@@ -17,6 +17,38 @@ DIAL_TOP_HOUR = 12
 SECONDS_PER_DAY = 86_400
 SECONDS_PER_HOUR = 3_600
 
+# Raw time-of-day angle has 00:00 at the top; the dial puts noon there.
+DIAL_OFFSET_DEG = 180.0
+SOLAR_NOON_SECS = 43_200            # 12:00 as seconds since local midnight
+SECONDS_PER_DEGREE = SECONDS_PER_DAY / 360.0    # 240 s of day per dial degree
+
+# --- Sun ----------------------------------------------------------------------
+CIVIL_DEPRESSION = 6.0              # degrees below horizon for dawn/dusk
+HORIZON_ELEVATION_DEG = -0.833      # solar disc touches the horizon (refraction)
+CIVIL_TWILIGHT_ELEVATION_DEG = -6.0
+
+# --- Year wheel ----------------------------------------------------------------
+# Unwrapped dial angles of the six season anchors bracketing one calendar
+# year in seasons_utc.json: previous December solstice, spring equinox,
+# summer solstice (top of dial after mod 360), autumn equinox, December
+# solstice, next spring equinox. Clockwise, 0 deg = summer solstice = top.
+YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
+
+# --- Moon ----------------------------------------------------------------------
+# Principal phase -> cycle fraction ("Last Quarter" is normalized to
+# "Third Quarter" by the repository on load).
+MOON_PHASE_FRACTIONS = {
+    "New Moon": 0.0,
+    "First Quarter": 0.25,
+    "Full Moon": 0.5,
+    "Third Quarter": 0.75,
+}
+MOON_CYCLE_QUARTER = 0.25           # fraction between consecutive principal phases
+
+# --- Bundled database coverage --------------------------------------------------
+SEASONS_YEAR_RANGE = (1560, 2640)
+MOON_PHASES_YEAR_RANGE = (1551, 2649)
+
 # Weekday index (datetime.weekday(): Monday=0) -> celestial body.
 # Sunday's body (Sun) sits in the dial center; the other six occupy the
 # hexagram diamonds at fixed slots.
