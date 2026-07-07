@@ -1,19 +1,32 @@
 """Composition root — the only object that knows everyone.
 
-Owns settings, the clock window, the tray and (from M3) the compositor,
-repositories and the minute scheduler.
+Owns settings, the clock window, the tray, the repositories, the
+compositor and the minute scheduler. Tick flow: read the wall clock
+fresh -> rebuild the day context when (local date, UTC offset) changed
+-> build the tick state -> repaint.
 """
 
 import sys
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
+import astral
 
 from PySide6.QtCore import QObject, QRect, Qt, QTimer
 from PySide6.QtGui import QAction, QGuiApplication
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
 
+from app.scheduler import MinuteScheduler
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
 from app.tray import TrayController
 from app.widget import ClockWidget
 from config import constants, defaults, paths
+from core.clock_state import build_day_context, build_tick_state
+from data.moon_phases import MoonPhaseRepository
+from data.seasons import SeasonsRepository
+from render.assets import AssetCache
+from render.compositor import Compositor
+from skins.manifest import missing_assets
 
 
 class AppController(QObject):
@@ -28,6 +41,29 @@ class AppController(QObject):
         self._widget = ClockWidget(self._settings.diameter, self._menu)
         self._tray = TrayController(self._menu)
 
+        city = defaults.DEFAULT_CITY
+        self._tz = ZoneInfo(city["timezone"])
+        self._observer = astral.Observer(
+            latitude=city["latitude"], longitude=city["longitude"]
+        )
+        self._seasons = SeasonsRepository()
+        self._moon_phases = MoonPhaseRepository()
+        missing = missing_assets(defaults.DEFAULT_SKIN)
+        if missing:
+            # Checked up front: a missing asset would otherwise raise
+            # inside paintEvent, where Qt swallows it — silently broken dial.
+            listing = "\n".join(str(path) for path in missing)
+            self._critical_box(
+                f"Skin assets are missing:\n{listing}",
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.Ok,
+            )
+            raise SystemExit(1)
+        self._compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+        self._day = None
+        self._widget.set_renderer(self._compositor)
+        self._scheduler = MinuteScheduler(self._on_tick, self)
+
         self._save_timer = QTimer(self)
         self._save_timer.setSingleShot(True)
         self._save_timer.setInterval(defaults.SETTINGS_WRITE_DEBOUNCE_MS)
@@ -37,12 +73,18 @@ class AppController(QObject):
     # --- Lifecycle --------------------------------------------------------------
 
     def run(self) -> None:
+        self._on_tick(clock_jumped=False)   # first frame BEFORE show()
         self._position_widget()
         self._widget.show()
         self._tray.show()
+        self._scheduler.start()
+        # windowHandle() exists only after show(); a monitor/DPI change
+        # invalidates every rasterized cache.
+        self._widget.windowHandle().screenChanged.connect(self._on_screen_changed)
 
     def quit(self) -> None:
         self._widget.mark_closing()
+        self._scheduler.stop()
         if self._save_timer.isActive():
             self._save_timer.stop()
         self._capture_position()
@@ -58,6 +100,37 @@ class AppController(QObject):
             )
         self._tray.hide()
         self._app.quit()
+
+    # --- Clock ------------------------------------------------------------------
+
+    def _on_tick(self, clock_jumped: bool) -> None:
+        now = datetime.now(self._tz)
+        day_key = (now.date(), now.utcoffset())
+        if self._day is None or self._day.cache_key != day_key or clock_jumped:
+            try:
+                self._day = build_day_context(
+                    now,
+                    self._observer,
+                    self._seasons.year_anchors(now.year),
+                    self._moon_phases.moon_window(now.year),
+                )
+            except Exception as error:
+                # Bundled data unreadable, out of coverage, or schema-
+                # malformed (KeyError/TypeError from a bad year entry) —
+                # nothing the app can do; die visibly, never tick a wrong
+                # dial and never freeze silently.
+                self._critical_box(
+                    f"Astronomical data unavailable:\n{error!r}",
+                    QMessageBox.StandardButton.Ok,
+                    QMessageBox.StandardButton.Ok,
+                )
+                raise SystemExit(1) from error
+            self._compositor.set_day(self._day)
+        self._widget.set_tick(build_tick_state(now, self._day))
+
+    def _on_screen_changed(self) -> None:
+        self._compositor.invalidate()
+        self._widget.update()
 
     # --- Settings ---------------------------------------------------------------
 

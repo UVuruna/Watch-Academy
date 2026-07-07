@@ -2,11 +2,12 @@
 
 All window flags/attributes are set in __init__, BEFORE the first show()
 — changing them later re-parents and hides the window on Windows.
+Painting is delegated to the render compositor; the widget itself knows
+nothing about the dial.
 """
 
 from PySide6.QtCore import QEvent, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QFont, QPainter, QPolygonF
-from PySide6.QtCore import QPointF, QRectF
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QMenu, QWidget
 
 from config import constants, defaults
@@ -21,6 +22,8 @@ class ClockWidget(QWidget):
         super().__init__()
         self._closing = False
         self._menu = menu
+        self._renderer = None
+        self._tick = None
 
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint
@@ -33,8 +36,32 @@ class ClockWidget(QWidget):
         self.resize(diameter, diameter)
 
     def mark_closing(self) -> None:
-        """Tell the Win+D watchdog that the coming hide is intentional."""
+        """Tell the spontaneous-hide watchdog that the coming hide is
+        intentional."""
         self._closing = True
+
+    # --- Rendering --------------------------------------------------------------
+
+    def set_renderer(self, renderer) -> None:
+        """The compositor: paint(painter, size, dpr, tick)."""
+        self._renderer = renderer
+
+    def set_tick(self, tick) -> None:
+        self._tick = tick
+        self.update()
+
+    def paintEvent(self, event) -> None:
+        if self._renderer is None or self._tick is None:
+            # Documented startup order: the controller delivers the first
+            # tick before show(), so this only covers stray early paints.
+            return
+        painter = QPainter(self)
+        self._renderer.paint(
+            painter,
+            float(min(self.width(), self.height())),
+            self.devicePixelRatioF(),
+            self._tick,
+        )
 
     # --- Input ----------------------------------------------------------------
 
@@ -76,60 +103,3 @@ class ClockWidget(QWidget):
     def _reshow(self) -> None:
         if not self._closing:
             self.show()
-
-    # --- Painting (M1 placeholder — replaced by render/ in M3) -----------------
-
-    def paintEvent(self, event) -> None:
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-
-        side = min(self.width(), self.height())
-        margin = defaults.PLACEHOLDER_RING_MARGIN
-        dial = QRectF(margin, margin, side - 2 * margin, side - 2 * margin)
-        center = dial.center()
-
-        # Translucent disc
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(*defaults.PLACEHOLDER_DISC_RGBA))
-        painter.drawEllipse(dial)
-
-        # Outer ring
-        painter.setBrush(Qt.BrushStyle.NoBrush)
-        painter.setPen(QColor(*defaults.PLACEHOLDER_RING_RGBA))
-        pen = painter.pen()
-        pen.setWidthF(defaults.PLACEHOLDER_RING_WIDTH)
-        painter.setPen(pen)
-        painter.drawEllipse(dial)
-
-        # Noon marker: small triangle at the top (12:00 position)
-        mark = side * defaults.PLACEHOLDER_NOON_MARK_SIZE
-        top = QPointF(center.x(), dial.top())
-        triangle = QPolygonF(
-            [
-                QPointF(top.x() - mark / 2, top.y()),
-                QPointF(top.x() + mark / 2, top.y()),
-                QPointF(top.x(), top.y() + mark),
-            ]
-        )
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(*defaults.PLACEHOLDER_NOON_MARK_RGBA))
-        painter.drawPolygon(triangle)
-
-        # Center dot
-        dot = side * defaults.PLACEHOLDER_CENTER_DOT_SIZE
-        painter.setBrush(QColor(*defaults.PLACEHOLDER_CENTER_DOT_RGBA))
-        painter.drawEllipse(center, dot, dot)
-
-        # Faint wordmark
-        font = QFont()
-        font.setPixelSize(int(side * defaults.PLACEHOLDER_TEXT_SIZE))
-        font.setBold(True)
-        painter.setFont(font)
-        painter.setPen(QColor(*defaults.PLACEHOLDER_TEXT_RGBA))
-        text_rect = QRectF(
-            dial.left(),
-            center.y() + side * defaults.PLACEHOLDER_TEXT_OFFSET_Y,
-            dial.width(),
-            side * defaults.PLACEHOLDER_TEXT_RECT_HEIGHT,
-        )
-        painter.drawText(text_rect, Qt.AlignmentFlag.AlignHCenter, defaults.PLACEHOLDER_TEXT)

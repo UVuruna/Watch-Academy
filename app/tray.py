@@ -22,10 +22,10 @@ def _draw_tray_icon() -> QIcon:
     margin = size * defaults.TRAY_ICON_MARGIN
     dial = rect.adjusted(margin, margin, -margin, -margin)
     painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(*defaults.PLACEHOLDER_DISC_RGBA[:3]))
+    painter.setBrush(QColor(*defaults.TRAY_DISC_RGB))
     painter.drawEllipse(dial)
-    painter.setBrush(QColor(*defaults.PLACEHOLDER_NOON_MARK_RGBA[:3]))
-    noon = size * defaults.PLACEHOLDER_NOON_MARK_SIZE * defaults.TRAY_NOON_MARK_SCALE
+    painter.setBrush(QColor(*defaults.TRAY_MARK_RGB))
+    noon = size * defaults.TRAY_MARK_SIZE
     painter.drawEllipse(QRectF(rect.center().x() - noon / 2, dial.top(), noon, noon))
     painter.end()
     return QIcon(pixmap)
