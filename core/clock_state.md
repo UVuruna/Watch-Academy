@@ -26,7 +26,9 @@ DST transitions, where the hexagram legitimately jumps 15°.
 
 ### TickState
 Frozen: hour angle, minute angle, year angle (recomputed per tick to
-stay smooth — it moves ~1°/day).
+stay smooth — it moves ~1°/day), and `is_daylight` (sun above the horizon
+right now; drives the Earth marker's day/night image — correct even on
+inverted midnight-sun transition days where sunset precedes sunrise).
 
 ## Functions
 - `build_day_context(now_local, observer, year_anchors, moon_window)`

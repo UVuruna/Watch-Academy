@@ -1,8 +1,9 @@
 # tests/
 
-Headless pytest suite — no QApplication anywhere; run with
-`python -m pytest tests` from the project root (the root `conftest.py`
-puts the packages on `sys.path`).
+Headless pytest suite; run with `python -m pytest tests` from the project
+root (the root `conftest.py` puts the packages on `sys.path`). Core, data
+and settings tests need no QApplication; the render tests create one on
+the `offscreen` Qt platform.
 
 ## Files
 
@@ -30,8 +31,15 @@ curve.
 
 ### `test_clock_state.py`
 Composition through the real repositories for Belgrade 2026-07-07 12:00
-CEST: cache key with DST offset, weekday→Mars, hexagram tilt range, hands
-at the top, year angle ~16 days past the solstice.
+CEST: cache key with DST offset (including the spring-forward day, where
+the key must carry the offset of NOW, not midnight), weekday→Mars,
+hexagram tilt range, hands at the top, `is_daylight`, year angle ~16 days
+past the solstice.
+
+### `test_render.py`
+Offscreen compositor smoke tests (`QT_QPA_PLATFORM=offscreen`): frame
+size, transparent corners, opaque ring, painted center, yellowish noon
+sector in July daylight.
 
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 127
@@ -44,7 +52,9 @@ Round-trip, atomic-write cleanup, BOM tolerance, corruption and
 diameter-range errors, quarantine-to-.bak.
 
 ### `test_purity.py`
-Asserts nothing under `core/` or `data/` mentions PySide6.
+Asserts nothing under `core/` or `data/` mentions PySide6 — and that
+library code reads no wall clock (`datetime.now`/`.today`/`time.time`;
+`core/__main__.py` is exempt as CLI glue).
 
 ## Connections
 

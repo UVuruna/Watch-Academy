@@ -10,15 +10,19 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 ### `constants.py` — Product Invariants
 Values that define what DOMY Watch is and never change: app identity, the
 24h dial convention (noon at top, clockwise, 180° offset), time constants,
-the weekday → celestial body mapping, sun thresholds (civil depression,
+the weekday → celestial body mapping and the hexagram diamond slot angles
+(the slots rotate WITH the hexagram), sun thresholds (civil depression,
 horizon/twilight elevations), the six year-anchor angles, moon phase →
 fraction mapping, and the bundled database coverage ranges.
 
 ### `defaults.py` — Developer Tunables
-Window sizing, the spontaneous-hide watchdog delay, settings schema version
-and write debounce, the M1 placeholder dial palette and layout fractions,
-tray icon geometry. From M3 this file also hosts `DEFAULT_SKIN` (a typed
-SkinDefinition instance).
+Window sizing, the spontaneous-hide watchdog delay, tick scheduling
+(epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
+M6 picker), settings schema version and write debounce, the procedural
+render geometry block (tick/font sizes with legibility floors, pen widths,
+marker borders), tray icon geometry, and `DEFAULT_SKIN` — a fully typed
+[Manifest](../skins/manifest.md) `SkinDefinition` instance that drives all
+rendering until it is serialized to `assets/skins/domy/skin.json` in M5.
 
 ### `winapi.py` — Win32 Literals
 The only sanctioned home for Win32 API constants (documented enum-exception

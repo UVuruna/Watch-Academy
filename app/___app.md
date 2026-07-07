@@ -1,17 +1,18 @@
 # app/
 
-The Qt application shell: window, input, tray and persistence. Knows nothing
-about astronomy (`core/`) or skin internals (`skins/`) — from M3 it consumes
-their outputs through the compositor.
+The Qt application shell: window, input, tray, timing and persistence.
+Knows nothing about astronomy (`core/`) or skin internals (`skins/`) — it
+consumes their outputs through the render compositor.
 
 ## Files
 
 ### `widget.py` — Clock Widget
-The frameless, per-pixel-transparent, always-at-bottom dial window.
-See [Clock Widget](widget.md).
+The frameless, per-pixel-transparent, always-at-bottom dial window;
+painting is delegated to the compositor. See [Clock Widget](widget.md).
 
 ### `controller.py` — App Controller
-Composition root: owns settings, window, tray, menu and the quit flow.
+Composition root: owns settings, window, tray, menu, repositories,
+compositor, scheduler and the tick/quit flows.
 See [App Controller](controller.md).
 
 ### `settings_store.py` — Settings Store
@@ -21,10 +22,13 @@ See [Settings Store](settings_store.md).
 ### `tray.py` — Tray Controller
 System tray icon with the shared context menu. See [Tray Controller](tray.md).
 
-Planned (M4+): `scheduler.py` (minute-aligned timer), `native.py` (ctypes
-click-through, power/clock-change events, optional WorkerW glue),
-single-instance guard (second launch must not spawn a second widget),
-`settings_dialog.py`, `location_picker.py` (M6).
+### `scheduler.py` — Minute Scheduler
+Minute-aligned self-rescheduling timer with clock-jump detection.
+See [Minute Scheduler](scheduler.md).
+
+Planned (M4+): `native.py` (ctypes click-through, power/clock-change
+events, optional WorkerW glue), single-instance guard (second launch must
+not spawn a second widget), `settings_dialog.py`, `location_picker.py` (M6).
 
 ## Connections
 

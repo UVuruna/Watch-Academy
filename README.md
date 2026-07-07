@@ -3,8 +3,9 @@
 A transparent 24-hour analog clock widget for the Windows desktop. Only the
 dial is visible — no frame, no taskbar entry — like a phone home-screen widget.
 
-**Status:** in development — M1 (transparent shell) and M2 (computation core
-with golden tests) done; the living dial (M3) is next.
+**Status:** in development — M1 (transparent shell), M2 (computation core
+with golden tests) and M3 (the living dial: sectors, hexagram, weekday
+bodies, year marker, hands) done; Windows hardening (M4) is next.
 
 ## The dial
 
@@ -13,8 +14,9 @@ with golden tests) done; the living dial (M3) is next.
 - The daylight arc (sunrise → sunset for the chosen city) is rendered bright;
   night is dark/gray; dawn/dusk bands in between.
 - A hexagram overlay whose top vertex always points at **true solar noon**.
-- 7 celestial bodies mark the weekdays (Sun = Sunday in the center); only the
-  current day's body is shown.
+- 7 celestial bodies mark the weekdays (Sun = Sunday in the center); the
+  current day's body is highlighted — the others are faint ghosts or fully
+  hidden, per skin settings.
 - An Earth icon orbits the dial once per year, calibrated to the real
   solstices (summer at the top, winter at the bottom).
 - Everything is skinnable: hands, weekday sets, year marker, colors, ring.

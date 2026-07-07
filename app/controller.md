@@ -4,8 +4,10 @@
 
 ## Purpose
 Composition root — the only object that knows everyone. Owns the settings
-store, the clock widget, the tray and the shared menu; runs the lifecycle
-(startup positioning, debounced position saves, quit).
+store, the clock widget, the tray, the shared menu, the data repositories,
+the compositor and the minute scheduler. Tick flow: read the wall clock
+fresh → rebuild the day context when `(local date, UTC offset)` changed
+(or after a clock jump) → build the tick state → repaint.
 
 ## Connections
 
@@ -13,7 +15,11 @@ store, the clock widget, the tray and the shared menu; runs the lifecycle
 - [Clock Widget](widget.md) — creates and positions the window
 - [Tray Controller](tray.md) — shows the tray icon
 - [Settings Store](settings_store.md) — load/recover/save
-- [Config (folder)](../config/___config.md) — defaults and paths
+- [Minute Scheduler](scheduler.md) — tick source
+- [Clock State](../core/clock_state.md) — day/tick builds
+- [Seasons](../data/seasons.md), [Moon Phases](../data/moon_phases.md) — anchors and windows
+- [Compositor](../render/compositor.md), [Assets](../render/assets.md) — rendering
+- [Config (folder)](../config/___config.md) — defaults (DEFAULT_CITY, DEFAULT_SKIN) and paths
 
 ### Used by
 - `main.py`
@@ -23,10 +29,16 @@ store, the clock widget, the tray and the shared menu; runs the lifecycle
 ### AppController
 
 #### Methods
-- `run()`: positions the widget and shows widget and tray. The remembered
+- `run()`: delivers the first tick BEFORE `show()` (the compositor must
+  have a day context when the first paint arrives), positions the widget,
+  shows widget and tray, starts the scheduler, connects `screenChanged`
+  (DPI/monitor moves flush every rasterized cache). The remembered
   position is kept if ANY attached screen shows part of the dial
   (multi-monitor safe); otherwise — first run or monitors rearranged —
   the widget centers on the primary screen
+- `_on_tick(clock_jumped)`: day-context rebuild on cache-key change or
+  clock jump; unreadable/out-of-coverage astronomical data dies VISIBLY
+  (dialog, then exit) — never a silently wrong dial
 - `quit()`: disarms the watchdog, saves the final position (a save failure
   shows a blocking stay-on-top dialog), hides tray, quits — the app always
   exits even when the save fails

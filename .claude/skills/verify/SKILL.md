@@ -31,8 +31,10 @@ Gotchas learned the hard way (2026-07-07):
   remembered position — and re-read the rect immediately before each capture.
 - **IsWindowVisible lies:** it stays TRUE for covered and minimized windows.
   To decide "is it really on screen", pixel-sample a distinctive widget pixel
-  (the yellow noon triangle at window top-center, ~(cx, top+15px) physical;
-  expect ≈ RGB 202,168,64 over dark wallpaper) via GetPixel.
+  via GetPixel. Since M3 the dial is the real render: the ring band
+  (~(cx, top+10px) physical) is dark slate ≈ RGB 74,78,87, and the top
+  sector inside it is yellow by day — sample both and compare against the
+  wallpaper.
 - **Wallpaper slideshow** changes the background between captures — never
   compare screenshots to judge presence; use pixel sampling.
 - **Monitors:** 2× 3840×2160; primary at 125% (logical 3072×1728), so

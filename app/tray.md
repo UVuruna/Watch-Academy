@@ -22,3 +22,5 @@ menu (Qt does not own them; the GC would destroy the menu mid-use).
 
 #### Methods
 - `show()` / `hide()`
+- `notify(title, message)`: non-blocking critical balloon (mid-run
+  settings-save failures)

@@ -7,10 +7,10 @@ Bundled visual assets: the project logo (M7) and bundled skins.
   🖼️ logo.svg              ← project logo (M7; also copied to monorepo logos/)
   📁 skins/
     📁 domy/               ← default bundled skin
-      ⚙️ skin.json         ← manifest (M5)
-      📁 dial/             ← hexagram.svg, arrow.svg, ring.svg (optional)
-      📁 hands/            ← hour + minute hand images (pivot declared in manifest)
-      📁 weekday/          ← sun, moon, mars, mercury, jupiter, venus, saturn
+      ⚙️ skin.json         ← manifest (M5; until then DEFAULT_SKIN lives in config)
+      📁 dial/             ← hexagram.png (present); arrow/ring optional (procedural now)
+      📁 hands/            ← hour.png + minute.png (present; pivots 0.5/0.68 and 0.5/0.92)
+      📁 weekday/          ← sun, moon, mars, mercury, jupiter, venus, saturn (procedural until dropped)
       📁 year_marker/      ← Earth per continent (day + night) and moon disc
 ```
 

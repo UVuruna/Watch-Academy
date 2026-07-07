@@ -4,8 +4,8 @@
 
 ## Purpose
 Lazy repository over `world_locations.json` for the location picker and
-the CLI selftest. The chosen `CityRecord` is persisted into settings;
-the widget never re-reads the file afterwards.
+the CLI selftest. The chosen `CityRecord` will be persisted into settings
+by the M6 picker; the widget never re-reads the file afterwards.
 
 ## Connections
 
@@ -30,4 +30,6 @@ from navigable groups (continent/subregion/country/admin).
 - `load()` / `release()`: parse on demand, drop when the picker closes
 - `children(path)`: children of any node, shape-classified (mixed depth
   safe); unknown path segments raise `KeyError` with the full path
-- `find_city(name)`: case-insensitive full walk (search box, CLI)
+- `find_city(name)`: folded full walk (search box, CLI) — diacritic
+  spellings match the ASCII transliterations in the database ("Niš" →
+  "Nis", "Tromsø" → "Tromso")
