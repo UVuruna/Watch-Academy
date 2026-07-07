@@ -1,3 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Build output (M7 pipeline)
+build/
+dist/
+setup/cert/
+setup/version_info.txt
+setup/_version_info.py
+
+# Legacy exclusions
 Database_Create/
 Side/
 Database/seasons_xxl.json
