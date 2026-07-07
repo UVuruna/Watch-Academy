@@ -49,6 +49,25 @@ MOON_CYCLE_QUARTER = 0.25           # fraction between consecutive principal pha
 SEASONS_YEAR_RANGE = (1560, 2640)
 MOON_PHASES_YEAR_RANGE = (1551, 2649)
 
+# --- Geography -------------------------------------------------------------------
+LATITUDE_RANGE = (-90.0, 90.0)
+LONGITUDE_RANGE = (-180.0, 180.0)
+
+# City-name folding for search: NFKD decomposition strips most diacritics
+# (š, č, ž, ü, ...) but NOT these single-codepoint letters — the bundled
+# city names are ASCII transliterations, so native spellings must fold to
+# match ("Tromsø" -> "tromso", "Đakovica" -> "dakovica").
+CITY_NAME_TRANSLITERATIONS = {
+    "ø": "o",
+    "đ": "d",
+    "ł": "l",
+    "æ": "ae",
+    "œ": "oe",
+    "ß": "ss",
+    "þ": "th",
+    "ð": "d",
+}
+
 # Weekday index (datetime.weekday(): Monday=0) -> celestial body.
 # Sunday's body (Sun) sits in the dial center; the other six occupy the
 # hexagram diamonds at fixed slots.
@@ -61,3 +80,15 @@ WEEKDAY_BODIES = (
     "saturn",    # Saturday
     "sun",       # Sunday
 )
+
+# Diamond slot of each orbiting body: dial degrees from the hexagram's TOP
+# vertex, clockwise. The slots rotate WITH the hexagram (owner decision) —
+# the bodies stay inside their diamonds. Sun has no slot (center).
+WEEKDAY_SLOT_ANGLES = {
+    "jupiter": 0.0,      # top    / yellow
+    "mars": 60.0,        # upper-right / orange
+    "venus": 120.0,      # lower-right / red
+    "mercury": 180.0,    # bottom / purple
+    "moon": 240.0,       # lower-left  / blue
+    "saturn": 300.0,     # upper-left  / green
+}
