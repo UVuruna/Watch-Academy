@@ -1,0 +1,7 @@
+# Runtime
+PySide6>=6.10
+astral>=3.2
+tzdata>=2025.1
+
+# Development
+pytest>=8.0
