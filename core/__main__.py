@@ -11,7 +11,7 @@ solstice states.
 
 import argparse
 from datetime import datetime
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 import astral
 
@@ -37,6 +37,9 @@ def main() -> None:
     parser.add_argument("--at", help="local ISO datetime (default: now)")
     args = parser.parse_args()
 
+    manual = (args.lat, args.lng, args.tz)
+    if args.city and any(value is not None for value in manual):
+        parser.error("--city conflicts with --lat/--lng/--tz — use one or the other")
     if args.city:
         matches = LocationRepository().find_city(args.city)
         if not matches:
@@ -45,14 +48,26 @@ def main() -> None:
         latitude, longitude, tz_name = record.latitude, record.longitude, record.timezone
         print(f"City:       {' / '.join(record.path)}  ({len(matches)} match(es))")
     elif args.lat is not None and args.lng is not None and args.tz:
+        lat_low, lat_high = constants.LATITUDE_RANGE
+        lng_low, lng_high = constants.LONGITUDE_RANGE
+        if not lat_low <= args.lat <= lat_high:
+            parser.error(f"--lat must be within {lat_low}..{lat_high}")
+        if not lng_low <= args.lng <= lng_high:
+            parser.error(f"--lng must be within {lng_low}..{lng_high}")
         latitude, longitude, tz_name = args.lat, args.lng, args.tz
         print(f"Position:   {latitude}, {longitude}")
     else:
         parser.error("provide --city NAME, or --lat --lng --tz")
 
-    tz = ZoneInfo(tz_name)
+    try:
+        tz = ZoneInfo(tz_name)
+    except ZoneInfoNotFoundError:
+        parser.error(f"unknown IANA timezone: {tz_name!r}")
     if args.at:
-        now = datetime.fromisoformat(args.at)
+        try:
+            now = datetime.fromisoformat(args.at)
+        except ValueError:
+            parser.error(f"--at must be an ISO datetime (e.g. 2026-06-21T12:00), got {args.at!r}")
         now = now.replace(tzinfo=tz) if now.tzinfo is None else now.astimezone(tz)
     else:
         now = datetime.now(tz)

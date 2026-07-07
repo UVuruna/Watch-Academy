@@ -9,7 +9,7 @@ rotation is always computable, even in polar night.
 """
 
 from dataclasses import dataclass
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from enum import Enum
 from typing import Callable
 from zoneinfo import ZoneInfo
@@ -58,6 +58,13 @@ def compute_sun_day(
     dawn = try_event(astral.sun.dawn, depression=constants.CIVIL_DEPRESSION)
     sunrise = try_event(astral.sun.sunrise)
     noon = astral.sun.noon(observer, date=local_date, tzinfo=tz)
+    if noon.date() != local_date:
+        # astral's noon() lacks the local-date re-search the other events
+        # have: in UTC+13/+14 zones (e.g. Kiritimati) the transit of the
+        # requested UTC day lands on the NEXT local day — mirror astral's
+        # own adjustment by asking for the neighboring UTC day.
+        shift = timedelta(days=1 if noon.date() > local_date else -1)
+        noon = astral.sun.noon(observer, date=local_date - shift, tzinfo=tz)
     sunset = try_event(astral.sun.sunset)
     dusk = try_event(astral.sun.dusk, depression=constants.CIVIL_DEPRESSION)
 
@@ -87,7 +94,10 @@ def _classify(
     if dawn is not None or dusk is not None:
         return DaylightRegime.TWILIGHT_ONLY
     # Only noon exists — decide by how high the sun gets at its best.
-    noon_elevation = astral.sun.elevation(observer, noon)
+    # GEOMETRIC elevation: the -0.833 threshold already contains refraction
+    # (astral's own sunrise definition); apparent elevation would count it
+    # twice and report POLAR_DAY on all-day-twilight days above ~87 deg.
+    noon_elevation = astral.sun.elevation(observer, noon, with_refraction=False)
     if noon_elevation > constants.HORIZON_ELEVATION_DEG:
         return DaylightRegime.POLAR_DAY
     if noon_elevation > constants.CIVIL_TWILIGHT_ELEVATION_DEG:

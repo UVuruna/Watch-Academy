@@ -13,7 +13,7 @@ import astral
 
 from core import angles
 from core.moon import MoonWindow, illumination, phase_fraction
-from core.sun import SunDay, compute_sun_day
+from core.sun import DaylightRegime, SunDay, compute_sun_day
 from core.year_wheel import YearAnchors, year_marker_angle
 
 
@@ -42,6 +42,7 @@ class TickState:
     hour_angle: float
     minute_angle: float
     year_angle: float               # moves ~1 deg/day; cheap to keep smooth
+    is_daylight: bool               # sun above the horizon right now
 
 
 def build_day_context(
@@ -69,4 +70,26 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         hour_angle=angles.time_to_dial_angle(now_local),
         minute_angle=angles.minute_hand_angle(now_local),
         year_angle=year_marker_angle(now_local, day.year_anchors),
+        is_daylight=_is_daylight(now_local, day.sun),
     )
+
+
+def _is_daylight(now: datetime, sun: SunDay) -> bool:
+    if sun.regime is DaylightRegime.POLAR_DAY:
+        return True
+    if sun.regime in (DaylightRegime.POLAR_NIGHT, DaylightRegime.TWILIGHT_ONLY):
+        return False
+    if sun.sunrise is not None and sun.sunset is not None:
+        if sun.sunset < sun.sunrise:
+            # Inverted midnight-sun transition day (e.g. Murmansk in May):
+            # this day's sunset falls just after local midnight, BEFORE its
+            # sunrise — daylight is the complement of the dark gap.
+            return now <= sun.sunset or now >= sun.sunrise
+        return sun.sunrise <= now <= sun.sunset
+    # Transitional one-sided days at high latitudes: only one boundary
+    # exists on this date.
+    if sun.sunrise is not None:
+        return now >= sun.sunrise
+    if sun.sunset is not None:
+        return now <= sun.sunset
+    return False
