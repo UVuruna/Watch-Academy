@@ -9,8 +9,10 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 
 ### `constants.py` — Product Invariants
 Values that define what DOMY Watch is and never change: app identity, the
-24h dial convention (noon at top, clockwise), time constants, the
-weekday → celestial body mapping.
+24h dial convention (noon at top, clockwise, 180° offset), time constants,
+the weekday → celestial body mapping, sun thresholds (civil depression,
+horizon/twilight elevations), the six year-anchor angles, moon phase →
+fraction mapping, and the bundled database coverage ranges.
 
 ### `defaults.py` — Developer Tunables
 Window sizing, the spontaneous-hide watchdog delay, settings schema version

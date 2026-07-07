@@ -3,8 +3,8 @@
 A transparent 24-hour analog clock widget for the Windows desktop. Only the
 dial is visible — no frame, no taskbar entry — like a phone home-screen widget.
 
-**Status:** in development — M1 (transparent shell) done; computation core (M2)
-and the living dial (M3) are next.
+**Status:** in development — M1 (transparent shell) and M2 (computation core
+with golden tests) done; the living dial (M3) is next.
 
 ## The dial
 
@@ -25,14 +25,14 @@ and the living dial (M3) are next.
 📁 DOMY Watch/
   🐍 main.py            ← entry point
   📁 config/            ← all constants and tunables
-  📁 core/              ← pure astronomy/angle computation (M2)
-  📁 data/              ← repositories over Database/*.json (M2)
+  📁 core/              ← pure astronomy/angle computation
+  📁 data/              ← repositories over Database/*.json
   📁 skins/             ← skin manifests, validation, merging (M5)
   📁 render/            ← QPainter layers and compositor (M3)
   📁 app/               ← Qt shell: window, tray, settings
   📁 assets/            ← bundled skins and logo
   📁 Database/          ← bundled astronomical/location data
-  📁 tests/             ← pytest suite (M2)
+  📁 tests/             ← pytest golden-value suite
   📁 design/            ← mockups and reference images (not bundled)
   📁 illustrator/       ← vector sources for skin assets (not bundled)
   📁 research/          ← one-off analysis scripts and oversized data (not bundled)

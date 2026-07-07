@@ -1,36 +1,44 @@
 # data/
 
-**Planned — implemented in M2.** Three repositories over `Database/*.json` —
-the only code that knows the file schemas. Loud failures with the supported
-range in the message (Rule #1); plain dataclasses out, no Qt.
+Three repositories over `Database/*.json` — the only code that knows the
+file schemas. Loud failures with the supported range in the message
+(Rule #1); plain dataclasses out; no Qt (enforced by the purity test).
 
-## Planned Files
+## Files
 
 ### `locations.py` — Location Repository
-LAZY over the 4 MB `world_locations.json` (loaded only while the picker is
-open, released after). Must handle MIXED depth: 127 of 241 countries mix
-direct-city children with admin-nested children — children are classified by
-the presence of a `latitude` field. Yields `CityRecord` — the only thing
-persisted after selection.
+LAZY over the 4 MB `world_locations.json` (45,650 cities; loaded on
+demand, released when the picker closes). Handles the MIXED depth — 127
+of 241 countries mix direct-city leaves with admin sub-dicts — by
+classifying every child by shape (`"latitude" in value`), never by depth.
+Yields `CityRecord`, the only thing persisted after selection.
+See [Locations](locations.md).
 
 ### `seasons.py` — Seasons Repository
-EAGER extract-and-discard at startup; builds `YearAnchors` from season start
-instants (careful: `winter.start` belongs to the NEXT winter — never pair
-`winter.duration` with the same year's `start`).
+Extract-and-discard over `seasons_utc.json` (1560–2640): parses once per
+year, keeps a tiny `YearAnchors`, drops the dict. Handles the verified
+field trap: a year's `winter.start` is the December solstice OF that year
+(ending the entry), while `winter.duration` describes the winter that
+BEGAN it — the two are never paired. See [Seasons](seasons.md).
 
-### `moon_phases.py` — Moon Phase Repository
-LAZY windowed extraction (current year ± boundary months); normalizes
-"Last Quarter" → "Third Quarter"; filters non-month keys.
+### `moon_phases.py` — Moon Phases Repository
+Windowed extraction over `moonPhases_utc.json` (1551–2649): the target
+year plus both neighbors, month keys filtered with `isdigit()` (year
+entries mix month dicts with aggregate count keys), "Last Quarter"
+normalized to "Third Quarter". See [Moon Phases](moon_phases.md).
 
 ### `_io.py` — Shared Loader
-`load_json_checked()` — a plain function, not an ABC (two repositories do
-not justify a class hierarchy).
+`load_json_checked()` — a plain function, not a base class (two small
+repositories do not justify a hierarchy).
 
 ## Connections
 
 ### Uses
-- [Config (folder)](../config/___config.md) — paths
+- [Config (folder)](../config/___config.md) — paths and coverage ranges
+- [Core (folder)](../core/___core.md) — `YearAnchors`, `MoonWindow`
 - [Database (folder)](../Database/___database.md) — the JSON files
 
 ### Used by
-- [App (folder)](../app/___app.md) — controller (M3) and location picker (M6)
+- [App (folder)](../app/___app.md) — controller (M3), location picker (M6)
+- [Core (folder)](../core/___core.md) CLI selftest
+- [Tests (folder)](../tests/___tests.md) — run against the LIVE files
