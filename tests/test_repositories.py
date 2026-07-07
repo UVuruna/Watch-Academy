@@ -61,6 +61,18 @@ class TestLocations:
         assert ada and ada[0].is_city
         assert ada[0].record.timezone == "Europe/Belgrade"
 
+    def test_find_city_folds_diacritics(self, locations):
+        """The DB stores ASCII transliterations; native spellings must
+        still match (combining marks AND single-codepoint letters)."""
+        nis = [r for r in locations.find_city("Niš") if "Serbia" in r.path]
+        assert nis and nis[0].name == "Nis"
+        tromso = locations.find_city("Tromsø")
+        assert tromso and tromso[0].name == "Tromso"
+
+    def test_release_and_reload_cycle(self, locations):
+        locations.release()
+        assert len(locations.children()) == 5  # auto-reloads lazily
+
     def test_find_city_belgrade(self, locations):
         serbian = [
             record

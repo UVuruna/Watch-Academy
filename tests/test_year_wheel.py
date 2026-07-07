@@ -43,6 +43,15 @@ def test_outside_span_fails_loudly(anchors_2026):
         )
 
 
+def test_exact_anchor_instants_including_last(anchors_2026):
+    """Every anchor instant maps exactly to its own angle — including the
+    LAST one (the next spring equinox, 630 -> 270 deg), which takes a
+    dedicated code path in the bisect interpolation."""
+    expected = [angle % 360.0 for angle in anchors_2026.angles]
+    for instant, want in zip(anchors_2026.instants, expected):
+        assert year_marker_angle(instant, anchors_2026) == pytest.approx(want, abs=1e-9)
+
+
 def test_mockup_day_earth_near_top():
     """20.6.2025 (mockup) is a day before the summer solstice — the Earth
     marker must sit within ~2 deg of the dial top."""

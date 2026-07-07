@@ -100,6 +100,19 @@ class TestSolarNoonOffsets:
         assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(22.57, abs=1.5)
 
 
+class TestExtremeZones:
+    def test_kiritimati_noon_stays_on_the_requested_local_day(self):
+        """UTC+14: astral's raw noon() lands on the NEXT local day —
+        compute_sun_day must re-anchor it so all five events share one
+        local calendar date and absolute ordering holds."""
+        observer = astral.Observer(latitude=1.87, longitude=-157.44)
+        sun_day = compute_sun_day(
+            observer, date(2026, 7, 7), ZoneInfo("Pacific/Kiritimati")
+        )
+        assert sun_day.noon.date() == date(2026, 7, 7)
+        assert sun_day.sunrise < sun_day.noon < sun_day.sunset
+
+
 class TestMockupDay:
     """The design screenshot header for 20.6.2025: '4:52 - 20:27 (12:39)'."""
 

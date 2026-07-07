@@ -25,9 +25,39 @@ def test_exact_at_anchors(window_2026):
     assert phase_fraction(full_moons[0], window_2026) == pytest.approx(0.5, abs=1e-9)
 
 
+def test_waning_segment_runs_forward(window_2026):
+    """Third Quarter → New Moon spans 0.75 → 1.0, NOT 0.75 → 0.0 backward:
+    2026-07-10 noon sits mid-segment at ≈0.85 (a natural refactor to
+    (f1−f0) interpolation would render it as near-full 0.44 instead of a
+    waning crescent — this pins the direction)."""
+    now = datetime(2026, 7, 10, 12, 0, tzinfo=timezone.utc)
+    assert phase_fraction(now, window_2026) == pytest.approx(0.852, abs=0.002)
+
+
+def test_wrap_to_zero_at_new_moon_anchor(window_2026):
+    new_moons = [t for t, f in window_2026.events if f == 0.0 and t.year == 2026]
+    assert new_moons, "2026 must contain new moons"
+    assert phase_fraction(new_moons[0], window_2026) == pytest.approx(0.0, abs=1e-9)
+
+
+def test_outside_window_fails_loudly(window_2026):
+    with pytest.raises(ValueError, match="outside the moon window"):
+        phase_fraction(datetime(2031, 1, 1, tzinfo=timezone.utc), window_2026)
+
+
+def test_coverage_edge_year_still_interpolates():
+    """1551 has no 1550 neighbor — the 2-year window must still bracket
+    instants inside the year itself."""
+    window = MoonPhaseRepository().moon_window(1551)
+    assert window.events[0][0].year == 1551
+    mid = datetime(1551, 7, 1, tzinfo=timezone.utc)
+    assert 0.0 <= phase_fraction(mid, window) < 1.0
+
+
 def test_may_2026_has_five_events(window_2026):
-    may = [t for t, _ in window_2026.events if (t.year, t.month) == (2026, 5)]
-    assert len(may) == 5  # including two full moons
+    may = [(t, f) for t, f in window_2026.events if (t.year, t.month) == (2026, 5)]
+    assert len(may) == 5
+    assert sum(1 for _, f in may if f == 0.5) == 2  # two full moons
 
 
 def test_third_quarter_normalization(window_2026):
