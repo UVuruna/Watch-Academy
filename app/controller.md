@@ -61,5 +61,7 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   by asking the compositor about the cursor position a few times a second
 - `_on_wake()`: resume-from-sleep / clock change → immediate full refresh
   (wired to the native PowerEventFilter)
+- `_open_time_travel()`: frozen (moment, observer) rendered instead of
+  the present for `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

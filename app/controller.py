@@ -8,6 +8,7 @@ fresh -> rebuild the day context when (local date, UTC offset) changed
 
 import sys
 from datetime import datetime
+from time import monotonic
 from zoneinfo import ZoneInfo
 
 import astral
@@ -19,6 +20,7 @@ from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QToolTip
 from app import native
 from app.scheduler import MinuteScheduler
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
+from app.time_travel import TimeTravelDialog
 from app.tray import TrayController
 from app.widget import ClockWidget
 from config import constants, defaults, paths
@@ -62,6 +64,10 @@ class AppController(QObject):
             raise SystemExit(1)
         self._compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         self._day = None
+        # Time Travel: a frozen (moment, observer) rendered instead of the
+        # present until the deadline passes.
+        self._simulation: tuple[datetime, astral.Observer] | None = None
+        self._simulation_ends: float = 0.0
         self._widget.set_renderer(self._compositor)
         seconds_hand = (
             defaults.DEFAULT_SKIN.hands.second is not None
@@ -123,13 +129,20 @@ class AppController(QObject):
     # --- Clock ------------------------------------------------------------------
 
     def _on_tick(self, clock_jumped: bool) -> None:
-        now = datetime.now(self._tz)
+        if self._simulation is not None and monotonic() >= self._simulation_ends:
+            self._simulation = None
+            self._day = None                # force the rebuild back to the present
+        if self._simulation is not None:
+            now, observer = self._simulation
+        else:
+            now = datetime.now(self._tz)
+            observer = self._observer
         day_key = (now.date(), now.utcoffset())
         if self._day is None or self._day.cache_key != day_key or clock_jumped:
             try:
                 self._day = build_day_context(
                     now,
-                    self._observer,
+                    observer,
                     self._seasons.year_anchors(now.year),
                     self._moon_phases.moon_window(now.year),
                 )
@@ -268,6 +281,9 @@ class AppController(QObject):
             group.addAction(action)
             size_menu.addAction(action)
         menu.addSeparator()
+        time_travel = QAction("Time Travel…", menu)
+        time_travel.triggered.connect(self._open_time_travel)
+        menu.addAction(time_travel)
         click_through = QAction("Click-through", menu)
         click_through.setCheckable(True)
         click_through.setChecked(self._settings.click_through)
@@ -282,6 +298,19 @@ class AppController(QObject):
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
         return menu
+
+    def _open_time_travel(self) -> None:
+        dialog = TimeTravelDialog()
+        if dialog.exec() != TimeTravelDialog.DialogCode.Accepted:
+            return
+        moment = dialog.moment().replace(second=0, microsecond=0, tzinfo=self._tz)
+        observer = astral.Observer(
+            latitude=dialog.latitude(), longitude=dialog.longitude()
+        )
+        self._simulation = (moment, observer)
+        self._simulation_ends = monotonic() + defaults.TIME_TRAVEL_DURATION_S
+        self._day = None                    # rebuild with the simulated situation
+        self._on_tick(clock_jumped=False)
 
     def _set_click_through(self, enabled: bool) -> None:
         self._widget.set_click_through(enabled)

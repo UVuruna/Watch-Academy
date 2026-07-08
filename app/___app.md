@@ -30,6 +30,10 @@ detection. See [Minute Scheduler](scheduler.md).
 Single-instance mutex, click-through toggle, circular hit-test helper,
 power/clock wake filter. See [Native](native.md).
 
+### `time_travel.py` — Time Travel
+Scenario-tester dialog: any moment + position rendered for a minute,
+then auto-reset. See [Time Travel](time_travel.md).
+
 Planned (M6): `settings_dialog.py`, `location_picker.py`. Deferred:
 optional WorkerW "glue to wallpaper" mode (fragile on Win11 24H2 —
 revisit on demand).
