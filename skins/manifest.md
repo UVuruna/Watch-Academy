@@ -3,11 +3,10 @@
 **Script:** [Manifest (script)](manifest.py)
 
 ## Purpose
-The typed skin definition — six overridable units (background, star,
-ring, weekday_set, year_marker, hands). Pure
-dataclasses with no I/O: `DEFAULT_SKIN` in config is an instance of these,
-and M5's `skin.json` loading/validation targets the same types, so
-extraction is serialization, not redesign.
+The typed render configuration — six unit specs (background, star,
+ring, weekday_set, year_marker, hands). Pure dataclasses with no I/O:
+`DEFAULT_SKIN` in config is the one instance; the controller overlays
+the ring preset and the user's display choices onto it at build time.
 
 ## Connections
 
@@ -20,7 +19,7 @@ extraction is serialization, not redesign.
 
 ## Classes
 
-- `SkinDefinition` — name, `z_order`, one spec per unit, plus the
+- `SkinDefinition` — `z_order`, one spec per unit, plus the
   user-overridable display scalars (the tray choice always wins):
   `pointer` ("hexa" | "cross" | "octa"), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),

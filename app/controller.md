@@ -51,7 +51,7 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (once per failure streak) instead of dying silently
 - `_build_menu()`: the shared tray/right-click menu, built from the
   `_add_choice_submenu()` helper (one exclusive check-group per
-  submenu) — Skin, Size (360/540/720), Pointer (Cross/Hexa/Octa),
+  submenu) — Ring (DOMY/MORPH presets), Size (360/540/720), Pointer (Cross/Hexa/Octa),
   Palette (Paint/Light), Umbra (two groups: Fine/Coarse/Gradient form +
   Full/Half contrast), Octa slot (nine modes; 1×1 placeholder skeletons
   ship for the image art — the owner pastes his vectors over them),
@@ -63,12 +63,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Click-through toggle (turn
   back off via the TRAY — the dial itself no longer takes clicks),
   Exit; the full settings dialog arrives in M6
-- `_set_skin()` / `_set_display_choice(key, value)`: swap the rendered
-  skin via the shared `_install_skin()` (fresh compositor, day context
-  kept) and persist; the module-level `apply_display_settings(skin,
-  settings)` (pure, testable) overlays the user's display choices,
-  opacity overrides (twilight alphas scale proportionally) and the
-  custom palette onto whatever the skin pack declares
+- `_set_ring()` / `_set_display_choice(key, value)`: rebuild via the
+  module-level `build_skin(settings)` — DEFAULT_SKIN + the chosen RING
+  PRESET (DOMY and MORPH are ring preset names, nothing more) — or a
+  targeted `dataclasses.replace`, install through the shared
+  `_install_skin()` (fresh compositor, day context kept) and persist;
+  `apply_display_settings(skin, settings)` (pure, testable) overlays
+  the display choices, opacity overrides and the custom palette
 - `_open_settings()`: the M6 dialog — location (new observer/timezone →
   full day-context rebuild), opacity and palette results applied by
   reinstalling the PRISTINE pack (so cleared overrides really clear)

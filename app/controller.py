@@ -31,9 +31,23 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from skins import resolver
 from skins.manifest import missing_assets
-from skins.packs import SkinValidationError
+
+
+def build_skin(settings: Settings):
+    """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
+    (DOMY and MORPH are ring preset names — nothing more, owner
+    decision) and the user's display choices overlaid."""
+    preset = defaults.RING_PRESETS[settings.ring]
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN,
+        ring=dataclasses.replace(
+            defaults.DEFAULT_SKIN.ring,
+            asset=preset["asset"],
+            letters=preset["letters"],
+        ),
+    )
+    return apply_display_settings(skin, settings)
 
 
 def apply_display_settings(skin, settings: Settings):
@@ -118,7 +132,7 @@ class AppController(QObject):
         )
         self._seasons = SeasonsRepository()
         self._moon_phases = MoonPhaseRepository()
-        self._skin = self._resolve_skin_or_recover(self._settings.skin)
+        self._skin = build_skin(self._settings)
         missing = missing_assets(self._skin)
         if missing:
             # Checked up front: a missing asset would otherwise raise
@@ -333,22 +347,6 @@ class AppController(QObject):
 
     # --- Menu ---------------------------------------------------------------------
 
-    def _resolve_skin_or_recover(self, name: str):
-        try:
-            skin = resolver.resolve(name)
-        except (KeyError, SkinValidationError) as error:
-            self._critical_box(
-                f"Skin {name!r} cannot be loaded:\n{error}\n\n"
-                f"Continuing with the built-in DOMY skin.",
-                QMessageBox.StandardButton.Ok,
-                QMessageBox.StandardButton.Ok,
-            )
-            skin = defaults.DEFAULT_SKIN
-        return self._apply_display_settings(skin)
-
-    def _apply_display_settings(self, skin):
-        return apply_display_settings(skin, self._settings)
-
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
         self._skin = skin
@@ -358,20 +356,11 @@ class AppController(QObject):
             self._compositor.set_day(self._day)
         self._widget.update()
 
-    def _set_skin(self, name: str) -> None:
-        if name == self._settings.skin:
+    def _set_ring(self, ring: str) -> None:
+        if ring == self._settings.ring:
             return
-        try:
-            skin = resolver.resolve(name)
-        except (KeyError, SkinValidationError) as error:
-            self._critical_box(
-                f"Skin {name!r} cannot be loaded:\n{error}",
-                QMessageBox.StandardButton.Ok,
-                QMessageBox.StandardButton.Ok,
-            )
-            return
-        self._install_skin(self._apply_display_settings(skin))
-        self._settings = replace(self._settings, skin=name)
+        self._settings = replace(self._settings, ring=ring)
+        self._install_skin(build_skin(self._settings))
         self._flush_position()
 
     def _set_display_choice(self, key: str, value) -> None:
@@ -409,9 +398,9 @@ class AppController(QObject):
         menu = QMenu()
         settings = self._settings
         self._add_choice_submenu(
-            menu, "Skin",
-            [(name, name.upper()) for name in sorted(resolver.discover())],
-            settings.skin, self._set_skin,
+            menu, "Ring",
+            [(name, name.upper()) for name in sorted(defaults.RING_PRESETS)],
+            settings.ring, self._set_ring,
         )
         self._add_choice_submenu(
             menu, "Size",
@@ -551,9 +540,9 @@ class AppController(QObject):
                 latitude=new_settings.latitude, longitude=new_settings.longitude
             )
             self._day = None                # full rebuild for the new place
-        # Reinstall from the PRISTINE pack so cleared overrides (back to
-        # "skin default") actually clear instead of sticking.
-        self._install_skin(self._resolve_skin_or_recover(self._settings.skin))
+        # Rebuild from DEFAULT_SKIN so cleared overrides (back to "skin
+        # default") actually clear instead of sticking.
+        self._install_skin(build_skin(self._settings))
         self._on_tick(clock_jumped=False)
         self._flush_position()
 

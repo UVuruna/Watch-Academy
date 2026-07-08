@@ -37,7 +37,7 @@ class Settings:
     window_y: int | None = None
     diameter: int = defaults.DEFAULT_DIAL_DIAMETER
     click_through: bool = False
-    skin: str = "domy"
+    ring: str = "domy"                  # ring preset name (DOMY/MORPH/…)
     pointer: str = "hexa"
     umbra_form: str = "fine"
     umbra_contrast: str = "full"
@@ -86,6 +86,7 @@ class SettingsStore:
             # paint pass, where Qt swallows the exception.
             choices = {}
             for key, default, allowed in (
+                ("ring", "domy", tuple(defaults.RING_PRESETS)),
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
                 ("umbra_form", "fine", constants.UMBRA_FORMS),
                 ("umbra_contrast", "full", constants.UMBRA_CONTRAST_VARIANTS),
@@ -123,7 +124,6 @@ class SettingsStore:
                 diameter=diameter,
                 # Additive keys (still schema 1): absent in older files.
                 click_through=bool(raw.get("click_through", False)),
-                skin=str(raw.get("skin", "domy")),
                 solar_rotation=bool(raw.get("solar_rotation", True)),
                 legend=bool(raw.get("legend", True)),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
@@ -149,7 +149,7 @@ class SettingsStore:
                 "diameter": settings.diameter,
             },
             "click_through": settings.click_through,
-            "skin": settings.skin,
+            "ring": settings.ring,
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,

@@ -1,111 +1,38 @@
-"""Skin pack loading, merging, validation and DOMY round-trip."""
+"""Ring presets and the built render config (the skin-pack system is
+gone — DOMY and MORPH are ring preset names, nothing more)."""
 
-import json
-
-import pytest
-
-from config import defaults, paths
-from skins import resolver
-from skins.packs import SkinValidationError, load_pack, serialize_skin
+from app.controller import build_skin
+from app.settings_store import Settings, replace
+from config import defaults
+from skins.manifest import missing_assets
 
 
-def test_domy_round_trip():
-    """serialize(DEFAULT_SKIN) → load == DEFAULT_SKIN, byte for byte."""
-    folder = paths.bundled_skins_dir() / "domy"
-    loaded = load_pack(folder, defaults.DEFAULT_SKIN)
-    assert loaded == defaults.DEFAULT_SKIN
+def test_ring_presets_carry_their_letters():
+    """Greek-ordinal letter positions per ring (owner spec)."""
+    assert defaults.RING_PRESETS["domy"]["letters"] == {12: "M", 20: "Y", 0: "Ω", 4: "D"}
+    assert defaults.RING_PRESETS["morph"]["letters"] == {12: "M", 16: "Π", 8: "H", 0: "Ω"}
+    for preset in defaults.RING_PRESETS.values():
+        assert preset["asset"].exists()
 
 
-def test_morph_merges_only_the_ring():
-    skin = resolver.resolve("morph")
-    assert skin.name == "MORPH"
-    assert skin.ring.letters == {12: "M", 16: "Π", 8: "H", 0: "Ω"}
-    assert skin.ring.asset.name == "morph.png"       # shared assets/ring/
-    # Everything else inherits from the base.
-    assert skin.hands == defaults.DEFAULT_SKIN.hands
-    assert skin.background == defaults.DEFAULT_SKIN.background
-    assert skin.weekday_set == defaults.DEFAULT_SKIN.weekday_set
+def test_build_skin_swaps_only_the_ring():
+    domy = build_skin(Settings())
+    morph = build_skin(replace(Settings(), ring="morph"))
+    assert domy.ring.asset.name == "domy.png"
+    assert morph.ring.asset.name == "morph.png"
+    assert morph.ring.letters == {12: "M", 16: "Π", 8: "H", 0: "Ω"}
+    # Everything else is identical — the ring preset IS the difference.
+    assert morph.hands == domy.hands
+    assert morph.background == domy.background
+    assert morph.weekday_set == domy.weekday_set
+    assert morph.year_marker == domy.year_marker
 
 
-def test_validation_lists_every_problem_at_once(tmp_path):
-    (tmp_path / "skin.json").write_text(
-        json.dumps(
-            {
-                "banana": {},
-                "ring": {
-                    "asset": "missing.png",
-                    "fill": "#000000",
-                    "text_color": "#FFFFFF",
-                    "letter_color": "#FFD700",
-                    "typo_field": 1,
-                },
-            }
-        ),
-        encoding="utf-8",
-    )
-    with pytest.raises(SkinValidationError) as excinfo:
-        load_pack(tmp_path, defaults.DEFAULT_SKIN)
-    problems = "\n".join(excinfo.value.problems)
-    assert "banana" in problems          # unknown section
-    assert "missing.png" in problems     # absent asset
-    assert "typo_field" in problems      # unknown field
-    assert "width_fraction" in problems  # required field missing
-
-
-def test_unknown_skin_name_fails_loudly():
-    with pytest.raises(KeyError, match="atlantis"):
-        resolver.resolve("atlantis")
-
-
-def test_discover_finds_both_bundled_packs():
-    found = resolver.discover()
-    assert "domy" in found and "morph" in found
-
-
-def test_serialize_is_json_ready():
-    folder = paths.bundled_skins_dir() / "domy"
-    payload = serialize_skin(defaults.DEFAULT_SKIN, folder)
-    json.dumps(payload)                  # must not raise
-    assert payload["ring"]["asset"] == "../../ring/domy.png"
-    assert payload["pointer"] == "hexa"
-    assert payload["umbra_form"] == "fine"
-    assert payload["umbra_contrast"] == "full"
-    assert payload["palette_style"] == "paint"
-    assert payload["solar_rotation"] is True
-    assert payload["octa_slot"] == "time"
-    assert payload["earth_style"] == "clean"
-
-
-def test_pack_display_choices_merge(tmp_path):
-    (tmp_path / "skin.json").write_text(
-        json.dumps(
-            {
-                "pointer": "octa",
-                "umbra_form": "coarse",
-                "umbra_contrast": "half",
-                "palette_style": "light",
-                "solar_rotation": False,
-                "octa_slot": "day_length",
-            }
-        ),
-        encoding="utf-8",
-    )
-    skin = load_pack(tmp_path, defaults.DEFAULT_SKIN)
-    assert skin.pointer == "octa"
-    assert skin.umbra_form == "coarse"
-    assert skin.umbra_contrast == "half"
-    assert skin.palette_style == "light"
-    assert skin.solar_rotation is False
-    assert skin.octa_slot == "day_length"
-
-
-def test_pack_rejects_unknown_display_choices(tmp_path):
-    (tmp_path / "skin.json").write_text(
-        json.dumps({"pointer": "banana", "umbra_contrast": "extreme"}),
-        encoding="utf-8",
-    )
-    with pytest.raises(SkinValidationError) as excinfo:
-        load_pack(tmp_path, defaults.DEFAULT_SKIN)
-    problems = "\n".join(excinfo.value.problems)
-    assert "banana" in problems
-    assert "extreme" in problems
+def test_default_config_assets_all_exist():
+    """Every asset the built config references ships in the repo (a miss
+    would otherwise surface inside paintEvent, where Qt swallows it)."""
+    assert missing_assets(build_skin(Settings())) == []
+    assert missing_assets(build_skin(replace(Settings(), ring="morph"))) == []
+    assert missing_assets(
+        build_skin(replace(Settings(), weekday_theme="norse", earth_style="atmo"))
+    ) == []

@@ -29,10 +29,10 @@ bodies, year marker, hands) done; Windows hardening (M4) is next.
   📁 config/            ← all constants and tunables
   📁 core/              ← pure astronomy/angle computation
   📁 data/              ← repositories over Database/*.json
-  📁 skins/             ← skin manifests, validation, merging (M5)
+  📁 skins/             ← typed render configuration (unit dataclasses)
   📁 render/            ← QPainter layers and compositor (M3)
   📁 app/               ← Qt shell: window, tray, settings
-  📁 assets/            ← shared art (ring, weekday themes, zodiac) + skins
+  📁 assets/            ← shared art: ring faces, hands, earth, weekday themes, zodiac
   📁 Database/          ← bundled astronomical/location data
   📁 tests/             ← pytest golden-value suite
   📁 design/            ← mockups and reference images (not bundled)

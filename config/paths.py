@@ -39,9 +39,5 @@ def user_dir() -> Path:
     return Path(os.environ["APPDATA"]) / constants.APP_NAME
 
 
-def user_skins_dir() -> Path:
-    return user_dir() / "skins"
-
-
 def settings_path() -> Path:
     return user_dir() / "settings.json"

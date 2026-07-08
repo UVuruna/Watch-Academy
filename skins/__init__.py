@@ -1,7 +1,7 @@
-"""Skin identity — Qt-free.
+"""Typed render configuration — Qt-free.
 
-M3 ships the typed unit dataclasses (manifest.py) that DEFAULT_SKIN in
-config is built from; loading skin.json packs, validation and per-unit
-override merging arrive with M5 (that step is then serialization, not a
-redesign).
+manifest.py holds the unit dataclasses that DEFAULT_SKIN in config is
+built from; the controller overlays the ring preset (DOMY/MORPH are
+ring preset names — nothing more) and the user's display choices onto
+it at build time.
 """

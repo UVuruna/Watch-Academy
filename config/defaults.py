@@ -107,10 +107,24 @@ TRAY_DISC_RGB = (18, 22, 34)
 TRAY_MARK_RGB = (255, 211, 77)
 TRAY_MARK_SIZE = 0.10                # fraction of the icon size
 
-# --- Default skin ---------------------------------------------------------------
-# Typed against skins/manifest.py from day one: extracting it into
-# assets/skins/domy/skin.json in M5 is serialization, not redesign.
-_DOMY = paths.bundled_skins_dir() / "domy"
+# --- Ring presets ----------------------------------------------------------------
+# DOMY and MORPH are RING PRESET names — nothing more (owner decision):
+# a ring face plus its Greek-ordinal letter positions. The owner may add
+# more rings (drop the art into assets/ring/ and add an entry here).
+RING_PRESETS = {
+    "domy": {
+        "asset": paths.assets_dir() / "ring" / "domy.png",
+        "letters": {12: "M", 20: "Y", 0: "Ω", 4: "D"},
+    },
+    "morph": {
+        "asset": paths.assets_dir() / "ring" / "morph.png",
+        "letters": {12: "M", 16: "Π", 8: "H", 0: "Ω"},
+    },
+}
+
+# --- Default render config --------------------------------------------------------
+# The ONE typed SkinDefinition the compositor consumes; the controller
+# overlays the ring preset and the user's display choices onto it.
 
 _CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oceania")
 
@@ -227,7 +241,6 @@ WEEKDAY_THEME_FILES = {
 }
 
 DEFAULT_SKIN = SkinDefinition(
-    name="DOMY",
     z_order=(
         "background",
         "star",
@@ -255,14 +268,14 @@ DEFAULT_SKIN = SkinDefinition(
         radius_fraction=0.86,           # star tips touch the ring's inner edge too
     ),
     ring=RingSpec(
-        asset=paths.assets_dir() / "ring" / "domy.png",   # design/hours/domy.png
+        # The DOMY preset by default; the controller swaps in the chosen
+        # ring preset (asset + letter positions) at build time.
+        asset=RING_PRESETS["domy"]["asset"],
         fill="#4A4E57",
         text_color="#F0F0F0",
         letter_color="#E8B84B",
         width_fraction=0.16,
-        # Letter hour-positions follow the Greek-alphabet ordinal (owner
-        # spec, matches the ring art): M at 12, Y at 20, Omega at 0, D at 4.
-        letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
+        letters=RING_PRESETS["domy"]["letters"],
     ),
     weekday_set=WeekdaySpec(
         bodies={name: WEEKDAY_ART_DIR / "planets" / f"{name}.png" for name in (
@@ -296,7 +309,7 @@ DEFAULT_SKIN = SkinDefinition(
         mode="both",                    # owner preview default; selectable in M6 settings
         # Both styles bundled; the earth_style display choice picks one.
         variants={
-            f"{style}_{continent}_{phase}": _DOMY / "year_marker"
+            f"{style}_{continent}_{phase}": paths.assets_dir() / "earth"
             / f"earth_{style}_{continent}_{phase}.png"
             for style in ("clean", "atmo")
             for continent in _CONTINENTS
@@ -322,9 +335,13 @@ DEFAULT_SKIN = SkinDefinition(
         # faint reference circle keeps the export from trimming them).
         # ONE shared scale preserves the designed proportions; every
         # rotation center is 15 design units above its canvas bottom.
-        hour=HandSpec(asset=_DOMY / "hands" / "hour.svg", design_height=240),
-        minute=HandSpec(asset=_DOMY / "hands" / "minute.svg", design_height=290),
-        second=HandSpec(asset=_DOMY / "hands" / "second.svg", design_height=300),
+        hour=HandSpec(asset=paths.assets_dir() / "hands" / "hour.svg", design_height=240),
+        minute=HandSpec(
+            asset=paths.assets_dir() / "hands" / "minute.svg", design_height=290
+        ),
+        second=HandSpec(
+            asset=paths.assets_dir() / "hands" / "second.svg", design_height=300
+        ),
         # The longest hand's (seconds) tip reach, fraction of the dial
         # radius — aimed at the end of the 360-dot scale lines.
         reach_fraction=0.88,

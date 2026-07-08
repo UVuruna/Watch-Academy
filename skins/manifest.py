@@ -1,11 +1,10 @@
-"""Typed skin definition — the six overridable units plus the noon marker.
+"""Typed render configuration — the dial's six unit specs.
 
 Pure dataclasses, importable from config (which builds DEFAULT_SKIN) and
-from render (which consumes a resolved skin). Asset fields hold absolute
-paths at runtime; a None asset means "draw procedurally". Hand pivots are
-MANDATORY fractions of the image size — the measured default hands prove
-pivots are non-uniform (0.68 vs 0.92 of height, the hour hand has a
-counterweight tail below the hub).
+from render (which consumes the built config). The controller overlays
+the RING PRESET (DOMY/MORPH are ring preset names — nothing more) and
+the user's display choices onto DEFAULT_SKIN at build time. Asset fields
+hold absolute paths; a None asset means "draw procedurally".
 """
 
 from dataclasses import dataclass, field
@@ -113,7 +112,6 @@ class HandsSpec:
 
 @dataclass(frozen=True)
 class SkinDefinition:
-    name: str
     z_order: tuple[str, ...]           # layer names bottom-up
     background: BackgroundSpec
     star: StarSpec
