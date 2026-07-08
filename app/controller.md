@@ -55,8 +55,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Exit; settings dialog arrives in M6
 - `_set_diameter()`: resizes the widget, invalidates the compositor
   caches and persists the choice
-- `_set_click_through()`: hit-test based — only the center hub stays
-  interactive (hover + right-click, i.e. in-place recovery); persisted
+- `_set_click_through()`: TRUE pass-through (window takes no mouse input;
+  tray-only recovery) + starts `_poll_hover()` — a cursor poller that
+  keeps ALL five hover tooltips (weekday, date, moon, dawn, dusk) alive
+  by asking the compositor about the cursor position a few times a second
 - `_on_wake()`: resume-from-sleep / clock change → immediate full refresh
   (wired to the native PowerEventFilter)
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be

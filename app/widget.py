@@ -44,11 +44,12 @@ class ClockWidget(QWidget):
         self._closing = True
 
     def set_click_through(self, enabled: bool) -> None:
-        """Shrink the interactive area to the center hub — the rest of the
-        dial passes clicks to whatever lies beneath. The hub keeps hover
-        and the right-click menu alive, so the mode can be turned off on
-        the dial itself (or via the tray)."""
+        """TRUE click-through: the whole window stops taking mouse input
+        (left and right clicks and system hover all pass to whatever lies
+        beneath). Recovery is via the tray; hover tooltips come from the
+        controller's cursor poller while the mode is on."""
         self._click_through = enabled
+        native.set_click_through(int(self.winId()), enabled)
 
     # --- Rendering --------------------------------------------------------------
 
@@ -104,15 +105,13 @@ class ClockWidget(QWidget):
 
     def nativeEvent(self, event_type, message):
         """Clicks outside the dial's inscribed circle fall through to
-        whatever lies beneath (the square window corners are not ours);
-        in click-through mode the interactive area shrinks further to the
-        center hub."""
-        if event_type == b"windows_generic_MSG":
-            interactive = (
-                defaults.CLICK_THROUGH_HANDLE_FRACTION if self._click_through else 1.0
-            )
-            if native.nchittest_falls_outside(int(message), interactive):
-                return True, winapi.HTTRANSPARENT
+        whatever lies beneath — the square window corners are not ours.
+        (In click-through mode WS_EX_TRANSPARENT bypasses hit testing
+        altogether, so this only matters in normal mode.)"""
+        if event_type == b"windows_generic_MSG" and native.nchittest_falls_outside(
+            int(message)
+        ):
+            return True, winapi.HTTRANSPARENT
         return super().nativeEvent(event_type, message)
 
     # --- Spontaneous-hide watchdog ----------------------------------------------

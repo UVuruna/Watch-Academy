@@ -38,10 +38,12 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
   small dials pop the full date over the current weekday body, the Earth
   and the Moon markers (large dials write the text directly)
 - `contextMenuEvent()`: opens the shared menu
+- `set_click_through()`: TRUE pass-through (`WS_EX_TRANSPARENT`) — no
+  clicks, no system hover; recovery via the tray, hover via the
+  controller's cursor poller
 - `nativeEvent()`: WM_NCHITTEST → `HTTRANSPARENT` outside the dial's
-  inscribed circle — corner clicks reach whatever lies beneath; in
-  click-through mode (`set_click_through`) the interactive area shrinks
-  to the center hub, which keeps hover and the right-click menu alive
+  inscribed circle — corner clicks reach whatever lies beneath (normal
+  mode; click-through bypasses hit testing altogether)
 - `hideEvent()` / `changeEvent()`: spontaneous-hide watchdog — undoes an
   OS-initiated hide/minimize after `WATCHDOG_RESHOW_MS` (note: Win+D on
   Windows 11 24H2 bypasses these events entirely; see the folder doc)

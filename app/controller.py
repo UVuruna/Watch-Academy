@@ -13,8 +13,8 @@ from zoneinfo import ZoneInfo
 import astral
 
 from PySide6.QtCore import QObject, QRect, Qt, QTimer
-from PySide6.QtGui import QAction, QActionGroup, QGuiApplication
-from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
+from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication
+from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QToolTip
 
 from app import native
 from app.scheduler import MinuteScheduler
@@ -79,6 +79,13 @@ class AppController(QObject):
         self._save_timer.timeout.connect(self._flush_position)
         self._widget.moved.connect(self._on_widget_moved)
 
+        # In click-through mode the window receives no mouse input, so the
+        # hover tooltips are driven by polling the global cursor instead.
+        self._hover_poller = QTimer(self)
+        self._hover_poller.setInterval(defaults.CLICK_THROUGH_HOVER_POLL_MS)
+        self._hover_poller.timeout.connect(self._poll_hover)
+        self._last_hover_tip: str | None = None
+
     # --- Lifecycle --------------------------------------------------------------
 
     def run(self) -> None:
@@ -92,6 +99,7 @@ class AppController(QObject):
         self._widget.windowHandle().screenChanged.connect(self._on_screen_changed)
         if self._settings.click_through:
             self._widget.set_click_through(True)
+            self._hover_poller.start()
 
     def quit(self) -> None:
         self._widget.mark_closing()
@@ -264,9 +272,8 @@ class AppController(QObject):
         click_through.setCheckable(True)
         click_through.setChecked(self._settings.click_through)
         click_through.setToolTip(
-            "Clicks pass through the dial to the desktop — only the center "
-            "hub stays interactive (right-click it, or use the tray, to "
-            "turn this back off)."
+            "The dial takes no clicks at all (they pass to the desktop); "
+            "hover info still works. Turn it back off here in the tray."
         )
         click_through.toggled.connect(self._set_click_through)
         menu.addAction(click_through)
@@ -278,8 +285,27 @@ class AppController(QObject):
 
     def _set_click_through(self, enabled: bool) -> None:
         self._widget.set_click_through(enabled)
+        if enabled:
+            self._hover_poller.start()
+        else:
+            self._hover_poller.stop()
+            QToolTip.hideText()
         self._settings = replace(self._settings, click_through=enabled)
         self._flush_position()
+
+    def _poll_hover(self) -> None:
+        cursor = QCursor.pos()
+        local = self._widget.mapFromGlobal(cursor)
+        size = float(min(self._widget.width(), self._widget.height()))
+        tip = None
+        if 0 <= local.x() < self._widget.width() and 0 <= local.y() < self._widget.height():
+            tip = self._compositor.tooltip_at(local.x(), local.y(), size)
+        if tip:
+            if tip != self._last_hover_tip:
+                QToolTip.showText(cursor, tip, self._widget)
+        elif self._last_hover_tip:
+            QToolTip.hideText()
+        self._last_hover_tip = tip
 
     def _set_diameter(self, diameter: int) -> None:
         if diameter == self._settings.diameter:

@@ -35,11 +35,23 @@ def acquire_single_instance(name: str) -> bool:
     return _kernel32.GetLastError() != winapi.ERROR_ALREADY_EXISTS
 
 
-def nchittest_falls_outside(message_ptr: int, radius_fraction: float) -> bool:
+def set_click_through(hwnd: int, enabled: bool) -> None:
+    """True click-through: WS_EX_TRANSPARENT removes the window from mouse
+    hit testing entirely (both buttons AND system hover pass to whatever
+    lies beneath) — toggled directly because setWindowFlag() would
+    re-parent and hide the window. Hover tooltips in this mode come from
+    the controller's cursor poller instead."""
+    style = _user32.GetWindowLongPtrW(wintypes.HWND(hwnd), winapi.GWL_EXSTYLE)
+    if enabled:
+        style |= winapi.WS_EX_LAYERED | winapi.WS_EX_TRANSPARENT
+    else:
+        style &= ~winapi.WS_EX_TRANSPARENT
+    _user32.SetWindowLongPtrW(wintypes.HWND(hwnd), winapi.GWL_EXSTYLE, style)
+
+
+def nchittest_falls_outside(message_ptr: int) -> bool:
     """True when the native message is a WM_NCHITTEST whose (physical,
-    screen-space) point lies outside `radius_fraction` of the window's
-    inscribed circle (1.0 = the dial edge; a smaller fraction shrinks the
-    interactive area to the center hub in click-through mode).
+    screen-space) point lies outside the window's inscribed circle.
     The window handle comes from the message itself — calling winId()
     here would force window creation from INSIDE window creation and
     CreateWindowEx would loop forever. Physical coordinates on both
@@ -53,7 +65,7 @@ def nchittest_falls_outside(message_ptr: int, radius_fraction: float) -> bool:
     _user32.GetWindowRect(msg.hWnd, ctypes.byref(rect))
     center_x = (rect.left + rect.right) / 2
     center_y = (rect.top + rect.bottom) / 2
-    radius = min(rect.right - rect.left, rect.bottom - rect.top) / 2 * radius_fraction
+    radius = min(rect.right - rect.left, rect.bottom - rect.top) / 2
     return (x - center_x) ** 2 + (y - center_y) ** 2 > radius * radius
 
 
