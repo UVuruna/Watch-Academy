@@ -24,17 +24,19 @@ MIN_DIAL_DIAMETER = 120
 MAX_DIAL_DIAMETER = 1200
 SIZE_PRESETS = (360, 540, 720)       # owner spec: three dial versions
 
-# Dials at or above this diameter carry more text (date on the Earth
-# marker, full weekday name on the planet); smaller dials get hover
-# tooltips instead (owner spec).
+# Dials at or above this diameter write the date on the Earth marker;
+# the FULL weekday name needs more room and appears only from the largest
+# preset (owner: at 540 the full name is too small — keep the short one).
+# Below the full-name threshold the markers get hover tooltips instead.
 FULL_TEXT_MIN_DIAMETER = 540
+WEEKDAY_FULL_NAME_MIN_DIAMETER = 720
 EARTH_DATE_TEXT_SIZE = 0.30          # fraction of the marker size
 
 # White label text carries a black outline so it stays readable over
 # bright bodies (owner spec — "WED" on Mercury washed out without it).
 LABEL_FILL_RGBA = (255, 255, 255, 240)
 LABEL_OUTLINE_RGBA = (0, 0, 0, 210)
-LABEL_OUTLINE_WIDTH = 0.14           # fraction of the font pixel size
+LABEL_OUTLINE_WIDTH = 0.05           # fraction of the font pixel size
 
 # Watchdog delay for undoing a spontaneous (OS-initiated) hide/minimize.
 # NOTE, verified on Windows 11 24H2: Win+D does NOT hide or minimize this
@@ -120,8 +122,8 @@ DEFAULT_SKIN = SkinDefinition(
         day_alpha=0.55,
         twilight_alpha=0.28,
         # Owner spec: the disc TOUCHES the ring's inner edge (measured at
-        # 0.887 of the radius in the ring art) — no empty space between.
-        radius_fraction=0.89,
+        # 0.858 of the radius in the seconds-scale ring art) — no gap.
+        radius_fraction=0.86,
     ),
     hexagram=HexagramSpec(
         colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
@@ -129,7 +131,7 @@ DEFAULT_SKIN = SkinDefinition(
         twilight_alpha=0.55,
         border_alpha=0.85,              # colored outlines run the full circle
         border_width_fraction=0.008,
-        radius_fraction=0.89,           # star tips touch the ring's inner edge too
+        radius_fraction=0.86,           # star tips touch the ring's inner edge too
     ),
     noon_marker=NoonMarkerSpec(
         asset=None,
@@ -176,9 +178,9 @@ DEFAULT_SKIN = SkinDefinition(
         day_color="#4B86C9",
         night_color="#20344F",
         # Owner spec: the Earth's outer edge TOUCHES the ring's inner
-        # edge (0.78 + 0.11 = 0.89 = the disc radius), same size as the
+        # edge (0.75 + 0.11 = 0.86 = the disc radius), same size as the
         # weekday planets.
-        orbit_fraction=0.78,
+        orbit_fraction=0.75,
         scale=0.11,
         moon_asset=_DOMY / "weekday" / "moon.png",
         moon_lit_color="#E8E4D8",
@@ -188,16 +190,16 @@ DEFAULT_SKIN = SkinDefinition(
         moon_scale=0.065,
     ),
     hands=HandsSpec(
-        # Owner spec: both hands rotate about a hub 15 px from the image
-        # bottom (hub circle radius 15 px), horizontally centered.
+        # Owner's vector hands: both rotate about a hub 15 units from the
+        # image bottom (hub circle radius 15), horizontally centered.
         hour=HandSpec(
-            asset=_DOMY / "hands" / "hour.png",
-            pivot=(0.5, (142 - 15) / 142),      # image 47x142
+            asset=_DOMY / "hands" / "hour.svg",
+            pivot=(0.5, (150 - 15) / 150),      # viewBox 46x150
             length_fraction=0.34,
         ),
         minute=HandSpec(
-            asset=_DOMY / "hands" / "minute.png",
-            pivot=(0.5, (201 - 15) / 201),      # image 30x201
+            asset=_DOMY / "hands" / "minute.svg",
+            pivot=(0.5, (210 - 15) / 210),      # viewBox 30x210
             length_fraction=0.60,
         ),
     ),

@@ -114,7 +114,7 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
-        if size < defaults.FULL_TEXT_MIN_DIAMETER:
+        if size < defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER:
             weekday = self._skin.weekday_set
             today = constants.WEEKDAY_BODIES[day.weekday_index]
             if weekday.display_mode == "center_only" or today == "sun":

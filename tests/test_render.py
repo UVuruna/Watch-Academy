@@ -71,9 +71,10 @@ def test_dial_is_not_mirrored(frame):
 
 def test_disc_touches_the_ring(frame):
     """Owner spec (emphasized twice): NO empty space between the disc and
-    the ring — the pixel just inside the ring's inner edge (0.887R, probe
-    at 90° between star tips) must be painted."""
-    assert frame.pixelColor(337, 180).alpha() > 200
+    the ring — the pixel just inside the disc edge (0.85R, probe at 90°
+    between star tips; the ring art with its seconds scale starts at
+    0.858R) must be painted."""
+    assert frame.pixelColor(333, 180).alpha() > 200
 
 
 def test_lit_regions_never_crash_across_polar_year(app):

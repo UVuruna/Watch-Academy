@@ -400,10 +400,10 @@ class WeekdayLayer(Layer):
             painter.setBrush(QColor(spec.body_colors[body]))
             painter.drawEllipse(pos, size / 2, size / 2)
         # The white weekday name is written ON the body either way (owner
-        # spec) — never the planet abbreviation. Short on small dials,
-        # full ("Wednesday") from FULL_TEXT_MIN_DIAMETER up; black outline
-        # keeps it readable over bright bodies.
-        full_text = 2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER
+        # spec) — never the planet abbreviation. Short until the largest
+        # preset (owner: full name is too small at 540), full from
+        # WEEKDAY_FULL_NAME_MIN_DIAMETER; black outline keeps it readable.
+        full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
         label = (
             constants.WEEKDAY_FULL_NAMES[body]
             if full_text
