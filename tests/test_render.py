@@ -196,6 +196,35 @@ def test_moon_flips_on_southern_hemisphere(app):
     assert right.red() <= 150
 
 
+def test_sunday_sun_covers_the_hands(app):
+    """On Sundays the opaque Sun in the center draws ABOVE the hands —
+    at noon sharp all hands point straight up, so a pixel just above the
+    center must show the warm Sun, not the gray hand shaft."""
+    from datetime import datetime
+
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+
+    tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
+    sunday_noon = datetime(2026, 7, 12, 12, 0, tzinfo=tz)   # a Sunday
+    observer = astral.Observer(
+        latitude=defaults.DEFAULT_CITY["latitude"],
+        longitude=defaults.DEFAULT_CITY["longitude"],
+    )
+    day = build_day_context(
+        sunday_noon,
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    image = Compositor(defaults.DEFAULT_SKIN, AssetCache()).render_offscreen(
+        360.0, 1.0, day, build_tick_state(sunday_noon, day)
+    )
+    color = image.pixelColor(180, 165)   # inside the Sun disc, on the hand axis
+    assert color.red() > 140 and color.red() > color.blue()   # Sun, not gray shaft
+
+
 def test_noon_sector_is_yellowish(frame):
     # At 12:00 in July the top sector (yellow) is in full daylight; sample
     # inside the background at dial angle ~16 deg — inside the (rotated)

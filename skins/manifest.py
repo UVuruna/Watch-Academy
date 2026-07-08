@@ -96,14 +96,20 @@ class YearMarkerSpec:
 @dataclass(frozen=True)
 class HandSpec:
     asset: Path
-    pivot: tuple[float, float]         # (x, y) fractions of the image size — MANDATORY
-    length_fraction: float             # tip-to-pivot reach as fraction of the dial radius
+    design_height: float               # image height in DESIGN UNITS (viewBox);
+                                       # the hub center is HAND_HUB_OFFSET_UNITS
+                                       # above the bottom by owner convention
 
 
 @dataclass(frozen=True)
 class HandsSpec:
+    """All hands share ONE scale so their designed proportions are never
+    deformed: the LONGEST hand's tip reaches `reach_fraction` of the dial
+    radius and the others follow at their drawn ratios."""
+
     hour: HandSpec
     minute: HandSpec
+    reach_fraction: float
     second: HandSpec | None = None     # optional; enabled via settings
 
 

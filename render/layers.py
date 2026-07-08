@@ -369,71 +369,89 @@ class RingLayer(Layer):
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
 
 
+def draw_weekday_body(
+    painter: QPainter,
+    ctx: RenderContext,
+    body: str,
+    pos: QPointF,
+    size: float,
+    opacity: float,
+) -> None:
+    """One weekday body with its white outlined label — shared by the
+    diamond slots and the above-the-hands center pass (Rule #5). The
+    label is the weekday name (owner spec): short until the largest
+    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER."""
+    spec = ctx.skin.weekday_set
+    painter.save()
+    painter.setOpacity(opacity)
+    asset = spec.bodies.get(body)
+    if asset is not None:
+        draw_pixmap_centered(painter, ctx, asset, pos, size)
+    else:
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(spec.body_colors[body]))
+        painter.drawEllipse(pos, size / 2, size / 2)
+    full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
+    label = (
+        constants.WEEKDAY_FULL_NAMES[body]
+        if full_text
+        else constants.WEEKDAY_LABELS[body]
+    )
+    font = QFont()
+    label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
+    font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
+    font.setBold(True)
+    draw_outlined_text(painter, pos, label, font)
+    painter.restore()
+
+
 class WeekdayLayer(Layer):
     """Seven bodies: Sun in the center, six in the hexagram diamonds.
-    The diamond slots rotate WITH the hexagram (owner decision). Modes:
-    "ghost" (all visible, non-current faint) and "center_only" (only the
-    current day's body, in the center)."""
+    The diamond slots rotate WITH the hexagram (owner decision) and stay
+    BELOW the hands. Modes: "ghost" (all visible, non-current faint) and
+    "center_only" (only the current day's body, in the center). Whenever
+    the CENTER image is the current day it is drawn by CenterBodyLayer
+    instead — ABOVE the hands (owner spec; diamonds are unaffected)."""
 
     cadence = Cadence.DAILY
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
-        center_size = 2 * ctx.radius * spec.center_scale
 
         if spec.display_mode == "center_only":
-            self._draw_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
-            return
+            return                       # the center pass draws it above the hands
 
-        self._draw_body(
-            painter, ctx, "sun", QPointF(0, 0), center_size,
-            1.0 if today == "sun" else spec.ghost_opacity,
-        )
+        if today != "sun":
+            center_size = 2 * ctx.radius * spec.center_scale
+            draw_weekday_body(
+                painter, ctx, "sun", QPointF(0, 0), center_size, spec.ghost_opacity
+            )
         orbit = ctx.radius * spec.orbit_fraction
         slot_size = 2 * ctx.radius * spec.diamond_scale
         for body, slot_angle in constants.WEEKDAY_SLOT_ANGLES.items():
             theta = slot_angle + ctx.day.hexagram_rotation
-            self._draw_body(
+            draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit), slot_size,
                 1.0 if body == today else spec.ghost_opacity,
             )
 
-    def _draw_body(
-        self,
-        painter: QPainter,
-        ctx: RenderContext,
-        body: str,
-        pos: QPointF,
-        size: float,
-        opacity: float,
-    ) -> None:
+
+class CenterBodyLayer(Layer):
+    """The current day's CENTER image drawn ABOVE the hands — the opaque
+    Sun on Sundays in ghost mode, or the day's body in center_only mode —
+    so the hands sweep behind it (owner spec; the diamond images never
+    move up here)."""
+
+    cadence = Cadence.MINUTE
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        painter.save()
-        painter.setOpacity(opacity)
-        asset = spec.bodies.get(body)
-        if asset is not None:
-            draw_pixmap_centered(painter, ctx, asset, pos, size)
-        else:
-            painter.setPen(Qt.PenStyle.NoPen)
-            painter.setBrush(QColor(spec.body_colors[body]))
-            painter.drawEllipse(pos, size / 2, size / 2)
-        # The white weekday name is written ON the body either way (owner
-        # spec) — never the planet abbreviation. Short until the largest
-        # preset (owner: full name is too small at 540), full from
-        # WEEKDAY_FULL_NAME_MIN_DIAMETER; black outline keeps it readable.
-        full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
-        label = (
-            constants.WEEKDAY_FULL_NAMES[body]
-            if full_text
-            else constants.WEEKDAY_LABELS[body]
-        )
-        font = QFont()
-        label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
-        font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
-        font.setBold(True)
-        draw_outlined_text(painter, pos, label, font)
-        painter.restore()
+        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        if spec.display_mode != "center_only" and today != "sun":
+            return
+        center_size = 2 * ctx.radius * spec.center_scale
+        draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
 
 
 class YearMarkerLayer(Layer):
@@ -542,8 +560,11 @@ class YearMarkerLayer(Layer):
 
 
 class HandLayer(Layer):
-    """One class, two instances — rotates the hand image about its
-    skin-declared pivot; the tip reaches length_fraction of the radius."""
+    """One class, three instances — rotates the hand image about the hub
+    center (HAND_HUB_OFFSET_UNITS above the image bottom, owner
+    convention). ALL hands share one scale so their designed proportions
+    are never deformed: the longest hand's tip reaches the skin's
+    reach_fraction and the others follow at their drawn ratios."""
 
     cadence = Cadence.MINUTE
 
@@ -565,13 +586,19 @@ class HandLayer(Layer):
             "minute": ctx.tick.minute_angle,
             "second": ctx.tick.second_angle,
         }[self._kind]
-        # The tip-to-pivot distance is pivot_y of the image height.
-        height = (spec.length_fraction * ctx.radius) / spec.pivot[1]
+        hands = self._skin.hands
+        hub = constants.HAND_HUB_OFFSET_UNITS
+        longest_tip_units = max(
+            hand.design_height - hub
+            for hand in (hands.hour, hands.minute, hands.second)
+            if hand is not None
+        )
+        units_to_logical = (hands.reach_fraction * ctx.radius) / longest_tip_units
+        height = spec.design_height * units_to_logical
+        pivot_y = (spec.design_height - hub) / spec.design_height
         pixmap = ctx.cache.pixmap_by_height(spec.asset, height, ctx.dpr)
         logical_w = pixmap.width() / ctx.dpr
         painter.save()
         painter.rotate(angle)
-        painter.drawPixmap(
-            QPointF(-spec.pivot[0] * logical_w, -spec.pivot[1] * height), pixmap
-        )
+        painter.drawPixmap(QPointF(-logical_w / 2, -pivot_y * height), pixmap)
         painter.restore()

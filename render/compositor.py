@@ -18,6 +18,7 @@ from render.assets import AssetCache
 from render.layers import (
     BackgroundLayer,
     Cadence,
+    CenterBodyLayer,
     HandLayer,
     HexagramLayer,
     Layer,
@@ -55,6 +56,10 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
                 layers.append(HandLayer(skin, "second"))
         else:
             layers.append(factories[name]())
+    if "weekday_set" in skin.z_order:
+        # The current day's center body rides ABOVE everything — the
+        # hands sweep behind the Sun (owner spec).
+        layers.append(CenterBodyLayer(skin))
     return layers
 
 

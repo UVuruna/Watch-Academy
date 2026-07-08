@@ -144,8 +144,8 @@ DEFAULT_SKIN = SkinDefinition(
         twilight_alpha=0.28,
         # TWO independent radii for fine tuning (fractions of the dial
         # radius; the ring art's inner edge sits at 0.858):
-        base_radius_fraction=0.86,      # the GRAY wheel
-        radius_fraction=0.86,           # the COLORED wedges
+        base_radius_fraction=0.90,      # the GRAY wheel
+        radius_fraction=0.90,           # the COLORED wedges
     ),
     hexagram=HexagramSpec(
         colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
@@ -221,22 +221,15 @@ DEFAULT_SKIN = SkinDefinition(
         moon_scale=0.08,                # ~72% of the Earth marker (owner spec)
     ),
     hands=HandsSpec(
-        # Owner's vector hands: both rotate about a hub 15 units from the
-        # image bottom (hub circle radius 15), horizontally centered.
-        hour=HandSpec(
-            asset=_DOMY / "hands" / "hour.svg",
-            pivot=(0.5, (150 - 15) / 150),      # viewBox 46x150
-            length_fraction=0.64,               # owner: ~64% of the circle
-        ),
-        minute=HandSpec(
-            asset=_DOMY / "hands" / "minute.svg",
-            pivot=(0.5, (210 - 15) / 210),      # viewBox 30x210
-            length_fraction=0.82,               # tip reaches the 360-dot scale
-        ),
-        second=HandSpec(
-            asset=_DOMY / "hands" / "second.svg",
-            pivot=(0.5, (300 - 15) / 300),      # viewBox 29x300, same 15-from-bottom rule
-            length_fraction=0.82,               # tip reaches the 360-dot scale
-        ),
+        # Owner's vector hands, ONE shared scale (designed proportions
+        # 240 : 288.5 : 296 stay exact); every hub center is 15 design
+        # units above the image bottom — the hub circles differ in size
+        # (30/27/22) so all three stay visible around the shared center.
+        hour=HandSpec(asset=_DOMY / "hands" / "hour.svg", design_height=240),
+        minute=HandSpec(asset=_DOMY / "hands" / "minute.svg", design_height=288.5),
+        second=HandSpec(asset=_DOMY / "hands" / "second.svg", design_height=296),
+        # The longest hand's (seconds) tip reach, fraction of the dial
+        # radius — aimed at the end of the 360-dot scale lines.
+        reach_fraction=0.88,
     ),
 )
