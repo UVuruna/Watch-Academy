@@ -28,17 +28,21 @@ per-paint context (skin, day, tick, radius, cache, dpr — `tick` is None
 while compositing non-MINUTE layers).
 
 ### BackgroundLayer (DAILY)
-The FIXED gray brightness wheel (asset), then transparent hue wedges
-that rotate with the hexagram, clipped to `lit_regions()` — the shared
-per-regime (start, end, alpha) arcs of the sunlit day (day alpha between
-sunrise and sunset, twilight alpha over the dawn/dusk bands, nothing at
-night; robust to missing boundaries on transitional polar days).
+The gray brightness wheel (asset) rotated WITH the hexagram — the white
+section centers on the star's top tip (true solar noon), black on solar
+midnight — then transparent hue wedges at the same rotation, clipped to
+`lit_regions()`: the shared per-regime (start, end, alpha) arcs of the
+sunlit day (day alpha between sunrise and sunset, twilight alpha over the
+dawn/dusk bands, nothing at night; robust to missing boundaries on
+transitional polar days). The disc leaves an empty band before the ring.
 
 ### HexagramLayer (DAILY)
 Procedural six-diamond star (tip radius + inner vertices at tip/√3):
-neutral gray diamonds over the whole circle keep the shape visible at
-night; the colored diamonds (near-full opacity) are clipped to the same
-`lit_regions()`. NoonMarkerLayer draws the triangle at the same rotation.
+colored BORDERS run the full circle so the night diamonds stay
+recognizable; the FILLS (near-full opacity) are clipped to the same
+`lit_regions()`. The star's top tip doubles as the solar-noon pointer —
+the DOMY skin ships no separate noon marker (NoonMarkerLayer remains
+available to other skins).
 
 ### RingLayer (STATIC)
 The full ring image when the skin provides one (numerals, minutes and

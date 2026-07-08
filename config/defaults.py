@@ -98,24 +98,23 @@ DEFAULT_SKIN = SkinDefinition(
         "hexagram",
         "weekday_set",
         "ring",
-        "noon_marker",
         "year_marker",
         "hands",
-    ),
+    ),                                  # no noon marker: the hexagram tip IS the noon pointer
     background=BackgroundSpec(
-        base_asset=_DOMY / "dial" / "base_gray.png",   # FIXED 32-section gray wheel
+        base_asset=_DOMY / "dial" / "base_gray.png",   # 32-section gray wheel, rotates with the hexagram
         base_color="#8A8D93",
         sector_palette=_SECTOR_PALETTE,
         day_alpha=0.55,
         twilight_alpha=0.28,
-        radius_fraction=0.84,
+        radius_fraction=0.76,           # empty breathing space between the disc and the ring
     ),
     hexagram=HexagramSpec(
         colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
-        night_color="#AEB2B9",
-        night_alpha=0.30,
         day_alpha=0.92,                 # near-full opacity where the sun is up
         twilight_alpha=0.55,
+        border_alpha=0.85,              # colored outlines run the full circle
+        border_width_fraction=0.008,
         radius_fraction=0.80,
     ),
     noon_marker=NoonMarkerSpec(
@@ -163,9 +162,9 @@ DEFAULT_SKIN = SkinDefinition(
         day_color="#4B86C9",
         night_color="#20344F",
         # Owner spec: the date marker orbits along the INSIDE of the dial,
-        # not on the ring band.
-        orbit_fraction=0.74,
-        scale=0.075,
+        # not on the ring band, and is the same size as the weekday planets.
+        orbit_fraction=0.66,
+        scale=0.11,
         moon_asset=_DOMY / "weekday" / "moon.png",
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
@@ -174,14 +173,16 @@ DEFAULT_SKIN = SkinDefinition(
         moon_scale=0.065,
     ),
     hands=HandsSpec(
+        # Owner spec: both hands rotate about a hub 15 px from the image
+        # bottom (hub circle radius 15 px), horizontally centered.
         hour=HandSpec(
             asset=_DOMY / "hands" / "hour.png",
-            pivot=(0.5, 0.68),          # measured: hub at 68% height, tail below
+            pivot=(0.5, (142 - 15) / 142),      # image 47x142
             length_fraction=0.34,
         ),
         minute=HandSpec(
             asset=_DOMY / "hands" / "minute.png",
-            pivot=(0.5, 0.92),          # measured: hub at 92% height
+            pivot=(0.5, (201 - 15) / 201),      # image 30x201
             length_fraction=0.60,
         ),
     ),

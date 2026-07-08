@@ -28,14 +28,16 @@ class BackgroundSpec:
 @dataclass(frozen=True)
 class HexagramSpec:
     """Procedural six-diamond star (owner decision: simple geometry is
-    drawn at runtime, not shipped as an image). Colored near-full opacity
-    where the sun is up, neutral elsewhere."""
+    drawn at runtime, not shipped as an image). Diamond FILLS appear only
+    where the sun is up; the colored BORDERS run the full circle so the
+    night diamonds stay recognizable (owner spec: purple hinted at the
+    bottom even in the dark)."""
 
-    colors: tuple[str, ...]            # 6 diamond fills, clockwise from top
-    night_color: str                   # neutral diamonds outside the lit region
-    night_alpha: float
-    day_alpha: float
+    colors: tuple[str, ...]            # 6 diamond colors, clockwise from top
+    day_alpha: float                   # fill opacity over the sunlit arc
     twilight_alpha: float
+    border_alpha: float                # full-circle colored outline opacity
+    border_width_fraction: float       # of the dial radius
     radius_fraction: float             # tip radius as fraction of the dial radius
 
 

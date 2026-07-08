@@ -139,6 +139,11 @@ class BackgroundLayer(Layer):
         radius = ctx.radius * spec.radius_fraction
         painter.setPen(Qt.PenStyle.NoPen)
 
+        # The gray wheel rotates WITH the hexagram too (owner spec): the
+        # white section centers on the star's top tip — true solar noon —
+        # and the black section on solar midnight.
+        painter.save()
+        painter.rotate(ctx.day.hexagram_rotation)
         if spec.base_asset is not None:
             draw_pixmap_centered(
                 painter, ctx, spec.base_asset, QPointF(0, 0), 2 * radius
@@ -146,6 +151,7 @@ class BackgroundLayer(Layer):
         else:
             painter.setBrush(QColor(spec.base_color))
             painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+        painter.restore()
 
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
@@ -167,28 +173,29 @@ class HexagramLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.hexagram
-        painter.setPen(Qt.PenStyle.NoPen)
 
-        # Neutral star over the whole circle (the night part keeps the
-        # shape visible), then the colored star clipped to the lit arcs.
+        # Colored BORDERS run the full circle so the night diamonds stay
+        # recognizable (owner spec)...
         painter.save()
-        painter.setOpacity(spec.night_alpha)
+        painter.setOpacity(spec.border_alpha)
         painter.rotate(ctx.day.hexagram_rotation)
-        self._draw_diamonds(painter, ctx, [spec.night_color] * 6)
+        self._draw_diamonds(painter, ctx, fill=False)
         painter.restore()
 
+        # ...while the FILLS appear only where the sun is up.
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(ctx.radius, start, end))
             painter.setOpacity(alpha)
             painter.rotate(ctx.day.hexagram_rotation)
-            self._draw_diamonds(painter, ctx, spec.colors)
+            self._draw_diamonds(painter, ctx, fill=True)
             painter.restore()
 
-    def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, colors) -> None:
-        tip = ctx.radius * self._skin.hexagram.radius_fraction
+    def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, fill: bool) -> None:
+        spec = self._skin.hexagram
+        tip = ctx.radius * spec.radius_fraction
         inner = tip * constants.HEXAGRAM_INNER_FRACTION
-        for k, color in enumerate(colors):
+        for k, color in enumerate(spec.colors):
             theta = k * 60.0
             diamond = QPolygonF(
                 [
@@ -198,7 +205,17 @@ class HexagramLayer(Layer):
                     dial_point(theta + 30.0, inner),
                 ]
             )
-            painter.setBrush(QColor(color))
+            if fill:
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.setBrush(QColor(color))
+            else:
+                painter.setPen(
+                    QPen(
+                        QColor(color),
+                        max(1.0, ctx.radius * spec.border_width_fraction),
+                    )
+                )
+                painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.drawPolygon(diamond)
 
 

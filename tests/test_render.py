@@ -57,16 +57,22 @@ def test_frame_is_painted(frame):
 
 
 def test_dial_is_not_mirrored(frame):
-    """The 14–18h sector (RIGHT of the dial, clockwise) is orange; the
-    06–10h sector (LEFT) is green. A sign slip in dial_point()/draw_pie()
+    """The 14–18h side (RIGHT of the dial, clockwise) is orange; the
+    06–10h side (LEFT) is green. A sign slip in dial_point()/draw_pie()
     that mirrors the dial swaps them — symmetric probes can't see it."""
-    right = frame.pixelColor(310, 130)   # dial angle ≈ +69° → orange sector
+    right = frame.pixelColor(297, 135)   # dial angle ≈ +69°, inside the disc
     assert right.alpha() > 200
     assert right.red() > 150 and right.red() > right.blue()
     assert right.red() > right.green()   # orange family, not green
-    left = frame.pixelColor(50, 130)     # dial angle ≈ 291° → green sector
+    left = frame.pixelColor(63, 135)     # dial angle ≈ 291° → green side
     assert left.alpha() > 200
     assert left.green() > left.red()     # green family, not orange
+
+
+def test_gap_between_disc_and_ring(frame):
+    """Owner spec: the inner disc must NOT touch the ring — the band
+    between them stays transparent (probe at 90°, between star tips)."""
+    assert frame.pixelColor(324, 180).alpha() < 60
 
 
 def test_lit_regions_never_crash_across_polar_year(app):
