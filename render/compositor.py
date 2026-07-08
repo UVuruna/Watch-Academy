@@ -27,6 +27,7 @@ from render.layers import (
     WeekdayLayer,
     YearMarkerLayer,
     dial_point,
+    resolve_moon_placement,
 )
 from skins.manifest import SkinDefinition
 
@@ -129,27 +130,27 @@ class Compositor:
             )
             today_radius = radius * weekday.diamond_scale
         if hit(today_pos, today_radius):
-            return f"{constants.WEEKDAY_FULL_NAMES[today]}, {self._date_text(date)}"
+            # Weekday marker: the day plus the body carrying it in this
+            # skin ("Wednesday, Mercury"; a gods skin says "…, Hades") —
+            # deliberately different from the Earth marker's date hover.
+            return f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
 
         marker = self._skin.year_marker
+        moon_angle = angles.moon_cycle_angle(day.moon_fraction)
+        if marker.mode in ("moon", "both"):
+            orbit, _ = resolve_moon_placement(marker, tick.year_angle, moon_angle)
+            if hit(dial_point(moon_angle, radius * orbit), radius * marker.moon_scale):
+                cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
+                return (
+                    f"{phase_name(day.moon_fraction)} — "
+                    f"{day.moon_illumination * 100:.0f}% lit — "
+                    f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}"
+                )
         if marker.mode in ("earth", "both") and hit(
             dial_point(tick.year_angle, radius * marker.orbit_fraction),
             radius * marker.scale,
         ):
             return self._date_text(date)
-        if marker.mode in ("moon", "both") and hit(
-            dial_point(
-                angles.moon_cycle_angle(day.moon_fraction),
-                radius * marker.moon_orbit_fraction,
-            ),
-            radius * marker.moon_scale,
-        ):
-            cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
-            return (
-                f"{phase_name(day.moon_fraction)} — "
-                f"{day.moon_illumination * 100:.0f}% lit — "
-                f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}"
-            )
 
         return self._twilight_tooltip(point, radius)
 

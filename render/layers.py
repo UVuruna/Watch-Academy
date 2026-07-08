@@ -90,6 +90,27 @@ def draw_outlined_text(
     painter.drawPath(path)
 
 
+def resolve_moon_placement(spec, year_angle: float, moon_angle: float) -> tuple[float, float]:
+    """(orbit_fraction, opacity) for the Moon marker in "both" mode: when
+    the Moon meets the Earth on the rim (their discs would overlap), the
+    skin's conflict policy decides — transit over the Earth at reduced
+    opacity, step out onto the ring, or step in below the Earth. Shared by
+    the layer and the hover hit test (Rule #5)."""
+    if spec.mode != "both":
+        return spec.moon_orbit_fraction, 1.0
+    delta = abs(year_angle - moon_angle) % 360.0
+    delta = min(delta, 360.0 - delta)
+    # Angular size at which the two discs touch on the shared orbit.
+    touch_deg = math.degrees((spec.scale + spec.moon_scale) / spec.orbit_fraction)
+    if delta >= touch_deg:
+        return spec.moon_orbit_fraction, 1.0
+    if spec.moon_conflict == "ring":
+        return defaults.MOON_CONFLICT_RING_ORBIT, 1.0
+    if spec.moon_conflict == "inner":
+        return defaults.MOON_CONFLICT_INNER_ORBIT, 1.0
+    return spec.moon_orbit_fraction, defaults.MOON_CONFLICT_OPACITY
+
+
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
     """Clip path for the pie between two dial angles going clockwise."""
     path = QPainterPath()
@@ -430,11 +451,15 @@ class YearMarkerLayer(Layer):
         if spec.mode in ("earth", "both"):
             self._draw_earth(painter, ctx)
         if spec.mode in ("moon", "both"):
-            pos = dial_point(
-                angles.moon_cycle_angle(ctx.day.moon_fraction),
-                ctx.radius * spec.moon_orbit_fraction,
+            moon_angle = angles.moon_cycle_angle(ctx.day.moon_fraction)
+            orbit, opacity = resolve_moon_placement(
+                spec, ctx.tick.year_angle, moon_angle
             )
+            pos = dial_point(moon_angle, ctx.radius * orbit)
+            painter.save()
+            painter.setOpacity(painter.opacity() * opacity)
             self._draw_moon(painter, ctx, pos, 2 * ctx.radius * spec.moon_scale)
+            painter.restore()
 
     def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker

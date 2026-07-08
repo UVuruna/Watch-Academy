@@ -84,6 +84,11 @@ BODY_LABEL_SIZE = 0.34               # fraction of the body size
 MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 MARKER_BORDER_RGBA = (255, 255, 255, 200)
 
+# --- Moon/Earth rim conflict (year marker, "both" mode) ------------------------
+MOON_CONFLICT_OPACITY = 0.5          # "overlay": moon transits over the Earth
+MOON_CONFLICT_RING_ORBIT = 0.93      # "ring": moon steps out onto the dial ring
+MOON_CONFLICT_INNER_ORBIT = 0.53     # "inner": moon steps in below the Earth
+
 # --- Tray --------------------------------------------------------------------
 TRAY_ICON_SIZE = 64                  # px of the procedurally drawn tray pixmap
 TRAY_ICON_MARGIN = 0.08              # fraction of the icon size
@@ -156,6 +161,15 @@ DEFAULT_SKIN = SkinDefinition(
         bodies={name: _DOMY / "weekday" / f"{name}.png" for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
+        body_names={
+            "sun": "Sun",
+            "moon": "Moon",
+            "mars": "Mars",
+            "mercury": "Mercury",
+            "jupiter": "Jupiter",
+            "venus": "Venus",
+            "saturn": "Saturn",
+        },
         body_colors={
             "sun": "#FFC838",
             "jupiter": "#E8C25A",
@@ -190,8 +204,9 @@ DEFAULT_SKIN = SkinDefinition(
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,
-        moon_orbit_fraction=0.60,
+        moon_orbit_fraction=0.75,       # rides the same rim as the Earth
         moon_scale=0.065,
+        moon_conflict="overlay",        # owner-preferred default of the three
     ),
     hands=HandsSpec(
         # Owner's vector hands: both rotate about a hub 15 units from the
@@ -199,12 +214,12 @@ DEFAULT_SKIN = SkinDefinition(
         hour=HandSpec(
             asset=_DOMY / "hands" / "hour.svg",
             pivot=(0.5, (150 - 15) / 150),      # viewBox 46x150
-            length_fraction=0.34,
+            length_fraction=0.75,               # owner: ~70-80% of the circle
         ),
         minute=HandSpec(
             asset=_DOMY / "hands" / "minute.svg",
             pivot=(0.5, (210 - 15) / 210),      # viewBox 30x210
-            length_fraction=0.60,
+            length_fraction=0.86,               # owner: to the end of the circle
         ),
         second=HandSpec(
             asset=_DOMY / "hands" / "second.svg",

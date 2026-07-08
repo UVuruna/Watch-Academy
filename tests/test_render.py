@@ -152,6 +152,31 @@ def test_moon_terminator_quarters(app):
     assert is_lit(third_quarter, 35, 50) and not is_lit(third_quarter, 65, 50)
 
 
+def test_moon_conflict_placement(app):
+    """When the Moon meets the Earth on the shared rim, the conflict
+    policy decides: overlay keeps the orbit at half opacity; ring/inner
+    step aside at full opacity; far apart nothing changes."""
+    import dataclasses
+
+    from render.layers import resolve_moon_placement
+
+    base = dataclasses.replace(defaults.DEFAULT_SKIN.year_marker, mode="both")
+    orbit, opacity = resolve_moon_placement(base, 100.0, 250.0)   # far apart
+    assert orbit == base.moon_orbit_fraction and opacity == 1.0
+    orbit, opacity = resolve_moon_placement(base, 100.0, 103.0)   # transit
+    assert orbit == base.moon_orbit_fraction
+    assert opacity == defaults.MOON_CONFLICT_OPACITY
+    ring = dataclasses.replace(base, moon_conflict="ring")
+    orbit, opacity = resolve_moon_placement(ring, 100.0, 103.0)
+    assert orbit == defaults.MOON_CONFLICT_RING_ORBIT and opacity == 1.0
+    inner = dataclasses.replace(base, moon_conflict="inner")
+    orbit, opacity = resolve_moon_placement(inner, 100.0, 103.0)
+    assert orbit == defaults.MOON_CONFLICT_INNER_ORBIT and opacity == 1.0
+    solo = dataclasses.replace(base, mode="moon")                 # no Earth, no conflict
+    orbit, opacity = resolve_moon_placement(solo, 100.0, 103.0)
+    assert orbit == base.moon_orbit_fraction and opacity == 1.0
+
+
 def test_moon_flips_on_southern_hemisphere(app):
     """Seen from the southern hemisphere the moon is upside down — at
     first quarter the lit half must appear on the LEFT (owner spec)."""
