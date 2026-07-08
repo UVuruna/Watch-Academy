@@ -22,6 +22,15 @@ from skins.manifest import (
 DEFAULT_DIAL_DIAMETER = 360          # logical px, before DPI scaling
 MIN_DIAL_DIAMETER = 120
 MAX_DIAL_DIAMETER = 1200
+SIZE_PRESETS = (360, 540, 720)       # owner spec: three dial versions
+
+# Dials at or above this diameter carry more text (date on the Earth
+# marker, full weekday name on the planet); smaller dials get hover
+# tooltips instead (owner spec).
+FULL_TEXT_MIN_DIAMETER = 540
+EARTH_DATE_TEXT_SIZE = 0.30          # fraction of the marker size
+EARTH_DATE_TEXT_RGBA = (255, 255, 255, 235)
+EARTH_DATE_SHADOW_RGBA = (0, 0, 0, 180)
 
 # Watchdog delay for undoing a spontaneous (OS-initiated) hide/minimize.
 # NOTE, verified on Windows 11 24H2: Win+D does NOT hide or minimize this

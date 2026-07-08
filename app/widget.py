@@ -8,7 +8,7 @@ nothing about the dial.
 
 from PySide6.QtCore import QEvent, Qt, QTimer, Signal
 from PySide6.QtGui import QPainter
-from PySide6.QtWidgets import QMenu, QWidget
+from PySide6.QtWidgets import QMenu, QToolTip, QWidget
 
 from config import constants, defaults
 
@@ -33,6 +33,7 @@ class ClockWidget(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self.setWindowTitle(constants.APP_NAME)
+        self.setMouseTracking(True)     # hover tooltips on small dials
         self.resize(diameter, diameter)
 
     def mark_closing(self) -> None:
@@ -71,6 +72,19 @@ class ClockWidget(QWidget):
             self.windowHandle().startSystemMove()
         else:
             super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:
+        if self._renderer is not None and self._tick is not None:
+            tip = self._renderer.tooltip_at(
+                event.position().x(),
+                event.position().y(),
+                float(min(self.width(), self.height())),
+            )
+            if tip:
+                QToolTip.showText(event.globalPosition().toPoint(), tip, self)
+            else:
+                QToolTip.hideText()
+        super().mouseMoveEvent(event)
 
     def contextMenuEvent(self, event) -> None:
         self._menu.exec(event.globalPos())

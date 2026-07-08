@@ -373,17 +373,23 @@ class WeekdayLayer(Layer):
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor(spec.body_colors[body]))
             painter.drawEllipse(pos, size / 2, size / 2)
-        # The white weekday SHORT name is written ON the body either way
-        # (owner spec) — never the planet abbreviation.
+        # The white weekday name is written ON the body either way (owner
+        # spec) — never the planet abbreviation. Short on small dials,
+        # full ("Wednesday") from FULL_TEXT_MIN_DIAMETER up.
+        full_text = 2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER
+        label = (
+            constants.WEEKDAY_FULL_NAMES[body]
+            if full_text
+            else constants.WEEKDAY_LABELS[body]
+        )
         font = QFont()
-        font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.BODY_LABEL_SIZE)))
+        label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
+        font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
         font.setBold(True)
         painter.setFont(font)
         painter.setPen(QColor(*defaults.BODY_LABEL_RGBA))
-        rect = QRectF(pos.x() - size / 2, pos.y() - size / 2, size, size)
-        painter.drawText(
-            rect, Qt.AlignmentFlag.AlignCenter, constants.WEEKDAY_LABELS[body]
-        )
+        rect = QRectF(pos.x() - size, pos.y() - size / 2, 2 * size, size)
+        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, label)
         painter.restore()
 
 
@@ -421,6 +427,8 @@ class YearMarkerLayer(Layer):
             painter.setClipPath(clip)
             draw_pixmap_centered(painter, ctx, asset, pos, size)
             painter.restore()
+            if 2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER:
+                self._draw_date(painter, ctx, pos, size)
         else:
             color = spec.day_color if ctx.tick.is_daylight else spec.night_color
             painter.setPen(
@@ -431,6 +439,22 @@ class YearMarkerLayer(Layer):
             )
             painter.setBrush(QColor(color))
             painter.drawEllipse(pos, size / 2, size / 2)
+
+    def _draw_date(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
+        """Large dials write the date ("8 Jul") ON the Earth marker."""
+        text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
+        font = QFont()
+        font.setPixelSize(
+            max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
+        )
+        font.setBold(True)
+        painter.setFont(font)
+        rect = QRectF(pos.x() - size, pos.y() - size / 2, 2 * size, size)
+        shadow = rect.translated(1.0, 1.0)
+        painter.setPen(QColor(*defaults.EARTH_DATE_SHADOW_RGBA))
+        painter.drawText(shadow, Qt.AlignmentFlag.AlignCenter, text)
+        painter.setPen(QColor(*defaults.EARTH_DATE_TEXT_RGBA))
+        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
 
     def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
         """Moon image (or procedural disc) with the unlit part shadowed:

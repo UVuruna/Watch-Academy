@@ -28,3 +28,5 @@ draws the MINUTE layers (hands, year marker) live.
   raises if called before the first day context (startup order is a
   controller guarantee)
 - `render_offscreen(size, dpr, day, tick) -> QImage`: same path, headless
+- `tooltip_at(x, y, size) -> str | None`: hover text for the marker under
+  the cursor (today's body / Earth / Moon), small dials only

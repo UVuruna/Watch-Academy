@@ -49,6 +49,9 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - `_on_widget_moved()` / `_flush_position()`: debounced position
   persistence; a mid-run save failure surfaces as a tray error balloon
   (once per failure streak) instead of dying silently
-- `_build_menu()`: the shared tray/right-click menu (Exit; grows in M4/M6)
+- `_build_menu()`: the shared tray/right-click menu — Size submenu
+  (360/540/720 presets, exclusive check group) + Exit; grows in M4/M6
+- `_set_diameter()`: resizes the widget, invalidates the compositor
+  caches and persists the choice
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

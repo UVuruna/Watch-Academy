@@ -10,6 +10,8 @@ the future settings preview.
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
+from config import constants, defaults
+from core import angles
 from core.clock_state import DayContext, TickState
 from render.assets import AssetCache
 from render.layers import (
@@ -23,6 +25,7 @@ from render.layers import (
     RingLayer,
     WeekdayLayer,
     YearMarkerLayer,
+    dial_point,
 )
 from skins.manifest import SkinDefinition
 
@@ -58,6 +61,7 @@ class Compositor:
         self._cache = cache
         self._layers = _build_layers(skin)
         self._day: DayContext | None = None
+        self._last_tick: TickState | None = None
         self._composite: QPixmap | None = None
         self._composite_key: tuple | None = None
 
@@ -73,6 +77,7 @@ class Compositor:
     def paint(self, painter: QPainter, size: float, dpr: float, tick: TickState) -> None:
         if self._day is None:
             raise RuntimeError("Compositor.paint() before the first day context")
+        self._last_tick = tick
         key = (round(size * dpr), self._day.cache_key)
         if self._composite is None or self._composite_key != key:
             self._composite = self._render_composite(size, dpr)
@@ -92,6 +97,54 @@ class Compositor:
                 layer.paint(painter, ctx)
                 painter.restore()
         painter.restore()
+
+    def tooltip_at(self, x: float, y: float, size: float) -> str | None:
+        """Hover text for the marker under the cursor — small dials only
+        (large dials write the same information directly on the dial)."""
+        if (
+            self._day is None
+            or self._last_tick is None
+            or size >= defaults.FULL_TEXT_MIN_DIAMETER
+        ):
+            return None
+        radius = size / 2
+        point = QPointF(x - radius, y - radius)      # center-origin
+        day, tick = self._day, self._last_tick
+        date = day.local_date
+
+        def hit(center: QPointF, hit_radius: float) -> bool:
+            dx, dy = point.x() - center.x(), point.y() - center.y()
+            return dx * dx + dy * dy <= hit_radius * hit_radius
+
+        weekday = self._skin.weekday_set
+        today = constants.WEEKDAY_BODIES[day.weekday_index]
+        if weekday.display_mode == "center_only" or today == "sun":
+            today_pos = QPointF(0, 0)
+            today_radius = radius * weekday.center_scale
+        else:
+            today_pos = dial_point(
+                constants.WEEKDAY_SLOT_ANGLES[today] + day.hexagram_rotation,
+                radius * weekday.orbit_fraction,
+            )
+            today_radius = radius * weekday.diamond_scale
+        if hit(today_pos, today_radius):
+            return f"{constants.WEEKDAY_FULL_NAMES[today]}, {date.day} {date:%B %Y}"
+
+        marker = self._skin.year_marker
+        if marker.mode in ("earth", "both") and hit(
+            dial_point(tick.year_angle, radius * marker.orbit_fraction),
+            radius * marker.scale,
+        ):
+            return f"{date.day} {date:%B %Y}"
+        if marker.mode in ("moon", "both") and hit(
+            dial_point(
+                angles.moon_cycle_angle(day.moon_fraction),
+                radius * marker.moon_orbit_fraction,
+            ),
+            radius * marker.moon_scale,
+        ):
+            return f"Moon: {day.moon_illumination * 100:.0f}% lit"
+        return None
 
     def render_offscreen(
         self, size: float, dpr: float, day: DayContext, tick: TickState

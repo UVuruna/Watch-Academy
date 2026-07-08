@@ -87,7 +87,7 @@ WEEKDAY_BODIES = (
 )
 
 # Label written in white ON each body: the weekday SHORT name, never the
-# planet-name abbreviation (owner spec).
+# planet-name abbreviation (owner spec). Larger dials show the full name.
 WEEKDAY_LABELS = {
     "moon": "MON",
     "mars": "TUE",
@@ -96,6 +96,15 @@ WEEKDAY_LABELS = {
     "venus": "FRI",
     "saturn": "SAT",
     "sun": "SUN",
+}
+WEEKDAY_FULL_NAMES = {
+    "moon": "Monday",
+    "mars": "Tuesday",
+    "mercury": "Wednesday",
+    "jupiter": "Thursday",
+    "venus": "Friday",
+    "saturn": "Saturday",
+    "sun": "Sunday",
 }
 
 # Diamond slot of each orbiting body: dial degrees from the hexagram's TOP

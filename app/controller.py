@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 import astral
 
 from PySide6.QtCore import QObject, QRect, Qt, QTimer
-from PySide6.QtGui import QAction, QGuiApplication
+from PySide6.QtGui import QAction, QActionGroup, QGuiApplication
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
 
 from app.scheduler import MinuteScheduler
@@ -232,10 +232,32 @@ class AppController(QObject):
 
     def _build_menu(self) -> QMenu:
         menu = QMenu()
+        size_menu = menu.addMenu("Size")
+        group = QActionGroup(menu)
+        group.setExclusive(True)
+        for preset in defaults.SIZE_PRESETS:
+            action = QAction(f"{preset} px", menu)
+            action.setCheckable(True)
+            action.setChecked(preset == self._settings.diameter)
+            action.triggered.connect(
+                lambda checked, diameter=preset: self._set_diameter(diameter)
+            )
+            group.addAction(action)
+            size_menu.addAction(action)
+        menu.addSeparator()
         exit_action = QAction("Exit", menu)
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
         return menu
+
+    def _set_diameter(self, diameter: int) -> None:
+        if diameter == self._settings.diameter:
+            return
+        self._settings = replace(self._settings, diameter=diameter)
+        self._widget.resize(diameter, diameter)
+        self._compositor.invalidate()
+        self._widget.update()
+        self._flush_position()          # persists position AND the new diameter
 
     @staticmethod
     def _critical_box(text: str, buttons, default) -> int:
