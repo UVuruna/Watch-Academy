@@ -413,8 +413,15 @@ class AppController(QObject):
         self._add_choice_group(
             menu, octa_menu,
             [
-                (mode, mode.replace("_", " ").capitalize())
-                for mode in constants.OCTA_SLOT_MODES
+                ("time", "Time"),
+                ("date", "Date"),
+                ("day_length", "Day length"),
+                ("zodiac_sign", "Astrology sign"),
+                ("zodiac_logo", "Astrology logo"),
+                ("zodiac_constellation", "Astrology constellation"),
+                ("zodiac_text", "Astrology text"),
+                ("chinese_logo", "Chinese zodiac logo"),
+                ("chinese_text", "Chinese zodiac text"),
             ],
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),

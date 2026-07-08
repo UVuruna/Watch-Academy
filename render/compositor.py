@@ -197,11 +197,14 @@ class Compositor:
         ):
             return self._earth_text()
 
-        arm_tip = self._arm_tooltip(point, radius, rotation)
-        if arm_tip is not None:
-            return arm_tip
+        # Twilight bands BEFORE the arm hovers (owner: the dawn/dusk
+        # info must never be shadowed — e.g. by a glowing quarter moon
+        # sitting right on the 06h/18h band).
+        twilight = self._twilight_tooltip(point, radius)
+        if twilight is not None:
+            return twilight
 
-        return self._twilight_tooltip(point, radius)
+        return self._arm_tooltip(point, radius, rotation)
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
         """Hover over a star arm (owner spec): hexa arms name their TWO
@@ -261,12 +264,12 @@ class Compositor:
         return anchors.instants[anchors.angles.index(unwrapped_angle)]
 
     def _chinese_text(self) -> str:
-        """"Fire Horse — 17 Feb 2026 – 5 Feb 2027" (Chinese year span)."""
+        """Slot hover, two lines (owner spec): name, then the year span."""
         day = self._day
         return _centered(
-            f"{day.chinese_name} — "
+            day.chinese_name,
             f"{day.chinese_start.day} {day.chinese_start:%b %Y} – "
-            f"{day.chinese_end.day} {day.chinese_end:%b %Y}"
+            f"{day.chinese_end.day} {day.chinese_end:%b %Y}",
         )
 
     def _zodiac_line(self) -> str:
@@ -279,7 +282,13 @@ class Compositor:
         )
 
     def _zodiac_text(self) -> str:
-        return _centered(self._zodiac_line())
+        """Slot hover, two lines (owner spec): name, then the date span."""
+        day = self._day
+        last = day.zodiac_end - timedelta(days=1)
+        return _centered(
+            f"{day.zodiac_symbol} {day.zodiac_name}",
+            f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}",
+        )
 
     def _earth_text(self) -> str:
         """Owner format, three lines: day/week ordinals, the zodiac sign

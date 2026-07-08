@@ -260,6 +260,30 @@ def test_chinese_slot_hover(july_wednesday):
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
     assert "Fire Horse" in tip and "2026" in tip and "2027" in tip
+    assert "<br/>" in tip                     # name / span on separate lines
+
+
+def test_twilight_band_beats_the_arm_hover(july_wednesday):
+    """Owner: dawn/dusk info must never be shadowed by the star-arm
+    hovers — the band keeps priority inside the star region."""
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    # Mid-dusk angle (sunset 20:25 → dusk 21:02), probe at 0.6R.
+    sunset_angle = (
+        (day.sun.sunset.hour * 3600 + day.sun.sunset.minute * 60) / 86400 * 360 + 180
+    ) % 360
+    dusk_angle = (
+        (day.sun.dusk.hour * 3600 + day.sun.dusk.minute * 60) / 86400 * 360 + 180
+    ) % 360
+    theta = math.radians((sunset_angle + dusk_angle) / 2)
+    tip = compositor.tooltip_at(
+        180.0 + 108.0 * math.sin(theta), 180.0 - 108.0 * math.cos(theta), 360.0
+    )
+    assert tip is not None and "Sunset" in tip and "Dusk" in tip
 
 
 # --- Umbra ----------------------------------------------------------------------------
