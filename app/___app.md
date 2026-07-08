@@ -32,11 +32,16 @@ power/clock wake filter. See [Native](native.md).
 
 ### `time_travel.py` — Time Travel
 Scenario-tester dialog: any moment + position rendered for a minute,
-then auto-reset. See [Time Travel](time_travel.md).
+then auto-reset (prefilled with the configured location).
+See [Time Travel](time_travel.md).
 
-Planned (M6): `settings_dialog.py`, `location_picker.py`. Deferred:
-optional WorkerW "glue to wallpaper" mode (fragile on Win11 24H2 —
-revisit on demand).
+### `settings_dialog.py` — Settings Dialog
+The M6 window: cascading location picker over the bundled city
+database with lat/lng fine-tune, Star/Aura opacity sliders and the
+palette chip editor. See [Settings Dialog](settings_dialog.md).
+
+Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
+24H2 — revisit on demand).
 
 ## Connections
 

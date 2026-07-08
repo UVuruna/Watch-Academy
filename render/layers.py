@@ -112,8 +112,11 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
 
 
 def palette_for(skin: SkinDefinition) -> tuple:
-    """The active Star+Aura palette preset — ONE source for both the
-    star diamonds and the background wedges (owner spec)."""
+    """The active Star+Aura palette — ONE source for both the star
+    diamonds and the background wedges (owner spec): the user's custom
+    hues when set (settings dialog), otherwise the owner preset."""
+    if skin.palette_override is not None:
+        return skin.palette_override
     return defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
 
 

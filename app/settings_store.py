@@ -10,10 +10,14 @@ silently.
 import dataclasses
 import json
 import os
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, field
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from config import constants, defaults
+
+_HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
 
 class SettingsCorruptError(Exception):
@@ -41,6 +45,17 @@ class Settings:
     solar_rotation: bool = True
     octa_slot: str = "time"
     earth_style: str = "clean"
+    # Location (M6 picker; defaults = the Belgrade preset).
+    city_name: str = defaults.DEFAULT_CITY["name"]
+    city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
+    latitude: float = defaults.DEFAULT_CITY["latitude"]
+    longitude: float = defaults.DEFAULT_CITY["longitude"]
+    timezone: str = defaults.DEFAULT_CITY["timezone"]
+    # Display overrides (None = the skin's own value).
+    star_alpha: float | None = None
+    aura_alpha: float | None = None
+    # Custom palettes keyed "pointer_style" -> tuple of #RRGGBB hues.
+    palettes: dict = field(default_factory=dict)
 
 
 class SettingsStore:
@@ -78,6 +93,24 @@ class SettingsStore:
                 if value not in allowed:
                     raise ValueError(f"{key} {value!r} unknown")
                 choices[key] = value
+            location = raw.get("location", {})
+            latitude = float(location.get("latitude", defaults.DEFAULT_CITY["latitude"]))
+            longitude = float(
+                location.get("longitude", defaults.DEFAULT_CITY["longitude"])
+            )
+            if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
+                raise ValueError(f"latitude {latitude} outside allowed range")
+            if (
+                not constants.LONGITUDE_RANGE[0]
+                <= longitude
+                <= constants.LONGITUDE_RANGE[1]
+            ):
+                raise ValueError(f"longitude {longitude} outside allowed range")
+            timezone = str(location.get("timezone", defaults.DEFAULT_CITY["timezone"]))
+            try:
+                ZoneInfo(timezone)
+            except Exception as exc:
+                raise ValueError(f"timezone {timezone!r} unknown: {exc}") from exc
             return Settings(
                 schema_version=int(raw["schema_version"]),
                 window_x=None if window["x"] is None else int(window["x"]),
@@ -87,6 +120,14 @@ class SettingsStore:
                 click_through=bool(raw.get("click_through", False)),
                 skin=str(raw.get("skin", "domy")),
                 solar_rotation=bool(raw.get("solar_rotation", True)),
+                city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
+                city_path=tuple(location.get("path", ())),
+                latitude=latitude,
+                longitude=longitude,
+                timezone=timezone,
+                star_alpha=_load_alpha(raw, "star_alpha"),
+                aura_alpha=_load_alpha(raw, "aura_alpha"),
+                palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
@@ -109,6 +150,18 @@ class SettingsStore:
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "earth_style": settings.earth_style,
+            "location": {
+                "name": settings.city_name,
+                "path": list(settings.city_path),
+                "latitude": settings.latitude,
+                "longitude": settings.longitude,
+                "timezone": settings.timezone,
+            },
+            "star_alpha": settings.star_alpha,
+            "aura_alpha": settings.aura_alpha,
+            "palettes": {
+                key: list(palette) for key, palette in settings.palettes.items()
+            },
         }
         self._path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self._path.with_suffix(".json.tmp")
@@ -121,6 +174,43 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
+
+
+def _load_alpha(raw: dict, key: str) -> float | None:
+    """Opacity override: null/absent = use the skin's own value."""
+    value = raw.get(key)
+    if value is None:
+        return None
+    value = float(value)
+    if not 0.0 <= value <= 1.0:
+        raise ValueError(f"{key} {value} outside 0..1")
+    return value
+
+
+def _load_palettes(raw: dict) -> dict:
+    """Custom palettes keyed "pointer_style"; every hue validated so a
+    hand-edited color cannot detonate inside a paint pass."""
+    if not isinstance(raw, dict):
+        raise ValueError("palettes must be an object")
+    valid_keys = {
+        f"{pointer}_{style}"
+        for pointer in constants.POINTER_POINTS
+        for style in constants.PALETTE_STYLES
+    }
+    palettes: dict = {}
+    for key, hues in raw.items():
+        if key not in valid_keys:
+            raise ValueError(f"palettes key {key!r} unknown")
+        pointer = key.rsplit("_", 1)[0]
+        if len(hues) != constants.POINTER_POINTS[pointer]:
+            raise ValueError(
+                f"palettes[{key!r}] needs {constants.POINTER_POINTS[pointer]} hues"
+            )
+        for hue in hues:
+            if not _HEX_COLOR.match(str(hue)):
+                raise ValueError(f"palettes[{key!r}] bad color {hue!r}")
+        palettes[key] = tuple(str(hue).upper() for hue in hues)
+    return palettes
 
 
 def replace(settings: Settings, **changes) -> Settings:

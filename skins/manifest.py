@@ -139,6 +139,9 @@ class SkinDefinition:
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # octa bottom arm, one of OCTA_SLOT_MODES
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
+    # Runtime-only (settings dialog): the user's custom hues for the
+    # active (pointer, palette_style) — never serialized to skin.json.
+    palette_override: tuple[str, ...] | None = None
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

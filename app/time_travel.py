@@ -22,7 +22,7 @@ from config import constants, defaults
 
 
 class TimeTravelDialog(QDialog):
-    def __init__(self, parent=None):
+    def __init__(self, latitude: float, longitude: float, parent=None):
         super().__init__(parent)
         self.setWindowTitle(f"{constants.APP_NAME} — Time Travel")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
@@ -35,12 +35,12 @@ class TimeTravelDialog(QDialog):
         self._latitude = QDoubleSpinBox(self)
         self._latitude.setRange(low, high)
         self._latitude.setDecimals(4)
-        self._latitude.setValue(defaults.DEFAULT_CITY["latitude"])
+        self._latitude.setValue(latitude)
         low, high = constants.LONGITUDE_RANGE
         self._longitude = QDoubleSpinBox(self)
         self._longitude.setRange(low, high)
         self._longitude.setDecimals(4)
-        self._longitude.setValue(defaults.DEFAULT_CITY["longitude"])
+        self._longitude.setValue(longitude)
 
         layout = QFormLayout(self)
         layout.addRow("Moment:", self._when)

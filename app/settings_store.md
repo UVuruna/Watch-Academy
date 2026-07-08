@@ -26,7 +26,12 @@ older files they take their defaults): `click_through` (False), `skin`
 set (a bad value would otherwise KeyError inside a paint pass, where Qt
 swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 `umbra_contrast` ("full"), `palette_style` ("paint"), `solar_rotation`
-(True), `octa_slot` ("time"), `earth_style` ("clean").
+(True), `octa_slot` ("time"), `earth_style` ("clean"). The M6 keys:
+the location block (`city_name`, `city_path` for combo restore,
+`latitude`/`longitude` range-checked, `timezone` verified against
+zoneinfo), the opacity overrides `star_alpha`/`aura_alpha` (null =
+skin default, else 0..1) and `palettes` (custom hues keyed
+"pointer_style", every color and count validated).
 
 ### SettingsStore
 - `load()`: missing file → default `Settings` (documented first-run

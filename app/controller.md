@@ -62,9 +62,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Exit; the full settings dialog arrives in M6
 - `_set_skin()` / `_set_display_choice(key, value)`: swap the rendered
   skin via the shared `_install_skin()` (fresh compositor, day context
-  kept) and persist; `_apply_display_settings()` overlays the user's
-  display choices onto whatever the skin pack declares — the tray
-  choice always wins
+  kept) and persist; the module-level `apply_display_settings(skin,
+  settings)` (pure, testable) overlays the user's display choices,
+  opacity overrides (twilight alphas scale proportionally) and the
+  custom palette onto whatever the skin pack declares
+- `_open_settings()`: the M6 dialog — location (new observer/timezone →
+  full day-context rebuild), opacity and palette results applied by
+  reinstalling the PRISTINE pack (so cleared overrides really clear)
 - `_set_diameter()`: resizes the widget, invalidates the compositor
   caches and persists the choice
 - `_set_click_through()`: TRUE pass-through (window takes no mouse input;

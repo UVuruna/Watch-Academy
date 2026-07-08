@@ -20,6 +20,7 @@ from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QToolTip
 
 from app import native
 from app.scheduler import MinuteScheduler
+from app.settings_dialog import SettingsDialog
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController
@@ -35,6 +36,45 @@ from skins.manifest import missing_assets
 from skins.packs import SkinValidationError
 
 
+def apply_display_settings(skin, settings: Settings):
+    """The user's choices win over whatever the skin pack declares:
+    the tray display scalars, the opacity overrides (twilight alphas
+    scale proportionally with the day alphas) and the custom palette
+    for the active (pointer, style). Module-level and pure — testable
+    without a controller."""
+    star = skin.star
+    if settings.star_alpha is not None:
+        star = dataclasses.replace(
+            star,
+            day_alpha=settings.star_alpha,
+            twilight_alpha=settings.star_alpha
+            * (star.twilight_alpha / star.day_alpha),
+        )
+    background = skin.background
+    if settings.aura_alpha is not None:
+        background = dataclasses.replace(
+            background,
+            day_alpha=settings.aura_alpha,
+            twilight_alpha=settings.aura_alpha
+            * (background.twilight_alpha / background.day_alpha),
+        )
+    return dataclasses.replace(
+        skin,
+        star=star,
+        background=background,
+        pointer=settings.pointer,
+        umbra_form=settings.umbra_form,
+        umbra_contrast=settings.umbra_contrast,
+        palette_style=settings.palette_style,
+        solar_rotation=settings.solar_rotation,
+        octa_slot=settings.octa_slot,
+        earth_style=settings.earth_style,
+        palette_override=settings.palettes.get(
+            f"{settings.pointer}_{settings.palette_style}"
+        ),
+    )
+
+
 class AppController(QObject):
     def __init__(self, app: QApplication):
         super().__init__()
@@ -47,10 +87,9 @@ class AppController(QObject):
         self._widget = ClockWidget(self._settings.diameter, self._menu)
         self._tray = TrayController(self._menu)
 
-        city = defaults.DEFAULT_CITY
-        self._tz = ZoneInfo(city["timezone"])
+        self._tz = ZoneInfo(self._settings.timezone)
         self._observer = astral.Observer(
-            latitude=city["latitude"], longitude=city["longitude"]
+            latitude=self._settings.latitude, longitude=self._settings.longitude
         )
         self._seasons = SeasonsRepository()
         self._moon_phases = MoonPhaseRepository()
@@ -283,18 +322,7 @@ class AppController(QObject):
         return self._apply_display_settings(skin)
 
     def _apply_display_settings(self, skin):
-        """The user's tray choices win over whatever the skin pack
-        declares."""
-        return dataclasses.replace(
-            skin,
-            pointer=self._settings.pointer,
-            umbra_form=self._settings.umbra_form,
-            umbra_contrast=self._settings.umbra_contrast,
-            palette_style=self._settings.palette_style,
-            solar_rotation=self._settings.solar_rotation,
-            octa_slot=self._settings.octa_slot,
-            earth_style=self._settings.earth_style,
-        )
+        return apply_display_settings(skin, self._settings)
 
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
@@ -446,6 +474,9 @@ class AppController(QObject):
         )
         menu.addAction(solar)
         menu.addSeparator()
+        settings_action = QAction("Settings…", menu)
+        settings_action.triggered.connect(self._open_settings)
+        menu.addAction(settings_action)
         time_travel = QAction("Time Travel…", menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
@@ -464,8 +495,33 @@ class AppController(QObject):
         menu.addAction(exit_action)
         return menu
 
+    def _open_settings(self) -> None:
+        dialog = SettingsDialog(self._settings, self._skin)
+        if dialog.exec() != SettingsDialog.DialogCode.Accepted:
+            return
+        new_settings = dialog.result_settings()
+        location_changed = (
+            new_settings.latitude,
+            new_settings.longitude,
+            new_settings.timezone,
+        ) != (self._settings.latitude, self._settings.longitude, self._settings.timezone)
+        self._settings = new_settings
+        if location_changed:
+            self._tz = ZoneInfo(new_settings.timezone)
+            self._observer = astral.Observer(
+                latitude=new_settings.latitude, longitude=new_settings.longitude
+            )
+            self._day = None                # full rebuild for the new place
+        # Reinstall from the PRISTINE pack so cleared overrides (back to
+        # "skin default") actually clear instead of sticking.
+        self._install_skin(self._resolve_skin_or_recover(self._settings.skin))
+        self._on_tick(clock_jumped=False)
+        self._flush_position()
+
     def _open_time_travel(self) -> None:
-        dialog = TimeTravelDialog()
+        dialog = TimeTravelDialog(
+            self._settings.latitude, self._settings.longitude
+        )
         if dialog.exec() != TimeTravelDialog.DialogCode.Accepted:
             return
         moment = dialog.moment().replace(second=0, microsecond=0, tzinfo=self._tz)
