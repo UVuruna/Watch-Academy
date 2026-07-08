@@ -182,20 +182,43 @@
   ],
   "axes": [
     {
-      "between": ["sun", "sun"],
-      "cures": ["Humility cures Pride - the center heals itself."]
+      "between": [
+        "sun",
+        "sun"
+      ],
+      "cures": [
+        "Humility cures Pride - the center heals itself."
+      ]
     },
     {
-      "between": ["jupiter", "mercury"],
-      "cures": ["Generosity cures Greed.", "Wisdom curbs Excess."]
+      "between": [
+        "jupiter",
+        "mercury"
+      ],
+      "cures": [
+        "Generosity cures Greed.",
+        "Wisdom curbs Excess."
+      ]
     },
     {
-      "between": ["mars", "moon"],
-      "cures": ["Courage cures Fear.", "Serenity quells Wrath."]
+      "between": [
+        "mars",
+        "moon"
+      ],
+      "cures": [
+        "Courage cures Fear.",
+        "Serenity quells Wrath."
+      ]
     },
     {
-      "between": ["venus", "saturn"],
-      "cures": ["Love dissolves Envy.", "Patience heals Jealousy."]
+      "between": [
+        "venus",
+        "saturn"
+      ],
+      "cures": [
+        "Love dissolves Envy.",
+        "Patience heals Jealousy."
+      ]
     }
   ],
   "moods_of_the_day": {
@@ -207,5 +230,53 @@
     "green": "Renewal - the morning",
     "cyan": "Hope - dawn (octa)",
     "red-orange": "Longing - dusk (octa)"
+  },
+  "articles_note": "One article per entity per theme: a few sentences weaving the entity with its day, color, hour mood, virtue and vice (SYMBOLISM.md canon). Display location TBD by the owner.",
+  "articles": {
+    "planets": {
+      "sun": "The Sun holds the center of the dial as it holds the center of the sky: Sunday is its day, white-gold its color - the sum of every hue on the wheel. Its virtue is Humility and its shadow Pride, the oldest pair: the star that gives all light must not mistake itself for the light's owner. Every other arm is, literally, a piece of decomposed sunlight.",
+      "moon": "The Moon rides the pre-dawn blue of 04h: Monday's body, the mood of Calm. It rules the night's two faces - Serenity, the stillness of a moonlit world, and Fear, the same darkness unlit. Its silver is the night metal, as the Sun's gold is the day's; medieval physicians even timed their cures by its phases.",
+      "mars": "Mars burns in the orange of the working afternoon at 16h, Tuesday's planet. The red planet carries the fire of Zeal - its bright face is Courage, its dark face Wrath, one fire that defends or destroys. Across the dial the Moon's Serenity quells its rage, while its Courage cures the Moon's Fear.",
+      "mercury": "Mercury stands at midnight purple - Wednesday's planet at the bottom of the dial, the hour of Sorrow and mystery. The swiftest planet is the mind itself: Wisdom is its virtue, Greed its vice, for the same cleverness that understands the world can start counting it. Jupiter's Generosity, straight across, is Greed's cure.",
+      "jupiter": "Jupiter crowns the dial in noon yellow - Thursday's planet at the top, the hour of Joy ('jovial' literally means 'of Jupiter'). The king planet gives with an open hand: Generosity is its virtue, Excess its vice - the royal table overflowing. Mercury's Wisdom, straight across at midnight, curbs that excess.",
+      "venus": "Venus glows in the evening red of 20h - Friday's planet, rising at dusk as the evening star. Passion is its hour's mood; Love its virtue and Jealousy its shadow, the fear of losing what is loved. Saturn's Patience, across the dial, heals that fear - while Venus' Love dissolves Saturn's Envy.",
+      "saturn": "Saturn keeps the green of the 08h morning - Saturday's planet, the hour of Renewal. The slowest planet is time itself: it teaches Patience and suffers Envy, the bitter green of another's harvest. It is also the week's day of rest - and in Hebrew the planet is named Shabtai, after the Sabbath."
+    },
+    "greek": {
+      "sun": "Helios drives the four-horse chariot of the sun across the sky, and Sunday - the dial's white-gold center - is his day. Like the light he carries, he stands above the six colors rather than among them. His pair is the center's own: Pride, the all-seeing eye that forgets it too is watched, and Humility, its cure.",
+      "moon": "Selene crosses the pre-dawn blue on a silver chariot, the Titan goddess of the Moon on Monday's arm. Her hour is Calm - moonlight over a sleeping world - and her two faces are the night's: Serenity and Fear. Lovers swore by her steady light; sailors and physicians counted her phases.",
+      "mars": "Ares is the storm of battle on Tuesday's orange arm, the fire of the working afternoon. Greece honored his Courage and dreaded his Wrath in the same breath - the soldier's two faces. Selene's calm, straight across the dial, is the only thing that quiets him.",
+      "mercury": "Hermes stands at the midnight-purple bottom of the dial: messenger, guide of souls, god of roads, merchants and thieves - Wednesday is his day. His Wisdom crosses every border; his Greed counts every coin along the way. The mourning purple suits the one god who walks freely into the underworld.",
+      "jupiter": "Zeus rules from the dial's noon-yellow summit as he rules from Olympus - Thursday, the king's day, the hour of Joy. Keeper of oaths and guests, his open hand is Generosity; his thunder-feast, Excess. Hermes - his own messenger - carries the Wisdom that tempers him from straight below.",
+      "venus": "Aphrodite, born of sea-foam, owns the evening red of Friday - the hour of Passion, when her planet rises as the evening star. Love is her gift and Jealousy her wound. Cronus' Patience, across the dial, heals what her fire scorches; her Love melts his old Envy.",
+      "saturn": "Cronus, Titan of time and the harvest, holds Saturday's green morning arm. His sickle cuts the grain - Renewal - yet he devoured his own children out of Envy and fear of being replaced. Time's other lesson is his virtue: Patience, which outlasts every rival."
+    },
+    "norse": {
+      "sun": "Sol drives the sun's chariot with the wolf Skoll forever at her heels - sunnudagr, Sunday, is her day at the dial's white-gold center. She outruns pride the way she outruns the wolf: by never stopping. Her light, like the center itself, contains every color of the week.",
+      "moon": "Mani steers the Moon through the pre-dawn blue, hunted by the wolf Hati until the world's end - Monday, manadagr, is his. His hour is Calm and his burden is the night's Fear; his gift, the Serenity of a lit path through darkness.",
+      "mars": "Tyr placed his right hand in the wolf Fenrir's jaws so the binding would hold - Tuesday, tysdagr, is his day on the orange arm. He is Courage made law: the god of war AND justice, whose Wrath serves order, never chaos. The afternoon's Zeal is his hour.",
+      "mercury": "Odin hung nine nights on the world-tree and traded an eye at Mimir's well - all for Wisdom. Wednesday, Wodnesdaeg, is his, at the dial's midnight purple: the hour of mystery suits the wanderer in the wide hat. His shadow is a collector's Greed - for runes, for ravens' news, for the slain.",
+      "jupiter": "Thor guards gods and men with the hammer Mjolnir - Thursday, thorsdagr, thunders at the dial's yellow noon. His Joy is the feast after the storm, his Generosity the protection he never withholds; his Excess, the legendary appetite that once emptied a giant's larder.",
+      "venus": "Freya rides a chariot drawn by cats and weeps tears of gold - Friday, frjadagr, is hers, on the evening-red arm of Passion. Goddess of love and of the chosen slain, she carries Love's power and Jealousy's ache in the same necklace, Brisingamen.",
+      "saturn": "Saturday alone has no Norse god: laugardagr, washing day - the north gave the week's end to cleansing and rest. Across the sea the same day is the Sabbath, and the dial keeps that meaning: the green morning of Renewal, the Patience of rest, the Envy it dissolves."
+    },
+    "religion": {
+      "sun": "Christianity worships at the dial's white-gold center: Sunday, the Lord's Day of resurrection - since Constantine's decree of 321, the day of the Sun and the day of rest are one. Gold is its glory and Humility its narrow gate; Pride, the first of its sins. Faith itself anchors here, the first of the trio that spans the dial.",
+      "moon": "Buddhism keeps the Moon's calendar on the blue pre-dawn arm of Monday: Uposatha observance follows the phases, and Vesak - birth, awakening, passing - falls on the full moon. Its practice is the arm's own pair: Serenity cultivated, Fear examined until it dissolves. The hour of Calm is, quite literally, the meditator's hour.",
+      "mars": "Zoroastrianism tends the sacred fire Atar on Mars' orange arm - Tuesday, the fire planet's day. Its heart is asha: truth as cosmic justice, the very calling of the day's god Tyr. The fire's two faces are the arm's: the Courage of the light against the lie, and the Wrath the flame must never become.",
+      "mercury": "Taoism flows at the dial's midnight purple: in the East Asian week Wednesday IS the water-star day - Mercury - and water is the Tao's central image, the soft that overcomes the hard. Its Wisdom is wu wei, acting without forcing; its warning is Greed, the grasping that loses what it grips. Midnight's stillness is its element.",
+      "jupiter": "Hinduism honors Thursday at the dial's yellow noon: Guruvar, the day of Brihaspati - guru of the gods, who IS the planet Jupiter in Vedic astrology. The guru's open hand is Generosity, the day's mood is Joy, and the feast's edge is Excess. Devotion here reaches its weekly summit, as the sun its daily one.",
+      "venus": "Islam gathers on the evening-red arm of Friday: Jumu'ah, the congregational prayer, makes it the blessed day of the week. The community stands shoulder to shoulder - Love as practice, not sentiment - while the tradition warns against Jealousy, the ember that consumes good deeds as fire consumes wood.",
+      "saturn": "Judaism rests on Saturday's green morning arm: Shabbat, the seventh day - so foundational that in Hebrew the planet Saturn is named Shabtai, after the day itself. Rest is Patience practiced weekly; the commandment against coveting guards the same arm's Envy. Renewal, the hour's mood, is the Sabbath's whole point."
+    },
+    "profession": {
+      "sun": "The Ruler is the Sun's child at the dial's white-gold center: royalty has always borrowed the sun's regalia. The crown teaches the center's own pair - Pride is the throne's occupational disease, Humility the only medicine that keeps a ruler fit to rule. His day is Sunday, when even kings rest under a higher King.",
+      "moon": "The Physician belongs to the Moon's blue pre-dawn arm: medieval medicine timed its cures by the lunar phase, and the healer keeps the night watch at the sickbed. The craft is the arm's pair in practice - a Serene hand against the patient's Fear. Monday, the Moon's day, opens the healer's week.",
+      "mars": "The Soldier is Mars' child on the orange afternoon arm - Tuesday, the day of the war planet and of Tyr, who gave his hand for the law. His two faces are Courage in defense and Wrath let loose; the entire discipline of soldiering is keeping the first without falling into the second.",
+      "mercury": "The Merchant walks Hermes' midnight-purple roads: Wednesday's child, weighing the world with Wisdom and tempted to count it with Greed. Every scale he holds echoes the arm's cross-cure - only Generosity, from the noon arm straight above, keeps the ledger honest.",
+      "jupiter": "The Priest - and the Teacher - is Jupiter's child at the yellow noon: Thursday is Guruvar, the guru's day, and the medieval woodcuts drew bishops, judges and scholars under this planet. His Generosity feeds the flock; his jovial table minds its Excess; his hour is Joy, the sanguine temperament of Jove himself.",
+      "venus": "The Artist is Venus' child on the evening-red arm: the old woodcuts drew musicians, painters and lovers under her star. Friday's Passion is the studio's fuel - work made from Love, guarded against Jealousy, the artist's oldest occupational wound.",
+      "saturn": "The Farmer is Saturn's child on the green morning arm: Cronus himself carries the harvest sickle. Saturday's Renewal is his season and Patience his craft - he sows and WAITS - while Envy of the neighbor's field is the vice the green arm warns him against."
+    }
   }
 }

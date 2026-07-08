@@ -3,8 +3,12 @@
 The complete symbolic cosmology of the dial — how the days of the week,
 celestial bodies, gods, religions, colors, hours, virtues and vices
 weave into one story. This document is the CANON; the machine-readable
-blurbs live in `Database/symbolism.json`
-([Database (folder)](Database/___database.md)).
+companion `Database/symbolism.json`
+([Database (folder)](Database/___database.md)) carries the short
+per-entity blurbs (shown by the hexa diamond hover) AND the full
+`articles` set — one encyclopedic article per entity per theme
+(5 themes × 7 = 35), each weaving the entity with its day, color, hour
+mood, virtue and vice; where they display is an open owner decision.
 
 ## Table of Contents
 

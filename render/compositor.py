@@ -29,7 +29,6 @@ from render.layers import (
     CenterBodyLayer,
     HandLayer,
     Layer,
-    NoonMarkerLayer,
     RenderContext,
     RingLayer,
     StarLayer,
@@ -58,7 +57,6 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     factories = {
         "background": lambda: BackgroundLayer(skin),
         "star": lambda: StarLayer(skin),
-        "noon_marker": lambda: NoonMarkerLayer(skin),
         "ring": lambda: RingLayer(skin),
         "weekday_set": lambda: WeekdayLayer(skin),
         "year_marker": lambda: YearMarkerLayer(skin),

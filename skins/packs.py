@@ -8,6 +8,7 @@ complete — SkinValidationError lists EVERY problem at once (Rule #1).
 
 import dataclasses
 import json
+import os
 from pathlib import Path
 
 from config import constants
@@ -17,7 +18,6 @@ from skins import manifest
 _UNITS = {
     "background": ("background", manifest.BackgroundSpec),
     "star": ("star", manifest.StarSpec),
-    "noon_marker": ("noon_marker", manifest.NoonMarkerSpec),
     "ring": ("ring", manifest.RingSpec),
     "weekday_set": ("weekday_set", manifest.WeekdaySpec),
     "year_marker": ("year_marker", manifest.YearMarkerSpec),
@@ -143,7 +143,10 @@ def _build_spec(spec_class, data: dict, folder: Path, prefix: str, problems: lis
 def _resolve_path(value, folder: Path, label: str, problems: list[str]):
     if value is None:
         return None
-    path = folder / str(value)
+    # normpath: shared content is referenced as "../../ring/domy.png" —
+    # the ".." must collapse so loaded paths compare equal to the
+    # config-built ones.
+    path = Path(os.path.normpath(folder / str(value)))
     if not path.exists():
         problems.append(f"{label}: asset not found: {value}")
         return None
@@ -156,7 +159,9 @@ def serialize_skin(skin: manifest.SkinDefinition, folder: Path) -> dict:
 
     def portable(value, key=None):
         if isinstance(value, Path):
-            return value.relative_to(folder).as_posix()
+            # os.path.relpath (not Path.relative_to): shared content
+            # lives OUTSIDE the pack folder ("../../ring/domy.png").
+            return Path(os.path.relpath(value, folder)).as_posix()
         if isinstance(value, tuple):
             return [portable(item) for item in value]
         if isinstance(value, dict):

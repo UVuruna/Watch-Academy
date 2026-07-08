@@ -26,3 +26,7 @@ color and mood) below the two zodiac sign lines.
   "profession"); the center (sun) and the six arms are all addressable
   by body name. Raises KeyError for an unknown body — loudly, per
   Rule #1.
+
+The JSON also carries the `articles` set (35 encyclopedic texts, one
+per entity per theme) — not yet surfaced in the app; the owner decides
+where they display.

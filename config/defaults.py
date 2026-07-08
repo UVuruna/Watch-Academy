@@ -10,7 +10,6 @@ from skins.manifest import (
     BackgroundSpec,
     HandSpec,
     HandsSpec,
-    NoonMarkerSpec,
     RingSpec,
     SkinDefinition,
     StarSpec,
@@ -168,17 +167,19 @@ GLOW_MID_ALPHA = 0.7
 GLOW_MID_STOP = 0.55                 # gradient position of the mid alpha
 GLOW_RADIUS_SCALE = 2.0              # halo radius, multiple of the marker radius
 
-# --- Octa bottom-arm zodiac art -------------------------------------------------
+# --- Shared app content (NOT skin-specific — a skin is a dial design) -----------
 # Skeleton folders with 1x1 placeholders ship in the repo; the owner
 # pastes his vector renders OVER them (same names). A missing file
 # still falls back to the text form (documented).
-ZODIAC_ART_DIR = paths.bundled_skins_dir() / "domy" / "zodiac"
+ZODIAC_ART_DIR = paths.assets_dir() / "zodiac"
+WEEKDAY_ART_DIR = paths.assets_dir() / "weekday"
 
 # --- Weekday body themes (SYMBOLISM.md canon) -----------------------------------
 # Display names per theme, body -> name (the weekday hover reads
 # "Wednesday, Odin" in the norse theme). "planets" keeps the skin's own
 # unit untouched. Saturday has no Norse god — the Sabbath stands in
-# (canon). Art: assets/skins/domy/weekday/<theme>/<body>.png.
+# (canon). Art: assets/weekday/<theme>/<Entity>.png (files carry the
+# ENTITY names; the two Norse diacritics fold to ASCII on disk).
 WEEKDAY_THEME_NAMES = {
     "greek": {
         "sun": "Helios",
@@ -218,6 +219,13 @@ WEEKDAY_THEME_NAMES = {
     },
 }
 
+# File stems on disk: the display names folded to ASCII (Sól -> Sol).
+_ASCII_FOLD = str.maketrans("óá", "oa")
+WEEKDAY_THEME_FILES = {
+    theme: {body: name.translate(_ASCII_FOLD) for body, name in names.items()}
+    for theme, names in WEEKDAY_THEME_NAMES.items()
+}
+
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",
     z_order=(
@@ -227,7 +235,7 @@ DEFAULT_SKIN = SkinDefinition(
         "ring",
         "year_marker",
         "hands",
-    ),                                  # no noon marker: the star's top tip IS the noon pointer
+    ),                                  # the star's top tip IS the noon pointer
     background=BackgroundSpec(
         # Procedural Umbra (owner spec/art): drawn at runtime so the
         # contrast setting can reshade it.
@@ -246,13 +254,8 @@ DEFAULT_SKIN = SkinDefinition(
         border_width_fraction=0.008,
         radius_fraction=0.86,           # star tips touch the ring's inner edge too
     ),
-    noon_marker=NoonMarkerSpec(
-        asset=None,
-        color="#FFC838",
-        scale=0.045,
-    ),
     ring=RingSpec(
-        asset=_DOMY / "dial" / "ring.png",   # design/hours/domy.png
+        asset=paths.assets_dir() / "ring" / "domy.png",   # design/hours/domy.png
         fill="#4A4E57",
         text_color="#F0F0F0",
         letter_color="#E8B84B",
@@ -262,7 +265,7 @@ DEFAULT_SKIN = SkinDefinition(
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={name: _DOMY / "weekday" / "planets" / f"{name}.png" for name in (
+        bodies={name: WEEKDAY_ART_DIR / "planets" / f"{name}.png" for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
         body_names={
@@ -307,7 +310,7 @@ DEFAULT_SKIN = SkinDefinition(
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
-        moon_asset=_DOMY / "weekday" / "planets" / "moon.png",
+        moon_asset=WEEKDAY_ART_DIR / "planets" / "moon.png",
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,

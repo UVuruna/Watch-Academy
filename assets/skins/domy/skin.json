@@ -31,13 +31,8 @@
     "border_width_fraction": 0.008,
     "radius_fraction": 0.86
   },
-  "noon_marker": {
-    "asset": null,
-    "color": "#FFC838",
-    "scale": 0.045
-  },
   "ring": {
-    "asset": "dial/ring.png",
+    "asset": "../../ring/domy.png",
     "fill": "#4A4E57",
     "text_color": "#F0F0F0",
     "letter_color": "#E8B84B",
@@ -51,13 +46,13 @@
   },
   "weekday_set": {
     "bodies": {
-      "sun": "weekday/planets/sun.png",
-      "moon": "weekday/planets/moon.png",
-      "mars": "weekday/planets/mars.png",
-      "mercury": "weekday/planets/mercury.png",
-      "jupiter": "weekday/planets/jupiter.png",
-      "venus": "weekday/planets/venus.png",
-      "saturn": "weekday/planets/saturn.png"
+      "sun": "../../weekday/planets/sun.png",
+      "moon": "../../weekday/planets/moon.png",
+      "mars": "../../weekday/planets/mars.png",
+      "mercury": "../../weekday/planets/mercury.png",
+      "jupiter": "../../weekday/planets/jupiter.png",
+      "venus": "../../weekday/planets/venus.png",
+      "saturn": "../../weekday/planets/saturn.png"
     },
     "body_names": {
       "sun": "Sun",
@@ -116,7 +111,7 @@
     "night_color": "#20344F",
     "orbit_fraction": 0.75,
     "scale": 0.11,
-    "moon_asset": "weekday/planets/moon.png",
+    "moon_asset": "../../weekday/planets/moon.png",
     "moon_lit_color": "#E8E4D8",
     "moon_dark_color": "#2A2D36",
     "moon_shadow_alpha": 0.82,

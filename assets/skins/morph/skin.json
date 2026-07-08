@@ -1,7 +1,7 @@
 {
   "name": "MORPH",
   "ring": {
-    "asset": "dial/ring.png",
+    "asset": "../../ring/morph.png",
     "fill": "#4A4E57",
     "text_color": "#F0F0F0",
     "letter_color": "#E8B84B",

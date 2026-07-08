@@ -6,10 +6,12 @@ instance of this package's typed dataclasses.
 
 A skin is a folder under `assets/skins/<name>/` (bundled) or
 `%APPDATA%/DOMY Watch/skins/<name>/` (user drop-in). Exactly SIX
-override-able logical units (closed set): `background`, `hexagram`,
+override-able logical units (closed set): `background`, `star`,
 `ring`, `weekday_set`, `year_marker`, `hands`. Ring letters are per-skin
-(may be blank). Hand pivot fractions are MANDATORY whenever hands are
-defined.
+(may be blank). Shared app CONTENT (ring art, weekday themes, zodiac
+art) lives in `assets/ring|weekday|zodiac/` — a skin references it with
+relative paths ("../../ring/morph.png"): a skin is a dial DESIGN, the
+content is common.
 
 ## Files
 

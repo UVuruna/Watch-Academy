@@ -388,33 +388,6 @@ class StarLayer(Layer):
                 painter.restore()
 
 
-class NoonMarkerLayer(Layer):
-    """Small marker in the ring band at the solar-noon angle. Always
-    SOLAR — a noon marker keeps pointing at true noon even when the
-    star stands upright."""
-
-    cadence = Cadence.DAILY
-
-    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
-        spec = self._skin.noon_marker
-        inner = ctx.radius * (1.0 - self._skin.ring.width_fraction)
-        size = 2 * ctx.radius * spec.scale
-        painter.save()
-        painter.rotate(ctx.day.star_rotation)
-        painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(spec.color))
-        painter.drawPolygon(
-            QPolygonF(
-                [
-                    QPointF(0.0, -inner),
-                    QPointF(-size / 2, -inner - size),
-                    QPointF(size / 2, -inner - size),
-                ]
-            )
-        )
-        painter.restore()
-
-
 class RingLayer(Layer):
     """Outer ring: donut, hour ticks, 24h numerals with per-skin letters,
     minute numbers along the inner edge."""

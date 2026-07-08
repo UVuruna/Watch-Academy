@@ -46,13 +46,6 @@ class StarSpec:
 
 
 @dataclass(frozen=True)
-class NoonMarkerSpec:
-    asset: Path | None                 # None -> procedural triangle
-    color: str
-    scale: float                       # of the dial diameter
-
-
-@dataclass(frozen=True)
 class RingSpec:
     asset: Path | None                 # full dial-ring image; None -> procedural
     fill: str
@@ -124,7 +117,6 @@ class SkinDefinition:
     z_order: tuple[str, ...]           # layer names bottom-up
     background: BackgroundSpec
     star: StarSpec
-    noon_marker: NoonMarkerSpec
     ring: RingSpec
     weekday_set: WeekdaySpec
     year_marker: YearMarkerSpec
@@ -156,7 +148,6 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
     referenced = [
         skin.background.base_asset,
         skin.ring.asset,
-        skin.noon_marker.asset,
         skin.year_marker.moon_asset,
         skin.hands.hour.asset,
         skin.hands.minute.asset,

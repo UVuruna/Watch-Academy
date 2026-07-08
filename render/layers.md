@@ -77,9 +77,7 @@ tip/√3 for the hexagram; the CROSS borrows the octa arm shape — "octa
 without the diagonals", slim diamonds with gaps): colored BORDERS run
 the full circle so the night diamonds stay recognizable; the FILLS
 (near-full opacity) are clipped to the same `lit_regions()`. The star's
-top tip doubles as the solar-noon pointer — the DOMY skin ships no
-separate noon marker (NoonMarkerLayer remains available to other skins,
-and stays SOLAR even in upright mode).
+top tip IS the solar-noon pointer.
 
 ### RingLayer (STATIC)
 The full ring image when the skin provides one (numerals, minutes and

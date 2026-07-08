@@ -10,16 +10,16 @@ helpers.
 
 ### `layers.py` — Layer Stack
 `Cadence` enum (STATIC: rebuild on skin/size/DPI change; DAILY: rebuild on
-day change; MINUTE: painted live) + `Layer` ABC + the seven concrete
-layers (closed set): BackgroundLayer (six 4-hour sectors + darkening
-overlays per daylight regime — always painter-drawn, the daylight arc
-changes daily), HexagramLayer (asset or procedural star, rotated to solar
-noon), NoonMarkerLayer, RingLayer (donut, ticks, 24h numerals with
-per-skin letters, minute numbers), WeekdayLayer (Sun center + six diamond
-slots that rotate WITH the hexagram; "ghost" and "center_only" modes),
-YearMarkerLayer (Earth day/night variant or procedural moon with
-terminator mask), HandLayer (one class, two instances, rotates about the
-skin-declared pivot). See [Layers](layers.md).
+day change; MINUTE: painted live) + `Layer` ABC + the concrete layers
+(closed set): BackgroundLayer (the Umbra brightness wheel + the Aura
+period wedges over the sunlit arc), StarLayer (procedural N-diamond
+star, top tip at solar noon or upright), RingLayer (ring art or the
+procedural donut with ticks, numerals, per-skin letters), WeekdayLayer
+(themed bodies on the pointer's slots; "ghost" and "center_only"
+modes), CenterBodyLayer and BottomSlotLayer (above the hands),
+YearMarkerLayer (Earth day/night variant, moon with terminator mask,
+event glow), HandLayer (one class, one shared scale, hub 15 design
+units above the canvas bottom). See [Layers](layers.md).
 
 ### `compositor.py` — Compositor
 Z-ordered stack from the skin's `z_order`; composites STATIC+DAILY layers

@@ -3,8 +3,8 @@
 **Script:** [Manifest (script)](manifest.py)
 
 ## Purpose
-The typed skin definition — six overridable units (background, hexagram,
-ring, weekday_set, year_marker, hands) plus the noon marker. Pure
+The typed skin definition — six overridable units (background, star,
+ring, weekday_set, year_marker, hands). Pure
 dataclasses with no I/O: `DEFAULT_SKIN` in config is an instance of these,
 and M5's `skin.json` loading/validation targets the same types, so
 extraction is serialization, not redesign.
@@ -37,7 +37,6 @@ extraction is serialization, not redesign.
   geometry is drawn at runtime, no image file): day/twilight alphas,
   full-circle border alpha/width, tip radius; colors come from the
   palette preset shared with the Aura
-- `NoonMarkerSpec` — asset-or-procedural triangle
 - `RingSpec` — full ring image (numerals/letters baked in) or procedural
   fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20)
 - `WeekdaySpec` — body images/colors, white weekday label on top,

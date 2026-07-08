@@ -24,8 +24,14 @@ def database_dir() -> Path:
     return app_root() / "Database"
 
 
+def assets_dir() -> Path:
+    """Shared app content (ring art, weekday themes, zodiac art) —
+    NOT skin-specific: a skin is a dial design, the content is common."""
+    return app_root() / "assets"
+
+
 def bundled_skins_dir() -> Path:
-    return app_root() / "assets" / "skins"
+    return assets_dir() / "skins"
 
 
 def user_dir() -> Path:

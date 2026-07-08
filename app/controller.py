@@ -52,16 +52,15 @@ def apply_display_settings(skin, settings: Settings):
         )
     weekday = skin.weekday_set
     if settings.weekday_theme != "planets":
-        # Themed bodies (SYMBOLISM.md canon): swap in the owner's art
-        # and the canon display names; "planets" keeps the skin's own
-        # weekday unit untouched.
-        theme_dir = (
-            paths.bundled_skins_dir() / "domy" / "weekday" / settings.weekday_theme
-        )
+        # Themed bodies (SYMBOLISM.md canon): swap in the shared themed
+        # art (files carry the ENTITY names) and the canon display
+        # names; "planets" keeps the skin's own weekday unit untouched.
+        theme_dir = defaults.WEEKDAY_ART_DIR / settings.weekday_theme
         names = defaults.WEEKDAY_THEME_NAMES[settings.weekday_theme]
+        files = defaults.WEEKDAY_THEME_FILES[settings.weekday_theme]
         weekday = dataclasses.replace(
             weekday,
-            bodies={body: theme_dir / f"{body}.png" for body in names},
+            bodies={body: theme_dir / f"{files[body]}.png" for body in names},
             body_names=dict(names),
         )
     background = skin.background

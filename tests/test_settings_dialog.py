@@ -110,7 +110,7 @@ def test_weekday_theme_swaps_bodies_and_names():
         defaults.DEFAULT_SKIN, replace(Settings(), weekday_theme="greek")
     )
     assert greek.weekday_set.body_names["mercury"] == "Hermes"
-    assert greek.weekday_set.bodies["mercury"].name == "mercury.png"
+    assert greek.weekday_set.bodies["mercury"].name == "Hermes.png"
     assert "greek" in str(greek.weekday_set.bodies["mercury"])
     assert all(path.exists() for path in greek.weekday_set.bodies.values())
     planets = apply_display_settings(defaults.DEFAULT_SKIN, Settings())
@@ -118,16 +118,18 @@ def test_weekday_theme_swaps_bodies_and_names():
 
 
 def test_every_theme_skeleton_is_complete():
-    """Every theme folder ships all seven body files (placeholders until
-    the owner pastes his vectors over them)."""
-    from config import constants, paths
+    """Every theme folder ships all seven ENTITY-named files
+    (placeholders until the owner pastes his vectors over them); the
+    Norse diacritics fold to ASCII on disk (Sól -> Sol.png)."""
+    from config import constants
 
     for theme in constants.WEEKDAY_THEMES:
         if theme == "planets":
             continue
-        folder = paths.bundled_skins_dir() / "domy" / "weekday" / theme
+        folder = defaults.WEEKDAY_ART_DIR / theme
         for body in constants.WEEKDAY_BODIES:
-            assert (folder / f"{body}.png").exists(), (theme, body)
+            stem = defaults.WEEKDAY_THEME_FILES[theme][body]
+            assert (folder / f"{stem}.png").exists(), (theme, body)
 
 
 def test_legend_off_silences_every_hover(app):
@@ -227,6 +229,22 @@ def test_symbolism_repository_covers_every_body_and_theme():
         blurbs = repo.arm_blurbs(body)
         for theme, key in constants.WEEKDAY_THEME_BLURBS.items():
             assert blurbs[key], (body, theme)
+
+
+def test_articles_cover_every_theme_and_body():
+    """35 encyclopedic articles (5 themes x 7 bodies), each substantial
+    (weaves day, color, mood, virtue and vice — SYMBOLISM.md canon)."""
+    import json
+
+    from config import constants, paths
+
+    data = json.loads(
+        (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
+    )
+    for theme in constants.WEEKDAY_THEMES:
+        for body in constants.WEEKDAY_BODIES:
+            article = data["articles"][theme][body]
+            assert len(article) > 150, (theme, body)
 
 
 def test_custom_palette_reaches_the_render():

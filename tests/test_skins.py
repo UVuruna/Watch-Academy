@@ -20,7 +20,7 @@ def test_morph_merges_only_the_ring():
     skin = resolver.resolve("morph")
     assert skin.name == "MORPH"
     assert skin.ring.letters == {12: "M", 16: "Π", 8: "H", 0: "Ω"}
-    assert skin.ring.asset.name == "ring.png" and "morph" in str(skin.ring.asset)
+    assert skin.ring.asset.name == "morph.png"       # shared assets/ring/
     # Everything else inherits from the base.
     assert skin.hands == defaults.DEFAULT_SKIN.hands
     assert skin.background == defaults.DEFAULT_SKIN.background
@@ -66,8 +66,7 @@ def test_serialize_is_json_ready():
     folder = paths.bundled_skins_dir() / "domy"
     payload = serialize_skin(defaults.DEFAULT_SKIN, folder)
     json.dumps(payload)                  # must not raise
-    assert payload["ring"]["asset"] == "dial/ring.png"
-    assert payload["noon_marker"]["asset"] is None
+    assert payload["ring"]["asset"] == "../../ring/domy.png"
     assert payload["pointer"] == "hexa"
     assert payload["umbra_form"] == "fine"
     assert payload["umbra_contrast"] == "full"

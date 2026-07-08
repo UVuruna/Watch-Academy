@@ -32,7 +32,7 @@ bodies, year marker, hands) done; Windows hardening (M4) is next.
   📁 skins/             ← skin manifests, validation, merging (M5)
   📁 render/            ← QPainter layers and compositor (M3)
   📁 app/               ← Qt shell: window, tray, settings
-  📁 assets/            ← bundled skins and logo
+  📁 assets/            ← shared art (ring, weekday themes, zodiac) + skins
   📁 Database/          ← bundled astronomical/location data
   📁 tests/             ← pytest golden-value suite
   📁 design/            ← mockups and reference images (not bundled)
