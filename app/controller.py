@@ -91,7 +91,7 @@ class AppController(QObject):
         # invalidates every rasterized cache.
         self._widget.windowHandle().screenChanged.connect(self._on_screen_changed)
         if self._settings.click_through:
-            native.set_click_through(int(self._widget.winId()), True)
+            self._widget.set_click_through(True)
 
     def quit(self) -> None:
         self._widget.mark_closing()
@@ -264,7 +264,9 @@ class AppController(QObject):
         click_through.setCheckable(True)
         click_through.setChecked(self._settings.click_through)
         click_through.setToolTip(
-            "The dial ignores the mouse entirely — turn it back off here in the tray."
+            "Clicks pass through the dial to the desktop — only the center "
+            "hub stays interactive (right-click it, or use the tray, to "
+            "turn this back off)."
         )
         click_through.toggled.connect(self._set_click_through)
         menu.addAction(click_through)
@@ -275,7 +277,7 @@ class AppController(QObject):
         return menu
 
     def _set_click_through(self, enabled: bool) -> None:
-        native.set_click_through(int(self._widget.winId()), enabled)
+        self._widget.set_click_through(enabled)
         self._settings = replace(self._settings, click_through=enabled)
         self._flush_position()
 

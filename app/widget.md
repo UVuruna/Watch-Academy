@@ -39,7 +39,9 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
   and the Moon markers (large dials write the text directly)
 - `contextMenuEvent()`: opens the shared menu
 - `nativeEvent()`: WM_NCHITTEST → `HTTRANSPARENT` outside the dial's
-  inscribed circle — corner clicks reach whatever lies beneath
+  inscribed circle — corner clicks reach whatever lies beneath; in
+  click-through mode (`set_click_through`) the interactive area shrinks
+  to the center hub, which keeps hover and the right-click menu alive
 - `hideEvent()` / `changeEvent()`: spontaneous-hide watchdog — undoes an
   OS-initiated hide/minimize after `WATCHDOG_RESHOW_MS` (note: Win+D on
   Windows 11 24H2 bypasses these events entirely; see the folder doc)

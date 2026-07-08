@@ -35,20 +35,11 @@ def acquire_single_instance(name: str) -> bool:
     return _kernel32.GetLastError() != winapi.ERROR_ALREADY_EXISTS
 
 
-def set_click_through(hwnd: int, enabled: bool) -> None:
-    """Toggle WS_EX_TRANSPARENT directly — flicker-free, unlike
-    setWindowFlag() which re-parents and hides the window."""
-    style = _user32.GetWindowLongPtrW(hwnd, winapi.GWL_EXSTYLE)
-    if enabled:
-        style |= winapi.WS_EX_LAYERED | winapi.WS_EX_TRANSPARENT
-    else:
-        style &= ~winapi.WS_EX_TRANSPARENT
-    _user32.SetWindowLongPtrW(hwnd, winapi.GWL_EXSTYLE, style)
-
-
-def nchittest_falls_outside(message_ptr: int) -> bool:
+def nchittest_falls_outside(message_ptr: int, radius_fraction: float) -> bool:
     """True when the native message is a WM_NCHITTEST whose (physical,
-    screen-space) point lies outside the window's inscribed circle.
+    screen-space) point lies outside `radius_fraction` of the window's
+    inscribed circle (1.0 = the dial edge; a smaller fraction shrinks the
+    interactive area to the center hub in click-through mode).
     The window handle comes from the message itself — calling winId()
     here would force window creation from INSIDE window creation and
     CreateWindowEx would loop forever. Physical coordinates on both
@@ -62,7 +53,7 @@ def nchittest_falls_outside(message_ptr: int) -> bool:
     _user32.GetWindowRect(msg.hWnd, ctypes.byref(rect))
     center_x = (rect.left + rect.right) / 2
     center_y = (rect.top + rect.bottom) / 2
-    radius = min(rect.right - rect.left, rect.bottom - rect.top) / 2
+    radius = min(rect.right - rect.left, rect.bottom - rect.top) / 2 * radius_fraction
     return (x - center_x) ** 2 + (y - center_y) ** 2 > radius * radius
 
 

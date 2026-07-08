@@ -25,6 +25,7 @@ class ClockWidget(QWidget):
         self._menu = menu
         self._renderer = None
         self._tick = None
+        self._click_through = False
 
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint
@@ -41,6 +42,13 @@ class ClockWidget(QWidget):
         """Tell the spontaneous-hide watchdog that the coming hide is
         intentional."""
         self._closing = True
+
+    def set_click_through(self, enabled: bool) -> None:
+        """Shrink the interactive area to the center hub — the rest of the
+        dial passes clicks to whatever lies beneath. The hub keeps hover
+        and the right-click menu alive, so the mode can be turned off on
+        the dial itself (or via the tray)."""
+        self._click_through = enabled
 
     # --- Rendering --------------------------------------------------------------
 
@@ -96,12 +104,15 @@ class ClockWidget(QWidget):
 
     def nativeEvent(self, event_type, message):
         """Clicks outside the dial's inscribed circle fall through to
-        whatever lies beneath (desktop icons, other windows) — the square
-        window corners are not ours."""
-        if event_type == b"windows_generic_MSG" and native.nchittest_falls_outside(
-            int(message)
-        ):
-            return True, winapi.HTTRANSPARENT
+        whatever lies beneath (the square window corners are not ours);
+        in click-through mode the interactive area shrinks further to the
+        center hub."""
+        if event_type == b"windows_generic_MSG":
+            interactive = (
+                defaults.CLICK_THROUGH_HANDLE_FRACTION if self._click_through else 1.0
+            )
+            if native.nchittest_falls_outside(int(message), interactive):
+                return True, winapi.HTTRANSPARENT
         return super().nativeEvent(event_type, message)
 
     # --- Spontaneous-hide watchdog ----------------------------------------------

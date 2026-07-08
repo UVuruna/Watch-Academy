@@ -64,6 +64,11 @@ CLOCK_JUMP_THRESHOLD_S = 5           # actual vs expected tick time -> full refr
 # toggle (default OFF per the original decision) with the M6 dialog.
 SECONDS_HAND_ENABLED = True
 
+# Click-through keeps a live "handle" around the dial center (hover and
+# right-click still work there, and it is how the mode is turned back off
+# without the tray); everything outside it passes to the desktop.
+CLICK_THROUGH_HANDLE_FRACTION = 0.22
+
 # --- Settings persistence ----------------------------------------------------
 SETTINGS_SCHEMA_VERSION = 1
 SETTINGS_WRITE_DEBOUNCE_MS = 750     # collapse rapid moveEvent bursts while dragging

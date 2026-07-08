@@ -70,6 +70,24 @@ def test_window_spans_neighbor_years(window_2026):
     assert window_2026.events[-1][0].year == 2027
 
 
+def test_phase_names_follow_the_common_convention():
+    """A principal name holds only around its instant; the day after the
+    Third Quarter (owner checked online for 8 July 2026) the moon must
+    already read Waning Crescent."""
+    from core.moon import phase_name
+
+    assert phase_name(0.75) == "Third Quarter"          # the instant itself
+    assert phase_name(0.76) == "Third Quarter"          # within +-half a day
+    assert phase_name(0.774) == "Waning Crescent"       # ~0.7 days after
+    assert phase_name(0.0) == "New Moon"
+    assert phase_name(0.98) == "Waning Crescent"
+    assert phase_name(0.99) == "New Moon"               # approaching the instant
+    assert phase_name(0.12) == "Waxing Crescent"
+    assert phase_name(0.35) == "Waxing Gibbous"
+    assert phase_name(0.5) == "Full Moon"
+    assert phase_name(0.6) == "Waning Gibbous"
+
+
 def test_illumination_curve():
     assert illumination(0.0) == pytest.approx(0.0)
     assert illumination(0.25) == pytest.approx(0.5)

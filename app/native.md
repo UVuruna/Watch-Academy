@@ -22,10 +22,10 @@ that must refresh the dial immediately.
 
 - `acquire_single_instance(name)`: named kernel mutex; the handle
   deliberately lives as long as the process
-- `set_click_through(hwnd, enabled)`: toggles `WS_EX_TRANSPARENT`
-  directly — `setWindowFlag()` would re-parent and hide the window
-- `nchittest_falls_outside(message_ptr)`: is the WM_NCHITTEST point
-  outside the window's inscribed circle? Uses the HWND from the message
+- `nchittest_falls_outside(message_ptr, radius_fraction)`: is the
+  WM_NCHITTEST point outside the given fraction of the window's inscribed
+  circle? (1.0 = the dial edge; the click-through handle fraction shrinks
+  the interactive area to the center hub.) Uses the HWND from the message
   itself — calling `winId()` here would force window creation from
   inside window creation and loop forever (learned the hard way)
 

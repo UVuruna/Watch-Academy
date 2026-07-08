@@ -12,6 +12,9 @@ setup/cert/
 setup/version_info.txt
 setup/_version_info.py
 
+# Owner's local-only experiments
+design/example/
+
 # Legacy exclusions
 Database_Create/
 Side/

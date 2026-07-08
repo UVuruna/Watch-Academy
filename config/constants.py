@@ -43,6 +43,12 @@ YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
 # --- Moon ----------------------------------------------------------------------
 SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length
 
+# A principal phase name (New/First Quarter/Full/Third Quarter) applies
+# only around the instant itself (±half a day, the common convention) —
+# afterwards the intermediate name takes over (e.g. Waning Crescent the
+# day after the Third Quarter).
+MOON_PRINCIPAL_WINDOW = 0.5 / SYNODIC_MONTH_DAYS
+
 # Octant names by cycle fraction (windows of 1/8 centered on the anchors).
 MOON_PHASE_NAMES = (
     "New Moon",

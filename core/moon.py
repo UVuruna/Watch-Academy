@@ -48,7 +48,25 @@ def illumination(fraction: float) -> float:
 
 
 def phase_name(fraction: float) -> str:
-    """English octant name for a cycle fraction (windows of 1/8 centered
-    on the four principal anchors and the four intermediate phases)."""
-    octant = int(((fraction % 1.0) + 1.0 / 16.0) * 8.0) % 8
-    return constants.MOON_PHASE_NAMES[octant]
+    """English phase name for a cycle fraction. A PRINCIPAL name (New,
+    First Quarter, Full, Third Quarter) applies only within ±half a day
+    of its instant — the common convention: the day after the Third
+    Quarter the moon is already a Waning Crescent."""
+    fraction %= 1.0
+    principals = (
+        (0.0, "New Moon"),
+        (0.25, "First Quarter"),
+        (0.5, "Full Moon"),
+        (0.75, "Third Quarter"),
+        (1.0, "New Moon"),
+    )
+    for anchor, name in principals:
+        if abs(fraction - anchor) <= constants.MOON_PRINCIPAL_WINDOW:
+            return name
+    if fraction < 0.25:
+        return "Waxing Crescent"
+    if fraction < 0.5:
+        return "Waxing Gibbous"
+    if fraction < 0.75:
+        return "Waning Gibbous"
+    return "Waning Crescent"
