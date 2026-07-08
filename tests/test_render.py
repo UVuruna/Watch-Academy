@@ -69,10 +69,11 @@ def test_dial_is_not_mirrored(frame):
     assert left.green() > left.red()     # green family, not orange
 
 
-def test_gap_between_disc_and_ring(frame):
-    """Owner spec: the inner disc must NOT touch the ring — the band
-    between them stays transparent (probe at 90°, between star tips)."""
-    assert frame.pixelColor(324, 180).alpha() < 60
+def test_disc_touches_the_ring(frame):
+    """Owner spec (emphasized twice): NO empty space between the disc and
+    the ring — the pixel just inside the ring's inner edge (0.887R, probe
+    at 90° between star tips) must be painted."""
+    assert frame.pixelColor(337, 180).alpha() > 200
 
 
 def test_lit_regions_never_crash_across_polar_year(app):

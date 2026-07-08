@@ -195,6 +195,7 @@ class HexagramLayer(Layer):
         spec = self._skin.hexagram
         tip = ctx.radius * spec.radius_fraction
         inner = tip * constants.HEXAGRAM_INNER_FRACTION
+        border_width = max(1.0, ctx.radius * spec.border_width_fraction)
         for k, color in enumerate(spec.colors):
             theta = k * 60.0
             diamond = QPolygonF(
@@ -208,15 +209,21 @@ class HexagramLayer(Layer):
             if fill:
                 painter.setPen(Qt.PenStyle.NoPen)
                 painter.setBrush(QColor(color))
+                painter.drawPolygon(diamond)
             else:
-                painter.setPen(
-                    QPen(
-                        QColor(color),
-                        max(1.0, ctx.radius * spec.border_width_fraction),
-                    )
-                )
+                # Border as PADDING (owner spec): clip to the diamond and
+                # stroke at double width, so only the inner half shows —
+                # neighboring diamonds' borders sit side by side instead
+                # of overpainting each other along shared edges.
+                clip = QPainterPath()
+                clip.addPolygon(diamond)
+                clip.closeSubpath()
+                painter.save()
+                painter.setClipPath(clip)
+                painter.setPen(QPen(QColor(color), 2.0 * border_width))
                 painter.setBrush(Qt.BrushStyle.NoBrush)
-            painter.drawPolygon(diamond)
+                painter.drawPolygon(diamond)
+                painter.restore()
 
 
 class NoonMarkerLayer(Layer):

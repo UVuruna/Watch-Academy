@@ -107,7 +107,9 @@ DEFAULT_SKIN = SkinDefinition(
         sector_palette=_SECTOR_PALETTE,
         day_alpha=0.55,
         twilight_alpha=0.28,
-        radius_fraction=0.76,           # empty breathing space between the disc and the ring
+        # Owner spec: the disc TOUCHES the ring's inner edge (measured at
+        # 0.887 of the radius in the ring art) — no empty space between.
+        radius_fraction=0.89,
     ),
     hexagram=HexagramSpec(
         colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
@@ -115,7 +117,7 @@ DEFAULT_SKIN = SkinDefinition(
         twilight_alpha=0.55,
         border_alpha=0.85,              # colored outlines run the full circle
         border_width_fraction=0.008,
-        radius_fraction=0.80,
+        radius_fraction=0.89,           # star tips touch the ring's inner edge too
     ),
     noon_marker=NoonMarkerSpec(
         asset=None,
