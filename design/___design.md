@@ -1,22 +1,25 @@
 # design/
 
-Reference mockups and screenshots — NOT bundled with the app.
+The owner's master art — NOT bundled with the app (working copies are
+downscaled into `assets/skins/domy/` and must be refreshed whenever a
+master changes).
 
-## Files
+## Folders
 
-- `Clock.png` — the base dial design: 24h ring (noon top, midnight bottom),
-  six 4-hour color sectors, minute scale, D-Ω-M-Y letters
-- `Screenshot … 170351/170407.png` — M2 MORPH and M2 DOMYNY full mockups with
-  a real day rendered (daylight arc, hexagram tilted to solar noon, weekday
-  bodies, Earth year marker, date/sun-times header)
-- `Screenshot … 170425/170534.png` — MORPH vs DOMYNI comparison and dial
-  close-up
-- `hours.png`, `minutes.png`, `seconds.png` — hand images (seconds unused —
-  the product has no seconds hand)
-- `hexaLight.png` — hexagram overlay reference
+- `hours/` — full dial-ring art per skin (`domy.png`, `morph.png`) with
+  the 360-dot precision/seconds scale
+- `pointer/` — vector hands (`hours.svg`, `minutes.svg`, `seconds.svg`;
+  rotation hub centered 15 units from the bottom, hub radius 15)
+- `background/` — the fixed 32-section gray wheel (`gray.png`) and the
+  cross/hexa/octa pointer look references (drawn procedurally in-app)
+- `weekday/planets/` — the seven weekday bodies
+- `date/earth/{atmosphere|clean}/{day|night}/` — Earth per continent
+- legacy loose files: `hours.png`, `minutes.png`, `seconds.png`,
+  `hexaLight.png` (superseded by the folders above)
 
 ## Connections
 
 ### Used by
-- [Tests (folder)](../tests/___tests.md) — mockup day 20.6.2025 is a golden
-  test case (sunrise 4:52, sunset 20:27)
+- [Assets (folder)](../assets/___assets.md) — downscaled working copies
+- [Tests (folder)](../tests/___tests.md) — mockup day 20.6.2025 remains a
+  golden test case (sunrise 4:52, sunset 20:27)
