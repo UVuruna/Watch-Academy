@@ -208,7 +208,7 @@ DEFAULT_SKIN = SkinDefinition(
         ),
         second=HandSpec(
             asset=_DOMY / "hands" / "second.svg",
-            pivot=(0.5, 285.5 / 300),           # viewBox 29x300, hub at y=285.5
+            pivot=(0.5, (300 - 15) / 300),      # viewBox 29x300, same 15-from-bottom rule
             length_fraction=0.82,               # tip reaches the 360-dot scale
         ),
     ),
