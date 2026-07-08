@@ -1,0 +1,11 @@
+{
+  "name": "MORPH",
+  "ring": {
+    "asset": "dial/ring.png",
+    "fill": "#4A4E57",
+    "text_color": "#F0F0F0",
+    "letter_color": "#E8B84B",
+    "width_fraction": 0.16,
+    "letters": {"12": "M", "16": "Π", "8": "H", "0": "Ω"}
+  }
+}

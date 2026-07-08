@@ -1,0 +1,137 @@
+{
+  "name": "DOMY",
+  "z_order": [
+    "background",
+    "hexagram",
+    "weekday_set",
+    "ring",
+    "year_marker",
+    "hands"
+  ],
+  "background": {
+    "base_asset": "dial/base_gray.png",
+    "base_color": "#8A8D93",
+    "sector_palette": [
+      "#FFD34D",
+      "#FF9E3D",
+      "#E14B4B",
+      "#8E4BC9",
+      "#3D7BFF",
+      "#4BC96B"
+    ],
+    "day_alpha": 0.55,
+    "twilight_alpha": 0.28,
+    "base_radius_fraction": 0.9,
+    "radius_fraction": 0.9
+  },
+  "hexagram": {
+    "colors": [
+      "#FFD34D",
+      "#FF9E3D",
+      "#E14B4B",
+      "#8E4BC9",
+      "#3D7BFF",
+      "#4BC96B"
+    ],
+    "day_alpha": 0.92,
+    "twilight_alpha": 0.55,
+    "border_alpha": 0.85,
+    "border_width_fraction": 0.008,
+    "radius_fraction": 0.86
+  },
+  "noon_marker": {
+    "asset": null,
+    "color": "#FFC838",
+    "scale": 0.045
+  },
+  "ring": {
+    "asset": "dial/ring.png",
+    "fill": "#4A4E57",
+    "text_color": "#F0F0F0",
+    "letter_color": "#E8B84B",
+    "width_fraction": 0.16,
+    "letters": {
+      "12": "M",
+      "20": "Y",
+      "0": "Ω",
+      "4": "D"
+    }
+  },
+  "weekday_set": {
+    "bodies": {
+      "sun": "weekday/sun.png",
+      "moon": "weekday/moon.png",
+      "mars": "weekday/mars.png",
+      "mercury": "weekday/mercury.png",
+      "jupiter": "weekday/jupiter.png",
+      "venus": "weekday/venus.png",
+      "saturn": "weekday/saturn.png"
+    },
+    "body_names": {
+      "sun": "Sun",
+      "moon": "Moon",
+      "mars": "Mars",
+      "mercury": "Mercury",
+      "jupiter": "Jupiter",
+      "venus": "Venus",
+      "saturn": "Saturn"
+    },
+    "body_colors": {
+      "sun": "#FFC838",
+      "jupiter": "#E8C25A",
+      "mars": "#C96A3D",
+      "venus": "#E1934B",
+      "mercury": "#9B8F86",
+      "moon": "#C9CDD4",
+      "saturn": "#D4B27A"
+    },
+    "display_mode": "ghost",
+    "ghost_opacity": 0.15,
+    "center_scale": 0.132,
+    "diamond_scale": 0.11,
+    "orbit_fraction": 0.38
+  },
+  "year_marker": {
+    "mode": "both",
+    "variants": {
+      "europe_day": "year_marker/earth_clean_europe_day.png",
+      "europe_night": "year_marker/earth_clean_europe_night.png",
+      "north_america_day": "year_marker/earth_clean_north_america_day.png",
+      "north_america_night": "year_marker/earth_clean_north_america_night.png",
+      "south_america_day": "year_marker/earth_clean_south_america_day.png",
+      "south_america_night": "year_marker/earth_clean_south_america_night.png",
+      "africa_day": "year_marker/earth_clean_africa_day.png",
+      "africa_night": "year_marker/earth_clean_africa_night.png",
+      "asia_day": "year_marker/earth_clean_asia_day.png",
+      "asia_night": "year_marker/earth_clean_asia_night.png",
+      "oceania_day": "year_marker/earth_clean_oceania_day.png",
+      "oceania_night": "year_marker/earth_clean_oceania_night.png"
+    },
+    "default_variant": "europe",
+    "day_color": "#4B86C9",
+    "night_color": "#20344F",
+    "orbit_fraction": 0.75,
+    "scale": 0.11,
+    "moon_asset": "weekday/moon.png",
+    "moon_lit_color": "#E8E4D8",
+    "moon_dark_color": "#2A2D36",
+    "moon_shadow_alpha": 0.82,
+    "moon_orbit_fraction": 0.75,
+    "moon_scale": 0.08
+  },
+  "hands": {
+    "hour": {
+      "asset": "hands/hour.svg",
+      "design_height": 240
+    },
+    "minute": {
+      "asset": "hands/minute.svg",
+      "design_height": 290
+    },
+    "reach_fraction": 0.88,
+    "second": {
+      "asset": "hands/second.svg",
+      "design_height": 300
+    }
+  }
+}

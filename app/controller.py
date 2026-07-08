@@ -29,7 +29,9 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
+from skins import resolver
 from skins.manifest import missing_assets
+from skins.packs import SkinValidationError
 
 
 class AppController(QObject):
@@ -51,7 +53,8 @@ class AppController(QObject):
         )
         self._seasons = SeasonsRepository()
         self._moon_phases = MoonPhaseRepository()
-        missing = missing_assets(defaults.DEFAULT_SKIN)
+        self._skin = self._resolve_skin_or_recover(self._settings.skin)
+        missing = missing_assets(self._skin)
         if missing:
             # Checked up front: a missing asset would otherwise raise
             # inside paintEvent, where Qt swallows it — silently broken dial.
@@ -62,7 +65,7 @@ class AppController(QObject):
                 QMessageBox.StandardButton.Ok,
             )
             raise SystemExit(1)
-        self._compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+        self._compositor = Compositor(self._skin, AssetCache())
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
         # present until the deadline passes.
@@ -70,8 +73,7 @@ class AppController(QObject):
         self._simulation_ends: float = 0.0
         self._widget.set_renderer(self._compositor)
         seconds_hand = (
-            defaults.DEFAULT_SKIN.hands.second is not None
-            and defaults.SECONDS_HAND_ENABLED
+            self._skin.hands.second is not None and defaults.SECONDS_HAND_ENABLED
         )
         self._scheduler = MinuteScheduler(self._on_tick, self, per_second=seconds_hand)
         # Resume-from-sleep and clock/zone changes refresh immediately —
@@ -266,8 +268,51 @@ class AppController(QObject):
 
     # --- Menu ---------------------------------------------------------------------
 
+    def _resolve_skin_or_recover(self, name: str):
+        try:
+            return resolver.resolve(name)
+        except (KeyError, SkinValidationError) as error:
+            self._critical_box(
+                f"Skin {name!r} cannot be loaded:\n{error}\n\n"
+                f"Continuing with the built-in DOMY skin.",
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.Ok,
+            )
+            return defaults.DEFAULT_SKIN
+
+    def _set_skin(self, name: str) -> None:
+        if name == self._settings.skin:
+            return
+        try:
+            skin = resolver.resolve(name)
+        except (KeyError, SkinValidationError) as error:
+            self._critical_box(
+                f"Skin {name!r} cannot be loaded:\n{error}",
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.Ok,
+            )
+            return
+        self._skin = skin
+        self._compositor = Compositor(skin, AssetCache())
+        self._widget.set_renderer(self._compositor)
+        if self._day is not None:
+            self._compositor.set_day(self._day)
+        self._widget.update()
+        self._settings = replace(self._settings, skin=name)
+        self._flush_position()
+
     def _build_menu(self) -> QMenu:
         menu = QMenu()
+        skin_menu = menu.addMenu("Skin")
+        skin_group = QActionGroup(menu)
+        skin_group.setExclusive(True)
+        for name in sorted(resolver.discover()):
+            action = QAction(name.upper(), menu)
+            action.setCheckable(True)
+            action.setChecked(name == self._settings.skin)
+            action.triggered.connect(lambda checked, skin=name: self._set_skin(skin))
+            skin_group.addAction(action)
+            skin_menu.addAction(action)
         size_menu = menu.addMenu("Size")
         group = QActionGroup(menu)
         group.setExclusive(True)

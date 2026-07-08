@@ -27,17 +27,21 @@ background wedges and the star diamonds share the same palette count.
 The year wheel already guarantees each season spans exactly 90° with a
 per-season daily rate.
 
-## Planned Files (M5)
+### `packs.py` — skin.json Load/Merge/Serialize
+Partial packs merge unit-by-unit onto the DOMY base (MORPH ships only
+its ring); `SkinValidationError` lists ALL problems at once; the DOMY
+`skin.json` itself is serialized from `DEFAULT_SKIN`, so config stays
+the single source of truth.
 
 ### `resolver.py` — Skin Resolver
-Discovers `skin.json` packs, merges base ← chosen pack ← per-unit
-overrides (`{"skin": name, "params": {...}}`), re-validates the merged
-result. Partial manifests (e.g. hands only) are valid as override
-sources. A broken override raises visibly — never a silent fallback.
+Discovers packs in bundled `assets/skins/` and
+`%APPDATA%/DOMY Watch/skins/`; `resolve(name)` returns the merged
+definition; unknown names and broken packs raise visibly (the app then
+offers the built-in DOMY, never falls back silently).
 
 ### `validate.py` — CLI
 `python -m skins.validate <folder>` — check a pack without launching the
-app; `SkinValidationError` lists ALL problems at once.
+app (manifest problems, then the merged-asset sweep).
 
 ## Connections
 
