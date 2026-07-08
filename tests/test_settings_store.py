@@ -59,26 +59,26 @@ def test_diameter_out_of_range_raises(store):
         store.load()
 
 
-def test_pointer_and_contrast_round_trip(store):
-    saved = replace(Settings(), pointer="octa", gray_contrast="soft")
+def test_display_choices_round_trip(store):
+    saved = replace(
+        Settings(),
+        pointer="octa",
+        umbra_contrast="soft",
+        palette_style="light",
+        solar_rotation=False,
+        octa_slot="zodiac",
+    )
     store.save(saved)
     assert store.load() == saved
 
 
-def test_unknown_pointer_raises(store):
+@pytest.mark.parametrize(
+    "key", ["pointer", "umbra_contrast", "palette_style", "octa_slot"]
+)
+def test_unknown_display_choice_raises(store, key):
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
-        ' "pointer": "banana"}',
-        encoding="utf-8",
-    )
-    with pytest.raises(SettingsCorruptError):
-        store.load()
-
-
-def test_unknown_gray_contrast_raises(store):
-    store.path.write_text(
-        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
-        ' "gray_contrast": "extreme"}',
+        f' "{key}": "banana"}}',
         encoding="utf-8",
     )
     with pytest.raises(SettingsCorruptError):

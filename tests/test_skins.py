@@ -69,21 +69,36 @@ def test_serialize_is_json_ready():
     assert payload["ring"]["asset"] == "dial/ring.png"
     assert payload["noon_marker"]["asset"] is None
     assert payload["pointer"] == "hexa"
-    assert payload["gray_contrast"] == "full"
+    assert payload["umbra_contrast"] == "full"
+    assert payload["palette_style"] == "paint"
+    assert payload["solar_rotation"] is True
+    assert payload["octa_slot"] == "time"
 
 
-def test_pack_pointer_and_contrast_merge(tmp_path):
+def test_pack_display_choices_merge(tmp_path):
     (tmp_path / "skin.json").write_text(
-        json.dumps({"pointer": "octa", "gray_contrast": "soft"}), encoding="utf-8"
+        json.dumps(
+            {
+                "pointer": "octa",
+                "umbra_contrast": "soft",
+                "palette_style": "light",
+                "solar_rotation": False,
+                "octa_slot": "day_length",
+            }
+        ),
+        encoding="utf-8",
     )
     skin = load_pack(tmp_path, defaults.DEFAULT_SKIN)
     assert skin.pointer == "octa"
-    assert skin.gray_contrast == "soft"
+    assert skin.umbra_contrast == "soft"
+    assert skin.palette_style == "light"
+    assert skin.solar_rotation is False
+    assert skin.octa_slot == "day_length"
 
 
-def test_pack_rejects_unknown_pointer_and_contrast(tmp_path):
+def test_pack_rejects_unknown_display_choices(tmp_path):
     (tmp_path / "skin.json").write_text(
-        json.dumps({"pointer": "banana", "gray_contrast": "extreme"}),
+        json.dumps({"pointer": "banana", "umbra_contrast": "extreme"}),
         encoding="utf-8",
     )
     with pytest.raises(SkinValidationError) as excinfo:
