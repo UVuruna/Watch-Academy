@@ -18,6 +18,7 @@ from config import constants, defaults
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.moon import phase_name
+from core.year_wheel import zodiac_span
 from render.assets import AssetCache
 from render.layers import (
     BackgroundLayer,
@@ -224,12 +225,20 @@ class Compositor:
         star = "*" if self._skin.solar_rotation else ""
 
         if self._skin.pointer == "hexa":
-            # The 60-deg arc [arm-30, arm+30] spans exactly two signs.
-            first = constants.ZODIAC_SIGNS[int((arm_angle - 30.0) % 360.0) // 30]
-            second = constants.ZODIAC_SIGNS[int(arm_angle % 360.0) // 30]
-            return _centered(
-                f"{first[1]} {first[0]} · {second[1]} {second[0]}{star}"
-            )
+            # The 60-deg arc [arm-30, arm+30] spans exactly two signs —
+            # one full line each (owner spec): symbol, name, date span.
+            lines = []
+            for offset in (-30.0, 0.0):      # the two signs' START angles
+                start_angle = (arm_angle + offset) % 360.0
+                name, symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
+                start, end = zodiac_span(self._day.year_anchors, start_angle)
+                start = start.astimezone(self._day.tzinfo)
+                last = end.astimezone(self._day.tzinfo) - timedelta(days=1)
+                lines.append(
+                    f"{symbol} {name} — {start.day} {start:%b} – {last.day} {last:%b}"
+                )
+            lines[0] += star
+            return _centered(*lines)
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events.
             anchor_angle = {0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0}[

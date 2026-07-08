@@ -51,6 +51,20 @@ def zodiac_sign(now: datetime, anchors: YearAnchors) -> tuple[str, str, datetime
     )
 
 
+def zodiac_span(anchors: YearAnchors, start_dial_angle: float) -> tuple[datetime, datetime]:
+    """Cusp instants of the sign starting at `start_dial_angle` (0 =
+    Cancer's first point, the summer solstice). Uses the in-anchor
+    occurrence of the sign — hover texts print day+month only, where
+    the year choice is irrelevant (cusps drift at most a day)."""
+    unwrapped = (
+        start_dial_angle if start_dial_angle >= 180.0 else start_dial_angle + 360.0
+    )
+    return (
+        _instant_at(anchors, unwrapped),
+        _instant_at(anchors, unwrapped + constants.ZODIAC_SPAN_DEG),
+    )
+
+
 def _unwrapped_angle(now: datetime, anchors: YearAnchors) -> float:
     """Interpolated UNWRAPPED angle (180..630 over the anchor span).
 

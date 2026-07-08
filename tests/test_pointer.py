@@ -203,7 +203,8 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
 def test_hexa_arm_hover_names_its_two_signs(july_wednesday):
     """Each hexa diamond spans exactly TWO zodiac signs (the owner's
     proposed list had Aquarius doubled on the bottom arm — corrected:
-    bottom = Sagittarius + Capricorn). Upright → no asterisk."""
+    bottom = Sagittarius + Capricorn), one full line each: symbol,
+    name, date span. Upright → no asterisk."""
     day, tick = july_wednesday
     upright = Compositor(
         dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False), AssetCache()
@@ -211,8 +212,11 @@ def test_hexa_arm_hover_names_its_two_signs(july_wednesday):
     upright.render_offscreen(360.0, 1.0, day, tick)
     top = upright.tooltip_at(180.0, 72.0, 360.0)          # top diamond, 0.6R up
     assert "Gemini" in top and "Cancer" in top and "*" not in top
+    assert "<br/>" in top                                 # one sign per line
+    assert "May" in top and "Jun" in top                  # each with its dates
     bottom = upright.tooltip_at(180.0, 288.0, 360.0)      # below mercury's slot
     assert "Sagittarius" in bottom and "Capricorn" in bottom
+    assert "Nov" in bottom and "Dec" in bottom
 
 
 def test_octa_arm_hovers_events_and_seasons(july_wednesday):
