@@ -69,17 +69,17 @@ def test_dial_is_not_mirrored(frame):
     assert left.green() > left.red()     # green family, not orange
 
 
-def test_bands_never_crash_across_polar_year(app):
+def test_lit_regions_never_crash_across_polar_year(app):
     """Transitional high-latitude days can lack ANY single boundary event
-    even in NORMAL/WHITE_NIGHTS regimes — _bands must degrade, not raise
-    (a crash here happens inside paintEvent, where Qt swallows it and the
-    dial silently goes blank for the whole day)."""
+    even in NORMAL/WHITE_NIGHTS regimes — lit_regions must degrade, not
+    raise (a crash here happens inside paintEvent, where Qt swallows it
+    and the dial silently goes blank for the whole day)."""
     from datetime import date, timedelta
 
     from core.sun import compute_sun_day
-    from render.layers import BackgroundLayer
+    from render.layers import lit_regions
 
-    layer = BackgroundLayer(defaults.DEFAULT_SKIN)
+    spec = defaults.DEFAULT_SKIN.background
     cities = [
         astral.Observer(latitude=69.6489, longitude=18.9551),   # Tromso
         astral.Observer(latitude=68.97, longitude=33.09),       # Murmansk
@@ -90,10 +90,19 @@ def test_bands_never_crash_across_polar_year(app):
     while day.year == 2026:
         for observer in cities:
             sun_day = compute_sun_day(observer, day, tz)
-            for start, end, shade in layer._bands(sun_day):
+            for start, end, alpha in lit_regions(sun_day, spec):
                 assert end > start
-                assert 0.0 <= shade <= 1.0
+                assert 0.0 < alpha <= 1.0
         day += timedelta(days=1)
+
+
+def _procedural_moon_skin():
+    """DEFAULT_SKIN with the moon image stripped — the terminator tests
+    sample pure lit/dark colors, which only the procedural path pins."""
+    import dataclasses
+
+    marker = dataclasses.replace(defaults.DEFAULT_SKIN.year_marker, moon_asset=None)
+    return dataclasses.replace(defaults.DEFAULT_SKIN, year_marker=marker)
 
 
 def test_moon_terminator_quarters(app):
@@ -106,8 +115,8 @@ def test_moon_terminator_quarters(app):
 
     from render.layers import RenderContext, YearMarkerLayer
 
-    layer = YearMarkerLayer(defaults.DEFAULT_SKIN)
-    lit = defaults.DEFAULT_SKIN.year_marker.moon_lit_color
+    skin = _procedural_moon_skin()
+    layer = YearMarkerLayer(skin)
 
     def render_moon(fraction):
         image = QImage(100, 100, QImage.Format.Format_ARGB32_Premultiplied)
@@ -115,7 +124,7 @@ def test_moon_terminator_quarters(app):
         painter = QPainter(image)
         painter.translate(50, 50)
         ctx = RenderContext(
-            skin=defaults.DEFAULT_SKIN,
+            skin=skin,
             day=SimpleNamespace(moon_fraction=fraction, southern_hemisphere=False),
             tick=None, radius=50.0, cache=AssetCache(), dpr=1.0,
         )
@@ -145,13 +154,14 @@ def test_moon_flips_on_southern_hemisphere(app):
 
     from render.layers import RenderContext, YearMarkerLayer
 
-    layer = YearMarkerLayer(defaults.DEFAULT_SKIN)
+    skin = _procedural_moon_skin()
+    layer = YearMarkerLayer(skin)
     image = QImage(100, 100, QImage.Format.Format_ARGB32_Premultiplied)
     image.fill(Qt.GlobalColor.transparent)
     painter = QPainter(image)
     painter.translate(50, 50)
     ctx = RenderContext(
-        skin=defaults.DEFAULT_SKIN,
+        skin=skin,
         day=SimpleNamespace(moon_fraction=0.25, southern_hemisphere=True),
         tick=None, radius=50.0, cache=AssetCache(), dpr=1.0,
     )

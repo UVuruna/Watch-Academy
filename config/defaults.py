@@ -61,8 +61,6 @@ RING_NUMERAL_MIN_PX = 7              # legibility floors at tiny dial sizes
 RING_LETTER_MIN_PX = 8
 RING_MINUTE_MIN_PX = 6
 BODY_LABEL_MIN_PX = 6
-HEXAGRAM_PEN_WIDTH = 0.006           # procedural star outline
-HEXAGRAM_PEN_RGBA = (255, 255, 255, 140)
 BODY_LABEL_SIZE = 0.34               # fraction of the body size
 BODY_LABEL_RGBA = (255, 255, 255, 230)
 MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
@@ -80,6 +78,19 @@ TRAY_MARK_SIZE = 0.10                # fraction of the icon size
 # assets/skins/domy/skin.json in M5 is serialization, not redesign.
 _DOMY = paths.bundled_skins_dir() / "domy"
 
+# Six hues clockwise from the hexagram-top wedge (owner spec):
+# yellow (top), orange, red, purple (bottom), blue, green.
+_SECTOR_PALETTE = (
+    "#FFD34D",
+    "#FF9E3D",
+    "#E14B4B",
+    "#8E4BC9",
+    "#3D7BFF",
+    "#4BC96B",
+)
+
+_CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oceania")
+
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",
     z_order=(
@@ -92,25 +103,19 @@ DEFAULT_SKIN = SkinDefinition(
         "hands",
     ),
     background=BackgroundSpec(
-        mode="colors",
-        # Clockwise from the noon-top sector: yellow (10-14h), orange,
-        # red, purple (22-02h), blue, green — matching the mockups.
-        sector_palette=(
-            "#FFD34D",
-            "#FF9E3D",
-            "#E14B4B",
-            "#8E4BC9",
-            "#3D7BFF",
-            "#4BC96B",
-        ),
-        day_base="#F2EFE6",
-        twilight_shade=0.55,
-        night_shade=0.25,
+        base_asset=_DOMY / "dial" / "base_gray.png",   # FIXED 32-section gray wheel
+        base_color="#8A8D93",
+        sector_palette=_SECTOR_PALETTE,
+        day_alpha=0.55,
+        twilight_alpha=0.28,
         radius_fraction=0.84,
     ),
     hexagram=HexagramSpec(
-        asset=_DOMY / "dial" / "hexagram.png",
-        opacity=0.85,
+        colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
+        night_color="#AEB2B9",
+        night_alpha=0.30,
+        day_alpha=0.92,                 # near-full opacity where the sun is up
+        twilight_alpha=0.55,
         radius_fraction=0.80,
     ),
     noon_marker=NoonMarkerSpec(
@@ -119,25 +124,19 @@ DEFAULT_SKIN = SkinDefinition(
         scale=0.045,
     ),
     ring=RingSpec(
+        asset=_DOMY / "dial" / "ring.png",   # design/hours/domy.png (gray; gold later)
         fill="#4A4E57",
         text_color="#F0F0F0",
         letter_color="#E8B84B",
         width_fraction=0.16,
         # Letter hour-positions follow the Greek-alphabet ordinal (owner
-        # spec, matches design/hours/domy.png): M at 12, Y at 20, Omega at
-        # 0, D at 4 — an inverted cross, NOT the 6/18 axis.
+        # spec, matches the ring art): M at 12, Y at 20, Omega at 0, D at 4.
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={
-            "sun": None,
-            "moon": None,
-            "mars": None,
-            "mercury": None,
-            "jupiter": None,
-            "venus": None,
-            "saturn": None,
-        },
+        bodies={name: _DOMY / "weekday" / f"{name}.png" for name in (
+            "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
+        )},
         body_colors={
             "sun": "#FFC838",
             "jupiter": "#E8C25A",
@@ -154,18 +153,25 @@ DEFAULT_SKIN = SkinDefinition(
         orbit_fraction=0.38,
     ),
     year_marker=YearMarkerSpec(
-        mode="earth",
-        variants={},                    # owner drops earth_<continent>_<day|night>.png in M5
+        mode="earth",                   # "moon" and "both" selectable (M6 settings)
+        variants={
+            f"{continent}_{phase}": _DOMY / "year_marker" / f"earth_clean_{continent}_{phase}.png"
+            for continent in _CONTINENTS
+            for phase in ("day", "night")
+        },
         default_variant="europe",
-        moon_asset=None,
         day_color="#4B86C9",
         night_color="#20344F",
-        moon_lit_color="#E8E4D8",
-        moon_dark_color="#2A2D36",
         # Owner spec: the date marker orbits along the INSIDE of the dial,
         # not on the ring band.
         orbit_fraction=0.74,
         scale=0.075,
+        moon_asset=_DOMY / "weekday" / "moon.png",
+        moon_lit_color="#E8E4D8",
+        moon_dark_color="#2A2D36",
+        moon_shadow_alpha=0.82,
+        moon_orbit_fraction=0.60,
+        moon_scale=0.065,
     ),
     hands=HandsSpec(
         hour=HandSpec(

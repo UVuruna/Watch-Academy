@@ -22,6 +22,11 @@ DIAL_OFFSET_DEG = 180.0
 SOLAR_NOON_SECS = 43_200            # 12:00 as seconds since local midnight
 SECONDS_PER_DEGREE = SECONDS_PER_DAY / 360.0    # 240 s of day per dial degree
 
+# Regular hexagram geometry: the star's inner-hexagon vertices sit at
+# tip_radius / sqrt(3) — each of the six diamonds spans (center, tip-30deg
+# inner vertex, tip, tip+30deg inner vertex).
+HEXAGRAM_INNER_FRACTION = 3 ** -0.5
+
 # --- Sun ----------------------------------------------------------------------
 CIVIL_DEPRESSION = 6.0              # degrees below horizon for dawn/dusk
 HORIZON_ELEVATION_DEG = -0.833      # solar disc touches the horizon (refraction)

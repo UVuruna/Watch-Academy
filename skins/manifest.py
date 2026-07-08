@@ -14,18 +14,28 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class BackgroundSpec:
-    mode: str                          # "colors" | "light_dark"
-    sector_palette: tuple[str, ...]    # 6 hex colors, clockwise from the noon-top sector
-    day_base: str                      # base disc color for "light_dark" mode
-    twilight_shade: float              # brightness kept in the dawn/dusk bands (0..1)
-    night_shade: float                 # brightness kept in the night arc (0..1)
+    """Fixed base wheel + transparent hue wedges that ROTATE WITH the
+    hexagram and are drawn only over the sunlit part of the day."""
+
+    base_asset: Path | None            # fixed gray wheel; None -> flat disc
+    base_color: str                    # procedural fallback disc color
+    sector_palette: tuple[str, ...]    # 6 hues, clockwise from the hexagram-top wedge
+    day_alpha: float                   # hue opacity over the sunrise->sunset arc
+    twilight_alpha: float              # hue opacity over the dawn/dusk bands
     radius_fraction: float             # of the dial radius (inside the ring)
 
 
 @dataclass(frozen=True)
 class HexagramSpec:
-    asset: Path | None                 # None -> procedural star outline
-    opacity: float
+    """Procedural six-diamond star (owner decision: simple geometry is
+    drawn at runtime, not shipped as an image). Colored near-full opacity
+    where the sun is up, neutral elsewhere."""
+
+    colors: tuple[str, ...]            # 6 diamond fills, clockwise from top
+    night_color: str                   # neutral diamonds outside the lit region
+    night_alpha: float
+    day_alpha: float
+    twilight_alpha: float
     radius_fraction: float             # tip radius as fraction of the dial radius
 
 
@@ -38,6 +48,7 @@ class NoonMarkerSpec:
 
 @dataclass(frozen=True)
 class RingSpec:
+    asset: Path | None                 # full dial-ring image; None -> procedural
     fill: str
     text_color: str
     letter_color: str
@@ -58,16 +69,23 @@ class WeekdaySpec:
 
 @dataclass(frozen=True)
 class YearMarkerSpec:
-    mode: str                          # "earth" | "moon_phase"
+    """Date markers along the INSIDE of the dial: Earth rides the year
+    wheel (solstice-calibrated); the Moon rides its own cycle — new moon
+    at the top, full moon at the bottom, clockwise."""
+
+    mode: str                          # "earth" | "moon" | "both"
     variants: dict[str, Path]          # "europe_day" / "europe_night" / ... -> image
     default_variant: str               # e.g. "europe"
-    moon_asset: Path | None            # full-moon disc (terminator drawn procedurally)
-    day_color: str                     # procedural fallbacks
+    day_color: str                     # procedural Earth fallbacks
     night_color: str
-    moon_lit_color: str
+    orbit_fraction: float              # Earth orbit, fraction of the dial radius
+    scale: float                       # Earth size, fraction of the dial diameter
+    moon_asset: Path | None            # full-moon disc image (terminator drawn over it)
+    moon_lit_color: str                # procedural moon fallback
     moon_dark_color: str
-    orbit_fraction: float
-    scale: float
+    moon_shadow_alpha: float           # darkness of the unlit part over the image
+    moon_orbit_fraction: float
+    moon_scale: float
 
 
 @dataclass(frozen=True)
@@ -102,7 +120,8 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
     fail inside paintEvent, where Qt swallows the exception and leaves a
     silently broken dial)."""
     referenced = [
-        skin.hexagram.asset,
+        skin.background.base_asset,
+        skin.ring.asset,
         skin.noon_marker.asset,
         skin.year_marker.moon_asset,
         skin.hands.hour.asset,

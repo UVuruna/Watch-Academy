@@ -26,6 +26,12 @@ def minute_hand_angle(t: datetime | time) -> float:
     return (t.minute * 60 + t.second) / constants.SECONDS_PER_HOUR * 360.0
 
 
+def moon_cycle_angle(fraction: float) -> float:
+    """Dial angle of the moon-cycle marker: new moon at the TOP (0 deg),
+    full moon at the BOTTOM (180 deg), moving clockwise (owner spec)."""
+    return (fraction * 360.0) % 360.0
+
+
 def hexagram_rotation_deg(solar_noon: datetime) -> float:
     """Rotation of the hexagram (and solar-noon arrow) from the dial top.
 

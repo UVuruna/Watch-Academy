@@ -64,6 +64,59 @@ def draw_pixmap_centered(
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 
 
+def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
+    """Clip path for the pie between two dial angles going clockwise."""
+    path = QPainterPath()
+    path.moveTo(0.0, 0.0)
+    rect = QRectF(-radius, -radius, 2 * radius, 2 * radius)
+    path.arcTo(rect, 90.0 - start_deg, -(end_deg - start_deg))
+    path.closeSubpath()
+    return path
+
+
+def lit_regions(sun: SunDay, spec) -> list[tuple[float, float, float]]:
+    """(start, end_unwrapped, hue_alpha) arcs of the SUNLIT part of the day
+    in wall-clock dial space — full alpha between sunrise and sunset, the
+    twilight alpha over the dawn/dusk bands, nothing at night (the fixed
+    gray base shows through). On transitional high-latitude days a
+    boundary can be missing even in NORMAL/WHITE_NIGHTS regimes — each
+    missing boundary coalesces to its neighbor (the band collapses to zero
+    width and is dropped) instead of crashing mid-paint."""
+
+    def arc(a: float, b: float, alpha: float) -> tuple[float, float, float]:
+        return (a, b if b > a else b + 360.0, alpha)
+
+    angle = angles.time_to_dial_angle
+    regime = sun.regime
+    if regime is DaylightRegime.NORMAL:
+        rise = angle(sun.sunrise) if sun.sunrise else angle(sun.dawn)
+        sets = angle(sun.sunset) if sun.sunset else angle(sun.dusk)
+        dawn = angle(sun.dawn) if sun.dawn else rise
+        dusk = angle(sun.dusk) if sun.dusk else sets
+        regions = [
+            arc(dawn, rise, spec.twilight_alpha),
+            arc(rise, sets, spec.day_alpha),
+            arc(sets, dusk, spec.twilight_alpha),
+        ]
+        return [region for region in regions if region[0] != region[1]]
+    if regime is DaylightRegime.WHITE_NIGHTS:
+        if sun.sunrise is None or sun.sunset is None:
+            # One-sided transition into/out of polar day: the sun is up
+            # nearly the whole day.
+            return [(0.0, 360.0, spec.day_alpha)]
+        return [
+            arc(angle(sun.sunrise), angle(sun.sunset), spec.day_alpha),
+            arc(angle(sun.sunset), angle(sun.sunrise), spec.twilight_alpha),
+        ]
+    if regime is DaylightRegime.TWILIGHT_ONLY:
+        if sun.dawn is not None and sun.dusk is not None:
+            return [arc(angle(sun.dawn), angle(sun.dusk), spec.twilight_alpha)]
+        return [(0.0, 360.0, spec.twilight_alpha)]
+    if regime is DaylightRegime.POLAR_DAY:
+        return [(0.0, 360.0, spec.day_alpha)]
+    return []                                            # POLAR_NIGHT
+
+
 class Layer(ABC):
     cadence: Cadence
 
@@ -75,8 +128,9 @@ class Layer(ABC):
 
 
 class BackgroundLayer(Layer):
-    """Six 4-hour sectors, then darkening overlays for twilight and night.
-    Always painter-drawn — the daylight arc changes every day."""
+    """The FIXED gray brightness wheel, then transparent hue wedges that
+    rotate with the hexagram and appear only where the sun is up (owner
+    model: the hexagram steers the colors; the gray base never moves)."""
 
     cadence = Cadence.DAILY
 
@@ -85,93 +139,67 @@ class BackgroundLayer(Layer):
         radius = ctx.radius * spec.radius_fraction
         painter.setPen(Qt.PenStyle.NoPen)
 
-        if spec.mode == "colors":
+        if spec.base_asset is not None:
+            draw_pixmap_centered(
+                painter, ctx, spec.base_asset, QPointF(0, 0), 2 * radius
+            )
+        else:
+            painter.setBrush(QColor(spec.base_color))
+            painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+
+        for start, end, alpha in lit_regions(ctx.day.sun, spec):
+            painter.save()
+            painter.setClipPath(pie_path(radius, start, end))
+            painter.setOpacity(alpha)
+            painter.rotate(ctx.day.hexagram_rotation)
             for i, color in enumerate(spec.sector_palette):
                 painter.setBrush(QColor(color))
                 draw_pie(painter, radius, i * 60.0 - 30.0, i * 60.0 + 30.0)
-        else:  # "light_dark"
-            painter.setBrush(QColor(spec.day_base))
-            painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
-
-        for start, end, shade in self._bands(ctx.day.sun):
-            overlay = QColor(0, 0, 0, round((1.0 - shade) * 255))
-            painter.setBrush(overlay)
-            draw_pie(painter, radius, start, end)
-
-    def _bands(self, sun: SunDay) -> list[tuple[float, float, float]]:
-        """(start, end, brightness-kept) arcs; day arcs are omitted (no
-        overlay). End angles are unwrapped past 360 where the arc crosses
-        the dial top/bottom. On transitional high-latitude days a boundary
-        can be missing even in NORMAL/WHITE_NIGHTS regimes — each missing
-        boundary coalesces to its neighbor (the band collapses to zero
-        width and is dropped) instead of crashing mid-paint."""
-        spec = self._skin.background
-
-        def arc(a: float, b: float, shade: float) -> tuple[float, float, float]:
-            return (a, b if b > a else b + 360.0, shade)
-
-        angle = angles.time_to_dial_angle
-        regime = sun.regime
-        if regime is DaylightRegime.NORMAL:
-            rise = angle(sun.sunrise) if sun.sunrise else angle(sun.dawn)
-            sets = angle(sun.sunset) if sun.sunset else angle(sun.dusk)
-            dawn = angle(sun.dawn) if sun.dawn else rise
-            dusk = angle(sun.dusk) if sun.dusk else sets
-            bands = [
-                arc(sets, dusk, spec.twilight_shade),
-                arc(dusk, dawn, spec.night_shade),
-                arc(dawn, rise, spec.twilight_shade),
-            ]
-            return [band for band in bands if band[0] != band[1]]
-        if regime is DaylightRegime.WHITE_NIGHTS:
-            if sun.sunrise is None or sun.sunset is None:
-                # One-sided transition into/out of polar day: the sun is up
-                # nearly the whole day — render it as all daylight.
-                return []
-            return [arc(angle(sun.sunset), angle(sun.sunrise), spec.twilight_shade)]
-        if regime is DaylightRegime.TWILIGHT_ONLY:
-            if sun.dawn is not None and sun.dusk is not None:
-                return [
-                    arc(angle(sun.dawn), angle(sun.dusk), spec.twilight_shade),
-                    arc(angle(sun.dusk), angle(sun.dawn), spec.night_shade),
-                ]
-            return [(0.0, 360.0, spec.twilight_shade)]  # all-day twilight band
-        if regime is DaylightRegime.POLAR_DAY:
-            return []
-        return [(0.0, 360.0, spec.night_shade)]          # POLAR_NIGHT
+            painter.restore()
 
 
 class HexagramLayer(Layer):
-    """Six-point star whose top vertex always points at true solar noon."""
+    """Procedural six-diamond star whose top vertex always points at true
+    solar noon. Colored near-full opacity where the sun is up, neutral
+    gray diamonds elsewhere (owner model)."""
 
     cadence = Cadence.DAILY
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.hexagram
-        tip_radius = ctx.radius * spec.radius_fraction
+        painter.setPen(Qt.PenStyle.NoPen)
+
+        # Neutral star over the whole circle (the night part keeps the
+        # shape visible), then the colored star clipped to the lit arcs.
         painter.save()
+        painter.setOpacity(spec.night_alpha)
         painter.rotate(ctx.day.hexagram_rotation)
-        painter.setOpacity(spec.opacity)
-        if spec.asset is not None:
-            pixmap = ctx.cache.pixmap_by_height(spec.asset, 2 * tip_radius, ctx.dpr)
-            logical_w = pixmap.width() / ctx.dpr
-            painter.drawPixmap(QPointF(-logical_w / 2, -tip_radius), pixmap)
-        else:
-            # Explicit QPen — copying painter.pen() would inherit the
-            # NoPen STYLE left by a previous layer and draw nothing.
-            painter.setPen(
-                QPen(
-                    QColor(*defaults.HEXAGRAM_PEN_RGBA),
-                    max(1.0, ctx.radius * defaults.HEXAGRAM_PEN_WIDTH),
-                )
-            )
-            painter.setBrush(Qt.BrushStyle.NoBrush)
-            for offset in (0.0, 60.0):
-                triangle = QPolygonF(
-                    [dial_point(offset + k * 120.0, tip_radius) for k in range(3)]
-                )
-                painter.drawPolygon(triangle)
+        self._draw_diamonds(painter, ctx, [spec.night_color] * 6)
         painter.restore()
+
+        for start, end, alpha in lit_regions(ctx.day.sun, spec):
+            painter.save()
+            painter.setClipPath(pie_path(ctx.radius, start, end))
+            painter.setOpacity(alpha)
+            painter.rotate(ctx.day.hexagram_rotation)
+            self._draw_diamonds(painter, ctx, spec.colors)
+            painter.restore()
+
+    def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, colors) -> None:
+        tip = ctx.radius * self._skin.hexagram.radius_fraction
+        inner = tip * constants.HEXAGRAM_INNER_FRACTION
+        for k, color in enumerate(colors):
+            theta = k * 60.0
+            diamond = QPolygonF(
+                [
+                    QPointF(0.0, 0.0),
+                    dial_point(theta - 30.0, inner),
+                    dial_point(theta, tip),
+                    dial_point(theta + 30.0, inner),
+                ]
+            )
+            painter.setBrush(QColor(color))
+            painter.drawPolygon(diamond)
 
 
 class NoonMarkerLayer(Layer):
@@ -207,6 +235,12 @@ class RingLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.ring
+        if spec.asset is not None:
+            # The ring art carries numerals, minutes and letters itself.
+            draw_pixmap_centered(
+                painter, ctx, spec.asset, QPointF(0, 0), 2 * ctx.radius
+            )
+            return
         outer, inner = ctx.radius, ctx.radius * (1.0 - spec.width_fraction)
 
         ring = QPainterPath()
@@ -315,35 +349,54 @@ class WeekdayLayer(Layer):
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor(spec.body_colors[body]))
             painter.drawEllipse(pos, size / 2, size / 2)
-            font = QFont()
-            font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.BODY_LABEL_SIZE)))
-            font.setBold(True)
-            painter.setFont(font)
-            painter.setPen(QColor(*defaults.BODY_LABEL_RGBA))
-            rect = QRectF(pos.x() - size / 2, pos.y() - size / 2, size, size)
-            painter.drawText(
-                rect, Qt.AlignmentFlag.AlignCenter, constants.WEEKDAY_LABELS[body]
-            )
+        # The white weekday SHORT name is written ON the body either way
+        # (owner spec) — never the planet abbreviation.
+        font = QFont()
+        font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.BODY_LABEL_SIZE)))
+        font.setBold(True)
+        painter.setFont(font)
+        painter.setPen(QColor(*defaults.BODY_LABEL_RGBA))
+        rect = QRectF(pos.x() - size / 2, pos.y() - size / 2, size, size)
+        painter.drawText(
+            rect, Qt.AlignmentFlag.AlignCenter, constants.WEEKDAY_LABELS[body]
+        )
         painter.restore()
 
 
 class YearMarkerLayer(Layer):
-    """Earth (day/night variant) or Moon-with-phase icon riding the ring
-    once per year — summer solstice at the top."""
+    """Date markers along the INSIDE of the dial. Earth rides the year
+    wheel (summer solstice at the top); the Moon rides its own cycle (new
+    moon at the top, full at the bottom, clockwise) showing the current
+    illumination. Modes: "earth", "moon", "both"."""
 
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
+        if spec.mode in ("earth", "both"):
+            self._draw_earth(painter, ctx)
+        if spec.mode in ("moon", "both"):
+            pos = dial_point(
+                angles.moon_cycle_angle(ctx.day.moon_fraction),
+                ctx.radius * spec.moon_orbit_fraction,
+            )
+            self._draw_moon(painter, ctx, pos, 2 * ctx.radius * spec.moon_scale)
+
+    def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
+        spec = self._skin.year_marker
         pos = dial_point(ctx.tick.year_angle, ctx.radius * spec.orbit_fraction)
         size = 2 * ctx.radius * spec.scale
-        if spec.mode == "moon_phase":
-            self._draw_moon(painter, ctx, pos, size)
-            return
         variant = f"{spec.default_variant}_{'day' if ctx.tick.is_daylight else 'night'}"
         asset = spec.variants.get(variant)
         if asset is not None:
+            # The Earth renders ship on an opaque space background — clip
+            # to the marker disc so only the globe shows.
+            clip = QPainterPath()
+            clip.addEllipse(pos, size / 2, size / 2)
+            painter.save()
+            painter.setClipPath(clip)
             draw_pixmap_centered(painter, ctx, asset, pos, size)
+            painter.restore()
         else:
             color = spec.day_color if ctx.tick.is_daylight else spec.night_color
             painter.setPen(
@@ -356,10 +409,10 @@ class YearMarkerLayer(Layer):
             painter.drawEllipse(pos, size / 2, size / 2)
 
     def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
-        """Full disc in the dark color, then the lit region: half-disc on
-        the lit side combined with the terminator half-ellipse
-        (semi-axis a = R*|cos 2pi*f|) — union when gibbous, difference
-        when crescent."""
+        """Moon image (or procedural disc) with the unlit part shadowed:
+        the lit region is the half-disc on the lit side combined with the
+        terminator half-ellipse (semi-axis a = R*|cos 2pi*f|) — union when
+        gibbous, difference when crescent; everything else is darkened."""
         spec = self._skin.year_marker
         fraction = ctx.day.moon_fraction
         radius = size / 2
@@ -370,8 +423,12 @@ class YearMarkerLayer(Layer):
             # the lit side swaps left/right (owner spec).
             painter.rotate(180.0)
         painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor(spec.moon_dark_color))
-        painter.drawEllipse(QPointF(0, 0), radius, radius)
+
+        if spec.moon_asset is not None:
+            draw_pixmap_centered(painter, ctx, spec.moon_asset, QPointF(0, 0), size)
+        else:
+            painter.setBrush(QColor(spec.moon_dark_color))
+            painter.drawEllipse(QPointF(0, 0), radius, radius)
 
         lit_right = fraction < 0.5          # waxing: lit on the right
         gibbous = 0.25 < fraction < 0.75
@@ -385,7 +442,15 @@ class YearMarkerLayer(Layer):
         terminator = QPainterPath()
         terminator.addEllipse(QRectF(-semi_axis, -radius, 2 * semi_axis, size))
         lit = half.united(terminator) if gibbous else half.subtracted(terminator)
-        painter.fillPath(lit, QColor(spec.moon_lit_color))
+
+        if spec.moon_asset is not None:
+            disc = QPainterPath()
+            disc.addEllipse(QRectF(-radius, -radius, size, size))
+            shadow = QColor(spec.moon_dark_color)
+            shadow.setAlphaF(spec.moon_shadow_alpha)
+            painter.fillPath(disc.subtracted(lit), shadow)
+        else:
+            painter.fillPath(lit, QColor(spec.moon_lit_color))
         painter.restore()
 
 

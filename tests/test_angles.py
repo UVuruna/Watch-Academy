@@ -27,6 +27,14 @@ def test_minute_hand_full_hour_revolution():
     assert angles.minute_hand_angle(time(10, 45, 0)) == pytest.approx(270.0)
 
 
+def test_moon_cycle_angle_mapping():
+    # New moon at the TOP, full moon at the BOTTOM, clockwise (owner spec).
+    assert angles.moon_cycle_angle(0.0) == pytest.approx(0.0)
+    assert angles.moon_cycle_angle(0.5) == pytest.approx(180.0)
+    assert angles.moon_cycle_angle(0.25) == pytest.approx(90.0)
+    assert angles.moon_cycle_angle(1.0) == pytest.approx(0.0)
+
+
 def test_hexagram_rotation_sign_convention():
     from datetime import datetime
 

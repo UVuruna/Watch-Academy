@@ -28,18 +28,22 @@ per-paint context (skin, day, tick, radius, cache, dpr — `tick` is None
 while compositing non-MINUTE layers).
 
 ### BackgroundLayer (DAILY)
-Sector wheel + `_bands()`: per-regime (start, end, brightness) arcs —
-NORMAL (twilight/night/twilight), WHITE_NIGHTS (no dark), TWILIGHT_ONLY
-(band or all-day twilight), POLAR_DAY (no overlay), POLAR_NIGHT (all
-dark).
+The FIXED gray brightness wheel (asset), then transparent hue wedges
+that rotate with the hexagram, clipped to `lit_regions()` — the shared
+per-regime (start, end, alpha) arcs of the sunlit day (day alpha between
+sunrise and sunset, twilight alpha over the dawn/dusk bands, nothing at
+night; robust to missing boundaries on transitional polar days).
 
-### HexagramLayer / NoonMarkerLayer (DAILY)
-Both rotate by `day.hexagram_rotation`; hexagram draws the skin asset (or
-a procedural star outline), the marker a triangle in the ring band.
+### HexagramLayer (DAILY)
+Procedural six-diamond star (tip radius + inner vertices at tip/√3):
+neutral gray diamonds over the whole circle keep the shape visible at
+night; the colored diamonds (near-full opacity) are clipped to the same
+`lit_regions()`. NoonMarkerLayer draws the triangle at the same rotation.
 
 ### RingLayer (STATIC)
-Donut fill, 24 hour ticks, numerals with per-skin letter substitutions
-(D-Ω-M-Y), minute numbers.
+The full ring image when the skin provides one (numerals, minutes and
+letters baked into the art); otherwise the procedural donut with ticks,
+numerals, letter substitutions and minute numbers.
 
 ### WeekdayLayer (DAILY)
 "ghost": Sun center + six slots at `WEEKDAY_SLOT_ANGLES +
@@ -49,11 +53,13 @@ image when provided, otherwise a colored disc; the white label is the
 weekday SHORT name (MON/TUE/…), never the planet abbreviation.
 
 ### YearMarkerLayer (MINUTE)
-Orbits along the INSIDE of the dial (owner spec), not on the ring. Earth
-variant chosen by `tick.is_daylight` (`<variant>_day` / `<variant>_night`),
-procedural disc fallback; "moon_phase" mode draws the terminator mask
-(half-disc ∪/− ellipse with a = R·|cos 2πf|), rotated 180° for
-southern-hemisphere cities.
+Date markers along the INSIDE of the dial (owner spec). Modes: "earth"
+(year wheel, day/night continent image clipped to a disc — the renders
+ship on opaque space backgrounds), "moon" (rides its own cycle via
+`moon_cycle_angle`: new at top, full at bottom, clockwise; the moon image
+gets the unlit part shadowed by the terminator mask — half-disc ∪/−
+ellipse with a = R·|cos 2πf| — and flips 180° for southern-hemisphere
+cities), or "both" (Earth at orbit 0.74, Moon at 0.60).
 
 ### HandLayer (MINUTE)
 Scales the hand image so tip-to-pivot = `length_fraction · radius`
