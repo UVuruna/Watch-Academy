@@ -29,6 +29,7 @@ class DayContext:
     year_anchors: YearAnchors
     moon_fraction: float            # cycle fraction at day-context build time
     moon_illumination: float
+    southern_hemisphere: bool       # the moon appears rotated 180 deg there
 
     @property
     def cache_key(self) -> tuple[date, timedelta]:
@@ -62,6 +63,7 @@ def build_day_context(
         year_anchors=year_anchors,
         moon_fraction=fraction,
         moon_illumination=illumination(fraction),
+        southern_hemisphere=observer.latitude < 0,
     )
 
 

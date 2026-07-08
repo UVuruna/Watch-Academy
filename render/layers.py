@@ -321,7 +321,9 @@ class WeekdayLayer(Layer):
             painter.setFont(font)
             painter.setPen(QColor(*defaults.BODY_LABEL_RGBA))
             rect = QRectF(pos.x() - size / 2, pos.y() - size / 2, size, size)
-            painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, body[:3].capitalize())
+            painter.drawText(
+                rect, Qt.AlignmentFlag.AlignCenter, constants.WEEKDAY_LABELS[body]
+            )
         painter.restore()
 
 
@@ -363,6 +365,10 @@ class YearMarkerLayer(Layer):
         radius = size / 2
         painter.save()
         painter.translate(pos)
+        if ctx.day.southern_hemisphere:
+            # From the southern hemisphere the moon appears upside down —
+            # the lit side swaps left/right (owner spec).
+            painter.rotate(180.0)
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(spec.moon_dark_color))
         painter.drawEllipse(QPointF(0, 0), radius, radius)

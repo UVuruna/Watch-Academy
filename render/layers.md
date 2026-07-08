@@ -45,12 +45,15 @@ Donut fill, 24 hour ticks, numerals with per-skin letter substitutions
 "ghost": Sun center + six slots at `WEEKDAY_SLOT_ANGLES +
 hexagram_rotation`, current day opaque, rest at `ghost_opacity`;
 "center_only": only the current day's body, centered. Bodies draw a skin
-image when provided, otherwise a colored disc with a 3-letter label.
+image when provided, otherwise a colored disc; the white label is the
+weekday SHORT name (MON/TUE/…), never the planet abbreviation.
 
 ### YearMarkerLayer (MINUTE)
-Earth variant chosen by `tick.is_daylight` (`<variant>_day` /
-`<variant>_night`), procedural disc fallback; "moon_phase" mode draws the
-terminator mask (half-disc ∪/− ellipse with a = R·|cos 2πf|).
+Orbits along the INSIDE of the dial (owner spec), not on the ring. Earth
+variant chosen by `tick.is_daylight` (`<variant>_day` / `<variant>_night`),
+procedural disc fallback; "moon_phase" mode draws the terminator mask
+(half-disc ∪/− ellipse with a = R·|cos 2πf|), rotated 180° for
+southern-hemisphere cities.
 
 ### HandLayer (MINUTE)
 Scales the hand image so tip-to-pivot = `length_fraction · radius`

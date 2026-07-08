@@ -20,7 +20,8 @@ per-day bundle and a tiny per-minute tick.
 
 ### DayContext
 Frozen: local date, UTC offset, weekday index (Monday=0), `SunDay`,
-hexagram rotation, `YearAnchors`, moon fraction/illumination.
+hexagram rotation, `YearAnchors`, moon fraction/illumination, and
+`southern_hemisphere` (the moon renders rotated 180° there).
 `cache_key = (local_date, utc_offset)` — the offset component catches
 DST transitions, where the hexagram legitimately jumps 15°.
 

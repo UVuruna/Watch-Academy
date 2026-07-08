@@ -123,7 +123,10 @@ DEFAULT_SKIN = SkinDefinition(
         text_color="#F0F0F0",
         letter_color="#E8B84B",
         width_fraction=0.16,
-        letters={12: "M", 18: "Y", 0: "Ω", 6: "D"},   # spells D-Omega-M-Y
+        # Letter hour-positions follow the Greek-alphabet ordinal (owner
+        # spec, matches design/hours/domy.png): M at 12, Y at 20, Omega at
+        # 0, D at 4 — an inverted cross, NOT the 6/18 axis.
+        letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
         bodies={
@@ -159,7 +162,9 @@ DEFAULT_SKIN = SkinDefinition(
         night_color="#20344F",
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
-        orbit_fraction=0.92,            # orbit + scale/1 must stay <= 1.0 (no edge clip)
+        # Owner spec: the date marker orbits along the INSIDE of the dial,
+        # not on the ring band.
+        orbit_fraction=0.74,
         scale=0.075,
     ),
     hands=HandsSpec(

@@ -81,6 +81,18 @@ WEEKDAY_BODIES = (
     "sun",       # Sunday
 )
 
+# Label written in white ON each body: the weekday SHORT name, never the
+# planet-name abbreviation (owner spec).
+WEEKDAY_LABELS = {
+    "moon": "MON",
+    "mars": "TUE",
+    "mercury": "WED",
+    "jupiter": "THU",
+    "venus": "FRI",
+    "saturn": "SAT",
+    "sun": "SUN",
+}
+
 # Diamond slot of each orbiting body: dial degrees from the hexagram's TOP
 # vertex, clockwise. The slots rotate WITH the hexagram (owner decision) —
 # the bodies stay inside their diamonds. Sun has no slot (center).

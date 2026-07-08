@@ -37,6 +37,7 @@ def test_day_context(belgrade_noon_context):
     assert day.utc_offset == timedelta(hours=2)          # CEST
     assert day.cache_key == (date(2026, 7, 7), timedelta(hours=2))
     assert day.weekday_index == 1                        # Tuesday -> mars
+    assert day.southern_hemisphere is False
     assert day.sun.regime is DaylightRegime.NORMAL
     # July in CEST: solar noon runs ~40 min late -> hexagram tilted right.
     assert 8.0 < day.hexagram_rotation < 13.0

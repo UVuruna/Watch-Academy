@@ -116,7 +116,7 @@ def test_moon_terminator_quarters(app):
         painter.translate(50, 50)
         ctx = RenderContext(
             skin=defaults.DEFAULT_SKIN,
-            day=SimpleNamespace(moon_fraction=fraction),
+            day=SimpleNamespace(moon_fraction=fraction, southern_hemisphere=False),
             tick=None, radius=50.0, cache=AssetCache(), dpr=1.0,
         )
         layer._draw_moon(painter, ctx, QPointF(0, 0), 80.0)
@@ -133,6 +133,33 @@ def test_moon_terminator_quarters(app):
     assert is_lit(full, 65, 50) and is_lit(full, 35, 50)
     third_quarter = render_moon(0.75)
     assert is_lit(third_quarter, 35, 50) and not is_lit(third_quarter, 65, 50)
+
+
+def test_moon_flips_on_southern_hemisphere(app):
+    """Seen from the southern hemisphere the moon is upside down — at
+    first quarter the lit half must appear on the LEFT (owner spec)."""
+    from types import SimpleNamespace
+
+    from PySide6.QtCore import QPointF, Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    from render.layers import RenderContext, YearMarkerLayer
+
+    layer = YearMarkerLayer(defaults.DEFAULT_SKIN)
+    image = QImage(100, 100, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.translate(50, 50)
+    ctx = RenderContext(
+        skin=defaults.DEFAULT_SKIN,
+        day=SimpleNamespace(moon_fraction=0.25, southern_hemisphere=True),
+        tick=None, radius=50.0, cache=AssetCache(), dpr=1.0,
+    )
+    layer._draw_moon(painter, ctx, QPointF(0, 0), 80.0)
+    painter.end()
+    left, right = image.pixelColor(35, 50), image.pixelColor(65, 50)
+    assert left.red() > 150          # lit side on the LEFT
+    assert right.red() <= 150
 
 
 def test_noon_sector_is_yellowish(frame):
