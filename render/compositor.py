@@ -99,13 +99,11 @@ class Compositor:
         painter.restore()
 
     def tooltip_at(self, x: float, y: float, size: float) -> str | None:
-        """Hover text for the marker under the cursor — small dials only
-        (large dials write the same information directly on the dial)."""
-        if (
-            self._day is None
-            or self._last_tick is None
-            or size >= defaults.FULL_TEXT_MIN_DIAMETER
-        ):
+        """Hover text under the cursor. Marker tooltips (today's body,
+        Earth, Moon) apply to small dials only — large dials write that
+        text directly; the twilight-band tooltips (dawn/sunrise and
+        sunset/dusk times) apply at every size."""
+        if self._day is None or self._last_tick is None:
             return None
         radius = size / 2
         point = QPointF(x - radius, y - radius)      # center-origin
@@ -116,34 +114,63 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
-        weekday = self._skin.weekday_set
-        today = constants.WEEKDAY_BODIES[day.weekday_index]
-        if weekday.display_mode == "center_only" or today == "sun":
-            today_pos = QPointF(0, 0)
-            today_radius = radius * weekday.center_scale
-        else:
-            today_pos = dial_point(
-                constants.WEEKDAY_SLOT_ANGLES[today] + day.hexagram_rotation,
-                radius * weekday.orbit_fraction,
-            )
-            today_radius = radius * weekday.diamond_scale
-        if hit(today_pos, today_radius):
-            return f"{constants.WEEKDAY_FULL_NAMES[today]}, {date.day} {date:%B %Y}"
+        if size < defaults.FULL_TEXT_MIN_DIAMETER:
+            weekday = self._skin.weekday_set
+            today = constants.WEEKDAY_BODIES[day.weekday_index]
+            if weekday.display_mode == "center_only" or today == "sun":
+                today_pos = QPointF(0, 0)
+                today_radius = radius * weekday.center_scale
+            else:
+                today_pos = dial_point(
+                    constants.WEEKDAY_SLOT_ANGLES[today] + day.hexagram_rotation,
+                    radius * weekday.orbit_fraction,
+                )
+                today_radius = radius * weekday.diamond_scale
+            if hit(today_pos, today_radius):
+                return f"{constants.WEEKDAY_FULL_NAMES[today]}, {date.day} {date:%B %Y}"
 
-        marker = self._skin.year_marker
-        if marker.mode in ("earth", "both") and hit(
-            dial_point(tick.year_angle, radius * marker.orbit_fraction),
-            radius * marker.scale,
+            marker = self._skin.year_marker
+            if marker.mode in ("earth", "both") and hit(
+                dial_point(tick.year_angle, radius * marker.orbit_fraction),
+                radius * marker.scale,
+            ):
+                return f"{date.day} {date:%B %Y}"
+            if marker.mode in ("moon", "both") and hit(
+                dial_point(
+                    angles.moon_cycle_angle(day.moon_fraction),
+                    radius * marker.moon_orbit_fraction,
+                ),
+                radius * marker.moon_scale,
+            ):
+                return f"Moon: {day.moon_illumination * 100:.0f}% lit"
+
+        return self._twilight_tooltip(point, radius)
+
+    def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
+        """Hovering a twilight band names its boundary times (owner spec):
+        the morning band reads dawn/sunrise, the evening band sunset/dusk."""
+        import math
+
+        sun = self._day.sun
+        distance = math.hypot(point.x(), point.y())
+        if distance > radius * self._skin.background.radius_fraction:
+            return None
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+
+        def within(start: float, end: float) -> bool:
+            span_end = end if end > start else end + 360.0
+            value = theta if theta >= start else theta + 360.0
+            return start <= value <= span_end
+
+        angle = angles.time_to_dial_angle
+        if sun.dawn is not None and sun.sunrise is not None and within(
+            angle(sun.dawn), angle(sun.sunrise)
         ):
-            return f"{date.day} {date:%B %Y}"
-        if marker.mode in ("moon", "both") and hit(
-            dial_point(
-                angles.moon_cycle_angle(day.moon_fraction),
-                radius * marker.moon_orbit_fraction,
-            ),
-            radius * marker.moon_scale,
+            return f"Dawn {sun.dawn:%H:%M} — Sunrise {sun.sunrise:%H:%M}"
+        if sun.sunset is not None and sun.dusk is not None and within(
+            angle(sun.sunset), angle(sun.dusk)
         ):
-            return f"Moon: {day.moon_illumination * 100:.0f}% lit"
+            return f"Sunset {sun.sunset:%H:%M} — Dusk {sun.dusk:%H:%M}"
         return None
 
     def render_offscreen(

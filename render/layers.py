@@ -13,7 +13,15 @@ from enum import Enum
 from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QFont, QPainter, QPainterPath, QPen, QPolygonF
+from PySide6.QtGui import (
+    QColor,
+    QFont,
+    QFontMetricsF,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QPolygonF,
+)
 
 from config import constants, defaults
 from core import angles
@@ -62,6 +70,24 @@ def draw_pixmap_centered(
     pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr)
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
+
+
+def draw_outlined_text(
+    painter: QPainter, center: QPointF, text: str, font: QFont
+) -> None:
+    """White label with a black outline (readable over bright bodies) —
+    the one shared text style of the weekday and date markers (Rule #5)."""
+    metrics = QFontMetricsF(font)
+    baseline = QPointF(
+        center.x() - metrics.horizontalAdvance(text) / 2,
+        center.y() + (metrics.ascent() - metrics.descent()) / 2,
+    )
+    path = QPainterPath()
+    path.addText(baseline, font, text)
+    outline_width = max(1.0, font.pixelSize() * defaults.LABEL_OUTLINE_WIDTH)
+    painter.setPen(QPen(QColor(*defaults.LABEL_OUTLINE_RGBA), outline_width))
+    painter.setBrush(QColor(*defaults.LABEL_FILL_RGBA))
+    painter.drawPath(path)
 
 
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
@@ -375,7 +401,8 @@ class WeekdayLayer(Layer):
             painter.drawEllipse(pos, size / 2, size / 2)
         # The white weekday name is written ON the body either way (owner
         # spec) — never the planet abbreviation. Short on small dials,
-        # full ("Wednesday") from FULL_TEXT_MIN_DIAMETER up.
+        # full ("Wednesday") from FULL_TEXT_MIN_DIAMETER up; black outline
+        # keeps it readable over bright bodies.
         full_text = 2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER
         label = (
             constants.WEEKDAY_FULL_NAMES[body]
@@ -386,10 +413,7 @@ class WeekdayLayer(Layer):
         label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
         font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
         font.setBold(True)
-        painter.setFont(font)
-        painter.setPen(QColor(*defaults.BODY_LABEL_RGBA))
-        rect = QRectF(pos.x() - size, pos.y() - size / 2, 2 * size, size)
-        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, label)
+        draw_outlined_text(painter, pos, label, font)
         painter.restore()
 
 
@@ -448,13 +472,7 @@ class YearMarkerLayer(Layer):
             max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
         )
         font.setBold(True)
-        painter.setFont(font)
-        rect = QRectF(pos.x() - size, pos.y() - size / 2, 2 * size, size)
-        shadow = rect.translated(1.0, 1.0)
-        painter.setPen(QColor(*defaults.EARTH_DATE_SHADOW_RGBA))
-        painter.drawText(shadow, Qt.AlignmentFlag.AlignCenter, text)
-        painter.setPen(QColor(*defaults.EARTH_DATE_TEXT_RGBA))
-        painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
+        draw_outlined_text(painter, pos, text, font)
 
     def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
         """Moon image (or procedural disc) with the unlit part shadowed:

@@ -29,8 +29,12 @@ SIZE_PRESETS = (360, 540, 720)       # owner spec: three dial versions
 # tooltips instead (owner spec).
 FULL_TEXT_MIN_DIAMETER = 540
 EARTH_DATE_TEXT_SIZE = 0.30          # fraction of the marker size
-EARTH_DATE_TEXT_RGBA = (255, 255, 255, 235)
-EARTH_DATE_SHADOW_RGBA = (0, 0, 0, 180)
+
+# White label text carries a black outline so it stays readable over
+# bright bodies (owner spec — "WED" on Mercury washed out without it).
+LABEL_FILL_RGBA = (255, 255, 255, 240)
+LABEL_OUTLINE_RGBA = (0, 0, 0, 210)
+LABEL_OUTLINE_WIDTH = 0.14           # fraction of the font pixel size
 
 # Watchdog delay for undoing a spontaneous (OS-initiated) hide/minimize.
 # NOTE, verified on Windows 11 24H2: Win+D does NOT hide or minimize this
@@ -71,7 +75,6 @@ RING_LETTER_MIN_PX = 8
 RING_MINUTE_MIN_PX = 6
 BODY_LABEL_MIN_PX = 6
 BODY_LABEL_SIZE = 0.34               # fraction of the body size
-BODY_LABEL_RGBA = (255, 255, 255, 230)
 MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 MARKER_BORDER_RGBA = (255, 255, 255, 200)
 
@@ -172,9 +175,10 @@ DEFAULT_SKIN = SkinDefinition(
         default_variant="europe",
         day_color="#4B86C9",
         night_color="#20344F",
-        # Owner spec: the date marker orbits along the INSIDE of the dial,
-        # not on the ring band, and is the same size as the weekday planets.
-        orbit_fraction=0.66,
+        # Owner spec: the Earth's outer edge TOUCHES the ring's inner
+        # edge (0.78 + 0.11 = 0.89 = the disc radius), same size as the
+        # weekday planets.
+        orbit_fraction=0.78,
         scale=0.11,
         moon_asset=_DOMY / "weekday" / "moon.png",
         moon_lit_color="#E8E4D8",

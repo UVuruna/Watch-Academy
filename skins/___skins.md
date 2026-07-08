@@ -21,6 +21,9 @@ Owner-specified dial pointer variants for M5 skins: **hexa** (6-point —
 points at both solstices, equinoxes fall between the vertices; the current
 default), **cross** (4-point — points at both solstices AND both
 equinoxes) and **octa** (8-point — solstices + equinoxes + midpoints).
+The pointer shape also sets HOW MANY colors measure the day's periods:
+cross = 4 hues × 90°, hexa = 6 hues × 60°, octa = 8 hues × 45° — the
+background wedges and the star diamonds share the same palette count.
 The year wheel already guarantees each season spans exactly 90° with a
 per-season daily rate.
 
