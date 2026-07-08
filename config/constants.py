@@ -162,8 +162,44 @@ UMBRA_CONTRAST_VARIANTS = ("full", "half")
 # seasons palette served under both styles.
 PALETTE_STYLES = ("paint", "light")
 
-# What the octa pointer's bottom arm shows (user-selectable).
-OCTA_SLOT_MODES = ("time", "date", "day_length", "zodiac")
+# What the octa pointer's bottom arm shows (user-selectable). The four
+# image modes draw the owner's PNG art (assets/skins/domy/zodiac/<dir>)
+# and fall back to the text form until the art exists (documented
+# fallback; the tray disables them while the folder is empty).
+OCTA_SLOT_MODES = (
+    "time",
+    "date",
+    "day_length",
+    "zodiac_sign",
+    "zodiac_logo",
+    "zodiac_constellation",
+    "zodiac_text",
+    "chinese_logo",
+    "chinese_text",
+)
+OCTA_SLOT_ART_DIRS = {
+    "zodiac_sign": "sign",
+    "zodiac_logo": "logo",
+    "zodiac_constellation": "constellation",
+    "chinese_logo": "chinese",
+}
+
+# Earth marker style: the owner ships every continent in a clean and an
+# atmosphere version.
+EARTH_STYLES = ("clean", "atmo")
+
+# Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,
+# the element every 10 (two years per element). Year N maps via
+# (N - 4) % 12 and ((N - 4) % 10) // 2 — 2026 = Fire Horse. The Chinese
+# year starts at the new moon falling between Jan 21 and Feb 20 (China
+# time), derived from the bundled principal-phase instants.
+CHINESE_ANIMALS = (
+    "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake",
+    "Horse", "Goat", "Monkey", "Rooster", "Dog", "Pig",
+)
+CHINESE_ELEMENTS = ("Wood", "Fire", "Earth", "Metal", "Water")
+CHINESE_NEW_YEAR_WINDOW = ((1, 21), (2, 20))   # (month, day) bounds, China time
+CHINA_UTC_OFFSET_HOURS = 8
 
 # Tropical zodiac: (name, symbol), indexed by dial angle // 30 on the
 # year wheel — Cancer's first point IS the summer solstice (dial top),

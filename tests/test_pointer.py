@@ -7,6 +7,7 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import dataclasses
+import math
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -196,6 +197,71 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
     assert "align='center'" in tip           # hover text is centered (owner spec)
 
 
+# --- Arm hovers (owner spec) -----------------------------------------------------------
+
+
+def test_hexa_arm_hover_names_its_two_signs(july_wednesday):
+    """Each hexa diamond spans exactly TWO zodiac signs (the owner's
+    proposed list had Aquarius doubled on the bottom arm — corrected:
+    bottom = Sagittarius + Capricorn). Upright → no asterisk."""
+    day, tick = july_wednesday
+    upright = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False), AssetCache()
+    )
+    upright.render_offscreen(360.0, 1.0, day, tick)
+    top = upright.tooltip_at(180.0, 72.0, 360.0)          # top diamond, 0.6R up
+    assert "Gemini" in top and "Cancer" in top and "*" not in top
+    bottom = upright.tooltip_at(180.0, 288.0, 360.0)      # below mercury's slot
+    assert "Sagittarius" in bottom and "Capricorn" in bottom
+
+
+def test_octa_arm_hovers_events_and_seasons(july_wednesday):
+    """Octa cardinals give the exact event instant; diagonals describe
+    their season with dates, duration and the middle date. Solar
+    rotation ON adds the imprecision asterisk."""
+    day, tick = july_wednesday
+    upright = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, pointer="octa", solar_rotation=False
+        ),
+        AssetCache(),
+    )
+    upright.render_offscreen(360.0, 1.0, day, tick)
+    cardinal = upright.tooltip_at(180.0, 72.0, 360.0)     # top arm
+    assert "Summer Solstice" in cardinal
+    assert "2026" in cardinal and ":" in cardinal         # exact date + minutes
+    assert "*" not in cardinal
+    diagonal = upright.tooltip_at(256.0, 104.0, 360.0)    # 45 deg arm, 0.6R
+    assert "Summer" in diagonal and "days" in diagonal and "Middle" in diagonal
+    solar = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa"), AssetCache()
+    )
+    solar.render_offscreen(360.0, 1.0, day, tick)
+    rotation = day.star_rotation
+    theta = math.radians(45.0 + rotation)
+    tilted = solar.tooltip_at(
+        180.0 + 108.0 * math.sin(theta), 180.0 - 108.0 * math.cos(theta), 360.0
+    )
+    assert tilted is not None and "*" in tilted
+
+
+def test_chinese_slot_hover(july_wednesday):
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN,
+            pointer="octa",
+            solar_rotation=False,
+            octa_slot="chinese_text",
+        ),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
+    tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
+    assert "Fire Horse" in tip and "2026" in tip and "2027" in tip
+
+
 # --- Umbra ----------------------------------------------------------------------------
 
 
@@ -261,15 +327,60 @@ def test_event_glow_is_visible_even_over_the_yellow_wedge(app):
         540.0, 1.0, day, quiet
     )
     # Upright + solstice noon: the Earth rides at the dial top, orbit
-    # 0.75R. Probe DIAGONALLY below-right of the marker: inside the 2.1x
+    # 0.75R. Probe DIAGONALLY below-right of the marker: inside the 2x
     # halo, outside the disc, off the noon hand shafts on the vertical
     # and BELOW the marker's date-text line (which renders as wide tofu
     # boxes under the offscreen platform and would mask the comparison).
     # The white core lifts the blue channel over the blue-free yellow.
     marker_y = 270 - round(270 * defaults.DEFAULT_SKIN.year_marker.orbit_fraction)
-    lit = with_glow.pixelColor(308, marker_y + 38)
-    plain = without.pixelColor(308, marker_y + 38)
+    lit = with_glow.pixelColor(300, marker_y + 30)
+    plain = without.pixelColor(300, marker_y + 30)
     assert lit.blue() - plain.blue() >= 8
+
+
+def test_moon_event_glow_renders(app):
+    """Owner report: the moon glow "doesn't work" — pin that the halo
+    really draws at a principal instant (it only shows within ±6 h of
+    one; his Time Travel likely landed outside a window)."""
+    import dataclasses as dc
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    seasons = SeasonsRepository().year_anchors(2026)
+    window = MoonPhaseRepository().moon_window(2026)
+    reference = datetime(2026, 7, 7, 12, 0, tzinfo=tz)
+    scout = build_day_context(reference, observer, seasons, window)
+    instant, name = min(
+        scout.moon_events, key=lambda event: abs(event[0] - reference)
+    )
+    local = instant.astimezone(tz)
+    day = build_day_context(local, observer, seasons, window)
+    glowing = build_tick_state(local, day)
+    assert glowing.moon_event == name
+    quiet = dc.replace(glowing, moon_event=None, season_event=None)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    with_glow = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, glowing
+    )
+    without = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, quiet
+    )
+    # At the instant the moon sits exactly on its cycle angle; probe
+    # 30 px above the marker center — inside the 2x halo, off the disc.
+    moon_angle = math.radians(day.moon_fraction * 360.0)
+    orbit = 270 * defaults.DEFAULT_SKIN.year_marker.moon_orbit_fraction
+    moon_x = 270 + orbit * math.sin(moon_angle)
+    moon_y = 270 - orbit * math.cos(moon_angle)
+    lit = with_glow.pixelColor(round(moon_x), round(moon_y) - 30)
+    plain = without.pixelColor(round(moon_x), round(moon_y) - 30)
+    assert (
+        lit.red() - plain.red() >= 8
+        or lit.green() - plain.green() >= 8
+        or lit.blue() - plain.blue() >= 8
+    )
 
 
 def test_half_contrast_renders_a_gentler_night(july_wednesday):

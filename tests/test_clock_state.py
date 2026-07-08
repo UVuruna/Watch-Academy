@@ -130,6 +130,36 @@ def test_season_event_window(belgrade_noon_context):
     assert outside.season_event is None
 
 
+def test_chinese_zodiac_2026(belgrade_noon_context):
+    """2026 is the Fire Horse year, starting at the Feb 17 new moon and
+    ending the day before CNY 2027 (Feb 6)."""
+    now, day = belgrade_noon_context
+    assert day.chinese_name == "Fire Horse"
+    assert (day.chinese_start.year, day.chinese_start.month, day.chinese_start.day) == (
+        2026, 2, 17,
+    )
+    assert day.chinese_end.year == 2027 and day.chinese_end.month == 2
+
+
+def test_chinese_zodiac_before_new_year():
+    """Mid-January belongs to the PREVIOUS Chinese year (Wood Snake
+    2025 runs until CNY 2026)."""
+    from zoneinfo import ZoneInfo
+
+    tz = ZoneInfo("Europe/Belgrade")
+    january = datetime(2026, 1, 10, 12, 0, tzinfo=tz)
+    observer = astral.Observer(latitude=44.82, longitude=20.46)
+    day = build_day_context(
+        january,
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    assert day.chinese_name == "Wood Snake"
+    assert day.chinese_start.year == 2025
+    assert (day.chinese_end.month, day.chinese_end.day) == (2, 16)
+
+
 def test_moon_event_window(belgrade_noon_context):
     """The Moon marker glows ±6 h around a principal instant (owner spec)."""
     now, day = belgrade_noon_context

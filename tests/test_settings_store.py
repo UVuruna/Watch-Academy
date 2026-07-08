@@ -67,14 +67,23 @@ def test_display_choices_round_trip(store):
         umbra_contrast="half",
         palette_style="light",
         solar_rotation=False,
-        octa_slot="zodiac",
+        octa_slot="zodiac_text",
+        earth_style="atmo",
     )
     store.save(saved)
     assert store.load() == saved
 
 
 @pytest.mark.parametrize(
-    "key", ["pointer", "umbra_form", "umbra_contrast", "palette_style", "octa_slot"]
+    "key",
+    [
+        "pointer",
+        "umbra_form",
+        "umbra_contrast",
+        "palette_style",
+        "octa_slot",
+        "earth_style",
+    ],
 )
 def test_unknown_display_choice_raises(store, key):
     store.path.write_text(

@@ -13,7 +13,7 @@ import astral
 
 from config import constants
 from core import angles
-from core.moon import MoonWindow, illumination, phase_fraction
+from core.moon import MoonWindow, chinese_zodiac, illumination, phase_fraction
 from core.sun import DaylightRegime, SunDay, compute_sun_day, day_length_hm
 from core.year_wheel import YearAnchors, year_marker_angle, zodiac_sign
 
@@ -41,8 +41,12 @@ class DayContext:
     zodiac_symbol: str
     zodiac_start: date              # local first day of the sign
     zodiac_end: date                # local first day of the NEXT sign
+    chinese_name: str               # "Fire Horse" — element + animal
+    chinese_start: date             # Chinese New Year (China time)
+    chinese_end: date               # day before the next one
     season_events: tuple[tuple[datetime, str], ...]   # anchor instants + names
     moon_events: tuple[tuple[datetime, str], ...]     # principal instants + names
+    tzinfo: object                  # the active timezone (hover instant display)
 
     @property
     def cache_key(self) -> tuple[date, timedelta]:
@@ -72,6 +76,7 @@ def build_day_context(
     sun_day = compute_sun_day(observer, now_local.date(), now_local.tzinfo)
     fraction = phase_fraction(now_local, moon_window)
     sign_name, sign_symbol, sign_start, sign_end = zodiac_sign(now_local, year_anchors)
+    chinese_name, chinese_start, chinese_end = chinese_zodiac(now_local, moon_window)
     return DayContext(
         local_date=now_local.date(),
         utc_offset=now_local.utcoffset(),
@@ -87,6 +92,9 @@ def build_day_context(
         zodiac_symbol=sign_symbol,
         zodiac_start=sign_start.astimezone(now_local.tzinfo).date(),
         zodiac_end=sign_end.astimezone(now_local.tzinfo).date(),
+        chinese_name=chinese_name,
+        chinese_start=chinese_start,
+        chinese_end=chinese_end,
         season_events=tuple(
             (instant, constants.SEASON_EVENT_NAMES[round(angle) % 360])
             for instant, angle in zip(year_anchors.instants, year_anchors.angles)
@@ -95,6 +103,7 @@ def build_day_context(
             (instant, _MOON_EVENT_NAMES[fraction % 1.0])
             for instant, fraction in moon_window.events
         ),
+        tzinfo=now_local.tzinfo,
     )
 
 

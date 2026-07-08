@@ -160,15 +160,19 @@ UMBRA_CONTRAST_SPANS = {
 }
 
 # --- Season/moon event glow rendering (windows live in constants) ---------------
-# White core -> warm mid -> transparent: the white core stays visible
-# even over the bright yellow Aura wedge (where the summer solstice
-# always lands).
-GLOW_CORE_COLOR = "#FFFFFF"
-GLOW_CORE_ALPHA = 0.95
-GLOW_MID_COLOR = "#FFD34D"
-GLOW_MID_ALPHA = 0.55
-GLOW_MID_STOP = 0.45                 # gradient position of the warm mid tone
-GLOW_RADIUS_SCALE = 2.1              # halo radius, multiple of the marker radius
+# Owner spec: pure WHITE, compact and intense — the halo diameter is
+# twice the marker's, i.e. halo radius = 2x marker radius.
+GLOW_COLOR = "#FFFFFF"
+GLOW_CORE_ALPHA = 1.0
+GLOW_MID_ALPHA = 0.7
+GLOW_MID_STOP = 0.55                 # gradient position of the mid alpha
+GLOW_RADIUS_SCALE = 2.0              # halo radius, multiple of the marker radius
+
+# --- Octa bottom-arm zodiac art -------------------------------------------------
+# The owner ships 12 PNGs per image mode into these folders; until a
+# folder is complete the tray disables its mode and the layer falls
+# back to the text form (documented fallback).
+ZODIAC_ART_DIR = paths.bundled_skins_dir() / "domy" / "zodiac"
 
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",
@@ -243,8 +247,11 @@ DEFAULT_SKIN = SkinDefinition(
     ),
     year_marker=YearMarkerSpec(
         mode="both",                    # owner preview default; selectable in M6 settings
+        # Both styles bundled; the earth_style display choice picks one.
         variants={
-            f"{continent}_{phase}": _DOMY / "year_marker" / f"earth_clean_{continent}_{phase}.png"
+            f"{style}_{continent}_{phase}": _DOMY / "year_marker"
+            / f"earth_{style}_{continent}_{phase}.png"
+            for style in ("clean", "atmo")
             for continent in _CONTINENTS
             for phase in ("day", "night")
         },

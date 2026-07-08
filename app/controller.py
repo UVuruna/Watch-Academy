@@ -293,6 +293,7 @@ class AppController(QObject):
             palette_style=self._settings.palette_style,
             solar_rotation=self._settings.solar_rotation,
             octa_slot=self._settings.octa_slot,
+            earth_style=self._settings.earth_style,
         )
 
     def _install_skin(self, skin) -> None:
@@ -329,15 +330,18 @@ class AppController(QObject):
         self._install_skin(dataclasses.replace(self._skin, **{key: value}))
         self._flush_position()
 
-    def _add_choice_group(self, menu: QMenu, submenu: QMenu, options, current, setter) -> None:
+    def _add_choice_group(
+        self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
+    ) -> None:
         """One exclusive check-group appended to `submenu`: options are
-        (value, label) pairs."""
+        (value, label) pairs; values in `disabled` render grayed out."""
         group = QActionGroup(menu)
         group.setExclusive(True)
         for value, label in options:
             action = QAction(label, menu)
             action.setCheckable(True)
             action.setChecked(value == current)
+            action.setEnabled(value not in disabled)
             action.triggered.connect(lambda checked, chosen=value: setter(chosen))
             group.addAction(action)
             submenu.addAction(action)
@@ -398,14 +402,29 @@ class AppController(QObject):
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
         )
-        self._add_choice_submenu(
-            menu, "Octa slot",
+        # Image modes stay grayed out until the owner's 12-PNG folder for
+        # them exists under assets/skins/domy/zodiac/.
+        missing_art = {
+            mode
+            for mode, folder in constants.OCTA_SLOT_ART_DIRS.items()
+            if len(list((defaults.ZODIAC_ART_DIR / folder).glob("*.png"))) < 12
+        }
+        octa_menu = menu.addMenu("Octa slot")
+        self._add_choice_group(
+            menu, octa_menu,
             [
                 (mode, mode.replace("_", " ").capitalize())
                 for mode in constants.OCTA_SLOT_MODES
             ],
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),
+            disabled=missing_art,
+        )
+        self._add_choice_submenu(
+            menu, "Earth",
+            [("clean", "Clean"), ("atmo", "Atmosphere")],
+            settings.earth_style,
+            lambda value: self._set_display_choice("earth_style", value),
         )
         solar = QAction("Solar rotation", menu)
         solar.setCheckable(True)

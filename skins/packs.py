@@ -63,6 +63,7 @@ def load_pack(folder: Path, base: manifest.SkinDefinition) -> manifest.SkinDefin
         ("palette_style", constants.PALETTE_STYLES),
         ("solar_rotation", (True, False)),
         ("octa_slot", constants.OCTA_SLOT_MODES),
+        ("earth_style", constants.EARTH_STYLES),
     )
     for key, allowed in _SCALARS:
         if key in raw:
@@ -175,6 +176,7 @@ def serialize_skin(skin: manifest.SkinDefinition, folder: Path) -> dict:
         "palette_style": skin.palette_style,
         "solar_rotation": skin.solar_rotation,
         "octa_slot": skin.octa_slot,
+        "earth_style": skin.earth_style,
     }
     for section, (field_name, _) in _UNITS.items():
         payload[section] = portable(getattr(skin, field_name))

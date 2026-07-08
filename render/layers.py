@@ -136,16 +136,16 @@ def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
 
 def draw_event_glow(painter: QPainter, pos: QPointF, marker_radius: float) -> None:
     """Radial halo behind a year marker during a season/moon event
-    window. A WHITE core blending into the warm mid tone keeps it
-    visible over any Aura wedge (the summer solstice always lands in
-    the bright yellow one — a yellow-only halo vanished there)."""
+    window (owner spec): pure WHITE, compact — the halo diameter is
+    twice the marker's — and intense, so it reads over any Aura wedge
+    (the summer solstice always lands in the bright yellow one)."""
     halo = marker_radius * defaults.GLOW_RADIUS_SCALE
     gradient = QRadialGradient(pos, halo)
-    core = QColor(defaults.GLOW_CORE_COLOR)
+    core = QColor(defaults.GLOW_COLOR)
     core.setAlphaF(defaults.GLOW_CORE_ALPHA)
-    mid = QColor(defaults.GLOW_MID_COLOR)
+    mid = QColor(defaults.GLOW_COLOR)
     mid.setAlphaF(defaults.GLOW_MID_ALPHA)
-    edge = QColor(defaults.GLOW_MID_COLOR)
+    edge = QColor(defaults.GLOW_COLOR)
     edge.setAlphaF(0.0)
     gradient.setColorAt(0.0, core)
     gradient.setColorAt(defaults.GLOW_MID_STOP, mid)
@@ -578,12 +578,25 @@ class CenterBodyLayer(Layer):
         draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
 
 
+def octa_slot_art(mode: str, name: str) -> Path | None:
+    """The PNG for an image slot mode ("Cancer" / "Horse"), or None when
+    the owner's art folder does not have it yet."""
+    folder = constants.OCTA_SLOT_ART_DIRS.get(mode)
+    if folder is None:
+        return None
+    path = defaults.ZODIAC_ART_DIR / folder / f"{name}.png"
+    return path if path.exists() else None
+
+
 class BottomSlotLayer(Layer):
     """The octa pointer's bottom arm carries user-selected info instead
     of a weekday body (owner spec): the digital time "12:24" (no seconds
-    — the font stays BIG), the date "8 Jul", the day length "15:35" or
-    the zodiac sign name. Text is sized to fill the slot width and drawn
-    ABOVE the hands like the center body."""
+    — the font stays BIG), the date "8 Jul", the day length "15:35", the
+    tropical zodiac (text or the owner's sign/logo/constellation art) or
+    the Chinese zodiac (text or logo art). Text is sized to fill the
+    slot width; everything draws ABOVE the hands like the center body.
+    Image modes fall back to the text form until the owner's PNG folder
+    is complete (documented; the tray disables them meanwhile)."""
 
     cadence = Cadence.MINUTE
 
@@ -593,13 +606,23 @@ class BottomSlotLayer(Layer):
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
         slot_size = 2 * ctx.radius * spec.diamond_scale
         mode = ctx.skin.octa_slot
-        if mode == "time":
+        chinese_animal = ctx.day.chinese_name.split()[-1]
+        if mode in constants.OCTA_SLOT_ART_DIRS:
+            name = chinese_animal if mode == "chinese_logo" else ctx.day.zodiac_name
+            asset = octa_slot_art(mode, name)
+            if asset is not None:
+                draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                return
+            text = name                  # documented fallback until the art lands
+        elif mode == "time":
             text = ctx.tick.time_hm
         elif mode == "date":
             text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         elif mode == "day_length":
             text = ctx.day.day_length
-        else:                            # "zodiac" (validated closed set)
+        elif mode == "chinese_text":
+            text = chinese_animal
+        else:                            # "zodiac_text" (validated closed set)
             text = ctx.day.zodiac_name
         # Fit-to-width: the largest font whose text spans the slot's
         # width fraction — measured, not guessed, so it never overflows.
@@ -645,7 +668,10 @@ class YearMarkerLayer(Layer):
         if ctx.tick.season_event is not None:
             # ±12 h around a solstice/equinox instant (owner spec).
             draw_event_glow(painter, pos, size / 2)
-        variant = f"{spec.default_variant}_{'day' if ctx.tick.is_daylight else 'night'}"
+        variant = (
+            f"{ctx.skin.earth_style}_{spec.default_variant}_"
+            f"{'day' if ctx.tick.is_daylight else 'night'}"
+        )
         asset = spec.variants.get(variant)
         if asset is not None:
             # The Earth renders ship on an opaque space background — clip

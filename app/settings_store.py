@@ -40,6 +40,7 @@ class Settings:
     palette_style: str = "paint"
     solar_rotation: bool = True
     octa_slot: str = "time"
+    earth_style: str = "clean"
 
 
 class SettingsStore:
@@ -71,6 +72,7 @@ class SettingsStore:
                 ("umbra_contrast", "full", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "paint", constants.PALETTE_STYLES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
+                ("earth_style", "clean", constants.EARTH_STYLES),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -106,6 +108,7 @@ class SettingsStore:
             "palette_style": settings.palette_style,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
+            "earth_style": settings.earth_style,
         }
         self._path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self._path.with_suffix(".json.tmp")

@@ -8,6 +8,7 @@ the future settings preview.
 """
 
 import html
+import math
 from datetime import timedelta
 
 from PySide6.QtCore import QPointF, Qt
@@ -165,12 +166,17 @@ class Compositor:
                 f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
             )
 
-        if self._skin.pointer == "octa" and self._skin.octa_slot == "zodiac":
+        if self._skin.pointer == "octa" and (
+            self._skin.octa_slot.startswith("zodiac")
+            or self._skin.octa_slot.startswith("chinese")
+        ):
             slot_pos = dial_point(
                 constants.OCTA_TIME_SLOT_ANGLE + rotation,
                 radius * weekday.orbit_fraction,
             )
             if hit(slot_pos, radius * weekday.diamond_scale):
+                if self._skin.octa_slot.startswith("chinese"):
+                    return self._chinese_text()
                 return self._zodiac_text()
 
         marker = self._skin.year_marker
@@ -191,7 +197,77 @@ class Compositor:
         ):
             return self._earth_text()
 
+        arm_tip = self._arm_tooltip(point, radius, rotation)
+        if arm_tip is not None:
+            return arm_tip
+
         return self._twilight_tooltip(point, radius)
+
+    def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
+        """Hover over a star arm (owner spec): hexa arms name their TWO
+        zodiac signs; cross/octa cardinal arms give the exact instant of
+        the solstice/equinox they point at; octa diagonal arms describe
+        their season (dates, duration, the middle date the arrow points
+        at). With solar rotation on, a trailing * flags the slight
+        offset from the year-wheel positions."""
+        distance = math.hypot(point.x(), point.y())
+        star_tip = radius * self._skin.star.radius_fraction
+        if not (radius * 0.08 <= distance <= star_tip):
+            return None
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        arms = constants.POINTER_POINTS[self._skin.pointer]
+        arm_step = 360.0 / arms
+        arm_angle = (round(((theta - rotation) % 360.0) / arm_step) * arm_step) % 360.0
+        star = "*" if self._skin.solar_rotation else ""
+
+        if self._skin.pointer == "hexa":
+            # The 60-deg arc [arm-30, arm+30] spans exactly two signs.
+            first = constants.ZODIAC_SIGNS[int((arm_angle - 30.0) % 360.0) // 30]
+            second = constants.ZODIAC_SIGNS[int(arm_angle % 360.0) // 30]
+            return _centered(
+                f"{first[1]} {first[0]} · {second[1]} {second[0]}{star}"
+            )
+        if arm_angle % 90.0 == 0.0:
+            # Cardinal arms (cross and octa) point at the season events.
+            anchor_angle = {0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0}[
+                arm_angle
+            ]
+            name = constants.SEASON_EVENT_NAMES[round(anchor_angle) % 360]
+            instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
+            return _centered(
+                f"{name}{star}",
+                f"{instant.day} {instant:%b %Y} — {instant:%H:%M}",
+            )
+        # Octa diagonal arms point at the season CENTERS.
+        season, start_angle = {
+            315.0: ("Spring", 270.0),
+            45.0: ("Summer", 360.0),
+            135.0: ("Autumn", 450.0),
+            225.0: ("Winter", 540.0),
+        }[arm_angle]
+        start = self._anchor_instant(start_angle).astimezone(self._day.tzinfo)
+        end = self._anchor_instant(start_angle + 90.0).astimezone(self._day.tzinfo)
+        middle = start + (end - start) / 2
+        days = round((end - start).total_seconds() / 86400)
+        return _centered(
+            f"{season}{star}",
+            f"{start.day} {start:%b} – {end.day} {end:%b} — {days} days",
+            f"Middle: {middle.day} {middle:%b}",
+        )
+
+    def _anchor_instant(self, unwrapped_angle: float):
+        """Season-anchor instant at an unwrapped year-wheel angle."""
+        anchors = self._day.year_anchors
+        return anchors.instants[anchors.angles.index(unwrapped_angle)]
+
+    def _chinese_text(self) -> str:
+        """"Fire Horse — 17 Feb 2026 – 5 Feb 2027" (Chinese year span)."""
+        day = self._day
+        return _centered(
+            f"{day.chinese_name} — "
+            f"{day.chinese_start.day} {day.chinese_start:%b %Y} – "
+            f"{day.chinese_end.day} {day.chinese_end:%b %Y}"
+        )
 
     def _zodiac_line(self) -> str:
         """"♋ Cancer — 21 Jun – 22 Jul" (sign with its date span)."""

@@ -137,8 +137,8 @@ class SkinDefinition:
     umbra_contrast: str = "full"       # "full" | "half" — Umbra shade span
     palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
-    octa_slot: str = "time"            # octa bottom arm: "time" | "date" |
-                                       # "day_length" | "zodiac"
+    octa_slot: str = "time"            # octa bottom arm, one of OCTA_SLOT_MODES
+    earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

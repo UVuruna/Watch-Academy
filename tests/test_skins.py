@@ -74,6 +74,7 @@ def test_serialize_is_json_ready():
     assert payload["palette_style"] == "paint"
     assert payload["solar_rotation"] is True
     assert payload["octa_slot"] == "time"
+    assert payload["earth_style"] == "clean"
 
 
 def test_pack_display_choices_merge(tmp_path):

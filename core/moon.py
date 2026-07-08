@@ -9,7 +9,7 @@ off by up to ~0.3 day near the instants, so it is not used here.
 
 import math
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
 from config import constants
 
@@ -45,6 +45,36 @@ def illumination(fraction: float) -> float:
     """Lit fraction of the moon disc (0.0 new .. 1.0 full) from the cycle
     fraction."""
     return (1.0 - math.cos(2.0 * math.pi * fraction)) / 2.0
+
+
+def chinese_zodiac(now_local: datetime, window: MoonWindow) -> tuple[str, date, date]:
+    """("Fire Horse", start, end) of the Chinese year at `now` — the
+    year begins at the new moon falling in the Jan 21 – Feb 20 window
+    (China time); animal and element follow the sexagenary cycle. The
+    moon window spans the neighbor years, so both cusps are present."""
+    year = now_local.date().year
+    start = _chinese_new_year(year, window)
+    if now_local.date() < start:
+        year -= 1
+        start = _chinese_new_year(year, window)
+    end = _chinese_new_year(year + 1, window) - timedelta(days=1)
+    animal = constants.CHINESE_ANIMALS[(year - 4) % 12]
+    element = constants.CHINESE_ELEMENTS[((year - 4) % 10) // 2]
+    return f"{element} {animal}", start, end
+
+
+def _chinese_new_year(year: int, window: MoonWindow) -> date:
+    """The Chinese New Year date of `year` (China time)."""
+    (lo_m, lo_d), (hi_m, hi_d) = constants.CHINESE_NEW_YEAR_WINDOW
+    low, high = date(year, lo_m, lo_d), date(year, hi_m, hi_d)
+    for instant, fraction in window.events:
+        if fraction == 0.0:
+            china = (
+                instant + timedelta(hours=constants.CHINA_UTC_OFFSET_HOURS)
+            ).date()
+            if low <= china <= high:
+                return china
+    raise ValueError(f"no Chinese New Year of {year} inside the moon window")
 
 
 def phase_name(fraction: float) -> str:
