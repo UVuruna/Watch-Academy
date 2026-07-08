@@ -222,12 +222,19 @@ DEFAULT_SKIN = SkinDefinition(
     ),
     hands=HandsSpec(
         # Owner's vector hands, ONE shared scale (designed proportions
-        # 240 : 288.5 : 296 stay exact); every hub center is 15 design
-        # units above the image bottom — the hub circles differ in size
-        # (30/27/22) so all three stay visible around the shared center.
-        hour=HandSpec(asset=_DOMY / "hands" / "hour.svg", design_height=240),
-        minute=HandSpec(asset=_DOMY / "hands" / "minute.svg", design_height=288.5),
-        second=HandSpec(asset=_DOMY / "hands" / "second.svg", design_height=296),
+        # stay exact). The exports are content-cropped, so each rotation
+        # center sits one hub radius above its own canvas bottom — the
+        # differing hub circles (30/27/22, borders included) nest visibly
+        # around the shared center.
+        hour=HandSpec(
+            asset=_DOMY / "hands" / "hour.svg", design_height=240, hub_diameter=30
+        ),
+        minute=HandSpec(
+            asset=_DOMY / "hands" / "minute.svg", design_height=288.5, hub_diameter=27
+        ),
+        second=HandSpec(
+            asset=_DOMY / "hands" / "second.svg", design_height=296, hub_diameter=22
+        ),
         # The longest hand's (seconds) tip reach, fraction of the dial
         # radius — aimed at the end of the 360-dot scale lines.
         reach_fraction=0.88,
