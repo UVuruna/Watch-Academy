@@ -283,12 +283,15 @@ class AppController(QObject):
         return self._apply_display_settings(skin)
 
     def _apply_display_settings(self, skin):
-        """The user's tray choices (pointer variant, gray-wheel contrast)
-        win over whatever the skin pack declares."""
+        """The user's tray choices win over whatever the skin pack
+        declares."""
         return dataclasses.replace(
             skin,
             pointer=self._settings.pointer,
-            gray_contrast=self._settings.gray_contrast,
+            umbra_contrast=self._settings.umbra_contrast,
+            palette_style=self._settings.palette_style,
+            solar_rotation=self._settings.solar_rotation,
+            octa_slot=self._settings.octa_slot,
         )
 
     def _install_skin(self, skin) -> None:
@@ -316,70 +319,88 @@ class AppController(QObject):
         self._settings = replace(self._settings, skin=name)
         self._flush_position()
 
-    def _set_pointer(self, pointer: str) -> None:
-        if pointer == self._settings.pointer:
+    def _set_display_choice(self, key: str, value) -> None:
+        """Shared setter behind Pointer/Palette/Umbra/Octa slot/Solar
+        rotation: persist the choice and reinstall the skin with it."""
+        if getattr(self._settings, key) == value:
             return
-        self._settings = replace(self._settings, pointer=pointer)
-        self._install_skin(dataclasses.replace(self._skin, pointer=pointer))
+        self._settings = replace(self._settings, **{key: value})
+        self._install_skin(dataclasses.replace(self._skin, **{key: value}))
         self._flush_position()
 
-    def _set_gray_contrast(self, contrast: str) -> None:
-        if contrast == self._settings.gray_contrast:
-            return
-        self._settings = replace(self._settings, gray_contrast=contrast)
-        self._install_skin(dataclasses.replace(self._skin, gray_contrast=contrast))
-        self._flush_position()
+    def _add_choice_submenu(self, menu: QMenu, title: str, options, current, setter) -> None:
+        """One exclusive check-group submenu: options are (value, label)."""
+        submenu = menu.addMenu(title)
+        group = QActionGroup(menu)
+        group.setExclusive(True)
+        for value, label in options:
+            action = QAction(label, menu)
+            action.setCheckable(True)
+            action.setChecked(value == current)
+            action.triggered.connect(lambda checked, chosen=value: setter(chosen))
+            group.addAction(action)
+            submenu.addAction(action)
 
     def _build_menu(self) -> QMenu:
         menu = QMenu()
-        skin_menu = menu.addMenu("Skin")
-        skin_group = QActionGroup(menu)
-        skin_group.setExclusive(True)
-        for name in sorted(resolver.discover()):
-            action = QAction(name.upper(), menu)
-            action.setCheckable(True)
-            action.setChecked(name == self._settings.skin)
-            action.triggered.connect(lambda checked, skin=name: self._set_skin(skin))
-            skin_group.addAction(action)
-            skin_menu.addAction(action)
-        size_menu = menu.addMenu("Size")
-        group = QActionGroup(menu)
-        group.setExclusive(True)
-        for preset in defaults.SIZE_PRESETS:
-            action = QAction(f"{preset} px", menu)
-            action.setCheckable(True)
-            action.setChecked(preset == self._settings.diameter)
-            action.triggered.connect(
-                lambda checked, diameter=preset: self._set_diameter(diameter)
-            )
-            group.addAction(action)
-            size_menu.addAction(action)
-        pointer_menu = menu.addMenu("Pointer")
-        pointer_group = QActionGroup(menu)
-        pointer_group.setExclusive(True)
-        for variant, arms in sorted(
-            constants.POINTER_POINTS.items(), key=lambda item: item[1]
-        ):
-            action = QAction(f"{variant.capitalize()} ({arms})", menu)
-            action.setCheckable(True)
-            action.setChecked(variant == self._settings.pointer)
-            action.triggered.connect(
-                lambda checked, pointer=variant: self._set_pointer(pointer)
-            )
-            pointer_group.addAction(action)
-            pointer_menu.addAction(action)
-        contrast_menu = menu.addMenu("Gray wheel")
-        contrast_group = QActionGroup(menu)
-        contrast_group.setExclusive(True)
-        for variant in constants.GRAY_CONTRAST_VARIANTS:
-            action = QAction(f"{variant.capitalize()} contrast", menu)
-            action.setCheckable(True)
-            action.setChecked(variant == self._settings.gray_contrast)
-            action.triggered.connect(
-                lambda checked, contrast=variant: self._set_gray_contrast(contrast)
-            )
-            contrast_group.addAction(action)
-            contrast_menu.addAction(action)
+        settings = self._settings
+        self._add_choice_submenu(
+            menu, "Skin",
+            [(name, name.upper()) for name in sorted(resolver.discover())],
+            settings.skin, self._set_skin,
+        )
+        self._add_choice_submenu(
+            menu, "Size",
+            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
+            settings.diameter, self._set_diameter,
+        )
+        self._add_choice_submenu(
+            menu, "Pointer",
+            [
+                (variant, f"{variant.capitalize()} ({arms})")
+                for variant, arms in sorted(
+                    constants.POINTER_POINTS.items(), key=lambda item: item[1]
+                )
+            ],
+            settings.pointer,
+            lambda value: self._set_display_choice("pointer", value),
+        )
+        self._add_choice_submenu(
+            menu, "Palette",
+            [(style, style.capitalize()) for style in constants.PALETTE_STYLES],
+            settings.palette_style,
+            lambda value: self._set_display_choice("palette_style", value),
+        )
+        self._add_choice_submenu(
+            menu, "Umbra",
+            [
+                (variant, f"{variant.capitalize()} contrast")
+                for variant in constants.UMBRA_CONTRAST_VARIANTS
+            ],
+            settings.umbra_contrast,
+            lambda value: self._set_display_choice("umbra_contrast", value),
+        )
+        self._add_choice_submenu(
+            menu, "Octa slot",
+            [
+                (mode, mode.replace("_", " ").capitalize())
+                for mode in constants.OCTA_SLOT_MODES
+            ],
+            settings.octa_slot,
+            lambda value: self._set_display_choice("octa_slot", value),
+        )
+        solar = QAction("Solar rotation", menu)
+        solar.setCheckable(True)
+        solar.setChecked(settings.solar_rotation)
+        solar.setToolTip(
+            "On: the star points at true solar noon. Off: Star, Aura and "
+            "Umbra stand upright (12/24 at the top) for reading exact "
+            "planet and season positions."
+        )
+        solar.toggled.connect(
+            lambda checked: self._set_display_choice("solar_rotation", checked)
+        )
+        menu.addAction(solar)
         menu.addSeparator()
         time_travel = QAction("Time Travel…", menu)
         time_travel.triggered.connect(self._open_time_travel)

@@ -35,7 +35,10 @@ class Settings:
     click_through: bool = False
     skin: str = "domy"
     pointer: str = "hexa"
-    gray_contrast: str = "full"
+    umbra_contrast: str = "full"
+    palette_style: str = "paint"
+    solar_rotation: bool = True
+    octa_slot: str = "time"
 
 
 class SettingsStore:
@@ -60,12 +63,17 @@ class SettingsStore:
                 raise ValueError(f"diameter {diameter} outside allowed range")
             # A bad value here would otherwise KeyError deep inside a
             # paint pass, where Qt swallows the exception.
-            pointer = str(raw.get("pointer", "hexa"))
-            if pointer not in constants.POINTER_POINTS:
-                raise ValueError(f"pointer {pointer!r} unknown")
-            gray_contrast = str(raw.get("gray_contrast", "full"))
-            if gray_contrast not in constants.GRAY_CONTRAST_VARIANTS:
-                raise ValueError(f"gray_contrast {gray_contrast!r} unknown")
+            choices = {}
+            for key, default, allowed in (
+                ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
+                ("umbra_contrast", "full", constants.UMBRA_CONTRAST_VARIANTS),
+                ("palette_style", "paint", constants.PALETTE_STYLES),
+                ("octa_slot", "time", constants.OCTA_SLOT_MODES),
+            ):
+                value = str(raw.get(key, default))
+                if value not in allowed:
+                    raise ValueError(f"{key} {value!r} unknown")
+                choices[key] = value
             return Settings(
                 schema_version=int(raw["schema_version"]),
                 window_x=None if window["x"] is None else int(window["x"]),
@@ -74,8 +82,8 @@ class SettingsStore:
                 # Additive keys (still schema 1): absent in older files.
                 click_through=bool(raw.get("click_through", False)),
                 skin=str(raw.get("skin", "domy")),
-                pointer=pointer,
-                gray_contrast=gray_contrast,
+                solar_rotation=bool(raw.get("solar_rotation", True)),
+                **choices,
             )
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             raise SettingsCorruptError(self._path, exc) from exc
@@ -91,7 +99,10 @@ class SettingsStore:
             "click_through": settings.click_through,
             "skin": settings.skin,
             "pointer": settings.pointer,
-            "gray_contrast": settings.gray_contrast,
+            "umbra_contrast": settings.umbra_contrast,
+            "palette_style": settings.palette_style,
+            "solar_rotation": settings.solar_rotation,
+            "octa_slot": settings.octa_slot,
         }
         self._path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self._path.with_suffix(".json.tmp")
