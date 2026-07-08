@@ -23,6 +23,10 @@ DIAL_OFFSET_DEG = 180.0
 SOLAR_NOON_SECS = 43_200            # 12:00 as seconds since local midnight
 SECONDS_PER_DEGREE = SECONDS_PER_DAY / 360.0    # 240 s of day per dial degree
 
+# Owner's hand-design convention: every hand rotates about a point
+# exactly this many design units above its canvas bottom.
+HAND_HUB_OFFSET_UNITS = 15
+
 # Regular hexagram geometry: the star's inner-hexagon vertices sit at
 # tip_radius / sqrt(3) — each of the six diamonds spans (center, tip-30deg
 # inner vertex, tip, tip+30deg inner vertex).

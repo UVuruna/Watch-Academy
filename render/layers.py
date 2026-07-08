@@ -587,17 +587,18 @@ class HandLayer(Layer):
             "second": ctx.tick.second_angle,
         }[self._kind]
         hands = self._skin.hands
-        # Content-cropped exports: the hub circle touches the canvas
-        # bottom, so the rotation center is one hub radius above it and
-        # tip-to-center = height − hub/2 (exact regardless of cropping).
+        # Owner convention: the canvases are exact (a faint reference
+        # circle prevents export trimming) and every rotation center is
+        # HAND_HUB_OFFSET_UNITS above its canvas bottom.
+        hub = constants.HAND_HUB_OFFSET_UNITS
         longest_tip_units = max(
-            hand.design_height - hand.hub_diameter / 2
+            hand.design_height - hub
             for hand in (hands.hour, hands.minute, hands.second)
             if hand is not None
         )
         units_to_logical = (hands.reach_fraction * ctx.radius) / longest_tip_units
         height = spec.design_height * units_to_logical
-        pivot_y = (spec.design_height - spec.hub_diameter / 2) / spec.design_height
+        pivot_y = (spec.design_height - hub) / spec.design_height
         pixmap = ctx.cache.pixmap_by_height(spec.asset, height, ctx.dpr)
         logical_w = pixmap.width() / ctx.dpr
         painter.save()

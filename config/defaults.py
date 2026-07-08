@@ -221,20 +221,13 @@ DEFAULT_SKIN = SkinDefinition(
         moon_scale=0.08,                # ~72% of the Earth marker (owner spec)
     ),
     hands=HandsSpec(
-        # Owner's vector hands, ONE shared scale (designed proportions
-        # stay exact). The exports are content-cropped, so each rotation
-        # center sits one hub radius above its own canvas bottom — the
-        # differing hub circles (30/27/22, borders included) nest visibly
-        # around the shared center.
-        hour=HandSpec(
-            asset=_DOMY / "hands" / "hour.svg", design_height=240, hub_diameter=30
-        ),
-        minute=HandSpec(
-            asset=_DOMY / "hands" / "minute.svg", design_height=288.5, hub_diameter=27
-        ),
-        second=HandSpec(
-            asset=_DOMY / "hands" / "second.svg", design_height=296, hub_diameter=22
-        ),
+        # Owner's vector hands at HIS exact canvas sizes (240/290/300; a
+        # faint reference circle keeps the export from trimming them).
+        # ONE shared scale preserves the designed proportions; every
+        # rotation center is 15 design units above its canvas bottom.
+        hour=HandSpec(asset=_DOMY / "hands" / "hour.svg", design_height=240),
+        minute=HandSpec(asset=_DOMY / "hands" / "minute.svg", design_height=290),
+        second=HandSpec(asset=_DOMY / "hands" / "second.svg", design_height=300),
         # The longest hand's (seconds) tip reach, fraction of the dial
         # radius — aimed at the end of the 360-dot scale lines.
         reach_fraction=0.88,

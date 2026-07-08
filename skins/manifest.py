@@ -95,14 +95,12 @@ class YearMarkerSpec:
 
 @dataclass(frozen=True)
 class HandSpec:
-    """Exports are cropped to the drawn content (Illustrator trims the
-    artboard), so the hub circle TOUCHES the canvas bottom — the rotation
-    center therefore sits exactly one hub radius above the bottom, and
-    the tip-to-center length is design_height − hub_diameter/2."""
+    """Owner convention: every hand canvas is exactly as designed (a
+    faint reference circle keeps the export from trimming it) and the
+    rotation center sits HAND_HUB_OFFSET_UNITS above the canvas bottom."""
 
     asset: Path
-    design_height: float               # cropped image height in design units (viewBox)
-    hub_diameter: float                # hub circle diameter incl. border, design units
+    design_height: float               # canvas height in design units (viewBox)
 
 
 @dataclass(frozen=True)
