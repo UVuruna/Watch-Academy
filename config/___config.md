@@ -20,7 +20,9 @@ sections — single lightest/darkest centered on noon/midnight — or the
 continuous gradient) and contrast variant names (full/half), the
 palette style names, the tropical zodiac table (signs are
 30° arcs of the year wheel — Cancer's first point IS the summer
-solstice), the season/moon glow windows (±12 h / ±6 h) and event names,
+solstice), the Chinese zodiac cycle (animals, elements, the CNY new-
+moon window), the octa slot modes with their art folders, the Earth
+style names, the season/moon glow windows (±12 h / ±6 h) and event names,
 sun thresholds (civil depression, horizon/twilight elevations), the six
 year-anchor angles, moon phase → fraction mapping, and the bundled
 database coverage ranges.

@@ -26,7 +26,7 @@ older files they take their defaults): `click_through` (False), `skin`
 set (a bad value would otherwise KeyError inside a paint pass, where Qt
 swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 `umbra_contrast` ("full"), `palette_style` ("paint"), `solar_rotation`
-(True), `octa_slot` ("time").
+(True), `octa_slot` ("time"), `earth_style` ("clean").
 
 ### SettingsStore
 - `load()`: missing file → default `Settings` (documented first-run

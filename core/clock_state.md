@@ -23,8 +23,10 @@ Frozen: local date, UTC offset, weekday index (Monday=0), `SunDay`,
 star rotation, `YearAnchors`, moon fraction/illumination,
 `southern_hemisphere` (the moon renders rotated 180° there), the day
 length string ("15:25", the octa slot option), the tropical zodiac sign
-(name, symbol, local start/end dates — cusps ride the year wheel) and
-the season/moon event instants with their names (glow inputs).
+(name, symbol, local start/end dates — cusps ride the year wheel), the
+Chinese year ("Fire Horse" + start/end dates, CNY derived from the
+bundled new-moon instants), the season/moon event instants with their
+names (glow inputs) and the active tzinfo (hover instant display).
 `cache_key = (local_date, utc_offset)` — the offset component catches
 DST transitions, where the star legitimately jumps 15°.
 

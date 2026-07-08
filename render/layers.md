@@ -104,9 +104,14 @@ Slot images never move up here.
 Octa only: the bottom arm (`OCTA_TIME_SLOT_ANGLE + rotation`) carries
 user-selected info instead of a body — the digital time "12:24" (no
 seconds, keeping the font big), the date "8 Jul", the day length
-"15:25" or the zodiac sign name. Fit-to-width so it never overflows the
-slot, drawn ABOVE the hands like the center body (owner spec). In
-zodiac mode the slot hover shows the sign's date span.
+"15:25", the tropical zodiac (text, or the owner's sign / logo /
+constellation PNG) or the Chinese zodiac (text, or logo PNG). Image art
+lives under `assets/skins/domy/zodiac/<dir>/<Name>.png`
+(`OCTA_SLOT_ART_DIRS`); until a 12-PNG folder is complete the tray
+disables that mode and the layer falls back to the text form
+(documented). Text is fit-to-width; everything draws ABOVE the hands
+like the center body (owner spec). Zodiac/Chinese modes get a hover
+with the sign's or year's date span.
 
 ### YearMarkerLayer (MINUTE)
 Date markers along the INSIDE of the dial (owner spec). Modes: "earth"
@@ -116,12 +121,13 @@ ship on opaque space backgrounds), "moon" (rides its own cycle via
 gets the unlit part shadowed by the terminator mask — half-disc ∪/−
 ellipse with a = R·|cos 2πf| — and flips 180° for southern-hemisphere
 cities), or "both" (shared rim at orbit 0.75; the smaller Moon transits
-OVER the Earth at `MOON_TRANSIT_OPACITY` when they meet). During event
-windows (`tick.season_event` ±12 h around a solstice/equinox,
-`tick.moon_event` ±6 h around a principal phase) the marker gets a
-radial halo via `draw_event_glow()` — WHITE core into a warm mid tone,
-so it stays visible even over the bright yellow Aura wedge where the
-summer solstice always lands.
+OVER the Earth at `MOON_TRANSIT_OPACITY` when they meet). The Earth draws the user's `earth_style` variant (clean or atmosphere —
+both bundled per continent and day/night). During event windows
+(`tick.season_event` ±12 h around a solstice/equinox, `tick.moon_event`
+±6 h around a principal phase) the marker gets a radial halo via
+`draw_event_glow()` — pure WHITE, intense and compact (halo diameter =
+2× the marker's, owner spec), visible even over the bright yellow Aura
+wedge where the summer solstice always lands.
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and

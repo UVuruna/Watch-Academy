@@ -13,7 +13,9 @@ Bundled visual assets: the project logo (M7) and bundled skins.
       📁 hands/            ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
       📁 weekday/          ← sun, moon, mars, mercury, jupiter, venus, saturn (real renders)
-      📁 year_marker/      ← earth_{clean|atmo}_{continent}_{day|night}.png (6 continents × 2 styles)
+      📁 year_marker/      ← earth_{clean|atmo}_{continent}_{day|night}.png (6 continents × 2 styles × day/night)
+      📁 zodiac/           ← octa bottom-arm art (owner ships 12 PNGs per folder):
+                             sign/, logo/, constellation/ (<Sign>.png), chinese/ (<Animal>.png)
     📁 morph/              ← partial skin: its own ring.png + letters (M-12, Π-16, H-8, Ω-0)
       ⚙️ skin.json
       📁 dial/

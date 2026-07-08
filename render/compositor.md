@@ -28,13 +28,16 @@ draws the MINUTE layers (hands, year marker) live.
   raises if called before the first day context (startup order is a
   controller guarantee)
 - `render_offscreen(size, dpr, day, tick) -> QImage`: same path, headless
-- `tooltip_at(x, y, size) -> str | None`: hover text at every dial size —
-  today's body (at its pointer slot via `today_slot_theta`, or the
-  center), the Earth marker (owner format, three lines: day/week
-  ordinals, the zodiac sign with its date span, the date — plus the
-  season event name on top while it glows), the Moon marker (two lines:
-  phase + illumination, cycle day), the octa zodiac slot (sign date
-  span) and the twilight bands (boundary times)
+- `tooltip_at(x, y, size) -> str | None`: hover text at every dial size,
+  ALL CENTERED (rich-text `<div align='center'>`), in priority order —
+  today's body; the octa info slot (zodiac sign span / Chinese year
+  span); the Moon marker (two lines: phase + illumination, cycle day);
+  the Earth marker (owner format: day/week ordinals, zodiac with span,
+  date — plus the season event name while it glows); the STAR ARMS
+  (hexa arms name their two zodiac signs; cross/octa cardinal arms give
+  the exact solstice/equinox instant; octa diagonals describe their
+  season with dates, duration and the middle date the arrow points at —
+  a trailing * flags solar-rotation imprecision); the twilight bands
 
 The layer stack follows `skin.z_order`; the current day's center body
 (and, on the octa pointer, the bottom-arm info slot) are appended LAST

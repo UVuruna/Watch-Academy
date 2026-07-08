@@ -28,3 +28,9 @@ period of interest plus margins.
 - `phase_fraction(now, window)`: 0.0 new … 0.5 full … wraps at 1.0;
   waxing below 0.5, waning above; raises outside the window span
 - `illumination(fraction)`: lit fraction of the disc, `(1−cos 2πf)/2`
+- `phase_name(fraction)`: principal name within ±half a day of its
+  instant, octant names otherwise
+- `chinese_zodiac(now, window)`: ("Fire Horse", start, end) — the
+  Chinese year begins at the new moon in the Jan 21 – Feb 20 window
+  (China time); animal/element from the sexagenary cycle; raises loudly
+  when the window lacks the cusp new moons

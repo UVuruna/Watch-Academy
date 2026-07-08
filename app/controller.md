@@ -53,8 +53,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `_add_choice_submenu()` helper (one exclusive check-group per
   submenu) — Skin, Size (360/540/720), Pointer (Cross/Hexa/Octa),
   Palette (Paint/Light), Umbra (two groups: Fine/Coarse/Gradient form +
-  Full/Half contrast), Octa slot (Time/Date/Day length/Zodiac), the
-  Solar rotation toggle (off = upright Star/Aura/Umbra), Time Travel…,
+  Full/Half contrast), Octa slot (nine modes; the four image modes stay
+  grayed out until the owner's 12-PNG folder exists under
+  assets/skins/domy/zodiac/), Earth (Clean/Atmosphere), the Solar
+  rotation toggle (off = upright Star/Aura/Umbra), Time Travel…,
   Click-through toggle (turn
   back off via the TRAY — the dial itself no longer takes clicks),
   Exit; the full settings dialog arrives in M6

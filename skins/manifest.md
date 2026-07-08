@@ -25,8 +25,10 @@ extraction is serialization, not redesign.
   `pointer` ("hexa" | "cross" | "octa"), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
   `palette_style` ("paint" | "light"), `solar_rotation` (False →
-  Star/Aura/Umbra stand upright) and `octa_slot` ("time" | "date" |
-  "day_length" | "zodiac")
+  Star/Aura/Umbra stand upright), `octa_slot` (one of
+  `OCTA_SLOT_MODES`: time/date/day length, tropical zodiac as
+  text/sign/logo/constellation, Chinese zodiac as text/logo) and
+  `earth_style` ("clean" | "atmo")
 - `BackgroundSpec` — the Umbra (custom art, or None for the procedural
   30-section wheel: single lightest/darkest sections centered on
   noon/midnight) + the Aura (transparent period hues from the palette
