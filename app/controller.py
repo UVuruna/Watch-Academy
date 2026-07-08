@@ -51,12 +51,21 @@ def apply_display_settings(skin, settings: Settings):
             * (star.twilight_alpha / star.day_alpha),
         )
     background = skin.background
-    if settings.aura_alpha is not None:
+    if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
+        # The Aura's sunlight and twilight opacities are INDEPENDENT
+        # overrides (owner spec) — no coupling ratio between them.
         background = dataclasses.replace(
             background,
-            day_alpha=settings.aura_alpha,
-            twilight_alpha=settings.aura_alpha
-            * (background.twilight_alpha / background.day_alpha),
+            day_alpha=(
+                settings.aura_day_alpha
+                if settings.aura_day_alpha is not None
+                else background.day_alpha
+            ),
+            twilight_alpha=(
+                settings.aura_twilight_alpha
+                if settings.aura_twilight_alpha is not None
+                else background.twilight_alpha
+            ),
         )
     return dataclasses.replace(
         skin,

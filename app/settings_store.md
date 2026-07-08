@@ -29,8 +29,9 @@ swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 (True), `octa_slot` ("time"), `earth_style` ("clean"). The M6 keys:
 the location block (`city_name`, `city_path` for combo restore,
 `latitude`/`longitude` range-checked, `timezone` verified against
-zoneinfo), the opacity overrides `star_alpha`/`aura_alpha` (null =
-skin default, else 0..1) and `palettes` (custom hues keyed
+zoneinfo), the opacity overrides `star_alpha`, `aura_day_alpha` and
+`aura_twilight_alpha` (null = skin default, else 0..1; the two Aura
+values are independent) and `palettes` (custom hues keyed
 "pointer_style", every color and count validated).
 
 ### SettingsStore

@@ -13,8 +13,11 @@ submenus cannot express:
   the combos to a found city, and lat/lng fine-tune spinboxes (the
   chosen city fills them; the user may nudge them to precise
   coordinates — the city's IANA timezone is kept).
-- **Opacity** — Star and Aura sliders (percent). They override the
-  skin's `day_alpha` values; the twilight alphas scale proportionally.
+- **Opacity** — three sliders (percent): Star (its twilight alpha
+  scales proportionally with the day value), plus Aura sunlight and
+  Aura twilight as two INDEPENDENT overrides (owner spec — no coupling
+  ratio between them). "Skin default" resets a slider and clears its
+  override.
 - **Palette** — one color chip per hue of the ACTIVE (pointer, style)
   preset; clicking a chip opens QColorDialog. Edited palettes are saved
   as the user's custom preset for that combination ("Reset" returns to

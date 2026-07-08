@@ -50,16 +50,21 @@ def test_dialog_defaults_keep_skin_opacities(app):
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     result = dialog.result_settings()
     assert result.star_alpha is None            # untouched slider = skin default
-    assert result.aura_alpha is None
+    assert result.aura_day_alpha is None
+    assert result.aura_twilight_alpha is None
     dialog.done(0)
 
 
-def test_dialog_slider_sets_the_override(app):
+def test_dialog_sliders_set_independent_overrides(app):
+    """Owner spec: the Aura's sunlight and twilight opacities move
+    independently — touching one leaves the other on the skin value."""
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     dialog._star_slider.setValue(40)
+    dialog._aura_twilight_slider.setValue(70)
     result = dialog.result_settings()
     assert result.star_alpha == pytest.approx(0.40)
-    assert result.aura_alpha is None
+    assert result.aura_day_alpha is None
+    assert result.aura_twilight_alpha == pytest.approx(0.70)
     dialog.done(0)
 
 
@@ -77,18 +82,25 @@ def test_dialog_palette_edit_and_reset(app):
 # --- apply_display_settings (pure) ---------------------------------------------
 
 
-def test_alpha_overrides_scale_twilight_proportionally():
-    settings = replace(Settings(), star_alpha=0.46, aura_alpha=0.275)
+def test_alpha_overrides():
+    """Star: single slider, its twilight scales proportionally. Aura:
+    sunlight and twilight are INDEPENDENT (owner spec) — an untouched
+    one keeps the skin's own value."""
+    settings = replace(Settings(), star_alpha=0.46, aura_twilight_alpha=0.7)
     skin = apply_display_settings(defaults.DEFAULT_SKIN, settings)
     base = defaults.DEFAULT_SKIN
     assert skin.star.day_alpha == pytest.approx(0.46)
     assert skin.star.twilight_alpha == pytest.approx(
         0.46 * base.star.twilight_alpha / base.star.day_alpha
     )
-    assert skin.background.day_alpha == pytest.approx(0.275)
-    assert skin.background.twilight_alpha == pytest.approx(
-        0.275 * base.background.twilight_alpha / base.background.day_alpha
+    assert skin.background.day_alpha == base.background.day_alpha  # untouched
+    assert skin.background.twilight_alpha == pytest.approx(0.7)
+    both = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(Settings(), aura_day_alpha=0.3, aura_twilight_alpha=0.9),
     )
+    assert both.background.day_alpha == pytest.approx(0.3)
+    assert both.background.twilight_alpha == pytest.approx(0.9)
 
 
 def test_custom_palette_reaches_the_render():

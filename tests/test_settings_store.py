@@ -104,7 +104,8 @@ def test_location_and_overrides_round_trip(store):
         longitude=18.9551,
         timezone="Europe/Oslo",
         star_alpha=0.5,
-        aura_alpha=0.25,
+        aura_day_alpha=0.25,
+        aura_twilight_alpha=0.6,
         palettes={"hexa_paint": ("#112233",) * 6},
     )
     store.save(saved)

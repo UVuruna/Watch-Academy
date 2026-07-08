@@ -51,9 +51,11 @@ class Settings:
     latitude: float = defaults.DEFAULT_CITY["latitude"]
     longitude: float = defaults.DEFAULT_CITY["longitude"]
     timezone: str = defaults.DEFAULT_CITY["timezone"]
-    # Display overrides (None = the skin's own value).
+    # Display overrides (None = the skin's own value). The Aura's
+    # sunlight and twilight opacities are INDEPENDENT (owner spec).
     star_alpha: float | None = None
-    aura_alpha: float | None = None
+    aura_day_alpha: float | None = None
+    aura_twilight_alpha: float | None = None
     # Custom palettes keyed "pointer_style" -> tuple of #RRGGBB hues.
     palettes: dict = field(default_factory=dict)
 
@@ -126,7 +128,8 @@ class SettingsStore:
                 longitude=longitude,
                 timezone=timezone,
                 star_alpha=_load_alpha(raw, "star_alpha"),
-                aura_alpha=_load_alpha(raw, "aura_alpha"),
+                aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
+                aura_twilight_alpha=_load_alpha(raw, "aura_twilight_alpha"),
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
@@ -158,7 +161,8 @@ class SettingsStore:
                 "timezone": settings.timezone,
             },
             "star_alpha": settings.star_alpha,
-            "aura_alpha": settings.aura_alpha,
+            "aura_day_alpha": settings.aura_day_alpha,
+            "aura_twilight_alpha": settings.aura_twilight_alpha,
             "palettes": {
                 key: list(palette) for key, palette in settings.palettes.items()
             },

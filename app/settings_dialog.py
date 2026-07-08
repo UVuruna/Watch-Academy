@@ -43,7 +43,8 @@ class SettingsDialog(QDialog):
         self._timezone = settings.timezone
         self._city_name = settings.city_name
         self._star_override = settings.star_alpha is not None
-        self._aura_override = settings.aura_alpha is not None
+        self._aura_day_override = settings.aura_day_alpha is not None
+        self._aura_twilight_override = settings.aura_twilight_alpha is not None
         self._palette_key = f"{settings.pointer}_{settings.palette_style}"
         self._preset = defaults.PALETTE_PRESETS[
             (settings.pointer, settings.palette_style)
@@ -247,26 +248,29 @@ class SettingsDialog(QDialog):
     def _build_opacity_group(self) -> QGroupBox:
         group = QGroupBox("Opacity")
         form = QFormLayout(group)
-        star_default = round(self._skin.star.day_alpha * 100)
-        aura_default = round(self._skin.background.day_alpha * 100)
-        star_value = (
-            round(self._settings.star_alpha * 100)
-            if self._settings.star_alpha is not None
-            else star_default
-        )
-        aura_value = (
-            round(self._settings.aura_alpha * 100)
-            if self._settings.aura_alpha is not None
-            else aura_default
-        )
-        self._star_slider, star_row = self._slider_row(
-            star_value, star_default, "star"
-        )
-        self._aura_slider, aura_row = self._slider_row(
-            aura_value, aura_default, "aura"
-        )
+
+        def initial(override: float | None, skin_value: float) -> tuple[int, int]:
+            default = round(skin_value * 100)
+            value = round(override * 100) if override is not None else default
+            return value, default
+
+        value, default = initial(self._settings.star_alpha, self._skin.star.day_alpha)
+        self._star_slider, star_row = self._slider_row(value, default, "star")
         form.addRow("Star", star_row)
-        form.addRow("Aura", aura_row)
+        # The Aura's sunlight and twilight opacities are INDEPENDENT
+        # sliders (owner spec).
+        value, default = initial(
+            self._settings.aura_day_alpha, self._skin.background.day_alpha
+        )
+        self._aura_day_slider, day_row = self._slider_row(value, default, "aura_day")
+        form.addRow("Aura — sunlight", day_row)
+        value, default = initial(
+            self._settings.aura_twilight_alpha, self._skin.background.twilight_alpha
+        )
+        self._aura_twilight_slider, twilight_row = self._slider_row(
+            value, default, "aura_twilight"
+        )
+        form.addRow("Aura — twilight", twilight_row)
         return group
 
     def _slider_row(self, value: int, default: int, which: str):
@@ -357,8 +361,15 @@ class SettingsDialog(QDialog):
             star_alpha=(
                 self._star_slider.value() / 100 if self._star_override else None
             ),
-            aura_alpha=(
-                self._aura_slider.value() / 100 if self._aura_override else None
+            aura_day_alpha=(
+                self._aura_day_slider.value() / 100
+                if self._aura_day_override
+                else None
+            ),
+            aura_twilight_alpha=(
+                self._aura_twilight_slider.value() / 100
+                if self._aura_twilight_override
+                else None
             ),
             palettes=palettes,
         )
