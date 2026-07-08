@@ -13,7 +13,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
-from config import defaults
+from config import constants, defaults
 
 
 class SettingsCorruptError(Exception):
@@ -34,6 +34,8 @@ class Settings:
     diameter: int = defaults.DEFAULT_DIAL_DIAMETER
     click_through: bool = False
     skin: str = "domy"
+    pointer: str = "hexa"
+    gray_contrast: str = "full"
 
 
 class SettingsStore:
@@ -56,6 +58,14 @@ class SettingsStore:
             diameter = int(window["diameter"])
             if not defaults.MIN_DIAL_DIAMETER <= diameter <= defaults.MAX_DIAL_DIAMETER:
                 raise ValueError(f"diameter {diameter} outside allowed range")
+            # A bad value here would otherwise KeyError deep inside a
+            # paint pass, where Qt swallows the exception.
+            pointer = str(raw.get("pointer", "hexa"))
+            if pointer not in constants.POINTER_POINTS:
+                raise ValueError(f"pointer {pointer!r} unknown")
+            gray_contrast = str(raw.get("gray_contrast", "full"))
+            if gray_contrast not in constants.GRAY_CONTRAST_VARIANTS:
+                raise ValueError(f"gray_contrast {gray_contrast!r} unknown")
             return Settings(
                 schema_version=int(raw["schema_version"]),
                 window_x=None if window["x"] is None else int(window["x"]),
@@ -64,6 +74,8 @@ class SettingsStore:
                 # Additive keys (still schema 1): absent in older files.
                 click_through=bool(raw.get("click_through", False)),
                 skin=str(raw.get("skin", "domy")),
+                pointer=pointer,
+                gray_contrast=gray_contrast,
             )
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             raise SettingsCorruptError(self._path, exc) from exc
@@ -78,6 +90,8 @@ class SettingsStore:
             },
             "click_through": settings.click_through,
             "skin": settings.skin,
+            "pointer": settings.pointer,
+            "gray_contrast": settings.gray_contrast,
         }
         self._path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self._path.with_suffix(".json.tmp")

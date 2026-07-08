@@ -6,6 +6,7 @@ fresh -> rebuild the day context when (local date, UTC offset) changed
 -> build the tick state -> repaint.
 """
 
+import dataclasses
 import sys
 from datetime import datetime
 from time import monotonic
@@ -270,7 +271,7 @@ class AppController(QObject):
 
     def _resolve_skin_or_recover(self, name: str):
         try:
-            return resolver.resolve(name)
+            skin = resolver.resolve(name)
         except (KeyError, SkinValidationError) as error:
             self._critical_box(
                 f"Skin {name!r} cannot be loaded:\n{error}\n\n"
@@ -278,7 +279,26 @@ class AppController(QObject):
                 QMessageBox.StandardButton.Ok,
                 QMessageBox.StandardButton.Ok,
             )
-            return defaults.DEFAULT_SKIN
+            skin = defaults.DEFAULT_SKIN
+        return self._apply_display_settings(skin)
+
+    def _apply_display_settings(self, skin):
+        """The user's tray choices (pointer variant, gray-wheel contrast)
+        win over whatever the skin pack declares."""
+        return dataclasses.replace(
+            skin,
+            pointer=self._settings.pointer,
+            gray_contrast=self._settings.gray_contrast,
+        )
+
+    def _install_skin(self, skin) -> None:
+        """Swap the rendered skin: fresh compositor, current day kept."""
+        self._skin = skin
+        self._compositor = Compositor(skin, AssetCache())
+        self._widget.set_renderer(self._compositor)
+        if self._day is not None:
+            self._compositor.set_day(self._day)
+        self._widget.update()
 
     def _set_skin(self, name: str) -> None:
         if name == self._settings.skin:
@@ -292,13 +312,22 @@ class AppController(QObject):
                 QMessageBox.StandardButton.Ok,
             )
             return
-        self._skin = skin
-        self._compositor = Compositor(skin, AssetCache())
-        self._widget.set_renderer(self._compositor)
-        if self._day is not None:
-            self._compositor.set_day(self._day)
-        self._widget.update()
+        self._install_skin(self._apply_display_settings(skin))
         self._settings = replace(self._settings, skin=name)
+        self._flush_position()
+
+    def _set_pointer(self, pointer: str) -> None:
+        if pointer == self._settings.pointer:
+            return
+        self._settings = replace(self._settings, pointer=pointer)
+        self._install_skin(dataclasses.replace(self._skin, pointer=pointer))
+        self._flush_position()
+
+    def _set_gray_contrast(self, contrast: str) -> None:
+        if contrast == self._settings.gray_contrast:
+            return
+        self._settings = replace(self._settings, gray_contrast=contrast)
+        self._install_skin(dataclasses.replace(self._skin, gray_contrast=contrast))
         self._flush_position()
 
     def _build_menu(self) -> QMenu:
@@ -325,6 +354,32 @@ class AppController(QObject):
             )
             group.addAction(action)
             size_menu.addAction(action)
+        pointer_menu = menu.addMenu("Pointer")
+        pointer_group = QActionGroup(menu)
+        pointer_group.setExclusive(True)
+        for variant, arms in sorted(
+            constants.POINTER_POINTS.items(), key=lambda item: item[1]
+        ):
+            action = QAction(f"{variant.capitalize()} ({arms})", menu)
+            action.setCheckable(True)
+            action.setChecked(variant == self._settings.pointer)
+            action.triggered.connect(
+                lambda checked, pointer=variant: self._set_pointer(pointer)
+            )
+            pointer_group.addAction(action)
+            pointer_menu.addAction(action)
+        contrast_menu = menu.addMenu("Gray wheel")
+        contrast_group = QActionGroup(menu)
+        contrast_group.setExclusive(True)
+        for variant in constants.GRAY_CONTRAST_VARIANTS:
+            action = QAction(f"{variant.capitalize()} contrast", menu)
+            action.setCheckable(True)
+            action.setChecked(variant == self._settings.gray_contrast)
+            action.triggered.connect(
+                lambda checked, contrast=variant: self._set_gray_contrast(contrast)
+            )
+            contrast_group.addAction(action)
+            contrast_menu.addAction(action)
         menu.addSeparator()
         time_travel = QAction("Time Travel…", menu)
         time_travel.triggered.connect(self._open_time_travel)
