@@ -31,3 +31,6 @@ solstice → next spring equinox) paired with unwrapped angles
   tropical sign — exact 30° arcs of the same wheel (Cancer's first
   point IS the summer solstice, Capricorn's the winter solstice,
   Aries' the spring equinox); cusp instants via inverse interpolation.
+- `zodiac_span(anchors, start_dial_angle)`: cusp instants of ANY sign
+  by its start angle (the hexa diamond hover lists both of its signs
+  with their date spans).
