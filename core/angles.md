@@ -19,5 +19,5 @@ the dial top — ready for `QPainter.rotate()`.
 ## Functions
 - `time_to_dial_angle(t)`: 12:00→0°, 18:00→90°, 00:00→180°, 06:00→270°
 - `minute_hand_angle(t)`: one revolution per hour
-- `hexagram_rotation_deg(solar_noon)`: +15°/hour of solar-noon lateness
+- `star_rotation_deg(solar_noon)`: +15°/hour of solar-noon lateness
   (positive = clockwise = west-in-zone or DST; negative = east-in-zone)

@@ -13,25 +13,29 @@ Values that define what DOMY Watch is and never change: app identity, the
 the weekday → celestial body mapping, the pointer variants (hexa 6 /
 cross 4 / octa 8 arms) with their weekday slot layouts (slots rotate
 WITH the star; shared cross slots resolve by the next-upcoming-day rule
-over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the
-digital time), the star arm half-angles (the cross borrows the octa arm shape), the
-gray-wheel structure (30 sections of 12°; single lightest/darkest centered
-on noon/midnight) and contrast variant names, sun thresholds (civil depression,
-horizon/twilight elevations), the six year-anchor angles, moon phase →
-fraction mapping, and the bundled database coverage ranges.
+over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
+slot with its `OCTA_SLOT_MODES`), the star arm half-angles (the cross
+borrows the octa arm shape), the Umbra structure (30 sections of 12°;
+single lightest/darkest centered on noon/midnight) and contrast variant
+names, the palette style names, the tropical zodiac table (signs are
+30° arcs of the year wheel — Cancer's first point IS the summer
+solstice), the season/moon glow windows (±12 h / ±6 h) and event names,
+sun thresholds (civil depression, horizon/twilight elevations), the six
+year-anchor angles, moon phase → fraction mapping, and the bundled
+database coverage ranges.
 
 ### `defaults.py` — Developer Tunables
 Window sizing, the spontaneous-hide watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
-marker borders), the pointer reference palettes (owner's art colors, used
-when a skin's palette length does not match the pointer's arm count), the
-gray-wheel shade endpoints per contrast with the octa
-time-text width fraction, tray icon geometry, and `DEFAULT_SKIN` — a fully
-typed [Manifest](../skins/manifest.md) `SkinDefinition` instance that is
-serialized verbatim to `assets/skins/domy/skin.json` (re-serialize after
-editing it).
+marker borders), `PALETTE_PRESETS` (the five Star+Aura palettes measured
+from the owner's art: hexa/octa paint+light, cross seasons), the Umbra
+shade ladders per contrast, the octa slot text width fraction, the event
+glow rendering (color/alpha/halo scale), tray icon geometry, and
+`DEFAULT_SKIN` — a fully typed [Manifest](../skins/manifest.md)
+`SkinDefinition` instance that is serialized verbatim to
+`assets/skins/domy/skin.json` (re-serialize after editing it).
 
 ### `winapi.py` — Win32 Literals
 The only sanctioned home for Win32 API constants (documented enum-exception

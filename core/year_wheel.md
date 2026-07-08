@@ -27,3 +27,7 @@ solstice → next spring equinox) paired with unwrapped angles
 - `year_marker_angle(now, anchors)`: bracketing-pair interpolation,
   mod 360; raises `ValueError` outside the anchor span (wrong-year
   anchors must fail loudly, not interpolate blindly).
+- `zodiac_sign(now, anchors)`: (name, symbol, start, end) of the
+  tropical sign — exact 30° arcs of the same wheel (Cancer's first
+  point IS the summer solstice, Capricorn's the winter solstice,
+  Aries' the spring equinox); cusp instants via inverse interpolation.

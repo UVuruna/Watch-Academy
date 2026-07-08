@@ -34,3 +34,7 @@ documented behavior, not an error), `noon` (always present), `regime`.
   `try/except ValueError` — never `astral.sun.sun()`, which throws away
   four valid events when one is missing and whose polar-day/night
   messages are identical.
+- `day_length_hm(sun)`: daylight duration as "H:MM" (the octa slot
+  option) — 24:00 on polar days, 0:00 in polar night/twilight-only,
+  complement logic on inverted midnight-sun days, local-midnight bounds
+  on one-sided transitional days.

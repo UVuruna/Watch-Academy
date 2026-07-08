@@ -18,16 +18,18 @@ The per-unit dataclasses (`SkinDefinition` + specs). See
 [Manifest](manifest.md).
 
 Dial pointer variants (implemented; user-selectable from the tray):
-**hexa** (6-point — the default), **cross** (4-point) and **octa**
-(8-point). The pointer sets HOW MANY colors measure the day's periods
-(cross = 4 hues × 90°, hexa = 6 × 60°, octa = 8 × 45° — background
-wedges and star diamonds share the palette count) and the weekday slot
-layout:
-hexa centers the Sun, cross pairs bodies on three arms (the
-next-upcoming day wins a shared slot; Wednesday sits alone at the
-bottom), octa seats one body per arm with the digital time on the
-bottom arm. A pack's `skin.json` may declare top-level `pointer` and
-`gray_contrast` defaults, but the user's tray choice always wins.
+**hexa** (6-point — the default), **cross** (4-point, arms shaped like
+octa arms with gaps) and **octa** (8-point). The pointer sets the
+palette size (cross = 4 hues × 90°, hexa = 6 × 60°, octa = 8 × 45° —
+the Aura wedges and the Star diamonds share ONE palette preset:
+hexa/octa in "paint" and "light" styles, cross with its single seasons
+palette) and the weekday slot layout: hexa centers the Sun, cross pairs
+bodies on three arms (the next-upcoming day wins a shared slot;
+Wednesday sits alone at the bottom), octa seats one body per arm with a
+user-selected info slot (time/date/day length/zodiac) on the bottom
+arm. A pack's `skin.json` may declare the top-level display scalars
+(`pointer`, `umbra_contrast`, `palette_style`, `solar_rotation`,
+`octa_slot`), but the user's tray choice always wins.
 
 ### `packs.py` — skin.json Load/Merge/Serialize
 Partial packs merge unit-by-unit onto the DOMY base (MORPH ships only

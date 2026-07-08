@@ -20,17 +20,20 @@ extraction is serialization, not redesign.
 
 ## Classes
 
-- `SkinDefinition` — name, `z_order`, one spec per unit, plus two
-  user-overridable scalars: `pointer` ("hexa" | "cross" | "octa" — the
-  star's arm count AND period-hue count) and `gray_contrast` ("full" |
-  "soft" — the gray wheel's shade range)
-- `BackgroundSpec` — base wheel (custom art, or None for the procedural
-  30-section gray wheel: single lightest/darkest sections centered on
-  noon/midnight) + transparent period hues that rotate WITH the star,
-  drawn only over the sunlit arc (day/twilight alphas)
-- `HexagramSpec` — PROCEDURAL N-diamond star (owner decision: simple
-  geometry is drawn at runtime, no image file): colors, day/twilight
-  alphas, full-circle border alpha/width, tip radius
+- `SkinDefinition` — name, `z_order`, one spec per unit, plus the
+  user-overridable display scalars (the tray choice always wins):
+  `pointer` ("hexa" | "cross" | "octa"), `umbra_contrast` ("full" |
+  "soft"), `palette_style` ("paint" | "light"), `solar_rotation`
+  (False → Star/Aura/Umbra stand upright) and `octa_slot` ("time" |
+  "date" | "day_length" | "zodiac")
+- `BackgroundSpec` — the Umbra (custom art, or None for the procedural
+  30-section wheel: single lightest/darkest sections centered on
+  noon/midnight) + the Aura (transparent period hues from the palette
+  preset, drawn only over the sunlit arc; day/twilight alphas)
+- `StarSpec` — PROCEDURAL N-diamond star (owner decision: simple
+  geometry is drawn at runtime, no image file): day/twilight alphas,
+  full-circle border alpha/width, tip radius; colors come from the
+  palette preset shared with the Aura
 - `NoonMarkerSpec` — asset-or-procedural triangle
 - `RingSpec` — full ring image (numerals/letters baked in) or procedural
   fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20)

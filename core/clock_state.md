@@ -20,16 +20,22 @@ per-day bundle and a tiny per-minute tick.
 
 ### DayContext
 Frozen: local date, UTC offset, weekday index (Monday=0), `SunDay`,
-hexagram rotation, `YearAnchors`, moon fraction/illumination, and
-`southern_hemisphere` (the moon renders rotated 180° there).
+star rotation, `YearAnchors`, moon fraction/illumination,
+`southern_hemisphere` (the moon renders rotated 180° there), the day
+length string ("15:25", the octa slot option), the tropical zodiac sign
+(name, symbol, local start/end dates — cusps ride the year wheel) and
+the season/moon event instants with their names (glow inputs).
 `cache_key = (local_date, utc_offset)` — the offset component catches
-DST transitions, where the hexagram legitimately jumps 15°.
+DST transitions, where the star legitimately jumps 15°.
 
 ### TickState
 Frozen: hour angle, minute angle, year angle (recomputed per tick to
-stay smooth — it moves ~1°/day), and `is_daylight` (sun above the horizon
+stay smooth — it moves ~1°/day), `is_daylight` (sun above the horizon
 right now; drives the Earth marker's day/night image — correct even on
-inverted midnight-sun transition days where sunset precedes sunrise).
+inverted midnight-sun transition days where sunset precedes sunrise),
+`time_hm` (the octa slot's digital time) and the active glow events:
+`season_event` (±12 h around a solstice/equinox) and `moon_event`
+(±6 h around a principal phase), None outside their windows.
 
 ## Functions
 - `build_day_context(now_local, observer, year_anchors, moon_window)`

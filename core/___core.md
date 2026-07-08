@@ -11,7 +11,7 @@ version. A purity test enforces the no-Qt rule.
 The one shared time→angle mapping (noon at top, clockwise: 12:00→0°,
 18:00→90°, 00:00→180°, 06:00→270°) used by the hour hand, the sun-event
 arc boundaries and the solar-noon marker; the minute-hand angle; the
-hexagram rotation from the solar-noon offset (+15°/hour late, computed
+star rotation from the solar-noon offset (+15°/hour late, computed
 from integer seconds to avoid timedelta sign bugs).
 See [Angles](angles.md).
 
@@ -19,7 +19,7 @@ See [Angles](angles.md).
 The five sun events (dawn/sunrise/noon/sunset/dusk) computed INDIVIDUALLY
 via astral — `astral.sun.sun()` is all-or-nothing and its polar-day and
 polar-night error messages are identical. `noon()` never raises, so the
-hexagram is always computable. `DaylightRegime` classification: NORMAL,
+star rotation is always computable. `DaylightRegime` classification: NORMAL,
 WHITE_NIGHTS, TWILIGHT_ONLY, POLAR_DAY, POLAR_NIGHT (elevation checks
 against −0.833°/−6°). See [Sun](sun.md).
 
@@ -38,7 +38,7 @@ See [Moon](moon.md).
 
 ### `clock_state.py` — Two-Tier State
 `DayContext` (frozen per-day bundle; cache key `(local_date, utcoffset)`
-catches DST — the hexagram legitimately jumps 15° at transitions) and
+catches DST — the star legitimately jumps 15° at transitions) and
 `TickState` (per-minute hand angles + smooth year angle).
 See [Clock State](clock_state.md).
 

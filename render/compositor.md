@@ -30,9 +30,14 @@ draws the MINUTE layers (hands, year marker) live.
 - `render_offscreen(size, dpr, day, tick) -> QImage`: same path, headless
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size —
   today's body (at its pointer slot via `today_slot_theta`, or the
-  center), the Earth marker (week + date), the Moon marker (phase,
-  illumination, cycle day) and the twilight bands (boundary times)
+  center), the Earth marker (owner format, three lines: day/week
+  ordinals, the zodiac sign with its date span, the date — plus the
+  season event name on top while it glows), the Moon marker (two lines:
+  phase + illumination, cycle day), the octa zodiac slot (sign date
+  span) and the twilight bands (boundary times)
 
 The layer stack follows `skin.z_order`; the current day's center body
-(and, on the octa pointer, the bottom-arm digital time) are appended
-LAST so they draw above the hands (owner spec).
+(and, on the octa pointer, the bottom-arm info slot) are appended LAST
+so they draw above the hands (owner spec). `_rotation()` feeds the
+shared Star/Aura/Umbra/slot rotation into every RenderContext: the
+solar offset, or 0 with solar rotation off (upright mode).
