@@ -35,11 +35,11 @@ def test_moon_cycle_angle_mapping():
     assert angles.moon_cycle_angle(1.0) == pytest.approx(0.0)
 
 
-def test_hexagram_rotation_sign_convention():
+def test_star_rotation_sign_convention():
     from datetime import datetime
 
     # Solar noon an hour EARLY (east of the zone meridian) -> -15 deg (left).
-    assert angles.hexagram_rotation_deg(datetime(2026, 7, 7, 11, 0, 0)) == pytest.approx(-15.0)
+    assert angles.star_rotation_deg(datetime(2026, 7, 7, 11, 0, 0)) == pytest.approx(-15.0)
     # Solar noon an hour LATE (west, or DST) -> +15 deg (right).
-    assert angles.hexagram_rotation_deg(datetime(2026, 7, 7, 13, 0, 0)) == pytest.approx(15.0)
-    assert angles.hexagram_rotation_deg(datetime(2026, 7, 7, 12, 0, 0)) == pytest.approx(0.0)
+    assert angles.star_rotation_deg(datetime(2026, 7, 7, 13, 0, 0)) == pytest.approx(15.0)
+    assert angles.star_rotation_deg(datetime(2026, 7, 7, 12, 0, 0)) == pytest.approx(0.0)

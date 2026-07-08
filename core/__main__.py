@@ -87,7 +87,7 @@ def main() -> None:
     print(f"Solar noon: {_fmt(day.sun.noon)}")
     print(f"Sunset:     {_fmt(day.sun.sunset)}")
     print(f"Dusk:       {_fmt(day.sun.dusk)}")
-    print(f"Hexagram:   {day.hexagram_rotation:+.2f} deg")
+    print(f"Star:       {day.star_rotation:+.2f} deg")
     print(f"Hour hand:  {tick.hour_angle:.2f} deg")
     print(f"Minute hand:{tick.minute_angle:7.2f} deg")
     print(f"Year angle: {tick.year_angle:.2f} deg  (0 = summer solstice at top)")

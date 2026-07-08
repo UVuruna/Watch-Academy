@@ -1,6 +1,6 @@
 """Golden sun values, empirically verified against astral 3.2.
 
-Includes the Belgrade DST hexagram jump, the four Tromso daylight
+Includes the Belgrade DST star jump, the four Tromso daylight
 regimes, Longyearbyen polar night (solar noon still computable) and the
 mockup day from the design screenshots.
 """
@@ -34,16 +34,16 @@ def _sun_day(record, on_date):
 
 
 class TestBelgradeDst:
-    """Across 2026's spring-forward the hexagram legitimately jumps +15 deg."""
+    """Across 2026's spring-forward the star legitimately jumps +15 deg."""
 
     def test_day_before_transition(self, belgrade):
         sun_day = _sun_day(belgrade, date(2026, 3, 28))
         assert sun_day.regime is DaylightRegime.NORMAL
-        assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(-4.17, abs=0.1)
+        assert angles.star_rotation_deg(sun_day.noon) == pytest.approx(-4.17, abs=0.1)
 
     def test_day_after_transition(self, belgrade):
         sun_day = _sun_day(belgrade, date(2026, 3, 29))
-        assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(10.76, abs=0.1)
+        assert angles.star_rotation_deg(sun_day.noon) == pytest.approx(10.76, abs=0.1)
 
 
 class TestDaylightRegimes:
@@ -70,7 +70,7 @@ class TestDaylightRegimes:
         sun_day = compute_sun_day(LONGYEARBYEN, date(2026, 12, 21), OSLO_TZ)
         assert sun_day.regime is DaylightRegime.POLAR_NIGHT
         assert sun_day.noon.strftime("%H:%M") == "11:55"
-        assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(-1.2, abs=0.1)
+        assert angles.star_rotation_deg(sun_day.noon) == pytest.approx(-1.2, abs=0.1)
 
     def test_belgrade_normal_day(self, belgrade):
         sun_day = _sun_day(belgrade, date(2026, 7, 7))
@@ -79,12 +79,12 @@ class TestDaylightRegimes:
 
 
 class TestSolarNoonOffsets:
-    """Cities far from their zone meridian tilt the hexagram hard."""
+    """Cities far from their zone meridian tilt the star hard."""
 
     def test_santiago_de_compostela_summer(self):
         observer = astral.Observer(latitude=42.8782, longitude=-8.5449)
         sun_day = compute_sun_day(observer, date(2026, 6, 21), ZoneInfo("Europe/Madrid"))
-        assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(39.76, abs=1.5)
+        assert angles.star_rotation_deg(sun_day.noon) == pytest.approx(39.76, abs=1.5)
 
     def test_santiago_de_compostela_winter(self):
         # No DST in December, so the offset is ~15 deg smaller than in
@@ -92,12 +92,12 @@ class TestSolarNoonOffsets:
         # equation of time moves it a degree or two through the winter).
         observer = astral.Observer(latitude=42.8782, longitude=-8.5449)
         sun_day = compute_sun_day(observer, date(2026, 12, 21), ZoneInfo("Europe/Madrid"))
-        assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(23.0, abs=1.0)
+        assert angles.star_rotation_deg(sun_day.noon) == pytest.approx(23.0, abs=1.0)
 
     def test_kamchatka(self):
         observer = astral.Observer(latitude=53.0452, longitude=158.6483)
         sun_day = compute_sun_day(observer, date(2026, 6, 21), ZoneInfo("Asia/Kamchatka"))
-        assert angles.hexagram_rotation_deg(sun_day.noon) == pytest.approx(22.57, abs=1.5)
+        assert angles.star_rotation_deg(sun_day.noon) == pytest.approx(22.57, abs=1.5)
 
 
 class TestExtremeZones:

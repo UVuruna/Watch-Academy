@@ -37,8 +37,8 @@ def moon_cycle_angle(fraction: float) -> float:
     return (fraction * 360.0) % 360.0
 
 
-def hexagram_rotation_deg(solar_noon: datetime) -> float:
-    """Rotation of the hexagram (and solar-noon arrow) from the dial top.
+def star_rotation_deg(solar_noon: datetime) -> float:
+    """Rotation of the star (and solar-noon arrow) from the dial top.
 
     Positive rotates clockwise/right — solar noon later than 12:00 local
     (city west of its zone meridian, or DST active); negative rotates

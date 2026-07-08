@@ -30,7 +30,29 @@ class YearAnchors:
 
 
 def year_marker_angle(now: datetime, anchors: YearAnchors) -> float:
-    """Dial angle of the year marker (degrees, clockwise, 0 = top).
+    """Dial angle of the year marker (degrees, clockwise, 0 = top)."""
+    return _unwrapped_angle(now, anchors) % 360.0
+
+
+def zodiac_sign(now: datetime, anchors: YearAnchors) -> tuple[str, str, datetime, datetime]:
+    """(name, symbol, start instant, end instant) of the tropical zodiac
+    sign at `now`. Signs are exact 30-deg arcs of the same year wheel —
+    Cancer's first point IS the summer solstice, Capricorn's the winter
+    solstice, Aries' the spring equinox — so the cusps ride the REAL
+    season instants, not fixed calendar dates."""
+    unwrapped = _unwrapped_angle(now, anchors)
+    start_angle = int(unwrapped // constants.ZODIAC_SPAN_DEG) * constants.ZODIAC_SPAN_DEG
+    name, symbol = constants.ZODIAC_SIGNS[int(start_angle % 360.0) // 30]
+    return (
+        name,
+        symbol,
+        _instant_at(anchors, start_angle),
+        _instant_at(anchors, start_angle + constants.ZODIAC_SPAN_DEG),
+    )
+
+
+def _unwrapped_angle(now: datetime, anchors: YearAnchors) -> float:
+    """Interpolated UNWRAPPED angle (180..630 over the anchor span).
 
     Raises ValueError when `now` is outside the anchor span — that means
     the anchors were built for the wrong year and must be visible, not
@@ -44,9 +66,22 @@ def year_marker_angle(now: datetime, anchors: YearAnchors) -> float:
         )
     hi = bisect.bisect_right(instants, now)
     if hi == len(instants):  # now == last anchor exactly
-        return anchors.angles[-1] % 360.0
+        return anchors.angles[-1]
     lo = hi - 1
     t0, t1 = instants[lo], instants[hi]
     a0, a1 = anchors.angles[lo], anchors.angles[hi]
     fraction = (now - t0) / (t1 - t0)
-    return (a0 + fraction * (a1 - a0)) % 360.0
+    return a0 + fraction * (a1 - a0)
+
+
+def _instant_at(anchors: YearAnchors, unwrapped_angle: float) -> datetime:
+    """Inverse interpolation: the instant at an unwrapped wheel angle.
+    The last segment extrapolates for the (edge-only) cusp just past the
+    final anchor."""
+    hi = bisect.bisect_right(anchors.angles, unwrapped_angle)
+    hi = min(max(hi, 1), len(anchors.angles) - 1)
+    lo = hi - 1
+    a0, a1 = anchors.angles[lo], anchors.angles[hi]
+    t0, t1 = anchors.instants[lo], anchors.instants[hi]
+    fraction = (unwrapped_angle - a0) / (a1 - a0)
+    return t0 + fraction * (t1 - t0)

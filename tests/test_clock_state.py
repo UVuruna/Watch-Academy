@@ -39,8 +39,8 @@ def test_day_context(belgrade_noon_context):
     assert day.weekday_index == 1                        # Tuesday -> mars
     assert day.southern_hemisphere is False
     assert day.sun.regime is DaylightRegime.NORMAL
-    # July in CEST: solar noon runs ~40 min late -> hexagram tilted right.
-    assert 8.0 < day.hexagram_rotation < 13.0
+    # July in CEST: solar noon runs ~40 min late -> star tilted right.
+    assert 8.0 < day.star_rotation < 13.0
     assert day.moon_fraction == pytest.approx(0.74, abs=0.01)
 
 
@@ -98,3 +98,46 @@ def test_tick_state_carries_the_digital_time(belgrade_noon_context):
     moment = now.replace(hour=12, minute=24, second=30)
     tick = build_tick_state(moment, day)
     assert tick.time_hm == "12:24"
+
+
+def test_zodiac_rides_the_year_wheel(belgrade_noon_context):
+    """2026-07-07 is Cancer — its first point IS the summer solstice
+    (Jun 21), its last day just before the Leo cusp (~Jul 22/23)."""
+    now, day = belgrade_noon_context
+    assert day.zodiac_name == "Cancer"
+    assert day.zodiac_symbol == "♋"
+    assert (day.zodiac_start.month, day.zodiac_start.day) == (6, 21)
+    assert day.zodiac_end.month == 7 and day.zodiac_end.day in (22, 23)
+
+
+def test_day_length_belgrade_summer(belgrade_noon_context):
+    """Belgrade in early July: ~15.3 h of daylight."""
+    now, day = belgrade_noon_context
+    hours = int(day.day_length.split(":")[0])
+    assert 15 <= hours <= 16
+
+
+def test_season_event_window(belgrade_noon_context):
+    """The Earth marker glows ±12 h around a season instant (owner spec)."""
+    now, day = belgrade_noon_context
+    solstice = next(
+        instant for instant, name in day.season_events if name == "Summer Solstice"
+    )
+    local = solstice.astimezone(now.tzinfo)
+    inside = build_tick_state(local + timedelta(hours=11), day)
+    assert inside.season_event == "Summer Solstice"
+    outside = build_tick_state(local + timedelta(hours=13), day)
+    assert outside.season_event is None
+
+
+def test_moon_event_window(belgrade_noon_context):
+    """The Moon marker glows ±6 h around a principal instant (owner spec)."""
+    now, day = belgrade_noon_context
+    instant, name = min(
+        day.moon_events, key=lambda event: abs(event[0] - now)
+    )
+    local = instant.astimezone(now.tzinfo)
+    inside = build_tick_state(local + timedelta(hours=5), day)
+    assert inside.moon_event == name
+    outside = build_tick_state(local + timedelta(hours=7), day)
+    assert outside.moon_event is None

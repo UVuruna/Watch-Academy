@@ -4,7 +4,7 @@ The five events are computed INDIVIDUALLY: astral.sun.sun() is
 all-or-nothing and raises ValueError at high latitudes even when four of
 the five events exist — and its message is identical for polar day and
 polar night, so exception text can never classify the regime. noon()
-never raises (meridian transit is always defined), so the hexagram
+never raises (meridian transit is always defined), so the star
 rotation is always computable, even in polar night.
 """
 
@@ -26,6 +26,33 @@ class DaylightRegime(Enum):
     TWILIGHT_ONLY = "twilight_only"  # sun never rises, but twilight occurs
     POLAR_DAY = "polar_day"          # sun never sets
     POLAR_NIGHT = "polar_night"      # sun never comes near the horizon
+
+
+def day_length_hm(sun: "SunDay") -> str:
+    """Daylight duration of the day as "H:MM" (the octa bottom-arm
+    option). Polar day reads 24:00, polar night/twilight-only 0:00;
+    inverted midnight-sun days take the complement of the dark gap;
+    one-sided transitional days measure against the local midnights."""
+    if sun.regime is DaylightRegime.POLAR_DAY:
+        return "24:00"
+    if sun.regime in (DaylightRegime.POLAR_NIGHT, DaylightRegime.TWILIGHT_ONLY):
+        return "0:00"
+    full_day = timedelta(days=1)
+    if sun.sunrise is not None and sun.sunset is not None:
+        if sun.sunset < sun.sunrise:
+            lit = full_day - (sun.sunrise - sun.sunset)
+        else:
+            lit = sun.sunset - sun.sunrise
+    else:
+        day_start = sun.noon.replace(hour=0, minute=0, second=0, microsecond=0)
+        if sun.sunrise is not None:
+            lit = day_start + full_day - sun.sunrise
+        elif sun.sunset is not None:
+            lit = sun.sunset - day_start
+        else:
+            lit = full_day if sun.regime is DaylightRegime.WHITE_NIGHTS else timedelta()
+    minutes = round(lit.total_seconds() / 60)
+    return f"{minutes // 60}:{minutes % 60:02d}"
 
 
 @dataclass(frozen=True)

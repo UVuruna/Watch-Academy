@@ -94,8 +94,8 @@ CITY_NAME_TRANSLITERATIONS = {
 }
 
 # Weekday index (datetime.weekday(): Monday=0) -> celestial body.
-# Sunday's body (Sun) sits in the dial center; the other six occupy the
-# hexagram diamonds at fixed slots.
+# Sunday's body (Sun) sits in the dial center on the hexa pointer; the
+# other bodies occupy the star's arm slots.
 WEEKDAY_BODIES = (
     "moon",      # Monday
     "mars",      # Tuesday
@@ -139,16 +139,62 @@ POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8}
 # them, never the fat rhombi a regular 4-star would give.
 POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5}
 
-# Gray brightness wheel: 30 sections of 12 deg for every pointer,
-# measured directly from the owner's art (design/background/gray.png).
-# The LIGHTEST and DARKEST sections are single, CENTERED on the star's
-# top tip (true solar noon) and bottom (true midnight); the remaining 28
-# form 14 mirror-symmetric pairs down the sides — 16 distinct shades
-# (1 + 14*2 + 1 = 30; the owner's structure closes only at 30).
-GRAY_WHEEL_SECTIONS = 30
+# The UMBRA (gray brightness wheel): 30 sections of 12 deg for every
+# pointer, measured directly from the owner's art
+# (design/background/gray.png). The LIGHTEST and DARKEST sections are
+# single, CENTERED on the star's top tip (true solar noon) and bottom
+# (true midnight); the remaining 28 form 14 mirror-symmetric pairs down
+# the sides — 16 distinct shades (1 + 14*2 + 1 = 30).
+UMBRA_SECTIONS = 30
 
-# The wheel ships in two user-selectable contrast versions.
-GRAY_CONTRAST_VARIANTS = ("full", "soft")
+# The Umbra ships in two user-selectable contrast versions.
+UMBRA_CONTRAST_VARIANTS = ("full", "soft")
+
+# Star + Aura palette styles (owner: "paint" = subtractive primaries —
+# blue/red/yellow mix toward black; "light" = additive primaries —
+# blue/red/green mix toward white). The cross pointer has a single
+# seasons palette served under both styles.
+PALETTE_STYLES = ("paint", "light")
+
+# What the octa pointer's bottom arm shows (user-selectable).
+OCTA_SLOT_MODES = ("time", "date", "day_length", "zodiac")
+
+# Tropical zodiac: (name, symbol), indexed by dial angle // 30 on the
+# year wheel — Cancer's first point IS the summer solstice (dial top),
+# Capricorn's the winter solstice (bottom), Aries' the spring equinox.
+# Sign boundaries are exact 30-deg arcs of the same piecewise-linear
+# year wheel, i.e. anchored on the REAL season instants.
+ZODIAC_SIGNS = (
+    ("Cancer", "♋"),
+    ("Leo", "♌"),
+    ("Virgo", "♍"),
+    ("Libra", "♎"),
+    ("Scorpio", "♏"),
+    ("Sagittarius", "♐"),
+    ("Capricorn", "♑"),
+    ("Aquarius", "♒"),
+    ("Pisces", "♓"),
+    ("Aries", "♈"),
+    ("Taurus", "♉"),
+    ("Gemini", "♊"),
+)
+ZODIAC_SPAN_DEG = 30.0
+
+# Season/moon event glow windows (owner spec): the Earth marker glows
+# ±12 h around the four season instants, the Moon marker ±6 h around the
+# four principal phase instants. The phase NAME window stays ±12 h
+# (MOON_PRINCIPAL_WINDOW above).
+SEASON_GLOW_WINDOW_H = 12.0
+MOON_GLOW_WINDOW_H = 6.0
+
+# Year-wheel anchor angle (mod 360) -> season event name shown in the
+# Earth hover during the glow window.
+SEASON_EVENT_NAMES = {
+    0: "Summer Solstice",
+    90: "Autumn Equinox",
+    180: "Winter Solstice",
+    270: "Spring Equinox",
+}
 
 # Body -> Sunday-first weekday index (the owner's numbering used by the
 # shared-slot priority rule: the occupant whose day comes NEXT wins).
