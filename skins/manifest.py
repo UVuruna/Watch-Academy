@@ -101,6 +101,7 @@ class HandSpec:
 class HandsSpec:
     hour: HandSpec
     minute: HandSpec
+    second: HandSpec | None = None     # optional; enabled via settings
 
 
 @dataclass(frozen=True)
@@ -128,6 +129,7 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         skin.year_marker.moon_asset,
         skin.hands.hour.asset,
         skin.hands.minute.asset,
+        skin.hands.second.asset if skin.hands.second else None,
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),
     ]

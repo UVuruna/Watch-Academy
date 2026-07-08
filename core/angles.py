@@ -26,6 +26,11 @@ def minute_hand_angle(t: datetime | time) -> float:
     return (t.minute * 60 + t.second) / constants.SECONDS_PER_HOUR * 360.0
 
 
+def second_hand_angle(t: datetime | time) -> float:
+    """Angle of the seconds hand: one revolution per minute, 0 at the top."""
+    return t.second * 6.0
+
+
 def moon_cycle_angle(fraction: float) -> float:
     """Dial angle of the moon-cycle marker: new moon at the TOP (0 deg),
     full moon at the BOTTOM (180 deg), moving clockwise (owner spec)."""

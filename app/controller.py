@@ -62,7 +62,11 @@ class AppController(QObject):
         self._compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         self._day = None
         self._widget.set_renderer(self._compositor)
-        self._scheduler = MinuteScheduler(self._on_tick, self)
+        seconds_hand = (
+            defaults.DEFAULT_SKIN.hands.second is not None
+            and defaults.SECONDS_HAND_ENABLED
+        )
+        self._scheduler = MinuteScheduler(self._on_tick, self, per_second=seconds_hand)
 
         self._save_timer = QTimer(self)
         self._save_timer.setSingleShot(True)

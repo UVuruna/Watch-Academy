@@ -57,8 +57,12 @@ DEFAULT_CITY = {
 }
 
 # --- Tick scheduling -----------------------------------------------------------
-TICK_EPSILON_MS = 50                 # fire just past the minute boundary
+TICK_EPSILON_MS = 50                 # fire just past the minute/second boundary
 CLOCK_JUMP_THRESHOLD_S = 5           # actual vs expected tick time -> full refresh
+
+# Seconds hand: default ON for the owner's preview; becomes a settings
+# toggle (default OFF per the original decision) with the M6 dialog.
+SECONDS_HAND_ENABLED = True
 
 # --- Settings persistence ----------------------------------------------------
 SETTINGS_SCHEMA_VERSION = 1
@@ -201,6 +205,11 @@ DEFAULT_SKIN = SkinDefinition(
             asset=_DOMY / "hands" / "minute.svg",
             pivot=(0.5, (210 - 15) / 210),      # viewBox 30x210
             length_fraction=0.60,
+        ),
+        second=HandSpec(
+            asset=_DOMY / "hands" / "second.svg",
+            pivot=(0.5, 285.5 / 300),           # viewBox 29x300, hub at y=285.5
+            length_fraction=0.82,               # tip reaches the 360-dot scale
         ),
     ),
 )

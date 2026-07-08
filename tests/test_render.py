@@ -182,9 +182,10 @@ def test_moon_flips_on_southern_hemisphere(app):
 
 def test_noon_sector_is_yellowish(frame):
     # At 12:00 in July the top sector (yellow) is in full daylight; sample
-    # inside the background, off the hexagram center line and outside the
-    # minute-number radius, at dial angle ~0 +/- a bit.
-    color = frame.pixelColor(180, 66)
+    # inside the background at dial angle ~16 deg — inside the (rotated)
+    # yellow wedge but OFF the 12h axis, where all three hands stack at
+    # noon sharp.
+    color = frame.pixelColor(210, 75)
     assert color.alpha() > 200
     assert color.red() > 150 and color.green() > 120
     assert color.blue() < color.red()  # yellow/orange family, not blue

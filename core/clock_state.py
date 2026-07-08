@@ -42,6 +42,7 @@ class TickState:
 
     hour_angle: float
     minute_angle: float
+    second_angle: float             # used only when the seconds hand is on
     year_angle: float               # moves ~1 deg/day; cheap to keep smooth
     is_daylight: bool               # sun above the horizon right now
 
@@ -71,6 +72,7 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
     return TickState(
         hour_angle=angles.time_to_dial_angle(now_local),
         minute_angle=angles.minute_hand_angle(now_local),
+        second_angle=angles.second_hand_angle(now_local),
         year_angle=year_marker_angle(now_local, day.year_anchors),
         is_daylight=_is_daylight(now_local, day.sun),
     )

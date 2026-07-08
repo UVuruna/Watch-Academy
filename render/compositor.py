@@ -13,6 +13,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap
 from config import constants, defaults
 from core import angles
 from core.clock_state import DayContext, TickState
+from core.moon import phase_name
 from render.assets import AssetCache
 from render.layers import (
     BackgroundLayer,
@@ -50,6 +51,8 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         if name == "hands":
             layers.append(HandLayer(skin, "hour"))
             layers.append(HandLayer(skin, "minute"))
+            if skin.hands.second is not None and defaults.SECONDS_HAND_ENABLED:
+                layers.append(HandLayer(skin, "second"))
         else:
             layers.append(factories[name]())
     return layers
@@ -99,10 +102,10 @@ class Compositor:
         painter.restore()
 
     def tooltip_at(self, x: float, y: float, size: float) -> str | None:
-        """Hover text under the cursor. Marker tooltips (today's body,
-        Earth, Moon) apply to small dials only — large dials write that
-        text directly; the twilight-band tooltips (dawn/sunrise and
-        sunset/dusk times) apply at every size."""
+        """Hover text under the cursor, at every dial size (owner spec):
+        today's body, the Earth marker (with the week of the year), the
+        Moon marker (phase name, illumination, day in the cycle) and the
+        twilight bands (dawn/sunrise and sunset/dusk times)."""
         if self._day is None or self._last_tick is None:
             return None
         radius = size / 2
@@ -114,37 +117,51 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
-        if size < defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER:
-            weekday = self._skin.weekday_set
-            today = constants.WEEKDAY_BODIES[day.weekday_index]
-            if weekday.display_mode == "center_only" or today == "sun":
-                today_pos = QPointF(0, 0)
-                today_radius = radius * weekday.center_scale
-            else:
-                today_pos = dial_point(
-                    constants.WEEKDAY_SLOT_ANGLES[today] + day.hexagram_rotation,
-                    radius * weekday.orbit_fraction,
-                )
-                today_radius = radius * weekday.diamond_scale
-            if hit(today_pos, today_radius):
-                return f"{constants.WEEKDAY_FULL_NAMES[today]}, {date.day} {date:%B %Y}"
+        weekday = self._skin.weekday_set
+        today = constants.WEEKDAY_BODIES[day.weekday_index]
+        if weekday.display_mode == "center_only" or today == "sun":
+            today_pos = QPointF(0, 0)
+            today_radius = radius * weekday.center_scale
+        else:
+            today_pos = dial_point(
+                constants.WEEKDAY_SLOT_ANGLES[today] + day.hexagram_rotation,
+                radius * weekday.orbit_fraction,
+            )
+            today_radius = radius * weekday.diamond_scale
+        if hit(today_pos, today_radius):
+            return f"{constants.WEEKDAY_FULL_NAMES[today]}, {self._date_text(date)}"
 
-            marker = self._skin.year_marker
-            if marker.mode in ("earth", "both") and hit(
-                dial_point(tick.year_angle, radius * marker.orbit_fraction),
-                radius * marker.scale,
-            ):
-                return f"{date.day} {date:%B %Y}"
-            if marker.mode in ("moon", "both") and hit(
-                dial_point(
-                    angles.moon_cycle_angle(day.moon_fraction),
-                    radius * marker.moon_orbit_fraction,
-                ),
-                radius * marker.moon_scale,
-            ):
-                return f"Moon: {day.moon_illumination * 100:.0f}% lit"
+        marker = self._skin.year_marker
+        if marker.mode in ("earth", "both") and hit(
+            dial_point(tick.year_angle, radius * marker.orbit_fraction),
+            radius * marker.scale,
+        ):
+            return self._date_text(date)
+        if marker.mode in ("moon", "both") and hit(
+            dial_point(
+                angles.moon_cycle_angle(day.moon_fraction),
+                radius * marker.moon_orbit_fraction,
+            ),
+            radius * marker.moon_scale,
+        ):
+            cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
+            return (
+                f"{phase_name(day.moon_fraction)} — "
+                f"{day.moon_illumination * 100:.0f}% lit — "
+                f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}"
+            )
 
         return self._twilight_tooltip(point, radius)
+
+    @staticmethod
+    def _date_text(date) -> str:
+        """Owner format: "28th Week, 8 July 2026"."""
+        week = date.isocalendar().week
+        if 10 <= week % 100 <= 13:
+            suffix = "th"
+        else:
+            suffix = {1: "st", 2: "nd", 3: "rd"}.get(week % 10, "th")
+        return f"{week}{suffix} Week, {date.day} {date:%B %Y}"
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Hovering a twilight band names its boundary times (owner spec):

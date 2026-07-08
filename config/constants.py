@@ -40,6 +40,20 @@ CIVIL_TWILIGHT_ELEVATION_DEG = -6.0
 YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
 
 # --- Moon ----------------------------------------------------------------------
+SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length
+
+# Octant names by cycle fraction (windows of 1/8 centered on the anchors).
+MOON_PHASE_NAMES = (
+    "New Moon",
+    "Waxing Crescent",
+    "First Quarter",
+    "Waxing Gibbous",
+    "Full Moon",
+    "Waning Gibbous",
+    "Third Quarter",
+    "Waning Crescent",
+)
+
 # Principal phase -> cycle fraction ("Last Quarter" is normalized to
 # "Third Quarter" by the repository on load).
 MOON_PHASE_FRACTIONS = {

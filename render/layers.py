@@ -532,11 +532,18 @@ class HandLayer(Layer):
 
     @property
     def _spec(self) -> HandSpec:
-        return self._skin.hands.hour if self._kind == "hour" else self._skin.hands.minute
+        hands = self._skin.hands
+        return {"hour": hands.hour, "minute": hands.minute, "second": hands.second}[
+            self._kind
+        ]
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._spec
-        angle = ctx.tick.hour_angle if self._kind == "hour" else ctx.tick.minute_angle
+        angle = {
+            "hour": ctx.tick.hour_angle,
+            "minute": ctx.tick.minute_angle,
+            "second": ctx.tick.second_angle,
+        }[self._kind]
         # The tip-to-pivot distance is pivot_y of the image height.
         height = (spec.length_fraction * ctx.radius) / spec.pivot[1]
         pixmap = ctx.cache.pixmap_by_height(spec.asset, height, ctx.dpr)

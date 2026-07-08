@@ -16,10 +16,17 @@ from config import defaults
 
 
 class MinuteScheduler(QObject):
-    def __init__(self, on_tick: Callable[[bool], None], parent: QObject | None = None):
-        """`on_tick(clock_jumped)` fires just after every minute boundary."""
+    def __init__(
+        self,
+        on_tick: Callable[[bool], None],
+        parent: QObject | None = None,
+        per_second: bool = False,
+    ):
+        """`on_tick(clock_jumped)` fires just after every minute boundary —
+        or every second boundary when the seconds hand is enabled."""
         super().__init__(parent)
         self._on_tick = on_tick
+        self._per_second = per_second
         self._expected: datetime | None = None
         self._timer = QTimer(self)
         self._timer.setSingleShot(True)
@@ -34,11 +41,14 @@ class MinuteScheduler(QObject):
 
     def _schedule(self) -> None:
         now = datetime.now().astimezone()
-        ms = (
-            (60 - now.second) * 1000
-            - now.microsecond // 1000
-            + defaults.TICK_EPSILON_MS
-        )
+        if self._per_second:
+            ms = 1000 - now.microsecond // 1000 + defaults.TICK_EPSILON_MS
+        else:
+            ms = (
+                (60 - now.second) * 1000
+                - now.microsecond // 1000
+                + defaults.TICK_EPSILON_MS
+            )
         self._expected = now + timedelta(milliseconds=ms)
         self._timer.start(max(ms, defaults.TICK_EPSILON_MS))
 

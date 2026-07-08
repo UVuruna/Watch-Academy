@@ -45,3 +45,10 @@ def illumination(fraction: float) -> float:
     """Lit fraction of the moon disc (0.0 new .. 1.0 full) from the cycle
     fraction."""
     return (1.0 - math.cos(2.0 * math.pi * fraction)) / 2.0
+
+
+def phase_name(fraction: float) -> str:
+    """English octant name for a cycle fraction (windows of 1/8 centered
+    on the four principal anchors and the four intermediate phases)."""
+    octant = int(((fraction % 1.0) + 1.0 / 16.0) * 8.0) % 8
+    return constants.MOON_PHASE_NAMES[octant]
