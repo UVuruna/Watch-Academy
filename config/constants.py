@@ -139,16 +139,22 @@ POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8}
 # them, never the fat rhombi a regular 4-star would give.
 POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5}
 
-# The UMBRA (gray brightness wheel): 30 sections of 12 deg for every
-# pointer, measured directly from the owner's art
-# (design/background/gray.png). The LIGHTEST and DARKEST sections are
-# single, CENTERED on the star's top tip (true solar noon) and bottom
-# (true midnight); the remaining 28 form 14 mirror-symmetric pairs down
-# the sides — 16 distinct shades (1 + 14*2 + 1 = 30).
-UMBRA_SECTIONS = 30
+# The UMBRA (gray brightness wheel) ships in three user-selectable
+# forms (owner spec). Sectioned forms follow one structure: the LIGHTEST
+# and DARKEST sections are single, CENTERED on the star's top tip (true
+# solar noon) and bottom (true midnight); every other shade appears
+# twice, mirrored left/right — so shades = sections/2 + 1:
+#   fine   — 30 sections of 12 deg, 16 shades (measured from the
+#            owner's art, design/background/gray.png);
+#   coarse — 24 sections of 15 deg, 13 shades;
+#   gradient — no sections at all: a continuous per-pixel sweep,
+#            lightest at the top, darkest at the bottom, mirrored.
+UMBRA_FORMS = ("fine", "coarse", "gradient")
+UMBRA_SECTION_COUNTS = {"fine": 30, "coarse": 24}
 
-# The Umbra ships in two user-selectable contrast versions.
-UMBRA_CONTRAST_VARIANTS = ("full", "soft")
+# Each form comes in two contrasts: "full" spans the whole gray range
+# (256 shades' worth), "half" the middle half of the scale (128).
+UMBRA_CONTRAST_VARIANTS = ("full", "half")
 
 # Star + Aura palette styles (owner: "paint" = subtractive primaries —
 # blue/red/yellow mix toward black; "light" = additive primaries —

@@ -7,6 +7,7 @@ year marker) live. The same paint path renders offscreen for tests and
 the future settings preview.
 """
 
+import html
 from datetime import timedelta
 
 from PySide6.QtCore import QPointF, Qt
@@ -40,6 +41,13 @@ _RENDER_HINTS = (
     | QPainter.RenderHint.SmoothPixmapTransform
     | QPainter.RenderHint.TextAntialiasing
 )
+
+
+def _centered(*lines: str) -> str:
+    """Tooltip rich text with CENTERED lines (owner spec — QToolTip
+    left-aligns plain text)."""
+    body = "<br/>".join(html.escape(line) for line in lines)
+    return f"<div align='center'>{body}</div>"
 
 
 def _build_layers(skin: SkinDefinition) -> list[Layer]:
@@ -153,7 +161,9 @@ class Compositor:
             # Weekday marker: the day plus the body carrying it in this
             # skin ("Wednesday, Mercury"; a gods skin says "…, Hades") —
             # deliberately different from the Earth marker's date hover.
-            return f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
+            return _centered(
+                f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
+            )
 
         if self._skin.pointer == "octa" and self._skin.octa_slot == "zodiac":
             slot_pos = dial_point(
@@ -170,10 +180,10 @@ class Compositor:
             if hit(moon_pos, radius * marker.moon_scale):
                 # Owner format, two lines: phase + illumination / cycle day.
                 cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
-                return (
+                return _centered(
                     f"{phase_name(day.moon_fraction)} — "
-                    f"{day.moon_illumination * 100:.0f}% lit\n"
-                    f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}"
+                    f"{day.moon_illumination * 100:.0f}% lit",
+                    f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}",
                 )
         if marker.mode in ("earth", "both") and hit(
             dial_point(tick.year_angle, radius * marker.orbit_fraction),
@@ -183,7 +193,7 @@ class Compositor:
 
         return self._twilight_tooltip(point, radius)
 
-    def _zodiac_text(self) -> str:
+    def _zodiac_line(self) -> str:
         """"♋ Cancer — 21 Jun – 22 Jul" (sign with its date span)."""
         day = self._day
         last = day.zodiac_end - timedelta(days=1)    # end is the next sign's first day
@@ -192,6 +202,9 @@ class Compositor:
             f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}"
         )
 
+    def _zodiac_text(self) -> str:
+        return _centered(self._zodiac_line())
+
     def _earth_text(self) -> str:
         """Owner format, three lines: day/week ordinals, the zodiac sign
         with its dates, the date — plus the season event name on top
@@ -199,12 +212,12 @@ class Compositor:
         day, date = self._day, self._day.local_date
         lines = [
             f"Day {date.timetuple().tm_yday} — Week {date.isocalendar().week}",
-            self._zodiac_text(),
+            self._zodiac_line(),
             f"{date.day} {date:%B %Y}",
         ]
         if self._last_tick.season_event is not None:
             lines.insert(0, self._last_tick.season_event)
-        return "\n".join(lines)
+        return _centered(*lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Hovering a twilight band names its boundary times (owner spec):
@@ -226,11 +239,11 @@ class Compositor:
         if sun.dawn is not None and sun.sunrise is not None and within(
             angle(sun.dawn), angle(sun.sunrise)
         ):
-            return f"Dawn {sun.dawn:%H:%M} — Sunrise {sun.sunrise:%H:%M}"
+            return _centered(f"Dawn {sun.dawn:%H:%M} — Sunrise {sun.sunrise:%H:%M}")
         if sun.sunset is not None and sun.dusk is not None and within(
             angle(sun.sunset), angle(sun.dusk)
         ):
-            return f"Sunset {sun.sunset:%H:%M} — Dusk {sun.dusk:%H:%M}"
+            return _centered(f"Sunset {sun.sunset:%H:%M} — Dusk {sun.dusk:%H:%M}")
         return None
 
     def render_offscreen(

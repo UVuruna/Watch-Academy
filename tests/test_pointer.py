@@ -25,6 +25,7 @@ from render.layers import (
     HandLayer,
     palette_for,
     today_slot_theta,
+    umbra_ladder,
     visible_occupant,
 )
 
@@ -191,50 +192,124 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
     # unrotated slot center must hit it (orbit 0.38 * 180 px below center).
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     tip = upright_compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
-    assert tip == "Wednesday, Mercury"
+    assert "Wednesday, Mercury" in tip
+    assert "align='center'" in tip           # hover text is centered (owner spec)
 
 
 # --- Umbra ----------------------------------------------------------------------------
 
 
-def test_umbra_structure():
-    """Measured from the owner's art (gray.png: 30 sections of 12 deg,
-    shades 0..255 step 17): single lightest/darkest sections centered on
-    noon/midnight + 14 mirror pairs = 16 shades. Soft contrast is the
-    middle half of the scale, values at the centers of 16 bins of 8 —
-    188..68, symmetric about 128."""
-    assert constants.UMBRA_SECTIONS == 30
-    shades = constants.UMBRA_SECTIONS // 2 + 1
-    assert shades == 16
-    assert 1 + 2 * (shades - 2) + 1 == constants.UMBRA_SECTIONS
-    assert defaults.UMBRA_SCALES["full"] == (255, 17)
-    assert defaults.UMBRA_SCALES["soft"] == (188, 8)
-    for contrast in constants.UMBRA_CONTRAST_VARIANTS:
-        lightest, step = defaults.UMBRA_SCALES[contrast]
-        values = [lightest - k * step for k in range(shades)]
-        assert all(0 <= value <= 255 for value in values)
-    full = [255 - k * 17 for k in range(shades)]
-    assert full[-1] == 0                                   # spans the whole range
-    soft = [188 - k * 8 for k in range(shades)]
-    assert soft[-1] == 68
-    assert all(value + mirror == 256 for value, mirror in zip(soft, reversed(soft)))
+def test_umbra_forms_structure():
+    """Sectioned forms (owner spec): fine 30 sections/16 shades (his
+    measured art), coarse 24/13 — single lightest/darkest + mirror
+    pairs; the gradient form has no sections at all."""
+    assert constants.UMBRA_SECTION_COUNTS == {"fine": 30, "coarse": 24}
+    for form, sections in constants.UMBRA_SECTION_COUNTS.items():
+        shades = sections // 2 + 1
+        assert 1 + 2 * (shades - 2) + 1 == sections, form
+    assert "gradient" in constants.UMBRA_FORMS
+    assert "gradient" not in constants.UMBRA_SECTION_COUNTS
 
 
-def test_soft_contrast_renders_a_gentler_night(july_wednesday):
+def test_umbra_ladders_hit_the_owner_values():
+    """full = endpoint-inclusive over 0..255 (16 shades -> step 17);
+    half = bin centers of the middle half 64..192 (16 -> 188..68 step 8,
+    every value + its mirror = 256)."""
+    full16 = umbra_ladder(16, "full")
+    assert full16 == tuple(255 - 17 * k for k in range(16))
+    half16 = umbra_ladder(16, "half")
+    assert half16 == tuple(188 - 8 * k for k in range(16))
+    assert all(a + b == 256 for a, b in zip(half16, reversed(half16)))
+    full13 = umbra_ladder(13, "full")
+    assert full13[0] == 255 and full13[-1] == 0 and full13[6] == 128
+    half13 = umbra_ladder(13, "half")
+    assert half13[0] == 187 and half13[-1] == 69 and half13[6] == 128
+    for ladder in (full16, half16, full13, half13):
+        assert list(ladder) == sorted(ladder, reverse=True)
+        assert len(set(ladder)) == len(ladder)
+
+
+def test_event_glow_is_visible_even_over_the_yellow_wedge(app):
+    """Owner report: no glow on the summer solstice. The solstice Earth
+    always sits in the bright yellow wedge — the halo must remain
+    visible there (white core). A/B: the same moment with and without
+    the event window must differ around the marker."""
+    import dataclasses as dc
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    solstice_noon = datetime(2026, 6, 21, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        solstice_noon,
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    glowing = build_tick_state(solstice_noon, day)
+    assert glowing.season_event == "Summer Solstice"
+    # Clear BOTH events: on this date the moon's first quarter is also
+    # within its window and its halo would contaminate the comparison.
+    quiet = dc.replace(glowing, season_event=None, moon_event=None)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    with_glow = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, glowing
+    )
+    without = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, quiet
+    )
+    # Upright + solstice noon: the Earth rides at the dial top, orbit
+    # 0.75R. Probe DIAGONALLY below-right of the marker: inside the 2.1x
+    # halo, outside the disc, off the noon hand shafts on the vertical
+    # and BELOW the marker's date-text line (which renders as wide tofu
+    # boxes under the offscreen platform and would mask the comparison).
+    # The white core lifts the blue channel over the blue-free yellow.
+    marker_y = 270 - round(270 * defaults.DEFAULT_SKIN.year_marker.orbit_fraction)
+    lit = with_glow.pixelColor(308, marker_y + 38)
+    plain = without.pixelColor(308, marker_y + 38)
+    assert lit.blue() - plain.blue() >= 8
+
+
+def test_half_contrast_renders_a_gentler_night(july_wednesday):
     """The bottom of the dial (solar midnight, no hue overlay in July) is
-    near-black on full contrast and clearly lifted on soft."""
+    near-black on full contrast and clearly lifted on half."""
     day, tick = july_wednesday
     full = Compositor(defaults.DEFAULT_SKIN, AssetCache()).render_offscreen(
         360.0, 1.0, day, tick
     )
-    soft_skin = dataclasses.replace(defaults.DEFAULT_SKIN, umbra_contrast="soft")
-    soft = Compositor(soft_skin, AssetCache()).render_offscreen(
+    half_skin = dataclasses.replace(defaults.DEFAULT_SKIN, umbra_contrast="half")
+    half = Compositor(half_skin, AssetCache()).render_offscreen(
         360.0, 1.0, day, tick
     )
     # 90 px below center: inside the darkest sections (plus the star's
     # slight solar rotation), away from body slots and diamond borders.
     full_pixel = full.pixelColor(180, 270)
-    soft_pixel = soft.pixelColor(180, 270)
-    assert full_pixel.alpha() > 200 and soft_pixel.alpha() > 200
+    half_pixel = half.pixelColor(180, 270)
+    assert full_pixel.alpha() > 200 and half_pixel.alpha() > 200
     assert full_pixel.red() < 50
-    assert soft_pixel.red() >= 55
+    assert half_pixel.red() >= 55
+
+
+@pytest.mark.parametrize("form", ["coarse", "gradient"])
+def test_umbra_forms_render(july_wednesday, form):
+    day, tick = july_wednesday
+    upright = dataclasses.replace(
+        defaults.DEFAULT_SKIN, umbra_form=form, solar_rotation=False
+    )
+    image = Compositor(upright, AssetCache()).render_offscreen(
+        360.0, 1.0, day, tick
+    )
+    assert image.pixelColor(180, 8).alpha() > 200
+    if form == "gradient":
+        # Upright: lightest straight up, darkest straight down; the
+        # sweep must be mirror-symmetric. Probes at 0.62R: top/bottom on
+        # the vertical, the mirror pair at dial angles 150/210 deg —
+        # night side in July, so pure Umbra with no Aura wedge over it.
+        top = image.pixelColor(180, 68).red()
+        bottom = image.pixelColor(180, 292).red()
+        night_right = image.pixelColor(236, 277).red()
+        night_left = image.pixelColor(124, 277).red()
+        assert bottom < 40 < top                 # dark bottom, light top...
+        assert abs(night_left - night_right) <= 2    # ...mirrored sides

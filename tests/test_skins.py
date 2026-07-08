@@ -69,6 +69,7 @@ def test_serialize_is_json_ready():
     assert payload["ring"]["asset"] == "dial/ring.png"
     assert payload["noon_marker"]["asset"] is None
     assert payload["pointer"] == "hexa"
+    assert payload["umbra_form"] == "fine"
     assert payload["umbra_contrast"] == "full"
     assert payload["palette_style"] == "paint"
     assert payload["solar_rotation"] is True
@@ -80,7 +81,8 @@ def test_pack_display_choices_merge(tmp_path):
         json.dumps(
             {
                 "pointer": "octa",
-                "umbra_contrast": "soft",
+                "umbra_form": "coarse",
+                "umbra_contrast": "half",
                 "palette_style": "light",
                 "solar_rotation": False,
                 "octa_slot": "day_length",
@@ -90,7 +92,8 @@ def test_pack_display_choices_merge(tmp_path):
     )
     skin = load_pack(tmp_path, defaults.DEFAULT_SKIN)
     assert skin.pointer == "octa"
-    assert skin.umbra_contrast == "soft"
+    assert skin.umbra_form == "coarse"
+    assert skin.umbra_contrast == "half"
     assert skin.palette_style == "light"
     assert skin.solar_rotation is False
     assert skin.octa_slot == "day_length"

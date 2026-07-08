@@ -24,9 +24,9 @@ run), `diameter`, plus the additive keys (still schema 1 — absent in
 older files they take their defaults): `click_through` (False), `skin`
 ("domy"), and the display choices, each validated against its closed
 set (a bad value would otherwise KeyError inside a paint pass, where Qt
-swallows exceptions): `pointer` ("hexa"), `umbra_contrast` ("full"),
-`palette_style` ("paint"), `solar_rotation` (True), `octa_slot`
-("time").
+swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
+`umbra_contrast` ("full"), `palette_style` ("paint"), `solar_rotation`
+(True), `octa_slot` ("time").
 
 ### SettingsStore
 - `load()`: missing file → default `Settings` (documented first-run

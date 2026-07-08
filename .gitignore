@@ -15,6 +15,14 @@ setup/_version_info.py
 # Owner's local-only experiments
 design/example/
 
+# Owner's design masters (working art, intentionally untracked — the
+# downscaled bundle copies live in assets/skins/ and ARE committed)
+design/background/
+design/date/
+design/hours/
+design/pointer/
+design/weekday/
+
 # Legacy exclusions
 Database_Create/
 Side/

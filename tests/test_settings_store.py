@@ -63,7 +63,8 @@ def test_display_choices_round_trip(store):
     saved = replace(
         Settings(),
         pointer="octa",
-        umbra_contrast="soft",
+        umbra_form="gradient",
+        umbra_contrast="half",
         palette_style="light",
         solar_rotation=False,
         octa_slot="zodiac",
@@ -73,7 +74,7 @@ def test_display_choices_round_trip(store):
 
 
 @pytest.mark.parametrize(
-    "key", ["pointer", "umbra_contrast", "palette_style", "octa_slot"]
+    "key", ["pointer", "umbra_form", "umbra_contrast", "palette_style", "octa_slot"]
 )
 def test_unknown_display_choice_raises(store, key):
     store.path.write_text(

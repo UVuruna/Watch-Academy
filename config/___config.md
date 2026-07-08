@@ -15,9 +15,10 @@ cross 4 / octa 8 arms) with their weekday slot layouts (slots rotate
 WITH the star; shared cross slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
 slot with its `OCTA_SLOT_MODES`), the star arm half-angles (the cross
-borrows the octa arm shape), the Umbra structure (30 sections of 12°;
-single lightest/darkest centered on noon/midnight) and contrast variant
-names, the palette style names, the tropical zodiac table (signs are
+borrows the octa arm shape), the Umbra forms (fine 30 / coarse 24
+sections — single lightest/darkest centered on noon/midnight — or the
+continuous gradient) and contrast variant names (full/half), the
+palette style names, the tropical zodiac table (signs are
 30° arcs of the year wheel — Cancer's first point IS the summer
 solstice), the season/moon glow windows (±12 h / ±6 h) and event names,
 sun thresholds (civil depression, horizon/twilight elevations), the six
@@ -31,8 +32,8 @@ M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
 marker borders), `PALETTE_PRESETS` (the five Star+Aura palettes measured
 from the owner's art: hexa/octa paint+light, cross seasons), the Umbra
-shade ladders per contrast, the octa slot text width fraction, the event
-glow rendering (color/alpha/halo scale), tray icon geometry, and
+contrast spans, the octa slot text width fraction, the event glow
+rendering (white core/warm mid/halo scale), tray icon geometry, and
 `DEFAULT_SKIN` — a fully typed [Manifest](../skins/manifest.md)
 `SkinDefinition` instance that is serialized verbatim to
 `assets/skins/domy/skin.json` (re-serialize after editing it).

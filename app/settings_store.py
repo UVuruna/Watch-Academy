@@ -35,6 +35,7 @@ class Settings:
     click_through: bool = False
     skin: str = "domy"
     pointer: str = "hexa"
+    umbra_form: str = "fine"
     umbra_contrast: str = "full"
     palette_style: str = "paint"
     solar_rotation: bool = True
@@ -66,6 +67,7 @@ class SettingsStore:
             choices = {}
             for key, default, allowed in (
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
+                ("umbra_form", "fine", constants.UMBRA_FORMS),
                 ("umbra_contrast", "full", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "paint", constants.PALETTE_STYLES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
@@ -99,6 +101,7 @@ class SettingsStore:
             "click_through": settings.click_through,
             "skin": settings.skin,
             "pointer": settings.pointer,
+            "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
             "palette_style": settings.palette_style,
             "solar_rotation": settings.solar_rotation,

@@ -58,6 +58,7 @@ def load_pack(folder: Path, base: manifest.SkinDefinition) -> manifest.SkinDefin
     # Top-level scalar choices, validated against the product's closed sets.
     _SCALARS = (
         ("pointer", tuple(constants.POINTER_POINTS)),
+        ("umbra_form", constants.UMBRA_FORMS),
         ("umbra_contrast", constants.UMBRA_CONTRAST_VARIANTS),
         ("palette_style", constants.PALETTE_STYLES),
         ("solar_rotation", (True, False)),
@@ -169,6 +170,7 @@ def serialize_skin(skin: manifest.SkinDefinition, folder: Path) -> dict:
         "name": skin.name,
         "z_order": list(skin.z_order),
         "pointer": skin.pointer,
+        "umbra_form": skin.umbra_form,
         "umbra_contrast": skin.umbra_contrast,
         "palette_style": skin.palette_style,
         "solar_rotation": skin.solar_rotation,

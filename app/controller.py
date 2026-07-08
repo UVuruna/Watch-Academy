@@ -288,6 +288,7 @@ class AppController(QObject):
         return dataclasses.replace(
             skin,
             pointer=self._settings.pointer,
+            umbra_form=self._settings.umbra_form,
             umbra_contrast=self._settings.umbra_contrast,
             palette_style=self._settings.palette_style,
             solar_rotation=self._settings.solar_rotation,
@@ -328,9 +329,9 @@ class AppController(QObject):
         self._install_skin(dataclasses.replace(self._skin, **{key: value}))
         self._flush_position()
 
-    def _add_choice_submenu(self, menu: QMenu, title: str, options, current, setter) -> None:
-        """One exclusive check-group submenu: options are (value, label)."""
-        submenu = menu.addMenu(title)
+    def _add_choice_group(self, menu: QMenu, submenu: QMenu, options, current, setter) -> None:
+        """One exclusive check-group appended to `submenu`: options are
+        (value, label) pairs."""
         group = QActionGroup(menu)
         group.setExclusive(True)
         for value, label in options:
@@ -340,6 +341,12 @@ class AppController(QObject):
             action.triggered.connect(lambda checked, chosen=value: setter(chosen))
             group.addAction(action)
             submenu.addAction(action)
+
+    def _add_choice_submenu(self, menu: QMenu, title: str, options, current, setter) -> QMenu:
+        """One exclusive check-group submenu: options are (value, label)."""
+        submenu = menu.addMenu(title)
+        self._add_choice_group(menu, submenu, options, current, setter)
+        return submenu
 
     def _build_menu(self) -> QMenu:
         menu = QMenu()
@@ -371,8 +378,19 @@ class AppController(QObject):
             settings.palette_style,
             lambda value: self._set_display_choice("palette_style", value),
         )
-        self._add_choice_submenu(
+        umbra_menu = self._add_choice_submenu(
             menu, "Umbra",
+            [
+                ("fine", "Fine (16 shades)"),
+                ("coarse", "Coarse (13 shades)"),
+                ("gradient", "Gradient"),
+            ],
+            settings.umbra_form,
+            lambda value: self._set_display_choice("umbra_form", value),
+        )
+        umbra_menu.addSeparator()
+        self._add_choice_group(
+            menu, umbra_menu,
             [
                 (variant, f"{variant.capitalize()} contrast")
                 for variant in constants.UMBRA_CONTRAST_VARIANTS

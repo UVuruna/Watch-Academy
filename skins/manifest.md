@@ -22,10 +22,11 @@ extraction is serialization, not redesign.
 
 - `SkinDefinition` — name, `z_order`, one spec per unit, plus the
   user-overridable display scalars (the tray choice always wins):
-  `pointer` ("hexa" | "cross" | "octa"), `umbra_contrast` ("full" |
-  "soft"), `palette_style` ("paint" | "light"), `solar_rotation`
-  (False → Star/Aura/Umbra stand upright) and `octa_slot` ("time" |
-  "date" | "day_length" | "zodiac")
+  `pointer` ("hexa" | "cross" | "octa"), `umbra_form` ("fine" |
+  "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
+  `palette_style` ("paint" | "light"), `solar_rotation` (False →
+  Star/Aura/Umbra stand upright) and `octa_slot` ("time" | "date" |
+  "day_length" | "zodiac")
 - `BackgroundSpec` — the Umbra (custom art, or None for the procedural
   30-section wheel: single lightest/darkest sections centered on
   noon/midnight) + the Aura (transparent period hues from the palette

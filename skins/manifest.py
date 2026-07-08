@@ -133,7 +133,8 @@ class SkinDefinition:
     # declares — see the controller's _apply_display_settings):
     pointer: str = "hexa"              # "hexa" | "cross" | "octa" — arm count
                                        # AND period-hue count (owner spec)
-    umbra_contrast: str = "full"       # "full" | "soft" — Umbra shade ladder
+    umbra_form: str = "fine"           # "fine" (30) | "coarse" (24) | "gradient"
+    umbra_contrast: str = "full"       # "full" | "half" — Umbra shade span
     palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # octa bottom arm: "time" | "date" |

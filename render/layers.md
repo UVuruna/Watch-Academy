@@ -59,12 +59,16 @@ The UMBRA (gray brightness wheel) rotated with the star, then the AURA
 sunlit day (day alpha between sunrise and sunset, twilight alpha over the
 dawn/dusk bands, nothing at night; robust to missing boundaries on
 transitional polar days). With no `base_asset` (the product default) the
-Umbra is drawn procedurally, matching the owner's measured art: 30
-sections of 12° — the lightest and darkest are SINGLE sections centered
-on the top tip (true solar noon) and the bottom (true midnight), the
-remaining 28 form 14 mirror-symmetric pairs. The 16 shades follow
-`UMBRA_SCALES[umbra_contrast]` — "full" 255..0 step 17, "soft" the
-middle half of the scale (188..68 step 8, symmetric about 128).
+Umbra is drawn procedurally in the user's chosen form: **fine** (30
+sections of 12°, 16 shades — the owner's measured art), **coarse** (24
+sections, 13 shades) — both with single lightest/darkest sections
+centered on the top tip (true solar noon) and the bottom (true
+midnight), the rest in mirror pairs — or **gradient** (a continuous
+per-pixel conical sweep, mirror-symmetric). Shade values come from
+`umbra_ladder(shades, contrast)`: "full" runs endpoint-inclusive over
+0..255 (16 → step 17), "half" takes the bin centers of the middle half
+64..192 (16 → 188..68 step 8, symmetric about 128); the gradient
+sweeps the same spans continuously.
 
 ### StarLayer (DAILY)
 Procedural N-diamond star (N = pointer arm count; arm half-angles from
@@ -114,8 +118,10 @@ ellipse with a = R·|cos 2πf| — and flips 180° for southern-hemisphere
 cities), or "both" (shared rim at orbit 0.75; the smaller Moon transits
 OVER the Earth at `MOON_TRANSIT_OPACITY` when they meet). During event
 windows (`tick.season_event` ±12 h around a solstice/equinox,
-`tick.moon_event` ±6 h around a principal phase) the marker gets a soft
-radial halo via `draw_event_glow()`.
+`tick.moon_event` ±6 h around a principal phase) the marker gets a
+radial halo via `draw_event_glow()` — WHITE core into a warm mid tone,
+so it stays visible even over the bright yellow Aura wedge where the
+summer solstice always lands.
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and

@@ -147,21 +147,28 @@ PALETTE_PRESETS = {
 # the slot width (owner: big font, must not overflow the slot).
 TIME_TEXT_WIDTH_FRACTION = 0.95
 
-# Umbra shade ladders per contrast, (lightest, step): 16 values,
-# shade k = lightest - k * step. Owner spec:
-#   full — the whole gray range, 255..0 step 17 (matches his art);
-#   soft — the MIDDLE HALF of the scale (64..192, width 16*8): 16 bins
-#   of 8, each value at its bin center -> 188..68 step 8, symmetric
-#   about 128 (every value + its mirror = 256).
-UMBRA_SCALES = {
-    "full": (255, 17),
-    "soft": (188, 8),
+# Umbra contrast spans, (lightest, darkest). Owner spec:
+#   full — the whole gray range: sectioned ladders run endpoint-
+#   inclusive (16 shades -> 255..0 step 17, matching his art);
+#   half — the MIDDLE HALF of the scale [64, 192]: sectioned ladders
+#   take the centers of N equal bins (16 -> 188..68 step 8, symmetric
+#   about 128 — every value + its mirror = 256).
+# The gradient form sweeps the same spans continuously.
+UMBRA_CONTRAST_SPANS = {
+    "full": (255, 0),
+    "half": (192, 64),
 }
 
 # --- Season/moon event glow rendering (windows live in constants) ---------------
-GLOW_COLOR = "#FFE9A0"               # warm halo behind the marker
-GLOW_ALPHA = 0.85                    # gradient center opacity
-GLOW_RADIUS_SCALE = 1.9              # halo radius, multiple of the marker radius
+# White core -> warm mid -> transparent: the white core stays visible
+# even over the bright yellow Aura wedge (where the summer solstice
+# always lands).
+GLOW_CORE_COLOR = "#FFFFFF"
+GLOW_CORE_ALPHA = 0.95
+GLOW_MID_COLOR = "#FFD34D"
+GLOW_MID_ALPHA = 0.55
+GLOW_MID_STOP = 0.45                 # gradient position of the warm mid tone
+GLOW_RADIUS_SCALE = 2.1              # halo radius, multiple of the marker radius
 
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",

@@ -16,6 +16,7 @@ from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import (
     QBrush,
     QColor,
+    QConicalGradient,
     QFont,
     QFontMetricsF,
     QPainter,
@@ -116,16 +117,38 @@ def palette_for(skin: SkinDefinition) -> tuple:
     return defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
 
 
+def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
+    """Shade values, lightest first (owner spec): full contrast runs
+    endpoint-inclusive over the whole range (16 shades -> 255..0 step
+    17); half contrast takes the CENTERS of N equal bins of the middle
+    half [64, 192] (16 -> 188..68 step 8, symmetric about 128)."""
+    lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
+    if contrast == "full":
+        return tuple(
+            round(lightest - k * (lightest - darkest) / (shades - 1))
+            for k in range(shades)
+        )
+    width = lightest - darkest
+    return tuple(
+        round(lightest - (k + 0.5) * width / shades) for k in range(shades)
+    )
+
+
 def draw_event_glow(painter: QPainter, pos: QPointF, marker_radius: float) -> None:
-    """Soft radial halo behind a year marker during a season/moon event
-    window (owner spec: a gentle glow, the marker itself unchanged)."""
+    """Radial halo behind a year marker during a season/moon event
+    window. A WHITE core blending into the warm mid tone keeps it
+    visible over any Aura wedge (the summer solstice always lands in
+    the bright yellow one — a yellow-only halo vanished there)."""
     halo = marker_radius * defaults.GLOW_RADIUS_SCALE
     gradient = QRadialGradient(pos, halo)
-    center = QColor(defaults.GLOW_COLOR)
-    center.setAlphaF(defaults.GLOW_ALPHA)
-    edge = QColor(defaults.GLOW_COLOR)
+    core = QColor(defaults.GLOW_CORE_COLOR)
+    core.setAlphaF(defaults.GLOW_CORE_ALPHA)
+    mid = QColor(defaults.GLOW_MID_COLOR)
+    mid.setAlphaF(defaults.GLOW_MID_ALPHA)
+    edge = QColor(defaults.GLOW_MID_COLOR)
     edge.setAlphaF(0.0)
-    gradient.setColorAt(0.0, center)
+    gradient.setColorAt(0.0, core)
+    gradient.setColorAt(defaults.GLOW_MID_STOP, mid)
     gradient.setColorAt(1.0, edge)
     painter.save()
     painter.setPen(Qt.PenStyle.NoPen)
@@ -261,22 +284,32 @@ class BackgroundLayer(Layer):
     def _draw_umbra(
         self, painter: QPainter, ctx: RenderContext, radius: float
     ) -> None:
-        """The brightness wheel, drawn in the already-rotated frame
-        (owner art, measured): 30 sections of 12 deg — the LIGHTEST and
-        DARKEST are single sections CENTERED on the top (true solar
-        noon) and bottom (true midnight), the remaining 28 form 14
-        mirror-symmetric pairs down the sides. 16 shades on the
-        contrast setting's arithmetic ladder."""
-        sections = constants.UMBRA_SECTIONS
-        lightest, step = defaults.UMBRA_SCALES[ctx.skin.umbra_contrast]
+        """The brightness wheel, drawn in the already-rotated frame:
+        lightest at the top (true solar noon), darkest at the bottom
+        (true midnight), mirrored left/right. Forms (owner spec): fine
+        30 / coarse 24 sections — single lightest/darkest sections
+        centered on top/bottom, the rest in mirror pairs — or the
+        continuous per-pixel gradient."""
+        contrast = ctx.skin.umbra_contrast
+        if ctx.skin.umbra_form == "gradient":
+            lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
+            # Conical sweep from the top: symmetric stops make the
+            # left/right sides exact mirrors, per-pixel smooth.
+            gradient = QConicalGradient(QPointF(0.0, 0.0), 90.0)
+            gradient.setColorAt(0.0, QColor(lightest, lightest, lightest))
+            gradient.setColorAt(0.5, QColor(darkest, darkest, darkest))
+            gradient.setColorAt(1.0, QColor(lightest, lightest, lightest))
+            painter.setBrush(QBrush(gradient))
+            painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+            return
+        sections = constants.UMBRA_SECTION_COUNTS[ctx.skin.umbra_form]
         span = 360.0 / sections
-        shades = sections // 2 + 1
-        for k in range(shades):
-            value = lightest - k * step
+        shades = umbra_ladder(sections // 2 + 1, contrast)
+        for k, value in enumerate(shades):
             painter.setBrush(QColor(value, value, value))
             center = k * span
             draw_pie(painter, radius, center - span / 2, center + span / 2)
-            if 0 < k < shades - 1:
+            if 0 < k < len(shades) - 1:
                 # Mirrored partner on the left side; the lightest and
                 # darkest stay single.
                 draw_pie(
