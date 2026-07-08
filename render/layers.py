@@ -177,21 +177,25 @@ class BackgroundLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.background
+        base_radius = ctx.radius * spec.base_radius_fraction
         radius = ctx.radius * spec.radius_fraction
         painter.setPen(Qt.PenStyle.NoPen)
 
         # The gray wheel rotates WITH the hexagram too (owner spec): the
         # white section centers on the star's top tip — true solar noon —
-        # and the black section on solar midnight.
+        # and the black section on solar midnight. Its radius is tuned
+        # independently of the colored wedges.
         painter.save()
         painter.rotate(ctx.day.hexagram_rotation)
         if spec.base_asset is not None:
             draw_pixmap_centered(
-                painter, ctx, spec.base_asset, QPointF(0, 0), 2 * radius
+                painter, ctx, spec.base_asset, QPointF(0, 0), 2 * base_radius
             )
         else:
             painter.setBrush(QColor(spec.base_color))
-            painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+            painter.drawEllipse(
+                QRectF(-base_radius, -base_radius, 2 * base_radius, 2 * base_radius)
+            )
         painter.restore()
 
         for start, end, alpha in lit_regions(ctx.day.sun, spec):

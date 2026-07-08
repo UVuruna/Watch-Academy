@@ -69,11 +69,18 @@ SECONDS_HAND_ENABLED = True
 # tooltips itself at this interval.
 CLICK_THROUGH_HOVER_POLL_MS = 200
 
+# Time Travel (scenario tester in the menu): the dial renders the entered
+# moment/position for this long, then returns to the present by itself.
+TIME_TRAVEL_DURATION_S = 60
+
 # --- Settings persistence ----------------------------------------------------
 SETTINGS_SCHEMA_VERSION = 1
 SETTINGS_WRITE_DEBOUNCE_MS = 750     # collapse rapid moveEvent bursts while dragging
 
-# --- Procedural render geometry (fractions of the dial radius unless noted) ----
+# --- Procedural FALLBACK geometry (fractions of the dial radius unless noted) --
+# NOT legacy: these drive the painter-drawn ring/labels used whenever a
+# skin ships no ring art (user drop-in skins, validate previews). The DOMY
+# skin itself uses ring.png, so these do not affect it.
 RING_TICK_WIDTH = 0.004
 RING_TICK_REACH = 1.03               # tick end, fraction of the ring inner radius
 RING_NUMERAL_SIZE = 0.085            # font pixel size
@@ -135,9 +142,10 @@ DEFAULT_SKIN = SkinDefinition(
         sector_palette=_SECTOR_PALETTE,
         day_alpha=0.55,
         twilight_alpha=0.28,
-        # Owner spec: the disc TOUCHES the ring's inner edge (measured at
-        # 0.858 of the radius in the seconds-scale ring art) — no gap.
-        radius_fraction=0.86,
+        # TWO independent radii for fine tuning (fractions of the dial
+        # radius; the ring art's inner edge sits at 0.858):
+        base_radius_fraction=0.86,      # the GRAY wheel
+        radius_fraction=0.86,           # the COLORED wedges
     ),
     hexagram=HexagramSpec(
         colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
@@ -153,7 +161,7 @@ DEFAULT_SKIN = SkinDefinition(
         scale=0.045,
     ),
     ring=RingSpec(
-        asset=_DOMY / "dial" / "ring.png",   # design/hours/domy.png (gray; gold later)
+        asset=_DOMY / "dial" / "ring.png",   # design/hours/domy.png
         fill="#4A4E57",
         text_color="#F0F0F0",
         letter_color="#E8B84B",

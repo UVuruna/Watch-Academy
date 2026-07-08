@@ -17,12 +17,13 @@ class BackgroundSpec:
     """Fixed base wheel + transparent hue wedges that ROTATE WITH the
     hexagram and are drawn only over the sunlit part of the day."""
 
-    base_asset: Path | None            # fixed gray wheel; None -> flat disc
+    base_asset: Path | None            # gray wheel; None -> flat disc
     base_color: str                    # procedural fallback disc color
     sector_palette: tuple[str, ...]    # 6 hues, clockwise from the hexagram-top wedge
     day_alpha: float                   # hue opacity over the sunrise->sunset arc
     twilight_alpha: float              # hue opacity over the dawn/dusk bands
-    radius_fraction: float             # of the dial radius (inside the ring)
+    base_radius_fraction: float        # GRAY wheel radius, of the dial radius
+    radius_fraction: float             # COLORED wedges radius — tune independently
 
 
 @dataclass(frozen=True)
