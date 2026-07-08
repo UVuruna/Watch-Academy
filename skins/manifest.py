@@ -14,29 +14,30 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class BackgroundSpec:
-    """Base brightness wheel + transparent hue wedges; BOTH rotate with
-    the star and the wedges are drawn only over the sunlit part of the
-    day. base_asset None (the product default) draws the 30-section gray
-    wheel procedurally — single lightest/darkest sections centered on
-    noon/midnight, shades from the gray-contrast setting."""
+    """The two background wheels: the UMBRA (gray brightness wheel) and
+    the AURA (transparent period-hue wedges over the sunlit part of the
+    day); both rotate with the star. base_asset None (the product
+    default) draws the 30-section Umbra procedurally — single
+    lightest/darkest sections centered on noon/midnight, shades from the
+    umbra-contrast setting. Aura hues come from the active palette
+    preset, shared with the star diamonds."""
 
-    base_asset: Path | None            # custom wheel art; None -> procedural gray wheel
-    sector_palette: tuple[str, ...]    # period hues, clockwise from the top-arm wedge
-    day_alpha: float                   # hue opacity over the sunrise->sunset arc
-    twilight_alpha: float              # hue opacity over the dawn/dusk bands
-    base_radius_fraction: float        # GRAY wheel radius, of the dial radius
-    radius_fraction: float             # COLORED wedges radius — tune independently
+    base_asset: Path | None            # custom Umbra art; None -> procedural
+    day_alpha: float                   # Aura opacity over the sunrise->sunset arc
+    twilight_alpha: float              # Aura opacity over the dawn/dusk bands
+    umbra_radius_fraction: float       # Umbra radius, of the dial radius
+    aura_radius_fraction: float        # Aura radius — tune independently
 
 
 @dataclass(frozen=True)
-class HexagramSpec:
-    """Procedural six-diamond star (owner decision: simple geometry is
+class StarSpec:
+    """Procedural N-diamond star (owner decision: simple geometry is
     drawn at runtime, not shipped as an image). Diamond FILLS appear only
     where the sun is up; the colored BORDERS run the full circle so the
     night diamonds stay recognizable (owner spec: purple hinted at the
-    bottom even in the dark)."""
+    bottom even in the dark). Colors come from the active palette preset
+    (config PALETTE_PRESETS), shared with the Aura wedges."""
 
-    colors: tuple[str, ...]            # 6 diamond colors, clockwise from top
     day_alpha: float                   # fill opacity over the sunlit arc
     twilight_alpha: float
     border_alpha: float                # full-circle colored outline opacity
@@ -122,15 +123,21 @@ class SkinDefinition:
     name: str
     z_order: tuple[str, ...]           # layer names bottom-up
     background: BackgroundSpec
-    hexagram: HexagramSpec
+    star: StarSpec
     noon_marker: NoonMarkerSpec
     ring: RingSpec
     weekday_set: WeekdaySpec
     year_marker: YearMarkerSpec
     hands: HandsSpec
+    # User display choices (tray/settings override whatever the pack
+    # declares — see the controller's _apply_display_settings):
     pointer: str = "hexa"              # "hexa" | "cross" | "octa" — arm count
                                        # AND period-hue count (owner spec)
-    gray_contrast: str = "full"        # "full" | "soft" — gray wheel shade range
+    umbra_contrast: str = "full"       # "full" | "soft" — Umbra shade ladder
+    palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues
+    solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
+    octa_slot: str = "time"            # octa bottom arm: "time" | "date" |
+                                       # "day_length" | "zodiac"
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

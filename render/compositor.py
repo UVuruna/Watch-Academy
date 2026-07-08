@@ -7,6 +7,8 @@ year marker) live. The same paint path renders offscreen for tests and
 the future settings preview.
 """
 
+from datetime import timedelta
+
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
@@ -17,15 +19,15 @@ from core.moon import phase_name
 from render.assets import AssetCache
 from render.layers import (
     BackgroundLayer,
+    BottomSlotLayer,
     Cadence,
     CenterBodyLayer,
     HandLayer,
-    HexagramLayer,
     Layer,
     NoonMarkerLayer,
     RenderContext,
     RingLayer,
-    TimeTextLayer,
+    StarLayer,
     WeekdayLayer,
     YearMarkerLayer,
     dial_point,
@@ -43,7 +45,7 @@ _RENDER_HINTS = (
 def _build_layers(skin: SkinDefinition) -> list[Layer]:
     factories = {
         "background": lambda: BackgroundLayer(skin),
-        "hexagram": lambda: HexagramLayer(skin),
+        "star": lambda: StarLayer(skin),
         "noon_marker": lambda: NoonMarkerLayer(skin),
         "ring": lambda: RingLayer(skin),
         "weekday_set": lambda: WeekdayLayer(skin),
@@ -63,9 +65,9 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
         if skin.pointer == "octa":
-            # The octa bottom arm's digital time also draws OVER the
-            # hands (owner spec).
-            layers.append(TimeTextLayer(skin))
+            # The octa bottom arm's info text also draws OVER the hands
+            # (owner spec).
+            layers.append(BottomSlotLayer(skin))
     return layers
 
 
@@ -88,6 +90,10 @@ class Compositor:
         self._composite = None
         self._cache.flush()
 
+    def _rotation(self) -> float:
+        """Star/Aura/Umbra/slot rotation: solar offset, or 0 upright."""
+        return self._day.star_rotation if self._skin.solar_rotation else 0.0
+
     def paint(self, painter: QPainter, size: float, dpr: float, tick: TickState) -> None:
         if self._day is None:
             raise RuntimeError("Compositor.paint() before the first day context")
@@ -104,6 +110,7 @@ class Compositor:
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=tick,
             radius=size / 2, cache=self._cache, dpr=dpr,
+            rotation=self._rotation(),
         )
         for layer in self._layers:
             if layer.cadence is Cadence.MINUTE:
@@ -114,15 +121,16 @@ class Compositor:
 
     def tooltip_at(self, x: float, y: float, size: float) -> str | None:
         """Hover text under the cursor, at every dial size (owner spec):
-        today's body, the Earth marker (with the week of the year), the
-        Moon marker (phase name, illumination, day in the cycle) and the
-        twilight bands (dawn/sunrise and sunset/dusk times)."""
+        today's body, the Earth marker (day/week ordinals, zodiac sign
+        with its dates, the date — plus the season event while it glows),
+        the Moon marker (phase + illumination, day in the cycle), the
+        octa zodiac slot and the twilight bands."""
         if self._day is None or self._last_tick is None:
             return None
         radius = size / 2
         point = QPointF(x - radius, y - radius)      # center-origin
         day, tick = self._day, self._last_tick
-        date = day.local_date
+        rotation = self._rotation()
 
         def hit(center: QPointF, hit_radius: float) -> bool:
             dx, dy = point.x() - center.x(), point.y() - center.y()
@@ -137,7 +145,7 @@ class Compositor:
             today_radius = radius * weekday.center_scale
         else:
             today_pos = dial_point(
-                today_theta + day.hexagram_rotation,
+                today_theta + rotation,
                 radius * weekday.orbit_fraction,
             )
             today_radius = radius * weekday.diamond_scale
@@ -147,34 +155,56 @@ class Compositor:
             # deliberately different from the Earth marker's date hover.
             return f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
 
+        if self._skin.pointer == "octa" and self._skin.octa_slot == "zodiac":
+            slot_pos = dial_point(
+                constants.OCTA_TIME_SLOT_ANGLE + rotation,
+                radius * weekday.orbit_fraction,
+            )
+            if hit(slot_pos, radius * weekday.diamond_scale):
+                return self._zodiac_text()
+
         marker = self._skin.year_marker
         moon_angle = angles.moon_cycle_angle(day.moon_fraction)
         if marker.mode in ("moon", "both"):
             moon_pos = dial_point(moon_angle, radius * marker.moon_orbit_fraction)
             if hit(moon_pos, radius * marker.moon_scale):
+                # Owner format, two lines: phase + illumination / cycle day.
                 cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
                 return (
                     f"{phase_name(day.moon_fraction)} — "
-                    f"{day.moon_illumination * 100:.0f}% lit — "
+                    f"{day.moon_illumination * 100:.0f}% lit\n"
                     f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}"
                 )
         if marker.mode in ("earth", "both") and hit(
             dial_point(tick.year_angle, radius * marker.orbit_fraction),
             radius * marker.scale,
         ):
-            return self._date_text(date)
+            return self._earth_text()
 
         return self._twilight_tooltip(point, radius)
 
-    @staticmethod
-    def _date_text(date) -> str:
-        """Owner format: "28th Week, 8 July 2026"."""
-        week = date.isocalendar().week
-        if 10 <= week % 100 <= 13:
-            suffix = "th"
-        else:
-            suffix = {1: "st", 2: "nd", 3: "rd"}.get(week % 10, "th")
-        return f"{week}{suffix} Week, {date.day} {date:%B %Y}"
+    def _zodiac_text(self) -> str:
+        """"♋ Cancer — 21 Jun – 22 Jul" (sign with its date span)."""
+        day = self._day
+        last = day.zodiac_end - timedelta(days=1)    # end is the next sign's first day
+        return (
+            f"{day.zodiac_symbol} {day.zodiac_name} — "
+            f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}"
+        )
+
+    def _earth_text(self) -> str:
+        """Owner format, three lines: day/week ordinals, the zodiac sign
+        with its dates, the date — plus the season event name on top
+        while the marker glows."""
+        day, date = self._day, self._day.local_date
+        lines = [
+            f"Day {date.timetuple().tm_yday} — Week {date.isocalendar().week}",
+            self._zodiac_text(),
+            f"{date.day} {date:%B %Y}",
+        ]
+        if self._last_tick.season_event is not None:
+            lines.insert(0, self._last_tick.season_event)
+        return "\n".join(lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Hovering a twilight band names its boundary times (owner spec):
@@ -183,7 +213,7 @@ class Compositor:
 
         sun = self._day.sun
         distance = math.hypot(point.x(), point.y())
-        if distance > radius * self._skin.background.radius_fraction:
+        if distance > radius * self._skin.background.aura_radius_fraction:
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
 
@@ -228,6 +258,7 @@ class Compositor:
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
+            rotation=self._rotation(),
         )
         for layer in self._layers:
             if layer.cadence is not Cadence.MINUTE:

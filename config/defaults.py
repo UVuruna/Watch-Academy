@@ -10,10 +10,10 @@ from skins.manifest import (
     BackgroundSpec,
     HandSpec,
     HandsSpec,
-    HexagramSpec,
     NoonMarkerSpec,
     RingSpec,
     SkinDefinition,
+    StarSpec,
     WeekdaySpec,
     YearMarkerSpec,
 )
@@ -113,77 +113,78 @@ TRAY_MARK_SIZE = 0.10                # fraction of the icon size
 # assets/skins/domy/skin.json in M5 is serialization, not redesign.
 _DOMY = paths.bundled_skins_dir() / "domy"
 
-# Six hues clockwise from the hexagram-top wedge (owner spec):
-# yellow (top), orange, red, purple (bottom), blue, green.
-_SECTOR_PALETTE = (
-    "#FFD34D",
-    "#FF9E3D",
-    "#E14B4B",
-    "#8E4BC9",
-    "#3D7BFF",
-    "#4BC96B",
-)
-
 _CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oceania")
 
-# Period hues per pointer variant, clockwise from the top arm — colors
-# taken from the owner's reference art (design/background/*.png). Used
-# whenever the skin's own palette length does not match the pointer's
-# arm count.
-POINTER_PALETTES = {
-    "hexa": _SECTOR_PALETTE,
-    "cross": ("#D9D900", "#D40F0F", "#B5B5B5", "#0A70D8"),
-    "octa": (
-        "#D9D900",
-        "#DB9000",
-        "#D04505",
-        "#D40E0E",
-        "#7D31E8",
-        "#0B57DB",
-        "#0BD1D1",
-        "#10CE10",
+# Star + Aura palettes, (pointer, style) -> hues clockwise from the top
+# arm. Measured directly from the owner's reference art
+# (design/background/{hexa,octa}_{paint,light}.png): paint = subtractive
+# primaries (yellow at the top), light = additive primaries (green at
+# the top — owner: that IS the point of the two styles). The cross has
+# ONE seasons palette (owner's own values: summer yellow top, autumn red
+# right, winter blue bottom, spring green left — solstices/equinoxes at
+# the arm centers), served under both styles.
+_CROSS_SEASONS = ("#D9D900", "#D40F0F", "#0A70D8", "#10CE10")
+PALETTE_PRESETS = {
+    ("hexa", "paint"): (
+        "#FFEE00", "#FFAA00", "#FF0000", "#8E55B9", "#0073E6", "#00B500",
     ),
+    ("hexa", "light"): (
+        "#00DC00", "#DCDC00", "#DC0000", "#DC00DC", "#0000DC", "#00DCDC",
+    ),
+    ("octa", "paint"): (
+        "#DCDC00", "#DC9600", "#DC3C00", "#DC0000",
+        "#783CF0", "#005ADC", "#00DCDC", "#00DC00",
+    ),
+    ("octa", "light"): (
+        "#00DC00", "#DCDC00", "#DC7800", "#DC0000",
+        "#DC00DC", "#0000DC", "#0078DC", "#00DCDC",
+    ),
+    ("cross", "paint"): _CROSS_SEASONS,
+    ("cross", "light"): _CROSS_SEASONS,
 }
-# Octa digital time: the text is sized to span this fraction of the
-# slot width (owner: big font, must not overflow the slot).
+
+# Octa bottom-arm text (time/date/...): sized to span this fraction of
+# the slot width (owner: big font, must not overflow the slot).
 TIME_TEXT_WIDTH_FRACTION = 0.95
 
-# Gray wheel shade ladders per contrast, (lightest, step): 16 values,
+# Umbra shade ladders per contrast, (lightest, step): 16 values,
 # shade k = lightest - k * step. Owner spec:
 #   full — the whole gray range, 255..0 step 17 (matches his art);
 #   soft — the MIDDLE HALF of the scale (64..192, width 16*8): 16 bins
 #   of 8, each value at its bin center -> 188..68 step 8, symmetric
 #   about 128 (every value + its mirror = 256).
-GRAY_WHEEL_SCALES = {
+UMBRA_SCALES = {
     "full": (255, 17),
     "soft": (188, 8),
 }
+
+# --- Season/moon event glow rendering (windows live in constants) ---------------
+GLOW_COLOR = "#FFE9A0"               # warm halo behind the marker
+GLOW_ALPHA = 0.85                    # gradient center opacity
+GLOW_RADIUS_SCALE = 1.9              # halo radius, multiple of the marker radius
 
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",
     z_order=(
         "background",
-        "hexagram",
+        "star",
         "weekday_set",
         "ring",
         "year_marker",
         "hands",
-    ),                                  # no noon marker: the hexagram tip IS the noon pointer
+    ),                                  # no noon marker: the star's top tip IS the noon pointer
     background=BackgroundSpec(
-        # Procedural gray wheel (owner spec): the section count depends on
-        # the pointer (32 hexa / 30 cross+octa) so a fixed image cannot
-        # serve all three variants.
+        # Procedural Umbra (owner spec/art): drawn at runtime so the
+        # contrast setting can reshade it.
         base_asset=None,
-        sector_palette=_SECTOR_PALETTE,
         day_alpha=0.55,
         twilight_alpha=0.28,
         # TWO independent radii for fine tuning (fractions of the dial
         # radius; the ring art's inner edge sits at 0.858):
-        base_radius_fraction=0.90,      # the GRAY wheel
-        radius_fraction=0.90,           # the COLORED wedges
+        umbra_radius_fraction=0.90,     # the gray wheel
+        aura_radius_fraction=0.90,      # the colored wedges
     ),
-    hexagram=HexagramSpec(
-        colors=_SECTOR_PALETTE,         # owner: procedural "paint" star
+    star=StarSpec(
         day_alpha=0.92,                 # near-full opacity where the sun is up
         twilight_alpha=0.55,
         border_alpha=0.85,              # colored outlines run the full circle

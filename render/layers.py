@@ -14,6 +14,7 @@ from pathlib import Path
 
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import (
+    QBrush,
     QColor,
     QFont,
     QFontMetricsF,
@@ -21,6 +22,7 @@ from PySide6.QtGui import (
     QPainterPath,
     QPen,
     QPolygonF,
+    QRadialGradient,
 )
 
 from config import constants, defaults
@@ -45,6 +47,9 @@ class RenderContext:
     radius: float                    # logical px, dial radius
     cache: AssetCache
     dpr: float
+    rotation: float = 0.0            # Star/Aura/Umbra/slot rotation: the solar
+                                     # offset, or 0 in upright mode (the noon
+                                     # marker stays solar — day.star_rotation)
 
 
 def dial_point(theta_deg: float, distance: float) -> QPointF:
@@ -105,13 +110,28 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
     return 1.0 if delta >= touch_deg else defaults.MOON_TRANSIT_OPACITY
 
 
-def pointer_palette(spec_palette: tuple, pointer: str) -> tuple:
-    """The skin's own palette when its length matches the pointer's arm
-    count, otherwise the owner's reference palette for that pointer."""
-    count = constants.POINTER_POINTS[pointer]
-    if len(spec_palette) == count:
-        return spec_palette
-    return defaults.POINTER_PALETTES[pointer]
+def palette_for(skin: SkinDefinition) -> tuple:
+    """The active Star+Aura palette preset — ONE source for both the
+    star diamonds and the background wedges (owner spec)."""
+    return defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
+
+
+def draw_event_glow(painter: QPainter, pos: QPointF, marker_radius: float) -> None:
+    """Soft radial halo behind a year marker during a season/moon event
+    window (owner spec: a gentle glow, the marker itself unchanged)."""
+    halo = marker_radius * defaults.GLOW_RADIUS_SCALE
+    gradient = QRadialGradient(pos, halo)
+    center = QColor(defaults.GLOW_COLOR)
+    center.setAlphaF(defaults.GLOW_ALPHA)
+    edge = QColor(defaults.GLOW_COLOR)
+    edge.setAlphaF(0.0)
+    gradient.setColorAt(0.0, center)
+    gradient.setColorAt(1.0, edge)
+    painter.save()
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(QBrush(gradient))
+    painter.drawEllipse(pos, halo, halo)
+    painter.restore()
 
 
 def visible_occupant(occupants: tuple[str, ...], today: str) -> str:
@@ -198,45 +218,47 @@ class Layer(ABC):
 
 
 class BackgroundLayer(Layer):
-    """The FIXED gray brightness wheel, then transparent hue wedges that
-    rotate with the hexagram and appear only where the sun is up (owner
-    model: the hexagram steers the colors; the gray base never moves)."""
+    """The UMBRA (gray brightness wheel) and the AURA (transparent hue
+    wedges over the sunlit part of the day); both rotate with the star
+    — or stand upright when solar rotation is off."""
 
     cadence = Cadence.DAILY
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.background
-        base_radius = ctx.radius * spec.base_radius_fraction
-        radius = ctx.radius * spec.radius_fraction
+        umbra_radius = ctx.radius * spec.umbra_radius_fraction
+        aura_radius = ctx.radius * spec.aura_radius_fraction
         painter.setPen(Qt.PenStyle.NoPen)
 
-        # The gray wheel rotates WITH the hexagram too (owner spec): the
-        # white pair straddles the star's top tip — true solar noon — and
-        # the black pair solar midnight. Its radius is tuned independently
-        # of the colored wedges.
+        # The Umbra rotates WITH the star (owner spec): the lightest
+        # section centers on the star's top tip — true solar noon — and
+        # the darkest on solar midnight. Its radius is tuned
+        # independently of the Aura.
         painter.save()
-        painter.rotate(ctx.day.hexagram_rotation)
+        painter.rotate(ctx.rotation)
         if spec.base_asset is not None:
             draw_pixmap_centered(
-                painter, ctx, spec.base_asset, QPointF(0, 0), 2 * base_radius
+                painter, ctx, spec.base_asset, QPointF(0, 0), 2 * umbra_radius
             )
         else:
-            self._draw_gray_wheel(painter, ctx, base_radius)
+            self._draw_umbra(painter, ctx, umbra_radius)
         painter.restore()
 
-        palette = pointer_palette(spec.sector_palette, ctx.skin.pointer)
+        palette = palette_for(ctx.skin)
         span = 360.0 / len(palette)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
-            painter.setClipPath(pie_path(radius, start, end))
+            painter.setClipPath(pie_path(aura_radius, start, end))
             painter.setOpacity(alpha)
-            painter.rotate(ctx.day.hexagram_rotation)
+            painter.rotate(ctx.rotation)
             for i, color in enumerate(palette):
                 painter.setBrush(QColor(color))
-                draw_pie(painter, radius, i * span - span / 2, i * span + span / 2)
+                draw_pie(
+                    painter, aura_radius, i * span - span / 2, i * span + span / 2
+                )
             painter.restore()
 
-    def _draw_gray_wheel(
+    def _draw_umbra(
         self, painter: QPainter, ctx: RenderContext, radius: float
     ) -> None:
         """The brightness wheel, drawn in the already-rotated frame
@@ -245,8 +267,8 @@ class BackgroundLayer(Layer):
         noon) and bottom (true midnight), the remaining 28 form 14
         mirror-symmetric pairs down the sides. 16 shades on the
         contrast setting's arithmetic ladder."""
-        sections = constants.GRAY_WHEEL_SECTIONS
-        lightest, step = defaults.GRAY_WHEEL_SCALES[ctx.skin.gray_contrast]
+        sections = constants.UMBRA_SECTIONS
+        lightest, step = defaults.UMBRA_SCALES[ctx.skin.umbra_contrast]
         span = 360.0 / sections
         shades = sections // 2 + 1
         for k in range(shades):
@@ -262,21 +284,21 @@ class BackgroundLayer(Layer):
                 )
 
 
-class HexagramLayer(Layer):
-    """Procedural six-diamond star whose top vertex always points at true
-    solar noon. Colored near-full opacity where the sun is up, neutral
-    gray diamonds elsewhere (owner model)."""
+class StarLayer(Layer):
+    """Procedural N-diamond star whose top vertex points at true solar
+    noon (or straight up with solar rotation off). Colored near-full
+    opacity where the sun is up, borders elsewhere (owner model)."""
 
     cadence = Cadence.DAILY
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
-        spec = self._skin.hexagram
+        spec = self._skin.star
 
         # Colored BORDERS run the full circle so the night diamonds stay
         # recognizable (owner spec)...
         painter.save()
         painter.setOpacity(spec.border_alpha)
-        painter.rotate(ctx.day.hexagram_rotation)
+        painter.rotate(ctx.rotation)
         self._draw_diamonds(painter, ctx, fill=False)
         painter.restore()
 
@@ -285,13 +307,13 @@ class HexagramLayer(Layer):
             painter.save()
             painter.setClipPath(pie_path(ctx.radius, start, end))
             painter.setOpacity(alpha)
-            painter.rotate(ctx.day.hexagram_rotation)
+            painter.rotate(ctx.rotation)
             self._draw_diamonds(painter, ctx, fill=True)
             painter.restore()
 
     def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, fill: bool) -> None:
-        spec = self._skin.hexagram
-        colors = pointer_palette(spec.colors, ctx.skin.pointer)
+        spec = self._skin.star
+        colors = palette_for(ctx.skin)
         count = len(colors)
         half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
         tip = ctx.radius * spec.radius_fraction
@@ -331,7 +353,9 @@ class HexagramLayer(Layer):
 
 
 class NoonMarkerLayer(Layer):
-    """Small marker in the ring band at the solar-noon angle."""
+    """Small marker in the ring band at the solar-noon angle. Always
+    SOLAR — a noon marker keeps pointing at true noon even when the
+    star stands upright."""
 
     cadence = Cadence.DAILY
 
@@ -340,7 +364,7 @@ class NoonMarkerLayer(Layer):
         inner = ctx.radius * (1.0 - self._skin.ring.width_fraction)
         size = 2 * ctx.radius * spec.scale
         painter.save()
-        painter.rotate(ctx.day.hexagram_rotation)
+        painter.rotate(ctx.day.star_rotation)
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(spec.color))
         painter.drawPolygon(
@@ -494,7 +518,7 @@ class WeekdayLayer(Layer):
         slot_size = 2 * ctx.radius * spec.diamond_scale
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
             body = visible_occupant(occupants, today)
-            theta = slot_angle + ctx.day.hexagram_rotation
+            theta = slot_angle + ctx.rotation
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit), slot_size,
                 1.0 if body == today else spec.ghost_opacity,
@@ -521,20 +545,29 @@ class CenterBodyLayer(Layer):
         draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
 
 
-class TimeTextLayer(Layer):
-    """The octa pointer's bottom arm carries the digital time instead of
-    a weekday body (owner spec): always "12:24" — no seconds, so the
-    font stays BIG — sized to fill the slot width, and drawn ABOVE the
-    hands (owner spec) like the center body."""
+class BottomSlotLayer(Layer):
+    """The octa pointer's bottom arm carries user-selected info instead
+    of a weekday body (owner spec): the digital time "12:24" (no seconds
+    — the font stays BIG), the date "8 Jul", the day length "15:35" or
+    the zodiac sign name. Text is sized to fill the slot width and drawn
+    ABOVE the hands like the center body."""
 
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        theta = constants.OCTA_TIME_SLOT_ANGLE + ctx.day.hexagram_rotation
+        theta = constants.OCTA_TIME_SLOT_ANGLE + ctx.rotation
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
         slot_size = 2 * ctx.radius * spec.diamond_scale
-        text = ctx.tick.time_hm
+        mode = ctx.skin.octa_slot
+        if mode == "time":
+            text = ctx.tick.time_hm
+        elif mode == "date":
+            text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
+        elif mode == "day_length":
+            text = ctx.day.day_length
+        else:                            # "zodiac" (validated closed set)
+            text = ctx.day.zodiac_name
         # Fit-to-width: the largest font whose text spans the slot's
         # width fraction — measured, not guessed, so it never overflows.
         font = QFont()
@@ -564,6 +597,9 @@ class YearMarkerLayer(Layer):
             moon_angle = angles.moon_cycle_angle(ctx.day.moon_fraction)
             opacity = moon_transit_opacity(spec, ctx.tick.year_angle, moon_angle)
             pos = dial_point(moon_angle, ctx.radius * spec.moon_orbit_fraction)
+            if ctx.tick.moon_event is not None:
+                # ±6 h around a principal phase instant (owner spec).
+                draw_event_glow(painter, pos, ctx.radius * spec.moon_scale)
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
             self._draw_moon(painter, ctx, pos, 2 * ctx.radius * spec.moon_scale)
@@ -573,6 +609,9 @@ class YearMarkerLayer(Layer):
         spec = self._skin.year_marker
         pos = dial_point(ctx.tick.year_angle, ctx.radius * spec.orbit_fraction)
         size = 2 * ctx.radius * spec.scale
+        if ctx.tick.season_event is not None:
+            # ±12 h around a solstice/equinox instant (owner spec).
+            draw_event_glow(painter, pos, size / 2)
         variant = f"{spec.default_variant}_{'day' if ctx.tick.is_daylight else 'night'}"
         asset = spec.variants.get(variant)
         if asset is not None:

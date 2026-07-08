@@ -2,38 +2,25 @@
   "name": "DOMY",
   "z_order": [
     "background",
-    "hexagram",
+    "star",
     "weekday_set",
     "ring",
     "year_marker",
     "hands"
   ],
   "pointer": "hexa",
-  "gray_contrast": "full",
+  "umbra_contrast": "full",
+  "palette_style": "paint",
+  "solar_rotation": true,
+  "octa_slot": "time",
   "background": {
     "base_asset": null,
-    "sector_palette": [
-      "#FFD34D",
-      "#FF9E3D",
-      "#E14B4B",
-      "#8E4BC9",
-      "#3D7BFF",
-      "#4BC96B"
-    ],
     "day_alpha": 0.55,
     "twilight_alpha": 0.28,
-    "base_radius_fraction": 0.9,
-    "radius_fraction": 0.9
+    "umbra_radius_fraction": 0.9,
+    "aura_radius_fraction": 0.9
   },
-  "hexagram": {
-    "colors": [
-      "#FFD34D",
-      "#FF9E3D",
-      "#E14B4B",
-      "#8E4BC9",
-      "#3D7BFF",
-      "#4BC96B"
-    ],
+  "star": {
     "day_alpha": 0.92,
     "twilight_alpha": 0.55,
     "border_alpha": 0.85,

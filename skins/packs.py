@@ -16,7 +16,7 @@ from skins import manifest
 # JSON section name -> (SkinDefinition field, spec class)
 _UNITS = {
     "background": ("background", manifest.BackgroundSpec),
-    "hexagram": ("hexagram", manifest.HexagramSpec),
+    "star": ("star", manifest.StarSpec),
     "noon_marker": ("noon_marker", manifest.NoonMarkerSpec),
     "ring": ("ring", manifest.RingSpec),
     "weekday_set": ("weekday_set", manifest.WeekdaySpec),
@@ -56,19 +56,24 @@ def load_pack(folder: Path, base: manifest.SkinDefinition) -> manifest.SkinDefin
     if "z_order" in raw:
         merged["z_order"] = tuple(raw["z_order"])
     # Top-level scalar choices, validated against the product's closed sets.
-    for key, allowed in (
+    _SCALARS = (
         ("pointer", tuple(constants.POINTER_POINTS)),
-        ("gray_contrast", constants.GRAY_CONTRAST_VARIANTS),
-    ):
+        ("umbra_contrast", constants.UMBRA_CONTRAST_VARIANTS),
+        ("palette_style", constants.PALETTE_STYLES),
+        ("solar_rotation", (True, False)),
+        ("octa_slot", constants.OCTA_SLOT_MODES),
+    )
+    for key, allowed in _SCALARS:
         if key in raw:
             if raw[key] in allowed:
                 merged[key] = raw[key]
             else:
                 problems.append(
-                    f"{key}: unknown value {raw[key]!r} (expected one of {sorted(allowed)})"
+                    f"{key}: unknown value {raw[key]!r} (expected one of {sorted(map(str, allowed))})"
                 )
+    scalar_keys = {key for key, _ in _SCALARS}
     for section, value in raw.items():
-        if section in ("name", "z_order", "pointer", "gray_contrast"):
+        if section in ("name", "z_order") or section in scalar_keys:
             continue
         if section not in _UNITS:
             problems.append(f"unknown section {section!r}")
@@ -164,7 +169,10 @@ def serialize_skin(skin: manifest.SkinDefinition, folder: Path) -> dict:
         "name": skin.name,
         "z_order": list(skin.z_order),
         "pointer": skin.pointer,
-        "gray_contrast": skin.gray_contrast,
+        "umbra_contrast": skin.umbra_contrast,
+        "palette_style": skin.palette_style,
+        "solar_rotation": skin.solar_rotation,
+        "octa_slot": skin.octa_slot,
     }
     for section, (field_name, _) in _UNITS.items():
         payload[section] = portable(getattr(skin, field_name))
