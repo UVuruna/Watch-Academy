@@ -23,12 +23,16 @@ See [Settings Store](settings_store.md).
 System tray icon with the shared context menu. See [Tray Controller](tray.md).
 
 ### `scheduler.py` — Minute Scheduler
-Minute-aligned self-rescheduling timer with clock-jump detection.
-See [Minute Scheduler](scheduler.md).
+Minute- or second-aligned self-rescheduling timer with clock-jump
+detection. See [Minute Scheduler](scheduler.md).
 
-Planned (M4+): `native.py` (ctypes click-through, power/clock-change
-events, optional WorkerW glue), single-instance guard (second launch must
-not spawn a second widget), `settings_dialog.py`, `location_picker.py` (M6).
+### `native.py` — Win32 Integration
+Single-instance mutex, click-through toggle, circular hit-test helper,
+power/clock wake filter. See [Native](native.md).
+
+Planned (M6): `settings_dialog.py`, `location_picker.py`. Deferred:
+optional WorkerW "glue to wallpaper" mode (fragile on Win11 24H2 —
+revisit on demand).
 
 ## Connections
 

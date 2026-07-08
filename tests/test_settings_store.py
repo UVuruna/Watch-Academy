@@ -18,10 +18,18 @@ def test_missing_file_yields_defaults(store):
 
 
 def test_round_trip(store):
-    saved = replace(Settings(), window_x=-1500, window_y=200)
+    saved = replace(Settings(), window_x=-1500, window_y=200, click_through=True)
     store.save(saved)
     assert store.load() == saved
     assert not store.path.with_suffix(".json.tmp").exists()  # atomic write cleaned up
+
+
+def test_click_through_defaults_false_in_older_files(store):
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    assert store.load().click_through is False
 
 
 def test_bom_is_tolerated(store):

@@ -186,7 +186,7 @@ DEFAULT_SKIN = SkinDefinition(
         orbit_fraction=0.38,
     ),
     year_marker=YearMarkerSpec(
-        mode="earth",                   # "moon" and "both" selectable (M6 settings)
+        mode="both",                    # owner preview default; selectable in M6 settings
         variants={
             f"{continent}_{phase}": _DOMY / "year_marker" / f"earth_clean_{continent}_{phase}.png"
             for continent in _CONTINENTS

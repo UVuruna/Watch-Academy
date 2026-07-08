@@ -10,7 +10,8 @@ from PySide6.QtCore import QEvent, Qt, QTimer, Signal
 from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QMenu, QToolTip, QWidget
 
-from config import constants, defaults
+from app import native
+from config import constants, defaults, winapi
 
 
 class ClockWidget(QWidget):
@@ -92,6 +93,16 @@ class ClockWidget(QWidget):
     def moveEvent(self, event) -> None:
         super().moveEvent(event)
         self.moved.emit()
+
+    def nativeEvent(self, event_type, message):
+        """Clicks outside the dial's inscribed circle fall through to
+        whatever lies beneath (desktop icons, other windows) — the square
+        window corners are not ours."""
+        if event_type == b"windows_generic_MSG" and native.nchittest_falls_outside(
+            int(message)
+        ):
+            return True, winapi.HTTRANSPARENT
+        return super().nativeEvent(event_type, message)
 
     # --- Spontaneous-hide watchdog ----------------------------------------------
     # An OS-initiated hide/minimize we did not request is undone after a

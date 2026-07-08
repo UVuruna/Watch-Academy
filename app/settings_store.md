@@ -20,7 +20,8 @@ skin and behavior arrive with M3–M6.
 
 ### Settings
 Frozen dataclass: `schema_version`, `window_x`/`window_y` (`None` = first
-run), `diameter`.
+run), `diameter`, `click_through` (additive key, still schema 1 — absent
+in older files defaults to False).
 
 ### SettingsStore
 - `load()`: missing file → default `Settings` (documented first-run

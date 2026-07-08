@@ -38,6 +38,8 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
   small dials pop the full date over the current weekday body, the Earth
   and the Moon markers (large dials write the text directly)
 - `contextMenuEvent()`: opens the shared menu
+- `nativeEvent()`: WM_NCHITTEST → `HTTRANSPARENT` outside the dial's
+  inscribed circle — corner clicks reach whatever lies beneath
 - `hideEvent()` / `changeEvent()`: spontaneous-hide watchdog — undoes an
   OS-initiated hide/minimize after `WATCHDOG_RESHOW_MS` (note: Win+D on
   Windows 11 24H2 bypasses these events entirely; see the folder doc)

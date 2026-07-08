@@ -50,8 +50,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   persistence; a mid-run save failure surfaces as a tray error balloon
   (once per failure streak) instead of dying silently
 - `_build_menu()`: the shared tray/right-click menu — Size submenu
-  (360/540/720 presets, exclusive check group) + Exit; grows in M4/M6
+  (360/540/720 presets, exclusive check group), Click-through toggle
+  (turn back off via the TRAY — the dial itself no longer takes clicks),
+  Exit; settings dialog arrives in M6
 - `_set_diameter()`: resizes the widget, invalidates the compositor
   caches and persists the choice
+- `_set_click_through()`: flicker-free WS_EX_TRANSPARENT toggle, persisted
+- `_on_wake()`: resume-from-sleep / clock change → immediate full refresh
+  (wired to the native PowerEventFilter)
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

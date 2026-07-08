@@ -16,6 +16,7 @@ from PySide6.QtCore import QObject, QRect, Qt, QTimer
 from PySide6.QtGui import QAction, QActionGroup, QGuiApplication
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
 
+from app import native
 from app.scheduler import MinuteScheduler
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
 from app.tray import TrayController
@@ -67,6 +68,10 @@ class AppController(QObject):
             and defaults.SECONDS_HAND_ENABLED
         )
         self._scheduler = MinuteScheduler(self._on_tick, self, per_second=seconds_hand)
+        # Resume-from-sleep and clock/zone changes refresh immediately —
+        # the scheduled tick never fired while the machine slept.
+        self._power_filter = native.PowerEventFilter(self._on_wake)
+        app.installNativeEventFilter(self._power_filter)
 
         self._save_timer = QTimer(self)
         self._save_timer.setSingleShot(True)
@@ -85,6 +90,8 @@ class AppController(QObject):
         # windowHandle() exists only after show(); a monitor/DPI change
         # invalidates every rasterized cache.
         self._widget.windowHandle().screenChanged.connect(self._on_screen_changed)
+        if self._settings.click_through:
+            native.set_click_through(int(self._widget.winId()), True)
 
     def quit(self) -> None:
         self._widget.mark_closing()
@@ -131,6 +138,10 @@ class AppController(QObject):
                 raise SystemExit(1) from error
             self._compositor.set_day(self._day)
         self._widget.set_tick(build_tick_state(now, self._day))
+
+    def _on_wake(self) -> None:
+        """Resume-from-sleep / system clock change: full refresh now."""
+        self._on_tick(clock_jumped=True)
 
     def _on_screen_changed(self) -> None:
         self._compositor.invalidate()
@@ -249,10 +260,24 @@ class AppController(QObject):
             group.addAction(action)
             size_menu.addAction(action)
         menu.addSeparator()
+        click_through = QAction("Click-through", menu)
+        click_through.setCheckable(True)
+        click_through.setChecked(self._settings.click_through)
+        click_through.setToolTip(
+            "The dial ignores the mouse entirely — turn it back off here in the tray."
+        )
+        click_through.toggled.connect(self._set_click_through)
+        menu.addAction(click_through)
+        menu.addSeparator()
         exit_action = QAction("Exit", menu)
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
         return menu
+
+    def _set_click_through(self, enabled: bool) -> None:
+        native.set_click_through(int(self._widget.winId()), enabled)
+        self._settings = replace(self._settings, click_through=enabled)
+        self._flush_position()
 
     def _set_diameter(self, diameter: int) -> None:
         if diameter == self._settings.diameter:

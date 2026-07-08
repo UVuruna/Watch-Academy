@@ -32,6 +32,7 @@ class Settings:
     window_x: int | None = None
     window_y: int | None = None
     diameter: int = defaults.DEFAULT_DIAL_DIAMETER
+    click_through: bool = False
 
 
 class SettingsStore:
@@ -59,6 +60,8 @@ class SettingsStore:
                 window_x=None if window["x"] is None else int(window["x"]),
                 window_y=None if window["y"] is None else int(window["y"]),
                 diameter=diameter,
+                # Additive key (still schema 1): absent in older files.
+                click_through=bool(raw.get("click_through", False)),
             )
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             raise SettingsCorruptError(self._path, exc) from exc
@@ -71,6 +74,7 @@ class SettingsStore:
                 "y": settings.window_y,
                 "diameter": settings.diameter,
             },
+            "click_through": settings.click_through,
         }
         self._path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self._path.with_suffix(".json.tmp")

@@ -7,6 +7,7 @@ __pycache__/
 # Build output (M7 pipeline)
 build/
 dist/
+*.spec
 setup/cert/
 setup/version_info.txt
 setup/_version_info.py

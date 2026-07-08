@@ -7,6 +7,7 @@ Win32 API literals live in winapi.py.
 
 APP_NAME = "DOMY Watch"
 ORGANIZATION = "UVuruna"
+SINGLE_INSTANCE_MUTEX = "DOMYWatch.SingleInstance"
 
 # --- Dial identity -----------------------------------------------------------
 # The dial is a 24-hour clock face, CLOCKWISE, with 12:00 noon at the TOP

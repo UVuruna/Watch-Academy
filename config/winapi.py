@@ -28,3 +28,6 @@ HTTRANSPARENT = -1
 # Undocumented Progman message that spawns the WorkerW wallpaper host
 # (optional "glue to wallpaper" mode, best-effort on Windows 11 24H2)
 WM_SPAWN_WORKERW = 0x052C
+
+# Kernel error codes
+ERROR_ALREADY_EXISTS = 183

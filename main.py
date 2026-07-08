@@ -22,7 +22,16 @@ def main() -> int:
     # without this, closing any dialog would quit the whole app.
     app.setQuitOnLastWindowClosed(False)
 
+    from app import native
     from app.controller import AppController
+
+    if not native.acquire_single_instance(constants.SINGLE_INSTANCE_MUTEX):
+        from PySide6.QtWidgets import QMessageBox
+
+        QMessageBox.information(
+            None, constants.APP_NAME, "DOMY Watch is already running."
+        )
+        return 0
 
     controller = AppController(app)
     controller.run()
