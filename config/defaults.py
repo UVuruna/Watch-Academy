@@ -148,13 +148,15 @@ POINTER_PALETTES = {
 # slot width (owner: big font, must not overflow the slot).
 TIME_TEXT_WIDTH_FRACTION = 0.95
 
-# Gray wheel shade endpoints per contrast, (lightest, darkest). Owner
-# spec: full contrast spans the whole gray range, soft the gentler
-# 60..195 window. The 17 distinct shades (single top + 15 pairs +
-# single bottom) are spaced evenly between the endpoints.
+# Gray wheel shade ladders per contrast, (lightest, step): 16 values,
+# shade k = lightest - k * step. Owner spec:
+#   full — the whole gray range, 255..0 step 17 (matches his art);
+#   soft — the MIDDLE HALF of the scale (64..192, width 16*8): 16 bins
+#   of 8, each value at its bin center -> 188..68 step 8, symmetric
+#   about 128 (every value + its mirror = 256).
 GRAY_WHEEL_SCALES = {
-    "full": (255, 0),
-    "soft": (195, 60),
+    "full": (255, 17),
+    "soft": (188, 8),
 }
 
 DEFAULT_SKIN = SkinDefinition(

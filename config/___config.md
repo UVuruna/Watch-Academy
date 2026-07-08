@@ -14,7 +14,8 @@ the weekday → celestial body mapping, the pointer variants (hexa 6 /
 cross 4 / octa 8 arms) with their weekday slot layouts (slots rotate
 WITH the star; shared cross slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the
-digital time), the gray-wheel structure (32 sections; single lightest/darkest centered
+digital time), the star arm half-angles (the cross borrows the octa arm shape), the
+gray-wheel structure (30 sections of 12°; single lightest/darkest centered
 on noon/midnight) and contrast variant names, sun thresholds (civil depression,
 horizon/twilight elevations), the six year-anchor angles, moon phase →
 fraction mapping, and the bundled database coverage ranges.

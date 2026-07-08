@@ -240,17 +240,17 @@ class BackgroundLayer(Layer):
         self, painter: QPainter, ctx: RenderContext, radius: float
     ) -> None:
         """The brightness wheel, drawn in the already-rotated frame
-        (owner spec): 32 sections for every pointer — the LIGHTEST and
+        (owner art, measured): 30 sections of 12 deg — the LIGHTEST and
         DARKEST are single sections CENTERED on the top (true solar
-        noon) and bottom (true midnight), the remaining 30 form 15
-        mirror-symmetric pairs down the sides. The 17 shades are spaced
-        evenly between the contrast setting's endpoints."""
+        noon) and bottom (true midnight), the remaining 28 form 14
+        mirror-symmetric pairs down the sides. 16 shades on the
+        contrast setting's arithmetic ladder."""
         sections = constants.GRAY_WHEEL_SECTIONS
-        lightest, darkest = defaults.GRAY_WHEEL_SCALES[ctx.skin.gray_contrast]
+        lightest, step = defaults.GRAY_WHEEL_SCALES[ctx.skin.gray_contrast]
         span = 360.0 / sections
         shades = sections // 2 + 1
         for k in range(shades):
-            value = round(lightest - k * (lightest - darkest) / (shades - 1))
+            value = lightest - k * step
             painter.setBrush(QColor(value, value, value))
             center = k * span
             draw_pie(painter, radius, center - span / 2, center + span / 2)
@@ -293,14 +293,15 @@ class HexagramLayer(Layer):
         spec = self._skin.hexagram
         colors = pointer_palette(spec.colors, ctx.skin.pointer)
         count = len(colors)
-        half = 180.0 / count
+        half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
         tip = ctx.radius * spec.radius_fraction
-        # Inner vertices of a regular N-point star of rhombi:
-        # tip / (2 cos(pi/N)) — 1/sqrt(3) of the tip for the hexagram.
+        # Inner vertices at tip / (2 cos(half)) — the regular-star value
+        # (1/sqrt(3) of the tip for the hexagram); the cross reuses the
+        # octa arm shape, so its arms don't touch (owner spec).
         inner = tip / (2.0 * math.cos(math.radians(half)))
         border_width = max(1.0, ctx.radius * spec.border_width_fraction)
         for k, color in enumerate(colors):
-            theta = k * 2.0 * half
+            theta = k * 360.0 / count
             diamond = QPolygonF(
                 [
                     QPointF(0.0, 0.0),

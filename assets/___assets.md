@@ -9,7 +9,7 @@ Bundled visual assets: the project logo (M7) and bundled skins.
     📁 domy/               ← default bundled skin
       ⚙️ skin.json         ← manifest, serialized FROM config's DEFAULT_SKIN
       📁 dial/             ← ring.png (full DOMY dial art); base_gray.png retired —
-                             the 32-section gray wheel is procedural now
+                             the 30-section gray wheel is procedural now
       📁 hands/            ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
       📁 weekday/          ← sun, moon, mars, mercury, jupiter, venus, saturn (real renders)

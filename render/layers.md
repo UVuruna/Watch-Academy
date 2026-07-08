@@ -48,17 +48,19 @@ then transparent hue wedges at the same rotation, clipped to
 sunlit day (day alpha between sunrise and sunset, twilight alpha over the
 dawn/dusk bands, nothing at night; robust to missing boundaries on
 transitional polar days). With no `base_asset` (the product default) the
-wheel is drawn procedurally: 32 sections for every pointer — the
-lightest and darkest are SINGLE sections centered on the top tip (true
-solar noon) and the bottom (true midnight), the remaining 30 form 15
-mirror-symmetric pairs. The 17 shades are spaced evenly between
-`GRAY_WHEEL_SCALES[gray_contrast]` endpoints — "full" spans 0..255,
-"soft" the gentler 60..195 window.
+wheel is drawn procedurally, matching the owner's measured art: 30
+sections of 12° — the lightest and darkest are SINGLE sections centered
+on the top tip (true solar noon) and the bottom (true midnight), the
+remaining 28 form 14 mirror-symmetric pairs. The 16 shades follow
+`GRAY_WHEEL_SCALES[gray_contrast]` — "full" 255..0 step 17, "soft" the
+middle half of the scale (188..68 step 8, symmetric about 128).
 
 ### HexagramLayer (DAILY)
-Procedural N-diamond star (N = pointer arm count; inner vertices at
-`tip / (2·cos(π/N))` — tip/√3 for the hexagram): colored BORDERS run the
-full circle so the night diamonds stay recognizable; the FILLS
+Procedural N-diamond star (N = pointer arm count; arm half-angles from
+`POINTER_ARM_HALF_ANGLE_DEG`, inner vertices at `tip / (2·cos(half))` —
+tip/√3 for the hexagram; the CROSS borrows the octa arm shape — "octa
+without the diagonals", slim diamonds with gaps): colored BORDERS run
+the full circle so the night diamonds stay recognizable; the FILLS
 (near-full opacity) are clipped to the same `lit_regions()`. The star's
 top tip doubles as the solar-noon pointer — the DOMY skin ships no
 separate noon marker (NoonMarkerLayer remains available to other skins).

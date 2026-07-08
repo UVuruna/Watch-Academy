@@ -16,7 +16,7 @@ from pathlib import Path
 class BackgroundSpec:
     """Base brightness wheel + transparent hue wedges; BOTH rotate with
     the star and the wedges are drawn only over the sunlit part of the
-    day. base_asset None (the product default) draws the 32-section gray
+    day. base_asset None (the product default) draws the 30-section gray
     wheel procedurally — single lightest/darkest sections centered on
     noon/midnight, shades from the gray-contrast setting."""
 

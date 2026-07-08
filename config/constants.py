@@ -132,11 +132,20 @@ WEEKDAY_FULL_NAMES = {
 # octa 8x45).
 POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8}
 
-# Gray brightness wheel: 32 sections for every pointer (owner spec).
+# Star arm (diamond) half-angles. Hexa/octa are the regular N-star
+# values (180/N, adjacent arms touch at the inner vertices); the CROSS
+# uses the OCTA arm shape — "octa without the 4 diagonal arms" (owner
+# spec, design/background/cross.png) — slim diamonds with gaps between
+# them, never the fat rhombi a regular 4-star would give.
+POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5}
+
+# Gray brightness wheel: 30 sections of 12 deg for every pointer,
+# measured directly from the owner's art (design/background/gray.png).
 # The LIGHTEST and DARKEST sections are single, CENTERED on the star's
-# top tip (true solar noon) and bottom (true midnight); the remaining 30
-# form 15 mirror-symmetric pairs down the sides — 17 distinct shades.
-GRAY_WHEEL_SECTIONS = 32
+# top tip (true solar noon) and bottom (true midnight); the remaining 28
+# form 14 mirror-symmetric pairs down the sides — 16 distinct shades
+# (1 + 14*2 + 1 = 30; the owner's structure closes only at 30).
+GRAY_WHEEL_SECTIONS = 30
 
 # The wheel ships in two user-selectable contrast versions.
 GRAY_CONTRAST_VARIANTS = ("full", "soft")

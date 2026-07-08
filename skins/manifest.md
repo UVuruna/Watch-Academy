@@ -25,7 +25,7 @@ extraction is serialization, not redesign.
   star's arm count AND period-hue count) and `gray_contrast` ("full" |
   "soft" — the gray wheel's shade range)
 - `BackgroundSpec` — base wheel (custom art, or None for the procedural
-  32-section gray wheel: single lightest/darkest sections centered on
+  30-section gray wheel: single lightest/darkest sections centered on
   noon/midnight) + transparent period hues that rotate WITH the star,
   drawn only over the sunlit arc (day/twilight alphas)
 - `HexagramSpec` — PROCEDURAL N-diamond star (owner decision: simple

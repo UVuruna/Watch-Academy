@@ -134,24 +134,35 @@ def test_pointer_variants_render(july_wednesday, pointer):
 
 
 def test_gray_wheel_structure():
-    """Owner spec: 32 sections for every pointer; the lightest and
-    darkest are SINGLE sections centered on noon/midnight, the rest
-    mirror-paired — 17 distinct shades spanning the contrast endpoints
-    exactly (full 0..255, soft 60..195)."""
-    assert constants.GRAY_WHEEL_SECTIONS == 32
+    """Measured from the owner's art (gray.png: 30 sections of 12 deg,
+    shades 0..255 step 17): single lightest/darkest sections centered on
+    noon/midnight + 14 mirror pairs = 16 shades. Soft contrast is the
+    middle half of the scale, values at the centers of 16 bins of 8 —
+    188..68, symmetric about 128."""
+    assert constants.GRAY_WHEEL_SECTIONS == 30
     shades = constants.GRAY_WHEEL_SECTIONS // 2 + 1
+    assert shades == 16
     assert 1 + 2 * (shades - 2) + 1 == constants.GRAY_WHEEL_SECTIONS
-    assert defaults.GRAY_WHEEL_SCALES["full"] == (255, 0)
-    assert defaults.GRAY_WHEEL_SCALES["soft"] == (195, 60)
+    assert defaults.GRAY_WHEEL_SCALES["full"] == (255, 17)
+    assert defaults.GRAY_WHEEL_SCALES["soft"] == (188, 8)
     for contrast in constants.GRAY_CONTRAST_VARIANTS:
-        lightest, darkest = defaults.GRAY_WHEEL_SCALES[contrast]
-        values = [
-            round(lightest - k * (lightest - darkest) / (shades - 1))
-            for k in range(shades)
-        ]
-        assert values[0] == lightest and values[-1] == darkest
-        assert values == sorted(values, reverse=True)     # strictly descending
-        assert len(set(values)) == shades                 # all distinct
+        lightest, step = defaults.GRAY_WHEEL_SCALES[contrast]
+        values = [lightest - k * step for k in range(shades)]
+        assert all(0 <= value <= 255 for value in values)
+    full = [255 - k * 17 for k in range(shades)]
+    assert full[-1] == 0                                   # spans the whole range
+    soft = [188 - k * 8 for k in range(shades)]
+    assert soft[-1] == 68
+    assert all(value + mirror == 256 for value, mirror in zip(soft, reversed(soft)))
+
+
+def test_cross_arms_borrow_the_octa_shape():
+    """Owner spec (cross.png): the cross is the octa star WITHOUT the
+    four diagonal arms — slim diamonds with gaps, not a fat 4-star."""
+    half_angles = constants.POINTER_ARM_HALF_ANGLE_DEG
+    assert half_angles["cross"] == half_angles["octa"]
+    for pointer in ("hexa", "octa"):
+        assert half_angles[pointer] == 180.0 / constants.POINTER_POINTS[pointer]
 
 
 def test_soft_contrast_renders_a_gentler_night(july_wednesday):
