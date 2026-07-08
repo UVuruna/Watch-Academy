@@ -15,6 +15,8 @@ blurbs live in `Database/symbolism.json`
 - [The Six Arms (Hexa Paint — the Canon)](#six-arms)
 - [Colors as Moods of the Day](#color-moods)
 - [Virtues and Vices — the Cross-Cure Axes](#virtues-vices)
+- [The Seven Professions](#professions)
+- [The Theological Trio](#theological-trio)
 - [The Octa Extension: Dawn and Dusk](#octa-extension)
 - [Light Palettes — the Prism Reading](#light-palettes)
 - [Layer Reference Tables](#reference-tables)
@@ -175,6 +177,49 @@ Mythic anchors: Cronus devoured his children out of envy and fear of
 being replaced; Odin gave an eye for wisdom; Ares embodies both the
 courage and the rage of battle.
 
+<a id="professions"></a>
+
+## The Seven Professions
+
+Medieval astrology drew the "children of the planets": each planet
+rules the professions born under it. The seven archetypal callings of
+the old world land one per body — and each snaps onto its body's
+virtue and vice:
+
+| Body | Profession | Why |
+|---|---|---|
+| Sun | **Ruler** | the royal planet; the ruler's lesson is Humility, his sin Pride |
+| Moon | **Physician** | medieval medicine followed the Moon (bloodletting calendars ran on its phases); the night watch at the sickbed; the healer's calm hand against the patient's fear |
+| Mars | **Soldier** | the warrior's two faces are Courage and Wrath |
+| Mercury | **Merchant** | Hermes, god of merchants and roads; Wisdom against Greed |
+| Jupiter | **Priest / Teacher** | Brihaspati IS the guru of the gods — Thursday is the teacher's day; the jovial bishop's Generosity and his table's Excess |
+| Venus | **Artist** | the planet's "children" in the old woodcuts are musicians and lovers; Love and its Jealousy |
+| Saturn | **Farmer** | Cronus carries the harvest sickle; the farmer sows and WAITS — Patience — and eyes the neighbor's field — Envy |
+
+The Moon's traditional alternate is the **Sailor** (the Moon rules the
+tides); the physician stands here by owner decision — and the
+calm-against-fear link is the stronger one.
+
+<a id="theological-trio"></a>
+
+## The Theological Trio
+
+Faith, Hope and Love are deliberately NOT three arm virtues — in
+tradition they are a SEPARATE set (the three theological virtues,
+alongside the seven remedies for the seven sins; Love alone belongs to
+both lists, and that too is canon: *caritas* appears in each). On the
+dial they span three different KINDS of places:
+
+- **Faith — the center** (Sunday, the day of worship): the vertical
+  axis, toward God;
+- **Hope — the dawn arm** (west, 06h): the horizon, toward what comes;
+- **Love — Venus' arm** (Friday evening): among people.
+
+The vertical, the horizon and the human — the trio stretches across
+the whole dial instead of sitting on it. (Considered and set aside:
+Faith on Jupiter/yellow — defensible through the priest's day — and
+Hope on blue; it would cost two cross-cures, too much for the gain.)
+
 <a id="octa-extension"></a>
 
 ## The Octa Extension: Dawn and Dusk
@@ -208,15 +253,15 @@ would have projected it. Same week, two readings.
 
 The full weave, one arm per row (hexa paint canon):
 
-| Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice |
-|---|---|---|---|---|---|---|---|---|
-| Sunday | Sun | Helios | Sól | Christianity | white-gold | — (source) | Humility | Pride |
-| Monday | Moon | Selene | Máni | Buddhism | blue | Calm | Serenity | Fear |
-| Tuesday | Mars | Ares | Tyr | Zoroastrianism | orange | Zeal | Courage | Wrath |
-| Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed |
-| Thursday | Jupiter | Zeus | Thor | Hinduism | yellow | Joy | Generosity | Excess |
-| Friday | Venus | Aphrodite | Freya | Islam | red | Passion | Love | Jealousy |
-| Saturday | Saturn | Cronus | — | Judaism | green | Renewal | Patience | Envy |
+| Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice | Profession |
+|---|---|---|---|---|---|---|---|---|---|
+| Sunday | Sun | Helios | Sól | Christianity | white-gold | — (source) | Humility | Pride | Ruler |
+| Monday | Moon | Selene | Máni | Buddhism | blue | Calm | Serenity | Fear | Physician |
+| Tuesday | Mars | Ares | Tyr | Zoroastrianism | orange | Zeal | Courage | Wrath | Soldier |
+| Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed | Merchant |
+| Thursday | Jupiter | Zeus | Thor | Hinduism | yellow | Joy | Generosity | Excess | Priest/Teacher |
+| Friday | Venus | Aphrodite | Freya | Islam | red | Passion | Love | Jealousy | Artist |
+| Saturday | Saturn | Cronus | — | Judaism | green | Renewal | Patience | Envy | Farmer |
 
 Octa extras:
 

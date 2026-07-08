@@ -4,7 +4,9 @@
     "white_light": "White light is the sum of all colors. Sunday sits in the center because the Sun is not one color among six - the six arms are sunlight decomposed, the star is the prism, Sunday is the source.",
     "paint_and_light": "Before Newton the world knew color as pigment: yellow, red and blue, mixed into orange, green and purple - the painter's wheel of six. Newton's prism opened the second world: red, green and blue light with cyan, magenta and yellow between them. DOMY's 'paint' and 'light' palette styles are exactly these two worlds.",
     "gold_and_silver": "Alchemy gives one metal to each luminary: gold to the Sun, silver to the Moon. On the dial the top is solar noon and the bottom is midnight, so gold crowns the top tip and silver the bottom - the day metal above, the night metal below.",
-    "cross_cure": "Every body carries a bright and a dark face - a virtue and a vice. Across each axis of the star, one body's virtue is the cure for the opposite body's vice."
+    "cross_cure": "Every body carries a bright and a dark face - a virtue and a vice. Across each axis of the star, one body's virtue is the cure for the opposite body's vice.",
+    "professions": "Medieval astrology drew the 'children of the planets': each planet rules the callings born under it. The seven archetypal professions of the old world land one per body, and each snaps onto its body's virtue and vice.",
+    "theological_trio": "Faith, Hope and Love are a separate set from the seven virtue/vice pairs (Love alone belongs to both, as in tradition). They span three kinds of places: Faith at the center (Sunday, toward God - the vertical), Hope on the dawn arm (west, toward what comes - the horizon), Love on Venus' arm (toward people - the human)."
   },
   "center": {
     "day": "Sunday",
@@ -15,8 +17,10 @@
     "color": "white-gold",
     "virtue": "Humility",
     "vice": "Pride",
+    "profession": "Ruler",
     "blurbs": {
       "day": "Sunday is the source, not one day among six: as white light contains every color, the week's center contains every day.",
+      "profession": "The Sun is the royal planet, and its child is the Ruler - whose lesson is Humility and whose sin is Pride.",
       "greek": "Helios drives the sun chariot across the sky each day; the Greeks named this day hemera Heliou, the day of the Sun.",
       "norse": "Sol (Sunna) is the Norse sun goddess, chased across the sky by the wolf Skoll; sunnudagr is her day.",
       "religion": "Christianity worships on the Lord's Day; in 321 Constantine made the 'day of the Sun' the day of rest, fusing Sun and Church in history. Sunday is also the day of Faith - with Hope at dawn and Love on Venus, the three theological virtues span the dial.",
@@ -36,8 +40,10 @@
       "mood": "Calm",
       "virtue": "Serenity",
       "vice": "Fear",
+      "profession": "Physician",
       "blurbs": {
         "day": "Monday is the Moon's day in every tongue that kept the planetary week - Selene's day in Greek, Mani's in Norse, Somvar in Sanskrit.",
+        "profession": "Medieval medicine followed the Moon - bloodletting calendars ran on its phases - and the physician keeps the night watch at the sickbed: a calm hand against the patient's fear. (The Moon's traditional alternate child is the Sailor, ruler of tides.)",
         "greek": "Selene is the Titan goddess of the Moon, crossing the night sky in a silver chariot drawn by white horses.",
         "norse": "Mani steers the Moon through the night, hunted by the wolf Hati until the world's end.",
         "religion": "The Buddhist calendar is lunar: Uposatha observance days follow the Moon's phases, and Vesak - the Buddha's birth, awakening and passing - falls on a full moon.",
@@ -56,8 +62,10 @@
       "mood": "Zeal",
       "virtue": "Courage",
       "vice": "Wrath",
+      "profession": "Soldier",
       "blurbs": {
         "day": "Tuesday belongs to the red planet: Ares' day to the Greeks, Tyr's day (tysdagr) to the Norse, Mangalvar in the Vedic week.",
+        "profession": "Mars' child is the Soldier, whose two faces are the body's virtue and vice themselves: Courage in defense, Wrath unleashed.",
         "greek": "Ares is the storm of battle itself - the Greeks honored his ferocity and feared his rage in the same breath.",
         "norse": "Tyr, god of war AND justice, gave his right hand to bind the wolf Fenrir - courage in the service of order.",
         "religion": "Zoroastrianism keeps the sacred fire Atar burning in its temples, and its heart is asha - cosmic truth and justice - mirrored in the fiery planet and the just god of this day.",
@@ -76,8 +84,10 @@
       "mood": "Sorrow",
       "virtue": "Wisdom",
       "vice": "Greed",
+      "profession": "Merchant",
       "blurbs": {
         "day": "Wednesday is Mercury's day - Hermes' day in Greek, Woden's (Odin's) day in the north, Budhvar in Sanskrit, the water-star day in East Asia.",
+        "profession": "Hermes is the god of roads and trade, and his child is the Merchant - who weighs with Wisdom and falls to Greed.",
         "greek": "Hermes is the messenger between worlds: god of roads, merchants, thieves and cunning speech, guide of souls into the underworld.",
         "norse": "Odin hung nine nights on the world-tree and gave an eye at Mimir's well - all of it for wisdom. Wednesday is literally Wodnesdaeg, his day.",
         "religion": "In the East Asian week Wednesday is the day of the water star - and water is the Tao's central image: the soft thing that overcomes the hard, the way that flows without striving.",
@@ -96,8 +106,10 @@
       "mood": "Joy",
       "virtue": "Generosity",
       "vice": "Excess",
+      "profession": "Priest / Teacher",
       "blurbs": {
         "day": "Thursday is the king planet's day: Zeus' day in Greek, Thor's day in the north, Guruvar - the guru's day - in the Vedic week.",
+        "profession": "Jupiter's children are priests, judges and teachers - Brihaspati IS the guru of the gods, and Thursday is the teacher's day: generous of hand, jovial of table.",
         "greek": "Zeus rules sky and thunder from Olympus, king of gods and keeper of oaths and guests.",
         "norse": "Thor, thunder itself, guards gods and men with the hammer Mjolnir; thorsdagr became Thursday.",
         "religion": "In Hindu tradition Thursday IS Brihaspativar: Brihaspati, guru of the gods, is the planet Jupiter itself, and his day is the week's most devotional.",
@@ -116,8 +128,10 @@
       "mood": "Passion",
       "virtue": "Love",
       "vice": "Jealousy",
+      "profession": "Artist",
       "blurbs": {
         "day": "Friday is the day of the evening star: Aphrodite's day in Greek, Freya's day in the north, Shukravar in Sanskrit.",
+        "profession": "Venus' children in the old woodcuts are musicians, painters and lovers - the Artist, who works from Love and burns with Jealousy.",
         "greek": "Aphrodite, born of sea-foam, rules love, beauty and desire - the planet Venus is her lamp at dusk.",
         "norse": "Freya, goddess of love and of the slain, rides a chariot drawn by cats and weeps tears of gold; frjadagr is her day.",
         "religion": "Islam gathers on Friday: Jumu'ah, the congregational prayer, makes this the blessed day of the week.",
@@ -136,8 +150,10 @@
       "mood": "Renewal",
       "virtue": "Patience",
       "vice": "Envy",
+      "profession": "Farmer",
       "blurbs": {
         "day": "Saturday is Saturn's day - Cronus' day to the Greeks, Shanivar in Sanskrit. The Norse alone gave it no god: laugardagr, washing day; the Sabbath stands there instead.",
+        "profession": "Cronus carries the harvest sickle, and Saturn's child is the Farmer - who sows and WAITS (Patience) and eyes the neighbor's field (Envy).",
         "greek": "Cronus, Titan of time and the harvest, devoured his own children out of envy and fear of being replaced - until Zeus, hidden away, returned to overthrow him.",
         "norse": "No Norse god claims this day; it belongs to rest and cleansing - and, across the sea, to the Sabbath.",
         "religion": "Shabbat is Judaism's seventh day of rest - and in Hebrew the planet Saturn is named Shabtai, after the Sabbath itself: the day named the planet.",
