@@ -89,3 +89,12 @@ def test_tick_state(belgrade_noon_context):
     # ~16 days after the summer solstice: ~1 deg/day clockwise from the top.
     assert 12.0 < tick.year_angle < 20.0
     assert tick.is_daylight is True                      # noon in July
+
+
+def test_tick_state_carries_the_digital_time(belgrade_noon_context):
+    """The octa pointer's bottom slot shows this string verbatim —
+    always without seconds (owner: keep the font big)."""
+    now, day = belgrade_noon_context
+    moment = now.replace(hour=12, minute=24, second=30)
+    tick = build_tick_state(moment, day)
+    assert tick.time_hm == "12:24"

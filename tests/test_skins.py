@@ -68,3 +68,26 @@ def test_serialize_is_json_ready():
     json.dumps(payload)                  # must not raise
     assert payload["ring"]["asset"] == "dial/ring.png"
     assert payload["noon_marker"]["asset"] is None
+    assert payload["pointer"] == "hexa"
+    assert payload["gray_contrast"] == "full"
+
+
+def test_pack_pointer_and_contrast_merge(tmp_path):
+    (tmp_path / "skin.json").write_text(
+        json.dumps({"pointer": "octa", "gray_contrast": "soft"}), encoding="utf-8"
+    )
+    skin = load_pack(tmp_path, defaults.DEFAULT_SKIN)
+    assert skin.pointer == "octa"
+    assert skin.gray_contrast == "soft"
+
+
+def test_pack_rejects_unknown_pointer_and_contrast(tmp_path):
+    (tmp_path / "skin.json").write_text(
+        json.dumps({"pointer": "banana", "gray_contrast": "extreme"}),
+        encoding="utf-8",
+    )
+    with pytest.raises(SkinValidationError) as excinfo:
+        load_pack(tmp_path, defaults.DEFAULT_SKIN)
+    problems = "\n".join(excinfo.value.problems)
+    assert "banana" in problems
+    assert "extreme" in problems

@@ -59,6 +59,32 @@ def test_diameter_out_of_range_raises(store):
         store.load()
 
 
+def test_pointer_and_contrast_round_trip(store):
+    saved = replace(Settings(), pointer="octa", gray_contrast="soft")
+    store.save(saved)
+    assert store.load() == saved
+
+
+def test_unknown_pointer_raises(store):
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "pointer": "banana"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
+def test_unknown_gray_contrast_raises(store):
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "gray_contrast": "extreme"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
 def test_quarantine_renames_to_bak(store):
     store.path.write_text("garbage", encoding="utf-8")
     backup = store.quarantine()
