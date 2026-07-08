@@ -37,7 +37,12 @@ draws the MINUTE layers (hands, year marker) live.
   (hexa arms name their two zodiac signs; cross/octa cardinal arms give
   the exact solstice/equinox instant; octa diagonals describe their
   season with dates, duration and the middle date the arrow points at —
-  a trailing * flags solar-rotation imprecision); the twilight bands
+  a trailing * flags solar-rotation imprecision; hexa arms append,
+  after a blank line, the encyclopedic blurb of the arm's body in the
+  ACTIVE weekday theme, from the
+  [Symbolism Repository](../data/symbolism.md)); the twilight bands.
+  With `legend` off, tooltip_at returns None for EVERYTHING — combined
+  with click-through the dial has zero interaction (owner spec)
 
 The layer stack follows `skin.z_order`; the current day's center body
 (and, on the octa pointer, the bottom-arm info slot) are appended LAST

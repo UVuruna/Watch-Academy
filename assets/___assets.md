@@ -12,10 +12,12 @@ Bundled visual assets: the project logo (M7) and bundled skins.
                              the 30-section gray wheel is procedural now
       📁 hands/            ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
-      📁 weekday/          ← sun, moon, mars, mercury, jupiter, venus, saturn (real renders)
+      📁 weekday/          ← body art per THEME (SYMBOLISM.md): planets/ (real renders),
+                             greek/, norse/, religion/, profession/ (<body>.png — 1×1
+                             placeholders until the owner pastes his vectors over them)
       📁 year_marker/      ← earth_{clean|atmo}_{continent}_{day|night}.png (6 continents × 2 styles × day/night)
-      📁 zodiac/           ← octa bottom-arm art (owner ships 12 PNGs per folder):
-                             sign/, logo/, constellation/ (<Sign>.png), chinese/ (<Animal>.png)
+      📁 zodiac/           ← octa bottom-arm art: sign/, logo/, constellation/ (<Sign>.png),
+                             chinese/ (<Animal>.png) — 1×1 placeholders, same convention
     📁 morph/              ← partial skin: its own ring.png + letters (M-12, Π-16, H-8, Ω-0)
       ⚙️ skin.json
       📁 dial/

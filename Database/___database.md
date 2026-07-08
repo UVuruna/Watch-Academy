@@ -27,10 +27,11 @@ variant kept for analysis only, not bundled.
 
 ### `symbolism.json`
 Machine-readable blurbs of the dial's symbolic cosmology (one to three
-sentences per day/god/religion/color/virtue/vice, plus the axes and
-philosophy notes). The narrative canon lives in
-[DOMY Symbolism](../SYMBOLISM.md); the app may surface these texts in
-future hovers/info panels.
+sentences per day/god/religion/profession/color/virtue/vice, plus the
+axes and philosophy notes). The narrative canon lives in
+[DOMY Symbolism](../SYMBOLISM.md); the hexa diamond hover shows the
+active theme's blurb via the
+[Symbolism Repository](../data/symbolism.md).
 
 ## Connections
 

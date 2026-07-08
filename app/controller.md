@@ -53,9 +53,12 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `_add_choice_submenu()` helper (one exclusive check-group per
   submenu) — Skin, Size (360/540/720), Pointer (Cross/Hexa/Octa),
   Palette (Paint/Light), Umbra (two groups: Fine/Coarse/Gradient form +
-  Full/Half contrast), Octa slot (nine modes; the four image modes stay
-  grayed out until the owner's 12-PNG folder exists under
-  assets/skins/domy/zodiac/), Earth (Clean/Atmosphere), the Solar
+  Full/Half contrast), Octa slot (nine modes; 1×1 placeholder skeletons
+  ship for the image art — the owner pastes his vectors over them),
+  Earth (Clean/Atmosphere), Weekday theme (Planets / Greek gods /
+  Norse gods / Religions / Professions — themed body art with the
+  canon hover names), the Legend toggle (off = no hovers at all; with
+  click-through the dial has zero interaction), the Solar
   rotation toggle (off = upright Star/Aura/Umbra), Time Travel…,
   Click-through toggle (turn
   back off via the TRAY — the dial itself no longer takes clicks),

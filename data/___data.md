@@ -1,6 +1,6 @@
 # data/
 
-Three repositories over `Database/*.json` — the only code that knows the
+Four repositories over `Database/*.json` — the only code that knows the
 file schemas. Loud failures with the supported range in the message
 (Rule #1); plain dataclasses out; no Qt (enforced by the purity test).
 
@@ -26,6 +26,12 @@ Windowed extraction over `moonPhases_utc.json` (1551–2649): the target
 year plus both neighbors, month keys filtered with `isdigit()` (year
 entries mix month dicts with aggregate count keys), "Last Quarter"
 normalized to "Third Quarter". See [Moon Phases](moon_phases.md).
+
+### `symbolism.py` — Symbolism Repository
+Per-body blurbs from `symbolism.json` (the machine-readable companion
+of [DOMY Symbolism](../SYMBOLISM.md)) — the hexa diamond hover shows
+the active weekday theme's encyclopedic text.
+See [Symbolism Repository](symbolism.md).
 
 ### `_io.py` — Shared Loader
 `load_json_checked()` — a plain function, not a base class (two small
