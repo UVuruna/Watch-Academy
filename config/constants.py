@@ -27,11 +27,6 @@ SECONDS_PER_DEGREE = SECONDS_PER_DAY / 360.0    # 240 s of day per dial degree
 # exactly this many design units above its canvas bottom.
 HAND_HUB_OFFSET_UNITS = 15
 
-# Regular hexagram geometry: the star's inner-hexagon vertices sit at
-# tip_radius / sqrt(3) — each of the six diamonds spans (center, tip-30deg
-# inner vertex, tip, tip+30deg inner vertex).
-HEXAGRAM_INNER_FRACTION = 3 ** -0.5
-
 # --- Sun ----------------------------------------------------------------------
 CIVIL_DEPRESSION = 6.0              # degrees below horizon for dawn/dusk
 HORIZON_ELEVATION_DEG = -0.833      # solar disc touches the horizon (refraction)
@@ -132,14 +127,60 @@ WEEKDAY_FULL_NAMES = {
     "sun": "Sunday",
 }
 
-# Diamond slot of each orbiting body: dial degrees from the hexagram's TOP
-# vertex, clockwise. The slots rotate WITH the hexagram (owner decision) —
-# the bodies stay inside their diamonds. Sun has no slot (center).
-WEEKDAY_SLOT_ANGLES = {
-    "jupiter": 0.0,      # top    / yellow
-    "mars": 60.0,        # upper-right / orange
-    "venus": 120.0,      # lower-right / red
-    "mercury": 180.0,    # bottom / purple
-    "moon": 240.0,       # lower-left  / blue
-    "saturn": 300.0,     # upper-left  / green
+# Pointer variants: how many arms the star has — and with how many hues
+# the day's periods are measured (owner spec: cross 4x90, hexa 6x60,
+# octa 8x45).
+POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8}
+
+# Gray brightness wheel: 32 sections for every pointer (owner spec).
+# The LIGHTEST and DARKEST sections are single, CENTERED on the star's
+# top tip (true solar noon) and bottom (true midnight); the remaining 30
+# form 15 mirror-symmetric pairs down the sides — 17 distinct shades.
+GRAY_WHEEL_SECTIONS = 32
+
+# The wheel ships in two user-selectable contrast versions.
+GRAY_CONTRAST_VARIANTS = ("full", "soft")
+
+# Body -> Sunday-first weekday index (the owner's numbering used by the
+# shared-slot priority rule: the occupant whose day comes NEXT wins).
+SUNDAY_FIRST_INDEX = {
+    "sun": 0,
+    "moon": 1,
+    "mars": 2,
+    "mercury": 3,
+    "jupiter": 4,
+    "venus": 5,
+    "saturn": 6,
 }
+
+# Weekday slots per pointer: (dial degrees from the pointer's TOP vertex,
+# occupant bodies). Slots rotate WITH the star (owner decision). Owner's
+# layouts: hexa = one body per arm, Sun in the center; cross = pairs on
+# 6/12/18 with Wednesday alone at the bottom; octa = one per arm with the
+# bottom arm showing the digital time instead of a body.
+POINTER_WEEKDAY_SLOTS = {
+    "hexa": (
+        (0.0, ("jupiter",)),
+        (60.0, ("mars",)),
+        (120.0, ("venus",)),
+        (180.0, ("mercury",)),
+        (240.0, ("moon",)),
+        (300.0, ("saturn",)),
+    ),
+    "cross": (
+        (0.0, ("jupiter", "sun")),
+        (90.0, ("mars", "venus")),
+        (180.0, ("mercury",)),
+        (270.0, ("moon", "saturn")),
+    ),
+    "octa": (
+        (0.0, ("sun",)),
+        (45.0, ("mars",)),
+        (90.0, ("venus",)),
+        (135.0, ("mercury",)),
+        (225.0, ("moon",)),
+        (270.0, ("saturn",)),
+        (315.0, ("jupiter",)),
+    ),
+}
+OCTA_TIME_SLOT_ANGLE = 180.0         # the bottom arm carries the digital time

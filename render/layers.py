@@ -105,6 +105,35 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
     return 1.0 if delta >= touch_deg else defaults.MOON_TRANSIT_OPACITY
 
 
+def pointer_palette(spec_palette: tuple, pointer: str) -> tuple:
+    """The skin's own palette when its length matches the pointer's arm
+    count, otherwise the owner's reference palette for that pointer."""
+    count = constants.POINTER_POINTS[pointer]
+    if len(spec_palette) == count:
+        return spec_palette
+    return defaults.POINTER_PALETTES[pointer]
+
+
+def visible_occupant(occupants: tuple[str, ...], today: str) -> str:
+    """Shared-slot priority (owner rule): the occupant whose weekday comes
+    NEXT from today wins — and today itself always wins (distance 0)."""
+    today_index = constants.SUNDAY_FIRST_INDEX[today]
+    return min(
+        occupants,
+        key=lambda body: (constants.SUNDAY_FIRST_INDEX[body] - today_index) % 7,
+    )
+
+
+def today_slot_theta(pointer: str, today: str) -> float | None:
+    """Unrotated dial angle of the slot showing today's body, or None
+    when today lives in the center (the hexa pointer keeps the Sun
+    there)."""
+    for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[pointer]:
+        if today in occupants:
+            return angle
+    return None
+
+
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
     """Clip path for the pie between two dial angles going clockwise."""
     path = QPainterPath()
@@ -182,9 +211,9 @@ class BackgroundLayer(Layer):
         painter.setPen(Qt.PenStyle.NoPen)
 
         # The gray wheel rotates WITH the hexagram too (owner spec): the
-        # white section centers on the star's top tip — true solar noon —
-        # and the black section on solar midnight. Its radius is tuned
-        # independently of the colored wedges.
+        # white pair straddles the star's top tip — true solar noon — and
+        # the black pair solar midnight. Its radius is tuned independently
+        # of the colored wedges.
         painter.save()
         painter.rotate(ctx.day.hexagram_rotation)
         if spec.base_asset is not None:
@@ -192,21 +221,45 @@ class BackgroundLayer(Layer):
                 painter, ctx, spec.base_asset, QPointF(0, 0), 2 * base_radius
             )
         else:
-            painter.setBrush(QColor(spec.base_color))
-            painter.drawEllipse(
-                QRectF(-base_radius, -base_radius, 2 * base_radius, 2 * base_radius)
-            )
+            self._draw_gray_wheel(painter, ctx, base_radius)
         painter.restore()
 
+        palette = pointer_palette(spec.sector_palette, ctx.skin.pointer)
+        span = 360.0 / len(palette)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(radius, start, end))
             painter.setOpacity(alpha)
             painter.rotate(ctx.day.hexagram_rotation)
-            for i, color in enumerate(spec.sector_palette):
+            for i, color in enumerate(palette):
                 painter.setBrush(QColor(color))
-                draw_pie(painter, radius, i * 60.0 - 30.0, i * 60.0 + 30.0)
+                draw_pie(painter, radius, i * span - span / 2, i * span + span / 2)
             painter.restore()
+
+    def _draw_gray_wheel(
+        self, painter: QPainter, ctx: RenderContext, radius: float
+    ) -> None:
+        """The brightness wheel, drawn in the already-rotated frame
+        (owner spec): 32 sections for every pointer — the LIGHTEST and
+        DARKEST are single sections CENTERED on the top (true solar
+        noon) and bottom (true midnight), the remaining 30 form 15
+        mirror-symmetric pairs down the sides. The 17 shades are spaced
+        evenly between the contrast setting's endpoints."""
+        sections = constants.GRAY_WHEEL_SECTIONS
+        lightest, darkest = defaults.GRAY_WHEEL_SCALES[ctx.skin.gray_contrast]
+        span = 360.0 / sections
+        shades = sections // 2 + 1
+        for k in range(shades):
+            value = round(lightest - k * (lightest - darkest) / (shades - 1))
+            painter.setBrush(QColor(value, value, value))
+            center = k * span
+            draw_pie(painter, radius, center - span / 2, center + span / 2)
+            if 0 < k < shades - 1:
+                # Mirrored partner on the left side; the lightest and
+                # darkest stay single.
+                draw_pie(
+                    painter, radius, 360.0 - center - span / 2, 360.0 - center + span / 2
+                )
 
 
 class HexagramLayer(Layer):
@@ -238,17 +291,22 @@ class HexagramLayer(Layer):
 
     def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, fill: bool) -> None:
         spec = self._skin.hexagram
+        colors = pointer_palette(spec.colors, ctx.skin.pointer)
+        count = len(colors)
+        half = 180.0 / count
         tip = ctx.radius * spec.radius_fraction
-        inner = tip * constants.HEXAGRAM_INNER_FRACTION
+        # Inner vertices of a regular N-point star of rhombi:
+        # tip / (2 cos(pi/N)) — 1/sqrt(3) of the tip for the hexagram.
+        inner = tip / (2.0 * math.cos(math.radians(half)))
         border_width = max(1.0, ctx.radius * spec.border_width_fraction)
-        for k, color in enumerate(spec.colors):
-            theta = k * 60.0
+        for k, color in enumerate(colors):
+            theta = k * 2.0 * half
             diamond = QPolygonF(
                 [
                     QPointF(0.0, 0.0),
-                    dial_point(theta - 30.0, inner),
+                    dial_point(theta - half, inner),
                     dial_point(theta, tip),
-                    dial_point(theta + 30.0, inner),
+                    dial_point(theta + half, inner),
                 ]
             )
             if fill:
@@ -406,12 +464,14 @@ def draw_weekday_body(
 
 
 class WeekdayLayer(Layer):
-    """Seven bodies: Sun in the center, six in the hexagram diamonds.
-    The diamond slots rotate WITH the hexagram (owner decision) and stay
-    BELOW the hands. Modes: "ghost" (all visible, non-current faint) and
-    "center_only" (only the current day's body, in the center). Whenever
-    the CENTER image is the current day it is drawn by CenterBodyLayer
-    instead — ABOVE the hands (owner spec; diamonds are unaffected)."""
+    """Weekday bodies on the pointer's arm slots (rotating WITH the star,
+    owner decision), BELOW the hands. The hexa pointer keeps the Sun in
+    the center; cross/octa give every body a slot — shared slots show
+    only the priority winner (see visible_occupant). Modes: "ghost" (all
+    visible slots, non-current faint) and "center_only" (only the current
+    day's body, in the center). Whenever the CENTER image is the current
+    day it is drawn by CenterBodyLayer instead — ABOVE the hands (owner
+    spec; slot images are unaffected)."""
 
     cadence = Cadence.DAILY
 
@@ -422,14 +482,17 @@ class WeekdayLayer(Layer):
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
 
-        if today != "sun":
+        if ctx.skin.pointer == "hexa" and today != "sun":
+            # Only the hexa layout centers the Sun; on Sundays the center
+            # pass draws it opaque above the hands instead.
             center_size = 2 * ctx.radius * spec.center_scale
             draw_weekday_body(
                 painter, ctx, "sun", QPointF(0, 0), center_size, spec.ghost_opacity
             )
         orbit = ctx.radius * spec.orbit_fraction
         slot_size = 2 * ctx.radius * spec.diamond_scale
-        for body, slot_angle in constants.WEEKDAY_SLOT_ANGLES.items():
+        for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
+            body = visible_occupant(occupants, today)
             theta = slot_angle + ctx.day.hexagram_rotation
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit), slot_size,
@@ -439,19 +502,49 @@ class WeekdayLayer(Layer):
 
 class CenterBodyLayer(Layer):
     """The current day's CENTER image drawn ABOVE the hands — the opaque
-    Sun on Sundays in ghost mode, or the day's body in center_only mode —
-    so the hands sweep behind it (owner spec; the diamond images never
-    move up here)."""
+    Sun on Sundays in ghost mode (hexa pointer only; cross/octa seat the
+    Sun on an arm slot), or the day's body in center_only mode — so the
+    hands sweep behind it (owner spec; the slot images never move up
+    here)."""
 
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
-        if spec.display_mode != "center_only" and today != "sun":
+        if spec.display_mode != "center_only" and not (
+            ctx.skin.pointer == "hexa" and today == "sun"
+        ):
             return
         center_size = 2 * ctx.radius * spec.center_scale
         draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
+
+
+class TimeTextLayer(Layer):
+    """The octa pointer's bottom arm carries the digital time instead of
+    a weekday body (owner spec): always "12:24" — no seconds, so the
+    font stays BIG — sized to fill the slot width, and drawn ABOVE the
+    hands (owner spec) like the center body."""
+
+    cadence = Cadence.MINUTE
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        spec = self._skin.weekday_set
+        theta = constants.OCTA_TIME_SLOT_ANGLE + ctx.day.hexagram_rotation
+        pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
+        slot_size = 2 * ctx.radius * spec.diamond_scale
+        text = ctx.tick.time_hm
+        # Fit-to-width: the largest font whose text spans the slot's
+        # width fraction — measured, not guessed, so it never overflows.
+        font = QFont()
+        font.setBold(True)
+        font.setPixelSize(100)
+        advance = QFontMetricsF(font).horizontalAdvance(text)
+        target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+        font.setPixelSize(
+            max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
+        )
+        draw_outlined_text(painter, pos, text, font)
 
 
 class YearMarkerLayer(Layer):

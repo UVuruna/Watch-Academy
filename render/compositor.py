@@ -25,9 +25,11 @@ from render.layers import (
     NoonMarkerLayer,
     RenderContext,
     RingLayer,
+    TimeTextLayer,
     WeekdayLayer,
     YearMarkerLayer,
     dial_point,
+    today_slot_theta,
 )
 from skins.manifest import SkinDefinition
 
@@ -60,6 +62,10 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
+        if skin.pointer == "octa":
+            # The octa bottom arm's digital time also draws OVER the
+            # hands (owner spec).
+            layers.append(TimeTextLayer(skin))
     return layers
 
 
@@ -124,12 +130,14 @@ class Compositor:
 
         weekday = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[day.weekday_index]
-        if weekday.display_mode == "center_only" or today == "sun":
+        today_theta = today_slot_theta(self._skin.pointer, today)
+        if weekday.display_mode == "center_only" or today_theta is None:
+            # center_only mode, or the hexa layout's center Sun
             today_pos = QPointF(0, 0)
             today_radius = radius * weekday.center_scale
         else:
             today_pos = dial_point(
-                constants.WEEKDAY_SLOT_ANGLES[today] + day.hexagram_rotation,
+                today_theta + day.hexagram_rotation,
                 radius * weekday.orbit_fraction,
             )
             today_radius = radius * weekday.diamond_scale

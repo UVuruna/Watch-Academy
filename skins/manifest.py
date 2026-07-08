@@ -14,12 +14,14 @@ from pathlib import Path
 
 @dataclass(frozen=True)
 class BackgroundSpec:
-    """Fixed base wheel + transparent hue wedges that ROTATE WITH the
-    hexagram and are drawn only over the sunlit part of the day."""
+    """Base brightness wheel + transparent hue wedges; BOTH rotate with
+    the star and the wedges are drawn only over the sunlit part of the
+    day. base_asset None (the product default) draws the 32-section gray
+    wheel procedurally — single lightest/darkest sections centered on
+    noon/midnight, shades from the gray-contrast setting."""
 
-    base_asset: Path | None            # gray wheel; None -> flat disc
-    base_color: str                    # procedural fallback disc color
-    sector_palette: tuple[str, ...]    # 6 hues, clockwise from the hexagram-top wedge
+    base_asset: Path | None            # custom wheel art; None -> procedural gray wheel
+    sector_palette: tuple[str, ...]    # period hues, clockwise from the top-arm wedge
     day_alpha: float                   # hue opacity over the sunrise->sunset arc
     twilight_alpha: float              # hue opacity over the dawn/dusk bands
     base_radius_fraction: float        # GRAY wheel radius, of the dial radius
@@ -126,6 +128,9 @@ class SkinDefinition:
     weekday_set: WeekdaySpec
     year_marker: YearMarkerSpec
     hands: HandsSpec
+    pointer: str = "hexa"              # "hexa" | "cross" | "octa" — arm count
+                                       # AND period-hue count (owner spec)
+    gray_contrast: str = "full"        # "full" | "soft" — gray wheel shade range
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

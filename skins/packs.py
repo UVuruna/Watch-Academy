@@ -10,6 +10,7 @@ import dataclasses
 import json
 from pathlib import Path
 
+from config import constants
 from skins import manifest
 
 # JSON section name -> (SkinDefinition field, spec class)
@@ -54,8 +55,20 @@ def load_pack(folder: Path, base: manifest.SkinDefinition) -> manifest.SkinDefin
     merged = {"name": raw.get("name", folder.name)}
     if "z_order" in raw:
         merged["z_order"] = tuple(raw["z_order"])
+    # Top-level scalar choices, validated against the product's closed sets.
+    for key, allowed in (
+        ("pointer", tuple(constants.POINTER_POINTS)),
+        ("gray_contrast", constants.GRAY_CONTRAST_VARIANTS),
+    ):
+        if key in raw:
+            if raw[key] in allowed:
+                merged[key] = raw[key]
+            else:
+                problems.append(
+                    f"{key}: unknown value {raw[key]!r} (expected one of {sorted(allowed)})"
+                )
     for section, value in raw.items():
-        if section in ("name", "z_order"):
+        if section in ("name", "z_order", "pointer", "gray_contrast"):
             continue
         if section not in _UNITS:
             problems.append(f"unknown section {section!r}")
@@ -147,7 +160,12 @@ def serialize_skin(skin: manifest.SkinDefinition, folder: Path) -> dict:
             }
         return value
 
-    payload = {"name": skin.name, "z_order": list(skin.z_order)}
+    payload = {
+        "name": skin.name,
+        "z_order": list(skin.z_order),
+        "pointer": skin.pointer,
+        "gray_contrast": skin.gray_contrast,
+    }
     for section, (field_name, _) in _UNITS.items():
         payload[section] = portable(getattr(skin, field_name))
     return payload

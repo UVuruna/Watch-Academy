@@ -126,6 +126,37 @@ _SECTOR_PALETTE = (
 
 _CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oceania")
 
+# Period hues per pointer variant, clockwise from the top arm — colors
+# taken from the owner's reference art (design/background/*.png). Used
+# whenever the skin's own palette length does not match the pointer's
+# arm count.
+POINTER_PALETTES = {
+    "hexa": _SECTOR_PALETTE,
+    "cross": ("#D9D900", "#D40F0F", "#B5B5B5", "#0A70D8"),
+    "octa": (
+        "#D9D900",
+        "#DB9000",
+        "#D04505",
+        "#D40E0E",
+        "#7D31E8",
+        "#0B57DB",
+        "#0BD1D1",
+        "#10CE10",
+    ),
+}
+# Octa digital time: the text is sized to span this fraction of the
+# slot width (owner: big font, must not overflow the slot).
+TIME_TEXT_WIDTH_FRACTION = 0.95
+
+# Gray wheel shade endpoints per contrast, (lightest, darkest). Owner
+# spec: full contrast spans the whole gray range, soft the gentler
+# 60..195 window. The 17 distinct shades (single top + 15 pairs +
+# single bottom) are spaced evenly between the endpoints.
+GRAY_WHEEL_SCALES = {
+    "full": (255, 0),
+    "soft": (195, 60),
+}
+
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",
     z_order=(
@@ -137,8 +168,10 @@ DEFAULT_SKIN = SkinDefinition(
         "hands",
     ),                                  # no noon marker: the hexagram tip IS the noon pointer
     background=BackgroundSpec(
-        base_asset=_DOMY / "dial" / "base_gray.png",   # 32-section gray wheel, rotates with the hexagram
-        base_color="#8A8D93",
+        # Procedural gray wheel (owner spec): the section count depends on
+        # the pointer (32 hexa / 30 cross+octa) so a fixed image cannot
+        # serve all three variants.
+        base_asset=None,
         sector_palette=_SECTOR_PALETTE,
         day_alpha=0.55,
         twilight_alpha=0.28,

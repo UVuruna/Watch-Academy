@@ -45,6 +45,7 @@ class TickState:
     second_angle: float             # used only when the seconds hand is on
     year_angle: float               # moves ~1 deg/day; cheap to keep smooth
     is_daylight: bool               # sun above the horizon right now
+    time_hm: str                    # "14:34" — the octa pointer's digital slot
 
 
 def build_day_context(
@@ -75,6 +76,7 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         second_angle=angles.second_hand_angle(now_local),
         year_angle=year_marker_angle(now_local, day.year_anchors),
         is_daylight=_is_daylight(now_local, day.sun),
+        time_hm=now_local.strftime("%H:%M"),
     )
 
 
