@@ -152,29 +152,20 @@ def test_moon_terminator_quarters(app):
     assert is_lit(third_quarter, 35, 50) and not is_lit(third_quarter, 65, 50)
 
 
-def test_moon_conflict_placement(app):
-    """When the Moon meets the Earth on the shared rim, the conflict
-    policy decides: overlay keeps the orbit at half opacity; ring/inner
-    step aside at full opacity; far apart nothing changes."""
+def test_moon_transit_opacity(app):
+    """The smaller Moon transits OVER the Earth at reduced opacity when
+    they meet on the shared rim; apart (or without the Earth shown) it is
+    fully opaque."""
     import dataclasses
 
-    from render.layers import resolve_moon_placement
+    from render.layers import moon_transit_opacity
 
     base = dataclasses.replace(defaults.DEFAULT_SKIN.year_marker, mode="both")
-    orbit, opacity = resolve_moon_placement(base, 100.0, 250.0)   # far apart
-    assert orbit == base.moon_orbit_fraction and opacity == 1.0
-    orbit, opacity = resolve_moon_placement(base, 100.0, 103.0)   # transit
-    assert orbit == base.moon_orbit_fraction
-    assert opacity == defaults.MOON_CONFLICT_OPACITY
-    ring = dataclasses.replace(base, moon_conflict="ring")
-    orbit, opacity = resolve_moon_placement(ring, 100.0, 103.0)
-    assert orbit == defaults.MOON_CONFLICT_RING_ORBIT and opacity == 1.0
-    inner = dataclasses.replace(base, moon_conflict="inner")
-    orbit, opacity = resolve_moon_placement(inner, 100.0, 103.0)
-    assert orbit == defaults.MOON_CONFLICT_INNER_ORBIT and opacity == 1.0
-    solo = dataclasses.replace(base, mode="moon")                 # no Earth, no conflict
-    orbit, opacity = resolve_moon_placement(solo, 100.0, 103.0)
-    assert orbit == base.moon_orbit_fraction and opacity == 1.0
+    assert moon_transit_opacity(base, 100.0, 250.0) == 1.0        # far apart
+    assert moon_transit_opacity(base, 100.0, 103.0) == defaults.MOON_TRANSIT_OPACITY
+    assert moon_transit_opacity(base, 100.0, 460.0 + 3.0) == defaults.MOON_TRANSIT_OPACITY
+    solo = dataclasses.replace(base, mode="moon")                 # no Earth, no transit
+    assert moon_transit_opacity(solo, 100.0, 103.0) == 1.0
 
 
 def test_moon_flips_on_southern_hemisphere(app):

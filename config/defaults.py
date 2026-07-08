@@ -84,10 +84,10 @@ BODY_LABEL_SIZE = 0.34               # fraction of the body size
 MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 MARKER_BORDER_RGBA = (255, 255, 255, 200)
 
-# --- Moon/Earth rim conflict (year marker, "both" mode) ------------------------
-MOON_CONFLICT_OPACITY = 0.5          # "overlay": moon transits over the Earth
-MOON_CONFLICT_RING_ORBIT = 0.93      # "ring": moon steps out onto the dial ring
-MOON_CONFLICT_INNER_ORBIT = 0.53     # "inner": moon steps in below the Earth
+# --- Moon/Earth rim transit (year marker, "both" mode) -------------------------
+# The smaller Moon passes OVER the Earth at reduced opacity when they meet
+# on the shared rim — like an eclipse (owner decision; both stay visible).
+MOON_TRANSIT_OPACITY = 0.5
 
 # --- Tray --------------------------------------------------------------------
 TRAY_ICON_SIZE = 64                  # px of the procedurally drawn tray pixmap
@@ -205,8 +205,7 @@ DEFAULT_SKIN = SkinDefinition(
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,
         moon_orbit_fraction=0.75,       # rides the same rim as the Earth
-        moon_scale=0.065,
-        moon_conflict="overlay",        # owner-preferred default of the three
+        moon_scale=0.08,                # ~72% of the Earth marker (owner spec)
     ),
     hands=HandsSpec(
         # Owner's vector hands: both rotate about a hub 15 units from the
@@ -214,12 +213,12 @@ DEFAULT_SKIN = SkinDefinition(
         hour=HandSpec(
             asset=_DOMY / "hands" / "hour.svg",
             pivot=(0.5, (150 - 15) / 150),      # viewBox 46x150
-            length_fraction=0.75,               # owner: ~70-80% of the circle
+            length_fraction=0.64,               # owner: ~64% of the circle
         ),
         minute=HandSpec(
             asset=_DOMY / "hands" / "minute.svg",
             pivot=(0.5, (210 - 15) / 210),      # viewBox 30x210
-            length_fraction=0.86,               # owner: to the end of the circle
+            length_fraction=0.82,               # tip reaches the 360-dot scale
         ),
         second=HandSpec(
             asset=_DOMY / "hands" / "second.svg",

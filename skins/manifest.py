@@ -89,12 +89,7 @@ class YearMarkerSpec:
     moon_dark_color: str
     moon_shadow_alpha: float           # darkness of the unlit part over the image
     moon_orbit_fraction: float
-    moon_scale: float
-    # What the Moon does in "both" mode when it meets the Earth on the rim:
-    # "overlay" (passes over at reduced opacity, both stay visible),
-    # "ring" (steps out onto the dial ring) or "inner" (steps in below
-    # the Earth). Settings-selectable in M6.
-    moon_conflict: str = "overlay"
+    moon_scale: float                  # smaller than the Earth (owner: ~72%)
 
 
 @dataclass(frozen=True)

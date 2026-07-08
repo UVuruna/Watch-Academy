@@ -27,7 +27,6 @@ from render.layers import (
     WeekdayLayer,
     YearMarkerLayer,
     dial_point,
-    resolve_moon_placement,
 )
 from skins.manifest import SkinDefinition
 
@@ -138,8 +137,8 @@ class Compositor:
         marker = self._skin.year_marker
         moon_angle = angles.moon_cycle_angle(day.moon_fraction)
         if marker.mode in ("moon", "both"):
-            orbit, _ = resolve_moon_placement(marker, tick.year_angle, moon_angle)
-            if hit(dial_point(moon_angle, radius * orbit), radius * marker.moon_scale):
+            moon_pos = dial_point(moon_angle, radius * marker.moon_orbit_fraction)
+            if hit(moon_pos, radius * marker.moon_scale):
                 cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
                 return (
                     f"{phase_name(day.moon_fraction)} — "
