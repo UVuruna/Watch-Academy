@@ -103,6 +103,132 @@ def test_alpha_overrides():
     assert both.background.twilight_alpha == pytest.approx(0.9)
 
 
+def test_weekday_theme_swaps_bodies_and_names():
+    """The themed art and canon display names replace the skin's unit;
+    "planets" leaves the skin untouched."""
+    greek = apply_display_settings(
+        defaults.DEFAULT_SKIN, replace(Settings(), weekday_theme="greek")
+    )
+    assert greek.weekday_set.body_names["mercury"] == "Hermes"
+    assert greek.weekday_set.bodies["mercury"].name == "mercury.png"
+    assert "greek" in str(greek.weekday_set.bodies["mercury"])
+    assert all(path.exists() for path in greek.weekday_set.bodies.values())
+    planets = apply_display_settings(defaults.DEFAULT_SKIN, Settings())
+    assert planets.weekday_set.bodies == defaults.DEFAULT_SKIN.weekday_set.bodies
+
+
+def test_every_theme_skeleton_is_complete():
+    """Every theme folder ships all seven body files (placeholders until
+    the owner pastes his vectors over them)."""
+    from config import constants, paths
+
+    for theme in constants.WEEKDAY_THEMES:
+        if theme == "planets":
+            continue
+        folder = paths.bundled_skins_dir() / "domy" / "weekday" / theme
+        for body in constants.WEEKDAY_BODIES:
+            assert (folder / f"{body}.png").exists(), (theme, body)
+
+
+def test_legend_off_silences_every_hover(app):
+    """Owner spec: Legend off -> no hover anywhere (true zero-interaction
+    dial together with click-through)."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    import astral
+
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
+    now = datetime(2026, 7, 8, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=defaults.DEFAULT_CITY["latitude"],
+        longitude=defaults.DEFAULT_CITY["longitude"],
+    )
+    day = build_day_context(
+        now,
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    tick = build_tick_state(now, day)
+    import dataclasses as dc
+
+    silent_skin = dc.replace(
+        defaults.DEFAULT_SKIN, legend=False, solar_rotation=False
+    )
+    compositor = Compositor(silent_skin, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
+    assert compositor.tooltip_at(180.0, 180.0 + orbit, 360.0) is None  # today body
+    assert compositor.tooltip_at(180.0, 72.0, 360.0) is None           # arm
+    assert compositor.tooltip_at(180.0, 40.0, 360.0) is None           # marker zone
+
+
+def test_hexa_arm_hover_appends_the_theme_blurb(app):
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    import dataclasses as dc
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    import astral
+
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
+    now = datetime(2026, 7, 8, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=defaults.DEFAULT_CITY["latitude"],
+        longitude=defaults.DEFAULT_CITY["longitude"],
+    )
+    day = build_day_context(
+        now,
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    tick = build_tick_state(now, day)
+    skin = dc.replace(
+        defaults.DEFAULT_SKIN, solar_rotation=False, weekday_theme="profession"
+    )
+    compositor = Compositor(skin, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    top = compositor.tooltip_at(180.0, 72.0, 360.0)      # top arm = jupiter
+    assert "Gemini" in top and "Cancer" in top           # the two signs stay
+    assert "guru of the gods" in top                     # profession blurb below
+    greek = Compositor(
+        dc.replace(skin, weekday_theme="greek"), AssetCache()
+    )
+    greek.render_offscreen(360.0, 1.0, day, tick)
+    top_greek = greek.tooltip_at(180.0, 72.0, 360.0)
+    assert "Olympus" in top_greek                        # theme switches the text
+
+
+def test_symbolism_repository_covers_every_body_and_theme():
+    from config import constants
+    from data.symbolism import SymbolismRepository
+
+    repo = SymbolismRepository()
+    for body in constants.WEEKDAY_BODIES:
+        blurbs = repo.arm_blurbs(body)
+        for theme, key in constants.WEEKDAY_THEME_BLURBS.items():
+            assert blurbs[key], (body, theme)
+
+
 def test_custom_palette_reaches_the_render():
     custom = ("#111111", "#222222", "#333333", "#444444", "#555555", "#666666")
     settings = replace(Settings(), palettes={"hexa_paint": custom})

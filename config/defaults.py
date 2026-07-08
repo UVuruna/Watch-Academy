@@ -169,10 +169,54 @@ GLOW_MID_STOP = 0.55                 # gradient position of the mid alpha
 GLOW_RADIUS_SCALE = 2.0              # halo radius, multiple of the marker radius
 
 # --- Octa bottom-arm zodiac art -------------------------------------------------
-# The owner ships 12 PNGs per image mode into these folders; until a
-# folder is complete the tray disables its mode and the layer falls
-# back to the text form (documented fallback).
+# Skeleton folders with 1x1 placeholders ship in the repo; the owner
+# pastes his vector renders OVER them (same names). A missing file
+# still falls back to the text form (documented).
 ZODIAC_ART_DIR = paths.bundled_skins_dir() / "domy" / "zodiac"
+
+# --- Weekday body themes (SYMBOLISM.md canon) -----------------------------------
+# Display names per theme, body -> name (the weekday hover reads
+# "Wednesday, Odin" in the norse theme). "planets" keeps the skin's own
+# unit untouched. Saturday has no Norse god — the Sabbath stands in
+# (canon). Art: assets/skins/domy/weekday/<theme>/<body>.png.
+WEEKDAY_THEME_NAMES = {
+    "greek": {
+        "sun": "Helios",
+        "moon": "Selene",
+        "mars": "Ares",
+        "mercury": "Hermes",
+        "jupiter": "Zeus",
+        "venus": "Aphrodite",
+        "saturn": "Cronus",
+    },
+    "norse": {
+        "sun": "Sól",
+        "moon": "Máni",
+        "mars": "Tyr",
+        "mercury": "Odin",
+        "jupiter": "Thor",
+        "venus": "Freya",
+        "saturn": "Sabbath",
+    },
+    "religion": {
+        "sun": "Christianity",
+        "moon": "Buddhism",
+        "mars": "Zoroastrianism",
+        "mercury": "Taoism",
+        "jupiter": "Hinduism",
+        "venus": "Islam",
+        "saturn": "Judaism",
+    },
+    "profession": {
+        "sun": "Ruler",
+        "moon": "Physician",
+        "mars": "Soldier",
+        "mercury": "Merchant",
+        "jupiter": "Priest",
+        "venus": "Artist",
+        "saturn": "Farmer",
+    },
+}
 
 DEFAULT_SKIN = SkinDefinition(
     name="DOMY",
@@ -218,7 +262,7 @@ DEFAULT_SKIN = SkinDefinition(
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={name: _DOMY / "weekday" / f"{name}.png" for name in (
+        bodies={name: _DOMY / "weekday" / "planets" / f"{name}.png" for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
         body_names={
@@ -263,7 +307,7 @@ DEFAULT_SKIN = SkinDefinition(
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
-        moon_asset=_DOMY / "weekday" / "moon.png",
+        moon_asset=_DOMY / "weekday" / "planets" / "moon.png",
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,

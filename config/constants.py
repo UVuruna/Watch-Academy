@@ -188,6 +188,21 @@ OCTA_SLOT_ART_DIRS = {
 # atmosphere version.
 EARTH_STYLES = ("clean", "atmo")
 
+# Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
+# own weekday unit; the others swap in the owner's themed art from
+# assets/skins/domy/weekday/<theme>/ with the canon display names.
+WEEKDAY_THEMES = ("planets", "greek", "norse", "religion", "profession")
+
+# Theme -> symbolism.json blurb key (the encyclopedic text under the
+# hexa diamond hover follows the active theme).
+WEEKDAY_THEME_BLURBS = {
+    "planets": "day",
+    "greek": "greek",
+    "norse": "norse",
+    "religion": "religion",
+    "profession": "profession",
+}
+
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,
 # the element every 10 (two years per element). Year N maps via
 # (N - 4) % 12 and ((N - 4) % 10) // 2 — 2026 = Fire Horse. The Chinese

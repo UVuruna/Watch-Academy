@@ -9,12 +9,14 @@ the future settings preview.
 
 import html
 import math
+import textwrap
 from datetime import timedelta
 
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
 from config import constants, defaults
+from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.moon import phase_name
@@ -86,6 +88,7 @@ class Compositor:
         self._skin = skin
         self._cache = cache
         self._layers = _build_layers(skin)
+        self._symbolism = SymbolismRepository()
         self._day: DayContext | None = None
         self._last_tick: TickState | None = None
         self._composite: QPixmap | None = None
@@ -136,6 +139,10 @@ class Compositor:
         the Moon marker (phase + illumination, day in the cycle), the
         octa zodiac slot and the twilight bands."""
         if self._day is None or self._last_tick is None:
+            return None
+        if not self._skin.legend:
+            # Legend off (owner spec): NO hovers at all — combined with
+            # click-through the dial has zero interaction.
             return None
         radius = size / 2
         point = QPointF(x - radius, y - radius)      # center-origin
@@ -238,6 +245,18 @@ class Compositor:
                     f"{symbol} {name} — {start.day} {start:%b} – {last.day} {last:%b}"
                 )
             lines[0] += star
+            # Below the signs: one blank line, then the encyclopedic
+            # blurb of THIS arm's body in the ACTIVE weekday theme
+            # (owner spec) — wrapped by hand so QToolTip stays narrow.
+            body = next(
+                occupants[0]
+                for angle, occupants in constants.POINTER_WEEKDAY_SLOTS["hexa"]
+                if angle == arm_angle
+            )
+            blurb_key = constants.WEEKDAY_THEME_BLURBS[self._skin.weekday_theme]
+            blurb = self._symbolism.arm_blurbs(body)[blurb_key]
+            lines.append("")
+            lines.extend(textwrap.wrap(blurb, width=46))
             return _centered(*lines)
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events.

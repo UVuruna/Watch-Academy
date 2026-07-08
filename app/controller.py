@@ -50,6 +50,20 @@ def apply_display_settings(skin, settings: Settings):
             twilight_alpha=settings.star_alpha
             * (star.twilight_alpha / star.day_alpha),
         )
+    weekday = skin.weekday_set
+    if settings.weekday_theme != "planets":
+        # Themed bodies (SYMBOLISM.md canon): swap in the owner's art
+        # and the canon display names; "planets" keeps the skin's own
+        # weekday unit untouched.
+        theme_dir = (
+            paths.bundled_skins_dir() / "domy" / "weekday" / settings.weekday_theme
+        )
+        names = defaults.WEEKDAY_THEME_NAMES[settings.weekday_theme]
+        weekday = dataclasses.replace(
+            weekday,
+            bodies={body: theme_dir / f"{body}.png" for body in names},
+            body_names=dict(names),
+        )
     background = skin.background
     if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
         # The Aura's sunlight and twilight opacities are INDEPENDENT
@@ -71,6 +85,7 @@ def apply_display_settings(skin, settings: Settings):
         skin,
         star=star,
         background=background,
+        weekday_set=weekday,
         pointer=settings.pointer,
         umbra_form=settings.umbra_form,
         umbra_contrast=settings.umbra_contrast,
@@ -78,6 +93,8 @@ def apply_display_settings(skin, settings: Settings):
         solar_rotation=settings.solar_rotation,
         octa_slot=settings.octa_slot,
         earth_style=settings.earth_style,
+        weekday_theme=settings.weekday_theme,
+        legend=settings.legend,
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
         ),
@@ -439,16 +456,8 @@ class AppController(QObject):
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
         )
-        # Image modes stay grayed out until the owner's 12-PNG folder for
-        # them exists under assets/skins/domy/zodiac/.
-        missing_art = {
-            mode
-            for mode, folder in constants.OCTA_SLOT_ART_DIRS.items()
-            if len(list((defaults.ZODIAC_ART_DIR / folder).glob("*.png"))) < 12
-        }
-        octa_menu = menu.addMenu("Octa slot")
-        self._add_choice_group(
-            menu, octa_menu,
+        self._add_choice_submenu(
+            menu, "Octa slot",
             [
                 ("time", "Time"),
                 ("date", "Date"),
@@ -462,7 +471,6 @@ class AppController(QObject):
             ],
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),
-            disabled=missing_art,
         )
         self._add_choice_submenu(
             menu, "Earth",
@@ -470,6 +478,29 @@ class AppController(QObject):
             settings.earth_style,
             lambda value: self._set_display_choice("earth_style", value),
         )
+        self._add_choice_submenu(
+            menu, "Weekday theme",
+            [
+                ("planets", "Planets"),
+                ("greek", "Greek gods"),
+                ("norse", "Norse gods"),
+                ("religion", "Religions"),
+                ("profession", "Professions"),
+            ],
+            settings.weekday_theme,
+            lambda value: self._set_display_choice("weekday_theme", value),
+        )
+        legend = QAction("Legend", menu)
+        legend.setCheckable(True)
+        legend.setChecked(settings.legend)
+        legend.setToolTip(
+            "All hover texts. Off: the dial shows nothing on hover — "
+            "combined with Click-through it has zero interaction."
+        )
+        legend.toggled.connect(
+            lambda checked: self._set_display_choice("legend", checked)
+        )
+        menu.addAction(legend)
         solar = QAction("Solar rotation", menu)
         solar.setCheckable(True)
         solar.setChecked(settings.solar_rotation)

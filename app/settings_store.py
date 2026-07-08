@@ -45,6 +45,8 @@ class Settings:
     solar_rotation: bool = True
     octa_slot: str = "time"
     earth_style: str = "clean"
+    weekday_theme: str = "planets"
+    legend: bool = True
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
     city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
@@ -90,6 +92,7 @@ class SettingsStore:
                 ("palette_style", "paint", constants.PALETTE_STYLES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
                 ("earth_style", "clean", constants.EARTH_STYLES),
+                ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -122,6 +125,7 @@ class SettingsStore:
                 click_through=bool(raw.get("click_through", False)),
                 skin=str(raw.get("skin", "domy")),
                 solar_rotation=bool(raw.get("solar_rotation", True)),
+                legend=bool(raw.get("legend", True)),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -153,6 +157,8 @@ class SettingsStore:
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "earth_style": settings.earth_style,
+            "weekday_theme": settings.weekday_theme,
+            "legend": settings.legend,
             "location": {
                 "name": settings.city_name,
                 "path": list(settings.city_path),
