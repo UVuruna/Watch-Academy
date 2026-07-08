@@ -10,8 +10,12 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 ### `constants.py` — Product Invariants
 Values that define what DOMY Watch is and never change: app identity, the
 24h dial convention (noon at top, clockwise, 180° offset), time constants,
-the weekday → celestial body mapping and the hexagram diamond slot angles
-(the slots rotate WITH the hexagram), sun thresholds (civil depression,
+the weekday → celestial body mapping, the pointer variants (hexa 6 /
+cross 4 / octa 8 arms) with their weekday slot layouts (slots rotate
+WITH the star; shared cross slots resolve by the next-upcoming-day rule
+over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the
+digital time), the gray-wheel structure (32 sections; single lightest/darkest centered
+on noon/midnight) and contrast variant names, sun thresholds (civil depression,
 horizon/twilight elevations), the six year-anchor angles, moon phase →
 fraction mapping, and the bundled database coverage ranges.
 
@@ -20,9 +24,13 @@ Window sizing, the spontaneous-hide watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
-marker borders), tray icon geometry, and `DEFAULT_SKIN` — a fully typed
-[Manifest](../skins/manifest.md) `SkinDefinition` instance that drives all
-rendering until it is serialized to `assets/skins/domy/skin.json` in M5.
+marker borders), the pointer reference palettes (owner's art colors, used
+when a skin's palette length does not match the pointer's arm count), the
+gray-wheel shade endpoints per contrast with the octa
+time-text width fraction, tray icon geometry, and `DEFAULT_SKIN` — a fully
+typed [Manifest](../skins/manifest.md) `SkinDefinition` instance that is
+serialized verbatim to `assets/skins/domy/skin.json` (re-serialize after
+editing it).
 
 ### `winapi.py` — Win32 Literals
 The only sanctioned home for Win32 API constants (documented enum-exception

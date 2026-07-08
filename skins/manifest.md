@@ -20,22 +20,27 @@ extraction is serialization, not redesign.
 
 ## Classes
 
-- `SkinDefinition` — name, `z_order`, one spec per unit
-- `BackgroundSpec` — fixed base wheel asset (32-section gray) + 6
-  transparent hues that rotate WITH the hexagram, drawn only over the
-  sunlit arc (day/twilight alphas)
-- `HexagramSpec` — PROCEDURAL six-diamond star (owner decision: simple
-  geometry is drawn at runtime, no image file): 6 colors, neutral night
-  color, day/twilight/night alphas, tip radius
+- `SkinDefinition` — name, `z_order`, one spec per unit, plus two
+  user-overridable scalars: `pointer` ("hexa" | "cross" | "octa" — the
+  star's arm count AND period-hue count) and `gray_contrast` ("full" |
+  "soft" — the gray wheel's shade range)
+- `BackgroundSpec` — base wheel (custom art, or None for the procedural
+  32-section gray wheel: single lightest/darkest sections centered on
+  noon/midnight) + transparent period hues that rotate WITH the star,
+  drawn only over the sunlit arc (day/twilight alphas)
+- `HexagramSpec` — PROCEDURAL N-diamond star (owner decision: simple
+  geometry is drawn at runtime, no image file): colors, day/twilight
+  alphas, full-circle border alpha/width, tip radius
 - `NoonMarkerSpec` — asset-or-procedural triangle
 - `RingSpec` — full ring image (numerals/letters baked in) or procedural
   fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20)
-- `WeekdaySpec` — body images/colors, white weekday SHORT label on top,
+- `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit
 - `YearMarkerSpec` — mode earth / moon / both; Earth day+night variants
   per continent on the year wheel; Moon on its own cycle (new at top,
   full at bottom) with the unlit part shadowed; separate orbits
-- `HandSpec` / `HandsSpec` — asset, MANDATORY pivot fractions, reach
+- `HandSpec` / `HandsSpec` — hand canvases at their exact designed sizes
+  (hub 15 design units above the bottom), ONE shared reach scale
 
 ## Functions
 

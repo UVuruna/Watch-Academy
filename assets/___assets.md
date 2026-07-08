@@ -7,20 +7,28 @@ Bundled visual assets: the project logo (M7) and bundled skins.
   🖼️ logo.svg              ← project logo (M7; also copied to monorepo logos/)
   📁 skins/
     📁 domy/               ← default bundled skin
-      ⚙️ skin.json         ← manifest (M5; until then DEFAULT_SKIN lives in config)
-      📁 dial/             ← ring.png (full DOMY dial art), base_gray.png (fixed 32-section wheel)
-      📁 hands/            ← hour.png + minute.png (pivots 0.5/0.68 and 0.5/0.92)
+      ⚙️ skin.json         ← manifest, serialized FROM config's DEFAULT_SKIN
+      📁 dial/             ← ring.png (full DOMY dial art); base_gray.png retired —
+                             the 32-section gray wheel is procedural now
+      📁 hands/            ← hour/minute/second.svg (owner canvases 240/290/300,
+                             hub 15 design units above the bottom)
       📁 weekday/          ← sun, moon, mars, mercury, jupiter, venus, saturn (real renders)
       📁 year_marker/      ← earth_{clean|atmo}_{continent}_{day|night}.png (6 continents × 2 styles)
+    📁 morph/              ← partial skin: its own ring.png + letters (M-12, Π-16, H-8, Ω-0)
+      ⚙️ skin.json
+      📁 dial/
 ```
 
-The hexagram is deliberately NOT an asset — it is simple geometry drawn
-procedurally from six palette colors (owner decision, keeps the bundle
-light and the star sharp at every size).
+The star and the gray brightness wheel are deliberately NOT assets —
+both are simple geometry drawn procedurally (owner decision: keeps the
+bundle light, stays sharp at every size, and lets the pointer variant
+change the arm count and the contrast setting change the shades at
+runtime).
 
-Bundle copies are downscaled working resolutions (ring/base 1024 px,
-planets and Earth markers 256 px, ~1.7 MB total); the full-resolution
-masters stay in `design/` (untracked owner scratch space).
+Bundle copies are downscaled working resolutions (ring 1024 px, planets
+and Earth markers 256 px); the full-resolution masters stay in `design/`
+(untracked owner scratch space) — RE-COPY bundle files whenever the
+masters change.
 
 ## Year marker naming convention
 
@@ -34,5 +42,5 @@ the asset cache).
 ## Connections
 
 ### Used by
-- [Skins (folder)](../skins/___skins.md) — manifest resolution (M5)
-- [Render (folder)](../render/___render.md) — asset cache (M3)
+- [Skins (folder)](../skins/___skins.md) — manifest resolution
+- [Render (folder)](../render/___render.md) — asset cache

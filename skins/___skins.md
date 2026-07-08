@@ -17,15 +17,17 @@ defined.
 The per-unit dataclasses (`SkinDefinition` + specs). See
 [Manifest](manifest.md).
 
-Owner-specified dial pointer variants for M5 skins: **hexa** (6-point —
-points at both solstices, equinoxes fall between the vertices; the current
-default), **cross** (4-point — points at both solstices AND both
-equinoxes) and **octa** (8-point — solstices + equinoxes + midpoints).
-The pointer shape also sets HOW MANY colors measure the day's periods:
-cross = 4 hues × 90°, hexa = 6 hues × 60°, octa = 8 hues × 45° — the
-background wedges and the star diamonds share the same palette count.
-The year wheel already guarantees each season spans exactly 90° with a
-per-season daily rate.
+Dial pointer variants (implemented; user-selectable from the tray):
+**hexa** (6-point — the default), **cross** (4-point) and **octa**
+(8-point). The pointer sets HOW MANY colors measure the day's periods
+(cross = 4 hues × 90°, hexa = 6 × 60°, octa = 8 × 45° — background
+wedges and star diamonds share the palette count) and the weekday slot
+layout:
+hexa centers the Sun, cross pairs bodies on three arms (the
+next-upcoming day wins a shared slot; Wednesday sits alone at the
+bottom), octa seats one body per arm with the digital time on the
+bottom arm. A pack's `skin.json` may declare top-level `pointer` and
+`gray_contrast` defaults, but the user's tray choice always wins.
 
 ### `packs.py` — skin.json Load/Merge/Serialize
 Partial packs merge unit-by-unit onto the DOMY base (MORPH ships only

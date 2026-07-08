@@ -5,8 +5,8 @@
 ## Purpose
 The only module that reads or writes user runtime state:
 `%APPDATA%/DOMY Watch/settings.json` (plain JSON — inspectable, diffable,
-survives reinstall). Schema v1 holds the window position and diameter; city,
-skin and behavior arrive with M3–M6.
+survives reinstall). Schema v1 holds the window position and diameter
+plus the additive keys; the city picker arrives with M6.
 
 ## Connections
 
@@ -20,8 +20,11 @@ skin and behavior arrive with M3–M6.
 
 ### Settings
 Frozen dataclass: `schema_version`, `window_x`/`window_y` (`None` = first
-run), `diameter`, `click_through` (additive key, still schema 1 — absent
-in older files defaults to False).
+run), `diameter`, plus the additive keys (still schema 1 — absent in
+older files they take their defaults): `click_through` (False), `skin`
+("domy"), `pointer` ("hexa" — validated against the closed variant set),
+`gray_contrast` ("full" — likewise validated; a bad value would
+otherwise KeyError inside a paint pass, where Qt swallows exceptions).
 
 ### SettingsStore
 - `load()`: missing file → default `Settings` (documented first-run

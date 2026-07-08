@@ -49,10 +49,16 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - `_on_widget_moved()` / `_flush_position()`: debounced position
   persistence; a mid-run save failure surfaces as a tray error balloon
   (once per failure streak) instead of dying silently
-- `_build_menu()`: the shared tray/right-click menu — Size submenu
-  (360/540/720 presets, exclusive check group), Click-through toggle
+- `_build_menu()`: the shared tray/right-click menu — Skin, Size
+  (360/540/720), Pointer (Cross/Hexa/Octa) and Gray wheel (Full/Soft
+  contrast) exclusive submenus, Time Travel…, Click-through toggle
   (turn back off via the TRAY — the dial itself no longer takes clicks),
-  Exit; settings dialog arrives in M6
+  Exit; the full settings dialog arrives in M6
+- `_set_skin()` / `_set_pointer()` / `_set_gray_contrast()`: swap the
+  rendered skin via the shared `_install_skin()` (fresh compositor,
+  day context kept) and persist; `_apply_display_settings()` overlays
+  the user's pointer/contrast choices onto whatever the skin pack
+  declares — the tray choice always wins
 - `_set_diameter()`: resizes the widget, invalidates the compositor
   caches and persists the choice
 - `_set_click_through()`: TRUE pass-through (window takes no mouse input;
