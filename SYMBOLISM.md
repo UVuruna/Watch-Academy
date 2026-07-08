@@ -1,0 +1,230 @@
+# DOMY Symbolism
+
+The complete symbolic cosmology of the dial — how the days of the week,
+celestial bodies, gods, religions, colors, hours, virtues and vices
+weave into one story. This document is the CANON; the machine-readable
+blurbs live in `Database/symbolism.json`
+([Database (folder)](Database/___database.md)).
+
+## Table of Contents
+
+- [The Founding Idea](#founding-idea)
+- [Paint and Light — Two Worlds](#paint-and-light)
+- [The Center: White Light](#center)
+- [Gold and Silver](#gold-and-silver)
+- [The Six Arms (Hexa Paint — the Canon)](#six-arms)
+- [Colors as Moods of the Day](#color-moods)
+- [Virtues and Vices — the Cross-Cure Axes](#virtues-vices)
+- [The Octa Extension: Dawn and Dusk](#octa-extension)
+- [Light Palettes — the Prism Reading](#light-palettes)
+- [Layer Reference Tables](#reference-tables)
+
+<a id="founding-idea"></a>
+
+## The Founding Idea
+
+The planetary week is Hellenistic: the seven days ARE the seven
+classical wanderers (Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn),
+and every later tradition — Roman, Norse, Vedic, East Asian — kept the
+same skeleton under different names. DOMY renders that skeleton
+literally: seven bodies on the dial, one per day, riding a star whose
+top vertex points at true solar noon.
+
+Every arm of the star carries a full identity: a day, a body, a Greek
+and a Norse god, a world religion, a color with its hour-of-day mood,
+a virtue and a vice. Opposite arms are opposites in meaning — and each
+arm's virtue is the CURE for the opposite arm's vice.
+
+<a id="paint-and-light"></a>
+
+## Paint and Light — Two Worlds
+
+Before Newton, the world knew color only through PIGMENT: yellow, red
+and blue as primaries; orange, green and purple mixed from them — six
+hues, the painter's wheel. After Newton split white light with a prism,
+a second world opened: red, green and blue light, with cyan, magenta
+and yellow as their complements — six hues again, the prism's wheel.
+
+DOMY's two palette styles are exactly these two worlds:
+
+- **paint** — the pigment wheel (the world of matter, the ancients);
+- **light** — the RGB+CMY wheel (the world of energy, Newton).
+
+The HEXA PAINT palette is the symbolic canon: everything below binds
+to it first. The light palettes and the octa palettes inherit the same
+positional meanings with adapted hues.
+
+<a id="center"></a>
+
+## The Center: White Light
+
+Sunday sits in the CENTER, not on an arm — because the Sun is not one
+color among six: **white light is the sum of all colors**. The six arms
+are sunlight decomposed; the star is the prism; Sunday is the source.
+
+The center's own duality is the oldest one: **Pride** (the self at the
+center of everything) against **Humility** (its only cure). The center
+cures itself. Sunday is also the day of **Faith** — with Hope at the
+dawn arm and Love on Venus, the three theological virtues span the
+whole dial.
+
+<a id="gold-and-silver"></a>
+
+## Gold and Silver
+
+Alchemy assigns one metal to each luminary: **gold to the Sun, silver
+to the Moon**. On the dial the top is solar noon and the bottom is
+midnight — so the star may carry a golden top tip and a silver bottom
+tip: day metal above, night metal below. These are accents of TIME,
+not arm colors.
+
+<a id="six-arms"></a>
+
+## The Six Arms (Hexa Paint — the Canon)
+
+Clockwise from the top (arm positions are dial hours; the slots rotate
+with the star):
+
+| Arm (hour) | Day | Body | Greek | Norse | Religion | Color |
+|---|---|---|---|---|---|---|
+| top (12h) | Thursday | Jupiter | Zeus | Thor | Hinduism | yellow |
+| 16h | Tuesday | Mars | Ares | Tyr | Zoroastrianism | orange |
+| 20h | Friday | Venus | Aphrodite | Freya | Islam | red |
+| bottom (24h) | Wednesday | Mercury | Hermes | Odin | Taoism | purple |
+| 04h | Monday | Moon | Selene | Máni | Buddhism | blue |
+| 08h | Saturday | Saturn | Cronus | — (Sabbath) | Judaism | green |
+| CENTER | Sunday | Sun | Helios | Sól | Christianity | white-gold |
+
+Why each religion sits on its day:
+
+- **Sunday — Christianity**: the Lord's Day; Constantine made the "day
+  of the Sun" the day of rest in 321 — Sun and Church fused in history.
+- **Monday — Buddhism**: the Buddhist calendar is lunar; Uposatha
+  observance follows the Moon's phases; Vesak is a full-moon day.
+- **Tuesday — Zoroastrianism**: the sacred fire (Atar) burns on the
+  fiery red planet's day; Tyr is the god of justice — and *asha*,
+  cosmic truth and justice, is Zoroastrianism's heart.
+- **Wednesday — Taoism**: in the East Asian week Wednesday IS the
+  water-star day (Mercury = water), and water is the Tao's central
+  metaphor; Odin's quest for wisdom mirrors the sage Laozi.
+- **Thursday — Hinduism**: Thursday is *Guruvar* — the day of
+  Brihaspati, who IS Jupiter in Vedic astrology; the week's most
+  devotional day.
+- **Friday — Islam**: Jumu'ah, the congregational prayer of Friday.
+- **Saturday — Judaism**: Shabbat — and in Hebrew the planet Saturn is
+  named *Shabtai*, after the Sabbath itself.
+
+Norse note: Saturday is the one day with no Norse god (Old Norse
+*laugardagr*, "washing day") — the Sabbath stands there instead. The
+Norse week otherwise: Sól, Máni, Tyr, Odin, Thor, Freya.
+
+<a id="color-moods"></a>
+
+## Colors as Moods of the Day
+
+The arm colors are POSITIONAL: each hue is the mood of its hour.
+
+| Color | Hour | Mood | Why |
+|---|---|---|---|
+| yellow | noon | **Joy** | the day's peak; "jovial" literally means "of Jupiter" |
+| orange | afternoon (16h) | **Zeal** | the fire of the working day; Mars' ember |
+| red | evening (20h) | **Passion** | the sunset's blood-red; Venus rises at dusk |
+| purple | midnight | **Sorrow** | the mourning purple; the day's grave and its mystery |
+| blue | pre-dawn (04h) | **Calm** | the still, moonlit hour; the phlegmatic Moon |
+| green | morning (08h) | **Renewal** | dew and growth; the week renews on the day of rest |
+
+Joy stands opposite Sorrow (noon against midnight), Zeal opposite
+Calm, Passion opposite Renewal — the emotional day breathes in
+opposites, exactly like the light itself.
+
+<a id="virtues-vices"></a>
+
+## Virtues and Vices — the Cross-Cure Axes
+
+Every body carries BOTH a virtue and a vice — its bright and dark face
+(owner decision: Mars is courage AND wrath; the Moon is peace AND
+fear). Across each axis, **one body's virtue is the cure for the
+opposite body's vice**:
+
+| Body | Virtue | Vice |
+|---|---|---|
+| Sun (center) | **Humility** | **Pride** |
+| Jupiter | **Generosity** | **Excess** (gluttony) |
+| Mercury | **Wisdom** | **Greed** |
+| Mars | **Courage** | **Wrath** |
+| Moon | **Serenity** | **Fear** |
+| Venus | **Love** | **Jealousy** |
+| Saturn | **Patience** | **Envy** |
+
+The cures, axis by axis:
+
+- **Center (Sun)**: Humility is the one cure for Pride — the center
+  heals itself.
+- **Noon–midnight (Jupiter ↔ Mercury)**: Generosity cures Greed;
+  Wisdom curbs Excess.
+- **Mars ↔ Moon**: Courage cures Fear; Serenity quells Wrath.
+- **Venus ↔ Saturn**: Love dissolves Envy; Patience heals Jealousy.
+
+The seven deadly sins echo here, each on its classical planet: pride
+(Sun), envy (Saturn's bitter green), wrath (Mars), greed (Mercury the
+merchant), gluttony (jovial Jupiter), lust (Venus — jealousy is its
+relational shadow), sloth (Saturn's OTHER shadow — fittingly on the
+day of rest).
+
+Mythic anchors: Cronus devoured his children out of envy and fear of
+being replaced; Odin gave an eye for wisdom; Ares embodies both the
+courage and the rage of battle.
+
+<a id="octa-extension"></a>
+
+## The Octa Extension: Dawn and Dusk
+
+The octa pointer adds two arms on the east–west axis — which on this
+dial are the hours of **18h and 06h: sunset and sunrise**. Their colors
+are the sky's own:
+
+- **cyan (west arm, 06h) — DAWN**: the pale blue-green sky before
+  sunrise; mood **Hope**, the emotion that looks forward.
+- **red-orange (east arm, 18h) — DUSK**: the burning sky of sunset;
+  mood **Longing**, the emotion that looks back.
+
+Hope and Longing are true opposites — one faces what comes, the other
+what has passed. Color-theoretically the pair is exact too: red-orange
+and blue-green are complements on the twelve-hue wheel.
+
+<a id="light-palettes"></a>
+
+## Light Palettes — the Prism Reading
+
+The light palettes keep every positional meaning (the moods, the
+axes, dawn/dusk) and translate the hues into the prism's world:
+RGB + CMY for the hexa, with orange and azure as the octa's dawn/dusk
+pair. Paint is how the ancients painted the week; light is how Newton
+would have projected it. Same week, two readings.
+
+<a id="reference-tables"></a>
+
+## Layer Reference Tables
+
+The full weave, one arm per row (hexa paint canon):
+
+| Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice |
+|---|---|---|---|---|---|---|---|---|
+| Sunday | Sun | Helios | Sól | Christianity | white-gold | — (source) | Humility | Pride |
+| Monday | Moon | Selene | Máni | Buddhism | blue | Calm | Serenity | Fear |
+| Tuesday | Mars | Ares | Tyr | Zoroastrianism | orange | Zeal | Courage | Wrath |
+| Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed |
+| Thursday | Jupiter | Zeus | Thor | Hinduism | yellow | Joy | Generosity | Excess |
+| Friday | Venus | Aphrodite | Freya | Islam | red | Passion | Love | Jealousy |
+| Saturday | Saturn | Cronus | — | Judaism | green | Renewal | Patience | Envy |
+
+Octa extras:
+
+| Arm | Phenomenon | Color | Mood |
+|---|---|---|---|
+| west (06h) | dawn | cyan | Hope |
+| east (18h) | dusk | red-orange | Longing |
+
+Accents: gold = the Sun's metal (top tip, noon); silver = the Moon's
+metal (bottom tip, midnight); white = the center, the sum of all
+colors.

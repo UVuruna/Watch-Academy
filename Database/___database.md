@@ -25,7 +25,16 @@ Principal moon phase instants (UTC), 1551–2649, keyed by year/month.
 Moved to [Research (folder)](../research/___research.md) — an oversized
 variant kept for analysis only, not bundled.
 
+### `symbolism.json`
+Machine-readable blurbs of the dial's symbolic cosmology (one to three
+sentences per day/god/religion/color/virtue/vice, plus the axes and
+philosophy notes). The narrative canon lives in
+[DOMY Symbolism](../SYMBOLISM.md); the app may surface these texts in
+future hovers/info panels.
+
 ## Connections
 
 ### Used by
 - [Data (folder)](../data/___data.md) — the only readers
+- [DOMY Symbolism](../SYMBOLISM.md) — `symbolism.json` is its
+  machine-readable companion (no repository yet; future in-app info)

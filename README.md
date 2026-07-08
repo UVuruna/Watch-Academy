@@ -42,6 +42,8 @@ bodies, year marker, hands) done; Windows hardening (M4) is next.
 
 ## Documentation
 
+- [DOMY Symbolism](SYMBOLISM.md) — the dial's symbolic cosmology (days,
+  gods, religions, colors, virtues and vices)
 - [Config (folder)](config/___config.md)
 - [Core (folder)](core/___core.md)
 - [Data (folder)](data/___data.md)

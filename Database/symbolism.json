@@ -1,0 +1,195 @@
+{
+  "about": "Machine-readable blurbs for the DOMY symbolic cosmology. The narrative canon lives in SYMBOLISM.md; these one-to-three-sentence texts are the extended info the app may surface (hovers, info panels, docs).",
+  "philosophy": {
+    "white_light": "White light is the sum of all colors. Sunday sits in the center because the Sun is not one color among six - the six arms are sunlight decomposed, the star is the prism, Sunday is the source.",
+    "paint_and_light": "Before Newton the world knew color as pigment: yellow, red and blue, mixed into orange, green and purple - the painter's wheel of six. Newton's prism opened the second world: red, green and blue light with cyan, magenta and yellow between them. DOMY's 'paint' and 'light' palette styles are exactly these two worlds.",
+    "gold_and_silver": "Alchemy gives one metal to each luminary: gold to the Sun, silver to the Moon. On the dial the top is solar noon and the bottom is midnight, so gold crowns the top tip and silver the bottom - the day metal above, the night metal below.",
+    "cross_cure": "Every body carries a bright and a dark face - a virtue and a vice. Across each axis of the star, one body's virtue is the cure for the opposite body's vice."
+  },
+  "center": {
+    "day": "Sunday",
+    "body": "sun",
+    "greek": "Helios",
+    "norse": "Sol",
+    "religion": "Christianity",
+    "color": "white-gold",
+    "virtue": "Humility",
+    "vice": "Pride",
+    "blurbs": {
+      "day": "Sunday is the source, not one day among six: as white light contains every color, the week's center contains every day.",
+      "greek": "Helios drives the sun chariot across the sky each day; the Greeks named this day hemera Heliou, the day of the Sun.",
+      "norse": "Sol (Sunna) is the Norse sun goddess, chased across the sky by the wolf Skoll; sunnudagr is her day.",
+      "religion": "Christianity worships on the Lord's Day; in 321 Constantine made the 'day of the Sun' the day of rest, fusing Sun and Church in history. Sunday is also the day of Faith - with Hope at dawn and Love on Venus, the three theological virtues span the dial.",
+      "color": "White-gold: the sum of all colors and the Sun's own metal.",
+      "virtue_vice": "Pride is the self at the center of everything; Humility is its only cure. The center heals itself."
+    }
+  },
+  "arms": [
+    {
+      "day": "Monday",
+      "body": "moon",
+      "hour": 4,
+      "greek": "Selene",
+      "norse": "Mani",
+      "religion": "Buddhism",
+      "color_name": "blue",
+      "mood": "Calm",
+      "virtue": "Serenity",
+      "vice": "Fear",
+      "blurbs": {
+        "day": "Monday is the Moon's day in every tongue that kept the planetary week - Selene's day in Greek, Mani's in Norse, Somvar in Sanskrit.",
+        "greek": "Selene is the Titan goddess of the Moon, crossing the night sky in a silver chariot drawn by white horses.",
+        "norse": "Mani steers the Moon through the night, hunted by the wolf Hati until the world's end.",
+        "religion": "The Buddhist calendar is lunar: Uposatha observance days follow the Moon's phases, and Vesak - the Buddha's birth, awakening and passing - falls on a full moon.",
+        "color": "Blue is the still hour before dawn: moonlight on a sleeping world.",
+        "virtue_vice": "The Moon's bright face is Serenity, its dark face Fear - the night brings both peace and dread. Courage, from the opposite arm, is Fear's cure."
+      }
+    },
+    {
+      "day": "Tuesday",
+      "body": "mars",
+      "hour": 16,
+      "greek": "Ares",
+      "norse": "Tyr",
+      "religion": "Zoroastrianism",
+      "color_name": "orange",
+      "mood": "Zeal",
+      "virtue": "Courage",
+      "vice": "Wrath",
+      "blurbs": {
+        "day": "Tuesday belongs to the red planet: Ares' day to the Greeks, Tyr's day (tysdagr) to the Norse, Mangalvar in the Vedic week.",
+        "greek": "Ares is the storm of battle itself - the Greeks honored his ferocity and feared his rage in the same breath.",
+        "norse": "Tyr, god of war AND justice, gave his right hand to bind the wolf Fenrir - courage in the service of order.",
+        "religion": "Zoroastrianism keeps the sacred fire Atar burning in its temples, and its heart is asha - cosmic truth and justice - mirrored in the fiery planet and the just god of this day.",
+        "color": "Orange is the working afternoon: the ember of the day's fire.",
+        "virtue_vice": "Mars carries both Courage and Wrath - the same fire that defends can destroy. Serenity, from the Moon's arm, quells Wrath; Courage cures the Moon's Fear."
+      }
+    },
+    {
+      "day": "Wednesday",
+      "body": "mercury",
+      "hour": 24,
+      "greek": "Hermes",
+      "norse": "Odin",
+      "religion": "Taoism",
+      "color_name": "purple",
+      "mood": "Sorrow",
+      "virtue": "Wisdom",
+      "vice": "Greed",
+      "blurbs": {
+        "day": "Wednesday is Mercury's day - Hermes' day in Greek, Woden's (Odin's) day in the north, Budhvar in Sanskrit, the water-star day in East Asia.",
+        "greek": "Hermes is the messenger between worlds: god of roads, merchants, thieves and cunning speech, guide of souls into the underworld.",
+        "norse": "Odin hung nine nights on the world-tree and gave an eye at Mimir's well - all of it for wisdom. Wednesday is literally Wodnesdaeg, his day.",
+        "religion": "In the East Asian week Wednesday is the day of the water star - and water is the Tao's central image: the soft thing that overcomes the hard, the way that flows without striving.",
+        "color": "Purple is midnight: the mourning color, the day's grave and its deepest mystery.",
+        "virtue_vice": "Mercury's bright face is Wisdom, its dark face Greed - the merchant god counts both coins and stars. Generosity, from Jupiter's arm, cures Greed; Wisdom curbs Jupiter's Excess."
+      }
+    },
+    {
+      "day": "Thursday",
+      "body": "jupiter",
+      "hour": 12,
+      "greek": "Zeus",
+      "norse": "Thor",
+      "religion": "Hinduism",
+      "color_name": "yellow",
+      "mood": "Joy",
+      "virtue": "Generosity",
+      "vice": "Excess",
+      "blurbs": {
+        "day": "Thursday is the king planet's day: Zeus' day in Greek, Thor's day in the north, Guruvar - the guru's day - in the Vedic week.",
+        "greek": "Zeus rules sky and thunder from Olympus, king of gods and keeper of oaths and guests.",
+        "norse": "Thor, thunder itself, guards gods and men with the hammer Mjolnir; thorsdagr became Thursday.",
+        "religion": "In Hindu tradition Thursday IS Brihaspativar: Brihaspati, guru of the gods, is the planet Jupiter itself, and his day is the week's most devotional.",
+        "color": "Yellow is noon at the top of the dial - and 'jovial', joyful, literally means 'of Jupiter'.",
+        "virtue_vice": "Jupiter's bright face is Generosity - the open royal hand; its dark face is Excess, the jovial table overflowing. Wisdom, from Mercury's arm, curbs Excess; Generosity cures Greed."
+      }
+    },
+    {
+      "day": "Friday",
+      "body": "venus",
+      "hour": 20,
+      "greek": "Aphrodite",
+      "norse": "Freya",
+      "religion": "Islam",
+      "color_name": "red",
+      "mood": "Passion",
+      "virtue": "Love",
+      "vice": "Jealousy",
+      "blurbs": {
+        "day": "Friday is the day of the evening star: Aphrodite's day in Greek, Freya's day in the north, Shukravar in Sanskrit.",
+        "greek": "Aphrodite, born of sea-foam, rules love, beauty and desire - the planet Venus is her lamp at dusk.",
+        "norse": "Freya, goddess of love and of the slain, rides a chariot drawn by cats and weeps tears of gold; frjadagr is her day.",
+        "religion": "Islam gathers on Friday: Jumu'ah, the congregational prayer, makes this the blessed day of the week.",
+        "color": "Red is the evening: the sunset's blood-glow, the hour when Venus rises.",
+        "virtue_vice": "Venus carries Love and its shadow Jealousy - the fear of losing what is loved. Patience, from Saturn's arm, heals Jealousy; Love dissolves Saturn's Envy."
+      }
+    },
+    {
+      "day": "Saturday",
+      "body": "saturn",
+      "hour": 8,
+      "greek": "Cronus",
+      "norse": null,
+      "religion": "Judaism",
+      "color_name": "green",
+      "mood": "Renewal",
+      "virtue": "Patience",
+      "vice": "Envy",
+      "blurbs": {
+        "day": "Saturday is Saturn's day - Cronus' day to the Greeks, Shanivar in Sanskrit. The Norse alone gave it no god: laugardagr, washing day; the Sabbath stands there instead.",
+        "greek": "Cronus, Titan of time and the harvest, devoured his own children out of envy and fear of being replaced - until Zeus, hidden away, returned to overthrow him.",
+        "norse": "No Norse god claims this day; it belongs to rest and cleansing - and, across the sea, to the Sabbath.",
+        "religion": "Shabbat is Judaism's seventh day of rest - and in Hebrew the planet Saturn is named Shabtai, after the Sabbath itself: the day named the planet.",
+        "color": "Green is the morning: dew, growth, the week renewing itself on the day of rest.",
+        "virtue_vice": "Saturn, keeper of time, teaches Patience; his shadow is Envy, the bitter green of wanting what another has. Love, from Venus' arm, dissolves Envy; Patience heals Jealousy."
+      }
+    }
+  ],
+  "octa_extras": [
+    {
+      "arm": "west",
+      "hour": 6,
+      "phenomenon": "dawn",
+      "color_name": "cyan",
+      "mood": "Hope",
+      "blurb": "The west arm sits on 06h - sunrise. Cyan is the pale blue-green sky before the sun clears the horizon, and its mood is Hope: the emotion that looks forward."
+    },
+    {
+      "arm": "east",
+      "hour": 18,
+      "phenomenon": "dusk",
+      "color_name": "red-orange",
+      "mood": "Longing",
+      "blurb": "The east arm sits on 18h - sunset. Red-orange is the burning evening sky, and its mood is Longing: the emotion that looks back. Hope and Longing face each other across the dial as dawn faces dusk."
+    }
+  ],
+  "axes": [
+    {
+      "between": ["sun", "sun"],
+      "cures": ["Humility cures Pride - the center heals itself."]
+    },
+    {
+      "between": ["jupiter", "mercury"],
+      "cures": ["Generosity cures Greed.", "Wisdom curbs Excess."]
+    },
+    {
+      "between": ["mars", "moon"],
+      "cures": ["Courage cures Fear.", "Serenity quells Wrath."]
+    },
+    {
+      "between": ["venus", "saturn"],
+      "cures": ["Love dissolves Envy.", "Patience heals Jealousy."]
+    }
+  ],
+  "moods_of_the_day": {
+    "yellow": "Joy - noon, the day's peak",
+    "orange": "Zeal - the working afternoon",
+    "red": "Passion - the evening",
+    "purple": "Sorrow - midnight",
+    "blue": "Calm - the hour before dawn",
+    "green": "Renewal - the morning",
+    "cyan": "Hope - dawn (octa)",
+    "red-orange": "Longing - dusk (octa)"
+  }
+}
