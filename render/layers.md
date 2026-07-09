@@ -78,7 +78,8 @@ sweeps the same spans continuously.
 Procedural N-diamond star (N = pointer arm count; arm half-angles from
 `POINTER_ARM_HALF_ANGLE_DEG`, inner vertices at `tip / (2·cos(half))` —
 tip/√3 for the hexagram; the CROSS borrows the octa arm shape — "octa
-without the diagonals", slim diamonds with gaps): colored BORDERS run
+without the diagonals", slim diamonds with gaps — and the TRIO is half
+of hexa, three hexa-shaped arms with gaps): colored BORDERS run
 the full circle so the night diamonds stay recognizable; the FILLS
 (near-full opacity) are clipped to the same `lit_regions()`. The star's
 top tip IS the solar-noon pointer.
@@ -91,8 +92,8 @@ numerals, letter substitutions and minute numbers.
 ### WeekdayLayer (DAILY)
 "ghost": bodies on the pointer's slots at `slot angle +
 hexagram_rotation`, current day opaque, rest at `ghost_opacity`; the
-hexa layout additionally centers a ghost Sun (cross/octa seat the Sun on
-an arm). "center_only": nothing here — the center pass draws it. Bodies
+hexa and trio layouts additionally center a ghost Sun (cross/octa seat
+the Sun on an arm). "center_only": nothing here — the center pass draws it. Bodies
 draw a skin image when provided, otherwise a colored disc; the white
 label is the weekday SHORT name (MON/TUE/…) below 720 px, the full name
 from 720 up.

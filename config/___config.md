@@ -11,11 +11,16 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 Values that define what DOMY Watch is and never change: app identity, the
 24h dial convention (noon at top, clockwise, 180° offset), time constants,
 the weekday → celestial body mapping, the pointer variants (hexa 6 /
-cross 4 / octa 8 arms) with their weekday slot layouts (slots rotate
-WITH the star; shared cross slots resolve by the next-upcoming-day rule
+cross 4 / octa 8 / trio 3 arms; display names Prism / Seasons /
+Compass / Trinity) with their weekday slot layouts (slots rotate
+WITH the star; shared slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
-slot with its `OCTA_SLOT_MODES`), the star arm half-angles (the cross
-borrows the octa arm shape), the Umbra forms (fine 30 / coarse 24
+slot with its `OCTA_SLOT_MODES`; the trio pairs Faith 12h =
+Jupiter+Saturn, Love 20h = Venus+Mars, Hope 4h = Moon+Mercury with the
+Sun centered, and its Aura wedges start ON the arms —
+`POINTER_AURA_WEDGE_OFFSET_DEG` — so the arms bound the day thirds
+4-12 / 12-20 / 20-4), the star arm half-angles (the cross
+borrows the octa arm shape; the trio is half of hexa), the Umbra forms (fine 30 / coarse 24
 sections — single lightest/darkest centered on noon/midnight — or the
 continuous gradient) and contrast variant names (full/half/light/dark), the
 palette style names, the tropical zodiac table (signs are

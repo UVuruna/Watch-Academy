@@ -21,7 +21,7 @@ the ring preset and the user's display choices onto it at build time.
 
 - `SkinDefinition` — `z_order`, one spec per unit, plus the
   user-overridable display scalars (the tray choice always wins):
-  `pointer` ("hexa" | "cross" | "octa"), `umbra_form` ("fine" |
+  `pointer` ("hexa" | "cross" | "octa" | "trio"), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
   `palette_style` ("paint" | "light"), `solar_rotation` (False →
   Star/Aura/Umbra stand upright), `octa_slot` (one of

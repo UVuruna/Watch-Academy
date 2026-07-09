@@ -34,7 +34,9 @@ draws the MINUTE layers (hands, year marker) live.
   span); the Moon marker (two lines: phase + illumination, cycle day);
   the Earth marker (owner format: day/week ordinals, zodiac with span,
   date — plus the season event name while it glows); the STAR ARMS
-  (hexa arms name their two zodiac signs; cross/octa cardinal arms give
+  (hexa arms name their two zodiac signs; trio arms give their
+  theological theme, the day third they start and their weekday pair;
+  cross/octa cardinal arms give
   the exact solstice/equinox instant; octa diagonals describe their
   season with dates, duration and the middle date the arrow points at —
   a trailing * flags solar-rotation imprecision; hexa arms append,

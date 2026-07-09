@@ -56,7 +56,8 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   pointer is active — `_set_display_choice` flips it on pointer
   change), Weekday (Planets / Planet signs / Greek gods / Norse gods /
   Religions / Professions), Ring (DOMY/MORPH presets), Pointer (two
-  groups: Cross/Hexa/Octa variant + Paint/Light palette) and Umbra
+  groups: Trinity/Seasons/Prism/Compass variant — the owner's display
+  names for trio/cross/hexa/octa — + Paint/Light palette) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
   contrast); then Size (360…1440),
   Elements (the FINAL.txt #5 on/off switches, via the shared

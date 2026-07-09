@@ -94,7 +94,7 @@ with the star):
 | Arm (hour) | Day | Body | Greek | Norse | Religion | Color |
 |---|---|---|---|---|---|---|
 | top (12h) | Thursday | Jupiter | Zeus | Thor | Hinduism | yellow |
-| 16h | Tuesday | Mars | Ares | Tyr | Zoroastrianism | orange |
+| 16h | Tuesday | Mars | Ares | Tyr | Freemasonry | orange |
 | 20h | Friday | Venus | Aphrodite | Freya | Islam | red |
 | bottom (24h) | Wednesday | Mercury | Hermes | Odin | Taoism | purple |
 | 04h | Monday | Moon | Selene | Máni | Buddhism | blue |
@@ -107,9 +107,12 @@ Why each religion sits on its day:
   of the Sun" the day of rest in 321 — Sun and Church fused in history.
 - **Monday — Buddhism**: the Buddhist calendar is lunar; Uposatha
   observance follows the Moon's phases; Vesak is a full-moon day.
-- **Tuesday — Zoroastrianism**: the sacred fire (Atar) burns on the
-  fiery red planet's day; Tyr is the god of justice — and *asha*,
-  cosmic truth and justice, is Zoroastrianism's heart.
+- **Tuesday — Freemasonry** (owner decision, replacing Zoroastrianism
+  in the basic seven): the Craft is sworn on OATHS — and Tyr, this
+  arm's Norse god, is the god of oaths who gave his hand to seal one;
+  the working tools (square and compasses) build the inner temple with
+  a soldier's discipline, the arm's Courage turned to labor, its Wrath
+  the raised arm the ritual binds.
 - **Wednesday — Taoism**: in the East Asian week Wednesday IS the
   water-star day (Mercury = water), and water is the Tao's central
   metaphor; Odin's quest for wisdom mirrors the sage Laozi.
@@ -119,6 +122,29 @@ Why each religion sits on its day:
 - **Friday — Islam**: Jumu'ah, the congregational prayer of Friday.
 - **Saturday — Judaism**: Shabbat — and in Hebrew the planet Saturn is
   named *Shabtai*, after the Sabbath itself.
+
+The owner's art holds TWELVE religions; the five beyond the basic
+seven are the ALTERNATE set, each on the day it fits best:
+
+- **Monday — Druidism**: groves, tides and the lunar reckoning of
+  time; the Moon's serenity is the druid's, fear of the dark wood its
+  shadow.
+- **Tuesday — Zoroastrianism**: the sacred fire (Atar) burns on the
+  fiery planet's day; *asha* — cosmic truth and justice — is the
+  courage of the flame against the lie.
+- **Wednesday — Shamanism**: the walker between worlds on the
+  messenger's day; Odin hanging on the tree for wisdom IS a shamanic
+  initiation.
+- **Thursday — Sikhism**: the Guru's day (*Guruvar*) taken literally —
+  a faith built on ten Gurus, langar generosity as its practice, the
+  arm's Excess its warned-against opposite.
+- **Saturday — Voodoo**: Baron Samedi — "Baron Saturday" by name —
+  keeper of the crossroads and the dead, patience of the grave, envy
+  of the living.
+
+Sunday and Friday have no alternate yet (Christianity and Islam stand
+in both sets until the owner adds art — Shinto and Wicca were
+proposed).
 
 Norse note: Old Norse gave Saturday no god of its own (*laugardagr*,
 "washing day") — the owner's canon seats **Loki** there: the bound
@@ -264,7 +290,7 @@ The full weave, one arm per row (hexa paint canon):
 |---|---|---|---|---|---|---|---|---|---|
 | Sunday | Sun | Helios | Sól | Christianity | white-gold | — (source) | Humility | Pride | Ruler |
 | Monday | Moon | Selene | Máni | Buddhism | blue | Calm | Serenity | Fear | Physician |
-| Tuesday | Mars | Ares | Tyr | Zoroastrianism | orange | Zeal | Courage | Wrath | Soldier |
+| Tuesday | Mars | Ares | Tyr | Freemasonry | orange | Zeal | Courage | Wrath | Soldier |
 | Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed | Merchant |
 | Thursday | Jupiter | Zeus | Thor | Hinduism | yellow | Joy | Generosity | Excess | Priest/Teacher |
 | Friday | Venus | Aphrodite | Freya | Islam | red | Passion | Love | Jealousy | Artist |

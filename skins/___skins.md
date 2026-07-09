@@ -18,16 +18,23 @@ The six unit dataclasses (`SkinDefinition` + specs: background, star,
 ring, weekday_set, year_marker, hands) and `missing_assets()`. See
 [Manifest](manifest.md).
 
-Dial pointer variants (user-selectable from the tray): **hexa**
-(6-point — the default), **cross** (4-point, arms shaped like octa arms
-with gaps) and **octa** (8-point). The pointer sets the palette size
-(cross = 4 hues × 90°, hexa = 6 × 60°, octa = 8 × 45° — the Aura wedges
-and the Star diamonds share ONE palette preset: hexa/octa in "paint"
-and "light" styles, cross with its single seasons palette) and the
-weekday slot layout: hexa centers the Sun, cross pairs bodies on three
-arms (the next-upcoming day wins a shared slot; Wednesday sits alone at
-the bottom), octa seats one body per arm with a user-selected info slot
-(time/date/day length/zodiac) on the bottom arm.
+Dial pointer variants (user-selectable from the tray; display names
+per the owner: Prism, Seasons, Compass, Trinity): **hexa/Prism**
+(6-point — the default), **cross/Seasons** (4-point, arms shaped like
+octa arms with gaps), **octa/Compass** (8-point) and **trio/Trinity**
+(3-point — half of hexa, arms at the M/D/Y ring letters 12h/4h/20h).
+The pointer sets the palette size (trio = 3 hues × 120°, cross = 4 ×
+90°, hexa = 6 × 60°, octa = 8 × 45° — the Aura wedges and the Star
+diamonds share ONE palette preset: hexa/octa in "paint" and "light"
+styles, cross with its single seasons palette, trio with the single
+trinity palette Faith yellow / Love red / Hope blue) and the weekday
+slot layout: hexa and trio center the Sun (trio pairs Jupiter+Saturn,
+Venus+Mars, Moon+Mercury on its three arms), cross pairs bodies on
+three arms (the next-upcoming day wins a shared slot; Wednesday sits
+alone at the bottom), octa seats one body per arm with a user-selected
+info slot (time/date/day length/zodiac) on the bottom arm. The trio's
+Aura wedges start ON the arms (the arms bound the day thirds 4-12 /
+12-20 / 20-4); every other pointer centers its wedges on the arms.
 
 ## Connections
 
