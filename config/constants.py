@@ -152,9 +152,10 @@ POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5}
 UMBRA_FORMS = ("fine", "coarse", "gradient")
 UMBRA_SECTION_COUNTS = {"fine": 30, "coarse": 24}
 
-# Each form comes in two contrasts: "full" spans the whole gray range
-# (256 shades' worth), "half" the middle half of the scale (128).
-UMBRA_CONTRAST_VARIANTS = ("full", "half")
+# Each form comes in four contrasts (owner spec): "full" spans the
+# whole gray range, "half" the middle half of the scale, "light" the
+# bright half (128-255), "dark" the dark half (0-127).
+UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 
 # Star + Aura palette styles (owner: "paint" = subtractive primaries —
 # blue/red/yellow mix toward black; "light" = additive primaries —

@@ -296,6 +296,7 @@ class BackgroundLayer(Layer):
         contrast = ctx.skin.umbra_contrast
         if ctx.skin.umbra_form == "gradient":
             lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
+            lightest = min(255, lightest)        # spans store window BOUNDS
             # Conical sweep from the top: symmetric stops make the
             # left/right sides exact mirrors, per-pixel smooth.
             gradient = QConicalGradient(QPointF(0.0, 0.0), 90.0)

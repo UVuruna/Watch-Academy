@@ -407,7 +407,9 @@ class AppController(QObject):
             [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
             settings.diameter, self._set_diameter,
         )
-        self._add_choice_submenu(
+        # Pointer variant and palette style share ONE dropdown (owner
+        # spec), two exclusive groups like the Umbra submenu.
+        pointer_menu = self._add_choice_submenu(
             menu, "Pointer",
             [
                 (variant, f"{variant.capitalize()} ({arms})")
@@ -418,9 +420,13 @@ class AppController(QObject):
             settings.pointer,
             lambda value: self._set_display_choice("pointer", value),
         )
-        self._add_choice_submenu(
-            menu, "Palette",
-            [(style, style.capitalize()) for style in constants.PALETTE_STYLES],
+        pointer_menu.addSeparator()
+        self._add_choice_group(
+            menu, pointer_menu,
+            [
+                (style, f"{style.capitalize()} palette")
+                for style in constants.PALETTE_STYLES
+            ],
             settings.palette_style,
             lambda value: self._set_display_choice("palette_style", value),
         )

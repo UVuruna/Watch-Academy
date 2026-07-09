@@ -17,7 +17,7 @@ over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
 slot with its `OCTA_SLOT_MODES`), the star arm half-angles (the cross
 borrows the octa arm shape), the Umbra forms (fine 30 / coarse 24
 sections — single lightest/darkest centered on noon/midnight — or the
-continuous gradient) and contrast variant names (full/half), the
+continuous gradient) and contrast variant names (full/half/light/dark), the
 palette style names, the tropical zodiac table (signs are
 30° arcs of the year wheel — Cancer's first point IS the summer
 solstice), the Chinese zodiac cycle (animals, elements, the CNY new-

@@ -160,16 +160,19 @@ PALETTE_PRESETS = {
 # the slot width (owner: big font, must not overflow the slot).
 TIME_TEXT_WIDTH_FRACTION = 0.95
 
-# Umbra contrast spans, (lightest, darkest). Owner spec:
-#   full — the whole gray range: sectioned ladders run endpoint-
-#   inclusive (16 shades -> 255..0 step 17, matching his art);
-#   half — the MIDDLE HALF of the scale [64, 192]: sectioned ladders
-#   take the centers of N equal bins (16 -> 188..68 step 8, symmetric
-#   about 128 — every value + its mirror = 256).
+# Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
+#   full  — the whole gray range: sectioned ladders run endpoint-
+#           inclusive (16 shades -> 255..0 step 17, matching his art);
+#   half  — the MIDDLE half [64, 192]; light — the BRIGHT half
+#           [128, 255]; dark — the DARK half [0, 127]. These three take
+#           the centers of N equal bins (exact step 8 for 16 shades:
+#           half 188..68, light 252..132, dark 124..4).
 # The gradient form sweeps the same spans continuously.
 UMBRA_CONTRAST_SPANS = {
     "full": (255, 0),
     "half": (192, 64),
+    "light": (256, 128),
+    "dark": (128, 0),
 }
 
 # --- Season/moon event glow rendering (windows live in constants) ---------------

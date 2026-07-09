@@ -51,9 +51,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (once per failure streak) instead of dying silently
 - `_build_menu()`: the shared tray/right-click menu, built from the
   `_add_choice_submenu()` helper (one exclusive check-group per
-  submenu) — Ring (DOMY/MORPH presets), Size (360/540/720), Pointer (Cross/Hexa/Octa),
-  Palette (Paint/Light), Umbra (two groups: Fine/Coarse/Gradient form +
-  Full/Half contrast), Octa slot (nine modes; 1×1 placeholder skeletons
+  submenu) — Ring (DOMY/MORPH presets), Size (360/540/720), Pointer
+  (two groups: Cross/Hexa/Octa variant + Paint/Light palette), Umbra
+  (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
+  contrast), Octa slot (nine modes; 1×1 placeholder skeletons
   ship for the image art — the owner pastes his vectors over them),
   Earth (Clean/Atmosphere), Weekday theme (Planets / Greek gods /
   Norse gods / Religions / Professions — themed body art with the

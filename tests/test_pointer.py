@@ -314,6 +314,14 @@ def test_umbra_ladders_hit_the_owner_values():
     half16 = umbra_ladder(16, "half")
     assert half16 == tuple(188 - 8 * k for k in range(16))
     assert all(a + b == 256 for a, b in zip(half16, reversed(half16)))
+    # Owner spec: light = the bright half (128-255), dark = the dark
+    # half (0-127) — bin centers, exact step 8 like "half".
+    light16 = umbra_ladder(16, "light")
+    assert light16 == tuple(252 - 8 * k for k in range(16))
+    assert light16[-1] == 132 and all(0 <= v <= 255 for v in light16)
+    dark16 = umbra_ladder(16, "dark")
+    assert dark16 == tuple(124 - 8 * k for k in range(16))
+    assert dark16[-1] == 4
     full13 = umbra_ladder(13, "full")
     assert full13[0] == 255 and full13[-1] == 0 and full13[6] == 128
     half13 = umbra_ladder(13, "half")
@@ -429,6 +437,18 @@ def test_half_contrast_renders_a_gentler_night(july_wednesday):
     assert full_pixel.alpha() > 200 and half_pixel.alpha() > 200
     assert full_pixel.red() < 50
     assert half_pixel.red() >= 55
+    # Light contrast lifts the night far higher (window 128-255); dark
+    # keeps it near-black (window 0-127).
+    light = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, umbra_contrast="light"),
+        AssetCache(),
+    ).render_offscreen(360.0, 1.0, day, tick)
+    dark = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, umbra_contrast="dark"),
+        AssetCache(),
+    ).render_offscreen(360.0, 1.0, day, tick)
+    assert light.pixelColor(180, 270).red() >= 120
+    assert dark.pixelColor(180, 270).red() < 50
 
 
 @pytest.mark.parametrize("form", ["coarse", "gradient"])
