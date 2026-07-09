@@ -283,8 +283,10 @@ def test_symbolism_repository_covers_every_body_and_theme():
 
 
 def test_articles_cover_every_theme_and_body():
-    """35 encyclopedic articles (5 themes x 7 bodies), each substantial
-    (weaves day, color, mood, virtue and vice — SYMBOLISM.md canon)."""
+    """Encyclopedic articles per theme x body: a multi-paragraph BASE
+    (image-aware, canon-woven) plus one VARIANT paragraph per
+    pointer/palette combination (religion variants arrive with the
+    owner's preset decision)."""
     import json
 
     from config import constants, paths
@@ -292,11 +294,15 @@ def test_articles_cover_every_theme_and_body():
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
+    combos = {"hexa_paint", "hexa_light", "octa_paint", "octa_light", "cross"}
     for theme in constants.WEEKDAY_THEMES:
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
         for body in constants.WEEKDAY_BODIES:
             article = data["articles"][article_set][body]
-            assert len(article) > 150, (theme, body)
+            assert len(article["base"]) > 300, (theme, body)
+            assert "\n\n" in article["base"], (theme, body)   # paragraphs
+            if article_set != "religion":
+                assert set(article["variants"]) == combos, (theme, body)
 
 
 def test_custom_palette_reaches_the_render():
