@@ -148,19 +148,15 @@ POINTER_DISPLAY_NAMES = {
 # spec, design/background/cross.png) — slim diamonds with gaps between
 # them, never the fat rhombi a regular 4-star would give. The TRIO is
 # likewise "half of hexa" (owner spec, FINAL.txt #7): three hexa-shaped
-# arms at 12h/4h/20h — where the ring letters M, D, Y point — with gaps.
+# arms at 12h/4h/20h — where the ring letters M, D, Y point — with
+# gaps; its three hues center on the arms (thirds 8-16 / 16-24 / 0-8).
 POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5, "trio": 30.0}
-
-# Aura wedge offset from the arm directions. Every pointer centers its
-# period hues ON the arms except the TRIO (owner spec, FINAL.txt #7):
-# its arms mark the BOUNDARIES of the day thirds 4h-12h / 12h-20h /
-# 20h-4h, each arm starting its own third clockwise — Faith (yellow,
-# 12h arm) guards 12-20, Love (red, 20h arm) the night 20-4, Hope
-# (blue, 4h arm) the morning 4-12.
-POINTER_AURA_WEDGE_OFFSET_DEG = {"hexa": 0.0, "cross": 0.0, "octa": 0.0, "trio": 60.0}
 
 # The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
 # Faith vertical toward God, Hope on the dawn side, Love with Venus).
+# Like every pointer, the arm tip is the CENTER of its hue (owner
+# correction 2026-07-10): Faith yellow spans 8h-16h, Love red 16h-24h,
+# Hope blue 0h-8h.
 TRIO_ARM_THEMES = {0.0: "Faith", 120.0: "Love", 240.0: "Hope"}
 
 # The UMBRA (gray brightness wheel) ships in three user-selectable

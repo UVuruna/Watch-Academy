@@ -189,20 +189,24 @@ def test_trio_centers_the_sun_and_pairs_the_week():
     assert slots[240.0] == ("moon", "mercury")
 
 
-def test_trio_aura_thirds_start_on_the_arms(july_wednesday):
-    """The trio's day thirds (owner spec): each arm STARTS its third
-    clockwise — 16h wears Faith's yellow (12-20), 8h wears Hope's blue
-    (4-12). Probed upright, between the arms (they sit at 0/120/240)."""
+def test_trio_aura_thirds_center_on_the_arms(july_wednesday):
+    """The trio's hues center on the arms like every pointer (owner
+    correction 2026-07-10): upright, yellow spans 8h-16h, red 16h-24h,
+    blue 0h-8h. Probed at 14h (yellow), 18h (red) and 6h (blue), away
+    from the diamonds (arms sit at 0/120/240 deg)."""
     day, tick = july_wednesday
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer="trio", solar_rotation=False,
         show_weekday=False, show_earth=False, show_moon=False,
     )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
-    afternoon = image.pixelColor(273, 126)      # dial 60 deg = 16h, radius 0.6R
-    assert afternoon.red() > afternoon.blue() + 30       # Faith yellow
-    morning = image.pixelColor(86, 126)         # dial 300 deg = 8h
-    assert morning.blue() > morning.red() + 30           # Hope blue
+    at_14h = image.pixelColor(234, 87)          # dial 30 deg, radius 0.6R
+    assert at_14h.red() > at_14h.blue() + 30             # Faith yellow
+    at_18h = image.pixelColor(288, 180)         # dial 90 deg
+    assert at_18h.red() > at_18h.green() + 30            # Love red
+    assert at_18h.red() > at_18h.blue() + 30
+    at_6h = image.pixelColor(72, 180)           # dial 270 deg
+    assert at_6h.blue() > at_6h.red() + 30               # Hope blue
 
 
 def test_upright_mode_disarms_the_rotation(july_wednesday):

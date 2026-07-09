@@ -277,10 +277,6 @@ class BackgroundLayer(Layer):
             else (defaults.COLORFUL_OFF_COLOR,)
         )
         span = 360.0 / len(palette)
-        # Wedges center on the arms — except the trio, whose arms mark
-        # the BOUNDARIES of the day thirds (each arm starts its own
-        # third clockwise, owner spec).
-        offset = constants.POINTER_AURA_WEDGE_OFFSET_DEG.get(ctx.skin.pointer, 0.0)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(aura_radius, start, end))
@@ -289,9 +285,7 @@ class BackgroundLayer(Layer):
             for i, color in enumerate(palette):
                 painter.setBrush(QColor(color))
                 draw_pie(
-                    painter, aura_radius,
-                    i * span - span / 2 + offset,
-                    i * span + span / 2 + offset,
+                    painter, aura_radius, i * span - span / 2, i * span + span / 2
                 )
             painter.restore()
 

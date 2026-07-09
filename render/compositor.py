@@ -269,11 +269,12 @@ class Compositor:
             lines.extend(textwrap.wrap(blurb, width=46))
             return _centered(*lines)
         if self._skin.pointer == "trio":
-            # Trio arm: its theological theme, the day third it starts
-            # (the arms are the third boundaries, owner spec) and the
-            # weekday pair it carries. The hover rework will grow this.
+            # Trio arm: its theological theme, the day third it CENTERS
+            # (the arm tip is the middle of its hue — owner correction)
+            # and the weekday pair it carries. The hover rework will
+            # grow this.
             theme = constants.TRIO_ARM_THEMES[arm_angle]
-            start_hour = int(((arm_angle + 180.0) % 360.0) // 15)
+            start_hour = int((((arm_angle + 180.0) % 360.0) // 15 - 4) % 24)
             end_hour = int((start_hour + 8) % 24)
             bodies = next(
                 occupants

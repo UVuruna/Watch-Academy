@@ -17,9 +17,8 @@ WITH the star; shared slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
 slot with its `OCTA_SLOT_MODES`; the trio pairs Faith 12h =
 Jupiter+Saturn, Love 20h = Venus+Mars, Hope 4h = Moon+Mercury with the
-Sun centered, and its Aura wedges start ON the arms —
-`POINTER_AURA_WEDGE_OFFSET_DEG` — so the arms bound the day thirds
-4-12 / 12-20 / 20-4), the star arm half-angles (the cross
+Sun centered — each arm tip is the CENTER of its hue, thirds
+8-16 / 16-24 / 0-8), the star arm half-angles (the cross
 borrows the octa arm shape; the trio is half of hexa), the Umbra forms (fine 30 / coarse 24
 sections — single lightest/darkest centered on noon/midnight — or the
 continuous gradient) and contrast variant names (full/half/light/dark), the

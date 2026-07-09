@@ -32,9 +32,9 @@ slot layout: hexa and trio center the Sun (trio pairs Jupiter+Saturn,
 Venus+Mars, Moon+Mercury on its three arms), cross pairs bodies on
 three arms (the next-upcoming day wins a shared slot; Wednesday sits
 alone at the bottom), octa seats one body per arm with a user-selected
-info slot (time/date/day length/zodiac) on the bottom arm. The trio's
-Aura wedges start ON the arms (the arms bound the day thirds 4-12 /
-12-20 / 20-4); every other pointer centers its wedges on the arms.
+info slot (time/date/day length/zodiac) on the bottom arm. Every
+pointer, the trio included, centers its Aura wedges on the arm tips
+(owner correction: trio thirds are 8-16 / 16-24 / 0-8).
 
 ## Connections
 
