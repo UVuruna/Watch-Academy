@@ -66,8 +66,9 @@ centered on the top tip (true solar noon) and the bottom (true
 midnight), the rest in mirror pairs — or **gradient** (a continuous
 per-pixel conical sweep, mirror-symmetric). Shade values come from
 `umbra_ladder(shades, contrast)`: "full" runs endpoint-inclusive over
-0..255 (16 → step 17), "half" takes the bin centers of the middle half
-64..192 (16 → 188..68 step 8, symmetric about 128); the gradient
+0..255 (16 → step 17); "half"/"light"/"dark" take the bin centers of
+their half-windows — middle 64..192 (188..68), bright 128..255
+(252..132), dark 0..127 (124..4), all exact step 8; the gradient
 sweeps the same spans continuously.
 
 ### StarLayer (DAILY)
