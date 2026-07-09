@@ -22,8 +22,10 @@ class TestLocations:
         assert all(not node.is_city for node in locations.children())
 
     def test_mixed_depth_walk_matches_audit(self, locations):
-        """The audited shape: 241 countries, 127 of them MIXED (city leaves
-        and admin dicts in the same children mapping), 45,650 cities."""
+        """The audited shape after the 2026-07 curation (macro regions
+        for the 9 chaotic countries, Tokyo's Shibuya-ku duplicate
+        removed): 241 countries, 121 MIXED (city leaves and admin dicts
+        in the same children mapping), 45,649 cities."""
         countries = mixed = cities = 0
         for continent in locations.children():
             for subregion in locations.children((continent.name,)):
@@ -47,8 +49,30 @@ class TestLocations:
                     if kinds == {"city", "admin"}:
                         mixed += 1
         assert countries == 241
-        assert mixed == 127
-        assert cities == 45_650
+        assert mixed == 121
+        assert cities == 45_649
+
+    def test_macro_region_curation(self, locations):
+        """The 9 chaotic countries were re-nested under a small set of
+        standard macro regions (owner-approved agent curation): London
+        now sits under UK/London; Tokyo under Japan/Kanto."""
+        uk = ("Europe", "Northern Europe", "United Kingdom")
+        uk_regions = [n.name for n in locations.children(uk) if not n.is_city]
+        assert len(uk_regions) == 12                 # ITL1, was 186 admins
+        london = [
+            n for n in locations.children(uk + ("London",)) if n.name == "London"
+        ]
+        assert london and london[0].is_city
+        japan = ("Asia", "Eastern Asia", "Japan")
+        jp_regions = [n.name for n in locations.children(japan) if not n.is_city]
+        assert sorted(jp_regions) == [
+            "Chubu", "Chugoku", "Hokkaido", "Kansai",
+            "Kanto", "Kyushu", "Shikoku", "Tohoku",
+        ]
+        tokyo_kids = locations.children(japan + ("Kanto",))
+        names = {n.name for n in tokyo_kids}
+        assert "Tokyo" in names and "Shibuya" in names
+        assert "Shibuya-ku" not in names             # duplicate removed
 
     def test_admin_nested_sample_from_audit(self, locations):
         ada = [

@@ -1,9 +1,11 @@
 """World locations repository — lazy over the 4 MB world_locations.json.
 
 The hierarchy is Continent -> Subregion -> Country -> [Admin ->] City with
-MIXED depth: 127 of the 241 countries contain both direct city leaves and
+MIXED depth: 121 of the 241 countries contain both direct city leaves and
 admin sub-dicts in the same children mapping. Every child is therefore
 classified by shape ("latitude" in value = city leaf), never by depth.
+The nine chaotic countries (UK's 186 counties etc.) were re-nested under
+small standard macro-region sets in the 2026-07 curation.
 
 The file is loaded only while the location picker needs it and released
 afterwards; the chosen CityRecord is the only thing the rest of the app

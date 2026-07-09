@@ -7,9 +7,14 @@ exclusively through the repositories in [Data (folder)](../data/___data.md)
 ## Files
 
 ### `world_locations.json` (~4 MB)
-Hierarchy `Continent → Subregion → Country → [Admin?] → City`; 45,650 cities,
-each with `latitude`, `longitude` and an IANA `timezone`. MIXED depth: 127 of
+Hierarchy `Continent → Subregion → Country → [Admin?] → City`; 45,649 cities,
+each with `latitude`, `longitude` and an IANA `timezone`. MIXED depth: 121 of
 241 countries have both direct-city children and admin-nested children.
+Curated 2026-07: the nine chaotic countries (UK 186 counties → 12 ITL1
+regions, Japan 47 prefectures → 8 regions, Russia → 8 federal districts,
+Turkey → 7, Thailand → 6, Romania → 8, Philippines/Vietnam/Algeria → 3
+each) re-nested under standard macro regions; Tokyo's Shibuya-ku
+duplicate removed.
 
 ### `seasons_utc.json` (~0.5 MB)
 Per-year (1560–2640) exact season data: year `start`/`end`/`duration`,
