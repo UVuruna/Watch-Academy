@@ -383,6 +383,10 @@ class AppController(QObject):
         if getattr(self._settings, key) == value:
             return
         self._settings = replace(self._settings, **{key: value})
+        if key == "pointer":
+            # The Octa slot theme submenu only applies to the octa
+            # pointer (owner spec, FINAL.txt #6).
+            self._octa_slot_action.setEnabled(value == "octa")
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
@@ -424,61 +428,12 @@ class AppController(QObject):
     def _build_menu(self) -> QMenu:
         menu = QMenu()
         settings = self._settings
-        self._add_choice_submenu(
-            menu, "Ring",
-            [(name, name.upper()) for name in sorted(defaults.RING_PRESETS)],
-            settings.ring, self._set_ring,
-        )
-        self._add_choice_submenu(
-            menu, "Size",
-            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
-            settings.diameter, self._set_diameter,
-        )
-        # Pointer variant and palette style share ONE dropdown (owner
-        # spec), two exclusive groups like the Umbra submenu.
-        pointer_menu = self._add_choice_submenu(
-            menu, "Pointer",
-            [
-                (variant, f"{variant.capitalize()} ({arms})")
-                for variant, arms in sorted(
-                    constants.POINTER_POINTS.items(), key=lambda item: item[1]
-                )
-            ],
-            settings.pointer,
-            lambda value: self._set_display_choice("pointer", value),
-        )
-        pointer_menu.addSeparator()
-        self._add_choice_group(
-            menu, pointer_menu,
-            [
-                (style, f"{style.capitalize()} palette")
-                for style in constants.PALETTE_STYLES
-            ],
-            settings.palette_style,
-            lambda value: self._set_display_choice("palette_style", value),
-        )
-        umbra_menu = self._add_choice_submenu(
-            menu, "Umbra",
-            [
-                ("fine", "Fine (16 shades)"),
-                ("coarse", "Coarse (13 shades)"),
-                ("gradient", "Gradient"),
-            ],
-            settings.umbra_form,
-            lambda value: self._set_display_choice("umbra_form", value),
-        )
-        umbra_menu.addSeparator()
-        self._add_choice_group(
-            menu, umbra_menu,
-            [
-                (variant, f"{variant.capitalize()} contrast")
-                for variant in constants.UMBRA_CONTRAST_VARIANTS
-            ],
-            settings.umbra_contrast,
-            lambda value: self._set_display_choice("umbra_contrast", value),
-        )
-        self._add_choice_submenu(
-            menu, "Octa slot",
+        # THEME is the first-level dropdown (owner spec, FINAL.txt #6):
+        # Octa slot (only with the octa pointer), Weekday, Ring, Pointer
+        # and Umbra nest inside it.
+        theme_menu = menu.addMenu("Theme")
+        octa_slot_menu = self._add_choice_submenu(
+            theme_menu, "Octa slot",
             [
                 ("time", "Time"),
                 ("date", "Date"),
@@ -492,6 +447,74 @@ class AppController(QObject):
             ],
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),
+        )
+        self._octa_slot_action = octa_slot_menu.menuAction()
+        self._octa_slot_action.setEnabled(settings.pointer == "octa")
+        self._add_choice_submenu(
+            theme_menu, "Weekday",
+            [
+                ("planets", "Planets"),
+                ("planet_signs", "Planet signs"),
+                ("greek", "Greek gods"),
+                ("norse", "Norse gods"),
+                ("religion", "Religions"),
+                ("profession", "Professions"),
+            ],
+            settings.weekday_theme,
+            lambda value: self._set_display_choice("weekday_theme", value),
+        )
+        self._add_choice_submenu(
+            theme_menu, "Ring",
+            [(name, name.upper()) for name in sorted(defaults.RING_PRESETS)],
+            settings.ring, self._set_ring,
+        )
+        # Pointer variant and palette style share ONE dropdown (owner
+        # spec), two exclusive groups like the Umbra submenu.
+        pointer_menu = self._add_choice_submenu(
+            theme_menu, "Pointer",
+            [
+                (variant, f"{variant.capitalize()} ({arms})")
+                for variant, arms in sorted(
+                    constants.POINTER_POINTS.items(), key=lambda item: item[1]
+                )
+            ],
+            settings.pointer,
+            lambda value: self._set_display_choice("pointer", value),
+        )
+        pointer_menu.addSeparator()
+        self._add_choice_group(
+            theme_menu, pointer_menu,
+            [
+                (style, f"{style.capitalize()} palette")
+                for style in constants.PALETTE_STYLES
+            ],
+            settings.palette_style,
+            lambda value: self._set_display_choice("palette_style", value),
+        )
+        umbra_menu = self._add_choice_submenu(
+            theme_menu, "Umbra",
+            [
+                ("fine", "Fine (16 shades)"),
+                ("coarse", "Coarse (13 shades)"),
+                ("gradient", "Gradient"),
+            ],
+            settings.umbra_form,
+            lambda value: self._set_display_choice("umbra_form", value),
+        )
+        umbra_menu.addSeparator()
+        self._add_choice_group(
+            theme_menu, umbra_menu,
+            [
+                (variant, f"{variant.capitalize()} contrast")
+                for variant in constants.UMBRA_CONTRAST_VARIANTS
+            ],
+            settings.umbra_contrast,
+            lambda value: self._set_display_choice("umbra_contrast", value),
+        )
+        self._add_choice_submenu(
+            menu, "Size",
+            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
+            settings.diameter, self._set_diameter,
         )
         # Elements (owner spec, FINAL.txt #5): on/off switches removing
         # individual dial elements; Earth also nests its style choice.
@@ -539,19 +562,6 @@ class AppController(QObject):
                 lambda checked, key=key: self._set_display_choice(key, checked),
                 tip,
             )
-        self._add_choice_submenu(
-            menu, "Weekday theme",
-            [
-                ("planets", "Planets"),
-                ("planet_signs", "Planet signs"),
-                ("greek", "Greek gods"),
-                ("norse", "Norse gods"),
-                ("religion", "Religions"),
-                ("profession", "Professions"),
-            ],
-            settings.weekday_theme,
-            lambda value: self._set_display_choice("weekday_theme", value),
-        )
         self._add_toggle(
             menu, "Legend", settings.legend,
             lambda checked: self._set_display_choice("legend", checked),

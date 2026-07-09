@@ -51,19 +51,20 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (once per failure streak) instead of dying silently
 - `_build_menu()`: the shared tray/right-click menu, built from the
   `_add_choice_submenu()` helper (one exclusive check-group per
-  submenu) — Ring (DOMY/MORPH presets), Size (360/540/720), Pointer
-  (two groups: Cross/Hexa/Octa variant + Paint/Light palette), Umbra
+  submenu) — THEME as the first-level dropdown (owner spec, FINAL.txt
+  #6) nesting Octa slot (nine modes; grayed out unless the octa
+  pointer is active — `_set_display_choice` flips it on pointer
+  change), Weekday (Planets / Planet signs / Greek gods / Norse gods /
+  Religions / Professions), Ring (DOMY/MORPH presets), Pointer (two
+  groups: Cross/Hexa/Octa variant + Paint/Light palette) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
-  contrast), Octa slot (nine modes; 1×1 placeholder skeletons
-  ship for the image art — the owner pastes his vectors over them),
+  contrast); then Size (360…1440),
   Elements (the FINAL.txt #5 on/off switches, via the shared
   `_add_toggle()` helper: Earth — with its Clean/Atmosphere style
   group nested — Moon, Weekday, Pointer, Colorful — off draws the
   day/twilight arcs as plain white transparency — and Seconds, which
   also switches the tick cadence through
-  `MinuteScheduler.set_per_second`), Weekday theme (Planets / Planet
-  signs / Greek gods / Norse gods / Religions / Professions — themed
-  body art with the canon hover names), the Legend toggle (off = no
+  `MinuteScheduler.set_per_second`), the Legend toggle (off = no
   hovers at all; with click-through the dial has zero interaction),
   the Solar rotation toggle (off = upright Star/Aura/Umbra), Time
   Travel…, Click-through toggle (turn back off via the TRAY — the
