@@ -58,8 +58,8 @@ def july_wednesday(app):
 def test_every_layout_seats_the_whole_week():
     for pointer, slots in constants.POINTER_WEEKDAY_SLOTS.items():
         seated = [body for _, occupants in slots for body in occupants]
-        if pointer == "hexa":
-            seated.append("sun")             # the hexa layout centers the Sun
+        if pointer in ("hexa", "trio"):
+            seated.append("sun")     # hexa and trio center the Sun
         assert sorted(seated) == sorted(constants.WEEKDAY_BODIES), pointer
 
 
@@ -167,7 +167,7 @@ def test_octa_slot_modes_render(july_wednesday, mode):
 # --- Render smoke -------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("pointer", ["cross", "octa"])
+@pytest.mark.parametrize("pointer", ["cross", "octa", "trio"])
 def test_pointer_variants_render(july_wednesday, pointer):
     day, tick = july_wednesday
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer=pointer)
@@ -175,6 +175,34 @@ def test_pointer_variants_render(july_wednesday, pointer):
     assert image.pixelColor(2, 2).alpha() == 0           # corners stay transparent
     assert image.pixelColor(180, 8).alpha() > 200        # ring painted
     assert image.pixelColor(333, 180).alpha() > 200      # disc touches the ring
+
+
+def test_trio_centers_the_sun_and_pairs_the_week():
+    """Owner-approved trio pairing: Faith 12h = Jupiter+Saturn, Love 20h
+    = Venus+Mars, Hope 4h = Moon+Mercury; Sunday's Sun in the center."""
+    from render.layers import today_slot_theta
+
+    assert today_slot_theta("trio", "sun") is None
+    slots = dict(constants.POINTER_WEEKDAY_SLOTS["trio"])
+    assert slots[0.0] == ("jupiter", "saturn")
+    assert slots[120.0] == ("venus", "mars")
+    assert slots[240.0] == ("moon", "mercury")
+
+
+def test_trio_aura_thirds_start_on_the_arms(july_wednesday):
+    """The trio's day thirds (owner spec): each arm STARTS its third
+    clockwise — 16h wears Faith's yellow (12-20), 8h wears Hope's blue
+    (4-12). Probed upright, between the arms (they sit at 0/120/240)."""
+    day, tick = july_wednesday
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="trio", solar_rotation=False,
+        show_weekday=False, show_earth=False, show_moon=False,
+    )
+    image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
+    afternoon = image.pixelColor(273, 126)      # dial 60 deg = 16h, radius 0.6R
+    assert afternoon.red() > afternoon.blue() + 30       # Faith yellow
+    morning = image.pixelColor(86, 126)         # dial 300 deg = 8h
+    assert morning.blue() > morning.red() + 30           # Hope blue
 
 
 def test_upright_mode_disarms_the_rotation(july_wednesday):

@@ -473,7 +473,9 @@ class AppController(QObject):
         pointer_menu = self._add_choice_submenu(
             theme_menu, "Pointer",
             [
-                (variant, f"{variant.capitalize()} ({arms})")
+                # Owner-chosen display names (FINAL.txt #8): Trinity,
+                # Seasons, Prism, Compass — internal keys unchanged.
+                (variant, f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})")
                 for variant, arms in sorted(
                     constants.POINTER_POINTS.items(), key=lambda item: item[1]
                 )

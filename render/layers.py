@@ -277,6 +277,10 @@ class BackgroundLayer(Layer):
             else (defaults.COLORFUL_OFF_COLOR,)
         )
         span = 360.0 / len(palette)
+        # Wedges center on the arms — except the trio, whose arms mark
+        # the BOUNDARIES of the day thirds (each arm starts its own
+        # third clockwise, owner spec).
+        offset = constants.POINTER_AURA_WEDGE_OFFSET_DEG.get(ctx.skin.pointer, 0.0)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(aura_radius, start, end))
@@ -285,7 +289,9 @@ class BackgroundLayer(Layer):
             for i, color in enumerate(palette):
                 painter.setBrush(QColor(color))
                 draw_pie(
-                    painter, aura_radius, i * span - span / 2, i * span + span / 2
+                    painter, aura_radius,
+                    i * span - span / 2 + offset,
+                    i * span + span / 2 + offset,
                 )
             painter.restore()
 
@@ -505,9 +511,9 @@ def draw_weekday_body(
 
 class WeekdayLayer(Layer):
     """Weekday bodies on the pointer's arm slots (rotating WITH the star,
-    owner decision), BELOW the hands. The hexa pointer keeps the Sun in
-    the center; cross/octa give every body a slot — shared slots show
-    only the priority winner (see visible_occupant). Modes: "ghost" (all
+    owner decision), BELOW the hands. The hexa and trio pointers keep
+    the Sun in the center; cross/octa give every body a slot — shared
+    slots show only the priority winner (see visible_occupant). Modes: "ghost" (all
     visible slots, non-current faint) and "center_only" (only the current
     day's body, in the center). Whenever the CENTER image is the current
     day it is drawn by CenterBodyLayer instead — ABOVE the hands (owner
@@ -522,9 +528,9 @@ class WeekdayLayer(Layer):
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
 
-        if ctx.skin.pointer == "hexa" and today != "sun":
-            # Only the hexa layout centers the Sun; on Sundays the center
-            # pass draws it opaque above the hands instead.
+        if ctx.skin.pointer in ("hexa", "trio") and today != "sun":
+            # The hexa and trio layouts center the Sun; on Sundays the
+            # center pass draws it opaque above the hands instead.
             center_size = 2 * ctx.radius * spec.center_scale
             draw_weekday_body(
                 painter, ctx, "sun", QPointF(0, 0), center_size, spec.ghost_opacity
@@ -542,10 +548,10 @@ class WeekdayLayer(Layer):
 
 class CenterBodyLayer(Layer):
     """The current day's CENTER image drawn ABOVE the hands — the opaque
-    Sun on Sundays in ghost mode (hexa pointer only; cross/octa seat the
-    Sun on an arm slot), or the day's body in center_only mode — so the
-    hands sweep behind it (owner spec; the slot images never move up
-    here)."""
+    Sun on Sundays in ghost mode (hexa and trio pointers; cross/octa
+    seat the Sun on an arm slot), or the day's body in center_only mode
+    — so the hands sweep behind it (owner spec; the slot images never
+    move up here)."""
 
     cadence = Cadence.MINUTE
 
@@ -553,7 +559,7 @@ class CenterBodyLayer(Layer):
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         if spec.display_mode != "center_only" and not (
-            ctx.skin.pointer == "hexa" and today == "sun"
+            ctx.skin.pointer in ("hexa", "trio") and today == "sun"
         ):
             return
         center_size = 2 * ctx.radius * spec.center_scale

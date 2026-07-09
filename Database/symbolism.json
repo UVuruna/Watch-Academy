@@ -6,7 +6,8 @@
     "gold_and_silver": "Alchemy gives one metal to each luminary: gold to the Sun, silver to the Moon. On the dial the top is solar noon and the bottom is midnight, so gold crowns the top tip and silver the bottom - the day metal above, the night metal below.",
     "cross_cure": "Every body carries a bright and a dark face - a virtue and a vice. Across each axis of the star, one body's virtue is the cure for the opposite body's vice.",
     "professions": "Medieval astrology drew the 'children of the planets': each planet rules the callings born under it. The seven archetypal professions of the old world land one per body, and each snaps onto its body's virtue and vice.",
-    "theological_trio": "Faith, Hope and Love are a separate set from the seven virtue/vice pairs (Love alone belongs to both, as in tradition). They span three kinds of places: Faith at the center (Sunday, toward God - the vertical), Hope on the dawn arm (west, toward what comes - the horizon), Love on Venus' arm (toward people - the human)."
+    "theological_trio": "Faith, Hope and Love are a separate set from the seven virtue/vice pairs (Love alone belongs to both, as in tradition). They span three kinds of places: Faith at the center (Sunday, toward God - the vertical), Hope on the dawn arm (west, toward what comes - the horizon), Love on Venus' arm (toward people - the human).",
+    "religion_alternates": "The owner's art holds twelve religions. The basic seven sit on the arms (Freemasonry on Tuesday, owner decision); the alternates each take the day they fit best: Druidism on Monday (lunar reckoning, groves and tides), Zoroastrianism on Tuesday (the fire Atar, asha as the courage of truth), Shamanism on Wednesday (the walker between worlds on the messenger's day; Odin on the tree is a shamanic initiation), Sikhism on Thursday (Guruvar taken literally - ten Gurus, langar generosity), Voodoo on Saturday (Baron Samedi, 'Baron Saturday', keeper of the crossroads and the dead). Sunday and Friday have no alternate yet - Christianity and Islam stand in both sets until the owner adds art (Shinto and Wicca proposed)."
   },
   "center": {
     "day": "Sunday",
@@ -57,7 +58,7 @@
       "hour": 16,
       "greek": "Ares",
       "norse": "Tyr",
-      "religion": "Zoroastrianism",
+      "religion": "Freemasonry",
       "color_name": "orange",
       "mood": "Zeal",
       "virtue": "Courage",
@@ -68,7 +69,7 @@
         "profession": "Mars' child is the Soldier, whose two faces are the body's virtue and vice themselves: Courage in defense, Wrath unleashed.",
         "greek": "Ares is the storm of battle itself - the Greeks honored his ferocity and feared his rage in the same breath.",
         "norse": "Tyr, god of war AND justice, gave his right hand to bind the wolf Fenrir - courage in the service of order.",
-        "religion": "Zoroastrianism keeps the sacred fire Atar burning in its temples, and its heart is asha - cosmic truth and justice - mirrored in the fiery planet and the just god of this day.",
+        "religion": "Freemasonry is sworn on oaths - and Tyr, this arm's god, gave his hand to seal one. The square and compasses build the inner temple with a soldier's discipline: Courage set to work, Wrath bound by ritual.",
         "color": "Orange is the working afternoon: the ember of the day's fire.",
         "virtue_vice": "Mars carries both Courage and Wrath - the same fire that defends can destroy. Serenity, from the Moon's arm, quells Wrath; Courage cures the Moon's Fear."
       }

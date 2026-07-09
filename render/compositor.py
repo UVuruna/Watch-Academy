@@ -268,6 +268,26 @@ class Compositor:
             lines.append("")
             lines.extend(textwrap.wrap(blurb, width=46))
             return _centered(*lines)
+        if self._skin.pointer == "trio":
+            # Trio arm: its theological theme, the day third it starts
+            # (the arms are the third boundaries, owner spec) and the
+            # weekday pair it carries. The hover rework will grow this.
+            theme = constants.TRIO_ARM_THEMES[arm_angle]
+            start_hour = int(((arm_angle + 180.0) % 360.0) // 15)
+            end_hour = int((start_hour + 8) % 24)
+            bodies = next(
+                occupants
+                for angle, occupants in constants.POINTER_WEEKDAY_SLOTS["trio"]
+                if angle == arm_angle
+            )
+            days = " · ".join(
+                constants.WEEKDAY_FULL_NAMES[body] for body in bodies
+            )
+            return _centered(
+                f"{theme}{star}",
+                f"{start_hour:02d}:00 – {end_hour:02d}:00",
+                days,
+            )
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events.
             anchor_angle = {0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0}[

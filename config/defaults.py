@@ -133,6 +133,11 @@ _CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oc
 # right, winter blue bottom, spring green left — solstices/equinoxes at
 # the arm centers), served under both styles.
 _CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
+# The TRIO carries the theological trio (owner spec, FINAL.txt #7) and,
+# like the cross, ONE palette under both styles: Faith yellow at 12h,
+# Love red at 20h, Hope blue at 4h — the hexa paint hues at the M, Y, D
+# ring-letter positions.
+_TRINITY = ("#F8E600", "#B60000", "#002FFF")
 PALETTE_PRESETS = {
     ("hexa", "paint"): (
         "#F8E600", "#DC9600", "#B60000", 
@@ -152,6 +157,8 @@ PALETTE_PRESETS = {
     ),
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
+    ("trio", "paint"): _TRINITY,
+    ("trio", "light"): _TRINITY,
 }
 
 # Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and
@@ -235,7 +242,8 @@ WEEKDAY_THEME_NAMES = {
     "religion": {
         "sun": "Christianity",
         "moon": "Buddhism",
-        "mars": "Zoroastrianism",
+        "mars": "Freemasonry",      # owner decision: replaces Zoroastrianism
+                                    # in the basic seven (now an alternate)
         "mercury": "Taoism",
         "jupiter": "Hinduism",
         "venus": "Islam",

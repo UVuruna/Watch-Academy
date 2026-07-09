@@ -128,16 +128,40 @@ WEEKDAY_FULL_NAMES = {
 }
 
 # Pointer variants: how many arms the star has — and with how many hues
-# the day's periods are measured (owner spec: cross 4x90, hexa 6x60,
-# octa 8x45).
-POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8}
+# the day's periods are measured (owner spec: trio 3x120, cross 4x90,
+# hexa 6x60, octa 8x45).
+POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8, "trio": 3}
+
+# Display names chosen by the owner (FINAL.txt #8): the internal keys
+# stay hexa/cross/octa/trio (settings and code stability); the menu and
+# the docs speak these.
+POINTER_DISPLAY_NAMES = {
+    "trio": "Trinity",
+    "cross": "Seasons",
+    "hexa": "Prism",
+    "octa": "Compass",
+}
 
 # Star arm (diamond) half-angles. Hexa/octa are the regular N-star
 # values (180/N, adjacent arms touch at the inner vertices); the CROSS
 # uses the OCTA arm shape — "octa without the 4 diagonal arms" (owner
 # spec, design/background/cross.png) — slim diamonds with gaps between
-# them, never the fat rhombi a regular 4-star would give.
-POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5}
+# them, never the fat rhombi a regular 4-star would give. The TRIO is
+# likewise "half of hexa" (owner spec, FINAL.txt #7): three hexa-shaped
+# arms at 12h/4h/20h — where the ring letters M, D, Y point — with gaps.
+POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5, "trio": 30.0}
+
+# Aura wedge offset from the arm directions. Every pointer centers its
+# period hues ON the arms except the TRIO (owner spec, FINAL.txt #7):
+# its arms mark the BOUNDARIES of the day thirds 4h-12h / 12h-20h /
+# 20h-4h, each arm starting its own third clockwise — Faith (yellow,
+# 12h arm) guards 12-20, Love (red, 20h arm) the night 20-4, Hope
+# (blue, 4h arm) the morning 4-12.
+POINTER_AURA_WEDGE_OFFSET_DEG = {"hexa": 0.0, "cross": 0.0, "octa": 0.0, "trio": 60.0}
+
+# The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
+# Faith vertical toward God, Hope on the dawn side, Love with Venus).
+TRIO_ARM_THEMES = {0.0: "Faith", 120.0: "Love", 240.0: "Hope"}
 
 # The UMBRA (gray brightness wheel) ships in three user-selectable
 # forms (owner spec). Sectioned forms follow one structure: the LIGHTEST
@@ -313,6 +337,15 @@ POINTER_WEEKDAY_SLOTS = {
         (225.0, ("moon",)),
         (270.0, ("saturn",)),
         (315.0, ("jupiter",)),
+    ),
+    # TRIO (owner-approved pairing, 2026-07-10): Faith 12h = Jupiter
+    # (the Priest) + Saturn (faith tried by time); Love 20h = Venus +
+    # Mars (the classic pair); Hope 4h = Moon + Mercury (the dawn
+    # herald). Sunday's Sun sits in the center, like the hexa layout.
+    "trio": (
+        (0.0, ("jupiter", "saturn")),
+        (120.0, ("venus", "mars")),
+        (240.0, ("moon", "mercury")),
     ),
 }
 OCTA_TIME_SLOT_ANGLE = 180.0         # the bottom arm carries the digital time
