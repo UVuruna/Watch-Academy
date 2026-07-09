@@ -100,6 +100,35 @@ def test_tick_state_carries_the_digital_time(belgrade_noon_context):
     assert tick.time_hm == "12:24"
 
 
+def test_southern_hemisphere_mirrors_the_year_marker():
+    """Owner spec (FINAL.txt #4): south of the equator the seasons are
+    opposite — 21 June (their shortest day) sits at the BOTTOM (Ω),
+    late December at the top (M)."""
+    from zoneinfo import ZoneInfo
+
+    tz = ZoneInfo("Australia/Sydney")
+    solstice = datetime(2026, 6, 21, 12, 0, tzinfo=tz)
+    sydney = astral.Observer(latitude=-33.87, longitude=151.21)
+    day = build_day_context(
+        solstice,
+        sydney,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    assert day.southern_hemisphere is True
+    tick = build_tick_state(solstice, day)
+    assert 170.0 < tick.year_angle < 190.0        # bottom, not top
+    december = datetime(2026, 12, 22, 12, 0, tzinfo=tz)
+    winter_day = build_day_context(
+        december,
+        sydney,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    winter_tick = build_tick_state(december, winter_day)
+    assert winter_tick.year_angle < 10.0 or winter_tick.year_angle > 350.0  # top
+
+
 def test_zodiac_rides_the_year_wheel(belgrade_noon_context):
     """2026-07-07 is Cancer — its first point IS the summer solstice
     (Jun 21), its last day just before the Leo cusp (~Jul 22/23)."""

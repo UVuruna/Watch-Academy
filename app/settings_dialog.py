@@ -20,6 +20,8 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
+    QListWidget,
+    QListWidgetItem,
     QPushButton,
     QSlider,
     QVBoxLayout,
@@ -27,7 +29,7 @@ from PySide6.QtWidgets import (
 
 from app.settings_store import Settings, replace
 from config import constants, defaults
-from data.locations import LocationRepository
+from data.locations import LocationRepository, fold_name
 
 _NO_REGION = "—"                       # the country's direct cities
 
@@ -80,12 +82,21 @@ class SettingsDialog(QDialog):
 
         self._search = QLineEdit()
         self._search.setPlaceholderText("City name…")
-        self._search.returnPressed.connect(self._search_city)
+        self._search.textChanged.connect(self._filter_cities)
         self._search_status = QLabel("")
         search_row = QHBoxLayout()
         search_row.addWidget(self._search)
         search_row.addWidget(self._search_status)
         form.addRow("Search", search_row)
+        # Live filter results (owner spec, FINAL.txt #1): typing shows
+        # the matching cities immediately — you always know whether the
+        # city exists. Click a result to jump the combos to it.
+        self._results = QListWidget()
+        self._results.setMaximumHeight(120)
+        self._results.hide()
+        self._results.itemClicked.connect(self._pick_result)
+        form.addRow("", self._results)
+        self._all_cities: list[tuple[str, str, tuple[str, ...]]] | None = None
 
         self._continent = QComboBox()
         self._subregion = QComboBox()
@@ -211,15 +222,38 @@ class SettingsDialog(QDialog):
             self._city_name = self._settings.city_name
             self._tz_label.setText(self._timezone)
 
-    def _search_city(self) -> None:
-        matches = self._locations.find_city(self._search.text().strip())
-        if not matches:
-            self._search_status.setText("not found")
+    def _filter_cities(self, text: str) -> None:
+        """Live search (owner spec): filter all 45k cities as you type,
+        show the matches in the dropdown list below."""
+        text = text.strip()
+        if len(text) < 2:
+            self._results.hide()
+            self._search_status.setText("")
             return
+        if self._all_cities is None:
+            self._all_cities = self._locations.all_cities()
+        wanted = fold_name(text)
+        matches = [
+            (display, path)
+            for folded, display, path in self._all_cities
+            if wanted in folded
+        ]
+        # Exact and prefix matches first, then the rest, alphabetical.
+        matches.sort(key=lambda m: (not fold_name(m[0]).startswith(wanted), m[0]))
+        self._results.clear()
+        for display, path in matches[:30]:
+            item = QListWidgetItem(f"{display}  —  {' / '.join(path[:-1])}")
+            item.setData(Qt.ItemDataRole.UserRole, path)
+            self._results.addItem(item)
         self._search_status.setText(
-            "1 match" if len(matches) == 1 else f"{len(matches)} matches — first shown"
+            "not found" if not matches else f"{len(matches)} found"
         )
-        self._restore_search(matches[0].path)
+        self._results.setVisible(bool(matches))
+
+    def _pick_result(self, item: QListWidgetItem) -> None:
+        path = tuple(item.data(Qt.ItemDataRole.UserRole))
+        self._restore_search(path)
+        self._results.hide()
 
     def _restore_search(self, path: tuple[str, ...]) -> None:
         """Walk the combos to a found city — its record fills lat/lng."""

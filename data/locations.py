@@ -44,7 +44,7 @@ def _is_city_leaf(value: dict) -> bool:
     return "latitude" in value
 
 
-def _fold_name(text: str) -> str:
+def fold_name(text: str) -> str:
     """Search folding: the bundled city names are ASCII transliterations,
     so native spellings must match them — NFKD strips combining diacritics
     (š, č, ü, ...), the transliteration table covers the single-codepoint
@@ -97,13 +97,29 @@ class LocationRepository:
             for name, value in node.items()
         ]
 
+    def all_cities(self) -> list[tuple[str, str, tuple[str, ...]]]:
+        """(folded name, display name, path) of EVERY city — one full
+        walk, used by the picker's live search filter."""
+        self.load()
+        cities: list[tuple[str, str, tuple[str, ...]]] = []
+        stack: list[tuple[tuple[str, ...], dict]] = [((), self._tree)]
+        while stack:
+            node_path, node = stack.pop()
+            for child_name, value in node.items():
+                child_path = node_path + (child_name,)
+                if _is_city_leaf(value):
+                    cities.append((fold_name(child_name), child_name, child_path))
+                else:
+                    stack.append((child_path, value))
+        return cities
+
     def find_city(self, name: str) -> list[CityRecord]:
         """All cities whose folded name matches (full walk — picker search
         box and the core CLI selftest). Diacritic spellings match their
         ASCII transliterations: "Niš" finds "Nis", "Tromsø" finds "Tromso".
         """
         self.load()
-        wanted = _fold_name(name)
+        wanted = fold_name(name)
         matches: list[CityRecord] = []
         stack: list[tuple[tuple[str, ...], dict]] = [((), self._tree)]
         while stack:
@@ -111,7 +127,7 @@ class LocationRepository:
             for child_name, value in node.items():
                 child_path = node_path + (child_name,)
                 if _is_city_leaf(value):
-                    if _fold_name(child_name) == wanted:
+                    if fold_name(child_name) == wanted:
                         matches.append(self._make_record(child_path, value))
                 else:
                     stack.append((child_path, value))

@@ -364,12 +364,16 @@ class AppController(QObject):
         self._flush_position()
 
     def _set_display_choice(self, key: str, value) -> None:
-        """Shared setter behind Pointer/Palette/Umbra/Octa slot/Solar
-        rotation: persist the choice and reinstall the skin with it."""
+        """Shared setter behind every display choice: persist and
+        REBUILD the render config from scratch — a bare scalar replace
+        is not enough for choices that swap assets (the weekday theme
+        replaces the body images inside apply_display_settings; a
+        scalar-only update left the planets on screen — owner bug
+        report, FINAL.txt #6)."""
         if getattr(self._settings, key) == value:
             return
         self._settings = replace(self._settings, **{key: value})
-        self._install_skin(dataclasses.replace(self._skin, **{key: value}))
+        self._install_skin(build_skin(self._settings))
         self._flush_position()
 
     def _add_choice_group(

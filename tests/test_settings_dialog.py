@@ -46,6 +46,33 @@ def test_dialog_city_pick_fills_coordinates(app):
     dialog.done(0)
 
 
+def test_live_search_filters_and_jumps(app):
+    """Owner spec (FINAL.txt #1): typing filters a visible result list —
+    you always know whether the city exists; clicking a result jumps
+    the combos to it. London must be findable."""
+    from PySide6.QtCore import Qt
+
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    dialog._search.setText("London")
+    assert dialog._results.isVisible() or dialog._results.count() > 0
+    texts = [dialog._results.item(i).text() for i in range(dialog._results.count())]
+    assert any(t.startswith("London") and "United Kingdom" in t for t in texts)
+    uk_london = next(
+        dialog._results.item(i)
+        for i in range(dialog._results.count())
+        if "United Kingdom" in dialog._results.item(i).text()
+        and dialog._results.item(i).text().startswith("London ")
+    )
+    dialog._pick_result(uk_london)
+    result = dialog.result_settings()
+    assert result.city_name == "London"
+    assert result.timezone == "Europe/London"
+    dialog._search.setText("Xyzzyqq")
+    assert dialog._results.count() == 0
+    assert dialog._search_status.text() == "not found"
+    dialog.done(0)
+
+
 def test_dialog_defaults_keep_skin_opacities(app):
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     result = dialog.result_settings()

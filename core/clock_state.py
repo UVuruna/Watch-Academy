@@ -108,11 +108,17 @@ def build_day_context(
 
 
 def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
+    year_angle = year_marker_angle(now_local, day.year_anchors)
+    if day.southern_hemisphere:
+        # Owner spec (FINAL.txt #4): the seasons are opposite south of
+        # the equator, so the date marker runs MIRRORED — 21 June (their
+        # shortest day) sits at the bottom (Ω), 22 December at the top (M).
+        year_angle = (year_angle + 180.0) % 360.0
     return TickState(
         hour_angle=angles.time_to_dial_angle(now_local),
         minute_angle=angles.minute_hand_angle(now_local),
         second_angle=angles.second_hand_angle(now_local),
-        year_angle=year_marker_angle(now_local, day.year_anchors),
+        year_angle=year_angle,
         is_daylight=_is_daylight(now_local, day.sun),
         time_hm=now_local.strftime("%H:%M"),
         season_event=_active_event(

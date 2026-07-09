@@ -20,8 +20,8 @@ from skins.manifest import (
 # --- Window ------------------------------------------------------------------
 DEFAULT_DIAL_DIAMETER = 360          # logical px, before DPI scaling
 MIN_DIAL_DIAMETER = 120
-MAX_DIAL_DIAMETER = 1200
-SIZE_PRESETS = (360, 540, 720)       # owner spec: three dial versions
+MAX_DIAL_DIAMETER = 2000             # roomy above the largest preset (1440)
+SIZE_PRESETS = (360, 540, 720, 1080, 1440)   # owner spec (FINAL.txt #3)
 
 # Dials at or above this diameter write the date on the Earth marker;
 # the FULL weekday name needs more room and appears only from the largest
@@ -136,21 +136,23 @@ _CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oc
 # ONE seasons palette (owner's own values: summer yellow top, autumn red
 # right, winter blue bottom, spring green left — solstices/equinoxes at
 # the arm centers), served under both styles.
-_CROSS_SEASONS = ("#D9D900", "#D40F0F", "#0A70D8", "#10CE10")
+_CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
 PALETTE_PRESETS = {
     ("hexa", "paint"): (
-        "#FFEE00", "#FFAA00", "#FF0000", "#8E55B9", "#0073E6", "#00B500",
+        "#F8E600", "#DC9600", "#B60000", 
+        "#542E85", "#002FFF", "#007E00",
     ),
     ("hexa", "light"): (
-        "#00DC00", "#DCDC00", "#DC0000", "#DC00DC", "#0000DC", "#00DCDC",
+        "#00DC00", "#FFFF00", "#FF0000", 
+        "#BD00BD", "#0040FF", "#00DDDD",
     ),
     ("octa", "paint"): (
-        "#DCDC00", "#DC9600", "#DC3C00", "#DC0000",
+        "#FFFFFF", "#F8E600", "#DC9600", "#DC0000",
         "#783CF0", "#005ADC", "#00DCDC", "#00DC00",
     ),
     ("octa", "light"): (
-        "#00DC00", "#DCDC00", "#DC7800", "#DC0000",
-        "#DC00DC", "#0000DC", "#0078DC", "#00DCDC",
+        "#00DC00", "#DCDC00", "#FF8C00", "#FF0000",
+        "#363636", "#783CF0", "#0078DC", "#00DCDC",
     ),
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
@@ -214,7 +216,9 @@ WEEKDAY_THEME_NAMES = {
         "mercury": "Odin",
         "jupiter": "Thor",
         "venus": "Freya",
-        "saturn": "Sabbath",
+        "saturn": "Loki",     # owner decision (FINAL.txt #2): Loki stands
+                              # on Saturday — the bound trickster as
+                              # Cronus' northern mirror
     },
     "religion": {
         "sun": "Christianity",
@@ -236,10 +240,18 @@ WEEKDAY_THEME_NAMES = {
     },
 }
 
-# File stems on disk: the display names folded to ASCII (Sól -> Sol).
+# File stems on disk: the display names folded to ASCII (Sól -> Sol);
+# the owner's religion art uses lowercase file names.
 _ASCII_FOLD = str.maketrans("óá", "oa")
 WEEKDAY_THEME_FILES = {
-    theme: {body: name.translate(_ASCII_FOLD) for body, name in names.items()}
+    theme: {
+        body: (
+            name.translate(_ASCII_FOLD).lower()
+            if theme == "religion"
+            else name.translate(_ASCII_FOLD)
+        )
+        for body, name in names.items()
+    }
     for theme, names in WEEKDAY_THEME_NAMES.items()
 }
 

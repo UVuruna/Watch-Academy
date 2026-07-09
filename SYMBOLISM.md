@@ -98,7 +98,7 @@ with the star):
 | 20h | Friday | Venus | Aphrodite | Freya | Islam | red |
 | bottom (24h) | Wednesday | Mercury | Hermes | Odin | Taoism | purple |
 | 04h | Monday | Moon | Selene | Máni | Buddhism | blue |
-| 08h | Saturday | Saturn | Cronus | — (Sabbath) | Judaism | green |
+| 08h | Saturday | Saturn | Cronus | Loki | Judaism | green |
 | CENTER | Sunday | Sun | Helios | Sól | Christianity | white-gold |
 
 Why each religion sits on its day:
@@ -120,9 +120,12 @@ Why each religion sits on its day:
 - **Saturday — Judaism**: Shabbat — and in Hebrew the planet Saturn is
   named *Shabtai*, after the Sabbath itself.
 
-Norse note: Saturday is the one day with no Norse god (Old Norse
-*laugardagr*, "washing day") — the Sabbath stands there instead. The
-Norse week otherwise: Sól, Máni, Tyr, Odin, Thor, Freya.
+Norse note: Old Norse gave Saturday no god of its own (*laugardagr*,
+"washing day") — the owner's canon seats **Loki** there: the bound
+trickster as Cronus' northern mirror, whose envy of Baldr is the green
+arm's own vice and whose sentence — bound until the world's end — is
+Patience taught the hard way. The Norse week otherwise: Sól, Máni,
+Tyr, Odin, Thor, Freya.
 
 <a id="color-moods"></a>
 
@@ -265,7 +268,7 @@ The full weave, one arm per row (hexa paint canon):
 | Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed | Merchant |
 | Thursday | Jupiter | Zeus | Thor | Hinduism | yellow | Joy | Generosity | Excess | Priest/Teacher |
 | Friday | Venus | Aphrodite | Freya | Islam | red | Passion | Love | Jealousy | Artist |
-| Saturday | Saturn | Cronus | — | Judaism | green | Renewal | Patience | Envy | Farmer |
+| Saturday | Saturn | Cronus | Loki | Judaism | green | Renewal | Patience | Envy | Farmer |
 
 Octa extras:
 
