@@ -175,7 +175,43 @@ class SettingsDialog(QDialog):
             self._region.addItems(admins)
             self._region.blockSignals(False)
         self._fill(self._city, self._group_path(), cities=True)
+        if level <= 3:
+            self._show_major_cities()
         self._on_city()
+
+    def _show_major_cities(self) -> None:
+        """Pin the country's MAJOR cities into the results list on
+        country change (agent finding: a city named like the last
+        segment of its own IANA timezone is that zone's canonical city —
+        it flags London for the UK for free). Click jumps the combos."""
+        country_path = (
+            self._continent.currentText(),
+            self._subregion.currentText(),
+            self._country.currentText(),
+        )
+        majors: list[tuple[str, tuple[str, ...]]] = []
+
+        def walk(path: tuple[str, ...]) -> None:
+            for child in self._locations.children(path):
+                if child.is_city:
+                    reference = (
+                        child.record.timezone.rsplit("/", 1)[-1].replace("_", " ")
+                    )
+                    if fold_name(child.name) == fold_name(reference):
+                        majors.append((child.name, path + (child.name,)))
+                else:
+                    walk(path + (child.name,))
+
+        try:
+            walk(country_path)
+        except KeyError:
+            return                       # combos mid-rebuild
+        self._results.clear()
+        for name, path in sorted(majors):
+            item = QListWidgetItem(f"★ {name}")
+            item.setData(Qt.ItemDataRole.UserRole, path)
+            self._results.addItem(item)
+        self._results.setVisible(bool(majors))
 
     def _on_city(self) -> None:
         name = self._city.currentText()

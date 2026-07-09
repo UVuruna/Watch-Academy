@@ -192,12 +192,31 @@ EARTH_STYLES = ("clean", "atmo")
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
 # own weekday unit; the others swap in the owner's themed art from
 # assets/skins/domy/weekday/<theme>/ with the canon display names.
-WEEKDAY_THEMES = ("planets", "greek", "norse", "religion", "profession")
+WEEKDAY_THEMES = (
+    "planets",
+    "planet_signs",
+    "greek",
+    "norse",
+    "religion",
+    "profession",
+)
 
 # Theme -> symbolism.json blurb key (the encyclopedic text under the
 # hexa diamond hover follows the active theme).
 WEEKDAY_THEME_BLURBS = {
     "planets": "day",
+    "planet_signs": "day",
+    "greek": "greek",
+    "norse": "norse",
+    "religion": "religion",
+    "profession": "profession",
+}
+
+# Theme -> symbolism.json article set (the glyph theme shares the
+# planet articles — same entities, different art).
+WEEKDAY_THEME_ARTICLES = {
+    "planets": "planets",
+    "planet_signs": "planets",
     "greek": "greek",
     "norse": "norse",
     "religion": "religion",

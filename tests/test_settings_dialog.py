@@ -73,6 +73,30 @@ def test_live_search_filters_and_jumps(app):
     dialog.done(0)
 
 
+def test_major_cities_pinned_per_country(app):
+    """Agent recommendation: the timezone-reference heuristic pins the
+    country's canonical cities — picking the United Kingdom must offer
+    London with one click (the owner's complaint)."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    for combo, value in (
+        (dialog._continent, "Europe"),
+        (dialog._subregion, "Northern Europe"),
+        (dialog._country, "United Kingdom"),
+    ):
+        combo.setCurrentIndex(combo.findText(value))
+    stars = [dialog._results.item(i).text() for i in range(dialog._results.count())]
+    assert "★ London" in stars
+    london = next(
+        dialog._results.item(i)
+        for i in range(dialog._results.count())
+        if dialog._results.item(i).text() == "★ London"
+    )
+    dialog._pick_result(london)
+    result = dialog.result_settings()
+    assert result.city_name == "London" and result.timezone == "Europe/London"
+    dialog.done(0)
+
+
 def test_dialog_defaults_keep_skin_opacities(app):
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     result = dialog.result_settings()
@@ -269,8 +293,9 @@ def test_articles_cover_every_theme_and_body():
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
     for theme in constants.WEEKDAY_THEMES:
+        article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
         for body in constants.WEEKDAY_BODIES:
-            article = data["articles"][theme][body]
+            article = data["articles"][article_set][body]
             assert len(article) > 150, (theme, body)
 
 

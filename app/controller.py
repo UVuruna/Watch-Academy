@@ -480,6 +480,7 @@ class AppController(QObject):
             menu, "Weekday theme",
             [
                 ("planets", "Planets"),
+                ("planet_signs", "Planet signs"),
                 ("greek", "Greek gods"),
                 ("norse", "Norse gods"),
                 ("religion", "Religions"),

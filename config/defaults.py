@@ -200,6 +200,17 @@ WEEKDAY_ART_DIR = paths.assets_dir() / "weekday"
 # (canon). Art: assets/weekday/<theme>/<Entity>.png (files carry the
 # ENTITY names; the two Norse diacritics fold to ASCII on disk).
 WEEKDAY_THEME_NAMES = {
+    # The owner's planet GLYPHS (☿ ♃ …) — same entities as "planets",
+    # body-named files, planet display names.
+    "planet_signs": {
+        "sun": "Sun",
+        "moon": "Moon",
+        "mars": "Mars",
+        "mercury": "Mercury",
+        "jupiter": "Jupiter",
+        "venus": "Venus",
+        "saturn": "Saturn",
+    },
     "greek": {
         "sun": "Helios",
         "moon": "Selene",
@@ -241,13 +252,14 @@ WEEKDAY_THEME_NAMES = {
 }
 
 # File stems on disk: the display names folded to ASCII (Sól -> Sol);
-# the owner's religion art uses lowercase file names.
+# the owner's religion and planet-sign art uses lowercase file names.
 _ASCII_FOLD = str.maketrans("óá", "oa")
+_LOWERCASE_THEMES = ("religion", "planet_signs")
 WEEKDAY_THEME_FILES = {
     theme: {
         body: (
             name.translate(_ASCII_FOLD).lower()
-            if theme == "religion"
+            if theme in _LOWERCASE_THEMES
             else name.translate(_ASCII_FOLD)
         )
         for body, name in names.items()
