@@ -305,6 +305,25 @@ def test_articles_cover_every_theme_and_body():
                 assert set(article["variants"]) == combos, (theme, body)
 
 
+def test_zodiac_articles_cover_every_sign():
+    """12 sign articles: a multi-paragraph base tied to the sign's hexa
+    arm canon, plus paint and light palette variants (signs live on the
+    hexa pointer only)."""
+    import json
+
+    from config import constants, paths
+
+    data = json.loads(
+        (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
+    )
+    zodiac = data["zodiac_articles"]
+    assert set(zodiac) == {name for name, _ in constants.ZODIAC_SIGNS}
+    for sign, article in zodiac.items():
+        assert len(article["base"]) > 250, sign
+        assert "\n\n" in article["base"], sign
+        assert set(article["variants"]) == {"paint", "light"}, sign
+
+
 def test_custom_palette_reaches_the_render():
     custom = ("#111111", "#222222", "#333333", "#444444", "#555555", "#666666")
     settings = replace(Settings(), palettes={"hexa_paint": custom})
