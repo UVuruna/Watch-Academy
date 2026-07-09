@@ -285,8 +285,9 @@ def test_symbolism_repository_covers_every_body_and_theme():
 def test_articles_cover_every_theme_and_body():
     """Encyclopedic articles per theme x body: a multi-paragraph BASE
     (image-aware, canon-woven) plus one VARIANT paragraph per
-    pointer/palette combination (religion variants arrive with the
-    owner's preset decision)."""
+    pointer/palette combination — including the trio. The alternate
+    religion set (religion_alt: Druidism Mon, Zoroastrianism Tue,
+    Shamanism Wed, Sikhism Thu, Voodoo Sat) carries the same shape."""
     import json
 
     from config import constants, paths
@@ -294,15 +295,23 @@ def test_articles_cover_every_theme_and_body():
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
-    combos = {"hexa_paint", "hexa_light", "octa_paint", "octa_light", "cross"}
+    combos = {
+        "hexa_paint", "hexa_light", "octa_paint", "octa_light", "cross", "trio",
+    }
     for theme in constants.WEEKDAY_THEMES:
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
         for body in constants.WEEKDAY_BODIES:
             article = data["articles"][article_set][body]
             assert len(article["base"]) > 250, (theme, body)
-            if article_set != "religion":     # religion rewrite awaits the
-                assert "\n\n" in article["base"], (theme, body)  # preset call
-                assert set(article["variants"]) == combos, (theme, body)
+            assert "\n\n" in article["base"], (theme, body)   # paragraphs
+            assert set(article["variants"]) == combos, (theme, body)
+    alternates = data["articles"]["religion_alt"]
+    assert set(alternates) == {"moon", "mars", "mercury", "jupiter", "saturn"}
+    for body, article in alternates.items():
+        assert article["name"], body
+        assert len(article["base"]) > 250, body
+        assert "\n\n" in article["base"], body
+        assert set(article["variants"]) == combos, body
 
 
 def test_zodiac_articles_cover_every_sign():
