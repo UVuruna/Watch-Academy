@@ -23,6 +23,9 @@ Self-rescheduling single-shot `QTimer` (PreciseTimer type).
 
 #### Methods
 - `start()` / `stop()`
+- `set_per_second(per_second)`: cadence change at runtime (the Seconds
+  element switch) — re-aims the pending shot immediately so a freshly
+  enabled seconds hand never sits frozen for up to a minute
 - `_fire()`: compares actual vs expected fire time; a gap beyond the
   threshold is reported as `on_tick(clock_jumped=True)` so the controller
   forces a full day-context refresh (sleep/resume, manual clock change)

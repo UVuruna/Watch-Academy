@@ -42,9 +42,14 @@ draws the MINUTE layers (hands, year marker) live.
   ACTIVE weekday theme, from the
   [Symbolism Repository](../data/symbolism.md)); the twilight bands.
   With `legend` off, tooltip_at returns None for EVERYTHING — combined
-  with click-through the dial has zero interaction (owner spec)
+  with click-through the dial has zero interaction (owner spec). A
+  switched-off Element answers no hovers either: weekday off silences
+  the today-body spot, pointer off the arm regions and the octa slot,
+  earth/moon off their markers
 
-The layer stack follows `skin.z_order`; the current day's center body
+The layer stack follows `skin.z_order`, skipping the layers of
+switched-off Elements (star, weekday set, year marker when both
+markers are off, the seconds hand); the current day's center body
 (and, on the octa pointer, the bottom-arm info slot) are appended LAST
 so they draw above the hands (owner spec). `_rotation()` feeds the
 shared Star/Aura/Umbra/slot rotation into every RenderContext: the

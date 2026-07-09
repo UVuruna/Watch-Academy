@@ -58,7 +58,10 @@ The UMBRA (gray brightness wheel) rotated with the star, then the AURA
 `lit_regions()`: the shared per-regime (start, end, alpha) arcs of the
 sunlit day (day alpha between sunrise and sunset, twilight alpha over the
 dawn/dusk bands, nothing at night; robust to missing boundaries on
-transitional polar days). With no `base_asset` (the product default) the
+transitional polar days). With the Colorful element off the same lit
+arcs are drawn in plain white (`COLORFUL_OFF_COLOR`) instead of the
+palette hues — the day/twilight indication itself never disappears
+(owner spec). With no `base_asset` (the product default) the
 Umbra is drawn procedurally in the user's chosen form: **fine** (30
 sections of 12°, 16 shades — the owner's measured art), **coarse** (24
 sections, 13 shades) — both with single lightest/darkest sections
@@ -113,15 +116,17 @@ like the center body (owner spec). Zodiac/Chinese modes get a hover
 with the sign's or year's date span.
 
 ### YearMarkerLayer (MINUTE)
-Date markers along the INSIDE of the dial (owner spec). Modes: "earth"
-(year wheel, day/night continent image clipped to a disc — the renders
-ship on opaque space backgrounds), "moon" (rides its own cycle via
-`moon_cycle_angle`: new at top, full at bottom, clockwise; the moon image
+Date markers along the INSIDE of the dial (owner spec), each behind its
+Elements switch: the Earth (`show_earth`: year wheel, day/night
+continent image clipped to a disc — the renders ship on opaque space
+backgrounds) and the Moon (`show_moon`: rides its own cycle via
+`moon_cycle_angle`, new at top, full at bottom, clockwise; the moon image
 gets the unlit part shadowed by the terminator mask — half-disc ∪/−
 ellipse with a = R·|cos 2πf| — and flips 180° for southern-hemisphere
-cities), or "both" (shared rim at orbit 0.75; the smaller Moon transits
-OVER the Earth at `MOON_TRANSIT_OPACITY` when they meet). The Earth draws the user's `earth_style` variant (clean or atmosphere —
-both bundled per continent and day/night). During event windows
+cities). With both markers on they share the rim at orbit 0.75 and the
+smaller Moon transits OVER the Earth at `MOON_TRANSIT_OPACITY` when they
+meet. The Earth draws the user's `earth_style` variant (clean or
+atmosphere — both bundled per continent and day/night). During event windows
 (`tick.season_event` ±12 h around a solstice/equinox, `tick.moon_event`
 ±6 h around a principal phase) the marker gets a radial halo via
 `draw_event_glow()` — pure WHITE, intense and compact (halo diameter =

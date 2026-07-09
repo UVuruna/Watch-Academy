@@ -26,8 +26,11 @@ the ring preset and the user's display choices onto it at build time.
   `palette_style` ("paint" | "light"), `solar_rotation` (False →
   Star/Aura/Umbra stand upright), `octa_slot` (one of
   `OCTA_SLOT_MODES`: time/date/day length, tropical zodiac as
-  text/sign/logo/constellation, Chinese zodiac as text/logo) and
-  `earth_style` ("clean" | "atmo")
+  text/sign/logo/constellation, Chinese zodiac as text/logo),
+  `earth_style` ("clean" | "atmo") and the six Elements switches
+  (`show_earth`, `show_moon`, `show_weekday`, `show_pointer`,
+  `colorful` — off draws the Aura as plain white transparency —
+  and `show_seconds`)
 - `BackgroundSpec` — the Umbra (custom art, or None for the procedural
   30-section wheel: single lightest/darkest sections centered on
   noon/midnight) + the Aura (transparent period hues from the palette
@@ -40,9 +43,10 @@ the ring preset and the user's display choices onto it at build time.
   fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20)
 - `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit
-- `YearMarkerSpec` — mode earth / moon / both; Earth day+night variants
-  per continent on the year wheel; Moon on its own cycle (new at top,
-  full at bottom) with the unlit part shadowed; separate orbits
+- `YearMarkerSpec` — Earth day+night variants per continent on the year
+  wheel; Moon on its own cycle (new at top, full at bottom) with the
+  unlit part shadowed; separate orbits. Which marker is drawn comes
+  from the Elements switches (`show_earth` / `show_moon`)
 - `HandSpec` / `HandsSpec` — hand canvases at their exact designed sizes
   (hub 15 design units above the bottom), ONE shared reach scale
 

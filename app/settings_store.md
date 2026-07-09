@@ -27,7 +27,9 @@ set (a bad value would otherwise KeyError inside a paint pass, where Qt
 swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 `umbra_contrast` ("full"), `palette_style` ("paint"), `solar_rotation`
 (True), `octa_slot` ("time"), `earth_style` ("clean"), `weekday_theme`
-("planets"), `legend` (True). The M6 keys:
+("planets"), `legend` (True), plus the six Elements switches (all True:
+`show_earth`, `show_moon`, `show_weekday`, `show_pointer`, `colorful`,
+`show_seconds`). The M6 keys:
 the location block (`city_name`, `city_path` for combo restore,
 `latitude`/`longitude` range-checked, `timezone` verified against
 zoneinfo), the opacity overrides `star_alpha`, `aura_day_alpha` and

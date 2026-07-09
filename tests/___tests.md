@@ -36,16 +36,23 @@ the key must carry the offset of NOW, not midnight), weekday→Mars,
 hexagram tilt range, hands at the top, `is_daylight`, year angle ~16 days
 past the solstice.
 
+### `test_elements.py`
+The Elements switches (FINAL.txt #5): pointer off drops the star AND
+the octa info slot, weekday off drops the bodies and the center, both
+markers off drop the year-marker layer, seconds off drops the third
+hand; Colorful off paints the Aura white (pixel saturation probe);
+switched-off elements answer no hovers.
+
 ### `test_render.py`
 Offscreen compositor smoke tests (`QT_QPA_PLATFORM=offscreen`): frame
 size, transparent corners, opaque ring, painted center, yellowish noon
 sector in July daylight.
 
 ### `test_repositories.py`
-Against the LIVE Database files: 5 continents, 241 countries, 127
-mixed-depth, 45,650 cities; the audited admin-nested sample
-(Serbia→Banat→Ada); Belgrade lookup; loud unknown-path and
-out-of-coverage errors.
+Against the LIVE Database files: 5 continents, 241 countries, 121
+mixed-depth, 45,649 cities (post-curation shape); the audited
+admin-nested sample (Serbia→Banat→Ada); the macro-region curation;
+Belgrade lookup; loud unknown-path and out-of-coverage errors.
 
 ### `test_settings_store.py`
 Round-trip, atomic-write cleanup, BOM tolerance, corruption and
