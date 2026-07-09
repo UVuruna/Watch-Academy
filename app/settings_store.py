@@ -47,6 +47,14 @@ class Settings:
     earth_style: str = "clean"
     weekday_theme: str = "planets"
     legend: bool = True
+    # Elements switches (owner spec, FINAL.txt #5): each removes one dial
+    # element; the day/twilight indication itself always stays.
+    show_earth: bool = True
+    show_moon: bool = True
+    show_weekday: bool = True
+    show_pointer: bool = True
+    colorful: bool = True               # off -> white Aura instead of hues
+    show_seconds: bool = True
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
     city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
@@ -126,6 +134,12 @@ class SettingsStore:
                 click_through=bool(raw.get("click_through", False)),
                 solar_rotation=bool(raw.get("solar_rotation", True)),
                 legend=bool(raw.get("legend", True)),
+                show_earth=bool(raw.get("show_earth", True)),
+                show_moon=bool(raw.get("show_moon", True)),
+                show_weekday=bool(raw.get("show_weekday", True)),
+                show_pointer=bool(raw.get("show_pointer", True)),
+                colorful=bool(raw.get("colorful", True)),
+                show_seconds=bool(raw.get("show_seconds", True)),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -159,6 +173,12 @@ class SettingsStore:
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "legend": settings.legend,
+            "show_earth": settings.show_earth,
+            "show_moon": settings.show_moon,
+            "show_weekday": settings.show_weekday,
+            "show_pointer": settings.show_pointer,
+            "colorful": settings.colorful,
+            "show_seconds": settings.show_seconds,
             "location": {
                 "name": settings.city_name,
                 "path": list(settings.city_path),

@@ -59,10 +59,6 @@ DEFAULT_CITY = {
 TICK_EPSILON_MS = 50                 # fire just past the minute/second boundary
 CLOCK_JUMP_THRESHOLD_S = 5           # actual vs expected tick time -> full refresh
 
-# Seconds hand: default ON for the owner's preview; becomes a settings
-# toggle (default OFF per the original decision) with the M6 dialog.
-SECONDS_HAND_ENABLED = True
-
 # True click-through: the window takes NO mouse input (recovery via the
 # tray only). Hover info survives through a cursor poller that shows the
 # tooltips itself at this interval.
@@ -157,6 +153,11 @@ PALETTE_PRESETS = {
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
 }
+
+# Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and
+# twilight arcs are still indicated, but as plain white transparency
+# instead of the pointer-palette hues.
+COLORFUL_OFF_COLOR = "#FFFFFF"
 
 # Octa bottom-arm text (time/date/...): sized to span this fraction of
 # the slot width (owner: big font, must not overflow the slot).
@@ -333,7 +334,6 @@ DEFAULT_SKIN = SkinDefinition(
         orbit_fraction=0.38,
     ),
     year_marker=YearMarkerSpec(
-        mode="both",                    # owner preview default; selectable in M6 settings
         # Both styles bundled; the earth_style display choice picks one.
         variants={
             f"{style}_{continent}_{phase}": paths.assets_dir() / "earth"

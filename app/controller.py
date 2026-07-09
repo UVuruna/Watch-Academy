@@ -108,6 +108,12 @@ def apply_display_settings(skin, settings: Settings):
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
         legend=settings.legend,
+        show_earth=settings.show_earth,
+        show_moon=settings.show_moon,
+        show_weekday=settings.show_weekday,
+        show_pointer=settings.show_pointer,
+        colorful=settings.colorful,
+        show_seconds=settings.show_seconds,
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
         ),
@@ -152,7 +158,7 @@ class AppController(QObject):
         self._simulation_ends: float = 0.0
         self._widget.set_renderer(self._compositor)
         seconds_hand = (
-            self._skin.hands.second is not None and defaults.SECONDS_HAND_ENABLED
+            self._skin.hands.second is not None and self._settings.show_seconds
         )
         self._scheduler = MinuteScheduler(self._on_tick, self, per_second=seconds_hand)
         # Resume-from-sleep and clock/zone changes refresh immediately —
@@ -354,6 +360,10 @@ class AppController(QObject):
         self._widget.set_renderer(self._compositor)
         if self._day is not None:
             self._compositor.set_day(self._day)
+        # The Seconds element switch also changes the tick cadence.
+        self._scheduler.set_per_second(
+            skin.hands.second is not None and self._settings.show_seconds
+        )
         self._widget.update()
 
     def _set_ring(self, ring: str) -> None:
@@ -397,6 +407,19 @@ class AppController(QObject):
         submenu = menu.addMenu(title)
         self._add_choice_group(menu, submenu, options, current, setter)
         return submenu
+
+    def _add_toggle(
+        self, menu: QMenu, title: str, checked: bool, setter, tooltip: str | None = None
+    ) -> QAction:
+        """One checkable on/off action appended to `menu`."""
+        action = QAction(title, menu)
+        action.setCheckable(True)
+        action.setChecked(checked)
+        if tooltip is not None:
+            action.setToolTip(tooltip)
+        action.toggled.connect(setter)
+        menu.addAction(action)
+        return action
 
     def _build_menu(self) -> QMenu:
         menu = QMenu()
@@ -470,12 +493,52 @@ class AppController(QObject):
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),
         )
-        self._add_choice_submenu(
-            menu, "Earth",
+        # Elements (owner spec, FINAL.txt #5): on/off switches removing
+        # individual dial elements; Earth also nests its style choice.
+        elements_menu = menu.addMenu("Elements")
+        earth_menu = elements_menu.addMenu("Earth")
+        self._add_toggle(
+            earth_menu, "Visible", settings.show_earth,
+            lambda checked: self._set_display_choice("show_earth", checked),
+            "The Earth marker riding the year wheel and showing the date.",
+        )
+        earth_menu.addSeparator()
+        self._add_choice_group(
+            menu, earth_menu,
             [("clean", "Clean"), ("atmo", "Atmosphere")],
             settings.earth_style,
             lambda value: self._set_display_choice("earth_style", value),
         )
+        for key, label, tip in (
+            (
+                "show_moon", "Moon",
+                "The Moon marker riding its cycle and showing the phase.",
+            ),
+            (
+                "show_weekday", "Weekday",
+                "The weekday bodies — the rotating slots and the center.",
+            ),
+            (
+                "show_pointer", "Pointer",
+                "The star diamonds. Off: the Aura colors stay, only the "
+                "pointer disappears.",
+            ),
+            (
+                "colorful", "Colorful",
+                "The Aura palette hues. Off: the day and twilight arcs "
+                "are drawn as plain white transparency.",
+            ),
+            (
+                "show_seconds", "Seconds",
+                "The seconds hand. Off: it is not drawn and the dial "
+                "ticks once per minute.",
+            ),
+        ):
+            self._add_toggle(
+                elements_menu, label, getattr(settings, key),
+                lambda checked, key=key: self._set_display_choice(key, checked),
+                tip,
+            )
         self._add_choice_submenu(
             menu, "Weekday theme",
             [
@@ -489,29 +552,19 @@ class AppController(QObject):
             settings.weekday_theme,
             lambda value: self._set_display_choice("weekday_theme", value),
         )
-        legend = QAction("Legend", menu)
-        legend.setCheckable(True)
-        legend.setChecked(settings.legend)
-        legend.setToolTip(
+        self._add_toggle(
+            menu, "Legend", settings.legend,
+            lambda checked: self._set_display_choice("legend", checked),
             "All hover texts. Off: the dial shows nothing on hover — "
-            "combined with Click-through it has zero interaction."
+            "combined with Click-through it has zero interaction.",
         )
-        legend.toggled.connect(
-            lambda checked: self._set_display_choice("legend", checked)
-        )
-        menu.addAction(legend)
-        solar = QAction("Solar rotation", menu)
-        solar.setCheckable(True)
-        solar.setChecked(settings.solar_rotation)
-        solar.setToolTip(
+        self._add_toggle(
+            menu, "Solar rotation", settings.solar_rotation,
+            lambda checked: self._set_display_choice("solar_rotation", checked),
             "On: the star points at true solar noon. Off: Star, Aura and "
             "Umbra stand upright (12/24 at the top) for reading exact "
-            "planet and season positions."
+            "planet and season positions.",
         )
-        solar.toggled.connect(
-            lambda checked: self._set_display_choice("solar_rotation", checked)
-        )
-        menu.addAction(solar)
         menu.addSeparator()
         settings_action = QAction("Settings…", menu)
         settings_action.triggered.connect(self._open_settings)
@@ -519,15 +572,12 @@ class AppController(QObject):
         time_travel = QAction("Time Travel…", menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
-        click_through = QAction("Click-through", menu)
-        click_through.setCheckable(True)
-        click_through.setChecked(self._settings.click_through)
-        click_through.setToolTip(
+        self._add_toggle(
+            menu, "Click-through", self._settings.click_through,
+            self._set_click_through,
             "The dial takes no clicks at all (they pass to the desktop); "
-            "hover info still works. Turn it back off here in the tray."
+            "hover info still works. Turn it back off here in the tray.",
         )
-        click_through.toggled.connect(self._set_click_through)
-        menu.addAction(click_through)
         menu.addSeparator()
         exit_action = QAction("Exit", menu)
         exit_action.triggered.connect(self.quit)

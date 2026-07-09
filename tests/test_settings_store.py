@@ -69,6 +69,12 @@ def test_display_choices_round_trip(store):
         solar_rotation=False,
         octa_slot="zodiac_text",
         earth_style="atmo",
+        show_earth=False,
+        show_moon=False,
+        show_weekday=False,
+        show_pointer=False,
+        colorful=False,
+        show_seconds=False,
     )
     store.save(saved)
     assert store.load() == saved

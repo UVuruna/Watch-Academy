@@ -71,9 +71,9 @@ class WeekdaySpec:
 class YearMarkerSpec:
     """Date markers along the INSIDE of the dial: Earth rides the year
     wheel (solstice-calibrated); the Moon rides its own cycle — new moon
-    at the top, full moon at the bottom, clockwise."""
+    at the top, full moon at the bottom, clockwise. Which of the two is
+    drawn comes from the Elements switches (show_earth / show_moon)."""
 
-    mode: str                          # "earth" | "moon" | "both"
     variants: dict[str, Path]          # "europe_day" / "europe_night" / ... -> image
     default_variant: str               # e.g. "europe"
     day_color: str                     # procedural Earth fallbacks
@@ -133,6 +133,15 @@ class SkinDefinition:
                                        # Greek/Norse gods, religions, professions
     legend: bool = True                # False -> NO hovers at all (with
                                        # click-through: zero interaction)
+    # Elements switches (owner spec, FINAL.txt #5) — each removes one
+    # dial element; what always stays is the day/twilight indication:
+    show_earth: bool = True            # the orbiting Earth date marker
+    show_moon: bool = True             # the orbiting Moon phase marker
+    show_weekday: bool = True          # the weekday bodies (slots + center)
+    show_pointer: bool = True          # the star diamonds (Aura colors stay)
+    colorful: bool = True              # False -> the Aura wears plain white
+                                       # transparency instead of palette hues
+    show_seconds: bool = True          # the seconds hand (and its cadence)
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None

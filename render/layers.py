@@ -97,13 +97,11 @@ def draw_outlined_text(
 
 
 def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
-    """Opacity of the Moon marker in "both" mode: when the smaller Moon
-    meets the Earth on the shared rim (their discs would overlap) it
-    passes OVER the Earth at reduced opacity — an eclipse-like transit
-    where both stay visible (owner decision). Shared by the layer and the
-    hover hit test (Rule #5)."""
-    if spec.mode != "both":
-        return 1.0
+    """Opacity of the Moon marker while the Earth is also shown: when the
+    smaller Moon meets the Earth on the shared rim (their discs would
+    overlap) it passes OVER the Earth at reduced opacity — an eclipse-like
+    transit where both stay visible (owner decision). The caller skips
+    this when the Earth element is switched off."""
     delta = abs(year_angle - moon_angle) % 360.0
     delta = min(delta, 360.0 - delta)
     # Angular size at which the two discs touch on the shared orbit.
@@ -270,7 +268,14 @@ class BackgroundLayer(Layer):
             self._draw_umbra(painter, ctx, umbra_radius)
         painter.restore()
 
-        palette = palette_for(ctx.skin)
+        # Colorful off (Elements switch): the day/twilight arcs are still
+        # indicated, but in plain white — a one-entry palette draws a
+        # single full wedge under the same clip and alphas.
+        palette = (
+            palette_for(ctx.skin)
+            if ctx.skin.colorful
+            else (defaults.COLORFUL_OFF_COLOR,)
+        )
         span = 360.0 / len(palette)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
@@ -618,17 +623,22 @@ class YearMarkerLayer(Layer):
     """Date markers along the INSIDE of the dial. Earth rides the year
     wheel (summer solstice at the top); the Moon rides its own cycle (new
     moon at the top, full at the bottom, clockwise) showing the current
-    illumination. Modes: "earth", "moon", "both"."""
+    illumination. The Elements switches pick which of the two is drawn."""
 
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
-        if spec.mode in ("earth", "both"):
+        if ctx.skin.show_earth:
             self._draw_earth(painter, ctx)
-        if spec.mode in ("moon", "both"):
+        if ctx.skin.show_moon:
             moon_angle = angles.moon_cycle_angle(ctx.day.moon_fraction)
-            opacity = moon_transit_opacity(spec, ctx.tick.year_angle, moon_angle)
+            # The rim transit only exists while the Earth is also shown.
+            opacity = (
+                moon_transit_opacity(spec, ctx.tick.year_angle, moon_angle)
+                if ctx.skin.show_earth
+                else 1.0
+            )
             pos = dial_point(moon_angle, ctx.radius * spec.moon_orbit_fraction)
             if ctx.tick.moon_event is not None:
                 # ±6 h around a principal phase instant (owner spec).

@@ -39,6 +39,17 @@ class MinuteScheduler(QObject):
     def stop(self) -> None:
         self._timer.stop()
 
+    def set_per_second(self, per_second: bool) -> None:
+        """Cadence change at runtime (the Seconds element switch). The
+        pending shot is re-aimed immediately — waiting it out would leave
+        a freshly enabled seconds hand frozen for up to a minute."""
+        if per_second == self._per_second:
+            return
+        self._per_second = per_second
+        if self._timer.isActive():
+            self._timer.stop()
+            self._schedule()
+
     def _schedule(self) -> None:
         now = datetime.now().astimezone()
         if self._per_second:

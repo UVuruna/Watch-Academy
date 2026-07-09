@@ -154,18 +154,14 @@ def test_moon_terminator_quarters(app):
 
 def test_moon_transit_opacity(app):
     """The smaller Moon transits OVER the Earth at reduced opacity when
-    they meet on the shared rim; apart (or without the Earth shown) it is
-    fully opaque."""
-    import dataclasses
-
+    they meet on the shared rim; apart it is fully opaque. (With the
+    Earth element switched off the layer skips the transit entirely.)"""
     from render.layers import moon_transit_opacity
 
-    base = dataclasses.replace(defaults.DEFAULT_SKIN.year_marker, mode="both")
-    assert moon_transit_opacity(base, 100.0, 250.0) == 1.0        # far apart
-    assert moon_transit_opacity(base, 100.0, 103.0) == defaults.MOON_TRANSIT_OPACITY
-    assert moon_transit_opacity(base, 100.0, 460.0 + 3.0) == defaults.MOON_TRANSIT_OPACITY
-    solo = dataclasses.replace(base, mode="moon")                 # no Earth, no transit
-    assert moon_transit_opacity(solo, 100.0, 103.0) == 1.0
+    spec = defaults.DEFAULT_SKIN.year_marker
+    assert moon_transit_opacity(spec, 100.0, 250.0) == 1.0        # far apart
+    assert moon_transit_opacity(spec, 100.0, 103.0) == defaults.MOON_TRANSIT_OPACITY
+    assert moon_transit_opacity(spec, 100.0, 460.0 + 3.0) == defaults.MOON_TRANSIT_OPACITY
 
 
 def test_moon_flips_on_southern_hemisphere(app):

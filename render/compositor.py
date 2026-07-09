@@ -15,7 +15,7 @@ from datetime import timedelta
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
-from config import constants, defaults
+from config import constants
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
@@ -61,23 +61,32 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         "weekday_set": lambda: WeekdayLayer(skin),
         "year_marker": lambda: YearMarkerLayer(skin),
     }
+    # Elements switches (owner spec): a switched-off element is simply
+    # not built. The YearMarkerLayer gates Earth/Moon internally (one
+    # layer, two markers).
+    skipped = {
+        "star": not skin.show_pointer,
+        "weekday_set": not skin.show_weekday,
+        "year_marker": not (skin.show_earth or skin.show_moon),
+    }
     layers: list[Layer] = []
     for name in skin.z_order:
         if name == "hands":
             layers.append(HandLayer(skin, "hour"))
             layers.append(HandLayer(skin, "minute"))
-            if skin.hands.second is not None and defaults.SECONDS_HAND_ENABLED:
+            if skin.hands.second is not None and skin.show_seconds:
                 layers.append(HandLayer(skin, "second"))
-        else:
+        elif not skipped.get(name, False):
             layers.append(factories[name]())
-    if "weekday_set" in skin.z_order:
+    if "weekday_set" in skin.z_order and skin.show_weekday:
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
-        if skin.pointer == "octa":
-            # The octa bottom arm's info text also draws OVER the hands
-            # (owner spec).
-            layers.append(BottomSlotLayer(skin))
+    if skin.pointer == "octa" and skin.show_pointer:
+        # The octa bottom arm's info text also draws OVER the hands
+        # (owner spec). It lives in the pointer's bottom arm, so it
+        # follows the Pointer element switch.
+        layers.append(BottomSlotLayer(skin))
     return layers
 
 
@@ -164,7 +173,7 @@ class Compositor:
                 radius * weekday.orbit_fraction,
             )
             today_radius = radius * weekday.diamond_scale
-        if hit(today_pos, today_radius):
+        if self._skin.show_weekday and hit(today_pos, today_radius):
             # Weekday marker: the day plus the body carrying it in this
             # skin ("Wednesday, Mercury"; a gods skin says "…, Hades") —
             # deliberately different from the Earth marker's date hover.
@@ -172,7 +181,7 @@ class Compositor:
                 f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
             )
 
-        if self._skin.pointer == "octa" and (
+        if self._skin.pointer == "octa" and self._skin.show_pointer and (
             self._skin.octa_slot.startswith("zodiac")
             or self._skin.octa_slot.startswith("chinese")
         ):
@@ -187,7 +196,7 @@ class Compositor:
 
         marker = self._skin.year_marker
         moon_angle = angles.moon_cycle_angle(day.moon_fraction)
-        if marker.mode in ("moon", "both"):
+        if self._skin.show_moon:
             moon_pos = dial_point(moon_angle, radius * marker.moon_orbit_fraction)
             if hit(moon_pos, radius * marker.moon_scale):
                 # Owner format, two lines: phase + illumination / cycle day.
@@ -197,7 +206,7 @@ class Compositor:
                     f"{day.moon_illumination * 100:.0f}% lit",
                     f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}",
                 )
-        if marker.mode in ("earth", "both") and hit(
+        if self._skin.show_earth and hit(
             dial_point(tick.year_angle, radius * marker.orbit_fraction),
             radius * marker.scale,
         ):
@@ -219,6 +228,9 @@ class Compositor:
         their season (dates, duration, the middle date the arrow points
         at). With solar rotation on, a trailing * flags the slight
         offset from the year-wheel positions."""
+        if not self._skin.show_pointer:
+            # Pointer element off: no visible arms, no arm hovers.
+            return None
         distance = math.hypot(point.x(), point.y())
         star_tip = radius * self._skin.star.radius_fraction
         if not (radius * 0.08 <= distance <= star_tip):
