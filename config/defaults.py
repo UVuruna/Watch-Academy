@@ -210,6 +210,17 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must read
 ARTICLE_WRAP_CHARS = 56
 
+# The Legend popup (replaces QToolTip, owner decision): capped to these
+# screen fractions — taller content scrolls instead of clipping off a
+# small screen; dark tooltip styling.
+LEGEND_MAX_WIDTH_FRACTION = 0.45
+LEGEND_MAX_HEIGHT_FRACTION = 0.85
+LEGEND_CURSOR_OFFSET_PX = 14
+LEGEND_PADDING_PX = 8
+LEGEND_BG = "#2B2B2B"
+LEGEND_BORDER = "#6E6E6E"
+LEGEND_TEXT = "#FFFFFF"
+
 # Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
 #   full  — the whole gray range: sectioned ladders run endpoint-
 #           inclusive (16 shades -> 255..0 step 17, matching his art);

@@ -567,15 +567,21 @@ class Compositor:
         from render.layers import octa_slot_art
 
         day = self._day
-        animal = day.chinese_name.split()[-1]
+        element, animal = day.chinese_name.split()
         header = _centered(
             day.chinese_name,
             f"{day.chinese_start.day} {day.chinese_start:%b %Y} – "
             f"{day.chinese_end.day} {day.chinese_end:%b %Y}",
         )
-        article = self._symbolism.chinese_article(animal)
+        # The animal's article, then the ELEMENT paragraph qualifying
+        # THIS return of it (owner spec — each return wears a new one).
+        text = (
+            self._symbolism.chinese_article(animal)["base"]
+            + "\n\n"
+            + self._symbolism.chinese_element(element)["base"]
+        )
         return header + "<br/>" + _article_html(
-            octa_slot_art("chinese_logo", animal), None, article["base"]
+            octa_slot_art("chinese_logo", animal), None, text
         )
 
     def _zodiac_line(self) -> str:

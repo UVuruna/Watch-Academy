@@ -48,3 +48,7 @@ class SymbolismRepository:
     def chinese_article(self, animal: str) -> dict:
         """{base} of one Chinese zodiac animal ("Horse")."""
         return self._load()["chinese_articles"][animal]
+
+    def chinese_element(self, element: str) -> dict:
+        """{base} of one Wu Xing element ("Fire")."""
+        return self._load()["chinese_elements"][element]

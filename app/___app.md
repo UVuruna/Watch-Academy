@@ -40,6 +40,11 @@ The M6 window: cascading location picker over the bundled city
 database with lat/lng fine-tune, Star/Aura opacity sliders and the
 palette chip editor. See [Settings Dialog](settings_dialog.md).
 
+### `legend_popup.py` — Legend Popup
+The scrollable hover window replacing QToolTip: capped to screen
+fractions, taller articles scroll, stays open while the cursor is over
+it. See [Legend Popup](legend_popup.md).
+
 Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
 24H2 — revisit on demand).
 

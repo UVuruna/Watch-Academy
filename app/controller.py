@@ -16,9 +16,10 @@ import astral
 
 from PySide6.QtCore import QObject, QRect, Qt, QTimer
 from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication
-from PySide6.QtWidgets import QApplication, QMenu, QMessageBox, QToolTip
+from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
 
 from app import native
+from app.legend_popup import LegendPopup
 from app.scheduler import MinuteScheduler
 from app.settings_dialog import SettingsDialog
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
@@ -168,7 +169,8 @@ class AppController(QObject):
         self._save_failed = False
 
         self._menu = self._build_menu()
-        self._widget = ClockWidget(self._settings.diameter, self._menu)
+        self._legend = LegendPopup()
+        self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
         try:
             self._tray = TrayController(self._menu)
         except ValueError as error:
@@ -701,7 +703,7 @@ class AppController(QObject):
             self._hover_poller.start()
         else:
             self._hover_poller.stop()
-            QToolTip.hideText()
+            self._legend.dismiss()
             # The poller was the only hover driver in this mode — clear
             # its target or the last element stays enlarged (review
             # finding: the cursor sits on the tray, not the dial).
@@ -713,6 +715,8 @@ class AppController(QObject):
 
     def _poll_hover(self) -> None:
         cursor = QCursor.pos()
+        if self._legend.isVisible() and self._legend.geometry().contains(cursor):
+            return                      # the user is scrolling the article
         local = self._widget.mapFromGlobal(cursor)
         size = float(min(self._widget.width(), self._widget.height()))
         tip = None
@@ -730,9 +734,9 @@ class AppController(QObject):
             tip = self._compositor.tooltip_at(local.x(), local.y(), size)
         if tip:
             if tip != self._last_hover_tip:
-                QToolTip.showText(cursor, tip, self._widget)
+                self._legend.show_html(tip, cursor)
         elif self._last_hover_tip:
-            QToolTip.hideText()
+            self._legend.dismiss()
         self._last_hover_tip = tip
 
     def _set_diameter(self, diameter: int) -> None:

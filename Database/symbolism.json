@@ -867,5 +867,23 @@
       "base": "The Pig closes the twelve — the zodiac's sincerity and abundance, the sign of enjoying what the other eleven chased. Last in the Great Race because it stopped to eat and sleep, and unashamed of either; Pig years favor generosity, comfort and honest pleasure.\n\nThe medallion may be the warmest of the set: the round, smiling animal in a richly engraved mantle of armor, the character for pig on its shoulder disc and a piglet-face pendant at its chest. Every twelfth year in a new element — the feast comes back once in sixty years."
     }
   },
-  "chinese_articles_note": "chinese_articles[Animal] = {base}: two left-aligned paragraphs per animal, written from the owner's bronze medallions (Greek-key borders — the same frame family as the ring letters), shown under the octa chinese-slot hover with the medallion on top."
+  "chinese_articles_note": "chinese_articles[Animal] = {base}: two left-aligned paragraphs per animal, written from the owner's bronze medallions (Greek-key borders — the same frame family as the ring letters), shown under the octa chinese-slot hover with the medallion on top.",
+  "chinese_elements": {
+    "Wood": {
+      "base": "Wood is the element of spring and the east — growth, flexibility, the green force that splits stone by patience alone. A Wood year bends rather than breaks and builds upward like a tree ring by ring; in the cycle of the five, Wood feeds Fire — what grows becomes fuel for what burns."
+    },
+    "Fire": {
+      "base": "Fire is the element of summer and the south — passion, visibility, transformation. A Fire year burns brighter and faster than the same animal in any other coat: it warms, illuminates and consumes, and asks only whether the flame is a hearth or a wildfire. In the cycle Fire leaves ash — and ash becomes Earth."
+    },
+    "Earth": {
+      "base": "Earth is the element of the center and the turning of the seasons — stability, nurture, the ground every other element returns to. An Earth year steadies its animal: harvests are gathered, houses are built, promises are kept. In the cycle Earth bears Metal, the way ore waits inside the mountain."
+    },
+    "Metal": {
+      "base": "Metal is the element of autumn and the west — precision, rigor, the blade and the bell. A Metal year cuts away what is unnecessary and keeps what rings true: harvest, judgment, craft. In the cycle Metal collects Water, as dew gathers on a cold blade at dawn."
+    },
+    "Water": {
+      "base": "Water is the element of winter and the north — depth, wisdom, the strength of yielding. A Water year flows around what it cannot move and wears it away all the same; it favors listening, memory and the long view. In the cycle Water feeds Wood, and the wheel of the five begins again."
+    }
+  },
+  "chinese_elements_note": "chinese_elements[Element] = {base}: one paragraph per Wu Xing element, shown under the animal article in the chinese-slot hover (the element qualifies THIS return of the animal; 12 animals x 5 elements = the sexagenary 60)."
 }

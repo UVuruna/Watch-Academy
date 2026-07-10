@@ -8,7 +8,7 @@ nothing about the dial.
 
 from PySide6.QtCore import QEvent, Qt, QTimer, Signal
 from PySide6.QtGui import QPainter
-from PySide6.QtWidgets import QMenu, QToolTip, QWidget
+from PySide6.QtWidgets import QMenu, QWidget
 
 from app import native
 from config import constants, defaults, winapi
@@ -19,10 +19,11 @@ class ClockWidget(QWidget):
 
     moved = Signal()
 
-    def __init__(self, diameter: int, menu: QMenu):
+    def __init__(self, diameter: int, menu: QMenu, legend):
         super().__init__()
         self._closing = False
         self._menu = menu
+        self._legend = legend           # the shared LegendPopup
         self._renderer = None
         self._tick = None
         self._click_through = False
@@ -96,9 +97,9 @@ class ClockWidget(QWidget):
                 size,
             )
             if tip:
-                QToolTip.showText(event.globalPosition().toPoint(), tip, self)
+                self._legend.show_html(tip, event.globalPosition().toPoint())
             else:
-                QToolTip.hideText()
+                self._legend.dismiss()
         super().mouseMoveEvent(event)
 
     def leaveEvent(self, event) -> None:
@@ -106,6 +107,9 @@ class ClockWidget(QWidget):
             -1.0e9, -1.0e9, float(min(self.width(), self.height()))
         ):
             self.update()               # shrink the enlarged element back
+        # Crossing INTO the legend popup must not close it — the wheel
+        # scrolls the article there; its own leaveEvent hides it.
+        self._legend.hide_unless_hovered()
         super().leaveEvent(event)
 
     def contextMenuEvent(self, event) -> None:

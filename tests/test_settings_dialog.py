@@ -329,6 +329,49 @@ def test_articles_cover_every_theme_and_body():
                                            # plus the display-name field
 
 
+def test_legend_popup_caps_and_scrolls(app):
+    """Owner spec: on small screens the legend must not clip — the popup
+    caps its height to a screen fraction and grows a scrollbar for
+    taller articles; short content sizes to itself."""
+    from PySide6.QtCore import QPoint
+    from PySide6.QtGui import QGuiApplication
+
+    from app.legend_popup import LegendPopup
+
+    popup = LegendPopup()
+    popup.show_html("<div>one line</div>", QPoint(100, 100))
+    short_height = popup.height()
+    screen = QGuiApplication.primaryScreen().availableGeometry()
+    assert short_height < screen.height() * 0.2
+    tall = "<div align='left'>" + "line<br/>" * 400 + "</div>"
+    popup.show_html(tall, QPoint(100, 100))
+    assert popup.height() <= round(
+        screen.height() * defaults.LEGEND_MAX_HEIGHT_FRACTION
+    )
+    assert popup._scroll.verticalScrollBar().maximum() > 0   # it scrolls
+    popup.dismiss()
+    assert not popup.isVisible()
+
+
+def test_chinese_articles_and_elements_cover_the_cycle():
+    """12 animal articles (image-aware, two paragraphs) and one Wu Xing
+    paragraph per element — together the sexagenary 60 (owner spec)."""
+    import json
+
+    from config import constants, paths
+
+    data = json.loads(
+        (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
+    )
+    assert set(data["chinese_articles"]) == set(constants.CHINESE_ANIMALS)
+    for animal, article in data["chinese_articles"].items():
+        assert len(article["base"]) > 250, animal
+        assert "\n\n" in article["base"], animal
+    assert set(data["chinese_elements"]) == set(constants.CHINESE_ELEMENTS)
+    for element, article in data["chinese_elements"].items():
+        assert len(article["base"]) > 150, element
+
+
 def test_zodiac_articles_cover_every_sign():
     """12 sign articles: a multi-paragraph base tied to the sign's hexa
     arm canon, plus paint and light palette variants (signs live on the
