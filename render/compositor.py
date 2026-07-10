@@ -15,7 +15,7 @@ from datetime import datetime, time, timedelta
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
-from config import constants
+from config import constants, defaults
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
@@ -36,6 +36,7 @@ from render.layers import (
     YearMarkerLayer,
     dial_point,
     today_slot_theta,
+    visible_occupant,
 )
 from skins.manifest import SkinDefinition
 
@@ -67,6 +68,36 @@ def _ordinal(n: int) -> str:
     else:
         suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
     return f"{n}<sup>{suffix}</sup>"
+
+
+def _article_body_html(text: str) -> str:
+    """LEFT-aligned article prose (owner spec — unlike every other
+    hover, which is centered): paragraphs separated by a blank line,
+    each wrapped to a fixed width so QToolTip stays a column."""
+    paragraphs = [
+        "<br/>".join(
+            html.escape(line)
+            for line in textwrap.wrap(paragraph, width=defaults.ARTICLE_WRAP_CHARS)
+        )
+        for paragraph in text.split("\n\n")
+    ]
+    return f"<div align='left'>{'<br/><br/>'.join(paragraphs)}</div>"
+
+
+def _article_html(image, title_html: str | None, text: str) -> str:
+    """One full article hover: the entity's art on top (larger and
+    clearer than on the dial — owner EXTRAS), an optional centered
+    title line, then the left-aligned prose."""
+    parts = []
+    if image is not None and image.exists():
+        parts.append(
+            f"<div align='center'><img src='{image.as_uri()}' "
+            f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/></div>"
+        )
+    if title_html is not None:
+        parts.append(f"<div align='center'>{title_html}</div><br/>")
+    parts.append(_article_body_html(text))
+    return "".join(parts)
 
 
 def _build_layers(skin: SkinDefinition) -> list[Layer]:
@@ -176,26 +207,14 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
-        weekday = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[day.weekday_index]
-        today_theta = today_slot_theta(self._skin.pointer, today)
-        if weekday.display_mode == "center_only" or today_theta is None:
-            # center_only mode, or the hexa layout's center Sun
-            today_pos = QPointF(0, 0)
-            today_radius = radius * weekday.center_scale
-        else:
-            today_pos = dial_point(
-                today_theta + rotation,
-                radius * weekday.orbit_fraction,
-            )
-            today_radius = radius * weekday.diamond_scale
-        if self._skin.show_weekday and hit(today_pos, today_radius):
-            # Weekday marker: the day plus the body carrying it in this
-            # skin ("Wednesday, Mercury"; a gods skin says "…, Hades") —
-            # deliberately different from the Earth marker's date hover.
-            return _centered(
-                f"{constants.WEEKDAY_FULL_NAMES[today]}, {weekday.body_names[today]}"
-            )
+        if self._skin.show_weekday:
+            # Weekday hover rework (owner spec): the ACTIVE body leads
+            # with the date, ghosts show their article alone — each only
+            # within its own image region.
+            body = self._weekday_body_at(point, radius, rotation, today)
+            if body is not None:
+                return self._weekday_tooltip(body, active=body == today)
 
         if self._skin.pointer == "octa" and self._skin.show_pointer and (
             self._skin.octa_slot.startswith("zodiac")
@@ -203,9 +222,9 @@ class Compositor:
         ):
             slot_pos = dial_point(
                 constants.OCTA_TIME_SLOT_ANGLE + rotation,
-                radius * weekday.orbit_fraction,
+                radius * self._skin.weekday_set.orbit_fraction,
             )
-            if hit(slot_pos, radius * weekday.diamond_scale):
+            if hit(slot_pos, radius * self._skin.weekday_set.diamond_scale):
                 if self._skin.octa_slot.startswith("chinese"):
                     return self._chinese_text()
                 return self._zodiac_text()
@@ -230,6 +249,66 @@ class Compositor:
             return twilight
 
         return self._arm_tooltip(point, radius, rotation)
+
+    def _combo_key(self) -> str:
+        """The (pointer, palette) combination the articles vary by —
+        "hexa_paint", "octa_light", "cross", "trio" (cross and trio have
+        a single palette under both styles)."""
+        pointer = self._skin.pointer
+        if pointer in ("cross", "trio"):
+            return pointer
+        return f"{pointer}_{self._skin.palette_style}"
+
+    def _weekday_body_at(
+        self, point: QPointF, radius: float, rotation: float, today: str
+    ) -> str | None:
+        """The weekday body whose image region contains `point` — the
+        visible slot occupants (shared slots resolve to the priority
+        winner) plus the centered body (today in center_only mode; the
+        Sun on the hexa/trio layouts)."""
+        weekday = self._skin.weekday_set
+
+        def hit(center: QPointF, hit_radius: float) -> bool:
+            dx, dy = point.x() - center.x(), point.y() - center.y()
+            return dx * dx + dy * dy <= hit_radius * hit_radius
+
+        center_body: str | None = None
+        if weekday.display_mode == "center_only":
+            center_body = today
+        elif self._skin.pointer in ("hexa", "trio"):
+            center_body = "sun"          # today's opaque Sun or the ghost Sun
+        if center_body is not None and hit(
+            QPointF(0, 0), radius * weekday.center_scale
+        ):
+            return center_body
+        if weekday.display_mode == "center_only":
+            return None                  # no slot bodies in this mode
+        for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
+            body = visible_occupant(occupants, today)
+            slot = dial_point(angle + rotation, radius * weekday.orbit_fraction)
+            if hit(slot, radius * weekday.diamond_scale):
+                return body
+        return None
+
+    def _weekday_tooltip(self, body: str, active: bool) -> str:
+        """The body's ARTICLE — its themed art on top, base plus the
+        paragraph of the ACTIVE (pointer, palette) combination; the
+        active day leads with "Thursday, 9th July 2026" (owner spec),
+        ghosts show the article alone."""
+        article_set = constants.WEEKDAY_THEME_ARTICLES[self._skin.weekday_theme]
+        node = self._symbolism.article(article_set, body)
+        text = node["base"]
+        variant = node["variants"].get(self._combo_key())
+        if variant:
+            text += "\n\n" + variant
+        title = None
+        if active:
+            date = self._day.local_date
+            title = (
+                f"{html.escape(constants.WEEKDAY_FULL_NAMES[body])}, "
+                f"{_ordinal(date.day)} {date:%B %Y}"
+            )
+        return _article_html(self._skin.weekday_set.bodies.get(body), title, text)
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
         """Hover over a star arm (owner spec): hexa arms name their TWO

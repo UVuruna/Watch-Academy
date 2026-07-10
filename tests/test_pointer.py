@@ -244,10 +244,30 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
     assert solar != upright
     # Wednesday=mercury sits at exactly 180 deg when upright: hover at the
     # unrotated slot center must hit it (orbit 0.38 * 180 px below center).
+    # Hover rework: the ACTIVE body leads with the date and carries its
+    # LEFT-aligned article (base + the active combination's paragraph).
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     tip = upright_compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
-    assert "Wednesday, Mercury" in tip
+    assert "Wednesday, 8<sup>th</sup> July 2026" in tip
+    assert "align='left'" in tip
+    assert "Mercury" in tip                    # the planets article text
     assert "align='center'" in tip           # hover text is centered (owner spec)
+
+
+def test_ghost_body_hover_shows_the_article_alone(july_wednesday):
+    """Hover rework: ghost (non-current) bodies are hover targets too,
+    showing their article WITHOUT the date line (owner spec) — probed on
+    Jupiter's top slot on a Wednesday."""
+    day, tick = july_wednesday
+    upright = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False), AssetCache()
+    )
+    upright.render_offscreen(360.0, 1.0, day, tick)
+    orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
+    tip = upright.tooltip_at(180.0, 180.0 - orbit, 360.0)   # top slot = jupiter
+    assert tip is not None and "align='left'" in tip
+    assert "Jupiter" in tip                    # its planets article
+    assert "July 2026" not in tip              # no date line on ghosts
 
 
 # --- Arm hovers (owner spec) -----------------------------------------------------------
