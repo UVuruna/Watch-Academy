@@ -146,14 +146,15 @@ def test_bottom_slot_layer_rides_only_the_octa_stack():
     hexa = _build_layers(defaults.DEFAULT_SKIN)
     assert any(isinstance(layer, BottomSlotLayer) for layer in octa)
     assert not any(isinstance(layer, BottomSlotLayer) for layer in hexa)
-    # The slot text draws OVER the hands (owner spec), like the center body.
+    # The slot draws BELOW the hands (owner bug report: the seconds
+    # hand passed behind the zodiac slot art).
     slot_index = next(
         i for i, layer in enumerate(octa) if isinstance(layer, BottomSlotLayer)
     )
-    last_hand = max(
+    first_hand = min(
         i for i, layer in enumerate(octa) if isinstance(layer, HandLayer)
     )
-    assert slot_index > last_hand
+    assert slot_index < first_hand
 
 
 @pytest.mark.parametrize("mode", constants.OCTA_SLOT_MODES)

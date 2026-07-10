@@ -125,6 +125,12 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     layers: list[Layer] = []
     for name in skin.z_order:
         if name == "hands":
+            if skin.pointer == "octa":
+                # The Compass info slot draws BELOW the hands (owner bug
+                # report: the seconds hand passed behind the zodiac art)
+                # and SURVIVES the Pointer element switch: the diamonds
+                # may hide, the selected info stays (owner correction).
+                layers.append(BottomSlotLayer(skin))
             layers.append(HandLayer(skin, "hour"))
             layers.append(HandLayer(skin, "minute"))
             if skin.hands.second is not None and skin.show_seconds:
@@ -135,11 +141,6 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
-    if skin.pointer == "octa":
-        # The octa bottom arm's info text also draws OVER the hands
-        # (owner spec) — and SURVIVES the Pointer element switch: the
-        # diamonds may hide, the selected info stays (owner correction).
-        layers.append(BottomSlotLayer(skin))
     return layers
 
 
