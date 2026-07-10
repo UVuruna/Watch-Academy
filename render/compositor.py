@@ -248,7 +248,12 @@ class Compositor:
         if twilight is not None:
             return twilight
 
-        return self._arm_tooltip(point, radius, rotation)
+        arm = self._arm_tooltip(point, radius, rotation)
+        if arm is not None:
+            return arm
+        # Last in the chain (owner rework 5 & 6): the sunlit arc answers
+        # with the day, the dark of the wheel with the night.
+        return self._period_tooltip(point, radius)
 
     def _combo_key(self) -> str:
         """The (pointer, palette) combination the articles vary by —
@@ -551,6 +556,50 @@ class Compositor:
         if self._last_tick.season_event is not None:
             lines.insert(0, html.escape(self._last_tick.season_event))
         return _centered_html(*lines)
+
+    def _period_tooltip(self, point: QPointF, radius: float) -> str | None:
+        """Aura/Umbra hovers (owner rework): the sunlit arc gives the
+        DAY — duration, the sun span, and the twilight-extended span;
+        the dark of the wheel gives the NIGHT — duration (24 h minus
+        this date's day length) with the sunset–sunrise and dusk–dawn
+        bounds. Polar days/nights cover the whole wheel accordingly."""
+        sun = self._day.sun
+        distance = math.hypot(point.x(), point.y())
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        angle = angles.time_to_dial_angle
+
+        def within(start: float, end: float) -> bool:
+            span_end = end if end > start else end + 360.0
+            value = theta if theta >= start else theta + 360.0
+            return start <= value <= span_end
+
+        hours, minutes = (int(part) for part in self._day.day_length.split(":"))
+        if sun.sunrise is not None and sun.sunset is not None:
+            in_day = within(angle(sun.sunrise), angle(sun.sunset))
+        else:
+            in_day = self._day.day_length == "24:00"    # polar day / night
+        if in_day:
+            if distance > radius * self._skin.background.aura_radius_fraction:
+                return None
+            lines = [f"Day {hours}h {minutes:02d}min"]
+            if sun.sunrise is not None and sun.sunset is not None:
+                lines.append(
+                    f"Sunrise {sun.sunrise:%H:%M} - Sunset {sun.sunset:%H:%M}"
+                )
+            if sun.dawn is not None and sun.dusk is not None:
+                lines.append(
+                    f"With twilight: Dawn {sun.dawn:%H:%M} - Dusk {sun.dusk:%H:%M}"
+                )
+            return _centered(*lines)
+        if distance > radius * self._skin.background.umbra_radius_fraction:
+            return None
+        night = 24 * 60 - (hours * 60 + minutes)
+        lines = [f"Night {night // 60}h {night % 60:02d}min"]
+        if sun.sunset is not None and sun.sunrise is not None:
+            lines.append(f"Sunset {sun.sunset:%H:%M} - Sunrise {sun.sunrise:%H:%M}")
+        if sun.dusk is not None and sun.dawn is not None:
+            lines.append(f"Dark: Dusk {sun.dusk:%H:%M} - Dawn {sun.dawn:%H:%M}")
+        return _centered(*lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Hovering a twilight band names its boundary times (owner spec):

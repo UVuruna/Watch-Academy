@@ -120,7 +120,9 @@ def test_colorful_off_paints_the_aura_white(july_wednesday):
 
 def test_hidden_elements_take_no_hovers(july_wednesday):
     """A switched-off element must not answer hovers: the Wednesday body
-    slot (weekday off) and the arm regions (pointer off) go silent."""
+    slot (weekday off) and the arm regions (pointer off) go silent —
+    the spot falls through to the wheel itself, which reads the NIGHT
+    there (midnight region, hover rework 5)."""
     day, tick = july_wednesday
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
@@ -132,5 +134,7 @@ def test_hidden_elements_take_no_hovers(july_wednesday):
     compositor.render_offscreen(360.0, 1.0, day, tick)
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     # Wednesday=mercury sits at exactly 180 deg when upright; with the
-    # weekday element off (and the arms off) the spot yields nothing.
-    assert compositor.tooltip_at(180.0, 180.0 + orbit, 360.0) is None
+    # weekday element off (and the arms off) no body or arm answers —
+    # only the wheel's own night hover.
+    tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
+    assert "Night" in tip and "Mercury" not in tip and "align='left'" not in tip

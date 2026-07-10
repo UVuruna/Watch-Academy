@@ -28,25 +28,34 @@ draws the MINUTE layers (hands, year marker) live.
   raises if called before the first day context (startup order is a
   controller guarantee)
 - `render_offscreen(size, dpr, day, tick) -> QImage`: same path, headless
-- `tooltip_at(x, y, size) -> str | None`: hover text at every dial size,
-  ALL CENTERED (rich-text `<div align='center'>`), in priority order —
-  today's body; the octa info slot (zodiac sign span / Chinese year
-  span); the Moon marker (two lines: phase + illumination, cycle day);
-  the Earth marker (owner format: day/week ordinals, zodiac with span,
-  date — plus the season event name while it glows); the STAR ARMS
-  (hexa arms name their two zodiac signs; trio arms give their
-  theological theme, the day third they start and their weekday pair;
-  cross/octa cardinal arms give
-  the exact solstice/equinox instant; octa diagonals describe their
-  season with dates, duration and the middle date the arrow points at —
-  a trailing * flags solar-rotation imprecision; hexa arms append,
-  after a blank line, the encyclopedic blurb of the arm's body in the
-  ACTIVE weekday theme, from the
-  [Symbolism Repository](../data/symbolism.md)); the twilight bands.
+- `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
+  (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
+  hyphens instead of long dashes), in priority order — the WEEKDAY
+  BODIES (every visible body within its image region: the active day
+  leads with "Thursday, 9th July 2026" and its LEFT-aligned article —
+  base + the active pointer/palette combination paragraph, the entity
+  art on top; ghosts show the article alone); the octa info slot; the
+  Moon marker (phase — with the exact principal instant in parentheses
+  while its name holds — Illumination to one decimal, the
+  moonrise-moonset span, the cycle day); the Earth marker (ordinal
+  date, Nth Day - Nth Week, the season row "Summer 18th of 94 Days" —
+  southern hemisphere flips the name — and the zodiac span, plus the
+  season event name while it glows); the twilight bands; the STAR ARMS
+  (hexa diamonds carry BOTH their signs, each a header with its span
+  plus the sign's full article from the
+  [Symbolism Repository](../data/symbolism.md); trio arms give their
+  theological theme, day third and weekday pair; cross/octa cardinals
+  give the exact event instant plus that day's length "15h 23min", the
+  cross appending its METEOROLOGICAL season block — From/To at the
+  halfway instants; octa diagonals describe their season with "(N.N
+  Days)" and "Heart:" as the midpoint label — a trailing * flags
+  solar-rotation imprecision); and LAST the wheel itself — the sunlit
+  arc answers with the day duration and both spans (sun and
+  twilight-extended), the dark with the night duration and its bounds.
   With `legend` off, tooltip_at returns None for EVERYTHING — combined
   with click-through the dial has zero interaction (owner spec). A
   switched-off Element answers no hovers either: weekday off silences
-  the today-body spot, pointer off the arm regions and the octa slot,
+  the body spots, pointer off the arm regions and the octa slot,
   earth/moon off their markers
 
 The layer stack follows `skin.z_order`, skipping the layers of

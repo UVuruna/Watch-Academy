@@ -254,6 +254,28 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
     assert "align='center'" in tip           # hover text is centered (owner spec)
 
 
+def test_day_and_night_period_hovers(july_wednesday):
+    """Hover rework 5 & 6: the sunlit arc answers with the day duration
+    and both spans (sun + twilight-extended), the dark of the wheel
+    with the night — probed upright at 14h (day) and just off midnight
+    (night), away from arms, bodies and markers."""
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, solar_rotation=False,
+            show_weekday=False, show_earth=False, show_moon=False,
+            show_pointer=False,
+        ),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    at_day = compositor.tooltip_at(234.0, 87.0, 360.0)     # dial 30 deg = 14h
+    assert "Day 15h" in at_day and "Sunrise" in at_day and "Dusk" in at_day
+    at_night = compositor.tooltip_at(162.0, 285.0, 360.0)  # near the bottom
+    assert "Night 8h" in at_night
+    assert "Sunset" in at_night and "Dawn" in at_night
+
+
 def test_ghost_body_hover_shows_the_article_alone(july_wednesday):
     """Hover rework: ghost (non-current) bodies are hover targets too,
     showing their article WITHOUT the date line (owner spec) — probed on
