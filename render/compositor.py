@@ -10,7 +10,7 @@ the future settings preview.
 import html
 import math
 import textwrap
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
@@ -51,6 +51,22 @@ def _centered(*lines: str) -> str:
     left-aligns plain text)."""
     body = "<br/>".join(html.escape(line) for line in lines)
     return f"<div align='center'>{body}</div>"
+
+
+def _centered_html(*lines: str) -> str:
+    """Centered tooltip from lines that are ALREADY safe HTML (ordinal
+    superscripts etc.) — the caller escapes any free-form data."""
+    return f"<div align='center'>{'<br/>'.join(lines)}</div>"
+
+
+def _ordinal(n: int) -> str:
+    """"9<sup>th</sup>" — the raised ordinal suffix of the hover rework
+    (owner spec: the suffix rides above the line)."""
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}<sup>{suffix}</sup>"
 
 
 def _build_layers(skin: SkinDefinition) -> list[Layer]:
@@ -199,13 +215,7 @@ class Compositor:
         if self._skin.show_moon:
             moon_pos = dial_point(moon_angle, radius * marker.moon_orbit_fraction)
             if hit(moon_pos, radius * marker.moon_scale):
-                # Owner format, two lines: phase + illumination / cycle day.
-                cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
-                return _centered(
-                    f"{phase_name(day.moon_fraction)} — "
-                    f"{day.moon_illumination * 100:.0f}% lit",
-                    f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}",
-                )
+                return self._moon_text()
         if self._skin.show_earth and hit(
             dial_point(tick.year_angle, radius * marker.orbit_fraction),
             radius * marker.scale,
@@ -349,19 +359,80 @@ class Compositor:
             f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}",
         )
 
+    def _moon_text(self) -> str:
+        """Moon hover (owner rework): the phase — with the exact instant
+        in parentheses while a principal name holds — then illumination
+        to one decimal, the rise–set span, and the cycle day."""
+        day = self._day
+        name = phase_name(day.moon_fraction)
+        lines = [name]
+        if name in constants.MOON_PHASE_FRACTIONS:
+            # A principal phase name holds ±12 h around its instant —
+            # show that instant (the nearest principal event by name).
+            noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
+            instant = min(
+                (event for event in day.moon_events if event[1] == name),
+                key=lambda event: abs(event[0] - noon),
+            )[0].astimezone(day.tzinfo)
+            lines.append(
+                f"({instant.day} {instant:%b %Y} - {instant:%H:%M})"
+            )
+        lines.append(f"Illumination {day.moon_illumination * 100:.1f}%")
+        if day.moonrise is not None and day.moonset is not None:
+            lines.append(f"{day.moonrise:%H:%M} - {day.moonset:%H:%M}")
+        elif day.moonrise is not None:
+            # The moon skips a rise or a set roughly once a month —
+            # show the side that exists on this date.
+            lines.append(f"Rises {day.moonrise:%H:%M}")
+        elif day.moonset is not None:
+            lines.append(f"Sets {day.moonset:%H:%M}")
+        cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
+        lines.append(f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}")
+        return _centered(*lines)
+
+    def _season_row(self) -> str:
+        """"Summer 20<sup>th</sup> of 94 Days" — the astronomical season
+        at the current date: bracketing anchors by instant, the NAME
+        flipped on the southern hemisphere (their seasons are opposite;
+        the tropics keep the astronomical row until the owner decides
+        the wet/dry split)."""
+        day = self._day
+        noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
+        events = day.season_events
+        index = max(
+            i for i, (instant, _) in enumerate(events) if instant <= noon
+        )
+        start, name = events[index]
+        end = events[index + 1][0]
+        season = name.split()[0]        # the season STARTS at its event
+        if day.southern_hemisphere:
+            season = {
+                "Summer": "Winter", "Winter": "Summer",
+                "Spring": "Autumn", "Autumn": "Spring",
+            }[season]
+        day_no = (day.local_date - start.astimezone(day.tzinfo).date()).days + 1
+        total = round((end - start).total_seconds() / 86400)
+        return f"{season} {_ordinal(day_no)} of {total} Days"
+
     def _earth_text(self) -> str:
-        """Owner format, three lines: day/week ordinals, the zodiac sign
-        with its dates, the date — plus the season event name on top
-        while the marker glows."""
+        """Earth hover (owner rework), four lines with raised ordinal
+        suffixes: the date, day/week ordinals, the season row and the
+        zodiac sign with its span in parentheses — plus the season event
+        name on top while the marker glows."""
         day, date = self._day, self._day.local_date
+        last = day.zodiac_end - timedelta(days=1)
         lines = [
-            f"Day {date.timetuple().tm_yday} — Week {date.isocalendar().week}",
-            self._zodiac_line(),
-            f"{date.day} {date:%B %Y}",
+            f"{_ordinal(date.day)} {date:%B %Y}",
+            f"{_ordinal(date.timetuple().tm_yday)} Day - "
+            f"{_ordinal(date.isocalendar().week)} Week",
+            self._season_row(),
+            f"{html.escape(day.zodiac_symbol)} {html.escape(day.zodiac_name)} "
+            f"({_ordinal(day.zodiac_start.day)} {day.zodiac_start:%B} - "
+            f"{_ordinal(last.day)} {last:%B})",
         ]
         if self._last_tick.season_event is not None:
-            lines.insert(0, self._last_tick.season_event)
-        return _centered(*lines)
+            lines.insert(0, html.escape(self._last_tick.season_event))
+        return _centered_html(*lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Hovering a twilight band names its boundary times (owner spec):

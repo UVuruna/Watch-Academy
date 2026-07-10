@@ -209,6 +209,27 @@ def test_trio_aura_thirds_center_on_the_arms(july_wednesday):
     assert at_6h.blue() > at_6h.red() + 30               # Hope blue
 
 
+def test_hover_rework_moon_and_earth_formats(july_wednesday):
+    """Owner hover rework: raised ordinal suffixes, illumination to one
+    decimal, the moonrise-moonset span and the season row (Belgrade,
+    8 July 2026 = 189th day, 18th day of a 94-day summer)."""
+    day, tick = july_wednesday
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    moon = compositor._moon_text()
+    assert "Illumination 42.8%" in moon       # one decimal (owner spec)
+    assert "of 29.53" in moon
+    # 8 Jul 2026 is a SKIP day in Belgrade — the moon sets at 13:53 but
+    # does not rise (rises again just after midnight on the 9th); the
+    # hover shows the side that exists.
+    assert "Sets 13:53" in moon
+    earth = compositor._earth_text()
+    assert "8<sup>th</sup> July 2026" in earth
+    assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
+    assert "Summer 18<sup>th</sup> of 94 Days" in earth
+    assert "Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)" in earth
+
+
 def test_upright_mode_disarms_the_rotation(july_wednesday):
     """With solar rotation OFF the Star/Aura/Umbra stand upright — the
     render differs from the solar one (Belgrade July tilts ~+14 deg) and
