@@ -40,3 +40,7 @@ class SymbolismRepository:
     def zodiac_article(self, sign: str) -> dict:
         """{base, variants{paint, light}} of one tropical sign."""
         return self._load()["zodiac_articles"][sign]
+
+    def trio_article(self, virtue: str) -> dict:
+        """{base} of one Trinity arm virtue (Faith / Hope / Love)."""
+        return self._load()["trio_articles"][virtue]

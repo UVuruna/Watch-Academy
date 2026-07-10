@@ -367,10 +367,9 @@ class Compositor:
                 )
             return "<br/>".join(parts)
         if self._skin.pointer == "trio":
-            # Trio arm: its theological theme, the day third it CENTERS
-            # (the arm tip is the middle of its hue — owner correction)
-            # and the weekday pair it carries. The hover rework will
-            # grow this.
+            # Trio arm (owner spec): its theological theme, the day
+            # third it CENTERS (the arm tip is the middle of its hue),
+            # the weekday pair it carries — and the virtue's ARTICLE.
             theme = constants.TRIO_ARM_THEMES[arm_angle]
             start_hour = int((((arm_angle + 180.0) % 360.0) // 15 - 4) % 24)
             end_hour = int((start_hour + 8) % 24)
@@ -382,11 +381,13 @@ class Compositor:
             days = " · ".join(
                 constants.WEEKDAY_FULL_NAMES[body] for body in bodies
             )
-            return _centered(
-                f"{theme}{star}",
-                f"{start_hour:02d}:00 – {end_hour:02d}:00",
-                days,
+            header = _centered_html(
+                f"{html.escape(theme)}{html.escape(star)}",
+                f"{start_hour:02d}:00 - {end_hour:02d}:00",
+                html.escape(days),
             )
+            article = self._symbolism.trio_article(theme)
+            return header + "<br/>" + _article_body_html(article["base"])
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events:
             # the exact instant, plus the DAY LENGTH on that date (owner
@@ -396,9 +397,9 @@ class Compositor:
             anchor_angle = {0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0}[
                 arm_angle
             ]
-            name = constants.SEASON_EVENT_NAMES[round(anchor_angle) % 360]
-            instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
             index = self._day.year_anchors.angles.index(anchor_angle)
+            name = self._day.season_events[index][1]      # zone-correct name
+            instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
             hours, minutes = self._day.anchor_day_lengths[index].split(":")
             lines = [
                 f"{html.escape(name)}{html.escape(star)}",
@@ -406,30 +407,57 @@ class Compositor:
                 f"{int(hours)}h {int(minutes)}min",
             ]
             if self._skin.pointer == "cross":
-                season = self._season_name_for(anchor_angle)
-                met_start, met_end = meteorological_span(
-                    self._day.year_anchors, anchor_angle
-                )
-                met_start = met_start.astimezone(self._day.tzinfo)
-                met_end = met_end.astimezone(self._day.tzinfo)
-                lines += [
-                    "",
-                    f"Meteorological {season}",
-                    f"From {_ordinal(met_start.day)} {met_start:%B %Y} - "
-                    f"{met_start:%H:%M}",
-                    f"To {_ordinal(met_end.day)} {met_end:%B %Y} - "
-                    f"{met_end:%H:%M}",
-                ]
+                lines.append("")
+                if self._day.zone == "tropics":
+                    # Tropics (owner decision): the cross arms describe
+                    # the equinox-bounded WET/DRY halves — the solstice
+                    # arms CENTER theirs, the equinox arms START theirs.
+                    span_start = 270.0 if anchor_angle in (270.0, 360.0) else 450.0
+                    lines += self._wet_dry_block(span_start)
+                else:
+                    season = self._season_name_for(anchor_angle)
+                    met_start, met_end = meteorological_span(
+                        self._day.year_anchors, anchor_angle
+                    )
+                    met_start = met_start.astimezone(self._day.tzinfo)
+                    met_end = met_end.astimezone(self._day.tzinfo)
+                    lines += [
+                        f"Meteorological {season}",
+                        f"From {_ordinal(met_start.day)} {met_start:%B %Y} - "
+                        f"{met_start:%H:%M}",
+                        f"To {_ordinal(met_end.day)} {met_end:%B %Y} - "
+                        f"{met_end:%H:%M}",
+                    ]
             return _centered_html(*lines)
-        # Octa diagonal arms point at the season CENTERS.
+        # Octa diagonal arms point at the QUARTER centers: the four
+        # temperate seasons — or, in the tropics, the halves of the
+        # wet/dry seasons (owner spec: TL is the first part of the
+        # season the top arms span, TR the second...).
         start_angle = {315.0: 270.0, 45.0: 360.0, 135.0: 450.0, 225.0: 540.0}[
             arm_angle
         ]
-        season = self._season_name_for(start_angle)
         start = self._anchor_instant(start_angle).astimezone(self._day.tzinfo)
         end = self._anchor_instant(start_angle + 90.0).astimezone(self._day.tzinfo)
         middle = start + (end - start) / 2
         days = (end - start).total_seconds() / 86400
+        if self._day.zone == "tropics":
+            starts_in_march = start_angle in (270.0, 360.0)
+            is_wet = starts_in_march != self._day.southern_hemisphere
+            half = "1<sup>st</sup>" if start_angle in (270.0, 450.0) else "2<sup>nd</sup>"
+            season_line = (
+                f"{'Wet' if is_wet else 'Dry'} season ({half} half)"
+                f"{html.escape(star)}"
+            )
+            whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
+            return _centered_html(
+                season_line,
+                f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
+                f"({days:.1f} Days)",
+                f"Heart: {_ordinal(middle.day)} {middle:%B}",
+                "",
+                *whole,
+            )
+        season = self._season_name_for(start_angle)
         return _centered_html(
             f"{html.escape(season)}{html.escape(star)}",
             f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
@@ -437,18 +465,28 @@ class Compositor:
             f"Heart: {_ordinal(middle.day)} {middle:%B}",
         )
 
-    def _season_name_for(self, start_anchor_angle: float) -> str:
-        """The season STARTING at an unwrapped anchor angle, flipped on
-        the southern hemisphere (their seasons are opposite)."""
-        season = {270.0: "Spring", 360.0: "Summer", 450.0: "Autumn", 540.0: "Winter"}[
-            start_anchor_angle
+    def _wet_dry_block(self, span_start_angle: float) -> list[str]:
+        """The whole wet/dry season lines (tropics): name and its
+        equinox-to-equinox span with the duration."""
+        start = self._anchor_instant(span_start_angle).astimezone(self._day.tzinfo)
+        end = self._anchor_instant(span_start_angle + 180.0).astimezone(
+            self._day.tzinfo
+        )
+        starts_in_march = span_start_angle % 360.0 == 270.0
+        is_wet = starts_in_march != self._day.southern_hemisphere
+        days = (end - start).total_seconds() / 86400
+        return [
+            f"{'Wet' if is_wet else 'Dry'} season",
+            f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
+            f"({days:.1f} Days)",
         ]
-        if self._day.southern_hemisphere:
-            season = {
-                "Summer": "Winter", "Winter": "Summer",
-                "Spring": "Autumn", "Autumn": "Spring",
-            }[season]
-        return season
+
+    def _season_name_for(self, start_anchor_angle: float) -> str:
+        """The temperate season STARTING at an unwrapped anchor angle —
+        read from the zone-correct event names (the south already flips
+        them): "Autumn Equinox" starts Autumn."""
+        index = self._day.year_anchors.angles.index(start_anchor_angle)
+        return self._day.season_events[index][1].split()[0]
 
     def _anchor_instant(self, unwrapped_angle: float):
         """Season-anchor instant at an unwrapped year-wheel angle."""
@@ -514,13 +552,22 @@ class Compositor:
         return _centered(*lines)
 
     def _season_row(self) -> str:
-        """"Summer 20<sup>th</sup> of 94 Days" — the astronomical season
-        at the current date: bracketing anchors by instant, the NAME
-        flipped on the southern hemisphere (their seasons are opposite;
-        the tropics keep the astronomical row until the owner decides
-        the wet/dry split)."""
+        """"Summer 20<sup>th</sup> of 94 Days" — the season at the
+        current date. The event names already carry the climate zone
+        (south flips them), so the season is the starting event's first
+        word; the TROPICS read their WET/DRY halves instead (owner
+        decision — bounded by the equinoxes, wet centered on the
+        hemisphere's high sun)."""
         day = self._day
         noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
+        if day.zone == "tropics":
+            start, end, is_wet = self._wet_dry_span_at(noon)
+            day_no = (day.local_date - start.astimezone(day.tzinfo).date()).days + 1
+            total = round((end - start).total_seconds() / 86400)
+            return (
+                f"{'Wet' if is_wet else 'Dry'} season "
+                f"{_ordinal(day_no)} of {total} Days"
+            )
         events = day.season_events
         index = max(
             i for i, (instant, _) in enumerate(events) if instant <= noon
@@ -528,14 +575,37 @@ class Compositor:
         start, name = events[index]
         end = events[index + 1][0]
         season = name.split()[0]        # the season STARTS at its event
-        if day.southern_hemisphere:
-            season = {
-                "Summer": "Winter", "Winter": "Summer",
-                "Spring": "Autumn", "Autumn": "Spring",
-            }[season]
         day_no = (day.local_date - start.astimezone(day.tzinfo).date()).days + 1
         total = round((end - start).total_seconds() / 86400)
         return f"{season} {_ordinal(day_no)} of {total} Days"
+
+    def _wet_dry_span_at(self, noon) -> tuple:
+        """(start, end, is_wet) of the tropical half-year at `noon`:
+        equinox-bounded, wet = the March→September half north of the
+        equator and the September→March half south of it. The one
+        boundary that can precede the anchor span (the previous
+        September equinox, needed in January–March) is synthesized one
+        tropical year before its bundled successor — day-count display
+        accuracy."""
+        anchors = self._day.year_anchors
+        equinoxes = [
+            (instant, angle)
+            for instant, angle in zip(anchors.instants, anchors.angles)
+            if angle % 180.0 == 90.0    # 270 / 450 / 630 — the equinoxes
+        ]
+        synthetic = (
+            equinoxes[1][0] - timedelta(days=constants.TROPICAL_YEAR_DAYS),
+            equinoxes[1][1] - 360.0,    # the September equinox before the span
+        )
+        equinoxes.insert(0, synthetic)
+        index = max(
+            i for i, (instant, _) in enumerate(equinoxes) if instant <= noon
+        )
+        start, start_angle = equinoxes[index]
+        end = equinoxes[index + 1][0]
+        starts_in_march = start_angle % 360.0 == 270.0
+        is_wet = starts_in_march != self._day.southern_hemisphere
+        return start, end, is_wet
 
     def _earth_text(self) -> str:
         """Earth hover (owner rework), four lines with raised ordinal

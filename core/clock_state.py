@@ -44,6 +44,8 @@ class DayContext:
     moonrise: datetime | None       # local instants on this date; None when
     moonset: datetime | None        # the moon skips the event that day
     southern_hemisphere: bool       # the moon appears rotated 180 deg there
+    zone: str                       # "north" | "tropics" | "south" — event
+                                    # naming and the wet/dry season split
     day_length: str                 # "15:35" — octa bottom-arm option
     zodiac_name: str                # tropical sign, cusps on the year wheel
     zodiac_symbol: str
@@ -86,6 +88,11 @@ def build_day_context(
     sun_day = compute_sun_day(observer, now_local.date(), now_local.tzinfo)
     fraction = phase_fraction(now_local, moon_window)
     moonrise, moonset = moon_rise_set(observer, now_local.date(), now_local.tzinfo)
+    if abs(observer.latitude) <= constants.TROPIC_LATITUDE_DEG:
+        zone = "tropics"
+    else:
+        zone = "south" if observer.latitude < 0 else "north"
+    event_names = constants.ZONE_SEASON_EVENT_NAMES[zone]
     sign_name, sign_symbol, sign_start, sign_end = zodiac_sign(now_local, year_anchors)
     chinese_name, chinese_start, chinese_end = chinese_zodiac(now_local, moon_window)
     return DayContext(
@@ -100,6 +107,7 @@ def build_day_context(
         moonrise=moonrise,
         moonset=moonset,
         southern_hemisphere=observer.latitude < 0,
+        zone=zone,
         day_length=day_length_hm(sun_day),
         zodiac_name=sign_name,
         zodiac_symbol=sign_symbol,
@@ -109,7 +117,7 @@ def build_day_context(
         chinese_start=chinese_start,
         chinese_end=chinese_end,
         season_events=tuple(
-            (instant, constants.SEASON_EVENT_NAMES[round(angle) % 360])
+            (instant, event_names[round(angle) % 360])
             for instant, angle in zip(year_anchors.instants, year_anchors.angles)
         ),
         anchor_day_lengths=tuple(

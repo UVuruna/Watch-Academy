@@ -254,6 +254,63 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
     assert "align='center'" in tip           # hover text is centered (owner spec)
 
 
+def _day_and_tick(latitude, longitude, tz_name):
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+
+    tz = ZoneInfo(tz_name)
+    now = datetime(2026, 7, 8, 12, 0, tzinfo=tz)
+    day = build_day_context(
+        now,
+        astral.Observer(latitude=latitude, longitude=longitude),
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    return day, build_tick_state(now, day)
+
+
+def test_climate_zones_name_the_events_and_seasons(app):
+    """Owner decision: the south flips the seasonal event names (their
+    Summer Solstice is the December one), the tropics use the neutral
+    month names and read their WET/DRY halves instead of seasons."""
+    sydney, tick = _day_and_tick(-33.8688, 151.2093, "Australia/Sydney")
+    assert sydney.zone == "south"
+    names = [name for _, name in sydney.season_events]
+    assert "Winter Solstice" in names and "Summer Solstice" in names
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, sydney, tick)
+    earth = compositor._earth_text()
+    assert "Winter 18<sup>th</sup> of 94 Days" in earth   # July = their winter
+
+    singapore, tick = _day_and_tick(1.3521, 103.8198, "Asia/Singapore")
+    assert singapore.zone == "tropics"
+    names = [name for _, name in singapore.season_events]
+    assert "June Solstice" in names and "December Solstice" in names
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, singapore, tick)
+    earth = compositor._earth_text()
+    assert "Wet season 111<sup>th</sup> of 186 Days" in earth
+
+
+def test_trio_arm_hover_carries_the_virtue_article(july_wednesday):
+    """The Trinity arm hover: theme, third, pair — then the virtue's
+    article (owner request): Faith's speaks of the vertical line."""
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, pointer="trio", solar_rotation=False,
+            show_weekday=False,
+        ),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    tip = compositor.tooltip_at(180.0, 72.0, 360.0)       # top arm = Faith
+    assert "Faith" in tip and "08:00 - 16:00" in tip
+    assert "Thursday" in tip and "Saturday" in tip
+    assert "align='left'" in tip and "vertical line" in tip
+
+
 def test_day_and_night_period_hovers(july_wednesday):
     """Hover rework 5 & 6: the sunlit arc answers with the day duration
     and both spans (sun + twilight-extended), the dark of the wheel

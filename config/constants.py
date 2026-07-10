@@ -294,14 +294,41 @@ ZODIAC_SPAN_DEG = 30.0
 SEASON_GLOW_WINDOW_H = 12.0
 MOON_GLOW_WINDOW_H = 6.0
 
-# Year-wheel anchor angle (mod 360) -> season event name shown in the
-# Earth hover during the glow window.
+# Year-wheel anchor angle (mod 360) -> season event name, PER CLIMATE
+# ZONE (owner decision 2026-07-10): the southern hemisphere flips the
+# seasonal names (their Summer Solstice is the December one) and the
+# tropics use the neutral month names (June/December Solstice,
+# March/September Equinox). SEASON_EVENT_NAMES keeps the northern table
+# as the canonical angle map.
 SEASON_EVENT_NAMES = {
     0: "Summer Solstice",
     90: "Autumn Equinox",
     180: "Winter Solstice",
     270: "Spring Equinox",
 }
+ZONE_SEASON_EVENT_NAMES = {
+    "north": SEASON_EVENT_NAMES,
+    "south": {
+        0: "Winter Solstice",
+        90: "Spring Equinox",
+        180: "Summer Solstice",
+        270: "Autumn Equinox",
+    },
+    "tropics": {
+        0: "June Solstice",
+        90: "September Equinox",
+        180: "December Solstice",
+        270: "March Equinox",
+    },
+}
+
+# The tropics span the Tropic of Cancer to the Tropic of Capricorn;
+# their year splits into WET and DRY halves bounded by the equinoxes
+# (owner decision) — the wet half centers on the hemisphere's high sun.
+TROPIC_LATITUDE_DEG = 23.44
+# One tropical year — used only to SYNTHESIZE an equinox instant that
+# falls just before the bundled anchor span (day-count display accuracy).
+TROPICAL_YEAR_DAYS = 365.2422
 
 # Body -> Sunday-first weekday index (the owner's numbering used by the
 # shared-slot priority rule: the occupant whose day comes NEXT wins).
