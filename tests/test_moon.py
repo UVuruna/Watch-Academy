@@ -65,13 +65,14 @@ def test_moon_rise_set_belgrade():
 def test_meteorological_summer_2026():
     """Cross-arm hover bounds (owner spec): summer runs from halfway
     spring-equinox→summer-solstice to halfway summer-solstice→autumn-
-    equinox — 2026: 5 May 23:34 to 7 Aug 04:14 (UTC anchors)."""
+    equinox — 2026: 5 May 23:35 to 7 Aug 04:14 (UTC anchors carry
+    seconds, so the printed anchor minutes round differently)."""
     from core.year_wheel import meteorological_span
     from data.seasons import SeasonsRepository
 
     anchors = SeasonsRepository().year_anchors(2026)
     start, end = meteorological_span(anchors, 360.0)   # the summer solstice
-    assert start.strftime("%d %b %H:%M") == "05 May 23:34"
+    assert start.strftime("%d %b %H:%M") == "05 May 23:35"
     assert end.strftime("%d %b %H:%M") == "07 Aug 04:14"
 
 
