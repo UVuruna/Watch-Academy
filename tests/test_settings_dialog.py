@@ -329,6 +329,24 @@ def test_articles_cover_every_theme_and_body():
                                            # plus the display-name field
 
 
+def test_guide_slides_and_captions_match():
+    """Every guide slide has a caption and every caption a slide; each
+    caption carries a title line plus a body (owner content)."""
+    import json
+
+    from config import defaults as d
+
+    slides = {path.stem for path in d.GUIDE_DIR.glob("*.png")}
+    captions = json.loads(
+        (d.GUIDE_DIR / "captions.json").read_text(encoding="utf-8")
+    )
+    assert slides == set(captions)
+    assert len(slides) >= 21
+    for stem, caption in captions.items():
+        title, _, body = caption.partition("\n")
+        assert title.strip() and len(body) > 100, stem
+
+
 def test_legend_popup_caps_and_scrolls(app):
     """Owner spec: on small screens the legend must not clip — the popup
     caps its height to a screen fraction and grows a scrollbar for

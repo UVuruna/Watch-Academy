@@ -7,6 +7,7 @@ placeholder — the frame ships first so the content can simply be
 dropped in.
 """
 
+import html
 import json
 
 from PySide6.QtCore import Qt
@@ -83,5 +84,13 @@ class GuideDialog(QDialog):
                 Qt.TransformationMode.SmoothTransformation,
             )
         self._image.setPixmap(pixmap)
-        self._caption.setText(self._captions.get(slide.stem, ""))
+        caption = self._captions.get(slide.stem, "")
+        # The caption's FIRST line is the slide title (bold), the rest
+        # is the body — one plain string, so the translation pipeline
+        # handles it whole.
+        title, _, body = caption.partition("\n")
+        self._caption.setText(
+            f"<div align='center'><b>{html.escape(title)}</b></div>"
+            f"<div>{html.escape(body)}</div>"
+        )
         self._counter.setText(f"{self._index + 1} / {len(self._slides)}")

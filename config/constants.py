@@ -264,6 +264,8 @@ RING_LETTER_FILES = {
     "Ψ": "Psi.png",
     "Σ": "Sigma.png",
     "Θ": "Theta.png",
+    # Symbols (the owner is growing this set for custom rings):
+    "✠": "templar.png",
 }
 
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
