@@ -41,6 +41,11 @@ class TrayController:
         self._icon.setToolTip(constants.APP_NAME)
         self._icon.setContextMenu(menu)
 
+    def set_menu(self, menu: QMenu) -> None:
+        """Swap the context menu (rebuilt after Settings)."""
+        self._menu = menu
+        self._icon.setContextMenu(menu)
+
     def show(self) -> None:
         self._icon.show()
 

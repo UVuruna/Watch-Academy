@@ -37,12 +37,35 @@ class ClockWidget(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self.setWindowTitle(constants.APP_NAME)
         self.setMouseTracking(True)     # hover tooltips on small dials
-        self.resize(diameter, diameter)
+        self.set_dial_diameter(diameter)
 
     def mark_closing(self) -> None:
         """Tell the spontaneous-hide watchdog that the coming hide is
         intentional."""
         self._closing = True
+
+    def set_dial_diameter(self, diameter: int) -> None:
+        """The window is the dial plus a transparent margin on every
+        side (owner spec: the 12/24 letters' overhang and halo were
+        clipped by the window square)."""
+        self._dial_diameter = diameter
+        self._margin_px = round(diameter * defaults.DIAL_WINDOW_MARGIN_FRACTION)
+        self.resize(
+            diameter + 2 * self._margin_px, diameter + 2 * self._margin_px
+        )
+
+    @property
+    def dial_diameter(self) -> int:
+        return self._dial_diameter
+
+    @property
+    def margin_px(self) -> int:
+        return self._margin_px
+
+    def set_menu(self, menu: QMenu) -> None:
+        """Swap the shared context menu (rebuilt after Settings — e.g. a
+        new custom ring joins Theme ▸ Ring)."""
+        self._menu = menu
 
     def set_click_through(self, enabled: bool) -> None:
         """TRUE click-through: the whole window stops taking mouse input
@@ -68,9 +91,10 @@ class ClockWidget(QWidget):
             # tick before show(), so this only covers stray early paints.
             return
         painter = QPainter(self)
+        painter.translate(self._margin_px, self._margin_px)
         self._renderer.paint(
             painter,
-            float(min(self.width(), self.height())),
+            float(self._dial_diameter),
             self.devicePixelRatioF(),
             self._tick,
         )
@@ -86,16 +110,12 @@ class ClockWidget(QWidget):
 
     def mouseMoveEvent(self, event) -> None:
         if self._renderer is not None and self._tick is not None:
-            size = float(min(self.width(), self.height()))
-            if self._renderer.set_hover(
-                event.position().x(), event.position().y(), size
-            ):
+            size = float(self._dial_diameter)
+            x = event.position().x() - self._margin_px
+            y = event.position().y() - self._margin_px
+            if self._renderer.set_hover(x, y, size):
                 self.update()           # hover-enlarge target changed
-            tip = self._renderer.tooltip_at(
-                event.position().x(),
-                event.position().y(),
-                size,
-            )
+            tip = self._renderer.tooltip_at(x, y, size)
             if tip:
                 self._legend.show_html(tip, event.globalPosition().toPoint())
             else:
@@ -104,7 +124,7 @@ class ClockWidget(QWidget):
 
     def leaveEvent(self, event) -> None:
         if self._renderer is not None and self._renderer.set_hover(
-            -1.0e9, -1.0e9, float(min(self.width(), self.height()))
+            -1.0e9, -1.0e9, float(self._dial_diameter)
         ):
             self.update()               # shrink the enlarged element back
         # Crossing INTO the legend popup must not close it — the wheel

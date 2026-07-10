@@ -62,6 +62,7 @@ class SettingsDialog(QDialog):
         layout.addWidget(self._build_sizes_group())
         layout.addWidget(self._build_palette_group())
         layout.addWidget(self._build_ring_tint_group())
+        layout.addWidget(self._build_custom_ring_group())
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
             | QDialogButtonBox.StandardButton.Cancel
@@ -508,6 +509,94 @@ class SettingsDialog(QDialog):
     def _show_ring_tint(self) -> None:
         self._ring_tint_label.setText(self._ring_tint or "Gray (default)")
 
+    # --- Custom ring (owner spec) -----------------------------------------------------
+
+    def _build_custom_ring_group(self) -> QGroupBox:
+        """The ring card builder: pick a layout (Flame / Chalice /
+        Seal), a library letter per position and a unique name — the
+        new card joins Theme ▸ Ring with the gold/silver metal rules."""
+        self._custom_rings = list(self._settings.custom_rings)
+        group = QGroupBox("Custom ring")
+        column = QVBoxLayout(group)
+        top = QHBoxLayout()
+        self._ring_layout_combo = QComboBox()
+        for key, layout in constants.RING_LAYOUTS.items():
+            self._ring_layout_combo.addItem(
+                f"{key.capitalize()} ({len(layout['positions'])} letters)", key
+            )
+        self._ring_layout_combo.currentIndexChanged.connect(
+            self._rebuild_ring_slots
+        )
+        top.addWidget(self._ring_layout_combo)
+        self._ring_name_edit = QLineEdit()
+        self._ring_name_edit.setPlaceholderText("Unique name")
+        top.addWidget(self._ring_name_edit)
+        add = QPushButton("Add ring")
+        add.clicked.connect(self._add_custom_ring)
+        top.addWidget(add)
+        column.addLayout(top)
+        self._ring_slot_row = QHBoxLayout()
+        column.addLayout(self._ring_slot_row)
+        self._ring_slot_combos: dict[int, QComboBox] = {}
+        self._custom_ring_status = QLabel(
+            f"{len(self._custom_rings)} custom ring(s) saved"
+        )
+        column.addWidget(self._custom_ring_status)
+        self._rebuild_ring_slots()
+        return group
+
+    def _rebuild_ring_slots(self) -> None:
+        while self._ring_slot_row.count():
+            item = self._ring_slot_row.takeAt(0)
+            if item.widget() is not None:
+                item.widget().deleteLater()
+            elif item.layout() is not None:
+                while item.layout().count():
+                    inner = item.layout().takeAt(0)
+                    if inner.widget() is not None:
+                        inner.widget().deleteLater()
+        self._ring_slot_combos = {}
+        layout_key = self._ring_layout_combo.currentData()
+        for position in constants.RING_LAYOUTS[layout_key]["positions"]:
+            cell = QVBoxLayout()
+            cell.addWidget(QLabel(f"{position}h"))
+            combo = QComboBox()
+            combo.addItems(list(constants.RING_LETTER_FILES))
+            cell.addWidget(combo)
+            self._ring_slot_combos[position] = combo
+            self._ring_slot_row.addLayout(cell)
+
+    def _add_custom_ring(self) -> None:
+        from data.rings import ring_presets, validate_preset
+
+        layout_key = self._ring_layout_combo.currentData()
+        entry = {
+            "name": self._ring_name_edit.text().strip(),
+            "positions": list(constants.RING_LAYOUTS[layout_key]["positions"]),
+            "letters": [
+                combo.currentText()
+                for combo in self._ring_slot_combos.values()
+            ],
+        }
+        try:
+            card = validate_preset(entry)
+            ring_presets(tuple(self._custom_rings) + (entry,))  # name clash?
+        except ValueError as error:
+            self._custom_ring_status.setText(str(error))
+            return
+        self._custom_rings.append(
+            {
+                "name": card["name"],
+                "positions": list(card["positions"]),
+                "letters": list(card["letters"]),
+            }
+        )
+        self._custom_ring_status.setText(
+            f"Added {card['name']!r} — OK saves it; find it under "
+            f"Theme ▸ Ring"
+        )
+        self._ring_name_edit.clear()
+
     # --- Result ---------------------------------------------------------------------
 
     def result_settings(self) -> Settings:
@@ -538,6 +627,7 @@ class SettingsDialog(QDialog):
             ),
             palettes=palettes,
             ring_tint=self._ring_tint,
+            custom_rings=tuple(self._custom_rings),
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()
