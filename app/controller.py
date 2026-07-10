@@ -167,7 +167,17 @@ class AppController(QObject):
 
         self._menu = self._build_menu()
         self._widget = ClockWidget(self._settings.diameter, self._menu)
-        self._tray = TrayController(self._menu)
+        try:
+            self._tray = TrayController(self._menu)
+        except ValueError as error:
+            # A broken/missing logo must be SEEN (review finding) — in a
+            # windowed build a bare traceback dies with no window at all.
+            self._critical_box(
+                f"The tray icon could not be loaded:\n{error}",
+                QMessageBox.StandardButton.Ok,
+                QMessageBox.StandardButton.Ok,
+            )
+            raise SystemExit(1) from error
 
         self._tz = ZoneInfo(self._settings.timezone)
         self._observer = astral.Observer(
@@ -690,6 +700,12 @@ class AppController(QObject):
         else:
             self._hover_poller.stop()
             QToolTip.hideText()
+            # The poller was the only hover driver in this mode — clear
+            # its target or the last element stays enlarged (review
+            # finding: the cursor sits on the tray, not the dial).
+            size = float(min(self._widget.width(), self._widget.height()))
+            if self._compositor.set_hover(-1.0e9, -1.0e9, size):
+                self._widget.update()
         self._settings = replace(self._settings, click_through=enabled)
         self._flush_position()
 

@@ -62,6 +62,26 @@ def test_moon_rise_set_belgrade():
     assert rise.tzinfo is not None and setting.tzinfo is not None
 
 
+def test_chinese_cusp_judged_in_chinas_frame(window_2026):
+    """Review fix: the Chinese year flips on CHINA's calendar date (CNY
+    2026 = Feb 17 China time, new moon 12:01 UTC). An Auckland (UTC+13)
+    midnight on their Feb 17 is still Feb 16 in China — the OLD Wood
+    Snake year; the old observer-local comparison already reported the
+    Fire Horse a day early."""
+    from zoneinfo import ZoneInfo
+
+    from core.moon import chinese_zodiac
+
+    auckland = ZoneInfo("Pacific/Auckland")
+    before = datetime(2026, 2, 17, 0, 0, tzinfo=auckland)
+    name, _, _ = chinese_zodiac(before, window_2026)
+    assert name == "Wood Snake"
+    after = datetime(2026, 2, 18, 12, 0, tzinfo=auckland)
+    name, start, _ = chinese_zodiac(after, window_2026)
+    assert name == "Fire Horse"
+    assert start.strftime("%d %b %Y") == "17 Feb 2026"
+
+
 def test_meteorological_summer_2026():
     """Cross-arm hover bounds (owner spec): summer runs from halfway
     spring-equinox→summer-solstice to halfway summer-solstice→autumn-

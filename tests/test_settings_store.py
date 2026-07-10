@@ -111,6 +111,18 @@ def test_unknown_display_choice_raises(store, key):
         store.load()
 
 
+def test_string_boolean_is_corrupt(store):
+    """Review fix (Rule #1): a hand-edited "false" STRING must raise,
+    not silently coerce to True and re-enable the element."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "show_seconds": "false"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
 def test_location_and_overrides_round_trip(store):
     saved = replace(
         Settings(),

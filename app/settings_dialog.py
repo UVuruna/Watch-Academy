@@ -72,6 +72,17 @@ class SettingsDialog(QDialog):
 
         if settings.city_path:
             self._restore_path(settings.city_path)
+        # Re-seed the ACTIVE location from the settings AFTER the combo
+        # cascade (review finding): building the combos fires _on_city
+        # with whatever city is alphabetically first, silently clobbering
+        # the real location on first run — and the user's fine-tuned
+        # lat/lng even with a stored path. The settings always win here;
+        # the combos are only navigation.
+        self._city_name = settings.city_name
+        self._timezone = settings.timezone
+        self._tz_label.setText(settings.timezone)
+        self._latitude.setValue(settings.latitude)
+        self._longitude.setValue(settings.longitude)
 
     def done(self, result: int) -> None:
         self._locations.release()

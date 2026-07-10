@@ -168,6 +168,23 @@ def test_weekday_theme_swaps_bodies_and_names():
     assert planets.weekday_set.bodies == defaults.DEFAULT_SKIN.weekday_set.bodies
 
 
+def test_dialog_open_close_keeps_the_location(app):
+    """Review fix: merely opening the Settings dialog must not relocate
+    the user — the combo cascade lands on the alphabetically first city,
+    but the settings' name/timezone/coordinates always win (first run
+    AND fine-tuned coordinates with a stored path)."""
+    from app.settings_dialog import SettingsDialog
+    from config import defaults as d
+
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    result = dialog.result_settings()
+    dialog.done(0)
+    assert result.city_name == d.DEFAULT_CITY["name"]
+    assert result.timezone == d.DEFAULT_CITY["timezone"]
+    assert result.latitude == d.DEFAULT_CITY["latitude"]
+    assert result.longitude == d.DEFAULT_CITY["longitude"]
+
+
 def test_every_theme_skeleton_is_complete():
     """Every theme folder ships all seven ENTITY-named files
     (placeholders until the owner pastes his vectors over them); the

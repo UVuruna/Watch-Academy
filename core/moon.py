@@ -9,7 +9,7 @@ off by up to ~0.3 day near the instants, so it is not used here.
 
 import math
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 from config import constants
 
@@ -69,10 +69,18 @@ def chinese_zodiac(now_local: datetime, window: MoonWindow) -> tuple[str, date, 
     """("Fire Horse", start, end) of the Chinese year at `now` — the
     year begins at the new moon falling in the Jan 21 – Feb 20 window
     (China time); animal and element follow the sexagenary cycle. The
-    moon window spans the neighbor years, so both cusps are present."""
-    year = now_local.date().year
+    moon window spans the neighbor years, so both cusps are present.
+
+    The cusp comparison happens entirely in CHINA's calendar frame
+    (review finding): comparing the observer's own local date against
+    China's New Year date misclassified the year by up to a day for
+    every non-UTC+8 observer around the cusp."""
+    china_now = now_local.astimezone(timezone.utc) + timedelta(
+        hours=constants.CHINA_UTC_OFFSET_HOURS
+    )
+    year = china_now.date().year
     start = _chinese_new_year(year, window)
-    if now_local.date() < start:
+    if china_now.date() < start:
         year -= 1
         start = _chinese_new_year(year, window)
     end = _chinese_new_year(year + 1, window) - timedelta(days=1)

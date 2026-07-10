@@ -10,7 +10,7 @@ gray art x hue), preserving the alpha of the source.
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QImage, QPainter, QPixmap, qGray
+from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
 
@@ -46,15 +46,22 @@ class AssetCache:
     @staticmethod
     def _desaturated(source: QPixmap) -> QPixmap:
         """Grayscale with the alpha kept — turns the owner's gold letter
-        art silver (owner-approved derivation). Per-pixel, but it runs
-        once per cache key on a small letter-sized image."""
-        image = source.toImage().convertToFormat(QImage.Format.Format_ARGB32)
-        for y in range(image.height()):
-            for x in range(image.width()):
-                color = image.pixelColor(x, y)
-                gray = qGray(color.rgb())
-                image.setPixelColor(x, y, QColor(gray, gray, gray, color.alpha()))
-        result = QPixmap.fromImage(image)
+        art silver (owner-approved derivation). Entirely native Qt
+        conversions (review finding: a per-pixel Python loop stalled the
+        GUI thread for seconds at large dial sizes): luminance via
+        Grayscale8, then the source alpha re-applied as a mask."""
+        image = source.toImage()
+        gray = image.convertToFormat(
+            QImage.Format.Format_Grayscale8
+        ).convertToFormat(QImage.Format.Format_ARGB32)
+        alpha = image.convertToFormat(QImage.Format.Format_Alpha8)
+        result = QPixmap.fromImage(gray)
+        painter = QPainter(result)
+        painter.setCompositionMode(
+            QPainter.CompositionMode.CompositionMode_DestinationIn
+        )
+        painter.drawImage(0, 0, alpha)
+        painter.end()
         result.setDevicePixelRatio(source.devicePixelRatio())
         return result
 

@@ -148,15 +148,15 @@ class SettingsStore:
                 window_y=None if window["y"] is None else int(window["y"]),
                 diameter=diameter,
                 # Additive keys (still schema 1): absent in older files.
-                click_through=bool(raw.get("click_through", False)),
-                solar_rotation=bool(raw.get("solar_rotation", True)),
-                legend=bool(raw.get("legend", True)),
-                show_earth=bool(raw.get("show_earth", True)),
-                show_moon=bool(raw.get("show_moon", True)),
-                show_weekday=bool(raw.get("show_weekday", True)),
-                show_pointer=bool(raw.get("show_pointer", True)),
-                colorful=bool(raw.get("colorful", True)),
-                show_seconds=bool(raw.get("show_seconds", True)),
+                click_through=_load_bool(raw, "click_through", False),
+                solar_rotation=_load_bool(raw, "solar_rotation", True),
+                legend=_load_bool(raw, "legend", True),
+                show_earth=_load_bool(raw, "show_earth", True),
+                show_moon=_load_bool(raw, "show_moon", True),
+                show_weekday=_load_bool(raw, "show_weekday", True),
+                show_pointer=_load_bool(raw, "show_pointer", True),
+                colorful=_load_bool(raw, "colorful", True),
+                show_seconds=_load_bool(raw, "show_seconds", True),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -236,6 +236,16 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
+
+
+def _load_bool(raw: dict, key: str, default: bool) -> bool:
+    """A REAL JSON boolean or absent — a hand-edited "false" string
+    would otherwise coerce to True silently (review finding; Rule #1:
+    errors must be visible)."""
+    value = raw.get(key, default)
+    if not isinstance(value, bool):
+        raise ValueError(f"{key} {value!r} is not true/false")
+    return value
 
 
 def _load_scale(raw: dict, key: str, low: float, high: float, default: float) -> float:
