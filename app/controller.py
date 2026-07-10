@@ -79,7 +79,11 @@ def apply_display_settings(skin, settings: Settings):
         # Themed bodies (SYMBOLISM.md canon): swap in the shared themed
         # art (files carry the ENTITY names) and the canon display
         # names; "planets" keeps the skin's own weekday unit untouched.
-        theme_dir = defaults.WEEKDAY_ART_DIR / settings.weekday_theme
+        # Both religion sets draw from the ONE religion/ folder.
+        theme_dir = (
+            defaults.WEEKDAY_ART_DIR
+            / defaults.WEEKDAY_THEME_DIRS[settings.weekday_theme]
+        )
         names = defaults.WEEKDAY_THEME_NAMES[settings.weekday_theme]
         files = defaults.WEEKDAY_THEME_FILES[settings.weekday_theme]
         weekday = dataclasses.replace(
@@ -470,6 +474,7 @@ class AppController(QObject):
                 ("greek", "Greek gods"),
                 ("norse", "Norse gods"),
                 ("religion", "Religions"),
+                ("religion_alt", "Religions II"),
                 ("profession", "Professions"),
             ],
             settings.weekday_theme,

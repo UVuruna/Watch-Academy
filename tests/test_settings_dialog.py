@@ -177,7 +177,7 @@ def test_every_theme_skeleton_is_complete():
     for theme in constants.WEEKDAY_THEMES:
         if theme == "planets":
             continue
-        folder = defaults.WEEKDAY_ART_DIR / theme
+        folder = defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
         for body in constants.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
             assert (folder / f"{stem}.png").exists(), (theme, body)
@@ -286,8 +286,9 @@ def test_articles_cover_every_theme_and_body():
     """Encyclopedic articles per theme x body: a multi-paragraph BASE
     (image-aware, canon-woven) plus one VARIANT paragraph per
     pointer/palette combination — including the trio. The alternate
-    religion set (religion_alt: Druidism Mon, Zoroastrianism Tue,
-    Shamanism Wed, Sikhism Thu, Voodoo Sat) carries the same shape."""
+    religion set is a FULL theme (Egypt Sun, Druidism Mon,
+    Zoroastrianism Tue, Shamanism Wed, Sikhism Thu, Babylon Fri,
+    Voodoo Sat) whose entries also carry a display `name`."""
     import json
 
     from config import constants, paths
@@ -306,12 +307,10 @@ def test_articles_cover_every_theme_and_body():
             assert "\n\n" in article["base"], (theme, body)   # paragraphs
             assert set(article["variants"]) == combos, (theme, body)
     alternates = data["articles"]["religion_alt"]
-    assert set(alternates) == {"moon", "mars", "mercury", "jupiter", "saturn"}
+    assert set(alternates) == set(constants.WEEKDAY_BODIES)
     for body, article in alternates.items():
-        assert article["name"], body
-        assert len(article["base"]) > 250, body
-        assert "\n\n" in article["base"], body
-        assert set(article["variants"]) == combos, body
+        assert article["name"], body       # covered by the main loop above,
+                                           # plus the display-name field
 
 
 def test_zodiac_articles_cover_every_sign():

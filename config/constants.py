@@ -225,6 +225,7 @@ WEEKDAY_THEMES = (
     "greek",
     "norse",
     "religion",
+    "religion_alt",
     "profession",
 )
 
@@ -236,6 +237,7 @@ WEEKDAY_THEME_BLURBS = {
     "greek": "greek",
     "norse": "norse",
     "religion": "religion",
+    "religion_alt": "religion_alt",
     "profession": "profession",
 }
 
@@ -247,6 +249,7 @@ WEEKDAY_THEME_ARTICLES = {
     "greek": "greek",
     "norse": "norse",
     "religion": "religion",
+    "religion_alt": "religion_alt",
     "profession": "profession",
 }
 

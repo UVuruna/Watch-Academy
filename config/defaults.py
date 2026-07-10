@@ -270,6 +270,18 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Islam",
         "saturn": "Judaism",
     },
+    # The ALTERNATE religion set — each on the day it fits best (canon
+    # in SYMBOLISM.md; Egypt and Babylon per the owner's 2026-07-10 art:
+    # Ra's Sunday, Ishtar IS Venus and Babylon invented the 7-day week).
+    "religion_alt": {
+        "sun": "Egypt",
+        "moon": "Druidism",
+        "mars": "Zoroastrianism",
+        "mercury": "Shamanism",
+        "jupiter": "Sikhism",
+        "venus": "Babylon",
+        "saturn": "Voodoo",
+    },
     "profession": {
         "sun": "Ruler",
         "moon": "Physician",
@@ -284,7 +296,17 @@ WEEKDAY_THEME_NAMES = {
 # File stems on disk: the display names folded to ASCII (Sól -> Sol);
 # the owner's religion and planet-sign art uses lowercase file names.
 _ASCII_FOLD = str.maketrans("óá", "oa")
-_LOWERCASE_THEMES = ("religion", "planet_signs")
+_LOWERCASE_THEMES = ("religion", "religion_alt", "planet_signs")
+# Theme -> art folder under assets/weekday/: both religion sets share
+# the ONE religion/ folder (all fourteen owner medallions together).
+WEEKDAY_THEME_DIRS = {
+    "planet_signs": "planet_signs",
+    "greek": "greek",
+    "norse": "norse",
+    "religion": "religion",
+    "religion_alt": "religion",
+    "profession": "profession",
+}
 WEEKDAY_THEME_FILES = {
     theme: {
         body: (

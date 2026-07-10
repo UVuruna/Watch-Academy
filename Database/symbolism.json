@@ -7,7 +7,7 @@
     "cross_cure": "Every body carries a bright and a dark face - a virtue and a vice. Across each axis of the star, one body's virtue is the cure for the opposite body's vice.",
     "professions": "Medieval astrology drew the 'children of the planets': each planet rules the callings born under it. The seven archetypal professions of the old world land one per body, and each snaps onto its body's virtue and vice.",
     "theological_trio": "Faith, Hope and Love are a separate set from the seven virtue/vice pairs (Love alone belongs to both, as in tradition). They span three kinds of places: Faith at the center (Sunday, toward God - the vertical), Hope on the dawn arm (west, toward what comes - the horizon), Love on Venus' arm (toward people - the human).",
-    "religion_alternates": "The owner's art holds twelve religions. The basic seven sit on the arms (Freemasonry on Tuesday, owner decision); the alternates each take the day they fit best: Druidism on Monday (lunar reckoning, groves and tides), Zoroastrianism on Tuesday (the fire Atar, asha as the courage of truth), Shamanism on Wednesday (the walker between worlds on the messenger's day; Odin on the tree is a shamanic initiation), Sikhism on Thursday (Guruvar taken literally - ten Gurus, langar generosity), Voodoo on Saturday (Baron Samedi, 'Baron Saturday', keeper of the crossroads and the dead). Sunday and Friday have no alternate yet - Christianity and Islam stand in both sets until the owner adds art (Shinto and Wicca proposed)."
+    "religion_alternates": "The owner's art holds fourteen religions in two full sets. The basic seven sit on the arms (Freemasonry on Tuesday, owner decision); the alternate seven each take the day they fit best: Ancient Egypt on Sunday (Ra reborn each dawn), Druidism on Monday (lunar reckoning, groves and tides), Zoroastrianism on Tuesday (the fire Atar, asha as the courage of truth), Shamanism on Wednesday (the walker between worlds on the messenger's day), Sikhism on Thursday (Guruvar taken literally - ten Gurus, langar generosity), Babylon on Friday (Ishtar IS Venus; Babylon invented the planetary week), Voodoo on Saturday (Baron Samedi, 'Baron Saturday', keeper of the crossroads)."
   },
   "center": {
     "day": "Sunday",
@@ -26,7 +26,8 @@
       "norse": "Sol (Sunna) is the Norse sun goddess, chased across the sky by the wolf Skoll; sunnudagr is her day.",
       "religion": "Christianity worships on the Lord's Day; in 321 Constantine made the 'day of the Sun' the day of rest, fusing Sun and Church in history. Sunday is also the day of Faith - with Hope at dawn and Love on Venus, the three theological virtues span the dial.",
       "color": "White-gold: the sum of all colors and the Sun's own metal.",
-      "virtue_vice": "Pride is the self at the center of everything; Humility is its only cure. The center heals itself."
+      "virtue_vice": "Pride is the self at the center of everything; Humility is its only cure. The center heals itself.",
+      "religion_alt": "Ancient Egypt set Ra's sun disc at the heart of three thousand years of faith - reborn each dawn, the source everything sails from, exactly where this dial keeps its white-gold center."
     }
   },
   "arms": [
@@ -49,7 +50,8 @@
         "norse": "Mani steers the Moon through the night, hunted by the wolf Hati until the world's end.",
         "religion": "The Buddhist calendar is lunar: Uposatha observance days follow the Moon's phases, and Vesak - the Buddha's birth, awakening and passing - falls on a full moon.",
         "color": "Blue is the still hour before dawn: moonlight on a sleeping world.",
-        "virtue_vice": "The Moon's bright face is Serenity, its dark face Fear - the night brings both peace and dread. Courage, from the opposite arm, is Fear's cure."
+        "virtue_vice": "The Moon's bright face is Serenity, its dark face Fear - the night brings both peace and dread. Courage, from the opposite arm, is Fear's cure.",
+        "religion_alt": "The druids reckoned time by the Moon - groves, tides and the lunar count of nights; the serenity of the sacred wood, and the fear of its dark."
       }
     },
     {
@@ -71,7 +73,8 @@
         "norse": "Tyr, god of war AND justice, gave his right hand to bind the wolf Fenrir - courage in the service of order.",
         "religion": "Freemasonry is sworn on oaths - and Tyr, this arm's god, gave his hand to seal one. The square and compasses build the inner temple with a soldier's discipline: Courage set to work, Wrath bound by ritual.",
         "color": "Orange is the working afternoon: the ember of the day's fire.",
-        "virtue_vice": "Mars carries both Courage and Wrath - the same fire that defends can destroy. Serenity, from the Moon's arm, quells Wrath; Courage cures the Moon's Fear."
+        "virtue_vice": "Mars carries both Courage and Wrath - the same fire that defends can destroy. Serenity, from the Moon's arm, quells Wrath; Courage cures the Moon's Fear.",
+        "religion_alt": "Zoroastrianism keeps the sacred fire Atar burning, and its heart is asha - truth and justice - the courage of the flame against the lie."
       }
     },
     {
@@ -93,7 +96,8 @@
         "norse": "Odin hung nine nights on the world-tree and gave an eye at Mimir's well - all of it for wisdom. Wednesday is literally Wodnesdaeg, his day.",
         "religion": "In the East Asian week Wednesday is the day of the water star - and water is the Tao's central image: the soft thing that overcomes the hard, the way that flows without striving.",
         "color": "Purple is midnight: the mourning color, the day's grave and its deepest mystery.",
-        "virtue_vice": "Mercury's bright face is Wisdom, its dark face Greed - the merchant god counts both coins and stars. Generosity, from Jupiter's arm, cures Greed; Wisdom curbs Jupiter's Excess."
+        "virtue_vice": "Mercury's bright face is Wisdom, its dark face Greed - the merchant god counts both coins and stars. Generosity, from Jupiter's arm, cures Greed; Wisdom curbs Jupiter's Excess.",
+        "religion_alt": "The shaman walks between worlds on the messenger's day - Odin hanging on the tree for wisdom is itself a shamanic initiation."
       }
     },
     {
@@ -115,7 +119,8 @@
         "norse": "Thor, thunder itself, guards gods and men with the hammer Mjolnir; thorsdagr became Thursday.",
         "religion": "In Hindu tradition Thursday IS Brihaspativar: Brihaspati, guru of the gods, is the planet Jupiter itself, and his day is the week's most devotional.",
         "color": "Yellow is noon at the top of the dial - and 'jovial', joyful, literally means 'of Jupiter'.",
-        "virtue_vice": "Jupiter's bright face is Generosity - the open royal hand; its dark face is Excess, the jovial table overflowing. Wisdom, from Mercury's arm, curbs Excess; Generosity cures Greed."
+        "virtue_vice": "Jupiter's bright face is Generosity - the open royal hand; its dark face is Excess, the jovial table overflowing. Wisdom, from Mercury's arm, curbs Excess; Generosity cures Greed.",
+        "religion_alt": "Sikhism takes Guruvar literally - a faith of ten Gurus whose daily practice is langar, generosity served at a common table."
       }
     },
     {
@@ -137,7 +142,8 @@
         "norse": "Freya, goddess of love and of the slain, rides a chariot drawn by cats and weeps tears of gold; frjadagr is her day.",
         "religion": "Islam gathers on Friday: Jumu'ah, the congregational prayer, makes this the blessed day of the week.",
         "color": "Red is the evening: the sunset's blood-glow, the hour when Venus rises.",
-        "virtue_vice": "Venus carries Love and its shadow Jealousy - the fear of losing what is loved. Patience, from Saturn's arm, heals Jealousy; Love dissolves Saturn's Envy."
+        "virtue_vice": "Venus carries Love and its shadow Jealousy - the fear of losing what is loved. Patience, from Saturn's arm, heals Jealousy; Love dissolves Saturn's Envy.",
+        "religion_alt": "Babylon named the planets gods and gave this clock its seven-day week; Ishtar IS Venus - the evening star, love and war in one body."
       }
     },
     {
@@ -159,7 +165,8 @@
         "norse": "Loki stands on Saturday (owner canon): the bound trickster, chained beneath the serpent venom as Cronus was cast down - the north gave its rest day to the god who never rests. His envy of Baldr brought the brightest god down.",
         "religion": "Shabbat is Judaism's seventh day of rest - and in Hebrew the planet Saturn is named Shabtai, after the Sabbath itself: the day named the planet.",
         "color": "Green is the morning: dew, growth, the week renewing itself on the day of rest.",
-        "virtue_vice": "Saturn, keeper of time, teaches Patience; his shadow is Envy, the bitter green of wanting what another has. Love, from Venus' arm, dissolves Envy; Patience heals Jealousy."
+        "virtue_vice": "Saturn, keeper of time, teaches Patience; his shadow is Envy, the bitter green of wanting what another has. Love, from Venus' arm, dissolves Envy; Patience heals Jealousy.",
+        "religion_alt": "Voodoo's keeper of the crossroads is Baron Samedi - Baron Saturday by name - the patience of the grave and the envy of the living."
       }
     }
   ],
@@ -695,6 +702,30 @@
           "octa_light": "The luminous octagram fans out eight rays, and the Saturn body holds its calm renewal among them like a candle set on a grave at Fet Gede. In light the mood turns from soil to flame-glow: small emitted brightnesses insisting that the dead are not gone, only standing elsewhere on the wheel.",
           "cross": "On the seasons cross the Saturn body at hour 8 flanks the dawn arm - the spring equinox side, shared with the Moon. Spring is this faith's deepest teaching made season: the Ghede who rule the grave rule fertility too, and nothing sprouts that was not first buried. Dawn out of the cemetery is Vodou's whole hope.",
           "trio": "On the Trinity pointer the Saturn body stands on the Faith arm, bright yellow, guarding 12h to 20h beside Jupiter. Vodou's faith is service, sevis lwa - a reciprocal bond: feed the spirits and they hold your world steady. Even the Baron, joking at death's gate, is trusted utterly to open it."
+        }
+      },
+      "sun": {
+        "name": "Ancient Egyptian religion (Egypt)",
+        "base": "The religion of ancient Egypt watched the sky for three thousand years and set the Sun at the heart of everything: Ra sailed his barque across the day, grew old by dusk, died into the underworld and was reborn every dawn - the oldest telling of the cycle this dial turns through.\n\nThe owner's medallion gives the god in gold: the falcon-headed Ra-Horakhty in the striped royal headdress, the blazing sun disc above his brow encircled by the cobra Wadjet, hieroglyphs running down his collar; the rim weaves ankhs - the key of life - with the Eye of Horus, gold on silver over lapis blue.\n\nIt guards Sunday as the day's eldest owner: no faith wove the Sun so completely into kingship, temple and tomb, and the white-gold CENTER of the dial - the source all six colors decompose from - is precisely where Egypt put Ra, the sum the other gods flowed into and out of.\n\nThe center pairs Humility with Pride, and Egypt staged that axis as no one else: pharaohs called themselves sons of Ra, yet every soul - royal or not - ended before the scales, its heart weighed against the feather of Ma'at. Pride built the pyramids; humility was the feather they were answerable to.",
+        "variants": {
+          "hexa_paint": "On the paint hexa Egypt holds the unmixable white-gold center. Pigment cannot blend its way to white - and Egyptian art knew it: tomb painters kept their gold as leaf, laid on, not mixed. The source is given from above, which is the whole Ra theology in a painter's fact.",
+          "hexa_light": "In the light world six beams sum to white at the hub, and Egypt's seat becomes literal physics: Ra at dawn pouring out every color the day will use. The medallion's radiant disc over the falcon's head is exactly this - emission, not surface.",
+          "octa_paint": "On the eight-pointed octa wheel Egypt would smile at the count: eight were the primordial gods of Hermopolis, the Ogdoad, who existed before the first sunrise. Eight pigment arms around the hub, and the Sun still breaks from their middle - creation retold in paint.",
+          "octa_light": "The octa light star rings the hub with eight beams, and Egypt read sunbeams as hands: Akhenaten's Aten reached down with little palms at the end of every ray, light literally giving life. Eight glowing arms from a white center is an Amarna relief drawn by a clock.",
+          "cross": "On the seasons cross Egypt keeps the crossing where the four arms meet. Its own year knew three seasons - flood, sowing, harvest, all timed by the Nile and the rising of Sirius - but every one of them was counted from the Sun's house: the center, where this faith always stood.",
+          "trio": "On the Trinity pointer the Sun keeps the center and the theme of Faith rises vertically from it - and Egypt built that vertical in stone: the obelisk is a petrified sunbeam, a single shaft of Ra planted in the earth. Faith, Hope and Love fan out from the same disc his falcon carries."
+        }
+      },
+      "venus": {
+        "name": "Babylonian religion (Babylon)",
+        "base": "Babylon's faith made the planets gods and the gods mathematics: its priests watched Venus from ziggurat tops, pressed her risings into clay, and named the seven days after the seven wanderers - the very week this clock still keeps was Babylon's invention.\n\nThe owner's medallion is Ishtar entire: her eight-pointed star in burning copper, cuneiform running down the rays, the sign of Venus set in its heart; beneath it strides her lion - the same beast that paced the Processional Way in glazed brick - and the silver rim parades lions' heads between palm fronds on a starry lapis night.\n\nIt guards Friday by identity, not analogy: Ishtar IS Venus, morning and evening star, and Friday is Venus' day in every tongue that kept the planetary week. The red 20h arm, Passion's hour, is her exact address - the evening star lighting the first hour of the night.\n\nThe arm pairs Love with Jealousy, and no goddess carried both more openly: goddess of love AND war in one body, who, refused by Gilgamesh, loosed the Bull of Heaven on his city. The Artist shares her arm - and Babylon's artists answered her with the most beautiful bricks ever fired.",
+        "variants": {
+          "hexa_paint": "On the paint hexa Babylon wears the deep red of Venus' 20h arm as pigment - kiln-fired, like the city itself: glazed brick reds and golds burned permanent in the Ishtar Gate. Love as a material you can build walls from, jealousy as the same fire left untended.",
+          "hexa_light": "In the light world the red arm becomes emission - and Ishtar was always light first: the evening star, the one lamp lit before all others in the darkening sky. Her medallion star glows copper against lapis night exactly as Venus does at dusk.",
+          "octa_paint": "The octa pointer is Babylon's own emblem drawn large: the star of Ishtar has EIGHT points, and here the whole dial wears her sign. On the pigment wheel her body keeps Venus' seat among the eight arms - the goddess recognizing her own geometry.",
+          "octa_light": "Eight beams around the hub - the light octa renders Ishtar's eight-pointed star as radiance, which is how Babylon actually met her: not as paint but as the brightest wanderer, rising and setting on schedules her astronomers could finally predict.",
+          "cross": "On the seasons cross Venus' body shares the autumn arm with Mars - love and war side by side, which for Babylon is no pairing at all but one goddess: Ishtar owned both. Autumn suits her too - the harvest festivals when the evening star stood longest over the city.",
+          "trio": "On the Trinity pointer her body stands on the red arm of Love, paired with Mars - and Babylon would call that arm simply 'Ishtar', love and war in one body, guarding the night third where the evening star reigns. Love as the theology of the first hour of darkness."
         }
       }
     }

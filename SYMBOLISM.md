@@ -123,9 +123,13 @@ Why each religion sits on its day:
 - **Saturday — Judaism**: Shabbat — and in Hebrew the planet Saturn is
   named *Shabtai*, after the Sabbath itself.
 
-The owner's art holds TWELVE religions; the five beyond the basic
-seven are the ALTERNATE set, each on the day it fits best:
+The owner's art holds FOURTEEN religions in two full sets; the seven
+beyond the basic set are the ALTERNATE set ("Religions II" in the
+menu), each on the day it fits best:
 
+- **Sunday — Ancient Egypt**: Ra reborn each dawn — no faith wove the
+  Sun so completely into kingship, temple and tomb; the heart weighed
+  against Ma'at's feather is the center's own Humility-Pride axis.
 - **Monday — Druidism**: groves, tides and the lunar reckoning of
   time; the Moon's serenity is the druid's, fear of the dark wood its
   shadow.
@@ -138,13 +142,12 @@ seven are the ALTERNATE set, each on the day it fits best:
 - **Thursday — Sikhism**: the Guru's day (*Guruvar*) taken literally —
   a faith built on ten Gurus, langar generosity as its practice, the
   arm's Excess its warned-against opposite.
+- **Friday — Babylon**: Ishtar IS Venus — the evening star, love and
+  war in one goddess; Babylon named the planets gods and invented the
+  seven-day planetary week this clock still keeps.
 - **Saturday — Voodoo**: Baron Samedi — "Baron Saturday" by name —
   keeper of the crossroads and the dead, patience of the grave, envy
   of the living.
-
-Sunday and Friday have no alternate yet (Christianity and Islam stand
-in both sets until the owner adds art — Shinto and Wicca were
-proposed).
 
 Norse note: Old Norse gave Saturday no god of its own (*laugardagr*,
 "washing day") — the owner's canon seats **Loki** there: the bound
