@@ -22,6 +22,10 @@ submenus cannot express:
   preset; clicking a chip opens QColorDialog. Edited palettes are saved
   as the user's custom preset for that combination ("Reset" returns to
   the owner preset).
+- **Ring tint** — one hue for the whole clock body (ring art, hands,
+  Umbra; the letter art stays untouched): preset chips from
+  `defaults.RING_TINT_PRESETS` (owner-tunable starting values, "Gray"
+  = the untouched art) plus a free QColorDialog picker.
 
 OK applies and persists everything; Cancel discards. The dialog loads
 the location tree on open and releases it on close (the repository's
@@ -42,7 +46,7 @@ documented lifecycle).
 ## Classes
 
 ### SettingsDialog
-- `__init__(settings, skin)`: builds the three groups prefilled from
+- `__init__(settings, skin)`: builds the four groups prefilled from
   the current settings (combos restored from the stored city path)
 - `result_settings() -> Settings`: the edited values as a new frozen
   Settings (valid only after Accepted)

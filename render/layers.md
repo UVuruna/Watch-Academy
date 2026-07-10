@@ -72,7 +72,9 @@ per-pixel conical sweep, mirror-symmetric). Shade values come from
 0..255 (16 → step 17); "half"/"light"/"dark" take the bin centers of
 their half-windows — middle 64..192 (188..68), bright 128..255
 (252..132), dark 0..127 (124..4), all exact step 8; the gradient
-sweeps the same spans continuously.
+sweeps the same spans continuously. Under a ring tint every gray is
+channel-multiplied by the hue (`tinted_gray`) — the Umbra follows the
+clock body's recolor; the hands do the same through the asset cache.
 
 ### StarLayer (DAILY)
 Procedural N-diamond star (N = pointer arm count; arm half-angles from
@@ -85,9 +87,12 @@ the full circle so the night diamonds stay recognizable; the FILLS
 top tip IS the solar-noon pointer.
 
 ### RingLayer (STATIC)
-The full ring image when the skin provides one (numerals, minutes and
-letters baked into the art); otherwise the procedural donut with ticks,
-numerals, letter substitutions and minute numbers.
+The full ring image when the skin provides one (numerals and minutes
+baked into the art), channel-multiplied by the ring tint, with the
+owner's gold/silver LETTER art overlaid by calculation
+(`RING_LETTER_RADIUS_FRACTION` / `RING_LETTER_ART_SCALE`) so the tint
+never touches the letters; otherwise the procedural donut with ticks,
+numerals, letter substitutions and minute numbers (untinted fallback).
 
 ### WeekdayLayer (DAILY)
 "ghost": bodies on the pointer's slots at `slot angle +

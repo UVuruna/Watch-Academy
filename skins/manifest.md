@@ -30,7 +30,9 @@ the ring preset and the user's display choices onto it at build time.
   `earth_style` ("clean" | "atmo") and the six Elements switches
   (`show_earth`, `show_moon`, `show_weekday`, `show_pointer`,
   `colorful` — off draws the Aura as plain white transparency —
-  and `show_seconds`)
+  and `show_seconds`), plus the ring recolor pair: `ring_tint`
+  (#RRGGBB multiplying ring art + hands + Umbra; None = gray art) and
+  `ring_finish` ("gold" | "silver" letter art, Omega inverted)
 - `BackgroundSpec` — the Umbra (custom art, or None for the procedural
   30-section wheel: single lightest/darkest sections centered on
   noon/midnight) + the Aura (transparent period hues from the palette
@@ -39,8 +41,11 @@ the ring preset and the user's display choices onto it at build time.
   geometry is drawn at runtime, no image file): day/twilight alphas,
   full-circle border alpha/width, tip radius; colors come from the
   palette preset shared with the Aura
-- `RingSpec` — full ring image (numerals/letters baked in) or procedural
-  fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20)
+- `RingSpec` — full ring image (numerals baked in) or procedural
+  fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20);
+  `letter_art` (hour → resolved gold/silver PNG, built by build_skin
+  for the active finish) is overlaid on the art so the ring TINT never
+  touches the letters
 - `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit
 - `YearMarkerSpec` — Earth day+night variants per continent on the year

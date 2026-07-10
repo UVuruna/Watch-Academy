@@ -55,7 +55,8 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   #6) nesting Octa slot (nine modes; grayed out unless the octa
   pointer is active — `_set_display_choice` flips it on pointer
   change), Weekday (Planets / Planet signs / Greek gods / Norse gods /
-  Religions / Professions), Ring (DOMY/MORPH presets), Pointer (two
+  Religions / Professions), Ring (DOMY/MORPH presets + the Gold/Silver
+  letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Compass variant — the owner's display
   names for trio/cross/hexa/octa — + Paint/Light palette) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark

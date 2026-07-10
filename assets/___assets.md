@@ -7,6 +7,10 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
 📁 assets/
   🖼️ logo.svg              ← project logo (M7; also copied to monorepo logos/)
   📁 ring/                 ← dial ring faces: domy.png, morph.png (+ future rings)
+    📁 letters/            ← the owner's letter art, {M,D,Y,P,H,Omega}_{gold,silver}.png
+                             (12 files, 1×1 placeholders until extracted from the ring) —
+                             overlaid by calculation so the ring TINT never touches them;
+                             the finish choice flips the metals (Omega always the inverse)
   📁 hands/                ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
   📁 earth/                ← earth_{clean|atmo}_{continent}_{day|night}.png

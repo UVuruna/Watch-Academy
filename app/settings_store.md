@@ -22,7 +22,9 @@ plus the additive keys; the city picker arrives with M6.
 Frozen dataclass: `schema_version`, `window_x`/`window_y` (`None` = first
 run), `diameter`, plus the additive keys (still schema 1 — absent in
 older files they take their defaults): `click_through` (False), `ring`
-("domy" — the ring preset), and the display choices, each validated against its closed
+("domy" — the ring preset), `ring_tint` (None or #RRGGBB — the whole-body
+recolor), `ring_finish` ("gold" | "silver" letter art), and the display
+choices, each validated against its closed
 set (a bad value would otherwise KeyError inside a paint pass, where Qt
 swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 `umbra_contrast` ("full"), `palette_style` ("paint"), `solar_rotation`
