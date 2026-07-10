@@ -333,6 +333,28 @@ def test_day_and_night_period_hovers(july_wednesday):
     assert "Sunset" in at_night and "Dawn" in at_night
 
 
+def test_arm_hover_only_inside_the_diamond(july_wednesday):
+    """Owner bug report: the diamond hover must not swallow the wheel —
+    BETWEEN the arms the Aura/Umbra day-night hover answers; the arm
+    text appears only inside the drawn diamond polygon."""
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, solar_rotation=False,
+            show_weekday=False, show_earth=False, show_moon=False,
+        ),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    on_arm = compositor.tooltip_at(180.0, 72.0, 360.0)     # top arm axis, 0.6R
+    assert "Gemini" in on_arm                              # diamond answers
+    # Dial 30 deg (between the 0 and 60 arms) at 0.7R: the gap — the
+    # day hover answers there (14h is deep in the July daylight arc).
+    between = compositor.tooltip_at(243.0, 70.9, 360.0)
+    assert between is not None and "Day 15h" in between
+    assert "Gemini" not in between and "Leo" not in between
+
+
 def test_ghost_body_hover_shows_the_article_alone(july_wednesday):
     """Hover rework: ghost (non-current) bodies are hover targets too,
     showing their article WITHOUT the date line (owner spec) — probed on

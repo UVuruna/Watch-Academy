@@ -13,7 +13,7 @@ import textwrap
 from datetime import datetime, time, timedelta
 
 from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QImage, QPainter, QPixmap
+from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
 from config import constants, defaults
 from data.symbolism import SymbolismRepository
@@ -379,6 +379,22 @@ class Compositor:
         arms = constants.POINTER_POINTS[self._skin.pointer]
         arm_step = 360.0 / arms
         arm_angle = (round(((theta - rotation) % 360.0) / arm_step) * arm_step) % 360.0
+        # Only INSIDE the drawn diamond (owner bug report): between the
+        # arms the wheel itself answers — the Aura's day or the Umbra's
+        # night. Same polygon as StarLayer draws.
+        half = constants.POINTER_ARM_HALF_ANGLE_DEG[self._skin.pointer]
+        inner = star_tip / (2.0 * math.cos(math.radians(half)))
+        drawn = arm_angle + rotation
+        diamond = QPolygonF(
+            [
+                QPointF(0.0, 0.0),
+                dial_point(drawn - half, inner),
+                dial_point(drawn, star_tip),
+                dial_point(drawn + half, inner),
+            ]
+        )
+        if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
+            return None
         star = "*" if self._skin.solar_rotation else ""
 
         if self._skin.pointer == "hexa":
