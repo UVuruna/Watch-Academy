@@ -118,6 +118,57 @@ def test_colorful_off_paints_the_aura_white(july_wednesday):
     ) < 12                                      # white transparency stays neutral
 
 
+def test_element_scales_flow_into_the_specs():
+    """Owner EXTRAS: the Settings size multipliers scale the spec values
+    (so the render AND the hover hit regions follow), and the octa slot
+    and hover-enlarge factors ride the skin fields."""
+    from app.controller import build_skin
+    from app.settings_store import Settings, replace
+
+    base = build_skin(Settings())
+    scaled = build_skin(
+        replace(
+            Settings(),
+            earth_scale=2.0, moon_scale=0.5,
+            weekday_scale=1.5, octa_slot_scale=0.8, hover_enlarge=1.4,
+        )
+    )
+    assert scaled.year_marker.scale == base.year_marker.scale * 2.0
+    assert scaled.year_marker.moon_scale == base.year_marker.moon_scale * 0.5
+    assert scaled.weekday_set.diamond_scale == base.weekday_set.diamond_scale * 1.5
+    assert scaled.weekday_set.center_scale == base.weekday_set.center_scale * 1.5
+    assert scaled.octa_slot_scale == 0.8
+    assert scaled.hover_enlarge == 1.4
+
+
+def test_hover_enlarge_grows_the_hovered_body(july_wednesday):
+    """Hovering a weekday body draws IT larger (one shared factor,
+    owner EXTRAS): with the cursor parked on Jupiter's top slot the
+    body's pixels reach beyond its normal radius."""
+    day, tick = july_wednesday
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, solar_rotation=False,
+        show_earth=False, show_moon=False, hover_enlarge=1.6,
+    )
+    compositor = Compositor(skin, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    spec = defaults.DEFAULT_SKIN.weekday_set
+    orbit = 180.0 * spec.orbit_fraction
+    body_edge_px = 180.0 * spec.diamond_scale        # normal half-size
+    # A probe just OUTSIDE the normal body edge, on the vertical above
+    # the center, inside the top slot direction.
+    probe = (180, round(180.0 - orbit - body_edge_px - 4))
+    plain = compositor.render_offscreen(360.0, 1.0, day, tick)
+    assert compositor.set_hover(180.0, 180.0 - orbit, 360.0)
+    hovered = compositor.render_offscreen(360.0, 1.0, day, tick)
+    # Just outside the body's normal edge: only the ENLARGED render
+    # reaches the probe, so the pixel changes under the hover.
+    assert hovered.pixelColor(*probe) != plain.pixelColor(*probe)
+    assert compositor.set_hover(-1.0e9, -1.0e9, 360.0)   # leave clears it
+    cleared = compositor.render_offscreen(360.0, 1.0, day, tick)
+    assert cleared.pixelColor(*probe) == plain.pixelColor(*probe)
+
+
 def test_hidden_elements_take_no_hovers(july_wednesday):
     """A switched-off element must not answer hovers: the Wednesday body
     slot (weekday off) and the arm regions (pointer off) go silent —

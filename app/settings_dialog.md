@@ -22,6 +22,10 @@ submenus cannot express:
   preset; clicking a chip opens QColorDialog. Edited palettes are saved
   as the user's custom preset for that combination ("Reset" returns to
   the owner preset).
+- **Element sizes** (owner EXTRAS) — four multiplier sliders (Earth,
+  Moon, Weekday, Octa slot; 50–200%, default 100%) plus the shared
+  Hover enlarge slider (100–200%, default 120% — the element under
+  the cursor grows by it; 100% disables the effect).
 - **Ring tint** — one hue for the whole clock body (ring art, hands,
   Umbra; the letter art stays untouched): preset chips from
   `defaults.RING_TINT_PRESETS` (owner-tunable starting values, "Gray"

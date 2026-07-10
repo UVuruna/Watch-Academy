@@ -75,6 +75,14 @@ def apply_display_settings(skin, settings: Settings):
             * (star.twilight_alpha / star.day_alpha),
         )
     weekday = skin.weekday_set
+    if settings.weekday_scale != 1.0:
+        # Element size multipliers (owner EXTRAS) scale the spec values
+        # directly, so the render AND the hover hit regions follow.
+        weekday = dataclasses.replace(
+            weekday,
+            diamond_scale=weekday.diamond_scale * settings.weekday_scale,
+            center_scale=weekday.center_scale * settings.weekday_scale,
+        )
     if settings.weekday_theme != "planets":
         # Themed bodies (SYMBOLISM.md canon): swap in the shared themed
         # art (files carry the ENTITY names) and the canon display
@@ -108,11 +116,19 @@ def apply_display_settings(skin, settings: Settings):
                 else background.twilight_alpha
             ),
         )
+    marker = skin.year_marker
+    if settings.earth_scale != 1.0 or settings.moon_scale != 1.0:
+        marker = dataclasses.replace(
+            marker,
+            scale=marker.scale * settings.earth_scale,
+            moon_scale=marker.moon_scale * settings.moon_scale,
+        )
     return dataclasses.replace(
         skin,
         star=star,
         background=background,
         weekday_set=weekday,
+        year_marker=marker,
         pointer=settings.pointer,
         umbra_form=settings.umbra_form,
         umbra_contrast=settings.umbra_contrast,
@@ -130,6 +146,8 @@ def apply_display_settings(skin, settings: Settings):
         show_seconds=settings.show_seconds,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
+        octa_slot_scale=settings.octa_slot_scale,
+        hover_enlarge=settings.hover_enlarge,
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
         ),
@@ -677,7 +695,17 @@ class AppController(QObject):
         local = self._widget.mapFromGlobal(cursor)
         size = float(min(self._widget.width(), self._widget.height()))
         tip = None
-        if 0 <= local.x() < self._widget.width() and 0 <= local.y() < self._widget.height():
+        inside = (
+            0 <= local.x() < self._widget.width()
+            and 0 <= local.y() < self._widget.height()
+        )
+        if self._compositor.set_hover(
+            local.x() if inside else -1.0e9,
+            local.y() if inside else -1.0e9,
+            size,
+        ):
+            self._widget.update()       # hover-enlarge in click-through mode
+        if inside:
             tip = self._compositor.tooltip_at(local.x(), local.y(), size)
         if tip:
             if tip != self._last_hover_tip:

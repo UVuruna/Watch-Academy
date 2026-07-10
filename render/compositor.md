@@ -28,6 +28,13 @@ draws the MINUTE layers (hands, year marker) live.
   raises if called before the first day context (startup order is a
   controller guarantee)
 - `render_offscreen(size, dpr, day, tick) -> QImage`: same path, headless
+- `set_hover(x, y, size) -> bool`: tracks the element under the cursor
+  for the HOVER-ENLARGE effect (owner EXTRAS — one shared factor draws
+  it larger); True = target changed, the widget repaints (weekday
+  bodies live in the DAILY composite, so one rebuild per change).
+  `_element_at()` is the ONE geometry shared with the tooltips
+  (body/octa slot/moon/earth, in hover priority); legend off or a
+  factor of 1.0 keeps the dial inert
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes), in priority order — the WEEKDAY

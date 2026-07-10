@@ -25,7 +25,10 @@ older files they take their defaults): `click_through` (False), `ring`
 ("domy" — the ring preset), `ring_tint` (None or #RRGGBB — the whole-body
 recolor), `ring_finish` ("gold" | "silver" letter art), and the display
 choices, each validated against its closed
-set (a bad value would otherwise KeyError inside a paint pass, where Qt
+set, the element size multipliers `earth_scale` / `moon_scale` /
+`weekday_scale` / `octa_slot_scale` (1.0, range 0.5–2.0) and
+`hover_enlarge` (1.2, range 1.0–2.0 — the element under the cursor
+grows by it; 1.0 disables the effect) (a bad value would otherwise KeyError inside a paint pass, where Qt
 swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 `umbra_contrast` ("full"), `palette_style` ("paint"), `solar_rotation`
 (True), `octa_slot` ("time"), `earth_style` ("clean"), `weekday_theme`

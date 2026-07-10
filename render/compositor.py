@@ -147,6 +147,7 @@ class Compositor:
         self._last_tick: TickState | None = None
         self._composite: QPixmap | None = None
         self._composite_key: tuple | None = None
+        self._hovered: str | None = None    # hover-enlarge target
 
     def set_day(self, day: DayContext) -> None:
         self._day = day
@@ -177,7 +178,7 @@ class Compositor:
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=tick,
             radius=size / 2, cache=self._cache, dpr=dpr,
-            rotation=self._rotation(),
+            rotation=self._rotation(), hovered=self._hovered,
         )
         for layer in self._layers:
             if layer.cadence is Cadence.MINUTE:
@@ -200,46 +201,26 @@ class Compositor:
             return None
         radius = size / 2
         point = QPointF(x - radius, y - radius)      # center-origin
-        day, tick = self._day, self._last_tick
         rotation = self._rotation()
+        today = constants.WEEKDAY_BODIES[self._day.weekday_index]
 
-        def hit(center: QPointF, hit_radius: float) -> bool:
-            dx, dy = point.x() - center.x(), point.y() - center.y()
-            return dx * dx + dy * dy <= hit_radius * hit_radius
-
-        today = constants.WEEKDAY_BODIES[day.weekday_index]
-        if self._skin.show_weekday:
-            # Weekday hover rework (owner spec): the ACTIVE body leads
-            # with the date, ghosts show their article alone — each only
-            # within its own image region.
-            body = self._weekday_body_at(point, radius, rotation, today)
-            if body is not None:
+        element = self._element_at(point, radius, rotation, today)
+        if element is not None:
+            if element.startswith("body:"):
+                # Weekday hover rework (owner spec): the ACTIVE body
+                # leads with the date, ghosts show their article alone.
+                body = element[len("body:"):]
                 return self._weekday_tooltip(body, active=body == today)
-
-        if self._skin.pointer == "octa" and self._skin.show_pointer and (
-            self._skin.octa_slot.startswith("zodiac")
-            or self._skin.octa_slot.startswith("chinese")
-        ):
-            slot_pos = dial_point(
-                constants.OCTA_TIME_SLOT_ANGLE + rotation,
-                radius * self._skin.weekday_set.orbit_fraction,
-            )
-            if hit(slot_pos, radius * self._skin.weekday_set.diamond_scale):
-                if self._skin.octa_slot.startswith("chinese"):
-                    return self._chinese_text()
-                return self._zodiac_text()
-
-        marker = self._skin.year_marker
-        moon_angle = angles.moon_cycle_angle(day.moon_fraction)
-        if self._skin.show_moon:
-            moon_pos = dial_point(moon_angle, radius * marker.moon_orbit_fraction)
-            if hit(moon_pos, radius * marker.moon_scale):
+            if element == "moon":
                 return self._moon_text()
-        if self._skin.show_earth and hit(
-            dial_point(tick.year_angle, radius * marker.orbit_fraction),
-            radius * marker.scale,
-        ):
-            return self._earth_text()
+            if element == "earth":
+                return self._earth_text()
+            if self._skin.octa_slot.startswith("chinese"):
+                return self._chinese_text()
+            if self._skin.octa_slot.startswith("zodiac"):
+                return self._zodiac_text()
+            # The time/date/day-length slot has no tooltip of its own —
+            # fall through to the region hovers.
 
         # Twilight bands BEFORE the arm hovers (owner: the dawn/dusk
         # info must never be shadowed — e.g. by a glowing quarter moon
@@ -254,6 +235,71 @@ class Compositor:
         # Last in the chain (owner rework 5 & 6): the sunlit arc answers
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
+
+    def _element_at(
+        self, point: QPointF, radius: float, rotation: float, today: str
+    ) -> str | None:
+        """The enlargeable element under the cursor, in hover priority
+        (Rule #5: ONE geometry shared by the tooltips and the
+        hover-enlarge effect): a weekday body ("body:<name>"), the octa
+        info slot, the Moon, the Earth."""
+
+        def hit(center: QPointF, hit_radius: float) -> bool:
+            dx, dy = point.x() - center.x(), point.y() - center.y()
+            return dx * dx + dy * dy <= hit_radius * hit_radius
+
+        if self._skin.show_weekday:
+            body = self._weekday_body_at(point, radius, rotation, today)
+            if body is not None:
+                return f"body:{body}"
+        weekday = self._skin.weekday_set
+        if self._skin.pointer == "octa" and self._skin.show_pointer and hit(
+            dial_point(
+                constants.OCTA_TIME_SLOT_ANGLE + rotation,
+                radius * weekday.orbit_fraction,
+            ),
+            radius * weekday.diamond_scale * self._skin.octa_slot_scale,
+        ):
+            return "octa_slot"
+        marker = self._skin.year_marker
+        if self._skin.show_moon and hit(
+            dial_point(
+                angles.moon_cycle_angle(self._day.moon_fraction),
+                radius * marker.moon_orbit_fraction,
+            ),
+            radius * marker.moon_scale,
+        ):
+            return "moon"
+        if self._skin.show_earth and hit(
+            dial_point(self._last_tick.year_angle, radius * marker.orbit_fraction),
+            radius * marker.scale,
+        ):
+            return "earth"
+        return None
+
+    def set_hover(self, x: float, y: float, size: float) -> bool:
+        """Track the element under the cursor for the HOVER-ENLARGE
+        effect (owner EXTRAS) — returns True when the target changed and
+        the widget must repaint. Legend off keeps the dial fully inert;
+        a factor of 1.0 disables the effect."""
+        hovered = None
+        if (
+            self._day is not None
+            and self._last_tick is not None
+            and self._skin.legend
+            and self._skin.hover_enlarge > 1.0
+        ):
+            radius = size / 2
+            point = QPointF(x - radius, y - radius)
+            today = constants.WEEKDAY_BODIES[self._day.weekday_index]
+            hovered = self._element_at(point, radius, self._rotation(), today)
+        if hovered == self._hovered:
+            return False
+        self._hovered = hovered
+        # Weekday bodies live in the cached DAILY composite — one
+        # rebuild per hover change, not per frame.
+        self._composite = None
+        return True
 
     def _combo_key(self) -> str:
         """The (pointer, palette) combination the articles vary by —
@@ -723,7 +769,7 @@ class Compositor:
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
-            rotation=self._rotation(),
+            rotation=self._rotation(), hovered=self._hovered,
         )
         for layer in self._layers:
             if layer.cadence is not Cadence.MINUTE:

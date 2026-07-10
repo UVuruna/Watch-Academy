@@ -152,6 +152,12 @@ class SkinDefinition:
     # gold + silver Omega; silver = the inverse) — letters never tint.
     ring_tint: str | None = None
     ring_finish: str = "gold"
+    # EXTRAS (owner spec): the octa info slot's size multiplier (the
+    # Earth/Moon/Weekday multipliers scale their spec values directly
+    # in apply_display_settings) and the shared hover-enlarge factor —
+    # the element under the cursor draws this much larger.
+    octa_slot_scale: float = 1.0
+    hover_enlarge: float = 1.2
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None

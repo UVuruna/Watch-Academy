@@ -63,6 +63,14 @@ class Settings:
     latitude: float = defaults.DEFAULT_CITY["latitude"]
     longitude: float = defaults.DEFAULT_CITY["longitude"]
     timezone: str = defaults.DEFAULT_CITY["timezone"]
+    # Element size multipliers + the shared hover-enlarge factor
+    # (owner EXTRAS): 1.0 = the skin's own size; hovering an element
+    # draws it hover_enlarge times larger (1.0 disables the effect).
+    earth_scale: float = 1.0
+    moon_scale: float = 1.0
+    weekday_scale: float = 1.0
+    octa_slot_scale: float = 1.0
+    hover_enlarge: float = 1.2
     # Display overrides (None = the skin's own value). The Aura's
     # sunlight and twilight opacities are INDEPENDENT (owner spec).
     star_alpha: float | None = None
@@ -154,6 +162,11 @@ class SettingsStore:
                 longitude=longitude,
                 timezone=timezone,
                 ring_tint=ring_tint,
+                earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                moon_scale=_load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                weekday_scale=_load_scale(raw, "weekday_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                octa_slot_scale=_load_scale(raw, "octa_slot_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                hover_enlarge=_load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
                 star_alpha=_load_alpha(raw, "star_alpha"),
                 aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
                 aura_twilight_alpha=_load_alpha(raw, "aura_twilight_alpha"),
@@ -197,6 +210,11 @@ class SettingsStore:
                 "longitude": settings.longitude,
                 "timezone": settings.timezone,
             },
+            "earth_scale": settings.earth_scale,
+            "moon_scale": settings.moon_scale,
+            "weekday_scale": settings.weekday_scale,
+            "octa_slot_scale": settings.octa_slot_scale,
+            "hover_enlarge": settings.hover_enlarge,
             "star_alpha": settings.star_alpha,
             "aura_day_alpha": settings.aura_day_alpha,
             "aura_twilight_alpha": settings.aura_twilight_alpha,
@@ -215,6 +233,14 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
+
+
+def _load_scale(raw: dict, key: str, low: float, high: float, default: float) -> float:
+    """Size multiplier: absent = the default; out of range = corrupt."""
+    value = float(raw.get(key, default))
+    if not low <= value <= high:
+        raise ValueError(f"{key} {value} outside {low}..{high}")
+    return value
 
 
 def _load_alpha(raw: dict, key: str) -> float | None:

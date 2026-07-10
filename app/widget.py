@@ -85,16 +85,28 @@ class ClockWidget(QWidget):
 
     def mouseMoveEvent(self, event) -> None:
         if self._renderer is not None and self._tick is not None:
+            size = float(min(self.width(), self.height()))
+            if self._renderer.set_hover(
+                event.position().x(), event.position().y(), size
+            ):
+                self.update()           # hover-enlarge target changed
             tip = self._renderer.tooltip_at(
                 event.position().x(),
                 event.position().y(),
-                float(min(self.width(), self.height())),
+                size,
             )
             if tip:
                 QToolTip.showText(event.globalPosition().toPoint(), tip, self)
             else:
                 QToolTip.hideText()
         super().mouseMoveEvent(event)
+
+    def leaveEvent(self, event) -> None:
+        if self._renderer is not None and self._renderer.set_hover(
+            -1.0e9, -1.0e9, float(min(self.width(), self.height()))
+        ):
+            self.update()               # shrink the enlarged element back
+        super().leaveEvent(event)
 
     def contextMenuEvent(self, event) -> None:
         self._menu.exec(event.globalPos())

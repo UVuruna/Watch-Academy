@@ -51,6 +51,9 @@ class RenderContext:
     rotation: float = 0.0            # Star/Aura/Umbra/slot rotation: the solar
                                      # offset, or 0 in upright mode (the noon
                                      # marker stays solar — day.star_rotation)
+    hovered: str | None = None       # element under the cursor ("earth",
+                                     # "moon", "octa_slot", "body:<name>") —
+                                     # drawn hover_enlarge times larger
 
 
 def dial_point(theta_deg: float, distance: float) -> QPointF:
@@ -171,6 +174,12 @@ def draw_event_glow(painter: QPainter, pos: QPointF, marker_radius: float) -> No
     painter.setBrush(QBrush(gradient))
     painter.drawEllipse(pos, halo, halo)
     painter.restore()
+
+
+def hover_factor(ctx: "RenderContext", element: str) -> float:
+    """The hover-enlarge multiplier when `element` is under the cursor
+    (owner EXTRAS: one shared factor for every element), else 1.0."""
+    return ctx.skin.hover_enlarge if ctx.hovered == element else 1.0
 
 
 def visible_occupant(occupants: tuple[str, ...], today: str) -> str:
@@ -562,6 +571,7 @@ class WeekdayLayer(Layer):
             # The hexa and trio layouts center the Sun; on Sundays the
             # center pass draws it opaque above the hands instead.
             center_size = 2 * ctx.radius * spec.center_scale
+            center_size *= hover_factor(ctx, "body:sun")
             draw_weekday_body(
                 painter, ctx, "sun", QPointF(0, 0), center_size, spec.ghost_opacity
             )
@@ -571,7 +581,8 @@ class WeekdayLayer(Layer):
             body = visible_occupant(occupants, today)
             theta = slot_angle + ctx.rotation
             draw_weekday_body(
-                painter, ctx, body, dial_point(theta, orbit), slot_size,
+                painter, ctx, body, dial_point(theta, orbit),
+                slot_size * hover_factor(ctx, f"body:{body}"),
                 1.0 if body == today else spec.ghost_opacity,
             )
 
@@ -593,6 +604,7 @@ class CenterBodyLayer(Layer):
         ):
             return
         center_size = 2 * ctx.radius * spec.center_scale
+        center_size *= hover_factor(ctx, f"body:{today}")
         draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
 
 
@@ -622,7 +634,11 @@ class BottomSlotLayer(Layer):
         spec = self._skin.weekday_set
         theta = constants.OCTA_TIME_SLOT_ANGLE + ctx.rotation
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
-        slot_size = 2 * ctx.radius * spec.diamond_scale
+        slot_size = (
+            2 * ctx.radius * spec.diamond_scale
+            * ctx.skin.octa_slot_scale          # Settings size multiplier
+            * hover_factor(ctx, "octa_slot")
+        )
         mode = ctx.skin.octa_slot
         chinese_animal = ctx.day.chinese_name.split()[-1]
         if mode in constants.OCTA_SLOT_ART_DIRS:
@@ -675,19 +691,22 @@ class YearMarkerLayer(Layer):
                 if ctx.skin.show_earth
                 else 1.0
             )
+            factor = hover_factor(ctx, "moon")
             pos = dial_point(moon_angle, ctx.radius * spec.moon_orbit_fraction)
             if ctx.tick.moon_event is not None:
                 # ±6 h around a principal phase instant (owner spec).
-                draw_event_glow(painter, pos, ctx.radius * spec.moon_scale)
+                draw_event_glow(painter, pos, ctx.radius * spec.moon_scale * factor)
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
-            self._draw_moon(painter, ctx, pos, 2 * ctx.radius * spec.moon_scale)
+            self._draw_moon(
+                painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor
+            )
             painter.restore()
 
     def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
         pos = dial_point(ctx.tick.year_angle, ctx.radius * spec.orbit_fraction)
-        size = 2 * ctx.radius * spec.scale
+        size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
         if ctx.tick.season_event is not None:
             # ±12 h around a solstice/equinox instant (owner spec).
             draw_event_glow(painter, pos, size / 2)

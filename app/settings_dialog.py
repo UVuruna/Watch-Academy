@@ -59,6 +59,7 @@ class SettingsDialog(QDialog):
         layout = QVBoxLayout(self)
         layout.addWidget(self._build_location_group())
         layout.addWidget(self._build_opacity_group())
+        layout.addWidget(self._build_sizes_group())
         layout.addWidget(self._build_palette_group())
         layout.addWidget(self._build_ring_tint_group())
         buttons = QDialogButtonBox(
@@ -369,6 +370,42 @@ class SettingsDialog(QDialog):
         row.addWidget(reset)
         return slider, row
 
+    # --- Element sizes (owner EXTRAS) ------------------------------------------------
+
+    def _build_sizes_group(self) -> QGroupBox:
+        """Per-element size multipliers plus the shared hover-enlarge
+        factor (the element under the cursor grows by it; 100% = off)."""
+        group = QGroupBox("Element sizes")
+        form = QFormLayout(group)
+        self._size_sliders: dict[str, QSlider] = {}
+        rows = [
+            ("earth_scale", "Earth", constants.ELEMENT_SCALE_RANGE, 100),
+            ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100),
+            ("weekday_scale", "Weekday", constants.ELEMENT_SCALE_RANGE, 100),
+            ("octa_slot_scale", "Octa slot", constants.ELEMENT_SCALE_RANGE, 100),
+            ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120),
+        ]
+        for key, title, (low, high), default in rows:
+            slider = QSlider(Qt.Orientation.Horizontal)
+            slider.setRange(round(low * 100), round(high * 100))
+            value = round(getattr(self._settings, key) * 100)
+            slider.setValue(value)
+            label = QLabel(f"{value}%")
+            slider.valueChanged.connect(
+                lambda new_value, lab=label: lab.setText(f"{new_value}%")
+            )
+            reset = QPushButton("Default")
+            reset.clicked.connect(
+                lambda checked, s=slider, d=default: s.setValue(d)
+            )
+            row = QHBoxLayout()
+            row.addWidget(slider)
+            row.addWidget(label)
+            row.addWidget(reset)
+            self._size_sliders[key] = slider
+            form.addRow(title, row)
+        return group
+
     # --- Palette --------------------------------------------------------------------
 
     def _build_palette_group(self) -> QGroupBox:
@@ -489,4 +526,8 @@ class SettingsDialog(QDialog):
             ),
             palettes=palettes,
             ring_tint=self._ring_tint,
+            **{
+                key: slider.value() / 100
+                for key, slider in self._size_sliders.items()
+            },
         )

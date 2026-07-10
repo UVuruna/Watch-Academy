@@ -322,6 +322,12 @@ ZONE_SEASON_EVENT_NAMES = {
     },
 }
 
+# Element size multipliers (Settings sliders, owner EXTRAS) and the
+# shared hover-enlarge factor (the element under the cursor draws this
+# much larger; 1.0 disables the effect).
+ELEMENT_SCALE_RANGE = (0.5, 2.0)
+HOVER_ENLARGE_RANGE = (1.0, 2.0)
+
 # The tropics span the Tropic of Cancer to the Tropic of Capricorn;
 # their year splits into WET and DRY halves bounded by the equinoxes
 # (owner decision) — the wet half centers on the hemisphere's high sun.

@@ -30,9 +30,12 @@ the ring preset and the user's display choices onto it at build time.
   `earth_style` ("clean" | "atmo") and the six Elements switches
   (`show_earth`, `show_moon`, `show_weekday`, `show_pointer`,
   `colorful` — off draws the Aura as plain white transparency —
-  and `show_seconds`), plus the ring recolor pair: `ring_tint`
+  and `show_seconds`), the ring recolor pair: `ring_tint`
   (#RRGGBB multiplying ring art + hands + Umbra; None = gray art) and
-  `ring_finish` ("gold" | "silver" letter art, Omega inverted)
+  `ring_finish` ("gold" | "silver" letter art, Omega inverted), plus
+  `octa_slot_scale` and `hover_enlarge` (owner EXTRAS; the
+  Earth/Moon/Weekday size multipliers scale their spec values in
+  apply_display_settings instead)
 - `BackgroundSpec` — the Umbra (custom art, or None for the procedural
   30-section wheel: single lightest/darkest sections centered on
   noon/midnight) + the Aura (transparent period hues from the palette
