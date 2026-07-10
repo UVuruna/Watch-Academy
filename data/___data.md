@@ -28,13 +28,18 @@ entries mix month dicts with aggregate count keys), "Last Quarter"
 normalized to "Third Quarter". See [Moon Phases](moon_phases.md).
 
 ### `symbolism.py` — Symbolism Repository
-Per-body blurbs from `symbolism.json` (the machine-readable companion
-of [DOMY Symbolism](../SYMBOLISM.md)) — the hexa diamond hover shows
-the active weekday theme's encyclopedic text.
+Per-body blurbs and the full ARTICLE corpus from `symbolism.json` (the
+machine-readable companion of [DOMY Symbolism](../SYMBOLISM.md)) — the
+hover articles per theme, sign, animal, element and Trinity virtue.
 See [Symbolism Repository](symbolism.md).
 
+### `rings.py` — Ring Presets
+The ring preset cards (bundled `ring_presets.json` + the user's custom
+cards from settings): `{name, positions, letters}`, layouts resolved by
+the positions signature, loud validation. See [Ring Presets](rings.md).
+
 ### `_io.py` — Shared Loader
-`load_json_checked()` — a plain function, not a base class (two small
+`load_json_checked()` — a plain function, not a base class (a few small
 repositories do not justify a hierarchy).
 
 ## Connections
