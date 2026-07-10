@@ -750,14 +750,19 @@ class Compositor:
             return start <= value <= span_end
 
         angle = angles.time_to_dial_angle
+        # Two lines per band (owner spec), in the order the light moves.
         if sun.dawn is not None and sun.sunrise is not None and within(
             angle(sun.dawn), angle(sun.sunrise)
         ):
-            return _centered(f"Dawn {sun.dawn:%H:%M} — Sunrise {sun.sunrise:%H:%M}")
+            return _centered(
+                f"Dawn {sun.dawn:%H:%M}", f"Sunrise {sun.sunrise:%H:%M}"
+            )
         if sun.sunset is not None and sun.dusk is not None and within(
             angle(sun.sunset), angle(sun.dusk)
         ):
-            return _centered(f"Sunset {sun.sunset:%H:%M} — Dusk {sun.dusk:%H:%M}")
+            return _centered(
+                f"Sunset {sun.sunset:%H:%M}", f"Dusk {sun.dusk:%H:%M}"
+            )
         return None
 
     def render_offscreen(
