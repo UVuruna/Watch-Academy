@@ -65,6 +65,21 @@ def zodiac_span(anchors: YearAnchors, start_dial_angle: float) -> tuple[datetime
     )
 
 
+def meteorological_span(
+    anchors: YearAnchors, center_angle: float
+) -> tuple[datetime, datetime]:
+    """Meteorological season bounds around the anchor at the UNWRAPPED
+    `center_angle` (owner spec, FINAL.txt hover 4C): each bound lies
+    HALFWAY between neighboring anchor instants — summer runs from half
+    spring-equinox→summer-solstice to half summer-solstice→autumn-
+    equinox, so every season CENTERS on its solstice/equinox."""
+    index = anchors.angles.index(center_angle)
+    before = anchors.instants[index - 1]
+    center = anchors.instants[index]
+    after = anchors.instants[index + 1]
+    return before + (center - before) / 2, center + (after - center) / 2
+
+
 def _unwrapped_angle(now: datetime, anchors: YearAnchors) -> float:
     """Interpolated UNWRAPPED angle (180..630 over the anchor span).
 

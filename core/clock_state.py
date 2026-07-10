@@ -53,6 +53,8 @@ class DayContext:
     chinese_start: date             # Chinese New Year (China time)
     chinese_end: date               # day before the next one
     season_events: tuple[tuple[datetime, str], ...]   # anchor instants + names
+    anchor_day_lengths: tuple[str, ...]  # "15:23" at each anchor's local date
+                                         # (cardinal arm hover, owner spec)
     moon_events: tuple[tuple[datetime, str], ...]     # principal instants + names
     tzinfo: object                  # the active timezone (hover instant display)
 
@@ -109,6 +111,16 @@ def build_day_context(
         season_events=tuple(
             (instant, constants.SEASON_EVENT_NAMES[round(angle) % 360])
             for instant, angle in zip(year_anchors.instants, year_anchors.angles)
+        ),
+        anchor_day_lengths=tuple(
+            day_length_hm(
+                compute_sun_day(
+                    observer,
+                    instant.astimezone(now_local.tzinfo).date(),
+                    now_local.tzinfo,
+                )
+            )
+            for instant in year_anchors.instants
         ),
         moon_events=tuple(
             (instant, _MOON_EVENT_NAMES[fraction % 1.0])
