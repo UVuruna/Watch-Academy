@@ -308,8 +308,10 @@ def test_octa_arm_hovers_events_and_seasons(july_wednesday):
     assert "Summer Solstice" in cardinal
     assert "2026" in cardinal and ":" in cardinal         # exact date + minutes
     assert "*" not in cardinal
+    assert "h " in cardinal and "min" in cardinal         # day length line
     diagonal = upright.tooltip_at(256.0, 104.0, 360.0)    # 45 deg arm, 0.6R
-    assert "Summer" in diagonal and "days" in diagonal and "Middle" in diagonal
+    assert "Summer" in diagonal and "Days)" in diagonal and "Heart" in diagonal
+    assert "<sup>" in diagonal                            # raised ordinals
     solar = Compositor(
         dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa"), AssetCache()
     )

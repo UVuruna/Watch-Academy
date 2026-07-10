@@ -20,7 +20,7 @@ from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.moon import phase_name
-from core.year_wheel import zodiac_span
+from core.year_wheel import meteorological_span, zodiac_span
 from render.assets import AssetCache
 from render.layers import (
     BackgroundLayer,
@@ -331,32 +331,36 @@ class Compositor:
         star = "*" if self._skin.solar_rotation else ""
 
         if self._skin.pointer == "hexa":
-            # The 60-deg arc [arm-30, arm+30] spans exactly two signs —
-            # one full line each (owner spec): symbol, name, date span.
-            lines = []
+            # The 60-deg arc [arm-30, arm+30] spans exactly two signs.
+            # Hover rework (owner spec): each sign gets its header line
+            # ("♋ Cancer (21st June - 21st July)") followed by ITS
+            # article (base + the active palette's paragraph), signs
+            # separated by a blank line.
+            style = self._skin.palette_style
+            parts = []
             for offset in (-30.0, 0.0):      # the two signs' START angles
                 start_angle = (arm_angle + offset) % 360.0
                 name, symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
                 start, end = zodiac_span(self._day.year_anchors, start_angle)
                 start = start.astimezone(self._day.tzinfo)
                 last = end.astimezone(self._day.tzinfo) - timedelta(days=1)
-                lines.append(
-                    f"{symbol} {name} — {start.day} {start:%b} – {last.day} {last:%b}"
+                header = (
+                    f"{html.escape(symbol)} {html.escape(name)} "
+                    f"({_ordinal(start.day)} {start:%B} - "
+                    f"{_ordinal(last.day)} {last:%B})"
                 )
-            lines[0] += star
-            # Below the signs: one blank line, then the encyclopedic
-            # blurb of THIS arm's body in the ACTIVE weekday theme
-            # (owner spec) — wrapped by hand so QToolTip stays narrow.
-            body = next(
-                occupants[0]
-                for angle, occupants in constants.POINTER_WEEKDAY_SLOTS["hexa"]
-                if angle == arm_angle
-            )
-            blurb_key = constants.WEEKDAY_THEME_BLURBS[self._skin.weekday_theme]
-            blurb = self._symbolism.arm_blurbs(body)[blurb_key]
-            lines.append("")
-            lines.extend(textwrap.wrap(blurb, width=46))
-            return _centered(*lines)
+                if offset == -30.0 and star:
+                    header += html.escape(star)
+                article = self._symbolism.zodiac_article(name)
+                text = article["base"]
+                variant = article["variants"].get(style)
+                if variant:
+                    text += "\n\n" + variant
+                parts.append(
+                    f"<div align='center'>{header}</div>"
+                    + _article_body_html(text)
+                )
+            return "<br/>".join(parts)
         if self._skin.pointer == "trio":
             # Trio arm: its theological theme, the day third it CENTERS
             # (the arm tip is the middle of its hue — owner correction)
@@ -379,32 +383,67 @@ class Compositor:
                 days,
             )
         if arm_angle % 90.0 == 0.0:
-            # Cardinal arms (cross and octa) point at the season events.
+            # Cardinal arms (cross and octa) point at the season events:
+            # the exact instant, plus the DAY LENGTH on that date (owner
+            # rework). The cross additionally describes its
+            # METEOROLOGICAL season — bounds halfway between the anchors,
+            # so the season centers on its solstice/equinox.
             anchor_angle = {0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0}[
                 arm_angle
             ]
             name = constants.SEASON_EVENT_NAMES[round(anchor_angle) % 360]
             instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
-            return _centered(
-                f"{name}{star}",
-                f"{instant.day} {instant:%b %Y} — {instant:%H:%M}",
-            )
+            index = self._day.year_anchors.angles.index(anchor_angle)
+            hours, minutes = self._day.anchor_day_lengths[index].split(":")
+            lines = [
+                f"{html.escape(name)}{html.escape(star)}",
+                f"{_ordinal(instant.day)} {instant:%B %Y} - {instant:%H:%M}",
+                f"{int(hours)}h {int(minutes)}min",
+            ]
+            if self._skin.pointer == "cross":
+                season = self._season_name_for(anchor_angle)
+                met_start, met_end = meteorological_span(
+                    self._day.year_anchors, anchor_angle
+                )
+                met_start = met_start.astimezone(self._day.tzinfo)
+                met_end = met_end.astimezone(self._day.tzinfo)
+                lines += [
+                    "",
+                    f"Meteorological {season}",
+                    f"From {_ordinal(met_start.day)} {met_start:%B %Y} - "
+                    f"{met_start:%H:%M}",
+                    f"To {_ordinal(met_end.day)} {met_end:%B %Y} - "
+                    f"{met_end:%H:%M}",
+                ]
+            return _centered_html(*lines)
         # Octa diagonal arms point at the season CENTERS.
-        season, start_angle = {
-            315.0: ("Spring", 270.0),
-            45.0: ("Summer", 360.0),
-            135.0: ("Autumn", 450.0),
-            225.0: ("Winter", 540.0),
-        }[arm_angle]
+        start_angle = {315.0: 270.0, 45.0: 360.0, 135.0: 450.0, 225.0: 540.0}[
+            arm_angle
+        ]
+        season = self._season_name_for(start_angle)
         start = self._anchor_instant(start_angle).astimezone(self._day.tzinfo)
         end = self._anchor_instant(start_angle + 90.0).astimezone(self._day.tzinfo)
         middle = start + (end - start) / 2
-        days = round((end - start).total_seconds() / 86400)
-        return _centered(
-            f"{season}{star}",
-            f"{start.day} {start:%b} – {end.day} {end:%b} — {days} days",
-            f"Middle: {middle.day} {middle:%b}",
+        days = (end - start).total_seconds() / 86400
+        return _centered_html(
+            f"{html.escape(season)}{html.escape(star)}",
+            f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
+            f"({days:.1f} Days)",
+            f"Heart: {_ordinal(middle.day)} {middle:%B}",
         )
+
+    def _season_name_for(self, start_anchor_angle: float) -> str:
+        """The season STARTING at an unwrapped anchor angle, flipped on
+        the southern hemisphere (their seasons are opposite)."""
+        season = {270.0: "Spring", 360.0: "Summer", 450.0: "Autumn", 540.0: "Winter"}[
+            start_anchor_angle
+        ]
+        if self._day.southern_hemisphere:
+            season = {
+                "Summer": "Winter", "Winter": "Summer",
+                "Spring": "Autumn", "Autumn": "Spring",
+            }[season]
+        return season
 
     def _anchor_instant(self, unwrapped_angle: float):
         """Season-anchor instant at an unwrapped year-wheel angle."""

@@ -226,7 +226,7 @@ def test_legend_off_silences_every_hover(app):
     assert compositor.tooltip_at(180.0, 40.0, 360.0) is None           # marker zone
 
 
-def test_hexa_arm_hover_appends_the_theme_blurb(app):
+def test_hexa_arm_hover_carries_the_sign_articles(app):
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -260,15 +260,14 @@ def test_hexa_arm_hover_appends_the_theme_blurb(app):
     )
     compositor = Compositor(skin, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    top = compositor.tooltip_at(180.0, 72.0, 360.0)      # top arm = jupiter
-    assert "Gemini" in top and "Cancer" in top           # the two signs stay
-    assert "guru of the gods" in top                     # profession blurb below
-    greek = Compositor(
-        dc.replace(skin, weekday_theme="greek"), AssetCache()
-    )
-    greek.render_offscreen(360.0, 1.0, day, tick)
-    top_greek = greek.tooltip_at(180.0, 72.0, 360.0)
-    assert "Olympus" in top_greek                        # theme switches the text
+    top = compositor.tooltip_at(180.0, 72.0, 360.0)      # top arm
+    # Hover rework (owner spec): the diamond shows each of its TWO
+    # signs as a header with the span in parentheses, followed by the
+    # sign's LEFT-aligned article (base + the active palette paragraph).
+    assert "Gemini" in top and "Cancer" in top
+    assert "(21<sup>st</sup> May - 20<sup>th</sup> June)" in top
+    assert "align='left'" in top                         # article prose
+    assert "Castor" in top or "Pollux" in top            # Gemini article text
 
 
 def test_symbolism_repository_covers_every_body_and_theme():
