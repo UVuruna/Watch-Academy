@@ -52,11 +52,12 @@ class RingSpec:
     letter_color: str
     width_fraction: float              # ring thickness as fraction of the dial radius
     letters: dict[int, str] = field(default_factory=dict)  # hour -> letter replacing the numeral
-    # The owner's letter art overlaid on the ring: hour -> (gold master
-    # file, draw_as_silver) — built by the controller's build_skin (the
-    # preset's accent letter wears the opposite metal; silver = the
-    # gold art desaturated at load). The ring tint never touches them.
-    letter_art: dict[int, tuple[Path, bool]] = field(default_factory=dict)
+    # The owner's letter art overlaid on the ring: hour -> the resolved
+    # file for the active finish — built by the controller's build_skin
+    # (the preset's accent letter wears the opposite metal; silver files
+    # are PRE-RENDERED by setup/make_silver_letters.py). The ring tint
+    # never touches them.
+    letter_art: dict[int, Path] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -177,7 +178,7 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         skin.hands.hour.asset,
         skin.hands.minute.asset,
         skin.hands.second.asset if skin.hands.second else None,
-        *[path for path, _ in skin.ring.letter_art.values()],
+        *skin.ring.letter_art.values(),
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),
     ]

@@ -73,13 +73,12 @@ def draw_pie(painter: QPainter, radius: float, start_deg: float, end_deg: float)
 
 def draw_pixmap_centered(
     painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF,
-    height: float, tint: str | None = None, desaturate: bool = False,
+    height: float, tint: str | None = None,
 ) -> None:
     """Asset rasterized to `height` and drawn centered at `pos` — the one
     shared image path of weekday bodies and the year marker (Rule #5).
-    `tint` channel-multiplies the image (the ring recolor); `desaturate`
-    turns the gold letter art silver."""
-    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint, desaturate)
+    `tint` channel-multiplies the image (the ring recolor)."""
+    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint)
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 
@@ -500,26 +499,24 @@ class RingLayer(Layer):
 
     def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
         """The owner's letter art at the preset's hour positions —
-        gold masters, desaturated to silver where build_skin marked the
-        finish (the accent letter wears the opposite metal). Each letter
-        ROTATES with its place on the circle (tangentially; the lower
-        half flips 180° to stay readable — Ω stands upright at the
-        bottom), rides a tight dark halo (owner spec: a gradient border,
-        lit from above) and is UNTINTED by the ring hue."""
+        gold masters and PRE-RENDERED silver files (the accent letter
+        wears the opposite metal, owner spec). Each letter ROTATES with
+        its place on the circle (tangentially; the lower half flips 180°
+        to stay readable — Ω stands upright at the bottom), rides a
+        tight dark halo (owner spec: a gradient border, lit from above)
+        and is UNTINTED by the ring hue."""
         height = (
             2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
             * ctx.skin.ring_letter_scale
         )
         shadow_radius = height * defaults.RING_LETTER_SHADOW_RADIUS
         samples = defaults.RING_LETTER_SHADOW_SAMPLES
-        for hour, (asset, silver) in self._skin.ring.letter_art.items():
+        for hour, asset in self._skin.ring.letter_art.items():
             theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
             rotation = theta - 180.0 if 90.0 < theta < 270.0 else (
                 theta if theta <= 90.0 else theta - 360.0
             )
-            pixmap = ctx.cache.pixmap_by_height(
-                asset, height, ctx.dpr, desaturate=silver
-            )
+            pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr)
             shadow = ctx.cache.pixmap_by_height(
                 asset, height, ctx.dpr, tint="#000000"
             )

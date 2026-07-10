@@ -40,56 +40,53 @@ def test_default_config_assets_all_exist():
 
 
 def test_letter_art_follows_the_finish():
-    """Owner spec (2026-07-10): the letters are GOLD masters, silver is
-    desaturated at load; each preset's ACCENT letter wears the opposite
-    metal — DOMY inverts its Omega, MORPH inverts its M."""
+    """Owner spec (2026-07-10): silver letters are PRE-RENDERED files
+    (setup/make_silver_letters.py) beside the gold masters; each
+    preset's ACCENT letter wears the opposite metal — DOMY inverts its
+    Omega, MORPH inverts its M."""
+    art_dir = defaults.RING_LETTER_ART_DIR
     gold = build_skin(Settings()).ring.letter_art
-    assert gold[12] == (defaults.RING_LETTER_ART_DIR / "M.svg", False)
-    assert gold[0] == (defaults.RING_LETTER_ART_DIR / "Omega.png", True)
+    assert gold[12] == art_dir / "M.svg"
+    assert gold[0] == art_dir / "Omega_silver.png"
     silver = build_skin(replace(Settings(), ring_finish="silver")).ring.letter_art
-    assert silver[12][1] is True                 # M desaturated
-    assert silver[0][1] is False                 # Omega stays gold
+    assert silver[12] == art_dir / "M_silver.png"
+    assert silver[0] == art_dir / "Omega.png"
     morph = build_skin(replace(Settings(), ring="morph")).ring.letter_art
-    assert morph[16] == (defaults.RING_LETTER_ART_DIR / "Pi.png", False)
-    assert morph[8][1] is False                  # H gold
-    assert morph[12][1] is True                  # MORPH gold inverts its M
+    assert morph[16] == art_dir / "Pi.png"       # Π uses the greek Pi art
+    assert morph[12] == art_dir / "M_silver.png"  # MORPH gold inverts its M
     morph_silver = build_skin(
         replace(Settings(), ring="morph", ring_finish="silver")
     ).ring.letter_art
-    assert morph_silver[12][1] is False          # M back to gold
-    assert morph_silver[0][1] is True            # Omega desaturated
+    assert morph_silver[12] == art_dir / "M.svg"
+    assert morph_silver[0] == art_dir / "Omega_silver.png"
 
 
-def test_silver_is_desaturated_gold(app_offscreen=None):
-    """The silver look = the gold art with the saturation removed
-    (owner-approved derivation): every pixel reads R=G=B, alpha kept."""
+def test_pre_rendered_silver_letters_are_grayscale():
+    """The generated silver files exist for every active letter, read
+    R=G=B on opaque pixels and keep their surroundings transparent."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtGui import QImage
     from PySide6.QtWidgets import QApplication
 
-    from render.assets import AssetCache
+    from config import constants
 
     QApplication.instance() or QApplication([])
-    cache = AssetCache()
-    silver = cache.pixmap_by_height(
-        defaults.RING_LETTER_ART_DIR / "M.svg", 48.0, 1.0, desaturate=True
-    ).toImage()
-    seen_opaque = False
-    for x in range(0, silver.width(), 5):
-        for y in range(0, silver.height(), 5):
-            color = silver.pixelColor(x, y)
-            if color.alpha() > 0:
-                seen_opaque = True
-                assert color.red() == color.green() == color.blue()
-    assert seen_opaque
-    # Transparent surroundings STAY transparent (owner bug report: a
-    # silently no-op alpha mask left the whole bounding box as an opaque
-    # gray plate). Probed on the PNG letter — the current latin SVGs
-    # carry a semi-opaque gold wash of their own (reported to the owner).
-    omega = cache.pixmap_by_height(
-        defaults.RING_LETTER_ART_DIR / "Omega.png", 48.0, 1.0, desaturate=True
-    ).toImage()
+    for filename in constants.RING_LETTER_FILES.values():
+        stem = filename.rsplit(".", 1)[0]
+        path = defaults.RING_LETTER_ART_DIR / f"{stem}_silver.png"
+        assert path.exists(), path
+        image = QImage(str(path))
+        seen_opaque = False
+        for x in range(0, image.width(), 25):
+            for y in range(0, image.height(), 25):
+                color = image.pixelColor(x, y)
+                if color.alpha() > 200:
+                    seen_opaque = True
+                    assert color.red() == color.green() == color.blue(), path
+        assert seen_opaque, path
+    omega = QImage(str(defaults.RING_LETTER_ART_DIR / "Omega_silver.png"))
     assert omega.pixelColor(0, 0).alpha() == 0
 
 

@@ -10,13 +10,13 @@ gray art x hue), preserving the alpha of the source.
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
+from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
 
 class AssetCache:
     def __init__(self):
-        self._pixmaps: dict[tuple[str, int, str | None, bool], QPixmap] = {}
+        self._pixmaps: dict[tuple[str, int, str | None], QPixmap] = {}
 
     def pixmap_by_height(
         self,
@@ -24,52 +24,21 @@ class AssetCache:
         logical_height: float,
         dpr: float,
         tint: str | None = None,
-        desaturate: bool = False,
     ) -> QPixmap:
         """The image scaled (aspect preserved) so its logical height is
         `logical_height`, rasterized at device resolution and optionally
-        tinted (channel multiply, source alpha kept) or desaturated (the
-        SILVER look of the owner's gold letter art). Raises ValueError
+        tinted (channel multiply, source alpha kept). Raises ValueError
         for missing/unreadable assets — a broken skin must be visible,
-        never silently blank."""
+        never silently blank. (Silver ring letters are PRE-RENDERED
+        files — setup/make_silver_letters.py — not a runtime effect.)"""
         px_height = max(1, round(logical_height * dpr))
-        key = (str(path), px_height, tint, desaturate)
+        key = (str(path), px_height, tint)
         if key not in self._pixmaps:
             pixmap = self._rasterize(path, px_height, dpr)
             if tint is not None:
                 pixmap = self._tinted(pixmap, tint)
-            if desaturate:
-                pixmap = self._desaturated(pixmap)
             self._pixmaps[key] = pixmap
         return self._pixmaps[key]
-
-    @staticmethod
-    def _desaturated(source: QPixmap) -> QPixmap:
-        """Grayscale with the alpha kept — turns the owner's gold letter
-        art silver (owner-approved derivation). Entirely native Qt:
-        unpremultiply, take the Grayscale8 luminance, then re-apply the
-        SOURCE's own alpha via DestinationIn — the same masking the tint
-        path uses (an Alpha8 image drawn as the mask silently no-ops on
-        some raster paths and left the letter's whole bounding box as an
-        opaque gray plate — owner bug report)."""
-        image = source.toImage().convertToFormat(QImage.Format.Format_ARGB32)
-        gray = image.convertToFormat(
-            QImage.Format.Format_Grayscale8
-        ).convertToFormat(QImage.Format.Format_ARGB32)
-        # Start from a TRANSPARENT pixmap like the tint path —
-        # QPixmap.fromImage of the (opaque) gray image would drop the
-        # alpha channel and DestinationIn could never write it back.
-        result = QPixmap(source.size())
-        result.fill(Qt.GlobalColor.transparent)
-        painter = QPainter(result)
-        painter.drawImage(0, 0, gray)
-        painter.setCompositionMode(
-            QPainter.CompositionMode.CompositionMode_DestinationIn
-        )
-        painter.drawPixmap(0, 0, source)
-        painter.end()
-        result.setDevicePixelRatio(source.devicePixelRatio())
-        return result
 
     @staticmethod
     def _tinted(source: QPixmap, tint: str) -> QPixmap:

@@ -46,10 +46,12 @@ def build_skin(settings: Settings):
         is_silver = (settings.ring_finish == "silver") != (
             letter == preset["accent"]
         )
-        letter_art[hour] = (
-            defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[letter],
-            is_silver,
-        )
+        filename = constants.RING_LETTER_FILES[letter]
+        if is_silver:
+            # Silver letters are PRE-RENDERED art (owner decision —
+            # setup/make_silver_letters.py), not a runtime effect.
+            filename = f"{filename.rsplit('.', 1)[0]}_silver.png"
+        letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
