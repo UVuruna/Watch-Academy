@@ -61,6 +61,7 @@ class Settings:
     show_pointer: bool = True
     colorful: bool = True               # off -> white Aura instead of hues
     show_seconds: bool = True
+    show_octa_slot: bool = True         # the Compass info slot (octa only)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
     city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
@@ -174,6 +175,7 @@ class SettingsStore:
                 show_pointer=_load_bool(raw, "show_pointer", True),
                 colorful=_load_bool(raw, "colorful", True),
                 show_seconds=_load_bool(raw, "show_seconds", True),
+                show_octa_slot=_load_bool(raw, "show_octa_slot", True),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -225,6 +227,7 @@ class SettingsStore:
             "show_pointer": settings.show_pointer,
             "colorful": settings.colorful,
             "show_seconds": settings.show_seconds,
+            "show_octa_slot": settings.show_octa_slot,
             "location": {
                 "name": settings.city_name,
                 "path": list(settings.city_path),

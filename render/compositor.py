@@ -125,11 +125,11 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     layers: list[Layer] = []
     for name in skin.z_order:
         if name == "hands":
-            if skin.pointer == "octa":
+            if skin.pointer == "octa" and skin.show_octa_slot:
                 # The Compass info slot draws BELOW the hands (owner bug
                 # report: the seconds hand passed behind the zodiac art)
-                # and SURVIVES the Pointer element switch: the diamonds
-                # may hide, the selected info stays (owner correction).
+                # and SURVIVES the Pointer element switch — it has its
+                # OWN Elements switch (owner spec).
                 layers.append(BottomSlotLayer(skin))
             layers.append(HandLayer(skin, "hour"))
             layers.append(HandLayer(skin, "minute"))
@@ -264,7 +264,7 @@ class Compositor:
             if body is not None:
                 return f"body:{body}"
         weekday = self._skin.weekday_set
-        if self._skin.pointer == "octa" and hit(
+        if self._skin.pointer == "octa" and self._skin.show_octa_slot and hit(
             dial_point(
                 constants.OCTA_TIME_SLOT_ANGLE + rotation,
                 radius * weekday.orbit_fraction,

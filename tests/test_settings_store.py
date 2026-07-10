@@ -83,6 +83,7 @@ def test_display_choices_round_trip(store):
         show_pointer=False,
         colorful=False,
         show_seconds=False,
+        show_octa_slot=False,
     )
     store.save(saved)
     assert store.load() == saved

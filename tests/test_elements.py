@@ -84,6 +84,23 @@ def test_markers_off_drop_the_year_marker_layer():
     assert any(isinstance(layer, YearMarkerLayer) for layer in layers)
 
 
+def test_compass_slot_has_its_own_switch():
+    """Owner spec: the Compass info slot is an Element of its own — it
+    survives Pointer-off but disappears with its own switch."""
+    kept = _build_layers(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, pointer="octa", show_pointer=False
+        )
+    )
+    assert any(isinstance(layer, BottomSlotLayer) for layer in kept)
+    dropped = _build_layers(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, pointer="octa", show_octa_slot=False
+        )
+    )
+    assert not any(isinstance(layer, BottomSlotLayer) for layer in dropped)
+
+
 def test_seconds_off_drops_the_third_hand():
     on = _build_layers(defaults.DEFAULT_SKIN)
     off = _build_layers(

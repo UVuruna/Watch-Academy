@@ -148,6 +148,7 @@ class SkinDefinition:
     colorful: bool = True              # False -> the Aura wears plain white
                                        # transparency instead of palette hues
     show_seconds: bool = True          # the seconds hand (and its cadence)
+    show_octa_slot: bool = True        # the Compass info slot (octa only)
     # Ring recolor (owner spec, FINAL.txt #6): ONE hue multiplies the
     # ring art, the hands and the Umbra (None = untouched gray art);
     # the finish picks the owner's letter art set (gold = M/D/Y/P/H

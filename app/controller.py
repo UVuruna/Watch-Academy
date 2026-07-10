@@ -160,6 +160,7 @@ def apply_display_settings(skin, settings: Settings):
         show_pointer=settings.show_pointer,
         colorful=settings.colorful,
         show_seconds=settings.show_seconds,
+        show_octa_slot=settings.show_octa_slot,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
         octa_slot_scale=settings.octa_slot_scale,
@@ -446,9 +447,10 @@ class AppController(QObject):
             return
         self._settings = replace(self._settings, **{key: value})
         if key == "pointer":
-            # The Octa slot theme submenu only applies to the octa
-            # pointer (owner spec, FINAL.txt #6).
+            # The Compass slot controls (the Theme submenu AND the
+            # Elements switch) only apply to the Compass pointer.
             self._octa_slot_action.setEnabled(value == "octa")
+            self._octa_slot_toggle.setEnabled(value == "octa")
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
@@ -640,6 +642,14 @@ class AppController(QObject):
                 lambda checked, key=key: self._set_display_choice(key, checked),
                 tip,
             )
+        # The Compass slot has its own switch, grayed out (like the
+        # Theme submenu) unless the Compass pointer is active.
+        self._octa_slot_toggle = self._add_toggle(
+            elements_menu, "Compass slot", settings.show_octa_slot,
+            lambda checked: self._set_display_choice("show_octa_slot", checked),
+            "The Compass pointer's bottom info slot.",
+        )
+        self._octa_slot_toggle.setEnabled(settings.pointer == "octa")
         self._add_toggle(
             menu, "Legend", settings.legend,
             lambda checked: self._set_display_choice("legend", checked),

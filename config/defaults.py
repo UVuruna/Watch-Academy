@@ -128,7 +128,10 @@ RING_TINT_PRESETS = {
 # ring presets), overlaid on the ring by calculation so the tint never
 # touches them; the silver look is derived by desaturation at load.
 RING_LETTER_ART_DIR = paths.assets_dir() / "ring" / "letters"
-RING_LETTER_RADIUS_FRACTION = 0.929  # letter center, of the dial radius
+RING_LETTER_RADIUS_FRACTION = 0.943  # letter center = the middle of the OUTER
+                                     # hour band alone (owner spec; measured
+                                     # 0.888–0.998 on both ring faces — the
+                                     # seconds scale is NOT part of the band)
 RING_LETTER_ART_SCALE = 0.075        # letter height, of the dial diameter
                                      # (deliberate slight oversize — owner
                                      # default; the Settings slider scales it)
