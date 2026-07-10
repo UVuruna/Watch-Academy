@@ -40,6 +40,28 @@ def test_wrap_to_zero_at_new_moon_anchor(window_2026):
     assert phase_fraction(new_moons[0], window_2026) == pytest.approx(0.0, abs=1e-9)
 
 
+def test_moon_rise_set_belgrade():
+    """Belgrade 2026-07-10 (waning crescent): the moon rises just after
+    midnight and sets mid-afternoon — 00:43 / 16:33 local per astral
+    (minute resolution). The Moon hover's od–do line reads these."""
+    from datetime import date
+    from zoneinfo import ZoneInfo
+
+    import astral
+
+    from config import defaults
+    from core.moon import moon_rise_set
+
+    city = defaults.DEFAULT_CITY
+    observer = astral.Observer(latitude=city["latitude"], longitude=city["longitude"])
+    rise, setting = moon_rise_set(
+        observer, date(2026, 7, 10), ZoneInfo(city["timezone"])
+    )
+    assert rise.strftime("%H:%M") == "00:43"
+    assert setting.strftime("%H:%M") == "16:33"
+    assert rise.tzinfo is not None and setting.tzinfo is not None
+
+
 def test_outside_window_fails_loudly(window_2026):
     with pytest.raises(ValueError, match="outside the moon window"):
         phase_fraction(datetime(2031, 1, 1, tzinfo=timezone.utc), window_2026)

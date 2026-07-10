@@ -13,7 +13,13 @@ import astral
 
 from config import constants
 from core import angles
-from core.moon import MoonWindow, chinese_zodiac, illumination, phase_fraction
+from core.moon import (
+    MoonWindow,
+    chinese_zodiac,
+    illumination,
+    moon_rise_set,
+    phase_fraction,
+)
 from core.sun import DaylightRegime, SunDay, compute_sun_day, day_length_hm
 from core.year_wheel import YearAnchors, year_marker_angle, zodiac_sign
 
@@ -35,6 +41,8 @@ class DayContext:
     year_anchors: YearAnchors
     moon_fraction: float            # cycle fraction at day-context build time
     moon_illumination: float
+    moonrise: datetime | None       # local instants on this date; None when
+    moonset: datetime | None        # the moon skips the event that day
     southern_hemisphere: bool       # the moon appears rotated 180 deg there
     day_length: str                 # "15:35" — octa bottom-arm option
     zodiac_name: str                # tropical sign, cusps on the year wheel
@@ -75,6 +83,7 @@ def build_day_context(
 ) -> DayContext:
     sun_day = compute_sun_day(observer, now_local.date(), now_local.tzinfo)
     fraction = phase_fraction(now_local, moon_window)
+    moonrise, moonset = moon_rise_set(observer, now_local.date(), now_local.tzinfo)
     sign_name, sign_symbol, sign_start, sign_end = zodiac_sign(now_local, year_anchors)
     chinese_name, chinese_start, chinese_end = chinese_zodiac(now_local, moon_window)
     return DayContext(
@@ -86,6 +95,8 @@ def build_day_context(
         year_anchors=year_anchors,
         moon_fraction=fraction,
         moon_illumination=illumination(fraction),
+        moonrise=moonrise,
+        moonset=moonset,
         southern_hemisphere=observer.latitude < 0,
         day_length=day_length_hm(sun_day),
         zodiac_name=sign_name,

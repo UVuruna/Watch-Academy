@@ -47,6 +47,24 @@ def illumination(fraction: float) -> float:
     return (1.0 - math.cos(2.0 * math.pi * fraction)) / 2.0
 
 
+def moon_rise_set(observer, day: date, tzinfo):
+    """Local (moonrise, moonset) on `day` via astral, either None when
+    the event does not occur on that calendar date (documented: the
+    moon skips a rise or a set roughly once a synodic month, and may do
+    so for days at polar latitudes)."""
+    import astral.moon
+
+    try:
+        rise = astral.moon.moonrise(observer, day, tzinfo)
+    except ValueError:
+        rise = None
+    try:
+        setting = astral.moon.moonset(observer, day, tzinfo)
+    except ValueError:
+        setting = None
+    return rise, setting
+
+
 def chinese_zodiac(now_local: datetime, window: MoonWindow) -> tuple[str, date, date]:
     """("Fire Horse", start, end) of the Chinese year at `now` — the
     year begins at the new moon falling in the Jan 21 – Feb 20 window
