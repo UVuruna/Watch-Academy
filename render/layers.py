@@ -754,7 +754,12 @@ class YearMarkerLayer(Layer):
             painter.setClipPath(clip)
             draw_pixmap_centered(painter, ctx, asset, pos, size)
             painter.restore()
-            if 2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER:
+            if (
+                2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER
+                and ctx.skin.show_earth_date
+            ):
+                # The date label is a switch of its own (owner spec) —
+                # and never fits below the full-text threshold anyway.
                 self._draw_date(painter, ctx, pos, size)
         else:
             color = spec.day_color if ctx.tick.is_daylight else spec.night_color

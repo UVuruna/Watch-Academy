@@ -164,6 +164,7 @@ def apply_display_settings(skin, settings: Settings):
         colorful=settings.colorful,
         show_seconds=settings.show_seconds,
         show_octa_slot=settings.show_octa_slot,
+        show_earth_date=settings.show_earth_date,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
         octa_slot_scale=settings.octa_slot_scale,
@@ -580,11 +581,23 @@ class AppController(QObject):
             settings.ring_finish,
             lambda value: self._set_display_choice("ring_finish", value),
         )
-        self._add_choice_submenu(
+        earth_menu = self._add_choice_submenu(
             theme_menu, "Earth",
             [("clean", "Clean"), ("atmo", "Atmosphere")],
             settings.earth_style,
             lambda value: self._set_display_choice("earth_style", value),
+        )
+        earth_menu.addSeparator()
+        # The date label ON the Earth marker (owner spec): its own
+        # switch, grayed out below the size that can draw it at all.
+        self._earth_date_toggle = self._add_toggle(
+            earth_menu, "Date", settings.show_earth_date,
+            lambda checked: self._set_display_choice("show_earth_date", checked),
+            "The date written on the Earth marker (shown from "
+            f"{defaults.FULL_TEXT_MIN_DIAMETER} px up).",
+        )
+        self._earth_date_toggle.setEnabled(
+            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         self._add_choice_submenu(
             theme_menu, "Weekday",
@@ -869,6 +882,10 @@ class AppController(QObject):
         if diameter == self._settings.diameter:
             return
         self._settings = replace(self._settings, diameter=diameter)
+        # The Earth date switch only applies where the label can draw.
+        self._earth_date_toggle.setEnabled(
+            diameter >= defaults.FULL_TEXT_MIN_DIAMETER
+        )
         self._widget.set_dial_diameter(diameter)
         self._compositor.invalidate()
         self._widget.update()

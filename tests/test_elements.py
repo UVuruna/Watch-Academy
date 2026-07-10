@@ -101,6 +101,29 @@ def test_compass_slot_has_its_own_switch():
     assert not any(isinstance(layer, BottomSlotLayer) for layer in dropped)
 
 
+def test_earth_date_switch_gates_the_label(july_wednesday):
+    """Owner spec: the date ON the Earth marker has its own switch —
+    render differs at 720 px when toggled, and stays identical at
+    360 px where the label never draws anyway."""
+    day, tick = july_wednesday
+    with_date = Compositor(defaults.DEFAULT_SKIN, AssetCache()).render_offscreen(
+        720.0, 1.0, day, tick
+    )
+    without = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, show_earth_date=False),
+        AssetCache(),
+    ).render_offscreen(720.0, 1.0, day, tick)
+    assert with_date != without
+    small_on = Compositor(defaults.DEFAULT_SKIN, AssetCache()).render_offscreen(
+        360.0, 1.0, day, tick
+    )
+    small_off = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, show_earth_date=False),
+        AssetCache(),
+    ).render_offscreen(360.0, 1.0, day, tick)
+    assert small_on == small_off
+
+
 def test_seconds_off_drops_the_third_hand():
     on = _build_layers(defaults.DEFAULT_SKIN)
     off = _build_layers(

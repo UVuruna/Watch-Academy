@@ -62,6 +62,7 @@ class Settings:
     colorful: bool = True               # off -> white Aura instead of hues
     show_seconds: bool = True
     show_octa_slot: bool = True         # the Compass info slot (octa only)
+    show_earth_date: bool = True        # the date label on the Earth marker
     language: str = "en"                # translation target (en = originals)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
@@ -178,6 +179,7 @@ class SettingsStore:
                 colorful=_load_bool(raw, "colorful", True),
                 show_seconds=_load_bool(raw, "show_seconds", True),
                 show_octa_slot=_load_bool(raw, "show_octa_slot", True),
+                show_earth_date=_load_bool(raw, "show_earth_date", True),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -230,6 +232,7 @@ class SettingsStore:
             "colorful": settings.colorful,
             "show_seconds": settings.show_seconds,
             "show_octa_slot": settings.show_octa_slot,
+            "show_earth_date": settings.show_earth_date,
             "language": settings.language,
             "location": {
                 "name": settings.city_name,

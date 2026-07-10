@@ -84,6 +84,8 @@ def test_display_choices_round_trip(store):
         colorful=False,
         show_seconds=False,
         show_octa_slot=False,
+        show_earth_date=False,
+        language="sr-Latn",
     )
     store.save(saved)
     assert store.load() == saved
