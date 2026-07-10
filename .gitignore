@@ -16,6 +16,10 @@ setup/_version_info.py
 design/example/
 DESIGN.txt
 
+# Owner's Illustrator workspace (the PATH to the assets, not the app —
+# the exported bundle copies in assets/ ARE committed)
+illustrator/
+
 # Owner's design masters (working art, intentionally untracked — the
 # downscaled bundle copies live in assets/skins/ and ARE committed)
 design/background/

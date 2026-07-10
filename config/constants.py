@@ -213,29 +213,33 @@ EARTH_STYLES = ("clean", "atmo")
 # presets live in Database/ring_presets.json (+ the user's custom ones
 # in settings) as {name, positions, letters}; the POSITIONS signature
 # picks a LAYOUT — the ring face with matching gaps and the metal
-# rules. Finish rules (owner): 4-letter layouts — GOLD puts the
-# triangle's three letters in gold and the remaining one in silver,
-# SILVER puts the 12h letter in gold and the rest in silver; the
-# hexagram wears all six in one metal. Silver letters are pre-rendered
-# files (setup/make_silver_letters.py).
+# rules. Finish rules (owner correction): the trio of ONE metal always
+# forms a TRIANGLE — the GOLD finish puts the layout's triangle in gold
+# and the rest in silver, the SILVER finish is the exact inverse; on
+# the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
+# letters are pre-rendered files (setup/make_silver_letters.py).
 RING_FINISHES = ("gold", "silver")
 RING_LAYOUTS = {
-    # Provisional display names offered to the owner: Flame (the gold
-    # triangle points UP), Chalice (points DOWN), Seal (Solomon's).
+    # Owner naming (2026-07-10): the up-triangle is the masculine
+    # Flame, the down-triangle the feminine Chalice, and their union —
+    # the hexagram — the Seal.
     "flame": {
         "positions": (12, 20, 24, 4),
         "face": "domy.png",
-        "triangle": (12, 20, 4),
+        "triangle": (12, 20, 4),     # points UP
+        "theme": "Masculine",
     },
     "chalice": {
         "positions": (12, 16, 24, 8),
         "face": "morph.png",
-        "triangle": (8, 16, 24),
+        "triangle": (8, 16, 24),     # points DOWN
+        "theme": "Feminine",
     },
     "seal": {
         "positions": (12, 16, 20, 24, 4, 8),
         "face": "hexagram.png",
-        "triangle": (),              # one metal for all six letters
+        "triangle": (12, 20, 4),     # gold up-triangle; silver wears 24/8/16
+        "theme": "Union",
     },
 }
 # The full letter library (glyph -> art file) — presets and the custom

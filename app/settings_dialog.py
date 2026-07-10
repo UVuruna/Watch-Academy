@@ -522,7 +522,9 @@ class SettingsDialog(QDialog):
         self._ring_layout_combo = QComboBox()
         for key, layout in constants.RING_LAYOUTS.items():
             self._ring_layout_combo.addItem(
-                f"{key.capitalize()} ({len(layout['positions'])} letters)", key
+                f"{key.capitalize()} — {layout['theme']} "
+                f"({len(layout['positions'])} letters)",
+                key,
             )
         self._ring_layout_combo.currentIndexChanged.connect(
             self._rebuild_ring_slots

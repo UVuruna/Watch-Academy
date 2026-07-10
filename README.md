@@ -55,7 +55,6 @@ bodies, year marker, hands) done; Windows hardening (M4) is next.
 - [Tests (folder)](tests/___tests.md)
 - [Setup (folder)](setup/___setup.md)
 - [Design (folder)](design/___design.md)
-- [Illustrator (folder)](illustrator/___illustrator.md)
 - [Research (folder)](research/___research.md)
 
 ## Running from source

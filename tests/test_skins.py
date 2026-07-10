@@ -46,7 +46,8 @@ def test_build_skin_swaps_only_the_ring():
 
 def test_custom_ring_card_builds_a_seal():
     """A user card with the six-position signature gets the hexagram
-    face and one metal for all six letters (owner rules)."""
+    face; BOTH metals form triangles (owner rule): gold finish = the
+    12/20/4 triangle gold + 24/8/16 silver, silver = the inverse."""
     card = {
         "name": "SOLOMON",
         "positions": [12, 16, 20, 24, 4, 8],
@@ -57,20 +58,22 @@ def test_custom_ring_card_builds_a_seal():
     )
     assert skin.ring.asset.name == "hexagram.png"
     assert len(skin.ring.letter_art) == 6
-    assert all(
-        not path.name.endswith("_silver.png")
-        for path in skin.ring.letter_art.values()
-    )
+    gold_hours = {
+        hour for hour, path in skin.ring.letter_art.items()
+        if not path.name.endswith("_silver.png")
+    }
+    assert gold_hours == {12, 20, 4}              # the up-triangle
     silver = build_skin(
         replace(
             Settings(), ring="SOLOMON", ring_finish="silver",
             custom_rings=(card,),
         )
     )
-    assert all(
-        path.name.endswith("_silver.png")
-        for path in silver.ring.letter_art.values()
-    )
+    gold_hours = {
+        hour for hour, path in silver.ring.letter_art.items()
+        if not path.name.endswith("_silver.png")
+    }
+    assert gold_hours == {0, 8, 16}               # the down-triangle
     assert missing_assets(silver) == []
 
 
@@ -86,10 +89,9 @@ def test_default_config_assets_all_exist():
 
 
 def test_letter_art_follows_the_finish():
-    """Owner metal rules (2026-07-10): GOLD puts the layout triangle's
-    three letters in gold and the remaining one in silver; SILVER puts
-    the 12h letter in gold and the rest in silver. Silver letters are
-    pre-rendered files."""
+    """Owner metal rule (correction 2026-07-10): the trio of one metal
+    always forms a TRIANGLE — gold finish = the layout triangle in
+    gold + the rest silver; silver finish = the exact inverse."""
     art_dir = defaults.RING_LETTER_ART_DIR
     gold = build_skin(Settings()).ring.letter_art
     assert gold[12] == art_dir / "M.svg"          # triangle 12/20/4 gold
@@ -97,9 +99,9 @@ def test_letter_art_follows_the_finish():
     assert gold[4] == art_dir / "D.svg"
     assert gold[0] == art_dir / "Omega_silver.png"
     silver = build_skin(replace(Settings(), ring_finish="silver")).ring.letter_art
-    assert silver[12] == art_dir / "M.svg"        # the 12h letter stays gold
+    assert silver[12] == art_dir / "M_silver.png"  # the triangle inverts
     assert silver[20] == art_dir / "Y_silver.png"
-    assert silver[0] == art_dir / "Omega_silver.png"
+    assert silver[0] == art_dir / "Omega.png"      # Omega back to gold
     morph = build_skin(replace(Settings(), ring="MORPH")).ring.letter_art
     assert morph[16] == art_dir / "Pi.png"        # triangle 8/16/24 gold
     assert morph[0] == art_dir / "Omega.png"
