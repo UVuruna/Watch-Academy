@@ -46,21 +46,27 @@ class AssetCache:
     @staticmethod
     def _desaturated(source: QPixmap) -> QPixmap:
         """Grayscale with the alpha kept — turns the owner's gold letter
-        art silver (owner-approved derivation). Entirely native Qt
-        conversions (review finding: a per-pixel Python loop stalled the
-        GUI thread for seconds at large dial sizes): luminance via
-        Grayscale8, then the source alpha re-applied as a mask."""
-        image = source.toImage()
+        art silver (owner-approved derivation). Entirely native Qt:
+        unpremultiply, take the Grayscale8 luminance, then re-apply the
+        SOURCE's own alpha via DestinationIn — the same masking the tint
+        path uses (an Alpha8 image drawn as the mask silently no-ops on
+        some raster paths and left the letter's whole bounding box as an
+        opaque gray plate — owner bug report)."""
+        image = source.toImage().convertToFormat(QImage.Format.Format_ARGB32)
         gray = image.convertToFormat(
             QImage.Format.Format_Grayscale8
         ).convertToFormat(QImage.Format.Format_ARGB32)
-        alpha = image.convertToFormat(QImage.Format.Format_Alpha8)
-        result = QPixmap.fromImage(gray)
+        # Start from a TRANSPARENT pixmap like the tint path —
+        # QPixmap.fromImage of the (opaque) gray image would drop the
+        # alpha channel and DestinationIn could never write it back.
+        result = QPixmap(source.size())
+        result.fill(Qt.GlobalColor.transparent)
         painter = QPainter(result)
+        painter.drawImage(0, 0, gray)
         painter.setCompositionMode(
             QPainter.CompositionMode.CompositionMode_DestinationIn
         )
-        painter.drawImage(0, 0, alpha)
+        painter.drawPixmap(0, 0, source)
         painter.end()
         result.setDevicePixelRatio(source.devicePixelRatio())
         return result

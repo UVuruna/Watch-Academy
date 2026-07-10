@@ -83,6 +83,14 @@ def test_silver_is_desaturated_gold(app_offscreen=None):
                 seen_opaque = True
                 assert color.red() == color.green() == color.blue()
     assert seen_opaque
+    # Transparent surroundings STAY transparent (owner bug report: a
+    # silently no-op alpha mask left the whole bounding box as an opaque
+    # gray plate). Probed on the PNG letter — the current latin SVGs
+    # carry a semi-opaque gold wash of their own (reported to the owner).
+    omega = cache.pixmap_by_height(
+        defaults.RING_LETTER_ART_DIR / "Omega.png", 48.0, 1.0, desaturate=True
+    ).toImage()
+    assert omega.pixelColor(0, 0).alpha() == 0
 
 
 def test_ring_tint_flows_to_the_skin_and_the_umbra():
