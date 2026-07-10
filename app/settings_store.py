@@ -38,6 +38,8 @@ class Settings:
     diameter: int = defaults.DEFAULT_DIAL_DIAMETER
     click_through: bool = False
     ring: str = "domy"                  # ring preset name (DOMY/MORPH/…)
+    ring_tint: str | None = None        # #RRGGBB multiplying ring+hands+Umbra
+    ring_finish: str = "gold"           # letter art metals (Omega inverted)
     pointer: str = "hexa"
     umbra_form: str = "fine"
     umbra_contrast: str = "full"
@@ -93,8 +95,14 @@ class SettingsStore:
             # A bad value here would otherwise KeyError deep inside a
             # paint pass, where Qt swallows the exception.
             choices = {}
+            ring_tint = raw.get("ring_tint")
+            if ring_tint is not None:
+                ring_tint = str(ring_tint).upper()
+                if not _HEX_COLOR.match(ring_tint):
+                    raise ValueError(f"ring_tint {ring_tint!r} not #RRGGBB")
             for key, default, allowed in (
                 ("ring", "domy", tuple(defaults.RING_PRESETS)),
+                ("ring_finish", "gold", constants.RING_FINISHES),
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
                 ("umbra_form", "fine", constants.UMBRA_FORMS),
                 ("umbra_contrast", "full", constants.UMBRA_CONTRAST_VARIANTS),
@@ -145,6 +153,7 @@ class SettingsStore:
                 latitude=latitude,
                 longitude=longitude,
                 timezone=timezone,
+                ring_tint=ring_tint,
                 star_alpha=_load_alpha(raw, "star_alpha"),
                 aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
                 aura_twilight_alpha=_load_alpha(raw, "aura_twilight_alpha"),
@@ -164,6 +173,8 @@ class SettingsStore:
             },
             "click_through": settings.click_through,
             "ring": settings.ring,
+            "ring_tint": settings.ring_tint,
+            "ring_finish": settings.ring_finish,
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,

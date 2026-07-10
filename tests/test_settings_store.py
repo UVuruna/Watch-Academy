@@ -69,6 +69,8 @@ def test_display_choices_round_trip(store):
         solar_rotation=False,
         octa_slot="zodiac_text",
         earth_style="atmo",
+        ring_tint="#8E55B9",
+        ring_finish="silver",
         show_earth=False,
         show_moon=False,
         show_weekday=False,
@@ -89,6 +91,8 @@ def test_display_choices_round_trip(store):
         "palette_style",
         "octa_slot",
         "earth_style",
+        "ring_finish",
+        "ring_tint",
     ],
 )
 def test_unknown_display_choice_raises(store, key):

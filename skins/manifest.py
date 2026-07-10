@@ -52,6 +52,10 @@ class RingSpec:
     letter_color: str
     width_fraction: float              # ring thickness as fraction of the dial radius
     letters: dict[int, str] = field(default_factory=dict)  # hour -> letter replacing the numeral
+    # The owner's separate gold/silver letter art overlaid on the ring
+    # (hour -> resolved file for the active finish) — built by the
+    # controller's build_skin so the ring tint never touches the letters.
+    letter_art: dict[int, Path] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -142,6 +146,12 @@ class SkinDefinition:
     colorful: bool = True              # False -> the Aura wears plain white
                                        # transparency instead of palette hues
     show_seconds: bool = True          # the seconds hand (and its cadence)
+    # Ring recolor (owner spec, FINAL.txt #6): ONE hue multiplies the
+    # ring art, the hands and the Umbra (None = untouched gray art);
+    # the finish picks the owner's letter art set (gold = M/D/Y/P/H
+    # gold + silver Omega; silver = the inverse) — letters never tint.
+    ring_tint: str | None = None
+    ring_finish: str = "gold"
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None
@@ -159,6 +169,7 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         skin.hands.hour.asset,
         skin.hands.minute.asset,
         skin.hands.second.asset if skin.hands.second else None,
+        *skin.ring.letter_art.values(),
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),
     ]

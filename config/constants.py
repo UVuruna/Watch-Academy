@@ -209,6 +209,13 @@ OCTA_SLOT_ART_DIRS = {
 # atmosphere version.
 EARTH_STYLES = ("clean", "atmo")
 
+# Ring letter FINISH (owner spec, FINAL.txt #6): the letters are the
+# owner's separate art (assets/ring/letters/<File>_<finish>.png),
+# positioned by code so the ring tint never touches them. "gold" =
+# M/D/Y/P/H gold with a silver Omega; "silver" = the inverse.
+RING_FINISHES = ("gold", "silver")
+RING_LETTER_FILES = {"M": "M", "D": "D", "Y": "Y", "Π": "P", "H": "H", "Ω": "Omega"}
+
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
 # own weekday unit; the others swap in the owner's themed art from
 # assets/skins/domy/weekday/<theme>/ with the canon display names.

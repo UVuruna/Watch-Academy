@@ -37,14 +37,24 @@ from skins.manifest import missing_assets
 def build_skin(settings: Settings):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
     (DOMY and MORPH are ring preset names — nothing more, owner
-    decision) and the user's display choices overlaid."""
+    decision), the letter art of the chosen finish (gold = M/D/Y/P/H
+    gold with a silver Omega; silver = the inverse) and the user's
+    display choices overlaid."""
     preset = defaults.RING_PRESETS[settings.ring]
+    letter_art = {}
+    for hour, letter in preset["letters"].items():
+        name = constants.RING_LETTER_FILES[letter]
+        metal = settings.ring_finish if name != "Omega" else (
+            "silver" if settings.ring_finish == "gold" else "gold"
+        )
+        letter_art[hour] = defaults.RING_LETTER_ART_DIR / f"{name}_{metal}.png"
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
             defaults.DEFAULT_SKIN.ring,
             asset=preset["asset"],
             letters=preset["letters"],
+            letter_art=letter_art,
         ),
     )
     return apply_display_settings(skin, settings)
@@ -114,6 +124,8 @@ def apply_display_settings(skin, settings: Settings):
         show_pointer=settings.show_pointer,
         colorful=settings.colorful,
         show_seconds=settings.show_seconds,
+        ring_tint=settings.ring_tint,
+        ring_finish=settings.ring_finish,
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
         ),
@@ -463,10 +475,21 @@ class AppController(QObject):
             settings.weekday_theme,
             lambda value: self._set_display_choice("weekday_theme", value),
         )
-        self._add_choice_submenu(
+        ring_menu = self._add_choice_submenu(
             theme_menu, "Ring",
             [(name, name.upper()) for name in sorted(defaults.RING_PRESETS)],
             settings.ring, self._set_ring,
+        )
+        ring_menu.addSeparator()
+        # The letter FINISH (owner spec): gold = M/D/Y/P/H gold with a
+        # silver Omega, silver = the inverse. The tint itself (whole
+        # clock body hue) lives in the Settings dialog color picker.
+        self._add_choice_group(
+            theme_menu, ring_menu,
+            [(finish, f"{finish.capitalize()} letters")
+             for finish in constants.RING_FINISHES],
+            settings.ring_finish,
+            lambda value: self._set_display_choice("ring_finish", value),
         )
         # Pointer variant and palette style share ONE dropdown (owner
         # spec), two exclusive groups like the Umbra submenu.

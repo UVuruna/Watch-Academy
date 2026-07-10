@@ -69,11 +69,13 @@ def draw_pie(painter: QPainter, radius: float, start_deg: float, end_deg: float)
 
 
 def draw_pixmap_centered(
-    painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF, height: float
+    painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF,
+    height: float, tint: str | None = None,
 ) -> None:
     """Asset rasterized to `height` and drawn centered at `pos` — the one
-    shared image path of weekday bodies and the year marker (Rule #5)."""
-    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr)
+    shared image path of weekday bodies and the year marker (Rule #5).
+    `tint` channel-multiplies the image (the ring recolor)."""
+    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint)
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 
@@ -116,6 +118,19 @@ def palette_for(skin: SkinDefinition) -> tuple:
     if skin.palette_override is not None:
         return skin.palette_override
     return defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
+
+
+def tinted_gray(value: int, tint: str | None) -> QColor:
+    """A gray of brightness `value`, channel-multiplied by the ring
+    tint (None = plain gray) — the Umbra's share of the ring recolor."""
+    if tint is None:
+        return QColor(value, value, value)
+    hue = QColor(tint)
+    return QColor(
+        value * hue.red() // 255,
+        value * hue.green() // 255,
+        value * hue.blue() // 255,
+    )
 
 
 def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
@@ -299,15 +314,16 @@ class BackgroundLayer(Layer):
         centered on top/bottom, the rest in mirror pairs — or the
         continuous per-pixel gradient."""
         contrast = ctx.skin.umbra_contrast
+        tint = ctx.skin.ring_tint            # the Umbra follows the ring hue
         if ctx.skin.umbra_form == "gradient":
             lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
             lightest = min(255, lightest)        # spans store window BOUNDS
             # Conical sweep from the top: symmetric stops make the
             # left/right sides exact mirrors, per-pixel smooth.
             gradient = QConicalGradient(QPointF(0.0, 0.0), 90.0)
-            gradient.setColorAt(0.0, QColor(lightest, lightest, lightest))
-            gradient.setColorAt(0.5, QColor(darkest, darkest, darkest))
-            gradient.setColorAt(1.0, QColor(lightest, lightest, lightest))
+            gradient.setColorAt(0.0, tinted_gray(lightest, tint))
+            gradient.setColorAt(0.5, tinted_gray(darkest, tint))
+            gradient.setColorAt(1.0, tinted_gray(lightest, tint))
             painter.setBrush(QBrush(gradient))
             painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
             return
@@ -315,7 +331,7 @@ class BackgroundLayer(Layer):
         span = 360.0 / sections
         shades = umbra_ladder(sections // 2 + 1, contrast)
         for k, value in enumerate(shades):
-            painter.setBrush(QColor(value, value, value))
+            painter.setBrush(tinted_gray(value, tint))
             center = k * span
             draw_pie(painter, radius, center - span / 2, center + span / 2)
             if 0 < k < len(shades) - 1:
@@ -403,14 +419,20 @@ class RingLayer(Layer):
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.ring
         if spec.asset is not None:
-            # The ring art carries numerals, minutes and letters itself.
+            # The ring art carries numerals and minutes; the ring tint
+            # multiplies the art. The LETTERS are the owner's separate
+            # gold/silver art, overlaid by calculation so the tint never
+            # touches them (1x1 placeholders until his files land).
             draw_pixmap_centered(
-                painter, ctx, spec.asset, QPointF(0, 0), 2 * ctx.radius
+                painter, ctx, spec.asset, QPointF(0, 0), 2 * ctx.radius,
+                tint=ctx.skin.ring_tint,
             )
+            self._draw_letter_art(painter, ctx)
             return
         outer, inner = ctx.radius, ctx.radius * (1.0 - spec.width_fraction)
 
         ring = QPainterPath()
+        # (procedural fallback ring below — no tint, no letter art)
         ring.addEllipse(QRectF(-outer, -outer, 2 * outer, 2 * outer))
         ring.addEllipse(QRectF(-inner, -inner, 2 * inner, 2 * inner))
         painter.setPen(Qt.PenStyle.NoPen)
@@ -465,6 +487,20 @@ class RingLayer(Layer):
             center = dial_point(minute * 6.0, minute_radius)
             rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
+
+    def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The owner's gold/silver letter PNGs at the preset's hour
+        positions, upright and UNTINTED (the finish already picked the
+        files in build_skin — 1x1 placeholders until the owner's art
+        lands)."""
+        height = 2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
+        for hour, asset in self._skin.ring.letter_art.items():
+            theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
+            draw_pixmap_centered(
+                painter, ctx, asset,
+                dial_point(theta, ctx.radius * defaults.RING_LETTER_RADIUS_FRACTION),
+                height,
+            )
 
 
 def draw_weekday_body(
@@ -778,7 +814,11 @@ class HandLayer(Layer):
         units_to_logical = (hands.reach_fraction * ctx.radius) / longest_tip_units
         height = spec.design_height * units_to_logical
         pivot_y = (spec.design_height - hub) / spec.design_height
-        pixmap = ctx.cache.pixmap_by_height(spec.asset, height, ctx.dpr)
+        # The hands follow the ring hue (owner spec: one tint recolors
+        # the whole clock body).
+        pixmap = ctx.cache.pixmap_by_height(
+            spec.asset, height, ctx.dpr, tint=ctx.skin.ring_tint
+        )
         logical_w = pixmap.width() / ctx.dpr
         painter.save()
         painter.rotate(angle)

@@ -54,11 +54,13 @@ class SettingsDialog(QDialog):
         self._hues = list(
             settings.palettes.get(self._palette_key, self._preset)
         )
+        self._ring_tint = settings.ring_tint
 
         layout = QVBoxLayout(self)
         layout.addWidget(self._build_location_group())
         layout.addWidget(self._build_opacity_group())
         layout.addWidget(self._build_palette_group())
+        layout.addWidget(self._build_ring_tint_group())
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
             | QDialogButtonBox.StandardButton.Cancel
@@ -413,6 +415,50 @@ class SettingsDialog(QDialog):
         for chip, hue in zip(self._chips, self._hues):
             self._paint_chip(chip, hue)
 
+    # --- Ring tint ------------------------------------------------------------------
+
+    def _build_ring_tint_group(self) -> QGroupBox:
+        """One hue recolors the whole clock body — ring art, hands and
+        Umbra (channel multiply; the letter art stays untouched). Preset
+        chips come from defaults.RING_TINT_PRESETS (owner-tunable),
+        plus a free color picker."""
+        group = QGroupBox("Ring tint — whole clock body (letters excluded)")
+        row = QHBoxLayout(group)
+        for name, hue in defaults.RING_TINT_PRESETS.items():
+            chip = QPushButton(name)
+            if hue is not None:
+                chip.setStyleSheet(
+                    f"background-color: {hue}; border: 1px solid #666;"
+                )
+            chip.setToolTip(hue or "the untouched gray art")
+            chip.clicked.connect(
+                lambda checked, chosen=hue: self._set_ring_tint(chosen)
+            )
+            row.addWidget(chip)
+        custom = QPushButton("Custom…")
+        custom.clicked.connect(self._pick_ring_tint)
+        row.addWidget(custom)
+        row.addStretch(1)
+        self._ring_tint_label = QLabel()
+        self._show_ring_tint()
+        row.addWidget(self._ring_tint_label)
+        return group
+
+    def _set_ring_tint(self, hue: str | None) -> None:
+        self._ring_tint = hue
+        self._show_ring_tint()
+
+    def _pick_ring_tint(self) -> None:
+        chosen = QColorDialog.getColor(
+            QColor(self._ring_tint or "#808080"), self, "Pick the ring tint"
+        )
+        if not chosen.isValid():
+            return
+        self._set_ring_tint(chosen.name().upper())
+
+    def _show_ring_tint(self) -> None:
+        self._ring_tint_label.setText(self._ring_tint or "Gray (default)")
+
     # --- Result ---------------------------------------------------------------------
 
     def result_settings(self) -> Settings:
@@ -442,4 +488,5 @@ class SettingsDialog(QDialog):
                 else None
             ),
             palettes=palettes,
+            ring_tint=self._ring_tint,
         )

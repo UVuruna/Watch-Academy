@@ -118,6 +118,27 @@ RING_PRESETS = {
     },
 }
 
+# --- Ring tint (owner spec, FINAL.txt #6) ------------------------------------------
+# One hue recolors the WHOLE clock body: the ring art, the hands and
+# the Umbra are channel-multiplied by it (gray stays gray under None).
+# The letters are separate art and are never tinted. Preset hues below
+# are STARTING VALUES — the owner tunes them here.
+RING_TINT_PRESETS = {
+    "Gray": None,                       # the untouched owner art
+    "Gold": "#D4AF37",
+    "Silver": "#C9CDD3",
+    "Copper": "#B87333",
+    "Purple": "#8E55B9",
+    "Ocean": "#4E7A9E",
+}
+
+# The owner's letter art (M/D/Y/P/H/Omega in gold and silver), overlaid
+# on the ring by calculation so the tint never touches them. 1x1
+# placeholders ship until the owner extracts the letters from the ring.
+RING_LETTER_ART_DIR = paths.assets_dir() / "ring" / "letters"
+RING_LETTER_RADIUS_FRACTION = 0.929  # letter center, of the dial radius
+RING_LETTER_ART_SCALE = 0.075        # letter height, of the dial diameter
+
 # --- Default render config --------------------------------------------------------
 # The ONE typed SkinDefinition the compositor consumes; the controller
 # overlays the ring preset and the user's display choices onto it.
