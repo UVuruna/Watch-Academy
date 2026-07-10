@@ -63,6 +63,7 @@ class SettingsDialog(QDialog):
         layout.addWidget(self._build_palette_group())
         layout.addWidget(self._build_ring_tint_group())
         layout.addWidget(self._build_custom_ring_group())
+        layout.addWidget(self._build_language_group())
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
             | QDialogButtonBox.StandardButton.Cancel
@@ -599,6 +600,30 @@ class SettingsDialog(QDialog):
         )
         self._ring_name_edit.clear()
 
+    # --- Language (owner spec: translate once via the keyless endpoint) --------------
+
+    def _build_language_group(self) -> QGroupBox:
+        group = QGroupBox("Language")
+        row = QHBoxLayout(group)
+        self._language_combo = QComboBox()
+        for code, name in sorted(
+            constants.TRANSLATION_LANGUAGES.items(), key=lambda item: item[1]
+        ):
+            self._language_combo.addItem(name, code)
+            if code == self._settings.language:
+                self._language_combo.setCurrentIndex(
+                    self._language_combo.count() - 1
+                )
+        row.addWidget(self._language_combo)
+        note = QLabel(
+            "First pick translates all texts in the background "
+            "(internet needed once) and caches them — afterwards the "
+            "language works offline."
+        )
+        note.setWordWrap(True)
+        row.addWidget(note, stretch=1)
+        return group
+
     # --- Result ---------------------------------------------------------------------
 
     def result_settings(self) -> Settings:
@@ -630,6 +655,7 @@ class SettingsDialog(QDialog):
             palettes=palettes,
             ring_tint=self._ring_tint,
             custom_rings=tuple(self._custom_rings),
+            language=self._language_combo.currentData(),
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

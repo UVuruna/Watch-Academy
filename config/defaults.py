@@ -216,6 +216,12 @@ LEGEND_TEXT = "#FFFFFF"
 GUIDE_DIR = paths.assets_dir() / "guide"
 GUIDE_SLIDE_MAX_PX = 720
 
+# Translation (owner spec: translate-once-then-cache, no accounts, no
+# keys): the keyless Google gtx endpoint; the per-language cache lives
+# beside settings.json in %APPDATA%/DOMY Watch/translations/.
+TRANSLATE_ENDPOINT = "https://translate.googleapis.com/translate_a/single"
+TRANSLATE_TIMEOUT_S = 15
+
 # Transparent margin around the dial INSIDE the window (owner bug
 # report: M and Omega touch the window square and their overhang and
 # shadow get clipped). Sized for the worst case: ring letters at the

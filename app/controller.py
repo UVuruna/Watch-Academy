@@ -8,6 +8,7 @@ fresh -> rebuild the day context when (local date, UTC offset) changed
 
 import dataclasses
 import sys
+import threading
 from datetime import datetime
 from time import monotonic
 from zoneinfo import ZoneInfo
@@ -32,6 +33,8 @@ from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
 from data.seasons import SeasonsRepository
+from data.symbolism import SymbolismRepository
+from data.translations import TranslationStore, collect_corpus, translate_texts
 from render.assets import AssetCache
 from render.compositor import Compositor
 from skins.manifest import missing_assets
@@ -201,6 +204,14 @@ class AppController(QObject):
         )
         self._seasons = SeasonsRepository()
         self._moon_phases = MoonPhaseRepository()
+        # Translation overlay (owner spec): apply whatever the cache
+        # already holds; missing entries translate in the background.
+        self._translation_overlay: dict = {}
+        self._translation_thread: threading.Thread | None = None
+        self._translation_error: Exception | None = None
+        self._translation_poller = QTimer(self)
+        self._translation_poller.setInterval(1000)
+        self._translation_poller.timeout.connect(self._poll_translation)
         self._skin = build_skin(self._settings)
         missing = missing_assets(self._skin)
         if missing:
@@ -213,7 +224,9 @@ class AppController(QObject):
                 QMessageBox.StandardButton.Ok,
             )
             raise SystemExit(1)
-        self._compositor = Compositor(self._skin, AssetCache())
+        if self._settings.language != "en":
+            self._apply_language(start_missing=True)
+        self._compositor = Compositor(self._skin, AssetCache(), self._symbolism())
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
         # present until the deadline passes.
@@ -416,10 +429,16 @@ class AppController(QObject):
 
     # --- Menu ---------------------------------------------------------------------
 
+    def _symbolism(self) -> SymbolismRepository:
+        """The article source with the active language's overlay laid
+        over the English originals (owner spec: we ship only English;
+        the user's machine translates once and caches)."""
+        return SymbolismRepository(overlay=self._translation_overlay or None)
+
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
         self._skin = skin
-        self._compositor = Compositor(skin, AssetCache())
+        self._compositor = Compositor(skin, AssetCache(), self._symbolism())
         self._widget.set_renderer(self._compositor)
         if self._day is not None:
             self._compositor.set_day(self._day)
@@ -671,7 +690,9 @@ class AppController(QObject):
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
         guide = QAction("Guide…", menu)
-        guide.triggered.connect(lambda: GuideDialog().exec())
+        guide.triggered.connect(
+            lambda: GuideDialog(self._translation_overlay).exec()
+        )
         menu.addAction(guide)
         self._add_toggle(
             menu, "Click-through", self._settings.click_through,
@@ -695,7 +716,10 @@ class AppController(QObject):
             new_settings.longitude,
             new_settings.timezone,
         ) != (self._settings.latitude, self._settings.longitude, self._settings.timezone)
+        language_changed = new_settings.language != self._settings.language
         self._settings = new_settings
+        if language_changed:
+            self._apply_language(start_missing=True)
         if location_changed:
             self._tz = ZoneInfo(new_settings.timezone)
             self._observer = astral.Observer(
@@ -727,6 +751,77 @@ class AppController(QObject):
         self._simulation_ends = monotonic() + defaults.TIME_TRAVEL_DURATION_S
         self._day = None                    # rebuild with the simulated situation
         self._on_tick(clock_jumped=False)
+
+    # --- Translation (owner spec: translate once, cache, display) -----------------
+
+    def _apply_language(self, start_missing: bool) -> None:
+        """Load the cached overlay for the chosen language and, when
+        entries are missing (first pick, or the English corpus grew),
+        translate them in a background thread — the dial keeps running
+        and the texts switch when the cache completes."""
+        language = self._settings.language
+        if language == "en":
+            self._translation_overlay = {}
+            return
+        store = TranslationStore()
+        self._translation_overlay = store.load(language)
+        if not start_missing or self._translation_thread is not None:
+            return
+        if store.missing(language, collect_corpus()):
+            self._translation_thread = threading.Thread(
+                target=self._translate_worker, args=(language,), daemon=True
+            )
+            self._translation_thread.start()
+            self._translation_poller.start()
+            self._tray.notify(
+                "Translating",
+                f"Preparing {constants.TRANSLATION_LANGUAGES[language]} — "
+                "the clock keeps running; texts switch when ready.",
+                critical=False,
+            )
+
+    def _translate_worker(self, language: str) -> None:
+        """Background thread: translate the missing corpus entries in
+        resumable chunks — every chunk persists, so a network failure
+        mid-run continues where it stopped on the next attempt."""
+        try:
+            store = TranslationStore()
+            corpus = collect_corpus()
+            while True:
+                missing = store.missing(language, corpus)
+                if not missing:
+                    break
+                chunk = dict(list(missing.items())[:20])
+                store.save(language, chunk, translate_texts(chunk, language))
+            self._translation_error = None
+        except Exception as error:      # network/JSON — surfaced by the poller
+            self._translation_error = error
+
+    def _poll_translation(self) -> None:
+        thread = self._translation_thread
+        if thread is None or thread.is_alive():
+            return
+        self._translation_poller.stop()
+        self._translation_thread = None
+        failed = self._translation_error
+        self._translation_error = None
+        language = self._settings.language
+        if language != "en":
+            # Apply whatever completed (chunks persist) either way.
+            self._translation_overlay = TranslationStore().load(language)
+            self._install_skin(build_skin(self._settings))
+        if failed is not None:
+            self._tray.notify(
+                "Translation incomplete",
+                f"{failed} — finished parts are shown; pick the language "
+                "again in Settings to resume.",
+            )
+        elif language != "en":
+            self._tray.notify(
+                "Translation ready",
+                f"{constants.TRANSLATION_LANGUAGES[language]} is active.",
+                critical=False,
+            )
 
     def _set_click_through(self, enabled: bool) -> None:
         self._widget.set_click_through(enabled)

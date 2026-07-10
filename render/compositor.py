@@ -145,11 +145,18 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
 
 
 class Compositor:
-    def __init__(self, skin: SkinDefinition, cache: AssetCache):
+    def __init__(
+        self,
+        skin: SkinDefinition,
+        cache: AssetCache,
+        symbolism: SymbolismRepository | None = None,
+    ):
         self._skin = skin
         self._cache = cache
         self._layers = _build_layers(skin)
-        self._symbolism = SymbolismRepository()
+        # The controller passes a repository with the active language's
+        # translation overlay; standalone uses read the originals.
+        self._symbolism = symbolism or SymbolismRepository()
         self._day: DayContext | None = None
         self._last_tick: TickState | None = None
         self._composite: QPixmap | None = None

@@ -23,7 +23,7 @@ from config import constants, defaults
 
 
 class GuideDialog(QDialog):
-    def __init__(self):
+    def __init__(self, translations: dict | None = None):
         super().__init__()
         self.setWindowTitle(f"{constants.APP_NAME} — Guide")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
@@ -32,6 +32,12 @@ class GuideDialog(QDialog):
         captions_path = defaults.GUIDE_DIR / "captions.json"
         if captions_path.exists():
             self._captions = json.loads(captions_path.read_text(encoding="utf-8"))
+        # The active language's overlay (key "guide/<stem>") wins over
+        # the shipped English captions.
+        for stem in list(self._captions):
+            translated = (translations or {}).get(f"guide/{stem}")
+            if translated is not None:
+                self._captions[stem] = translated
         self._index = 0
 
         self._image = QLabel()

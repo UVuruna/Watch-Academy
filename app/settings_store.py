@@ -62,6 +62,7 @@ class Settings:
     colorful: bool = True               # off -> white Aura instead of hues
     show_seconds: bool = True
     show_octa_slot: bool = True         # the Compass info slot (octa only)
+    language: str = "en"                # translation target (en = originals)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
     city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
@@ -129,6 +130,7 @@ class SettingsStore:
             if ring is None:
                 raise ValueError(f"ring {ring_value!r} unknown")
             for key, default, allowed in (
+                ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
                 ("umbra_form", "fine", constants.UMBRA_FORMS),
@@ -228,6 +230,7 @@ class SettingsStore:
             "colorful": settings.colorful,
             "show_seconds": settings.show_seconds,
             "show_octa_slot": settings.show_octa_slot,
+            "language": settings.language,
             "location": {
                 "name": settings.city_name,
                 "path": list(settings.city_path),

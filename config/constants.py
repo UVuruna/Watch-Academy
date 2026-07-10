@@ -372,6 +372,35 @@ ZONE_SEASON_EVENT_NAMES = {
     },
 }
 
+# Languages offered in Settings (owner: "all the provider offers") —
+# the Google-translate codes the gtx endpoint accepts, code -> English
+# display name; "en" shows the shipped originals and "sr-Latn" is
+# Serbian with a local Cyrillic->Latin transliteration.
+TRANSLATION_LANGUAGES = {
+    "en": "English",
+    "af": "Afrikaans", "sq": "Albanian", "am": "Amharic", "ar": "Arabic",
+    "hy": "Armenian", "az": "Azerbaijani", "eu": "Basque",
+    "be": "Belarusian", "bn": "Bengali", "bs": "Bosnian",
+    "bg": "Bulgarian", "ca": "Catalan", "zh-CN": "Chinese (Simplified)",
+    "zh-TW": "Chinese (Traditional)", "hr": "Croatian", "cs": "Czech",
+    "da": "Danish", "nl": "Dutch", "eo": "Esperanto", "et": "Estonian",
+    "fi": "Finnish", "fr": "French", "gl": "Galician", "ka": "Georgian",
+    "de": "German", "el": "Greek", "gu": "Gujarati", "he": "Hebrew",
+    "hi": "Hindi", "hu": "Hungarian", "is": "Icelandic",
+    "id": "Indonesian", "ga": "Irish", "it": "Italian", "ja": "Japanese",
+    "kn": "Kannada", "kk": "Kazakh", "ko": "Korean", "lv": "Latvian",
+    "lt": "Lithuanian", "mk": "Macedonian", "ms": "Malay",
+    "ml": "Malayalam", "mt": "Maltese", "mr": "Marathi",
+    "mn": "Mongolian", "ne": "Nepali", "no": "Norwegian",
+    "fa": "Persian", "pl": "Polish", "pt": "Portuguese",
+    "pa": "Punjabi", "ro": "Romanian", "ru": "Russian",
+    "sr": "Serbian (Cyrillic)", "sr-Latn": "Serbian (Latin)",
+    "sk": "Slovak", "sl": "Slovenian", "es": "Spanish",
+    "sw": "Swahili", "sv": "Swedish", "ta": "Tamil", "te": "Telugu",
+    "th": "Thai", "tr": "Turkish", "uk": "Ukrainian", "ur": "Urdu",
+    "uz": "Uzbek", "vi": "Vietnamese", "cy": "Welsh",
+}
+
 # Element size multipliers (Settings sliders, owner EXTRAS) and the
 # shared hover-enlarge factor (the element under the cursor draws this
 # much larger; 1.0 disables the effect).

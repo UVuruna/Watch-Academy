@@ -33,6 +33,12 @@ machine-readable companion of [DOMY Symbolism](../SYMBOLISM.md)) — the
 hover articles per theme, sign, animal, element and Trinity virtue.
 See [Symbolism Repository](symbolism.md).
 
+### `translations.py` — Translations
+Translate-once-then-cache (owner spec: we ship only English): corpus
+collection, the keyless gtx client, the hash-tracked per-language
+cache and the Serbian Cyrillic→Latin transliteration.
+See [Translations](translations.md).
+
 ### `rings.py` — Ring Presets
 The ring preset cards (bundled `ring_presets.json` + the user's custom
 cards from settings): `{name, positions, letters}`, layouts resolved by

@@ -52,6 +52,12 @@ class TrayController:
     def hide(self) -> None:
         self._icon.hide()
 
-    def notify(self, title: str, message: str) -> None:
-        """Non-blocking error balloon (used for mid-run save failures)."""
-        self._icon.showMessage(title, message, QSystemTrayIcon.MessageIcon.Critical)
+    def notify(self, title: str, message: str, critical: bool = True) -> None:
+        """Non-blocking balloon: errors by default, `critical=False`
+        for progress notes (e.g. background translation)."""
+        icon = (
+            QSystemTrayIcon.MessageIcon.Critical
+            if critical
+            else QSystemTrayIcon.MessageIcon.Information
+        )
+        self._icon.showMessage(title, message, icon)
