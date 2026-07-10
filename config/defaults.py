@@ -207,7 +207,7 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 # Article hovers (owner spec, FINAL.txt hover rework + EXTRAS): the
 # entity's art rides on top of its article, larger and clearer than on
 # the dial; the prose wraps at a fixed width so QToolTip stays a column.
-ARTICLE_IMAGE_WIDTH_PX = 96
+ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must read
 ARTICLE_WRAP_CHARS = 56
 
 # Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
