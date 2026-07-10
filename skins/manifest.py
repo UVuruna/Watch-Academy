@@ -159,6 +159,7 @@ class SkinDefinition:
     # the element under the cursor draws this much larger.
     octa_slot_scale: float = 1.0
     hover_enlarge: float = 1.2
+    ring_letter_scale: float = 1.0     # multiplies RING_LETTER_ART_SCALE
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None

@@ -383,6 +383,7 @@ class SettingsDialog(QDialog):
             ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100),
             ("weekday_scale", "Weekday", constants.ELEMENT_SCALE_RANGE, 100),
             ("octa_slot_scale", "Octa slot", constants.ELEMENT_SCALE_RANGE, 100),
+            ("ring_letter_scale", "Ring letters", constants.ELEMENT_SCALE_RANGE, 100),
             ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120),
         ]
         for key, title, (low, high), default in rows:

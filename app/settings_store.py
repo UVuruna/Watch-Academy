@@ -70,6 +70,7 @@ class Settings:
     moon_scale: float = 1.0
     weekday_scale: float = 1.0
     octa_slot_scale: float = 1.0
+    ring_letter_scale: float = 1.0
     hover_enlarge: float = 1.2
     # Display overrides (None = the skin's own value). The Aura's
     # sunlight and twilight opacities are INDEPENDENT (owner spec).
@@ -166,6 +167,7 @@ class SettingsStore:
                 moon_scale=_load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 weekday_scale=_load_scale(raw, "weekday_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 octa_slot_scale=_load_scale(raw, "octa_slot_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                ring_letter_scale=_load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 hover_enlarge=_load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
                 star_alpha=_load_alpha(raw, "star_alpha"),
                 aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
@@ -214,6 +216,7 @@ class SettingsStore:
             "moon_scale": settings.moon_scale,
             "weekday_scale": settings.weekday_scale,
             "octa_slot_scale": settings.octa_slot_scale,
+            "ring_letter_scale": settings.ring_letter_scale,
             "hover_enlarge": settings.hover_enlarge,
             "star_alpha": settings.star_alpha,
             "aura_day_alpha": settings.aura_day_alpha,

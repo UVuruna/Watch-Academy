@@ -499,18 +499,50 @@ class RingLayer(Layer):
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
 
     def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The owner's letter art at the preset's hour positions,
-        upright and UNTINTED — gold masters, desaturated to silver where
-        build_skin marked the finish (the accent letter wears the
-        opposite metal, owner spec)."""
-        height = 2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
+        """The owner's letter art at the preset's hour positions —
+        gold masters, desaturated to silver where build_skin marked the
+        finish (the accent letter wears the opposite metal). Each letter
+        ROTATES with its place on the circle (tangentially; the lower
+        half flips 180° to stay readable — Ω stands upright at the
+        bottom), rides a tight dark halo (owner spec: a gradient border,
+        lit from above) and is UNTINTED by the ring hue."""
+        height = (
+            2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
+            * ctx.skin.ring_letter_scale
+        )
+        shadow_radius = height * defaults.RING_LETTER_SHADOW_RADIUS
+        samples = defaults.RING_LETTER_SHADOW_SAMPLES
         for hour, (asset, silver) in self._skin.ring.letter_art.items():
             theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
-            draw_pixmap_centered(
-                painter, ctx, asset,
-                dial_point(theta, ctx.radius * defaults.RING_LETTER_RADIUS_FRACTION),
-                height, desaturate=silver,
+            rotation = theta - 180.0 if 90.0 < theta < 270.0 else (
+                theta if theta <= 90.0 else theta - 360.0
             )
+            pixmap = ctx.cache.pixmap_by_height(
+                asset, height, ctx.dpr, desaturate=silver
+            )
+            shadow = ctx.cache.pixmap_by_height(
+                asset, height, ctx.dpr, tint="#000000"
+            )
+            logical_w = pixmap.width() / ctx.dpr
+            pos = dial_point(
+                theta, ctx.radius * defaults.RING_LETTER_RADIUS_FRACTION
+            )
+            painter.save()
+            painter.translate(pos)
+            painter.rotate(rotation)
+            painter.setOpacity(defaults.RING_LETTER_SHADOW_ALPHA)
+            for k in range(samples):
+                angle = 2.0 * math.pi * k / samples
+                painter.drawPixmap(
+                    QPointF(
+                        -logical_w / 2 + shadow_radius * math.cos(angle),
+                        -height / 2 + shadow_radius * math.sin(angle),
+                    ),
+                    shadow,
+                )
+            painter.setOpacity(1.0)
+            painter.drawPixmap(QPointF(-logical_w / 2, -height / 2), pixmap)
+            painter.restore()
 
 
 def draw_weekday_body(

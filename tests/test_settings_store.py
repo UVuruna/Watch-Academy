@@ -75,6 +75,7 @@ def test_display_choices_round_trip(store):
         moon_scale=0.8,
         weekday_scale=1.25,
         octa_slot_scale=0.75,
+        ring_letter_scale=1.3,
         hover_enlarge=1.4,
         show_earth=False,
         show_moon=False,

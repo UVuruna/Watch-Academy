@@ -143,6 +143,14 @@ RING_TINT_PRESETS = {
 RING_LETTER_ART_DIR = paths.assets_dir() / "ring" / "letters"
 RING_LETTER_RADIUS_FRACTION = 0.929  # letter center, of the dial radius
 RING_LETTER_ART_SCALE = 0.075        # letter height, of the dial diameter
+                                     # (deliberate slight oversize — owner
+                                     # default; the Settings slider scales it)
+# Letter shadow (owner spec): a tight, intense dark halo on all sides —
+# a gradient border, as if lit from above. Stamped as N offset copies of
+# the blackened letter at `alpha` each, `radius` of the letter height.
+RING_LETTER_SHADOW_RADIUS = 0.05     # of the letter height
+RING_LETTER_SHADOW_ALPHA = 0.55      # per stamp (stamps overlap -> intense)
+RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
 
 # --- Default render config --------------------------------------------------------
 # The ONE typed SkinDefinition the compositor consumes; the controller

@@ -149,6 +149,7 @@ def apply_display_settings(skin, settings: Settings):
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
         octa_slot_scale=settings.octa_slot_scale,
+        ring_letter_scale=settings.ring_letter_scale,
         hover_enlarge=settings.hover_enlarge,
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
