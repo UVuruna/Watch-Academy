@@ -209,21 +209,57 @@ OCTA_SLOT_ART_DIRS = {
 # atmosphere version.
 EARTH_STYLES = ("clean", "atmo")
 
-# Ring letter FINISH (owner spec): the letters are the owner's separate
-# GOLD art (assets/ring/letters/, latin SVG + greek PNG), positioned by
-# code so the ring tint never touches them; the silver look is derived
-# by DESATURATING the gold at load (owner-approved). Each ring preset
-# names its ACCENT letter — the one wearing the OPPOSITE metal:
-# DOMY gold = D/M/Y gold + silver Omega, DOMY silver = the inverse;
-# MORPH gold = Omega/Pi/H gold + silver M, MORPH silver = the inverse.
+# Ring letters and layouts (owner spec 2026-07-10, data-driven): ring
+# presets live in Database/ring_presets.json (+ the user's custom ones
+# in settings) as {name, positions, letters}; the POSITIONS signature
+# picks a LAYOUT — the ring face with matching gaps and the metal
+# rules. Finish rules (owner): 4-letter layouts — GOLD puts the
+# triangle's three letters in gold and the remaining one in silver,
+# SILVER puts the 12h letter in gold and the rest in silver; the
+# hexagram wears all six in one metal. Silver letters are pre-rendered
+# files (setup/make_silver_letters.py).
 RING_FINISHES = ("gold", "silver")
+RING_LAYOUTS = {
+    # Provisional display names offered to the owner: Flame (the gold
+    # triangle points UP), Chalice (points DOWN), Seal (Solomon's).
+    "flame": {
+        "positions": (12, 20, 24, 4),
+        "face": "domy.png",
+        "triangle": (12, 20, 4),
+    },
+    "chalice": {
+        "positions": (12, 16, 24, 8),
+        "face": "morph.png",
+        "triangle": (8, 16, 24),
+    },
+    "seal": {
+        "positions": (12, 16, 20, 24, 4, 8),
+        "face": "hexagram.png",
+        "triangle": (),              # one metal for all six letters
+    },
+}
+# The full letter library (glyph -> art file) — presets and the custom
+# ring builder choose from these; every glyph also ships a pre-rendered
+# <Stem>_silver.png.
 RING_LETTER_FILES = {
     "M": "M.svg",
     "D": "D.svg",
     "Y": "Y.svg",
-    "Π": "Pi.png",
+    "G": "G.svg",
     "H": "H.svg",
+    "I": "I.svg",
+    "P": "P.svg",
+    "S": "S.svg",
+    "U": "U.svg",
+    "V": "V.svg",
+    "X": "X.svg",
+    "Z": "Z.svg",
     "Ω": "Omega.png",
+    "Π": "Pi.png",
+    "Φ": "Phi.png",
+    "Ψ": "Psi.png",
+    "Σ": "Sigma.png",
+    "Θ": "Theta.png",
 }
 
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's

@@ -16,6 +16,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from config import constants, defaults
+from data.rings import ring_presets, validate_preset
 
 _HEX_COLOR = re.compile(r"^#[0-9A-Fa-f]{6}$")
 
@@ -37,9 +38,12 @@ class Settings:
     window_y: int | None = None
     diameter: int = defaults.DEFAULT_DIAL_DIAMETER
     click_through: bool = False
-    ring: str = "domy"                  # ring preset name (DOMY/MORPH/…)
+    ring: str = "DOMY"                  # ring preset CARD name (bundled or custom)
     ring_tint: str | None = None        # #RRGGBB multiplying ring+hands+Umbra
-    ring_finish: str = "gold"           # letter art metals (Omega inverted)
+    ring_finish: str = "gold"           # letter metals (triangle/12h rules)
+    # The user's custom ring cards ({name, positions, letters}) — merged
+    # with Database/ring_presets.json by data/rings.py.
+    custom_rings: tuple = ()
     pointer: str = "hexa"
     umbra_form: str = "fine"
     umbra_contrast: str = "full"
@@ -109,8 +113,21 @@ class SettingsStore:
                 ring_tint = str(ring_tint).upper()
                 if not _HEX_COLOR.match(ring_tint):
                     raise ValueError(f"ring_tint {ring_tint!r} not #RRGGBB")
+            # Custom ring cards first — the chosen ring name is checked
+            # against bundled + custom together; the name matches case-
+            # insensitively (older files stored "domy").
+            custom_rings = tuple(
+                _normalized_ring_card(entry)
+                for entry in raw.get("custom_rings", ())
+            )
+            by_fold = {
+                name.lower(): name for name in ring_presets(custom_rings)
+            }
+            ring_value = str(raw.get("ring", "DOMY"))
+            ring = by_fold.get(ring_value.lower())
+            if ring is None:
+                raise ValueError(f"ring {ring_value!r} unknown")
             for key, default, allowed in (
-                ("ring", "domy", tuple(defaults.RING_PRESETS)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
                 ("umbra_form", "fine", constants.UMBRA_FORMS),
@@ -162,6 +179,8 @@ class SettingsStore:
                 latitude=latitude,
                 longitude=longitude,
                 timezone=timezone,
+                ring=ring,
+                custom_rings=custom_rings,
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 moon_scale=_load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
@@ -190,6 +209,7 @@ class SettingsStore:
             "ring": settings.ring,
             "ring_tint": settings.ring_tint,
             "ring_finish": settings.ring_finish,
+            "custom_rings": [dict(card) for card in settings.custom_rings],
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
@@ -236,6 +256,17 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
+
+
+def _normalized_ring_card(entry: dict) -> dict:
+    """One custom ring card, validated by the shared card validator and
+    stored in its JSON-serializable shape."""
+    card = validate_preset(entry)
+    return {
+        "name": card["name"],
+        "positions": list(card["positions"]),
+        "letters": list(card["letters"]),
+    }
 
 
 def _load_bool(raw: dict, key: str, default: bool) -> bool:

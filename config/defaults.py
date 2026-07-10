@@ -103,25 +103,12 @@ TRAY_ICON_SIZE = 64                  # px of the rasterized tray pixmap
 LOGO_ASSET = paths.assets_dir() / "logo.svg"
 LOGO_SETUP_ASSET = paths.assets_dir() / "logo-setup.svg"
 
-# --- Ring presets ----------------------------------------------------------------
-# DOMY and MORPH are RING PRESET names — nothing more (owner decision):
-# a ring face plus its Greek-ordinal letter positions. The owner may add
-# more rings (drop the art into assets/ring/ and add an entry here).
-RING_PRESETS = {
-    # "accent" = the letter wearing the OPPOSITE metal of the chosen
-    # finish (owner spec 2026-07-10): DOMY inverts its Omega, MORPH
-    # inverts its M.
-    "domy": {
-        "asset": paths.assets_dir() / "ring" / "domy.png",
-        "letters": {12: "M", 20: "Y", 0: "Ω", 4: "D"},
-        "accent": "Ω",
-    },
-    "morph": {
-        "asset": paths.assets_dir() / "ring" / "morph.png",
-        "letters": {12: "M", 16: "Π", 8: "H", 0: "Ω"},
-        "accent": "M",
-    },
-}
+# --- Ring faces -------------------------------------------------------------------
+# Ring PRESETS are data now (Database/ring_presets.json + the user's
+# custom cards in settings, loaded by data/rings.py — owner spec): a
+# card is {name, positions, letters}; its positions signature picks the
+# LAYOUT (constants.RING_LAYOUTS) whose FACE file lives here.
+RING_FACE_DIR = paths.assets_dir() / "ring"
 
 # --- Ring tint (owner spec, FINAL.txt #6) ------------------------------------------
 # One hue recolors the WHOLE clock body: the ring art, the hands and
@@ -220,6 +207,18 @@ LEGEND_PADDING_PX = 8
 LEGEND_BG = "#2B2B2B"
 LEGEND_BORDER = "#6E6E6E"
 LEGEND_TEXT = "#FFFFFF"
+
+# The Guide window (owner spec: a help carousel; named Guide, not
+# About): slides = assets/guide/NN_name.png + optional captions.json.
+GUIDE_DIR = paths.assets_dir() / "guide"
+GUIDE_SLIDE_MAX_PX = 720
+
+# Transparent margin around the dial INSIDE the window (owner bug
+# report: M and Omega touch the window square and their overhang and
+# shadow get clipped). Sized for the worst case: ring letters at the
+# 200% slider maximum reach ~7.9% beyond the dial radius, plus their
+# halo — 5% of the DIAMETER per side covers it with headroom.
+DIAL_WINDOW_MARGIN_FRACTION = 0.05
 
 # Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
 #   full  — the whole gray range: sectioned ladders run endpoint-
@@ -377,14 +376,15 @@ DEFAULT_SKIN = SkinDefinition(
         radius_fraction=0.86,           # star tips touch the ring's inner edge too
     ),
     ring=RingSpec(
-        # The DOMY preset by default; the controller swaps in the chosen
-        # ring preset (asset + letter positions) at build time.
-        asset=RING_PRESETS["domy"]["asset"],
+        # A face placeholder only — the controller's build_skin ALWAYS
+        # overlays the chosen ring preset card (face + letters + letter
+        # art) from Database/ring_presets.json at build time.
+        asset=RING_FACE_DIR / "domy.png",
         fill="#4A4E57",
         text_color="#F0F0F0",
         letter_color="#E8B84B",
         width_fraction=0.16,
-        letters=RING_PRESETS["domy"]["letters"],
+        letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
         bodies={name: WEEKDAY_ART_DIR / "planets" / f"{name}.png" for name in (

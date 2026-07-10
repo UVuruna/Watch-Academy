@@ -1,0 +1,15 @@
+{
+  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs.",
+  "presets": [
+    {
+      "name": "DOMY",
+      "positions": [12, 20, 24, 4],
+      "letters": ["M", "Y", "Ω", "D"]
+    },
+    {
+      "name": "MORPH",
+      "positions": [12, 16, 24, 8],
+      "letters": ["M", "Π", "Ω", "H"]
+    }
+  ]
+}

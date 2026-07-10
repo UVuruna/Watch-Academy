@@ -19,6 +19,7 @@ from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
 
 from app import native
+from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
 from app.scheduler import MinuteScheduler
 from app.settings_dialog import SettingsDialog
@@ -29,26 +30,41 @@ from app.widget import ClockWidget
 from config import constants, defaults, paths
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
+from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
 from skins.manifest import missing_assets
 
 
+def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
+    """The owner's metal rules: the hexagram (no triangle) wears ONE
+    metal; 4-letter layouts — GOLD puts the triangle's three letters in
+    gold and the remaining one in silver, SILVER puts the 12h letter in
+    gold and the rest in silver."""
+    triangle = layout["triangle"]
+    if not triangle:
+        return finish == "gold"
+    if finish == "gold":
+        return position in triangle
+    return position == 12
+
+
 def build_skin(settings: Settings):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
-    (DOMY and MORPH are ring preset names — nothing more, owner
-    decision), the letter art of the chosen finish (the preset's ACCENT
-    letter wears the opposite metal; silver is desaturated gold) and
-    the user's display choices overlaid."""
-    preset = defaults.RING_PRESETS[settings.ring]
+    CARD (Database/ring_presets.json + the user's custom cards — owner
+    spec: {name, positions, letters}, the positions signature picks the
+    layout/face), the letter art of the chosen finish and the user's
+    display choices overlaid."""
+    card = ring_presets(settings.custom_rings)[settings.ring]
+    layout = constants.RING_LAYOUTS[card["layout"]]
+    letters = {}
     letter_art = {}
-    for hour, letter in preset["letters"].items():
-        is_silver = (settings.ring_finish == "silver") != (
-            letter == preset["accent"]
-        )
-        filename = constants.RING_LETTER_FILES[letter]
-        if is_silver:
+    for position, glyph in zip(card["positions"], card["letters"]):
+        hour = position % 24                     # cards say 24, hours say 0
+        letters[hour] = glyph
+        filename = constants.RING_LETTER_FILES[glyph]
+        if not _letter_is_gold(position, layout, settings.ring_finish):
             # Silver letters are PRE-RENDERED art (owner decision —
             # setup/make_silver_letters.py), not a runtime effect.
             filename = f"{filename.rsplit('.', 1)[0]}_silver.png"
@@ -57,8 +73,8 @@ def build_skin(settings: Settings):
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
             defaults.DEFAULT_SKIN.ring,
-            asset=preset["asset"],
-            letters=preset["letters"],
+            asset=defaults.RING_FACE_DIR / layout["face"],
+            letters=letters,
             letter_art=letter_art,
         ),
     )
@@ -479,58 +495,10 @@ class AppController(QObject):
     def _build_menu(self) -> QMenu:
         menu = QMenu()
         settings = self._settings
-        # THEME is the first-level dropdown (owner spec, FINAL.txt #6):
-        # Octa slot (only with the octa pointer), Weekday, Ring, Pointer
-        # and Umbra nest inside it.
+        # THEME is the first-level dropdown, in the owner's order:
+        # Pointer, Umbra, Ring, Earth, Weekday, Compass slot (only with
+        # the Compass pointer).
         theme_menu = menu.addMenu("Theme")
-        octa_slot_menu = self._add_choice_submenu(
-            theme_menu, "Octa slot",
-            [
-                ("time", "Time"),
-                ("date", "Date"),
-                ("day_length", "Day length"),
-                ("zodiac_sign", "Astrology sign"),
-                ("zodiac_logo", "Astrology logo"),
-                ("zodiac_constellation", "Astrology constellation"),
-                ("zodiac_text", "Astrology text"),
-                ("chinese_logo", "Chinese zodiac logo"),
-                ("chinese_text", "Chinese zodiac text"),
-            ],
-            settings.octa_slot,
-            lambda value: self._set_display_choice("octa_slot", value),
-        )
-        self._octa_slot_action = octa_slot_menu.menuAction()
-        self._octa_slot_action.setEnabled(settings.pointer == "octa")
-        self._add_choice_submenu(
-            theme_menu, "Weekday",
-            [
-                ("planets", "Planets"),
-                ("planet_signs", "Planet signs"),
-                ("greek", "Greek gods"),
-                ("norse", "Norse gods"),
-                ("religion", "Religions"),
-                ("religion_alt", "Religions II"),
-                ("profession", "Professions"),
-            ],
-            settings.weekday_theme,
-            lambda value: self._set_display_choice("weekday_theme", value),
-        )
-        ring_menu = self._add_choice_submenu(
-            theme_menu, "Ring",
-            [(name, name.upper()) for name in sorted(defaults.RING_PRESETS)],
-            settings.ring, self._set_ring,
-        )
-        ring_menu.addSeparator()
-        # The letter FINISH (owner spec): gold = M/D/Y/P/H gold with a
-        # silver Omega, silver = the inverse. The tint itself (whole
-        # clock body hue) lives in the Settings dialog color picker.
-        self._add_choice_group(
-            theme_menu, ring_menu,
-            [(finish, f"{finish.capitalize()} letters")
-             for finish in constants.RING_FINISHES],
-            settings.ring_finish,
-            lambda value: self._set_display_choice("ring_finish", value),
-        )
         # Pointer variant and palette style share ONE dropdown (owner
         # spec), two exclusive groups like the Umbra submenu.
         pointer_menu = self._add_choice_submenu(
@@ -576,28 +544,78 @@ class AppController(QObject):
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
         )
+        ring_menu = self._add_choice_submenu(
+            theme_menu, "Ring",
+            [
+                (name, name)
+                for name in sorted(ring_presets(settings.custom_rings))
+            ],
+            settings.ring, self._set_ring,
+        )
+        ring_menu.addSeparator()
+        # The letter FINISH (owner rules): gold = the triangle letters
+        # gold + the remaining one silver; silver = the 12h letter gold
+        # + the rest silver; the hexagram wears one metal. The tint
+        # itself lives in the Settings dialog color picker.
+        self._add_choice_group(
+            theme_menu, ring_menu,
+            [(finish, f"{finish.capitalize()} letters")
+             for finish in constants.RING_FINISHES],
+            settings.ring_finish,
+            lambda value: self._set_display_choice("ring_finish", value),
+        )
+        self._add_choice_submenu(
+            theme_menu, "Earth",
+            [("clean", "Clean"), ("atmo", "Atmosphere")],
+            settings.earth_style,
+            lambda value: self._set_display_choice("earth_style", value),
+        )
+        self._add_choice_submenu(
+            theme_menu, "Weekday",
+            [
+                ("planets", "Planets"),
+                ("planet_signs", "Planet signs"),
+                ("greek", "Greek gods"),
+                ("norse", "Norse gods"),
+                ("religion", "Religions"),
+                ("religion_alt", "Religions II"),
+                ("profession", "Professions"),
+            ],
+            settings.weekday_theme,
+            lambda value: self._set_display_choice("weekday_theme", value),
+        )
+        compass_slot_menu = self._add_choice_submenu(
+            theme_menu, "Compass slot",
+            [
+                ("time", "Time"),
+                ("date", "Date"),
+                ("day_length", "Day length"),
+                ("zodiac_sign", "Astrology sign"),
+                ("zodiac_logo", "Astrology logo"),
+                ("zodiac_constellation", "Astrology constellation"),
+                ("zodiac_text", "Astrology text"),
+                ("chinese_logo", "Chinese zodiac logo"),
+                ("chinese_text", "Chinese zodiac text"),
+            ],
+            settings.octa_slot,
+            lambda value: self._set_display_choice("octa_slot", value),
+        )
+        self._octa_slot_action = compass_slot_menu.menuAction()
+        self._octa_slot_action.setEnabled(settings.pointer == "octa")
         self._add_choice_submenu(
             menu, "Size",
             [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
             settings.diameter, self._set_diameter,
         )
-        # Elements (owner spec, FINAL.txt #5): on/off switches removing
-        # individual dial elements; Earth also nests its style choice.
+        # Elements (owner spec): plain on/off switches for every
+        # element — the Earth STYLE lives under Theme now.
         elements_menu = menu.addMenu("Elements")
-        earth_menu = elements_menu.addMenu("Earth")
-        self._add_toggle(
-            earth_menu, "Visible", settings.show_earth,
-            lambda checked: self._set_display_choice("show_earth", checked),
-            "The Earth marker riding the year wheel and showing the date.",
-        )
-        earth_menu.addSeparator()
-        self._add_choice_group(
-            menu, earth_menu,
-            [("clean", "Clean"), ("atmo", "Atmosphere")],
-            settings.earth_style,
-            lambda value: self._set_display_choice("earth_style", value),
-        )
         for key, label, tip in (
+            (
+                "show_earth", "Earth",
+                "The Earth marker riding the year wheel and showing "
+                "the date.",
+            ),
             (
                 "show_moon", "Moon",
                 "The Moon marker riding its cycle and showing the phase.",
@@ -647,6 +665,9 @@ class AppController(QObject):
         time_travel = QAction("Time Travel…", menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
+        guide = QAction("Guide…", menu)
+        guide.triggered.connect(lambda: GuideDialog().exec())
+        menu.addAction(guide)
         self._add_toggle(
             menu, "Click-through", self._settings.click_through,
             self._set_click_through,
@@ -680,6 +701,11 @@ class AppController(QObject):
         # default") actually clear instead of sticking.
         self._install_skin(build_skin(self._settings))
         self._on_tick(clock_jumped=False)
+        # The menu mirrors the settings (checkmarks, custom rings in
+        # Theme > Ring) — rebuild it wholesale after every dialog OK.
+        self._menu = self._build_menu()
+        self._widget.set_menu(self._menu)
+        self._tray.set_menu(self._menu)
         self._flush_position()
 
     def _open_time_travel(self) -> None:
@@ -707,8 +733,9 @@ class AppController(QObject):
             # The poller was the only hover driver in this mode — clear
             # its target or the last element stays enlarged (review
             # finding: the cursor sits on the tray, not the dial).
-            size = float(min(self._widget.width(), self._widget.height()))
-            if self._compositor.set_hover(-1.0e9, -1.0e9, size):
+            if self._compositor.set_hover(
+                -1.0e9, -1.0e9, float(self._widget.dial_diameter)
+            ):
                 self._widget.update()
         self._settings = replace(self._settings, click_through=enabled)
         self._flush_position()
@@ -718,20 +745,19 @@ class AppController(QObject):
         if self._legend.isVisible() and self._legend.geometry().contains(cursor):
             return                      # the user is scrolling the article
         local = self._widget.mapFromGlobal(cursor)
-        size = float(min(self._widget.width(), self._widget.height()))
+        size = float(self._widget.dial_diameter)
+        margin = self._widget.margin_px
+        x, y = local.x() - margin, local.y() - margin
         tip = None
-        inside = (
-            0 <= local.x() < self._widget.width()
-            and 0 <= local.y() < self._widget.height()
-        )
+        inside = 0 <= x < size and 0 <= y < size
         if self._compositor.set_hover(
-            local.x() if inside else -1.0e9,
-            local.y() if inside else -1.0e9,
+            x if inside else -1.0e9,
+            y if inside else -1.0e9,
             size,
         ):
             self._widget.update()       # hover-enlarge in click-through mode
         if inside:
-            tip = self._compositor.tooltip_at(local.x(), local.y(), size)
+            tip = self._compositor.tooltip_at(x, y, size)
         if tip:
             if tip != self._last_hover_tip:
                 self._legend.show_html(tip, cursor)
@@ -743,7 +769,7 @@ class AppController(QObject):
         if diameter == self._settings.diameter:
             return
         self._settings = replace(self._settings, diameter=diameter)
-        self._widget.resize(diameter, diameter)
+        self._widget.set_dial_diameter(diameter)
         self._compositor.invalidate()
         self._widget.update()
         self._flush_position()          # persists position AND the new diameter
