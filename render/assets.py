@@ -10,30 +10,53 @@ gray art x hue), preserving the alpha of the source.
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QPainter, QPixmap
+from PySide6.QtGui import QColor, QImage, QPainter, QPixmap, qGray
 from PySide6.QtSvg import QSvgRenderer
 
 
 class AssetCache:
     def __init__(self):
-        self._pixmaps: dict[tuple[str, int, str | None], QPixmap] = {}
+        self._pixmaps: dict[tuple[str, int, str | None, bool], QPixmap] = {}
 
     def pixmap_by_height(
-        self, path: Path, logical_height: float, dpr: float, tint: str | None = None
+        self,
+        path: Path,
+        logical_height: float,
+        dpr: float,
+        tint: str | None = None,
+        desaturate: bool = False,
     ) -> QPixmap:
         """The image scaled (aspect preserved) so its logical height is
         `logical_height`, rasterized at device resolution and optionally
-        tinted (channel multiply, source alpha kept). Raises ValueError
+        tinted (channel multiply, source alpha kept) or desaturated (the
+        SILVER look of the owner's gold letter art). Raises ValueError
         for missing/unreadable assets — a broken skin must be visible,
         never silently blank."""
         px_height = max(1, round(logical_height * dpr))
-        key = (str(path), px_height, tint)
+        key = (str(path), px_height, tint, desaturate)
         if key not in self._pixmaps:
             pixmap = self._rasterize(path, px_height, dpr)
             if tint is not None:
                 pixmap = self._tinted(pixmap, tint)
+            if desaturate:
+                pixmap = self._desaturated(pixmap)
             self._pixmaps[key] = pixmap
         return self._pixmaps[key]
+
+    @staticmethod
+    def _desaturated(source: QPixmap) -> QPixmap:
+        """Grayscale with the alpha kept — turns the owner's gold letter
+        art silver (owner-approved derivation). Per-pixel, but it runs
+        once per cache key on a small letter-sized image."""
+        image = source.toImage().convertToFormat(QImage.Format.Format_ARGB32)
+        for y in range(image.height()):
+            for x in range(image.width()):
+                color = image.pixelColor(x, y)
+                gray = qGray(color.rgb())
+                image.setPixelColor(x, y, QColor(gray, gray, gray, color.alpha()))
+        result = QPixmap.fromImage(image)
+        result.setDevicePixelRatio(source.devicePixelRatio())
+        return result
 
     @staticmethod
     def _tinted(source: QPixmap, tint: str) -> QPixmap:

@@ -6,11 +6,16 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
 ```
 📁 assets/
   🖼️ logo.svg              ← project logo (M7; also copied to monorepo logos/)
+  🖼️ logo.svg              ← the owner's GOLD watch — tray icon now, EXE/installer art in M7
+  🖼️ logo-setup.svg        ← the rose-gold variant (NSIS wizard art)
   📁 ring/                 ← dial ring faces: domy.png, morph.png (+ future rings)
-    📁 letters/            ← the owner's letter art, {M,D,Y,P,H,Omega}_{gold,silver}.png
-                             (12 files, 1×1 placeholders until extracted from the ring) —
-                             overlaid by calculation so the ring TINT never touches them;
-                             the finish choice flips the metals (Omega always the inverse)
+    📁 letters/            ← the owner's GOLD letter library: latin SVG (D,G,H,I,M,P,S,
+                             U,V,X,Y,Z) + greek PNG (Omega,Phi,Pi,Psi,Sigma,Theta).
+                             Active per preset (RING_LETTER_FILES): domy M/D/Y+Omega,
+                             morph M/Pi/H+Omega. Overlaid by calculation so the ring
+                             TINT never touches them; SILVER = desaturated gold at load;
+                             each preset's ACCENT letter wears the opposite metal
+                             (domy inverts its Omega, morph inverts its M)
   📁 hands/                ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
   📁 earth/                ← earth_{clean|atmo}_{continent}_{day|night}.png

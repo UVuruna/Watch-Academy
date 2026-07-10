@@ -37,17 +37,19 @@ from skins.manifest import missing_assets
 def build_skin(settings: Settings):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
     (DOMY and MORPH are ring preset names — nothing more, owner
-    decision), the letter art of the chosen finish (gold = M/D/Y/P/H
-    gold with a silver Omega; silver = the inverse) and the user's
-    display choices overlaid."""
+    decision), the letter art of the chosen finish (the preset's ACCENT
+    letter wears the opposite metal; silver is desaturated gold) and
+    the user's display choices overlaid."""
     preset = defaults.RING_PRESETS[settings.ring]
     letter_art = {}
     for hour, letter in preset["letters"].items():
-        name = constants.RING_LETTER_FILES[letter]
-        metal = settings.ring_finish if name != "Omega" else (
-            "silver" if settings.ring_finish == "gold" else "gold"
+        is_silver = (settings.ring_finish == "silver") != (
+            letter == preset["accent"]
         )
-        letter_art[hour] = defaults.RING_LETTER_ART_DIR / f"{name}_{metal}.png"
+        letter_art[hour] = (
+            defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[letter],
+            is_silver,
+        )
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(

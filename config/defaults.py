@@ -96,25 +96,30 @@ MARKER_BORDER_RGBA = (255, 255, 255, 200)
 # on the shared rim — like an eclipse (owner decision; both stay visible).
 MOON_TRANSIT_OPACITY = 0.5
 
-# --- Tray --------------------------------------------------------------------
-TRAY_ICON_SIZE = 64                  # px of the procedurally drawn tray pixmap
-TRAY_ICON_MARGIN = 0.08              # fraction of the icon size
-TRAY_DISC_RGB = (18, 22, 34)
-TRAY_MARK_RGB = (255, 211, 77)
-TRAY_MARK_SIZE = 0.10                # fraction of the icon size
+# --- Tray / app presentation ---------------------------------------------------
+# The owner's gold watch (logo.svg) is the app face: tray icon now, EXE
+# icon and installer art in M7; logo-setup.svg is the rose-gold variant.
+TRAY_ICON_SIZE = 64                  # px of the rasterized tray pixmap
+LOGO_ASSET = paths.assets_dir() / "logo.svg"
+LOGO_SETUP_ASSET = paths.assets_dir() / "logo-setup.svg"
 
 # --- Ring presets ----------------------------------------------------------------
 # DOMY and MORPH are RING PRESET names — nothing more (owner decision):
 # a ring face plus its Greek-ordinal letter positions. The owner may add
 # more rings (drop the art into assets/ring/ and add an entry here).
 RING_PRESETS = {
+    # "accent" = the letter wearing the OPPOSITE metal of the chosen
+    # finish (owner spec 2026-07-10): DOMY inverts its Omega, MORPH
+    # inverts its M.
     "domy": {
         "asset": paths.assets_dir() / "ring" / "domy.png",
         "letters": {12: "M", 20: "Y", 0: "Ω", 4: "D"},
+        "accent": "Ω",
     },
     "morph": {
         "asset": paths.assets_dir() / "ring" / "morph.png",
         "letters": {12: "M", 16: "Π", 8: "H", 0: "Ω"},
+        "accent": "M",
     },
 }
 
@@ -132,9 +137,9 @@ RING_TINT_PRESETS = {
     "Ocean": "#4E7A9E",
 }
 
-# The owner's letter art (M/D/Y/P/H/Omega in gold and silver), overlaid
-# on the ring by calculation so the tint never touches them. 1x1
-# placeholders ship until the owner extracts the letters from the ring.
+# The owner's GOLD letter art (a full latin/greek library for future
+# ring presets), overlaid on the ring by calculation so the tint never
+# touches them; the silver look is derived by desaturation at load.
 RING_LETTER_ART_DIR = paths.assets_dir() / "ring" / "letters"
 RING_LETTER_RADIUS_FRACTION = 0.929  # letter center, of the dial radius
 RING_LETTER_ART_SCALE = 0.075        # letter height, of the dial diameter

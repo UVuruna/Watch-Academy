@@ -5,28 +5,31 @@ them and the GC would otherwise destroy the menu mid-use.
 """
 
 from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QIcon, QPainter, QPixmap
+from PySide6.QtGui import QIcon, QPainter, QPixmap
+from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
 from config import constants, defaults
 
 
 def _draw_tray_icon() -> QIcon:
-    """Procedural stand-in until assets/logo.svg exists (M7)."""
+    """The owner's gold watch (assets/logo.svg) rasterized to the tray
+    size, aspect kept and centered. A missing/broken logo must be
+    visible — the app raises instead of showing an empty tray."""
+    renderer = QSvgRenderer(str(defaults.LOGO_ASSET))
+    if not renderer.isValid():
+        raise ValueError(f"cannot load the tray logo: {defaults.LOGO_ASSET}")
     size = defaults.TRAY_ICON_SIZE
     pixmap = QPixmap(size, size)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    rect = QRectF(pixmap.rect())
-    margin = size * defaults.TRAY_ICON_MARGIN
-    dial = rect.adjusted(margin, margin, -margin, -margin)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(*defaults.TRAY_DISC_RGB))
-    painter.drawEllipse(dial)
-    painter.setBrush(QColor(*defaults.TRAY_MARK_RGB))
-    noon = size * defaults.TRAY_MARK_SIZE
-    painter.drawEllipse(QRectF(rect.center().x() - noon / 2, dial.top(), noon, noon))
+    design = renderer.defaultSize()
+    scale = size / max(design.width(), design.height())
+    width, height = design.width() * scale, design.height() * scale
+    renderer.render(
+        painter, QRectF((size - width) / 2, (size - height) / 2, width, height)
+    )
     painter.end()
     return QIcon(pixmap)
 

@@ -73,12 +73,13 @@ def draw_pie(painter: QPainter, radius: float, start_deg: float, end_deg: float)
 
 def draw_pixmap_centered(
     painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF,
-    height: float, tint: str | None = None,
+    height: float, tint: str | None = None, desaturate: bool = False,
 ) -> None:
     """Asset rasterized to `height` and drawn centered at `pos` — the one
     shared image path of weekday bodies and the year marker (Rule #5).
-    `tint` channel-multiplies the image (the ring recolor)."""
-    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint)
+    `tint` channel-multiplies the image (the ring recolor); `desaturate`
+    turns the gold letter art silver."""
+    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint, desaturate)
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 
@@ -498,17 +499,17 @@ class RingLayer(Layer):
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
 
     def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The owner's gold/silver letter PNGs at the preset's hour
-        positions, upright and UNTINTED (the finish already picked the
-        files in build_skin — 1x1 placeholders until the owner's art
-        lands)."""
+        """The owner's letter art at the preset's hour positions,
+        upright and UNTINTED — gold masters, desaturated to silver where
+        build_skin marked the finish (the accent letter wears the
+        opposite metal, owner spec)."""
         height = 2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
-        for hour, asset in self._skin.ring.letter_art.items():
+        for hour, (asset, silver) in self._skin.ring.letter_art.items():
             theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
             draw_pixmap_centered(
                 painter, ctx, asset,
                 dial_point(theta, ctx.radius * defaults.RING_LETTER_RADIUS_FRACTION),
-                height,
+                height, desaturate=silver,
             )
 
 

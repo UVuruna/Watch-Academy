@@ -3,13 +3,15 @@
 **Script:** [Tray Controller (script)](tray.py)
 
 ## Purpose
-System tray presence: icon, tooltip and the shared context menu. The icon is
-drawn procedurally until `assets/logo.svg` exists (M7).
+System tray presence: icon, tooltip and the shared context menu. The icon
+is the owner's gold watch (`assets/logo.svg`) rasterized to the tray size
+— a missing or broken logo raises loudly instead of an empty tray.
 
 ## Connections
 
 ### Uses
-- [Config (folder)](../config/___config.md) — icon size and palette
+- [Config (folder)](../config/___config.md) — icon size, `LOGO_ASSET`
+- [Assets (folder)](../assets/___assets.md) — logo.svg
 
 ### Used by
 - [App Controller](controller.md) — creates it with the shared menu

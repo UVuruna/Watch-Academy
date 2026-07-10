@@ -40,17 +40,49 @@ def test_default_config_assets_all_exist():
 
 
 def test_letter_art_follows_the_finish():
-    """Owner spec: gold = M/D/Y/P/H gold with a silver Omega; silver =
-    the inverse. The Omega always wears the OTHER metal."""
+    """Owner spec (2026-07-10): the letters are GOLD masters, silver is
+    desaturated at load; each preset's ACCENT letter wears the opposite
+    metal — DOMY inverts its Omega, MORPH inverts its M."""
     gold = build_skin(Settings()).ring.letter_art
-    assert gold[12].name == "M_gold.png"
-    assert gold[0].name == "Omega_silver.png"
+    assert gold[12] == (defaults.RING_LETTER_ART_DIR / "M.svg", False)
+    assert gold[0] == (defaults.RING_LETTER_ART_DIR / "Omega.png", True)
     silver = build_skin(replace(Settings(), ring_finish="silver")).ring.letter_art
-    assert silver[12].name == "M_silver.png"
-    assert silver[0].name == "Omega_gold.png"
+    assert silver[12][1] is True                 # M desaturated
+    assert silver[0][1] is False                 # Omega stays gold
     morph = build_skin(replace(Settings(), ring="morph")).ring.letter_art
-    assert morph[16].name == "P_gold.png"       # Π maps to the P file
-    assert morph[8].name == "H_gold.png"
+    assert morph[16] == (defaults.RING_LETTER_ART_DIR / "Pi.png", False)
+    assert morph[8][1] is False                  # H gold
+    assert morph[12][1] is True                  # MORPH gold inverts its M
+    morph_silver = build_skin(
+        replace(Settings(), ring="morph", ring_finish="silver")
+    ).ring.letter_art
+    assert morph_silver[12][1] is False          # M back to gold
+    assert morph_silver[0][1] is True            # Omega desaturated
+
+
+def test_silver_is_desaturated_gold(app_offscreen=None):
+    """The silver look = the gold art with the saturation removed
+    (owner-approved derivation): every pixel reads R=G=B, alpha kept."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+    cache = AssetCache()
+    silver = cache.pixmap_by_height(
+        defaults.RING_LETTER_ART_DIR / "M.svg", 48.0, 1.0, desaturate=True
+    ).toImage()
+    seen_opaque = False
+    for x in range(0, silver.width(), 5):
+        for y in range(0, silver.height(), 5):
+            color = silver.pixelColor(x, y)
+            if color.alpha() > 0:
+                seen_opaque = True
+                assert color.red() == color.green() == color.blue()
+    assert seen_opaque
 
 
 def test_ring_tint_flows_to_the_skin_and_the_umbra():
