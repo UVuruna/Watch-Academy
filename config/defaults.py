@@ -216,9 +216,10 @@ GUIDE_SLIDE_MAX_PX = 720
 # Transparent margin around the dial INSIDE the window (owner bug
 # report: M and Omega touch the window square and their overhang and
 # shadow get clipped). Sized for the worst case: ring letters at the
-# 200% slider maximum reach ~7.9% beyond the dial radius, plus their
-# halo — 5% of the DIAMETER per side covers it with headroom.
-DIAL_WINDOW_MARGIN_FRACTION = 0.05
+# 200% slider maximum reach ~7.9% beyond the dial radius plus their
+# halo (~9.4% total) — 6% of the DIAMETER per side (= 12% of the
+# radius) leaves real headroom; 5% left only ~2 px at 800 px.
+DIAL_WINDOW_MARGIN_FRACTION = 0.06
 
 # Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
 #   full  — the whole gray range: sectioned ladders run endpoint-

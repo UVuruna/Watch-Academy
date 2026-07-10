@@ -15,7 +15,7 @@ from datetime import datetime, time, timedelta
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
-from config import constants, defaults
+from config import constants, defaults, defaults
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
@@ -177,7 +177,11 @@ class Compositor:
         if self._composite is None or self._composite_key != key:
             self._composite = self._render_composite(size, dpr)
             self._composite_key = key
-        painter.drawPixmap(QPointF(0, 0), self._composite)
+        # The composite carries the window's transparent margin (the
+        # ring letters overhang the dial square) — blit it back-shifted
+        # so the dial lands at (0, 0).
+        overhang = size * defaults.DIAL_WINDOW_MARGIN_FRACTION
+        painter.drawPixmap(QPointF(-overhang, -overhang), self._composite)
 
         painter.save()
         painter.setRenderHints(_RENDER_HINTS)
@@ -809,13 +813,18 @@ class Compositor:
         return image
 
     def _render_composite(self, size: float, dpr: float) -> QPixmap:
-        px = round(size * dpr)
+        # STATIC/DAILY layers include the ring letters, which OVERHANG
+        # the dial square (owner spec) — the composite is padded by the
+        # same margin the window carries, or they clip right here (owner
+        # bug report: the Omega's bottom was cut flat).
+        overhang = size * defaults.DIAL_WINDOW_MARGIN_FRACTION
+        px = round((size + 2 * overhang) * dpr)
         pixmap = QPixmap(px, px)
         pixmap.fill(Qt.GlobalColor.transparent)
         painter = QPainter(pixmap)
         painter.setRenderHints(_RENDER_HINTS)
         painter.scale(dpr, dpr)
-        painter.translate(size / 2, size / 2)
+        painter.translate(size / 2 + overhang, size / 2 + overhang)
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
