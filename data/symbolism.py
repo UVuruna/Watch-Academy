@@ -44,3 +44,7 @@ class SymbolismRepository:
     def trio_article(self, virtue: str) -> dict:
         """{base} of one Trinity arm virtue (Faith / Hope / Love)."""
         return self._load()["trio_articles"][virtue]
+
+    def chinese_article(self, animal: str) -> dict:
+        """{base} of one Chinese zodiac animal ("Horse")."""
+        return self._load()["chinese_articles"][animal]

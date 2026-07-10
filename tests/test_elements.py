@@ -51,13 +51,15 @@ def july_wednesday(app):
     return day, build_tick_state(now, day)
 
 
-def test_pointer_off_drops_the_star_and_the_octa_slot():
+def test_pointer_off_drops_the_star_but_keeps_the_octa_slot():
+    """Owner correction: hiding the Pointer element removes the
+    diamonds, but the octa info slot keeps showing its selection."""
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer="octa", show_pointer=False
     )
     layers = _build_layers(skin)
     assert not any(isinstance(layer, StarLayer) for layer in layers)
-    assert not any(isinstance(layer, BottomSlotLayer) for layer in layers)
+    assert any(isinstance(layer, BottomSlotLayer) for layer in layers)
 
 
 def test_weekday_off_drops_the_bodies_and_the_center():

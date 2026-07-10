@@ -49,15 +49,21 @@ _RENDER_HINTS = (
 
 def _centered(*lines: str) -> str:
     """Tooltip rich text with CENTERED lines (owner spec — QToolTip
-    left-aligns plain text)."""
-    body = "<br/>".join(html.escape(line) for line in lines)
-    return f"<div align='center'>{body}</div>"
+    left-aligns plain text). Every line keeps its full width — QToolTip
+    would otherwise wrap long lines at its own narrow heuristic (owner
+    bug report: "Dusk 21:01" broke onto a new line)."""
+    return _centered_html(*(html.escape(line) for line in lines))
 
 
 def _centered_html(*lines: str) -> str:
     """Centered tooltip from lines that are ALREADY safe HTML (ordinal
-    superscripts etc.) — the caller escapes any free-form data."""
-    return f"<div align='center'>{'<br/>'.join(lines)}</div>"
+    superscripts etc.) — the caller escapes any free-form data. Each
+    line is wrapped in a no-wrap div so it owns one full-width row."""
+    body = "".join(
+        f"<div style='white-space:nowrap'>{line if line else '&nbsp;'}</div>"
+        for line in lines
+    )
+    return f"<div align='center'>{body}</div>"
 
 
 def _ordinal(n: int) -> str:
@@ -129,10 +135,10 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
-    if skin.pointer == "octa" and skin.show_pointer:
+    if skin.pointer == "octa":
         # The octa bottom arm's info text also draws OVER the hands
-        # (owner spec). It lives in the pointer's bottom arm, so it
-        # follows the Pointer element switch.
+        # (owner spec) — and SURVIVES the Pointer element switch: the
+        # diamonds may hide, the selected info stays (owner correction).
         layers.append(BottomSlotLayer(skin))
     return layers
 
@@ -253,7 +259,7 @@ class Compositor:
             if body is not None:
                 return f"body:{body}"
         weekday = self._skin.weekday_set
-        if self._skin.pointer == "octa" and self._skin.show_pointer and hit(
+        if self._skin.pointer == "octa" and hit(
             dial_point(
                 constants.OCTA_TIME_SLOT_ANGLE + rotation,
                 radius * weekday.orbit_fraction,
@@ -556,12 +562,20 @@ class Compositor:
         return anchors.instants[anchors.angles.index(unwrapped_angle)]
 
     def _chinese_text(self) -> str:
-        """Slot hover, two lines (owner spec): name, then the year span."""
+        """Chinese slot hover (owner rework): the year name and span,
+        then the animal's ARTICLE with the owner's medallion on top."""
+        from render.layers import octa_slot_art
+
         day = self._day
-        return _centered(
+        animal = day.chinese_name.split()[-1]
+        header = _centered(
             day.chinese_name,
             f"{day.chinese_start.day} {day.chinese_start:%b %Y} – "
             f"{day.chinese_end.day} {day.chinese_end:%b %Y}",
+        )
+        article = self._symbolism.chinese_article(animal)
+        return header + "<br/>" + _article_html(
+            octa_slot_art("chinese_logo", animal), None, article["base"]
         )
 
     def _zodiac_line(self) -> str:
@@ -574,12 +588,20 @@ class Compositor:
         )
 
     def _zodiac_text(self) -> str:
-        """Slot hover, two lines (owner spec): name, then the date span."""
+        """Zodiac slot hover (owner rework): the sign and its span, then
+        the sign's ARTICLE (base only — the palette variants speak in
+        hexa arm colors) with the owner's sign art on top."""
+        from render.layers import octa_slot_art
+
         day = self._day
         last = day.zodiac_end - timedelta(days=1)
-        return _centered(
+        header = _centered(
             f"{day.zodiac_symbol} {day.zodiac_name}",
             f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}",
+        )
+        article = self._symbolism.zodiac_article(day.zodiac_name)
+        return header + "<br/>" + _article_html(
+            octa_slot_art("zodiac_sign", day.zodiac_name), None, article["base"]
         )
 
     def _moon_text(self) -> str:
