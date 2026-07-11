@@ -3,7 +3,7 @@
   "pages": [
     {"title": "One Dial, One Whole Day", "columns": 1, "images": ["01_day-night"]},
     {"title": "The Four Pointers", "columns": 2, "images": ["02_pointer_prism", "04_pointer_seasons", "05_pointer_compass", "06_pointer_trinity"]},
-    {"title": "Two Color Worlds", "columns": 1, "images": ["03_palettes"]},
+    {"title": "Two Color Worlds", "columns": 2, "images": ["47_palette_prism_paint", "48_palette_prism_light", "49_palette_compass_paint", "50_palette_compass_light", "51_palette_seasons", "52_palette_trinity"]},
     {"title": "The Umbra — the Night Wheel", "columns": 2, "images": ["07_umbra_full", "08_umbra_half", "09_umbra_light", "10_umbra_dark"]},
     {"title": "The Two Travelers", "columns": 1, "images": ["11_earth_moon"]},
     {"title": "Reading the Travelers", "columns": 2, "images": ["12_earth_legend", "13_moon_legend"]},
@@ -12,6 +12,7 @@
     {"title": "Seven Days, Seven Faces", "columns": 2, "images": ["24_weekday_planets", "25_weekday_greek", "26_weekday_norse", "27_weekday_religion", "28_weekday_professions"]},
     {"title": "The Compass Slot", "columns": 2, "images": ["29_slot_zodiac", "30_slot_chinese"]},
     {"title": "Rings, Letters, Metals", "columns": 2, "images": ["19_rings", "22_ring_domy_gold", "23_ring_domy_silver", "36_ring_morph_silver"]},
+    {"title": "One Clock, Any Color", "columns": 2, "images": ["41_tint_light_gold", "42_tint_dark_gold", "43_tint_green", "44_tint_blue", "45_tint_lavender", "46_tint_brown"]},
     {"title": "The Settings Window", "columns": 1, "images": ["40_settings_window"]},
     {"title": "Settings, Piece by Piece", "columns": 2, "images": ["31_settings_location", "32_settings_opacity", "33_settings_sizes", "34_settings_custom_ring", "35_menu_elements"]},
     {"title": "Color and Language", "columns": 2, "images": ["37_settings_palette", "38_settings_ring_tint", "39_settings_language"]},
