@@ -4,7 +4,9 @@
 
 ## Purpose
 Loads the ring preset "cards" (owner spec): bundled ones from
-`Database/ring_presets.json` plus the user's CUSTOM rings from the
+`Database/ring_presets.json` — DOMY (flame), MORPH (chalice) and
+NUMBERS (seal: every hour number on its own position, Ω at the
+bottom, one metal for all six) — plus the user's CUSTOM rings from the
 settings, each `{name, positions, letters}`. The positions signature
 resolves the LAYOUT (`RING_LAYOUTS`: flame / chalice / seal — the ring
 face with matching gaps and the metal triangle). Validation is loud:

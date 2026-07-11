@@ -20,6 +20,11 @@ def test_ring_preset_cards_load_and_validate():
     assert presets["DOMY"]["layout"] == "flame"
     assert presets["DOMY"]["letters"] == ("M", "Y", "Ω", "D")
     assert presets["MORPH"]["layout"] == "chalice"
+    # The third bundled styling (owner spec 2026-07-11): every hour
+    # number on its OWN position, Omega on the bottom — a seal, so one
+    # metal dresses all six.
+    assert presets["NUMBERS"]["layout"] == "seal"
+    assert presets["NUMBERS"]["letters"] == ("12", "16", "20", "Ω", "4", "8")
     for layout in constants.RING_LAYOUTS.values():
         assert (defaults.RING_FACE_DIR / layout["face"]).exists()
     with pytest.raises(ValueError):

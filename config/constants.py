@@ -263,9 +263,11 @@ RING_LAYOUTS = {
 # ring builder choose from these; every glyph also ships a pre-rendered
 # <Stem>_silver.png. The library is GROUPED (owner spec 2026-07-11):
 # the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
-# run 1-10 and 20 today; the owner adds 11-19 and 21-23 next.
+# exist ONLY for the six ring positions they belong to (owner decision:
+# a number makes no sense away from its own hour) — 24h wears Ω in the
+# NUMBERS bundled preset.
 _LATIN_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-_RING_NUMBERS = tuple(str(n) for n in (*range(1, 11), 20))
+_RING_NUMBERS = ("4", "8", "12", "16", "20")
 RING_LETTER_GROUPS = {
     "Latin": tuple(_LATIN_LETTERS),
     "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),

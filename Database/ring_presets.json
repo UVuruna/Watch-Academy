@@ -3,13 +3,52 @@
   "presets": [
     {
       "name": "DOMY",
-      "positions": [12, 20, 24, 4],
-      "letters": ["M", "Y", "Ω", "D"]
+      "positions": [
+        12,
+        20,
+        24,
+        4
+      ],
+      "letters": [
+        "M",
+        "Y",
+        "Ω",
+        "D"
+      ]
     },
     {
       "name": "MORPH",
-      "positions": [12, 16, 24, 8],
-      "letters": ["M", "Π", "Ω", "H"]
+      "positions": [
+        12,
+        16,
+        24,
+        8
+      ],
+      "letters": [
+        "M",
+        "Π",
+        "Ω",
+        "H"
+      ]
+    },
+    {
+      "name": "NUMBERS",
+      "positions": [
+        12,
+        16,
+        20,
+        24,
+        4,
+        8
+      ],
+      "letters": [
+        "12",
+        "16",
+        "20",
+        "Ω",
+        "4",
+        "8"
+      ]
     }
   ]
 }
