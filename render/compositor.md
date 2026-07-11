@@ -43,7 +43,12 @@ draws the MINUTE layers (hands, year marker) live.
   2026-07-11, `defaults.ARTICLE_TITLE_PX`) — the active day adds
   "Thursday, 9th July 2026" beneath it, then the LEFT-aligned
   article — base + the active pointer/palette combination paragraph,
-  the entity art on top); the octa info slot; the
+  the entity art on top). In every article the canon terms POP
+  (owner spec 2026-07-12, `_highlight_terms`): virtues bold blue,
+  vices bold red, moods bold yellow, color words in their own hue
+  (`defaults.LEGEND_*` rules, English + Serbian originals), and hex
+  notes like "(#F8E600)" are stripped from display. Then the octa
+  info slot; the
   Moon marker (phase — with the exact principal instant in parentheses
   while its name holds — Illumination to one decimal, the
   moonrise-moonset span, the cycle day); the Earth marker (ordinal

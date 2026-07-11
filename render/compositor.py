@@ -9,13 +9,14 @@ the future settings preview.
 
 import html
 import math
+import re
 import textwrap
 from datetime import datetime, time, timedelta
 
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
-from config import constants, defaults, defaults
+from config import constants, defaults
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
@@ -76,13 +77,51 @@ def _ordinal(n: int) -> str:
     return f"{n}<sup>{suffix}</sup>"
 
 
+# Canon terms POP in the article prose (owner spec 2026-07-12):
+# virtues bold blue, vices bold red, moods bold yellow, color words
+# bold in their own hue; hex notes like " (#F8E600)" never display.
+# Rules are owner-tunable in defaults; matching runs over the shipped
+# ORIGINALS (English + Serbian) — machine-translated languages read
+# plain.
+_HEX_NOTE = re.compile(r"\s*\(#[0-9A-Fa-f]{6}\)")
+_HIGHLIGHT_RULES = [
+    (
+        re.compile(rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b"),
+        hue,
+    )
+    for category, hue in (
+        ("virtue", defaults.LEGEND_VIRTUE_COLOR),
+        ("vice", defaults.LEGEND_VICE_COLOR),
+        ("mood", defaults.LEGEND_MOOD_COLOR),
+    )
+] + [
+    (re.compile(rf"\b(?:{pattern})\b", re.IGNORECASE), hue)
+    for pattern, hue in defaults.LEGEND_COLOR_PATTERNS
+]
+
+
+def _highlight_terms(escaped: str) -> str:
+    """Wrap every canon term of an ESCAPED prose line in its colored
+    bold span (the markup the rules insert never re-matches a rule)."""
+    for pattern, hue in _HIGHLIGHT_RULES:
+        escaped = pattern.sub(
+            lambda match, hue=hue: (
+                f"<b style=\"color:{hue}\">{match.group(0)}</b>"
+            ),
+            escaped,
+        )
+    return escaped
+
+
 def _article_body_html(text: str) -> str:
     """LEFT-aligned article prose (owner spec — unlike every other
     hover, which is centered): paragraphs separated by a blank line,
-    each wrapped to a fixed width so QToolTip stays a column."""
+    each wrapped to a fixed width so QToolTip stays a column; canon
+    terms highlighted, hex notes stripped."""
+    text = _HEX_NOTE.sub("", text)
     paragraphs = [
         "<br/>".join(
-            html.escape(line)
+            _highlight_terms(html.escape(line))
             for line in textwrap.wrap(paragraph, width=defaults.ARTICLE_WRAP_CHARS)
         )
         for paragraph in text.split("\n\n")

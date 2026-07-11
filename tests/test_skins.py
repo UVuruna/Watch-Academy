@@ -171,6 +171,27 @@ def test_letter_groups_cover_the_library_exactly():
         assert silver.exists(), glyph
 
 
+def test_legend_highlighting_colors_canon_terms():
+    """Owner spec 2026-07-12: virtues pop bold blue, vices bold red,
+    moods bold yellow, color words in their own hue — in BOTH shipped
+    originals; hex notes never display."""
+    from render.compositor import _article_body_html
+
+    out = _article_body_html(
+        "Patience heals Jealousy in green (#007E00), the mood called Renewal."
+    )
+    assert "#007E00" not in out
+    assert f'<b style="color:{defaults.LEGEND_VIRTUE_COLOR}">Patience</b>' in out
+    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">Jealousy</b>' in out
+    assert f'<b style="color:{defaults.LEGEND_MOOD_COLOR}">Renewal</b>' in out
+    assert 'style="color:#3ECC3E">green</b>' in out
+    sr = _article_body_html("Strpljenje leči Ljubomoru, a zeleno je Obnova.")
+    assert f'<b style="color:{defaults.LEGEND_VIRTUE_COLOR}">Strpljenje</b>' in sr
+    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">Ljubomoru</b>' in sr
+    assert f'<b style="color:{defaults.LEGEND_MOOD_COLOR}">Obnova</b>' in sr
+    assert 'style="color:#3ECC3E">zeleno</b>' in sr
+
+
 def test_ring_tint_is_a_tritone_map():
     """Owner spec 2026-07-11: the tint must NOT touch whites or blacks
     (ring numerals stay legible) — black -> black, white -> white, the

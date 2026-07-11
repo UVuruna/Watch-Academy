@@ -238,6 +238,76 @@ ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
                                      # spec 2026-07-11: a slightly bigger title,
                                      # then a margin, then the prose)
 
+# --- Legend term highlighting (owner spec 2026-07-12) ------------------------------
+# Canon terms POP inside article prose: virtues bold blue, vices bold
+# red, moods/emotions bold yellow, color words bold in their own color.
+# Applied at RENDER time over the English and Serbian originals (the
+# machine-translated languages read plain); hex notes like "(#F8E600)"
+# are stripped from the display. Patterns are regex fragments, matched
+# case-SENSITIVELY for terms (the canon capitalizes them) and
+# case-insensitively for colors; Serbian fragments cover the case
+# endings.
+LEGEND_VIRTUE_COLOR = "#6FA8FF"
+LEGEND_VICE_COLOR = "#FF6B6B"
+LEGEND_MOOD_COLOR = "#FFD34D"
+LEGEND_TERM_PATTERNS = {
+    "virtue": (
+        "Humility", "Justice", "Generosity", "Wisdom", "Courage",
+        "Serenity", "Love", "Patience", "Faith", "Hope",
+        "Poniznost(?:i|ću)?", "Pravednost(?:i|ću)?",
+        "Velikodušnost(?:i|ću)?", "Mudrost(?:i|ću)?", "Hrabrost(?:i|ću)?",
+        "Spokoj(?:a|u|em)?", "Ljubav(?:i|lju)?", "Strpljenj[eau]",
+        "Strpljenjem", "Ver[aeiu]", "Verom", "Nad[aeiu]", "Nadom",
+    ),
+    "vice": (
+        "Pride", "Servility", "Excess", "Greed", "Wrath", "Fear",
+        "Jealousy", "Envy",
+        "Gordost(?:i|ću)?", "Pokornost(?:i|ću)?", "Neumerenost(?:i|ću)?",
+        "Pohlep[aeiou]", "Pohlepom", "Gnev(?:a|u|om)?", "Strah(?:a|u|om)?",
+        "Ljubomor[aeiou]", "Ljubomorom", "Zavist(?:i|ću)?", "Zavišću",
+    ),
+    "mood": (
+        "Joy", "Zeal", "Passion", "Sorrow", "Calm", "Renewal", "Glory",
+        "Eclipse", "Longing",
+        "Radost(?:i|ću)?", "Žar(?:a|u|om)?", "Strast(?:i|ću)?", "Strašću",
+        "Tug[aeiou]", "Tugom", "Mir(?:a|u|om)?", "Obnov[aeiou]", "Obnovom",
+        "Sjaj(?:a|u|em)?", "Pomračenj[eau]", "Pomračenjem",
+        "Čežnj[aeiou]", "Čežnjom",
+    ),
+}
+# Color WORDS wear their own hue (display-brightened so they stay
+# readable on the dark legend background).
+LEGEND_COLOR_PATTERNS = (
+    (r"yellow\w*", "#F8E600"),
+    (r"golden|gold\w*", "#E8C24A"),
+    (r"amber", "#ECB800"),
+    (r"orange\w*", "#E88A20"),
+    (r"red(?:s|der|dish|dens)?", "#F04040"),
+    (r"crimson", "#E03050"),
+    (r"purple\w*|violet\w*", "#A968E0"),
+    (r"magenta", "#E858E8"),
+    (r"blue\w*", "#5C86FF"),
+    (r"azure", "#4AA8FF"),
+    (r"green\w*", "#3ECC3E"),
+    (r"cyan", "#00DCDC"),
+    (r"white\w*", "#FFFFFF"),
+    (r"silver\w*", "#C9CDD3"),
+    (r"žut\w*", "#F8E600"),
+    (r"zlat\w*", "#E8C24A"),
+    (r"ćilibar\w*", "#ECB800"),
+    (r"narandžast\w*", "#E88A20"),
+    (r"crven\w*", "#F04040"),
+    (r"purpur\w*", "#B058C8"),
+    (r"ljubičast\w*", "#A968E0"),
+    (r"magent\w*", "#E858E8"),
+    (r"plav\w*", "#5C86FF"),
+    (r"azur\w*", "#4AA8FF"),
+    (r"zelen\w*", "#3ECC3E"),
+    (r"cijan\w*", "#00DCDC"),
+    (r"bel(?:o|a|e|i|u|im|om|og|oj)\b", "#FFFFFF"),
+    (r"srebrn\w*", "#C9CDD3"),
+)
+
 # The Legend popup (replaces QToolTip, owner decision): capped to these
 # screen fractions — taller content scrolls instead of clipping off a
 # small screen; dark tooltip styling.
@@ -379,7 +449,8 @@ WEEKDAY_THEME_NAMES = {
         "saturn": "Voodoo",
     },
     "profession": {
-        "sun": "Ruler",
+        "sun": "Ruler · Servant",   # the yin-yang center (owner spec
+                                    # 2026-07-12): one figure, two faces
         "moon": "Physician",
         "mars": "Soldier",
         "mercury": "Merchant",
@@ -415,6 +486,9 @@ WEEKDAY_THEME_FILES = {
     }
     for theme, names in WEEKDAY_THEME_NAMES.items()
 }
+# The dual center shows both faces in the hover title, but the owner's
+# medallion file keeps the single name.
+WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
 
 DEFAULT_SKIN = SkinDefinition(
     z_order=(
