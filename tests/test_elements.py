@@ -197,9 +197,10 @@ def test_hover_enlarge_grows_the_hovered_body(july_wednesday):
     spec = defaults.DEFAULT_SKIN.weekday_set
     orbit = 180.0 * spec.orbit_fraction
     body_edge_px = 180.0 * spec.diamond_scale        # normal half-size
-    # A probe just OUTSIDE the normal body edge, on the vertical above
-    # the center, inside the top slot direction.
-    probe = (180, round(180.0 - orbit - body_edge_px - 4))
+    # A probe just OUTSIDE the normal body edge, above the center but
+    # OFF the exact vertical — the noon-pointing hands cover the
+    # center strip and would eat the pixel difference.
+    probe = (170, round(180.0 - orbit - body_edge_px - 4))
     plain = compositor.render_offscreen(360.0, 1.0, day, tick)
     assert compositor.set_hover(180.0, 180.0 - orbit, 360.0)
     hovered = compositor.render_offscreen(360.0, 1.0, day, tick)

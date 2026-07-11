@@ -171,6 +171,59 @@ def test_letter_groups_cover_the_library_exactly():
         assert silver.exists(), glyph
 
 
+def test_letter_shadow_is_a_black_silhouette():
+    """Owner bug 2026-07-12: the tritone left bright GOLD pixels bright
+    under the #000000 shadow tint (a red halo on the ring letters) —
+    pure black must produce a SILHOUETTE: every opaque pixel black,
+    alpha untouched."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+    source = QPixmap(2, 1)
+    source.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(source)
+    painter.fillRect(0, 0, 1, 1, QColor(230, 180, 60))    # a bright gold
+    painter.end()
+    shadow = AssetCache._tinted(source, "#000000").toImage().convertToFormat(
+        QImage.Format.Format_ARGB32
+    )
+    gold = shadow.pixelColor(0, 0)
+    assert (gold.red(), gold.green(), gold.blue()) == (0, 0, 0)
+    assert gold.alpha() == 255
+    assert shadow.pixelColor(1, 0).alpha() == 0            # air stays air
+
+
+def test_svg_masters_survive_flush():
+    """Owner bug 2026-07-12: traced letter SVGs parse in seconds — the
+    master raster must be parsed once and survive flush() (monitor/DPI
+    switches), so a screen change never re-pays the parse."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+    path = defaults.RING_LETTER_ART_DIR / "M.svg"
+    cache = AssetCache()
+    first = cache.pixmap_by_height(path, 60.0, 1.0)
+    assert str(path) in AssetCache._svg_masters
+    master, master_px = AssetCache._svg_masters[str(path)]
+    assert master_px >= AssetCache.MASTER_MIN_PX
+    cache.flush()
+    assert str(path) in AssetCache._svg_masters      # the parse is kept
+    again = cache.pixmap_by_height(path, 120.0, 1.0)
+    assert first.height() == 60 and again.height() == 120
+
+
 def test_legend_highlighting_colors_canon_terms():
     """Owner spec 2026-07-12: virtues pop bold blue, vices bold red,
     moods bold yellow, color words in their own hue — in BOTH shipped

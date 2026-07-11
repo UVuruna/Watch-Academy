@@ -9,14 +9,30 @@ untouched so ring numerals keep their contrast — only the gray midtones
 take the hue. Source alpha is preserved.
 """
 
+import hashlib
+import math
+import sys
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
+from config import paths
+
 
 class AssetCache:
+    # SVG MASTERS survive across instances AND flush() (owner bug
+    # 2026-07-12: traced letter SVGs parse in 1.3-1.6 s EACH — the
+    # NUMBERS ring froze startup and every monitor switch re-paid it).
+    # A file is parsed+rendered ONCE per session at master resolution,
+    # persisted to a disk cache for the next launch, and every
+    # requested size scales down from the master (dial letters stay
+    # far below it).
+    _svg_masters: dict[str, tuple[QImage, int]] = {}
+    MASTER_MIN_PX = 1024
+    MASTER_STEP_PX = 512
+
     def __init__(self):
         self._pixmaps: dict[tuple[str, int, str | None], QPixmap] = {}
 
@@ -51,7 +67,24 @@ class AssetCache:
         out = SCREEN(max(2L-1, 0), MULTIPLY(min(2L, 1), tint)).
         Composed entirely from native blend modes (Plus / Multiply /
         Screen / invertPixels — no per-pixel Python, the review lesson);
-        alpha restored from the source at the end."""
+        alpha restored from the source at the end.
+
+        PURE BLACK is a SILHOUETTE, not a tritone (owner bug
+        2026-07-12: the letter shadow tints with #000000, and the
+        tritone left bright gold pixels bright — a red halo instead of
+        a dark one): the source alpha filled solid black."""
+        if QColor(tint).lightness() == 0:
+            silhouette = QPixmap(source.size())
+            silhouette.setDevicePixelRatio(source.devicePixelRatio())
+            silhouette.fill(Qt.GlobalColor.transparent)
+            painter = QPainter(silhouette)
+            painter.drawPixmap(0, 0, source)
+            painter.setCompositionMode(
+                QPainter.CompositionMode.CompositionMode_SourceIn
+            )
+            painter.fillRect(silhouette.rect(), QColor(tint))
+            painter.end()
+            return silhouette
         device = source.size()               # device pixels; DPR reapplied at the end
 
         def opaque(fill: Qt.GlobalColor) -> QImage:
@@ -100,22 +133,64 @@ class AssetCache:
         return result
 
     def flush(self) -> None:
-        """Drop everything (screen/DPI or skin change)."""
+        """Drop the sized pixmaps (screen/DPI or skin change) — the SVG
+        masters are resolution-independent pixels and stay."""
         self._pixmaps.clear()
 
-    @staticmethod
-    def _rasterize(path: Path, px_height: int, dpr: float) -> QPixmap:
-        if path.suffix.lower() == ".svg":
-            renderer = QSvgRenderer(str(path))
+    @classmethod
+    def _svg_master(cls, path: Path, px_height: int) -> QImage:
+        """The file rendered ONCE at master resolution (quantized, at
+        least MASTER_MIN_PX) — parsed at most once per session and
+        persisted to a disk cache so the next launch skips the parse
+        entirely (traced SVGs cost seconds to parse)."""
+        target = max(
+            cls.MASTER_MIN_PX,
+            math.ceil(px_height / cls.MASTER_STEP_PX) * cls.MASTER_STEP_PX,
+        )
+        key = str(path)
+        cached = cls._svg_masters.get(key)
+        if cached is not None and cached[1] >= max(px_height, cls.MASTER_MIN_PX):
+            return cached[0]
+        stamp = hashlib.sha1(key.encode("utf-8")).hexdigest()[:16]
+        disk = (
+            paths.settings_path().parent / "raster_cache"
+            / f"{stamp}_{int(path.stat().st_mtime)}_{target}.png"
+        )
+        image = QImage(str(disk)) if disk.exists() else QImage()
+        if image.isNull():
+            renderer = QSvgRenderer(key)
             if not renderer.isValid():
                 raise ValueError(f"cannot load SVG asset: {path}")
             size = renderer.defaultSize()
-            px_width = max(1, round(px_height * size.width() / size.height()))
-            pixmap = QPixmap(px_width, px_height)
-            pixmap.fill(Qt.GlobalColor.transparent)
-            painter = QPainter(pixmap)
-            renderer.render(painter, QRectF(0, 0, px_width, px_height))
+            width = max(1, round(target * size.width() / size.height()))
+            image = QImage(width, target, QImage.Format.Format_ARGB32)
+            image.fill(Qt.GlobalColor.transparent)
+            painter = QPainter(image)
+            renderer.render(painter, QRectF(0, 0, width, target))
             painter.end()
+            try:
+                disk.parent.mkdir(parents=True, exist_ok=True)
+                image.save(str(disk))
+            except OSError as error:     # a cold cache is only slower,
+                print(                   # never wrong — but say so
+                    f"raster cache write failed: {disk}: {error}",
+                    file=sys.stderr,
+                )
+        cls._svg_masters[key] = (image, target)
+        return image
+
+    @classmethod
+    def _rasterize(cls, path: Path, px_height: int, dpr: float) -> QPixmap:
+        if path.suffix.lower() == ".svg":
+            master = cls._svg_master(path, px_height)
+            image = (
+                master
+                if master.height() == px_height
+                else master.scaledToHeight(
+                    px_height, Qt.TransformationMode.SmoothTransformation
+                )
+            )
+            pixmap = QPixmap.fromImage(image)
         else:
             source = QPixmap(str(path))
             if source.isNull():
