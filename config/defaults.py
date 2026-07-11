@@ -114,7 +114,9 @@ RING_FACE_DIR = paths.assets_dir() / "ring"
 # One hue recolors the WHOLE clock body: the ring art, the hands and
 # the Umbra are channel-multiplied by it (gray stays gray under None).
 # The letters are separate art and are never tinted. Preset hues below
-# are STARTING VALUES — the owner tunes them here.
+# are STARTING VALUES — the owner tunes them here. Settings shows them
+# as a grid of color circles (Paint style — owner spec 2026-07-11);
+# the name appears in the circle's hover tooltip.
 RING_TINT_PRESETS = {
     "Gray": None,                       # the untouched owner art
     "Gold": "#D4AF37",
@@ -122,7 +124,40 @@ RING_TINT_PRESETS = {
     "Copper": "#B87333",
     "Purple": "#8E55B9",
     "Ocean": "#4E7A9E",
+    # The owner's gold palette (his reference swatches, 2026-07-11).
+    "Naples Yellow": "#FFE169",
+    "Sunglow": "#FFD235",
+    "Mikado Yellow": "#FFC300",
+    "Satin Gold": "#C9980B",
+    "Golden Brown": "#926C15",
+    # Pipetted from the owner's Clock_OuterColors.png (21 ring variants,
+    # 3x7 grid, mode color of each hour band — 2026-07-11).
+    "Charcoal": "#36454F",
+    "Glaucous": "#6082B6",
+    "Slate Gray": "#708090",
+    "Black Coral": "#54626F",
+    "Steel": "#71797E",
+    "Roman Silver": "#808992",
+    "Cadet Gray": "#91A3B0",
+    "Deep Pine": "#253529",
+    "Sage Steel": "#5E716A",
+    "Smoke": "#738276",
+    "Ebony": "#545851",
+    "Smoky Plum": "#66606D",
+    "Periwinkle": "#9090C0",
+    "Lavender Gray": "#A7A6BA",
+    "Espresso": "#342523",
+    "Anthracite": "#494F55",
+    "Granite": "#625D5D",
+    "Dim Gray": "#6B6B6B",
+    "Stone": "#928E85",
+    "Nevada": "#6C7174",
+    "Aluminium": "#888B8D",
 }
+RING_TINT_SWATCH_PX = 22             # diameter of one tint circle
+RING_TINT_SWATCHES_PER_ROW = 11
+PALETTE_SWATCH_PX = 34               # pointer palette circles (owner:
+                                     # bigger than the tint swatches)
 
 # The owner's GOLD letter art (a full latin/greek library for future
 # ring presets), overlaid on the ring by calculation so the tint never
@@ -199,6 +234,9 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 # the dial; the prose wraps at a fixed width so QToolTip stays a column.
 ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must read
 ARTICLE_WRAP_CHARS = 56
+ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
+                                     # spec 2026-07-11: a slightly bigger title,
+                                     # then a margin, then the prose)
 
 # The Legend popup (replaces QToolTip, owner decision): capped to these
 # screen fractions — taller content scrolls instead of clipping off a

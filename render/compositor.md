@@ -38,10 +38,12 @@ draws the MINUTE layers (hands, year marker) live.
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes), in priority order — the WEEKDAY
-  BODIES (every visible body within its image region: the active day
-  leads with "Thursday, 9th July 2026" and its LEFT-aligned article —
-  base + the active pointer/palette combination paragraph, the entity
-  art on top; ghosts show the article alone); the octa info slot; the
+  BODIES (every visible body within its image region: the entity's
+  NAME as a bigger bold title — Odin, Farmer, Islam… (owner spec
+  2026-07-11, `defaults.ARTICLE_TITLE_PX`) — the active day adds
+  "Thursday, 9th July 2026" beneath it, then the LEFT-aligned
+  article — base + the active pointer/palette combination paragraph,
+  the entity art on top); the octa info slot; the
   Moon marker (phase — with the exact principal instant in parentheses
   while its name holds — Illumination to one decimal, the
   moonrise-moonset span, the cycle day); the Earth marker (ordinal

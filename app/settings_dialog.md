@@ -18,18 +18,31 @@ submenus cannot express:
   Aura twilight as two INDEPENDENT overrides (owner spec — no coupling
   ratio between them). "Skin default" resets a slider and clears its
   override.
-- **Palette** — one color chip per hue of the ACTIVE (pointer, style)
-  preset; clicking a chip opens QColorDialog. Edited palettes are saved
-  as the user's custom preset for that combination ("Reset" returns to
-  the owner preset).
-- **Element sizes** (owner EXTRAS) — four multiplier sliders (Earth,
-  Moon, Weekday, Octa slot; 50–200%, default 100%) plus the shared
-  Hover enlarge slider (100–200%, default 120% — the element under
-  the cursor grows by it; 100% disables the effect).
+- **Palette** — one BIG color circle per hue of the ACTIVE (pointer,
+  style) preset (owner spec 2026-07-11: Paint-style swatches);
+  hovering a circle names the arm position it colors (Top / Bottom
+  Left — the Compass speaks compass: North-East…, from
+  `constants.POINTER_ARM_LABELS`); clicking opens QColorDialog. Edited
+  palettes are saved as the user's custom preset for that combination
+  ("Reset" returns to the owner preset).
+- **Element sizes** (owner EXTRAS) — five multiplier sliders (Earth,
+  Moon, Weekday, Octa slot, Ring letters; 50–200%, default 100%) plus
+  the shared Hover enlarge slider (100–200%, default 120% — the
+  element under the cursor grows by it; 100% disables the effect).
 - **Ring tint** — one hue for the whole clock body (ring art, hands,
-  Umbra; the letter art stays untouched): preset chips from
-  `defaults.RING_TINT_PRESETS` (owner-tunable starting values, "Gray"
-  = the untouched art) plus a free QColorDialog picker.
+  Umbra; the letter art stays untouched): a Paint-style GRID of color
+  circles from `defaults.RING_TINT_PRESETS` (owner-tunable; 32 hues —
+  the owner's gold palette and the 21 ring variants pipetted from his
+  Clock_OuterColors.png; names live in the tooltips, the active
+  swatch wears a white ring, "Gray" = the untouched art) plus a free
+  QColorDialog picker.
+- **Custom ring** — the ring card builder: a layout (Flame /
+  Chalice / Seal), a library letter per position and a unique name;
+  Add validates the card and OK persists it (it appears under
+  Theme ▸ Ring).
+- **Language** — all provider languages; the first pick translates
+  the whole corpus in the background and caches it. The Default
+  button jumps back to English (the shipped originals).
 
 OK applies and persists everything; Cancel discards. The dialog loads
 the location tree on open and releases it on close (the repository's

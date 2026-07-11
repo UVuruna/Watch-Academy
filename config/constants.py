@@ -142,6 +142,23 @@ POINTER_DISPLAY_NAMES = {
     "octa": "Compass",
 }
 
+# What each palette circle COLORS (owner spec 2026-07-11: hovering a
+# palette swatch in Settings names its arm position). Order matches
+# PALETTE_PRESETS — clockwise from the top arm; the Compass speaks in
+# cardinal directions, the others in dial positions.
+POINTER_ARM_LABELS = {
+    "trio": ("Top", "Right", "Left"),
+    "cross": ("Top", "Right", "Bottom", "Left"),
+    "hexa": (
+        "Top", "Top Right", "Bottom Right",
+        "Bottom", "Bottom Left", "Top Left",
+    ),
+    "octa": (
+        "North", "North-East", "East", "South-East",
+        "South", "South-West", "West", "North-West",
+    ),
+}
+
 # Star arm (diamond) half-angles. Hexa/octa are the regular N-star
 # values (180/N, adjacent arms touch at the inner vertices); the CROSS
 # uses the OCTA arm shape — "octa without the 4 diagonal arms" (owner

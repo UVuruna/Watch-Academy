@@ -360,21 +360,27 @@ class Compositor:
         return None
 
     def _weekday_tooltip(self, body: str, active: bool) -> str:
-        """The body's ARTICLE — its themed art on top, base plus the
-        paragraph of the ACTIVE (pointer, palette) combination; the
-        active day leads with "Thursday, 9th July 2026" (owner spec),
-        ghosts show the article alone."""
+        """The body's ARTICLE — its themed art on top, then the entity
+        NAME as a bigger title (owner spec 2026-07-11: the god / planet
+        / calling the medallion shows), base plus the paragraph of the
+        ACTIVE (pointer, palette) combination; the active day adds
+        "Thursday, 9th July 2026" under the name (owner spec), ghosts
+        show name and article alone."""
         article_set = constants.WEEKDAY_THEME_ARTICLES[self._skin.weekday_theme]
         node = self._symbolism.article(article_set, body)
         text = node["base"]
         variant = node["variants"].get(self._combo_key())
         if variant:
             text += "\n\n" + variant
-        title = None
+        title = (
+            f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
+            f"<b>{html.escape(self._skin.weekday_set.body_names[body])}</b>"
+            f"</span>"
+        )
         if active:
             date = self._day.local_date
-            title = (
-                f"{html.escape(constants.WEEKDAY_FULL_NAMES[body])}, "
+            title += (
+                f"<br/>{html.escape(constants.WEEKDAY_FULL_NAMES[body])}, "
                 f"{_ordinal(date.day)} {date:%B %Y}"
             )
         return _article_html(self._skin.weekday_set.bodies.get(body), title, text)

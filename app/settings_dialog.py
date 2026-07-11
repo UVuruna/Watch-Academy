@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
     QDialogButtonBox,
     QDoubleSpinBox,
     QFormLayout,
+    QGridLayout,
     QGroupBox,
     QHBoxLayout,
     QLabel,
@@ -423,18 +424,23 @@ class SettingsDialog(QDialog):
     # --- Palette --------------------------------------------------------------------
 
     def _build_palette_group(self) -> QGroupBox:
+        """The active (pointer, style) hues as BIG color circles (owner
+        spec 2026-07-11) — hovering one names the arm position it colors
+        (Top / Bottom Left / North-East…); clicking opens the picker."""
         pointer = self._settings.pointer
         style = self._settings.palette_style
         group = QGroupBox(
-            f"Palette — {pointer.capitalize()} {style.capitalize()}"
+            f"Palette — {constants.POINTER_DISPLAY_NAMES[pointer]} "
+            f"{style.capitalize()}"
         )
         column = QVBoxLayout(group)
         chips_row = QHBoxLayout()
+        self._arm_labels = constants.POINTER_ARM_LABELS[pointer]
         self._chips: list[QPushButton] = []
         for index, hue in enumerate(self._hues):
             chip = QPushButton()
-            chip.setFixedSize(36, 24)
-            self._paint_chip(chip, hue)
+            self._round_swatch(chip, hue, defaults.PALETTE_SWATCH_PX)
+            chip.setToolTip(f"{self._arm_labels[index]} — {hue}")
             chip.clicked.connect(lambda checked, i=index: self._pick_color(i))
             self._chips.append(chip)
             chips_row.addWidget(chip)
@@ -446,11 +452,21 @@ class SettingsDialog(QDialog):
         return group
 
     @staticmethod
-    def _paint_chip(chip: QPushButton, hue: str) -> None:
+    def _round_swatch(
+        chip: QPushButton, hue: str, size: int, selected: bool = False
+    ) -> None:
+        """Paint-style color circle (owner spec): a plain filled round
+        button; the selected ring-tint swatch wears a white ring."""
+        border = "2px solid #FFFFFF" if selected else "1px solid #666"
+        chip.setFixedSize(size, size)
         chip.setStyleSheet(
-            f"background-color: {hue}; border: 1px solid #666;"
+            f"background-color: {hue}; border: {border};"
+            f"border-radius: {size // 2}px;"
         )
-        chip.setToolTip(hue)
+
+    def _paint_chip(self, chip: QPushButton, hue: str, index: int) -> None:
+        self._round_swatch(chip, hue, defaults.PALETTE_SWATCH_PX)
+        chip.setToolTip(f"{self._arm_labels[index]} — {hue}")
 
     def _pick_color(self, index: int) -> None:
         chosen = QColorDialog.getColor(
@@ -459,40 +475,50 @@ class SettingsDialog(QDialog):
         if not chosen.isValid():
             return
         self._hues[index] = chosen.name().upper()
-        self._paint_chip(self._chips[index], self._hues[index])
+        self._paint_chip(self._chips[index], self._hues[index], index)
 
     def _reset_palette(self) -> None:
         self._hues = list(self._preset)
-        for chip, hue in zip(self._chips, self._hues):
-            self._paint_chip(chip, hue)
+        for index, (chip, hue) in enumerate(zip(self._chips, self._hues)):
+            self._paint_chip(chip, hue, index)
 
     # --- Ring tint ------------------------------------------------------------------
 
     def _build_ring_tint_group(self) -> QGroupBox:
         """One hue recolors the whole clock body — ring art, hands and
-        Umbra (channel multiply; the letter art stays untouched). Preset
-        chips come from defaults.RING_TINT_PRESETS (owner-tunable),
-        plus a free color picker."""
+        Umbra (channel multiply; the letter art stays untouched). The
+        presets (defaults.RING_TINT_PRESETS, owner-tunable) show as a
+        Paint-style grid of color circles (owner spec 2026-07-11) —
+        the name lives in the tooltip, the active one wears a white
+        ring — plus a free color picker."""
         group = QGroupBox("Ring tint — whole clock body (letters excluded)")
-        row = QHBoxLayout(group)
-        for name, hue in defaults.RING_TINT_PRESETS.items():
-            chip = QPushButton(name)
-            if hue is not None:
-                chip.setStyleSheet(
-                    f"background-color: {hue}; border: 1px solid #666;"
-                )
-            chip.setToolTip(hue or "the untouched gray art")
+        column = QVBoxLayout(group)
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(4)
+        grid.setVerticalSpacing(4)
+        self._tint_swatches: list[tuple[QPushButton, str | None]] = []
+        per_row = defaults.RING_TINT_SWATCHES_PER_ROW
+        for index, (name, hue) in enumerate(defaults.RING_TINT_PRESETS.items()):
+            chip = QPushButton()
+            chip.setToolTip(
+                f"{name} — {hue}" if hue else f"{name} — the untouched art"
+            )
             chip.clicked.connect(
                 lambda checked, chosen=hue: self._set_ring_tint(chosen)
             )
-            row.addWidget(chip)
+            self._tint_swatches.append((chip, hue))
+            grid.addWidget(chip, index // per_row, index % per_row)
+        grid.setColumnStretch(per_row, 1)
+        column.addLayout(grid)
+        row = QHBoxLayout()
         custom = QPushButton("Custom…")
         custom.clicked.connect(self._pick_ring_tint)
         row.addWidget(custom)
         row.addStretch(1)
         self._ring_tint_label = QLabel()
-        self._show_ring_tint()
         row.addWidget(self._ring_tint_label)
+        column.addLayout(row)
+        self._show_ring_tint()
         return group
 
     def _set_ring_tint(self, hue: str | None) -> None:
@@ -509,6 +535,15 @@ class SettingsDialog(QDialog):
 
     def _show_ring_tint(self) -> None:
         self._ring_tint_label.setText(self._ring_tint or "Gray (default)")
+        # Repaint every swatch — the one matching the active tint is
+        # ringed white ("Gray"/None shows as the bare art gray).
+        for chip, hue in self._tint_swatches:
+            self._round_swatch(
+                chip,
+                hue or "#9A9A9A",
+                defaults.RING_TINT_SWATCH_PX,
+                selected=(hue == self._ring_tint),
+            )
 
     # --- Custom ring (owner spec) -----------------------------------------------------
 
@@ -615,6 +650,16 @@ class SettingsDialog(QDialog):
                     self._language_combo.count() - 1
                 )
         row.addWidget(self._language_combo)
+        # One-click way back to the shipped originals (owner spec
+        # 2026-07-11): jump the combo to English.
+        default = QPushButton("Default")
+        default.setToolTip("Back to English — the shipped original texts")
+        default.clicked.connect(
+            lambda: self._language_combo.setCurrentIndex(
+                self._language_combo.findData("en")
+            )
+        )
+        row.addWidget(default)
         note = QLabel(
             "First pick translates all texts in the background "
             "(internet needed once) and caches them — afterwards the "
