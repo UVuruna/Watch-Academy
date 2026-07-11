@@ -207,12 +207,12 @@ PALETTE_PRESETS = {
         "#BD00BD", "#0040FF", "#00DDDD",
     ),
     ("octa", "paint"): (
-        "#FFFFFF", "#F8E600", "#DC9600", "#DC0000",
+        "#F8E600", "#ECB800", "#DC9600", "#DC0000",
         "#783CF0", "#005ADC", "#00DCDC", "#00DC00",
     ),
     ("octa", "light"): (
         "#00DC00", "#DCDC00", "#FF8C00", "#FF0000",
-        "#363636", "#783CF0", "#0078DC", "#00DCDC",
+        "#BD00BD", "#0000FF", "#0080FF", "#00FFFF",
     ),
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
@@ -415,10 +415,6 @@ WEEKDAY_THEME_FILES = {
     }
     for theme, names in WEEKDAY_THEME_NAMES.items()
 }
-# The owner's Amun medallion is named amunu.png (his spelling of the
-# reconstructed Egyptian *Amānu*) — the file keeps his name, the hover
-# still reads "Amun".
-WEEKDAY_THEME_FILES["egypt"]["jupiter"] = "amunu"
 
 DEFAULT_SKIN = SkinDefinition(
     z_order=(
