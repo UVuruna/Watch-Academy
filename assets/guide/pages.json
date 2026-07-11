@@ -9,8 +9,10 @@
     {"title": "Reading the Travelers", "columns": 2, "images": ["12_earth_legend", "13_moon_legend"]},
     {"title": "The Diamond Legends", "columns": 1, "images": ["14_diamond_legend"]},
     {"title": "Day, Night and the Twilights", "columns": 2, "images": ["15_day_legend", "16_night_legend", "17_dawn_legend", "18_dusk_legend"]},
-    {"title": "Rings, Letters, Metals", "columns": 1, "images": ["19_rings"]},
-    {"title": "Settings", "columns": 1, "images": ["20_settings"]},
+    {"title": "Seven Days, Seven Faces", "columns": 2, "images": ["24_weekday_planets", "25_weekday_greek", "26_weekday_norse", "27_weekday_religion", "28_weekday_professions"]},
+    {"title": "The Compass Slot", "columns": 2, "images": ["29_slot_zodiac", "30_slot_chinese"]},
+    {"title": "Rings, Letters, Metals", "columns": 2, "images": ["19_rings", "22_ring_domy_gold", "23_ring_domy_silver", "36_ring_morph_silver"]},
+    {"title": "Settings, Piece by Piece", "columns": 2, "images": ["31_settings_location", "32_settings_opacity", "33_settings_sizes", "34_settings_custom_ring", "35_menu_elements"]},
     {"title": "Time Travel", "columns": 1, "images": ["21_time_travel"]}
   ]
 }
