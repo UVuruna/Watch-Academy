@@ -613,6 +613,7 @@ class AppController(QObject):
                 ("planet_signs", "Planet signs"),
                 ("greek", "Greek gods"),
                 ("norse", "Norse gods"),
+                ("egypt", "Egyptian gods"),
                 ("religion", "Religions"),
                 ("religion_alt", "Religions II"),
                 ("profession", "Professions"),

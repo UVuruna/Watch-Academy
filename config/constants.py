@@ -295,6 +295,7 @@ WEEKDAY_THEMES = (
     "planet_signs",
     "greek",
     "norse",
+    "egypt",
     "religion",
     "religion_alt",
     "profession",
@@ -307,6 +308,7 @@ WEEKDAY_THEME_BLURBS = {
     "planet_signs": "day",
     "greek": "greek",
     "norse": "norse",
+    "egypt": "egypt",
     "religion": "religion",
     "religion_alt": "religion_alt",
     "profession": "profession",
@@ -319,6 +321,7 @@ WEEKDAY_THEME_ARTICLES = {
     "planet_signs": "planets",
     "greek": "greek",
     "norse": "norse",
+    "egypt": "egypt",
     "religion": "religion",
     "religion_alt": "religion_alt",
     "profession": "profession",
@@ -395,8 +398,10 @@ ZONE_SEASON_EVENT_NAMES = {
 
 # Languages offered in Settings (owner: "all the provider offers") —
 # the Google-translate codes the gtx endpoint accepts, code -> English
-# display name; "en" shows the shipped originals and "sr-Latn" is
-# Serbian with a local Cyrillic->Latin transliteration.
+# display name. ORIGINALS (owner decision 2026-07-11) ship hand-written
+# in the app (Database/translations/) and sit pinned at the top of the
+# combo; every other language machine-translates on first pick.
+TRANSLATION_ORIGINALS = ("en", "sr-Latn")
 TRANSLATION_LANGUAGES = {
     "en": "English",
     "af": "Afrikaans", "sq": "Albanian", "am": "Amharic", "ar": "Arabic",

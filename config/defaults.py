@@ -342,6 +342,20 @@ WEEKDAY_THEME_NAMES = {
                               # on Saturday — the bound trickster as
                               # Cronus' northern mirror
     },
+    # Egyptian gods (owner art 2026-07-11, per the approved mapping):
+    # Ra's Sunday, Khonsu the moon-walker, Montu the war falcon, Thoth
+    # the scribe on the messenger's day, Amun the king of gods, Hathor
+    # love and beauty, Osiris — harvest, patience and rebirth on
+    # Saturn's day.
+    "egypt": {
+        "sun": "Ra",
+        "moon": "Khonsu",
+        "mars": "Montu",
+        "mercury": "Thoth",
+        "jupiter": "Amun",
+        "venus": "Hathor",
+        "saturn": "Osiris",
+    },
     "religion": {
         "sun": "Christianity",
         "moon": "Buddhism",
@@ -378,13 +392,14 @@ WEEKDAY_THEME_NAMES = {
 # File stems on disk: the display names folded to ASCII (Sól -> Sol);
 # the owner's religion and planet-sign art uses lowercase file names.
 _ASCII_FOLD = str.maketrans("óá", "oa")
-_LOWERCASE_THEMES = ("religion", "religion_alt", "planet_signs")
+_LOWERCASE_THEMES = ("religion", "religion_alt", "planet_signs", "egypt")
 # Theme -> art folder under assets/weekday/: both religion sets share
 # the ONE religion/ folder (all fourteen owner medallions together).
 WEEKDAY_THEME_DIRS = {
     "planet_signs": "planet_signs",
     "greek": "greek",
     "norse": "norse",
+    "egypt": "egypt",
     "religion": "religion",
     "religion_alt": "religion",
     "profession": "profession",
@@ -400,6 +415,10 @@ WEEKDAY_THEME_FILES = {
     }
     for theme, names in WEEKDAY_THEME_NAMES.items()
 }
+# The owner's Amun medallion is named amunu.png (his spelling of the
+# reconstructed Egyptian *Amānu*) — the file keeps his name, the hover
+# still reads "Amun".
+WEEKDAY_THEME_FILES["egypt"]["jupiter"] = "amunu"
 
 DEFAULT_SKIN = SkinDefinition(
     z_order=(

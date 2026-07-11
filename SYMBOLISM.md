@@ -162,6 +162,26 @@ Tyr, Odin, Thor, Freya (Friday's etymology is genuinely contested
 between Frigg and Freyja — the owner's canon reads it as Freya,
 Venus' northern face).
 
+The EGYPTIAN theme (owner art 2026-07-11) reads the same seven days
+through the Nile:
+
+- **Sunday — Ra**: the sun itself; no pantheon fused sun and kingship
+  more completely — reborn every dawn, the center's own god.
+- **Monday — Khonsu**: "the traveller" — the moon god who crosses the
+  night sky, healer and marker of time.
+- **Tuesday — Montu**: the falcon-headed war god of Thebes, the raised
+  arm of Egypt's armies — Mars' burning hour.
+- **Wednesday — Thoth**: scribe of the gods, reckoner of years,
+  inventor of writing — Hermes' exact elder mirror on the messenger's
+  day (the Greeks themselves merged them as Hermes Trismegistus).
+- **Thursday — Amun**: the hidden one, king of gods, joined with the
+  sun as Amun-Ra — Jupiter's crown in Egyptian dress.
+- **Friday — Hathor**: love, beauty, music and joy — the lady of the
+  west on Venus' evening.
+- **Saturday — Osiris**: the harvest that dies and returns; lord of
+  the underworld and of rebirth — Saturn's patience made a god, the
+  sickle's oldest owner.
+
 <a id="color-moods"></a>
 
 ## Colors as Moods of the Day
