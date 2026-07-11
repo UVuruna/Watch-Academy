@@ -69,11 +69,24 @@ Sunday sits in the CENTER, not on an arm — because the Sun is not one
 color among six: **white light is the sum of all colors**. The six arms
 are sunlight decomposed; the star is the prism; Sunday is the source.
 
-The center's own duality is the oldest one: **Pride** (the self at the
-center of everything) against **Humility** (its only cure). The center
-cures itself. Sunday is also the day of **Faith** — with Hope at the
-dawn arm and Love on Venus, the three theological virtues span the
-whole dial.
+The center is DOUBLE (owner decision 2026-07-12): one figure with two
+faces — the SERVANT-KING, black and white in one body, the dial's own
+yin-yang. Every arm carries a single virtue and a single vice; the
+center carries two of each, and two moods besides:
+
+| | The Ruler (bright face) | The Servant (dark face) |
+|---|---|---|
+| Virtue | **Justice** — the virtue a ruler PRACTICES: Solomon's scales, the heart weighed against Ma'at's feather | **Humility** — the virtue that SAVES him |
+| Vice | **Pride** — the self at the center of everything | **Servility** — humility curdled into spinelessness, serving the throne instead of the truth |
+| Mood | **Glory** — the sun at noon | **Eclipse** — the hour the king's light fails |
+
+The cure axis lies INSIDE the center, crossed like a miniature of the
+dial itself: the Servant's Humility cures the Ruler's Pride, and the
+Ruler's Justice cures the Servant's Servility — a spine straightened
+by what is right. The center is the one place on the dial that is
+both its own disease and its own medicine. Sunday is also the day of
+**Faith** — with Hope at the dawn arm and Love on Venus, the three
+theological virtues span the whole dial.
 
 <a id="gold-and-silver"></a>
 
@@ -213,7 +226,7 @@ opposite body's vice**:
 
 | Body | Virtue | Vice |
 |---|---|---|
-| Sun (center) | **Humility** | **Pride** |
+| Sun (center) | **Humility · Justice** (servant · ruler) | **Pride · Servility** (ruler · servant) |
 | Jupiter | **Generosity** | **Excess** (gluttony) |
 | Mercury | **Wisdom** | **Greed** |
 | Mars | **Courage** | **Wrath** |
@@ -223,8 +236,9 @@ opposite body's vice**:
 
 The cures, axis by axis:
 
-- **Center (Sun)**: Humility is the one cure for Pride — the center
-  heals itself.
+- **Center (Sun)**: the center heals itself, crosswise — the
+  Servant's Humility cures the Ruler's Pride, the Ruler's Justice
+  cures the Servant's Servility (the servant-king's inner axis).
 - **Noon–midnight (Jupiter ↔ Mercury)**: Generosity cures Greed;
   Wisdom curbs Excess — knowing when enough is enough.
 - **Mars ↔ Moon**: Courage cures Fear; Serenity quells Wrath.
@@ -256,7 +270,7 @@ virtue and vice:
 
 | Body | Profession | Why |
 |---|---|---|
-| Sun | **Ruler** | the royal planet; the ONE calling whose virtue is not the skill of the office but its cure — every other profession practices its virtue, the ruler is saved by his: the lesson is Humility, the sin Pride, servant-king over sovereign |
+| Sun | **Ruler** | the royal planet; a DOUBLE calling — the servant-king: as ruler he practices Justice and is stalked by Pride, as servant he practices Humility and is stalked by Servility; each face cures the other, in Glory at noon and Eclipse when the light fails |
 | Moon | **Physician** | medieval medicine followed the Moon (bloodletting calendars ran on its phases); the night watch at the sickbed; the healer's calm hand against the patient's fear (Fear's full cure stands across the dial — the Soldier's Courage) |
 | Mars | **Soldier** | the warrior's two faces are Courage and Wrath |
 | Mercury | **Merchant** | Hermes, god of merchants and roads; Wisdom against Greed |
@@ -329,7 +343,7 @@ The full weave, one arm per row (hexa paint canon):
 
 | Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice | Profession |
 |---|---|---|---|---|---|---|---|---|---|
-| Sunday | Sun | Helios | Sól | Christianity | white-gold | — (source) | Humility | Pride | Ruler |
+| Sunday | Sun | Helios | Sól | Christianity | white-gold | Glory / Eclipse (source) | Humility · Justice | Pride · Servility | Ruler (servant-king) |
 | Monday | Moon | Selene | Máni | Buddhism | blue | Calm | Serenity | Fear | Physician |
 | Tuesday | Mars | Ares | Tyr | Freemasonry | orange | Zeal | Courage | Wrath | Soldier |
 | Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed | Merchant |
