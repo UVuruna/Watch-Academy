@@ -12,9 +12,11 @@ from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 from config import constants, defaults
 
 
-def _draw_tray_icon() -> QIcon:
+def logo_icon() -> QIcon:
     """The owner's gold watch (assets/logo.svg) rasterized to the tray
-    size, aspect kept and centered. A missing/broken logo must be
+    size, aspect kept and centered — the ONE app face: the tray and the
+    app-wide window icon (dialog title bars) both wear it; the built
+    EXE additionally embeds the M7 ICO. A missing/broken logo must be
     visible — the app raises instead of showing an empty tray."""
     renderer = QSvgRenderer(str(defaults.LOGO_ASSET))
     if not renderer.isValid():
@@ -35,9 +37,9 @@ def _draw_tray_icon() -> QIcon:
 
 
 class TrayController:
-    def __init__(self, menu: QMenu):
+    def __init__(self, menu: QMenu, icon: QIcon):
         self._menu = menu
-        self._icon = QSystemTrayIcon(_draw_tray_icon())
+        self._icon = QSystemTrayIcon(icon)
         self._icon.setToolTip(constants.APP_NAME)
         self._icon.setContextMenu(menu)
 

@@ -26,7 +26,7 @@ from app.scheduler import MinuteScheduler
 from app.settings_dialog import SettingsDialog
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
 from app.time_travel import TimeTravelDialog
-from app.tray import TrayController
+from app.tray import TrayController, logo_icon
 from app.widget import ClockWidget
 from config import constants, defaults, paths
 from core.clock_state import build_day_context, build_tick_state
@@ -190,7 +190,12 @@ class AppController(QObject):
         self._legend = LegendPopup()
         self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
         try:
-            self._tray = TrayController(self._menu)
+            icon = logo_icon()
+            self._tray = TrayController(self._menu, icon)
+            # Every dialog title bar (Settings, Time Travel, Guide)
+            # inherits this instead of the generic Windows icon (owner
+            # report 2026-07-11); the built EXE gets the M7 ICO on top.
+            self._app.setWindowIcon(icon)
         except ValueError as error:
             # A broken/missing logo must be SEEN (review finding) — in a
             # windowed build a bare traceback dies with no window at all.
