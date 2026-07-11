@@ -29,6 +29,7 @@ from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon
 from app.widget import ClockWidget
 from config import constants, defaults, paths
+from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
@@ -186,6 +187,15 @@ class AppController(QObject):
         self._settings = self._load_settings_or_recover()
         self._save_failed = False
 
+        # The cached overlay loads BEFORE the menu builds, so the menu
+        # speaks the chosen language from the very first frame (Phase 2);
+        # _apply_language below only starts the background fetch for
+        # entries the cache does not know yet.
+        self._translation_overlay: dict = {}
+        if self._settings.language != "en":
+            self._translation_overlay = TranslationStore().load(
+                self._settings.language
+            )
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
@@ -214,7 +224,6 @@ class AppController(QObject):
         self._moon_phases = MoonPhaseRepository()
         # Translation overlay (owner spec): apply whatever the cache
         # already holds; missing entries translate in the background.
-        self._translation_overlay: dict = {}
         self._translation_thread: threading.Thread | None = None
         self._translation_error: Exception | None = None
         self._translation_poller = QTimer(self)

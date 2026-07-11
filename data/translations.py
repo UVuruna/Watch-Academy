@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from config import constants, defaults, paths
+from config import constants, defaults, paths, ui_text
 from data._io import load_json_checked
 
 _SR_LATN = {
@@ -78,6 +78,10 @@ def collect_corpus() -> dict:
             json.loads(pages.read_text(encoding="utf-8"))["pages"]
         ):
             corpus[f"guide_page/{index}"] = page["title"]
+    # Phase 2 (owner spec): the UI chrome — menu, dialogs, balloons,
+    # hover labels and name tables. The English string IS the key.
+    for text in ui_text.UI_STRINGS:
+        corpus[f"ui/{text}"] = text
     return corpus
 
 
