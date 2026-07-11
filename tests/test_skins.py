@@ -140,9 +140,71 @@ def test_pre_rendered_silver_letters_are_grayscale():
     assert omega.pixelColor(0, 0).alpha() == 0
 
 
+def test_letter_groups_cover_the_library_exactly():
+    """The builder's grouped dropdown (owner spec 2026-07-11: Latin /
+    Greek / Numbers / Symbols sections) must offer every library glyph
+    exactly once — and every glyph must ship BOTH its gold art and its
+    pre-rendered silver twin."""
+    from pathlib import Path
+
+    from config import constants
+
+    grouped = [
+        glyph
+        for glyphs in constants.RING_LETTER_GROUPS.values()
+        for glyph in glyphs
+    ]
+    assert sorted(grouped) == sorted(constants.RING_LETTER_FILES)
+    assert len(grouped) == len(set(grouped))
+    assert len(constants.RING_LETTER_GROUPS["Latin"]) == 26   # the full alphabet
+    for glyph, filename in constants.RING_LETTER_FILES.items():
+        gold = defaults.RING_LETTER_ART_DIR / filename
+        silver = (
+            defaults.RING_LETTER_ART_DIR / f"{Path(filename).stem}_silver.png"
+        )
+        assert gold.exists(), glyph
+        assert silver.exists(), glyph
+
+
+def test_ring_tint_is_a_tritone_map():
+    """Owner spec 2026-07-11: the tint must NOT touch whites or blacks
+    (ring numerals stay legible) — black -> black, white -> white, the
+    exact midtone -> the tint. Checked on both twins: the pixmap
+    recolor (AssetCache._tinted) and the scalar Umbra map."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+    from render.layers import tinted_gray
+
+    QApplication.instance() or QApplication([])
+    source = QPixmap(3, 1)
+    painter = QPainter(source)
+    painter.fillRect(0, 0, 1, 1, QColor(0, 0, 0))
+    painter.fillRect(1, 0, 1, 1, QColor(128, 128, 128))
+    painter.fillRect(2, 0, 1, 1, QColor(255, 255, 255))
+    painter.end()
+    tinted = AssetCache._tinted(source, "#007E00").toImage().convertToFormat(
+        QImage.Format.Format_ARGB32
+    )
+    black, mid, white = (tinted.pixelColor(x, 0) for x in range(3))
+    assert (black.red(), black.green(), black.blue()) == (0, 0, 0)
+    assert (white.red(), white.green(), white.blue()) == (255, 255, 255)
+    assert mid.green() > 100 and mid.red() < 30 and mid.blue() < 30  # ~the tint
+
+    assert tinted_gray(0, "#007E00").getRgb()[:3] == (0, 0, 0)
+    assert tinted_gray(255, "#007E00").getRgb()[:3] == (255, 255, 255)
+    mid = tinted_gray(128, "#007E00")
+    assert mid.green() > 100 and mid.red() < 10 and mid.blue() < 10
+
+
 def test_ring_tint_flows_to_the_skin_and_the_umbra():
-    """The tint reaches the built config and the Umbra render: with a
-    pure red tint the wheel's bright top reads red, not gray."""
+    """The tint reaches the built config and the Umbra render — as a
+    TRITONE: the wheel's bright TOP stays white (owner spec: whites are
+    untouchable), while the midtone flank reads red."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -176,12 +238,16 @@ def test_ring_tint_flows_to_the_skin_and_the_umbra():
         colorful=False, show_pointer=False, show_weekday=False,
         show_earth=False, show_moon=False,
     )
-    probe = (180, 108)                   # above center — the Umbra's bright top
+    probe = (180, 108)                   # above center — a MIDTONE wheel shade
     gray = Compositor(bare, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     pixel = gray.pixelColor(*probe)
     assert abs(pixel.red() - pixel.blue()) < 12          # neutral gray
+    assert 30 < pixel.red() < 225                        # a real midtone — the
+                                                         # tritone must move it
     red = Compositor(
         dataclasses.replace(bare, ring_tint="#FF0000"), AssetCache()
     ).render_offscreen(360.0, 1.0, day, tick)
     pixel = red.pixelColor(*probe)
-    assert pixel.red() > pixel.blue() + 60               # tinted wheel
+    assert pixel.red() > pixel.blue() + 60               # midtone takes the tint
+    # Whites/blacks staying untouched is pinned by the tritone unit
+    # test above — this test guards the skin -> Umbra plumbing.

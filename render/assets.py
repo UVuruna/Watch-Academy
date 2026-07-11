@@ -3,14 +3,16 @@
 PNG and SVG are both accepted (detected by extension); SVG goes through
 QSvgRenderer so user vector hands stay sharp at any size. The explicit
 QtSvg import also guarantees PyInstaller bundles the Svg plugin. An
-optional tint channel-multiplies the rasterized image (the ring recolor:
-gray art x hue), preserving the alpha of the source.
+optional tint recolors the rasterized image with a TRITONE gradient map
+(black -> tint -> white; owner spec 2026-07-11): whites and blacks stay
+untouched so ring numerals keep their contrast — only the gray midtones
+take the hue. Source alpha is preserved.
 """
 
 from pathlib import Path
 
 from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QPainter, QPixmap
+from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
 
@@ -42,16 +44,54 @@ class AssetCache:
 
     @staticmethod
     def _tinted(source: QPixmap, tint: str) -> QPixmap:
-        """Channel multiply with `tint`, alpha restored from the source
-        — the standard cheap colorize for gray art (white -> the tint,
-        mid-gray -> a darker tint)."""
-        result = QPixmap(source.size())
+        """TRITONE gradient map black -> tint -> white (owner spec
+        2026-07-11 — the plain channel multiply turned WHITE ring
+        numerals into the tint color): luminance L keeps black at 0
+        and white at 1, the exact midtone lands on the tint —
+        out = SCREEN(max(2L-1, 0), MULTIPLY(min(2L, 1), tint)).
+        Composed entirely from native blend modes (Plus / Multiply /
+        Screen / invertPixels — no per-pixel Python, the review lesson);
+        alpha restored from the source at the end."""
+        device = source.size()               # device pixels; DPR reapplied at the end
+
+        def opaque(fill: Qt.GlobalColor) -> QImage:
+            image = QImage(device, QImage.Format.Format_ARGB32_Premultiplied)
+            image.setDevicePixelRatio(source.devicePixelRatio())
+            image.fill(fill)                 # same DPR everywhere -> 1:1 blits
+            return image
+
+        gray = opaque(Qt.GlobalColor.black)  # transparent areas read black;
+        painter = QPainter(gray)             # alpha is reapplied last
+        painter.drawPixmap(0, 0, source)
+        painter.end()
+
+        dark = gray.copy()                   # min(2L, 1)
+        painter = QPainter(dark)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Plus)
+        painter.drawImage(0, 0, gray)
+        painter.end()
+
+        inverted = gray.copy()               # max(2L-1, 0) = 1 - min(2(1-L), 1)
+        inverted.invertPixels()
+        light = inverted.copy()
+        painter = QPainter(light)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Plus)
+        painter.drawImage(0, 0, inverted)
+        painter.end()
+        light.invertPixels()
+
+        painter = QPainter(dark)             # dark half toward the tint...
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Multiply)
+        painter.fillRect(dark.rect(), QColor(tint))
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Screen)
+        painter.drawImage(0, 0, light)       # ...light half toward white
+        painter.end()
+
+        result = QPixmap(device)
         result.setDevicePixelRatio(source.devicePixelRatio())
         result.fill(Qt.GlobalColor.transparent)
         painter = QPainter(result)
-        painter.drawPixmap(0, 0, source)
-        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_Multiply)
-        painter.fillRect(result.rect(), QColor(tint))
+        painter.drawImage(0, 0, dark)
         painter.setCompositionMode(
             QPainter.CompositionMode.CompositionMode_DestinationIn
         )

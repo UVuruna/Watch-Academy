@@ -124,16 +124,21 @@ def palette_for(skin: SkinDefinition) -> tuple:
 
 
 def tinted_gray(value: int, tint: str | None) -> QColor:
-    """A gray of brightness `value`, channel-multiplied by the ring
-    tint (None = plain gray) — the Umbra's share of the ring recolor."""
+    """A gray of brightness `value` through the TRITONE map
+    black -> tint -> white (owner spec 2026-07-11: whites stay white,
+    blacks stay black, the exact midtone lands on the tint) — the
+    Umbra's share of the ring recolor; None = plain gray. The scalar
+    twin of AssetCache._tinted."""
     if tint is None:
         return QColor(value, value, value)
     hue = QColor(tint)
-    return QColor(
-        value * hue.red() // 255,
-        value * hue.green() // 255,
-        value * hue.blue() // 255,
-    )
+
+    def channel(c: int) -> int:
+        if value <= 127:
+            return c * (value * 2) // 255                    # black -> tint
+        return c + (255 - c) * (value * 2 - 255) // 255      # tint -> white
+
+    return QColor(channel(hue.red()), channel(hue.green()), channel(hue.blue()))
 
 
 def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
