@@ -19,12 +19,17 @@ from PySide6.QtWidgets import (
 )
 
 from config import constants, defaults
+from config.ui_text import ui
 
 
 class TimeTravelDialog(QDialog):
-    def __init__(self, latitude: float, longitude: float, parent=None):
+    def __init__(
+        self, latitude: float, longitude: float, parent=None,
+        overlay: dict | None = None,
+    ):
         super().__init__(parent)
-        self.setWindowTitle(f"{constants.APP_NAME} — Time Travel")
+        tr = lambda text: ui(overlay or {}, text)  # noqa: E731 — dialog chrome
+        self.setWindowTitle(f"{constants.APP_NAME} — {tr('Time Travel')}")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
 
         self._when = QDateTimeEdit(QDateTime.currentDateTime(), self)
@@ -43,14 +48,15 @@ class TimeTravelDialog(QDialog):
         self._longitude.setValue(longitude)
 
         layout = QFormLayout(self)
-        layout.addRow("Moment:", self._when)
-        layout.addRow("Latitude:", self._latitude)
-        layout.addRow("Longitude:", self._longitude)
+        layout.addRow(tr("Moment:"), self._when)
+        layout.addRow(tr("Latitude:"), self._latitude)
+        layout.addRow(tr("Longitude:"), self._longitude)
         layout.addRow(
             QLabel(
-                f"The dial shows this situation for "
-                f"{defaults.TIME_TRAVEL_DURATION_S} seconds, then returns "
-                f"to the present."
+                tr(
+                    "The dial shows this situation for {n} seconds, "
+                    "then returns to the present."
+                ).format(n=defaults.TIME_TRAVEL_DURATION_S)
             )
         )
         buttons = QDialogButtonBox(

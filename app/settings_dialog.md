@@ -49,7 +49,9 @@ submenus cannot express:
 
 OK applies and persists everything; Cancel discards. The dialog loads
 the location tree on open and releases it on close (the repository's
-documented lifecycle).
+documented lifecycle). All chrome strings resolve through the
+[UI Text Catalog](../config/ui_text.md) (translation Phase 2) — the
+controller passes the active overlay.
 
 ## Connections
 

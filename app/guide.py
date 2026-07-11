@@ -27,14 +27,15 @@ from PySide6.QtWidgets import (
 )
 
 from config import constants, defaults
+from config.ui_text import ui
 
 
 class GuideDialog(QDialog):
     def __init__(self, translations: dict | None = None):
         super().__init__()
-        self.setWindowTitle(f"{constants.APP_NAME} — Guide")
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         overlay = translations or {}
+        self.setWindowTitle(f"{constants.APP_NAME} — {ui(overlay, 'Guide')}")
+        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
 
         pages_path = defaults.GUIDE_DIR / "pages.json"
         self._pages = json.loads(pages_path.read_text(encoding="utf-8"))["pages"]
@@ -64,9 +65,9 @@ class GuideDialog(QDialog):
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
         self._counter = QLabel()
-        previous = QPushButton("← Previous")
+        previous = QPushButton(ui(overlay, "← Previous"))
         previous.clicked.connect(lambda: self._step(-1))
-        following = QPushButton("Next →")
+        following = QPushButton(ui(overlay, "Next →"))
         following.clicked.connect(lambda: self._step(+1))
         row = QHBoxLayout()
         row.addWidget(previous)

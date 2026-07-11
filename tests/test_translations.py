@@ -63,6 +63,39 @@ def test_bundled_original_serves_without_network(tmp_path):
     assert store.missing("sr-Latn", corpus) == {}
 
 
+def test_phase2_chrome_speaks_the_overlay():
+    """Phase 2 (owner spec): the menu and dialog chrome resolve through
+    ui/<text> overlay entries — with a marker overlay every Settings
+    group title and the Time Travel labels come back translated."""
+    import os
+    import tempfile
+    from pathlib import Path
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication, QGroupBox
+
+    from app.controller import build_skin
+    from app.settings_dialog import SettingsDialog
+    from app.settings_store import SettingsStore
+    from app.time_travel import TimeTravelDialog
+    from config import ui_text
+
+    QApplication.instance() or QApplication([])
+    overlay = {f"ui/{text}": f"№{text}" for text in ui_text.UI_STRINGS}
+    store = SettingsStore(Path(tempfile.mkdtemp()) / "settings.json")
+    settings = store.load()
+    dialog = SettingsDialog(settings, build_skin(settings), overlay)
+    titles = {group.title() for group in dialog.findChildren(QGroupBox)}
+    assert "№Location" in titles
+    assert "№Language" in titles
+    assert "№Custom ring" in titles
+    travel = TimeTravelDialog(44.0, 20.0, overlay=overlay)
+    assert "№Time Travel" in travel.windowTitle()
+    # The English fallback stays intact without an overlay.
+    bare = SettingsDialog(settings, build_skin(settings))
+    assert "Location" in {g.title() for g in bare.findChildren(QGroupBox)}
+
+
 def test_serbian_transliteration():
     assert transliterate_sr("Месец носи Спокој") == "Mesec nosi Spokoj"
     assert transliterate_sr("Џак и Љиљана, ЊЕГОШ") == "Džak i Ljiljana, NJEGOŠ"

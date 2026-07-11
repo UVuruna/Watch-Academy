@@ -30,15 +30,20 @@ from PySide6.QtWidgets import (
 
 from app.settings_store import Settings, replace
 from config import constants, defaults
+from config.ui_text import ui
 from data.locations import LocationRepository, fold_name
 
 _NO_REGION = "—"                       # the country's direct cities
 
 
 class SettingsDialog(QDialog):
-    def __init__(self, settings: Settings, skin, parent=None):
+    def __init__(self, settings: Settings, skin,
+                 overlay: dict | None = None, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("DOMY Watch Settings")
+        self._overlay = overlay or {}
+        self.setWindowTitle(
+            f"{constants.APP_NAME} — {self._tr('Settings')}"
+        )
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self._settings = settings
         self._skin = skin
@@ -87,6 +92,10 @@ class SettingsDialog(QDialog):
         self._latitude.setValue(settings.latitude)
         self._longitude.setValue(settings.longitude)
 
+    def _tr(self, text: str) -> str:
+        """The active language's form of a chrome string (Phase 2)."""
+        return ui(self._overlay, text)
+
     def done(self, result: int) -> None:
         self._locations.release()
         super().done(result)
@@ -94,17 +103,18 @@ class SettingsDialog(QDialog):
     # --- Location -----------------------------------------------------------------
 
     def _build_location_group(self) -> QGroupBox:
-        group = QGroupBox("Location")
+        tr = self._tr
+        group = QGroupBox(tr("Location"))
         form = QFormLayout(group)
 
         self._search = QLineEdit()
-        self._search.setPlaceholderText("City name…")
+        self._search.setPlaceholderText(tr("City name…"))
         self._search.textChanged.connect(self._filter_cities)
         self._search_status = QLabel("")
         search_row = QHBoxLayout()
         search_row.addWidget(self._search)
         search_row.addWidget(self._search_status)
-        form.addRow("Search", search_row)
+        form.addRow(tr("Search"), search_row)
         # Live filter results (owner spec, FINAL.txt #1): typing shows
         # the matching cities immediately — you always know whether the
         # city exists. Click a result to jump the combos to it.
@@ -120,11 +130,11 @@ class SettingsDialog(QDialog):
         self._country = QComboBox()
         self._region = QComboBox()
         self._city = QComboBox()
-        form.addRow("Continent", self._continent)
-        form.addRow("Subregion", self._subregion)
-        form.addRow("Country", self._country)
-        form.addRow("Region", self._region)
-        form.addRow("City", self._city)
+        form.addRow(tr("Continent"), self._continent)
+        form.addRow(tr("Subregion"), self._subregion)
+        form.addRow(tr("Country"), self._country)
+        form.addRow(tr("Region"), self._region)
+        form.addRow(tr("City"), self._city)
 
         self._latitude = QDoubleSpinBox()
         self._latitude.setDecimals(4)
@@ -134,10 +144,10 @@ class SettingsDialog(QDialog):
         self._longitude.setDecimals(4)
         self._longitude.setRange(*constants.LONGITUDE_RANGE)
         self._longitude.setValue(self._settings.longitude)
-        form.addRow("Latitude", self._latitude)
-        form.addRow("Longitude", self._longitude)
+        form.addRow(tr("Latitude"), self._latitude)
+        form.addRow(tr("Longitude"), self._longitude)
         self._tz_label = QLabel(self._timezone)
-        form.addRow("Timezone", self._tz_label)
+        form.addRow(tr("Timezone"), self._tz_label)
 
         self._fill(self._continent, ())
         self._continent.currentTextChanged.connect(lambda _: self._on_level(1))
@@ -299,7 +309,9 @@ class SettingsDialog(QDialog):
             item.setData(Qt.ItemDataRole.UserRole, path)
             self._results.addItem(item)
         self._search_status.setText(
-            "not found" if not matches else f"{len(matches)} found"
+            self._tr("not found")
+            if not matches
+            else self._tr("{n} found").format(n=len(matches))
         )
         self._results.setVisible(bool(matches))
 
@@ -333,7 +345,8 @@ class SettingsDialog(QDialog):
     # --- Opacity --------------------------------------------------------------------
 
     def _build_opacity_group(self) -> QGroupBox:
-        group = QGroupBox("Opacity")
+        tr = self._tr
+        group = QGroupBox(tr("Opacity"))
         form = QFormLayout(group)
 
         def initial(override: float | None, skin_value: float) -> tuple[int, int]:
@@ -343,21 +356,21 @@ class SettingsDialog(QDialog):
 
         value, default = initial(self._settings.star_alpha, self._skin.star.day_alpha)
         self._star_slider, star_row = self._slider_row(value, default, "star")
-        form.addRow("Star", star_row)
+        form.addRow(tr("Star"), star_row)
         # The Aura's sunlight and twilight opacities are INDEPENDENT
         # sliders (owner spec).
         value, default = initial(
             self._settings.aura_day_alpha, self._skin.background.day_alpha
         )
         self._aura_day_slider, day_row = self._slider_row(value, default, "aura_day")
-        form.addRow("Aura — sunlight", day_row)
+        form.addRow(tr("Aura — sunlight"), day_row)
         value, default = initial(
             self._settings.aura_twilight_alpha, self._skin.background.twilight_alpha
         )
         self._aura_twilight_slider, twilight_row = self._slider_row(
             value, default, "aura_twilight"
         )
-        form.addRow("Aura — twilight", twilight_row)
+        form.addRow(tr("Aura — twilight"), twilight_row)
         return group
 
     def _slider_row(self, value: int, default: int, which: str):
@@ -365,7 +378,7 @@ class SettingsDialog(QDialog):
         slider.setRange(0, 100)
         slider.setValue(value)
         label = QLabel(f"{value}%")
-        reset = QPushButton("Skin default")
+        reset = QPushButton(self._tr("Skin default"))
 
         def on_moved(new_value: int) -> None:
             label.setText(f"{new_value}%")
@@ -389,16 +402,19 @@ class SettingsDialog(QDialog):
     def _build_sizes_group(self) -> QGroupBox:
         """Per-element size multipliers plus the shared hover-enlarge
         factor (the element under the cursor grows by it; 100% = off)."""
-        group = QGroupBox("Element sizes")
+        tr = self._tr
+        group = QGroupBox(tr("Element sizes"))
         form = QFormLayout(group)
         self._size_sliders: dict[str, QSlider] = {}
         rows = [
-            ("earth_scale", "Earth", constants.ELEMENT_SCALE_RANGE, 100),
-            ("moon_scale", "Moon", constants.ELEMENT_SCALE_RANGE, 100),
-            ("weekday_scale", "Weekday", constants.ELEMENT_SCALE_RANGE, 100),
-            ("octa_slot_scale", "Octa slot", constants.ELEMENT_SCALE_RANGE, 100),
-            ("ring_letter_scale", "Ring letters", constants.ELEMENT_SCALE_RANGE, 100),
-            ("hover_enlarge", "Hover enlarge", constants.HOVER_ENLARGE_RANGE, 120),
+            ("earth_scale", tr("Earth"), constants.ELEMENT_SCALE_RANGE, 100),
+            ("moon_scale", tr("Moon"), constants.ELEMENT_SCALE_RANGE, 100),
+            ("weekday_scale", tr("Weekday"), constants.ELEMENT_SCALE_RANGE, 100),
+            ("octa_slot_scale", tr("Octa slot"), constants.ELEMENT_SCALE_RANGE, 100),
+            ("ring_letter_scale", tr("Ring letters"),
+             constants.ELEMENT_SCALE_RANGE, 100),
+            ("hover_enlarge", tr("Hover enlarge"),
+             constants.HOVER_ENLARGE_RANGE, 120),
         ]
         for key, title, (low, high), default in rows:
             slider = QSlider(Qt.Orientation.Horizontal)
@@ -409,7 +425,7 @@ class SettingsDialog(QDialog):
             slider.valueChanged.connect(
                 lambda new_value, lab=label: lab.setText(f"{new_value}%")
             )
-            reset = QPushButton("Default")
+            reset = QPushButton(tr("Default"))
             reset.clicked.connect(
                 lambda checked, s=slider, d=default: s.setValue(d)
             )
@@ -430,8 +446,10 @@ class SettingsDialog(QDialog):
         pointer = self._settings.pointer
         style = self._settings.palette_style
         group = QGroupBox(
-            f"Palette — {constants.POINTER_DISPLAY_NAMES[pointer]} "
-            f"{style.capitalize()}"
+            self._tr("Palette — {pointer} {style}").format(
+                pointer=constants.POINTER_DISPLAY_NAMES[pointer],
+                style=style.capitalize(),
+            )
         )
         column = QVBoxLayout(group)
         chips_row = QHBoxLayout()
@@ -440,12 +458,12 @@ class SettingsDialog(QDialog):
         for index, hue in enumerate(self._hues):
             chip = QPushButton()
             self._round_swatch(chip, hue, defaults.PALETTE_SWATCH_PX)
-            chip.setToolTip(f"{self._arm_labels[index]} — {hue}")
+            chip.setToolTip(f"{self._tr(self._arm_labels[index])} — {hue}")
             chip.clicked.connect(lambda checked, i=index: self._pick_color(i))
             self._chips.append(chip)
             chips_row.addWidget(chip)
         chips_row.addStretch(1)
-        reset = QPushButton("Reset to preset")
+        reset = QPushButton(self._tr("Reset to preset"))
         reset.clicked.connect(self._reset_palette)
         chips_row.addWidget(reset)
         column.addLayout(chips_row)
@@ -466,7 +484,7 @@ class SettingsDialog(QDialog):
 
     def _paint_chip(self, chip: QPushButton, hue: str, index: int) -> None:
         self._round_swatch(chip, hue, defaults.PALETTE_SWATCH_PX)
-        chip.setToolTip(f"{self._arm_labels[index]} — {hue}")
+        chip.setToolTip(f"{self._tr(self._arm_labels[index])} — {hue}")
 
     def _pick_color(self, index: int) -> None:
         chosen = QColorDialog.getColor(
@@ -491,7 +509,8 @@ class SettingsDialog(QDialog):
         Paint-style grid of color circles (owner spec 2026-07-11) —
         the name lives in the tooltip, the active one wears a white
         ring — plus a free color picker."""
-        group = QGroupBox("Ring tint — whole clock body (letters excluded)")
+        tr = self._tr
+        group = QGroupBox(tr("Ring tint — whole clock body (letters excluded)"))
         column = QVBoxLayout(group)
         grid = QGridLayout()
         grid.setHorizontalSpacing(4)
@@ -501,7 +520,9 @@ class SettingsDialog(QDialog):
         for index, (name, hue) in enumerate(defaults.RING_TINT_PRESETS.items()):
             chip = QPushButton()
             chip.setToolTip(
-                f"{name} — {hue}" if hue else f"{name} — the untouched art"
+                f"{tr(name)} — {hue}"
+                if hue
+                else f"{tr(name)} — {tr('the untouched art')}"
             )
             chip.clicked.connect(
                 lambda checked, chosen=hue: self._set_ring_tint(chosen)
@@ -511,7 +532,7 @@ class SettingsDialog(QDialog):
         grid.setColumnStretch(per_row, 1)
         column.addLayout(grid)
         row = QHBoxLayout()
-        custom = QPushButton("Custom…")
+        custom = QPushButton(tr("Custom…"))
         custom.clicked.connect(self._pick_ring_tint)
         row.addWidget(custom)
         row.addStretch(1)
@@ -534,7 +555,9 @@ class SettingsDialog(QDialog):
         self._set_ring_tint(chosen.name().upper())
 
     def _show_ring_tint(self) -> None:
-        self._ring_tint_label.setText(self._ring_tint or "Gray (default)")
+        self._ring_tint_label.setText(
+            self._ring_tint or self._tr("Gray (default)")
+        )
         # Repaint every swatch — the one matching the active tint is
         # ringed white ("Gray"/None shows as the bare art gray).
         for chip, hue in self._tint_swatches:
@@ -551,15 +574,20 @@ class SettingsDialog(QDialog):
         """The ring card builder: pick a layout (Flame / Chalice /
         Seal), a library letter per position and a unique name — the
         new card joins Theme ▸ Ring with the gold/silver metal rules."""
+        tr = self._tr
         self._custom_rings = list(self._settings.custom_rings)
-        group = QGroupBox("Custom ring")
+        group = QGroupBox(tr("Custom ring"))
         column = QVBoxLayout(group)
         top = QHBoxLayout()
         self._ring_layout_combo = QComboBox()
+        layout_labels = {
+            "flame": "Flame — Masculine ({n} letters)",
+            "chalice": "Chalice — Feminine ({n} letters)",
+            "seal": "Seal — Union ({n} letters)",
+        }
         for key, layout in constants.RING_LAYOUTS.items():
             self._ring_layout_combo.addItem(
-                f"{key.capitalize()} — {layout['theme']} "
-                f"({len(layout['positions'])} letters)",
+                tr(layout_labels[key]).format(n=len(layout["positions"])),
                 key,
             )
         self._ring_layout_combo.currentIndexChanged.connect(
@@ -567,9 +595,9 @@ class SettingsDialog(QDialog):
         )
         top.addWidget(self._ring_layout_combo)
         self._ring_name_edit = QLineEdit()
-        self._ring_name_edit.setPlaceholderText("Unique name")
+        self._ring_name_edit.setPlaceholderText(tr("Unique name"))
         top.addWidget(self._ring_name_edit)
-        add = QPushButton("Add ring")
+        add = QPushButton(tr("Add ring"))
         add.clicked.connect(self._add_custom_ring)
         top.addWidget(add)
         column.addLayout(top)
@@ -577,7 +605,7 @@ class SettingsDialog(QDialog):
         column.addLayout(self._ring_slot_row)
         self._ring_slot_combos: dict[int, QComboBox] = {}
         self._custom_ring_status = QLabel(
-            f"{len(self._custom_rings)} custom ring(s) saved"
+            tr("{n} custom ring(s) saved").format(n=len(self._custom_rings))
         )
         column.addWidget(self._custom_ring_status)
         self._rebuild_ring_slots()
@@ -603,15 +631,14 @@ class SettingsDialog(QDialog):
             self._ring_slot_combos[position] = combo
             self._ring_slot_row.addLayout(cell)
 
-    @staticmethod
-    def _letter_combo() -> QComboBox:
+    def _letter_combo(self) -> QComboBox:
         """The letter library GROUPED into sections (owner spec
         2026-07-11): Latin / Greek / Numbers / Symbols — the section
         headers are visible in the dropdown but not selectable."""
         combo = QComboBox()
         model = QStandardItemModel(combo)
         for group, glyphs in constants.RING_LETTER_GROUPS.items():
-            header = QStandardItem(f"— {group} —")
+            header = QStandardItem(f"— {self._tr(group)} —")
             header.setFlags(Qt.ItemFlag.NoItemFlags)
             model.appendRow(header)
             for glyph in glyphs:
@@ -646,15 +673,17 @@ class SettingsDialog(QDialog):
             }
         )
         self._custom_ring_status.setText(
-            f"Added {card['name']!r} — OK saves it; find it under "
-            f"Theme ▸ Ring"
+            self._tr(
+                "Added '{name}' — OK saves it; find it under Theme ▸ Ring"
+            ).format(name=card["name"])
         )
         self._ring_name_edit.clear()
 
     # --- Language (owner spec: translate once via the keyless endpoint) --------------
 
     def _build_language_group(self) -> QGroupBox:
-        group = QGroupBox("Language")
+        tr = self._tr
+        group = QGroupBox(tr("Language"))
         row = QHBoxLayout(group)
         self._language_combo = QComboBox()
         # The ORIGINALS ride the top (owner spec 2026-07-11): English
@@ -673,7 +702,9 @@ class SettingsDialog(QDialog):
             key=lambda item: item[1],
         )
         for code, name in originals:
-            self._language_combo.addItem(f"{name} — original", code)
+            self._language_combo.addItem(
+                tr("{name} — original").format(name=name), code
+            )
         self._language_combo.insertSeparator(len(originals))
         for code, name in rest:
             self._language_combo.addItem(name, code)
@@ -683,8 +714,8 @@ class SettingsDialog(QDialog):
         row.addWidget(self._language_combo)
         # One-click way back to the shipped originals (owner spec
         # 2026-07-11): jump the combo to English.
-        default = QPushButton("Default")
-        default.setToolTip("Back to English — the shipped original texts")
+        default = QPushButton(tr("Default"))
+        default.setToolTip(tr("Back to English — the shipped original texts"))
         default.clicked.connect(
             lambda: self._language_combo.setCurrentIndex(
                 self._language_combo.findData("en")
@@ -692,9 +723,11 @@ class SettingsDialog(QDialog):
         )
         row.addWidget(default)
         note = QLabel(
-            "The originals above the line ship inside the app. Any "
-            "other language translates itself in the background on "
-            "first pick (internet needed once) and then works offline."
+            tr(
+                "The originals above the line ship inside the app. Any "
+                "other language translates itself in the background on "
+                "first pick (internet needed once) and then works offline."
+            )
         )
         note.setWordWrap(True)
         row.addWidget(note, stretch=1)

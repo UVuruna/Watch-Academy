@@ -415,7 +415,7 @@ class AppController(QObject):
             if not self._save_failed:
                 self._save_failed = True
                 self._tray.notify(
-                    "Settings could not be saved",
+                    self._ui("Settings could not be saved"),
                     f"{self._store.path}\n{error}",
                 )
         else:
@@ -525,20 +525,26 @@ class AppController(QObject):
         menu.addAction(action)
         return action
 
+    def _ui(self, text: str) -> str:
+        """The active language's form of a chrome string (Phase 2)."""
+        return ui(self._translation_overlay, text)
+
     def _build_menu(self) -> QMenu:
         menu = QMenu()
         settings = self._settings
+        tr = self._ui
         # THEME is the first-level dropdown, in the owner's order:
         # Pointer, Umbra, Ring, Earth, Weekday, Compass slot (only with
         # the Compass pointer).
-        theme_menu = menu.addMenu("Theme")
+        theme_menu = menu.addMenu(tr("Theme"))
         # Pointer variant and palette style share ONE dropdown (owner
         # spec), two exclusive groups like the Umbra submenu.
         pointer_menu = self._add_choice_submenu(
-            theme_menu, "Pointer",
+            theme_menu, tr("Pointer"),
             [
                 # Owner-chosen display names (FINAL.txt #8): Trinity,
-                # Seasons, Prism, Compass — internal keys unchanged.
+                # Seasons, Prism, Compass — protected brand terms, the
+                # same in every language.
                 (variant, f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})")
                 for variant, arms in sorted(
                     constants.POINTER_POINTS.items(), key=lambda item: item[1]
@@ -551,18 +557,18 @@ class AppController(QObject):
         self._add_choice_group(
             theme_menu, pointer_menu,
             [
-                (style, f"{style.capitalize()} palette")
+                (style, tr(f"{style.capitalize()} palette"))
                 for style in constants.PALETTE_STYLES
             ],
             settings.palette_style,
             lambda value: self._set_display_choice("palette_style", value),
         )
         umbra_menu = self._add_choice_submenu(
-            theme_menu, "Umbra",
+            theme_menu, tr("Umbra"),
             [
-                ("fine", "Fine (16 shades)"),
-                ("coarse", "Coarse (13 shades)"),
-                ("gradient", "Gradient"),
+                ("fine", tr("Fine (16 shades)")),
+                ("coarse", tr("Coarse (13 shades)")),
+                ("gradient", tr("Gradient")),
             ],
             settings.umbra_form,
             lambda value: self._set_display_choice("umbra_form", value),
@@ -571,14 +577,14 @@ class AppController(QObject):
         self._add_choice_group(
             theme_menu, umbra_menu,
             [
-                (variant, f"{variant.capitalize()} contrast")
+                (variant, tr(f"{variant.capitalize()} contrast"))
                 for variant in constants.UMBRA_CONTRAST_VARIANTS
             ],
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
         )
         ring_menu = self._add_choice_submenu(
-            theme_menu, "Ring",
+            theme_menu, tr("Ring"),
             [
                 (name, name)
                 for name in sorted(ring_presets(settings.custom_rings))
@@ -592,14 +598,14 @@ class AppController(QObject):
         # itself lives in the Settings dialog color picker.
         self._add_choice_group(
             theme_menu, ring_menu,
-            [(finish, f"{finish.capitalize()} letters")
+            [(finish, tr(f"{finish.capitalize()} letters"))
              for finish in constants.RING_FINISHES],
             settings.ring_finish,
             lambda value: self._set_display_choice("ring_finish", value),
         )
         earth_menu = self._add_choice_submenu(
-            theme_menu, "Earth",
-            [("clean", "Clean"), ("atmo", "Atmosphere")],
+            theme_menu, tr("Earth"),
+            [("clean", tr("Clean")), ("atmo", tr("Atmosphere"))],
             settings.earth_style,
             lambda value: self._set_display_choice("earth_style", value),
         )
@@ -607,41 +613,43 @@ class AppController(QObject):
         # The date label ON the Earth marker (owner spec): its own
         # switch, grayed out below the size that can draw it at all.
         self._earth_date_toggle = self._add_toggle(
-            earth_menu, "Date", settings.show_earth_date,
+            earth_menu, tr("Date"), settings.show_earth_date,
             lambda checked: self._set_display_choice("show_earth_date", checked),
-            "The date written on the Earth marker (shown from "
-            f"{defaults.FULL_TEXT_MIN_DIAMETER} px up).",
+            tr(
+                "The date written on the Earth marker (shown from "
+                "{size} px up)."
+            ).format(size=defaults.FULL_TEXT_MIN_DIAMETER),
         )
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         self._add_choice_submenu(
-            theme_menu, "Weekday",
+            theme_menu, tr("Weekday"),
             [
-                ("planets", "Planets"),
-                ("planet_signs", "Planet signs"),
-                ("greek", "Greek gods"),
-                ("norse", "Norse gods"),
-                ("egypt", "Egyptian gods"),
-                ("religion", "Religions"),
-                ("religion_alt", "Religions II"),
-                ("profession", "Professions"),
+                ("planets", tr("Planets")),
+                ("planet_signs", tr("Planet signs")),
+                ("greek", tr("Greek gods")),
+                ("norse", tr("Norse gods")),
+                ("egypt", tr("Egyptian gods")),
+                ("religion", tr("Religions")),
+                ("religion_alt", tr("Religions II")),
+                ("profession", tr("Professions")),
             ],
             settings.weekday_theme,
             lambda value: self._set_display_choice("weekday_theme", value),
         )
         compass_slot_menu = self._add_choice_submenu(
-            theme_menu, "Compass slot",
+            theme_menu, tr("Compass slot"),
             [
-                ("time", "Time"),
-                ("date", "Date"),
-                ("day_length", "Day length"),
-                ("zodiac_sign", "Astrology sign"),
-                ("zodiac_logo", "Astrology logo"),
-                ("zodiac_constellation", "Astrology constellation"),
-                ("zodiac_text", "Astrology text"),
-                ("chinese_logo", "Chinese zodiac logo"),
-                ("chinese_text", "Chinese zodiac text"),
+                ("time", tr("Time")),
+                ("date", tr("Date")),
+                ("day_length", tr("Day length")),
+                ("zodiac_sign", tr("Astrology sign")),
+                ("zodiac_logo", tr("Astrology logo")),
+                ("zodiac_constellation", tr("Astrology constellation")),
+                ("zodiac_text", tr("Astrology text")),
+                ("chinese_logo", tr("Chinese zodiac logo")),
+                ("chinese_text", tr("Chinese zodiac text")),
             ],
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),
@@ -649,41 +657,41 @@ class AppController(QObject):
         self._octa_slot_action = compass_slot_menu.menuAction()
         self._octa_slot_action.setEnabled(settings.pointer == "octa")
         self._add_choice_submenu(
-            menu, "Size",
+            menu, tr("Size"),
             [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
             settings.diameter, self._set_diameter,
         )
         # Elements (owner spec): plain on/off switches for every
         # element — the Earth STYLE lives under Theme now.
-        elements_menu = menu.addMenu("Elements")
+        elements_menu = menu.addMenu(tr("Elements"))
         for key, label, tip in (
             (
-                "show_earth", "Earth",
-                "The Earth marker riding the year wheel and showing "
-                "the date.",
+                "show_earth", tr("Earth"),
+                tr("The Earth marker riding the year wheel and showing "
+                   "the date."),
             ),
             (
-                "show_moon", "Moon",
-                "The Moon marker riding its cycle and showing the phase.",
+                "show_moon", tr("Moon"),
+                tr("The Moon marker riding its cycle and showing the phase."),
             ),
             (
-                "show_weekday", "Weekday",
-                "The weekday bodies — the rotating slots and the center.",
+                "show_weekday", tr("Weekday"),
+                tr("The weekday bodies — the rotating slots and the center."),
             ),
             (
-                "show_pointer", "Pointer",
-                "The star diamonds. Off: the Aura colors stay, only the "
-                "pointer disappears.",
+                "show_pointer", tr("Pointer"),
+                tr("The star diamonds. Off: the Aura colors stay, only the "
+                   "pointer disappears."),
             ),
             (
-                "colorful", "Colorful",
-                "The Aura palette hues. Off: the day and twilight arcs "
-                "are drawn as plain white transparency.",
+                "colorful", tr("Colorful"),
+                tr("The Aura palette hues. Off: the day and twilight arcs "
+                   "are drawn as plain white transparency."),
             ),
             (
-                "show_seconds", "Seconds",
-                "The seconds hand. Off: it is not drawn and the dial "
-                "ticks once per minute.",
+                "show_seconds", tr("Seconds"),
+                tr("The seconds hand. Off: it is not drawn and the dial "
+                   "ticks once per minute."),
             ),
         ):
             self._add_toggle(
@@ -694,50 +702,52 @@ class AppController(QObject):
         # The Compass slot has its own switch, grayed out (like the
         # Theme submenu) unless the Compass pointer is active.
         self._octa_slot_toggle = self._add_toggle(
-            elements_menu, "Compass slot", settings.show_octa_slot,
+            elements_menu, tr("Compass slot"), settings.show_octa_slot,
             lambda checked: self._set_display_choice("show_octa_slot", checked),
-            "The Compass pointer's bottom info slot.",
+            tr("The Compass pointer's bottom info slot."),
         )
         self._octa_slot_toggle.setEnabled(settings.pointer == "octa")
         self._add_toggle(
-            menu, "Legend", settings.legend,
+            menu, tr("Legend"), settings.legend,
             lambda checked: self._set_display_choice("legend", checked),
-            "All hover texts. Off: the dial shows nothing on hover — "
-            "combined with Click-through it has zero interaction.",
+            tr("All hover texts. Off: the dial shows nothing on hover — "
+               "combined with Click-through it has zero interaction."),
         )
         self._add_toggle(
-            menu, "Solar rotation", settings.solar_rotation,
+            menu, tr("Solar rotation"), settings.solar_rotation,
             lambda checked: self._set_display_choice("solar_rotation", checked),
-            "On: the star points at true solar noon. Off: Star, Aura and "
-            "Umbra stand upright (12/24 at the top) for reading exact "
-            "planet and season positions.",
+            tr("On: the star points at true solar noon. Off: Star, Aura and "
+               "Umbra stand upright (12/24 at the top) for reading exact "
+               "planet and season positions."),
         )
         menu.addSeparator()
-        settings_action = QAction("Settings…", menu)
+        settings_action = QAction(tr("Settings…"), menu)
         settings_action.triggered.connect(self._open_settings)
         menu.addAction(settings_action)
-        time_travel = QAction("Time Travel…", menu)
+        time_travel = QAction(tr("Time Travel…"), menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
-        guide = QAction("Guide…", menu)
+        guide = QAction(tr("Guide…"), menu)
         guide.triggered.connect(
             lambda: GuideDialog(self._translation_overlay).exec()
         )
         menu.addAction(guide)
         self._add_toggle(
-            menu, "Click-through", self._settings.click_through,
+            menu, tr("Click-through"), self._settings.click_through,
             self._set_click_through,
-            "The dial takes no clicks at all (they pass to the desktop); "
-            "hover info still works. Turn it back off here in the tray.",
+            tr("The dial takes no clicks at all (they pass to the desktop); "
+               "hover info still works. Turn it back off here in the tray."),
         )
         menu.addSeparator()
-        exit_action = QAction("Exit", menu)
+        exit_action = QAction(tr("Exit"), menu)
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
         return menu
 
     def _open_settings(self) -> None:
-        dialog = SettingsDialog(self._settings, self._skin)
+        dialog = SettingsDialog(
+            self._settings, self._skin, self._translation_overlay
+        )
         if dialog.exec() != SettingsDialog.DialogCode.Accepted:
             return
         new_settings = dialog.result_settings()
@@ -769,7 +779,8 @@ class AppController(QObject):
 
     def _open_time_travel(self) -> None:
         dialog = TimeTravelDialog(
-            self._settings.latitude, self._settings.longitude
+            self._settings.latitude, self._settings.longitude,
+            overlay=self._translation_overlay,
         )
         if dialog.exec() != TimeTravelDialog.DialogCode.Accepted:
             return
@@ -804,9 +815,11 @@ class AppController(QObject):
             self._translation_thread.start()
             self._translation_poller.start()
             self._tray.notify(
-                "Translating",
-                f"Preparing {constants.TRANSLATION_LANGUAGES[language]} — "
-                "the clock keeps running; texts switch when ready.",
+                self._ui("Translating"),
+                self._ui(
+                    "Preparing {language} — the clock keeps running; "
+                    "texts switch when ready."
+                ).format(language=constants.TRANSLATION_LANGUAGES[language]),
                 critical=False,
             )
 
@@ -837,19 +850,28 @@ class AppController(QObject):
         self._translation_error = None
         language = self._settings.language
         if language != "en":
-            # Apply whatever completed (chunks persist) either way.
+            # Apply whatever completed (chunks persist) either way —
+            # including the menu, whose chrome strings live in the
+            # same overlay (Phase 2).
             self._translation_overlay = TranslationStore().load(language)
             self._install_skin(build_skin(self._settings))
+            self._menu = self._build_menu()
+            self._widget.set_menu(self._menu)
+            self._tray.set_menu(self._menu)
         if failed is not None:
             self._tray.notify(
-                "Translation incomplete",
-                f"{failed} — finished parts are shown; pick the language "
-                "again in Settings to resume.",
+                self._ui("Translation incomplete"),
+                self._ui(
+                    "{error} — finished parts are shown; pick the language "
+                    "again in Settings to resume."
+                ).format(error=failed),
             )
         elif language != "en":
             self._tray.notify(
-                "Translation ready",
-                f"{constants.TRANSLATION_LANGUAGES[language]} is active.",
+                self._ui("Translation ready"),
+                self._ui("{language} is active.").format(
+                    language=constants.TRANSLATION_LANGUAGES[language]
+                ),
                 critical=False,
             )
 
