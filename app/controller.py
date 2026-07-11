@@ -41,10 +41,12 @@ from skins.manifest import missing_assets
 
 
 def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
-    """The owner's metal rule: the trio of one metal always forms a
-    TRIANGLE. Gold finish = the layout's triangle in gold, the rest in
-    silver; silver finish = the exact inverse (on the hexagram both
-    metals form triangles)."""
+    """The owner's metal rules: 4-letter layouts — the trio of one
+    metal forms the layout's TRIANGLE (gold finish = triangle gold +
+    the rest silver; silver = the exact inverse); the SEAL wears ONE
+    metal on all six (owner correction 2026-07-11)."""
+    if not layout["triangle"]:
+        return finish == "gold"
     return (position in layout["triangle"]) == (finish == "gold")
 
 

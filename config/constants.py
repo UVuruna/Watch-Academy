@@ -238,7 +238,7 @@ RING_LAYOUTS = {
     "seal": {
         "positions": (12, 16, 20, 24, 4, 8),
         "face": "hexagram.png",
-        "triangle": (12, 20, 4),     # gold up-triangle; silver wears 24/8/16
+        "triangle": (),              # the Seal wears ONE metal on all six
         "theme": "Union",
     },
 }

@@ -46,34 +46,32 @@ def test_build_skin_swaps_only_the_ring():
 
 def test_custom_ring_card_builds_a_seal():
     """A user card with the six-position signature gets the hexagram
-    face; BOTH metals form triangles (owner rule): gold finish = the
-    12/20/4 triangle gold + 24/8/16 silver, silver = the inverse."""
+    face and ONE metal on all six letters (owner correction): gold
+    finish = everything gold, silver = everything silver."""
     card = {
         "name": "SOLOMON",
         "positions": [12, 16, 20, 24, 4, 8],
-        "letters": ["S", "Ω", "Σ", "M", "Θ", "Ψ"],
+        "letters": ["S", "Ω", "Σ", "M", "Θ", "✠"],
     }
     skin = build_skin(
         replace(Settings(), ring="SOLOMON", custom_rings=(card,))
     )
     assert skin.ring.asset.name == "hexagram.png"
     assert len(skin.ring.letter_art) == 6
-    gold_hours = {
-        hour for hour, path in skin.ring.letter_art.items()
-        if not path.name.endswith("_silver.png")
-    }
-    assert gold_hours == {12, 20, 4}              # the up-triangle
+    assert all(
+        not path.name.endswith("_silver.png")
+        for path in skin.ring.letter_art.values()
+    )
     silver = build_skin(
         replace(
             Settings(), ring="SOLOMON", ring_finish="silver",
             custom_rings=(card,),
         )
     )
-    gold_hours = {
-        hour for hour, path in silver.ring.letter_art.items()
-        if not path.name.endswith("_silver.png")
-    }
-    assert gold_hours == {0, 8, 16}               # the down-triangle
+    assert all(
+        path.name.endswith("_silver.png")
+        for path in silver.ring.letter_art.values()
+    )
     assert missing_assets(silver) == []
 
 
