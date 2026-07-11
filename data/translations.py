@@ -72,6 +72,12 @@ def collect_corpus() -> dict:
             captions.read_text(encoding="utf-8")
         ).items():
             corpus[f"guide/{stem}"] = text
+    pages = defaults.GUIDE_DIR / "pages.json"
+    if pages.exists():
+        for index, page in enumerate(
+            json.loads(pages.read_text(encoding="utf-8"))["pages"]
+        ):
+            corpus[f"guide_page/{index}"] = page["title"]
     return corpus
 
 

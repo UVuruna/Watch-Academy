@@ -211,10 +211,15 @@ LEGEND_BG = "#2B2B2B"
 LEGEND_BORDER = "#6E6E6E"
 LEGEND_TEXT = "#FFFFFF"
 
-# The Guide window (owner spec: a help carousel; named Guide, not
-# About): slides = assets/guide/NN_name.png + optional captions.json.
+# The Guide window (owner spec: a paged, RESIZABLE help book): pages
+# group related images (pages.json), captions.json holds per-image
+# Title\ntext; images open at 540 px (75% of the 720 originals) and
+# scale live with the window.
 GUIDE_DIR = paths.assets_dir() / "guide"
-GUIDE_SLIDE_MAX_PX = 720
+GUIDE_INITIAL_IMAGE_PX = 540
+GUIDE_TITLE_PX = 22
+GUIDE_SUBTITLE_PX = 15
+GUIDE_SPACING_PX = 8
 
 # Translation (owner spec: translate-once-then-cache, no accounts, no
 # keys): the keyless Google gtx endpoint; the per-language cache lives

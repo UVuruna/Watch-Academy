@@ -329,9 +329,9 @@ def test_articles_cover_every_theme_and_body():
                                            # plus the display-name field
 
 
-def test_guide_slides_and_captions_match():
-    """Every guide slide has a caption and every caption a slide; each
-    caption carries a title line plus a body (owner content)."""
+def test_guide_pages_cover_every_slide_exactly_once():
+    """The page structure covers each slide exactly once; every slide
+    has a caption with a title line plus a body (owner content)."""
     import json
 
     from config import defaults as d
@@ -340,8 +340,16 @@ def test_guide_slides_and_captions_match():
     captions = json.loads(
         (d.GUIDE_DIR / "captions.json").read_text(encoding="utf-8")
     )
-    assert slides == set(captions)
+    pages = json.loads(
+        (d.GUIDE_DIR / "pages.json").read_text(encoding="utf-8")
+    )["pages"]
+    paged = [stem for page in pages for stem in page["images"]]
+    assert slides == set(captions) == set(paged)
+    assert len(paged) == len(set(paged))          # no slide twice
     assert len(slides) >= 21
+    for page in pages:
+        assert page["title"].strip()
+        assert page["columns"] in (1, 2)
     for stem, caption in captions.items():
         title, _, body = caption.partition("\n")
         assert title.strip() and len(body) > 100, stem
