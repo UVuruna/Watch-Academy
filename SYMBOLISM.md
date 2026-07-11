@@ -5,10 +5,11 @@ celestial bodies, gods, religions, colors, hours, virtues and vices
 weave into one story. This document is the CANON; the machine-readable
 companion `Database/symbolism.json`
 ([Database (folder)](Database/___database.md)) carries the short
-per-entity blurbs (shown by the hexa diamond hover) AND the full
-`articles` set — one encyclopedic article per entity per theme
-(5 themes × 7 = 35), each weaving the entity with its day, color, hour
-mood, virtue and vice; where they display is an open owner decision.
+per-entity blurbs (legacy — the diamond hover now speaks the zodiac
+sign articles) AND the full `articles` set — one encyclopedic article
+per entity per theme (6 sets × 7 = 42), each weaving the entity with
+its day, color, hour mood, virtue and vice, plus a variant paragraph
+per pointer/palette combination; the weekday hover shows them.
 
 ## Table of Contents
 
@@ -111,8 +112,8 @@ Why each religion sits on its day:
   in the basic seven): the Craft is sworn on OATHS — and Tyr, this
   arm's Norse god, is the god of oaths who gave his hand to seal one;
   the working tools (square and compasses) build the inner temple with
-  a soldier's discipline, the arm's Courage turned to labor, its Wrath
-  the raised arm the ritual binds.
+  a soldier's discipline — the arm's Courage turned to labor, its
+  Wrath the raised arm that the oath keeps bound.
 - **Wednesday — Taoism**: in the East Asian week Wednesday IS the
   water-star day (Mercury = water), and water is the Tao's central
   metaphor; Odin's quest for wisdom mirrors the sage Laozi.
@@ -142,19 +143,24 @@ menu), each on the day it fits best:
 - **Thursday — Sikhism**: the Guru's day (*Guruvar*) taken literally —
   a faith built on ten Gurus, langar generosity as its practice, the
   arm's Excess its warned-against opposite.
-- **Friday — Babylon**: Ishtar IS Venus — the evening star, love and
-  war in one goddess; Babylon named the planets gods and invented the
+- **Friday — Babylon**: Ishtar IS Venus — evening star and morning
+  star by turns, love and war in one goddess, exactly as the planet
+  itself alternates; Babylon named the planets gods and fixed their
+  order — the raw material the Hellenistic world assembled into the
   seven-day planetary week this clock still keeps.
 - **Saturday — Voodoo**: Baron Samedi — "Baron Saturday" by name —
-  keeper of the crossroads and the dead, patience of the grave, envy
-  of the living.
+  keeper of the cemetery crossroads and the dead (the life-death
+  threshold; the ceremonial crossroads proper belong to Papa Legba),
+  patience of the grave, envy of the living.
 
 Norse note: Old Norse gave Saturday no god of its own (*laugardagr*,
 "washing day") — the owner's canon seats **Loki** there: the bound
 trickster as Cronus' northern mirror, whose envy of Baldr is the green
 arm's own vice and whose sentence — bound until the world's end — is
 Patience taught the hard way. The Norse week otherwise: Sól, Máni,
-Tyr, Odin, Thor, Freya.
+Tyr, Odin, Thor, Freya (Friday's etymology is genuinely contested
+between Frigg and Freyja — the owner's canon reads it as Freya,
+Venus' northern face).
 
 <a id="color-moods"></a>
 
@@ -167,13 +173,14 @@ The arm colors are POSITIONAL: each hue is the mood of its hour.
 | yellow | noon | **Joy** | the day's peak; "jovial" literally means "of Jupiter" |
 | orange | afternoon (16h) | **Zeal** | the fire of the working day; Mars' ember |
 | red | evening (20h) | **Passion** | the sunset's blood-red; Venus rises at dusk |
-| purple | midnight | **Sorrow** | the mourning purple; the day's grave and its mystery |
+| purple | midnight | **Sorrow** | a mourning purple; the day's grave and its mystery — Odin's hour, wisdom bought by sacrifice in the dark |
 | blue | pre-dawn (04h) | **Calm** | the still, moonlit hour; the phlegmatic Moon |
-| green | morning (08h) | **Renewal** | dew and growth; the week renews on the day of rest |
+| green | morning (08h) | **Renewal** | dew and growth; the week renews on the day of rest — and in Saturn's own key, the harvest returns what patience sowed |
 
 Joy stands opposite Sorrow (noon against midnight), Zeal opposite
-Calm, Passion opposite Renewal — the emotional day breathes in
-opposites, exactly like the light itself.
+Calm, Passion opposite Renewal — desire spent against growth
+beginning — the emotional day breathes in opposites, exactly like the
+light itself.
 
 <a id="virtues-vices"></a>
 
@@ -199,19 +206,24 @@ The cures, axis by axis:
 - **Center (Sun)**: Humility is the one cure for Pride — the center
   heals itself.
 - **Noon–midnight (Jupiter ↔ Mercury)**: Generosity cures Greed;
-  Wisdom curbs Excess.
+  Wisdom curbs Excess — knowing when enough is enough.
 - **Mars ↔ Moon**: Courage cures Fear; Serenity quells Wrath.
-- **Venus ↔ Saturn**: Love dissolves Envy; Patience heals Jealousy.
+- **Venus ↔ Saturn**: Love dissolves Envy; Patience heals Jealousy —
+  insecurity waited out, not argued with.
 
-The seven deadly sins echo here, each on its classical planet: pride
+The seven deadly sins echo here in DOMY's own mapping (no single
+classical planet-to-sin scheme exists — traditions differ): pride
 (Sun), envy (Saturn's bitter green), wrath (Mars), greed (Mercury the
 merchant), gluttony (jovial Jupiter), lust (Venus — jealousy is its
-relational shadow), sloth (Saturn's OTHER shadow — fittingly on the
-day of rest).
+relational shadow, a deliberate substitution), sloth (Saturn's OTHER
+shadow — fittingly on the day of rest). Saturn thus carries two of
+the seven while the Moon carries none: its vice, Fear, is older than
+any list.
 
-Mythic anchors: Cronus devoured his children out of envy and fear of
-being replaced; Odin gave an eye for wisdom; Ares embodies both the
-courage and the rage of battle.
+Mythic anchors: Cronus devoured his children out of fear of the
+prophecy that one would replace him; Odin gave an eye for wisdom;
+Ares embodies battle whole — the Greeks themselves mistrusted him for
+its rage, and the courage belongs to the soldier who masters it.
 
 <a id="professions"></a>
 
@@ -224,8 +236,8 @@ virtue and vice:
 
 | Body | Profession | Why |
 |---|---|---|
-| Sun | **Ruler** | the royal planet; the ruler's lesson is Humility, his sin Pride |
-| Moon | **Physician** | medieval medicine followed the Moon (bloodletting calendars ran on its phases); the night watch at the sickbed; the healer's calm hand against the patient's fear |
+| Sun | **Ruler** | the royal planet; the ONE calling whose virtue is not the skill of the office but its cure — every other profession practices its virtue, the ruler is saved by his: the lesson is Humility, the sin Pride, servant-king over sovereign |
+| Moon | **Physician** | medieval medicine followed the Moon (bloodletting calendars ran on its phases); the night watch at the sickbed; the healer's calm hand against the patient's fear (Fear's full cure stands across the dial — the Soldier's Courage) |
 | Mars | **Soldier** | the warrior's two faces are Courage and Wrath |
 | Mercury | **Merchant** | Hermes, god of merchants and roads; Wisdom against Greed |
 | Jupiter | **Priest / Teacher** | Brihaspati IS the guru of the gods — Thursday is the teacher's day; the jovial bishop's Generosity and his table's Excess |
@@ -252,9 +264,15 @@ dial they span three different KINDS of places:
 - **Love — Venus' arm** (Friday evening): among people.
 
 The vertical, the horizon and the human — the trio stretches across
-the whole dial instead of sitting on it. (Considered and set aside:
-Faith on Jupiter/yellow — defensible through the priest's day — and
-Hope on blue; it would cost two cross-cures, too much for the gain.)
+the whole dial instead of sitting on it. (Faith on Jupiter's yellow
+and Hope on the Moon's blue were weighed for THIS entity canon and
+kept out — the virtues would shadow two cross-cures. The TRIO POINTER
+does that pairing deliberately and that is not a contradiction: its
+three arms stand at the ring letters — Faith 12h with Jupiter and
+Saturn, Love 20h with Venus and Mars, Hope 4h with the Moon and
+Mercury — the pointer reads the virtues onto HOURS, this canon keeps
+them among KINDS of places; each arm's hue third centers on its tip:
+Faith 8h–16h, Love 16h–24h, Hope 0h–8h.)
 
 <a id="octa-extension"></a>
 

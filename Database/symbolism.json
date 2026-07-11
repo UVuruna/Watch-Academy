@@ -261,7 +261,7 @@
           "octa_paint": "With eight arms the wheel redistributes, and the Moon slides an hour deeper into the dark: the arm at 3h, a colder sea-blue, the deep night. Farther from dawn, closer to the night's true middle — the Moon more at home, if anything.",
           "octa_light": "At 3h in light colors the blue shades toward violet — the deep night touched by midnight's purple from the arm beyond. The Moon's calm here borders on sorrow without crossing into it.",
           "cross": "The cross is the seasons palette, and the Moon takes the 6h dawn arm, green for Spring, sharing it with Saturn. The spring equinox is the year's own daybreak — a fitting post for the body that ends every night.",
-          "trio": "The trio keeps the Moon at its own 4h, but the arm now reads Hope — blue, shared with Mercury — and it no longer centers an hour: it bounds the morning, guarding the third from 4h to 12h. Fitting work for the body that ends every night: hope is the Moon's calm turned to face the coming sun."
+          "trio": "The trio keeps the Moon at its own 4h, but the arm now reads Hope — blue, shared with Mercury — and its tip is now the very center of its hue: it guards the morning third from 0h to 8h. Fitting work for the body that ends every night: hope is the Moon's calm turned to face the coming sun."
         }
       },
       "mars": {
@@ -272,7 +272,7 @@
           "octa_paint": "The octa wheel moves Mars an hour toward noon: the arm at 15h, sunflower yellow, the mid-afternoon. The fight begins earlier — zeal borrowing some of noon's joy.",
           "octa_light": "At 15h in light colors Mars wears a harder, brassier yellow — the mid-afternoon read as metal rather than flame, effort with the shine worn off.",
           "cross": "On the seasons cross Mars takes the 18h dusk arm, red for Autumn, and finally wears its own color — sharing the arm with Venus, as Ares shared everything with Aphrodite. War and love on one arm, pointing at the autumn equinox, the year's long evening.",
-          "trio": "The Trinity moves Mars to 20h, onto Love's red arm beside Venus — the arms bound the day's thirds rather than centering them, and this pair guards the night from 20h to 4h. Mars finally wears its own red, and Love reads through it as protection: courage keeping watch so that what is loved can sleep."
+          "trio": "The Trinity moves Mars to 20h, onto Love's red arm beside Venus — each arm's tip centers its third of the day, and this pair guards the evening from 16h to 24h. Mars finally wears its own red, and Love reads through it as protection: courage keeping watch so that what is loved can sleep."
         }
       },
       "mercury": {
@@ -283,7 +283,7 @@
           "octa_paint": "The octa wheel pulls Mercury off midnight to the arm at 21h, deep red, the late evening — the hour of last errands and closing accounts, before the day's books are shut.",
           "octa_light": "At 21h in light colors the red sharpens to a pure signal red — the late evening as a filament still glowing, the mind refusing to switch off.",
           "cross": "On the seasons cross Mercury returns to the bottom arm at 0h, blue for Winter, and holds it alone — the only body that shares its arm with no one. The winter solstice is the year's midnight, and Mercury stands that watch solitary, as thought does.",
-          "trio": "The trio lifts Mercury off midnight to 4h, onto Hope's blue arm beside the Moon, guarding the morning third from 4h to 12h. Hope is the theological shape of Wisdom's forward look: the mind that weighed the day at midnight now stands at the morning's gate, counting what comes instead of what has gone."
+          "trio": "The trio lifts Mercury off midnight to 4h, onto Hope's blue arm beside the Moon, guarding the morning third from 0h to 8h. Hope is the theological shape of Wisdom's forward look: the mind that weighed the day at midnight now stands at the morning's gate, counting what comes instead of what has gone."
         }
       },
       "jupiter": {
@@ -294,7 +294,7 @@
           "octa_paint": "On the octa wheel the Sun steps out of the center and takes the crown, so Jupiter yields the top and moves to 9h, green, the mid-morning — the teacher's hour, when the day's work of giving actually begins. A king gracious enough to make room for the source itself.",
           "octa_light": "At 9h in light colors Jupiter wears cyan — the mid-morning as clear sky. Generosity in its freshest register, before the heat of the day.",
           "cross": "On the seasons cross Jupiter keeps the top arm at 12h, yellow for Summer, sharing it with the Sun. The summer solstice is the year at its most generous — the longest light, the fullest table — and the two most royal bodies preside over it together.",
-          "trio": "On the Trinity Jupiter keeps its crown: the 12h arm, yellow — but the yellow is Faith's now, shared with Saturn, and the arm bounds the day's third from 12h to 20h instead of centering noon. Faith reads naturally through the king planet: generosity is faith practiced with the hands, giving before any return is proven."
+          "trio": "On the Trinity Jupiter keeps its crown: the 12h arm, yellow — but the yellow is Faith's now, shared with Saturn, and the arm centers the day's third - 8h to 16h, noon at its tip. Faith reads naturally through the king planet: generosity is faith practiced with the hands, giving before any return is proven."
         }
       },
       "venus": {
@@ -305,7 +305,7 @@
           "octa_paint": "The octa wheel moves Venus onto the 18h dusk arm itself, glowing orange — the mood of Longing, the emotion that looks back. The evening star exactly at sunset, at the moment the day becomes something to miss.",
           "octa_light": "At 18h in light colors Venus burns sunset-orange, the sky's own dusk hue. Longing as the west going down in fire.",
           "cross": "On the seasons cross Venus holds the 18h arm, red for Autumn, sharing it with Mars — Aphrodite and Ares together, as in the oldest gossip of the gods. The autumn equinox is the year's dusk: the harvest of what was loved, and the first cold that makes one hold it tighter.",
-          "trio": "Venus does not move at all: the Trinity's red Love arm is her own 20h, and Love is already her virtue — the one word belonging to both the seven pairs and the theological three. Mars joins her there, and together they bound the night from 20h to 4h: passion and courage guarding the dark third of the day."
+          "trio": "Venus does not move at all: the Trinity's red Love arm is her own 20h, and Love is already her virtue — the one word belonging to both the seven pairs and the theological three. Mars joins her there, and together they guard the evening from 16h to 24h: passion and courage guarding the dark third of the day."
         }
       },
       "saturn": {
@@ -316,7 +316,7 @@
           "octa_paint": "The octa wheel moves Saturn onto the 6h dawn arm itself, cyan, the mood of Hope. It is the most philosophical move on the wheel: hope is simply patience turned to face forward, and the slowest planet earns the arm that waits for the Sun.",
           "octa_light": "At 6h in light colors Saturn wears the deep blue of the last minutes before sunrise — Hope at its coldest and most certain, the hour the farmer already stands in the field.",
           "cross": "On the seasons cross Saturn holds the 6h arm, green for Spring, sharing it with the Moon. The spring equinox is sowing time — the farmer's own festival — patience at the exact moment it commits its seed to the ground.",
-          "trio": "The Trinity promotes Saturn from the morning to the crown: the 12h Faith arm, yellow, shared with Jupiter — the two slow giants on one arm, bounding the day from 12h to 20h. Faith reads through Saturn as patience aimed upward: trusting a harvest that takes thirty years to come round."
+          "trio": "The Trinity promotes Saturn from the morning to the crown: the 12h Faith arm, yellow, shared with Jupiter — the two slow giants on one arm, guarding the day's height from 8h to 16h. Faith reads through Saturn as patience aimed upward: trusting a harvest that takes thirty years to come round."
         }
       }
     },
@@ -340,7 +340,7 @@
           "octa_paint": "On the eight-armed star she slides to 3h in a deeper sea-blue, and the mood is named simply the deep night. One hour closer to midnight, one shade further from dawn: the physician's watch moves to the darkest ward.",
           "octa_light": "At 3h in the light palette her blue shades toward violet — the deep night edging toward Mercury's midnight. Here Calm and Sorrow are neighbors, as anyone awake at three in the morning knows.",
           "cross": "On the seasons cross she holds the 6h arm — Spring, green — and shares it with Cronus. The arm points at the spring equinox, the dawn of the year: the dial's two quiet teachers, Serenity and Patience, keeping the year's morning together.",
-          "trio": "The Trinity leaves Selene on her 4h arm but renames the post: the blue now means Hope, she shares the arm with Hermes, and instead of centering the pre-dawn hour it bounds the morning, 4h to 12h. The goddess who kept Endymion's night now guards the promise that night ends — calm turned to face the sun."
+          "trio": "The Trinity leaves Selene on her 4h arm but renames the post: the blue now means Hope, she shares the arm with Hermes, and with the pre-dawn hour at its very tip it guards the morning, 0h to 8h. The goddess who kept Endymion's night now guards the promise that night ends — calm turned to face the sun."
         }
       },
       "mars": {
@@ -351,7 +351,7 @@
           "octa_paint": "On the eight-armed star he advances to 15h in a hot yellow, the mid-afternoon. One hour closer to noon's peak: the soldier moved up to the earlier watch, his fire nearer the height of the day.",
           "octa_light": "At 15h in the light palette the yellow evens out, steadier and less blinding — the mid-afternoon as discipline rather than blaze. Wrath banked into routine is exactly what an army calls order.",
           "cross": "On the seasons cross he stands at 18h — Autumn, red — and shares the arm with Aphrodite. It points at the autumn equinox, the year's dusk; the lovers whom Hephaestus once caught in a single net are bound to a single arm again, war and love ruling the season of the falling leaf together.",
-          "trio": "On the Trinity Ares marches to 20h and stands on Love's red arm — beside Aphrodite, as always, as the net proved. Together they bound the night from 20h to 4h. Love reads through the war god as its garrison: the same fire that rains spears in his storm stands sentry so that what the heart keeps can sleep."
+          "trio": "On the Trinity Ares marches to 20h and stands on Love's red arm — beside Aphrodite, as always, as the net proved. Together they guard the evening from 16h to 24h. Love reads through the war god as its garrison: the same fire that rains spears in his storm stands sentry so that what the heart keeps can sleep."
         }
       },
       "mercury": {
@@ -362,7 +362,7 @@
           "octa_paint": "On the eight-armed star he moves off midnight to 21h in deep red, the late evening. The guide takes the road earlier: still abroad while others turn in — the day's last messenger rather than its gravekeeper.",
           "octa_light": "At 21h in the light palette the red is pure and full — the late evening as an unmixed beam. The day's final errand is run at signal-lamp brightness, urgency in the color of the heart rather than of mourning.",
           "cross": "On the seasons cross he keeps the bottom of the dial — Winter, blue — and he shares the arm with no one. It points at the winter solstice, the year's own midnight: the guide of souls stands alone at that door, as he always has.",
-          "trio": "The Trinity calls Hermes up from midnight to 4h, onto Hope's blue arm beside Selene, bounding the morning from 4h to 12h. The psychopomp is handed the opposite door: not the guide down into the dark but the herald of what comes — hope being wisdom's forward road, and roads were always his."
+          "trio": "The Trinity calls Hermes up from midnight to 4h, onto Hope's blue arm beside Selene, guarding the morning from 0h to 8h. The psychopomp is handed the opposite door: not the guide down into the dark but the herald of what comes — hope being wisdom's forward road, and roads were always his."
         }
       },
       "jupiter": {
@@ -373,7 +373,7 @@
           "octa_paint": "On the eight-armed star Zeus yields the zenith to Helios and moves to 9h in green, the mid-morning. It is a graceful abdication — the king steps aside for the source itself — and lands on the hour of held court: mid-morning, when a ruler actually rules.",
           "octa_light": "At 9h in the light palette his arm turns cyan — the mid-morning sky itself. The thunder-god in plain daylight blue-green: the storm at rest, the sky simply being generous with the day.",
           "cross": "On the seasons cross he returns to the top: 12h, Summer, yellow, sharing the arm with Helios. It points at the summer solstice — the year's longest light — where Thursday's king and Sunday's source hold the peak together, as throne and sun have always shared a summit.",
-          "trio": "On the Trinity Zeus keeps the top: the 12h arm, yellow — but the yellow is Faith's now, and he shares it with Cronus, the father he overthrew. Together they bound the day from 12h to 20h. Faith reads strangely and rightly through the king: the keeper of oaths stands on the arm of what every oath is made of."
+          "trio": "On the Trinity Zeus keeps the top: the 12h arm, yellow — but the yellow is Faith's now, and he shares it with Cronus, the father he overthrew. Together they guard the day's height from 8h to 16h. Faith reads strangely and rightly through the king: the keeper of oaths stands on the arm of what every oath is made of."
         }
       },
       "venus": {
@@ -384,7 +384,7 @@
           "octa_paint": "On the eight-armed star she moves to 18h and takes the dusk arm itself, red-orange, and the mood changes name: from Passion to Longing, the emotion that looks back. The evening star at the exact hour of the sun's leaving — desire and farewell in one color.",
           "octa_light": "At 18h in the light palette the dusk burns a brighter orange — the sunset sky's own hue read as light. Longing at full luminance: what has passed, still glowing.",
           "cross": "On the seasons cross she stands at 18h — Autumn, red — sharing the arm with Ares. It points at the autumn equinox, and the pairing is the oldest gossip on Olympus: the lovers Hephaestus once trapped in a single net now share a single arm, love and war ruling the season of ripeness and fall.",
-          "trio": "Aphrodite does not move: the Trinity's Love arm is her own 20h in her own red, for Love alone belongs to both sets — arm virtue and theological virtue at once. Ares joins her, and the lovers bound the night from 20h to 4h: the third of the day when work is done and only what one loves remains."
+          "trio": "Aphrodite does not move: the Trinity's Love arm is her own 20h in her own red, for Love alone belongs to both sets — arm virtue and theological virtue at once. Ares joins her, and the lovers guard the evening from 16h to 24h: the third of the day when work is done and only what one loves remains."
         }
       },
       "saturn": {
@@ -395,7 +395,7 @@
           "octa_paint": "On the eight-armed star the old titan takes the dawn arm itself: 6h, cyan, and the mood is Hope — the emotion that looks forward. It is the dial's gentlest irony: the keeper of time is given the hour when time begins again; patience's reward is dawn.",
           "octa_light": "At 6h in the light palette the dawn deepens to a strong sky-blue. Hope read as light, on the arm of the god who tried to swallow the future — and now stands guard over its arrival each morning.",
           "cross": "On the seasons cross he keeps 6h — Spring, green — and shares the arm with Selene. It points at the spring equinox, the year's own dawn: Selene's Serenity and his Patience, the dial's two quiet virtues, holding the childhood of the year together.",
-          "trio": "The Trinity lifts Cronus to the crown: the 12h Faith arm, yellow, shared with Zeus — the devourer and the child who escaped him on one arm, bounding the day from 12h to 20h. Faith is the titan's hardest lesson read forward: to trust the future he once swallowed, and wait for it with open hands."
+          "trio": "The Trinity lifts Cronus to the crown: the 12h Faith arm, yellow, shared with Zeus — the devourer and the child who escaped him on one arm, guarding the day's height from 8h to 16h. Faith is the titan's hardest lesson read forward: to trust the future he once swallowed, and wait for it with open hands."
         }
       }
     },
@@ -419,7 +419,7 @@
           "octa_paint": "The eight-pointed star gives 06h to the dawn itself, so Mani retreats to the 3h arm in sea-deep blue (#005ADC) — the deep night. He moves an hour further from sunrise, deeper into his own kingdom.",
           "octa_light": "On the octa prism the 3h arm turns violet-blue (#783CF0): the deep night with a violet cast, calm shading into mystery — the moonlit world at its darkest and strangest.",
           "cross": "The cross is the seasons palette: his arm at dial 6h points at the spring equinox, colored spring green, shared with Loki. The moon-steerer stands on the sunrise arm in the season of first growth — the counter of nights lending his silver to the year's green morning.",
-          "trio": "The Trinity keeps Mani at his 04h post but changes the watchword: the blue arm (#002FFF) now stands for Hope, shared with Odin, and it bounds the morning from 4h to 12h instead of centering the pre-dawn calm. A right duty for the hunted moon-steerer: he has proven every single night that dawn arrives."
+          "trio": "The Trinity keeps Mani at his 04h post but changes the watchword: the blue arm (#002FFF) now stands for Hope, shared with Odin, and it guards the morning from 0h to 8h, the pre-dawn calm at its tip. A right duty for the hunted moon-steerer: he has proven every single night that dawn arrives."
         }
       },
       "mars": {
@@ -430,7 +430,7 @@
           "octa_paint": "With dusk claiming the 18h arm, Tyr shifts to 15h in warm yellow (#F8E600) — the mid-afternoon. He moves an hour toward noon, closer to the day's peak, the soldier called up earlier in the day.",
           "octa_light": "On the octa prism the 15h arm holds a hard field-yellow (#DCDC00): the mid-afternoon in light hues, zeal turned metallic — the color of work without shade.",
           "cross": "The cross is the seasons palette: his arm at dial 18h points at the autumn equinox, colored autumn red, and he shares it with Freya. War and love on one sunset arm — the old Mars-and-Venus pairing in northern dress, the sword-hand and the sword-maiden holding the year's red season together.",
-          "trio": "On the Trinity Tyr shifts to 20h and stands under Love's deep red (#B60000), sharing the arm with Freya — sword-hand and sword-maiden bounding the night from 20h to 4h. Love reads through Tyr as the pledge: he gave his hand so the others would be safe, which is love spelled in the north's own alphabet."
+          "trio": "On the Trinity Tyr shifts to 20h and stands under Love's deep red (#B60000), sharing the arm with Freya — sword-hand and sword-maiden guarding the evening from 16h to 24h. Love reads through Tyr as the pledge: he gave his hand so the others would be safe, which is love spelled in the north's own alphabet."
         }
       },
       "mercury": {
@@ -452,7 +452,7 @@
           "octa_paint": "On the eight-pointed star Sol herself takes the noon arm, so Thor steps to 9h in green (#00DC00) — the mid-morning. The protector moves to the working hours before the peak, hammer up while the day is still being built.",
           "octa_light": "The octa prism gives his 9h arm cyan (#00DCDC): the mid-morning as clear sky after a storm — the thunder god's own aftermath color.",
           "cross": "The cross is the seasons palette: his arm at dial 12h points at the summer solstice, colored summer yellow, shared with Sol. Thunder and sun together on the summer arm — the season of the highest light and the heaviest storms, both of them his.",
-          "trio": "On the Trinity Thor keeps the crown at 12h in Faith's yellow (#F8E600), sharing the arm with Loki — his old road-companion made his arm-mate — as the two bound the day from 12h to 20h. Faith reads plainest through Thor of all the gods: Midgard trusts that the hammer will come, and it always has."
+          "trio": "On the Trinity Thor keeps the crown at 12h in Faith's yellow (#F8E600), sharing the arm with Loki — his old road-companion made his arm-mate — as the two guard the day's height from 8h to 16h. Faith reads plainest through Thor of all the gods: Midgard trusts that the hammer will come, and it always has."
         }
       },
       "venus": {
@@ -463,7 +463,7 @@
           "octa_paint": "The eight-pointed star moves her to the 18h dusk arm in sunset orange (#DC9600), and the mood becomes Longing — her own myth exactly: Freya wandering the world weeping tears of red gold for her lost husband Odr. Passion looks forward; longing looks back down the road he took.",
           "octa_light": "On the octa prism the dusk arm burns bright orange (#FF8C00): Longing in the sky's own sunset color, the burning west read as light.",
           "cross": "The cross is the seasons palette: her arm at dial 18h points at the autumn equinox, colored autumn red, shared with Tyr. The sword-maiden and the one-handed soldier hold the red season together — love and war on one arm, as the North always knew they were.",
-          "trio": "Freya stands still: the Trinity's Love arm is her own 20h in her own red (#B60000), for Love alone belongs to both sets. Tyr joins her, and together they bound the night from 20h to 4h — the chooser of the slain and the one-handed pledge-giver guarding the dark third, love with a sword in each hand."
+          "trio": "Freya stands still: the Trinity's Love arm is her own 20h in her own red (#B60000), for Love alone belongs to both sets. Tyr joins her, and together they guard the evening from 16h to 24h — the chooser of the slain and the one-handed pledge-giver guarding the dark third, love with a sword in each hand."
         }
       },
       "saturn": {
@@ -474,7 +474,7 @@
           "octa_paint": "The eight-pointed star moves him to the 6h dawn arm in cyan (#00DCDC), and the mood becomes Hope — a strange grace for the bound one, yet earned: even Ragnarok precedes a world reborn, and the dawn belongs to whoever waited out the night.",
           "octa_light": "On the octa prism the dawn arm deepens to sky blue (#0078DC): Hope in the color of the pre-sunrise sky — the trickster holding the hour that looks only forward.",
           "cross": "The cross is the seasons palette: his arm at dial 6h points at the spring equinox, colored spring green, shared with Mani. The bound god and the hunted moon hold the sunrise arm together — spring, the season that forgives winter everything, on the arm of the one who caused it.",
-          "trio": "The Trinity gives Loki the strangest promotion on the dial: the 12h Faith arm, yellow (#F8E600), beside Thor, bounding the day from 12h to 20h. Faith on the deceiver reads as sentence and prophecy at once — the gods' broken trust bound him, yet after his own fire the world comes back green. Even Loki serves the promise."
+          "trio": "The Trinity gives Loki the strangest promotion on the dial: the 12h Faith arm, yellow (#F8E600), beside Thor, guarding the day's height from 8h to 16h. Faith on the deceiver reads as sentence and prophecy at once — the gods' broken trust bound him, yet after his own fire the world comes back green. Even Loki serves the promise."
         }
       }
     },
@@ -556,7 +556,7 @@
         "base": "Judaism is the covenant faith: one God, a people bound to Him by law and promise, and time itself made holy - its first sanctuary was not a building but a day.\n\nThe owner's medallion weaves a golden Star of David from two interlocked triangles on dark slate, the bands inscribed edge to edge with minute Hebrew script - a symbol literally built of text, for a people of the book; silver leaves and small stars circle the rim.\n\nIt keeps Saturday because Saturday IS Shabbat: in Hebrew, Saturn is Shabtai, named for the Sabbath itself. Its arm is the green 8h arm of Renewal, and Shabbat is exactly that - the renewal the work-week exists to reach.\n\nThe arm pairs Patience with Envy under the Farmer - and Torah farms in sabbaths too: every shmita year the land itself rests as the people do. Patience is covenant kept through long exile; envy is what the tenth commandment names, and forbids.",
         "variants": {
           "hexa_paint": "On the paint hexa the Saturn body wears green at 8h - a mixed pigment, yellow worked into blue, joy tempered with depth. The mixing suits a tradition of argument and interpretation: nothing left simple, everything blended through generations of reading, and still unmistakably itself.",
-          "hexa_light": "In the light world the 8h morning arm glows growing-season green. Judaism keeps its lights literal - Shabbat candles at dusk, the ner tamid never allowed to go out, Hanukkah's eight flames - so a dial where color is kindled rather than painted speaks its native language.",
+          "hexa_light": "In the light world the 8h morning arm cools from green to cyan (#00DDDD), the clear early sky. Judaism keeps its lights literal - Shabbat candles at dusk, the ner tamid never allowed to go out, Hanukkah's eight flames - so a dial where color is kindled rather than painted speaks its native language.",
           "octa_paint": "On the octa star's eight pigment arms the Saturn body keeps its patient post, and eight carries weight in its world: covenant on the eighth day, Hanukkah's eight nights - the number just past the week, where holiness exceeds creation. A denser wheel only deepens the fit.",
           "octa_light": "The octa light star burns eight beams around the hub, and a Jewish eye cannot see eight lights without seeing Hanukkah - the festival whose flames last exactly that count. The Saturn body among them glows steady and unhurried: patience rendered as the flame that outlasts its oil.",
           "cross": "On the seasons cross the Saturn body stands with the spring arm, and spring is where the Jewish year takes its bearings: Nisan, the month of Passover, is counted first, because liberation is the founding memory. Green Renewal on the spring arm is Exodus retold as a season.",
@@ -584,7 +584,7 @@
           "octa_paint": "The octa star moves him an hour earlier, to 03h in #005ADC — out of the pre-dawn Calm and into the deep night itself. The watch lengthens: this is the physician at the hardest hour, before any promise of morning.",
           "octa_light": "At 03h on the light octa his blue leans violet (#783CF0), borrowing a shade of midnight's Sorrow into the deep night. The healer's color admits what the healer knows: not every night watch ends well.",
           "cross": "On the seasons cross the Physician moves to the 06h arm — Spring, green, pointed at the vernal equinox — and shares it with Saturn, the Farmer. Healer and grower on one spoke, and rightly: both tend living things, and both must wait for them.",
-          "trio": "The Trinity keeps the Physician at 04h but renames his watch: the blue arm now means Hope, shared with the Merchant, and it bounds the morning from 4h to 12h. No calling earns the word more honestly — hope is the physician's true instrument, the thing he keeps alive at the bedside until the fever breaks."
+          "trio": "The Trinity keeps the Physician at 04h but renames his watch: the blue arm now means Hope, shared with the Merchant, and it guards the morning from 0h to 8h. No calling earns the word more honestly — hope is the physician's true instrument, the thing he keeps alive at the bedside until the fever breaks."
         }
       },
       "mars": {
@@ -595,7 +595,7 @@
           "octa_paint": "The octa star pulls him an hour earlier, to 15h in #F8E600 — the mid-afternoon, the very middle of the grind. If 16h is the ember, 15h is the anvil hour: no grand mood, just work.",
           "octa_light": "At 15h in #DCDC00 the light octa gives him a harder, duller yellow — mid-afternoon light with the shine worked off it. The soldier's least glamorous posting, and therefore his truest.",
           "cross": "On the seasons cross the Soldier stands at 18h — Autumn, red, pointed at the autumnal equinox — sharing the spoke with Venus, the Artist. Mars beside Venus, the oldest pairing in the sky: autumn's red belongs to them both, blood and rose in one color.",
-          "trio": "On the Trinity the Soldier moves to 20h, onto Love's red arm beside the Artist, and the pair bound the night from 20h to 4h. It is the arm that explains the profession: courage is love wearing armor — the soldier stands the night watch not for the fight's sake but for the sake of what sleeps behind him."
+          "trio": "On the Trinity the Soldier moves to 20h, onto Love's red arm beside the Artist, and the pair guard the evening from 16h to 24h. It is the arm that explains the profession: courage is love wearing armor — the soldier stands the night watch not for the fight's sake but for the sake of what sleeps behind him."
         }
       },
       "mercury": {
@@ -606,7 +606,7 @@
           "octa_paint": "The octa star lifts him off the bottom to 21h in dark red (#DC0000) — the late evening, the market's true closing hour. The reckoning comes earlier here, done by lamplight rather than in the grave of midnight.",
           "octa_light": "At 21h in pure red (#FF0000) the light octa gives the late evening its full signal color — the last hot hour before the books close. The scale weighs the same; the lamp is redder.",
           "cross": "On the seasons cross the Merchant keeps the bottom arm at 0h — Winter, blue, pointed at the winter solstice — and he alone shares it with no one. The year's midnight belongs to a single figure: the one calling that can sit at the bottom of the wheel, alone, and still balance the books.",
-          "trio": "The Trinity lifts the Merchant off midnight to 04h, onto Hope's blue arm beside the Physician, bounding the morning from 4h to 12h. The move names the trade's true engine: every venture is hope with numbers on it — the ledger closed in sorrow at midnight reopens at the morning's gate, credit extended to the day."
+          "trio": "The Trinity lifts the Merchant off midnight to 04h, onto Hope's blue arm beside the Physician, guarding the morning from 0h to 8h. The move names the trade's true engine: every venture is hope with numbers on it — the ledger closed in sorrow at midnight reopens at the morning's gate, credit extended to the day."
         }
       },
       "jupiter": {
@@ -617,7 +617,7 @@
           "octa_paint": "The octa star moves him to 09h in green (#00DC00) — the mid-morning, which is to say the school hour. The teacher leaves the pulpit's noon for the classroom's morning, and the color of growth fits the work of growing minds.",
           "octa_light": "At 09h in cyan (#00DCDC) the light octa gives his mid-morning the color of a clear early sky. The lesson moves nearer to dawn — generosity practiced early, before the day has anything to repay it with.",
           "cross": "On the seasons cross the Priest stands at 12h on the Summer arm, yellow, pointed at the summer solstice — and shares it with the Sun itself. Teacher beside king on the year's highest spoke: the light and the one who lifts it, on the same arm at last.",
-          "trio": "On the Trinity the Priest keeps the top arm at 12h, yellow — but the yellow now names Faith, his own working material, and he shares the arm with the Farmer as they bound the day from 12h to 20h. The placement reads itself: faith is the sun he lifts on the staff, raised higher than his own head so others can see by it."
+          "trio": "On the Trinity the Priest keeps the top arm at 12h, yellow — but the yellow now names Faith, his own working material, and he shares the arm with the Farmer as they guard the day's height from 8h to 16h. The placement reads itself: faith is the sun he lifts on the staff, raised higher than his own head so others can see by it."
         }
       },
       "venus": {
@@ -628,7 +628,7 @@
           "octa_paint": "The octa star draws the Artist back to 18h in orange (#DC9600) — the dusk arm — and the mood changes with the place: from Passion to Longing, the feeling that looks back. It is the artist's other native hour, since half of art is memory.",
           "octa_light": "At 18h in bright orange (#FF8C00) the light octa paints the dusk sky itself — the burning west at sunset. Longing keeps the arm: the day is ending, and the artist is the one who refuses to let it go unrecorded.",
           "cross": "On the seasons cross the Artist stands at 18h — Autumn, red, pointed at the autumnal equinox — sharing the spoke with Mars, the Soldier. Venus beside Mars, as in every myth: autumn's red is harvest and blood and rose at once, and it takes both figures to say so.",
-          "trio": "The Artist does not move: the Trinity's Love arm is his own 20h in his own red, for love is his virtue in both sets at once. The Soldier joins him, and together they bound the night from 20h to 4h — guard and poet of the same dark hours, one keeping what is loved safe, the other keeping it in color."
+          "trio": "The Artist does not move: the Trinity's Love arm is his own 20h in his own red, for love is his virtue in both sets at once. The Soldier joins him, and together they guard the evening from 16h to 24h — guard and poet of the same dark hours, one keeping what is loved safe, the other keeping it in color."
         }
       },
       "saturn": {
@@ -639,7 +639,7 @@
           "octa_paint": "The octa star moves him to the dawn arm itself, 06h in cyan (#00DCDC), and the mood becomes Hope — dawn's own. No calling knows dawn-hope like the sower: every seed is a wager that tomorrow comes, and here he stands on the very arm that faces it.",
           "octa_light": "At 06h in sky blue (#0078DC) the light octa deepens the dawn: Hope in a bluer key, the last of night still in the air as the farmer walks out. The wager is the same; the light is younger.",
           "cross": "On the seasons cross the Farmer stands at 06h — Spring, green, pointed at the vernal equinox: sowing season, his own festival. He shares the spoke with the Moon, the Physician — grower and healer together, the two patient professions that tend life and wait for it.",
-          "trio": "The Trinity promotes the Farmer from the morning to the crown: the 12h Faith arm, yellow, shared with the Priest, bounding the day from 12h to 20h. The pairing is the oldest sermon there is — sowing is faith performed with the hands, every seed a creed: buried, waited on, and believed in before it is seen."
+          "trio": "The Trinity promotes the Farmer from the morning to the crown: the 12h Faith arm, yellow, shared with the Priest, guarding the day's height from 8h to 16h. The pairing is the oldest sermon there is — sowing is faith performed with the hands, every seed a creed: buried, waited on, and believed in before it is seen."
         }
       }
     },
@@ -653,7 +653,7 @@
           "octa_paint": "On the eight-point star the wheel is cut finer, and the Moon body holds its calm station on the dawn side of the dial. In pigment that calm is deep and absorbent, night water in a sacred well - the extra arms only widen the circle the grove has always stood in.",
           "octa_light": "The luminous octagram adds arms the way a stone circle adds sightlines - more risings to watch for. Among eight rays the Moon body keeps its cool, serene glow, reading as moonlight on tidewater: reflected, patient, marking time without ever burning it.",
           "cross": "The cross pointer marks the year's four hinges, and the Moon body at hour 4 flanks the dawn arm - the spring equinox side, shared with Saturn's body. For druids this is Alban Eilir, the Light of the Earth: day and night in equal measure, the balance the whole grove-faith keeps.",
-          "trio": "On the Trinity pointer the Moon body stands on the Hope arm, deep blue, guarding the morning third from 4h to 12h and sharing the arm with Mercury. Hope is the druid's horizon virtue: the moon always returns and the wheel always turns - night, in this faith, is a promise rather than an end."
+          "trio": "On the Trinity pointer the Moon body stands on the Hope arm, deep blue, guarding the morning third from 0h to 8h and sharing the arm with Mercury. Hope is the druid's horizon virtue: the moon always returns and the wheel always turns - night, in this faith, is a promise rather than an end."
         }
       },
       "mars": {
@@ -665,7 +665,7 @@
           "octa_paint": "On the eight-point star the Mars body keeps its zealous post on the afternoon side of the dial, the day's fighting hours. In pigment that zeal stays martial and warm, a banner color, an ember carried on the march - and this faith has always known which way it faces: toward the fire.",
           "octa_light": "The luminous octagram spreads eight rays, and the Mars body holds its own among them like a watchfire in a line of beacons. In light its zeal turns clean and directional - the fire temple's flame seen across the dark - courage that shows the road instead of scorching it.",
           "cross": "On the seasons cross the Mars body at hour 16 flanks the dusk arm - the autumn equinox side, shared with Venus. That is Mehregan, the feast of Mithra, lord of covenant and judge of oaths: a season of reckoning fit for a faith where every soul must cross the bridge of its own deeds.",
-          "trio": "On the Trinity pointer the Mars body stands on the Love arm, deep red, guarding the night from 20h to 4h beside Venus. In Zoroastrian terms that love is devotion, Spenta Armaiti - the fire fed through the dark watches; choosing the good again each night is how this faith loves."
+          "trio": "On the Trinity pointer the Mars body stands on the Love arm, deep red, guarding the evening from 16h to 24h beside Venus. In Zoroastrian terms that love is devotion, Spenta Armaiti - the fire fed through the dark watches; choosing the good again each night is how this faith loves."
         }
       },
       "mercury": {
@@ -677,7 +677,7 @@
           "octa_paint": "On the eight-point star the Mercury body keeps midnight, the dial's lowest point, under the silver tip rather than the gold. In pigment its sorrow is dusk-deep, the color of the descent. Eight arms simply add doors, and the shaman is the one figure on the dial who knows how to open them.",
           "octa_light": "The luminous octagram turns the star into eight rays, and the Mercury body holds the midnight ray - light at the very bottom of the night. That is the drum journey itself: a glow carried down into darkness and brought back up, sorrow shining like phosphorescence that needs no sun.",
           "cross": "On the seasons cross the Mercury body stands at hour 24, on the winter solstice arm itself - the longest night, silver-tipped at the dial's foot. Winter is the shaman's season: the world sleeps, the tent closes, the drum begins, and the deepest journeys are made while the sun is furthest away.",
-          "trio": "On the Trinity pointer the Mercury body stands on the Hope arm, deep blue, guarding the morning from 4h to 12h beside the Moon. Hope is the shaman's entire errand: to go down after the lost and return with them by dawn. Every journey wagers that something can be brought back."
+          "trio": "On the Trinity pointer the Mercury body stands on the Hope arm, deep blue, guarding the morning from 0h to 8h beside the Moon. Hope is the shaman's entire errand: to go down after the lost and return with them by dawn. Every journey wagers that something can be brought back."
         }
       },
       "jupiter": {
@@ -685,11 +685,11 @@
         "base": "Sikhism, founded by Guru Nanak in fifteenth-century Punjab, teaches one formless God, equality of all, honest work and sharing - ten Gurus completed by the scripture itself, enthroned as the living Guru.\n\nThe owner's medallion raises the golden Khanda against a starry midnight field: the double-edged sword upright in the chakkar's ring, two curved kirpans crossed behind it, in a silver rim of alternating lotus flowers and khanda emblems.\n\nIt owns Thursday by name: Guruvar, the Guru's day - and Jupiter is Brihaspati, guru of the gods. It stands at hour 12 in yellow, the dial's noon, on the Priest and Teacher's arm, its Joy the mood of a langar hall at midday.\n\nThe arm's Generosity is a pillar of the faith - vand chhako, share what you earn - and its Excess is what the Gurus' discipline trims away. The Khanda cuts both ways: abundance can feed or bloat; the Sikh keeps it a service.",
         "variants": {
           "hexa_paint": "On the pigment hexagram the Jupiter body wears yellow, a painter's primary - and nearly the color Sikhs already fly: the kesri saffron of the Nishan Sahib above every gurdwara. In paint the hue is ground and given like grain, a harvest color, the shade of food offered rather than kept.",
-          "hexa_light": "In the light world yellow is not a primary but a sum: red and green beams meeting make it. That suits Sikh teaching - the brightest things are joined things, sangat over solitude, the shared langar over the lone meal. Yellow lives in both wheels, as the faith lives in both work and prayer.",
+          "hexa_light": "In the light world the noon arm turns pure green (#00DC00), one of the three primary beams that sum to white. That suits Sikh teaching - the brightest whole is made of joined lights, sangat over solitude, the shared langar over the lone meal. Gold in paint, green in light: the faith lives in both wheels, as it lives in both work and prayer.",
           "octa_paint": "On the eight-point star the Jupiter body keeps high noon, the top of the dial nearest its golden tip. In pigment its joy is granary-warm, the mood of a langar hall at midday. However finely the wheel is cut, this body does not move: generosity stands where the sun stands highest.",
           "octa_light": "The luminous octagram fans out eight rays, and the Jupiter body crowns the noon ray. In light its yellow mood becomes sheer radiance, the same glow the owner painted around the Khanda - the Name remembered at the brightest hour, a light that exists only by being given off.",
           "cross": "On the seasons cross the Jupiter body stands at hour 12, on the summer solstice arm, beneath the gold of the dial's crown. High summer is the year's own langar: the sun giving its utmost without keeping accounts - and Vaisakhi, the harvest feast, is the day the Khalsa itself was born.",
-          "trio": "On the Trinity pointer the Jupiter body carries the Faith arm itself, bright yellow, guarding the day from 12h to 20h beside Saturn. Faith is this religion's root word: sikh means learner, one who trusts the Guru enough to be taught - belief practiced daily as work, remembrance and sharing."
+          "trio": "On the Trinity pointer the Jupiter body carries the Faith arm itself, bright yellow, guarding the day's height from 8h to 16h beside Saturn. Faith is this religion's root word: sikh means learner, one who trusts the Guru enough to be taught - belief practiced daily as work, remembrance and sharing."
         }
       },
       "saturn": {
@@ -697,11 +697,11 @@
         "base": "Vodou was born in Haiti when West African religion survived the slave ships, wearing Catholic saints as masks: one creator, Bondye, served through the lwa, spirits who ride their people in ceremony, and the ancestors.\n\nThe owner's medallion restores dignity to the emblem outsiders know best: a burlap doll with a copper skull face, chest bound in an X of twine, cowries ringing the silver rim, and a copper belly plate engraved with a veve, the sign that calls a spirit down.\n\nIt rules Saturday through Baron Samedi - 'Baron Saturday' - keeper of the crossroads and the dead, at home on Saturn's green arm at hour 8, the Farmer's arm: the Ghede govern graves and fertility alike.\n\nThe arm's Patience is the ancestor-faith itself, debts honored over generations; its Envy is the sorcery Vodou is slandered with and its ethics condemn. Green Renewal is its truth: nothing sprouts that was not buried.",
         "variants": {
           "hexa_paint": "On the pigment hexagram the Saturn body wears green, the painter's mix of yellow and blue - growth out of dark ground. Pigment is Vodou's own medium: veve traced in cornmeal and ash on the temple floor, color poured onto earth to open a way. This green is graveyard grass, life fed by the dead.",
-          "hexa_light": "In the world of light green turns primary, one of the three beams that sum to white. There is a quiet justice in that: a faith of the enslaved, long dismissed as darkness, holds a primary seat in the brighter wheel. Green light is the Ghede's paradox made visible - out of the tomb, the most living color.",
+          "hexa_light": "In the world of light the arm cools from green to cyan (#00DDDD), the pale sky just before sunrise. There is a quiet justice in that: a faith of the enslaved, long dismissed as darkness, wears the dawn's own color in the brighter wheel. Cyan is the Ghede's paradox made visible - out of the tomb, the first light of morning.",
           "octa_paint": "On the eight-point star the Saturn body keeps its post on the rising side of the dial, its mood of renewal intact. In pigment that renewal is loamy and slow, compost color, the patience of soil. Eight arms cut more crossroads into the dial - and every crossroads in Vodou belongs first to the keeper of the gate.",
           "octa_light": "The luminous octagram fans out eight rays, and the Saturn body holds its calm renewal among them like a candle set on a grave at Fet Gede. In light the mood turns from soil to flame-glow: small emitted brightnesses insisting that the dead are not gone, only standing elsewhere on the wheel.",
           "cross": "On the seasons cross the Saturn body at hour 8 flanks the dawn arm - the spring equinox side, shared with the Moon. Spring is this faith's deepest teaching made season: the Ghede who rule the grave rule fertility too, and nothing sprouts that was not first buried. Dawn out of the cemetery is Vodou's whole hope.",
-          "trio": "On the Trinity pointer the Saturn body stands on the Faith arm, bright yellow, guarding 12h to 20h beside Jupiter. Vodou's faith is service, sevis lwa - a reciprocal bond: feed the spirits and they hold your world steady. Even the Baron, joking at death's gate, is trusted utterly to open it."
+          "trio": "On the Trinity pointer the Saturn body stands on the Faith arm, bright yellow, guarding 8h to 16h beside Jupiter. Vodou's faith is service, sevis lwa - a reciprocal bond: feed the spirits and they hold your world steady. Even the Baron, joking at death's gate, is trusted utterly to open it."
         }
       },
       "sun": {
@@ -822,7 +822,7 @@
       "base": "Faith is the vertical line of the three: not a feeling but a direction, the part of a person that points upward the way the M points from the top of this ring. Paul named it first of the trio that remains when everything else passes - faith, hope and love - and the dial gives it the highest arm.\n\nIt wears yellow, the noon color, and guards the day's height from 8 to 16 - the working hours, which is the quiet joke of its placement: faith is not kept at midnight vigils but in the plain middle of the day, where work either honors what one believes or betrays it.\n\nTwo days carry it together. Jupiter's Thursday brings the Priest - faith professed, taught, celebrated - and Saturn's Saturday brings the Farmer's patience: faith TESTED, the kind that sows and waits without proof. Between them the pair warns of its own shadows, Excess and Envy: belief turned loud, or turned sour at a neighbor's harvest."
     },
     "Hope": {
-      "base": "Hope is the horizon line: it looks not up but FORWARD, at what is coming and cannot yet be seen. The dial seats it on the blue arm at 4h - the hour before dawn, the coldest and darkest stretch of the night, which is exactly where hope does its work.\n\nIt guards the morning third, 0 to 8: the hours when the day exists only as a promise. Its blue is the pre-dawn sky one shade before it lightens - Calm, the mood of that hour, because hope is not excitement but a steady expectation.\n\nThe Moon's Monday and Mercury's Wednesday share the arm: the Moon lends Serenity, the lamp that holds through the night, and Mercury - the morning star, the herald - lends the message that the light is already on its way. Their shadow is Fear, hope's exact opposite: the same darkness read as threat instead of promise."
+      "base": "Hope is the horizon line: it looks not up but FORWARD, at what is coming and cannot yet be seen. The dial seats it on the blue arm at 4h - the hour before dawn, the coldest and darkest stretch of the night, which is exactly where hope does its work.\n\nIt guards the morning third, 0 to 8: the hours when the day exists only as a promise. Its blue is the pre-dawn sky one shade before it lightens - Calm, the mood of that hour, because hope is not excitement but a steady expectation.\n\nThe Moon's Monday and Mercury's Wednesday share the arm: the Moon lends Serenity, the lamp that holds through the night, and Mercury - the morning star, the herald - lends the message that the light is already on its way. Their shadows are Fear and Greed: the Moon's darkness read as threat instead of promise, and the Merchant's grasping at what the morning has not yet delivered. Hope answers both - it waits, and it waits open-handed."
     },
     "Love": {
       "base": "Love is the horizontal line, the one that runs from person to person - and Paul's verdict stands over the whole trio: the greatest of these is love. The dial gives it the red arm at 20h, where Y closes the ring's word, and the evening third from 16 to midnight: the hours people finally turn toward each other.\n\nIts red is Passion, the mood of the evening - the color Venus has always worn, the first star lit in the darkening sky. Love guards the night not as danger but as intimacy: the third of the day that belongs to closeness, tables, beds and long talks.\n\nVenus' Friday and Mars' Tuesday share the arm - the oldest pairing there is, love and courage, the lover and the defender; Babylon knew them as one goddess. Their shadows are Jealousy and Wrath, love's two failures, and the canon sends their cures from across the dial: Patience quells Jealousy, Serenity quells Wrath."
