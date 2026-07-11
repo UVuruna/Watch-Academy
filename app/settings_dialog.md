@@ -38,8 +38,11 @@ submenus cannot express:
   QColorDialog picker.
 - **Custom ring** — the ring card builder: a layout (Flame /
   Chalice / Seal), a library letter per position and a unique name;
-  Add validates the card and OK persists it (it appears under
-  Theme ▸ Ring).
+  the per-position dropdown is GROUPED (owner spec 2026-07-11) into
+  Latin (the full A–Z), Greek, Numbers (1–10, 20 — growing) and
+  Symbols sections with unselectable headers
+  (`constants.RING_LETTER_GROUPS`). Add validates the card and OK
+  persists it (it appears under Theme ▸ Ring).
 - **Language** — all provider languages; the first pick translates
   the whole corpus in the background and caches it. The Default
   button jumps back to English (the shipped originals).

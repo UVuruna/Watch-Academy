@@ -8,7 +8,7 @@ via result_settings(); the controller applies and persists it.
 """
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
     QColorDialog,
     QComboBox,
@@ -598,11 +598,27 @@ class SettingsDialog(QDialog):
         for position in constants.RING_LAYOUTS[layout_key]["positions"]:
             cell = QVBoxLayout()
             cell.addWidget(QLabel(f"{position}h"))
-            combo = QComboBox()
-            combo.addItems(list(constants.RING_LETTER_FILES))
+            combo = self._letter_combo()
             cell.addWidget(combo)
             self._ring_slot_combos[position] = combo
             self._ring_slot_row.addLayout(cell)
+
+    @staticmethod
+    def _letter_combo() -> QComboBox:
+        """The letter library GROUPED into sections (owner spec
+        2026-07-11): Latin / Greek / Numbers / Symbols — the section
+        headers are visible in the dropdown but not selectable."""
+        combo = QComboBox()
+        model = QStandardItemModel(combo)
+        for group, glyphs in constants.RING_LETTER_GROUPS.items():
+            header = QStandardItem(f"— {group} —")
+            header.setFlags(Qt.ItemFlag.NoItemFlags)
+            model.appendRow(header)
+            for glyph in glyphs:
+                model.appendRow(QStandardItem(glyph))
+        combo.setModel(model)
+        combo.setCurrentIndex(1)         # the first real glyph, not a header
+        return combo
 
     def _add_custom_ring(self) -> None:
         from data.rings import ring_presets, validate_preset

@@ -261,26 +261,26 @@ RING_LAYOUTS = {
 }
 # The full letter library (glyph -> art file) — presets and the custom
 # ring builder choose from these; every glyph also ships a pre-rendered
-# <Stem>_silver.png.
+# <Stem>_silver.png. The library is GROUPED (owner spec 2026-07-11):
+# the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
+# run 1-10 and 20 today; the owner adds 11-19 and 21-23 next.
+_LATIN_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_RING_NUMBERS = tuple(str(n) for n in (*range(1, 11), 20))
+RING_LETTER_GROUPS = {
+    "Latin": tuple(_LATIN_LETTERS),
+    "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),
+    "Numbers": _RING_NUMBERS,
+    "Symbols": ("✠",),
+}
 RING_LETTER_FILES = {
-    "M": "M.svg",
-    "D": "D.svg",
-    "Y": "Y.svg",
-    "G": "G.svg",
-    "H": "H.svg",
-    "I": "I.svg",
-    "P": "P.svg",
-    "S": "S.svg",
-    "U": "U.svg",
-    "V": "V.svg",
-    "X": "X.svg",
-    "Z": "Z.svg",
+    **{letter: f"{letter}.svg" for letter in _LATIN_LETTERS},
     "Ω": "Omega.png",
     "Π": "Pi.png",
     "Φ": "Phi.png",
     "Ψ": "Psi.png",
     "Σ": "Sigma.png",
     "Θ": "Theta.png",
+    **{number: f"{number}.svg" for number in _RING_NUMBERS},
     # Symbols (the owner is growing this set for custom rings):
     "✠": "templar.png",
 }
