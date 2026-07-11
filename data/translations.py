@@ -112,36 +112,60 @@ def translate_texts(texts: dict, target: str, progress=None) -> dict:
 class TranslationStore:
     """Per-language overlay cache: {hashes: {key: sha1(en)}, texts:
     {key: translated}} — hash-tracked so corpus edits re-translate only
-    the changed entries."""
+    the changed entries. Languages with a BUNDLED ORIGINAL (owner
+    decision 2026-07-11: English and Serbian Latin ship hand-written —
+    Database/translations/<lang>.json) read the bundle first; the
+    user's cache only overlays entries whose English changed after
+    the release."""
 
-    def __init__(self, directory: Path | None = None):
+    def __init__(self, directory: Path | None = None,
+                 bundled: Path | None = None):
         self._dir = directory or (paths.settings_path().parent / "translations")
+        self._bundled = bundled or (paths.database_dir() / "translations")
 
     def _path(self, lang: str) -> Path:
         return self._dir / f"{lang}.json"
+
+    def _bundled_data(self, lang: str) -> dict:
+        path = self._bundled / f"{lang}.json"
+        if not path.exists():
+            return {"hashes": {}, "texts": {}}
+        return json.loads(path.read_text(encoding="utf-8"))
 
     @staticmethod
     def _hash(text: str) -> str:
         return hashlib.sha1(text.encode("utf-8")).hexdigest()
 
     def load(self, lang: str) -> dict:
-        """key → translated text (empty when nothing is cached yet)."""
+        """key → translated text. The bundled original wins whenever
+        it was made from the SAME English as the user's cached entry
+        (an original beats a machine draft of the same source — e.g. a
+        pre-release MT cache); the user's entry wins only where its
+        English moved on after the release."""
+        bundled = self._bundled_data(lang)
+        texts = dict(bundled["texts"])
         path = self._path(lang)
-        if not path.exists():
-            return {}
-        return json.loads(path.read_text(encoding="utf-8"))["texts"]
+        if path.exists():
+            user = json.loads(path.read_text(encoding="utf-8"))
+            for key, text in user["texts"].items():
+                if (key not in texts
+                        or user["hashes"].get(key) != bundled["hashes"].get(key)):
+                    texts[key] = text
+        return texts
 
     def missing(self, lang: str, corpus: dict) -> dict:
         """The corpus entries not yet translated for `lang` — new keys
-        AND entries whose English source changed since caching."""
+        AND entries whose English source matches NEITHER the bundled
+        original NOR the user's cache."""
+        bundled = self._bundled_data(lang)["hashes"]
+        user = {}
         path = self._path(lang)
-        hashes = {}
         if path.exists():
-            hashes = json.loads(path.read_text(encoding="utf-8"))["hashes"]
+            user = json.loads(path.read_text(encoding="utf-8"))["hashes"]
         return {
             key: text
             for key, text in corpus.items()
-            if hashes.get(key) != self._hash(text)
+            if self._hash(text) not in (bundled.get(key), user.get(key))
         }
 
     def save(self, lang: str, corpus_slice: dict, texts: dict) -> None:

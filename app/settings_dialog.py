@@ -657,14 +657,29 @@ class SettingsDialog(QDialog):
         group = QGroupBox("Language")
         row = QHBoxLayout(group)
         self._language_combo = QComboBox()
-        for code, name in sorted(
-            constants.TRANSLATION_LANGUAGES.items(), key=lambda item: item[1]
-        ):
+        # The ORIGINALS ride the top (owner spec 2026-07-11): English
+        # and Serbian Latin ship hand-written in the app; everything
+        # below the separator machine-translates on first pick.
+        originals = [
+            (code, constants.TRANSLATION_LANGUAGES[code])
+            for code in constants.TRANSLATION_ORIGINALS
+        ]
+        rest = sorted(
+            (
+                (code, name)
+                for code, name in constants.TRANSLATION_LANGUAGES.items()
+                if code not in constants.TRANSLATION_ORIGINALS
+            ),
+            key=lambda item: item[1],
+        )
+        for code, name in originals:
+            self._language_combo.addItem(f"{name} — original", code)
+        self._language_combo.insertSeparator(len(originals))
+        for code, name in rest:
             self._language_combo.addItem(name, code)
-            if code == self._settings.language:
-                self._language_combo.setCurrentIndex(
-                    self._language_combo.count() - 1
-                )
+        index = self._language_combo.findData(self._settings.language)
+        if index >= 0:
+            self._language_combo.setCurrentIndex(index)
         row.addWidget(self._language_combo)
         # One-click way back to the shipped originals (owner spec
         # 2026-07-11): jump the combo to English.
@@ -677,9 +692,9 @@ class SettingsDialog(QDialog):
         )
         row.addWidget(default)
         note = QLabel(
-            "First pick translates all texts in the background "
-            "(internet needed once) and caches them — afterwards the "
-            "language works offline."
+            "The originals above the line ship inside the app. Any "
+            "other language translates itself in the background on "
+            "first pick (internet needed once) and then works offline."
         )
         note.setWordWrap(True)
         row.addWidget(note, stretch=1)

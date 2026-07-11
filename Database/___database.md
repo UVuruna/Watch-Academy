@@ -31,12 +31,23 @@ Moved to [Research (folder)](../research/___research.md) — an oversized
 variant kept for analysis only, not bundled.
 
 ### `symbolism.json`
-Machine-readable blurbs of the dial's symbolic cosmology (one to three
-sentences per day/god/religion/profession/color/virtue/vice, plus the
-axes and philosophy notes). The narrative canon lives in
-[DOMY Symbolism](../SYMBOLISM.md); the hexa diamond hover shows the
-active theme's blurb via the
+Machine-readable blurbs AND the full encyclopedic `articles` of the
+dial's symbolic cosmology (per theme × body with pointer/palette
+variant paragraphs, plus zodiac, Chinese, element and trio articles).
+The narrative canon lives in [DOMY Symbolism](../SYMBOLISM.md); the
+weekday and slot hovers read it via the
 [Symbolism Repository](../data/symbolism.md).
+
+### `ring_presets.json`
+The bundled ring styling cards — DOMY, MORPH and NUMBERS — loaded by
+[Ring Presets](../data/rings.md) together with the user's custom cards.
+
+### `translations/`
+BUNDLED ORIGINAL translations (owner decision 2026-07-11): English is
+the shipped source, `sr-Latn.json` the hand-written Serbian original —
+`{hashes: sha1(EN) per key, texts}`, consumed by
+[Translations](../data/translations.md); every other language machine-
+translates into the user's cache instead.
 
 ## Connections
 

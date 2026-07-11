@@ -3,16 +3,22 @@
 **Script:** [Translations (script)](translations.py)
 
 ## Purpose
-The owner's translation model: WE ship only English; the user's machine
-translates it once and caches it. `collect_corpus()` gathers every
+The owner's translation model: English and Serbian Latin ship as
+hand-written ORIGINALS (owner decision 2026-07-11 — pinned at the top
+of the language combo); every other language machine-translates once
+on the user's machine and caches. `collect_corpus()` gathers every
 translatable text (all article sets, zodiac/chinese/element/trio
-articles, guide captions) under stable keys; `TranslationStore` caches
-per-language JSON in `%APPDATA%/DOMY Watch/translations/` with a source
-HASH per entry — after we edit an article only the changed entries are
-re-translated, and an interrupted run resumes where it stopped.
-`translate_texts()` talks to the keyless Google gtx endpoint (no
-account, no key — the owner's "simple option"); `sr-Latn` is served as
-Serbian plus a local Cyrillic→Latin transliteration.
+articles, guide captions and page titles) under stable keys;
+`TranslationStore` layers three sources: the shipped English, the
+BUNDLED originals (`Database/translations/<lang>.json`) and the user's
+cache in `%APPDATA%/DOMY Watch/translations/` — each entry carries a
+sha1 of its ENGLISH source, so after we edit an article only the
+changed entries re-translate (for originals they fall back to machine
+output until we refresh the bundle), and an interrupted run resumes
+where it stopped. `translate_texts()` talks to the keyless Google gtx
+endpoint (no account, no key — the owner's "simple option"); `sr` is
+served as Serbian plus a local Cyrillic→Latin transliteration when
+the target is `sr-Latn` and no bundle covers an entry.
 
 ## Connections
 
@@ -35,6 +41,9 @@ Serbian plus a local Cyrillic→Latin transliteration.
 ## Classes
 
 ### TranslationStore
-- `load(lang)`: the cached overlay (key → text) or `{}`
+- `load(lang)`: the overlay (key → text) — bundled original first,
+  the user's cache on top; `{}` when neither exists
 - `missing(lang, corpus)`: entries new or changed since caching
-- `save(lang, corpus_slice, texts)`: merge + persist (atomic)
+  (bundled hashes count as cached; the user's cache wins on conflict)
+- `save(lang, corpus_slice, texts)`: merge + persist into the USER
+  cache (atomic; the bundle is never written at runtime)
