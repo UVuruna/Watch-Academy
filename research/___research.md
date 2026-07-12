@@ -48,6 +48,13 @@ Servant on Sunday, Mary/Moon, David/Mars, Moses/Mercury,
 Solomon/Jupiter, Bride and Bridegroom/Venus, Joseph's sheaves/Saturn)
 and the 8 Gemini prompts (drop dir assets/weekday/bible/).
 
+### `alchemy_metal_prompts.md` — Alchemy Metal Prompts
+Redesign of the seven alchemy weekday plates: the shared ingot-pile
+center is replaced by one signature object + signature behavior +
+explicit finish per metal (mirror/tarnish, forge/rust, liquid beads,
+bell, verdigris, plumb bob) so the four gray metals become
+distinguishable; 7 Gemini prompts, borders kept.
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner
