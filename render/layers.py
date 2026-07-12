@@ -265,17 +265,17 @@ def south_slot_theta(skin: SkinDefinition, rotation: float) -> float:
     return constants.SOUTH_SLOT_ANGLE + rotation
 
 
-def sunday_dual_active(skin: SkinDefinition, today: str) -> bool:
-    """True while the dial shows BOTH Sunday faces (owner 2026-07-12):
-    the Compass and the Seasons on a Sunday — Ruler at his north slot,
-    the SERVANT face at 24h ("two persons, a union"); the Trinity and
-    the Prism keep one image ("two persons in one body") and speak the
-    second face only in the hover. Needs the theme's dual art on disk
+def sunday_dual_face(skin: SkinDefinition) -> bool:
+    """True while the SERVANT face holds the 24h seat on the Compass or
+    the Seasons (owner correction 2026-07-13: NOT Sunday-only — it
+    stands there all week like every other body, ghosted, and turns
+    opaque on Sunday: "two persons, a union"). The Trinity and the
+    Prism keep one image ("two persons in one body") and speak the
+    second face in the hover. Needs the theme's dual art on disk
     (documented: no art, no second face)."""
     spec = skin.weekday_set
     return (
-        today == "sun"
-        and skin.pointer in ("octa", "cross")
+        skin.pointer in ("octa", "cross")
         and skin.show_weekday
         and skin.weekday_slot == "weekday"
         and not weekday_pinned(skin)
@@ -283,6 +283,24 @@ def sunday_dual_active(skin: SkinDefinition, today: str) -> bool:
         and spec.dual_asset is not None
         and spec.dual_asset.exists()
     )
+
+
+def servant_holds_the_seat(skin: SkinDefinition, today: str) -> bool:
+    """Whether the Servant face WINS the 24h seat today: on the Compass
+    the seat is his alone; on the Seasons he shares it with Mercury's
+    slot and the standard shared-slot priority decides (the Servant
+    counts as an eighth body whose day is Sunday)."""
+    if not sunday_dual_face(skin):
+        return False
+    seat = next(
+        (
+            occupants
+            for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+            if angle == constants.SOUTH_SLOT_ANGLE
+        ),
+        (),
+    )
+    return not seat or visible_occupant(seat + ("sun",), today) == "sun"
 
 
 def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
@@ -463,8 +481,18 @@ def aurora_bands(
 class Layer(ABC):
     cadence: Cadence
 
-    def __init__(self, skin: SkinDefinition):
+    def __init__(self, skin: SkinDefinition, lift: bool = False):
         self._skin = skin
+        # The hover Z-LIFT (owner 2026-07-13): the enlarged element must
+        # ride ABOVE the hands. A base layer (lift=False) skips its
+        # hovered element; HoverLiftLayer owns lift=True twins that
+        # draw ONLY it, stacked last.
+        self._lift = lift
+
+    def _gate(self, ctx: "RenderContext", element: str) -> bool:
+        """True when THIS pass draws `element`: the base pass draws all
+        but the hovered one, the lift pass only the hovered one."""
+        return (ctx.hovered == element) == self._lift
 
     @abstractmethod
     def paint(self, painter: QPainter, ctx: RenderContext) -> None: ...
@@ -847,22 +875,27 @@ class WeekdayLayer(Layer):
             # No diamonds, no slot positions (owner 2026-07-12):
             # today's body alone, pinned at the bottom — straight
             # south, or 3h left of it when the South slot shares.
-            draw_weekday_body(
-                painter, ctx, today,
-                dial_point(
-                    pinned_weekday_theta(ctx.skin),
-                    ctx.radius * spec.orbit_fraction,
-                ),
-                2 * ctx.radius * spec.diamond_scale
-                * hover_factor(ctx, f"body:{today}"),
-                1.0,
-            )
+            if self._gate(ctx, f"body:{today}"):
+                draw_weekday_body(
+                    painter, ctx, today,
+                    dial_point(
+                        pinned_weekday_theta(ctx.skin),
+                        ctx.radius * spec.orbit_fraction,
+                    ),
+                    2 * ctx.radius * spec.diamond_scale
+                    * hover_factor(ctx, f"body:{today}"),
+                    1.0,
+                )
             return
 
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
 
-        if ctx.skin.pointer in ("hexa", "trio") and today != "sun":
+        if (
+            ctx.skin.pointer in ("hexa", "trio")
+            and today != "sun"
+            and self._gate(ctx, "body:sun")
+        ):
             # The hexa and trio layouts center the Sun; on Sundays the
             # center pass draws it opaque above the hands instead.
             center_size = 2 * ctx.radius * spec.center_scale
@@ -872,23 +905,27 @@ class WeekdayLayer(Layer):
             )
         orbit = ctx.radius * spec.orbit_fraction
         slot_size = 2 * ctx.radius * spec.diamond_scale
-        dual = sunday_dual_active(ctx.skin, today)
+        servant = servant_holds_the_seat(ctx.skin, today)
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
-            if dual and slot_angle == constants.SOUTH_SLOT_ANGLE:
-                continue     # the 24h seat belongs to the Servant today
+            if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:
+                continue     # the Servant won the 24h seat today
             body = visible_occupant(occupants, today)
+            if not self._gate(ctx, f"body:{body}"):
+                continue
             theta = slot_angle + ctx.rotation
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hover_factor(ctx, f"body:{body}"),
                 1.0 if body == today else spec.ghost_opacity,
             )
-        if dual:
-            # THE DUAL SUNDAY (owner 2026-07-12): the Ruler keeps his
-            # north slot, the SERVANT face rises at 24h — two persons,
-            # a union; the metal themes' swap recolors it exactly like
-            # the Ruler plate. Image only — the Names label belongs to
-            # the Ruler face.
+        if servant and self._gate(ctx, "sun_servant"):
+            # THE SERVANT FACE at 24h (owner 2026-07-13): it stands all
+            # week like every other body — ghosted, OPAQUE on Sunday —
+            # two persons, a union; the metal themes' swap recolors it
+            # exactly like the Ruler plate. Image only — the Names
+            # label belongs to the Ruler face.
+            painter.save()
+            painter.setOpacity(1.0 if today == "sun" else spec.ghost_opacity)
             draw_pixmap_centered(
                 painter, ctx, spec.dual_asset,
                 dial_point(
@@ -897,6 +934,7 @@ class WeekdayLayer(Layer):
                 slot_size * hover_factor(ctx, "sun_servant"),
                 metal=spec.metal,
             )
+            painter.restore()
 
 
 class WeekdayBadgeLayer(Layer):
@@ -913,6 +951,8 @@ class WeekdayBadgeLayer(Layer):
         spec = self._skin.weekday_set
         mode = ctx.skin.weekday_slot
         if mode in ("time", "date", "day_length"):
+            if self._lift:
+                return       # text modes answer no hover — never lifted
             # The DAY slot as an info text (owner 2026-07-12) — exists
             # only pointer-off, where the pinned spot is free; no hover
             # (the text modes answer nothing, like in the info slot).
@@ -925,6 +965,8 @@ class WeekdayBadgeLayer(Layer):
                 slot_text(mode, ctx),
             )
             return
+        if not self._gate(ctx, "weekday_badge"):
+            return                       # hover z-lift repaints it on top
         badge = weekday_badge(ctx.skin, ctx.day, ctx.tick)
         if badge is None:
             return
@@ -1017,6 +1059,8 @@ class BottomSlotLayer(Layer):
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        if not self._gate(ctx, "octa_slot"):
+            return                       # hover z-lift repaints it on top
         spec = self._skin.weekday_set
         if south_slot_centered(ctx.skin):
             # Compass/Seasons (owner dual-Sunday round 2026-07-12):
@@ -1165,9 +1209,9 @@ class YearMarkerLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
-        if ctx.skin.show_earth:
+        if ctx.skin.show_earth and self._gate(ctx, "earth"):
             self._draw_earth(painter, ctx)
-        if ctx.skin.show_moon:
+        if ctx.skin.show_moon and self._gate(ctx, "moon"):
             moon_angle = angles.moon_cycle_angle(ctx.day.moon_fraction)
             # The rim transit only exists while the Earth is also shown.
             opacity = (
@@ -1284,6 +1328,31 @@ class YearMarkerLayer(Layer):
         else:
             painter.fillPath(lit, QColor(spec.moon_lit_color))
         painter.restore()
+
+
+class HoverLiftLayer(Layer):
+    """The hover Z-LIFT (owner 2026-07-13: "kad radim hover hoću da u
+    trenutku enlarge bude iznad kazaljki"): stacked LAST, it repaints
+    ONLY the hovered element through lift=True twins of the element
+    layers — each base layer skips its hovered element via
+    Layer._gate, so nothing draws twice."""
+
+    cadence = Cadence.MINUTE
+
+    def __init__(self, skin: SkinDefinition):
+        super().__init__(skin)
+        self._twins = (
+            WeekdayLayer(skin, lift=True),
+            WeekdayBadgeLayer(skin, lift=True),
+            BottomSlotLayer(skin, lift=True),
+            YearMarkerLayer(skin, lift=True),
+        )
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        if not ctx.hovered:
+            return
+        for twin in self._twins:
+            twin.paint(painter, ctx)
 
 
 class HandLayer(Layer):

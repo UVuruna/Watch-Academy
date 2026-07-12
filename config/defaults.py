@@ -657,6 +657,22 @@ WEEKDAY_THEME_FILES["japan"] = {
 # relative to WEEKDAY_ART_DIR without the extension; the metal themes'
 # COLORED look inserts a colored/ folder before the file name (the
 # profession Servant is a full eighth plate living beside the Ruler).
+# The two FACE NAMES of each theme's Sunday (hover titles: the north
+# face and the south face; the combined single-image legend keeps the
+# theme's own dual display name).
+WEEKDAY_DUAL_NAMES = {
+    "planets": ("Sun", "Eclipsed Sun"),
+    "planet_signs": ("Sun", "Eclipsed Sun"),
+    "greek": ("Helios", "Phaethon"),
+    "norse": ("Sól", "Skoll"),
+    "egypt": ("Ra", "Afu-Ra"),
+    "slavic": ("Young Dažbog", "Old Dažbog"),
+    "alchemy": ("Gold", "Raw Ore"),
+    "japan": ("Amaterasu", "Ama-no-Iwato"),
+    "religion": ("Freemasonry", "The Rough Ashlar"),
+    "religion_alt": ("Mithraism", "Corax"),
+    "profession": ("Ruler", "Servant"),
+}
 WEEKDAY_DUAL_FILES = {
     "planets": "planets/dual/sun_eclipse",
     "planet_signs": "planet_signs/dual/sun_eclipse",

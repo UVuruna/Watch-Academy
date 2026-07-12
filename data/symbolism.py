@@ -32,6 +32,13 @@ class SymbolismRepository:
                 combo: self._overlay.get(f"{prefix}/variants/{combo}", text)
                 for combo, text in node["variants"].items()
             }
+        if "faces" in node:
+            # The dual Sunday's Ruler/Servant face texts (owner
+            # 2026-07-13) ride the same overlay path.
+            out["faces"] = {
+                face: self._overlay.get(f"{prefix}/faces/{face}", text)
+                for face, text in node["faces"].items()
+            }
         return out
 
     def _load(self) -> dict:

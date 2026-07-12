@@ -159,25 +159,42 @@ def test_south_slot_matrix():
 
 
 def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
-    """Owner dual-Sunday round 2026-07-12: on a Sunday the Compass and
-    the Seasons show BOTH faces — the Ruler holds his north slot and
-    the SERVANT face (WEEKDAY_DUAL_FILES art) takes the 24h seat (the
-    cross's mercury ghost yields it), answering the sun hover; the
-    Trinity and the Prism keep the single center image; ordinary days
-    and center_only mode stay single-faced. Every theme's dual art is
-    ON DISK, the metal themes' colored variants too."""
+    """Owner corrections 2026-07-13: the SERVANT face is NOT
+    Sunday-only — it stands at 24h all week like every other body
+    (ghosted; opaque on Sunday) and speaks ITS OWN face text with its
+    own name; the north sun speaks the RULER face; on the Seasons the
+    Servant shares mercury's 180 seat by the standard priority; the
+    Trinity/Prism single image carries BOTH plates in its legend.
+    Every theme's dual art is ON DISK, colored variants too."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from render.layers import south_slot_centered, sunday_dual_active
+    from render.layers import (
+        servant_holds_the_seat, south_slot_centered, sunday_dual_face,
+    )
 
     # The art table is complete: all twelve themes + colored variants.
     for theme in constants.WEEKDAY_THEMES:
         rel = defaults.WEEKDAY_DUAL_FILES[theme]
         assert (defaults.WEEKDAY_ART_DIR / f"{rel}.png").exists(), theme
+        assert theme in defaults.WEEKDAY_DUAL_NAMES
     for theme in constants.METAL_THEMES:
         folder, _, name = defaults.WEEKDAY_DUAL_FILES[theme].rpartition("/")
         colored = defaults.WEEKDAY_ART_DIR / folder / "colored" / f"{name}.png"
         assert colored.exists(), theme
+    # ...and so are the SPLIT FACE TEXTS (owner: no identical text on
+    # the two faces) — every article set's sun carries distinct
+    # ruler/servant prose.
+    import json as _json
+
+    from config import paths
+    data = _json.loads(
+        (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
+    )
+    for article_set in set(constants.WEEKDAY_THEME_ARTICLES.values()):
+        faces = data["articles"][article_set]["sun"].get("faces")
+        assert faces is not None, article_set
+        assert set(faces) == {"ruler", "servant"}, article_set
+        assert faces["ruler"] != faces["servant"], article_set
 
     city = defaults.DEFAULT_CITY
     tz = ZoneInfo(city["timezone"])
@@ -197,21 +214,48 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
             replace(Settings(), pointer=pointer, solar_rotation=False),
         )
         assert skin.weekday_set.dual_asset is not None
-        assert sunday_dual_active(skin, "sun"), pointer
+        assert sunday_dual_face(skin)
+        assert servant_holds_the_seat(skin, "sun"), pointer
         compositor = Compositor(skin, AssetCache())
         compositor.render_offscreen(360.0, 1.0, day, tick)
         orbit = 180.0 * skin.weekday_set.orbit_fraction
-        tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
-        assert tip is not None and "Sunday" in tip, pointer   # the Servant
-    # The Prism keeps one image; ordinary days stay single-faced.
-    hexa = apply_display_settings(
-        defaults.DEFAULT_SKIN, replace(Settings(), pointer="hexa")
-    )
-    assert not sunday_dual_active(hexa, "sun")
+        south = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
+        north = compositor.tooltip_at(180.0, 180.0 - orbit, 360.0)
+        # Each face speaks its OWN name and text (owner: no more
+        # identical Ruler text on the Servant).
+        assert south is not None and "Eclipsed Sun" in south, pointer
+        assert north is not None and "Eclipsed Sun" not in north, pointer
+        assert "sun_eclipse" in south and "sun_eclipse" not in north
+    # The SERVANT stands as a ghost on ORDINARY days too (a Wednesday):
+    # on the Compass the free 24h seat is his; on the Seasons mercury
+    # is TODAY on Wednesday and keeps his own seat.
+    wed_day, wed_tick = july_wednesday
     octa = apply_display_settings(
-        defaults.DEFAULT_SKIN, replace(Settings(), pointer="octa")
+        defaults.DEFAULT_SKIN,
+        replace(Settings(), pointer="octa", solar_rotation=False),
     )
-    assert not sunday_dual_active(octa, "mercury")
+    assert servant_holds_the_seat(octa, "mercury")
+    ghost = Compositor(octa, AssetCache())
+    ghost.render_offscreen(360.0, 1.0, wed_day, wed_tick)
+    orbit = 180.0 * octa.weekday_set.orbit_fraction
+    tip = ghost.tooltip_at(180.0, 180.0 + orbit, 360.0)
+    assert tip is not None and "Eclipsed Sun" in tip
+    cross = apply_display_settings(
+        defaults.DEFAULT_SKIN, replace(Settings(), pointer="cross")
+    )
+    assert not servant_holds_the_seat(cross, "mercury")   # Wednesday: his seat
+    # On a Friday Sunday is nearer than Wednesday — the Servant wins.
+    assert servant_holds_the_seat(cross, "venus")
+    # The Prism keeps one image — but its legend carries BOTH plates.
+    hexa = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(Settings(), pointer="hexa", solar_rotation=False),
+    )
+    assert not sunday_dual_face(hexa)
+    prism = Compositor(hexa, AssetCache())
+    prism.render_offscreen(360.0, 1.0, day, tick)
+    center = prism.tooltip_at(180.0, 180.0, 360.0)
+    assert center is not None and center.count("<img") == 2
     # center_only keeps the center for the body — no dual, slot at 24h.
     center_only = dataclasses.replace(
         octa,
@@ -219,7 +263,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
             octa.weekday_set, display_mode="center_only"
         ),
     )
-    assert not sunday_dual_active(center_only, "sun")
+    assert not sunday_dual_face(center_only)
     assert not south_slot_centered(center_only)
 
 

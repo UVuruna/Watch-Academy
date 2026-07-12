@@ -41,13 +41,15 @@ from render.layers import (
     WeekdayBadgeLayer,
     WeekdayLayer,
     YearMarkerLayer,
+    HoverLiftLayer,
     dial_point,
     pinned_weekday_theta,
+    servant_holds_the_seat,
     south_slot_available,
     south_slot_centered,
     south_slot_theta,
     south_slot_view,
-    sunday_dual_active,
+    sunday_dual_face,
     today_slot_theta,
     visible_occupant,
     weekday_badge,
@@ -157,15 +159,21 @@ def _article_html(
     accents: tuple[str, ...] = (),
 ) -> str:
     """One full article hover: the entity's art on top (larger and
-    clearer than on the dial — owner EXTRAS), an optional centered
-    title line, then the left-aligned prose (color words light up only
-    per `accents` — the entity's own diamond hues)."""
+    clearer than on the dial — owner EXTRAS; a TUPLE draws the images
+    side by side — the dual Sunday's two plates, owner 2026-07-13), an
+    optional centered title line, then the left-aligned prose (color
+    words light up only per `accents` — the entity's own diamond
+    hues)."""
     parts = []
-    if image is not None and image.exists():
-        parts.append(
-            f"<div align='center'><img src='{image.as_uri()}' "
-            f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/></div>"
-        )
+    images = image if isinstance(image, tuple) else (image,)
+    tags = "".join(
+        f"<img src='{img.as_uri()}' "
+        f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/>"
+        for img in images
+        if img is not None and img.exists()
+    )
+    if tags:
+        parts.append(f"<div align='center'>{tags}</div>")
     if title_html is not None:
         parts.append(f"<div align='center'>{title_html}</div><br/>")
     parts.append(_article_body_html(text, accents))
@@ -224,6 +232,9 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # round 2026-07-12) rides ABOVE the hands like the center
         # body — "the center occludes the hands", his accepted cost.
         layers.append(BottomSlotLayer(skin))
+    # LAST: the hover z-lift (owner 2026-07-13) — the enlarged element
+    # repaints above everything, hands included.
+    layers.append(HoverLiftLayer(skin))
     return layers
 
 
@@ -350,15 +361,22 @@ class Compositor:
                     return self._chinese_text()
                 return self._zodiac_text()
             if element == "sun_servant":
-                # The SERVANT face of the dual Sunday (owner
-                # 2026-07-12): until the split face-texts land, both
-                # faces speak the sun article — whose double-center
-                # paragraph already tells the two of them.
-                return self._weekday_tooltip("sun", active=True)
+                # The SERVANT face at 24h (owner 2026-07-13): its own
+                # name, its own plate, its own text.
+                return self._sun_face_tooltip(
+                    "servant", active=today == "sun"
+                )
             if element.startswith("body:"):
                 # Weekday hover rework (owner spec): the ACTIVE body
                 # leads with the date, ghosts show their article alone.
                 body = element[len("body:"):]
+                if body == "sun" and sunday_dual_face(self._skin):
+                    # The north face on the Compass/Seasons speaks the
+                    # RULER face alone (owner 2026-07-13) — the 24h
+                    # face has its own hover.
+                    return self._sun_face_tooltip(
+                        "ruler", active=today == "sun"
+                    )
                 return self._weekday_tooltip(body, active=body == today)
             if element == "moon":
                 return self._moon_text()
@@ -435,14 +453,15 @@ class Compositor:
                 body = self._weekday_body_at(point, radius, rotation, today)
                 if body is not None:
                     return f"body:{body}"
-                if sunday_dual_active(self._skin, today) and hit(
+                if servant_holds_the_seat(self._skin, today) and hit(
                     dial_point(
                         constants.SOUTH_SLOT_ANGLE + rotation,
                         radius * self._skin.weekday_set.orbit_fraction,
                     ),
                     radius * self._skin.weekday_set.diamond_scale,
                 ):
-                    # The Sunday SERVANT face at 24h (owner 2026-07-12).
+                    # The SERVANT face at 24h — ghosted all week,
+                    # opaque on Sunday (owner 2026-07-13).
                     return "sun_servant"
         weekday = self._skin.weekday_set
         if south_slot_available(self._skin) and hit(
@@ -541,10 +560,10 @@ class Compositor:
             return center_body
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
-        dual = sunday_dual_active(self._skin, today)
+        dual = servant_holds_the_seat(self._skin, today)
         for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
             if dual and angle == constants.SOUTH_SLOT_ANGLE:
-                continue     # the Sunday Servant owns the 24h seat today
+                continue     # the Servant won the 24h seat today
             body = visible_occupant(occupants, today)
             slot = dial_point(
                 angle + rotation, radius * weekday.orbit_fraction
@@ -562,7 +581,10 @@ class Compositor:
         ACTIVE (pointer, palette) combination; the active day adds
         "Thursday, 9th July 2026" under the name (owner spec), ghosts
         show name and article alone. `theme` overrides the main theme
-        (the info slot's second weekday, owner 2026-07-12)."""
+        (the info slot's second weekday, owner 2026-07-12). The SUN
+        shows BOTH Sunday plates side by side wherever it appears as
+        one image (owner 2026-07-13) — the extended base text already
+        tells the two faces."""
         theme = theme or self._skin.weekday_theme
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
         if theme == self._skin.weekday_theme:
@@ -578,6 +600,17 @@ class Compositor:
                 / defaults.WEEKDAY_THEME_DIRS[theme]
                 / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
             )
+        if body == "sun":
+            # The dual center's TWO plates in one legend (owner
+            # 2026-07-13: "u prism i trinity treba legend sa 2 slike").
+            if theme == self._skin.weekday_theme:
+                dual_image = self._skin.weekday_set.dual_asset
+            else:
+                dual_image = (
+                    defaults.WEEKDAY_ART_DIR
+                    / f"{defaults.WEEKDAY_DUAL_FILES[theme]}.png"
+                )
+            image = (image, dual_image)
         node = self._symbolism.article(article_set, body)
         text = node["base"]
         variant = node["variants"].get(self._combo_key())
@@ -597,6 +630,43 @@ class Compositor:
         return _article_html(
             image, title, text,
             accents=defaults.BODY_ACCENT_HUES[body],
+        )
+
+    def _sun_face_tooltip(self, face: str, active: bool) -> str:
+        """ONE face of the dual Sunday (owner 2026-07-13): on the
+        Compass and the Seasons each face is its own person — its own
+        name, its own plate, its own text (articles.<set>.sun.faces;
+        the base article stands in until a theme's split lands). The
+        Ruler face keeps the pointer/palette variant paragraph."""
+        theme = self._skin.weekday_theme
+        ruler = face == "ruler"
+        display_name = defaults.WEEKDAY_DUAL_NAMES[theme][0 if ruler else 1]
+        image = (
+            self._skin.weekday_set.bodies.get("sun")
+            if ruler
+            else self._skin.weekday_set.dual_asset
+        )
+        node = self._symbolism.article(
+            constants.WEEKDAY_THEME_ARTICLES[theme], "sun"
+        )
+        text = node.get("faces", {}).get(face) or node["base"]
+        if ruler:
+            variant = node["variants"].get(self._combo_key())
+            if variant:
+                text += "\n\n" + variant
+        title = (
+            f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
+            f"<b>{html.escape(self._tr(display_name))}</b>"
+            f"</span>"
+        )
+        if active:
+            date = self._day.local_date
+            title += (
+                f"<br/>{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES['sun']))}, "
+                f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}"
+            )
+        return _article_html(
+            image, title, text, accents=defaults.BODY_ACCENT_HUES["sun"],
         )
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:

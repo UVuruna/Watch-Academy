@@ -60,6 +60,9 @@ def collect_corpus() -> dict:
             corpus[f"articles/{article_set}/{body}/base"] = article["base"]
             for combo, text in article.get("variants", {}).items():
                 corpus[f"articles/{article_set}/{body}/variants/{combo}"] = text
+            for face, text in article.get("faces", {}).items():
+                # The dual Sunday's Ruler/Servant face texts (2026-07-13).
+                corpus[f"articles/{article_set}/{body}/faces/{face}"] = text
     for group in ("zodiac_articles", "chinese_articles",
                   "chinese_elements", "trio_articles"):
         for name, article in canon[group].items():
