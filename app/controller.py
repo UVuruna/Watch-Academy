@@ -286,12 +286,13 @@ def apply_display_settings(skin, settings: Settings):
         zodiac_style=settings.zodiac_style,
         ascendant_style=settings.ascendant_style,
         chinese_style=settings.chinese_style,
-        # The astrology badge in the weekday position exists only on
-        # the Prism and Aurora (owner spec) — other pointers always
-        # draw the bodies.
+        # The badge in the weekday position exists wherever the PINNED
+        # layout does (owner 2026-07-12): under Aurora, and on any mode
+        # with the Pointer element off — otherwise the bodies return.
         weekday_slot=(
             settings.weekday_slot
             if settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+            or not settings.show_pointer
             else "weekday"
         ),
         earth_style=settings.earth_style,
@@ -712,11 +713,11 @@ class AppController(QObject):
         self._settings = replace(self._settings, **{key: value})
         self._install_skin(build_skin(self._settings))
         self._flush_position()
-        if key in ("pointer", "show_weekday"):
-            # These two move the whole enablement matrix (the South
-            # slot's availability and Aurora's image-only modes, the
-            # Solar rotation lock) — rebuild the menu so every state
-            # recomputes declaratively in _build_menu.
+        if key in ("pointer", "show_weekday", "show_pointer"):
+            # These move the whole enablement matrix (the South slot's
+            # availability, the weekday-badge availability, Aurora's
+            # image-only modes, the Solar rotation lock) — rebuild the
+            # menu so every state recomputes declaratively.
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
             self._tray.set_menu(self._menu)
@@ -877,10 +878,14 @@ class AppController(QObject):
         weekday_menu = theme_menu.addMenu(tr("Weekday"))
         # The weekday POSITION (owner 2026-07-12): the bodies, or a
         # BADGE — the official sign, the ASCENDANT or the Chinese year
-        # — each with its own STYLE dropdown right here (Aurora only;
-        # other pointers gray the badges out). Pairs with the South
+        # — each with its own STYLE dropdown right here. Available
+        # wherever the PINNED layout exists: under Aurora, and on any
+        # mode once the Pointer element is off. Pairs with the South
         # slot: e.g. official sign left, rising sign right.
-        badge_possible = settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+        badge_possible = (
+            settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+            or not settings.show_pointer
+        )
         position_group = QActionGroup(menu)
         position_group.setExclusive(True)
 
@@ -896,7 +901,7 @@ class AppController(QObject):
             parent.addAction(action)
 
         position_action(
-            weekday_menu, tr("Bodies"),
+            weekday_menu, tr("Weekday bodies"),
             settings.weekday_slot == "weekday",
             lambda checked: self._set_display_choice(
                 "weekday_slot", "weekday"

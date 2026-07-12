@@ -242,6 +242,16 @@ def test_weekday_badge_gating_and_pointer_off_flank():
             replace(Settings(), pointer=pointer, weekday_slot="ascendant"),
         )
         assert skin.weekday_slot == "weekday", pointer   # bodies forced
+        # ...but with the Pointer element OFF the pinned layout exists,
+        # so the badge survives on every mode (owner 2026-07-12).
+        pinned = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(
+                Settings(), pointer=pointer, weekday_slot="ascendant",
+                show_pointer=False,
+            ),
+        )
+        assert pinned.weekday_slot == "ascendant", pointer
     for mode in ("zodiac", "ascendant", "chinese"):
         aurora = apply_display_settings(
             defaults.DEFAULT_SKIN,

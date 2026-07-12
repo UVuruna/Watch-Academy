@@ -1007,7 +1007,7 @@
   "ui/Text": "c3328c39b0e29f78e9ff45db674248b1d245887d",
   "ui/Colored": "1cbc379653d9a14f444c641f035f4d5d692aa626",
   "ui/Ascendant": "c6db2ec02dcf3556a6323441f9db90a8db6c6932",
-  "ui/Bodies": "b091d64170afaf93cbbf5cae61c985309ff8bfa1"
+  "ui/Weekday bodies": "3c745282a9cf10719c0dca59c8ee6856222b161f"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -2016,6 +2016,6 @@
   "ui/Text": "Tekst",
   "ui/Colored": "U boji",
   "ui/Ascendant": "Podznak",
-  "ui/Bodies": "Tela"
+  "ui/Weekday bodies": "Tela dana"
  }
 }
