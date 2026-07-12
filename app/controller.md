@@ -52,19 +52,25 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - `_build_menu()`: the shared tray/right-click menu, built from the
   `_add_choice_submenu()` helper (one exclusive check-group per
   submenu) — THEME as the first-level dropdown (owner spec, FINAL.txt
-  #6) nesting the South slot (Time/Date/Day length plus the Astrology
-  and Chinese-zodiac entries that open their own STYLE dropdowns —
-  Astrology: Sign/Logo/Constellation/Text, Chinese:
-  Text/Colored/Gold/Silver/Bronze with the metals running the
-  selective swap on the bronze logo; available on the Compass, Trinity
-  and Aurora always, on Prism/Seasons once the Weekday element is off;
-  Aurora grays the plain and Text entries out — images only; pointer
-  and show_weekday changes REBUILD the menu so the matrix recomputes),
-  Weekday (every `WEEKDAY_THEME_TITLES` entry; the three
-  bronze-plate themes — Greek gods / Norse gods / Professions — open a
-  Gold/Bronze/Silver metal dropdown whose pick activates the theme AND
-  remembers its metal via `_set_theme_metal`, releasing
-  follow-the-ring), Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
+  #6) holding exactly EARTH, DAY SLOT and INFO SLOT (owner menu round
+  2026-07-12: the Slots wrapper and the separate Weekday entry are
+  gone). The two slot submenus are THE SAME SHAPE
+  (`add_weekday_submenu` builds the shared part): a Weekday submenu
+  (every `WEEKDAY_THEME_TITLES` entry — the three bronze-plate themes
+  open a Gold/Bronze/Silver/Colored metal dropdown whose pick
+  activates theme AND metal, releasing follow-the-ring — plus the
+  shared Names switch, offered in both slots and kept in sync by a
+  menu rebuild), the Time/Date/Day length text modes, and the
+  Astrology / Ascendant / Chinese-zodiac families with their own
+  STYLE dropdowns (day slot: image styles only; info slot adds Text).
+  Gating: the day slot's badge families need the pinned layout
+  (Aurora or pointer off), its TEXT modes need the pointer OFF
+  (Aurora stays images-only); the info slot exists on Compass/
+  Trinity/Aurora always, anywhere once Weekday or Pointer is off;
+  Aurora grays the info slot's plain and Text entries. Pointer,
+  show_weekday, show_pointer and show_weekday_names changes REBUILD
+  the menu so the matrix (and the twin Names checkbox) recomputes.
+  Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's
   display names for trio/cross/hexa/aurora/octa; Aurora has no arm

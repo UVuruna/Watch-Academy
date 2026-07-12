@@ -20,7 +20,7 @@ UI_STRINGS: tuple[str, ...] = (
     # --- Menu -----------------------------------------------------------------
     "Design", "Hands",
     "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday",
-    "Slots", "Day slot", "Info slot",
+    "Day slot", "Info slot",
     "Size", "Elements", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
@@ -43,7 +43,6 @@ UI_STRINGS: tuple[str, ...] = (
     # Ascendant (the rising sign right now) and the Chinese zodiac
     # open their own submenus.
     "Sign", "Logo", "Constellation", "Text", "Colored", "Ascendant",
-    "Weekday bodies",
     "Moon", "Colorful", "Seconds",
     # Menu tooltips
     "The date written on the Earth marker (shown from {size} px up).",
@@ -119,6 +118,9 @@ UI_STRINGS: tuple[str, ...] = (
     "Angle", "Season", "Phase", "Moonrise", "Moonset",
     "Morning Twilight", "Evening Twilight",
     "With Twilight", "Complete Dark",
+    # Owner 2026-07-12 ("add that info somewhere, in a few words"):
+    # the twilight band names its astronomical definition.
+    "Civil twilight (Sun 6° below the horizon)",
     "Illumination",
     "Day {day} of {total}",
     "{ordinal} Day - {ordinal_week} Week",

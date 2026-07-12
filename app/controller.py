@@ -186,6 +186,23 @@ def build_skin(settings: Settings):
     return apply_display_settings(skin, settings)
 
 
+def _effective_weekday_slot(settings: Settings) -> str:
+    """What the DAY slot actually shows (owner rules 2026-07-12): the
+    badge families live in any PINNED layout (Aurora, or the Pointer
+    element off); the TEXT modes (time/date/day length) need the
+    pointer OFF — under Aurora the day slot stays images-only exactly
+    like the info slot. Anywhere else the bodies rule."""
+    mode = settings.weekday_slot
+    if mode in ("time", "date", "day_length"):
+        return mode if not settings.show_pointer else "weekday"
+    if mode != "weekday" and not (
+        settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+        or not settings.show_pointer
+    ):
+        return "weekday"
+    return mode
+
+
 def apply_display_settings(skin, settings: Settings):
     """The user's choices win over whatever the skin pack declares:
     the tray display scalars, the opacity overrides (twilight alphas
@@ -286,15 +303,8 @@ def apply_display_settings(skin, settings: Settings):
         day_slot_style=settings.day_slot_style,
         info_slot_style=settings.info_slot_style,
         info_slot_theme=settings.info_slot_theme,
-        # The badge in the weekday position exists wherever the PINNED
-        # layout does (owner 2026-07-12): under Aurora, and on any mode
-        # with the Pointer element off — otherwise the bodies return.
-        weekday_slot=(
-            settings.weekday_slot
-            if settings.pointer in constants.WEEKDAY_BADGE_POINTERS
-            or not settings.show_pointer
-            else "weekday"
-        ),
+        info_slot_metal=_theme_metal(settings, settings.info_slot_theme),
+        weekday_slot=_effective_weekday_slot(settings),
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
         legend=settings.legend,
@@ -648,32 +658,43 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _metal_updates(self, theme: str, metal: str | None) -> dict:
+        """The settings delta of an EXPLICIT metal pick (either slot's
+        Weekday submenu): remembers the theme's metal and releases
+        follow-the-ring, otherwise the ring finish would silently
+        override it. Empty when no metal was chosen."""
+        if metal is None:
+            return {}
+        metals = dict(self._settings.theme_metals)
+        metals[theme] = metal
+        return {"theme_metals": metals, "theme_metal_follow_ring": False}
+
     def _set_south_slot(
-        self, mode: str, style: str | None = None, theme: str | None = None
+        self, mode: str, style: str | None = None,
+        theme: str | None = None, metal: str | None = None,
     ) -> None:
-        """Info slot content + its OWN style/theme in one click (owner
-        2026-07-12: independent of the day slot's look)."""
+        """Info slot content + its OWN style/theme/metal in one click
+        (owner 2026-07-12: independent of the day slot's look)."""
         updates: dict = {"octa_slot": mode}
         if style is not None:
             updates["info_slot_style"] = style
         if theme is not None:
             updates["info_slot_theme"] = theme
+            updates.update(self._metal_updates(theme, metal))
         self._settings = replace(self._settings, **updates)
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
-    def _set_theme_metal(self, theme: str, metal: str) -> None:
-        """Theme + metal in one click (the Weekday menu's metal
-        dropdowns, owner 2026-07-12): activates the theme, remembers
-        its metal — and an EXPLICIT pick releases follow-the-ring,
-        otherwise the ring finish would silently override it."""
-        metals = dict(self._settings.theme_metals)
-        metals[theme] = metal
+    def _set_weekday_theme(self, theme: str, metal: str | None = None) -> None:
+        """Day slot back to the WEEKDAY BODIES wearing `theme` (owner
+        menu 2026-07-12: the theme list lives inside Day slot ▸ Weekday,
+        so picking a theme also picks the mode; bronze-plate themes
+        pick their metal in the same click)."""
         self._settings = replace(
             self._settings,
+            weekday_slot="weekday",
             weekday_theme=theme,
-            theme_metals=metals,
-            theme_metal_follow_ring=False,
+            **self._metal_updates(theme, metal),
         )
         self._install_skin(build_skin(self._settings))
         self._flush_position()
@@ -719,11 +740,16 @@ class AppController(QObject):
         self._settings = replace(self._settings, **{key: value})
         self._install_skin(build_skin(self._settings))
         self._flush_position()
-        if key in ("pointer", "show_weekday", "show_pointer"):
+        if key in (
+            "pointer", "show_weekday", "show_pointer",
+            "show_weekday_names",
+        ):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
-            # image-only modes, the Solar rotation lock) — rebuild the
-            # menu so every state recomputes declaratively.
+            # image-only modes, the Solar rotation lock) — or, for the
+            # Names switch, have a TWIN checkbox in the other slot's
+            # Weekday submenu — rebuild the menu so every state
+            # recomputes declaratively.
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
             self._tray.set_menu(self._menu)
@@ -881,92 +907,100 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        # WEEKDAY = purely the THEME the bodies wear (owner UX
-        # reorganization 2026-07-12: what shows WHERE moved to Slots).
-        weekday_menu = theme_menu.addMenu(tr("Weekday"))
-        weekday_group = QActionGroup(menu)
-        weekday_group.setExclusive(True)
-        for key, title in defaults.WEEKDAY_THEME_TITLES.items():
-            if key in constants.METAL_THEMES:
-                # The bronze-plate themes pick their METAL right here
-                # (owner 2026-07-12): Theme > Weekday > Greek gods > Gold.
-                metal_menu = weekday_menu.addMenu(tr(title))
-                for metal in constants.THEME_METALS:
-                    action = QAction(tr(metal.capitalize()), menu)
-                    action.setCheckable(True)
-                    action.setChecked(
-                        settings.weekday_theme == key
-                        and _theme_metal(settings, key) == metal
-                    )
-                    action.triggered.connect(
-                        lambda checked, theme=key, chosen=metal:
-                        self._set_theme_metal(theme, chosen)
-                    )
-                    weekday_group.addAction(action)
-                    metal_menu.addAction(action)
-            else:
-                action = QAction(tr(title), menu)
-                action.setCheckable(True)
-                action.setChecked(settings.weekday_theme == key)
-                action.triggered.connect(
-                    lambda checked, chosen=key:
-                    self._set_display_choice("weekday_theme", chosen)
-                )
-                weekday_group.addAction(action)
-                weekday_menu.addAction(action)
-        weekday_menu.addSeparator()
-        # The day-name text has its own switch (owner spec 2026-07-12),
-        # exactly like the Earth date.
-        self._add_toggle(
-            weekday_menu, tr("Names"), settings.show_weekday_names,
-            lambda checked: self._set_display_choice(
-                "show_weekday_names", checked
-            ),
-            tr("The day name written on the weekday bodies."),
-        )
-        # SLOTS (owner UX reorganization 2026-07-12: the old names lied
-        # — the "Weekday" position can hold astrology and the "South
-        # slot" is not always south): ONE submenu with the two bottom
-        # positions. The DAY slot is the weekday unit (bodies on the
-        # star's arms, or — in the pinned layouts — a single badge at
-        # the bottom); the INFO slot is the information display. Alone
-        # each stands at the bottom center; together they split 3h
-        # (day) and 21h (info).
+        # DAY SLOT and INFO SLOT sit directly under Theme beside Earth
+        # (owner menu round 2026-07-12: the Slots wrapper and the
+        # separate Weekday entry confused — the THEME LIST lives inside
+        # each slot's own Weekday submenu now, and the two submenus are
+        # THE SAME: both pick a theme with its metal and both carry the
+        # Names switch).
         aurora = settings.pointer == "aurora"
         badge_possible = (
             settings.pointer in constants.WEEKDAY_BADGE_POINTERS
             or not settings.show_pointer
         )
-        slots_menu = theme_menu.addMenu(tr("Slots"))
-        day_slot_menu = slots_menu.addMenu(tr("Day slot"))
-        position_group = QActionGroup(menu)
-        position_group.setExclusive(True)
+        day_slot_menu = theme_menu.addMenu(tr("Day slot"))
+        info_slot_menu = theme_menu.addMenu(tr("Info slot"))
 
-        def position_action(
-            parent: QMenu, label: str, checked: bool, handler, enabled: bool
+        def slot_action(
+            parent: QMenu, group: QActionGroup, label: str,
+            checked: bool, handler, enabled: bool = True,
         ) -> None:
             action = QAction(label, menu)
             action.setCheckable(True)
             action.setChecked(checked)
             action.setEnabled(enabled)
             action.triggered.connect(handler)
-            position_group.addAction(action)
+            group.addAction(action)
             parent.addAction(action)
 
-        position_action(
-            day_slot_menu, tr("Weekday bodies"),
-            settings.weekday_slot == "weekday",
-            lambda checked: self._set_display_choice(
-                "weekday_slot", "weekday"
-            ),
-            True,
-        )
+        def add_weekday_submenu(
+            parent: QMenu, group: QActionGroup,
+            active: bool, current_theme: str, on_theme,
+        ) -> None:
+            """The IDENTICAL Weekday submenu of both slots (owner
+            2026-07-12): the 11 themes — the bronze-plate ones open
+            their metal dropdown in place — plus the shared Names
+            switch. Picking a theme also picks the slot's weekday
+            mode."""
+            sub = parent.addMenu(tr("Weekday"))
+            for key, title in defaults.WEEKDAY_THEME_TITLES.items():
+                if key in constants.METAL_THEMES:
+                    metal_menu = sub.addMenu(tr(title))
+                    for metal in constants.THEME_METALS:
+                        slot_action(
+                            metal_menu, group, tr(metal.capitalize()),
+                            active and current_theme == key
+                            and _theme_metal(settings, key) == metal,
+                            lambda checked, t=key, m=metal: on_theme(t, m),
+                        )
+                else:
+                    slot_action(
+                        sub, group, tr(title),
+                        active and current_theme == key,
+                        lambda checked, t=key: on_theme(t),
+                    )
+            sub.addSeparator()
+            # The day-name text switch (owner spec 2026-07-12) — ONE
+            # shared setting, offered in both slots; toggling it
+            # rebuilds the menu so its twin stays in sync.
+            self._add_toggle(
+                sub, tr("Names"), settings.show_weekday_names,
+                lambda checked: self._set_display_choice(
+                    "show_weekday_names", checked
+                ),
+                tr("The day name written on the weekday bodies."),
+            )
+
         zodiac_styles = (
             ("sign", tr("Sign")),
             ("logo", tr("Logo")),
             ("constellation", tr("Constellation")),
             ("colored", tr("Colored")),
         )
+        # --- Day slot: the weekday unit, an info text, or a badge ----
+        day_group = QActionGroup(menu)
+        day_group.setExclusive(True)
+        add_weekday_submenu(
+            day_slot_menu, day_group,
+            settings.weekday_slot == "weekday", settings.weekday_theme,
+            self._set_weekday_theme,
+        )
+        # The text modes join the DAY slot too (owner 2026-07-12) —
+        # like the badges they are gray in Pointer mode, and Aurora
+        # keeps this slot images-only, so they need the pointer OFF.
+        for mode, label in (
+            ("time", tr("Time")),
+            ("date", tr("Date")),
+            ("day_length", tr("Day length")),
+        ):
+            slot_action(
+                day_slot_menu, day_group, label,
+                settings.weekday_slot == mode,
+                lambda checked, chosen=mode: self._set_display_choice(
+                    "weekday_slot", chosen
+                ),
+                not settings.show_pointer,
+            )
         for mode, title in (
             ("zodiac", tr("Astrology")),
             ("ascendant", tr("Ascendant")),
@@ -974,8 +1008,8 @@ class AppController(QObject):
             badge_menu = day_slot_menu.addMenu(title)
             badge_menu.setEnabled(badge_possible)
             for style, label in zodiac_styles:
-                position_action(
-                    badge_menu, label,
+                slot_action(
+                    badge_menu, day_group, label,
                     settings.weekday_slot == mode
                     and settings.day_slot_style == style,
                     lambda checked, m=mode, s=style:
@@ -990,52 +1024,36 @@ class AppController(QObject):
             ("silver", tr("Silver")),
             ("bronze", tr("Bronze")),
         ):
-            position_action(
-                chinese_badge_menu, label,
+            slot_action(
+                chinese_badge_menu, day_group, label,
                 settings.weekday_slot == "chinese"
                 and settings.day_slot_style == style,
                 lambda checked, s=style:
                 self._set_weekday_badge("chinese", s),
                 badge_possible,
             )
-        info_slot_menu = slots_menu.addMenu(tr("Info slot"))
-        slot_group = QActionGroup(menu)
-        slot_group.setExclusive(True)
-
-        def slot_action(
-            parent: QMenu, label: str, checked: bool, handler, enabled: bool
-        ) -> None:
-            action = QAction(label, menu)
-            action.setCheckable(True)
-            action.setChecked(checked)
-            action.setEnabled(enabled)
-            action.triggered.connect(handler)
-            slot_group.addAction(action)
-            parent.addAction(action)
-
+        # --- Info slot: the same shape, its own settings --------------
+        info_group = QActionGroup(menu)
+        info_group.setExclusive(True)
+        # A SECOND weekday body with its OWN theme (owner 2026-07-12:
+        # e.g. Norse left, Greek right, both showing today).
+        add_weekday_submenu(
+            info_slot_menu, info_group,
+            settings.octa_slot == "weekday", settings.info_slot_theme,
+            lambda theme, metal=None: self._set_south_slot(
+                "weekday", theme=theme, metal=metal
+            ),
+        )
         for mode, label in (
             ("time", tr("Time")),
             ("date", tr("Date")),
             ("day_length", tr("Day length")),
         ):
             slot_action(
-                info_slot_menu, label,
+                info_slot_menu, info_group, label,
                 settings.octa_slot == mode,
                 lambda checked, chosen=mode: self._set_south_slot(chosen),
                 not aurora,
-            )
-        # A SECOND weekday body with its OWN theme (owner 2026-07-12:
-        # e.g. Norse left, Greek right, both showing today).
-        info_weekday_menu = info_slot_menu.addMenu(tr("Weekday"))
-        for key, title in defaults.WEEKDAY_THEME_TITLES.items():
-            slot_action(
-                info_weekday_menu, tr(title),
-                settings.octa_slot == "weekday"
-                and settings.info_slot_theme == key,
-                lambda checked, chosen=key: self._set_south_slot(
-                    "weekday", theme=chosen
-                ),
-                True,
             )
         for family, family_title in (
             ("zodiac", tr("Astrology")),
@@ -1046,14 +1064,12 @@ class AppController(QObject):
         ):
             family_menu = info_slot_menu.addMenu(family_title)
             for style, label in (
-                ("sign", tr("Sign")),
-                ("logo", tr("Logo")),
-                ("constellation", tr("Constellation")),
+                *zodiac_styles[:3],
                 ("text", tr("Text")),
                 ("colored", tr("Colored")),
             ):
                 slot_action(
-                    family_menu, label,
+                    family_menu, info_group, label,
                     settings.octa_slot == family
                     and settings.info_slot_style == style,
                     lambda checked, m=family, chosen=style:
@@ -1069,7 +1085,7 @@ class AppController(QObject):
             ("bronze", tr("Bronze")),
         ):
             slot_action(
-                chinese_menu, label,
+                chinese_menu, info_group, label,
                 settings.octa_slot == "chinese"
                 and settings.info_slot_style == style,
                 lambda checked, chosen=style: self._set_south_slot(

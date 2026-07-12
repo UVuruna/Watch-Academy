@@ -732,6 +732,26 @@ class RingLayer(Layer):
             painter.restore()
 
 
+def draw_body_label(
+    painter: QPainter, ctx: RenderContext, body: str,
+    pos: QPointF, size: float,
+) -> None:
+    """The weekday-name label on a body — shared by the weekday unit
+    and the info slot's second body (Rule #5): short until the largest
+    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER."""
+    full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
+    label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
+    label = (
+        constants.WEEKDAY_FULL_NAMES[body]
+        if full_text
+        else constants.WEEKDAY_LABELS[body]
+    )
+    font = QFont()
+    font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
+    font.setBold(True)
+    draw_outlined_text(painter, pos, label, font)
+
+
 def draw_weekday_body(
     painter: QPainter,
     ctx: RenderContext,
@@ -753,9 +773,6 @@ def draw_weekday_body(
         ctx.skin.show_weekday_names
         and ctx.skin.weekday_theme != "planet_signs"
     )
-    full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
-    label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
-    label_px = max(defaults.BODY_LABEL_MIN_PX, round(label_size))
     asset = spec.bodies.get(body)
     if asset is not None:
         # The theme's metal (owner 2026-07-12): the hue-selective swap
@@ -768,15 +785,7 @@ def draw_weekday_body(
         painter.setBrush(QColor(spec.body_colors[body]))
         painter.drawEllipse(pos, size / 2, size / 2)
     if names_on:
-        label = (
-            constants.WEEKDAY_FULL_NAMES[body]
-            if full_text
-            else constants.WEEKDAY_LABELS[body]
-        )
-        font = QFont()
-        font.setPixelSize(label_px)
-        font.setBold(True)
-        draw_outlined_text(painter, pos, label, font)
+        draw_body_label(painter, ctx, body, pos, size)
     painter.restore()
 
 
@@ -849,11 +858,25 @@ class WeekdayBadgeLayer(Layer):
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        spec = self._skin.weekday_set
+        mode = ctx.skin.weekday_slot
+        if mode in ("time", "date", "day_length"):
+            # The DAY slot as an info text (owner 2026-07-12) — exists
+            # only pointer-off, where the pinned spot is free; no hover
+            # (the text modes answer nothing, like in the info slot).
+            pos = dial_point(
+                pinned_weekday_theta(ctx.skin),
+                ctx.radius * spec.orbit_fraction,
+            )
+            draw_fitted_text(
+                painter, pos, 2 * ctx.radius * spec.diamond_scale,
+                slot_text(mode, ctx),
+            )
+            return
         badge = weekday_badge(ctx.skin, ctx.day, ctx.tick)
         if badge is None:
             return
         sign, folder, metal = badge
-        spec = self._skin.weekday_set
         theta = pinned_weekday_theta(ctx.skin)
         asset = octa_slot_art(folder, sign)
         if asset is None:
@@ -898,6 +921,33 @@ def octa_slot_art(folder: str, name: str) -> Path | None:
     None while the owner's art folder does not have it yet."""
     path = defaults.ZODIAC_ART_DIR / folder / f"{name}.png"
     return path if path.exists() else None
+
+
+def slot_text(mode: str, ctx: RenderContext) -> str:
+    """The INFO TEXT of a slot's time/date/day-length mode — shared by
+    the info slot and the day slot's text modes (Rule #5)."""
+    if mode == "time":
+        return ctx.tick.time_hm
+    if mode == "date":
+        return f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
+    return ctx.day.day_length            # "day_length" (validated set)
+
+
+def draw_fitted_text(
+    painter: QPainter, pos: QPointF, slot_size: float, text: str
+) -> None:
+    """Fit-to-width outlined slot text: the largest bold font whose
+    text spans the slot's width fraction — measured, not guessed, so
+    it never overflows (shared by both slots, Rule #5)."""
+    font = QFont()
+    font.setBold(True)
+    font.setPixelSize(100)
+    advance = QFontMetricsF(font).horizontalAdvance(text)
+    target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+    font.setPixelSize(
+        max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
+    )
+    draw_outlined_text(painter, pos, text, font)
 
 
 class BottomSlotLayer(Layer):
@@ -966,27 +1016,45 @@ class BottomSlotLayer(Layer):
             text = chinese_animal        # documented fallback until the art lands
         elif mode == "weekday":
             # A SECOND weekday body (owner 2026-07-12): today in the
-            # info slot's OWN theme — e.g. Norse left, Greek right.
+            # info slot's OWN theme — e.g. Norse left, Greek right —
+            # wearing that theme's metal (gold/silver run the selective
+            # swap, colored is its own art) and, with Names on, the
+            # day-name label exactly like the day slot's bodies.
             body = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
             theme = ctx.skin.info_slot_theme
+            metal = ctx.skin.info_slot_metal
             if theme == "planets":
                 asset = defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
             else:
-                asset = (
+                theme_dir = (
                     defaults.WEEKDAY_ART_DIR
                     / defaults.WEEKDAY_THEME_DIRS[theme]
+                )
+                if metal == "colored" and theme in constants.METAL_THEMES:
+                    theme_dir = theme_dir / "colored"
+                asset = (
+                    theme_dir
                     / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
                 )
             if asset.exists():
-                draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                draw_pixmap_centered(
+                    painter, ctx, asset, pos, slot_size,
+                    metal=(
+                        metal
+                        if theme in constants.METAL_THEMES
+                        and metal in defaults.METAL_SWAP_TARGETS
+                        else None
+                    ),
+                )
+                if (
+                    ctx.skin.show_weekday_names
+                    and theme != "planet_signs"
+                ):
+                    draw_body_label(painter, ctx, body, pos, slot_size)
                 return
             text = constants.WEEKDAY_LABELS[body]   # documented fallback
-        elif mode == "time":
-            text = ctx.tick.time_hm
-        elif mode == "date":
-            text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
-        elif mode == "day_length":
-            text = ctx.day.day_length
+        elif mode in ("time", "date", "day_length"):
+            text = slot_text(mode, ctx)
         elif mode == "chinese":          # style == "text" (validated set)
             # TWO lines (owner 2026-07-12): the element above the
             # animal — "Fire" / "Horse", never the animal alone.
@@ -997,17 +1065,7 @@ class BottomSlotLayer(Layer):
             return
         else:                            # zodiac text (validated closed set)
             text = ctx.day.zodiac_name
-        # Fit-to-width: the largest font whose text spans the slot's
-        # width fraction — measured, not guessed, so it never overflows.
-        font = QFont()
-        font.setBold(True)
-        font.setPixelSize(100)
-        advance = QFontMetricsF(font).horizontalAdvance(text)
-        target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
-        font.setPixelSize(
-            max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
-        )
-        draw_outlined_text(painter, pos, text, font)
+        draw_fitted_text(painter, pos, slot_size, text)
 
     @staticmethod
     def _two_lines(

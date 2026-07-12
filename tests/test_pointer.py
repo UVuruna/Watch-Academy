@@ -488,6 +488,77 @@ def test_chinese_slot_styles_render(july_wednesday, style):
     assert image.pixelColor(180, 8).alpha() > 200
 
 
+def test_day_slot_text_modes_need_the_pointer_off(july_wednesday):
+    """Owner 2026-07-12: Time/Date/Day length join the DAY slot — but
+    like the badges they are gray in Pointer mode, and Aurora keeps
+    the day slot images-only, so they draw only with the Pointer
+    element OFF (at the pinned spot, answering no hover, exactly like
+    the info slot's text modes)."""
+    from PySide6.QtCore import QPointF
+
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+
+    for mode in ("time", "date", "day_length"):
+        drawn = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(Settings(), pointer="hexa", weekday_slot=mode),
+        )
+        assert drawn.weekday_slot == "weekday"      # star up: bodies rule
+        aurora = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(Settings(), pointer="aurora", weekday_slot=mode),
+        )
+        assert aurora.weekday_slot == "weekday"     # aurora: images only
+        pinned = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(
+                Settings(), pointer="octa", weekday_slot=mode,
+                show_pointer=False,
+            ),
+        )
+        assert pinned.weekday_slot == mode
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, solar_rotation=False,
+            show_pointer=False, weekday_slot="time", show_octa_slot=False,
+        ),
+        AssetCache(),
+    )
+    image = compositor.render_offscreen(360.0, 1.0, day, tick)
+    assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
+    # The pinned spot answers NO hover in a text mode — no body, no badge.
+    orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
+    assert compositor._element_at(
+        QPointF(0.0, orbit), 180.0, 0.0, "mercury"
+    ) is None
+
+
+def test_info_slot_weekday_wears_its_theme_metal(july_wednesday):
+    """Owner 2026-07-12 (identical Weekday submenus): the info slot's
+    second body carries ITS OWN theme's metal — resolved from
+    theme_metals in apply_display_settings, run through the selective
+    swap (or the colored/ art) on the info body alone."""
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+
+    skin = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(
+            Settings(), pointer="octa", octa_slot="weekday",
+            info_slot_theme="greek", theme_metals={"greek": "gold"},
+        ),
+    )
+    assert skin.info_slot_metal == "gold"
+    assert skin.weekday_theme == "planets"       # the day slot untouched
+    day, tick = july_wednesday
+    image = Compositor(skin, AssetCache()).render_offscreen(
+        360.0, 1.0, day, tick
+    )
+    assert image.pixelColor(180, 8).alpha() > 200
+
+
 # --- Render smoke -------------------------------------------------------------------
 
 
@@ -555,6 +626,37 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
     assert "Summer 18<sup>th</sup> of 94 Days" in earth
     assert "Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)" in earth
+
+
+def test_lunation_before_the_years_first_new_moon(app, july_wednesday):
+    """Owner correction 2026-07-12: the year's 1st Moon = the first New
+    Moon on/after Jan 1, so the early-January days still riding the
+    December lunation read as the PREVIOUS year's LAST — 2025 began 12
+    lunations (Dec 20 was its 12th), and 5 Jan 2026 is inside it. Only
+    roughly one year in three reaches 13."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    now = datetime(2026, 1, 5, 12, 0, tzinfo=tz)
+    day = build_day_context(
+        now,
+        astral.Observer(
+            latitude=city["latitude"], longitude=city["longitude"]
+        ),
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    january = compositor._lunation_ordinal()
+    assert "12" in january and "2025" in january
+    # ...and a mid-year date counts within its own year (first 2026
+    # New Moon 18 Jan; by 8 July SIX lunations have started — July's
+    # own new moon has not fallen yet).
+    july_day, july_tick = july_wednesday
+    compositor.render_offscreen(360.0, 1.0, july_day, july_tick)
+    july = compositor._lunation_ordinal()
+    assert "6" in july and "2026" in july
 
 
 def test_upright_mode_disarms_the_rotation(july_wednesday):
@@ -745,6 +847,8 @@ def test_twilight_band_format_and_tick_priority(july_wednesday):
     assert "Dawn:" in below_band and "Sunrise:" in below_band
     span = round((sun.sunrise - sun.dawn).total_seconds() / 60)
     assert f"{span} min - {span / 4:.2f}°" in below_band
+    # The band names its astronomical definition (owner 2026-07-12).
+    assert "Civil twilight" in below_band
     # Same wedge angle, but INSIDE the tick annulus (which overlaps the
     # aura up to 0.90 R): the circle answers, not the wedge.
     aura = compositor._skin.background.aura_radius_fraction

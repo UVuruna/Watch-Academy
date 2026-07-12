@@ -238,7 +238,13 @@ OCTA_SLOT_MODES = (
 # (owner 2026-07-12) — in the PINNED layouts (Aurora, or the Pointer
 # element off): it stands at the usual bottom spot, so the pair can
 # read official sign left, ascendant right. Elsewhere the bodies rule.
-WEEKDAY_SLOT_MODES = ("weekday", "zodiac", "ascendant", "chinese")
+# The TEXT modes (owner 2026-07-12: "time/date/day length can go in the
+# day slot too") need the Pointer element OFF — under Aurora the day
+# slot stays images-only, exactly like the info slot.
+WEEKDAY_SLOT_MODES = (
+    "weekday", "time", "date", "day_length", "zodiac", "ascendant",
+    "chinese",
+)
 WEEKDAY_BADGE_POINTERS = ("aurora",)
 ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text", "colored")
 CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")

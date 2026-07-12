@@ -416,7 +416,9 @@ class Compositor:
                     radius * weekday.diamond_scale,
                 ):
                     return "weekday_badge"
-            else:
+            elif self._skin.weekday_slot == "weekday":
+                # The text modes (time/date/day length in the DAY slot,
+                # owner 2026-07-12) draw no bodies and answer no hover.
                 body = self._weekday_body_at(point, radius, rotation, today)
                 if body is not None:
                     return f"body:{body}"
@@ -873,19 +875,28 @@ class Compositor:
 
     def _lunation_ordinal(self) -> str:
         """"7<sup>th</sup> Moon of 2026" — which lunation of the
-        calendar year is running (new-moon starts; the one spilling
-        over from December counts as the first) — owner request
-        2026-07-12, shown in the Moon hover and the tick band."""
+        calendar year is running, counted from the year's FIRST New
+        Moon (owner correction 2026-07-12): the days BEFORE it still
+        ride the lunation that started in December, so they read as
+        the PREVIOUS year's last — 12th or 13th, however many that
+        year really began (13 roughly one year in three)."""
         day = self._day
         noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
+        year = day.local_date.year
         count = sum(
             1 for when, name in day.moon_events
-            if name == "New Moon"
-            and when.year == day.local_date.year
-            and when <= noon
+            if name == "New Moon" and when.year == year and when <= noon
         )
+        if count == 0:
+            # Early January, before the year's first New Moon — the
+            # moon_window covers the neighbor years (data guarantee).
+            year -= 1
+            count = sum(
+                1 for when, name in day.moon_events
+                if name == "New Moon" and when.year == year
+            )
         return self._tr("{ordinal} Moon of {year}").format(
-            ordinal=self._ord(max(1, count)), year=day.local_date.year
+            ordinal=self._ord(count), year=year
         )
 
     def _period_word(self, minutes: int) -> str:
@@ -1257,6 +1268,12 @@ class Compositor:
                 f"{self._label(a)} {first:%H:%M} - "
                 f"{self._label(b)} {second:%H:%M}",
                 html.escape(f"{span} min - {span / 4:.2f}°"),
+                # Owner 2026-07-12 ("add that info somewhere, in a few
+                # words"): the band is CIVIL twilight — the 6° is the
+                # Sun's depth, not a dial angle.
+                html.escape(
+                    self._tr("Civil twilight (Sun 6° below the horizon)")
+                ),
             )
 
         angle = angles.time_to_dial_angle

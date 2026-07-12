@@ -155,6 +155,8 @@ class SkinDefinition:
     day_slot_style: str = "sign"       # the DAY slot badge's own style
     info_slot_style: str = "sign"      # the INFO slot's own style
     info_slot_theme: str = "planets"   # the INFO slot's weekday theme
+    info_slot_metal: str = "bronze"    # that theme's metal (bronze = as drawn,
+                                       # "colored" = the colored/ art)
     weekday_slot: str = "weekday"      # weekday POSITION: bodies, or an
                                        # astrology badge (hexa/aurora only)
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
