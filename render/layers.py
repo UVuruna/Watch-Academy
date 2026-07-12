@@ -73,12 +73,13 @@ def draw_pie(painter: QPainter, radius: float, start_deg: float, end_deg: float)
 
 def draw_pixmap_centered(
     painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF,
-    height: float, tint: str | None = None,
+    height: float, tint: str | None = None, desaturate: bool = False,
 ) -> None:
     """Asset rasterized to `height` and drawn centered at `pos` — the one
     shared image path of weekday bodies and the year marker (Rule #5).
-    `tint` channel-multiplies the image (the ring recolor)."""
-    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint)
+    `tint` tritone-maps the image (the metal recolor); `desaturate`
+    grays it first so the tritone works on pure luminance."""
+    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint, desaturate)
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 
@@ -576,7 +577,12 @@ def draw_weekday_body(
     )
     asset = spec.bodies.get(body)
     if asset is not None:
-        draw_pixmap_centered(painter, ctx, asset, body_pos, size)
+        # The theme's metal (owner 2026-07-12): bronze-plate art turns
+        # gold/silver through the tritone; None leaves it as drawn.
+        draw_pixmap_centered(
+            painter, ctx, asset, body_pos, size,
+            tint=spec.metal_tint, desaturate=spec.metal_desaturate,
+        )
     else:
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(spec.body_colors[body]))

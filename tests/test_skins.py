@@ -116,6 +116,52 @@ def test_letter_art_follows_the_finish():
     assert morph_silver[0] == art_dir / "Omega_silver.png"
 
 
+def test_bronze_finish_and_theme_metals():
+    """Owner 2026-07-12: (1) BRONZE ring finish — the triangle wears
+    bronze, the accent letter silver, the Seal all six bronze, and the
+    pre-rendered bronze files exist for every glyph; (2) the bronze-
+    plate weekday themes wear the chosen METAL as a render tint —
+    gold/silver tritone, bronze = the art as drawn; follow-the-ring
+    maps the ring finish onto them; full-color themes never tint."""
+    art_dir = defaults.RING_LETTER_ART_DIR
+    bronze = build_skin(replace(Settings(), ring_finish="bronze")).ring.letter_art
+    assert bronze[12] == art_dir / "M_bronze.png"   # triangle 12/20/4 bronze
+    assert bronze[4] == art_dir / "D_bronze.png"
+    assert bronze[0] == art_dir / "Omega_silver.png"  # accent stays silver
+    assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
+    from config import constants as c
+
+    for filename in c.RING_LETTER_FILES.values():
+        stem = filename.rsplit(".", 1)[0]
+        assert (art_dir / f"{stem}_bronze.png").exists(), stem
+    seal = {
+        "name": "SEALB", "positions": [4, 8, 12, 16, 20, 24],
+        "letters": ["S", "O", "L", "M", "N", "A"],
+    }
+    seal_art = build_skin(replace(
+        Settings(), ring="SEALB", ring_finish="bronze", custom_rings=(seal,),
+    )).ring.letter_art
+    assert all(p.name.endswith("_bronze.png") for p in seal_art.values())
+    # Theme metals: explicit choice, the bronze rest state, follow-ring.
+    gold_greek = build_skin(replace(
+        Settings(), weekday_theme="greek", theme_metals={"greek": "gold"},
+    )).weekday_set
+    assert gold_greek.metal_tint == defaults.THEME_METAL_TINTS["gold"]
+    assert gold_greek.metal_desaturate is True
+    plain_greek = build_skin(replace(Settings(), weekday_theme="greek")).weekday_set
+    assert plain_greek.metal_tint is None            # bronze = as drawn
+    follow = build_skin(replace(
+        Settings(), weekday_theme="norse", ring_finish="silver",
+        theme_metals={"norse": "gold"}, theme_metal_follow_ring=True,
+    )).weekday_set
+    assert follow.metal_tint == defaults.THEME_METAL_TINTS["silver"]
+    colorful = build_skin(replace(
+        Settings(), weekday_theme="egypt", theme_metal_follow_ring=True,
+        ring_finish="gold",
+    )).weekday_set
+    assert colorful.metal_tint is None               # full-color theme
+
+
 def test_pre_rendered_silver_letters_are_grayscale():
     """The generated silver files exist for every active letter, read
     R=G=B on opaque pixels and keep their surroundings transparent."""
@@ -211,12 +257,14 @@ def test_hand_packs_load_and_resolve():
     packs = hand_packs()
     assert {"CLASSIC", "STEEL"} <= set(packs)
     assert packs["STEEL"]["pivots"]["seconds"] == (None, 310.0)
-    steel = build_skin(replace(Settings(), hands="STEEL")).hands
+    # STEEL is the install default (owner list 2026-07-12).
+    steel = build_skin(Settings()).hands
+    assert "steel" in str(steel.hour.asset)
     assert steel.second.pivot_y == 310.0
     assert steel.second.natural_height == 1040.0
     assert steel.desaturate is False               # bundled art stays as drawn
     assert steel.z_order == ("hours", "minutes", "seconds")
-    classic = build_skin(Settings()).hands
+    classic = build_skin(replace(Settings(), hands="CLASSIC")).hands
     hour_tip = classic.hour.natural_height - classic.hour.pivot_y
     minute_tip = classic.minute.natural_height - classic.minute.pivot_y
     reach = classic.minute_reach_fraction * hour_tip / minute_tip

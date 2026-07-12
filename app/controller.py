@@ -44,14 +44,26 @@ from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
 
-def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
-    """The owner's metal rules: 4-letter layouts — the trio of one
-    metal forms the layout's TRIANGLE (gold finish = triangle gold +
-    the rest silver; silver = the exact inverse); the SEAL wears ONE
-    metal on all six (owner correction 2026-07-11)."""
-    if not layout["triangle"]:
-        return finish == "gold"
-    return (position in layout["triangle"]) == (finish == "gold")
+def _letter_metal(position: int, layout: dict, finish: str) -> str:
+    """The owner's metal rules (extended with bronze 2026-07-12):
+    4-letter layouts — the trio of one metal forms the layout's
+    TRIANGLE and the remaining letter wears the ACCENT metal (gold ->
+    3 gold + 1 silver; silver -> 3 silver + 1 gold; bronze -> 3 bronze
+    + 1 silver); the SEAL wears the ONE finish metal on all six."""
+    if not layout["triangle"] or position in layout["triangle"]:
+        return finish
+    return "gold" if finish == "silver" else "silver"
+
+
+def _theme_metal(settings: Settings, theme: str) -> str:
+    """The METAL a bronze-plate theme wears (owner 2026-07-12):
+    follow-the-ring wins, then the per-theme Settings choice, then
+    bronze — the art as drawn. Non-metal themes are always bronze."""
+    if theme not in constants.METAL_THEMES:
+        return "bronze"
+    if settings.theme_metal_follow_ring:
+        return settings.ring_finish
+    return settings.theme_metals.get(theme, "bronze")
 
 
 def _next_rotation_theme(current: str, selected: tuple[str, ...]) -> str:
@@ -154,10 +166,12 @@ def build_skin(settings: Settings):
         hour = position % 24                     # cards say 24, hours say 0
         letters[hour] = glyph
         filename = constants.RING_LETTER_FILES[glyph]
-        if not _letter_is_gold(position, layout, settings.ring_finish):
-            # Silver letters are PRE-RENDERED art (owner decision —
-            # setup/make_silver_letters.py), not a runtime effect.
-            filename = f"{filename.rsplit('.', 1)[0]}_silver.png"
+        metal = _letter_metal(position, layout, settings.ring_finish)
+        if metal != "gold":
+            # Silver and bronze letters are PRE-RENDERED art (owner
+            # decision — setup/make_silver_letters.py and
+            # make_bronze_letters.py), not a runtime effect.
+            filename = f"{filename.rsplit('.', 1)[0]}_{metal}.png"
         letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
@@ -210,6 +224,16 @@ def apply_display_settings(skin, settings: Settings):
             weekday,
             bodies={body: theme_dir / f"{files[body]}.png" for body in names},
             body_names=dict(names),
+        )
+    # The bronze-plate themes wear their chosen METAL (owner
+    # 2026-07-12): gold/silver = desaturate + tritone at render;
+    # bronze leaves the art as drawn.
+    tint = defaults.THEME_METAL_TINTS.get(
+        _theme_metal(settings, settings.weekday_theme)
+    )
+    if tint is not None:
+        weekday = dataclasses.replace(
+            weekday, metal_tint=tint, metal_desaturate=True
         )
     background = skin.background
     if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
@@ -597,6 +621,22 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _set_theme_metal(self, theme: str, metal: str) -> None:
+        """Theme + metal in one click (the Weekday menu's metal
+        dropdowns, owner 2026-07-12): activates the theme, remembers
+        its metal — and an EXPLICIT pick releases follow-the-ring,
+        otherwise the ring finish would silently override it."""
+        metals = dict(self._settings.theme_metals)
+        metals[theme] = metal
+        self._settings = replace(
+            self._settings,
+            weekday_theme=theme,
+            theme_metals=metals,
+            theme_metal_follow_ring=False,
+        )
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _configure_theme_rotation(self) -> None:
         """Start/stop the rotation timer per the settings (called at
         startup and after every Settings OK). The rotation ORDER is
@@ -789,15 +829,37 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        weekday_menu = self._add_choice_submenu(
-            theme_menu, tr("Weekday"),
-            [
-                (key, tr(title))
-                for key, title in defaults.WEEKDAY_THEME_TITLES.items()
-            ],
-            settings.weekday_theme,
-            lambda value: self._set_display_choice("weekday_theme", value),
-        )
+        weekday_menu = theme_menu.addMenu(tr("Weekday"))
+        weekday_group = QActionGroup(menu)
+        weekday_group.setExclusive(True)
+        for key, title in defaults.WEEKDAY_THEME_TITLES.items():
+            if key in constants.METAL_THEMES:
+                # The bronze-plate themes pick their METAL right here
+                # (owner 2026-07-12): Theme > Weekday > Greek gods > Gold.
+                metal_menu = weekday_menu.addMenu(tr(title))
+                for metal in constants.THEME_METALS:
+                    action = QAction(tr(metal.capitalize()), menu)
+                    action.setCheckable(True)
+                    action.setChecked(
+                        settings.weekday_theme == key
+                        and _theme_metal(settings, key) == metal
+                    )
+                    action.triggered.connect(
+                        lambda checked, theme=key, chosen=metal:
+                        self._set_theme_metal(theme, chosen)
+                    )
+                    weekday_group.addAction(action)
+                    metal_menu.addAction(action)
+            else:
+                action = QAction(tr(title), menu)
+                action.setCheckable(True)
+                action.setChecked(settings.weekday_theme == key)
+                action.triggered.connect(
+                    lambda checked, chosen=key:
+                    self._set_display_choice("weekday_theme", chosen)
+                )
+                weekday_group.addAction(action)
+                weekday_menu.addAction(action)
         weekday_menu.addSeparator()
         # The day-name text has its own switch (owner spec 2026-07-12),
         # exactly like the Earth date.

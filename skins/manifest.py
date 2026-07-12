@@ -71,6 +71,11 @@ class WeekdaySpec:
     center_scale: float                # of the dial diameter
     diamond_scale: float
     orbit_fraction: float              # slot distance from center, of the dial radius
+    # The bronze-plate themes (greek/norse/profession) can wear a METAL
+    # (owner 2026-07-12): gold/silver = desaturate + tritone tint at
+    # render; bronze (the art as drawn) keeps both fields at rest.
+    metal_tint: str | None = None
+    metal_desaturate: bool = False
 
 
 @dataclass(frozen=True)

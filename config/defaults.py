@@ -18,7 +18,8 @@ from skins.manifest import (
 )
 
 # --- Window ------------------------------------------------------------------
-DEFAULT_DIAL_DIAMETER = 360          # logical px, before DPI scaling
+DEFAULT_DIAL_DIAMETER = 720          # logical px, before DPI scaling
+                                     # (owner install-default list 2026-07-12)
 MIN_DIAL_DIAMETER = 120
 MAX_DIAL_DIAMETER = 2000             # roomy above the largest preset (1440)
 SIZE_PRESETS = (360, 540, 720, 1080, 1440)   # owner spec (FINAL.txt #3)
@@ -488,6 +489,20 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Copper",
         "saturn": "Lead",
     },
+    # The Japanese week (owner art 2026-07-12, Gemini from our prompts):
+    # the yōbi day names ARE the planetary week — sun, moon, then the
+    # five Wu Xing element stars (fire=Mars, water=Mercury, wood=
+    # Jupiter, metal=Venus, earth=Saturn). Display names KEEP the
+    # kanji (owner instruction); files are folded ASCII overrides.
+    "japan": {
+        "sun": "Nichiyōbi (日曜日)",
+        "moon": "Getsuyōbi (月曜日)",
+        "mars": "Kayōbi (火曜日)",
+        "mercury": "Suiyōbi (水曜日)",
+        "jupiter": "Mokuyōbi (木曜日)",
+        "venus": "Kin'yōbi (金曜日)",
+        "saturn": "Doyōbi (土曜日)",
+    },
     "religion": {
         "sun": "Christianity",
         "moon": "Buddhism",
@@ -540,6 +555,7 @@ WEEKDAY_THEME_DIRS = {
     "egypt": "egypt",
     "slavic": "slavic",
     "alchemy": "alchemy",
+    "japan": "japan",
     "religion": "religion",
     "religion_alt": "religion",
     "profession": "profession",
@@ -560,6 +576,29 @@ WEEKDAY_THEME_FILES = {
 WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
 # The metal reads Quicksilver, the owner's file keeps the element name.
 WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "mercury"
+# The Japanese display names carry kanji — the files are the romaji
+# day names folded to plain ASCII (macrons and the apostrophe dropped).
+WEEKDAY_THEME_FILES["japan"] = {
+    "sun": "nichiyobi",
+    "moon": "getsuyobi",
+    "mars": "kayobi",
+    "mercury": "suiyobi",
+    "jupiter": "mokuyobi",
+    "venus": "kinyobi",
+    "saturn": "doyobi",
+}
+
+# The metal tints for the bronze-plate themes (owner 2026-07-12,
+# tritone recipe approved on the Zeus previews): bronze = the art as
+# drawn (no tint), gold and silver = desaturate + tritone with the
+# owner's Photoshop overlay colors.
+THEME_METAL_TINTS = {"gold": "#FFD235", "silver": "#C9CDD3"}
+# Bronze ring LETTERS are PRE-RENDERED from the silver ones
+# (setup/make_bronze_letters.py): the letters are already bright, so
+# the medallion recipe would blow their detail out — slight darkening
+# instead, then a straight multiply (owner direction 2026-07-12).
+BRONZE_LETTER_TINT = "#CD7F32"
+BRONZE_LETTER_BRIGHTNESS = 0.88
 
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.
@@ -571,6 +610,7 @@ WEEKDAY_THEME_TITLES = {
     "egypt": "Egyptian gods",
     "slavic": "Slavic gods",
     "alchemy": "Alchemy",
+    "japan": "Japanese week",
     "religion": "Religions",
     "religion_alt": "Religions II",
     "profession": "Professions",

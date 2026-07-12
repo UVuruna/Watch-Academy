@@ -86,9 +86,20 @@ def test_display_choices_round_trip(store):
         show_octa_slot=False,
         show_earth_date=False,
         language="sr-Latn",
+        ring="MORPH",
+        theme_metals={"greek": "gold", "norse": "silver"},
+        theme_metal_follow_ring=True,
     )
     store.save(saved)
     assert store.load() == saved
+    # An unknown theme or metal is dropped on load, never crashes.
+    lenient = replace(Settings(), theme_metals={"greek": "gold"})
+    store.save(lenient)
+    raw = store.path.read_text(encoding="utf-8").replace(
+        '"greek": "gold"', '"greek": "banana", "egypt": "gold"'
+    )
+    store.path.write_text(raw, encoding="utf-8")
+    assert store.load().theme_metals == {}
 
 
 @pytest.mark.parametrize(

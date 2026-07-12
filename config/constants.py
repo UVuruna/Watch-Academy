@@ -235,7 +235,7 @@ EARTH_STYLES = ("clean", "atmo")
 # and the rest in silver, the SILVER finish is the exact inverse; on
 # the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
 # letters are pre-rendered files (setup/make_silver_letters.py).
-RING_FINISHES = ("gold", "silver")
+RING_FINISHES = ("gold", "silver", "bronze")
 RING_LAYOUTS = {
     # Owner naming (2026-07-10): the up-triangle is the masculine
     # Flame, the down-triangle the feminine Chalice, and their union —
@@ -301,10 +301,17 @@ WEEKDAY_THEMES = (
     "egypt",
     "slavic",
     "alchemy",
+    "japan",
     "religion",
     "religion_alt",
     "profession",
 )
+
+# The bronze-plate themes (owner 2026-07-12): their medallions can wear
+# a METAL — bronze is the art as drawn, gold and silver are runtime
+# tritone tints. All other themes are full-color and never tint.
+METAL_THEMES = ("greek", "norse", "profession")
+THEME_METALS = ("gold", "bronze", "silver")
 
 # Theme -> symbolism.json blurb key (the encyclopedic text under the
 # hexa diamond hover follows the active theme).
@@ -316,6 +323,7 @@ WEEKDAY_THEME_BLURBS = {
     "egypt": "egypt",
     "slavic": "slavic",
     "alchemy": "alchemy",
+    "japan": "japan",
     "religion": "religion",
     "religion_alt": "religion_alt",
     "profession": "profession",
@@ -331,6 +339,7 @@ WEEKDAY_THEME_ARTICLES = {
     "egypt": "egypt",
     "slavic": "slavic",
     "alchemy": "alchemy",
+    "japan": "japan",
     "religion": "religion",
     "religion_alt": "religion_alt",
     "profession": "profession",

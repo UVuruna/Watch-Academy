@@ -32,7 +32,9 @@ the ring preset and the user's display choices onto it at build time.
   `colorful` — off draws the Aura as plain white transparency —
   and `show_seconds`), the ring recolor pair: `ring_tint`
   (#RRGGBB multiplying ring art + hands + Umbra; None = gray art) and
-  `ring_finish` ("gold" | "silver" letter art, Omega inverted), plus
+  `ring_finish` ("gold" | "silver" | "bronze" letter art — the layout
+  triangle wears the finish, the accent letter the opposite metal,
+  bronze's accent silver), plus
   `octa_slot_scale` and `hover_enlarge` (owner EXTRAS; the
   Earth/Moon/Weekday size multipliers scale their spec values in
   apply_display_settings instead)
@@ -46,11 +48,14 @@ the ring preset and the user's display choices onto it at build time.
   palette preset shared with the Aura
 - `RingSpec` — full ring image (numerals baked in) or procedural
   fallback with per-hour letter substitutions (M-12, D-4, Ω-0, Y-20);
-  `letter_art` (hour → resolved gold/silver PNG, built by build_skin
-  for the active finish) is overlaid on the art so the ring TINT never
-  touches the letters
+  `letter_art` (hour → resolved gold/silver/bronze PNG, built by
+  build_skin for the active finish) is overlaid on the art so the ring
+  TINT never touches the letters
 - `WeekdaySpec` — body images/colors, white weekday label on top,
-  display mode (ghost / center_only), ghost opacity, sizes, orbit
+  display mode (ghost / center_only), ghost opacity, sizes, orbit,
+  and the theme METAL pair `metal_tint`/`metal_desaturate` (owner
+  2026-07-12: the bronze-plate themes wear gold/silver via desaturate
+  + tritone at render; None/False = the art as drawn)
 - `YearMarkerSpec` — Earth day+night variants per continent on the year
   wheel; Moon on its own cycle (new at top, full at bottom) with the
   unlit part shadowed; separate orbits. Which marker is drawn comes

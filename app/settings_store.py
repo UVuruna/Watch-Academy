@@ -44,13 +44,15 @@ class Settings:
     # The user's custom ring cards ({name, positions, letters}) — merged
     # with Database/ring_presets.json by data/rings.py.
     custom_rings: tuple = ()
+    # Install defaults per the owner's 2026-07-12 list: hexa paint,
+    # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
     pointer: str = "hexa"
-    umbra_form: str = "fine"
-    umbra_contrast: str = "full"
+    umbra_form: str = "gradient"
+    umbra_contrast: str = "dark"
     palette_style: str = "paint"
     solar_rotation: bool = True
     octa_slot: str = "time"
-    earth_style: str = "clean"
+    earth_style: str = "atmo"
     weekday_theme: str = "planets"
     legend: bool = True
     # Elements switches (owner spec, FINAL.txt #5): each removes one dial
@@ -65,12 +67,18 @@ class Settings:
     show_earth_date: bool = True        # the date label on the Earth marker
     show_weekday_names: bool = True     # the day-name text on the bodies
     moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
-    hands: str = "CLASSIC"              # the hand pack (Design ▸ Hands)
+    hands: str = "STEEL"                # the hand pack (Design ▸ Hands)
     # Theme rotation (owner spec 2026-07-12): cycle the CHECKED weekday
     # themes every N minutes instead of wearing one forever.
     theme_rotation: bool = False
     theme_rotation_minutes: int = 60
     theme_rotation_themes: tuple[str, ...] = constants.WEEKDAY_THEMES
+    # The METAL each bronze-plate theme wears (owner 2026-07-12):
+    # {"greek"/"norse"/"profession": "gold"/"bronze"/"silver"}; absent
+    # theme = bronze (the art as drawn). follow_ring makes all three
+    # wear the ring_finish metal instead.
+    theme_metals: dict = field(default_factory=dict)
+    theme_metal_follow_ring: bool = False
     language: str = "en"                # translation target (en = originals)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
@@ -142,11 +150,11 @@ class SettingsStore:
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
-                ("umbra_form", "fine", constants.UMBRA_FORMS),
-                ("umbra_contrast", "full", constants.UMBRA_CONTRAST_VARIANTS),
+                ("umbra_form", "gradient", constants.UMBRA_FORMS),
+                ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "paint", constants.PALETTE_STYLES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
-                ("earth_style", "clean", constants.EARTH_STYLES),
+                ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
             ):
                 value = str(raw.get(key, default))
@@ -195,7 +203,7 @@ class SettingsStore:
                 hands=(
                     raw["hands"]
                     if isinstance(raw.get("hands"), str) and raw["hands"].strip()
-                    else "CLASSIC"
+                    else "STEEL"
                 ),
                 theme_rotation=_load_bool(raw, "theme_rotation", False),
                 theme_rotation_minutes=(
@@ -211,6 +219,17 @@ class SettingsStore:
                     )
                     if theme in constants.WEEKDAY_THEMES
                 ) or constants.WEEKDAY_THEMES,
+                theme_metals={
+                    str(theme): str(metal)
+                    for theme, metal in dict(
+                        raw.get("theme_metals", {})
+                    ).items()
+                    if str(theme) in constants.METAL_THEMES
+                    and str(metal) in constants.THEME_METALS
+                },
+                theme_metal_follow_ring=_load_bool(
+                    raw, "theme_metal_follow_ring", False
+                ),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -270,6 +289,8 @@ class SettingsStore:
             "theme_rotation": settings.theme_rotation,
             "theme_rotation_minutes": settings.theme_rotation_minutes,
             "theme_rotation_themes": list(settings.theme_rotation_themes),
+            "theme_metals": dict(settings.theme_metals),
+            "theme_metal_follow_ring": settings.theme_metal_follow_ring,
             "language": settings.language,
             "location": {
                 "name": settings.city_name,

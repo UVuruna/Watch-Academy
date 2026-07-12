@@ -32,7 +32,10 @@ UI_STRINGS: tuple[str, ...] = (
     "The day name written on the weekday bodies.",
     "Moon — below horizon",
     "Planets", "Planet signs", "Greek gods", "Norse gods", "Egyptian gods",
-    "Slavic gods", "Alchemy", "Religions", "Religions II", "Professions",
+    "Slavic gods", "Alchemy", "Japanese week", "Religions", "Religions II",
+    "Professions",
+    # The theme METALS (bronze-plate themes + the ring finish menu).
+    "Gold", "Bronze", "Silver", "Bronze letters", "Follow ring color",
     "Time", "Day length",
     "Astrology sign", "Astrology logo", "Astrology constellation",
     "Astrology text", "Chinese zodiac logo", "Chinese zodiac text",

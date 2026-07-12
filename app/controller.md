@@ -54,8 +54,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   submenu) — THEME as the first-level dropdown (owner spec, FINAL.txt
   #6) nesting Octa slot (nine modes; grayed out unless the octa
   pointer is active — `_set_display_choice` flips it on pointer
-  change), Weekday (Planets / Planet signs / Greek gods / Norse gods /
-  Religions / Professions), Ring (DOMY/MORPH presets + the Gold/Silver
+  change), Weekday (every `WEEKDAY_THEME_TITLES` entry; the three
+  bronze-plate themes — Greek gods / Norse gods / Professions — open a
+  Gold/Bronze/Silver metal dropdown whose pick activates the theme AND
+  remembers its metal via `_set_theme_metal`, releasing
+  follow-the-ring), Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Compass variant — the owner's display
   names for trio/cross/hexa/octa — + Paint/Light palette) and Umbra

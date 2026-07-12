@@ -912,6 +912,40 @@ class SettingsDialog(QDialog):
         row.addWidget(self._rotation_unit)
         row.addStretch(1)
         column.addLayout(row)
+        # The METAL each bronze-plate theme wears (owner 2026-07-12):
+        # the default the rotation uses, per theme — or one checkbox
+        # to follow the ring finish everywhere.
+        metal_row = QHBoxLayout()
+        self._metal_combos: dict[str, QComboBox] = {}
+        for theme in constants.METAL_THEMES:
+            metal_row.addWidget(
+                QLabel(tr(defaults.WEEKDAY_THEME_TITLES[theme]))
+            )
+            combo = QComboBox()
+            for metal in constants.THEME_METALS:
+                combo.addItem(tr(metal.capitalize()), metal)
+            combo.setCurrentIndex(
+                combo.findData(
+                    self._settings.theme_metals.get(theme, "bronze")
+                )
+            )
+            self._metal_combos[theme] = combo
+            metal_row.addWidget(combo)
+        metal_row.addStretch(1)
+        column.addLayout(metal_row)
+        self._metal_follow_ring = QCheckBox(tr("Follow ring color"))
+        self._metal_follow_ring.setChecked(
+            self._settings.theme_metal_follow_ring
+        )
+        self._metal_follow_ring.toggled.connect(
+            lambda checked: [
+                combo.setEnabled(not checked)
+                for combo in self._metal_combos.values()
+            ]
+        )
+        for combo in self._metal_combos.values():
+            combo.setEnabled(not self._settings.theme_metal_follow_ring)
+        column.addWidget(self._metal_follow_ring)
         return group
 
     # --- System (autostart) -------------------------------------------------------------
@@ -1027,6 +1061,11 @@ class SettingsDialog(QDialog):
                 for key, box in self._rotation_checks.items()
                 if box.isChecked()
             ) or constants.WEEKDAY_THEMES,
+            theme_metals={
+                theme: combo.currentData()
+                for theme, combo in self._metal_combos.items()
+            },
+            theme_metal_follow_ring=self._metal_follow_ring.isChecked(),
             palettes=palettes,
             ring_tint=self._ring_tint,
             custom_rings=tuple(self._custom_rings),
