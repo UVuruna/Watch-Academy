@@ -12,7 +12,7 @@ from datetime import date, datetime, timedelta
 import astral
 
 from config import constants
-from core import angles
+from core import angles, ascendant
 from core.moon import (
     MoonWindow,
     chinese_zodiac,
@@ -59,6 +59,8 @@ class DayContext:
                                          # (cardinal arm hover, owner spec)
     moon_events: tuple[tuple[datetime, str], ...]     # principal instants + names
     tzinfo: object                  # the active timezone (hover instant display)
+    latitude: float = 0.0           # observer coordinates — the minute tick
+    longitude: float = 0.0          # computes the ASCENDANT from them
 
     @property
     def cache_key(self) -> tuple[date, timedelta]:
@@ -78,6 +80,9 @@ class TickState:
     time_hm: str                    # "14:34" — the octa pointer's digital slot
     season_event: str | None       # "Summer Solstice" within ±12 h, else None
     moon_event: str | None         # "Full Moon" within ±6 h, else None
+    ascendant_sign: str = ""        # the rising sign right now ("Virgo") —
+                                    # the South slot's Ascendant mode
+                                    # (owner request 2026-07-12)
 
 
 def build_day_context(
@@ -136,6 +141,8 @@ def build_day_context(
             for instant, fraction in moon_window.events
         ),
         tzinfo=now_local.tzinfo,
+        latitude=observer.latitude,
+        longitude=observer.longitude,
     )
 
 
@@ -154,6 +161,9 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         is_daylight=_is_daylight(now_local, day.sun),
         is_moon_up=_is_moon_up(now_local, day),
         time_hm=now_local.strftime("%H:%M"),
+        ascendant_sign=ascendant.ascendant_sign(
+            now_local, day.latitude, day.longitude
+        ),
         season_event=_active_event(
             now_local, day.season_events, constants.SEASON_GLOW_WINDOW_H
         ),

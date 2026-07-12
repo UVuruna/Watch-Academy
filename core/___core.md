@@ -39,8 +39,14 @@ See [Moon](moon.md).
 ### `clock_state.py` — Two-Tier State
 `DayContext` (frozen per-day bundle; cache key `(local_date, utcoffset)`
 catches DST — the star legitimately jumps 15° at transitions) and
-`TickState` (per-minute hand angles + smooth year angle).
-See [Clock State](clock_state.md).
+`TickState` (per-minute hand angles + smooth year angle + the rising
+sign). See [Clock State](clock_state.md).
+
+### `ascendant.py` — Rising Sign
+The natal ascendant ("podznak", owner request 2026-07-12): Julian date
+→ sidereal time → the ascendant ecliptic longitude; validated against
+the owner's own birth chart (Belgrade 20.6.1990 12:15 → Virgo).
+See [Ascendant](ascendant.md).
 
 ### `__main__.py` — CLI Selftest
 `python -m core --city NAME [--at ISO]` (or `--lat --lng --tz`) prints

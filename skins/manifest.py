@@ -153,6 +153,7 @@ class SkinDefinition:
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     zodiac_style: str = "sign"         # Astrology dropdown (ZODIAC_SLOT_STYLES)
+    ascendant_style: str = "sign"      # Ascendant dropdown (same styles)
     chinese_style: str = "bronze"      # Chinese dropdown (CHINESE_SLOT_STYLES)
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
     weekday_theme: str = "planets"     # WEEKDAY_THEMES: bodies as planets,

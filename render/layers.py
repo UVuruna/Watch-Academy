@@ -250,13 +250,15 @@ def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
     chinese-text shows the colored badge."""
     mode = skin.octa_slot
     style = {
-        "zodiac": skin.zodiac_style, "chinese": skin.chinese_style,
+        "zodiac": skin.zodiac_style,
+        "ascendant": skin.ascendant_style,
+        "chinese": skin.chinese_style,
     }.get(mode)
     if skin.pointer == "aurora":
         if mode in ("time", "date", "day_length"):
             return "zodiac", "logo"
-        if mode == "zodiac" and style == "text":
-            return "zodiac", "logo"
+        if mode in ("zodiac", "ascendant") and style == "text":
+            return mode, "logo"
         if mode == "chinese" and style == "text":
             return "chinese", "colored"
     return mode, style
@@ -851,14 +853,28 @@ class BottomSlotLayer(Layer):
         )
         mode, style = south_slot_view(ctx.skin)
         chinese_animal = ctx.day.chinese_name.split()[-1]
-        if mode == "zodiac" and style in constants.ZODIAC_STYLE_ART_DIRS:
-            asset = octa_slot_art(
-                constants.ZODIAC_STYLE_ART_DIRS[style], ctx.day.zodiac_name
+        if (
+            mode in ("zodiac", "ascendant")
+            and style in constants.ZODIAC_STYLE_ART_DIRS
+        ):
+            # The Ascendant wears the same zodiac art — for the sign
+            # RISING right now (owner request 2026-07-12; it cycles all
+            # twelve signs every day).
+            sign = (
+                ctx.tick.ascendant_sign
+                if mode == "ascendant"
+                else ctx.day.zodiac_name
             )
+            asset = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS[style], sign)
             if asset is not None:
                 draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
                 return
-            text = ctx.day.zodiac_name   # documented fallback until the art lands
+            text = sign                  # documented fallback until the art lands
+        elif mode == "ascendant":        # style == "text": two lines
+            self._two_lines(
+                painter, pos, slot_size, "Asc", ctx.tick.ascendant_sign
+            )
+            return
         elif mode == "chinese" and style in constants.CHINESE_STYLE_ART_DIRS:
             asset = octa_slot_art(
                 constants.CHINESE_STYLE_ART_DIRS[style], chinese_animal
@@ -885,31 +901,12 @@ class BottomSlotLayer(Layer):
         elif mode == "chinese":          # style == "text" (validated set)
             # TWO lines (owner 2026-07-12): the element above the
             # animal — "Fire" / "Horse", never the animal alone.
-            element = ctx.day.chinese_name.split()[0]
-            font = QFont()
-            font.setBold(True)
-            font.setPixelSize(100)
-            widest = max(
-                QFontMetricsF(font).horizontalAdvance(line)
-                for line in (element, chinese_animal)
-            )
-            target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
-            font.setPixelSize(
-                max(
-                    defaults.BODY_LABEL_MIN_PX,
-                    math.floor(100.0 * target / widest),
-                )
-            )
-            offset = font.pixelSize() * 0.62
-            draw_outlined_text(
-                painter, QPointF(pos.x(), pos.y() - offset), element, font
-            )
-            draw_outlined_text(
-                painter, QPointF(pos.x(), pos.y() + offset), chinese_animal,
-                font,
+            self._two_lines(
+                painter, pos, slot_size,
+                ctx.day.chinese_name.split()[0], chinese_animal,
             )
             return
-        else:                            # "zodiac_text" (validated closed set)
+        else:                            # zodiac text (validated closed set)
             text = ctx.day.zodiac_name
         # Fit-to-width: the largest font whose text spans the slot's
         # width fraction — measured, not guessed, so it never overflows.
@@ -922,6 +919,33 @@ class BottomSlotLayer(Layer):
             max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
         )
         draw_outlined_text(painter, pos, text, font)
+
+    @staticmethod
+    def _two_lines(
+        painter: QPainter, pos: QPointF, slot_size: float,
+        top: str, bottom: str,
+    ) -> None:
+        """Two stacked outlined lines sharing one fit-to-width font —
+        the Chinese year ("Fire" / "Horse") and the Ascendant
+        ("Asc" / "Virgo") text styles (Rule #5)."""
+        font = QFont()
+        font.setBold(True)
+        font.setPixelSize(100)
+        widest = max(
+            QFontMetricsF(font).horizontalAdvance(line)
+            for line in (top, bottom)
+        )
+        target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+        font.setPixelSize(
+            max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / widest))
+        )
+        offset = font.pixelSize() * 0.62
+        draw_outlined_text(
+            painter, QPointF(pos.x(), pos.y() - offset), top, font
+        )
+        draw_outlined_text(
+            painter, QPointF(pos.x(), pos.y() + offset), bottom, font
+        )
 
 
 class YearMarkerLayer(Layer):

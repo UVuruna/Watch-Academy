@@ -7,11 +7,34 @@ from zoneinfo import ZoneInfo
 import astral
 import pytest
 
+from core.ascendant import ascendant_longitude, ascendant_sign
 from core.clock_state import build_day_context, build_tick_state
 from core.sun import DaylightRegime
 from data.locations import LocationRepository
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
+
+
+def test_ascendant_matches_the_owners_birth_chart():
+    """Golden (owner data 2026-07-12): born 20 June 1990 at 12:15 CEST
+    in Belgrade with a documented VIRGO ascendant — the formula must
+    reproduce it, and the rising sign walks all twelve signs in a day."""
+    belgrade = ZoneInfo("Europe/Belgrade")
+    birth = datetime(1990, 6, 20, 12, 15, tzinfo=belgrade)
+    longitude = ascendant_longitude(birth, 44.82, 20.46)
+    assert 150.0 <= longitude < 180.0            # Virgo's 30 degrees
+    assert abs(longitude - 174.34) < 0.05        # pinned exact value
+    assert ascendant_sign(birth, 44.82, 20.46) == "Virgo"
+    seen = []
+    for step in range(0, 48):
+        sign = ascendant_sign(
+            datetime(1990, 6, 20, 0, 0, tzinfo=belgrade)
+            + timedelta(minutes=30 * step),
+            44.82, 20.46,
+        )
+        if not seen or seen[-1] != sign:
+            seen.append(sign)
+    assert len(set(seen)) == 12                  # a full wheel in a day
 
 
 @pytest.fixture(scope="module")

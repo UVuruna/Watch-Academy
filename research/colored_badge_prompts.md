@@ -191,70 +191,78 @@ Ornate circular badge, vivid cloisonné enamel in Chinese festival style, photor
 Ornate circular badge, vivid cloisonné enamel in Chinese festival style, photorealistic render, perfectly centered, isolated on white background. Center: a contented rosy-pink Pig with a gentle smile among golden grain sacks and persimmons, symbols of plenty; glossy crimson-red field. Border: gold ring of cloud scrolls with four small roundels bearing the kanji 豬 in gold. Colors: crimson red, gold, rosy pink, persimmon orange.
 ```
 
-## Astrology — celestial enamel, element-colored
+## Astrology — celestial enamel, STRICT element palettes (v2)
 
-Fire signs (Aries, Leo, Sagittarius) burn warm red-orange; earth signs
-(Taurus, Virgo, Capricorn) wear green and umber; air signs (Gemini,
-Libra, Aquarius) breathe sky blue and white; water signs (Cancer,
-Scorpio, Pisces) flow teal and deep blue — all on a shared deep
-night-violet field with golden stars.
+Owner correction 2026-07-12: the first batch drifted off the elements
+(a red Scorpio on a WATER sign). Version 2 locks every sign to its
+element — the FIELD, the figure and the border accents all speak one
+element, so the four families are unmistakable at a glance:
+
+- FIRE (Aries, Leo, Sagittarius): deep ember-black field; flame red,
+  orange and gold only.
+- EARTH (Taurus, Virgo, Capricorn): deep forest-green field; green,
+  earth brown and wheat gold only.
+- AIR (Gemini, Libra, Aquarius): deep sky-indigo field; sky blue,
+  white and silver only.
+- WATER (Cancer, Scorpio, Pisces): deep sea-teal field; teal, sea
+  blue, aqua and pearl only.
 
 **Aries**
 ```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: a charging Ram with magnificent spiral golden horns, coat glowing ember-red, small flames at its hooves, the Aries glyph blazing above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the red Aries glyph. Colors: ember red, flame orange, gold, night violet.
-```
-
-**Taurus**
-```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: a powerful Bull with a copper-brown coat and pale crescent horns standing in spring flowers, the Taurus glyph glowing green above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the green Taurus glyph. Colors: copper brown, spring green, gold, night violet.
-```
-
-**Gemini**
-```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: the Twins back to back — one in white and gold, one in sky blue and silver — hands almost touching, a shared star between them, the Gemini glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the sky-blue Gemini glyph. Colors: sky blue, white, silver, gold, night violet.
-```
-
-**Cancer**
-```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: a moonlit teal Crab with a pearl-sheen shell on wet silver sand, gentle waves and a full moon above, the Cancer glyph glowing; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the teal Cancer glyph. Colors: teal, moon silver, pearl white, night violet.
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. FIRE sign - STRICT palette: flame red, orange and gold only, no other hues anywhere. Center: a charging Ram with spiral golden horns, coat glowing ember-red, flames licking from its hooves, the Aries glyph blazing in fire-orange above; glossy deep ember-black field with drifting sparks. Border: gold ring of small flames with four roundels bearing the golden Aries glyph on red enamel.
 ```
 
 **Leo**
 ```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: a majestic Lion with a blazing golden mane like a sun corona, calm regal gaze, the Leo glyph shining above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the orange Leo glyph. Colors: radiant gold, flame orange, warm amber, night violet.
-```
-
-**Virgo**
-```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: the Maiden in a flowing green and white gown holding a sheaf of golden wheat, a single bright star (Spica) at the wheat's tip, the Virgo glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the green Virgo glyph. Colors: leaf green, wheat gold, white, night violet.
-```
-
-**Libra**
-```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: golden balance Scales in perfect equilibrium, each pan holding a small glowing star, held by a graceful hand emerging from clouds, the Libra glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the sky-blue Libra glyph. Colors: sky blue, gold, cloud white, night violet.
-```
-
-**Scorpio**
-```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: a gleaming obsidian-and-crimson Scorpion with its tail arched high, the stinger tipped with a bright red star (Antares), the Scorpio glyph glowing above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the crimson Scorpio glyph. Colors: obsidian black, crimson, teal sheen, night violet.
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. FIRE sign - STRICT palette: flame red, orange and gold only, no other hues anywhere. Center: a majestic Lion with a blazing golden mane like a sun corona, calm regal gaze, the Leo glyph shining in gold above; glossy deep ember-black field with drifting sparks. Border: gold ring of small flames with four roundels bearing the golden Leo glyph on red enamel.
 ```
 
 **Sagittarius**
 ```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: a centaur Archer mid-gallop drawing a golden bow, the arrow trailing a comet of fire toward the stars, cloak streaming, the Sagittarius glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the orange Sagittarius glyph. Colors: flame orange, chestnut, gold comet, night violet.
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. FIRE sign - STRICT palette: flame red, orange and gold only, no other hues anywhere. Center: a centaur Archer mid-gallop drawing a golden bow, the arrow trailing a comet of fire, chestnut-red body and flame-orange cloak, the Sagittarius glyph above; glossy deep ember-black field with drifting sparks. Border: gold ring of small flames with four roundels bearing the golden Sagittarius glyph on red enamel.
+```
+
+**Taurus**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. EARTH sign - STRICT palette: leaf green, earth brown and wheat gold only, no other hues anywhere. Center: a powerful earth-brown Bull with pale horns standing firm among green meadow grass and golden wheat, the Taurus glyph in green above; glossy deep forest-green field with tiny golden seeds of light. Border: antique-gold ring of leaves and wheat ears with four roundels bearing the green Taurus glyph on brown enamel.
+```
+
+**Virgo**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. EARTH sign - STRICT palette: leaf green, earth brown and wheat gold only, no other hues anywhere. Center: the Maiden in a flowing green and cream gown holding a sheaf of golden wheat, a single bright golden star at the wheat tip, the Virgo glyph in green above; glossy deep forest-green field with tiny golden seeds of light. Border: antique-gold ring of leaves and wheat ears with four roundels bearing the green Virgo glyph on brown enamel.
 ```
 
 **Capricorn**
 ```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: the Sea-Goat — a stern mountain goat with spiral horns whose body ends in a curled teal fish tail — climbing a starlit crag from dark water, the Capricorn glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the green Capricorn glyph. Colors: slate gray, deep green, teal tail, night violet.
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. EARTH sign - STRICT palette: leaf green, earth brown, stone gray and wheat gold only, no other hues anywhere. Center: the Sea-Goat - a stern mountain goat with spiral horns whose body ends in a coiled moss-green tail - climbing a brown stone crag, the Capricorn glyph in green above; glossy deep forest-green field with tiny golden seeds of light. Border: antique-gold ring of leaves and wheat ears with four roundels bearing the green Capricorn glyph on brown enamel.
+```
+
+**Gemini**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. AIR sign - STRICT palette: sky blue, white and silver only, no other hues anywhere. Center: the Twins back to back - one in white and silver, one in sky blue - hands almost touching with a shared silver star between them, the Gemini glyph in sky blue above; glossy deep sky-indigo field with wisps of white cloud. Border: silver ring of small clouds and swallows with four roundels bearing the sky-blue Gemini glyph on white enamel.
+```
+
+**Libra**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. AIR sign - STRICT palette: sky blue, white and silver only, no other hues anywhere. Center: silver balance Scales in perfect equilibrium held by a graceful hand emerging from white clouds, a small silver star in each pan, the Libra glyph in sky blue above; glossy deep sky-indigo field with wisps of white cloud. Border: silver ring of small clouds and swallows with four roundels bearing the sky-blue Libra glyph on white enamel.
 ```
 
 **Aquarius**
 ```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: the Water-Bearer pouring a stream of glowing star-water from a silver amphora, the stream dissolving into constellations, robes in white and azure, the Aquarius glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the azure Aquarius glyph. Colors: azure, silver, star white, night violet.
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. AIR sign - STRICT palette: sky blue, white and silver only, no other hues anywhere. Center: the Water-Bearer in white and sky-blue robes pouring a stream of silver starlight from a silver amphora, the stream dissolving into white stars, the Aquarius glyph in sky blue above; glossy deep sky-indigo field with wisps of white cloud. Border: silver ring of small clouds and swallows with four roundels bearing the sky-blue Aquarius glyph on white enamel.
+```
+
+**Cancer**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. WATER sign - STRICT palette: teal, sea blue, aqua and pearl white only, no other hues anywhere. Center: a moonlit teal Crab with a pearl-sheen shell on wet silver-blue sand, gentle aqua waves and a pearl full moon above, the Cancer glyph in aqua; glossy deep sea-teal field with rising silver bubbles. Border: pearl-silver ring of waves and shells with four roundels bearing the aqua Cancer glyph on sea-blue enamel.
+```
+
+**Scorpio**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. WATER sign - STRICT palette: teal, sea blue, aqua and pearl white only, no other hues anywhere - ABSOLUTELY NO RED. Center: a gleaming deep-teal Scorpion with a bioluminescent aqua glow along its shell, tail arched high with a bright PEARL-WHITE star at the stinger, on a dark sea floor, the Scorpio glyph in aqua above; glossy deep sea-teal field with rising silver bubbles. Border: pearl-silver ring of waves and shells with four roundels bearing the aqua Scorpio glyph on sea-blue enamel.
 ```
 
 **Pisces**
 ```
-Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Center: two Fish — one pearl-white, one deep teal — swimming in an eternal circle joined by a shimmering golden cord, bubbles rising like stars, the Pisces glyph above; glossy deep night-violet field with golden stars. Border: gold ring with tiny eight-point stars and four roundels bearing the teal Pisces glyph. Colors: teal, pearl white, gold cord, night violet.
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. WATER sign - STRICT palette: teal, sea blue, aqua and pearl white only, no other hues anywhere. Center: two Fish - one pearl-white, one deep teal - swimming in an eternal circle joined by a shimmering silver cord, silver bubbles rising like stars, the Pisces glyph in aqua above; glossy deep sea-teal field with rising silver bubbles. Border: pearl-silver ring of waves and shells with four roundels bearing the aqua Pisces glyph on sea-blue enamel.
 ```

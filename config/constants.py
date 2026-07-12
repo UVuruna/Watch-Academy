@@ -224,14 +224,20 @@ PALETTE_STYLES = ("paint", "light")
 # ("colored" joins when the owner's art lands), the Chinese zodiac
 # picks text/colored/gold/silver/bronze (the metals run the selective
 # swap on the bronze logo, colored uses the fresh full-color badges).
-OCTA_SLOT_MODES = ("time", "date", "day_length", "zodiac", "chinese")
-ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text")
+# "ascendant" (owner request 2026-07-12): the RISING sign right now —
+# the natal podznak, cycling through all twelve signs daily; it wears
+# the zodiac styles through its own ascendant_style dropdown.
+OCTA_SLOT_MODES = (
+    "time", "date", "day_length", "zodiac", "ascendant", "chinese",
+)
+ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text", "colored")
 CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")
 # style -> art folder under assets/zodiac/ (text styles draw no art).
 ZODIAC_STYLE_ART_DIRS = {
     "sign": "sign",
     "logo": "logo",
     "constellation": "constellation",
+    "colored": "logo_colored",
 }
 CHINESE_STYLE_ART_DIRS = {
     "colored": "chinese_colored",

@@ -38,9 +38,10 @@ UI_STRINGS: tuple[str, ...] = (
     # The theme METALS (bronze-plate themes + the ring finish menu).
     "Gold", "Bronze", "Silver", "Bronze letters", "Follow ring color",
     "Time", "Day length",
-    # South slot style dropdowns (owner 2026-07-12): Astrology and the
-    # Chinese zodiac open their own submenus.
-    "Sign", "Logo", "Constellation", "Text", "Colored",
+    # South slot style dropdowns (owner 2026-07-12): Astrology, the
+    # Ascendant (the rising sign right now) and the Chinese zodiac
+    # open their own submenus.
+    "Sign", "Logo", "Constellation", "Text", "Colored", "Ascendant",
     "Moon", "Colorful", "Seconds",
     # Menu tooltips
     "The date written on the Earth marker (shown from {size} px up).",

@@ -284,6 +284,7 @@ def apply_display_settings(skin, settings: Settings):
         ),
         octa_slot=settings.octa_slot,
         zodiac_style=settings.zodiac_style,
+        ascendant_style=settings.ascendant_style,
         chinese_style=settings.chinese_style,
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
@@ -933,6 +934,7 @@ class AppController(QObject):
             ("logo", tr("Logo")),
             ("constellation", tr("Constellation")),
             ("text", tr("Text")),
+            ("colored", tr("Colored")),
         ):
             slot_action(
                 astro_menu, label,
@@ -940,6 +942,26 @@ class AppController(QObject):
                 and settings.zodiac_style == style,
                 lambda checked, chosen=style: self._set_south_slot(
                     "zodiac", zodiac_style=chosen
+                ),
+                not (aurora and style == "text"),
+            )
+        # The ASCENDANT (owner request 2026-07-12): the sign rising on
+        # the eastern horizon right now — it cycles all twelve signs
+        # every day, so it belongs to the hour-driven slot.
+        ascendant_menu = south_slot_menu.addMenu(tr("Ascendant"))
+        for style, label in (
+            ("sign", tr("Sign")),
+            ("logo", tr("Logo")),
+            ("constellation", tr("Constellation")),
+            ("text", tr("Text")),
+            ("colored", tr("Colored")),
+        ):
+            slot_action(
+                ascendant_menu, label,
+                settings.octa_slot == "ascendant"
+                and settings.ascendant_style == style,
+                lambda checked, chosen=style: self._set_south_slot(
+                    "ascendant", ascendant_style=chosen
                 ),
                 not (aurora and style == "text"),
             )

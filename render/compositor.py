@@ -340,6 +340,8 @@ class Compositor:
                 return self._chinese_text()
             if slot_mode == "zodiac":
                 return self._zodiac_text()
+            if slot_mode == "ascendant":
+                return self._ascendant_text()
             # The time/date/day-length slot has no tooltip of its own —
             # fall through to the region hovers.
 
@@ -797,6 +799,21 @@ class Compositor:
             octa_slot_art("sign", day.zodiac_name), None,
             article["base"],
             accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
+        )
+
+    def _ascendant_text(self) -> str:
+        """The Ascendant hover (owner request 2026-07-12): the sign
+        RISING on the eastern horizon right now — the natal podznak,
+        a new sign roughly every two hours — with its article."""
+        sign = self._last_tick.ascendant_sign
+        symbol = dict(constants.ZODIAC_SIGNS)[sign]
+        header = _centered(
+            self._tr("Ascendant"), f"{symbol} {self._tr(sign)}"
+        )
+        article = self._symbolism.zodiac_article(sign)
+        return header + "<br/>" + _article_html(
+            octa_slot_art("sign", sign), None, article["base"],
+            accents=defaults.SIGN_ACCENT_HUES[sign],
         )
 
     def _moon_text(self) -> str:

@@ -180,6 +180,10 @@ def test_bronze_finish_and_theme_metals():
         assert (
             defaults.ZODIAC_ART_DIR / "chinese_colored" / f"{animal}.png"
         ).exists(), animal
+    for sign, _ in c.ZODIAC_SIGNS:
+        assert (
+            defaults.ZODIAC_ART_DIR / "logo_colored" / f"{sign}.png"
+        ).exists(), sign
     # The hue-SELECTIVE swap (owner insight 2026-07-12): warm bronze
     # pixels take the target metal, gray pixels stay untouched.
     import os
