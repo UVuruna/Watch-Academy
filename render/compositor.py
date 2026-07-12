@@ -89,7 +89,10 @@ def _ordinal(n: int) -> str:
 _HEX_NOTE = re.compile(r"\s*\(#[0-9A-Fa-f]{6}\)")
 _TERM_RULES = [
     (
-        re.compile(rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b"),
+        re.compile(
+            rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b",
+            re.IGNORECASE,
+        ),
         hue,
     )
     for category, hue in (

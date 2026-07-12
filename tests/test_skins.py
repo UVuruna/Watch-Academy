@@ -308,6 +308,14 @@ def test_legend_highlighting_colors_canon_terms():
     assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">Ljubomoru</b>' in sr
     assert f'<b style="color:{defaults.LEGEND_MOOD_COLOR}">Obnova</b>' in sr
     assert 'style="color:#3ECC3E">zeleno</b>' in sr
+    # LOWERCASE canon mentions burn too (owner report 2026-07-12), the
+    # -šću instrumentals included.
+    lower = _article_body_html(
+        "njegov porok je gordost, a vrlina poniznost — gordošću pada"
+    )
+    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">gordost</b>' in lower
+    assert f'<b style="color:{defaults.LEGEND_VIRTUE_COLOR}">poniznost</b>' in lower
+    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">gordošću</b>' in lower
     # No accents (e.g. the Chinese article): color words stay plain.
     plain = _article_body_html("A green field under a red sky.")
     assert "</b>" not in plain

@@ -252,10 +252,10 @@ ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
 # red, moods/emotions bold yellow, color words bold in their own color.
 # Applied at RENDER time over the English and Serbian originals (the
 # machine-translated languages read plain); hex notes like "(#F8E600)"
-# are stripped from the display. Patterns are regex fragments, matched
-# case-SENSITIVELY for terms (the canon capitalizes them) and
-# case-insensitively for colors; Serbian fragments cover the case
-# endings.
+# are stripped from the display. Patterns are regex fragments, ALL
+# matched case-insensitively (owner report 2026-07-12: a lowercase
+# "gordost" must burn red too); Serbian fragments cover the case
+# endings including the -šću instrumentals.
 LEGEND_VIRTUE_COLOR = "#6FA8FF"
 LEGEND_VICE_COLOR = "#FF6B6B"
 LEGEND_MOOD_COLOR = "#FFD34D"
@@ -263,22 +263,25 @@ LEGEND_TERM_PATTERNS = {
     "virtue": (
         "Humility", "Justice", "Generosity", "Wisdom", "Courage",
         "Serenity", "Love", "Patience", "Faith", "Hope",
-        "Poniznost(?:i|ću)?", "Pravednost(?:i|ću)?",
-        "Velikodušnost(?:i|ću)?", "Mudrost(?:i|ću)?", "Hrabrost(?:i|ću)?",
+        "Poniznost(?:i)?", "Poniznošću", "Pravednost(?:i)?", "Pravednošću",
+        "Velikodušnost(?:i)?", "Velikodušnošću",
+        "Mudrost(?:i)?", "Mudrošću", "Hrabrost(?:i)?", "Hrabrošću",
         "Spokoj(?:a|u|em)?", "Ljubav(?:i|lju)?", "Strpljenj[eau]",
         "Strpljenjem", "Ver[aeiu]", "Verom", "Nad[aeiu]", "Nadom",
     ),
     "vice": (
         "Pride", "Servility", "Excess", "Greed", "Wrath", "Fear",
         "Jealousy", "Envy",
-        "Gordost(?:i|ću)?", "Pokornost(?:i|ću)?", "Neumerenost(?:i|ću)?",
+        "Gordost(?:i)?", "Gordošću", "Pokornost(?:i)?", "Pokornošću",
+        "Neumerenost(?:i)?", "Neumerenošću",
         "Pohlep[aeiou]", "Pohlepom", "Gnev(?:a|u|om)?", "Strah(?:a|u|om)?",
-        "Ljubomor[aeiou]", "Ljubomorom", "Zavist(?:i|ću)?", "Zavišću",
+        "Ljubomor[aeiou]", "Ljubomorom", "Zavist(?:i)?", "Zavišću",
     ),
     "mood": (
         "Joy", "Zeal", "Passion", "Sorrow", "Calm", "Renewal", "Glory",
         "Eclipse", "Longing",
-        "Radost(?:i|ću)?", "Žar(?:a|u|om)?", "Strast(?:i|ću)?", "Strašću",
+        "Radost(?:i)?", "Radošću", "Žar(?:a|u|om)?",
+        "Strast(?:i)?", "Strašću",
         "Tug[aeiou]", "Tugom", "Mir(?:a|u|om)?", "Obnov[aeiou]", "Obnovom",
         "Sjaj(?:a|u|em)?", "Pomračenj[eau]", "Pomračenjem",
         "Čežnj[aeiou]", "Čežnjom",
