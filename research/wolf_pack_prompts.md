@@ -75,7 +75,7 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 
 **Luna (monday)**
 ```
-Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a she-wolf alone on a cliff edge, muzzle lifted to the sky mid-howl, her breath rising as a faint relief mist, the full moon worked as a large smooth polished disc in low relief above her, pine tops far below the cliff. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise, interlaced with small pine sprigs, with four small roundels bearing the Moon crescent glyph. Palette: aged bronze dominant; the only bright accent a cool moonlight-silver sheen on the moon disc.
+Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a she-wolf utterly alone on a cliff edge — no pack anywhere on the plate — muzzle lifted to the sky mid-howl, her breath rising as a faint relief mist, the full moon worked as a large SMOOTH polished disc in low relief above her, perfectly round with NO rays (the quiet opposite of the Alpha plate's rayed sun), pine tops far below the cliff. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise, interlaced with small pine sprigs, with four small roundels bearing the Moon crescent glyph. Palette: aged bronze dominant; the only bright accent a cool moonlight-silver sheen on the moon disc.
 ```
 
 **Hunter (tuesday)**
@@ -124,7 +124,7 @@ Ornate circular badge, vivid full-color painted wilderness over bronze, photorea
 
 **Luna (monday)** → `colored/Luna.png`
 ```
-Ornate circular badge, vivid full-color painted wilderness over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a silver-white she-wolf on a cliff edge howling at a huge full moon in a deep blue starry night, moonlight silvering her fur and her rising breath, moonlit pine tops far below. Border: cool bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small silver roundels bearing the Moon crescent. Colors: moonlight silver, deep night blue, white fur, cold star white.
+Ornate circular badge, vivid full-color painted wilderness over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a silver-white she-wolf utterly alone on a cliff edge — no pack anywhere — howling at a huge smooth full moon without rays in a deep blue starry night, moonlight silvering her fur and her rising breath, moonlit pine tops far below. Border: cool bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small silver roundels bearing the Moon crescent. Colors: moonlight silver, deep night blue, white fur, cold star white.
 ```
 
 **Hunter (tuesday)** → `colored/Hunter.png`
