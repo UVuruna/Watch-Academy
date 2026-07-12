@@ -805,7 +805,12 @@
   "ui/Rotation center ABOVE the image bottom in pixels — the hand must point UP.": "6bdd516d12d8055b3de895823a1f73e6291a840b",
   "ui/PNG images pointing UP. Colored art grays out so the clock tint can recolor it; the tip-to-pivot length sets every size automatically.": "efd84ca8e6e0166ba1365084ae3b17819932434f",
   "ui/{n} hand set(s) saved": "b979a94887ff374b7acf98b2c257cfd14e4b5d5b",
-  "ui/Added '{name}' — find it under Design ▸ Hands": "99455c906239ebde4be30e7ba2449fb2b3877e72"
+  "ui/Added '{name}' — find it under Design ▸ Hands": "99455c906239ebde4be30e7ba2449fb2b3877e72",
+  "ui/Encyclopedia…": "3b2d94a6d3a4f07b2c0d38045bec754d2fd77cce",
+  "ui/Encyclopedia": "cc5645f0e43dd9b3de3c56079e659582d460994d",
+  "ui/Astrology": "f8d569ca7f814a9c054bcfa14198fa016b2bc9a1",
+  "ui/Chinese zodiac": "edbda9ab009522f13262532798678c38176ab3ae",
+  "ui/← Back": "c32ae9f4a77d1bb9e91e2d30664631cf2e25797a"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -1612,6 +1617,11 @@
   "ui/Rotation center ABOVE the image bottom in pixels — the hand must point UP.": "Centar rotacije IZNAD dna slike u pikselima — kazaljka mora biti okrenuta NAGORE.",
   "ui/PNG images pointing UP. Colored art grays out so the clock tint can recolor it; the tip-to-pivot length sets every size automatically.": "PNG slike okrenute NAGORE. Obojene slike prelaze u sivo da bi boja sata mogla da ih preboji; dužina od vrha do pivota automatski određuje sve veličine.",
   "ui/{n} hand set(s) saved": "{n} sačuvanih kompleta kazaljki",
-  "ui/Added '{name}' — find it under Design ▸ Hands": "Dodato '{name}' — potraži pod Dizajn ▸ Kazaljke"
+  "ui/Added '{name}' — find it under Design ▸ Hands": "Dodato '{name}' — potraži pod Dizajn ▸ Kazaljke",
+  "ui/Encyclopedia…": "Enciklopedija…",
+  "ui/Encyclopedia": "Enciklopedija",
+  "ui/Astrology": "Astrologija",
+  "ui/Chinese zodiac": "Kineski zodijak",
+  "ui/← Back": "← Nazad"
  }
 }

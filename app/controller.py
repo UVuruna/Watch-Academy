@@ -20,6 +20,7 @@ from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication
 from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
 
 from app import native
+from app.encyclopedia import EncyclopediaDialog
 from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
 from app.scheduler import MinuteScheduler
@@ -818,6 +819,11 @@ class AppController(QObject):
         time_travel = QAction(tr("Time Travel…"), menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
+        encyclopedia = QAction(tr("Encyclopedia…"), menu)
+        encyclopedia.triggered.connect(
+            lambda: EncyclopediaDialog(self._translation_overlay).exec()
+        )
+        menu.addAction(encyclopedia)
         guide = QAction(tr("Guide…"), menu)
         guide.triggered.connect(
             lambda: GuideDialog(self._translation_overlay).exec()
