@@ -272,6 +272,34 @@ def aurora_weekday_theta(skin: SkinDefinition) -> float:
     return constants.SOUTH_SLOT_ANGLE
 
 
+def ascendant_block_theta(hour_angle: float) -> float:
+    """The hexa arm holding the CURRENT 4-hour color block (owner spec
+    2026-07-12: 6-10 / 10-14 / 14-18 / 18-22 / 22-2 / 2-6) — the
+    astrology badge in the weekday position rides it through the day,
+    the way the year wheel rides the seasons."""
+    hour = ((hour_angle - 180.0) % 360.0) / 15.0
+    tip = (int((hour + 2.0) // 4.0) * 4) % 24
+    return (tip * 15.0 + 180.0) % 360.0
+
+
+def weekday_badge(skin: SkinDefinition, day, tick) -> tuple[str, str] | None:
+    """(sign, art folder) of the astrology badge occupying the weekday
+    position, or None when the bodies are shown. "zodiac" = the
+    official sun sign, "ascendant" = the sign rising right now; each
+    wears its own style dropdown (text coerces to the sign art —
+    the on-dial badge is always an image)."""
+    if skin.weekday_slot == "zodiac":
+        style = skin.zodiac_style
+        sign = day.zodiac_name
+    elif skin.weekday_slot == "ascendant":
+        style = skin.ascendant_style
+        sign = tick.ascendant_sign
+    else:
+        return None
+    folder = constants.ZODIAC_STYLE_ART_DIRS.get(style, "sign")
+    return sign, folder
+
+
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
     """Clip path for the pie between two dial angles going clockwise."""
     path = QPainterPath()
@@ -768,6 +796,9 @@ class WeekdayLayer(Layer):
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
 
+        if ctx.skin.weekday_slot != "weekday":
+            return   # the astrology badge (its own MINUTE layer) took over
+
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
 
@@ -798,6 +829,37 @@ class WeekdayLayer(Layer):
             )
 
 
+class WeekdayBadgeLayer(Layer):
+    """The astrology badge occupying the weekday position (owner
+    2026-07-12) — MINUTE cadence, because the ascendant changes by the
+    hour and the Prism block arm every four: on the Prism it rides the
+    arm of the current 4-hour color block, under Aurora it keeps the
+    south spot (sun sign left, ascendant right when paired with the
+    slot). It replaces the whole weekday unit while active."""
+
+    cadence = Cadence.MINUTE
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        badge = weekday_badge(ctx.skin, ctx.day, ctx.tick)
+        if badge is None:
+            return
+        sign, folder = badge
+        spec = self._skin.weekday_set
+        if ctx.skin.pointer == "aurora":
+            theta = aurora_weekday_theta(ctx.skin)
+        else:
+            theta = ascendant_block_theta(ctx.tick.hour_angle) + ctx.rotation
+        asset = octa_slot_art(folder, sign)
+        if asset is None:
+            return                       # documented: no art, no badge
+        size = (
+            2 * ctx.radius * spec.diamond_scale
+            * hover_factor(ctx, "weekday_badge")
+        )
+        pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
+        draw_pixmap_centered(painter, ctx, asset, pos, size)
+
+
 class CenterBodyLayer(Layer):
     """The current day's CENTER image drawn ABOVE the hands — the opaque
     Sun on Sundays in ghost mode (hexa and trio pointers; cross/octa
@@ -810,6 +872,8 @@ class CenterBodyLayer(Layer):
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        if ctx.skin.weekday_slot != "weekday":
+            return          # the astrology badge replaced the unit
         if spec.display_mode != "center_only" and not (
             ctx.skin.pointer in ("hexa", "trio") and today == "sun"
         ):

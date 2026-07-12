@@ -42,6 +42,7 @@ UI_STRINGS: tuple[str, ...] = (
     # Ascendant (the rising sign right now) and the Chinese zodiac
     # open their own submenus.
     "Sign", "Logo", "Constellation", "Text", "Colored", "Ascendant",
+    "Bodies",
     "Moon", "Colorful", "Seconds",
     # Menu tooltips
     "The date written on the Earth marker (shown from {size} px up).",

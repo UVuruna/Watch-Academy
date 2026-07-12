@@ -286,6 +286,14 @@ def apply_display_settings(skin, settings: Settings):
         zodiac_style=settings.zodiac_style,
         ascendant_style=settings.ascendant_style,
         chinese_style=settings.chinese_style,
+        # The astrology badge in the weekday position exists only on
+        # the Prism and Aurora (owner spec) — other pointers always
+        # draw the bodies.
+        weekday_slot=(
+            settings.weekday_slot
+            if settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+            else "weekday"
+        ),
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
         legend=settings.legend,
@@ -856,6 +864,30 @@ class AppController(QObject):
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         weekday_menu = theme_menu.addMenu(tr("Weekday"))
+        # The weekday POSITION (owner 2026-07-12): the bodies, or an
+        # astrology badge — the official sign or the ASCENDANT — on
+        # the Prism (riding the current 4-hour color-block arm) and
+        # under Aurora (the south spot; pairs with the slot: official
+        # left, rising right). Other pointers gray the badges out.
+        badge_possible = settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+        position_group = QActionGroup(menu)
+        position_group.setExclusive(True)
+        for value, label in (
+            ("weekday", tr("Bodies")),
+            ("zodiac", tr("Astrology")),
+            ("ascendant", tr("Ascendant")),
+        ):
+            action = QAction(label, menu)
+            action.setCheckable(True)
+            action.setChecked(settings.weekday_slot == value)
+            action.setEnabled(value == "weekday" or badge_possible)
+            action.triggered.connect(
+                lambda checked, chosen=value:
+                self._set_display_choice("weekday_slot", chosen)
+            )
+            position_group.addAction(action)
+            weekday_menu.addAction(action)
+        weekday_menu.addSeparator()
         weekday_group = QActionGroup(menu)
         weekday_group.setExclusive(True)
         for key, title in defaults.WEEKDAY_THEME_TITLES.items():

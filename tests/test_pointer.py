@@ -216,6 +216,39 @@ def test_palette_for_selects_the_skin_choice():
 # --- Aurora (owner spec 2026-07-12) -------------------------------------------------
 
 
+def test_weekday_badge_blocks_and_gating():
+    """Owner spec 2026-07-12: the astrology badge in the weekday
+    position rides the Prism arm of the CURRENT 4-hour color block
+    (6-10 / 10-14 / 14-18 / 18-22 / 22-2 / 2-6); only the Prism and
+    Aurora allow it — other pointers force the bodies back."""
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+    from render.layers import ascendant_block_theta
+
+    def theta_at(hour: float) -> float:
+        return ascendant_block_theta((hour * 15.0 + 180.0) % 360.0)
+
+    assert theta_at(7) == 300.0      # 6-10  -> the 8h arm
+    assert theta_at(6.0) == 300.0    # the boundary opens the new block
+    assert theta_at(11.5) == 0.0     # 10-14 -> the 12h crown
+    assert theta_at(15) == 60.0      # 14-18 -> the 16h arm
+    assert theta_at(19) == 120.0     # 18-22 -> the 20h arm
+    assert theta_at(23) == 180.0     # 22-2  -> the Omega arm
+    assert theta_at(1.9) == 180.0
+    assert theta_at(3) == 240.0      # 2-6   -> the 4h arm
+    octa = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(Settings(), pointer="octa", weekday_slot="ascendant"),
+    )
+    assert octa.weekday_slot == "weekday"    # grayed pointers -> bodies
+    for pointer in ("hexa", "aurora"):
+        skin = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(Settings(), pointer=pointer, weekday_slot="ascendant"),
+        )
+        assert skin.weekday_slot == "ascendant"
+
+
 def test_aurora_bands_spread_the_day_hues_evenly():
     """The five DAY hues split the actual sunrise-sunset arc into equal
     bands — ALL of them visible on the shortest and the longest day

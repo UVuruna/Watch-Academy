@@ -55,6 +55,8 @@ class Settings:
     zodiac_style: str = "sign"          # Astrology style dropdown
     ascendant_style: str = "sign"       # Ascendant style dropdown
     chinese_style: str = "bronze"       # Chinese zodiac style dropdown
+    weekday_slot: str = "weekday"       # the weekday POSITION: bodies, or
+                                        # an astrology badge (hexa/aurora)
     earth_style: str = "atmo"
     weekday_theme: str = "planets"
     legend: bool = True
@@ -177,6 +179,7 @@ class SettingsStore:
                 ("zodiac_style", "sign", constants.ZODIAC_SLOT_STYLES),
                 ("ascendant_style", "sign", constants.ZODIAC_SLOT_STYLES),
                 ("chinese_style", "bronze", constants.CHINESE_SLOT_STYLES),
+                ("weekday_slot", "weekday", constants.WEEKDAY_SLOT_MODES),
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
             ):
@@ -298,6 +301,7 @@ class SettingsStore:
             "zodiac_style": settings.zodiac_style,
             "ascendant_style": settings.ascendant_style,
             "chinese_style": settings.chinese_style,
+            "weekday_slot": settings.weekday_slot,
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "legend": settings.legend,

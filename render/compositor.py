@@ -34,8 +34,10 @@ from render.layers import (
     RenderContext,
     RingLayer,
     StarLayer,
+    WeekdayBadgeLayer,
     WeekdayLayer,
     YearMarkerLayer,
+    ascendant_block_theta,
     aurora_weekday_theta,
     dial_point,
     south_slot_available,
@@ -43,6 +45,7 @@ from render.layers import (
     south_slot_view,
     today_slot_theta,
     visible_occupant,
+    weekday_badge,
 )
 from skins.manifest import SkinDefinition
 
@@ -182,6 +185,10 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     layers: list[Layer] = []
     for name in skin.z_order:
         if name == "hands":
+            if skin.show_weekday and skin.weekday_slot != "weekday":
+                # The astrology badge in the weekday position (owner
+                # 2026-07-12) — MINUTE cadence, below the hands.
+                layers.append(WeekdayBadgeLayer(skin))
             if south_slot_available(skin):
                 # The SOUTH slot draws BELOW the hands (owner bug
                 # report: the seconds hand passed behind the zodiac art)
@@ -323,6 +330,14 @@ class Compositor:
 
         element = self._element_at(point, radius, rotation, today)
         if element is not None:
+            if element == "weekday_badge":
+                # The astrology badge in the weekday position (owner
+                # 2026-07-12): sun sign or the rising sign.
+                return (
+                    self._ascendant_text()
+                    if self._skin.weekday_slot == "ascendant"
+                    else self._zodiac_text()
+                )
             if element.startswith("body:"):
                 # Weekday hover rework (owner spec): the ACTIVE body
                 # leads with the date, ghosts show their article alone.
@@ -372,9 +387,27 @@ class Compositor:
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
         if self._skin.show_weekday:
-            body = self._weekday_body_at(point, radius, rotation, today)
-            if body is not None:
-                return f"body:{body}"
+            badge = weekday_badge(self._skin, self._day, self._last_tick)
+            if badge is not None:
+                # The astrology badge occupies the weekday position —
+                # its hit region mirrors the drawn spot exactly.
+                weekday = self._skin.weekday_set
+                if self._skin.pointer == "aurora":
+                    theta = aurora_weekday_theta(self._skin)
+                else:
+                    theta = (
+                        ascendant_block_theta(self._last_tick.hour_angle)
+                        + rotation
+                    )
+                if hit(
+                    dial_point(theta, radius * weekday.orbit_fraction),
+                    radius * weekday.diamond_scale,
+                ):
+                    return "weekday_badge"
+            else:
+                body = self._weekday_body_at(point, radius, rotation, today)
+                if body is not None:
+                    return f"body:{body}"
         weekday = self._skin.weekday_set
         if south_slot_available(self._skin) and hit(
             dial_point(
@@ -805,6 +838,8 @@ class Compositor:
         """The Ascendant hover (owner request 2026-07-12): the sign
         RISING on the eastern horizon right now — the natal podznak,
         a new sign roughly every two hours — with its article."""
+        from render.layers import octa_slot_art
+
         sign = self._last_tick.ascendant_sign
         symbol = dict(constants.ZODIAC_SIGNS)[sign]
         header = _centered(

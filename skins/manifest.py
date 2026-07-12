@@ -155,6 +155,8 @@ class SkinDefinition:
     zodiac_style: str = "sign"         # Astrology dropdown (ZODIAC_SLOT_STYLES)
     ascendant_style: str = "sign"      # Ascendant dropdown (same styles)
     chinese_style: str = "bronze"      # Chinese dropdown (CHINESE_SLOT_STYLES)
+    weekday_slot: str = "weekday"      # weekday POSITION: bodies, or an
+                                       # astrology badge (hexa/aurora only)
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
     weekday_theme: str = "planets"     # WEEKDAY_THEMES: bodies as planets,
                                        # Greek/Norse gods, religions, professions
