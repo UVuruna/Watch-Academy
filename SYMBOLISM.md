@@ -446,6 +446,26 @@ Octa extras:
 | west (06h) | dawn | cyan | Hope |
 | east (18h) | dusk | red-orange | Longing |
 
+## The Seasons Axis — Goethe's Poles (owner-approved 2026-07-12)
+
+The cross palette's yellow/blue is not a compromise — it is the oldest
+color theory in the world applied literally. Goethe's *Farbenlehre*
+(1810) builds ALL color on two poles: **yellow is the first color of
+light** (light seen through the thinnest dark) and **blue is the first
+color of darkness** (dark seen through the thinnest light). The
+Seasons pointer holds exactly that axis: the summer solstice arm at
+the top wears yellow — the Ruler, the year's longest light — and the
+winter solstice arm at the bottom wears blue — the Servant, the
+longest dark. The other two arms complete Goethe's system: **green is
+the UNION of the poles** (yellow + blue mixed in equal parts), which
+is precisely what an equinox is — the two days the year balances
+light and dark in equal halves, the Ruler and the Servant meeting as
+equals in spring; and autumn's red-orange is Goethe's *Steigerung*
+(intensification) — yellow deepened by passing through gathering
+darkness, the light going down fighting. On Sundays the Seasons
+pointer lights BOTH solstice arms — the two faces of the dual center,
+a year apart and one dial tall.
+
 Accents: gold = the Sun's metal (top tip, noon); silver = the Moon's
 metal (bottom tip, midnight); white = the center, the sum of all
 colors.
