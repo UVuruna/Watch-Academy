@@ -792,14 +792,8 @@ class AppController(QObject):
         weekday_menu = self._add_choice_submenu(
             theme_menu, tr("Weekday"),
             [
-                ("planets", tr("Planets")),
-                ("planet_signs", tr("Planet signs")),
-                ("greek", tr("Greek gods")),
-                ("norse", tr("Norse gods")),
-                ("egypt", tr("Egyptian gods")),
-                ("religion", tr("Religions")),
-                ("religion_alt", tr("Religions II")),
-                ("profession", tr("Professions")),
+                (key, tr(title))
+                for key, title in defaults.WEEKDAY_THEME_TITLES.items()
             ],
             settings.weekday_theme,
             lambda value: self._set_display_choice("weekday_theme", value),

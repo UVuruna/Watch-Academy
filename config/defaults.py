@@ -461,6 +461,33 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Hathor",
         "saturn": "Osiris",
     },
+    # Slavic gods (owner art 2026-07-12, per the approved mapping):
+    # Dažbog the giving sun, Hors the night-walker, Svetovid's four
+    # faces and white war-horse on Tuesday, Veles the horned trader-
+    # trickster mirroring Odin and Hermes, Perun's oak and thunder at
+    # noon, Mokoš spinning on the day her cult kept as Friday, Morana
+    # — winter drowned each spring — on the arm of Renewal.
+    "slavic": {
+        "sun": "Dažbog",
+        "moon": "Hors",
+        "mars": "Svetovid",
+        "mercury": "Veles",
+        "jupiter": "Perun",
+        "venus": "Mokoš",
+        "saturn": "Morana",
+    },
+    # The seven metals of alchemy (owner art 2026-07-12): the classical
+    # planet-metal correspondence — every medallion the same still life
+    # of bars, nuggets and coiled wire, each wearing its own metal.
+    "alchemy": {
+        "sun": "Gold",
+        "moon": "Silver",
+        "mars": "Iron",
+        "mercury": "Quicksilver",
+        "jupiter": "Tin",
+        "venus": "Copper",
+        "saturn": "Lead",
+    },
     "religion": {
         "sun": "Christianity",
         "moon": "Buddhism",
@@ -475,7 +502,9 @@ WEEKDAY_THEME_NAMES = {
     # in SYMBOLISM.md; Egypt and Babylon per the owner's 2026-07-10 art:
     # Ra's Sunday, Ishtar IS Venus and Babylon invented the 7-day week).
     "religion_alt": {
-        "sun": "Egypt",
+        "sun": "Mithraism",     # owner decision 2026-07-12: replaces Egypt
+                                # (a duplicate once the Egyptian gods became
+                                # a full theme) — Sol Invictus IS dies Solis
         "moon": "Druidism",
         "mars": "Zoroastrianism",
         "mercury": "Shamanism",
@@ -495,10 +524,13 @@ WEEKDAY_THEME_NAMES = {
     },
 }
 
-# File stems on disk: the display names folded to ASCII (Sól -> Sol);
-# the owner's religion and planet-sign art uses lowercase file names.
-_ASCII_FOLD = str.maketrans("óá", "oa")
-_LOWERCASE_THEMES = ("religion", "religion_alt", "planet_signs", "egypt")
+# File stems on disk: the display names folded to ASCII (Sól -> Sol,
+# Dažbog -> dazbog); the owner's religion, planet-sign, egypt, slavic
+# and alchemy art uses lowercase file names.
+_ASCII_FOLD = str.maketrans("óážš", "oazs")
+_LOWERCASE_THEMES = (
+    "religion", "religion_alt", "planet_signs", "egypt", "slavic", "alchemy",
+)
 # Theme -> art folder under assets/weekday/: both religion sets share
 # the ONE religion/ folder (all fourteen owner medallions together).
 WEEKDAY_THEME_DIRS = {
@@ -506,6 +538,8 @@ WEEKDAY_THEME_DIRS = {
     "greek": "greek",
     "norse": "norse",
     "egypt": "egypt",
+    "slavic": "slavic",
+    "alchemy": "alchemy",
     "religion": "religion",
     "religion_alt": "religion",
     "profession": "profession",
@@ -524,6 +558,23 @@ WEEKDAY_THEME_FILES = {
 # The dual center shows both faces in the hover title, but the owner's
 # medallion file keeps the single name.
 WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
+# The metal reads Quicksilver, the owner's file keeps the element name.
+WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "mercury"
+
+# ONE menu/encyclopedia/settings title per theme (English; translated
+# through the ui/ overlay at display) — every theme list iterates this.
+WEEKDAY_THEME_TITLES = {
+    "planets": "Planets",
+    "planet_signs": "Planet signs",
+    "greek": "Greek gods",
+    "norse": "Norse gods",
+    "egypt": "Egyptian gods",
+    "slavic": "Slavic gods",
+    "alchemy": "Alchemy",
+    "religion": "Religions",
+    "religion_alt": "Religions II",
+    "profession": "Professions",
+}
 
 DEFAULT_SKIN = SkinDefinition(
     z_order=(

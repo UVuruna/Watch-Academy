@@ -64,13 +64,7 @@ def _topics() -> dict:
     """topic key -> {title, icon, entries}; article refs resolve lazily
     against the repository so the overlay always applies."""
     topics: dict = {}
-    theme_titles = {
-        "planets": "Planets", "planet_signs": "Planet signs",
-        "greek": "Greek gods", "norse": "Norse gods",
-        "egypt": "Egyptian gods", "religion": "Religions",
-        "religion_alt": "Religions II", "profession": "Professions",
-    }
-    for theme, title in theme_titles.items():
+    for theme, title in defaults.WEEKDAY_THEME_TITLES.items():
         icon, entries = _weekday_topic(theme)
         topics[theme] = {"title": title, "icon": icon, "entries": entries}
     topics["astrology"] = {

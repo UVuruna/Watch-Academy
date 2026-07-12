@@ -886,14 +886,10 @@ class SettingsDialog(QDialog):
         column.addWidget(self._rotation_enabled)
         grid = QGridLayout()
         grid.setHorizontalSpacing(24)
-        labels = {
-            "planets": "Planets", "planet_signs": "Planet signs",
-            "greek": "Greek gods", "norse": "Norse gods",
-            "egypt": "Egyptian gods", "religion": "Religions",
-            "religion_alt": "Religions II", "profession": "Professions",
-        }
         self._rotation_checks: dict[str, QCheckBox] = {}
-        for index, (key, label) in enumerate(labels.items()):
+        for index, (key, label) in enumerate(
+            defaults.WEEKDAY_THEME_TITLES.items()
+        ):
             box = QCheckBox(tr(label))
             box.setChecked(key in self._settings.theme_rotation_themes)
             self._rotation_checks[key] = box

@@ -32,7 +32,7 @@ UI_STRINGS: tuple[str, ...] = (
     "The day name written on the weekday bodies.",
     "Moon — below horizon",
     "Planets", "Planet signs", "Greek gods", "Norse gods", "Egyptian gods",
-    "Religions", "Religions II", "Professions",
+    "Slavic gods", "Alchemy", "Religions", "Religions II", "Professions",
     "Time", "Day length",
     "Astrology sign", "Astrology logo", "Astrology constellation",
     "Astrology text", "Chinese zodiac logo", "Chinese zodiac text",

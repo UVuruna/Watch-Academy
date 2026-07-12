@@ -7,7 +7,7 @@ companion `Database/symbolism.json`
 ([Database (folder)](Database/___database.md)) carries the short
 per-entity blurbs (legacy — the diamond hover now speaks the zodiac
 sign articles) AND the full `articles` set — one encyclopedic article
-per entity per theme (6 sets × 7 = 42), each weaving the entity with
+per entity per theme (9 sets × 7 = 63), each weaving the entity with
 its day, color, hour mood, virtue and vice, plus a variant paragraph
 per pointer/palette combination; the weekday hover shows them.
 
@@ -141,9 +141,13 @@ The owner's art holds FOURTEEN religions in two full sets; the seven
 beyond the basic set are the ALTERNATE set ("Religions II" in the
 menu), each on the day it fits best:
 
-- **Sunday — Ancient Egypt**: Ra reborn each dawn — no faith wove the
-  Sun so completely into kingship, temple and tomb; the heart weighed
-  against Ma'at's feather is the center's own Humility-Pride axis.
+- **Sunday — Mithraism** (owner art 2026-07-12, replacing Ancient
+  Egypt once the Egyptian gods became a full theme of their own):
+  Rome's soldier-mysteries of Sol Invictus — *dies Solis* is literally
+  their holy day; seven grades of initiation under the seven planets
+  climb the very week this dial draws, and the tauroctony doubles as
+  a star map of the celestial equator (Taurus, Canis, Hydra, Corvus,
+  Scorpius).
 - **Monday — Druidism**: groves, tides and the lunar reckoning of
   time; the Moon's serenity is the druid's, fear of the dark wood its
   shadow.
@@ -194,6 +198,57 @@ through the Nile:
 - **Saturday — Osiris**: the harvest that dies and returns; lord of
   the underworld and of rebirth — Saturn's patience made a god, the
   sickle's oldest owner.
+
+The SLAVIC theme (owner art 2026-07-12) reads the same seven days
+through the old Slavic pantheon — the owner's home mythology, and one
+that maps onto the planetary week with almost no forcing:
+
+- **Sunday — Dažbog**: the giving sun, ancestor of the Slavs (the
+  Tale of Igor's Campaign calls them "Dažbog's grandchildren"); his
+  horn spilling coins is sunlight read as wealth handed out daily.
+- **Monday — Hors**: the deity of the night light; Vseslav in wolf
+  shape "crossed the path of great Hors" before dawn — the 4h
+  pre-dawn arm told as myth.
+- **Tuesday — Svetovid**: four faces, the great sword and the white
+  divining horse of Arkona — the war arm's watchman, facing every
+  direction at once.
+- **Wednesday — Veles**: horned lord of cattle, trade, magic, oaths
+  and song, the serpent at the world-tree's roots — the exact Slavic
+  seat of Odin, Hermes and Thoth's day, at the dial's midnight root.
+- **Thursday — Perun**: the thunderer of the oak at the dial's crown;
+  his six-petal thunder-mark (*gromovnik*), folk-carved on roof beams
+  against lightning, is a six-armed star — the hexa pointer itself.
+  Perun at 12h over Veles at 0h draws the Perun–Veles storm myth as
+  the dial's vertical axis, exactly as the Norse set draws Thor–Odin.
+- **Friday — Mokoš**: the great spinner, Moist Mother Earth, the only
+  goddess of Vladimir's Kyiv pantheon; her cult survived as St
+  Paraskeva-**Pyatnitsa** — Friday by name.
+- **Saturday — Morana**: winter and death, her straw effigy drowned
+  or burned at the spring equinox to this day — the arm of Renewal
+  taken as ritual fact.
+
+The ALCHEMY theme (owner art 2026-07-12) is the classical
+planet-metal correspondence — the seven medallions deliberately show
+ONE still life (stacked bars, raw nuggets, a coil of wire) transmuted
+through seven metals, the week as one substance in seven states:
+
+- **Sunday — Gold** (Sol): incorruptible, the Great Work's goal; laid
+  on as leaf, never mixed — the unmixable center in a goldsmith's fact.
+- **Monday — Silver** (Luna): the albedo, mirrors and moonlight; its
+  black tarnish and polish are the phases worked in metal.
+- **Tuesday — Iron** (Mars): blade and armor — and hemoglobin: Mars
+  genuinely runs in the blood.
+- **Wednesday — Quicksilver** (Mercurius): the only metal liquid at
+  room temperature, the transformer between states, the spirit of the
+  *tria prima*.
+- **Thursday — Tin** (Jupiter): the benevolent alloy-maker — bell
+  bronze's voice; bent tin answers with the "tin cry".
+- **Friday — Copper** (Venus): *aes cyprium*, the metal of Venus' own
+  island Cyprus; the ♀ glyph is her hand-mirror, polished copper the
+  first mirror.
+- **Saturday — Lead** (Saturn): heaviest and slowest, the *prima
+  materia* the Work begins from — lead-to-gold is the week read as a
+  single transmutation, Saturday into Sunday.
 
 <a id="color-moods"></a>
 
