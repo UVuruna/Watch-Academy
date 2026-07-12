@@ -27,9 +27,13 @@ def _bronzed(source: Path) -> Image.Image:
     # The silver letters are grayscale — one channel is the luminance.
     gray = img.getchannel("R")
     brightness = defaults.BRONZE_LETTER_BRIGHTNESS
+    contrast = defaults.BRONZE_LETTER_CONTRAST
     tint = defaults.BRONZE_LETTER_TINT.lstrip("#")
     color = tuple(int(tint[i:i + 2], 16) for i in (0, 2, 4))
-    lut = [max(0, min(255, round(v * brightness))) for v in range(256)]
+    lut = [
+        max(0, min(255, round((v * brightness - 128) * contrast + 128)))
+        for v in range(256)
+    ]
     gray = gray.point(lut)
     out = Image.merge("RGB", [
         gray.point(lambda v, c=c: v * c // 255) for c in color

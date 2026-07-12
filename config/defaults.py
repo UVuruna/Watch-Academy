@@ -607,9 +607,11 @@ THEME_METAL_TINTS = {"gold": "#FFD235", "silver": "#C9CDD3"}
 # Bronze ring LETTERS are PRE-RENDERED from the silver ones
 # (setup/make_bronze_letters.py): the letters are already bright, so
 # the medallion recipe would blow their detail out — slight darkening
-# instead, then a straight multiply (owner direction 2026-07-12).
-BRONZE_LETTER_TINT = "#CD7F32"
+# plus a mild contrast lift, then a straight multiply with the WARM
+# bronze (owner verdict 2026-07-12: candidate F).
+BRONZE_LETTER_TINT = "#B87333"
 BRONZE_LETTER_BRIGHTNESS = 0.88
+BRONZE_LETTER_CONTRAST = 1.12
 
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.
