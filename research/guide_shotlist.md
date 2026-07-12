@@ -24,9 +24,11 @@ substantially on **2026-07-12**, all AFTER the Guide was last touched:
 
 - The right-click menu was reorganized into **Design** (Pointer + palette
   style, Ring + letter finish, **Hands** — brand new, Umbra, Size) and
-  **Theme** (Earth + date, Weekday + per-theme metal, **Slots** — Day slot
-  and Info slot, replacing the old single "Compass slot" idea). None of
-  this structure exists in the current Guide.
+  **Theme** (exactly three entries since 0.14.167: Earth + date, **Day
+  slot** and **Info slot** — the theme list with its metals and the Names
+  switch lives INSIDE each slot's own identical Weekday submenu,
+  replacing the old separate Weekday entry and the Slots wrapper). None
+  of this structure exists in the current Guide.
 - **Aurora**, the fifth pointer (arm-less, the day painted in bands), has
   no chapter, no palette page, and no menu mention anywhere in the Guide.
 - The weekday **Colored** look (a fourth metal alongside Gold/Silver/
@@ -208,14 +210,17 @@ keep each page's grid at a readable six images.
 
 **17 — One Theme, Four Metals.** New: Greek gods, Norse gods and
 Professions each wear Gold, Silver, Bronze or the freshly-shipped
-**Colored** full-art look — chosen per theme via its own Theme ▸
-Weekday ▸ <Theme> submenu, independent of the ring's own finish unless
-"Follow ring color" is checked in Settings.
+**Colored** full-art look — chosen per theme via Theme ▸ Day slot ▸
+Weekday ▸ <Theme> (the identical dropdown repeats under Info slot ▸
+Weekday), independent of the ring's own finish unless "Follow ring
+color" is checked in Settings.
 
 **18 — The Day Slot.** Renamed from "The Compass Slot" — it is not
 Compass-only. Keeps the zodiac/Chinese badge explanation, adds the
 **Ascendant** (the sign rising on the eastern horizon right now,
-changing roughly every two hours) as the fourth Day-slot mode.
+changing roughly every two hours), and — since 0.14.167 — the
+Time/Date/Day length text modes (pointer-off only) plus the Weekday
+theme submenu itself: the theme list moved INSIDE the slot.
 
 **19 — The Info Slot.** New: the OTHER bottom position — Time, Date,
 Day length, a SECOND weekday theme (its own independent pick, so the
@@ -359,69 +364,69 @@ see the [appendix](#appendix-reused).
 <td>Close crop on the Earth marker alone, same season/day-night phase both times, so only the clean-vs-atmosphere art difference reads.</td></tr>
 
 <tr><td>73</td><td>weekday_planet_signs</td>
-<td>Theme ▸ Weekday ▸ Planet signs.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Planet signs.</td>
 <td>Weekday theme = planet_signs.</td>
 <td>Full dial (2-column grid crop matching the existing 24-28 framing), the seven planet-glyph medallions on their arms.</td></tr>
 
 <tr><td>74</td><td>weekday_egypt</td>
-<td>Theme ▸ Weekday ▸ Egyptian gods.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Egyptian gods.</td>
 <td>Weekday theme = egypt.</td>
 <td>Same framing; Ra/Khonsu/Montu/Thoth/Amun/Hathor/Osiris visible.</td></tr>
 
 <tr><td>75</td><td>weekday_slavic</td>
-<td>Theme ▸ Weekday ▸ Slavic gods.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Slavic gods.</td>
 <td>Weekday theme = slavic.</td>
 <td>Same framing; Dažbog/Hors/Svetovid/Veles/Perun/Mokoš/Morana visible.</td></tr>
 
 <tr><td>76</td><td>weekday_alchemy</td>
-<td>Theme ▸ Weekday ▸ Alchemy.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Alchemy.</td>
 <td>Weekday theme = alchemy.</td>
 <td>Same framing; the seven metal still-lifes (Gold/Silver/Iron/Quicksilver/Tin/Copper/Lead) visible.</td></tr>
 
 <tr><td>77</td><td>weekday_japan</td>
-<td>Theme ▸ Weekday ▸ Japanese week.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Japanese week.</td>
 <td>Weekday theme = japan.</td>
 <td>Same framing; the seven yōbi medallions with kanji labels visible.</td></tr>
 
 <tr><td>78</td><td>weekday_religion_alt</td>
-<td>Theme ▸ Weekday ▸ Religions II.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Religions II.</td>
 <td>Weekday theme = religion_alt.</td>
 <td>Same framing; Mithraism/Druidism/Zoroastrianism/Shamanism/Sikhism/Babylon/Voodoo visible.</td></tr>
 
 <tr><td>79</td><td>weekday_greek_colored</td>
-<td>Theme ▸ Weekday ▸ Greek gods ▸ Colored.</td>
+<td>Theme ▸ Day slot ▸ Weekday ▸ Greek gods ▸ Colored.</td>
 <td>Weekday theme = greek, its metal = colored.</td>
 <td>Same framing as the existing 25_weekday_greek, so the reader can flip between the bronze-plate look and this full-color art directly.</td></tr>
 
 <tr><td>80</td><td>menu_theme_weekday_metal</td>
-<td>Right-click ▸ Theme ▸ Weekday ▸ Greek gods, expanded (a metal-carrying theme opens its own sub-submenu instead of activating directly).</td>
+<td>Right-click ▸ Theme ▸ Day slot ▸ Weekday ▸ Greek gods, expanded (a metal-carrying theme opens its own sub-submenu instead of activating directly).</td>
 <td>Baseline.</td>
 <td>The Gold / Bronze / Silver / Colored radio group nested under Greek gods, to show this per-theme submenu exists only on the three metal themes (Greek, Norse, Professions) — the other eight activate with one click.</td></tr>
 
 <tr><td>81</td><td>slot_ascendant</td>
-<td>Theme ▸ Slots ▸ Day slot ▸ Ascendant ▸ Sign.</td>
+<td>Theme ▸ Day slot ▸ Ascendant ▸ Sign.</td>
 <td>Day slot mode = ascendant, style = sign.</td>
 <td>The badge in the day-slot position with a visibly different sign than whatever the Info slot or the date would suggest is "today's" sign — make the point that Ascendant changes roughly every two hours, independent of the calendar.</td></tr>
 
 <tr><td>82</td><td>menu_theme_slots_day</td>
-<td>Right-click ▸ Theme ▸ Slots ▸ Day slot, expanded (Astrology and Chinese zodiac as nested submenus, not expanded further).</td>
+<td>Right-click ▸ Theme ▸ Day slot, expanded (Astrology and Chinese zodiac as nested submenus, not expanded further).</td>
 <td>Baseline.</td>
-<td>Weekday bodies / Astrology / Ascendant / Chinese zodiac as the four top entries of the Day slot submenu.</td></tr>
+<td>Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac as the Day slot submenu's entries (Weekday holds the 11-theme list + Names; the three text modes gray while the Pointer element is on).</td></tr>
 
 <tr><td>83</td><td>slot_info_time</td>
-<td>Design ▸ Pointer ▸ Compass (needed for the Info slot to always be available); Theme ▸ Slots ▸ Info slot ▸ Time (already default mode).</td>
+<td>Design ▸ Pointer ▸ Compass (needed for the Info slot to always be available); Theme ▸ Info slot ▸ Time (already default mode).</td>
 <td>Pointer = Compass (octa). Everything else baseline.</td>
 <td>Full dial, the digital time readable in the Compass's reserved bottom arm.</td></tr>
 
 <tr><td>84</td><td>slot_info_paired_weekday</td>
-<td>Design ▸ Pointer ▸ Aurora; Elements ▸ Weekday on; Elements ▸ Info slot on; Theme ▸ Weekday ▸ Norse gods; Theme ▸ Slots ▸ Info slot ▸ Weekday ▸ Greek gods.</td>
+<td>Design ▸ Pointer ▸ Aurora; Elements ▸ Weekday on; Elements ▸ Info slot on; Theme ▸ Day slot ▸ Weekday ▸ Norse gods; Theme ▸ Info slot ▸ Weekday ▸ Greek gods.</td>
 <td>Pointer = Aurora, Weekday theme = norse, Info slot mode = weekday with info_slot_theme = greek. Both the day-slot body and the info-slot body must be on at once.</td>
 <td>Both bottom badges side by side — today's Norse god on one side, today's Greek god on the other — demonstrating the two slots can each run a fully independent theme.</td></tr>
 
 <tr><td>85</td><td>menu_theme_slots_info</td>
-<td>Right-click ▸ Theme ▸ Slots ▸ Info slot, expanded (Weekday/Astrology/Ascendant/Chinese zodiac as nested submenus, not expanded further).</td>
+<td>Right-click ▸ Theme ▸ Info slot, expanded (Weekday/Astrology/Ascendant/Chinese zodiac as nested submenus, not expanded further).</td>
 <td>Baseline.</td>
-<td>Time / Date / Day length / Weekday / Astrology / Ascendant / Chinese zodiac as the Info slot submenu's entries.</td></tr>
+<td>Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac as the Info slot submenu's entries — the SAME shape as the Day slot's.</td></tr>
 
 <tr><td>86</td><td>colorful_on_off</td>
 <td>Elements ▸ Colorful, toggled off for the second half.</td>
@@ -519,9 +524,9 @@ the new captions.json entries):
   out of Elements and into Theme ▸ Earth (chapter 10) — Elements now
   only toggles the marker on/off, not clean-vs-atmosphere.
 - `29_slot_zodiac`/`30_slot_chinese`'s captions currently say "The
-  Compass slot" — should become "The Day slot" (chapter 18), since the
-  Slots reorganization split it from the Info slot and it is no longer
-  Compass-only.
+  Compass slot" — should become "The Info slot" (chapter 19): the old
+  Compass slot IS today's Info slot; the Day slot is the weekday unit's
+  own position (chapter 18).
 
 ---
 
