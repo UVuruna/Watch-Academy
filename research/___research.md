@@ -41,6 +41,13 @@ Servant.png prompts (bronze plate + colored) to pair with the Ruler on
 Sunday, the dual-legend concept, and the cross-theme survey of second
 sun figures (Ra's night barque, Sól/Skoll, Amaterasu's cave...).
 
+### `bible_theme_prompts.md` — Bible Theme Prompts
+The owner-requested 12th weekday theme: both testaments as stained
+glass — the day mapping with rationale (Ancient of Days + the Son as
+Servant on Sunday, Mary/Moon, David/Mars, Moses/Mercury,
+Solomon/Jupiter, Bride and Bridegroom/Venus, Joseph's sheaves/Saturn)
+and the 8 Gemini prompts (drop dir assets/weekday/bible/).
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner

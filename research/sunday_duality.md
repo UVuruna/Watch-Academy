@@ -121,7 +121,7 @@ together); `profession` is the assigned item above and isn't repeated.
 | Egypt | Ra-Horakhty, falcon-headed, day barque (`ra.png`) | Afu-Ra, ram-headed night form, towed through the Duat fighting Apophis | **Canon-strong** |
 | Norse | Sól, sun held aloft, chariot racing the wolf (`Sol.png`) | Skoll the wolf catching the sun-disc — the Eclipse foretold | **Canon-strong** |
 | Japan | Amaterasu's radiant disc + torii (`nichiyobi.png`) | The sealed boulder of Ama-no-Iwato, the mirror's last glint | **Canon-strong** |
-| Christianity (religion) | Cross + Chi-Rho on black stone (`christianity.png`) | The washbasin and towel, staff and loosened crown of thorns | **Canon-strong** |
+| Christianity (religion) | Cross + Chi-Rho on black stone (`christianity.png`) | The washbasin and towel, staff and loosened crown of thorns | **Canon-strong** — but see the REMAP note below: since 2026-07-12 the religion theme's SUNDAY entity is Freemasonry; the washbasin stays as Christianity's own two-faces pair for its new Friday |
 | Mithraism (religion_alt) | The tauroctony, Sol blazing above the cave (`mithraism.png`) | Pater enthroned at the cave banquet, served by a masked Corax | **Canon-strong** |
 | Alchemy | Refined gold — ingots, nuggets, wire in a solar corona (`gold.png`) | The same gold unrefined — a raw vein in dark quartz, corona still buried | **Canon-strong** |
 | Greek | Helios driving the quadriga (`Helios.png`) | Phaethon losing control of that same chariot — the scorched sky | **Canon-strong** |
@@ -258,6 +258,44 @@ which is a mood tint, not a duality FIGURE the way Skoll or Afu-Ra is
 its own sake, not because the canon asks for it. No prompt is offered
 for either; if wanted later, "the same sun.png disc in eclipse, a thin
 corona ring around a black disc" is the entire brief.
+
+---
+
+## Freemasonry — the NEW religion-theme Sunday pair (owner remap 2026-07-12)
+
+The owner moved the base religion set to narrative-first days:
+Freemasonry now holds SUNDAY (the quest for more Light under the
+All-Seeing Eye; the Master seated in the East), Christianity moved to
+Friday (the God who forgives, agape, Good Friday). So the religion
+theme's Sunday DUAL is now the masonic one — and no tradition states
+the center's double nature more literally than the two ashlars:
+
+> The ROUGH ASHLAR is the apprentice's stone — unhewn, aware it needs
+> the chisel (Humility, the Servant face). The PERFECT ASHLAR is the
+> fellow-craft's proof — the polished cube that returns the light it
+> is given (Glory, the Ruler face). The Eye above watches the work
+> either way (Justice).
+
+The main face stays the owner's `freemasonry.png` (square and
+compasses); the companion below is the dark face. An OPTIONAL third
+prompt upgrades the main medallion to work the All-Seeing Eye into
+the composition — the owner's call whether to regenerate or keep the
+plain square-and-compasses.
+
+**Rough Ashlar — the Servant face (drop at `assets/weekday/religion/dual/rough_ashlar.png`)**
+```
+Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the owner's freemasonry religion medallion. Center: a rough-hewn cubic block of stone on a masonic tracing board, its faces still cracked and unworked, a gavel and a chisel resting against its base and a plumb line hanging beside it; high above, the All-Seeing Eye within a radiant triangle watches faintly through the gloom, a single thin ray touching the stone's top edge — the work not yet begun, the light only promised. Border: silver ring bearing small roundels that alternate the square-and-compasses with a tiny radiant delta. Palette: silver, graphite black, one faint warm ray of pale gold — matching the religion set's black-stone finish exactly.
+```
+
+**Perfect Ashlar — optional bright counterpart (drop at `assets/weekday/religion/dual/perfect_ashlar.png`, only if the owner wants the pair as TWO new images instead of reusing freemasonry.png)**
+```
+Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the owner's freemasonry religion medallion. Center: a perfectly squared and polished cubic ashlar on a masonic tracing board, its faces mirror-smooth and returning the light, suspended from a lewis hook above a builder's level; the All-Seeing Eye within a radiant triangle blazes directly over it, its glory rays breaking on the cube's edges into small stars. Border: silver ring bearing small roundels that alternate the square-and-compasses with a tiny radiant delta. Palette: silver, graphite black, radiant white-gold rays — matching the religion set's black-stone finish exactly.
+```
+
+**Optional main-medallion upgrade — square, compasses AND the Eye (would replace `assets/weekday/religion/freemasonry.png`)**
+```
+Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the other religion medallions (black stone, silver relief). Center: the square and compasses opened over an open book of constitutions, the letter G at their crossing; above them the All-Seeing Eye within a radiant triangle, its glory rays fanning down so the tools work literally UNDER the Eye's light; two small columns flank the composition at the edges. Border: silver ring with small roundels alternating a radiant delta, a trowel and a plumb line. Palette: silver, graphite black, pale white-gold rays.
+```
 
 ---
 

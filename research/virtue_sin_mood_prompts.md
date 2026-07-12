@@ -120,20 +120,13 @@ Ornate circular badge, vivid allegorical enamel in radiant gold cameo, engraved 
 Ornate circular badge, vivid allegorical enamel in radiant gold cameo, engraved sunburst field, photorealistic render, perfectly centered, isolated on white background. Center: the same king's Servant face, the crown lifted from his own head and held low in both hands, eyes downcast, a plain dark robe replacing royal dress, one bare foot resting in a basin of water; glossy sunburst field of fine golden rays kept low and gentle, dawn-twilight rather than noon-blaze, tinted black and silver. Border: polished gold ring with a laurel-leaf wreath motif, four small black-enamel roundels with silver trim bearing a tiny silver basin. Colors: gold dominant, deep black, silver trim.
 ```
 
-> **REGENERATION NOTE (owner report 2026-07-12).** The prompt above
-> reused the crown-in-hands + washbasin allegory — the SAME composition
-> as the Servant profession plate, so the generated Humility reads as a
-> third copy of the Servant (and a cousin of the Servility sin's
-> kneeling figure). The bronze/colored Servant pair sharing one
-> composition IS intentional (every profession plate pairs that way);
-> Humility duplicating it is not. Regenerate Humility with this v2 —
-> the classic emblem "the fullest ear bows lowest", zero figure
-> overlap, still black-and-silver for the Servant face:
-
-**Humility v2 (Sunday — Servant face) — regenerate, replaces the above**
-```
-Ornate circular badge, vivid allegorical enamel in radiant gold cameo, engraved sunburst field, photorealistic render, perfectly centered, isolated on white background. Center: a single golden ear of wheat, heavy with full ripe grain, bowing deeply toward the earth while the empty slender stalks around it stand stiffly upright — the fullest ear bows lowest; beneath it a tiny fallen royal crown half-sunk in the soil among the roots; glossy sunburst field of fine golden rays kept low and gentle, dawn-twilight rather than noon-blaze, tinted black and silver. Border: polished gold ring with a laurel-leaf wreath motif, four small black-enamel roundels with silver trim bearing a tiny bowed wheat ear. Colors: gold dominant, deep black, silver trim.
-```
+> **RESOLVED (owner verdict 2026-07-12).** The crown-and-basin
+> composition above IS the canon Humility — the owner generated and
+> compared a wheat-emblem v2 and rejected it ("the bowed wheat reads
+> as famine and drought, like the plagues on Egypt, not humility");
+> the Christ-like figure lifting the crown off and setting a foot in
+> the water stays, and its kinship with the Servant plate is accepted
+> as the Sunday family resemblance. No regeneration.
 
 **Serenity (Monday)**
 ```
