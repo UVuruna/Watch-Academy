@@ -258,3 +258,49 @@ which is a mood tint, not a duality FIGURE the way Skoll or Afu-Ra is
 its own sake, not because the canon asks for it. No prompt is offered
 for either; if wanted later, "the same sun.png disc in eclipse, a thin
 corona ring around a black disc" is the entire brief.
+
+---
+
+## Colored variants for the metal themes (owner correction 2026-07-12)
+
+Greek, Norse and Professions carry FOUR looks (Gold/Silver/Bronze +
+Colored full art) — so their Sunday companions need TWO generations
+each, exactly like the Servant pair above. The bronze Phaethon and
+Skoll are delivered; these are the missing COLORED prompts, in the
+same house styles as `colored/Helios.png` and `colored/Sol.png`.
+
+**Phaethon — colored (drop at `assets/weekday/greek/dual/colored/Phaethon.png`)**
+```
+Ornate circular badge, vivid full-color enamel over dark gold, photorealistic render, perfectly centered, isolated on white background — same finish and Greek-key border family as the colored Helios badge. Center: Phaethon, Helios's proud young son, gripping the reins of the runaway sun chariot in white-knuckled panic, the four winged horses bolting in different directions, the chariot tilting; the sun-disc behind him guttering from radiant gold to ember red, a jagged black scorch-streak burning across a glossy twilight-orange sky field, tiny stars and a smoking cloud-strip beneath the wheels. Border: darkened gold Greek key pattern with small roundels bearing a cracked ember-red sun-disc. Colors: ember orange, scorched crimson, aged gold, ash black — visibly the SAME palette family as the colored Helios badge but overheated and breaking.
+```
+
+**Skoll — colored (drop at `assets/weekday/norse/dual/colored/Skoll.png`)**
+```
+Ornate circular badge, vivid full-color painted-wood-and-iron finish with aurora accents, photorealistic render, perfectly centered, isolated on white background — same finish and Celtic-knotwork border family as the colored Sol badge. Center: Skoll, the great charcoal-black wolf of Norse myth, caught mid-leap against a deep indigo dusk sky threaded with a thin green-violet aurora, jaws closing around the last golden sliver of the sun-disc; Sol's empty upraised hand and trailing golden hair just visible at the wolf's shoulder, her chariot horses rearing behind in his dust. Border: iron-and-painted-wood Celtic knotwork ring with small roundels bearing a wolf's snapping jaw in dying-ember gold. Colors: charcoal black, deep indigo, aurora green-violet, dying ember gold — the SAME aurora-accent family as the colored Sol badge with its daylight swallowed.
+```
+
+---
+
+## Delivered art — where everything landed (2026-07-12)
+
+All ten generated images processed (circle cut / alpha crop, 800×800
+RGBA) and placed; the `dual/` subfolders are inert until the legend
+wiring lands:
+
+| Source | Destination |
+|---|---|
+| servant.png | `assets/weekday/profession/Servant.png` |
+| servant colored.png | `assets/weekday/profession/colored/Servant.png` |
+| phaethon.png | `assets/weekday/greek/dual/Phaethon.png` |
+| skoll.png | `assets/weekday/norse/dual/Skoll.png` |
+| afu-ra.png | `assets/weekday/egypt/dual/afu_ra.png` |
+| Ama-no-Iwato.png | `assets/weekday/japan/dual/ama_no_iwato.png` |
+| corax.png | `assets/weekday/religion/dual/corax.png` |
+| washbasin.png | `assets/weekday/religion/dual/washbasin.png` |
+| old dazbog.png | `assets/weekday/slavic/dual/dazbog_old.png` |
+| raw ore.png | `assets/weekday/alchemy/dual/ore.png` |
+
+The Servant pair sits directly beside the Ruler (an eighth plate of
+the profession set, per section 1); everything else waits in its
+theme's `dual/` folder. When the colored Phaethon/Skoll land, they
+take `dual/colored/` next to their bronze versions.

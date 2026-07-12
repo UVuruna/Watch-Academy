@@ -25,11 +25,23 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              planets/ (sun..saturn.png, real renders)
                              greek/ (Helios..Cronus.png)   norse/ (Sol..Sabbath.png)
                              religion/ (Christianity..Judaism.png)
-                             profession/ (Ruler..Farmer.png)
-                             — non-planet files are 1×1 placeholders until the owner
-                             pastes his vectors over them (same names)
+                             profession/ (Ruler..Farmer.png — + Servant.png, the
+                             Sunday companion plate, also in colored/)
+                             — metal themes add colored/ (full-color art) and each
+                             theme may hold dual/ (the Sunday-duality companion:
+                             greek/dual/Phaethon, norse/dual/Skoll, egypt/dual/afu_ra,
+                             japan/dual/ama_no_iwato, religion/dual/{corax,washbasin},
+                             slavic/dual/dazbog_old, alchemy/dual/ore — inert until
+                             the dual-legend wiring lands)
   📁 zodiac/               ← octa bottom-arm art: sign/, logo/, constellation/ (<Sign>.png),
                              chinese/ (<Animal>.png) — 1×1 placeholders, same convention
+  📁 virtue/  📁 sin/  📁 mood/
+                           ← the cross-cure emblem logos (owner Gemini art
+                             2026-07-12, research/virtue_sin_mood_prompts.md):
+                             8 per family, Capitalized stems (Justice.png...,
+                             Sunday counted twice) — for the Encyclopedia's
+                             Virtues/Sins/Moods sections and the WEEK mode;
+                             inert until that wiring lands
 ```
 
 The star and the Umbra are deliberately NOT assets — both are simple
