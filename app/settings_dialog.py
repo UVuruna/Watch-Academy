@@ -672,18 +672,24 @@ class SettingsDialog(QDialog):
         for position in constants.RING_LAYOUTS[layout_key]["positions"]:
             cell = QVBoxLayout()
             cell.addWidget(QLabel(f"{position}h"))
-            combo = self._letter_combo()
+            combo = self._letter_combo(position)
             cell.addWidget(combo)
             self._ring_slot_combos[position] = combo
             self._ring_slot_row.addLayout(cell)
 
-    def _letter_combo(self) -> QComboBox:
+    def _letter_combo(self, position: int) -> QComboBox:
         """The letter library GROUPED into sections (owner spec
         2026-07-11): Latin / Greek / Numbers / Symbols — the section
-        headers are visible in the dropdown but not selectable."""
+        headers are visible in the dropdown but not selectable. A
+        NUMBER only fits its own hour (owner rule 2026-07-12), so the
+        Numbers section offers at most the position's own number."""
         combo = QComboBox()
         model = QStandardItemModel(combo)
         for group, glyphs in constants.RING_LETTER_GROUPS.items():
+            if group == "Numbers":
+                glyphs = tuple(g for g in glyphs if int(g) == position)
+                if not glyphs:
+                    continue             # 24h has no number — Ω's seat
             header = QStandardItem(f"— {self._tr(group)} —")
             header.setFlags(Qt.ItemFlag.NoItemFlags)
             model.appendRow(header)

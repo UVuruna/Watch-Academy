@@ -8,6 +8,7 @@ fresh -> rebuild the day context when (local date, UTC offset) changed
 
 import dataclasses
 import sys
+import random
 import threading
 from datetime import datetime
 from time import monotonic
@@ -598,9 +599,13 @@ class AppController(QObject):
 
     def _configure_theme_rotation(self) -> None:
         """Start/stop the rotation timer per the settings (called at
-        startup and after every Settings OK)."""
+        startup and after every Settings OK). The rotation ORDER is
+        shuffled fresh each time (owner spec 2026-07-12: never the
+        same sequence twice)."""
         settings = self._settings
-        if settings.theme_rotation and len(settings.theme_rotation_themes) >= 2:
+        self._rotation_order = list(settings.theme_rotation_themes)
+        random.shuffle(self._rotation_order)
+        if settings.theme_rotation and len(self._rotation_order) >= 2:
             self._theme_rotation_timer.start(
                 settings.theme_rotation_minutes * 60 * 1000
             )
@@ -608,13 +613,13 @@ class AppController(QObject):
             self._theme_rotation_timer.stop()
 
     def _rotate_theme(self) -> None:
-        """One rotation step: the next checked theme goes live (and the
-        menu checkmarks follow)."""
+        """One rotation step: the next theme of the SHUFFLED order goes
+        live (and the menu checkmarks follow)."""
         self._set_display_choice(
             "weekday_theme",
             _next_rotation_theme(
                 self._settings.weekday_theme,
-                self._settings.theme_rotation_themes,
+                tuple(self._rotation_order),
             ),
         )
         self._menu = self._build_menu()

@@ -37,6 +37,15 @@ def validate_preset(entry: dict) -> dict:
     unknown = [l for l in letters if l not in constants.RING_LETTER_FILES]
     if unknown:
         raise ValueError(f"ring preset {name!r}: unknown letters {unknown}")
+    # A NUMBER may only stand on its own hour (owner rule 2026-07-12:
+    # a 4 at 12h makes no sense — that is why only the six ring-hour
+    # numbers exist at all).
+    for position, glyph in zip(positions, letters):
+        if glyph.isdigit() and int(glyph) != position:
+            raise ValueError(
+                f"ring preset {name!r}: number {glyph} cannot stand at "
+                f"{position}h — numbers only fit their own position"
+            )
     return {
         "name": name,
         "positions": positions,
