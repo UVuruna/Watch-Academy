@@ -838,7 +838,15 @@
   "zodiac_articles/Aries/variants/paint_south": "0ce04fbcbbe765ed291d35c8119ed34b2144309f",
   "zodiac_articles/Aries/variants/light_south": "6023c0c561554e71397763b66b5543a384869534",
   "zodiac_articles/Taurus/variants/paint_south": "055e45580a30617ada4b0751abf44eee5df2819f",
-  "zodiac_articles/Taurus/variants/light_south": "7d91ce5f64adf1bdb071b10bc730bd55ef4051e9"
+  "zodiac_articles/Taurus/variants/light_south": "7d91ce5f64adf1bdb071b10bc730bd55ef4051e9",
+  "ui/Theme rotation": "d4a53856938cfb0eb496c2cc0c1cbfc1bf7f0c3a",
+  "ui/Enabled": "df174a3f2faa31814e06540acda7af8825403fac",
+  "ui/Every": "3560d90b708fd3e1f69285334ea051554e90d75b",
+  "ui/minutes": "be2e2bb698c7a42a8ff654d6025fa7c4c335bfc9",
+  "ui/hours": "5aedee0964c6b2b3fc2c57843d266e138c2f128a",
+  "ui/Cycles the checked weekday themes.": "1d635dc4a5af849b1aea2f8720e0649a40e71eac",
+  "ui/System": "bc0792d8dc81e8aa30b987246a5ce97c40cd6833",
+  "ui/Start with Windows": "ee4e7bfb0e1da65ffc524f7f3425592025f7102c"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -1678,6 +1686,14 @@
   "zodiac_articles/Aries/variants/paint_south": "Južno od ekvatora točak se okreće i ovan iskače iz prolećnog zelenila u večernji krak na 20h, odeven u duboku pigmentnu crvenu (#B60000), čas čije je raspoloženje Strast. To je Venerin rođeni krak, i stara priča se iznova pripoveda bojom: Marsov naprasiti znak smešten u odajama njegove mitske ljubavnice, Arej zatečen u Afroditinoj večeri. Južni ovan čuva svoju vatru, ali je upire u srce umesto u godišnje doba — nestrpljenje sazrelo u žar, juriš prve trave postao juriš prve ljubavi — a s njim se pomera i njegova senka: ne više Zavist, nego vreliji rođak te mane, Ljubomora — strast koja je počela da steže ono što bi trebalo samo da greje.",
   "zodiac_articles/Aries/variants/light_south": "U južnoj svetlosnoj paleti ovnov večernji krak gori čistom crvenom (#FF0000), prvom primarnom bojom aditivnog sveta. Hladna cijan zora njegovog severnog čitanja je nestala; ono što je bio zapreteni naboj sada je izračeni plamen, ovan kao svetionik, a ne kao seme. Hrabrost odaslana kao žudnja, u punom sjaju, u Venerin rođeni čas — signal koji ne čeka svoje godišnje doba, nego ga objavljuje.",
   "zodiac_articles/Taurus/variants/paint_south": "Južno od ekvatora točak se okreće i bik stiže kući: ogledalom preslikana godina smešta Bika na večernji krak Strasti, u rođenu Venerinu kuću, u pigmentnoj crvenoj (#B60000) — grimizu boje volujske krvi, teškom od zemlje koliko je njegovo severno zelenilo bilo teško od trave. Mit premešta težište zajedno s nijansom, jer je obličje koje je Zevs uzeo na sebe da prenese Evropu oduvek bilo priča o strasti, pa nežurni pasač postaje postojani ljubavnik: isto strpljenje izgovoreno iznova kao odanost, stara zavist koja se zagreva u rođenu senku kraka — ljubomoru, ljubav koja se drži onako kako bik drži tlo.",
-  "zodiac_articles/Taurus/variants/light_south": "U južnoj svetlosnoj paleti bikov večernji krak plamti čistom crvenom (#FF0000), aditivnom primarnom bojom, i čitanje se izoštrava: više nije reč o pašnjaku ni o glini tamnoj kao vino, nego o signalu — o želji objavljenoj punim sjajem. Venerina zver koja se vratila kući zadržava svoju sporost, ali spora vatra gori najduže: strast kao postojano zračenje, odanost koja se odašilje u svet umesto da ostane zakopana u polju."
+  "zodiac_articles/Taurus/variants/light_south": "U južnoj svetlosnoj paleti bikov večernji krak plamti čistom crvenom (#FF0000), aditivnom primarnom bojom, i čitanje se izoštrava: više nije reč o pašnjaku ni o glini tamnoj kao vino, nego o signalu — o želji objavljenoj punim sjajem. Venerina zver koja se vratila kući zadržava svoju sporost, ali spora vatra gori najduže: strast kao postojano zračenje, odanost koja se odašilje u svet umesto da ostane zakopana u polju.",
+  "ui/Theme rotation": "Rotacija tema",
+  "ui/Enabled": "Uključeno",
+  "ui/Every": "Na svakih",
+  "ui/minutes": "minuta",
+  "ui/hours": "sati",
+  "ui/Cycles the checked weekday themes.": "Kruži kroz štiklirane teme dana u sedmici.",
+  "ui/System": "Sistem",
+  "ui/Start with Windows": "Pokreni uz Windows"
  }
 }

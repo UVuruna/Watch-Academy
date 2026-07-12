@@ -77,6 +77,9 @@ UI_STRINGS: tuple[str, ...] = (
     "North", "North-East", "East", "South-East",
     "South", "South-West", "West", "North-West",
     "{name} — original",
+    "Theme rotation", "Enabled", "Every", "minutes", "hours",
+    "Cycles the checked weekday themes.",
+    "System", "Start with Windows",
     "Back to English — the shipped original texts",
     "The originals above the line ship inside the app. Any other language translates itself in the background on first pick (internet needed once) and then works offline.",
     # Ring tint color names (tooltips)

@@ -144,6 +144,29 @@ def test_phase2b_hover_lines_speak_the_overlay():
     assert "12<sup>th</sup> July 2026" in en._weekday_tooltip("sun", True)
 
 
+def test_theme_rotation_cycles_and_persists(tmp_path):
+    """Owner spec 2026-07-12: the checked weekday themes rotate every
+    N minutes — the cycle helper wraps, a current theme outside the
+    list restarts it, and the three settings round-trip."""
+    from app.controller import _next_rotation_theme
+    from app.settings_store import Settings, SettingsStore, replace
+
+    assert _next_rotation_theme("greek", ("planets", "greek", "egypt")) == "egypt"
+    assert _next_rotation_theme("egypt", ("planets", "greek", "egypt")) == "planets"
+    assert _next_rotation_theme("norse", ("planets", "greek")) == "planets"
+    store = SettingsStore(tmp_path / "settings.json")
+    store.save(replace(
+        Settings(),
+        theme_rotation=True,
+        theme_rotation_minutes=120,
+        theme_rotation_themes=("greek", "egypt"),
+    ))
+    loaded = store.load()
+    assert loaded.theme_rotation is True
+    assert loaded.theme_rotation_minutes == 120
+    assert loaded.theme_rotation_themes == ("greek", "egypt")
+
+
 def test_serbian_transliteration():
     assert transliterate_sr("Месец носи Спокој") == "Mesec nosi Spokoj"
     assert transliterate_sr("Џак и Љиљана, ЊЕГОШ") == "Džak i Ljiljana, NJEGOŠ"

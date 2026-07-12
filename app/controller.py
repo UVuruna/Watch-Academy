@@ -53,6 +53,14 @@ def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
     return (position in layout["triangle"]) == (finish == "gold")
 
 
+def _next_rotation_theme(current: str, selected: tuple[str, ...]) -> str:
+    """The theme AFTER `current` in the rotation list (cyclic); a
+    current theme outside the list starts it from the top."""
+    if current in selected:
+        return selected[(selected.index(current) + 1) % len(selected)]
+    return selected[0]
+
+
 def _earth_continent(settings: Settings) -> str:
     """The Earth-marker art variant for the ACTIVE location (owner bug
     2026-07-12: the marker was always Europe). The picker's continent
@@ -318,6 +326,11 @@ class AppController(QObject):
         self._translation_poller = QTimer(self)
         self._translation_poller.setInterval(1000)
         self._translation_poller.timeout.connect(self._poll_translation)
+        # Theme rotation (owner spec 2026-07-12): cycle the selected
+        # weekday themes every N minutes.
+        self._theme_rotation_timer = QTimer(self)
+        self._theme_rotation_timer.timeout.connect(self._rotate_theme)
+        self._configure_theme_rotation()
         self._skin = build_skin(self._settings)
         missing = missing_assets(self._skin)
         if missing:
@@ -582,6 +595,31 @@ class AppController(QObject):
         self._settings = replace(self._settings, hands=hands)
         self._install_skin(build_skin(self._settings))
         self._flush_position()
+
+    def _configure_theme_rotation(self) -> None:
+        """Start/stop the rotation timer per the settings (called at
+        startup and after every Settings OK)."""
+        settings = self._settings
+        if settings.theme_rotation and len(settings.theme_rotation_themes) >= 2:
+            self._theme_rotation_timer.start(
+                settings.theme_rotation_minutes * 60 * 1000
+            )
+        else:
+            self._theme_rotation_timer.stop()
+
+    def _rotate_theme(self) -> None:
+        """One rotation step: the next checked theme goes live (and the
+        menu checkmarks follow)."""
+        self._set_display_choice(
+            "weekday_theme",
+            _next_rotation_theme(
+                self._settings.weekday_theme,
+                self._settings.theme_rotation_themes,
+            ),
+        )
+        self._menu = self._build_menu()
+        self._widget.set_menu(self._menu)
+        self._tray.set_menu(self._menu)
 
     def _set_display_choice(self, key: str, value) -> None:
         """Shared setter behind every display choice: persist and
@@ -908,6 +946,8 @@ class AppController(QObject):
         self._menu = self._build_menu()
         self._widget.set_menu(self._menu)
         self._tray.set_menu(self._menu)
+        self._configure_theme_rotation()
+        native.set_autostart(dialog.autostart_selected())
         self._flush_position()
 
     def _open_time_travel(self) -> None:

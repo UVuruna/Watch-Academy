@@ -13,12 +13,15 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
     QColorDialog,
     QComboBox,
     QDialog,
     QDialogButtonBox,
     QDoubleSpinBox,
     QFormLayout,
+    QFrame,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
@@ -27,9 +30,11 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPushButton,
+    QScrollArea,
     QSlider,
     QSpinBox,
     QVBoxLayout,
+    QWidget,
 )
 
 from app.settings_store import Settings, replace
@@ -66,15 +71,27 @@ class SettingsDialog(QDialog):
         )
         self._ring_tint = settings.ring_tint
 
+        # The dialog outgrew small screens (owner question 2026-07-12):
+        # the groups live in a SCROLL AREA capped to the screen height,
+        # with OK/Cancel always visible below it.
+        content = QWidget()
+        column = QVBoxLayout(content)
+        column.addWidget(self._build_location_group())
+        column.addWidget(self._build_opacity_group())
+        column.addWidget(self._build_sizes_group())
+        column.addWidget(self._build_palette_group())
+        column.addWidget(self._build_ring_tint_group())
+        column.addWidget(self._build_custom_ring_group())
+        column.addWidget(self._build_custom_hands_group())
+        column.addWidget(self._build_theme_rotation_group())
+        column.addWidget(self._build_language_group())
+        column.addWidget(self._build_system_group())
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setWidget(content)
         layout = QVBoxLayout(self)
-        layout.addWidget(self._build_location_group())
-        layout.addWidget(self._build_opacity_group())
-        layout.addWidget(self._build_sizes_group())
-        layout.addWidget(self._build_palette_group())
-        layout.addWidget(self._build_ring_tint_group())
-        layout.addWidget(self._build_custom_ring_group())
-        layout.addWidget(self._build_custom_hands_group())
-        layout.addWidget(self._build_language_group())
+        layout.addWidget(scroll, stretch=1)
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
             | QDialogButtonBox.StandardButton.Cancel
@@ -82,6 +99,11 @@ class SettingsDialog(QDialog):
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
+        screen = QApplication.primaryScreen().availableGeometry()
+        self.resize(
+            min(content.sizeHint().width() + 48, screen.width() - 80),
+            min(content.sizeHint().height() + 96, round(screen.height() * 0.92)),
+        )
 
         if settings.city_path:
             self._restore_path(settings.city_path)
@@ -823,6 +845,74 @@ class SettingsDialog(QDialog):
         )
         self._hand_name_edit.clear()
 
+    # --- Theme rotation (owner spec 2026-07-12) ----------------------------------------
+
+    def _build_theme_rotation_group(self) -> QGroupBox:
+        """Cycle the CHECKED weekday themes every N minutes/hours
+        instead of wearing one forever."""
+        tr = self._tr
+        group = QGroupBox(tr("Theme rotation"))
+        column = QVBoxLayout(group)
+        self._rotation_enabled = QCheckBox(tr("Enabled"))
+        self._rotation_enabled.setChecked(self._settings.theme_rotation)
+        self._rotation_enabled.setToolTip(
+            tr("Cycles the checked weekday themes.")
+        )
+        column.addWidget(self._rotation_enabled)
+        grid = QGridLayout()
+        grid.setHorizontalSpacing(24)
+        labels = {
+            "planets": "Planets", "planet_signs": "Planet signs",
+            "greek": "Greek gods", "norse": "Norse gods",
+            "egypt": "Egyptian gods", "religion": "Religions",
+            "religion_alt": "Religions II", "profession": "Professions",
+        }
+        self._rotation_checks: dict[str, QCheckBox] = {}
+        for index, (key, label) in enumerate(labels.items()):
+            box = QCheckBox(tr(label))
+            box.setChecked(key in self._settings.theme_rotation_themes)
+            self._rotation_checks[key] = box
+            grid.addWidget(box, index // 4, index % 4)
+        column.addLayout(grid)
+        row = QHBoxLayout()
+        row.addWidget(QLabel(tr("Every")))
+        self._rotation_amount = QSpinBox()
+        self._rotation_amount.setRange(1, 999)
+        minutes = self._settings.theme_rotation_minutes
+        self._rotation_unit = QComboBox()
+        self._rotation_unit.addItem(tr("minutes"), 1)
+        self._rotation_unit.addItem(tr("hours"), 60)
+        if minutes % 60 == 0:
+            self._rotation_amount.setValue(minutes // 60)
+            self._rotation_unit.setCurrentIndex(1)
+        else:
+            self._rotation_amount.setValue(minutes)
+        row.addWidget(self._rotation_amount)
+        row.addWidget(self._rotation_unit)
+        row.addStretch(1)
+        column.addLayout(row)
+        return group
+
+    # --- System (autostart) -------------------------------------------------------------
+
+    def _build_system_group(self) -> QGroupBox:
+        """Start with Windows (owner spec 2026-07-12): a standard-user
+        HKCU Run entry — the registry is the store, read live here and
+        applied by the controller on OK."""
+        from app import native
+
+        tr = self._tr
+        group = QGroupBox(tr("System"))
+        row = QHBoxLayout(group)
+        self._autostart_check = QCheckBox(tr("Start with Windows"))
+        self._autostart_check.setChecked(native.autostart_enabled())
+        row.addWidget(self._autostart_check)
+        row.addStretch(1)
+        return group
+
+    def autostart_selected(self) -> bool:
+        return self._autostart_check.isChecked()
+
     # --- Language (owner spec: translate once via the keyless endpoint) --------------
 
     def _build_language_group(self) -> QGroupBox:
@@ -906,6 +996,16 @@ class SettingsDialog(QDialog):
                 else None
             ),
             moon_hidden_alpha=self._moon_alpha_slider.value() / 100,
+            theme_rotation=self._rotation_enabled.isChecked(),
+            theme_rotation_minutes=(
+                self._rotation_amount.value()
+                * self._rotation_unit.currentData()
+            ),
+            theme_rotation_themes=tuple(
+                key
+                for key, box in self._rotation_checks.items()
+                if box.isChecked()
+            ) or constants.WEEKDAY_THEMES,
             palettes=palettes,
             ring_tint=self._ring_tint,
             custom_rings=tuple(self._custom_rings),

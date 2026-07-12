@@ -66,6 +66,11 @@ class Settings:
     show_weekday_names: bool = True     # the day-name text on the bodies
     moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
     hands: str = "CLASSIC"              # the hand pack (Design ▸ Hands)
+    # Theme rotation (owner spec 2026-07-12): cycle the CHECKED weekday
+    # themes every N minutes instead of wearing one forever.
+    theme_rotation: bool = False
+    theme_rotation_minutes: int = 60
+    theme_rotation_themes: tuple[str, ...] = constants.WEEKDAY_THEMES
     language: str = "en"                # translation target (en = originals)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
@@ -192,6 +197,20 @@ class SettingsStore:
                     if isinstance(raw.get("hands"), str) and raw["hands"].strip()
                     else "CLASSIC"
                 ),
+                theme_rotation=_load_bool(raw, "theme_rotation", False),
+                theme_rotation_minutes=(
+                    int(raw["theme_rotation_minutes"])
+                    if isinstance(raw.get("theme_rotation_minutes"), int)
+                    and 1 <= raw["theme_rotation_minutes"] <= 24 * 60
+                    else 60
+                ),
+                theme_rotation_themes=tuple(
+                    theme
+                    for theme in raw.get(
+                        "theme_rotation_themes", constants.WEEKDAY_THEMES
+                    )
+                    if theme in constants.WEEKDAY_THEMES
+                ) or constants.WEEKDAY_THEMES,
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -248,6 +267,9 @@ class SettingsStore:
             "show_weekday_names": settings.show_weekday_names,
             "moon_hidden_alpha": settings.moon_hidden_alpha,
             "hands": settings.hands,
+            "theme_rotation": settings.theme_rotation,
+            "theme_rotation_minutes": settings.theme_rotation_minutes,
+            "theme_rotation_themes": list(settings.theme_rotation_themes),
             "language": settings.language,
             "location": {
                 "name": settings.city_name,

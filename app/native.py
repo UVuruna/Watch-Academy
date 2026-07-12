@@ -35,6 +35,55 @@ def acquire_single_instance(name: str) -> bool:
     return _kernel32.GetLastError() != winapi.ERROR_ALREADY_EXISTS
 
 
+_RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
+_RUN_VALUE = "DOMY Watch"
+
+
+def _autostart_command() -> str:
+    """What HKCU Run should launch: the frozen EXE, or (in development)
+    pythonw with the repo's main.py."""
+    import sys
+    from pathlib import Path
+
+    if getattr(sys, "frozen", False):
+        return f'"{sys.executable}"'
+    pythonw = Path(sys.executable).with_name("pythonw.exe")
+    main = Path(__file__).resolve().parents[1] / "main.py"
+    return f'"{pythonw}" "{main}"'
+
+
+def autostart_enabled() -> bool:
+    """Whether the HKCU Run entry exists (the registry IS the store —
+    no duplicate flag in settings.json)."""
+    import winreg
+
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, _RUN_KEY) as key:
+            winreg.QueryValueEx(key, _RUN_VALUE)
+        return True
+    except OSError:
+        return False
+
+
+def set_autostart(enabled: bool) -> None:
+    """Create or remove the HKCU Run entry (standard-user autostart —
+    the app never elevates, per the build conventions)."""
+    import winreg
+
+    with winreg.OpenKey(
+        winreg.HKEY_CURRENT_USER, _RUN_KEY, 0, winreg.KEY_SET_VALUE
+    ) as key:
+        if enabled:
+            winreg.SetValueEx(
+                key, _RUN_VALUE, 0, winreg.REG_SZ, _autostart_command()
+            )
+        else:
+            try:
+                winreg.DeleteValue(key, _RUN_VALUE)
+            except FileNotFoundError:
+                pass                    # already absent — nothing to remove
+
+
 def set_click_through(hwnd: int, enabled: bool) -> None:
     """True click-through: WS_EX_TRANSPARENT removes the window from mouse
     hit testing entirely (both buttons AND system hover pass to whatever
