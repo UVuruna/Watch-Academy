@@ -114,8 +114,13 @@ def test_south_slot_matrix():
     assert south_slot_theta(
         skin(pointer="hexa", show_pointer=True), 14.0
     ) == 194.0
+    # Pointer element off + weekday still on -> the pair FLANKS the
+    # bottom (owner extension); weekday off as well -> plain south.
     assert south_slot_theta(
         skin(pointer="hexa", show_pointer=False), 14.0
+    ) == constants.AURORA_DUAL_SLOT_ANGLE
+    assert south_slot_theta(
+        skin(pointer="hexa", show_pointer=False, show_weekday=False), 14.0
     ) == 180.0
     assert south_slot_theta(
         skin(pointer="trio", show_pointer=True), 14.0
@@ -216,37 +221,50 @@ def test_palette_for_selects_the_skin_choice():
 # --- Aurora (owner spec 2026-07-12) -------------------------------------------------
 
 
-def test_weekday_badge_blocks_and_gating():
-    """Owner spec 2026-07-12: the astrology badge in the weekday
-    position rides the Prism arm of the CURRENT 4-hour color block
-    (6-10 / 10-14 / 14-18 / 18-22 / 22-2 / 2-6); only the Prism and
-    Aurora allow it — other pointers force the bodies back."""
+def test_weekday_badge_gating_and_pointer_off_flank():
+    """Owner 2026-07-12 (revised): the astrology badge lives under
+    AURORA ONLY (the Prism variant was dropped — the 2-signs-per-
+    diamond mapping is average-only); AND with the Pointer element OFF
+    the South slot exists on EVERY mode, flanking the south-dwelling
+    body Aurora-style on Prism/Seasons."""
+    import dataclasses
+
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from render.layers import ascendant_block_theta
-
-    def theta_at(hour: float) -> float:
-        return ascendant_block_theta((hour * 15.0 + 180.0) % 360.0)
-
-    assert theta_at(7) == 300.0      # 6-10  -> the 8h arm
-    assert theta_at(6.0) == 300.0    # the boundary opens the new block
-    assert theta_at(11.5) == 0.0     # 10-14 -> the 12h crown
-    assert theta_at(15) == 60.0      # 14-18 -> the 16h arm
-    assert theta_at(19) == 120.0     # 18-22 -> the 20h arm
-    assert theta_at(23) == 180.0     # 22-2  -> the Omega arm
-    assert theta_at(1.9) == 180.0
-    assert theta_at(3) == 240.0      # 2-6   -> the 4h arm
-    octa = apply_display_settings(
-        defaults.DEFAULT_SKIN,
-        replace(Settings(), pointer="octa", weekday_slot="ascendant"),
+    from render.layers import (
+        south_slot_available, south_slot_flanks, south_slot_theta,
     )
-    assert octa.weekday_slot == "weekday"    # grayed pointers -> bodies
-    for pointer in ("hexa", "aurora"):
+
+    for pointer in ("hexa", "octa", "cross", "trio"):
         skin = apply_display_settings(
             defaults.DEFAULT_SKIN,
             replace(Settings(), pointer=pointer, weekday_slot="ascendant"),
         )
-        assert skin.weekday_slot == "ascendant"
+        assert skin.weekday_slot == "weekday", pointer   # bodies forced
+    aurora = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(Settings(), pointer="aurora", weekday_slot="ascendant"),
+    )
+    assert aurora.weekday_slot == "ascendant"
+
+    def skin(**kw):
+        return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
+
+    # Pointer element OFF -> the slot exists on every mode.
+    for pointer in ("hexa", "cross", "trio", "octa"):
+        off = skin(pointer=pointer, show_pointer=False, show_weekday=True)
+        assert south_slot_available(off), pointer
+        # ...and it pins straight south (or flanks on Prism/Seasons).
+        if pointer in ("hexa", "cross"):
+            assert south_slot_flanks(off)
+            assert south_slot_theta(off, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
+        else:
+            assert not south_slot_flanks(off)
+            assert south_slot_theta(off, 14.0) == constants.SOUTH_SLOT_ANGLE
+    # Weekday off as well -> no flanking, plain south.
+    lone = skin(pointer="hexa", show_pointer=False, show_weekday=False)
+    assert not south_slot_flanks(lone)
+    assert south_slot_theta(lone, 14.0) == constants.SOUTH_SLOT_ANGLE
 
 
 def test_aurora_bands_spread_the_day_hues_evenly():
