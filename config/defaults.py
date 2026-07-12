@@ -228,6 +228,17 @@ PALETTE_PRESETS = {
     ("cross", "light"): _CROSS_SEASONS,
     ("trio", "paint"): _TRINITY,
     ("trio", "light"): _TRINITY,
+    # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
+    # paint = azure/green/yellow/orange/red, light = azure/cyan/green/
+    # yellow/red; twilight left (dawn) blue, right (dusk) brown.
+    ("aurora", "paint"): (
+        "#002FFF", "#0080FF", "#007E00", "#F8E600", "#DC9600",
+        "#B60000", "#6B4423",
+    ),
+    ("aurora", "light"): (
+        "#0040FF", "#0080FF", "#00DCDC", "#00DC00", "#FFFF00",
+        "#FF0000", "#7A4A21",
+    ),
 }
 
 # Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and

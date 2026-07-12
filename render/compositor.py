@@ -445,9 +445,14 @@ class Compositor:
             return center_body
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
+        # The Aurora slot is FIXED above the Omega (owner spec) — the
+        # hit test must match the drawn, un-rotated position.
+        slot_rotation = 0.0 if self._skin.pointer == "aurora" else rotation
         for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
             body = visible_occupant(occupants, today)
-            slot = dial_point(angle + rotation, radius * weekday.orbit_fraction)
+            slot = dial_point(
+                angle + slot_rotation, radius * weekday.orbit_fraction
+            )
             if hit(slot, radius * weekday.diamond_scale):
                 return body
         return None
@@ -491,6 +496,8 @@ class Compositor:
         if not self._skin.show_pointer:
             # Pointer element off: no visible arms, no arm hovers.
             return None
+        if self._skin.pointer == "aurora":
+            return None      # no arms exist (owner spec 2026-07-12)
         distance = math.hypot(point.x(), point.y())
         star_tip = radius * self._skin.star.radius_fraction
         if not (radius * 0.08 <= distance <= star_tip):

@@ -60,8 +60,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   remembers its metal via `_set_theme_metal`, releasing
   follow-the-ring), Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
-  groups: Trinity/Seasons/Prism/Compass variant — the owner's display
-  names for trio/cross/hexa/octa — + Paint/Light palette) and Umbra
+  groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's
+  display names for trio/cross/hexa/aurora/octa; Aurora has no arm
+  count and forces solar rotation (its toggle grays out) — + Paint/
+  Light palette) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
   contrast); then Size (360…1440),
   Elements (the FINAL.txt #5 on/off switches, via the shared

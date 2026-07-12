@@ -130,7 +130,10 @@ WEEKDAY_FULL_NAMES = {
 # Pointer variants: how many arms the star has — and with how many hues
 # the day's periods are measured (owner spec: trio 3x120, cross 4x90,
 # hexa 6x60, octa 8x45).
-POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8, "trio": 3}
+# "aurora" (owner spec 2026-07-12) draws NO geometric pointer at all —
+# its 7 entries are the PALETTE size: a dawn hue, five day hues spread
+# EVENLY across the actual sunrise-sunset arc, and a dusk hue.
+POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8, "trio": 3, "aurora": 7}
 
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
 # stay hexa/cross/octa/trio (settings and code stability); the menu and
@@ -140,6 +143,7 @@ POINTER_DISPLAY_NAMES = {
     "cross": "Seasons",
     "hexa": "Prism",
     "octa": "Compass",
+    "aurora": "Aurora",     # no arms — the day itself painted in bands
 }
 
 # What each palette circle COLORS (owner spec 2026-07-11: hovering a
@@ -156,6 +160,12 @@ POINTER_ARM_LABELS = {
     "octa": (
         "North", "North-East", "East", "South-East",
         "South", "South-West", "West", "North-West",
+    ),
+    # Aurora speaks in day phases: the dawn band, five day hues from
+    # sunrise to sunset, the dusk band.
+    "aurora": (
+        "Dawn", "Morning", "Forenoon", "Noon", "Afternoon", "Evening",
+        "Dusk",
     ),
 }
 
@@ -508,6 +518,14 @@ POINTER_WEEKDAY_SLOTS = {
         (0.0, ("jupiter", "saturn")),
         (120.0, ("venus", "mars")),
         (240.0, ("moon", "mercury")),
+    ),
+    # AURORA (owner spec 2026-07-12): one FIXED slot at the imagined
+    # south — the dial bottom, above the Omega — showing today's body
+    # only (all seven occupants -> the priority rule always picks
+    # today). It never rotates with the sun.
+    "aurora": (
+        (180.0, ("sun", "moon", "mars", "mercury", "jupiter", "venus",
+                 "saturn")),
     ),
 }
 OCTA_TIME_SLOT_ANGLE = 180.0         # the bottom arm carries the digital time

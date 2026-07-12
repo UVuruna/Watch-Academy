@@ -390,6 +390,19 @@ RGB + CMY for the hexa, with orange and azure as the octa's dawn/dusk
 pair. Paint is how the ancients painted the week; light is how Newton
 would have projected it. Same week, two readings.
 
+The AURORA pointer (owner spec 2026-07-12) abandons geometry entirely:
+no star, no arms — the day itself is the pointer. Five day hues (paint
+azure/green/yellow/orange/red; light azure/cyan/green/yellow/red)
+spread EVENLY across the actual sunrise-to-sunset arc, so every hue
+stays visible on the shortest and the longest day alike — the arc
+stretches and compresses, never the palette. The dawn band wears blue
+on the left, the dusk band brown on the right. Aurora is ALWAYS
+solar-rotated (its bands anchor to the real sun events), and the
+weekday body — when the element is on — stands fixed at the imagined
+south, the dial bottom above the Omega. Custom hues edit in Settings
+like every other palette (seven chips: Dawn, Morning, Forenoon, Noon,
+Afternoon, Evening, Dusk).
+
 <a id="reference-tables"></a>
 
 ## Layer Reference Tables

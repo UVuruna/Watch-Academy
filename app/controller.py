@@ -276,7 +276,12 @@ def apply_display_settings(skin, settings: Settings):
         umbra_form=settings.umbra_form,
         umbra_contrast=settings.umbra_contrast,
         palette_style=settings.palette_style,
-        solar_rotation=settings.solar_rotation,
+        # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
+        # bands anchor to the real sun events, so the whole wheel keeps
+        # the solar frame regardless of the toggle.
+        solar_rotation=(
+            True if settings.pointer == "aurora" else settings.solar_rotation
+        ),
         octa_slot=settings.octa_slot,
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
@@ -678,9 +683,11 @@ class AppController(QObject):
         self._settings = replace(self._settings, **{key: value})
         if key == "pointer":
             # The Compass slot controls (the Theme submenu AND the
-            # Elements switch) only apply to the Compass pointer.
+            # Elements switch) only apply to the Compass pointer; the
+            # Solar rotation toggle has no say under Aurora.
             self._octa_slot_action.setEnabled(value == "octa")
             self._octa_slot_toggle.setEnabled(value == "octa")
+            self._solar_rotation_action.setEnabled(value != "aurora")
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
@@ -738,8 +745,14 @@ class AppController(QObject):
             [
                 # Owner-chosen display names (FINAL.txt #8): Trinity,
                 # Seasons, Prism, Compass — protected brand terms, the
-                # same in every language.
-                (variant, f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})")
+                # same in every language. Aurora has no arms, so no
+                # count after its name.
+                (
+                    variant,
+                    constants.POINTER_DISPLAY_NAMES[variant]
+                    if variant == "aurora"
+                    else f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})",
+                )
                 for variant, arms in sorted(
                     constants.POINTER_POINTS.items(), key=lambda item: item[1]
                 )
@@ -940,13 +953,16 @@ class AppController(QObject):
             tr("All hover texts. Off: the dial shows nothing on hover — "
                "combined with Click-through it has zero interaction."),
         )
-        self._add_toggle(
+        self._solar_rotation_action = self._add_toggle(
             menu, tr("Solar rotation"), settings.solar_rotation,
             lambda checked: self._set_display_choice("solar_rotation", checked),
             tr("On: the star points at true solar noon. Off: Star, Aura and "
                "Umbra stand upright (12/24 at the top) for reading exact "
                "planet and season positions."),
         )
+        # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12) — the
+        # bands anchor to the real sun events, the toggle has no say.
+        self._solar_rotation_action.setEnabled(settings.pointer != "aurora")
         self._add_toggle(
             menu, tr("Click-through"), self._settings.click_through,
             self._set_click_through,

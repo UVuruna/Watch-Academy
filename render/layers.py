@@ -261,6 +261,69 @@ def lit_regions(sun: SunDay, spec) -> list[tuple[float, float, float]]:
     return []                                            # POLAR_NIGHT
 
 
+def aurora_bands(
+    sun: SunDay, palette: tuple, day_alpha: float, twilight_alpha: float
+) -> tuple[list[tuple[float, float, str, float]], bool]:
+    """The AURORA pointer's color bands (owner spec 2026-07-12): the
+    five DAY hues spread EVENLY across the actual sunrise-sunset arc —
+    every hue visible on the shortest and the longest day alike — with
+    the dawn band in the palette's FIRST hue (left, blue) and the dusk
+    band in its LAST (right, brown). Returns (bands, solar_frame):
+    bands are (start, end_unwrapped, hue, alpha) in wall-clock dial
+    space; solar_frame=True marks the boundary-less regimes (polar day,
+    one-sided white nights, boundary-less twilight-only) whose bands
+    run midnight-to-midnight in the SOLAR frame — the caller rotates
+    them with the star."""
+    dawn_hue, day_hues, dusk_hue = palette[0], palette[1:-1], palette[-1]
+
+    def arc(a: float, b: float) -> tuple[float, float]:
+        return a, b if b > a else b + 360.0
+
+    def spread(a: float, b: float, alpha: float) -> list:
+        step = (b - a) / len(day_hues)
+        return [
+            (a + k * step, a + (k + 1) * step, hue, alpha)
+            for k, hue in enumerate(day_hues)
+        ]
+
+    angle = angles.time_to_dial_angle
+    regime = sun.regime
+    if regime is DaylightRegime.NORMAL:
+        rise = angle(sun.sunrise) if sun.sunrise else angle(sun.dawn)
+        sets = angle(sun.sunset) if sun.sunset else angle(sun.dusk)
+        dawn = angle(sun.dawn) if sun.dawn else rise
+        dusk = angle(sun.dusk) if sun.dusk else sets
+        bands = []
+        if dawn != rise:
+            bands.append((*arc(dawn, rise), dawn_hue, twilight_alpha))
+        bands.extend(spread(*arc(rise, sets), day_alpha))
+        if sets != dusk:
+            bands.append((*arc(sets, dusk), dusk_hue, twilight_alpha))
+        return bands, False
+    if regime is DaylightRegime.WHITE_NIGHTS:
+        if sun.sunrise is None or sun.sunset is None:
+            return spread(180.0, 540.0, day_alpha), True
+        rise, sets = angle(sun.sunrise), angle(sun.sunset)
+        bands = spread(*arc(rise, sets), day_alpha)
+        night_a, night_b = arc(sets, rise)
+        middle = (night_a + night_b) / 2.0
+        # The bright night: dusk brown into the sunset half, dawn blue
+        # out of the sunrise half.
+        bands.append((night_a, middle, dusk_hue, twilight_alpha))
+        bands.append((middle, night_b, dawn_hue, twilight_alpha))
+        return bands, False
+    if regime is DaylightRegime.TWILIGHT_ONLY:
+        if sun.dawn is not None and sun.dusk is not None:
+            return (
+                spread(*arc(angle(sun.dawn), angle(sun.dusk)), twilight_alpha),
+                False,
+            )
+        return spread(180.0, 540.0, twilight_alpha), True
+    if regime is DaylightRegime.POLAR_DAY:
+        return spread(180.0, 540.0, day_alpha), True
+    return [], False                                     # POLAR_NIGHT
+
+
 class Layer(ABC):
     cadence: Cadence
 
@@ -297,6 +360,25 @@ class BackgroundLayer(Layer):
         else:
             self._draw_umbra(painter, ctx, umbra_radius)
         painter.restore()
+
+        # AURORA (owner spec 2026-07-12): no geometric pointer — the
+        # day hues spread evenly across the actual sunrise-sunset arc,
+        # dawn blue on the left, dusk brown on the right, so every hue
+        # stays visible on the shortest and the longest day alike.
+        if ctx.skin.colorful and ctx.skin.pointer == "aurora":
+            bands, solar_frame = aurora_bands(
+                ctx.day.sun, palette_for(ctx.skin),
+                spec.day_alpha, spec.twilight_alpha,
+            )
+            for start, end, hue, alpha in bands:
+                painter.save()
+                if solar_frame:
+                    painter.rotate(ctx.rotation)
+                painter.setOpacity(alpha)
+                painter.setBrush(QColor(hue))
+                draw_pie(painter, aura_radius, start, end)
+                painter.restore()
+            return
 
         # Colorful off (Elements switch): the day/twilight arcs are still
         # indicated, but in plain white — a one-entry palette draws a
@@ -366,6 +448,8 @@ class StarLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.star
+        if ctx.skin.pointer == "aurora":
+            return          # no geometry at all — the Aura IS the pointer
 
         # Colored BORDERS run the full circle so the night diamonds stay
         # recognizable (owner spec)...
@@ -634,7 +718,11 @@ class WeekdayLayer(Layer):
         slot_size = 2 * ctx.radius * spec.diamond_scale
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
             body = visible_occupant(occupants, today)
-            theta = slot_angle + ctx.rotation
+            # The Aurora slot stands FIXED above the Omega (owner spec
+            # 2026-07-12: the imagined south) — never sun-rotated.
+            theta = slot_angle + (
+                0.0 if ctx.skin.pointer == "aurora" else ctx.rotation
+            )
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hover_factor(ctx, f"body:{body}"),

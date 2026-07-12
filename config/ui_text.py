@@ -79,6 +79,8 @@ UI_STRINGS: tuple[str, ...] = (
     "Right", "Left",
     "North", "North-East", "East", "South-East",
     "South", "South-West", "West", "North-West",
+    # Aurora palette chips speak in day phases (Dawn/Dusk are above).
+    "Morning", "Forenoon", "Noon", "Afternoon", "Evening",
     "{name} — original",
     "Theme rotation", "Enabled", "Every", "minutes", "hours",
     "Cycles the checked weekday themes.",

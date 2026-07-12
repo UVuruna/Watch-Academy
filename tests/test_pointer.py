@@ -65,6 +65,13 @@ def test_every_layout_seats_the_whole_week():
 
 def test_slot_angles_sit_on_the_pointer_arms():
     for pointer, slots in constants.POINTER_WEEKDAY_SLOTS.items():
+        if pointer == "aurora":
+            # No arms exist — the single slot is pinned to the dial
+            # bottom, above the Omega (owner spec 2026-07-12).
+            assert slots == ((180.0, constants.WEEKDAY_BODIES),) or [
+                angle for angle, _ in slots
+            ] == [180.0]
+            continue
         arm_step = 360.0 / constants.POINTER_POINTS[pointer]
         for angle, _ in slots:
             assert angle % arm_step == 0.0, (pointer, angle)
@@ -136,6 +143,69 @@ def test_palette_for_selects_the_skin_choice():
     light = dataclasses.replace(paint, palette_style="light")
     assert palette_for(paint) == defaults.PALETTE_PRESETS[("octa", "paint")]
     assert palette_for(light) == defaults.PALETTE_PRESETS[("octa", "light")]
+
+
+# --- Aurora (owner spec 2026-07-12) -------------------------------------------------
+
+
+def test_aurora_bands_spread_the_day_hues_evenly():
+    """The five DAY hues split the actual sunrise-sunset arc into equal
+    bands — ALL of them visible on the shortest and the longest day
+    alike — dawn wears the palette's first hue (blue), dusk its last
+    (brown); the weekday slot is pinned to the dial bottom and the
+    pointer is always solar-rotated."""
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    import astral
+
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+    from core.clock_state import build_day_context
+    from core import angles
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.layers import aurora_bands, today_slot_theta
+
+    palette = defaults.PALETTE_PRESETS[("aurora", "paint")]
+    tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
+    observer = astral.Observer(
+        latitude=defaults.DEFAULT_CITY["latitude"],
+        longitude=defaults.DEFAULT_CITY["longitude"],
+    )
+    seasons = SeasonsRepository()
+    moons = MoonPhaseRepository()
+    for date in (datetime(2026, 6, 21, 12, 0, tzinfo=tz),      # longest day
+                 datetime(2026, 12, 21, 12, 0, tzinfo=tz)):    # shortest day
+        day = build_day_context(
+            date, observer,
+            seasons.year_anchors(date.year), moons.moon_window(date.year),
+        )
+        bands, solar_frame = aurora_bands(day.sun, palette, 0.55, 0.28)
+        assert solar_frame is False
+        assert len(bands) == 7, date                 # dawn + 5 day + dusk
+        assert bands[0][2] == palette[0]             # dawn blue
+        assert bands[-1][2] == palette[-1]           # dusk brown
+        assert bands[0][3] == bands[-1][3] == 0.28   # twilight alpha
+        day_bands = bands[1:-1]
+        assert [hue for _, _, hue, _ in day_bands] == list(palette[1:-1])
+        rise = angles.time_to_dial_angle(day.sun.sunrise)
+        sets = angles.time_to_dial_angle(day.sun.sunset)
+        span = (sets - rise) % 360.0
+        widths = [end - start for start, end, _, alpha in day_bands]
+        assert all(abs(w - span / 5) < 1e-9 for w in widths), date
+        assert abs(day_bands[0][0] - rise) < 1e-9
+        assert all(alpha == 0.55 for _, _, _, alpha in day_bands)
+    # The weekday slot never rotates: pinned at the bottom, above Omega.
+    for body in constants.WEEKDAY_BODIES:
+        assert today_slot_theta("aurora", body) == 180.0
+    # Aurora is ALWAYS solar-rotated, whatever the toggle says.
+    skin = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(Settings(), pointer="aurora", solar_rotation=False),
+    )
+    assert skin.solar_rotation is True
+    assert skin.pointer == "aurora"
 
 
 # --- Octa bottom slot ----------------------------------------------------------------
