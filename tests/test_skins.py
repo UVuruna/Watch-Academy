@@ -146,20 +146,41 @@ def test_bronze_finish_and_theme_metals():
     gold_greek = build_skin(replace(
         Settings(), weekday_theme="greek", theme_metals={"greek": "gold"},
     )).weekday_set
-    assert gold_greek.metal_tint == defaults.THEME_METAL_TINTS["gold"]
-    assert gold_greek.metal_desaturate is True
+    assert gold_greek.metal == "gold"
     plain_greek = build_skin(replace(Settings(), weekday_theme="greek")).weekday_set
-    assert plain_greek.metal_tint is None            # bronze = as drawn
+    assert plain_greek.metal is None                 # bronze = as drawn
     follow = build_skin(replace(
         Settings(), weekday_theme="norse", ring_finish="silver",
         theme_metals={"norse": "gold"}, theme_metal_follow_ring=True,
     )).weekday_set
-    assert follow.metal_tint == defaults.THEME_METAL_TINTS["silver"]
+    assert follow.metal == "silver"
     colorful = build_skin(replace(
         Settings(), weekday_theme="egypt", theme_metal_follow_ring=True,
         ring_finish="gold",
     )).weekday_set
-    assert colorful.metal_tint is None               # full-color theme
+    assert colorful.metal is None                    # full-color theme
+    # The hue-SELECTIVE swap (owner insight 2026-07-12): warm bronze
+    # pixels take the target metal, gray pixels stay untouched.
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtGui import QColor, QPixmap
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+    probe = QPixmap(2, 1)
+    probe.fill(QColor("#B08050"))                    # warm bronze
+    image = probe.toImage()
+    image.setPixelColor(1, 0, QColor("#808080"))     # neutral gray
+    swapped = AssetCache._metal_swapped(
+        QPixmap.fromImage(image), "silver"
+    ).toImage()
+    bronze_out = swapped.pixelColor(0, 0)
+    gray_out = swapped.pixelColor(1, 0)
+    assert bronze_out.saturationF() < 0.15           # bronze went silver
+    assert gray_out == QColor("#808080")             # gray untouched
 
 
 def test_pre_rendered_silver_letters_are_grayscale():

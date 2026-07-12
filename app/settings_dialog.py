@@ -417,6 +417,11 @@ class SettingsDialog(QDialog):
             value, default, "aura_twilight"
         )
         form.addRow(tr("Aura — twilight"), twilight_row)
+        if self._settings.pointer == "aurora":
+            # Aurora has no separate twilight opacity (owner 2026-07-12:
+            # the dedicated dawn/dusk COLORS carry the meaning — the
+            # whole arc follows the daylight opacity).
+            self._aura_twilight_slider.setEnabled(False)
         # The Moon marker DIMS below the horizon (owner spec
         # 2026-07-12) — a plain scale, not an override.
         self._moon_alpha_slider = QSlider(Qt.Orientation.Horizontal)
@@ -475,7 +480,7 @@ class SettingsDialog(QDialog):
             ("earth_scale", tr("Earth"), constants.ELEMENT_SCALE_RANGE, 100),
             ("moon_scale", tr("Moon"), constants.ELEMENT_SCALE_RANGE, 100),
             ("weekday_scale", tr("Weekday"), constants.ELEMENT_SCALE_RANGE, 100),
-            ("octa_slot_scale", tr("Octa slot"), constants.ELEMENT_SCALE_RANGE, 100),
+            ("octa_slot_scale", tr("South slot"), constants.ELEMENT_SCALE_RANGE, 100),
             ("ring_letter_scale", tr("Ring letters"),
              constants.ELEMENT_SCALE_RANGE, 100),
             ("hover_enlarge", tr("Hover enlarge"),

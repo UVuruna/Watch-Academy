@@ -74,12 +74,16 @@ def draw_pie(painter: QPainter, radius: float, start_deg: float, end_deg: float)
 def draw_pixmap_centered(
     painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF,
     height: float, tint: str | None = None, desaturate: bool = False,
+    metal: str | None = None,
 ) -> None:
     """Asset rasterized to `height` and drawn centered at `pos` — the one
     shared image path of weekday bodies and the year marker (Rule #5).
-    `tint` tritone-maps the image (the metal recolor); `desaturate`
-    grays it first so the tritone works on pure luminance."""
-    pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr, tint, desaturate)
+    `tint` tritone-maps the image; `desaturate` grays it first;
+    `metal` runs the hue-SELECTIVE bronze-to-gold/silver swap (only the
+    warm bronze pixels change — owner insight 2026-07-12)."""
+    pixmap = ctx.cache.pixmap_by_height(
+        asset, height, ctx.dpr, tint, desaturate, metal
+    )
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
 
@@ -208,6 +212,56 @@ def today_slot_theta(pointer: str, today: str) -> float | None:
     return None
 
 
+def south_slot_available(skin: SkinDefinition) -> bool:
+    """The owner's availability matrix (2026-07-12): the Compass always
+    reserves its bottom arm for the slot; the Trinity always has room
+    at the south gap between its blue and red diamonds; Aurora always
+    shows it (images only); Prism and Seasons gain it only once the
+    Weekday element is off — the slot takes the freed space."""
+    if not skin.show_octa_slot:
+        return False
+    if skin.pointer in ("octa", "trio", "aurora"):
+        return True
+    return not skin.show_weekday
+
+
+def south_slot_theta(skin: SkinDefinition, rotation: float) -> float:
+    """Where the slot sits (owner rules 2026-07-12): on the Compass it
+    IS the bottom arm (rotating with the star); under Aurora it pins
+    straight south — or to 21h on the right when the weekday body
+    shares the bottom; on the other pointers it rides the bottom arm
+    while the star is DRAWN (rotation is already 0 with solar rotation
+    off) and pins straight south once the Pointer element is off."""
+    if skin.pointer == "octa":
+        return constants.SOUTH_SLOT_ANGLE + rotation
+    if skin.pointer == "aurora":
+        if skin.show_weekday:
+            return constants.AURORA_DUAL_SLOT_ANGLE
+        return constants.SOUTH_SLOT_ANGLE
+    if skin.show_pointer:
+        return constants.SOUTH_SLOT_ANGLE + rotation
+    return constants.SOUTH_SLOT_ANGLE
+
+
+def south_slot_mode(skin: SkinDefinition) -> str:
+    """Aurora allows only the image modes in its slot (owner spec:
+    'samo neki logo') — a persisted text mode shows the zodiac logo."""
+    if (
+        skin.pointer == "aurora"
+        and skin.octa_slot not in constants.SOUTH_SLOT_LOGO_MODES
+    ):
+        return "zodiac_logo"
+    return skin.octa_slot
+
+
+def aurora_weekday_theta(skin: SkinDefinition) -> float:
+    """The Aurora weekday angle: straight south alone, 3h on the left
+    when the south slot shares the bottom (owner dual layout)."""
+    if skin.show_octa_slot:
+        return constants.AURORA_DUAL_WEEKDAY_ANGLE
+    return constants.SOUTH_SLOT_ANGLE
+
+
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
     """Clip path for the pie between two dial angles going clockwise."""
     path = QPainterPath()
@@ -262,19 +316,22 @@ def lit_regions(sun: SunDay, spec) -> list[tuple[float, float, float]]:
 
 
 def aurora_bands(
-    sun: SunDay, palette: tuple, day_alpha: float, twilight_alpha: float
+    sun: SunDay, palette: tuple, day_alpha: float
 ) -> tuple[list[tuple[float, float, str, float]], bool]:
     """The AURORA pointer's color bands (owner spec 2026-07-12): the
     five DAY hues spread EVENLY across the actual sunrise-sunset arc —
     every hue visible on the shortest and the longest day alike — with
     the dawn band in the palette's FIRST hue (left, blue) and the dusk
-    band in its LAST (right, brown). Returns (bands, solar_frame):
-    bands are (start, end_unwrapped, hue, alpha) in wall-clock dial
-    space; solar_frame=True marks the boundary-less regimes (polar day,
-    one-sided white nights, boundary-less twilight-only) whose bands
-    run midnight-to-midnight in the SOLAR frame — the caller rotates
-    them with the star."""
+    band in its LAST (right, brown). The twilight bands have NO
+    separate opacity (owner: the dedicated dawn/dusk COLORS carry the
+    meaning) — everything follows the daylight alpha. Returns (bands,
+    solar_frame): bands are (start, end_unwrapped, hue, alpha) in
+    wall-clock dial space; solar_frame=True marks the boundary-less
+    regimes (polar day, one-sided white nights, boundary-less
+    twilight-only) whose bands run midnight-to-midnight in the SOLAR
+    frame — the caller rotates them with the star."""
     dawn_hue, day_hues, dusk_hue = palette[0], palette[1:-1], palette[-1]
+    twilight_alpha = day_alpha           # one opacity for the whole arc
 
     def arc(a: float, b: float) -> tuple[float, float]:
         return a, b if b > a else b + 360.0
@@ -367,8 +424,7 @@ class BackgroundLayer(Layer):
         # stays visible on the shortest and the longest day alike.
         if ctx.skin.colorful and ctx.skin.pointer == "aurora":
             bands, solar_frame = aurora_bands(
-                ctx.day.sun, palette_for(ctx.skin),
-                spec.day_alpha, spec.twilight_alpha,
+                ctx.day.sun, palette_for(ctx.skin), spec.day_alpha,
             )
             for start, end, hue, alpha in bands:
                 painter.save()
@@ -661,11 +717,10 @@ def draw_weekday_body(
     )
     asset = spec.bodies.get(body)
     if asset is not None:
-        # The theme's metal (owner 2026-07-12): bronze-plate art turns
-        # gold/silver through the tritone; None leaves it as drawn.
+        # The theme's metal (owner 2026-07-12): the hue-selective swap
+        # turns only the bronze details gold/silver; None = as drawn.
         draw_pixmap_centered(
-            painter, ctx, asset, body_pos, size,
-            tint=spec.metal_tint, desaturate=spec.metal_desaturate,
+            painter, ctx, asset, body_pos, size, metal=spec.metal,
         )
     else:
         painter.setPen(Qt.PenStyle.NoPen)
@@ -718,11 +773,14 @@ class WeekdayLayer(Layer):
         slot_size = 2 * ctx.radius * spec.diamond_scale
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
             body = visible_occupant(occupants, today)
-            # The Aurora slot stands FIXED above the Omega (owner spec
-            # 2026-07-12: the imagined south) — never sun-rotated.
-            theta = slot_angle + (
-                0.0 if ctx.skin.pointer == "aurora" else ctx.rotation
-            )
+            # The Aurora slot stands FIXED near the Omega (owner spec:
+            # the imagined south) — never sun-rotated; when the south
+            # slot shares the bottom, the pair flanks it (weekday 3h
+            # left, slot 21h right).
+            if ctx.skin.pointer == "aurora":
+                theta = aurora_weekday_theta(ctx.skin)
+            else:
+                theta = slot_angle + ctx.rotation
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hover_factor(ctx, f"body:{body}"),
@@ -762,33 +820,47 @@ def octa_slot_art(mode: str, name: str) -> Path | None:
 
 
 class BottomSlotLayer(Layer):
-    """The octa pointer's bottom arm carries user-selected info instead
-    of a weekday body (owner spec): the digital time "12:24" (no seconds
-    — the font stays BIG), the date "8 Jul", the day length "15:35", the
-    tropical zodiac (text or the owner's sign/logo/constellation art) or
-    the Chinese zodiac (text or logo art). Text is sized to fill the
-    slot width; everything draws ABOVE the hands like the center body.
-    Image modes fall back to the text form until the owner's PNG folder
-    is complete (documented; the tray disables them meanwhile)."""
+    """The SOUTH SLOT: user-selected info near the dial bottom — the
+    digital time "12:24" (no seconds — the font stays BIG), the date
+    "8 Jul", the day length "15:35", the tropical zodiac (text or the
+    owner's sign/logo/constellation art) or the Chinese zodiac (text or
+    logo art). Where it sits and when it exists follows the owner's
+    matrix (south_slot_available / south_slot_theta); Aurora is images
+    only (south_slot_mode). Text is sized to fill the slot width;
+    everything draws ABOVE the hands like the center body. Image modes
+    fall back to the text form until the owner's PNG folder is
+    complete (documented)."""
 
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        theta = constants.OCTA_TIME_SLOT_ANGLE + ctx.rotation
+        theta = south_slot_theta(ctx.skin, ctx.rotation)
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
         slot_size = (
             2 * ctx.radius * spec.diamond_scale
             * ctx.skin.octa_slot_scale          # Settings size multiplier
             * hover_factor(ctx, "octa_slot")
         )
-        mode = ctx.skin.octa_slot
+        mode = south_slot_mode(ctx.skin)
         chinese_animal = ctx.day.chinese_name.split()[-1]
         if mode in constants.OCTA_SLOT_ART_DIRS:
             name = chinese_animal if mode == "chinese_logo" else ctx.day.zodiac_name
             asset = octa_slot_art(mode, name)
             if asset is not None:
-                draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                # The Chinese medallions are bronze plates like the
+                # Greek/Norse/Professions art (owner 2026-07-12): they
+                # follow the RING finish — the hue-selective swap for
+                # gold/silver, bronze as drawn.
+                metal = (
+                    ctx.skin.ring_finish
+                    if mode == "chinese_logo"
+                    and ctx.skin.ring_finish in defaults.METAL_SWAP_TARGETS
+                    else None
+                )
+                draw_pixmap_centered(
+                    painter, ctx, asset, pos, slot_size, metal=metal,
+                )
                 return
             text = name                  # documented fallback until the art lands
         elif mode == "time":

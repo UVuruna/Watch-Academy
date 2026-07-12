@@ -14,11 +14,12 @@ import math
 import sys
 from pathlib import Path
 
+import numpy as np
 from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
-from config import paths
+from config import defaults, paths
 
 
 class AssetCache:
@@ -43,25 +44,103 @@ class AssetCache:
         dpr: float,
         tint: str | None = None,
         desaturate: bool = False,
+        metal: str | None = None,
     ) -> QPixmap:
         """The image scaled (aspect preserved) so its logical height is
         `logical_height`, rasterized at device resolution, optionally
         DESATURATED (user hand packs: colored art grays out so the
-        clock tint has gray to work on) and optionally tinted. Raises
-        ValueError for missing/unreadable assets — a broken skin must
-        be visible, never silently blank. (Silver ring letters are
-        PRE-RENDERED files — setup/make_silver_letters.py — not a
-        runtime effect.)"""
+        clock tint has gray to work on), optionally tinted, and
+        optionally METAL-SWAPPED (bronze-plate medallions: only the
+        warm bronze pixels turn gold/silver — the gray stone stays;
+        owner insight 2026-07-12). Raises ValueError for missing/
+        unreadable assets — a broken skin must be visible, never
+        silently blank. (Silver and bronze ring letters are
+        PRE-RENDERED files — setup/make_*_letters.py — not runtime
+        effects.)"""
         px_height = max(1, round(logical_height * dpr))
-        key = (str(path), px_height, tint, desaturate)
+        key = (str(path), px_height, tint, desaturate, metal)
         if key not in self._pixmaps:
             pixmap = self._rasterize(path, px_height, dpr)
+            if metal is not None:
+                pixmap = self._metal_swapped(pixmap, metal)
             if desaturate:
                 pixmap = self._desaturated(pixmap)
             if tint is not None:
                 pixmap = self._tinted(pixmap, tint)
             self._pixmaps[key] = pixmap
         return self._pixmaps[key]
+
+    @staticmethod
+    def _metal_swapped(source: QPixmap, metal: str) -> QPixmap:
+        """The hue-SELECTIVE metal swap (owner insight 2026-07-12): the
+        bronze-plate art mixes warm bronze details with GRAY stone and
+        engravings — a soft warm-hue window with a saturation ramp
+        selects only the bronze pixels, which take the target metal's
+        hue/saturation/value; everything else stays as drawn. numpy
+        vectorized (per-pixel Python is banned in the render path)."""
+        target = defaults.METAL_SWAP_TARGETS[metal]
+        dpr = source.devicePixelRatio()
+        image = source.toImage().convertToFormat(
+            QImage.Format.Format_RGBA8888
+        )
+        width, height = image.width(), image.height()
+        stride = image.bytesPerLine() // 4
+        buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
+        rgba = (
+            buffer.reshape(height, stride, 4)[:, :width, :]
+            .astype(np.float64) / 255.0
+        )
+        rgb = rgba[..., :3]
+        maxc = rgb.max(axis=-1)
+        minc = rgb.min(axis=-1)
+        span = maxc - minc
+        sat = np.where(maxc > 0, span / np.maximum(maxc, 1e-6), 0.0)
+        rc = (maxc - rgb[..., 0]) / np.maximum(span, 1e-6)
+        gc = (maxc - rgb[..., 1]) / np.maximum(span, 1e-6)
+        bc = (maxc - rgb[..., 2]) / np.maximum(span, 1e-6)
+        hue = np.where(
+            maxc == rgb[..., 0], bc - gc,
+            np.where(maxc == rgb[..., 1], 2.0 + rc - bc, 4.0 + gc - rc),
+        )
+        hue = np.where(span > 0, (hue / 6.0) % 1.0, 0.0) * 360.0
+
+        def smoothstep(x):
+            x = np.clip(x, 0.0, 1.0)
+            return x * x * (3.0 - 2.0 * x)
+
+        low, high = defaults.METAL_SWAP_HUE_WINDOW
+        soft = defaults.METAL_SWAP_HUE_SOFT
+        sat_lo, sat_hi = defaults.METAL_SWAP_SAT_RAMP
+        weight = (
+            smoothstep((hue - (low - soft)) / soft)
+            * (1.0 - smoothstep((hue - high) / soft))
+            * smoothstep((sat - sat_lo) / (sat_hi - sat_lo))
+        )[..., None]
+
+        new_sat = np.clip(sat * target["sat_mul"], 0.0, 1.0)
+        new_val = np.clip(maxc * target["val_mul"], 0.0, 1.0)
+        sector = (target["hue"] % 360.0) / 60.0
+        index = int(sector) % 6
+        fraction = sector - int(sector)
+        p = new_val * (1.0 - new_sat)
+        q = new_val * (1.0 - new_sat * fraction)
+        t = new_val * (1.0 - new_sat * (1.0 - fraction))
+        order = [
+            (new_val, t, p), (q, new_val, p), (p, new_val, t),
+            (p, q, new_val), (t, p, new_val), (new_val, p, q),
+        ][index]
+        swapped = np.stack(order, axis=-1)
+
+        rgba[..., :3] = rgb * (1.0 - weight) + swapped * weight
+        out_bytes = np.ascontiguousarray(
+            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
+        )
+        out = QImage(
+            out_bytes.tobytes(), width, height, width * 4,
+            QImage.Format.Format_RGBA8888,
+        ).copy()
+        out.setDevicePixelRatio(dpr)
+        return QPixmap.fromImage(out)
 
     @staticmethod
     def _desaturated(source: QPixmap) -> QPixmap:

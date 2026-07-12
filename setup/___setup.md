@@ -15,11 +15,10 @@ not a runtime effect).
 
 ### `make_bronze_letters.py` — Bronze Letter Generator
 Derives `<Stem>_bronze.png` from each pre-rendered silver letter: a
-slight darkening (`BRONZE_LETTER_BRIGHTNESS`) then a straight multiply
-with `BRONZE_LETTER_TINT` — the letters are already bright, so the
-medallion tritone recipe would blow their detail out (owner direction
-2026-07-12). Run AFTER `make_silver_letters.py` whenever a letter
-master changes.
+straight multiply with `BRONZE_LETTER_TINT` (brightness/contrast knobs
+exist but sit at 1.0 — the owner's verdict on the live dial: darkened
+candidates sat darker than the bronze medallions). Run AFTER
+`make_silver_letters.py` whenever a letter master changes.
 
 ## Connections
 

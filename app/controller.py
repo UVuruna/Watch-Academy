@@ -226,15 +226,11 @@ def apply_display_settings(skin, settings: Settings):
             body_names=dict(names),
         )
     # The bronze-plate themes wear their chosen METAL (owner
-    # 2026-07-12): gold/silver = desaturate + tritone at render;
-    # bronze leaves the art as drawn.
-    tint = defaults.THEME_METAL_TINTS.get(
-        _theme_metal(settings, settings.weekday_theme)
-    )
-    if tint is not None:
-        weekday = dataclasses.replace(
-            weekday, metal_tint=tint, metal_desaturate=True
-        )
+    # 2026-07-12): gold/silver run the hue-SELECTIVE swap at render
+    # (only the bronze details change); bronze = the art as drawn.
+    metal = _theme_metal(settings, settings.weekday_theme)
+    if metal in defaults.METAL_SWAP_TARGETS:
+        weekday = dataclasses.replace(weekday, metal=metal)
     background = skin.background
     if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
         # The Aura's sunlight and twilight opacities are INDEPENDENT
@@ -681,15 +677,16 @@ class AppController(QObject):
         if getattr(self._settings, key) == value:
             return
         self._settings = replace(self._settings, **{key: value})
-        if key == "pointer":
-            # The Compass slot controls (the Theme submenu AND the
-            # Elements switch) only apply to the Compass pointer; the
-            # Solar rotation toggle has no say under Aurora.
-            self._octa_slot_action.setEnabled(value == "octa")
-            self._octa_slot_toggle.setEnabled(value == "octa")
-            self._solar_rotation_action.setEnabled(value != "aurora")
         self._install_skin(build_skin(self._settings))
         self._flush_position()
+        if key in ("pointer", "show_weekday"):
+            # These two move the whole enablement matrix (the South
+            # slot's availability and Aurora's image-only modes, the
+            # Solar rotation lock) — rebuild the menu so every state
+            # recomputes declaratively in _build_menu.
+            self._menu = self._build_menu()
+            self._widget.set_menu(self._menu)
+            self._tray.set_menu(self._menu)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -745,8 +742,9 @@ class AppController(QObject):
             [
                 # Owner-chosen display names (FINAL.txt #8): Trinity,
                 # Seasons, Prism, Compass — protected brand terms, the
-                # same in every language. Aurora has no arms, so no
-                # count after its name.
+                # same in every language. Aurora has no arms — no count
+                # after its name, and it sits LAST, below the Compass
+                # (owner spec 2026-07-12).
                 (
                     variant,
                     constants.POINTER_DISPLAY_NAMES[variant]
@@ -754,7 +752,8 @@ class AppController(QObject):
                     else f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})",
                 )
                 for variant, arms in sorted(
-                    constants.POINTER_POINTS.items(), key=lambda item: item[1]
+                    constants.POINTER_POINTS.items(),
+                    key=lambda item: (item[0] == "aurora", item[1]),
                 )
             ],
             settings.pointer,
@@ -883,8 +882,14 @@ class AppController(QObject):
             ),
             tr("The day name written on the weekday bodies."),
         )
-        compass_slot_menu = self._add_choice_submenu(
-            theme_menu, tr("Compass slot"),
+        # The SOUTH slot (renamed from "Compass slot" — owner 2026-07-12:
+        # it now serves other pointers too). Availability matrix:
+        # Compass always (its reserved bottom arm), Trinity and Aurora
+        # always, Prism/Seasons once the Weekday element is off. Aurora
+        # is images only — the text modes gray out under it.
+        south_slot_menu = theme_menu.addMenu(tr("South slot"))
+        self._add_choice_group(
+            menu, south_slot_menu,
             [
                 ("time", tr("Time")),
                 ("date", tr("Date")),
@@ -898,9 +903,21 @@ class AppController(QObject):
             ],
             settings.octa_slot,
             lambda value: self._set_display_choice("octa_slot", value),
+            disabled=(
+                tuple(
+                    mode for mode in constants.OCTA_SLOT_MODES
+                    if mode not in constants.SOUTH_SLOT_LOGO_MODES
+                )
+                if settings.pointer == "aurora"
+                else ()
+            ),
         )
-        self._octa_slot_action = compass_slot_menu.menuAction()
-        self._octa_slot_action.setEnabled(settings.pointer == "octa")
+        slot_possible = (
+            settings.pointer in ("octa", "trio", "aurora")
+            or not settings.show_weekday
+        )
+        self._octa_slot_action = south_slot_menu.menuAction()
+        self._octa_slot_action.setEnabled(slot_possible)
         # Elements (owner spec): plain on/off switches for every
         # element — the Earth STYLE lives under Theme now.
         elements_menu = menu.addMenu(tr("Elements"))
@@ -939,14 +956,17 @@ class AppController(QObject):
                 lambda checked, key=key: self._set_display_choice(key, checked),
                 tip,
             )
-        # The Compass slot has its own switch, grayed out (like the
-        # Theme submenu) unless the Compass pointer is active.
+        # The South slot has its own switch, grayed out (like the Theme
+        # submenu) whenever the active pointer/weekday combination has
+        # no room for it.
         self._octa_slot_toggle = self._add_toggle(
-            elements_menu, tr("Compass slot"), settings.show_octa_slot,
+            elements_menu, tr("South slot"), settings.show_octa_slot,
             lambda checked: self._set_display_choice("show_octa_slot", checked),
-            tr("The Compass pointer's bottom info slot."),
+            tr("The info slot near the dial bottom: always there on the "
+               "Compass, Trinity and Aurora; on Prism and Seasons once "
+               "the Weekday element is off."),
         )
-        self._octa_slot_toggle.setEnabled(settings.pointer == "octa")
+        self._octa_slot_toggle.setEnabled(slot_possible)
         self._add_toggle(
             menu, tr("Legend"), settings.legend,
             lambda checked: self._set_display_choice("legend", checked),

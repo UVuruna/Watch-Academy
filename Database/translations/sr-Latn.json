@@ -513,7 +513,6 @@
   "ui/Click-through": "a7fee9dab9b43acaaea33cbe08704392fd49edc8",
   "ui/Coarse (13 shades)": "22f201f65e396cc81738480d0e8bfab93c37e70d",
   "ui/Colorful": "4cae17b079896a5201dcb8a1187cf79d52e71abe",
-  "ui/Compass slot": "3836a35b8e112f51cd2c617fc80fa689d530bc11",
   "ui/Continent": "2513cf08a13d5c34b34d1b8a93ec9a42632d811b",
   "ui/Copper": "392696b691848e1c2e14231fecd9edd150d7521e",
   "ui/Country": "d523ebbd10146cdfd39dee077f04c9d08468d0bc",
@@ -641,7 +640,6 @@
   "ui/Numbers": "7e53821f70ae16079c4a6a64c52a91fae645bc5f",
   "ui/Ocean": "76022a00a16b0482beec04274945ed192a931410",
   "ui/Oct": "51327aef9866e85ef5b5b2294a28494d2715ae59",
-  "ui/Octa slot": "bd8ebc41162caabeec7feeea679ac441fd62a119",
   "ui/October": "87206ae2363483496c099f8c3aac5b4a8ae2a66a",
   "ui/Odin": "b1a6fb73903307ee22b745905b5ee3ab59c2ad94",
   "ui/On: the star points at true solar noon. Off: Star, Aura and Umbra stand upright (12/24 at the top) for reading exact planet and season positions.": "5d0ae2dac07491f6d1384a00847520a60d5be543",
@@ -727,7 +725,6 @@
   "ui/Taoism": "7a32aa8ece147ec62daea30f60e9b45b36a997c6",
   "ui/Taurus": "c5e606e056ade44a820632a75114e5367860a0b9",
   "ui/The Aura palette hues. Off: the day and twilight arcs are drawn as plain white transparency.": "373785c626783179cefa578cba46b33e21c120f3",
-  "ui/The Compass pointer's bottom info slot.": "636bb5e30efd9aa496c8d19caa198e4626828bd2",
   "ui/The Earth marker riding the year wheel and showing the date.": "1614113328b1f099b0078fa64616727ce6be122e",
   "ui/The Moon marker riding its cycle and showing the phase.": "52a894b724cd5c0b2baafbd8075f6bc1986d07af",
   "ui/The date written on the Earth marker (shown from {size} px up).": "ba7d6d384360e0e72fd913a608eecfb5fe47096b",
@@ -1004,7 +1001,9 @@
   "ui/Forenoon": "b8c8c519c9136b28c3cf54ce3d707a7069afe74f",
   "ui/Noon": "ffca17fc624c3c6c23dbd29105ce389e40757d9f",
   "ui/Afternoon": "d682699b928cb945c39c2f94b12ec16e995333d5",
-  "ui/Evening": "6734e19790f111270c9e4d31eac31cef46534e85"
+  "ui/Evening": "6734e19790f111270c9e4d31eac31cef46534e85",
+  "ui/South slot": "0284c6dabe6da09e32934d3aebb1feab132194f9",
+  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "9da0658eb4ca1fc4c6455add34e7c4f54b8a119b"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -1519,7 +1518,6 @@
   "ui/Click-through": "Propuštanje klikova",
   "ui/Coarse (13 shades)": "Grubo (13 nijansi)",
   "ui/Colorful": "Boje",
-  "ui/Compass slot": "Compass slot",
   "ui/Continent": "Kontinent",
   "ui/Copper": "Bakarna",
   "ui/Country": "Država",
@@ -1647,7 +1645,6 @@
   "ui/Numbers": "Brojevi",
   "ui/Ocean": "Okean",
   "ui/Oct": "okt",
-  "ui/Octa slot": "Octa slot",
   "ui/October": "oktobar",
   "ui/Odin": "Odin",
   "ui/On: the star points at true solar noon. Off: Star, Aura and Umbra stand upright (12/24 at the top) for reading exact planet and season positions.": "Uključeno: zvezda pokazuje na pravo solarno podne. Isključeno: Zvezda, Aura i Umbra stoje uspravno (12/24 na vrhu) radi očitavanja tačnih pozicija planeta i godišnjih doba.",
@@ -1733,7 +1730,6 @@
   "ui/Taoism": "Taoizam",
   "ui/Taurus": "Bik",
   "ui/The Aura palette hues. Off: the day and twilight arcs are drawn as plain white transparency.": "Nijanse Aura palete. Isključeno: dnevni i sumračni lukovi se crtaju kao obična bela providnost.",
-  "ui/The Compass pointer's bottom info slot.": "Donji info slot Compass pokazivača.",
   "ui/The Earth marker riding the year wheel and showing the date.": "Marker Zemlje koji putuje godišnjim točkom i prikazuje datum.",
   "ui/The Moon marker riding its cycle and showing the phase.": "Marker Meseca koji prati svoj ciklus i prikazuje fazu.",
   "ui/The date written on the Earth marker (shown from {size} px up).": "Datum ispisan na markeru Zemlje (prikazuje se od {size} px naviše).",
@@ -2010,6 +2006,8 @@
   "ui/Forenoon": "Prepodne",
   "ui/Noon": "Podne",
   "ui/Afternoon": "Popodne",
-  "ui/Evening": "Veče"
+  "ui/Evening": "Veče",
+  "ui/South slot": "Južno polje",
+  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "Info polje pri dnu brojčanika: uvek dostupno uz Compass, Trinity i Aurora pokazivače; uz Prism i Seasons tek kada je Weekday element isključen."
  }
 }

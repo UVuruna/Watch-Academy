@@ -36,7 +36,11 @@ from render.layers import (
     StarLayer,
     WeekdayLayer,
     YearMarkerLayer,
+    aurora_weekday_theta,
     dial_point,
+    south_slot_available,
+    south_slot_mode,
+    south_slot_theta,
     today_slot_theta,
     visible_occupant,
 )
@@ -178,11 +182,13 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     layers: list[Layer] = []
     for name in skin.z_order:
         if name == "hands":
-            if skin.pointer == "octa" and skin.show_octa_slot:
-                # The Compass info slot draws BELOW the hands (owner bug
+            if south_slot_available(skin):
+                # The SOUTH slot draws BELOW the hands (owner bug
                 # report: the seconds hand passed behind the zodiac art)
                 # and SURVIVES the Pointer element switch — it has its
-                # OWN Elements switch (owner spec).
+                # OWN Elements switch (owner spec + availability matrix
+                # 2026-07-12: Compass/Trinity/Aurora always, Prism and
+                # Seasons once the Weekday element is off).
                 layers.append(BottomSlotLayer(skin))
             # The hand pack's own z_order draws bottom-up (owner spec
             # 2026-07-12; default hours -> minutes -> seconds).
@@ -326,9 +332,13 @@ class Compositor:
                 return self._moon_text()
             if element == "earth":
                 return self._earth_text()
-            if self._skin.octa_slot.startswith("chinese"):
+            # The EFFECTIVE mode (Aurora shows images only — a text
+            # mode falls back to the zodiac logo, and the hover must
+            # describe what is actually drawn).
+            slot_mode = south_slot_mode(self._skin)
+            if slot_mode.startswith("chinese"):
                 return self._chinese_text()
-            if self._skin.octa_slot.startswith("zodiac"):
+            if slot_mode.startswith("zodiac"):
                 return self._zodiac_text()
             # The time/date/day-length slot has no tooltip of its own —
             # fall through to the region hovers.
@@ -364,9 +374,9 @@ class Compositor:
             if body is not None:
                 return f"body:{body}"
         weekday = self._skin.weekday_set
-        if self._skin.pointer == "octa" and self._skin.show_octa_slot and hit(
+        if south_slot_available(self._skin) and hit(
             dial_point(
-                constants.OCTA_TIME_SLOT_ANGLE + rotation,
+                south_slot_theta(self._skin, rotation),
                 radius * weekday.orbit_fraction,
             ),
             radius * weekday.diamond_scale * self._skin.octa_slot_scale,
@@ -445,14 +455,16 @@ class Compositor:
             return center_body
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
-        # The Aurora slot is FIXED above the Omega (owner spec) — the
-        # hit test must match the drawn, un-rotated position.
-        slot_rotation = 0.0 if self._skin.pointer == "aurora" else rotation
         for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
             body = visible_occupant(occupants, today)
-            slot = dial_point(
-                angle + slot_rotation, radius * weekday.orbit_fraction
-            )
+            # Aurora pins the body near the Omega — un-rotated, and
+            # shifted to 3h when the south slot shares the bottom; the
+            # hit test must match the drawn position.
+            if self._skin.pointer == "aurora":
+                theta = aurora_weekday_theta(self._skin)
+            else:
+                theta = angle + rotation
+            slot = dial_point(theta, radius * weekday.orbit_fraction)
             if hit(slot, radius * weekday.diamond_scale):
                 return body
         return None

@@ -233,11 +233,11 @@ PALETTE_PRESETS = {
     # yellow/red; twilight left (dawn) blue, right (dusk) brown.
     ("aurora", "paint"): (
         "#002FFF", "#0080FF", "#007E00", "#F8E600", "#DC9600",
-        "#B60000", "#6B4423",
+        "#BC0000", "#5D1212",
     ),
     ("aurora", "light"): (
         "#0040FF", "#0080FF", "#00DCDC", "#00DC00", "#FFFF00",
-        "#FF0000", "#7A4A21",
+        "#FF2828", "#720017",
     ),
 }
 
@@ -599,19 +599,26 @@ WEEKDAY_THEME_FILES["japan"] = {
     "saturn": "doyobi",
 }
 
-# The metal tints for the bronze-plate themes (owner 2026-07-12,
-# tritone recipe approved on the Zeus previews): bronze = the art as
-# drawn (no tint), gold and silver = desaturate + tritone with the
-# owner's Photoshop overlay colors.
-THEME_METAL_TINTS = {"gold": "#FFD235", "silver": "#C9CDD3"}
+# The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
+# the medallions mix bronze details with GRAY stone and engravings —
+# only the warm bronze pixels may change, the gray stays). Detection =
+# a warm-hue window with soft edges + a saturation ramp; per-target
+# hue/saturation/value mapping. Bronze = the art as drawn (no swap).
+METAL_SWAP_HUE_WINDOW = (10.0, 60.0)   # degrees, warm bronze range
+METAL_SWAP_HUE_SOFT = 8.0              # soft edge width outside the window
+METAL_SWAP_SAT_RAMP = (0.10, 0.28)     # smoothstep: below gray, above bronze
+METAL_SWAP_TARGETS = {
+    "gold": {"hue": 48.0, "sat_mul": 1.25, "val_mul": 1.25},
+    "silver": {"hue": 220.0, "sat_mul": 0.06, "val_mul": 1.22},
+}
 # Bronze ring LETTERS are PRE-RENDERED from the silver ones
-# (setup/make_bronze_letters.py): the letters are already bright, so
-# the medallion recipe would blow their detail out — slight darkening
-# plus a mild contrast lift, then a straight multiply with the WARM
-# bronze (owner verdict 2026-07-12: candidate F).
-BRONZE_LETTER_TINT = "#B87333"
-BRONZE_LETTER_BRIGHTNESS = 0.88
-BRONZE_LETTER_CONTRAST = 1.12
+# (setup/make_bronze_letters.py). Final recipe = a STRAIGHT multiply
+# with classic bronze, no brightness/contrast change (owner verdict
+# revised on the live dial 2026-07-12: the darkened candidates sat
+# darker than the bronze medallions — candidate C matches).
+BRONZE_LETTER_TINT = "#CD7F32"
+BRONZE_LETTER_BRIGHTNESS = 1.0
+BRONZE_LETTER_CONTRAST = 1.0
 
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.

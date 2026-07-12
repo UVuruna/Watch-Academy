@@ -79,7 +79,62 @@ def test_slot_angles_sit_on_the_pointer_arms():
 
 def test_octa_reserves_the_bottom_arm_for_the_info_slot():
     occupied = [angle for angle, _ in constants.POINTER_WEEKDAY_SLOTS["octa"]]
-    assert constants.OCTA_TIME_SLOT_ANGLE not in occupied
+    assert constants.SOUTH_SLOT_ANGLE not in occupied
+
+
+def test_south_slot_matrix():
+    """Owner matrix 2026-07-12: availability (Compass/Trinity/Aurora
+    always, Prism/Seasons once Weekday is off), position (Compass arm
+    rotates; the others rotate only while the star is DRAWN; Aurora
+    pins south, or 21h/3h flanking when the weekday shares the
+    bottom), and Aurora's images-only mode fallback."""
+    import dataclasses
+
+    from render.layers import (
+        aurora_weekday_theta, south_slot_available, south_slot_mode,
+        south_slot_theta,
+    )
+
+    def skin(**kw):
+        return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
+
+    # Availability.
+    assert south_slot_available(skin(pointer="octa"))
+    assert south_slot_available(skin(pointer="trio", show_weekday=True))
+    assert south_slot_available(skin(pointer="aurora", show_weekday=True))
+    assert not south_slot_available(skin(pointer="hexa", show_weekday=True))
+    assert south_slot_available(skin(pointer="hexa", show_weekday=False))
+    assert not south_slot_available(skin(pointer="cross", show_weekday=True))
+    assert not south_slot_available(
+        skin(pointer="octa", show_octa_slot=False)
+    )
+    # Position: the Compass arm rotates; hexa rides the drawn star,
+    # pins south once the Pointer element is off.
+    assert south_slot_theta(skin(pointer="octa"), 14.0) == 194.0
+    assert south_slot_theta(
+        skin(pointer="hexa", show_pointer=True), 14.0
+    ) == 194.0
+    assert south_slot_theta(
+        skin(pointer="hexa", show_pointer=False), 14.0
+    ) == 180.0
+    assert south_slot_theta(
+        skin(pointer="trio", show_pointer=True), 14.0
+    ) == 194.0
+    # Aurora: south alone, flanking pair with the weekday on.
+    lone = skin(pointer="aurora", show_weekday=False)
+    both = skin(pointer="aurora", show_weekday=True, show_octa_slot=True)
+    assert south_slot_theta(lone, 14.0) == 180.0
+    assert south_slot_theta(both, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
+    assert aurora_weekday_theta(both) == constants.AURORA_DUAL_WEEKDAY_ANGLE
+    assert aurora_weekday_theta(
+        skin(pointer="aurora", show_octa_slot=False)
+    ) == 180.0
+    # Aurora shows images only — a text mode falls back to the logo.
+    assert south_slot_mode(skin(pointer="aurora", octa_slot="time")) == "zodiac_logo"
+    assert south_slot_mode(
+        skin(pointer="aurora", octa_slot="chinese_logo")
+    ) == "chinese_logo"
+    assert south_slot_mode(skin(pointer="octa", octa_slot="time")) == "time"
 
 
 # --- Shared-slot priority (owner rule) --------------------------------------------
@@ -181,12 +236,14 @@ def test_aurora_bands_spread_the_day_hues_evenly():
             date, observer,
             seasons.year_anchors(date.year), moons.moon_window(date.year),
         )
-        bands, solar_frame = aurora_bands(day.sun, palette, 0.55, 0.28)
+        bands, solar_frame = aurora_bands(day.sun, palette, 0.55)
         assert solar_frame is False
         assert len(bands) == 7, date                 # dawn + 5 day + dusk
         assert bands[0][2] == palette[0]             # dawn blue
         assert bands[-1][2] == palette[-1]           # dusk brown
-        assert bands[0][3] == bands[-1][3] == 0.28   # twilight alpha
+        # No separate twilight opacity under Aurora (owner: the color
+        # carries the meaning) — the whole arc wears the day alpha.
+        assert bands[0][3] == bands[-1][3] == 0.55
         day_bands = bands[1:-1]
         assert [hue for _, _, hue, _ in day_bands] == list(palette[1:-1])
         rise = angles.time_to_dial_angle(day.sun.sunrise)

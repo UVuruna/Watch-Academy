@@ -53,9 +53,9 @@ the ring preset and the user's display choices onto it at build time.
   TINT never touches the letters
 - `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit,
-  and the theme METAL pair `metal_tint`/`metal_desaturate` (owner
-  2026-07-12: the bronze-plate themes wear gold/silver via desaturate
-  + tritone at render; None/False = the art as drawn)
+  and the theme `metal` (owner 2026-07-12: "gold"/"silver" run the
+  hue-SELECTIVE swap at render — only the warm bronze pixels change,
+  the gray stone and engravings stay; None = bronze, as drawn)
 - `YearMarkerSpec` — Earth day+night variants per continent on the year
   wheel; Moon on its own cycle (new at top, full at bottom) with the
   unlit part shadowed; separate orbits. Which marker is drawn comes

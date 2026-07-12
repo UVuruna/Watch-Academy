@@ -210,10 +210,15 @@ UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 # seasons palette served under both styles.
 PALETTE_STYLES = ("paint", "light")
 
-# What the octa pointer's bottom arm shows (user-selectable). The four
-# image modes draw the owner's PNG art (assets/skins/domy/zodiac/<dir>)
-# and fall back to the text form until the art exists (documented
-# fallback; the tray disables them while the folder is empty).
+# The SOUTH SLOT (menu name; the internal octa_* keys stay for settings
+# and code stability, like the pointer keys): user-selected info near
+# the dial bottom. On the Compass it IS the reserved bottom arm; the
+# Trinity always has room at the south gap between its blue and red
+# diamonds; Aurora always shows it (images only); Prism and Seasons
+# gain it once the Weekday element is off (owner matrix 2026-07-12).
+# The four image modes draw the owner's PNG art
+# (assets/zodiac/<dir>) and fall back to the text form until the art
+# exists (documented fallback).
 OCTA_SLOT_MODES = (
     "time",
     "date",
@@ -231,6 +236,11 @@ OCTA_SLOT_ART_DIRS = {
     "zodiac_constellation": "constellation",
     "chinese_logo": "chinese",
 }
+# Aurora allows ONLY the image modes in its slot (owner spec: "samo
+# neki logo") — a persisted text mode falls back to the zodiac logo.
+SOUTH_SLOT_LOGO_MODES = (
+    "zodiac_sign", "zodiac_logo", "zodiac_constellation", "chinese_logo",
+)
 
 # Earth marker style: the owner ships every continent in a clean and an
 # atmosphere version.
@@ -528,4 +538,10 @@ POINTER_WEEKDAY_SLOTS = {
                  "saturn")),
     ),
 }
-OCTA_TIME_SLOT_ANGLE = 180.0         # the bottom arm carries the digital time
+# The SOUTH SLOT home angle (the Compass reserves this bottom arm for
+# it) and the Aurora DUAL layout (owner spec 2026-07-12): with BOTH the
+# weekday body and the slot on, they flank the bottom ±45° — the
+# weekday at 3h on the left, the slot at 21h on the right.
+SOUTH_SLOT_ANGLE = 180.0
+AURORA_DUAL_WEEKDAY_ANGLE = 225.0    # 3h — bottom left
+AURORA_DUAL_SLOT_ANGLE = 135.0       # 21h — bottom right

@@ -52,9 +52,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - `_build_menu()`: the shared tray/right-click menu, built from the
   `_add_choice_submenu()` helper (one exclusive check-group per
   submenu) — THEME as the first-level dropdown (owner spec, FINAL.txt
-  #6) nesting Octa slot (nine modes; grayed out unless the octa
-  pointer is active — `_set_display_choice` flips it on pointer
-  change), Weekday (every `WEEKDAY_THEME_TITLES` entry; the three
+  #6) nesting the South slot (nine modes; available on the Compass,
+  Trinity and Aurora always, on Prism/Seasons once the Weekday element
+  is off; Aurora grays the text modes out — images only; pointer and
+  show_weekday changes REBUILD the menu so the matrix recomputes),
+  Weekday (every `WEEKDAY_THEME_TITLES` entry; the three
   bronze-plate themes — Greek gods / Norse gods / Professions — open a
   Gold/Bronze/Silver metal dropdown whose pick activates the theme AND
   remembers its metal via `_set_theme_metal`, releasing

@@ -19,7 +19,7 @@ def ui(overlay: dict, text: str) -> str:
 UI_STRINGS: tuple[str, ...] = (
     # --- Menu -----------------------------------------------------------------
     "Design", "Hands",
-    "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday", "Compass slot",
+    "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday", "South slot",
     "Size", "Elements", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
@@ -48,7 +48,9 @@ UI_STRINGS: tuple[str, ...] = (
     "The star diamonds. Off: the Aura colors stay, only the pointer disappears.",
     "The Aura palette hues. Off: the day and twilight arcs are drawn as plain white transparency.",
     "The seconds hand. Off: it is not drawn and the dial ticks once per minute.",
-    "The Compass pointer's bottom info slot.",
+    "The info slot near the dial bottom: always there on the "
+    "Compass, Trinity and Aurora; on Prism and Seasons once "
+    "the Weekday element is off.",
     "All hover texts. Off: the dial shows nothing on hover — combined with Click-through it has zero interaction.",
     "On: the star points at true solar noon. Off: Star, Aura and Umbra stand upright (12/24 at the top) for reading exact planet and season positions.",
     "The dial takes no clicks at all (they pass to the desktop); hover info still works. Turn it back off here in the tray.",
@@ -68,7 +70,7 @@ UI_STRINGS: tuple[str, ...] = (
     "City", "Latitude", "Longitude", "Timezone",
     "not found", "{n} found",
     "Star", "Aura — sunlight", "Aura — twilight", "Skin default", "Default",
-    "Ring letters", "Octa slot", "Hover enlarge",
+    "Ring letters", "Hover enlarge",
     "Reset to preset", "Custom…", "Gray (default)", "the untouched art",
     "Unique name", "Add ring", "{n} custom ring(s) saved",
     "Added '{name}' — OK saves it; find it under Theme ▸ Ring",
