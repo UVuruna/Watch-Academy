@@ -92,6 +92,9 @@ class YearMarkerSpec:
     moon_shadow_alpha: float           # darkness of the unlit part over the image
     moon_orbit_fraction: float
     moon_scale: float                  # smaller than the Earth (owner: ~72%)
+    moon_hidden_alpha: float = 0.5     # marker opacity while the moon is
+                                       # BELOW the horizon (owner spec
+                                       # 2026-07-12; Settings slider)
 
 
 @dataclass(frozen=True)
@@ -151,6 +154,10 @@ class SkinDefinition:
     show_octa_slot: bool = True        # the Compass info slot (octa only)
     show_earth_date: bool = True       # the date label ON the Earth marker
                                        # (only draws from 540 px up anyway)
+    show_weekday_names: bool = True    # the day-name text on the weekday
+                                       # bodies (owner spec 2026-07-12:
+                                       # its own switch under Theme ▸
+                                       # Weekday, like the Earth date)
     # Ring recolor (owner spec, FINAL.txt #6): ONE hue multiplies the
     # ring art, the hands and the Umbra (None = untouched gray art);
     # the finish picks the owner's letter art set (gold = M/D/Y/P/H

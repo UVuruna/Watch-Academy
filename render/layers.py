@@ -562,24 +562,38 @@ def draw_weekday_body(
     spec = ctx.skin.weekday_set
     painter.save()
     painter.setOpacity(opacity)
+    names_on = ctx.skin.show_weekday_names
+    full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
+    label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
+    label_px = max(defaults.BODY_LABEL_MIN_PX, round(label_size))
+    # The planet-SIGN glyphs must never wear the text OVER them (owner
+    # spec 2026-07-12): the name moves ABOVE the sign and the PAIR is
+    # centered as one block on the slot position.
+    stacked = names_on and ctx.skin.weekday_theme == "planet_signs"
+    gap = label_px * 0.35
+    body_pos = (
+        QPointF(pos.x(), pos.y() + (label_px + gap) / 2) if stacked else pos
+    )
     asset = spec.bodies.get(body)
     if asset is not None:
-        draw_pixmap_centered(painter, ctx, asset, pos, size)
+        draw_pixmap_centered(painter, ctx, asset, body_pos, size)
     else:
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(spec.body_colors[body]))
-        painter.drawEllipse(pos, size / 2, size / 2)
-    full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
-    label = (
-        constants.WEEKDAY_FULL_NAMES[body]
-        if full_text
-        else constants.WEEKDAY_LABELS[body]
-    )
-    font = QFont()
-    label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
-    font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
-    font.setBold(True)
-    draw_outlined_text(painter, pos, label, font)
+        painter.drawEllipse(body_pos, size / 2, size / 2)
+    if names_on:
+        label = (
+            constants.WEEKDAY_FULL_NAMES[body]
+            if full_text
+            else constants.WEEKDAY_LABELS[body]
+        )
+        font = QFont()
+        font.setPixelSize(label_px)
+        font.setBold(True)
+        text_pos = (
+            QPointF(pos.x(), pos.y() - (size + gap) / 2) if stacked else pos
+        )
+        draw_outlined_text(painter, text_pos, label, font)
     painter.restore()
 
 
@@ -726,6 +740,10 @@ class YearMarkerLayer(Layer):
                 if ctx.skin.show_earth
                 else 1.0
             )
+            if not ctx.tick.is_moon_up:
+                # Below the horizon the marker DIMS (owner spec
+                # 2026-07-12; the Settings ▸ Opacity slider).
+                opacity *= spec.moon_hidden_alpha
             factor = hover_factor(ctx, "moon")
             pos = dial_point(moon_angle, ctx.radius * spec.moon_orbit_fraction)
             if ctx.tick.moon_event is not None:

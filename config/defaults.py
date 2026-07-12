@@ -515,15 +515,16 @@ DEFAULT_SKIN = SkinDefinition(
         # Procedural Umbra (owner spec/art): drawn at runtime so the
         # contrast setting can reshade it.
         base_asset=None,
-        day_alpha=0.55,
-        twilight_alpha=0.28,
+        # Owner defaults 2026-07-12: sunlight 36%, twilight 12%.
+        day_alpha=0.36,
+        twilight_alpha=0.12,
         # TWO independent radii for fine tuning (fractions of the dial
         # radius; the ring art's inner edge sits at 0.858):
         umbra_radius_fraction=0.90,     # the gray wheel
         aura_radius_fraction=0.90,      # the colored wedges
     ),
     star=StarSpec(
-        day_alpha=0.92,                 # near-full opacity where the sun is up
+        day_alpha=1.0,                  # full opacity (owner default 2026-07-12)
         twilight_alpha=0.55,
         border_alpha=0.85,              # colored outlines run the full circle
         border_width_fraction=0.008,

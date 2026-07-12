@@ -145,6 +145,9 @@ def apply_display_settings(skin, settings: Settings):
             scale=marker.scale * settings.earth_scale,
             moon_scale=marker.moon_scale * settings.moon_scale,
         )
+    marker = dataclasses.replace(
+        marker, moon_hidden_alpha=settings.moon_hidden_alpha
+    )
     return dataclasses.replace(
         skin,
         star=star,
@@ -168,6 +171,7 @@ def apply_display_settings(skin, settings: Settings):
         show_seconds=settings.show_seconds,
         show_octa_slot=settings.show_octa_slot,
         show_earth_date=settings.show_earth_date,
+        show_weekday_names=settings.show_weekday_names,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
         octa_slot_scale=settings.octa_slot_scale,
@@ -632,7 +636,7 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        self._add_choice_submenu(
+        weekday_menu = self._add_choice_submenu(
             theme_menu, tr("Weekday"),
             [
                 ("planets", tr("Planets")),
@@ -646,6 +650,16 @@ class AppController(QObject):
             ],
             settings.weekday_theme,
             lambda value: self._set_display_choice("weekday_theme", value),
+        )
+        weekday_menu.addSeparator()
+        # The day-name text has its own switch (owner spec 2026-07-12),
+        # exactly like the Earth date.
+        self._add_toggle(
+            weekday_menu, tr("Names"), settings.show_weekday_names,
+            lambda checked: self._set_display_choice(
+                "show_weekday_names", checked
+            ),
+            tr("The day name written on the weekday bodies."),
         )
         compass_slot_menu = self._add_choice_submenu(
             theme_menu, tr("Compass slot"),

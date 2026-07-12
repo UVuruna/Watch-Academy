@@ -74,6 +74,7 @@ class TickState:
     second_angle: float             # used only when the seconds hand is on
     year_angle: float               # moves ~1 deg/day; cheap to keep smooth
     is_daylight: bool               # sun above the horizon right now
+    is_moon_up: bool                # moon above the horizon right now
     time_hm: str                    # "14:34" — the octa pointer's digital slot
     season_event: str | None       # "Summer Solstice" within ±12 h, else None
     moon_event: str | None         # "Full Moon" within ±6 h, else None
@@ -151,6 +152,7 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         second_angle=angles.second_hand_angle(now_local),
         year_angle=year_angle,
         is_daylight=_is_daylight(now_local, day.sun),
+        is_moon_up=_is_moon_up(now_local, day),
         time_hm=now_local.strftime("%H:%M"),
         season_event=_active_event(
             now_local, day.season_events, constants.SEASON_GLOW_WINDOW_H
@@ -170,6 +172,24 @@ def _active_event(
         if abs(now - instant) <= limit:
             return name
     return None
+
+
+def _is_moon_up(now: datetime, day: DayContext) -> bool:
+    """Whether the moon stands above the horizon (owner spec
+    2026-07-12: the marker dims below it). Skip days (one event
+    missing) read from the present event; both missing (polar edge) is
+    treated as up — dimming a moon someone can see would be the worse
+    lie."""
+    rise, sets = day.moonrise, day.moonset
+    if rise is None and sets is None:
+        return True
+    if rise is not None and sets is not None:
+        if rise <= sets:
+            return rise <= now <= sets
+        return now >= rise or now <= sets      # up across midnight
+    if rise is None:                           # was up, only sets today
+        return now <= sets
+    return now >= rise                         # only rises today
 
 
 def _is_daylight(now: datetime, sun: SunDay) -> bool:

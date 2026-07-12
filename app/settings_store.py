@@ -63,6 +63,8 @@ class Settings:
     show_seconds: bool = True
     show_octa_slot: bool = True         # the Compass info slot (octa only)
     show_earth_date: bool = True        # the date label on the Earth marker
+    show_weekday_names: bool = True     # the day-name text on the bodies
+    moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
     language: str = "en"                # translation target (en = originals)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
@@ -180,6 +182,10 @@ class SettingsStore:
                 show_seconds=_load_bool(raw, "show_seconds", True),
                 show_octa_slot=_load_bool(raw, "show_octa_slot", True),
                 show_earth_date=_load_bool(raw, "show_earth_date", True),
+                show_weekday_names=_load_bool(raw, "show_weekday_names", True),
+                moon_hidden_alpha=_load_scale(
+                    raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
+                ),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -233,6 +239,8 @@ class SettingsStore:
             "show_seconds": settings.show_seconds,
             "show_octa_slot": settings.show_octa_slot,
             "show_earth_date": settings.show_earth_date,
+            "show_weekday_names": settings.show_weekday_names,
+            "moon_hidden_alpha": settings.moon_hidden_alpha,
             "language": settings.language,
             "location": {
                 "name": settings.city_name,

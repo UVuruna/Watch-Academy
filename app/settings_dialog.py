@@ -371,6 +371,25 @@ class SettingsDialog(QDialog):
             value, default, "aura_twilight"
         )
         form.addRow(tr("Aura — twilight"), twilight_row)
+        # The Moon marker DIMS below the horizon (owner spec
+        # 2026-07-12) — a plain scale, not an override.
+        self._moon_alpha_slider = QSlider(Qt.Orientation.Horizontal)
+        self._moon_alpha_slider.setRange(0, 100)
+        moon_value = round(self._settings.moon_hidden_alpha * 100)
+        self._moon_alpha_slider.setValue(moon_value)
+        moon_label = QLabel(f"{moon_value}%")
+        self._moon_alpha_slider.valueChanged.connect(
+            lambda new_value: moon_label.setText(f"{new_value}%")
+        )
+        moon_reset = QPushButton(tr("Default"))
+        moon_reset.clicked.connect(
+            lambda: self._moon_alpha_slider.setValue(50)
+        )
+        moon_row = QHBoxLayout()
+        moon_row.addWidget(self._moon_alpha_slider)
+        moon_row.addWidget(moon_label)
+        moon_row.addWidget(moon_reset)
+        form.addRow(tr("Moon — below horizon"), moon_row)
         return group
 
     def _slider_row(self, value: int, default: int, which: str):
@@ -761,6 +780,7 @@ class SettingsDialog(QDialog):
                 if self._aura_twilight_override
                 else None
             ),
+            moon_hidden_alpha=self._moon_alpha_slider.value() / 100,
             palettes=palettes,
             ring_tint=self._ring_tint,
             custom_rings=tuple(self._custom_rings),
