@@ -107,6 +107,7 @@ UI_STRINGS: tuple[str, ...] = (
     "{season} {ordinal} of {total} Days",
     "Heart:", "Meteorological {season}", "From", "To",
     "Wet season", "Dry season", "(1st half)", "(2nd half)",
+    "Day", "Days", "{element} {animal}",
     # --- Name tables ---------------------------------------------------------------
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
     "Sunday",

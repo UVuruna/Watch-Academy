@@ -96,6 +96,54 @@ def test_phase2_chrome_speaks_the_overlay():
     assert "Location" in {g.title() for g in bare.findChildren(QGroupBox)}
 
 
+def test_phase2b_hover_lines_speak_the_overlay():
+    """Phase 2b: the hover INFO lines translate — labels, day/month/
+    phase names, dot ordinals — while the English path keeps the
+    raised suffixes."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    import astral
+    from PySide6.QtWidgets import QApplication
+
+    from app.controller import build_skin
+    from app.settings_store import Settings
+    from config import defaults
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    QApplication.instance() or QApplication([])
+    overlay = {
+        "ui/Sunday": "nedelja", "ui/July": "jul", "ui/Sun": "Sunce",
+        "ui/Illumination": "Osvetljenost", "ui/Summer": "Leto",
+        "ui/{season} {ordinal} of {total} Days": "{season} {ordinal} od {total} dana",
+    }
+    city = defaults.DEFAULT_CITY
+    now = datetime(2026, 7, 12, 12, 0, tzinfo=ZoneInfo(city["timezone"]))
+    day = build_day_context(
+        now,
+        astral.Observer(latitude=city["latitude"], longitude=city["longitude"]),
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    sr = Compositor(build_skin(Settings()), AssetCache(), overlay=overlay)
+    sr._day, sr._last_tick = day, tick
+    title = sr._weekday_tooltip("sun", active=True)
+    assert "Sunce" in title and "nedelja, 12. jul 2026" in title
+    assert "Leto 22. od 94 dana" in sr._season_row()
+    assert "Osvetljenost" in sr._moon_text()
+    en = Compositor(build_skin(Settings()), AssetCache())
+    en._day, en._last_tick = day, tick
+    assert "12<sup>th</sup> July 2026" in en._weekday_tooltip("sun", True)
+
+
 def test_serbian_transliteration():
     assert transliterate_sr("Месец носи Спокој") == "Mesec nosi Spokoj"
     assert transliterate_sr("Џак и Љиљана, ЊЕГОШ") == "Džak i Ljiljana, NJEGOŠ"

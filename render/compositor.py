@@ -17,6 +17,7 @@ from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
 from config import constants, defaults
+from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
@@ -199,24 +200,53 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     return layers
 
 
+_MONTHS = (
+    "January", "February", "March", "April", "May", "June", "July",
+    "August", "September", "October", "November", "December",
+)
+_MONTHS_SHORT = (
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+    "Oct", "Nov", "Dec",
+)
+
+
 class Compositor:
     def __init__(
         self,
         skin: SkinDefinition,
         cache: AssetCache,
         symbolism: SymbolismRepository | None = None,
+        overlay: dict | None = None,
     ):
         self._skin = skin
         self._cache = cache
         self._layers = _build_layers(skin)
         # The controller passes a repository with the active language's
-        # translation overlay; standalone uses read the originals.
+        # translation overlay; standalone uses read the originals. The
+        # same overlay (Phase 2b) also translates the hover INFO lines
+        # — labels, day/month/sign/phase names.
         self._symbolism = symbolism or SymbolismRepository()
+        self._overlay = overlay or {}
         self._day: DayContext | None = None
         self._last_tick: TickState | None = None
         self._composite: QPixmap | None = None
         self._composite_key: tuple | None = None
         self._hovered: str | None = None    # hover-enlarge target
+
+    def _tr(self, text: str) -> str:
+        """The active language's form of a hover label (Phase 2b)."""
+        return ui(self._overlay, text)
+
+    def _ord(self, n: int) -> str:
+        """English keeps the raised suffix (owner spec); every other
+        language reads the standard European "12."."""
+        return f"{n}." if self._overlay else _ordinal(n)
+
+    def _month(self, when) -> str:
+        return self._tr(_MONTHS[when.month - 1])
+
+    def _month_short(self, when) -> str:
+        return self._tr(_MONTHS_SHORT[when.month - 1])
 
     def set_day(self, day: DayContext) -> None:
         self._day = day
@@ -429,14 +459,14 @@ class Compositor:
             text += "\n\n" + variant
         title = (
             f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
-            f"<b>{html.escape(self._skin.weekday_set.body_names[body])}</b>"
+            f"<b>{html.escape(self._tr(self._skin.weekday_set.body_names[body]))}</b>"
             f"</span>"
         )
         if active:
             date = self._day.local_date
             title += (
-                f"<br/>{html.escape(constants.WEEKDAY_FULL_NAMES[body])}, "
-                f"{_ordinal(date.day)} {date:%B %Y}"
+                f"<br/>{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES[body]))}, "
+                f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}"
             )
         return _article_html(
             self._skin.weekday_set.bodies.get(body), title, text,
@@ -494,9 +524,9 @@ class Compositor:
                 start = start.astimezone(self._day.tzinfo)
                 last = end.astimezone(self._day.tzinfo) - timedelta(days=1)
                 header = (
-                    f"{html.escape(symbol)} {html.escape(name)} "
-                    f"({_ordinal(start.day)} {start:%B} - "
-                    f"{_ordinal(last.day)} {last:%B})"
+                    f"{html.escape(symbol)} {html.escape(self._tr(name))} "
+                    f"({self._ord(start.day)} {html.escape(self._month(start))} - "
+                    f"{self._ord(last.day)} {html.escape(self._month(last))})"
                 )
                 if offset == -30.0 and star:
                     header += html.escape(star)
@@ -525,10 +555,10 @@ class Compositor:
                 if angle == arm_angle
             )
             days = " · ".join(
-                constants.WEEKDAY_FULL_NAMES[body] for body in bodies
+                self._tr(constants.WEEKDAY_FULL_NAMES[body]) for body in bodies
             )
             header = _centered_html(
-                f"{html.escape(theme)}{html.escape(star)}",
+                f"{html.escape(self._tr(theme))}{html.escape(star)}",
                 f"{start_hour:02d}:00 - {end_hour:02d}:00",
                 html.escape(days),
             )
@@ -550,8 +580,9 @@ class Compositor:
             instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
             hours, minutes = self._day.anchor_day_lengths[index].split(":")
             lines = [
-                f"{html.escape(name)}{html.escape(star)}",
-                f"{_ordinal(instant.day)} {instant:%B %Y} - {instant:%H:%M}",
+                f"{html.escape(self._tr(name))}{html.escape(star)}",
+                f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
+                f"{instant.year} - {instant:%H:%M}",
                 f"{int(hours)}h {int(minutes)}min",
             ]
             if self._skin.pointer == "cross":
@@ -570,10 +601,14 @@ class Compositor:
                     met_start = met_start.astimezone(self._day.tzinfo)
                     met_end = met_end.astimezone(self._day.tzinfo)
                     lines += [
-                        f"Meteorological {season}",
-                        f"From {_ordinal(met_start.day)} {met_start:%B %Y} - "
+                        self._tr("Meteorological {season}").format(
+                            season=self._tr(season)
+                        ),
+                        f"{self._tr('From')} {self._ord(met_start.day)} "
+                        f"{self._month(met_start)} {met_start.year} - "
                         f"{met_start:%H:%M}",
-                        f"To {_ordinal(met_end.day)} {met_end:%B %Y} - "
+                        f"{self._tr('To')} {self._ord(met_end.day)} "
+                        f"{self._month(met_end)} {met_end.year} - "
                         f"{met_end:%H:%M}",
                     ]
             return _centered_html(*lines)
@@ -591,26 +626,42 @@ class Compositor:
         if self._day.zone == "tropics":
             starts_in_march = start_angle in (270.0, 360.0)
             is_wet = starts_in_march != self._day.southern_hemisphere
-            half = "1<sup>st</sup>" if start_angle in (270.0, 450.0) else "2<sup>nd</sup>"
+            if self._overlay:
+                half = self._tr("(1st half)" if start_angle in (270.0, 450.0)
+                                else "(2nd half)")
+            else:
+                half = (
+                    "(1<sup>st</sup> half)"
+                    if start_angle in (270.0, 450.0)
+                    else "(2<sup>nd</sup> half)"
+                )
             season_line = (
-                f"{'Wet' if is_wet else 'Dry'} season ({half} half)"
+                f"{self._tr('Wet season' if is_wet else 'Dry season')} {half}"
                 f"{html.escape(star)}"
             )
             whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
             return _centered_html(
                 season_line,
-                f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
-                f"({days:.1f} Days)",
-                f"Heart: {_ordinal(middle.day)} {middle:%B}",
+                self._span_line(start, end, days),
+                f"{self._tr('Heart:')} {self._ord(middle.day)} "
+                f"{self._month(middle)}",
                 "",
                 *whole,
             )
         season = self._season_name_for(start_angle)
         return _centered_html(
-            f"{html.escape(season)}{html.escape(star)}",
-            f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
-            f"({days:.1f} Days)",
-            f"Heart: {_ordinal(middle.day)} {middle:%B}",
+            f"{html.escape(self._tr(season))}{html.escape(star)}",
+            self._span_line(start, end, days),
+            f"{self._tr('Heart:')} {self._ord(middle.day)} {self._month(middle)}",
+        )
+
+    def _span_line(self, start, end, days: float) -> str:
+        """"21st December - 20th March (89.3 Days)" in the active
+        language."""
+        return (
+            f"{self._ord(start.day)} {self._month(start)} - "
+            f"{self._ord(end.day)} {self._month(end)} "
+            f"({days:.1f} {self._tr('Days')})"
         )
 
     def _wet_dry_block(self, span_start_angle: float) -> list[str]:
@@ -624,9 +675,8 @@ class Compositor:
         is_wet = starts_in_march != self._day.southern_hemisphere
         days = (end - start).total_seconds() / 86400
         return [
-            f"{'Wet' if is_wet else 'Dry'} season",
-            f"{_ordinal(start.day)} {start:%B} - {_ordinal(end.day)} {end:%B} "
-            f"({days:.1f} Days)",
+            self._tr("Wet season" if is_wet else "Dry season"),
+            self._span_line(start, end, days),
         ]
 
     def _season_name_for(self, start_anchor_angle: float) -> str:
@@ -649,9 +699,13 @@ class Compositor:
         day = self._day
         element, animal = day.chinese_name.split()
         header = _centered(
-            day.chinese_name,
-            f"{day.chinese_start.day} {day.chinese_start:%b %Y} – "
-            f"{day.chinese_end.day} {day.chinese_end:%b %Y}",
+            self._tr("{element} {animal}").format(
+                element=self._tr(element), animal=self._tr(animal)
+            ),
+            f"{day.chinese_start.day} {self._month_short(day.chinese_start)} "
+            f"{day.chinese_start.year} – "
+            f"{day.chinese_end.day} {self._month_short(day.chinese_end)} "
+            f"{day.chinese_end.year}",
         )
         # The animal's article, then the ELEMENT paragraph qualifying
         # THIS return of it (owner spec — each return wears a new one).
@@ -669,8 +723,9 @@ class Compositor:
         day = self._day
         last = day.zodiac_end - timedelta(days=1)    # end is the next sign's first day
         return (
-            f"{day.zodiac_symbol} {day.zodiac_name} — "
-            f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}"
+            f"{day.zodiac_symbol} {self._tr(day.zodiac_name)} — "
+            f"{day.zodiac_start.day} {self._month_short(day.zodiac_start)} – "
+            f"{last.day} {self._month_short(last)}"
         )
 
     def _zodiac_text(self) -> str:
@@ -682,8 +737,9 @@ class Compositor:
         day = self._day
         last = day.zodiac_end - timedelta(days=1)
         header = _centered(
-            f"{day.zodiac_symbol} {day.zodiac_name}",
-            f"{day.zodiac_start.day} {day.zodiac_start:%b} – {last.day} {last:%b}",
+            f"{day.zodiac_symbol} {self._tr(day.zodiac_name)}",
+            f"{day.zodiac_start.day} {self._month_short(day.zodiac_start)} – "
+            f"{last.day} {self._month_short(last)}",
         )
         article = self._symbolism.zodiac_article(day.zodiac_name)
         return header + "<br/>" + _article_html(
@@ -698,7 +754,7 @@ class Compositor:
         to one decimal, the rise–set span, and the cycle day."""
         day = self._day
         name = phase_name(day.moon_fraction)
-        lines = [name]
+        lines = [self._tr(name)]
         if name in constants.MOON_PHASE_FRACTIONS:
             # A principal phase name holds ±12 h around its instant —
             # show that instant (the nearest principal event by name).
@@ -708,19 +764,26 @@ class Compositor:
                 key=lambda event: abs(event[0] - noon),
             )[0].astimezone(day.tzinfo)
             lines.append(
-                f"({instant.day} {instant:%b %Y} - {instant:%H:%M})"
+                f"({instant.day} {self._month_short(instant)} {instant.year}"
+                f" - {instant:%H:%M})"
             )
-        lines.append(f"Illumination {day.moon_illumination * 100:.1f}%")
+        lines.append(
+            f"{self._tr('Illumination')} {day.moon_illumination * 100:.1f}%"
+        )
         if day.moonrise is not None and day.moonset is not None:
             lines.append(f"{day.moonrise:%H:%M} - {day.moonset:%H:%M}")
         elif day.moonrise is not None:
             # The moon skips a rise or a set roughly once a month —
             # show the side that exists on this date.
-            lines.append(f"Rises {day.moonrise:%H:%M}")
+            lines.append(f"{self._tr('Rises')} {day.moonrise:%H:%M}")
         elif day.moonset is not None:
-            lines.append(f"Sets {day.moonset:%H:%M}")
+            lines.append(f"{self._tr('Sets')} {day.moonset:%H:%M}")
         cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
-        lines.append(f"Day {cycle_day:.1f} of {constants.SYNODIC_MONTH_DAYS}")
+        lines.append(
+            self._tr("Day {day} of {total}").format(
+                day=f"{cycle_day:.1f}", total=constants.SYNODIC_MONTH_DAYS
+            )
+        )
         return _centered(*lines)
 
     def _season_row(self) -> str:
@@ -736,9 +799,9 @@ class Compositor:
             start, end, is_wet = self._wet_dry_span_at(noon)
             day_no = (day.local_date - start.astimezone(day.tzinfo).date()).days + 1
             total = round((end - start).total_seconds() / 86400)
-            return (
-                f"{'Wet' if is_wet else 'Dry'} season "
-                f"{_ordinal(day_no)} of {total} Days"
+            return self._tr("{season} {ordinal} of {total} Days").format(
+                season=self._tr("Wet season" if is_wet else "Dry season"),
+                ordinal=self._ord(day_no), total=total,
             )
         events = day.season_events
         index = max(
@@ -749,7 +812,9 @@ class Compositor:
         season = name.split()[0]        # the season STARTS at its event
         day_no = (day.local_date - start.astimezone(day.tzinfo).date()).days + 1
         total = round((end - start).total_seconds() / 86400)
-        return f"{season} {_ordinal(day_no)} of {total} Days"
+        return self._tr("{season} {ordinal} of {total} Days").format(
+            season=self._tr(season), ordinal=self._ord(day_no), total=total,
+        )
 
     def _wet_dry_span_at(self, noon) -> tuple:
         """(start, end, is_wet) of the tropical half-year at `noon`:
@@ -787,16 +852,22 @@ class Compositor:
         day, date = self._day, self._day.local_date
         last = day.zodiac_end - timedelta(days=1)
         lines = [
-            f"{_ordinal(date.day)} {date:%B %Y}",
-            f"{_ordinal(date.timetuple().tm_yday)} Day - "
-            f"{_ordinal(date.isocalendar().week)} Week",
+            f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}",
+            self._tr("{ordinal} Day - {ordinal_week} Week").format(
+                ordinal=self._ord(date.timetuple().tm_yday),
+                ordinal_week=self._ord(date.isocalendar().week),
+            ),
             self._season_row(),
-            f"{html.escape(day.zodiac_symbol)} {html.escape(day.zodiac_name)} "
-            f"({_ordinal(day.zodiac_start.day)} {day.zodiac_start:%B} - "
-            f"{_ordinal(last.day)} {last:%B})",
+            f"{html.escape(day.zodiac_symbol)} "
+            f"{html.escape(self._tr(day.zodiac_name))} "
+            f"({self._ord(day.zodiac_start.day)} "
+            f"{html.escape(self._month(day.zodiac_start))} - "
+            f"{self._ord(last.day)} {html.escape(self._month(last))})",
         ]
         if self._last_tick.season_event is not None:
-            lines.insert(0, html.escape(self._last_tick.season_event))
+            lines.insert(
+                0, html.escape(self._tr(self._last_tick.season_event))
+            )
         return _centered_html(*lines)
 
     def _period_tooltip(self, point: QPointF, radius: float) -> str | None:
@@ -823,24 +894,32 @@ class Compositor:
         if in_day:
             if distance > radius * self._skin.background.aura_radius_fraction:
                 return None
-            lines = [f"Day {hours}h {minutes:02d}min"]
+            lines = [f"{self._tr('Day')} {hours}h {minutes:02d}min"]
             if sun.sunrise is not None and sun.sunset is not None:
                 lines.append(
-                    f"Sunrise {sun.sunrise:%H:%M} - Sunset {sun.sunset:%H:%M}"
+                    f"{self._tr('Sunrise')} {sun.sunrise:%H:%M} - "
+                    f"{self._tr('Sunset')} {sun.sunset:%H:%M}"
                 )
             if sun.dawn is not None and sun.dusk is not None:
                 lines.append(
-                    f"With twilight: Dawn {sun.dawn:%H:%M} - Dusk {sun.dusk:%H:%M}"
+                    f"{self._tr('With twilight:')} {self._tr('Dawn')} "
+                    f"{sun.dawn:%H:%M} - {self._tr('Dusk')} {sun.dusk:%H:%M}"
                 )
             return _centered(*lines)
         if distance > radius * self._skin.background.umbra_radius_fraction:
             return None
         night = 24 * 60 - (hours * 60 + minutes)
-        lines = [f"Night {night // 60}h {night % 60:02d}min"]
+        lines = [f"{self._tr('Night')} {night // 60}h {night % 60:02d}min"]
         if sun.sunset is not None and sun.sunrise is not None:
-            lines.append(f"Sunset {sun.sunset:%H:%M} - Sunrise {sun.sunrise:%H:%M}")
+            lines.append(
+                f"{self._tr('Sunset')} {sun.sunset:%H:%M} - "
+                f"{self._tr('Sunrise')} {sun.sunrise:%H:%M}"
+            )
         if sun.dusk is not None and sun.dawn is not None:
-            lines.append(f"Dark: Dusk {sun.dusk:%H:%M} - Dawn {sun.dawn:%H:%M}")
+            lines.append(
+                f"{self._tr('Dark:')} {self._tr('Dusk')} {sun.dusk:%H:%M} - "
+                f"{self._tr('Dawn')} {sun.dawn:%H:%M}"
+            )
         return _centered(*lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
@@ -865,13 +944,15 @@ class Compositor:
             angle(sun.dawn), angle(sun.sunrise)
         ):
             return _centered(
-                f"Dawn {sun.dawn:%H:%M}", f"Sunrise {sun.sunrise:%H:%M}"
+                f"{self._tr('Dawn')} {sun.dawn:%H:%M}",
+                f"{self._tr('Sunrise')} {sun.sunrise:%H:%M}",
             )
         if sun.sunset is not None and sun.dusk is not None and within(
             angle(sun.sunset), angle(sun.dusk)
         ):
             return _centered(
-                f"Sunset {sun.sunset:%H:%M}", f"Dusk {sun.dusk:%H:%M}"
+                f"{self._tr('Sunset')} {sun.sunset:%H:%M}",
+                f"{self._tr('Dusk')} {sun.dusk:%H:%M}",
             )
         return None
 

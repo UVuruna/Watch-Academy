@@ -296,7 +296,10 @@ class AppController(QObject):
             raise SystemExit(1)
         if self._settings.language != "en":
             self._apply_language(start_missing=True)
-        self._compositor = Compositor(self._skin, AssetCache(), self._symbolism())
+        self._compositor = Compositor(
+            self._skin, AssetCache(), self._symbolism(),
+            overlay=self._translation_overlay,
+        )
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
         # present until the deadline passes.
@@ -517,7 +520,10 @@ class AppController(QObject):
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
         self._skin = skin
-        self._compositor = Compositor(skin, AssetCache(), self._symbolism())
+        self._compositor = Compositor(
+            skin, AssetCache(), self._symbolism(),
+            overlay=self._translation_overlay,
+        )
         self._widget.set_renderer(self._compositor)
         if self._day is not None:
             self._compositor.set_day(self._day)

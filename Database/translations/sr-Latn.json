@@ -810,7 +810,10 @@
   "ui/Encyclopedia": "cc5645f0e43dd9b3de3c56079e659582d460994d",
   "ui/Astrology": "f8d569ca7f814a9c054bcfa14198fa016b2bc9a1",
   "ui/Chinese zodiac": "edbda9ab009522f13262532798678c38176ab3ae",
-  "ui/← Back": "c32ae9f4a77d1bb9e91e2d30664631cf2e25797a"
+  "ui/← Back": "c32ae9f4a77d1bb9e91e2d30664631cf2e25797a",
+  "ui/Day": "987b9ced08d4ac5d11d286ca4b54b99a4f69164b",
+  "ui/Days": "f6bb0f468a8569c67b3d6826e57e62c5500c3681",
+  "ui/{element} {animal}": "24d1062fd15a29140a8f26465b23db542e30e498"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -1622,6 +1625,9 @@
   "ui/Encyclopedia": "Enciklopedija",
   "ui/Astrology": "Astrologija",
   "ui/Chinese zodiac": "Kineski zodijak",
-  "ui/← Back": "← Nazad"
+  "ui/← Back": "← Nazad",
+  "ui/Day": "Dan",
+  "ui/Days": "dana",
+  "ui/{element} {animal}": "{animal} ({element})"
  }
 }
