@@ -200,6 +200,11 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
     return layers
 
 
+# South of the equator the year wheel runs mirrored (+180°) — these
+# unwrapped anchor angles trade places (June solstice <-> December,
+# March equinox <-> September).
+_SOUTH_ANCHOR_FLIP = {270.0: 450.0, 360.0: 540.0, 450.0: 270.0, 540.0: 360.0}
+
 _MONTHS = (
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December",
@@ -575,6 +580,12 @@ class Compositor:
             anchor_angle = {0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0}[
                 arm_angle
             ]
+            if self._day.southern_hemisphere:
+                # The year wheel runs MIRRORED south of the equator
+                # (the Earth marker already does) — the arms must point
+                # at the mirrored anchors too (owner bug 2026-07-12:
+                # Sydney's TOP arm must read the DECEMBER solstice).
+                anchor_angle = _SOUTH_ANCHOR_FLIP[anchor_angle]
             index = self._day.year_anchors.angles.index(anchor_angle)
             name = self._day.season_events[index][1]      # zone-correct name
             instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
@@ -619,6 +630,10 @@ class Compositor:
         start_angle = {315.0: 270.0, 45.0: 360.0, 135.0: 450.0, 225.0: 540.0}[
             arm_angle
         ]
+        if self._day.southern_hemisphere:
+            # Mirrored wheel (see the cardinal arms): the quarters the
+            # diagonal arms span flip with it.
+            start_angle = _SOUTH_ANCHOR_FLIP[start_angle]
         start = self._anchor_instant(start_angle).astimezone(self._day.tzinfo)
         end = self._anchor_instant(start_angle + 90.0).astimezone(self._day.tzinfo)
         middle = start + (end - start) / 2

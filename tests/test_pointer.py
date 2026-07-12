@@ -271,6 +271,30 @@ def _day_and_tick(latitude, longitude, tz_name):
     return day, build_tick_state(now, day)
 
 
+def test_southern_hemisphere_mirrors_the_arm_anchors(app):
+    """Owner bug 2026-07-12 (Sydney screenshots): the year wheel runs
+    MIRRORED in the south, so the TOP cardinal arm must read the
+    DECEMBER solstice — their Summer Solstice — and the diagonals the
+    mirrored quarters; the north keeps June at the top."""
+    import dataclasses
+
+    sydney, tick = _day_and_tick(-33.8688, 151.2093, "Australia/Sydney")
+    upright = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, pointer="octa", solar_rotation=False
+        ),
+        AssetCache(),
+    )
+    upright.render_offscreen(360.0, 1.0, sydney, tick)
+    top = upright.tooltip_at(180.0, 72.0, 360.0)
+    assert "Summer Solstice" in top                  # the south's own name
+    assert "December" in top                         # at the DECEMBER instant
+    bottom = upright.tooltip_at(180.0, 288.0, 360.0)
+    assert "Winter Solstice" in bottom and "June" in bottom
+    diagonal = upright.tooltip_at(256.0, 104.0, 360.0)    # 45 deg arm
+    assert "December" in diagonal or "January" in diagonal or "February" in diagonal
+
+
 def test_climate_zones_name_the_events_and_seasons(app):
     """Owner decision: the south flips the seasonal event names (their
     Summer Solstice is the December one), the tropics use the neutral
