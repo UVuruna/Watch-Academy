@@ -537,14 +537,21 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Kin'yōbi (金曜日)",
         "saturn": "Doyōbi (土曜日)",
     },
+    # NARRATIVE-FIRST remap (owner decision 2026-07-12): each religion
+    # sits on the day its OWN canon points to, not its rest day —
+    # Freemasonry's quest for Light under the All-Seeing Eye takes the
+    # Sun (its Sunday DOUBLE = the rough vs the perfect ashlar);
+    # Islam's calendar IS the moon (Quran 2:189); Buddhism wins the
+    # war-day without weapons (Mara, Dhammapada 103); Christianity's
+    # forgiving love lands on Venus's Friday (Good Friday, agape).
     "religion": {
-        "sun": "Christianity",
-        "moon": "Buddhism",
-        "mars": "Freemasonry",      # owner decision: replaces Zoroastrianism
-                                    # in the basic seven (now an alternate)
+        "sun": "Freemasonry",       # owner: replaces Zoroastrianism in
+                                    # the basic seven (now an alternate)
+        "moon": "Islam",
+        "mars": "Buddhism",
         "mercury": "Taoism",
         "jupiter": "Hinduism",
-        "venus": "Islam",
+        "venus": "Christianity",
         "saturn": "Judaism",
     },
     # The ALTERNATE religion set — each on the day it fits best (canon

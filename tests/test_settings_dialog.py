@@ -320,7 +320,7 @@ def test_articles_cover_every_theme_and_body():
     """Encyclopedic articles per theme x body: a multi-paragraph BASE
     (image-aware, canon-woven) plus one VARIANT paragraph per
     pointer/palette combination — including the trio. The alternate
-    religion set is a FULL theme (Egypt Sun, Druidism Mon,
+    religion set is a FULL theme (Mithraism Sun, Druidism Mon,
     Zoroastrianism Tue, Shamanism Wed, Sikhism Thu, Babylon Fri,
     Voodoo Sat) whose entries also carry a display `name`."""
     import json

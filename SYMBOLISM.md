@@ -7,7 +7,7 @@ companion `Database/symbolism.json`
 ([Database (folder)](Database/___database.md)) carries the short
 per-entity blurbs (legacy — the diamond hover now speaks the zodiac
 sign articles) AND the full `articles` set — one encyclopedic article
-per entity per theme (9 sets × 7 = 63), each weaving the entity with
+per entity per theme (10 sets × 7 = 70), each weaving the entity with
 its day, color, hour mood, virtue and vice, plus a variant paragraph
 per pointer/palette combination; the weekday hover shows them.
 
@@ -108,32 +108,52 @@ with the star):
 | Arm (hour) | Day | Body | Greek | Norse | Religion | Color |
 |---|---|---|---|---|---|---|
 | top (12h) | Thursday | Jupiter | Zeus | Thor | Hinduism | yellow |
-| 16h | Tuesday | Mars | Ares | Tyr | Freemasonry | orange |
-| 20h | Friday | Venus | Aphrodite | Freya | Islam | red |
+| 16h | Tuesday | Mars | Ares | Tyr | Buddhism | orange |
+| 20h | Friday | Venus | Aphrodite | Freya | Christianity | red |
 | bottom (24h) | Wednesday | Mercury | Hermes | Odin | Taoism | purple |
-| 04h | Monday | Moon | Selene | Máni | Buddhism | blue |
+| 04h | Monday | Moon | Selene | Máni | Islam | blue |
 | 08h | Saturday | Saturn | Cronus | Loki | Judaism | green |
-| CENTER | Sunday | Sun | Helios | Sól | Christianity | white-gold |
+| CENTER | Sunday | Sun | Helios | Sól | Freemasonry | white-gold |
 
-Why each religion sits on its day:
+Why each religion sits on its day (NARRATIVE-FIRST remap, owner
+decision 2026-07-12: each faith goes to the day its OWN canon points
+at, never to its rest day):
 
-- **Sunday — Christianity**: the Lord's Day; Constantine made the "day
-  of the Sun" the day of rest in 321 — Sun and Church fused in history.
-- **Monday — Buddhism**: the Buddhist calendar is lunar; Uposatha
-  observance follows the Moon's phases; Vesak is a full-moon day.
-- **Tuesday — Freemasonry** (owner decision, replacing Zoroastrianism
-  in the basic seven): the Craft is sworn on OATHS — and Tyr, this
-  arm's Norse god, is the god of oaths who gave his hand to seal one;
-  the working tools (square and compasses) build the inner temple with
-  a soldier's discipline — the arm's Courage turned to labor, its
-  Wrath the raised arm that the oath keeps bound.
+- **Sunday — Freemasonry** (owner decision; it replaced Zoroastrianism
+  in the basic seven, and now takes the center): the whole Craft is a
+  quest for MORE LIGHT — the All-Seeing Eye in glory rays, the Blazing
+  Star, the Worshipful Master seated in the East where the sun rises;
+  the square and compasses of the owner's medallion do their work
+  UNDER that Eye. And no theme states the center's DOUBLE nature more
+  literally: the ROUGH ASHLAR and the PERFECT ASHLAR — the unhewn
+  stone that knows it needs the chisel (Humility), the polished cube
+  that returns the light (Glory), the Eye that watches the work
+  (Justice).
+- **Monday — Islam**: the calendar itself IS the Moon — Quran 2:189:
+  "They ask you about the crescent moons: say, they are timekeeping
+  for mankind"; Ramadan begins and ends with the sighted crescent;
+  the crescent-and-star on the owner's medallion; Laylat al-Qadr, the
+  Night of Power. (Jumu'ah remains the congregation's Friday — but
+  the faith's own clock is lunar.)
+- **Tuesday — Buddhism**: the Buddha's central scene IS a battle won
+  without weapons — Mara's army breaking against a man sitting still
+  under the Bodhi tree; Dhammapada 103: greater than the conqueror of
+  a thousand men a thousand times is the conqueror of himself. The
+  war-day's Courage turned inward, its Wrath the one enemy actually
+  defeated.
 - **Wednesday — Taoism**: in the East Asian week Wednesday IS the
   water-star day (Mercury = water), and water is the Tao's central
   metaphor; Odin's quest for wisdom mirrors the sage Laozi.
 - **Thursday — Hinduism**: Thursday is *Guruvar* — the day of
   Brihaspati, who IS Jupiter in Vedic astrology; the week's most
   devotional day.
-- **Friday — Islam**: Jumu'ah, the congregational prayer of Friday.
+- **Friday — Christianity**: after the Old-Testament God who punishes,
+  the Christian God FORGIVES everything (owner's framing) — a faith
+  whose first commandment is love lands on the day of Love; "God is
+  love" (1 John 4:8); and the story's very center is a Friday — the
+  Cross of Good Friday, sacrifice out of love. (History note it left
+  behind: Constantine's 321 fusion of *dies Solis* with the day of
+  rest is why Sunday USED to hold it.)
 - **Saturday — Judaism**: Shabbat — and in Hebrew the planet Saturn is
   named *Shabtai*, after the Sabbath itself.
 
@@ -411,12 +431,12 @@ The full weave, one arm per row (hexa paint canon):
 
 | Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice | Profession |
 |---|---|---|---|---|---|---|---|---|---|
-| Sunday | Sun | Helios | Sól | Christianity | white-gold | Glory / Eclipse (source) | Humility · Justice | Pride · Servility | Ruler (servant-king) |
-| Monday | Moon | Selene | Máni | Buddhism | blue | Calm | Serenity | Fear | Physician |
-| Tuesday | Mars | Ares | Tyr | Freemasonry | orange | Zeal | Courage | Wrath | Soldier |
+| Sunday | Sun | Helios | Sól | Freemasonry | white-gold | Glory / Eclipse (source) | Humility · Justice | Pride · Servility | Ruler (servant-king) |
+| Monday | Moon | Selene | Máni | Islam | blue | Calm | Serenity | Fear | Physician |
+| Tuesday | Mars | Ares | Tyr | Buddhism | orange | Zeal | Courage | Wrath | Soldier |
 | Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed | Merchant |
 | Thursday | Jupiter | Zeus | Thor | Hinduism | yellow | Joy | Generosity | Excess | Priest/Teacher |
-| Friday | Venus | Aphrodite | Freya | Islam | red | Passion | Love | Jealousy | Artist |
+| Friday | Venus | Aphrodite | Freya | Christianity | red | Passion | Love | Jealousy | Artist |
 | Saturday | Saturn | Cronus | Loki | Judaism | green | Renewal | Patience | Envy | Farmer |
 
 Octa extras:
