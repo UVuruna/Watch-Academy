@@ -62,6 +62,10 @@ class SettingsDialog(QDialog):
         self._star_override = settings.star_alpha is not None
         self._aura_day_override = settings.aura_day_alpha is not None
         self._aura_twilight_override = settings.aura_twilight_alpha is not None
+        # The major-cities suggestions only appear on USER interaction
+        # (owner 2026-07-12: the box popped huge on every open although
+        # the location is picked once) — armed after construction.
+        self._suggestions_armed = False
         self._palette_key = f"{settings.pointer}_{settings.palette_style}"
         self._preset = defaults.PALETTE_PRESETS[
             (settings.pointer, settings.palette_style)
@@ -118,6 +122,8 @@ class SettingsDialog(QDialog):
         self._tz_label.setText(settings.timezone)
         self._latitude.setValue(settings.latitude)
         self._longitude.setValue(settings.longitude)
+        self._results.hide()
+        self._suggestions_armed = True   # from here on, changes are the user's
 
     def _tr(self, text: str) -> str:
         """The active language's form of a chrome string (Phase 2)."""
@@ -256,6 +262,8 @@ class SettingsDialog(QDialog):
                 else:
                     walk(path + (child.name,))
 
+        if not self._suggestions_armed:
+            return                       # dialog construction, not the user
         try:
             walk(country_path)
         except KeyError:
@@ -265,7 +273,7 @@ class SettingsDialog(QDialog):
             item = QListWidgetItem(f"★ {name}")
             item.setData(Qt.ItemDataRole.UserRole, path)
             self._results.addItem(item)
-        self._results.setVisible(bool(majors))
+        self._fit_results()
 
     def _on_city(self) -> None:
         name = self._city.currentText()
@@ -340,7 +348,18 @@ class SettingsDialog(QDialog):
             if not matches
             else self._tr("{n} found").format(n=len(matches))
         )
-        self._results.setVisible(bool(matches))
+        self._fit_results()
+
+    def _fit_results(self) -> None:
+        """The suggestion box wraps its rows instead of holding a huge
+        fixed area (owner 2026-07-12: one city does not need a field)."""
+        rows = self._results.count()
+        if not rows:
+            self._results.hide()
+            return
+        row_height = self._results.sizeHintForRow(0)
+        self._results.setFixedHeight(min(120, rows * row_height + 10))
+        self._results.show()
 
     def _pick_result(self, item: QListWidgetItem) -> None:
         path = tuple(item.data(Qt.ItemDataRole.UserRole))

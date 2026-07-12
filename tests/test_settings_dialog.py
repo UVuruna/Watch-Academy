@@ -97,6 +97,22 @@ def test_major_cities_pinned_per_country(app):
     dialog.done(0)
 
 
+def test_major_cities_stay_quiet_until_the_user_acts(app):
+    """Owner correction 2026-07-12: opening Settings must NOT pop the
+    huge suggestion box — the location is picked once. Suggestions
+    appear only after the USER touches the cascade, and the box wraps
+    its rows instead of holding a fixed 120 px."""
+    settings = replace(Settings(), city_path=BELGRADE_PATH)
+    dialog = SettingsDialog(settings, defaults.DEFAULT_SKIN)
+    assert dialog._results.count() == 0            # nothing suggested on open
+    assert dialog._results.isHidden()
+    dialog._country.setCurrentIndex(dialog._country.findText("Italy"))
+    assert dialog._results.count() >= 1            # the user acted -> majors
+    row = dialog._results.sizeHintForRow(0)
+    assert dialog._results.height() <= dialog._results.count() * row + 10
+    dialog.done(0)
+
+
 def test_dialog_defaults_keep_skin_opacities(app):
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     result = dialog.result_settings()
