@@ -30,9 +30,16 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              — metal themes add colored/ (full-color art) and each
                              theme may hold dual/ (the Sunday-duality companion:
                              greek/dual/Phaethon, norse/dual/Skoll, egypt/dual/afu_ra,
-                             japan/dual/ama_no_iwato, religion/dual/{corax,washbasin},
-                             slavic/dual/dazbog_old, alchemy/dual/ore — inert until
-                             the dual-legend wiring lands)
+                             japan/dual/ama_no_iwato, religion/dual/{corax,washbasin,
+                             rough_ashlar,perfect_ashlar}, slavic/dual/dazbog_old,
+                             alchemy/dual/ore — inert until the dual-Sunday wiring
+                             lands; freemasonry.png itself is the owner's upgraded
+                             Eye-over-square-and-compasses medallion since 0.14.173)
+                             bible/ (staged 12th theme, NOT wired yet — the
+                             stained-glass windows: ancient_of_days, mary, david,
+                             moses, solomon, song_of_songs, joseph +
+                             dual/son_servant; wiring waits on the owner's figure
+                             verdict, research/bible_theme_prompts.md)
   📁 zodiac/               ← octa bottom-arm art: sign/, logo/, constellation/ (<Sign>.png),
                              chinese/ (<Animal>.png) — 1×1 placeholders, same convention
   📁 virtue/  📁 sin/  📁 mood/

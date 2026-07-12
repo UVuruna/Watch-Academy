@@ -247,17 +247,26 @@ Circular medallion, weathered silver-and-bronze relief on a cold winter-gray fie
 
 ---
 
-## Notes on the two "stretch" themes
+## The two "stretch" themes — ECLIPSED SUN (owner: wants total coverage)
 
-**Planets** and **planet_signs** share one article set, and that
-article never personifies the Sun beyond the physical body — no named
-second character exists to draw, only the same plasma sphere with its
-light dimmed. A companion image there would just be an eclipsed disc,
-which is a mood tint, not a duality FIGURE the way Skoll or Afu-Ra is
-— worth doing only if the owner wants total 8-per-theme coverage for
-its own sake, not because the canon asks for it. No prompt is offered
-for either; if wanted later, "the same sun.png disc in eclipse, a thin
-corona ring around a black disc" is the entire brief.
+**Planets** and **planet_signs** have no named second character — but
+the owner loves the eclipse idea ("teško vizuelno prikazati ali
+probaćemo"), and physically it IS the honest dual: the same Sun with
+its light taken, Glory become Eclipse. Two prompts, each matching its
+set's own look:
+
+**Eclipsed Sun — planets (drop at `assets/weekday/planets/dual/sun_eclipse.png`)**
+```
+Photorealistic total solar eclipse, perfectly centered, isolated on transparent background — the SAME photoreal space-render style as a NASA sun photograph, matching the look of the theme's real sun render. Center: the Moon's pitch-black disc covering the Sun exactly, leaving a thin, blazing white-gold corona ring streaming irregular wisps and two or three small pink prominence flares at the rim; a faint diamond-ring glint at the upper edge, the last bead of light; deep-space black around it with no stars near the corona. No border, no medallion, no frame — a raw celestial body like the other planet renders. Colors: black disc, white-gold corona, faint silver streamers, prominence pink.
+```
+
+**Eclipsed Sun — planet signs (drop at `assets/weekday/planet_signs/dual/sun_eclipse.png`)**
+```
+Minimal planetary glyph in the same engraved-emblem style as the theme's Sun glyph (the circle with the center dot): the SAME circled-dot Sun symbol now in eclipse — the disc filled matte black, the center dot glowing faint silver instead of gold, and a thin radiant corona ring hugging the outer edge of the circle where the gold rim used to be, a few hair-thin rays escaping at irregular angles. Perfectly centered, isolated on transparent background, no text. Colors: matte black, silver, one whisper of pale gold in the corona.
+```
+
+With these two, all TWELVE themes (including the Bible set) carry the
+Sunday pair.
 
 ---
 
