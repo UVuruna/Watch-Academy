@@ -275,38 +275,50 @@ LEGEND_TERM_PATTERNS = {
         "Čežnj[aeiou]", "Čežnjom",
     ),
 }
-# Color WORDS wear their own hue (display-brightened so they stay
-# readable on the dark legend background).
-LEGEND_COLOR_PATTERNS = (
-    (r"yellow\w*", "#F8E600"),
-    (r"golden|gold\w*", "#E8C24A"),
-    (r"amber", "#ECB800"),
-    (r"orange\w*", "#E88A20"),
-    (r"red(?:s|der|dish|dens)?", "#F04040"),
-    (r"crimson", "#E03050"),
-    (r"purple\w*|violet\w*", "#A968E0"),
-    (r"magenta", "#E858E8"),
-    (r"blue\w*", "#5C86FF"),
-    (r"azure", "#4AA8FF"),
-    (r"green\w*", "#3ECC3E"),
-    (r"cyan", "#00DCDC"),
-    (r"white\w*", "#FFFFFF"),
-    (r"silver\w*", "#C9CDD3"),
-    (r"žut\w*", "#F8E600"),
-    (r"zlat\w*", "#E8C24A"),
-    (r"ćilibar\w*", "#ECB800"),
-    (r"narandžast\w*", "#E88A20"),
-    (r"crven\w*", "#F04040"),
-    (r"purpur\w*", "#B058C8"),
-    (r"ljubičast\w*", "#A968E0"),
-    (r"magent\w*", "#E858E8"),
-    (r"plav\w*", "#5C86FF"),
-    (r"azur\w*", "#4AA8FF"),
-    (r"zelen\w*", "#3ECC3E"),
-    (r"cijan\w*", "#00DCDC"),
-    (r"bel(?:o|a|e|i|u|im|om|og|oj)\b", "#FFFFFF"),
-    (r"srebrn\w*", "#C9CDD3"),
-)
+# Color WORDS wear their own hue — but ONLY the hue(s) of the entity's
+# own diamond (owner correction 2026-07-12: in the Soldier's article
+# only "orange" colors, in the Merchant's only "purple"; "the red
+# planet" or gold-as-money stay plain). Keyed patterns; the accent
+# tables below say which keys an article may light up.
+LEGEND_COLOR_PATTERNS = {
+    "yellow": ((r"yellow\w*", r"žut\w*"), "#F8E600"),
+    "gold": ((r"golden|gold\w*", r"zlat\w*"), "#E8C24A"),
+    "amber": ((r"amber", r"ćilibar\w*"), "#ECB800"),
+    "orange": ((r"orange\w*", r"narandžast\w*"), "#E88A20"),
+    "red": ((r"red(?:s|der|dish|dens)?", r"crimson", r"crven\w*"), "#F04040"),
+    "purple": ((r"purple\w*", r"violet\w*", r"purpur\w*", r"ljubičast\w*"),
+               "#A968E0"),
+    "magenta": ((r"magenta", r"magent\w*"), "#E858E8"),
+    "blue": ((r"blue\w*", r"plav\w*"), "#5C86FF"),
+    "azure": ((r"azure", r"azur\w*"), "#4AA8FF"),
+    "green": ((r"green\w*", r"zelen\w*"), "#3ECC3E"),
+    "cyan": ((r"cyan", r"cijan\w*"), "#00DCDC"),
+    "white": ((r"white\w*", r"bel(?:o|a|e|i|u|im|om|og|oj)\b"), "#FFFFFF"),
+    "silver": ((r"silver\w*", r"srebrn\w*"), "#C9CDD3"),
+}
+# Which color keys each weekday BODY may light up: the union of its
+# arm's hues across the palettes (hexa/octa, paint/light) — never a
+# color that merely appears in the prose.
+BODY_ACCENT_HUES = {
+    "sun": ("white", "gold", "yellow", "green"),
+    "moon": ("blue",),
+    "mars": ("orange", "amber", "yellow"),
+    "mercury": ("purple", "magenta", "red"),
+    "jupiter": ("yellow", "green", "cyan"),
+    "venus": ("red", "orange"),
+    "saturn": ("green", "cyan", "azure"),
+}
+# Zodiac signs inherit their hexa arm's (paint, light) pair; the trio
+# virtues their own hue.
+SIGN_ACCENT_HUES = {
+    "Gemini": ("yellow", "green"), "Cancer": ("yellow", "green"),
+    "Leo": ("orange", "yellow"), "Virgo": ("orange", "yellow"),
+    "Libra": ("red",), "Scorpio": ("red",),
+    "Sagittarius": ("purple", "magenta"), "Capricorn": ("purple", "magenta"),
+    "Aquarius": ("blue",), "Pisces": ("blue",),
+    "Aries": ("green", "cyan"), "Taurus": ("green", "cyan"),
+}
+TRIO_ACCENT_HUES = {"Faith": ("yellow",), "Love": ("red",), "Hope": ("blue",)}
 
 # The Legend popup (replaces QToolTip, owner decision): capped to these
 # screen fractions — taller content scrolls instead of clipping off a

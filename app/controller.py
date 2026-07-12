@@ -282,6 +282,7 @@ class AppController(QObject):
         self._scheduler.start()
         # windowHandle() exists only after show(); a monitor/DPI change
         # invalidates every rasterized cache.
+        self._last_dpr = self._widget.devicePixelRatioF()
         self._widget.windowHandle().screenChanged.connect(self._on_screen_changed)
         if self._settings.click_through:
             self._widget.set_click_through(True)
@@ -345,6 +346,14 @@ class AppController(QObject):
         self._on_tick(clock_jumped=True)
 
     def _on_screen_changed(self) -> None:
+        """Qt fires this for ANY monitor crossing — but two identical
+        screens (the owner's 2x 4K/32") share one pixel density, and
+        crossing between them must cost NOTHING. The rasterized caches
+        only die when the DPR actually changes."""
+        dpr = self._widget.devicePixelRatioF()
+        if dpr == self._last_dpr:
+            return
+        self._last_dpr = dpr
         self._compositor.invalidate()
         self._widget.update()
 

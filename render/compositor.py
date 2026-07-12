@@ -78,13 +78,15 @@ def _ordinal(n: int) -> str:
 
 
 # Canon terms POP in the article prose (owner spec 2026-07-12):
-# virtues bold blue, vices bold red, moods bold yellow, color words
-# bold in their own hue; hex notes like " (#F8E600)" never display.
-# Rules are owner-tunable in defaults; matching runs over the shipped
-# ORIGINALS (English + Serbian) — machine-translated languages read
-# plain.
+# virtues bold blue, vices bold red, moods bold yellow — always; color
+# words ONLY when they are the entity's OWN diamond hue (owner
+# correction: the Soldier lights up "orange", never "the red planet";
+# `accents` names the allowed color keys). Hex notes like " (#F8E600)"
+# never display. Rules are owner-tunable in defaults; matching runs
+# over the shipped ORIGINALS (English + Serbian) — machine-translated
+# languages read plain.
 _HEX_NOTE = re.compile(r"\s*\(#[0-9A-Fa-f]{6}\)")
-_HIGHLIGHT_RULES = [
+_TERM_RULES = [
     (
         re.compile(rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b"),
         hue,
@@ -94,16 +96,19 @@ _HIGHLIGHT_RULES = [
         ("vice", defaults.LEGEND_VICE_COLOR),
         ("mood", defaults.LEGEND_MOOD_COLOR),
     )
-] + [
-    (re.compile(rf"\b(?:{pattern})\b", re.IGNORECASE), hue)
-    for pattern, hue in defaults.LEGEND_COLOR_PATTERNS
 ]
+_COLOR_RULES = {
+    key: (re.compile(rf"\b(?:{'|'.join(patterns)})\b", re.IGNORECASE), hue)
+    for key, (patterns, hue) in defaults.LEGEND_COLOR_PATTERNS.items()
+}
 
 
-def _highlight_terms(escaped: str) -> str:
+def _highlight_terms(escaped: str, accents: tuple[str, ...] = ()) -> str:
     """Wrap every canon term of an ESCAPED prose line in its colored
-    bold span (the markup the rules insert never re-matches a rule)."""
-    for pattern, hue in _HIGHLIGHT_RULES:
+    bold span (the markup the rules insert never re-matches a rule);
+    color words light up only for the `accents` keys."""
+    rules = _TERM_RULES + [_COLOR_RULES[key] for key in accents]
+    for pattern, hue in rules:
         escaped = pattern.sub(
             lambda match, hue=hue: (
                 f"<b style=\"color:{hue}\">{match.group(0)}</b>"
@@ -113,15 +118,16 @@ def _highlight_terms(escaped: str) -> str:
     return escaped
 
 
-def _article_body_html(text: str) -> str:
+def _article_body_html(text: str, accents: tuple[str, ...] = ()) -> str:
     """LEFT-aligned article prose (owner spec — unlike every other
     hover, which is centered): paragraphs separated by a blank line,
     each wrapped to a fixed width so QToolTip stays a column; canon
-    terms highlighted, hex notes stripped."""
+    terms highlighted (color words only per `accents`), hex notes
+    stripped."""
     text = _HEX_NOTE.sub("", text)
     paragraphs = [
         "<br/>".join(
-            _highlight_terms(html.escape(line))
+            _highlight_terms(html.escape(line), accents)
             for line in textwrap.wrap(paragraph, width=defaults.ARTICLE_WRAP_CHARS)
         )
         for paragraph in text.split("\n\n")
@@ -129,10 +135,14 @@ def _article_body_html(text: str) -> str:
     return f"<div align='left'>{'<br/><br/>'.join(paragraphs)}</div>"
 
 
-def _article_html(image, title_html: str | None, text: str) -> str:
+def _article_html(
+    image, title_html: str | None, text: str,
+    accents: tuple[str, ...] = (),
+) -> str:
     """One full article hover: the entity's art on top (larger and
     clearer than on the dial — owner EXTRAS), an optional centered
-    title line, then the left-aligned prose."""
+    title line, then the left-aligned prose (color words light up only
+    per `accents` — the entity's own diamond hues)."""
     parts = []
     if image is not None and image.exists():
         parts.append(
@@ -141,7 +151,7 @@ def _article_html(image, title_html: str | None, text: str) -> str:
         )
     if title_html is not None:
         parts.append(f"<div align='center'>{title_html}</div><br/>")
-    parts.append(_article_body_html(text))
+    parts.append(_article_body_html(text, accents))
     return "".join(parts)
 
 
@@ -422,7 +432,10 @@ class Compositor:
                 f"<br/>{html.escape(constants.WEEKDAY_FULL_NAMES[body])}, "
                 f"{_ordinal(date.day)} {date:%B %Y}"
             )
-        return _article_html(self._skin.weekday_set.bodies.get(body), title, text)
+        return _article_html(
+            self._skin.weekday_set.bodies.get(body), title, text,
+            accents=defaults.BODY_ACCENT_HUES[body],
+        )
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
         """Hover over a star arm (owner spec): hexa arms name their TWO
@@ -488,7 +501,9 @@ class Compositor:
                     text += "\n\n" + variant
                 parts.append(
                     f"<div align='center'>{header}</div>"
-                    + _article_body_html(text)
+                    + _article_body_html(
+                        text, accents=defaults.SIGN_ACCENT_HUES[name]
+                    )
                 )
             return "<br/>".join(parts)
         if self._skin.pointer == "trio":
@@ -512,7 +527,9 @@ class Compositor:
                 html.escape(days),
             )
             article = self._symbolism.trio_article(theme)
-            return header + "<br/>" + _article_body_html(article["base"])
+            return header + "<br/>" + _article_body_html(
+                article["base"], accents=defaults.TRIO_ACCENT_HUES[theme]
+            )
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events:
             # the exact instant, plus the DAY LENGTH on that date (owner
@@ -664,7 +681,9 @@ class Compositor:
         )
         article = self._symbolism.zodiac_article(day.zodiac_name)
         return header + "<br/>" + _article_html(
-            octa_slot_art("zodiac_sign", day.zodiac_name), None, article["base"]
+            octa_slot_art("zodiac_sign", day.zodiac_name), None,
+            article["base"],
+            accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
         )
 
     def _moon_text(self) -> str:
