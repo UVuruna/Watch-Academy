@@ -212,46 +212,39 @@ def today_slot_theta(pointer: str, today: str) -> float | None:
     return None
 
 
+def weekday_pinned(skin: SkinDefinition) -> bool:
+    """True when the weekday unit is PINNED to the bottom (owner
+    2026-07-12): under Aurora, and on EVERY mode once the Pointer
+    element is off — no diamonds means no slot positions, so the
+    weekday shrinks to today's body straight south (or flanking the
+    South slot at 3h/21h when both are on)."""
+    return skin.pointer == "aurora" or not skin.show_pointer
+
+
 def south_slot_available(skin: SkinDefinition) -> bool:
     """The owner's availability matrix (2026-07-12): the Compass always
     reserves its bottom arm for the slot; the Trinity always has room
     at the south gap between its blue and red diamonds; Aurora always
-    shows it (images only); Prism and Seasons gain it once the Weekday
-    element is off — and with the POINTER element off the slot exists
-    on EVERY mode (owner extension: both can combine, like Aurora)."""
+    shows it (images only); with the POINTER element off it exists on
+    EVERY mode (both can combine, like Aurora); Prism and Seasons with
+    the star drawn gain it once the Weekday element is off."""
     if not skin.show_octa_slot:
         return False
-    if skin.pointer in ("octa", "trio", "aurora"):
+    if weekday_pinned(skin):
         return True
-    return not skin.show_weekday or not skin.show_pointer
-
-
-def south_slot_flanks(skin: SkinDefinition) -> bool:
-    """True when the slot and the SOUTH-dwelling weekday body must
-    flank the bottom Aurora-style (owner 2026-07-12): the Pointer
-    element is off, the slot is on, and the pointer normally seats a
-    body straight south (Prism and Seasons — mercury's arm)."""
-    return (
-        skin.pointer in ("hexa", "cross")
-        and not skin.show_pointer
-        and skin.show_weekday
-        and south_slot_available(skin)
-    )
+    if skin.pointer in ("octa", "trio"):
+        return True
+    return not skin.show_weekday
 
 
 def south_slot_theta(skin: SkinDefinition, rotation: float) -> float:
-    """Where the slot sits (owner rules 2026-07-12): with the Pointer
-    element OFF it pins straight south on every mode — or to 21h when
-    it flanks the south-dwelling weekday body; otherwise the Compass
-    rides its bottom arm, Aurora pins south (or 21h in the dual pair),
-    and the rest ride the bottom arm of the drawn star (rotation is
-    already 0 with solar rotation off)."""
-    if skin.pointer == "aurora":
+    """Where the slot sits (owner rules 2026-07-12): pinned layouts
+    (Aurora, or any mode with the Pointer element off) put it straight
+    south — or at 21h when the weekday body shares the bottom; with
+    the star drawn it rides the bottom arm (rotation is already 0
+    when solar rotation is off)."""
+    if weekday_pinned(skin):
         if skin.show_weekday:
-            return constants.AURORA_DUAL_SLOT_ANGLE
-        return constants.SOUTH_SLOT_ANGLE
-    if not skin.show_pointer:
-        if south_slot_flanks(skin):
             return constants.AURORA_DUAL_SLOT_ANGLE
         return constants.SOUTH_SLOT_ANGLE
     return constants.SOUTH_SLOT_ANGLE + rotation
@@ -278,9 +271,10 @@ def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
     return mode, style
 
 
-def aurora_weekday_theta(skin: SkinDefinition) -> float:
-    """The Aurora weekday angle: straight south alone, 3h on the left
-    when the south slot shares the bottom (owner dual layout)."""
+def pinned_weekday_theta(skin: SkinDefinition) -> float:
+    """The PINNED weekday angle (Aurora, or the Pointer element off):
+    straight south alone, 3h on the left when the south slot shares
+    the bottom (owner dual layout)."""
     if skin.show_octa_slot:
         return constants.AURORA_DUAL_WEEKDAY_ANGLE
     return constants.SOUTH_SLOT_ANGLE
@@ -804,6 +798,22 @@ class WeekdayLayer(Layer):
         if ctx.skin.weekday_slot != "weekday":
             return   # the astrology badge (its own MINUTE layer) took over
 
+        if weekday_pinned(ctx.skin):
+            # No diamonds, no slot positions (owner 2026-07-12):
+            # today's body alone, pinned at the bottom — straight
+            # south, or 3h left of it when the South slot shares.
+            draw_weekday_body(
+                painter, ctx, today,
+                dial_point(
+                    pinned_weekday_theta(ctx.skin),
+                    ctx.radius * spec.orbit_fraction,
+                ),
+                2 * ctx.radius * spec.diamond_scale
+                * hover_factor(ctx, f"body:{today}"),
+                1.0,
+            )
+            return
+
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
 
@@ -817,21 +827,9 @@ class WeekdayLayer(Layer):
             )
         orbit = ctx.radius * spec.orbit_fraction
         slot_size = 2 * ctx.radius * spec.diamond_scale
-        flank = south_slot_flanks(ctx.skin)
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
             body = visible_occupant(occupants, today)
-            # The Aurora slot stands FIXED near the Omega (owner spec:
-            # the imagined south) — never sun-rotated; when the south
-            # slot shares the bottom, the pair flanks it (weekday 3h
-            # left, slot 21h right). With the Pointer element off the
-            # same flanking rescues the south-dwelling body on Prism
-            # and Seasons (owner extension).
-            if ctx.skin.pointer == "aurora":
-                theta = aurora_weekday_theta(ctx.skin)
-            elif flank and slot_angle == constants.SOUTH_SLOT_ANGLE:
-                theta = constants.AURORA_DUAL_WEEKDAY_ANGLE
-            else:
-                theta = slot_angle + ctx.rotation
+            theta = slot_angle + ctx.rotation
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hover_factor(ctx, f"body:{body}"),
@@ -855,7 +853,7 @@ class WeekdayBadgeLayer(Layer):
             return
         sign, folder = badge
         spec = self._skin.weekday_set
-        theta = aurora_weekday_theta(ctx.skin)
+        theta = pinned_weekday_theta(ctx.skin)
         asset = octa_slot_art(folder, sign)
         if asset is None:
             return                       # documented: no art, no badge
@@ -881,6 +879,8 @@ class CenterBodyLayer(Layer):
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         if ctx.skin.weekday_slot != "weekday":
             return          # the astrology badge replaced the unit
+        if weekday_pinned(ctx.skin):
+            return          # pinned layouts draw today at the bottom
         if spec.display_mode != "center_only" and not (
             ctx.skin.pointer in ("hexa", "trio") and today == "sun"
         ):

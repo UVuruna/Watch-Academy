@@ -37,15 +37,15 @@ from render.layers import (
     WeekdayBadgeLayer,
     WeekdayLayer,
     YearMarkerLayer,
-    aurora_weekday_theta,
     dial_point,
+    pinned_weekday_theta,
     south_slot_available,
-    south_slot_flanks,
     south_slot_theta,
     south_slot_view,
     today_slot_theta,
     visible_occupant,
     weekday_badge,
+    weekday_pinned,
 )
 from skins.manifest import SkinDefinition
 
@@ -394,7 +394,7 @@ class Compositor:
                 weekday = self._skin.weekday_set
                 if hit(
                     dial_point(
-                        aurora_weekday_theta(self._skin),
+                        pinned_weekday_theta(self._skin),
                         radius * weekday.orbit_fraction,
                     ),
                     radius * weekday.diamond_scale,
@@ -475,6 +475,19 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
+        if weekday_pinned(self._skin):
+            # Pinned layouts (Aurora, or the Pointer element off):
+            # today's body alone at the bottom — the hit test mirrors
+            # the drawn, un-rotated position.
+            if hit(
+                dial_point(
+                    pinned_weekday_theta(self._skin),
+                    radius * weekday.orbit_fraction,
+                ),
+                radius * weekday.diamond_scale,
+            ):
+                return today
+            return None
         center_body: str | None = None
         if weekday.display_mode == "center_only":
             center_body = today
@@ -486,20 +499,11 @@ class Compositor:
             return center_body
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
-        flank = south_slot_flanks(self._skin)
         for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
             body = visible_occupant(occupants, today)
-            # Aurora pins the body near the Omega — un-rotated, and
-            # shifted to 3h when the south slot shares the bottom; the
-            # pointer-off flank does the same on Prism/Seasons. The
-            # hit test must match the drawn position.
-            if self._skin.pointer == "aurora":
-                theta = aurora_weekday_theta(self._skin)
-            elif flank and angle == constants.SOUTH_SLOT_ANGLE:
-                theta = constants.AURORA_DUAL_WEEKDAY_ANGLE
-            else:
-                theta = angle + rotation
-            slot = dial_point(theta, radius * weekday.orbit_fraction)
+            slot = dial_point(
+                angle + rotation, radius * weekday.orbit_fraction
+            )
             if hit(slot, radius * weekday.diamond_scale):
                 return body
         return None

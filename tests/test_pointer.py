@@ -91,7 +91,7 @@ def test_south_slot_matrix():
     import dataclasses
 
     from render.layers import (
-        aurora_weekday_theta, south_slot_available, south_slot_theta,
+        pinned_weekday_theta, south_slot_available, south_slot_theta,
         south_slot_view,
     )
 
@@ -130,8 +130,8 @@ def test_south_slot_matrix():
     both = skin(pointer="aurora", show_weekday=True, show_octa_slot=True)
     assert south_slot_theta(lone, 14.0) == 180.0
     assert south_slot_theta(both, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
-    assert aurora_weekday_theta(both) == constants.AURORA_DUAL_WEEKDAY_ANGLE
-    assert aurora_weekday_theta(
+    assert pinned_weekday_theta(both) == constants.AURORA_DUAL_WEEKDAY_ANGLE
+    assert pinned_weekday_theta(
         skin(pointer="aurora", show_octa_slot=False)
     ) == 180.0
     # Aurora shows images only — plain and text modes coerce to logos.
@@ -232,7 +232,8 @@ def test_weekday_badge_gating_and_pointer_off_flank():
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
     from render.layers import (
-        south_slot_available, south_slot_flanks, south_slot_theta,
+        pinned_weekday_theta, south_slot_available, south_slot_theta,
+        weekday_pinned,
     )
 
     for pointer in ("hexa", "octa", "cross", "trio"):
@@ -250,21 +251,25 @@ def test_weekday_badge_gating_and_pointer_off_flank():
     def skin(**kw):
         return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
 
-    # Pointer element OFF -> the slot exists on every mode.
+    # Pointer element OFF -> UNIFORM pinned rule on every mode (owner
+    # correction: no diamonds, no slot positions): with the weekday on
+    # the pair flanks the bottom (body 3h, slot 21h); alone the slot
+    # (or the body) stands straight south.
     for pointer in ("hexa", "cross", "trio", "octa"):
         off = skin(pointer=pointer, show_pointer=False, show_weekday=True)
+        assert weekday_pinned(off), pointer
         assert south_slot_available(off), pointer
-        # ...and it pins straight south (or flanks on Prism/Seasons).
-        if pointer in ("hexa", "cross"):
-            assert south_slot_flanks(off)
-            assert south_slot_theta(off, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
-        else:
-            assert not south_slot_flanks(off)
-            assert south_slot_theta(off, 14.0) == constants.SOUTH_SLOT_ANGLE
-    # Weekday off as well -> no flanking, plain south.
-    lone = skin(pointer="hexa", show_pointer=False, show_weekday=False)
-    assert not south_slot_flanks(lone)
-    assert south_slot_theta(lone, 14.0) == constants.SOUTH_SLOT_ANGLE
+        assert south_slot_theta(off, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
+        assert pinned_weekday_theta(off) == constants.AURORA_DUAL_WEEKDAY_ANGLE
+        lone = skin(pointer=pointer, show_pointer=False, show_weekday=False)
+        assert south_slot_theta(lone, 14.0) == constants.SOUTH_SLOT_ANGLE
+    # The body alone (slot element off) pins straight south.
+    body_only = skin(
+        pointer="hexa", show_pointer=False, show_octa_slot=False,
+    )
+    assert pinned_weekday_theta(body_only) == constants.SOUTH_SLOT_ANGLE
+    # With the star drawn nothing is pinned.
+    assert not weekday_pinned(skin(pointer="hexa", show_pointer=True))
 
 
 def test_aurora_bands_spread_the_day_hues_evenly():
