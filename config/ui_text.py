@@ -115,8 +115,11 @@ UI_STRINGS: tuple[str, ...] = (
     "Settings could not be saved",
     # --- Hover legend labels (the compositor) --------------------------------------
     "Sunrise", "Sunset", "Dawn", "Dusk", "Night",
-    "Dark:", "With twilight:",
-    "Illumination", "Rises", "Sets",
+    # Owner formatting round 2026-07-12: bold labels and section titles.
+    "Angle", "Season", "Phase", "Moonrise", "Moonset",
+    "Morning Twilight", "Evening Twilight",
+    "With Twilight", "Complete Dark",
+    "Illumination",
     "Day {day} of {total}",
     "{ordinal} Day - {ordinal_week} Week",
     "{season} {ordinal} of {total} Days",

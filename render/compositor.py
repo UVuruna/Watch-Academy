@@ -361,9 +361,21 @@ class Compositor:
                 return self._zodiac_text()
             if slot_mode == "ascendant":
                 return self._ascendant_text()
+            if slot_mode == "weekday":
+                # The info slot's SECOND weekday speaks its own theme.
+                return self._weekday_tooltip(
+                    today, active=True, theme=self._skin.info_slot_theme
+                )
             # The time/date/day-length slot has no tooltip of its own —
             # fall through to the region hovers.
 
+        # The ring TICK band FIRST (owner 2026-07-12: in that narrow
+        # annulus the circle outranks the twilight wedge under it) —
+        # the 360 arrows answer with what their ANGLE means on every
+        # wheel.
+        tick = self._tick_tooltip(point, radius)
+        if tick is not None:
+            return tick
         # Twilight bands BEFORE the arm hovers (owner: the dawn/dusk
         # info must never be shadowed — e.g. by a glowing quarter moon
         # sitting right on the 06h/18h band).
@@ -374,11 +386,6 @@ class Compositor:
         arm = self._arm_tooltip(point, radius, rotation)
         if arm is not None:
             return arm
-        # The ring TICK band (owner spec 2026-07-12): the 360 arrows
-        # answer with what their ANGLE means on every wheel.
-        tick = self._tick_tooltip(point, radius)
-        if tick is not None:
-            return tick
         # Last in the chain (owner rework 5 & 6): the sunlit arc answers
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
@@ -517,14 +524,31 @@ class Compositor:
                 return body
         return None
 
-    def _weekday_tooltip(self, body: str, active: bool) -> str:
+    def _weekday_tooltip(
+        self, body: str, active: bool, theme: str | None = None
+    ) -> str:
         """The body's ARTICLE — its themed art on top, then the entity
         NAME as a bigger title (owner spec 2026-07-11: the god / planet
         / calling the medallion shows), base plus the paragraph of the
         ACTIVE (pointer, palette) combination; the active day adds
         "Thursday, 9th July 2026" under the name (owner spec), ghosts
-        show name and article alone."""
-        article_set = constants.WEEKDAY_THEME_ARTICLES[self._skin.weekday_theme]
+        show name and article alone. `theme` overrides the main theme
+        (the info slot's second weekday, owner 2026-07-12)."""
+        theme = theme or self._skin.weekday_theme
+        article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+        if theme == self._skin.weekday_theme:
+            display_name = self._skin.weekday_set.body_names[body]
+            image = self._skin.weekday_set.bodies.get(body)
+        elif theme == "planets":
+            display_name = defaults.DEFAULT_SKIN.weekday_set.body_names[body]
+            image = defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
+        else:
+            display_name = defaults.WEEKDAY_THEME_NAMES[theme][body]
+            image = (
+                defaults.WEEKDAY_ART_DIR
+                / defaults.WEEKDAY_THEME_DIRS[theme]
+                / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
+            )
         node = self._symbolism.article(article_set, body)
         text = node["base"]
         variant = node["variants"].get(self._combo_key())
@@ -532,7 +556,7 @@ class Compositor:
             text += "\n\n" + variant
         title = (
             f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
-            f"<b>{html.escape(self._tr(self._skin.weekday_set.body_names[body]))}</b>"
+            f"<b>{html.escape(self._tr(display_name))}</b>"
             f"</span>"
         )
         if active:
@@ -542,7 +566,7 @@ class Compositor:
                 f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}"
             )
         return _article_html(
-            self._skin.weekday_set.bodies.get(body), title, text,
+            image, title, text,
             accents=defaults.BODY_ACCENT_HUES[body],
         )
 
@@ -864,14 +888,41 @@ class Compositor:
             ordinal=self._ord(max(1, count)), year=day.local_date.year
         )
 
+    def _period_word(self, minutes: int) -> str:
+        """The day-period a wall-clock minute falls in on THIS date
+        (owner approved 2026-07-12): Day, Night or one of the
+        twilights — read off today's sun bounds."""
+        sun = self._day.sun
+
+        def mins(when: datetime) -> int:
+            return when.hour * 60 + when.minute
+
+        if sun.sunrise is not None and sun.sunset is not None:
+            if (
+                sun.dawn is not None
+                and mins(sun.dawn) <= minutes < mins(sun.sunrise)
+            ):
+                return self._tr("Morning Twilight")
+            if mins(sun.sunrise) <= minutes < mins(sun.sunset):
+                return self._tr("Day")
+            if (
+                sun.dusk is not None
+                and mins(sun.sunset) <= minutes < mins(sun.dusk)
+            ):
+                return self._tr("Evening Twilight")
+            return self._tr("Night")
+        # Polar day / night spans the whole wheel.
+        return self._tr("Day" if self._day.day_length == "24:00" else "Night")
+
     def _tick_tooltip(self, point: QPointF, radius: float) -> str | None:
         """The ring tick band (owner spec 2026-07-12, organized to the
-        DOMY letters): hovering any of the 360 arrows reads that ANGLE
-        on every wheel in titled sections — DAY (the 24h time and the
-        exact degree), YEAR (the year-wheel date, the anchor event on
-        its day, the season, the day and week of the year) and MOON
-        (the running lunation, then the cycle reading at that angle —
-        new at the top, full at the bottom, as the marker rides)."""
+        DOMY letters, formatting round two): hovering any of the 360
+        arrows reads that ANGLE on every wheel in titled sections
+        separated by blank lines — DAY (labeled time and degree plus
+        the day-period word), YEAR (labeled date with the anchor event,
+        labeled season with the day/week ordinals) and MOON (the
+        running lunation, then the cycle reading at that angle — new
+        at the top, full at the bottom, as the marker rides)."""
         distance = math.hypot(point.x(), point.y())
         if not (
             radius * defaults.TICK_HOVER_INNER_FRACTION
@@ -881,8 +932,10 @@ class Compositor:
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
         minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
-        line_time = html.escape(
-            f"{minutes // 60:02d}:{minutes % 60:02d} — {theta:.1f}°"
+        line_time = (
+            f"{self._label('Time')} {minutes // 60:02d}:{minutes % 60:02d} - "
+            f"{self._label('Angle')} {theta:.1f}° - "
+            + html.escape(self._period_word(minutes))
         )
 
         day = self._day
@@ -891,8 +944,8 @@ class Compositor:
         )
         local = instant.astimezone(day.tzinfo)
         line_date = (
-            f"{self._ord(local.day)} {html.escape(self._month(local))} "
-            f"{local.year}"
+            f"{self._label('Date')} {self._ord(local.day)} "
+            f"{html.escape(self._month(local))} {local.year}"
         )
         event = next(
             (
@@ -902,7 +955,7 @@ class Compositor:
             None,
         )
         if event is not None:
-            line_date += f" — {html.escape(self._tr(event))}"
+            line_date += f" - {html.escape(self._tr(event))}"
         line_year = html.escape(
             self._tr("{ordinal} Day - {ordinal_week} Week")
         ).format(
@@ -915,14 +968,17 @@ class Compositor:
                 if when <= instant
             ] or [day.season_events[0]]
             season = max(passed)[1].split()[0]
-            line_year = f"{html.escape(self._tr(season))} — {line_year}"
+            line_year = (
+                f"{self._label('Season')} "
+                f"{html.escape(self._tr(season))} - {line_year}"
+            )
 
         fraction = theta / 360.0
         cycle_day = f"{fraction * constants.SYNODIC_MONTH_DAYS:.1f}"
         line_moon = (
-            f"{html.escape(self._tr('Illumination'))} "
-            f"{illumination(fraction) * 100:.1f}% — "
-            f"{html.escape(self._tr(phase_name(fraction)))} — "
+            f"{self._label('Illumination')} "
+            f"{illumination(fraction) * 100:.1f}% - "
+            f"{html.escape(self._tr(phase_name(fraction)))} - "
             + html.escape(
                 self._tr("Day {day} of {total}").format(
                     day=cycle_day, total=constants.SYNODIC_MONTH_DAYS
@@ -932,9 +988,11 @@ class Compositor:
         return _centered_html(
             f"<b>{html.escape(self._tr('Day'))}</b>",
             line_time,
+            "",
             f"<b>{html.escape(self._tr('Year'))}</b>",
             line_date,
             line_year,
+            "",
             f"<b>{html.escape(self._tr('Moon'))}</b>",
             self._lunation_ordinal(),
             line_moon,
@@ -958,12 +1016,12 @@ class Compositor:
         )
 
     def _moon_text(self) -> str:
-        """Moon hover (owner rework): the phase — with the exact instant
-        in parentheses while a principal name holds — then illumination
-        to one decimal, the rise–set span, and the cycle day."""
+        """Moon hover (owner formatting round 2026-07-12): bold Phase /
+        Illumination / Moonrise-Moonset labels, a blank line, then the
+        cycle day and the running lunation."""
         day = self._day
         name = phase_name(day.moon_fraction)
-        lines = [self._tr(name)]
+        phase_value = html.escape(self._tr(name))
         if name in constants.MOON_PHASE_FRACTIONS:
             # A principal phase name holds ±12 h around its instant —
             # show that instant (the nearest principal event by name).
@@ -972,30 +1030,36 @@ class Compositor:
                 (event for event in day.moon_events if event[1] == name),
                 key=lambda event: abs(event[0] - noon),
             )[0].astimezone(day.tzinfo)
-            lines.append(
-                f"({instant.day} {self._month_short(instant)} {instant.year}"
+            phase_value += html.escape(
+                f" ({instant.day} {self._month_short(instant)}"
                 f" - {instant:%H:%M})"
             )
-        lines.append(
-            f"{self._tr('Illumination')} {day.moon_illumination * 100:.1f}%"
-        )
+        lines = [
+            f"{self._label('Phase')} {phase_value}",
+            f"{self._label('Illumination')} "
+            f"{day.moon_illumination * 100:.1f}%",
+        ]
         if day.moonrise is not None and day.moonset is not None:
-            lines.append(f"{day.moonrise:%H:%M} - {day.moonset:%H:%M}")
+            lines.append(
+                f"{self._label('Moonrise')} {day.moonrise:%H:%M} - "
+                f"{self._label('Moonset')} {day.moonset:%H:%M}"
+            )
         elif day.moonrise is not None:
             # The moon skips a rise or a set roughly once a month —
             # show the side that exists on this date.
-            lines.append(f"{self._tr('Rises')} {day.moonrise:%H:%M}")
+            lines.append(f"{self._label('Moonrise')} {day.moonrise:%H:%M}")
         elif day.moonset is not None:
-            lines.append(f"{self._tr('Sets')} {day.moonset:%H:%M}")
+            lines.append(f"{self._label('Moonset')} {day.moonset:%H:%M}")
         cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
-        lines.append(
-            self._tr("Day {day} of {total}").format(
-                day=f"{cycle_day:.1f}", total=constants.SYNODIC_MONTH_DAYS
-            )
-        )
-        # Which lunation of the year is running (owner 2026-07-12).
         return _centered_html(
-            *(html.escape(line) for line in lines),
+            *lines,
+            "",
+            html.escape(
+                self._tr("Day {day} of {total}").format(
+                    day=f"{cycle_day:.1f}",
+                    total=constants.SYNODIC_MONTH_DAYS,
+                )
+            ),
             self._lunation_ordinal(),
         )
 
@@ -1057,21 +1121,28 @@ class Compositor:
         is_wet = starts_in_march != self._day.southern_hemisphere
         return start, end, is_wet
 
+    def _label(self, text: str) -> str:
+        """A BOLD hover label with its colon (owner formatting round
+        2026-07-12: labels bold, values plain)."""
+        return f"<b>{html.escape(self._tr(text))}:</b>"
+
     def _earth_text(self) -> str:
-        """Earth hover (owner rework), four lines with raised ordinal
-        suffixes: the date, day/week ordinals, the season row and the
-        zodiac sign with its span in parentheses — plus the season event
-        name on top while the marker glows."""
+        """Earth hover (owner formatting round 2026-07-12): a bold
+        Date label with the day/week ordinals beneath, a blank line,
+        then bold Season and Sign labels — plus the season event on
+        top while the marker glows."""
         day, date = self._day, self._day.local_date
         last = day.zodiac_end - timedelta(days=1)
         lines = [
-            f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}",
+            f"{self._label('Date')} {self._ord(date.day)} "
+            f"{html.escape(self._month(date))} {date.year}",
             self._tr("{ordinal} Day - {ordinal_week} Week").format(
                 ordinal=self._ord(date.timetuple().tm_yday),
                 ordinal_week=self._ord(date.isocalendar().week),
             ),
-            self._season_row(),
-            f"{html.escape(day.zodiac_symbol)} "
+            "",
+            f"{self._label('Season')} {self._season_row()}",
+            f"{self._label('Sign')} {html.escape(day.zodiac_symbol)} "
             f"{html.escape(self._tr(day.zodiac_name))} "
             f"({self._ord(day.zodiac_start.day)} "
             f"{html.escape(self._month(day.zodiac_start))} - "
@@ -1083,12 +1154,27 @@ class Compositor:
             )
         return _centered_html(*lines)
 
+    def _period_earth_html(self, kind: str) -> str:
+        """The active region's own Earth face rides the Day/Night hover
+        (owner 2026-07-12): the day art on the Day side, the night art
+        on the Night side — atmosphere or clean per the Earth setting."""
+        marker = self._skin.year_marker
+        path = marker.variants.get(
+            f"{self._skin.earth_style}_{marker.default_variant}_{kind}"
+        )
+        if path is None:
+            return ""
+        return (
+            f"<div align='center'><img src='{path.as_uri()}' "
+            f"width='{defaults.PERIOD_EARTH_IMAGE_PX}'/></div>"
+        )
+
     def _period_tooltip(self, point: QPointF, radius: float) -> str | None:
-        """Aura/Umbra hovers (owner rework): the sunlit arc gives the
-        DAY — duration, the sun span, and the twilight-extended span;
-        the dark of the wheel gives the NIGHT — duration (24 h minus
-        this date's day length) with the sunset–sunrise and dusk–dawn
-        bounds. Polar days/nights cover the whole wheel accordingly."""
+        """Aura/Umbra hovers (owner formatting round 2026-07-12): a mini
+        Earth of the active region on top, then a bold Day/Night title
+        with the duration, the labeled sun span, a blank line, and the
+        twilight-extended span under its own With Twilight / Complete
+        Dark title. Polar days/nights cover the whole wheel."""
         sun = self._day.sun
         distance = math.hypot(point.x(), point.y())
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
@@ -1107,37 +1193,49 @@ class Compositor:
         if in_day:
             if distance > radius * self._skin.background.aura_radius_fraction:
                 return None
-            lines = [f"{self._tr('Day')} {hours}h {minutes:02d}min"]
+            lines = [
+                f"<b>{html.escape(self._tr('Day'))}</b> "
+                f"{hours}h {minutes:02d}min"
+            ]
             if sun.sunrise is not None and sun.sunset is not None:
                 lines.append(
-                    f"{self._tr('Sunrise')} {sun.sunrise:%H:%M} - "
-                    f"{self._tr('Sunset')} {sun.sunset:%H:%M}"
+                    f"{self._label('Sunrise')} {sun.sunrise:%H:%M} - "
+                    f"{self._label('Sunset')} {sun.sunset:%H:%M}"
                 )
             if sun.dawn is not None and sun.dusk is not None:
-                lines.append(
-                    f"{self._tr('With twilight:')} {self._tr('Dawn')} "
-                    f"{sun.dawn:%H:%M} - {self._tr('Dusk')} {sun.dusk:%H:%M}"
-                )
-            return _centered(*lines)
+                lines += [
+                    "",
+                    f"<b>{html.escape(self._tr('With Twilight'))}</b>",
+                    f"{self._label('Dawn')} {sun.dawn:%H:%M} - "
+                    f"{self._label('Dusk')} {sun.dusk:%H:%M}",
+                ]
+            return self._period_earth_html("day") + _centered_html(*lines)
         if distance > radius * self._skin.background.umbra_radius_fraction:
             return None
         night = 24 * 60 - (hours * 60 + minutes)
-        lines = [f"{self._tr('Night')} {night // 60}h {night % 60:02d}min"]
+        lines = [
+            f"<b>{html.escape(self._tr('Night'))}</b> "
+            f"{night // 60}h {night % 60:02d}min"
+        ]
         if sun.sunset is not None and sun.sunrise is not None:
             lines.append(
-                f"{self._tr('Sunset')} {sun.sunset:%H:%M} - "
-                f"{self._tr('Sunrise')} {sun.sunrise:%H:%M}"
+                f"{self._label('Sunset')} {sun.sunset:%H:%M} - "
+                f"{self._label('Sunrise')} {sun.sunrise:%H:%M}"
             )
         if sun.dusk is not None and sun.dawn is not None:
-            lines.append(
-                f"{self._tr('Dark:')} {self._tr('Dusk')} {sun.dusk:%H:%M} - "
-                f"{self._tr('Dawn')} {sun.dawn:%H:%M}"
-            )
-        return _centered(*lines)
+            lines += [
+                "",
+                f"<b>{html.escape(self._tr('Complete Dark'))}</b>",
+                f"{self._label('Dusk')} {sun.dusk:%H:%M} - "
+                f"{self._label('Dawn')} {sun.dawn:%H:%M}",
+            ]
+        return self._period_earth_html("night") + _centered_html(*lines)
 
     def _twilight_tooltip(self, point: QPointF, radius: float) -> str | None:
-        """Hovering a twilight band names its boundary times (owner spec):
-        the morning band reads dawn/sunrise, the evening band sunset/dusk."""
+        """Hovering a twilight band (owner formatting round 2026-07-12):
+        a bold Morning/Evening Twilight title, the labeled boundary
+        times in the order the light moves, and the band's span in
+        minutes AND dial degrees (15° per hour)."""
         import math
 
         sun = self._day.sun
@@ -1151,21 +1249,28 @@ class Compositor:
             value = theta if theta >= start else theta + 360.0
             return start <= value <= span_end
 
+        def band(title: str, a: str, first: datetime,
+                 b: str, second: datetime) -> str:
+            span = round((second - first).total_seconds() / 60)
+            return _centered_html(
+                f"<b>{html.escape(self._tr(title))}</b>",
+                f"{self._label(a)} {first:%H:%M} - "
+                f"{self._label(b)} {second:%H:%M}",
+                html.escape(f"{span} min - {span / 4:.2f}°"),
+            )
+
         angle = angles.time_to_dial_angle
-        # Two lines per band (owner spec), in the order the light moves.
         if sun.dawn is not None and sun.sunrise is not None and within(
             angle(sun.dawn), angle(sun.sunrise)
         ):
-            return _centered(
-                f"{self._tr('Dawn')} {sun.dawn:%H:%M}",
-                f"{self._tr('Sunrise')} {sun.sunrise:%H:%M}",
+            return band(
+                "Morning Twilight", "Dawn", sun.dawn, "Sunrise", sun.sunrise
             )
         if sun.sunset is not None and sun.dusk is not None and within(
             angle(sun.sunset), angle(sun.dusk)
         ):
-            return _centered(
-                f"{self._tr('Sunset')} {sun.sunset:%H:%M}",
-                f"{self._tr('Dusk')} {sun.dusk:%H:%M}",
+            return band(
+                "Evening Twilight", "Sunset", sun.sunset, "Dusk", sun.dusk
             )
         return None
 

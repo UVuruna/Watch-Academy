@@ -262,6 +262,8 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 # the dial; the prose wraps at a fixed width so QToolTip stays a column.
 ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must read
 ARTICLE_WRAP_CHARS = 56
+PERIOD_EARTH_IMAGE_PX = 128          # the Day/Night hover carries a mini Earth
+                                     # of the active region (owner 2026-07-12)
 ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
                                      # spec 2026-07-11: a slightly bigger title,
                                      # then a margin, then the prose)

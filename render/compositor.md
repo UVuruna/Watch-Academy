@@ -49,12 +49,23 @@ draws the MINUTE layers (hands, year marker) live.
   (`defaults.LEGEND_*` rules, English + Serbian originals), and hex
   notes like "(#F8E600)" are stripped from display. Then the octa
   info slot; the
-  Moon marker (phase — with the exact principal instant in parentheses
-  while its name holds — Illumination to one decimal, the
-  moonrise-moonset span, the cycle day); the Earth marker (ordinal
-  date, Nth Day - Nth Week, the season row "Summer 18th of 94 Days" —
-  southern hemisphere flips the name — and the zodiac span, plus the
-  season event name while it glows); the twilight bands; the STAR ARMS
+  Moon marker (owner formatting round 2026-07-12: bold **Phase:** —
+  with the exact principal instant in parentheses while its name
+  holds — **Illumination:** to one decimal and **Moonrise:**/
+  **Moonset:**, a blank row, then the cycle day and the running
+  lunation); the Earth marker (bold **Date:** with the Nth Day - Nth
+  Week row beneath, a blank row, then **Season:** "Summer 18th of 94
+  Days" — southern hemisphere flips the name — and **Sign:** with the
+  zodiac span, plus the season event name while it glows); the ring
+  TICK BAND (before the twilight wedges — in the overlapping annulus
+  the circle wins): the 360 arrows answer in DOMY-titled sections
+  separated by blank rows — **Day** (**Time:**/**Angle:** plus the
+  day-period word), **Year** (**Date:** with the anchor event,
+  **Season:** with the day/week ordinals) and **Moon** (the running
+  lunation, then the cycle reading at that angle); the twilight bands
+  (bold **Morning/Evening Twilight** title, the labeled bounds in the
+  order the light moves, and the span in minutes AND dial degrees —
+  "37 min - 9.25°" at 15°/h); the STAR ARMS
   (hexa diamonds carry BOTH their signs, each a header with its span
   plus the sign's full article from the
   [Symbolism Repository](../data/symbolism.md); trio arms give their
@@ -63,9 +74,12 @@ draws the MINUTE layers (hands, year marker) live.
   cross appending its METEOROLOGICAL season block — From/To at the
   halfway instants; octa diagonals describe their season with "(N.N
   Days)" and "Heart:" as the midpoint label — a trailing * flags
-  solar-rotation imprecision); and LAST the wheel itself — the sunlit
-  arc answers with the day duration and both spans (sun and
-  twilight-extended), the dark with the night duration and its bounds.
+  solar-rotation imprecision); and LAST the wheel itself — a mini
+  Earth of the active region on top (day art on the Day side, night
+  art on the Night side, atmosphere/clean per the Earth setting,
+  `defaults.PERIOD_EARTH_IMAGE_PX`), then bold **Day**/**Night** with
+  the duration, the labeled sun span, and the twilight-extended span
+  under its own **With Twilight** / **Complete Dark** title.
   With `legend` off, tooltip_at returns None for EVERYTHING — combined
   with click-through the dial has zero interaction (owner spec). A
   switched-off Element answers no hovers either: weekday off silences

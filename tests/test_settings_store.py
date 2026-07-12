@@ -68,9 +68,9 @@ def test_display_choices_round_trip(store):
         palette_style="light",
         solar_rotation=False,
         octa_slot="ascendant",
-        zodiac_style="constellation",
-        ascendant_style="colored",
-        chinese_style="colored",
+        day_slot_style="colored",
+        info_slot_style="constellation",
+        info_slot_theme="norse",
         earth_style="atmo",
         ring_tint="#8E55B9",
         ring_finish="silver",
@@ -107,11 +107,11 @@ def test_display_choices_round_trip(store):
     # (2026-07-12) instead of raising SettingsCorruptError.
     raw = store.path.read_text(encoding="utf-8").replace(
         '"octa_slot": "time"', '"octa_slot": "chinese_logo"'
-    )
+    ).replace('"info_slot_style": "sign",', '')   # a true legacy file
     store.path.write_text(raw, encoding="utf-8")
     migrated = store.load()
     assert migrated.octa_slot == "chinese"
-    assert migrated.chinese_style == "bronze"
+    assert migrated.info_slot_style == "bronze"
 
 
 @pytest.mark.parametrize(

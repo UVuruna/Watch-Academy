@@ -283,9 +283,9 @@ def apply_display_settings(skin, settings: Settings):
             True if settings.pointer == "aurora" else settings.solar_rotation
         ),
         octa_slot=settings.octa_slot,
-        zodiac_style=settings.zodiac_style,
-        ascendant_style=settings.ascendant_style,
-        chinese_style=settings.chinese_style,
+        day_slot_style=settings.day_slot_style,
+        info_slot_style=settings.info_slot_style,
+        info_slot_theme=settings.info_slot_theme,
         # The badge in the weekday position exists wherever the PINNED
         # layout does (owner 2026-07-12): under Aurora, and on any mode
         # with the Pointer element off — otherwise the bodies return.
@@ -638,21 +638,27 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
-    def _set_weekday_badge(self, mode: str, **styles) -> None:
-        """Weekday position + badge style in one click (owner
-        2026-07-12: the style dropdowns live right in the Weekday
-        menu — Sign/Logo/Constellation/Colored for the astrology pair,
-        the metal styles for the Chinese year)."""
+    def _set_weekday_badge(self, mode: str, style: str) -> None:
+        """Day slot content + its OWN style in one click (owner
+        2026-07-12: the slots are independent — this never touches the
+        info slot's look)."""
         self._settings = replace(
-            self._settings, weekday_slot=mode, **styles
+            self._settings, weekday_slot=mode, day_slot_style=style
         )
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
-    def _set_south_slot(self, mode: str, **styles) -> None:
-        """South slot mode + family style in one click (the Astrology
-        and Chinese dropdowns, owner 2026-07-12)."""
-        self._settings = replace(self._settings, octa_slot=mode, **styles)
+    def _set_south_slot(
+        self, mode: str, style: str | None = None, theme: str | None = None
+    ) -> None:
+        """Info slot content + its OWN style/theme in one click (owner
+        2026-07-12: independent of the day slot's look)."""
+        updates: dict = {"octa_slot": mode}
+        if style is not None:
+            updates["info_slot_style"] = style
+        if theme is not None:
+            updates["info_slot_theme"] = theme
+        self._settings = replace(self._settings, **updates)
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
@@ -961,20 +967,19 @@ class AppController(QObject):
             ("constellation", tr("Constellation")),
             ("colored", tr("Colored")),
         )
-        for mode, title, style_field, current_style in (
-            ("zodiac", tr("Astrology"), "zodiac_style",
-             settings.zodiac_style),
-            ("ascendant", tr("Ascendant"), "ascendant_style",
-             settings.ascendant_style),
+        for mode, title in (
+            ("zodiac", tr("Astrology")),
+            ("ascendant", tr("Ascendant")),
         ):
             badge_menu = day_slot_menu.addMenu(title)
             badge_menu.setEnabled(badge_possible)
             for style, label in zodiac_styles:
                 position_action(
                     badge_menu, label,
-                    settings.weekday_slot == mode and current_style == style,
-                    lambda checked, m=mode, f=style_field, s=style:
-                    self._set_weekday_badge(m, **{f: s}),
+                    settings.weekday_slot == mode
+                    and settings.day_slot_style == style,
+                    lambda checked, m=mode, s=style:
+                    self._set_weekday_badge(m, s),
                     badge_possible,
                 )
         chinese_badge_menu = day_slot_menu.addMenu(tr("Chinese zodiac"))
@@ -988,9 +993,9 @@ class AppController(QObject):
             position_action(
                 chinese_badge_menu, label,
                 settings.weekday_slot == "chinese"
-                and settings.chinese_style == style,
+                and settings.day_slot_style == style,
                 lambda checked, s=style:
-                self._set_weekday_badge("chinese", chinese_style=s),
+                self._set_weekday_badge("chinese", s),
                 badge_possible,
             )
         info_slot_menu = slots_menu.addMenu(tr("Info slot"))
@@ -1019,43 +1024,42 @@ class AppController(QObject):
                 lambda checked, chosen=mode: self._set_south_slot(chosen),
                 not aurora,
             )
-        astro_menu = info_slot_menu.addMenu(tr("Astrology"))
-        for style, label in (
-            ("sign", tr("Sign")),
-            ("logo", tr("Logo")),
-            ("constellation", tr("Constellation")),
-            ("text", tr("Text")),
-            ("colored", tr("Colored")),
-        ):
+        # A SECOND weekday body with its OWN theme (owner 2026-07-12:
+        # e.g. Norse left, Greek right, both showing today).
+        info_weekday_menu = info_slot_menu.addMenu(tr("Weekday"))
+        for key, title in defaults.WEEKDAY_THEME_TITLES.items():
             slot_action(
-                astro_menu, label,
-                settings.octa_slot == "zodiac"
-                and settings.zodiac_style == style,
-                lambda checked, chosen=style: self._set_south_slot(
-                    "zodiac", zodiac_style=chosen
+                info_weekday_menu, tr(title),
+                settings.octa_slot == "weekday"
+                and settings.info_slot_theme == key,
+                lambda checked, chosen=key: self._set_south_slot(
+                    "weekday", theme=chosen
                 ),
-                not (aurora and style == "text"),
+                True,
             )
-        # The ASCENDANT (owner request 2026-07-12): the sign rising on
-        # the eastern horizon right now — it cycles all twelve signs
-        # every day, so it belongs to the hour-driven slot.
-        ascendant_menu = info_slot_menu.addMenu(tr("Ascendant"))
-        for style, label in (
-            ("sign", tr("Sign")),
-            ("logo", tr("Logo")),
-            ("constellation", tr("Constellation")),
-            ("text", tr("Text")),
-            ("colored", tr("Colored")),
+        for family, family_title in (
+            ("zodiac", tr("Astrology")),
+            # The ASCENDANT (owner request 2026-07-12): the sign rising
+            # on the eastern horizon right now — cycling all twelve
+            # signs daily, it belongs to the hour-driven slot.
+            ("ascendant", tr("Ascendant")),
         ):
-            slot_action(
-                ascendant_menu, label,
-                settings.octa_slot == "ascendant"
-                and settings.ascendant_style == style,
-                lambda checked, chosen=style: self._set_south_slot(
-                    "ascendant", ascendant_style=chosen
-                ),
-                not (aurora and style == "text"),
-            )
+            family_menu = info_slot_menu.addMenu(family_title)
+            for style, label in (
+                ("sign", tr("Sign")),
+                ("logo", tr("Logo")),
+                ("constellation", tr("Constellation")),
+                ("text", tr("Text")),
+                ("colored", tr("Colored")),
+            ):
+                slot_action(
+                    family_menu, label,
+                    settings.octa_slot == family
+                    and settings.info_slot_style == style,
+                    lambda checked, m=family, chosen=style:
+                    self._set_south_slot(m, style=chosen),
+                    not (aurora and style == "text"),
+                )
         chinese_menu = info_slot_menu.addMenu(tr("Chinese zodiac"))
         for style, label in (
             ("text", tr("Text")),
@@ -1067,9 +1071,9 @@ class AppController(QObject):
             slot_action(
                 chinese_menu, label,
                 settings.octa_slot == "chinese"
-                and settings.chinese_style == style,
+                and settings.info_slot_style == style,
                 lambda checked, chosen=style: self._set_south_slot(
-                    "chinese", chinese_style=chosen
+                    "chinese", style=chosen
                 ),
                 not (aurora and style == "text"),
             )

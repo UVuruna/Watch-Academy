@@ -227,19 +227,27 @@ PALETTE_STYLES = ("paint", "light")
 # "ascendant" (owner request 2026-07-12): the RISING sign right now —
 # the natal podznak, cycling through all twelve signs daily; it wears
 # the zodiac styles through its own ascendant_style dropdown.
+# "weekday" in the INFO slot (owner 2026-07-12): a SECOND weekday body
+# — its own theme via info_slot_theme — so the pinned pair can read
+# e.g. Norse left, Greek right, both showing today.
 OCTA_SLOT_MODES = (
-    "time", "date", "day_length", "zodiac", "ascendant", "chinese",
+    "time", "date", "day_length", "weekday", "zodiac", "ascendant",
+    "chinese",
 )
-# The WEEKDAY POSITION can carry an astrology badge instead of the
-# bodies (owner 2026-07-12) — AURORA ONLY (the owner dropped the Prism
-# variant once the 2-signs-per-diamond mapping proved average-only):
-# it stands at the usual south spot, so the pair can read official
-# sign left, ascendant right. Other pointers gray the option out and
-# always draw the bodies.
+# The DAY SLOT can carry an astrology badge instead of the bodies
+# (owner 2026-07-12) — in the PINNED layouts (Aurora, or the Pointer
+# element off): it stands at the usual bottom spot, so the pair can
+# read official sign left, ascendant right. Elsewhere the bodies rule.
 WEEKDAY_SLOT_MODES = ("weekday", "zodiac", "ascendant", "chinese")
 WEEKDAY_BADGE_POINTERS = ("aurora",)
 ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text", "colored")
 CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")
+# Each SLOT carries its OWN style (owner 2026-07-12: the shared
+# per-family fields collapsed both slots onto one look) — one value
+# from either family's set, interpreted per the active family.
+SLOT_STYLE_VALUES = tuple(dict.fromkeys(
+    ZODIAC_SLOT_STYLES + CHINESE_SLOT_STYLES
+))
 # style -> art folder under assets/zodiac/ (text styles draw no art).
 ZODIAC_STYLE_ART_DIRS = {
     "sign": "sign",

@@ -52,9 +52,9 @@ class Settings:
     palette_style: str = "paint"
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
-    zodiac_style: str = "sign"          # Astrology style dropdown
-    ascendant_style: str = "sign"       # Ascendant style dropdown
-    chinese_style: str = "bronze"       # Chinese zodiac style dropdown
+    day_slot_style: str = "sign"        # the DAY slot badge's own style
+    info_slot_style: str = "sign"       # the INFO slot's own style
+    info_slot_theme: str = "planets"    # the INFO slot's weekday theme
     weekday_slot: str = "weekday"       # the weekday POSITION: bodies, or
                                         # an astrology badge (hexa/aurora)
     earth_style: str = "atmo"
@@ -155,19 +155,32 @@ class SettingsStore:
             # MODE + per-family STYLE pair — the six old combined
             # values map onto it (external user data, not an API shim).
             legacy_slot = {
-                "zodiac_sign": ("zodiac", "zodiac_style", "sign"),
-                "zodiac_logo": ("zodiac", "zodiac_style", "logo"),
-                "zodiac_constellation": (
-                    "zodiac", "zodiac_style", "constellation"
-                ),
-                "zodiac_text": ("zodiac", "zodiac_style", "text"),
-                "chinese_logo": ("chinese", "chinese_style", "bronze"),
-                "chinese_text": ("chinese", "chinese_style", "text"),
+                "zodiac_sign": ("zodiac", "sign"),
+                "zodiac_logo": ("zodiac", "logo"),
+                "zodiac_constellation": ("zodiac", "constellation"),
+                "zodiac_text": ("zodiac", "text"),
+                "chinese_logo": ("chinese", "bronze"),
+                "chinese_text": ("chinese", "text"),
             }
             if raw.get("octa_slot") in legacy_slot:
-                mode, style_key, style = legacy_slot[raw["octa_slot"]]
+                mode, style = legacy_slot[raw["octa_slot"]]
                 raw["octa_slot"] = mode
-                raw.setdefault(style_key, style)
+                raw.setdefault("info_slot_style", style)
+            # Second migration (2026-07-12): the per-FAMILY style keys
+            # became per-SLOT styles so the two slots stay independent.
+            family_styles = {
+                "zodiac": raw.get("zodiac_style"),
+                "ascendant": raw.get("ascendant_style"),
+                "chinese": raw.get("chinese_style"),
+            }
+            if "info_slot_style" not in raw:
+                style = family_styles.get(raw.get("octa_slot"))
+                if style:
+                    raw["info_slot_style"] = style
+            if "day_slot_style" not in raw:
+                style = family_styles.get(raw.get("weekday_slot"))
+                if style:
+                    raw["day_slot_style"] = style
             for key, default, allowed in (
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
@@ -176,9 +189,9 @@ class SettingsStore:
                 ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "paint", constants.PALETTE_STYLES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
-                ("zodiac_style", "sign", constants.ZODIAC_SLOT_STYLES),
-                ("ascendant_style", "sign", constants.ZODIAC_SLOT_STYLES),
-                ("chinese_style", "bronze", constants.CHINESE_SLOT_STYLES),
+                ("day_slot_style", "sign", constants.SLOT_STYLE_VALUES),
+                ("info_slot_style", "sign", constants.SLOT_STYLE_VALUES),
+                ("info_slot_theme", "planets", constants.WEEKDAY_THEMES),
                 ("weekday_slot", "weekday", constants.WEEKDAY_SLOT_MODES),
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
@@ -298,9 +311,9 @@ class SettingsStore:
             "palette_style": settings.palette_style,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
-            "zodiac_style": settings.zodiac_style,
-            "ascendant_style": settings.ascendant_style,
-            "chinese_style": settings.chinese_style,
+            "day_slot_style": settings.day_slot_style,
+            "info_slot_style": settings.info_slot_style,
+            "info_slot_theme": settings.info_slot_theme,
             "weekday_slot": settings.weekday_slot,
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,

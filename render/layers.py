@@ -256,11 +256,11 @@ def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
     coerce: time/date/day-length and zodiac-text show the zodiac logo,
     chinese-text shows the colored badge."""
     mode = skin.octa_slot
-    style = {
-        "zodiac": skin.zodiac_style,
-        "ascendant": skin.ascendant_style,
-        "chinese": skin.chinese_style,
-    }.get(mode)
+    style = (
+        skin.info_slot_style
+        if mode in ("zodiac", "ascendant", "chinese")
+        else None
+    )
     if skin.pointer == "aurora":
         if mode in ("time", "date", "day_length"):
             return "zodiac", "logo"
@@ -290,14 +290,12 @@ def weekday_badge(
     animal; each wears its own style dropdown (the badge is always an
     image — text styles coerce to the family's default art; the
     Chinese gold/silver styles run the selective swap)."""
+    style = skin.day_slot_style
     if skin.weekday_slot == "zodiac":
-        style = skin.zodiac_style
         sign = day.zodiac_name
     elif skin.weekday_slot == "ascendant":
-        style = skin.ascendant_style
         sign = tick.ascendant_sign
     elif skin.weekday_slot == "chinese":
-        style = skin.chinese_style
         animal = day.chinese_name.split()[-1]
         folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese")
         metal = style if style in defaults.METAL_SWAP_TARGETS else None
@@ -966,6 +964,23 @@ class BottomSlotLayer(Layer):
                 )
                 return
             text = chinese_animal        # documented fallback until the art lands
+        elif mode == "weekday":
+            # A SECOND weekday body (owner 2026-07-12): today in the
+            # info slot's OWN theme — e.g. Norse left, Greek right.
+            body = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+            theme = ctx.skin.info_slot_theme
+            if theme == "planets":
+                asset = defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
+            else:
+                asset = (
+                    defaults.WEEKDAY_ART_DIR
+                    / defaults.WEEKDAY_THEME_DIRS[theme]
+                    / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
+                )
+            if asset.exists():
+                draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                return
+            text = constants.WEEKDAY_LABELS[body]   # documented fallback
         elif mode == "time":
             text = ctx.tick.time_hm
         elif mode == "date":

@@ -152,9 +152,9 @@ class SkinDefinition:
     palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
-    zodiac_style: str = "sign"         # Astrology dropdown (ZODIAC_SLOT_STYLES)
-    ascendant_style: str = "sign"      # Ascendant dropdown (same styles)
-    chinese_style: str = "bronze"      # Chinese dropdown (CHINESE_SLOT_STYLES)
+    day_slot_style: str = "sign"       # the DAY slot badge's own style
+    info_slot_style: str = "sign"      # the INFO slot's own style
+    info_slot_theme: str = "planets"   # the INFO slot's weekday theme
     weekday_slot: str = "weekday"      # weekday POSITION: bodies, or an
                                        # astrology badge (hexa/aurora only)
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art

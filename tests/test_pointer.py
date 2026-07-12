@@ -139,19 +139,19 @@ def test_south_slot_matrix():
         skin(pointer="aurora", octa_slot="time")
     ) == ("zodiac", "logo")
     assert south_slot_view(
-        skin(pointer="aurora", octa_slot="zodiac", zodiac_style="text")
+        skin(pointer="aurora", octa_slot="zodiac", info_slot_style="text")
     ) == ("zodiac", "logo")
     assert south_slot_view(
-        skin(pointer="aurora", octa_slot="chinese", chinese_style="text")
+        skin(pointer="aurora", octa_slot="chinese", info_slot_style="text")
     ) == ("chinese", "colored")
     assert south_slot_view(
-        skin(pointer="aurora", octa_slot="chinese", chinese_style="gold")
+        skin(pointer="aurora", octa_slot="chinese", info_slot_style="gold")
     ) == ("chinese", "gold")
     assert south_slot_view(
         skin(pointer="octa", octa_slot="time")
     ) == ("time", None)
     assert south_slot_view(
-        skin(pointer="octa", octa_slot="zodiac", zodiac_style="sign")
+        skin(pointer="octa", octa_slot="zodiac", info_slot_style="sign")
     ) == ("zodiac", "sign")
 
 
@@ -273,7 +273,7 @@ def test_weekday_badge_gating_and_pointer_off_flank():
     gold_badge = weekday_badge(
         _dc.replace(
             defaults.DEFAULT_SKIN, pointer="aurora",
-            weekday_slot="chinese", chinese_style="gold",
+            weekday_slot="chinese", day_slot_style="gold",
         ),
         _Day, _Tick,
     )
@@ -281,7 +281,7 @@ def test_weekday_badge_gating_and_pointer_off_flank():
     colored_badge = weekday_badge(
         _dc.replace(
             defaults.DEFAULT_SKIN, pointer="aurora",
-            weekday_slot="chinese", chinese_style="colored",
+            weekday_slot="chinese", day_slot_style="colored",
         ),
         _Day, _Tick,
     )
@@ -289,7 +289,7 @@ def test_weekday_badge_gating_and_pointer_off_flank():
     asc_badge = weekday_badge(
         _dc.replace(
             defaults.DEFAULT_SKIN, pointer="aurora",
-            weekday_slot="ascendant", ascendant_style="colored",
+            weekday_slot="ascendant", day_slot_style="colored",
         ),
         _Day, _Tick,
     )
@@ -339,9 +339,15 @@ def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):
         + defaults.TICK_HOVER_OUTER_FRACTION
     ) / 2
     top = compositor.tooltip_at(180.0, 180.0 - band, 360.0)     # theta 0
-    assert "12:00" in top
+    # Formatting round 2026-07-12: bold labels, the exact dial degree
+    # and the day-period word on the time line; blank rows between the
+    # D/Y/M sections.
+    assert "12:00" in top and "Time:" in top
+    assert "Angle:" in top and "0.0°" in top
+    assert "&nbsp;" in top                     # the section separators
     # The top of the year wheel IS the summer solstice anchor.
     assert "Summer Solstice" in top and "Summer" in top
+    assert "Date:" in top and "Season:" in top
     assert "June" in top and "2026" in top
     # Moon wheel: new at the top — 0% illumination, day 0 of the cycle.
     assert "0.0%" in top and "New Moon" in top
@@ -350,7 +356,7 @@ def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):
     side = compositor.tooltip_at(
         180.0 + band * m.sin(rad), 180.0 - band * m.cos(rad), 360.0
     )
-    assert "04:40" in side
+    assert "04:40" in side and "250.0°" in side
     assert "February" in side and "Winter" in side   # 250 deg on the year wheel
     assert "Waning Gibbous" in side                  # 250/360 of the moon cycle
     # Inverse golden: the ANGLE round-trips exactly (the December
@@ -462,7 +468,7 @@ def test_zodiac_slot_styles_render(july_wednesday, style):
     day, tick = july_wednesday
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer="octa",
-        octa_slot="zodiac", zodiac_style=style,
+        octa_slot="zodiac", info_slot_style=style,
     )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200
@@ -476,7 +482,7 @@ def test_chinese_slot_styles_render(july_wednesday, style):
     day, tick = july_wednesday
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer="octa",
-        octa_slot="chinese", chinese_style=style,
+        octa_slot="chinese", info_slot_style=style,
     )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200
@@ -535,14 +541,17 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     moon = compositor._moon_text()
-    assert "Illumination 42.8%" in moon       # one decimal (owner spec)
-    assert "of 29.53" in moon
+    # Formatting round 2026-07-12: bold labels on the first three rows.
+    assert "Phase:</b>" in moon
+    assert "Illumination:</b> 42.8%" in moon   # one decimal (owner spec)
+    assert "of 29.53" in moon and "&nbsp;" in moon
     # 8 Jul 2026 is a SKIP day in Belgrade — the moon sets at 13:53 but
     # does not rise (rises again just after midnight on the 9th); the
     # hover shows the side that exists.
-    assert "Sets 13:53" in moon
+    assert "Moonset:</b> 13:53" in moon
     earth = compositor._earth_text()
-    assert "8<sup>th</sup> July 2026" in earth
+    assert "Date:</b> 8<sup>th</sup> July 2026" in earth
+    assert "Season:</b>" in earth and "Sign:</b>" in earth
     assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
     assert "Summer 18<sup>th</sup> of 94 Days" in earth
     assert "Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)" in earth
@@ -673,10 +682,11 @@ def test_trio_arm_hover_carries_the_virtue_article(july_wednesday):
 
 
 def test_day_and_night_period_hovers(july_wednesday):
-    """Hover rework 5 & 6: the sunlit arc answers with the day duration
-    and both spans (sun + twilight-extended), the dark of the wheel
-    with the night — probed upright at 14h (day) and just off midnight
-    (night), away from arms, bodies and markers."""
+    """Hover rework 5 & 6 + formatting round 2026-07-12: the sunlit arc
+    answers with a bold Day title, labeled sun span and the twilight
+    span under its With Twilight title — plus a mini Earth of the
+    active region (day art on the day side, night art on the night
+    side); the dark of the wheel mirrors it as Night / Complete Dark."""
     day, tick = july_wednesday
     compositor = Compositor(
         dataclasses.replace(
@@ -688,10 +698,58 @@ def test_day_and_night_period_hovers(july_wednesday):
     )
     compositor.render_offscreen(360.0, 1.0, day, tick)
     at_day = compositor.tooltip_at(234.0, 87.0, 360.0)     # dial 30 deg = 14h
-    assert "Day 15h" in at_day and "Sunrise" in at_day and "Dusk" in at_day
+    assert "<b>Day</b> 15h" in at_day
+    assert "Sunrise:" in at_day and "Dusk:" in at_day
+    assert "With Twilight" in at_day
+    assert "<img" in at_day and "_day" in at_day           # the region's day face
     at_night = compositor.tooltip_at(162.0, 285.0, 360.0)  # near the bottom
-    assert "Night 8h" in at_night
-    assert "Sunset" in at_night and "Dawn" in at_night
+    assert "<b>Night</b> 8h" in at_night
+    assert "Sunset:" in at_night and "Dawn:" in at_night
+    assert "Complete Dark" in at_night
+    assert "<img" in at_night and "_night" in at_night
+
+
+def test_twilight_band_format_and_tick_priority(july_wednesday):
+    """Owner formatting round 2026-07-12: the twilight hover carries a
+    bold Morning/Evening Twilight title, the labeled bounds and the
+    band's span in minutes AND dial degrees (15°/h); where the ring
+    tick band overlaps the twilight wedge (0.86–0.90 R), the CIRCLE
+    outranks the wedge."""
+    from core import angles
+
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, solar_rotation=False,
+            show_weekday=False, show_earth=False, show_moon=False,
+            show_pointer=False,
+        ),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    sun = day.sun
+    theta = math.radians(
+        (angles.time_to_dial_angle(sun.dawn)
+         + angles.time_to_dial_angle(sun.sunrise)) / 2
+    )
+
+    def probe(fraction):
+        return compositor.tooltip_at(
+            180.0 + 180.0 * fraction * math.sin(theta),
+            180.0 - 180.0 * fraction * math.cos(theta),
+            360.0,
+        )
+
+    below_band = probe((defaults.TICK_HOVER_INNER_FRACTION - 0.02))
+    assert "Morning Twilight" in below_band
+    assert "Dawn:" in below_band and "Sunrise:" in below_band
+    span = round((sun.sunrise - sun.dawn).total_seconds() / 60)
+    assert f"{span} min - {span / 4:.2f}°" in below_band
+    # Same wedge angle, but INSIDE the tick annulus (which overlaps the
+    # aura up to 0.90 R): the circle answers, not the wedge.
+    aura = compositor._skin.background.aura_radius_fraction
+    in_band = probe((defaults.TICK_HOVER_INNER_FRACTION + aura) / 2)
+    assert "Time:" in in_band and "Date:" in in_band
 
 
 def test_arm_hover_only_inside_the_diamond(july_wednesday):
@@ -712,7 +770,7 @@ def test_arm_hover_only_inside_the_diamond(july_wednesday):
     # Dial 30 deg (between the 0 and 60 arms) at 0.7R: the gap — the
     # day hover answers there (14h is deep in the July daylight arc).
     between = compositor.tooltip_at(243.0, 70.9, 360.0)
-    assert between is not None and "Day 15h" in between
+    assert between is not None and "<b>Day</b> 15h" in between
     assert "Gemini" not in between and "Leo" not in between
 
 
@@ -794,7 +852,7 @@ def test_chinese_slot_hover(july_wednesday):
             pointer="octa",
             solar_rotation=False,
             octa_slot="chinese",
-            chinese_style="text",
+            info_slot_style="text",
         ),
         AssetCache(),
     )
