@@ -870,7 +870,32 @@ class BottomSlotLayer(Layer):
         elif mode == "day_length":
             text = ctx.day.day_length
         elif mode == "chinese_text":
-            text = chinese_animal
+            # TWO lines (owner 2026-07-12): the element above the
+            # animal — "Fire" / "Horse", never the animal alone.
+            element = ctx.day.chinese_name.split()[0]
+            font = QFont()
+            font.setBold(True)
+            font.setPixelSize(100)
+            widest = max(
+                QFontMetricsF(font).horizontalAdvance(line)
+                for line in (element, chinese_animal)
+            )
+            target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+            font.setPixelSize(
+                max(
+                    defaults.BODY_LABEL_MIN_PX,
+                    math.floor(100.0 * target / widest),
+                )
+            )
+            offset = font.pixelSize() * 0.62
+            draw_outlined_text(
+                painter, QPointF(pos.x(), pos.y() - offset), element, font
+            )
+            draw_outlined_text(
+                painter, QPointF(pos.x(), pos.y() + offset), chinese_animal,
+                font,
+            )
+            return
         else:                            # "zodiac_text" (validated closed set)
             text = ctx.day.zodiac_name
         # Fit-to-width: the largest font whose text spans the slot's
