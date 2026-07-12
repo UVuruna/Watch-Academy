@@ -180,10 +180,10 @@ def test_hand_packs_load_and_resolve():
 
     packs = hand_packs()
     assert {"CLASSIC", "STEEL"} <= set(packs)
-    assert packs["STEEL"]["pivots"]["seconds"] == (None, 306.0)
+    assert packs["STEEL"]["pivots"]["seconds"] == (None, 310.0)
     steel = build_skin(replace(Settings(), hands="STEEL")).hands
-    assert steel.second.pivot_y == 306.0
-    assert steel.second.natural_height == 1032.0
+    assert steel.second.pivot_y == 310.0
+    assert steel.second.natural_height == 1040.0
     assert steel.desaturate is False               # bundled art stays as drawn
     assert steel.z_order == ("hours", "minutes", "seconds")
     classic = build_skin(Settings()).hands
@@ -238,7 +238,7 @@ def test_svg_masters_survive_flush():
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
-    path = defaults.paths.assets_dir() / "hands" / "classic" / "hours.svg"
+    path = defaults.LOGO_ASSET                       # the last SVG in the app
     cache = AssetCache()
     first = cache.pixmap_by_height(path, 60.0, 1.0)
     assert str(path) in AssetCache._svg_masters

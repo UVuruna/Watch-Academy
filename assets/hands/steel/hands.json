@@ -1,9 +1,9 @@
 {
   "name": "STEEL",
   "pivot": {
-    "hours": {"x": null, "y": 83},
-    "minutes": {"x": null, "y": 55},
-    "seconds": {"x": null, "y": 306}
+    "hours": {"x": null, "y": 87},
+    "minutes": {"x": null, "y": 59},
+    "seconds": {"x": null, "y": 310}
   },
   "z_order": ["hours", "minutes", "seconds"]
 }

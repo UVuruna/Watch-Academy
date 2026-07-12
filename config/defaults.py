@@ -605,19 +605,19 @@ DEFAULT_SKIN = SkinDefinition(
     hands=HandsSpec(
         # A PLACEHOLDER only — build_skin ALWAYS resolves the chosen
         # hand pack (assets/hands/<pack>/ or a user pack) into a full
-        # HandsSpec; these are the CLASSIC pack's values (canvases
-        # 240/290/300, every pivot 15 units above the bottom).
+        # HandsSpec; these are the CLASSIC pack's values (the owner's
+        # PNG exports, every pivot 17 px above the bottom).
         hour=HandSpec(
-            asset=paths.assets_dir() / "hands" / "classic" / "hours.svg",
-            natural_height=240, pivot_y=15,
+            asset=paths.assets_dir() / "hands" / "classic" / "hours.png",
+            natural_height=246, pivot_y=17,
         ),
         minute=HandSpec(
-            asset=paths.assets_dir() / "hands" / "classic" / "minutes.svg",
-            natural_height=290, pivot_y=15,
+            asset=paths.assets_dir() / "hands" / "classic" / "minutes.png",
+            natural_height=295, pivot_y=17,
         ),
         second=HandSpec(
-            asset=paths.assets_dir() / "hands" / "classic" / "seconds.svg",
-            natural_height=300, pivot_y=15,
+            asset=paths.assets_dir() / "hands" / "classic" / "seconds.png",
+            natural_height=306, pivot_y=17,
         ),
         minute_reach_fraction=HAND_MINUTE_REACH_FRACTION,
         second_reach_fraction=HAND_SECOND_REACH_FRACTION,

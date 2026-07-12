@@ -2,9 +2,9 @@
   "note": "Hand pack (owner spec 2026-07-12): hours/minutes/seconds images pointing UP + this file. pivot = the rotation center per hand: x from the left (null = the image middle), y in pixels FROM THE BOTTOM; z_order lists the draw order bottom-up. Sizing uses TIP-TO-PIVOT lengths only: the seconds tip touches the ring, the minutes tip the minute arrows, the hours follow the pack's own hours/minutes ratio.",
   "name": "CLASSIC",
   "pivot": {
-    "hours": {"x": null, "y": 15},
-    "minutes": {"x": null, "y": 15},
-    "seconds": {"x": null, "y": 15}
+    "hours": {"x": null, "y": 17},
+    "minutes": {"x": null, "y": 17},
+    "seconds": {"x": null, "y": 17}
   },
   "z_order": ["hours", "minutes", "seconds"]
 }
