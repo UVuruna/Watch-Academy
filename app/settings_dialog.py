@@ -7,6 +7,9 @@ repository's documented lifecycle). OK produces a new frozen Settings
 via result_settings(); the controller applies and persists it.
 """
 
+import json
+from pathlib import Path
+
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
@@ -25,6 +28,7 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QPushButton,
     QSlider,
+    QSpinBox,
     QVBoxLayout,
 )
 
@@ -69,6 +73,7 @@ class SettingsDialog(QDialog):
         layout.addWidget(self._build_palette_group())
         layout.addWidget(self._build_ring_tint_group())
         layout.addWidget(self._build_custom_ring_group())
+        layout.addWidget(self._build_custom_hands_group())
         layout.addWidget(self._build_language_group())
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
@@ -529,7 +534,7 @@ class SettingsDialog(QDialog):
         the name lives in the tooltip, the active one wears a white
         ring — plus a free color picker."""
         tr = self._tr
-        group = QGroupBox(tr("Ring tint — whole clock body (letters excluded)"))
+        group = QGroupBox(tr("Clock tint — dial, hands and Umbra (letters excluded)"))
         column = QVBoxLayout(group)
         grid = QGridLayout()
         grid.setHorizontalSpacing(4)
@@ -697,6 +702,126 @@ class SettingsDialog(QDialog):
             ).format(name=card["name"])
         )
         self._ring_name_edit.clear()
+
+    # --- Custom hands (owner spec 2026-07-12) -----------------------------------------
+
+    def _build_custom_hands_group(self) -> QGroupBox:
+        """The hand-pack builder: three PNGs pointing UP, a pivot per
+        hand (x from the left, 'center' by default; y in pixels from
+        the bottom), a bottom-up z-order and a unique name. Add writes
+        the pack folder immediately (files, not settings) — it appears
+        under Design ▸ Hands."""
+        from data.hands import HAND_NAMES, hand_packs
+
+        tr = self._tr
+        group = QGroupBox(tr("Custom hands"))
+        column = QVBoxLayout(group)
+        note = QLabel(tr(
+            "PNG images pointing UP. Colored art grays out so the clock "
+            "tint can recolor it; the tip-to-pivot length sets every "
+            "size automatically."
+        ))
+        note.setWordWrap(True)
+        column.addWidget(note)
+        self._hand_files: dict[str, str | None] = {h: None for h in HAND_NAMES}
+        self._hand_pivots: dict[str, tuple[QSpinBox, QSpinBox]] = {}
+        labels = {"hours": "Hours", "minutes": "Minutes", "seconds": "Seconds"}
+        for hand in HAND_NAMES:
+            row = QHBoxLayout()
+            row.addWidget(QLabel(tr(labels[hand])))
+            pick = QPushButton(tr("Browse…"))
+            pick.clicked.connect(lambda checked, h=hand: self._pick_hand(h))
+            row.addWidget(pick, stretch=1)
+            row.addWidget(QLabel(tr("Pivot X")))
+            x_spin = QSpinBox()
+            x_spin.setRange(-1, 8192)
+            x_spin.setValue(-1)
+            x_spin.setSpecialValueText(tr("center"))
+            x_spin.setToolTip(tr(
+                "Rotation center from the LEFT edge in pixels of your "
+                "image — leave 'center' for symmetric hands."
+            ))
+            row.addWidget(x_spin)
+            row.addWidget(QLabel(tr("Pivot Y")))
+            y_spin = QSpinBox()
+            y_spin.setRange(0, 8192)
+            y_spin.setValue(15)
+            y_spin.setToolTip(tr(
+                "Rotation center ABOVE the image bottom in pixels — the "
+                "hand must point UP."
+            ))
+            row.addWidget(y_spin)
+            self._hand_pivots[hand] = (x_spin, y_spin)
+            self._hand_buttons = getattr(self, "_hand_buttons", {})
+            self._hand_buttons[hand] = pick
+            column.addLayout(row)
+        bottom = QHBoxLayout()
+        bottom.addWidget(QLabel(tr("Z-order (bottom → top)")))
+        self._hand_z_combo = QComboBox()
+        import itertools
+        for order in itertools.permutations(HAND_NAMES):
+            self._hand_z_combo.addItem(
+                " · ".join(tr(labels[h]) for h in order), list(order)
+            )
+        bottom.addWidget(self._hand_z_combo, stretch=1)
+        self._hand_name_edit = QLineEdit()
+        self._hand_name_edit.setPlaceholderText(tr("Unique name"))
+        bottom.addWidget(self._hand_name_edit)
+        add = QPushButton(tr("Add hands"))
+        add.clicked.connect(self._add_custom_hands)
+        bottom.addWidget(add)
+        column.addLayout(bottom)
+        user_count = sum(
+            1 for pack in hand_packs().values()
+            if pack["dir"].parent != defaults.paths.assets_dir() / "hands"
+        )
+        self._custom_hands_status = QLabel(
+            tr("{n} hand set(s) saved").format(n=user_count)
+        )
+        column.addWidget(self._custom_hands_status)
+        return group
+
+    def _pick_hand(self, hand: str) -> None:
+        from PySide6.QtWidgets import QFileDialog
+
+        path, _ = QFileDialog.getOpenFileName(
+            self, self._tr("Browse…"), "", "PNG (*.png)"
+        )
+        if not path:
+            return
+        self._hand_files[hand] = path
+        self._hand_buttons[hand].setText(Path(path).name)
+
+    def _add_custom_hands(self) -> None:
+        import shutil
+
+        from data.hands import HAND_NAMES, hand_packs, user_hands_dir
+
+        tr = self._tr
+        name = self._hand_name_edit.text().strip()
+        missing = [h for h in HAND_NAMES if not self._hand_files[h]]
+        if not name or missing or any(
+            name.lower() == existing.lower() for existing in hand_packs()
+        ):
+            self._custom_hands_status.setText(tr("Unique name"))
+            return
+        target = user_hands_dir() / name
+        target.mkdir(parents=True, exist_ok=True)
+        meta = {"name": name, "pivot": {}, "z_order": self._hand_z_combo.currentData()}
+        for hand in HAND_NAMES:
+            shutil.copyfile(self._hand_files[hand], target / f"{hand}.png")
+            x_spin, y_spin = self._hand_pivots[hand]
+            meta["pivot"][hand] = {
+                "x": None if x_spin.value() < 0 else x_spin.value(),
+                "y": y_spin.value(),
+            }
+        (target / "hands.json").write_text(
+            json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
+        self._custom_hands_status.setText(
+            tr("Added '{name}' — find it under Design ▸ Hands").format(name=name)
+        )
+        self._hand_name_edit.clear()
 
     # --- Language (owner spec: translate once via the keyless endpoint) --------------
 

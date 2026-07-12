@@ -99,24 +99,34 @@ class YearMarkerSpec:
 
 @dataclass(frozen=True)
 class HandSpec:
-    """Owner convention: every hand canvas is exactly as designed (a
-    faint reference circle keeps the export from trimming it) and the
-    rotation center sits HAND_HUB_OFFSET_UNITS above the canvas bottom."""
+    """One hand image pointing UP with its rotation PIVOT (owner spec
+    2026-07-12): x from the left (None = the image middle, the default
+    for symmetric hands), y ABOVE the image bottom — both in the
+    image's own units (pixels, or viewBox units for SVG)."""
 
     asset: Path
-    design_height: float               # canvas height in design units (viewBox)
+    natural_height: float              # full image height in its own units
+    pivot_y: float                     # rotation center above the bottom
+    pivot_x_fraction: float | None = None   # of the width; None = centered
 
 
 @dataclass(frozen=True)
 class HandsSpec:
-    """All hands share ONE scale so their designed proportions are never
-    deformed: the LONGEST hand's tip reaches `reach_fraction` of the dial
-    radius and the others follow at their drawn ratios."""
+    """A hand PACK resolved for the renderer. Sizing uses TIP-TO-PIVOT
+    lengths only (owner spec): the seconds tip reaches
+    `second_reach_fraction` of the dial radius (the ring), the minutes
+    tip `minute_reach_fraction` (the minute arrows) and the hours
+    follow the pack's own hours/minutes tip ratio. `z_order` draws
+    bottom-up; `desaturate` grays colored user art so the clock tint
+    can recolor it."""
 
     hour: HandSpec
     minute: HandSpec
-    reach_fraction: float
+    minute_reach_fraction: float
+    second_reach_fraction: float
     second: HandSpec | None = None     # optional; enabled via settings
+    z_order: tuple[str, ...] = ("hours", "minutes", "seconds")
+    desaturate: bool = False
 
 
 @dataclass(frozen=True)

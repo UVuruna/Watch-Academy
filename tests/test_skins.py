@@ -171,6 +171,32 @@ def test_letter_groups_cover_the_library_exactly():
         assert silver.exists(), glyph
 
 
+def test_hand_packs_load_and_resolve():
+    """Owner spec 2026-07-12: hand PACKS (folder + hands.json). The
+    bundled CLASSIC and STEEL load, pivots flow into the skin, and the
+    classic sizing stays pinned (minute tip 0.849R, hour at the pack's
+    own 225/275 ratio -> 0.695R)."""
+    from data.hands import hand_packs
+
+    packs = hand_packs()
+    assert {"CLASSIC", "STEEL"} <= set(packs)
+    assert packs["STEEL"]["pivots"]["seconds"] == (None, 306.0)
+    steel = build_skin(replace(Settings(), hands="STEEL")).hands
+    assert steel.second.pivot_y == 306.0
+    assert steel.second.natural_height == 1032.0
+    assert steel.desaturate is False               # bundled art stays as drawn
+    assert steel.z_order == ("hours", "minutes", "seconds")
+    classic = build_skin(Settings()).hands
+    hour_tip = classic.hour.natural_height - classic.hour.pivot_y
+    minute_tip = classic.minute.natural_height - classic.minute.pivot_y
+    reach = classic.minute_reach_fraction * hour_tip / minute_tip
+    assert abs(reach - 0.695) < 0.005
+    # A vanished pack name falls back to CLASSIC (documented) instead
+    # of bricking the startup.
+    gone = build_skin(replace(Settings(), hands="NO-SUCH-PACK")).hands
+    assert gone.hour.asset == classic.hour.asset
+
+
 def test_letter_shadow_is_a_black_silhouette():
     """Owner bug 2026-07-12: the tritone left bright GOLD pixels bright
     under the #000000 shadow tint (a red halo on the ring letters) —
@@ -212,7 +238,7 @@ def test_svg_masters_survive_flush():
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
-    path = defaults.paths.assets_dir() / "hands" / "hour.svg"
+    path = defaults.paths.assets_dir() / "hands" / "classic" / "hours.svg"
     cache = AssetCache()
     first = cache.pixmap_by_height(path, 60.0, 1.0)
     assert str(path) in AssetCache._svg_masters

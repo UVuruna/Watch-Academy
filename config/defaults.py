@@ -177,6 +177,15 @@ RING_LETTER_SHADOW_RADIUS = 0.05     # of the letter height
 RING_LETTER_SHADOW_ALPHA = 0.55      # per stamp (stamps overlap -> intense)
 RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
 
+# --- Hand sizing (owner spec 2026-07-12) -------------------------------------------
+# Sizing uses TIP-TO-PIVOT lengths only: the seconds tip reaches the
+# ring (the end of the 360-dot scale), the minutes tip the minute
+# arrows, and the hours follow each pack's own hours/minutes tip
+# ratio. Values derived from the CLASSIC look (285/275-unit tips at
+# the old shared 0.88 reach) so existing dials render unchanged.
+HAND_SECOND_REACH_FRACTION = 0.88
+HAND_MINUTE_REACH_FRACTION = 0.849
+
 # --- Default render config --------------------------------------------------------
 # The ONE typed SkinDefinition the compositor consumes; the controller
 # overlays the ring preset and the user's display choices onto it.
@@ -594,19 +603,23 @@ DEFAULT_SKIN = SkinDefinition(
         moon_scale=0.08,                # ~72% of the Earth marker (owner spec)
     ),
     hands=HandsSpec(
-        # Owner's vector hands at HIS exact canvas sizes (240/290/300; a
-        # faint reference circle keeps the export from trimming them).
-        # ONE shared scale preserves the designed proportions; every
-        # rotation center is 15 design units above its canvas bottom.
-        hour=HandSpec(asset=paths.assets_dir() / "hands" / "hour.svg", design_height=240),
+        # A PLACEHOLDER only — build_skin ALWAYS resolves the chosen
+        # hand pack (assets/hands/<pack>/ or a user pack) into a full
+        # HandsSpec; these are the CLASSIC pack's values (canvases
+        # 240/290/300, every pivot 15 units above the bottom).
+        hour=HandSpec(
+            asset=paths.assets_dir() / "hands" / "classic" / "hours.svg",
+            natural_height=240, pivot_y=15,
+        ),
         minute=HandSpec(
-            asset=paths.assets_dir() / "hands" / "minute.svg", design_height=290
+            asset=paths.assets_dir() / "hands" / "classic" / "minutes.svg",
+            natural_height=290, pivot_y=15,
         ),
         second=HandSpec(
-            asset=paths.assets_dir() / "hands" / "second.svg", design_height=300
+            asset=paths.assets_dir() / "hands" / "classic" / "seconds.svg",
+            natural_height=300, pivot_y=15,
         ),
-        # The longest hand's (seconds) tip reach, fraction of the dial
-        # radius — aimed at the end of the 360-dot scale lines.
-        reach_fraction=0.88,
+        minute_reach_fraction=HAND_MINUTE_REACH_FRACTION,
+        second_reach_fraction=HAND_SECOND_REACH_FRACTION,
     ),
 )

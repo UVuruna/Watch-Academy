@@ -18,6 +18,7 @@ def ui(overlay: dict, text: str) -> str:
 
 UI_STRINGS: tuple[str, ...] = (
     # --- Menu -----------------------------------------------------------------
+    "Design", "Hands",
     "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday", "Compass slot",
     "Size", "Elements", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Guide…", "Click-through", "Exit",
@@ -49,7 +50,15 @@ UI_STRINGS: tuple[str, ...] = (
     # --- Settings dialog --------------------------------------------------------
     "Location", "Opacity", "Element sizes", "Custom ring", "Language",
     "Palette — {pointer} {style}",
-    "Ring tint — whole clock body (letters excluded)",
+    "Clock tint — dial, hands and Umbra (letters excluded)",
+    "Custom hands", "Hours", "Minutes", "Seconds", "Browse…",
+    "Add hands", "Pivot X", "Pivot Y", "center",
+    "Z-order (bottom → top)",
+    "Rotation center from the LEFT edge in pixels of your image — leave 'center' for symmetric hands.",
+    "Rotation center ABOVE the image bottom in pixels — the hand must point UP.",
+    "PNG images pointing UP. Colored art grays out so the clock tint can recolor it; the tip-to-pivot length sets every size automatically.",
+    "{n} hand set(s) saved",
+    "Added '{name}' — find it under Design ▸ Hands",
     "Search", "City name…", "Continent", "Subregion", "Country", "Region",
     "City", "Latitude", "Longitude", "Timezone",
     "not found", "{n} found",

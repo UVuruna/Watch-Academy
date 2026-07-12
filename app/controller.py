@@ -31,6 +31,7 @@ from app.widget import ClockWidget
 from config import constants, defaults, paths
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
+from data.hands import HAND_NAMES, hand_packs
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
 from data.seasons import SeasonsRepository
@@ -38,7 +39,7 @@ from data.symbolism import SymbolismRepository
 from data.translations import TranslationStore, collect_corpus, translate_texts
 from render.assets import AssetCache
 from render.compositor import Compositor
-from skins.manifest import missing_assets
+from skins.manifest import HandSpec, HandsSpec, missing_assets
 
 
 def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
@@ -51,12 +52,58 @@ def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
     return (position in layout["triangle"]) == (finish == "gold")
 
 
+def _resolve_hands(settings: Settings):
+    """The chosen HAND PACK (owner spec 2026-07-12) resolved into a
+    HandsSpec: image sizes read here (header-only), pivots and z-order
+    from the pack's hands.json; tip reach targets from defaults. A
+    vanished USER pack falls back to CLASSIC with a stderr note
+    (documented — an uninstalled pack must not brick the startup);
+    user-pack art is desaturated so the clock tint can recolor it."""
+    from PySide6.QtGui import QImageReader
+
+    packs = hand_packs()
+    chosen = next(
+        (name for name in packs if name.lower() == settings.hands.lower()),
+        None,
+    )
+    if chosen is None:
+        print(
+            f"hand pack {settings.hands!r} is gone — using CLASSIC",
+            file=sys.stderr,
+        )
+        chosen = "CLASSIC"
+    pack = packs[chosen]
+    specs = {}
+    for hand in HAND_NAMES:
+        path = pack["files"][hand]
+        size = QImageReader(str(path)).size()
+        if size.height() <= 0:
+            raise ValueError(f"hand pack {chosen!r}: unreadable {path}")
+        x, y = pack["pivots"][hand]
+        specs[hand] = HandSpec(
+            asset=path,
+            natural_height=float(size.height()),
+            pivot_y=y,
+            pivot_x_fraction=None if x is None else x / size.width(),
+        )
+    bundled = pack["dir"].parent == paths.assets_dir() / "hands"
+    return HandsSpec(
+        hour=specs["hours"],
+        minute=specs["minutes"],
+        second=specs["seconds"],
+        minute_reach_fraction=defaults.HAND_MINUTE_REACH_FRACTION,
+        second_reach_fraction=defaults.HAND_SECOND_REACH_FRACTION,
+        z_order=pack["z_order"],
+        desaturate=not bundled,
+    )
+
+
 def build_skin(settings: Settings):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
     CARD (Database/ring_presets.json + the user's custom cards — owner
     spec: {name, positions, letters}, the positions signature picks the
-    layout/face), the letter art of the chosen finish and the user's
-    display choices overlaid."""
+    layout/face), the letter art of the chosen finish, the chosen HAND
+    PACK and the user's display choices overlaid."""
     card = ring_presets(settings.custom_rings)[settings.ring]
     layout = constants.RING_LAYOUTS[card["layout"]]
     letters = {}
@@ -78,6 +125,7 @@ def build_skin(settings: Settings):
             letters=letters,
             letter_art=letter_art,
         ),
+        hands=_resolve_hands(settings),
     )
     return apply_display_settings(skin, settings)
 
@@ -485,6 +533,13 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _set_hands(self, hands: str) -> None:
+        if hands == self._settings.hands:
+            return
+        self._settings = replace(self._settings, hands=hands)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _set_display_choice(self, key: str, value) -> None:
         """Shared setter behind every display choice: persist and
         REBUILD the render config from scratch — a bare scalar replace
@@ -546,14 +601,14 @@ class AppController(QObject):
         menu = QMenu()
         settings = self._settings
         tr = self._ui
-        # THEME is the first-level dropdown, in the owner's order:
-        # Pointer, Umbra, Ring, Earth, Weekday, Compass slot (only with
-        # the Compass pointer).
-        theme_menu = menu.addMenu(tr("Theme"))
+        # Reorganized menu (owner approved 2026-07-12): DESIGN = how
+        # the instrument looks (Pointer, Ring, Hands, Umbra, Size),
+        # THEME = what the figures show (Weekday, Earth, Compass slot).
+        design_menu = menu.addMenu(tr("Design"))
         # Pointer variant and palette style share ONE dropdown (owner
         # spec), two exclusive groups like the Umbra submenu.
         pointer_menu = self._add_choice_submenu(
-            theme_menu, tr("Pointer"),
+            design_menu, tr("Pointer"),
             [
                 # Owner-chosen display names (FINAL.txt #8): Trinity,
                 # Seasons, Prism, Compass — protected brand terms, the
@@ -568,7 +623,7 @@ class AppController(QObject):
         )
         pointer_menu.addSeparator()
         self._add_choice_group(
-            theme_menu, pointer_menu,
+            design_menu, pointer_menu,
             [
                 (style, tr(f"{style.capitalize()} palette"))
                 for style in constants.PALETTE_STYLES
@@ -576,8 +631,34 @@ class AppController(QObject):
             settings.palette_style,
             lambda value: self._set_display_choice("palette_style", value),
         )
+        ring_menu = self._add_choice_submenu(
+            design_menu, tr("Ring"),
+            [
+                (name, name)
+                for name in sorted(ring_presets(settings.custom_rings))
+            ],
+            settings.ring, self._set_ring,
+        )
+        ring_menu.addSeparator()
+        # The letter FINISH (owner rules): gold = the triangle letters
+        # gold + the remaining one silver; silver = the exact inverse;
+        # the Seal wears one metal. The tint itself lives in Settings.
+        self._add_choice_group(
+            design_menu, ring_menu,
+            [(finish, tr(f"{finish.capitalize()} letters"))
+             for finish in constants.RING_FINISHES],
+            settings.ring_finish,
+            lambda value: self._set_display_choice("ring_finish", value),
+        )
+        # The HAND PACKS (owner spec 2026-07-12): bundled CLASSIC and
+        # STEEL plus whatever the user added via Settings.
+        self._add_choice_submenu(
+            design_menu, tr("Hands"),
+            [(name, name) for name in sorted(hand_packs())],
+            settings.hands, self._set_hands,
+        )
         umbra_menu = self._add_choice_submenu(
-            theme_menu, tr("Umbra"),
+            design_menu, tr("Umbra"),
             [
                 ("fine", tr("Fine (16 shades)")),
                 ("coarse", tr("Coarse (13 shades)")),
@@ -588,7 +669,7 @@ class AppController(QObject):
         )
         umbra_menu.addSeparator()
         self._add_choice_group(
-            theme_menu, umbra_menu,
+            design_menu, umbra_menu,
             [
                 (variant, tr(f"{variant.capitalize()} contrast"))
                 for variant in constants.UMBRA_CONTRAST_VARIANTS
@@ -596,26 +677,12 @@ class AppController(QObject):
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
         )
-        ring_menu = self._add_choice_submenu(
-            theme_menu, tr("Ring"),
-            [
-                (name, name)
-                for name in sorted(ring_presets(settings.custom_rings))
-            ],
-            settings.ring, self._set_ring,
+        self._add_choice_submenu(
+            design_menu, tr("Size"),
+            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
+            settings.diameter, self._set_diameter,
         )
-        ring_menu.addSeparator()
-        # The letter FINISH (owner rules): gold = the triangle letters
-        # gold + the remaining one silver; silver = the 12h letter gold
-        # + the rest silver; the hexagram wears one metal. The tint
-        # itself lives in the Settings dialog color picker.
-        self._add_choice_group(
-            theme_menu, ring_menu,
-            [(finish, tr(f"{finish.capitalize()} letters"))
-             for finish in constants.RING_FINISHES],
-            settings.ring_finish,
-            lambda value: self._set_display_choice("ring_finish", value),
-        )
+        theme_menu = menu.addMenu(tr("Theme"))
         earth_menu = self._add_choice_submenu(
             theme_menu, tr("Earth"),
             [("clean", tr("Clean")), ("atmo", tr("Atmosphere"))],
@@ -679,11 +746,6 @@ class AppController(QObject):
         )
         self._octa_slot_action = compass_slot_menu.menuAction()
         self._octa_slot_action.setEnabled(settings.pointer == "octa")
-        self._add_choice_submenu(
-            menu, tr("Size"),
-            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
-            settings.diameter, self._set_diameter,
-        )
         # Elements (owner spec): plain on/off switches for every
         # element — the Earth STYLE lives under Theme now.
         elements_menu = menu.addMenu(tr("Elements"))
@@ -743,6 +805,12 @@ class AppController(QObject):
                "Umbra stand upright (12/24 at the top) for reading exact "
                "planet and season positions."),
         )
+        self._add_toggle(
+            menu, tr("Click-through"), self._settings.click_through,
+            self._set_click_through,
+            tr("The dial takes no clicks at all (they pass to the desktop); "
+               "hover info still works. Turn it back off here in the tray."),
+        )
         menu.addSeparator()
         settings_action = QAction(tr("Settings…"), menu)
         settings_action.triggered.connect(self._open_settings)
@@ -755,12 +823,6 @@ class AppController(QObject):
             lambda: GuideDialog(self._translation_overlay).exec()
         )
         menu.addAction(guide)
-        self._add_toggle(
-            menu, tr("Click-through"), self._settings.click_through,
-            self._set_click_through,
-            tr("The dial takes no clicks at all (they pass to the desktop); "
-               "hover info still works. Turn it back off here in the tray."),
-        )
         menu.addSeparator()
         exit_action = QAction(tr("Exit"), menu)
         exit_action.triggered.connect(self.quit)

@@ -44,6 +44,12 @@ The ring preset cards (bundled `ring_presets.json` + the user's custom
 cards from settings): `{name, positions, letters}`, layouts resolved by
 the positions signature, loud validation. See [Ring Presets](rings.md).
 
+### `hands.py` — Hand Packs
+The hand packs (owner spec 2026-07-12): a folder of hours/minutes/
+seconds images pointing UP plus `hands.json` (name, per-hand pivot,
+bottom-up z-order); bundled `assets/hands/<pack>/` + the user's own
+packs beside the settings file. See [Hand Packs](hands.md).
+
 ### `_io.py` — Shared Loader
 `load_json_checked()` — a plain function, not a base class (a few small
 repositories do not justify a hierarchy).

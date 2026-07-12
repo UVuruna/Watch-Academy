@@ -180,10 +180,16 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
                 # and SURVIVES the Pointer element switch — it has its
                 # OWN Elements switch (owner spec).
                 layers.append(BottomSlotLayer(skin))
-            layers.append(HandLayer(skin, "hour"))
-            layers.append(HandLayer(skin, "minute"))
-            if skin.hands.second is not None and skin.show_seconds:
-                layers.append(HandLayer(skin, "second"))
+            # The hand pack's own z_order draws bottom-up (owner spec
+            # 2026-07-12; default hours -> minutes -> seconds).
+            kinds = {"hours": "hour", "minutes": "minute", "seconds": "second"}
+            for hand in skin.hands.z_order:
+                kind = kinds[hand]
+                if kind == "second" and (
+                    skin.hands.second is None or not skin.show_seconds
+                ):
+                    continue
+                layers.append(HandLayer(skin, kind))
         elif not skipped.get(name, False):
             layers.append(factories[name]())
     if "weekday_set" in skin.z_order and skin.show_weekday:

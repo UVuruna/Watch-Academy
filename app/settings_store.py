@@ -65,6 +65,7 @@ class Settings:
     show_earth_date: bool = True        # the date label on the Earth marker
     show_weekday_names: bool = True     # the day-name text on the bodies
     moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
+    hands: str = "CLASSIC"              # the hand pack (Design ▸ Hands)
     language: str = "en"                # translation target (en = originals)
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
@@ -186,6 +187,11 @@ class SettingsStore:
                 moon_hidden_alpha=_load_scale(
                     raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
                 ),
+                hands=(
+                    raw["hands"]
+                    if isinstance(raw.get("hands"), str) and raw["hands"].strip()
+                    else "CLASSIC"
+                ),
                 city_name=str(location.get("name", defaults.DEFAULT_CITY["name"])),
                 city_path=tuple(location.get("path", ())),
                 latitude=latitude,
@@ -241,6 +247,7 @@ class SettingsStore:
             "show_earth_date": settings.show_earth_date,
             "show_weekday_names": settings.show_weekday_names,
             "moon_hidden_alpha": settings.moon_hidden_alpha,
+            "hands": settings.hands,
             "language": settings.language,
             "location": {
                 "name": settings.city_name,

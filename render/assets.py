@@ -42,21 +42,46 @@ class AssetCache:
         logical_height: float,
         dpr: float,
         tint: str | None = None,
+        desaturate: bool = False,
     ) -> QPixmap:
         """The image scaled (aspect preserved) so its logical height is
-        `logical_height`, rasterized at device resolution and optionally
-        tinted (channel multiply, source alpha kept). Raises ValueError
-        for missing/unreadable assets — a broken skin must be visible,
-        never silently blank. (Silver ring letters are PRE-RENDERED
-        files — setup/make_silver_letters.py — not a runtime effect.)"""
+        `logical_height`, rasterized at device resolution, optionally
+        DESATURATED (user hand packs: colored art grays out so the
+        clock tint has gray to work on) and optionally tinted. Raises
+        ValueError for missing/unreadable assets — a broken skin must
+        be visible, never silently blank. (Silver ring letters are
+        PRE-RENDERED files — setup/make_silver_letters.py — not a
+        runtime effect.)"""
         px_height = max(1, round(logical_height * dpr))
-        key = (str(path), px_height, tint)
+        key = (str(path), px_height, tint, desaturate)
         if key not in self._pixmaps:
             pixmap = self._rasterize(path, px_height, dpr)
+            if desaturate:
+                pixmap = self._desaturated(pixmap)
             if tint is not None:
                 pixmap = self._tinted(pixmap, tint)
             self._pixmaps[key] = pixmap
         return self._pixmaps[key]
+
+    @staticmethod
+    def _desaturated(source: QPixmap) -> QPixmap:
+        """Grayscale luminance with the source alpha re-applied (the
+        transparent-canvas pattern — fromImage of an opaque gray would
+        drop the alpha channel)."""
+        gray = source.toImage().convertToFormat(
+            QImage.Format.Format_Grayscale8
+        ).convertToFormat(QImage.Format.Format_ARGB32)
+        result = QPixmap(source.size())
+        result.setDevicePixelRatio(source.devicePixelRatio())
+        result.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(result)
+        painter.drawImage(0, 0, gray)
+        painter.setCompositionMode(
+            QPainter.CompositionMode.CompositionMode_DestinationIn
+        )
+        painter.drawPixmap(0, 0, source)
+        painter.end()
+        return result
 
     @staticmethod
     def _tinted(source: QPixmap, tint: str) -> QPixmap:
