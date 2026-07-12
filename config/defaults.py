@@ -328,6 +328,17 @@ SIGN_ACCENT_HUES = {
     "Aries": ("green", "cyan"), "Taurus": ("green", "cyan"),
 }
 TRIO_ACCENT_HUES = {"Faith": ("yellow",), "Love": ("red",), "Hope": ("blue",)}
+# South of the equator the mirrored year wheel seats every sign on the
+# OPPOSITE arm (owner spec 2026-07-12) — its accents follow that arm.
+_SIGN_OPPOSITE = {
+    "Gemini": "Sagittarius", "Cancer": "Capricorn",
+    "Leo": "Aquarius", "Virgo": "Pisces",
+    "Libra": "Aries", "Scorpio": "Taurus",
+}
+_SIGN_OPPOSITE.update({south: north for north, south in _SIGN_OPPOSITE.items()})
+SIGN_ACCENT_HUES_SOUTH = {
+    sign: SIGN_ACCENT_HUES[_SIGN_OPPOSITE[sign]] for sign in SIGN_ACCENT_HUES
+}
 
 # The Legend popup (replaces QToolTip, owner decision): capped to these
 # screen fractions — taller content scrolls instead of clipping off a

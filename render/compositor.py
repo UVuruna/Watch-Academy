@@ -522,8 +522,14 @@ class Compositor:
             # separated by a blank line.
             style = self._skin.palette_style
             parts = []
+            south = self._day.southern_hemisphere
             for offset in (-30.0, 0.0):      # the two signs' START angles
                 start_angle = (arm_angle + offset) % 360.0
+                if south:
+                    # The mirrored year wheel (owner spec 2026-07-12):
+                    # the diamond the Earth passes must name the signs
+                    # it actually passes there — the opposite half.
+                    start_angle = (start_angle + 180.0) % 360.0
                 name, symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
                 start, end = zodiac_span(self._day.year_anchors, start_angle)
                 start = start.astimezone(self._day.tzinfo)
@@ -537,14 +543,22 @@ class Compositor:
                     header += html.escape(star)
                 article = self._symbolism.zodiac_article(name)
                 text = article["base"]
-                variant = article["variants"].get(style)
+                # South of the equator the sign wears the opposite
+                # arm's hue — its own SOUTH variant paragraph (falls
+                # back to the northern one until translated/edited).
+                variant = (
+                    article["variants"].get(f"{style}_south")
+                    if south else None
+                ) or article["variants"].get(style)
                 if variant:
                     text += "\n\n" + variant
+                accents = (
+                    defaults.SIGN_ACCENT_HUES_SOUTH
+                    if south else defaults.SIGN_ACCENT_HUES
+                )[name]
                 parts.append(
                     f"<div align='center'>{header}</div>"
-                    + _article_body_html(
-                        text, accents=defaults.SIGN_ACCENT_HUES[name]
-                    )
+                    + _article_body_html(text, accents=accents)
                 )
             return "<br/>".join(parts)
         if self._skin.pointer == "trio":

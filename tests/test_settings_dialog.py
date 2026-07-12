@@ -400,8 +400,9 @@ def test_chinese_articles_and_elements_cover_the_cycle():
 
 def test_zodiac_articles_cover_every_sign():
     """12 sign articles: a multi-paragraph base tied to the sign's hexa
-    arm canon, plus paint and light palette variants (signs live on the
-    hexa pointer only)."""
+    arm canon, plus paint and light palette variants — and, since the
+    southern wheel seats every sign on the OPPOSITE arm (owner spec
+    2026-07-12), a *_south pair with the color-borrowed reading."""
     import json
 
     from config import constants, paths
@@ -414,7 +415,10 @@ def test_zodiac_articles_cover_every_sign():
     for sign, article in zodiac.items():
         assert len(article["base"]) > 250, sign
         assert "\n\n" in article["base"], sign
-        assert set(article["variants"]) == {"paint", "light"}, sign
+        assert set(article["variants"]) == {
+            "paint", "light", "paint_south", "light_south",
+        }, sign
+        assert "South of the equator" in article["variants"]["paint_south"]
 
 
 def test_custom_palette_reaches_the_render():

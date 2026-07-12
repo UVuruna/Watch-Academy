@@ -295,6 +295,25 @@ def test_southern_hemisphere_mirrors_the_arm_anchors(app):
     assert "December" in diagonal or "January" in diagonal or "February" in diagonal
 
 
+def test_southern_hemisphere_mirrors_the_diamond_signs(app):
+    """Owner spec 2026-07-12: in the south the Earth passes the TOP
+    diamond in December — its hover must name Sagittarius/Capricorn
+    (with their universal dates) and highlight in the arm it actually
+    occupies; the north keeps Gemini/Cancer at the top."""
+    import dataclasses
+
+    sydney, tick = _day_and_tick(-33.8688, 151.2093, "Australia/Sydney")
+    upright = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False),
+        AssetCache(),
+    )
+    upright.render_offscreen(360.0, 1.0, sydney, tick)
+    top = upright.tooltip_at(180.0, 72.0, 360.0)          # top diamond
+    assert "Sagittarius" in top and "Capricorn" in top
+    assert "December" in top                              # universal dates
+    assert "Gemini" not in top
+
+
 def test_climate_zones_name_the_events_and_seasons(app):
     """Owner decision: the south flips the seasonal event names (their
     Summer Solstice is the December one), the tropics use the neutral
