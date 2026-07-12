@@ -275,14 +275,17 @@ RING_LETTER_GROUPS = {
     "Symbols": ("✠",),
 }
 RING_LETTER_FILES = {
-    **{letter: f"{letter}.svg" for letter in _LATIN_LETTERS},
+    # The WHOLE library is PNG at 512 px height (owner decision
+    # 2026-07-12 — the traced SVGs parsed in seconds; 512 covers every
+    # on-dial size with room to spare).
+    **{letter: f"{letter}.png" for letter in _LATIN_LETTERS},
     "Ω": "Omega.png",
     "Π": "Pi.png",
     "Φ": "Phi.png",
     "Ψ": "Psi.png",
     "Σ": "Sigma.png",
     "Θ": "Theta.png",
-    **{number: f"{number}.svg" for number in _RING_NUMBERS},
+    **{number: f"{number}.png" for number in _RING_NUMBERS},
     # Symbols (the owner is growing this set for custom rings):
     "✠": "templar.png",
 }

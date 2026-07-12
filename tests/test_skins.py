@@ -97,9 +97,9 @@ def test_letter_art_follows_the_finish():
     gold + the rest silver; silver finish = the exact inverse."""
     art_dir = defaults.RING_LETTER_ART_DIR
     gold = build_skin(Settings()).ring.letter_art
-    assert gold[12] == art_dir / "M.svg"          # triangle 12/20/4 gold
-    assert gold[20] == art_dir / "Y.svg"
-    assert gold[4] == art_dir / "D.svg"
+    assert gold[12] == art_dir / "M.png"          # triangle 12/20/4 gold
+    assert gold[20] == art_dir / "Y.png"
+    assert gold[4] == art_dir / "D.png"
     assert gold[0] == art_dir / "Omega_silver.png"
     silver = build_skin(replace(Settings(), ring_finish="silver")).ring.letter_art
     assert silver[12] == art_dir / "M_silver.png"  # the triangle inverts
@@ -112,7 +112,7 @@ def test_letter_art_follows_the_finish():
     morph_silver = build_skin(
         replace(Settings(), ring="MORPH", ring_finish="silver")
     ).ring.letter_art
-    assert morph_silver[12] == art_dir / "M.svg"
+    assert morph_silver[12] == art_dir / "M.png"
     assert morph_silver[0] == art_dir / "Omega_silver.png"
 
 
@@ -212,7 +212,7 @@ def test_svg_masters_survive_flush():
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
-    path = defaults.RING_LETTER_ART_DIR / "M.svg"
+    path = defaults.paths.assets_dir() / "hands" / "hour.svg"
     cache = AssetCache()
     first = cache.pixmap_by_height(path, 60.0, 1.0)
     assert str(path) in AssetCache._svg_masters
