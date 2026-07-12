@@ -875,78 +875,9 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
+        # WEEKDAY = purely the THEME the bodies wear (owner UX
+        # reorganization 2026-07-12: what shows WHERE moved to Slots).
         weekday_menu = theme_menu.addMenu(tr("Weekday"))
-        # The weekday POSITION (owner 2026-07-12): the bodies, or a
-        # BADGE — the official sign, the ASCENDANT or the Chinese year
-        # — each with its own STYLE dropdown right here. Available
-        # wherever the PINNED layout exists: under Aurora, and on any
-        # mode once the Pointer element is off. Pairs with the South
-        # slot: e.g. official sign left, rising sign right.
-        badge_possible = (
-            settings.pointer in constants.WEEKDAY_BADGE_POINTERS
-            or not settings.show_pointer
-        )
-        position_group = QActionGroup(menu)
-        position_group.setExclusive(True)
-
-        def position_action(
-            parent: QMenu, label: str, checked: bool, handler, enabled: bool
-        ) -> None:
-            action = QAction(label, menu)
-            action.setCheckable(True)
-            action.setChecked(checked)
-            action.setEnabled(enabled)
-            action.triggered.connect(handler)
-            position_group.addAction(action)
-            parent.addAction(action)
-
-        position_action(
-            weekday_menu, tr("Weekday bodies"),
-            settings.weekday_slot == "weekday",
-            lambda checked: self._set_display_choice(
-                "weekday_slot", "weekday"
-            ),
-            True,
-        )
-        zodiac_styles = (
-            ("sign", tr("Sign")),
-            ("logo", tr("Logo")),
-            ("constellation", tr("Constellation")),
-            ("colored", tr("Colored")),
-        )
-        for mode, title, style_field, current_style in (
-            ("zodiac", tr("Astrology"), "zodiac_style",
-             settings.zodiac_style),
-            ("ascendant", tr("Ascendant"), "ascendant_style",
-             settings.ascendant_style),
-        ):
-            badge_menu = weekday_menu.addMenu(title)
-            badge_menu.setEnabled(badge_possible)
-            for style, label in zodiac_styles:
-                position_action(
-                    badge_menu, label,
-                    settings.weekday_slot == mode and current_style == style,
-                    lambda checked, m=mode, f=style_field, s=style:
-                    self._set_weekday_badge(m, **{f: s}),
-                    badge_possible,
-                )
-        chinese_badge_menu = weekday_menu.addMenu(tr("Chinese zodiac"))
-        chinese_badge_menu.setEnabled(badge_possible)
-        for style, label in (
-            ("colored", tr("Colored")),
-            ("gold", tr("Gold")),
-            ("silver", tr("Silver")),
-            ("bronze", tr("Bronze")),
-        ):
-            position_action(
-                chinese_badge_menu, label,
-                settings.weekday_slot == "chinese"
-                and settings.chinese_style == style,
-                lambda checked, s=style:
-                self._set_weekday_badge("chinese", chinese_style=s),
-                badge_possible,
-            )
-        weekday_menu.addSeparator()
         weekday_group = QActionGroup(menu)
         weekday_group.setExclusive(True)
         for key, title in defaults.WEEKDAY_THEME_TITLES.items():
@@ -987,13 +918,82 @@ class AppController(QObject):
             ),
             tr("The day name written on the weekday bodies."),
         )
-        # The SOUTH slot (owner 2026-07-12): three plain modes plus the
-        # Astrology and Chinese zodiac entries that open their own
-        # STYLE dropdowns — one exclusive group across all of it.
-        # Aurora is images only: the plain modes and both Text styles
-        # gray out under it.
+        # SLOTS (owner UX reorganization 2026-07-12: the old names lied
+        # — the "Weekday" position can hold astrology and the "South
+        # slot" is not always south): ONE submenu with the two bottom
+        # positions. The DAY slot is the weekday unit (bodies on the
+        # star's arms, or — in the pinned layouts — a single badge at
+        # the bottom); the INFO slot is the information display. Alone
+        # each stands at the bottom center; together they split 3h
+        # (day) and 21h (info).
         aurora = settings.pointer == "aurora"
-        south_slot_menu = theme_menu.addMenu(tr("South slot"))
+        badge_possible = (
+            settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+            or not settings.show_pointer
+        )
+        slots_menu = theme_menu.addMenu(tr("Slots"))
+        day_slot_menu = slots_menu.addMenu(tr("Day slot"))
+        position_group = QActionGroup(menu)
+        position_group.setExclusive(True)
+
+        def position_action(
+            parent: QMenu, label: str, checked: bool, handler, enabled: bool
+        ) -> None:
+            action = QAction(label, menu)
+            action.setCheckable(True)
+            action.setChecked(checked)
+            action.setEnabled(enabled)
+            action.triggered.connect(handler)
+            position_group.addAction(action)
+            parent.addAction(action)
+
+        position_action(
+            day_slot_menu, tr("Weekday bodies"),
+            settings.weekday_slot == "weekday",
+            lambda checked: self._set_display_choice(
+                "weekday_slot", "weekday"
+            ),
+            True,
+        )
+        zodiac_styles = (
+            ("sign", tr("Sign")),
+            ("logo", tr("Logo")),
+            ("constellation", tr("Constellation")),
+            ("colored", tr("Colored")),
+        )
+        for mode, title, style_field, current_style in (
+            ("zodiac", tr("Astrology"), "zodiac_style",
+             settings.zodiac_style),
+            ("ascendant", tr("Ascendant"), "ascendant_style",
+             settings.ascendant_style),
+        ):
+            badge_menu = day_slot_menu.addMenu(title)
+            badge_menu.setEnabled(badge_possible)
+            for style, label in zodiac_styles:
+                position_action(
+                    badge_menu, label,
+                    settings.weekday_slot == mode and current_style == style,
+                    lambda checked, m=mode, f=style_field, s=style:
+                    self._set_weekday_badge(m, **{f: s}),
+                    badge_possible,
+                )
+        chinese_badge_menu = day_slot_menu.addMenu(tr("Chinese zodiac"))
+        chinese_badge_menu.setEnabled(badge_possible)
+        for style, label in (
+            ("colored", tr("Colored")),
+            ("gold", tr("Gold")),
+            ("silver", tr("Silver")),
+            ("bronze", tr("Bronze")),
+        ):
+            position_action(
+                chinese_badge_menu, label,
+                settings.weekday_slot == "chinese"
+                and settings.chinese_style == style,
+                lambda checked, s=style:
+                self._set_weekday_badge("chinese", chinese_style=s),
+                badge_possible,
+            )
+        info_slot_menu = slots_menu.addMenu(tr("Info slot"))
         slot_group = QActionGroup(menu)
         slot_group.setExclusive(True)
 
@@ -1014,12 +1014,12 @@ class AppController(QObject):
             ("day_length", tr("Day length")),
         ):
             slot_action(
-                south_slot_menu, label,
+                info_slot_menu, label,
                 settings.octa_slot == mode,
                 lambda checked, chosen=mode: self._set_south_slot(chosen),
                 not aurora,
             )
-        astro_menu = south_slot_menu.addMenu(tr("Astrology"))
+        astro_menu = info_slot_menu.addMenu(tr("Astrology"))
         for style, label in (
             ("sign", tr("Sign")),
             ("logo", tr("Logo")),
@@ -1039,7 +1039,7 @@ class AppController(QObject):
         # The ASCENDANT (owner request 2026-07-12): the sign rising on
         # the eastern horizon right now — it cycles all twelve signs
         # every day, so it belongs to the hour-driven slot.
-        ascendant_menu = south_slot_menu.addMenu(tr("Ascendant"))
+        ascendant_menu = info_slot_menu.addMenu(tr("Ascendant"))
         for style, label in (
             ("sign", tr("Sign")),
             ("logo", tr("Logo")),
@@ -1056,7 +1056,7 @@ class AppController(QObject):
                 ),
                 not (aurora and style == "text"),
             )
-        chinese_menu = south_slot_menu.addMenu(tr("Chinese zodiac"))
+        chinese_menu = info_slot_menu.addMenu(tr("Chinese zodiac"))
         for style, label in (
             ("text", tr("Text")),
             ("colored", tr("Colored")),
@@ -1073,11 +1073,16 @@ class AppController(QObject):
                 ),
                 not (aurora and style == "text"),
             )
+        # The info slot exists on the Compass/Trinity/Aurora always,
+        # anywhere once the Weekday element OR the Pointer element is
+        # off (owner matrix — the menu was missing the pointer-off
+        # clause, his bug report with the Prism screenshot).
         slot_possible = (
             settings.pointer in ("octa", "trio", "aurora")
             or not settings.show_weekday
+            or not settings.show_pointer
         )
-        self._octa_slot_action = south_slot_menu.menuAction()
+        self._octa_slot_action = info_slot_menu.menuAction()
         self._octa_slot_action.setEnabled(slot_possible)
         # Elements (owner spec): plain on/off switches for every
         # element — the Earth STYLE lives under Theme now.
@@ -1117,15 +1122,15 @@ class AppController(QObject):
                 lambda checked, key=key: self._set_display_choice(key, checked),
                 tip,
             )
-        # The South slot has its own switch, grayed out (like the Theme
-        # submenu) whenever the active pointer/weekday combination has
+        # The Info slot has its own switch, grayed out (like the Theme
+        # submenu) whenever the active pointer/element combination has
         # no room for it.
         self._octa_slot_toggle = self._add_toggle(
-            elements_menu, tr("South slot"), settings.show_octa_slot,
+            elements_menu, tr("Info slot"), settings.show_octa_slot,
             lambda checked: self._set_display_choice("show_octa_slot", checked),
-            tr("The info slot near the dial bottom: always there on the "
-               "Compass, Trinity and Aurora; on Prism and Seasons once "
-               "the Weekday element is off."),
+            tr("The information display near the dial bottom. Alone it "
+               "stands at the bottom center; paired with the day slot "
+               "they split 3h and 21h."),
         )
         self._octa_slot_toggle.setEnabled(slot_possible)
         self._add_toggle(

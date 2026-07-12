@@ -21,8 +21,12 @@ from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
-from core.moon import phase_name
-from core.year_wheel import meteorological_span, zodiac_span
+from core.moon import illumination, phase_name
+from core.year_wheel import (
+    instant_at_marker_angle,
+    meteorological_span,
+    zodiac_span,
+)
 from render.assets import AssetCache
 from render.layers import (
     BackgroundLayer,
@@ -370,6 +374,11 @@ class Compositor:
         arm = self._arm_tooltip(point, radius, rotation)
         if arm is not None:
             return arm
+        # The ring TICK band (owner spec 2026-07-12): the 360 arrows
+        # answer with what their ANGLE means on every wheel.
+        tick = self._tick_tooltip(point, radius)
+        if tick is not None:
+            return tick
         # Last in the chain (owner rework 5 & 6): the sunlit arc answers
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
@@ -838,6 +847,99 @@ class Compositor:
             accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
         )
 
+    def _lunation_ordinal(self) -> str:
+        """"7<sup>th</sup> Moon of 2026" — which lunation of the
+        calendar year is running (new-moon starts; the one spilling
+        over from December counts as the first) — owner request
+        2026-07-12, shown in the Moon hover and the tick band."""
+        day = self._day
+        noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
+        count = sum(
+            1 for when, name in day.moon_events
+            if name == "New Moon"
+            and when.year == day.local_date.year
+            and when <= noon
+        )
+        return self._tr("{ordinal} Moon of {year}").format(
+            ordinal=self._ord(max(1, count)), year=day.local_date.year
+        )
+
+    def _tick_tooltip(self, point: QPointF, radius: float) -> str | None:
+        """The ring tick band (owner spec 2026-07-12, organized to the
+        DOMY letters): hovering any of the 360 arrows reads that ANGLE
+        on every wheel in titled sections — DAY (the 24h time and the
+        exact degree), YEAR (the year-wheel date, the anchor event on
+        its day, the season, the day and week of the year) and MOON
+        (the running lunation, then the cycle reading at that angle —
+        new at the top, full at the bottom, as the marker rides)."""
+        distance = math.hypot(point.x(), point.y())
+        if not (
+            radius * defaults.TICK_HOVER_INNER_FRACTION
+            <= distance
+            <= radius * defaults.TICK_HOVER_OUTER_FRACTION
+        ):
+            return None
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
+        line_time = html.escape(
+            f"{minutes // 60:02d}:{minutes % 60:02d} — {theta:.1f}°"
+        )
+
+        day = self._day
+        instant = instant_at_marker_angle(
+            day.year_anchors, theta, day.southern_hemisphere
+        )
+        local = instant.astimezone(day.tzinfo)
+        line_date = (
+            f"{self._ord(local.day)} {html.escape(self._month(local))} "
+            f"{local.year}"
+        )
+        event = next(
+            (
+                name for when, name in day.season_events
+                if when.astimezone(day.tzinfo).date() == local.date()
+            ),
+            None,
+        )
+        if event is not None:
+            line_date += f" — {html.escape(self._tr(event))}"
+        line_year = html.escape(
+            self._tr("{ordinal} Day - {ordinal_week} Week")
+        ).format(
+            ordinal=self._ord(local.timetuple().tm_yday),
+            ordinal_week=self._ord(local.isocalendar().week),
+        )
+        if day.zone != "tropics":
+            passed = [
+                (when, name) for when, name in day.season_events
+                if when <= instant
+            ] or [day.season_events[0]]
+            season = max(passed)[1].split()[0]
+            line_year = f"{html.escape(self._tr(season))} — {line_year}"
+
+        fraction = theta / 360.0
+        cycle_day = f"{fraction * constants.SYNODIC_MONTH_DAYS:.1f}"
+        line_moon = (
+            f"{html.escape(self._tr('Illumination'))} "
+            f"{illumination(fraction) * 100:.1f}% — "
+            f"{html.escape(self._tr(phase_name(fraction)))} — "
+            + html.escape(
+                self._tr("Day {day} of {total}").format(
+                    day=cycle_day, total=constants.SYNODIC_MONTH_DAYS
+                )
+            )
+        )
+        return _centered_html(
+            f"<b>{html.escape(self._tr('Day'))}</b>",
+            line_time,
+            f"<b>{html.escape(self._tr('Year'))}</b>",
+            line_date,
+            line_year,
+            f"<b>{html.escape(self._tr('Moon'))}</b>",
+            self._lunation_ordinal(),
+            line_moon,
+        )
+
     def _ascendant_text(self) -> str:
         """The Ascendant hover (owner request 2026-07-12): the sign
         RISING on the eastern horizon right now — the natal podznak,
@@ -891,7 +993,11 @@ class Compositor:
                 day=f"{cycle_day:.1f}", total=constants.SYNODIC_MONTH_DAYS
             )
         )
-        return _centered(*lines)
+        # Which lunation of the year is running (owner 2026-07-12).
+        return _centered_html(
+            *(html.escape(line) for line in lines),
+            self._lunation_ordinal(),
+        )
 
     def _season_row(self) -> str:
         """"Summer 20<sup>th</sup> of 94 Days" — the season at the

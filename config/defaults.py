@@ -160,6 +160,13 @@ RING_TINT_SWATCHES_PER_ROW = 11
 PALETTE_SWATCH_PX = 34               # pointer palette circles (owner:
                                      # bigger than the tint swatches)
 
+# The ring TICK band hover (owner spec 2026-07-12): any of the 360
+# arrows answers with what its ANGLE means on each wheel — the 24h
+# time, the year-wheel date and the moon-cycle phase. The band spans
+# these dial-radius fractions (the arrows' own zone on the ring art).
+TICK_HOVER_INNER_FRACTION = 0.86
+TICK_HOVER_OUTER_FRACTION = 0.945
+
 # The owner's GOLD letter art (a full latin/greek library for future
 # ring presets), overlaid on the ring by calculation so the tint never
 # touches them; the silver look is derived by desaturation at load.

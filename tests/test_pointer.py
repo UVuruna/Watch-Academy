@@ -319,6 +319,55 @@ def test_weekday_badge_gating_and_pointer_off_flank():
     assert not weekday_pinned(skin(pointer="hexa", show_pointer=True))
 
 
+def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):
+    """Owner spec 2026-07-12: hovering the ring tick band answers with
+    the angle on every wheel — the 24h time, the year-wheel date (with
+    the season, and the event on an anchor day) and the moon-cycle
+    reading (new at the top, exactly as the Moon marker rides)."""
+    import math as m
+
+    from core.year_wheel import instant_at_marker_angle, year_marker_angle
+
+    day, tick = july_wednesday
+    compositor = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False),
+        AssetCache(),
+    )
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    band = 180.0 * (
+        defaults.TICK_HOVER_INNER_FRACTION
+        + defaults.TICK_HOVER_OUTER_FRACTION
+    ) / 2
+    top = compositor.tooltip_at(180.0, 180.0 - band, 360.0)     # theta 0
+    assert "12:00" in top
+    # The top of the year wheel IS the summer solstice anchor.
+    assert "Summer Solstice" in top and "Summer" in top
+    assert "June" in top and "2026" in top
+    # Moon wheel: new at the top — 0% illumination, day 0 of the cycle.
+    assert "0.0%" in top and "New Moon" in top
+    theta = 250.0                              # ((250-180)/15)h = 04:40
+    rad = m.radians(theta)
+    side = compositor.tooltip_at(
+        180.0 + band * m.sin(rad), 180.0 - band * m.cos(rad), 360.0
+    )
+    assert "04:40" in side
+    assert "February" in side and "Winter" in side   # 250 deg on the year wheel
+    assert "Waning Gibbous" in side                  # 250/360 of the moon cycle
+    # Inverse golden: the ANGLE round-trips exactly (the December
+    # solstice angle legitimately has two dates a year apart — the
+    # inverse picks the span's earlier one, so compare angles).
+    for when, name in day.season_events:
+        angle = year_marker_angle(when, day.year_anchors)
+        back = instant_at_marker_angle(day.year_anchors, angle)
+        assert abs(
+            year_marker_angle(back, day.year_anchors) - angle
+        ) % 360.0 < 0.01, name
+    # Southern mirror: the same angle un-mirrors +180.
+    south = instant_at_marker_angle(day.year_anchors, 0.0, southern=True)
+    north_bottom = instant_at_marker_angle(day.year_anchors, 180.0)
+    assert south == north_bottom
+
+
 def test_aurora_bands_spread_the_day_hues_evenly():
     """The five DAY hues split the actual sunrise-sunset arc into equal
     bands — ALL of them visible on the shortest and the longest day

@@ -19,7 +19,8 @@ def ui(overlay: dict, text: str) -> str:
 UI_STRINGS: tuple[str, ...] = (
     # --- Menu -----------------------------------------------------------------
     "Design", "Hands",
-    "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday", "South slot",
+    "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday",
+    "Slots", "Day slot", "Info slot",
     "Size", "Elements", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
@@ -52,9 +53,9 @@ UI_STRINGS: tuple[str, ...] = (
     "The star diamonds. Off: the Aura colors stay, only the pointer disappears.",
     "The Aura palette hues. Off: the day and twilight arcs are drawn as plain white transparency.",
     "The seconds hand. Off: it is not drawn and the dial ticks once per minute.",
-    "The info slot near the dial bottom: always there on the "
-    "Compass, Trinity and Aurora; on Prism and Seasons once "
-    "the Weekday element is off.",
+    "The information display near the dial bottom. Alone it "
+    "stands at the bottom center; paired with the day slot "
+    "they split 3h and 21h.",
     "All hover texts. Off: the dial shows nothing on hover — combined with Click-through it has zero interaction.",
     "On: the star points at true solar noon. Off: Star, Aura and Umbra stand upright (12/24 at the top) for reading exact planet and season positions.",
     "The dial takes no clicks at all (they pass to the desktop); hover info still works. Turn it back off here in the tray.",
@@ -121,7 +122,10 @@ UI_STRINGS: tuple[str, ...] = (
     "{season} {ordinal} of {total} Days",
     "Heart:", "Meteorological {season}", "From", "To",
     "Wet season", "Dry season", "(1st half)", "(2nd half)",
-    "Day", "Days", "{element} {animal}",
+    "Day", "Days", "Year", "{element} {animal}",
+    # The ring tick-band hover + the Moon hover lunation (owner
+    # 2026-07-12): which moon of the calendar year is running.
+    "{ordinal} Moon of {year}",
     # --- Name tables ---------------------------------------------------------------
     "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
     "Sunday",

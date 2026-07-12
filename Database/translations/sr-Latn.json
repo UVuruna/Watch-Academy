@@ -996,8 +996,6 @@
   "ui/Noon": "ffca17fc624c3c6c23dbd29105ce389e40757d9f",
   "ui/Afternoon": "d682699b928cb945c39c2f94b12ec16e995333d5",
   "ui/Evening": "6734e19790f111270c9e4d31eac31cef46534e85",
-  "ui/South slot": "0284c6dabe6da09e32934d3aebb1feab132194f9",
-  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "9da0658eb4ca1fc4c6455add34e7c4f54b8a119b",
   "ui/Gods": "bbc0b165a9b5ce27fea5ea54143f02fe7fb36a24",
   "ui/Zodiac": "d1628e5e6e4ec9631753d9b8fe2b3c351c5e8563",
   "ui/Themes": "94d5186ba3ec63d1ebcb1e902a2d13ac15f0c527",
@@ -1007,7 +1005,13 @@
   "ui/Text": "c3328c39b0e29f78e9ff45db674248b1d245887d",
   "ui/Colored": "1cbc379653d9a14f444c641f035f4d5d692aa626",
   "ui/Ascendant": "c6db2ec02dcf3556a6323441f9db90a8db6c6932",
-  "ui/Weekday bodies": "3c745282a9cf10719c0dca59c8ee6856222b161f"
+  "ui/Weekday bodies": "3c745282a9cf10719c0dca59c8ee6856222b161f",
+  "ui/Slots": "0c1a16e17517d5db584e59f03e5701a1df0aec29",
+  "ui/Day slot": "a81c1cd8528a197946a7ca77d80a4483d3d34b50",
+  "ui/Info slot": "6eca066c504b8834cb19f9883cc115dc4ef9526e",
+  "ui/The information display near the dial bottom. Alone it stands at the bottom center; paired with the day slot they split 3h and 21h.": "3df535fda3aac37f010cace716d6828894f22fc4",
+  "ui/Year": "879e32326c5217968ac8e3a14e4a8a5214957264",
+  "ui/{ordinal} Moon of {year}": "383f537f6297f7a5a392046318a6b1664e336d71"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -2005,8 +2009,6 @@
   "ui/Noon": "Podne",
   "ui/Afternoon": "Popodne",
   "ui/Evening": "Veče",
-  "ui/South slot": "Južno polje",
-  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "Info polje pri dnu brojčanika: uvek dostupno uz Compass, Trinity i Aurora pokazivače; uz Prism i Seasons tek kada je Weekday element isključen.",
   "ui/Gods": "Bogovi",
   "ui/Zodiac": "Zodijak",
   "ui/Themes": "Teme",
@@ -2016,6 +2018,12 @@
   "ui/Text": "Tekst",
   "ui/Colored": "U boji",
   "ui/Ascendant": "Podznak",
-  "ui/Weekday bodies": "Tela dana"
+  "ui/Weekday bodies": "Tela dana",
+  "ui/Slots": "Polja",
+  "ui/Day slot": "Dnevno polje",
+  "ui/Info slot": "Info polje",
+  "ui/The information display near the dial bottom. Alone it stands at the bottom center; paired with the day slot they split 3h and 21h.": "Info prikaz pri dnu brojcanika. Sam stoji na sredini dna; u paru sa dnevnim poljem dele se na 3h i 21h.",
+  "ui/Year": "Godina",
+  "ui/{ordinal} Moon of {year}": "{ordinal} mesec u {year}"
  }
 }

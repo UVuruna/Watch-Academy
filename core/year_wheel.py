@@ -34,6 +34,19 @@ def year_marker_angle(now: datetime, anchors: YearAnchors) -> float:
     return _unwrapped_angle(now, anchors) % 360.0
 
 
+def instant_at_marker_angle(
+    anchors: YearAnchors, dial_angle: float, southern: bool = False
+) -> datetime:
+    """Public inverse of year_marker_angle (the ring tick hover, owner
+    2026-07-12): the calendar instant whose year-marker angle equals
+    `dial_angle` — un-mirroring the southern wheel first (the marker
+    runs +180° south of the equator)."""
+    if southern:
+        dial_angle = (dial_angle - 180.0) % 360.0
+    unwrapped = dial_angle if dial_angle >= 180.0 else dial_angle + 360.0
+    return _instant_at(anchors, unwrapped)
+
+
 def zodiac_sign(now: datetime, anchors: YearAnchors) -> tuple[str, str, datetime, datetime]:
     """(name, symbol, start instant, end instant) of the tropical zodiac
     sign at `now`. Signs are exact 30-deg arcs of the same year wheel —
