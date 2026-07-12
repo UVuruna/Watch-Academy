@@ -24,6 +24,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
     "Encyclopedia", "Astrology", "Chinese zodiac", "← Back",
+    "Gods", "Zodiac", "Themes",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",
     "Full contrast", "Half contrast", "Light contrast", "Dark contrast",
     "Paint palette", "Light palette",

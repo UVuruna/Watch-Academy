@@ -366,6 +366,16 @@ LEGEND_BG = "#2B2B2B"
 LEGEND_BORDER = "#6E6E6E"
 LEGEND_TEXT = "#FFFFFF"
 
+# The Encyclopedia article view (owner UX round 2026-07-12): the whole
+# text BLOCK is centered (never text-align center) and spans this
+# fraction of the window width; the font grows with the width at a
+# gentle em-like coefficient between the base and the cap.
+ENCYCLOPEDIA_TEXT_WIDTH_FRACTION = 0.85
+ENCYCLOPEDIA_BASE_FONT_PX = 13
+ENCYCLOPEDIA_FONT_GROWTH = 0.006     # extra px per viewport px above the base width
+ENCYCLOPEDIA_FONT_BASE_WIDTH = 560   # viewport width where the base font applies
+ENCYCLOPEDIA_MAX_FONT_PX = 21
+
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and

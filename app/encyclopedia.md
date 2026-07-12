@@ -7,19 +7,23 @@ The article BROWSER (owner spec 2026-07-12; menu Encyclopedia… below
 Time Travel…): every legend readable without hovering the dial, on two
 screens —
 
-1. **Topics** — a gallery grid, one card per topic with its symbol
-   image: every weekday theme (`WEEKDAY_THEME_TITLES`, ten as of
-   2026-07-12 — Slavic gods and Alchemy joined), Astrology (the
-   twelve signs), the Chinese zodiac (twelve animals + five
-   elements) and the Trinity.
+1. **Topics** — a gallery in FOUR GROUPS (owner UX round 2026-07-12,
+   `_TOPIC_GROUPS`): Gods (Greek/Norse/Egyptian/Slavic), Zodiac
+   (Astrology, Chinese zodiac, Planets, Planet signs), Themes
+   (Alchemy, Japanese week, Professions, Trinity) and Religions
+   (two members for now) — a bold header + rule above each card row.
 2. **Articles** — a scrollable list of the topic's entries: the
-   entity image, its NAME as a bold title and the full base article,
-   translated through the active overlay and with the canon terms
-   highlighted exactly like the dial legends (virtues blue, vices
-   red, moods yellow, the entity's own arm hue).
+   entity image(s) — Astrology shows the sign LOGO and its
+   CONSTELLATION side by side — the NAME as a bold title and the
+   full base article, translated through the active overlay and with
+   the canon terms highlighted exactly like the dial legends (virtues
+   blue, vices red, moods yellow, the entity's own arm hue).
 
-The window is RESIZABLE like the Guide: entry images rescale live
-with the width.
+The window is RESIZABLE: each entry is ONE centered block spanning
+`ENCYCLOPEDIA_TEXT_WIDTH_FRACTION` of the width (the text stays
+left-aligned INSIDE the block — owner: center the object, never the
+lines), images share the block, and the font grows with the width at
+the gentle em-like coefficient (`ENCYCLOPEDIA_FONT_GROWTH`, capped).
 
 ## Connections
 

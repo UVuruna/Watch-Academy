@@ -1003,7 +1003,10 @@
   "ui/Afternoon": "d682699b928cb945c39c2f94b12ec16e995333d5",
   "ui/Evening": "6734e19790f111270c9e4d31eac31cef46534e85",
   "ui/South slot": "0284c6dabe6da09e32934d3aebb1feab132194f9",
-  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "9da0658eb4ca1fc4c6455add34e7c4f54b8a119b"
+  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "9da0658eb4ca1fc4c6455add34e7c4f54b8a119b",
+  "ui/Gods": "bbc0b165a9b5ce27fea5ea54143f02fe7fb36a24",
+  "ui/Zodiac": "d1628e5e6e4ec9631753d9b8fe2b3c351c5e8563",
+  "ui/Themes": "94d5186ba3ec63d1ebcb1e902a2d13ac15f0c527"
  },
  "texts": {
   "articles/greek/jupiter/base": "Zevs je oluja pretvorena u zakon — otac neba koji je okončao doba Titana, a potom morao da nauči da vlada neposlušnom porodicom koju je oslobodio. Crtež mu daje pune insignije te službe: krunisan i na prestolu, sa zlatnom munjom stegnutom u jednoj pesnici i žezlom s orlom na vrhu u drugoj, orlovi su urezani u naslone prestola, a jedan živi kruži iznad, dok se iza prestola uzdiže hrast otežao od žira — drvo njegovog proročišta u Dodoni, gde je bog govorio kroz šuštanje lišća.\n\nNjegov dom je vrh brojčanika, krak na 12h, obojen žuto — krak četvrtka, raspoloženje Radosti u podne, vrhunac dana. Jezik to pamti: jovijalan doslovno znači 'Jupiterov'. Kralj zauzima mesto krune, gde pravo sunce izliva svoje zlato pravo na njegov krak; a četvrtak je Guruvar u vedskoj sedmici, dan Brihaspatija, učitelja bogova — kraljev krak je ujedno i učiteljev.\n\nNjegova vrlina je Velikodušnost, a porok Neumerenost — kraljevska trpeza koja hrani sve, a onda ne ume da stane. To je jedna ista ruka koja se nikad ne sklapa, bilo da daje ili poseže za drugom porcijom. Njegov lek stoji na suprotnom vrhu brojčanika: Hermesova ponoćna Mudrost obuzdava Neumerenost, dok Zevsova Velikodušnost, izlivena pravo niz istu osu, leči Pohlepu.\n\nRadost vlada podnevom jer podne ništa ne skriva: sve stoji u punoj svetlosti, senke su najkraće, svet je najdarežljiviji. Velikodušnost je upravo to — podne srca — a njena neumerenost je ono što se dogodi kada gozba odbije da prizna da popodne postoji.",
@@ -2008,6 +2011,9 @@
   "ui/Afternoon": "Popodne",
   "ui/Evening": "Veče",
   "ui/South slot": "Južno polje",
-  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "Info polje pri dnu brojčanika: uvek dostupno uz Compass, Trinity i Aurora pokazivače; uz Prism i Seasons tek kada je Weekday element isključen."
+  "ui/The info slot near the dial bottom: always there on the Compass, Trinity and Aurora; on Prism and Seasons once the Weekday element is off.": "Info polje pri dnu brojčanika: uvek dostupno uz Compass, Trinity i Aurora pokazivače; uz Prism i Seasons tek kada je Weekday element isključen.",
+  "ui/Gods": "Bogovi",
+  "ui/Zodiac": "Zodijak",
+  "ui/Themes": "Teme"
  }
 }
