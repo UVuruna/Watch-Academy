@@ -44,8 +44,10 @@ from render.layers import (
     dial_point,
     pinned_weekday_theta,
     south_slot_available,
+    south_slot_centered,
     south_slot_theta,
     south_slot_view,
+    sunday_dual_active,
     today_slot_theta,
     visible_occupant,
     weekday_badge,
@@ -193,13 +195,13 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
                 # The astrology badge in the weekday position (owner
                 # 2026-07-12) — MINUTE cadence, below the hands.
                 layers.append(WeekdayBadgeLayer(skin))
-            if south_slot_available(skin):
-                # The SOUTH slot draws BELOW the hands (owner bug
-                # report: the seconds hand passed behind the zodiac art)
-                # and SURVIVES the Pointer element switch — it has its
-                # OWN Elements switch (owner spec + availability matrix
-                # 2026-07-12: Compass/Trinity/Aurora always, Prism and
-                # Seasons once the Weekday element is off).
+            if south_slot_available(skin) and not south_slot_centered(skin):
+                # The BOTTOM slot draws BELOW the hands (owner bug
+                # report: the seconds hand passed behind the zodiac
+                # art) and SURVIVES the Pointer element switch — it has
+                # its OWN Elements switch (owner matrix, dual-Sunday
+                # round 2026-07-12: Compass/Seasons in the center,
+                # pinned layouts at the bottom, Trinity/Prism none).
                 layers.append(BottomSlotLayer(skin))
             # The hand pack's own z_order draws bottom-up (owner spec
             # 2026-07-12; default hours -> minutes -> seconds).
@@ -217,6 +219,11 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
+    if south_slot_available(skin) and south_slot_centered(skin):
+        # The CENTERED info slot (Compass/Seasons, owner dual-Sunday
+        # round 2026-07-12) rides ABOVE the hands like the center
+        # body — "the center occludes the hands", his accepted cost.
+        layers.append(BottomSlotLayer(skin))
     return layers
 
 
@@ -342,6 +349,12 @@ class Compositor:
                 if self._skin.weekday_slot == "chinese":
                     return self._chinese_text()
                 return self._zodiac_text()
+            if element == "sun_servant":
+                # The SERVANT face of the dual Sunday (owner
+                # 2026-07-12): until the split face-texts land, both
+                # faces speak the sun article — whose double-center
+                # paragraph already tells the two of them.
+                return self._weekday_tooltip("sun", active=True)
             if element.startswith("body:"):
                 # Weekday hover rework (owner spec): the ACTIVE body
                 # leads with the date, ghosts show their article alone.
@@ -422,9 +435,20 @@ class Compositor:
                 body = self._weekday_body_at(point, radius, rotation, today)
                 if body is not None:
                     return f"body:{body}"
+                if sunday_dual_active(self._skin, today) and hit(
+                    dial_point(
+                        constants.SOUTH_SLOT_ANGLE + rotation,
+                        radius * self._skin.weekday_set.orbit_fraction,
+                    ),
+                    radius * self._skin.weekday_set.diamond_scale,
+                ):
+                    # The Sunday SERVANT face at 24h (owner 2026-07-12).
+                    return "sun_servant"
         weekday = self._skin.weekday_set
         if south_slot_available(self._skin) and hit(
-            dial_point(
+            QPointF(0.0, 0.0)
+            if south_slot_centered(self._skin)
+            else dial_point(
                 south_slot_theta(self._skin, rotation),
                 radius * weekday.orbit_fraction,
             ),
@@ -517,7 +541,10 @@ class Compositor:
             return center_body
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
+        dual = sunday_dual_active(self._skin, today)
         for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
+            if dual and angle == constants.SOUTH_SLOT_ANGLE:
+                continue     # the Sunday Servant owns the 24h seat today
             body = visible_occupant(occupants, today)
             slot = dial_point(
                 angle + rotation, radius * weekday.orbit_fraction

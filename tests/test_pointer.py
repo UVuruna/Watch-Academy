@@ -83,36 +83,42 @@ def test_octa_reserves_the_bottom_arm_for_the_info_slot():
 
 
 def test_south_slot_matrix():
-    """Owner matrix 2026-07-12: availability (Compass/Trinity/Aurora
-    always, Prism/Seasons once Weekday is off), position (Compass arm
-    rotates; the others rotate only while the star is DRAWN; Aurora
-    pins south, or 21h/3h flanking when the weekday shares the
-    bottom), and Aurora's images-only mode fallback."""
+    """Owner matrix (dual-Sunday round 2026-07-12): the Compass and
+    the Seasons carry the slot in the CENTER (their 24h arm belongs to
+    the Sunday pair) — weekday off frees the bottom, so it moves to
+    24h; the Trinity and the Prism have NO room while the star is up;
+    Aurora and the pointer-off pinned layouts keep the bottom rules;
+    plus Aurora's images-only mode fallback."""
     import dataclasses
 
     from render.layers import (
-        pinned_weekday_theta, south_slot_available, south_slot_theta,
-        south_slot_view,
+        pinned_weekday_theta, south_slot_available, south_slot_centered,
+        south_slot_theta, south_slot_view,
     )
 
     def skin(**kw):
         return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
 
-    # Availability.
+    # Availability: octa/cross yes, trio/hexa NO while the star is up.
     assert south_slot_available(skin(pointer="octa"))
-    assert south_slot_available(skin(pointer="trio", show_weekday=True))
-    assert south_slot_available(skin(pointer="aurora", show_weekday=True))
+    assert south_slot_available(skin(pointer="cross", show_weekday=True))
+    assert not south_slot_available(skin(pointer="trio", show_weekday=True))
     assert not south_slot_available(skin(pointer="hexa", show_weekday=True))
-    assert south_slot_available(skin(pointer="hexa", show_weekday=False))
-    assert not south_slot_available(skin(pointer="cross", show_weekday=True))
+    assert not south_slot_available(skin(pointer="hexa", show_weekday=False))
+    assert south_slot_available(skin(pointer="trio", show_pointer=False))
+    assert south_slot_available(skin(pointer="aurora", show_weekday=True))
     assert not south_slot_available(
         skin(pointer="octa", show_octa_slot=False)
     )
-    # Position: the Compass arm rotates; hexa rides the drawn star,
-    # pins south once the Pointer element is off.
-    assert south_slot_theta(skin(pointer="octa"), 14.0) == 194.0
+    # Center vs bottom: weekday up -> center; weekday off -> the 24h
+    # arm (rotating); pinned layouts never center.
+    assert south_slot_centered(skin(pointer="octa"))
+    assert south_slot_centered(skin(pointer="cross"))
+    assert not south_slot_centered(skin(pointer="octa", show_weekday=False))
+    assert not south_slot_centered(skin(pointer="octa", show_pointer=False))
+    assert not south_slot_centered(skin(pointer="aurora"))
     assert south_slot_theta(
-        skin(pointer="hexa", show_pointer=True), 14.0
+        skin(pointer="octa", show_weekday=False), 14.0
     ) == 194.0
     # Pointer element off + weekday still on -> the pair FLANKS the
     # bottom (owner extension); weekday off as well -> plain south.
@@ -122,9 +128,6 @@ def test_south_slot_matrix():
     assert south_slot_theta(
         skin(pointer="hexa", show_pointer=False, show_weekday=False), 14.0
     ) == 180.0
-    assert south_slot_theta(
-        skin(pointer="trio", show_pointer=True), 14.0
-    ) == 194.0
     # Aurora: south alone, flanking pair with the weekday on.
     lone = skin(pointer="aurora", show_weekday=False)
     both = skin(pointer="aurora", show_weekday=True, show_octa_slot=True)
@@ -153,6 +156,71 @@ def test_south_slot_matrix():
     assert south_slot_view(
         skin(pointer="octa", octa_slot="zodiac", info_slot_style="sign")
     ) == ("zodiac", "sign")
+
+
+def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
+    """Owner dual-Sunday round 2026-07-12: on a Sunday the Compass and
+    the Seasons show BOTH faces — the Ruler holds his north slot and
+    the SERVANT face (WEEKDAY_DUAL_FILES art) takes the 24h seat (the
+    cross's mercury ghost yields it), answering the sun hover; the
+    Trinity and the Prism keep the single center image; ordinary days
+    and center_only mode stay single-faced. Every theme's dual art is
+    ON DISK, the metal themes' colored variants too."""
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+    from render.layers import south_slot_centered, sunday_dual_active
+
+    # The art table is complete: all twelve themes + colored variants.
+    for theme in constants.WEEKDAY_THEMES:
+        rel = defaults.WEEKDAY_DUAL_FILES[theme]
+        assert (defaults.WEEKDAY_ART_DIR / f"{rel}.png").exists(), theme
+    for theme in constants.METAL_THEMES:
+        folder, _, name = defaults.WEEKDAY_DUAL_FILES[theme].rpartition("/")
+        colored = defaults.WEEKDAY_ART_DIR / folder / "colored" / f"{name}.png"
+        assert colored.exists(), theme
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    now = datetime(2026, 7, 12, 12, 0, tzinfo=tz)          # a Sunday
+    day = build_day_context(
+        now,
+        astral.Observer(
+            latitude=city["latitude"], longitude=city["longitude"]
+        ),
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    for pointer in ("octa", "cross"):
+        skin = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(Settings(), pointer=pointer, solar_rotation=False),
+        )
+        assert skin.weekday_set.dual_asset is not None
+        assert sunday_dual_active(skin, "sun"), pointer
+        compositor = Compositor(skin, AssetCache())
+        compositor.render_offscreen(360.0, 1.0, day, tick)
+        orbit = 180.0 * skin.weekday_set.orbit_fraction
+        tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
+        assert tip is not None and "Sunday" in tip, pointer   # the Servant
+    # The Prism keeps one image; ordinary days stay single-faced.
+    hexa = apply_display_settings(
+        defaults.DEFAULT_SKIN, replace(Settings(), pointer="hexa")
+    )
+    assert not sunday_dual_active(hexa, "sun")
+    octa = apply_display_settings(
+        defaults.DEFAULT_SKIN, replace(Settings(), pointer="octa")
+    )
+    assert not sunday_dual_active(octa, "mercury")
+    # center_only keeps the center for the body — no dual, slot at 24h.
+    center_only = dataclasses.replace(
+        octa,
+        weekday_set=dataclasses.replace(
+            octa.weekday_set, display_mode="center_only"
+        ),
+    )
+    assert not sunday_dual_active(center_only, "sun")
+    assert not south_slot_centered(center_only)
 
 
 # --- Shared-slot priority (owner rule) --------------------------------------------
@@ -439,20 +507,35 @@ def test_aurora_bands_spread_the_day_hues_evenly():
 # --- Octa bottom slot ----------------------------------------------------------------
 
 
-def test_bottom_slot_layer_rides_only_the_octa_stack():
+def test_bottom_slot_layer_stack_positions():
+    """Owner dual-Sunday round 2026-07-12: on the Compass/Seasons the
+    info slot is CENTERED and rides ABOVE the hands (the center
+    occludes them — his accepted cost); in the pinned layouts it sits
+    at the bottom BELOW the hands (the old bug report: the seconds
+    hand passed behind the zodiac art); the Prism has none at all."""
     octa = _build_layers(dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa"))
     hexa = _build_layers(defaults.DEFAULT_SKIN)
     assert any(isinstance(layer, BottomSlotLayer) for layer in octa)
     assert not any(isinstance(layer, BottomSlotLayer) for layer in hexa)
-    # The slot draws BELOW the hands (owner bug report: the seconds
-    # hand passed behind the zodiac slot art).
     slot_index = next(
         i for i, layer in enumerate(octa) if isinstance(layer, BottomSlotLayer)
     )
-    first_hand = min(
+    last_hand = max(
         i for i, layer in enumerate(octa) if isinstance(layer, HandLayer)
     )
-    assert slot_index < first_hand
+    assert slot_index > last_hand            # centered -> above the hands
+    pinned = _build_layers(
+        dataclasses.replace(
+            defaults.DEFAULT_SKIN, pointer="octa", show_pointer=False,
+        )
+    )
+    slot_index = next(
+        i for i, layer in enumerate(pinned) if isinstance(layer, BottomSlotLayer)
+    )
+    first_hand = min(
+        i for i, layer in enumerate(pinned) if isinstance(layer, HandLayer)
+    )
+    assert slot_index < first_hand           # bottom -> below the hands
 
 
 @pytest.mark.parametrize("mode", constants.OCTA_SLOT_MODES)
@@ -949,6 +1032,8 @@ def test_octa_arm_hovers_events_and_seasons(july_wednesday):
 
 
 def test_chinese_slot_hover(july_wednesday):
+    """The info slot lives in the CENTER on the Compass (owner
+    dual-Sunday round 2026-07-12) — the hover answers at (0,0)."""
     day, tick = july_wednesday
     compositor = Compositor(
         dataclasses.replace(
@@ -961,8 +1046,7 @@ def test_chinese_slot_hover(july_wednesday):
         AssetCache(),
     )
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
-    tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
+    tip = compositor.tooltip_at(180.0, 180.0, 360.0)      # dial center
     assert "Fire Horse" in tip and "2026" in tip and "2027" in tip
     assert "<br/>" in tip                     # name / span on separate lines
 

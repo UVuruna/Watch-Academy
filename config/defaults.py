@@ -223,13 +223,21 @@ PALETTE_PRESETS = {
         "#00DC00", "#FFFF00", "#FF0000", 
         "#BD00BD", "#0040FF", "#00DDDD",
     ),
+    # COMPASS palettes (owner dual-Sunday round 2026-07-12): the wheel
+    # is the day's arc from light to dark — North (12h) wears the
+    # Ruler's white-gold, the hues descend through afternoon zeal,
+    # dusk, evening passion to the SOUTH (24h) Servant: near-black
+    # with a silver hint in paint; in the LIGHT world the south is
+    # not black but MOONLIGHT silver — pigment loses the light at
+    # midnight, light finds the Moon there. W dawn cyan (Hope) and
+    # E dusk red-orange (Longing) keep their canon seats.
     ("octa", "paint"): (
-        "#F8E600", "#ECB800", "#DC9600", "#DC0000",
-        "#783CF0", "#005ADC", "#00DCDC", "#00DC00",
+        "#FFE9A8", "#ECB800", "#DC5A00", "#B4143C",
+        "#20202A", "#00368C", "#00DCDC", "#00C850",
     ),
     ("octa", "light"): (
-        "#00DC00", "#DCDC00", "#FF8C00", "#FF0000",
-        "#BD00BD", "#0000FF", "#0080FF", "#00FFFF",
+        "#FFFFFF", "#FFDC00", "#FF6400", "#FF2864",
+        "#C8D7F0", "#2850FF", "#00E1FF", "#00FF64",
     ),
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
@@ -639,6 +647,28 @@ WEEKDAY_THEME_FILES["japan"] = {
     "jupiter": "mokuyobi",
     "venus": "kinyobi",
     "saturn": "doyobi",
+}
+
+# THE DUAL SUNDAY (owner 2026-07-12): every theme's center day has a
+# SECOND face — the Servant to the Ruler. On the Compass and the
+# Seasons both faces shine (Ruler north 12h, Servant south 24h — two
+# persons, a union); the Trinity and the Prism keep ONE image (two
+# persons in one body) with both faces in the hover. Paths are
+# relative to WEEKDAY_ART_DIR without the extension; the metal themes'
+# COLORED look inserts a colored/ folder before the file name (the
+# profession Servant is a full eighth plate living beside the Ruler).
+WEEKDAY_DUAL_FILES = {
+    "planets": "planets/dual/sun_eclipse",
+    "planet_signs": "planet_signs/dual/sun_eclipse",
+    "greek": "greek/dual/Phaethon",
+    "norse": "norse/dual/Skoll",
+    "egypt": "egypt/dual/afu_ra",
+    "slavic": "slavic/dual/dazbog_old",
+    "alchemy": "alchemy/dual/ore",
+    "japan": "japan/dual/ama_no_iwato",
+    "religion": "religion/dual/rough_ashlar",
+    "religion_alt": "religion/dual/corax",
+    "profession": "profession/Servant",
 }
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:

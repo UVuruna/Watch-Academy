@@ -76,6 +76,10 @@ class WeekdaySpec:
     # render (only the warm bronze pixels change — the gray stone and
     # engravings stay); None = bronze, the art as drawn.
     metal: str | None = None
+    # The SERVANT face of the theme's Sunday (owner dual-Sunday round
+    # 2026-07-12) — resolved from WEEKDAY_DUAL_FILES with the metal in
+    # apply_display_settings; drawn at 24h on the Compass/Seasons.
+    dual_asset: Path | None = None
 
 
 @dataclass(frozen=True)

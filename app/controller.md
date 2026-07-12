@@ -65,8 +65,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   STYLE dropdowns (day slot: image styles only; info slot adds Text).
   Gating: the day slot's badge families need the pinned layout
   (Aurora or pointer off), its TEXT modes need the pointer OFF
-  (Aurora stays images-only); the info slot exists on Compass/
-  Trinity/Aurora always, anywhere once Weekday or Pointer is off;
+  (Aurora stays images-only); the info slot exists on the Compass
+  and the Seasons (in the CENTER — dual-Sunday round 2026-07-12:
+  their 24h arm belongs to the Sunday pair; weekday off moves it to
+  24h) and under Aurora, plus anywhere once the Pointer element is
+  off — the Trinity and the Prism have NO room while the star is up;
   Aurora grays the info slot's plain and Text entries. Pointer,
   show_weekday, show_pointer and show_weekday_names changes REBUILD
   the menu so the matrix (and the twin Names checkbox) recomputes.

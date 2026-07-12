@@ -252,6 +252,16 @@ def apply_display_settings(skin, settings: Settings):
     # (only the bronze details change); bronze = the art as drawn.
     if metal in defaults.METAL_SWAP_TARGETS:
         weekday = dataclasses.replace(weekday, metal=metal)
+    # The Sunday SERVANT face (owner dual-Sunday round 2026-07-12):
+    # every theme carries one; the metal themes' COLORED look swaps in
+    # the colored/ variant, gold/silver reuse the swap via spec.metal.
+    dual_rel = defaults.WEEKDAY_DUAL_FILES[settings.weekday_theme]
+    if metal == "colored" and settings.weekday_theme in constants.METAL_THEMES:
+        folder, _, name = dual_rel.rpartition("/")
+        dual_rel = f"{folder}/colored/{name}"
+    weekday = dataclasses.replace(
+        weekday, dual_asset=defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+    )
     background = skin.background
     if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
         # The Aura's sunlight and twilight opacities are INDEPENDENT
@@ -1093,13 +1103,13 @@ class AppController(QObject):
                 ),
                 not (aurora and style == "text"),
             )
-        # The info slot exists on the Compass/Trinity/Aurora always,
-        # anywhere once the Weekday element OR the Pointer element is
-        # off (owner matrix — the menu was missing the pointer-off
-        # clause, his bug report with the Prism screenshot).
+        # The info slot exists on the Compass and the Seasons (in the
+        # CENTER — owner dual-Sunday round 2026-07-12: the 24h arm
+        # belongs to the Sunday pair) and under Aurora; the Trinity and
+        # the Prism have NO room for it while the star is up; the
+        # pointer-off pinned layouts always have it.
         slot_possible = (
-            settings.pointer in ("octa", "trio", "aurora")
-            or not settings.show_weekday
+            settings.pointer in ("octa", "cross", "aurora")
             or not settings.show_pointer
         )
         self._octa_slot_action = info_slot_menu.menuAction()
@@ -1148,9 +1158,11 @@ class AppController(QObject):
         self._octa_slot_toggle = self._add_toggle(
             elements_menu, tr("Info slot"), settings.show_octa_slot,
             lambda checked: self._set_display_choice("show_octa_slot", checked),
-            tr("The information display near the dial bottom. Alone it "
-               "stands at the bottom center; paired with the day slot "
-               "they split 3h and 21h."),
+            tr("The information display. On the Compass and the Seasons "
+               "it lives in the center (the 24h arm belongs to the "
+               "Sunday pair); with the pointer off it sits at the dial "
+               "bottom — alone at the center, or at 21h beside the day "
+               "slot at 3h."),
         )
         self._octa_slot_toggle.setEnabled(slot_possible)
         self._add_toggle(

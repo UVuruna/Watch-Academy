@@ -52,9 +52,11 @@ UI_STRINGS: tuple[str, ...] = (
     "The star diamonds. Off: the Aura colors stay, only the pointer disappears.",
     "The Aura palette hues. Off: the day and twilight arcs are drawn as plain white transparency.",
     "The seconds hand. Off: it is not drawn and the dial ticks once per minute.",
-    "The information display near the dial bottom. Alone it "
-    "stands at the bottom center; paired with the day slot "
-    "they split 3h and 21h.",
+    "The information display. On the Compass and the Seasons "
+    "it lives in the center (the 24h arm belongs to the "
+    "Sunday pair); with the pointer off it sits at the dial "
+    "bottom — alone at the center, or at 21h beside the day "
+    "slot at 3h.",
     "All hover texts. Off: the dial shows nothing on hover — combined with Click-through it has zero interaction.",
     "On: the star points at true solar noon. Off: Star, Aura and Umbra stand upright (12/24 at the top) for reading exact planet and season positions.",
     "The dial takes no clicks at all (they pass to the desktop); hover info still works. Turn it back off here in the tray.",

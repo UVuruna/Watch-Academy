@@ -222,32 +222,67 @@ def weekday_pinned(skin: SkinDefinition) -> bool:
 
 
 def south_slot_available(skin: SkinDefinition) -> bool:
-    """The owner's availability matrix (2026-07-12): the Compass always
-    reserves its bottom arm for the slot; the Trinity always has room
-    at the south gap between its blue and red diamonds; Aurora always
-    shows it (images only); with the POINTER element off it exists on
-    EVERY mode (both can combine, like Aurora); Prism and Seasons with
-    the star drawn gain it once the Weekday element is off."""
+    """The owner's availability matrix (dual-Sunday round 2026-07-12):
+    the Compass and the Seasons carry the info slot (in the CENTER —
+    their 24h arm belongs to the Sunday pair); Aurora always shows it
+    (images only); with the POINTER element off it exists on EVERY
+    mode; the Trinity and the Prism have NO room while the star is
+    drawn."""
     if not skin.show_octa_slot:
         return False
     if weekday_pinned(skin):
         return True
-    if skin.pointer in ("octa", "trio"):
-        return True
-    return not skin.show_weekday
+    return skin.pointer in ("octa", "cross")
+
+
+def south_slot_centered(skin: SkinDefinition) -> bool:
+    """True when the info slot lives in the CENTER (owner dual-Sunday
+    round 2026-07-12: Compass/Seasons with the weekday unit up — the
+    24h arm hosts the Sunday Servant). The center occludes the hands,
+    so it is avoided whenever something frees the bottom: weekday off
+    moves the slot to 24h, center_only mode keeps the center for the
+    body, the pinned layouts keep their own bottom rules."""
+    if weekday_pinned(skin):
+        return False
+    if skin.pointer not in ("octa", "cross"):
+        return False
+    if not skin.show_weekday or skin.weekday_slot != "weekday":
+        return False
+    return skin.weekday_set.display_mode != "center_only"
 
 
 def south_slot_theta(skin: SkinDefinition, rotation: float) -> float:
-    """Where the slot sits (owner rules 2026-07-12): pinned layouts
-    (Aurora, or any mode with the Pointer element off) put it straight
-    south — or at 21h when the weekday body shares the bottom; with
-    the star drawn it rides the bottom arm (rotation is already 0
-    when solar rotation is off)."""
+    """Where the NON-centered slot sits (owner rules): pinned layouts
+    (Aurora, or the Pointer element off) put it straight south — or at
+    21h when the weekday body shares the bottom; on the Compass and
+    the Seasons with the bottom freed (weekday off / center_only) it
+    rides the 24h arm (rotation is already 0 when solar rotation is
+    off)."""
     if weekday_pinned(skin):
         if skin.show_weekday:
             return constants.AURORA_DUAL_SLOT_ANGLE
         return constants.SOUTH_SLOT_ANGLE
     return constants.SOUTH_SLOT_ANGLE + rotation
+
+
+def sunday_dual_active(skin: SkinDefinition, today: str) -> bool:
+    """True while the dial shows BOTH Sunday faces (owner 2026-07-12):
+    the Compass and the Seasons on a Sunday — Ruler at his north slot,
+    the SERVANT face at 24h ("two persons, a union"); the Trinity and
+    the Prism keep one image ("two persons in one body") and speak the
+    second face only in the hover. Needs the theme's dual art on disk
+    (documented: no art, no second face)."""
+    spec = skin.weekday_set
+    return (
+        today == "sun"
+        and skin.pointer in ("octa", "cross")
+        and skin.show_weekday
+        and skin.weekday_slot == "weekday"
+        and not weekday_pinned(skin)
+        and spec.display_mode != "center_only"
+        and spec.dual_asset is not None
+        and spec.dual_asset.exists()
+    )
 
 
 def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
@@ -837,13 +872,30 @@ class WeekdayLayer(Layer):
             )
         orbit = ctx.radius * spec.orbit_fraction
         slot_size = 2 * ctx.radius * spec.diamond_scale
+        dual = sunday_dual_active(ctx.skin, today)
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
+            if dual and slot_angle == constants.SOUTH_SLOT_ANGLE:
+                continue     # the 24h seat belongs to the Servant today
             body = visible_occupant(occupants, today)
             theta = slot_angle + ctx.rotation
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hover_factor(ctx, f"body:{body}"),
                 1.0 if body == today else spec.ghost_opacity,
+            )
+        if dual:
+            # THE DUAL SUNDAY (owner 2026-07-12): the Ruler keeps his
+            # north slot, the SERVANT face rises at 24h — two persons,
+            # a union; the metal themes' swap recolors it exactly like
+            # the Ruler plate. Image only — the Names label belongs to
+            # the Ruler face.
+            draw_pixmap_centered(
+                painter, ctx, spec.dual_asset,
+                dial_point(
+                    constants.SOUTH_SLOT_ANGLE + ctx.rotation, orbit
+                ),
+                slot_size * hover_factor(ctx, "sun_servant"),
+                metal=spec.metal,
             )
 
 
@@ -966,8 +1018,16 @@ class BottomSlotLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        theta = south_slot_theta(ctx.skin, ctx.rotation)
-        pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
+        if south_slot_centered(ctx.skin):
+            # Compass/Seasons (owner dual-Sunday round 2026-07-12):
+            # the slot lives in the CENTER — the 24h arm belongs to
+            # the Sunday pair.
+            pos = QPointF(0.0, 0.0)
+        else:
+            pos = dial_point(
+                south_slot_theta(ctx.skin, ctx.rotation),
+                ctx.radius * spec.orbit_fraction,
+            )
         slot_size = (
             2 * ctx.radius * spec.diamond_scale
             * ctx.skin.octa_slot_scale          # Settings size multiplier
