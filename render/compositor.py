@@ -331,13 +331,13 @@ class Compositor:
         element = self._element_at(point, radius, rotation, today)
         if element is not None:
             if element == "weekday_badge":
-                # The astrology badge in the weekday position (owner
-                # 2026-07-12): sun sign or the rising sign.
-                return (
-                    self._ascendant_text()
-                    if self._skin.weekday_slot == "ascendant"
-                    else self._zodiac_text()
-                )
+                # The badge in the weekday position (owner 2026-07-12):
+                # sun sign, the rising sign, or the Chinese year.
+                if self._skin.weekday_slot == "ascendant":
+                    return self._ascendant_text()
+                if self._skin.weekday_slot == "chinese":
+                    return self._chinese_text()
+                return self._zodiac_text()
             if element.startswith("body:"):
                 # Weekday hover rework (owner spec): the ACTIVE body
                 # leads with the date, ghosts show their article alone.

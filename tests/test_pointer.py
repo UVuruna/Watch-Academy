@@ -242,11 +242,48 @@ def test_weekday_badge_gating_and_pointer_off_flank():
             replace(Settings(), pointer=pointer, weekday_slot="ascendant"),
         )
         assert skin.weekday_slot == "weekday", pointer   # bodies forced
-    aurora = apply_display_settings(
-        defaults.DEFAULT_SKIN,
-        replace(Settings(), pointer="aurora", weekday_slot="ascendant"),
+    for mode in ("zodiac", "ascendant", "chinese"):
+        aurora = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(Settings(), pointer="aurora", weekday_slot=mode),
+        )
+        assert aurora.weekday_slot == mode
+    # The Chinese badge carries its metal into the selective swap.
+    from render.layers import weekday_badge
+
+    class _Tick:
+        ascendant_sign = "Virgo"
+
+    class _Day:
+        zodiac_name = "Cancer"
+        chinese_name = "Fire Horse"
+
+    import dataclasses as _dc
+
+    gold_badge = weekday_badge(
+        _dc.replace(
+            defaults.DEFAULT_SKIN, pointer="aurora",
+            weekday_slot="chinese", chinese_style="gold",
+        ),
+        _Day, _Tick,
     )
-    assert aurora.weekday_slot == "ascendant"
+    assert gold_badge == ("Horse", "chinese", "gold")
+    colored_badge = weekday_badge(
+        _dc.replace(
+            defaults.DEFAULT_SKIN, pointer="aurora",
+            weekday_slot="chinese", chinese_style="colored",
+        ),
+        _Day, _Tick,
+    )
+    assert colored_badge == ("Horse", "chinese_colored", None)
+    asc_badge = weekday_badge(
+        _dc.replace(
+            defaults.DEFAULT_SKIN, pointer="aurora",
+            weekday_slot="ascendant", ascendant_style="colored",
+        ),
+        _Day, _Tick,
+    )
+    assert asc_badge == ("Virgo", "logo_colored", None)
 
     def skin(**kw):
         return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)

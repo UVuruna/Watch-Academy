@@ -637,6 +637,17 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _set_weekday_badge(self, mode: str, **styles) -> None:
+        """Weekday position + badge style in one click (owner
+        2026-07-12: the style dropdowns live right in the Weekday
+        menu — Sign/Logo/Constellation/Colored for the astrology pair,
+        the metal styles for the Chinese year)."""
+        self._settings = replace(
+            self._settings, weekday_slot=mode, **styles
+        )
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _set_south_slot(self, mode: str, **styles) -> None:
         """South slot mode + family style in one click (the Astrology
         and Chinese dropdowns, owner 2026-07-12)."""
@@ -864,29 +875,72 @@ class AppController(QObject):
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         weekday_menu = theme_menu.addMenu(tr("Weekday"))
-        # The weekday POSITION (owner 2026-07-12): the bodies, or an
-        # astrology badge — the official sign or the ASCENDANT — on
-        # the Prism (riding the current 4-hour color-block arm) and
-        # under Aurora (the south spot; pairs with the slot: official
-        # left, rising right). Other pointers gray the badges out.
+        # The weekday POSITION (owner 2026-07-12): the bodies, or a
+        # BADGE — the official sign, the ASCENDANT or the Chinese year
+        # — each with its own STYLE dropdown right here (Aurora only;
+        # other pointers gray the badges out). Pairs with the South
+        # slot: e.g. official sign left, rising sign right.
         badge_possible = settings.pointer in constants.WEEKDAY_BADGE_POINTERS
         position_group = QActionGroup(menu)
         position_group.setExclusive(True)
-        for value, label in (
-            ("weekday", tr("Bodies")),
-            ("zodiac", tr("Astrology")),
-            ("ascendant", tr("Ascendant")),
-        ):
+
+        def position_action(
+            parent: QMenu, label: str, checked: bool, handler, enabled: bool
+        ) -> None:
             action = QAction(label, menu)
             action.setCheckable(True)
-            action.setChecked(settings.weekday_slot == value)
-            action.setEnabled(value == "weekday" or badge_possible)
-            action.triggered.connect(
-                lambda checked, chosen=value:
-                self._set_display_choice("weekday_slot", chosen)
-            )
+            action.setChecked(checked)
+            action.setEnabled(enabled)
+            action.triggered.connect(handler)
             position_group.addAction(action)
-            weekday_menu.addAction(action)
+            parent.addAction(action)
+
+        position_action(
+            weekday_menu, tr("Bodies"),
+            settings.weekday_slot == "weekday",
+            lambda checked: self._set_display_choice(
+                "weekday_slot", "weekday"
+            ),
+            True,
+        )
+        zodiac_styles = (
+            ("sign", tr("Sign")),
+            ("logo", tr("Logo")),
+            ("constellation", tr("Constellation")),
+            ("colored", tr("Colored")),
+        )
+        for mode, title, style_field, current_style in (
+            ("zodiac", tr("Astrology"), "zodiac_style",
+             settings.zodiac_style),
+            ("ascendant", tr("Ascendant"), "ascendant_style",
+             settings.ascendant_style),
+        ):
+            badge_menu = weekday_menu.addMenu(title)
+            badge_menu.setEnabled(badge_possible)
+            for style, label in zodiac_styles:
+                position_action(
+                    badge_menu, label,
+                    settings.weekday_slot == mode and current_style == style,
+                    lambda checked, m=mode, f=style_field, s=style:
+                    self._set_weekday_badge(m, **{f: s}),
+                    badge_possible,
+                )
+        chinese_badge_menu = weekday_menu.addMenu(tr("Chinese zodiac"))
+        chinese_badge_menu.setEnabled(badge_possible)
+        for style, label in (
+            ("colored", tr("Colored")),
+            ("gold", tr("Gold")),
+            ("silver", tr("Silver")),
+            ("bronze", tr("Bronze")),
+        ):
+            position_action(
+                chinese_badge_menu, label,
+                settings.weekday_slot == "chinese"
+                and settings.chinese_style == style,
+                lambda checked, s=style:
+                self._set_weekday_badge("chinese", chinese_style=s),
+                badge_possible,
+            )
         weekday_menu.addSeparator()
         weekday_group = QActionGroup(menu)
         weekday_group.setExclusive(True)

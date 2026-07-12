@@ -236,7 +236,7 @@ OCTA_SLOT_MODES = (
 # it stands at the usual south spot, so the pair can read official
 # sign left, ascendant right. Other pointers gray the option out and
 # always draw the bodies.
-WEEKDAY_SLOT_MODES = ("weekday", "zodiac", "ascendant")
+WEEKDAY_SLOT_MODES = ("weekday", "zodiac", "ascendant", "chinese")
 WEEKDAY_BADGE_POINTERS = ("aurora",)
 ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text", "colored")
 CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")

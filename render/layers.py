@@ -280,23 +280,32 @@ def pinned_weekday_theta(skin: SkinDefinition) -> float:
     return constants.SOUTH_SLOT_ANGLE
 
 
-def weekday_badge(skin: SkinDefinition, day, tick) -> tuple[str, str] | None:
-    """(sign, art folder) of the astrology badge occupying the weekday
+def weekday_badge(
+    skin: SkinDefinition, day, tick
+) -> tuple[str, str, str | None] | None:
+    """(name, art folder, metal) of the badge occupying the weekday
     position (AURORA only — the owner dropped the Prism variant), or
     None when the bodies are shown. "zodiac" = the official sun sign,
-    "ascendant" = the sign rising right now; each wears its own style
-    dropdown (text coerces to the sign art — the on-dial badge is
-    always an image)."""
+    "ascendant" = the sign rising right now, "chinese" = the year's
+    animal; each wears its own style dropdown (the badge is always an
+    image — text styles coerce to the family's default art; the
+    Chinese gold/silver styles run the selective swap)."""
     if skin.weekday_slot == "zodiac":
         style = skin.zodiac_style
         sign = day.zodiac_name
     elif skin.weekday_slot == "ascendant":
         style = skin.ascendant_style
         sign = tick.ascendant_sign
+    elif skin.weekday_slot == "chinese":
+        style = skin.chinese_style
+        animal = day.chinese_name.split()[-1]
+        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese")
+        metal = style if style in defaults.METAL_SWAP_TARGETS else None
+        return animal, folder, metal
     else:
         return None
     folder = constants.ZODIAC_STYLE_ART_DIRS.get(style, "sign")
-    return sign, folder
+    return sign, folder, None
 
 
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
@@ -740,29 +749,26 @@ def draw_weekday_body(
     spec = ctx.skin.weekday_set
     painter.save()
     painter.setOpacity(opacity)
-    names_on = ctx.skin.show_weekday_names
+    # The planet-SIGN glyphs wear NO text at all (owner correction
+    # 2026-07-12 — supersedes the earlier stacked-above rule).
+    names_on = (
+        ctx.skin.show_weekday_names
+        and ctx.skin.weekday_theme != "planet_signs"
+    )
     full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
     label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
     label_px = max(defaults.BODY_LABEL_MIN_PX, round(label_size))
-    # The planet-SIGN glyphs must never wear the text OVER them (owner
-    # spec 2026-07-12): the name moves ABOVE the sign and the PAIR is
-    # centered as one block on the slot position.
-    stacked = names_on and ctx.skin.weekday_theme == "planet_signs"
-    gap = label_px * 0.35
-    body_pos = (
-        QPointF(pos.x(), pos.y() + (label_px + gap) / 2) if stacked else pos
-    )
     asset = spec.bodies.get(body)
     if asset is not None:
         # The theme's metal (owner 2026-07-12): the hue-selective swap
         # turns only the bronze details gold/silver; None = as drawn.
         draw_pixmap_centered(
-            painter, ctx, asset, body_pos, size, metal=spec.metal,
+            painter, ctx, asset, pos, size, metal=spec.metal,
         )
     else:
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor(spec.body_colors[body]))
-        painter.drawEllipse(body_pos, size / 2, size / 2)
+        painter.drawEllipse(pos, size / 2, size / 2)
     if names_on:
         label = (
             constants.WEEKDAY_FULL_NAMES[body]
@@ -772,10 +778,7 @@ def draw_weekday_body(
         font = QFont()
         font.setPixelSize(label_px)
         font.setBold(True)
-        text_pos = (
-            QPointF(pos.x(), pos.y() - (size + gap) / 2) if stacked else pos
-        )
-        draw_outlined_text(painter, text_pos, label, font)
+        draw_outlined_text(painter, pos, label, font)
     painter.restore()
 
 
@@ -851,7 +854,7 @@ class WeekdayBadgeLayer(Layer):
         badge = weekday_badge(ctx.skin, ctx.day, ctx.tick)
         if badge is None:
             return
-        sign, folder = badge
+        sign, folder, metal = badge
         spec = self._skin.weekday_set
         theta = pinned_weekday_theta(ctx.skin)
         asset = octa_slot_art(folder, sign)
@@ -862,7 +865,7 @@ class WeekdayBadgeLayer(Layer):
             * hover_factor(ctx, "weekday_badge")
         )
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
-        draw_pixmap_centered(painter, ctx, asset, pos, size)
+        draw_pixmap_centered(painter, ctx, asset, pos, size, metal=metal)
 
 
 class CenterBodyLayer(Layer):
