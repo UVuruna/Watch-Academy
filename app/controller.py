@@ -53,6 +53,38 @@ def _letter_is_gold(position: int, layout: dict, finish: str) -> bool:
     return (position in layout["triangle"]) == (finish == "gold")
 
 
+def _earth_continent(settings: Settings) -> str:
+    """The Earth-marker art variant for the ACTIVE location (owner bug
+    2026-07-12: the marker was always Europe). The picker's continent
+    decides ("Americas" splits by latitude — the art has north and
+    south); hand-tuned coordinates without a picked city fall back to
+    a coarse geographic estimate."""
+    picker = settings.city_path[0] if settings.city_path else None
+    if picker == "Americas":
+        # Owner rule: Central America and the Caribbean wear the
+        # north_america art — only the South America subregion goes south.
+        subregion = settings.city_path[1] if len(settings.city_path) > 1 else ""
+        return (
+            "south_america" if subregion == "South America" else "north_america"
+        )
+    named = {
+        "Africa": "africa", "Asia": "asia",
+        "Europe": "europe", "Oceania": "oceania",
+    }
+    if picker in named:
+        return named[picker]
+    lat, lon = settings.latitude, settings.longitude
+    if lon < -30.0:
+        return "north_america" if lat >= 8.5 else "south_america"
+    if lat < -10.0 and lon >= 110.0:
+        return "oceania"
+    if lon < 35.0:
+        return "europe" if lat >= 35.0 else "africa"
+    if lon < 52.0 and lat < 12.0:
+        return "africa"                  # the Horn and Madagascar
+    return "europe" if lon < 45.0 and lat >= 40.0 else "asia"
+
+
 def _resolve_hands(settings: Settings):
     """The chosen HAND PACK (owner spec 2026-07-12) resolved into a
     HandsSpec: image sizes read here (header-only), pivots and z-order
@@ -195,7 +227,11 @@ def apply_display_settings(skin, settings: Settings):
             moon_scale=marker.moon_scale * settings.moon_scale,
         )
     marker = dataclasses.replace(
-        marker, moon_hidden_alpha=settings.moon_hidden_alpha
+        marker,
+        moon_hidden_alpha=settings.moon_hidden_alpha,
+        # The Earth marker wears the ACTIVE location's continent art
+        # (owner bug 2026-07-12: it was pinned to Europe).
+        default_variant=_earth_continent(settings),
     )
     return dataclasses.replace(
         skin,

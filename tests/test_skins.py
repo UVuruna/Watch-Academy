@@ -171,6 +171,36 @@ def test_letter_groups_cover_the_library_exactly():
         assert silver.exists(), glyph
 
 
+def test_earth_marker_follows_the_location_continent():
+    """Owner bug 2026-07-12: the Earth marker was pinned to Europe —
+    the picked continent decides (Americas splits by SUBREGION: owner
+    rule — Central America and the Caribbean wear the north art), and
+    hand-tuned coordinates fall back to a coarse estimate."""
+    def variant(**kwargs):
+        return build_skin(replace(Settings(), **kwargs)).year_marker.default_variant
+
+    assert variant() == "europe"                        # Belgrade default
+    assert variant(
+        city_path=("Oceania", "Australia and New Zealand", "Australia", "Sydney"),
+        latitude=-33.87, longitude=151.21,
+    ) == "oceania"
+    assert variant(
+        city_path=("Americas", "Northern America", "United States", "New York"),
+        latitude=40.7, longitude=-74.0,
+    ) == "north_america"
+    assert variant(
+        city_path=("Americas", "Caribbean", "Jamaica", "Kingston"),
+        latitude=18.0, longitude=-76.8,
+    ) == "north_america"                                # owner rule
+    assert variant(
+        city_path=("Americas", "South America", "Brazil", "Rio de Janeiro"),
+        latitude=-22.9, longitude=-43.2,
+    ) == "south_america"
+    # No picked city: the geographic fallback.
+    assert variant(city_path=(), latitude=35.7, longitude=139.7) == "asia"
+    assert variant(city_path=(), latitude=-1.3, longitude=36.8) == "africa"
+
+
 def test_hand_packs_load_and_resolve():
     """Owner spec 2026-07-12: hand PACKS (folder + hands.json). The
     bundled CLASSIC and STEEL load, pivots flow into the skin, and the
