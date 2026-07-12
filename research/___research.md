@@ -55,6 +55,13 @@ explicit finish per metal (mirror/tarnish, forge/rust, liquid beads,
 bell, verdigris, plumb bob) so the four gray metals become
 distinguishable; 7 Gemini prompts, borders kept.
 
+### `wolf_pack_prompts.md` — Wolf Pack Theme Prompts
+The owner-approved 13th weekday theme: the pack hierarchy as the week
+(Alpha with the Omega servant as Sunday dual — the dial's own M/Ω
+ring letters made flesh — Luna, Hunter, Scout, Beta, Mate, Elder),
+fourth bronze metal-theme with a paw-print border, 8 bronze + 8
+colored Gemini prompts; drop dir assets/weekday/wolf/.
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner
