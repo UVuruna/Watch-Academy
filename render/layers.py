@@ -243,15 +243,23 @@ def south_slot_theta(skin: SkinDefinition, rotation: float) -> float:
     return constants.SOUTH_SLOT_ANGLE
 
 
-def south_slot_mode(skin: SkinDefinition) -> str:
-    """Aurora allows only the image modes in its slot (owner spec:
-    'samo neki logo') — a persisted text mode shows the zodiac logo."""
-    if (
-        skin.pointer == "aurora"
-        and skin.octa_slot not in constants.SOUTH_SLOT_LOGO_MODES
-    ):
-        return "zodiac_logo"
-    return skin.octa_slot
+def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
+    """The EFFECTIVE (mode, style) pair of the South slot. Aurora
+    allows images only (owner spec: 'samo neki logo') — the text modes
+    coerce: time/date/day-length and zodiac-text show the zodiac logo,
+    chinese-text shows the colored badge."""
+    mode = skin.octa_slot
+    style = {
+        "zodiac": skin.zodiac_style, "chinese": skin.chinese_style,
+    }.get(mode)
+    if skin.pointer == "aurora":
+        if mode in ("time", "date", "day_length"):
+            return "zodiac", "logo"
+        if mode == "zodiac" and style == "text":
+            return "zodiac", "logo"
+        if mode == "chinese" and style == "text":
+            return "chinese", "colored"
+    return mode, style
 
 
 def aurora_weekday_theta(skin: SkinDefinition) -> float:
@@ -809,12 +817,11 @@ class CenterBodyLayer(Layer):
         draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
 
 
-def octa_slot_art(mode: str, name: str) -> Path | None:
-    """The PNG for an image slot mode ("Cancer" / "Horse"), or None when
-    the owner's art folder does not have it yet."""
-    folder = constants.OCTA_SLOT_ART_DIRS.get(mode)
-    if folder is None:
-        return None
+def octa_slot_art(folder: str, name: str) -> Path | None:
+    """The PNG for an image slot style — `folder` is a subdirectory of
+    assets/zodiac/ ("sign", "logo", "constellation", "chinese",
+    "chinese_colored"), `name` the entity ("Cancer" / "Horse") — or
+    None while the owner's art folder does not have it yet."""
     path = defaults.ZODIAC_ART_DIR / folder / f"{name}.png"
     return path if path.exists() else None
 
@@ -842,34 +849,40 @@ class BottomSlotLayer(Layer):
             * ctx.skin.octa_slot_scale          # Settings size multiplier
             * hover_factor(ctx, "octa_slot")
         )
-        mode = south_slot_mode(ctx.skin)
+        mode, style = south_slot_view(ctx.skin)
         chinese_animal = ctx.day.chinese_name.split()[-1]
-        if mode in constants.OCTA_SLOT_ART_DIRS:
-            name = chinese_animal if mode == "chinese_logo" else ctx.day.zodiac_name
-            asset = octa_slot_art(mode, name)
+        if mode == "zodiac" and style in constants.ZODIAC_STYLE_ART_DIRS:
+            asset = octa_slot_art(
+                constants.ZODIAC_STYLE_ART_DIRS[style], ctx.day.zodiac_name
+            )
             if asset is not None:
-                # The Chinese medallions are bronze plates like the
-                # Greek/Norse/Professions art (owner 2026-07-12): they
-                # follow the RING finish — the hue-selective swap for
-                # gold/silver, bronze as drawn.
-                metal = (
-                    ctx.skin.ring_finish
-                    if mode == "chinese_logo"
-                    and ctx.skin.ring_finish in defaults.METAL_SWAP_TARGETS
-                    else None
-                )
+                draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                return
+            text = ctx.day.zodiac_name   # documented fallback until the art lands
+        elif mode == "chinese" and style in constants.CHINESE_STYLE_ART_DIRS:
+            asset = octa_slot_art(
+                constants.CHINESE_STYLE_ART_DIRS[style], chinese_animal
+            )
+            if asset is not None:
+                # The gold/silver STYLES run the hue-selective swap on
+                # the bronze logo; colored is its own art, bronze the
+                # logo as drawn (owner dropdown 2026-07-12).
                 draw_pixmap_centered(
-                    painter, ctx, asset, pos, slot_size, metal=metal,
+                    painter, ctx, asset, pos, slot_size,
+                    metal=(
+                        style if style in defaults.METAL_SWAP_TARGETS
+                        else None
+                    ),
                 )
                 return
-            text = name                  # documented fallback until the art lands
+            text = chinese_animal        # documented fallback until the art lands
         elif mode == "time":
             text = ctx.tick.time_hm
         elif mode == "date":
             text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         elif mode == "day_length":
             text = ctx.day.day_length
-        elif mode == "chinese_text":
+        elif mode == "chinese":          # style == "text" (validated set)
             # TWO lines (owner 2026-07-12): the element above the
             # animal — "Fire" / "Horse", never the animal alone.
             element = ctx.day.chinese_name.split()[0]

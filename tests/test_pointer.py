@@ -91,8 +91,8 @@ def test_south_slot_matrix():
     import dataclasses
 
     from render.layers import (
-        aurora_weekday_theta, south_slot_available, south_slot_mode,
-        south_slot_theta,
+        aurora_weekday_theta, south_slot_available, south_slot_theta,
+        south_slot_view,
     )
 
     def skin(**kw):
@@ -129,12 +129,25 @@ def test_south_slot_matrix():
     assert aurora_weekday_theta(
         skin(pointer="aurora", show_octa_slot=False)
     ) == 180.0
-    # Aurora shows images only — a text mode falls back to the logo.
-    assert south_slot_mode(skin(pointer="aurora", octa_slot="time")) == "zodiac_logo"
-    assert south_slot_mode(
-        skin(pointer="aurora", octa_slot="chinese_logo")
-    ) == "chinese_logo"
-    assert south_slot_mode(skin(pointer="octa", octa_slot="time")) == "time"
+    # Aurora shows images only — plain and text modes coerce to logos.
+    assert south_slot_view(
+        skin(pointer="aurora", octa_slot="time")
+    ) == ("zodiac", "logo")
+    assert south_slot_view(
+        skin(pointer="aurora", octa_slot="zodiac", zodiac_style="text")
+    ) == ("zodiac", "logo")
+    assert south_slot_view(
+        skin(pointer="aurora", octa_slot="chinese", chinese_style="text")
+    ) == ("chinese", "colored")
+    assert south_slot_view(
+        skin(pointer="aurora", octa_slot="chinese", chinese_style="gold")
+    ) == ("chinese", "gold")
+    assert south_slot_view(
+        skin(pointer="octa", octa_slot="time")
+    ) == ("time", None)
+    assert south_slot_view(
+        skin(pointer="octa", octa_slot="zodiac", zodiac_style="sign")
+    ) == ("zodiac", "sign")
 
 
 # --- Shared-slot priority (owner rule) --------------------------------------------
@@ -290,6 +303,31 @@ def test_octa_slot_modes_render(july_wednesday, mode):
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa", octa_slot=mode)
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
+
+
+@pytest.mark.parametrize("style", constants.ZODIAC_SLOT_STYLES)
+def test_zodiac_slot_styles_render(july_wednesday, style):
+    day, tick = july_wednesday
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="octa",
+        octa_slot="zodiac", zodiac_style=style,
+    )
+    image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
+    assert image.pixelColor(180, 8).alpha() > 200
+
+
+@pytest.mark.parametrize("style", constants.CHINESE_SLOT_STYLES)
+def test_chinese_slot_styles_render(july_wednesday, style):
+    """Every Chinese dropdown style paints (owner 2026-07-12): text in
+    two lines, colored from its own folder, gold/silver through the
+    selective swap, bronze as drawn."""
+    day, tick = july_wednesday
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="octa",
+        octa_slot="chinese", chinese_style=style,
+    )
+    image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
+    assert image.pixelColor(180, 8).alpha() > 200
 
 
 # --- Render smoke -------------------------------------------------------------------
@@ -603,7 +641,8 @@ def test_chinese_slot_hover(july_wednesday):
             defaults.DEFAULT_SKIN,
             pointer="octa",
             solar_rotation=False,
-            octa_slot="chinese_text",
+            octa_slot="chinese",
+            chinese_style="text",
         ),
         AssetCache(),
     )

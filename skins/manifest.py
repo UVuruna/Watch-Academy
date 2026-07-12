@@ -151,7 +151,9 @@ class SkinDefinition:
     umbra_contrast: str = "full"       # "full" | "half" — Umbra shade span
     palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
-    octa_slot: str = "time"            # octa bottom arm, one of OCTA_SLOT_MODES
+    octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
+    zodiac_style: str = "sign"         # Astrology dropdown (ZODIAC_SLOT_STYLES)
+    chinese_style: str = "bronze"      # Chinese dropdown (CHINESE_SLOT_STYLES)
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
     weekday_theme: str = "planets"     # WEEKDAY_THEMES: bodies as planets,
                                        # Greek/Norse gods, religions, professions

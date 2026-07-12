@@ -209,15 +209,20 @@ def apply_display_settings(skin, settings: Settings):
             diamond_scale=weekday.diamond_scale * settings.weekday_scale,
             center_scale=weekday.center_scale * settings.weekday_scale,
         )
+    metal = _theme_metal(settings, settings.weekday_theme)
     if settings.weekday_theme != "planets":
         # Themed bodies (SYMBOLISM.md canon): swap in the shared themed
         # art (files carry the ENTITY names) and the canon display
         # names; "planets" keeps the skin's own weekday unit untouched.
-        # Both religion sets draw from the ONE religion/ folder.
+        # Both religion sets draw from the ONE religion/ folder; the
+        # COLORED look (owner 2026-07-12) is separate art in the
+        # theme's colored/ subfolder — no swap.
         theme_dir = (
             defaults.WEEKDAY_ART_DIR
             / defaults.WEEKDAY_THEME_DIRS[settings.weekday_theme]
         )
+        if metal == "colored":
+            theme_dir = theme_dir / "colored"
         names = defaults.WEEKDAY_THEME_NAMES[settings.weekday_theme]
         files = defaults.WEEKDAY_THEME_FILES[settings.weekday_theme]
         weekday = dataclasses.replace(
@@ -228,7 +233,6 @@ def apply_display_settings(skin, settings: Settings):
     # The bronze-plate themes wear their chosen METAL (owner
     # 2026-07-12): gold/silver run the hue-SELECTIVE swap at render
     # (only the bronze details change); bronze = the art as drawn.
-    metal = _theme_metal(settings, settings.weekday_theme)
     if metal in defaults.METAL_SWAP_TARGETS:
         weekday = dataclasses.replace(weekday, metal=metal)
     background = skin.background
@@ -279,6 +283,8 @@ def apply_display_settings(skin, settings: Settings):
             True if settings.pointer == "aurora" else settings.solar_rotation
         ),
         octa_slot=settings.octa_slot,
+        zodiac_style=settings.zodiac_style,
+        chinese_style=settings.chinese_style,
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
         legend=settings.legend,
@@ -622,6 +628,13 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _set_south_slot(self, mode: str, **styles) -> None:
+        """South slot mode + family style in one click (the Astrology
+        and Chinese dropdowns, owner 2026-07-12)."""
+        self._settings = replace(self._settings, octa_slot=mode, **styles)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _set_theme_metal(self, theme: str, metal: str) -> None:
         """Theme + metal in one click (the Weekday menu's metal
         dropdowns, owner 2026-07-12): activates the theme, remembers
@@ -882,36 +895,71 @@ class AppController(QObject):
             ),
             tr("The day name written on the weekday bodies."),
         )
-        # The SOUTH slot (renamed from "Compass slot" — owner 2026-07-12:
-        # it now serves other pointers too). Availability matrix:
-        # Compass always (its reserved bottom arm), Trinity and Aurora
-        # always, Prism/Seasons once the Weekday element is off. Aurora
-        # is images only — the text modes gray out under it.
+        # The SOUTH slot (owner 2026-07-12): three plain modes plus the
+        # Astrology and Chinese zodiac entries that open their own
+        # STYLE dropdowns — one exclusive group across all of it.
+        # Aurora is images only: the plain modes and both Text styles
+        # gray out under it.
+        aurora = settings.pointer == "aurora"
         south_slot_menu = theme_menu.addMenu(tr("South slot"))
-        self._add_choice_group(
-            menu, south_slot_menu,
-            [
-                ("time", tr("Time")),
-                ("date", tr("Date")),
-                ("day_length", tr("Day length")),
-                ("zodiac_sign", tr("Astrology sign")),
-                ("zodiac_logo", tr("Astrology logo")),
-                ("zodiac_constellation", tr("Astrology constellation")),
-                ("zodiac_text", tr("Astrology text")),
-                ("chinese_logo", tr("Chinese zodiac logo")),
-                ("chinese_text", tr("Chinese zodiac text")),
-            ],
-            settings.octa_slot,
-            lambda value: self._set_display_choice("octa_slot", value),
-            disabled=(
-                tuple(
-                    mode for mode in constants.OCTA_SLOT_MODES
-                    if mode not in constants.SOUTH_SLOT_LOGO_MODES
-                )
-                if settings.pointer == "aurora"
-                else ()
-            ),
-        )
+        slot_group = QActionGroup(menu)
+        slot_group.setExclusive(True)
+
+        def slot_action(
+            parent: QMenu, label: str, checked: bool, handler, enabled: bool
+        ) -> None:
+            action = QAction(label, menu)
+            action.setCheckable(True)
+            action.setChecked(checked)
+            action.setEnabled(enabled)
+            action.triggered.connect(handler)
+            slot_group.addAction(action)
+            parent.addAction(action)
+
+        for mode, label in (
+            ("time", tr("Time")),
+            ("date", tr("Date")),
+            ("day_length", tr("Day length")),
+        ):
+            slot_action(
+                south_slot_menu, label,
+                settings.octa_slot == mode,
+                lambda checked, chosen=mode: self._set_south_slot(chosen),
+                not aurora,
+            )
+        astro_menu = south_slot_menu.addMenu(tr("Astrology"))
+        for style, label in (
+            ("sign", tr("Sign")),
+            ("logo", tr("Logo")),
+            ("constellation", tr("Constellation")),
+            ("text", tr("Text")),
+        ):
+            slot_action(
+                astro_menu, label,
+                settings.octa_slot == "zodiac"
+                and settings.zodiac_style == style,
+                lambda checked, chosen=style: self._set_south_slot(
+                    "zodiac", zodiac_style=chosen
+                ),
+                not (aurora and style == "text"),
+            )
+        chinese_menu = south_slot_menu.addMenu(tr("Chinese zodiac"))
+        for style, label in (
+            ("text", tr("Text")),
+            ("colored", tr("Colored")),
+            ("gold", tr("Gold")),
+            ("silver", tr("Silver")),
+            ("bronze", tr("Bronze")),
+        ):
+            slot_action(
+                chinese_menu, label,
+                settings.octa_slot == "chinese"
+                and settings.chinese_style == style,
+                lambda checked, chosen=style: self._set_south_slot(
+                    "chinese", chinese_style=chosen
+                ),
+                not (aurora and style == "text"),
+            )
         slot_possible = (
             settings.pointer in ("octa", "trio", "aurora")
             or not settings.show_weekday

@@ -159,6 +159,27 @@ def test_bronze_finish_and_theme_metals():
         ring_finish="gold",
     )).weekday_set
     assert colorful.metal is None                    # full-color theme
+    # COLORED (owner 2026-07-12): fresh full-color badges from the
+    # theme's colored/ subfolder — no swap; the whole set exists for
+    # every metal-capable theme, plus the 12 colored Chinese badges.
+    colored = build_skin(replace(
+        Settings(), weekday_theme="greek", theme_metals={"greek": "colored"},
+    )).weekday_set
+    assert colored.metal is None
+    assert "colored" in str(colored.bodies["jupiter"])
+    assert all(path.exists() for path in colored.bodies.values())
+    for theme in c.METAL_THEMES:
+        folder = (
+            defaults.WEEKDAY_ART_DIR
+            / defaults.WEEKDAY_THEME_DIRS[theme] / "colored"
+        )
+        for body in c.WEEKDAY_BODIES:
+            stem = defaults.WEEKDAY_THEME_FILES[theme][body]
+            assert (folder / f"{stem}.png").exists(), (theme, body)
+    for animal in c.CHINESE_ANIMALS:
+        assert (
+            defaults.ZODIAC_ART_DIR / "chinese_colored" / f"{animal}.png"
+        ).exists(), animal
     # The hue-SELECTIVE swap (owner insight 2026-07-12): warm bronze
     # pixels take the target metal, gray pixels stay untouched.
     import os

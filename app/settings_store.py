@@ -51,7 +51,9 @@ class Settings:
     umbra_contrast: str = "dark"
     palette_style: str = "paint"
     solar_rotation: bool = True
-    octa_slot: str = "time"
+    octa_slot: str = "time"             # South slot MODE
+    zodiac_style: str = "sign"          # Astrology style dropdown
+    chinese_style: str = "bronze"       # Chinese zodiac style dropdown
     earth_style: str = "atmo"
     weekday_theme: str = "planets"
     legend: bool = True
@@ -146,6 +148,23 @@ class SettingsStore:
             ring = by_fold.get(ring_value.lower())
             if ring is None:
                 raise ValueError(f"ring {ring_value!r} unknown")
+            # One-time migration (2026-07-12): the South slot became a
+            # MODE + per-family STYLE pair — the six old combined
+            # values map onto it (external user data, not an API shim).
+            legacy_slot = {
+                "zodiac_sign": ("zodiac", "zodiac_style", "sign"),
+                "zodiac_logo": ("zodiac", "zodiac_style", "logo"),
+                "zodiac_constellation": (
+                    "zodiac", "zodiac_style", "constellation"
+                ),
+                "zodiac_text": ("zodiac", "zodiac_style", "text"),
+                "chinese_logo": ("chinese", "chinese_style", "bronze"),
+                "chinese_text": ("chinese", "chinese_style", "text"),
+            }
+            if raw.get("octa_slot") in legacy_slot:
+                mode, style_key, style = legacy_slot[raw["octa_slot"]]
+                raw["octa_slot"] = mode
+                raw.setdefault(style_key, style)
             for key, default, allowed in (
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
@@ -154,6 +173,8 @@ class SettingsStore:
                 ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "paint", constants.PALETTE_STYLES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
+                ("zodiac_style", "sign", constants.ZODIAC_SLOT_STYLES),
+                ("chinese_style", "bronze", constants.CHINESE_SLOT_STYLES),
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
             ):
@@ -272,6 +293,8 @@ class SettingsStore:
             "palette_style": settings.palette_style,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
+            "zodiac_style": settings.zodiac_style,
+            "chinese_style": settings.chinese_style,
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "legend": settings.legend,

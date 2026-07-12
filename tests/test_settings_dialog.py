@@ -176,7 +176,9 @@ def test_weekday_theme_swaps_bodies_and_names():
     greek = apply_display_settings(
         defaults.DEFAULT_SKIN, replace(Settings(), weekday_theme="greek")
     )
-    assert greek.weekday_set.body_names["mercury"] == "Hermes"
+    # Display names carry the native script (owner 2026-07-12); the
+    # file stays on the plain ASCII stem.
+    assert greek.weekday_set.body_names["mercury"] == "Hermes (Ἑρμῆς)"
     assert greek.weekday_set.bodies["mercury"].name == "Hermes.png"
     assert "greek" in str(greek.weekday_set.bodies["mercury"])
     assert all(path.exists() for path in greek.weekday_set.bodies.values())

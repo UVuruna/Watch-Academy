@@ -39,8 +39,8 @@ from render.layers import (
     aurora_weekday_theta,
     dial_point,
     south_slot_available,
-    south_slot_mode,
     south_slot_theta,
+    south_slot_view,
     today_slot_theta,
     visible_occupant,
 )
@@ -332,13 +332,13 @@ class Compositor:
                 return self._moon_text()
             if element == "earth":
                 return self._earth_text()
-            # The EFFECTIVE mode (Aurora shows images only — a text
-            # mode falls back to the zodiac logo, and the hover must
-            # describe what is actually drawn).
-            slot_mode = south_slot_mode(self._skin)
-            if slot_mode.startswith("chinese"):
+            # The EFFECTIVE mode (Aurora shows images only — text modes
+            # coerce to a logo, and the hover must describe what is
+            # actually drawn).
+            slot_mode, _ = south_slot_view(self._skin)
+            if slot_mode == "chinese":
                 return self._chinese_text()
-            if slot_mode.startswith("zodiac"):
+            if slot_mode == "zodiac":
                 return self._zodiac_text()
             # The time/date/day-length slot has no tooltip of its own —
             # fall through to the region hovers.
@@ -766,7 +766,7 @@ class Compositor:
             + self._symbolism.chinese_element(element)["base"]
         )
         return header + "<br/>" + _article_html(
-            octa_slot_art("chinese_logo", animal), None, text
+            octa_slot_art("chinese", animal), None, text
         )
 
     def _zodiac_line(self) -> str:
@@ -794,7 +794,7 @@ class Compositor:
         )
         article = self._symbolism.zodiac_article(day.zodiac_name)
         return header + "<br/>" + _article_html(
-            octa_slot_art("zodiac_sign", day.zodiac_name), None,
+            octa_slot_art("sign", day.zodiac_name), None,
             article["base"],
             accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
         )

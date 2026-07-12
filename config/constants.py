@@ -219,28 +219,26 @@ PALETTE_STYLES = ("paint", "light")
 # The four image modes draw the owner's PNG art
 # (assets/zodiac/<dir>) and fall back to the text form until the art
 # exists (documented fallback).
-OCTA_SLOT_MODES = (
-    "time",
-    "date",
-    "day_length",
-    "zodiac_sign",
-    "zodiac_logo",
-    "zodiac_constellation",
-    "zodiac_text",
-    "chinese_logo",
-    "chinese_text",
-)
-OCTA_SLOT_ART_DIRS = {
-    "zodiac_sign": "sign",
-    "zodiac_logo": "logo",
-    "zodiac_constellation": "constellation",
-    "chinese_logo": "chinese",
+# COMPOSITE model (owner 2026-07-12): a top-level MODE plus a per-
+# family STYLE dropdown — Astrology picks sign/logo/constellation/text
+# ("colored" joins when the owner's art lands), the Chinese zodiac
+# picks text/colored/gold/silver/bronze (the metals run the selective
+# swap on the bronze logo, colored uses the fresh full-color badges).
+OCTA_SLOT_MODES = ("time", "date", "day_length", "zodiac", "chinese")
+ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text")
+CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")
+# style -> art folder under assets/zodiac/ (text styles draw no art).
+ZODIAC_STYLE_ART_DIRS = {
+    "sign": "sign",
+    "logo": "logo",
+    "constellation": "constellation",
 }
-# Aurora allows ONLY the image modes in its slot (owner spec: "samo
-# neki logo") — a persisted text mode falls back to the zodiac logo.
-SOUTH_SLOT_LOGO_MODES = (
-    "zodiac_sign", "zodiac_logo", "zodiac_constellation", "chinese_logo",
-)
+CHINESE_STYLE_ART_DIRS = {
+    "colored": "chinese_colored",
+    "gold": "chinese",
+    "silver": "chinese",
+    "bronze": "chinese",
+}
 
 # Earth marker style: the owner ships every continent in a clean and an
 # atmosphere version.
@@ -331,7 +329,9 @@ WEEKDAY_THEMES = (
 # a METAL — bronze is the art as drawn, gold and silver are runtime
 # tritone tints. All other themes are full-color and never tint.
 METAL_THEMES = ("greek", "norse", "profession")
-THEME_METALS = ("gold", "bronze", "silver")
+# "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
+# badges from the theme's colored/ subfolder — separate art, no swap.
+THEME_METALS = ("gold", "bronze", "silver", "colored")
 
 # Theme -> symbolism.json blurb key (the encyclopedic text under the
 # hexa diamond hover follows the active theme).

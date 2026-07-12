@@ -67,7 +67,9 @@ def test_display_choices_round_trip(store):
         umbra_contrast="half",
         palette_style="light",
         solar_rotation=False,
-        octa_slot="zodiac_text",
+        octa_slot="zodiac",
+        zodiac_style="constellation",
+        chinese_style="colored",
         earth_style="atmo",
         ring_tint="#8E55B9",
         ring_finish="silver",
@@ -100,6 +102,15 @@ def test_display_choices_round_trip(store):
     )
     store.path.write_text(raw, encoding="utf-8")
     assert store.load().theme_metals == {}
+    # The six OLD combined South-slot values migrate to mode + style
+    # (2026-07-12) instead of raising SettingsCorruptError.
+    raw = store.path.read_text(encoding="utf-8").replace(
+        '"octa_slot": "time"', '"octa_slot": "chinese_logo"'
+    )
+    store.path.write_text(raw, encoding="utf-8")
+    migrated = store.load()
+    assert migrated.octa_slot == "chinese"
+    assert migrated.chinese_style == "bronze"
 
 
 @pytest.mark.parametrize(

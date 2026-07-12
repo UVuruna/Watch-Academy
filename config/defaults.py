@@ -449,22 +449,26 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Venus",
         "saturn": "Saturn",
     },
+    # Display names carry the NATIVE script (owner 2026-07-12: "da
+    # koristimo ta slova" — like the Japanese kanji and the Slavic
+    # diacritics); the files keep plain ASCII stems via the explicit
+    # overrides below.
     "greek": {
-        "sun": "Helios",
-        "moon": "Selene",
-        "mars": "Ares",
-        "mercury": "Hermes",
-        "jupiter": "Zeus",
-        "venus": "Aphrodite",
-        "saturn": "Cronus",
+        "sun": "Helios (Ἥλιος)",
+        "moon": "Selene (Σελήνη)",
+        "mars": "Ares (Ἄρης)",
+        "mercury": "Hermes (Ἑρμῆς)",
+        "jupiter": "Zeus (Ζεύς)",
+        "venus": "Aphrodite (Ἀφροδίτη)",
+        "saturn": "Cronus (Κρόνος)",
     },
     "norse": {
         "sun": "Sól",
         "moon": "Máni",
-        "mars": "Tyr",
-        "mercury": "Odin",
-        "jupiter": "Thor",
-        "venus": "Freya",
+        "mars": "Tyr (Týr)",
+        "mercury": "Odin (Óðinn)",
+        "jupiter": "Thor (Þórr)",
+        "venus": "Freya (Freyja)",
         "saturn": "Loki",     # owner decision (FINAL.txt #2): Loki stands
                               # on Saturday — the bound trickster as
                               # Cronus' northern mirror
@@ -597,6 +601,18 @@ WEEKDAY_THEME_FILES = {
 WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
 # The metal reads Quicksilver, the owner's file keeps the element name.
 WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "mercury"
+# The Greek and Norse display names carry native-script parentheticals
+# now — the files stay on the plain ASCII stems.
+WEEKDAY_THEME_FILES["greek"] = {
+    "sun": "Helios", "moon": "Selene", "mars": "Ares",
+    "mercury": "Hermes", "jupiter": "Zeus", "venus": "Aphrodite",
+    "saturn": "Cronus",
+}
+WEEKDAY_THEME_FILES["norse"] = {
+    "sun": "Sol", "moon": "Mani", "mars": "Tyr",
+    "mercury": "Odin", "jupiter": "Thor", "venus": "Freya",
+    "saturn": "Loki",
+}
 # The Japanese display names carry kanji — the files are the romaji
 # day names folded to plain ASCII (macrons and the apostrophe dropped).
 WEEKDAY_THEME_FILES["japan"] = {
