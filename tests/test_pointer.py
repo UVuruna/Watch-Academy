@@ -225,7 +225,16 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         # identical Ruler text on the Servant).
         assert south is not None and "Eclipsed Sun" in south, pointer
         assert north is not None and "Eclipsed Sun" not in north, pointer
-        assert "sun_eclipse" in south and "sun_eclipse" not in north
+        # The hover embeds the SCALED cache copy of the servant plate
+        # (performance round 2026-07-13) — pin the exact resolved uri.
+        from render.assets import scaled_variant_file
+
+        eclipse_uri = scaled_variant_file(
+            defaults.WEEKDAY_ART_DIR
+            / f"{defaults.WEEKDAY_DUAL_FILES['planets']}.png",
+            2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
+        ).as_uri()
+        assert eclipse_uri in south and eclipse_uri not in north
     # The SERVANT stands as a ghost on ORDINARY days too (a Wednesday):
     # on the Compass the free 24h seat is his; on the Seasons mercury
     # is TODAY on Wednesday and keeps his own seat.

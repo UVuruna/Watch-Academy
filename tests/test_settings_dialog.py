@@ -303,7 +303,15 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     assert "Gemini" in top and "Cancer" in top
     assert "(21<sup>st</sup> May - 20<sup>th</sup> June)" in top
     assert "align='justify'" in top                      # article prose
-    assert "logo_colored" in top                         # the colored plates
+    # The colored plate rides as the SCALED cache copy (performance
+    # round 2026-07-13) — pin the exact resolved uri.
+    from render.assets import scaled_variant_file
+
+    gemini_uri = scaled_variant_file(
+        defaults.ZODIAC_ART_DIR / "logo_colored" / "Gemini.png",
+        2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
+    ).as_uri()
+    assert gemini_uri in top
     # Two WIDTH-DECLARED sign columns (the popup honors these cells).
     assert top.count(f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>") == 2
     assert "Castor" in top or "Pollux" in top            # Gemini article text
