@@ -16,7 +16,7 @@ from pathlib import Path
 
 import numpy as np
 from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QImage, QPainter, QPixmap
+from PySide6.QtGui import QColor, QImage, QImageReader, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
 from config import defaults, paths
@@ -43,6 +43,40 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
         except OSError as error:
             # A cold cache is only slower, never wrong — but say so.
             print(f"metal variant cache write failed: {error}", file=sys.stderr)
+            return path
+    return cache
+
+
+def scaled_variant_file(path: Path | None, width: int) -> Path | None:
+    """A DISK copy of `path` downscaled to `width` px — the hover
+    performance fix (owner 2026-07-13: every first hover decoded the
+    full 800×800 plate synchronously inside the tooltip's rich text
+    while the popup shows at most a quarter of that; callers pass 2×
+    the display width so the tooltip still downsamples for
+    crispness). Cached by mtime; sources already small enough return
+    the original (the header read costs no pixel decode)."""
+    if path is None or not path.exists():
+        return path
+    source = QImageReader(str(path)).size()
+    if not source.isValid() or source.width() <= width:
+        return path
+    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{int(path.stat().st_mtime)}_w{width}.png"
+    )
+    if not cache.exists():
+        scaled = QPixmap(str(path)).scaledToWidth(
+            width, Qt.TransformationMode.SmoothTransformation
+        )
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            scaled.save(str(cache))
+        except OSError as error:
+            print(
+                f"scaled variant cache write failed: {error}",
+                file=sys.stderr,
+            )
             return path
     return cache
 

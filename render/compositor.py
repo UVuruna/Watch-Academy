@@ -26,7 +26,7 @@ from core.year_wheel import (
     meteorological_span,
     zodiac_span,
 )
-from render.assets import AssetCache, metal_variant_file
+from render.assets import AssetCache, metal_variant_file, scaled_variant_file
 from render.layers import (
     BackgroundLayer,
     BottomSlotLayer,
@@ -182,7 +182,8 @@ def _article_html(
     parts = []
     images = image if isinstance(image, tuple) else (image,)
     tags = "".join(
-        f"<img src='{img.as_uri()}' "
+        f"<img src='"
+        f"{scaled_variant_file(img, 2 * defaults.ARTICLE_IMAGE_WIDTH_PX).as_uri()}' "
         f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/>"
         for img in images
         if img is not None and img.exists()
@@ -201,8 +202,9 @@ def _hover_badge(path) -> str:
     the art is missing."""
     if path is None or not path.exists():
         return ""
+    small = scaled_variant_file(path, 2 * defaults.HOVER_BADGE_WIDTH_PX)
     return (
-        f"<div align='center'><img src='{path.as_uri()}' "
+        f"<div align='center'><img src='{small.as_uri()}' "
         f"width='{defaults.HOVER_BADGE_WIDTH_PX}'/></div>"
     )
 
@@ -786,8 +788,11 @@ class Compositor:
                 )
                 plate = ""
                 if colored is not None and colored.exists():
+                    small = scaled_variant_file(
+                        colored, 2 * defaults.ARTICLE_IMAGE_WIDTH_PX
+                    )
                     plate = (
-                        f"<div align='center'><img src='{colored.as_uri()}' "
+                        f"<div align='center'><img src='{small.as_uri()}' "
                         f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/></div>"
                     )
                 article = self._symbolism.zodiac_article(name)
@@ -1087,7 +1092,8 @@ class Compositor:
             path = octa_slot_art(folder, sign)
             if path is None or not path.exists():
                 return ""
-            return f"<img src='{path.as_uri()}' width='{px}' align='middle'/>"
+            small = scaled_variant_file(path, 2 * px)
+            return f"<img src='{small.as_uri()}' width='{px}' align='middle'/>"
 
         return (
             "<div align='center'>"
@@ -1441,8 +1447,11 @@ class Compositor:
         )
         if path is None:
             return ""
+        small = scaled_variant_file(
+            path, 2 * defaults.PERIOD_EARTH_IMAGE_PX
+        )
         return (
-            f"<div align='center'><img src='{path.as_uri()}' "
+            f"<div align='center'><img src='{small.as_uri()}' "
             f"width='{defaults.PERIOD_EARTH_IMAGE_PX}'/></div>"
         )
 
