@@ -22,6 +22,31 @@ from PySide6.QtSvg import QSvgRenderer
 from config import defaults, paths
 
 
+def metal_variant_file(path: Path, metal: str | None) -> Path:
+    """A DISK copy of `path` with the hue-selective metal swap applied
+    (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed
+    the BRONZE file even under the gold/silver look — QToolTip embeds
+    files, not pixmaps). Cached in the raster cache keyed by the file's
+    mtime; None or a non-swap metal returns the original path."""
+    if path is None or metal not in defaults.METAL_SWAP_TARGETS:
+        return path
+    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{int(path.stat().st_mtime)}_{metal}.png"
+    )
+    if not cache.exists():
+        swapped = AssetCache._metal_swapped(QPixmap(str(path)), metal)
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            swapped.save(str(cache))
+        except OSError as error:
+            # A cold cache is only slower, never wrong — but say so.
+            print(f"metal variant cache write failed: {error}", file=sys.stderr)
+            return path
+    return cache
+
+
 class AssetCache:
     # SVG MASTERS survive across instances AND flush() (owner bug
     # 2026-07-12: traced letter SVGs parse in 1.3-1.6 s EACH — the

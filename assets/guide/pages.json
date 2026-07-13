@@ -1,21 +1,272 @@
 {
-  "note": "The Guide's PAGE structure (owner spec): related images share a page in a grid; per-image title+text stays in captions.json (translated as guide/<stem>); page titles translate as guide_page/<index>.",
-  "pages": [
-    {"title": "One Dial, One Whole Day", "columns": 1, "images": ["01_day-night"]},
-    {"title": "The Four Pointers", "columns": 2, "images": ["02_pointer_prism", "04_pointer_seasons", "05_pointer_compass", "06_pointer_trinity"]},
-    {"title": "Two Color Worlds", "columns": 2, "images": ["47_palette_prism_paint", "48_palette_prism_light", "49_palette_compass_paint", "50_palette_compass_light", "51_palette_seasons", "52_palette_trinity"]},
-    {"title": "The Umbra — the Night Wheel", "columns": 2, "images": ["07_umbra_full", "08_umbra_half", "09_umbra_light", "10_umbra_dark"]},
-    {"title": "The Two Travelers", "columns": 1, "images": ["11_earth_moon"]},
-    {"title": "Reading the Travelers", "columns": 2, "images": ["12_earth_legend", "13_moon_legend"]},
-    {"title": "The Diamond Legends", "columns": 1, "images": ["14_diamond_legend"]},
-    {"title": "Day, Night and the Twilights", "columns": 2, "images": ["15_day_legend", "16_night_legend", "17_dawn_legend", "18_dusk_legend"]},
-    {"title": "Seven Days, Seven Faces", "columns": 2, "images": ["24_weekday_planets", "25_weekday_greek", "26_weekday_norse", "27_weekday_religion", "28_weekday_professions"]},
-    {"title": "The Compass Slot", "columns": 2, "images": ["29_slot_zodiac", "30_slot_chinese"]},
-    {"title": "Rings, Letters, Metals", "columns": 2, "images": ["19_rings", "22_ring_domy_gold", "23_ring_domy_silver", "36_ring_morph_silver"]},
-    {"title": "One Clock, Any Color", "columns": 2, "images": ["41_tint_light_gold", "42_tint_dark_gold", "43_tint_green", "44_tint_blue", "45_tint_lavender", "46_tint_brown"]},
-    {"title": "The Settings Window", "columns": 1, "images": ["40_settings_window"]},
-    {"title": "Settings, Piece by Piece", "columns": 2, "images": ["31_settings_location", "32_settings_opacity", "33_settings_sizes", "34_settings_custom_ring", "53_settings_custom_hands", "35_menu_elements"]},
-    {"title": "Color and Language", "columns": 2, "images": ["37_settings_palette", "38_settings_ring_tint", "39_settings_language"]},
-    {"title": "Time Travel", "columns": 1, "images": ["21_time_travel"]}
-  ]
+ "note": "The Guide's PAGE structure (owner spec): related images share a page in a grid; per-image title+text stays in captions.json (translated as guide/<stem>); page titles translate as guide_page/<index>.",
+ "pages": [
+  {
+   "title": "One Dial, One Whole Day",
+   "columns": 1,
+   "images": [
+    "01_day-night"
+   ]
+  },
+  {
+   "title": "Opening the Menu",
+   "columns": 2,
+   "images": [
+    "54_menu_top_level",
+    "55_tray_menu"
+   ]
+  },
+  {
+   "title": "The Ring Tick Band — Anatomy of 360 Arrows",
+   "columns": 2,
+   "images": [
+    "56_tick_anatomy",
+    "57_tick_hover"
+   ]
+  },
+  {
+   "title": "The Five Pointers",
+   "columns": 2,
+   "images": [
+    "02_pointer_prism",
+    "04_pointer_seasons",
+    "05_pointer_compass",
+    "06_pointer_trinity",
+    "58_pointer_aurora"
+   ]
+  },
+  {
+   "title": "Two Color Worlds",
+   "columns": 2,
+   "images": [
+    "47_palette_prism_paint",
+    "48_palette_prism_light",
+    "49_palette_compass_paint",
+    "50_palette_compass_light",
+    "51_palette_seasons",
+    "52_palette_trinity",
+    "59_palette_aurora_paint",
+    "60_palette_aurora_light"
+   ]
+  },
+  {
+   "title": "The Umbra — Your Night Wheel",
+   "columns": 2,
+   "images": [
+    "07_umbra_full",
+    "08_umbra_half",
+    "09_umbra_light",
+    "10_umbra_dark",
+    "61_umbra_coarse",
+    "62_umbra_gradient_form"
+   ]
+  },
+  {
+   "title": "The Ring — Faces, Finish and Numbers",
+   "columns": 2,
+   "images": [
+    "19_rings",
+    "22_ring_domy_gold",
+    "23_ring_domy_silver",
+    "36_ring_morph_silver",
+    "63_ring_domy_bronze",
+    "64_ring_numbers_seal",
+    "65_menu_design_ring"
+   ]
+  },
+  {
+   "title": "Hands — Classic, Steel and Your Own",
+   "columns": 2,
+   "images": [
+    "66_hands_classic",
+    "67_hands_steel",
+    "68_menu_design_hands"
+   ]
+  },
+  {
+   "title": "The Dial's Own Size",
+   "columns": 2,
+   "images": [
+    "69_menu_design_size",
+    "70_size_compare"
+   ]
+  },
+  {
+   "title": "Theme: The Earth's Two Looks",
+   "columns": 2,
+   "images": [
+    "71_menu_theme_earth",
+    "72_earth_clean_vs_atmo"
+   ]
+  },
+  {
+   "title": "Two Travelers",
+   "columns": 1,
+   "images": [
+    "11_earth_moon"
+   ]
+  },
+  {
+   "title": "Reading the Travelers",
+   "columns": 2,
+   "images": [
+    "12_earth_legend",
+    "13_moon_legend"
+   ]
+  },
+  {
+   "title": "The Diamond Legends",
+   "columns": 1,
+   "images": [
+    "14_diamond_legend"
+   ]
+  },
+  {
+   "title": "Day, Night and the Twilights",
+   "columns": 2,
+   "images": [
+    "15_day_legend",
+    "16_night_legend",
+    "17_dawn_legend",
+    "18_dusk_legend"
+   ]
+  },
+  {
+   "title": "Seven Days, Eleven Faces I",
+   "columns": 2,
+   "images": [
+    "24_weekday_planets",
+    "25_weekday_greek",
+    "26_weekday_norse",
+    "73_weekday_planet_signs",
+    "74_weekday_egypt",
+    "75_weekday_slavic"
+   ]
+  },
+  {
+   "title": "Seven Days, Eleven Faces II",
+   "columns": 2,
+   "images": [
+    "27_weekday_religion",
+    "28_weekday_professions",
+    "76_weekday_alchemy",
+    "77_weekday_japan",
+    "78_weekday_religion_alt"
+   ]
+  },
+  {
+   "title": "One Theme, Four Metals",
+   "columns": 2,
+   "images": [
+    "79_weekday_greek_colored",
+    "80_menu_theme_weekday_metal"
+   ]
+  },
+  {
+   "title": "The Day Slot",
+   "columns": 2,
+   "images": [
+    "29_slot_zodiac",
+    "30_slot_chinese",
+    "81_slot_ascendant",
+    "82_menu_theme_slots_day"
+   ]
+  },
+  {
+   "title": "The Info Slot",
+   "columns": 2,
+   "images": [
+    "83_slot_info_time",
+    "84_slot_info_paired_weekday",
+    "85_menu_theme_slots_info"
+   ]
+  },
+  {
+   "title": "Elements — Every Switch",
+   "columns": 2,
+   "images": [
+    "35_menu_elements",
+    "86_colorful_on_off"
+   ]
+  },
+  {
+   "title": "Legend, Solar Rotation, Click-through",
+   "columns": 2,
+   "images": [
+    "87_solar_rotation_off",
+    "88_tray_click_through"
+   ]
+  },
+  {
+   "title": "One Clock, Any Color",
+   "columns": 2,
+   "images": [
+    "41_tint_light_gold",
+    "42_tint_dark_gold",
+    "43_tint_green",
+    "44_tint_blue",
+    "45_tint_lavender",
+    "46_tint_brown"
+   ]
+  },
+  {
+   "title": "The Settings Window",
+   "columns": 1,
+   "images": [
+    "40_settings_window"
+   ]
+  },
+  {
+   "title": "Settings: Location, Opacity, Element Sizes",
+   "columns": 2,
+   "images": [
+    "31_settings_location",
+    "32_settings_opacity",
+    "33_settings_sizes"
+   ]
+  },
+  {
+   "title": "Settings: Palette and Ring Tint",
+   "columns": 2,
+   "images": [
+    "37_settings_palette",
+    "38_settings_ring_tint"
+   ]
+  },
+  {
+   "title": "Settings: Your Own Ring and Hands",
+   "columns": 2,
+   "images": [
+    "34_settings_custom_ring",
+    "53_settings_custom_hands"
+   ]
+  },
+  {
+   "title": "Settings: Theme Rotation",
+   "columns": 1,
+   "images": [
+    "89_settings_theme_rotation"
+   ]
+  },
+  {
+   "title": "Settings: Language and System",
+   "columns": 2,
+   "images": [
+    "39_settings_language",
+    "90_settings_system"
+   ]
+  },
+  {
+   "title": "Time Travel",
+   "columns": 1,
+   "images": [
+    "21_time_travel"
+   ]
+  },
+  {
+   "title": "Two Things Worth Knowing",
+   "columns": 1,
+   "images": []
+  }
+ ]
 }

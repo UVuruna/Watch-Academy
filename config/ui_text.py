@@ -151,6 +151,16 @@ UI_STRINGS: tuple[str, ...] = (
     "Summer Solstice", "Winter Solstice", "Spring Equinox", "Autumn Equinox",
     "June Solstice", "December Solstice", "March Equinox", "September Equinox",
     "Faith", "Hope", "Love",
+    # Encyclopedia expansion (owner 2026-07-13): the new groups/topics
+    # and the cross-cure emblem names (Love already lives above).
+    "The Clock", "The Week", "The Instrument", "The Inner Wheel",
+    "Virtues", "Sins", "Moods",
+    "Justice", "Humility", "Serenity", "Courage", "Wisdom",
+    "Generosity", "Patience",
+    "Pride", "Servility", "Fear", "Wrath", "Greed", "Excess",
+    "Jealousy", "Envy",
+    "Glory", "Eclipse", "Calm", "Zeal", "Sorrow", "Joy", "Passion",
+    "Renewal",
     # Entity display names (weekday hover titles; planets reuse Sun…Saturn)
     "Sun", "Mars", "Mercury", "Jupiter", "Venus", "Saturn",
     "Helios", "Selene", "Ares", "Hermes", "Zeus", "Aphrodite", "Cronus",

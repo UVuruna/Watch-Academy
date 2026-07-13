@@ -347,6 +347,40 @@ def test_articles_cover_every_theme_and_body():
                                            # plus the display-name field
 
 
+def test_encyclopedia_expansion_wiring():
+    """Owner expansion 2026-07-13: the Encyclopedia opens THE CLOCK
+    (Week day pages, Instrument articles) and THE INNER WHEEL
+    (virtue/sin/mood emblems), the metal themes cycle four LOOKS, and
+    every new article resolves from Database/encyclopedia.json."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _topics
+
+    QApplication.instance() or QApplication([])
+    topics = _topics()
+    assert len(topics["week"]["entries"]) == 7
+    assert len(topics["instrument"]["entries"]) == 8
+    for family in ("virtues", "sins", "moods"):
+        assert len(topics[family]["entries"]) == 8
+    # The metal themes carry the four looks; the sun entry pairs
+    # BOTH plates per look.
+    greek_sun = topics["greek"]["entries"][0]
+    assert [label for label, _ in greek_sun["looks"]] == [
+        "Bronze", "Gold", "Silver", "Colored",
+    ]
+    assert all(len(paths) == 2 for _, paths in greek_sun["looks"])
+    assert len(topics["chinese"]["entries"][0]["looks"]) == 4
+    # The dialog renders every new topic without crashing and the
+    # texts resolve (a Wednesday page must name its planet).
+    dialog = EncyclopediaDialog()
+    for key in ("week", "instrument", "virtues", "sins", "moods", "greek"):
+        dialog._show_topic(key)
+    assert "Mercury" in dialog._article_text(("week", "mercury"))
+    assert "6°" in dialog._article_text(("instrument", "twilight"))
+    assert dialog._article_text(("emblem", "virtues", "Justice"))
+    dialog.deleteLater()
+
+
 def test_guide_pages_cover_every_slide_exactly_once():
     """The page structure covers each slide exactly once; every slide
     has a caption with a title line plus a body (owner content)."""

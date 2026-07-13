@@ -27,7 +27,7 @@ from core.year_wheel import (
     meteorological_span,
     zodiac_span,
 )
-from render.assets import AssetCache
+from render.assets import AssetCache, metal_variant_file
 from render.layers import (
     BackgroundLayer,
     BottomSlotLayer,
@@ -358,7 +358,7 @@ class Compositor:
                 if self._skin.weekday_slot == "ascendant":
                     return self._ascendant_text()
                 if self._skin.weekday_slot == "chinese":
-                    return self._chinese_text()
+                    return self._chinese_text(self._skin.day_slot_style)
                 return self._zodiac_text()
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
@@ -385,9 +385,9 @@ class Compositor:
             # The EFFECTIVE mode (Aurora shows images only — text modes
             # coerce to a logo, and the hover must describe what is
             # actually drawn).
-            slot_mode, _ = south_slot_view(self._skin)
+            slot_mode, slot_style = south_slot_view(self._skin)
             if slot_mode == "chinese":
-                return self._chinese_text()
+                return self._chinese_text(slot_style)
             if slot_mode == "zodiac":
                 return self._zodiac_text()
             if slot_mode == "ascendant":
@@ -590,16 +590,33 @@ class Compositor:
         if theme == self._skin.weekday_theme:
             display_name = self._skin.weekday_set.body_names[body]
             image = self._skin.weekday_set.bodies.get(body)
+            metal = self._skin.weekday_set.metal
         elif theme == "planets":
             display_name = defaults.DEFAULT_SKIN.weekday_set.body_names[body]
             image = defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
+            metal = None
         else:
+            # The info slot's SECOND weekday: resolve the art exactly
+            # like its layer — the theme's OWN metal, colored/ included
+            # (owner bug 2026-07-13: the legend always showed bronze).
             display_name = defaults.WEEKDAY_THEME_NAMES[theme][body]
+            theme_dir = (
+                defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
+            )
+            slot_metal = self._skin.info_slot_metal
+            if slot_metal == "colored" and theme in constants.METAL_THEMES:
+                theme_dir = theme_dir / "colored"
             image = (
-                defaults.WEEKDAY_ART_DIR
-                / defaults.WEEKDAY_THEME_DIRS[theme]
+                theme_dir
                 / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
             )
+            metal = (
+                slot_metal
+                if theme in constants.METAL_THEMES
+                and slot_metal in defaults.METAL_SWAP_TARGETS
+                else None
+            )
+        image = metal_variant_file(image, metal)
         if body == "sun":
             # The dual center's TWO plates in one legend (owner
             # 2026-07-13: "u prism i trinity treba legend sa 2 slike").
@@ -610,7 +627,7 @@ class Compositor:
                     defaults.WEEKDAY_ART_DIR
                     / f"{defaults.WEEKDAY_DUAL_FILES[theme]}.png"
                 )
-            image = (image, dual_image)
+            image = (image, metal_variant_file(dual_image, metal))
         node = self._symbolism.article(article_set, body)
         text = node["base"]
         variant = node["variants"].get(self._combo_key())
@@ -641,10 +658,11 @@ class Compositor:
         theme = self._skin.weekday_theme
         ruler = face == "ruler"
         display_name = defaults.WEEKDAY_DUAL_NAMES[theme][0 if ruler else 1]
-        image = (
+        image = metal_variant_file(
             self._skin.weekday_set.bodies.get("sun")
             if ruler
-            else self._skin.weekday_set.dual_asset
+            else self._skin.weekday_set.dual_asset,
+            self._skin.weekday_set.metal,
         )
         node = self._symbolism.article(
             constants.WEEKDAY_THEME_ARTICLES[theme], "sun"
@@ -913,9 +931,12 @@ class Compositor:
         anchors = self._day.year_anchors
         return anchors.instants[anchors.angles.index(unwrapped_angle)]
 
-    def _chinese_text(self) -> str:
+    def _chinese_text(self, style: str | None = None) -> str:
         """Chinese slot hover (owner rework): the year name and span,
-        then the animal's ARTICLE with the owner's medallion on top."""
+        then the animal's ARTICLE with the owner's medallion on top —
+        in the ACTIVE style's look (owner bug 2026-07-13: the legend
+        always showed the bronze plate): colored takes its own art,
+        gold/silver ride the selective swap."""
         from render.layers import octa_slot_art
 
         day = self._day
@@ -936,9 +957,12 @@ class Compositor:
             + "\n\n"
             + self._symbolism.chinese_element(element)["base"]
         )
-        return header + "<br/>" + _article_html(
-            octa_slot_art("chinese", animal), None, text
+        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese")
+        image = metal_variant_file(
+            octa_slot_art(folder, animal),
+            style if style in defaults.METAL_SWAP_TARGETS else None,
         )
+        return header + "<br/>" + _article_html(image, None, text)
 
     def _zodiac_line(self) -> str:
         """"♋ Cancer — 21 Jun – 22 Jul" (sign with its date span)."""

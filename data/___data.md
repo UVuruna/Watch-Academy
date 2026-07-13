@@ -33,6 +33,11 @@ machine-readable companion of [DOMY Symbolism](../SYMBOLISM.md)) — the
 hover articles per theme, sign, animal, element and Trinity virtue.
 See [Symbolism Repository](symbolism.md).
 
+### `encyclopedia.py` — Encyclopedia Repository
+The Encyclopedia's own content from `Database/encyclopedia.json`
+(instrument articles, week day pages, virtue/sin/mood entries),
+overlay-localized. See [Encyclopedia Repository](encyclopedia.md).
+
 ### `translations.py` — Translations
 Translate-once-then-cache (owner spec: we ship only English): corpus
 collection, the keyless gtx client, the hash-tracked per-language

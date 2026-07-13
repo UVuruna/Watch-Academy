@@ -69,6 +69,18 @@ def collect_corpus() -> dict:
             corpus[f"{group}/{name}/base"] = article["base"]
             for combo, text in article.get("variants", {}).items():
                 corpus[f"{group}/{name}/variants/{combo}"] = text
+    encyclopedia = paths.database_dir() / "encyclopedia.json"
+    if encyclopedia.exists():
+        # The Encyclopedia's own content (owner expansion 2026-07-13):
+        # instrument articles, week day pages, emblem entries.
+        data = json.loads(encyclopedia.read_text(encoding="utf-8"))
+        for section in ("instrument", "week"):
+            for key, node in data[section].items():
+                corpus[f"encyclopedia/{section}/{key}/title"] = node["title"]
+                corpus[f"encyclopedia/{section}/{key}/base"] = node["base"]
+        for family in ("virtues", "sins", "moods"):
+            for name, node in data[family].items():
+                corpus[f"encyclopedia/{family}/{name}/base"] = node["base"]
     captions = defaults.GUIDE_DIR / "captions.json"
     if captions.exists():
         for stem, text in json.loads(

@@ -1,14 +1,20 @@
-"""Encyclopedia — the article browser (owner spec 2026-07-12).
+"""Encyclopedia — the article browser (owner spec 2026-07-12; expansion
+2026-07-13).
 
-Screen 1 is a gallery of TOPICS in four GROUPS (owner UX round: Gods /
-Zodiac — with the planets and their signs / Themes / Religions), each
-card wearing its symbol image; screen 2 lists every article of the
+Screen 1 is a gallery of TOPICS in GROUPS — THE CLOCK first (the Week
+day pages and the Instrument functionality articles), then Gods /
+Zodiac / Themes / Religions, and THE INNER WHEEL last (Virtues, Sins,
+Moods with their emblem logos); screen 2 lists every article of the
 chosen topic — entity image(s), bold name, full base text — translated
 through the active overlay and with the canon terms highlighted exactly
 like the dial legends. The whole article BLOCK is centered and spans a
 fraction of the window width; the font grows gently with the window
 (em-like coefficient). Astrology shows BOTH the sign logo and its
-constellation side by side. Resizable: everything rescales live.
+constellation side by side; the SUN entries pair the Ruler plate with
+the Servant face. Metal themes (and the Chinese animals) carry LOOK
+ARROWS — Bronze / Gold / Silver / Colored cycled per entry (owner
+2026-07-13: "sve slike od te teme, može skrol levo desno strelice").
+Resizable: everything rescales live.
 """
 
 from pathlib import Path
@@ -30,26 +36,73 @@ from PySide6.QtWidgets import (
 
 from config import constants, defaults
 from config.ui_text import ui
+from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
+from render.assets import metal_variant_file
 from render.compositor import _article_body_html
 
 _TOPIC_ICON_PX = 96
 
-# The gallery groups (owner UX round 2026-07-12): gods together, the
-# zodiac family with the planets and their signs, the remaining week
-# themes with the Trinity, and the religions on their own ("2 members
-# for now").
+# The gallery groups (owner UX rounds 2026-07-12/13): the clock's own
+# story first, gods together, the zodiac family with the planets and
+# their signs, the remaining week themes with the Trinity, the
+# religions, and the cross-cure emblem families last.
 _TOPIC_GROUPS = (
+    ("The Clock", ("week", "instrument")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
     ("Themes", ("alchemy", "japan", "profession", "trinity")),
     ("Religions", ("religion", "religion_alt")),
+    ("The Inner Wheel", ("virtues", "sins", "moods")),
 )
+
+# The WEEK page image strip (owner spec: each day gathers everything it
+# owns): planet render, planet sign, then the day's virtue / sin / mood
+# emblems — Sunday, the dual day, carries both of each.
+_WEEK_EMBLEMS = {
+    "sun": (("Justice", "Humility"), ("Pride", "Servility"),
+            ("Glory", "Eclipse")),
+    "moon": (("Serenity",), ("Fear",), ("Calm",)),
+    "mars": (("Courage",), ("Wrath",), ("Zeal",)),
+    "mercury": (("Wisdom",), ("Greed",), ("Sorrow",)),
+    "jupiter": (("Generosity",), ("Excess",), ("Joy",)),
+    "venus": (("Love",), ("Jealousy",), ("Passion",)),
+    "saturn": (("Patience",), ("Envy",), ("Renewal",)),
+}
+_VSM_DAYS = {
+    "virtues": ("Justice", "Humility", "Serenity", "Courage", "Wisdom",
+                "Generosity", "Love", "Patience"),
+    "sins": ("Pride", "Servility", "Fear", "Wrath", "Greed", "Excess",
+             "Jealousy", "Envy"),
+    "moods": ("Glory", "Eclipse", "Calm", "Zeal", "Sorrow", "Joy",
+              "Passion", "Renewal"),
+}
+_VSM_DIRS = {"virtues": "virtue", "sins": "sin", "moods": "mood"}
+_INSTRUMENT_KEYS = (
+    "dial", "solar_rotation", "twilight", "year_wheel", "moon_lunations",
+    "paint_light", "metals", "ring_letters",
+)
+
+
+def _looks(base: Path, colored: Path | None) -> tuple:
+    """The four LOOKS of a bronze-plate image (owner 2026-07-13):
+    Bronze as drawn, Gold and Silver through the selective-swap disk
+    cache, Colored from its own art when it exists."""
+    looks = [
+        ("Bronze", base),
+        ("Gold", metal_variant_file(base, "gold")),
+        ("Silver", metal_variant_file(base, "silver")),
+    ]
+    if colored is not None and colored.exists():
+        looks.append(("Colored", colored))
+    return tuple(looks)
 
 
 def _weekday_topic(theme: str):
     """(icon path, entries) for one weekday theme: seven bodies in
-    week order with their themed art, display names and article set."""
+    week order with their themed art, display names and article set —
+    the SUN pairs the Ruler plate with its Servant face, and the metal
+    themes carry the four-look arrows."""
     article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
     if theme == "planets":
         directory = defaults.WEEKDAY_ART_DIR / "planets"
@@ -61,16 +114,41 @@ def _weekday_topic(theme: str):
         )
         files = defaults.WEEKDAY_THEME_FILES[theme]
         names = defaults.WEEKDAY_THEME_NAMES[theme]
+    metal = theme in constants.METAL_THEMES
     week_order = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
-    entries = [
-        {
-            "images": (directory / f"{files[body]}.png",),
+    dual = defaults.WEEKDAY_ART_DIR / f"{defaults.WEEKDAY_DUAL_FILES[theme]}.png"
+    entries = []
+    for body in week_order:
+        base = directory / f"{files[body]}.png"
+        images = (base, dual) if body == "sun" and dual.exists() else (base,)
+        entry = {
+            "images": images,
             "name": names[body],
             "article": ("article", article_set, body),
             "accents": defaults.BODY_ACCENT_HUES[body],
         }
-        for body in week_order
-    ]
+        if metal:
+            colored_dir = directory / "colored"
+            if body == "sun" and dual.exists():
+                folder, _, stem = defaults.WEEKDAY_DUAL_FILES[theme].rpartition("/")
+                dual_colored = (
+                    defaults.WEEKDAY_ART_DIR / folder / "colored" / f"{stem}.png"
+                )
+                entry["looks"] = tuple(
+                    (label, (one, two))
+                    for (label, one), (_, two) in zip(
+                        _looks(base, colored_dir / f"{files[body]}.png"),
+                        _looks(dual, dual_colored),
+                    )
+                )
+            else:
+                entry["looks"] = tuple(
+                    (label, (path,))
+                    for label, path in _looks(
+                        base, colored_dir / f"{files[body]}.png"
+                    )
+                )
+        entries.append(entry)
     return entries[0]["images"][0], entries
 
 
@@ -112,6 +190,16 @@ def _topics() -> dict:
                 "name": animal,
                 "article": ("chinese", animal),
                 "accents": (),
+                # The animals wear the four looks too (bronze plate,
+                # the two swaps, the colored art).
+                "looks": tuple(
+                    (label, (path,))
+                    for label, path in _looks(
+                        defaults.ZODIAC_ART_DIR / "chinese" / f"{animal}.png",
+                        defaults.ZODIAC_ART_DIR / "chinese_colored"
+                        / f"{animal}.png",
+                    )
+                ),
             }
             for animal in constants.CHINESE_ANIMALS
         ] + [
@@ -124,6 +212,70 @@ def _topics() -> dict:
             for element in constants.CHINESE_ELEMENTS
         ],
     }
+    # THE CLOCK (owner expansion 2026-07-13): the Week day pages and
+    # the Instrument functionality articles — names and texts live in
+    # Database/encyclopedia.json and resolve lazily per entry.
+    topics["week"] = {
+        "title": "The Week",
+        "icon": defaults.WEEKDAY_ART_DIR / "planets" / "sun.png",
+        "entries": [
+            {
+                "images": (
+                    defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png",
+                    defaults.WEEKDAY_ART_DIR / "planet_signs" / f"{body}.png",
+                    *(
+                        defaults.EMBLEM_ART_DIRS[family] / f"{name}.png"
+                        for family, names in zip(
+                            ("virtues", "sins", "moods"),
+                            _WEEK_EMBLEMS[body],
+                        )
+                        for name in names
+                    ),
+                ),
+                "name": ("week_title", body),
+                "article": ("week", body),
+                "accents": defaults.BODY_ACCENT_HUES[body],
+            }
+            for body in (
+                "sun", "moon", "mars", "mercury", "jupiter", "venus",
+                "saturn",
+            )
+        ],
+    }
+    topics["instrument"] = {
+        "title": "The Instrument",
+        "icon": None,
+        "entries": [
+            {
+                "images": (),
+                "name": ("instrument_title", key),
+                "article": ("instrument", key),
+                "accents": (),
+            }
+            for key in _INSTRUMENT_KEYS
+        ],
+    }
+    # THE INNER WHEEL: one entry per emblem, its logo above its text.
+    for family in ("virtues", "sins", "moods"):
+        topics[family] = {
+            "title": family.capitalize(),
+            "icon": (
+                defaults.EMBLEM_ART_DIRS[family]
+                / f"{_VSM_DAYS[family][0]}.png"
+            ),
+            "entries": [
+                {
+                    "images": (
+                        defaults.EMBLEM_ART_DIRS[family]
+                        / f"{name}.png",
+                    ),
+                    "name": name,
+                    "article": ("emblem", family, name),
+                    "accents": (),
+                }
+                for name in _VSM_DAYS[family]
+            ],
+        }
     topics["trinity"] = {
         "title": "Trinity",
         "icon": None,
@@ -150,8 +302,9 @@ class EncyclopediaDialog(QDialog):
         )
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self._symbolism = SymbolismRepository(overlay=self._overlay)
+        self._encyclopedia = EncyclopediaRepository(overlay=self._overlay)
         self._topics = _topics()
-        self._cells: list[tuple[QLabel, QPixmap, int]] = []
+        self._cells: list[dict] = []
         self._blocks: list[QWidget] = []
         self._text_labels: list[QLabel] = []
         self._name_labels: list[QLabel] = []
@@ -190,7 +343,24 @@ class EncyclopediaDialog(QDialog):
             return self._symbolism.chinese_article(ref[1])["base"]
         if kind == "element":
             return self._symbolism.chinese_element(ref[1])["base"]
+        if kind == "week":
+            return self._encyclopedia.week(ref[1])["base"]
+        if kind == "instrument":
+            return self._encyclopedia.instrument(ref[1])["base"]
+        if kind == "emblem":
+            return self._encyclopedia.entry(ref[1], ref[2])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
+
+    def _entry_name(self, entry: dict) -> str:
+        """An entry's display name: the WEEK and INSTRUMENT pages take
+        their titles from the encyclopedia database (localized there);
+        everything else translates through the UI overlay."""
+        name = entry["name"]
+        if isinstance(name, tuple):
+            if name[0] == "week_title":
+                return self._encyclopedia.week(name[1])["title"]
+            return self._encyclopedia.instrument(name[1])["title"]
+        return self._tr(name)
 
     def _show_topics(self) -> None:
         """Screen 1 — the topic gallery in the owner's four groups,
@@ -262,24 +432,61 @@ class EncyclopediaDialog(QDialog):
             cell = QVBoxLayout(block)
             cell.setContentsMargins(0, 0, 0, 0)
             cell.setSpacing(defaults.GUIDE_SPACING_PX)
-            images = [
-                path for path in entry["images"]
-                if path is not None and Path(path).exists()
+            # LOOKS (owner 2026-07-13): a metal entry cycles Bronze /
+            # Gold / Silver / Colored with the arrow buttons; a plain
+            # entry is a one-look list.
+            looks = entry.get("looks") or (("", tuple(entry["images"])),)
+            look_pixmaps = [
+                [
+                    QPixmap(str(path))
+                    for path in paths_
+                    if path is not None and Path(path).exists()
+                ]
+                for _, paths_ in looks
             ]
-            if images:
+            state = {
+                "labels": [],
+                "looks": look_pixmaps,
+                "titles": [label for label, _ in looks],
+                "index": 0,
+                "caption": None,
+            }
+            count = max((len(p) for p in look_pixmaps), default=0)
+            if count:
                 images_row = QHBoxLayout()
                 images_row.setSpacing(defaults.GUIDE_SPACING_PX * 2)
                 images_row.addStretch(1)
-                for path in images:
+                for _ in range(count):
                     label = QLabel()
                     label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                    self._cells.append(
-                        (label, QPixmap(str(path)), len(images))
-                    )
+                    state["labels"].append(label)
                     images_row.addWidget(label)
                 images_row.addStretch(1)
                 cell.addLayout(images_row)
-            name = QLabel(f"<b>{self._tr(entry['name'])}</b>")
+                self._cells.append(state)
+            if len(look_pixmaps) > 1:
+                arrows = QHBoxLayout()
+                arrows.addStretch(1)
+                back = QToolButton()
+                back.setText("◀")
+                caption = QLabel(self._tr(state["titles"][0]))
+                caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                caption.setMinimumWidth(80)
+                state["caption"] = caption
+                forward = QToolButton()
+                forward.setText("▶")
+                back.clicked.connect(
+                    lambda checked=False, s=state: self._cycle_look(s, -1)
+                )
+                forward.clicked.connect(
+                    lambda checked=False, s=state: self._cycle_look(s, 1)
+                )
+                arrows.addWidget(back)
+                arrows.addWidget(caption)
+                arrows.addWidget(forward)
+                arrows.addStretch(1)
+                cell.addLayout(arrows)
+            name = QLabel(f"<b>{self._entry_name(entry)}</b>")
             name.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self._name_labels.append(name)
             cell.addWidget(name)
@@ -325,14 +532,38 @@ class EncyclopediaDialog(QDialog):
             label.setStyleSheet(f"font-size: {font_px}px;")
         for label in self._name_labels:
             label.setStyleSheet(f"font-size: {font_px + 3}px;")
-        for image, art, siblings in self._cells:
+        for state in self._cells:
+            self._render_cell(state, block_width)
+
+    def _render_cell(self, state: dict, block_width: int) -> None:
+        """Draw the cell's CURRENT look into its labels (scaled to the
+        block width, siblings splitting it)."""
+        pixmaps = state["looks"][state["index"]]
+        siblings = max(1, len(pixmaps))
+        for label, art in zip(state["labels"], pixmaps):
             share = block_width // siblings - defaults.GUIDE_SPACING_PX * 2
-            width = min(max(160, share), art.width())
-            image.setPixmap(
+            width = min(max(120, share), art.width())
+            label.setPixmap(
                 art.scaledToWidth(
                     width, Qt.TransformationMode.SmoothTransformation
                 )
             )
+        for label in state["labels"][len(pixmaps):]:
+            label.clear()
+
+    def _cycle_look(self, state: dict, step: int) -> None:
+        """The ◀ / ▶ arrows (owner 2026-07-13): the next metal look of
+        this entry, caption updated."""
+        state["index"] = (state["index"] + step) % len(state["looks"])
+        if state["caption"] is not None:
+            state["caption"].setText(
+                self._tr(state["titles"][state["index"]])
+            )
+        block_width = round(
+            max(320, self._scroll.viewport().width())
+            * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
+        )
+        self._render_cell(state, block_width)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

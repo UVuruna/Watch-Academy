@@ -447,6 +447,13 @@ GLOW_RADIUS_SCALE = 2.0              # halo radius, multiple of the marker radiu
 # still falls back to the text form (documented).
 ZODIAC_ART_DIR = paths.assets_dir() / "zodiac"
 WEEKDAY_ART_DIR = paths.assets_dir() / "weekday"
+# The cross-cure emblem logos (owner Gemini art 2026-07-12): one PNG
+# per virtue/sin/mood, Capitalized stems, 8 per family (Sunday twice).
+EMBLEM_ART_DIRS = {
+    "virtues": paths.assets_dir() / "virtue",
+    "sins": paths.assets_dir() / "sin",
+    "moods": paths.assets_dir() / "mood",
+}
 
 # --- Weekday body themes (SYMBOLISM.md canon) -----------------------------------
 # Display names per theme, body -> name (the weekday hover reads

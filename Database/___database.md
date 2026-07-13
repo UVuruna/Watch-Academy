@@ -38,6 +38,15 @@ The narrative canon lives in [DOMY Symbolism](../SYMBOLISM.md); the
 weekday and slot hovers read it via the
 [Symbolism Repository](../data/symbolism.md).
 
+### `encyclopedia.json`
+The Encyclopedia's OWN content (owner expansion 2026-07-13), separate
+from the dial articles: the eight INSTRUMENT functionality articles
+(the dial, solar rotation, twilight, the year wheel, lunations,
+Paint/Light, metals, the ring letters), the seven WEEK day pages and
+the 24 VIRTUES/SINS/MOODS emblem entries. Read by the
+[Encyclopedia Repository](../data/encyclopedia.md); translated through
+`encyclopedia/<section>/<key>/...` overlay keys.
+
 ### `ring_presets.json`
 The bundled ring styling cards — DOMY, MORPH and NUMBERS — loaded by
 [Ring Presets](../data/rings.md) together with the user's custom cards.
