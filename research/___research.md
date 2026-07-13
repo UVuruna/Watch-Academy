@@ -85,6 +85,20 @@ Turning Points (both Solstices + one Equinox, split gold/silver
 hexagram field) and the optional Meteorological twins — 16 prompts,
 drop dirs assets/trinity/ and assets/season/.
 
+### `chinese_zodiac_prompts.md` — Chinese Zodiac Prompts
+The bronze Chinese-zodiac redesign (owner 2026-07-13): the Greek
+key border replaced by a huiwen meander with Wu Xing element
+roundels on the pentagram points — 12 Gemini prompts, drop dir
+assets/zodiac/chinese/.
+
+### `instrument_prompts.md` — Instrument Prompt & Shot Sheet
+Images for the Encyclopedia's "The Instrument" articles (owner
+2026-07-13): a section-logo Gemini prompt in its own gear-tooth
+bronze family, a Paint/Light abstraction prompt, exact SCREENSHOT
+instructions for the five articles the app itself already draws
+(dial, solar rotation, twilight, year wheel, lunations) and
+existing-asset pointers for metals and ring letters.
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner
