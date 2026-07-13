@@ -41,17 +41,24 @@ draws the MINUTE layers (hands, year marker) live.
   BODIES (every visible body within its image region: the entity's
   NAME as a bigger bold title — Odin, Farmer, Islam… (owner spec
   2026-07-11, `defaults.ARTICLE_TITLE_PX`) — the active day adds
-  "Thursday, 9th July 2026" beneath it, then the LEFT-aligned
-  article — base + the active pointer/palette combination paragraph,
+  "Thursday, 9th July 2026" beneath it, then the JUSTIFIED
+  article (owner 2026-07-13: clean book-column edges, reflowing in a
+  `defaults.ARTICLE_TEXT_WIDTH_PX` cell) — base + the active
+  pointer/palette combination paragraph,
   the entity art on top). In every article the canon terms POP
   (owner spec 2026-07-12, `_highlight_terms`): virtues bold blue,
   vices bold red, moods bold yellow, color words in their own hue
   (`defaults.LEGEND_*` rules, English + Serbian originals), and hex
   notes like "(#F8E600)" are stripped from display. Then the octa
-  info slot; the
-  Moon marker (owner formatting round 2026-07-12: bold **Phase:** —
-  with the exact principal instant in parentheses while its name
-  holds — **Illumination:** to one decimal and **Moonrise:**/
+  info slot — the Astrology/Ascendant hovers lead with a bold title
+  ("Ascendant" written out in full) and an image TRIO: the ACTIVE
+  style's art large in the middle, the two remaining styles at
+  `ASTRO_SIDE_IMAGE_FRACTION` beside it (owner 2026-07-13; text mode
+  leads with the colored logo); the
+  Moon marker (owner formatting round 2026-07-13: the phase NAME as
+  the title — no "Phase:" label — with the exact principal instant
+  beneath while its name holds, then **Illumination:** to one decimal
+  and **Moonrise:**/
   **Moonset:**, a blank row, then the cycle day and the running
   lunation); the Earth marker (bold **Date:** with the Nth Day - Nth
   Week row beneath, a blank row, then **Season:** "Summer 18th of 94
@@ -61,19 +68,27 @@ draws the MINUTE layers (hands, year marker) live.
   the circle wins): the 360 arrows answer in DOMY-titled sections
   separated by blank rows — **Day** (**Time:**/**Angle:** plus the
   day-period word), **Year** (**Date:** with the anchor event,
-  **Season:** with the day/week ordinals) and **Moon** (the running
-  lunation, then the cycle reading at that angle); the twilight bands
+  **Season:** with the day/week ordinals) and **Moon** (the lunation
+  the ANGLE belongs to — with the Moon on the dial's LEFT the right
+  half of the ring already reads as the NEXT moon, December wrapping
+  into the new year's 1st (owner logic 2026-07-13) — then the cycle
+  reading at that angle); the twilight bands
   (bold **Morning/Evening Twilight** title, the labeled bounds in the
   order the light moves, and the span in minutes AND dial degrees —
   "37 min - 9.25°" at 15°/h); the STAR ARMS
-  (hexa diamonds carry BOTH their signs, each a header with its span
-  plus the sign's full article from the
+  (hexa diamonds carry BOTH their signs SIDE BY SIDE as two columns —
+  owner 2026-07-13: bold glyph-free title with the span, the COLORED
+  logo, then the sign's full article from the
   [Symbolism Repository](../data/symbolism.md); trio arms give their
   theological theme, day third and weekday pair; cross/octa cardinals
-  give the exact event instant plus that day's length "15h 23min", the
-  cross appending its METEOROLOGICAL season block — From/To at the
-  halfway instants; octa diagonals describe their season with "(N.N
-  Days)" and "Heart:" as the midpoint label — a trailing * flags
+  follow the image → title → space → data format — the turning-point
+  badge, the bold event name, its instant and the labeled
+  **Daylight:** — the cross appending, after a rule, its
+  METEOROLOGICAL season block wearing its own badge with bold
+  **From**/**To** at the halfway instants and the labeled
+  **Duration:** in days to one decimal (the tropics' wet/dry block
+  wears the same format); octa diagonals describe their season with
+  "(N.N Days)" and "Heart:" as the midpoint label — a trailing * flags
   solar-rotation imprecision); and LAST the wheel itself — a mini
   Earth of the active region on top (day art on the Day side, night
   art on the Night side, atmosphere/clean per the Earth setting,

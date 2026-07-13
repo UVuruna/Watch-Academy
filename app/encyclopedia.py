@@ -19,7 +19,7 @@ Resizable: everything rescales live.
 
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QDialog,
@@ -55,8 +55,6 @@ def _flow_html(text: str, accents: tuple = ()) -> str:
         for paragraph in text.split("\n\n")
     ]
     return "<div align='left'>" + "<br/><br/>".join(paragraphs) + "</div>"
-
-_TOPIC_ICON_PX = 96
 
 # The gallery groups (owner UX rounds 2026-07-12/13): the clock's own
 # story first, gods together, the zodiac family with the planets and
@@ -154,9 +152,9 @@ def _theme_dual_art(theme: str, colored: bool = False) -> Path:
 
 def _weekday_topic(theme: str):
     """(icon path, entries) for one weekday theme: seven bodies in
-    week order. Every look is a tuple of ROWS (owner 2026-07-13: the
-    Ruler stands ABOVE the Servant, never beside him) — the sun stacks
-    its two plates vertically; the metal themes cycle Colored/Bronze/
+    week order. Every look is a tuple of ROWS — the sun's two plates
+    stand SIDE BY SIDE, Ruler left, Servant right (owner correction
+    2026-07-13: never stacked); the metal themes cycle Colored/Bronze/
     Gold/Silver; the planets cycle their photos and the sign glyphs."""
     article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
     if theme == "planets":
@@ -169,10 +167,10 @@ def _weekday_topic(theme: str):
         base = _theme_body_art(theme, body)
         sun = body == "sun"
 
-        def rows(top: Path, bottom: Path | None) -> tuple:
-            if bottom is not None and bottom.exists():
-                return ((top,), (bottom,))
-            return ((top,),)
+        def rows(ruler: Path, servant: Path | None) -> tuple:
+            if servant is not None and servant.exists():
+                return ((ruler, servant),)
+            return ((ruler,),)
 
         entry = {
             "looks": ((
@@ -307,32 +305,40 @@ def _topics() -> dict:
     # image strip GROUPS by kinship on the arrows (owner: "nećemo da
     # nabacamo sve teme — grupišemo po srodnosti"): the canon strip
     # (planet, sign and the day's emblems), then the gods, the
-    # religions and the craft themes; Sunday stacks every pair
-    # vertically — the Ruler face above, the Servant below.
+    # religions and the craft themes; Sunday puts every pair SIDE BY
+    # SIDE — Ruler immediately left of its Servant (owner correction
+    # 2026-07-13: never stacked).
     def _week_theme_rows(body: str, themes: tuple) -> tuple:
-        top = tuple(_theme_body_art(t, body) for t in themes)
         if body != "sun":
-            return (top,)
-        return (top, tuple(_theme_dual_art(t) for t in themes))
+            return (tuple(_theme_body_art(t, body) for t in themes),)
+        return (tuple(
+            plate
+            for t in themes
+            for plate in (_theme_body_art(t, "sun"), _theme_dual_art(t))
+        ),)
 
     def _week_canon_rows(body: str) -> tuple:
         virtue, sin, mood = _WEEK_EMBLEMS[body]
-        top = (
-            _theme_body_art("planets", body),
-            _theme_body_art("planet_signs", body),
-            defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[0]}.png",
-            defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[0]}.png",
-            defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[0]}.png",
-        )
         if body != "sun":
-            return (top,)
-        return (top, (
+            return ((
+                _theme_body_art("planets", body),
+                _theme_body_art("planet_signs", body),
+                defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[0]}.png",
+                defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[0]}.png",
+                defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[0]}.png",
+            ),)
+        return ((
+            _theme_body_art("planets", "sun"),
             _theme_dual_art("planets"),
+            _theme_body_art("planet_signs", "sun"),
             _theme_dual_art("planet_signs"),
+            defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[0]}.png",
             defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[1]}.png",
+            defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[0]}.png",
             defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[1]}.png",
+            defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[0]}.png",
             defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[1]}.png",
-        ))
+        ),)
 
     topics["week"] = {
         "title": "The Week",
@@ -443,7 +449,8 @@ class EncyclopediaDialog(QDialog):
         self.setWindowTitle(
             f"{constants.APP_NAME} — {self._tr('Encyclopedia')}"
         )
-        self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        # A NORMAL window (owner 2026-07-13: no stay-on-top — it must
+        # yield to whatever has focus, like any other application).
         # Maximize/minimize live in the title bar (owner 2026-07-13:
         # "treba button maximize da se proširi preko celog ekrana").
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
@@ -455,6 +462,8 @@ class EncyclopediaDialog(QDialog):
         self._blocks: list[QWidget] = []
         self._text_labels: list[QLabel] = []
         self._name_labels: list[QLabel] = []
+        self._topic_cards: list[QToolButton] = []
+        self._pixmap_cache: dict[str, QPixmap] = {}
 
         self._title = QLabel()
         self._title.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -515,19 +524,24 @@ class EncyclopediaDialog(QDialog):
         return self._tr(name)
 
     def _show_topics(self) -> None:
-        """Screen 1 — the topic gallery in the owner's four groups,
-        a bold group header above each card row."""
+        """Screen 1 — the topic gallery in the owner's groups,
+        EVERYTHING centered (owner 2026-07-13: headers and cards
+        alike); the card icons are RESPONSIVE — _rescale grows and
+        shrinks them with the window between the two bounds, and only
+        below the minimum does the scrollbar take over."""
         self._title.setText(self._tr("Encyclopedia"))
         self._back.hide()
         self._cells = []
         self._blocks = []
         self._text_labels = []
         self._name_labels = []
+        self._topic_cards = []
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX)
         for group_title, keys in _TOPIC_GROUPS:
             header = QLabel(self._tr(group_title))
+            header.setAlignment(Qt.AlignmentFlag.AlignCenter)
             header.setStyleSheet(
                 f"font-size: {defaults.GUIDE_SUBTITLE_PX + 2}px;"
                 f"font-weight: bold;"
@@ -538,9 +552,10 @@ class EncyclopediaDialog(QDialog):
             rule.setFrameShape(QFrame.Shape.HLine)
             rule.setFrameShadow(QFrame.Shadow.Sunken)
             column.addWidget(rule)
-            grid = QGridLayout()
-            grid.setSpacing(defaults.GUIDE_SPACING_PX * 2)
-            for index, key in enumerate(keys):
+            row = QHBoxLayout()
+            row.setSpacing(defaults.GUIDE_SPACING_PX * 2)
+            row.addStretch(1)
+            for key in keys:
                 topic = self._topics[key]
                 card = QToolButton()
                 card.setToolButtonStyle(
@@ -548,21 +563,19 @@ class EncyclopediaDialog(QDialog):
                 )
                 card.setText(self._tr(topic["title"]))
                 if topic["icon"] is not None and Path(topic["icon"]).exists():
-                    pixmap = QPixmap(str(topic["icon"])).scaledToHeight(
-                        _TOPIC_ICON_PX,
-                        Qt.TransformationMode.SmoothTransformation,
-                    )
-                    card.setIcon(QIcon(pixmap))
-                    card.setIconSize(pixmap.size())
-                card.setMinimumSize(_TOPIC_ICON_PX + 60, _TOPIC_ICON_PX + 50)
+                    # The FULL-RES art backs the icon — QIcon renders
+                    # whatever size _rescale asks for.
+                    card.setIcon(QIcon(str(topic["icon"])))
                 card.clicked.connect(
                     lambda checked=False, chosen=key: self._show_topic(chosen)
                 )
-                grid.addWidget(card, index // 4, index % 4)
-            grid.setColumnStretch(4, 1)
-            column.addLayout(grid)
+                row.addWidget(card)
+                self._topic_cards.append(card)
+            row.addStretch(1)
+            column.addLayout(row)
         column.addStretch(1)
         self._scroll.setWidget(content)
+        self._rescale()
 
     def _show_topic(self, key: str) -> None:
         """Screen 2 — every article of the topic: the images row (the
@@ -576,6 +589,7 @@ class EncyclopediaDialog(QDialog):
         self._blocks = []
         self._text_labels = []
         self._name_labels = []
+        self._topic_cards = []
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX * 3)
@@ -585,15 +599,18 @@ class EncyclopediaDialog(QDialog):
             cell.setContentsMargins(0, 0, 0, 0)
             cell.setSpacing(defaults.GUIDE_SPACING_PX)
             # LOOKS (owner 2026-07-13): every look is a tuple of ROWS —
-            # the Sunday pairs stack the Servant BELOW the Ruler; the
-            # arrows page through kinship groups or metal finishes.
+            # the Sunday pairs stand side by side; the arrows page
+            # through kinship groups or metal finishes. Only PATHS are
+            # kept here — the pixmaps decode lazily in _render_cell
+            # (owner 2026-07-13: The Week opened far too slowly when
+            # every look of every entry loaded upfront).
             looks = entry.get("looks") or (
                 ("", (tuple(entry.get("images", ())),)),
             )
             look_rows = [
                 [
                     [
-                        QPixmap(str(path))
+                        path
                         for path in row
                         if path is not None and Path(path).exists()
                     ]
@@ -667,10 +684,14 @@ class EncyclopediaDialog(QDialog):
         self._rescale()
 
     def _rescale(self) -> None:
-        """Everything follows the window: each entry BLOCK spans the
-        configured width fraction (centered), the images share the
-        block (the Astrology pair splits it), and the font grows with
-        the width at the gentle em-like coefficient."""
+        """Everything follows the window — on the gallery the card
+        icons resize between their bounds; on a topic each entry BLOCK
+        spans the configured width fraction, the images share the
+        block, and the font grows with the width at the gentle em-like
+        coefficient."""
+        if self._topic_cards:
+            self._rescale_topics()
+            return
         viewport = max(320, self._scroll.viewport().width())
         block_width = round(
             viewport * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
@@ -695,12 +716,53 @@ class EncyclopediaDialog(QDialog):
         for state in self._cells:
             self._render_cell(state, block_width)
 
+    def _rescale_topics(self) -> None:
+        """The gallery cards follow the window (owner 2026-07-13):
+        the icon side grows until the widest group fills the WIDTH or
+        the stacked groups fill the HEIGHT — whichever bound bites
+        first — clamped between the two configured sizes; below the
+        minimum the scroll area takes over."""
+        viewport = self._scroll.viewport()
+        columns = max(len(keys) for _, keys in _TOPIC_GROUPS)
+        spacing = defaults.GUIDE_SPACING_PX * 2
+        width_share = (
+            (viewport.width() - 48) // columns - spacing
+        )
+        # Per-group vertical overhead: header + rule + the card's own
+        # caption line + spacings (estimate — the scrollbar catches
+        # whatever the estimate misses).
+        overhead = defaults.GUIDE_SUBTITLE_PX + 2 + 64
+        height_share = viewport.height() // len(_TOPIC_GROUPS) - overhead
+        icon = max(
+            defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX,
+            min(
+                defaults.ENCYCLOPEDIA_TOPIC_ICON_MAX_PX,
+                width_share,
+                height_share,
+            ),
+        )
+        for card in self._topic_cards:
+            card.setIconSize(QSize(icon, icon))
+            card.setMinimumSize(icon + 40, icon + 44)
+
+    def _pixmap(self, path) -> QPixmap:
+        """The decoded-image cache behind the lazy looks (owner
+        2026-07-13: The Week opened far too slowly): a look decodes
+        on FIRST display, then the cache answers — paths were already
+        filtered for existence."""
+        key = str(path)
+        pixmap = self._pixmap_cache.get(key)
+        if pixmap is None:
+            pixmap = QPixmap(key)
+            self._pixmap_cache[key] = pixmap
+        return pixmap
+
     def _render_cell(self, state: dict, block_width: int) -> None:
         """Rebuild the cell's image GRID for its current look: each
-        look is rows of pixmaps (the Sunday pairs put the Servant row
-        under the Ruler row); the columns split the block width and
-        the images SHRINK as far as needed (owner 2026-07-13: nothing
-        may overlap or clip)."""
+        look is rows of image paths (the Sunday pairs side by side);
+        the columns split the block width and the images SHRINK as
+        far as needed (owner 2026-07-13: nothing may overlap or
+        clip)."""
         container = state["container"]
         if container is None:
             return
@@ -724,7 +786,8 @@ class EncyclopediaDialog(QDialog):
         )
         for row_index, row in enumerate(rows):
             offset = (columns - len(row)) // 2    # center shorter rows
-            for col_index, art in enumerate(row):
+            for col_index, path in enumerate(row):
+                art = self._pixmap(path)
                 label = QLabel()
                 label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 width = max(24, min(share, art.width()))
@@ -737,6 +800,12 @@ class EncyclopediaDialog(QDialog):
                     label, row_index, offset + col_index,
                     alignment=Qt.AlignmentFlag.AlignCenter,
                 )
+        # Commit the new geometry NOW (owner bug 2026-07-13: after a
+        # look switch to larger art the container kept its old size —
+        # the image drew clipped under the neighboring widgets).
+        grid.activate()
+        container.updateGeometry()
+        container.adjustSize()
 
     def _cycle_look(self, state: dict, step: int) -> None:
         """The ◀ / ▶ arrows (owner 2026-07-13): the next look of this

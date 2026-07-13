@@ -10,7 +10,6 @@ the future settings preview.
 import html
 import math
 import re
-import textwrap
 from datetime import datetime, time, timedelta
 
 from PySide6.QtCore import QPointF, Qt
@@ -138,20 +137,31 @@ def _highlight_terms(escaped: str, accents: tuple[str, ...] = ()) -> str:
 
 
 def _article_body_html(text: str, accents: tuple[str, ...] = ()) -> str:
-    """LEFT-aligned article prose (owner spec — unlike every other
-    hover, which is centered): paragraphs separated by a blank line,
-    each wrapped to a fixed width so QToolTip stays a column; canon
+    """JUSTIFIED article prose (owner 2026-07-13 round two — clean
+    edges on both sides, like a book column): each paragraph reflows
+    inside a fixed-width table cell so QToolTip stays a column; canon
     terms highlighted (color words only per `accents`), hex notes
     stripped."""
     text = _HEX_NOTE.sub("", text)
-    paragraphs = [
-        "<br/>".join(
-            _highlight_terms(html.escape(line), accents)
-            for line in textwrap.wrap(paragraph, width=defaults.ARTICLE_WRAP_CHARS)
-        )
-        for paragraph in text.split("\n\n")
-    ]
-    return f"<div align='left'>{'<br/><br/>'.join(paragraphs)}</div>"
+    body = "".join(
+        f"<p align='justify'>{_highlight_terms(html.escape(p), accents)}</p>"
+        for p in text.split("\n\n")
+    )
+    return (
+        f"<table><tr><td width='{defaults.ARTICLE_TEXT_WIDTH_PX}'>"
+        f"{body}</td></tr></table>"
+    )
+
+
+def _hover_title(text_html: str) -> str:
+    """A hover TITLE line (owner 2026-07-13 round two): bigger and
+    bold, centered — the phase name, the Ascendant word, the season
+    and turning-point names all wear it."""
+    return (
+        f"<div align='center'><span style='font-size:"
+        f"{defaults.ARTICLE_TITLE_PX}px; font-weight:bold'>"
+        f"{text_html}</span></div>"
+    )
 
 
 def _article_html(
@@ -368,10 +378,10 @@ class Compositor:
                 # The badge in the weekday position (owner 2026-07-12):
                 # sun sign, the rising sign, or the Chinese year.
                 if self._skin.weekday_slot == "ascendant":
-                    return self._ascendant_text()
+                    return self._ascendant_text(self._skin.day_slot_style)
                 if self._skin.weekday_slot == "chinese":
                     return self._chinese_text(self._skin.day_slot_style)
-                return self._zodiac_text()
+                return self._zodiac_text(self._skin.day_slot_style)
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
                 # name, its own plate, its own text.
@@ -401,9 +411,9 @@ class Compositor:
             if slot_mode == "chinese":
                 return self._chinese_text(slot_style)
             if slot_mode == "zodiac":
-                return self._zodiac_text()
+                return self._zodiac_text(slot_style)
             if slot_mode == "ascendant":
-                return self._ascendant_text()
+                return self._ascendant_text(slot_style)
             if slot_mode == "weekday":
                 # The info slot's SECOND weekday speaks its own theme.
                 return self._weekday_tooltip(
@@ -739,12 +749,14 @@ class Compositor:
 
         if self._skin.pointer == "hexa":
             # The 60-deg arc [arm-30, arm+30] spans exactly two signs.
-            # Hover rework (owner spec): each sign gets its header line
-            # ("♋ Cancer (21st June - 21st July)") followed by ITS
-            # article (base + the active palette's paragraph), signs
-            # separated by a blank line.
+            # Hover rework (owner 2026-07-13 round two): the two signs
+            # stand LEFT/RIGHT as two columns — each with its bold
+            # title (name + dates, NO glyph), its COLORED logo, then
+            # ITS article (base + the active palette's paragraph).
+            from render.layers import octa_slot_art
+
             style = self._skin.palette_style
-            parts = []
+            columns = []
             south = self._day.southern_hemisphere
             for offset in (-30.0, 0.0):      # the two signs' START angles
                 start_angle = (arm_angle + offset) % 360.0
@@ -753,17 +765,26 @@ class Compositor:
                     # the diamond the Earth passes must name the signs
                     # it actually passes there — the opposite half.
                     start_angle = (start_angle + 180.0) % 360.0
-                name, symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
+                name, _symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
                 start, end = zodiac_span(self._day.year_anchors, start_angle)
                 start = start.astimezone(self._day.tzinfo)
                 last = end.astimezone(self._day.tzinfo) - timedelta(days=1)
                 header = (
-                    f"{html.escape(symbol)} {html.escape(self._tr(name))} "
+                    f"{html.escape(self._tr(name))} "
                     f"({self._ord(start.day)} {html.escape(self._month(start))} - "
                     f"{self._ord(last.day)} {html.escape(self._month(last))})"
                 )
                 if offset == -30.0 and star:
                     header += html.escape(star)
+                colored = octa_slot_art(
+                    constants.ZODIAC_STYLE_ART_DIRS["colored"], name
+                )
+                plate = ""
+                if colored is not None and colored.exists():
+                    plate = (
+                        f"<div align='center'><img src='{colored.as_uri()}' "
+                        f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/></div>"
+                    )
                 article = self._symbolism.zodiac_article(name)
                 text = article["base"]
                 # South of the equator the sign wears the opposite
@@ -779,11 +800,16 @@ class Compositor:
                     defaults.SIGN_ACCENT_HUES_SOUTH
                     if south else defaults.SIGN_ACCENT_HUES
                 )[name]
-                parts.append(
-                    f"<div align='center'>{header}</div>"
+                columns.append(
+                    _hover_title(header)
+                    + plate
                     + _article_body_html(text, accents=accents)
                 )
-            return "<br/>".join(parts)
+            return (
+                "<table cellspacing='12'><tr>"
+                f"<td>{columns[0]}</td><td>{columns[1]}</td>"
+                "</tr></table>"
+            )
         if self._skin.pointer == "trio":
             # Trio arm (owner spec): its theological theme, the day
             # third it CENTERS (the arm tip is the middle of its hue),
@@ -832,49 +858,64 @@ class Compositor:
             name = self._day.season_events[index][1]      # zone-correct name
             instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
             hours, minutes = self._day.anchor_day_lengths[index].split(":")
-            lines = [
-                # Bold event title (owner 2026-07-13).
-                f"<b>{html.escape(self._tr(name))}</b>{html.escape(star)}",
-                f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
-                f"{instant.year} - {instant:%H:%M}",
-                f"{int(hours)}h {int(minutes)}min",
-            ]
-            if self._skin.pointer == "cross":
-                lines.append("")
-                if self._day.zone == "tropics":
-                    # Tropics (owner decision): the cross arms describe
-                    # the equinox-bounded WET/DRY halves — the solstice
-                    # arms CENTER theirs, the equinox arms START theirs.
-                    span_start = 270.0 if anchor_angle in (270.0, 360.0) else 450.0
-                    lines += self._wet_dry_block(span_start)
-                else:
-                    season = self._season_name_for(anchor_angle)
-                    met_start, met_end = meteorological_span(
-                        self._day.year_anchors, anchor_angle
-                    )
-                    met_start = met_start.astimezone(self._day.tzinfo)
-                    met_end = met_end.astimezone(self._day.tzinfo)
-                    lines += [
-                        "<b>" + html.escape(
-                            self._tr("Meteorological {season}").format(
-                                season=self._tr(season)
-                            )
-                        ) + "</b>",
-                        f"{self._tr('From')} {self._ord(met_start.day)} "
-                        f"{self._month(met_start)} {met_start.year} - "
-                        f"{met_start:%H:%M}",
-                        f"{self._tr('To')} {self._ord(met_end.day)} "
-                        f"{self._month(met_end)} {met_end.year} - "
-                        f"{met_end:%H:%M}",
-                    ]
-            # The turning-point badge (owner 2026-07-13): both
-            # equinoxes share the ONE balance emblem.
+            # First block (owner format 2026-07-13: image → title →
+            # space → data; both equinoxes share the ONE balance
+            # emblem): the turning point with its labeled day length.
             badge = (
                 "Equinox" if "Equinox" in name else name.replace(" ", "_")
             )
-            return _hover_badge(
+            head = _hover_badge(
                 defaults.SEASON_ART_DIR / "turning_point" / f"{badge}.png"
-            ) + _centered_html(*lines)
+            ) + _hover_title(
+                f"{html.escape(self._tr(name))}{html.escape(star)}"
+            ) + _centered_html(
+                "",
+                f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
+                f"{instant.year} - {instant:%H:%M}",
+                f"{self._label('Daylight')} {int(hours)}h {int(minutes)}min",
+            )
+            if self._skin.pointer != "cross":
+                return head
+            # Second block, split off by a RULE (owner 2026-07-13:
+            # two data sets, a line between them): the meteorological
+            # season — or the tropics' wet/dry half-year — wearing its
+            # own badge.
+            if self._day.zone == "tropics":
+                # Tropics (owner decision): the cross arms describe
+                # the equinox-bounded WET/DRY halves — the solstice
+                # arms CENTER theirs, the equinox arms START theirs.
+                span_start = 270.0 if anchor_angle in (270.0, 360.0) else 450.0
+                is_wet, block = self._wet_dry_block(span_start)
+                return head + "<hr/>" + _hover_badge(
+                    defaults.SEASON_ART_DIR
+                    / f"{'Wet' if is_wet else 'Dry'}_Season.png"
+                ) + block
+            season = self._season_name_for(anchor_angle)
+            met_start, met_end = meteorological_span(
+                self._day.year_anchors, anchor_angle
+            )
+            met_start = met_start.astimezone(self._day.tzinfo)
+            met_end = met_end.astimezone(self._day.tzinfo)
+            met_days = (met_end - met_start).total_seconds() / 86400
+            return head + "<hr/>" + _hover_badge(
+                defaults.SEASON_ART_DIR / "meteorological" / f"{season}.png"
+            ) + _hover_title(
+                html.escape(
+                    self._tr("Meteorological {season}").format(
+                        season=self._tr(season)
+                    )
+                )
+            ) + _centered_html(
+                "",
+                f"<b>{self._tr('From')}</b> {self._ord(met_start.day)} "
+                f"{self._month(met_start)} {met_start.year} - "
+                f"{met_start:%H:%M}",
+                f"<b>{self._tr('To')}</b> {self._ord(met_end.day)} "
+                f"{self._month(met_end)} {met_end.year} - "
+                f"{met_end:%H:%M}",
+                f"{self._label('Duration')} {met_days:.1f} "
+                f"{html.escape(self._tr('Days'))}",
+            )
         # Octa diagonal arms point at the QUARTER centers: the four
         # temperate seasons — or, in the tropics, the halves of the
         # wet/dry seasons (owner spec: TL is the first part of the
@@ -906,7 +947,7 @@ class Compositor:
                 f"<b>{html.escape(self._tr('Wet season' if is_wet else 'Dry season'))}</b> "
                 f"{half}{html.escape(star)}"
             )
-            whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
+            _, whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
             return _hover_badge(
                 defaults.SEASON_ART_DIR
                 / f"{'Wet' if is_wet else 'Dry'}_Season.png"
@@ -915,9 +956,7 @@ class Compositor:
                 self._span_line(start, end, days),
                 f"{self._tr('Heart:')} {self._ord(middle.day)} "
                 f"{self._month(middle)}",
-                "",
-                *whole,
-            )
+            ) + "<hr/>" + whole
         season = self._season_name_for(start_angle)
         return _hover_badge(
             defaults.SEASON_ART_DIR / f"{season}.png"
@@ -936,9 +975,11 @@ class Compositor:
             f"({days:.1f} {self._tr('Days')})"
         )
 
-    def _wet_dry_block(self, span_start_angle: float) -> list[str]:
-        """The whole wet/dry season lines (tropics): name and its
-        equinox-to-equinox span with the duration."""
+    def _wet_dry_block(self, span_start_angle: float) -> tuple[bool, str]:
+        """The whole wet/dry season block (tropics), in the owner's
+        2026-07-13 season format — title → space → bold From/To bounds
+        → labeled Duration; returns (is_wet, html) so the caller can
+        pick the badge."""
         start = self._anchor_instant(span_start_angle).astimezone(self._day.tzinfo)
         end = self._anchor_instant(span_start_angle + 180.0).astimezone(
             self._day.tzinfo
@@ -946,11 +987,17 @@ class Compositor:
         starts_in_march = span_start_angle % 360.0 == 270.0
         is_wet = starts_in_march != self._day.southern_hemisphere
         days = (end - start).total_seconds() / 86400
-        return [
-            # Bold season title (owner 2026-07-13).
-            f"<b>{html.escape(self._tr('Wet season' if is_wet else 'Dry season'))}</b>",
-            self._span_line(start, end, days),
-        ]
+        return is_wet, _hover_title(
+            html.escape(self._tr("Wet season" if is_wet else "Dry season"))
+        ) + _centered_html(
+            "",
+            f"<b>{self._tr('From')}</b> {self._ord(start.day)} "
+            f"{self._month(start)} {start.year}",
+            f"<b>{self._tr('To')}</b> {self._ord(end.day)} "
+            f"{self._month(end)} {end.year}",
+            f"{self._label('Duration')} {days:.1f} "
+            f"{html.escape(self._tr('Days'))}",
+        )
 
     def _season_name_for(self, start_anchor_angle: float) -> str:
         """The temperate season STARTING at an unwrapped anchor angle —
@@ -1007,36 +1054,82 @@ class Compositor:
             f"{last.day} {self._month_short(last)}"
         )
 
-    def _zodiac_text(self) -> str:
-        """Zodiac slot hover (owner rework): the sign and its span, then
-        the sign's ARTICLE (base only — the palette variants speak in
-        hexa arm colors) with the owner's sign art on top."""
+    def _zodiac_image_trio(self, style: str | None, sign: str) -> str:
+        """The Astrology hover's image row (owner 2026-07-13): the
+        ACTIVE style's art LARGE in the middle — filling the image
+        band — and the two remaining styles small at its sides (text
+        mode leads with the colored logo)."""
         from render.layers import octa_slot_art
 
+        dirs = constants.ZODIAC_STYLE_ART_DIRS
+        main_style = style if style in dirs else "colored"
+        sides = {
+            "logo": ("sign", "constellation"),
+            "colored": ("sign", "constellation"),
+            "sign": ("logo", "constellation"),
+            "constellation": ("sign", "logo"),
+        }[main_style]
+        side_px = round(
+            defaults.ASTRO_MAIN_IMAGE_PX * defaults.ASTRO_SIDE_IMAGE_FRACTION
+        )
+
+        def img(folder: str, px: int) -> str:
+            path = octa_slot_art(folder, sign)
+            if path is None or not path.exists():
+                return ""
+            return f"<img src='{path.as_uri()}' width='{px}' align='middle'/>"
+
+        return (
+            "<div align='center'>"
+            + img(dirs[sides[0]], side_px)
+            + img(dirs[main_style], defaults.ASTRO_MAIN_IMAGE_PX)
+            + img(dirs[sides[1]], side_px)
+            + "</div>"
+        )
+
+    def _zodiac_text(self, style: str | None = None) -> str:
+        """Zodiac slot hover (owner rework, formatting 2026-07-13):
+        the sign name as the bold title with its span beneath, the
+        image TRIO led by the active style, then the sign's ARTICLE
+        (base only — the palette variants speak in hexa arm colors)."""
         day = self._day
         last = day.zodiac_end - timedelta(days=1)
-        header = _centered(
-            f"{day.zodiac_symbol} {self._tr(day.zodiac_name)}",
+        header = _hover_title(html.escape(self._tr(day.zodiac_name))) + _centered(
             f"{day.zodiac_start.day} {self._month_short(day.zodiac_start)} – "
             f"{last.day} {self._month_short(last)}",
         )
         article = self._symbolism.zodiac_article(day.zodiac_name)
-        return header + "<br/>" + _article_html(
-            octa_slot_art("sign", day.zodiac_name), None,
-            article["base"],
-            accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
+        return (
+            header
+            + self._zodiac_image_trio(style, day.zodiac_name)
+            + _article_body_html(
+                article["base"],
+                accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
+            )
         )
 
-    def _lunation_ordinal(self) -> str:
+    def _lunation_ordinal(self, next_cycle: bool = False) -> str:
         """"7<sup>th</sup> Moon of 2026" — which lunation of the
         calendar year is running, counted from the year's FIRST New
         Moon (owner correction 2026-07-12): the days BEFORE it still
         ride the lunation that started in December, so they read as
         the PREVIOUS year's last — 12th or 13th, however many that
-        year really began (13 roughly one year in three)."""
+        year really began (13 roughly one year in three).
+        `next_cycle` reads the FOLLOWING lunation instead (owner logic
+        2026-07-13: with the Moon on the dial's left — second half of
+        its cycle — the ring past 12h already belongs to the NEXT
+        moon, December wrapping into the new year's 1st)."""
         day = self._day
         noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
-        year = day.local_date.year
+        if next_cycle:
+            # Slide the reading instant just past the next New Moon —
+            # the moon_window covers the neighbor years, so the event
+            # is always in the data.
+            noon = min(
+                when for when, name in day.moon_events
+                if name == "New Moon" and when > noon
+            ) + timedelta(hours=1)
+        year = noon.astimezone(day.tzinfo).year
         count = sum(
             1 for when, name in day.moon_events
             if name == "New Moon" and when.year == year and when <= noon
@@ -1139,6 +1232,13 @@ class Compositor:
             )
 
         fraction = theta / 360.0
+        # Which lunation the hovered ANGLE belongs to (owner logic
+        # 2026-07-13): the cycle runs one full ring from the 12h New
+        # Moon point. Moon on the LEFT (second half) → the right half
+        # of the ring, past 12h again, is already the NEXT moon; Moon
+        # on the RIGHT (first half) → the whole ring is the current
+        # one (behind it the young past, ahead of it the rest).
+        next_cycle = day.moon_fraction > 0.5 and fraction < 0.5
         cycle_day = f"{fraction * constants.SYNODIC_MONTH_DAYS:.1f}"
         line_moon = (
             f"{self._label('Illumination')} "
@@ -1159,34 +1259,36 @@ class Compositor:
             line_year,
             "",
             f"<b>{html.escape(self._tr('Moon'))}</b>",
-            self._lunation_ordinal(),
+            self._lunation_ordinal(next_cycle=next_cycle),
             line_moon,
         )
 
-    def _ascendant_text(self) -> str:
-        """The Ascendant hover (owner request 2026-07-12): the sign
-        RISING on the eastern horizon right now — the natal podznak,
-        a new sign roughly every two hours — with its article."""
-        from render.layers import octa_slot_art
-
+    def _ascendant_text(self, style: str | None = None) -> str:
+        """The Ascendant hover (owner request 2026-07-12, formatting
+        2026-07-13): "Ascendant" as the bold title, the rising sign
+        beneath it, the image TRIO led by the active style, then the
+        sign's article."""
         sign = self._last_tick.ascendant_sign
         symbol = dict(constants.ZODIAC_SIGNS)[sign]
-        header = _centered(
-            self._tr("Ascendant"), f"{symbol} {self._tr(sign)}"
-        )
+        header = _hover_title(
+            html.escape(self._tr("Ascendant"))
+        ) + _centered(f"{symbol} {self._tr(sign)}")
         article = self._symbolism.zodiac_article(sign)
-        return header + "<br/>" + _article_html(
-            octa_slot_art("sign", sign), None, article["base"],
-            accents=defaults.SIGN_ACCENT_HUES[sign],
+        return (
+            header
+            + self._zodiac_image_trio(style, sign)
+            + _article_body_html(
+                article["base"], accents=defaults.SIGN_ACCENT_HUES[sign],
+            )
         )
 
     def _moon_text(self) -> str:
-        """Moon hover (owner formatting round 2026-07-12): bold Phase /
-        Illumination / Moonrise-Moonset labels, a blank line, then the
-        cycle day and the running lunation."""
+        """Moon hover (owner formatting rounds 2026-07-12/13): the
+        PHASE NAME is the title — bigger, bold, no label — with the
+        principal-phase instant beneath it, then the labeled data."""
         day = self._day
         name = phase_name(day.moon_fraction)
-        phase_value = html.escape(self._tr(name))
+        title = _hover_title(html.escape(self._tr(name)))
         if name in constants.MOON_PHASE_FRACTIONS:
             # A principal phase name holds ±12 h around its instant —
             # show that instant (the nearest principal event by name).
@@ -1195,12 +1297,11 @@ class Compositor:
                 (event for event in day.moon_events if event[1] == name),
                 key=lambda event: abs(event[0] - noon),
             )[0].astimezone(day.tzinfo)
-            phase_value += html.escape(
-                f" ({instant.day} {self._month_short(instant)}"
-                f" - {instant:%H:%M})"
+            title += _centered(
+                f"{instant.day} {self._month_short(instant)}"
+                f" - {instant:%H:%M}"
             )
         lines = [
-            f"{self._label('Phase')} {phase_value}",
             f"{self._label('Illumination')} "
             f"{day.moon_illumination * 100:.1f}%",
         ]
@@ -1216,7 +1317,8 @@ class Compositor:
         elif day.moonset is not None:
             lines.append(f"{self._label('Moonset')} {day.moonset:%H:%M}")
         cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
-        return _centered_html(
+        return title + _centered_html(
+            "",
             *lines,
             "",
             html.escape(

@@ -296,12 +296,15 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     compositor = Compositor(skin, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     top = compositor.tooltip_at(180.0, 72.0, 360.0)      # top arm
-    # Hover rework (owner spec): the diamond shows each of its TWO
-    # signs as a header with the span in parentheses, followed by the
-    # sign's LEFT-aligned article (base + the active palette paragraph).
+    # Hover rework (owner 2026-07-13 round two): the diamond's TWO
+    # signs stand side by side as columns — bold title with the span
+    # in parentheses (no glyph), the colored logo, JUSTIFIED article
+    # (base + the active palette paragraph).
     assert "Gemini" in top and "Cancer" in top
     assert "(21<sup>st</sup> May - 20<sup>th</sup> June)" in top
-    assert "align='left'" in top                         # article prose
+    assert "align='justify'" in top                      # article prose
+    assert "logo_colored" in top                         # the colored plates
+    assert top.count("<td>") == 2                        # two sign columns
     assert "Castor" in top or "Pollux" in top            # Gemini article text
 
 
@@ -363,13 +366,14 @@ def test_encyclopedia_expansion_wiring():
     for family in ("virtues", "sins", "moods"):
         assert len(topics[family]["entries"]) == 8
     # The metal themes cycle four looks, COLORED FIRST (owner default
-    # 2026-07-13); the sun stacks the Servant row UNDER the Ruler row.
+    # 2026-07-13); the sun's two plates stand SIDE BY SIDE — Ruler
+    # left, Servant right (owner correction 2026-07-13).
     greek_sun = topics["greek"]["entries"][0]
     assert [label for label, _ in greek_sun["looks"]] == [
         "Colored", "Bronze", "Gold", "Silver",
     ]
     assert all(
-        len(rows) == 2 and all(len(row) == 1 for row in rows)
+        len(rows) == 1 and len(rows[0]) == 2
         for _, rows in greek_sun["looks"]
     )
     # Chinese stays BRONZE-first; planets cycle photo/sign; astrology
@@ -383,25 +387,29 @@ def test_encyclopedia_expansion_wiring():
     assert [l for l, _ in topics["astrology"]["entries"][0]["looks"]] == [
         "Logo & Constellation", "Colored", "Sign",
     ]
-    # The Week pages group by kinship; Sunday's canon strip is a 2x5
-    # grid — every pair vertical, Ruler above Servant.
+    # The Week pages group by kinship; Sunday's canon strip is ONE row
+    # of interleaved pairs — each Ruler immediately left of its
+    # Servant (owner correction 2026-07-13: never stacked).
     week_sun = topics["week"]["entries"][0]
     assert [l for l, _ in week_sun["looks"]] == [
         "Canon", "Gods", "Religions", "Themes", "Animals",
     ]
     canon_rows = week_sun["looks"][0][1]
-    assert len(canon_rows) == 2
-    assert len(canon_rows[0]) == 5 and len(canon_rows[1]) == 5
+    assert len(canon_rows) == 1
+    assert len(canon_rows[0]) == 10
     monday = topics["week"]["entries"][1]
     assert len(monday["looks"][0][1]) == 1        # single row off-Sunday
     # The animal societies are metal themes with the full four looks
-    # and their own Sunday pairs (owner 2026-07-13).
+    # and their own side-by-side Sunday pairs (owner 2026-07-13).
     for theme in ("wolf", "bee", "elephant"):
         entry = topics[theme]["entries"][0]
         assert [l for l, _ in entry["looks"]] == [
             "Colored", "Bronze", "Gold", "Silver",
         ], theme
-        assert all(len(rows) == 2 for _, rows in entry["looks"]), theme
+        assert all(
+            len(rows) == 1 and len(rows[0]) == 2
+            for _, rows in entry["looks"]
+        ), theme
     # The Seasons topic (badges + articles) and the trinity emblems.
     assert len(topics["seasons"]["entries"]) == 10
     met = topics["seasons"]["entries"][-1]

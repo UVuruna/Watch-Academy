@@ -231,4 +231,4 @@ def test_hidden_elements_take_no_hovers(july_wednesday):
     # weekday element off (and the arms off) no body or arm answers —
     # only the wheel's own night hover.
     tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
-    assert "Night" in tip and "Mercury" not in tip and "align='left'" not in tip
+    assert "Night" in tip and "Mercury" not in tip and "align='justify'" not in tip

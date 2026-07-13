@@ -59,8 +59,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (every `WEEKDAY_THEME_TITLES` entry — the three bronze-plate themes
   open a Gold/Bronze/Silver/Colored metal dropdown whose pick
   activates theme AND metal, releasing follow-the-ring — plus the
-  shared Names switch, offered in both slots and kept in sync by a
-  menu rebuild), the Time/Date/Day length text modes, and the
+  slot's OWN Names switch — `show_weekday_names` for the day slot,
+  `show_info_slot_names` for the info slot (owner bug 2026-07-13:
+  they were one linked setting)), the Time/Date/Day length text
+  modes, and the
   Astrology / Ascendant / Chinese-zodiac families with their own
   STYLE dropdowns (day slot: image styles only; info slot adds Text).
   Gating: the day slot's badge families need the pinned layout
@@ -71,8 +73,8 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   24h) and under Aurora, plus anywhere once the Pointer element is
   off — the Trinity and the Prism have NO room while the star is up;
   Aurora grays the info slot's plain and Text entries. Pointer,
-  show_weekday, show_pointer and show_weekday_names changes REBUILD
-  the menu so the matrix (and the twin Names checkbox) recomputes.
+  show_weekday and show_pointer changes REBUILD
+  the menu so the enablement matrix recomputes.
   Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's

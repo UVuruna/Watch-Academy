@@ -71,6 +71,10 @@ class Settings:
     show_octa_slot: bool = True         # the Compass info slot (octa only)
     show_earth_date: bool = True        # the date label on the Earth marker
     show_weekday_names: bool = True     # the day-name text on the bodies
+    show_info_slot_names: bool = True   # the day-name text on the info
+                                        # slot's second body (owner bug
+                                        # 2026-07-13: its OWN switch —
+                                        # the two slots were linked)
     moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
     hands: str = "STEEL"                # the hand pack (Design ▸ Hands)
     # Theme rotation (owner spec 2026-07-12): cycle the CHECKED weekday
@@ -236,6 +240,9 @@ class SettingsStore:
                 show_octa_slot=_load_bool(raw, "show_octa_slot", True),
                 show_earth_date=_load_bool(raw, "show_earth_date", True),
                 show_weekday_names=_load_bool(raw, "show_weekday_names", True),
+                show_info_slot_names=_load_bool(
+                    raw, "show_info_slot_names", True
+                ),
                 moon_hidden_alpha=_load_scale(
                     raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
                 ),
@@ -327,6 +334,7 @@ class SettingsStore:
             "show_octa_slot": settings.show_octa_slot,
             "show_earth_date": settings.show_earth_date,
             "show_weekday_names": settings.show_weekday_names,
+            "show_info_slot_names": settings.show_info_slot_names,
             "moon_hidden_alpha": settings.moon_hidden_alpha,
             "hands": settings.hands,
             "theme_rotation": settings.theme_rotation,

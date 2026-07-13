@@ -327,6 +327,7 @@ def apply_display_settings(skin, settings: Settings):
         show_octa_slot=settings.show_octa_slot,
         show_earth_date=settings.show_earth_date,
         show_weekday_names=settings.show_weekday_names,
+        show_info_slot_names=settings.show_info_slot_names,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
         octa_slot_scale=settings.octa_slot_scale,
@@ -750,16 +751,11 @@ class AppController(QObject):
         self._settings = replace(self._settings, **{key: value})
         self._install_skin(build_skin(self._settings))
         self._flush_position()
-        if key in (
-            "pointer", "show_weekday", "show_pointer",
-            "show_weekday_names",
-        ):
+        if key in ("pointer", "show_weekday", "show_pointer"):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
-            # image-only modes, the Solar rotation lock) — or, for the
-            # Names switch, have a TWIN checkbox in the other slot's
-            # Weekday submenu — rebuild the menu so every state
-            # recomputes declaratively.
+            # image-only modes, the Solar rotation lock) — rebuild the
+            # menu so every state recomputes declaratively.
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
             self._tray.set_menu(self._menu)
@@ -945,13 +941,13 @@ class AppController(QObject):
 
         def add_weekday_submenu(
             parent: QMenu, group: QActionGroup,
-            active: bool, current_theme: str, on_theme,
+            active: bool, current_theme: str, on_theme, names_key: str,
         ) -> None:
             """The IDENTICAL Weekday submenu of both slots (owner
-            2026-07-12): the 11 themes — the bronze-plate ones open
-            their metal dropdown in place — plus the shared Names
-            switch. Picking a theme also picks the slot's weekday
-            mode."""
+            2026-07-12): the themes — the bronze-plate ones open
+            their metal dropdown in place — plus the slot's OWN Names
+            switch (owner bug 2026-07-13: the two slots were linked).
+            Picking a theme also picks the slot's weekday mode."""
             sub = parent.addMenu(tr("Weekday"))
             for key, title in defaults.WEEKDAY_THEME_TITLES.items():
                 if key in constants.METAL_THEMES:
@@ -970,13 +966,10 @@ class AppController(QObject):
                         lambda checked, t=key: on_theme(t),
                     )
             sub.addSeparator()
-            # The day-name text switch (owner spec 2026-07-12) — ONE
-            # shared setting, offered in both slots; toggling it
-            # rebuilds the menu so its twin stays in sync.
             self._add_toggle(
-                sub, tr("Names"), settings.show_weekday_names,
-                lambda checked: self._set_display_choice(
-                    "show_weekday_names", checked
+                sub, tr("Names"), getattr(settings, names_key),
+                lambda checked, key=names_key: self._set_display_choice(
+                    key, checked
                 ),
                 tr("The day name written on the weekday bodies."),
             )
@@ -993,7 +986,7 @@ class AppController(QObject):
         add_weekday_submenu(
             day_slot_menu, day_group,
             settings.weekday_slot == "weekday", settings.weekday_theme,
-            self._set_weekday_theme,
+            self._set_weekday_theme, "show_weekday_names",
         )
         # The text modes join the DAY slot too (owner 2026-07-12) —
         # like the badges they are gray in Pointer mode, and Aurora
@@ -1053,6 +1046,7 @@ class AppController(QObject):
             lambda theme, metal=None: self._set_south_slot(
                 "weekday", theme=theme, metal=metal
             ),
+            "show_info_slot_names",
         )
         for mode, label in (
             ("time", tr("Time")),

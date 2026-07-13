@@ -128,6 +128,9 @@ UI_STRINGS: tuple[str, ...] = (
     "{ordinal} Day - {ordinal_week} Week",
     "{season} {ordinal} of {total} Days",
     "Heart:", "Meteorological {season}", "From", "To",
+    # Owner formatting round 2026-07-13: the turning-point hover labels
+    # its day length, the season blocks their span length.
+    "Daylight", "Duration",
     "Wet season", "Dry season", "(1st half)", "(2nd half)",
     "Day", "Days", "Year", "{element} {animal}",
     # The ring tick-band hover + the Moon hover lunation (owner

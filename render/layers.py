@@ -1097,8 +1097,11 @@ class BottomSlotLayer(Layer):
                 return
             text = sign                  # documented fallback until the art lands
         elif mode == "ascendant":        # style == "text": two lines
+            # The FULL word (owner 2026-07-13: never the "Asc"
+            # shorthand) — the shared fit-to-width font shrinks to it.
             self._two_lines(
-                painter, pos, slot_size, "Asc", ctx.tick.ascendant_sign
+                painter, pos, slot_size, "Ascendant",
+                ctx.tick.ascendant_sign,
             )
             return
         elif mode == "chinese" and style in constants.CHINESE_STYLE_ART_DIRS:
@@ -1151,7 +1154,7 @@ class BottomSlotLayer(Layer):
                     ),
                 )
                 if (
-                    ctx.skin.show_weekday_names
+                    ctx.skin.show_info_slot_names
                     and theme != "planet_signs"
                 ):
                     draw_body_label(painter, ctx, body, pos, slot_size)
@@ -1178,7 +1181,7 @@ class BottomSlotLayer(Layer):
     ) -> None:
         """Two stacked outlined lines sharing one fit-to-width font —
         the Chinese year ("Fire" / "Horse") and the Ascendant
-        ("Asc" / "Virgo") text styles (Rule #5)."""
+        ("Ascendant" / "Virgo") text styles (Rule #5)."""
         font = QFont()
         font.setBold(True)
         font.setPixelSize(100)

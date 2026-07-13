@@ -7,14 +7,18 @@ The article BROWSER (owner spec 2026-07-12; menu Encyclopedia… below
 Time Travel…): every legend readable without hovering the dial, on two
 screens —
 
-1. **Topics** — a gallery in FOUR GROUPS (owner UX round 2026-07-12,
-   `_TOPIC_GROUPS`): Gods (Greek/Norse/Egyptian/Slavic), Zodiac
-   (Astrology, Chinese zodiac, Planets, Planet signs), Themes
-   (Alchemy, Japanese week, Professions, Trinity) and Religions
-   (two members for now) — a bold header + rule above each card row.
+1. **Topics** — a gallery in the owner's GROUPS (`_TOPIC_GROUPS`):
+   The Clock, Gods, Zodiac, Themes, Religions, Animal Societies and
+   The Inner Wheel — EVERYTHING centered (owner 2026-07-13: headers
+   and card rows alike) and the cards RESPONSIVE: `_rescale_topics`
+   grows/shrinks the icons with the window between
+   `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`; only below the minimum does
+   the scrollbar take over.
 2. **Articles** — a scrollable list of the topic's entries: the
    entity image(s) — Astrology shows the sign LOGO and its
-   CONSTELLATION side by side — the NAME as a bold title and the
+   CONSTELLATION side by side, every Sunday RULER/SERVANT pair stands
+   side by side too (owner correction 2026-07-13: never stacked) —
+   the NAME as a bold title and the
    full base article, translated through the active overlay and with
    the canon terms highlighted exactly like the dial legends (virtues
    blue, vices red, moods yellow, the entity's own arm hue).
@@ -24,6 +28,14 @@ The window is RESIZABLE: each entry is ONE centered block spanning
 left-aligned INSIDE the block — owner: center the object, never the
 lines), images share the block, and the font grows with the width at
 the gentle em-like coefficient (`ENCYCLOPEDIA_FONT_GROWTH`, capped).
+
+It is a NORMAL window (owner 2026-07-13: no stay-on-top). The look
+images decode LAZILY — `_show_topic` keeps only PATHS and
+`_render_cell` loads through the `_pixmap` cache on first display
+(owner 2026-07-13: The Week opened far too slowly when every look of
+every entry decoded upfront), and after every look switch the grid
+geometry is committed immediately so larger art never draws clipped
+under its neighbors.
 
 ## Connections
 
@@ -44,5 +56,8 @@ the gentle em-like coefficient (`ENCYCLOPEDIA_FONT_GROWTH`, capped).
 
 ### EncyclopediaDialog
 - `__init__(translations)`: builds the topic gallery
-- `_show_topic(key)`: fills the scrollable article list
-- `_rescale()`: live image sizing on resize (Guide pattern)
+- `_show_topic(key)`: fills the scrollable article list (paths only —
+  pixmaps decode lazily)
+- `_rescale()`: live sizing on resize — gallery cards through
+  `_rescale_topics()`, article blocks/fonts otherwise
+- `_pixmap(path)`: the decoded-image cache behind the lazy looks

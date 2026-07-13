@@ -184,6 +184,10 @@ class SkinDefinition:
                                        # bodies (owner spec 2026-07-12:
                                        # its own switch under Theme ▸
                                        # Weekday, like the Earth date)
+    show_info_slot_names: bool = True  # the SAME switch for the info
+                                       # slot's second body (owner bug
+                                       # 2026-07-13: the two slots must
+                                       # toggle independently)
     # Ring recolor (owner spec, FINAL.txt #6): ONE hue multiplies the
     # ring art, the hands and the Umbra (None = untouched gray art);
     # the finish picks the owner's letter art set (gold = M/D/Y/P/H

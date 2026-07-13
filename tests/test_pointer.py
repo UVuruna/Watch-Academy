@@ -739,8 +739,11 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     moon = compositor._moon_text()
-    # Formatting round 2026-07-12: bold labels on the first three rows.
-    assert "Phase:</b>" in moon
+    # Formatting round 2026-07-13: the phase NAME is the title — no
+    # "Phase:" label anywhere, the name rides the bigger bold line.
+    assert "Phase:</b>" not in moon
+    assert "font-weight:bold" in moon
+    assert "Waning" in moon or "Waxing" in moon or "Moon" in moon
     assert "Illumination:</b> 42.8%" in moon   # one decimal (owner spec)
     assert "of 29.53" in moon and "&nbsp;" in moon
     # 8 Jul 2026 is a SKIP day in Belgrade — the moon sets at 13:53 but
@@ -786,6 +789,41 @@ def test_lunation_before_the_years_first_new_moon(app, july_wednesday):
     assert "6" in july and "2026" in july
 
 
+def test_lunation_ordinal_reads_the_ring_side(app):
+    """Owner logic 2026-07-13 (his 11 July screenshot): with the Moon
+    on the dial's LEFT — second half of its cycle — the ring past 12h
+    already belongs to the NEXT moon (hovering right of the top must
+    read the 7th, not the running 6th); and December wraps into the
+    new year's 1st."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+
+    def ordinals(now):
+        day = build_day_context(
+            now, observer,
+            SeasonsRepository().year_anchors(now.year),
+            MoonPhaseRepository().moon_window(now.year),
+        )
+        assert day.moon_fraction > 0.5      # premise: Moon on the LEFT
+        tick = build_tick_state(now, day)
+        compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+        compositor.render_offscreen(360.0, 1.0, day, tick)
+        return (
+            compositor._lunation_ordinal(),
+            compositor._lunation_ordinal(next_cycle=True),
+        )
+
+    current, following = ordinals(datetime(2026, 7, 11, 12, 0, tzinfo=tz))
+    assert "6" in current and "2026" in current
+    assert "7" in following and "2026" in following
+    december, january = ordinals(datetime(2026, 12, 28, 12, 0, tzinfo=tz))
+    assert "12" in december and "2026" in december
+    assert "1<sup>st</sup>" in january and "2027" in january
+
+
 def test_upright_mode_disarms_the_rotation(july_wednesday):
     """With solar rotation OFF the Star/Aura/Umbra stand upright — the
     render differs from the solar one (Belgrade July tilts ~+14 deg) and
@@ -801,11 +839,11 @@ def test_upright_mode_disarms_the_rotation(july_wednesday):
     # Wednesday=mercury sits at exactly 180 deg when upright: hover at the
     # unrotated slot center must hit it (orbit 0.38 * 180 px below center).
     # Hover rework: the ACTIVE body leads with the date and carries its
-    # LEFT-aligned article (base + the active combination's paragraph).
+    # JUSTIFIED article (base + the active combination's paragraph).
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     tip = upright_compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
     assert "Wednesday, 8<sup>th</sup> July 2026" in tip
-    assert "align='left'" in tip
+    assert "align='justify'" in tip
     assert "Mercury" in tip                    # the planets article text
     assert "align='center'" in tip           # hover text is centered (owner spec)
 
@@ -907,7 +945,7 @@ def test_trio_arm_hover_carries_the_virtue_article(july_wednesday):
     tip = compositor.tooltip_at(180.0, 72.0, 360.0)       # top arm = Faith
     assert "Faith" in tip and "08:00 - 16:00" in tip
     assert "Thursday" in tip and "Saturday" in tip
-    assert "align='left'" in tip and "vertical line" in tip
+    assert "align='justify'" in tip and "vertical line" in tip
 
 
 def test_day_and_night_period_hovers(july_wednesday):
@@ -1016,7 +1054,7 @@ def test_ghost_body_hover_shows_the_article_alone(july_wednesday):
     upright.render_offscreen(360.0, 1.0, day, tick)
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     tip = upright.tooltip_at(180.0, 180.0 - orbit, 360.0)   # top slot = jupiter
-    assert tip is not None and "align='left'" in tip
+    assert tip is not None and "align='justify'" in tip
     assert "Jupiter" in tip                    # its planets article
     assert "July 2026" not in tip              # no date line on ghosts
 
@@ -1027,8 +1065,9 @@ def test_ghost_body_hover_shows_the_article_alone(july_wednesday):
 def test_hexa_arm_hover_names_its_two_signs(july_wednesday):
     """Each hexa diamond spans exactly TWO zodiac signs (the owner's
     proposed list had Aquarius doubled on the bottom arm — corrected:
-    bottom = Sagittarius + Capricorn), one full line each: symbol,
-    name, date span. Upright → no asterisk."""
+    bottom = Sagittarius + Capricorn), side by side as two COLUMNS
+    (owner 2026-07-13): bold title with the date span, no glyph.
+    Upright → no asterisk."""
     day, tick = july_wednesday
     upright = Compositor(
         dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False), AssetCache()
@@ -1036,7 +1075,8 @@ def test_hexa_arm_hover_names_its_two_signs(july_wednesday):
     upright.render_offscreen(360.0, 1.0, day, tick)
     top = upright.tooltip_at(180.0, 72.0, 360.0)          # top diamond, 0.6R up
     assert "Gemini" in top and "Cancer" in top and "*" not in top
-    assert "<br/>" in top                                 # one sign per line
+    assert top.count("<td>") == 2                         # two sign columns
+    assert "♊" not in top and "♋" not in top              # titles wear no glyph
     assert "May" in top and "Jun" in top                  # each with its dates
     bottom = upright.tooltip_at(180.0, 288.0, 360.0)      # below mercury's slot
     assert "Sagittarius" in bottom and "Capricorn" in bottom

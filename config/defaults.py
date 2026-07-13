@@ -269,8 +269,14 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 # entity's art rides on top of its article, larger and clearer than on
 # the dial; the prose wraps at a fixed width so QToolTip stays a column.
 ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must read
-ARTICLE_WRAP_CHARS = 68              # owner 2026-07-13: the legend prose should
-                                     # span nearly the tooltip's full width
+ARTICLE_TEXT_WIDTH_PX = 460          # owner 2026-07-13 round two: the prose is
+                                     # JUSTIFIED inside a fixed-width column
+                                     # (Qt reflows it — no manual wrapping)
+# The Astrology/Ascendant hover image trio (owner 2026-07-13): the
+# ACTIVE style's art large in the middle, the two remaining styles
+# small at its sides.
+ASTRO_MAIN_IMAGE_PX = 256
+ASTRO_SIDE_IMAGE_FRACTION = 0.35
 PERIOD_EARTH_IMAGE_PX = 128          # the Day/Night hover carries a mini Earth
                                      # of the active region (owner 2026-07-12)
 ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
@@ -394,6 +400,11 @@ ENCYCLOPEDIA_BASE_FONT_PX = 13
 ENCYCLOPEDIA_FONT_GROWTH = 0.006     # extra px per viewport px above the base width
 ENCYCLOPEDIA_FONT_BASE_WIDTH = 560   # viewport width where the base font applies
 ENCYCLOPEDIA_MAX_FONT_PX = 21
+# The topic gallery cards (owner 2026-07-13: everything centered, the
+# thumbnails RESPONSIVE — they grow/shrink with the window between the
+# two bounds; below the minimum the scrollbar takes over).
+ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
+ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
