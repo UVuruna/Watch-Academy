@@ -66,6 +66,24 @@ def _theme_metal(settings: Settings, theme: str) -> str:
     return settings.theme_metals.get(theme, "bronze")
 
 
+class _StayOpenMenu(QMenu):
+    """A menu whose CHECKABLE items do not close it (owner menu rework
+    2026-07-13: several settings in one visit) — plain actions (Exit,
+    Settings…) close as usual; Escape or clicking away closes too."""
+
+    def mouseReleaseEvent(self, event) -> None:
+        action = self.actionAt(event.position().toPoint())
+        if (
+            action is not None
+            and action.isCheckable()
+            and action.isEnabled()
+        ):
+            action.trigger()
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
+
+
 def _next_rotation_theme(current: str, selected: tuple[str, ...]) -> str:
     """The theme AFTER `current` in the rotation list (cyclic); a
     current theme outside the list starts it from the top."""
@@ -356,6 +374,7 @@ class AppController(QObject):
             self._translation_overlay = TranslationStore().load(
                 self._settings.language
             )
+        self._retired_menu = None       # keeps a replaced OPEN menu alive
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
@@ -755,10 +774,17 @@ class AppController(QObject):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
             # image-only modes, the Solar rotation lock) — rebuild the
-            # menu so every state recomputes declaratively.
+            # menu so every state recomputes declaratively. The old
+            # menu may still be OPEN (stay-open items trigger without
+            # closing): close it and keep the reference alive until
+            # the next rebuild so Qt never deletes a visible popup.
+            retired = self._menu
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
             self._tray.set_menu(self._menu)
+            if retired is not None:
+                retired.close()
+                self._retired_menu = retired
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -776,9 +802,16 @@ class AppController(QObject):
             group.addAction(action)
             submenu.addAction(action)
 
+    def _submenu(self, parent: QMenu, title: str) -> QMenu:
+        """One stay-open submenu attached to `parent` (owner menu
+        rework 2026-07-13: every level keeps checkable picks open)."""
+        submenu = _StayOpenMenu(title, parent)
+        parent.addMenu(submenu)
+        return submenu
+
     def _add_choice_submenu(self, menu: QMenu, title: str, options, current, setter) -> QMenu:
         """One exclusive check-group submenu: options are (value, label)."""
-        submenu = menu.addMenu(title)
+        submenu = self._submenu(menu, title)
         self._add_choice_group(menu, submenu, options, current, setter)
         return submenu
 
@@ -800,13 +833,15 @@ class AppController(QObject):
         return ui(self._translation_overlay, text)
 
     def _build_menu(self) -> QMenu:
-        menu = QMenu()
+        menu = _StayOpenMenu()
         settings = self._settings
         tr = self._ui
-        # Reorganized menu (owner approved 2026-07-12): DESIGN = how
-        # the instrument looks (Pointer, Ring, Hands, Umbra, Size),
-        # THEME = what the figures show (Weekday, Earth, Compass slot).
-        design_menu = menu.addMenu(tr("Design"))
+        # Menu rework (owner 2026-07-13): emoji-fronted top level —
+        # Design / Primary Slot / Secondary Slot / Elements, then the
+        # three switches, the four windows, Exit — and checkable picks
+        # keep the menu OPEN. DESIGN = how the instrument looks
+        # (Pointer, Ring, Umbra | Hands, Earth | Size).
+        design_menu = self._submenu(menu, f"🎨 {tr('Design')}")
         # Pointer variant and palette style share ONE dropdown (owner
         # spec), two exclusive groups like the Umbra submenu.
         pointer_menu = self._add_choice_submenu(
@@ -860,13 +895,6 @@ class AppController(QObject):
             settings.ring_finish,
             lambda value: self._set_display_choice("ring_finish", value),
         )
-        # The HAND PACKS (owner spec 2026-07-12): bundled CLASSIC and
-        # STEEL plus whatever the user added via Settings.
-        self._add_choice_submenu(
-            design_menu, tr("Hands"),
-            [(name, name) for name in sorted(hand_packs())],
-            settings.hands, self._set_hands,
-        )
         umbra_menu = self._add_choice_submenu(
             design_menu, tr("Umbra"),
             [
@@ -887,14 +915,17 @@ class AppController(QObject):
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
         )
+        design_menu.addSeparator()
+        # The HAND PACKS (owner spec 2026-07-12): bundled CLASSIC and
+        # STEEL plus whatever the user added via Settings.
         self._add_choice_submenu(
-            design_menu, tr("Size"),
-            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
-            settings.diameter, self._set_diameter,
+            design_menu, tr("Hands"),
+            [(name, name) for name in sorted(hand_packs())],
+            settings.hands, self._set_hands,
         )
-        theme_menu = menu.addMenu(tr("Theme"))
+        # EARTH lives inside Design now (owner menu rework 2026-07-13).
         earth_menu = self._add_choice_submenu(
-            theme_menu, tr("Earth"),
+            design_menu, tr("Earth"),
             [("clean", tr("Clean")), ("atmo", tr("Atmosphere"))],
             settings.earth_style,
             lambda value: self._set_display_choice("earth_style", value),
@@ -913,19 +944,24 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        # DAY SLOT and INFO SLOT sit directly under Theme beside Earth
-        # (owner menu round 2026-07-12: the Slots wrapper and the
-        # separate Weekday entry confused — the THEME LIST lives inside
-        # each slot's own Weekday submenu now, and the two submenus are
-        # THE SAME: both pick a theme with its metal and both carry the
-        # Names switch).
+        design_menu.addSeparator()
+        self._add_choice_submenu(
+            design_menu, tr("Size"),
+            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
+            settings.diameter, self._set_diameter,
+        )
+        # PRIMARY and SECONDARY SLOT sit at the TOP level (owner menu
+        # rework 2026-07-13: the Theme wrapper is gone — Earth moved
+        # into Design). The two submenus stay the same shape: both
+        # pick a theme with its metal and both carry their OWN Names
+        # switch.
         aurora = settings.pointer == "aurora"
         badge_possible = (
             settings.pointer in constants.WEEKDAY_BADGE_POINTERS
             or not settings.show_pointer
         )
-        day_slot_menu = theme_menu.addMenu(tr("Day slot"))
-        info_slot_menu = theme_menu.addMenu(tr("Info slot"))
+        day_slot_menu = self._submenu(menu, f"🥇 {tr('Primary Slot')}")
+        info_slot_menu = self._submenu(menu, f"🥈 {tr('Secondary Slot')}")
 
         def slot_action(
             parent: QMenu, group: QActionGroup, label: str,
@@ -943,28 +979,45 @@ class AppController(QObject):
             parent: QMenu, group: QActionGroup,
             active: bool, current_theme: str, on_theme, names_key: str,
         ) -> None:
-            """The IDENTICAL Weekday submenu of both slots (owner
-            2026-07-12): the themes — the bronze-plate ones open
-            their metal dropdown in place — plus the slot's OWN Names
-            switch (owner bug 2026-07-13: the two slots were linked).
-            Picking a theme also picks the slot's weekday mode."""
-            sub = parent.addMenu(tr("Weekday"))
-            for key, title in defaults.WEEKDAY_THEME_TITLES.items():
-                if key in constants.METAL_THEMES:
-                    metal_menu = sub.addMenu(tr(title))
-                    for metal in constants.THEME_METALS:
+            """The IDENTICAL Weekday submenu of both slots, in KINSHIP
+            GROUPS (owner menu rework 2026-07-13: Ancient Gods /
+            Society / Animals / Arcana): the bronze-plate themes open
+            their metal dropdown in place, Planets nests its Image and
+            Sign looks — plus the slot's OWN Names switch. Picking a
+            theme also picks the slot's weekday mode."""
+            sub = self._submenu(parent, tr("Weekday"))
+            for group_title, keys in defaults.WEEKDAY_MENU_GROUPS:
+                group_menu = self._submenu(sub, tr(group_title))
+                for key in keys:
+                    title = defaults.WEEKDAY_THEME_TITLES[key]
+                    if key == "planets":
+                        # Image/Sign as two options of ONE entry
+                        # (owner: planet_signs stays a theme, nested).
+                        planet_menu = self._submenu(group_menu, tr(title))
+                        for pkey, plabel in (
+                            ("planets", tr("Image")),
+                            ("planet_signs", tr("Sign")),
+                        ):
+                            slot_action(
+                                planet_menu, group, plabel,
+                                active and current_theme == pkey,
+                                lambda checked, t=pkey: on_theme(t),
+                            )
+                    elif key in constants.METAL_THEMES:
+                        metal_menu = self._submenu(group_menu, tr(title))
+                        for metal in constants.THEME_METALS:
+                            slot_action(
+                                metal_menu, group, tr(metal.capitalize()),
+                                active and current_theme == key
+                                and _theme_metal(settings, key) == metal,
+                                lambda checked, t=key, m=metal: on_theme(t, m),
+                            )
+                    else:
                         slot_action(
-                            metal_menu, group, tr(metal.capitalize()),
-                            active and current_theme == key
-                            and _theme_metal(settings, key) == metal,
-                            lambda checked, t=key, m=metal: on_theme(t, m),
+                            group_menu, group, tr(title),
+                            active and current_theme == key,
+                            lambda checked, t=key: on_theme(t),
                         )
-                else:
-                    slot_action(
-                        sub, group, tr(title),
-                        active and current_theme == key,
-                        lambda checked, t=key: on_theme(t),
-                    )
             sub.addSeparator()
             self._add_toggle(
                 sub, tr("Names"), getattr(settings, names_key),
@@ -1008,7 +1061,7 @@ class AppController(QObject):
             ("zodiac", tr("Astrology")),
             ("ascendant", tr("Ascendant")),
         ):
-            badge_menu = day_slot_menu.addMenu(title)
+            badge_menu = self._submenu(day_slot_menu, title)
             badge_menu.setEnabled(badge_possible)
             for style, label in zodiac_styles:
                 slot_action(
@@ -1019,7 +1072,7 @@ class AppController(QObject):
                     self._set_weekday_badge(m, s),
                     badge_possible,
                 )
-        chinese_badge_menu = day_slot_menu.addMenu(tr("Chinese zodiac"))
+        chinese_badge_menu = self._submenu(day_slot_menu, tr("Chinese zodiac"))
         chinese_badge_menu.setEnabled(badge_possible)
         for style, label in (
             ("colored", tr("Colored")),
@@ -1066,7 +1119,7 @@ class AppController(QObject):
             # signs daily, it belongs to the hour-driven slot.
             ("ascendant", tr("Ascendant")),
         ):
-            family_menu = info_slot_menu.addMenu(family_title)
+            family_menu = self._submenu(info_slot_menu, family_title)
             for style, label in (
                 *zodiac_styles[:3],
                 ("text", tr("Text")),
@@ -1080,7 +1133,7 @@ class AppController(QObject):
                     self._set_south_slot(m, style=chosen),
                     not (aurora and style == "text"),
                 )
-        chinese_menu = info_slot_menu.addMenu(tr("Chinese zodiac"))
+        chinese_menu = self._submenu(info_slot_menu, tr("Chinese zodiac"))
         for style, label in (
             ("text", tr("Text")),
             ("colored", tr("Colored")),
@@ -1109,8 +1162,8 @@ class AppController(QObject):
         self._octa_slot_action = info_slot_menu.menuAction()
         self._octa_slot_action.setEnabled(slot_possible)
         # Elements (owner spec): plain on/off switches for every
-        # element — the Earth STYLE lives under Theme now.
-        elements_menu = menu.addMenu(tr("Elements"))
+        # element — the Earth STYLE lives under Design now.
+        elements_menu = self._submenu(menu, f"🧩 {tr('Elements')}")
         for key, label, tip in (
             (
                 "show_earth", tr("Earth"),
@@ -1146,11 +1199,10 @@ class AppController(QObject):
                 lambda checked, key=key: self._set_display_choice(key, checked),
                 tip,
             )
-        # The Info slot has its own switch, grayed out (like the Theme
-        # submenu) whenever the active pointer/element combination has
-        # no room for it.
+        # The Secondary Slot has its own switch, grayed out whenever
+        # the active pointer/element combination has no room for it.
         self._octa_slot_toggle = self._add_toggle(
-            elements_menu, tr("Info slot"), settings.show_octa_slot,
+            elements_menu, tr("Secondary Slot"), settings.show_octa_slot,
             lambda checked: self._set_display_choice("show_octa_slot", checked),
             tr("The information display. On the Compass and the Seasons "
                "it lives in the center (the 24h arm belongs to the "
@@ -1159,14 +1211,15 @@ class AppController(QObject):
                "slot at 3h."),
         )
         self._octa_slot_toggle.setEnabled(slot_possible)
+        menu.addSeparator()
         self._add_toggle(
-            menu, tr("Legend"), settings.legend,
+            menu, f"📜 {tr('Legend')}", settings.legend,
             lambda checked: self._set_display_choice("legend", checked),
             tr("All hover texts. Off: the dial shows nothing on hover — "
                "combined with Click-through it has zero interaction."),
         )
         self._solar_rotation_action = self._add_toggle(
-            menu, tr("Solar rotation"), settings.solar_rotation,
+            menu, f"🔆 {tr('Solar rotation')}", settings.solar_rotation,
             lambda checked: self._set_display_choice("solar_rotation", checked),
             tr("On: the star points at true solar noon. Off: Star, Aura and "
                "Umbra stand upright (12/24 at the top) for reading exact "
@@ -1176,30 +1229,30 @@ class AppController(QObject):
         # bands anchor to the real sun events, the toggle has no say.
         self._solar_rotation_action.setEnabled(settings.pointer != "aurora")
         self._add_toggle(
-            menu, tr("Click-through"), self._settings.click_through,
+            menu, f"🖱️ {tr('Click-through')}", self._settings.click_through,
             self._set_click_through,
             tr("The dial takes no clicks at all (they pass to the desktop); "
                "hover info still works. Turn it back off here in the tray."),
         )
         menu.addSeparator()
-        settings_action = QAction(tr("Settings…"), menu)
+        settings_action = QAction(f"⚙️ {tr('Settings…')}", menu)
         settings_action.triggered.connect(self._open_settings)
         menu.addAction(settings_action)
-        time_travel = QAction(tr("Time Travel…"), menu)
-        time_travel.triggered.connect(self._open_time_travel)
-        menu.addAction(time_travel)
-        encyclopedia = QAction(tr("Encyclopedia…"), menu)
+        encyclopedia = QAction(f"🏛️ {tr('Encyclopedia…')}", menu)
         encyclopedia.triggered.connect(
             lambda: EncyclopediaDialog(self._translation_overlay).exec()
         )
         menu.addAction(encyclopedia)
-        guide = QAction(tr("Guide…"), menu)
+        guide = QAction(f"📖 {tr('Guide…')}", menu)
         guide.triggered.connect(
             lambda: GuideDialog(self._translation_overlay).exec()
         )
         menu.addAction(guide)
+        time_travel = QAction(f"🕰️ {tr('Time Travel…')}", menu)
+        time_travel.triggered.connect(self._open_time_travel)
+        menu.addAction(time_travel)
         menu.addSeparator()
-        exit_action = QAction(tr("Exit"), menu)
+        exit_action = QAction(f"🚪 {tr('Exit')}", menu)
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
         return menu

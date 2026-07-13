@@ -803,13 +803,27 @@ WEEKDAY_THEME_TITLES = {
     "slavic": "Slavic gods",
     "alchemy": "Alchemy",
     "japan": "Japanese week",
-    "religion": "Religions",
-    "religion_alt": "Religions II",
+    # Owner renames 2026-07-13: masonry and voodoo are creeds and
+    # mysteries, not strictly religions — and "Religions II" is gone.
+    "religion": "Creeds",
+    "religion_alt": "Mysteries",
     "profession": "Professions",
     "wolf": "Wolf Pack",
     "bee": "Bee Hive",
     "elephant": "Elephant Herd",
 }
+
+# The Weekday submenu GROUPS (owner menu rework 2026-07-13): kinship
+# submenus instead of the flat theme list. Planets nests its SIGN look
+# as a second option (planet_signs stays its own theme underneath);
+# The Inner Wheel (Virtues/Sins/Moods) joins once those themes gain
+# their dial texts.
+WEEKDAY_MENU_GROUPS = (
+    ("Ancient Gods", ("egypt", "greek", "norse", "slavic")),
+    ("Society", ("profession", "religion", "religion_alt")),
+    ("Animals", ("wolf", "elephant", "bee")),
+    ("Arcana", ("planets", "alchemy", "japan")),
+)
 
 DEFAULT_SKIN = SkinDefinition(
     z_order=(

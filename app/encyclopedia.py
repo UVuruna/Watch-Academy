@@ -65,7 +65,7 @@ _TOPIC_GROUPS = (
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
     ("Themes", ("alchemy", "japan", "profession", "trinity")),
-    ("Religions", ("religion", "religion_alt")),
+    ("Creeds & Mysteries", ("religion", "religion_alt")),
     ("Animal Societies", ("wolf", "bee", "elephant")),
     ("The Inner Wheel", ("virtues", "sins", "moods", "duality")),
 )

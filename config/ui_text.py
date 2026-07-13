@@ -19,13 +19,16 @@ def ui(overlay: dict, text: str) -> str:
 UI_STRINGS: tuple[str, ...] = (
     # --- Menu -----------------------------------------------------------------
     "Design", "Hands",
-    "Theme", "Pointer", "Umbra", "Ring", "Earth", "Weekday",
-    "Day slot", "Info slot",
+    "Pointer", "Umbra", "Ring", "Earth", "Weekday",
+    # Menu rework (owner 2026-07-13): the two slots at the top level,
+    # the Weekday kinship groups.
+    "Primary Slot", "Secondary Slot",
+    "Ancient Gods", "Society", "Arcana", "Image",
     "Size", "Elements", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
     "Encyclopedia", "Astrology", "Chinese zodiac", "← Back",
-    "Gods", "Zodiac", "Themes",
+    "Gods", "Zodiac", "Themes", "Creeds & Mysteries",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",
     "Full contrast", "Half contrast", "Light contrast", "Dark contrast",
     "Paint palette", "Light palette",
@@ -34,7 +37,7 @@ UI_STRINGS: tuple[str, ...] = (
     "The day name written on the weekday bodies.",
     "Moon — below horizon",
     "Planets", "Planet signs", "Greek gods", "Norse gods", "Egyptian gods",
-    "Slavic gods", "Alchemy", "Japanese week", "Religions", "Religions II",
+    "Slavic gods", "Alchemy", "Japanese week", "Creeds", "Mysteries",
     "Professions",
     # The theme METALS (bronze-plate themes + the ring finish menu).
     "Gold", "Bronze", "Silver", "Bronze letters", "Follow ring color",
@@ -79,7 +82,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Ring letters", "Hover enlarge",
     "Reset to preset", "Custom…", "Gray (default)", "the untouched art",
     "Unique name", "Add ring", "{n} custom ring(s) saved",
-    "Added '{name}' — OK saves it; find it under Theme ▸ Ring",
+    "Added '{name}' — OK saves it; find it under Design ▸ Ring",
     "Flame — Masculine ({n} letters)", "Chalice — Feminine ({n} letters)",
     "Seal — Union ({n} letters)",
     "Latin", "Greek", "Numbers", "Symbols",

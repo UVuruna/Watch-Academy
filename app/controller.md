@@ -49,22 +49,28 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - `_on_widget_moved()` / `_flush_position()`: debounced position
   persistence; a mid-run save failure surfaces as a tray error balloon
   (once per failure streak) instead of dying silently
-- `_build_menu()`: the shared tray/right-click menu, built from the
-  `_add_choice_submenu()` helper (one exclusive check-group per
-  submenu) — THEME as the first-level dropdown (owner spec, FINAL.txt
-  #6) holding exactly EARTH, DAY SLOT and INFO SLOT (owner menu round
-  2026-07-12: the Slots wrapper and the separate Weekday entry are
-  gone). The two slot submenus are THE SAME SHAPE
+- `_build_menu()`: the shared tray/right-click menu (owner rework
+  2026-07-13), every level a `_StayOpenMenu` — CHECKABLE picks keep
+  the menu open for several settings in one visit; plain actions
+  close as usual (a rebuild while open closes and RETAINS the old
+  menu so Qt never deletes a visible popup). Emoji-fronted top level:
+  🎨 Design (Pointer, Ring, Umbra | Hands, Earth — with the Date
+  switch — | Size), 🥇 Primary Slot, 🥈 Secondary Slot, 🧩 Elements |
+  📜 Legend, 🔆 Solar rotation, 🖱️ Click-through | ⚙️ Settings…,
+  🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The two
+  slot submenus are THE SAME SHAPE
   (`add_weekday_submenu` builds the shared part): a Weekday submenu
-  (every `WEEKDAY_THEME_TITLES` entry — the three bronze-plate themes
+  in KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`: Ancient Gods / Society —
+  Professions, Creeds, Mysteries — / Animals / Arcana, where Planets
+  nests its Image and Sign looks; the metal themes
   open a Gold/Bronze/Silver/Colored metal dropdown whose pick
-  activates theme AND metal, releasing follow-the-ring — plus the
-  slot's OWN Names switch — `show_weekday_names` for the day slot,
-  `show_info_slot_names` for the info slot (owner bug 2026-07-13:
-  they were one linked setting)), the Time/Date/Day length text
+  activates theme AND metal, releasing follow-the-ring) — plus the
+  slot's OWN Names switch — `show_weekday_names` for the primary,
+  `show_info_slot_names` for the secondary (owner bug 2026-07-13:
+  they were one linked setting) — the Time/Date/Day length text
   modes, and the
   Astrology / Ascendant / Chinese-zodiac families with their own
-  STYLE dropdowns (day slot: image styles only; info slot adds Text).
+  STYLE dropdowns (primary: image styles only; secondary adds Text).
   Gating: the day slot's badge families need the pinned layout
   (Aurora or pointer off), its TEXT modes need the pointer OFF
   (Aurora stays images-only); the info slot exists on the Compass

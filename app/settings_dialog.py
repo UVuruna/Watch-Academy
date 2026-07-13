@@ -750,7 +750,7 @@ class SettingsDialog(QDialog):
         )
         self._custom_ring_status.setText(
             self._tr(
-                "Added '{name}' — OK saves it; find it under Theme ▸ Ring"
+                "Added '{name}' — OK saves it; find it under Design ▸ Ring"
             ).format(name=card["name"])
         )
         self._ring_name_edit.clear()
