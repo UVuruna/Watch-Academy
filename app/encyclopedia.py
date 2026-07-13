@@ -369,10 +369,14 @@ def _topics() -> dict:
     }
     topics["instrument"] = {
         "title": "The Instrument",
-        "icon": None,
+        # The owner's gear-tooth section logo (2026-07-13); article
+        # images join per key as they land (missing files stay hidden).
+        "icon": defaults.INSTRUMENT_ART_DIR / "logo.png",
         "entries": [
             {
-                "images": (),
+                "images": (
+                    defaults.INSTRUMENT_ART_DIR / f"{key}.png",
+                ),
                 "name": ("instrument_title", key),
                 "article": ("instrument", key),
                 "accents": (),
@@ -407,7 +411,7 @@ def _topics() -> dict:
     # files stay hidden); the Union pairs both triangles.
     topics["duality"] = {
         "title": "The Two Triangles",
-        "icon": defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
+        "icon": defaults.SCALE_ART_DIR / "Union.png",
         "entries": [
             {
                 "images": (
@@ -426,10 +430,9 @@ def _topics() -> dict:
                 "accents": ("blue",),
             },
             {
-                "images": (
-                    defaults.SCALE_ART_DIR / "Judas_Triangle.png",
-                    defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
-                ),
+                # The owner's hexagram badge (2026-07-13): the two
+                # triangles interlocked, the white circle at the cross.
+                "images": (defaults.SCALE_ART_DIR / "Union.png",),
                 "name": "The Union",
                 "article": ("emblem", "duality", "The Union"),
                 "accents": ("red", "blue"),

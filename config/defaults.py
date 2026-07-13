@@ -281,6 +281,7 @@ ARTICLE_COLUMN_WIDTH_PX = 400        # the hexa TWO-COLUMN legend: each sign's
 # medallions illustrating "The Two Triangles" — wired before the art
 # lands; the Encyclopedia hides missing files.
 SCALE_ART_DIR = paths.assets_dir() / "scale"
+INSTRUMENT_ART_DIR = paths.assets_dir() / "instrument"
 # The Astrology/Ascendant hover image trio (owner 2026-07-13): the
 # ACTIVE style's art large in the middle, the two remaining styles
 # small at its sides.

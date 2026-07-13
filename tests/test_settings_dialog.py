@@ -415,7 +415,9 @@ def test_encyclopedia_expansion_wiring():
     # three entries; the Union pairs both badges, articles resolve.
     duality = topics["duality"]["entries"]
     assert [e["name"] for e in duality] == ["Lucifer", "Judas", "The Union"]
-    assert len(duality[2]["images"]) == 2
+    # The Union wears the owner's hexagram badge (2026-07-13).
+    assert duality[2]["images"][0].name == "Union.png"
+    assert duality[2]["images"][0].exists()
     from data.encyclopedia import EncyclopediaRepository
     union = EncyclopediaRepository().entry("duality", "The Union")["base"]
     assert "hexagram" in union and "antidote" in union
