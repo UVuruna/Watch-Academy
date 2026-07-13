@@ -62,6 +62,21 @@ ring letters made flesh — Luna, Hunter, Scout, Beta, Mate, Elder),
 fourth bronze metal-theme with a paw-print border, 8 bronze + 8
 colored Gemini prompts; drop dir assets/weekday/wolf/.
 
+### `bee_hive_prompts.md` — Bee Hive Theme Prompts
+The 14th weekday theme: the hive's castes as the week (Queen with
+the day-one Cleaner as Sunday dual, Nurse, Guard, Scout's waggle
+dance, Builder, the Drone on Venus — owner's call — and the dying
+Forager on Saturn), honeycomb border echoing the dial's hexagram,
+8 bronze + 8 colored prompts; drop dir assets/weekday/bee/.
+
+### `elephant_herd_prompts.md` — Elephant Herd Theme Prompts
+The 15th weekday theme closing the animal-society trio (pack=rank,
+hive=function, herd=MEMORY): Matriarch with the dead matriarch's
+bones as the Memory dual, Allomother, Musth, the infrasound Caller,
+the bachelor-school Mentor, the Reunion ceremony, the Elder digging
+remembered water on her last molars; acacia-and-tusk border, 8
+bronze + 8 colored prompts; drop dir assets/weekday/elephant/.
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner
