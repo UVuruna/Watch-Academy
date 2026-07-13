@@ -155,6 +155,9 @@ UI_STRINGS: tuple[str, ...] = (
     # and the cross-cure emblem names (Love already lives above).
     "The Clock", "The Week", "The Instrument", "The Inner Wheel",
     "Virtues", "Sins", "Moods",
+    # Look-arrow captions (owner 2026-07-13: kinship groups + the
+    # astrology/planets look names; the metals live above already).
+    "Canon", "Signs", "Logo & Constellation",
     "Justice", "Humility", "Serenity", "Courage", "Wisdom",
     "Generosity", "Patience",
     "Pride", "Servility", "Fear", "Wrath", "Greed", "Excess",

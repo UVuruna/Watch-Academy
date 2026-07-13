@@ -362,14 +362,38 @@ def test_encyclopedia_expansion_wiring():
     assert len(topics["instrument"]["entries"]) == 8
     for family in ("virtues", "sins", "moods"):
         assert len(topics[family]["entries"]) == 8
-    # The metal themes carry the four looks; the sun entry pairs
-    # BOTH plates per look.
+    # The metal themes cycle four looks, COLORED FIRST (owner default
+    # 2026-07-13); the sun stacks the Servant row UNDER the Ruler row.
     greek_sun = topics["greek"]["entries"][0]
     assert [label for label, _ in greek_sun["looks"]] == [
+        "Colored", "Bronze", "Gold", "Silver",
+    ]
+    assert all(
+        len(rows) == 2 and all(len(row) == 1 for row in rows)
+        for _, rows in greek_sun["looks"]
+    )
+    # Chinese stays BRONZE-first; planets cycle photo/sign; astrology
+    # leads with the logo+constellation pair.
+    assert [l for l, _ in topics["chinese"]["entries"][0]["looks"]] == [
         "Bronze", "Gold", "Silver", "Colored",
     ]
-    assert all(len(paths) == 2 for _, paths in greek_sun["looks"])
-    assert len(topics["chinese"]["entries"][0]["looks"]) == 4
+    assert [l for l, _ in topics["planets"]["entries"][0]["looks"]] == [
+        "Planets", "Signs",
+    ]
+    assert [l for l, _ in topics["astrology"]["entries"][0]["looks"]] == [
+        "Logo & Constellation", "Colored", "Sign",
+    ]
+    # The Week pages group by kinship; Sunday's canon strip is a 2x5
+    # grid — every pair vertical, Ruler above Servant.
+    week_sun = topics["week"]["entries"][0]
+    assert [l for l, _ in week_sun["looks"]] == [
+        "Canon", "Gods", "Religions", "Themes",
+    ]
+    canon_rows = week_sun["looks"][0][1]
+    assert len(canon_rows) == 2
+    assert len(canon_rows[0]) == 5 and len(canon_rows[1]) == 5
+    monday = topics["week"]["entries"][1]
+    assert len(monday["looks"][0][1]) == 1        # single row off-Sunday
     # The dialog renders every new topic without crashing and the
     # texts resolve (a Wednesday page must name its planet).
     dialog = EncyclopediaDialog()

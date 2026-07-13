@@ -788,7 +788,7 @@ class Compositor:
                 self._tr(constants.WEEKDAY_FULL_NAMES[body]) for body in bodies
             )
             header = _centered_html(
-                f"{html.escape(self._tr(theme))}{html.escape(star)}",
+                f"<b>{html.escape(self._tr(theme))}</b>{html.escape(star)}",
                 f"{start_hour:02d}:00 - {end_hour:02d}:00",
                 html.escape(days),
             )
@@ -816,7 +816,8 @@ class Compositor:
             instant = self._anchor_instant(anchor_angle).astimezone(self._day.tzinfo)
             hours, minutes = self._day.anchor_day_lengths[index].split(":")
             lines = [
-                f"{html.escape(self._tr(name))}{html.escape(star)}",
+                # Bold event title (owner 2026-07-13).
+                f"<b>{html.escape(self._tr(name))}</b>{html.escape(star)}",
                 f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
                 f"{instant.year} - {instant:%H:%M}",
                 f"{int(hours)}h {int(minutes)}min",
@@ -837,9 +838,11 @@ class Compositor:
                     met_start = met_start.astimezone(self._day.tzinfo)
                     met_end = met_end.astimezone(self._day.tzinfo)
                     lines += [
-                        self._tr("Meteorological {season}").format(
-                            season=self._tr(season)
-                        ),
+                        "<b>" + html.escape(
+                            self._tr("Meteorological {season}").format(
+                                season=self._tr(season)
+                            )
+                        ) + "</b>",
                         f"{self._tr('From')} {self._ord(met_start.day)} "
                         f"{self._month(met_start)} {met_start.year} - "
                         f"{met_start:%H:%M}",
@@ -876,8 +879,8 @@ class Compositor:
                     else "(2<sup>nd</sup> half)"
                 )
             season_line = (
-                f"{self._tr('Wet season' if is_wet else 'Dry season')} {half}"
-                f"{html.escape(star)}"
+                f"<b>{html.escape(self._tr('Wet season' if is_wet else 'Dry season'))}</b> "
+                f"{half}{html.escape(star)}"
             )
             whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
             return _centered_html(
@@ -890,7 +893,7 @@ class Compositor:
             )
         season = self._season_name_for(start_angle)
         return _centered_html(
-            f"{html.escape(self._tr(season))}{html.escape(star)}",
+            f"<b>{html.escape(self._tr(season))}</b>{html.escape(star)}",
             self._span_line(start, end, days),
             f"{self._tr('Heart:')} {self._ord(middle.day)} {self._month(middle)}",
         )
@@ -915,7 +918,8 @@ class Compositor:
         is_wet = starts_in_march != self._day.southern_hemisphere
         days = (end - start).total_seconds() / 86400
         return [
-            self._tr("Wet season" if is_wet else "Dry season"),
+            # Bold season title (owner 2026-07-13).
+            f"<b>{html.escape(self._tr('Wet season' if is_wet else 'Dry season'))}</b>",
             self._span_line(start, end, days),
         ]
 

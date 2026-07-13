@@ -269,7 +269,8 @@ TIME_TEXT_WIDTH_FRACTION = 0.95
 # entity's art rides on top of its article, larger and clearer than on
 # the dial; the prose wraps at a fixed width so QToolTip stays a column.
 ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must read
-ARTICLE_WRAP_CHARS = 56
+ARTICLE_WRAP_CHARS = 68              # owner 2026-07-13: the legend prose should
+                                     # span nearly the tooltip's full width
 PERIOD_EARTH_IMAGE_PX = 128          # the Day/Night hover carries a mini Earth
                                      # of the active region (owner 2026-07-12)
 ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
@@ -383,11 +384,12 @@ LEGEND_BG = "#2B2B2B"
 LEGEND_BORDER = "#6E6E6E"
 LEGEND_TEXT = "#FFFFFF"
 
-# The Encyclopedia article view (owner UX round 2026-07-12): the whole
-# text BLOCK is centered (never text-align center) and spans this
-# fraction of the window width; the font grows with the width at a
-# gentle em-like coefficient between the base and the cap.
-ENCYCLOPEDIA_TEXT_WIDTH_FRACTION = 0.85
+# The Encyclopedia article view (owner UX rounds 2026-07-12/13): the
+# text BLOCK hugs the LEFT edge and spans this fraction of the window
+# width — the prose reflows to fill it (no fixed wrap); the font grows
+# with the width at a gentle em-like coefficient between the base and
+# the cap.
+ENCYCLOPEDIA_TEXT_WIDTH_FRACTION = 0.9
 ENCYCLOPEDIA_BASE_FONT_PX = 13
 ENCYCLOPEDIA_FONT_GROWTH = 0.006     # extra px per viewport px above the base width
 ENCYCLOPEDIA_FONT_BASE_WIDTH = 560   # viewport width where the base font applies

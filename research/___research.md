@@ -77,6 +77,14 @@ the bachelor-school Mentor, the Reunion ceremony, the Elder digging
 remembered water on her last molars; acacia-and-tusk border, 8
 bronze + 8 colored prompts; drop dir assets/weekday/elephant/.
 
+### `season_trinity_prompts.md` — Season & Trinity Badge Prompts
+The remaining concept badges (owner 2026-07-13): the Trinity family
+(Faith/Hope/Love, triskelion bronze cameo), the Seasons on the Goethe
+axis (Spring/Summer/Autumn/Winter + Wet/Dry, copper growth-ring), the
+Turning Points (both Solstices + one Equinox, split gold/silver
+hexagram field) and the optional Meteorological twins — 16 prompts,
+drop dirs assets/trinity/ and assets/season/.
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner
