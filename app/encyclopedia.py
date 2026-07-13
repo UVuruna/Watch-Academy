@@ -779,6 +779,13 @@ class EncyclopediaDialog(QDialog):
         for card in self._topic_cards:
             card.setIconSize(QSize(icon, icon))
             card.setMinimumSize(icon + 40, icon + 44)
+        # Commit the new card geometry NOW (owner bug 2026-07-13: the
+        # first open drew the groups overlapping — the rows kept their
+        # pre-show heights until a manual resize forced a relayout).
+        content = self._scroll.widget()
+        if content is not None and content.layout() is not None:
+            content.layout().activate()
+            content.adjustSize()
 
     def _pixmap(self, path) -> QPixmap:
         """The decoded-image cache behind the lazy looks (owner
@@ -858,4 +865,11 @@ class EncyclopediaDialog(QDialog):
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
+        self._rescale()
+
+    def showEvent(self, event) -> None:
+        # The gallery is built BEFORE the window has its real geometry
+        # — rescale once more on the first show (owner bug 2026-07-13:
+        # deformed until a manual resize).
+        super().showEvent(event)
         self._rescale()
