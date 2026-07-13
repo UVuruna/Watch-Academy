@@ -272,6 +272,10 @@ ARTICLE_IMAGE_WIDTH_PX = 192         # owner: at least 2x — the details must r
 ARTICLE_TEXT_WIDTH_PX = 460          # owner 2026-07-13 round two: the prose is
                                      # JUSTIFIED inside a fixed-width column
                                      # (Qt reflows it — no manual wrapping)
+ARTICLE_COLUMN_WIDTH_PX = 400        # the hexa TWO-COLUMN legend: each sign's
+                                     # column; two of them + spacing must fit
+                                     # LEGEND_MAX_WIDTH_FRACTION of a 1080p
+                                     # screen (0.45 × 1920 = 864)
 # The Astrology/Ascendant hover image trio (owner 2026-07-13): the
 # ACTIVE style's art large in the middle, the two remaining styles
 # small at its sides.

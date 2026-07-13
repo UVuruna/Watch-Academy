@@ -1075,7 +1075,7 @@ def test_hexa_arm_hover_names_its_two_signs(july_wednesday):
     upright.render_offscreen(360.0, 1.0, day, tick)
     top = upright.tooltip_at(180.0, 72.0, 360.0)          # top diamond, 0.6R up
     assert "Gemini" in top and "Cancer" in top and "*" not in top
-    assert top.count("<td>") == 2                         # two sign columns
+    assert top.count("<td width=") == 2                   # two sign columns
     assert "♊" not in top and "♋" not in top              # titles wear no glyph
     assert "May" in top and "Jun" in top                  # each with its dates
     bottom = upright.tooltip_at(180.0, 288.0, 360.0)      # below mercury's slot

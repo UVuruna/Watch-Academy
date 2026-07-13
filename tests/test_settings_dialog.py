@@ -304,7 +304,8 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     assert "(21<sup>st</sup> May - 20<sup>th</sup> June)" in top
     assert "align='justify'" in top                      # article prose
     assert "logo_colored" in top                         # the colored plates
-    assert top.count("<td>") == 2                        # two sign columns
+    # Two WIDTH-DECLARED sign columns (the popup honors these cells).
+    assert top.count(f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>") == 2
     assert "Castor" in top or "Pollux" in top            # Gemini article text
 
 
@@ -479,6 +480,16 @@ def test_legend_popup_caps_and_scrolls(app):
         screen.height() * defaults.LEGEND_MAX_HEIGHT_FRACTION
     )
     assert popup._scroll.verticalScrollBar().maximum() > 0   # it scrolls
+    # Owner regression 2026-07-13: justified prose must WRAP inside its
+    # declared column — the label must never size to the UNWRAPPED
+    # document (kilometer-wide paragraphs).
+    prose = (
+        f"<table><tr><td width='{defaults.ARTICLE_TEXT_WIDTH_PX}'>"
+        "<p align='justify'>" + "word " * 400 + "</p></td></tr></table>"
+    )
+    popup.show_html(prose, QPoint(100, 100))
+    assert popup._label.width() <= defaults.ARTICLE_TEXT_WIDTH_PX + 40
+    assert popup._label.height() > 100                # it wrapped tall
     popup.dismiss()
     assert not popup.isVisible()
 

@@ -136,20 +136,25 @@ def _highlight_terms(escaped: str, accents: tuple[str, ...] = ()) -> str:
     return escaped
 
 
-def _article_body_html(text: str, accents: tuple[str, ...] = ()) -> str:
-    """JUSTIFIED article prose (owner 2026-07-13 round two — clean
-    edges on both sides, like a book column): each paragraph reflows
-    inside a fixed-width table cell so QToolTip stays a column; canon
+def _article_paragraphs(text: str, accents: tuple[str, ...] = ()) -> str:
+    """The bare JUSTIFIED paragraphs of an article (owner 2026-07-13
+    round two — clean edges on both sides, like a book column): canon
     terms highlighted (color words only per `accents`), hex notes
-    stripped."""
+    stripped. The caller provides the width-constrained cell."""
     text = _HEX_NOTE.sub("", text)
-    body = "".join(
+    return "".join(
         f"<p align='justify'>{_highlight_terms(html.escape(p), accents)}</p>"
         for p in text.split("\n\n")
     )
+
+
+def _article_body_html(text: str, accents: tuple[str, ...] = ()) -> str:
+    """One article as a single fixed-width column: the paragraphs
+    reflow inside the declared table cell (the legend popup measures
+    the document and honors this width)."""
     return (
         f"<table><tr><td width='{defaults.ARTICLE_TEXT_WIDTH_PX}'>"
-        f"{body}</td></tr></table>"
+        f"{_article_paragraphs(text, accents)}</td></tr></table>"
     )
 
 
@@ -803,11 +808,16 @@ class Compositor:
                 columns.append(
                     _hover_title(header)
                     + plate
-                    + _article_body_html(text, accents=accents)
+                    + _article_paragraphs(text, accents=accents)
                 )
+            # ONE flat table, both columns width-declared (nested
+            # tables measured wrong — the popup honors these cells).
             return (
                 "<table cellspacing='12'><tr>"
-                f"<td>{columns[0]}</td><td>{columns[1]}</td>"
+                f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+                f"{columns[0]}</td>"
+                f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+                f"{columns[1]}</td>"
                 "</tr></table>"
             )
         if self._skin.pointer == "trio":

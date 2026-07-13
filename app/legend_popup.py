@@ -7,8 +7,10 @@ when the content is taller, and stays open while the cursor is over it
 so the wheel can scroll the article.
 """
 
+import math
+
 from PySide6.QtCore import QPoint, Qt
-from PySide6.QtGui import QCursor, QGuiApplication
+from PySide6.QtGui import QCursor, QGuiApplication, QTextDocument
 from PySide6.QtWidgets import QFrame, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from config import defaults
@@ -23,10 +25,19 @@ class LegendPopup(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self._label = QLabel()
         self._label.setTextFormat(Qt.TextFormat.RichText)
+        # Justified prose must WRAP inside its declared column (owner
+        # regression 2026-07-13: without word wrap the label sized to
+        # the unwrapped document — kilometer-wide paragraphs). The
+        # label NEVER sizes itself: show_html measures the content and
+        # fixes the width, because QLabel's own wordWrap heuristic
+        # squeezes declared table columns (measured: two 420px columns
+        # collapse to 533px total).
+        self._label.setWordWrap(True)
         self._label.setStyleSheet(
             f"color: {defaults.LEGEND_TEXT}; "
             f"padding: {defaults.LEGEND_PADDING_PX}px;"
         )
+        self._measure = QTextDocument()
         self._scroll = QScrollArea()
         self._scroll.setWidget(self._label)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -48,17 +59,34 @@ class LegendPopup(QWidget):
         article scrolls instead of clipping."""
         if content != self._html:
             self._html = content
-            self._label.setText(content)
-            self._label.adjustSize()
             screen = (
                 QGuiApplication.screenAt(anchor)
                 or QGuiApplication.primaryScreen()
             ).availableGeometry()
-            frame = 2 + self._scroll.verticalScrollBar().sizeHint().width()
-            width = min(
-                self._label.width() + frame,
-                round(screen.width() * defaults.LEGEND_MAX_WIDTH_FRACTION),
+            cap = round(screen.width() * defaults.LEGEND_MAX_WIDTH_FRACTION)
+            # Measure the content laid out at the cap: declared table
+            # columns hold their width, nowrap lines keep their natural
+            # one — idealWidth is the width the content actually asks
+            # for (QLabel's own wordWrap sizing would squeeze it).
+            self._measure.setDefaultFont(self._label.font())
+            self._measure.setHtml(content)
+            self._measure.setTextWidth(cap)
+            pad = 2 * defaults.LEGEND_PADDING_PX
+            wanted = math.ceil(self._measure.idealWidth()) + pad
+            self._label.setFixedWidth(max(wanted, 1))
+            # Fixed-width table columns do NOT squeeze below their
+            # declared widths — content wider than the cap (e.g. the
+            # hexa two-column legend on a scaled-down laptop) scrolls
+            # sideways instead of clipping.
+            self._scroll.setHorizontalScrollBarPolicy(
+                Qt.ScrollBarPolicy.ScrollBarAsNeeded
+                if wanted > cap
+                else Qt.ScrollBarPolicy.ScrollBarAlwaysOff
             )
+            self._label.setText(content)
+            self._label.adjustSize()
+            frame = 2 + self._scroll.verticalScrollBar().sizeHint().width()
+            width = min(self._label.width() + frame, cap)
             height = min(
                 self._label.height() + 2,
                 round(screen.height() * defaults.LEGEND_MAX_HEIGHT_FRACTION),
