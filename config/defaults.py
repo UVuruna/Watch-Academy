@@ -456,6 +456,15 @@ EMBLEM_ART_DIRS = {
     "sins": paths.assets_dir() / "sin",
     "moods": paths.assets_dir() / "mood",
 }
+# The trinity and season badge families (owner Gemini art 2026-07-13):
+# Faith/Hope/Love triskelions; the Goethe-axis seasons with the
+# tropics' Wet_Season/Dry_Season, plus turning_point/ (the solstices
+# and the one Equinox) and meteorological/ (the measured twins).
+TRINITY_ART_DIR = paths.assets_dir() / "trinity"
+SEASON_ART_DIR = paths.assets_dir() / "season"
+# Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
+# their emblem above the text — smaller than the article plates).
+HOVER_BADGE_WIDTH_PX = 128
 
 # --- Weekday body themes (SYMBOLISM.md canon) -----------------------------------
 # Display names per theme, body -> name (the weekday hover reads
@@ -595,6 +604,39 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Artist",
         "saturn": "Farmer",
     },
+    # THE ANIMAL SOCIETIES (owner 2026-07-13) — three orders of order:
+    # the pack ranks, the hive works by age (the career IS the clock),
+    # the herd remembers (the leader is the one who holds the map).
+    "wolf": {
+        "sun": "Alpha · Omega",     # the first and the last of the pack
+                                    # — M at noon, Ω at midnight
+        "moon": "Luna",
+        "mars": "Hunter",
+        "mercury": "Scout",
+        "jupiter": "Beta",
+        "venus": "Mate",
+        "saturn": "Elder",
+    },
+    "bee": {
+        "sun": "Queen · Cleaner",   # the mother of the hive and the
+                                    # day-one daughter at her birth cell
+        "moon": "Nurse",
+        "mars": "Guard",
+        "mercury": "Scout",
+        "jupiter": "Builder",
+        "venus": "Drone",
+        "saturn": "Forager",
+    },
+    "elephant": {
+        "sun": "Matriarch · Memory",  # the ruler and the REMEMBERED
+                                      # ruler — the bones that taught her
+        "moon": "Allomother",
+        "mars": "Musth",
+        "mercury": "Caller",
+        "jupiter": "Mentor",
+        "venus": "Reunion",
+        "saturn": "Elder",
+    },
 }
 
 # File stems on disk: the display names folded to ASCII (Sól -> Sol,
@@ -603,6 +645,7 @@ WEEKDAY_THEME_NAMES = {
 _ASCII_FOLD = str.maketrans("óážš", "oazs")
 _LOWERCASE_THEMES = (
     "religion", "religion_alt", "planet_signs", "egypt", "slavic", "alchemy",
+    "wolf",                        # the owner's wolf art uses lowercase stems
 )
 # Theme -> art folder under assets/weekday/: both religion sets share
 # the ONE religion/ folder (all fourteen owner medallions together).
@@ -617,6 +660,9 @@ WEEKDAY_THEME_DIRS = {
     "religion": "religion",
     "religion_alt": "religion",
     "profession": "profession",
+    "wolf": "wolf",
+    "bee": "bee",
+    "elephant": "elephant",
 }
 WEEKDAY_THEME_FILES = {
     theme: {
@@ -632,6 +678,9 @@ WEEKDAY_THEME_FILES = {
 # The dual center shows both faces in the hover title, but the owner's
 # medallion file keeps the single name.
 WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
+WEEKDAY_THEME_FILES["wolf"]["sun"] = "alpha"
+WEEKDAY_THEME_FILES["bee"]["sun"] = "Queen"
+WEEKDAY_THEME_FILES["elephant"]["sun"] = "Matriarch"
 # The metal reads Quicksilver, the owner's file keeps the element name.
 WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "mercury"
 # The Greek and Norse display names carry native-script parentheticals
@@ -681,6 +730,9 @@ WEEKDAY_DUAL_NAMES = {
     "religion": ("Freemasonry", "The Rough Ashlar"),
     "religion_alt": ("Mithraism", "Corax"),
     "profession": ("Ruler", "Servant"),
+    "wolf": ("Alpha", "Omega"),
+    "bee": ("Queen", "Cleaner"),
+    "elephant": ("Matriarch", "Memory"),
 }
 WEEKDAY_DUAL_FILES = {
     "planets": "planets/dual/sun_eclipse",
@@ -694,6 +746,9 @@ WEEKDAY_DUAL_FILES = {
     "religion": "religion/dual/rough_ashlar",
     "religion_alt": "religion/dual/corax",
     "profession": "profession/Servant",
+    "wolf": "wolf/dual/omega",
+    "bee": "bee/dual/Cleaner",
+    "elephant": "elephant/dual/Memory",
 }
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
@@ -731,6 +786,9 @@ WEEKDAY_THEME_TITLES = {
     "religion": "Religions",
     "religion_alt": "Religions II",
     "profession": "Professions",
+    "wolf": "Wolf Pack",
+    "bee": "Bee Hive",
+    "elephant": "Elephant Herd",
 }
 
 DEFAULT_SKIN = SkinDefinition(

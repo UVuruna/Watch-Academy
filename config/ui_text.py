@@ -157,7 +157,17 @@ UI_STRINGS: tuple[str, ...] = (
     "Virtues", "Sins", "Moods",
     # Look-arrow captions (owner 2026-07-13: kinship groups + the
     # astrology/planets look names; the metals live above already).
-    "Canon", "Signs", "Logo & Constellation",
+    "Canon", "Signs", "Logo & Constellation", "Animals",
+    # The animal societies (owner 2026-07-13): theme titles, the
+    # encyclopedia group, the Seasons topic and every role name.
+    "Wolf Pack", "Bee Hive", "Elephant Herd", "Animal Societies",
+    "Seasons",
+    "Alpha · Omega", "Luna", "Hunter", "Scout", "Beta", "Mate", "Elder",
+    "Alpha", "Omega",
+    "Queen · Cleaner", "Nurse", "Guard", "Builder", "Drone", "Forager",
+    "Queen", "Cleaner",
+    "Matriarch · Memory", "Allomother", "Musth", "Caller", "Mentor",
+    "Reunion", "Matriarch", "Memory",
     "Justice", "Humility", "Serenity", "Courage", "Wisdom",
     "Generosity", "Patience",
     "Pride", "Servility", "Fear", "Wrath", "Greed", "Excess",

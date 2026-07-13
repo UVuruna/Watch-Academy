@@ -63,12 +63,29 @@ _TOPIC_ICON_PX = 96
 # their signs, the remaining week themes with the Trinity, the
 # religions, and the cross-cure emblem families last.
 _TOPIC_GROUPS = (
-    ("The Clock", ("week", "instrument")),
+    ("The Clock", ("week", "instrument", "seasons")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
     ("Themes", ("alchemy", "japan", "profession", "trinity")),
     ("Religions", ("religion", "religion_alt")),
+    ("Animal Societies", ("wolf", "bee", "elephant")),
     ("The Inner Wheel", ("virtues", "sins", "moods")),
+)
+
+# The SEASONS topic (owner 2026-07-13): the year's quarters, the
+# tropics' halves, the turning points and the measured twins — badges
+# from assets/season/, articles from encyclopedia.json.
+_SEASON_ENTRIES = (
+    ("Spring", "Spring.png"),
+    ("Summer", "Summer.png"),
+    ("Autumn", "Autumn.png"),
+    ("Winter", "Winter.png"),
+    ("Wet_Season", "Wet_Season.png"),
+    ("Dry_Season", "Dry_Season.png"),
+    ("Summer_Solstice", "turning_point/Summer_Solstice.png"),
+    ("Winter_Solstice", "turning_point/Winter_Solstice.png"),
+    ("Equinox", "turning_point/Equinox.png"),
+    ("Meteorological", None),          # four badges in one entry
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -333,6 +350,9 @@ def _topics() -> dict:
                     ("Themes", _week_theme_rows(
                         body, ("profession", "alchemy", "japan")
                     )),
+                    ("Animals", _week_theme_rows(
+                        body, ("wolf", "bee", "elephant")
+                    )),
                 ),
                 "name": ("week_title", body),
                 "article": ("week", body),
@@ -377,15 +397,39 @@ def _topics() -> dict:
         }
     topics["trinity"] = {
         "title": "Trinity",
-        "icon": None,
+        "icon": defaults.TRINITY_ART_DIR / "Faith.png",
         "entries": [
             {
-                "images": (),
+                # The trinity badges landed 2026-07-13 — each virtue
+                # wears its triskelion emblem above the article.
+                "images": (defaults.TRINITY_ART_DIR / f"{virtue}.png",),
                 "name": virtue,
                 "article": ("trio", virtue),
                 "accents": defaults.TRIO_ACCENT_HUES[virtue],
             }
             for virtue in ("Faith", "Hope", "Love")
+        ],
+    }
+    topics["seasons"] = {
+        "title": "Seasons",
+        "icon": defaults.SEASON_ART_DIR / "Summer.png",
+        "entries": [
+            {
+                "images": (
+                    tuple(
+                        defaults.SEASON_ART_DIR / "meteorological"
+                        / f"{season}.png"
+                        for season in ("Spring", "Summer", "Autumn",
+                                       "Winter")
+                    )
+                    if art is None
+                    else (defaults.SEASON_ART_DIR / art,)
+                ),
+                "name": ("season_title", key),
+                "article": ("season", key),
+                "accents": (),
+            }
+            for key, art in _SEASON_ENTRIES
         ],
     }
     return topics
@@ -450,18 +494,23 @@ class EncyclopediaDialog(QDialog):
             return self._encyclopedia.week(ref[1])["base"]
         if kind == "instrument":
             return self._encyclopedia.instrument(ref[1])["base"]
+        if kind == "season":
+            return self._encyclopedia.season(ref[1])["base"]
         if kind == "emblem":
             return self._encyclopedia.entry(ref[1], ref[2])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
 
     def _entry_name(self, entry: dict) -> str:
-        """An entry's display name: the WEEK and INSTRUMENT pages take
-        their titles from the encyclopedia database (localized there);
-        everything else translates through the UI overlay."""
+        """An entry's display name: the WEEK, INSTRUMENT and SEASONS
+        pages take their titles from the encyclopedia database
+        (localized there); everything else translates through the UI
+        overlay."""
         name = entry["name"]
         if isinstance(name, tuple):
             if name[0] == "week_title":
                 return self._encyclopedia.week(name[1])["title"]
+            if name[0] == "season_title":
+                return self._encyclopedia.season(name[1])["title"]
             return self._encyclopedia.instrument(name[1])["title"]
         return self._tr(name)
 

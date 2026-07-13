@@ -180,6 +180,18 @@ def _article_html(
     return "".join(parts)
 
 
+def _hover_badge(path) -> str:
+    """The emblem above an arm hover (owner 2026-07-13: the trinity,
+    season and turning-point badges ride their tooltips) — empty when
+    the art is missing."""
+    if path is None or not path.exists():
+        return ""
+    return (
+        f"<div align='center'><img src='{path.as_uri()}' "
+        f"width='{defaults.HOVER_BADGE_WIDTH_PX}'/></div>"
+    )
+
+
 def _build_layers(skin: SkinDefinition) -> list[Layer]:
     factories = {
         "background": lambda: BackgroundLayer(skin),
@@ -793,8 +805,13 @@ class Compositor:
                 html.escape(days),
             )
             article = self._symbolism.trio_article(theme)
-            return header + "<br/>" + _article_body_html(
-                article["base"], accents=defaults.TRIO_ACCENT_HUES[theme]
+            return (
+                _hover_badge(defaults.TRINITY_ART_DIR / f"{theme}.png")
+                + header + "<br/>"
+                + _article_body_html(
+                    article["base"],
+                    accents=defaults.TRIO_ACCENT_HUES[theme],
+                )
             )
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events:
@@ -850,7 +867,14 @@ class Compositor:
                         f"{self._month(met_end)} {met_end.year} - "
                         f"{met_end:%H:%M}",
                     ]
-            return _centered_html(*lines)
+            # The turning-point badge (owner 2026-07-13): both
+            # equinoxes share the ONE balance emblem.
+            badge = (
+                "Equinox" if "Equinox" in name else name.replace(" ", "_")
+            )
+            return _hover_badge(
+                defaults.SEASON_ART_DIR / "turning_point" / f"{badge}.png"
+            ) + _centered_html(*lines)
         # Octa diagonal arms point at the QUARTER centers: the four
         # temperate seasons — or, in the tropics, the halves of the
         # wet/dry seasons (owner spec: TL is the first part of the
@@ -883,7 +907,10 @@ class Compositor:
                 f"{half}{html.escape(star)}"
             )
             whole = self._wet_dry_block(270.0 if starts_in_march else 450.0)
-            return _centered_html(
+            return _hover_badge(
+                defaults.SEASON_ART_DIR
+                / f"{'Wet' if is_wet else 'Dry'}_Season.png"
+            ) + _centered_html(
                 season_line,
                 self._span_line(start, end, days),
                 f"{self._tr('Heart:')} {self._ord(middle.day)} "
@@ -892,7 +919,9 @@ class Compositor:
                 *whole,
             )
         season = self._season_name_for(start_angle)
-        return _centered_html(
+        return _hover_badge(
+            defaults.SEASON_ART_DIR / f"{season}.png"
+        ) + _centered_html(
             f"<b>{html.escape(self._tr(season))}</b>{html.escape(star)}",
             self._span_line(start, end, days),
             f"{self._tr('Heart:')} {self._ord(middle.day)} {self._month(middle)}",

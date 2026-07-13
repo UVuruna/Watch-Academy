@@ -47,6 +47,13 @@ class EncyclopediaRepository:
             f"encyclopedia/week/{body}", self._load()["week"][body]
         )
 
+    def season(self, key: str) -> dict:
+        """{title, base} of one SEASONS article ("Spring", "Equinox",
+        "Wet_Season", "Meteorological"...) — owner 2026-07-13."""
+        return self._localized(
+            f"encyclopedia/seasons/{key}", self._load()["seasons"][key]
+        )
+
     def entry(self, family: str, name: str) -> dict:
         """{base} of one virtue/sin/mood emblem article — family is
         "virtues" | "sins" | "moods", name the emblem ("Justice")."""

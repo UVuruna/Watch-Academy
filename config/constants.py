@@ -351,12 +351,18 @@ WEEKDAY_THEMES = (
     "religion",
     "religion_alt",
     "profession",
+    # The ANIMAL SOCIETIES (owner 2026-07-13) — three orders of order:
+    # the pack by RANK, the hive by FUNCTION AND AGE, the herd by
+    # MEMORY.
+    "wolf",
+    "bee",
+    "elephant",
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
 # a METAL — bronze is the art as drawn, gold and silver are runtime
 # tritone tints. All other themes are full-color and never tint.
-METAL_THEMES = ("greek", "norse", "profession")
+METAL_THEMES = ("greek", "norse", "profession", "wolf", "bee", "elephant")
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
 THEME_METALS = ("gold", "bronze", "silver", "colored")
@@ -375,6 +381,11 @@ WEEKDAY_THEME_BLURBS = {
     "religion": "religion",
     "religion_alt": "religion_alt",
     "profession": "profession",
+    # The animal societies reuse the generic day blurb (the legacy
+    # blurb path never grew theme sets of its own).
+    "wolf": "day",
+    "bee": "day",
+    "elephant": "day",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -391,6 +402,9 @@ WEEKDAY_THEME_ARTICLES = {
     "religion": "religion",
     "religion_alt": "religion_alt",
     "profession": "profession",
+    "wolf": "wolf",
+    "bee": "bee",
+    "elephant": "elephant",
 }
 
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,

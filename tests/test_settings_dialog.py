@@ -387,21 +387,41 @@ def test_encyclopedia_expansion_wiring():
     # grid — every pair vertical, Ruler above Servant.
     week_sun = topics["week"]["entries"][0]
     assert [l for l, _ in week_sun["looks"]] == [
-        "Canon", "Gods", "Religions", "Themes",
+        "Canon", "Gods", "Religions", "Themes", "Animals",
     ]
     canon_rows = week_sun["looks"][0][1]
     assert len(canon_rows) == 2
     assert len(canon_rows[0]) == 5 and len(canon_rows[1]) == 5
     monday = topics["week"]["entries"][1]
     assert len(monday["looks"][0][1]) == 1        # single row off-Sunday
+    # The animal societies are metal themes with the full four looks
+    # and their own Sunday pairs (owner 2026-07-13).
+    for theme in ("wolf", "bee", "elephant"):
+        entry = topics[theme]["entries"][0]
+        assert [l for l, _ in entry["looks"]] == [
+            "Colored", "Bronze", "Gold", "Silver",
+        ], theme
+        assert all(len(rows) == 2 for _, rows in entry["looks"]), theme
+    # The Seasons topic (badges + articles) and the trinity emblems.
+    assert len(topics["seasons"]["entries"]) == 10
+    met = topics["seasons"]["entries"][-1]
+    assert len(met["images"]) == 4            # the four measured twins
+    assert all(
+        entry["images"][0].exists()
+        for entry in topics["trinity"]["entries"]
+    )
     # The dialog renders every new topic without crashing and the
     # texts resolve (a Wednesday page must name its planet).
     dialog = EncyclopediaDialog()
-    for key in ("week", "instrument", "virtues", "sins", "moods", "greek"):
+    for key in (
+        "week", "instrument", "seasons", "virtues", "sins", "moods",
+        "greek", "wolf", "bee", "elephant",
+    ):
         dialog._show_topic(key)
     assert "Mercury" in dialog._article_text(("week", "mercury"))
     assert "6°" in dialog._article_text(("instrument", "twilight"))
     assert dialog._article_text(("emblem", "virtues", "Justice"))
+    assert "Goethe" in dialog._article_text(("season", "Spring"))
     dialog.deleteLater()
 
 

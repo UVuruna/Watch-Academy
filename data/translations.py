@@ -74,8 +74,8 @@ def collect_corpus() -> dict:
         # The Encyclopedia's own content (owner expansion 2026-07-13):
         # instrument articles, week day pages, emblem entries.
         data = json.loads(encyclopedia.read_text(encoding="utf-8"))
-        for section in ("instrument", "week"):
-            for key, node in data[section].items():
+        for section in ("instrument", "week", "seasons"):
+            for key, node in data.get(section, {}).items():
                 corpus[f"encyclopedia/{section}/{key}/title"] = node["title"]
                 corpus[f"encyclopedia/{section}/{key}/base"] = node["base"]
         for family in ("virtues", "sins", "moods"):
