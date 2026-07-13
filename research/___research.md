@@ -85,6 +85,16 @@ Turning Points (both Solstices + one Equinox, split gold/silver
 hexagram field) and the optional Meteorological twins — 16 prompts,
 drop dirs assets/trinity/ and assets/season/.
 
+### `bible_dark_prompts.md` — Bible II & Dark Set Prompts
+The owner's two-sets decision (2026-07-13): BIBLE II (Abraham·Isaac
+dual, Jonah, Samson, Jacob, Noah, Ruth/Esther alternatives, Job) and
+the DARK set as night-window stained glass where every figure MIRRORS
+a light one (Lucifer·Judas dual, Lilith, Goliath, the Serpent,
+Herod/Nebuchadnezzar alternatives, Delilah, Cain) — 18 theme prompts
++ the two scale badges (Judas ▽ blue / Lucifer △ red) for "The Two
+Triangles"; drop dirs assets/weekday/bible2|bible_dark/ and
+assets/scale/.
+
 ### `chinese_zodiac_prompts.md` — Chinese Zodiac Prompts
 The bronze Chinese-zodiac redesign (owner 2026-07-13): the Greek
 key border replaced by a huiwen meander with Wu Xing element
