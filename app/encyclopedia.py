@@ -405,6 +405,17 @@ def _topics() -> dict:
                 for name in _VSM_DAYS[family]
             ],
         }
+    # The comparative WHEEL article leads the Moods topic (owner GO
+    # 2026-07-14): humors -> Plutchik -> the dial's own eight, with
+    # the owner's wheel plate as the illustration.
+    topics["moods"]["entries"].insert(0, {
+        "images": (
+            defaults.EMBLEM_ART_DIRS["moods"] / "Wheel_of_Moods.png",
+        ),
+        "name": "The Wheel of Moods",
+        "article": ("emblem", "moods", "The Wheel of Moods"),
+        "accents": (),
+    })
     # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing

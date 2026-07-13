@@ -163,6 +163,8 @@ UI_STRINGS: tuple[str, ...] = (
     "Virtues", "Sins", "Moods",
     # The Judas–Lucifer scale (owner 2026-07-13).
     "The Two Triangles", "Lucifer", "Judas", "The Union",
+    # The comparative wheel article leading the Moods topic (2026-07-14).
+    "The Wheel of Moods",
     # Look-arrow captions (owner 2026-07-13: kinship groups + the
     # astrology/planets look names; the metals live above already).
     "Canon", "Signs", "Logo & Constellation", "Animals",

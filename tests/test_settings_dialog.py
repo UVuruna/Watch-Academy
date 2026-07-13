@@ -372,8 +372,13 @@ def test_encyclopedia_expansion_wiring():
     topics = _topics()
     assert len(topics["week"]["entries"]) == 7
     assert len(topics["instrument"]["entries"]) == 8
-    for family in ("virtues", "sins", "moods"):
+    for family in ("virtues", "sins"):
         assert len(topics[family]["entries"]) == 8
+    # Moods leads with the comparative WHEEL article (owner 2026-07-14).
+    moods = topics["moods"]["entries"]
+    assert len(moods) == 9
+    assert moods[0]["name"] == "The Wheel of Moods"
+    assert moods[0]["images"][0].exists()
     # The metal themes cycle four looks, COLORED FIRST (owner default
     # 2026-07-13); the sun's two plates stand SIDE BY SIDE — Ruler
     # left, Servant right (owner correction 2026-07-13).
