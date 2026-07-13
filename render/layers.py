@@ -340,9 +340,11 @@ def weekday_badge(
     position (AURORA only — the owner dropped the Prism variant), or
     None when the bodies are shown. "zodiac" = the official sun sign,
     "ascendant" = the sign rising right now, "chinese" = the year's
-    animal; each wears its own style dropdown (the badge is always an
-    image — text styles coerce to the family's default art; the
-    Chinese gold/silver styles run the selective swap)."""
+    animal; each wears its own style dropdown (TEXT is real since the
+    owner 2026-07-13 round — drawn by the badge layer — except under
+    Aurora, which stays images-only and keeps the coercion to the
+    family's default art; the Chinese gold/silver styles run the
+    selective swap)."""
     style = skin.day_slot_style
     if skin.weekday_slot == "zodiac":
         sign = day.zodiac_name
@@ -972,14 +974,33 @@ class WeekdayBadgeLayer(Layer):
             return
         sign, folder, metal = badge
         theta = pinned_weekday_theta(ctx.skin)
-        asset = octa_slot_art(folder, sign)
-        if asset is None:
-            return                       # documented: no art, no badge
         size = (
             2 * ctx.radius * spec.diamond_scale
             * hover_factor(ctx, "weekday_badge")
         )
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
+        if (
+            ctx.skin.day_slot_style == "text"
+            and ctx.skin.pointer != "aurora"
+        ):
+            # TEXT style in the primary slot (owner 2026-07-13) —
+            # Aurora stays images-only, so there the style keeps
+            # coercing to the family's default art below.
+            if mode == "ascendant":
+                BottomSlotLayer._two_lines(
+                    painter, pos, size, "Ascendant", sign,
+                )
+            elif mode == "chinese":
+                BottomSlotLayer._two_lines(
+                    painter, pos, size,
+                    ctx.day.chinese_name.split()[0], sign,
+                )
+            else:
+                draw_fitted_text(painter, pos, size, sign)
+            return
+        asset = octa_slot_art(folder, sign)
+        if asset is None:
+            return                       # documented: no art, no badge
         draw_pixmap_centered(painter, ctx, asset, pos, size, metal=metal)
 
 

@@ -79,8 +79,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   24h) and under Aurora, plus anywhere once the Pointer element is
   off — the Trinity and the Prism have NO room while the star is up;
   Aurora grays the info slot's plain and Text entries. Pointer,
-  show_weekday and show_pointer changes REBUILD
-  the menu so the enablement matrix recomputes.
+  show_weekday and show_pointer changes re-gray the gated entries IN
+  PLACE (`_refresh_menu_gating` over the `_menu_gates` buckets —
+  owner 2026-07-13: those switches must not close the open menu; no
+  rebuild). TEXT is a real primary-slot style now (drawn by the badge
+  layer; Aurora keeps it grayed/coerced, images-only).
   Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's

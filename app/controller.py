@@ -754,9 +754,15 @@ class AppController(QObject):
                 tuple(self._rotation_order),
             ),
         )
+        # The timer can fire while the user is browsing the menu —
+        # close and RETAIN the replaced one so Qt never deletes a
+        # visible popup (stay-open menus, owner 2026-07-13).
+        retired = self._menu
         self._menu = self._build_menu()
         self._widget.set_menu(self._menu)
         self._tray.set_menu(self._menu)
+        retired.close()
+        self._retired_menu = retired
 
     def _set_display_choice(self, key: str, value) -> None:
         """Shared setter behind every display choice: persist and
@@ -773,18 +779,36 @@ class AppController(QObject):
         if key in ("pointer", "show_weekday", "show_pointer"):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
-            # image-only modes, the Solar rotation lock) — rebuild the
-            # menu so every state recomputes declaratively. The old
-            # menu may still be OPEN (stay-open items trigger without
-            # closing): close it and keep the reference alive until
-            # the next rebuild so Qt never deletes a visible popup.
-            retired = self._menu
-            self._menu = self._build_menu()
-            self._widget.set_menu(self._menu)
-            self._tray.set_menu(self._menu)
-            if retired is not None:
-                retired.close()
-                self._retired_menu = retired
+            # image-only modes, the Solar rotation lock) — re-gray the
+            # gated entries IN PLACE (owner 2026-07-13: switching the
+            # pointer or an element must not close the open menu).
+            self._refresh_menu_gating()
+
+    def _refresh_menu_gating(self) -> None:
+        """Recompute every gated menu entry from the CURRENT settings
+        without rebuilding (the stay-open menu keeps its window; only
+        the gray states move)."""
+        settings = self._settings
+        aurora = settings.pointer == "aurora"
+        badge_possible = (
+            settings.pointer in constants.WEEKDAY_BADGE_POINTERS
+            or not settings.show_pointer
+        )
+        slot_possible = (
+            settings.pointer in ("octa", "cross", "aurora")
+            or not settings.show_pointer
+        )
+        for item in self._menu_gates["badge"]:
+            item.setEnabled(badge_possible)
+        for item in self._menu_gates["badge_text"]:
+            item.setEnabled(badge_possible and not aurora)
+        for item in self._menu_gates["pointer_off"]:
+            item.setEnabled(not settings.show_pointer)
+        for item in self._menu_gates["not_aurora"]:
+            item.setEnabled(not aurora)
+        self._octa_slot_action.setEnabled(slot_possible)
+        self._octa_slot_toggle.setEnabled(slot_possible)
+        self._solar_rotation_action.setEnabled(not aurora)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -963,10 +987,18 @@ class AppController(QObject):
         day_slot_menu = self._submenu(menu, f"🥇 {tr('Primary Slot')}")
         info_slot_menu = self._submenu(menu, f"🥈 {tr('Secondary Slot')}")
 
+        # Gating buckets (owner 2026-07-13: pointer/element switches
+        # must NOT close the menu — no rebuild; _refresh_menu_gating
+        # re-grays these lists in place).
+        self._menu_gates = {
+            "badge": [], "badge_text": [], "pointer_off": [],
+            "not_aurora": [],
+        }
+
         def slot_action(
             parent: QMenu, group: QActionGroup, label: str,
             checked: bool, handler, enabled: bool = True,
-        ) -> None:
+        ) -> QAction:
             action = QAction(label, menu)
             action.setCheckable(True)
             action.setChecked(checked)
@@ -974,6 +1006,7 @@ class AppController(QObject):
             action.triggered.connect(handler)
             group.addAction(action)
             parent.addAction(action)
+            return action
 
         def add_weekday_submenu(
             parent: QMenu, group: QActionGroup,
@@ -1049,45 +1082,65 @@ class AppController(QObject):
             ("date", tr("Date")),
             ("day_length", tr("Day length")),
         ):
-            slot_action(
+            self._menu_gates["pointer_off"].append(slot_action(
                 day_slot_menu, day_group, label,
                 settings.weekday_slot == mode,
                 lambda checked, chosen=mode: self._set_display_choice(
                     "weekday_slot", chosen
                 ),
                 not settings.show_pointer,
-            )
+            ))
         for mode, title in (
             ("zodiac", tr("Astrology")),
             ("ascendant", tr("Ascendant")),
         ):
             badge_menu = self._submenu(day_slot_menu, title)
             badge_menu.setEnabled(badge_possible)
+            self._menu_gates["badge"].append(badge_menu)
             for style, label in zodiac_styles:
-                slot_action(
+                self._menu_gates["badge"].append(slot_action(
                     badge_menu, day_group, label,
                     settings.weekday_slot == mode
                     and settings.day_slot_style == style,
                     lambda checked, m=mode, s=style:
                     self._set_weekday_badge(m, s),
                     badge_possible,
-                )
+                ))
+            # TEXT joins the primary slot too (owner 2026-07-13) — it
+            # needs a real pinned spot, so Aurora (images-only) grays
+            # it while the image styles stay.
+            self._menu_gates["badge_text"].append(slot_action(
+                badge_menu, day_group, tr("Text"),
+                settings.weekday_slot == mode
+                and settings.day_slot_style == "text",
+                lambda checked, m=mode:
+                self._set_weekday_badge(m, "text"),
+                badge_possible and not aurora,
+            ))
         chinese_badge_menu = self._submenu(day_slot_menu, tr("Chinese zodiac"))
         chinese_badge_menu.setEnabled(badge_possible)
+        self._menu_gates["badge"].append(chinese_badge_menu)
         for style, label in (
             ("colored", tr("Colored")),
             ("gold", tr("Gold")),
             ("silver", tr("Silver")),
             ("bronze", tr("Bronze")),
         ):
-            slot_action(
+            self._menu_gates["badge"].append(slot_action(
                 chinese_badge_menu, day_group, label,
                 settings.weekday_slot == "chinese"
                 and settings.day_slot_style == style,
                 lambda checked, s=style:
                 self._set_weekday_badge("chinese", s),
                 badge_possible,
-            )
+            ))
+        self._menu_gates["badge_text"].append(slot_action(
+            chinese_badge_menu, day_group, tr("Text"),
+            settings.weekday_slot == "chinese"
+            and settings.day_slot_style == "text",
+            lambda checked: self._set_weekday_badge("chinese", "text"),
+            badge_possible and not aurora,
+        ))
         # --- Info slot: the same shape, its own settings --------------
         info_group = QActionGroup(menu)
         info_group.setExclusive(True)
@@ -1106,12 +1159,12 @@ class AppController(QObject):
             ("date", tr("Date")),
             ("day_length", tr("Day length")),
         ):
-            slot_action(
+            self._menu_gates["not_aurora"].append(slot_action(
                 info_slot_menu, info_group, label,
                 settings.octa_slot == mode,
                 lambda checked, chosen=mode: self._set_south_slot(chosen),
                 not aurora,
-            )
+            ))
         for family, family_title in (
             ("zodiac", tr("Astrology")),
             # The ASCENDANT (owner request 2026-07-12): the sign rising
@@ -1125,7 +1178,7 @@ class AppController(QObject):
                 ("text", tr("Text")),
                 ("colored", tr("Colored")),
             ):
-                slot_action(
+                action = slot_action(
                     family_menu, info_group, label,
                     settings.octa_slot == family
                     and settings.info_slot_style == style,
@@ -1133,6 +1186,8 @@ class AppController(QObject):
                     self._set_south_slot(m, style=chosen),
                     not (aurora and style == "text"),
                 )
+                if style == "text":
+                    self._menu_gates["not_aurora"].append(action)
         chinese_menu = self._submenu(info_slot_menu, tr("Chinese zodiac"))
         for style, label in (
             ("text", tr("Text")),
@@ -1141,7 +1196,7 @@ class AppController(QObject):
             ("silver", tr("Silver")),
             ("bronze", tr("Bronze")),
         ):
-            slot_action(
+            action = slot_action(
                 chinese_menu, info_group, label,
                 settings.octa_slot == "chinese"
                 and settings.info_slot_style == style,
@@ -1150,6 +1205,8 @@ class AppController(QObject):
                 ),
                 not (aurora and style == "text"),
             )
+            if style == "text":
+                self._menu_gates["not_aurora"].append(action)
         # The info slot exists on the Compass and the Seasons (in the
         # CENTER — owner dual-Sunday round 2026-07-12: the 24h arm
         # belongs to the Sunday pair) and under Aurora; the Trinity and

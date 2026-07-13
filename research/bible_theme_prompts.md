@@ -275,7 +275,21 @@ Circular stained-glass rose-window medallion, backlit by deep twilight-purple li
 Circular stained-glass rose-window medallion, backlit by warm golden-yellow light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Solomon enthroned in judgment, crowned and robed in radiant yellow-gold glass, one hand raised in a gesture of decree, a swaddled infant held gently below him between two kneeling women in postures of plea, a small glass silhouette of the newly built Temple's pillars glowing faintly behind the throne. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a set of balance scales, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: warm golden yellow dominant, deep amber, small ivory-white accents for the infant and the women's robes.
 ```
 
-### Venus — the Bride and Bridegroom (`song_of_songs.png`)
+### Venus — Adam and Eve (`adam_and_eve.png`)
+
+**Owner verdict 2026-07-13** (supersedes the Song of Songs pick below:
+"Adam i Eva mi je ipak — za njih svi znaju, za one pesme ne baš"): the
+first pair replaces the Bride and Bridegroom on Friday — everyone
+knows them, they anchor Friday calendrically (created the sixth day),
+and the first union is the plainest Love a window can tell.
+
+```
+Circular stained-glass rose-window medallion, backlit by warm crimson-rose light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Adam and Eve standing hand in hand in the garden of Eden rendered in glass — modestly composed, greenery and blossoms wrapping their figures, the Tree of Life rising luminous between and behind them with ruby fruit among emerald leaves, a small white dove perched above their joined hands, animals of the garden as tiny stained-glass silhouettes at their feet. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a two-figures-and-tree emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep rose red dominant, garden emerald green, ruby fruit, warm flesh-toned ivory glass.
+```
+
+### Venus — the Bride and Bridegroom (`song_of_songs.png`) — SUPERSEDED
+
+Kept for the record; the owner picked Adam and Eve above.
 
 ```
 Circular stained-glass rose-window medallion, backlit by warm crimson-rose light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: the Bridegroom and Bride of the Song of Songs embracing within a walled garden of glass — pomegranate trees heavy with ruby-glass fruit, white lilies at their feet, two doves circling above their joined hands, a small golden wax-seal shape glowing where their hands meet, echoing "set me as a seal upon your heart" (Song 8:6). Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a pomegranate-and-dove emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep rose red dominant, ruby pomegranate, garden green, pearl-white doves.
