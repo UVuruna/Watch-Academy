@@ -10,8 +10,11 @@ Loads `Database/encyclopedia.json` — the Encyclopedia's OWN content
 built the way it is — the dial, solar rotation, twilight, the year
 wheel, lunations, Paint/Light, metals, the ring letters), the WEEK
 pages (seven cross-theme day portraits — everything a day owns woven
-into one prose page) and the VIRTUES / SINS / MOODS entries (one short
-article per cross-cure emblem, 8 per family, Sunday counted twice).
+into one prose page), the SEASONS articles, the VIRTUES / SINS /
+MOODS entries (one short article per cross-cure emblem, 8 per family,
+Sunday counted twice) and the DUALITY family (owner 2026-07-13: "The
+Two Triangles" — Lucifer, Judas and The Union, the scale of self
+whose zero no individual reaches).
 
 Every text rides the same translation overlay as the articles
 (`encyclopedia/<section>/<key>/base|title` keys), so the bundled
@@ -33,4 +36,6 @@ Serbian and any machine-translated language apply automatically.
 #### Methods
 - `instrument(key)`: `{title, base}` of one functionality article
 - `week(body)`: `{title, base}` of one weekday page (body = sun..saturn)
-- `entry(family, name)`: `{base}` of one virtue/sin/mood article
+- `season(key)`: `{title, base}` of one SEASONS article
+- `entry(family, name)`: `{base}` of one virtues/sins/moods/duality
+  article

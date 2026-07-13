@@ -411,6 +411,14 @@ def test_encyclopedia_expansion_wiring():
             len(rows) == 1 and len(rows[0]) == 2
             for _, rows in entry["looks"]
         ), theme
+    # The Two Triangles (owner 2026-07-13): the Judas–Lucifer scale —
+    # three entries; the Union pairs both badges, articles resolve.
+    duality = topics["duality"]["entries"]
+    assert [e["name"] for e in duality] == ["Lucifer", "Judas", "The Union"]
+    assert len(duality[2]["images"]) == 2
+    from data.encyclopedia import EncyclopediaRepository
+    union = EncyclopediaRepository().entry("duality", "The Union")["base"]
+    assert "hexagram" in union and "antidote" in union
     # The Seasons topic (badges + articles) and the trinity emblems.
     assert len(topics["seasons"]["entries"]) == 10
     met = topics["seasons"]["entries"][-1]

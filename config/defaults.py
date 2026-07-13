@@ -276,6 +276,11 @@ ARTICLE_COLUMN_WIDTH_PX = 400        # the hexa TWO-COLUMN legend: each sign's
                                      # column; two of them + spacing must fit
                                      # LEGEND_MAX_WIDTH_FRACTION of a 1080p
                                      # screen (0.45 × 1920 = 864)
+
+# The Judas–Lucifer scale badges (owner 2026-07-13): the two triangle
+# medallions illustrating "The Two Triangles" — wired before the art
+# lands; the Encyclopedia hides missing files.
+SCALE_ART_DIR = paths.assets_dir() / "scale"
 # The Astrology/Ascendant hover image trio (owner 2026-07-13): the
 # ACTIVE style's art large in the middle, the two remaining styles
 # small at its sides.

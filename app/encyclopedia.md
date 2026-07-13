@@ -9,7 +9,9 @@ screens —
 
 1. **Topics** — a gallery in the owner's GROUPS (`_TOPIC_GROUPS`):
    The Clock, Gods, Zodiac, Themes, Religions, Animal Societies and
-   The Inner Wheel — EVERYTHING centered (owner 2026-07-13: headers
+   The Inner Wheel (Virtues, Sins, Moods and THE TWO TRIANGLES — the
+   Judas–Lucifer scale of self, owner 2026-07-13; its badge art is
+   wired ahead of landing) — EVERYTHING centered (owner 2026-07-13: headers
    and card rows alike) and the cards RESPONSIVE: `_rescale_topics`
    grows/shrinks the icons with the window between
    `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`; only below the minimum does

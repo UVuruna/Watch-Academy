@@ -158,6 +158,8 @@ UI_STRINGS: tuple[str, ...] = (
     # and the cross-cure emblem names (Love already lives above).
     "The Clock", "The Week", "The Instrument", "The Inner Wheel",
     "Virtues", "Sins", "Moods",
+    # The Judas–Lucifer scale (owner 2026-07-13).
+    "The Two Triangles", "Lucifer", "Judas", "The Union",
     # Look-arrow captions (owner 2026-07-13: kinship groups + the
     # astrology/planets look names; the metals live above already).
     "Canon", "Signs", "Logo & Constellation", "Animals",

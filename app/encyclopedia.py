@@ -67,7 +67,7 @@ _TOPIC_GROUPS = (
     ("Themes", ("alchemy", "japan", "profession", "trinity")),
     ("Religions", ("religion", "religion_alt")),
     ("Animal Societies", ("wolf", "bee", "elephant")),
-    ("The Inner Wheel", ("virtues", "sins", "moods")),
+    ("The Inner Wheel", ("virtues", "sins", "moods", "duality")),
 )
 
 # The SEASONS topic (owner 2026-07-13): the year's quarters, the
@@ -401,6 +401,41 @@ def _topics() -> dict:
                 for name in _VSM_DAYS[family]
             ],
         }
+    # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
+    # the two fallen extremes of self and the zero no individual
+    # reaches. The badge art is wired ahead of its landing (missing
+    # files stay hidden); the Union pairs both triangles.
+    topics["duality"] = {
+        "title": "The Two Triangles",
+        "icon": defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
+        "entries": [
+            {
+                "images": (
+                    defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
+                ),
+                "name": "Lucifer",
+                "article": ("emblem", "duality", "Lucifer"),
+                "accents": ("red",),
+            },
+            {
+                "images": (
+                    defaults.SCALE_ART_DIR / "Judas_Triangle.png",
+                ),
+                "name": "Judas",
+                "article": ("emblem", "duality", "Judas"),
+                "accents": ("blue",),
+            },
+            {
+                "images": (
+                    defaults.SCALE_ART_DIR / "Judas_Triangle.png",
+                    defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
+                ),
+                "name": "The Union",
+                "article": ("emblem", "duality", "The Union"),
+                "accents": ("red", "blue"),
+            },
+        ],
+    }
     topics["trinity"] = {
         "title": "Trinity",
         "icon": defaults.TRINITY_ART_DIR / "Faith.png",

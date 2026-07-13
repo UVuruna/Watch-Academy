@@ -55,8 +55,9 @@ class EncyclopediaRepository:
         )
 
     def entry(self, family: str, name: str) -> dict:
-        """{base} of one virtue/sin/mood emblem article — family is
-        "virtues" | "sins" | "moods", name the emblem ("Justice")."""
+        """{base} of one emblem-family article — family is "virtues" |
+        "sins" | "moods" | "duality" (the Judas–Lucifer scale, owner
+        2026-07-13), name the entry ("Justice", "Lucifer")."""
         return self._localized(
             f"encyclopedia/{family}/{name}", self._load()[family][name]
         )
