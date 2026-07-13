@@ -209,19 +209,24 @@ rationale, per the brief.
 
 Mirrors Abraham's Sunday-ruler slot: the morning star's fall (Isaiah
 14:12, Luke 10:18) is scripture's own Glory-becomes-Eclipse story, the
-darkest possible Sunday-Ruler pairing. The black sun/black-hole ring —
-"the star that loves itself," light that will not give itself away —
-directly seeds the Two Triangles' upward-flame/self-exaltation pole in
+darkest possible Sunday-Ruler pairing. His celestial image (owner
+canon correction 2026-07-13) is the SUPERNOVA — the star that burns
+everything it has in one climb, outshining the sky exactly as it
+destroys itself; the black hole belongs to Judas at the dial's bottom.
+This seeds the Two Triangles' upward-flame/self-exaltation pole in
 Section C below.
 
 ```
-Circular stained-glass rose-window medallion, backlit by a cold black-violet night sky through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring as the light-set plates, but read as a night window; mirrors abraham.png's Sunday-ruler slot as the Fall's own Glory-to-Eclipse story. Center: Lucifer, the morning star, caught mid-fall — still radiant and beautiful, wings trailing streamers of gold-white fire guttering to ember-red as he drops, his crown tilted and slipping from his brow; behind him a perfect black ring, a black sun that swallows its own corona and lets no light leave it, "the star that loves itself." Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a falling-star-and-slipping-crown emblem, an upward RED triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top rendered in smoked amber-red glass, its rays thin and reluctant. Colors: deep black-violet dominant, guttering ember-red and gold-white in the falling fire, cold blue-black at the ring's rim, no warm gold except the dying fire itself.
+Circular stained-glass rose-window medallion, backlit by a cold black-violet night sky through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring as the light-set plates, but read as a night window; mirrors abraham.png's Sunday-ruler slot as the Fall's own Glory-to-Eclipse story. Center: Lucifer, the morning star, caught mid-fall — still radiant and beautiful, wings trailing streamers of gold-white fire guttering to ember-red as he drops, his crown tilted and slipping from his brow; behind him, high in the glass, the blinding flash of a supernova — a star burning everything it has in one final blaze, briefly outshining the whole window exactly as it dies. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a falling-star-and-slipping-crown emblem, an upward RED triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top rendered in smoked amber-red glass, its rays thin and reluctant. Colors: deep black-violet dominant, guttering ember-red and gold-white in the falling fire, cold blue-black at the ring's rim, no warm gold except the dying fire itself.
 ```
 
 ### Sunday, servant face (dual) — Judas (`dual/judas.png`)
 
 Mirrors Isaac's Sunday-servant slot: the servant who betrays instead
-of trusting. **Scene choice:** the brief offered "the kiss in the
+of trusting. His celestial image (owner canon 2026-07-13) is the
+BLACK HOLE — the star's other death, the collapse inward, sitting
+where his falling triangle points: the bottom of the 24-hour dial.
+**Scene choice:** the brief offered "the kiss in the
 torchlit garden OR the thirty silver pieces spilling, rope coiled at
 his feet" — I picked the coins/rope scene. A solitary figure alone
 with the evidence of his own choice reads as sober grief, where a
@@ -232,7 +237,7 @@ be avoided outright; the rope below is explicitly coiled and resting
 on the ground, untouched — never around his neck, never in use.
 
 ```
-Circular stained-glass rose-window medallion, backlit by cold torch-ember light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked-amber oculus as lucifer.png, but the glass reads even lower and quieter, no majesty left in it; mirrors isaac.png's Sunday-servant slot, trust curdled into despair. Center: Judas alone on bare ground, thirty silver coins spilled from an open pouch and scattered around his sandals, catching a thin cold light; a length of rope lying coiled and still at his feet, untouched, resting rather than in use; his head bowed into both hands, shoulders drawn in — sober grief rendered plainly, no sneer, no caricature. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a scattered-coins emblem, a downward BLUE triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top in smoked amber-red glass, its rays thin and reluctant, same placement as lucifer.png. Colors: cold slate-blue dominant, tarnished silver coins, near-black lead, one thin cold ember accent from the distant torch-light.
+Circular stained-glass rose-window medallion, backlit by cold torch-ember light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked-amber oculus as lucifer.png, but the glass reads even lower and quieter, no majesty left in it; mirrors isaac.png's Sunday-servant slot, trust curdled into despair. Center: Judas alone on bare ground, thirty silver coins spilled from an open pouch and scattered around his sandals, catching a thin cold light; a length of rope lying coiled and still at his feet, untouched, resting rather than in use; his head bowed into both hands, shoulders drawn in — sober grief rendered plainly, no sneer, no caricature; low in the glass behind him, a collapsed dark star — a perfect black ring swallowing its own faint corona, the light that is not allowed to leave. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a scattered-coins emblem, a downward BLUE triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top in smoked amber-red glass, its rays thin and reluctant, same placement as lucifer.png. Colors: cold slate-blue dominant, tarnished silver coins, near-black lead, one thin cold ember accent from the distant torch-light.
 ```
 
 ### Monday — Lilith (`lilith.png`)
