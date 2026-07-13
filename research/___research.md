@@ -95,6 +95,21 @@ Herod/Nebuchadnezzar alternatives, Delilah, Cain) — 18 theme prompts
 Triangles"; drop dirs assets/weekday/bible2|bible_dark/ and
 assets/scale/.
 
+### `cosmos_prompts.md` — Cosmos & Planets Medallion Prompts
+The COSMOS weekday theme (owner 2026-07-13): deep-sky objects as
+bronze star-chart medallions — Sun with the event-horizon black hole
+dual, nebula, supernova, pulsar-as-clock, galaxy, binary stars,
+comet — 16 prompts (bronze + colored arcs) plus the 8-prompt Planets
+medallion look (drop dir assets/weekday/planets_art/).
+
+### `intelligences_prompts.md` — Nine Intelligences & Wheel of Moods
+The Nine Intelligences badges (owner GO 2026-07-13): a new
+silver-inlaid "academy cameo" family, 9 = the six Prism arms + the
+three Trinity arms, each with its instrument and arm-color enamel
+(drop dir assets/intelligence/); plus the Wheel of Moods medallion —
+the dial's own eight-mood wheel in the exact paint hues with the
+white Glory center and the Awe crescent below (assets/mood/).
+
 ### `chinese_zodiac_prompts.md` — Chinese Zodiac Prompts
 The bronze Chinese-zodiac redesign (owner 2026-07-13): the Greek
 key border replaced by a huiwen meander with Wu Xing element
