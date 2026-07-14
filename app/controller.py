@@ -1251,43 +1251,18 @@ class AppController(QObject):
         self._octa_slot_action = info_slot_menu.menuAction()
         self._octa_slot_action.setEnabled(slot_possible)
         # Elements (owner spec): plain on/off switches for every
-        # element — the Earth STYLE lives under Design now.
+        # element — the Earth STYLE lives under Design now. The owner's
+        # ORDER and TERMS (2026-07-14): the two slots lead — named
+        # exactly like their top-level menus, never "Weekday" — then
+        # the star, its colors, the two markers, the seconds hand.
         elements_menu = self._submenu(menu, f"🧩 {tr('Elements')}")
-        for key, label, tip in (
-            (
-                "show_earth", tr("Earth"),
-                tr("The Earth marker riding the year wheel and showing "
-                   "the date."),
+        self._add_toggle(
+            elements_menu, tr("Primary Slot"), settings.show_weekday,
+            lambda checked: self._set_display_choice(
+                "show_weekday", checked
             ),
-            (
-                "show_moon", tr("Moon"),
-                tr("The Moon marker riding its cycle and showing the phase."),
-            ),
-            (
-                "show_weekday", tr("Weekday"),
-                tr("The weekday bodies — the rotating slots and the center."),
-            ),
-            (
-                "show_pointer", tr("Pointer"),
-                tr("The star diamonds. Off: the Aura colors stay, only the "
-                   "pointer disappears."),
-            ),
-            (
-                "colorful", tr("Colorful"),
-                tr("The Aura palette hues. Off: the day and twilight arcs "
-                   "are drawn as plain white transparency."),
-            ),
-            (
-                "show_seconds", tr("Seconds"),
-                tr("The seconds hand. Off: it is not drawn and the dial "
-                   "ticks once per minute."),
-            ),
-        ):
-            self._add_toggle(
-                elements_menu, label, getattr(settings, key),
-                lambda checked, key=key: self._set_display_choice(key, checked),
-                tip,
-            )
+            tr("The weekday bodies — the rotating slots and the center."),
+        )
         # The Secondary Slot has its own switch, grayed out whenever
         # the active pointer/element combination has no room for it.
         self._octa_slot_toggle = self._add_toggle(
@@ -1300,6 +1275,37 @@ class AppController(QObject):
                "slot at 3h."),
         )
         self._octa_slot_toggle.setEnabled(slot_possible)
+        for key, label, tip in (
+            (
+                "show_pointer", tr("Pointer"),
+                tr("The star diamonds. Off: the Aura colors stay, only the "
+                   "pointer disappears."),
+            ),
+            (
+                "colorful", tr("Colorful"),
+                tr("The Aura palette hues. Off: the day and twilight arcs "
+                   "are drawn as plain white transparency."),
+            ),
+            (
+                "show_earth", tr("Earth"),
+                tr("The Earth marker riding the year wheel and showing "
+                   "the date."),
+            ),
+            (
+                "show_moon", tr("Moon"),
+                tr("The Moon marker riding its cycle and showing the phase."),
+            ),
+            (
+                "show_seconds", tr("Seconds"),
+                tr("The seconds hand. Off: it is not drawn and the dial "
+                   "ticks once per minute."),
+            ),
+        ):
+            self._add_toggle(
+                elements_menu, label, getattr(settings, key),
+                lambda checked, key=key: self._set_display_choice(key, checked),
+                tip,
+            )
         menu.addSeparator()
         self._add_toggle(
             menu, f"📜 {tr('Legend')}", settings.legend,
