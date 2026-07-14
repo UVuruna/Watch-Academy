@@ -635,12 +635,13 @@ def test_chinese_slot_styles_render(july_wednesday, style):
     assert image.pixelColor(180, 8).alpha() > 200
 
 
-def test_day_slot_text_modes_need_the_pointer_off(july_wednesday):
-    """Owner 2026-07-12: Time/Date/Day length join the DAY slot — but
-    like the badges they are gray in Pointer mode, and Aurora keeps
-    the day slot images-only, so they draw only with the Pointer
-    element OFF (at the pinned spot, answering no hover, exactly like
-    the info slot's text modes)."""
+def test_day_slot_text_modes_need_a_pinned_spot(july_wednesday):
+    """Owner 2026-07-12 + roundel round 2026-07-14: Time/Date/Day
+    length join the DAY slot wherever a PINNED spot exists — the
+    Pointer element off, or Aurora (text is real there now, on the
+    subdial). With the star up the bodies rule. The spot ENLARGES on
+    hover like every slot (owner 2026-07-14: an inherited trait) but
+    keeps no tooltip of its own."""
     from PySide6.QtCore import QPointF
 
     from app.controller import apply_display_settings
@@ -656,7 +657,7 @@ def test_day_slot_text_modes_need_the_pointer_off(july_wednesday):
             defaults.DEFAULT_SKIN,
             replace(Settings(), pointer="aurora", weekday_slot=mode),
         )
-        assert aurora.weekday_slot == "weekday"     # aurora: images only
+        assert aurora.weekday_slot == mode          # pinned under Aurora
         pinned = apply_display_settings(
             defaults.DEFAULT_SKIN,
             replace(
@@ -675,11 +676,16 @@ def test_day_slot_text_modes_need_the_pointer_off(july_wednesday):
     )
     image = compositor.render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
-    # The pinned spot answers NO hover in a text mode — no body, no badge.
+    # The pinned spot IS a hover target (the enlarge works) — but the
+    # text modes still answer with no tooltip of their own.
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     assert compositor._element_at(
         QPointF(0.0, orbit), 180.0, 0.0, "mercury"
-    ) is None
+    ) == "weekday_badge"
+    x = 180.0
+    y = 180.0 + orbit
+    tip = compositor.tooltip_at(x, y, 360.0)
+    assert tip is None or "Time" not in str(tip)
 
 
 def test_info_slot_weekday_wears_its_theme_metal(july_wednesday):

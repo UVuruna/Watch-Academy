@@ -206,13 +206,14 @@ def build_skin(settings: Settings):
 
 def _effective_weekday_slot(settings: Settings) -> str:
     """What the DAY slot actually shows (owner rules 2026-07-12): the
-    badge families live in any PINNED layout (Aurora, or the Pointer
-    element off); the TEXT modes (time/date/day length) need the
-    pointer OFF — under Aurora the day slot stays images-only exactly
-    like the info slot. Anywhere else the bodies rule."""
+    badge families AND the text modes live in any PINNED layout —
+    Aurora, or the Pointer element off (owner 2026-07-14: text is real
+    under Aurora too, on the roundel subdial). Anywhere else the
+    bodies rule."""
     mode = settings.weekday_slot
     if mode in ("time", "date", "day_length"):
-        return mode if not settings.show_pointer else "weekday"
+        pinned = not settings.show_pointer or settings.pointer == "aurora"
+        return mode if pinned else "weekday"
     if mode != "weekday" and not (
         settings.pointer in constants.WEEKDAY_BADGE_POINTERS
         or not settings.show_pointer

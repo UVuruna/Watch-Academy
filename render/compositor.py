@@ -434,12 +434,17 @@ class Compositor:
         if element is not None:
             if element == "weekday_badge":
                 # The badge in the weekday position (owner 2026-07-12):
-                # sun sign, the rising sign, or the Chinese year.
+                # sun sign, the rising sign, or the Chinese year. The
+                # time/date/day-length modes have no reading of their
+                # own — the hover-ENLARGE still works (owner
+                # 2026-07-14: every slot inherits it), the region
+                # hovers take over below.
                 if self._skin.weekday_slot == "ascendant":
                     return self._ascendant_text(self._skin.day_slot_style)
                 if self._skin.weekday_slot == "chinese":
                     return self._chinese_text(self._skin.day_slot_style)
-                return self._zodiac_text(self._skin.day_slot_style)
+                if self._skin.weekday_slot == "zodiac":
+                    return self._zodiac_text(self._skin.day_slot_style)
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
                 # name, its own plate, its own text.
@@ -512,9 +517,13 @@ class Compositor:
 
         if self._skin.show_weekday:
             badge = weekday_badge(self._skin, self._day, self._last_tick)
-            if badge is not None:
-                # The astrology badge occupies the weekday position —
-                # its hit region mirrors the drawn spot exactly.
+            if badge is not None or self._skin.weekday_slot in (
+                "time", "date", "day_length"
+            ):
+                # The badge OR a text mode occupies the weekday
+                # position — the hit region mirrors the drawn spot
+                # exactly (owner 2026-07-14: the hover-enlarge is an
+                # inherited trait, whatever the slot shows).
                 weekday = self._skin.weekday_set
                 if hit(
                     dial_point(

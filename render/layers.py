@@ -946,22 +946,30 @@ class WeekdayBadgeLayer(Layer):
         spec = self._skin.weekday_set
         mode = ctx.skin.weekday_slot
         if mode in ("time", "date", "day_length"):
-            if self._lift:
-                return       # text modes answer no hover — never lifted
-            # The DAY slot as an info text (owner 2026-07-12) — exists
-            # only pointer-off, where the pinned spot is free; no hover
-            # (the text modes answer nothing, like in the info slot).
+            # The DAY slot as an info text (owner 2026-07-12) on the
+            # pinned spot. The hover-ENLARGE is an inherited trait
+            # (owner 2026-07-14: every slot grows, whatever it shows)
+            # — only the tooltip stays silent for these modes.
+            if not self._gate(ctx, "weekday_badge"):
+                return
             pos = dial_point(
                 pinned_weekday_theta(ctx.skin),
                 ctx.radius * spec.orbit_fraction,
             )
-            size = 2 * ctx.radius * spec.diamond_scale
-            draw_slot_roundel(painter, ctx, pos, size)
-            draw_fitted_text(
-                painter, pos,
-                size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
-                slot_text(mode, ctx),
+            size = (
+                2 * ctx.radius * spec.diamond_scale
+                * hover_factor(ctx, "weekday_badge")
             )
+            draw_slot_roundel(painter, ctx, pos, size)
+            inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
+            if mode == "date":
+                # The full date in two rows (owner 2026-07-14).
+                BottomSlotLayer._two_lines(
+                    painter, pos, inner,
+                    slot_text("date", ctx), str(ctx.day.local_date.year),
+                )
+            else:
+                draw_fitted_text(painter, pos, inner, slot_text(mode, ctx))
             return
         if not self._gate(ctx, "weekday_badge"):
             return                       # hover z-lift repaints it on top
@@ -1225,7 +1233,17 @@ class BottomSlotLayer(Layer):
                     draw_body_label(painter, ctx, body, pos, slot_size)
                 return
             text = constants.WEEKDAY_LABELS[body]   # documented fallback
-        elif mode in ("time", "date", "day_length"):
+        elif mode == "date":
+            # The FULL date in two rows (owner 2026-07-14): the day
+            # and month above, the year beneath.
+            draw_slot_roundel(painter, ctx, pos, slot_size)
+            self._two_lines(
+                painter, pos,
+                slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+                slot_text("date", ctx), str(ctx.day.local_date.year),
+            )
+            return
+        elif mode in ("time", "day_length"):
             text = slot_text(mode, ctx)
         elif mode == "chinese":          # style == "text" (validated set)
             # TWO lines (owner 2026-07-12): the element above the
