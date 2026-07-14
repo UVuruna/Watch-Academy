@@ -1242,7 +1242,7 @@ class YearMarkerLayer(Layer):
         if ctx.skin.show_earth and self._gate(ctx, "earth"):
             self._draw_earth(painter, ctx)
         if ctx.skin.show_moon and self._gate(ctx, "moon"):
-            moon_angle = angles.moon_cycle_angle(ctx.day.moon_fraction)
+            moon_angle = angles.moon_cycle_angle(ctx.tick.moon_fraction)
             # The rim transit only exists while the Earth is also shown.
             opacity = (
                 moon_transit_opacity(spec, ctx.tick.year_angle, moon_angle)
@@ -1320,7 +1320,7 @@ class YearMarkerLayer(Layer):
         terminator half-ellipse (semi-axis a = R*|cos 2pi*f|) — union when
         gibbous, difference when crescent; everything else is darkened."""
         spec = self._skin.year_marker
-        fraction = ctx.day.moon_fraction
+        fraction = ctx.tick.moon_fraction
         radius = size / 2
         painter.save()
         painter.translate(pos)

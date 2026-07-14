@@ -819,8 +819,8 @@ def test_lunation_ordinal_reads_the_ring_side(app):
             SeasonsRepository().year_anchors(now.year),
             MoonPhaseRepository().moon_window(now.year),
         )
-        assert day.moon_fraction > 0.5      # premise: Moon on the LEFT
         tick = build_tick_state(now, day)
+        assert tick.moon_fraction > 0.5     # premise: Moon on the LEFT
         compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
         compositor.render_offscreen(360.0, 1.0, day, tick)
         return (
@@ -1286,7 +1286,7 @@ def test_moon_event_glow_renders(app):
     )
     # At the instant the moon sits exactly on its cycle angle; probe
     # 30 px above the marker center — inside the 2x halo, off the disc.
-    moon_angle = math.radians(day.moon_fraction * 360.0)
+    moon_angle = math.radians(glowing.moon_fraction * 360.0)
     orbit = 270 * defaults.DEFAULT_SKIN.year_marker.moon_orbit_fraction
     moon_x = 270 + orbit * math.sin(moon_angle)
     moon_y = 270 - orbit * math.cos(moon_angle)

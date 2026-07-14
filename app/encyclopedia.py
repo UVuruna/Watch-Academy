@@ -1082,15 +1082,28 @@ class EncyclopediaDialog(QDialog):
     def _resize_cell(self, state: dict, block_width: int) -> None:
         """Fit the look's images to the block width — the columns
         split it and every image shrinks as far as needed (owner
-        2026-07-13: nothing may overlap or clip)."""
+        2026-07-13: nothing may overlap or clip) — AND to the height
+        ceiling (owner imperative 2026-07-14: an image never eats more
+        than READER_IMAGE_MAX_HEIGHT_FRACTION of the page; the text
+        must stay on screen)."""
+        max_height = round(
+            self._scroll.viewport().height()
+            * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION
+        )
         for label, art, columns in state.get("cells", ()):
+            if art.isNull():
+                continue
             share = block_width // columns - defaults.GUIDE_SPACING_PX * 2
             width = max(24, min(share, art.width()))
-            label.setPixmap(
-                art.scaledToWidth(
-                    width, Qt.TransformationMode.SmoothTransformation
-                )
+            pixmap = art.scaledToWidth(
+                width, Qt.TransformationMode.SmoothTransformation
             )
+            if pixmap.height() > max_height:
+                pixmap = art.scaledToHeight(
+                    max(24, max_height),
+                    Qt.TransformationMode.SmoothTransformation,
+                )
+            label.setPixmap(pixmap)
 
     def _cycle_look(self, state: dict, step: int) -> None:
         """The ◀ / ▶ arrows (owner 2026-07-13): the next look of this

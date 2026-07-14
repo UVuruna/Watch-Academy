@@ -37,6 +37,10 @@ class GuideDialog(QDialog):
         overlay = translations or {}
         self.setWindowTitle(f"{constants.APP_NAME} — {ui(overlay, 'Guide')}")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        # Minimize/maximize in the title bar (owner 2026-07-14 — same
+        # as the Encyclopedia).
+        self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
 
         pages_path = defaults.GUIDE_DIR / "pages.json"
         self._pages = json.loads(pages_path.read_text(encoding="utf-8"))["pages"]
@@ -135,19 +139,32 @@ class GuideDialog(QDialog):
 
     def _rescale(self) -> None:
         """Fit every image to its grid cell — called on page turns AND
-        window resizes (owner spec: the Guide is resizable)."""
+        window resizes (owner spec: the Guide is resizable). The
+        HEIGHT ceiling applies here too (owner imperative 2026-07-14:
+        an image never eats more than the fraction of the page — the
+        caption must stay on screen)."""
         available = max(
             240,
             self._scroll.viewport().width() - 4 * defaults.GUIDE_SPACING_PX,
         )
+        max_height = round(
+            self._scroll.viewport().height()
+            * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION
+        )
         for image, art, columns in self._cells:
+            if art.isNull():
+                continue
             width = max(160, available // columns - defaults.GUIDE_SPACING_PX)
-            image.setPixmap(
-                art.scaledToWidth(
-                    min(width, art.width()),
+            pixmap = art.scaledToWidth(
+                min(width, art.width()),
+                Qt.TransformationMode.SmoothTransformation,
+            )
+            if pixmap.height() > max_height:
+                pixmap = art.scaledToHeight(
+                    max(24, max_height),
                     Qt.TransformationMode.SmoothTransformation,
                 )
-            )
+            image.setPixmap(pixmap)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

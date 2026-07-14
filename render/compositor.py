@@ -540,7 +540,7 @@ class Compositor:
         marker = self._skin.year_marker
         if self._skin.show_moon and hit(
             dial_point(
-                angles.moon_cycle_angle(self._day.moon_fraction),
+                angles.moon_cycle_angle(self._last_tick.moon_fraction),
                 radius * marker.moon_orbit_fraction,
             ),
             radius * marker.moon_scale,
@@ -1296,7 +1296,7 @@ class Compositor:
         # of the ring, past 12h again, is already the NEXT moon; Moon
         # on the RIGHT (first half) → the whole ring is the current
         # one (behind it the young past, ahead of it the rest).
-        next_cycle = day.moon_fraction > 0.5 and fraction < 0.5
+        next_cycle = self._last_tick.moon_fraction > 0.5 and fraction < 0.5
         cycle_day = f"{fraction * constants.SYNODIC_MONTH_DAYS:.1f}"
         line_moon = (
             f"{self._label('Illumination')} "
@@ -1346,23 +1346,26 @@ class Compositor:
         PHASE NAME is the title — bigger, bold, no label — with the
         principal-phase instant beneath it, then the labeled data."""
         day = self._day
-        name = phase_name(day.moon_fraction)
+        tick = self._last_tick
+        name = phase_name(tick.moon_fraction)
         title = _hover_title(html.escape(self._tr(name)))
         if name in constants.MOON_PHASE_FRACTIONS:
             # A principal phase name holds ±12 h around its instant —
-            # show that instant (the nearest principal event by name).
+            # show that instant (the nearest principal event by name),
+            # dated like the weekday tooltip (owner 2026-07-14:
+            # "14th July", not "14 Jul").
             noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
             instant = min(
                 (event for event in day.moon_events if event[1] == name),
                 key=lambda event: abs(event[0] - noon),
             )[0].astimezone(day.tzinfo)
             title += _centered(
-                f"{instant.day} {self._month_short(instant)}"
+                f"{self._ord(instant.day)} {self._month(instant)}"
                 f" - {instant:%H:%M}"
             )
         lines = [
             f"{self._label('Illumination')} "
-            f"{day.moon_illumination * 100:.1f}%",
+            f"{tick.moon_illumination * 100:.1f}%",
         ]
         if day.moonrise is not None and day.moonset is not None:
             lines.append(
@@ -1375,7 +1378,7 @@ class Compositor:
             lines.append(f"{self._label('Moonrise')} {day.moonrise:%H:%M}")
         elif day.moonset is not None:
             lines.append(f"{self._label('Moonset')} {day.moonset:%H:%M}")
-        cycle_day = day.moon_fraction * constants.SYNODIC_MONTH_DAYS
+        cycle_day = tick.moon_fraction * constants.SYNODIC_MONTH_DAYS
         return title + _centered_html(
             "",
             *lines,

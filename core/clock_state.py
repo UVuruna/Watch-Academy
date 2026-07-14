@@ -39,8 +39,11 @@ class DayContext:
     sun: SunDay
     star_rotation: float            # degrees, also the solar-noon arrow
     year_anchors: YearAnchors
-    moon_fraction: float            # cycle fraction at day-context build time
-    moon_illumination: float
+    moon_window: MoonWindow         # principal-phase instants — the MINUTE
+                                    # tick reads the live cycle fraction from
+                                    # it (owner bug 2026-07-14: a day-time New
+                                    # Moon left the marker stale until
+                                    # midnight when the fraction lived here)
     moonrise: datetime | None       # local instants on this date; None when
     moonset: datetime | None        # the moon skips the event that day
     southern_hemisphere: bool       # the moon appears rotated 180 deg there
@@ -75,6 +78,8 @@ class TickState:
     minute_angle: float
     second_angle: float             # used only when the seconds hand is on
     year_angle: float               # moves ~1 deg/day; cheap to keep smooth
+    moon_fraction: float            # LIVE cycle fraction (0 new .. 0.5 full)
+    moon_illumination: float        # lit disc fraction right now
     is_daylight: bool               # sun above the horizon right now
     is_moon_up: bool                # moon above the horizon right now
     time_hm: str                    # "14:34" — the octa pointer's digital slot
@@ -92,7 +97,6 @@ def build_day_context(
     moon_window: MoonWindow,
 ) -> DayContext:
     sun_day = compute_sun_day(observer, now_local.date(), now_local.tzinfo)
-    fraction = phase_fraction(now_local, moon_window)
     moonrise, moonset = moon_rise_set(observer, now_local.date(), now_local.tzinfo)
     if abs(observer.latitude) <= constants.TROPIC_LATITUDE_DEG:
         zone = "tropics"
@@ -108,8 +112,7 @@ def build_day_context(
         sun=sun_day,
         star_rotation=angles.star_rotation_deg(sun_day.noon),
         year_anchors=year_anchors,
-        moon_fraction=fraction,
-        moon_illumination=illumination(fraction),
+        moon_window=moon_window,
         moonrise=moonrise,
         moonset=moonset,
         southern_hemisphere=observer.latitude < 0,
@@ -153,11 +156,17 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         # the equator, so the date marker runs MIRRORED — 21 June (their
         # shortest day) sits at the bottom (Ω), 22 December at the top (M).
         year_angle = (year_angle + 180.0) % 360.0
+    # LIVE per-minute (owner bug 2026-07-14): a New Moon at 11:43 must
+    # wrap the marker and the cycle-day readout at 11:43 — not at the
+    # next day-context rebuild.
+    moon_fraction = phase_fraction(now_local, day.moon_window)
     return TickState(
         hour_angle=angles.time_to_dial_angle(now_local),
         minute_angle=angles.minute_hand_angle(now_local),
         second_angle=angles.second_hand_angle(now_local),
         year_angle=year_angle,
+        moon_fraction=moon_fraction,
+        moon_illumination=illumination(moon_fraction),
         is_daylight=_is_daylight(now_local, day.sun),
         is_moon_up=_is_moon_up(now_local, day),
         time_hm=now_local.strftime("%H:%M"),

@@ -20,7 +20,8 @@ per-day bundle and a tiny per-minute tick.
 
 ### DayContext
 Frozen: local date, UTC offset, weekday index (Monday=0), `SunDay`,
-star rotation, `YearAnchors`, moon fraction/illumination,
+star rotation, `YearAnchors`, the `MoonWindow` (principal-phase
+instants — the tick reads the LIVE cycle fraction from it),
 `southern_hemisphere` (the moon renders rotated 180° there), the day
 length string ("15:25", the octa slot option), the tropical zodiac sign
 (name, symbol, local start/end dates — cusps ride the year wheel), the
@@ -32,12 +33,15 @@ DST transitions, where the star legitimately jumps 15°.
 
 ### TickState
 Frozen: hour angle, minute angle, year angle (recomputed per tick to
-stay smooth — it moves ~1°/day), `is_daylight` (sun above the horizon
-right now; drives the Earth marker's day/night image — correct even on
-inverted midnight-sun transition days where sunset precedes sunrise),
-`time_hm` (the octa slot's digital time) and the active glow events:
-`season_event` (±12 h around a solstice/equinox) and `moon_event`
-(±6 h around a principal phase), None outside their windows.
+stay smooth — it moves ~1°/day), `moon_fraction`/`moon_illumination`
+(LIVE per minute — owner bug 2026-07-14: a day-time New Moon must wrap
+the marker at its instant, not at the next day-context rebuild),
+`is_daylight` (sun above the horizon right now; drives the Earth
+marker's day/night image — correct even on inverted midnight-sun
+transition days where sunset precedes sunrise), `time_hm` (the octa
+slot's digital time) and the active glow events: `season_event`
+(±12 h around a solstice/equinox) and `moon_event` (±6 h around a
+principal phase), None outside their windows.
 
 ## Functions
 - `build_day_context(now_local, observer, year_anchors, moon_window)`

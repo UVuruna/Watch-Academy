@@ -92,8 +92,8 @@ def main() -> None:
     print(f"Minute hand:{tick.minute_angle:7.2f} deg")
     print(f"Year angle: {tick.year_angle:.2f} deg  (0 = summer solstice at top)")
     print(
-        f"Moon:       fraction {day.moon_fraction:.4f}, "
-        f"illumination {day.moon_illumination * 100:.1f}%"
+        f"Moon:       fraction {tick.moon_fraction:.4f}, "
+        f"illumination {tick.moon_illumination * 100:.1f}%"
     )
 
 

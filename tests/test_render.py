@@ -133,8 +133,9 @@ def test_moon_terminator_quarters(app):
         painter.translate(50, 50)
         ctx = RenderContext(
             skin=skin,
-            day=SimpleNamespace(moon_fraction=fraction, southern_hemisphere=False),
-            tick=None, radius=50.0, cache=AssetCache(), dpr=1.0,
+            day=SimpleNamespace(southern_hemisphere=False),
+            tick=SimpleNamespace(moon_fraction=fraction),
+            radius=50.0, cache=AssetCache(), dpr=1.0,
         )
         layer._draw_moon(painter, ctx, QPointF(0, 0), 80.0)
         painter.end()
@@ -182,8 +183,9 @@ def test_moon_flips_on_southern_hemisphere(app):
     painter.translate(50, 50)
     ctx = RenderContext(
         skin=skin,
-        day=SimpleNamespace(moon_fraction=0.25, southern_hemisphere=True),
-        tick=None, radius=50.0, cache=AssetCache(), dpr=1.0,
+        day=SimpleNamespace(southern_hemisphere=True),
+        tick=SimpleNamespace(moon_fraction=0.25),
+        radius=50.0, cache=AssetCache(), dpr=1.0,
     )
     layer._draw_moon(painter, ctx, QPointF(0, 0), 80.0)
     painter.end()

@@ -440,6 +440,10 @@ UI_BUTTON_COLORS = {
     "download": ("#CE93D8", "#6A1B9A"),     # violet — save the entry
     "neutral": ("#B0BEC5", "#546E7A"),      # the look arrows
 }
+# Reader image ceiling (owner imperative 2026-07-14): no article or
+# Guide image may eat the page — anything taller than this fraction of
+# the viewport height scales down to it, leaving room for the text.
+READER_IMAGE_MAX_HEIGHT_FRACTION = 0.35
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image

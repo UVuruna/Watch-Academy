@@ -64,7 +64,31 @@ def test_day_context(belgrade_noon_context):
     assert day.sun.regime is DaylightRegime.NORMAL
     # July in CEST: solar noon runs ~40 min late -> star tilted right.
     assert 8.0 < day.star_rotation < 13.0
-    assert day.moon_fraction == pytest.approx(0.74, abs=0.01)
+    # The golden moon fraction moved to the MINUTE tick (owner bug
+    # 2026-07-14: the marker must move while the app runs).
+    tick = build_tick_state(now, day)
+    assert tick.moon_fraction == pytest.approx(0.74, abs=0.01)
+
+
+def test_moon_wraps_live_while_the_app_runs():
+    """Owner bug 2026-07-14 (his screenshots): the app launched in the
+    morning, the New Moon struck at 11:43, and at 14:20 the marker
+    still sat LEFT of 12h reading Day 29.5 of 29.53 — the fraction
+    lived on the once-a-day context. The MINUTE tick must read the
+    live fraction: same DayContext, two ticks, the cycle wraps."""
+    tz = ZoneInfo("Europe/Belgrade")
+    observer = astral.Observer(latitude=44.82, longitude=20.46)
+    day = build_day_context(
+        datetime(2026, 7, 14, 9, 0, tzinfo=tz),      # morning launch
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    before = build_tick_state(datetime(2026, 7, 14, 10, 0, tzinfo=tz), day)
+    after = build_tick_state(datetime(2026, 7, 14, 14, 20, tzinfo=tz), day)
+    assert before.moon_fraction > 0.99               # old cycle, last hours
+    assert after.moon_fraction < 0.01                # the NEW cycle, live
+    assert after.moon_illumination < 0.001           # a hair past new
 
 
 def test_cache_key_uses_the_offset_of_now_on_dst_day(belgrade_noon_context):
