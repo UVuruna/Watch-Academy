@@ -41,20 +41,35 @@ from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 from render.assets import metal_variant_file
-from render.compositor import _HEX_NOTE, _highlight_terms
+from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
 
 
-def _flow_html(text: str, accents: tuple = ()) -> str:
+def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
     """Article prose that REFLOWS with the window (owner 2026-07-13:
     the paragraphs span the block and re-wrap live) — no fixed
     character wrap; QLabel's word wrap fills the width. Canon terms
-    highlighted, hex notes stripped, left-aligned."""
+    highlighted, hex notes stripped, JUSTIFIED like the legend, and
+    [[Subhead]] markers drawn as bold headings (owner 2026-07-14;
+    `tr` localizes the label)."""
     text = _HEX_NOTE.sub("", text)
-    paragraphs = [
-        _highlight_terms(_html.escape(paragraph), accents)
-        for paragraph in text.split("\n\n")
-    ]
-    return "<div align='left'>" + "<br/><br/>".join(paragraphs) + "</div>"
+    parts = []
+    for paragraph in text.split("\n\n"):
+        match = _SUBHEAD.match(paragraph)
+        if match:
+            label = match.group(1)
+            if tr is not None:
+                label = tr(label)
+            parts.append(
+                "<p align='left' style='margin-bottom:0'>"
+                f"<b>{_html.escape(label)}</b></p>"
+            )
+            paragraph = paragraph[match.end():]
+        parts.append(
+            "<p align='justify'>"
+            + _highlight_terms(_html.escape(paragraph), accents)
+            + "</p>"
+        )
+    return "<div>" + "".join(parts) + "</div>"
 
 # The gallery groups (owner UX rounds 2026-07-12/13): the clock's own
 # story first, gods together, the zodiac family with the planets and
@@ -809,6 +824,7 @@ class EncyclopediaDialog(QDialog):
                 _flow_html(
                     self._article_text(entry["article"]),
                     accents=entry["accents"],
+                    tr=self._tr,
                 )
             )
             text.setWordWrap(True)

@@ -136,25 +136,49 @@ def _highlight_terms(escaped: str, accents: tuple[str, ...] = ()) -> str:
     return escaped
 
 
-def _article_paragraphs(text: str, accents: tuple[str, ...] = ()) -> str:
+# Subheadings (owner 2026-07-14): article paragraphs may open with a
+# [[Subhead]] marker from the FIXED vocabulary — rendered as a bold
+# heading line, translated through the ui catalog.
+_SUBHEAD = re.compile(r"^\[\[(.+?)\]\]\s*")
+
+
+def _article_paragraphs(
+    text: str, accents: tuple[str, ...] = (), tr=None,
+) -> str:
     """The bare JUSTIFIED paragraphs of an article (owner 2026-07-13
     round two — clean edges on both sides, like a book column): canon
     terms highlighted (color words only per `accents`), hex notes
-    stripped. The caller provides the width-constrained cell."""
+    stripped, [[Subhead]] markers drawn as bold headings (owner
+    2026-07-14; `tr` localizes the label). The caller provides the
+    width-constrained cell."""
     text = _HEX_NOTE.sub("", text)
-    return "".join(
-        f"<p align='justify'>{_highlight_terms(html.escape(p), accents)}</p>"
-        for p in text.split("\n\n")
-    )
+    parts = []
+    for p in text.split("\n\n"):
+        match = _SUBHEAD.match(p)
+        if match:
+            label = match.group(1)
+            if tr is not None:
+                label = tr(label)
+            parts.append(
+                "<p align='left' style='margin-bottom:0'>"
+                f"<b>{html.escape(label)}</b></p>"
+            )
+            p = p[match.end():]
+        parts.append(
+            f"<p align='justify'>{_highlight_terms(html.escape(p), accents)}</p>"
+        )
+    return "".join(parts)
 
 
-def _article_body_html(text: str, accents: tuple[str, ...] = ()) -> str:
+def _article_body_html(
+    text: str, accents: tuple[str, ...] = (), tr=None,
+) -> str:
     """One article as a single fixed-width column: the paragraphs
     reflow inside the declared table cell (the legend popup measures
     the document and honors this width)."""
     return (
         f"<table><tr><td width='{defaults.ARTICLE_TEXT_WIDTH_PX}'>"
-        f"{_article_paragraphs(text, accents)}</td></tr></table>"
+        f"{_article_paragraphs(text, accents, tr)}</td></tr></table>"
     )
 
 
@@ -171,7 +195,7 @@ def _hover_title(text_html: str) -> str:
 
 def _article_html(
     image, title_html: str | None, text: str,
-    accents: tuple[str, ...] = (),
+    accents: tuple[str, ...] = (), tr=None,
 ) -> str:
     """One full article hover: the entity's art on top (larger and
     clearer than on the dial — owner EXTRAS; a TUPLE draws the images
@@ -192,7 +216,7 @@ def _article_html(
         parts.append(f"<div align='center'>{tags}</div>")
     if title_html is not None:
         parts.append(f"<div align='center'>{title_html}</div><br/>")
-    parts.append(_article_body_html(text, accents))
+    parts.append(_article_body_html(text, accents, tr))
     return "".join(parts)
 
 
@@ -678,7 +702,7 @@ class Compositor:
             )
         return _article_html(
             image, title, text,
-            accents=defaults.BODY_ACCENT_HUES[body],
+            accents=defaults.BODY_ACCENT_HUES[body], tr=self._tr,
         )
 
     def _sun_face_tooltip(self, face: str, active: bool) -> str:
@@ -717,6 +741,7 @@ class Compositor:
             )
         return _article_html(
             image, title, text, accents=defaults.BODY_ACCENT_HUES["sun"],
+            tr=self._tr,
         )
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
@@ -816,7 +841,7 @@ class Compositor:
                 columns.append(
                     _hover_title(header)
                     + plate
-                    + _article_paragraphs(text, accents=accents)
+                    + _article_paragraphs(text, accents=accents, tr=self._tr)
                 )
             # ONE flat table, both columns width-declared (nested
             # tables measured wrong — the popup honors these cells).
@@ -855,6 +880,7 @@ class Compositor:
                 + _article_body_html(
                     article["base"],
                     accents=defaults.TRIO_ACCENT_HUES[theme],
+                    tr=self._tr,
                 )
             )
         if arm_angle % 90.0 == 0.0:
@@ -1060,7 +1086,9 @@ class Compositor:
             octa_slot_art(folder, animal),
             style if style in defaults.METAL_SWAP_TARGETS else None,
         )
-        return header + "<br/>" + _article_html(image, None, text)
+        return header + "<br/>" + _article_html(
+            image, None, text, tr=self._tr,
+        )
 
     def _zodiac_line(self) -> str:
         """"♋ Cancer — 21 Jun – 22 Jul" (sign with its date span)."""
@@ -1124,6 +1152,7 @@ class Compositor:
             + _article_body_html(
                 article["base"],
                 accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
+                tr=self._tr,
             )
         )
 
@@ -1298,6 +1327,7 @@ class Compositor:
             + self._zodiac_image_trio(style, sign)
             + _article_body_html(
                 article["base"], accents=defaults.SIGN_ACCENT_HUES[sign],
+                tr=self._tr,
             )
         )
 

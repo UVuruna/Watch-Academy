@@ -195,6 +195,10 @@ UI_STRINGS: tuple[str, ...] = (
     "The Nine Intelligences", "Bodily-Kinesthetic", "Interpersonal",
     "Linguistic", "Naturalist", "Logical-Mathematical", "Musical",
     "Existential", "Intrapersonal", "Spatial",
+    # The article SUBHEAD vocabulary (owner 2026-07-14): the fixed
+    # eight — [[Marker]] lines in the corpus render as bold headings.
+    "The Figure", "The Plate", "On the Dial", "The Hour", "The Story",
+    "The Lesson", "The Sky", "The Ninth",
     "Alpha · Omega", "Luna", "Hunter", "Scout", "Beta", "Mate", "Elder",
     "Alpha", "Omega",
     "Queen · Cleaner", "Nurse", "Guard", "Builder", "Drone", "Forager",

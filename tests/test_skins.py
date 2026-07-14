@@ -415,6 +415,23 @@ def test_legend_highlighting_colors_canon_terms():
     assert "</b>" not in plain
 
 
+def test_subhead_markers_render_as_translated_headings():
+    """RUNDA D (owner plan 2026-07-14): a [[Marker]] paragraph prefix
+    becomes a bold left-aligned heading translated through the ui
+    catalog; the marker itself never reaches the justified body."""
+    from render.compositor import _article_paragraphs
+
+    text = "[[The Figure]] Odin rules Wednesday.\n\nA plain paragraph."
+    sr = _article_paragraphs(
+        text, tr=lambda s: {"The Figure": "Lik"}.get(s, s)
+    )
+    assert "<b>Lik</b>" in sr
+    assert "[[" not in sr and "The Figure" not in sr
+    assert "Odin rules Wednesday." in sr
+    en = _article_paragraphs(text)                   # no translator: EN label
+    assert "<b>The Figure</b>" in en and "[[" not in en
+
+
 def test_ring_tint_is_a_tritone_map():
     """Owner spec 2026-07-11: the tint must NOT touch whites or blacks
     (ring numerals stay legible) — black -> black, white -> white, the
