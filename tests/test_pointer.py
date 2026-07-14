@@ -137,16 +137,17 @@ def test_south_slot_matrix():
     assert pinned_weekday_theta(
         skin(pointer="aurora", show_octa_slot=False)
     ) == 180.0
-    # Aurora shows images only — plain and text modes coerce to logos.
+    # Every mode is REAL under Aurora since the roundel round (owner
+    # 2026-07-14) — the old images-only coercion is gone.
     assert south_slot_view(
         skin(pointer="aurora", octa_slot="time")
-    ) == ("zodiac", "logo")
+    ) == ("time", None)
     assert south_slot_view(
         skin(pointer="aurora", octa_slot="zodiac", info_slot_style="text")
-    ) == ("zodiac", "logo")
+    ) == ("zodiac", "text")
     assert south_slot_view(
         skin(pointer="aurora", octa_slot="chinese", info_slot_style="text")
-    ) == ("chinese", "colored")
+    ) == ("chinese", "text")
     assert south_slot_view(
         skin(pointer="aurora", octa_slot="chinese", info_slot_style="gold")
     ) == ("chinese", "gold")
@@ -798,34 +799,46 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
 
 
 def test_greetings_ride_the_ring_letters_when_unlocked(july_wednesday):
-    """The hidden mode (owner 2026-07-14): unlocked, hovering the 12h
-    or 24h ring letter opens the Four Greetings — Serbian in every
-    language, verses + reading + the watchmaker's commentary; locked,
-    the same spot stays an ordinary tick hover."""
+    """The hidden mode (owner 2026-07-14, placement round two):
+    unlocked, hovering the 12h or 24h ring LETTER — the band OUTSIDE
+    the tick scale — opens the Four Greetings (verses + reading + the
+    watchmaker's commentary, Serbian in every language); the TICKS at
+    those angles keep their own day/year/moon reading, and locked the
+    letters stay silent."""
     from PySide6.QtCore import QPointF
 
     day, tick = july_wednesday
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
-    band = (
+    letters = (
+        defaults.TICK_HOVER_OUTER_FRACTION
+        + defaults.GREETINGS_LETTER_OUTER_FRACTION
+    ) / 2
+    ticks = (
         defaults.TICK_HOVER_INNER_FRACTION
         + defaults.TICK_HOVER_OUTER_FRACTION
     ) / 2
-    top = QPointF(0.0, -180.0 * band)
-    bottom = QPointF(0.0, 180.0 * band)
-    locked = compositor._tick_tooltip(top, 180.0)
-    assert locked is not None and "Četiri pozdrava" not in locked
+    top = QPointF(0.0, -180.0 * letters)
+    bottom = QPointF(0.0, 180.0 * letters)
+    assert compositor._tick_tooltip(top, 180.0) is None      # locked
     compositor.set_hidden_unlocked(True)
     for point in (top, bottom):
         poem = compositor._tick_tooltip(point, 180.0)
         assert "Četiri pozdrava" in poem
         assert "Dobar dan" in poem and "ponovi sve ovo" in poem
         assert "Komentar časovničara" in poem
-    # A degree past the letter window the ticks speak again.
-    away = QPointF(
-        180.0 * band * 0.3, -180.0 * band
-    )
-    assert "Četiri pozdrava" not in compositor._tick_tooltip(away, 180.0)
+        # The closing line maps the greetings to the dial: noon FAITH,
+        # dawn HOPE (owner correction 2026-07-14) — the words wear the
+        # legend highlight, so match around the markup.
+        assert "podne" in poem and "vere" in poem
+        assert "zora" in poem and "nade" in poem
+        assert "zora povratka" not in poem
+    # The TICK at the same angle still reads day/year/moon...
+    tick_text = compositor._tick_tooltip(QPointF(0.0, -180.0 * ticks), 180.0)
+    assert tick_text is not None and "Četiri pozdrava" not in tick_text
+    # ...and a step aside on the letter band is silent again.
+    away = QPointF(60.0 * letters, -170.0 * letters)
+    assert compositor._tick_tooltip(away, 180.0) is None
 
 
 def test_lunation_before_the_years_first_new_moon(app, july_wednesday):

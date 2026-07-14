@@ -26,13 +26,21 @@ class TimeTravelDialog(QDialog):
     def __init__(
         self, latitude: float, longitude: float, parent=None,
         overlay: dict | None = None,
+        initial_moment: datetime | None = None,
     ):
         super().__init__(parent)
         tr = lambda text: ui(overlay or {}, text)  # noqa: E731 — dialog chrome
         self.setWindowTitle(f"{constants.APP_NAME} — {tr('Time Travel')}")
         self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
 
-        self._when = QDateTimeEdit(QDateTime.currentDateTime(), self)
+        # A running simulation seeds the moment (owner 2026-07-14) —
+        # naive, expressed in the configured timezone.
+        self._when = QDateTimeEdit(
+            QDateTime(initial_moment)
+            if initial_moment is not None
+            else QDateTime.currentDateTime(),
+            self,
+        )
         self._when.setCalendarPopup(True)
         self._when.setDisplayFormat("dd.MM.yyyy HH:mm")
 

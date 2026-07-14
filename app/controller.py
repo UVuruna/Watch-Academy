@@ -10,7 +10,7 @@ import dataclasses
 import sys
 import random
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from time import monotonic
 from zoneinfo import ZoneInfo
 
@@ -33,7 +33,6 @@ from app.widget import ClockWidget
 from config import constants, defaults, paths
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
-from core.sun import compute_sun_day
 from data.hands import HAND_NAMES, hand_packs
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
@@ -834,12 +833,11 @@ class AppController(QObject):
         )
         for item in self._menu_gates["badge"]:
             item.setEnabled(badge_possible)
-        for item in self._menu_gates["badge_text"]:
-            item.setEnabled(badge_possible and not aurora)
-        for item in self._menu_gates["pointer_off"]:
-            item.setEnabled(not settings.show_pointer)
-        for item in self._menu_gates["not_aurora"]:
-            item.setEnabled(not aurora)
+        # Text modes are REAL everywhere since the roundel round
+        # (owner 2026-07-14): Aurora no longer grays them — they draw
+        # on the watch-face subdial like everything flat.
+        for item in self._menu_gates["pinned"]:
+            item.setEnabled(not settings.show_pointer or aurora)
         self._octa_slot_action.setEnabled(slot_possible)
         self._octa_slot_toggle.setEnabled(slot_possible)
         self._solar_rotation_action.setEnabled(not aurora)
@@ -1025,8 +1023,7 @@ class AppController(QObject):
         # must NOT close the menu — no rebuild; _refresh_menu_gating
         # re-grays these lists in place).
         self._menu_gates = {
-            "badge": [], "badge_text": [], "pointer_off": [],
-            "not_aurora": [],
+            "badge": [], "pinned": [],
         }
 
         def slot_action(
@@ -1111,20 +1108,21 @@ class AppController(QObject):
             self._set_weekday_theme, "show_weekday_names",
         )
         # The text modes join the DAY slot too (owner 2026-07-12) —
-        # like the badges they are gray in Pointer mode, and Aurora
-        # keeps this slot images-only, so they need the pointer OFF.
+        # they need a PINNED spot: the pointer off, or Aurora (whose
+        # south seat is pinned; text draws on the roundel subdial
+        # since the owner's 2026-07-14 round).
         for mode, label in (
             ("time", tr("Time")),
             ("date", tr("Date")),
             ("day_length", tr("Day length")),
         ):
-            self._menu_gates["pointer_off"].append(slot_action(
+            self._menu_gates["pinned"].append(slot_action(
                 day_slot_menu, day_group, label,
                 settings.weekday_slot == mode,
                 lambda checked, chosen=mode: self._set_display_choice(
                     "weekday_slot", chosen
                 ),
-                not settings.show_pointer,
+                not settings.show_pointer or aurora,
             ))
         for mode, title in (
             ("zodiac", tr("Astrology")),
@@ -1142,16 +1140,15 @@ class AppController(QObject):
                     self._set_weekday_badge(m, s),
                     badge_possible,
                 ))
-            # TEXT joins the primary slot too (owner 2026-07-13) — it
-            # needs a real pinned spot, so Aurora (images-only) grays
-            # it while the image styles stay.
-            self._menu_gates["badge_text"].append(slot_action(
+            # TEXT joins the primary slot too (owner 2026-07-13; since
+            # the roundel round it is real under Aurora as well).
+            self._menu_gates["badge"].append(slot_action(
                 badge_menu, day_group, tr("Text"),
                 settings.weekday_slot == mode
                 and settings.day_slot_style == "text",
                 lambda checked, m=mode:
                 self._set_weekday_badge(m, "text"),
-                badge_possible and not aurora,
+                badge_possible,
             ))
         chinese_badge_menu = self._submenu(day_slot_menu, tr("Chinese zodiac"))
         chinese_badge_menu.setEnabled(badge_possible)
@@ -1170,12 +1167,12 @@ class AppController(QObject):
                 self._set_weekday_badge("chinese", s),
                 badge_possible,
             ))
-        self._menu_gates["badge_text"].append(slot_action(
+        self._menu_gates["badge"].append(slot_action(
             chinese_badge_menu, day_group, tr("Text"),
             settings.weekday_slot == "chinese"
             and settings.day_slot_style == "text",
             lambda checked: self._set_weekday_badge("chinese", "text"),
-            badge_possible and not aurora,
+            badge_possible,
         ))
         # --- Info slot: the same shape, its own settings --------------
         info_group = QActionGroup(menu)
@@ -1195,12 +1192,11 @@ class AppController(QObject):
             ("date", tr("Date")),
             ("day_length", tr("Day length")),
         ):
-            self._menu_gates["not_aurora"].append(slot_action(
+            slot_action(
                 info_slot_menu, info_group, label,
                 settings.octa_slot == mode,
                 lambda checked, chosen=mode: self._set_south_slot(chosen),
-                not aurora,
-            ))
+            )
         for family, family_title in (
             ("zodiac", tr("Astrology")),
             # The ASCENDANT (owner request 2026-07-12): the sign rising
@@ -1214,16 +1210,13 @@ class AppController(QObject):
                 ("text", tr("Text")),
                 ("colored", tr("Colored")),
             ):
-                action = slot_action(
+                slot_action(
                     family_menu, info_group, label,
                     settings.octa_slot == family
                     and settings.info_slot_style == style,
                     lambda checked, m=family, chosen=style:
                     self._set_south_slot(m, style=chosen),
-                    not (aurora and style == "text"),
                 )
-                if style == "text":
-                    self._menu_gates["not_aurora"].append(action)
         chinese_menu = self._submenu(info_slot_menu, tr("Chinese zodiac"))
         for style, label in (
             ("text", tr("Text")),
@@ -1232,17 +1225,14 @@ class AppController(QObject):
             ("silver", tr("Silver")),
             ("bronze", tr("Bronze")),
         ):
-            action = slot_action(
+            slot_action(
                 chinese_menu, info_group, label,
                 settings.octa_slot == "chinese"
                 and settings.info_slot_style == style,
                 lambda checked, chosen=style: self._set_south_slot(
                     "chinese", style=chosen
                 ),
-                not (aurora and style == "text"),
             )
-            if style == "text":
-                self._menu_gates["not_aurora"].append(action)
         # The info slot exists on the Compass and the Seasons (in the
         # CENTER — owner dual-Sunday round 2026-07-12: the 24h arm
         # belongs to the Sunday pair) and under Aurora; the Trinity and
@@ -1356,11 +1346,14 @@ class AppController(QObject):
         # QUICK JUMP (owner 2026-07-14): one-click Time Travel presets
         # right below the dialog entry — same minute-then-back rules.
         jumps = self._submenu(menu, f"⚡ {tr('Quick Jump')}")
+        # Short arrow labels (owner 2026-07-14: "Next Sun Turning
+        # Point" was a mouthful) — → walks forward, ← backward, and
+        # repeated clicks CHAIN through the years.
         for kind, label in (
-            ("next_sun", tr("Next Sun Turning Point")),
-            ("prev_sun", tr("Previous Sun Turning Point")),
-            ("next_moon", tr("Next Moon Turning Point")),
-            ("prev_moon", tr("Previous Moon Turning Point")),
+            ("next_sun", f"☀️ {tr('Sun')} →"),
+            ("prev_sun", f"☀️ {tr('Sun')} ←"),
+            ("next_moon", f"🌙 {tr('Moon')} →"),
+            ("prev_moon", f"🌙 {tr('Moon')} ←"),
             (None, None),
             ("north_pole", tr("North Pole")),
             ("south_pole", tr("South Pole")),
@@ -1417,9 +1410,22 @@ class AppController(QObject):
         self._flush_position()
 
     def _open_time_travel(self) -> None:
+        # A running simulation SEEDS the dialog (owner 2026-07-14):
+        # after a quick jump the offered coordinates and moment are
+        # the simulated ones, not the home city's.
+        if self._simulation is not None:
+            sim_moment, sim_observer = self._simulation
+            initial = sim_moment.astimezone(self._tz).replace(tzinfo=None)
+            latitude = sim_observer.latitude
+            longitude = sim_observer.longitude
+        else:
+            initial = None
+            latitude = self._settings.latitude
+            longitude = self._settings.longitude
         dialog = TimeTravelDialog(
-            self._settings.latitude, self._settings.longitude,
+            latitude, longitude,
             overlay=self._translation_overlay,
+            initial_moment=initial,
         )
         if dialog.exec() != TimeTravelDialog.DialogCode.Accepted:
             return
@@ -1439,46 +1445,60 @@ class AppController(QObject):
         self._on_tick(clock_jumped=False)
 
     def _quick_jump(self, kind: str) -> None:
-        """One-click Time Travel presets (owner 2026-07-14): the sun
-        and moon TURNING POINTS land exactly on their instants (the
-        event glow is on), the poles show the polar regimes, and
-        Greenwich shows the sun EXACTLY at 12:00 — today's noon at the
-        meridian where true solar noon coincides with the wall-clock
-        noon (that is Greenwich only up to the equation of time)."""
-        now = datetime.now(self._tz)
-        observer = self._observer
-        moment = now
-        if kind in ("next_sun", "prev_sun"):
-            instants = self._seasons.year_anchors(now.year).instants
-        elif kind in ("next_moon", "prev_moon"):
-            instants = tuple(
-                when for when, _ in
-                self._moon_phases.moon_window(now.year).events
-            )
-        if kind in ("next_sun", "next_moon"):
-            moment = min(w for w in instants if w > now).astimezone(self._tz)
-        elif kind in ("prev_sun", "prev_moon"):
-            moment = max(w for w in instants if w <= now).astimezone(self._tz)
-        elif kind == "north_pole":
+        """One-click Time Travel presets (owner rounds 2026-07-14).
+        The jumps CHAIN: while a simulation runs, the next jump starts
+        from the SIMULATED situation — a time jump keeps the simulated
+        PLACE, a place jump keeps the simulated MOMENT — so repeated
+        "→ Sun" walks the turning points year after year, and a pole
+        or Greenwich pick stays under you while you travel. The three
+        places are REAL coordinates with their REAL clocks: Greenwich
+        at the observatory in its own timezone (BST in summer — the
+        sun honestly culminates near 13:00 then), the poles on UTC.
+        Every jump restarts the standard minute-then-back."""
+        if self._simulation is not None:
+            base_moment, base_observer = self._simulation
+        else:
+            base_moment = datetime.now(self._tz)
+            base_observer = self._observer
+        moment, observer = base_moment, base_observer
+        if kind in ("next_sun", "prev_sun", "next_moon", "prev_moon"):
+            if kind.endswith("sun"):
+                instants = sorted({
+                    instant
+                    for year in (base_moment.year - 1, base_moment.year,
+                                 base_moment.year + 1)
+                    for instant in self._seasons.year_anchors(year).instants
+                })
+            else:
+                instants = [
+                    when for when, _ in
+                    self._moon_phases.moon_window(base_moment.year).events
+                ]
+            # The simulated moment is floored to the minute, so the
+            # landed-on instant lies seconds AHEAD of it — the strict
+            # one-minute guard keeps "next" from re-picking it.
+            if kind.startswith("next"):
+                moment = min(
+                    w for w in instants
+                    if w > base_moment + timedelta(minutes=1)
+                )
+            else:
+                moment = max(w for w in instants if w < base_moment)
+            moment = moment.astimezone(base_moment.tzinfo)
+        elif kind in ("north_pole", "south_pole"):
+            sign = 1 if kind == "north_pole" else -1
             observer = astral.Observer(
-                latitude=defaults.QUICK_JUMP_POLE_LATITUDE, longitude=0.0
+                latitude=sign * defaults.QUICK_JUMP_POLE_LATITUDE,
+                longitude=0.0,
             )
-        elif kind == "south_pole":
+            moment = base_moment.astimezone(timezone.utc)
+        else:                               # greenwich — the REAL place
             observer = astral.Observer(
-                latitude=-defaults.QUICK_JUMP_POLE_LATITUDE, longitude=0.0
+                latitude=defaults.GREENWICH_LATITUDE,
+                longitude=defaults.GREENWICH_LONGITUDE,
             )
-        else:                               # greenwich
-            moment = now.replace(hour=12, minute=0, second=0, microsecond=0)
-            zero = astral.Observer(
-                latitude=defaults.GREENWICH_LATITUDE, longitude=0.0
-            )
-            sun_day = compute_sun_day(zero, now.date(), self._tz)
-            offset_hours = (
-                sun_day.noon - moment
-            ).total_seconds() / constants.SECONDS_PER_HOUR
-            longitude = max(-180.0, min(180.0, offset_hours * 15.0))
-            observer = astral.Observer(
-                latitude=defaults.GREENWICH_LATITUDE, longitude=longitude
+            moment = base_moment.astimezone(
+                ZoneInfo(defaults.GREENWICH_TIMEZONE)
             )
         self._start_simulation(
             moment.replace(second=0, microsecond=0), observer

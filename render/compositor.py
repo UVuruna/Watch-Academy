@@ -462,9 +462,6 @@ class Compositor:
                 return self._moon_text()
             if element == "earth":
                 return self._earth_text()
-            # The EFFECTIVE mode (Aurora shows images only — text modes
-            # coerce to a logo, and the hover must describe what is
-            # actually drawn).
             slot_mode, slot_style = south_slot_view(self._skin)
             if slot_mode == "chinese":
                 return self._chinese_text(slot_style)
@@ -1257,22 +1254,30 @@ class Compositor:
         running lunation, then the cycle reading at that angle — new
         at the top, full at the bottom, as the marker rides)."""
         distance = math.hypot(point.x(), point.y())
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        # The unlocked hidden mode (owner 2026-07-14, placement round
+        # two): the 12h and 24h ring LETTERS — M and Ω on DOMY,
+        # whatever glyphs another ring seats there — open the Four
+        # Greetings. Only the letter band OUTSIDE the tick scale: the
+        # ticks at those angles keep their own day/year/moon reading.
+        half = defaults.GREETINGS_LETTER_HALF_DEG
+        if (
+            self._hidden_unlocked
+            and radius * defaults.TICK_HOVER_OUTER_FRACTION
+            < distance
+            <= radius * defaults.GREETINGS_LETTER_OUTER_FRACTION
+            and (
+                theta <= half or theta >= 360.0 - half
+                or abs(theta - 180.0) <= half
+            )
+        ):
+            return self._greetings_tooltip()
         if not (
             radius * defaults.TICK_HOVER_INNER_FRACTION
             <= distance
             <= radius * defaults.TICK_HOVER_OUTER_FRACTION
         ):
             return None
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        # The unlocked hidden mode (owner 2026-07-14): the 12h and 24h
-        # ring letters — M and Ω on DOMY, whatever glyphs another ring
-        # seats there — open the Four Greetings instead of the ticks.
-        half = defaults.GREETINGS_LETTER_HALF_DEG
-        if self._hidden_unlocked and (
-            theta <= half or theta >= 360.0 - half
-            or abs(theta - 180.0) <= half
-        ):
-            return self._greetings_tooltip()
         minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
         line_time = (
             f"{self._label('Time')} {minutes // 60:02d}:{minutes % 60:02d} - "
@@ -1373,12 +1378,16 @@ class Compositor:
         reading and the watchmaker's commentary as a justified column
         — Serbian in every language, on the 12h/24h ring letters."""
         data = _greetings()
+        gap = defaults.GREETINGS_STANZA_GAP_PX
+        # Small margins, not blank lines (owner round two) — Qt
+        # collapses the adjacent margins to the larger one.
         stanzas = "".join(
-            "<div align='center'><i>"
+            f"<div align='center' style='margin-top:{gap}px;"
+            f"margin-bottom:{gap}px'><i>"
             + "<br/>".join(
                 html.escape(line) for line in stanza.split("\n")
             )
-            + "</i></div><br/>"
+            + "</i></div>"
             for stanza in data["verses"].split("\n\n")
         )
         return (

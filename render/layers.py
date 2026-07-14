@@ -30,7 +30,7 @@ from config import constants, defaults, paths
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.sun import DaylightRegime, SunDay
-from render.assets import AssetCache
+from render.assets import AssetCache, ring_face_color
 from skins.manifest import HandSpec, SkinDefinition
 
 
@@ -304,23 +304,16 @@ def servant_holds_the_seat(skin: SkinDefinition, today: str) -> bool:
 
 
 def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
-    """The EFFECTIVE (mode, style) pair of the South slot. Aurora
-    allows images only (owner spec: 'samo neki logo') — the text modes
-    coerce: time/date/day-length and zodiac-text show the zodiac logo,
-    chinese-text shows the colored badge."""
+    """The (mode, style) pair of the South slot. Every mode is real
+    under every pointer since the ROUNDEL round (owner 2026-07-14) —
+    the old Aurora images-only coercion is gone: text and the flat
+    astrology art now sit on a watch-face subdial."""
     mode = skin.octa_slot
     style = (
         skin.info_slot_style
         if mode in ("zodiac", "ascendant", "chinese")
         else None
     )
-    if skin.pointer == "aurora":
-        if mode in ("time", "date", "day_length"):
-            return "zodiac", "logo"
-        if mode in ("zodiac", "ascendant") and style == "text":
-            return mode, "logo"
-        if mode == "chinese" and style == "text":
-            return "chinese", "colored"
     return mode, style
 
 
@@ -962,8 +955,11 @@ class WeekdayBadgeLayer(Layer):
                 pinned_weekday_theta(ctx.skin),
                 ctx.radius * spec.orbit_fraction,
             )
+            size = 2 * ctx.radius * spec.diamond_scale
+            draw_slot_roundel(painter, ctx, pos, size)
             draw_fitted_text(
-                painter, pos, 2 * ctx.radius * spec.diamond_scale,
+                painter, pos,
+                size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
                 slot_text(mode, ctx),
             )
             return
@@ -979,28 +975,37 @@ class WeekdayBadgeLayer(Layer):
             * hover_factor(ctx, "weekday_badge")
         )
         pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
-        if (
-            ctx.skin.day_slot_style == "text"
-            and ctx.skin.pointer != "aurora"
-        ):
-            # TEXT style in the primary slot (owner 2026-07-13) —
-            # Aurora stays images-only, so there the style keeps
-            # coercing to the family's default art below.
+        if ctx.skin.day_slot_style == "text":
+            # TEXT style in the primary slot (owner 2026-07-13; real
+            # under every pointer since the roundel round) — on the
+            # watch-face subdial.
+            draw_slot_roundel(painter, ctx, pos, size)
+            inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
             if mode == "ascendant":
                 BottomSlotLayer._two_lines(
-                    painter, pos, size, "Ascendant", sign,
+                    painter, pos, inner, "Ascendant", sign,
                 )
             elif mode == "chinese":
                 BottomSlotLayer._two_lines(
-                    painter, pos, size,
+                    painter, pos, inner,
                     ctx.day.chinese_name.split()[0], sign,
                 )
             else:
-                draw_fitted_text(painter, pos, size, sign)
+                draw_fitted_text(painter, pos, inner, sign)
             return
         asset = octa_slot_art(folder, sign)
         if asset is None:
             return                       # documented: no art, no badge
+        if ctx.skin.day_slot_style in ("sign", "logo", "constellation"):
+            # Flat glyph art rides the subdial too (owner 2026-07-14);
+            # the colored badges and the chinese plates stay bare.
+            draw_slot_roundel(painter, ctx, pos, size)
+            draw_pixmap_centered(
+                painter, ctx, asset, pos,
+                size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+                metal=metal,
+            )
+            return
         draw_pixmap_centered(painter, ctx, asset, pos, size, metal=metal)
 
 
@@ -1049,6 +1054,27 @@ def slot_text(mode: str, ctx: RenderContext) -> str:
     return ctx.day.day_length            # "day_length" (validated set)
 
 
+def draw_slot_roundel(
+    painter: QPainter, ctx: RenderContext, pos: QPointF, diameter: float
+) -> None:
+    """The watch-face SUBDIAL behind flat slot content (owner
+    2026-07-14): a circle filled with the active ring's own face color
+    and rimmed in the letter FINISH metal — worn by every text mode
+    and by the flat astrology art (sign / logo / constellation); the
+    circular plates (medallions, planets, colored badges) stay
+    bare."""
+    rim = QColor(
+        defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
+    )
+    width = max(1.5, diameter * defaults.SLOT_ROUNDEL_BORDER_FRACTION)
+    painter.save()
+    painter.setPen(QPen(rim, width))
+    painter.setBrush(ring_face_color(paths.art_file(ctx.skin.ring.asset)))
+    inner = (diameter - width) / 2.0
+    painter.drawEllipse(pos, inner, inner)
+    painter.restore()
+
+
 def draw_fitted_text(
     painter: QPainter, pos: QPointF, slot_size: float, text: str
 ) -> None:
@@ -1072,11 +1098,11 @@ class BottomSlotLayer(Layer):
     "8 Jul", the day length "15:35", the tropical zodiac (text or the
     owner's sign/logo/constellation art) or the Chinese zodiac (text or
     logo art). Where it sits and when it exists follows the owner's
-    matrix (south_slot_available / south_slot_theta); Aurora is images
-    only (south_slot_mode). Text is sized to fill the slot width;
-    everything draws ABOVE the hands like the center body. Image modes
-    fall back to the text form until the owner's PNG folder is
-    complete (documented)."""
+    matrix (south_slot_available / south_slot_theta). Text and the
+    flat glyph art sit on the watch-face SUBDIAL (owner 2026-07-14);
+    text is sized to fill the subdial width; everything draws ABOVE
+    the hands like the center body. Image modes fall back to the text
+    form until the owner's PNG folder is complete (documented)."""
 
     cadence = Cadence.MINUTE
 
@@ -1115,15 +1141,27 @@ class BottomSlotLayer(Layer):
             )
             asset = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS[style], sign)
             if asset is not None:
-                draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                if style == "colored":
+                    draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
+                else:
+                    # Flat glyph art rides the watch-face SUBDIAL
+                    # (owner 2026-07-14) — the colored badge is a
+                    # circular plate and stays bare.
+                    draw_slot_roundel(painter, ctx, pos, slot_size)
+                    draw_pixmap_centered(
+                        painter, ctx, asset, pos,
+                        slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+                    )
                 return
             text = sign                  # documented fallback until the art lands
         elif mode == "ascendant":        # style == "text": two lines
             # The FULL word (owner 2026-07-13: never the "Asc"
             # shorthand) — the shared fit-to-width font shrinks to it.
+            draw_slot_roundel(painter, ctx, pos, slot_size)
             self._two_lines(
-                painter, pos, slot_size, "Ascendant",
-                ctx.tick.ascendant_sign,
+                painter, pos,
+                slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+                "Ascendant", ctx.tick.ascendant_sign,
             )
             return
         elif mode == "chinese" and style in constants.CHINESE_STYLE_ART_DIRS:
@@ -1192,14 +1230,22 @@ class BottomSlotLayer(Layer):
         elif mode == "chinese":          # style == "text" (validated set)
             # TWO lines (owner 2026-07-12): the element above the
             # animal — "Fire" / "Horse", never the animal alone.
+            draw_slot_roundel(painter, ctx, pos, slot_size)
             self._two_lines(
-                painter, pos, slot_size,
+                painter, pos,
+                slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
                 ctx.day.chinese_name.split()[0], chinese_animal,
             )
             return
         else:                            # zodiac text (validated closed set)
             text = ctx.day.zodiac_name
-        draw_fitted_text(painter, pos, slot_size, text)
+        # Every text form sits on the subdial (owner 2026-07-14:
+        # "Text svaki") — the fallbacks for missing art included.
+        draw_slot_roundel(painter, ctx, pos, slot_size)
+        draw_fitted_text(
+            painter, pos,
+            slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION, text,
+        )
 
     @staticmethod
     def _two_lines(

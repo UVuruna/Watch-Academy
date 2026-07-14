@@ -973,8 +973,10 @@ class EncyclopediaDialog(QDialog):
             # The Four Greetings page: CENTERED italic stanzas with
             # their line breaks kept, the reading justified below.
             data = entry["article"][1]
+            gap = defaults.GREETINGS_STANZA_GAP_PX
             stanzas = "".join(
-                "<p align='center'><i>"
+                f"<p align='center' style='margin-top:{gap}px;"
+                f"margin-bottom:{gap}px'><i>"
                 + "<br/>".join(
                     _html.escape(line) for line in stanza.split("\n")
                 )

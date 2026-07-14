@@ -23,6 +23,52 @@ from config import defaults, paths
 from config.paths import art_file
 
 
+_ring_face_colors: dict[str, QColor] = {}
+
+
+def ring_face_color(path: Path | None) -> QColor:
+    """The ring art's own FACE color — the slot-roundel fill (owner
+    2026-07-14: 'boja unutar kruga je RING preset boja'). Sampled once
+    per file: walk the top center column to the first opaque band,
+    then read a ring of pixels a few steps deeper and take the MEDIAN
+    by luminance, so numerals and ticks (the bright minority) never
+    win. Missing/unreadable art falls back to the documented color."""
+    if path is None:
+        return QColor(defaults.SLOT_ROUNDEL_FILL_FALLBACK)
+    key = str(path)
+    cached = _ring_face_colors.get(key)
+    if cached is not None:
+        return cached
+    image = QImage(key)
+    color = QColor(defaults.SLOT_ROUNDEL_FILL_FALLBACK)
+    if not image.isNull():
+        center = image.width() // 2
+        top = next(
+            (
+                y for y in range(image.height() // 2)
+                if image.pixelColor(center, y).alpha() > 200
+            ),
+            None,
+        )
+        if top is not None:
+            depth = top + max(3, image.height() // 40)
+            radius = image.height() / 2.0 - depth
+            samples = []
+            for step in range(0, 360, 9):
+                angle = math.radians(step)
+                probe = image.pixelColor(
+                    round(center + radius * math.sin(angle)),
+                    round(image.height() / 2.0 - radius * math.cos(angle)),
+                )
+                if probe.alpha() > 200:
+                    samples.append(probe)
+            if samples:
+                samples.sort(key=lambda c: c.lightness())
+                color = samples[len(samples) // 2]
+    _ring_face_colors[key] = color
+    return color
+
+
 def metal_variant_file(path: Path, metal: str | None) -> Path:
     """A DISK copy of `path` with the hue-selective metal swap applied
     (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed

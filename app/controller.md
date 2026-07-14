@@ -72,18 +72,19 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Astrology / Ascendant / Chinese-zodiac families with their own
   STYLE dropdowns (primary: image styles only; secondary adds Text).
   Gating: the day slot's badge families need the pinned layout
-  (Aurora or pointer off), its TEXT modes need the pointer OFF
-  (Aurora stays images-only); the info slot exists on the Compass
+  (Aurora or pointer off) and its Time/Date/Day-length modes a pinned
+  SPOT (pointer off, or Aurora); the info slot exists on the Compass
   and the Seasons (in the CENTER — dual-Sunday round 2026-07-12:
   their 24h arm belongs to the Sunday pair; weekday off moves it to
   24h) and under Aurora, plus anywhere once the Pointer element is
-  off — the Trinity and the Prism have NO room while the star is up;
-  Aurora grays the info slot's plain and Text entries. Pointer,
+  off — the Trinity and the Prism have NO room while the star is up.
+  Since the ROUNDEL round (owner 2026-07-14) TEXT is real under EVERY
+  pointer — the old Aurora images-only coercion is gone; text and the
+  flat astrology art draw on the watch-face subdial. Pointer,
   show_weekday and show_pointer changes re-gray the gated entries IN
   PLACE (`_refresh_menu_gating` over the `_menu_gates` buckets —
   owner 2026-07-13: those switches must not close the open menu; no
-  rebuild). TEXT is a real primary-slot style now (drawn by the badge
-  layer; Aurora keeps it grayed/coerced, images-only).
+  rebuild).
   Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's

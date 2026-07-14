@@ -448,14 +448,39 @@ UI_BUTTON_COLORS = {
 READER_IMAGE_MAX_HEIGHT_FRACTION = 0.35
 # The unlocked hidden mode (owner 2026-07-14): hovering within this
 # many degrees of the 12h/24h ring letters opens the Four Greetings.
+# The hit zone is the LETTER band OUTSIDE the tick scale (owner round
+# two: the ticks at those angles must keep their own day/year/moon
+# reading), and the stanzas breathe with a small margin, not a full
+# blank line.
 GREETINGS_LETTER_HALF_DEG = 6.0
+GREETINGS_LETTER_OUTER_FRACTION = 1.08
+GREETINGS_STANZA_GAP_PX = 6
 
 # Time Travel QUICK JUMPS (owner 2026-07-14): one-click presets under
 # the Time Travel menu — sun/moon turning points, the poles, and the
-# "sun exactly at 12:00" Greenwich view. Same rules as the dialog:
-# TIME_TRAVEL_DURATION_S, then back to the present.
+# Royal Observatory itself. Same rules as the dialog:
+# TIME_TRAVEL_DURATION_S, then back to the present; the jumps CHAIN
+# from the running simulation. The places are REAL coordinates with
+# their REAL clocks (the poles ride UTC).
 QUICK_JUMP_POLE_LATITUDE = 89.99     # exact 90 divides astral by zero
 GREENWICH_LATITUDE = 51.4779
+GREENWICH_LONGITUDE = 0.0
+GREENWICH_TIMEZONE = "Europe/London"
+
+# The slot ROUNDEL (owner 2026-07-14, watch-subdial inspiration):
+# every TEXT display and the flat astrology art (sign / logo /
+# constellation) sit on a subdial — a circle in the ring's own face
+# color (sampled from the active ring art), rimmed in the letter
+# FINISH metal; circular plates (medallions, planets, colored badges)
+# stay bare.
+SLOT_ROUNDEL_BORDER_FRACTION = 0.045     # rim width, of the diameter
+SLOT_ROUNDEL_CONTENT_FRACTION = 0.78     # content size inside the rim
+SLOT_ROUNDEL_FILL_FALLBACK = "#39434D"   # unreadable/missing ring art
+SLOT_ROUNDEL_BORDER_COLORS = {
+    "gold": "#FFD235",
+    "silver": "#C9CDD3",
+    "bronze": "#CD7F32",
+}
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image

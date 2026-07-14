@@ -117,10 +117,9 @@ UI_STRINGS: tuple[str, ...] = (
     # The hidden-mode unlock balloon (owner 2026-07-14).
     "Hidden mode unlocked",
     "The Four Greetings await in the Encyclopedia — Trinity.",
-    # Time Travel quick jumps (owner 2026-07-14).
+    # Time Travel quick jumps (owner 2026-07-14; round two shortened
+    # the turning points to arrow labels built from Sun/Moon).
     "Quick Jump",
-    "Next Sun Turning Point", "Previous Sun Turning Point",
-    "Next Moon Turning Point", "Previous Moon Turning Point",
     "North Pole", "South Pole", "Greenwich",
     "Settings", "Time Travel", "Guide",
     # --- Tray balloons / error boxes ---------------------------------------------
