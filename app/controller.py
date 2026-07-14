@@ -1399,11 +1399,15 @@ class AppController(QObject):
         # QUICK JUMP (owner 2026-07-14): one-click Time Travel presets
         # right below the dialog entry — same minute-then-back rules.
         jumps = self._submenu(menu, f"⚡ {tr('Quick Jump')}")
-        # Short arrow labels (owner rounds 2026-07-14/15): the BIG ➜
-        # walks forward (logo, text, arrow), the mirrored ⬅ backward
-        # (arrow, logo, text); repeated clicks CHAIN through the years
-        # and the menu STAYS OPEN for exactly that. NOW ends the
-        # simulation — back to the present in one click.
+        # Short arrow labels (owner rounds 2026-07-14/15): the TEXT
+        # always in the middle, the ARROW always on its own side and
+        # the logo on the opposite end — forward = logo-text-arrow,
+        # backward = arrow-text-logo. Both arrows are the SAME heavy
+        # monochrome pair (U+1F844/U+1F846 — the emoji ⬅ renders as a
+        # blue badge in Windows menus, owner veto); repeated clicks
+        # CHAIN through the years and the menu STAYS OPEN for exactly
+        # that. NOW ends the simulation — back to the present in one
+        # click.
         now_action = QAction(tr("Now"), jumps)
         now_action.setProperty("stay_open", True)
         now_action.triggered.connect(
@@ -1412,10 +1416,10 @@ class AppController(QObject):
         jumps.addAction(now_action)
         jumps.addSeparator()
         for kind, label in (
-            ("next_sun", f"☀️ {tr('Sun')} ➜"),
-            ("prev_sun", f"⬅ ☀️ {tr('Sun')}"),
-            ("next_moon", f"🌙 {tr('Moon')} ➜"),
-            ("prev_moon", f"⬅ 🌙 {tr('Moon')}"),
+            ("next_sun", f"☀️ {tr('Sun')} \U0001F846"),
+            ("prev_sun", f"\U0001F844 {tr('Sun')} ☀️"),
+            ("next_moon", f"🌙 {tr('Moon')} \U0001F846"),
+            ("prev_moon", f"\U0001F844 {tr('Moon')} 🌙"),
             (None, None),
             ("north_pole", tr("North Pole")),
             ("south_pole", tr("South Pole")),
