@@ -1027,13 +1027,13 @@ class SlotLayer(Layer):
             # The full date in two rows (owner 2026-07-14).
             draw_slot_roundel(painter, ctx, pos, size)
             draw_two_lines(
-                painter, pos, inner,
+                painter, ctx, pos, inner,
                 slot_text("date", ctx), str(ctx.day.local_date.year),
             )
             return
         if mode in ("time", "day_length"):
             draw_slot_roundel(painter, ctx, pos, size)
-            draw_fitted_text(painter, pos, inner, slot_text(mode, ctx))
+            draw_fitted_text(painter, ctx, pos, inner, slot_text(mode, ctx))
             return
         if mode == "weekday":
             self._draw_weekday_slot(
@@ -1066,9 +1066,9 @@ class SlotLayer(Layer):
             # 2026-07-13, never the "Asc" shorthand).
             draw_slot_roundel(painter, ctx, pos, size)
             if mode == "ascendant":
-                draw_two_lines(painter, pos, inner, "Ascendant", sign)
+                draw_two_lines(painter, ctx, pos, inner, "Ascendant", sign)
             else:
-                draw_fitted_text(painter, pos, inner, sign)
+                draw_fitted_text(painter, ctx, pos, inner, sign)
             return
         # Chinese zodiac: the plates stay bare, text and the fallback
         # ride the subdial as element-over-animal (owner 2026-07-12).
@@ -1088,7 +1088,7 @@ class SlotLayer(Layer):
                 return
         draw_slot_roundel(painter, ctx, pos, size)
         draw_two_lines(
-            painter, pos, inner, ctx.day.chinese_name.split()[0], animal
+            painter, ctx, pos, inner, ctx.day.chinese_name.split()[0], animal
         )
 
     def _draw_weekday_slot(
@@ -1137,7 +1137,8 @@ class SlotLayer(Layer):
         # Documented fallback until the theme art lands.
         draw_slot_roundel(painter, ctx, pos, size)
         draw_fitted_text(
-            painter, pos, size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+            painter, ctx, pos,
+            size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
             constants.WEEKDAY_LABELS[today],
         )
 
@@ -1239,11 +1240,21 @@ def draw_slot_roundel(
     PLATE ART draws whenever ANY plate exists — a missing finish is
     RECOLORED from his master, a missing seat borrows the center
     plate — under a LIVE outward shadow (owner 2026-07-15: one master
-    plate, the code paints the metals and the light). With no art at
-    all: the procedural circle, the ring's own face color rimmed in
-    the finish metal."""
+    plate, the code paints the metals and the light). The "theme"
+    plate style (owner A/B spec) colorizes the tapisserie field to
+    the clock tint; "black" keeps the standard dark field. With no
+    art at all: the procedural circle, the ring's own face color
+    rimmed in the finish metal."""
     _draw_subdial_shadow(painter, pos, diameter)
-    plate = subdial_plate_file(ctx.skin.ring_finish, _subdial_seat(pos))
+    plate = subdial_plate_file(
+        ctx.skin.ring_finish,
+        _subdial_seat(pos),
+        tint=(
+            ctx.skin.ring_tint
+            if ctx.skin.subdial_style == "theme"
+            else None
+        ),
+    )
     if plate is not None:
         draw_pixmap_centered(painter, ctx, plate, pos, diameter)
         return
@@ -1259,12 +1270,49 @@ def draw_slot_roundel(
     painter.restore()
 
 
-def draw_fitted_text(
-    painter: QPainter, pos: QPointF, slot_size: float, text: str
+def _finish_color(ctx: RenderContext) -> QColor:
+    """The letter-finish metal color — the ONE hue of every subdial
+    accent: the mini hand, the theme-style ticks and all complication
+    texts (owner 2026-07-15: 'u boji kao i kazaljka')."""
+    return QColor(
+        defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
+    )
+
+
+def draw_shadowed_text(
+    painter: QPainter, center: QPointF, text: str, font: QFont,
+    color: QColor,
 ) -> None:
-    """Fit-to-width outlined slot text: the largest bold font whose
-    text spans the slot's width fraction — measured, not guessed, so
-    it never overflows (shared by both slots, Rule #5)."""
+    """A finish-colored label over a DROP SHADOW (owner 2026-07-15:
+    subdial texts are never white — the metal color like the hand,
+    shadowed so they read on both plate styles)."""
+    metrics = QFontMetricsF(font)
+    baseline = QPointF(
+        center.x() - metrics.horizontalAdvance(text) / 2,
+        center.y() + (metrics.ascent() - metrics.descent()) / 2,
+    )
+    path = QPainterPath()
+    path.addText(baseline, font, text)
+    offset = max(
+        1.0,
+        font.pixelSize() * defaults.SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION,
+    )
+    painter.save()
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(QColor(*defaults.SUBDIAL_TEXT_SHADOW_RGBA))
+    painter.drawPath(path.translated(offset, offset))
+    painter.setBrush(color)
+    painter.drawPath(path)
+    painter.restore()
+
+
+def draw_fitted_text(
+    painter: QPainter, ctx: RenderContext, pos: QPointF,
+    slot_size: float, text: str,
+) -> None:
+    """Fit-to-width slot text in the finish metal over a shadow: the
+    largest bold font whose text spans the slot's width fraction —
+    measured, not guessed, so it never overflows (Rule #5)."""
     font = QFont()
     font.setBold(True)
     font.setPixelSize(100)
@@ -1273,14 +1321,14 @@ def draw_fitted_text(
     font.setPixelSize(
         max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / advance))
     )
-    draw_outlined_text(painter, pos, text, font)
+    draw_shadowed_text(painter, pos, text, font, _finish_color(ctx))
 
 
 def draw_two_lines(
-    painter: QPainter, pos: QPointF, slot_size: float,
-    top: str, bottom: str,
+    painter: QPainter, ctx: RenderContext, pos: QPointF,
+    slot_size: float, top: str, bottom: str,
 ) -> None:
-    """Two stacked outlined lines sharing one fit-to-width font —
+    """Two stacked finish-metal lines sharing one fit-to-width font —
     the Chinese year ("Fire" / "Horse"), the Ascendant ("Ascendant" /
     "Virgo") and the two-row date ("14 Jul" / "2026") (Rule #5)."""
     font = QFont()
@@ -1295,11 +1343,12 @@ def draw_two_lines(
         max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / widest))
     )
     offset = font.pixelSize() * 0.62
-    draw_outlined_text(
-        painter, QPointF(pos.x(), pos.y() - offset), top, font
+    color = _finish_color(ctx)
+    draw_shadowed_text(
+        painter, QPointF(pos.x(), pos.y() - offset), top, font, color
     )
-    draw_outlined_text(
-        painter, QPointF(pos.x(), pos.y() + offset), bottom, font
+    draw_shadowed_text(
+        painter, QPointF(pos.x(), pos.y() + offset), bottom, font, color
     )
 
 
@@ -1309,11 +1358,18 @@ def draw_small_seconds(
     """The SMALL-SECONDS complication (owner 2026-07-14): the active
     set's own seconds hand rotating inside the subdial, behind eight
     tick marks just inside the rim — four LARGER at the cardinal
-    points, four smaller between them, white with a soft shadow like
-    the ring's odd-hour markers."""
+    points, four smaller between them. Colors (owner 2026-07-15 A/B
+    spec): the hand ALWAYS wears the letter-finish metal over its own
+    drop shadow; the ticks are white on the "black" plate style and
+    finish-colored on the "theme" style — shadowed either way."""
     spec = ctx.skin.hands.second
     radius = diameter / 2.0
     outer = radius * defaults.SMALL_SECONDS_TICK_OUTER_FRACTION
+    tick_color = (
+        _finish_color(ctx)
+        if ctx.skin.subdial_style == "theme"
+        else QColor(*defaults.SMALL_SECONDS_TICK_RGBA)
+    )
     painter.save()
     painter.translate(pos)
     for step in range(8):
@@ -1335,25 +1391,38 @@ def draw_small_seconds(
         ))
         painter.drawLine(start + shadow, end + shadow)
         painter.setPen(QPen(
-            QColor(*defaults.SMALL_SECONDS_TICK_RGBA), width,
+            tick_color, width,
             Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap,
         ))
         painter.drawLine(start, end)
     if spec is not None:
         # The mini hand — the pack's own seconds hand, pivot math
-        # identical to the big HandLayer, tip inside the tick ring.
+        # identical to the big HandLayer, tip inside the tick ring —
+        # in the FINISH metal (never the clock tint) over a drop
+        # shadow (owner 2026-07-15).
         tip_units = spec.natural_height - spec.pivot_y
         target_tip = outer - radius * 0.06
         height = spec.natural_height * (target_tip / tip_units)
         pixmap = ctx.cache.pixmap_by_height(
-            spec.asset, height, ctx.dpr, tint=ctx.skin.ring_tint,
+            spec.asset, height, ctx.dpr,
+            tint=defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish],
+            desaturate=ctx.skin.hands.desaturate,
+        )
+        silhouette = ctx.cache.pixmap_by_height(
+            spec.asset, height, ctx.dpr, tint="#000000",
             desaturate=ctx.skin.hands.desaturate,
         )
         logical_w = pixmap.width() / ctx.dpr
         pivot_x = logical_w * (
             0.5 if spec.pivot_x_fraction is None else spec.pivot_x_fraction
         )
+        offset = radius * defaults.SMALL_SECONDS_HAND_SHADOW_OFFSET_FRACTION
         painter.rotate(ctx.tick.second_angle)
+        painter.setOpacity(defaults.SMALL_SECONDS_HAND_SHADOW_OPACITY)
+        painter.drawPixmap(
+            QPointF(-pivot_x + offset, -target_tip + offset), silhouette
+        )
+        painter.setOpacity(1.0)
         painter.drawPixmap(QPointF(-pivot_x, -target_tip), pixmap)
     painter.restore()
 

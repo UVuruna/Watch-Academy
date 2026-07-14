@@ -310,6 +310,14 @@ EARTH_STYLES = ("clean", "atmo")
 # the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
 # letters are pre-rendered files (setup/make_silver_letters.py).
 RING_FINISHES = ("gold", "silver", "bronze")
+
+# The subdial PLATE styles (owner 2026-07-15, his A/B spec): "theme" —
+# the tapisserie field wears the clock tint (the AP design in the
+# theme color) and the tick circle joins the finish metal; "black" —
+# the standard dark AP field as drawn, white ticks. Both: rim, mini
+# hand and complication texts in the letter-finish metal, shadowed.
+SUBDIAL_STYLES = ("theme", "black")
+
 RING_LAYOUTS = {
     # Owner naming (2026-07-10): the up-triangle is the masculine
     # Flame, the down-triangle the feminine Chalice, and their union —

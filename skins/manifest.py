@@ -202,6 +202,11 @@ class SkinDefinition:
     # gold + silver Omega; silver = the inverse) — letters never tint.
     ring_tint: str | None = None
     ring_finish: str = "gold"
+    subdial_style: str = "black"       # complication plates (owner A/B
+                                       # 2026-07-15): "theme" tints the
+                                       # tapisserie field to the clock
+                                       # tint, "black" keeps the
+                                       # standard dark AP field
     # EXTRAS (owner spec): the octa info slot's size multiplier (the
     # Earth/Moon/Weekday multipliers scale their spec values directly
     # in apply_display_settings) and the shared hover-enlarge factor —

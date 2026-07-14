@@ -65,6 +65,10 @@ class Settings:
     show_third_slot: bool = False
     earth_style: str = "atmo"
     weekday_theme: str = "planets"
+    subdial_style: str = "black"        # complication plates (owner A/B
+                                        # 2026-07-15): "theme" tints the
+                                        # tapisserie field, "black" keeps
+                                        # the standard dark AP field
     # Artwork source (owner 2026-07-14): the Gemini and ChatGPT
     # generations coexist on disk; this picks which one the dial and
     # the readers show (missing files fall back to the other source).
@@ -216,6 +220,7 @@ class SettingsStore:
                 ("third_slot_theme", "planets", constants.WEEKDAY_THEMES),
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
+                ("subdial_style", "black", constants.SUBDIAL_STYLES),
                 ("art_source", constants.ART_SOURCE_DEFAULT,
                  constants.ART_SOURCES),
             ):
@@ -357,6 +362,7 @@ class SettingsStore:
             "show_third_slot": settings.show_third_slot,
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
+            "subdial_style": settings.subdial_style,
             "art_source": settings.art_source,
             "legend": settings.legend,
             "show_earth": settings.show_earth,

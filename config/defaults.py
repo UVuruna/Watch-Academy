@@ -486,13 +486,24 @@ SLOT_ROUNDEL_BORDER_COLORS = {
 }
 # The SMALL-SECONDS complication (owner 2026-07-14): eight tick marks
 # just inside the subdial rim — four larger at the cardinals, four
-# smaller between — white with a soft shadow, never touching the
-# bezel; the mini hand's tip stays inside the tick ring.
+# smaller between — with a soft shadow, never touching the bezel; the
+# mini hand's tip stays inside the tick ring. Colors (owner 2026-07-15
+# A/B spec): the mini hand always wears the letter FINISH metal over
+# its own drop shadow; the ticks are white on the "black" plate style
+# and finish-colored on the "theme" style.
 SMALL_SECONDS_TICK_OUTER_FRACTION = 0.80
 SMALL_SECONDS_TICK_MAJOR_FRACTION = 0.18
 SMALL_SECONDS_TICK_MINOR_FRACTION = 0.11
 SMALL_SECONDS_TICK_RGBA = (255, 255, 255, 235)
 SMALL_SECONDS_TICK_SHADOW_RGBA = (0, 0, 0, 140)
+SMALL_SECONDS_HAND_SHADOW_OFFSET_FRACTION = 0.035   # of the subdial radius
+SMALL_SECONDS_HAND_SHADOW_OPACITY = 0.55
+
+# Complication TEXTS on the subdials (owner 2026-07-15): always the
+# letter-finish metal color — never white — over a drop shadow so they
+# read on both plate styles.
+SUBDIAL_TEXT_SHADOW_RGBA = (0, 0, 0, 180)
+SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION = 0.06          # of the font pixel size
 
 # Per-pointer SLOT sizing (owner 2026-07-15): the diamonds differ —
 # the slim-armed Seasons and Compass carry 125%, the big-diamond
@@ -520,6 +531,10 @@ SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 # never moves.
 SUBDIAL_RECOLOR_VALUE_RAMP = (0.30, 0.60)
 SUBDIAL_RECOLOR_SAT_CUTOFF = (0.10, 0.30)
+# The "theme" plate style multiplies the DARK field by the clock tint;
+# the raw luminance (~0.2) would leave the hue barely readable, so the
+# field brightens by this gain before the tint lands (texture intact).
+SUBDIAL_RECOLOR_FIELD_GAIN = 1.9
 SUBDIAL_RECOLOR_COLORS = {
     "gold": "#FFD235",
     "bronze": "#CD7F32",

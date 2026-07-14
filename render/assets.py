@@ -69,38 +69,51 @@ def ring_face_color(path: Path | None) -> QColor:
     return color
 
 
-def subdial_plate_file(finish: str, seat: str) -> Path | None:
+def subdial_plate_file(
+    finish: str, seat: str, tint: str | None = None
+) -> Path | None:
     """The owner's subdial plate for (letter finish, seat). His art
     wins as drawn; a missing SEAT falls back to the center plate (the
     directional shadow is rendered live by the layer, owner
     2026-07-15); a missing FINISH recolors another finish's master —
     only the bright, low-saturation brushed rim takes the finish
     color, the dark tapisserie field never moves (disk-cached like
-    the metal variants). None = no plate art at all."""
+    the metal variants). A TINT (the "theme" plate style, owner
+    2026-07-15 A/B spec) recolors the DARK field to the clock tint —
+    that always runs through the recolor pass, even on the exact
+    finish. None = no plate art at all."""
     base = defaults.SUBDIAL_ART_DIR
     for stem in (seat, "center"):
         exact = paths.art_file(base / finish / f"{stem}.png")
         if exact.exists():
-            return exact
+            return (
+                _recolored_plate(exact, finish, tint) if tint else exact
+            )
     for source_finish in defaults.SUBDIAL_RECOLOR_COLORS:
         if source_finish == finish:
             continue
         for stem in (seat, "center"):
             master = paths.art_file(base / source_finish / f"{stem}.png")
             if master.exists():
-                return _recolored_plate(master, finish)
+                return _recolored_plate(master, finish, tint)
     return None
 
 
-def _recolored_plate(master: Path, finish: str) -> Path:
+def _recolored_plate(
+    master: Path, finish: str, tint: str | None = None
+) -> Path:
     """The master plate with its brushed metal rim COLORIZED to the
     finish: weighted pixels (bright AND unsaturated) become the finish
-    color multiplied by their own luminance — the brushing survives,
-    the dark field stays."""
+    color multiplied by their own luminance — the brushing survives.
+    With a TINT the complementary weight (the dark tapisserie field)
+    is colorized the same way to the clock tint (the "theme" plate
+    style); without one the field stays as drawn."""
     stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
+    tint_tag = f"_{tint.lstrip('#').lower()}" if tint else ""
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(master.stat().st_mtime)}_subdial_{finish}.png"
+        / f"{stamp}_{int(master.stat().st_mtime)}"
+        f"_subdial_{finish}{tint_tag}.png"
     )
     if cache.exists():
         return cache
@@ -130,11 +143,23 @@ def _recolored_plate(master: Path, finish: str) -> Path:
         * (1.0 - smoothstep((sat - sat_low) / (sat_high - sat_low)))
     )[..., None]
     target = QColor(defaults.SUBDIAL_RECOLOR_COLORS[finish])
-    tint = np.array([
+    finish_rgb = np.array([
         target.redF(), target.greenF(), target.blueF()
     ])
-    colorized = tint[None, None, :] * value[..., None]
-    rgba[..., :3] = rgb * (1.0 - weight) + colorized * weight
+    rim = finish_rgb[None, None, :] * value[..., None]
+    if tint:
+        # The "theme" plate style: the dark tapisserie field takes the
+        # clock tint, luminance-preserving like the rim but lifted by
+        # the field gain so the hue actually reads on the dark relief.
+        theme = QColor(tint)
+        theme_rgb = np.array([
+            theme.redF(), theme.greenF(), theme.blueF()
+        ])
+        lifted = value * defaults.SUBDIAL_RECOLOR_FIELD_GAIN
+        field = theme_rgb[None, None, :] * lifted[..., None]
+    else:
+        field = rgb
+    rgba[..., :3] = field * (1.0 - weight) + rim * weight
     out_bytes = np.ascontiguousarray(
         (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
     )

@@ -127,6 +127,8 @@ UI_STRINGS: tuple[str, ...] = (
     "1ˢᵗ Slot", "2ⁿᵈ Slot", "3ʳᵈ Slot",
     "Complications", "Digital Time", "Enable",
     "The slots enable in order — 1st, then 2nd, then 3rd.",
+    # The complication PLATE styles (owner A/B spec 2026-07-15).
+    "Theme background", "Classic black",
     "Settings", "Time Travel", "Guide",
     # --- Tray balloons / error boxes ---------------------------------------------
     "Translating",

@@ -268,6 +268,13 @@ def test_subdial_plate_recolors_to_every_finish(app):
         assert plate is not None and plate != master, finish
         assert plate.name.endswith(f"_subdial_{finish}.png"), finish
         assert plate.exists(), finish
+    # The "theme" plate style (owner A/B spec 2026-07-15): a clock
+    # TINT recolors the tapisserie field — that pass runs even on the
+    # exact finish, into its own cache entry.
+    tinted = subdial_plate_file("silver", "center", tint="#5A3FA0")
+    assert tinted is not None and tinted != master
+    assert tinted.name.endswith("_subdial_silver_5a3fa0.png")
+    assert tinted.exists()
 
 
 def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):

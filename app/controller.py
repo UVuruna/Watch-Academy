@@ -400,6 +400,7 @@ def apply_display_settings(skin, settings: Settings):
         show_info_slot_names=settings.show_info_slot_names,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
+        subdial_style=settings.subdial_style,
         ring_letter_scale=settings.ring_letter_scale,
         hover_enlarge=settings.hover_enlarge,
         palette_override=settings.palettes.get(
@@ -1040,6 +1041,19 @@ class AppController(QObject):
             ],
             settings.umbra_contrast,
             lambda value: self._set_display_choice("umbra_contrast", value),
+        )
+        # The complication PLATE style (owner A/B spec 2026-07-15):
+        # "theme" wears the clock tint on the tapisserie field and
+        # finish-metal ticks; "black" keeps the standard dark AP field
+        # with white ticks.
+        self._add_choice_submenu(
+            design_menu, tr("Complications"),
+            [
+                ("theme", tr("Theme background")),
+                ("black", tr("Classic black")),
+            ],
+            settings.subdial_style,
+            lambda value: self._set_display_choice("subdial_style", value),
         )
         design_menu.addSeparator()
         # The HAND PACKS (owner spec 2026-07-12): bundled CLASSIC and
