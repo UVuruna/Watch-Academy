@@ -39,6 +39,13 @@ CIVIL_TWILIGHT_ELEVATION_DEG = -6.0
 # solstice, next spring equinox. Clockwise, 0 deg = summer solstice = top.
 YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
 
+# --- Hidden mode ----------------------------------------------------------------
+# Typing this character sequence while the dial has focus unlocks the
+# hidden extras (owner 2026-07-14) — for now the Four Greetings verses
+# page in the Encyclopedia's Trinity topic. The owner sets the final
+# sequence here; the unlock persists in settings.
+HIDDEN_MODE_SECRET = "333333333333"
+
 # --- Artwork sources -----------------------------------------------------------
 # The Gemini and ChatGPT generations COEXIST (owner 2026-07-14); every
 # sourced asset root holds one subtree per source —

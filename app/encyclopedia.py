@@ -19,6 +19,7 @@ ARROWS — Bronze / Gold / Silver / Colored cycled per entry (owner
 Resizable: everything rescales live.
 """
 
+import json
 import shutil
 from pathlib import Path
 
@@ -617,7 +618,11 @@ def _topics() -> dict:
 
 
 class EncyclopediaDialog(QDialog):
-    def __init__(self, translations: dict | None = None):
+    def __init__(
+        self,
+        translations: dict | None = None,
+        hidden_unlocked: bool = False,
+    ):
         super().__init__()
         self._overlay = translations or {}
         self._tr = lambda text: ui(self._overlay, text)
@@ -633,6 +638,22 @@ class EncyclopediaDialog(QDialog):
         self._symbolism = SymbolismRepository(overlay=self._overlay)
         self._encyclopedia = EncyclopediaRepository(overlay=self._overlay)
         self._topics = _topics()
+        if hidden_unlocked:
+            # The Four Greetings (owner 2026-07-14): the owner's own
+            # verses, Serbian in EVERY language, unlocked by the
+            # hidden-mode code — they close the Trinity topic.
+            data = json.loads(
+                (paths.database_dir() / "verses.json").read_text(
+                    encoding="utf-8"
+                )
+            )["trinity"]
+            self._topics["trinity"]["entries"].append({
+                "images": (defaults.SCALE_ART_DIR / "Union.png",),
+                "name": data["title"],
+                "article": ("verses", data),
+                "accents": (),
+                "poem": True,
+            })
         self._cells: list[dict] = []
         self._blocks: list[QWidget] = []
         self._text_labels: list[QLabel] = []
@@ -693,6 +714,10 @@ class EncyclopediaDialog(QDialog):
 
     def _article_text(self, ref: tuple) -> str:
         kind = ref[0]
+        if kind == "verses":
+            # The Four Greetings stay SERBIAN in every language
+            # (owner 2026-07-14) — verses, then their reading.
+            return ref[1]["verses"] + "\n\n" + ref[1]["explanation"]
         if kind == "article":
             return self._symbolism.article(ref[1], ref[2])["base"]
         if kind == "zodiac":
@@ -940,13 +965,27 @@ class EncyclopediaDialog(QDialog):
         name.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._name_labels.append(name)
         cell.addWidget(name)
-        text = QLabel(
-            _flow_html(
-                self._article_text(entry["article"]),
-                accents=entry["accents"],
-                tr=self._tr,
+        if entry.get("poem"):
+            # The Four Greetings page: CENTERED italic stanzas with
+            # their line breaks kept, the reading justified below.
+            data = entry["article"][1]
+            stanzas = "".join(
+                "<p align='center'><i>"
+                + "<br/>".join(
+                    _html.escape(line) for line in stanza.split("\n")
+                )
+                + "</i></p>"
+                for stanza in data["verses"].split("\n\n")
             )
-        )
+            text = QLabel(stanzas + _flow_html(data["explanation"]))
+        else:
+            text = QLabel(
+                _flow_html(
+                    self._article_text(entry["article"]),
+                    accents=entry["accents"],
+                    tr=self._tr,
+                )
+            )
         text.setWordWrap(True)
         text.setTextFormat(Qt.TextFormat.RichText)
         self._text_labels.append(text)

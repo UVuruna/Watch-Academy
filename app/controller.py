@@ -454,6 +454,10 @@ class AppController(QObject):
         self._save_timer.setInterval(defaults.SETTINGS_WRITE_DEBOUNCE_MS)
         self._save_timer.timeout.connect(self._flush_position)
         self._widget.moved.connect(self._on_widget_moved)
+        # The hidden-mode code listener (owner 2026-07-14): printable
+        # keys typed on the focused dial roll through a buffer.
+        self._secret_buffer = ""
+        self._widget.typed.connect(self._collect_secret)
 
         # In click-through mode the window receives no mouse input, so the
         # hover tooltips are driven by polling the global cursor instead.
@@ -595,6 +599,29 @@ class AppController(QObject):
 
     def _on_widget_moved(self) -> None:
         self._save_timer.start()
+
+    def _collect_secret(self, char: str) -> None:
+        """Typing HIDDEN_MODE_SECRET on the focused dial unlocks the
+        hidden extras (owner 2026-07-14) — for now the Four Greetings
+        verses page in the Encyclopedia's Trinity topic. The unlock
+        persists in settings."""
+        if self._settings.hidden_unlocked:
+            return
+        secret = constants.HIDDEN_MODE_SECRET
+        self._secret_buffer = (self._secret_buffer + char)[-len(secret):]
+        if self._secret_buffer != secret:
+            return
+        self._secret_buffer = ""
+        self._settings = replace(self._settings, hidden_unlocked=True)
+        try:
+            self._store.save(self._settings)
+        except OSError as error:
+            print(f"settings save failed: {error}", file=sys.stderr)
+        self._tray.notify(
+            self._ui("Hidden mode unlocked"),
+            self._ui("The Four Greetings await in the Encyclopedia — Trinity."),
+            critical=False,
+        )
 
     def _capture_position(self) -> None:
         self._settings = replace(
@@ -1302,7 +1329,10 @@ class AppController(QObject):
         menu.addAction(settings_action)
         encyclopedia = QAction(f"🏛️ {tr('Encyclopedia…')}", menu)
         encyclopedia.triggered.connect(
-            lambda: EncyclopediaDialog(self._translation_overlay).exec()
+            lambda: EncyclopediaDialog(
+                self._translation_overlay,
+                hidden_unlocked=self._settings.hidden_unlocked,
+            ).exec()
         )
         menu.addAction(encyclopedia)
         guide = QAction(f"📖 {tr('Guide…')}", menu)

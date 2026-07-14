@@ -18,6 +18,8 @@ class ClockWidget(QWidget):
     """Frameless, per-pixel-transparent, always-at-bottom dial window."""
 
     moved = Signal()
+    typed = Signal(str)                 # printable keys while focused —
+                                        # the hidden-mode code listener
 
     def __init__(self, diameter: int, menu: QMenu, legend):
         super().__init__()
@@ -37,6 +39,9 @@ class ClockWidget(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self.setWindowTitle(constants.APP_NAME)
         self.setMouseTracking(True)     # hover tooltips on small dials
+        # A click gives the dial keyboard focus so the hidden-mode
+        # code can be typed on it (owner 2026-07-14).
+        self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
         self.set_dial_diameter(diameter)
 
     def mark_closing(self) -> None:
@@ -107,6 +112,13 @@ class ClockWidget(QWidget):
             self.windowHandle().startSystemMove()
         else:
             super().mousePressEvent(event)
+
+    def keyPressEvent(self, event) -> None:
+        text = event.text()
+        if text and text.isprintable():
+            self.typed.emit(text)
+        else:
+            super().keyPressEvent(event)
 
     def mouseMoveEvent(self, event) -> None:
         if self._renderer is not None and self._tick is not None:

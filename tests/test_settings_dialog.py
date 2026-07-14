@@ -228,6 +228,36 @@ def test_every_theme_skeleton_is_complete():
             ).exists(), (theme, body)
 
 
+def test_hidden_mode_unlocks_the_four_greetings(app):
+    """Owner 2026-07-14: typing the secret sequence on the focused
+    dial unlocks the hidden extras — the Trinity topic gains the Four
+    Greetings page (the owner's verses, SERBIAN in every language),
+    locked dialogs never show it, and the unlock flag persists in
+    settings."""
+    from app.encyclopedia import EncyclopediaDialog
+
+    locked = EncyclopediaDialog()
+    assert len(locked._topics["trinity"]["entries"]) == 3
+    locked.deleteLater()
+    unlocked = EncyclopediaDialog(hidden_unlocked=True)
+    entries = unlocked._topics["trinity"]["entries"]
+    assert len(entries) == 4
+    poem = entries[-1]
+    assert poem["name"] == "Četiri pozdrava"
+    assert poem["poem"] is True
+    text = unlocked._article_text(poem["article"])
+    assert "Dobar dan" in text and "ponovi sve ovo" in text
+    assert "Krug pozdrava je krug ovog sata" in text
+    unlocked._show_topic("trinity")
+    unlocked._step(-1)                       # wrap onto the poem page
+    assert unlocked._counter.text() == "4 / 4"
+    unlocked.deleteLater()
+    assert Settings().hidden_unlocked is False
+    from config import constants
+
+    assert len(constants.HIDDEN_MODE_SECRET) >= 3
+
+
 def test_art_source_resolves_with_fallback():
     """Owner 2026-07-14: the Gemini and ChatGPT generations coexist
     under assets/<root>/<source>/ — canonical paths resolve into the

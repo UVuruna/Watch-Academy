@@ -114,6 +114,9 @@ UI_STRINGS: tuple[str, ...] = (
     "Home", "Download",
     # The art-source pick (owner 2026-07-14: Gemini vs ChatGPT).
     "Artwork",
+    # The hidden-mode unlock balloon (owner 2026-07-14).
+    "Hidden mode unlocked",
+    "The Four Greetings await in the Encyclopedia — Trinity.",
     "Settings", "Time Travel", "Guide",
     # --- Tray balloons / error boxes ---------------------------------------------
     "Translating",
