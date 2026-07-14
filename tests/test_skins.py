@@ -428,6 +428,16 @@ def test_subhead_markers_render_as_translated_headings():
     assert "<b>Lik</b>" in sr
     assert "[[" not in sr and "The Figure" not in sr
     assert "Odin rules Wednesday." in sr
+    # Round two (owner 2026-07-14): CENTERED, hugging its paragraph —
+    # the gap above beats the gap below.
+    assert "align='center'" in sr
+    assert (
+        f"margin-bottom:{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px" in sr
+    )
+    assert (
+        defaults.ARTICLE_SUBHEAD_GAP_ABOVE_PX
+        > defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX
+    )
     en = _article_paragraphs(text)                   # no translator: EN label
     assert "<b>The Figure</b>" in en and "[[" not in en
 

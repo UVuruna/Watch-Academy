@@ -16,28 +16,35 @@ screens —
    grows/shrinks the icons with the window between
    `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`; only below the minimum does
    the scrollbar take over.
-2. **Articles** — a scrollable list of the topic's entries: the
-   entity image(s) — Astrology shows the sign LOGO and its
+2. **Articles** — a SLIDER (owner plan round E, 2026-07-14): one entry
+   per page, ← Previous / Next → wrap around with a counter between
+   them; the chrome wears the shared gradient pills ([UI
+   Style](ui_style.md)) — ⌂ Home top-left back to the gallery,
+   ⬇ Download top-right saves the open entry's image(s) and text.
+   The entity image(s) — Astrology shows the sign LOGO and its
    CONSTELLATION side by side, every Sunday RULER/SERVANT pair stands
-   side by side too (owner correction 2026-07-13: never stacked) —
-   the NAME as a bold title and the
-   full base article, translated through the active overlay and with
-   the canon terms highlighted exactly like the dial legends (virtues
-   blue, vices red, moods yellow, the entity's own arm hue).
+   side by side on THEME pages, while the WEEK pages STACK each pair
+   (owner 2026-07-14: Ruler on top, its Servant directly under,
+   themes as columns) — then the NAME as a bold title and the full
+   base article, translated through the active overlay and with the
+   canon terms highlighted exactly like the dial legends (virtues
+   blue, vices red, moods yellow, the entity's own arm hue), the
+   `[[Subhead]]` markers drawn as centered bold headings hugging
+   their paragraph.
 
-The window is RESIZABLE: each entry is ONE centered block spanning
-`ENCYCLOPEDIA_TEXT_WIDTH_FRACTION` of the width (the text stays
-left-aligned INSIDE the block — owner: center the object, never the
-lines), images share the block, and the font grows with the width at
-the gentle em-like coefficient (`ENCYCLOPEDIA_FONT_GROWTH`, capped).
+The window is RESIZABLE: each entry is ONE block spanning
+`ENCYCLOPEDIA_TEXT_WIDTH_FRACTION` of the width, CENTERED with even
+side margins (owner 2026-07-14 — supersedes the 2026-07-13 left-hug),
+images share the block, and the font grows with the width at the
+gentle em-like coefficient (`ENCYCLOPEDIA_FONT_GROWTH`, capped).
 
 It is a NORMAL window (owner 2026-07-13: no stay-on-top). The look
-images decode LAZILY — `_show_topic` keeps only PATHS and
-`_render_cell` loads through the `_pixmap` cache on first display
-(owner 2026-07-13: The Week opened far too slowly when every look of
-every entry decoded upfront), and after every look switch the grid
-geometry is committed immediately so larger art never draws clipped
-under its neighbors.
+images decode LAZILY through the `_pixmap` cache (owner 2026-07-13:
+The Week opened far too slowly when every look decoded upfront). The
+image grid is built ONCE per look (`_render_cell`); window resizes
+only RE-FIT the pixmaps in place (`_resize_cell`) — tearing the grid
+down per resize left ghost labels and stale container heights that
+CLIPPED the art (owner bug 2026-07-14: the full-size crop).
 
 ## Connections
 
@@ -57,9 +64,14 @@ under its neighbors.
 ## Classes
 
 ### EncyclopediaDialog
-- `__init__(translations)`: builds the topic gallery
-- `_show_topic(key)`: fills the scrollable article list (paths only —
-  pixmaps decode lazily)
+- `__init__(translations)`: builds the topic gallery and the styled
+  chrome (Home / Download / ← Previous / counter / Next →)
+- `_show_topic(key)`: opens the topic slider at its first entry
+- `_step(delta)` / `_show_entry()`: the pager — one entry per page,
+  wraps both ways, pager hidden on single-entry topics
+- `_download_entry()`: saves the open entry's current-look image(s)
+  and its text (headings as `[Label]` lines) into a picked folder
 - `_rescale()`: live sizing on resize — gallery cards through
-  `_rescale_topics()`, article blocks/fonts otherwise
+  `_rescale_topics()`; entry pages re-fit fonts and pixmaps
+  (`_resize_cell`) without rebuilding the grid
 - `_pixmap(path)`: the decoded-image cache behind the lazy looks

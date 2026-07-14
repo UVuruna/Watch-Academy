@@ -276,6 +276,12 @@ ARTICLE_COLUMN_WIDTH_PX = 400        # the hexa TWO-COLUMN legend: each sign's
                                      # column; two of them + spacing must fit
                                      # LEGEND_MAX_WIDTH_FRACTION of a 1080p
                                      # screen (0.45 × 1920 = 864)
+# Subheading spacing (owner 2026-07-14 round two): the heading sits
+# CENTERED and visibly closer to ITS paragraph than to the previous one
+# — Qt collapses adjacent block margins to the larger, so the paragraph
+# after a heading carries the same small top margin.
+ARTICLE_SUBHEAD_GAP_ABOVE_PX = 18
+ARTICLE_SUBHEAD_GAP_BELOW_PX = 2
 
 # The Judas–Lucifer scale badges (owner 2026-07-13): the two triangle
 # medallions illustrating "The Two Triangles" — wired before the art
@@ -418,11 +424,22 @@ ENCYCLOPEDIA_MAX_FONT_PX = 21
 # two bounds; below the minimum the scrollbar takes over).
 ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
 ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
-# The topic SLIDER (owner plan round E, 2026-07-14): a topic pages one
-# entry at a time like the Guide; the Back button is BIG so the way
-# back to the gallery is never hunted for.
-ENCYCLOPEDIA_BACK_FONT_PX = 16
-ENCYCLOPEDIA_BACK_PADDING_PX = 8
+# Modern reader buttons (owner 2026-07-14: "veći, upečatljiviji,
+# življih boja — ne kao app iz 1990-e"): vivid gradient pills shared by
+# the Encyclopedia and the Guide. Each role owns a (top, bottom)
+# gradient pair; hover lightens and pressed darkens the same pair.
+UI_BUTTON_FONT_PX = 17
+UI_BUTTON_RADIUS_PX = 12
+UI_BUTTON_PADDING_PX = (10, 26)         # vertical, horizontal
+UI_BUTTON_SMALL_FONT_PX = 14            # the per-entry look arrows
+UI_BUTTON_SMALL_PADDING_PX = (5, 12)
+UI_BUTTON_COLORS = {
+    "home": ("#4FACFE", "#1565C0"),         # blue — the way back
+    "previous": ("#FFB75E", "#E65100"),     # orange
+    "next": ("#7EDB7B", "#2E7D32"),         # green
+    "download": ("#CE93D8", "#6A1B9A"),     # violet — save the entry
+    "neutral": ("#B0BEC5", "#546E7A"),      # the look arrows
+}
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
@@ -431,7 +448,8 @@ ENCYCLOPEDIA_BACK_PADDING_PX = 8
 GUIDE_DIR = paths.assets_dir() / "guide"
 GUIDE_INITIAL_IMAGE_PX = 540
 GUIDE_TITLE_PX = 22
-GUIDE_SUBTITLE_PX = 15
+GUIDE_SUBTITLE_PX = 17
+GUIDE_BODY_PX = 14        # owner 2026-07-14: the caption text was tiny
 GUIDE_SPACING_PX = 8
 
 # Translation (owner spec: translate-once-then-cache, no accounts, no
@@ -923,7 +941,7 @@ WEEKDAY_DUAL_FILES = {
     "japan": "japan/primary/dual/ama_no_iwato",
     "religion": "religion/primary/dual/rough_ashlar",
     "religion_alt": "religion/secondary/dual/corax",
-    "profession": "profession/primary/Servant",
+    "profession": "profession/primary/dual/Servant",
     "wolf": "wolf/primary/dual/omega",
     "bee": "bee/primary/dual/Cleaner",
     "elephant": "elephant/primary/dual/Memory",

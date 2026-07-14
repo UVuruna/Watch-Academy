@@ -45,6 +45,19 @@ The scrollable hover window replacing QToolTip: capped to screen
 fractions, taller articles scroll, stays open while the cursor is over
 it. See [Legend Popup](legend_popup.md).
 
+### `encyclopedia.py` — Encyclopedia Dialog
+The article browser: a grouped topic gallery, then a SLIDER paging one
+entry at a time with Home / Download and the look arrows.
+See [Encyclopedia Dialog](encyclopedia.md).
+
+### `guide.py` — Guide Dialog
+The paged, resizable help book over `assets/guide/` pages and
+captions. See [Guide Dialog](guide.md).
+
+### `ui_style.py` — UI Style
+Shared modern gradient-pill button styling for the reader dialogs —
+roles, sizes and colors all from defaults. See [UI Style](ui_style.md).
+
 Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
 24H2 — revisit on demand).
 

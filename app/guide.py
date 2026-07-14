@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
 
@@ -64,11 +65,19 @@ class GuideDialog(QDialog):
         self._scroll = QScrollArea()
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
+        # The pager wears the shared gradient pills (owner 2026-07-14:
+        # big, vivid, modern — same chrome as the Encyclopedia).
         self._counter = QLabel()
+        self._counter.setStyleSheet(
+            f"font-size: {defaults.UI_BUTTON_FONT_PX}px;"
+            "font-weight: bold;"
+        )
         previous = QPushButton(ui(overlay, "← Previous"))
         previous.clicked.connect(lambda: self._step(-1))
+        style_button(previous, "previous")
         following = QPushButton(ui(overlay, "Next →"))
         following.clicked.connect(lambda: self._step(+1))
+        style_button(following, "next")
         row = QHBoxLayout()
         row.addWidget(previous)
         row.addStretch(1)
@@ -112,7 +121,8 @@ class GuideDialog(QDialog):
             text = QLabel(
                 f"<div style='font-size: {defaults.GUIDE_SUBTITLE_PX}px'>"
                 f"<b>{html.escape(title)}</b></div>"
-                f"<div style='margin-top: {defaults.GUIDE_SPACING_PX}px'>"
+                f"<div style='margin-top: {defaults.GUIDE_SPACING_PX}px;"
+                f"font-size: {defaults.GUIDE_BODY_PX}px'>"
                 f"{html.escape(body)}</div>"
             )
             text.setWordWrap(True)

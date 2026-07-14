@@ -19,12 +19,14 @@ ARROWS — Bronze / Gold / Silver / Colored cycled per entry (owner
 Resizable: everything rescales live.
 """
 
+import shutil
 from pathlib import Path
 
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QDialog,
+    QFileDialog,
     QFrame,
     QGridLayout,
     QHBoxLayout,
@@ -38,6 +40,7 @@ from PySide6.QtWidgets import (
 
 import html as _html
 
+from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
@@ -57,17 +60,26 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
     parts = []
     for paragraph in text.split("\n\n"):
         match = _SUBHEAD.match(paragraph)
+        body_style = ""
         if match:
             label = match.group(1)
             if tr is not None:
                 label = tr(label)
+            # CENTERED, hugging its own paragraph (owner 2026-07-14
+            # round two — same rule as the hover legends).
             parts.append(
-                "<p align='left' style='margin-bottom:0'>"
+                "<p align='center' style='"
+                f"margin-top:{defaults.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
+                f"margin-bottom:{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
                 f"<b>{_html.escape(label)}</b></p>"
             )
             paragraph = paragraph[match.end():]
+            body_style = (
+                f" style='margin-top:"
+                f"{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
+            )
         parts.append(
-            "<p align='justify'>"
+            f"<p align='justify'{body_style}>"
             + _highlight_terms(_html.escape(paragraph), accents)
             + "</p>"
         )
@@ -343,13 +355,15 @@ def _topics() -> dict:
     # SIDE — Ruler immediately left of its Servant (owner correction
     # 2026-07-13: never stacked).
     def _week_theme_rows(body: str, themes: tuple) -> tuple:
+        # Sunday STACKS each pair (owner 2026-07-14: "Sun pa ispod
+        # Eclipse, pa sledeća kolona nova tematika") — Rulers across
+        # the top row, each Servant directly UNDER its Ruler.
         if body != "sun":
             return (tuple(_theme_body_art(t, body) for t in themes),)
-        return (tuple(
-            plate
-            for t in themes
-            for plate in (_theme_body_art(t, "sun"), _theme_dual_art(t))
-        ),)
+        return (
+            tuple(_theme_body_art(t, "sun") for t in themes),
+            tuple(_theme_dual_art(t) for t in themes),
+        )
 
     def _week_canon_rows(body: str) -> tuple:
         virtue, sin, mood = _WEEK_EMBLEMS[body]
@@ -361,18 +375,22 @@ def _topics() -> dict:
                 defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[0]}.png",
                 defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[0]}.png",
             ),)
-        return ((
-            _theme_body_art("planets", "sun"),
-            _theme_dual_art("planets"),
-            _theme_body_art("planet_signs", "sun"),
-            _theme_dual_art("planet_signs"),
-            defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[0]}.png",
-            defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[1]}.png",
-            defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[0]}.png",
-            defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[1]}.png",
-            defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[0]}.png",
-            defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[1]}.png",
-        ),)
+        return (
+            (
+                _theme_body_art("planets", "sun"),
+                _theme_body_art("planet_signs", "sun"),
+                defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[0]}.png",
+                defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[0]}.png",
+                defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[0]}.png",
+            ),
+            (
+                _theme_dual_art("planets"),
+                _theme_dual_art("planet_signs"),
+                defaults.EMBLEM_ART_DIRS["virtues"] / f"{virtue[1]}.png",
+                defaults.EMBLEM_ART_DIRS["sins"] / f"{sin[1]}.png",
+                defaults.EMBLEM_ART_DIRS["moods"] / f"{mood[1]}.png",
+            ),
+        )
 
     topics["week"] = {
         "title": "The Week",
@@ -633,27 +651,37 @@ class EncyclopediaDialog(QDialog):
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
         self._topic_key: str | None = None
         self._entry_index = 0
-        self._back = QPushButton(self._tr("← Back"))
+        # The reader chrome (owner 2026-07-14: big, vivid, modern —
+        # Home top-left, Download top-right, the pager bottom-center).
+        self._back = QPushButton("⌂  " + self._tr("Home"))
         self._back.clicked.connect(self._show_topics)
-        # BIG on purpose (owner plan round E): the way back to the
-        # gallery must never be hunted for.
-        self._back.setStyleSheet(
-            f"font-size: {defaults.ENCYCLOPEDIA_BACK_FONT_PX}px;"
-            f"padding: {defaults.ENCYCLOPEDIA_BACK_PADDING_PX}px "
-            f"{defaults.ENCYCLOPEDIA_BACK_PADDING_PX * 3}px;"
-        )
+        style_button(self._back, "home")
+        self._download = QPushButton("⬇  " + self._tr("Download"))
+        self._download.clicked.connect(self._download_entry)
+        style_button(self._download, "download")
         self._counter = QLabel()
+        self._counter.setStyleSheet(
+            f"font-size: {defaults.UI_BUTTON_FONT_PX}px;"
+            "font-weight: bold;"
+        )
         self._previous = QPushButton(self._tr("← Previous"))
         self._previous.clicked.connect(lambda: self._step(-1))
+        style_button(self._previous, "previous")
         self._next = QPushButton(self._tr("Next →"))
         self._next.clicked.connect(lambda: self._step(+1))
+        style_button(self._next, "next")
+        top = QHBoxLayout()
+        top.addWidget(self._back)
+        top.addStretch(1)
+        top.addWidget(self._download)
         row = QHBoxLayout()
-        row.addWidget(self._back)
         row.addStretch(1)
         row.addWidget(self._previous)
         row.addWidget(self._counter)
         row.addWidget(self._next)
+        row.addStretch(1)
         layout = QVBoxLayout(self)
+        layout.addLayout(top)
         layout.addWidget(self._title)
         layout.addWidget(self._scroll, stretch=1)
         layout.addLayout(row)
@@ -706,6 +734,7 @@ class EncyclopediaDialog(QDialog):
         self._title.setText(self._tr("Encyclopedia"))
         self._topic_key = None
         self._back.hide()
+        self._download.hide()
         self._previous.hide()
         self._counter.hide()
         self._next.hide()
@@ -768,6 +797,41 @@ class EncyclopediaDialog(QDialog):
         self._entry_index = (self._entry_index + delta) % len(entries)
         self._show_entry()
 
+    def _download_entry(self) -> None:
+        """⬇ Download (owner 2026-07-14): save the OPEN entry — the
+        current look's image(s) and the article text (headings kept
+        as [Label] lines) — into a folder the user picks."""
+        entry = self._topics[self._topic_key]["entries"][self._entry_index]
+        target = QFileDialog.getExistingDirectory(
+            self, self._tr("Download")
+        )
+        if not target:
+            return
+        name = self._entry_name(entry)
+        safe = "".join(
+            ch if ch.isalnum() or ch in " ·-_()" else "_" for ch in name
+        ).strip()
+        text = _HEX_NOTE.sub("", self._article_text(entry["article"]))
+        lines = [name, ""]
+        for paragraph in text.split("\n\n"):
+            match = _SUBHEAD.match(paragraph)
+            if match:
+                lines.append(f"[{self._tr(match.group(1))}]")
+                paragraph = paragraph[match.end():]
+            lines += [paragraph, ""]
+        (Path(target) / f"{safe}.txt").write_text(
+            "\n".join(lines), encoding="utf-8"
+        )
+        state = self._cells[0] if self._cells else None
+        if state is not None:
+            rows = state["looks"][state["index"]]
+            images = [path for row in rows for path in row]
+            for index, path in enumerate(images, start=1):
+                suffix = f"_{index}" if len(images) > 1 else ""
+                shutil.copyfile(
+                    path, Path(target) / f"{safe}{suffix}.png"
+                )
+
     def _show_entry(self) -> None:
         """The current entry's PAGE: the images row (the Astrology
         pair sits side by side), the bold name and the text, all
@@ -778,6 +842,7 @@ class EncyclopediaDialog(QDialog):
         entry = entries[self._entry_index]
         self._title.setText(self._tr(topic["title"]))
         self._back.show()
+        self._download.show()
         self._counter.setText(f"{self._entry_index + 1} / {len(entries)}")
         pager = len(entries) > 1
         self._previous.setVisible(pager)
@@ -841,12 +906,18 @@ class EncyclopediaDialog(QDialog):
             arrows.addStretch(1)
             back = QToolButton()
             back.setText("◀")
+            style_button(back, "neutral", small=True)
             caption = QLabel(self._tr(state["titles"][0]))
             caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            caption.setMinimumWidth(120)
+            caption.setMinimumWidth(140)
+            caption.setStyleSheet(
+                f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
+                "font-weight: bold;"
+            )
             state["caption"] = caption
             forward = QToolButton()
             forward.setText("▶")
+            style_button(forward, "neutral", small=True)
             back.clicked.connect(
                 lambda checked=False, s=state: self._cycle_look(s, -1)
             )
@@ -874,9 +945,10 @@ class EncyclopediaDialog(QDialog):
         self._text_labels.append(text)
         cell.addWidget(text)
         self._blocks.append(block)
-        # The block HUGS THE LEFT EDGE (owner 2026-07-13) — only
-        # the images/name center within it.
-        column.addWidget(block, alignment=Qt.AlignmentFlag.AlignLeft)
+        # The block sits CENTERED with even side margins (owner
+        # 2026-07-14: "ravnomerno po sredini" — supersedes the
+        # left-hug of 2026-07-13).
+        column.addWidget(block, alignment=Qt.AlignmentFlag.AlignHCenter)
         column.addStretch(1)
         self._scroll.setWidget(content)
         self._scroll.verticalScrollBar().setValue(0)
@@ -913,7 +985,11 @@ class EncyclopediaDialog(QDialog):
         for label in self._name_labels:
             label.setStyleSheet(f"font-size: {font_px + 3}px;")
         for state in self._cells:
-            self._render_cell(state, block_width)
+            # First pass builds the grid; resizes only re-fit pixmaps.
+            if "cells" in state:
+                self._resize_cell(state, block_width)
+            else:
+                self._render_cell(state, block_width)
 
     def _rescale_topics(self) -> None:
         """The gallery cards follow the window (owner 2026-07-13):
@@ -964,11 +1040,12 @@ class EncyclopediaDialog(QDialog):
         return pixmap
 
     def _render_cell(self, state: dict, block_width: int) -> None:
-        """Rebuild the cell's image GRID for its current look: each
-        look is rows of image paths (the Sunday pairs side by side);
-        the columns split the block width and the images SHRINK as
-        far as needed (owner 2026-07-13: nothing may overlap or
-        clip)."""
+        """Build the cell's image GRID for its current look — ONCE per
+        look. Window resizes only RE-SCALE the pixmaps in place
+        (`_resize_cell`, the Guide's approach): tearing the grid down
+        on every resize left half-deleted labels painting as ghosts
+        and stale container heights CLIPPING the art (owner bug
+        2026-07-14: the full-size crop)."""
         container = state["container"]
         if container is None:
             return
@@ -978,6 +1055,7 @@ class EncyclopediaDialog(QDialog):
                 item = old.takeAt(0)
                 widget = item.widget()
                 if widget is not None:
+                    widget.setParent(None)
                     widget.deleteLater()
             QWidget().setLayout(old)     # detach so a fresh grid can bind
         grid = QGridLayout(container)
@@ -985,33 +1063,34 @@ class EncyclopediaDialog(QDialog):
         grid.setSpacing(defaults.GUIDE_SPACING_PX)
         rows = state["looks"][state["index"]]
         columns = max((len(row) for row in rows), default=0)
+        state["cells"] = []
         if not columns:
             return
-        share = (
-            block_width // columns - defaults.GUIDE_SPACING_PX * 2
-        )
         for row_index, row in enumerate(rows):
             offset = (columns - len(row)) // 2    # center shorter rows
             for col_index, path in enumerate(row):
                 art = self._pixmap(path)
                 label = QLabel()
                 label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                width = max(24, min(share, art.width()))
-                label.setPixmap(
-                    art.scaledToWidth(
-                        width, Qt.TransformationMode.SmoothTransformation
-                    )
-                )
+                state["cells"].append((label, art, columns))
                 grid.addWidget(
                     label, row_index, offset + col_index,
                     alignment=Qt.AlignmentFlag.AlignCenter,
                 )
-        # Commit the new geometry NOW (owner bug 2026-07-13: after a
-        # look switch to larger art the container kept its old size —
-        # the image drew clipped under the neighboring widgets).
-        grid.activate()
-        container.updateGeometry()
-        container.adjustSize()
+        self._resize_cell(state, block_width)
+
+    def _resize_cell(self, state: dict, block_width: int) -> None:
+        """Fit the look's images to the block width — the columns
+        split it and every image shrinks as far as needed (owner
+        2026-07-13: nothing may overlap or clip)."""
+        for label, art, columns in state.get("cells", ()):
+            share = block_width // columns - defaults.GUIDE_SPACING_PX * 2
+            width = max(24, min(share, art.width()))
+            label.setPixmap(
+                art.scaledToWidth(
+                    width, Qt.TransformationMode.SmoothTransformation
+                )
+            )
 
     def _cycle_look(self, state: dict, step: int) -> None:
         """The ◀ / ▶ arrows (owner 2026-07-13): the next look of this

@@ -39,7 +39,7 @@ roundels carrying a calling-specific emblem (crowns for the Ruler) and
 single rune-like glyphs at the four cardinal points; no bright colors
 anywhere, pure weathered bronze/gold/slate-gray.
 
-Drop at `assets/weekday/profession/primary/Servant.png`.
+Drop at `assets/weekday/profession/primary/dual/Servant.png`.
 
 ```
 Circular bronze/antique-gold sculptural relief medallion on a dark cracked-slate stone background, photorealistic render, perfectly centered, isolated on transparent background — same weathered bronze relief finish, stone texture and lighting as Ruler.png and the rest of the Profession set. Center: the Ruler's Servant face — the same bearded king, standing before his own empty throne, crown lifted from his head and held low in both hands, eyes downcast, the ermine-trimmed royal robe replaced by a plain rope-belted tunic, one bare foot resting in a bronze basin of water at the foot of the throne where the eagle-blazoned shield stood in the Ruler plate; the same imperial eagles are engraved faintly into the stone behind him, wings folded low instead of raised. Border: identical double-ring Celtic knotwork to Ruler.png with lion supporters and rune-like glyphs at the four cardinal points, but the crown roundels are replaced with small bronze roundels bearing a basin-and-towel emblem. Palette: dark antique bronze, muted gold, weathered slate gray only — no bright colors, same matte sculptural metal finish and cracked-stone texture as the rest of the bronze Profession set.
@@ -336,8 +336,8 @@ wiring lands:
 
 | Source | Destination |
 |---|---|
-| servant.png | `assets/weekday/profession/primary/Servant.png` |
-| servant colored.png | `assets/weekday/profession/colored/Servant.png` |
+| servant.png | `assets/weekday/profession/primary/dual/Servant.png` |
+| servant colored.png | `assets/weekday/profession/colored/dual/Servant.png` |
 | phaethon.png | `assets/weekday/greek/primary/dual/Phaethon.png` |
 | skoll.png | `assets/weekday/norse/primary/dual/Skoll.png` |
 | afu-ra.png | `assets/weekday/egypt/primary/dual/afu_ra.png` |

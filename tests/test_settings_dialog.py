@@ -404,16 +404,19 @@ def test_encyclopedia_expansion_wiring():
     assert [l for l, _ in topics["astrology"]["entries"][0]["looks"]] == [
         "Logo & Constellation", "Colored", "Sign",
     ]
-    # The Week pages group by kinship; Sunday's canon strip is ONE row
-    # of interleaved pairs — each Ruler immediately left of its
-    # Servant (owner correction 2026-07-13: never stacked).
+    # The Week pages group by kinship; Sunday STACKS each pair (owner
+    # 2026-07-14: Ruler on top, its Servant directly UNDER, themes as
+    # columns) — supersedes the 2026-07-13 one-row interleave.
     week_sun = topics["week"]["entries"][0]
     assert [l for l, _ in week_sun["looks"]] == [
         "Canon", "Gods", "Religions", "Themes", "Animals",
     ]
     canon_rows = week_sun["looks"][0][1]
-    assert len(canon_rows) == 1
-    assert len(canon_rows[0]) == 10
+    assert len(canon_rows) == 2
+    assert len(canon_rows[0]) == 5 and len(canon_rows[1]) == 5
+    gods_rows = week_sun["looks"][1][1]
+    assert len(gods_rows) == 2                    # rulers over servants
+    assert len(gods_rows[0]) == len(gods_rows[1]) == 4
     monday = topics["week"]["entries"][1]
     assert len(monday["looks"][0][1]) == 1        # single row off-Sunday
     # The animal societies are metal themes with the full four looks

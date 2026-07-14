@@ -109,6 +109,9 @@ UI_STRINGS: tuple[str, ...] = (
     "Moment:", "Latitude:", "Longitude:",
     "The dial shows this situation for {n} seconds, then returns to the present.",
     "← Previous", "Next →",
+    # The Encyclopedia reader chrome (owner 2026-07-14: Home top-left,
+    # Download saves the open entry's image and text).
+    "Home", "Download",
     "Settings", "Time Travel", "Guide",
     # --- Tray balloons / error boxes ---------------------------------------------
     "Translating",

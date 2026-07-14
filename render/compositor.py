@@ -155,17 +155,27 @@ def _article_paragraphs(
     parts = []
     for p in text.split("\n\n"):
         match = _SUBHEAD.match(p)
+        body_style = ""
         if match:
             label = match.group(1)
             if tr is not None:
                 label = tr(label)
+            # CENTERED, hugging its own paragraph (owner 2026-07-14
+            # round two: the gap above must beat the gap below).
             parts.append(
-                "<p align='left' style='margin-bottom:0'>"
+                "<p align='center' style='"
+                f"margin-top:{defaults.ARTICLE_SUBHEAD_GAP_ABOVE_PX}px;"
+                f"margin-bottom:{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'>"
                 f"<b>{html.escape(label)}</b></p>"
             )
             p = p[match.end():]
+            body_style = (
+                f" style='margin-top:"
+                f"{defaults.ARTICLE_SUBHEAD_GAP_BELOW_PX}px'"
+            )
         parts.append(
-            f"<p align='justify'>{_highlight_terms(html.escape(p), accents)}</p>"
+            f"<p align='justify'{body_style}>"
+            f"{_highlight_terms(html.escape(p), accents)}</p>"
         )
     return "".join(parts)
 
