@@ -1062,15 +1062,37 @@ def slot_text(mode: str, ctx: RenderContext) -> str:
     return ctx.day.day_length            # "day_length" (validated set)
 
 
+def _subdial_seat(pos: QPointF) -> str:
+    """Which subdial PLATE a slot position wears (owner 2026-07-14:
+    the sun lives at the dial center, every seat shadows outward):
+    the exact center, the 3h seat (lower left), the 21h seat (lower
+    right), or the lone southern spot."""
+    if abs(pos.x()) < 1.0 and abs(pos.y()) < 1.0:
+        return "center"
+    theta = math.degrees(math.atan2(pos.x(), -pos.y())) % 360.0
+    if abs(theta - constants.AURORA_DUAL_WEEKDAY_ANGLE) <= 30.0:
+        return "h3"
+    if abs(theta - constants.AURORA_DUAL_SLOT_ANGLE) <= 30.0:
+        return "h21"
+    return "south"
+
+
 def draw_slot_roundel(
     painter: QPainter, ctx: RenderContext, pos: QPointF, diameter: float
 ) -> None:
     """The watch-face SUBDIAL behind flat slot content (owner
-    2026-07-14): a circle filled with the active ring's own face color
-    and rimmed in the letter FINISH metal — worn by every text mode
-    and by the flat astrology art (sign / logo / constellation); the
-    circular plates (medallions, planets, colored badges) stay
-    bare."""
+    2026-07-14) — worn by every text mode and by the flat astrology
+    art (sign / logo / constellation); the circular plates
+    (medallions, planets, colored badges) stay bare. The owner's
+    PLATE ART draws when it exists (per letter finish and seat, the
+    seat falling back to the center plate); otherwise the procedural
+    circle: the ring's own face color rimmed in the finish metal."""
+    finish_dir = defaults.SUBDIAL_ART_DIR / ctx.skin.ring_finish
+    for stem in (_subdial_seat(pos), "center"):
+        plate = paths.art_file(finish_dir / f"{stem}.png")
+        if plate.exists():
+            draw_pixmap_centered(painter, ctx, plate, pos, diameter)
+            return
     rim = QColor(
         defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
     )
@@ -1129,10 +1151,9 @@ class BottomSlotLayer(Layer):
                 ctx.radius * spec.orbit_fraction,
             )
         slot_size = (
-            2 * ctx.radius * spec.diamond_scale
-            * ctx.skin.octa_slot_scale          # Settings size multiplier
-            * hover_factor(ctx, "octa_slot")
-        )
+            2 * ctx.radius * spec.diamond_scale   # carries the SLOT size
+            * hover_factor(ctx, "octa_slot")      # (owner 2026-07-14: one
+        )                                         # slider for every slot)
         mode, style = south_slot_view(ctx.skin)
         chinese_animal = ctx.day.chinese_name.split()[-1]
         if (

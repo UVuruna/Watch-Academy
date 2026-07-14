@@ -1364,7 +1364,6 @@
   "ui/Custom hands": "e8d222e13c80116f5a95e2bf11195677d86ae91d",
   "ui/Custom ring": "ace1cb24b1b18d3ad539221dd39504cec59486f2",
   "ui/Custom…": "dce04fd315530c73a93ee565f67a370dae10ab30",
-  "ui/Cycles the checked weekday themes.": "1d635dc4a5af849b1aea2f8720e0649a40e71eac",
   "ui/Dark contrast": "06948dc7f6baa65a39c1a16220f2c364de6d62ac",
   "ui/Date": "eb9a4bc1c0c153e4e4b042a79113b815b7e3021d",
   "ui/David": "d27937f914ebe99ee315f04449678eccfb658191",
@@ -1399,7 +1398,6 @@
   "ui/Element sizes": "775f5cfca2a1d78902b793f31e41fdb16ffdb867",
   "ui/Elements": "a563972e807d43617dfb0a4b0398984476c03544",
   "ui/Elephant Herd": "1aed77eff462d6c4d85ded0ef7ea8d54c09de238",
-  "ui/Enabled": "df174a3f2faa31814e06540acda7af8825403fac",
   "ui/Encyclopedia": "cc5645f0e43dd9b3de3c56079e659582d460994d",
   "ui/Encyclopedia…": "3b2d94a6d3a4f07b2c0d38045bec754d2fd77cce",
   "ui/Envy": "6088414b57b7c9c4d4803758d63413683b2c0232",
@@ -1863,7 +1861,10 @@
   "zodiac_articles/Virgo/variants/light": "f7499d192a8894f94e6ccd8e66a047bb52c80e28",
   "zodiac_articles/Virgo/variants/light_south": "6ad528dee4fdc58d9671fdaa91b08729fea92e2f",
   "zodiac_articles/Virgo/variants/paint": "002e0776963e08f2f4c65a23de99b21e134a58ed",
-  "zodiac_articles/Virgo/variants/paint_south": "72f2e236cbad039b905d618c019f3ee0338d3d6b"
+  "zodiac_articles/Virgo/variants/paint_south": "72f2e236cbad039b905d618c019f3ee0338d3d6b",
+  "ui/Slot": "ece2ac10d7266fea31ebbb19635c1cdc5b71fdf5",
+  "ui/None": "6eef6648406c333a4035cd5e60d0bf2ecf2606d7",
+  "ui/Custom": "081ae3fdc403609cf6e760849ebb14117b7a50cb"
  },
  "texts": {
   "articles/alchemy/jupiter/base": "[[The Figure]] Kalaj je metal Jupitera, onog dobroćudnog, i njegovi darovi su uglavnom darovi zvuka i sjaja. Mek, srebrnast i dovoljno jeftin da se njime sve prevuče, kalaj je ono što daje bronzu kada ga dodaš bakru i ono što daje zvonovinu kada ga dodaš još — legura koja livenom zvonu daje čist zvon a orguljskoj cevi da drži svoj ton. Savij šipku čistog kalaja i on se žali: čuveni „krik kalaja“, tihi vrisak njegovih kristala koji se preraspoređuju, metal koji doslovno progovara kada ga obrađuješ. Njegov znak ♃ isti je glif za metal, planetu i grom oca nebeskog.\n\n[[The Plate]] Vlasnikov medaljon izliva zajedničku mrtvu prirodu u bledom, meko belom kalaju — naslagane poluge, grumeni, namotaj žice, sve u blagom kositreno svetlom tonu koji kalaju daje njegovu skromnost. Obod je Jupiterova sopstvena kraljevska oprema: krune i hrastovo lišće smenjuju se sa snopovima munja, i glif ♃ — nacrtan poput zaobljenog „24“ — postavljen u medaljone ukrug. Kraljevski amblemi oko metala koji izgleda najskromnije: isto bogatstvo kao na zlatnoj ploči, odeveno kao kalaj, ali jednako okrunjeno.\n\n[[On the Dial]] četvrtak je dan Jupitera — francuski jeudi, dies Iovis — pa ga kalaj uzima, i uzima krunu zvezde: gornji krak 12h, podnevno žut, raspoloženje Radost. To je najviša tačka brojčanika, podne u svom najsjajnijem, i Jupiter, veći dobrotvor, sedi tamo u žutoj boji bliskoj zlatu, najsrećniji čas na najsrećnijem kraku. Tamo gde zlato drži središte kao izvor, kalaj drži vrhunac kao slavlje — podne sedmice, koje zvoni poput udarenog zvona.\n\n[[The Lesson]] Vrlina kalaja je Velikodušnost, a njegov porok Neumerenost — otvorena šaka i šaka koja se nikada ne sklapa. Jupiter je samo širenje, a širenje je blagoslov dok ne postane naduvenost; veći dobrotvor daje, ali previše dobre stvari i dalje je previše. Neumerenost obuzdava, s druge strane brojčanika, Mudrost na kraku Merkura — hitar um koji zna kada da stane — dok je Velikodušnost Neumerenost održana u meri, obilje koje se izliva a da ne plavi. Kalaj čini da zvono zvoni; Mudrost ga čuva od pucanja.",
@@ -3229,7 +3230,6 @@
   "ui/Custom hands": "Kazaljke po želji",
   "ui/Custom ring": "Prsten po želji",
   "ui/Custom…": "Po želji…",
-  "ui/Cycles the checked weekday themes.": "Kruži kroz štiklirane teme dana u sedmici.",
   "ui/Dark contrast": "Tamni kontrast",
   "ui/Date": "Datum",
   "ui/David": "David",
@@ -3264,7 +3264,6 @@
   "ui/Element sizes": "Veličine elemenata",
   "ui/Elements": "Elementi",
   "ui/Elephant Herd": "Krdo slonova",
-  "ui/Enabled": "Uključeno",
   "ui/Encyclopedia": "Enciklopedija",
   "ui/Encyclopedia…": "Enciklopedija…",
   "ui/Envy": "Zavist",
@@ -3728,6 +3727,9 @@
   "zodiac_articles/Virgo/variants/light": "U svetu svetlosti njen krak postaje čisto žut, crvena i zelena svetlost sabrane u sjaj veći od svake ponaosob. Pabirčarka postaje bistra: preciznost kao osvetljenje, lampa na radnom stolu umesto vatre u polju, njen tihi žar postojano emitovan u najtoplijoj primarnoj boji ekrana.",
   "zodiac_articles/Virgo/variants/light_south": "U južnoj svetlosnoj paleti njen krak sija plavo (#0040FF), osnovnom bojom oba sveta, ali ovde je to zrak, a ne pigment. Pabirčarka postaje poslednja svetiljka noći: preciznost kao bdenje, briga sagorela do budnosti, njena tačnost postojano zrači u čas pred zoru, spokojna jer je sve već izbrojano.",
   "zodiac_articles/Virgo/variants/paint": "U pigmentu Devica nosi žetvenu narandžastu, crvenu i žutu umešane u terakotu i zrelo žito. Suptraktivni svet joj pristaje: boja gline, hleba i septembarskih polja, žar učinjen korisnim, vojnikova nijansa smekšala u sve ono što se vojnik bori da zaštiti.",
-  "zodiac_articles/Virgo/variants/paint_south": "Južno od ekvatora točak se okreće i devica prelazi na predzorni Mesečev krak, menjajući vojničku narandžastu za plavu (#002FFF), na meru odvagan lapis starih radionica. Čas je Mir, i on je čita drugačije: žar se hladi u spokoj, njena čuvena briga napokon stoji imenovana kao porok ovog kraka — Strah, a Merkurovi spiskovi vode se na vodolijin način, kao odmereno, tiho presipanje u mraku. Astreja, poslednja od besmrtnika koja je napustila zemlju, sada drži poslednju stražu pred izlazak sunca, a Spika je jedino zrno koje još sija u četiri sata."
+  "zodiac_articles/Virgo/variants/paint_south": "Južno od ekvatora točak se okreće i devica prelazi na predzorni Mesečev krak, menjajući vojničku narandžastu za plavu (#002FFF), na meru odvagan lapis starih radionica. Čas je Mir, i on je čita drugačije: žar se hladi u spokoj, njena čuvena briga napokon stoji imenovana kao porok ovog kraka — Strah, a Merkurovi spiskovi vode se na vodolijin način, kao odmereno, tiho presipanje u mraku. Astreja, poslednja od besmrtnika koja je napustila zemlju, sada drži poslednju stražu pred izlazak sunca, a Spika je jedino zrno koje još sija u četiri sata.",
+  "ui/Slot": "Slot",
+  "ui/None": "Nijedna",
+  "ui/Custom": "Prilagođeno"
  }
 }

@@ -127,6 +127,6 @@ Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 - [ ] 88 — 88_tray_click_through.png — Desni klik ▸ Click-through, uključeno (checked); zatim desni klik na TRAY ikonicu (numeračnik više ne prima klikove) — Click-through = on — Tray meni sa vidljivo štiklovanim Click-through, jasno pokazujući da je tray jedini put nazad iz ovog moda.
 
-- [ ] 89 — 89_settings_theme_rotation.png — Settings… ▸ skroluj do "Theme rotation"; Enabled štiklovano, bar 4-5 checkbox-ova tema štiklovano (dovoljno da se vidi grid), "Every" postavljeno na čitljiv broj, bar jedan dropdown za metal teme vidljiv, Follow ring color isključeno da se tri metal-kombinacije prikažu kao omogućene — Cela grupa u kadru: Enabled checkbox, grid checkbox-ova tema, red Every N minuta/sati, dropdown-ovi metala po temi, Follow ring color checkbox.
+- [ ] 89 — 89_settings_theme_rotation.png — Settings… ▸ skroluj do "Theme rotation"; u dropdown-u izaberi Custom (od 2026-07-14 nema Enabled checkbox-a — None znači bez rotacije), bar 4-5 checkbox-ova tema štiklovano (dovoljno da se vidi grid), "Every" postavljeno na čitljiv broj, bar jedan dropdown za metal teme vidljiv (prikazuju se samo metal teme iz izabrane grupe), Follow ring color isključeno — Cela grupa u kadru: grupa-dropdown, grid checkbox-ova tema, red Every N minuta/sati, dropdown-ovi metala po temi, Follow ring color checkbox.
 
 - [ ] 90 — 90_settings_system.png — Settings… ▸ skroluj do "System" (dno dijaloga); baseline — Sam checkbox "Start with Windows".

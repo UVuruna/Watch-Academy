@@ -84,9 +84,11 @@ class Settings:
                                         # the two slots were linked)
     moon_hidden_alpha: float = 0.5      # Moon marker opacity below the horizon
     hands: str = "STEEL"                # the hand pack (Design ▸ Hands)
-    # Theme rotation (owner spec 2026-07-12): cycle the CHECKED weekday
-    # themes every N minutes instead of wearing one forever.
-    theme_rotation: bool = False
+    # Theme rotation (owner spec 2026-07-12; group dropdown
+    # 2026-07-14): "none" = the canon, no rotation; a kinship-group
+    # title straight from the Weekday menu grouping cycles that whole
+    # family; "custom" cycles the CHECKED themes.
+    theme_rotation_group: str = "none"
     theme_rotation_minutes: int = 60
     theme_rotation_themes: tuple[str, ...] = constants.WEEKDAY_THEMES
     # The METAL each bronze-plate theme wears (owner 2026-07-12):
@@ -107,8 +109,10 @@ class Settings:
     # draws it hover_enlarge times larger (1.0 disables the effect).
     earth_scale: float = 1.0
     moon_scale: float = 1.0
-    weekday_scale: float = 1.0
-    octa_slot_scale: float = 1.0
+    # ONE size for every slot (owner 2026-07-14: the weekday diamonds
+    # and the subdials share the SLOT slider — the old separate
+    # weekday/south-slot scales are gone).
+    slot_scale: float = 1.0
     ring_letter_scale: float = 1.0
     hover_enlarge: float = 1.2
     # Display overrides (None = the skin's own value). The Aura's
@@ -261,7 +265,7 @@ class SettingsStore:
                     if isinstance(raw.get("hands"), str) and raw["hands"].strip()
                     else "STEEL"
                 ),
-                theme_rotation=_load_bool(raw, "theme_rotation", False),
+                theme_rotation_group=_load_rotation_group(raw),
                 theme_rotation_minutes=(
                     int(raw["theme_rotation_minutes"])
                     if isinstance(raw.get("theme_rotation_minutes"), int)
@@ -296,8 +300,16 @@ class SettingsStore:
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 moon_scale=_load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
-                weekday_scale=_load_scale(raw, "weekday_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
-                octa_slot_scale=_load_scale(raw, "octa_slot_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
+                # One-time migration (2026-07-14): the separate weekday
+                # and south-slot scales merged into slot_scale — older
+                # files inherit their weekday value.
+                slot_scale=_load_scale(
+                    raw, "slot_scale", *constants.ELEMENT_SCALE_RANGE,
+                    _load_scale(
+                        raw, "weekday_scale",
+                        *constants.ELEMENT_SCALE_RANGE, 1.0,
+                    ),
+                ),
                 ring_letter_scale=_load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 hover_enlarge=_load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
                 star_alpha=_load_alpha(raw, "star_alpha"),
@@ -349,7 +361,7 @@ class SettingsStore:
             "show_info_slot_names": settings.show_info_slot_names,
             "moon_hidden_alpha": settings.moon_hidden_alpha,
             "hands": settings.hands,
-            "theme_rotation": settings.theme_rotation,
+            "theme_rotation_group": settings.theme_rotation_group,
             "theme_rotation_minutes": settings.theme_rotation_minutes,
             "theme_rotation_themes": list(settings.theme_rotation_themes),
             "theme_metals": dict(settings.theme_metals),
@@ -364,8 +376,7 @@ class SettingsStore:
             },
             "earth_scale": settings.earth_scale,
             "moon_scale": settings.moon_scale,
-            "weekday_scale": settings.weekday_scale,
-            "octa_slot_scale": settings.octa_slot_scale,
+            "slot_scale": settings.slot_scale,
             "ring_letter_scale": settings.ring_letter_scale,
             "hover_enlarge": settings.hover_enlarge,
             "star_alpha": settings.star_alpha,
@@ -397,6 +408,35 @@ def _normalized_ring_card(entry: dict) -> dict:
         "positions": list(card["positions"]),
         "letters": list(card["letters"]),
     }
+
+
+def rotation_themes(settings: "Settings") -> tuple[str, ...]:
+    """The themes the rotation cycles (owner 2026-07-14): a kinship
+    GROUP straight from the Weekday menu grouping, the custom checkbox
+    list — or nothing at all ("none", the canon: Planets forever)."""
+    group = settings.theme_rotation_group
+    if group == "custom":
+        return settings.theme_rotation_themes
+    for title, keys in defaults.WEEKDAY_MENU_GROUPS:
+        if title == group:
+            return keys
+    return ()
+
+
+def _load_rotation_group(raw: dict) -> str:
+    """The rotation dropdown value — with the one-time migration from
+    the pre-2026-07-14 Enabled checkbox (external user data: enabled
+    meant the checked list, i.e. today's "custom")."""
+    value = raw.get("theme_rotation_group")
+    if value is None:
+        return "custom" if raw.get("theme_rotation") is True else "none"
+    value = str(value)
+    allowed = {"none", "custom"} | {
+        title for title, _ in defaults.WEEKDAY_MENU_GROUPS
+    }
+    if value not in allowed:
+        raise ValueError(f"theme_rotation_group {value!r} unknown")
+    return value
 
 
 def _load_bool(raw: dict, key: str, default: bool) -> bool:

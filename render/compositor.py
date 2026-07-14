@@ -557,7 +557,7 @@ class Compositor:
                 south_slot_theta(self._skin, rotation),
                 radius * weekday.orbit_fraction,
             ),
-            radius * weekday.diamond_scale * self._skin.octa_slot_scale,
+            radius * weekday.diamond_scale,
         ):
             return "octa_slot"
         marker = self._skin.year_marker

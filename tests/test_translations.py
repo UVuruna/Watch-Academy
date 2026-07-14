@@ -145,26 +145,44 @@ def test_phase2b_hover_lines_speak_the_overlay():
 
 
 def test_theme_rotation_cycles_and_persists(tmp_path):
-    """Owner spec 2026-07-12: the checked weekday themes rotate every
-    N minutes — the cycle helper wraps, a current theme outside the
-    list restarts it, and the three settings round-trip."""
+    """Owner specs 2026-07-12/14: the rotation cycles a kinship GROUP
+    or the custom checkbox list — the cycle helper wraps, the group
+    resolves through the menu grouping, the settings round-trip, and
+    the pre-dropdown Enabled flag migrates (external user data)."""
     from app.controller import _next_rotation_theme
-    from app.settings_store import Settings, SettingsStore, replace
+    from app.settings_store import (
+        Settings, SettingsStore, replace, rotation_themes,
+    )
 
     assert _next_rotation_theme("greek", ("planets", "greek", "egypt")) == "egypt"
     assert _next_rotation_theme("egypt", ("planets", "greek", "egypt")) == "planets"
     assert _next_rotation_theme("norse", ("planets", "greek")) == "planets"
+    # The group dropdown resolves through the Weekday menu grouping.
+    assert rotation_themes(Settings()) == ()                 # none = canon
+    assert rotation_themes(
+        replace(Settings(), theme_rotation_group="Animals")
+    ) == ("wolf", "elephant", "bee")
+    assert rotation_themes(replace(
+        Settings(), theme_rotation_group="custom",
+        theme_rotation_themes=("greek", "egypt"),
+    )) == ("greek", "egypt")
     store = SettingsStore(tmp_path / "settings.json")
     store.save(replace(
         Settings(),
-        theme_rotation=True,
+        theme_rotation_group="custom",
         theme_rotation_minutes=120,
         theme_rotation_themes=("greek", "egypt"),
     ))
     loaded = store.load()
-    assert loaded.theme_rotation is True
+    assert loaded.theme_rotation_group == "custom"
     assert loaded.theme_rotation_minutes == 120
     assert loaded.theme_rotation_themes == ("greek", "egypt")
+    # The pre-dropdown files carried a boolean Enabled flag.
+    raw = store.path.read_text(encoding="utf-8").replace(
+        '"theme_rotation_group": "custom"', '"theme_rotation": true'
+    )
+    store.path.write_text(raw, encoding="utf-8")
+    assert store.load().theme_rotation_group == "custom"
 
 
 def test_serbian_transliteration():

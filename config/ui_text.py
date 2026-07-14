@@ -93,8 +93,7 @@ UI_STRINGS: tuple[str, ...] = (
     # Aurora palette chips speak in day phases (Dawn/Dusk are above).
     "Morning", "Forenoon", "Noon", "Afternoon", "Evening",
     "{name} — original",
-    "Theme rotation", "Enabled", "Every", "minutes", "hours",
-    "Cycles the checked weekday themes.",
+    "Theme rotation", "Every", "minutes", "hours",
     "System", "Start with Windows",
     "Back to English — the shipped original texts",
     "The originals above the line ship inside the app. Any other language translates itself in the background on first pick (internet needed once) and then works offline.",
@@ -121,6 +120,9 @@ UI_STRINGS: tuple[str, ...] = (
     # the turning points to arrow labels built from Sun/Moon).
     "Quick Jump",
     "North Pole", "South Pole", "Greenwich",
+    # The unified SLOT size slider and the rotation-group dropdown
+    # (owner 2026-07-14).
+    "Slot", "None", "Custom",
     "Settings", "Time Travel", "Guide",
     # --- Tray balloons / error boxes ---------------------------------------------
     "Translating",

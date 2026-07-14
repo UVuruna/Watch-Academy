@@ -200,7 +200,6 @@ class SkinDefinition:
     # Earth/Moon/Weekday multipliers scale their spec values directly
     # in apply_display_settings) and the shared hover-enlarge factor —
     # the element under the cursor draws this much larger.
-    octa_slot_scale: float = 1.0
     hover_enlarge: float = 1.2
     ring_letter_scale: float = 1.0     # multiplies RING_LETTER_ART_SCALE
     # Runtime-only (settings dialog): the user's custom hues for the

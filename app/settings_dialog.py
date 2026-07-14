@@ -480,8 +480,7 @@ class SettingsDialog(QDialog):
         rows = [
             ("earth_scale", tr("Earth"), constants.ELEMENT_SCALE_RANGE, 100),
             ("moon_scale", tr("Moon"), constants.ELEMENT_SCALE_RANGE, 100),
-            ("weekday_scale", tr("Weekday"), constants.ELEMENT_SCALE_RANGE, 100),
-            ("octa_slot_scale", tr("South slot"), constants.ELEMENT_SCALE_RANGE, 100),
+            ("slot_scale", tr("Slot"), constants.ELEMENT_SCALE_RANGE, 100),
             ("ring_letter_scale", tr("Ring letters"),
              constants.ELEMENT_SCALE_RANGE, 100),
             ("hover_enlarge", tr("Hover enlarge"),
@@ -884,13 +883,24 @@ class SettingsDialog(QDialog):
         tr = self._tr
         group = QGroupBox(tr("Theme rotation"))
         column = QVBoxLayout(group)
-        self._rotation_enabled = QCheckBox(tr("Enabled"))
-        self._rotation_enabled.setChecked(self._settings.theme_rotation)
-        self._rotation_enabled.setToolTip(
-            tr("Cycles the checked weekday themes.")
+        # The GROUP dropdown (owner 2026-07-14): None (the canon — no
+        # rotation), one kinship family from the Weekday menu
+        # grouping, or Custom (the checkbox grid). No Enabled checkbox
+        # — None IS off.
+        self._rotation_group = QComboBox()
+        self._rotation_group.addItem(tr("None"), "none")
+        for title, _ in defaults.WEEKDAY_MENU_GROUPS:
+            self._rotation_group.addItem(tr(title), title)
+        self._rotation_group.addItem(tr("Custom"), "custom")
+        index = self._rotation_group.findData(
+            self._settings.theme_rotation_group
         )
-        column.addWidget(self._rotation_enabled)
-        grid = QGridLayout()
+        if index >= 0:
+            self._rotation_group.setCurrentIndex(index)
+        column.addWidget(self._rotation_group)
+        self._rotation_grid_host = QWidget()
+        grid = QGridLayout(self._rotation_grid_host)
+        grid.setContentsMargins(0, 0, 0, 0)
         grid.setHorizontalSpacing(24)
         self._rotation_checks: dict[str, QCheckBox] = {}
         for index, (key, label) in enumerate(
@@ -898,9 +908,10 @@ class SettingsDialog(QDialog):
         ):
             box = QCheckBox(tr(label))
             box.setChecked(key in self._settings.theme_rotation_themes)
+            box.toggled.connect(lambda _checked: self._refresh_rotation_ui())
             self._rotation_checks[key] = box
             grid.addWidget(box, index // 4, index % 4)
-        column.addLayout(grid)
+        column.addWidget(self._rotation_grid_host)
         row = QHBoxLayout()
         row.addWidget(QLabel(tr("Every")))
         self._rotation_amount = QSpinBox()
@@ -918,21 +929,24 @@ class SettingsDialog(QDialog):
         row.addWidget(self._rotation_unit)
         row.addStretch(1)
         column.addLayout(row)
-        # The METAL each bronze-plate theme wears (owner 2026-07-12):
-        # the default the rotation uses, per theme — or one checkbox
-        # to follow the ring finish everywhere.
+        # The METAL each bronze-plate theme wears (owner 2026-07-12;
+        # colored is the canon default 2026-07-14): per theme — or one
+        # checkbox to follow the ring finish everywhere. Only the
+        # metal themes INSIDE the current rotation selection show
+        # their combos (owner 2026-07-14).
         metal_row = QHBoxLayout()
         self._metal_combos: dict[str, QComboBox] = {}
+        self._metal_labels: dict[str, QLabel] = {}
         for theme in constants.METAL_THEMES:
-            metal_row.addWidget(
-                QLabel(tr(defaults.WEEKDAY_THEME_TITLES[theme]))
-            )
+            label = QLabel(tr(defaults.WEEKDAY_THEME_TITLES[theme]))
+            self._metal_labels[theme] = label
+            metal_row.addWidget(label)
             combo = QComboBox()
             for metal in constants.THEME_METALS:
                 combo.addItem(tr(metal.capitalize()), metal)
             combo.setCurrentIndex(
                 combo.findData(
-                    self._settings.theme_metals.get(theme, "bronze")
+                    self._settings.theme_metals.get(theme, "colored")
                 )
             )
             self._metal_combos[theme] = combo
@@ -952,7 +966,36 @@ class SettingsDialog(QDialog):
         for combo in self._metal_combos.values():
             combo.setEnabled(not self._settings.theme_metal_follow_ring)
         column.addWidget(self._metal_follow_ring)
+        self._rotation_group.currentIndexChanged.connect(
+            lambda _index: self._refresh_rotation_ui()
+        )
+        self._refresh_rotation_ui()
         return group
+
+    def _rotation_selection(self) -> tuple[str, ...]:
+        """The themes the CURRENT dialog state would rotate."""
+        group_key = self._rotation_group.currentData()
+        if group_key == "custom":
+            return tuple(
+                key for key, box in self._rotation_checks.items()
+                if box.isChecked()
+            )
+        for title, keys in defaults.WEEKDAY_MENU_GROUPS:
+            if title == group_key:
+                return keys
+        return ()
+
+    def _refresh_rotation_ui(self) -> None:
+        """The checkbox grid shows only for Custom; each metal combo
+        shows only while its theme is IN the selection (owner
+        2026-07-14: 'ako smo odabrali animals dobijamo samo ta 3')."""
+        group_key = self._rotation_group.currentData()
+        self._rotation_grid_host.setVisible(group_key == "custom")
+        selected = set(self._rotation_selection())
+        for theme in constants.METAL_THEMES:
+            visible = theme in selected
+            self._metal_labels[theme].setVisible(visible)
+            self._metal_combos[theme].setVisible(visible)
 
     # --- System (autostart) -------------------------------------------------------------
 
@@ -1077,7 +1120,7 @@ class SettingsDialog(QDialog):
                 else None
             ),
             moon_hidden_alpha=self._moon_alpha_slider.value() / 100,
-            theme_rotation=self._rotation_enabled.isChecked(),
+            theme_rotation_group=self._rotation_group.currentData(),
             theme_rotation_minutes=(
                 self._rotation_amount.value()
                 * self._rotation_unit.currentData()

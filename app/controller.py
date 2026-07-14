@@ -26,7 +26,13 @@ from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
 from app.scheduler import MinuteScheduler
 from app.settings_dialog import SettingsDialog
-from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
+from app.settings_store import (
+    Settings,
+    SettingsCorruptError,
+    SettingsStore,
+    replace,
+    rotation_themes,
+)
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon
 from app.widget import ClockWidget
@@ -240,13 +246,13 @@ def apply_display_settings(skin, settings: Settings):
             * (star.twilight_alpha / star.day_alpha),
         )
     weekday = skin.weekday_set
-    if settings.weekday_scale != 1.0:
-        # Element size multipliers (owner EXTRAS) scale the spec values
-        # directly, so the render AND the hover hit regions follow.
+    if settings.slot_scale != 1.0:
+        # ONE slot size (owner 2026-07-14): the multiplier scales the
+        # spec values directly — bodies, subdials, hit regions alike.
         weekday = dataclasses.replace(
             weekday,
-            diamond_scale=weekday.diamond_scale * settings.weekday_scale,
-            center_scale=weekday.center_scale * settings.weekday_scale,
+            diamond_scale=weekday.diamond_scale * settings.slot_scale,
+            center_scale=weekday.center_scale * settings.slot_scale,
         )
     metal = _theme_metal(settings, settings.weekday_theme)
     if settings.weekday_theme != "planets":
@@ -352,7 +358,6 @@ def apply_display_settings(skin, settings: Settings):
         show_info_slot_names=settings.show_info_slot_names,
         ring_tint=settings.ring_tint,
         ring_finish=settings.ring_finish,
-        octa_slot_scale=settings.octa_slot_scale,
         ring_letter_scale=settings.ring_letter_scale,
         hover_enlarge=settings.hover_enlarge,
         palette_override=settings.palettes.get(
@@ -765,15 +770,16 @@ class AppController(QObject):
 
     def _configure_theme_rotation(self) -> None:
         """Start/stop the rotation timer per the settings (called at
-        startup and after every Settings OK). The rotation ORDER is
-        shuffled fresh each time (owner spec 2026-07-12: never the
-        same sequence twice)."""
-        settings = self._settings
-        self._rotation_order = list(settings.theme_rotation_themes)
+        startup and after every Settings OK). The GROUP dropdown picks
+        what cycles (owner 2026-07-14: a kinship family, the custom
+        checkbox list, or none at all); the ORDER is shuffled fresh
+        each time (owner spec 2026-07-12: never the same sequence
+        twice)."""
+        self._rotation_order = list(rotation_themes(self._settings))
         random.shuffle(self._rotation_order)
-        if settings.theme_rotation and len(self._rotation_order) >= 2:
+        if len(self._rotation_order) >= 2:
             self._theme_rotation_timer.start(
-                settings.theme_rotation_minutes * 60 * 1000
+                self._settings.theme_rotation_minutes * 60 * 1000
             )
         else:
             self._theme_rotation_timer.stop()

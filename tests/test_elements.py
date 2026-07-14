@@ -172,14 +172,15 @@ def test_element_scales_flow_into_the_specs():
         replace(
             Settings(),
             earth_scale=2.0, moon_scale=0.5,
-            weekday_scale=1.5, octa_slot_scale=0.8, hover_enlarge=1.4,
+            slot_scale=1.5, hover_enlarge=1.4,
         )
     )
     assert scaled.year_marker.scale == base.year_marker.scale * 2.0
     assert scaled.year_marker.moon_scale == base.year_marker.moon_scale * 0.5
+    # ONE slot size (owner 2026-07-14): the merged slider drives the
+    # bodies AND every subdial through diamond_scale.
     assert scaled.weekday_set.diamond_scale == base.weekday_set.diamond_scale * 1.5
     assert scaled.weekday_set.center_scale == base.weekday_set.center_scale * 1.5
-    assert scaled.octa_slot_scale == 0.8
     assert scaled.hover_enlarge == 1.4
 
 

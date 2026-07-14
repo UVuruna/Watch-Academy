@@ -469,10 +469,13 @@ GREENWICH_TIMEZONE = "Europe/London"
 
 # The slot ROUNDEL (owner 2026-07-14, watch-subdial inspiration):
 # every TEXT display and the flat astrology art (sign / logo /
-# constellation) sit on a subdial — a circle in the ring's own face
-# color (sampled from the active ring art), rimmed in the letter
-# FINISH metal; circular plates (medallions, planets, colored badges)
-# stay bare.
+# constellation) sit on a subdial. The owner's PLATE ART (tapisserie
+# field + finish bezel, assets/badge/subdial/<finish>/<seat>.png)
+# draws when it exists — seat falls back to center.png, and with no
+# art at all the PROCEDURAL circle takes over: the ring's own face
+# color, rimmed in the letter FINISH metal. Circular plates
+# (medallions, planets, colored badges) stay bare.
+SUBDIAL_ART_DIR = paths.assets_dir() / "badge" / "subdial"
 SLOT_ROUNDEL_BORDER_FRACTION = 0.045     # rim width, of the diameter
 SLOT_ROUNDEL_CONTENT_FRACTION = 0.78     # content size inside the rim
 SLOT_ROUNDEL_FILL_FALLBACK = "#39434D"   # unreadable/missing ring art
