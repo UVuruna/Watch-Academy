@@ -45,7 +45,8 @@ enable chain `show_weekday` → `show_octa_slot` → `show_third_slot`
 and per-theme metals (`theme_metals`, `theme_metal_follow_ring`).
 `art_source` ("gemini" | "chatgpt") picks the art world;
 `theme_rotation_group` (None or a kinship group / "custom") drives the
-daily theme rotation. The hidden mode is deliberately NOT here (owner
+daily theme rotation; `subdial_style` ("theme" | "black") picks the
+complication plate look (owner A/B spec 2026-07-15). The hidden mode is deliberately NOT here (owner
 2026-07-15): the unlock lives per session in the controller. The M6
 keys: the location block (`city_name`, `city_path` for combo restore,
 `latitude`/`longitude` range-checked, `timezone` verified against

@@ -54,8 +54,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   the menu open for several settings in one visit; plain actions
   close as usual (a rebuild while open closes and RETAINS the old
   menu so Qt never deletes a visible popup). Emoji-fronted top level:
-  🎨 Design (Pointer, Ring, Umbra | Hands, Earth — with the Date
-  switch — | Size), 🥇 1ˢᵗ Slot, 🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
+  🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
+  style, Theme background / Classic black (owner A/B spec 2026-07-15)
+  — | Hands, Earth — with the Date switch — | Size), 🥇 1ˢᵗ Slot,
+  🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
   📜 Legend, 🔆 Solar rotation, 🖱️ Click-through | ⚙️ Settings…,
   🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The three
   slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
@@ -71,7 +73,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   separator each slot carries its ENABLE switch: slots enable
   strictly 1 → 2 → 3 (`enable2`/`enable3` gates gray the jumps); the
   Seasons three-slot case locks the 1st on the classic weekday unit
-  (`first_lock`). Since the ROUNDEL round (owner 2026-07-14) TEXT is
+  (`first_lock`). Each slot's top-level entry carries a CHECK MARK
+  beside its ordinal while the slot is enabled (owner 2026-07-15),
+  refreshed in place with the gating. Since the ROUNDEL round (owner
+  2026-07-14) TEXT is
   real under EVERY pointer — text and the flat astrology art draw on
   the watch-face subdial. Pointer, show_weekday and show_pointer
   changes re-gray the gated entries IN PLACE (`_refresh_menu_gating`

@@ -16,15 +16,18 @@ cross-source fallback).
 Module helpers beyond the cache: `ring_face_color()` (the ring art's
 median-luminance face sample, the procedural subdial fill),
 `metal_variant_file()` / `scaled_variant_file()` (disk-cached derived
-images), and `subdial_plate_file(finish, seat)` — the owner's subdial
-plate for a (letter finish, seat) pair: his art wins as drawn, a
-missing seat borrows the center plate, and a missing FINISH is
-`_recolored_plate()`-ed from another finish's master (numpy colorize:
-only the bright, low-saturation brushed rim takes the finish color ×
-its own luminance, the dark tapisserie field never moves;
-`SUBDIAL_RECOLOR_*` knobs, disk-cached in `raster_cache/`). Returns
-None when no plate art exists at all — the layer then draws the
-procedural circle.
+images), and `subdial_plate_file(finish, seat, tint=None)` — the
+owner's subdial plate for a (letter finish, seat) pair: his art wins
+as drawn, a missing seat borrows the center plate, and a missing
+FINISH is `_recolored_plate()`-ed from another finish's master (numpy
+colorize: only the bright, low-saturation brushed rim takes the
+finish color × its own luminance; `SUBDIAL_RECOLOR_*` knobs,
+disk-cached in `raster_cache/`). A TINT (the "theme" plate style,
+owner A/B spec 2026-07-15) colorizes the dark tapisserie field to the
+clock tint the same way, lifted by the field gain so the hue reads —
+that pass runs even on the exact finish, into its own cache entry.
+Returns None when no plate art exists at all — the layer then draws
+the procedural circle.
 
 ## Connections
 

@@ -88,10 +88,16 @@ the owner's plate art resolved by
 [Assets](assets.md)`.subdial_plate_file()` (per letter finish and seat,
 recolored from his one master when a finish has no art of its own);
 with no plate art at all, a procedural circle in the ring's face color
-rimmed with the finish metal. The SMALL SECONDS mode
-(`draw_small_seconds`) draws 4 larger NSEW ticks + 4 smaller between,
-white with a shadow, inside the plate rim, plus the active set's hand
-in miniature — while seated it replaces the big seconds hand.
+rimmed with the finish metal. Two PLATE STYLES (owner A/B spec
+2026-07-15, `skin.subdial_style`): "theme" colorizes the tapisserie
+field to the clock tint, "black" keeps the standard dark AP field.
+Every subdial accent wears the letter-FINISH metal (`_finish_color`):
+the complication texts (`draw_shadowed_text` — finish color over a
+drop shadow, never white) and the SMALL SECONDS mode
+(`draw_small_seconds`): 4 larger NSEW ticks + 4 smaller between —
+finish-colored on "theme", white on "black", shadowed either way —
+plus the active set's hand in miniature, finish-tinted over its own
+drop shadow; while seated it replaces the big seconds hand.
 
 ## Classes
 
