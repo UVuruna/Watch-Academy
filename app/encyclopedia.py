@@ -416,6 +416,15 @@ def _topics() -> dict:
         "article": ("emblem", "moods", "The Wheel of Moods"),
         "accents": (),
     })
+    # THE NINTH MOOD closes it (owner 8+1 structure, 2026-07-14):
+    # Eclipse keeps its plate as the EVENT mood outside the eight
+    # hours — the moment the Servant crosses the Ruler.
+    topics["moods"]["entries"].append({
+        "images": (defaults.EMBLEM_ART_DIRS["moods"] / "Eclipse.png",),
+        "name": "The Ninth Mood",
+        "article": ("emblem", "moods", "The Ninth Mood"),
+        "accents": (),
+    })
     # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing

@@ -374,11 +374,14 @@ def test_encyclopedia_expansion_wiring():
     assert len(topics["instrument"]["entries"]) == 8
     for family in ("virtues", "sins"):
         assert len(topics[family]["entries"]) == 8
-    # Moods leads with the comparative WHEEL article (owner 2026-07-14).
+    # Moods leads with the comparative WHEEL article and closes with
+    # the 8+1 event mood (owner 2026-07-14).
     moods = topics["moods"]["entries"]
-    assert len(moods) == 9
+    assert len(moods) == 10
     assert moods[0]["name"] == "The Wheel of Moods"
     assert moods[0]["images"][0].exists()
+    assert moods[-1]["name"] == "The Ninth Mood"
+    assert moods[-1]["images"][0].exists()
     # The metal themes cycle four looks, COLORED FIRST (owner default
     # 2026-07-13); the sun's two plates stand SIDE BY SIDE — Ruler
     # left, Servant right (owner correction 2026-07-13).
