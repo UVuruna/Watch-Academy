@@ -22,12 +22,14 @@ from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
 from render.layers import (
-    BottomSlotLayer,
     HandLayer,
+    SlotLayer,
     palette_for,
+    slot_layout,
     today_slot_theta,
     umbra_ladder,
     visible_occupant,
+    weekday_classic_slot,
 )
 
 
@@ -82,81 +84,92 @@ def test_octa_reserves_the_bottom_arm_for_the_info_slot():
     assert constants.SOUTH_SLOT_ANGLE not in occupied
 
 
-def test_south_slot_matrix():
-    """Owner matrix (dual-Sunday round 2026-07-12): the Compass and
-    the Seasons carry the slot in the CENTER (their 24h arm belongs to
-    the Sunday pair) — weekday off frees the bottom, so it moves to
-    24h; the Trinity and the Prism have NO room while the star is up;
-    Aurora and the pointer-off pinned layouts keep the bottom rules;
-    plus Aurora's images-only mode fallback."""
+def test_slot_layout_matrix():
+    """The owner's SLOT POSITION MATRIX (2026-07-14), pinned case by
+    case: one slot (classic weekday / 24h on the Trinity / the center
+    elsewhere), two slots (weekday priority on the Seasons and the
+    Compass, arm seats on the Trinity and the Prism, 3h+21h flanks),
+    three slots (top + right + left; the Seasons lock the 1st on the
+    classic unit), the pinned layouts, and the 1 → 2 → 3 enable
+    order."""
     import dataclasses
 
-    from render.layers import (
-        pinned_weekday_theta, south_slot_available, south_slot_centered,
-        south_slot_theta, south_slot_view,
-    )
+    TOP = constants.SLOT_SEAT_TOP_ANGLE
+    RIGHT_ARM = constants.SLOT_SEAT_RIGHT_ARM_ANGLE
+    LEFT_ARM = constants.SLOT_SEAT_LEFT_ARM_ANGLE
+    H3 = constants.AURORA_DUAL_WEEKDAY_ANGLE
+    H21 = constants.AURORA_DUAL_SLOT_ANGLE
+    SOUTH = constants.SOUTH_SLOT_ANGLE
 
     def skin(**kw):
+        kw.setdefault("show_octa_slot", False)
         return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
 
-    # Availability: octa/cross yes, trio/hexa NO while the star is up.
-    assert south_slot_available(skin(pointer="octa"))
-    assert south_slot_available(skin(pointer="cross", show_weekday=True))
-    assert not south_slot_available(skin(pointer="trio", show_weekday=True))
-    assert not south_slot_available(skin(pointer="hexa", show_weekday=True))
-    assert not south_slot_available(skin(pointer="hexa", show_weekday=False))
-    assert south_slot_available(skin(pointer="trio", show_pointer=False))
-    assert south_slot_available(skin(pointer="aurora", show_weekday=True))
-    assert not south_slot_available(
-        skin(pointer="octa", show_octa_slot=False)
-    )
-    # Center vs bottom: weekday up -> center; weekday off -> the 24h
-    # arm (rotating); pinned layouts never center.
-    assert south_slot_centered(skin(pointer="octa"))
-    assert south_slot_centered(skin(pointer="cross"))
-    assert not south_slot_centered(skin(pointer="octa", show_weekday=False))
-    assert not south_slot_centered(skin(pointer="octa", show_pointer=False))
-    assert not south_slot_centered(skin(pointer="aurora"))
-    assert south_slot_theta(
-        skin(pointer="octa", show_weekday=False), 14.0
-    ) == 194.0
-    # Pointer element off + weekday still on -> the pair FLANKS the
-    # bottom (owner extension); weekday off as well -> plain south.
-    assert south_slot_theta(
-        skin(pointer="hexa", show_pointer=False), 14.0
-    ) == constants.AURORA_DUAL_SLOT_ANGLE
-    assert south_slot_theta(
-        skin(pointer="hexa", show_pointer=False, show_weekday=False), 14.0
-    ) == 180.0
-    # Aurora: south alone, flanking pair with the weekday on.
-    lone = skin(pointer="aurora", show_weekday=False)
-    both = skin(pointer="aurora", show_weekday=True, show_octa_slot=True)
-    assert south_slot_theta(lone, 14.0) == 180.0
-    assert south_slot_theta(both, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
-    assert pinned_weekday_theta(both) == constants.AURORA_DUAL_WEEKDAY_ANGLE
-    assert pinned_weekday_theta(
-        skin(pointer="aurora", show_octa_slot=False)
-    ) == 180.0
-    # Every mode is REAL under Aurora since the roundel round (owner
-    # 2026-07-14) — the old images-only coercion is gone.
-    assert south_slot_view(
-        skin(pointer="aurora", octa_slot="time")
-    ) == ("time", None)
-    assert south_slot_view(
-        skin(pointer="aurora", octa_slot="zodiac", info_slot_style="text")
-    ) == ("zodiac", "text")
-    assert south_slot_view(
-        skin(pointer="aurora", octa_slot="chinese", info_slot_style="text")
-    ) == ("chinese", "text")
-    assert south_slot_view(
-        skin(pointer="aurora", octa_slot="chinese", info_slot_style="gold")
-    ) == ("chinese", "gold")
-    assert south_slot_view(
-        skin(pointer="octa", octa_slot="time")
-    ) == ("time", None)
-    assert south_slot_view(
-        skin(pointer="octa", octa_slot="zodiac", info_slot_style="sign")
-    ) == ("zodiac", "sign")
+    # ONE slot: weekday -> the classic unit; anything else 24h on the
+    # Trinity, the CENTER on the Seasons/Prism/Compass.
+    for pointer in ("trio", "cross", "hexa", "octa"):
+        assert slot_layout(skin(pointer=pointer)) == {1: "classic"}, pointer
+    assert slot_layout(skin(pointer="trio", weekday_slot="time")) == {1: SOUTH}
+    for pointer in ("cross", "hexa", "octa"):
+        assert slot_layout(
+            skin(pointer=pointer, weekday_slot="zodiac")
+        ) == {1: "center"}, pointer
+    # TWO slots: the Trinity and the Prism seat the pair on the arms.
+    for pointer in ("trio", "hexa"):
+        assert slot_layout(
+            skin(pointer=pointer, show_octa_slot=True)
+        ) == {1: LEFT_ARM, 2: RIGHT_ARM}, pointer
+    # The Seasons and the Compass: whichever slot is weekday rides the
+    # classic unit, the other takes the center; both weekday -> the
+    # 1st; neither -> the 3h/21h flanks.
+    for pointer in ("cross", "octa"):
+        assert slot_layout(
+            skin(pointer=pointer, show_octa_slot=True, octa_slot="date")
+        ) == {1: "classic", 2: "center"}, pointer
+        assert slot_layout(skin(
+            pointer=pointer, show_octa_slot=True,
+            weekday_slot="date", octa_slot="weekday",
+        )) == {1: "center", 2: "classic"}, pointer
+        assert slot_layout(skin(
+            pointer=pointer, show_octa_slot=True, octa_slot="weekday",
+        )) == {1: "classic", 2: "center"}, pointer
+        assert slot_layout(skin(
+            pointer=pointer, show_octa_slot=True,
+            weekday_slot="time", octa_slot="date",
+        )) == {1: H3, 2: H21}, pointer
+    # THREE slots: top + right + left — the Seasons lock the 1st on
+    # the classic unit and flank the rest.
+    assert slot_layout(skin(
+        pointer="octa", show_octa_slot=True, show_third_slot=True,
+    )) == {1: TOP, 2: H21, 3: H3}
+    for pointer in ("trio", "hexa"):
+        assert slot_layout(skin(
+            pointer=pointer, show_octa_slot=True, show_third_slot=True,
+        )) == {1: TOP, 2: RIGHT_ARM, 3: LEFT_ARM}, pointer
+    assert slot_layout(skin(
+        pointer="cross", show_octa_slot=True, show_third_slot=True,
+    )) == {1: "classic", 2: H21, 3: H3}
+    # PINNED (Aurora, or the pointer off): 24h alone, the 3h/21h pair,
+    # the top+arms trio — the weekday mode sits in a SEAT (today
+    # alone), never the classic unit.
+    for pinned in (
+        skin(pointer="aurora"),
+        skin(pointer="hexa", show_pointer=False),
+    ):
+        assert slot_layout(pinned) == {1: SOUTH}
+        assert weekday_classic_slot(pinned) is None
+    assert slot_layout(
+        skin(pointer="aurora", show_octa_slot=True)
+    ) == {1: H3, 2: H21}
+    assert slot_layout(skin(
+        pointer="aurora", show_octa_slot=True, show_third_slot=True,
+    )) == {1: TOP, 2: RIGHT_ARM, 3: LEFT_ARM}
+    # The enable ORDER (owner: ne može samo third): without the 1st
+    # nothing draws, without the 2nd the 3rd stays dark.
+    assert slot_layout(skin(show_weekday=False, show_octa_slot=True)) == {}
+    assert slot_layout(skin(
+        pointer="octa", show_octa_slot=False, show_third_slot=True,
+    )) == {1: "classic"}
 
 
 def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
@@ -169,9 +182,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     Every theme's dual art is ON DISK, colored variants too."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from render.layers import (
-        servant_holds_the_seat, south_slot_centered, sunday_dual_face,
-    )
+    from render.layers import servant_holds_the_seat, sunday_dual_face
 
     # The art table is complete: all twelve themes + colored variants.
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
@@ -276,7 +287,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     prism.render_offscreen(360.0, 1.0, day, tick)
     center = prism.tooltip_at(180.0, 180.0, 360.0)
     assert center is not None and center.count("<img") == 2
-    # center_only keeps the center for the body — no dual, slot at 24h.
+    # center_only keeps the center for the body — no dual face.
     center_only = dataclasses.replace(
         octa,
         weekday_set=dataclasses.replace(
@@ -284,7 +295,6 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         ),
     )
     assert not sunday_dual_face(center_only)
-    assert not south_slot_centered(center_only)
 
 
 # --- Shared-slot priority (owner rule) --------------------------------------------
@@ -353,102 +363,36 @@ def test_palette_for_selects_the_skin_choice():
 # --- Aurora (owner spec 2026-07-12) -------------------------------------------------
 
 
-def test_weekday_badge_gating_and_pointer_off_flank():
-    """Owner 2026-07-12 (revised): the astrology badge lives under
-    AURORA ONLY (the Prism variant was dropped — the 2-signs-per-
-    diamond mapping is average-only); AND with the Pointer element OFF
-    the South slot exists on EVERY mode, flanking the south-dwelling
-    body Aurora-style on Prism/Seasons."""
-    import dataclasses
-
+def test_slot_modes_are_real_everywhere():
+    """The slot matrix (owner 2026-07-14): every 1st-slot mode is
+    EFFECTIVE under every pointer — the matrix seats it — with ONE
+    exception: the Seasons with all three slots lock the 1st on the
+    weekday unit. The Chinese styles keep carrying their art folder
+    and selective-swap metal."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from render.layers import (
-        pinned_weekday_theta, south_slot_available, south_slot_theta,
-        weekday_pinned,
-    )
 
-    for pointer in ("hexa", "octa", "cross", "trio"):
-        skin = apply_display_settings(
-            defaults.DEFAULT_SKIN,
-            replace(Settings(), pointer=pointer, weekday_slot="ascendant"),
-        )
-        assert skin.weekday_slot == "weekday", pointer   # bodies forced
-        # ...but with the Pointer element OFF the pinned layout exists,
-        # so the badge survives on every mode (owner 2026-07-12).
-        pinned = apply_display_settings(
-            defaults.DEFAULT_SKIN,
-            replace(
-                Settings(), pointer=pointer, weekday_slot="ascendant",
-                show_pointer=False,
-            ),
-        )
-        assert pinned.weekday_slot == "ascendant", pointer
-    for mode in ("zodiac", "ascendant", "chinese"):
-        aurora = apply_display_settings(
-            defaults.DEFAULT_SKIN,
-            replace(Settings(), pointer="aurora", weekday_slot=mode),
-        )
-        assert aurora.weekday_slot == mode
-    # The Chinese badge carries its metal into the selective swap.
-    from render.layers import weekday_badge
-
-    class _Tick:
-        ascendant_sign = "Virgo"
-
-    class _Day:
-        zodiac_name = "Cancer"
-        chinese_name = "Fire Horse"
-
-    import dataclasses as _dc
-
-    gold_badge = weekday_badge(
-        _dc.replace(
-            defaults.DEFAULT_SKIN, pointer="aurora",
-            weekday_slot="chinese", day_slot_style="gold",
+    for pointer in ("hexa", "octa", "cross", "trio", "aurora"):
+        for mode in ("ascendant", "zodiac", "chinese", "time", "seconds"):
+            skin = apply_display_settings(
+                defaults.DEFAULT_SKIN,
+                replace(Settings(), pointer=pointer, weekday_slot=mode),
+            )
+            assert skin.weekday_slot == mode, (pointer, mode)
+    locked = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(
+            Settings(), pointer="cross", weekday_slot="ascendant",
+            show_octa_slot=True, show_third_slot=True,
         ),
-        _Day, _Tick,
     )
-    assert gold_badge == ("Horse", "chinese/primary", "gold")
-    colored_badge = weekday_badge(
-        _dc.replace(
-            defaults.DEFAULT_SKIN, pointer="aurora",
-            weekday_slot="chinese", day_slot_style="colored",
-        ),
-        _Day, _Tick,
-    )
-    assert colored_badge == ("Horse", "chinese/colored", None)
-    asc_badge = weekday_badge(
-        _dc.replace(
-            defaults.DEFAULT_SKIN, pointer="aurora",
-            weekday_slot="ascendant", day_slot_style="colored",
-        ),
-        _Day, _Tick,
-    )
-    assert asc_badge == ("Virgo", "astrology/colored", None)
-
-    def skin(**kw):
-        return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
-
-    # Pointer element OFF -> UNIFORM pinned rule on every mode (owner
-    # correction: no diamonds, no slot positions): with the weekday on
-    # the pair flanks the bottom (body 3h, slot 21h); alone the slot
-    # (or the body) stands straight south.
-    for pointer in ("hexa", "cross", "trio", "octa"):
-        off = skin(pointer=pointer, show_pointer=False, show_weekday=True)
-        assert weekday_pinned(off), pointer
-        assert south_slot_available(off), pointer
-        assert south_slot_theta(off, 14.0) == constants.AURORA_DUAL_SLOT_ANGLE
-        assert pinned_weekday_theta(off) == constants.AURORA_DUAL_WEEKDAY_ANGLE
-        lone = skin(pointer=pointer, show_pointer=False, show_weekday=False)
-        assert south_slot_theta(lone, 14.0) == constants.SOUTH_SLOT_ANGLE
-    # The body alone (slot element off) pins straight south.
-    body_only = skin(
-        pointer="hexa", show_pointer=False, show_octa_slot=False,
-    )
-    assert pinned_weekday_theta(body_only) == constants.SOUTH_SLOT_ANGLE
-    # With the star drawn nothing is pinned.
-    assert not weekday_pinned(skin(pointer="hexa", show_pointer=True))
+    assert locked.weekday_slot == "weekday"          # the Seasons lock
+    # The Chinese styles resolve art folders + swap metals (Rule #5:
+    # one mapping shared by every slot).
+    assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "chinese/primary"
+    assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "chinese/colored"
+    assert "gold" in defaults.METAL_SWAP_TARGETS
+    assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "astrology/colored"
 
 
 def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):
@@ -577,12 +521,15 @@ def test_bottom_slot_layer_stack_positions():
     occludes them — his accepted cost); in the pinned layouts it sits
     at the bottom BELOW the hands (the old bug report: the seconds
     hand passed behind the zodiac art); the Prism has none at all."""
-    octa = _build_layers(dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa"))
-    hexa = _build_layers(defaults.DEFAULT_SKIN)
-    assert any(isinstance(layer, BottomSlotLayer) for layer in octa)
-    assert not any(isinstance(layer, BottomSlotLayer) for layer in hexa)
+    octa = _build_layers(dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="octa", show_octa_slot=True,
+    ))
+    lone = _build_layers(defaults.DEFAULT_SKIN)
+    assert any(isinstance(layer, SlotLayer) for layer in octa)
+    # One classic slot alone (the canon) builds NO seat layer at all.
+    assert not any(isinstance(layer, SlotLayer) for layer in lone)
     slot_index = next(
-        i for i, layer in enumerate(octa) if isinstance(layer, BottomSlotLayer)
+        i for i, layer in enumerate(octa) if isinstance(layer, SlotLayer)
     )
     last_hand = max(
         i for i, layer in enumerate(octa) if isinstance(layer, HandLayer)
@@ -594,7 +541,7 @@ def test_bottom_slot_layer_stack_positions():
         )
     )
     slot_index = next(
-        i for i, layer in enumerate(pinned) if isinstance(layer, BottomSlotLayer)
+        i for i, layer in enumerate(pinned) if isinstance(layer, SlotLayer)
     )
     first_hand = min(
         i for i, layer in enumerate(pinned) if isinstance(layer, HandLayer)
@@ -605,7 +552,10 @@ def test_bottom_slot_layer_stack_positions():
 @pytest.mark.parametrize("mode", constants.OCTA_SLOT_MODES)
 def test_octa_slot_modes_render(july_wednesday, mode):
     day, tick = july_wednesday
-    skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa", octa_slot=mode)
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="octa", octa_slot=mode,
+        show_octa_slot=True,
+    )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
 
@@ -615,7 +565,7 @@ def test_zodiac_slot_styles_render(july_wednesday, style):
     day, tick = july_wednesday
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer="octa",
-        octa_slot="zodiac", info_slot_style=style,
+        octa_slot="zodiac", info_slot_style=style, show_octa_slot=True,
     )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200
@@ -629,43 +579,18 @@ def test_chinese_slot_styles_render(july_wednesday, style):
     day, tick = july_wednesday
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer="octa",
-        octa_slot="chinese", info_slot_style=style,
+        octa_slot="chinese", info_slot_style=style, show_octa_slot=True,
     )
     image = Compositor(skin, AssetCache()).render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200
 
 
-def test_day_slot_text_modes_need_a_pinned_spot(july_wednesday):
-    """Owner 2026-07-12 + roundel round 2026-07-14: Time/Date/Day
-    length join the DAY slot wherever a PINNED spot exists — the
-    Pointer element off, or Aurora (text is real there now, on the
-    subdial). With the star up the bodies rule. The spot ENLARGES on
-    hover like every slot (owner 2026-07-14: an inherited trait) but
-    keeps no tooltip of its own."""
+def test_seated_digital_slot_enlarges_but_stays_silent(july_wednesday):
+    """The digital slot modes (owner 2026-07-14): a seated slot IS a
+    hover target (the enlarge is an inherited trait) but keeps no
+    tooltip of its own — and it paints without a crash."""
     from PySide6.QtCore import QPointF
 
-    from app.controller import apply_display_settings
-    from app.settings_store import Settings, replace
-
-    for mode in ("time", "date", "day_length"):
-        drawn = apply_display_settings(
-            defaults.DEFAULT_SKIN,
-            replace(Settings(), pointer="hexa", weekday_slot=mode),
-        )
-        assert drawn.weekday_slot == "weekday"      # star up: bodies rule
-        aurora = apply_display_settings(
-            defaults.DEFAULT_SKIN,
-            replace(Settings(), pointer="aurora", weekday_slot=mode),
-        )
-        assert aurora.weekday_slot == mode          # pinned under Aurora
-        pinned = apply_display_settings(
-            defaults.DEFAULT_SKIN,
-            replace(
-                Settings(), pointer="octa", weekday_slot=mode,
-                show_pointer=False,
-            ),
-        )
-        assert pinned.weekday_slot == mode
     day, tick = july_wednesday
     compositor = Compositor(
         dataclasses.replace(
@@ -676,15 +601,11 @@ def test_day_slot_text_modes_need_a_pinned_spot(july_wednesday):
     )
     image = compositor.render_offscreen(360.0, 1.0, day, tick)
     assert image.pixelColor(180, 8).alpha() > 200        # painted, no crash
-    # The pinned spot IS a hover target (the enlarge works) — but the
-    # text modes still answer with no tooltip of their own.
     orbit = 180.0 * defaults.DEFAULT_SKIN.weekday_set.orbit_fraction
     assert compositor._element_at(
         QPointF(0.0, orbit), 180.0, 0.0, "mercury"
-    ) == "weekday_badge"
-    x = 180.0
-    y = 180.0 + orbit
-    tip = compositor.tooltip_at(x, y, 360.0)
+    ) == "slot:1"
+    tip = compositor.tooltip_at(180.0, 180.0 + orbit, 360.0)
     assert tip is None or "Time" not in str(tip)
 
 
@@ -1215,6 +1136,7 @@ def test_chinese_slot_hover(july_wednesday):
             solar_rotation=False,
             octa_slot="chinese",
             info_slot_style="text",
+            show_octa_slot=True,
         ),
         AssetCache(),
     )

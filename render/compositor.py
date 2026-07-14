@@ -31,30 +31,25 @@ from core.year_wheel import (
 from render.assets import AssetCache, metal_variant_file, scaled_variant_file
 from render.layers import (
     BackgroundLayer,
-    BottomSlotLayer,
     Cadence,
     CenterBodyLayer,
     HandLayer,
     Layer,
     RenderContext,
     RingLayer,
+    SlotLayer,
     StarLayer,
-    WeekdayBadgeLayer,
     WeekdayLayer,
     YearMarkerLayer,
     HoverLiftLayer,
     dial_point,
-    pinned_weekday_theta,
     servant_holds_the_seat,
-    south_slot_available,
-    south_slot_centered,
-    south_slot_theta,
-    south_slot_view,
+    slot_layout,
+    slot_view,
     sunday_dual_face,
     today_slot_theta,
     visible_occupant,
-    weekday_badge,
-    weekday_pinned,
+    weekday_classic_slot,
 )
 from skins.manifest import SkinDefinition
 
@@ -270,21 +265,18 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         "weekday_set": not skin.show_weekday,
         "year_marker": not (skin.show_earth or skin.show_moon),
     }
+    seats = [
+        seat for seat in slot_layout(skin).values() if seat != "classic"
+    ]
     layers: list[Layer] = []
     for name in skin.z_order:
         if name == "hands":
-            if skin.show_weekday and skin.weekday_slot != "weekday":
-                # The astrology badge in the weekday position (owner
-                # 2026-07-12) — MINUTE cadence, below the hands.
-                layers.append(WeekdayBadgeLayer(skin))
-            if south_slot_available(skin) and not south_slot_centered(skin):
-                # The BOTTOM slot draws BELOW the hands (owner bug
+            if any(seat != "center" for seat in seats):
+                # The SEATED slots draw BELOW the hands (owner bug
                 # report: the seconds hand passed behind the zodiac
-                # art) and SURVIVES the Pointer element switch — it has
-                # its OWN Elements switch (owner matrix, dual-Sunday
-                # round 2026-07-12: Compass/Seasons in the center,
-                # pinned layouts at the bottom, Trinity/Prism none).
-                layers.append(BottomSlotLayer(skin))
+                # art); the layer walks the owner's position matrix
+                # (2026-07-14) internally.
+                layers.append(SlotLayer(skin))
             # The hand pack's own z_order draws bottom-up (owner spec
             # 2026-07-12; default hours -> minutes -> seconds).
             kinds = {"hours": "hour", "minutes": "minute", "seconds": "second"}
@@ -301,11 +293,11 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
-    if south_slot_available(skin) and south_slot_centered(skin):
-        # The CENTERED info slot (Compass/Seasons, owner dual-Sunday
-        # round 2026-07-12) rides ABOVE the hands like the center
-        # body — "the center occludes the hands", his accepted cost.
-        layers.append(BottomSlotLayer(skin))
+    if "center" in seats:
+        # A CENTER-seated slot (owner dual-Sunday round 2026-07-12)
+        # rides ABOVE the hands like the center body — "the center
+        # occludes the hands", his accepted cost.
+        layers.append(SlotLayer(skin, centered=True))
     # LAST: the hover z-lift (owner 2026-07-13) — the enlarged element
     # repaints above everything, hands included.
     layers.append(HoverLiftLayer(skin))
@@ -432,19 +424,26 @@ class Compositor:
 
         element = self._element_at(point, radius, rotation, today)
         if element is not None:
-            if element == "weekday_badge":
-                # The badge in the weekday position (owner 2026-07-12):
-                # sun sign, the rising sign, or the Chinese year. The
-                # time/date/day-length modes have no reading of their
-                # own — the hover-ENLARGE still works (owner
-                # 2026-07-14: every slot inherits it), the region
-                # hovers take over below.
-                if self._skin.weekday_slot == "ascendant":
-                    return self._ascendant_text(self._skin.day_slot_style)
-                if self._skin.weekday_slot == "chinese":
-                    return self._chinese_text(self._skin.day_slot_style)
-                if self._skin.weekday_slot == "zodiac":
-                    return self._zodiac_text(self._skin.day_slot_style)
+            if element.startswith("slot:"):
+                # A SEATED slot (owner matrix 2026-07-14) speaks its
+                # own content: the sign, the rising sign, the Chinese
+                # year, or its theme's weekday article. The digital
+                # modes (time/date/day length/seconds) have no reading
+                # of their own — the hover-ENLARGE still works, the
+                # region hovers take over below.
+                mode, style, theme, _metal = slot_view(
+                    self._skin, int(element[len("slot:"):])
+                )
+                if mode == "ascendant":
+                    return self._ascendant_text(style)
+                if mode == "chinese":
+                    return self._chinese_text(style)
+                if mode == "zodiac":
+                    return self._zodiac_text(style)
+                if mode == "weekday":
+                    return self._weekday_tooltip(
+                        today, active=True, theme=theme
+                    )
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
                 # name, its own plate, its own text.
@@ -467,20 +466,7 @@ class Compositor:
                 return self._moon_text()
             if element == "earth":
                 return self._earth_text()
-            slot_mode, slot_style = south_slot_view(self._skin)
-            if slot_mode == "chinese":
-                return self._chinese_text(slot_style)
-            if slot_mode == "zodiac":
-                return self._zodiac_text(slot_style)
-            if slot_mode == "ascendant":
-                return self._ascendant_text(slot_style)
-            if slot_mode == "weekday":
-                # The info slot's SECOND weekday speaks its own theme.
-                return self._weekday_tooltip(
-                    today, active=True, theme=self._skin.info_slot_theme
-                )
-            # The time/date/day-length slot has no tooltip of its own —
-            # fall through to the region hovers.
+            # The digital slots fall through to the region hovers.
 
         # The ring TICK band FIRST (owner 2026-07-12: in that narrow
         # annulus the circle outranks the twilight wedge under it) —
@@ -515,51 +501,38 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
-        if self._skin.show_weekday:
-            badge = weekday_badge(self._skin, self._day, self._last_tick)
-            if badge is not None or self._skin.weekday_slot in (
-                "time", "date", "day_length"
-            ):
-                # The badge OR a text mode occupies the weekday
-                # position — the hit region mirrors the drawn spot
-                # exactly (owner 2026-07-14: the hover-enlarge is an
-                # inherited trait, whatever the slot shows).
-                weekday = self._skin.weekday_set
-                if hit(
-                    dial_point(
-                        pinned_weekday_theta(self._skin),
-                        radius * weekday.orbit_fraction,
-                    ),
-                    radius * weekday.diamond_scale,
-                ):
-                    return "weekday_badge"
-            elif self._skin.weekday_slot == "weekday":
-                # The text modes (time/date/day length in the DAY slot,
-                # owner 2026-07-12) draw no bodies and answer no hover.
-                body = self._weekday_body_at(point, radius, rotation, today)
-                if body is not None:
-                    return f"body:{body}"
-                if servant_holds_the_seat(self._skin, today) and hit(
-                    dial_point(
-                        constants.SOUTH_SLOT_ANGLE + rotation,
-                        radius * self._skin.weekday_set.orbit_fraction,
-                    ),
-                    radius * self._skin.weekday_set.diamond_scale,
-                ):
-                    # The SERVANT face at 24h — ghosted all week,
-                    # opaque on Sunday (owner 2026-07-13).
-                    return "sun_servant"
         weekday = self._skin.weekday_set
-        if south_slot_available(self._skin) and hit(
-            QPointF(0.0, 0.0)
-            if south_slot_centered(self._skin)
-            else dial_point(
-                south_slot_theta(self._skin, rotation),
-                radius * weekday.orbit_fraction,
-            ),
-            radius * weekday.diamond_scale,
-        ):
-            return "octa_slot"
+        classic = None
+        for index, seat in slot_layout(self._skin).items():
+            if seat == "classic":
+                classic = index
+                continue
+            # A SEATED slot's hit region mirrors the drawn spot exactly
+            # (owner 2026-07-14: the hover-enlarge is an inherited
+            # trait, whatever the slot shows).
+            pos = (
+                QPointF(0.0, 0.0)
+                if seat == "center"
+                else dial_point(
+                    seat + rotation, radius * weekday.orbit_fraction
+                )
+            )
+            if hit(pos, radius * weekday.diamond_scale):
+                return f"slot:{index}"
+        if classic is not None:
+            body = self._weekday_body_at(point, radius, rotation, today)
+            if body is not None:
+                return f"body:{body}"
+            if servant_holds_the_seat(self._skin, today) and hit(
+                dial_point(
+                    constants.SOUTH_SLOT_ANGLE + rotation,
+                    radius * weekday.orbit_fraction,
+                ),
+                radius * weekday.diamond_scale,
+            ):
+                # The SERVANT face at 24h — ghosted all week,
+                # opaque on Sunday (owner 2026-07-13).
+                return "sun_servant"
         marker = self._skin.year_marker
         if self._skin.show_moon and hit(
             dial_point(
@@ -622,19 +595,6 @@ class Compositor:
             dx, dy = point.x() - center.x(), point.y() - center.y()
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
-        if weekday_pinned(self._skin):
-            # Pinned layouts (Aurora, or the Pointer element off):
-            # today's body alone at the bottom — the hit test mirrors
-            # the drawn, un-rotated position.
-            if hit(
-                dial_point(
-                    pinned_weekday_theta(self._skin),
-                    radius * weekday.orbit_fraction,
-                ),
-                radius * weekday.diamond_scale,
-            ):
-                return today
-            return None
         center_body: str | None = None
         if weekday.display_mode == "center_only":
             center_body = today

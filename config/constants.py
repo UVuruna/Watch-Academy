@@ -249,22 +249,29 @@ PALETTE_STYLES = ("paint", "light")
 # "weekday" in the INFO slot (owner 2026-07-12): a SECOND weekday body
 # — its own theme via info_slot_theme — so the pinned pair can read
 # e.g. Norse left, Greek right, both showing today.
+# "seconds" (owner 2026-07-14): a SMALL-SECONDS complication — the
+# active hand set's seconds hand rotating inside the subdial (the big
+# Elements seconds hand yields while a slot shows it).
 OCTA_SLOT_MODES = (
-    "time", "date", "day_length", "weekday", "zodiac", "ascendant",
-    "chinese",
+    "time", "date", "day_length", "seconds", "weekday", "zodiac",
+    "ascendant", "chinese",
 )
 # The DAY SLOT can carry an astrology badge instead of the bodies
 # (owner 2026-07-12) — in the PINNED layouts (Aurora, or the Pointer
 # element off): it stands at the usual bottom spot, so the pair can
 # read official sign left, ascendant right. Elsewhere the bodies rule.
-# The TEXT modes (owner 2026-07-12: "time/date/day length can go in the
-# day slot too") need the Pointer element OFF — under Aurora the day
-# slot stays images-only, exactly like the info slot.
 WEEKDAY_SLOT_MODES = (
-    "weekday", "time", "date", "day_length", "zodiac", "ascendant",
-    "chinese",
+    "weekday", "time", "date", "day_length", "seconds", "zodiac",
+    "ascendant", "chinese",
 )
-WEEKDAY_BADGE_POINTERS = ("aurora",)
+# SLOT SEATS (owner matrix 2026-07-14): the fixed dial angles the
+# multi-slot layouts use — the top (12h), the 20h/4h arm pair (the
+# Trinity/Prism red and blue arms) and the 21h/3h between-arms pair;
+# 24h (SOUTH_SLOT_ANGLE) hosts a lone pinned slot. Seats ride the
+# star's rotation.
+SLOT_SEAT_TOP_ANGLE = 0.0
+SLOT_SEAT_RIGHT_ARM_ANGLE = 120.0      # the 20h arm (red on paint)
+SLOT_SEAT_LEFT_ARM_ANGLE = 240.0       # the 4h arm (blue on paint)
 ZODIAC_SLOT_STYLES = ("sign", "logo", "constellation", "text", "colored")
 CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")
 # Each SLOT carries its OWN style (owner 2026-07-12: the shared

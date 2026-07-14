@@ -212,57 +212,130 @@ def today_slot_theta(pointer: str, today: str) -> float | None:
     return None
 
 
-def weekday_pinned(skin: SkinDefinition) -> bool:
-    """True when the weekday unit is PINNED to the bottom (owner
-    2026-07-12): under Aurora, and on EVERY mode once the Pointer
-    element is off — no diamonds means no slot positions, so the
-    weekday shrinks to today's body straight south (or flanking the
-    South slot at 3h/21h when both are on)."""
-    return skin.pointer == "aurora" or not skin.show_pointer
+def enabled_slots(skin: SkinDefinition) -> tuple[tuple[int, str], ...]:
+    """The ENABLED slots in order — (index, mode) pairs. They enable
+    STRICTLY 1 → 2 → 3 (owner 2026-07-14: "ne može da uključi samo
+    third")."""
+    slots = []
+    if skin.show_weekday:
+        slots.append((1, skin.weekday_slot))
+        if skin.show_octa_slot:
+            slots.append((2, skin.octa_slot))
+            if skin.show_third_slot:
+                slots.append((3, skin.third_slot))
+    return tuple(slots)
 
 
-def south_slot_available(skin: SkinDefinition) -> bool:
-    """The owner's availability matrix (dual-Sunday round 2026-07-12):
-    the Compass and the Seasons carry the info slot (in the CENTER —
-    their 24h arm belongs to the Sunday pair); Aurora always shows it
-    (images only); with the POINTER element off it exists on EVERY
-    mode; the Trinity and the Prism have NO room while the star is
-    drawn."""
-    if not skin.show_octa_slot:
-        return False
-    if weekday_pinned(skin):
-        return True
-    return skin.pointer in ("octa", "cross")
+def slot_layout(skin: SkinDefinition) -> dict:
+    """The owner's SLOT POSITION MATRIX (2026-07-14), slot index →
+    seat: "classic" (the full weekday unit — arms rotation, ghosts,
+    center, in that slot's theme), "center", or the seat's unrotated
+    dial ANGLE (seats ride the star's rotation).
+
+    One slot: weekday = the classic unit (Trinity/Prism keep their
+    center rules); anything else sits at 24h on the Trinity and the
+    pinned layouts, in the CENTER elsewhere. Two slots: the Seasons
+    and the Compass give the (first) weekday slot the classic unit
+    and the other the center — with no weekday both flank at 3h/21h;
+    the Trinity and the Prism seat the pair on the 4h/20h arms. Three
+    slots: the 1st on top (the Seasons lock it to the classic unit
+    instead), the 2nd on the right, the 3rd on the left."""
+    slots = enabled_slots(skin)
+    if not slots:
+        return {}
+    order = [index for index, _ in slots]
+    count = len(slots)
+    pinned = skin.pointer == "aurora" or not skin.show_pointer
+    if pinned:
+        seats = {
+            1: (constants.SOUTH_SLOT_ANGLE,),
+            2: (constants.AURORA_DUAL_WEEKDAY_ANGLE,
+                constants.AURORA_DUAL_SLOT_ANGLE),
+            3: (constants.SLOT_SEAT_TOP_ANGLE,
+                constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
+                constants.SLOT_SEAT_LEFT_ARM_ANGLE),
+        }[count]
+        return dict(zip(order, seats))
+    if skin.pointer in ("trio", "hexa"):
+        if count == 1:
+            index, mode = slots[0]
+            if mode == "weekday":
+                return {index: "classic"}
+            return {
+                index: (
+                    constants.SOUTH_SLOT_ANGLE
+                    if skin.pointer == "trio"
+                    else "center"
+                )
+            }
+        if count == 2:
+            return {
+                order[0]: constants.SLOT_SEAT_LEFT_ARM_ANGLE,
+                order[1]: constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
+            }
+        return {
+            order[0]: constants.SLOT_SEAT_TOP_ANGLE,
+            order[1]: constants.SLOT_SEAT_RIGHT_ARM_ANGLE,
+            order[2]: constants.SLOT_SEAT_LEFT_ARM_ANGLE,
+        }
+    # The Seasons (cross) and the Compass (octa): the weekday unit
+    # keeps priority.
+    if count == 1:
+        index, mode = slots[0]
+        return {index: "classic" if mode == "weekday" else "center"}
+    if count == 2:
+        weekday_indexes = [index for index, mode in slots if mode == "weekday"]
+        if weekday_indexes:
+            classic = weekday_indexes[0]      # both weekday → the 1st
+            other = next(index for index in order if index != classic)
+            return {classic: "classic", other: "center"}
+        return {
+            order[0]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
+            order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
+        }
+    if skin.pointer == "cross":
+        # The 1st is LOCKED to the weekday unit (owner; coerced in
+        # apply_display_settings) — the other two flank at 3h/21h.
+        return {
+            order[0]: "classic",
+            order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
+            order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
+        }
+    return {
+        order[0]: constants.SLOT_SEAT_TOP_ANGLE,
+        order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
+        order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
+    }
 
 
-def south_slot_centered(skin: SkinDefinition) -> bool:
-    """True when the info slot lives in the CENTER (owner dual-Sunday
-    round 2026-07-12: Compass/Seasons with the weekday unit up — the
-    24h arm hosts the Sunday Servant). The center occludes the hands,
-    so it is avoided whenever something frees the bottom: weekday off
-    moves the slot to 24h, center_only mode keeps the center for the
-    body, the pinned layouts keep their own bottom rules."""
-    if weekday_pinned(skin):
-        return False
-    if skin.pointer not in ("octa", "cross"):
-        return False
-    if not skin.show_weekday or skin.weekday_slot != "weekday":
-        return False
-    return skin.weekday_set.display_mode != "center_only"
+def weekday_classic_slot(skin: SkinDefinition) -> int | None:
+    """Which slot drives the CLASSIC weekday unit — None when every
+    enabled slot sits in a seat."""
+    return next(
+        (
+            index for index, seat in slot_layout(skin).items()
+            if seat == "classic"
+        ),
+        None,
+    )
 
 
-def south_slot_theta(skin: SkinDefinition, rotation: float) -> float:
-    """Where the NON-centered slot sits (owner rules): pinned layouts
-    (Aurora, or the Pointer element off) put it straight south — or at
-    21h when the weekday body shares the bottom; on the Compass and
-    the Seasons with the bottom freed (weekday off / center_only) it
-    rides the 24h arm (rotation is already 0 when solar rotation is
-    off)."""
-    if weekday_pinned(skin):
-        if skin.show_weekday:
-            return constants.AURORA_DUAL_SLOT_ANGLE
-        return constants.SOUTH_SLOT_ANGLE
-    return constants.SOUTH_SLOT_ANGLE + rotation
+def slot_view(skin: SkinDefinition, index: int) -> tuple:
+    """(mode, style, theme, metal) of slot 1 / 2 / 3."""
+    if index == 1:
+        return (
+            skin.weekday_slot, skin.day_slot_style,
+            skin.weekday_theme, skin.weekday_set.metal,
+        )
+    if index == 2:
+        return (
+            skin.octa_slot, skin.info_slot_style,
+            skin.info_slot_theme, skin.info_slot_metal,
+        )
+    return (
+        skin.third_slot, skin.third_slot_style,
+        skin.third_slot_theme, skin.third_slot_metal,
+    )
 
 
 def sunday_dual_face(skin: SkinDefinition) -> bool:
@@ -271,14 +344,12 @@ def sunday_dual_face(skin: SkinDefinition) -> bool:
     stands there all week like every other body, ghosted, and turns
     opaque on Sunday: "two persons, a union"). The Trinity and the
     Prism keep one image ("two persons in one body") and speak the
-    second face in the hover. Needs the theme's dual art on disk
-    (documented: no art, no second face)."""
+    second face in the hover. Needs the CLASSIC unit up and the
+    theme's dual art on disk (documented: no art, no second face)."""
     spec = skin.weekday_set
     return (
         skin.pointer in ("octa", "cross")
-        and skin.show_weekday
-        and skin.weekday_slot == "weekday"
-        and not weekday_pinned(skin)
+        and weekday_classic_slot(skin) is not None
         and spec.display_mode != "center_only"
         and spec.dual_asset is not None
         and paths.art_file(spec.dual_asset).exists()
@@ -301,57 +372,6 @@ def servant_holds_the_seat(skin: SkinDefinition, today: str) -> bool:
         (),
     )
     return not seat or visible_occupant(seat + ("sun",), today) == "sun"
-
-
-def south_slot_view(skin: SkinDefinition) -> tuple[str, str | None]:
-    """The (mode, style) pair of the South slot. Every mode is real
-    under every pointer since the ROUNDEL round (owner 2026-07-14) —
-    the old Aurora images-only coercion is gone: text and the flat
-    astrology art now sit on a watch-face subdial."""
-    mode = skin.octa_slot
-    style = (
-        skin.info_slot_style
-        if mode in ("zodiac", "ascendant", "chinese")
-        else None
-    )
-    return mode, style
-
-
-def pinned_weekday_theta(skin: SkinDefinition) -> float:
-    """The PINNED weekday angle (Aurora, or the Pointer element off):
-    straight south alone, 3h on the left when the south slot shares
-    the bottom (owner dual layout)."""
-    if skin.show_octa_slot:
-        return constants.AURORA_DUAL_WEEKDAY_ANGLE
-    return constants.SOUTH_SLOT_ANGLE
-
-
-def weekday_badge(
-    skin: SkinDefinition, day, tick
-) -> tuple[str, str, str | None] | None:
-    """(name, art folder, metal) of the badge occupying the weekday
-    position (AURORA only — the owner dropped the Prism variant), or
-    None when the bodies are shown. "zodiac" = the official sun sign,
-    "ascendant" = the sign rising right now, "chinese" = the year's
-    animal; each wears its own style dropdown (TEXT is real since the
-    owner 2026-07-13 round — drawn by the badge layer — except under
-    Aurora, which stays images-only and keeps the coercion to the
-    family's default art; the Chinese gold/silver styles run the
-    selective swap)."""
-    style = skin.day_slot_style
-    if skin.weekday_slot == "zodiac":
-        sign = day.zodiac_name
-    elif skin.weekday_slot == "ascendant":
-        sign = tick.ascendant_sign
-    elif skin.weekday_slot == "chinese":
-        animal = day.chinese_name.split()[-1]
-        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese/primary")
-        metal = style if style in defaults.METAL_SWAP_TARGETS else None
-        return animal, folder, metal
-    else:
-        return None
-    folder = constants.ZODIAC_STYLE_ART_DIRS.get(style, "astrology/sign")
-    return sign, folder, None
 
 
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
@@ -863,25 +883,8 @@ class WeekdayLayer(Layer):
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
 
-        if ctx.skin.weekday_slot != "weekday":
-            return   # the astrology badge (its own MINUTE layer) took over
-
-        if weekday_pinned(ctx.skin):
-            # No diamonds, no slot positions (owner 2026-07-12):
-            # today's body alone, pinned at the bottom — straight
-            # south, or 3h left of it when the South slot shares.
-            if self._gate(ctx, f"body:{today}"):
-                draw_weekday_body(
-                    painter, ctx, today,
-                    dial_point(
-                        pinned_weekday_theta(ctx.skin),
-                        ctx.radius * spec.orbit_fraction,
-                    ),
-                    2 * ctx.radius * spec.diamond_scale
-                    * hover_factor(ctx, f"body:{today}"),
-                    1.0,
-                )
-            return
+        if weekday_classic_slot(ctx.skin) is None:
+            return   # every slot sits in a SEAT (the slot layer draws)
 
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
@@ -932,89 +935,177 @@ class WeekdayLayer(Layer):
             painter.restore()
 
 
-class WeekdayBadgeLayer(Layer):
-    """The astrology badge occupying the weekday position (owner
-    2026-07-12) — MINUTE cadence, because the ascendant changes by the
-    hour and the Prism block arm every four: on the Prism it rides the
-    arm of the current 4-hour color block, under Aurora it keeps the
-    south spot (sun sign left, ascendant right when paired with the
-    slot). It replaces the whole weekday unit while active."""
+class SlotLayer(Layer):
+    """Every SEATED slot (owner matrix 2026-07-14): the 1st/2nd/3rd
+    contents at their matrix positions — angles ride the star's
+    rotation, "center" sits on the hub; the classic weekday unit
+    belongs to WeekdayLayer. MINUTE cadence — the ascendant moves
+    hourly and the small-seconds hand repaints on the per-second
+    tick. Two instances share the class: the below-hands one draws
+    the ANGLE seats, the above-hands one the CENTER seat (owner: the
+    center occludes the hands); the hover-lift twin draws whatever is
+    hovered."""
 
     cadence = Cadence.MINUTE
 
+    def __init__(
+        self, skin: SkinDefinition, centered: bool = False,
+        lift: bool = False,
+    ):
+        super().__init__(skin, lift=lift)
+        self._centered = centered
+
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
-        mode = ctx.skin.weekday_slot
-        if mode in ("time", "date", "day_length"):
-            # The DAY slot as an info text (owner 2026-07-12) on the
-            # pinned spot. The hover-ENLARGE is an inherited trait
-            # (owner 2026-07-14: every slot grows, whatever it shows)
-            # — only the tooltip stays silent for these modes.
-            if not self._gate(ctx, "weekday_badge"):
-                return
-            pos = dial_point(
-                pinned_weekday_theta(ctx.skin),
-                ctx.radius * spec.orbit_fraction,
-            )
+        for index, seat in slot_layout(ctx.skin).items():
+            if seat == "classic":
+                continue
+            if not self._lift and (seat == "center") != self._centered:
+                continue                 # the other instance draws it
+            element = f"slot:{index}"
+            if not self._gate(ctx, element):
+                continue                 # hover z-lift repaints on top
+            if seat == "center":
+                pos = QPointF(0.0, 0.0)
+            else:
+                pos = dial_point(
+                    seat + ctx.rotation, ctx.radius * spec.orbit_fraction
+                )
             size = (
                 2 * ctx.radius * spec.diamond_scale
-                * hover_factor(ctx, "weekday_badge")
+                * hover_factor(ctx, element)
             )
+            self._draw_slot(painter, ctx, index, pos, size)
+
+    def _draw_slot(
+        self, painter: QPainter, ctx: RenderContext, index: int,
+        pos: QPointF, size: float,
+    ) -> None:
+        mode, style, theme, metal = slot_view(ctx.skin, index)
+        inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
+        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        if mode == "seconds":
+            # The SMALL-SECONDS complication (owner 2026-07-14).
             draw_slot_roundel(painter, ctx, pos, size)
-            inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
-            if mode == "date":
-                # The full date in two rows (owner 2026-07-14).
-                BottomSlotLayer._two_lines(
-                    painter, pos, inner,
-                    slot_text("date", ctx), str(ctx.day.local_date.year),
+            draw_small_seconds(painter, ctx, pos, size)
+            return
+        if mode == "date":
+            # The full date in two rows (owner 2026-07-14).
+            draw_slot_roundel(painter, ctx, pos, size)
+            draw_two_lines(
+                painter, pos, inner,
+                slot_text("date", ctx), str(ctx.day.local_date.year),
+            )
+            return
+        if mode in ("time", "day_length"):
+            draw_slot_roundel(painter, ctx, pos, size)
+            draw_fitted_text(painter, pos, inner, slot_text(mode, ctx))
+            return
+        if mode == "weekday":
+            self._draw_weekday_slot(
+                painter, ctx, index, pos, size, theme, metal, today
+            )
+            return
+        if mode in ("zodiac", "ascendant"):
+            sign = (
+                ctx.tick.ascendant_sign
+                if mode == "ascendant"
+                else ctx.day.zodiac_name
+            )
+            if style in constants.ZODIAC_STYLE_ART_DIRS:
+                asset = octa_slot_art(
+                    constants.ZODIAC_STYLE_ART_DIRS[style], sign
                 )
-            else:
-                draw_fitted_text(painter, pos, inner, slot_text(mode, ctx))
-            return
-        if not self._gate(ctx, "weekday_badge"):
-            return                       # hover z-lift repaints it on top
-        badge = weekday_badge(ctx.skin, ctx.day, ctx.tick)
-        if badge is None:
-            return
-        sign, folder, metal = badge
-        theta = pinned_weekday_theta(ctx.skin)
-        size = (
-            2 * ctx.radius * spec.diamond_scale
-            * hover_factor(ctx, "weekday_badge")
-        )
-        pos = dial_point(theta, ctx.radius * spec.orbit_fraction)
-        if ctx.skin.day_slot_style == "text":
-            # TEXT style in the primary slot (owner 2026-07-13; real
-            # under every pointer since the roundel round) — on the
-            # watch-face subdial.
+                if asset is not None:
+                    if style == "colored":
+                        draw_pixmap_centered(painter, ctx, asset, pos, size)
+                    else:
+                        # Flat glyph art rides the subdial (owner
+                        # 2026-07-14); the colored badge stays bare.
+                        draw_slot_roundel(painter, ctx, pos, size)
+                        draw_pixmap_centered(
+                            painter, ctx, asset, pos, inner
+                        )
+                    return
+            # TEXT style, and the documented fallback until the art
+            # lands — the Ascendant speaks the FULL word (owner
+            # 2026-07-13, never the "Asc" shorthand).
             draw_slot_roundel(painter, ctx, pos, size)
-            inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
             if mode == "ascendant":
-                BottomSlotLayer._two_lines(
-                    painter, pos, inner, "Ascendant", sign,
-                )
-            elif mode == "chinese":
-                BottomSlotLayer._two_lines(
-                    painter, pos, inner,
-                    ctx.day.chinese_name.split()[0], sign,
-                )
+                draw_two_lines(painter, pos, inner, "Ascendant", sign)
             else:
                 draw_fitted_text(painter, pos, inner, sign)
             return
-        asset = octa_slot_art(folder, sign)
-        if asset is None:
-            return                       # documented: no art, no badge
-        if ctx.skin.day_slot_style in ("sign", "logo", "constellation"):
-            # Flat glyph art rides the subdial too (owner 2026-07-14);
-            # the colored badges and the chinese plates stay bare.
-            draw_slot_roundel(painter, ctx, pos, size)
-            draw_pixmap_centered(
-                painter, ctx, asset, pos,
-                size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
-                metal=metal,
+        # Chinese zodiac: the plates stay bare, text and the fallback
+        # ride the subdial as element-over-animal (owner 2026-07-12).
+        animal = ctx.day.chinese_name.split()[-1]
+        if style in constants.CHINESE_STYLE_ART_DIRS:
+            asset = octa_slot_art(
+                constants.CHINESE_STYLE_ART_DIRS[style], animal
             )
+            if asset is not None:
+                draw_pixmap_centered(
+                    painter, ctx, asset, pos, size,
+                    metal=(
+                        style if style in defaults.METAL_SWAP_TARGETS
+                        else None
+                    ),
+                )
+                return
+        draw_slot_roundel(painter, ctx, pos, size)
+        draw_two_lines(
+            painter, pos, inner, ctx.day.chinese_name.split()[0], animal
+        )
+
+    def _draw_weekday_slot(
+        self, painter: QPainter, ctx: RenderContext, index: int,
+        pos: QPointF, size: float, theme: str, metal: str | None,
+        today: str,
+    ) -> None:
+        """Today's body in a SEAT, in that slot's own theme (owner
+        2026-07-12: e.g. Norse left, Greek right, both showing
+        today)."""
+        if index == 1:
+            # The 1st slot's unit is already themed on the skin.
+            draw_weekday_body(painter, ctx, today, pos, size, 1.0)
             return
-        draw_pixmap_centered(painter, ctx, asset, pos, size, metal=metal)
+        if theme == "planets":
+            asset = (
+                defaults.WEEKDAY_ART_DIR / "planets" / "primary"
+                / f"{today}.png"
+            )
+        else:
+            theme_dir = (
+                defaults.WEEKDAY_ART_DIR
+                / defaults.WEEKDAY_THEME_DIRS[theme]
+            )
+            if metal == "colored" and theme in constants.METAL_THEMES:
+                # colored is the variant SIBLING (owner restructure
+                # 2026-07-14: <family>/colored).
+                theme_dir = theme_dir.parent / "colored"
+            asset = (
+                theme_dir
+                / f"{defaults.WEEKDAY_THEME_FILES[theme][today]}.png"
+            )
+        if paths.art_file(asset).exists():
+            draw_pixmap_centered(
+                painter, ctx, asset, pos, size,
+                metal=(
+                    metal
+                    if theme in constants.METAL_THEMES
+                    and metal in defaults.METAL_SWAP_TARGETS
+                    else None
+                ),
+            )
+            if ctx.skin.show_info_slot_names and theme != "planet_signs":
+                draw_body_label(painter, ctx, today, pos, size)
+            return
+        # Documented fallback until the theme art lands.
+        draw_slot_roundel(painter, ctx, pos, size)
+        draw_fitted_text(
+            painter, pos, size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
+            constants.WEEKDAY_LABELS[today],
+        )
 
 
 class CenterBodyLayer(Layer):
@@ -1029,10 +1120,8 @@ class CenterBodyLayer(Layer):
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
-        if ctx.skin.weekday_slot != "weekday":
-            return          # the astrology badge replaced the unit
-        if weekday_pinned(ctx.skin):
-            return          # pinned layouts draw today at the bottom
+        if weekday_classic_slot(ctx.skin) is None:
+            return          # every slot sits in a seat
         if spec.display_mode != "center_only" and not (
             ctx.skin.pointer in ("hexa", "trio") and today == "sun"
         ):
@@ -1122,196 +1211,86 @@ def draw_fitted_text(
     draw_outlined_text(painter, pos, text, font)
 
 
-class BottomSlotLayer(Layer):
-    """The SOUTH SLOT: user-selected info near the dial bottom — the
-    digital time "12:24" (no seconds — the font stays BIG), the date
-    "8 Jul", the day length "15:35", the tropical zodiac (text or the
-    owner's sign/logo/constellation art) or the Chinese zodiac (text or
-    logo art). Where it sits and when it exists follows the owner's
-    matrix (south_slot_available / south_slot_theta). Text and the
-    flat glyph art sit on the watch-face SUBDIAL (owner 2026-07-14);
-    text is sized to fill the subdial width; everything draws ABOVE
-    the hands like the center body. Image modes fall back to the text
-    form until the owner's PNG folder is complete (documented)."""
+def draw_two_lines(
+    painter: QPainter, pos: QPointF, slot_size: float,
+    top: str, bottom: str,
+) -> None:
+    """Two stacked outlined lines sharing one fit-to-width font —
+    the Chinese year ("Fire" / "Horse"), the Ascendant ("Ascendant" /
+    "Virgo") and the two-row date ("14 Jul" / "2026") (Rule #5)."""
+    font = QFont()
+    font.setBold(True)
+    font.setPixelSize(100)
+    widest = max(
+        QFontMetricsF(font).horizontalAdvance(line)
+        for line in (top, bottom)
+    )
+    target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
+    font.setPixelSize(
+        max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / widest))
+    )
+    offset = font.pixelSize() * 0.62
+    draw_outlined_text(
+        painter, QPointF(pos.x(), pos.y() - offset), top, font
+    )
+    draw_outlined_text(
+        painter, QPointF(pos.x(), pos.y() + offset), bottom, font
+    )
 
-    cadence = Cadence.MINUTE
 
-    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
-        if not self._gate(ctx, "octa_slot"):
-            return                       # hover z-lift repaints it on top
-        spec = self._skin.weekday_set
-        if south_slot_centered(ctx.skin):
-            # Compass/Seasons (owner dual-Sunday round 2026-07-12):
-            # the slot lives in the CENTER — the 24h arm belongs to
-            # the Sunday pair.
-            pos = QPointF(0.0, 0.0)
-        else:
-            pos = dial_point(
-                south_slot_theta(ctx.skin, ctx.rotation),
-                ctx.radius * spec.orbit_fraction,
-            )
-        slot_size = (
-            2 * ctx.radius * spec.diamond_scale   # carries the SLOT size
-            * hover_factor(ctx, "octa_slot")      # (owner 2026-07-14: one
-        )                                         # slider for every slot)
-        mode, style = south_slot_view(ctx.skin)
-        chinese_animal = ctx.day.chinese_name.split()[-1]
-        if (
-            mode in ("zodiac", "ascendant")
-            and style in constants.ZODIAC_STYLE_ART_DIRS
-        ):
-            # The Ascendant wears the same zodiac art — for the sign
-            # RISING right now (owner request 2026-07-12; it cycles all
-            # twelve signs every day).
-            sign = (
-                ctx.tick.ascendant_sign
-                if mode == "ascendant"
-                else ctx.day.zodiac_name
-            )
-            asset = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS[style], sign)
-            if asset is not None:
-                if style == "colored":
-                    draw_pixmap_centered(painter, ctx, asset, pos, slot_size)
-                else:
-                    # Flat glyph art rides the watch-face SUBDIAL
-                    # (owner 2026-07-14) — the colored badge is a
-                    # circular plate and stays bare.
-                    draw_slot_roundel(painter, ctx, pos, slot_size)
-                    draw_pixmap_centered(
-                        painter, ctx, asset, pos,
-                        slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
-                    )
-                return
-            text = sign                  # documented fallback until the art lands
-        elif mode == "ascendant":        # style == "text": two lines
-            # The FULL word (owner 2026-07-13: never the "Asc"
-            # shorthand) — the shared fit-to-width font shrinks to it.
-            draw_slot_roundel(painter, ctx, pos, slot_size)
-            self._two_lines(
-                painter, pos,
-                slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
-                "Ascendant", ctx.tick.ascendant_sign,
-            )
-            return
-        elif mode == "chinese" and style in constants.CHINESE_STYLE_ART_DIRS:
-            asset = octa_slot_art(
-                constants.CHINESE_STYLE_ART_DIRS[style], chinese_animal
-            )
-            if asset is not None:
-                # The gold/silver STYLES run the hue-selective swap on
-                # the bronze logo; colored is its own art, bronze the
-                # logo as drawn (owner dropdown 2026-07-12).
-                draw_pixmap_centered(
-                    painter, ctx, asset, pos, slot_size,
-                    metal=(
-                        style if style in defaults.METAL_SWAP_TARGETS
-                        else None
-                    ),
-                )
-                return
-            text = chinese_animal        # documented fallback until the art lands
-        elif mode == "weekday":
-            # A SECOND weekday body (owner 2026-07-12): today in the
-            # info slot's OWN theme — e.g. Norse left, Greek right —
-            # wearing that theme's metal (gold/silver run the selective
-            # swap, colored is its own art) and, with Names on, the
-            # day-name label exactly like the day slot's bodies.
-            body = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
-            theme = ctx.skin.info_slot_theme
-            metal = ctx.skin.info_slot_metal
-            if theme == "planets":
-                asset = (
-                    defaults.WEEKDAY_ART_DIR / "planets" / "primary"
-                    / f"{body}.png"
-                )
-            else:
-                theme_dir = (
-                    defaults.WEEKDAY_ART_DIR
-                    / defaults.WEEKDAY_THEME_DIRS[theme]
-                )
-                if metal == "colored" and theme in constants.METAL_THEMES:
-                    # colored is the variant SIBLING (owner
-                    # restructure 2026-07-14: <family>/colored).
-                    theme_dir = theme_dir.parent / "colored"
-                asset = (
-                    theme_dir
-                    / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
-                )
-            if paths.art_file(asset).exists():
-                draw_pixmap_centered(
-                    painter, ctx, asset, pos, slot_size,
-                    metal=(
-                        metal
-                        if theme in constants.METAL_THEMES
-                        and metal in defaults.METAL_SWAP_TARGETS
-                        else None
-                    ),
-                )
-                if (
-                    ctx.skin.show_info_slot_names
-                    and theme != "planet_signs"
-                ):
-                    draw_body_label(painter, ctx, body, pos, slot_size)
-                return
-            text = constants.WEEKDAY_LABELS[body]   # documented fallback
-        elif mode == "date":
-            # The FULL date in two rows (owner 2026-07-14): the day
-            # and month above, the year beneath.
-            draw_slot_roundel(painter, ctx, pos, slot_size)
-            self._two_lines(
-                painter, pos,
-                slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
-                slot_text("date", ctx), str(ctx.day.local_date.year),
-            )
-            return
-        elif mode in ("time", "day_length"):
-            text = slot_text(mode, ctx)
-        elif mode == "chinese":          # style == "text" (validated set)
-            # TWO lines (owner 2026-07-12): the element above the
-            # animal — "Fire" / "Horse", never the animal alone.
-            draw_slot_roundel(painter, ctx, pos, slot_size)
-            self._two_lines(
-                painter, pos,
-                slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION,
-                ctx.day.chinese_name.split()[0], chinese_animal,
-            )
-            return
-        else:                            # zodiac text (validated closed set)
-            text = ctx.day.zodiac_name
-        # Every text form sits on the subdial (owner 2026-07-14:
-        # "Text svaki") — the fallbacks for missing art included.
-        draw_slot_roundel(painter, ctx, pos, slot_size)
-        draw_fitted_text(
-            painter, pos,
-            slot_size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION, text,
+def draw_small_seconds(
+    painter: QPainter, ctx: RenderContext, pos: QPointF, diameter: float
+) -> None:
+    """The SMALL-SECONDS complication (owner 2026-07-14): the active
+    set's own seconds hand rotating inside the subdial, behind eight
+    tick marks just inside the rim — four LARGER at the cardinal
+    points, four smaller between them, white with a soft shadow like
+    the ring's odd-hour markers."""
+    spec = ctx.skin.hands.second
+    radius = diameter / 2.0
+    outer = radius * defaults.SMALL_SECONDS_TICK_OUTER_FRACTION
+    painter.save()
+    painter.translate(pos)
+    for step in range(8):
+        major = step % 2 == 0
+        length = radius * (
+            defaults.SMALL_SECONDS_TICK_MAJOR_FRACTION
+            if major
+            else defaults.SMALL_SECONDS_TICK_MINOR_FRACTION
         )
-
-    @staticmethod
-    def _two_lines(
-        painter: QPainter, pos: QPointF, slot_size: float,
-        top: str, bottom: str,
-    ) -> None:
-        """Two stacked outlined lines sharing one fit-to-width font —
-        the Chinese year ("Fire" / "Horse") and the Ascendant
-        ("Ascendant" / "Virgo") text styles (Rule #5)."""
-        font = QFont()
-        font.setBold(True)
-        font.setPixelSize(100)
-        widest = max(
-            QFontMetricsF(font).horizontalAdvance(line)
-            for line in (top, bottom)
+        width = max(1.0, radius * (0.07 if major else 0.05))
+        angle = math.radians(step * 45.0)
+        ux, uy = math.sin(angle), -math.cos(angle)
+        start = QPointF(ux * (outer - length), uy * (outer - length))
+        end = QPointF(ux * outer, uy * outer)
+        shadow = QPointF(width * 0.35, width * 0.35)
+        painter.setPen(QPen(
+            QColor(*defaults.SMALL_SECONDS_TICK_SHADOW_RGBA), width,
+            Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap,
+        ))
+        painter.drawLine(start + shadow, end + shadow)
+        painter.setPen(QPen(
+            QColor(*defaults.SMALL_SECONDS_TICK_RGBA), width,
+            Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap,
+        ))
+        painter.drawLine(start, end)
+    if spec is not None:
+        # The mini hand — the pack's own seconds hand, pivot math
+        # identical to the big HandLayer, tip inside the tick ring.
+        tip_units = spec.natural_height - spec.pivot_y
+        target_tip = outer - radius * 0.06
+        height = spec.natural_height * (target_tip / tip_units)
+        pixmap = ctx.cache.pixmap_by_height(
+            spec.asset, height, ctx.dpr, tint=ctx.skin.ring_tint,
+            desaturate=ctx.skin.hands.desaturate,
         )
-        target = slot_size * defaults.TIME_TEXT_WIDTH_FRACTION
-        font.setPixelSize(
-            max(defaults.BODY_LABEL_MIN_PX, math.floor(100.0 * target / widest))
+        logical_w = pixmap.width() / ctx.dpr
+        pivot_x = logical_w * (
+            0.5 if spec.pivot_x_fraction is None else spec.pivot_x_fraction
         )
-        offset = font.pixelSize() * 0.62
-        draw_outlined_text(
-            painter, QPointF(pos.x(), pos.y() - offset), top, font
-        )
-        draw_outlined_text(
-            painter, QPointF(pos.x(), pos.y() + offset), bottom, font
-        )
+        painter.rotate(ctx.tick.second_angle)
+        painter.drawPixmap(QPointF(-pivot_x, -target_tip), pixmap)
+    painter.restore()
 
 
 class YearMarkerLayer(Layer):
@@ -1458,8 +1437,7 @@ class HoverLiftLayer(Layer):
         super().__init__(skin)
         self._twins = (
             WeekdayLayer(skin, lift=True),
-            WeekdayBadgeLayer(skin, lift=True),
-            BottomSlotLayer(skin, lift=True),
+            SlotLayer(skin, lift=True),
             YearMarkerLayer(skin, lift=True),
         )
 

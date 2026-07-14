@@ -21,9 +21,9 @@ from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor, _build_layers
 from render.layers import (
-    BottomSlotLayer,
     CenterBodyLayer,
     HandLayer,
+    SlotLayer,
     StarLayer,
     WeekdayLayer,
     YearMarkerLayer,
@@ -59,7 +59,7 @@ def test_pointer_off_drops_the_star_but_keeps_the_octa_slot():
     )
     layers = _build_layers(skin)
     assert not any(isinstance(layer, StarLayer) for layer in layers)
-    assert any(isinstance(layer, BottomSlotLayer) for layer in layers)
+    assert any(isinstance(layer, SlotLayer) for layer in layers)
 
 
 def test_weekday_off_drops_the_bodies_and_the_center():
@@ -92,13 +92,13 @@ def test_compass_slot_has_its_own_switch():
             defaults.DEFAULT_SKIN, pointer="octa", show_pointer=False
         )
     )
-    assert any(isinstance(layer, BottomSlotLayer) for layer in kept)
+    assert any(isinstance(layer, SlotLayer) for layer in kept)
     dropped = _build_layers(
         dataclasses.replace(
             defaults.DEFAULT_SKIN, pointer="octa", show_octa_slot=False
         )
     )
-    assert not any(isinstance(layer, BottomSlotLayer) for layer in dropped)
+    assert not any(isinstance(layer, SlotLayer) for layer in dropped)
 
 
 def test_earth_date_switch_gates_the_label(july_wednesday):

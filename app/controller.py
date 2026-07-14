@@ -210,22 +210,35 @@ def build_skin(settings: Settings):
     return apply_display_settings(skin, settings)
 
 
+def _slot_seconds(settings: Settings) -> bool:
+    """Whether any ENABLED slot runs the small-seconds complication
+    (owner 2026-07-14) — the big hand yields and its Elements toggle
+    grays out."""
+    if settings.show_weekday and settings.weekday_slot == "seconds":
+        return True
+    if settings.show_octa_slot and settings.octa_slot == "seconds":
+        return True
+    return (
+        settings.show_third_slot
+        and settings.show_octa_slot
+        and settings.third_slot == "seconds"
+    )
+
+
 def _effective_weekday_slot(settings: Settings) -> str:
-    """What the DAY slot actually shows (owner rules 2026-07-12): the
-    badge families AND the text modes live in any PINNED layout —
-    Aurora, or the Pointer element off (owner 2026-07-14: text is real
-    under Aurora too, on the roundel subdial). Anywhere else the
-    bodies rule."""
-    mode = settings.weekday_slot
-    if mode in ("time", "date", "day_length"):
-        pinned = not settings.show_pointer or settings.pointer == "aurora"
-        return mode if pinned else "weekday"
-    if mode != "weekday" and not (
-        settings.pointer in constants.WEEKDAY_BADGE_POINTERS
-        or not settings.show_pointer
+    """The 1st slot's effective mode. Under the owner's SLOT MATRIX
+    (2026-07-14) every mode is real under every pointer — the matrix
+    gives it a seat. The single lock: the Seasons with all THREE
+    slots up keep the 1st on the weekday unit (owner: mora 1st da
+    bude weekday)."""
+    if (
+        settings.pointer == "cross"
+        and settings.show_pointer
+        and settings.show_octa_slot
+        and settings.show_third_slot
     ):
         return "weekday"
-    return mode
+    return settings.weekday_slot
 
 
 def apply_display_settings(skin, settings: Settings):
@@ -343,6 +356,13 @@ def apply_display_settings(skin, settings: Settings):
         info_slot_theme=settings.info_slot_theme,
         info_slot_metal=_theme_metal(settings, settings.info_slot_theme),
         weekday_slot=_effective_weekday_slot(settings),
+        third_slot=settings.third_slot,
+        third_slot_style=settings.third_slot_style,
+        third_slot_theme=settings.third_slot_theme,
+        third_slot_metal=_theme_metal(settings, settings.third_slot_theme),
+        # The slots enable IN ORDER (owner 2026-07-14): the third
+        # exists only on top of the second.
+        show_third_slot=settings.show_third_slot and settings.show_octa_slot,
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
         legend=settings.legend,
@@ -351,7 +371,9 @@ def apply_display_settings(skin, settings: Settings):
         show_weekday=settings.show_weekday,
         show_pointer=settings.show_pointer,
         colorful=settings.colorful,
-        show_seconds=settings.show_seconds,
+        # The big seconds hand YIELDS while a slot runs the
+        # small-seconds complication (owner 2026-07-14).
+        show_seconds=settings.show_seconds and not _slot_seconds(settings),
         show_octa_slot=settings.show_octa_slot,
         show_earth_date=settings.show_earth_date,
         show_weekday_names=settings.show_weekday_names,
@@ -448,8 +470,9 @@ class AppController(QObject):
         self._simulation_ends: float = 0.0
         self._widget.set_renderer(self._compositor)
         seconds_hand = (
-            self._skin.hands.second is not None and self._settings.show_seconds
-        )
+            self._skin.hands.second is not None
+            and self._settings.show_seconds
+        ) or _slot_seconds(self._settings)
         self._scheduler = MinuteScheduler(self._on_tick, self, per_second=seconds_hand)
         # Resume-from-sleep and clock/zone changes refresh immediately —
         # the scheduled tick never fired while the machine slept.
@@ -697,9 +720,11 @@ class AppController(QObject):
         self._widget.set_renderer(self._compositor)
         if self._day is not None:
             self._compositor.set_day(self._day)
-        # The Seconds element switch also changes the tick cadence.
+        # The Seconds element switch also changes the tick cadence —
+        # and so does the small-seconds slot (owner 2026-07-14).
         self._scheduler.set_per_second(
-            skin.hands.second is not None and self._settings.show_seconds
+            (skin.hands.second is not None and self._settings.show_seconds)
+            or _slot_seconds(self._settings)
         )
         self._widget.update()
 
@@ -749,6 +774,22 @@ class AppController(QObject):
             updates["info_slot_style"] = style
         if theme is not None:
             updates["info_slot_theme"] = theme
+            updates.update(self._metal_updates(theme, metal))
+        self._settings = replace(self._settings, **updates)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
+    def _set_third_slot(
+        self, mode: str, style: str | None = None,
+        theme: str | None = None, metal: str | None = None,
+    ) -> None:
+        """The 3rd slot's content (owner 2026-07-14) — the same shape
+        as the other two, its own style/theme/metal."""
+        updates: dict = {"third_slot": mode}
+        if style is not None:
+            updates["third_slot_style"] = style
+        if theme is not None:
+            updates["third_slot_theme"] = theme
             updates.update(self._metal_updates(theme, metal))
         self._settings = replace(self._settings, **updates)
         self._install_skin(build_skin(self._settings))
@@ -827,27 +868,30 @@ class AppController(QObject):
     def _refresh_menu_gating(self) -> None:
         """Recompute every gated menu entry from the CURRENT settings
         without rebuilding (the stay-open menu keeps its window; only
-        the gray states move)."""
+        the gray states move). The slot matrix (owner 2026-07-14)
+        seats every mode under every pointer — what remains gated:
+        the Seasons' three-slot 1st-slot lock, the 1 → 2 → 3 enable
+        order, and the big seconds hand while a slot runs the
+        small-seconds complication."""
         settings = self._settings
-        aurora = settings.pointer == "aurora"
-        badge_possible = (
-            settings.pointer in constants.WEEKDAY_BADGE_POINTERS
-            or not settings.show_pointer
+        locked = (
+            settings.pointer == "cross"
+            and settings.show_pointer
+            and settings.show_octa_slot
+            and settings.show_third_slot
         )
-        slot_possible = (
-            settings.pointer in ("octa", "cross", "aurora")
-            or not settings.show_pointer
+        for item in self._menu_gates["first_lock"]:
+            item.setEnabled(not locked)
+        self._menu_gates["enable2"].setEnabled(settings.show_weekday)
+        self._menu_gates["enable3"].setEnabled(
+            settings.show_weekday and settings.show_octa_slot
         )
-        for item in self._menu_gates["badge"]:
-            item.setEnabled(badge_possible)
-        # Text modes are REAL everywhere since the roundel round
-        # (owner 2026-07-14): Aurora no longer grays them — they draw
-        # on the watch-face subdial like everything flat.
-        for item in self._menu_gates["pinned"]:
-            item.setEnabled(not settings.show_pointer or aurora)
-        self._octa_slot_action.setEnabled(slot_possible)
-        self._octa_slot_toggle.setEnabled(slot_possible)
-        self._solar_rotation_action.setEnabled(not aurora)
+        self._menu_gates["seconds"].setEnabled(
+            not _slot_seconds(settings)
+        )
+        self._solar_rotation_action.setEnabled(
+            settings.pointer != "aurora"
+        )
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -1013,24 +1057,21 @@ class AppController(QObject):
             [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
             settings.diameter, self._set_diameter,
         )
-        # PRIMARY and SECONDARY SLOT sit at the TOP level (owner menu
-        # rework 2026-07-13: the Theme wrapper is gone — Earth moved
-        # into Design). The two submenus stay the same shape: both
-        # pick a theme with its metal and both carry their OWN Names
-        # switch.
-        aurora = settings.pointer == "aurora"
-        badge_possible = (
-            settings.pointer in constants.WEEKDAY_BADGE_POINTERS
-            or not settings.show_pointer
-        )
-        day_slot_menu = self._submenu(menu, f"🥇 {tr('Primary Slot')}")
-        info_slot_menu = self._submenu(menu, f"🥈 {tr('Secondary Slot')}")
+        # The THREE SLOTS at the TOP level (owner 2026-07-14: the
+        # 1st/2nd/3rd Slot system, superscripts in the labels). Every
+        # slot has the same shape — the Weekday themes, the
+        # COMPLICATIONS dropdown (Digital Time / Date / Day length /
+        # Seconds), the astrology families — and its own ENABLE below
+        # the separator; they enable strictly 1 → 2 → 3.
+        day_slot_menu = self._submenu(menu, f"🥇 {tr('1ˢᵗ Slot')}")
+        info_slot_menu = self._submenu(menu, f"🥈 {tr('2ⁿᵈ Slot')}")
+        third_slot_menu = self._submenu(menu, f"🥉 {tr('3ʳᵈ Slot')}")
 
         # Gating buckets (owner 2026-07-13: pointer/element switches
         # must NOT close the menu — no rebuild; _refresh_menu_gating
         # re-grays these lists in place).
         self._menu_gates = {
-            "badge": [], "pinned": [],
+            "first_lock": [],
         }
 
         def slot_action(
@@ -1106,176 +1147,121 @@ class AppController(QObject):
             ("constellation", tr("Constellation")),
             ("colored", tr("Colored")),
         )
-        # --- Day slot: the weekday unit, an info text, or a badge ----
-        day_group = QActionGroup(menu)
-        day_group.setExclusive(True)
-        add_weekday_submenu(
-            day_slot_menu, day_group,
-            settings.weekday_slot == "weekday", settings.weekday_theme,
-            self._set_weekday_theme, "show_weekday_names",
-        )
-        # The text modes join the DAY slot too (owner 2026-07-12) —
-        # they need a PINNED spot: the pointer off, or Aurora (whose
-        # south seat is pinned; text draws on the roundel subdial
-        # since the owner's 2026-07-14 round).
-        for mode, label in (
-            ("time", tr("Time")),
-            ("date", tr("Date")),
-            ("day_length", tr("Day length")),
+
+        def build_slot_menu(
+            slot_menu, index: int, mode_value: str, style_value: str,
+            theme_value: str, names_key: str, enabled_value: bool,
+            enable_key: str, set_mode, set_style_mode, set_theme,
         ):
-            self._menu_gates["pinned"].append(slot_action(
-                day_slot_menu, day_group, label,
-                settings.weekday_slot == mode,
-                lambda checked, chosen=mode: self._set_display_choice(
-                    "weekday_slot", chosen
+            """One slot submenu (owner 2026-07-14: all three share the
+            shape): Weekday themes, the COMPLICATIONS dropdown, the
+            astrology families — and the slot's own ENABLE below the
+            separator. Returns (enable action, the 1st-slot lockable
+            entries)."""
+            group = QActionGroup(menu)
+            group.setExclusive(True)
+            lockable = []
+            add_weekday_submenu(
+                slot_menu, group,
+                mode_value == "weekday", theme_value, set_theme, names_key,
+            )
+            comps = self._submenu(slot_menu, tr("Complications"))
+            lockable.append(comps.menuAction())
+            for mode, label in (
+                ("time", tr("Digital Time")),
+                ("date", tr("Date")),
+                ("day_length", tr("Day length")),
+                ("seconds", tr("Seconds")),
+            ):
+                slot_action(
+                    comps, group, label, mode_value == mode,
+                    lambda checked, chosen=mode: set_mode(chosen),
+                )
+            for family, family_title in (
+                ("zodiac", tr("Astrology")),
+                # The ASCENDANT (owner request 2026-07-12): the sign
+                # rising on the eastern horizon right now.
+                ("ascendant", tr("Ascendant")),
+            ):
+                family_menu = self._submenu(slot_menu, family_title)
+                lockable.append(family_menu.menuAction())
+                for style, label in (
+                    *zodiac_styles,
+                    ("text", tr("Text")),
+                ):
+                    slot_action(
+                        family_menu, group, label,
+                        mode_value == family and style_value == style,
+                        lambda checked, m=family, s=style:
+                        set_style_mode(m, s),
+                    )
+            chinese_menu = self._submenu(slot_menu, tr("Chinese zodiac"))
+            lockable.append(chinese_menu.menuAction())
+            for style, label in (
+                ("colored", tr("Colored")),
+                ("gold", tr("Gold")),
+                ("silver", tr("Silver")),
+                ("bronze", tr("Bronze")),
+                ("text", tr("Text")),
+            ):
+                slot_action(
+                    chinese_menu, group, label,
+                    mode_value == "chinese" and style_value == style,
+                    lambda checked, s=style: set_style_mode("chinese", s),
+                )
+            slot_menu.addSeparator()
+            enable = self._add_toggle(
+                slot_menu, tr("Enable"), enabled_value,
+                lambda checked, key=enable_key: self._set_display_choice(
+                    key, checked
                 ),
-                not settings.show_pointer or aurora,
-            ))
-        for mode, title in (
-            ("zodiac", tr("Astrology")),
-            ("ascendant", tr("Ascendant")),
-        ):
-            badge_menu = self._submenu(day_slot_menu, title)
-            badge_menu.setEnabled(badge_possible)
-            self._menu_gates["badge"].append(badge_menu)
-            for style, label in zodiac_styles:
-                self._menu_gates["badge"].append(slot_action(
-                    badge_menu, day_group, label,
-                    settings.weekday_slot == mode
-                    and settings.day_slot_style == style,
-                    lambda checked, m=mode, s=style:
-                    self._set_weekday_badge(m, s),
-                    badge_possible,
-                ))
-            # TEXT joins the primary slot too (owner 2026-07-13; since
-            # the roundel round it is real under Aurora as well).
-            self._menu_gates["badge"].append(slot_action(
-                badge_menu, day_group, tr("Text"),
-                settings.weekday_slot == mode
-                and settings.day_slot_style == "text",
-                lambda checked, m=mode:
-                self._set_weekday_badge(m, "text"),
-                badge_possible,
-            ))
-        chinese_badge_menu = self._submenu(day_slot_menu, tr("Chinese zodiac"))
-        chinese_badge_menu.setEnabled(badge_possible)
-        self._menu_gates["badge"].append(chinese_badge_menu)
-        for style, label in (
-            ("colored", tr("Colored")),
-            ("gold", tr("Gold")),
-            ("silver", tr("Silver")),
-            ("bronze", tr("Bronze")),
-        ):
-            self._menu_gates["badge"].append(slot_action(
-                chinese_badge_menu, day_group, label,
-                settings.weekday_slot == "chinese"
-                and settings.day_slot_style == style,
-                lambda checked, s=style:
-                self._set_weekday_badge("chinese", s),
-                badge_possible,
-            ))
-        self._menu_gates["badge"].append(slot_action(
-            chinese_badge_menu, day_group, tr("Text"),
-            settings.weekday_slot == "chinese"
-            and settings.day_slot_style == "text",
-            lambda checked: self._set_weekday_badge("chinese", "text"),
-            badge_possible,
-        ))
-        # --- Info slot: the same shape, its own settings --------------
-        info_group = QActionGroup(menu)
-        info_group.setExclusive(True)
-        # A SECOND weekday body with its OWN theme (owner 2026-07-12:
-        # e.g. Norse left, Greek right, both showing today).
-        add_weekday_submenu(
-            info_slot_menu, info_group,
-            settings.octa_slot == "weekday", settings.info_slot_theme,
+                tr("The slots enable in order — 1st, then 2nd, then 3rd."),
+            )
+            return enable, lockable
+
+        _, first_lockable = build_slot_menu(
+            day_slot_menu, 1,
+            settings.weekday_slot, settings.day_slot_style,
+            settings.weekday_theme, "show_weekday_names",
+            settings.show_weekday, "show_weekday",
+            lambda mode: self._set_display_choice("weekday_slot", mode),
+            self._set_weekday_badge,
+            self._set_weekday_theme,
+        )
+        # The Seasons with all three slots LOCK the 1st on the weekday
+        # unit (owner 2026-07-14) — everything but Weekday grays.
+        self._menu_gates["first_lock"] = first_lockable
+        enable2, _ = build_slot_menu(
+            info_slot_menu, 2,
+            settings.octa_slot, settings.info_slot_style,
+            settings.info_slot_theme, "show_info_slot_names",
+            settings.show_octa_slot, "show_octa_slot",
+            self._set_south_slot,
+            lambda mode, style: self._set_south_slot(mode, style=style),
             lambda theme, metal=None: self._set_south_slot(
                 "weekday", theme=theme, metal=metal
             ),
-            "show_info_slot_names",
         )
-        for mode, label in (
-            ("time", tr("Time")),
-            ("date", tr("Date")),
-            ("day_length", tr("Day length")),
-        ):
-            slot_action(
-                info_slot_menu, info_group, label,
-                settings.octa_slot == mode,
-                lambda checked, chosen=mode: self._set_south_slot(chosen),
-            )
-        for family, family_title in (
-            ("zodiac", tr("Astrology")),
-            # The ASCENDANT (owner request 2026-07-12): the sign rising
-            # on the eastern horizon right now — cycling all twelve
-            # signs daily, it belongs to the hour-driven slot.
-            ("ascendant", tr("Ascendant")),
-        ):
-            family_menu = self._submenu(info_slot_menu, family_title)
-            for style, label in (
-                *zodiac_styles[:3],
-                ("text", tr("Text")),
-                ("colored", tr("Colored")),
-            ):
-                slot_action(
-                    family_menu, info_group, label,
-                    settings.octa_slot == family
-                    and settings.info_slot_style == style,
-                    lambda checked, m=family, chosen=style:
-                    self._set_south_slot(m, style=chosen),
-                )
-        chinese_menu = self._submenu(info_slot_menu, tr("Chinese zodiac"))
-        for style, label in (
-            ("text", tr("Text")),
-            ("colored", tr("Colored")),
-            ("gold", tr("Gold")),
-            ("silver", tr("Silver")),
-            ("bronze", tr("Bronze")),
-        ):
-            slot_action(
-                chinese_menu, info_group, label,
-                settings.octa_slot == "chinese"
-                and settings.info_slot_style == style,
-                lambda checked, chosen=style: self._set_south_slot(
-                    "chinese", style=chosen
-                ),
-            )
-        # The info slot exists on the Compass and the Seasons (in the
-        # CENTER — owner dual-Sunday round 2026-07-12: the 24h arm
-        # belongs to the Sunday pair) and under Aurora; the Trinity and
-        # the Prism have NO room for it while the star is up; the
-        # pointer-off pinned layouts always have it.
-        slot_possible = (
-            settings.pointer in ("octa", "cross", "aurora")
-            or not settings.show_pointer
-        )
-        self._octa_slot_action = info_slot_menu.menuAction()
-        self._octa_slot_action.setEnabled(slot_possible)
-        # Elements (owner spec): plain on/off switches for every
-        # element — the Earth STYLE lives under Design now. The owner's
-        # ORDER and TERMS (2026-07-14): the two slots lead — named
-        # exactly like their top-level menus, never "Weekday" — then
-        # the star, its colors, the two markers, the seconds hand.
-        elements_menu = self._submenu(menu, f"🧩 {tr('Elements')}")
-        self._add_toggle(
-            elements_menu, tr("Primary Slot"), settings.show_weekday,
-            lambda checked: self._set_display_choice(
-                "show_weekday", checked
+        enable3, _ = build_slot_menu(
+            third_slot_menu, 3,
+            settings.third_slot, settings.third_slot_style,
+            settings.third_slot_theme, "show_info_slot_names",
+            settings.show_third_slot, "show_third_slot",
+            self._set_third_slot,
+            lambda mode, style: self._set_third_slot(mode, style=style),
+            lambda theme, metal=None: self._set_third_slot(
+                "weekday", theme=theme, metal=metal
             ),
-            tr("The weekday bodies — the rotating slots and the center."),
         )
-        # The Secondary Slot has its own switch, grayed out whenever
-        # the active pointer/element combination has no room for it.
-        self._octa_slot_toggle = self._add_toggle(
-            elements_menu, tr("Secondary Slot"), settings.show_octa_slot,
-            lambda checked: self._set_display_choice("show_octa_slot", checked),
-            tr("The information display. On the Compass and the Seasons "
-               "it lives in the center (the 24h arm belongs to the "
-               "Sunday pair); with the pointer off it sits at the dial "
-               "bottom — alone at the center, or at 21h beside the day "
-               "slot at 3h."),
-        )
-        self._octa_slot_toggle.setEnabled(slot_possible)
+        self._menu_gates["enable2"] = enable2
+        self._menu_gates["enable3"] = enable3
+        enable2.setEnabled(settings.show_weekday)
+        enable3.setEnabled(settings.show_weekday and settings.show_octa_slot)
+        # Elements (owner spec): plain on/off switches — the slots
+        # enable INSIDE their own submenus now (owner 2026-07-14), so
+        # only the star, its colors, the two markers and the seconds
+        # hand remain.
+        elements_menu = self._submenu(menu, f"🧩 {tr('Elements')}")
         for key, label, tip in (
             (
                 "show_pointer", tr("Pointer"),
@@ -1302,11 +1288,16 @@ class AppController(QObject):
                    "ticks once per minute."),
             ),
         ):
-            self._add_toggle(
+            action = self._add_toggle(
                 elements_menu, label, getattr(settings, key),
                 lambda checked, key=key: self._set_display_choice(key, checked),
                 tip,
             )
+            if key == "show_seconds":
+                # The big hand yields while a slot runs the
+                # small-seconds complication (owner 2026-07-14).
+                self._menu_gates["seconds"] = action
+                action.setEnabled(not _slot_seconds(settings))
         menu.addSeparator()
         self._add_toggle(
             menu, f"📜 {tr('Legend')}", settings.legend,

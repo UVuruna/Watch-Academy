@@ -1600,7 +1600,6 @@
   "ui/Pride": "cc11118c85df8b8f4d29e322156e333f0c56ce93",
   "ui/Pride · Servility": "8a03a55712de52d2939e9a196f97c546e50fb92b",
   "ui/Priest": "b45c5249d5f6ad901c75146b55db8cc78f1b5774",
-  "ui/Primary Slot": "e1e2ff53d2b83445a2381c74c0a76b2490d7be59",
   "ui/Professions": "85fb53e4bc112a0ed8006205414ef8eb60d3cce7",
   "ui/Pulsar": "1b8463c5bcf1afef55874524157a91dc22576b6e",
   "ui/Purple": "32576f4fedc07f63020353af6a8aac66c4452c4c",
@@ -1638,7 +1637,6 @@
   "ui/Search": "bce06414177f72ab70e6387b6af9f8ceef0d6049",
   "ui/Season": "62255f5671e8a384c041bbdbb113701d4016304a",
   "ui/Seasons": "27d882d46a3864083c06461be23a1cbd37115d71",
-  "ui/Secondary Slot": "c13d2fab398b23eae1fc4ebfaff16d4a7f86d716",
   "ui/Seconds": "5fb1db527825d2996e37c655e5dec49d4da80c09",
   "ui/Selene": "993b451e52e895e77173e9be8aac8ca51ca56ecf",
   "ui/Sep": "fdd289e370bd5cc575f48a16947d05c144ec474b",
@@ -1743,7 +1741,6 @@
   "ui/Thoth": "262f7bb0470518f3abbac1b03fc873ff68e5451e",
   "ui/Thursday": "76031ddf92450ba52c1e3945097079807a9065c2",
   "ui/Tiger": "dd697aa8cce5c810f10070878f9d6f89c5a5937c",
-  "ui/Time": "6c82e6dd86807ee3db07e3c82bec1ae1ce00b08b",
   "ui/Time Travel": "88c82a471620151641245db9c08fbdcf6900b1d2",
   "ui/Time Travel…": "eecfbc6b91009ed2b65ce9aa7c80225f2415b154",
   "ui/Timezone": "d1f7dc891b5e5d1797163b556e805123c9369e4f",
@@ -1864,7 +1861,14 @@
   "zodiac_articles/Virgo/variants/paint_south": "72f2e236cbad039b905d618c019f3ee0338d3d6b",
   "ui/Slot": "ece2ac10d7266fea31ebbb19635c1cdc5b71fdf5",
   "ui/None": "6eef6648406c333a4035cd5e60d0bf2ecf2606d7",
-  "ui/Custom": "081ae3fdc403609cf6e760849ebb14117b7a50cb"
+  "ui/Custom": "081ae3fdc403609cf6e760849ebb14117b7a50cb",
+  "ui/1ˢᵗ Slot": "848aa2627696ce1c4d23950364e2f2871f1a62da",
+  "ui/2ⁿᵈ Slot": "21548efc4c45133b2f7db2ba88089df2d33b1e6b",
+  "ui/3ʳᵈ Slot": "0782f8650bc54f1542e493004cc40fe1b7942425",
+  "ui/Complications": "5e2ba821e480210fc6b21003dd3e257fd7ee71c7",
+  "ui/Digital Time": "553a9c99e89e8b46fea53f247105bb7749da2bfe",
+  "ui/Enable": "20063ad9053289cecaa20ae630ed2dd758282a07",
+  "ui/The slots enable in order — 1st, then 2nd, then 3rd.": "8800dc151cdf5b33f3b6c8784e8bc47a43d147d2"
  },
  "texts": {
   "articles/alchemy/jupiter/base": "[[The Figure]] Kalaj je metal Jupitera, onog dobroćudnog, i njegovi darovi su uglavnom darovi zvuka i sjaja. Mek, srebrnast i dovoljno jeftin da se njime sve prevuče, kalaj je ono što daje bronzu kada ga dodaš bakru i ono što daje zvonovinu kada ga dodaš još — legura koja livenom zvonu daje čist zvon a orguljskoj cevi da drži svoj ton. Savij šipku čistog kalaja i on se žali: čuveni „krik kalaja“, tihi vrisak njegovih kristala koji se preraspoređuju, metal koji doslovno progovara kada ga obrađuješ. Njegov znak ♃ isti je glif za metal, planetu i grom oca nebeskog.\n\n[[The Plate]] Vlasnikov medaljon izliva zajedničku mrtvu prirodu u bledom, meko belom kalaju — naslagane poluge, grumeni, namotaj žice, sve u blagom kositreno svetlom tonu koji kalaju daje njegovu skromnost. Obod je Jupiterova sopstvena kraljevska oprema: krune i hrastovo lišće smenjuju se sa snopovima munja, i glif ♃ — nacrtan poput zaobljenog „24“ — postavljen u medaljone ukrug. Kraljevski amblemi oko metala koji izgleda najskromnije: isto bogatstvo kao na zlatnoj ploči, odeveno kao kalaj, ali jednako okrunjeno.\n\n[[On the Dial]] četvrtak je dan Jupitera — francuski jeudi, dies Iovis — pa ga kalaj uzima, i uzima krunu zvezde: gornji krak 12h, podnevno žut, raspoloženje Radost. To je najviša tačka brojčanika, podne u svom najsjajnijem, i Jupiter, veći dobrotvor, sedi tamo u žutoj boji bliskoj zlatu, najsrećniji čas na najsrećnijem kraku. Tamo gde zlato drži središte kao izvor, kalaj drži vrhunac kao slavlje — podne sedmice, koje zvoni poput udarenog zvona.\n\n[[The Lesson]] Vrlina kalaja je Velikodušnost, a njegov porok Neumerenost — otvorena šaka i šaka koja se nikada ne sklapa. Jupiter je samo širenje, a širenje je blagoslov dok ne postane naduvenost; veći dobrotvor daje, ali previše dobre stvari i dalje je previše. Neumerenost obuzdava, s druge strane brojčanika, Mudrost na kraku Merkura — hitar um koji zna kada da stane — dok je Velikodušnost Neumerenost održana u meri, obilje koje se izliva a da ne plavi. Kalaj čini da zvono zvoni; Mudrost ga čuva od pucanja.",
@@ -3466,7 +3470,6 @@
   "ui/Pride": "Gordost",
   "ui/Pride · Servility": "Gordost · Pokornost",
   "ui/Priest": "Sveštenik",
-  "ui/Primary Slot": "Primarni slot",
   "ui/Professions": "Zanimanja",
   "ui/Pulsar": "Pulsar",
   "ui/Purple": "Ljubičasta",
@@ -3504,7 +3507,6 @@
   "ui/Search": "Pretraga",
   "ui/Season": "Godišnje doba",
   "ui/Seasons": "Godišnja doba",
-  "ui/Secondary Slot": "Sekundarni slot",
   "ui/Seconds": "Sekundna",
   "ui/Selene": "Selena",
   "ui/Sep": "sep",
@@ -3609,7 +3611,6 @@
   "ui/Thoth": "Tot",
   "ui/Thursday": "četvrtak",
   "ui/Tiger": "Tigar",
-  "ui/Time": "Vreme",
   "ui/Time Travel": "Putovanje kroz vreme",
   "ui/Time Travel…": "Putovanje kroz vreme…",
   "ui/Timezone": "Vremenska zona",
@@ -3730,6 +3731,13 @@
   "zodiac_articles/Virgo/variants/paint_south": "Južno od ekvatora točak se okreće i devica prelazi na predzorni Mesečev krak, menjajući vojničku narandžastu za plavu (#002FFF), na meru odvagan lapis starih radionica. Čas je Mir, i on je čita drugačije: žar se hladi u spokoj, njena čuvena briga napokon stoji imenovana kao porok ovog kraka — Strah, a Merkurovi spiskovi vode se na vodolijin način, kao odmereno, tiho presipanje u mraku. Astreja, poslednja od besmrtnika koja je napustila zemlju, sada drži poslednju stražu pred izlazak sunca, a Spika je jedino zrno koje još sija u četiri sata.",
   "ui/Slot": "Slot",
   "ui/None": "Nijedna",
-  "ui/Custom": "Prilagođeno"
+  "ui/Custom": "Prilagođeno",
+  "ui/1ˢᵗ Slot": "1ᵛⁱ Slot",
+  "ui/2ⁿᵈ Slot": "2ᵍⁱ Slot",
+  "ui/3ʳᵈ Slot": "3ᶜⁱ Slot",
+  "ui/Complications": "Komplikacije",
+  "ui/Digital Time": "Digitalno vreme",
+  "ui/Enable": "Uključi",
+  "ui/The slots enable in order — 1st, then 2nd, then 3rd.": "Slotovi se uključuju redom — 1., pa 2., pa 3."
  }
 }

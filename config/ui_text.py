@@ -22,7 +22,6 @@ UI_STRINGS: tuple[str, ...] = (
     "Pointer", "Umbra", "Ring", "Earth", "Weekday",
     # Menu rework (owner 2026-07-13): the two slots at the top level,
     # the Weekday kinship groups.
-    "Primary Slot", "Secondary Slot",
     "Ancient Gods", "Society", "Arcana", "Image",
     "Size", "Elements", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
@@ -41,7 +40,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Professions",
     # The theme METALS (bronze-plate themes + the ring finish menu).
     "Gold", "Bronze", "Silver", "Bronze letters", "Follow ring color",
-    "Time", "Day length",
+    "Day length",
     # South slot style dropdowns (owner 2026-07-12): Astrology, the
     # Ascendant (the rising sign right now) and the Chinese zodiac
     # open their own submenus.
@@ -123,6 +122,11 @@ UI_STRINGS: tuple[str, ...] = (
     # The unified SLOT size slider and the rotation-group dropdown
     # (owner 2026-07-14).
     "Slot", "None", "Custom",
+    # The 1st/2nd/3rd Slot system (owner 2026-07-14): superscript
+    # labels, the Complications dropdown and the per-slot Enable.
+    "1ˢᵗ Slot", "2ⁿᵈ Slot", "3ʳᵈ Slot",
+    "Complications", "Digital Time", "Enable",
+    "The slots enable in order — 1st, then 2nd, then 3rd.",
     "Settings", "Time Travel", "Guide",
     # --- Tray balloons / error boxes ---------------------------------------------
     "Translating",

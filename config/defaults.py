@@ -484,6 +484,15 @@ SLOT_ROUNDEL_BORDER_COLORS = {
     "silver": "#C9CDD3",
     "bronze": "#CD7F32",
 }
+# The SMALL-SECONDS complication (owner 2026-07-14): eight tick marks
+# just inside the subdial rim — four larger at the cardinals, four
+# smaller between — white with a soft shadow, never touching the
+# bezel; the mini hand's tip stays inside the tick ring.
+SMALL_SECONDS_TICK_OUTER_FRACTION = 0.80
+SMALL_SECONDS_TICK_MAJOR_FRACTION = 0.18
+SMALL_SECONDS_TICK_MINOR_FRACTION = 0.11
+SMALL_SECONDS_TICK_RGBA = (255, 255, 255, 235)
+SMALL_SECONDS_TICK_SHADOW_RGBA = (0, 0, 0, 140)
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image

@@ -165,6 +165,12 @@ class SkinDefinition:
                                        # "colored" = the colored/ art)
     weekday_slot: str = "weekday"      # weekday POSITION: bodies, or an
                                        # astrology badge (hexa/aurora only)
+    # The THIRD slot (owner 2026-07-14: the 1st/2nd/3rd Slot system).
+    third_slot: str = "date"
+    third_slot_style: str = "sign"
+    third_slot_theme: str = "planets"
+    third_slot_metal: str = "bronze"
+    show_third_slot: bool = False
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
     weekday_theme: str = "planets"     # WEEKDAY_THEMES: bodies as planets,
                                        # Greek/Norse gods, religions, professions
@@ -179,7 +185,7 @@ class SkinDefinition:
     colorful: bool = True              # False -> the Aura wears plain white
                                        # transparency instead of palette hues
     show_seconds: bool = True          # the seconds hand (and its cadence)
-    show_octa_slot: bool = True        # the Compass info slot (octa only)
+    show_octa_slot: bool = False       # canon 2026-07-14: ONE slot only
     show_earth_date: bool = True       # the date label ON the Earth marker
                                        # (only draws from 540 px up anyway)
     show_weekday_names: bool = True    # the day-name text on the weekday

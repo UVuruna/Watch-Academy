@@ -57,6 +57,12 @@ class Settings:
     info_slot_theme: str = "planets"    # the INFO slot's weekday theme
     weekday_slot: str = "weekday"       # the weekday POSITION: bodies, or
                                         # an astrology badge (hexa/aurora)
+    # The THIRD slot (owner 2026-07-14: 1st/2nd/3rd Slot system) —
+    # same shape as the other two; internal keys stay stable.
+    third_slot: str = "date"
+    third_slot_style: str = "sign"
+    third_slot_theme: str = "planets"
+    show_third_slot: bool = False
     earth_style: str = "atmo"
     weekday_theme: str = "planets"
     # Artwork source (owner 2026-07-14): the Gemini and ChatGPT
@@ -75,7 +81,7 @@ class Settings:
     show_pointer: bool = True
     colorful: bool = True               # off -> white Aura instead of hues
     show_seconds: bool = True
-    show_octa_slot: bool = True         # the Compass info slot (octa only)
+    show_octa_slot: bool = False        # canon 2026-07-14: ONE slot only
     show_earth_date: bool = True        # the date label on the Earth marker
     show_weekday_names: bool = True     # the day-name text on the bodies
     show_info_slot_names: bool = True   # the day-name text on the info
@@ -208,6 +214,9 @@ class SettingsStore:
                 ("info_slot_style", "sign", constants.SLOT_STYLE_VALUES),
                 ("info_slot_theme", "planets", constants.WEEKDAY_THEMES),
                 ("weekday_slot", "weekday", constants.WEEKDAY_SLOT_MODES),
+                ("third_slot", "date", constants.OCTA_SLOT_MODES),
+                ("third_slot_style", "sign", constants.SLOT_STYLE_VALUES),
+                ("third_slot_theme", "planets", constants.WEEKDAY_THEMES),
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
                 ("art_source", constants.ART_SOURCE_DEFAULT,
@@ -250,7 +259,9 @@ class SettingsStore:
                 show_pointer=_load_bool(raw, "show_pointer", True),
                 colorful=_load_bool(raw, "colorful", True),
                 show_seconds=_load_bool(raw, "show_seconds", True),
-                show_octa_slot=_load_bool(raw, "show_octa_slot", True),
+                # Canon (owner 2026-07-14): ONE slot out of the box.
+                show_octa_slot=_load_bool(raw, "show_octa_slot", False),
+                show_third_slot=_load_bool(raw, "show_third_slot", False),
                 show_earth_date=_load_bool(raw, "show_earth_date", True),
                 show_weekday_names=_load_bool(raw, "show_weekday_names", True),
                 show_info_slot_names=_load_bool(
@@ -344,6 +355,10 @@ class SettingsStore:
             "info_slot_style": settings.info_slot_style,
             "info_slot_theme": settings.info_slot_theme,
             "weekday_slot": settings.weekday_slot,
+            "third_slot": settings.third_slot,
+            "third_slot_style": settings.third_slot_style,
+            "third_slot_theme": settings.third_slot_theme,
+            "show_third_slot": settings.show_third_slot,
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "art_source": settings.art_source,

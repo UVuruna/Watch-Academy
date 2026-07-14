@@ -23,10 +23,10 @@ Gde fajlovi idu:
 
 Meni je od 2026-07-13 reorganizovan — svuda ispod koristi NOVU strukturu
 gornjeg nivoa: **Design** (Pointer/Ring/Umbra | Hands/Earth | Size),
-**Primary Slot**, **Secondary Slot**, **Elements** | **Legend**,
+**1ˢᵗ Slot**, **2ⁿᵈ Slot**, **Elements** | **Legend**,
 **Solar rotation**, **Click-through** | **Settings**, **Encyclopedia**,
 **Guide**, **Time Travel** | **Exit**. Stari "Theme ▸ Day slot/Info
-slot" sada je **Primary Slot**/**Secondary Slot** direktno na gornjem
+slot" sada je **1ˢᵗ Slot**/**2ⁿᵈ Slot** direktno na gornjem
 nivou; stari "Theme ▸ Earth" sada je **Design ▸ Earth**; teme
 "Religions"/"Religions II" sada se zovu **Creeds**/**Mysteries**.
 
@@ -57,7 +57,7 @@ Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 ## Guide (37 kadrova)
 
-- [ ] 54 — 54_menu_top_level.png — Desni klik bilo gde unutar kruga numeračnika; baseline, ne otvarati nijedan podmeni — Ceo meni gornjeg nivoa: Design, Primary Slot, Secondary Slot, Elements, Legend, Solar rotation, Click-through, Settings…, Encyclopedia…, Guide…, Time Travel…, Exit — plus dovoljno numeračnika iza menija da se vidi da je desni klik baš na DOMY Watch.
+- [ ] 54 — 54_menu_top_level.png — Desni klik bilo gde unutar kruga numeračnika; baseline, ne otvarati nijedan podmeni — Ceo meni gornjeg nivoa: Design, 1ˢᵗ Slot, 2ⁿᵈ Slot, Elements, Legend, Solar rotation, Click-through, Settings…, Encyclopedia…, Guide…, Time Travel…, Exit — plus dovoljno numeračnika iza menija da se vidi da je desni klik baš na DOMY Watch.
 
 - [ ] 55 — 55_tray_menu.png — Desni klik na tray ikonicu u Windows sistemskoj traci; baseline — Sama tray ikonica plus identičan meni gornjeg nivoa kao na 54, da se vizuelno potvrdi da je isto stablo svuda.
 
@@ -95,31 +95,31 @@ Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 - [ ] 72 — 72_earth_clean_vs_atmo.png — Design ▸ Earth ▸ Clean, zatim Design ▸ Earth ▸ Atmosphere (već podrazumevano); dva kadra, menja se samo earth_style — Blizak kadar samo na Earth marker, ista sezona i ista dan/noć faza oba puta, da se vidi isključivo razlika u art-u clean-vs-atmosphere.
 
-- [ ] 73 — 73_weekday_planet_signs.png — Primary Slot ▸ Weekday ▸ Arcana ▸ Planets ▸ Sign; tema Weekday = planet_signs — Ceo krug (2-kolonski grid kadar isti kao postojeći 24-28), sedam medaljona sa planetarnim simbolima na kracima.
+- [ ] 73 — 73_weekday_planet_signs.png — 1ˢᵗ Slot ▸ Weekday ▸ Arcana ▸ Planets ▸ Sign; tema Weekday = planet_signs — Ceo krug (2-kolonski grid kadar isti kao postojeći 24-28), sedam medaljona sa planetarnim simbolima na kracima.
 
-- [ ] 74 — 74_weekday_egypt.png — Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Egyptian gods; tema Weekday = egypt — Isti kadar kao 73; Ra/Khonsu/Montu/Thoth/Amun/Hathor/Osiris vidljivi.
+- [ ] 74 — 74_weekday_egypt.png — 1ˢᵗ Slot ▸ Weekday ▸ Ancient Gods ▸ Egyptian gods; tema Weekday = egypt — Isti kadar kao 73; Ra/Khonsu/Montu/Thoth/Amun/Hathor/Osiris vidljivi.
 
-- [ ] 75 — 75_weekday_slavic.png — Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Slavic gods; tema Weekday = slavic — Isti kadar; Dažbog/Hors/Svetovid/Veles/Perun/Mokoš/Morana vidljivi.
+- [ ] 75 — 75_weekday_slavic.png — 1ˢᵗ Slot ▸ Weekday ▸ Ancient Gods ▸ Slavic gods; tema Weekday = slavic — Isti kadar; Dažbog/Hors/Svetovid/Veles/Perun/Mokoš/Morana vidljivi.
 
-- [ ] 76 — 76_weekday_alchemy.png — Primary Slot ▸ Weekday ▸ Arcana ▸ Alchemy; tema Weekday = alchemy — Isti kadar; sedam metalnih mrtvih priroda (Gold/Silver/Iron/Quicksilver/Tin/Copper/Lead) vidljivo.
+- [ ] 76 — 76_weekday_alchemy.png — 1ˢᵗ Slot ▸ Weekday ▸ Arcana ▸ Alchemy; tema Weekday = alchemy — Isti kadar; sedam metalnih mrtvih priroda (Gold/Silver/Iron/Quicksilver/Tin/Copper/Lead) vidljivo.
 
-- [ ] 77 — 77_weekday_japan.png — Primary Slot ▸ Weekday ▸ Arcana ▸ Japanese week; tema Weekday = japan — Isti kadar; sedam yōbi medaljona sa kanji oznakama vidljivo.
+- [ ] 77 — 77_weekday_japan.png — 1ˢᵗ Slot ▸ Weekday ▸ Arcana ▸ Japanese week; tema Weekday = japan — Isti kadar; sedam yōbi medaljona sa kanji oznakama vidljivo.
 
-- [ ] 78 — 78_weekday_religion_alt.png — Primary Slot ▸ Weekday ▸ Society ▸ Mysteries; tema Weekday = religion_alt — Isti kadar; Mithraism/Druidism/Zoroastrianism/Shamanism/Sikhism/Babylon/Voodoo vidljivo.
+- [ ] 78 — 78_weekday_religion_alt.png — 1ˢᵗ Slot ▸ Weekday ▸ Society ▸ Mysteries; tema Weekday = religion_alt — Isti kadar; Mithraism/Druidism/Zoroastrianism/Shamanism/Sikhism/Babylon/Voodoo vidljivo.
 
-- [ ] 79 — 79_weekday_greek_colored.png — Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods ▸ Colored; tema Weekday = greek, metal = colored — Isti kadar kao postojeći 25_weekday_greek, da se može direktno uporediti bronzana ploča i ovaj pun-kolor art.
+- [ ] 79 — 79_weekday_greek_colored.png — 1ˢᵗ Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods ▸ Colored; tema Weekday = greek, metal = colored — Isti kadar kao postojeći 25_weekday_greek, da se može direktno uporediti bronzana ploča i ovaj pun-kolor art.
 
-- [ ] 80 — 80_menu_theme_weekday_metal.png — Desni klik ▸ Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods, razvijeno (metal-teme otvaraju svoj pod-podmeni); baseline — Grupa Gold / Bronze / Silver / Colored ugnježdena ispod Greek gods, da se pokaže da ovaj pod-podmeni postoji samo kod sedam tema sa metalima (Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos) — ostale teme se aktiviraju jednim klikom.
+- [ ] 80 — 80_menu_theme_weekday_metal.png — Desni klik ▸ 1ˢᵗ Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods, razvijeno (metal-teme otvaraju svoj pod-podmeni); baseline — Grupa Gold / Bronze / Silver / Colored ugnježdena ispod Greek gods, da se pokaže da ovaj pod-podmeni postoji samo kod sedam tema sa metalima (Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos) — ostale teme se aktiviraju jednim klikom.
 
-- [ ] 81 — 81_slot_ascendant.png — Primary Slot ▸ Ascendant ▸ Sign — režim Primary Slot = ascendant, stil = sign — Bedž na poziciji Primary Slot-a sa vidljivo drugačijim znakom nego što bi datum ili Secondary Slot sugerisali — poenta da se Ascendant menja otprilike na svaka dva sata, nezavisno od kalendara.
+- [ ] 81 — 81_slot_ascendant.png — 1ˢᵗ Slot ▸ Ascendant ▸ Sign — režim 1ˢᵗ Slot = ascendant, stil = sign — Bedž na poziciji 1ˢᵗ Slot-a sa vidljivo drugačijim znakom nego što bi datum ili 2ⁿᵈ Slot sugerisali — poenta da se Ascendant menja otprilike na svaka dva sata, nezavisno od kalendara.
 
-- [ ] 82 — 82_menu_theme_slots_day.png — Desni klik ▸ Primary Slot, razvijeno (Astrology i Chinese zodiac kao ugnježdeni podmeniji, ne razvijati dalje); baseline — Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac kao stavke Primary Slot podmenija (Weekday sadrži 21 temu u šest grupa srodstva + Names; tri tekstualna moda zasive dok je Pointer element uključen).
+- [ ] 82 — 82_menu_theme_slots_day.png — Desni klik ▸ 1ˢᵗ Slot, razvijeno (Astrology i Chinese zodiac kao ugnježdeni podmeniji, ne razvijati dalje); baseline — Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac kao stavke 1ˢᵗ Slot podmenija (Weekday sadrži 21 temu u šest grupa srodstva + Names; tri tekstualna moda zasive dok je Pointer element uključen).
 
-- [ ] 83 — 83_slot_info_time.png — Design ▸ Pointer ▸ Compass (potrebno da bi Secondary Slot uvek bio dostupan); Secondary Slot ▸ Time (već podrazumevani mod) — pointer = Compass (octa), sve ostalo baseline — Ceo krug, digitalno vreme čitljivo u rezervisanom donjem kraku Compass-a.
+- [ ] 83 — 83_slot_info_time.png — Design ▸ Pointer ▸ Compass (potrebno da bi 2ⁿᵈ Slot uvek bio dostupan); 2ⁿᵈ Slot ▸ Time (već podrazumevani mod) — pointer = Compass (octa), sve ostalo baseline — Ceo krug, digitalno vreme čitljivo u rezervisanom donjem kraku Compass-a.
 
-- [ ] 84 — 84_slot_info_paired_weekday.png — Design ▸ Pointer ▸ Aurora; Elements ▸ Primary Slot uključeno; Elements ▸ Secondary Slot uključeno; Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Norse gods; Secondary Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods — pointer = Aurora, Primary Slot tema = norse, Secondary Slot mod = weekday sa temom = greek; oba bedža moraju biti uključena istovremeno — Oba donja bedža jedan pored drugog: današnji nordijski bog na jednoj strani, današnji grčki bog na drugoj — da se pokaže da oba slota mogu voditi potpuno nezavisnu temu.
+- [ ] 84 — 84_slot_info_paired_weekday.png — Design ▸ Pointer ▸ Aurora; 1ˢᵗ Slot ▸ Enable uključeno; 2ⁿᵈ Slot ▸ Enable uključeno; 1ˢᵗ Slot ▸ Weekday ▸ Ancient Gods ▸ Norse gods; 2ⁿᵈ Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods — pointer = Aurora, 1ˢᵗ Slot tema = norse, 2ⁿᵈ Slot mod = weekday sa temom = greek; oba bedža moraju biti uključena istovremeno — Oba donja bedža jedan pored drugog: današnji nordijski bog na jednoj strani, današnji grčki bog na drugoj — da se pokaže da oba slota mogu voditi potpuno nezavisnu temu.
 
-- [ ] 85 — 85_menu_theme_slots_info.png — Desni klik ▸ Secondary Slot, razvijeno (Weekday/Astrology/Ascendant/Chinese zodiac kao ugnježdeni podmeniji, ne razvijati dalje); baseline — Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac kao stavke Secondary Slot podmenija — ISTOG oblika kao Primary Slot-ov.
+- [ ] 85 — 85_menu_theme_slots_info.png — Desni klik ▸ 2ⁿᵈ Slot, razvijeno (Weekday/Astrology/Ascendant/Chinese zodiac kao ugnježdeni podmeniji, ne razvijati dalje); baseline — Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac kao stavke 2ⁿᵈ Slot podmenija — ISTOG oblika kao 1ˢᵗ Slot-ov.
 
 - [ ] 86 — 86_colorful_on_off.png — Elements ▸ Colorful, isključeno za drugu polovinu; dva kadra: Colorful uključeno (baseline) i isključeno — Isti region dnevnog/sumračnog luka oba puta — obojene nijanse u jednom, obična bela providnost u drugom.
 
