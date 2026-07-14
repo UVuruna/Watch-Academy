@@ -21,8 +21,11 @@ convention):
   `Patience.png`
 - `assets/sin/Pride.png`, `Servility.png`, `Fear.png`, `Wrath.png`,
   `Greed.png`, `Excess.png`, `Jealousy.png`, `Envy.png`
-- `assets/mood/Glory.png`, `Eclipse.png`, `Calm.png`, `Zeal.png`,
-  `Sorrow.png`, `Joy.png`, `Passion.png`, `Renewal.png`
+- `assets/mood/Glory.png`, `Awe.png` (rename 2026-07-14 — formerly
+  `Eclipse.png`; the code rename maps the file, and the existing
+  Eclipse plate stays valid art until the new Awe plate lands),
+  `Calm.png`, `Zeal.png`, `Sorrow.png`, `Joy.png`, `Passion.png`,
+  `Renewal.png`
 
 ---
 
@@ -66,7 +69,7 @@ in one body").
 | Day | Arm color | Mood |
 |---|---|---|
 | Sunday (Ruler face) | white-gold | Glory |
-| Sunday (Servant face) | black, silver trim | Eclipse |
+| Sunday (Servant face) | black, silver trim | Awe (formerly Eclipse) |
 | Monday | blue | Calm |
 | Tuesday | orange | Zeal |
 | Wednesday | purple | Sorrow |
@@ -207,7 +210,17 @@ Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissure
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: the sun at its exact zenith, a crowned figure standing in a blinding noon halo casting no shadow at all, arms thrown open to the light; glossy gradient sky-disc blazing pure white-gold at the center and fading to deep noon blue at the rim. Border: polished silver ring with a sundial hour-tick motif, four small white-gold enamel roundels bearing a tiny sun-at-zenith mark. Colors: silver dominant, blinding white-gold, noon blue.
 ```
 
-**Eclipse (Sunday — Servant face)**
+**Awe (Sunday — Servant face)** — *owner rename 2026-07-14: the
+servant's mood is AWE (Plutchik's own fear + surprise compound — the
+feeling of standing under something larger than yourself); Eclipse
+stays the Planets theme's dual EVENT, not a feeling.*
+```
+Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a servant figure kneeling low near the bottom rim, face lifted and eyes wide, one hand half-raised to shield them — watching from far below as an immense sun blazes at the zenith wearing a thin dark eclipse ring, his long shadow stretching behind him; fear and wonder held in one upturned face; glossy gradient sky-disc pale silver-blue at the base climbing to one blinding white-gold point high in the field. Border: polished silver ring with a sundial hour-tick motif, four small black-enamel roundels with silver trim bearing a tiny upturned crescent. Colors: silver dominant, pale silver-blue, blinding white-gold point, deep charcoal shadow.
+```
+
+**Eclipse (SUPERSEDED as the mood name — the plate below remains
+valid art and the composition may still serve the Awe badge if the
+owner prefers the darkened-sun reading)**
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a darkened sun disc ringed by a thin silver corona, a crown resting alone on an empty throne in shadow, a single candle guttering beside it; glossy gradient sky-disc black at the center with a thin silver corona ring bleeding to charcoal at the rim. Border: polished silver ring with a sundial hour-tick motif, four small black-enamel roundels with silver trim bearing a tiny corona ring. Colors: silver dominant, eclipse black, corona silver.
 ```
