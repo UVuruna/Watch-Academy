@@ -119,6 +119,10 @@ UI_STRINGS: tuple[str, ...] = (
     # the turning points to arrow labels built from Sun/Moon).
     "Quick Jump",
     "North Pole", "South Pole", "Greenwich",
+    # NOW (owner 2026-07-15): back to the present — in the Quick Jump
+    # menu and as the Time Travel dialog's left button.
+    "Now", "OK", "Cancel",
+    "Back to the present — the simulation ends immediately.",
     # The unified SLOT size slider and the rotation-group dropdown
     # (owner 2026-07-14).
     "Slot", "None", "Custom",

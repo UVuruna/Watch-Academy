@@ -12,17 +12,22 @@ from PySide6.QtCore import QDateTime, Qt
 from PySide6.QtWidgets import (
     QDateTimeEdit,
     QDialog,
-    QDialogButtonBox,
     QDoubleSpinBox,
     QFormLayout,
+    QHBoxLayout,
     QLabel,
+    QPushButton,
 )
 
+from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
 
 
 class TimeTravelDialog(QDialog):
+    # The third exit (owner 2026-07-15): end the simulation and return
+    # the dial to the present immediately (Accepted=1, Rejected=0).
+    RETURN_TO_NOW = 2
     def __init__(
         self, latitude: float, longitude: float, parent=None,
         overlay: dict | None = None,
@@ -67,13 +72,27 @@ class TimeTravelDialog(QDialog):
                 ).format(n=defaults.TIME_TRAVEL_DURATION_S)
             )
         )
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel,
-            self,
+        # The shared vivid buttons (owner 2026-07-15: the stylized ones
+        # we use), NOW standing on the LEFT — back to the present, the
+        # simulation ends immediately.
+        row = QHBoxLayout()
+        now = QPushButton(tr("Now"), self)
+        style_button(now, "home", small=True)
+        now.setToolTip(
+            tr("Back to the present — the simulation ends immediately.")
         )
-        buttons.accepted.connect(self.accept)
-        buttons.rejected.connect(self.reject)
-        layout.addRow(buttons)
+        now.clicked.connect(lambda: self.done(self.RETURN_TO_NOW))
+        ok = QPushButton(tr("OK"), self)
+        style_button(ok, "next", small=True)
+        ok.clicked.connect(self.accept)
+        cancel = QPushButton(tr("Cancel"), self)
+        style_button(cancel, "neutral", small=True)
+        cancel.clicked.connect(self.reject)
+        row.addWidget(now)
+        row.addStretch(1)
+        row.addWidget(ok)
+        row.addWidget(cancel)
+        layout.addRow(row)
 
     def moment(self) -> datetime:
         """Naive wall time — the controller attaches the active timezone."""

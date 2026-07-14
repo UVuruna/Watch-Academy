@@ -75,14 +75,16 @@ def _theme_metal(settings: Settings, theme: str) -> str:
 class _StayOpenMenu(QMenu):
     """A menu whose CHECKABLE items do not close it (owner menu rework
     2026-07-13: several settings in one visit) — plain actions (Exit,
-    Settings…) close as usual; Escape or clicking away closes too."""
+    Settings…) close as usual; Escape or clicking away closes too.
+    Plain actions carrying the "stay_open" property keep it open the
+    same way (owner 2026-07-15: chaining Quick Jumps in one visit)."""
 
     def mouseReleaseEvent(self, event) -> None:
         action = self.actionAt(event.position().toPoint())
         if (
             action is not None
-            and action.isCheckable()
             and action.isEnabled()
+            and (action.isCheckable() or action.property("stay_open"))
         ):
             action.trigger()
             event.accept()
@@ -1397,14 +1399,23 @@ class AppController(QObject):
         # QUICK JUMP (owner 2026-07-14): one-click Time Travel presets
         # right below the dialog entry — same minute-then-back rules.
         jumps = self._submenu(menu, f"⚡ {tr('Quick Jump')}")
-        # Short arrow labels (owner 2026-07-14: "Next Sun Turning
-        # Point" was a mouthful) — → walks forward, ← backward, and
-        # repeated clicks CHAIN through the years.
+        # Short arrow labels (owner rounds 2026-07-14/15): the BIG ➜
+        # walks forward (logo, text, arrow), the mirrored ⬅ backward
+        # (arrow, logo, text); repeated clicks CHAIN through the years
+        # and the menu STAYS OPEN for exactly that. NOW ends the
+        # simulation — back to the present in one click.
+        now_action = QAction(tr("Now"), jumps)
+        now_action.setProperty("stay_open", True)
+        now_action.triggered.connect(
+            lambda checked=False: self._end_simulation()
+        )
+        jumps.addAction(now_action)
+        jumps.addSeparator()
         for kind, label in (
-            ("next_sun", f"☀️ {tr('Sun')} →"),
-            ("prev_sun", f"☀️ {tr('Sun')} ←"),
-            ("next_moon", f"🌙 {tr('Moon')} →"),
-            ("prev_moon", f"🌙 {tr('Moon')} ←"),
+            ("next_sun", f"☀️ {tr('Sun')} ➜"),
+            ("prev_sun", f"⬅ ☀️ {tr('Sun')}"),
+            ("next_moon", f"🌙 {tr('Moon')} ➜"),
+            ("prev_moon", f"⬅ 🌙 {tr('Moon')}"),
             (None, None),
             ("north_pole", tr("North Pole")),
             ("south_pole", tr("South Pole")),
@@ -1415,6 +1426,7 @@ class AppController(QObject):
                 jumps.addSeparator()
                 continue
             action = QAction(label, jumps)
+            action.setProperty("stay_open", True)
             action.triggered.connect(
                 lambda checked=False, kind=kind: self._quick_jump(kind)
             )
@@ -1478,13 +1490,25 @@ class AppController(QObject):
             overlay=self._translation_overlay,
             initial_moment=initial,
         )
-        if dialog.exec() != TimeTravelDialog.DialogCode.Accepted:
+        result = dialog.exec()
+        if result == TimeTravelDialog.RETURN_TO_NOW:
+            self._end_simulation()
+            return
+        if result != TimeTravelDialog.DialogCode.Accepted:
             return
         moment = dialog.moment().replace(second=0, microsecond=0, tzinfo=self._tz)
         observer = astral.Observer(
             latitude=dialog.latitude(), longitude=dialog.longitude()
         )
         self._start_simulation(moment, observer)
+
+    def _end_simulation(self) -> None:
+        """NOW (owner 2026-07-15): back to the present immediately —
+        the running simulation ends and the dial rebuilds from the
+        real wall clock; a no-op when nothing is simulated."""
+        self._simulation = None
+        self._day = None
+        self._on_tick(clock_jumped=False)
 
     def _start_simulation(self, moment: datetime, observer) -> None:
         """Render the (moment, observer) situation for the standard
