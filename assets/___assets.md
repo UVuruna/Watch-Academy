@@ -21,34 +21,29 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   📁 hands/                ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
   📁 earth/                ← earth_{clean|atmo}_{continent}_{day|night}.png
-  📁 weekday/              ← body art per THEME (SYMBOLISM.md), files carry ENTITY names:
-                             planets/ (sun..saturn.png, real renders)
-                             greek/ (Helios..Cronus.png)   norse/ (Sol..Sabbath.png)
-                             religion/ (Christianity..Judaism.png)
-                             profession/ (Ruler..Farmer.png — + Servant.png, the
-                             Sunday companion plate, also in colored/)
-                             — metal themes add colored/ (full-color art) and each
-                             theme may hold dual/ (the Sunday-duality companion:
-                             greek/dual/Phaethon, norse/dual/Skoll, egypt/dual/afu_ra,
-                             japan/dual/ama_no_iwato, religion/dual/{corax,washbasin,
-                             rough_ashlar,perfect_ashlar}, slavic/dual/dazbog_old,
-                             alchemy/dual/ore — inert until the dual-Sunday wiring
-                             lands; freemasonry.png itself is the owner's upgraded
-                             Eye-over-square-and-compasses medallion since 0.14.173)
-                             bible/ (staged 12th theme, NOT wired yet — the
-                             stained-glass windows: ancient_of_days, mary, david,
-                             moses, solomon, song_of_songs, joseph +
-                             dual/son_servant; wiring waits on the owner's figure
-                             verdict, research/bible_theme_prompts.md)
-  📁 zodiac/               ← octa bottom-arm art: sign/, logo/, constellation/ (<Sign>.png),
-                             chinese/ (<Animal>.png) — 1×1 placeholders, same convention
-  📁 virtue/  📁 sin/  📁 mood/
-                           ← the cross-cure emblem logos (owner Gemini art
-                             2026-07-12, research/virtue_sin_mood_prompts.md):
-                             8 per family, Capitalized stems (Justice.png...,
-                             Sunday counted twice) — for the Encyclopedia's
-                             Virtues/Sins/Moods sections and the WEEK mode;
-                             inert until that wiring lands
+  📁 weekday/              ← body art per THEME in the FAMILY/VARIANT tree
+                             (owner restructure 2026-07-14):
+                             <family>/<variant>/[dual/]<Entity>.png — dual/
+                             sits INSIDE each variant, colored is a variant
+                             SIBLING. Families:
+                             planets/ → primary/ (real renders) + signs/
+                             (glyphs) + art/ (bronze medallions)
+                             bible/ → primary/ + secondary/ (Bible II) +
+                             dark/ (the night windows)
+                             religion/ → primary/ (Creeds) + secondary/
+                             (Mysteries)
+                             greek|norse|egypt|slavic|wolf|bee|elephant|
+                             profession|cosmos/ → primary/ + colored/
+                             alchemy|japan/ → primary/
+  📁 zodiac/               ← astrology/ → primary/ (plain logo) + colored/ +
+                             sign/ + constellation/ (<Sign>.png);
+                             chinese/ → primary/ + colored/ (<Animal>.png)
+  📁 emblem/               ← virtue/ sin/ mood/ intelligence/ — the emblem
+                             logo families (Capitalized stems; mood also
+                             holds Wheel_of_Moods[_dark].png)
+  📁 badge/                ← season/ (+ turning_point/, meteorological/),
+                             trinity/, scale/ (the two triangles + Union)
+  📁 instrument/           ← the Instrument section logo + article images
 ```
 
 The star and the Umbra are deliberately NOT assets — both are simple
@@ -66,7 +61,7 @@ masters change.
 `earth_<style>_<continent>_<day|night>.png` with style `clean` (default)
 or `atmo`, continents: europe, north_america, south_america, africa,
 asia, oceania. The night variant is shown between sunset and sunrise. The
-moon marker reuses `weekday/planets/moon.png` with a procedural
+moon marker reuses `weekday/planets/primary/moon.png` with a procedural
 terminator shadow. PNG or SVG both work (detected by extension,
 rasterized once by the asset cache).
 

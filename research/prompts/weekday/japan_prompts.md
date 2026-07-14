@@ -36,7 +36,7 @@ image model to render readable Japanese script fails reliably and
 produces garbled marks, so the kiku roundel keeps the rim's rhythm
 without ever attempting text.
 
-Files land in `assets/weekday/japan/`. Stems below are the exact
+Files land in `assets/weekday/japan/primary/`. Stems below are the exact
 lowercase romaji stems from `WEEKDAY_THEME_FILES["japan"]` (macrons and
 the apostrophe already folded — `kinyobi`, not `kin'yōbi`); the Sunday
 dual sits at `dual/ama_no_iwato.png` per

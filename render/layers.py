@@ -352,12 +352,12 @@ def weekday_badge(
         sign = tick.ascendant_sign
     elif skin.weekday_slot == "chinese":
         animal = day.chinese_name.split()[-1]
-        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese")
+        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese/primary")
         metal = style if style in defaults.METAL_SWAP_TARGETS else None
         return animal, folder, metal
     else:
         return None
-    folder = constants.ZODIAC_STYLE_ART_DIRS.get(style, "sign")
+    folder = constants.ZODIAC_STYLE_ART_DIRS.get(style, "astrology/sign")
     return sign, folder, None
 
 
@@ -1031,8 +1031,9 @@ class CenterBodyLayer(Layer):
 
 def octa_slot_art(folder: str, name: str) -> Path | None:
     """The PNG for an image slot style — `folder` is a subdirectory of
-    assets/zodiac/ ("sign", "logo", "constellation", "chinese",
-    "chinese_colored"), `name` the entity ("Cancer" / "Horse") — or
+    assets/zodiac/ ("astrology/sign", "astrology/primary",
+    "astrology/constellation", "chinese/primary", "chinese/colored" —
+    the family/variant tree), `name` the entity ("Cancer" / "Horse") — or
     None while the owner's art folder does not have it yet."""
     path = defaults.ZODIAC_ART_DIR / folder / f"{name}.png"
     return path if path.exists() else None
@@ -1152,14 +1153,19 @@ class BottomSlotLayer(Layer):
             theme = ctx.skin.info_slot_theme
             metal = ctx.skin.info_slot_metal
             if theme == "planets":
-                asset = defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
+                asset = (
+                    defaults.WEEKDAY_ART_DIR / "planets" / "primary"
+                    / f"{body}.png"
+                )
             else:
                 theme_dir = (
                     defaults.WEEKDAY_ART_DIR
                     / defaults.WEEKDAY_THEME_DIRS[theme]
                 )
                 if metal == "colored" and theme in constants.METAL_THEMES:
-                    theme_dir = theme_dir / "colored"
+                    # colored is the variant SIBLING (owner
+                    # restructure 2026-07-14: <family>/colored).
+                    theme_dir = theme_dir.parent / "colored"
                 asset = (
                     theme_dir
                     / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"

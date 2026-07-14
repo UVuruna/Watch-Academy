@@ -223,21 +223,21 @@ literal architecture — sunlight, through glass, telling scripture.
 
 ## 3. The Prompts
 
-Suggested drop location: `assets/weekday/bible/`, with the Sunday
-second face at `assets/weekday/bible/dual/son_servant.png` (matching
+Suggested drop location: `assets/weekday/bible/primary/`, with the Sunday
+second face at `assets/weekday/bible/primary/dual/son_servant.png` (matching
 the `dual/` convention already used for Greek/Norse/Egypt/Japan/
 Slavic/Alchemy/Religion in [Sunday Duality](sunday_duality.md)).
 
 | Figure | File stem |
 |---|---|
-| The Ancient of Days | `assets/weekday/bible/ancient_of_days.png` |
-| The Son as Servant (dual) | `assets/weekday/bible/dual/son_servant.png` |
-| Mary | `assets/weekday/bible/mary.png` |
-| David | `assets/weekday/bible/david.png` |
-| Moses | `assets/weekday/bible/moses.png` |
-| Solomon | `assets/weekday/bible/solomon.png` |
-| The Bride and Bridegroom | `assets/weekday/bible/song_of_songs.png` |
-| Joseph | `assets/weekday/bible/joseph.png` |
+| The Ancient of Days | `assets/weekday/bible/primary/ancient_of_days.png` |
+| The Son as Servant (dual) | `assets/weekday/bible/primary/dual/son_servant.png` |
+| Mary | `assets/weekday/bible/primary/mary.png` |
+| David | `assets/weekday/bible/primary/david.png` |
+| Moses | `assets/weekday/bible/primary/moses.png` |
+| Solomon | `assets/weekday/bible/primary/solomon.png` |
+| The Bride and Bridegroom | `assets/weekday/bible/primary/song_of_songs.png` |
+| Joseph | `assets/weekday/bible/primary/joseph.png` |
 
 ### Sun — Ancient of Days (`ancient_of_days.png`)
 

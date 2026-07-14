@@ -35,7 +35,7 @@ mythological:
 | Instrument | engraved **gear-tooth** ring, fine machine-cut teeth | **aged bronze** relief, tick-tooth rim echoing the dial's own 360-mark band | the one family that is a device, not a myth — the encyclopedia explaining its own works |
 
 This also keeps the logo unmistakably apart from the Zodiac section's
-own logo (`assets/zodiac/logo/`) — the brief below repeats "not a
+own logo (`assets/zodiac/astrology/primary/`) — the brief below repeats "not a
 zodiac" inside the prompt itself because a bare circular dial with a
 ring of numerals is exactly the kind of image Gemini defaults toward
 astrology art unless told otherwise.
@@ -164,9 +164,9 @@ bronze as the ambient plate finish everything else is struck in — is
 already sitting in the asset tree, generated for the weekday alchemy
 set and needing no rework:
 
-- **Gold:** `assets/weekday/alchemy/gold.png` — crucible pouring molten
+- **Gold:** `assets/weekday/alchemy/primary/gold.png` — crucible pouring molten
   gold beside a polished sun-face disc, exactly "gold to the Sun."
-- **Silver:** `assets/weekday/alchemy/silver.png` — half-polished,
+- **Silver:** `assets/weekday/alchemy/primary/silver.png` — half-polished,
   half-tarnished mirror-disc and chalice, exactly "silver to the Moon."
 - **Bronze:** no dedicated medallion exists (or is needed) — bronze is
   the default, ambient finish of dozens of existing plates project-wide

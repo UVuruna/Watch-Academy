@@ -178,9 +178,12 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         assert (defaults.WEEKDAY_ART_DIR / f"{rel}.png").exists(), theme
         assert theme in defaults.WEEKDAY_DUAL_NAMES
     for theme in constants.METAL_THEMES:
-        folder, _, name = defaults.WEEKDAY_DUAL_FILES[theme].rpartition("/")
-        colored = defaults.WEEKDAY_ART_DIR / folder / "colored" / f"{name}.png"
-        assert colored.exists(), theme
+        # The colored dual is the SIBLING variant (owner restructure
+        # 2026-07-14): the variant segment swaps to colored/.
+        rel = defaults.WEEKDAY_DUAL_FILES[theme].replace(
+            "/primary/", "/colored/"
+        )
+        assert (defaults.WEEKDAY_ART_DIR / f"{rel}.png").exists(), theme
     # ...and so are the SPLIT FACE TEXTS (owner: no identical text on
     # the two faces) — every article set's sun carries distinct
     # ruler/servant prose.
@@ -398,7 +401,7 @@ def test_weekday_badge_gating_and_pointer_off_flank():
         ),
         _Day, _Tick,
     )
-    assert gold_badge == ("Horse", "chinese", "gold")
+    assert gold_badge == ("Horse", "chinese/primary", "gold")
     colored_badge = weekday_badge(
         _dc.replace(
             defaults.DEFAULT_SKIN, pointer="aurora",
@@ -406,7 +409,7 @@ def test_weekday_badge_gating_and_pointer_off_flank():
         ),
         _Day, _Tick,
     )
-    assert colored_badge == ("Horse", "chinese_colored", None)
+    assert colored_badge == ("Horse", "chinese/colored", None)
     asc_badge = weekday_badge(
         _dc.replace(
             defaults.DEFAULT_SKIN, pointer="aurora",
@@ -414,7 +417,7 @@ def test_weekday_badge_gating_and_pointer_off_flank():
         ),
         _Day, _Tick,
     )
-    assert asc_badge == ("Virgo", "logo_colored", None)
+    assert asc_badge == ("Virgo", "astrology/colored", None)
 
     def skin(**kw):
         return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)

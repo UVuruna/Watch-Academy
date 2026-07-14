@@ -13,14 +13,14 @@ one prompt at a time; generate a whole family in one chat session so
 the set stays visually consistent.
 
 Suggested drop locations (flat PNGs, matching the existing
-`assets/virtue/`, `assets/zodiac/sign/` conventions):
+`assets/emblem/virtue/`, `assets/zodiac/astrology/sign/` conventions):
 
-- `assets/trinity/Faith.png`, `Hope.png`, `Love.png`
-- `assets/season/Spring.png`, `Summer.png`, `Autumn.png`, `Winter.png`,
+- `assets/badge/trinity/Faith.png`, `Hope.png`, `Love.png`
+- `assets/badge/season/Spring.png`, `Summer.png`, `Autumn.png`, `Winter.png`,
   `WetSeason.png`, `DrySeason.png`
-- `assets/season/turning_point/SummerSolstice.png`,
+- `assets/badge/season/turning_point/SummerSolstice.png`,
   `WinterSolstice.png`, `Equinox.png`
-- `assets/season/meteorological/Spring.png`, `Summer.png`, `Autumn.png`,
+- `assets/badge/season/meteorological/Spring.png`, `Summer.png`, `Autumn.png`,
   `Winter.png` *(OPTIONAL set)*
 
 ---

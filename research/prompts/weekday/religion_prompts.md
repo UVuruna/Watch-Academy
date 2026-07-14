@@ -37,7 +37,7 @@ the lotus, and a seated meditating silhouette, never a caricature.
 Freemasonry keeps the square-and-compasses/ashlar language, no other
 order's symbols borrowed in.
 
-Files land in the SHARED `assets/weekday/religion/` folder — both
+Files land in the SHARED `assets/weekday/religion/primary/` folder — both
 `religion` and `religion_alt` point at the same directory per
 `WEEKDAY_THEME_DIRS`, and the fourteen stems plus two duals never
 collide. Stems below are exact and lowercase, matching

@@ -169,20 +169,20 @@ def test_bronze_finish_and_theme_metals():
     assert "colored" in str(colored.bodies["jupiter"])
     assert all(path.exists() for path in colored.bodies.values())
     for theme in c.METAL_THEMES:
+        # colored is the variant SIBLING (owner restructure 2026-07-14).
         folder = (
-            defaults.WEEKDAY_ART_DIR
-            / defaults.WEEKDAY_THEME_DIRS[theme] / "colored"
-        )
+            defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
+        ).parent / "colored"
         for body in c.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
             assert (folder / f"{stem}.png").exists(), (theme, body)
     for animal in c.CHINESE_ANIMALS:
         assert (
-            defaults.ZODIAC_ART_DIR / "chinese_colored" / f"{animal}.png"
+            defaults.ZODIAC_ART_DIR / "chinese" / "colored" / f"{animal}.png"
         ).exists(), animal
     for sign, _ in c.ZODIAC_SIGNS:
         assert (
-            defaults.ZODIAC_ART_DIR / "logo_colored" / f"{sign}.png"
+            defaults.ZODIAC_ART_DIR / "astrology" / "colored" / f"{sign}.png"
         ).exists(), sign
     # The hue-SELECTIVE swap (owner insight 2026-07-12): warm bronze
     # pixels take the target metal, gray pixels stay untouched.

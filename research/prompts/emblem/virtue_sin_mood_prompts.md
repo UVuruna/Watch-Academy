@@ -14,14 +14,14 @@ the Servant (dark face) as two separate entries in every list — so
 each category holds 8 items over 7 days, not 7.
 
 Suggested drop locations (flat, one PNG per item, matching the
-existing `assets/zodiac/sign/` and `assets/weekday/religion/`
+existing `assets/zodiac/astrology/sign/` and `assets/weekday/religion/primary/`
 convention):
-- `assets/virtue/Justice.png`, `Humility.png`, `Serenity.png`,
+- `assets/emblem/virtue/Justice.png`, `Humility.png`, `Serenity.png`,
   `Courage.png`, `Wisdom.png`, `Generosity.png`, `Love.png`,
   `Patience.png`
-- `assets/sin/Pride.png`, `Servility.png`, `Fear.png`, `Wrath.png`,
+- `assets/emblem/sin/Pride.png`, `Servility.png`, `Fear.png`, `Wrath.png`,
   `Greed.png`, `Excess.png`, `Jealousy.png`, `Envy.png`
-- `assets/mood/Glory.png`, `Awe.png` (rename 2026-07-14 — formerly
+- `assets/emblem/mood/Glory.png`, `Awe.png` (rename 2026-07-14 — formerly
   `Eclipse.png`; the code rename maps the file, and the existing
   Eclipse plate stays valid art until the new Awe plate lands),
   `Calm.png`, `Zeal.png`, `Sorrow.png`, `Joy.png`, `Passion.png`,

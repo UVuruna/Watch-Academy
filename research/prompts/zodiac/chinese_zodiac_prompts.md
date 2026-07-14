@@ -21,7 +21,7 @@ the EARTH roundel deep RED-BROWN (not yellow-ochre) and the accents
 red — both sit below the window, so the swap recolors only the
 bronze, never the enamel. The prompts below already say so.
 
-**Drop:** over the existing stems in `assets/zodiac/chinese/`
+**Drop:** over the existing stems in `assets/zodiac/chinese/primary/`
 (`Rat.png` … `Pig.png` — capitalized). The colored set
 (`chinese_colored/`) is untouched.
 

@@ -66,11 +66,11 @@ lowercase snake_case — the same convention `bible_theme_prompts.md`
 and `bible_dark_prompts.md` already use for their casts.
 
 **Drop (wiring follows once the art lands):**
-- `assets/weekday/cosmos/` — `sun.png`, `nebula.png`, `supernova.png`,
+- `assets/weekday/cosmos/primary/` — `sun.png`, `nebula.png`, `supernova.png`,
   `pulsar.png`, `galaxy.png`, `binary_stars.png`, `comet.png`
-- `assets/weekday/cosmos/dual/black_hole.png`
+- `assets/weekday/cosmos/primary/dual/black_hole.png`
 - `assets/weekday/cosmos/colored/` — same seven stems
-- `assets/weekday/cosmos/dual/colored/black_hole.png`
+- `assets/weekday/cosmos/primary/dual/colored/black_hole.png`
 
 ---
 
@@ -210,7 +210,7 @@ Ornate circular badge, vivid full-color painted cosmos over bronze, photorealist
 ## Planets Medallion Look — turning the real-photo bodies to bronze
 
 The owner's real-photo Planets theme already ships seven bodies at
-`assets/weekday/planets/` (`sun.png` … `saturn.png`, real renders —
+`assets/weekday/planets/primary/` (`sun.png` … `saturn.png`, real renders —
 `assets/___assets.md`, `design/___design.md`). This section is the
 SAME bronze medallion register applied to those same seven bodies
 plus the eclipse dual, so Planets and Cosmos read as one visual
@@ -221,13 +221,13 @@ likeness translated into relief — so the two Sun prompts do not
 duplicate each other.
 
 **Drop dir — flag for the owner:** proposing
-`assets/weekday/planets_art/` since the real-photo set already owns
-`assets/weekday/planets/` and the two must not collide; the owner may
+`assets/weekday/planets/art/` since the real-photo set already owns
+`assets/weekday/planets/primary/` and the two must not collide; the owner may
 prefer a different name (`planets_bronze/`, `planets_medal/`, …).
 
-- `assets/weekday/planets_art/` — `sun.png`, `moon.png`, `mars.png`,
+- `assets/weekday/planets/art/` — `sun.png`, `moon.png`, `mars.png`,
   `mercury.png`, `jupiter.png`, `venus.png`, `saturn.png`
-- `assets/weekday/planets_art/dual/sun_eclipse.png`
+- `assets/weekday/planets/art/dual/sun_eclipse.png`
 - Bronze only, no `colored/` arc requested for this section.
 
 ### Sun (`sun.png`)

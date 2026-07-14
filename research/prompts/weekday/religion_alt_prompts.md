@@ -33,7 +33,7 @@ particular is rendered with the dignity the article insists on ("the
 owner's medallion restores dignity to the emblem outsiders know
 best"), never as a mockery prop.
 
-Files land in the SAME shared `assets/weekday/religion/` folder as
+Files land in the SAME shared `assets/weekday/religion/secondary/` folder as
 Creeds (per `WEEKDAY_THEME_DIRS`, both themes point at one directory).
 Stems below are exact and lowercase, matching
 `WEEKDAY_THEME_FILES["religion_alt"]`.

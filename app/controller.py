@@ -249,15 +249,14 @@ def apply_display_settings(skin, settings: Settings):
         # Themed bodies (SYMBOLISM.md canon): swap in the shared themed
         # art (files carry the ENTITY names) and the canon display
         # names; "planets" keeps the skin's own weekday unit untouched.
-        # Both religion sets draw from the ONE religion/ folder; the
-        # COLORED look (owner 2026-07-12) is separate art in the
-        # theme's colored/ subfolder — no swap.
+        # Family/variant tree (owner restructure 2026-07-14): the
+        # COLORED look is the variant SIBLING <family>/colored.
         theme_dir = (
             defaults.WEEKDAY_ART_DIR
             / defaults.WEEKDAY_THEME_DIRS[settings.weekday_theme]
         )
         if metal == "colored":
-            theme_dir = theme_dir / "colored"
+            theme_dir = theme_dir.parent / "colored"
         names = defaults.WEEKDAY_THEME_NAMES[settings.weekday_theme]
         files = defaults.WEEKDAY_THEME_FILES[settings.weekday_theme]
         weekday = dataclasses.replace(
@@ -275,8 +274,9 @@ def apply_display_settings(skin, settings: Settings):
     # the colored/ variant, gold/silver reuse the swap via spec.metal.
     dual_rel = defaults.WEEKDAY_DUAL_FILES[settings.weekday_theme]
     if metal == "colored" and settings.weekday_theme in constants.METAL_THEMES:
-        folder, _, name = dual_rel.rpartition("/")
-        dual_rel = f"{folder}/colored/{name}"
+        # The colored dual lives in the SIBLING variant (owner
+        # restructure 2026-07-14): swap the variant segment.
+        dual_rel = dual_rel.replace("/primary/", "/colored/")
     weekday = dataclasses.replace(
         weekday, dual_asset=defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
     )

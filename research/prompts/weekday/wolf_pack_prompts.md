@@ -52,12 +52,12 @@ thin eclipsed-sun corona ring in its sky — the same mark Skoll bites
 and the ore plate hides as a vein.
 
 **Drop (wiring follows once the art lands):**
-- `assets/weekday/wolf/` — `Alpha.png`, `Luna.png`, `Hunter.png`,
+- `assets/weekday/wolf/primary/` — `Alpha.png`, `Luna.png`, `Hunter.png`,
   `Scout.png`, `Beta.png`, `Mate.png`, `Elder.png` (capitalized,
   greek/norse convention)
-- `assets/weekday/wolf/dual/Omega.png`
+- `assets/weekday/wolf/primary/dual/Omega.png`
 - `assets/weekday/wolf/colored/` — same seven stems
-- `assets/weekday/wolf/dual/colored/Omega.png`
+- `assets/weekday/wolf/primary/dual/colored/Omega.png`
 
 ---
 

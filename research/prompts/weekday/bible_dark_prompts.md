@@ -24,7 +24,7 @@ inline as a **Note**, and left the roster untouched.
 
 ---
 
-## Section A — Bible II (`assets/weekday/bible2/`)
+## Section A — Bible II (`assets/weekday/bible/secondary/`)
 
 Same stained-glass rose-window craft as the base Bible set
 ([Bible Theme Prompts](bible_theme_prompts.md)): trefoil-lancet
@@ -41,15 +41,15 @@ tracery/oculus, the same way the base set cross-references
 
 | Figure | File stem |
 |---|---|
-| Abraham (Sunday, ruler face) | `assets/weekday/bible2/abraham.png` |
-| Isaac (Sunday, servant face, dual) | `assets/weekday/bible2/dual/isaac.png` |
-| Jonah (Monday) | `assets/weekday/bible2/jonah.png` |
-| Samson (Tuesday) | `assets/weekday/bible2/samson.png` |
-| Jacob (Wednesday) | `assets/weekday/bible2/jacob.png` |
-| Noah (Thursday) | `assets/weekday/bible2/noah.png` |
-| Ruth (Friday, primary) | `assets/weekday/bible2/ruth.png` |
-| Esther (Friday, alternative) | `assets/weekday/bible2/esther_alt.png` |
-| Job (Saturday) | `assets/weekday/bible2/job.png` |
+| Abraham (Sunday, ruler face) | `assets/weekday/bible/secondary/abraham.png` |
+| Isaac (Sunday, servant face, dual) | `assets/weekday/bible/secondary/dual/isaac.png` |
+| Jonah (Monday) | `assets/weekday/bible/secondary/jonah.png` |
+| Samson (Tuesday) | `assets/weekday/bible/secondary/samson.png` |
+| Jacob (Wednesday) | `assets/weekday/bible/secondary/jacob.png` |
+| Noah (Thursday) | `assets/weekday/bible/secondary/noah.png` |
+| Ruth (Friday, primary) | `assets/weekday/bible/secondary/ruth.png` |
+| Esther (Friday, alternative) | `assets/weekday/bible/secondary/esther_alt.png` |
+| Job (Saturday) | `assets/weekday/bible/secondary/job.png` |
 
 ### Sunday, ruler face — Abraham (`abraham.png`)
 
@@ -177,7 +177,7 @@ Circular stained-glass rose-window medallion, backlit by deep green renewal ligh
 
 ---
 
-## Section B — Bible Dark (`assets/weekday/bible_dark/`)
+## Section B — Bible Dark (`assets/weekday/bible/dark/`)
 
 Same rose-window medallion craft as the base Bible set and Bible II —
 trefoil-lancet lead-came tracery, four cardinal jewel-roundels, the
@@ -195,15 +195,15 @@ rationale, per the brief.
 
 | Figure | File stem | Mirrors |
 |---|---|---|
-| Lucifer (Sunday, ruler face) | `assets/weekday/bible_dark/lucifer.png` | Abraham / Ancient of Days |
-| Judas (Sunday, servant face, dual) | `assets/weekday/bible_dark/dual/judas.png` | Isaac / Son as Servant |
-| Lilith (Monday) | `assets/weekday/bible_dark/lilith.png` | Mary |
-| Goliath (Tuesday) | `assets/weekday/bible_dark/goliath.png` | David |
-| the Serpent (Wednesday) | `assets/weekday/bible_dark/serpent.png` | Moses |
-| Herod (Thursday, primary) | `assets/weekday/bible_dark/herod.png` | Solomon |
-| Nebuchadnezzar (Thursday, alternative) | `assets/weekday/bible_dark/nebuchadnezzar_alt.png` | Solomon |
-| Delilah (Friday) | `assets/weekday/bible_dark/delilah.png` | Ruth / Samson |
-| Cain (Saturday) | `assets/weekday/bible_dark/cain.png` | Joseph |
+| Lucifer (Sunday, ruler face) | `assets/weekday/bible/dark/lucifer.png` | Abraham / Ancient of Days |
+| Judas (Sunday, servant face, dual) | `assets/weekday/bible/dark/dual/judas.png` | Isaac / Son as Servant |
+| Lilith (Monday) | `assets/weekday/bible/dark/lilith.png` | Mary |
+| Goliath (Tuesday) | `assets/weekday/bible/dark/goliath.png` | David |
+| the Serpent (Wednesday) | `assets/weekday/bible/dark/serpent.png` | Moses |
+| Herod (Thursday, primary) | `assets/weekday/bible/dark/herod.png` | Solomon |
+| Nebuchadnezzar (Thursday, alternative) | `assets/weekday/bible/dark/nebuchadnezzar_alt.png` | Solomon |
+| Delilah (Friday) | `assets/weekday/bible/dark/delilah.png` | Ruth / Samson |
+| Cain (Saturday) | `assets/weekday/bible/dark/cain.png` | Joseph |
 
 ### Sunday, ruler face — Lucifer (`lucifer.png`)
 
@@ -322,10 +322,10 @@ Circular stained-glass rose-window medallion, backlit by sour, bruised green-vio
 
 ---
 
-## Section C — the Two Triangles scale badges (`assets/scale/`)
+## Section C — the Two Triangles scale badges (`assets/badge/scale/`)
 
 Circular medallions in the project's bronze/metal cameo badge
-register — like the `assets/season/turning_point` family — NOT
+register — like the `assets/badge/season/turning_point` family — NOT
 stained glass: no backlit color-through-glass, a weathered metal relief
 disc on a dark field instead. (I did not re-open the `turning_point`
 files themselves — outside the two files I was told to read — so the
@@ -336,8 +336,8 @@ against the actual `turning_point` art before sending to Gemini.)
 
 | Badge | File stem |
 |---|---|
-| Judas's Triangle | `assets/scale/Judas_Triangle.png` |
-| Lucifer's Triangle | `assets/scale/Lucifer_Triangle.png` |
+| Judas's Triangle | `assets/badge/scale/Judas_Triangle.png` |
+| Lucifer's Triangle | `assets/badge/scale/Lucifer_Triangle.png` |
 
 These illustrate the "Two Triangles" encyclopedia article — the
 Judas–Lucifer scale of self-hate/self-love whose zero point no
@@ -400,5 +400,5 @@ face one level down in a `dual/` subfolder
 follow this exactly. The two scale badges use the PascalCase names the
 owner specified directly (`Judas_Triangle.png`, `Lucifer_Triangle.png`)
 rather than the weekday snake_case convention — kept as given since
-`assets/scale/` is a badge family, not a weekday theme, and the owner
+`assets/badge/scale/` is a badge family, not a weekday theme, and the owner
 named these two files explicitly.

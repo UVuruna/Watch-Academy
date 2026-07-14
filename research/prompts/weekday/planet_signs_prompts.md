@@ -37,7 +37,7 @@ accordingly.
 
 **File stems (must match exactly — regenerations drop over these):**
 `sun.png`, `moon.png`, `mars.png`, `mercury.png`, `jupiter.png`,
-`venus.png`, `saturn.png` in `assets/weekday/planet_signs/`, plus
+`venus.png`, `saturn.png` in `assets/weekday/planets/signs/`, plus
 `dual/sun_eclipse.png`.
 
 Shared skeleton: *Ornate circular sigil, polished metal relief,

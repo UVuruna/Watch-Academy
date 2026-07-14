@@ -255,17 +255,19 @@ SLOT_STYLE_VALUES = tuple(dict.fromkeys(
     ZODIAC_SLOT_STYLES + CHINESE_SLOT_STYLES
 ))
 # style -> art folder under assets/zodiac/ (text styles draw no art).
+# Family/variant tree (owner restructure 2026-07-14): astrology's
+# plain logo is its PRIMARY variant.
 ZODIAC_STYLE_ART_DIRS = {
-    "sign": "sign",
-    "logo": "logo",
-    "constellation": "constellation",
-    "colored": "logo_colored",
+    "sign": "astrology/sign",
+    "logo": "astrology/primary",
+    "constellation": "astrology/constellation",
+    "colored": "astrology/colored",
 }
 CHINESE_STYLE_ART_DIRS = {
-    "colored": "chinese_colored",
-    "gold": "chinese",
-    "silver": "chinese",
-    "bronze": "chinese",
+    "colored": "chinese/colored",
+    "gold": "chinese/primary",
+    "silver": "chinese/primary",
+    "bronze": "chinese/primary",
 }
 
 # Earth marker style: the owner ships every continent in a clean and an

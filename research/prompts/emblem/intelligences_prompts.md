@@ -20,11 +20,11 @@ consistent.
 Suggested drop locations (flat PNGs, PascalCase stems matching the
 existing emblem-family convention):
 
-- `assets/intelligence/BodilyKinesthetic.png`, `Interpersonal.png`,
+- `assets/emblem/intelligence/BodilyKinesthetic.png`, `Interpersonal.png`,
   `Linguistic.png`, `Naturalist.png`, `LogicalMathematical.png`,
   `Musical.png`, `Existential.png`, `Intrapersonal.png`, `Spatial.png`
-- `assets/mood/Wheel_of_Moods.png`, optionally
-  `assets/mood/Wheel_of_Moods_dark.png`
+- `assets/emblem/mood/Wheel_of_Moods.png`, optionally
+  `assets/emblem/mood/Wheel_of_Moods_dark.png`
 
 ---
 
@@ -160,7 +160,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 A single medallion, not a per-day badge, for the Moods article's
 three-way comparison (the Greek humors, Plutchik's wheel of emotions,
 and the dial's own wheel). Same silver-sundial family as the existing
-per-day Mood badges (`assets/mood/Joy.png` etc. — see the "Moods —
+per-day Mood badges (`assets/emblem/mood/Joy.png` etc. — see the "Moods —
 silver sundial cameo" family description in
 [Virtue, Sin and Mood Prompts](virtue_sin_mood_prompts.md)): polished
 silver cameo, sundial hour-tick motif, the hour's own light.
@@ -182,7 +182,7 @@ Two moods sit outside the six-color wheel, exactly as in the Mood
 badge set's Sunday-dual row: **Glory** (the Ruler face, the sum of all
 six colors — white light) becomes the medallion's own radiant white
 center boss; **Awe** — the servant's mood, currently named Eclipse in
-`assets/mood/Eclipse.png` and under owner review for a rename (see
+`assets/emblem/mood/Eclipse.png` and under owner review for a rename (see
 `prompt.txt`) — becomes the small pale-silver crescent set into the
 outer ring at the very bottom, "watching from below" rather than
 claiming a wedge of its own. Hex values are listed above only to
@@ -214,6 +214,6 @@ Same pipeline as the rest of the project's generated art: Gemini's PNG
 output drops to the project root, then goes through white-background
 removal + circle crop + resize to 800×800 RGBA, same as every other
 weekday/badge asset delivered so far. Section A's nine badges land at
-`assets/intelligence/{PascalCaseStem}.png`; Section B's medallion(s)
-land at `assets/mood/Wheel_of_Moods.png` (and the optional
+`assets/emblem/intelligence/{PascalCaseStem}.png`; Section B's medallion(s)
+land at `assets/emblem/mood/Wheel_of_Moods.png` (and the optional
 `Wheel_of_Moods_dark.png`), alongside the existing per-day Mood badges.

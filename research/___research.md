@@ -33,7 +33,7 @@ cross-theme weekday pages with Sunday and Tuesday written in full.
 ### `prompts/emblem/virtue_sin_mood_prompts.md` — Virtue/Sin/Mood Prompts
 The three canonical 8-item lists (Sunday dual) and 24 Gemini prompts
 for their logos — gold cameo virtues, blackened-iron sins, silver
-sundial moods; proposed drop dirs assets/virtue|sin|mood/.
+sundial moods; proposed drop dirs assets/emblem/virtue|sin|mood/.
 
 ### `guide_shotlist.md` — Guide Redesign and Shot List
 The Guide's 30-chapter redesign plan plus the numbered 37-screenshot
@@ -49,7 +49,7 @@ The owner-requested 12th weekday theme: both testaments as stained
 glass — the day mapping with rationale (Ancient of Days + the Son as
 Servant on Sunday, Mary/Moon, David/Mars, Moses/Mercury,
 Solomon/Jupiter, Bride and Bridegroom/Venus, Joseph's sheaves/Saturn)
-and the 8 Gemini prompts (drop dir assets/weekday/bible/).
+and the 8 Gemini prompts (drop dir assets/weekday/bible/primary/).
 
 ### `prompts/weekday/alchemy_metal_prompts.md` — Alchemy Metal Prompts
 Redesign of the seven alchemy weekday plates: the shared ingot-pile
@@ -63,14 +63,14 @@ The owner-approved 13th weekday theme: the pack hierarchy as the week
 (Alpha with the Omega servant as Sunday dual — the dial's own M/Ω
 ring letters made flesh — Luna, Hunter, Scout, Beta, Mate, Elder),
 fourth bronze metal-theme with a paw-print border, 8 bronze + 8
-colored Gemini prompts; drop dir assets/weekday/wolf/.
+colored Gemini prompts; drop dir assets/weekday/wolf/primary/.
 
 ### `prompts/weekday/bee_hive_prompts.md` — Bee Hive Theme Prompts
 The 14th weekday theme: the hive's castes as the week (Queen with
 the day-one Cleaner as Sunday dual, Nurse, Guard, Scout's waggle
 dance, Builder, the Drone on Venus — owner's call — and the dying
 Forager on Saturn), honeycomb border echoing the dial's hexagram,
-8 bronze + 8 colored prompts; drop dir assets/weekday/bee/.
+8 bronze + 8 colored prompts; drop dir assets/weekday/bee/primary/.
 
 ### `prompts/weekday/elephant_herd_prompts.md` — Elephant Herd Theme Prompts
 The 15th weekday theme closing the animal-society trio (pack=rank,
@@ -78,7 +78,7 @@ hive=function, herd=MEMORY): Matriarch with the dead matriarch's
 bones as the Memory dual, Allomother, Musth, the infrasound Caller,
 the bachelor-school Mentor, the Reunion ceremony, the Elder digging
 remembered water on her last molars; acacia-and-tusk border, 8
-bronze + 8 colored prompts; drop dir assets/weekday/elephant/.
+bronze + 8 colored prompts; drop dir assets/weekday/elephant/primary/.
 
 ### `prompts/badge/season_trinity_prompts.md` — Season & Trinity Badge Prompts
 The remaining concept badges (owner 2026-07-13): the Trinity family
@@ -86,7 +86,7 @@ The remaining concept badges (owner 2026-07-13): the Trinity family
 axis (Spring/Summer/Autumn/Winter + Wet/Dry, copper growth-ring), the
 Turning Points (both Solstices + one Equinox, split gold/silver
 hexagram field) and the optional Meteorological twins — 16 prompts,
-drop dirs assets/trinity/ and assets/season/.
+drop dirs assets/badge/trinity/ and assets/badge/season/.
 
 ### `prompts/weekday/bible_dark_prompts.md` — Bible II & Dark Set Prompts
 The owner's two-sets decision (2026-07-13): BIBLE II (Abraham·Isaac
@@ -95,29 +95,29 @@ the DARK set as night-window stained glass where every figure MIRRORS
 a light one (Lucifer·Judas dual, Lilith, Goliath, the Serpent,
 Herod/Nebuchadnezzar alternatives, Delilah, Cain) — 18 theme prompts
 + the two scale badges (Judas ▽ blue / Lucifer △ red) for "The Two
-Triangles"; drop dirs assets/weekday/bible2|bible_dark/ and
-assets/scale/.
+Triangles"; drop dirs assets/weekday/bible/secondary|bible_dark/ and
+assets/badge/scale/.
 
 ### `prompts/weekday/cosmos_prompts.md` — Cosmos & Planets Medallion Prompts
 The COSMOS weekday theme (owner 2026-07-13): deep-sky objects as
 bronze star-chart medallions — Sun with the event-horizon black hole
 dual, nebula, supernova, pulsar-as-clock, galaxy, binary stars,
 comet — 16 prompts (bronze + colored arcs) plus the 8-prompt Planets
-medallion look (drop dir assets/weekday/planets_art/).
+medallion look (drop dir assets/weekday/planets/art/).
 
 ### `prompts/emblem/intelligences_prompts.md` — Nine Intelligences & Wheel of Moods
 The Nine Intelligences badges (owner GO 2026-07-13): a new
 silver-inlaid "academy cameo" family, 9 = the six Prism arms + the
 three Trinity arms, each with its instrument and arm-color enamel
-(drop dir assets/intelligence/); plus the Wheel of Moods medallion —
+(drop dir assets/emblem/intelligence/); plus the Wheel of Moods medallion —
 the dial's own eight-mood wheel in the exact paint hues with the
-white Glory center and the Awe crescent below (assets/mood/).
+white Glory center and the Awe crescent below (assets/emblem/mood/).
 
 ### `prompts/zodiac/chinese_zodiac_prompts.md` — Chinese Zodiac Prompts
 The bronze Chinese-zodiac redesign (owner 2026-07-13): the Greek
 key border replaced by a huiwen meander with Wu Xing element
 roundels on the pentagram points — 12 Gemini prompts, drop dir
-assets/zodiac/chinese/.
+assets/zodiac/chinese/primary/.
 
 ### `prompts/instrument/instrument_prompts.md` — Instrument Prompt & Shot Sheet
 Images for the Encyclopedia's "The Instrument" articles (owner

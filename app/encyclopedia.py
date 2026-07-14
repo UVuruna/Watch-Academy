@@ -134,7 +134,10 @@ def _metal_looks(base: Path, colored: Path | None) -> tuple:
 def _theme_body_art(theme: str, body: str) -> Path:
     """One theme's plate for one body (bronze / canon file)."""
     if theme == "planets":
-        return defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
+        return (
+            defaults.WEEKDAY_ART_DIR / "planets" / "primary"
+            / f"{body}.png"
+        )
     return (
         defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
         / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
@@ -142,11 +145,11 @@ def _theme_body_art(theme: str, body: str) -> Path:
 
 
 def _theme_dual_art(theme: str, colored: bool = False) -> Path:
-    """The theme's Sunday SERVANT plate (colored variant on demand)."""
+    """The theme's Sunday SERVANT plate — the colored dual lives in
+    the SIBLING variant (owner restructure 2026-07-14)."""
     rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if colored:
-        folder, _, stem = rel.rpartition("/")
-        return defaults.WEEKDAY_ART_DIR / folder / "colored" / f"{stem}.png"
+        rel = rel.replace("/primary/", "/colored/")
     return defaults.WEEKDAY_ART_DIR / f"{rel}.png"
 
 
@@ -183,8 +186,9 @@ def _weekday_topic(theme: str):
         if metal:
             colored = (
                 defaults.WEEKDAY_ART_DIR
-                / defaults.WEEKDAY_THEME_DIRS[theme] / "colored"
-                / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
+                / defaults.WEEKDAY_THEME_DIRS[theme]
+            ).parent / "colored" / (
+                f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
             )
             if sun:
                 entry["looks"] = tuple(
@@ -205,9 +209,12 @@ def _weekday_topic(theme: str):
         elif theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
             # glyphs ride the arrows.
-            sign = defaults.WEEKDAY_ART_DIR / "planet_signs" / f"{body}.png"
+            sign = (
+                defaults.WEEKDAY_ART_DIR / "planets" / "signs"
+                / f"{body}.png"
+            )
             sign_dual = (
-                defaults.WEEKDAY_ART_DIR / "planet_signs" / "dual"
+                defaults.WEEKDAY_ART_DIR / "planets" / "signs" / "dual"
                 / "sun_eclipse.png"
             )
             entry["looks"] = (
@@ -229,23 +236,25 @@ def _topics() -> dict:
         topics[theme] = {"title": title, "icon": icon, "entries": entries}
     topics["astrology"] = {
         "title": "Astrology",
-        "icon": defaults.ZODIAC_ART_DIR / "sign" / "Leo.png",
+        "icon": defaults.ZODIAC_ART_DIR / "astrology" / "sign" / "Leo.png",
         "entries": [
             {
                 # Owner defaults 2026-07-13: the logo+constellation pair
                 # leads; the arrows reach the colored logo and the sign.
                 "looks": (
                     ("Logo & Constellation", ((
-                        defaults.ZODIAC_ART_DIR / "logo" / f"{sign}.png",
-                        defaults.ZODIAC_ART_DIR / "constellation"
+                        defaults.ZODIAC_ART_DIR / "astrology" / "primary"
                         / f"{sign}.png",
+                        defaults.ZODIAC_ART_DIR / "astrology"
+                        / "constellation" / f"{sign}.png",
                     ),)),
                     ("Colored", ((
-                        defaults.ZODIAC_ART_DIR / "logo_colored"
+                        defaults.ZODIAC_ART_DIR / "astrology" / "colored"
                         / f"{sign}.png",
                     ),)),
                     ("Sign", ((
-                        defaults.ZODIAC_ART_DIR / "sign" / f"{sign}.png",
+                        defaults.ZODIAC_ART_DIR / "astrology" / "sign"
+                        / f"{sign}.png",
                     ),)),
                 ),
                 "name": sign,
@@ -259,9 +268,10 @@ def _topics() -> dict:
             )
         ],
     }
+    chinese_primary = defaults.ZODIAC_ART_DIR / "chinese" / "primary"
     topics["chinese"] = {
         "title": "Chinese zodiac",
-        "icon": defaults.ZODIAC_ART_DIR / "chinese" / "Dragon.png",
+        "icon": chinese_primary / "Dragon.png",
         "entries": [
             {
                 "name": animal,
@@ -273,17 +283,13 @@ def _topics() -> dict:
                 "looks": tuple(
                     (label, ((path,),))
                     for label, path in (
-                        ("Bronze",
-                         defaults.ZODIAC_ART_DIR / "chinese"
-                         / f"{animal}.png"),
+                        ("Bronze", chinese_primary / f"{animal}.png"),
                         ("Gold", metal_variant_file(
-                            defaults.ZODIAC_ART_DIR / "chinese"
-                            / f"{animal}.png", "gold")),
+                            chinese_primary / f"{animal}.png", "gold")),
                         ("Silver", metal_variant_file(
-                            defaults.ZODIAC_ART_DIR / "chinese"
-                            / f"{animal}.png", "silver")),
+                            chinese_primary / f"{animal}.png", "silver")),
                         ("Colored",
-                         defaults.ZODIAC_ART_DIR / "chinese_colored"
+                         defaults.ZODIAC_ART_DIR / "chinese" / "colored"
                          / f"{animal}.png"),
                     )
                 ),
@@ -342,7 +348,7 @@ def _topics() -> dict:
 
     topics["week"] = {
         "title": "The Week",
-        "icon": defaults.WEEKDAY_ART_DIR / "planets" / "sun.png",
+        "icon": defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "sun.png",
         "entries": [
             {
                 "looks": (

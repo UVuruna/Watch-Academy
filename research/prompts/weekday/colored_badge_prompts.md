@@ -14,7 +14,7 @@ matches the arm the day lives on.
 Suggested drop locations (wiring follows once the art lands):
 - `assets/weekday/greek/colored/`, `.../norse/colored/`,
   `.../profession/colored/` — same file names as the bronze set
-- `assets/zodiac/chinese_colored/`, `assets/zodiac/logo_colored/`
+- `assets/zodiac/chinese/colored/`, `assets/zodiac/astrology/colored/`
 
 ---
 

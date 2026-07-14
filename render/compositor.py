@@ -622,7 +622,10 @@ class Compositor:
             metal = self._skin.weekday_set.metal
         elif theme == "planets":
             display_name = defaults.DEFAULT_SKIN.weekday_set.body_names[body]
-            image = defaults.WEEKDAY_ART_DIR / "planets" / f"{body}.png"
+            image = (
+                defaults.WEEKDAY_ART_DIR / "planets" / "primary"
+                / f"{body}.png"
+            )
             metal = None
         else:
             # The info slot's SECOND weekday: resolve the art exactly
@@ -634,7 +637,7 @@ class Compositor:
             )
             slot_metal = self._skin.info_slot_metal
             if slot_metal == "colored" and theme in constants.METAL_THEMES:
-                theme_dir = theme_dir / "colored"
+                theme_dir = theme_dir.parent / "colored"
             image = (
                 theme_dir
                 / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
@@ -1052,7 +1055,7 @@ class Compositor:
             + "\n\n"
             + self._symbolism.chinese_element(element)["base"]
         )
-        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese")
+        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese/primary")
         image = metal_variant_file(
             octa_slot_art(folder, animal),
             style if style in defaults.METAL_SWAP_TARGETS else None,

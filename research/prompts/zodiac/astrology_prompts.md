@@ -9,12 +9,12 @@ paragraph, which is where the owner's plate scene for that sign lives)
 
 **Three looks, three jobs:**
 
-- **SIGN** (`assets/zodiac/sign/`) — the full illustrated
+- **SIGN** (`assets/zodiac/astrology/sign/`) — the full illustrated
   creature/figure medallion, the scene straight off the article,
   wearing the sign's own element color STRICTLY (see below).
-- **LOGO** (`assets/zodiac/logo/`) — the bare astrological glyph
+- **LOGO** (`assets/zodiac/astrology/primary/`) — the bare astrological glyph
   only, a minimal mark meant to still read at 64px.
-- **CONSTELLATION** (`assets/zodiac/constellation/`) — the sign's
+- **CONSTELLATION** (`assets/zodiac/astrology/constellation/`) — the sign's
   actual star pattern on a night field, its mythic figure only
   faintly ghosted behind, no glyph anywhere.
 
@@ -52,7 +52,7 @@ watermark.
 
 ---
 
-## 1. SIGN look (`assets/zodiac/sign/`) — 12 prompts
+## 1. SIGN look (`assets/zodiac/astrology/sign/`) — 12 prompts
 
 Shared skeleton: *Ornate circular medallion, photorealistic render,
 perfectly centered, isolated on white background, no text or
@@ -125,7 +125,7 @@ Ornate circular medallion, photorealistic render, perfectly centered, isolated o
 
 ---
 
-## 2. LOGO look (`assets/zodiac/logo/`) — 12 prompts
+## 2. LOGO look (`assets/zodiac/astrology/primary/`) — 12 prompts
 
 The bare glyph only — no creature, no scene, no element color. Bold
 and legible at small sizes.
@@ -199,7 +199,7 @@ Minimalist emblem, square 1:1, perfectly centered, isolated on white background,
 
 ---
 
-## 3. CONSTELLATION look (`assets/zodiac/constellation/`) — 12 prompts
+## 3. CONSTELLATION look (`assets/zodiac/astrology/constellation/`) — 12 prompts
 
 The sign's real star pattern on a night field, its mythic figure only
 faintly ghosted behind, no glyph, no element color-coding (the strict

@@ -280,7 +280,7 @@ ARTICLE_COLUMN_WIDTH_PX = 400        # the hexa TWO-COLUMN legend: each sign's
 # The Judas–Lucifer scale badges (owner 2026-07-13): the two triangle
 # medallions illustrating "The Two Triangles" — wired before the art
 # lands; the Encyclopedia hides missing files.
-SCALE_ART_DIR = paths.assets_dir() / "scale"
+SCALE_ART_DIR = paths.assets_dir() / "badge" / "scale"
 INSTRUMENT_ART_DIR = paths.assets_dir() / "instrument"
 # The Astrology/Ascendant hover image trio (owner 2026-07-13): the
 # ACTIVE style's art large in the middle, the two remaining styles
@@ -473,16 +473,17 @@ WEEKDAY_ART_DIR = paths.assets_dir() / "weekday"
 # The cross-cure emblem logos (owner Gemini art 2026-07-12): one PNG
 # per virtue/sin/mood, Capitalized stems, 8 per family (Sunday twice).
 EMBLEM_ART_DIRS = {
-    "virtues": paths.assets_dir() / "virtue",
-    "sins": paths.assets_dir() / "sin",
-    "moods": paths.assets_dir() / "mood",
+    "virtues": paths.assets_dir() / "emblem" / "virtue",
+    "sins": paths.assets_dir() / "emblem" / "sin",
+    "moods": paths.assets_dir() / "emblem" / "mood",
+    "intelligence": paths.assets_dir() / "emblem" / "intelligence",
 }
 # The trinity and season badge families (owner Gemini art 2026-07-13):
 # Faith/Hope/Love triskelions; the Goethe-axis seasons with the
 # tropics' Wet_Season/Dry_Season, plus turning_point/ (the solstices
 # and the one Equinox) and meteorological/ (the measured twins).
-TRINITY_ART_DIR = paths.assets_dir() / "trinity"
-SEASON_ART_DIR = paths.assets_dir() / "season"
+TRINITY_ART_DIR = paths.assets_dir() / "badge" / "trinity"
+SEASON_ART_DIR = paths.assets_dir() / "badge" / "season"
 # Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128
@@ -670,20 +671,26 @@ _LOWERCASE_THEMES = (
 )
 # Theme -> art folder under assets/weekday/: both religion sets share
 # the ONE religion/ folder (all fourteen owner medallions together).
+# FAMILY/VARIANT tree (owner restructure 2026-07-14): every theme dir
+# is <family>/<variant> — related themes share a family (religion =
+# primary Creeds + secondary Mysteries; planets = primary photos +
+# signs glyphs + art medallions; bible = primary/secondary/dark), and
+# a variant's colored arc is its SIBLING <family>/colored with dual/
+# INSIDE each variant.
 WEEKDAY_THEME_DIRS = {
-    "planet_signs": "planet_signs",
-    "greek": "greek",
-    "norse": "norse",
-    "egypt": "egypt",
-    "slavic": "slavic",
-    "alchemy": "alchemy",
-    "japan": "japan",
-    "religion": "religion",
-    "religion_alt": "religion",
-    "profession": "profession",
-    "wolf": "wolf",
-    "bee": "bee",
-    "elephant": "elephant",
+    "planet_signs": "planets/signs",
+    "greek": "greek/primary",
+    "norse": "norse/primary",
+    "egypt": "egypt/primary",
+    "slavic": "slavic/primary",
+    "alchemy": "alchemy/primary",
+    "japan": "japan/primary",
+    "religion": "religion/primary",
+    "religion_alt": "religion/secondary",
+    "profession": "profession/primary",
+    "wolf": "wolf/primary",
+    "bee": "bee/primary",
+    "elephant": "elephant/primary",
 }
 WEEKDAY_THEME_FILES = {
     theme: {
@@ -755,21 +762,24 @@ WEEKDAY_DUAL_NAMES = {
     "bee": ("Queen", "Cleaner"),
     "elephant": ("Matriarch", "Memory"),
 }
+# Dual paths live INSIDE the theme's variant dir; the colored dual is
+# the same path with the variant segment swapped to colored/ (owner
+# restructure 2026-07-14).
 WEEKDAY_DUAL_FILES = {
-    "planets": "planets/dual/sun_eclipse",
-    "planet_signs": "planet_signs/dual/sun_eclipse",
-    "greek": "greek/dual/Phaethon",
-    "norse": "norse/dual/Skoll",
-    "egypt": "egypt/dual/afu_ra",
-    "slavic": "slavic/dual/dazbog_old",
-    "alchemy": "alchemy/dual/ore",
-    "japan": "japan/dual/ama_no_iwato",
-    "religion": "religion/dual/rough_ashlar",
-    "religion_alt": "religion/dual/corax",
-    "profession": "profession/Servant",
-    "wolf": "wolf/dual/omega",
-    "bee": "bee/dual/Cleaner",
-    "elephant": "elephant/dual/Memory",
+    "planets": "planets/primary/dual/sun_eclipse",
+    "planet_signs": "planets/signs/dual/sun_eclipse",
+    "greek": "greek/primary/dual/Phaethon",
+    "norse": "norse/primary/dual/Skoll",
+    "egypt": "egypt/primary/dual/afu_ra",
+    "slavic": "slavic/primary/dual/dazbog_old",
+    "alchemy": "alchemy/primary/dual/ore",
+    "japan": "japan/primary/dual/ama_no_iwato",
+    "religion": "religion/primary/dual/rough_ashlar",
+    "religion_alt": "religion/secondary/dual/corax",
+    "profession": "profession/primary/Servant",
+    "wolf": "wolf/primary/dual/omega",
+    "bee": "bee/primary/dual/Cleaner",
+    "elephant": "elephant/primary/dual/Memory",
 }
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
@@ -866,7 +876,7 @@ DEFAULT_SKIN = SkinDefinition(
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={name: WEEKDAY_ART_DIR / "planets" / f"{name}.png" for name in (
+        bodies={name: WEEKDAY_ART_DIR / "planets" / "primary" / f"{name}.png" for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
         body_names={
@@ -910,7 +920,7 @@ DEFAULT_SKIN = SkinDefinition(
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
-        moon_asset=WEEKDAY_ART_DIR / "planets" / "moon.png",
+        moon_asset=WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png",
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,

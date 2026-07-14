@@ -28,7 +28,7 @@ Professions medallion style instead of the allegorical-badge style.
 
 ## 1. Servant.png — bronze plate (matches Ruler.png exactly)
 
-House style, read off `assets/weekday/profession/Ruler.png`,
+House style, read off `assets/weekday/profession/primary/Ruler.png`,
 `Soldier.png`, `Priest.png` and `Merchant.png`: a weathered
 bronze/antique-gold sculptural relief figure standing on a dark
 cracked-slate stone background with motifs specific to the calling
@@ -39,7 +39,7 @@ roundels carrying a calling-specific emblem (crowns for the Ruler) and
 single rune-like glyphs at the four cardinal points; no bright colors
 anywhere, pure weathered bronze/gold/slate-gray.
 
-Drop at `assets/weekday/profession/Servant.png`.
+Drop at `assets/weekday/profession/primary/Servant.png`.
 
 ```
 Circular bronze/antique-gold sculptural relief medallion on a dark cracked-slate stone background, photorealistic render, perfectly centered, isolated on transparent background — same weathered bronze relief finish, stone texture and lighting as Ruler.png and the rest of the Profession set. Center: the Ruler's Servant face — the same bearded king, standing before his own empty throne, crown lifted from his head and held low in both hands, eyes downcast, the ermine-trimmed royal robe replaced by a plain rope-belted tunic, one bare foot resting in a bronze basin of water at the foot of the throne where the eagle-blazoned shield stood in the Ruler plate; the same imperial eagles are engraved faintly into the stone behind him, wings folded low instead of raised. Border: identical double-ring Celtic knotwork to Ruler.png with lion supporters and rune-like glyphs at the four cardinal points, but the crown roundels are replaced with small bronze roundels bearing a basin-and-towel emblem. Palette: dark antique bronze, muted gold, weathered slate gray only — no bright colors, same matte sculptural metal finish and cracked-stone texture as the rest of the bronze Profession set.
@@ -255,12 +255,12 @@ probaćemo"), and physically it IS the honest dual: the same Sun with
 its light taken, Glory become Eclipse. Two prompts, each matching its
 set's own look:
 
-**Eclipsed Sun — planets (drop at `assets/weekday/planets/dual/sun_eclipse.png`)**
+**Eclipsed Sun — planets (drop at `assets/weekday/planets/primary/dual/sun_eclipse.png`)**
 ```
 Photorealistic total solar eclipse, perfectly centered, isolated on transparent background — the SAME photoreal space-render style as a NASA sun photograph, matching the look of the theme's real sun render. Center: the Moon's pitch-black disc covering the Sun exactly, leaving a thin, blazing white-gold corona ring streaming irregular wisps and two or three small pink prominence flares at the rim; a faint diamond-ring glint at the upper edge, the last bead of light; deep-space black around it with no stars near the corona. No border, no medallion, no frame — a raw celestial body like the other planet renders. Colors: black disc, white-gold corona, faint silver streamers, prominence pink.
 ```
 
-**Eclipsed Sun — planet signs (drop at `assets/weekday/planet_signs/dual/sun_eclipse.png`)**
+**Eclipsed Sun — planet signs (drop at `assets/weekday/planets/signs/dual/sun_eclipse.png`)**
 ```
 Minimal planetary glyph in the same engraved-emblem style as the theme's Sun glyph (the circle with the center dot): the SAME circled-dot Sun symbol now in eclipse — the disc filled matte black, the center dot glowing faint silver instead of gold, and a thin radiant corona ring hugging the outer edge of the circle where the gold rim used to be, a few hair-thin rays escaping at irregular angles. Perfectly centered, isolated on transparent background, no text. Colors: matte black, silver, one whisper of pale gold in the corona.
 ```
@@ -291,17 +291,17 @@ prompt upgrades the main medallion to work the All-Seeing Eye into
 the composition — the owner's call whether to regenerate or keep the
 plain square-and-compasses.
 
-**Rough Ashlar — the Servant face (drop at `assets/weekday/religion/dual/rough_ashlar.png`)**
+**Rough Ashlar — the Servant face (drop at `assets/weekday/religion/primary/dual/rough_ashlar.png`)**
 ```
 Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the owner's freemasonry religion medallion. Center: a rough-hewn cubic block of stone on a masonic tracing board, its faces still cracked and unworked, a gavel and a chisel resting against its base and a plumb line hanging beside it; high above, the All-Seeing Eye within a radiant triangle watches faintly through the gloom, a single thin ray touching the stone's top edge — the work not yet begun, the light only promised. Border: silver ring bearing small roundels that alternate the square-and-compasses with a tiny radiant delta. Palette: silver, graphite black, one faint warm ray of pale gold — matching the religion set's black-stone finish exactly.
 ```
 
-**Perfect Ashlar — optional bright counterpart (drop at `assets/weekday/religion/dual/perfect_ashlar.png`, only if the owner wants the pair as TWO new images instead of reusing freemasonry.png)**
+**Perfect Ashlar — optional bright counterpart (drop at `assets/weekday/religion/primary/dual/perfect_ashlar.png`, only if the owner wants the pair as TWO new images instead of reusing freemasonry.png)**
 ```
 Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the owner's freemasonry religion medallion. Center: a perfectly squared and polished cubic ashlar on a masonic tracing board, its faces mirror-smooth and returning the light, suspended from a lewis hook above a builder's level; the All-Seeing Eye within a radiant triangle blazes directly over it, its glory rays breaking on the cube's edges into small stars. Border: silver ring bearing small roundels that alternate the square-and-compasses with a tiny radiant delta. Palette: silver, graphite black, radiant white-gold rays — matching the religion set's black-stone finish exactly.
 ```
 
-**Optional main-medallion upgrade — square, compasses AND the Eye (would replace `assets/weekday/religion/freemasonry.png`)**
+**Optional main-medallion upgrade — square, compasses AND the Eye (would replace `assets/weekday/religion/primary/freemasonry.png`)**
 ```
 Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the other religion medallions (black stone, silver relief). Center: the square and compasses opened over an open book of constitutions, the letter G at their crossing; above them the All-Seeing Eye within a radiant triangle, its glory rays fanning down so the tools work literally UNDER the Eye's light; two small columns flank the composition at the edges. Border: silver ring with small roundels alternating a radiant delta, a trowel and a plumb line. Palette: silver, graphite black, pale white-gold rays.
 ```
@@ -316,12 +316,12 @@ each, exactly like the Servant pair above. The bronze Phaethon and
 Skoll are delivered; these are the missing COLORED prompts, in the
 same house styles as `colored/Helios.png` and `colored/Sol.png`.
 
-**Phaethon — colored (drop at `assets/weekday/greek/dual/colored/Phaethon.png`)**
+**Phaethon — colored (drop at `assets/weekday/greek/primary/dual/colored/Phaethon.png`)**
 ```
 Ornate circular badge, vivid full-color enamel over dark gold, photorealistic render, perfectly centered, isolated on white background — same finish and Greek-key border family as the colored Helios badge. Center: Phaethon, Helios's proud young son, gripping the reins of the runaway sun chariot in white-knuckled panic, the four winged horses bolting in different directions, the chariot tilting; the sun-disc behind him guttering from radiant gold to ember red, a jagged black scorch-streak burning across a glossy twilight-orange sky field, tiny stars and a smoking cloud-strip beneath the wheels. Border: darkened gold Greek key pattern with small roundels bearing a cracked ember-red sun-disc. Colors: ember orange, scorched crimson, aged gold, ash black — visibly the SAME palette family as the colored Helios badge but overheated and breaking.
 ```
 
-**Skoll — colored (drop at `assets/weekday/norse/dual/colored/Skoll.png`)**
+**Skoll — colored (drop at `assets/weekday/norse/primary/dual/colored/Skoll.png`)**
 ```
 Ornate circular badge, vivid full-color painted-wood-and-iron finish with aurora accents, photorealistic render, perfectly centered, isolated on white background — same finish and Celtic-knotwork border family as the colored Sol badge. Center: Skoll, the great charcoal-black wolf of Norse myth, caught mid-leap against a deep indigo dusk sky threaded with a thin green-violet aurora, jaws closing around the last golden sliver of the sun-disc; Sol's empty upraised hand and trailing golden hair just visible at the wolf's shoulder, her chariot horses rearing behind in his dust. Border: iron-and-painted-wood Celtic knotwork ring with small roundels bearing a wolf's snapping jaw in dying-ember gold. Colors: charcoal black, deep indigo, aurora green-violet, dying ember gold — the SAME aurora-accent family as the colored Sol badge with its daylight swallowed.
 ```
@@ -336,16 +336,16 @@ wiring lands:
 
 | Source | Destination |
 |---|---|
-| servant.png | `assets/weekday/profession/Servant.png` |
+| servant.png | `assets/weekday/profession/primary/Servant.png` |
 | servant colored.png | `assets/weekday/profession/colored/Servant.png` |
-| phaethon.png | `assets/weekday/greek/dual/Phaethon.png` |
-| skoll.png | `assets/weekday/norse/dual/Skoll.png` |
-| afu-ra.png | `assets/weekday/egypt/dual/afu_ra.png` |
-| Ama-no-Iwato.png | `assets/weekday/japan/dual/ama_no_iwato.png` |
-| corax.png | `assets/weekday/religion/dual/corax.png` |
-| washbasin.png | `assets/weekday/religion/dual/washbasin.png` |
-| old dazbog.png | `assets/weekday/slavic/dual/dazbog_old.png` |
-| raw ore.png | `assets/weekday/alchemy/dual/ore.png` |
+| phaethon.png | `assets/weekday/greek/primary/dual/Phaethon.png` |
+| skoll.png | `assets/weekday/norse/primary/dual/Skoll.png` |
+| afu-ra.png | `assets/weekday/egypt/primary/dual/afu_ra.png` |
+| Ama-no-Iwato.png | `assets/weekday/japan/primary/dual/ama_no_iwato.png` |
+| corax.png | `assets/weekday/religion/primary/dual/corax.png` |
+| washbasin.png | `assets/weekday/religion/primary/dual/washbasin.png` |
+| old dazbog.png | `assets/weekday/slavic/primary/dual/dazbog_old.png` |
+| raw ore.png | `assets/weekday/alchemy/primary/dual/ore.png` |
 
 The Servant pair sits directly beside the Ruler (an eighth plate of
 the profession set, per section 1); everything else waits in its

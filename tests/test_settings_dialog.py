@@ -308,7 +308,7 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     from render.assets import scaled_variant_file
 
     gemini_uri = scaled_variant_file(
-        defaults.ZODIAC_ART_DIR / "logo_colored" / "Gemini.png",
+        defaults.ZODIAC_ART_DIR / "astrology" / "colored" / "Gemini.png",
         2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
     ).as_uri()
     assert gemini_uri in top

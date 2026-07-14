@@ -47,7 +47,7 @@ gold inside its raw ore block — the same promise the Sunday dual
 plate (`dual/ore.png`, black ore split by a gold vein) makes loud.
 Saturday whispers what Sunday shouts.
 
-**Drop:** over the existing stems in `assets/weekday/alchemy/`
+**Drop:** over the existing stems in `assets/weekday/alchemy/primary/`
 (`gold.png`, `silver.png`, `iron.png`, `mercury.png`, `tin.png`,
 `copper.png`, `lead.png`). `dual/ore.png` is untouched.
 

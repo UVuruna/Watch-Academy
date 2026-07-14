@@ -27,7 +27,7 @@ relief plates; a full-color painted `colored/` set **already exists**
 for Professions on its own separate sheet, so **no colored prompts are
 authored here.**
 
-Files land in `assets/weekday/profession/`. Stems below are the exact
+Files land in `assets/weekday/profession/primary/`. Stems below are the exact
 Capitalized names from `WEEKDAY_THEME_FILES["profession"]` — note the
 Sunday dual is `Servant.png`, sitting DIRECTLY in the folder, NOT under
 a `dual/` subfolder, per `WEEKDAY_DUAL_FILES["profession"] =
