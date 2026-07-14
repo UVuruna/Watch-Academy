@@ -165,3 +165,16 @@ Ornate circular badge, vivid full-color painted open sky over rose-bronze, photo
 ```
 Ornate circular badge, vivid full-color painted open field over aged bronze, photorealistic render, perfectly centered, isolated on white background. Center: an old forager bee landing heavy on the weathered gray hive board in pale low winter-gold light, wing edges frayed and translucent, pollen baskets full and bright orange — the one strong color on the plate — her long blue shadow reaching toward the dark entrance. Border: aged dark bronze honeycomb ring with tiny bees, four gunmetal roundels bearing the Saturn glyph. Colors: pale winter gold, weathered gray board, bright pollen orange, long blue shadow.
 ```
+
+---
+
+## The Ninth — the Swarm (`swarm.png`, encyclopedia-only)
+
+Owner 8+1 extension (2026-07-14): the hive's ninth is the EVENT — the
+swarm, the one moment the whole structure rises and leaves as a single
+body (the hive's own eclipse: not a caste, a happening). Encyclopedia
+plate only; the dial keeps its eight.
+
+```
+Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the swarm in flight — a great rising column of thousands of bees lifting from an abandoned comb as one living cloud, the old queen a slightly larger form at the heart of the vortex, the comb below left EMPTY with every hexagonal cell open and bare; the cloud's upper edge curling like smoke about to leave the frame. Border: bronze ring worked as a band of hexagonal honeycomb cells — all of them OPEN and uncapped, not a single sealed cell, with four small roundels bearing a tiny rising-cloud spiral. Palette: aged bronze dominant, the empty comb a shade darker, no gilded metal — the gold left with the hive.
+```

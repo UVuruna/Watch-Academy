@@ -151,3 +151,19 @@ Ornate circular badge, vivid full-color painted wilderness over rose-bronze, pho
 ```
 Ornate circular badge, vivid full-color painted wilderness over aged bronze, photorealistic render, perfectly centered, isolated on white background. Center: an old scar-eared wolf with a frost-white muzzle seated apart on a low flat stone beneath a bare winter tree, watching the distant pack at play under a pale overcast winter sky, a low silver sun stretching long blue shadows across the snow toward him. Border: aged dark bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small gunmetal roundels bearing the Saturn glyph. Colors: winter white, pale silver sun, long blue shadows, frost-gray fur.
 ```
+
+---
+
+## The Ninth Wolf — Sigma (`sigma.png`, encyclopedia-only)
+
+Owner 8+1 extension (2026-07-14, the Ninth Mood pattern): every
+society may hold a NINTH that stands outside the eight seats. The
+pack's ninth is the MYTH — Sigma, the wolf the internet invented and
+ethology never found. The canon line stands ("no plate was carved for
+him; the dial leaves him unrepresented"): this plate is not carved FOR
+him — it depicts THE RUMOR ITSELF, and it stays out of the dial; only
+the Encyclopedia shows it, closing the Wolf Pack topic.
+
+```
+Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf silhouette walking away into rolling mist, deliberately HALF-CARVED — the head and shoulders in finished bronze relief, the hindquarters dissolving into raw uncut stone as if the sculptor abandoned the work, no pack anywhere, an empty rock outcrop faint in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise with small pine sprigs — but the trail BREAKS and fades to smooth uncarved stone along the bottom quarter, and the four roundels are blank polished discs bearing no glyph at all. Palette: aged bronze dominant, raw gray stone where the carving dissolves, no gilded metal anywhere.
+```

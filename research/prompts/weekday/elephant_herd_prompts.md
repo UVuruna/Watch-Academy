@@ -162,3 +162,16 @@ Ornate circular badge, vivid full-color painted savanna over rose-bronze, photor
 ```
 Ornate circular badge, vivid full-color painted savanna drought over aged bronze, photorealistic render, perfectly centered, isolated on white background. Center: the ancient cow with sunken temples and one broken tusk kneeling in a white-hot bone-dry cracked riverbed under a bleached colorless sky, digging with trunk and forefoot — and the miracle: a dark gleam of water rising in the sand exactly where she remembered it; the thirsty herd waits in line behind her, a dead white tree at the edge, long pale shadows. Border: aged dark bronze ring of acacia branches and paired tusks, four gunmetal roundels bearing the Saturn glyph. Colors: drought white, cracked earth pale gray, dusty hide, one dark gleam of found water.
 ```
+
+---
+
+## The Ninth — the Graveyard (`graveyard.png`, encyclopedia-only)
+
+Owner 8+1 extension (2026-07-14): the herd's ninth is the LEGEND —
+the elephants' graveyard, the hidden valley the old ones supposedly
+walk to alone, which biology rejects and stories refuse to give up
+(the herd's Sigma). Encyclopedia plate only; the dial keeps its eight.
+
+```
+Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a moonlit hidden valley seen from its narrow rocky entrance — the ground inside worked with great curved tusks and ribcages half-sunk in earth, a worn single-file path leading in through the gap, and NO living elephant anywhere in the frame; above the valley a thin crescent moon in low relief. Border: bronze ring carved with acacia thorn branches whose leaves are FALLING, drifting loose between paired crescent tusks, with four small roundels bearing a single tusk lying horizontal. Palette: aged bronze dominant, cold silver sheen on the moonlit bones, no gilded sun anywhere.
+```
