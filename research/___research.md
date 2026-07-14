@@ -127,6 +127,21 @@ instructions for the five articles the app itself already draws
 (dial, solar rotation, twilight, year wheel, lunations) and
 existing-asset pointers for metals and ring letters.
 
+### Legacy regeneration sheets (owner 2026-07-14, ChatGPT wave)
+Scenes authored FRESH from the symbolism canon with stems matching
+the existing assets so regenerations overwrite in place:
+`prompts/weekday/greek_prompts.md` (8, meander+laurel),
+`norse_prompts.md` (8, knotwork+runes),
+`egypt_prompts.md` (8+8 colored, cartouche+scarab),
+`slavic_prompts.md` (8+8 colored, kolovrat+wheat),
+`religion_prompts.md` (Creeds, 8, silver-on-black),
+`religion_alt_prompts.md` (Mysteries, 8),
+`profession_prompts.md` (8, Servant dual sits flat per defaults),
+`japan_prompts.md` (8, seigaiha ring, kanji-free),
+`planet_signs_prompts.md` (8, metal sigils + eclipsed dual) and
+`prompts/zodiac/astrology_prompts.md` (36: sign/logo/constellation
+under the strict element palettes).
+
 ### `symbolism_audit.md` — Symbolism Audit
 Three-auditor report (mythology accuracy / moral axes / consistency):
 swap recommendations, improvements and confirmations — the owner
