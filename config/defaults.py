@@ -418,6 +418,11 @@ ENCYCLOPEDIA_MAX_FONT_PX = 21
 # two bounds; below the minimum the scrollbar takes over).
 ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
 ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
+# The topic SLIDER (owner plan round E, 2026-07-14): a topic pages one
+# entry at a time like the Guide; the Back button is BIG so the way
+# back to the gallery is never hunted for.
+ENCYCLOPEDIA_BACK_FONT_PX = 16
+ENCYCLOPEDIA_BACK_PADDING_PX = 8
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image

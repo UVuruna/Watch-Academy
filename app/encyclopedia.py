@@ -4,10 +4,12 @@
 Screen 1 is a gallery of TOPICS in GROUPS — THE CLOCK first (the Week
 day pages and the Instrument functionality articles), then Gods /
 Zodiac / Themes / Religions, and THE INNER WHEEL last (Virtues, Sins,
-Moods with their emblem logos); screen 2 lists every article of the
-chosen topic — entity image(s), bold name, full base text — translated
-through the active overlay and with the canon terms highlighted exactly
-like the dial legends. The whole article BLOCK is centered and spans a
+Moods with their emblem logos); screen 2 is a SLIDER (owner plan round
+E, 2026-07-14): the topic's articles page ONE AT A TIME like the Guide
+— ← Previous / Next → wrap around, a counter sits between them and a
+BIG Back button leads home. Each page shows the entry's image(s), bold
+name and full base text — translated through the active overlay and
+with the canon terms highlighted exactly like the dial legends. The whole article BLOCK is centered and spans a
 fraction of the window width; the font grows gently with the window
 (em-like coefficient). Astrology shows BOTH the sign logo and its
 constellation side by side; the SUN entries pair the Ruler plate with
@@ -629,11 +631,28 @@ class EncyclopediaDialog(QDialog):
         self._scroll = QScrollArea()
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
+        self._topic_key: str | None = None
+        self._entry_index = 0
         self._back = QPushButton(self._tr("← Back"))
         self._back.clicked.connect(self._show_topics)
+        # BIG on purpose (owner plan round E): the way back to the
+        # gallery must never be hunted for.
+        self._back.setStyleSheet(
+            f"font-size: {defaults.ENCYCLOPEDIA_BACK_FONT_PX}px;"
+            f"padding: {defaults.ENCYCLOPEDIA_BACK_PADDING_PX}px "
+            f"{defaults.ENCYCLOPEDIA_BACK_PADDING_PX * 3}px;"
+        )
+        self._counter = QLabel()
+        self._previous = QPushButton(self._tr("← Previous"))
+        self._previous.clicked.connect(lambda: self._step(-1))
+        self._next = QPushButton(self._tr("Next →"))
+        self._next.clicked.connect(lambda: self._step(+1))
         row = QHBoxLayout()
         row.addWidget(self._back)
         row.addStretch(1)
+        row.addWidget(self._previous)
+        row.addWidget(self._counter)
+        row.addWidget(self._next)
         layout = QVBoxLayout(self)
         layout.addWidget(self._title)
         layout.addWidget(self._scroll, stretch=1)
@@ -685,7 +704,11 @@ class EncyclopediaDialog(QDialog):
         shrinks them with the window between the two bounds, and only
         below the minimum does the scrollbar take over."""
         self._title.setText(self._tr("Encyclopedia"))
+        self._topic_key = None
         self._back.hide()
+        self._previous.hide()
+        self._counter.hide()
+        self._next.hide()
         self._cells = []
         self._blocks = []
         self._text_labels = []
@@ -733,13 +756,33 @@ class EncyclopediaDialog(QDialog):
         self._rescale()
 
     def _show_topic(self, key: str) -> None:
-        """Screen 2 — every article of the topic: the images row (the
-        Astrology pair sits side by side), the bold name and the text,
-        all inside ONE centered block per entry (owner: center the
-        whole object, never the text lines)."""
-        topic = self._topics[key]
+        """Screen 2 — the topic SLIDER (owner plan round E,
+        2026-07-14): entries page one at a time from the first."""
+        self._topic_key = key
+        self._entry_index = 0
+        self._show_entry()
+
+    def _step(self, delta: int) -> None:
+        """← Previous / Next → — wraps around like the Guide pages."""
+        entries = self._topics[self._topic_key]["entries"]
+        self._entry_index = (self._entry_index + delta) % len(entries)
+        self._show_entry()
+
+    def _show_entry(self) -> None:
+        """The current entry's PAGE: the images row (the Astrology
+        pair sits side by side), the bold name and the text, all
+        inside ONE block (owner: center the whole object, never the
+        text lines)."""
+        topic = self._topics[self._topic_key]
+        entries = topic["entries"]
+        entry = entries[self._entry_index]
         self._title.setText(self._tr(topic["title"]))
         self._back.show()
+        self._counter.setText(f"{self._entry_index + 1} / {len(entries)}")
+        pager = len(entries) > 1
+        self._previous.setVisible(pager)
+        self._counter.setVisible(pager)
+        self._next.setVisible(pager)
         self._cells = []
         self._blocks = []
         self._text_labels = []
@@ -748,93 +791,93 @@ class EncyclopediaDialog(QDialog):
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX * 3)
-        for entry in topic["entries"]:
-            block = QWidget()
-            cell = QVBoxLayout(block)
-            cell.setContentsMargins(0, 0, 0, 0)
-            cell.setSpacing(defaults.GUIDE_SPACING_PX)
-            # LOOKS (owner 2026-07-13): every look is a tuple of ROWS —
-            # the Sunday pairs stand side by side; the arrows page
-            # through kinship groups or metal finishes. Only PATHS are
-            # kept here — the pixmaps decode lazily in _render_cell
-            # (owner 2026-07-13: The Week opened far too slowly when
-            # every look of every entry loaded upfront).
-            looks = entry.get("looks") or (
-                ("", (tuple(entry.get("images", ())),)),
-            )
-            look_rows = [
+        block = QWidget()
+        cell = QVBoxLayout(block)
+        cell.setContentsMargins(0, 0, 0, 0)
+        cell.setSpacing(defaults.GUIDE_SPACING_PX)
+        # LOOKS (owner 2026-07-13): every look is a tuple of ROWS —
+        # the Sunday pairs stand side by side; the arrows page
+        # through kinship groups or metal finishes. Only PATHS are
+        # kept here — the pixmaps decode lazily in _render_cell
+        # (owner 2026-07-13: The Week opened far too slowly when
+        # every look of every entry loaded upfront).
+        looks = entry.get("looks") or (
+            ("", (tuple(entry.get("images", ())),)),
+        )
+        look_rows = [
+            [
                 [
-                    [
-                        path
-                        for path in row
-                        if path is not None and Path(path).exists()
-                    ]
-                    for row in rows
+                    path
+                    for path in row
+                    if path is not None and Path(path).exists()
                 ]
-                for _, rows in looks
+                for row in rows
             ]
-            titles = [label for label, _ in looks]
-            keep = [
-                index for index, rows in enumerate(look_rows)
-                if any(rows)
-            ]
-            look_rows = [look_rows[index] for index in keep]
-            titles = [titles[index] for index in keep]
-            state = {
-                "container": None,
-                "looks": look_rows,
-                "titles": titles,
-                "index": 0,
-                "caption": None,
-            }
-            if look_rows:
-                container = QWidget()
-                state["container"] = container
-                cell.addWidget(
-                    container, alignment=Qt.AlignmentFlag.AlignHCenter
-                )
-                self._cells.append(state)
-            if len(look_rows) > 1:
-                arrows = QHBoxLayout()
-                arrows.addStretch(1)
-                back = QToolButton()
-                back.setText("◀")
-                caption = QLabel(self._tr(state["titles"][0]))
-                caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                caption.setMinimumWidth(120)
-                state["caption"] = caption
-                forward = QToolButton()
-                forward.setText("▶")
-                back.clicked.connect(
-                    lambda checked=False, s=state: self._cycle_look(s, -1)
-                )
-                forward.clicked.connect(
-                    lambda checked=False, s=state: self._cycle_look(s, 1)
-                )
-                arrows.addWidget(back)
-                arrows.addWidget(caption)
-                arrows.addWidget(forward)
-                arrows.addStretch(1)
-                cell.addLayout(arrows)
-            name = QLabel(f"<b>{self._entry_name(entry)}</b>")
-            name.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self._name_labels.append(name)
-            cell.addWidget(name)
-            text = QLabel(
-                _flow_html(
-                    self._article_text(entry["article"]),
-                    accents=entry["accents"],
-                    tr=self._tr,
-                )
+            for _, rows in looks
+        ]
+        titles = [label for label, _ in looks]
+        keep = [
+            index for index, rows in enumerate(look_rows)
+            if any(rows)
+        ]
+        look_rows = [look_rows[index] for index in keep]
+        titles = [titles[index] for index in keep]
+        state = {
+            "container": None,
+            "looks": look_rows,
+            "titles": titles,
+            "index": 0,
+            "caption": None,
+        }
+        if look_rows:
+            container = QWidget()
+            state["container"] = container
+            cell.addWidget(
+                container, alignment=Qt.AlignmentFlag.AlignHCenter
             )
-            text.setWordWrap(True)
-            text.setTextFormat(Qt.TextFormat.RichText)
-            self._text_labels.append(text)
-            cell.addWidget(text)
-            self._blocks.append(block)
-            # The block HUGS THE LEFT EDGE (owner 2026-07-13) — only
-            # the images/name center within it.
-            column.addWidget(block, alignment=Qt.AlignmentFlag.AlignLeft)
+            self._cells.append(state)
+        if len(look_rows) > 1:
+            arrows = QHBoxLayout()
+            arrows.addStretch(1)
+            back = QToolButton()
+            back.setText("◀")
+            caption = QLabel(self._tr(state["titles"][0]))
+            caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            caption.setMinimumWidth(120)
+            state["caption"] = caption
+            forward = QToolButton()
+            forward.setText("▶")
+            back.clicked.connect(
+                lambda checked=False, s=state: self._cycle_look(s, -1)
+            )
+            forward.clicked.connect(
+                lambda checked=False, s=state: self._cycle_look(s, 1)
+            )
+            arrows.addWidget(back)
+            arrows.addWidget(caption)
+            arrows.addWidget(forward)
+            arrows.addStretch(1)
+            cell.addLayout(arrows)
+        name = QLabel(f"<b>{self._entry_name(entry)}</b>")
+        name.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._name_labels.append(name)
+        cell.addWidget(name)
+        text = QLabel(
+            _flow_html(
+                self._article_text(entry["article"]),
+                accents=entry["accents"],
+                tr=self._tr,
+            )
+        )
+        text.setWordWrap(True)
+        text.setTextFormat(Qt.TextFormat.RichText)
+        self._text_labels.append(text)
+        cell.addWidget(text)
+        self._blocks.append(block)
+        # The block HUGS THE LEFT EDGE (owner 2026-07-13) — only
+        # the images/name center within it.
+        column.addWidget(block, alignment=Qt.AlignmentFlag.AlignLeft)
+        column.addStretch(1)
         self._scroll.setWidget(content)
         self._scroll.verticalScrollBar().setValue(0)
         self._rescale()

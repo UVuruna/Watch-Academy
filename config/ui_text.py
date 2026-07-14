@@ -168,7 +168,10 @@ UI_STRINGS: tuple[str, ...] = (
     "The Wheel of Moods", "The Ninth Mood",
     # Look-arrow captions (owner 2026-07-13: kinship groups + the
     # astrology/planets look names; the metals live above already).
-    "Canon", "Signs", "Logo & Constellation", "Animals",
+    "Canon", "Signs", "Logo & Constellation", "Animals", "Religions",
+    # The Trinity topic title (coverage gap caught 2026-07-14 — the
+    # gallery card showed raw English).
+    "Trinity",
     # The animal societies (owner 2026-07-13): theme titles, the
     # encyclopedia group, the Seasons topic and every role name.
     "Wolf Pack", "Bee Hive", "Elephant Herd", "Animal Societies",

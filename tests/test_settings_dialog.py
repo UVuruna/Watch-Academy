@@ -457,6 +457,20 @@ def test_encyclopedia_expansion_wiring():
     assert "6°" in dialog._article_text(("instrument", "twilight"))
     assert dialog._article_text(("emblem", "virtues", "Justice"))
     assert "Goethe" in dialog._article_text(("season", "Spring"))
+    # The topic SLIDER (owner plan round E, 2026-07-14): one entry per
+    # page, ← / → wrap around like the Guide, the pager hides on the
+    # gallery and the counter tracks the position.
+    dialog._show_topic("greek")
+    assert dialog._entry_index == 0
+    assert dialog._counter.text() == "1 / 8"      # 7 bodies + Hades
+    assert len(dialog._blocks) == 1
+    dialog._step(-1)                              # wraps to the Ninth
+    assert dialog._entry_index == 7
+    assert dialog._counter.text() == "8 / 8"
+    dialog._step(+1)
+    assert dialog._entry_index == 0
+    dialog._show_topics()
+    assert dialog._back.isHidden() and dialog._next.isHidden()
     dialog.deleteLater()
 
 
