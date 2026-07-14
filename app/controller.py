@@ -877,11 +877,15 @@ class AppController(QObject):
         self._settings = replace(self._settings, **{key: value})
         self._install_skin(build_skin(self._settings))
         self._flush_position()
-        if key in ("pointer", "show_weekday", "show_pointer"):
+        if key in (
+            "pointer", "show_weekday", "show_pointer",
+            "show_octa_slot", "show_third_slot",
+        ):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
-            # image-only modes, the Solar rotation lock) — re-gray the
-            # gated entries IN PLACE (owner 2026-07-13: switching the
+            # image-only modes, the Solar rotation lock, the enable
+            # chain and the slot check marks) — re-gray the gated
+            # entries IN PLACE (owner 2026-07-13: switching the
             # pointer or an element must not close the open menu).
             self._refresh_menu_gating()
 
@@ -909,6 +913,10 @@ class AppController(QObject):
         self._menu_gates["seconds"].setEnabled(
             not _slot_seconds(settings)
         )
+        for action, key in self._slot_menu_checks:
+            # The check mark beside the slot ordinal (owner
+            # 2026-07-15) follows the enable state live.
+            action.setChecked(getattr(settings, key))
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
@@ -1290,6 +1298,18 @@ class AppController(QObject):
         self._menu_gates["enable3"] = enable3
         enable2.setEnabled(settings.show_weekday)
         enable3.setEnabled(settings.show_weekday and settings.show_octa_slot)
+        # A check mark LEFT of the slot ordinals while the slot is
+        # active (owner 2026-07-15: the state at a glance, without
+        # opening the submenu) — refreshed in place on every enable
+        # change.
+        self._slot_menu_checks = (
+            (day_slot_menu.menuAction(), "show_weekday"),
+            (info_slot_menu.menuAction(), "show_octa_slot"),
+            (third_slot_menu.menuAction(), "show_third_slot"),
+        )
+        for action, key in self._slot_menu_checks:
+            action.setCheckable(True)
+            action.setChecked(getattr(settings, key))
         # Elements (owner spec): plain on/off switches — the slots
         # enable INSIDE their own submenus now (owner 2026-07-14), so
         # only the star, its colors, the two markers and the seconds
