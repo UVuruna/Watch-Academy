@@ -78,7 +78,7 @@ center carries two of each, and two moods besides:
 |---|---|---|
 | Virtue | **Justice** — the virtue a ruler PRACTICES: Solomon's scales, the heart weighed against Ma'at's feather | **Humility** — the virtue that SAVES him |
 | Vice | **Pride** — the self at the center of everything | **Servility** — humility curdled into spinelessness, serving the throne instead of the truth |
-| Mood | **Glory** — the sun at noon | **Eclipse** — the hour the king's light fails |
+| Mood | **Glory** — the sun at noon | **Awe** — the servant watching the light from below (renamed from Eclipse 2026-07-14; Eclipse lives on as The Ninth Mood, the event) |
 
 The cure axis lies INSIDE the center, crossed like a miniature of the
 dial itself: the Servant's Humility cures the Ruler's Pride, and the
@@ -345,7 +345,7 @@ virtue and vice:
 
 | Body | Profession | Why |
 |---|---|---|
-| Sun | **Ruler** | the royal planet; a DOUBLE calling — the servant-king: as ruler he practices Justice and is stalked by Pride, as servant he practices Humility and is stalked by Servility; each face cures the other, in Glory at noon and Eclipse when the light fails |
+| Sun | **Ruler** | the royal planet; a DOUBLE calling — the servant-king: as ruler he practices Justice and is stalked by Pride, as servant he practices Humility and is stalked by Servility; each face cures the other, in Glory at noon and Awe when the light is watched from below |
 | Moon | **Physician** | medieval medicine followed the Moon (bloodletting calendars ran on its phases); the night watch at the sickbed; the healer's calm hand against the patient's fear (Fear's full cure stands across the dial — the Soldier's Courage) |
 | Mars | **Soldier** | the warrior's two faces are Courage and Wrath |
 | Mercury | **Merchant** | Hermes, god of merchants and roads; Wisdom against Greed |
@@ -431,7 +431,7 @@ The full weave, one arm per row (hexa paint canon):
 
 | Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice | Profession |
 |---|---|---|---|---|---|---|---|---|---|
-| Sunday | Sun | Helios | Sól | Freemasonry | white-gold | Glory / Eclipse (source) | Humility · Justice | Pride · Servility | Ruler (servant-king) |
+| Sunday | Sun | Helios | Sól | Freemasonry | white-gold | Glory / Awe (source) | Humility · Justice | Pride · Servility | Ruler (servant-king) |
 | Monday | Moon | Selene | Máni | Islam | blue | Calm | Serenity | Fear | Physician |
 | Tuesday | Mars | Ares | Tyr | Buddhism | orange | Zeal | Courage | Wrath | Soldier |
 | Wednesday | Mercury | Hermes | Odin | Taoism | purple | Sorrow | Wisdom | Greed | Merchant |

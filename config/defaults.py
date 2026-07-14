@@ -325,11 +325,14 @@ LEGEND_TERM_PATTERNS = {
     ),
     "mood": (
         "Joy", "Zeal", "Passion", "Sorrow", "Calm", "Renewal", "Glory",
-        "Eclipse", "Longing",
+        # Awe is the renamed servant mood (2026-07-14); Eclipse stays
+        # matchable for The Ninth Mood's own article.
+        "Awe", "Eclipse", "Longing",
         "Radost(?:i)?", "Radošću", "Žar(?:a|u|om)?",
         "Strast(?:i)?", "Strašću",
         "Tug[aeiou]", "Tugom", "Mir(?:a|u|om)?", "Obnov[aeiou]", "Obnovom",
-        "Sjaj(?:a|u|em)?", "Pomračenj[eau]", "Pomračenjem",
+        "Sjaj(?:a|u|em)?", "Strahopoštovanj[eau]", "Strahopoštovanjem",
+        "Pomračenj[eau]", "Pomračenjem",
         "Čežnj[aeiou]", "Čežnjom",
     ),
 }

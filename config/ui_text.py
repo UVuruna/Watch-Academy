@@ -183,7 +183,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Generosity", "Patience",
     "Pride", "Servility", "Fear", "Wrath", "Greed", "Excess",
     "Jealousy", "Envy",
-    "Glory", "Eclipse", "Calm", "Zeal", "Sorrow", "Joy", "Passion",
+    "Glory", "Awe", "Calm", "Zeal", "Sorrow", "Joy", "Passion",
     "Renewal",
     # Entity display names (weekday hover titles; planets reuse Sun…Saturn)
     "Sun", "Mars", "Mercury", "Jupiter", "Venus", "Saturn",

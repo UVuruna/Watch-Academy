@@ -91,7 +91,7 @@ _SEASON_ENTRIES = (
 # emblems — Sunday, the dual day, carries both of each.
 _WEEK_EMBLEMS = {
     "sun": (("Justice", "Humility"), ("Pride", "Servility"),
-            ("Glory", "Eclipse")),
+            ("Glory", "Awe")),
     "moon": (("Serenity",), ("Fear",), ("Calm",)),
     "mars": (("Courage",), ("Wrath",), ("Zeal",)),
     "mercury": (("Wisdom",), ("Greed",), ("Sorrow",)),
@@ -104,7 +104,7 @@ _VSM_DAYS = {
                 "Generosity", "Love", "Patience"),
     "sins": ("Pride", "Servility", "Fear", "Wrath", "Greed", "Excess",
              "Jealousy", "Envy"),
-    "moods": ("Glory", "Eclipse", "Calm", "Zeal", "Sorrow", "Joy",
+    "moods": ("Glory", "Awe", "Calm", "Zeal", "Sorrow", "Joy",
               "Passion", "Renewal"),
 }
 _INSTRUMENT_KEYS = (
