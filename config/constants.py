@@ -44,7 +44,7 @@ YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
 # hidden extras (owner 2026-07-14) — for now the Four Greetings verses
 # page in the Encyclopedia's Trinity topic. The owner sets the final
 # sequence here; the unlock persists in settings.
-HIDDEN_MODE_SECRET = "333333333333"
+HIDDEN_MODE_SECRET = "36m36u36v"
 
 # --- Artwork sources -----------------------------------------------------------
 # The Gemini and ChatGPT generations COEXIST (owner 2026-07-14); every

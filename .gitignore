@@ -32,8 +32,10 @@ design/pointer/
 design/weekday/
 
 # Owner's ChatGPT staging inbox (the mapped canonical copies in
-# assets/<root>/chatgpt/ ARE committed)
-chatGPT/
+# assets/<root>/chatgpt/ ARE committed). Anchored to the root — a bare
+# chatGPT/ would also swallow assets/*/chatgpt/ (Windows matches
+# case-insensitively).
+/chatGPT/
 
 # Legacy exclusions
 Database_Create/

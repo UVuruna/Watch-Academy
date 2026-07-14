@@ -443,7 +443,19 @@ UI_BUTTON_COLORS = {
 # Reader image ceiling (owner imperative 2026-07-14): no article or
 # Guide image may eat the page — anything taller than this fraction of
 # the viewport height scales down to it, leaving room for the text.
+# Round two: the WHOLE image grid shares the ceiling — stacked rows
+# split it, so the Week's Sunday pairs still leave the text visible.
 READER_IMAGE_MAX_HEIGHT_FRACTION = 0.35
+# The unlocked hidden mode (owner 2026-07-14): hovering within this
+# many degrees of the 12h/24h ring letters opens the Four Greetings.
+GREETINGS_LETTER_HALF_DEG = 6.0
+
+# Time Travel QUICK JUMPS (owner 2026-07-14): one-click presets under
+# the Time Travel menu — sun/moon turning points, the poles, and the
+# "sun exactly at 12:00" Greenwich view. Same rules as the dialog:
+# TIME_TRAVEL_DURATION_S, then back to the present.
+QUICK_JUMP_POLE_LATITUDE = 89.99     # exact 90 divides astral by zero
+GREENWICH_LATITUDE = 51.4779
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image

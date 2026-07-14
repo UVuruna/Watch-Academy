@@ -775,6 +775,57 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
     assert "Summer 18<sup>th</sup> of 94 Days" in earth
     assert "Cancer (21<sup>st</sup> June - 21<sup>st</sup> July)" in earth
+    # A PRINCIPAL-phase day dates its instant like the weekday tooltip
+    # and the <sup> markup must render, never print literally (owner
+    # bug 2026-07-14).
+    tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
+    new_moon = datetime(2026, 7, 14, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=defaults.DEFAULT_CITY["latitude"],
+        longitude=defaults.DEFAULT_CITY["longitude"],
+    )
+    nm_day = build_day_context(
+        new_moon, observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    nm_tick = build_tick_state(new_moon, nm_day)
+    principal = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    principal.render_offscreen(360.0, 1.0, nm_day, nm_tick)
+    title = principal._moon_text()
+    assert "14<sup>th</sup> July - 11:43" in title
+    assert "&lt;sup&gt;" not in title
+
+
+def test_greetings_ride_the_ring_letters_when_unlocked(july_wednesday):
+    """The hidden mode (owner 2026-07-14): unlocked, hovering the 12h
+    or 24h ring letter opens the Four Greetings — Serbian in every
+    language, verses + reading + the watchmaker's commentary; locked,
+    the same spot stays an ordinary tick hover."""
+    from PySide6.QtCore import QPointF
+
+    day, tick = july_wednesday
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    band = (
+        defaults.TICK_HOVER_INNER_FRACTION
+        + defaults.TICK_HOVER_OUTER_FRACTION
+    ) / 2
+    top = QPointF(0.0, -180.0 * band)
+    bottom = QPointF(0.0, 180.0 * band)
+    locked = compositor._tick_tooltip(top, 180.0)
+    assert locked is not None and "Četiri pozdrava" not in locked
+    compositor.set_hidden_unlocked(True)
+    for point in (top, bottom):
+        poem = compositor._tick_tooltip(point, 180.0)
+        assert "Četiri pozdrava" in poem
+        assert "Dobar dan" in poem and "ponovi sve ovo" in poem
+        assert "Komentar časovničara" in poem
+    # A degree past the letter window the ticks speak again.
+    away = QPointF(
+        180.0 * band * 0.3, -180.0 * band
+    )
+    assert "Četiri pozdrava" not in compositor._tick_tooltip(away, 180.0)
 
 
 def test_lunation_before_the_years_first_new_moon(app, july_wednesday):

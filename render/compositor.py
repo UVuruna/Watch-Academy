@@ -8,9 +8,11 @@ the future settings preview.
 """
 
 import html
+import json
 import math
 import re
 from datetime import datetime, time, timedelta
+from functools import lru_cache
 
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
@@ -140,6 +142,15 @@ def _highlight_terms(escaped: str, accents: tuple[str, ...] = ()) -> str:
 # [[Subhead]] marker from the FIXED vocabulary — rendered as a bold
 # heading line, translated through the ui catalog.
 _SUBHEAD = re.compile(r"^\[\[(.+?)\]\]\s*")
+
+
+@lru_cache(maxsize=1)
+def _greetings() -> dict:
+    """The owner's Four Greetings (Database/verses.json) — Serbian in
+    every language, shown only in the unlocked hidden mode."""
+    return json.loads(
+        (paths.database_dir() / "verses.json").read_text(encoding="utf-8")
+    )["trinity"]
 
 
 def _article_paragraphs(
@@ -338,6 +349,12 @@ class Compositor:
         self._composite: QPixmap | None = None
         self._composite_key: tuple | None = None
         self._hovered: str | None = None    # hover-enlarge target
+        # Hidden mode (owner 2026-07-14): unlocked, the 12h and 24h
+        # ring letters open the Four Greetings legend.
+        self._hidden_unlocked = False
+
+    def set_hidden_unlocked(self, unlocked: bool) -> None:
+        self._hidden_unlocked = unlocked
 
     def _tr(self, text: str) -> str:
         """The active language's form of a hover label (Phase 2b)."""
@@ -1247,6 +1264,15 @@ class Compositor:
         ):
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        # The unlocked hidden mode (owner 2026-07-14): the 12h and 24h
+        # ring letters — M and Ω on DOMY, whatever glyphs another ring
+        # seats there — open the Four Greetings instead of the ticks.
+        half = defaults.GREETINGS_LETTER_HALF_DEG
+        if self._hidden_unlocked and (
+            theta <= half or theta >= 360.0 - half
+            or abs(theta - 180.0) <= half
+        ):
+            return self._greetings_tooltip()
         minutes = round((((theta - 180.0) % 360.0) / 15.0) * 60) % (24 * 60)
         line_time = (
             f"{self._label('Time')} {minutes // 60:02d}:{minutes % 60:02d} - "
@@ -1341,6 +1367,28 @@ class Compositor:
             )
         )
 
+    def _greetings_tooltip(self) -> str:
+        """The Four Greetings legend (owner 2026-07-14): the verses
+        CENTERED in italic with their line breaks kept, then the
+        reading and the watchmaker's commentary as a justified column
+        — Serbian in every language, on the 12h/24h ring letters."""
+        data = _greetings()
+        stanzas = "".join(
+            "<div align='center'><i>"
+            + "<br/>".join(
+                html.escape(line) for line in stanza.split("\n")
+            )
+            + "</i></div><br/>"
+            for stanza in data["verses"].split("\n\n")
+        )
+        return (
+            _hover_title(html.escape(data["title"]))
+            + stanzas
+            + _article_body_html(
+                data["explanation"] + "\n\n" + data["commentary"]
+            )
+        )
+
     def _moon_text(self) -> str:
         """Moon hover (owner formatting rounds 2026-07-12/13): the
         PHASE NAME is the title — bigger, bold, no label — with the
@@ -1359,8 +1407,11 @@ class Compositor:
                 (event for event in day.moon_events if event[1] == name),
                 key=lambda event: abs(event[0] - noon),
             )[0].astimezone(day.tzinfo)
-            title += _centered(
-                f"{self._ord(instant.day)} {self._month(instant)}"
+            # _centered_html — the ordinal carries real <sup> markup
+            # (owner bug 2026-07-14: it printed literally through the
+            # escaping _centered).
+            title += _centered_html(
+                f"{self._ord(instant.day)} {html.escape(self._month(instant))}"
                 f" - {instant:%H:%M}"
             )
         lines = [

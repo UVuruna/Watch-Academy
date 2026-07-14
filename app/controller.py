@@ -33,6 +33,7 @@ from app.widget import ClockWidget
 from config import constants, defaults, paths
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
+from core.sun import compute_sun_day
 from data.hands import HAND_NAMES, hand_packs
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
@@ -434,6 +435,7 @@ class AppController(QObject):
             self._skin, AssetCache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
+        self._compositor.set_hidden_unlocked(self._settings.hidden_unlocked)
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
         # present until the deadline passes.
@@ -613,6 +615,7 @@ class AppController(QObject):
             return
         self._secret_buffer = ""
         self._settings = replace(self._settings, hidden_unlocked=True)
+        self._compositor.set_hidden_unlocked(True)
         try:
             self._store.save(self._settings)
         except OSError as error:
@@ -685,6 +688,7 @@ class AppController(QObject):
             skin, AssetCache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
+        self._compositor.set_hidden_unlocked(self._settings.hidden_unlocked)
         self._widget.set_renderer(self._compositor)
         if self._day is not None:
             self._compositor.set_day(self._day)
@@ -1349,6 +1353,28 @@ class AppController(QObject):
         time_travel = QAction(f"🕰️ {tr('Time Travel…')}", menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
+        # QUICK JUMP (owner 2026-07-14): one-click Time Travel presets
+        # right below the dialog entry — same minute-then-back rules.
+        jumps = self._submenu(menu, f"⚡ {tr('Quick Jump')}")
+        for kind, label in (
+            ("next_sun", tr("Next Sun Turning Point")),
+            ("prev_sun", tr("Previous Sun Turning Point")),
+            ("next_moon", tr("Next Moon Turning Point")),
+            ("prev_moon", tr("Previous Moon Turning Point")),
+            (None, None),
+            ("north_pole", tr("North Pole")),
+            ("south_pole", tr("South Pole")),
+            (None, None),
+            ("greenwich", tr("Greenwich")),
+        ):
+            if kind is None:
+                jumps.addSeparator()
+                continue
+            action = QAction(label, jumps)
+            action.triggered.connect(
+                lambda checked=False, kind=kind: self._quick_jump(kind)
+            )
+            jumps.addAction(action)
         menu.addSeparator()
         exit_action = QAction(f"🚪 {tr('Exit')}", menu)
         exit_action.triggered.connect(self.quit)
@@ -1401,10 +1427,62 @@ class AppController(QObject):
         observer = astral.Observer(
             latitude=dialog.latitude(), longitude=dialog.longitude()
         )
+        self._start_simulation(moment, observer)
+
+    def _start_simulation(self, moment: datetime, observer) -> None:
+        """Render the (moment, observer) situation for the standard
+        Time Travel minute, then return to the present — any new
+        travel restarts the minute (owner 2026-07-14)."""
         self._simulation = (moment, observer)
         self._simulation_ends = monotonic() + defaults.TIME_TRAVEL_DURATION_S
         self._day = None                    # rebuild with the simulated situation
         self._on_tick(clock_jumped=False)
+
+    def _quick_jump(self, kind: str) -> None:
+        """One-click Time Travel presets (owner 2026-07-14): the sun
+        and moon TURNING POINTS land exactly on their instants (the
+        event glow is on), the poles show the polar regimes, and
+        Greenwich shows the sun EXACTLY at 12:00 — today's noon at the
+        meridian where true solar noon coincides with the wall-clock
+        noon (that is Greenwich only up to the equation of time)."""
+        now = datetime.now(self._tz)
+        observer = self._observer
+        moment = now
+        if kind in ("next_sun", "prev_sun"):
+            instants = self._seasons.year_anchors(now.year).instants
+        elif kind in ("next_moon", "prev_moon"):
+            instants = tuple(
+                when for when, _ in
+                self._moon_phases.moon_window(now.year).events
+            )
+        if kind in ("next_sun", "next_moon"):
+            moment = min(w for w in instants if w > now).astimezone(self._tz)
+        elif kind in ("prev_sun", "prev_moon"):
+            moment = max(w for w in instants if w <= now).astimezone(self._tz)
+        elif kind == "north_pole":
+            observer = astral.Observer(
+                latitude=defaults.QUICK_JUMP_POLE_LATITUDE, longitude=0.0
+            )
+        elif kind == "south_pole":
+            observer = astral.Observer(
+                latitude=-defaults.QUICK_JUMP_POLE_LATITUDE, longitude=0.0
+            )
+        else:                               # greenwich
+            moment = now.replace(hour=12, minute=0, second=0, microsecond=0)
+            zero = astral.Observer(
+                latitude=defaults.GREENWICH_LATITUDE, longitude=0.0
+            )
+            sun_day = compute_sun_day(zero, now.date(), self._tz)
+            offset_hours = (
+                sun_day.noon - moment
+            ).total_seconds() / constants.SECONDS_PER_HOUR
+            longitude = max(-180.0, min(180.0, offset_hours * 15.0))
+            observer = astral.Observer(
+                latitude=defaults.GREENWICH_LATITUDE, longitude=longitude
+            )
+        self._start_simulation(
+            moment.replace(second=0, microsecond=0), observer
+        )
 
     # --- Translation (owner spec: translate once, cache, display) -----------------
 

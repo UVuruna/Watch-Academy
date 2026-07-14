@@ -169,3 +169,12 @@ class GuideDialog(QDialog):
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
         self._rescale()
+
+    def showEvent(self, event) -> None:
+        # The page is built BEFORE the window has its real geometry —
+        # the images sized themselves to a guessed, smaller viewport
+        # until a manual resize (owner bug 2026-07-14: same class as
+        # the Encyclopedia's first-open deformation). Rescale once the
+        # true size exists.
+        super().showEvent(event)
+        self._rescale()

@@ -716,8 +716,12 @@ class EncyclopediaDialog(QDialog):
         kind = ref[0]
         if kind == "verses":
             # The Four Greetings stay SERBIAN in every language
-            # (owner 2026-07-14) — verses, then their reading.
-            return ref[1]["verses"] + "\n\n" + ref[1]["explanation"]
+            # (owner 2026-07-14) — verses, their reading, then the
+            # watchmaker's commentary.
+            return "\n\n".join((
+                ref[1]["verses"], ref[1]["explanation"],
+                ref[1]["commentary"],
+            ))
         if kind == "article":
             return self._symbolism.article(ref[1], ref[2])["base"]
         if kind == "zodiac":
@@ -977,7 +981,9 @@ class EncyclopediaDialog(QDialog):
                 + "</i></p>"
                 for stanza in data["verses"].split("\n\n")
             )
-            text = QLabel(stanzas + _flow_html(data["explanation"]))
+            text = QLabel(stanzas + _flow_html(
+                data["explanation"] + "\n\n" + data["commentary"]
+            ))
         else:
             text = QLabel(
                 _flow_html(
@@ -1110,6 +1116,7 @@ class EncyclopediaDialog(QDialog):
         rows = state["looks"][state["index"]]
         columns = max((len(row) for row in rows), default=0)
         state["cells"] = []
+        state["rows"] = sum(1 for row in rows if row)
         if not columns:
             return
         for row_index, row in enumerate(rows):
@@ -1129,12 +1136,18 @@ class EncyclopediaDialog(QDialog):
         """Fit the look's images to the block width — the columns
         split it and every image shrinks as far as needed (owner
         2026-07-13: nothing may overlap or clip) — AND to the height
-        ceiling (owner imperative 2026-07-14: an image never eats more
-        than READER_IMAGE_MAX_HEIGHT_FRACTION of the page; the text
-        must stay on screen)."""
-        max_height = round(
+        ceiling (owner imperative 2026-07-14 round two: the WHOLE image
+        grid never eats more than READER_IMAGE_MAX_HEIGHT_FRACTION of
+        the page — stacked rows SHARE the ceiling — so the text stays
+        on screen)."""
+        rows = max(1, state.get("rows", 1))
+        ceiling = round(
             self._scroll.viewport().height()
             * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION
+        )
+        max_height = max(
+            24,
+            (ceiling - defaults.GUIDE_SPACING_PX * (rows - 1)) // rows,
         )
         for label, art, columns in state.get("cells", ()):
             if art.isNull():
@@ -1146,7 +1159,7 @@ class EncyclopediaDialog(QDialog):
             )
             if pixmap.height() > max_height:
                 pixmap = art.scaledToHeight(
-                    max(24, max_height),
+                    max_height,
                     Qt.TransformationMode.SmoothTransformation,
                 )
             label.setPixmap(pixmap)
