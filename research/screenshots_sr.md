@@ -27,13 +27,16 @@ gornjeg nivoa: **Design** (Pointer/Ring/Umbra | Hands/Earth | Size),
 **Guide**, **Time Travel** | **Exit**. Stari "Theme ▸ Day slot/Info
 slot" sada je **Primary Slot**/**Secondary Slot** direktno na gornjem
 nivou; stari "Theme ▸ Earth" sada je **Design ▸ Earth**; teme
-"Religions"/"Religions II" sada se zovu **Creeds**/**Mysteries**. Weekday
-podmeni ima i grupe srodstva (Ancient Gods / Society / Animals / Arcana)
-— tačan raspored 11 tema po ove četiri grupe NIJE potvrđen izvorima
-korišćenim za ovaj spisak, pa je kod svake stavke koja prolazi kroz
-Weekday podmeni ima grupe srodstva: Ancient Gods (Egyptian, Greek, Norse, Slavic), Society (Professions, Creeds, Mysteries), Animals (Wolf Pack, Elephant Herd, Bee Hive), Arcana (Planets sa Image/Sign, Alchemy, Japanese week);
-vlasnik samo treba da pronađe temu unutar Weekday podmenija, koji god
-korak više to bio.
+"Religions"/"Religions II" sada se zovu **Creeds**/**Mysteries**.
+
+Weekday podmeni od tekst-talasa (2026-07-14) drži **21 temu u šest
+grupa srodstva** (potvrđeno u kodu): **Ancient Gods** (Egyptian, Greek,
+Norse, Slavic), **Society** (Professions, Creeds, Mysteries),
+**Scripture** (Bible, Bible II, Bible Dark), **Animals** (Wolf Pack,
+Elephant Herd, Bee Hive), **The Inner Wheel** (Virtues, Sins, Moods),
+**Arcana** (Planets sa Image/Sign/Art, Alchemy, Japanese week, Cosmos).
+Metal pod-podmeni (Gold/Bronze/Silver/Colored) postoji kod SEDAM tema:
+Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 ---
 
@@ -105,11 +108,11 @@ korak više to bio.
 
 - [ ] 79 — 79_weekday_greek_colored.png — Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods ▸ Colored; tema Weekday = greek, metal = colored — Isti kadar kao postojeći 25_weekday_greek, da se može direktno uporediti bronzana ploča i ovaj pun-kolor art.
 
-- [ ] 80 — 80_menu_theme_weekday_metal.png — Desni klik ▸ Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods, razvijeno (metal-teme otvaraju svoj pod-podmeni); baseline — Grupa Gold / Bronze / Silver / Colored ugnježdena ispod Greek gods, da se pokaže da ovaj pod-podmeni postoji samo kod tri teme sa metalima (Greek, Norse, Professions) — ostalih osam tema se aktivira jednim klikom.
+- [ ] 80 — 80_menu_theme_weekday_metal.png — Desni klik ▸ Primary Slot ▸ Weekday ▸ Ancient Gods ▸ Greek gods, razvijeno (metal-teme otvaraju svoj pod-podmeni); baseline — Grupa Gold / Bronze / Silver / Colored ugnježdena ispod Greek gods, da se pokaže da ovaj pod-podmeni postoji samo kod sedam tema sa metalima (Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos) — ostale teme se aktiviraju jednim klikom.
 
 - [ ] 81 — 81_slot_ascendant.png — Primary Slot ▸ Ascendant ▸ Sign — režim Primary Slot = ascendant, stil = sign — Bedž na poziciji Primary Slot-a sa vidljivo drugačijim znakom nego što bi datum ili Secondary Slot sugerisali — poenta da se Ascendant menja otprilike na svaka dva sata, nezavisno od kalendara.
 
-- [ ] 82 — 82_menu_theme_slots_day.png — Desni klik ▸ Primary Slot, razvijeno (Astrology i Chinese zodiac kao ugnježdeni podmeniji, ne razvijati dalje); baseline — Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac kao stavke Primary Slot podmenija (Weekday sadrži listu od 11 tema + Names; tri tekstualna moda zasive dok je Pointer element uključen).
+- [ ] 82 — 82_menu_theme_slots_day.png — Desni klik ▸ Primary Slot, razvijeno (Astrology i Chinese zodiac kao ugnježdeni podmeniji, ne razvijati dalje); baseline — Weekday / Time / Date / Day length / Astrology / Ascendant / Chinese zodiac kao stavke Primary Slot podmenija (Weekday sadrži 21 temu u šest grupa srodstva + Names; tri tekstualna moda zasive dok je Pointer element uključen).
 
 - [ ] 83 — 83_slot_info_time.png — Design ▸ Pointer ▸ Compass (potrebno da bi Secondary Slot uvek bio dostupan); Secondary Slot ▸ Time (već podrazumevani mod) — pointer = Compass (octa), sve ostalo baseline — Ceo krug, digitalno vreme čitljivo u rezervisanom donjem kraku Compass-a.
 
