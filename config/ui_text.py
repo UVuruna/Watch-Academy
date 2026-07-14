@@ -184,6 +184,17 @@ UI_STRINGS: tuple[str, ...] = (
     "Delilah", "Cain",
     "Sun · Black Hole", "Black Hole", "Nebula", "Supernova", "Pulsar",
     "Galaxy", "Binary Stars", "Comet",
+    # The Inner Wheel dial themes' dual titles (single names above).
+    "Justice · Humility", "Pride · Servility", "Glory · Awe",
+    # The Ninth entries closing the topics (owner 8+1 doctrine).
+    "Sigma", "The Swarm", "The Graveyard", "The Big Bang", "Hades",
+    "Baldur", "Set", "Crnobog", "The Philosopher's Stone", "The Jester",
+    "The Unknown God", "The Lost Mystery", "Melchizedek", "Legion",
+    "The Cat", "Ophiuchus",
+    # The Nine Intelligences topic.
+    "The Nine Intelligences", "Bodily-Kinesthetic", "Interpersonal",
+    "Linguistic", "Naturalist", "Logical-Mathematical", "Musical",
+    "Existential", "Intrapersonal", "Spatial",
     "Alpha · Omega", "Luna", "Hunter", "Scout", "Beta", "Mate", "Elder",
     "Alpha", "Omega",
     "Queen · Cleaner", "Nurse", "Guard", "Builder", "Drone", "Forager",

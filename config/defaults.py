@@ -710,6 +710,35 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Venus",
         "saturn": "Saturn",
     },
+    # THE INNER WHEEL on the dial (owner 2026-07-14): the days ARE
+    # their virtues / vices / hour-moods.
+    "virtues": {
+        "sun": "Justice · Humility",
+        "moon": "Serenity",
+        "mars": "Courage",
+        "mercury": "Wisdom",
+        "jupiter": "Generosity",
+        "venus": "Love",
+        "saturn": "Patience",
+    },
+    "sins": {
+        "sun": "Pride · Servility",
+        "moon": "Fear",
+        "mars": "Wrath",
+        "mercury": "Greed",
+        "jupiter": "Excess",
+        "venus": "Jealousy",
+        "saturn": "Envy",
+    },
+    "moods": {
+        "sun": "Glory · Awe",
+        "moon": "Calm",
+        "mars": "Zeal",
+        "mercury": "Sorrow",
+        "jupiter": "Joy",
+        "venus": "Passion",
+        "saturn": "Renewal",
+    },
 }
 
 # File stems on disk: the display names folded to ASCII (Sól -> Sol,
@@ -747,6 +776,11 @@ WEEKDAY_THEME_DIRS = {
     "bible_dark": "bible/dark",
     "cosmos": "cosmos/primary",
     "planets_art": "planets/art",
+    # The emblem families live OUTSIDE assets/weekday/ — the relative
+    # step-up reaches assets/emblem/ (owner 2026-07-14).
+    "virtues": "../emblem/virtue",
+    "sins": "../emblem/sin",
+    "moods": "../emblem/mood",
 }
 WEEKDAY_THEME_FILES = {
     theme: {
@@ -817,6 +851,23 @@ WEEKDAY_THEME_FILES["planets_art"] = {
     "mercury": "mercury", "jupiter": "jupiter", "venus": "venus",
     "saturn": "saturn",
 }
+# The emblem stems ARE the single names (Capitalized) — only the dual
+# sun display titles need the override.
+WEEKDAY_THEME_FILES["virtues"] = {
+    "sun": "Justice", "moon": "Serenity", "mars": "Courage",
+    "mercury": "Wisdom", "jupiter": "Generosity", "venus": "Love",
+    "saturn": "Patience",
+}
+WEEKDAY_THEME_FILES["sins"] = {
+    "sun": "Pride", "moon": "Fear", "mars": "Wrath",
+    "mercury": "Greed", "jupiter": "Excess", "venus": "Jealousy",
+    "saturn": "Envy",
+}
+WEEKDAY_THEME_FILES["moods"] = {
+    "sun": "Glory", "moon": "Calm", "mars": "Zeal",
+    "mercury": "Sorrow", "jupiter": "Joy", "venus": "Passion",
+    "saturn": "Renewal",
+}
 
 # THE DUAL SUNDAY (owner 2026-07-12): every theme's center day has a
 # SECOND face — the Servant to the Ruler. On the Compass and the
@@ -849,6 +900,9 @@ WEEKDAY_DUAL_NAMES = {
     "bible_dark": ("Lucifer", "Judas"),
     "cosmos": ("Sun", "Black Hole"),
     "planets_art": ("Sun", "Eclipsed Sun"),
+    "virtues": ("Justice", "Humility"),
+    "sins": ("Pride", "Servility"),
+    "moods": ("Glory", "Awe"),
 }
 # Dual paths live INSIDE the theme's variant dir; the colored dual is
 # the same path with the variant segment swapped to colored/ (owner
@@ -873,6 +927,9 @@ WEEKDAY_DUAL_FILES = {
     "bible_dark": "bible/dark/dual/judas",
     "cosmos": "cosmos/primary/dual/black_hole",
     "planets_art": "planets/art/dual/sun_eclipse",
+    "virtues": "../emblem/virtue/Humility",
+    "sins": "../emblem/sin/Servility",
+    "moods": "../emblem/mood/Awe",
 }
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
@@ -922,6 +979,12 @@ WEEKDAY_THEME_TITLES = {
     "bible2": "Bible II",
     "bible_dark": "Bible Dark",
     "cosmos": "Cosmos",
+    # The Inner Wheel dial themes; their ENCYCLOPEDIA topics stay the
+    # emblem pages (the later family pass overwrites the weekday
+    # topics built from these titles — deliberate).
+    "virtues": "Virtues",
+    "sins": "Sins",
+    "moods": "Moods",
 }
 
 # The Weekday submenu GROUPS (owner menu rework 2026-07-13): kinship
@@ -935,6 +998,8 @@ WEEKDAY_MENU_GROUPS = (
     # The Scripture family (owner 2026-07-14).
     ("Scripture", ("bible", "bible2", "bible_dark")),
     ("Animals", ("wolf", "elephant", "bee")),
+    # The emblem families on the dial (owner 2026-07-14).
+    ("The Inner Wheel", ("virtues", "sins", "moods")),
     ("Arcana", ("planets", "alchemy", "japan", "cosmos")),
 )
 

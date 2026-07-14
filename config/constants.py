@@ -366,6 +366,11 @@ WEEKDAY_THEMES = (
     "bible_dark",
     "cosmos",
     "planets_art",
+    # The Inner Wheel on the dial (owner 2026-07-14): the emblem
+    # families as weekday themes — the art lives in assets/emblem/.
+    "virtues",
+    "sins",
+    "moods",
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
@@ -403,6 +408,9 @@ WEEKDAY_THEME_BLURBS = {
     "bible_dark": "day",
     "cosmos": "day",
     "planets_art": "day",
+    "virtues": "day",
+    "sins": "day",
+    "moods": "day",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -429,6 +437,9 @@ WEEKDAY_THEME_ARTICLES = {
     # The medallion look shares the planet articles — same entities,
     # different art (like the glyphs).
     "planets_art": "planets",
+    "virtues": "virtues",
+    "sins": "sins",
+    "moods": "moods",
 }
 
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,

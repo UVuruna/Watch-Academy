@@ -68,7 +68,8 @@ _TOPIC_GROUPS = (
     ("Creeds & Mysteries", ("religion", "religion_alt")),
     ("Scripture", ("bible", "bible2", "bible_dark")),
     ("Animal Societies", ("wolf", "bee", "elephant")),
-    ("The Inner Wheel", ("virtues", "sins", "moods", "duality")),
+    ("The Inner Wheel",
+     ("virtues", "sins", "moods", "duality", "intelligences")),
 )
 
 # The SEASONS topic (owner 2026-07-13): the year's quarters, the
@@ -441,6 +442,71 @@ def _topics() -> dict:
         "article": ("emblem", "moods", "The Ninth Mood"),
         "accents": (),
     })
+    # THE NINE INTELLIGENCES (owner GO 2026-07-13): the academy cameos
+    # — 9 = the six Prism arms + the three Trinity arms.
+    intel = defaults.EMBLEM_ART_DIRS["intelligence"]
+    topics["intelligences"] = {
+        "title": "The Nine Intelligences",
+        "icon": intel / "existential.png",
+        "entries": [{
+            "images": (),
+            "name": "The Nine Intelligences",
+            "article": ("emblem", "intelligence", "The Nine Intelligences"),
+            "accents": (),
+        }] + [
+            {
+                "images": (intel / f"{stem}.png",),
+                "name": name,
+                "article": ("emblem", "intelligence", name),
+                "accents": (),
+            }
+            for name, stem in (
+                ("Bodily-Kinesthetic", "bodily_kinesthetic"),
+                ("Interpersonal", "interpersonal"),
+                ("Linguistic", "linguistic"),
+                ("Naturalist", "naturalist"),
+                ("Logical-Mathematical", "logical_mathematical"),
+                ("Musical", "musical"),
+                ("Existential", "existential"),
+                ("Intrapersonal", "intrapersonal"),
+                ("Spatial", "spatial"),
+            )
+        ],
+    }
+    # THE NINTHS close their topics (owner 8+1 doctrine 2026-07-14):
+    # the excluded member, the event, the myth, the legend — plates
+    # wired ahead of the art (missing files stay hidden).
+    _w = defaults.WEEKDAY_ART_DIR
+    _z = defaults.ZODIAC_ART_DIR
+    for topic_key, name, plate in (
+        ("wolf", "Sigma", _w / "wolf/primary/sigma.png"),
+        ("bee", "The Swarm", _w / "bee/primary/swarm.png"),
+        ("elephant", "The Graveyard",
+         _w / "elephant/primary/graveyard.png"),
+        ("cosmos", "The Big Bang", _w / "cosmos/primary/big_bang.png"),
+        ("greek", "Hades", _w / "greek/primary/hades.png"),
+        ("norse", "Baldur", _w / "norse/primary/baldur.png"),
+        ("egypt", "Set", _w / "egypt/primary/set.png"),
+        ("slavic", "Crnobog", _w / "slavic/primary/crnobog.png"),
+        ("alchemy", "The Philosopher's Stone",
+         _w / "alchemy/primary/stone.png"),
+        ("profession", "The Jester",
+         _w / "profession/primary/Jester.png"),
+        ("religion", "The Unknown God",
+         _w / "religion/primary/unknown_god.png"),
+        ("religion_alt", "The Lost Mystery",
+         _w / "religion/secondary/lost_mystery.png"),
+        ("bible", "Melchizedek", _w / "bible/primary/melchizedek.png"),
+        ("bible_dark", "Legion", _w / "bible/dark/legion.png"),
+        ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
+        ("astrology", "Ophiuchus", _z / "astrology/sign/Ophiuchus.png"),
+    ):
+        topics[topic_key]["entries"].append({
+            "images": (plate,),
+            "name": name,
+            "article": ("emblem", "ninths", name),
+            "accents": (),
+        })
     # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing
