@@ -14,6 +14,7 @@ by itself. The entered wall time is interpreted in the active timezone.
 ### Uses
 - [Config (folder)](../config/___config.md) — coordinate ranges, default
   city prefill, duration
+- [UI Style](ui_style.md) — the shared vivid button pills
 
 ### Used by
 - [App Controller](controller.md) — `_open_time_travel()` feeds the
@@ -23,8 +24,14 @@ by itself. The entered wall time is interpreted in the active timezone.
 
 ### TimeTravelDialog
 Stay-on-top `QDialog`: `QDateTimeEdit` (calendar popup) + two
-`QDoubleSpinBox` for latitude/longitude, prefilled with now/Belgrade.
+`QDoubleSpinBox` for latitude/longitude, prefilled with now/Belgrade
+(a running simulation seeds them instead). The button row wears the
+shared vivid style (owner 2026-07-15): blue **Now** on the LEFT —
+closes with `RETURN_TO_NOW`, the controller ends the simulation and
+the dial returns to the present immediately — then green OK and
+neutral Cancel on the right.
 
 #### Methods
 - `moment()`: naive wall time (controller attaches the timezone)
 - `latitude()` / `longitude()`
+- `RETURN_TO_NOW`: the third dialog result code, produced by Now

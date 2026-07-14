@@ -123,13 +123,18 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   by asking the compositor about the cursor position a few times a second
 - `_on_wake()`: resume-from-sleep / clock change → immediate full refresh
   (wired to the native PowerEventFilter)
-- `_open_time_travel()` / `_quick_jump()`: frozen (moment, observer)
-  rendered instead of the present for `TIME_TRAVEL_DURATION_S`, then
-  the tick flow snaps back; the QUICK JUMP submenu (owner 2026-07-14)
-  offers the next/previous sun and moon turning points, the two poles
-  and Greenwich true-noon — jumps CHAIN off the running simulation
-  (time keeps its place when the place changes and vice versa), and
-  the dialog seeds from it
+- `_open_time_travel()` / `_quick_jump()` / `_end_simulation()`:
+  frozen (moment, observer) rendered instead of the present for
+  `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back; the QUICK
+  JUMP submenu (owner 2026-07-14) leads with NOW (back to the present
+  immediately) and offers the next/previous sun and moon turning
+  points (big ➜/⬅ arrows — forward reads logo-text-arrow, backward
+  arrow-logo-text, owner 2026-07-15), the two poles and Greenwich —
+  jumps CHAIN off the running simulation (time keeps its place when
+  the place changes and vice versa), every jump entry keeps the menu
+  OPEN (the `stay_open` action property on the `_StayOpenMenu`), and
+  the dialog seeds from the simulation; the dialog's blue Now button
+  (left of OK/Cancel) ends the simulation through `RETURN_TO_NOW`
 - `_collect_secret(char)`: the HIDDEN MODE unlock — printable keys on
   the focused dial roll through a buffer; matching
   `constants.HIDDEN_MODE_SECRET` flips the RUNTIME
