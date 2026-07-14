@@ -55,36 +55,33 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   close as usual (a rebuild while open closes and RETAINS the old
   menu so Qt never deletes a visible popup). Emoji-fronted top level:
   🎨 Design (Pointer, Ring, Umbra | Hands, Earth — with the Date
-  switch — | Size), 🥇 Primary Slot, 🥈 Secondary Slot, 🧩 Elements |
+  switch — | Size), 🥇 1ˢᵗ Slot, 🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
   📜 Legend, 🔆 Solar rotation, 🖱️ Click-through | ⚙️ Settings…,
-  🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The two
-  slot submenus are THE SAME SHAPE
-  (`add_weekday_submenu` builds the shared part): a Weekday submenu
-  in KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`: Ancient Gods / Society —
-  Professions, Creeds, Mysteries — / Animals / Arcana, where Planets
-  nests its Image and Sign looks; the metal themes
-  open a Gold/Bronze/Silver/Colored metal dropdown whose pick
+  🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The three
+  slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
+  a Weekday submenu in KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`: Ancient
+  Gods / Society — Professions, Creeds, Mysteries — / Animals /
+  Arcana, where Planets nests its Image and Sign looks; the metal
+  themes open a Gold/Bronze/Silver/Colored metal dropdown whose pick
   activates theme AND metal, releasing follow-the-ring) — plus the
-  slot's OWN Names switch — `show_weekday_names` for the primary,
-  `show_info_slot_names` for the secondary (owner bug 2026-07-13:
-  they were one linked setting) — the Time/Date/Day length text
-  modes, and the
-  Astrology / Ascendant / Chinese-zodiac families with their own
-  STYLE dropdowns (primary: image styles only; secondary adds Text).
-  Gating: the day slot's badge families need the pinned layout
-  (Aurora or pointer off) and its Time/Date/Day-length modes a pinned
-  SPOT (pointer off, or Aurora); the info slot exists on the Compass
-  and the Seasons (in the CENTER — dual-Sunday round 2026-07-12:
-  their 24h arm belongs to the Sunday pair; weekday off moves it to
-  24h) and under Aurora, plus anywhere once the Pointer element is
-  off — the Trinity and the Prism have NO room while the star is up.
-  Since the ROUNDEL round (owner 2026-07-14) TEXT is real under EVERY
-  pointer — the old Aurora images-only coercion is gone; text and the
-  flat astrology art draw on the watch-face subdial. Pointer,
-  show_weekday and show_pointer changes re-gray the gated entries IN
-  PLACE (`_refresh_menu_gating` over the `_menu_gates` buckets —
-  owner 2026-07-13: those switches must not close the open menu; no
-  rebuild).
+  slot's OWN Names switch — the COMPLICATIONS submenu (Digital time /
+  Date / Day length / Seconds — the seated small seconds silences the
+  big hand and its Elements toggle), and the Astrology / Ascendant /
+  Chinese-zodiac families with their own STYLE dropdowns. Below a
+  separator each slot carries its ENABLE switch: slots enable
+  strictly 1 → 2 → 3 (`enable2`/`enable3` gates gray the jumps); the
+  Seasons three-slot case locks the 1st on the classic weekday unit
+  (`first_lock`). Since the ROUNDEL round (owner 2026-07-14) TEXT is
+  real under EVERY pointer — text and the flat astrology art draw on
+  the watch-face subdial. Pointer, show_weekday and show_pointer
+  changes re-gray the gated entries IN PLACE (`_refresh_menu_gating`
+  over the `_menu_gates` buckets — owner 2026-07-13: those switches
+  must not close the open menu; no rebuild). The classic weekday unit
+  wears the theme of the slot that DRIVES it (`_classic_slot_theme` +
+  `_themed_weekday_set`, owner 2026-07-15): on the Seasons/Compass
+  with two slots where only the 2nd is weekday, that slot rides the
+  rotation in ITS OWN theme. Theme ROTATION cycles inside a kinship
+  group picked in Settings (`rotation_themes`).
   Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's
@@ -121,7 +118,18 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   by asking the compositor about the cursor position a few times a second
 - `_on_wake()`: resume-from-sleep / clock change → immediate full refresh
   (wired to the native PowerEventFilter)
-- `_open_time_travel()`: frozen (moment, observer) rendered instead of
-  the present for `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back
+- `_open_time_travel()` / `_quick_jump()`: frozen (moment, observer)
+  rendered instead of the present for `TIME_TRAVEL_DURATION_S`, then
+  the tick flow snaps back; the QUICK JUMP submenu (owner 2026-07-14)
+  offers the next/previous sun and moon turning points, the two poles
+  and Greenwich true-noon — jumps CHAIN off the running simulation
+  (time keeps its place when the place changes and vice versa), and
+  the dialog seeds from it
+- `_collect_secret(char)`: the HIDDEN MODE unlock — printable keys on
+  the focused dial roll through a buffer; matching
+  `constants.HIDDEN_MODE_SECRET` flips the RUNTIME
+  `_hidden_unlocked` flag (owner 2026-07-15: per SESSION, never
+  persisted — the code must be re-entered on every launch) and the
+  Four Greetings appear on the ring letters and in the Encyclopedia
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

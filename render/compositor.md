@@ -33,7 +33,9 @@ draws the MINUTE layers (hands, year marker) live.
   it larger); True = target changed, the widget repaints (weekday
   bodies live in the DAILY composite, so one rebuild per change).
   `_element_at()` is the ONE geometry shared with the tooltips
-  (body/octa slot/moon/earth, in hover priority); legend off or a
+  (body/seated slots/moon/earth, in hover priority — seated slots
+  reuse the layer's exact seat geometry: `slot_seat_rotation` /
+  `slot_seat_scale` / `slot_seat_orbit`); legend off or a
   factor of 1.0 keeps the dial inert
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
@@ -49,8 +51,12 @@ draws the MINUTE layers (hands, year marker) live.
   (owner spec 2026-07-12, `_highlight_terms`): virtues bold blue,
   vices bold red, moods bold yellow, color words in their own hue
   (`defaults.LEGEND_*` rules, English + Serbian originals), and hex
-  notes like "(#F8E600)" are stripped from display. Then the octa
-  info slot — the Astrology/Ascendant hovers lead with a bold title
+  notes like "(#F8E600)" are stripped from display; when the CLASSIC
+  unit is driven by the 2nd slot (Seasons/Compass two-slot case) the
+  body hover speaks that slot's own theme. Then the seated slots
+  ("slot:N" via `slot_view` — weekday seats answer the body article,
+  zodiac/ascendant/Chinese their sign texts, digital faces stay
+  silent) — the Astrology/Ascendant hovers lead with a bold title
   ("Ascendant" written out in full) and an image TRIO: the ACTIVE
   style's art large in the middle, the two remaining styles at
   `ASTRO_SIDE_IMAGE_FRACTION` beside it (owner 2026-07-13; text mode
@@ -103,8 +109,12 @@ draws the MINUTE layers (hands, year marker) live.
 
 The layer stack follows `skin.z_order`, skipping the layers of
 switched-off Elements (star, weekday set, year marker when both
-markers are off, the seconds hand); the current day's center body
-(and, on the octa pointer, the bottom-arm info slot) are appended LAST
-so they draw above the hands (owner spec). `_rotation()` feeds the
-shared Star/Aura/Umbra/slot rotation into every RenderContext: the
-solar offset, or 0 with solar rotation off (upright mode).
+markers are off, the seconds hand); angle-seated slots draw BELOW the
+hands, while the current day's center body and a center-seated slot
+are appended LAST so they draw above the hands (owner spec).
+`_rotation()` feeds the shared Star/Aura/Umbra rotation into every
+RenderContext: the solar offset, or 0 with solar rotation off
+(upright mode) — the slot seats take it only through
+`slot_seat_rotation` (armed pointers only). The letter band also
+answers the FOUR GREETINGS hover on the 12h/24h ring letters once the
+hidden mode is unlocked for the session.
