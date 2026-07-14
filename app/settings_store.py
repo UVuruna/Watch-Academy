@@ -69,9 +69,6 @@ class Settings:
     # generations coexist on disk; this picks which one the dial and
     # the readers show (missing files fall back to the other source).
     art_source: str = constants.ART_SOURCE_DEFAULT
-    # Hidden mode (owner 2026-07-14): unlocked by typing the secret
-    # sequence on the focused dial; persists across sessions.
-    hidden_unlocked: bool = False
     legend: bool = True
     # Elements switches (owner spec, FINAL.txt #5): each removes one dial
     # element; the day/twilight indication itself always stays.
@@ -267,7 +264,6 @@ class SettingsStore:
                 show_info_slot_names=_load_bool(
                     raw, "show_info_slot_names", True
                 ),
-                hidden_unlocked=_load_bool(raw, "hidden_unlocked", False),
                 moon_hidden_alpha=_load_scale(
                     raw, "moon_hidden_alpha", 0.0, 1.0, 0.5
                 ),
@@ -362,7 +358,6 @@ class SettingsStore:
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "art_source": settings.art_source,
-            "hidden_unlocked": settings.hidden_unlocked,
             "legend": settings.legend,
             "show_earth": settings.show_earth,
             "show_moon": settings.show_moon,

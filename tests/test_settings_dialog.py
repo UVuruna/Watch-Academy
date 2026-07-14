@@ -252,7 +252,9 @@ def test_hidden_mode_unlocks_the_four_greetings(app):
     unlocked._step(-1)                       # wrap onto the poem page
     assert unlocked._counter.text() == "4 / 4"
     unlocked.deleteLater()
-    assert Settings().hidden_unlocked is False
+    # SESSION-only (owner 2026-07-15): the unlock never persists —
+    # the settings know nothing about it.
+    assert not hasattr(Settings(), "hidden_unlocked")
     from config import constants
 
     assert len(constants.HIDDEN_MODE_SECRET) >= 3

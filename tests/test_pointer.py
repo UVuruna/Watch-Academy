@@ -26,6 +26,9 @@ from render.layers import (
     SlotLayer,
     palette_for,
     slot_layout,
+    slot_seat_orbit,
+    slot_seat_rotation,
+    slot_seat_scale,
     today_slot_theta,
     umbra_ladder,
     visible_occupant,
@@ -170,6 +173,101 @@ def test_slot_layout_matrix():
     assert slot_layout(skin(
         pointer="octa", show_octa_slot=False, show_third_slot=True,
     )) == {1: "classic"}
+
+
+def test_slot_seat_geometry_follows_the_pointer():
+    """Owner 2026-07-15, pinned: (1) seats ride the star's rotation
+    ONLY while a pointer with arms is drawn — Aurora and pointer-off
+    stay on natural round angles; (2) slot size is 125% on the
+    slim-armed Seasons/Compass, 150% everywhere else including the
+    pinned layouts; (3) on the slim-armed pointers an ANGLE seat
+    shifts outward to the diamond's widest point, arms at 3h/6h stay
+    (trio/hexa untouched, center/classic untouched)."""
+
+    def skin(**kw):
+        return dataclasses.replace(defaults.DEFAULT_SKIN, **kw)
+
+    # (1) Rotation reaches the seats only under an armed pointer.
+    for pointer in ("trio", "cross", "hexa", "octa"):
+        assert slot_seat_rotation(skin(pointer=pointer), 10.76) == 10.76
+    assert slot_seat_rotation(skin(pointer="aurora"), 10.76) == 0.0
+    assert slot_seat_rotation(
+        skin(pointer="hexa", show_pointer=False), 10.76
+    ) == 0.0
+    # (2) Per-pointer sizes: 125% slim-armed, 150% elsewhere + pinned.
+    for pointer in ("cross", "octa"):
+        assert slot_seat_scale(skin(pointer=pointer)) == 1.25, pointer
+    for pointer in ("trio", "hexa", "aurora"):
+        assert slot_seat_scale(skin(pointer=pointer)) == 1.50, pointer
+    assert slot_seat_scale(
+        skin(pointer="octa", show_pointer=False)
+    ) == defaults.SLOT_SIZE_PINNED == 1.50
+    # (3) The outward shift: angle seats on cross/octa only.
+    H3 = constants.AURORA_DUAL_WEEKDAY_ANGLE
+    for pointer in ("cross", "octa"):
+        assert slot_seat_orbit(skin(pointer=pointer), H3) == \
+            defaults.SLOT_SEAT_OUTWARD[pointer], pointer
+        assert slot_seat_orbit(skin(pointer=pointer), "center") == 1.0
+        assert slot_seat_orbit(skin(pointer=pointer), "classic") == 1.0
+    assert slot_seat_orbit(skin(pointer="hexa"), H3) == 1.0
+    assert slot_seat_orbit(
+        skin(pointer="octa", show_pointer=False), H3
+    ) == 1.0
+
+
+def test_classic_unit_wears_the_driving_slots_theme():
+    """Owner 2026-07-15 (his 'ne razumem' point, pinned plainly): on
+    the Seasons/Compass with TWO slots where the 1st chose another
+    mode and the 2ND is weekday, the classic rotating unit is DRIVEN
+    by the 2nd slot — so it wears the 2nd slot's own theme, not the
+    1st's. Every other case keeps the weekday theme."""
+    from app.controller import _classic_slot_theme
+    from app.settings_store import Settings, replace
+
+    base = replace(
+        Settings(), weekday_theme="planets", info_slot_theme="greek",
+    )
+    # The 2nd slot drives the classic unit -> ITS theme dresses it.
+    for pointer in ("cross", "octa"):
+        driven = replace(
+            base, pointer=pointer, show_octa_slot=True,
+            weekday_slot="time", octa_slot="weekday",
+        )
+        assert _classic_slot_theme(driven)[0] == "greek", pointer
+    # The 1st slot is weekday itself -> the weekday theme stays.
+    plain = replace(
+        base, pointer="octa", show_octa_slot=True, octa_slot="weekday",
+    )
+    assert _classic_slot_theme(plain)[0] == "planets"
+    # Three slots: the Seasons lock the 1st on the classic unit ->
+    # the weekday theme stays even with a weekday 2nd.
+    third = replace(
+        base, pointer="cross", show_octa_slot=True, show_third_slot=True,
+        weekday_slot="time", octa_slot="weekday",
+    )
+    assert _classic_slot_theme(third)[0] == "planets"
+
+
+def test_subdial_plate_recolors_to_every_finish(app):
+    """Owner 2026-07-15 ('ti si taj koji treba da renderuješ zlatnu i
+    bronzanu boju'), pinned: his ONE silver master serves every letter
+    finish — silver returns the master as drawn, gold and bronze
+    return disk-cached recolors of it; a seat with no plate of its
+    own borrows the center plate."""
+    from config import paths as _paths
+    from render.assets import subdial_plate_file
+
+    master = _paths.art_file(
+        defaults.SUBDIAL_ART_DIR / "silver" / "center.png"
+    )
+    assert master.exists()
+    assert subdial_plate_file("silver", "center") == master
+    assert subdial_plate_file("silver", "h3") == master   # seat borrow
+    for finish in ("gold", "bronze"):
+        plate = subdial_plate_file(finish, "center")
+        assert plate is not None and plate != master, finish
+        assert plate.name.endswith(f"_subdial_{finish}.png"), finish
+        assert plate.exists(), finish
 
 
 def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):

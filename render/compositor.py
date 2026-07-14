@@ -45,6 +45,9 @@ from render.layers import (
     dial_point,
     servant_holds_the_seat,
     slot_layout,
+    slot_seat_orbit,
+    slot_seat_rotation,
+    slot_seat_scale,
     slot_view,
     sunday_dual_face,
     today_slot_theta,
@@ -461,7 +464,16 @@ class Compositor:
                     return self._sun_face_tooltip(
                         "ruler", active=today == "sun"
                     )
-                return self._weekday_tooltip(body, active=body == today)
+                # The classic unit may be DRIVEN by the 2nd slot
+                # (owner 2026-07-15) — the hover speaks that theme.
+                theme = (
+                    self._skin.info_slot_theme
+                    if weekday_classic_slot(self._skin) == 2
+                    else None
+                )
+                return self._weekday_tooltip(
+                    body, active=body == today, theme=theme
+                )
             if element == "moon":
                 return self._moon_text()
             if element == "earth":
@@ -514,10 +526,16 @@ class Compositor:
                 QPointF(0.0, 0.0)
                 if seat == "center"
                 else dial_point(
-                    seat + rotation, radius * weekday.orbit_fraction
+                    seat + slot_seat_rotation(self._skin, rotation),
+                    radius * weekday.orbit_fraction
+                    * slot_seat_orbit(self._skin, seat),
                 )
             )
-            if hit(pos, radius * weekday.diamond_scale):
+            if hit(
+                pos,
+                radius * weekday.diamond_scale
+                * slot_seat_scale(self._skin),
+            ):
                 return f"slot:{index}"
         if classic is not None:
             body = self._weekday_body_at(point, radius, rotation, today)

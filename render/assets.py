@@ -69,6 +69,89 @@ def ring_face_color(path: Path | None) -> QColor:
     return color
 
 
+def subdial_plate_file(finish: str, seat: str) -> Path | None:
+    """The owner's subdial plate for (letter finish, seat). His art
+    wins as drawn; a missing SEAT falls back to the center plate (the
+    directional shadow is rendered live by the layer, owner
+    2026-07-15); a missing FINISH recolors another finish's master —
+    only the bright, low-saturation brushed rim takes the finish
+    color, the dark tapisserie field never moves (disk-cached like
+    the metal variants). None = no plate art at all."""
+    base = defaults.SUBDIAL_ART_DIR
+    for stem in (seat, "center"):
+        exact = paths.art_file(base / finish / f"{stem}.png")
+        if exact.exists():
+            return exact
+    for source_finish in defaults.SUBDIAL_RECOLOR_COLORS:
+        if source_finish == finish:
+            continue
+        for stem in (seat, "center"):
+            master = paths.art_file(base / source_finish / f"{stem}.png")
+            if master.exists():
+                return _recolored_plate(master, finish)
+    return None
+
+
+def _recolored_plate(master: Path, finish: str) -> Path:
+    """The master plate with its brushed metal rim COLORIZED to the
+    finish: weighted pixels (bright AND unsaturated) become the finish
+    color multiplied by their own luminance — the brushing survives,
+    the dark field stays."""
+    stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{int(master.stat().st_mtime)}_subdial_{finish}.png"
+    )
+    if cache.exists():
+        return cache
+    image = QImage(str(master)).convertToFormat(
+        QImage.Format.Format_RGBA8888
+    )
+    width, height = image.width(), image.height()
+    stride = image.bytesPerLine() // 4
+    buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
+    rgba = (
+        buffer.reshape(height, stride, 4)[:, :width, :]
+        .astype(np.float64) / 255.0
+    )
+    rgb = rgba[..., :3]
+    value = rgb.max(axis=-1)
+    minc = rgb.min(axis=-1)
+    sat = np.where(value > 0, (value - minc) / np.maximum(value, 1e-6), 0.0)
+
+    def smoothstep(x):
+        x = np.clip(x, 0.0, 1.0)
+        return x * x * (3.0 - 2.0 * x)
+
+    value_low, value_high = defaults.SUBDIAL_RECOLOR_VALUE_RAMP
+    sat_low, sat_high = defaults.SUBDIAL_RECOLOR_SAT_CUTOFF
+    weight = (
+        smoothstep((value - value_low) / (value_high - value_low))
+        * (1.0 - smoothstep((sat - sat_low) / (sat_high - sat_low)))
+    )[..., None]
+    target = QColor(defaults.SUBDIAL_RECOLOR_COLORS[finish])
+    tint = np.array([
+        target.redF(), target.greenF(), target.blueF()
+    ])
+    colorized = tint[None, None, :] * value[..., None]
+    rgba[..., :3] = rgb * (1.0 - weight) + colorized * weight
+    out_bytes = np.ascontiguousarray(
+        (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
+    )
+    out = QImage(
+        out_bytes.tobytes(), width, height, width * 4,
+        QImage.Format.Format_RGBA8888,
+    ).copy()
+    try:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        out.save(str(cache))
+    except OSError as error:
+        # A cold cache is only slower, never wrong — but say so.
+        print(f"subdial recolor cache write failed: {error}", file=sys.stderr)
+        return master
+    return cache
+
+
 def metal_variant_file(path: Path, metal: str | None) -> Path:
     """A DISK copy of `path` with the hue-selective metal swap applied
     (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed

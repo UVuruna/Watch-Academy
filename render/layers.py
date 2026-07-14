@@ -30,7 +30,7 @@ from config import constants, defaults, paths
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.sun import DaylightRegime, SunDay
-from render.assets import AssetCache, ring_face_color
+from render.assets import AssetCache, ring_face_color, subdial_plate_file
 from skins.manifest import HandSpec, SkinDefinition
 
 
@@ -306,6 +306,37 @@ def slot_layout(skin: SkinDefinition) -> dict:
         order[1]: constants.AURORA_DUAL_SLOT_ANGLE,
         order[2]: constants.AURORA_DUAL_WEEKDAY_ANGLE,
     }
+
+
+def slot_seat_rotation(skin: SkinDefinition, rotation: float) -> float:
+    """Seats ride the star's rotation ONLY while the pointer is drawn
+    (owner 2026-07-15: without a pointer — Aurora included — the
+    positions stay on natural round angles; the tilt exists solely to
+    keep seats between the diamonds)."""
+    if skin.show_pointer and skin.pointer != "aurora":
+        return rotation
+    return 0.0
+
+
+def slot_seat_scale(skin: SkinDefinition) -> float:
+    """The per-pointer slot SIZE factor (owner 2026-07-15): 125% on
+    the slim-armed Seasons/Compass, 150% elsewhere."""
+    if not skin.show_pointer:
+        return defaults.SLOT_SIZE_PINNED
+    return defaults.SLOT_SIZE_BY_POINTER[skin.pointer]
+
+
+def slot_seat_orbit(skin: SkinDefinition, seat) -> float:
+    """The seat's orbit factor: on the slim-armed pointers an ANGLE
+    seat shifts outward to the diamond's widest point (owner
+    2026-07-15); the center and the pinned layouts stay put."""
+    if (
+        seat not in ("classic", "center")
+        and skin.show_pointer
+        and skin.pointer in defaults.SLOT_SEAT_OUTWARD
+    ):
+        return defaults.SLOT_SEAT_OUTWARD[skin.pointer]
+    return 1.0
 
 
 def weekday_classic_slot(skin: SkinDefinition) -> int | None:
@@ -969,10 +1000,13 @@ class SlotLayer(Layer):
                 pos = QPointF(0.0, 0.0)
             else:
                 pos = dial_point(
-                    seat + ctx.rotation, ctx.radius * spec.orbit_fraction
+                    seat + slot_seat_rotation(ctx.skin, ctx.rotation),
+                    ctx.radius * spec.orbit_fraction
+                    * slot_seat_orbit(ctx.skin, seat),
                 )
             size = (
                 2 * ctx.radius * spec.diamond_scale
+                * slot_seat_scale(ctx.skin)
                 * hover_factor(ctx, element)
             )
             self._draw_slot(painter, ctx, index, pos, size)
@@ -1166,6 +1200,35 @@ def _subdial_seat(pos: QPointF) -> str:
     return "south"
 
 
+def _draw_subdial_shadow(
+    painter: QPainter, pos: QPointF, diameter: float
+) -> None:
+    """The subdial's LIVE shadow (owner 2026-07-15: the sun lives at
+    the dial center, the shadow is rendered — never baked): offset
+    OUTWARD from the center, symmetric on the center seat."""
+    distance = math.hypot(pos.x(), pos.y())
+    if distance > 1.0:
+        offset = diameter * defaults.SUBDIAL_SHADOW_OFFSET_FRACTION
+        shifted = QPointF(
+            pos.x() + pos.x() / distance * offset,
+            pos.y() + pos.y() / distance * offset,
+        )
+    else:
+        shifted = pos
+    radius = diameter / 2.0 * defaults.SUBDIAL_SHADOW_SPREAD
+    gradient = QRadialGradient(shifted, radius)
+    shade = QColor(*defaults.SUBDIAL_SHADOW_RGBA)
+    gradient.setColorAt(0.75, shade)
+    fade = QColor(shade)
+    fade.setAlpha(0)
+    gradient.setColorAt(1.0, fade)
+    painter.save()
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(gradient)
+    painter.drawEllipse(shifted, radius, radius)
+    painter.restore()
+
+
 def draw_slot_roundel(
     painter: QPainter, ctx: RenderContext, pos: QPointF, diameter: float
 ) -> None:
@@ -1173,15 +1236,17 @@ def draw_slot_roundel(
     2026-07-14) — worn by every text mode and by the flat astrology
     art (sign / logo / constellation); the circular plates
     (medallions, planets, colored badges) stay bare. The owner's
-    PLATE ART draws when it exists (per letter finish and seat, the
-    seat falling back to the center plate); otherwise the procedural
-    circle: the ring's own face color rimmed in the finish metal."""
-    finish_dir = defaults.SUBDIAL_ART_DIR / ctx.skin.ring_finish
-    for stem in (_subdial_seat(pos), "center"):
-        plate = paths.art_file(finish_dir / f"{stem}.png")
-        if plate.exists():
-            draw_pixmap_centered(painter, ctx, plate, pos, diameter)
-            return
+    PLATE ART draws whenever ANY plate exists — a missing finish is
+    RECOLORED from his master, a missing seat borrows the center
+    plate — under a LIVE outward shadow (owner 2026-07-15: one master
+    plate, the code paints the metals and the light). With no art at
+    all: the procedural circle, the ring's own face color rimmed in
+    the finish metal."""
+    _draw_subdial_shadow(painter, pos, diameter)
+    plate = subdial_plate_file(ctx.skin.ring_finish, _subdial_seat(pos))
+    if plate is not None:
+        draw_pixmap_centered(painter, ctx, plate, pos, diameter)
+        return
     rim = QColor(
         defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
     )

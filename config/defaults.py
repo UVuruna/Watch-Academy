@@ -494,6 +494,38 @@ SMALL_SECONDS_TICK_MINOR_FRACTION = 0.11
 SMALL_SECONDS_TICK_RGBA = (255, 255, 255, 235)
 SMALL_SECONDS_TICK_SHADOW_RGBA = (0, 0, 0, 140)
 
+# Per-pointer SLOT sizing (owner 2026-07-15): the diamonds differ —
+# the slim-armed Seasons and Compass carry 125%, the big-diamond
+# Trinity/Prism, Aurora and the pointer-off layouts 150%; on the slim
+# arms the seat also shifts OUTWARD to the diamond's widest point
+# (the between-arm 3h/21h seats stay put).
+SLOT_SIZE_BY_POINTER = {
+    "trio": 1.50, "hexa": 1.50, "aurora": 1.50,
+    "cross": 1.25, "octa": 1.25,
+}
+SLOT_SIZE_PINNED = 1.50
+SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12}
+
+# The subdial's live SHADOW (owner 2026-07-15: the sun lives at the
+# dial center, the shadow is RENDERED, never baked) — offset outward
+# from the center, none on the center seat.
+SUBDIAL_SHADOW_RGBA = (0, 0, 0, 100)
+SUBDIAL_SHADOW_OFFSET_FRACTION = 0.05    # of the subdial diameter
+SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
+
+# Recoloring the owner's subdial plate to a missing letter finish
+# (owner 2026-07-15: one master plate, the code paints the metals):
+# only BRIGHT, LOW-SATURATION pixels (the brushed rim) take the finish
+# color multiplied by their own luminance — the dark tapisserie field
+# never moves.
+SUBDIAL_RECOLOR_VALUE_RAMP = (0.30, 0.60)
+SUBDIAL_RECOLOR_SAT_CUTOFF = (0.10, 0.30)
+SUBDIAL_RECOLOR_COLORS = {
+    "gold": "#FFD235",
+    "bronze": "#CD7F32",
+    "silver": "#C9CDD3",
+}
+
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and

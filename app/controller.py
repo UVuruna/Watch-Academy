@@ -241,6 +241,56 @@ def _effective_weekday_slot(settings: Settings) -> str:
     return settings.weekday_slot
 
 
+def _classic_slot_theme(settings: Settings) -> tuple[str, str | None]:
+    """The (theme, metal) DRESSING the classic weekday unit: normally
+    the 1st slot's — except the Seasons/Compass two-slot case where
+    only the 2ND is weekday, so the 2nd rides the rotation in its own
+    theme (owner 2026-07-15)."""
+    if (
+        settings.pointer in ("cross", "octa")
+        and settings.show_pointer
+        and settings.show_weekday
+        and settings.show_octa_slot
+        and not settings.show_third_slot
+        and _effective_weekday_slot(settings) != "weekday"
+        and settings.octa_slot == "weekday"
+    ):
+        theme = settings.info_slot_theme
+        return theme, _theme_metal(settings, theme)
+    theme = settings.weekday_theme
+    return theme, _theme_metal(settings, theme)
+
+
+def _themed_weekday_set(base, theme: str, metal: str | None):
+    """The weekday unit dressed in `theme` wearing `metal` — the
+    SYMBOLISM canon swap (entity-named files, canon display names;
+    "planets" keeps the pack's own unit), the hue-SELECTIVE metal at
+    render, and the Sunday Servant dual (the COLORED look swaps in
+    the sibling variant; owner restructure 2026-07-14)."""
+    weekday = base
+    if theme != "planets":
+        theme_dir = (
+            defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
+        )
+        if metal == "colored":
+            theme_dir = theme_dir.parent / "colored"
+        names = defaults.WEEKDAY_THEME_NAMES[theme]
+        files = defaults.WEEKDAY_THEME_FILES[theme]
+        weekday = dataclasses.replace(
+            weekday,
+            bodies={body: theme_dir / f"{files[body]}.png" for body in names},
+            body_names=dict(names),
+        )
+    if metal in defaults.METAL_SWAP_TARGETS:
+        weekday = dataclasses.replace(weekday, metal=metal)
+    dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
+    if metal == "colored" and theme in constants.METAL_THEMES:
+        dual_rel = dual_rel.replace("/primary/", "/colored/")
+    return dataclasses.replace(
+        weekday, dual_asset=defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+    )
+
+
 def apply_display_settings(skin, settings: Settings):
     """The user's choices win over whatever the skin pack declares:
     the tray display scalars, the opacity overrides (twilight alphas
@@ -267,42 +317,12 @@ def apply_display_settings(skin, settings: Settings):
             diamond_scale=weekday.diamond_scale * settings.slot_scale,
             center_scale=weekday.center_scale * settings.slot_scale,
         )
-    metal = _theme_metal(settings, settings.weekday_theme)
-    if settings.weekday_theme != "planets":
-        # Themed bodies (SYMBOLISM.md canon): swap in the shared themed
-        # art (files carry the ENTITY names) and the canon display
-        # names; "planets" keeps the skin's own weekday unit untouched.
-        # Family/variant tree (owner restructure 2026-07-14): the
-        # COLORED look is the variant SIBLING <family>/colored.
-        theme_dir = (
-            defaults.WEEKDAY_ART_DIR
-            / defaults.WEEKDAY_THEME_DIRS[settings.weekday_theme]
-        )
-        if metal == "colored":
-            theme_dir = theme_dir.parent / "colored"
-        names = defaults.WEEKDAY_THEME_NAMES[settings.weekday_theme]
-        files = defaults.WEEKDAY_THEME_FILES[settings.weekday_theme]
-        weekday = dataclasses.replace(
-            weekday,
-            bodies={body: theme_dir / f"{files[body]}.png" for body in names},
-            body_names=dict(names),
-        )
-    # The bronze-plate themes wear their chosen METAL (owner
-    # 2026-07-12): gold/silver run the hue-SELECTIVE swap at render
-    # (only the bronze details change); bronze = the art as drawn.
-    if metal in defaults.METAL_SWAP_TARGETS:
-        weekday = dataclasses.replace(weekday, metal=metal)
-    # The Sunday SERVANT face (owner dual-Sunday round 2026-07-12):
-    # every theme carries one; the metal themes' COLORED look swaps in
-    # the colored/ variant, gold/silver reuse the swap via spec.metal.
-    dual_rel = defaults.WEEKDAY_DUAL_FILES[settings.weekday_theme]
-    if metal == "colored" and settings.weekday_theme in constants.METAL_THEMES:
-        # The colored dual lives in the SIBLING variant (owner
-        # restructure 2026-07-14): swap the variant segment.
-        dual_rel = dual_rel.replace("/primary/", "/colored/")
-    weekday = dataclasses.replace(
-        weekday, dual_asset=defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
-    )
+    # The CLASSIC unit wears the theme of the slot that DRIVES it
+    # (owner 2026-07-15): on the Seasons/Compass with two slots where
+    # only the 2nd is weekday, that slot rides the rotation in ITS
+    # OWN theme.
+    theme, metal = _classic_slot_theme(settings)
+    weekday = _themed_weekday_set(weekday, theme, metal)
     background = skin.background
     if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
         # The Aura's sunlight and twilight opacities are INDEPENDENT
@@ -462,7 +482,9 @@ class AppController(QObject):
             self._skin, AssetCache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
-        self._compositor.set_hidden_unlocked(self._settings.hidden_unlocked)
+        # SESSION-only (owner 2026-07-15): every launch starts locked —
+        # the code must be typed again.
+        self._hidden_unlocked = False
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
         # present until the deadline passes.
@@ -632,22 +654,19 @@ class AppController(QObject):
 
     def _collect_secret(self, char: str) -> None:
         """Typing HIDDEN_MODE_SECRET on the focused dial unlocks the
-        hidden extras (owner 2026-07-14) — for now the Four Greetings
-        verses page in the Encyclopedia's Trinity topic. The unlock
-        persists in settings."""
-        if self._settings.hidden_unlocked:
+        hidden extras — for now the Four Greetings on the ring letters
+        and in the Encyclopedia's Trinity topic. The unlock lives for
+        THIS SESSION only (owner 2026-07-15: every launch asks for the
+        code again — nothing persists)."""
+        if self._hidden_unlocked:
             return
         secret = constants.HIDDEN_MODE_SECRET
         self._secret_buffer = (self._secret_buffer + char)[-len(secret):]
         if self._secret_buffer != secret:
             return
         self._secret_buffer = ""
-        self._settings = replace(self._settings, hidden_unlocked=True)
+        self._hidden_unlocked = True
         self._compositor.set_hidden_unlocked(True)
-        try:
-            self._store.save(self._settings)
-        except OSError as error:
-            print(f"settings save failed: {error}", file=sys.stderr)
         self._tray.notify(
             self._ui("Hidden mode unlocked"),
             self._ui("The Four Greetings await in the Encyclopedia — Trinity."),
@@ -716,7 +735,7 @@ class AppController(QObject):
             skin, AssetCache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
-        self._compositor.set_hidden_unlocked(self._settings.hidden_unlocked)
+        self._compositor.set_hidden_unlocked(self._hidden_unlocked)
         self._widget.set_renderer(self._compositor)
         if self._day is not None:
             self._compositor.set_day(self._day)
@@ -1329,7 +1348,7 @@ class AppController(QObject):
         encyclopedia.triggered.connect(
             lambda: EncyclopediaDialog(
                 self._translation_overlay,
-                hidden_unlocked=self._settings.hidden_unlocked,
+                hidden_unlocked=self._hidden_unlocked,
             ).exec()
         )
         menu.addAction(encyclopedia)
