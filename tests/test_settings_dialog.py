@@ -399,7 +399,7 @@ def test_encyclopedia_expansion_wiring():
         "Bronze", "Gold", "Silver", "Colored",
     ]
     assert [l for l, _ in topics["planets"]["entries"][0]["looks"]] == [
-        "Planets", "Signs",
+        "Planets", "Signs", "Art",
     ]
     assert [l for l, _ in topics["astrology"]["entries"][0]["looks"]] == [
         "Logo & Constellation", "Colored", "Sign",

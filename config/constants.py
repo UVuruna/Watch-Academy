@@ -359,12 +359,22 @@ WEEKDAY_THEMES = (
     "wolf",
     "bee",
     "elephant",
+    # The TEXT WAVE themes (owner 2026-07-14): the three Scripture
+    # sets, the deep sky, and the Planets medallion look.
+    "bible",
+    "bible2",
+    "bible_dark",
+    "cosmos",
+    "planets_art",
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
 # a METAL — bronze is the art as drawn, gold and silver are runtime
 # tritone tints. All other themes are full-color and never tint.
-METAL_THEMES = ("greek", "norse", "profession", "wolf", "bee", "elephant")
+METAL_THEMES = (
+    "greek", "norse", "profession", "wolf", "bee", "elephant",
+    "cosmos",              # bronze star-chart medallions + colored arc
+)
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
 THEME_METALS = ("gold", "bronze", "silver", "colored")
@@ -388,6 +398,11 @@ WEEKDAY_THEME_BLURBS = {
     "wolf": "day",
     "bee": "day",
     "elephant": "day",
+    "bible": "day",
+    "bible2": "day",
+    "bible_dark": "day",
+    "cosmos": "day",
+    "planets_art": "day",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -407,6 +422,13 @@ WEEKDAY_THEME_ARTICLES = {
     "wolf": "wolf",
     "bee": "bee",
     "elephant": "elephant",
+    "bible": "bible",
+    "bible2": "bible2",
+    "bible_dark": "bible_dark",
+    "cosmos": "cosmos",
+    # The medallion look shares the planet articles — same entities,
+    # different art (like the glyphs).
+    "planets_art": "planets",
 }
 
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,

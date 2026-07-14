@@ -173,6 +173,17 @@ UI_STRINGS: tuple[str, ...] = (
     # encyclopedia group, the Seasons topic and every role name.
     "Wolf Pack", "Bee Hive", "Elephant Herd", "Animal Societies",
     "Seasons",
+    # The text-wave themes (owner 2026-07-14): titles, the Scripture
+    # group, the Planets Art option and every display/face name.
+    "Bible", "Bible II", "Bible Dark", "Cosmos", "Scripture", "Art",
+    "Ancient of Days · Son", "Ancient of Days", "Son", "Mary", "David",
+    "Moses", "Solomon", "Adam & Eve", "Joseph",
+    "Abraham · Isaac", "Abraham", "Isaac", "Jonah", "Samson", "Jacob",
+    "Noah", "Ruth", "Job",
+    "Lucifer · Judas", "Lilith", "Goliath", "The Serpent", "Herod",
+    "Delilah", "Cain",
+    "Sun · Black Hole", "Black Hole", "Nebula", "Supernova", "Pulsar",
+    "Galaxy", "Binary Stars", "Comet",
     "Alpha · Omega", "Luna", "Hunter", "Scout", "Beta", "Mate", "Elder",
     "Alpha", "Omega",
     "Queen · Cleaner", "Nurse", "Guard", "Builder", "Drone", "Forager",

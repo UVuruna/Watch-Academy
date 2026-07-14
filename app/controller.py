@@ -1024,12 +1024,14 @@ class AppController(QObject):
                 for key in keys:
                     title = defaults.WEEKDAY_THEME_TITLES[key]
                     if key == "planets":
-                        # Image/Sign as two options of ONE entry
-                        # (owner: planet_signs stays a theme, nested).
+                        # Image/Sign/Art as three options of ONE entry
+                        # (owner: planet_signs and planets_art stay
+                        # themes underneath, nested).
                         planet_menu = self._submenu(group_menu, tr(title))
                         for pkey, plabel in (
                             ("planets", tr("Image")),
                             ("planet_signs", tr("Sign")),
+                            ("planets_art", tr("Art")),
                         ):
                             slot_action(
                                 planet_menu, group, plabel,

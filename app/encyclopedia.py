@@ -64,8 +64,9 @@ _TOPIC_GROUPS = (
     ("The Clock", ("week", "instrument", "seasons")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
-    ("Themes", ("alchemy", "japan", "profession", "trinity")),
+    ("Themes", ("alchemy", "japan", "profession", "trinity", "cosmos")),
     ("Creeds & Mysteries", ("religion", "religion_alt")),
+    ("Scripture", ("bible", "bible2", "bible_dark")),
     ("Animal Societies", ("wolf", "bee", "elephant")),
     ("The Inner Wheel", ("virtues", "sins", "moods", "duality")),
 )
@@ -208,7 +209,7 @@ def _weekday_topic(theme: str):
                 )
         elif theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
-            # glyphs ride the arrows.
+            # glyphs and the bronze medallions ride the arrows.
             sign = (
                 defaults.WEEKDAY_ART_DIR / "planets" / "signs"
                 / f"{body}.png"
@@ -217,9 +218,18 @@ def _weekday_topic(theme: str):
                 defaults.WEEKDAY_ART_DIR / "planets" / "signs" / "dual"
                 / "sun_eclipse.png"
             )
+            art = (
+                defaults.WEEKDAY_ART_DIR / "planets" / "art"
+                / f"{body}.png"
+            )
+            art_dual = (
+                defaults.WEEKDAY_ART_DIR / "planets" / "art" / "dual"
+                / "sun_eclipse.png"
+            )
             entry["looks"] = (
                 ("Planets", rows(base, _theme_dual_art("planets") if sun else None)),
                 ("Signs", rows(sign, sign_dual if sun else None)),
+                ("Art", rows(art, art_dual if sun else None)),
             )
         entries.append(entry)
     return _theme_body_art(theme, "sun"), entries

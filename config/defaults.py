@@ -662,6 +662,54 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Reunion",
         "saturn": "Elder",
     },
+    # The SCRIPTURE family (owner 2026-07-14): three stained-glass sets.
+    "bible": {
+        "sun": "Ancient of Days · Son",
+        "moon": "Mary",
+        "mars": "David",
+        "mercury": "Moses",
+        "jupiter": "Solomon",
+        "venus": "Adam & Eve",
+        "saturn": "Joseph",
+    },
+    "bible2": {
+        "sun": "Abraham · Isaac",
+        "moon": "Jonah",
+        "mars": "Samson",
+        "mercury": "Jacob",
+        "jupiter": "Noah",
+        "venus": "Ruth",
+        "saturn": "Job",
+    },
+    "bible_dark": {
+        "sun": "Lucifer · Judas",
+        "moon": "Lilith",
+        "mars": "Goliath",
+        "mercury": "The Serpent",
+        "jupiter": "Herod",
+        "venus": "Delilah",
+        "saturn": "Cain",
+    },
+    # The DEEP SKY (owner 2026-07-14): star-chart medallions.
+    "cosmos": {
+        "sun": "Sun · Black Hole",
+        "moon": "Nebula",
+        "mars": "Supernova",
+        "mercury": "Pulsar",
+        "jupiter": "Galaxy",
+        "venus": "Binary Stars",
+        "saturn": "Comet",
+    },
+    # The Planets MEDALLION look — same entities, bronze art.
+    "planets_art": {
+        "sun": "Sun",
+        "moon": "Moon",
+        "mars": "Mars",
+        "mercury": "Mercury",
+        "jupiter": "Jupiter",
+        "venus": "Venus",
+        "saturn": "Saturn",
+    },
 }
 
 # File stems on disk: the display names folded to ASCII (Sól -> Sol,
@@ -694,6 +742,11 @@ WEEKDAY_THEME_DIRS = {
     "wolf": "wolf/primary",
     "bee": "bee/primary",
     "elephant": "elephant/primary",
+    "bible": "bible/primary",
+    "bible2": "bible/secondary",
+    "bible_dark": "bible/dark",
+    "cosmos": "cosmos/primary",
+    "planets_art": "planets/art",
 }
 WEEKDAY_THEME_FILES = {
     theme: {
@@ -737,6 +790,33 @@ WEEKDAY_THEME_FILES["japan"] = {
     "venus": "kinyobi",
     "saturn": "doyobi",
 }
+# The text-wave themes (owner 2026-07-14): explicit lowercase stems —
+# the display names carry duals ("·") and compounds ("Adam & Eve").
+WEEKDAY_THEME_FILES["bible"] = {
+    "sun": "ancient_of_days", "moon": "mary", "mars": "david",
+    "mercury": "moses", "jupiter": "solomon", "venus": "adam_and_eve",
+    "saturn": "joseph",
+}
+WEEKDAY_THEME_FILES["bible2"] = {
+    "sun": "abraham", "moon": "jonah", "mars": "samson",
+    "mercury": "jacob", "jupiter": "noah", "venus": "ruth",
+    "saturn": "job",
+}
+WEEKDAY_THEME_FILES["bible_dark"] = {
+    "sun": "lucifer", "moon": "lilith", "mars": "goliath",
+    "mercury": "serpent", "jupiter": "herod", "venus": "delilah",
+    "saturn": "cain",
+}
+WEEKDAY_THEME_FILES["cosmos"] = {
+    "sun": "sun", "moon": "nebula", "mars": "supernova",
+    "mercury": "pulsar", "jupiter": "galaxy", "venus": "binary_stars",
+    "saturn": "comet",
+}
+WEEKDAY_THEME_FILES["planets_art"] = {
+    "sun": "sun", "moon": "moon", "mars": "mars",
+    "mercury": "mercury", "jupiter": "jupiter", "venus": "venus",
+    "saturn": "saturn",
+}
 
 # THE DUAL SUNDAY (owner 2026-07-12): every theme's center day has a
 # SECOND face — the Servant to the Ruler. On the Compass and the
@@ -764,6 +844,11 @@ WEEKDAY_DUAL_NAMES = {
     "wolf": ("Alpha", "Omega"),
     "bee": ("Queen", "Cleaner"),
     "elephant": ("Matriarch", "Memory"),
+    "bible": ("Ancient of Days", "Son"),
+    "bible2": ("Abraham", "Isaac"),
+    "bible_dark": ("Lucifer", "Judas"),
+    "cosmos": ("Sun", "Black Hole"),
+    "planets_art": ("Sun", "Eclipsed Sun"),
 }
 # Dual paths live INSIDE the theme's variant dir; the colored dual is
 # the same path with the variant segment swapped to colored/ (owner
@@ -783,6 +868,11 @@ WEEKDAY_DUAL_FILES = {
     "wolf": "wolf/primary/dual/omega",
     "bee": "bee/primary/dual/Cleaner",
     "elephant": "elephant/primary/dual/Memory",
+    "bible": "bible/primary/dual/son_servant",
+    "bible2": "bible/secondary/dual/isaac",
+    "bible_dark": "bible/dark/dual/judas",
+    "cosmos": "cosmos/primary/dual/black_hole",
+    "planets_art": "planets/art/dual/sun_eclipse",
 }
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
@@ -825,6 +915,13 @@ WEEKDAY_THEME_TITLES = {
     "wolf": "Wolf Pack",
     "bee": "Bee Hive",
     "elephant": "Elephant Herd",
+    # The text-wave themes (owner 2026-07-14). planets_art carries NO
+    # title on purpose: it nests as the Planets "Art" option in the
+    # menu and rides the Planets encyclopedia topic as a look.
+    "bible": "Bible",
+    "bible2": "Bible II",
+    "bible_dark": "Bible Dark",
+    "cosmos": "Cosmos",
 }
 
 # The Weekday submenu GROUPS (owner menu rework 2026-07-13): kinship
@@ -835,8 +932,10 @@ WEEKDAY_THEME_TITLES = {
 WEEKDAY_MENU_GROUPS = (
     ("Ancient Gods", ("egypt", "greek", "norse", "slavic")),
     ("Society", ("profession", "religion", "religion_alt")),
+    # The Scripture family (owner 2026-07-14).
+    ("Scripture", ("bible", "bible2", "bible_dark")),
     ("Animals", ("wolf", "elephant", "bee")),
-    ("Arcana", ("planets", "alchemy", "japan")),
+    ("Arcana", ("planets", "alchemy", "japan", "cosmos")),
 )
 
 DEFAULT_SKIN = SkinDefinition(
