@@ -152,3 +152,28 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Afu-Ra ram-headed in dulled bronze and indigo, the night barque Mesektet gliding through deep indigo waters, the sun dimmed to a black disc rimmed by a faint gold corona, the emerald serpent Apophis coiled beneath the hull, pale stars standing in for daylight. Border: dulled-bronze hieroglyph cartouche band, broken by four painted roundels alternating a dark ankh and a dark scarab, each framing the Sun glyph. Colors: indigo night, dulled bronze, faint gold corona, emerald serpent.
 ```
+
+---
+
+## The Ninth — Set (`set.png`)
+
+Owner 8+1 extension (2026-07-14): Set is the Ninth of the Theban set,
+sharing the same bronze and colored looks as the other eight, not an
+encyclopedia-only figure. Use undecided: legend third plate / Compass
+ninth seat / Prism triptych. He is the excluded murderer brother —
+Osiris already sits Saturday's throne, mummiform and at peace — the
+Cain of this set, envy turned to violence rather than the other way
+round; read as a triad rather than a single pole, Set's violent
+self-assertion and Osiris's total passivity in death echo the
+Judas–Lucifer axis from opposite Egyptian ends, with Horus, the
+avenging son who is never on the dial either, standing as their
+unshown Union.
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Set, the red-haired god with the head of his unidentified beast, standing over the sealed coffin he tricked his brother Osiris into — the was-scepter of chaos gripped in one fist, a coiled length of rope in the other, the Nile's floodplain cracked and stormy behind him, no crook or flail anywhere near his hands. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab — but here left cracked and unfinished, the ankh's loop broken in two of the four. No text, no watermark.
+```
+
+**Set (colored)** → `colored/set.png`
+```
+Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Set in dusty red-ochre and black, the head of his unidentified beast rendered sharp-eared and long-snouted, the was-scepter of chaos raised over the sealed coffin of Osiris, a storm of red desert sand boiling behind him, no crook or flail in sight. Border: cracked red-ochre hieroglyph cartouche band, broken by four painted roundels alternating a fractured ankh and a dulled scarab, each losing its usual gleam. Colors: red ochre, storm black, dulled gold, cracked lapis.
+```

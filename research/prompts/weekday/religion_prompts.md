@@ -129,3 +129,22 @@ article — bands left plain rather than lettered.*
 ```
 Ornate circular medallion, silver sculptural relief on dark slate, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Star of David formed from two interlocked triangles, its bands left smooth and finely fluted, deliberately free of any inscription. Border: silver rim circling small leaf and six-point-star roundels. Palette: silver relief and dark slate dominant; the golden star the only warm accent. No text, no script, no watermark.
 ```
+
+---
+
+## The Ninth — The Unknown God (`unknown_god.png`)
+
+Owner 8+1 extension (2026-07-14): the Unknown God is the Ninth of the
+Creeds set, kept in the same single-look silver-on-black register as
+the other seven — this theme has no colored arc to extend. Use
+undecided: legend third plate / Compass ninth seat / Prism triptych.
+It is the Athenian altar Paul found inscribed "to the unknown god"
+(Acts 17) — the seat every creed quietly keeps open for what it does
+not know — rendered dignified and faceless, with a bare unlettered
+altar rather than any of the other six emblems, since no duality or
+trinity reading from this dial's Judas–Lucifer axis has a natural
+claim on it.
+
+```
+Ornate circular medallion, silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a plain stone altar standing alone on bare black marble, its face left completely smooth and unlettered where an inscription would sit, a single thin curl of incense smoke rising from its top into empty space above — no idol, no symbol, no figure of any kind resting on or behind it. Border: a plain unbroken silver rim, quietly polished, carrying none of the other six faiths' emblems — no chain of tools, no strapwork, no lotus, no bagua, no Om, no cross, no star. Palette: silver relief and black marble dominant; the single rising thread of smoke the only bright accent. No text, no script, no watermark.
+```

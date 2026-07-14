@@ -165,13 +165,24 @@ Ornate circular badge, vivid full-color painted savanna drought over aged bronze
 
 ---
 
-## The Ninth — the Graveyard (`graveyard.png`, encyclopedia-only)
+## The Ninth — the Graveyard (`graveyard.png`)
 
-Owner 8+1 extension (2026-07-14): the herd's ninth is the LEGEND —
-the elephants' graveyard, the hidden valley the old ones supposedly
-walk to alone, which biology rejects and stories refuse to give up
-(the herd's Sigma). Encyclopedia plate only; the dial keeps its eight.
+Owner clarification (2026-07-14, the Ninth-as-regular-member
+correction): the Graveyard is a REGULAR NINTH member of the Elephant
+Herd set, wearing the same bronze and colored looks as the other eight
+elephants — not an encyclopedia-only extra. Use undecided: legend
+third plate / Compass ninth seat / Prism triptych. It extends the
+herd's own memory axis one step past the Matriarch/Memory pair — the
+living leader, the individually remembered dead, and now the place
+memory becomes myth rather than record — but the Judas–Lucifer
+self-love/self-hate reading has no natural foothold in an animal
+society, so it is not forced here.
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a moonlit hidden valley seen from its narrow rocky entrance — the ground inside worked with great curved tusks and ribcages half-sunk in earth, a worn single-file path leading in through the gap, and NO living elephant anywhere in the frame; above the valley a thin crescent moon in low relief. Border: bronze ring carved with acacia thorn branches whose leaves are FALLING, drifting loose between paired crescent tusks, with four small roundels bearing a single tusk lying horizontal. Palette: aged bronze dominant, cold silver sheen on the moonlit bones, no gilded sun anywhere.
+```
+
+**The Graveyard (colored)** → `colored/graveyard.png`
+```
+Ornate circular badge, vivid full-color painted savanna night over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a moonlit hidden valley seen from its narrow rocky entrance, pale curved tusks and pearl-white ribcages half-sunk in silvered earth, a worn path leading in through the gap under a deep indigo star-filled sky, no living elephant anywhere in the frame, a thin crescent moon glowing cold above the valley. Border: silver-bronze ring of acacia branches with leaves visibly falling between paired crescent tusks, four gunmetal roundels bearing a single tusk lying horizontal. Colors: deep night indigo, moonlit bone white, cold silver, no warm gold anywhere.
 ```

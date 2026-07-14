@@ -357,6 +357,25 @@ Circular bronze/metal cameo medallion, weathered relief on a dark, near-black fi
 
 ---
 
+## The Ninth — Legion (`legion.png`)
+
+Owner 8+1 extension (2026-07-14): Legion is the Ninth of the Bible
+Dark set, kept in the same night-window register as the other eight
+figures. Use undecided: legend third plate / Compass ninth seat /
+Prism triptych. Where the base Bible theme's Sunday plate reads one
+seat wearing two balanced faces (Ruler and Servant, Ancient of Days
+and Son), Legion is that arrangement's dark mirror — one body claimed
+by countless voices, held in balance by none — "my name is Legion, for
+we are many" (Mark 5:9) read as the Union's own possibility failing
+rather than holding; the swine herd stays distant and sober on the
+cliff, no gore in frame.
+
+```
+Circular stained-glass rose-window medallion, backlit by cold slate-gray night light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png. Center: a single robed figure standing alone among tombs at the cliff's edge, his face rendered as a faint blur of overlapping features — not one face but many pressed together, none dominant — chains broken and hanging loose from his wrists, calm now rather than raging; far below and distant along the cliff, a small pale herd of swine at the water's edge, kept small, indistinct and sober, no violence in frame. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a broken-chain emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: cold slate gray dominant, tomb-stone white, near-black iron, one distant dull ember accent at the cliff's foot.
+```
+
+---
+
 ## Delivery note
 
 Same pipeline as the rest of the project's generated art: Gemini's PNG

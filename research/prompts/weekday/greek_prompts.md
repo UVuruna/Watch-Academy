@@ -91,3 +91,28 @@ son's proud hands is Pride, the scorched sky its Eclipse."*
 ```
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Phaethon, Helios's proud young son, gripping the reins of the same quadriga now bolting out of control, the four winged horses panicked and scattering across a smoke-blackened sky, the golden halo-disc behind his head guttering and cracked, the earth far below scorched and burning — the same chariot Helios drives in mastery, one day undone by pride. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Sun glyph in relief. No text, no watermark.
 ```
+
+---
+
+## The Ninth — Hades (`hades.png`)
+
+Owner 8+1 extension (2026-07-14): Hades is the Ninth of the Olympian
+set — a REGULAR member sharing the same bronze and colored looks as
+the other eight gods, not an encyclopedia-only extra. Use undecided:
+legend third plate / Compass ninth seat / Prism triptych. He is the
+brother with no day and no light on this dial — the helm of
+invisibility, worn by the god who is never himself shown — and, where
+the reading lands naturally, he and Zeus (Thursday's king of the
+bright sky) sit at opposite ends of a Judas–Lucifer axis, below and
+above, with Poseidon's sea as the unclaimed middle; where that triad
+feels forced, he stands simply as the unseen ninth, ruling the one
+realm none of the eight plates ever visits.
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Hades seated on a dark iron throne inside a lightless cavern, the horned helm of invisibility held loosely in one hand rather than worn — the god who chooses not to be seen — his other hand resting on Cerberus's middle head, the two other heads turned watchfully outward, the key of the underworld's gate hanging heavy at his belt, a thin river (the Styx) cut in low relief winding away into total dark behind the throne. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels left deliberately bare and ungilded — no glyph in any of them, no day belongs to him. No text, no watermark.
+```
+
+**Hades (colored)** → `colored/hades.png`
+```
+Ornate circular badge, vivid full-color enamel over dark iron, photorealistic render, perfectly centered, isolated on white background. Center: Hades enthroned in a lightless cavern, black-and-silver robes, the helm of invisibility held loose in one hand rather than worn, Cerberus's three heads resting watchful at his side, the key of the underworld gate glinting cold at his belt; glossy pitch-black field with faint deep-violet cave light, no sun anywhere. Border: dark iron Greek key (meander) pattern with four bare black-enamel roundels, left empty — no glyph, no day. Colors: iron black, cold silver, deep violet, no gold.
+```

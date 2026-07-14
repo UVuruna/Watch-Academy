@@ -300,3 +300,20 @@ Circular stained-glass rose-window medallion, backlit by warm crimson-rose light
 ```
 Circular stained-glass rose-window medallion, backlit by fresh green harvest light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Joseph standing in his coat of many colors amid a ring of golden wheat sheaves bowing low around one upright central sheaf (Genesis 37:7), granaries of Egypt glowing faintly gold in the distance behind him, his expression calm and unhurried, the deep green glass field of the harvest field surrounding the scene. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a single wheat sheaf, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: fresh harvest green dominant, wheat gold, multicolor glass accents in the coat, warm amber granary light.
 ```
+
+---
+
+## The Ninth — Melchizedek (`melchizedek.png`)
+
+Owner 8+1 extension (2026-07-14): Melchizedek is the Ninth of the
+Bible theme, rendered in the same luminous stained-glass register as
+the other eight figures. Use undecided: legend third plate / Compass
+ninth seat / Prism triptych. He is the priest-king without father,
+mother or genealogy (Hebrews 7) — bread and wine brought to Abraham,
+outside every lineage the other eight figures belong to — and no
+duality or trinity reading fits him honestly, since his defining trait
+is having no second pole to be read against at all.
+
+```
+Circular stained-glass rose-window medallion, backlit by luminous white-gold light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Melchizedek, priest-king of Salem, in glass robes that are at once royal purple and priestly white with no house or tribe marking woven into them, bringing forward bread and a cup of wine to a kneeling Abraham (Genesis 14:18), no crown of any single kingdom on his head, no line of descent shown behind him — a figure who begins and ends inside this one scene, with no genealogy the glass can trace (Hebrews 7:3). Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a bread-and-chalice emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: white-gold and royal purple dominant, warm bread-gold, deep wine-red in the cup, no single house-color claiming him.
+```

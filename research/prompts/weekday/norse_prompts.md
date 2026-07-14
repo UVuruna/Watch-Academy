@@ -91,3 +91,27 @@ daughter drives on."*
 ```
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: the great wolf Skoll leaping to seize the blazing sun disc in his jaws, Sol's chariot and her horses Arvakr and Alsvidr faltering behind him, the disc darkening into a black orb rimmed by a thin gilded corona as his teeth close on it — Ragnarok's promised eclipse, the same road her daughter is sworn to ride again. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Sun glyph between the runes. No text, no watermark.
 ```
+
+---
+
+## The Ninth — Baldur (`baldur.png`)
+
+Owner 8+1 extension (2026-07-14): Baldur is the Ninth of the Aesir
+set, wearing the same bronze and colored looks as the other eight
+gods rather than sitting encyclopedia-only. Use undecided: legend
+third plate / Compass ninth seat / Prism triptych. He is the dead
+shining god whose absence, not his presence, sets Ragnarok in motion —
+the one Aesir the dial cannot show doing anything, only lying still —
+so his roundels stay blank like Sigma's, the ninth that is missing
+rather than the ninth that acts; no Judas–Lucifer axis is forced onto
+him, since his story is grief and absence rather than either extreme
+of self-regard.
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Baldur laid out on his ship Hringhorni, radiant even in death, his face untouched by decay and faintly luminous against the gathered grief of the other gods standing at the shore, a sprig of mistletoe — the one thing that could harm him — resting apart from his body near the pyre, the ship not yet set alight. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels left bare and unrune'd — no glyph in any of them, no day was ever his. No text, no watermark.
+```
+
+**Baldur (colored)** → `colored/baldur.png`
+```
+Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Baldur laid out radiant on the ship Hringhorni, pale gold hair and unmarked skin glowing faintly even in death, the gathered gods bowed in grief at the shore, a single sprig of mistletoe resting apart from his body, the funeral pyre still unlit; glossy pale dawn-white field fading to mourning gray at the rim. Border: carved knotwork ring painted white-gold and gray, four roundels left bare and unpainted — no rune, no day. Colors: pale gold, mourning gray, unlit pyre black, one soft white glow.
+```

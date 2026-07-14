@@ -152,3 +152,26 @@ Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-g
 ```
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: an aged Dažbog in dulled gray-gold, his winged helm rimed with frost, walking bent along a snow-pale road, his once-blazing corona faded to a thin silver-gray ring, an emptied horn of plenty cracked at his side, bare wintry trees around him under a pale winter sky. Border: dulled-gold rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in faded gold, each framing the Sun glyph. Colors: dull gray-gold, frost white, faded amber.
 ```
+
+---
+
+## The Ninth — Crnobog (`crnobog.png`)
+
+Owner 8+1 extension (2026-07-14): Crnobog is the Ninth of the
+Rodnovery set, sharing the same bronze and colored looks as the other
+eight gods rather than sitting encyclopedia-only. Use undecided:
+legend third plate / Compass ninth seat / Prism triptych. He is the
+black god standing opposite every bright one on the dial — the set
+already implies his other half, Belobog the white god, without needing
+to plate him too — dark against bright reading here as this pantheon's
+own version of the Judas–Lucifer axis, one god carrying the whole
+set's shadow so none of the other eight has to.
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Crnobog, a gaunt black-robed god carved in the darkest relief on the whole set, standing before a cold unlit hearth-stone where every other Slavic plate keeps a sun, corona, or moon behind its god's head, his hands empty, no scepter, no horn of plenty, no distaff — only a bare standing stone behind him, unmarked. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels left withered and ungilded, no ripe grain in any of them. No text, no watermark.
+```
+
+**Crnobog (colored)** → `colored/crnobog.png`
+```
+Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Crnobog in unrelieved black robes against a field gone to ash-gray and cold slate, standing before a bare unlit hearth-stone where every other plate in the set glows gold behind its god, his hands empty of any harvest or weapon. Border: ash-gray rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels left withered and colorless. Colors: unrelieved black, ash gray, cold slate, no gold anywhere.
+```

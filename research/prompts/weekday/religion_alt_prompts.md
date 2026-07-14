@@ -124,3 +124,21 @@ outsiders know best," per the article's own framing.*
 ```
 Ornate circular medallion, burlap-and-copper relief, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a dignified burlap doll figure with a smooth copper skull-face, chest bound in a simple X of twine, a copper belly-plate bearing an abstract crossed-line sigil. Border: cowrie shells ringing the rim. Palette: burlap-and-copper relief dominant; the copper skull-face and belly-plate the only bright metal accents. No text, no watermark.
 ```
+
+---
+
+## The Ninth — The Lost Mystery (`lost_mystery.png`)
+
+Owner 8+1 extension (2026-07-14): the Lost Mystery is the Ninth of
+the Mysteries set, kept in the same single-look silver-and-gold
+register as the other seven traditions — this theme carries no
+colored arc either. Use undecided: legend third plate / Compass
+ninth seat / Prism triptych. It is the Eleusinian secret that was
+never written down, the one mystery that kept itself even from
+history; no duality or trinity from this dial's Judas–Lucifer axis
+has a natural claim on a secret that by definition left no other pole
+to mirror it against.
+
+```
+Ornate circular medallion, gold-and-silver relief on night-dark stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a sealed stone chest resting on a low altar inside a torch-lit hall, its lid bound shut with an unbroken cord and a wax seal left uncarved and blank, a single sheaf of barley laid across the lid, the hall's far end fading into darkness where the initiates would have stood — nothing shown of what was kept. Border: a plain rim of interlaced barley ears and closed poppy pods, no lettering, no figure, no emblem borrowed from any of the other six mysteries. Palette: gold-and-silver relief on night-dark stone dominant; the wax seal the only pale, unmarked accent. No text, no watermark.
+```

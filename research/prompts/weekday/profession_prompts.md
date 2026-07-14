@@ -118,3 +118,26 @@ wheat, per the article's opening image.*
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a farmer in rough, fringed cloth with a net slung across his shoulders, a sickle and a bundle of wheat ears raised in his right hand, a shepherd's crook in his left, a plough and an axe lying at his feet, a ram and an ox resting behind him. Border: the whole scene wreathed in a border braided from wheat. Palette: darkened aged bronze dominant; the wheat braid the only brighter warm accent. No text, no watermark.
 ```
+
+---
+
+## The Ninth — The Jester (`Jester.png`)
+
+Owner 8+1 extension (2026-07-14): the Jester is the Ninth of the
+Professions set, wearing the same bronze relief and guild-crest
+colored looks as the other eight callings. Use undecided: legend
+third plate / Compass ninth seat / Prism triptych. He stands outside
+every guild — the one figure allowed to tell the Ruler the truth no
+courtier dares — and reads naturally as a trinity with the Sunday
+pair: Ruler (authority), Servant (humility), and the Jester as the
+mirror that mocks both, patched from fragments of every other calling
+because he belongs fully to none of them.
+
+```
+Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a lean jester in a belled motley cap and patchwork tunic, one hand holding up a small mirror to a fallen crown lying beside an empty throne at the plate's edge, the other hand extended low in a servant's bow that is really a mockery of it, a marotte-scepter topped with his own grinning likeness held loosely at his side. Border: a ring stitched from tiny fragments of every other calling's emblem in turn — a sliver of serpent-and-laurel, an oak leaf, a coin, an open book, a mask, a wheat ear, an eagle feather — none dominant, all present, out of order. Palette: aged bronze dominant; the small mirror the only brighter accent. No text, no watermark.
+```
+
+**The Jester (colored)** → `colored/Jester.png`
+```
+Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Jester in a patchwork motley stitched from every guild's own color — white-gold, blue, orange, purple, yellow, red and green panels meeting at his belled cap and sleeves — holding up a small mirror toward an empty throne at the frame's edge, his bow to it half a mockery; glossy field split into the same seven colors behind him, none dominant. Border: a ring alternating tiny fragments of every other guild's emblem — crown, serpent-rod, sword, scale, book, lyre, wheat-sheaf — stitched together out of order. Colors: all seven guild hues at once, patchwork, no single color ruling.
+```

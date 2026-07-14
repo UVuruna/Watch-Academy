@@ -97,3 +97,27 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a stout content pig standing among old square-holed coins and a small pile of ingots, small auspicious bronze cloud scrolls around it. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls — strictly Chinese ornament, no Greek meander — with five small enamel element roundels set into the ring at the five points of a pentagram: the kanji 火 over flames on deep red at the very top, 土 over a small mountain on deep red-brown at the upper right, 金 over an ingot on pale gold at the lower right, 水 over waves on deep blue at the lower left, 木 over a small tree on green at the upper left. Palette: aged bronze dominant; the only bright accent a red knotted cord through one coin.
 ```
+
+---
+
+## The Ninth — the Cat (`Cat.png`)
+
+Owner 8+1 extension (2026-07-14): the Cat is the Ninth of the Chinese
+Zodiac set, wearing the same weathered bronze relief as the other
+twelve animals. Use undecided: legend third plate / Compass ninth
+seat / Prism triptych. It is the thirteenth animal the Rat tricked out
+of a year in the river-crossing race — the one competitor the cycle
+itself remembers losing — and no Judas–Lucifer duality applies here,
+since the twelve-branch cycle was never built on that self-love/
+self-hate axis to begin with.
+
+```
+Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a sleek cat frozen mid-leap at a riverbank, one paw still reaching for a departing raft already too far to catch, the rat's small silhouette visible riding it away toward the far shore, small auspicious bronze cloud scrolls drifting undisturbed around the scene as if the race had already been decided. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls — strictly Chinese ornament, no Greek meander — with five small enamel element roundels set into the ring at the five points of a pentagram: the kanji 火 over flames on deep red at the very top, 土 over a small mountain on deep red-brown at the upper right, 金 over an ingot on pale gold at the lower right, 水 over waves on deep blue at the lower left, 木 over a small tree on green at the upper left. Palette: aged bronze dominant; the only bright accent the cat's sharp amber eyes fixed on the departing raft.
+```
+
+Colored companion: `chinese_colored/Cat.png` would sit in the same
+cloisonné-enamel, crimson-and-gold festival register as the other
+twelve (see [Colored Badge Prompts](../weekday/colored_badge_prompts.md)'s
+Chinese zodiac section) — not authored here, since this sheet stays
+bronze-only and already leaves the existing `chinese_colored/` set
+untouched.

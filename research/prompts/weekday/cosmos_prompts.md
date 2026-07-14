@@ -294,13 +294,25 @@ same as every other weekday/badge asset delivered so far
 
 ---
 
-## The Ninth — the Big Bang (`big_bang.png`, encyclopedia-only)
+## The Ninth — the Big Bang (`big_bang.png`)
 
-Owner 8+1 extension (2026-07-14, approved by name): the cosmos ninth
-is the EVENT BEFORE ALL HOURS — the flash every other plate descends
-from; each of the eight bodies is a consequence of this one moment.
-Encyclopedia plate only; the dial keeps its eight.
+Owner clarification (2026-07-14, the Ninth-as-regular-member
+correction): the Big Bang is a REGULAR NINTH member of the Cosmos set,
+wearing the same bronze and colored looks as the other eight bodies —
+not an encyclopedia-only extra. Use undecided: legend third plate /
+Compass ninth seat / Prism triptych. Cosmos's own vocabulary already
+reuses the Judas–Lucifer axis once removed — the outward-blazing
+Tuesday supernova and the inward-collapsing Sunday-servant black hole
+are this dial's two astrophysical readings of self-exaltation and
+self-effacement (`research/bible_dark_prompts.md`) — and the Big Bang
+is naturally the flash before either pole existed, the single origin
+both extremes still carry an echo of.
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the first instant of everything — a single blinding point at the exact middle of the plate, the surrounding relief blasted OUTWARD from it in concentric shockwave rings that carry, embedded in their ripples, tiny half-formed shapes of all the other plates: a faint spiral galaxy, a nebula pillar, a pair of orbiting stars, a comet's curve — everything still molten, unfinished, rushing away from the center point. Border: bronze ring carved as a fine engraved star-chart whose constellation lines all radiate OUT of the center instead of circling, with four small roundels bearing a single point-with-rays mark. Palette: aged bronze dominant, one white-hot point at dead center, the shockwave rings brighter toward the middle and cooling toward the rim.
+```
+
+**The Big Bang (colored)** → `colored/big_bang.png`
+```
+Ornate circular badge, vivid full-color painted cosmos over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the first instant of everything, a single blinding white-gold point at the exact middle of the plate, concentric shockwave rings blasting outward in violet, magenta and cyan, carrying within their ripples tiny half-formed glimpses of the other plates — a faint spiral galaxy, a nebula pillar, a pair of orbiting stars, a comet's curve — all still molten and rushing away from the center. Border: bronze ring carved as a fine engraved star-chart whose constellation lines radiate outward from the center instead of circling, four small gold roundels bearing a single point-with-rays mark. Colors: blinding white-gold core, violet-to-cyan shockwave rings, deep space black at the rim.
 ```

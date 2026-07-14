@@ -154,16 +154,23 @@ Ornate circular badge, vivid full-color painted wilderness over aged bronze, pho
 
 ---
 
-## The Ninth Wolf — Sigma (`sigma.png`, encyclopedia-only)
+## The Ninth — Sigma (`sigma.png`)
 
-Owner 8+1 extension (2026-07-14, the Ninth Mood pattern): every
-society may hold a NINTH that stands outside the eight seats. The
-pack's ninth is the MYTH — Sigma, the wolf the internet invented and
-ethology never found. The canon line stands ("no plate was carved for
-him; the dial leaves him unrepresented"): this plate is not carved FOR
-him — it depicts THE RUMOR ITSELF, and it stays out of the dial; only
-the Encyclopedia shows it, closing the Wolf Pack topic.
+Owner clarification (2026-07-14, the Ninth-as-regular-member
+correction): Sigma is a REGULAR NINTH member of the Wolf Pack set,
+wearing the same bronze and colored looks as the other eight wolves —
+not an encyclopedia-only extra. Use undecided: legend third plate /
+Compass ninth seat / Prism triptych. Sigma sits outside the
+Alpha–Omega hierarchy entirely rather than completing it — a wolf
+equal in stature to the Alpha but belonging to no rank at all,
+ethology's ghost rather than its opposite pole — so no Judas–Lucifer
+duality is forced onto it here.
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf silhouette walking away into rolling mist, deliberately HALF-CARVED — the head and shoulders in finished bronze relief, the hindquarters dissolving into raw uncut stone as if the sculptor abandoned the work, no pack anywhere, an empty rock outcrop faint in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise with small pine sprigs — but the trail BREAKS and fades to smooth uncarved stone along the bottom quarter, and the four roundels are blank polished discs bearing no glyph at all. Palette: aged bronze dominant, raw gray stone where the carving dissolves, no gilded metal anywhere.
+```
+
+**Sigma (colored)** → `colored/sigma.png`
+```
+Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf walking away into rolling mist, deliberately HALF-PAINTED — the head and shoulders rendered in rich full color, silver-gray coat catching warm amber eye-light, the hindquarters dissolving into bare unpainted canvas with visible pencil underdrawing and a few dry brush strokes, no pack anywhere, an empty rock outcrop faint and unfinished in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, but the trail fades to blank canvas along the bottom quarter, four roundels left as bare pale discs with no glyph painted in. Colors: rich silver-gray and amber where finished, fading to raw canvas white and pencil gray where the painting stops.
 ```

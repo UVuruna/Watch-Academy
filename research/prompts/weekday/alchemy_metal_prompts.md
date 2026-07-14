@@ -87,3 +87,21 @@ Ornate circular medallion, photorealistic render, perfectly centered, isolated o
 ```
 Ornate circular medallion, photorealistic render, perfectly centered, isolated on white background. Center: a massive lead plumb bob hanging dead still on a taut cord, its point aimed at a rough-cast block of raw lead below — the block dull, scarred and heavy, dusted with a whitish oxide film, and split by one hairline crack in which the faintest thread of gold glints, almost invisible: the prima materia keeping its promise. Finish: dark matte blue-gray that swallows the light, no specular shine anywhere, oxide-dusted — the darkest and deadest gray of the set. Border: the existing dark ring of heavy chain links and Saturn glyphs, gunmetal relief.
 ```
+
+---
+
+## The Ninth — The Philosopher's Stone (`stone.png`)
+
+Owner 8+1 extension (2026-07-14): the Philosopher's Stone is the
+Ninth of the Alchemy Metals set — bronze/single-look only, since this
+theme carries no colored arc to match. Use undecided: legend third
+plate / Compass ninth seat / Prism triptych. It is the substance that
+does not exist and is the goal of all seven metals worked on the other
+plates — gold's incorruptibility, lead's prima materia thread, all of
+it aimed at a stone none of the seven ever becomes; no Judas–Lucifer
+reading is forced here, since the Work this set depicts is
+transformation toward a single goal, not a scale between two poles.
+
+```
+Ornate circular medallion, photorealistic render, perfectly centered, isolated on white background. Center: a single small egg-shaped stone resting alone on a bare stone table, its surface shifting between deep ruby-red and matte black depending on the angle of the light, neither metal nor mineral, no crucible, no anvil, no ingot anywhere near it — the one object the other seven plates were all reaching toward and never hold. Finish: an impossible surface that reads as stone, glass and metal all at once, absorbing light on one edge and throwing it back on the other — the only finish on the set that cannot be named by a single metal. Border: a plain unbroken ring inlaid with seven tiny dull studs — one in each of the other six metals' finishes plus one left blank — evenly spaced, none of them brighter than the stone itself.
+```
