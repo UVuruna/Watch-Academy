@@ -39,6 +39,18 @@ CIVIL_TWILIGHT_ELEVATION_DEG = -6.0
 # solstice, next spring equinox. Clockwise, 0 deg = summer solstice = top.
 YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
 
+# --- Artwork sources -----------------------------------------------------------
+# The Gemini and ChatGPT generations COEXIST (owner 2026-07-14); every
+# sourced asset root holds one subtree per source —
+# assets/<root>/<source>/<family>/... — the user picks in Settings and
+# a file missing in the chosen source falls back to the other. Code
+# keeps building CANONICAL source-less paths; config.paths.art_file
+# resolves them at every disk boundary.
+ART_SOURCES = ("gemini", "chatgpt")
+ART_SOURCE_DEFAULT = "gemini"
+ART_SOURCE_TITLES = {"gemini": "Gemini", "chatgpt": "ChatGPT"}
+ART_SOURCED_ROOTS = ("weekday", "zodiac", "emblem", "badge", "instrument")
+
 # --- Moon ----------------------------------------------------------------------
 SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length
 

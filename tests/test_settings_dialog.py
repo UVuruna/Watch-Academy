@@ -181,7 +181,13 @@ def test_weekday_theme_swaps_bodies_and_names():
     assert greek.weekday_set.body_names["mercury"] == "Hermes (Ἑρμῆς)"
     assert greek.weekday_set.bodies["mercury"].name == "Hermes.png"
     assert "greek" in str(greek.weekday_set.bodies["mercury"])
-    assert all(path.exists() for path in greek.weekday_set.bodies.values())
+    # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
+    from config import paths as _paths
+
+    assert all(
+        _paths.art_file(path).exists()
+        for path in greek.weekday_set.bodies.values()
+    )
     planets = apply_display_settings(defaults.DEFAULT_SKIN, Settings())
     assert planets.weekday_set.bodies == defaults.DEFAULT_SKIN.weekday_set.bodies
 
@@ -209,13 +215,46 @@ def test_every_theme_skeleton_is_complete():
     Norse diacritics fold to ASCII on disk (Sól -> Sol.png)."""
     from config import constants
 
+    from config import paths as _paths
+
     for theme in constants.WEEKDAY_THEMES:
         if theme == "planets":
             continue
         folder = defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
         for body in constants.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
-            assert (folder / f"{stem}.png").exists(), (theme, body)
+            assert _paths.art_file(
+                folder / f"{stem}.png"
+            ).exists(), (theme, body)
+
+
+def test_art_source_resolves_with_fallback():
+    """Owner 2026-07-14: the Gemini and ChatGPT generations coexist
+    under assets/<root>/<source>/ — canonical paths resolve into the
+    active source, FALL BACK to the other where a file is missing
+    (partial ChatGPT coverage), the emblem step-up lands under the
+    REAL root, and settings validate the stored value."""
+    from config import constants, paths
+
+    canonical = defaults.WEEKDAY_ART_DIR / "greek/primary/Zeus.png"
+    resolved = paths.art_file(canonical)
+    assert "gemini" in resolved.parts and resolved.exists()
+    stepup = paths.art_file(
+        defaults.WEEKDAY_ART_DIR / "../emblem/virtue/Justice.png"
+    )
+    assert stepup.parts[-4:-2] == ("emblem", "gemini")
+    assert stepup.exists()
+    try:
+        paths.set_art_source("chatgpt")
+        wolf = paths.art_file(
+            defaults.WEEKDAY_ART_DIR / "wolf/primary/alpha.png"
+        )
+        assert "chatgpt" in wolf.parts and wolf.exists()
+        fallback = paths.art_file(canonical)     # no ChatGPT Greek yet
+        assert "gemini" in fallback.parts and fallback.exists()
+    finally:
+        paths.set_art_source(constants.ART_SOURCE_DEFAULT)
+    assert Settings().art_source == constants.ART_SOURCE_DEFAULT
 
 
 def test_legend_off_silences_every_hover(app):
@@ -376,12 +415,14 @@ def test_encyclopedia_expansion_wiring():
         assert len(topics[family]["entries"]) == 8
     # Moods leads with the comparative WHEEL article and closes with
     # the 8+1 event mood (owner 2026-07-14).
+    from config import paths as _paths
+
     moods = topics["moods"]["entries"]
     assert len(moods) == 10
     assert moods[0]["name"] == "The Wheel of Moods"
-    assert moods[0]["images"][0].exists()
+    assert _paths.art_file(moods[0]["images"][0]).exists()
     assert moods[-1]["name"] == "The Ninth Mood"
-    assert moods[-1]["images"][0].exists()
+    assert _paths.art_file(moods[-1]["images"][0]).exists()
     # The metal themes cycle four looks, COLORED FIRST (owner default
     # 2026-07-13); the sun's two plates stand SIDE BY SIDE — Ruler
     # left, Servant right (owner correction 2026-07-13).
@@ -436,7 +477,7 @@ def test_encyclopedia_expansion_wiring():
     assert [e["name"] for e in duality] == ["Lucifer", "Judas", "The Union"]
     # The Union wears the owner's hexagram badge (2026-07-13).
     assert duality[2]["images"][0].name == "Union.png"
-    assert duality[2]["images"][0].exists()
+    assert _paths.art_file(duality[2]["images"][0]).exists()
     from data.encyclopedia import EncyclopediaRepository
     union = EncyclopediaRepository().entry("duality", "The Union")["base"]
     assert "hexagram" in union and "antidote" in union
@@ -445,7 +486,7 @@ def test_encyclopedia_expansion_wiring():
     met = topics["seasons"]["entries"][-1]
     assert len(met["images"]) == 4            # the four measured twins
     assert all(
-        entry["images"][0].exists()
+        _paths.art_file(entry["images"][0]).exists()
         for entry in topics["trinity"]["entries"]
     )
     # The dialog renders every new topic without crashing and the

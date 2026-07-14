@@ -20,6 +20,7 @@ from PySide6.QtGui import QColor, QImage, QImageReader, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
 from config import defaults, paths
+from config.paths import art_file
 
 
 def metal_variant_file(path: Path, metal: str | None) -> Path:
@@ -28,6 +29,7 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
     the BRONZE file even under the gold/silver look — QToolTip embeds
     files, not pixmaps). Cached in the raster cache keyed by the file's
     mtime; None or a non-swap metal returns the original path."""
+    path = art_file(path)
     if path is None or metal not in defaults.METAL_SWAP_TARGETS:
         return path
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
@@ -55,6 +57,7 @@ def scaled_variant_file(path: Path | None, width: int) -> Path | None:
     the display width so the tooltip still downsamples for
     crispness). Cached by mtime; sources already small enough return
     the original (the header read costs no pixel decode)."""
+    path = art_file(path)
     if path is None or not path.exists():
         return path
     source = QImageReader(str(path)).size()
@@ -116,6 +119,7 @@ class AssetCache:
         silently blank. (Silver and bronze ring letters are
         PRE-RENDERED files — setup/make_*_letters.py — not runtime
         effects.)"""
+        path = art_file(path)
         px_height = max(1, round(logical_height * dpr))
         key = (str(path), px_height, tint, desaturate, metal)
         if key not in self._pixmaps:

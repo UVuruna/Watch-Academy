@@ -41,7 +41,7 @@ from PySide6.QtWidgets import (
 import html as _html
 
 from app.ui_style import style_button
-from config import constants, defaults
+from config import constants, defaults, paths
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
@@ -152,7 +152,7 @@ def _metal_looks(base: Path, colored: Path | None) -> tuple:
     COLORED FIRST — the owner's default — then Bronze as drawn and
     the two selective-swap disk-cache variants."""
     looks = []
-    if colored is not None and colored.exists():
+    if colored is not None and paths.art_file(colored).exists():
         looks.append(("Colored", colored))
     looks += [
         ("Bronze", base),
@@ -202,7 +202,7 @@ def _weekday_topic(theme: str):
         sun = body == "sun"
 
         def rows(ruler: Path, servant: Path | None) -> tuple:
-            if servant is not None and servant.exists():
+            if servant is not None and paths.art_file(servant).exists():
                 return ((ruler, servant),)
             return ((ruler,),)
 
@@ -769,10 +769,11 @@ class EncyclopediaDialog(QDialog):
                     Qt.ToolButtonStyle.ToolButtonTextUnderIcon
                 )
                 card.setText(self._tr(topic["title"]))
-                if topic["icon"] is not None and Path(topic["icon"]).exists():
+                icon = paths.art_file(topic["icon"])
+                if icon is not None and icon.exists():
                     # The FULL-RES art backs the icon — QIcon renders
                     # whatever size _rescale asks for.
-                    card.setIcon(QIcon(str(topic["icon"])))
+                    card.setIcon(QIcon(str(icon)))
                 card.clicked.connect(
                     lambda checked=False, chosen=key: self._show_topic(chosen)
                 )
@@ -869,12 +870,18 @@ class EncyclopediaDialog(QDialog):
         looks = entry.get("looks") or (
             ("", (tuple(entry.get("images", ())),)),
         )
+        # Resolve through the active ART SOURCE here (owner 2026-07-14:
+        # Gemini vs ChatGPT with per-file fallback) — the grid, the
+        # pixmap cache and Download all consume the resolved paths.
         look_rows = [
             [
                 [
-                    path
-                    for path in row
-                    if path is not None and Path(path).exists()
+                    resolved
+                    for resolved in (
+                        paths.art_file(path) for path in row
+                        if path is not None
+                    )
+                    if resolved.exists()
                 ]
                 for row in rows
             ]

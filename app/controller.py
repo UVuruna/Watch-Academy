@@ -225,8 +225,11 @@ def apply_display_settings(skin, settings: Settings):
     """The user's choices win over whatever the skin pack declares:
     the tray display scalars, the opacity overrides (twilight alphas
     scale proportionally with the day alphas) and the custom palette
-    for the active (pointer, style). Module-level and pure — testable
-    without a controller."""
+    for the active (pointer, style). Module-level — testable without
+    a controller."""
+    # The ART SOURCE switch (owner 2026-07-14: Gemini vs ChatGPT) —
+    # every disk boundary resolves canonical paths through it.
+    paths.set_art_source(settings.art_source)
     star = skin.star
     if settings.star_alpha is not None:
         star = dataclasses.replace(

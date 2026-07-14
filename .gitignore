@@ -31,6 +31,10 @@ design/hours/
 design/pointer/
 design/weekday/
 
+# Owner's ChatGPT staging inbox (the mapped canonical copies in
+# assets/<root>/chatgpt/ ARE committed)
+chatGPT/
+
 # Legacy exclusions
 Database_Create/
 Side/

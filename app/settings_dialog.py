@@ -88,6 +88,7 @@ class SettingsDialog(QDialog):
         column.addWidget(self._build_custom_ring_group())
         column.addWidget(self._build_custom_hands_group())
         column.addWidget(self._build_theme_rotation_group())
+        column.addWidget(self._build_artwork_group())
         column.addWidget(self._build_language_group())
         column.addWidget(self._build_system_group())
         scroll = QScrollArea()
@@ -975,6 +976,26 @@ class SettingsDialog(QDialog):
 
     # --- Language (owner spec: translate once via the keyless endpoint) --------------
 
+    def _build_artwork_group(self) -> QGroupBox:
+        """The ART SOURCE pick (owner 2026-07-14): the Gemini and
+        ChatGPT generations coexist — one combo switches every plate,
+        emblem and badge; files missing in the chosen source fall back
+        to the other."""
+        tr = self._tr
+        group = QGroupBox(tr("Artwork"))
+        row = QHBoxLayout(group)
+        self._art_source_combo = QComboBox()
+        for source in constants.ART_SOURCES:
+            self._art_source_combo.addItem(
+                constants.ART_SOURCE_TITLES[source], source
+            )
+        index = self._art_source_combo.findData(self._settings.art_source)
+        if index >= 0:
+            self._art_source_combo.setCurrentIndex(index)
+        row.addWidget(self._art_source_combo)
+        row.addStretch(1)
+        return group
+
     def _build_language_group(self) -> QGroupBox:
         tr = self._tr
         group = QGroupBox(tr("Language"))
@@ -1075,6 +1096,7 @@ class SettingsDialog(QDialog):
             ring_tint=self._ring_tint,
             custom_rings=tuple(self._custom_rings),
             language=self._language_combo.currentData(),
+            art_source=self._art_source_combo.currentData(),
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

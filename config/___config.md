@@ -51,7 +51,13 @@ to Rule #4). Consumed by `app/native.py` from M4.
 ### `paths.py` — Frozen-Safe Paths
 Resolves `Database/`, `assets/skins/` and `%APPDATA%/DOMY Watch/` from
 `Path(__file__)` / `sys._MEIPASS` — never from the working directory, so a
-PyInstaller `--onedir` bundle finds its data.
+PyInstaller `--onedir` bundle finds its data. Also hosts the ART SOURCE
+resolver (owner 2026-07-14: the Gemini and ChatGPT generations coexist
+under `assets/<root>/<source>/`): `set_art_source(source)` switches the
+active source and `art_file(path)` maps a canonical source-less path
+into it, falling back to the other source where the file is missing —
+every disk boundary (asset cache, hover images, Encyclopedia, manifest
+validation) resolves through it.
 
 ## Connections
 

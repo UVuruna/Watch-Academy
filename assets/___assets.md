@@ -21,9 +21,14 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   📁 hands/                ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
   📁 earth/                ← earth_{clean|atmo}_{continent}_{day|night}.png
-  📁 weekday/              ← body art per THEME in the FAMILY/VARIANT tree
-                             (owner restructure 2026-07-14):
-                             <family>/<variant>/[dual/]<Entity>.png — dual/
+  📁 weekday/              ← body art per THEME: SOURCE first (owner
+                             2026-07-14: Gemini and ChatGPT coexist, the
+                             user picks in Settings), then the
+                             FAMILY/VARIANT tree (owner restructure
+                             2026-07-14):
+                             <source>/<family>/<variant>/[dual/]<Entity>.png
+                             — source gemini/ or chatgpt/ (a file missing in
+                             one source falls back to the other), dual/
                              sits INSIDE each variant, colored is a variant
                              SIBLING. Families:
                              planets/ → primary/ (real renders) + signs/
@@ -35,16 +40,26 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              greek|norse|egypt|slavic|wolf|bee|elephant|
                              profession|cosmos/ → primary/ + colored/
                              alchemy|japan/ → primary/
-  📁 zodiac/               ← astrology/ → primary/ (plain logo) + colored/ +
-                             sign/ + constellation/ (<Sign>.png);
-                             chinese/ → primary/ + colored/ (<Animal>.png)
-  📁 emblem/               ← virtue/ sin/ mood/ intelligence/ — the emblem
-                             logo families (Capitalized stems; mood also
-                             holds Wheel_of_Moods[_dark].png)
-  📁 badge/                ← season/ (+ turning_point/, meteorological/),
-                             trinity/, scale/ (the two triangles + Union)
-  📁 instrument/           ← the Instrument section logo + article images
+  📁 zodiac/               ← <source>/astrology/ → primary/ (plain logo) +
+                             colored/ + sign/ + constellation/ (<Sign>.png);
+                             <source>/chinese/ → primary/ + colored/
+                             (<Animal>.png)
+  📁 emblem/               ← <source>/virtue|sin|mood|intelligence/ — the
+                             emblem logo families (Capitalized stems; mood
+                             also holds Wheel_of_Moods[_dark].png)
+  📁 badge/                ← <source>/season/ (+ turning_point/,
+                             meteorological/), <source>/trinity/,
+                             <source>/scale/ (the two triangles + Union)
+  📁 instrument/           ← <source>/ → the Instrument section logo +
+                             article images
 ```
+
+**Dropping new art:** ChatGPT generations go into the untracked
+`chatGPT/` inbox at the project root (informal folder names are fine —
+the intake maps them onto the canonical stems), or straight to the
+final `assets/<root>/chatgpt/...` path. Prompt sheets state CANONICAL
+source-less paths — the source segment decides where the file
+physically lives.
 
 The star and the Umbra are deliberately NOT assets — both are simple
 geometry drawn procedurally (owner decision: keeps the bundle light,

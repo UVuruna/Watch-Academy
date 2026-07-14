@@ -59,6 +59,10 @@ class Settings:
                                         # an astrology badge (hexa/aurora)
     earth_style: str = "atmo"
     weekday_theme: str = "planets"
+    # Artwork source (owner 2026-07-14): the Gemini and ChatGPT
+    # generations coexist on disk; this picks which one the dial and
+    # the readers show (missing files fall back to the other source).
+    art_source: str = constants.ART_SOURCE_DEFAULT
     legend: bool = True
     # Elements switches (owner spec, FINAL.txt #5): each removes one dial
     # element; the day/twilight indication itself always stays.
@@ -199,6 +203,8 @@ class SettingsStore:
                 ("weekday_slot", "weekday", constants.WEEKDAY_SLOT_MODES),
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
+                ("art_source", constants.ART_SOURCE_DEFAULT,
+                 constants.ART_SOURCES),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -324,6 +330,7 @@ class SettingsStore:
             "weekday_slot": settings.weekday_slot,
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
+            "art_source": settings.art_source,
             "legend": settings.legend,
             "show_earth": settings.show_earth,
             "show_moon": settings.show_moon,

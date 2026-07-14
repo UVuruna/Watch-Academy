@@ -26,7 +26,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import constants, defaults
+from config import constants, defaults, paths
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.sun import DaylightRegime, SunDay
@@ -281,7 +281,7 @@ def sunday_dual_face(skin: SkinDefinition) -> bool:
         and not weekday_pinned(skin)
         and spec.display_mode != "center_only"
         and spec.dual_asset is not None
-        and spec.dual_asset.exists()
+        and paths.art_file(spec.dual_asset).exists()
     )
 
 
@@ -1035,7 +1035,7 @@ def octa_slot_art(folder: str, name: str) -> Path | None:
     "astrology/constellation", "chinese/primary", "chinese/colored" —
     the family/variant tree), `name` the entity ("Cancer" / "Horse") — or
     None while the owner's art folder does not have it yet."""
-    path = defaults.ZODIAC_ART_DIR / folder / f"{name}.png"
+    path = paths.art_file(defaults.ZODIAC_ART_DIR / folder / f"{name}.png")
     return path if path.exists() else None
 
 
@@ -1170,7 +1170,7 @@ class BottomSlotLayer(Layer):
                     theme_dir
                     / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
                 )
-            if asset.exists():
+            if paths.art_file(asset).exists():
                 draw_pixmap_centered(
                     painter, ctx, asset, pos, slot_size,
                     metal=(

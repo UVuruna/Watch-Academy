@@ -15,7 +15,7 @@ from datetime import datetime, time, timedelta
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
-from config import constants, defaults
+from config import constants, defaults, paths
 from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
@@ -220,7 +220,7 @@ def _article_html(
         f"{scaled_variant_file(img, 2 * defaults.ARTICLE_IMAGE_WIDTH_PX).as_uri()}' "
         f"width='{defaults.ARTICLE_IMAGE_WIDTH_PX}'/>"
         for img in images
-        if img is not None and img.exists()
+        if img is not None and paths.art_file(img).exists()
     )
     if tags:
         parts.append(f"<div align='center'>{tags}</div>")
@@ -234,7 +234,7 @@ def _hover_badge(path) -> str:
     """The emblem above an arm hover (owner 2026-07-13: the trinity,
     season and turning-point badges ride their tooltips) — empty when
     the art is missing."""
-    if path is None or not path.exists():
+    if path is None or not paths.art_file(path).exists():
         return ""
     small = scaled_variant_file(path, 2 * defaults.HOVER_BADGE_WIDTH_PX)
     return (

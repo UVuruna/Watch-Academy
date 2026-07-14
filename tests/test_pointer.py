@@ -173,9 +173,14 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     )
 
     # The art table is complete: all twelve themes + colored variants.
+    # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
+    from config import paths as _paths
+
     for theme in constants.WEEKDAY_THEMES:
         rel = defaults.WEEKDAY_DUAL_FILES[theme]
-        assert (defaults.WEEKDAY_ART_DIR / f"{rel}.png").exists(), theme
+        assert _paths.art_file(
+            defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+        ).exists(), theme
         assert theme in defaults.WEEKDAY_DUAL_NAMES
     for theme in constants.METAL_THEMES:
         # The colored dual is the SIBLING variant (owner restructure
@@ -183,7 +188,9 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         rel = defaults.WEEKDAY_DUAL_FILES[theme].replace(
             "/primary/", "/colored/"
         )
-        assert (defaults.WEEKDAY_ART_DIR / f"{rel}.png").exists(), theme
+        assert _paths.art_file(
+            defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+        ).exists(), theme
     # ...and so are the SPLIT FACE TEXTS (owner: no identical text on
     # the two faces) — every article set's sun carries distinct
     # ruler/servant prose.

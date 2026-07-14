@@ -10,6 +10,8 @@ hold absolute paths; a None asset means "draw procedurally".
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from config import paths
+
 
 @dataclass(frozen=True)
 class BackgroundSpec:
@@ -222,4 +224,9 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),
     ]
-    return [path for path in referenced if path is not None and not path.exists()]
+    # Canonical paths resolve through the active ART SOURCE first
+    # (owner 2026-07-14: assets/<root>/<source>/... with fallback).
+    return [
+        path for path in referenced
+        if path is not None and not paths.art_file(path).exists()
+    ]

@@ -13,8 +13,9 @@ Gde fajlovi idu:
 - **Guide** slike (37 komada) prepisuju/dodaju postojeća imena u
   `assets/guide/` — nastavljaju flat `NN_opis.png` konvenciju već
   korišćenu za fajlove 01-53.
-- **Instrument** slike (5 komada) idu direktno na navedene apsolutne
-  putanje: `assets/instrument/dial.png`, `solar_rotation.png`,
+- **Instrument** slike (5 komada) idu direktno na navedene putanje
+  (od 2026-07-14 stablo ima sloj izvora — podrazumevani je `gemini/`):
+  `assets/instrument/gemini/dial.png`, `solar_rotation.png`,
   `twilight.png`, `year_wheel.png`, `moon_lunations.png`.
 - Format/rezolucija: snimati u prirodnoj veličini piksela aplikacije —
   slike smeju biti i veće od 800×800 (to ograničenje važi samo za
