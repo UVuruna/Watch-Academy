@@ -11,54 +11,92 @@ Planetary** (SR Panteon / Planetarni), default Planetary.
 
 ## Doctrine crystallization (owner round two, 2026-07-15)
 
-**1. The Underworld has a home — the DUAL's shadow face.** The
-owner's alarm was right (of the three great Greek brothers we seated
-none but Zeus) and the fix was already inside our own system: the
-Sunday dual was never strictly Ruler/Servant — that is the
-professions/planets theology only. Our shipped dual pairs read
-Helios/**Phaethon** (the fallen son), Sól/**Skoll** (the devourer),
-Sun/**Black Hole** (the collapse pole), Gold/**Raw Ore**,
-Lucifer/**Judas**. The dual is THE BRIGHT FACE AND ITS SHADOW, theme
-by theme. Therefore: **the Pantheon Greek dual is Zeus / Hades** —
-the throne above and the throne below, same royal blood, two realms.
-Hades stands on the dial at 24h all week and OPAQUE every Sunday —
-a real, visible seat, not a footnote. (Where a mythology has a true
-underworld king, this pattern is now available to it.)
+**1. ✅ APPROVED — the Underworld lives at the DUAL's shadow face.**
+The owner's ruling: *"prava suprotnost — vrhovni bog i bog podzemlja,
+koja god mitologija priča o tome."* The Sunday dual was never
+strictly Ruler/Servant — that is the professions/planets theology
+only. Our shipped dual pairs read Helios/**Phaethon** (the fallen
+son), Sól/**Skoll** (the devourer), Sun/**Black Hole** (the collapse
+pole), Gold/**Raw Ore**, Lucifer/**Judas**. The dual is THE BRIGHT
+FACE AND ITS SHADOW, theme by theme — and the opposition NEED NOT be
+evil (the owner's Bible reading: the Father and the Son oppose as
+proud opposes humble, not as good opposes evil). Therefore: **the
+Pantheon Greek dual is Zeus / Hades** — the throne above and the
+throne below — and every mythology that tells the
+throne-above/throne-below story may use the same pattern. Hades
+stands on the dial at 24h all week and OPAQUE every Sunday.
 
-**2. The Ninth, crystallized — the one OUTSIDE the circle, in one of
-two forms.** The owner's Sigma reading is adopted: Sigma is NOT a
-lesser exile — he is the UNION of Alpha and Omega, both poles in one
-body, possibly stronger than Alpha. Half our ninths already read
-this way: the Philosopher's Stone (all seven metals completed),
-Melchizedek (king AND priest, no lineage), the Big Bang (every plate
-in one point), Legion (the dark union — many in one). The others are
-the EXCLUDED form (Set, the Cat, Ophiuchus, the Unknown God). So the
-doctrine now names both faces: **the Ninth is outside the week's
-circle — either as the Excluded One or as the Union of the week's
-two poles (the Judas–Lucifer Union figure); the Union is the nobler
-form and preferred where the mythology offers one.** Sigma's article
-gets reframed accordingly.
+**2. ✅ APPROVED with the owner's refinement — the Ninth, final
+form.** Outside the week's circle, in one of two forms: the
+**Excluded One**, or the **UNION of the week's poles** — and the
+Union **need not be a person**: it can be a place, an event, a
+concept. The owner's own examples define it: no mythology offers one
+person who is both Lucifer and Judas — but **HELL** holds them both,
+at the very bottom, per Dante; and in the Bible, where the Father is
+the Sunday face and the Son its dual, the ninth is **the Holy
+Trinity** — the union of the pair itself. Two laws follow:
+- **The Union must NEVER rank below the seated figures** — it is the
+  hardest entry to define in every theme, and worth the effort.
+- Each theme is decided ON ITS OWN (the per-theme review below);
+  where no worthy Union exists, the Excluded form stands proudly.
+Sigma's article reframes now: the union of Alpha and Omega in one
+body, possibly stronger than Alpha — never a lesser exile.
 
-**3. The max-coverage principle (owner).** Where the symbolism fits
-CLEANLY, the Pantheon roster prefers a figure the Planetary roster
-does NOT already seat — the two rosters together should cover as
-many first-rank figures as possible. A repeat is allowed only where
-no fresh figure carries the seat honestly (Ra is the stated example:
-supreme and solar agree).
+**3. ✅ APPROVED — the max-coverage principle.** Where the symbolism
+fits CLEANLY, the Pantheon roster prefers a figure the Planetary
+roster does NOT already seat — the two rosters together should cover
+as many first-rank figures as possible. A repeat is allowed only
+where no fresh figure carries the seat honestly (Ra is the stated
+example: supreme and solar agree).
 
-**4. The archetype table itself is open for review.** The owner
-confirmed blue-Fear and orange-Wrath, doubts purple-Greed, and
-floated Pride-toward-yellow. One defense worth stating before that
-review: PRIDE is the throne's sin by our deepest canon — the scale's
-self-exaltation pole IS Lucifer, the bible_dark SUN; moving Pride
-off Sunday would unstitch the Judas–Lucifer scale, the bible_dark
-mirror and the virtue/sin/mood wheels at once. Purple-Wisdom also
-has a defense: purple is the night of the MIND — wisdom won in the
-dark (Odin hangs in darkness for the runes; Thoth is the NIGHT
-knowledge; Sorrow rides purple at midnight) — while the REALM of
-darkness now has its own home at the dual's shadow face (point 1).
-If any binding still feels wrong after this round, we run a formal
-binding-by-binding review before any roster is finalized.
+**4. ✅ SETTLED — purple is the night of the MIND.** The owner
+accepted the defense: wisdom is won in the dark (Odin on the tree,
+Thoth's night knowledge, Sorrow riding purple at midnight), while
+the REALM of darkness now has its own home at the dual's shadow
+face. The Pride-on-Sunday defense also stands (the scale's
+self-exaltation pole IS Lucifer, the bible_dark Sun); the
+binding-by-binding review remains available on request but no
+binding is currently challenged.
+
+---
+
+## The Ninth, theme by theme — the Union review
+
+Each theme decided on its own, per the doctrine: prefer a Union that
+outranks every seated figure; otherwise the Excluded form stands.
+
+| Theme | Today | Form | Proposal | Note |
+|---|---|---|---|---|
+| wolf | Sigma | UNION ✓ | keep, article reframed | Alpha+Omega in one body |
+| bee | The Swarm | UNION (reframe) | keep | the whole hive in one flying body — queen, workers, everything leaves as ONE |
+| elephant | The Graveyard | UNION (reframe) | keep | the place where every rank of the herd becomes one — union in memory |
+| cosmos | The Big Bang | UNION ✓ | keep | everything in one point |
+| alchemy | Philosopher's Stone | UNION ✓ | keep | all seven metals completed |
+| greek | Hades (promoted to dual) | ⚖ open | **Gaia** / Dionysos / Olympus | see below |
+| norse | Baldur | ⚖ open | **Yggdrasil** / Baldur stays | the world-tree HOLDS all nine worlds — Asgard and Hel's realm on one trunk; outranks everything seated. Baldur remains the noblest Excluded if the owner prefers a figure |
+| egypt | Set | Excluded (keep) | Set stays | the excluded brother-murderer is deep canon (the Cain parallel); Union alternative **Ma'at** (the order every god serves) noted but Set's story is stronger |
+| slavic | Crnobog | ⚖ open | **Triglav** / Crnobog stays | Triglav — three realms (sky, earth, underworld) in ONE three-headed body: the union of the Perun–Veles axis itself, and a mountain bears his name |
+| profession | The Jester | ⚖ open | **The Polymath** / Jester stays | the Polymath (the Leonardo archetype) is every estate in one person — a true Union; the Jester is the charming Excluded who may speak truth to the throne |
+| religion | The Unknown God | UNION (reframe) | keep | ΑΓΝΩΣΤΩ ΘΕΩ — the God behind ALL creeds, what every seat points at beyond itself |
+| religion_alt | The Lost Mystery | UNION (reframe) | keep | the secret every mystery circled and none wrote down |
+| bible | Melchizedek | → **THE HOLY TRINITY** | owner's own example | the union of the Sunday pair itself — Father, Son, Spirit as ONE; nothing outranks it |
+| bible2 | — (none today) | ← **Melchizedek** | new | the king-priest without lineage who blessed ABRAHAM — bible2's own Sunday figure; the Union figure lands in the set he belongs to |
+| bible_dark | Legion | → **THE NINTH CIRCLE** | owner's own example | Dante's frozen pit where Lucifer chews Judas — BOTH poles of the scale at the very bottom, the place that unites them; and the ninth circle takes the NINTH seat (the name writes itself). Legion → the Wider lane |
+| chinese | The Cat | Excluded (keep) | Cat stays | the zodiac myth offers no union — the race has only winners and the tricked |
+| astrology | Ophiuchus | Excluded (keep) | stays | the thirteenth sign |
+| japan | — | none | stays none | seven elements, no excluded member — already ruled |
+
+**⚖ The Greek ninth, argued.** With Hades promoted to the dual:
+- **Gaia** (rec) — the earth between the sky-throne and the
+  under-throne, mother of BOTH lines (gods and Titans alike): a
+  union of the week's poles that outranks every seated figure, and a
+  household name.
+- **Dionysos the twice-born** — a PERSON union (god by father,
+  mortal by mother, killed and reborn); famous, but the owner's
+  refinement (the union need not be a person) opens stronger doors.
+- **Olympus** — the mountain holding all the seated gods; but it
+  excludes Hades, so it unites the seven, not the POLES — weaker by
+  the doctrine's letter.
 
 The seat archetypes (the position system all of this serves):
 
@@ -368,25 +406,34 @@ Slavic: Hors*, Mokoš*†, Svetovid is seated, Stribog, Rod.
 (* already has a plate/article from the Planetary roster — near-zero
 cost; † unless seated by the owner's ⚖ picks above.)
 
-## Open picks — the owner's list (after crystallization)
+## Open picks — the owner's list (after round three)
 
-Settled this round: Zeus/Hades dual ✓, Artemis Tuesday ✓ (max-
-coverage), Hera Friday ✓, Anubis Thursday ✓, the Ninth-as-Union
-doctrine ✓, Sigma reframed ✓, option names Pantheon/Planetary ✓.
+Settled: Zeus/Hades dual ✓, the dual doctrine generalized (supreme /
+underworld wherever the mythology tells it) ✓, Artemis Tuesday ✓,
+Hera Friday ✓, Anubis Thursday ✓, the Ninth doctrine final (Union
+need not be a person; never outranked; per-theme) ✓, Sigma reframed
+✓, purple = the night of the mind ✓, max-coverage ✓, names
+Pantheon/Planetary ✓, bible ninth = **the Holy Trinity** ✓ (owner's
+example), bible_dark ninth = **the Ninth Circle** ✓ (owner's Dante
+reading).
 
 Still open:
-1. Greek Ninth: **Dionysos the twice-born Union** (rec) / Pan (the
-   dead god) / Hades stays the ninth (and the dual finds another
-   shadow).
-2. Egyptian Friday: **Bastet** (rec, max-coverage) / Hathor repeat.
-3. Egyptian Saturday: **Osiris repeat** (rec, the seat's best story)
-   / Geb (max-coverage).
-4. Norse Monday: **Hel** (rec) / Njord.
-5. Norse Friday: **Frigg** (rec, max-coverage) / Freya repeat.
-6. Slavic Wednesday: **Svarog** (rec, soft) / Hors reuse.
-7. Slavic Friday: **Lada** (rec) / Mokoš.
-8. Slavic dual: **share Old Dažbog** (rec) / a Perun-specific twin.
-9. Wolf Friday: **Mate** (rec, keeps the Alpha/Omega dual) / Omega.
-10. The archetype-binding review (purple-Greed, the Pride question):
-    run it as its own round before art generation, or accept the
-    current table with the defenses in doctrine point 4?
+1. Greek Ninth: **Gaia** (rec) / Dionysos / Olympus / Pan.
+2. Norse Ninth: **Yggdrasil** (rec) / Baldur stays.
+3. Slavic Ninth: **Triglav** (rec) / Crnobog stays.
+4. Profession Ninth: **The Polymath** / the Jester stays (no rec —
+   both strong).
+5. bible2 Ninth: **Melchizedek relocates there** (rec) / bible2
+   stays ninth-less.
+6. Egyptian Friday: **Bastet** (rec, max-coverage) / Hathor repeat.
+7. Egyptian Saturday: **Osiris repeat** (rec) / Geb.
+8. Norse Monday: **Hel** (rec) / Njord.
+9. Norse Friday: **Frigg** (rec, max-coverage) / Freya repeat.
+10. Slavic Wednesday: **Svarog** (rec, soft) / Hors reuse.
+11. Slavic Friday: **Lada** (rec) / Mokoš.
+12. Slavic dual: **share Old Dažbog** (rec) / a Perun-specific twin
+    — or, under the generalized dual doctrine, **Perun / Veles**?
+    (the combat myth IS throne-above/throne-below; but Veles already
+    holds the Pantheon Monday — one figure, two Pantheon roles would
+    be a first).
+13. Wolf Friday: **Mate** (rec, keeps the Alpha/Omega dual) / Omega.
