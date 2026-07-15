@@ -3,9 +3,11 @@
 A transparent 24-hour analog clock widget for the Windows desktop. Only the
 dial is visible — no frame, no taskbar entry — like a phone home-screen widget.
 
-**Status:** in development — M1 (transparent shell), M2 (computation core
-with golden tests) and M3 (the living dial: sectors, hexagram, weekday
-bodies, year marker, hands) done; Windows hardening (M4) is next.
+**Status:** in development — the core is feature-complete (M1 shell,
+M2 computation core, M3 living dial, plus the theme/metal/roster skin
+system, Settings with the city picker, Encyclopedia, Guide, Time
+Travel, translations). What remains to release is listed taxatively
+in [Roadmap](ROADMAP.md).
 
 ## The dial
 
@@ -42,6 +44,11 @@ bodies, year marker, hands) done; Windows hardening (M4) is next.
 
 ## Documentation
 
+- [Roadmap](ROADMAP.md) — everything left between today and the
+  GitHub release, including the owner's queued feature tasks
+- [The DOMY Canon](CANON.md) — the seating doctrine: the
+  color–virtue–vice–mood web, the two rosters, duals, ninths and
+  pointer archetypes — read before any theme/roster work
 - [DOMY Symbolism](SYMBOLISM.md) — the dial's symbolic cosmology (days,
   gods, religions, colors, virtues and vices)
 - [Config (folder)](config/___config.md)

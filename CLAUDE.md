@@ -32,9 +32,13 @@ here.
 - **Win+D ground truth (verified):** the OS raises the desktop layer above
   ALL windows (TOPMOST included), no Qt events arrive — do not chase this
   as a bug; WorkerW glue is the only workaround (optional, M4).
-- **Milestones:** M1 shell ✓, M2 computation core ✓, M3 living dial ✓;
-  M4 Windows hardening → M5 skin system → M6 settings/picker → M7 docs+
-  build+installer.
+- **Milestones:** M1 shell ✓, M2 computation core ✓, M3 living dial ✓,
+  M4–M6 goals absorbed along the way (hardening, skin system,
+  settings/picker); what remains to release is [Roadmap](ROADMAP.md).
+- **Canon:** the seating doctrine — the color–virtue–vice–mood web,
+  the two rosters, duals, ninths, pointer archetypes — is
+  [The DOMY Canon](CANON.md); read it BEFORE any theme, roster or
+  article work.
 
 ## Project Deltas to the Root Rules
 
