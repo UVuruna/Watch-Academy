@@ -540,16 +540,16 @@ Trinity** ✓, bible2 **Melchizedek** ✓, bible_dark **the Ninth
 Circle** ✓; wolves = canon names + rank in parentheses, no second
 roster ✓; thirteenths Encyclopedia-only with recorded justification ✓.
 
-Still open:
-1. **The Religion rework** — GO/adjust the two tables above; the one
-   real pick inside it: Friday **Sikhism** (rec, by membership) /
-   Zoroastrianism (by symbol).
-2. Ancient Religions Thursday: **Eleusinian Mysteries** (rec) /
-   Hermeticism.
-3. Egyptian Friday: **Bastet** (rec, max-coverage) / Hathor repeat.
-4. Egyptian Saturday: **Osiris repeat** (rec) / Geb.
-
-Everything else is decided; after these four, the execution wave
-starts: prompt-sheet expansions per border identity → the owner
-generates → symbolism.json articles (both faces argued per seat) →
-`figure_roster` code round.
+**ROUND FIVE — ALL PICKS CLOSED (owner: "prihvaćeno… sve
+definisali"):** the Religion rework has its GO (Friday = **Sikhism**,
+Ancient Thursday = **Eleusinian Mysteries**), Egyptian Friday =
+**Bastet**, Egyptian Saturday = **Osiris**. Nothing remains open.
+The execution wave: (1) per-theme consolidated prompt sheets — one
+file per theme, EVERYTHING it needs (base + pantheon, bronze +
+colored where the theme has them, duals, ninths, REUSE marks for
+plates that already exist) so the owner generates in order without
+hunting; (2) symbolism.json articles; (3) the `figure_roster` code
+round. Pantheon art drops:
+`assets/weekday/<theme>/pantheon/…` (+ `pantheon/colored/`,
+`pantheon/dual/`); reused figures point at their existing primary
+files — no regeneration.
