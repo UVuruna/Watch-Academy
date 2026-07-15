@@ -19,10 +19,6 @@ Performance experiments.
 Extended variant of `Database/seasons_utc.json` kept for analysis; the app
 bundles only the compact file.
 
-### `prompts/weekday/colored_badge_prompts.md` — Colored Badge Prompts
-Gemini image prompts for the COLORED weekday/zodiac badge sets (the
-house prompt style every later prompt sheet follows).
-
 ### `encyclopedia_expansion.md` — Encyclopedia Expansion
 Design + ship-ready copy for the Encyclopedia's second half (owner
 task 2026-07-12): "The Instrument" functionality articles (dial, solar
@@ -30,19 +26,16 @@ rotation, twilight, year wheel, lunations, palettes, metals, ring
 letters), the Virtues/Sins/Moods sections, and the WEEK mode — seven
 cross-theme weekday pages with Sunday and Tuesday written in full.
 
-### `prompts/emblem/virtue_sin_mood_prompts.md` — Virtue/Sin/Mood Prompts
-The three canonical 8-item lists (Sunday dual) and 24 Gemini prompts
-for their logos — gold cameo virtues, blackened-iron sins, silver
-sundial moods; proposed drop dirs assets/emblem/virtue|sin|mood/.
+### `prompts/emblem/` — Virtue, Sin and Mood Prompts (one file each)
+The three wheel themes split per the one-theme-one-file rule
+(2026-07-15): `virtue_prompts.md` (gold cameo, Humility dual),
+`sin_prompts.md` (blackened iron, Servility dual), `mood_prompts.md`
+(silver sundial, Awe dual + the Ninth Mood / Eclipse ninth); drop
+dirs assets/emblem/virtue|sin|mood/.
 
 ### `guide_shotlist.md` — Guide Redesign and Shot List
 The Guide's 30-chapter redesign plan plus the numbered 37-screenshot
 shot list with exact preconditions per shot (owner shoots these).
-
-### `prompts/weekday/sunday_duality.md` — Sunday Duality
-Servant.png prompts (bronze plate + colored) to pair with the Ruler on
-Sunday, the dual-legend concept, and the cross-theme survey of second
-sun figures (Ra's night barque, Sól/Skoll, Amaterasu's cave...).
 
 ### `prompts/weekday/bible_theme_prompts.md` — Bible Theme Prompts
 The owner-requested 12th weekday theme: both testaments as stained

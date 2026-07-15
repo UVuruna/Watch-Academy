@@ -41,3 +41,53 @@ styling, a rich-text QLabel inside a QScrollArea.
 - `hide_unless_hovered()`: hides unless the cursor is inside the popup
   (crossing from the dial INTO the popup must not close it)
 - `leaveEvent`: hides when the cursor leaves the popup itself
+
+## Design note (proposed, not implemented) — Sunday dual portraits
+
+Moved verbatim from the retired `research/prompts/weekday/sunday_duality.md`
+(2026-07-12); this is a mechanism proposal, not an image prompt, so it
+never belonged in a per-theme prompt file — this popup doc is its
+correct home.
+
+Grounded in the actual mechanism (`render/compositor.py`): every
+weekday hover is one block of HTML built by `_article_html()` and
+shown in this popup, a `QLabel` in `Qt.TextFormat.RichText` — a
+`QTextDocument` subset that already supports basic `<table>` markup,
+not just a single `<img>`. Today `_weekday_tooltip()` passes ONE
+`image` path into `_article_html()`; for `body == "sun"` it would pass
+a PAIR instead, so every dual-plate theme (Professions' Ruler/Servant
+and any other theme that grows a Sunday dual) can show both portraits
+on hover.
+
+**Layout** — a two-column row above the shared title, each column its
+own portrait + caption, divided by a small centered glyph so the pair
+reads as one duality rather than two unrelated pictures:
+
+```
+┌───────────────┬───┬───────────────┐
+│   Ruler.png    │ ⚖ │  Servant.png   │
+│    "Ruler"     │   │   "Servant"    │
+└───────────────┴───┴───────────────┘
+        Ruler · Servant                 <- existing display name, unchanged
+   Thursday... (only on the active day)
+   [ the base article + active variant — already narrates both faces ]
+```
+
+- The divider glyph is the dial's own yin-yang shorthand already named
+  in the Ruler article ("the dial's own yin-yang") — a small ☯ or a
+  vertical hairline rule both read fine in Qt rich text; ☯ is more
+  legible at hover size.
+- Caption color continues the existing `accents=defaults.BODY_ACCENT_HUES[body]`
+  mechanism: "Ruler" in warm gold, "Servant" in cool silver/gray — no
+  new plumbing, just two `<span style='color:...'>` labels next to
+  captions that don't exist for any other body today.
+- The shared title stays exactly what it already is —
+  `defaults.WEEKDAY_THEME_NAMES[...]["sun"]` already resolves to
+  "Ruler · Servant" — so no new string is needed there.
+- Every other body keeps the single-image path untouched; this is a
+  `body == "sun"` branch inside `_weekday_tooltip()`/`_article_html()`,
+  not a redesign of the popup.
+- The mechanism generalizes for free to any OTHER theme that grows a
+  second Sunday plate — the branch keys off `body == "sun"`, not off
+  the Professions theme specifically, so Egypt/Norse/Japan/etc. get the
+  same two-portrait hover the day their art lands.

@@ -7,7 +7,10 @@ the project's own canon — `Database/symbolism.json` →
 paragraph, which is where the owner's plate scene for that sign lives)
 — not from the current images, which are being replaced outright.
 
-**Three looks, three jobs:**
+**Four looks, four jobs** (the first three authored fresh from the
+project's own canon below; the fourth — COLORED — moved in from
+`colored_badge_prompts.md` during the 2026-07-15 consolidation, see
+its own section further down):
 
 - **SIGN** (`assets/zodiac/astrology/sign/`) — the full illustrated
   creature/figure medallion, the scene straight off the article,
@@ -17,13 +20,13 @@ paragraph, which is where the owner's plate scene for that sign lives)
 - **CONSTELLATION** (`assets/zodiac/astrology/constellation/`) — the sign's
   actual star pattern on a night field, its mythic figure only
   faintly ghosted behind, no glyph anywhere.
+- **COLORED** (`assets/zodiac/astrology/colored/`) — vivid celestial
+  enamel, full color, the same STRICT element-palette rule as SIGN.
 
-**Element palette rule (locked, per the owner's 2026-07-12 correction
-already codified in
-[Colored Badge Prompts](../weekday/colored_badge_prompts.md)'s
-"STRICT element palettes v2" section — reused here verbatim so the two
-zodiac art sets agree):** the FIELD, the figure and the border accents
-all speak ONE element per sign, no drift:
+**Element palette rule (locked, per the owner's 2026-07-12 correction;
+restated verbatim in the "4. COLORED look" section below so the SIGN
+look and the colored plates agree):** the FIELD, the figure and the
+border accents all speak ONE element per sign, no drift:
 
 - FIRE (Aries, Leo, Sagittarius): deep ember-dark field; flame red,
   orange and gold only.
@@ -43,8 +46,9 @@ all three folders identically):** `Aries.png`, `Taurus.png`,
 `Pisces.png` (on disk today, alphabetically: `Aquarius.png`,
 `Aries.png`, `Cancer.png`, `Capricorn.png`, `Gemini.png`, `Leo.png`,
 `Libra.png`, `Pisces.png`, `Sagittarius.png`, `Scorpio.png`,
-`Taurus.png`, `Virgo.png` — identical stems in `sign/`, `logo/` and
-`constellation/`). `chinese/` and `chinese_colored/` are untouched.
+`Taurus.png`, `Virgo.png` — identical stems in `sign/`, `logo/`,
+`constellation/` and `colored/`). `chinese/` and `chinese_colored/`
+are untouched.
 
 Every prompt below: square 1:1, photorealistic where the look is
 scenic, perfectly centered, isolated on white background, no text or
@@ -276,19 +280,112 @@ Photorealistic astronomical illustration, square 1:1, perfectly centered, isolat
 
 ---
 
-## The Ninth — Ophiuchus (`sign/Ophiuchus.png`, `logo/Ophiuchus.png`, `constellation/Ophiuchus.png`)
+## 4. COLORED look (`assets/zodiac/astrology/colored/`) — 12 prompts
 
-Owner 8+1 extension (2026-07-14): Ophiuchus is the Ninth of the
-Zodiac Signs set, given all three of the theme's own looks — sign,
-logo and constellation — rather than sitting encyclopedia-only. Use
-undecided: legend third plate / Compass ninth seat / Prism triptych.
-It is astrology's own famous excluded thirteenth sign, the
-serpent-bearer whose real path through the ecliptic the twelve-sign
-zodiac has always left off the wheel; because it straddles the FIRE
-and WATER triads rather than belonging to either, its sign-look plate
-is the one exception to the strict four-element palette rule, blending
-twilight indigo and deep teal instead. No Judas–Lucifer reading
-applies — its exclusion is calendrical, not moral.
+Moved verbatim from `colored_badge_prompts.md`'s Astrology section
+(owner consolidation 2026-07-15 — that sheet now only carries the sets
+that don't have a home of their own; the zodiac signs' colored plates
+live here from now on, alongside the sign/logo/constellation looks
+above). Vivid celestial enamel, full color — a fresh full-color badge
+for each sign, not a recolor of the SIGN-look medallion.
+
+Owner correction 2026-07-12: the first batch drifted off the elements
+(a red Scorpio on a WATER sign). Version 2 locks every sign to its
+element — the FIELD, the figure and the border accents all speak one
+element, so the four families are unmistakable at a glance:
+
+- FIRE (Aries, Leo, Sagittarius): deep ember-black field; flame red,
+  orange and gold only.
+- EARTH (Taurus, Virgo, Capricorn): deep forest-green field; green,
+  earth brown and wheat gold only.
+- AIR (Gemini, Libra, Aquarius): deep sky-indigo field; sky blue,
+  white and silver only.
+- WATER (Cancer, Scorpio, Pisces): deep sea-teal field; teal, sea
+  blue, aqua and pearl only.
+
+**Aries**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. FIRE sign - STRICT palette: flame red, orange and gold only, no other hues anywhere. Center: a charging Ram with spiral golden horns, coat glowing ember-red, flames licking from its hooves, the Aries glyph blazing in fire-orange above; glossy deep ember-black field with drifting sparks. Border: gold ring of small flames with four roundels bearing the golden Aries glyph on red enamel.
+```
+
+**Leo**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. FIRE sign - STRICT palette: flame red, orange and gold only, no other hues anywhere. Center: a majestic Lion with a blazing golden mane like a sun corona, calm regal gaze, the Leo glyph shining in gold above; glossy deep ember-black field with drifting sparks. Border: gold ring of small flames with four roundels bearing the golden Leo glyph on red enamel.
+```
+
+**Sagittarius**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. FIRE sign - STRICT palette: flame red, orange and gold only, no other hues anywhere. Center: a centaur Archer mid-gallop drawing a golden bow, the arrow trailing a comet of fire, chestnut-red body and flame-orange cloak, the Sagittarius glyph above; glossy deep ember-black field with drifting sparks. Border: gold ring of small flames with four roundels bearing the golden Sagittarius glyph on red enamel.
+```
+
+**Taurus**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. EARTH sign - STRICT palette: leaf green, earth brown and wheat gold only, no other hues anywhere. Center: a powerful earth-brown Bull with pale horns standing firm among green meadow grass and golden wheat, the Taurus glyph in green above; glossy deep forest-green field with tiny golden seeds of light. Border: antique-gold ring of leaves and wheat ears with four roundels bearing the green Taurus glyph on brown enamel.
+```
+
+**Virgo**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. EARTH sign - STRICT palette: leaf green, earth brown and wheat gold only, no other hues anywhere. Center: the Maiden in a flowing green and cream gown holding a sheaf of golden wheat, a single bright golden star at the wheat tip, the Virgo glyph in green above; glossy deep forest-green field with tiny golden seeds of light. Border: antique-gold ring of leaves and wheat ears with four roundels bearing the green Virgo glyph on brown enamel.
+```
+
+**Capricorn**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. EARTH sign - STRICT palette: leaf green, earth brown, stone gray and wheat gold only, no other hues anywhere. Center: the Sea-Goat - a stern mountain goat with spiral horns whose body ends in a coiled moss-green tail - climbing a brown stone crag, the Capricorn glyph in green above; glossy deep forest-green field with tiny golden seeds of light. Border: antique-gold ring of leaves and wheat ears with four roundels bearing the green Capricorn glyph on brown enamel.
+```
+
+**Gemini**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. AIR sign - STRICT palette: sky blue, white and silver only, no other hues anywhere. Center: the Twins back to back - one in white and silver, one in sky blue - hands almost touching with a shared silver star between them, the Gemini glyph in sky blue above; glossy deep sky-indigo field with wisps of white cloud. Border: silver ring of small clouds and swallows with four roundels bearing the sky-blue Gemini glyph on white enamel.
+```
+
+**Libra**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. AIR sign - STRICT palette: sky blue, white and silver only, no other hues anywhere. Center: silver balance Scales in perfect equilibrium held by a graceful hand emerging from white clouds, a small silver star in each pan, the Libra glyph in sky blue above; glossy deep sky-indigo field with wisps of white cloud. Border: silver ring of small clouds and swallows with four roundels bearing the sky-blue Libra glyph on white enamel.
+```
+
+**Aquarius**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. AIR sign - STRICT palette: sky blue, white and silver only, no other hues anywhere. Center: the Water-Bearer in white and sky-blue robes pouring a stream of silver starlight from a silver amphora, the stream dissolving into white stars, the Aquarius glyph in sky blue above; glossy deep sky-indigo field with wisps of white cloud. Border: silver ring of small clouds and swallows with four roundels bearing the sky-blue Aquarius glyph on white enamel.
+```
+
+**Cancer**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. WATER sign - STRICT palette: teal, sea blue, aqua and pearl white only, no other hues anywhere. Center: a moonlit teal Crab with a pearl-sheen shell on wet silver-blue sand, gentle aqua waves and a pearl full moon above, the Cancer glyph in aqua; glossy deep sea-teal field with rising silver bubbles. Border: pearl-silver ring of waves and shells with four roundels bearing the aqua Cancer glyph on sea-blue enamel.
+```
+
+**Scorpio**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. WATER sign - STRICT palette: teal, sea blue, aqua and pearl white only, no other hues anywhere - ABSOLUTELY NO RED. Center: a gleaming deep-teal Scorpion with a bioluminescent aqua glow along its shell, tail arched high with a bright PEARL-WHITE star at the stinger, on a dark sea floor, the Scorpio glyph in aqua above; glossy deep sea-teal field with rising silver bubbles. Border: pearl-silver ring of waves and shells with four roundels bearing the aqua Scorpio glyph on sea-blue enamel.
+```
+
+**Pisces**
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. WATER sign - STRICT palette: teal, sea blue, aqua and pearl white only, no other hues anywhere. Center: two Fish - one pearl-white, one deep teal - swimming in an eternal circle joined by a shimmering silver cord, silver bubbles rising like stars, the Pisces glyph in aqua above; glossy deep sea-teal field with rising silver bubbles. Border: pearl-silver ring of waves and shells with four roundels bearing the aqua Pisces glyph on sea-blue enamel.
+```
+
+---
+
+## The Thirteenth — Ophiuchus (`sign/Ophiuchus.png`, `logo/Ophiuchus.png`, `constellation/Ophiuchus.png`, `colored/Ophiuchus.png`)
+
+**Encyclopedia-only — the excluded thirteenth (the Sun crosses it Nov
+30 – Dec 17; excluded since Babylon to keep twelve).** Per the owner's
+round-four doctrine ruling (`../pantheon_catalog.md`, 2026-07-15):
+Ophiuchus is a real ecliptic constellation — the Sun crosses it
+roughly Nov 30 – Dec 17 — known since Babylon and deliberately
+excluded to keep twelve equal signs; the modern "13th sign" debate
+keeps him famous. Placement: an Encyclopedia-only non-member with a
+short article — no dial seat, no rotation role — exactly as the owner
+ruled. (This corrects the 2026-07-14 draft note kept below, which had
+floated a full Ninth dial seat across all four looks — round four
+settles it: encyclopedia-only, though all four looks are still worth
+authoring for the article.) It is astrology's own famous excluded
+thirteenth sign, the serpent-bearer whose real path through the
+ecliptic the twelve-sign zodiac has always left off the wheel; because
+it straddles the FIRE and WATER triads rather than belonging to
+either, its sign-look plate is the one exception to the strict
+four-element palette rule, blending twilight indigo and deep teal
+instead. No Judas–Lucifer reading applies — its exclusion is
+calendrical, not moral.
 
 ### SIGN look — Ophiuchus (`sign/Ophiuchus.png`)
 
@@ -306,4 +403,10 @@ Minimalist emblem, square 1:1, perfectly centered, isolated on white background,
 
 ```
 Photorealistic astronomical illustration, square 1:1, perfectly centered, isolated on white background, no text, no glyph. Center: a deep midnight-blue to black night-sky field scattered with faint background stars; the Ophiuchus constellation traced as bright white star points joined by thin silver lines in a broad house-shaped pentagon, one bright star crowning it like a head, one of the largest patterns in the whole sky yet excluded from the zodiac's twelve; behind the stars, the serpent-bearer's form appears faintly ghosted in translucent smoky outline, a serpent coiling through his arms, barely visible.
+```
+
+### COLORED look — Ophiuchus (`colored/Ophiuchus.png`)
+
+```
+Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Serpent-bearer sign - STRICT palette: twilight indigo, deep teal and faint ember-orange only, no other hues anywhere, the one plate allowed to blend fire and water since Ophiuchus stands between both triads. Center: a robed figure gripping a great serpent with both hands, the snake's body coiled once around his waist and trailing beyond the badge's edge on both sides, his bare feet planted on a scorpion crushed underfoot, the Ophiuchus glyph in pale teal above; glossy deep twilight indigo-teal field with faint ember sparks caught in the serpent's coils. Border: bronze-silver ring of coiled-serpent scrollwork with four small roundels bearing the pale-teal Ophiuchus glyph on indigo enamel. Colors: twilight indigo, deep teal, faint ember-orange.
 ```

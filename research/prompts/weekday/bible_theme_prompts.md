@@ -37,10 +37,11 @@ the Last Supper. This is the strongest possible fit for the existing
 Sunday DUAL mechanism: Old-Testament majesty (Justice/Pride, the
 Ruler's face) against New-Testament humility (Humility/Servility, the
 Servant's face) is not an analogy the Bible theme has to construct —
-`sunday_duality.md`'s own Christianity entry already names this exact
-pairing ("the king who washes feet, the God who empties himself...
-where the king of kings who kneels to wash feet is the servant-king in
-one body") for the *religion* set's Sunday plate. The Bible theme
+the *religion* theme's own retired Christianity dual already named this
+exact pairing ("the king who washes feet, the God who empties
+himself... where the king of kings who kneels to wash feet is the
+servant-king in one body") — see the Washbasin entry in the
+[Religion Prompts](religion_prompts.md) historical appendix. The Bible theme
 inherits the same textual logic in fresh art — no alternative was
 seriously in competition.
 
@@ -135,8 +136,8 @@ here as the improvement the brief invited:
   keeps Eden's imagery alive without needing Adam and Eve by name —
   spices, pomegranates and doves are the Song's own furniture, and
   doves already crown Venus's Aphrodite plate in
-  [Colored Badge Prompts](colored_badge_prompts.md), so the visual
-  language of this arm stays consistent across themes for free.
+  [Greek Prompts](greek_prompts.md)'s colored `Aphrodite.png`, so the
+  visual language of this arm stays consistent across themes for free.
 
 Verdict: the Song of Songs' Bride and Bridegroom is the strongest
 single choice on the whole board — recommended over the seed.
@@ -226,7 +227,7 @@ literal architecture — sunlight, through glass, telling scripture.
 Suggested drop location: `assets/weekday/bible/primary/`, with the Sunday
 second face at `assets/weekday/bible/primary/dual/son_servant.png` (matching
 the `dual/` convention already used for Greek/Norse/Egypt/Japan/
-Slavic/Alchemy/Religion in [Sunday Duality](sunday_duality.md)).
+Slavic/Alchemy/Religion — see any of those themes' own prompt sheets).
 
 | Figure | File stem |
 |---|---|
@@ -314,9 +315,8 @@ the union of the pair itself. This SUPERSEDES Melchizedek as the
 Bible theme's Ninth (locked, `pantheon_catalog.md` round four/five:
 "bible ninth **the Holy Trinity** ✓"). Melchizedek is not deleted —
 his prompt **RELOCATES, byte-identical, to the Bible II set**, where
-he becomes ITS Ninth (see [Bible II, Bible Dark & the Two
-Triangles](bible_dark_prompts.md) ▸ Section A ▸ "The Ninth —
-Melchizedek"); Abraham, the man Melchizedek blesses, is Bible II's own
+he becomes ITS Ninth (see [Bible II Prompts](bible2_prompts.md) ▸ "The
+Ninth — Melchizedek"); Abraham, the man Melchizedek blesses, is Bible II's own
 Sunday figure, so the Union figure now lands in the set he textually
 belongs to. Per the doctrine's own law, **the Union must never rank
 below the seated figures** — the Trinity does not compete with Ancient
@@ -344,7 +344,7 @@ Per `ROSTER.md` (last generated 2026-07-15), theme `bible`:
   `dual/son_servant.png`.
 - **Ninth — Melchizedek:** never generated (— Gemini, — ChatGPT) —
   good, nothing to discard. RELOCATED to Bible II as ITS Ninth; no
-  longer this theme's figure. See `bible_dark_prompts.md` ▸ Section A.
+  longer this theme's figure. See `bible2_prompts.md`.
 - **Ninth — The Holy Trinity:** NEW, not yet in `ROSTER.md` — needs
   `holy_trinity.png` generated.
 

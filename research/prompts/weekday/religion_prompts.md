@@ -225,6 +225,46 @@ Nothing of it remains active here.
 
 ---
 
+## Historical / optional appendix — do not generate by default
+
+Superseded and optional companion plates, moved verbatim from the
+retired `sunday_duality.md`, kept for the record only. None of these
+are wired into the current roster; the generation-order checklist below
+does not include them — the owner generates from this appendix only by
+deliberate choice.
+
+**The Rough Ashlar** (Freemasonry's old Servant face) is already
+documented above under "Dual — Christianity / Satanism" as SUPERSEDED
+— not repeated here to avoid two copies of the same plate.
+
+**Washbasin — Christianity's retired dual** (`dual/washbasin.png`):
+before this rework, Christianity's Sunday dual was the washbasin-and-
+towel pairing ("the king who washes feet, the God who empties
+himself... the king of kings who kneels to wash feet is the
+servant-king in one body") rather than Satanism. Superseded by the
+Satanism dual above; the plate stays on disk as historical art.
+
+```
+Circular medallion, polished silver relief on black marble stone, photorealistic render, perfectly centered, isolated on transparent background — same finish and grapevine-and-ichthys border as christianity.png. Center: a plain silver washbasin and folded linen towel resting on black marble, water rippling in the basin catching a soft glow, a simple wooden staff leaning beside it where the cross stood in the christianity.png plate, the crown of thorns now resting loose and open beside the basin instead of at a cross's foot; the same soft glow that lit the cross in christianity.png now lighting the water's surface. Border: identical silver grapevine-and-ichthys knotwork ring to christianity.png. Palette: polished silver, deep black marble, soft warm-white glow — matching the christianity.png plate's finish exactly, no bright colors.
+```
+
+**Perfect Ashlar — optional bright counterpart to the Rough Ashlar**
+(`dual/perfect_ashlar.png`, only if the owner wants the pair as TWO new
+images instead of reusing `freemasonry.png`):
+
+```
+Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the owner's freemasonry religion medallion. Center: a perfectly squared and polished cubic ashlar on a masonic tracing board, its faces mirror-smooth and returning the light, suspended from a lewis hook above a builder's level; the All-Seeing Eye within a radiant triangle blazes directly over it, its glory rays breaking on the cube's edges into small stars. Border: silver ring bearing small roundels that alternate the square-and-compasses with a tiny radiant delta. Palette: silver, graphite black, radiant white-gold rays — matching the religion set's black-stone finish exactly.
+```
+
+**Optional main-medallion upgrade** — square, compasses AND the Eye
+(would replace `freemasonry.png`, the current Ninth plate):
+
+```
+Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the other religion medallions (black stone, silver relief). Center: the square and compasses opened over an open book of constitutions, the letter G at their crossing; above them the All-Seeing Eye within a radiant triangle, its glory rays fanning down so the tools work literally UNDER the Eye's light; two small columns flank the composition at the edges. Border: silver ring with small roundels alternating a radiant delta, a trowel and a plumb line. Palette: silver, graphite black, pale white-gold rays.
+```
+
+---
+
 ## Generation-order checklist
 
 1. **Generate NEW art — one plate:** the Satanism dual

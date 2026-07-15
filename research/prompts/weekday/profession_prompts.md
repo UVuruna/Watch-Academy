@@ -133,9 +133,9 @@ as the dominant hue (Ruler white-gold, Physician blue, Soldier orange,
 Merchant purple, Priest yellow, Artist red, Farmer green) — the badge
 then matches the arm the day lives on. Drop under
 `assets/weekday/profession/colored/` (same stems as the bronze set
-above). Note: the colored Servant (dual) companion is documented
-separately in [Sunday Duality](sunday_duality.md) — out of scope for
-this move, not duplicated here.
+above). The colored Servant (dual) companion is included below, moved
+verbatim from the retired `sunday_duality.md` — this closes the last
+gap in the theme's own colored set.
 
 **Ruler (sun)**
 ```
@@ -170,6 +170,14 @@ Ornate circular badge, vivid full-color guild-crest style, photorealistic render
 **Farmer (saturn)**
 ```
 Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Farmer in a green tunic and straw hat swinging a scythe through ripe golden wheat, a laden apple tree and plowed fields behind, morning dew light; glossy fresh green field. Border: bronze-green ring with small green roundels bearing wheat sheaves, vine scrollwork between them. Colors: fresh green dominant, wheat gold, earth brown accents.
+```
+
+**Servant (dual, colored)** — matches `colored/Ruler.png`; drop at
+`assets/weekday/profession/colored/Servant.png` (sitting directly in
+the folder, same convention as the bronze Servant above)
+
+```
+Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: the Ruler's Servant face kneeling before his own empty golden throne, the crown lifted from his own head and held low in both hands, eyes downcast, the ermine-and-gold robe replaced by a plain ivory-white tunic with a simple rope belt, one bare foot resting in a golden basin of water; a soft, low dawn-grey glow behind him instead of a blazing halo — the muted, quiet twin of the Ruler's radiant noon field, same white-gold family read cooler and lower. Border: polished gold ring with small white-enamel roundels bearing a basin-and-towel emblem (echoing the Ruler badge's crown roundels), laurel scrollwork between them. Colors: white and gold dominant — same family as the Ruler badge — with cool dawn-grey accents in place of its warm sunrise-orange.
 ```
 
 ---
@@ -241,8 +249,8 @@ Per `ROSTER.md` (last generated 2026-07-15):
 - **Bronze** — all exist (✔ Gemini): Ruler, Servant (dual), Physician,
   Soldier, Merchant, Priest, Artist, Farmer.
 - **Colored** — all exist (✔ Gemini): same seven callings + Ruler,
-  `colored/` stems (the Servant colored dual is tracked separately in
-  [Sunday Duality](sunday_duality.md)).
+  `colored/` stems, plus the Servant colored dual — prompt above,
+  moved verbatim from the retired `sunday_duality.md`.
 - **Ninth — The Jester:** neither register exists on disk (— / —
   Gemini and ChatGPT both) — good, nothing generated needs to be
   thrown away. SUPERSEDED, do not generate.
