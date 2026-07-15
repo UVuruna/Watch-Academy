@@ -562,6 +562,14 @@ SLOT_SIZE_BY_POINTER = {
 SLOT_SIZE_PINNED = 1.50
 SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12}
 
+# The weekday-by-colors unit rides the ROMB CENTER of its diamond (owner
+# 2026-07-15): the star tip sits at star.radius_fraction and a diamond's
+# diagonals cross at EXACTLY half the tip on every pointer (inner =
+# tip / (2 cos half) ⇒ projection = tip/2), so the by-colors body centers
+# in the romb at this fraction of the tip — uniformly, whatever the
+# pointer (Trinity/Prism/Seasons/Compass all inherit the same position).
+WEEKDAY_ROMB_CENTER_OF_TIP = 0.5
+
 # The subdial's live SHADOW (owner 2026-07-15: the sun lives at the
 # dial center, the shadow is RENDERED, never baked) — offset outward
 # from the center, none on the center seat.

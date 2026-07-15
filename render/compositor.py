@@ -51,6 +51,7 @@ from render.layers import (
     slot_seat_scale,
     slot_view,
     sunday_dual_face,
+    weekday_body_orbit,
     today_slot_theta,
     visible_occupant,
     weekday_classic_slot,
@@ -549,9 +550,9 @@ class Compositor:
             if servant_holds_the_seat(self._skin, today) and hit(
                 dial_point(
                     constants.SOUTH_SLOT_ANGLE + rotation,
-                    radius * weekday.orbit_fraction,
+                    radius * weekday_body_orbit(self._skin),
                 ),
-                radius * weekday.diamond_scale,
+                radius * weekday.diamond_scale * slot_seat_scale(self._skin),
             ):
                 # The SERVANT face at 24h — ghosted all week,
                 # opaque on Sunday (owner 2026-07-13).
@@ -624,7 +625,8 @@ class Compositor:
         elif self._skin.pointer in ("hexa", "trio"):
             center_body = "sun"          # today's opaque Sun or the ghost Sun
         if center_body is not None and hit(
-            QPointF(0, 0), radius * weekday.center_scale
+            QPointF(0, 0),
+            radius * weekday.center_scale * slot_seat_scale(self._skin),
         ):
             return center_body
         if weekday.display_mode == "center_only":
@@ -635,9 +637,12 @@ class Compositor:
                 continue     # the Servant won the 24h seat today
             body = visible_occupant(occupants, today)
             slot = dial_point(
-                angle + rotation, radius * weekday.orbit_fraction
+                angle + rotation, radius * weekday_body_orbit(self._skin)
             )
-            if hit(slot, radius * weekday.diamond_scale):
+            if hit(
+                slot,
+                radius * weekday.diamond_scale * slot_seat_scale(self._skin),
+            ):
                 return body
         return None
 

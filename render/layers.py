@@ -326,6 +326,16 @@ def slot_seat_scale(skin: SkinDefinition) -> float:
     return defaults.SLOT_SIZE_BY_POINTER[skin.pointer]
 
 
+def weekday_body_orbit(skin: SkinDefinition) -> float:
+    """Orbit fraction (of the dial radius) that centers the weekday-by-
+    colors body in its diamond: a romb's diagonals cross at EXACTLY half
+    the star tip on every pointer (tip = star.radius_fraction), so the
+    by-colors body rides that radius uniformly (owner 2026-07-15 — this
+    one slot always sits at the romb center, whatever the pointer; the
+    seated 2nd/3rd slots keep their own arm geometry)."""
+    return skin.star.radius_fraction * defaults.WEEKDAY_ROMB_CENTER_OF_TIP
+
+
 def slot_seat_orbit(skin: SkinDefinition, seat) -> float:
     """The seat's orbit factor: on the slim-armed pointers an ANGLE
     seat shifts outward to the diamond's widest point (owner
@@ -927,13 +937,19 @@ class WeekdayLayer(Layer):
         ):
             # The hexa and trio layouts center the Sun; on Sundays the
             # center pass draws it opaque above the hands instead.
-            center_size = 2 * ctx.radius * spec.center_scale
+            center_size = (
+                2 * ctx.radius * spec.center_scale
+                * slot_seat_scale(ctx.skin)
+            )
             center_size *= hover_factor(ctx, "body:sun")
             draw_weekday_body(
                 painter, ctx, "sun", QPointF(0, 0), center_size, spec.ghost_opacity
             )
-        orbit = ctx.radius * spec.orbit_fraction
-        slot_size = 2 * ctx.radius * spec.diamond_scale
+        orbit = ctx.radius * weekday_body_orbit(ctx.skin)
+        slot_size = (
+            2 * ctx.radius * spec.diamond_scale
+            * slot_seat_scale(ctx.skin)
+        )
         servant = servant_holds_the_seat(ctx.skin, today)
         for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
             if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:

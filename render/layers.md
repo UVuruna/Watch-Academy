@@ -75,7 +75,15 @@ Aurora and pointer-off stay on natural round angles; `slot_seat_scale()`
 sizes slots per pointer (`SLOT_SIZE_BY_POINTER`: 125% on the slim-armed
 Seasons/Compass, 150% elsewhere and pinned); `slot_seat_orbit()` shifts
 ANGLE seats outward to the diamond's widest point on the slim-armed
-pointers (`SLOT_SEAT_OUTWARD`). `slot_view(skin, index)` resolves a
+pointers (`SLOT_SEAT_OUTWARD`). The CLASSIC weekday-by-colors unit
+(drawn by `WeekdayLayer`, hit-tested in the compositor) inherits the
+SAME geometry (owner 2026-07-15 — the three slots must behave
+identically): its bodies carry `slot_seat_scale()` too, and ride the
+ROMB CENTER via `weekday_body_orbit()` — half the star tip
+(`WEEKDAY_ROMB_CENTER_OF_TIP`), which is the diamond's diagonal-cross
+radius on EVERY pointer, so the by-colors slot centers in its romb
+uniformly (the seated 2nd/3rd slots keep their own arm geometry).
+`slot_view(skin, index)` resolves a
 slot's (mode, astrology style, theme, metal); `weekday_classic_slot()`
 names the slot driving the classic unit (None when every slot is
 seated).

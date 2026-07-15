@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo
 
 import astral
 import pytest
+from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
 from config import constants, defaults
@@ -24,12 +25,14 @@ from render.compositor import Compositor, _build_layers
 from render.layers import (
     HandLayer,
     SlotLayer,
+    dial_point,
     palette_for,
     slot_layout,
     slot_seat_orbit,
     slot_seat_rotation,
     slot_seat_scale,
     today_slot_theta,
+    weekday_body_orbit,
     umbra_ladder,
     visible_occupant,
     weekday_classic_slot,
@@ -213,6 +216,43 @@ def test_slot_seat_geometry_follows_the_pointer():
     assert slot_seat_orbit(
         skin(pointer="octa", show_pointer=False), H3
     ) == 1.0
+
+
+def test_classic_weekday_unit_carries_the_pointer_scale():
+    """The per-pointer slot size (0.14.229) reaches the CLASSIC weekday
+    unit — the today badge and its ghosts — not only the seated slots:
+    a probe beyond the UNSCALED body edge still lands on the body
+    because the hit radius carries slot_seat_scale. Regression guard —
+    the factor was once wired into SlotLayer alone, so the badge stayed
+    one size on every pointer (owner: Prism i Kompas identični)."""
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())  # hexa → 1.5×
+    spec = defaults.DEFAULT_SKIN.weekday_set
+    R = 180.0
+    angle = constants.POINTER_WEEKDAY_SLOTS["hexa"][1][0]  # a non-south seat
+    center = dial_point(angle, R * weekday_body_orbit(defaults.DEFAULT_SKIN))
+    unscaled_half = R * spec.diamond_scale
+    norm = math.hypot(center.x(), center.y())
+    # 1.35× the unscaled half-size out from the body center: inside the
+    # 1.5× body, OUTSIDE the 1.0× body — so the hit proves the scaling.
+    probe = QPointF(
+        center.x() + center.x() / norm * unscaled_half * 1.35,
+        center.y() + center.y() / norm * unscaled_half * 1.35,
+    )
+    assert comp._weekday_body_at(probe, R, 0.0, "mercury") is not None
+
+
+def test_weekday_body_sits_at_the_romb_center_on_every_pointer():
+    """The weekday-by-colors body rides the ROMB CENTER — half the star
+    tip — identically on every pointer (owner 2026-07-15: this one slot
+    always centers in its diamond, whatever the pointer). Pinned against
+    the geometry: a diamond's diagonals cross at tip/2, and the body must
+    sit farther out than the legacy 0.38 orbit (it was stuck inside)."""
+    for pointer in ("hexa", "trio", "cross", "octa"):
+        s = dataclasses.replace(defaults.DEFAULT_SKIN, pointer=pointer)
+        expected = s.star.radius_fraction / 2.0
+        assert weekday_body_orbit(s) == pytest.approx(expected), pointer
+        # Farther out than the legacy 0.38 orbit it was stuck inside.
+        assert weekday_body_orbit(s) > s.weekday_set.orbit_fraction, pointer
 
 
 def test_classic_unit_wears_the_driving_slots_theme():
@@ -1438,10 +1478,11 @@ def test_half_contrast_renders_a_gentler_night(july_wednesday):
     half = Compositor(half_skin, AssetCache()).render_offscreen(
         360.0, 1.0, day, tick
     )
-    # 90 px below center: inside the darkest sections (plus the star's
-    # slight solar rotation), away from body slots and diamond borders.
-    full_pixel = full.pixelColor(180, 270)
-    half_pixel = half.pixelColor(180, 270)
+    # 104 px below center: inside the darkest sections (plus the star's
+    # slight solar rotation), BELOW the enlarged south body slot and away
+    # from diamond borders.
+    full_pixel = full.pixelColor(180, 284)
+    half_pixel = half.pixelColor(180, 284)
     assert full_pixel.alpha() > 200 and half_pixel.alpha() > 200
     assert full_pixel.red() < 50
     assert half_pixel.red() >= 55
@@ -1455,8 +1496,8 @@ def test_half_contrast_renders_a_gentler_night(july_wednesday):
         dataclasses.replace(defaults.DEFAULT_SKIN, umbra_contrast="dark"),
         AssetCache(),
     ).render_offscreen(360.0, 1.0, day, tick)
-    assert light.pixelColor(180, 270).red() >= 120
-    assert dark.pixelColor(180, 270).red() < 50
+    assert light.pixelColor(180, 284).red() >= 120
+    assert dark.pixelColor(180, 284).red() < 50
 
 
 @pytest.mark.parametrize("form", ["coarse", "gradient"])

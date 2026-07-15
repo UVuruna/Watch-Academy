@@ -35,8 +35,10 @@ draws the MINUTE layers (hands, year marker) live.
   `_element_at()` is the ONE geometry shared with the tooltips
   (body/seated slots/moon/earth, in hover priority — seated slots
   reuse the layer's exact seat geometry: `slot_seat_rotation` /
-  `slot_seat_scale` / `slot_seat_orbit`); legend off or a
-  factor of 1.0 keeps the dial inert
+  `slot_seat_scale` / `slot_seat_orbit`; the classic weekday bodies
+  mirror `WeekdayLayer` — `slot_seat_scale` size and the
+  `weekday_body_orbit` romb-center ride, servant seat included); legend
+  off or a factor of 1.0 keeps the dial inert
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes), in priority order — the WEEKDAY
