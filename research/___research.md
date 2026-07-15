@@ -80,6 +80,15 @@ the bachelor-school Mentor, the Reunion ceremony, the Elder digging
 remembered water on her last molars; acacia-and-tusk border, 8
 bronze + 8 colored prompts; drop dir assets/weekday/elephant/primary/.
 
+### `build_roster.py` — ROSTER.md Generator
+Generates the root [Master Systematics](../ROSTER.md) (owner
+2026-07-15): the seat-archetype matrix, every weekday theme's seven
+figures + dual + ninth, zodiac/chinese/badge/emblem inventories, and
+per-SOURCE (Gemini/ChatGPT) art coverage with a shortage list — the
+one place to check what is missing. Regenerate after any theme-table
+change or art drop; keep its NINTHS table in sync with
+`app/encyclopedia.py`.
+
 ### `pantheon_roster_report.md` — The Two Rosters: Seats Are Archetypes
 The owner's doctrine (2026-07-15): a seat is OUR archetype
 (color + virtue + vice + mood + estate — the matrix from our own

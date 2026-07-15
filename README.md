@@ -56,6 +56,9 @@ bodies, year marker, hands) done; Windows hardening (M4) is next.
 - [Setup (folder)](setup/___setup.md)
 - [Design (folder)](design/___design.md)
 - [Research (folder)](research/___research.md)
+- [Roster — the Master Systematics](ROSTER.md) — every theme, every
+  figure, its seat, per-source art coverage (generated:
+  `python research/build_roster.py`)
 
 ## Running from source
 
