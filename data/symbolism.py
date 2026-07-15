@@ -55,13 +55,36 @@ class SymbolismRepository:
         return self._by_body[body]
 
     def article(self, article_set: str, body: str) -> dict:
-        """{base, variants[, name]} of one entity — article_set is a
+        """{base, variants[, faces]} of one entity — article_set is a
         WEEKDAY_THEME_ARTICLES value (planets/greek/norse/religion/
-        religion_alt/profession)."""
-        return self._localized(
-            f"articles/{article_set}/{body}",
-            self._load()["articles"][article_set][body],
-        )
+        …/greek_pantheon/…). A `$ref` entry (a PANTHEON reseat — the
+        same figure serving a new seat) resolves to its SOURCE
+        entity's article, localized under the SOURCE keys so the text
+        translates exactly once; the reseat's OWN faces (the pantheon
+        Sunday duals) override and localize under the reseat's keys."""
+        node = self._load()["articles"][article_set][body]
+        prefix = f"articles/{article_set}/{body}"
+        if "$ref" in node:
+            ref_set, ref_body = node["$ref"]
+            merged = dict(self.article(ref_set, ref_body))
+            merged.pop("faces", None)
+            if "variants" in node:
+                # A CROSS-SEAT reseat: the source's variants describe
+                # its old positions, so the reseat carries its own —
+                # localized under the reseat's keys.
+                merged["variants"] = {
+                    combo: self._overlay.get(
+                        f"{prefix}/variants/{combo}", text
+                    )
+                    for combo, text in node["variants"].items()
+                }
+            if "faces" in node:
+                merged["faces"] = {
+                    face: self._overlay.get(f"{prefix}/faces/{face}", text)
+                    for face, text in node["faces"].items()
+                }
+            return merged
+        return self._localized(prefix, node)
 
     def zodiac_article(self, sign: str) -> dict:
         """{base, variants{paint, light}} of one tropical sign."""

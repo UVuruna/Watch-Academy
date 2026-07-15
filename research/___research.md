@@ -81,6 +81,17 @@ top to bottom without hunting. The folder's own
 sections below describe the pre-restructure content and remain as
 history.
 
+### `merge_articles.py` — Staged-Articles Merger
+The article-wave pipeline (2026-07-15): per-theme writer agents stage
+JSON files under `research/articles_staging/`, this script validates
+the shape (7 bodies, the six variant keys, $ref only for same-seat
+reuse), lands the four pantheon article sets and the Religion rework
+into `Database/symbolism.json`, the new ninths into
+`Database/encyclopedia.json`, and every staged Serbian text into the
+sr-Latn bundle (hash-keyed, orphans pruned, audit printed). The
+staging folder is deleted after a clean merge — the databases are the
+source of truth.
+
 ### `build_roster.py` — ROSTER.md Generator
 Generates the root [Master Systematics](../ROSTER.md) (owner
 2026-07-15): the seat-archetype matrix, every weekday theme's seven

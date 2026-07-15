@@ -57,7 +57,11 @@ def collect_corpus() -> dict:
     corpus: dict = {}
     for article_set, bodies in canon["articles"].items():
         for body, article in bodies.items():
-            corpus[f"articles/{article_set}/{body}/base"] = article["base"]
+            if "base" in article:
+                corpus[f"articles/{article_set}/{body}/base"] = article["base"]
+            # $ref entries (pantheon reseats) translate their SOURCE's
+            # base once — but cross-seat reseats carry their OWN
+            # variants, and pantheon Sunday duals their OWN faces.
             for combo, text in article.get("variants", {}).items():
                 corpus[f"articles/{article_set}/{body}/variants/{combo}"] = text
             for face, text in article.get("faces", {}).items():
