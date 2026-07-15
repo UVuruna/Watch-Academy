@@ -80,6 +80,16 @@ the bachelor-school Mentor, the Reunion ceremony, the Elder digging
 remembered water on her last molars; acacia-and-tusk border, 8
 bronze + 8 colored prompts; drop dir assets/weekday/elephant/primary/.
 
+### `pantheon_roster_report.md` — Omitted Figures, the Consolidated Roster Report
+The owner's two-roster decision (2026-07-15): what every theme
+omitted, WHY (the seven classical day-rulers seat by domain fit, not
+cultural rank), the audit of the Haiku research pass (Thoth/Morana/
+Mokoš/Physician were never missing; Hades/Baldur/Set/Crnobog are the
+Ninths), the genuine gaps (Apollo, Artemis, Athena, Poseidon; Horus,
+Isis; Svarog; Heimdall, Hel; Eris as an outer-bodies case), the
+`figure_roster` canon/pantheon mechanism and the per-theme proposed
+pantheon seats with costs — execution checklist awaits the GO.
+
 ### `prompts/badge/scale_badge_prompts.md` — Scale Badge Prompts
 The Judas–Lucifer Scale triptych behind the Duality topic and the
 Trinity doctrine (owner: duality rides the scale, the Trinity is
