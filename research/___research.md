@@ -89,6 +89,16 @@ one place to check what is missing. Regenerate after any theme-table
 change or art drop; keep its NINTHS table in sync with
 `app/encyclopedia.py`.
 
+### `pantheon_catalog.md` — The Pantheon Catalog (the owner's review)
+Both rosters seat by seat with everything on the table: Planetary vs
+Pantheon per theme, every alternative with pros and cons, every
+dilemma flagged ⚖ for the joint decision (Greek Tuesday Ares↔Artemis
+with the owner's hunting-is-green reading, the Greek dual, Egyptian
+Isis placement, Norse Monday Hel↔Njord↔Frigg, Slavic Svarog/Lada,
+the Wolf OMEGA discovery — Omega already IS the Alpha/Omega dual),
+the unchanged themes argued, the Wider-Pantheon lane, and the open
+picks list. Option names approved: Pantheon / Planetary.
+
 ### `pantheon_roster_report.md` — The Two Rosters: Seats Are Archetypes
 The owner's doctrine (2026-07-15): a seat is OUR archetype
 (color + virtue + vice + mood + estate — the matrix from our own

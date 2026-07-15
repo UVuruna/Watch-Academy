@@ -37,13 +37,10 @@ Wrath at once.
 ## 2. The two options — mechanism and NAMES
 
 - Setting **`figure_roster`**, one global dropdown in Settings beside
-  the Artwork source. Proposed names (owner asked for the naming):
-  - **RECOMMENDED: "Pantheon" / "Planetary"** — SR **"Panteon" /
-    "Planetarni"**. Pantheon = the mythology's own hierarchy seated
-    on our archetypes; Planetary = today's day-ruler counterparts.
-    Short, watch-flavored, translates cleanly.
-  - Alternative (the owner's plain wording): "By importance" /
-    "By weekday" — SR "Po važnosti" / "Po danima".
+  the Artwork source. Names APPROVED by the owner (2026-07-15):
+  **"Pantheon" / "Planetary"** — SR **"Panteon" / "Planetarni"**.
+  The seat-by-seat review catalog with all alternatives and open
+  dilemmas lives in [The Pantheon Catalog](pantheon_catalog.md).
 - Default: **Planetary** (the shipped canon stays untouched).
 - Wiring: `WEEKDAY_THEME_FILES_PANTHEON` per theme →
   `assets/weekday/<theme>/pantheon/…`, pantheon articles in
