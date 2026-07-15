@@ -169,39 +169,16 @@ Circular stained-glass rose-window medallion, backlit by sour, bruised green-vio
 
 ---
 
-## Section C — the Two Triangles scale badges (`assets/badge/scale/`)
+## The Two Triangles — see the Scale sheet
 
-Circular medallions in the project's bronze/metal cameo badge
-register — like the `assets/badge/season/turning_point` family — NOT
-stained glass: no backlit color-through-glass, a weathered metal relief
-disc on a dark field instead. (I did not re-open the `turning_point`
-files themselves — outside the two files I was told to read — so the
-prompts below are built from the metal-cameo idiom already documented
-elsewhere in this project's prompt sheets, e.g. the bronze/silver
-medallion prompts in `greek_prompts.md` or `norse_prompts.md`. Worth a
-quick sanity check
-against the actual `turning_point` art before sending to Gemini.)
-
-| Badge | File stem |
-|---|---|
-| Judas's Triangle | `assets/badge/scale/Judas_Triangle.png` |
-| Lucifer's Triangle | `assets/badge/scale/Lucifer_Triangle.png` |
-
-These illustrate the "Two Triangles" encyclopedia article — the
-Judas–Lucifer scale of self-hate/self-love whose zero point no
-individual actually reaches.
-
-### Judas_Triangle.png — downward triangle, self-abnegation pole
-
-```
-Circular bronze/metal cameo medallion, weathered relief on a dark, near-black field, photorealistic render, perfectly centered, isolated on transparent background — same metal-cameo finish as the project's season/turning_point badge family, no stained glass, no color-through-light. Center: a single downward-pointing triangle ▽, cast in cold silver-blue metal, its point aimed straight down toward the medallion's base like a chalice or a drop of water — the self-abnegation pole, weight given away rather than kept. Rim: a thin plain metal ring studded with two small motifs worked into the surface at opposite points — a short coil of rope (resting, not a noose) and a small scatter of thirty tiny coin-discs — both kept small and understated, secondary to the triangle. Colors: cold silver-blue triangle, near-black field, dull pewter rim — no warm tones anywhere.
-```
-
-### Lucifer_Triangle.png — upward triangle, self-exaltation pole
-
-```
-Circular bronze/metal cameo medallion, weathered relief on a dark, near-black field, photorealistic render, perfectly centered, isolated on transparent background — same metal-cameo finish as the project's season/turning_point badge family, no stained glass, no color-through-light. Center: a single upward-pointing triangle △, cast in warm red-gold metal with a faint inner ember glow along its edges like a small held flame — the self-exaltation pole, reaching up and out rather than down. Rim: a thin plain metal ring studded with two small motifs worked into the surface at opposite points — a falling five-point star with a short trailing streak, and a small tilted crown slipping off-center — both kept small and understated, secondary to the triangle. Colors: warm red-gold triangle with ember glow, near-black field, dull bronze rim — no cold tones anywhere.
-```
+The Judas–Lucifer scale badges are the SCALE tematika's own art and
+live in their own file per the one-theme-one-file rule:
+`research/prompts/badge/scale_badge_prompts.md` — BOTH registers (the
+metal cameo medallions and the stained-glass windows the owner
+adopted 2026-07-15, including the new round rose-window UNION — the
+held balance of the two poles as the ideal of objectivity). The dark
+set's own plates above stay purely stained-glass; the scale is its
+emblem, not its roster.
 
 ---
 

@@ -58,7 +58,9 @@ per source.
   dial seat)
 
 ### `badge/`
-- `scale_badge_prompts.md` — the Judas–Lucifer Scale triptych
+- `scale_badge_prompts.md` — the Judas–Lucifer Scale, BOTH
+  registers: metal cameo triptych + the stained-glass windows
+  (owner masters 2026-07-15) with the rose-window UNION
 - `season_trinity_prompts.md` — Trinity, Seasons, Turning Points,
   Meteorological twins
 

@@ -1,24 +1,26 @@
-# Scale Badge Prompts (Gemini)
+# Scale Prompts (Gemini) — the Judas–Lucifer Scale, both registers
 
-Prompts for the three **Judas–Lucifer Scale** badges behind the
-Encyclopedia's Duality topic and the Trinity doctrine (owner
-2026-07-14: *duality rides the Judas–Lucifer scale; the Trinity is
-their UNION, 2 + 1 — where the pattern fits, we build it*). The art
-ALREADY EXISTS at `assets/badge/gemini/scale/` — this sheet documents
-the canon renders so they can be regenerated, and so the ChatGPT
-source can grow its own parallel set
-(`assets/badge/chatgpt/scale/` is empty today).
+The ONE sheet for the Scale tematika: the **metal cameo medallions**
+(the original set — the art exists at `assets/badge/gemini/scale/`)
+AND the **stained-glass windows** (the owner's 2026-07-15 discovery:
+title-only generations produced night-window triangles he approved —
+"judas1" and the Lucifer window are ADOPTED as masters). Behind the
+Encyclopedia's Duality topic and the Trinity doctrine (owner: duality
+rides the Judas–Lucifer scale; the Trinity is their UNION, 2 + 1).
 
-Same house rules as the other badge sheets: circular, photorealistic
-render, perfectly centered, isolated background, **NO lettering
-anywhere in the image**. Paste one prompt at a time; generate all
-three in one chat session so the set stays consistent.
+Same house rules as every sheet: photorealistic render, perfectly
+centered, isolated background, **NO lettering anywhere in the
+image**. Generate a whole register in one chat session.
 
 Drop locations:
 
-- `assets/badge/<source>/scale/Lucifer_Triangle.png`
-- `assets/badge/<source>/scale/Judas_Triangle.png`
-- `assets/badge/<source>/scale/Union.png`
+- Metal cameo: `assets/badge/<source>/scale/Lucifer_Triangle.png`,
+  `…/Judas_Triangle.png`, `…/Union.png`
+- Stained glass: `assets/badge/<source>/scale/glass/Lucifer_Triangle.png`,
+  `…/glass/Judas_Triangle.png`, `…/glass/Union.png`
+  *(the owner's approved accidental renders drop here as the Gemini
+  masters — the unused hanged-Judas variants may be kept beside them
+  as `Judas_Triangle_alt*.png` or discarded, owner's call)*
 
 ---
 
@@ -65,4 +67,40 @@ Circular metal badge, photorealistic render, perfectly centered, isolated on whi
 
 ```
 Circular metal badge, photorealistic render, perfectly centered, isolated on white background. A dark aged iron disc rimmed by a heavy bronze-iron ring. Center: a large hexagram — two interlaced beveled triangles woven over and under each other: the UPWARD triangle in warm polished copper with faint embers licking its outer edges, the DOWNWARD triangle in cold brushed steel — framing a perfectly blank, polished white roundel at the exact center. Quiet devices in relief: a faint falling star with a trail at the top of the field, short segments of knotted rope lying along the lower rim left and right, and a tiny balanced two-pan scale at the bottom center of the rim. Palette: warm copper and ember against cold steel, on near-black iron, the white roundel the only bright surface. NO lettering anywhere.
+```
+
+---
+
+## The stained-glass register (owner masters 2026-07-15)
+
+The owner's title-only generations produced the night-window forms of
+the two poles — **adopted as the Gemini masters** (drop them at the
+glass/ paths above; regenerate from these prompts only for the
+ChatGPT parallel or a damaged file). The windows are SHAPED as the
+triangles themselves; the Union completes them as the ROUND rose
+window — two triangular windows uniting into the circle.
+
+**Judas Triangle — glass** → `glass/Judas_Triangle.png`
+*(the adopted master: the owner's "judas1")*
+
+```
+DOWNWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep midnight-blue glass throughout, no warm tones. Center: Judas half-turned from a cold white rose of light, clutching the money bag to his chest, coins slipping from it into the dark; upper left panel the Last Supper at table, upper right panel Gethsemane — a figure weeping under the olive tree by moonlight; below the bag, a small arched gate where a hooded figure walks down night steps out of the city. Border: thorned-vine leadwork in blue-black; three rim roundels — a knotted noose at the apex-top, a water drop at one corner, a chalice at the other; a small money-bag roundel at the descending point. Palette: midnight blue, silver-white light, blue-black lead. NO lettering anywhere.
+```
+
+**Lucifer Triangle — glass** → `glass/Lucifer_Triangle.png`
+*(the adopted master: the owner's Lucifer window)*
+
+```
+UPWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Ember-red and gold glass throughout, no cold tones. Center: the beautiful winged rebel mid-rise on a black crag, one arm flung up toward a golden radiance pouring from the apex, dark-red feathered wings spread, red drapery streaming; below him the crag falls into rolling ember-red cloudglass. Border: darkened gothic leadwork; the all-seeing eye in a roundel at the apex under the golden light; two eight-point star roundels at the base corners. Palette: ember red, molten gold, black-iron lead. NO lettering anywhere.
+```
+
+**The Union — glass** → `glass/Union.png`
+*(NEW — the owner's brief: the union of the two extremes held BEFORE
+either tips the pendulum = the ideal of OBJECTIVITY. Not a person —
+no one in the myths holds both poles without tipping — but the held
+instant itself: stained glass colors light; objectivity is the one
+pane that does not.)*
+
+```
+ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. Center: a six-pointed seal of two large interlaced triangles woven over and under each other — the UPWARD triangle in ember-red and gold glass, the DOWNWARD triangle in midnight-blue and silver glass — and at their overlapping hexagonal heart the panes turn PERFECTLY CLEAR, uncolored glass: plain white daylight passes through the exact center unchanged, the brightest point of the window. Rim: gothic stone tracery; at the top a small sun-disc roundel at noon; at the lower left a falling-star-and-slipping-crown roundel in red-gold; at the lower right a noose-and-coins roundel in blue-silver; at the bottom center a two-pan balance roundel at PERFECT rest. Palette: ember red-gold and midnight blue-silver in equal measure, black-iron lead, the clear center the only uncolored glass. NO lettering anywhere.
 ```
