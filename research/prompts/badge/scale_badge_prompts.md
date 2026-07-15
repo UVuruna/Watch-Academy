@@ -16,11 +16,13 @@ Drop locations:
 
 - Metal cameo: `assets/badge/<source>/scale/Lucifer_Triangle.png`,
   `…/Judas_Triangle.png`, `…/Union.png`
-- Stained glass: `assets/badge/<source>/scale/glass/Lucifer_Triangle.png`,
-  `…/glass/Judas_Triangle.png`, `…/glass/Union.png`
-  *(the owner's approved accidental renders drop here as the Gemini
-  masters — the unused hanged-Judas variants may be kept beside them
-  as `Judas_Triangle_alt*.png` or discarded, owner's call)*
+- Stained glass: `assets/badge/<source>/scale/glass/` —
+  `Lucifer_Triangle.png`, `Judas_Triangle.png` (the adopted masters),
+  `Lucifer_Triangle_v2.png`, `Judas_Triangle_v2.png` (GPT's own
+  variants, kept beside), `Union_Meeting.png` (the figurative Union)
+  and `Union.png` (the symbolic rose window); the unused hanged-Judas
+  renders may live as `Judas_Triangle_alt*.png` or be discarded —
+  owner's call
 
 ---
 
@@ -76,9 +78,16 @@ Circular metal badge, photorealistic render, perfectly centered, isolated on whi
 The owner's title-only generations produced the night-window forms of
 the two poles — **adopted as the Gemini masters** (drop them at the
 glass/ paths above; regenerate from these prompts only for the
-ChatGPT parallel or a damaged file). The windows are SHAPED as the
-triangles themselves; the Union completes them as the ROUND rose
-window — two triangular windows uniting into the circle.
+ChatGPT parallel or a damaged file). GPT then produced SECOND
+VARIANTS on its own — described below as the v2 prompts so they can
+be regenerated too (the owner keeps whichever he prefers per slot;
+the unused ones live beside as `_v2`/`_alt`). The windows are SHAPED
+as the triangles themselves; the scale completes with TWO UNIONS
+(owner doctrine, this round): one **figurative** — the imaginary
+MEETING of the two extremes, each tempering the other's madness —
+and one **symbolic** — the clear-hearted rose window. Hell is what
+happened because they never met; the Meeting is what would have
+happened if they had.
 
 **Judas Triangle — glass** → `glass/Judas_Triangle.png`
 *(the adopted master: the owner's "judas1")*
@@ -94,11 +103,42 @@ DOWNWARD-pointing triangular stained-glass window, night-window register, photor
 UPWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Ember-red and gold glass throughout, no cold tones. Center: the beautiful winged rebel mid-rise on a black crag, one arm flung up toward a golden radiance pouring from the apex, dark-red feathered wings spread, red drapery streaming; below him the crag falls into rolling ember-red cloudglass. Border: darkened gothic leadwork; the all-seeing eye in a roundel at the apex under the golden light; two eight-point star roundels at the base corners. Palette: ember red, molten gold, black-iron lead. NO lettering anywhere.
 ```
 
-**The Union — glass** → `glass/Union.png`
-*(NEW — the owner's brief: the union of the two extremes held BEFORE
-either tips the pendulum = the ideal of OBJECTIVITY. Not a person —
-no one in the myths holds both poles without tipping — but the held
-instant itself: stained glass colors light; objectivity is the one
+**Judas Triangle — glass v2** → `glass/Judas_Triangle_v2.png`
+*(GPT's own unprompted variant, described here for regeneration —
+the darker nocturne of the same composition)*
+
+```
+DOWNWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep navy and blue-black glass, darker than midnight, no warm tones. Center: Judas bowed over the money bag clutched in both hands, coins slipping from it one by one down toward the descending point, his halo a cold white glass rose behind a lowered head; upper left panel the Last Supper crowded at table under a blue arch, the bright figure at its center; upper right panel Gethsemane under a full moon — a mourner weeping on the rocks above a night city of small lit windows; beneath the coins, an arched stone gate where a hooded figure descends night steps out of the city. Border: braided thorn-vine leadwork in near-black iron; a water-drop roundel at one top corner, a chalice roundel at the other, a money-bag roundel at the descending point. Palette: deep navy, blue-black, one cold white glow, iron lead. NO lettering anywhere.
+```
+
+**Lucifer Triangle — glass v2** → `glass/Lucifer_Triangle_v2.png`
+*(GPT's own unprompted variant — the bat-winged fall with the figure
+in the light he is losing)*
+
+```
+UPWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep crimson and blood-red glass throughout, no cold tones. Center: the rebel seen from behind, mid-fall yet still reaching — dark BAT-MEMBRANE wings spread wide and already torn at the edges, one arm stretched up toward the apex where a radiant robed FIGURE stands inside a white-gold burst of rays that break through boiling red cloudglass; his drapery shredding into the storm below, faint lightning veins in the cloud panes. Border: twisted thorn-and-rope leadwork in dark bronze-red; an eight-point star roundel at the apex, a falling-comet roundel at one base corner, a golden crown roundel at the other. Palette: crimson, blood red, white-gold radiance at the apex only, dark bronze lead. NO lettering anywhere.
+```
+
+---
+
+## The two Unions
+
+**The Union I — the Meeting (figurative)** → `glass/Union_Meeting.png`
+*(the owner's brief, this round: the IMAGINARY union — what would
+have happened had the two extremes FOUND each other and each tempered
+the other's madness. Neither was useless: Lucifer's cup overflowed
+with love of self, Judas's with hate of self — met, each is the
+other's antidote. Hell is the history where they never met; this
+window is the history that never happened. The ideal of objectivity
+AS PERSONS.)*
+
+```
+ROUND stained-glass window, night-window register, photorealistic render, isolated background. The field split down the middle: the LEFT half ember-red and gold glass (a dimmed crag world, the fire calmed to warm hearth-gold), the RIGHT half midnight-blue and silver glass (a lightening night world, the dark easing toward blue dawn). At the center seam, TWO FIGURES meet: the winged rebel has STEPPED DOWN from his rock — wings folded low, his once-upflung arm now lowered — gripping the forearm of Judas and lifting him from his knees at the pit's edge; Judas's bowed head is RAISED, meeting his eyes, his free hand open and empty. At their clasped forearms the glass turns PERFECTLY CLEAR and uncolored — plain white daylight through the exact point where they hold each other, the brightest light in the window. Quiet signs of the two madnesses laid down: a golden crown sitting STEADY and straight on the rebel's head, an EMPTY noose lying slack on the ground beside untouched silver coins at Judas's feet. Above the pair, high in the tracery, a two-pan balance at perfect rest. Border: half thorn-and-rope, half thorned-vine leadwork joining seamlessly at top and bottom; a sun-disc roundel at the apex. Palette: warm hearth-gold and red left, dawn-blue and silver right, the clear clasp the only uncolored glass. NO lettering anywhere.
+```
+
+**The Union II — the Seal (symbolic)** → `glass/Union.png`
+*(the approved rose window: the held balance BEFORE either pole tips
+the pendulum — stained glass colors light; objectivity is the one
 pane that does not.)*
 
 ```
