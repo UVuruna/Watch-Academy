@@ -205,17 +205,13 @@ outranks every seated figure; otherwise the Excluded form stands.
 | astrology | Ophiuchus | Excluded (keep) | stays | the thirteenth sign |
 | japan | — | none | stays none | seven elements, no excluded member — already ruled |
 
-**⚖ The Greek ninth, argued.** With Hades promoted to the dual:
-- **Gaia** (rec) — the earth between the sky-throne and the
-  under-throne, mother of BOTH lines (gods and Titans alike): a
-  union of the week's poles that outranks every seated figure, and a
-  household name.
-- **Dionysos the twice-born** — a PERSON union (god by father,
-  mortal by mother, killed and reborn); famous, but the owner's
-  refinement (the union need not be a person) opens stronger doors.
-- **Olympus** — the mountain holding all the seated gods; but it
-  excludes Hades, so it unites the seven, not the POLES — weaker by
-  the doctrine's letter.
+**The Greek ninth — GAIA, locked (round four).** With Hades promoted
+to the dual: the earth between the sky-throne and the under-throne,
+mother of BOTH lines (gods and Titans alike) — a union of the week's
+poles that outranks every seated figure, and a household name.
+(Argued and retired: Dionysos the twice-born — a fine PERSON union,
+but the owner's refinement opened stronger doors; Olympus — unites
+the seven, not the POLES, since it excludes Hades.)
 
 The seat archetypes (the position system all of this serves):
 
@@ -243,7 +239,7 @@ The seat archetypes (the position system all of this serves):
 | venus | Aphrodite | **Hera** | max-coverage |
 | saturn | Cronus | **Demeter** | firm |
 | dual | Helios / Phaethon | **Zeus / Hades** | crystallized |
-| ninth | Hades → **Dionysos** (the Union) | same | ⚖ see below |
+| ninth | Hades → **Gaia** (the Union) | same | LOCKED round four |
 
 With the dual and the max-coverage principle, the TWO rosters
 together now seat: Zeus, Hera, Poseidon, Hades, Athena, Apollo,
@@ -374,14 +370,14 @@ shared** (the night-barque IS Ra's own shadow face).
 | Seat | Planetary | Pantheon | Status |
 |---|---|---|---|
 | sun | Sól | **Odin** | firm |
-| moon | Máni | **Hel** | ⚖ vs Njord / Frigg |
+| moon | Máni | **Hel** | LOCKED round four |
 | mars | Tyr | **Thor** | firm |
 | mercury | Odin | **Loki** | firm |
 | jupiter | Thor | **Tyr** | firm |
-| venus | Freya | **Freya** ✓ | firm |
+| venus | Freya | **Frigg** | LOCKED round four (max-coverage) |
 | saturn | Loki | **Freyr** | firm |
-| dual | Sól / Skoll | Odin / **the Wanderer** | proposal |
-| ninth | Baldur | Baldur (both modes) | doctrine |
+| dual | Sól / Skoll | Odin / **the Wanderer** | LOCKED round four |
+| ninth | Baldur → **Yggdrasil** (the Union) | same | LOCKED round four |
 
 **Sunday — Odin.** The Allfather; Pride that hanged itself on the
 tree for wisdom — both faces in one figure. Dual proposal: **Odin the

@@ -175,6 +175,33 @@ flagged for owner awareness, roster left unchanged.
 Circular stained-glass rose-window medallion, backlit by deep green renewal light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as abraham.png. Center: Job seated low among ash-gray glass rubble, robes torn but his posture unbowed, head lifted rather than bent, a single thin shaft of green-gold light breaking through the tracery above him and falling across his hands; broken pottery shards at his feet, a distant silhouette of his ruined house behind him rendered small and quiet rather than dramatic. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a single shaft-of-light emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: fresh renewal green dominant, ash gray, one thin gold-white light shaft, muted ember accents.
 ```
 
+### The Ninth — Melchizedek (`melchizedek.png`)
+
+**Doctrine (`pantheon_catalog.md`, owner round two/four/five):**
+Melchizedek RELOCATES here from the base Bible theme, where the Holy
+Trinity now stands as the Sunday pair's own Union
+([Bible Theme Prompts](bible_theme_prompts.md) ▸ "The Ninth — The Holy
+Trinity"). Bible II gains him as its FIRST Ninth — the fit is
+textual, not administrative: Melchizedek's one scene, Genesis 14:18,
+is blessing ABRAHAM, and Abraham is Bible II's own Sunday ruler face
+above — the Union figure lands in the set he belongs to. He remains
+the priest-king without father, mother or genealogy (Hebrews 7) — no
+duality or trinity reading fits him honestly, since his defining trait
+is having no second pole to be read against at all; per the doctrine's
+own law the Ninth must never rank below the seated figures, and a king
+who is ALSO a priest, owed tithes by Abraham himself, already outranks
+by definition.
+
+Prompt kept byte-identical to its original (it was drafted for the
+base Bible set and still cross-references that set's own reference
+plate, `ancient_of_days.png`, rather than this set's `abraham.png` —
+flagged as an inconsistency worth an owner decision, not silently
+fixed here).
+
+```
+Circular stained-glass rose-window medallion, backlit by luminous white-gold light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Melchizedek, priest-king of Salem, in glass robes that are at once royal purple and priestly white with no house or tribe marking woven into them, bringing forward bread and a cup of wine to a kneeling Abraham (Genesis 14:18), no crown of any single kingdom on his head, no line of descent shown behind him — a figure who begins and ends inside this one scene, with no genealogy the glass can trace (Hebrews 7:3). Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a bread-and-chalice emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: white-gold and royal purple dominant, warm bread-gold, deep wine-red in the cup, no single house-color claiming him.
+```
+
 ---
 
 ## Section B — Bible Dark (`assets/weekday/bible/dark/`)
@@ -357,22 +384,86 @@ Circular bronze/metal cameo medallion, weathered relief on a dark, near-black fi
 
 ---
 
-## The Ninth — Legion (`legion.png`)
+## The Ninth — The Ninth Circle (`ninth_circle.png`)
 
-Owner 8+1 extension (2026-07-14): Legion is the Ninth of the Bible
-Dark set, kept in the same night-window register as the other eight
-figures. Use undecided: legend third plate / Compass ninth seat /
-Prism triptych. Where the base Bible theme's Sunday plate reads one
-seat wearing two balanced faces (Ruler and Servant, Ancient of Days
-and Son), Legion is that arrangement's dark mirror — one body claimed
-by countless voices, held in balance by none — "my name is Legion, for
-we are many" (Mark 5:9) read as the Union's own possibility failing
-rather than holding; the swine herd stays distant and sober on the
-cliff, no gore in frame.
+**Doctrine (`pantheon_catalog.md`, owner round two/four/five, the
+owner's OWN worked example of the Union form):** *"nema osobe koja je
+i Lucifer i Juda — ali Pakao ih drži oboje, na samom dnu, po
+Danteu"* — no mythology offers one PERSON who is both Lucifer and
+Judas, but HELL holds them both, at the very bottom, per Dante's own
+geography. This SUPERSEDES Legion as Bible Dark's Ninth (locked,
+`pantheon_catalog.md` round four/five: "bible_dark ninth **the Ninth
+Circle** ✓... the ninth circle takes the NINTH seat, the name writes
+itself"). Legion is not deleted — he retires to the Wider-Pantheon
+lane, an Encyclopedia-only figure; his prompt is kept below for the
+record (see the SUPERSEDED section) but is not to be generated. This
+is the PLACE form of the Union, not a person — the frozen pit where
+Lucifer's fall and Judas's despair, the scale's two poles from Section
+C above, are held together at last. Per the doctrine's own law the
+Union must never rank below the seated figures: nothing in the Dark
+set outranks the pit both of them fall into.
+
+```
+Circular stained-glass rose-window medallion, backlit by faint cold starlight through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; the PLACE rather than a person, the union of Lucifer's fall and Judas's despair at the very bottom of the frozen pit (Inferno XXXIV). Center: Cocytus seen from directly above, a vast lake of black ice stretching to the tracery's edge, its surface spiraling inward in narrowing rings toward a single dark point; at that point, a colossal three-faced shadow rises waist-deep from the ice, each mouth working slowly, two small pale figures held motionless within its jaws — the two poles of the scale, chewed but never consumed, dignified even here, no gore, no visible violence, distance and cold doing all the telling. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a spiral-ice emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, its rays thinner and more reluctant than anywhere else in the set — the one place even Providence's gaze must strain to reach. Colors: near-black ice dominant, cold slate and iron-blue, one faint frost-white glint where the spiral narrows, no warm color anywhere. No lettering, no text, no watermark.
+```
+
+---
+
+## SUPERSEDED — Legion (do NOT generate `legion.png`)
+
+**Owner ruling 2026-07-15** (`pantheon_catalog.md`, doctrine
+crystallization round four/five): Legion is retired as Bible Dark's
+Ninth. The Ninth Circle above is now canonical. Legion is not deleted
+from the project — he retires to the Wider-Pantheon lane as an
+Encyclopedia-only figure. **Kept below for the historical record only;
+this prompt is not to be sent to Gemini.**
+
+Owner 8+1 extension (2026-07-14, superseded 2026-07-15): Legion was
+the original Ninth of the Bible Dark set, kept in the same
+night-window register as the other eight figures. Where the base
+Bible theme's Sunday plate reads one seat wearing two balanced faces
+(Ruler and Servant, Ancient of Days and Son), Legion was that
+arrangement's dark mirror — one body claimed by countless voices, held
+in balance by none — "my name is Legion, for we are many" (Mark 5:9)
+read as the Union's own possibility failing rather than holding; the
+swine herd stays distant and sober on the cliff, no gore in frame.
 
 ```
 Circular stained-glass rose-window medallion, backlit by cold slate-gray night light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png. Center: a single robed figure standing alone among tombs at the cliff's edge, his face rendered as a faint blur of overlapping features — not one face but many pressed together, none dominant — chains broken and hanging loose from his wrists, calm now rather than raging; far below and distant along the cliff, a small pale herd of swine at the water's edge, kept small, indistinct and sober, no violence in frame. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a broken-chain emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: cold slate gray dominant, tomb-stone white, near-black iron, one distant dull ember accent at the cliff's foot.
 ```
+
+---
+
+## Generation-order checklist
+
+Per `ROSTER.md` (last generated 2026-07-15):
+
+**Bible II (`bible2`):**
+- Seated seven + Sunday dual — all exist (✔ Gemini): `abraham.png`,
+  `jonah.png`, `samson.png`, `jacob.png`, `noah.png`, `ruth.png`,
+  `job.png`, `dual/isaac.png`. (`esther_alt.png` is the recorded
+  Friday alternative, not the seated pick — out of scope here.)
+- **Ninth — Melchizedek:** relocated here from the base Bible theme;
+  never generated anywhere, before or after the move (— Gemini, —
+  ChatGPT) — nothing to discard. Bible II had NO ninth before this
+  move; needs `melchizedek.png` generated.
+
+**Bible Dark (`bible_dark`):**
+- Seated seven + Sunday dual — all exist (✔ Gemini): `lucifer.png`,
+  `lilith.png`, `goliath.png`, `serpent.png`, `herod.png`,
+  `delilah.png`, `cain.png`, `dual/judas.png`. (`nebuchadnezzar_alt.png`
+  is the recorded Thursday alternative, not the seated pick.)
+- **Ninth — Legion:** never generated (— Gemini, — ChatGPT) — good,
+  nothing to discard. SUPERSEDED, do not generate.
+- **Ninth — The Ninth Circle:** NEW, not yet in `ROSTER.md` — needs
+  `ninth_circle.png` generated.
+
+**Section C (Two Triangles scale badges):** unaffected by this round —
+`Lucifer_Triangle.png` and `Judas_Triangle.png` both exist (✔ Gemini)
+and both already ship.
+
+**Net new generation work from this round: 2 plates**
+(`melchizedek.png` for Bible II, `ninth_circle.png` for Bible Dark).
 
 ---
 

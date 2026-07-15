@@ -303,17 +303,50 @@ Circular stained-glass rose-window medallion, backlit by fresh green harvest lig
 
 ---
 
-## The Ninth — Melchizedek (`melchizedek.png`)
+## The Ninth — The Holy Trinity (`holy_trinity.png`)
 
-Owner 8+1 extension (2026-07-14): Melchizedek is the Ninth of the
-Bible theme, rendered in the same luminous stained-glass register as
-the other eight figures. Use undecided: legend third plate / Compass
-ninth seat / Prism triptych. He is the priest-king without father,
-mother or genealogy (Hebrews 7) — bread and wine brought to Abraham,
-outside every lineage the other eight figures belong to — and no
-duality or trinity reading fits him honestly, since his defining trait
-is having no second pole to be read against at all.
+**Owner ruling 2026-07-15** (`pantheon_catalog.md`, doctrine
+crystallization round two, the owner's OWN worked example of the
+Union form): *"gde je otac nedeljna slika, a sin njegov dual, deveti
+je Sveto Trojstvo — unija samog para"* — where the Father is the
+Sunday plate and the Son is its dual, the Ninth is the Holy Trinity,
+the union of the pair itself. This SUPERSEDES Melchizedek as the
+Bible theme's Ninth (locked, `pantheon_catalog.md` round four/five:
+"bible ninth **the Holy Trinity** ✓"). Melchizedek is not deleted —
+his prompt **RELOCATES, byte-identical, to the Bible II set**, where
+he becomes ITS Ninth (see [Bible II, Bible Dark & the Two
+Triangles](bible_dark_prompts.md) ▸ Section A ▸ "The Ninth —
+Melchizedek"); Abraham, the man Melchizedek blesses, is Bible II's own
+Sunday figure, so the Union figure now lands in the set he textually
+belongs to. Per the doctrine's own law, **the Union must never rank
+below the seated figures** — the Trinity does not compete with Ancient
+of Days and the Son as Servant, it completes them: the same Sunday
+pair read as one.
+
+The iconography is deliberately WITHOUT lettering: no monogram, no
+Greek letters, no inscription — the triquetra, the dove, the hand and
+the lamb carry the doctrine on their own, the way the rest of this set
+never needs a caption either.
 
 ```
-Circular stained-glass rose-window medallion, backlit by luminous white-gold light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Melchizedek, priest-king of Salem, in glass robes that are at once royal purple and priestly white with no house or tribe marking woven into them, bringing forward bread and a cup of wine to a kneeling Abraham (Genesis 14:18), no crown of any single kingdom on his head, no line of descent shown behind him — a figure who begins and ends inside this one scene, with no genealogy the glass can trace (Hebrews 7:3). Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a bread-and-chalice emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: white-gold and royal purple dominant, warm bread-gold, deep wine-red in the cup, no single house-color claiming him.
+Circular stained-glass rose-window medallion, backlit by radiant white-gold light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: three interlaced rings of glass forming a triquetra at the medallion's heart — one ring golden-white, one ivory-clear, one silver-white — overlapping into a single unbroken knot with no beginning and no end; a dove of pale glass descending through the topmost ring, an open hand of blessing resting within the second, a small lamb lying calm within the third, three emblems reading as one radiant knot rather than three separate figures. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a plain triquetra emblem repeated at each cardinal point, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set but its rays wider and brighter than on any other plate — the Union outranks every seated figure beneath it. Colors: white-gold, ivory and silver in equal measure, no single hue dominant, a faint rainbow refraction at the rings' overlap the only added color. No lettering anywhere in the glass, no text, no watermark.
 ```
+
+---
+
+## Generation-order checklist
+
+Per `ROSTER.md` (last generated 2026-07-15), theme `bible`:
+
+- **Seated seven + Sunday dual** — all exist (✔ Gemini):
+  `ancient_of_days.png`, `mary.png`, `david.png`, `moses.png`,
+  `solomon.png`, `adam_and_eve.png`, `joseph.png`,
+  `dual/son_servant.png`.
+- **Ninth — Melchizedek:** never generated (— Gemini, — ChatGPT) —
+  good, nothing to discard. RELOCATED to Bible II as ITS Ninth; no
+  longer this theme's figure. See `bible_dark_prompts.md` ▸ Section A.
+- **Ninth — The Holy Trinity:** NEW, not yet in `ROSTER.md` — needs
+  `holy_trinity.png` generated.
+
+**Net new generation work for this theme: 1 plate** (the Holy
+Trinity). Everything else in the Bible set is already on disk.

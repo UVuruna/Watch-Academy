@@ -1,5 +1,10 @@
 # The Two Rosters — Seats Are Archetypes, Fame Comes First
 
+> **SUPERSEDED for roster contents (2026-07-15):** the per-theme
+> tables below predate the final verdicts — the LOCKED rosters,
+> duals and ninths live in [The Pantheon Catalog](pantheon_catalog.md)
+> and only there. This file remains as the doctrine's origin story.
+
 **Owner doctrine (2026-07-15, verbatim direction):** a seat is NOT a
 planet looking for its literal counterpart. A seat is OUR archetype —
 a color, a virtue, a vice, a mood, an estate — and the imperative is

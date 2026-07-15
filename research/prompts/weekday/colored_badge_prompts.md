@@ -6,138 +6,33 @@ These are NOT recolors of the bronze plates — each is a fresh
 full-color badge. Paste one prompt at a time; generate a whole theme
 in one chat session so the series stays consistent.
 
-Professions deliberately wear their DIAL ARM COLORS as the dominant
-hue (Ruler white-gold, Physician blue, Soldier orange, Merchant
-purple, Priest yellow, Artist red, Farmer green) — the badge then
-matches the arm the day lives on.
-
 Suggested drop locations (wiring follows once the art lands):
-- `assets/weekday/greek/colored/`, `.../norse/colored/`,
-  `.../profession/colored/` — same file names as the bronze set
 - `assets/zodiac/chinese/colored/`, `assets/zodiac/astrology/colored/`
 
 **Where the OTHER colored sets live** (owner lookup 2026-07-15 — they
-are not missing, they ride their theme's own sheet): **Egyptian
-gods** — `egypt_prompts.md` ▸ "Colored plates — Theban tomb-fresco,
-lapis and gold"; **Slavic gods** — `slavic_prompts.md` ▸ "Colored
-plates — Slavic folk-icon painting, earth and gold"; the newer animal
-societies carry theirs in `wolf_pack_prompts.md` /
-`bee_hive_prompts.md` / `elephant_herd_prompts.md`, the deep sky in
-`cosmos_prompts.md` (which also holds the **Planets ART medallion**
-look for `assets/weekday/planets/art/`).
+are not missing, they ride their theme's own sheet): **Norse gods** —
+`norse_prompts.md` ▸ "Planetary — colored" (moved out of this sheet
+2026-07-15 during the Pantheon consolidation; that file now also
+carries the Pantheon roster's bronze + colored plates and the
+previously-missing colored Skoll dual); **Greek gods** —
+`greek_prompts.md` ▸ "Planetary — colored plates" (the 7 seated gods
++ the Phaethon dual) and "Pantheon — colored plates" (Poseidon,
+Artemis, Athena, Apollo, Hera, Demeter, the Hades dual, the Gaia
+ninth); **Professions** — `profession_prompts.md` ▸ "Colored plates —
+guild crests in the dial arm colors" (moved out of this sheet
+2026-07-15 during the ninth-swap consolidation — Ruler white-gold,
+Physician blue, Soldier orange, Merchant purple, Priest yellow, Artist
+red, Farmer green, the badge matching the arm the day lives on, plus
+the new Polymath ninth); **Egyptian gods** — `egypt_prompts.md` ▸
+"Colored plates — Theban tomb-fresco, lapis and gold"; **Slavic
+gods** — `slavic_prompts.md` ▸ "Colored plates — Slavic folk-icon
+painting, earth and gold"; the newer animal societies carry theirs in
+`wolf_pack_prompts.md` / `bee_hive_prompts.md` /
+`elephant_herd_prompts.md`, the deep sky in `cosmos_prompts.md`
+(which also holds the **Planets ART medallion** look for
+`assets/weekday/planets/art/`).
 
 ---
-
-## Greek gods — vivid Mediterranean enamel
-
-**Helios (sun)**
-```
-Ornate circular badge, vivid full-color enamel over gold, photorealistic render, perfectly centered, isolated on white background. Center: Helios the Greek sun god driving his four-horse chariot out of a blazing golden sunrise, crimson cloak streaming, a radiant crown of white-gold rays around his head, the horses white with fiery manes; glossy azure-blue sky field. Border: polished gold Greek key (meander) pattern with small red-enamel roundels bearing golden suns. Colors: radiant gold, azure blue, crimson, white.
-```
-
-**Selene (moon)**
-```
-Ornate circular badge, vivid full-color enamel over silver, photorealistic render, perfectly centered, isolated on white background. Center: Selene the Greek moon goddess in a flowing silver-white gown riding her two-horse chariot across a starry midnight sky, a bright crescent moon crowning her head, pale moonlight trailing behind; glossy deep blue-violet field with silver stars. Border: polished silver Greek key pattern with small midnight-blue roundels bearing silver crescents. Colors: silver, moonlight white, deep blue, violet.
-```
-
-**Ares (mars)**
-```
-Ornate circular badge, vivid full-color enamel over dark gold, photorealistic render, perfectly centered, isolated on white background. Center: Ares the Greek war god in blood-red and black bronze armor with a tall crimson-crested helmet, spear and round shield with a boar emblem, flames and smoke behind him; glossy ember-orange field. Border: darkened gold Greek key pattern with small black roundels bearing crossed red spears. Colors: crimson, ember orange, black bronze, gold.
-```
-
-**Hermes (mercury)**
-```
-Ornate circular badge, vivid full-color enamel over gold, photorealistic render, perfectly centered, isolated on white background. Center: Hermes the Greek messenger god mid-flight, winged golden sandals and winged cap, holding the caduceus with two entwined serpents, his cloak swirling; glossy royal-purple twilight field with tiny stars. Border: polished gold Greek key pattern with small purple roundels bearing golden winged sandals. Colors: royal purple, gold, white wings, teal serpents.
-```
-
-**Zeus (jupiter)**
-```
-Ornate circular badge, vivid full-color enamel over gold, photorealistic render, perfectly centered, isolated on white background. Center: Zeus enthroned in majesty, white beard and golden laurel crown, a blazing white-gold thunderbolt raised in his right hand, an eagle perched beside the throne, storm clouds parting to golden light; glossy sun-yellow field. Border: polished gold Greek key pattern with small sky-blue roundels bearing golden thunderbolts. Colors: sun yellow, gold, storm blue, white.
-```
-
-**Aphrodite (venus)**
-```
-Ornate circular badge, vivid full-color enamel over rose gold, photorealistic render, perfectly centered, isolated on white background. Center: Aphrodite born of the sea foam, rising from an open white scallop shell on turquoise waves, auburn hair flowing, doves circling her, rose petals on the water; glossy warm red-rose field behind the sea. Border: polished rose-gold Greek key pattern with small red roundels bearing white doves. Colors: rose red, turquoise sea, pearl white, rose gold.
-```
-
-**Cronus (saturn)**
-```
-Ornate circular badge, vivid full-color enamel over aged gold, photorealistic render, perfectly centered, isolated on white background. Center: Cronus the Titan of time and harvest, gray-bearded in a deep green hooded robe, holding a great curved scythe and an hourglass with golden sand, sheaves of wheat at his feet; glossy deep green field. Border: aged gold Greek key pattern with small dark-green roundels bearing golden hourglasses. Colors: deep green, aged gold, wheat amber, gray.
-```
-
-## Norse gods — painted North, aurora accents
-
-**Sól (sun)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Sol the Norse sun goddess driving her sun chariot across the sky, golden hair blazing like fire, the bright sun disc behind her, the shadowy wolf Skoll chasing at the horizon; glossy amber-gold field with aurora streaks. Border: carved knotwork ring painted gold and red with small roundels bearing golden sun wheels. Colors: blazing gold, amber, aurora green, wolf gray.
-```
-
-**Máni (moon)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Mani the Norse moon god steering the pale moon chariot through a star-strewn night, silver-white hair and cloak, the full moon glowing behind him, the wolf Hati lurking below; glossy deep-blue night field with green aurora curtains. Border: carved knotwork ring painted silver and blue with small roundels bearing silver crescents. Colors: silver, deep night blue, aurora green, white.
-```
-
-**Tyr (mars)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Tyr the one-handed Norse god of war and oaths in scale armor and a red cloak, sword raised in his left hand, his right arm ending at the wrist, the great wolf Fenrir bound in chains behind him; glossy ember-orange field. Border: carved knotwork ring painted iron gray and red with small roundels bearing the Tiwaz rune. Colors: ember orange, iron gray, blood red, chain silver.
-```
-
-**Odin (mercury)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Odin the wanderer-sage with a wide-brimmed hat shadowing his one eye, deep blue cloak, the spear Gungnir with glowing runes, ravens Huginn and Muninn on his shoulders, the world-tree Yggdrasil faint behind; glossy royal-purple twilight field. Border: carved knotwork ring painted purple and silver with small roundels bearing the Ansuz rune. Colors: royal purple, deep blue, raven black, rune silver.
-```
-
-**Thor (jupiter)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Thor red-bearded and mighty, swinging the hammer Mjolnir wreathed in white-blue lightning, his belt of strength glowing, storm clouds and rain behind, two goats at his feet; glossy golden-yellow field split by lightning. Border: carved knotwork ring painted gold and storm blue with small roundels bearing hammer emblems. Colors: golden yellow, storm blue, lightning white, red beard.
-```
-
-**Freya (venus)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Freya the Norse goddess of love and war, golden hair braided, wearing the amber necklace Brisingamen glowing at her throat, a falcon-feather cloak over one shoulder, two gray cats drawing her chariot; glossy warm red field with golden sparks. Border: carved knotwork ring painted rose gold and red with small roundels bearing amber gems. Colors: warm red, amber gold, rose, cat gray.
-```
-
-**Loki (saturn)**
-```
-Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Loki the trickster half-smiling, sharp-featured in green and black, small flames dancing between his fingers, a serpent coiling around his arm, faint chains at the edge hinting at his binding; glossy emerald-green field with smoke curls. Border: carved knotwork ring painted green and dark gold with small roundels bearing coiled serpents. Colors: emerald green, flame orange, black, dark gold.
-```
-
-## Professions — guild crests in the dial arm colors
-
-**Ruler (sun)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a crowned Ruler on a golden throne holding scepter and orb, ermine-trimmed white and gold robes, a rising sun behind the throne; glossy white-gold radiant field. Border: polished gold ring with small white-enamel roundels bearing golden crowns, laurel scrollwork between them. Colors: white and gold dominant, warm sunrise accents.
-```
-
-**Physician (moon)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Physician in a deep blue robe with a white collar, holding a glass vial of glowing moonlit elixir and the serpent-twined rod of Asclepius, a crescent moon and herbs behind; glossy deep-blue field. Border: silver ring with small blue roundels bearing the serpent rod, moonflower scrollwork between them. Colors: deep blue dominant, silver, moonlight white, herb green accents.
-```
-
-**Soldier (mars)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Soldier in burnished armor standing guard with sword and tall shield, an ember-orange banner behind him, watchfire glow on the metal; glossy ember-orange field. Border: dark steel ring with small orange roundels bearing crossed swords, spearhead scrollwork between them. Colors: ember orange dominant, steel gray, flame red accents.
-```
-
-**Merchant (mercury)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Merchant in a rich purple coat at a wooden counter, one hand on a balance scale, the other holding a ledger, coins and spice sacks and a small sailing ship behind; glossy royal-purple field. Border: gold ring with small purple roundels bearing balance scales, coin scrollwork between them. Colors: royal purple dominant, gold coins, warm wood accents.
-```
-
-**Priest (jupiter)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Priest-teacher in golden-yellow vestments with raised open hands, an open illuminated book on a stand before him, candle flames and a ray of light from above; glossy warm yellow field. Border: gold ring with small yellow roundels bearing open books, flame scrollwork between them. Colors: golden yellow dominant, white light, warm amber accents.
-```
-
-**Artist (venus)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: an Artist in a red tunic at an easel, brush raised mid-stroke, a lyre and theater mask at their feet, paint swirls of many colors lifting off the canvas into the air; glossy deep red field. Border: rose-gold ring with small red roundels bearing lyres, brush-stroke scrollwork between them. Colors: deep red dominant, rose gold, multicolor paint accents.
-```
-
-**Farmer (saturn)**
-```
-Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: a Farmer in a green tunic and straw hat swinging a scythe through ripe golden wheat, a laden apple tree and plowed fields behind, morning dew light; glossy fresh green field. Border: bronze-green ring with small green roundels bearing wheat sheaves, vine scrollwork between them. Colors: fresh green dominant, wheat gold, earth brown accents.
-```
 
 ## Chinese zodiac — festival red and gold, cloisonné enamel
 

@@ -80,6 +80,14 @@ the bachelor-school Mentor, the Reunion ceremony, the Elder digging
 remembered water on her last molars; acacia-and-tusk border, 8
 bronze + 8 colored prompts; drop dir assets/weekday/elephant/primary/.
 
+### `prompts/` — the Prompt Sheets (restructured 2026-07-15)
+One weekday theme = ONE complete sheet (both rosters, both registers,
+duals, ninths, REUSE and DO-NOT-GENERATE marks) — the owner generates
+top to bottom without hunting. The folder's own
+[index](prompts/___prompts.md) lists every sheet; the per-file
+sections below describe the pre-restructure content and remain as
+history.
+
 ### `build_roster.py` — ROSTER.md Generator
 Generates the root [Master Systematics](../ROSTER.md) (owner
 2026-07-15): the seat-archetype matrix, every weekday theme's seven

@@ -1,4 +1,4 @@
-# Slavic Gods — the Rodnovery Weekday Theme (bronze plates + colored)
+# Slavic Gods — the Rodnovery Weekday Theme (Planetary + Pantheon, bronze plates + colored)
 
 The Slavic set — Dažbog, Hors, Svetovid, Veles, Perun, Mokoš, Morana,
 plus the Sunday dual Old Dažbog — predates the prompt-sheet convention
@@ -19,9 +19,22 @@ is the metal-swap family — gold and silver variants hue-swap the same
 warm bronze pixels programmatically, so no separate gold/silver
 prompts are needed here.
 
+**Two rosters, one sheet (owner 2026-07-15):** this file now covers
+BOTH `figure_roster` modes for the theme. **Planetary** (below,
+unchanged) is the shipped canon. **Pantheon** reseats the same eight
+Rodnovery figures by their own mythological rank rather than by
+planetary counterpart, per the "Slavic — final adjudication" table in
+[The Pantheon Catalog](../../pantheon_catalog.md): Perun takes the
+throne, Veles becomes the dual's shadow face, Svarog and Lada are the
+only genuinely new figures, and the Ninth changes for the WHOLE theme
+— Triglav supersedes Crnobog in both modes. Pantheon art drops under
+`assets/weekday/slavic/pantheon/` (+ `pantheon/colored/`); seats
+REUSED by both rosters cost no new file — code points straight at the
+existing Planetary plate.
+
 ---
 
-## Bronze plates
+## Planetary — bronze plates
 
 **Sunday — Dažbog** → `dazbog.png`
 
@@ -97,13 +110,13 @@ Ornate circular medallion, aged bronze relief, photorealistic render, perfectly 
 
 ---
 
-## Colored plates — Slavic folk-icon painting, earth and gold
+## Planetary — colored plates — Slavic folk-icon painting, earth and gold
 
 The theme never got a colored companion set; these eight are fresh
 full-color paintings of the same compositions, not recolors of the
 bronze plates. Generate the whole set in one chat session so the
 series stays consistent. Drop under `colored/` (same stems) and the
-dual under `dual/colored/dazbog_old.png`.
+dual under `colored/dual/dazbog_old.png`.
 
 **Dažbog (sunday)** → `colored/dazbog.png`
 
@@ -147,7 +160,7 @@ Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-g
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Morana gaunt and veiled on a winter throne, frost-rimed gray robes hung with pale blue icicles, a crescent-topped staff with a small bound doll in one hand, a poppy seed-pod in the other, bare snow-white trees and pale winter light filling the field. Border: frost-gray rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in pale silver, each framing the Saturn glyph. Colors: frost blue-white, pale gray, winter silver.
 ```
 
-**Old Dažbog (sunday dual)** → `dual/colored/dazbog_old.png`
+**Old Dažbog (sunday dual)** → `colored/dual/dazbog_old.png`
 
 ```
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: an aged Dažbog in dulled gray-gold, his winged helm rimed with frost, walking bent along a snow-pale road, his once-blazing corona faded to a thin silver-gray ring, an emptied horn of plenty cracked at his side, bare wintry trees around him under a pale winter sky. Border: dulled-gold rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in faded gold, each framing the Sun glyph. Colors: dull gray-gold, frost white, faded amber.
@@ -155,23 +168,221 @@ Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-g
 
 ---
 
-## The Ninth — Crnobog (`crnobog.png`)
+## Pantheon — bronze plates
 
-Owner 8+1 extension (2026-07-14): Crnobog is the Ninth of the
-Rodnovery set, sharing the same bronze and colored looks as the other
-eight gods rather than sitting encyclopedia-only. Use undecided:
-legend third plate / Compass ninth seat / Prism triptych. He is the
-black god standing opposite every bright one on the dial — the set
-already implies his other half, Belobog the white god, without needing
-to plate him too — dark against bright reading here as this pantheon's
-own version of the Judas–Lucifer axis, one god carrying the whole
-set's shadow so none of the other eight has to.
+Five seats and the dual REUSE the existing Planetary plates unchanged
+— no regeneration, no new file, `figure_roster: pantheon` code just
+points at the same `primary/` asset. Only Wednesday (Svarog) and
+Friday (Lada) are genuinely new figures. Drop the two new bronze
+plates under `assets/weekday/slavic/pantheon/` (`svarog.png`,
+`lada.png`); the border identity carries over unchanged — the same
+continuous rodovik solar-wheel (kolovrat) band broken by wheat-sheaf
+roundels as every Planetary plate on this theme.
+
+**Sunday — Perun** → REUSE `perun.png`
+
+*The supreme thunderer — Perun already stands crowned and
+storm-wreathed on the Planetary Thursday plate; the Pantheon throne
+reseats the same render, the thunderer now read as king rather than
+Generosity's seat-holder.*
 
 ```
-Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Crnobog, a gaunt black-robed god carved in the darkest relief on the whole set, standing before a cold unlit hearth-stone where every other Slavic plate keeps a sun, corona, or moon behind its god's head, his hands empty, no scepter, no horn of plenty, no distaff — only a bare standing stone behind him, unmarked. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels left withered and ungilded, no ripe grain in any of them. No text, no watermark.
+REUSE — no new render. Pantheon Sunday reseats `slavic/primary/perun.png` verbatim (Planetary Thursday's plate): Perun hurling a bolt of lightning from his raised hand, a battle-axe ready in the other, storm-clouds boiling around him — the same god, now supreme.
 ```
 
-**Crnobog (colored)** → `colored/crnobog.png`
+**Monday — Mokoš** → REUSE `mokos.png`
+
+*Her name IS moisture — mokra — the wet mother belongs on the blue
+water seat; the Pantheon Monday reseats the Planetary Friday plate
+unchanged, women's care read as the Physician face rather than Love's
+seat-holder.*
+
 ```
-Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Crnobog in unrelieved black robes against a field gone to ash-gray and cold slate, standing before a bare unlit hearth-stone where every other plate in the set glows gold behind its god, his hands empty of any harvest or weapon. Border: ash-gray rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels left withered and colorless. Colors: unrelieved black, ash gray, cold slate, no gold anywhere.
+REUSE — no new render. Pantheon Monday reseats `slavic/primary/mokos.png` verbatim (Planetary Friday's plate): Mokoš veiled, turning her distaff, sheaves of ripe wheat and a coiled serpent at her feet — the same goddess, now the calm blue mother.
 ```
+
+**Tuesday — Svetovid** → REUSE `svetovid.png`
+
+*The four-faced war-watcher keeps his own seat in both rosters — no
+reseat, the same plate standing twice.*
+
+```
+REUSE — no new render. Pantheon Tuesday reuses `slavic/primary/svetovid.png` verbatim — Svetovid already holds Tuesday in the Planetary roster; the Pantheon roster changes nothing here.
+```
+
+**Wednesday — Svarog** → `pantheon/svarog.png`
+
+*The heavenly smith as the making MIND — the forge of order, sparks
+scattered upward as stars, the solar-fire hammer that beats the world
+into shape.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Svarog the heavenly smith, bearded and broad-shouldered at his celestial forge, a solar-fire hammer raised high over a dark iron anvil, sparks leaping from the strike and scattering upward to become a field of stars he is shown forging one by one, tongs gripping a half-formed sun-disc glowing white-hot in his other hand, the forge's banked coals glowing behind him like a second dawn. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels, each cradling the Mercury glyph in relief. No text, no watermark.
+```
+
+**Thursday — Dažbog** → REUSE `dazbog.png`
+
+*Dažd-bog, "the god who gives" — Generosity by name; the Pantheon
+Thursday reseats the Planetary Sunday plate unchanged, the giver-god
+moved onto the seat his own name already writes.*
+
+```
+REUSE — no new render. Pantheon Thursday reseats `slavic/primary/dazbog.png` verbatim (Planetary Sunday's plate): Dažbog radiant under a winged helm, horn of plenty spilling coins and wheat, a sun-star scepter raised — the same giver, now Generosity's own seat-holder by name.
+```
+
+**Friday — Lada** → `pantheon/lada.png`
+
+*The folk-songs' love goddess — wreaths, spring wedding garlands,
+red-and-white folk embroidery motifs.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Lada, a young goddess crowned with a woven wreath of spring flowers, a wedding garland of interlaced blossoms draped across her open arms, her robe carved with a running band of folk embroidery motifs, a pair of doves alighting on her shoulders, ripe red berries and a trailing bridal ribbon coiling at her feet. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels, each cradling the Venus glyph in relief. No text, no watermark.
+```
+
+**Saturday — Morana** → REUSE `morana.png`
+
+*Winter into spring — Renewal is her whole myth; no reseat needed, the
+same plate stands for both rosters.*
+
+```
+REUSE — no new render. Pantheon Saturday reuses `slavic/primary/morana.png` verbatim — Morana already holds Saturday in the Planetary roster; the Pantheon roster changes nothing here.
+```
+
+**Sunday (dual), shadow face — Veles** → REUSE `veles.png`
+
+*The combat myth IS the throne above and the throne below: Perun's
+storm above, Veles's roots and waters below. The shadow face of the
+Pantheon dual reuses the existing Planetary Wednesday plate
+unchanged — the horned serpent-lord of waters and the underworld, now
+read as Perun's shadow face rather than Wednesday's own seat-holder.*
+
+```
+REUSE — no new render. Pantheon Sunday's shadow face reuses `slavic/primary/veles.png` verbatim (Planetary Wednesday's plate): Veles horned and long-bearded, enthroned on living tree-roots, a serpent coiled through the roots at his feet — the same god, now the Underworld pole opposite Perun.
+```
+
+---
+
+## Pantheon — colored plates
+
+The same REUSE logic carries over: five seats and the dual point
+straight at the existing Planetary `colored/` files, no repaint
+needed. Only Svarog and Lada get fresh full-color paintings, in the
+theme's own folk-icon register (warm earth-and-gold palette, matching
+the Planetary colored set above) — generate both in the same chat
+session for consistency. Drop under
+`assets/weekday/slavic/pantheon/colored/` (`svarog.png`, `lada.png`).
+
+**Sunday — Perun** → REUSE `colored/perun.png`
+
+```
+REUSE — no new render. Pantheon Sunday reseats `slavic/colored/perun.png` verbatim (Planetary Thursday's colored plate).
+```
+
+**Monday — Mokoš** → REUSE `colored/mokos.png`
+
+```
+REUSE — no new render. Pantheon Monday reseats `slavic/colored/mokos.png` verbatim (Planetary Friday's colored plate).
+```
+
+**Tuesday — Svetovid** → REUSE `colored/svetovid.png`
+
+```
+REUSE — no new render. Pantheon Tuesday reuses `slavic/colored/svetovid.png` verbatim — same seat, both rosters.
+```
+
+**Wednesday — Svarog** → `pantheon/colored/svarog.png`
+
+```
+Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Svarog at his celestial forge in glowing amber and iron-gray, a solar-fire hammer blazing white-gold as it strikes the anvil, sparks scattering upward and becoming painted stars against a deep twilight-purple sky, a half-formed sun-disc gripped white-hot in his tongs. Border: iron-gray rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in ember gold, each framing the Mercury glyph. Colors: ember gold, iron gray, twilight purple, forge-white sparks.
+```
+
+**Thursday — Dažbog** → REUSE `colored/dazbog.png`
+
+```
+REUSE — no new render. Pantheon Thursday reseats `slavic/colored/dazbog.png` verbatim (Planetary Sunday's colored plate).
+```
+
+**Friday — Lada** → `pantheon/colored/lada.png`
+
+```
+Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Lada crowned with a wreath of pink and gold spring flowers, a wedding garland of red-and-white blossoms draped across her arms, her robe painted with red-and-white folk embroidery bands, two white doves settled on her shoulders, ripe red berries and a trailing bridal ribbon at her feet against a warm rose-gold field. Border: rose-gold rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in blossom pink, each framing the Venus glyph. Colors: rose gold, blossom pink, red-and-white embroidery, spring green.
+```
+
+**Saturday — Morana** → REUSE `colored/morana.png`
+
+```
+REUSE — no new render. Pantheon Saturday reuses `slavic/colored/morana.png` verbatim — same seat, both rosters.
+```
+
+**Sunday (dual), shadow face — Veles** → REUSE `colored/veles.png`
+
+```
+REUSE — no new render. Pantheon Sunday's shadow face reuses `slavic/colored/veles.png` verbatim (Planetary Wednesday's colored plate).
+```
+
+---
+
+## The Ninth — Triglav (`triglav.png`)
+
+**Supersedes Crnobog (2026-07-15):** the Round Four adjudication in
+[The Pantheon Catalog](../../pantheon_catalog.md) ("Slavic — final
+adjudication") LOCKS Triglav as the Ninth for this theme in BOTH
+modes. Do NOT generate `crnobog.png` — the 8+1 Crnobog section this
+replaces is retired outright, not kept as an alternative. Crnobog
+moves to the Encyclopedia's Wider-Pantheon lane alongside Hors,
+Stribog, Rod and Jarilo; his shadow-god reading survives in his own
+article, just off the dial.
+
+Triglav is the Union of the Perun–Veles axis itself: three realms —
+sky, earth and the underworld — carried in ONE three-headed body, a
+mountain bearing his name. Per doctrine the Union must never rank
+below the seated figures, and his own statue tradition (Szczecin/
+Wolgast) supplies the read: a golden veil bound across all three
+faces' eyes, because a god who could see every realm at once is too
+holy to look upon the world directly. That veil — not a diminished,
+withered border — is how this plate reads as OUTRANKING every seated
+god, in deliberate contrast to Hades'/Baldur's/Set's/the old
+Crnobog's stripped, ungilded rings.
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Triglav, three-headed beneath one crown of interlocking horns, each bearded face turned toward its own realm — one skyward and storm-browed, one turned level and earthward, one bowed down into shadow — a golden veil bound tight across all three pairs of eyes, too holy to look upon the world directly, enthroned above a carved seam where a thunderbolt above meets a coiling serpent-root below, the sacred black horse of his oracle standing riderless at his feet. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band tripled in depth of relief, broken by four wheat-sheaf roundels, each cradling all seven planetary glyphs bundled together as one radiant sheaf — the union of every seated day, outranking them all. No text, no watermark.
+```
+
+**Triglav (colored)** → `colored/triglav.png`
+```
+Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Triglav three-headed under one horned crown, each golden-lit face turned to its own realm — a storm-amber sky above, a rich earth-brown middle band, a deep teal-green underworld glow below — a golden veil bound across all three pairs of eyes, the sacred black horse standing at his feet where all three realms' colors meet and blend into one radiant field. Border: gold rodovik solar-wheel carving tripled in depth, broken by four painted wheat-sheaf roundels, each bundling all seven glyphs in gold relief — outranking every seated god's single glyph. Colors: storm amber, earth brown, underworld teal, unifying gold.
+```
+
+---
+
+## Generation order — everything this theme needs, what already exists
+
+**Planetary set — unchanged, already on disk:** `dazbog.png` ·
+`hors.png` · `svetovid.png` · `veles.png` · `perun.png` · `mokos.png`
+· `morana.png` · `dual/dazbog_old.png`, plus all eight `colored/`
+companions and `colored/dual/dazbog_old.png`. Nothing to regenerate.
+
+**New art this pass — generate in this order, one chat session per
+register so each series stays consistent:**
+
+- [ ] `pantheon/svarog.png` — bronze, NEW
+- [ ] `pantheon/lada.png` — bronze, NEW
+- [ ] `triglav.png` — bronze, NEW (supersedes `crnobog.png` — do NOT
+      generate `crnobog.png`)
+- [ ] `pantheon/colored/svarog.png` — colored, NEW
+- [ ] `pantheon/colored/lada.png` — colored, NEW
+- [ ] `colored/triglav.png` — colored, NEW
+
+**REUSE only — no art to generate, `figure_roster: pantheon` just
+points at the existing file:**
+
+- [x] Pantheon Sunday → `primary/perun.png` + `colored/perun.png`
+- [x] Pantheon Monday → `primary/mokos.png` + `colored/mokos.png`
+- [x] Pantheon Tuesday → `primary/svetovid.png` + `colored/svetovid.png`
+- [x] Pantheon Thursday → `primary/dazbog.png` + `colored/dazbog.png`
+- [x] Pantheon Saturday → `primary/morana.png` + `colored/morana.png`
+- [x] Pantheon Sunday dual (shadow face) → `primary/veles.png` +
+      `colored/veles.png`
+
+**Retired:** `crnobog.png` / `colored/crnobog.png` — superseded by
+Triglav; do not generate, do not keep as a fallback.
