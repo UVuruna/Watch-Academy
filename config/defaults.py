@@ -118,42 +118,62 @@ RING_FACE_DIR = paths.assets_dir() / "ring"
 # are STARTING VALUES — the owner tunes them here. Settings shows them
 # as a grid of color circles (Paint style — owner spec 2026-07-11);
 # the name appears in the circle's hover tooltip.
-RING_TINT_PRESETS = {
-    "Gray": None,                       # the untouched owner art
-    "Gold": "#D4AF37",
-    "Silver": "#C9CDD3",
-    "Copper": "#B87333",
-    "Purple": "#8E55B9",
-    "Ocean": "#4E7A9E",
-    # The owner's gold palette (his reference swatches, 2026-07-11).
-    "Naples Yellow": "#FFE169",
-    "Sunglow": "#FFD235",
-    "Mikado Yellow": "#FFC300",
-    "Satin Gold": "#C9980B",
-    "Golden Brown": "#926C15",
-    # Pipetted from the owner's Clock_OuterColors.png (21 ring variants,
-    # 3x7 grid, mode color of each hour band — 2026-07-11).
-    "Charcoal": "#36454F",
-    "Glaucous": "#6082B6",
-    "Slate Gray": "#708090",
-    "Black Coral": "#54626F",
-    "Steel": "#71797E",
-    "Roman Silver": "#808992",
-    "Cadet Gray": "#91A3B0",
-    "Deep Pine": "#253529",
-    "Sage Steel": "#5E716A",
-    "Smoke": "#738276",
-    "Ebony": "#545851",
-    "Smoky Plum": "#66606D",
-    "Periwinkle": "#9090C0",
-    "Lavender Gray": "#A7A6BA",
-    "Espresso": "#342523",
-    "Anthracite": "#494F55",
-    "Granite": "#625D5D",
-    "Dim Gray": "#6B6B6B",
-    "Stone": "#928E85",
-    "Nevada": "#6C7174",
-    "Aluminium": "#888B8D",
+# The swatches split into TWO groupings (owner 2026-07-15: "podeli na
+# svetlije i tamnije" — the whole palette read too light), each its own
+# labeled grid. The Darker group grew a fashion row (owner: subtle,
+# understated, "gospodske" hues — navy/teget, petrol, graphite and the
+# silver-leaning darks).
+RING_TINT_GROUPS = {
+    "Lighter": {
+        "Gray": None,                   # the untouched owner art
+        # The owner's gold palette (his reference swatches, 2026-07-11).
+        "Naples Yellow": "#FFE169",
+        "Sunglow": "#FFD235",
+        "Mikado Yellow": "#FFC300",
+        "Gold": "#D4AF37",
+        "Satin Gold": "#C9980B",
+        "Copper": "#B87333",
+        "Silver": "#C9CDD3",
+        "Lavender Gray": "#A7A6BA",
+        "Periwinkle": "#9090C0",
+        "Cadet Gray": "#91A3B0",
+        "Stone": "#928E85",
+        "Aluminium": "#888B8D",
+        "Roman Silver": "#808992",
+        "Glaucous": "#6082B6",
+        "Slate Gray": "#708090",
+        "Smoke": "#738276",
+        "Steel": "#71797E",
+    },
+    "Darker": {
+        # Pipetted from the owner's Clock_OuterColors.png (21 ring
+        # variants, 3x7 grid, mode color per hour band — 2026-07-11).
+        "Nevada": "#6C7174",
+        "Dim Gray": "#6B6B6B",
+        "Granite": "#625D5D",
+        "Pewter": "#565B5F",
+        "Ebony": "#545851",
+        "Anthracite": "#494F55",
+        "Iron": "#4C4E52",
+        "Graphite": "#3B3F44",
+        "Gunmetal": "#2A3439",
+        "Charcoal": "#36454F",
+        "Black Coral": "#54626F",
+        # The fashion darks (owner 2026-07-15): muted wardrobe hues.
+        "Ocean": "#4E7A9E",
+        "Petrol": "#2F4550",
+        "Navy": "#1B2A41",
+        "Oxford Blue": "#14213D",
+        "Sage Steel": "#5E716A",
+        "Dark Olive": "#3C3F33",
+        "Deep Pine": "#253529",
+        "Smoky Plum": "#66606D",
+        "Aubergine": "#3D3242",
+        "Bordeaux": "#4E3238",
+        "Purple": "#8E55B9",
+        "Golden Brown": "#926C15",
+        "Espresso": "#342523",
+    },
 }
 RING_TINT_SWATCH_PX = 22             # diameter of one tint circle
 RING_TINT_SWATCHES_PER_ROW = 11

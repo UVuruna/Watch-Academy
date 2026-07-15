@@ -575,32 +575,37 @@ class SettingsDialog(QDialog):
     def _build_ring_tint_group(self) -> QGroupBox:
         """One hue recolors the whole clock body — ring art, hands and
         Umbra (channel multiply; the letter art stays untouched). The
-        presets (defaults.RING_TINT_PRESETS, owner-tunable) show as a
-        Paint-style grid of color circles (owner spec 2026-07-11) —
-        the name lives in the tooltip, the active one wears a white
-        ring — plus a free color picker."""
+        presets (defaults.RING_TINT_GROUPS, owner-tunable) show as TWO
+        labeled Paint-style grids — Lighter and Darker (owner
+        2026-07-15: the one flat palette read too light) — the name in
+        the tooltip, the active swatch ringed white — plus a free
+        color picker."""
         tr = self._tr
         group = QGroupBox(tr("Clock tint — dial, hands and Umbra (letters excluded)"))
         column = QVBoxLayout(group)
-        grid = QGridLayout()
-        grid.setHorizontalSpacing(4)
-        grid.setVerticalSpacing(4)
         self._tint_swatches: list[tuple[QPushButton, str | None]] = []
         per_row = defaults.RING_TINT_SWATCHES_PER_ROW
-        for index, (name, hue) in enumerate(defaults.RING_TINT_PRESETS.items()):
-            chip = QPushButton()
-            chip.setToolTip(
-                f"{tr(name)} — {hue}"
-                if hue
-                else f"{tr(name)} — {tr('the untouched art')}"
-            )
-            chip.clicked.connect(
-                lambda checked, chosen=hue: self._set_ring_tint(chosen)
-            )
-            self._tint_swatches.append((chip, hue))
-            grid.addWidget(chip, index // per_row, index % per_row)
-        grid.setColumnStretch(per_row, 1)
-        column.addLayout(grid)
+        for title, presets in defaults.RING_TINT_GROUPS.items():
+            label = QLabel(tr(title))
+            label.setStyleSheet("font-weight: bold;")
+            column.addWidget(label)
+            grid = QGridLayout()
+            grid.setHorizontalSpacing(4)
+            grid.setVerticalSpacing(4)
+            for index, (name, hue) in enumerate(presets.items()):
+                chip = QPushButton()
+                chip.setToolTip(
+                    f"{tr(name)} — {hue}"
+                    if hue
+                    else f"{tr(name)} — {tr('the untouched art')}"
+                )
+                chip.clicked.connect(
+                    lambda checked, chosen=hue: self._set_ring_tint(chosen)
+                )
+                self._tint_swatches.append((chip, hue))
+                grid.addWidget(chip, index // per_row, index % per_row)
+            grid.setColumnStretch(per_row, 1)
+            column.addLayout(grid)
         row = QHBoxLayout()
         custom = QPushButton(tr("Custom…"))
         custom.clicked.connect(self._pick_ring_tint)

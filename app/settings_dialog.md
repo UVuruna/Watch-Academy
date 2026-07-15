@@ -30,12 +30,15 @@ submenus cannot express:
   the shared Hover enlarge slider (100–200%, default 120% — the
   element under the cursor grows by it; 100% disables the effect).
 - **Ring tint** — one hue for the whole clock body (ring art, hands,
-  Umbra; the letter art stays untouched): a Paint-style GRID of color
-  circles from `defaults.RING_TINT_PRESETS` (owner-tunable; 32 hues —
-  the owner's gold palette and the 21 ring variants pipetted from his
-  Clock_OuterColors.png; names live in the tooltips, the active
-  swatch wears a white ring, "Gray" = the untouched art) plus a free
-  QColorDialog picker.
+  Umbra; the letter art stays untouched): TWO labeled Paint-style
+  grids from `defaults.RING_TINT_GROUPS` (owner 2026-07-15: the flat
+  palette read too light) — **Lighter** (the gold palette, silvers and
+  pastels) and **Darker** (the deep ring variants plus the fashion
+  darks: Navy/teget, Oxford Blue, Petrol, Gunmetal, Graphite, Iron,
+  Pewter, Dark Olive, Aubergine, Bordeaux — subtle wardrobe hues,
+  owner-tunable; names live in the tooltips, the active swatch wears
+  a white ring, "Gray" = the untouched art) plus a free QColorDialog
+  picker.
 - **Custom ring** — the ring card builder: a layout (Flame /
   Chalice / Seal), a library letter per position and a unique name;
   the per-position dropdown is GROUPED (owner spec 2026-07-11) into

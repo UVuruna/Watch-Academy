@@ -96,13 +96,18 @@ UI_STRINGS: tuple[str, ...] = (
     "System", "Start with Windows",
     "Back to English — the shipped original texts",
     "The originals above the line ship inside the app. Any other language translates itself in the background on first pick (internet needed once) and then works offline.",
-    # Ring tint color names (tooltips)
+    # Ring tint color names (tooltips) + the two group labels (owner
+    # 2026-07-15: the palette split into Lighter and Darker).
+    "Lighter", "Darker",
     "Gray", "Gold", "Silver", "Copper", "Purple", "Ocean",
     "Naples Yellow", "Sunglow", "Mikado Yellow", "Satin Gold", "Golden Brown",
     "Charcoal", "Glaucous", "Slate Gray", "Black Coral", "Steel",
     "Roman Silver", "Cadet Gray", "Deep Pine", "Sage Steel", "Smoke",
     "Ebony", "Smoky Plum", "Periwinkle", "Lavender Gray", "Espresso",
     "Anthracite", "Granite", "Dim Gray", "Stone", "Nevada", "Aluminium",
+    # The fashion darks (owner 2026-07-15: subtle wardrobe hues).
+    "Pewter", "Iron", "Graphite", "Gunmetal", "Petrol", "Navy",
+    "Oxford Blue", "Dark Olive", "Aubergine", "Bordeaux",
     # --- Time Travel / Guide ----------------------------------------------------
     "Moment:", "Latitude:", "Longitude:",
     "The dial shows this situation for {n} seconds, then returns to the present.",

@@ -1874,7 +1874,19 @@
   "ui/Now": "e3b82040565bb4be6b11f778a2e3df327ed20a3b",
   "ui/OK": "9ce3bd4224c8c1780db56b4125ecf3f24bf748b7",
   "ui/Cancel": "77dfd2135f4db726c47299bb55be26f7f4525a46",
-  "ui/Back to the present — the simulation ends immediately.": "1678e83ac168568540d521c349c2664776918a72"
+  "ui/Back to the present — the simulation ends immediately.": "1678e83ac168568540d521c349c2664776918a72",
+  "ui/Lighter": "f9a0b706e42644b4686ff55671a75d660c18b2c2",
+  "ui/Darker": "1741adab35111d35e3796f16e1aa9df9cff4a7fc",
+  "ui/Pewter": "4018ba22a04d35d2894a7a1d43ed913f47a41adb",
+  "ui/Iron": "8564fe3b4b674b36c08f22266d713f860a15ca99",
+  "ui/Graphite": "220c98deb1482e5b5361b123b929ee8e4ac1e18d",
+  "ui/Gunmetal": "6d334a454f482fd373889ae7ca9e20984246c229",
+  "ui/Petrol": "1bf5eb7e770ce0b7408b1ce19485b12969a87926",
+  "ui/Navy": "0229e960cf4cd5f02b4ed9299c09b7880b2ffdaf",
+  "ui/Oxford Blue": "43160f6060340b750ec95efaac97d3d79b2dd120",
+  "ui/Dark Olive": "9bb4933553c0288af97d0a2ed42b8442cb290d0f",
+  "ui/Aubergine": "67fbdff1fd74a3e2ffeba20e52cb54a817a837a9",
+  "ui/Bordeaux": "360e674001116a0f1be3705c65a72906bcf6bf88"
  },
  "texts": {
   "articles/alchemy/jupiter/base": "[[The Figure]] Kalaj je metal Jupitera, onog dobroćudnog, i njegovi darovi su uglavnom darovi zvuka i sjaja. Mek, srebrnast i dovoljno jeftin da se njime sve prevuče, kalaj je ono što daje bronzu kada ga dodaš bakru i ono što daje zvonovinu kada ga dodaš još — legura koja livenom zvonu daje čist zvon a orguljskoj cevi da drži svoj ton. Savij šipku čistog kalaja i on se žali: čuveni „krik kalaja“, tihi vrisak njegovih kristala koji se preraspoređuju, metal koji doslovno progovara kada ga obrađuješ. Njegov znak ♃ isti je glif za metal, planetu i grom oca nebeskog.\n\n[[The Plate]] Vlasnikov medaljon izliva zajedničku mrtvu prirodu u bledom, meko belom kalaju — naslagane poluge, grumeni, namotaj žice, sve u blagom kositreno svetlom tonu koji kalaju daje njegovu skromnost. Obod je Jupiterova sopstvena kraljevska oprema: krune i hrastovo lišće smenjuju se sa snopovima munja, i glif ♃ — nacrtan poput zaobljenog „24“ — postavljen u medaljone ukrug. Kraljevski amblemi oko metala koji izgleda najskromnije: isto bogatstvo kao na zlatnoj ploči, odeveno kao kalaj, ali jednako okrunjeno.\n\n[[On the Dial]] četvrtak je dan Jupitera — francuski jeudi, dies Iovis — pa ga kalaj uzima, i uzima krunu zvezde: gornji krak 12h, podnevno žut, raspoloženje Radost. To je najviša tačka brojčanika, podne u svom najsjajnijem, i Jupiter, veći dobrotvor, sedi tamo u žutoj boji bliskoj zlatu, najsrećniji čas na najsrećnijem kraku. Tamo gde zlato drži središte kao izvor, kalaj drži vrhunac kao slavlje — podne sedmice, koje zvoni poput udarenog zvona.\n\n[[The Lesson]] Vrlina kalaja je Velikodušnost, a njegov porok Neumerenost — otvorena šaka i šaka koja se nikada ne sklapa. Jupiter je samo širenje, a širenje je blagoslov dok ne postane naduvenost; veći dobrotvor daje, ali previše dobre stvari i dalje je previše. Neumerenost obuzdava, s druge strane brojčanika, Mudrost na kraku Merkura — hitar um koji zna kada da stane — dok je Velikodušnost Neumerenost održana u meri, obilje koje se izliva a da ne plavi. Kalaj čini da zvono zvoni; Mudrost ga čuva od pucanja.",
@@ -3750,6 +3762,18 @@
   "ui/Now": "Sada",
   "ui/OK": "U redu",
   "ui/Cancel": "Otkaži",
-  "ui/Back to the present — the simulation ends immediately.": "Povratak u sadašnjost — simulacija se odmah završava."
+  "ui/Back to the present — the simulation ends immediately.": "Povratak u sadašnjost — simulacija se odmah završava.",
+  "ui/Lighter": "Svetlije",
+  "ui/Darker": "Tamnije",
+  "ui/Pewter": "Kalaj",
+  "ui/Iron": "Gvožđe",
+  "ui/Graphite": "Grafit",
+  "ui/Gunmetal": "Topovska bronza",
+  "ui/Petrol": "Petrolej",
+  "ui/Navy": "Teget",
+  "ui/Oxford Blue": "Oksford plava",
+  "ui/Dark Olive": "Tamna maslina",
+  "ui/Aubergine": "Patlidžan",
+  "ui/Bordeaux": "Bordo"
  }
 }
