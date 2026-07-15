@@ -630,9 +630,24 @@ class SettingsDialog(QDialog):
         self._set_ring_tint(chosen.name().upper())
 
     def _show_ring_tint(self) -> None:
-        self._ring_tint_label.setText(
-            self._ring_tint or self._tr("Gray (default)")
+        # The label speaks like the hover (owner 2026-07-15): the
+        # preset's NAME beside the hex; a custom hue shows bare hex.
+        name = next(
+            (
+                preset_name
+                for presets in defaults.RING_TINT_GROUPS.values()
+                for preset_name, hue in presets.items()
+                if hue == self._ring_tint and hue is not None
+            ),
+            None,
         )
+        if self._ring_tint is None:
+            text = self._tr("Gray (default)")
+        elif name is not None:
+            text = f"{self._tr(name)} — {self._ring_tint}"
+        else:
+            text = self._ring_tint
+        self._ring_tint_label.setText(text)
         # Repaint every swatch — the one matching the active tint is
         # ringed white ("Gray"/None shows as the bare art gray).
         for chip, hue in self._tint_swatches:

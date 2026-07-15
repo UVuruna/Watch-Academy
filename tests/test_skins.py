@@ -301,6 +301,36 @@ def test_earth_marker_follows_the_location_continent():
     assert variant(city_path=(), latitude=-1.3, longitude=36.8) == "africa"
 
 
+def test_earth_pole_regions_full_res_and_latitude_override():
+    """Owner 2026-07-15 (the Globe originals round): the pole views
+    exist in ALL FOUR variants and the marker swaps to them at extreme
+    latitudes — the latitude rides the DAY CONTEXT, so the pole Quick
+    Jumps see the pole even though the settings still name a
+    continent. Every earth face is his full-resolution original."""
+    from PySide6.QtGui import QImageReader
+
+    from render.layers import earth_region
+
+    # The full 32-variant table exists at full resolution.
+    for style in ("clean", "atmo"):
+        for region in (
+            "europe", "north_america", "south_america", "africa",
+            "asia", "oceania", "north_pole", "south_pole",
+        ):
+            for phase in ("day", "night"):
+                key = f"{style}_{region}_{phase}"
+                path = defaults.DEFAULT_SKIN.year_marker.variants[key]
+                assert path.exists(), key
+                size = QImageReader(str(path)).size()
+                assert size.width() >= 1500, (key, size.width())
+    # The latitude override: poles beyond the knob, continents inside.
+    assert earth_region(89.99, "europe") == "north_pole"
+    assert earth_region(-89.99, "europe") == "south_pole"
+    assert earth_region(defaults.EARTH_POLE_LATITUDE, "asia") == "north_pole"
+    assert earth_region(69.65, "europe") == "europe"      # Tromsø stays
+    assert earth_region(44.82, "europe") == "europe"
+
+
 def test_hand_packs_load_and_resolve():
     """Owner spec 2026-07-12: hand PACKS (folder + hands.json). The
     bundled CLASSIC and STEEL load, pivots flow into the skin, and the

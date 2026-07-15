@@ -43,6 +43,7 @@ from render.layers import (
     YearMarkerLayer,
     HoverLiftLayer,
     dial_point,
+    earth_region,
     servant_holds_the_seat,
     slot_layout,
     slot_seat_orbit,
@@ -1535,8 +1536,9 @@ class Compositor:
         (owner 2026-07-12): the day art on the Day side, the night art
         on the Night side — atmosphere or clean per the Earth setting."""
         marker = self._skin.year_marker
+        region = earth_region(self._day.latitude, marker.default_variant)
         path = marker.variants.get(
-            f"{self._skin.earth_style}_{marker.default_variant}_{kind}"
+            f"{self._skin.earth_style}_{region}_{kind}"
         )
         if path is None:
             return ""

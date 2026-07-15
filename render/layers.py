@@ -1427,6 +1427,19 @@ def draw_small_seconds(
     painter.restore()
 
 
+def earth_region(latitude: float, default: str) -> str:
+    """The Earth marker's ART REGION: the active location's continent
+    — except at extreme latitudes, where the planet honestly shows its
+    POLE (owner 2026-07-15: the Quick Jump flips onto the poles). The
+    latitude rides the day context, so a running simulation carries
+    its own observer here."""
+    if latitude >= defaults.EARTH_POLE_LATITUDE:
+        return "north_pole"
+    if latitude <= -defaults.EARTH_POLE_LATITUDE:
+        return "south_pole"
+    return default
+
+
 class YearMarkerLayer(Layer):
     """Date markers along the INSIDE of the dial. Earth rides the year
     wheel (summer solstice at the top); the Moon rides its own cycle (new
@@ -1471,7 +1484,8 @@ class YearMarkerLayer(Layer):
             # ±12 h around a solstice/equinox instant (owner spec).
             draw_event_glow(painter, pos, size / 2)
         variant = (
-            f"{ctx.skin.earth_style}_{spec.default_variant}_"
+            f"{ctx.skin.earth_style}_"
+            f"{earth_region(ctx.day.latitude, spec.default_variant)}_"
             f"{'day' if ctx.tick.is_daylight else 'night'}"
         )
         asset = spec.variants.get(variant)

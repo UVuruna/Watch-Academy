@@ -102,18 +102,22 @@ def subdial_plate_file(
 def _recolored_plate(
     master: Path, finish: str, tint: str | None = None
 ) -> Path:
-    """The master plate with its brushed metal rim COLORIZED to the
-    finish: weighted pixels (bright AND unsaturated) become the finish
-    color multiplied by their own luminance — the brushing survives.
-    With a TINT the complementary weight (the dark tapisserie field)
-    is colorized the same way to the clock tint (the "theme" plate
+    """The master plate with its brushed metal BEZEL colorized to the
+    finish: bright, unsaturated pixels INSIDE the radial bezel band
+    become the finish color multiplied by their own luminance — the
+    brushing survives, and the field's own specular highlights stay
+    neutral (owner correction 2026-07-15: without the radial mask the
+    interiors drank the metal and the three finishes stopped
+    matching). With a TINT the interior (the tapisserie field) is
+    colorized the same way to the clock tint (the "theme" plate
     style); without one the field stays as drawn."""
     stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
     tint_tag = f"_{tint.lstrip('#').lower()}" if tint else ""
     cache = (
         paths.settings_path().parent / "raster_cache"
         / f"{stamp}_{int(master.stat().st_mtime)}"
-        f"_subdial_{finish}{tint_tag}.png"
+        f"_subdial{defaults.SUBDIAL_RECOLOR_VERSION}"
+        f"_{finish}{tint_tag}.png"
     )
     if cache.exists():
         return cache
@@ -138,9 +142,18 @@ def _recolored_plate(
 
     value_low, value_high = defaults.SUBDIAL_RECOLOR_VALUE_RAMP
     sat_low, sat_high = defaults.SUBDIAL_RECOLOR_SAT_CUTOFF
+    # The radial bezel band: 0 across the whole field, ramping to 1
+    # where the brushed bezel lives — the metal never reaches the
+    # interior highlights.
+    rim_low, rim_high = defaults.SUBDIAL_RECOLOR_RIM_RADIUS
+    ys, xs = np.mgrid[0:height, 0:width]
+    radius = np.hypot(
+        xs - (width - 1) / 2.0, ys - (height - 1) / 2.0
+    ) / (width / 2.0)
     weight = (
         smoothstep((value - value_low) / (value_high - value_low))
         * (1.0 - smoothstep((sat - sat_low) / (sat_high - sat_low)))
+        * smoothstep((radius - rim_low) / (rim_high - rim_low))
     )[..., None]
     target = QColor(defaults.SUBDIAL_RECOLOR_COLORS[finish])
     finish_rgb = np.array([
@@ -218,9 +231,11 @@ def scaled_variant_file(path: Path | None, width: int) -> Path | None:
     if not source.isValid() or source.width() <= width:
         return path
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
+    # The source STEM rides the cache name — hover tests and humans
+    # can read which face a derived file came from.
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_w{width}.png"
+        / f"{stamp}_{int(path.stat().st_mtime)}_w{width}_{path.stem}.png"
     )
     if not cache.exists():
         scaled = QPixmap(str(path)).scaledToWidth(

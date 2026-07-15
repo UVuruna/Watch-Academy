@@ -218,7 +218,18 @@ HAND_MINUTE_REACH_FRACTION = 0.849
 # The ONE typed SkinDefinition the compositor consumes; the controller
 # overlays the ring preset and the user's display choices onto it.
 
-_CONTINENTS = ("europe", "north_america", "south_america", "africa", "asia", "oceania")
+_CONTINENTS = (
+    "europe", "north_america", "south_america", "africa", "asia",
+    "oceania",
+    # The polar views (owner 2026-07-15: the Quick Jump flips the
+    # planet onto its poles, so the marker follows).
+    "north_pole", "south_pole",
+)
+# Beyond this |latitude| the Earth marker wears the POLE art instead of
+# the continent's — high enough that ordinary cities keep their
+# continent view, low enough that the pole jumps (±89.99°) and the far
+# polar settlements honestly see the pole.
+EARTH_POLE_LATITUDE = 75.0
 
 # Star + Aura palettes, (pointer, style) -> hues clockwise from the top
 # arm. Measured directly from the owner's reference art
@@ -546,11 +557,16 @@ SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 
 # Recoloring the owner's subdial plate to a missing letter finish
 # (owner 2026-07-15: one master plate, the code paints the metals):
-# only BRIGHT, LOW-SATURATION pixels (the brushed rim) take the finish
-# color multiplied by their own luminance — the dark tapisserie field
-# never moves.
+# only BRIGHT, LOW-SATURATION pixels take the finish color multiplied
+# by their own luminance — and ONLY inside the radial BEZEL band
+# (owner correction, his three side-by-side grabs: without the radial
+# mask the field's own specular highlights drank the metal and the
+# three finishes' interiors stopped matching). Measured on his master:
+# the field runs to r≈0.85, the brushed bezel starts there.
 SUBDIAL_RECOLOR_VALUE_RAMP = (0.30, 0.60)
 SUBDIAL_RECOLOR_SAT_CUTOFF = (0.10, 0.30)
+SUBDIAL_RECOLOR_RIM_RADIUS = (0.82, 0.87)   # radial ramp, of plate radius
+SUBDIAL_RECOLOR_VERSION = 2      # cache tag — bump on recolor math changes
 # The "theme" plate style multiplies the DARK field by the clock tint;
 # the raw luminance (~0.2) would leave the hue barely readable, so the
 # field brightens by this gain before the tint lands (texture intact).
