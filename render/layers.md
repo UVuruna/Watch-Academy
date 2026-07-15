@@ -84,7 +84,11 @@ ROMB CENTER via `weekday_body_orbit()` — half the star tip
 radius on EVERY pointer, so the by-colors slot centers in its romb
 uniformly (the seated 2nd/3rd slots keep their own arm geometry).
 `slot_view(skin, index)` resolves a
-slot's (mode, astrology style, theme, metal); `weekday_classic_slot()`
+slot's (mode, astrology style, theme, metal, roster) — the roster is
+per slot (owner 2026-07-15), so a seated weekday body first tries
+`defaults.pantheon_seat` when its slot says "pantheon" and keeps the
+planetary art when the seat's plate has not landed (the shared safety
+law); `weekday_classic_slot()`
 names the slot driving the classic unit (None when every slot is
 seated).
 

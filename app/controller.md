@@ -65,7 +65,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Gods / Society — Professions, Creeds, Mysteries — / Animals /
   Arcana, where Planets nests its Image and Sign looks; the metal
   themes open a Gold/Bronze/Silver/Colored metal dropdown whose pick
-  activates theme AND metal, releasing follow-the-ring) — plus the
+  activates theme AND metal, releasing follow-the-ring; the pantheon
+  themes carry a Planetary/Pantheon roster pair in the same dropdown
+  — below the metals on Greek/Norse, the whole dropdown on Egyptian/
+  Slavic — writing that slot's OWN `*_roster` key, owner 2026-07-15:
+  slot 1 Greek Planetary can sit beside slot 2 Greek Pantheon) — plus the
   slot's OWN Names switch — the COMPLICATIONS submenu (Digital time /
   Date / Day length / Seconds — the seated small seconds silences the
   big hand and its Elements toggle), and the Astrology / Ascendant /
@@ -82,11 +86,18 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   changes re-gray the gated entries IN PLACE (`_refresh_menu_gating`
   over the `_menu_gates` buckets — owner 2026-07-13: those switches
   must not close the open menu; no rebuild). The classic weekday unit
-  wears the theme of the slot that DRIVES it (`_classic_slot_theme` +
-  `_themed_weekday_set`, owner 2026-07-15): on the Seasons/Compass
+  wears the theme AND roster of the slot that DRIVES it
+  (`_classic_slot_theme` + `_themed_weekday_set` /
+  `_pantheon_weekday_set`, owner 2026-07-15): on the Seasons/Compass
   with two slots where only the 2nd is weekday, that slot rides the
-  rotation in ITS OWN theme. Theme ROTATION cycles inside a kinship
-  group picked in Settings (`rotation_themes`).
+  rotation in ITS OWN theme. The pantheon set resolves every seat
+  through `defaults.pantheon_seat` — the safety law: the first
+  EXISTING candidate plate wins with the pantheon identity (name +
+  article), a seat whose art has not landed keeps the PLANETARY
+  bundle whole, and a missing pantheon dual pulls the WHOLE Sunday
+  pair (plate, names, face texts) back to planetary. Theme ROTATION
+  cycles inside a kinship group picked in Settings
+  (`rotation_themes`).
   Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
   letter-finish group; the tint color picker lives in Settings), Pointer (two
   groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's

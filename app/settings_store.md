@@ -41,8 +41,12 @@ matrix 2026-07-14): per-slot mode / astrology style / theme —
 `weekday_slot`+`weekday_slot_style`+`weekday_theme` (1st),
 `octa_slot`+`octa_slot_style`+`info_slot_theme` (2nd),
 `third_slot`+`third_slot_style`+`third_slot_theme` (3rd) — with the
-enable chain `show_weekday` → `show_octa_slot` → `show_third_slot`
-and per-theme metals (`theme_metals`, `theme_metal_follow_ring`).
+enable chain `show_weekday` → `show_octa_slot` → `show_third_slot`,
+per-theme metals (`theme_metals`, `theme_metal_follow_ring`) and the
+PER-SLOT figure roster (`weekday_roster` / `info_slot_roster` /
+`third_slot_roster`, each "planetary" | "pantheon"; owner 2026-07-15:
+picked inside the theme's own dropdown like the metals, so slot 1 can
+wear Greek Planetary beside slot 2 in Greek Pantheon).
 `art_source` ("gemini" | "chatgpt") picks the art world;
 `theme_rotation_group` (None or a kinship group / "custom") drives the
 daily theme rotation; `subdial_style` ("theme" | "black") picks the

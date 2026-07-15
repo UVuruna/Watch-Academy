@@ -39,7 +39,13 @@ render geometry block (tick/font sizes with legibility floors, pen widths,
 marker borders), `PALETTE_PRESETS` (the five Star+Aura palettes measured
 from the owner's art: hexa/octa paint+light, cross seasons), the Umbra
 contrast spans, the octa slot text width fraction, the event glow
-rendering (white core/warm mid/halo scale), tray icon geometry, and
+rendering (white core/warm mid/halo scale), tray icon geometry, the
+PANTHEON roster tables (`WEEKDAY_PANTHEON`: per theme the candidate
+plate paths, seated names, article set and the Sunday dual) with
+`pantheon_seat(theme, body)` — the shared safety-law resolver (first
+EXISTING candidate plate wins with the pantheon identity; None keeps
+the planetary bundle whole) consumed by the classic unit, the seated
+slots and the hovers alike — and
 `DEFAULT_SKIN` — a fully typed [Manifest](../skins/manifest.md)
 `SkinDefinition` instance that is serialized verbatim to
 `assets/skins/domy/skin.json` (re-serialize after editing it).

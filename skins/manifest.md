@@ -34,7 +34,11 @@ the ring preset and the user's display choices onto it at build time.
   (#RRGGBB multiplying ring art + hands + Umbra; None = gray art) and
   `ring_finish` ("gold" | "silver" | "bronze" letter art — the layout
   triangle wears the finish, the accent letter the opposite metal,
-  bronze's accent silver), plus
+  bronze's accent silver), the seated slots' own looks
+  (`info_slot_theme`/`info_slot_metal`/`info_slot_roster` and the
+  `third_slot_*` mirror — the roster is PER SLOT, owner 2026-07-15:
+  "planetary" | "pantheon" picked in the theme's own dropdown, so the
+  same theme can sit twice with two casts), plus
   `octa_slot_scale` and `hover_enlarge` (owner EXTRAS; the
   Earth/Moon/Weekday size multipliers scale their spec values in
   apply_display_settings instead)
@@ -55,7 +59,10 @@ the ring preset and the user's display choices onto it at build time.
   display mode (ghost / center_only), ghost opacity, sizes, orbit,
   and the theme `metal` (owner 2026-07-12: "gold"/"silver" run the
   hue-SELECTIVE swap at render — only the warm bronze pixels change,
-  the gray stone and engravings stay; None = bronze, as drawn)
+  the gray stone and engravings stay; None = bronze, as drawn); the
+  PANTHEON roster dress adds `article_set`, `body_articles` (body →
+  (set, body) the hover reads, so fallen-back seats keep planetary
+  text) and `dual_names` (the Sunday pair as seated)
 - `YearMarkerSpec` — Earth day+night variants per continent on the year
   wheel; Moon on its own cycle (new at top, full at bottom) with the
   unlit part shadowed; separate orbits. Which marker is drawn comes

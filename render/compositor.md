@@ -55,7 +55,14 @@ draws the MINUTE layers (hands, year marker) live.
   (`defaults.LEGEND_*` rules, English + Serbian originals), and hex
   notes like "(#F8E600)" are stripped from display; when the CLASSIC
   unit is driven by the 2nd slot (Seasons/Compass two-slot case) the
-  body hover speaks that slot's own theme. Then the seated slots
+  body hover speaks that slot's own theme, metal AND roster. A hover
+  with an explicit roster takes the weekday-set shortcut only while
+  the roster matches the set as dressed (owner 2026-07-15: slot 1
+  Greek Planetary beside slot 2 Greek Pantheon — same theme, two
+  casts); a pantheon seat otherwise resolves identity, plate and
+  article through `defaults.pantheon_seat`, planetary-whole on
+  missing art, the Sunday dual pair falling back together. Then the
+  seated slots
   ("slot:N" via `slot_view` — weekday seats answer the body article,
   zodiac/ascendant/Chinese their sign texts, digital faces stay
   silent) — the Astrology/Ascendant hovers lead with a bold title
