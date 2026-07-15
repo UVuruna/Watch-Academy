@@ -65,6 +65,9 @@ class Settings:
     show_third_slot: bool = False
     earth_style: str = "atmo"
     weekday_theme: str = "planets"
+    figure_roster: str = "planetary"    # planetary (day-rulers, canon)
+                                        # | pantheon (the culture's own
+                                        # hierarchy; owner 2026-07-15)
     subdial_style: str = "black"        # complication plates (owner A/B
                                         # 2026-07-15): "theme" tints the
                                         # tapisserie field, "black" keeps
@@ -221,6 +224,7 @@ class SettingsStore:
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
                 ("subdial_style", "black", constants.SUBDIAL_STYLES),
+                ("figure_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("art_source", constants.ART_SOURCE_DEFAULT,
                  constants.ART_SOURCES),
             ):
@@ -363,6 +367,7 @@ class SettingsStore:
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "subdial_style": settings.subdial_style,
+            "figure_roster": settings.figure_roster,
             "art_source": settings.art_source,
             "legend": settings.legend,
             "show_earth": settings.show_earth,

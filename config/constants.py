@@ -318,6 +318,12 @@ RING_FINISHES = ("gold", "silver", "bronze")
 # hand and complication texts in the letter-finish metal, shadowed.
 SUBDIAL_STYLES = ("theme", "black")
 
+# The two figure ROSTERS (owner doctrine 2026-07-15): "planetary" —
+# the day-ruler counterparts (the shipped canon); "pantheon" — the
+# culture's own hierarchy seated on our archetypes. Themes without a
+# pantheon table fall back to planetary (documented).
+FIGURE_ROSTERS = ("planetary", "pantheon")
+
 RING_LAYOUTS = {
     # Owner naming (2026-07-10): the up-triangle is the masculine
     # Flame, the down-triangle the feminine Chalice, and their union —

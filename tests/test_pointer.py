@@ -359,9 +359,14 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
 
     for theme in constants.WEEKDAY_THEMES:
         rel = defaults.WEEKDAY_DUAL_FILES[theme]
-        assert _paths.art_file(
+        if not _paths.art_file(
             defaults.WEEKDAY_ART_DIR / f"{rel}.png"
-        ).exists(), theme
+        ).exists():
+            # ONLY the reworked Creeds may run dual-less: its Satanism
+            # plate is pending owner art (2026-07-15) — the theme runs
+            # single-faced until it lands.
+            assert theme == "religion", theme
+            continue
         assert theme in defaults.WEEKDAY_DUAL_NAMES
     for theme in constants.METAL_THEMES:
         # The colored dual is the SIBLING variant (owner restructure

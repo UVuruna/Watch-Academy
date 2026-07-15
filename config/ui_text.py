@@ -105,6 +105,21 @@ UI_STRINGS: tuple[str, ...] = (
     "Roman Silver", "Cadet Gray", "Deep Pine", "Sage Steel", "Smoke",
     "Ebony", "Smoky Plum", "Periwinkle", "Lavender Gray", "Espresso",
     "Anthracite", "Granite", "Dim Gray", "Stone", "Nevada", "Aluminium",
+    # The FIGURE ROSTER (owner 2026-07-15) + the Pantheon names, the
+    # reworked Creeds and the wolf rank parentheticals.
+    "Figures", "Planetary", "Pantheon", "Ancient religions",
+    "Poseidon (Ποσειδῶν)",
+    "Artemis (Ἄρτεμις)",
+    "Athena (Ἀθηνᾶ)",
+    "Apollo (Ἀπόλλων)",
+    "Hera (Ἥρα)",
+    "Demeter (Δημήτηρ)",
+    "Hel", "Frigg", "Freyr", "Isis", "Horus", "Anubis", "Bastet",
+    "Svarog", "Lada", "Hades", "The Wanderer",
+    "Gaia", "Yggdrasil", "Triglav", "The Pharaoh", "The Polymath",
+    "The Holy Trinity", "The Ninth Circle",
+    "Eleusinian Mysteries", "Satanism",
+    "Leader (Alpha) · Omega", "Hunter (Gamma)", "Scout (Delta)",
     # The fashion darks (owner 2026-07-15: subtle wardrobe hues).
     "Pewter", "Iron", "Graphite", "Gunmetal", "Petrol", "Navy",
     "Oxford Blue", "Dark Olive", "Aubergine", "Bordeaux",

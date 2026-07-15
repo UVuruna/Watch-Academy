@@ -218,6 +218,97 @@ HAND_MINUTE_REACH_FRACTION = 0.849
 # The ONE typed SkinDefinition the compositor consumes; the controller
 # overlays the ring preset and the user's display choices onto it.
 
+# --- The PANTHEON roster (owner doctrine 2026-07-15) --------------------------
+# Per theme: each seat lists CANDIDATE art paths (relative to
+# assets/weekday/, first existing wins) — a seat with NO existing
+# candidate falls back to the PLANETARY bundle (file + name + article
+# together) so a half-generated pantheon never shows a wrong
+# (figure, article) pair. Colored variants live under
+# <theme>/pantheon/colored/ mirroring the bronze stems.
+WEEKDAY_PANTHEON = {
+    "greek": {
+        "articles": "greek_pantheon",
+        "files": {
+            "sun": ("greek/pantheon/zeus", "greek/primary/Zeus"),
+            "moon": ("greek/pantheon/poseidon",),
+            "mars": ("greek/pantheon/artemis",),
+            "mercury": ("greek/pantheon/athena",),
+            "jupiter": ("greek/pantheon/apollo",),
+            "venus": ("greek/pantheon/hera",),
+            "saturn": ("greek/pantheon/demeter",),
+        },
+        "names": {
+            "sun": "Zeus (\u0396\u03b5\u03cd\u03c2)",
+            "moon": "Poseidon (\u03a0\u03bf\u03c3\u03b5\u03b9\u03b4\u1ff6\u03bd)",
+            "mars": "Artemis (\u1f0c\u03c1\u03c4\u03b5\u03bc\u03b9\u03c2)",
+            "mercury": "Athena (\u1f08\u03b8\u03b7\u03bd\u1fb6)",
+            "jupiter": "Apollo (\u1f08\u03c0\u03cc\u03bb\u03bb\u03c9\u03bd)",
+            "venus": "Hera (\u1f2d\u03c1\u03b1)",
+            "saturn": "Demeter (\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1)",
+        },
+        "dual": ("greek/pantheon/dual/hades",),
+        "dual_names": ("Zeus", "Hades"),
+    },
+    "norse": {
+        "articles": "norse_pantheon",
+        "files": {
+            "sun": ("norse/pantheon/Odin",),
+            "moon": ("norse/pantheon/Hel",),
+            "mars": ("norse/primary/Thor",),
+            "mercury": ("norse/primary/Loki",),
+            "jupiter": ("norse/primary/Tyr",),
+            "venus": ("norse/pantheon/Frigg",),
+            "saturn": ("norse/pantheon/Freyr",),
+        },
+        "names": {
+            "sun": "Odin (\u00d3\u00f0inn)", "moon": "Hel",
+            "mars": "Thor (\u00de\u00f3rr)", "mercury": "Loki",
+            "jupiter": "Tyr (T\u00fdr)", "venus": "Frigg",
+            "saturn": "Freyr",
+        },
+        "dual": ("norse/primary/Odin",),
+        "dual_names": ("Odin", "The Wanderer"),
+    },
+    "egypt": {
+        "articles": "egypt_pantheon",
+        "files": {
+            "sun": ("egypt/primary/ra",),
+            "moon": ("egypt/pantheon/isis",),
+            "mars": ("egypt/pantheon/horus",),
+            "mercury": ("egypt/primary/thoth",),
+            "jupiter": ("egypt/pantheon/anubis",),
+            "venus": ("egypt/pantheon/bastet",),
+            "saturn": ("egypt/primary/osiris",),
+        },
+        "names": {
+            "sun": "Ra", "moon": "Isis", "mars": "Horus",
+            "mercury": "Thoth", "jupiter": "Anubis",
+            "venus": "Bastet", "saturn": "Osiris",
+        },
+        "dual": ("egypt/primary/dual/afu_ra",),
+        "dual_names": ("Ra", "Afu-Ra"),
+    },
+    "slavic": {
+        "articles": "slavic_pantheon",
+        "files": {
+            "sun": ("slavic/primary/perun",),
+            "moon": ("slavic/primary/mokos",),
+            "mars": ("slavic/primary/svetovid",),
+            "mercury": ("slavic/pantheon/svarog",),
+            "jupiter": ("slavic/primary/dazbog",),
+            "venus": ("slavic/pantheon/lada",),
+            "saturn": ("slavic/primary/morana",),
+        },
+        "names": {
+            "sun": "Perun", "moon": "Moko\u0161", "mars": "Svetovid",
+            "mercury": "Svarog", "jupiter": "Da\u017ebog",
+            "venus": "Lada", "saturn": "Morana",
+        },
+        "dual": ("slavic/primary/veles",),
+        "dual_names": ("Perun", "Veles"),
+    },
+}
+
 _CONTINENTS = (
     "europe", "north_america", "south_america", "africa", "asia",
     "oceania",
@@ -790,13 +881,13 @@ WEEKDAY_THEME_NAMES = {
     # war-day without weapons (Mara, Dhammapada 103); Christianity's
     # forgiving love lands on Venus's Friday (Good Friday, agape).
     "religion": {
-        "sun": "Freemasonry",       # owner: replaces Zoroastrianism in
+        "sun": "Christianity",       # owner: replaces Zoroastrianism in
                                     # the basic seven (now an alternate)
         "moon": "Islam",
         "mars": "Buddhism",
         "mercury": "Taoism",
         "jupiter": "Hinduism",
-        "venus": "Christianity",
+        "venus": "Sikhism",
         "saturn": "Judaism",
     },
     # The ALTERNATE religion set — each on the day it fits best (canon
@@ -809,7 +900,7 @@ WEEKDAY_THEME_NAMES = {
         "moon": "Druidism",
         "mars": "Zoroastrianism",
         "mercury": "Shamanism",
-        "jupiter": "Sikhism",
+        "jupiter": "Eleusinian Mysteries",
         "venus": "Babylon",
         "saturn": "Voodoo",
     },
@@ -827,11 +918,11 @@ WEEKDAY_THEME_NAMES = {
     # the pack ranks, the hive works by age (the career IS the clock),
     # the herd remembers (the leader is the one who holds the map).
     "wolf": {
-        "sun": "Alpha · Omega",     # the first and the last of the pack
+        "sun": "Leader (Alpha) · Omega",     # the first and the last of the pack
                                     # — M at noon, Ω at midnight
         "moon": "Luna",
-        "mars": "Hunter",
-        "mercury": "Scout",
+        "mars": "Hunter (Gamma)",
+        "mercury": "Scout (Delta)",
         "jupiter": "Beta",
         "venus": "Mate",
         "saturn": "Elder",
@@ -995,6 +1086,10 @@ WEEKDAY_THEME_FILES["bee"]["sun"] = "Queen"
 WEEKDAY_THEME_FILES["elephant"]["sun"] = "Matriarch"
 # The metal reads Quicksilver, the owner's file keeps the element name.
 WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "mercury"
+# The reworked Creeds and the wolf rank parentheticals keep plain stems.
+WEEKDAY_THEME_FILES["religion_alt"]["jupiter"] = "eleusis"
+WEEKDAY_THEME_FILES["wolf"]["mars"] = "hunter"
+WEEKDAY_THEME_FILES["wolf"]["mercury"] = "scout"
 # The Greek and Norse display names carry native-script parentheticals
 # now — the files stay on the plain ASCII stems.
 WEEKDAY_THEME_FILES["greek"] = {
@@ -1083,7 +1178,7 @@ WEEKDAY_DUAL_NAMES = {
     "slavic": ("Young Dažbog", "Old Dažbog"),
     "alchemy": ("Gold", "Raw Ore"),
     "japan": ("Amaterasu", "Ama-no-Iwato"),
-    "religion": ("Freemasonry", "The Rough Ashlar"),
+    "religion": ("Christianity", "Satanism"),
     "religion_alt": ("Mithraism", "Corax"),
     "profession": ("Ruler", "Servant"),
     "wolf": ("Alpha", "Omega"),
@@ -1110,7 +1205,7 @@ WEEKDAY_DUAL_FILES = {
     "slavic": "slavic/primary/dual/dazbog_old",
     "alchemy": "alchemy/primary/dual/ore",
     "japan": "japan/primary/dual/ama_no_iwato",
-    "religion": "religion/primary/dual/rough_ashlar",
+    "religion": "religion/primary/dual/satanism",
     "religion_alt": "religion/secondary/dual/corax",
     "profession": "profession/primary/dual/Servant",
     "wolf": "wolf/primary/dual/omega",
@@ -1161,7 +1256,7 @@ WEEKDAY_THEME_TITLES = {
     # Owner renames 2026-07-13: masonry and voodoo are creeds and
     # mysteries, not strictly religions — and "Religions II" is gone.
     "religion": "Creeds",
-    "religion_alt": "Mysteries",
+    "religion_alt": "Ancient religions",
     "profession": "Professions",
     "wolf": "Wolf Pack",
     "bee": "Bee Hive",

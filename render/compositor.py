@@ -661,6 +661,17 @@ class Compositor:
         tells the two faces."""
         theme = theme or self._skin.weekday_theme
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+        article_body = body
+        if (
+            theme == self._skin.weekday_theme
+            and self._skin.weekday_set.body_articles is not None
+        ):
+            # The PANTHEON roster (owner 2026-07-15): each seat's
+            # article follows the FIGURE actually shown there —
+            # fallen-back seats keep the planetary text.
+            article_set, article_body = (
+                self._skin.weekday_set.body_articles[body]
+            )
         if theme == self._skin.weekday_theme:
             display_name = self._skin.weekday_set.body_names[body]
             image = self._skin.weekday_set.bodies.get(body)
@@ -705,7 +716,7 @@ class Compositor:
                     / f"{defaults.WEEKDAY_DUAL_FILES[theme]}.png"
                 )
             image = (image, metal_variant_file(dual_image, metal))
-        node = self._symbolism.article(article_set, body)
+        node = self._symbolism.article(article_set, article_body)
         text = node["base"]
         variant = node["variants"].get(self._combo_key())
         if variant:
@@ -734,7 +745,11 @@ class Compositor:
         Ruler face keeps the pointer/palette variant paragraph."""
         theme = self._skin.weekday_theme
         ruler = face == "ruler"
-        display_name = defaults.WEEKDAY_DUAL_NAMES[theme][0 if ruler else 1]
+        dual_names = (
+            self._skin.weekday_set.dual_names
+            or defaults.WEEKDAY_DUAL_NAMES[theme]
+        )
+        display_name = dual_names[0 if ruler else 1]
         image = metal_variant_file(
             self._skin.weekday_set.bodies.get("sun")
             if ruler
@@ -742,7 +757,9 @@ class Compositor:
             self._skin.weekday_set.metal,
         )
         node = self._symbolism.article(
-            constants.WEEKDAY_THEME_ARTICLES[theme], "sun"
+            self._skin.weekday_set.article_set
+            or constants.WEEKDAY_THEME_ARTICLES[theme],
+            "sun",
         )
         text = node.get("faces", {}).get(face) or node["base"]
         if ruler:

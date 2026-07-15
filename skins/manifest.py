@@ -82,6 +82,13 @@ class WeekdaySpec:
     # 2026-07-12) — resolved from WEEKDAY_DUAL_FILES with the metal in
     # apply_display_settings; drawn at 24h on the Compass/Seasons.
     dual_asset: Path | None = None
+    # The PANTHEON roster (owner 2026-07-15) overrides these; None =
+    # the constants tables (the planetary canon).
+    article_set: str | None = None     # hover articles' set name
+    body_articles: dict | None = None  # per-body (set, body) — seats
+                                       # that FELL BACK to a planetary
+                                       # figure keep its article
+    dual_names: tuple | None = None    # the Sunday pair's hover names
 
 
 @dataclass(frozen=True)

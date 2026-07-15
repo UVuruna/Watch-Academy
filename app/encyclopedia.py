@@ -514,26 +514,36 @@ def _topics() -> dict:
     # wired ahead of the art (missing files stay hidden).
     _w = defaults.WEEKDAY_ART_DIR
     _z = defaults.ZODIAC_ART_DIR
+    # Round-four/five verdicts (owner 2026-07-15): the Union ninths —
+    # Gaia/Yggdrasil/Triglav/the Pharaoh/the Polymath/the Holy Trinity/
+    # the Ninth Circle/Freemasonry — supersede the old exile ninths;
+    # Melchizedek relocates to Bible II, the Unknown God to the
+    # Ancient set. Retired entries stay in encyclopedia.json for the
+    # Wider-Pantheon wave.
     for topic_key, name, plate in (
         ("wolf", "Sigma", _w / "wolf/primary/sigma.png"),
         ("bee", "The Swarm", _w / "bee/primary/swarm.png"),
         ("elephant", "The Graveyard",
          _w / "elephant/primary/graveyard.png"),
         ("cosmos", "The Big Bang", _w / "cosmos/primary/big_bang.png"),
-        ("greek", "Hades", _w / "greek/primary/hades.png"),
-        ("norse", "Baldur", _w / "norse/primary/baldur.png"),
-        ("egypt", "Set", _w / "egypt/primary/set.png"),
-        ("slavic", "Crnobog", _w / "slavic/primary/crnobog.png"),
+        ("greek", "Gaia", _w / "greek/pantheon/gaia.png"),
+        ("norse", "Yggdrasil", _w / "norse/pantheon/Yggdrasil.png"),
+        ("egypt", "The Pharaoh", _w / "egypt/pantheon/pharaoh.png"),
+        ("slavic", "Triglav", _w / "slavic/pantheon/triglav.png"),
         ("alchemy", "The Philosopher's Stone",
          _w / "alchemy/primary/stone.png"),
-        ("profession", "The Jester",
-         _w / "profession/primary/Jester.png"),
-        ("religion", "The Unknown God",
-         _w / "religion/primary/unknown_god.png"),
-        ("religion_alt", "The Lost Mystery",
-         _w / "religion/secondary/lost_mystery.png"),
-        ("bible", "Melchizedek", _w / "bible/primary/melchizedek.png"),
-        ("bible_dark", "Legion", _w / "bible/dark/legion.png"),
+        ("profession", "The Polymath",
+         _w / "profession/primary/Polymath.png"),
+        ("religion", "Freemasonry",
+         _w / "religion/primary/freemasonry.png"),
+        ("religion_alt", "The Unknown God",
+         _w / "religion/secondary/unknown_god.png"),
+        ("bible", "The Holy Trinity",
+         _w / "bible/primary/holy_trinity.png"),
+        ("bible2", "Melchizedek",
+         _w / "bible/secondary/melchizedek.png"),
+        ("bible_dark", "The Ninth Circle",
+         _w / "bible/dark/ninth_circle.png"),
         ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
         ("astrology", "Ophiuchus", _z / "astrology/sign/Ophiuchus.png"),
     ):

@@ -282,7 +282,21 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
         files = defaults.WEEKDAY_THEME_FILES[theme]
         weekday = dataclasses.replace(
             weekday,
-            bodies={body: theme_dir / f"{files[body]}.png" for body in names},
+            # PENDING art (documented): a seat whose plate the owner
+            # has not generated yet (the Ancient set's Eleusis today)
+            # maps to None — the manifest contract draws the
+            # procedural colored disc with the name label instead of
+            # crashing on a missing file.
+            bodies={
+                body: (
+                    theme_dir / f"{files[body]}.png"
+                    if paths.art_file(
+                        theme_dir / f"{files[body]}.png"
+                    ).exists()
+                    else None
+                )
+                for body in names
+            },
             body_names=dict(names),
         )
     if metal in defaults.METAL_SWAP_TARGETS:
@@ -290,8 +304,69 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
     dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if metal == "colored" and theme in constants.METAL_THEMES:
         dual_rel = dual_rel.replace("/primary/", "/colored/")
+    dual = defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+    if not paths.art_file(dual).exists():
+        # PENDING art (documented): a rework can point the dual at a
+        # plate the owner has not generated yet (the Creeds' Satanism
+        # dual today) — the Sunday runs single-faced until it lands,
+        # never wearing a wrong plate.
+        dual = None
+    return dataclasses.replace(weekday, dual_asset=dual)
+
+
+def _pantheon_weekday_set(base, theme: str, metal: str | None):
+    """The PANTHEON roster's weekday set (owner doctrine 2026-07-15):
+    per seat the first EXISTING candidate plate wins with the pantheon
+    identity (name + pantheon article); a seat whose art has not
+    landed yet falls back to the PLANETARY bundle — file, name and
+    article TOGETHER, so a half-generated pantheon never pairs a
+    wrong figure with a wrong text. The Sunday dual and its names
+    follow the same rule."""
+    table = defaults.WEEKDAY_PANTHEON[theme]
+    planetary = _themed_weekday_set(base, theme, metal)
+    bodies: dict = {}
+    names: dict = {}
+    articles: dict = {}
+    for body in constants.WEEKDAY_BODIES:
+        chosen = next(
+            (
+                rel for rel in table["files"][body]
+                if paths.art_file(
+                    defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+                ).exists()
+            ),
+            None,
+        )
+        if chosen is not None:
+            bodies[body] = defaults.WEEKDAY_ART_DIR / f"{chosen}.png"
+            names[body] = table["names"][body]
+            articles[body] = (table["articles"], body)
+        else:
+            bodies[body] = planetary.bodies[body]
+            names[body] = planetary.body_names[body]
+            articles[body] = (
+                constants.WEEKDAY_THEME_ARTICLES[theme], body
+            )
+    dual_rel = table["dual"][0]
+    dual = defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+    if paths.art_file(dual).exists():
+        dual_names = table["dual_names"]
+        faces_set = table["articles"]
+    else:
+        # The pantheon dual's plate has not landed — the WHOLE Sunday
+        # pair falls back together (plate, names AND face texts), so
+        # the hover never says Hades over a Phaethon plate.
+        dual = planetary.dual_asset
+        dual_names = defaults.WEEKDAY_DUAL_NAMES[theme]
+        faces_set = None
     return dataclasses.replace(
-        weekday, dual_asset=defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+        planetary,
+        bodies=bodies,
+        body_names=names,
+        dual_asset=dual,
+        article_set=faces_set,
+        body_articles=articles,
+        dual_names=dual_names,
     )
 
 
@@ -326,7 +401,13 @@ def apply_display_settings(skin, settings: Settings):
     # only the 2nd is weekday, that slot rides the rotation in ITS
     # OWN theme.
     theme, metal = _classic_slot_theme(settings)
-    weekday = _themed_weekday_set(weekday, theme, metal)
+    if (
+        settings.figure_roster == "pantheon"
+        and theme in defaults.WEEKDAY_PANTHEON
+    ):
+        weekday = _pantheon_weekday_set(weekday, theme, metal)
+    else:
+        weekday = _themed_weekday_set(weekday, theme, metal)
     background = skin.background
     if settings.aura_day_alpha is not None or settings.aura_twilight_alpha is not None:
         # The Aura's sunlight and twilight opacities are INDEPENDENT

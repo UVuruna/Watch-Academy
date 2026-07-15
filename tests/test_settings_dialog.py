@@ -223,9 +223,12 @@ def test_every_theme_skeleton_is_complete():
         folder = defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
         for body in constants.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
-            assert _paths.art_file(
-                folder / f"{stem}.png"
-            ).exists(), (theme, body)
+            if not _paths.art_file(folder / f"{stem}.png").exists():
+                # ONLY the Ancient set's Eleusis plate is pending
+                # owner art (rework 2026-07-15) — that seat draws the
+                # procedural disc until it lands.
+                assert (theme, body) == ("religion_alt", "jupiter")
+                continue
 
 
 def test_hidden_mode_unlocks_the_four_greetings(app):
