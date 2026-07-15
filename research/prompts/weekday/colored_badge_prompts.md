@@ -16,6 +16,16 @@ Suggested drop locations (wiring follows once the art lands):
   `.../profession/colored/` — same file names as the bronze set
 - `assets/zodiac/chinese/colored/`, `assets/zodiac/astrology/colored/`
 
+**Where the OTHER colored sets live** (owner lookup 2026-07-15 — they
+are not missing, they ride their theme's own sheet): **Egyptian
+gods** — `egypt_prompts.md` ▸ "Colored plates — Theban tomb-fresco,
+lapis and gold"; **Slavic gods** — `slavic_prompts.md` ▸ "Colored
+plates — Slavic folk-icon painting, earth and gold"; the newer animal
+societies carry theirs in `wolf_pack_prompts.md` /
+`bee_hive_prompts.md` / `elephant_herd_prompts.md`, the deep sky in
+`cosmos_prompts.md` (which also holds the **Planets ART medallion**
+look for `assets/weekday/planets/art/`).
+
 ---
 
 ## Greek gods — vivid Mediterranean enamel

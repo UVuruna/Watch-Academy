@@ -80,6 +80,15 @@ the bachelor-school Mentor, the Reunion ceremony, the Elder digging
 remembered water on her last molars; acacia-and-tusk border, 8
 bronze + 8 colored prompts; drop dir assets/weekday/elephant/primary/.
 
+### `prompts/badge/scale_badge_prompts.md` — Scale Badge Prompts
+The Judas–Lucifer Scale triptych behind the Duality topic and the
+Trinity doctrine (owner: duality rides the scale, the Trinity is
+their union 2+1): the flame-bearing Lucifer up-triangle, the empty
+Judas down-triangle with noose and thirty coins, and the Union
+hexagram around the blank zero where the Sun stands — documents the
+EXISTING assets/badge/gemini/scale/ renders for regeneration and the
+ChatGPT parallel set.
+
 ### `prompts/badge/season_trinity_prompts.md` — Season & Trinity Badge Prompts
 The remaining concept badges (owner 2026-07-13): the Trinity family
 (Faith/Hope/Love, triskelion bronze cameo), the Seasons on the Goethe
