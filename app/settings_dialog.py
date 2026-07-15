@@ -1056,23 +1056,6 @@ class SettingsDialog(QDialog):
         if index >= 0:
             self._art_source_combo.setCurrentIndex(index)
         row.addWidget(self._art_source_combo)
-        # The FIGURE ROSTER (owner 2026-07-15): Planetary — the
-        # day-ruler canon; Pantheon — the culture's own hierarchy.
-        # Themes without a pantheon table fall back to Planetary.
-        row.addSpacing(16)
-        row.addWidget(QLabel(tr("Figures")))
-        self._figure_roster_combo = QComboBox()
-        for roster, label in (
-            ("planetary", tr("Planetary")),
-            ("pantheon", tr("Pantheon")),
-        ):
-            self._figure_roster_combo.addItem(label, roster)
-        index = self._figure_roster_combo.findData(
-            self._settings.figure_roster
-        )
-        if index >= 0:
-            self._figure_roster_combo.setCurrentIndex(index)
-        row.addWidget(self._figure_roster_combo)
         row.addStretch(1)
         return group
 
@@ -1177,7 +1160,6 @@ class SettingsDialog(QDialog):
             custom_rings=tuple(self._custom_rings),
             language=self._language_combo.currentData(),
             art_source=self._art_source_combo.currentData(),
-            figure_roster=self._figure_roster_combo.currentData(),
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

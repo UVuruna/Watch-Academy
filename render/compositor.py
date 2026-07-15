@@ -439,7 +439,7 @@ class Compositor:
                 # modes (time/date/day length/seconds) have no reading
                 # of their own — the hover-ENLARGE still works, the
                 # region hovers take over below.
-                mode, style, theme, _metal = slot_view(
+                mode, style, theme, metal, roster = slot_view(
                     self._skin, int(element[len("slot:"):])
                 )
                 if mode == "ascendant":
@@ -450,7 +450,8 @@ class Compositor:
                     return self._zodiac_text(style)
                 if mode == "weekday":
                     return self._weekday_tooltip(
-                        today, active=True, theme=theme
+                        today, active=True, theme=theme,
+                        slot_metal=metal, roster=roster,
                     )
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
@@ -470,15 +471,16 @@ class Compositor:
                         "ruler", active=today == "sun"
                     )
                 # The classic unit may be DRIVEN by the 2nd slot
-                # (owner 2026-07-15) — the hover speaks that theme.
-                theme = (
-                    self._skin.info_slot_theme
-                    if weekday_classic_slot(self._skin) == 2
-                    else None
-                )
-                return self._weekday_tooltip(
-                    body, active=body == today, theme=theme
-                )
+                # (owner 2026-07-15) — the hover speaks that theme,
+                # in that slot's OWN roster and metal.
+                if weekday_classic_slot(self._skin) == 2:
+                    return self._weekday_tooltip(
+                        body, active=body == today,
+                        theme=self._skin.info_slot_theme,
+                        slot_metal=self._skin.info_slot_metal,
+                        roster=self._skin.info_slot_roster,
+                    )
+                return self._weekday_tooltip(body, active=body == today)
             if element == "moon":
                 return self._moon_text()
             if element == "earth":
@@ -647,7 +649,8 @@ class Compositor:
         return None
 
     def _weekday_tooltip(
-        self, body: str, active: bool, theme: str | None = None
+        self, body: str, active: bool, theme: str | None = None,
+        slot_metal: str | None = None, roster: str | None = None,
     ) -> str:
         """The body's ARTICLE — its themed art on top, then the entity
         NAME as a bigger title (owner spec 2026-07-11: the god / planet
@@ -662,17 +665,24 @@ class Compositor:
         theme = theme or self._skin.weekday_theme
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
         article_body = body
-        if (
-            theme == self._skin.weekday_theme
-            and self._skin.weekday_set.body_articles is not None
-        ):
+        # The weekday-set shortcut holds only while the ROSTER matches
+        # too (owner 2026-07-15: slot 1 Greek Planetary beside slot 2
+        # Greek Pantheon — same theme, two casts); a caller that names
+        # no roster follows the set as dressed.
+        same_unit = theme == self._skin.weekday_theme and roster in (
+            None,
+            "pantheon"
+            if self._skin.weekday_set.body_articles is not None
+            else "planetary",
+        )
+        if same_unit and self._skin.weekday_set.body_articles is not None:
             # The PANTHEON roster (owner 2026-07-15): each seat's
             # article follows the FIGURE actually shown there —
             # fallen-back seats keep the planetary text.
             article_set, article_body = (
                 self._skin.weekday_set.body_articles[body]
             )
-        if theme == self._skin.weekday_theme:
+        if same_unit:
             display_name = self._skin.weekday_set.body_names[body]
             image = self._skin.weekday_set.bodies.get(body)
             metal = self._skin.weekday_set.metal
@@ -684,36 +694,59 @@ class Compositor:
             )
             metal = None
         else:
-            # The info slot's SECOND weekday: resolve the art exactly
-            # like its layer — the theme's OWN metal, colored/ included
-            # (owner bug 2026-07-13: the legend always showed bronze).
-            display_name = defaults.WEEKDAY_THEME_NAMES[theme][body]
-            theme_dir = (
-                defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
-            )
-            slot_metal = self._skin.info_slot_metal
-            if slot_metal == "colored" and theme in constants.METAL_THEMES:
-                theme_dir = theme_dir.parent / "colored"
-            image = (
-                theme_dir
-                / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
-            )
+            # A SEATED slot's SECOND weekday: resolve the art exactly
+            # like its layer — the slot's OWN metal, colored/ included
+            # (owner bug 2026-07-13: the legend always showed bronze),
+            # and the slot's OWN roster (owner 2026-07-15): a pantheon
+            # seat speaks the figure actually shown there, a seat
+            # whose plate has not landed keeps the planetary bundle
+            # whole — the same safety law as the classic unit.
             metal = (
                 slot_metal
                 if theme in constants.METAL_THEMES
                 and slot_metal in defaults.METAL_SWAP_TARGETS
                 else None
             )
+            seat = (
+                defaults.pantheon_seat(theme, body)
+                if roster == "pantheon" else None
+            )
+            if seat is not None:
+                image, display_name, (article_set, article_body) = seat
+            else:
+                display_name = defaults.WEEKDAY_THEME_NAMES[theme][body]
+                theme_dir = (
+                    defaults.WEEKDAY_ART_DIR
+                    / defaults.WEEKDAY_THEME_DIRS[theme]
+                )
+                if (
+                    slot_metal == "colored"
+                    and theme in constants.METAL_THEMES
+                ):
+                    theme_dir = theme_dir.parent / "colored"
+                image = (
+                    theme_dir
+                    / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
+                )
         image = metal_variant_file(image, metal)
         if body == "sun":
             # The dual center's TWO plates in one legend (owner
             # 2026-07-13: "u prism i trinity treba legend sa 2 slike").
-            if theme == self._skin.weekday_theme:
+            if same_unit:
                 dual_image = self._skin.weekday_set.dual_asset
             else:
+                dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
+                if roster == "pantheon" and theme in defaults.WEEKDAY_PANTHEON:
+                    # The pantheon dual wins only when its plate is on
+                    # disk — otherwise the WHOLE planetary pair stays
+                    # (the classic unit's Sunday law).
+                    candidate = defaults.WEEKDAY_PANTHEON[theme]["dual"][0]
+                    if paths.art_file(
+                        defaults.WEEKDAY_ART_DIR / f"{candidate}.png"
+                    ).exists():
+                        dual_rel = candidate
                 dual_image = (
-                    defaults.WEEKDAY_ART_DIR
-                    / f"{defaults.WEEKDAY_DUAL_FILES[theme]}.png"
+                    defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
                 )
             image = (image, metal_variant_file(dual_image, metal))
         node = self._symbolism.article(article_set, article_body)

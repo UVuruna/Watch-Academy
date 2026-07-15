@@ -807,6 +807,64 @@ def test_info_slot_weekday_wears_its_theme_metal(july_wednesday):
     assert image.pixelColor(180, 8).alpha() > 200
 
 
+def test_seated_slot_wears_its_own_roster():
+    """Owner 2026-07-15 ('u 1 slot grcki planetary u 2 slot grcki
+    panteon'): the FIGURE roster is each slot's OWN pick, made in the
+    theme dropdown beside the metals — the same theme can sit twice
+    with two casts. Pinned: the built skin carries the per-slot
+    rosters, the seats resolve through the shared pantheon_seat
+    safety law (identity and plate travel together or not at all),
+    and the seated hover speaks the seated figure even when both
+    slots share the theme."""
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+    from config import paths as _paths
+    from render.layers import slot_view
+
+    skin = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(
+            Settings(), pointer="octa", octa_slot="weekday",
+            weekday_theme="greek", weekday_roster="planetary",
+            info_slot_theme="greek", info_slot_roster="pantheon",
+        ),
+    )
+    # Slot 1 stays the PLANETARY cast (no pantheon identities on the
+    # weekday set) while slot 2 carries its own pantheon pick.
+    assert skin.weekday_set.body_articles is None
+    assert slot_view(skin, 1)[4] == "planetary"
+    assert skin.info_slot_roster == "pantheon"
+    assert slot_view(skin, 2)[4] == "pantheon"
+    # The throne the 2nd slot draws on Sunday: Zeus, the pantheon
+    # article, an existing plate (fame first — the reused primary
+    # serves until the pantheon plate lands).
+    seat = defaults.pantheon_seat("greek", "sun")
+    assert seat is not None
+    assert seat[1].startswith("Zeus")
+    assert seat[2] == ("greek_pantheon", "sun")
+    assert _paths.art_file(seat[0]).exists()
+    # The safety law on every seat: a pantheon identity only ever
+    # rides an existing pantheon plate — no seat may pair the
+    # pantheon name with missing art.
+    for body in constants.WEEKDAY_BODIES:
+        resolved = defaults.pantheon_seat("greek", body)
+        if resolved is not None:
+            assert _paths.art_file(resolved[0]).exists(), body
+    # The seated hover speaks the seated figure — same theme on both
+    # slots, two casts (the same_unit shortcut must compare rosters).
+    comp = Compositor(skin, AssetCache())
+    pantheon_tip = comp._weekday_tooltip(
+        "sun", active=False, theme="greek",
+        slot_metal="bronze", roster="pantheon",
+    )
+    planetary_tip = comp._weekday_tooltip(
+        "sun", active=False, theme="greek",
+        slot_metal="bronze", roster="planetary",
+    )
+    assert "Zeus" in pantheon_tip and "Helios" not in pantheon_tip
+    assert "Helios" in planetary_tip
+
+
 # --- Render smoke -------------------------------------------------------------------
 
 

@@ -309,6 +309,30 @@ WEEKDAY_PANTHEON = {
     },
 }
 
+def pantheon_seat(theme: str, body: str):
+    """The PANTHEON seat bundle for (theme, body) — (art_path, name,
+    (article_set, body)) with the safety law: the first EXISTING
+    candidate plate wins with the pantheon identity; NO existing
+    candidate returns None and the caller keeps the PLANETARY bundle
+    whole (file + name + article together). Shared by the classic
+    unit, the seated slots and the hover resolution."""
+    from config import paths as _paths
+
+    table = WEEKDAY_PANTHEON.get(theme)
+    if table is None:
+        return None
+    for rel in table["files"][body]:
+        path = WEEKDAY_ART_DIR / f"{rel}.png"
+        if _paths.art_file(path).exists():
+            return (
+                path,
+                table["names"][body],
+                (table["articles"], body),
+            )
+    return None
+
+
+
 _CONTINENTS = (
     "europe", "north_america", "south_america", "africa", "asia",
     "oceania",

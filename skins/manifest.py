@@ -170,6 +170,10 @@ class SkinDefinition:
     info_slot_theme: str = "planets"   # the INFO slot's weekday theme
     info_slot_metal: str = "bronze"    # that theme's metal (bronze = as drawn,
                                        # "colored" = the colored/ art)
+    info_slot_roster: str = "planetary"  # that theme's FIGURE roster —
+                                       # per slot (owner 2026-07-15:
+                                       # slot 1 Greek Planetary, slot 2
+                                       # Greek Pantheon)
     weekday_slot: str = "weekday"      # weekday POSITION: bodies, or an
                                        # astrology badge (hexa/aurora only)
     # The THIRD slot (owner 2026-07-14: the 1st/2nd/3rd Slot system).
@@ -177,6 +181,7 @@ class SkinDefinition:
     third_slot_style: str = "sign"
     third_slot_theme: str = "planets"
     third_slot_metal: str = "bronze"
+    third_slot_roster: str = "planetary"
     show_third_slot: bool = False
     earth_style: str = "clean"         # "clean" | "atmo" — Earth marker art
     weekday_theme: str = "planets"     # WEEKDAY_THEMES: bodies as planets,

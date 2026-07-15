@@ -260,9 +260,9 @@ def _classic_slot_theme(settings: Settings) -> tuple[str, str | None]:
         and settings.octa_slot == "weekday"
     ):
         theme = settings.info_slot_theme
-        return theme, _theme_metal(settings, theme)
+        return theme, _theme_metal(settings, theme), settings.info_slot_roster
     theme = settings.weekday_theme
-    return theme, _theme_metal(settings, theme)
+    return theme, _theme_metal(settings, theme), settings.weekday_roster
 
 
 def _themed_weekday_set(base, theme: str, metal: str | None):
@@ -328,19 +328,9 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
     names: dict = {}
     articles: dict = {}
     for body in constants.WEEKDAY_BODIES:
-        chosen = next(
-            (
-                rel for rel in table["files"][body]
-                if paths.art_file(
-                    defaults.WEEKDAY_ART_DIR / f"{rel}.png"
-                ).exists()
-            ),
-            None,
-        )
-        if chosen is not None:
-            bodies[body] = defaults.WEEKDAY_ART_DIR / f"{chosen}.png"
-            names[body] = table["names"][body]
-            articles[body] = (table["articles"], body)
+        seat = defaults.pantheon_seat(theme, body)
+        if seat is not None:
+            bodies[body], names[body], articles[body] = seat
         else:
             bodies[body] = planetary.bodies[body]
             names[body] = planetary.body_names[body]
@@ -400,11 +390,8 @@ def apply_display_settings(skin, settings: Settings):
     # (owner 2026-07-15): on the Seasons/Compass with two slots where
     # only the 2nd is weekday, that slot rides the rotation in ITS
     # OWN theme.
-    theme, metal = _classic_slot_theme(settings)
-    if (
-        settings.figure_roster == "pantheon"
-        and theme in defaults.WEEKDAY_PANTHEON
-    ):
+    theme, metal, roster = _classic_slot_theme(settings)
+    if roster == "pantheon" and theme in defaults.WEEKDAY_PANTHEON:
         weekday = _pantheon_weekday_set(weekday, theme, metal)
     else:
         weekday = _themed_weekday_set(weekday, theme, metal)
@@ -460,11 +447,13 @@ def apply_display_settings(skin, settings: Settings):
         info_slot_style=settings.info_slot_style,
         info_slot_theme=settings.info_slot_theme,
         info_slot_metal=_theme_metal(settings, settings.info_slot_theme),
+        info_slot_roster=settings.info_slot_roster,
         weekday_slot=_effective_weekday_slot(settings),
         third_slot=settings.third_slot,
         third_slot_style=settings.third_slot_style,
         third_slot_theme=settings.third_slot_theme,
         third_slot_metal=_theme_metal(settings, settings.third_slot_theme),
+        third_slot_roster=settings.third_slot_roster,
         # The slots enable IN ORDER (owner 2026-07-14): the third
         # exists only on top of the second.
         show_third_slot=settings.show_third_slot and settings.show_octa_slot,
@@ -888,15 +877,18 @@ class AppController(QObject):
     def _set_south_slot(
         self, mode: str, style: str | None = None,
         theme: str | None = None, metal: str | None = None,
+        roster: str | None = None,
     ) -> None:
-        """Info slot content + its OWN style/theme/metal in one click
-        (owner 2026-07-12: independent of the day slot's look)."""
+        """Info slot content + its OWN style/theme/metal/roster in one
+        click (owner 2026-07-12: independent of the day slot's look)."""
         updates: dict = {"octa_slot": mode}
         if style is not None:
             updates["info_slot_style"] = style
         if theme is not None:
             updates["info_slot_theme"] = theme
             updates.update(self._metal_updates(theme, metal))
+        if roster is not None:
+            updates["info_slot_roster"] = roster
         self._settings = replace(self._settings, **updates)
         self._install_skin(build_skin(self._settings))
         self._flush_position()
@@ -904,28 +896,36 @@ class AppController(QObject):
     def _set_third_slot(
         self, mode: str, style: str | None = None,
         theme: str | None = None, metal: str | None = None,
+        roster: str | None = None,
     ) -> None:
         """The 3rd slot's content (owner 2026-07-14) — the same shape
-        as the other two, its own style/theme/metal."""
+        as the other two, its own style/theme/metal/roster."""
         updates: dict = {"third_slot": mode}
         if style is not None:
             updates["third_slot_style"] = style
         if theme is not None:
             updates["third_slot_theme"] = theme
             updates.update(self._metal_updates(theme, metal))
+        if roster is not None:
+            updates["third_slot_roster"] = roster
         self._settings = replace(self._settings, **updates)
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
-    def _set_weekday_theme(self, theme: str, metal: str | None = None) -> None:
+    def _set_weekday_theme(
+        self, theme: str, metal: str | None = None,
+        roster: str | None = None,
+    ) -> None:
         """Day slot back to the WEEKDAY BODIES wearing `theme` (owner
         menu 2026-07-12: the theme list lives inside Day slot ▸ Weekday,
         so picking a theme also picks the mode; bronze-plate themes
-        pick their metal in the same click)."""
+        pick their metal in the same click, pantheon themes their
+        roster)."""
         self._settings = replace(
             self._settings,
             weekday_slot="weekday",
             weekday_theme=theme,
+            **({"weekday_roster": roster} if roster is not None else {}),
             **self._metal_updates(theme, metal),
         )
         self._install_skin(build_skin(self._settings))
@@ -1233,6 +1233,7 @@ class AppController(QObject):
         def add_weekday_submenu(
             parent: QMenu, group: QActionGroup,
             active: bool, current_theme: str, on_theme, names_key: str,
+            current_roster: str = "planetary",
         ) -> None:
             """The IDENTICAL Weekday submenu of both slots, in KINSHIP
             GROUPS (owner menu rework 2026-07-13: Ancient Gods /
@@ -1269,6 +1270,42 @@ class AppController(QObject):
                                 and _theme_metal(settings, key) == metal,
                                 lambda checked, t=key, m=metal: on_theme(t, m),
                             )
+                        if key in defaults.WEEKDAY_PANTHEON:
+                            # The roster pair sits BELOW the metals in
+                            # the same dropdown (owner 2026-07-15: like
+                            # the Pointer picking variant AND color) —
+                            # per slot, so slot 1 can wear Planetary
+                            # while slot 2 wears the Pantheon. Its OWN
+                            # exclusive group: metal and roster checks
+                            # must coexist.
+                            metal_menu.addSeparator()
+                            roster_group = QActionGroup(menu)
+                            roster_group.setExclusive(True)
+                            for roster in constants.FIGURE_ROSTERS:
+                                slot_action(
+                                    metal_menu, roster_group,
+                                    tr(roster.capitalize()),
+                                    active and current_theme == key
+                                    and current_roster == roster,
+                                    lambda checked, t=key, r=roster:
+                                    on_theme(t, None, r),
+                                )
+                    elif key in defaults.WEEKDAY_PANTHEON:
+                        # Non-metal pantheon themes (Egyptian, Slavic)
+                        # have no other variant, so the dropdown IS the
+                        # roster pair; either pick also picks the theme.
+                        roster_menu = self._submenu(group_menu, tr(title))
+                        roster_group = QActionGroup(menu)
+                        roster_group.setExclusive(True)
+                        for roster in constants.FIGURE_ROSTERS:
+                            slot_action(
+                                roster_menu, roster_group,
+                                tr(roster.capitalize()),
+                                active and current_theme == key
+                                and current_roster == roster,
+                                lambda checked, t=key, r=roster:
+                                on_theme(t, None, r),
+                            )
                     else:
                         slot_action(
                             group_menu, group, tr(title),
@@ -1295,6 +1332,7 @@ class AppController(QObject):
             slot_menu, index: int, mode_value: str, style_value: str,
             theme_value: str, names_key: str, enabled_value: bool,
             enable_key: str, set_mode, set_style_mode, set_theme,
+            roster_value: str = "planetary",
         ):
             """One slot submenu (owner 2026-07-14: all three share the
             shape): Weekday themes, the COMPLICATIONS dropdown, the
@@ -1307,6 +1345,7 @@ class AppController(QObject):
             add_weekday_submenu(
                 slot_menu, group,
                 mode_value == "weekday", theme_value, set_theme, names_key,
+                current_roster=roster_value,
             )
             comps = self._submenu(slot_menu, tr("Complications"))
             lockable.append(comps.menuAction())
@@ -1370,6 +1409,7 @@ class AppController(QObject):
             lambda mode: self._set_display_choice("weekday_slot", mode),
             self._set_weekday_badge,
             self._set_weekday_theme,
+            roster_value=settings.weekday_roster,
         )
         # The Seasons with all three slots LOCK the 1st on the weekday
         # unit (owner 2026-07-14) — everything but Weekday grays.
@@ -1381,9 +1421,10 @@ class AppController(QObject):
             settings.show_octa_slot, "show_octa_slot",
             self._set_south_slot,
             lambda mode, style: self._set_south_slot(mode, style=style),
-            lambda theme, metal=None: self._set_south_slot(
-                "weekday", theme=theme, metal=metal
+            lambda theme, metal=None, roster=None: self._set_south_slot(
+                "weekday", theme=theme, metal=metal, roster=roster
             ),
+            roster_value=settings.info_slot_roster,
         )
         enable3, _ = build_slot_menu(
             third_slot_menu, 3,
@@ -1392,9 +1433,10 @@ class AppController(QObject):
             settings.show_third_slot, "show_third_slot",
             self._set_third_slot,
             lambda mode, style: self._set_third_slot(mode, style=style),
-            lambda theme, metal=None: self._set_third_slot(
-                "weekday", theme=theme, metal=metal
+            lambda theme, metal=None, roster=None: self._set_third_slot(
+                "weekday", theme=theme, metal=metal, roster=roster
             ),
+            roster_value=settings.third_slot_roster,
         )
         self._menu_gates["enable2"] = enable2
         self._menu_gates["enable3"] = enable3

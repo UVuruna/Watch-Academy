@@ -362,20 +362,30 @@ def weekday_classic_slot(skin: SkinDefinition) -> int | None:
 
 
 def slot_view(skin: SkinDefinition, index: int) -> tuple:
-    """(mode, style, theme, metal) of slot 1 / 2 / 3."""
+    """(mode, style, theme, metal, roster) of slot 1 / 2 / 3 — the
+    roster is PER SLOT (owner 2026-07-15: slot 1 Greek Planetary next
+    to slot 2 Greek Pantheon); the 1st slot's roster is whatever the
+    weekday set was dressed in."""
     if index == 1:
         return (
             skin.weekday_slot, skin.day_slot_style,
             skin.weekday_theme, skin.weekday_set.metal,
+            (
+                "pantheon"
+                if skin.weekday_set.body_articles is not None
+                else "planetary"
+            ),
         )
     if index == 2:
         return (
             skin.octa_slot, skin.info_slot_style,
             skin.info_slot_theme, skin.info_slot_metal,
+            skin.info_slot_roster,
         )
     return (
         skin.third_slot, skin.third_slot_style,
         skin.third_slot_theme, skin.third_slot_metal,
+        skin.third_slot_roster,
     )
 
 
@@ -1031,7 +1041,7 @@ class SlotLayer(Layer):
         self, painter: QPainter, ctx: RenderContext, index: int,
         pos: QPointF, size: float,
     ) -> None:
-        mode, style, theme, metal = slot_view(ctx.skin, index)
+        mode, style, theme, metal, roster = slot_view(ctx.skin, index)
         inner = size * defaults.SLOT_ROUNDEL_CONTENT_FRACTION
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         if mode == "seconds":
@@ -1053,7 +1063,8 @@ class SlotLayer(Layer):
             return
         if mode == "weekday":
             self._draw_weekday_slot(
-                painter, ctx, index, pos, size, theme, metal, today
+                painter, ctx, index, pos, size, theme, metal, roster,
+                today,
             )
             return
         if mode in ("zodiac", "ascendant"):
@@ -1110,16 +1121,25 @@ class SlotLayer(Layer):
     def _draw_weekday_slot(
         self, painter: QPainter, ctx: RenderContext, index: int,
         pos: QPointF, size: float, theme: str, metal: str | None,
-        today: str,
+        roster: str, today: str,
     ) -> None:
-        """Today's body in a SEAT, in that slot's own theme (owner
-        2026-07-12: e.g. Norse left, Greek right, both showing
-        today)."""
+        """Today's body in a SEAT, in that slot's own theme AND roster
+        (owner 2026-07-12: e.g. Norse left, Greek right, both showing
+        today; owner 2026-07-15: the roster is the slot's own too)."""
         if index == 1:
             # The 1st slot's unit is already themed on the skin.
             draw_weekday_body(painter, ctx, today, pos, size, 1.0)
             return
-        if theme == "planets":
+        seat = (
+            defaults.pantheon_seat(theme, today)
+            if roster == "pantheon" else None
+        )
+        if seat is not None:
+            # The PANTHEON figure on this seat (owner 2026-07-15) —
+            # the shared safety law: no plate on disk means the
+            # planetary bundle below stays whole.
+            asset = seat[0]
+        elif theme == "planets":
             asset = (
                 defaults.WEEKDAY_ART_DIR / "planets" / "primary"
                 / f"{today}.png"
