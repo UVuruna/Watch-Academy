@@ -131,16 +131,31 @@ do not invent them):
 ### Trinity (trio)
 
 The triangle: two natures below, the one who holds BOTH rises to
-the apex.
+the apex. Heaven staged AS a courtroom is scriptural, not our
+invention — the articles argue from it: Jesus is literally called
+the Advocate (*Parakletos*, 1 John 2:1), Satan literally the Accuser
+(*Kategoros*, Revelation 12:10; Job 1–2; Zechariah 3).
 
 | Arm | Color | Person | Nature | Type | Calling |
 |---|---|---|---|---|---|
-| top (12h) | yellow | **God** | both natures at once — loves himself AND questions himself, so he corrects his own deeds and cannot be manipulated or steered | the whole | **Judge** |
-| 20h | red | **the Devil** | Pride — love turned toward himself | the Boss syndrome (everyone must please him) | **Prosecutor** |
-| 04h | blue | **Jesus** | Weakness — love turned toward others | the Servant syndrome (pleases everyone) | **Advocate** |
+| top (12h) | yellow | **God** | both natures at once — loves himself AND questions himself, so he corrects his own deeds and cannot be manipulated or steered | **The One** | **Judge** — the one who knows all and sees all |
+| 20h | red | **the Devil** | Pride — love turned toward himself | the Boss syndrome (everyone must please him) | **Prosecutor** — wants to punish, enjoys punishing |
+| 04h | blue | **Jesus** | Weakness — love turned toward others | the Servant syndrome (pleases everyone) | **Advocate** — always steps in to defend the other |
+
+**The Eye is the union of the three** (owner 2026-07-16): the
+ALL-SEEING EYE sits at the CENTER during the archetype reveal — the
+Great Seal's Eye of Providence read through DOMY, the triangle's
+three sides in the three arm colors, its iris the only uncolored
+glass (the same objectivity-as-clear-light doctrine as the Union
+rosette). The mottos belong to the ARTICLES, never inscribed in art:
+**E PLURIBUS UNUM** — out of many, one — is The One's motto (both
+natures in one person); **ANNUIT COEPTIS** — Providence favors the
+undertaking — is the Eye's. (The Great Seal's third motto, NOVUS
+ORDO SECLORUM, stays in reserve.)
 
 Trinity archetype articles run in TWO ROWS (like the hexa zodiac
-diamonds): the person and the calling.
+diamonds): the person and the calling. Image prompts:
+`research/prompts/archetype/trinity_prompts.md`.
 
 ### Prism (hexa)
 

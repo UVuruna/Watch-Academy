@@ -77,6 +77,13 @@ per source.
 - `subdial_circle_prompts.md` — the subdial plates (the silver
   master ships; gold/bronze recolor at runtime)
 
+### `archetype/` — one file per pointer archetype
+- `trinity_prompts.md` — the courtroom trio (Jesus the Advocate /
+  the Devil the Prosecutor / The One the Judge) + the all-seeing
+  Eye rosette as the union of the three at the center; stained-glass
+  register matching the Scale windows. Prism/Seasons/Compass
+  archetypes have no sheets yet (persons undecided — owner decides).
+
 ## Connections
 
 ### Uses

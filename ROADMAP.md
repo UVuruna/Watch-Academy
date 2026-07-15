@@ -49,10 +49,15 @@ lives in [The DOMY Canon](CANON.md).
    palette style option must be GRAYED (unavailable) while they are
    the active pointer.
 4. **Pointer archetypes.** Every pointer gets its own ARCHETYPE
-   overlay — persons seated on the arm colors with articles. The
-   approved content canon (Trinity = Advocate/Prosecutor/Judge,
-   Prism = the love/hatred mechanic) is defined in
-   [The DOMY Canon](CANON.md) — read it first. Display rules:
+   overlay — persons seated on the arm colors with articles, and the
+   ALL-SEEING EYE (the union of the three) at the CENTER on Trinity.
+   The approved content canon (Trinity = Advocate/Prosecutor/Judge
+   with The One at the apex, Prism = the love/hatred mechanic) is
+   defined in [The DOMY Canon](CANON.md) — read it first. Trinity
+   image prompts are READY:
+   `research/prompts/archetype/trinity_prompts.md` (stained-glass
+   register, drop at `assets/archetype/<source>/trinity/`).
+   Display rules:
    - Visible only during GLOW windows: one of the 4 moon phases
      (~every 7 days) or one of the 4 sun events (~every 90 days).
    - Moon window: revealed ONLY by double-click on Omega.
