@@ -17,7 +17,7 @@ from functools import lru_cache
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
-from config import constants, defaults, paths
+from config import constants, defaults, paths, profiling
 from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
@@ -380,13 +380,15 @@ class Compositor:
         """Star/Aura/Umbra/slot rotation: solar offset, or 0 upright."""
         return self._day.star_rotation if self._skin.solar_rotation else 0.0
 
+    @profiling.timed("Paint frame")
     def paint(self, painter: QPainter, size: float, dpr: float, tick: TickState) -> None:
         if self._day is None:
             raise RuntimeError("Compositor.paint() before the first day context")
         self._last_tick = tick
         key = (round(size * dpr), self._day.cache_key)
         if self._composite is None or self._composite_key != key:
-            self._composite = self._render_composite(size, dpr)
+            with profiling.measure("Composite rebuild"):
+                self._composite = self._render_composite(size, dpr)
             self._composite_key = key
         # The composite carries the window's transparent margin (the
         # ring letters overhang the dial square) — blit it back-shifted
@@ -409,6 +411,7 @@ class Compositor:
                 painter.restore()
         painter.restore()
 
+    @profiling.timed("Hover text")
     def tooltip_at(self, x: float, y: float, size: float) -> str | None:
         """Hover text under the cursor, at every dial size (owner spec):
         today's body, the Earth marker (day/week ordinals, zodiac sign
@@ -502,6 +505,7 @@ class Compositor:
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
 
+    @profiling.timed("Hit test")
     def _element_at(
         self, point: QPointF, radius: float, rotation: float, today: str
     ) -> str | None:

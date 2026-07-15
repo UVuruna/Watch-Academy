@@ -58,6 +58,12 @@ Belgrade lookup; loud unknown-path and out-of-coverage errors.
 Round-trip, atomic-write cleanup, BOM tolerance, corruption and
 diameter-range errors, quarantine-to-.bak.
 
+### `test_profiling.py`
+The `@timed` statistics store (owner 2026-07-15): cumulative
+aggregates with session-only recents, atomic persistence and reset;
+the Report's readable-unit formatting (ns whole, µs/ms at two
+decimals, s at three).
+
 ### `test_purity.py`
 Asserts nothing under `core/` or `data/` mentions PySide6 — and that
 library code reads no wall clock (`datetime.now`/`.today`/`time.time`;

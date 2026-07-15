@@ -24,6 +24,7 @@ from app import native
 from app.encyclopedia import EncyclopediaDialog
 from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
+from app.report import ReportDialog
 from app.scheduler import MinuteScheduler
 from app.settings_dialog import SettingsDialog
 from app.settings_store import (
@@ -36,7 +37,7 @@ from app.settings_store import (
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon
 from app.widget import ClockWidget
-from config import constants, defaults, paths
+from config import constants, defaults, paths, profiling
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from data.hands import HAND_NAMES, hand_packs
@@ -178,6 +179,7 @@ def _resolve_hands(settings: Settings):
     )
 
 
+@profiling.timed("Build skin")
 def build_skin(settings: Settings):
     """The ONE render config: DEFAULT_SKIN with the chosen RING PRESET
     CARD (Database/ring_presets.json + the user's custom cards — owner
@@ -429,6 +431,10 @@ class AppController(QObject):
                 self._settings.language
             )
         self._retired_menu = None       # keeps a replaced OPEN menu alive
+        # The hidden-mode unlock is SESSION-only (owner 2026-07-15):
+        # every launch starts locked — the code must be typed again.
+        # Lives BEFORE the menu build: the Report entry reads it.
+        self._hidden_unlocked = False
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
@@ -485,9 +491,6 @@ class AppController(QObject):
             self._skin, AssetCache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
-        # SESSION-only (owner 2026-07-15): every launch starts locked —
-        # the code must be typed again.
-        self._hidden_unlocked = False
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
         # present until the deadline passes.
@@ -508,6 +511,12 @@ class AppController(QObject):
         self._save_timer.setSingleShot(True)
         self._save_timer.setInterval(defaults.SETTINGS_WRITE_DEBOUNCE_MS)
         self._save_timer.timeout.connect(self._flush_position)
+        # The profiling store flushes once per minute (dirty-guarded —
+        # measuring itself never costs an I/O) and again at quit.
+        self._profiling_timer = QTimer(self)
+        self._profiling_timer.setInterval(60_000)
+        self._profiling_timer.timeout.connect(profiling.flush)
+        self._profiling_timer.start()
         self._widget.moved.connect(self._on_widget_moved)
         # The hidden-mode code listener (owner 2026-07-14): printable
         # keys typed on the focused dial roll through a buffer.
@@ -559,11 +568,13 @@ class AppController(QObject):
                 QMessageBox.StandardButton.Ok,
                 QMessageBox.StandardButton.Ok,
             )
+        profiling.flush()
         self._tray.hide()
         self._app.quit()
 
     # --- Clock ------------------------------------------------------------------
 
+    @profiling.timed("Tick")
     def _on_tick(self, clock_jumped: bool) -> None:
         if self._simulation is not None and monotonic() >= self._simulation_ends:
             self._simulation = None
@@ -576,12 +587,13 @@ class AppController(QObject):
         day_key = (now.date(), now.utcoffset())
         if self._day is None or self._day.cache_key != day_key or clock_jumped:
             try:
-                self._day = build_day_context(
-                    now,
-                    observer,
-                    self._seasons.year_anchors(now.year),
-                    self._moon_phases.moon_window(now.year),
-                )
+                with profiling.measure("Day context"):
+                    self._day = build_day_context(
+                        now,
+                        observer,
+                        self._seasons.year_anchors(now.year),
+                        self._moon_phases.moon_window(now.year),
+                    )
             except Exception as error:
                 # Bundled data unreadable, out of coverage, or schema-
                 # malformed (KeyError/TypeError from a bad year entry) —
@@ -676,6 +688,7 @@ class AppController(QObject):
         self._secret_buffer = ""
         self._hidden_unlocked = True
         self._compositor.set_hidden_unlocked(True)
+        self._report_action.setVisible(True)   # the Report above Exit
         self._tray.notify(
             self._ui("Hidden mode unlocked"),
             self._ui("The Four Greetings await in the Encyclopedia — Trinity."),
@@ -1442,10 +1455,20 @@ class AppController(QObject):
             )
             jumps.addAction(action)
         menu.addSeparator()
+        # The hidden REPORT (owner 2026-07-15): function efficiency
+        # statistics, visible only after the session unlock — above
+        # Exit ("iznad Izlaza").
+        self._report_action = QAction(f"📊 {tr('Report')}", menu)
+        self._report_action.setVisible(self._hidden_unlocked)
+        self._report_action.triggered.connect(self._open_report)
+        menu.addAction(self._report_action)
         exit_action = QAction(f"🚪 {tr('Exit')}", menu)
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
         return menu
+
+    def _open_report(self) -> None:
+        ReportDialog(self._translation_overlay).exec()
 
     def _open_settings(self) -> None:
         dialog = SettingsDialog(

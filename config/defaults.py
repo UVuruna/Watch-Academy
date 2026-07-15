@@ -591,6 +591,19 @@ SUBDIAL_RECOLOR_COLORS = {
     "silver": "#C9CDD3",
 }
 
+# The hidden REPORT window (owner 2026-07-15): function efficiency
+# statistics — table + two QPainter charts in one quiet gold hue
+# (single-series marks; identity lives in the row labels, exact
+# numbers in the table).
+REPORT_REFRESH_MS = 1000
+REPORT_BAR_TOP_N = 10
+REPORT_CHART_HEIGHT_PX = 170
+REPORT_MARK_COLOR = "#C9980B"        # satin gold — the one series hue
+REPORT_MARK_DIM_COLOR = "#6E5A18"    # unselected bars
+REPORT_INK_COLOR = "#E8EAED"         # primary text on the chart
+REPORT_MUTED_COLOR = "#9AA0A6"       # secondary text / axis
+REPORT_SURFACE_COLOR = "#202124"     # chart surface
+
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and

@@ -58,6 +58,12 @@ captions. See [Guide Dialog](guide.md).
 Shared modern gradient-pill button styling for the reader dialogs —
 roles, sizes and colors all from defaults. See [UI Style](ui_style.md).
 
+### `report.py` — Report
+The hidden efficiency report (owner 2026-07-15): the session unlock
+reveals 📊 Report above Exit — sortable function statistics, a
+top-total bar chart and a recent-durations sparkline.
+See [Report](report.md).
+
 Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
 24H2 — revisit on demand).
 

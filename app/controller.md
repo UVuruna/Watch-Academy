@@ -139,7 +139,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   the focused dial roll through a buffer; matching
   `constants.HIDDEN_MODE_SECRET` flips the RUNTIME
   `_hidden_unlocked` flag (owner 2026-07-15: per SESSION, never
-  persisted — the code must be re-entered on every launch) and the
-  Four Greetings appear on the ring letters and in the Encyclopedia
+  persisted — the code must be re-entered on every launch), the
+  Four Greetings appear on the ring letters and in the Encyclopedia,
+  and 📊 Report reveals itself above Exit
+- `_open_report()`: the hidden [Report](report.md) — the
+  [Profiling](../config/profiling.md) statistics (`@timed` on the
+  tick, day rebuild, skin build, paint, composite rebuild, hit test,
+  hover text, subdial recolor, working-set warmup and translation
+  chunks), flushed once per minute and at quit
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

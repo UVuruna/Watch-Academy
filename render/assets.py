@@ -19,7 +19,7 @@ from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QColor, QImage, QImageReader, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
-from config import defaults, paths
+from config import defaults, paths, profiling
 from config.paths import art_file
 
 
@@ -99,6 +99,7 @@ def subdial_plate_file(
     return None
 
 
+@profiling.timed("Subdial recolor")
 def _recolored_plate(
     master: Path, finish: str, tint: str | None = None
 ) -> Path:
@@ -241,6 +242,7 @@ def working_ceiling(path: Path | None) -> int | None:
     return defaults.WORKING_SET_CEILINGS.get(subtree)
 
 
+@profiling.timed("Working set warmup")
 def warm_working_set(progress=None) -> int:
     """Generate the DOWNSCALED working copies of every oversized dial
     asset (owner 2026-07-15: the originals ship full-res, the

@@ -48,6 +48,11 @@ rendering (white core/warm mid/halo scale), tray icon geometry, and
 The only sanctioned home for Win32 API constants (documented enum-exception
 to Rule #4). Consumed by `app/native.py` from M4.
 
+### `profiling.py` — Profiling
+The `@timed` / `measure()` execution-time statistics store behind the
+hidden Report (owner 2026-07-15) — cumulative since the installation,
+flushed by the controller. See [Profiling](profiling.md).
+
 ### `paths.py` — Frozen-Safe Paths
 Resolves `Database/`, `assets/skins/` and `%APPDATA%/DOMY Watch/` from
 `Path(__file__)` / `sys._MEIPASS` — never from the working directory, so a

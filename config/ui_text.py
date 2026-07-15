@@ -128,6 +128,13 @@ UI_STRINGS: tuple[str, ...] = (
     # menu and as the Time Travel dialog's left button.
     "Now", "OK", "Cancel",
     "Back to the present — the simulation ends immediately.",
+    # The hidden REPORT (owner 2026-07-15): function efficiency
+    # statistics behind the session unlock.
+    "Report", "Function", "Calls", "Average", "Min", "Max", "Total",
+    "Last", "Reset", "Close",
+    "Top functions by total time",
+    "No measurements yet — use the clock a little.",
+    "Select a row to watch its recent durations.",
     # The unified SLOT size slider and the rotation-group dropdown
     # (owner 2026-07-14).
     "Slot", "None", "Custom",

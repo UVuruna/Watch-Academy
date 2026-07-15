@@ -15,7 +15,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from config import constants, defaults, paths, ui_text
+from config import constants, defaults, paths, profiling, ui_text
 from data._io import load_json_checked
 
 _SR_LATN = {
@@ -101,6 +101,7 @@ def collect_corpus() -> dict:
     return corpus
 
 
+@profiling.timed("Translate chunk")
 def translate_texts(texts: dict, target: str, progress=None) -> dict:
     """Translate `texts` (key → English) to `target`, one request per
     entry through the gtx endpoint. Raises on network failure — the
