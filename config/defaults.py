@@ -231,6 +231,20 @@ _CONTINENTS = (
 # polar settlements honestly see the pole.
 EARTH_POLE_LATITUDE = 75.0
 
+# The WORKING SET (owner 2026-07-15): originals ship at full
+# resolution; the dial reads a once-per-file DOWNSCALED copy instead —
+# quality and performance both, for a little disk. Ceilings per assets
+# subtree, from the worst case the dial can ask for (1440 dial ×
+# 200% element scale × 200% hover enlarge ≈ 800 px for the round
+# bodies; the slot seats with their 150% pointer factor ≈ 1200 px).
+# Sources at or under the ceiling stay as they are.
+WORKING_SET_CEILINGS = {
+    "earth": 800,
+    "weekday": 800,
+    "zodiac": 1200,
+    "badge": 1200,
+}
+
 # Star + Aura palettes, (pointer, style) -> hues clockwise from the top
 # arm. Measured directly from the owner's reference art
 # (design/background/{hexa,octa}_{paint,light}.png): paint = subtractive

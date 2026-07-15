@@ -331,6 +331,40 @@ def test_earth_pole_regions_full_res_and_latitude_override():
     assert earth_region(44.82, "europe") == "europe"
 
 
+def test_working_set_downscales_oversized_dial_art():
+    """Owner 2026-07-15: the originals ship full-res, the WORKING SET
+    serves the dial — the warmup builds a downscaled copy per
+    oversized source (idempotent: a warm second run builds nothing),
+    the ceiling follows the assets subtree, and trees the dial never
+    draws stay untouched."""
+    from pathlib import Path
+
+    from config import paths
+    from render.assets import (
+        scaled_variant_file,
+        warm_working_set,
+        working_ceiling,
+    )
+
+    assets = paths.assets_dir()
+    assert working_ceiling(
+        assets / "earth" / "earth_clean_europe_day.png"
+    ) == 800
+    assert working_ceiling(assets / "weekday" / "x.png") == 800
+    assert working_ceiling(assets / "zodiac" / "x.png") == 1200
+    assert working_ceiling(assets / "guide" / "x.png") is None
+    assert working_ceiling(Path("C:/elsewhere/x.png")) is None
+    warm_working_set()
+    # Warm: the earth originals (1992 px) wear 800-wide copies…
+    copy = scaled_variant_file(
+        assets / "earth" / "earth_clean_north_pole_day.png", 800
+    )
+    assert copy is not None and copy.exists()
+    assert copy.name.endswith("_earth_clean_north_pole_day.png")
+    # …and a second run rebuilds nothing.
+    assert warm_working_set() == 0
+
+
 def test_hand_packs_load_and_resolve():
     """Owner spec 2026-07-12: hand PACKS (folder + hands.json). The
     bundled CLASSIC and STEEL load, pivots flow into the skin, and the

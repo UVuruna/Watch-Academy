@@ -45,7 +45,7 @@ from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
 from data.translations import TranslationStore, collect_corpus, translate_texts
-from render.assets import AssetCache
+from render.assets import AssetCache, warm_working_set
 from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
@@ -536,6 +536,12 @@ class AppController(QObject):
         if self._settings.click_through:
             self._widget.set_click_through(True)
             self._hover_poller.start()
+        # The WORKING SET warms in the background (owner 2026-07-15:
+        # full-res originals ship, the downscaled dial copies build at
+        # start) — a no-op once every derived file exists.
+        threading.Thread(
+            target=lambda: warm_working_set(progress=print), daemon=True
+        ).start()
 
     def quit(self) -> None:
         self._widget.mark_closing()

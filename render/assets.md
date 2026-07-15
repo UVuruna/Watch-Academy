@@ -13,6 +13,16 @@ Every disk boundary resolves canonical paths through
 `config.paths.art_file` (the Gemini/ChatGPT art-source switch with
 cross-source fallback).
 
+**The working set** (owner 2026-07-15): originals ship at full
+resolution; the dial decodes through a once-per-file DOWNSCALED copy
+instead — `working_ceiling()` names each assets subtree's largest
+possible on-dial size (`WORKING_SET_CEILINGS`: earth/weekday 800 px,
+zodiac/badge 1200 px, from 1440 dial × 200% scale × 200% enlarge),
+`warm_working_set()` pre-builds the copies on a background thread at
+startup (idempotent, progress-logged), and `pixmap_by_height` routes
+any request that fits under the ceiling through the copy — oversized
+requests keep the original, small sources stay untouched.
+
 Module helpers beyond the cache: `ring_face_color()` (the ring art's
 median-luminance face sample, the procedural subdial fill),
 `metal_variant_file()` / `scaled_variant_file()` (disk-cached derived

@@ -216,6 +216,66 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
     return cache
 
 
+def _scaled_cache_path(path: Path, width: int) -> Path:
+    """Where `path`'s downscaled-to-`width` copy lives. The source
+    STEM rides the name — hover tests and humans can read which face
+    a derived file came from."""
+    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
+    return (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{int(path.stat().st_mtime)}_w{width}_{path.stem}.png"
+    )
+
+
+def working_ceiling(path: Path | None) -> int | None:
+    """The WORKING-SET ceiling of an asset (owner 2026-07-15): the
+    subtree under assets/ names the largest pixel size the dial can
+    ever ask of it — None for trees the dial never draws (guide,
+    instrument reader art) and for paths outside assets/."""
+    if path is None:
+        return None
+    try:
+        subtree = path.relative_to(paths.assets_dir()).parts[0]
+    except ValueError:
+        return None
+    return defaults.WORKING_SET_CEILINGS.get(subtree)
+
+
+def warm_working_set(progress=None) -> int:
+    """Generate the DOWNSCALED working copies of every oversized dial
+    asset (owner 2026-07-15: the originals ship full-res, the
+    installation builds the working set). Runs on a background thread
+    at startup — QImage-based, disk-cached like every derived file, a
+    no-op once warm. Returns how many copies were (re)built."""
+    from time import perf_counter
+
+    start = perf_counter()
+    built = 0
+    todo: list[tuple[Path, int]] = []
+    for subtree, ceiling in defaults.WORKING_SET_CEILINGS.items():
+        for source in sorted((paths.assets_dir() / subtree).rglob("*.png")):
+            size = QImageReader(str(source)).size()
+            if size.isValid() and size.width() > ceiling:
+                todo.append((source, ceiling))
+    for index, (source, ceiling) in enumerate(todo):
+        fresh = not _scaled_cache_path(source, ceiling).exists()
+        scaled_variant_file(source, ceiling)
+        if fresh:
+            built += 1
+        if progress is not None and (index + 1) % 10 == 0:
+            elapsed = perf_counter() - start
+            progress(
+                f"[{elapsed:.1f}s] working set {index + 1}/{len(todo)} "
+                f"({(index + 1) / len(todo) * 100:.0f}%)"
+            )
+    if progress is not None and todo:
+        progress(
+            f"[{perf_counter() - start:.1f}s] working set complete — "
+            f"{len(todo)} oversized sources"
+        )
+    return built
+
+
 def scaled_variant_file(path: Path | None, width: int) -> Path | None:
     """A DISK copy of `path` downscaled to `width` px — the hover
     performance fix (owner 2026-07-13: every first hover decoded the
@@ -230,15 +290,11 @@ def scaled_variant_file(path: Path | None, width: int) -> Path | None:
     source = QImageReader(str(path)).size()
     if not source.isValid() or source.width() <= width:
         return path
-    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
-    # The source STEM rides the cache name — hover tests and humans
-    # can read which face a derived file came from.
-    cache = (
-        paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_w{width}_{path.stem}.png"
-    )
+    cache = _scaled_cache_path(path, width)
     if not cache.exists():
-        scaled = QPixmap(str(path)).scaledToWidth(
+        # QImage, not QPixmap — the working-set warmup calls this off
+        # the GUI thread (QPixmap is main-thread-only).
+        scaled = QImage(str(path)).scaledToWidth(
             width, Qt.TransformationMode.SmoothTransformation
         )
         try:
@@ -292,7 +348,16 @@ class AssetCache:
         px_height = max(1, round(logical_height * dpr))
         key = (str(path), px_height, tint, desaturate, metal)
         if key not in self._pixmaps:
-            pixmap = self._rasterize(path, px_height, dpr)
+            # The WORKING SET (owner 2026-07-15): a full-res original
+            # decodes through its downscaled working copy whenever the
+            # requested size fits under the subtree's ceiling — the
+            # warmup pre-builds these, and a cold copy builds here
+            # once. Oversized requests keep the original.
+            ceiling = working_ceiling(path)
+            source = path
+            if ceiling is not None and px_height <= ceiling:
+                source = scaled_variant_file(path, ceiling)
+            pixmap = self._rasterize(source, px_height, dpr)
             if metal is not None:
                 pixmap = self._metal_swapped(pixmap, metal)
             if desaturate:
