@@ -101,6 +101,16 @@ one place to check what is missing. Regenerate after any theme-table
 change or art drop; keep its NINTHS table in sync with
 `app/encyclopedia.py`.
 
+### `bond_theme.md` — The Bond (relationship pillars theme draft)
+The owner's man-and-woman pillars (prompt.txt notes, 2026-07-16)
+seated on the wheel through the CONJUGATION LAW — every pillar is a
+seat's virtue conjugated between two persons, every shadow its vice
+(Trust/Moon, Support/Mars, Tolerance/Mercury, Gratitude/Jupiter,
+Passion/Venus, Respect/Saturn, the Union enthroned with Loyalty and
+Closeness as its faces); ninth candidates (the Child / Loneliness),
+name options, 1 Corinthians 13 as the anchor — open questions await
+the owner (the Dracula telling, the ninth, the name).
+
 ### `pantheon_catalog.md` — The Pantheon Catalog (the owner's review)
 Both rosters seat by seat with everything on the table: Planetary vs
 Pantheon per theme, every alternative with pros and cons, every

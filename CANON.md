@@ -125,8 +125,9 @@ glass; objectivity as the only glass that does not color the light).
 
 Owner canon 2026-07-16: each pointer carries its own ARCHETYPE
 reading of the arm colors — persons layered on the same wheel.
-Approved so far (Seasons and Compass pending — the owner decides;
-do not invent them):
+Trinity and Prism are approved; Seasons' CONCEPT is approved (the
+four temperaments); Compass is a PROPOSAL awaiting the owner's
+verdict:
 
 ### Trinity (trio)
 
@@ -138,9 +139,31 @@ the Advocate (*Parakletos*, 1 John 2:1), Satan literally the Accuser
 
 | Arm | Color | Person | Nature | Type | Calling |
 |---|---|---|---|---|---|
-| top (12h) | yellow | **God** | both natures at once — loves himself AND questions himself, so he corrects his own deeds and cannot be manipulated or steered | **The One** | **Judge** — the one who knows all and sees all |
-| 20h | red | **the Devil** | Pride — love turned toward himself | the Boss syndrome (everyone must please him) | **Prosecutor** — wants to punish, enjoys punishing |
-| 04h | blue | **Jesus** | Weakness — love turned toward others | the Servant syndrome (pleases everyone) | **Advocate** — always steps in to defend the other |
+| top (12h) | yellow | **God** | both natures at once — loves himself AND questions himself, so he corrects his own deeds and cannot be manipulated or steered; **the union of the two below** (owner 2026-07-16: "the Union of Jesus and Lucifer") | **The One** | **Judge** — the one who knows all and sees all |
+| 20h | red | **the Devil** | Pride — love turned toward himself; in the articles he stands for **enjoyment, hedonism** | the Boss syndrome (everyone must please him) | **Prosecutor** — wants to punish, enjoys punishing |
+| 04h | blue | **Jesus** | Weakness — love turned toward others; in the articles he stands for **renunciation** | the Servant syndrome (pleases everyone) | **Advocate** — always steps in to defend the other |
+
+Quote anchors for the articles (owner 2026-07-16: "use quotes that
+suit us, or propose them"):
+
+- **The One** — Revelation 1:8: *"I am the Alpha and the Omega …
+  who is, and who was, and who is to come"* — the owner's very
+  definition ("onaj koji je bio, koji jeste i koji će biti"), and it
+  lands on OUR dial: Omega already holds the 24h seat, and Sigma is
+  canonically the union of Alpha and Omega. Also Exodus 3:14 —
+  *"I AM THAT I AM"* — The One's name spoken by itself.
+- **Jesus (renunciation)** — Matthew 16:24: *"let him deny himself,
+  and take up his cross"*; Luke 22:42: *"not my will, but thine"*.
+- **The Devil (hedonism)** — the temptations of Matthew 4 (bread,
+  glory, all the kingdoms offered at once); 1 Corinthians 15:32 /
+  Isaiah 22:13: *"let us eat and drink; for tomorrow we die"*.
+- **NOVUS ORDO SECLORUM** — no longer in reserve (owner
+  2026-07-16): it is the PROPHECY that a new Judge keeps coming — a
+  new One, a new *E Pluribus Unum* — to lead the people and mankind
+  into a better future. Its actual source already says exactly this:
+  Virgil, Eclogue IV — *"magnus ab integro saeclorum nascitur ordo"*
+  ("the great order of the ages is born anew") — antiquity's own
+  prophecy of the returning savior-child.
 
 **The Eye is the union of the three** (owner 2026-07-16): the
 ALL-SEEING EYE sits at the CENTER during the archetype reveal — the
@@ -161,23 +184,85 @@ diamonds): the person and the calling. Image prompts:
 
 Six arms, two interlocked triangles, and ONE mechanic: love can turn
 flaws into virtues, and hatred can turn the same virtues into flaws.
+The PERSONS (owner 2026-07-16; the orange seat still open):
 
-| Arm | Color | Quality |
-|---|---|---|
-| top (12h) | yellow | **Love** — shared summit of Weakness and Pride: love of others AND love of self, at the point where they become SIN |
-| 16h | orange | **Courage** |
-| 20h | red | **Pride** |
-| bottom (24h) | purple | **Hatred** — shared root of the virtue pair: turned inward it drags Humility down (Judas); turned outward it turns Courage into wrath, madness, overreach (Lucifer) |
-| 04h | blue | **Weakness (Fear)** |
-| 08h | green | **Humility** |
+| Arm | Color | Quality | Person |
+|---|---|---|---|
+| top (12h) | yellow | **Love** — shared summit of Weakness and Pride: love of others AND love of self, at the point where they become SIN | **The One (God)** |
+| 16h | orange | **Courage** | **OPEN** — owner undecided; proposed: **Michael the Archangel** (see below) |
+| 20h | red | **Pride** | **Lucifer** (his Scale window is already ember-red) |
+| bottom (24h) | purple | **Hatred** — shared root of the virtue pair: turned inward it drags Humility down (Judas); turned outward it turns Courage into wrath, madness, overreach (Lucifer) | **the Devil** |
+| 04h | blue | **Weakness (Fear)** | **Judas** (his Scale window is already midnight-blue) |
+| 08h | green | **Humility** | **Jesus** (renunciation — the same nature as his Trinity seat) |
 
 The diagonals carry the oppositions — **Love–Hatred** (12h–24h),
 **Humility–Pride** (08h–20h), **Fear–Courage** (04h–16h) — the same
 diagonal geometry as the mood and virtue axes in
 [DOMY Symbolism](SYMBOLISM.md) (Fear–Courage IS the Moon–Mars
-cross-cure axis).
+cross-cure axis). With the persons seated, every diagonal becomes a
+PERSON-PAIR: **The One against the Devil** (Love–Hatred),
+**Jesus against Lucifer** (Humility–Pride — the one who descended
+against the one who wanted to ascend: Luke 14:11 *"he that humbleth
+himself shall be exalted"* against Isaiah 14:13 *"I will ascend into
+heaven"*), and — if Michael is accepted — **Michael against Judas**
+(Courage–Fear: the one who fights against the one who despaired).
+Michael's argument: Revelation 12 holds the WHOLE cast in one
+chapter — Michael wars against the dragon (12:7) and the Accuser is
+thrown down (12:10); he balances the wheel three-and-three (The One,
+Jesus, Michael against Lucifer, the Devil, Judas). Alternatives if
+the owner prefers a human: John the Baptist (courage before Herod,
+paid with his head) or David (the boy before the giant). Judas and
+Lucifer inherit their existing Scale glass windows — no new art for
+those two seats.
 
-Display rules (feature spec in [Roadmap](ROADMAP.md)): archetypes
+### Seasons (cross) — the Four Temperaments (concept APPROVED 2026-07-16)
+
+The oldest four-fold reading of man there is — the humors — laid on
+the four season arms, each arm's season carrying the temperament it
+has always carried in the tradition:
+
+| Arm | Season | Temperament | Nature |
+|---|---|---|---|
+| spring | **Sanguine** | blood — warm and moist like spring air | the enthusiast: quick to love, quick to laugh, quick to forget |
+| summer | **Choleric** | yellow bile — hot and dry like the summer sun | the commander: fire that drives and fire that burns |
+| autumn | **Melancholic** | black bile — cold and dry like fallen leaves | the thinker: depth bought with heaviness |
+| winter | **Phlegmatic** | phlegm — cold and moist like snow | the steady one: calm that outlasts every storm |
+
+Per-arm assignment above is the classical correspondence (proposed
+as the default mapping; the owner adjusts if he reads a season
+differently).
+
+### Compass (octa) — the Eight Walks of Life (PROPOSAL — awaiting the owner's verdict)
+
+Eight estates seated POSITIONALLY, each justified by its HOUR (the
+DOMY way — the colors are already moods of the day), with the four
+diagonals as oppositions:
+
+| Arm | Hour sense | Estate | Why this hour |
+|---|---|---|---|
+| 12h | noon | **the King** | power at its zenith; the throne hour |
+| 15h | afternoon | **the Merchant** | the market's peak; the deal closed before dusk |
+| 18h | sunset | **the Soldier** | stands guard where day meets night — the frontier hour |
+| 21h | evening | **the Artist** | stage, feast and music after dark |
+| 24h | midnight | **the Wanderer** | outside the walls, owning nothing but the road (the Odin-the-Wanderer hour — the norse dual already walks at 24h) |
+| 03h | deep night | **the Scholar** | the lamplit student — the only one awake with the stars |
+| 06h | dawn | **the Farmer** | up at first light, plough in hand |
+| 09h | morning | **the Priest** | morning mass, the school bell — the teacher's hour |
+
+The oppositions: **King–Wanderer** (the crown against the open
+road — Pride and Humility again), **Soldier–Farmer** (the sword
+against the plough — Isaiah 2:4, *"they shall beat their swords
+into plowshares"*), **Merchant–Scholar** (what a thing costs
+against what it is worth), **Artist–Priest** (the stage against the
+altar — two performances, both reaching past this world). Kinship
+note: seven of the eight echo the Seven Professions theme (which
+seats the Physician instead of the Scholar and the Wanderer) — a
+different reading of the same society, positional by hour instead
+of planetary.
+
+### Display rules
+
+Feature spec in [Roadmap](ROADMAP.md): archetypes
 show only during GLOW windows (a moon phase ~every 7 days, a sun
 event ~every 90); the moon window reveals them only on Omega
 double-click; the sun window also as a slot theme option and in the

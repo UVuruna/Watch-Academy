@@ -79,6 +79,9 @@ lives in [The DOMY Canon](CANON.md).
 - **Wider Pantheon Encyclopedia topics** — one per culture for the
   A-list figures no seat could hold (retired ninths stay in
   `encyclopedia.json` for this wave).
+- **The Bond theme** (relationship pillars, owner notes 2026-07-16)
+  — definition draft in `research/bond_theme.md`; owner still owes
+  the Dracula telling, the ninth pick and the name.
 - **`research/build_roster.py`** — add pantheon + glass columns,
   regenerate [Roster](ROSTER.md).
 - **Win+D WorkerW glue (optional)** — the only workaround for the
