@@ -60,6 +60,125 @@ binding is currently challenged.
 
 ---
 
+## Round four — the owner's verdicts (2026-07-15)
+
+- **Ninths LOCKED:** Gaia (greek), Yggdrasil (norse), Triglav
+  (slavic), **the Polymath** (profession — *"ne može klovn da bude
+  najviši na piramidi"*; the Jester retires to the Wider lane, his
+  truth-to-the-throne line surviving inside the Polymath's article).
+- **Norse LOCKED** as recommended: Odin, Hel, Thor, Loki, Tyr,
+  Frigg, Freyr + Odin/the Wanderer dual + Yggdrasil.
+- **Slavic — adjudicated** (the owner delegated: *"tu moraš ti sam da
+  presudiš… važno mi je da ne izostavimo nekog važnog"*): see the
+  revised table below. Dažbog is NOT dropped — he keeps Thursday,
+  the seat his own name writes.
+- **Egypt ninth — the owner's Pharaoh proposal ACCEPTED and
+  seconded** (see below).
+- **The thirteenths (Ophiuchus, the Cat)** stay Encyclopedia-only
+  non-members, with their justifications recorded below.
+- **Wolves:** no second roster at all — the CANON display names gain
+  the psychologists' rank in parentheses: Leader (Alpha), Hunter
+  (Gamma), Scout (Delta), Second (Beta); Luna, Mate and Elder stay
+  plain; Omega remains the dual, Sigma the ninth. Zero new art.
+- **Religion rework requested** — the full proposal is its own
+  section below.
+
+### Slavic — final adjudication
+
+| Seat | Pantheon (final) | Why |
+|---|---|---|
+| sun | **Perun** | the supreme thunderer |
+| dual | **Perun / Veles** | the combat myth IS throne-above/throne-below — the storm god and the serpent at the roots; the owner's "one figure, one seat" rule is honored by moving Veles OFF Monday |
+| moon | **Mokoš** | her name IS moisture (*mokra*) — the wet mother on the blue water seat, women's care as the Physician face |
+| mars | **Svetovid** | the four-faced war-watcher |
+| mercury | **Svarog** | the smith — the making mind |
+| jupiter | **Dažbog** | *Dažd-bog*, "the god who gives" — Generosity by name; SEATED, per the owner's worry |
+| venus | **Lada** | the folk-songs' love goddess |
+| saturn | **Morana** | winter into spring — Renewal |
+| ninth | **Triglav** | three realms in one three-headed body |
+
+Nobody important is dropped: Hors keeps his Planetary Moon, Crnobog,
+Stribog, Jarilo and Rod take the Wider lane. Every attested first-
+rank name is now visible somewhere.
+
+### Egypt — the Pharaoh ninth (owner's proposal, seconded)
+
+**The Pharaoh** (Tutankhamun's likeness, named simply "Pharaoh") is
+not merely acceptable — it is the doctrine's best proof: the living
+king was **Horus in life and Osiris in death** — the throne above
+and the throne below united in ONE living body. That is the Union
+form, word for word; and the golden mask is the single most famous
+Egyptian image on Earth, so the never-outranked law holds. Egypt
+ninth: **The Pharaoh**; Set retires to the Wider lane (his murder
+story lives on inside the Osiris and Horus articles regardless).
+
+### The thirteenths — justification on record
+
+- **The Cat (Chinese zodiac):** genuinely part of the myth — in the
+  Great Race folk tale the Rat tricks the Cat (the wrong day, or the
+  push into the river from the Ox's back), which is WHY cats hunt
+  rats and why no Year of the Cat exists; and the Vietnamese zodiac
+  actually SEATS the Cat in the Rabbit's place. The excluded
+  thirteenth is told by the culture itself — full justification.
+- **Ophiuchus:** a real ecliptic constellation — the Sun crosses it
+  roughly Nov 30 – Dec 17; known since Babylon and deliberately
+  excluded to keep twelve equal signs. The modern "13th sign" debate
+  keeps him famous.
+- Placement: both are Encyclopedia-only non-members with short
+  articles (no dial seat, no rotation role) — exactly as the owner
+  ruled.
+
+## The Religion rework — proposal (awaiting GO)
+
+The owner's direction: the main theme re-centers on the living
+faiths with Christianity on the throne; the second theme becomes
+ANCIENT RELIGIONS; Freemasonry — present and powerful, but not a
+religion — becomes the ninth.
+
+### Creeds (main theme, reworked)
+
+| Seat | Today | Proposed | Note |
+|---|---|---|---|
+| sun | Freemasonry | **Christianity** | the largest faith (~2.4 B) takes the throne |
+| dual | — / Rough Ashlar | **Christianity / Satanism** | the faith and its adversary — the red horned Devil as its face; precedent already ships (bible_dark's Lucifer/Judas) |
+| moon | Islam ✓ | Islam | ~1.9 B, the crescent IS the seat |
+| mars | Buddhism ✓ | Buddhism | |
+| mercury | Taoism ✓ | Taoism | |
+| jupiter | Hinduism ✓ | Hinduism | |
+| venus | Christianity | **Sikhism** (rec) / Zoroastrianism | the freed seat; see the honest numbers below |
+| saturn | Judaism ✓ | Judaism | |
+| ninth | Unknown God | **Freemasonry** | the owner's call — not a religion, yet present and powerful: BOTH ninth forms at once (excluded as a non-religion; union as the lodge where men of every creed sit together); the existing plate survives |
+
+**The freed Friday seat — facts before the pick:** the largest
+UNSEATED living faith is **Sikhism** (~26 M — larger than Judaism);
+Zoroastrianism, though ancient and noble, counts only ~100–200 k
+today. If membership is the criterion the owner named, Friday is
+Sikhism (and seva/langar — love as service — reads red). If SYMBOL
+is the criterion, Zoroastrianism's fire temples burn red and it is
+the FIRST dualist faith — poetic on the theme that now carries a
+Satan dual. **Recommendation: Sikhism**, Zoroastrianism stays in
+Ancient Religions where it is already seated. As for seating
+SATANISM itself on Friday — advise against: it is stronger as the
+dual's shadow face; seated twice it would double.
+
+### Ancient Religions (rename of Mysteries)
+
+| Seat | Today | Proposed | Note |
+|---|---|---|---|
+| sun | Mithraism ✓ | Mithraism | the soldier-mystery of Rome |
+| dual | Mithraism / Corax ✓ | unchanged | |
+| moon | Druidism ✓ | Druidism | owner named the druids |
+| mars | Zoroastrianism ✓ | Zoroastrianism | stays here (see above) |
+| mercury | Shamanism ✓ | Shamanism | owner named the shamans |
+| jupiter | Sikhism | **Eleusinian Mysteries** | Sikhism promotes to Creeds; Eleusis — the greatest mystery cult of antiquity — takes the priest seat (alternative: Hermeticism) |
+| venus | Babylon ✓ | Babylon | Ishtar's city on the love seat |
+| saturn | Voodoo ✓ | Voodoo | owner named it; its lineage is genuinely old (West African Vodun) |
+| ninth | Lost Mystery | **The Unknown God** | relocated from Creeds — the ΑΓΝΩΣΤΩ ΘΕΩ altar in Athens is literally ANCIENT (Acts 17); the Lost Mystery folds into its article (they are the same thought told twice) |
+
+Art cost of the whole rework: one new plate (Satanism dual) + one
+(Eleusis) + colored where applicable; Christianity/Freemasonry/
+Sikhism plates all exist and reseat.
+
 ## The Ninth, theme by theme — the Union review
 
 Each theme decided on its own, per the doctrine: prefer a Union that
@@ -406,34 +525,31 @@ Slavic: Hors*, Mokoš*†, Svetovid is seated, Stribog, Rod.
 (* already has a plate/article from the Planetary roster — near-zero
 cost; † unless seated by the owner's ⚖ picks above.)
 
-## Open picks — the owner's list (after round three)
+## Open picks — the owner's list (after round four)
 
-Settled: Zeus/Hades dual ✓, the dual doctrine generalized (supreme /
-underworld wherever the mythology tells it) ✓, Artemis Tuesday ✓,
-Hera Friday ✓, Anubis Thursday ✓, the Ninth doctrine final (Union
-need not be a person; never outranked; per-theme) ✓, Sigma reframed
-✓, purple = the night of the mind ✓, max-coverage ✓, names
-Pantheon/Planetary ✓, bible ninth = **the Holy Trinity** ✓ (owner's
-example), bible_dark ninth = **the Ninth Circle** ✓ (owner's Dante
-reading).
+Settled to date: names Pantheon/Planetary ✓; the dual doctrine
+(supreme/underworld, opposition need not be evil) ✓; the Ninth
+doctrine final ✓; purple = the night of the mind ✓; max-coverage ✓;
+Greek roster + Zeus/Hades dual + **Gaia** ninth ✓; Norse roster
+LOCKED (Odin, Hel, Thor, Loki, Tyr, Frigg, Freyr, the Wanderer dual,
+**Yggdrasil**) ✓; Slavic roster adjudicated (Perun/Veles dual,
+Mokoš Monday, Dažbog seated Thursday, **Triglav**) ✓; Egypt ninth
+**the Pharaoh** (owner's proposal) ✓; profession ninth **the
+Polymath** ✓ (Jester to the Wider lane); bible ninth **the Holy
+Trinity** ✓, bible2 **Melchizedek** ✓, bible_dark **the Ninth
+Circle** ✓; wolves = canon names + rank in parentheses, no second
+roster ✓; thirteenths Encyclopedia-only with recorded justification ✓.
 
 Still open:
-1. Greek Ninth: **Gaia** (rec) / Dionysos / Olympus / Pan.
-2. Norse Ninth: **Yggdrasil** (rec) / Baldur stays.
-3. Slavic Ninth: **Triglav** (rec) / Crnobog stays.
-4. Profession Ninth: **The Polymath** / the Jester stays (no rec —
-   both strong).
-5. bible2 Ninth: **Melchizedek relocates there** (rec) / bible2
-   stays ninth-less.
-6. Egyptian Friday: **Bastet** (rec, max-coverage) / Hathor repeat.
-7. Egyptian Saturday: **Osiris repeat** (rec) / Geb.
-8. Norse Monday: **Hel** (rec) / Njord.
-9. Norse Friday: **Frigg** (rec, max-coverage) / Freya repeat.
-10. Slavic Wednesday: **Svarog** (rec, soft) / Hors reuse.
-11. Slavic Friday: **Lada** (rec) / Mokoš.
-12. Slavic dual: **share Old Dažbog** (rec) / a Perun-specific twin
-    — or, under the generalized dual doctrine, **Perun / Veles**?
-    (the combat myth IS throne-above/throne-below; but Veles already
-    holds the Pantheon Monday — one figure, two Pantheon roles would
-    be a first).
-13. Wolf Friday: **Mate** (rec, keeps the Alpha/Omega dual) / Omega.
+1. **The Religion rework** — GO/adjust the two tables above; the one
+   real pick inside it: Friday **Sikhism** (rec, by membership) /
+   Zoroastrianism (by symbol).
+2. Ancient Religions Thursday: **Eleusinian Mysteries** (rec) /
+   Hermeticism.
+3. Egyptian Friday: **Bastet** (rec, max-coverage) / Hathor repeat.
+4. Egyptian Saturday: **Osiris repeat** (rec) / Geb.
+
+Everything else is decided; after these four, the execution wave
+starts: prompt-sheet expansions per border identity → the owner
+generates → symbolism.json articles (both faces argued per seat) →
+`figure_roster` code round.
