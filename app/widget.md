@@ -36,7 +36,12 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
 - `mousePressEvent()`: left button starts a native OS window move
 - `mouseMoveEvent()`: hover tooltips via `compositor.tooltip_at()` —
   small dials pop the full date over the current weekday body, the Earth
-  and the Moon markers (large dials write the text directly)
+  and the Moon markers (large dials write the text directly). Holding
+  the BYPASS key (`defaults.HOVER_BYPASS_MODIFIER`, Ctrl) SILENCES
+  hovers while the cursor travels (owner 2026-07-16: near the screen
+  edge a large neighbour legend covered the smaller weekday body —
+  hold, glide past, release inside the wanted element); the
+  controller's click-through poller obeys the same key
 - `contextMenuEvent()`: opens the shared menu
 - `set_click_through()`: TRUE pass-through (`WS_EX_TRANSPARENT`) — no
   clicks, no system hover; recovery via the tray, hover via the

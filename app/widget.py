@@ -13,6 +13,12 @@ from PySide6.QtWidgets import QMenu, QWidget
 from app import native
 from config import constants, defaults, winapi
 
+# The hover-bypass key, resolved from the config name (Qt enums do
+# not belong in config — Rule: config stays Qt-free).
+_HOVER_BYPASS = getattr(
+    Qt.KeyboardModifier, defaults.HOVER_BYPASS_MODIFIER
+)
+
 
 class ClockWidget(QWidget):
     """Frameless, per-pixel-transparent, always-at-bottom dial window."""
@@ -122,6 +128,19 @@ class ClockWidget(QWidget):
 
     def mouseMoveEvent(self, event) -> None:
         if self._renderer is not None and self._tick is not None:
+            if event.modifiers() & _HOVER_BYPASS:
+                # The held BYPASS key silences the whole hover system
+                # (owner 2026-07-16): a large neighbour legend — e.g.
+                # the hexa zodiac diamond's — can cover a smaller
+                # target near the screen edge; hold, glide past,
+                # release inside the element you actually want.
+                if self._renderer.set_hover(
+                    -1.0e9, -1.0e9, float(self._dial_diameter)
+                ):
+                    self.update()
+                self._legend.dismiss()
+                super().mouseMoveEvent(event)
+                return
             size = float(self._dial_diameter)
             x = event.position().x() - self._margin_px
             y = event.position().y() - self._margin_px

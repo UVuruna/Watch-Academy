@@ -65,6 +65,14 @@ CLOCK_JUMP_THRESHOLD_S = 5           # actual vs expected tick time -> full refr
 # tooltips itself at this interval.
 CLICK_THROUGH_HOVER_POLL_MS = 200
 
+# Holding this key SILENCES the hover system while the cursor travels
+# (owner 2026-07-16): near the screen edge a large neighbour legend —
+# e.g. the hexa zodiac diamond's — covers the smaller weekday body, so
+# the target could never be reached; hold, glide past, release inside
+# the wanted element. A Qt.KeyboardModifier NAME (config stays
+# Qt-free); the widget resolves it.
+HOVER_BYPASS_MODIFIER = "ControlModifier"
+
 # Time Travel (scenario tester in the menu): the dial renders the entered
 # moment/position for this long, then returns to the present by itself.
 TIME_TRAVEL_DURATION_S = 60

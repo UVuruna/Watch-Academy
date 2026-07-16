@@ -1844,6 +1844,13 @@ class AppController(QObject):
         x, y = local.x() - margin, local.y() - margin
         tip = None
         inside = 0 <= x < size and 0 <= y < size
+        if QApplication.queryKeyboardModifiers() & getattr(
+            Qt.KeyboardModifier, defaults.HOVER_BYPASS_MODIFIER
+        ):
+            # The held bypass key silences hovers in click-through
+            # mode too (owner 2026-07-16) — same rule as the widget's
+            # mouseMoveEvent.
+            inside = False
         if self._compositor.set_hover(
             x if inside else -1.0e9,
             y if inside else -1.0e9,
