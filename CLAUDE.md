@@ -48,6 +48,12 @@ here.
 - **MD-first also for NEW files:** create the component's `.md`
   (purpose, connections) BEFORE creating the script, not only when
   modifying existing ones.
+- **Translation policy (owner 2026-07-16): NO Serbian translation
+  during development.** Texts churn — translating unfinished text is
+  write-then-delete waste. Sessions write ENGLISH ONLY (new UI keys
+  may ship untranslated; English is the documented fallback). The SR
+  bundle is brought to full coverage in ONE dedicated TRANSLATION
+  session immediately before a build/release (see WORKPLAN).
 - **Accuracy > speed:** this is an astronomical instrument — a slow
   correct answer beats a fast plausible one; pin every fixed behavior
   with a golden test before relying on it.

@@ -105,8 +105,10 @@ quote-the-greats and color-fidelity rules); SYMBOLISM.md;
 (courtroom persons+callings, family members+hearth-roles,
 temperaments+ages, persons+qualities, pillars+shadows,
 estates+objects, ages+beings), with the Bible/philosopher quotes
-woven in; SR bundle synced to 0/0. **MANDATORY in this session:**
-the ~327 `octa_paint`/`octa_light` variant paragraphs in
+woven in — **ENGLISH ONLY (translation policy, owner 2026-07-16:
+no SR during development; the pre-build Translation session covers
+everything at once)**. **MANDATORY in this session:** the ~327
+`octa_paint`/`octa_light` variant paragraphs in
 `Database/symbolism.json` still describe the OLD compass hues
 (found in Session 3) — rewrite them to the Walks/Ages wheels.
 
@@ -134,6 +136,16 @@ could hold; retired ninthsʼ material reused; SR synced.
 regenerated; docs freshness pass (stale status lines, PROJECTS.md
 registration at the monorepo root); link check of the whole `.md`
 chain.
+
+### Session 15 — the Translation wave → **Opus** (runs IMMEDIATELY before Session 10)
+**Say:** "Radi Sesiju 15 iz WORKPLAN.md — prevod pred build."
+**Reads:** this entry; `data/translations.md`; the merge pipeline
+pattern in `research/___research.md` (merge_articles.py).
+**Delivers:** the ONE translation pass of the whole cycle (owner
+policy 2026-07-16): every untranslated/stale key — articles, UI
+strings, encyclopedia pages, moon pages, archetype texts — brought
+to a clean bundle==corpus 0/0 audit in `sr-Latn.json`; house voice,
+brand terms stay English; the audit numbers printed in the report.
 
 ### Session 10 — M7 Build & Release → **Opus**
 **Say:** "Radi Sesiju 10 iz WORKPLAN.md — M7 build pipeline i
