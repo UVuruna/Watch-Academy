@@ -15,6 +15,7 @@ rules by which any new member, theme or figure gets placed.
 - [The Throne and Its Shadow](#throne-shadow)
 - [The Ninth — Outside the Circle](#the-ninth)
 - [Pointer Archetypes](#pointer-archetypes)
+- [The Dozen — the Twelve-Wedge Pointer](#the-dozen)
 - [Working Rules for Agents](#working-rules)
 
 <a id="the-web"></a>
@@ -449,6 +450,65 @@ show only during GLOW windows (a moon phase ~every 7 days, a sun
 event ~every 90); the moon window reveals them only on Omega
 double-click; the sun window also as a slot theme option and in the
 Encyclopedia; they work under Time Travel.
+
+<a id="the-dozen"></a>
+
+## The Dozen — the Twelve-Wedge Pointer (IN DEFINITION, owner 2026-07-16)
+
+A new pointer that divides the 24h dial into TWELVE 2-hour wedges
+(`Dozen.png`, the owner's sheet, root). No weekday model rides it —
+its readings are the year and the day. Two variants:
+
+### The Zodiac Dozen (left sheet)
+
+Wedge boundaries ON the cardinal axes (12h–14h, 14h–16h, …). This
+aligns EXACTLY with the zodiac because Cancer opens at the summer
+solstice — which IS the dial's top on our year wheel; every season
+holds exactly three signs, so the sign boundaries land on the wedge
+lines all around. The color wheel is the RGB circle rotated 15°
+so that NO pure primary appears (owner spec — no pure green, red or
+blue): Cancer `#40FF00`, Leo `#BFFF00`, Virgo `#FFBF00`, Libra
+`#FF4000`, Scorpio `#FF0040`, Sagittarius `#FF00C0`, Capricorn
+`#BF00FF`, Aquarius `#4000FF`, Pisces `#0040FF`, Aries `#00BFFF`,
+Taurus `#00FFBF`, Gemini `#00FF40`. **Lighting:** the CURRENT
+sign's wedge lights (the Astrology Zodiac — the only theme that
+makes sense here; the Chinese YEAR zodiac does not, see below).
+
+### The Month Dozen (right sheet)
+
+Wedges CENTERED on the axes (11h–13h, …), June at the top; pure
+primaries allowed: June `#00FF00`, July `#80FF00`, August
+`#FFFF00`, September `#FFBF00`, October `#FF0000`, November
+`#FF0080`, December `#FF00FF`, January `#8000FF`, February
+`#0000FF`, March `#0080FF`, April `#00FFFF`, May `#00FF80`.
+
+**The alignment dilemma** (owner): a month's middle is the 15th,
+but the solstice falls June 20–22. Two options:
+
+- **(a) Exact months** — every month exactly 30° with the 1st on a
+  wedge line; the Earth marker's tempo varies per month (February's
+  28 days cover the same 30° as January's 31) and the
+  solstices/equinoxes slide slightly OFF the axes. Doctrine-legal:
+  the year wheel already runs piecewise (every season exactly 90°).
+- ★ **(b) One year-truth** — the shared year wheel stays untouched
+  (solstice pinned to the top, identical Earth position on every
+  pointer); the wedges are fixed 30° badges and the few-degree
+  oscillation is accepted — the colors say "roughly June". The
+  precision instruments remain the season and zodiac readings.
+
+★ = the standing recommendation; the owner rules.
+
+**Lighting (PROPOSED):** the right geometry is a GIFT — the
+traditional Chinese DOUBLE-HOURS (shichen) are EXACTLY these
+wedges: the Horse hour runs 11:00–13:00 centered on noon, the Rat
+23:00–01:00 on midnight, twelve animals in 2-hour watches centered
+on the cardinal hours. So the Month Dozen can light BY THE DAY: the
+hand entering a double-hour lights its wedge and the animal speaks
+the article — the Chinese zodiac, dismissed for the YEAR reading,
+returns as the DAY reading it always truly was. And all twelve
+animal medallions ALREADY exist on disk (colored/gold/silver/
+bronze) — zero new art. The plain alternative: light the CURRENT
+month (year reading), mirroring the zodiac variant.
 
 <a id="working-rules"></a>
 

@@ -86,6 +86,13 @@ lives in [The DOMY Canon](CANON.md).
    archetype section) stays HIDDEN behind the existing typed
    cipher — when the code is entered, the poem appears in the
    Encyclopedia, bound to the Seasons.
+7. **The Dozen pointer** (owner 2026-07-16, `Dozen.png`). A new
+   twelve-wedge pointer — 2h per wedge — in two variants: the
+   Zodiac Dozen (boundaries on the axes, 15°-shifted RGB wheel,
+   current sign lights) and the Month Dozen (wedges centered on the
+   axes, pure primaries, June top). Full doctrine, palettes and the
+   open verdicts (month alignment a/★b, the shichen day-lighting
+   proposal) in [The DOMY Canon](CANON.md) §The Dozen.
 
 <a id="engineering-backlog"></a>
 

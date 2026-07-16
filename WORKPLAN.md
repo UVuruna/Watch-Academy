@@ -140,6 +140,22 @@ replacing the dev pythonw entry; clean-profile smoke; then asks the
 owner about GIT RELEASE (tag + `gh release create` with the
 installer artifact).
 
+### Session 11 — the Dozen pointer → **Opus**
+**Say:** "Radi Sesiju 11 iz WORKPLAN.md — Dozen pointer."
+**Reads:** CANON.md §The Dozen (BOTH variants, the palettes, the
+owner's verdicts on the open points); `Dozen.png` (root);
+`render/layers.md`, `skins/manifest.md`, `config/___config.md`
+(palette system).
+**Delivers:** the twelve-wedge pointer with its two variants —
+Zodiac Dozen (sign boundaries on the axes, 15°-shifted wheel,
+current sign lights, existing zodiac art speaks the articles) and
+Month Dozen (axis-centered wedges, pure primaries, lighting per the
+owner's verdict — current month, or the Chinese double-hours
+following the hand with the existing animal medallions); palettes
+pinned with tests, offscreen renders for the owner's eyes. (Opus:
+render geometry + year-wheel interplay. May run before or after
+Session 5 — the owner names the order.)
+
 ## Running in Parallel (no agent needed)
 
 - **Owner art generation** from the sheets: pantheon plates,
@@ -157,3 +173,7 @@ installer artifact).
 - Seven archetypes stay seven (the standing recommendation) or grow
   to thirteen — 13 is the excluded number in this system.
 - Odanost as the center's day face, or on a planet seat.
+- The Dozen: month alignment (a) exact 30° months / ★ (b) one
+  year-truth with badge wedges; the Month Dozen lighting — current
+  month, or ★ the Chinese double-hours (shichen) following the
+  hand.
