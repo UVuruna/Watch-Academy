@@ -95,6 +95,10 @@ lives in [The DOMY Canon](CANON.md).
   pending — do not restructure until he rules.
 - **`research/build_roster.py`** — add pantheon + glass columns,
   regenerate [Roster](ROSTER.md).
+- **Compass palette pair implementation** — the APPROVED hues live
+  in [The DOMY Canon](CANON.md) (paint = the Walks' materials,
+  light = the Eight Ages); replace the two near-identical octa
+  presets in `PALETTE_PRESETS` and pin with a test.
 - **Win+D WorkerW glue (optional)** — the only workaround for the
   Show Desktop layer; ship or consciously drop.
 - **Docs freshness pass** — README status line, PROJECTS.md entry;

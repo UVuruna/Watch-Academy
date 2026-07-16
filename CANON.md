@@ -152,8 +152,22 @@ beside a single human life.
 |---|---|---|
 | Trinity | **The One** — the courtroom | **The Family** (owner 2026-07-16) |
 | Seasons | **the Four Temperaments** — one palette, both styles | — |
-| Prism | **The Persons** | **One Soul, the Bond** (proposed) |
-| Compass | **the Eight Walks of Life** (proposal) | **the Eight Ages** (proposal) |
+| Prism | **The Persons** | **One Soul, the Bond** (APPROVED 2026-07-16) |
+| Compass | **the Eight Walks of Life** (approved) | **the Eight Ages** (APPROVED 2026-07-16) |
+
+**The two-row canon** (owner 2026-07-16): every archetype position
+speaks TWO ARTICLES in its legend, on the hexa-zodiac-diamond
+principle — the rows per archetype:
+
+| Archetype | Row 1 | Row 2 |
+|---|---|---|
+| Trinity paint | the person (God / the Devil / Jesus) | the calling (Judge / Prosecutor / Advocate) |
+| Trinity light | the member (Father / Mother / Child) | the hearth-role — PROPOSED: **the Shield / the Heart / the Dawn** |
+| Seasons | the temperament | the age of man (the tetramorph creature stands as the reserve second row) |
+| Prism paint | the person | the quality (Michael / Courage) |
+| Prism light | the pillar | its SHADOW — the virtue and the vice of the same thing (owner: the theme began as this duality) |
+| Compass paint | the estate | its object: **the Crown / the Coin / the Sword / the Mask / the Staff / the Book / the Plough / the Bell** |
+| Compass light | the age | the hour's light (the owner's own poem of day–evening–night–morning heads these rows once its text lands) |
 
 ### Trinity (trio)
 
@@ -230,8 +244,9 @@ the child returning it to the past. The apex mirror completes the
 pair of Trinity readings: in PAINT the top is the one who JUDGES;
 in LIGHT the top is the one who is SERVED — the same triangle, once
 as the hierarchy of power, once as the hierarchy of care. Center
-union (proposed, mirroring the Eye): **the Hearth** — the court's
-union is the Eye that watches; the family's is the fire that warms.
+union (APPROVED 2026-07-16, mirroring the Eye): **the Hearth** —
+the court's union is the Eye that watches; the family's is the fire
+that warms.
 
 Six arms, two interlocked triangles, and ONE mechanic: love can turn
 flaws into virtues, and hatred can turn the same virtues into flaws.
@@ -263,7 +278,7 @@ he balances the wheel three-and-three (The One, Jesus, Michael
 against Lucifer, the Devil, Judas). Judas and Lucifer inherit their
 existing Scale glass windows — no new art for those two seats.
 
-### Prism light — One Soul, the Bond (PROPOSED 2026-07-16)
+### Prism light — One Soul, the Bond (APPROVED 2026-07-16)
 
 The relationship-pillars theme (`research/bond_theme.md`) IS
 prism-shaped, and the pattern seats it here: paint carries heaven's
@@ -272,10 +287,15 @@ conjugated from the six planets' virtues, each with its shadow, the
 cure axes on the diagonals — seated on the planets' arms: **Trust
 04h, Respect 08h, Gratitude 12h, Support 16h, Passion 20h,
 Tolerance 24h**, the Union (Zajedništvo) at the center and the
-Child as the Ninth. In the light register the summit arm is green —
-the highest and purest love (the owner's own words for Gratitude)
-shown as GROWTH; Trust keeps its blue at 04h and Passion its red at
-20h; the remaining hues are argued per the color-fidelity rule. — the Four Temperaments (concept APPROVED 2026-07-16, full definition below)
+Child as the Ninth. The light-register hues (owner confirmed
+2026-07-16 — the pillars keep their planet seats and WEAR the light
+palette): **Gratitude green** (12h — the highest love shown as
+GROWTH), **Support yellow** (16h — the daylight shoulder: being
+someone's working light), **Respect cyan** (08h — the cool clear
+air you leave around what you respect: respect keeps a clean
+distance), Trust keeps blue (04h), Passion keeps red (20h),
+Tolerance wears magenta (24h — purple's light neighbour). Each
+re-hue argued per the color-fidelity rule, never at random. — the Four Temperaments (concept APPROVED 2026-07-16, full definition below)
 
 The oldest four-fold reading of man there is — Hippocrates' humors —
 laid on the four season arms in their classical correspondence, on
@@ -339,10 +359,10 @@ The Walks belong to PAINT: estates are matter — crown gold, coin
 copper, iron and blood, stage velvet, road dust, lamp ink, field
 earth, alb linen — and by the pattern, paint is the world's order.
 
-**Compass palette rework (PROPOSED 2026-07-16)** — the owner's
-complaint stands: the two octa presets are essentially one wheel
-with nuance shifts. The proposal ties each palette to its
-archetype's substance. PAINT — the Walks' materials:
+**Compass palette rework (APPROVED 2026-07-16, implementation
+pending)** — the owner's complaint stood: the two octa presets were
+essentially one wheel with nuance shifts. Each palette now ties to
+its archetype's substance. PAINT — the Walks' materials:
 
 | Arm | Estate | Hue |
 |---|---|---|
@@ -358,10 +378,12 @@ archetype's substance. PAINT — the Walks' materials:
 The day-arc survives (brightest at noon, darkest at midnight), but
 every arm now has its OWN substance instead of a nuance step.
 
-### Compass light — the Eight Ages, the Wheel of a Life (PROPOSED 2026-07-16)
+### Compass light — the Eight Ages, the Wheel of a Life (APPROVED 2026-07-16)
 
 By the pattern, the Compass light carries a single human LIFE — the
-day as a lifetime, sunrise to sunrise:
+day as a lifetime, sunrise to sunrise. The owner's own poem — the
+one that sings day, evening, night and morning — belongs to these
+articles (text pending; he delivers it when ready):
 
 | Arm | Hour sense | Age | Hue |
 |---|---|---|---|

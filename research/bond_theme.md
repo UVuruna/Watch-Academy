@@ -7,7 +7,7 @@ of the relationship between a man and a woman"* — count flexible
 Passion**, gratitude named *"the highest and purest form of love"*.
 This draft seats the theme on the DOMY wheel — his verdicts
 honored, everything else marked proposed. **Home on the dial
-(proposed 2026-07-16): the PRISM LIGHT archetype** — see
+(APPROVED 2026-07-16): the PRISM LIGHT archetype** — see
 [The DOMY Canon](../CANON.md): paint carries heaven's six persons,
 light the six pillars of a home.
 
@@ -99,13 +99,14 @@ three persons; the family triangle is its household form. The
 direction names where each one's given love FLOWS, never the only
 love each one holds.)
 
-## Name Options (owner: "The Bond, or something stronger")
+## Name Options (owner 2026-07-16: keep the variants, ★ marks the agent's pick, final choice made along the way)
 
-Leading candidates after the owner's *"two bodies, one soul"*:
+Candidates after the owner's *"two bodies, one soul"*:
 
-- **One Soul** — his own phrase inverted into a name; and the quote
-  anchor already exists: asked what a friend is, Aristotle answered
-  *"one soul dwelling in two bodies"* (Diogenes Laertius V.20).
+- ★ **One Soul (Jedna duša)** — the agent's pick: the owner's own
+  phrase inverted into a name, and the quote anchor already exists:
+  asked what a friend is, Aristotle answered *"one soul dwelling in
+  two bodies"* (Diogenes Laertius V.20).
 - **The Vow (Zavet)** — the stronger word he flagged.
 - **The Bond (Savez)** — the safe default.
 - (*One Flesh* / Genesis 2:24 remains the center's quote either
@@ -126,7 +127,8 @@ Leading candidates after the owner's *"two bodies, one soul"*:
 
 ## Open Questions for the Owner
 
-1. Theme name: **One Soul** / **The Vow (Zavet)** / **The Bond
-   (Savez)**?
+1. Theme name — picked along the way from the ★-marked list above.
 2. Does **Odanost** satisfy him as the day face, or does he want it
    on a planet seat (it would contest Saturn with Respect)?
+3. The Trinity light second row — do **the Shield / the Heart /
+   the Dawn** hearth-roles suit him?
