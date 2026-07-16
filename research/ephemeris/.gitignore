@@ -6,3 +6,6 @@ ephe/
 events.sqlite
 events.sqlite-journal
 __pycache__/
+# Phase III: raw Laskar La2004 ASCII files (~6.5 MB) — re-fetch with the
+# curl commands in laskar/la2004_extract.txt (that extract stays committed)
+laskar/*.ASC

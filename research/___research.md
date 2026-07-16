@@ -13,9 +13,11 @@ with the app, not part of the runtime dependency graph. The GEMINI/CHATGPT PROMP
 [Ephemeris (subfolder)](ephemeris/___ephemeris.md) — reproducible
 Swiss-Ephemeris (DE441-span, −13000…+17000) extraction of all
 solstices/equinoxes (~120k) and Moon phases (~1.5M), the northern
-light/dark half-year durations, and the pinned **Anno Lucis year** ≈ 4083
-BCE (owner task 2026-07-16, ROADMAP item 12). Research-only; not imported by
-the app.
+light/dark half-year durations, and the pinned **Anno Lucis year** = 4079
+BCE (owner definition: the first year of the unbroken light era) (owner task 2026-07-16, ROADMAP item 12). Research-only; not imported by
+the app. Now also carries **Phase II** (the eclipse catalog) and **Phase
+III** (the Laskar La2004 LONG envelope of the light/dark amplitude over
+±200,000 years, validated against the DE441 series).
 
 ### `graph_years.py`
 Exploratory plotting of season/year data.

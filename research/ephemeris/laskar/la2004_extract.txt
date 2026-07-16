@@ -1,0 +1,61 @@
+La2004 orbital solution — committable provenance extract (Phase III)
+====================================================================
+
+The two raw ASCII files this extract samples are GITIGNORED (6.5 MB total);
+re-fetch them and regenerate long_envelope.json / .png with:
+
+    curl -L -o INSOLN.LA2004.BTL.ASC \
+      https://ssp.imcce.fr/insola/earth/online/earth/La2004/INSOLN.LA2004.BTL.ASC
+    curl -L -o INSOLP.LA2004.BTL.ASC \
+      https://ssp.imcce.fr/insola/earth/online/earth/La2004/INSOLP.LA2004.BTL.ASC
+    ../.venv/Scripts/python.exe ../long_envelope.py all
+
+CITATION
+    J. Laskar, P. Robutel, F. Joutel, M. Gastineau, A. C. M. Correia and
+    B. Levrard, 2004: "A long-term numerical solution for the insolation
+    quantities of the Earth", Astronomy & Astrophysics 428, 261-285.
+    doi:10.1051/0004-6361:20041335
+
+SOURCE (fetched 2026-07-16)
+    IMCCE, https://ssp.imcce.fr/insola/earth/online/earth/La2004/
+    (the vo.imcce.fr path 302-redirects here).
+
+FILES
+    INSOLN.LA2004.BTL.ASC   past    t = 0 .. -51000 kyr   51001 rows  4590090 B
+        sha256 3f13b9f8e69085baf40bc67a2669e6f6af4148fef9218ed2158772aa91e35f8c
+    INSOLP.LA2004.BTL.ASC   future  t = 0 .. +21000 kyr   21001 rows  1890090 B
+        sha256 8e5ac423374802a4ce2a0958672271ed408054cc70214056c0c221c3d5b14750
+
+FORMAT  (four whitespace-separated columns, Fortran 'D' exponents)
+    1  t        time in kiloyears from J2000  (astronomical year = 2000 + 1000*t)
+    2  e        eccentricity                  (dimensionless)
+    3  epsilon  obliquity                     (radians)
+    4  varpi    longitude of perihelion from the moving vernal equinox (radians)
+                -> the climatic precession is e * sin(varpi)
+
+The row at t = 0: e = 0.016702, epsilon = 0.409093 rad = 23.44 deg,
+varpi = 1.796257 rad = 102.92 deg — i.e. today's values.
+
+--- INSOLN.LA2004.BTL.ASC (past), 51001 rows ---
+            0.000   0.1670236225492288D-01   0.4090928042223415D+00   0.1796256991128036D+01
+           -1.000   0.1716138713254424D-01   0.4113529838787881D+00   0.1497928479545051D+01
+           -2.000   0.1749682471015021D-01   0.4135547681918493D+00   0.1200023931298518D+01
+           -3.000   0.1784575075382516D-01   0.4156391588120549D+00   0.9034936199713171D+00
+           -4.000   0.1821091028944827D-01   0.4175547806057498D+00   0.6113806652890439D+00
+           -5.000   0.1845349552525976D-01   0.4192474312468655D+00   0.3155370046330948D+00
+              ...
+       -50998.000   0.9484212898542599D-02   0.4044250108455471D+00   0.1501185826976774D+01
+       -50999.000   0.9572328912838128D-02   0.4028702723976301D+00   0.1248106757945211D+01
+       -51000.000   0.9676241473059092D-02   0.4013041649492096D+00   0.1000032842610906D+01
+
+--- INSOLP.LA2004.BTL.ASC (future), 21001 rows ---
+            0.000   0.1670236225492288D-01   0.4090928042223415D+00   0.1796256991128036D+01
+            1.000   0.1627519714977170D-01   0.4068337899307937D+00   0.2098560774622779D+01
+            2.000   0.1585014989173078D-01   0.4046314303285188D+00   0.2397656662447144D+01
+            3.000   0.1533970553450452D-01   0.4025410228521181D+00   0.2705314878269721D+01
+            4.000   0.1483548077812866D-01   0.4006169797694719D+00   0.3009609116749589D+01
+            5.000   0.1431647243633636D-01   0.3989009643996893D+00   0.3313412726335608D+01
+              ...
+        20998.000   0.2663261758791615D-01   0.3924984384334985D+00   0.4647594137387516D+01
+        20999.000   0.2715493610356251D-01   0.3915989481283879D+00   0.4935575118227401D+01
+        21000.000   0.2763952629122177D-01   0.3908344560809828D+00   0.5227645464048615D+01

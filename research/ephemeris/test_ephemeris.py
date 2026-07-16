@@ -178,3 +178,64 @@ def test_lunar_eclipse_2019_01_21_total():
     assert err_min < 5, f"2019 lunar off by {err_min:.1f} min ({iso})"
     assert typ == "total", f"2019 lunar typed {typ}"
     assert 1.1 < mag < 1.3, f"2019 lunar umbral magnitude {mag:.3f}"
+
+
+# --------------------------------------------------------------------------
+# Phase III — the long envelope (Laskar La2004) golden checks
+# --------------------------------------------------------------------------
+# The committed long_envelope.json carries the derived series AND its own
+# validation-vs-DE441 numbers; the two file-based checks run on a bare
+# checkout. The recompute check needs the gitignored raw La2004 .ASC files
+# and skips without them.
+
+LONG_JSON = os.path.join(HERE, "long_envelope.json")
+LASKAR_DIR = os.path.join(HERE, "laskar")
+_LASKAR_RAW = [os.path.join(LASKAR_DIR, "INSOLN.LA2004.BTL.ASC"),
+               os.path.join(LASKAR_DIR, "INSOLP.LA2004.BTL.ASC")]
+
+
+def _long():
+    if not os.path.exists(LONG_JSON):
+        pytest.skip("long_envelope.json absent — run long_envelope.py all")
+    return json.load(open(LONG_JSON))
+
+
+def test_long_envelope_overlap_agreement():
+    """The Laskar-derived signed light-dark curve must track the measured
+    DE441 series over the overlap: sub-hour mean, a couple hours worst-case,
+    essentially perfect correlation."""
+    v = _long()["meta"]["validation_vs_de441"]
+    assert v["mean_abs_dev_hours"] < 2.0, \
+        f"mean dev {v['mean_abs_dev_hours']:.2f} h too large"
+    assert v["max_abs_dev_hours"] < 6.0, \
+        f"max dev {v['max_abs_dev_hours']:.2f} h too large"
+    assert v["pearson_r"] > 0.9995, f"correlation {v['pearson_r']:.6f} too low"
+
+
+def test_long_envelope_e_today():
+    """e(today) from La2004 matches the modern value ~0.0167, and the
+    signed light-dark at t=0 is the ~7.6-day present amplitude."""
+    d = _long()
+    v = d["meta"]["validation_vs_de441"]
+    assert abs(v["e_today"] - 0.0167) < 5e-4, f"e_today {v['e_today']}"
+    i = d["t_kyr"].index(0)
+    assert abs(d["e"][i] - 0.0167) < 5e-4, f"e[t=0] {d['e'][i]}"
+    assert 7.3 < d["signed_light_minus_dark_days"][i] < 7.8, \
+        f"signed[t=0] {d['signed_light_minus_dark_days'][i]}"
+    # envelope is the |sin|=1 bound, so envelope >= |signed| everywhere here
+    assert d["envelope_days"][i] >= d["signed_light_minus_dark_days"][i]
+
+
+def test_long_envelope_recompute_matches_committed():
+    """Guard against a stale committed JSON: recompute the validation from
+    the raw La2004 files and confirm it reproduces the stored numbers.
+    Skips cleanly when the (gitignored) raw files are absent."""
+    if not all(os.path.exists(p) for p in _LASKAR_RAW):
+        pytest.skip("raw La2004 .ASC absent — re-fetch per laskar/la2004_extract.txt")
+    import importlib
+    L = importlib.import_module("long_envelope")
+    fresh = L.validate(verbose=False)
+    stored = _long()["meta"]["validation_vs_de441"]
+    for k in ("max_abs_dev_hours", "mean_abs_dev_hours", "pearson_r"):
+        assert abs(fresh[k] - stored[k]) < 1e-3, \
+            f"{k}: recomputed {fresh[k]} vs committed {stored[k]}"
