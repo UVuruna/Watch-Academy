@@ -77,12 +77,26 @@ per source.
 - `subdial_circle_prompts.md` — the subdial plates (the silver
   master ships; gold/bronze recolor at runtime)
 
-### `archetype/` — one file per pointer archetype
+### `archetype/` — one file per pointer archetype (all seven + the Calendar, complete 2026-07-16)
 - `trinity_prompts.md` — the courtroom trio (Jesus the Advocate /
   the Devil the Prosecutor / The One the Judge) + the all-seeing
-  Eye rosette as the union of the three at the center; stained-glass
-  register matching the Scale windows. Prism/Seasons/Compass
-  archetypes have no sheets yet (persons undecided — owner decides).
+  Eye rosette as the union of the three at the center
+- `family_prompts.md` — Trinity light: the Father/Shield, the
+  Mother/Heart, the Child/Dawn + the Hearth rosette + role rondels
+- `persons_prompts.md` — Prism paint: One/Love, Michael/Courage,
+  Devil/Hatred, Jesus/Humility (Lucifer and Judas REUSE the Scale
+  glass windows)
+- `one_soul_prompts.md` — Prism light: the six pillar windows each
+  carrying its shadow, the Union rosette, the Child rondel
+- `temperaments_prompts.md` — Seasons: the four temperaments on the
+  season colors + the UNAPPROVED optional tetramorph section
+- `walks_prompts.md` — Compass paint: the eight estates in their
+  material hues + the eight object rondels (Crown … Bell)
+- `life_prompts.md` — Compass light: BOTH image registers — the
+  Tree (one oak, eight states) and the Menagerie (eight creatures)
+- `calendar_prompts.md` — the Calendar pointer: twelve month
+  medallions (wedges stay flat color; zodiac art and the Chinese
+  animal medallions REUSE)
 
 ## Connections
 
