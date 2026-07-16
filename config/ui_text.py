@@ -31,6 +31,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",
     "Full contrast", "Half contrast", "Light contrast", "Dark contrast",
     "Paint palette", "Light palette",
+    # The Calendar pointer (owner 2026-07-16): the wheel pair riding
+    # the Paint/Light slot, and its two lighting modes.
+    "Calendar", "Almanac",
+    "Light the hour (shichen)", "Light the month/sign",
     "Gold letters", "Silver letters",
     "Clean", "Atmosphere", "Date", "Names",
     "The day name written on the weekday bodies.",

@@ -21,9 +21,13 @@ the ring preset and the user's display choices onto it at build time.
 
 - `SkinDefinition` — `z_order`, one spec per unit, plus the
   user-overridable display scalars (the tray choice always wins):
-  `pointer` ("hexa" | "cross" | "octa" | "trio"), `umbra_form` ("fine" |
+  `pointer` ("hexa" | "cross" | "octa" | "trio" | "aurora" |
+  "calendar"), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
-  `palette_style` ("paint" | "light"), `solar_rotation` (False →
+  `palette_style` ("paint" | "light" — on the Calendar pointer it PICKS
+  THE WHEEL: paint = Zodiac, light = Almanac, owner 2026-07-16),
+  `calendar_lighting` ("hour" the shichen | "year" the month/sign wedge),
+  `solar_rotation` (False →
   Star/Aura/Umbra stand upright), `octa_slot` (one of
   `OCTA_SLOT_MODES`: time/date/day length, tropical zodiac as
   text/sign/logo/constellation, Chinese zodiac as text/logo),

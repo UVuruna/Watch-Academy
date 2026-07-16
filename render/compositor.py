@@ -427,10 +427,17 @@ class Compositor:
             raise RuntimeError("Compositor.paint() before the first day context")
         self._last_tick = tick
         reveal = self.reveal_active()
-        key = (round(size * dpr), self._day.cache_key, reveal)
+        # The Calendar's lit wedge (the shichen under the hour hand)
+        # changes INTRADAY, so it keys the DAILY composite too — the
+        # wedges live below the ring (in the composite), and this keeps
+        # them relighting ~12 times a day instead of once (owner spec).
+        calendar_lit = self._calendar_lit(tick)
+        key = (round(size * dpr), self._day.cache_key, reveal, calendar_lit)
         if self._composite is None or self._composite_key != key:
             with profiling.measure("Composite rebuild"):
-                self._composite = self._render_composite(size, dpr, reveal)
+                self._composite = self._render_composite(
+                    size, dpr, reveal, calendar_lit
+                )
             self._composite_key = key
         # The composite carries the window's transparent margin (the
         # ring letters overhang the dial square) — blit it back-shifted
@@ -445,7 +452,7 @@ class Compositor:
             skin=self._skin, day=self._day, tick=tick,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
-            reveal_active=reveal,
+            reveal_active=reveal, calendar_lit=calendar_lit,
         )
         for layer in self._layers:
             if layer.cadence is Cadence.MINUTE:
@@ -546,6 +553,14 @@ class Compositor:
         arm = self._arm_tooltip(point, radius, rotation)
         if arm is not None:
             return arm
+        # The Calendar wedges (owner 2026-07-16): a lit-capable wedge
+        # answers with its month + double-hour animal (Almanac) or its
+        # sign + dates (Zodiac). The wheel covers the whole dial, so it
+        # pre-empts the day/night period hover below.
+        if self._skin.pointer == "calendar":
+            calendar = self._calendar_tooltip(point, radius)
+            if calendar is not None:
+                return calendar
         # Last in the chain (owner rework 5 & 6): the sunlit arc answers
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
@@ -867,8 +882,8 @@ class Compositor:
         if not self._skin.show_pointer:
             # Pointer element off: no visible arms, no arm hovers.
             return None
-        if self._skin.pointer == "aurora":
-            return None      # no arms exist (owner spec 2026-07-12)
+        if self._skin.pointer in ("aurora", "calendar"):
+            return None      # no arms exist (owner spec: the wheel is it)
         distance = math.hypot(point.x(), point.y())
         star_tip = radius * self._skin.star.radius_fraction
         if not (radius * 0.08 <= distance <= star_tip):
@@ -1650,6 +1665,48 @@ class Compositor:
             f"width='{defaults.PERIOD_EARTH_IMAGE_PX}'/></div>"
         )
 
+    def _calendar_tooltip(self, point: QPointF, radius: float) -> str | None:
+        """The Calendar wedge hover (owner 2026-07-16, kept modest —
+        full articles arrive with the archetype engine). Almanac: the
+        month name and the wedge's Chinese double-hour animal with its
+        clock span. Zodiac: the sign name with its date span (the
+        existing year-wheel cusps)."""
+        from render.layers import calendar_wheel
+
+        distance = math.hypot(point.x(), point.y())
+        outer = radius * self._skin.background.aura_radius_fraction
+        if not (radius * 0.08 <= distance <= outer):
+            return None
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        step = constants.CALENDAR_WEDGE_DEG
+        day = self._day
+        if calendar_wheel(self._skin) == "almanac":
+            index = int((theta + step / 2.0) // step) % 12
+            month = (index + 5) % 12 + 1
+            animal = constants.CHINESE_ANIMALS[(index - 6) % 12]
+            center_hour = (2 * index - 12) % 24
+            start_hour, end_hour = (center_hour - 1) % 24, (center_hour + 1) % 24
+            return _centered_html(
+                f"<b>{html.escape(self._tr(_MONTHS[month - 1]))}</b>",
+                "",
+                html.escape(self._tr(animal)),
+                f"{start_hour:02d}:00 - {end_hour:02d}:00",
+            )
+        # Zodiac: the sign whose wedge starts at this angle (south mirrors
+        # the wheel, as the star-arm hover does).
+        start_angle = int(theta // step) * step
+        if day.southern_hemisphere:
+            start_angle = (start_angle + 180.0) % 360.0
+        name, symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
+        start, end = zodiac_span(day.year_anchors, start_angle)
+        start = start.astimezone(day.tzinfo)
+        last = end.astimezone(day.tzinfo) - timedelta(days=1)
+        return _centered_html(
+            f"<b>{html.escape(symbol)} {html.escape(self._tr(name))}</b>",
+            f"{self._ord(start.day)} {html.escape(self._month(start))} - "
+            f"{self._ord(last.day)} {html.escape(self._month(last))}",
+        )
+
     def _period_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Aura/Umbra hovers (owner formatting round 2026-07-12): a mini
         Earth of the active region on top, then a bold Day/Night title
@@ -1775,8 +1832,22 @@ class Compositor:
         painter.end()
         return image
 
+    def _calendar_lit(self, tick: TickState) -> int | None:
+        """The Calendar wedge index that lights (owner 2026-07-16), or
+        None off the Calendar pointer. Shared by the composite key and
+        the wedge render (Rule #5)."""
+        if self._skin.pointer != "calendar":
+            return None
+        from render.layers import calendar_lit_index
+
+        return calendar_lit_index(
+            self._skin, self._skin.calendar_lighting,
+            tick.hour_angle, self._day,
+        )
+
     def _render_composite(
-        self, size: float, dpr: float, reveal_active: bool = False
+        self, size: float, dpr: float, reveal_active: bool = False,
+        calendar_lit: int | None = None,
     ) -> QPixmap:
         # STATIC/DAILY layers include the ring letters, which OVERHANG
         # the dial square (owner spec) — the composite is padded by the
@@ -1794,7 +1865,7 @@ class Compositor:
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
-            reveal_active=reveal_active,
+            reveal_active=reveal_active, calendar_lit=calendar_lit,
         )
         for layer in self._layers:
             if layer.cadence is not Cadence.MINUTE:

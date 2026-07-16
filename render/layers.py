@@ -30,6 +30,7 @@ from config import constants, defaults, paths
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.sun import DaylightRegime, SunDay
+from core.year_wheel import almanac_marker_angle
 from render.assets import AssetCache, ring_face_color, subdial_plate_file
 from skins.manifest import HandSpec, SkinDefinition
 
@@ -58,6 +59,11 @@ class RenderContext:
                                      # Omega double-click raises every
                                      # non-active weekday body to full
                                      # opacity for REVEAL_WEEK_DURATION_S
+    calendar_lit: int | None = None  # Calendar pointer: the wedge index
+                                     # (0..11 from the top) that LIGHTS —
+                                     # the compositor computes it from the
+                                     # live tick (the shichen changes intraday,
+                                     # so it also keys the DAILY composite)
 
 
 def dial_point(theta_deg: float, distance: float) -> QPointF:
@@ -130,6 +136,63 @@ def palette_for(skin: SkinDefinition) -> tuple:
     if skin.palette_override is not None:
         return skin.palette_override
     return defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
+
+
+def calendar_wheel(skin: SkinDefinition) -> str:
+    """Which of the Calendar's two wheels is active (owner 2026-07-16):
+    the palette_style CARRIES the wheel — paint = the Zodiac Dozen,
+    light = the Almanac (Month) Dozen."""
+    return "zodiac" if skin.palette_style == "paint" else "almanac"
+
+
+def calendar_wedge_bounds(wheel: str) -> list[tuple[float, float]]:
+    """The twelve wedge (start, end) dial angles, index 0 first (the top
+    wedge), clockwise (owner 2026-07-16). ZODIAC boundaries sit ON the
+    cardinal axes — the top wedge STARTS at the top (12h line); ALMANAC
+    wedges are CENTERED on the axes — the top wedge is centered on the
+    top (shifted half a wedge earlier). Starts may be negative; draw_pie
+    handles the clockwise sweep."""
+    step = constants.CALENDAR_WEDGE_DEG
+    offset = 0.0 if wheel == "zodiac" else -step / 2.0
+    return [(k * step + offset, k * step + offset + step) for k in range(12)]
+
+
+def calendar_lit_index(
+    skin: SkinDefinition, lighting: str, hour_angle: float, day: DayContext
+) -> int:
+    """Which wedge (0..11 from the top) LIGHTS (owner 2026-07-16). "hour"
+    — the wedge containing the HOUR HAND (the Chinese double-hour): on
+    the Zodiac its own boundary geometry (floor), on the Almanac the
+    axis-centered geometry (round). "year" — the current SIGN's wedge on
+    the Zodiac (Cancer = 0, aligned with the year wheel), the current
+    MONTH's wedge on the Almanac."""
+    step = constants.CALENDAR_WEDGE_DEG
+    wheel = calendar_wheel(skin)
+    if lighting == "hour":
+        if wheel == "zodiac":
+            return int(hour_angle // step) % 12
+        return int((hour_angle + step / 2.0) // step) % 12
+    if wheel == "zodiac":
+        names = [name for name, _ in constants.ZODIAC_SIGNS]
+        return names.index(day.zodiac_name)
+    from core.year_wheel import almanac_month_index
+    return almanac_month_index(day.local_date.month)
+
+
+def calendar_day_arrow(angle_deg: float, radius: float) -> QPolygonF:
+    """The Almanac Earth day-arrow (owner 2026-07-16): a small triangle
+    at `angle_deg`, tip toward the ring ticks, base inward — the ring
+    reads today's date to the day. Tunables in defaults."""
+    tip = radius * defaults.CALENDAR_ARROW_TIP_FRACTION
+    base = tip - radius * defaults.CALENDAR_ARROW_LENGTH_FRACTION
+    half = defaults.CALENDAR_ARROW_HALF_DEG
+    return QPolygonF(
+        [
+            dial_point(angle_deg, tip),
+            dial_point(angle_deg - half, base),
+            dial_point(angle_deg + half, base),
+        ]
+    )
 
 
 def tinted_gray(value: int, tint: str | None) -> QColor:
@@ -252,7 +315,9 @@ def slot_layout(skin: SkinDefinition) -> dict:
         return {}
     order = [index for index, _ in slots]
     count = len(slots)
-    pinned = skin.pointer == "aurora" or not skin.show_pointer
+    pinned = (
+        skin.pointer in ("aurora", "calendar") or not skin.show_pointer
+    )
     if pinned:
         seats = {
             1: (constants.SOUTH_SLOT_ANGLE,),
@@ -320,7 +385,7 @@ def slot_seat_rotation(skin: SkinDefinition, rotation: float) -> float:
     (owner 2026-07-15: without a pointer — Aurora included — the
     positions stay on natural round angles; the tilt exists solely to
     keep seats between the diamonds)."""
-    if skin.show_pointer and skin.pointer != "aurora":
+    if skin.show_pointer and skin.pointer not in ("aurora", "calendar"):
         return rotation
     return 0.0
 
@@ -616,6 +681,33 @@ class BackgroundLayer(Layer):
                 painter.restore()
             return
 
+        # CALENDAR (owner 2026-07-16, CANON §The Dozen): TWELVE 2-hour
+        # wedges — the Aura carries the wedge colors, no star arms (like
+        # Aurora). Calendar-FIXED: the wedges never ride the solar
+        # rotation (owner spec). The wedge that LIGHTS (the shichen, or
+        # the current month/sign) raises its opacity by the delta; the
+        # lit index rides the RenderContext (the compositor computes it
+        # from the live tick and keys the composite on it).
+        if ctx.skin.pointer == "calendar":
+            palette = palette_for(ctx.skin)
+            wheel = calendar_wheel(ctx.skin)
+            cal_radius = ctx.radius * (
+                ctx.skin.background.aura_radius_fraction
+            )
+            base = defaults.CALENDAR_WEDGE_ALPHA
+            for index, (start, end) in enumerate(calendar_wedge_bounds(wheel)):
+                alpha = base + (
+                    defaults.CALENDAR_WEDGE_LIT_DELTA
+                    if index == ctx.calendar_lit
+                    else 0.0
+                )
+                painter.save()
+                painter.setOpacity(min(1.0, alpha))
+                painter.setBrush(QColor(palette[index]))
+                draw_pie(painter, cal_radius, start, end)
+                painter.restore()
+            return
+
         # Colorful off (Elements switch): the day/twilight arcs are still
         # indicated, but in plain white — a one-entry palette draws a
         # single full wedge under the same clip and alphas.
@@ -684,8 +776,8 @@ class StarLayer(Layer):
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.star
-        if ctx.skin.pointer == "aurora":
-            return          # no geometry at all — the Aura IS the pointer
+        if ctx.skin.pointer in ("aurora", "calendar"):
+            return          # no geometry at all — the wheel IS the pointer
 
         # Colored BORDERS run the full circle so the night diamonds stay
         # recognizable (owner spec)...
@@ -1547,6 +1639,20 @@ class YearMarkerLayer(Layer):
 
     def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
+        # The Calendar's ALMANAC wheel carries its OWN real-calendar year
+        # mapping (owner 2026-07-16): the Earth marker rides the month
+        # wedges (one tick ≈ one day) instead of the shared six-anchor
+        # season wheel — every OTHER pointer, the Zodiac wheel included,
+        # keeps the shared wheel.
+        almanac = (
+            ctx.skin.pointer == "calendar"
+            and calendar_wheel(ctx.skin) == "almanac"
+        )
+        year_angle = (
+            almanac_marker_angle(ctx.day.local_date)
+            if almanac
+            else ctx.tick.year_angle
+        )
         # During its ±12 h event window the Earth RELOCATES radially to the
         # ring band centerline (owner 2026-07-16), keeping its year-wheel
         # angle, so the GOLDEN halo straddles the ring.
@@ -1554,10 +1660,19 @@ class YearMarkerLayer(Layer):
         orbit = (
             defaults.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
         )
-        pos = dial_point(ctx.tick.year_angle, ctx.radius * orbit)
+        pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
         if glowing:
             draw_event_glow(painter, pos, size / 2, defaults.GLOW_SUN_COLOR)
+        if almanac:
+            # The day-ARROW at the marker's exact tick (owner 2026-07-16):
+            # a small procedural triangle pointing from inside the dial
+            # OUTWARD at the ring, so the ring reads today's date.
+            painter.save()
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(QColor(defaults.CALENDAR_ARROW_COLOR))
+            painter.drawPolygon(calendar_day_arrow(year_angle, ctx.radius))
+            painter.restore()
         variant = (
             f"{ctx.skin.earth_style}_"
             f"{earth_region(ctx.day.latitude, spec.default_variant)}_"

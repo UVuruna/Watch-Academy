@@ -11,8 +11,11 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 Values that define what DOMY Watch is and never change: app identity, the
 24h dial convention (noon at top, clockwise, 180° offset), time constants,
 the weekday → celestial body mapping, the pointer variants (hexa 6 /
-cross 4 / octa 8 / trio 3 arms; display names Prism / Seasons /
-Compass / Trinity) with their weekday slot layouts (slots rotate
+cross 4 / octa 8 / trio 3 arms, aurora and calendar armless; display
+names Prism / Seasons / Compass / Trinity / Aurora / Calendar; the
+Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`
+and its `CALENDAR_LIGHTING_MODES` — hour/year, owner 2026-07-16) with
+their weekday slot layouts (slots rotate
 WITH the star; shared slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
 slot with its `OCTA_SLOT_MODES`; the trio pairs Faith 12h =
@@ -36,9 +39,13 @@ Window sizing, the spontaneous-hide watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
-marker borders), `PALETTE_PRESETS` (the five Star+Aura palettes measured
-from the owner's art: hexa/octa paint+light, cross seasons), the Umbra
-contrast spans, the octa slot text width fraction, the event glow
+marker borders), `PALETTE_PRESETS` (the Star+Aura/wedge palettes
+measured from the owner's art: hexa/octa paint+light, cross/trio
+single, aurora bands, and the Calendar's two twelve-hue wheels —
+paint = Zodiac, light = Almanac, owner 2026-07-16), the Calendar wedge
+opacity + lit delta and the Almanac day-arrow geometry
+(`CALENDAR_WEDGE_ALPHA`, `CALENDAR_WEDGE_LIT_DELTA`, `CALENDAR_ARROW_*`),
+the Umbra contrast spans, the octa slot text width fraction, the event glow
 rendering (owner rework 2026-07-16: the ring-band relocation radius, the
 golden Sun / silver Moon colors, the alpha stops and halo scale), tray
 icon geometry, the

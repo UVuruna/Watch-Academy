@@ -436,6 +436,7 @@ def apply_display_settings(skin, settings: Settings):
         umbra_form=settings.umbra_form,
         umbra_contrast=settings.umbra_contrast,
         palette_style=settings.palette_style,
+        calendar_lighting=settings.calendar_lighting,
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
         # bands anchor to the real sun events, so the whole wheel keeps
         # the solar frame regardless of the toggle.
@@ -1031,8 +1032,18 @@ class AppController(QObject):
         # one PALETTE_PRESETS entry serves both styles there) — gray the
         # whole group in place, following the existing gating pattern.
         palette_grayed = settings.pointer in ("trio", "cross")
-        for action in self._menu_gates["palette_style"]:
+        labels = self._palette_style_labels[
+            "calendar" if settings.pointer == "calendar" else "default"
+        ]
+        for action, label in zip(
+            self._menu_gates["palette_style"], labels
+        ):
             action.setEnabled(not palette_grayed)
+            action.setText(label)
+        # Calendar lighting only means anything on the Calendar pointer.
+        calendar_off = settings.pointer != "calendar"
+        for action in self._menu_gates["calendar_lighting"]:
+            action.setEnabled(not calendar_off)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -1108,12 +1119,16 @@ class AppController(QObject):
                 (
                     variant,
                     constants.POINTER_DISPLAY_NAMES[variant]
-                    if variant == "aurora"
+                    if variant in ("aurora", "calendar")
                     else f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})",
                 )
+                # Aurora and Calendar have no arms — no count after the
+                # name, and both sit LAST, below the armed pointers.
                 for variant, arms in sorted(
                     constants.POINTER_POINTS.items(),
-                    key=lambda item: (item[0] == "aurora", item[1]),
+                    key=lambda item: (
+                        item[0] in ("aurora", "calendar"), item[1]
+                    ),
                 )
             ],
             settings.pointer,
@@ -1134,6 +1149,40 @@ class AppController(QObject):
             disabled=(
                 constants.PALETTE_STYLES
                 if settings.pointer in ("trio", "cross") else ()
+            ),
+        )
+        # On the Calendar the pair IS the wheel (owner seal 2026-07-16:
+        # Zodiac/Almanac sit in the Paint/Light slot) — the labels swap
+        # IN PLACE with the pointer, no rebuild of the stay-open menu.
+        self._palette_style_labels = {
+            "calendar": (tr("Zodiac"), tr("Almanac")),
+            "default": (tr("Paint palette"), tr("Light palette")),
+        }
+        for action, label in zip(
+            palette_style_actions,
+            self._palette_style_labels[
+                "calendar" if settings.pointer == "calendar" else "default"
+            ],
+        ):
+            action.setText(label)
+        # The Calendar lighting mode (owner 2026-07-16): which wedge
+        # lights — the shichen under the hour hand, or the current
+        # month/sign. GRAYED off the Calendar pointer (like Paint/Light
+        # on trio/cross). On the Calendar, Paint/Light PICK THE WHEEL
+        # (paint = Zodiac, light = Almanac — the labels stay, the
+        # equivalence is documented).
+        pointer_menu.addSeparator()
+        calendar_lighting_actions = self._add_choice_group(
+            design_menu, pointer_menu,
+            [
+                ("hour", tr("Light the hour (shichen)")),
+                ("year", tr("Light the month/sign")),
+            ],
+            settings.calendar_lighting,
+            lambda value: self._set_display_choice("calendar_lighting", value),
+            disabled=(
+                constants.CALENDAR_LIGHTING_MODES
+                if settings.pointer != "calendar" else ()
             ),
         )
         ring_menu = self._add_choice_submenu(
@@ -1239,6 +1288,7 @@ class AppController(QObject):
         self._menu_gates = {
             "first_lock": [],
             "palette_style": palette_style_actions,
+            "calendar_lighting": calendar_lighting_actions,
         }
 
         def slot_action(

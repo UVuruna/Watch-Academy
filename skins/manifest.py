@@ -162,7 +162,11 @@ class SkinDefinition:
                                        # AND period-hue count (owner spec)
     umbra_form: str = "fine"           # "fine" (30) | "coarse" (24) | "gradient"
     umbra_contrast: str = "full"       # "full" | "half" — Umbra shade span
-    palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues
+    palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues;
+                                       # on the Calendar pointer it PICKS THE
+                                       # WHEEL: paint = Zodiac, light = Almanac
+    calendar_lighting: str = "hour"    # "hour" (the shichen under the hand) |
+                                       # "year" (the current month/sign wedge)
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     day_slot_style: str = "sign"       # the DAY slot badge's own style

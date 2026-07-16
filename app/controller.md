@@ -99,18 +99,23 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   cycles inside a kinship group picked in Settings
   (`rotation_themes`).
   Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
-  letter-finish group; the tint color picker lives in Settings), Pointer (two
-  groups: Trinity/Seasons/Prism/Aurora/Compass variant — the owner's
-  display names for trio/cross/hexa/aurora/octa; Aurora has no arm
-  count and forces solar rotation (its toggle grays out) — + Paint/
-  Light palette) and Umbra
+  letter-finish group; the tint color picker lives in Settings), Pointer
+  (three groups: Trinity/Seasons/Prism/Compass/Aurora/Calendar variant —
+  the owner's display names for trio/cross/hexa/octa/aurora/calendar;
+  Aurora and Calendar have no arm count, and Aurora forces solar
+  rotation (its toggle grays out) — the Paint/Light palette group, and
+  the Calendar lighting group (Hour/Year)) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
   contrast); the Paint/Light group is GRAYED in place while Trinity or
   Seasons drives the pointer (owner 2026-07-16 — `_menu_gates
   ["palette_style"]`, `_add_choice_group` now returns its actions so
   `_refresh_menu_gating` can re-enable them the moment the pointer
   changes to hexa/octa/aurora — both styles read the SAME
-  `PALETTE_PRESETS` entry there, so the choice does nothing); then
+  `PALETTE_PRESETS` entry there, so the choice does nothing). On the
+  Calendar pointer Paint/Light instead PICK THE WHEEL — paint = Zodiac,
+  light = Almanac (the labels stay, the equivalence is documented) — so
+  the group stays live there; the Calendar lighting group is grayed off
+  the Calendar pointer (`_menu_gates["calendar_lighting"]`). Then
   Size (360…1440),
   Elements (the FINAL.txt #5 on/off switches, via the shared
   `_add_toggle()` helper: Earth — with its Clean/Atmosphere style

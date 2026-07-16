@@ -424,12 +424,46 @@ PALETTE_PRESETS = {
         "#0040FF", "#0080FF", "#00DCDC", "#00DC00", "#FFFF00",
         "#FF2828", "#720017",
     ),
+    # CALENDAR (owner 2026-07-16, CANON §The Dozen). TWELVE hues,
+    # clockwise from the TOP wedge (the tuple convention for the two
+    # wheels differs — see below). paint = the ZODIAC Dozen (boundaries
+    # ON the cardinal axes; the RGB circle rotated 15° so no pure
+    # primary shows): the FIRST hue fills the wedge that STARTS at the
+    # top (12h line), i.e. Cancer, then Leo, Virgo … clockwise. light =
+    # the ALMANAC (Month) Dozen (wedges CENTERED on the axes; pure
+    # primaries allowed): the FIRST hue fills the wedge CENTERED on the
+    # top, i.e. June, then July, August … clockwise.
+    ("calendar", "paint"): (
+        "#40FF00", "#BFFF00", "#FFBF00", "#FF4000", "#FF0040", "#FF00C0",
+        "#BF00FF", "#4000FF", "#0040FF", "#00BFFF", "#00FFBF", "#00FF40",
+    ),
+    ("calendar", "light"): (
+        "#00FF00", "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080",
+        "#FF00FF", "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80",
+    ),
 }
 
 # Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and
 # twilight arcs are still indicated, but as plain white transparency
 # instead of the pointer-palette hues.
 COLORFUL_OFF_COLOR = "#FFFFFF"
+
+# --- Calendar pointer (owner 2026-07-16, CANON §The Dozen) ---------------------
+# The twelve wedges paint at a base opacity; the LIT wedge (the shichen
+# under the hour hand, or the current month/sign) raises it by the
+# delta. Calendar-fixed — the wedges never ride the solar rotation.
+CALENDAR_WEDGE_ALPHA = 0.30          # every wedge's resting opacity
+CALENDAR_WEDGE_LIT_DELTA = 0.50      # extra opacity on the lit wedge
+CALENDAR_WEDGE_RADIUS_FRACTION = 0.90  # wedge reach, of the dial radius
+# The Earth DAY-ARROW on the Almanac wheel (owner 2026-07-16: "one tick
+# ≈ one day"): a small triangle at the marker's exact tick, pointing
+# from inside the dial OUTWARD toward the ring so the ring reads today's
+# date to the day. Drawn procedurally (the ring numeral arrow is the
+# visual reference).
+CALENDAR_ARROW_TIP_FRACTION = 0.845  # arrow tip radius (just inside the ticks)
+CALENDAR_ARROW_LENGTH_FRACTION = 0.06  # tip-to-base length, of the dial radius
+CALENDAR_ARROW_HALF_DEG = 2.4        # half-width of the base, in dial degrees
+CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring letters/ticks
 
 # Octa bottom-arm text (time/date/...): sized to span this fraction of
 # the slot width (owner: big font, must not overflow the slot).
@@ -694,6 +728,8 @@ SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION = 0.06          # of the font pixel size
 SLOT_SIZE_BY_POINTER = {
     "trio": 1.50, "hexa": 1.50, "aurora": 1.50,
     "cross": 1.25, "octa": 1.25,
+    # Calendar rides the PINNED layout (no arms) — the big-slot size.
+    "calendar": 1.50,
 }
 SLOT_SIZE_PINNED = 1.50
 SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12}

@@ -2106,7 +2106,11 @@
   "ui/Satanism": "7b368daf0e7cb7db25ee8f405217b6575e64cd08",
   "ui/Leader (Alpha) · Omega": "0ae245e0c82c822610ce3fd3779bb5f2bd62a420",
   "ui/Hunter (Gamma)": "b3b5c366251b0405a7ef705a12be655d21d5b487",
-  "ui/Scout (Delta)": "68e7ba1c6a592b5ae68d5e86a915e4a23b883eff"
+  "ui/Scout (Delta)": "68e7ba1c6a592b5ae68d5e86a915e4a23b883eff",
+  "ui/Calendar": "adab5090ac6a1b7b5420faac7be86c41721ba27c",
+  "ui/Almanac": "9109cec1d70311d881395724cd4124b203de6384",
+  "ui/Light the hour (shichen)": "d901560ba0b16233494d3e2b9483d0f50e5d505d",
+  "ui/Light the month/sign": "606d705d3c8cff58c4b5c6356e355b341a27a1b9"
  },
  "texts": {
   "articles/alchemy/jupiter/base": "[[The Figure]] Kalaj je metal Jupitera, onog dobroćudnog, i njegovi darovi su uglavnom darovi zvuka i sjaja. Mek, srebrnast i dovoljno jeftin da se njime sve prevuče, kalaj je ono što daje bronzu kada ga dodaš bakru i ono što daje zvonovinu kada ga dodaš još — legura koja livenom zvonu daje čist zvon a orguljskoj cevi da drži svoj ton. Savij šipku čistog kalaja i on se žali: čuveni „krik kalaja“, tihi vrisak njegovih kristala koji se preraspoređuju, metal koji doslovno progovara kada ga obrađuješ. Njegov znak ♃ isti je glif za metal, planetu i grom oca nebeskog.\n\n[[The Plate]] Vlasnikov medaljon izliva zajedničku mrtvu prirodu u bledom, meko belom kalaju — naslagane poluge, grumeni, namotaj žice, sve u blagom kositreno svetlom tonu koji kalaju daje njegovu skromnost. Obod je Jupiterova sopstvena kraljevska oprema: krune i hrastovo lišće smenjuju se sa snopovima munja, i glif ♃ — nacrtan poput zaobljenog „24“ — postavljen u medaljone ukrug. Kraljevski amblemi oko metala koji izgleda najskromnije: isto bogatstvo kao na zlatnoj ploči, odeveno kao kalaj, ali jednako okrunjeno.\n\n[[On the Dial]] četvrtak je dan Jupitera — francuski jeudi, dies Iovis — pa ga kalaj uzima, i uzima krunu zvezde: gornji krak 12h, podnevno žut, raspoloženje Radost. To je najviša tačka brojčanika, podne u svom najsjajnijem, i Jupiter, veći dobrotvor, sedi tamo u žutoj boji bliskoj zlatu, najsrećniji čas na najsrećnijem kraku. Tamo gde zlato drži središte kao izvor, kalaj drži vrhunac kao slavlje — podne sedmice, koje zvoni poput udarenog zvona.\n\n[[The Lesson]] Vrlina kalaja je Velikodušnost, a njegov porok Neumerenost — otvorena šaka i šaka koja se nikada ne sklapa. Jupiter je samo širenje, a širenje je blagoslov dok ne postane naduvenost; veći dobrotvor daje, ali previše dobre stvari i dalje je previše. Neumerenost obuzdava, s druge strane brojčanika, Mudrost na kraku Merkura — hitar um koji zna kada da stane — dok je Velikodušnost Neumerenost održana u meri, obilje koje se izliva a da ne plavi. Kalaj čini da zvono zvoni; Mudrost ga čuva od pucanja.",
@@ -4214,6 +4218,10 @@
   "ui/Satanism": "Satanizam",
   "ui/Leader (Alpha) · Omega": "Vođa (Alfa) · Omega",
   "ui/Hunter (Gamma)": "Lovac (Gama)",
-  "ui/Scout (Delta)": "Izviđač (Delta)"
+  "ui/Scout (Delta)": "Izviđač (Delta)",
+  "ui/Calendar": "Kalendar",
+  "ui/Almanac": "Almanah",
+  "ui/Light the hour (shichen)": "Svetli po satu (dvosat)",
+  "ui/Light the month/sign": "Svetli po mesecu/znaku"
  }
 }

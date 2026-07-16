@@ -49,7 +49,10 @@ class Settings:
     pointer: str = "hexa"
     umbra_form: str = "gradient"
     umbra_contrast: str = "dark"
-    palette_style: str = "paint"
+    palette_style: str = "paint"       # on Calendar: paint = Zodiac wheel,
+                                        # light = Almanac wheel
+    calendar_lighting: str = "hour"     # Calendar lit wedge: "hour" (the
+                                        # shichen) | "year" (month/sign)
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
     day_slot_style: str = "sign"        # the DAY slot badge's own style
@@ -216,6 +219,8 @@ class SettingsStore:
                 ("umbra_form", "gradient", constants.UMBRA_FORMS),
                 ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "paint", constants.PALETTE_STYLES),
+                ("calendar_lighting", "hour",
+                 constants.CALENDAR_LIGHTING_MODES),
                 ("octa_slot", "time", constants.OCTA_SLOT_MODES),
                 ("day_slot_style", "sign", constants.SLOT_STYLE_VALUES),
                 ("info_slot_style", "sign", constants.SLOT_STYLE_VALUES),
@@ -359,6 +364,7 @@ class SettingsStore:
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
             "palette_style": settings.palette_style,
+            "calendar_lighting": settings.calendar_lighting,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "day_slot_style": settings.day_slot_style,

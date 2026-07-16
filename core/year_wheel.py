@@ -8,8 +8,9 @@ error; the golden tests reject it.
 """
 
 import bisect
+import calendar
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 
 from config import constants
 
@@ -32,6 +33,32 @@ class YearAnchors:
 def year_marker_angle(now: datetime, anchors: YearAnchors) -> float:
     """Dial angle of the year marker (degrees, clockwise, 0 = top)."""
     return _unwrapped_angle(now, anchors) % 360.0
+
+
+def almanac_month_index(month: int) -> int:
+    """The ALMANAC wheel's wedge index (0..11) of a calendar month,
+    counted CLOCKWISE from the top wedge = June (owner 2026-07-16,
+    CANON §The Month Dozen): June 0, July 1, … December 6, January 7,
+    … May 11."""
+    return (month - 6) % 12
+
+
+def almanac_marker_angle(when: date) -> float:
+    """Dial angle (degrees, clockwise, 0 = top) of the Earth marker on
+    the CALENDAR pointer's Almanac wheel — its OWN real-calendar year
+    mapping (owner 2026-07-16): every month spans exactly 30° with the
+    1st of the month on its wedge-START line, and day D sits
+    (D-1)/days_in_month of the way into the wedge (one small ring tick
+    ≈ one day). June's wedge is CENTERED on the top, so June 1 lands on
+    the 11:00h line (15° before the top) and the summer solstice
+    (~June 21) lands ~5-6 ticks clockwise past it — the natural
+    consequence of anchoring each 1st to the hour lines. Leap February
+    rides the real calendar (calendar.monthrange)."""
+    days_in_month = calendar.monthrange(when.year, when.month)[1]
+    index = almanac_month_index(when.month)
+    wedge_start = index * constants.CALENDAR_WEDGE_DEG - constants.CALENDAR_WEDGE_DEG / 2
+    into = (when.day - 1) / days_in_month * constants.CALENDAR_WEDGE_DEG
+    return (wedge_start + into) % 360.0
 
 
 def instant_at_marker_angle(

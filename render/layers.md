@@ -35,20 +35,56 @@ rotation off (upright mode — better for reading exact positions).
 - [Compositor](compositor.md)
 
 ## Pointer Variants
-A skin renders with one of five pointer layouts
+A skin renders with one of six pointer layouts
 (`SkinDefinition.pointer`, user-overridable): **trio** (Trinity, 3
 hexa-shaped arms), **cross** (Seasons, 4 × 90°), **hexa** (Prism, 6 ×
-60°), **octa** (Compass, 8 × 45°) and **aurora** (no arms — wedges
-only). The arm count drives the star geometry, the Aura wedge count
-and the weekday slot layout (`POINTER_WEEKDAY_SLOTS`). Shared slots
-(cross pairs two bodies on three arms) show only the priority winner:
-the occupant whose weekday comes NEXT from today — today itself always
-wins (`visible_occupant`). Each pointer draws with its palette preset
+60°), **octa** (Compass, 8 × 45°), **aurora** (no arms — day-hue wedges
+only) and **calendar** (no arms — twelve calendar wedges). The arm
+count drives the star geometry, the Aura wedge count and the weekday
+slot layout (`POINTER_WEEKDAY_SLOTS`). Shared slots (cross pairs two
+bodies on three arms) show only the priority winner: the occupant whose
+weekday comes NEXT from today — today itself always wins
+(`visible_occupant`). Each pointer draws with its palette preset
 (`PALETTE_PRESETS[(pointer, palette_style)]`): hexa and octa ship
 "paint" and "light" versions (subtractive vs additive primaries,
 measured from the owner's art), the cross a single seasons palette
 (summer yellow top, autumn red right, winter blue bottom, spring green
 left).
+
+<a id="the-calendar-pointer"></a>
+
+### The Calendar Pointer (owner 2026-07-16)
+The **Calendar** divides the 24h dial into TWELVE 2-hour wedges and,
+like Aurora, draws NO star arms — the Aura carries the wedge colors
+(`BackgroundLayer`; `StarLayer` skips it). The `palette_style` PICKS
+THE WHEEL (`calendar_wheel()`): **paint = the Zodiac Dozen** (wedge
+boundaries ON the cardinal axes, first hue = the wedge starting at the
+12h line = Cancer, sign boundaries aligned with the year wheel) and
+**light = the Almanac (Month) Dozen** (wedges CENTERED on the axes,
+first hue = the wedge centered on the top = June). `calendar_wedge_bounds()`
+returns the twelve `(start, end)` dial angles; the wedges are
+CALENDAR-FIXED — they never ride the solar rotation.
+
+One wedge LIGHTS by raising its opacity
+(`CALENDAR_WEDGE_ALPHA` + `CALENDAR_WEDGE_LIT_DELTA`);
+`calendar_lit_index()` chooses it from `SkinDefinition.calendar_lighting`:
+**"hour"** — the wedge under the hour hand (the Chinese double-hour /
+shichen: the noon Horse wedge, the midnight Rat…), **"year"** — the
+current month's wedge (Almanac) or the current sign's (Zodiac). The lit
+index rides `RenderContext.calendar_lit` (the compositor computes it
+from the live tick and keys the DAILY composite on it, so the shichen
+relights intraday even though the wedges live below the ring).
+
+On the Almanac wheel ONLY the Earth marker leaves the shared six-anchor
+season wheel for the Almanac's OWN real-calendar mapping
+(`core.year_wheel.almanac_marker_angle`): every month spans 30° with
+the 1st on its wedge-start line (one small ring tick ≈ one day). There
+it gains the **day-ARROW** (`calendar_day_arrow()`,
+`YearMarkerLayer._draw_earth`) — a small gold triangle at the marker's
+exact tick pointing OUTWARD at the ring, so the ring reads today's date
+to the day. The Moon marker keeps its own lunation orbit. The wedge
+HOVER (`Compositor._calendar_tooltip`) is modest: the month + the
+double-hour's animal (Almanac) or the sign + its dates (Zodiac).
 
 <a id="the-slot-system"></a>
 
@@ -66,12 +102,14 @@ date, day length, small seconds, zodiac, ascendant or Chinese zodiac.
   the other the center, or flank both at 225°/135° when neither is;
 - **three slots** — top 0° + right + left; the Seasons lock the 1st
   slot on the classic unit (coerced in the controller);
-- **pinned** (Aurora, or the pointer off) — 180° alone, the 225°/135°
-  pair, the 0°/120°/240° trio; weekday shows today alone in a seat.
+- **pinned** (Aurora, Calendar, or the pointer off) — 180° alone, the
+  225°/135° pair, the 0°/120°/240° trio; weekday shows today alone in a
+  seat.
 
 Seat geometry (owner 2026-07-15): `slot_seat_rotation()` lets seats
 ride the star's solar rotation ONLY while an armed pointer is drawn —
-Aurora and pointer-off stay on natural round angles; `slot_seat_scale()`
+Aurora, Calendar and pointer-off stay on natural round angles;
+`slot_seat_scale()`
 sizes slots per pointer (`SLOT_SIZE_BY_POINTER`: 125% on the slim-armed
 Seasons/Compass, 150% elsewhere and pinned); `slot_seat_orbit()` shifts
 ANGLE seats outward to the diamond's widest point on the slim-armed

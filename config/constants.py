@@ -152,7 +152,23 @@ WEEKDAY_FULL_NAMES = {
 # "aurora" (owner spec 2026-07-12) draws NO geometric pointer at all —
 # its 7 entries are the PALETTE size: a dawn hue, five day hues spread
 # EVENLY across the actual sunrise-sunset arc, and a dusk hue.
-POINTER_POINTS = {"hexa": 6, "cross": 4, "octa": 8, "trio": 3, "aurora": 7}
+# "calendar" (owner 2026-07-16, CANON §The Dozen) divides the 24h dial
+# into TWELVE 2-hour wedges and, like Aurora, draws NO star arms — its
+# 12 entries are the PALETTE size (one hue per wedge). Its two wheels
+# ride the Paint/Light slot: paint = the Zodiac Dozen, light = the
+# Almanac (Month) Dozen. It has NO arm HALF-ANGLE (armless, like
+# Aurora): the star geometry and the arm hovers skip it explicitly.
+POINTER_POINTS = {
+    "hexa": 6, "cross": 4, "octa": 8, "trio": 3, "aurora": 7,
+    "calendar": 12,
+}
+CALENDAR_WEDGES = 12
+CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
+# The two lighting modes (owner 2026-07-16, both user-selectable):
+# "hour" — the wedge under the HOUR HAND lights (the Chinese
+# double-hour, shichen); "year" — the current MONTH's wedge (Almanac)
+# or the current SIGN's wedge (Zodiac).
+CALENDAR_LIGHTING_MODES = ("hour", "year")
 
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
 # stay hexa/cross/octa/trio (settings and code stability); the menu and
@@ -163,6 +179,7 @@ POINTER_DISPLAY_NAMES = {
     "hexa": "Prism",
     "octa": "Compass",
     "aurora": "Aurora",     # no arms — the day itself painted in bands
+    "calendar": "Calendar",  # no arms — the year/day in twelve wedges
 }
 
 # What each palette circle COLORS (owner spec 2026-07-11: hovering a
@@ -186,6 +203,12 @@ POINTER_ARM_LABELS = {
         "Dawn", "Morning", "Forenoon", "Noon", "Afternoon", "Evening",
         "Dusk",
     ),
+    # Calendar wedges, clockwise from the TOP wedge. The two wheels
+    # differ (paint = signs from the top boundary, light = months from
+    # the top center), so the palette-editor labels stay NEUTRAL — the
+    # ordinal position of each wedge (owner spec: the swatch names its
+    # place, the wheel gives the meaning).
+    "calendar": tuple(f"Wedge {index + 1}" for index in range(12)),
 }
 
 # Star arm (diamond) half-angles. Hexa/octa are the regular N-star
@@ -654,7 +677,21 @@ POINTER_WEEKDAY_SLOTS = {
         (180.0, ("sun", "moon", "mars", "mercury", "jupiter", "venus",
                  "saturn")),
     ),
+    # CALENDAR (owner 2026-07-16): no weekday model of its own — it uses
+    # the PINNED slot layout (like Aurora / the pointer-off case), one
+    # fixed slot at the dial bottom above the Omega showing today alone.
+    "calendar": (
+        (180.0, ("sun", "moon", "mars", "mercury", "jupiter", "venus",
+                 "saturn")),
+    ),
 }
+
+# The Calendar lighting modes (owner 2026-07-16, both user-selectable):
+# "hour" — the wedge under the HOUR HAND lights (the Chinese
+# double-hour, shichen — the animal speaks); "year" — the current
+# MONTH's wedge lights on the Almanac, the current SIGN's on the
+# Zodiac.
+CALENDAR_LIGHTING_MODES = ("hour", "year")
 # The SOUTH SLOT home angle (the Compass reserves this bottom arm for
 # it) and the Aurora DUAL layout (owner spec 2026-07-12): with BOTH the
 # weekday body and the slot on, they flank the bottom ±45° — the
