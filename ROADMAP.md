@@ -150,7 +150,17 @@ lives in [The DOMY Canon](CANON.md).
     indiction cycles all stand at 1 in year 1 — 19×28×15 = 7980,
     the Julian Period). The article draws the parallel: every
     tradition sought the world's year one in its scriptures or its
-    arithmetic; this dial measured it in the sky. **Phase II — ECLIPSES (owner 2026-07-16):**
+    arithmetic; this dial measured it in the sky (owner: "!!! TO
+    !!!" — the thesis, sealed). Flavor thread (owner, with a wink):
+    the sixth millennium after the light — we are just past A.L.
+    6000 — but per OUR canon the One is not a person returning
+    every 6000 years: God is the CALLING that keeps being filled
+    (NOVUS ORDO SECLORUM), so the sixth millennium finds not one
+    returning Christ but the ever-returning Judge. Also in the
+    comparison: the ALEXANDRIAN era (5493 BCE — the same Septuagint
+    arithmetic, an earlier Alexandrian rounding) and the HEBREW
+    Anno Mundi (3761 BCE — the Masoretic text's shorter patriarch
+    ages, Seder Olam Rabbah, 2nd c. CE). **Phase II — ECLIPSES (owner 2026-07-16):**
     the same Swiss Ephemeris files carry them; pyswisseph has direct
     finders (`swe.sol_eclipse_when_glob` / `swe.lun_eclipse_when`
     with types total/annular/hybrid/partial and total/partial/
