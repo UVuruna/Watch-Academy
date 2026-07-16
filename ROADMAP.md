@@ -93,7 +93,19 @@ lives in [The DOMY Canon](CANON.md).
 8. **SPACEBAR opens the Encyclopedia at the hovered topic** (owner
    2026-07-16): while any themed hover is active (with or without
    the legend visible), Space opens the Encyclopedia on that
-   topic's page.
+   topic's page. **OWNER CORRECTION (same day): "sve znači SVE" —
+   every hover text that has an encyclopedia page must open it**:
+   weekday bodies in SEATED slots and under the Calendar's pinned
+   layout (per-slot theme AND roster), the Compass/Seasons arm
+   events (equinoxes, solstices, seasons → the Sun/Seasons pages),
+   the Moon marker → its CURRENT phase's page, the Earth marker,
+   the Chinese slot — everything with a page.
+8b. **The Moon topic grows to EIGHT pages** (owner 2026-07-16): one
+   per phase — the four turning points and the four between (waxing
+   crescent/gibbous, waning gibbous/crescent) — each with a
+   description and a mythological/astrological connection; plus the
+   TIDES explained: spring tide at new/full (Sun and Moon pulling
+   the water together/apart), neap tide at the quarters.
 9. **Image clipping in the Encyclopedia — REPEAT COMPLAINT** (owner
    2026-07-16, "OVO NIJE PRVI PUT!"): the title above and the
    style/nav row below overlap the medallion image. The layout must
@@ -125,11 +137,18 @@ lives in [The DOMY Canon](CANON.md).
     with types total/annular/hybrid/partial and total/partial/
     penumbral; `_loc` variants for visibility from a place). Volume:
     ~230–240 eclipses per century ≈ ~140k events over the span —
-    small next to the moon phases. ΔT caveat is SHARPER here: THAT
-    an eclipse happens, its date and type are robust across the
-    whole span; WHERE its shadow path falls (local visibility) is
-    only trustworthy within a few millennia of the present, because
-    hours of ΔT slide the path in longitude. Dial ideas: the Eclipse
+    small next to the moon phases. Stored per solar eclipse (owner
+    2026-07-16: an eclipse is not the same everywhere on the
+    planet): the instant, the TYPE, the MAGNITUDE and the
+    GEOGRAPHIC POINT of greatest eclipse (lat/lon) — the finders
+    return them — so the app can say where it was total and compute
+    local circumstances on demand; lunar eclipses are visible from
+    the whole night side (only "was the moon up" is local). ΔT
+    caveat is SHARPER here: THAT an eclipse happens, its date and
+    type are robust across the whole span; WHERE its shadow path
+    falls (local visibility) is only trustworthy within a few
+    millennia of the present, because hours of ΔT slide the path in
+    longitude. Dial ideas: the Eclipse
     already exists in our canon as the NINTH MOOD — eclipse events
     can join the glow system and Time Travel's famous-moments list.
 13. **The Calendar pointer** (owner 2026-07-16, `Dozen.png`). A
