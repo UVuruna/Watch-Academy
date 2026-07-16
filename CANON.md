@@ -482,33 +482,41 @@ primaries allowed: June `#00FF00`, July `#80FF00`, August
 `#FF0080`, December `#FF00FF`, January `#8000FF`, February
 `#0000FF`, March `#0080FF`, April `#00FFFF`, May `#00FF80`.
 
-**The alignment dilemma** (owner): a month's middle is the 15th,
-but the solstice falls June 20–22. Two options:
+**The alignment VERDICT (owner 2026-07-16): the REAL CALENDAR.**
+The Month Dozen carries its OWN year mapping — every month exactly
+30° with the 1st on a wedge line (January 1 exactly at the 01:00h
+line), and the reason is the owner's tick insight: **there are
+exactly 30 small ring ticks between two hour numerals, which
+matches the days of a month — on this pointer ONE TICK ≈ ONE DAY.**
+The Earth marker's tempo varies slightly per month (February's 28
+days cover the same 30° as January's 31 — accepted), and the
+solstices/equinoxes slide ~5–7 ticks CLOCKWISE off the axes
+(June 20–21 = ticks 20–21 of June's wedge — accepted, "što je
+ok"). Every OTHER pointer keeps the shared six-anchor season wheel;
+this per-month mapping is the Month Dozen's own reading.
 
-- **(a) Exact months** — every month exactly 30° with the 1st on a
-  wedge line; the Earth marker's tempo varies per month (February's
-  28 days cover the same 30° as January's 31) and the
-  solstices/equinoxes slide slightly OFF the axes. Doctrine-legal:
-  the year wheel already runs piecewise (every season exactly 90°).
-- ★ **(b) One year-truth** — the shared year wheel stays untouched
-  (solstice pinned to the top, identical Earth position on every
-  pointer); the wedges are fixed 30° badges and the few-degree
-  oscillation is accepted — the colors say "roughly June". The
-  precision instruments remain the season and zodiac readings.
+**The Earth day-arrow (owner 2026-07-16):** with tick = day, the
+Earth year marker on this pointer POINTS at the exact tick where it
+stands — a small arrow like the one under the "12" ring numeral,
+in the opposite direction (from inside the dial toward the tick) —
+so the ring reads today's DATE to the day.
 
-★ = the standing recommendation; the owner rules.
+**Lighting (APPROVED 2026-07-16): the Chinese DOUBLE-HOURS
+(shichen).** The right geometry is a gift — the traditional shichen
+are EXACTLY these wedges: the Horse hour runs 11:00–13:00 centered
+on noon, the Rat 23:00–01:00 on midnight, twelve animals in 2-hour
+watches centered on the cardinal hours. The Month Dozen lights BY
+THE DAY: the hand entering a double-hour lights its wedge and the
+animal speaks the article — the Chinese zodiac, dismissed for the
+YEAR reading, returns as the DAY reading it historically was. All
+twelve animal medallions already exist on disk (colored/gold/
+silver/bronze) — zero new art. (The unchosen alternative, for the
+record: lighting the current MONTH's wedge by the year reading,
+as the Zodiac Dozen lights the current sign.)
 
-**Lighting (PROPOSED):** the right geometry is a GIFT — the
-traditional Chinese DOUBLE-HOURS (shichen) are EXACTLY these
-wedges: the Horse hour runs 11:00–13:00 centered on noon, the Rat
-23:00–01:00 on midnight, twelve animals in 2-hour watches centered
-on the cardinal hours. So the Month Dozen can light BY THE DAY: the
-hand entering a double-hour lights its wedge and the animal speaks
-the article — the Chinese zodiac, dismissed for the YEAR reading,
-returns as the DAY reading it always truly was. And all twelve
-animal medallions ALREADY exist on disk (colored/gold/silver/
-bronze) — zero new art. The plain alternative: light the CURRENT
-month (year reading), mirroring the zodiac variant.
+**Naming (open):** the working slug is `dozen`; display-name
+candidates for the two variants: ★ **Zodiac** (left) and
+**Almanac** (right); alternatives: Ecliptic, Calendar, Dodeca.
 
 <a id="working-rules"></a>
 

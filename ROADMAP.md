@@ -90,9 +90,13 @@ lives in [The DOMY Canon](CANON.md).
    twelve-wedge pointer — 2h per wedge — in two variants: the
    Zodiac Dozen (boundaries on the axes, 15°-shifted RGB wheel,
    current sign lights) and the Month Dozen (wedges centered on the
-   axes, pure primaries, June top). Full doctrine, palettes and the
-   open verdicts (month alignment a/★b, the shichen day-lighting
-   proposal) in [The DOMY Canon](CANON.md) §The Dozen.
+   axes, pure primaries, June top; its OWN real-calendar year
+   mapping — one ring tick ≈ one day, the 1st of each month on a
+   wedge line, solstices ~5–7 ticks off-axis; the Earth marker
+   gains a day-ARROW pointing at its exact tick; lighting = the
+   Chinese double-hours following the hand, existing animal
+   medallions). Full doctrine and palettes in
+   [The DOMY Canon](CANON.md) §The Dozen.
 
 <a id="engineering-backlog"></a>
 

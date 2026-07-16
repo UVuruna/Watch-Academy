@@ -149,12 +149,14 @@ owner's verdicts on the open points); `Dozen.png` (root);
 **Delivers:** the twelve-wedge pointer with its two variants —
 Zodiac Dozen (sign boundaries on the axes, 15°-shifted wheel,
 current sign lights, existing zodiac art speaks the articles) and
-Month Dozen (axis-centered wedges, pure primaries, lighting per the
-owner's verdict — current month, or the Chinese double-hours
-following the hand with the existing animal medallions); palettes
-pinned with tests, offscreen renders for the owner's eyes. (Opus:
-render geometry + year-wheel interplay. May run before or after
-Session 5 — the owner names the order.)
+Month Dozen (axis-centered wedges, pure primaries; its OWN
+real-calendar year mapping with one tick ≈ one day and the 1st of
+each month on a wedge line; the Earth marker's day-ARROW pointing
+at its exact tick; the Chinese double-hours lighting following the
+hand, reusing the existing animal medallions); palettes and the
+per-month mapping pinned with golden tests, offscreen renders for
+the owner's eyes. (Opus: render geometry + a second year mapping.
+May run before or after Session 5 — the owner names the order.)
 
 ## Running in Parallel (no agent needed)
 
@@ -173,7 +175,6 @@ Session 5 — the owner names the order.)
 - Seven archetypes stay seven (the standing recommendation) or grow
   to thirteen — 13 is the excluded number in this system.
 - Odanost as the center's day face, or on a planet seat.
-- The Dozen: month alignment (a) exact 30° months / ★ (b) one
-  year-truth with badge wedges; the Month Dozen lighting — current
-  month, or ★ the Chinese double-hours (shichen) following the
-  hand.
+- The Dozen: display names — ★ Zodiac (left) and Almanac (right) /
+  Ecliptic / Calendar / Dodeca; and whether BOTH variants ship as
+  selectable pointers (assumed yes).
