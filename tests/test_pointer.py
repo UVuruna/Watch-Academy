@@ -1573,16 +1573,15 @@ def test_event_glow_is_visible_even_over_the_yellow_wedge(app):
     without = Compositor(skin, AssetCache()).render_offscreen(
         540.0, 1.0, day, quiet
     )
-    # Upright + solstice noon: the Earth rides at the dial top, orbit
-    # 0.75R. Probe DIAGONALLY below-right of the marker: inside the 2x
-    # halo, outside the disc, off the noon hand shafts on the vertical
-    # and BELOW the marker's date-text line (which renders as wide tofu
-    # boxes under the offscreen platform and would mask the comparison).
-    # The white core lifts the blue channel over the blue-free yellow.
-    marker_y = 270 - round(270 * defaults.DEFAULT_SKIN.year_marker.orbit_fraction)
-    lit = with_glow.pixelColor(300, marker_y + 30)
-    plain = without.pixelColor(300, marker_y + 30)
-    assert lit.blue() - plain.blue() >= 8
+    # Upright + solstice noon: the Earth RELOCATES to the ring band
+    # centerline at the dial top (owner rework 2026-07-16). Probe
+    # DIAGONALLY below-right of the relocated marker: inside the halo,
+    # outside the disc, off the noon hand shafts on the vertical.
+    marker_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    lit = with_glow.pixelColor(289, marker_y + 33)
+    plain = without.pixelColor(289, marker_y + 33)
+    # The GOLDEN core lifts red and green over the background.
+    assert lit.red() - plain.red() >= 8 or lit.green() - plain.green() >= 8
 
 
 def test_moon_event_glow_renders(app):
@@ -1615,10 +1614,11 @@ def test_moon_event_glow_renders(app):
     without = Compositor(skin, AssetCache()).render_offscreen(
         540.0, 1.0, day, quiet
     )
-    # At the instant the moon sits exactly on its cycle angle; probe
-    # 30 px above the marker center — inside the 2x halo, off the disc.
+    # At the instant the moon sits exactly on its cycle angle and
+    # RELOCATES to the ring band centerline (owner rework 2026-07-16);
+    # probe 30 px above the relocated marker center, off the disc.
     moon_angle = math.radians(glowing.moon_fraction * 360.0)
-    orbit = 270 * defaults.DEFAULT_SKIN.year_marker.moon_orbit_fraction
+    orbit = 270 * defaults.GLOW_RING_RADIUS_FRACTION
     moon_x = 270 + orbit * math.sin(moon_angle)
     moon_y = 270 - orbit * math.cos(moon_angle)
     lit = with_glow.pixelColor(round(moon_x), round(moon_y) - 30)
@@ -1628,6 +1628,98 @@ def test_moon_event_glow_renders(app):
         or lit.green() - plain.green() >= 8
         or lit.blue() - plain.blue() >= 8
     )
+
+
+def test_season_glow_relocates_to_ring_band_and_is_golden(app):
+    """Turning-point rework (owner 2026-07-16): at a solstice the Earth
+    marker relocates radially to the ring band centerline at its year
+    angle, and its glow is GOLDEN (red/green lifted, blue barely). The
+    OLD orbit (0.75R) carries no glow anymore."""
+    import dataclasses as dc
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    solstice_noon = datetime(2026, 6, 21, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        solstice_noon,
+        observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    glowing = build_tick_state(solstice_noon, day)
+    assert glowing.season_event == "Summer Solstice"
+    quiet = dc.replace(glowing, season_event=None, moon_event=None)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    with_glow = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, glowing
+    )
+    without = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, quiet
+    )
+    # Summer solstice: year_angle 0 -> the top. Relocated to the ring
+    # band centerline; probe 40 px above center (inside the halo, clear
+    # of the ~30 px marker disc).
+    band_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    lit = with_glow.pixelColor(289, band_y + 33)
+    plain = without.pixelColor(289, band_y + 33)
+    dr = lit.red() - plain.red()
+    dg = lit.green() - plain.green()
+    db = lit.blue() - plain.blue()
+    assert dr >= 8 and dg >= 8       # golden: red & green lift
+    assert dr - db >= 8              # ... and clearly more than blue
+    # The OLD orbit is now quiet: no glow relocation leaves it behind.
+    old_y = 270 - round(270 * defaults.DEFAULT_SKIN.year_marker.orbit_fraction)
+    old_lit = with_glow.pixelColor(289, old_y + 33)
+    old_plain = without.pixelColor(289, old_y + 33)
+    assert abs(old_lit.red() - old_plain.red()) <= 4
+
+
+def test_moon_glow_relocates_to_ring_band_and_is_silver(app):
+    """The Moon's phase glow relocates to the ring band centerline too,
+    and its color is SILVER — all three channels lift together (blue is
+    NOT suppressed the way the golden sun glow suppresses it)."""
+    import dataclasses as dc
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    seasons = SeasonsRepository().year_anchors(2026)
+    window = MoonPhaseRepository().moon_window(2026)
+    reference = datetime(2026, 7, 7, 12, 0, tzinfo=tz)
+    scout = build_day_context(reference, observer, seasons, window)
+    instant, name = min(
+        scout.moon_events, key=lambda event: abs(event[0] - reference)
+    )
+    local = instant.astimezone(tz)
+    day = build_day_context(local, observer, seasons, window)
+    glowing = build_tick_state(local, day)
+    assert glowing.moon_event == name
+    quiet = dc.replace(glowing, moon_event=None, season_event=None)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    with_glow = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, glowing
+    )
+    without = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, quiet
+    )
+    moon_angle = math.radians(glowing.moon_fraction * 360.0)
+    orbit = 270 * defaults.GLOW_RING_RADIUS_FRACTION
+    moon_x = 270 + orbit * math.sin(moon_angle)
+    moon_y = 270 - orbit * math.cos(moon_angle)
+    lit = with_glow.pixelColor(round(moon_x), round(moon_y) - 30)
+    plain = without.pixelColor(round(moon_x), round(moon_y) - 30)
+    dr = lit.red() - plain.red()
+    dg = lit.green() - plain.green()
+    db = lit.blue() - plain.blue()
+    assert dr >= 8 and dg >= 8 and db >= 8      # silver: all channels lift
+    # Silver keeps blue with the rest — unlike the golden sun glow which
+    # suppresses blue by a wide margin.
+    assert dr - db <= 6
 
 
 def test_half_contrast_renders_a_gentler_night(july_wednesday):

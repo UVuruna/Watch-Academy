@@ -167,18 +167,21 @@ def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
     )
 
 
-def draw_event_glow(painter: QPainter, pos: QPointF, marker_radius: float) -> None:
-    """Radial halo behind a year marker during a season/moon event
-    window (owner spec): pure WHITE, compact — the halo diameter is
-    twice the marker's — and intense, so it reads over any Aura wedge
-    (the summer solstice always lands in the bright yellow one)."""
+def draw_event_glow(
+    painter: QPainter, pos: QPointF, marker_radius: float, color: str
+) -> None:
+    """Radial halo behind a year marker relocated to the ring band
+    centerline during a season/moon event window (owner rework
+    2026-07-16): compact — the halo diameter is twice the marker's — and
+    intense, so it reads over any background while STRADDLING the ring.
+    `color` is GOLDEN for the Sun's events, SILVER for the Moon's."""
     halo = marker_radius * defaults.GLOW_RADIUS_SCALE
     gradient = QRadialGradient(pos, halo)
-    core = QColor(defaults.GLOW_COLOR)
+    core = QColor(color)
     core.setAlphaF(defaults.GLOW_CORE_ALPHA)
-    mid = QColor(defaults.GLOW_COLOR)
+    mid = QColor(color)
     mid.setAlphaF(defaults.GLOW_MID_ALPHA)
-    edge = QColor(defaults.GLOW_COLOR)
+    edge = QColor(color)
     edge.setAlphaF(0.0)
     gradient.setColorAt(0.0, core)
     gradient.setColorAt(defaults.GLOW_MID_STOP, mid)
@@ -1518,10 +1521,23 @@ class YearMarkerLayer(Layer):
                 # 2026-07-12; the Settings ▸ Opacity slider).
                 opacity *= spec.moon_hidden_alpha
             factor = hover_factor(ctx, "moon")
-            pos = dial_point(moon_angle, ctx.radius * spec.moon_orbit_fraction)
-            if ctx.tick.moon_event is not None:
-                # ±6 h around a principal phase instant (owner spec).
-                draw_event_glow(painter, pos, ctx.radius * spec.moon_scale * factor)
+            # During its ±6 h event window the Moon RELOCATES radially to
+            # the ring band centerline (owner 2026-07-16), keeping its
+            # cycle angle, so the SILVER halo straddles the ring.
+            glowing = ctx.tick.moon_event is not None
+            orbit = (
+                defaults.GLOW_RING_RADIUS_FRACTION
+                if glowing
+                else spec.moon_orbit_fraction
+            )
+            pos = dial_point(moon_angle, ctx.radius * orbit)
+            if glowing:
+                draw_event_glow(
+                    painter,
+                    pos,
+                    ctx.radius * spec.moon_scale * factor,
+                    defaults.GLOW_MOON_COLOR,
+                )
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
             self._draw_moon(
@@ -1531,11 +1547,17 @@ class YearMarkerLayer(Layer):
 
     def _draw_earth(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.year_marker
-        pos = dial_point(ctx.tick.year_angle, ctx.radius * spec.orbit_fraction)
+        # During its ±12 h event window the Earth RELOCATES radially to the
+        # ring band centerline (owner 2026-07-16), keeping its year-wheel
+        # angle, so the GOLDEN halo straddles the ring.
+        glowing = ctx.tick.season_event is not None
+        orbit = (
+            defaults.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
+        )
+        pos = dial_point(ctx.tick.year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
-        if ctx.tick.season_event is not None:
-            # ±12 h around a solstice/equinox instant (owner spec).
-            draw_event_glow(painter, pos, size / 2)
+        if glowing:
+            draw_event_glow(painter, pos, size / 2, defaults.GLOW_SUN_COLOR)
         variant = (
             f"{ctx.skin.earth_style}_"
             f"{earth_region(ctx.day.latitude, spec.default_variant)}_"

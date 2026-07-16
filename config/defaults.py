@@ -787,9 +787,18 @@ UMBRA_CONTRAST_SPANS = {
 }
 
 # --- Season/moon event glow rendering (windows live in constants) ---------------
-# Owner spec: pure WHITE, compact and intense — the halo diameter is
-# twice the marker's, i.e. halo radius = 2x marker radius.
-GLOW_COLOR = "#FFFFFF"
+# Turning-point glow REWORK (owner 2026-07-16): at a GLOW event the
+# glowing marker relocates RADIALLY to the ring band centerline — the
+# radius where the hour numerals and ring letters sit — keeping its event
+# ANGLE (New Moon still at the 12h reading). The compact halo then
+# STRADDLES the ring, shining both inside and outside the circle, so it
+# reads over any background (a white Compass tip, the bright yellow top
+# arms) without needing to be huge. New colors: the Sun's events (the
+# Earth marker at a solstice/equinox) glow GOLDEN, the Moon's phases glow
+# SILVER — starting values the owner tunes here.
+GLOW_RING_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION  # ring band centerline
+GLOW_SUN_COLOR = "#FFCC33"           # golden — distinct from the yellow arms
+GLOW_MOON_COLOR = "#E8EBEE"          # silver — bright, reads on the dark ring
 GLOW_CORE_ALPHA = 1.0
 GLOW_MID_ALPHA = 0.7
 GLOW_MID_STOP = 0.55                 # gradient position of the mid alpha

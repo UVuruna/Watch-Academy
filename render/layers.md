@@ -203,10 +203,15 @@ smaller Moon transits OVER the Earth at `MOON_TRANSIT_OPACITY` when they
 meet. The Earth draws the user's `earth_style` variant (clean or
 atmosphere — both bundled per continent and day/night). During event windows
 (`tick.season_event` ±12 h around a solstice/equinox, `tick.moon_event`
-±6 h around a principal phase) the marker gets a radial halo via
-`draw_event_glow()` — pure WHITE, intense and compact (halo diameter =
-2× the marker's, owner spec), visible even over the bright yellow Aura
-wedge where the summer solstice always lands.
+±6 h around a principal phase) the glowing marker RELOCATES radially
+to the RING BAND CENTERLINE (owner rework 2026-07-16,
+`defaults.GLOW_RING_RADIUS_FRACTION` = the numeral/letter radius),
+keeping its own angle (the Moon still glows at its cycle reading), so a
+compact halo via `draw_event_glow()` STRADDLES the ring — shining both
+inside and outside the circle and reading over any background instead of
+having to be huge. The colors carry the source: the Sun's events glow
+GOLDEN (`GLOW_SUN_COLOR`), the Moon's phases SILVER (`GLOW_MOON_COLOR`);
+the halo diameter stays 2× the marker's.
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and
