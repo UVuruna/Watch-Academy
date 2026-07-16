@@ -160,7 +160,26 @@ lives in [The DOMY Canon](CANON.md).
     comparison: the ALEXANDRIAN era (5493 BCE — the same Septuagint
     arithmetic, an earlier Alexandrian rounding) and the HEBREW
     Anno Mundi (3761 BCE — the Masoretic text's shorter patriarch
-    ages, Seder Olam Rabbah, 2nd c. CE). **Phase II — ECLIPSES (owner 2026-07-16):**
+    ages, Seder Olam Rabbah, 2nd c. CE).
+    **Era terminology (owner direction 2026-07-16):** the cycle is
+    named by LIGHT, not by starry seasons — **the Light Era and the
+    Dark Era** (we live in the Light Era; hence Anno Lucis).
+    PROPOSED refinement (owner picks): read the era as one long
+    DAY, in the dial's own language — its DAWN 4079 BCE (the
+    11-year flicker), its NOON ≈ +1000 CE (the peak, light ~8 days
+    ahead), its DUSK +6423 CE — "we live in the early afternoon of
+    the Light Era."
+    **Phase III (OPTIONAL research, owner interest 2026-07-16):**
+    the LONG envelope. Beyond DE441 the day-exact ephemerides are
+    unreliable, but the ENVELOPE's drivers (eccentricity, climatic
+    precession) are solved for millions of years — Laskar's La2004/
+    La2010 orbital solutions (public, IMCCE) give e(t) and e·sinϖ
+    at 1000-year steps; from them the light−dark amplitude and the
+    era lengths can be plotted over e.g. ±200,000 years WITHOUT
+    pretending day-level dates: the amplitude breathes with the
+    ~100,000-year (and 405k) eccentricity cycles — currently
+    FALLING toward a deep minimum in ~25–30 millennia, then rising
+    — exactly the longer cyclicity the owner suspects. **Phase II — ECLIPSES (owner 2026-07-16):**
     the same Swiss Ephemeris files carry them; pyswisseph has direct
     finders (`swe.sol_eclipse_when_glob` / `swe.lun_eclipse_when`
     with types total/annular/hybrid/partial and total/partial/
