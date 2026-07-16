@@ -9,6 +9,14 @@ with the app, not part of the runtime dependency graph. The GEMINI/CHATGPT PROMP
 
 ## Files
 
+### `ephemeris/` — The Anno Lucis Pipeline (subfolder)
+[Ephemeris (subfolder)](ephemeris/___ephemeris.md) — reproducible
+Swiss-Ephemeris (DE441-span, −13000…+17000) extraction of all
+solstices/equinoxes (~120k) and Moon phases (~1.5M), the northern
+light/dark half-year durations, and the pinned **Anno Lucis year** ≈ 4083
+BCE (owner task 2026-07-16, ROADMAP item 12). Research-only; not imported by
+the app.
+
 ### `graph_years.py`
 Exploratory plotting of season/year data.
 
@@ -106,6 +114,14 @@ per-SOURCE (Gemini/ChatGPT) art coverage with a shortage list — the
 one place to check what is missing. Regenerate after any theme-table
 change or art drop; keep its NINTHS table in sync with
 `app/encyclopedia.py`.
+
+### `circumplex_notes.md` — The Emotion Wheel Notes
+The owner's Geneva-Emotion-Wheel drop read against our web: the
+circumplex axes confirm the dial's diagonal-opposition geometry,
+the four quadrants map to the four temperaments (each gets its
+emotional family), and a harvest of unseated emotion vocabulary
+(shame, guilt, regret, relief, compassion, admiration…) for the
+article writers; intensity-ladder idea sparks, unadopted.
 
 ### `bond_theme.md` — The Bond (relationship pillars theme draft)
 The owner's man-and-woman pillars (prompt.txt notes, 2026-07-16)

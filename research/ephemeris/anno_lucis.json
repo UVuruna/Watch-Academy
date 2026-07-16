@@ -1,0 +1,19 @@
+{
+  "anno_lucis_year_smoothed": -4081.9,
+  "anno_lucis_year_smoothed_label": "4083 BCE",
+  "anno_lucis_year_raw_sustained": -4078,
+  "anno_lucis_year_raw_sustained_label": "4079 BCE",
+  "definition": "Northern LIGHT half = vernal->autumn equinox; DARK = the rest. Anno Lucis = the year the light half durably outgrows the dark (light-dark crosses 0 upward).",
+  "smoothing": "rolling mean, window 71 years, over light-dark; negative->positive crossing nearest 4000 BCE.",
+  "raw_criterion": "first year beginning a run of 100 consecutive years with light>dark, near the crossing.",
+  "all_smoothed_up_crossings": [
+    -4081.9,
+    16424.2
+  ],
+  "delta_t_caveat": "Event YEARS and season DURATIONS are robust; exact local clock times over +/-15 millennia are not (the Earth-rotation deltaT model carries hours of uncertainty).",
+  "span_years": [
+    -12998,
+    16993
+  ],
+  "n_years": 29992
+}

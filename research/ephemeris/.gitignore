@@ -1,0 +1,8 @@
+# Swiss Ephemeris data files (~98 MB) — re-fetch with download_ephe.py
+ephe/
+# Local Python 3.11 venv (uv-managed) holding pyswisseph
+.venv/
+# Full event database (hundreds of MB) — regenerate with extract.py
+events.sqlite
+events.sqlite-journal
+__pycache__/
