@@ -2,7 +2,7 @@
 
 **GENERATED — do not edit by hand.** Regenerate with `python research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
 
-_Last generated: 2026-07-15_
+_Last generated: 2026-07-16_
 
 ## The Position System — seat archetypes
 
@@ -146,17 +146,17 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Freemasonry | `freemasonry` | ✔ | — |
+| sun | Sunday | Christianity | `christianity` | ✔ | — |
 | moon | Monday | Islam | `islam` | ✔ | — |
 | mars | Tuesday | Buddhism | `buddhism` | ✔ | — |
 | mercury | Wednesday | Taoism | `taoism` | ✔ | — |
 | jupiter | Thursday | Hinduism | `hinduism` | ✔ | — |
-| venus | Friday | Christianity | `christianity` | ✔ | — |
+| venus | Friday | Sikhism | `sikhism` | ✔ | — |
 | saturn | Saturday | Judaism | `judaism` | ✔ | — |
-| dual | Sunday | Freemasonry / The Rough Ashlar | `rough_ashlar` | ✔ | — |
+| dual | Sunday | Christianity / Satanism | `satanism` | — | — |
 | ninth | — | The Unknown God | `unknown_god` | — | — |
 
-### Mysteries (`religion_alt`)
+### Ancient religions (`religion_alt`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
@@ -164,7 +164,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | moon | Monday | Druidism | `druidism` | ✔ | — |
 | mars | Tuesday | Zoroastrianism | `zoroastrianism` | ✔ | — |
 | mercury | Wednesday | Shamanism | `shamanism` | ✔ | — |
-| jupiter | Thursday | Sikhism | `sikhism` | ✔ | — |
+| jupiter | Thursday | Eleusinian Mysteries | `eleusis` | — | — |
 | venus | Friday | Babylon | `babylon` | ✔ | — |
 | saturn | Saturday | Voodoo | `voodoo` | ✔ | — |
 | dual | Sunday | Mithraism / Corax | `corax` | ✔ | — |
@@ -188,10 +188,10 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 | Seat | Day | Figure | File | Gemini | ChatGPT | Colored G | Colored C |
 |---|---|---|---|---|---|---|---|
-| sun | Sunday | Alpha · Omega | `alpha` | ✔ | ✔ | ✔ | ✔ |
+| sun | Sunday | Leader (Alpha) · Omega | `alpha` | ✔ | ✔ | ✔ | ✔ |
 | moon | Monday | Luna | `luna` | ✔ | ✔ | ✔ | ✔ |
-| mars | Tuesday | Hunter | `hunter` | ✔ | ✔ | ✔ | ✔ |
-| mercury | Wednesday | Scout | `scout` | ✔ | ✔ | ✔ | ✔ |
+| mars | Tuesday | Hunter (Gamma) | `hunter` | ✔ | ✔ | ✔ | ✔ |
+| mercury | Wednesday | Scout (Delta) | `scout` | ✔ | ✔ | ✔ | ✔ |
 | jupiter | Thursday | Beta | `beta` | ✔ | ✔ | ✔ | ✔ |
 | venus | Friday | Mate | `mate` | ✔ | ✔ | ✔ | ✔ |
 | saturn | Saturday | Elder | `elder` | ✔ | ✔ | ✔ | ✔ |
@@ -320,6 +320,62 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | saturn | Saturday | Renewal | `Renewal` | ✔ | ✔ |
 | dual | Sunday | Glory / Awe | `Awe` | ✔ | ✔ |
 
+## Pantheon vs Planetary — per-seat coverage
+
+Per pantheon theme, the seated Pantheon name against the Planetary fallback, with per-source on-disk coverage of every PANTHEON candidate plate (`defaults.WEEKDAY_PANTHEON`).
+
+### Greek gods — Pantheon (`greek`)
+
+| Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
+|---|---|---|---|---|---|
+| sun | Sunday | Zeus (Ζεύς) | `zeus`, `Zeus` | — ✔ | — — |
+| moon | Monday | Poseidon (Ποσειδῶν) | `poseidon` | — | — |
+| mars | Tuesday | Artemis (Ἄρτεμις) | `artemis` | — | — |
+| mercury | Wednesday | Athena (Ἀθηνᾶ) | `athena` | — | — |
+| jupiter | Thursday | Apollo (Ἀπόλλων) | `apollo` | — | — |
+| venus | Friday | Hera (Ἥρα) | `hera` | — | — |
+| saturn | Saturday | Demeter (Δημήτηρ) | `demeter` | — | — |
+| dual | Sunday | Zeus / Hades | `hades` | — | — |
+
+### Norse gods — Pantheon (`norse`)
+
+| Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
+|---|---|---|---|---|---|
+| sun | Sunday | Odin (Óðinn) | `Odin` | — | — |
+| moon | Monday | Hel | `Hel` | — | — |
+| mars | Tuesday | Thor (Þórr) | `Thor` | ✔ | — |
+| mercury | Wednesday | Loki | `Loki` | ✔ | — |
+| jupiter | Thursday | Tyr (Týr) | `Tyr` | ✔ | — |
+| venus | Friday | Frigg | `Frigg` | — | — |
+| saturn | Saturday | Freyr | `Freyr` | — | — |
+| dual | Sunday | Odin / The Wanderer | `Odin` | ✔ | — |
+
+### Egyptian gods — Pantheon (`egypt`)
+
+| Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
+|---|---|---|---|---|---|
+| sun | Sunday | Ra | `ra` | ✔ | — |
+| moon | Monday | Isis | `isis` | — | — |
+| mars | Tuesday | Horus | `horus` | — | — |
+| mercury | Wednesday | Thoth | `thoth` | ✔ | — |
+| jupiter | Thursday | Anubis | `anubis` | — | — |
+| venus | Friday | Bastet | `bastet` | — | — |
+| saturn | Saturday | Osiris | `osiris` | ✔ | — |
+| dual | Sunday | Ra / Afu-Ra | `afu_ra` | ✔ | — |
+
+### Slavic gods — Pantheon (`slavic`)
+
+| Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
+|---|---|---|---|---|---|
+| sun | Sunday | Perun | `perun` | ✔ | — |
+| moon | Monday | Mokoš | `mokos` | ✔ | — |
+| mars | Tuesday | Svetovid | `svetovid` | ✔ | — |
+| mercury | Wednesday | Svarog | `svarog` | — | — |
+| jupiter | Thursday | Dažbog | `dazbog` | ✔ | — |
+| venus | Friday | Lada | `lada` | — | — |
+| saturn | Saturday | Morana | `morana` | ✔ | — |
+| dual | Sunday | Perun / Veles | `veles` | ✔ | — |
+
 ## Zodiac — Astrology (12 signs + the 13th)
 
 | Sign | sign G | sign C | logo G | logo C | constellation G | constellation C | colored G | colored C |
@@ -379,6 +435,12 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | scale | `Lucifer_Triangle` | ✔ | — |
 | scale | `Judas_Triangle` | ✔ | — |
 | scale | `Union` | ✔ | — |
+| scale glass | `Judas_Triangle` | — | — |
+| scale glass | `Lucifer_Triangle` | — | — |
+| scale glass | `Judas_Triangle_v2` | — | — |
+| scale glass | `Lucifer_Triangle_v2` | — | — |
+| scale glass | `Union_Meeting` | — | — |
+| scale glass | `Union` | — | — |
 | subdial (silver master) | `center` | ✔ | — |
 
 ## Emblems
@@ -422,7 +484,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 ## Shortage List — everything the tables marked —
 
-**chatgpt** (261):
+**chatgpt** (300):
 
 - weekday planets/primary/sun.png
 - weekday planets/primary/moon.png
@@ -519,20 +581,20 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 - weekday japan/primary/kinyobi.png
 - weekday japan/primary/doyobi.png
 - weekday japan/primary/dual/ama_no_iwato.png
-- weekday religion/primary/freemasonry.png
+- weekday religion/primary/christianity.png
 - weekday religion/primary/islam.png
 - weekday religion/primary/buddhism.png
 - weekday religion/primary/taoism.png
 - weekday religion/primary/hinduism.png
-- weekday religion/primary/christianity.png
+- weekday religion/primary/sikhism.png
 - weekday religion/primary/judaism.png
-- weekday religion/primary/dual/rough_ashlar.png
+- weekday religion/primary/dual/satanism.png
 - weekday religion/primary/unknown_god.png
 - weekday religion/secondary/mithraism.png
 - weekday religion/secondary/druidism.png
 - weekday religion/secondary/zoroastrianism.png
 - weekday religion/secondary/shamanism.png
-- weekday religion/secondary/sikhism.png
+- weekday religion/secondary/eleusis.png
 - weekday religion/secondary/babylon.png
 - weekday religion/secondary/voodoo.png
 - weekday religion/secondary/dual/corax.png
@@ -599,6 +661,39 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 - weekday cosmos/colored/dual/black_hole.png
 - weekday cosmos/primary/big_bang.png
 - weekday cosmos/colored/big_bang.png
+- weekday greek/pantheon/zeus.png
+- weekday greek/primary/Zeus.png
+- weekday greek/pantheon/poseidon.png
+- weekday greek/pantheon/artemis.png
+- weekday greek/pantheon/athena.png
+- weekday greek/pantheon/apollo.png
+- weekday greek/pantheon/hera.png
+- weekday greek/pantheon/demeter.png
+- weekday greek/pantheon/dual/hades.png
+- weekday norse/pantheon/Odin.png
+- weekday norse/pantheon/Hel.png
+- weekday norse/primary/Thor.png
+- weekday norse/primary/Loki.png
+- weekday norse/primary/Tyr.png
+- weekday norse/pantheon/Frigg.png
+- weekday norse/pantheon/Freyr.png
+- weekday norse/primary/Odin.png
+- weekday egypt/primary/ra.png
+- weekday egypt/pantheon/isis.png
+- weekday egypt/pantheon/horus.png
+- weekday egypt/primary/thoth.png
+- weekday egypt/pantheon/anubis.png
+- weekday egypt/pantheon/bastet.png
+- weekday egypt/primary/osiris.png
+- weekday egypt/primary/dual/afu_ra.png
+- weekday slavic/primary/perun.png
+- weekday slavic/primary/mokos.png
+- weekday slavic/primary/svetovid.png
+- weekday slavic/pantheon/svarog.png
+- weekday slavic/primary/dazbog.png
+- weekday slavic/pantheon/lada.png
+- weekday slavic/primary/morana.png
+- weekday slavic/primary/veles.png
 - zodiac astrology/sign/Cancer.png
 - zodiac astrology/primary/Cancer.png
 - zodiac astrology/constellation/Cancer.png
@@ -684,9 +779,15 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 - badge scale/Lucifer_Triangle.png
 - badge scale/Judas_Triangle.png
 - badge scale/Union.png
+- badge scale/glass/Judas_Triangle.png
+- badge scale/glass/Lucifer_Triangle.png
+- badge scale/glass/Judas_Triangle_v2.png
+- badge scale/glass/Lucifer_Triangle_v2.png
+- badge scale/glass/Union_Meeting.png
+- badge scale/glass/Union.png
 - badge subdial/silver/center.png
 
-**gemini** (31):
+**gemini** (57):
 
 - weekday greek/primary/hades.png
 - weekday greek/colored/hades.png
@@ -695,7 +796,9 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 - weekday egypt/primary/set.png
 - weekday slavic/primary/crnobog.png
 - weekday alchemy/primary/stone.png
+- weekday religion/primary/dual/satanism.png
 - weekday religion/primary/unknown_god.png
+- weekday religion/secondary/eleusis.png
 - weekday religion/secondary/lost_mystery.png
 - weekday profession/primary/Jester.png
 - weekday profession/colored/Jester.png
@@ -709,6 +812,24 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 - weekday bible/dark/legion.png
 - weekday cosmos/primary/big_bang.png
 - weekday cosmos/colored/big_bang.png
+- weekday greek/pantheon/zeus.png
+- weekday greek/pantheon/poseidon.png
+- weekday greek/pantheon/artemis.png
+- weekday greek/pantheon/athena.png
+- weekday greek/pantheon/apollo.png
+- weekday greek/pantheon/hera.png
+- weekday greek/pantheon/demeter.png
+- weekday greek/pantheon/dual/hades.png
+- weekday norse/pantheon/Odin.png
+- weekday norse/pantheon/Hel.png
+- weekday norse/pantheon/Frigg.png
+- weekday norse/pantheon/Freyr.png
+- weekday egypt/pantheon/isis.png
+- weekday egypt/pantheon/horus.png
+- weekday egypt/pantheon/anubis.png
+- weekday egypt/pantheon/bastet.png
+- weekday slavic/pantheon/svarog.png
+- weekday slavic/pantheon/lada.png
 - zodiac astrology/sign/Ophiuchus.png
 - zodiac astrology/primary/Ophiuchus.png
 - zodiac astrology/constellation/Ophiuchus.png
@@ -719,4 +840,10 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 - badge season/DrySeason.png
 - badge season/turning_point/SummerSolstice.png
 - badge season/turning_point/WinterSolstice.png
+- badge scale/glass/Judas_Triangle.png
+- badge scale/glass/Lucifer_Triangle.png
+- badge scale/glass/Judas_Triangle_v2.png
+- badge scale/glass/Lucifer_Triangle_v2.png
+- badge scale/glass/Union_Meeting.png
+- badge scale/glass/Union.png
 

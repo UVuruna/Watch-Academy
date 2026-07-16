@@ -33,6 +33,12 @@ The three wheel themes split per the one-theme-one-file rule
 (silver sundial, Awe dual + the Ninth Mood / Eclipse ninth); drop
 dirs assets/emblem/virtue|sin|mood/.
 
+### `screenshots_sr.md` — Screenshot Checklist (Serbian)
+Owner-facing checkbox list (Serbian, 2026-07-14) of every screenshot to
+capture for the app: 5 for the Encyclopedia "The Instrument" chapter
+(`assets/instrument/gemini/`) and 37 for the redesigned Guide
+(`assets/guide/`), with capture instructions per shot.
+
 ### `guide_shotlist.md` — Guide Redesign and Shot List
 The Guide's 30-chapter redesign plan plus the numbered 37-screenshot
 shot list with exact preconditions per shot (owner shoots these).

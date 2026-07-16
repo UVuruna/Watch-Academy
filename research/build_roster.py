@@ -166,6 +166,49 @@ def weekday_sections() -> list[str]:
     return out
 
 
+PANTHEON_THEMES = ("greek", "norse", "egypt", "slavic")
+
+
+def pantheon_sections() -> list[str]:
+    out = ["## Pantheon vs Planetary — per-seat coverage\n"]
+    out.append(
+        "Per pantheon theme, the seated Pantheon name against the "
+        "Planetary fallback, with per-source on-disk coverage of every "
+        "PANTHEON candidate plate (`defaults.WEEKDAY_PANTHEON`).\n"
+    )
+    for theme in PANTHEON_THEMES:
+        table = defaults.WEEKDAY_PANTHEON[theme]
+        title = defaults.WEEKDAY_THEME_TITLES.get(theme, theme.title())
+        out.append(f"### {title} — Pantheon (`{theme}`)\n")
+        out.append(
+            "| Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |"
+        )
+        out.append("|---|---|---|---|---|---|")
+        for seat in SEATS:
+            candidates = table["files"][seat]
+            name = table["names"][seat]
+            cand_str = ", ".join(f"`{c.rsplit('/', 1)[-1]}`" for c in candidates)
+            g_marks = " ".join(mark("gemini", c) for c in candidates)
+            c_marks = " ".join(mark("chatgpt", c) for c in candidates)
+            out.append(
+                f"| {seat} | {DAYS[seat]} | {name} | {cand_str} "
+                f"| {g_marks} | {c_marks} |"
+            )
+        dual = table.get("dual")
+        if dual:
+            dual_names = table.get("dual_names", ("Dual",))
+            dual_name = " / ".join(dual_names)
+            cand_str = ", ".join(f"`{c.rsplit('/', 1)[-1]}`" for c in dual)
+            g_marks = " ".join(mark("gemini", c) for c in dual)
+            c_marks = " ".join(mark("chatgpt", c) for c in dual)
+            out.append(
+                f"| dual | Sunday | {dual_name} | {cand_str} "
+                f"| {g_marks} | {c_marks} |"
+            )
+        out.append("")
+    return out
+
+
 def zodiac_mark(source: str, rel: str) -> str:
     path = ROOT / "assets" / "zodiac" / source / f"{rel}.png"
     if path.exists():
@@ -253,6 +296,7 @@ def main() -> None:
     )
     lines.append("## Weekday Themes\n")
     lines += weekday_sections()
+    lines += pantheon_sections()
     lines += zodiac_sections()
     lines += flat_section(
         "Badges", "badge",
@@ -277,6 +321,13 @@ def main() -> None:
             "scale": [
                 "scale/Lucifer_Triangle", "scale/Judas_Triangle",
                 "scale/Union",
+            ],
+            "scale glass": [
+                f"scale/glass/{s}" for s in (
+                    "Judas_Triangle", "Lucifer_Triangle",
+                    "Judas_Triangle_v2", "Lucifer_Triangle_v2",
+                    "Union_Meeting", "Union",
+                )
             ],
             # Only the silver master is REQUIRED art — gold and bronze
             # recolor from it at runtime (0.14.238 radial bezel mask).

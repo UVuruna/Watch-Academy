@@ -22,7 +22,7 @@ lives in [The DOMY Canon](CANON.md).
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/
   metal/roster skin system, Settings with the city picker,
   Encyclopedia, Guide, Time Travel, translations (SR bundle synced).
-- **Suite:** 235 green tests (`python -m pytest tests`).
+- **Suite:** 242 green tests (`python -m pytest tests`).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
 - **`dist/DOMYWatch/DOMYWatch.exe` is an ad-hoc PyInstaller test
