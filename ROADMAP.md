@@ -163,11 +163,11 @@ lives in [The DOMY Canon](CANON.md).
    user-selectable (by the hand's Chinese double-hour, and by the
    year — month/sign). Full doctrine and palettes in
    [The DOMY Canon](CANON.md) §The Calendar.
-14. **Easter egg idea (recorded, owner approved the recording):**
-   the owner's birth moment — 20 June, 12:15, the double Horse —
-   sits at the very TOP of the Calendar dial twice over (the Horse
-   double-hour centered on noon; the June-20 solstice tick). A
-   future hidden touch may honor that spot.
+14. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
+   moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
+   Horse, sitting at the very TOP of the Calendar dial twice over
+   (11:45 inside the Horse double-hour centered on noon; the
+   June-20 solstice tick). A future hidden touch honors that spot.
 
 <a id="engineering-backlog"></a>
 
