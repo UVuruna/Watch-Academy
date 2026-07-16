@@ -163,10 +163,10 @@ Calendar (Zodiac/Almanac)** — the dial holds **TWELVE layouts in
 all**: eight staged, four instrumental. Twelve, in the system that
 just gained the Calendar's dozen.
 
-**Wheel-pair naming (owner ask 2026-07-16 — PROPOSED, he picks):**
-"Paint/Light" does not suit every pointer. The proposal — each
+**Wheel-pair naming (SEALED 2026-07-16, owner "može da"):** each
 pair label follows the pointer's own wheels, via the existing
-in-place label machinery (`_palette_style_labels`):
+in-place label machinery (`_palette_style_labels`) — implementation
+queued (ROADMAP 11):
 
 | Pointer | instead of Paint | instead of Light |
 |---|---|---|
@@ -505,7 +505,10 @@ Levante, Scirocco, Ostro, Libeccio, Ponente, Maestro).
 animals — that symbolize each period of a life). Two options on the
 table:
 
-- ★ **The Tree** — ONE being through the whole wheel, an oak in
+**BOTH registers SEALED (owner 2026-07-16: "oba")** — the owner
+generates both sets and they ship as parallel looks:
+
+- **The Tree** — ONE being through the whole wheel, an oak in
   eight states: the seed in dark soil (the Unborn, 03h), the sprout
   at first light (Birth, 06h), the sapling (Childhood, 09h), the
   blossoming crown (Youth, 12h), the full green crown (Maturity,
@@ -522,13 +525,40 @@ table:
   swan song). Richer article material, one symbol-beast per seat;
   the Phoenix at 03h says NOVUS ORDO by itself.
 
+### The Time reading of the Trinity (owner canon 2026-07-16)
+
+Over both Trinity stages lies a THIRD, philosophical reading of the
+three arms — TIME itself:
+
+| Arm | Color | Time | The gaze that stays there |
+|---|---|---|---|
+| 04h | blue | **the PAST** | who keeps staring back is Judas's kin — worries too much for himself and others, the pessimist, the one who helps even when no help is needed |
+| top (12h) | yellow | **the PRESENT** | the only ideal — *the past never happened, and the future never comes*; living here is the Judge's seat |
+| 20h | red | **the FUTURE** | determination — who stares only ahead is Lucifer's kin, forever imagining and wanting MORE |
+
+### The poem's cycle (owner canon 2026-07-16)
+
+The four greetings ride the Seasons cross as the CYCLE OF A DAY =
+THE CYCLE OF A LIFE: **12h — good day, TODAY** (the present, lit by
+faith); **18h — good evening** (life flowing in love toward
+tomorrow); **24h — good night, the PEACEFUL DEATH** full of
+understanding; **06h — the new morning, REBIRTH** without the past.
+The poem lives on Seasons because the seasons ARE that cycle —
+nature dies each winter and is born each spring; the Trinity keeps
+its own past–present–future reading above. The poem keeps BOTH its
+hidden homes (Trinity + Seasons — sealed).
+
 ### Display rules
 
-Feature spec in [Roadmap](ROADMAP.md): archetypes
-show only during GLOW windows (a moon phase ~every 7 days, a sun
-event ~every 90); the moon window reveals them only on Omega
-double-click; the sun window also as a slot theme option and in the
-Encyclopedia; they work under Time Travel.
+**SUPERSEDED IN PART (owner 2026-07-16): the archetypes are NOT
+hidden extras — they ship as the DEFAULT reading of each pointer**
+("tako smo ih lepo osmislili da ih ne bih sakrivao"). The original
+glow-window-only reveal is retired as the gating rule; what remains
+from the old spec: they work under Time Travel, the two-row
+articles, the Encyclopedia presence. The EXACT on-dial form of the
+default display (what sits on the arms, what the Omega double-click
+does now) is the open decision of the engine session — the options
+live in the owner discussion.
 
 <a id="the-dozen"></a>
 

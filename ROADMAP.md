@@ -211,21 +211,36 @@ lives in [The DOMY Canon](CANON.md).
    user-selectable (by the hand's Chinese double-hour, and by the
    year — month/sign). Full doctrine and palettes in
    [The DOMY Canon](CANON.md) §The Calendar.
+13b. **The named moons (owner 2026-07-16).** The Almanac's month
+   articles adopt the FULL-MOON FOLK NAMES (January the Wolf Moon —
+   our Wolf theme's own month! — Snow, Worm, Pink, Flower,
+   Strawberry, Buck, Sturgeon, Harvest, Hunter's, Beaver, Cold),
+   plus the two calendar specials: the BLUE MOON (the second full
+   moon inside one calendar month — every ~2.7 years, "once in a
+   blue moon"; the moon is not actually blue) and the BLOOD MOON
+   (the total lunar eclipse's true red — already the eclipse
+   display's color). Display idea (owner): the full-moon marker may
+   wear a SUBTLE tint or tinted glow on the special moons —
+   silver-blue on a Blue Moon, the eclipse red already covered.
 14a. **Eclipse Quick Jump + on-dial display (owner 2026-07-16).**
    Quick Jump grows FOUR groups — Moon, Moon Eclipse, Sun, Sun
    Eclipse — each with prev/next (dropdown + arrow), fed by the
    eclipse catalog (Session 16). Icons: no true eclipse emoji
    exists — 🌑 (solar) / 🌘 (lunar) stand in until the owner draws
-   two small PNGs/SVGs. ON-DIAL DISPLAY — the brainstorm options
-   (owner picks): (a) ★ THE CORONA — during a solar-eclipse window
-   the Moon marker rides onto the Sun's ring position and the glow
-   turns BLACK-CORE-WITH-GOLDEN-RING (a corona — physically what a
-   total eclipse looks like); for a lunar eclipse the Moon marker
-   turns BLOOD-RED with a silver-red halo (totality really is
-   blood-red); (b) a small eclipse badge at the event's ring angle;
-   (c) both — the corona at the marker, the badge in the Almanac
-   wedge. The Eclipse is already the NINTH MOOD in the emblem
-   canon — the articles link there.
+   two small PNGs/SVGs. ON-DIAL DISPLAY — v2 after the owner's
+   correction (there is no "Sun marker" — the display anchors to
+   the MOON and EARTH markers): during the eclipse window (owner:
+   ±3h or ±6h, like the glow windows) — **the EARTH marker is
+   REPLACED by the ECLIPSE image** (the Ninth Mood emblem art), and
+   **the MOON marker wears the PHENOMENON**: at a solar eclipse
+   (new moon — the marker at the moon ring's TOP) a black disc
+   with a GOLDEN CORONA ring; at a lunar eclipse (full moon — the
+   marker at the BOTTOM) the moon turns BLOOD-RED with a silver-red
+   halo (totality truly is red). Both together = the owner's "(c)
+   oboje — razmislićemo": the Earth SAYS an eclipse is here, the
+   Moon SHOWS which one and how it looks. Owner still to confirm
+   the final pick and the window width. The Eclipse is already the
+   NINTH MOOD in the emblem canon — the articles link there.
 15. **The Observatory — the statistics window (owner 2026-07-16).**
    A right-click sibling of the Encyclopedia showing CHARTS over
    the long data (Session 17): season-duration oscillations with
