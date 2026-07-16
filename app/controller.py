@@ -745,10 +745,12 @@ class AppController(QObject):
 
     def _collect_secret(self, char: str) -> None:
         """Typing HIDDEN_MODE_SECRET on the focused dial unlocks the
-        hidden extras — for now the Four Greetings on the ring letters
-        and in the Encyclopedia's Trinity topic. The unlock lives for
-        THIS SESSION only (owner 2026-07-15: every launch asks for the
-        code again — nothing persists)."""
+        hidden extras — the Four Greetings on the ring letters, in the
+        Encyclopedia's Trinity topic, and, bound to their CANONICAL
+        home (ROADMAP queue #6), a second reading in the Encyclopedia's
+        Seasons topic. The unlock lives for THIS SESSION only (owner
+        2026-07-15: every launch asks for the code again — nothing
+        persists)."""
         if self._hidden_unlocked:
             return
         secret = constants.HIDDEN_MODE_SECRET
@@ -761,7 +763,10 @@ class AppController(QObject):
         self._report_action.setVisible(True)   # the Report above Exit
         self._tray.notify(
             self._ui("Hidden mode unlocked"),
-            self._ui("The Four Greetings await in the Encyclopedia — Trinity."),
+            self._ui(
+                "The Four Greetings await in the Encyclopedia — "
+                "Trinity and Seasons."
+            ),
             critical=False,
         )
 

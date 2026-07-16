@@ -134,7 +134,7 @@ UI_STRINGS: tuple[str, ...] = (
     "Artwork",
     # The hidden-mode unlock balloon (owner 2026-07-14).
     "Hidden mode unlocked",
-    "The Four Greetings await in the Encyclopedia — Trinity.",
+    "The Four Greetings await in the Encyclopedia — Trinity and Seasons.",
     # Time Travel quick jumps (owner 2026-07-14; round two shortened
     # the turning points to arrow labels built from Sun/Moon).
     "Quick Jump",

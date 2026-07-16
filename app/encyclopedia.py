@@ -651,16 +651,32 @@ class EncyclopediaDialog(QDialog):
         if hidden_unlocked:
             # The Four Greetings (owner 2026-07-14): the owner's own
             # verses, Serbian in EVERY language, unlocked by the
-            # hidden-mode code — they close the Trinity topic.
-            data = json.loads(
+            # hidden-mode code — they close the Trinity topic (the
+            # dial's own top-letter hover legend, unchanged).
+            verses = json.loads(
                 (paths.database_dir() / "verses.json").read_text(
                     encoding="utf-8"
                 )
-            )["trinity"]
+            )
+            data = verses["trinity"]
             self._topics["trinity"]["entries"].append({
                 "images": (defaults.SCALE_ART_DIR / "Union.png",),
                 "name": data["title"],
                 "article": ("verses", data),
+                "accents": (),
+                "poem": True,
+            })
+            # The poem's CANONICAL home (ROADMAP queue #6, owner
+            # 2026-07-16): bound to the Seasons — the four greetings
+            # sit on the four temperament arms (CANON.md). A SECOND,
+            # shorter reading — the CANON's three-line quote plus an
+            # English framing of the four faces — closes the Seasons
+            # topic; absent entirely until the same cipher unlocks it.
+            season_data = verses["seasons"]
+            self._topics["seasons"]["entries"].append({
+                "images": (defaults.SEASON_ART_DIR / "Poem.png",),
+                "name": season_data["title"],
+                "article": ("verses", season_data),
                 "accents": (),
                 "poem": True,
             })

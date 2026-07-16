@@ -157,8 +157,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `constants.HIDDEN_MODE_SECRET` flips the RUNTIME
   `_hidden_unlocked` flag (owner 2026-07-15: per SESSION, never
   persisted — the code must be re-entered on every launch), the
-  Four Greetings appear on the ring letters and in the Encyclopedia,
-  and 📊 Report reveals itself above Exit
+  Four Greetings appear on the ring letters and in the Encyclopedia
+  — the Trinity topic's own reading AND, bound to their CANONICAL
+  home (ROADMAP queue #6, owner 2026-07-16), a second reading in the
+  Seasons topic, the CANON's three-line quote with an English framing
+  of the four faces — and 📊 Report reveals itself above Exit
 - `_open_report()`: the hidden [Report](report.md) — the
   [Profiling](../config/profiling.md) statistics (`@timed` on the
   tick, day rebuild, skin build, paint, composite rebuild, hit test,

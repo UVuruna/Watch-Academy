@@ -75,3 +75,23 @@ CLIPPED the art (owner bug 2026-07-14: the full-size crop).
   `_rescale_topics()`; entry pages re-fit fonts and pixmaps
   (`_resize_cell`) without rebuilding the grid
 - `_pixmap(path)`: the decoded-image cache behind the lazy looks
+
+## Design Decisions
+
+**The hidden poem (owner 2026-07-16, ROADMAP queue #6):** when
+`hidden_unlocked` is true, `__init__` appends TWO extra entries from
+`Database/verses.json` — one closing the Trinity topic (the owner's
+full four-stanza verses, Serbian throughout, an existing reading), and
+one closing the Seasons topic, the poem's CANONICAL home (CANON.md —
+the four greetings sit on the four temperament arms): the CANON's
+three-line quote, verbatim Serbian, with a short English framing of
+the four faces (day = the present lit by faith; evening = life
+flowing in love; good night = the peaceful death, full of
+understanding; new morning = rebirth without the past). Both entries
+carry `"poem": True`, which routes them through the centered-stanza
+renderer instead of the normal justified article flow. Neither entry
+exists in `_topics()` at all when locked — the SAME cipher unlocks
+both (there is no second code); the unlock is SESSION-only, like the
+Report. The Seasons entry's badge is a 1×1 px placeholder at
+`assets/badge/<source>/season/Poem.png` (owner art pending, per the
+WORKPLAN "Missing owner art" rule).

@@ -263,6 +263,46 @@ def test_hidden_mode_unlocks_the_four_greetings(app):
     assert len(constants.HIDDEN_MODE_SECRET) >= 3
 
 
+def test_hidden_mode_binds_the_poem_to_seasons_too(app):
+    """ROADMAP queue #6 / WORKPLAN Session 7 (owner 2026-07-16): the
+    poem's CANONICAL home is the Seasons — the four greetings sit on
+    the four temperament arms (CANON.md). Behind the SAME cipher (no
+    second code), a SECOND reading closes the Seasons topic: absent
+    entirely before the unlock, present after, gone again once a
+    fresh dialog opens locked."""
+    from app.encyclopedia import EncyclopediaDialog
+
+    locked = EncyclopediaDialog()
+    assert len(locked._topics["seasons"]["entries"]) == 10
+    assert all(
+        entry.get("poem") is not True
+        for entry in locked._topics["seasons"]["entries"]
+    )
+    locked.deleteLater()
+
+    unlocked = EncyclopediaDialog(hidden_unlocked=True)
+    entries = unlocked._topics["seasons"]["entries"]
+    assert len(entries) == 11
+    poem = entries[-1]
+    assert poem["poem"] is True
+    assert poem["name"] == "Četiri pozdrava"
+    text = unlocked._article_text(poem["article"])
+    assert "Dobar dan" in text and "jutro novo" in text
+    # The CANON's three-line quote, verbatim — not the richer Trinity
+    # reading (verses + Serbian explanation + watchmaker commentary).
+    assert "veru u bolje sutra obasjan" in text
+    assert "u ljubavi da nam proteče" in text
+    # The framing is the SHORT ENGLISH house-voice reading of the four
+    # faces (day/evening/night/morning), distinct from Trinity's.
+    assert "faith in a better tomorrow" in text
+    assert "peaceful death" in text
+    assert "rebirth" in text
+    unlocked._show_topic("seasons")
+    unlocked._step(-1)                       # wrap onto the poem page
+    assert unlocked._counter.text() == "11 / 11"
+    unlocked.deleteLater()
+
+
 def test_art_source_resolves_with_fallback():
     """Owner 2026-07-14: the Gemini and ChatGPT generations coexist
     under assets/<root>/<source>/ — canonical paths resolve into the
