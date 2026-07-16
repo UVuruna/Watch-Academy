@@ -119,7 +119,19 @@ lives in [The DOMY Canon](CANON.md).
     the day actually starts growing") — then TWO calendars
     everywhere (AD and Anno Lucis), and eventually TWO
     INSTALLATIONS (full = the whole span for Time Travel, partial
-    = the current bundle).
+    = the current bundle). **Phase II — ECLIPSES (owner 2026-07-16):**
+    the same Swiss Ephemeris files carry them; pyswisseph has direct
+    finders (`swe.sol_eclipse_when_glob` / `swe.lun_eclipse_when`
+    with types total/annular/hybrid/partial and total/partial/
+    penumbral; `_loc` variants for visibility from a place). Volume:
+    ~230–240 eclipses per century ≈ ~140k events over the span —
+    small next to the moon phases. ΔT caveat is SHARPER here: THAT
+    an eclipse happens, its date and type are robust across the
+    whole span; WHERE its shadow path falls (local visibility) is
+    only trustworthy within a few millennia of the present, because
+    hours of ΔT slide the path in longitude. Dial ideas: the Eclipse
+    already exists in our canon as the NINTH MOOD — eclipse events
+    can join the glow system and Time Travel's famous-moments list.
 13. **The Calendar pointer** (owner 2026-07-16, `Dozen.png`). A
    twelve-wedge pointer, its two wheels **Zodiac / Almanac** in the
    Paint/Light menu slot: Zodiac (sign boundaries on the axes,
