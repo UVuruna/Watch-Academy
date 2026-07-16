@@ -60,6 +60,42 @@ Subcommands `sun` / `moon` / `halves` / `anno` / `plot` / `all`.
   criterion → `anno_lucis.json`.
 - `plot`: the deviation curve → `anno_lucis.png`.
 
+### `extract_eclipses.py` — Phase II: the eclipse catalog
+Extends the pipeline with every SOLAR and LUNAR eclipse across the full
+span, via the Swiss Ephemeris' direct global finders (not the crossing
+marcher). Subcommands `solar` / `lunar` / `summary` / `all`.
+- `solar`: walks `swe.sol_eclipse_when_glob` forward (each result's
+  `tret[0]` = the maximum instant); at that instant `swe.sol_eclipse_where`
+  gives the TYPE, the MAGNITUDE (NASA, `attr[8]`) and the GEOGRAPHIC POINT
+  of greatest eclipse (`geopos[0]/[1]` — the central line, or the
+  greatest-partial point for partials). Into `solar_eclipses`
+  (`jd_tt, jd_ut, iso_ut, type, magnitude, lat, lon`). Types decoded from
+  the return flag: **hybrid** (annular-total, bit 32 — tested first),
+  **total**, **annular**, **partial**. If `where` reports no surface point
+  (`rf==0`) the place/magnitude are stored NULL, the type/time kept.
+- `lunar`: walks `swe.lun_eclipse_when`; `swe.lun_eclipse_how` gives the
+  MAGNITUDE — umbral (`attr[0]`) for total/partial, penumbral (`attr[1]`)
+  for penumbral. Into `lunar_eclipses`
+  (`jd_tt, jd_ut, iso_ut, type, magnitude`).
+- Both finders work in UT; we store `jd_ut` as returned and
+  `jd_tt = jd_ut + deltat`. RESUMABLE (shared `meta` table, per-table
+  `last_jd`/`done`), progress every 500 events (Rule #10).
+- `summary`: writes `eclipses_summary.json`.
+
+### `eclipses_summary.json` (committable)
+Counts per type per catalog, events-per-century, first/last events, span,
+and the sharper eclipse ΔT caveat. Current run: **70,644 solar** (total
+19,250 · annular 23,549 · hybrid 3,228 · partial 24,617) + **70,778 lunar**
+(total 21,056 · partial 25,035 · penumbral 24,687) = **141,422** eclipses,
+~236 of each per century, spanning −12998 … +16993.
+
+**Eclipse ΔT caveat (SHARPER than the season one):** THAT an eclipse
+happens, and its DATE and TYPE, are robust across the whole span. But the
+SHADOW-PATH LONGITUDE (the solar greatest-eclipse `lon`) is only trustworthy
+within a few millennia of the present — hours of ΔT at the extremes slide
+the sub-solar longitude by tens of degrees. Latitudes and magnitudes stay
+reliable.
+
 ### `test_ephemeris.py` — Golden checks
 Runs under the venv python; **skips** cleanly when `events.sqlite` (or a
 table / an unfinished scan) is absent, so CI stays green without the
@@ -67,6 +103,9 @@ gitignored database. Checks: 2026 June solstice within 60 s of bundled
 `Database/seasons_utc.json`; 2026-07-07 last quarter within 5 min of bundled
 `Database/moonPhases_utc.json` (once the Moon scan is complete); CE 1000 June
 solstice on the expected proleptic-Gregorian day; ~4 sun events/year cadence.
+Phase II: the 1999-08-11 and 2024-04-08 TOTAL solars (max time within 5 min,
+greatest-eclipse point within ~1°) and the 2019-01-21 TOTAL lunar
+(umbral magnitude ~1.2) — all skip cleanly when the eclipse tables are absent.
 
 ### `season_halves.json` (~0.94 MB, committable)
 `{year: [light_days, dark_days]}` for ~29 992 years. The compact evidence
@@ -96,6 +135,7 @@ python -m uv pip install --python .venv/Scripts/python.exe pyswisseph numpy matp
 # 2. data (~98 MB) + full extraction
 .venv/Scripts/python.exe download_ephe.py
 .venv/Scripts/python.exe extract.py all       # sun (~15s) -> moon (~min) -> halves -> anno -> plot
+.venv/Scripts/python.exe extract_eclipses.py all  # solar (~1min) -> lunar (~1min) -> eclipses_summary.json
 
 # 3. verify
 .venv/Scripts/python.exe -m pytest test_ephemeris.py -v

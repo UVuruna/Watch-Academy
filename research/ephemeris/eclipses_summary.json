@@ -1,0 +1,43 @@
+{
+  "solar": {
+    "counts_by_type": {
+      "annular": 23549,
+      "hybrid": 3228,
+      "partial": 24617,
+      "total": 19250
+    },
+    "total": 70644,
+    "per_century": 235.55,
+    "first_event": {
+      "iso_ut": "-12998-11-06T16:08:58Z",
+      "type": "total"
+    },
+    "last_event": {
+      "iso_ut": "+16993-08-06T21:49:52Z",
+      "type": "hybrid"
+    }
+  },
+  "lunar": {
+    "counts_by_type": {
+      "partial": 25035,
+      "penumbral": 24687,
+      "total": 21056
+    },
+    "total": 70778,
+    "per_century": 235.99,
+    "first_event": {
+      "iso_ut": "-12998-11-21T03:39:46Z",
+      "type": "partial"
+    },
+    "last_event": {
+      "iso_ut": "+16993-08-22T11:29:02Z",
+      "type": "partial"
+    }
+  },
+  "combined_total": 141422,
+  "span_years": [
+    -12998,
+    16993
+  ],
+  "delta_t_caveat": "That an eclipse happens, and its DATE and TYPE, are robust across the whole -13000..+17000 span (they follow the Sun/Moon geometry DE441 nails). But the SHADOW-PATH LONGITUDE (the greatest-eclipse lon for solar eclipses) is only trustworthy within a few millennia of the present: the Earth-rotation deltaT model carries hours of uncertainty at the extremes, which slides the sub-solar longitude by tens of degrees. Latitudes and magnitudes stay reliable."
+}

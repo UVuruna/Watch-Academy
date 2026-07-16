@@ -110,3 +110,71 @@ def test_sun_event_cadence():
     span = 16993 - (-12998)
     per_year = n / span
     assert 3.99 < per_year < 4.01, f"sun cadence {per_year:.3f}/yr (want ~4)"
+
+
+# --------------------------------------------------------------------------
+# Phase II — eclipse catalog golden checks
+# --------------------------------------------------------------------------
+
+def _table_exists(conn, table):
+    row = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+        (table,)).fetchone()
+    return bool(row)
+
+
+def _nearest_eclipse(conn, table, jd_target, cols):
+    row = conn.execute(
+        f"SELECT {cols} FROM {table} ORDER BY ABS(jd_ut-?) LIMIT 1",
+        (jd_target,)).fetchone()
+    return row
+
+
+def test_solar_eclipse_1999_08_11_total():
+    """The great European total of 1999-08-11: maximum ~11:03 UT, greatest
+    eclipse near 45.1N 24.3E (Romania)."""
+    conn = _conn()
+    if not (_table_exists(conn, "solar_eclipses")
+            and _table_has_rows(conn, "solar_eclipses")):
+        pytest.skip("solar_eclipses absent — run extract_eclipses.py solar")
+    jd_ref = swe.julday(1999, 8, 11, 11.05, swe.GREG_CAL)
+    iso, typ, mag, lat, lon, jd = _nearest_eclipse(
+        conn, "solar_eclipses", jd_ref, "iso_ut,type,magnitude,lat,lon,jd_ut")
+    err_min = abs(jd - jd_ref) * DAY_SECONDS / 60.0
+    assert err_min < 5, f"1999 solar off by {err_min:.1f} min ({iso})"
+    assert typ == "total", f"1999 solar typed {typ}"
+    assert abs(lat - 45.1) < 1.0 and abs(lon - 24.3) < 1.0, \
+        f"1999 greatest eclipse at {lat:.2f}N {lon:.2f}E"
+
+
+def test_solar_eclipse_2024_04_08_total():
+    """The North American total of 2024-04-08: maximum ~18:17 UT, greatest
+    eclipse near 25.3N 104.1W (Mexico)."""
+    conn = _conn()
+    if not (_table_exists(conn, "solar_eclipses")
+            and _table_has_rows(conn, "solar_eclipses")):
+        pytest.skip("solar_eclipses absent — run extract_eclipses.py solar")
+    jd_ref = swe.julday(2024, 4, 8, 18.29, swe.GREG_CAL)
+    iso, typ, mag, lat, lon, jd = _nearest_eclipse(
+        conn, "solar_eclipses", jd_ref, "iso_ut,type,magnitude,lat,lon,jd_ut")
+    err_min = abs(jd - jd_ref) * DAY_SECONDS / 60.0
+    assert err_min < 5, f"2024 solar off by {err_min:.1f} min ({iso})"
+    assert typ == "total", f"2024 solar typed {typ}"
+    assert abs(lat - 25.3) < 1.0 and abs(lon - (-104.1)) < 1.0, \
+        f"2024 greatest eclipse at {lat:.2f}N {lon:.2f}E"
+
+
+def test_lunar_eclipse_2019_01_21_total():
+    """The total lunar of 2019-01-21: maximum ~05:12 UT, umbral magnitude
+    ~1.2."""
+    conn = _conn()
+    if not (_table_exists(conn, "lunar_eclipses")
+            and _table_has_rows(conn, "lunar_eclipses")):
+        pytest.skip("lunar_eclipses absent — run extract_eclipses.py lunar")
+    jd_ref = swe.julday(2019, 1, 21, 5.20, swe.GREG_CAL)
+    iso, typ, mag, jd = _nearest_eclipse(
+        conn, "lunar_eclipses", jd_ref, "iso_ut,type,magnitude,jd_ut")
+    err_min = abs(jd - jd_ref) * DAY_SECONDS / 60.0
+    assert err_min < 5, f"2019 lunar off by {err_min:.1f} min ({iso})"
+    assert typ == "total", f"2019 lunar typed {typ}"
+    assert 1.1 < mag < 1.3, f"2019 lunar umbral magnitude {mag:.3f}"
