@@ -80,8 +80,18 @@ lives in [The DOMY Canon](CANON.md).
   A-list figures no seat could hold (retired ninths stay in
   `encyclopedia.json` for this wave).
 - **The Bond theme** (relationship pillars, owner notes 2026-07-16)
-  — definition draft in `research/bond_theme.md`; owner still owes
-  the Dracula telling, the ninth pick and the name.
+  — definition draft in `research/bond_theme.md`; the Child ninth
+  and the family triangle approved; the NAME still open
+  (One Soul / The Vow / The Bond).
+- **OPEN STRATEGIC QUESTION (owner, 2026-07-16):** partition the
+  themes per pointer (each pointer only its naturally-aligned
+  themes, ≥4 groups, +paint/light = 6) versus keeping themes
+  universal. The standing recommendation (agent, same day): keep
+  the WEEK layer (weekday themes, 7 bodies) universal; give each
+  pointer its native content on the DAY layer (the archetypes —
+  already per-pointer); add soft "natural home" pointer
+  recommendations per theme instead of hard walls. Owner verdict
+  pending — do not restructure until he rules.
 - **`research/build_roster.py`** — add pantheon + glass columns,
   regenerate [Roster](ROSTER.md).
 - **Win+D WorkerW glue (optional)** — the only workaround for the

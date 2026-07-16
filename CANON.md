@@ -125,9 +125,9 @@ glass; objectivity as the only glass that does not color the light).
 
 Owner canon 2026-07-16: each pointer carries its own ARCHETYPE
 reading of the arm colors — persons layered on the same wheel.
-Trinity and Prism are approved; Seasons' CONCEPT is approved (the
-four temperaments); Compass is a PROPOSAL awaiting the owner's
-verdict:
+Trinity, Prism (Michael included) and the Seasons temperaments are
+approved; the Seasons tetramorph persons and the whole Compass
+reading are PROPOSALS awaiting the owner's verdict:
 
 ### Trinity (trio)
 
@@ -189,7 +189,7 @@ The PERSONS (owner 2026-07-16; the orange seat still open):
 | Arm | Color | Quality | Person |
 |---|---|---|---|
 | top (12h) | yellow | **Love** — shared summit of Weakness and Pride: love of others AND love of self, at the point where they become SIN | **The One (God)** |
-| 16h | orange | **Courage** | **OPEN** — owner undecided; proposed: **Michael the Archangel** (see below) |
+| 16h | orange | **Courage** | **Michael the Archangel** (APPROVED 2026-07-16) |
 | 20h | red | **Pride** | **Lucifer** (his Scale window is already ember-red) |
 | bottom (24h) | purple | **Hatred** — shared root of the virtue pair: turned inward it drags Humility down (Judas); turned outward it turns Courage into wrath, madness, overreach (Lucifer) | **the Devil** |
 | 04h | blue | **Weakness (Fear)** | **Judas** (his Scale window is already midnight-blue) |
@@ -199,38 +199,50 @@ The diagonals carry the oppositions — **Love–Hatred** (12h–24h),
 **Humility–Pride** (08h–20h), **Fear–Courage** (04h–16h) — the same
 diagonal geometry as the mood and virtue axes in
 [DOMY Symbolism](SYMBOLISM.md) (Fear–Courage IS the Moon–Mars
-cross-cure axis). With the persons seated, every diagonal becomes a
+cross-cure axis). With the persons seated, every diagonal is a
 PERSON-PAIR: **The One against the Devil** (Love–Hatred),
 **Jesus against Lucifer** (Humility–Pride — the one who descended
 against the one who wanted to ascend: Luke 14:11 *"he that humbleth
 himself shall be exalted"* against Isaiah 14:13 *"I will ascend into
-heaven"*), and — if Michael is accepted — **Michael against Judas**
-(Courage–Fear: the one who fights against the one who despaired).
-Michael's argument: Revelation 12 holds the WHOLE cast in one
-chapter — Michael wars against the dragon (12:7) and the Accuser is
-thrown down (12:10); he balances the wheel three-and-three (The One,
-Jesus, Michael against Lucifer, the Devil, Judas). Alternatives if
-the owner prefers a human: John the Baptist (courage before Herod,
-paid with his head) or David (the boy before the giant). Judas and
-Lucifer inherit their existing Scale glass windows — no new art for
-those two seats.
+heaven"*), and **Michael against Judas** (Courage–Fear: the one who
+fights against the one who despaired). Michael's article anchor:
+Revelation 12 holds the WHOLE cast in one chapter — Michael wars
+against the dragon (12:7) and the Accuser is thrown down (12:10);
+he balances the wheel three-and-three (The One, Jesus, Michael
+against Lucifer, the Devil, Judas). Judas and Lucifer inherit their
+existing Scale glass windows — no new art for those two seats.
 
-### Seasons (cross) — the Four Temperaments (concept APPROVED 2026-07-16)
+### Seasons (cross) — the Four Temperaments (concept APPROVED 2026-07-16, full definition below)
 
-The oldest four-fold reading of man there is — the humors — laid on
-the four season arms, each arm's season carrying the temperament it
-has always carried in the tradition:
+The oldest four-fold reading of man there is — Hippocrates' humors —
+laid on the four season arms in their classical correspondence, on
+the seasons palette's own colors. Each temperament gets the full
+bundle: humor, element, the person type (like the Trinity
+syndromes), a bright and a dark face, and its age of man:
 
-| Arm | Season | Temperament | Nature |
-|---|---|---|---|
-| spring | **Sanguine** | blood — warm and moist like spring air | the enthusiast: quick to love, quick to laugh, quick to forget |
-| summer | **Choleric** | yellow bile — hot and dry like the summer sun | the commander: fire that drives and fire that burns |
-| autumn | **Melancholic** | black bile — cold and dry like fallen leaves | the thinker: depth bought with heaviness |
-| winter | **Phlegmatic** | phlegm — cold and moist like snow | the steady one: calm that outlasts every storm |
+| Arm | Color | Temperament | Humor · element (qualities) | Type of person | Bright face / dark face | Age of man |
+|---|---|---|---|---|---|---|
+| spring | green | **Sanguine** | blood · air (warm & moist) | the Companion — quick to love, quick to laugh, everyone's friend in an hour | openness, joy / fickleness — starts everything, finishes nothing, promises easily | childhood & youth |
+| summer | yellow | **Choleric** | yellow bile · fire (hot & dry) | the Commander — the fire that drives; kin to the Boss syndrome when it burns | drive, decisiveness / wrath, tyranny — the fire that consumes its own house | the prime |
+| autumn | red | **Melancholic** | black bile · earth (cold & dry) | the Thinker — depth bought with heaviness; the artist's and scholar's humor | depth, precision, memory / brooding, despair — the weight turned inward | middle age |
+| winter | blue | **Phlegmatic** | phlegm · water (cold & moist) | the Peacemaker — the calm that outlasts every storm | serenity, endurance, mercy / sloth, passivity — the calm that never moves at all |old age |
 
-Per-arm assignment above is the classical correspondence (proposed
-as the default mapping; the owner adjusts if he reads a season
-differently).
+The two axes are TOTAL opposites in the humor square, exactly the
+dial's diagonal logic: **Sanguine–Melancholic** (spring against
+autumn — laughter against heaviness, the morning of life against
+its evening) and **Choleric–Phlegmatic** (summer against winter —
+fire against water, hot-and-dry against cold-and-moist, the only
+pair opposed in BOTH qualities). Each temperament's cure stands
+across the dial, as always.
+
+**Optional persons layer (PROPOSED — owner decides):** the four
+living creatures around the throne (Revelation 4:7; Ezekiel 1) — the
+tetramorph: the **Man/Angel** (air, sanguine spring), the **Lion**
+(fire, choleric summer), the **Ox** (earth, melancholic autumn), the
+**Eagle** (water, phlegmatic winter). They are the zodiac's own
+FIXED CROSS (Aquarius–Leo–Taurus–Scorpio) — a cross of persons on
+the Cross pointer, circling the center the way they circle the
+throne.
 
 ### Compass (octa) — the Eight Walks of Life (PROPOSAL — awaiting the owner's verdict)
 

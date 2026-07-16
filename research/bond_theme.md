@@ -35,9 +35,12 @@ below) — the dial's geometry becomes the anatomy of a marriage.
   love"*. Seated.
 - **Odanost / Loyalty** — *"maybe; not the same as trust but aims at
   the same theme"*. Proposed as a DUAL FACE of the center (below).
-- **Bliskost / Closeness** — *"maybe what I described via Dracula"*.
-  Proposed as the other dual face — the owner still owes the Dracula
-  telling; the seat waits for it.
+- **Bliskost / Closeness** — resolved 2026-07-16 (Drakula is a
+  friend's SURNAME, not the count): the owner described how he and
+  that friend share gaming — closeness is FINDING THE SHARED
+  TOPICS: having someone to talk to about the things that do not
+  interest everyone. The private world of two. Seated as the night
+  face of the center (below).
 - **Iskrenost** — individual side of Trust (his law); lives inside
   Trust's article, not on a seat.
 - **Sigurnost / Security** — proposed as a STATE, not a pillar: the
@@ -60,8 +63,9 @@ below) — the dial's geometry becomes the anatomy of a marriage.
 **The center's dual faces (proposed):** the Union shows two faces
 like every Sunday — **Odanost (the day face — the union KEPT: the
 word held, visible to the world)** and **Bliskost (the night face —
-the union FELT: closeness with no defenses up; pending the owner's
-Dracula telling)**.
+the union FELT: the shared topics, the private world of two, the
+conversation that exists nowhere else; the owner's definition
+2026-07-16)**.
 
 **The cross-cures conjugate** (the existing axes, spoken in the
 dual): Trust disarms the Fight and Support cures Suspicion
@@ -70,20 +74,39 @@ Taking-for-granted (Jupiter↔Mercury); Passion burns away Contempt
 and Respect calms Jealousy (Venus↔Saturn); the center heals itself
 crosswise, as always.
 
-## The Ninth (owner picks the kind)
+## The Ninth — the Child (APPROVED 2026-07-16)
 
-- **Union-kind: the Child** — the union of the two made flesh;
-  stands outside the eight and is never less important (Ecclesiastes
-  4:12: *"a threefold cord is not quickly broken"*).
-- **Excluded-kind: Samoća (Loneliness)** — the one outside the
-  circle; what every pillar exists against, and what gives the
-  circle its meaning.
+**The Child** — the union of the two made flesh; stands outside the
+eight and is never less important (Ecclesiastes 4:12: *"a threefold
+cord is not quickly broken"*).
 
-## Name Options
+With the Child comes the owner's **FAMILY TRIANGLE** (2026-07-16):
 
-**The Bond** / **The Vow** / **One Flesh** (Genesis 2:24 — *"and
-they two shall be one flesh"*: the theme's own E Pluribus Unum).
-Working Serbian name: **Savez**.
+> Husband loves wife — wife loves child — child loves father.
+> Only in such a triangle does everyone GIVE love and everyone
+> RECEIVE love, and it holds the family and its love together.
+
+The doctrine reading: love as a CIRCUIT, not a pool — each member
+pours into one and is filled by another, so the love CIRCULATES and
+no one is left dry and no one hoards. Unlike the Trinity archetype's
+triangle, this one has NO apex — a circle wearing a triangle's
+shape: perfect equality through flow. (Theology has a word for
+exactly this — *perichoresis*, the circular dance of love among the
+three persons; the family triangle is its household form. The
+direction names where each one's given love FLOWS, never the only
+love each one holds.)
+
+## Name Options (owner: "The Bond, or something stronger")
+
+Leading candidates after the owner's *"two bodies, one soul"*:
+
+- **One Soul** — his own phrase inverted into a name; and the quote
+  anchor already exists: asked what a friend is, Aristotle answered
+  *"one soul dwelling in two bodies"* (Diogenes Laertius V.20).
+- **The Vow (Zavet)** — the stronger word he flagged.
+- **The Bond (Savez)** — the safe default.
+- (*One Flesh* / Genesis 2:24 remains the center's quote either
+  way.)
 
 ## Quote Anchors
 
@@ -100,9 +123,7 @@ Working Serbian name: **Savez**.
 
 ## Open Questions for the Owner
 
-1. The **Dracula telling** — what Bliskost meant in that
-   description; the night face waits for it.
-2. Ninth: **the Child** or **Loneliness**?
-3. Theme name: The Bond / The Vow / One Flesh / other?
-4. Does **Odanost** satisfy him as the day face, or does he want it
+1. Theme name: **One Soul** / **The Vow (Zavet)** / **The Bond
+   (Savez)**?
+2. Does **Odanost** satisfy him as the day face, or does he want it
    on a planet seat (it would contest Saturn with Respect)?
