@@ -152,4 +152,3 @@ ROUND stained-glass rondel, night-window register, photorealistic render, isolat
 - Reuse doctrine: Zodiac articles use existing astrology art; shichen
   lighting uses existing Chinese animal medallions — zero new art
   for either wheel beyond the twelve month medallions.
-```
