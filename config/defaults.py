@@ -391,21 +391,23 @@ PALETTE_PRESETS = {
         "#00DC00", "#FFFF00", "#FF0000", 
         "#BD00BD", "#0040FF", "#00DDDD",
     ),
-    # COMPASS palettes (owner dual-Sunday round 2026-07-12): the wheel
-    # is the day's arc from light to dark — North (12h) wears the
-    # Ruler's white-gold, the hues descend through afternoon zeal,
-    # dusk, evening passion to the SOUTH (24h) Servant: near-black
-    # with a silver hint in paint; in the LIGHT world the south is
-    # not black but MOONLIGHT silver — pigment loses the light at
-    # midnight, light finds the Moon there. W dawn cyan (Hope) and
-    # E dusk red-orange (Longing) keep their canon seats.
+    # COMPASS palettes (owner rework 2026-07-16): the two octa presets
+    # were essentially one wheel with nuance shifts — each palette now
+    # ties to its archetype's substance. PAINT = the Walks' materials
+    # (King gold, Merchant copper, Soldier iron-blood, Artist velvet,
+    # Wanderer road-dust, Scholar lamp ink, Farmer field green, Priest
+    # alb ivory). LIGHT = the Wheel of a Life, the Eight Ages (Youth
+    # noon-zenith yellow through Death midnight silver — never black,
+    # light finds the Moon there — to the Unborn's predawn mist and
+    # Birth's dawn rose). Both keep the day-arc: brightest at noon,
+    # darkest/coolest at midnight.
     ("octa", "paint"): (
-        "#FFE9A8", "#ECB800", "#DC5A00", "#B4143C",
-        "#20202A", "#00368C", "#00DCDC", "#00C850",
+        "#F0C420", "#C87533", "#A02020", "#7A2E8E",
+        "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
     ),
     ("octa", "light"): (
-        "#FFFFFF", "#FFDC00", "#FF6400", "#FF2864",
-        "#C8D7F0", "#2850FF", "#00E1FF", "#00FF64",
+        "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
+        "#C8D7F0", "#8FA8C8", "#FFD9CC", "#7CE577",
     ),
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,

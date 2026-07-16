@@ -527,6 +527,24 @@ def test_cross_serves_one_seasons_palette_under_both_styles():
     )
 
 
+def test_compass_octa_presets_are_the_approved_walks_and_ages():
+    """Owner rework 2026-07-16: PAINT wears the Walks' materials, LIGHT
+    wears the Eight Ages — the two presets must be the exact approved
+    hex tuples (CANON.md) and must no longer be near-identical."""
+    assert defaults.PALETTE_PRESETS[("octa", "paint")] == (
+        "#F0C420", "#C87533", "#A02020", "#7A2E8E",
+        "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
+    )
+    assert defaults.PALETTE_PRESETS[("octa", "light")] == (
+        "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
+        "#C8D7F0", "#8FA8C8", "#FFD9CC", "#7CE577",
+    )
+    assert (
+        defaults.PALETTE_PRESETS[("octa", "paint")]
+        != defaults.PALETTE_PRESETS[("octa", "light")]
+    )
+
+
 def test_palette_for_selects_the_skin_choice():
     paint = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa")
     light = dataclasses.replace(paint, palette_style="light")

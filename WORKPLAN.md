@@ -105,7 +105,10 @@ quote-the-greats and color-fidelity rules); SYMBOLISM.md;
 (courtroom persons+callings, family members+hearth-roles,
 temperaments+ages, persons+qualities, pillars+shadows,
 estates+objects, ages+beings), with the Bible/philosopher quotes
-woven in; SR bundle synced to 0/0.
+woven in; SR bundle synced to 0/0. **MANDATORY in this session:**
+the ~327 `octa_paint`/`octa_light` variant paragraphs in
+`Database/symbolism.json` still describe the OLD compass hues
+(found in Session 3) — rewrite them to the Walks/Ages wheels.
 
 ### Session 7 — The poem Easter egg → **Sonnet**
 **Say:** "Radi Sesiju 7 iz WORKPLAN.md — pesma iza šifre."
