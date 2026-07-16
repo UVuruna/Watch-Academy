@@ -36,6 +36,12 @@ swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
 `umbra_contrast` ("full"), `palette_style` ("paint" — on the Calendar
 pointer paint = Zodiac wheel, light = Almanac wheel),
 `calendar_lighting` ("hour" | "year", owner 2026-07-16),
+`archetype_mode` (False — THE ARCHETYPE MODE, owner sealed package
+2026-07-16: the diamonds carry the active wheel's archetype figures
+and the weekday model and all three slots switch OFF at the render
+level only, so every slot key here keeps the user's choice for the
+toggle-back) and `archetype_earth_day` (False — the abbreviated day
+on the Earth marker while the mode runs),
 `solar_rotation`
 (True), `earth_style` ("clean"), `legend` (True), plus the six
 Elements switches (all True: `show_earth`, `show_moon`, `show_weekday`,

@@ -56,7 +56,12 @@ HIDDEN_MODE_SECRET = "36m36u36v"
 ART_SOURCES = ("gemini", "chatgpt")
 ART_SOURCE_DEFAULT = "gemini"
 ART_SOURCE_TITLES = {"gemini": "Gemini", "chatgpt": "ChatGPT"}
-ART_SOURCED_ROOTS = ("weekday", "zodiac", "emblem", "badge", "instrument")
+ART_SOURCED_ROOTS = (
+    "weekday", "zodiac", "emblem", "badge", "instrument",
+    # The archetype stained glass (owner sealed package 2026-07-16):
+    # assets/archetype/<source>/<archetype>/<file>.png.
+    "archetype",
+)
 
 # --- Moon ----------------------------------------------------------------------
 SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length

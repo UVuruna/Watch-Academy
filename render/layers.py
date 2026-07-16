@@ -19,6 +19,7 @@ from PySide6.QtGui import (
     QConicalGradient,
     QFont,
     QFontMetricsF,
+    QImageReader,
     QPainter,
     QPainterPath,
     QPen,
@@ -26,7 +27,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import constants, defaults, paths
+from config import archetypes, constants, defaults, paths
 from core import angles
 from core.clock_state import DayContext, TickState
 from core.sun import DaylightRegime, SunDay
@@ -64,6 +65,11 @@ class RenderContext:
                                      # the compositor computes it from the
                                      # live tick (the shichen changes intraday,
                                      # so it also keys the DAILY composite)
+    archetype_lit: int | None = None  # Archetype mode (owner 2026-07-16):
+                                     # the figure whose HOUR-SPACE holds the
+                                     # hour hand draws FULL, the rest ghost —
+                                     # computed from the live tick like the
+                                     # calendar wedge, keying the composite
 
 
 def dial_point(theta_deg: float, distance: float) -> QPointF:
@@ -282,10 +288,108 @@ def today_slot_theta(pointer: str, today: str) -> float | None:
     return None
 
 
+def archetype_key(skin: SkinDefinition) -> str | None:
+    """The ACTIVE archetype — the grid entry of (pointer, wheel) while
+    the mode is ON and the pointer is drawn; None otherwise (mode off,
+    the archetype-less Aurora/Calendar, or the Pointer element off —
+    the figures ride the diamonds, no arms means no archetype)."""
+    if not (skin.archetype_mode and skin.show_pointer):
+        return None
+    return archetypes.grid_key(skin.pointer, skin.palette_style)
+
+
+def archetype_active(skin: SkinDefinition) -> bool:
+    """True while the ARCHETYPE MODE overrides the dial (owner sealed
+    package 2026-07-16) — the weekday model and all three slots are
+    OFF for rendering and hit-testing, without touching settings."""
+    return archetype_key(skin) is not None
+
+
+def archetype_lit_index(
+    pointer: str, hour_angle: float, rotation: float = 0.0
+) -> int:
+    """The figure whose HOUR-SPACE contains the hour hand (owner
+    2026-07-16): the circle divides by arms — trio 3×8h, cross 4×6h,
+    hexa 6×4h, octa 8×3h — each space CENTERED on its arm (the arm tip
+    is the center of its hue, the standing convention). The spaces
+    ride the drawn arms, so the solar rotation shifts them exactly as
+    it shifts the diamonds; index = the figures-tuple position."""
+    arms = constants.POINTER_POINTS[pointer]
+    step = 360.0 / arms
+    return int(round(((hour_angle - rotation) % 360.0) / step)) % arms
+
+
+def archetype_art_ready(path) -> bool:
+    """Whether REAL archetype art is on disk: the file exists and is
+    larger than the committed 1×1 placeholders (the WORKPLAN
+    missing-art rule). While it is not, the renderer draws the
+    figure's NAME instead — never a stretched pixel or a crash."""
+    resolved = paths.art_file(path)
+    if resolved is None or not resolved.exists():
+        return False
+    size = QImageReader(str(resolved)).size()
+    return (
+        size.isValid()
+        and size.width() > archetypes.ARCHETYPE_ART_MIN_PX
+        and size.height() > archetypes.ARCHETYPE_ART_MIN_PX
+    )
+
+
+def draw_archetype_figure(
+    painter: QPainter, ctx: "RenderContext", fig: dict, pos: QPointF,
+    height: float, opacity: float, named: bool,
+) -> None:
+    """One archetype figure in its diamond: the stained glass scaled
+    into the arm (color visible around it) at `opacity`; `named` adds
+    the display name in the label style. Missing/placeholder art draws
+    the NAME alone — the documented fallback until the owner's glass
+    lands."""
+    painter.save()
+    painter.setOpacity(opacity)
+    ready = archetype_art_ready(fig["file"])
+    if ready:
+        draw_pixmap_centered(painter, ctx, fig["file"], pos, height)
+    if named or not ready:
+        # The diamond's widest width is tip·tan(half) — recovered from
+        # the figure height (= tip · the per-pointer height fraction).
+        width = (
+            height * math.tan(math.radians(
+                constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
+            ))
+            / archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[ctx.skin.pointer]
+        )
+        _draw_archetype_name(painter, fig["name"], pos, width, height)
+    painter.restore()
+
+
+def _draw_archetype_name(
+    painter: QPainter, name: str, pos: QPointF, arm_width: float,
+    figure_height: float,
+) -> None:
+    """The figure's name in the outlined label style, FITTED to the
+    diamond's width (measured, never guessed — Melancholic must not
+    overflow the slim cross arm) and capped against the figure."""
+    font = QFont()
+    font.setBold(True)
+    font.setPixelSize(100)
+    advance = QFontMetricsF(font).horizontalAdvance(name)
+    target = arm_width * archetypes.ARCHETYPE_NAME_WIDTH_FRACTION
+    fitted = math.floor(100.0 * target / advance)
+    cap = round(figure_height * archetypes.ARCHETYPE_NAME_MAX_OF_FIGURE)
+    font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, min(fitted, cap)))
+    draw_outlined_text(painter, pos, name, font)
+
+
 def enabled_slots(skin: SkinDefinition) -> tuple[tuple[int, str], ...]:
     """The ENABLED slots in order — (index, mode) pairs. They enable
     STRICTLY 1 → 2 → 3 (owner 2026-07-14: "ne može da uključi samo
-    third")."""
+    third"). In ARCHETYPE MODE (owner 2026-07-16) the answer is EMPTY:
+    the mode overrides the weekday model and all three slots at this
+    one shared gate — rendering, hit-testing and layer building all
+    read the slot chain through here — while the user's settings stay
+    untouched, so toggling the mode back restores everything."""
+    if archetype_active(skin):
+        return ()
     slots = []
     if skin.show_weekday:
         slots.append((1, skin.weekday_slot))
@@ -1314,6 +1418,76 @@ class CenterBodyLayer(Layer):
         draw_weekday_body(painter, ctx, body, QPointF(0, 0), center_size, 1.0)
 
 
+class ArchetypeLayer(Layer):
+    """THE ARCHETYPE MODE's arm figures (owner sealed package
+    2026-07-16): each diamond carries its archetype's stained glass,
+    scaled into the arm with the color visible around it, at the romb
+    center — the same radius the weekday-by-colors unit rides. The
+    figure whose HOUR-SPACE holds the hour hand (ctx.archetype_lit)
+    draws FULL; the rest ghost at the weekday ghost opacity — an
+    ARCHETYPE CLOCK, not a gallery. During the reveal window every
+    figure is full (the "show me everything" gesture). With Names on
+    the LIT figure carries its display name (all of them during the
+    reveal); missing/placeholder art always falls back to the name.
+    DAILY cadence — the lit index keys the composite exactly like the
+    Calendar's shichen wedge."""
+
+    cadence = Cadence.DAILY
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        key = archetype_key(ctx.skin)
+        if key is None:
+            return
+        orbit = ctx.radius * weekday_body_orbit(ctx.skin)
+        tip = ctx.radius * ctx.skin.star.radius_fraction
+        height = (
+            tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[ctx.skin.pointer]
+        )
+        names_on = ctx.skin.show_weekday_names
+        for index, fig in enumerate(archetypes.figures(key)):
+            lit = ctx.reveal_active or index == ctx.archetype_lit
+            draw_archetype_figure(
+                painter, ctx, fig,
+                dial_point(fig["angle"] + ctx.rotation, orbit),
+                height,
+                1.0 if lit else ctx.skin.weekday_set.ghost_opacity,
+                named=names_on and lit,
+            )
+
+
+class ArchetypeCenterLayer(Layer):
+    """The archetype's CENTER — the Eye / the Hearth / the Seal / the
+    Union / the Throne (the Compass has none) — drawn where the
+    weekday center body used to live: ABOVE the hands, full opacity
+    (the union stands outside the hour lighting). Placeholder art
+    falls back to the center's name; the hover-enlarge lift twin
+    joins HoverLiftLayer under the "archetype:center" element."""
+
+    cadence = Cadence.MINUTE
+
+    def paint(self, painter: QPainter, ctx: RenderContext) -> None:
+        key = archetype_key(ctx.skin)
+        if key is None:
+            return
+        center = archetypes.center(key)
+        if center is None or not self._gate(ctx, "archetype:center"):
+            return
+        size = (
+            2 * ctx.radius * ctx.skin.weekday_set.center_scale
+            * hover_factor(ctx, "archetype:center")
+        )
+        painter.save()
+        if archetype_art_ready(center["file"]):
+            draw_pixmap_centered(
+                painter, ctx, center["file"], QPointF(0, 0), size
+            )
+        else:
+            _draw_archetype_name(
+                painter, center["name"], QPointF(0, 0), size, size
+            )
+        painter.restore()
+
+
 def octa_slot_art(folder: str, name: str) -> Path | None:
     """The PNG for an image slot style — `folder` is a subdirectory of
     assets/zodiac/ ("astrology/sign", "astrology/primary",
@@ -1707,14 +1881,37 @@ class YearMarkerLayer(Layer):
             painter.drawEllipse(pos, size / 2, size / 2)
 
     def _draw_date(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
-        """Large dials write the date ("8 Jul") ON the Earth marker."""
+        """Large dials write the date ("8 Jul") ON the Earth marker.
+        In archetype mode with the Day-of-week option on (owner
+        2026-07-16, archetype_earth_day) the abbreviated weekday joins
+        it: the date shifts up and TUE/THU… writes beneath — the same
+        label machinery, one marker, two rows."""
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         font = QFont()
         font.setPixelSize(
             max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
         )
         font.setBold(True)
-        draw_outlined_text(painter, pos, text, font)
+        if not (ctx.skin.archetype_earth_day and archetype_active(ctx.skin)):
+            draw_outlined_text(painter, pos, text, font)
+            return
+        offset = size * archetypes.ARCHETYPE_EARTH_DAY_OFFSET
+        draw_outlined_text(
+            painter, QPointF(pos.x(), pos.y() - offset), text, font
+        )
+        day_font = QFont()
+        day_font.setPixelSize(
+            max(
+                defaults.BODY_LABEL_MIN_PX,
+                round(size * archetypes.ARCHETYPE_EARTH_DAY_TEXT_SIZE),
+            )
+        )
+        day_font.setBold(True)
+        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        draw_outlined_text(
+            painter, QPointF(pos.x(), pos.y() + offset),
+            constants.WEEKDAY_LABELS[today], day_font,
+        )
 
     def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
         """Moon image (or procedural disc) with the unlit part shadowed:
@@ -1777,6 +1974,9 @@ class HoverLiftLayer(Layer):
             WeekdayLayer(skin, lift=True),
             SlotLayer(skin, lift=True),
             YearMarkerLayer(skin, lift=True),
+            # The archetype CENTER enlarges like the old center body
+            # (owner sealed package 2026-07-16) — inert off the mode.
+            ArchetypeCenterLayer(skin, lift=True),
         )
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:

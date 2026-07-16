@@ -27,6 +27,13 @@ the ring preset and the user's display choices onto it at build time.
   `palette_style` ("paint" | "light" — on the Calendar pointer it PICKS
   THE WHEEL: paint = Zodiac, light = Almanac, owner 2026-07-16),
   `calendar_lighting` ("hour" the shichen | "year" the month/sign wedge),
+  `archetype_mode` (owner sealed package 2026-07-16 — the active
+  (pointer, palette_style) shows ITS archetype: figures in the
+  diamonds, the hour hand lighting the current hour-space, the weekday
+  model and all three slots overridden OFF at the RENDER level so the
+  slot fields below keep the user's choices) and `archetype_earth_day`
+  (the optional abbreviated day under the Earth marker's date while
+  the mode runs — default False),
   `solar_rotation` (False →
   Star/Aura/Umbra stand upright), `octa_slot` (one of
   `OCTA_SLOT_MODES`: time/date/day length, tropical zodiac as

@@ -1014,11 +1014,12 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
 
 
 def test_omega_double_click_reveals_the_week(july_wednesday):
-    """Omega double-click = reveal the week (owner 2026-07-16): the hit
-    region sits at the 24h letter band; triggering it raises every
-    non-active weekday body to full opacity (ghosts AND, on Trinity/
-    Prism, the ghost center Sun moves to the above-hands center pass)
-    for REVEAL_WEEK_DURATION_S, expiring after the timer."""
+    """Omega double-click, REPURPOSED (owner seal 2026-07-16,
+    superseding the same-day restart semantics): the hit region sits
+    at the 24h letter band; the first double-click starts the
+    REVEAL_WEEK_DURATION_S window (hands hidden, ghosts full), the
+    NEXT one TOGGLES IT OFF — never a restart — and a fresh click
+    afterwards starts a new window that expires on its own."""
     day, tick = july_wednesday
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
@@ -1033,15 +1034,21 @@ def test_omega_double_click_reveals_the_week(july_wednesday):
     assert not compositor.hit_omega(180.0, 180.0 - 180.0 * outer, 360.0)  # top: not Omega
 
     assert not compositor.reveal_active()
-    compositor.trigger_reveal_week(now=1000.0)
+    assert compositor.trigger_reveal_week(now=1000.0) is True   # started
     assert compositor.reveal_active(now=1000.0)
     assert compositor.reveal_active(now=1000.0 + defaults.REVEAL_WEEK_DURATION_S - 1)
     assert not compositor.reveal_active(now=1000.0 + defaults.REVEAL_WEEK_DURATION_S)
 
-    # A second double-click RESTARTS the window (owner spec: 60s after
-    # the LAST double-click).
-    compositor.trigger_reveal_week(now=1050.0)
-    assert compositor.reveal_active(now=1050.0 + defaults.REVEAL_WEEK_DURATION_S - 1)
+    # A second double-click INSIDE the window ends it (toggle-off).
+    assert compositor.trigger_reveal_week(now=1100.0) is True
+    assert compositor.trigger_reveal_week(now=1110.0) is False  # ended
+    assert not compositor.reveal_active(now=1110.0)
+
+    # And a fresh click after a toggle-off starts a NEW window that
+    # expires by the timer again.
+    assert compositor.trigger_reveal_week(now=1200.0) is True
+    assert compositor.reveal_active(now=1200.0 + defaults.REVEAL_WEEK_DURATION_S - 1)
+    assert not compositor.reveal_active(now=1200.0 + defaults.REVEAL_WEEK_DURATION_S)
 
 
 def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesday):
@@ -1091,22 +1098,24 @@ def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesd
     assert center_alpha > 0.0                   # ...CenterBodyLayer lifts it
 
 
-def test_palette_style_grays_on_trio_and_cross(app):
-    """Paint/Light does nothing on Trinity/Seasons (owner 2026-07-16):
-    both styles resolve to the SAME PALETTE_PRESETS entry there, so the
-    choice group renders fully GRAYED; hexa/octa/aurora keep it live —
-    same shape as `_add_choice_group`'s `disabled` gating used
-    elsewhere in the menu (owner 2026-07-13 pattern)."""
+def test_palette_style_grays_on_cross_only(app):
+    """Paint/Light gating, revised with the CANON Family wheel (owner
+    2026-07-16): the Trinity now carries TWO wheels — the Court paint
+    trio and the APPROVED Family light trio (green Child at the top,
+    light red Mother at 20h, light blue Father at 4h) — so the pair is
+    LIVE there; only the Seasons keep ONE palette (and one archetype)
+    under both styles and stay grayed. Same `_add_choice_group`
+    `disabled` shape as before."""
     from app.controller import AppController
     from PySide6.QtWidgets import QMenu
 
     for pointer, expect_grayed in (
-        ("trio", True), ("cross", True),
+        ("trio", False), ("cross", True),
         ("hexa", False), ("octa", False), ("aurora", False),
     ):
         menu = QMenu()
         submenu = QMenu()
-        disabled = constants.PALETTE_STYLES if pointer in ("trio", "cross") else ()
+        disabled = constants.PALETTE_STYLES if pointer == "cross" else ()
         actions = AppController._add_choice_group(
             None, menu, submenu,
             [(style, style) for style in constants.PALETTE_STYLES],
@@ -1116,8 +1125,11 @@ def test_palette_style_grays_on_trio_and_cross(app):
         assert len(actions) == len(constants.PALETTE_STYLES)
         assert all(not a.isEnabled() for a in actions) == expect_grayed
         assert all(a.isEnabled() for a in actions) == (not expect_grayed)
-    # Trinity and Seasons really do carry only ONE preset per style.
-    assert defaults.PALETTE_PRESETS[("trio", "paint")] == defaults.PALETTE_PRESETS[("trio", "light")]
+    # The Trinity's two wheels differ now (Court vs the Family trio —
+    # the top stays the derivation from the hexa light primaries);
+    # the Seasons really do carry ONE preset under both styles.
+    assert defaults.PALETTE_PRESETS[("trio", "paint")] != defaults.PALETTE_PRESETS[("trio", "light")]
+    assert defaults.PALETTE_PRESETS[("trio", "light")][0] == "#00DC00"
     assert defaults.PALETTE_PRESETS[("cross", "paint")] == defaults.PALETTE_PRESETS[("cross", "light")]
 
 

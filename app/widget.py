@@ -123,9 +123,11 @@ class ClockWidget(QWidget):
             super().mousePressEvent(event)
 
     def mouseDoubleClickEvent(self, event) -> None:
-        # Omega (24h) double-click = reveal the week (owner 2026-07-16):
-        # raises every non-active weekday body to full opacity for
-        # REVEAL_WEEK_DURATION_S, restarting on every new double-click.
+        # Omega (24h) double-click — REPURPOSED (owner seal 2026-07-16):
+        # HIDES THE HANDS for REVEAL_WEEK_DURATION_S or until the NEXT
+        # double-click (a toggle-off, not a restart); the weekday
+        # ghost-reveal and the archetype figures fold into the same
+        # "show me everything" gesture inside the compositor.
         if (
             event.button() == Qt.MouseButton.LeftButton
             and self._renderer is not None
@@ -133,16 +135,17 @@ class ClockWidget(QWidget):
             x = event.position().x() - self._margin_px
             y = event.position().y() - self._margin_px
             if self._renderer.hit_omega(x, y, float(self._dial_diameter)):
-                self._renderer.trigger_reveal_week()
+                started = self._renderer.trigger_reveal_week()
                 self.update()
-                # Snap BACK on time: without this the expiry would
-                # wait for the next minute tick to repaint (the
-                # weekday layer is daily-cached). A stale shot after
-                # a restart repaints harmlessly mid-reveal.
-                QTimer.singleShot(
-                    defaults.REVEAL_WEEK_DURATION_S * 1000 + 50,
-                    self.update,
-                )
+                if started:
+                    # Snap BACK on time: without this the expiry would
+                    # wait for the next minute tick to repaint (the
+                    # weekday layer is daily-cached). A stale shot
+                    # after a toggle-off repaints harmlessly.
+                    QTimer.singleShot(
+                        defaults.REVEAL_WEEK_DURATION_S * 1000 + 50,
+                        self.update,
+                    )
                 return
         super().mouseDoubleClickEvent(event)
 

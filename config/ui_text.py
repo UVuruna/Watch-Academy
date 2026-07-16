@@ -66,6 +66,19 @@ UI_STRINGS: tuple[str, ...] = (
     "All hover texts. Off: the dial shows nothing on hover — combined with Click-through it has zero interaction.",
     "On: the star points at true solar noon. Off: Star, Aura and Umbra stand upright (12/24 at the top) for reading exact planet and season positions.",
     "The dial takes no clicks at all (they pass to the desktop); hover info still works. Turn it back off here in the tray.",
+    # THE ARCHETYPE MODE (owner sealed package 2026-07-16) — the
+    # toggle pair beside Solar rotation and the hover pending line
+    # (new strings ship untranslated; the pre-build Translation
+    # session covers them).
+    "Archetype", "Earth weekday",
+    "The diamonds carry the active wheel's archetype "
+    "figures; the hour hand lights the one whose "
+    "hour-space it is in. The weekday model and the slots "
+    "step aside while it runs.",
+    "The abbreviated day (TUE, THU…) written under the "
+    "Earth marker's date while the Archetype mode runs.",
+    "The Canon has already named this seat; its article is still "
+    "being written.",
     # --- Settings dialog --------------------------------------------------------
     "Location", "Opacity", "Element sizes", "Custom ring", "Language",
     "Palette — {pointer} {style}",

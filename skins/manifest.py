@@ -167,6 +167,18 @@ class SkinDefinition:
                                        # WHEEL: paint = Zodiac, light = Almanac
     calendar_lighting: str = "hour"    # "hour" (the shichen under the hand) |
                                        # "year" (the current month/sign wedge)
+    # THE ARCHETYPE MODE (owner sealed package 2026-07-16): the active
+    # (pointer, palette_style) shows ITS archetype — the diamonds carry
+    # the stained-glass figures, the hour hand lights the one whose
+    # hour-space it is in, and the weekday model and ALL THREE SLOTS
+    # switch OFF at the render level (render.layers.enabled_slots) —
+    # the user's slot settings stay untouched, so toggling back
+    # restores everything. Aurora/Calendar have no archetype: the mode
+    # is inert there.
+    archetype_mode: bool = False
+    # The optional abbreviated day (TUE, THU…) the Earth marker writes
+    # under its date label while the mode runs (owner: default OFF).
+    archetype_earth_day: bool = False
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     day_slot_style: str = "sign"       # the DAY slot badge's own style

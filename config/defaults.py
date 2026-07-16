@@ -383,18 +383,25 @@ WORKING_SET_CEILINGS = {
 # right, winter blue bottom, spring green left — solstices/equinoxes at
 # the arm centers), served under both styles.
 _CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
-# The TRIO carries the theological trio (owner spec, FINAL.txt #7) and,
-# like the cross, ONE palette under both styles: Faith yellow at 12h,
-# Love red at 20h, Hope blue at 4h — the hexa paint hues at the M, Y, D
-# ring-letter positions.
+# The TRIO's PAINT wheel carries the theological trio (owner spec,
+# FINAL.txt #7): Faith yellow at 12h, Love red at 20h, Hope blue at
+# 4h — the hexa paint hues at the M, Y, D ring-letter positions. Its
+# LIGHT wheel is the FAMILY triangle (CANON, placement APPROVED
+# 2026-07-16): the same derivation from the hexa LIGHT primaries at
+# 12/20/4 — green at the top (the Child) — with the parents' hues
+# LIGHTENED per the owner's member table ("light blue" the Father,
+# "light red" the Mother; hue tuning licensed to the agent,
+# 2026-07-16). Two wheels, so Paint/Light is LIVE on the Trinity now
+# (the Court/Family pair) — only the Seasons keep one palette.
 _TRINITY = ("#F8E600", "#B60000", "#002FFF")
+_FAMILY = ("#00DC00", "#FF8080", "#7FB2FF")
 PALETTE_PRESETS = {
     ("hexa", "paint"): (
-        "#F8E600", "#DC9600", "#B60000", 
+        "#F8E600", "#DC9600", "#B60000",
         "#542E85", "#002FFF", "#007E00",
     ),
     ("hexa", "light"): (
-        "#00DC00", "#FFFF00", "#FF0000", 
+        "#00DC00", "#FFFF00", "#FF0000",
         "#BD00BD", "#0040FF", "#00DDDD",
     ),
     # COMPASS palettes (owner rework 2026-07-16): the two octa presets
@@ -418,7 +425,7 @@ PALETTE_PRESETS = {
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
     ("trio", "paint"): _TRINITY,
-    ("trio", "light"): _TRINITY,
+    ("trio", "light"): _FAMILY,
     # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
     # paint = azure/green/yellow/orange/red, light = azure/cyan/green/
     # yellow/red; twilight left (dawn) blue, right (dusk) brown.

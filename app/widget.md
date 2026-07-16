@@ -30,11 +30,16 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
 #### Methods
 - `mark_closing()`: disarms the spontaneous-hide watchdog before an
   intentional hide/exit
-- `mouseDoubleClickEvent()` (owner 2026-07-16): a left double-click on
-  the Omega (24h) ring letter — hit-tested via
-  `compositor.hit_omega()`, the same geometry family as the ring
-  letters/ticks — starts (or restarts) the 60-second reveal-week
-  window (`compositor.trigger_reveal_week()`); any other double-click
+- `mouseDoubleClickEvent()` (owner seal 2026-07-16, REPURPOSED the
+  same day): a left double-click on the Omega (24h) ring letter —
+  hit-tested via `compositor.hit_omega()`, the same geometry family
+  as the ring letters/ticks — TOGGLES the reveal window
+  (`compositor.trigger_reveal_week()`): the first click HIDES THE
+  HANDS for `REVEAL_WEEK_DURATION_S` (with the weekday model on the
+  ghosts rise to full in the same gesture; in archetype mode every
+  figure draws full), the next click ends it — a toggle-off, not a
+  restart. The snap-back QTimer fires only on a START (a stale shot
+  after a toggle-off repaints harmlessly); any other double-click
   falls through to Qt's default handling
 - `keyPressEvent()`: SPACE is handled FIRST (owner 2026-07-16, ROADMAP
   queue #8) — over a themed hover target (weekday body, astrology/

@@ -67,6 +67,18 @@ slots and the hovers alike — and
 `SkinDefinition` instance that is serialized verbatim to
 `assets/skins/domy/skin.json` (re-serialize after editing it).
 
+### `archetypes.py` — The Archetype Mode
+THE ARCHETYPE MODE's one configuration home (owner sealed package
+2026-07-16): the (pointer, palette_style) → archetype grid — seven
+archetypes over four pointers, none on Aurora/Calendar — the
+per-archetype figure tables (arm angle, stained-glass drop path, the
+two-row names, article entity, encyclopedia target), the center table
+(Eye / Hearth / Seal / Union / Throne — Compass none), the article-set
+names Session 6 fills, the Ages' two image registers and the render
+tunables (figure heights, name sizing, the 1×1-placeholder threshold,
+the Earth day-label geometry, the pending line). See
+[Archetypes](archetypes.md).
+
 ### `winapi.py` — Win32 Literals
 The only sanctioned home for Win32 API constants (documented enum-exception
 to Rule #4). Consumed by `app/native.py` from M4.

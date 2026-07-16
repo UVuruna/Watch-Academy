@@ -37,7 +37,7 @@ from app.settings_store import (
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon
 from app.widget import ClockWidget
-from config import constants, defaults, paths, profiling
+from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from data.hands import HAND_NAMES, hand_packs
@@ -369,6 +369,16 @@ def apply_display_settings(skin, settings: Settings):
     # The ART SOURCE switch (owner 2026-07-14: Gemini vs ChatGPT) —
     # every disk boundary resolves canonical paths through it.
     paths.set_art_source(settings.art_source)
+    # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
+    # while the drawn pointer carries an archetype. The overriding
+    # itself happens at the RENDER level (render.layers.enabled_slots
+    # answers empty), so every slot/weekday setting below stays the
+    # user's own — toggling the mode back restores everything.
+    archetype_on = (
+        settings.archetype_mode
+        and settings.show_pointer
+        and archetypes.has_archetype(settings.pointer)
+    )
     star = skin.star
     if settings.star_alpha is not None:
         star = dataclasses.replace(
@@ -467,8 +477,13 @@ def apply_display_settings(skin, settings: Settings):
         show_pointer=settings.show_pointer,
         colorful=settings.colorful,
         # The big seconds hand YIELDS while a slot runs the
-        # small-seconds complication (owner 2026-07-14).
-        show_seconds=settings.show_seconds and not _slot_seconds(settings),
+        # small-seconds complication (owner 2026-07-14) — except in
+        # archetype mode, where the slots are overridden OFF and the
+        # big hand returns.
+        show_seconds=settings.show_seconds
+        and not (_slot_seconds(settings) and not archetype_on),
+        archetype_mode=settings.archetype_mode,
+        archetype_earth_day=settings.archetype_earth_day,
         show_octa_slot=settings.show_octa_slot,
         show_earth_date=settings.show_earth_date,
         show_weekday_names=settings.show_weekday_names,
@@ -990,7 +1005,7 @@ class AppController(QObject):
         self._flush_position()
         if key in (
             "pointer", "show_weekday", "show_pointer",
-            "show_octa_slot", "show_third_slot",
+            "show_octa_slot", "show_third_slot", "archetype_mode",
         ):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
@@ -1009,6 +1024,17 @@ class AppController(QObject):
         order, and the big seconds hand while a slot runs the
         small-seconds complication."""
         settings = self._settings
+        # THE ARCHETYPE MODE gating (owner sealed package 2026-07-16):
+        # the toggle grays where no archetype exists — Aurora and the
+        # Calendar — and with the Pointer element off (no diamonds, no
+        # figures); the Earth-weekday sub-toggle needs the mode itself.
+        archetype_available = (
+            settings.show_pointer
+            and archetypes.has_archetype(settings.pointer)
+        )
+        archetype_on = archetype_available and settings.archetype_mode
+        self._archetype_action.setEnabled(archetype_available)
+        self._archetype_earth_action.setEnabled(archetype_on)
         locked = (
             settings.pointer == "cross"
             and settings.show_pointer
@@ -1017,12 +1043,17 @@ class AppController(QObject):
         )
         for item in self._menu_gates["first_lock"]:
             item.setEnabled(not locked)
-        self._menu_gates["enable2"].setEnabled(settings.show_weekday)
+        self._menu_gates["enable2"].setEnabled(
+            settings.show_weekday and not archetype_on
+        )
         self._menu_gates["enable3"].setEnabled(
             settings.show_weekday and settings.show_octa_slot
+            and not archetype_on
         )
+        # A seated small-seconds slot cannot silence the big hand
+        # while the archetype mode overrides the slots.
         self._menu_gates["seconds"].setEnabled(
-            not _slot_seconds(settings)
+            not (_slot_seconds(settings) and not archetype_on)
         )
         # The check mark beside the slot ordinal (owner 2026-07-15)
         # follows the EFFECTIVE enable — the 1 → 2 → 3 chain, not the
@@ -1038,13 +1069,19 @@ class AppController(QObject):
         }
         for action, key in self._slot_menu_checks:
             action.setChecked(effective[key])
+            # The whole slot submenu grays IN PLACE while the mode
+            # overrides the slots (owner 2026-07-16) — the settings
+            # underneath stay untouched for the toggle-back.
+            action.setEnabled(not archetype_on)
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
-        # Paint/Light does nothing on Trinity/Seasons (owner 2026-07-16:
-        # one PALETTE_PRESETS entry serves both styles there) — gray the
-        # whole group in place, following the existing gating pattern.
-        palette_grayed = settings.pointer in ("trio", "cross")
+        # Paint/Light gating (owner 2026-07-16, revised with the CANON
+        # Family wheel): the Trinity now carries TWO wheels — Court
+        # paint / Family light — so the pair is LIVE there; only the
+        # Seasons keep one palette (and one archetype) under both
+        # styles, so only the cross grays the group.
+        palette_grayed = settings.pointer == "cross"
         labels = self._palette_style_labels[
             "calendar" if settings.pointer == "calendar" else "default"
         ]
@@ -1148,9 +1185,11 @@ class AppController(QObject):
             lambda value: self._set_display_choice("pointer", value),
         )
         pointer_menu.addSeparator()
-        # Paint/Light is GRAYED while Trinity/Seasons drive the pointer
-        # (owner 2026-07-16): both palette styles resolve to the SAME
-        # PALETTE_PRESETS entry there, so the choice does nothing.
+        # Paint/Light is GRAYED only while the Seasons drive the
+        # pointer now (owner 2026-07-16, revised with the CANON Family
+        # wheel): the Trinity carries TWO wheels — Court paint /
+        # Family light — so the choice is live there; the cross alone
+        # keeps one palette under both styles.
         palette_style_actions = self._add_choice_group(
             design_menu, pointer_menu,
             [
@@ -1161,7 +1200,7 @@ class AppController(QObject):
             lambda value: self._set_display_choice("palette_style", value),
             disabled=(
                 constants.PALETTE_STYLES
-                if settings.pointer in ("trio", "cross") else ()
+                if settings.pointer == "cross" else ()
             ),
         )
         # On the Calendar the pair IS the wheel (owner seal 2026-07-16:
@@ -1599,6 +1638,36 @@ class AppController(QObject):
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12) — the
         # bands anchor to the real sun events, the toggle has no say.
         self._solar_rotation_action.setEnabled(settings.pointer != "aurora")
+        # THE ARCHETYPE MODE (owner sealed package 2026-07-16): the
+        # stay-open checkable beside Solar rotation — the diamonds fill
+        # with the active wheel's archetype figures, the hour hand
+        # lights the one whose hour-space it is in, and the weekday
+        # model and all three slots step aside (render-level override —
+        # the slot settings stay put). Grayed on Aurora/Calendar.
+        self._archetype_action = self._add_toggle(
+            menu, f"🎭 {tr('Archetype')}", settings.archetype_mode,
+            lambda checked: self._set_display_choice(
+                "archetype_mode", checked
+            ),
+            tr(
+                "The diamonds carry the active wheel's archetype "
+                "figures; the hour hand lights the one whose "
+                "hour-space it is in. The weekday model and the slots "
+                "step aside while it runs."
+            ),
+        )
+        # The small checkable under the toggle (owner 2026-07-16): the
+        # abbreviated day on the Earth marker while the mode runs.
+        self._archetype_earth_action = self._add_toggle(
+            menu, f"🌍 {tr('Earth weekday')}", settings.archetype_earth_day,
+            lambda checked: self._set_display_choice(
+                "archetype_earth_day", checked
+            ),
+            tr(
+                "The abbreviated day (TUE, THU…) written under the "
+                "Earth marker's date while the Archetype mode runs."
+            ),
+        )
         self._add_toggle(
             menu, f"🖱️ {tr('Click-through')}", self._settings.click_through,
             self._set_click_through,
@@ -1672,6 +1741,11 @@ class AppController(QObject):
         exit_action = QAction(f"🚪 {tr('Exit')}", menu)
         exit_action.triggered.connect(self.quit)
         menu.addAction(exit_action)
+        # Normalize every gated state from the CURRENT settings — the
+        # one gating implementation serves the fresh build and the
+        # in-place refresh alike (Rule #5; the archetype/slot/palette
+        # gates all live there).
+        self._refresh_menu_gating()
         return menu
 
     def _open_report(self) -> None:

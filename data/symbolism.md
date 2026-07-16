@@ -26,6 +26,16 @@ color and mood) below the two zodiac sign lines.
   "profession"); the center (sun) and the six arms are all addressable
   by body name. Raises KeyError for an unknown body — loudly, per
   Rule #1.
+- `archetype_article(article_set, entity) -> dict | None` (owner
+  sealed package 2026-07-16): the ARCHETYPE MODE's two-row article —
+  `articles.<set>.<entity>` holding `{"rows": [row1, row2]}`. The set
+  names live in [Archetypes](../config/archetypes.md)
+  (`archetype_trinity_paint` … `archetype_compass_light`), the entity
+  keys per figure plus `"center"`. Session 6 WRITES the texts; until a
+  set/entity exists this returns **None** and the hover shows the
+  figure's name with the pending line — the documented graceful path,
+  never a KeyError. Translated rows overlay under
+  `articles/<set>/<entity>/rows/<i>`.
 
 The JSON also carries the `articles` set (35 encyclopedic texts, one
 per entity per theme) — not yet surfaced in the app; the owner decides

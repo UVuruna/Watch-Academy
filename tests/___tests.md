@@ -48,6 +48,18 @@ Offscreen compositor smoke tests (`QT_QPA_PLATFORM=offscreen`): frame
 size, transparent corners, opaque ring, painted center, yellowish noon
 sector in July daylight.
 
+### `test_archetype.py`
+THE ARCHETYPE MODE goldens (owner sealed package 2026-07-16): the
+seven-archetype grid and figure/center tables, the render-level
+override (slots/weekday off without mutating settings; the big
+seconds hand returns), the hour-space lighting boundaries per pointer
+(trio/cross/hexa/octa, solar rotation riding the drawn arms), the
+1×1-placeholder fallback to the figure's name, the repurposed Omega
+reveal hiding the hands, the graceful two-row article path and the
+pending line, the Walks→Professions encyclopedia mapping, the Earth
+day-label option, and the menu gating (full controller against a TEMP
+settings home).
+
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 121
 mixed-depth, 45,649 cities (post-curation shape); the audited

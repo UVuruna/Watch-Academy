@@ -40,15 +40,37 @@ draws the MINUTE layers (hands, year marker) live.
   `weekday_body_orbit` romb-center ride, servant seat included); legend
   off or a factor of 1.0 keeps the dial inert
 - `hit_omega(x, y, size) -> bool` / `trigger_reveal_week()` /
-  `reveal_active()` (owner 2026-07-16): the Omega (24h) double-click
-  hit region — the greetings letter geometry seated at 180° — and the
-  60-second reveal-week window it starts/restarts; `paint()` and
-  `_render_composite()` fold the live `reveal_active` flag into the
-  composite cache key and `RenderContext`, so the DAILY WeekdayLayer
-  redraws ghosts at full opacity and steps aside for CenterBodyLayer
-  to lift the ghost center Sun above the hands while it runs. The
-  hidden-mode Four Greetings hover (below) moved to the 12h letter
-  ONLY in the same round — Omega no longer answers it
+  `reveal_active()` (owner 2026-07-16, REPURPOSED by the same-day
+  seal): the Omega (24h) double-click hit region — the greetings
+  letter geometry seated at 180° — and the reveal window it TOGGLES:
+  the first double-click starts `REVEAL_WEEK_DURATION_S` (returning
+  True), the next one ends it (a toggle-off, not a restart; False).
+  While it runs `paint()` SKIPS the HandLayers — the hands are
+  hidden so the whole theme, pointer and dial read clean — and the
+  live flag keys the composite, so the DAILY WeekdayLayer redraws
+  ghosts at full opacity and steps aside for CenterBodyLayer to lift
+  the ghost center Sun above the hands; in ARCHETYPE MODE every
+  figure draws full instead (the same "show me everything"
+  semantics). The hidden-mode Four Greetings hover (below) moved to
+  the 12h letter ONLY in the same round — Omega no longer answers it
+- THE ARCHETYPE MODE plumbing (owner sealed package 2026-07-16;
+  tables in [Archetypes](../config/archetypes.md), layers in
+  [Layers](layers.md) §The Archetype Mode): `_archetype_lit(tick)`
+  computes the hour-space figure from the live tick and keys the
+  DAILY composite on it (the Calendar-wedge pattern);
+  `_build_layers()` seats `ArchetypeLayer` at the weekday_set z spot
+  and appends `ArchetypeCenterLayer` above the hands while the mode
+  is active; `_element_at` answers `"archetype:center"` over the
+  center disc; the arm hovers return the archetype's TWO-ROW article
+  (`_archetype_arm_tooltip` → `_archetype_two_rows`: the stained
+  glass — real art only — the figure's name, row 1, a rule, the
+  second-row name, row 2, resolved through
+  `SymbolismRepository.archetype_article`; an unwritten set shows
+  the name + the pending line, never a KeyError) and the center the
+  same via `_archetype_center_tooltip`; `encyclopedia_target`
+  follows each FIGURE's own (topic, entry) — today only the Walks
+  map onto the Professions pages, everything else answers None
+  gracefully (Sessions 6/8 add the topics)
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes), in priority order — the WEEKDAY

@@ -53,6 +53,14 @@ class Settings:
                                         # light = Almanac wheel
     calendar_lighting: str = "hour"     # Calendar lit wedge: "hour" (the
                                         # shichen) | "year" (month/sign)
+    # THE ARCHETYPE MODE (owner sealed package 2026-07-16): the
+    # diamonds carry the archetype figures and the weekday model and
+    # all three slots switch OFF — at the RENDER level only, so the
+    # slot keys below keep the user's choices untouched.
+    archetype_mode: bool = False
+    # The optional abbreviated day on the Earth marker while the mode
+    # runs (owner: default OFF).
+    archetype_earth_day: bool = False
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
     day_slot_style: str = "sign"        # the DAY slot badge's own style
@@ -267,6 +275,10 @@ class SettingsStore:
                 diameter=diameter,
                 # Additive keys (still schema 1): absent in older files.
                 click_through=_load_bool(raw, "click_through", False),
+                archetype_mode=_load_bool(raw, "archetype_mode", False),
+                archetype_earth_day=_load_bool(
+                    raw, "archetype_earth_day", False
+                ),
                 solar_rotation=_load_bool(raw, "solar_rotation", True),
                 legend=_load_bool(raw, "legend", True),
                 show_earth=_load_bool(raw, "show_earth", True),
@@ -365,6 +377,8 @@ class SettingsStore:
             "umbra_contrast": settings.umbra_contrast,
             "palette_style": settings.palette_style,
             "calendar_lighting": settings.calendar_lighting,
+            "archetype_mode": settings.archetype_mode,
+            "archetype_earth_day": settings.archetype_earth_day,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "day_slot_style": settings.day_slot_style,

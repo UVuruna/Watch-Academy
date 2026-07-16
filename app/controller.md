@@ -58,7 +58,8 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   style, Theme background / Classic black (owner A/B spec 2026-07-15)
   — | Hands, Earth — with the Date switch — | Size), 🥇 1ˢᵗ Slot,
   🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
-  📜 Legend, 🔆 Solar rotation, 🖱️ Click-through | ⚙️ Settings…,
+  📜 Legend, 🔆 Solar rotation, 🎭 Archetype (+ its 🌍 Earth weekday
+  sub-toggle), 🖱️ Click-through | ⚙️ Settings…,
   🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The three
   slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
   a Weekday submenu in KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`: Ancient
@@ -106,12 +107,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   rotation (its toggle grays out) — the Paint/Light palette group, and
   the Calendar lighting group (Hour/Year)) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
-  contrast); the Paint/Light group is GRAYED in place while Trinity or
-  Seasons drives the pointer (owner 2026-07-16 — `_menu_gates
-  ["palette_style"]`, `_add_choice_group` now returns its actions so
-  `_refresh_menu_gating` can re-enable them the moment the pointer
-  changes to hexa/octa/aurora — both styles read the SAME
-  `PALETTE_PRESETS` entry there, so the choice does nothing). On the
+  contrast); the Paint/Light group is GRAYED in place only while the
+  SEASONS drive the pointer now (owner 2026-07-16, revised the same
+  day with the CANON Family wheel: the Trinity carries TWO wheels —
+  Court paint / Family light, `PALETTE_PRESETS[("trio", "light")]` —
+  so the pair is LIVE there; `_menu_gates["palette_style"]`,
+  `_add_choice_group` returns its actions so `_refresh_menu_gating`
+  re-grays them in place). On the
   Calendar pointer Paint/Light instead PICK THE WHEEL — paint = Zodiac,
   light = Almanac (the labels stay, the equivalence is documented) — so
   the group stays live there; the Calendar lighting group is grayed off
@@ -124,7 +126,18 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   also switches the tick cadence through
   `MinuteScheduler.set_per_second`), the Legend toggle (off = no
   hovers at all; with click-through the dial has zero interaction),
-  the Solar rotation toggle (off = upright Star/Aura/Umbra), Time
+  the Solar rotation toggle (off = upright Star/Aura/Umbra), the
+  ARCHETYPE toggle pair (owner sealed package 2026-07-16): 🎭
+  Archetype — the stay-open checkable that turns the mode on (the
+  render-level override; the slot settings stay untouched) — with 🌍
+  Earth weekday beneath it (`archetype_earth_day`, live only while
+  the mode runs); `_refresh_menu_gating` grays the Archetype toggle
+  where no archetype exists (Aurora, Calendar, Pointer element off)
+  and, WHILE THE MODE IS ON, grays the three slot submenus and their
+  enables IN PLACE and releases the big-seconds gate (a seated
+  small-seconds slot cannot silence the hidden big hand); the
+  gating call now also closes `_build_menu` itself, so a fresh menu
+  and an in-place refresh share the ONE implementation. Then Time
   Travel…, Click-through toggle (turn back off via the TRAY — the
   dial itself no longer takes clicks), Exit
 - `_set_ring()` / `_set_display_choice(key, value)`: rebuild via the
@@ -133,7 +146,10 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   targeted `dataclasses.replace`, install through the shared
   `_install_skin()` (fresh compositor, day context kept) and persist;
   `apply_display_settings(skin, settings)` (pure, testable) overlays
-  the display choices, opacity overrides and the custom palette
+  the display choices, opacity overrides and the custom palette —
+  including `archetype_mode`/`archetype_earth_day` (owner 2026-07-16;
+  while the mode is active a seated small-seconds slot no longer
+  silences the big hand, since the slots are overridden off)
 - `_open_settings()`: the M6 dialog — location (new observer/timezone →
   full day-context rebuild), opacity and palette results applied by
   reinstalling the PRISTINE pack (so cleared overrides really clear)

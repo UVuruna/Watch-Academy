@@ -66,6 +66,8 @@ def test_display_choices_round_trip(store):
         umbra_form="gradient",
         umbra_contrast="half",
         palette_style="light",
+        archetype_mode=True,
+        archetype_earth_day=True,
         solar_rotation=False,
         octa_slot="ascendant",
         day_slot_style="colored",

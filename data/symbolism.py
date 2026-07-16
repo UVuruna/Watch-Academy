@@ -86,6 +86,28 @@ class SymbolismRepository:
             return merged
         return self._localized(prefix, node)
 
+    def archetype_article(self, article_set: str, entity: str) -> dict | None:
+        """The TWO-ROW archetype article (owner sealed package
+        2026-07-16): `articles.<article_set>.<entity>` with
+        `{"rows": [row1, row2]}` — the set names live in
+        config/archetypes.py (archetype_trinity_paint …), the entity
+        keys per figure plus "center". Session 6 writes the texts;
+        until a set/entity exists this returns None and the hover
+        shows the figure's name with the pending line — the DOCUMENTED
+        graceful path (never a KeyError inside a hover)."""
+        node = self._load()["articles"].get(article_set, {}).get(entity)
+        if node is None:
+            return None
+        if not self._overlay or "rows" not in node:
+            return node
+        prefix = f"articles/{article_set}/{entity}"
+        out = dict(node)
+        out["rows"] = [
+            self._overlay.get(f"{prefix}/rows/{i}", text)
+            for i, text in enumerate(node["rows"])
+        ]
+        return out
+
     def zodiac_article(self, sign: str) -> dict:
         """{base, variants{paint, light}} of one tropical sign."""
         return self._localized(

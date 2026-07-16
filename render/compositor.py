@@ -18,7 +18,7 @@ from time import monotonic
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
-from config import constants, defaults, paths, profiling
+from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
@@ -31,6 +31,8 @@ from core.year_wheel import (
 )
 from render.assets import AssetCache, metal_variant_file, scaled_variant_file
 from render.layers import (
+    ArchetypeCenterLayer,
+    ArchetypeLayer,
     BackgroundLayer,
     Cadence,
     CenterBodyLayer,
@@ -43,6 +45,10 @@ from render.layers import (
     WeekdayLayer,
     YearMarkerLayer,
     HoverLiftLayer,
+    archetype_active,
+    archetype_art_ready,
+    archetype_key,
+    archetype_lit_index,
     dial_point,
     earth_region,
     servant_holds_the_seat,
@@ -293,12 +299,26 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
                 ):
                     continue
                 layers.append(HandLayer(skin, kind))
+        elif name == "weekday_set" and archetype_active(skin):
+            # THE ARCHETYPE MODE (owner sealed package 2026-07-16):
+            # the archetype figures take the weekday model's z spot —
+            # the weekday unit and the slots are overridden OFF at the
+            # render level (enabled_slots), never in settings.
+            layers.append(ArchetypeLayer(skin))
         elif not skipped.get(name, False):
             layers.append(factories[name]())
-    if "weekday_set" in skin.z_order and skin.show_weekday:
+    if (
+        "weekday_set" in skin.z_order and skin.show_weekday
+        and not archetype_active(skin)
+    ):
         # The current day's center body rides ABOVE everything — the
         # hands sweep behind the Sun (owner spec).
         layers.append(CenterBodyLayer(skin))
+    if archetype_active(skin):
+        # The archetype CENTER — the Eye / Hearth / Seal / Union /
+        # Throne — draws where the weekday center used to: above the
+        # hands, per the existing center z-order (owner 2026-07-16).
+        layers.append(ArchetypeCenterLayer(skin))
     if "center" in seats:
         # A CENTER-seated slot (owner dual-Sunday round 2026-07-12)
         # rides ABOVE the hands like the center body — "the center
@@ -402,17 +422,27 @@ class Compositor:
             and abs(theta - 180.0) <= half
         )
 
-    def trigger_reveal_week(self, now: float | None = None) -> None:
-        """Start (or restart) the 60-second reveal window — each new
-        Omega double-click pushes the deadline forward (owner spec:
-        "lasts 60s after the LAST double-click")."""
+    def trigger_reveal_week(self, now: float | None = None) -> bool:
+        """The Omega double-click, REPURPOSED (owner seal 2026-07-16):
+        it HIDES THE HANDS for REVEAL_WEEK_DURATION_S — or until the
+        NEXT double-click, a TOGGLE-OFF, not a restart — so the whole
+        theme, pointer and dial can be seen clean. Where the weekday
+        model is on, the ghost-reveal folds into the same gesture
+        (ghosts to full + hands hidden together); in archetype mode
+        every figure draws full the same way. Returns True when the
+        window STARTED, False when this click ended it."""
         moment = monotonic() if now is None else now
+        if self.reveal_active(moment):
+            self._reveal_until = None
+            self._composite = None    # ghosts/figures fall back
+            return False
         self._reveal_until = moment + defaults.REVEAL_WEEK_DURATION_S
-        self._composite = None    # WeekdayLayer (DAILY) must redraw
+        self._composite = None    # the DAILY layers must redraw
+        return True
 
     def reveal_active(self, now: float | None = None) -> bool:
         """True while the reveal window from the last Omega double-click
-        is still running."""
+        is still running (toggled off or expired = False)."""
         if self._reveal_until is None:
             return False
         moment = monotonic() if now is None else now
@@ -459,11 +489,17 @@ class Compositor:
         # wedges live below the ring (in the composite), and this keeps
         # them relighting ~12 times a day instead of once (owner spec).
         calendar_lit = self._calendar_lit(tick)
-        key = (round(size * dpr), self._day.cache_key, reveal, calendar_lit)
+        # The archetype hour-space (owner 2026-07-16) turns with the
+        # hour hand the same way — the lit figure keys the composite.
+        archetype_lit = self._archetype_lit(tick)
+        key = (
+            round(size * dpr), self._day.cache_key, reveal, calendar_lit,
+            archetype_lit,
+        )
         if self._composite is None or self._composite_key != key:
             with profiling.measure("Composite rebuild"):
                 self._composite = self._render_composite(
-                    size, dpr, reveal, calendar_lit
+                    size, dpr, reveal, calendar_lit, archetype_lit
                 )
             self._composite_key = key
         # The composite carries the window's transparent margin (the
@@ -480,9 +516,14 @@ class Compositor:
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
             reveal_active=reveal, calendar_lit=calendar_lit,
+            archetype_lit=archetype_lit,
         )
         for layer in self._layers:
             if layer.cadence is Cadence.MINUTE:
+                if reveal and isinstance(layer, HandLayer):
+                    # The reveal window HIDES THE HANDS (owner seal
+                    # 2026-07-16) — the theme reads clean beneath.
+                    continue
                 painter.save()   # isolate pen/brush/opacity/rotation leaks
                 layer.paint(painter, ctx)
                 painter.restore()
@@ -529,6 +570,11 @@ class Compositor:
                         today, active=True, theme=theme,
                         slot_metal=metal, roster=roster,
                     )
+            if element == "archetype:center":
+                # The Eye / Hearth / Seal / Union / Throne speak their
+                # CANON paragraph — gracefully pending until Session 6
+                # writes the set (owner 2026-07-16).
+                return self._archetype_center_tooltip()
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
                 # name, its own plate, its own text.
@@ -647,6 +693,8 @@ class Compositor:
             )
         if element == "earth":
             return "seasons", self._season_topic_index()
+        if element == "archetype:center":
+            return None      # the centers have no pages yet (Session 6/8)
         if element.startswith("slot:"):
             mode, _style, theme, _metal, _roster = slot_view(
                 self._skin, int(element[len("slot:"):])
@@ -748,6 +796,16 @@ class Compositor:
         ])
         if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
             return None
+        if archetype_active(self._skin):
+            # ARCHETYPE MODE (owner 2026-07-16): the Spacebar jump
+            # follows the FIGURE's own encyclopedia target — today only
+            # the Walks map onto the Professions pages; the persons,
+            # temperaments, pillars, family and ages have no topics yet
+            # (Sessions 6/8) and answer None gracefully.
+            fig = archetypes.figures(archetype_key(self._skin))[
+                self._archetype_arm_index(arm_angle)
+            ]
+            return fig["enc"]
         if pointer == "hexa":
             # The cursor's half of the 60° arc picks which of the two signs.
             rel = ((theta - rotation - arm_angle + 180.0) % 360.0) - 180.0
@@ -865,6 +923,15 @@ class Compositor:
                 # The SERVANT face at 24h — ghosted all week,
                 # opaque on Sunday (owner 2026-07-13).
                 return "sun_servant"
+        if archetype_active(self._skin):
+            # The archetype CENTER (owner 2026-07-16) sits where the
+            # weekday center used to — same hit disc, hover-enlarge
+            # included; the Compass has no center to hit.
+            center = archetypes.center(archetype_key(self._skin))
+            if center is not None and hit(
+                QPointF(0.0, 0.0), radius * weekday.center_scale
+            ):
+                return "archetype:center"
         marker = self._skin.year_marker
         if self._skin.show_moon and hit(
             dial_point(
@@ -906,9 +973,12 @@ class Compositor:
         return True
 
     def _combo_key(self) -> str:
-        """The (pointer, palette) combination the articles vary by —
-        "hexa_paint", "octa_light", "cross", "trio" (cross and trio have
-        a single palette under both styles)."""
+        """The (pointer, palette) combination the WEEKDAY articles vary
+        by — "hexa_paint", "octa_light", "cross", "trio". The trio
+        still collapses although it gained the Family LIGHT wheel
+        (2026-07-16): the shipped article variants carry one "trio"
+        paragraph, and the archetype articles vary by their own grid
+        sets instead — a trio_light variant wave is Session 6's call."""
         pointer = self._skin.pointer
         if pointer in ("cross", "trio"):
             return pointer
@@ -1076,6 +1146,69 @@ class Compositor:
             accents=defaults.BODY_ACCENT_HUES[body], tr=self._tr,
         )
 
+    def _archetype_arm_index(self, arm_angle: float) -> int:
+        """The figures-tuple index of an unrotated arm angle — the same
+        k·(360/N) order archetype_lit_index counts in (Rule #5: one
+        ordering shared by lighting, hovers and the Spacebar jump)."""
+        arms = constants.POINTER_POINTS[self._skin.pointer]
+        return int(round(arm_angle / (360.0 / arms))) % arms
+
+    def _archetype_arm_tooltip(self, arm_angle: float) -> str:
+        """An arm's archetype legend (owner 2026-07-16): the TWO-ROW
+        article per the two-row canon — person+calling, member+
+        hearth-role, temperament+age, person+quality, pillar+shadow,
+        estate+object, age+being."""
+        key = archetype_key(self._skin)
+        fig = archetypes.figures(key)[self._archetype_arm_index(arm_angle)]
+        return self._archetype_two_rows(
+            key, fig["name"], fig["row2"], fig["entity"], fig["file"]
+        )
+
+    def _archetype_center_tooltip(self) -> str:
+        """The archetype center's legend — the Eye / the Hearth / the
+        Seal / the Union / the Throne speak their CANON paragraph."""
+        key = archetype_key(self._skin)
+        center = archetypes.center(key)
+        return self._archetype_two_rows(
+            key, center["name"], None, center["entity"], center["file"]
+        )
+
+    def _archetype_two_rows(
+        self, key: str, name: str, row2: str | None, entity: str, art,
+    ) -> str:
+        """One archetype legend: the stained glass on top (real art
+        only — a 1×1 placeholder never stretches into the popup), the
+        figure's name as the title, then the TWO ROWS from the
+        archetype's article set. Until Session 6 writes the set the
+        hover shows the name, the second-row name and the one-line
+        pending stand-in — the documented graceful path, never a
+        KeyError."""
+        set_name = archetypes.ARCHETYPES[key]["articles"]
+        node = self._symbolism.archetype_article(set_name, entity)
+        badge = _hover_badge(art) if archetype_art_ready(art) else ""
+        title = _hover_title(html.escape(self._tr(name)))
+        rows = (node or {}).get("rows") or ()
+        if rows:
+            parts = [badge, title, _article_body_html(rows[0], tr=self._tr)]
+            if row2 is not None and len(rows) > 1:
+                # The second row, split off by a rule — the same shape
+                # as the cross arms' two data sets (owner pattern).
+                parts += [
+                    "<hr/>",
+                    _hover_title(html.escape(self._tr(row2))),
+                    _article_body_html(rows[1], tr=self._tr),
+                ]
+            return "".join(parts)
+        subtitle = (
+            _centered_html(f"<b>{html.escape(self._tr(row2))}</b>")
+            if row2 is not None
+            else ""
+        )
+        return badge + title + subtitle + _centered_html(
+            "",
+            html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE)),
+        )
+
     def _sun_face_tooltip(self, face: str, active: bool) -> str:
         """ONE face of the dual Sunday (owner 2026-07-13): on the
         Compass and the Seasons each face is its own person — its own
@@ -1157,6 +1290,12 @@ class Compositor:
         )
         if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
             return None
+        if archetype_active(self._skin):
+            # ARCHETYPE MODE (owner 2026-07-16): the arm answers its
+            # archetype's TWO-ROW article instead of the sign/season/
+            # virtue readings — a different kind of watch while it
+            # runs; the weekday and slot hovers are already silent.
+            return self._archetype_arm_tooltip(arm_angle)
         star = "*" if self._skin.solar_rotation else ""
 
         if self._skin.pointer == "hexa":
@@ -2101,9 +2240,20 @@ class Compositor:
             tick.hour_angle, self._day,
         )
 
+    def _archetype_lit(self, tick: TickState) -> int | None:
+        """The archetype figure whose HOUR-SPACE holds the hour hand
+        (owner 2026-07-16), or None off the mode. Shared by the
+        composite key and the figure render (Rule #5); the spaces ride
+        the drawn arms, so the solar rotation feeds in."""
+        if not archetype_active(self._skin):
+            return None
+        return archetype_lit_index(
+            self._skin.pointer, tick.hour_angle, self._rotation()
+        )
+
     def _render_composite(
         self, size: float, dpr: float, reveal_active: bool = False,
-        calendar_lit: int | None = None,
+        calendar_lit: int | None = None, archetype_lit: int | None = None,
     ) -> QPixmap:
         # STATIC/DAILY layers include the ring letters, which OVERHANG
         # the dial square (owner spec) — the composite is padded by the
@@ -2122,6 +2272,7 @@ class Compositor:
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
             reveal_active=reveal_active, calendar_lit=calendar_lit,
+            archetype_lit=archetype_lit,
         )
         for layer in self._layers:
             if layer.cadence is not Cadence.MINUTE:

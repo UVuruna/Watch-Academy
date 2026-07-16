@@ -10,10 +10,12 @@ system. Pointer-variant helpers live here too: `palette_for()` (the
 active Star+Aura palette preset — one source for the star diamonds AND
 the background wedges), `visible_occupant()` (shared-slot priority),
 `today_slot_theta()` (today's slot angle, None for the hexa center Sun),
-`draw_event_glow()` (the season/moon event halo), and the SLOT system:
+`draw_event_glow()` (the season/moon event halo), the SLOT system:
 `slot_layout()`, `slot_view()`, `weekday_classic_slot()` and the seat
 geometry trio `slot_seat_rotation()` / `slot_seat_scale()` /
-`slot_seat_orbit()` (see [The Slot System](#the-slot-system)).
+`slot_seat_orbit()` (see [The Slot System](#the-slot-system)) — and
+the ARCHETYPE MODE helpers (see
+[The Archetype Mode](#the-archetype-mode)).
 
 The three named dial elements (owner naming): the **Star** (the
 pointer), the **Aura** (colored period wedges) and the **Umbra** (gray
@@ -30,6 +32,8 @@ rotation off (upright mode — better for reading exact positions).
 - [Assets](assets.md) — pixmap rasterization
 - [Config (folder)](../config/___config.md) — pointer slots, gray-wheel
   scales, dial constants
+- [Archetypes](../config/archetypes.md) — the archetype grid, figure
+  tables and render tunables
 
 ### Used by
 - [Compositor](compositor.md)
@@ -85,6 +89,48 @@ exact tick pointing OUTWARD at the ring, so the ring reads today's date
 to the day. The Moon marker keeps its own lunation orbit. The wedge
 HOVER (`Compositor._calendar_tooltip`) is modest: the month + the
 double-hour's animal (Almanac) or the sign + its dates (Zodiac).
+
+<a id="the-archetype-mode"></a>
+
+## The Archetype Mode
+
+THE ARCHETYPE MODE (owner sealed package 2026-07-16; grid and figure
+tables in [Archetypes](../config/archetypes.md)): with
+`skin.archetype_mode` on and an armed pointer drawn, each diamond
+carries its archetype's stained-glass FIGURE and the dial becomes an
+ARCHETYPE CLOCK. The machinery:
+
+- `archetype_key(skin)` / `archetype_active(skin)` — the active grid
+  entry; None/False off the mode, on Aurora/Calendar (no archetype)
+  and with the Pointer element off (no diamonds, no figures).
+- **The one override gate:** `enabled_slots()` answers EMPTY while the
+  mode is active, so the weekday model and ALL THREE SLOTS die
+  together — rendering, hit-testing and layer building all read the
+  slot chain through it — while the user's settings stay untouched
+  (toggling back restores everything).
+- `archetype_lit_index(pointer, hour_angle, rotation)` — the figure
+  whose HOUR-SPACE holds the hour hand: the circle divides by arms
+  (trio 3×8h, cross 4×6h, hexa 6×4h, octa 8×3h), every space CENTERED
+  on its arm; the spaces ride the DRAWN (solar-rotated) arms. The
+  compositor computes it from the live tick and keys the DAILY
+  composite on it, like the Calendar's shichen wedge.
+- `ArchetypeLayer` (DAILY, at the weekday_set z spot): the figures at
+  the romb center (`weekday_body_orbit`), scaled into the diamond by
+  `ARCHETYPE_FIGURE_HEIGHT_OF_TIP` with the arm color visible around
+  them; the lit figure FULL, the rest at the weekday
+  `ghost_opacity`; the reveal window turns everything full. With
+  Names on the lit figure carries its display name.
+- `ArchetypeCenterLayer` (MINUTE, above the hands like
+  CenterBodyLayer): the center figure — the Eye / Hearth / Seal /
+  Union / Throne, none on the Compass — full opacity, hover-enlarged
+  as `"archetype:center"` (its lift twin joins HoverLiftLayer).
+- `archetype_art_ready(path)` + `draw_archetype_figure()` — the
+  graceful placeholder path: a missing file or a committed 1×1
+  placeholder draws the figure's NAME in the outlined label style
+  (fitted to the diamond width), never a stretched pixel.
+- The Earth marker stays (it is the instrument, not a slot): with
+  `skin.archetype_earth_day` on, `_draw_date` shifts the date up and
+  writes the abbreviated weekday (`WEEKDAY_LABELS`) beneath it.
 
 <a id="the-slot-system"></a>
 
