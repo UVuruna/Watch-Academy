@@ -6,7 +6,10 @@ of the relationship between a man and a woman"* — count flexible
 (6/7/8/9), his shortlist locked at **Trust, Respect, Support,
 Passion**, gratitude named *"the highest and purest form of love"*.
 This draft seats the theme on the DOMY wheel — his verdicts
-honored, everything else marked proposed.
+honored, everything else marked proposed. **Home on the dial
+(proposed 2026-07-16): the PRISM LIGHT archetype** — see
+[The DOMY Canon](../CANON.md): paint carries heaven's six persons,
+light the six pillars of a home.
 
 ## The Conjugation Law
 

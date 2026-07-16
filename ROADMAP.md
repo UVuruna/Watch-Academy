@@ -48,16 +48,17 @@ lives in [The DOMY Canon](CANON.md).
    Seasons have no separate paint/light palette variants — the
    palette style option must be GRAYED (unavailable) while they are
    the active pointer.
-4. **Pointer archetypes.** Every pointer gets its own ARCHETYPE
-   overlay — persons seated on the arm colors with articles, and the
-   ALL-SEEING EYE (the union of the three) at the CENTER on Trinity.
-   The approved content canon (Trinity = Advocate/Prosecutor/Judge
-   with The One at the apex, Prism = the love/hatred mechanic) is
-   defined in [The DOMY Canon](CANON.md) — read it first. Trinity
-   image prompts are READY:
+4. **Pointer archetypes — SEVEN, one per (pointer, palette)**
+   (owner 2026-07-16: seven layouts, rhyming with the week; paint =
+   the world's order, light = the home's). The grid, content canon,
+   the Trinity light Family palette (green/blue/red), and the
+   PROPOSED Compass palette rework (paint = the Walks' materials,
+   light = the Eight Ages) are in [The DOMY Canon](CANON.md) — read
+   it first. Trinity paint image prompts are READY:
    `research/prompts/archetype/trinity_prompts.md` (stained-glass
-   register, drop at `assets/archetype/<source>/trinity/`).
-   Display rules:
+   register, drop at `assets/archetype/<source>/trinity/`). Also
+   queued here: the per-theme CANONICAL POINTER note "under the
+   asterisk" (Encyclopedia/menu). Display rules:
    - Visible only during GLOW windows: one of the 4 moon phases
      (~every 7 days) or one of the 4 sun events (~every 90 days).
    - Moon window: revealed ONLY by double-click on Omega.

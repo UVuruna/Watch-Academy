@@ -73,6 +73,21 @@ Supporting rules, all owner-decided:
 - **No seat left unarguable.** Every seat gets a full re-argued
   article for its position; reusing another seat's text is allowed
   only when the figure sits on the SAME seat in both rosters.
+- **Color fidelity across registers** (owner 2026-07-16). A figure
+  bound to one color's bundle KEEPS that color wherever it
+  reappears, whenever possible; when a second register must seat it
+  on another color, the article argues the new seat from ANOTHER
+  true facet of the figure — people, and especially gods, have many
+  faces, so there is room to adapt — but never at random. Binding
+  colors to natures and then shuffling them would unmake the web.
+- **The canonical pointer** (owner compromise 2026-07-16). Themes
+  stay FREE on every pointer (the user may put Egypt on the
+  Compass), but each theme names its canonical pointer — noted
+  "under the asterisk" in the Encyclopedia and the menus.
+- **Quote the greats** (owner 2026-07-16). Whenever it serves, the
+  legends quote the Bible or the great philosophers — Aristotle,
+  Ecclesiastes, Virgil; an article with a real quote in it outranks
+  one without.
 
 <a id="two-rosters"></a>
 
@@ -124,10 +139,21 @@ glass; objectivity as the only glass that does not color the light).
 ## Pointer Archetypes
 
 Owner canon 2026-07-16: each pointer carries its own ARCHETYPE
-reading of the arm colors — persons layered on the same wheel.
-Trinity, Prism (Michael included) and the Seasons temperaments are
-approved; the Seasons tetramorph persons and the whole Compass
-reading are PROPOSALS awaiting the owner's verdict:
+reading of the arm colors — persons layered on the same wheel, one
+archetype per (pointer, palette). The full set is **SEVEN — which
+rhymes with the week itself** (owner): the Seasons serve one palette
+under both styles, every other pointer splits paint/light. The
+pattern that decides what goes where: **paint carries the WORLD's
+order, light carries the HOME's** — the court of heaven beside the
+family, the six persons beside the marriage, society's estates
+beside a single human life.
+
+| Pointer | Paint (the world) | Light (the home) |
+|---|---|---|
+| Trinity | **The One** — the courtroom | **The Family** (owner 2026-07-16) |
+| Seasons | **the Four Temperaments** — one palette, both styles | — |
+| Prism | **The Persons** | **One Soul, the Bond** (proposed) |
+| Compass | **the Eight Walks of Life** (proposal) | **the Eight Ages** (proposal) |
 
 ### Trinity (trio)
 
@@ -180,7 +206,32 @@ Trinity archetype articles run in TWO ROWS (like the hexa zodiac
 diamonds): the person and the calling. Image prompts:
 `research/prompts/archetype/trinity_prompts.md`.
 
-### Prism (hexa)
+### Trinity light — The Family (placement APPROVED 2026-07-16)
+
+The FAMILY TRIANGLE (husband loves wife — wife loves child — child
+loves father; defined with the Bond theme) rides the trio's LIGHT
+palette: **green at the top, light blue on the left (04h), light
+red on the right (20h)** — not an arbitrary trio: it is the SAME
+derivation as the paint trio (the hexa light primaries at the
+12/20/4 positions, as paint took the hexa paint ones). Proposed
+wearing:
+
+| Arm | Color | Member | Why |
+|---|---|---|---|
+| top (12h) | green | **the Child** | new, growing, unformed — spring green; he stands at the top and the two below STRIVE FOR him (owner) |
+| 04h | light blue | **the Husband** | trust and calm — the guardian's color; Hope's arm in the paint trio |
+| 20h | light red | **the Wife** | Venus's own red — love embodied; Friday is already the woman's day |
+
+The love circuit then runs COUNTER-CLOCKWISE (owner: "not ideal,
+but it has meaning") — and the doctrine embraces it: **the world's
+day runs clockwise, the home runs against the clock** — love in a
+family flows against time, the parents pouring into the future and
+the child returning it to the past. The apex mirror completes the
+pair of Trinity readings: in PAINT the top is the one who JUDGES;
+in LIGHT the top is the one who is SERVED — the same triangle, once
+as the hierarchy of power, once as the hierarchy of care. Center
+union (proposed, mirroring the Eye): **the Hearth** — the court's
+union is the Eye that watches; the family's is the fire that warms.
 
 Six arms, two interlocked triangles, and ONE mechanic: love can turn
 flaws into virtues, and hatred can turn the same virtues into flaws.
@@ -212,7 +263,19 @@ he balances the wheel three-and-three (The One, Jesus, Michael
 against Lucifer, the Devil, Judas). Judas and Lucifer inherit their
 existing Scale glass windows — no new art for those two seats.
 
-### Seasons (cross) — the Four Temperaments (concept APPROVED 2026-07-16, full definition below)
+### Prism light — One Soul, the Bond (PROPOSED 2026-07-16)
+
+The relationship-pillars theme (`research/bond_theme.md`) IS
+prism-shaped, and the pattern seats it here: paint carries heaven's
+six persons, light carries the six pillars of a home. Six pillars
+conjugated from the six planets' virtues, each with its shadow, the
+cure axes on the diagonals — seated on the planets' arms: **Trust
+04h, Respect 08h, Gratitude 12h, Support 16h, Passion 20h,
+Tolerance 24h**, the Union (Zajedništvo) at the center and the
+Child as the Ninth. In the light register the summit arm is green —
+the highest and purest love (the owner's own words for Gratitude)
+shown as GROWTH; Trust keeps its blue at 04h and Passion its red at
+20h; the remaining hues are argued per the color-fidelity rule. — the Four Temperaments (concept APPROVED 2026-07-16, full definition below)
 
 The oldest four-fold reading of man there is — Hippocrates' humors —
 laid on the four season arms in their classical correspondence, on
@@ -271,6 +334,56 @@ note: seven of the eight echo the Seven Professions theme (which
 seats the Physician instead of the Scholar and the Wanderer) — a
 different reading of the same society, positional by hour instead
 of planetary.
+
+The Walks belong to PAINT: estates are matter — crown gold, coin
+copper, iron and blood, stage velvet, road dust, lamp ink, field
+earth, alb linen — and by the pattern, paint is the world's order.
+
+**Compass palette rework (PROPOSED 2026-07-16)** — the owner's
+complaint stands: the two octa presets are essentially one wheel
+with nuance shifts. The proposal ties each palette to its
+archetype's substance. PAINT — the Walks' materials:
+
+| Arm | Estate | Hue |
+|---|---|---|
+| 12h | King | royal gold `#F0C420` — the crown |
+| 15h | Merchant | copper `#C87533` — the coin |
+| 18h | Soldier | iron-blood crimson `#A02020` |
+| 21h | Artist | stage velvet violet `#7A2E8E` |
+| 24h | Wanderer | road-dust indigo-charcoal `#262636` |
+| 03h | Scholar | lamplit ink blue `#1F5FA8` |
+| 06h | Farmer | field green `#3E8914` |
+| 09h | Priest | alb ivory `#EDEDE0` |
+
+The day-arc survives (brightest at noon, darkest at midnight), but
+every arm now has its OWN substance instead of a nuance step.
+
+### Compass light — the Eight Ages, the Wheel of a Life (PROPOSED 2026-07-16)
+
+By the pattern, the Compass light carries a single human LIFE — the
+day as a lifetime, sunrise to sunrise:
+
+| Arm | Hour sense | Age | Hue |
+|---|---|---|---|
+| 06h | first light | **Birth** | pale rose `#FFD9CC` |
+| 09h | morning | **Childhood** | spring green `#7CE577` |
+| 12h | noon | **Youth** — the zenith | sun yellow `#FFE800` |
+| 15h | afternoon | **Maturity** | amber `#FFB400` |
+| 18h | sunset | **the Elder** — the harvest of a life | ember `#FF6A3C` |
+| 21h | evening | **Old age** | dusk violet `#9C6BD4` |
+| 24h | midnight | **Death** | moonlight silver `#C8D7F0` — in the light world midnight is never black; light finds the Moon there |
+| 03h | before dawn | **the Unborn** — the ancestors and the not-yet-born | predawn mist `#8FA8C8` |
+
+The wheel CLOSES: after the silver and the mist, dawn births again —
+**NOVUS ORDO SECLORUM enacted on the dial**, the order of ages born
+anew with every turn. Anchors: Ecclesiastes 3 (*"a time to be born,
+and a time to die"*) and Shakespeare's seven ages (*"all the
+world's a stage"*, As You Like It — we give his stage its eighth
+player: the one not yet on it). Alternative if the owner wants the
+biblical register here instead: the eight **Beatitudes** (Matthew
+5:3–10). A third reserve, the most literally compass-native: the
+eight classical WINDS of the compass rose (Tramontana, Greco,
+Levante, Scirocco, Ostro, Libeccio, Ponente, Maestro).
 
 ### Display rules
 
