@@ -1,15 +1,55 @@
 {
-  "anno_lucis_year_smoothed": -4081.9,
-  "anno_lucis_year_smoothed_label": "4083 BCE",
-  "anno_lucis_year_raw_sustained": -4078,
-  "anno_lucis_year_raw_sustained_label": "4079 BCE",
-  "definition": "Northern LIGHT half = vernal->autumn equinox; DARK = the rest. Anno Lucis = the year the light half durably outgrows the dark (light-dark crosses 0 upward).",
-  "smoothing": "rolling mean, window 71 years, over light-dark; negative->positive crossing nearest 4000 BCE.",
-  "raw_criterion": "first year beginning a run of 100 consecutive years with light>dark, near the crossing.",
-  "all_smoothed_up_crossings": [
-    -4081.9,
-    16424.2
-  ],
+  "anno_lucis_year": -4078,
+  "anno_lucis_label": "4079 BCE",
+  "definition_owner": "The first year of the unbroken light era: the dawn flickered for 11 years (-4088 one light year, then dark returned; last dark year -4079), and from -4078 the light half held EVERY year - 10,501 consecutive years, until +6423 CE. No averaging; the raw measured series.",
+  "dawn_flicker": {
+    "first_light_year": -4088,
+    "last_dark_year": -4079,
+    "flicker_span_years": 11,
+    "runs": [
+      [
+        -4088,
+        "light",
+        1
+      ],
+      [
+        -4087,
+        "dark",
+        7
+      ],
+      [
+        -4080,
+        "light",
+        1
+      ],
+      [
+        -4079,
+        "dark",
+        1
+      ],
+      [
+        -4078,
+        "light",
+        10501
+      ]
+    ]
+  },
+  "light_era": {
+    "from": -4078,
+    "to": 6423,
+    "length_years": 10501,
+    "note": "Around +6423-6432 CE the reverse flicker happens and the DARK era begins (~10k years); the NEXT Anno Lucis is +16429 - one apsidal cycle later."
+  },
+  "today": {
+    "year": 2026,
+    "light_minus_dark_days": 7.542,
+    "anno_lucis_calendar": 6105,
+    "formula": "A.L. = CE year + 4079"
+  },
+  "superseded_smoothed_estimate": {
+    "year": -4081.9,
+    "note": "the 71-yr rolling-mean crossing - kept for the record; the owner ruled the raw never-again definition is THE definition (2026-07-16)"
+  },
   "delta_t_caveat": "Event YEARS and season DURATIONS are robust; exact local clock times over +/-15 millennia are not (the Earth-rotation deltaT model carries hours of uncertainty).",
   "span_years": [
     -12998,

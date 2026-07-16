@@ -131,7 +131,26 @@ lives in [The DOMY Canon](CANON.md).
     the day actually starts growing") — then TWO calendars
     everywhere (AD and Anno Lucis), and eventually TWO
     INSTALLATIONS (full = the whole span for Time Travel, partial
-    = the current bundle). **Phase II — ECLIPSES (owner 2026-07-16):**
+    = the current bundle). **MEASURED AND SEALED (owner definition,
+    2026-07-16): ANNO LUCIS = 4079 BCE** — the first year of the
+    unbroken light era after the 11-year dawn flicker (first light
+    year 4089 BCE, last dark year 4080 BCE, then 10,501 light years
+    in a row until +6423 CE); **A.L. = CE + 4079 → 2026 = A.L.
+    6105**; details in `research/ephemeris/anno_lucis.json`.
+    **Encyclopedia article queued — "the Eras of the World":** ours
+    (4079 BCE, the only MEASURED one, with the flicker story — "even
+    nature hesitated for eleven years"), the masonic Anno Lucis
+    (4000 BCE — Anderson 1723, rounded from biblical creation
+    chronology), Ussher (4004 BCE), the Hebrew Anno Mundi
+    (3761 BCE, Masoretic genealogies), and the BYZANTINE Anno Mundi
+    (1 September 5509 BCE — owner ask: from the SEPTUAGINT's longer
+    patriarch ages, tuned so Christ arrives ~year 5500 ("the middle
+    of the sixth millennium" — the new Adam on the sixth day), and
+    COMPUTATIONALLY so the 19-year lunar, 28-year solar and 15-year
+    indiction cycles all stand at 1 in year 1 — 19×28×15 = 7980,
+    the Julian Period). The article draws the parallel: every
+    tradition sought the world's year one in its scriptures or its
+    arithmetic; this dial measured it in the sky. **Phase II — ECLIPSES (owner 2026-07-16):**
     the same Swiss Ephemeris files carry them; pyswisseph has direct
     finders (`swe.sol_eclipse_when_glob` / `swe.lun_eclipse_when`
     with types total/annular/hybrid/partial and total/partial/

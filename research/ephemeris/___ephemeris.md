@@ -11,18 +11,23 @@ This folder is NOT part of the app runtime. Nothing here is imported by the
 watch; it produces committable evidence files (`season_halves.json`,
 `anno_lucis.json`, `anno_lucis.png`) and a large gitignored event database.
 
-## The Anno Lucis result
+## The Anno Lucis result (owner definition SEALED 2026-07-16)
 
-- **Smoothed crossing:** ≈ **4083 BCE** (astronomical year −4081.9) — the
-  71-year rolling-mean of `light − dark` crossing zero upward, nearest the
-  expected ≈4000 BCE region.
-- **First raw sustained run:** **4079 BCE** (year −4078) — the first year
-  beginning a 100-year unbroken run of raw light > dark.
-
-The two agree to ~4 years. The only other smoothed upward crossing in the
-whole span is ≈ +16424 CE, one full apsidal-precession period (~20 500 yr)
-later — confirming the mechanism (the slow rotation of Earth's perihelion
-against the equinoxes).
+- **ANNO LUCIS = 4079 BCE** (astronomical year −4078): the first year
+  of the UNBROKEN light era. No averaging — the raw measured series
+  (the owner ruled out smoothed indicators).
+- **The dawn flickered for 11 years:** −4088 ONE light year (the first
+  flicker ever), then dark returned for 7 years, one light year
+  (−4080), one last dark year (−4079) — and from **−4078 the light
+  half won EVERY year, 10,501 years in a row**.
+- **The light era runs 4079 BCE → 6423 CE.** Around +6423–6432 the
+  reverse flicker happens and the DARK era begins (~10,000 years);
+  the NEXT Anno Lucis is +16429 — one apsidal cycle later.
+- **Today (2026): the light half is ~7.5 days longer** than the dark —
+  near the era's peak. The A.L. calendar: **A.L. = CE + 4079** →
+  2026 CE = **A.L. 6105**.
+- The superseded 71-yr smoothed crossing (≈4083 BCE) stays recorded in
+  `anno_lucis.json` for the method history only.
 
 ## Files
 
