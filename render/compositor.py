@@ -13,6 +13,7 @@ import math
 import re
 from datetime import datetime, time, timedelta
 from functools import lru_cache
+from time import monotonic
 
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
@@ -346,12 +347,51 @@ class Compositor:
         self._composite: QPixmap | None = None
         self._composite_key: tuple | None = None
         self._hovered: str | None = None    # hover-enlarge target
-        # Hidden mode (owner 2026-07-14): unlocked, the 12h and 24h
-        # ring letters open the Four Greetings legend.
+        # Hidden mode (owner 2026-07-14, top-only round 2026-07-16):
+        # unlocked, the 12h ring letter opens the Four Greetings legend.
         self._hidden_unlocked = False
+        # Reveal-week (owner 2026-07-16): an Omega double-click raises
+        # every non-active weekday body to full opacity until this
+        # monotonic deadline; None = no reveal running.
+        self._reveal_until: float | None = None
 
     def set_hidden_unlocked(self, unlocked: bool) -> None:
         self._hidden_unlocked = unlocked
+
+    def hit_omega(self, x: float, y: float, size: float) -> bool:
+        """True when (x, y) — widget-local, same coordinates as
+        `set_hover`/`tooltip_at` — lands on the Omega (24h) ring letter
+        region: the same geometry family as the greetings letter band
+        and the tick ring, seated at the bottom instead of the top."""
+        radius = size / 2
+        point = QPointF(x - radius, y - radius)
+        distance = math.hypot(point.x(), point.y())
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        half = defaults.OMEGA_HIT_HALF_DEG
+        return (
+            radius * defaults.TICK_HOVER_OUTER_FRACTION
+            < distance
+            <= radius * defaults.OMEGA_HIT_OUTER_FRACTION
+            and abs(theta - 180.0) <= half
+        )
+
+    def trigger_reveal_week(self, now: float | None = None) -> None:
+        """Start (or restart) the 60-second reveal window — each new
+        Omega double-click pushes the deadline forward (owner spec:
+        "lasts 60s after the LAST double-click")."""
+        moment = monotonic() if now is None else now
+        self._reveal_until = moment + defaults.REVEAL_WEEK_DURATION_S
+        self._composite = None    # WeekdayLayer (DAILY) must redraw
+
+    def reveal_active(self, now: float | None = None) -> bool:
+        """True while the reveal window from the last Omega double-click
+        is still running."""
+        if self._reveal_until is None:
+            return False
+        moment = monotonic() if now is None else now
+        if moment >= self._reveal_until:
+            return False
+        return True
 
     def _tr(self, text: str) -> str:
         """The active language's form of a hover label (Phase 2b)."""
@@ -386,10 +426,11 @@ class Compositor:
         if self._day is None:
             raise RuntimeError("Compositor.paint() before the first day context")
         self._last_tick = tick
-        key = (round(size * dpr), self._day.cache_key)
+        reveal = self.reveal_active()
+        key = (round(size * dpr), self._day.cache_key, reveal)
         if self._composite is None or self._composite_key != key:
             with profiling.measure("Composite rebuild"):
-                self._composite = self._render_composite(size, dpr)
+                self._composite = self._render_composite(size, dpr, reveal)
             self._composite_key = key
         # The composite carries the window's transparent margin (the
         # ring letters overhang the dial square) — blit it back-shifted
@@ -404,6 +445,7 @@ class Compositor:
             skin=self._skin, day=self._day, tick=tick,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
+            reveal_active=reveal,
         )
         for layer in self._layers:
             if layer.cadence is Cadence.MINUTE:
@@ -1302,21 +1344,20 @@ class Compositor:
         at the top, full at the bottom, as the marker rides)."""
         distance = math.hypot(point.x(), point.y())
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        # The unlocked hidden mode (owner 2026-07-14, placement round
-        # two): the 12h and 24h ring LETTERS — M and Ω on DOMY,
-        # whatever glyphs another ring seats there — open the Four
-        # Greetings. Only the letter band OUTSIDE the tick scale: the
-        # ticks at those angles keep their own day/year/moon reading.
+        # The unlocked hidden mode (owner 2026-07-16, top-only round):
+        # ONLY the 12h ring LETTER — M on DOMY, whatever glyph another
+        # ring seats there — opens the Four Greetings. Only the letter
+        # band OUTSIDE the tick scale: the ticks at that angle keep
+        # their own day/year/moon reading. The 24h (Omega) letter used
+        # to share this trigger; it now belongs to the reveal-week
+        # double-click instead (see Compositor.hit_omega).
         half = defaults.GREETINGS_LETTER_HALF_DEG
         if (
             self._hidden_unlocked
             and radius * defaults.TICK_HOVER_OUTER_FRACTION
             < distance
             <= radius * defaults.GREETINGS_LETTER_OUTER_FRACTION
-            and (
-                theta <= half or theta >= 360.0 - half
-                or abs(theta - 180.0) <= half
-            )
+            and (theta <= half or theta >= 360.0 - half)
         ):
             return self._greetings_tooltip()
         if not (
@@ -1734,7 +1775,9 @@ class Compositor:
         painter.end()
         return image
 
-    def _render_composite(self, size: float, dpr: float) -> QPixmap:
+    def _render_composite(
+        self, size: float, dpr: float, reveal_active: bool = False
+    ) -> QPixmap:
         # STATIC/DAILY layers include the ring letters, which OVERHANG
         # the dial square (owner spec) — the composite is padded by the
         # same margin the window carries, or they clip right here (owner
@@ -1751,6 +1794,7 @@ class Compositor:
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
+            reveal_active=reveal_active,
         )
         for layer in self._layers:
             if layer.cadence is not Cadence.MINUTE:

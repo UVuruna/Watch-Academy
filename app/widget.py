@@ -119,6 +119,30 @@ class ClockWidget(QWidget):
         else:
             super().mousePressEvent(event)
 
+    def mouseDoubleClickEvent(self, event) -> None:
+        # Omega (24h) double-click = reveal the week (owner 2026-07-16):
+        # raises every non-active weekday body to full opacity for
+        # REVEAL_WEEK_DURATION_S, restarting on every new double-click.
+        if (
+            event.button() == Qt.MouseButton.LeftButton
+            and self._renderer is not None
+        ):
+            x = event.position().x() - self._margin_px
+            y = event.position().y() - self._margin_px
+            if self._renderer.hit_omega(x, y, float(self._dial_diameter)):
+                self._renderer.trigger_reveal_week()
+                self.update()
+                # Snap BACK on time: without this the expiry would
+                # wait for the next minute tick to repaint (the
+                # weekday layer is daily-cached). A stale shot after
+                # a restart repaints harmlessly mid-reveal.
+                QTimer.singleShot(
+                    defaults.REVEAL_WEEK_DURATION_S * 1000 + 50,
+                    self.update,
+                )
+                return
+        super().mouseDoubleClickEvent(event)
+
     def keyPressEvent(self, event) -> None:
         text = event.text()
         if text and text.isprintable():

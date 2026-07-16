@@ -39,6 +39,16 @@ draws the MINUTE layers (hands, year marker) live.
   mirror `WeekdayLayer` — `slot_seat_scale` size and the
   `weekday_body_orbit` romb-center ride, servant seat included); legend
   off or a factor of 1.0 keeps the dial inert
+- `hit_omega(x, y, size) -> bool` / `trigger_reveal_week()` /
+  `reveal_active()` (owner 2026-07-16): the Omega (24h) double-click
+  hit region — the greetings letter geometry seated at 180° — and the
+  60-second reveal-week window it starts/restarts; `paint()` and
+  `_render_composite()` fold the live `reveal_active` flag into the
+  composite cache key and `RenderContext`, so the DAILY WeekdayLayer
+  redraws ghosts at full opacity and steps aside for CenterBodyLayer
+  to lift the ghost center Sun above the hands while it runs. The
+  hidden-mode Four Greetings hover (below) moved to the 12h letter
+  ONLY in the same round — Omega no longer answers it
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes), in priority order — the WEEKDAY
@@ -125,5 +135,7 @@ are appended LAST so they draw above the hands (owner spec).
 RenderContext: the solar offset, or 0 with solar rotation off
 (upright mode) — the slot seats take it only through
 `slot_seat_rotation` (armed pointers only). The letter band also
-answers the FOUR GREETINGS hover on the 12h/24h ring letters once the
-hidden mode is unlocked for the session.
+answers the FOUR GREETINGS hover on the 12h ring letter ONLY (owner
+2026-07-16) once the hidden mode is unlocked for the session; the 24h
+(Omega) letter instead answers a double-click — see `hit_omega`
+above.

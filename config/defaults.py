@@ -614,15 +614,26 @@ UI_BUTTON_COLORS = {
 # Round two: the WHOLE image grid shares the ceiling — stacked rows
 # split it, so the Week's Sunday pairs still leave the text visible.
 READER_IMAGE_MAX_HEIGHT_FRACTION = 0.35
-# The unlocked hidden mode (owner 2026-07-14): hovering within this
-# many degrees of the 12h/24h ring letters opens the Four Greetings.
-# The hit zone is the LETTER band OUTSIDE the tick scale (owner round
-# two: the ticks at those angles must keep their own day/year/moon
-# reading), and the stanzas breathe with a small margin, not a full
-# blank line.
+# The unlocked hidden mode (owner 2026-07-16, top-only round): hovering
+# within this many degrees of the 12h ring letter opens the Four
+# Greetings. The hit zone is the LETTER band OUTSIDE the tick scale
+# (owner round two: the ticks at that angle must keep their own
+# day/year/moon reading), and the stanzas breathe with a small margin,
+# not a full blank line. The 24h (Omega) letter no longer answers this
+# hover — that spot now carries the reveal-week double-click below.
 GREETINGS_LETTER_HALF_DEG = 6.0
 GREETINGS_LETTER_OUTER_FRACTION = 1.08
 GREETINGS_STANZA_GAP_PX = 6
+
+# Omega (24h) double-click = reveal the week (owner 2026-07-16): the
+# hit region mirrors the greetings letter geometry above, seated at
+# 180° instead of 0°/360°. A double-click raises every non-active
+# weekday body (ghosts and, on Trinity/Prism, the ghost center Sun) to
+# full opacity for REVEAL_WEEK_DURATION_S, restarting on every new
+# double-click.
+OMEGA_HIT_HALF_DEG = 6.0
+OMEGA_HIT_OUTER_FRACTION = 1.08
+REVEAL_WEEK_DURATION_S = 60.0
 
 # Time Travel QUICK JUMPS (owner 2026-07-14): one-click presets under
 # the Time Travel menu — sun/moon turning points, the poles, and the

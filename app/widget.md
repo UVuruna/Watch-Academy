@@ -30,6 +30,12 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
 #### Methods
 - `mark_closing()`: disarms the spontaneous-hide watchdog before an
   intentional hide/exit
+- `mouseDoubleClickEvent()` (owner 2026-07-16): a left double-click on
+  the Omega (24h) ring letter — hit-tested via
+  `compositor.hit_omega()`, the same geometry family as the ring
+  letters/ticks — starts (or restarts) the 60-second reveal-week
+  window (`compositor.trigger_reveal_week()`); any other double-click
+  falls through to Qt's default handling
 - `set_renderer(compositor)` / `set_tick(tick)`: painting inputs; each new
   tick schedules a repaint
 - `paintEvent()`: delegates to `compositor.paint(painter, size, dpr, tick)`

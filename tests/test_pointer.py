@@ -957,13 +957,15 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     assert "&lt;sup&gt;" not in title
 
 
-def test_greetings_ride_the_ring_letters_when_unlocked(july_wednesday):
-    """The hidden mode (owner 2026-07-14, placement round two):
-    unlocked, hovering the 12h or 24h ring LETTER — the band OUTSIDE
-    the tick scale — opens the Four Greetings (verses + reading + the
-    watchmaker's commentary, Serbian in every language); the TICKS at
-    those angles keep their own day/year/moon reading, and locked the
-    letters stay silent."""
+def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
+    """The hidden mode (owner 2026-07-14, placement round two; TOP-ONLY
+    round 2026-07-16): unlocked, hovering the 12h ring LETTER — the band
+    OUTSIDE the tick scale — opens the Four Greetings (verses + reading
+    + the watchmaker's commentary, Serbian in every language); the TICKS
+    at that angle keep their own day/year/moon reading, locked the
+    letter stays silent, and the 24h (Omega) letter no longer answers
+    this hover at all — that spot now belongs to the reveal-week
+    double-click."""
     from PySide6.QtCore import QPointF
 
     day, tick = july_wednesday
@@ -973,31 +975,129 @@ def test_greetings_ride_the_ring_letters_when_unlocked(july_wednesday):
         defaults.TICK_HOVER_OUTER_FRACTION
         + defaults.GREETINGS_LETTER_OUTER_FRACTION
     ) / 2
-    ticks = (
-        defaults.TICK_HOVER_INNER_FRACTION
-        + defaults.TICK_HOVER_OUTER_FRACTION
-    ) / 2
     top = QPointF(0.0, -180.0 * letters)
     bottom = QPointF(0.0, 180.0 * letters)
     assert compositor._tick_tooltip(top, 180.0) is None      # locked
     compositor.set_hidden_unlocked(True)
-    for point in (top, bottom):
-        poem = compositor._tick_tooltip(point, 180.0)
-        assert "Četiri pozdrava" in poem
-        assert "Dobar dan" in poem and "ponovi sve ovo" in poem
-        assert "Komentar časovničara" in poem
-        # The closing line maps the greetings to the dial: noon FAITH,
-        # dawn HOPE (owner correction 2026-07-14) — the words wear the
-        # legend highlight, so match around the markup.
-        assert "podne" in poem and "vere" in poem
-        assert "zora" in poem and "nade" in poem
-        assert "zora povratka" not in poem
-    # The TICK at the same angle still reads day/year/moon...
-    tick_text = compositor._tick_tooltip(QPointF(0.0, -180.0 * ticks), 180.0)
-    assert tick_text is not None and "Četiri pozdrava" not in tick_text
-    # ...and a step aside on the letter band is silent again.
-    away = QPointF(60.0 * letters, -170.0 * letters)
-    assert compositor._tick_tooltip(away, 180.0) is None
+    assert compositor._tick_tooltip(bottom, 180.0) is None   # Omega: silent
+    poem = compositor._tick_tooltip(top, 180.0)
+    assert "Četiri pozdrava" in poem
+    assert "Dobar dan" in poem and "ponovi sve ovo" in poem
+    assert "Komentar časovničara" in poem
+    # The closing line maps the greetings to the dial: noon FAITH,
+    # dawn HOPE (owner correction 2026-07-14) — the words wear the
+    # legend highlight, so match around the markup.
+    assert "podne" in poem and "vere" in poem
+    assert "zora" in poem and "nade" in poem
+    assert "zora povratka" not in poem
+
+
+def test_omega_double_click_reveals_the_week(july_wednesday):
+    """Omega double-click = reveal the week (owner 2026-07-16): the hit
+    region sits at the 24h letter band; triggering it raises every
+    non-active weekday body to full opacity (ghosts AND, on Trinity/
+    Prism, the ghost center Sun moves to the above-hands center pass)
+    for REVEAL_WEEK_DURATION_S, expiring after the timer."""
+    day, tick = july_wednesday
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+
+    outer = (
+        defaults.TICK_HOVER_OUTER_FRACTION + defaults.OMEGA_HIT_OUTER_FRACTION
+    ) / 2
+    # hit_omega takes WIDGET-LOCAL coordinates (the dial center sits at
+    # (radius, radius), same convention as set_hover/tooltip_at).
+    x, y = 180.0, 180.0 + 180.0 * outer        # bottom = 24h/Omega
+    assert compositor.hit_omega(x, y, 360.0)
+    assert not compositor.hit_omega(180.0, 180.0 - 180.0 * outer, 360.0)  # top: not Omega
+
+    assert not compositor.reveal_active()
+    compositor.trigger_reveal_week(now=1000.0)
+    assert compositor.reveal_active(now=1000.0)
+    assert compositor.reveal_active(now=1000.0 + defaults.REVEAL_WEEK_DURATION_S - 1)
+    assert not compositor.reveal_active(now=1000.0 + defaults.REVEAL_WEEK_DURATION_S)
+
+    # A second double-click RESTARTS the window (owner spec: 60s after
+    # the LAST double-click).
+    compositor.trigger_reveal_week(now=1050.0)
+    assert compositor.reveal_active(now=1050.0 + defaults.REVEAL_WEEK_DURATION_S - 1)
+
+
+def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesday):
+    """The reveal window (owner 2026-07-16) raises every non-active
+    weekday body — the arm ghosts AND, on Trinity/Prism, the ghost
+    center Sun — to full opacity, and the center Sun moves from
+    WeekdayLayer (below the hands) to CenterBodyLayer (above them)."""
+    import dataclasses as dc
+
+    from PySide6.QtGui import QImage, QPainter
+
+    from render.layers import CenterBodyLayer, RenderContext, WeekdayLayer
+
+    day, tick = july_wednesday
+    skin = dc.replace(defaults.DEFAULT_SKIN, pointer="trio")
+    today = constants.WEEKDAY_BODIES[day.weekday_index]
+    assert today != "sun"                       # Wednesday: Sun is a ghost
+
+    cache = AssetCache()
+    weekday_layer = WeekdayLayer(skin)
+    center_layer = CenterBodyLayer(skin)
+
+    def render(reveal_active: bool) -> tuple[float, float]:
+        """Returns (weekday-layer alpha, center-layer alpha) sampled at
+        the dial center, where only the ghost/reveal Sun can land."""
+        image = QImage(361, 361, QImage.Format.Format_ARGB32_Premultiplied)
+        painter = QPainter(image)
+        painter.translate(180.5, 180.5)
+        ctx = RenderContext(
+            skin=skin, day=day, tick=None, radius=180.0, cache=cache,
+            dpr=1.0, reveal_active=reveal_active,
+        )
+        weekday_layer.paint(painter, ctx)
+        weekday_alpha = image.pixelColor(180, 180).alphaF()
+        image.fill(0)
+        center_layer.paint(painter, ctx)
+        center_alpha = image.pixelColor(180, 180).alphaF()
+        painter.end()
+        return weekday_alpha, center_alpha
+
+    weekday_alpha, center_alpha = render(reveal_active=False)
+    assert weekday_alpha > 0.0                  # the ghost Sun, below hands
+    assert center_alpha == 0.0                  # CenterBodyLayer skips it
+
+    weekday_alpha, center_alpha = render(reveal_active=True)
+    assert weekday_alpha == 0.0                 # WeekdayLayer steps aside
+    assert center_alpha > 0.0                   # ...CenterBodyLayer lifts it
+
+
+def test_palette_style_grays_on_trio_and_cross(app):
+    """Paint/Light does nothing on Trinity/Seasons (owner 2026-07-16):
+    both styles resolve to the SAME PALETTE_PRESETS entry there, so the
+    choice group renders fully GRAYED; hexa/octa/aurora keep it live —
+    same shape as `_add_choice_group`'s `disabled` gating used
+    elsewhere in the menu (owner 2026-07-13 pattern)."""
+    from app.controller import AppController
+    from PySide6.QtWidgets import QMenu
+
+    for pointer, expect_grayed in (
+        ("trio", True), ("cross", True),
+        ("hexa", False), ("octa", False), ("aurora", False),
+    ):
+        menu = QMenu()
+        submenu = QMenu()
+        disabled = constants.PALETTE_STYLES if pointer in ("trio", "cross") else ()
+        actions = AppController._add_choice_group(
+            None, menu, submenu,
+            [(style, style) for style in constants.PALETTE_STYLES],
+            constants.PALETTE_STYLES[0], lambda value: None,
+            disabled=disabled,
+        )
+        assert len(actions) == len(constants.PALETTE_STYLES)
+        assert all(not a.isEnabled() for a in actions) == expect_grayed
+        assert all(a.isEnabled() for a in actions) == (not expect_grayed)
+    # Trinity and Seasons really do carry only ONE preset per style.
+    assert defaults.PALETTE_PRESETS[("trio", "paint")] == defaults.PALETTE_PRESETS[("trio", "light")]
+    assert defaults.PALETTE_PRESETS[("cross", "paint")] == defaults.PALETTE_PRESETS[("cross", "light")]
 
 
 def test_lunation_before_the_years_first_new_moon(app, july_wednesday):

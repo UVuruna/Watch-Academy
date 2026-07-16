@@ -1022,14 +1022,23 @@ class AppController(QObject):
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
+        # Paint/Light does nothing on Trinity/Seasons (owner 2026-07-16:
+        # one PALETTE_PRESETS entry serves both styles there) — gray the
+        # whole group in place, following the existing gating pattern.
+        palette_grayed = settings.pointer in ("trio", "cross")
+        for action in self._menu_gates["palette_style"]:
+            action.setEnabled(not palette_grayed)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
-    ) -> None:
+    ) -> list[QAction]:
         """One exclusive check-group appended to `submenu`: options are
-        (value, label) pairs; values in `disabled` render grayed out."""
+        (value, label) pairs; values in `disabled` render grayed out.
+        Returns the created actions (owner 2026-07-16: some groups need
+        to be re-grayed in place later, e.g. Paint/Light on trio/cross)."""
         group = QActionGroup(menu)
         group.setExclusive(True)
+        actions = []
         for value, label in options:
             action = QAction(label, menu)
             action.setCheckable(True)
@@ -1038,6 +1047,8 @@ class AppController(QObject):
             action.triggered.connect(lambda checked, chosen=value: setter(chosen))
             group.addAction(action)
             submenu.addAction(action)
+            actions.append(action)
+        return actions
 
     def _submenu(self, parent: QMenu, title: str) -> QMenu:
         """One stay-open submenu attached to `parent` (owner menu
@@ -1104,7 +1115,10 @@ class AppController(QObject):
             lambda value: self._set_display_choice("pointer", value),
         )
         pointer_menu.addSeparator()
-        self._add_choice_group(
+        # Paint/Light is GRAYED while Trinity/Seasons drive the pointer
+        # (owner 2026-07-16): both palette styles resolve to the SAME
+        # PALETTE_PRESETS entry there, so the choice does nothing.
+        palette_style_actions = self._add_choice_group(
             design_menu, pointer_menu,
             [
                 (style, tr(f"{style.capitalize()} palette"))
@@ -1112,6 +1126,10 @@ class AppController(QObject):
             ],
             settings.palette_style,
             lambda value: self._set_display_choice("palette_style", value),
+            disabled=(
+                constants.PALETTE_STYLES
+                if settings.pointer in ("trio", "cross") else ()
+            ),
         )
         ring_menu = self._add_choice_submenu(
             design_menu, tr("Ring"),
@@ -1215,6 +1233,7 @@ class AppController(QObject):
         # re-grays these lists in place).
         self._menu_gates = {
             "first_lock": [],
+            "palette_style": palette_style_actions,
         }
 
         def slot_action(

@@ -105,7 +105,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   count and forces solar rotation (its toggle grays out) — + Paint/
   Light palette) and Umbra
   (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
-  contrast); then Size (360…1440),
+  contrast); the Paint/Light group is GRAYED in place while Trinity or
+  Seasons drives the pointer (owner 2026-07-16 — `_menu_gates
+  ["palette_style"]`, `_add_choice_group` now returns its actions so
+  `_refresh_menu_gating` can re-enable them the moment the pointer
+  changes to hexa/octa/aurora — both styles read the SAME
+  `PALETTE_PRESETS` entry there, so the choice does nothing); then
+  Size (360…1440),
   Elements (the FINAL.txt #5 on/off switches, via the shared
   `_add_toggle()` helper: Earth — with its Clean/Atmosphere style
   group nested — Moon, Weekday, Pointer, Colorful — off draws the

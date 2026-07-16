@@ -54,6 +54,10 @@ class RenderContext:
     hovered: str | None = None       # element under the cursor ("earth",
                                      # "moon", "octa_slot", "body:<name>") —
                                      # drawn hover_enlarge times larger
+    reveal_active: bool = False      # reveal-week (owner 2026-07-16): an
+                                     # Omega double-click raises every
+                                     # non-active weekday body to full
+                                     # opacity for REVEAL_WEEK_DURATION_S
 
 
 def dial_point(theta_deg: float, distance: float) -> QPointF:
@@ -943,10 +947,12 @@ class WeekdayLayer(Layer):
         if (
             ctx.skin.pointer in ("hexa", "trio")
             and today != "sun"
+            and not ctx.reveal_active
             and self._gate(ctx, "body:sun")
         ):
-            # The hexa and trio layouts center the Sun; on Sundays the
-            # center pass draws it opaque above the hands instead.
+            # The hexa and trio layouts center the Sun; on Sundays — or
+            # during the reveal window (owner 2026-07-16) — the CENTER
+            # pass draws it opaque ABOVE the hands instead.
             center_size = (
                 2 * ctx.radius * spec.center_scale
                 * slot_seat_scale(ctx.skin)
@@ -971,16 +977,19 @@ class WeekdayLayer(Layer):
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hover_factor(ctx, f"body:{body}"),
-                1.0 if body == today else spec.ghost_opacity,
+                1.0 if body == today or ctx.reveal_active else spec.ghost_opacity,
             )
         if servant and self._gate(ctx, "sun_servant"):
             # THE SERVANT FACE at 24h (owner 2026-07-13): it stands all
-            # week like every other body — ghosted, OPAQUE on Sunday —
-            # two persons, a union; the metal themes' swap recolors it
-            # exactly like the Ruler plate. Image only — the Names
-            # label belongs to the Ruler face.
+            # week like every other body — ghosted, OPAQUE on Sunday or
+            # during the reveal window — two persons, a union; the
+            # metal themes' swap recolors it exactly like the Ruler
+            # plate. Image only — the Names label belongs to the Ruler
+            # face.
             painter.save()
-            painter.setOpacity(1.0 if today == "sun" else spec.ghost_opacity)
+            painter.setOpacity(
+                1.0 if today == "sun" or ctx.reveal_active else spec.ghost_opacity
+            )
             draw_pixmap_centered(
                 painter, ctx, spec.dual_asset,
                 dial_point(
@@ -1184,7 +1193,9 @@ class CenterBodyLayer(Layer):
     Sun on Sundays in ghost mode (hexa and trio pointers; cross/octa
     seat the Sun on an arm slot), or the day's body in center_only mode
     — so the hands sweep behind it (owner spec; the slot images never
-    move up here)."""
+    move up here). During the reveal-week window (owner 2026-07-16) the
+    ghost center Sun also rises here, opaque, on every day of the week —
+    that IS the z-order lift the reveal promises."""
 
     cadence = Cadence.MINUTE
 
@@ -1193,13 +1204,19 @@ class CenterBodyLayer(Layer):
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         if weekday_classic_slot(ctx.skin) is None:
             return          # every slot sits in a seat
+        ghost_reveal = (
+            ctx.reveal_active
+            and spec.display_mode != "center_only"
+            and ctx.skin.pointer in ("hexa", "trio")
+        )
         if spec.display_mode != "center_only" and not (
             ctx.skin.pointer in ("hexa", "trio") and today == "sun"
-        ):
+        ) and not ghost_reveal:
             return
         center_size = 2 * ctx.radius * spec.center_scale
         center_size *= hover_factor(ctx, f"body:{today}")
-        draw_weekday_body(painter, ctx, today, QPointF(0, 0), center_size, 1.0)
+        body = "sun" if ghost_reveal else today
+        draw_weekday_body(painter, ctx, body, QPointF(0, 0), center_size, 1.0)
 
 
 def octa_slot_art(folder: str, name: str) -> Path | None:
