@@ -535,9 +535,12 @@ def test_compass_octa_presets_are_the_approved_walks_and_ages():
         "#F0C420", "#C87533", "#A02020", "#7A2E8E",
         "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
     )
+    # Owner shift 2026-07-16: Death at midnight wears pure WHITE (in
+    # the light register death goes INTO the light), the moonlight
+    # silver moved to the Unborn, the mist to Birth; the rose retired.
     assert defaults.PALETTE_PRESETS[("octa", "light")] == (
         "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
-        "#C8D7F0", "#8FA8C8", "#FFD9CC", "#7CE577",
+        "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     )
     assert (
         defaults.PALETTE_PRESETS[("octa", "paint")]

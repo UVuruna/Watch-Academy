@@ -1024,10 +1024,20 @@ class AppController(QObject):
         self._menu_gates["seconds"].setEnabled(
             not _slot_seconds(settings)
         )
+        # The check mark beside the slot ordinal (owner 2026-07-15)
+        # follows the EFFECTIVE enable — the 1 → 2 → 3 chain, not the
+        # raw setting (owner bug 2026-07-16: slot 1 off left the 2nd
+        # and 3rd ordinals checked while their enables grayed).
+        effective = {
+            "show_weekday": settings.show_weekday,
+            "show_octa_slot": settings.show_weekday
+            and settings.show_octa_slot,
+            "show_third_slot": settings.show_weekday
+            and settings.show_octa_slot
+            and settings.show_third_slot,
+        }
         for action, key in self._slot_menu_checks:
-            # The check mark beside the slot ordinal (owner
-            # 2026-07-15) follows the enable state live.
-            action.setChecked(getattr(settings, key))
+            action.setChecked(effective[key])
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )

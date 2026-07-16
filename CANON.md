@@ -481,14 +481,14 @@ articles (text pending; he delivers it when ready):
 
 | Arm | Hour sense | Age | Hue |
 |---|---|---|---|
-| 06h | first light | **Birth** | pale rose `#FFD9CC` |
+| 06h | first light | **Birth** | predawn mist `#8FA8C8` (owner shift 2026-07-16 — the rose retired; birth steps OUT of the mist) |
 | 09h | morning | **Childhood** | spring green `#7CE577` |
 | 12h | noon | **Youth** — the zenith | sun yellow `#FFE800` |
 | 15h | afternoon | **Maturity** | amber `#FFB400` |
 | 18h | sunset | **the Elder** — the harvest of a life | ember `#FF6A3C` |
 | 21h | evening | **Old age** | dusk violet `#9C6BD4` |
-| 24h | midnight | **Death** | moonlight silver `#C8D7F0` — in the light world midnight is never black; light finds the Moon there |
-| 03h | before dawn | **the Unborn** — the ancestors and the not-yet-born | predawn mist `#8FA8C8` |
+| 24h | midnight | **Death** | pure white `#FFFFFF` (owner shift 2026-07-16) — in the light register death goes INTO THE LIGHT |
+| 03h | before dawn | **the Unborn** | moonlight silver `#C8D7F0` — the wedge holds TWO peoples (owner 2026-07-16): the ancestors who have passed AND the not-yet-born; in the registers, the Phoenix in ash and the seed in the soil carry both |
 
 The wheel CLOSES: after the silver and the mist, dawn births again —
 **NOVUS ORDO SECLORUM enacted on the dial**, the order of ages born
@@ -550,15 +550,29 @@ hidden homes (Trinity + Seasons — sealed).
 
 ### Display rules
 
-**SUPERSEDED IN PART (owner 2026-07-16): the archetypes are NOT
-hidden extras — they ship as the DEFAULT reading of each pointer**
-("tako smo ih lepo osmislili da ih ne bih sakrivao"). The original
-glow-window-only reveal is retired as the gating rule; what remains
-from the old spec: they work under Time Travel, the two-row
-articles, the Encyclopedia presence. The EXACT on-dial form of the
-default display (what sits on the arms, what the Omega double-click
-does now) is the open decision of the engine session — the options
-live in the owner discussion.
+**THE ARCHETYPE MODE (owner spec 2026-07-16, superseding the old
+glow-window reveal):**
+
+- **A TOGGLE in the right-click menu**, beside Solar rotation /
+  Legend / Click-through (the checkable stay-open family).
+- **When ON: the DIAMONDS fill with the archetype's images and
+  texts** — and the weekday model and ALL THREE SLOTS switch OFF.
+  It is deliberately a DIFFERENT kind of watch while it runs: not
+  the weekday focus but the Almanac kind (owner: "ako krakovi nose
+  sličice, to je druga vrsta sata").
+- **The day of week while the mode is on** — owner's options, form
+  to be picked in the engine session: none at all; the hour hand
+  LIGHTS the archetype whose space it enters; or the EARTH marker
+  carries an optional abbreviated day (TUE, THU…) beside its date.
+- **Omega double-click is REPURPOSED (owner 2026-07-16): it HIDES
+  THE HANDS** — for 60 seconds or until the next double-click — so
+  the whole theme, pointer and dial can be seen clean. (The
+  ghost-reveal it used to do folds into the same gesture where the
+  weekday model is on.)
+- They work under Time Travel; the two-row articles and the
+  Encyclopedia presence stand; hue tuning of the family/trinity/
+  prism/seasons palettes is licensed to the agent where needed
+  (owner 2026-07-16).
 
 <a id="the-dozen"></a>
 

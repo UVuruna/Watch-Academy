@@ -402,18 +402,18 @@ PALETTE_PRESETS = {
     # ties to its archetype's substance. PAINT = the Walks' materials
     # (King gold, Merchant copper, Soldier iron-blood, Artist velvet,
     # Wanderer road-dust, Scholar lamp ink, Farmer field green, Priest
-    # alb ivory). LIGHT = the Wheel of a Life, the Eight Ages (Youth
-    # noon-zenith yellow through Death midnight silver — never black,
-    # light finds the Moon there — to the Unborn's predawn mist and
-    # Birth's dawn rose). Both keep the day-arc: brightest at noon,
-    # darkest/coolest at midnight.
+    # alb ivory). LIGHT = the Wheel of a Life, the Eight Ages (owner
+    # shift 2026-07-16: Death at midnight wears pure WHITE — in the
+    # light register death goes INTO the light; the moonlight silver
+    # moved to the Unborn at 03h, the predawn mist to Birth at 06h;
+    # the dawn rose retired). Both keep the day-arc.
     ("octa", "paint"): (
         "#F0C420", "#C87533", "#A02020", "#7A2E8E",
         "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
     ),
     ("octa", "light"): (
         "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
-        "#C8D7F0", "#8FA8C8", "#FFD9CC", "#7CE577",
+        "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     ),
     ("cross", "paint"): _CROSS_SEASONS,
     ("cross", "light"): _CROSS_SEASONS,
