@@ -161,14 +161,23 @@ lives in [The DOMY Canon](CANON.md).
     arithmetic, an earlier Alexandrian rounding) and the HEBREW
     Anno Mundi (3761 BCE — the Masoretic text's shorter patriarch
     ages, Seder Olam Rabbah, 2nd c. CE).
-    **Era terminology (owner direction 2026-07-16):** the cycle is
-    named by LIGHT, not by starry seasons — **the Light Era and the
-    Dark Era** (we live in the Light Era; hence Anno Lucis).
-    PROPOSED refinement (owner picks): read the era as one long
-    DAY, in the dial's own language — its DAWN 4079 BCE (the
-    11-year flicker), its NOON ≈ +1000 CE (the peak, light ~8 days
-    ahead), its DUSK +6423 CE — "we live in the early afternoon of
-    the Light Era."
+    **Era terminology v2 (owner 2026-07-16):** the ERA name goes
+    epochal — leading candidate **Age of Light / Light Era** (owner:
+    "možda još epskije") — AND the starry-season terms live INSIDE
+    the eras as their halves: rising half = starry SPRING, falling
+    half = starry SUMMER (light era); the dark era mirrors with
+    starry AUTUMN and WINTER. MEASURED TRANSITIONS (from our own
+    base, smoothed peaks; the owner's "~1000" guess landed EXACTLY):
+    starry winter … → 4079 BCE (the dawn); **starry SPRING 4079 BCE
+    → 1000 CE (the peak, +7.94 d)**; **starry SUMMER 1000 → 6423 —
+    WE LIVE IN THE STARRY SUMMER**; starry autumn 6423 → 10990 (the
+    dark peak, −5.5 d); starry winter 10990 → 16429 (the next
+    dawn). The prior dark era peaked 9561 BCE (−9.1 d).
+    **The THREE PRECISION TIERS must be documented in-app (owner
+    2026-07-16):** (i) the bundled core 1560–2640 — minute-exact;
+    (ii) the Deep Time span −13000…+17000 — physics exact, local
+    clock ±hours (ΔT); (iii) beyond — Laskar: era lengths and
+    amplitudes only, no dates.
     **Phase III (OPTIONAL research, owner interest 2026-07-16):**
     the LONG envelope. Beyond DE441 the day-exact ephemerides are
     unreliable, but the ENVELOPE's drivers (eccentricity, climatic
@@ -236,10 +245,12 @@ lives in [The DOMY Canon](CANON.md).
    (new moon — the marker at the moon ring's TOP) a black disc
    with a GOLDEN CORONA ring; at a lunar eclipse (full moon — the
    marker at the BOTTOM) the moon turns BLOOD-RED with a silver-red
-   halo (totality truly is red). Both together = the owner's "(c)
-   oboje — razmislićemo": the Earth SAYS an eclipse is here, the
-   Moon SHOWS which one and how it looks. Owner still to confirm
-   the final pick and the window width. The Eclipse is already the
+   halo (totality truly is red). Both together = SEALED (owner
+   2026-07-16): window ±3h; the Earth swap uses the EXISTING
+   Eclipse art from the PLANETS theme (the Eclipsed-Sun dual); the
+   corona is GLOW-drawn (confirmed — no new art): solar = black
+   disc in a golden glow ring, lunar = fully darkened moon in the
+   corona glow. The Eclipse is already the
    NINTH MOOD in the emblem canon — the articles link there.
 15. **The Observatory — the statistics window (owner 2026-07-16).**
    A right-click sibling of the Encyclopedia showing CHARTS over
@@ -248,6 +259,14 @@ lives in [The DOMY Canon](CANON.md).
    the app), the light−dark envelope with the eras marked, the
    eclipse timeline, the local day-length curve; dark
    QPainter-drawn, series toggles, bundled compact JSON series.
+15b. **The MASON G ring (owner 2026-07-16).** A new bundled ring
+   preset on the seal layout: **G(12) S(16) M(20) Ω(24) N(4)
+   A(8)** — the banknote's letters on the dial (CANON §The
+   Banknote). Plus: HOVER LEGEND per letter (what G, S, M, Ω, N, A
+   each stand for), and ENCYCLOPEDIA lore for the ring presets'
+   own symbolism — DOMY traces the INVERTED cross, MORPH the
+   upright cross, MASON G / NUMBERS / Templar the hexagram/seal
+   (owner: "malo legende oko tih naših odabira").
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
