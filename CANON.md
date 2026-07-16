@@ -162,12 +162,12 @@ principle — the rows per archetype:
 | Archetype | Row 1 | Row 2 |
 |---|---|---|
 | Trinity paint | the person (God / the Devil / Jesus) | the calling (Judge / Prosecutor / Advocate) |
-| Trinity light | the member (Father / Mother / Child) | the hearth-role — PROPOSED: **the Shield / the Heart / the Dawn** |
+| Trinity light | the member (Father / Mother / Child) | the hearth-role: **the Shield / the Heart / the Dawn** (APPROVED 2026-07-16) |
 | Seasons | the temperament | the age of man (the tetramorph creature stands as the reserve second row) |
 | Prism paint | the person | the quality (Michael / Courage) |
 | Prism light | the pillar | its SHADOW — the virtue and the vice of the same thing (owner: the theme began as this duality) |
 | Compass paint | the estate | its object: **the Crown / the Coin / the Sword / the Mask / the Staff / the Book / the Plough / the Bell** |
-| Compass light | the age | the hour's light (the owner's own poem of day–evening–night–morning heads these rows once its text lands) |
+| Compass light | the age | its LIVING BEING — image layer, options below (owner: beings that symbolize the period of a life) |
 
 ### Trinity (trio)
 
@@ -327,6 +327,20 @@ FIXED CROSS (Aquarius–Leo–Taurus–Scorpio) — a cross of persons on
 the Cross pointer, circling the center the way they circle the
 throne.
 
+**The owner's poem** (2026-07-16) binds HERE — four greetings, four
+phenomena, exactly the four arms; it stays HIDDEN behind the cipher
+and appears in the Encyclopedia when the code is typed:
+
+> *Dobar dan, veru u bolje sutra obasjan*
+> *Dobro veče, u ljubavi da nam proteče*
+> *Za laku noć... I za dobro jutro novo...*
+
+Its four faces, as the owner reads them: the day — the PRESENT lit
+by faith in a better tomorrow; the evening — life flowing in love;
+the good night — the peaceful death, full of understanding; the new
+morning — rebirth, happiness WITHOUT the past, which is finished
+and needs no more thought.
+
 ### Compass (octa) — the Eight Walks of Life (PROPOSAL — awaiting the owner's verdict)
 
 Eight estates seated POSITIONALLY, each justified by its HOUR (the
@@ -406,6 +420,27 @@ biblical register here instead: the eight **Beatitudes** (Matthew
 5:3–10). A third reserve, the most literally compass-native: the
 eight classical WINDS of the compass rose (Tramontana, Greco,
 Levante, Scirocco, Ostro, Libeccio, Ponente, Maestro).
+
+**The image layer** (owner ask 2026-07-16: living beings — plants,
+animals — that symbolize each period of a life). Two options on the
+table:
+
+- ★ **The Tree** — ONE being through the whole wheel, an oak in
+  eight states: the seed in dark soil (the Unborn, 03h), the sprout
+  at first light (Birth, 06h), the sapling (Childhood, 09h), the
+  blossoming crown (Youth, 12h), the full green crown (Maturity,
+  15h), the fruit-laden amber crown (the Elder, 18h), the leaf-fall
+  (Old age, 21h), the bare tree in moonlight with a seed at its
+  root (Death, 24h — the seed closes the circle). One life, one
+  being, eight lights — and the dial already loves a great tree
+  (Yggdrasil is a Ninth).
+- **The Menagerie** — each age its creature: the Phoenix in ash
+  (the Unborn — rebirth itself), the hatching chick or lamb
+  (Birth), the swallow (Childhood), the lion (Youth), the ox
+  (Maturity — the yoke years), the elephant (the Elder — memory),
+  the owl (Old age — wisdom in the dark), the swan (Death — the
+  swan song). Richer article material, one symbol-beast per seat;
+  the Phoenix at 03h says NOVUS ORDO by itself.
 
 ### Display rules
 

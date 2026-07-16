@@ -40,10 +40,14 @@ in [Roadmap](ROADMAP.md).
   📁 design/            ← mockups and reference images (not bundled)
   📁 illustrator/       ← vector sources for skin assets (not bundled)
   📁 research/          ← one-off analysis scripts and oversized data (not bundled)
+  📁 tools/             ← owner-run asset utilities (background remover)
 ```
 
 ## Documentation
 
+- [Work Plan](WORKPLAN.md) — the ORDER of the closing sessions:
+  what to tell each fresh agent, what it reads, what it delivers,
+  and which model tier the job deserves
 - [Roadmap](ROADMAP.md) — everything left between today and the
   GitHub release, including the owner's queued feature tasks
 - [The DOMY Canon](CANON.md) — the seating doctrine: the
@@ -63,6 +67,7 @@ in [Roadmap](ROADMAP.md).
 - [Setup (folder)](setup/___setup.md)
 - [Design (folder)](design/___design.md)
 - [Research (folder)](research/___research.md)
+- [Tools (folder)](tools/___tools.md) — owner-run background remover
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
   figure, its seat, per-source art coverage (generated:
   `python research/build_roster.py`)

@@ -72,6 +72,20 @@ lives in [The DOMY Canon](CANON.md).
    - Works with Time Travel in any mode.
    - Seasons and Compass archetypes: owner still deciding — do not
      invent them.
+5. **Turning-point glow rework** (owner 2026-07-16). At a GLOW
+   event (a moon phase / a sun event) the MARKER relocates to the
+   RING BAND CENTERLINE — the radius where the hour numerals and
+   letters sit — at its event position (New Moon at 12h). The glow
+   then straddles the ring (shines inside AND outside the circle),
+   so it can be SMALL and any color: today it must be huge to
+   survive e.g. a white Compass tip, and a yellow sun-glow fights
+   the yellow top arms. New colors: the **Sun glows GOLDEN, the
+   Moon glows SILVER**.
+6. **The poem Easter egg** (owner 2026-07-16). The owner's
+   four-greeting poem (text in [The DOMY Canon](CANON.md), Seasons
+   archetype section) stays HIDDEN behind the existing typed
+   cipher — when the code is entered, the poem appears in the
+   Encyclopedia, bound to the Seasons.
 
 <a id="engineering-backlog"></a>
 

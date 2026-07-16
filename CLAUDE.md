@@ -34,7 +34,10 @@ here.
   as a bug; WorkerW glue is the only workaround (optional, M4).
 - **Milestones:** M1 shell ✓, M2 computation core ✓, M3 living dial ✓,
   M4–M6 goals absorbed along the way (hardening, skin system,
-  settings/picker); what remains to release is [Roadmap](ROADMAP.md).
+  settings/picker); what remains to release is [Roadmap](ROADMAP.md),
+  and the SESSION ORDER with per-session reading lists and model
+  tiers is [Work Plan](WORKPLAN.md) — when the owner names a
+  session, run it as written there.
 - **Canon:** the seating doctrine — the color–virtue–vice–mood web,
   the two rosters, duals, ninths, pointer archetypes — is
   [The DOMY Canon](CANON.md); read it BEFORE any theme, roster or

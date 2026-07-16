@@ -99,6 +99,28 @@ three persons; the family triangle is its household form. The
 direction names where each one's given love FLOWS, never the only
 love each one holds.)
 
+**Why the circle runs the way it runs** (completed 2026-07-16 with
+the hearth-roles — the Shield / the Heart / the Dawn, APPROVED):
+each member gives WHAT THEY ARE to the one who needs exactly that.
+
+- **The Child loves the Father** (the owner's own reading): small
+  and in need of safety, the Dawn naturally turns to the pillar of
+  the house — the smallest sleeps soundest behind the Shield.
+- **The Father loves the Mother**: the Heart carries everyone, so
+  someone must carry HER — the Shield covers the Heart, because
+  warming her warms the whole house through her. And it is also the
+  Father's deepest lesson to the Child: *"the most important thing
+  a father can do for his children is to love their mother"*
+  (Theodore Hesburgh) — the Dawn learns what love looks like by
+  watching it.
+- **The Mother loves the Child**: the Heart pours where the flame
+  is newest and most fragile — love flows to the future, as nature
+  itself commands.
+
+So the circuit is not arbitrary: safety flows backward to its
+source, care flows forward to its future, and the strongest bends
+toward the one who holds everyone else.
+
 ## Name Options (owner 2026-07-16: keep the variants, ★ marks the agent's pick, final choice made along the way)
 
 Candidates after the owner's *"two bodies, one soul"*:
@@ -130,5 +152,5 @@ Candidates after the owner's *"two bodies, one soul"*:
 1. Theme name — picked along the way from the ★-marked list above.
 2. Does **Odanost** satisfy him as the day face, or does he want it
    on a planet seat (it would contest Saturn with Respect)?
-3. The Trinity light second row — do **the Shield / the Heart /
-   the Dawn** hearth-roles suit him?
+3. ~~The hearth-roles~~ — **the Shield / the Heart / the Dawn
+   APPROVED 2026-07-16.**
