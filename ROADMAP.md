@@ -111,8 +111,13 @@ lives in [The DOMY Canon](CANON.md).
     Ephemeris, −13000…+17000) → a research pipeline extracting all
     solstices/equinoxes (~122k) and moon phases (~1.5M), pinning
     the exact ANNO LUCIS year (the smoothed crossing where the
-    light half-year outgrows the dark, ≈4000 BCE) — then TWO
-    calendars everywhere (AD and Anno Lucis), and eventually TWO
+    light half-year outgrows the dark, ≈4000 BCE — the owner's
+    figure is an EXAMPLE, not a measurement; the pipeline
+    determines the true year, and if it differs from the masonic
+    traditional 4000 BCE, THE TRUE YEAR WINS — owner doctrine
+    2026-07-16: "as January 1st differs from December 22nd when
+    the day actually starts growing") — then TWO calendars
+    everywhere (AD and Anno Lucis), and eventually TWO
     INSTALLATIONS (full = the whole span for Time Travel, partial
     = the current bundle).
 13. **The Calendar pointer** (owner 2026-07-16, `Dozen.png`). A
