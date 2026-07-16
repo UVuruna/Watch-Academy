@@ -560,10 +560,22 @@ glow-window reveal):**
   It is deliberately a DIFFERENT kind of watch while it runs: not
   the weekday focus but the Almanac kind (owner: "ako krakovi nose
   sličice, to je druga vrsta sata").
-- **The day of week while the mode is on** — owner's options, form
-  to be picked in the engine session: none at all; the hour hand
-  LIGHTS the archetype whose space it enters; or the EARTH marker
-  carries an optional abbreviated day (TUE, THU…) beside its date.
+- **THE SEALED PACKAGE (owner 2026-07-16, "paket može"):**
+  - Diamonds carry ONLY the figures (the stained glass scaled in;
+    the arm color stays visible around it); with Names on, the
+    ACTIVE figure carries its name.
+  - **The hour hand LIGHTS the archetype whose HOUR-SPACE it is
+    in** — the circle divides by arms (Trinity 3×8h, Seasons 4×6h,
+    Prism 6×4h, Compass 8×3h): the current archetype's diamond is
+    full, the others are ghosts — the mode is an ARCHETYPE CLOCK,
+    not a gallery.
+  - Day of week: an OPTIONAL abbreviated day (TUE, THU…) on the
+    EARTH marker beside its date — default OFF.
+  - Centers: Eye (Trinity paint), Hearth (Trinity light), Seal
+    (Prism paint), Union (Prism light), Throne (Seasons, both
+    wheels), **Compass — none** (the rose is the wheel itself).
+  - Earth and Moon markers STAY (they are the instrument, not
+    slots); glow and eclipses work in the mode.
 - **Omega double-click is REPURPOSED (owner 2026-07-16): it HIDES
   THE HANDS** — for 60 seconds or until the next double-click — so
   the whole theme, pointer and dial can be seen clean. (The
@@ -573,6 +585,18 @@ glow-window reveal):**
   Encyclopedia presence stand; hue tuning of the family/trinity/
   prism/seasons palettes is licensed to the agent where needed
   (owner 2026-07-16).
+
+### The Glow Metal Triad (owner sealed 2026-07-16)
+
+Three event families, three metals — the dial's own metallurgy:
+**GOLD** for the Sun's turning points, **SILVER** for the Moon's
+phases, **BRONZE/COPPER for the eclipses** — and copper is not just
+the third metal: the totally eclipsed Moon physically IS
+copper-red (astronomy's own "copper moon"). At a lunar eclipse the
+darkened Moon sits in a BRONZE corona glow; at a solar eclipse the
+Moon marker wears the black disc in a GOLDEN corona (the real
+corona's color) while the Earth-replacing ECLIPSE image glows
+BRONZE — wherever bronze burns, an eclipse is happening.
 
 <a id="the-dozen"></a>
 

@@ -161,9 +161,8 @@ lives in [The DOMY Canon](CANON.md).
     arithmetic, an earlier Alexandrian rounding) and the HEBREW
     Anno Mundi (3761 BCE — the Masoretic text's shorter patriarch
     ages, Seder Olam Rabbah, 2nd c. CE).
-    **Era terminology v2 (owner 2026-07-16):** the ERA name goes
-    epochal — leading candidate **Age of Light / Light Era** (owner:
-    "možda još epskije") — AND the starry-season terms live INSIDE
+    **Era terminology SEALED (owner 2026-07-16): AGE OF LIGHT and
+    AGE OF DARKNESS** — AND the starry-season terms live INSIDE
     the eras as their halves: rising half = starry SPRING, falling
     half = starry SUMMER (light era); the dark era mirrors with
     starry AUTUMN and WINTER. MEASURED TRANSITIONS (from our own
