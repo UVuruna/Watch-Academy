@@ -196,6 +196,38 @@ Sonnet transcript); `Anno Lucis.png`.
 the doc. App integration (dual calendar, full installation) is a
 LATER session.
 
+### Session 16 — Deep Time integration → **Fable** (the big database enters the app)
+**Say:** "Radi Sesiju 16 iz WORKPLAN.md."
+**Reads:** ROADMAP queue item 12 (all phases); `research/ephemeris/___ephemeris.md`;
+`data/seasons.md`, `data/moon_phases.md`, `app/time_travel.md`.
+**Delivers:** the FULL-installation data pack — a compact app-side
+database built FROM `research/ephemeris/events.sqlite` (sun events,
+moon phases, eclipses with geometry) that the app detects at
+startup: Time Travel then spans −13000…+17000 (without it, the
+bundled 1560–2640 with the friendly clamp from the hotfix); the
+DUAL CALENDAR everywhere years show (AD + Anno Lucis, A.L. = CE +
+4079); Quick Jump grows the ECLIPSE navigation — four groups (Moon,
+Moon Eclipse, Sun, Sun Eclipse), each with prev/next (owner layout
+2026-07-16; placeholder emoji 🌑/🌘 until the owner draws the two
+small icons); the on-dial ECLIPSE DISPLAY per the owner's pick from
+the brainstorm (ROADMAP item 12, display options). ΔT honesty
+strings in the hovers at deep-time extremes.
+
+### Session 17 — the Observatory → **Fable** (the statistics window)
+**Say:** "Radi Sesiju 17 iz WORKPLAN.md."
+**Reads:** ROADMAP queue item 15 (the charts list);
+`research/ephemeris/season_halves.json` + `eclipses_summary.json`;
+the dataviz notes; `app/encyclopedia.md` (the dialog family).
+**Delivers:** a right-click window beside the Encyclopedia — "like
+an encyclopedia, only with statistics" (owner) — dark
+QPainter-drawn interactive charts over the long data: the
+season-duration oscillations with PER-SERIES CHECKBOXES (four
+seasons, light/dark halves — the owner's own graph, live), the
+light−dark envelope with Anno Lucis and the era spans marked, the
+eclipse timeline (nearest past/next from any traveled moment), the
+current location's day-length curve over the year; series data
+ships as compact bundled JSON (decimated where needed).
+
 ## Running in Parallel (no agent needed)
 
 - **Owner art generation** from the sheets: pantheon plates,

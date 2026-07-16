@@ -211,7 +211,29 @@ lives in [The DOMY Canon](CANON.md).
    user-selectable (by the hand's Chinese double-hour, and by the
    year — month/sign). Full doctrine and palettes in
    [The DOMY Canon](CANON.md) §The Calendar.
-14. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
+14a. **Eclipse Quick Jump + on-dial display (owner 2026-07-16).**
+   Quick Jump grows FOUR groups — Moon, Moon Eclipse, Sun, Sun
+   Eclipse — each with prev/next (dropdown + arrow), fed by the
+   eclipse catalog (Session 16). Icons: no true eclipse emoji
+   exists — 🌑 (solar) / 🌘 (lunar) stand in until the owner draws
+   two small PNGs/SVGs. ON-DIAL DISPLAY — the brainstorm options
+   (owner picks): (a) ★ THE CORONA — during a solar-eclipse window
+   the Moon marker rides onto the Sun's ring position and the glow
+   turns BLACK-CORE-WITH-GOLDEN-RING (a corona — physically what a
+   total eclipse looks like); for a lunar eclipse the Moon marker
+   turns BLOOD-RED with a silver-red halo (totality really is
+   blood-red); (b) a small eclipse badge at the event's ring angle;
+   (c) both — the corona at the marker, the badge in the Almanac
+   wedge. The Eclipse is already the NINTH MOOD in the emblem
+   canon — the articles link there.
+15. **The Observatory — the statistics window (owner 2026-07-16).**
+   A right-click sibling of the Encyclopedia showing CHARTS over
+   the long data (Session 17): season-duration oscillations with
+   per-series checkboxes (the owner's own Anno Lucis graph, live in
+   the app), the light−dark envelope with the eras marked, the
+   eclipse timeline, the local day-length curve; dark
+   QPainter-drawn, series toggles, bundled compact JSON series.
+16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
    (11:45 inside the Horse double-hour centered on noon; the
