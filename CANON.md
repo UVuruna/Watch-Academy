@@ -302,14 +302,40 @@ existing Scale glass windows — no new art for those two seats.
 
 ### Prism light — One Soul, the Bond (APPROVED 2026-07-16)
 
-The relationship-pillars theme (`research/bond_theme.md`) IS
-prism-shaped, and the pattern seats it here: paint carries heaven's
-six persons, light carries the six pillars of a home. Six pillars
-conjugated from the six planets' virtues, each with its shadow, the
-cure axes on the diagonals — seated on the planets' arms: **Trust
-04h, Respect 08h, Gratitude 12h, Support 16h, Passion 20h,
-Tolerance 24h**, the Union (Zajedništvo) at the center and the
-Child as the Ninth. The light-register hues (owner confirmed
+The relationship-pillars theme IS prism-shaped, and the pattern
+seats it here: paint carries heaven's six persons, light carries
+the six pillars of a home. The engine is the owner's CONJUGATION
+LAW: *"honesty is a trait of the individual; trust is its
+counterpart in the relationship"* — generalized, **every pillar is
+a seat's VIRTUE conjugated between two persons, and every pillar's
+shadow is that seat's VICE conjugated the same way** — the forces
+that hold the bond together, and the ones that dissolve it:
+
+| Arm | Light hue | Pillar (holds the bond) | Shadow (dissolves it) |
+|---|---|---|---|
+| 12h | green | **Zahvalnost (Gratitude)** — the answer giving waits for; the owner's "highest and purest form of love", shown as GROWTH | **Podrazumevanje** — taking the other for granted |
+| 16h | yellow | **Podrška (Support)** — my courage placed at your service; the daylight shoulder | **Svađa** — the fight (wrath between two) |
+| 20h | red | **Strast (Passion)** — love embodied | **Ljubomora** — jealousy |
+| 24h | magenta | **Tolerancija (Tolerance)** — knowing the other is NOT you and never will be | **Sebičnost** — keeping score of who gave what |
+| 04h | blue | **Poverenje (Trust)** — calm because of the other; sleeping soundly beside someone | **Sumnja** — suspicion |
+| 08h | cyan | **Poštovanje (Respect)** — what only years can build; the clear air around what you respect | **Prezir** — contempt, the bond's deadliest poison |
+
+**The center: Zajedništvo (the Union)** — mutual servant-kingship,
+each RULES and SERVES the other (the throne's dual nature
+conjugated); its shadow: tyranny of one / erasure of the other. Its
+two faces: **Odanost** (the day face — the union KEPT, the word
+held before the world) and **Bliskost** (the night face — the union
+FELT: the shared topics, the private world of two). **The Ninth:
+the Child** — the union made flesh, with the FAMILY TRIANGLE
+circuit (husband→wife→child→father — everyone gives and everyone
+receives). **The cures conjugate along the diagonals**, as always:
+Trust disarms the Fight, Support cures Suspicion; Gratitude cures
+Score-keeping, Tolerance cures Taking-for-granted; Passion burns
+away Contempt, Respect calms Jealousy. Master quote: 1 Corinthians
+13:4–7 (*"keepeth no record of wrongs… beareth all things,
+believeth all things, hopeth all things, endureth all things"*).
+The full working draft with the candidate triage and name options
+(★ One Soul / The Vow / The Bond): `research/bond_theme.md`. The light-register hues (owner confirmed
 2026-07-16 — the pillars keep their planet seats and WEAR the light
 palette): **Gratitude green** (12h — the highest love shown as
 GROWTH), **Support yellow** (16h — the daylight shoulder: being
