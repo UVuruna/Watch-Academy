@@ -608,9 +608,14 @@ def _topics() -> dict:
             for virtue in ("Faith", "Hope", "Love")
         ],
     }
-    # THE MOON (owner 2026-07-16, ROADMAP queue #10): the lunations —
-    # the four phases, the synodic month and the dial's Moon marker and
-    # ring reading, in one house-voice article.
+    # THE MOON (owner 2026-07-16, ROADMAP queue #8b): EIGHT phase pages —
+    # the four principal phases and the four between them — in cycle
+    # order, each a house-voice article carrying the phase's geometry,
+    # its myth and the tides (spring at new/full, neap at the quarters).
+    # The order is constants.MOON_PHASE_NAMES, so the Spacebar jump
+    # (compositor._element_encyclopedia_target) indexes a hovered phase
+    # straight into this list. The single moon plate backs every page
+    # until per-phase art lands.
     moon_plate = defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png"
     topics["moon"] = {
         "title": "Moon",
@@ -618,10 +623,11 @@ def _topics() -> dict:
         "entries": [
             {
                 "images": (moon_plate,),
-                "name": ("moon_title", "Moon"),
-                "article": ("moon", "Moon"),
+                "name": ("moon_title", phase),
+                "article": ("moon", phase),
                 "accents": (),
             }
+            for phase in constants.MOON_PHASE_NAMES
         ],
     }
     topics["seasons"] = {

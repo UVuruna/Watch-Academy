@@ -68,6 +68,163 @@ def test_encyclopedia_target_maps_body_and_ignores_untopiced(app):
     assert comp.encyclopedia_target(4.0, 4.0, 360.0) is None
 
 
+def _dt(app, when):
+    city = defaults.DEFAULT_CITY
+    now = when.replace(tzinfo=ZoneInfo(city["timezone"]))
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        now, observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    return day, build_tick_state(now, day)
+
+
+def _seat_px(skin, radius, seat_angle):
+    """The widget pixel at a seated slot's centre — mirrors the
+    compositor's `_element_at` seat geometry."""
+    from render.layers import dial_point, slot_seat_orbit, slot_seat_rotation
+
+    orbit = skin.weekday_set.orbit_fraction * slot_seat_orbit(skin, seat_angle)
+    pos = dial_point(seat_angle + slot_seat_rotation(skin, 0.0), radius * orbit)
+    return radius + pos.x(), radius + pos.y()
+
+
+def _arm_px(radius, dial_angle, star_fraction):
+    """A widget pixel well inside the star arm pointing at `dial_angle`
+    (solar rotation off, so the drawn angle is the dial angle)."""
+    from render.layers import dial_point
+
+    pos = dial_point(dial_angle, radius * star_fraction * 0.82)
+    return radius + pos.x(), radius + pos.y()
+
+
+def test_spacebar_covers_calendar_pinned_body(app):
+    """"sve znači SVE" (owner 2026-07-16): the Calendar pointer's pinned
+    weekday seat opens its OWN theme's page at today's body — the owner's
+    failing "Zeus on the Calendar pinned slot" (Thursday, Greek → Zeus =
+    Jupiter, the 5th Week page)."""
+    import dataclasses
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))     # a Thursday
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="calendar",
+        weekday_theme="greek", solar_rotation=False,
+    )
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    # The pinned seat sits at 24h (SOUTH_SLOT_ANGLE, the dial bottom).
+    px, py = _seat_px(skin, 180.0, 180.0)
+    assert comp.encyclopedia_target(px, py, 360.0) == ("greek", 4)
+
+
+def test_spacebar_seated_slots_resolve_per_slot_theme(app):
+    """Two seated weekday slots on the Prism, each in its OWN theme
+    (owner failing case: Zeus and the Egyptian body on the 4h/20h arms) —
+    the Spacebar jump opens each slot's own theme page at today's body,
+    NOT the main theme's."""
+    import dataclasses
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))     # Thursday
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="hexa", solar_rotation=False,
+        weekday_theme="greek", weekday_slot="weekday",
+        show_octa_slot=True, octa_slot="weekday", info_slot_theme="egypt",
+    )
+    from render.layers import slot_layout
+
+    layout = slot_layout(skin)               # {1: 240°, 2: 120°}
+    assert set(layout.values()) == {240.0, 120.0}
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    slot1 = next(a for i, a in layout.items() if i == 1)
+    slot2 = next(a for i, a in layout.items() if i == 2)
+    # Today is Thursday → Jupiter, the 5th Week page in both themes.
+    assert comp.encyclopedia_target(
+        *_seat_px(skin, 180.0, slot1), 360.0
+    ) == ("greek", 4)
+    assert comp.encyclopedia_target(
+        *_seat_px(skin, 180.0, slot2), 360.0
+    ) == ("egypt", 4)
+
+
+def test_spacebar_cross_equinox_arm_opens_the_sun(app):
+    """The Seasons (cross) cardinal arms open the Sun topic (owner
+    2026-07-16, "equinox on Compass") — a left/right arm points at an
+    equinox, the shared Equinox page (Sun entry 2)."""
+    import dataclasses
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="cross", solar_rotation=False,
+    )
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    star_fraction = skin.star.radius_fraction
+    # 90° (right, 18h) and 270° (left, 06h) are the equinox arms.
+    for dial_angle in (90.0, 270.0):
+        px, py = _arm_px(180.0, dial_angle, star_fraction)
+        assert comp.encyclopedia_target(px, py, 360.0) == ("sun", 2)
+    # A solstice cardinal (top/bottom) opens a solstice page instead.
+    top = comp.encyclopedia_target(
+        *_arm_px(180.0, 0.0, star_fraction), 360.0
+    )
+    assert top is not None and top[0] == "sun" and top[1] in (0, 1)
+
+
+def test_spacebar_octa_season_arm_opens_the_seasons(app):
+    """The Compass (octa) DIAGONAL arms open the Seasons topic (owner
+    2026-07-16, "summer on Compass"): the diagonal whose tooltip names
+    Summer maps to the Summer season page (entry 1)."""
+    import dataclasses
+
+    from render.compositor import _ENC_SEASON_ORDER
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, pointer="octa", solar_rotation=False,
+    )
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    star_fraction = skin.star.radius_fraction
+    summer_index = _ENC_SEASON_ORDER.index("Summer")
+    matched = False
+    for dial_angle in (45.0, 135.0, 225.0, 315.0):
+        px, py = _arm_px(180.0, dial_angle, star_fraction)
+        target = comp.encyclopedia_target(px, py, 360.0)
+        assert target is not None and target[0] == "seasons"
+        tooltip = comp.tooltip_at(px, py, 360.0)
+        if tooltip and "Summer" in tooltip:
+            assert target == ("seasons", summer_index)
+            matched = True
+    assert matched, "no octa diagonal named Summer in July"
+
+
+def test_spacebar_moon_marker_opens_the_current_phase(app):
+    """The Moon marker opens the Moon topic at the CURRENT phase's page
+    (owner 2026-07-16): the phase name indexes constants.MOON_PHASE_NAMES,
+    the eight-page order of the topic (queue #8b)."""
+    from config import constants
+    from core.moon import phase_name
+    from render.layers import dial_point
+    from core import angles
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 12, 0))
+    skin = defaults.DEFAULT_SKIN
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    marker = skin.year_marker
+    pos = dial_point(
+        angles.moon_cycle_angle(tick.moon_fraction),
+        180.0 * marker.moon_orbit_fraction,
+    )
+    target = comp.encyclopedia_target(180.0 + pos.x(), 180.0 + pos.y(), 360.0)
+    expected = constants.MOON_PHASE_NAMES.index(phase_name(tick.moon_fraction))
+    assert target == ("moon", expected)
+
+
 def test_frame_size_and_transparency(frame):
     assert frame.width() == 360 and frame.height() == 360
     # Corners lie outside the dial circle -> fully transparent.

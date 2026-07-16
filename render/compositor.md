@@ -132,13 +132,34 @@ animal's Chinese COLORED medallion, the Zodiac wedge the sign's COLORED
 LOGO — a real `_hover_badge` image above the text, never a unicode glyph.
 
 - `encyclopedia_target(x, y, size) -> (topic, entry) | None` (owner
-  2026-07-16, ROADMAP queue #8): the ONE element→encyclopedia-topic
-  mapping behind the Spacebar jump — a weekday body → its theme page at
-  that body, an Astrology/Ascendant/Chinese slot → the sign/animal page,
-  a hexa sign diamond (`_arm_zodiac_sign`) and a Calendar wedge
-  (`_calendar_wedge_target`) → the sign/animal page. It reuses the hover
-  GEOMETRY, not the tooltip text, so it works with the legend OFF; the
-  Moon, Earth, digital slots, twilight bands and ring band map to None.
+  2026-07-16, ROADMAP queue #8, "sve znači SVE" round 2026-07-16): the
+  ONE table-driven element→encyclopedia-topic mapping behind the Spacebar
+  jump — EVERY hover that speaks a page opens it. It reuses the hover
+  GEOMETRY, not the tooltip text, so it works with the legend OFF, and it
+  follows `tooltip_at`'s own priority: `_element_encyclopedia_target`
+  first (from `_element_at`), then `_arm_encyclopedia_target`, then the
+  Calendar wedge.
+  - **Weekday bodies** — a pinned/classic body AND a seated weekday slot
+    both resolve the OWNING theme (the classic unit's `weekday_theme`, or
+    the 2nd slot's `info_slot_theme` when it drives the unit; a seated
+    slot's own `slot_view` theme) → that theme's Week-order body page.
+    This fixes the owner's failing cases: today's body on the Calendar's
+    pinned slot, and the Greek/Egyptian bodies seated on 4h/20h slots.
+  - **Slots** — zodiac/ascendant → the Astrology sign page, Chinese → the
+    animal page; digital faces map to None.
+  - **Star arms** (`_arm_encyclopedia_target`, mirrors the `_arm_tooltip`
+    diamond) — hexa diamonds → the zodiac sign; cross/octa CARDINAL arms
+    → the Sun topic's solstice/equinox (`_sun_topic_index`); octa
+    DIAGONAL arms → the Seasons topic's season or tropical half; trio
+    arms → the Trinity virtue.
+  - **Moon marker** → the Moon topic at the CURRENT phase's page
+    (`phase_name` indexed into `constants.MOON_PHASE_NAMES`, the topic's
+    eight-page order — ROADMAP queue #8b).
+  - **Earth marker** → the Seasons topic at the current season
+    (`_season_topic_index`/`_current_season_key`, mirroring `_season_row`).
+  - **Calendar wedges** (`_calendar_wedge_target`) → the sign/animal page.
+  - No page — the digital slots, the twilight bands and the ring band —
+    returns None.
 
 The layer stack follows `skin.z_order`, skipping the layers of
 switched-off Elements (star, weekday set, year marker when both

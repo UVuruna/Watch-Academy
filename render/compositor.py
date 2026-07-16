@@ -331,6 +331,17 @@ _ENC_WEEK_ORDER = (
     "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn",
 )
 
+# The SEASONS / SUN / TRINITY encyclopedia topics list their entries in
+# these fixed orders (app.encyclopedia._SEASON_ENTRIES / _SUN_ENTRIES /
+# the trinity topic) — the Spacebar jump (owner 2026-07-16, "sve znači
+# SVE") indexes the hovered season / turning point / virtue by them.
+_ENC_SEASON_ORDER = (
+    "Spring", "Summer", "Autumn", "Winter",
+    "Wet_Season", "Dry_Season", "Meteorological",
+)
+_ENC_SUN_ORDER = ("Summer_Solstice", "Winter_Solstice", "Equinox")
+_ENC_TRIO_ORDER = ("Faith", "Hope", "Love")
+
 _MONTHS = (
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December",
@@ -586,12 +597,17 @@ class Compositor:
     ) -> tuple[str, int] | None:
         """The (topic key, entry index) the Encyclopedia should open on
         for the element under the cursor — the ONE element→topic mapping
-        (owner 2026-07-16, ROADMAP queue #8): a weekday body, an
-        Astrology / Ascendant / Chinese slot, a hexa sign diamond or a
-        Calendar wedge. Works whether or not the legend is visible (it
-        reuses the hover GEOMETRY, not the tooltip text). Elements with
-        no encyclopedia topic — the Moon, the Earth, the digital slots,
-        the twilight bands, the ring band — return None."""
+        (owner 2026-07-16, ROADMAP queue #8; "sve znači SVE" correction):
+        EVERY hover that speaks a text with an encyclopedia page opens
+        it. Works whether or not the legend is visible (it reuses the
+        hover GEOMETRY, not the tooltip text). Priority mirrors
+        `tooltip_at`: the enlargeable elements first (weekday bodies —
+        classic AND seated slots, each in its OWN theme/roster — the
+        zodiac / ascendant / Chinese slots, the Moon at its phase, the
+        Earth at its season), then the star arms (hexa signs, cross/octa
+        solstice-equinox and season events, trio virtues), then the
+        Calendar wedges. Elements with no page — the digital slots, the
+        twilight bands, the ring band — return None."""
         if self._day is None or self._last_tick is None:
             return None
         radius = size / 2
@@ -600,60 +616,128 @@ class Compositor:
         today = constants.WEEKDAY_BODIES[self._day.weekday_index]
         element = self._element_at(point, radius, rotation, today)
         if element is not None:
-            if element.startswith("body:") or element == "sun_servant":
-                body = "sun" if element == "sun_servant" else element[5:]
-                theme = self._skin.weekday_theme
-                if (
-                    body in _ENC_WEEK_ORDER
-                    and theme in defaults.WEEKDAY_THEME_TITLES
-                ):
-                    return theme, _ENC_WEEK_ORDER.index(body)
-                return None
-            if element.startswith("slot:"):
-                mode = slot_view(self._skin, int(element[len("slot:"):]))[0]
-                if mode == "zodiac":
-                    return (
-                        "astrology",
-                        _ENC_ZODIAC_ORDER.index(self._day.zodiac_name),
-                    )
-                if mode == "ascendant":
-                    return (
-                        "astrology",
-                        _ENC_ZODIAC_ORDER.index(
-                            self._last_tick.ascendant_sign
-                        ),
-                    )
-                if mode == "chinese":
-                    animal = self._day.chinese_name.split()[1]
-                    return "chinese", constants.CHINESE_ANIMALS.index(animal)
-            return None
-        sign = self._arm_zodiac_sign(point, radius, rotation)
-        if sign is not None:
-            return "astrology", _ENC_ZODIAC_ORDER.index(sign)
+            return self._element_encyclopedia_target(element, today)
+        arm = self._arm_encyclopedia_target(point, radius, rotation)
+        if arm is not None:
+            return arm
         if self._skin.pointer == "calendar":
             return self._calendar_wedge_target(point, radius)
         return None
 
-    def _arm_zodiac_sign(
+    def _weekday_encyclopedia_target(
+        self, body: str, theme: str
+    ) -> tuple[str, int] | None:
+        """(theme topic, body page index) for a weekday body dressed in
+        `theme` — the classic unit's theme OR a seated slot's own theme.
+        None when the theme carries no encyclopedia topic."""
+        if body in _ENC_WEEK_ORDER and theme in defaults.WEEKDAY_THEME_TITLES:
+            return theme, _ENC_WEEK_ORDER.index(body)
+        return None
+
+    def _element_encyclopedia_target(
+        self, element: str, today: str
+    ) -> tuple[str, int] | None:
+        """The page for one enlargeable element (`_element_at` output).
+        Seated weekday slots and the pinned classic bodies resolve the
+        slot's OWN theme/roster; the Moon opens at its current phase, the
+        Earth at its current season."""
+        if element == "moon":
+            return "moon", constants.MOON_PHASE_NAMES.index(
+                phase_name(self._last_tick.moon_fraction)
+            )
+        if element == "earth":
+            return "seasons", self._season_topic_index()
+        if element.startswith("slot:"):
+            mode, _style, theme, _metal, _roster = slot_view(
+                self._skin, int(element[len("slot:"):])
+            )
+            if mode == "zodiac":
+                return (
+                    "astrology",
+                    _ENC_ZODIAC_ORDER.index(self._day.zodiac_name),
+                )
+            if mode == "ascendant":
+                return (
+                    "astrology",
+                    _ENC_ZODIAC_ORDER.index(self._last_tick.ascendant_sign),
+                )
+            if mode == "chinese":
+                animal = self._day.chinese_name.split()[1]
+                return "chinese", constants.CHINESE_ANIMALS.index(animal)
+            if mode == "weekday":
+                # A seated weekday slot shows TODAY's body in the slot's
+                # OWN theme (owner failing case: Zeus / the Egyptian body
+                # seated at 4h/20h) — its page is that theme's body page.
+                return self._weekday_encyclopedia_target(today, theme)
+            return None                       # a digital face — no page
+        if element.startswith("body:") or element == "sun_servant":
+            body = "sun" if element == "sun_servant" else element[len("body:"):]
+            # The classic unit may be DRIVEN by the 2nd slot (owner
+            # 2026-07-15) — its page then follows THAT slot's theme,
+            # including under the Calendar's pinned layout.
+            theme = (
+                self._skin.info_slot_theme
+                if weekday_classic_slot(self._skin) == 2
+                else self._skin.weekday_theme
+            )
+            return self._weekday_encyclopedia_target(body, theme)
+        return None
+
+    def _current_season_key(self) -> str:
+        """The Encyclopedia SEASONS key for the current date — a
+        temperate season ("Spring".."Winter") or a tropical half
+        ("Wet_Season"/"Dry_Season"). Mirrors `_season_row`."""
+        day = self._day
+        noon = datetime.combine(day.local_date, time(12, 0), day.tzinfo)
+        if day.zone == "tropics":
+            _start, _end, is_wet = self._wet_dry_span_at(noon)
+            return "Wet_Season" if is_wet else "Dry_Season"
+        events = day.season_events
+        index = max(
+            i for i, (instant, _) in enumerate(events) if instant <= noon
+        )
+        return events[index][1].split()[0]    # the season STARTS at its event
+
+    def _season_topic_index(self) -> int:
+        """The Earth marker's SEASONS page (owner 2026-07-16): the
+        current season's entry, or the topic head when none matches."""
+        key = self._current_season_key()
+        return _ENC_SEASON_ORDER.index(key) if key in _ENC_SEASON_ORDER else 0
+
+    def _sun_topic_index(self, event_name: str) -> int:
+        """The SUN page for a cardinal-arm turning point — the event
+        name is zone-correct (south already flips it)."""
+        if "Equinox" in event_name:
+            return _ENC_SUN_ORDER.index("Equinox")
+        if "Summer" in event_name:
+            return _ENC_SUN_ORDER.index("Summer_Solstice")
+        return _ENC_SUN_ORDER.index("Winter_Solstice")
+
+    def _arm_encyclopedia_target(
         self, point: QPointF, radius: float, rotation: float
-    ) -> str | None:
-        """The zodiac sign whose HEXA diamond the cursor sits in (owner
-        2026-07-16, the Spacebar jump) — None off the hexa pointer or
-        between the arms. Mirrors the _arm_tooltip diamond geometry; the
-        cursor's half of the 60° arc picks which of the two signs."""
-        if not self._skin.show_pointer or self._skin.pointer != "hexa":
+    ) -> tuple[str, int] | None:
+        """The page for the star arm under the cursor (owner 2026-07-16,
+        "sve znači SVE"): hexa diamonds → the zodiac sign; cross/octa
+        CARDINAL arms → the Sun topic's solstice/equinox; octa DIAGONAL
+        arms → the Seasons topic's season (or tropical half); trio arms →
+        the Trinity virtue. None off the arms or on the pointer-less
+        wheels. Mirrors `_arm_tooltip`'s diamond geometry."""
+        if not self._skin.show_pointer:
             return None
+        pointer = self._skin.pointer
+        if pointer in ("aurora", "calendar"):
+            return None                       # no arms exist
         distance = math.hypot(point.x(), point.y())
         star_tip = radius * self._skin.star.radius_fraction
         if not (radius * 0.08 <= distance <= star_tip):
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        arms = constants.POINTER_POINTS["hexa"]
+        arms = constants.POINTER_POINTS[pointer]
         arm_step = 360.0 / arms
         arm_angle = (
             round(((theta - rotation) % 360.0) / arm_step) * arm_step
         ) % 360.0
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG["hexa"]
+        half = constants.POINTER_ARM_HALF_ANGLE_DEG[pointer]
         inner = star_tip / (2.0 * math.cos(math.radians(half)))
         drawn = arm_angle + rotation
         diamond = QPolygonF([
@@ -664,11 +748,47 @@ class Compositor:
         ])
         if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
             return None
-        rel = ((theta - rotation - arm_angle + 180.0) % 360.0) - 180.0
-        start_angle = (arm_angle + (-30.0 if rel < 0.0 else 0.0)) % 360.0
+        if pointer == "hexa":
+            # The cursor's half of the 60° arc picks which of the two signs.
+            rel = ((theta - rotation - arm_angle + 180.0) % 360.0) - 180.0
+            start_angle = (arm_angle + (-30.0 if rel < 0.0 else 0.0)) % 360.0
+            if self._day.southern_hemisphere:
+                start_angle = (start_angle + 180.0) % 360.0
+            return (
+                "astrology",
+                _ENC_ZODIAC_ORDER.index(
+                    constants.ZODIAC_SIGNS[int(start_angle) // 30][0]
+                ),
+            )
+        if pointer == "trio":
+            theme = constants.TRIO_ARM_THEMES[arm_angle]
+            return "trinity", _ENC_TRIO_ORDER.index(theme)
+        if arm_angle % 90.0 == 0.0:
+            # Cardinal arms (cross and octa) point at the turning points.
+            anchor_angle = {
+                0.0: 360.0, 90.0: 450.0, 180.0: 540.0, 270.0: 270.0
+            }[arm_angle]
+            if self._day.southern_hemisphere:
+                anchor_angle = _SOUTH_ANCHOR_FLIP[anchor_angle]
+            index = self._day.year_anchors.angles.index(anchor_angle)
+            return "sun", self._sun_topic_index(
+                self._day.season_events[index][1]
+            )
+        # Octa diagonal arms point at the QUARTER centers — the seasons.
+        start_angle = {
+            315.0: 270.0, 45.0: 360.0, 135.0: 450.0, 225.0: 540.0
+        }[arm_angle]
         if self._day.southern_hemisphere:
-            start_angle = (start_angle + 180.0) % 360.0
-        return constants.ZODIAC_SIGNS[int(start_angle) // 30][0]
+            start_angle = _SOUTH_ANCHOR_FLIP[start_angle]
+        if self._day.zone == "tropics":
+            starts_in_march = start_angle in (270.0, 360.0)
+            is_wet = starts_in_march != self._day.southern_hemisphere
+            return "seasons", _ENC_SEASON_ORDER.index(
+                "Wet_Season" if is_wet else "Dry_Season"
+            )
+        return "seasons", _ENC_SEASON_ORDER.index(
+            self._season_name_for(start_angle)
+        )
 
     def _calendar_wedge_target(
         self, point: QPointF, radius: float

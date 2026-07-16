@@ -590,7 +590,12 @@ def test_encyclopedia_expansion_wiring():
     assert [e["name"][1] for e in topics["sun"]["entries"]] == [
         "Summer_Solstice", "Winter_Solstice", "Equinox",
     ]
-    assert len(topics["moon"]["entries"]) == 1
+    # The Moon topic grows to EIGHT phase pages (owner 2026-07-16,
+    # ROADMAP queue #8b) — in constants.MOON_PHASE_NAMES cycle order.
+    from config import constants as _constants
+    assert [e["name"][1] for e in topics["moon"]["entries"]] == list(
+        _constants.MOON_PHASE_NAMES
+    )
     assert all(
         _paths.art_file(entry["images"][0]).exists()
         for entry in topics["trinity"]["entries"]
@@ -607,10 +612,13 @@ def test_encyclopedia_expansion_wiring():
     assert "6°" in dialog._article_text(("instrument", "twilight"))
     assert dialog._article_text(("emblem", "virtues", "Justice"))
     assert "Goethe" in dialog._article_text(("season", "Spring"))
-    # The three-way split (owner 2026-07-16): the Moon article speaks
-    # the synodic month, the Sun article the solstice.
-    assert "29.53" in dialog._article_text(("moon", "Moon"))
+    # The three-way split (owner 2026-07-16): the Sun article speaks the
+    # solstice; the eight Moon pages (queue #8b) speak their phase and
+    # the tides — spring at the syzygies, neap at the quarters.
     assert "solstice" in dialog._article_text(("sun", "Summer_Solstice"))
+    assert "29.53" in dialog._article_text(("moon", "New Moon"))
+    assert "SPRING" in dialog._article_text(("moon", "Full Moon"))
+    assert "NEAP" in dialog._article_text(("moon", "First Quarter"))
     # The topic SLIDER (owner plan round E, 2026-07-14): one entry per
     # page, ← / → wrap around like the Guide, the pager hides on the
     # gallery and the counter tracks the position.
