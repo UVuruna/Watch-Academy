@@ -15,7 +15,7 @@ rules by which any new member, theme or figure gets placed.
 - [The Throne and Its Shadow](#throne-shadow)
 - [The Ninth — Outside the Circle](#the-ninth)
 - [Pointer Archetypes](#pointer-archetypes)
-- [The Dozen — the Twelve-Wedge Pointer](#the-dozen)
+- [The Calendar — the Twelve-Wedge Pointer](#the-dozen)
 - [Working Rules for Agents](#working-rules)
 
 <a id="the-web"></a>
@@ -453,11 +453,24 @@ Encyclopedia; they work under Time Travel.
 
 <a id="the-dozen"></a>
 
-## The Dozen — the Twelve-Wedge Pointer (IN DEFINITION, owner 2026-07-16)
+## The Calendar — the Twelve-Wedge Pointer (owner 2026-07-16)
 
 A new pointer that divides the 24h dial into TWELVE 2-hour wedges
 (`Dozen.png`, the owner's sheet, root). No weekday model rides it —
-its readings are the year and the day. Two variants:
+its readings are the year and the day. **Naming (owner verdict):
+the pointer is CALENDAR; its two wheels, ZODIAC and ALMANAC, sit in
+the Paint/Light slot of the menu** (one pointer, two variants —
+exactly as the other pointers offer Paint/Light).
+
+**Display doctrine (owner 2026-07-16):** the wedges carry NO
+medallions — they are too small for art that would not touch. The
+Calendar uses the PINNED slot layout instead (slots 1/2/3 laid out
+as on a real watch face, the same as when no pointer is drawn), and
+the user seats whatever he wants there. A wedge LIGHTS by visibly
+raising its opacity. TWO lighting modes, BOTH user-selectable:
+**by the hour** (the hand's Chinese double-hour lights, the animal
+speaks) and **by the year** (the current month's wedge on the
+Almanac, the current sign's on the Zodiac).
 
 ### The Zodiac Dozen (left sheet)
 
@@ -489,11 +502,12 @@ line), and the reason is the owner's tick insight: **there are
 exactly 30 small ring ticks between two hour numerals, which
 matches the days of a month — on this pointer ONE TICK ≈ ONE DAY.**
 The Earth marker's tempo varies slightly per month (February's 28
-days cover the same 30° as January's 31 — accepted), and the
-solstices/equinoxes slide ~5–7 ticks CLOCKWISE off the axes
-(June 20–21 = ticks 20–21 of June's wedge — accepted, "što je
-ok"). Every OTHER pointer keeps the shared six-anchor season wheel;
-this per-month mapping is the Month Dozen's own reading.
+days cover the same 30° as January's 31), and the
+solstices/equinoxes sit ~5–7 ticks CLOCKWISE of the axes — not a
+concession but the NATURAL CONSEQUENCE of anchoring the 1st of each
+month to the hour lines (June 20–21 = ticks 20–21 of June's wedge).
+Every OTHER pointer keeps the shared six-anchor season wheel; this
+per-month mapping is the Almanac's own reading.
 
 **The Earth day-arrow (owner 2026-07-16):** with tick = day, the
 Earth year marker on this pointer POINTS at the exact tick where it
@@ -514,9 +528,9 @@ silver/bronze) — zero new art. (The unchosen alternative, for the
 record: lighting the current MONTH's wedge by the year reading,
 as the Zodiac Dozen lights the current sign.)
 
-**Naming (open):** the working slug is `dozen`; display-name
-candidates for the two variants: ★ **Zodiac** (left) and
-**Almanac** (right); alternatives: Ecliptic, Calendar, Dodeca.
+**Naming (SEALED 2026-07-16):** the pointer is **Calendar** (slug
+`calendar`); the two wheels are **Zodiac** (left) and **Almanac**
+(right), offered where the other pointers offer Paint/Light.
 
 <a id="working-rules"></a>
 

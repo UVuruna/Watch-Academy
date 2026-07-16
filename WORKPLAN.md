@@ -23,6 +23,10 @@ agent is never burned on an easy job.
 5. Every session ends the house way: `python -m pytest tests`
    green, offscreen render/menu probe where UI changed, versioned
    commits (`0.14.xxx description`), push, and a Serbian report.
+6. **Missing owner art** (owner rule 2026-07-16): when a feature
+   needs an image the owner has not generated yet, commit a 1×1 px
+   PNG placeholder at the exact drop path with the exact name — the
+   owner overwrites it when the art lands.
 
 ## Model Tier Legend
 
@@ -140,8 +144,8 @@ replacing the dev pythonw entry; clean-profile smoke; then asks the
 owner about GIT RELEASE (tag + `gh release create` with the
 installer artifact).
 
-### Session 11 — the Dozen pointer → **Opus**
-**Say:** "Radi Sesiju 11 iz WORKPLAN.md — Dozen pointer."
+### Session 11 — the Calendar pointer → **Opus**
+**Say:** "Radi Sesiju 11 iz WORKPLAN.md — Calendar pointer."
 **Reads:** CANON.md §The Dozen (BOTH variants, the palettes, the
 owner's verdicts on the open points); `Dozen.png` (root);
 `render/layers.md`, `skins/manifest.md`, `config/___config.md`
@@ -175,6 +179,7 @@ May run before or after Session 5 — the owner names the order.)
 - Seven archetypes stay seven (the standing recommendation) or grow
   to thirteen — 13 is the excluded number in this system.
 - Odanost as the center's day face, or on a planet seat.
-- The Dozen: display names — ★ Zodiac (left) and Almanac (right) /
-  Ecliptic / Calendar / Dodeca; and whether BOTH variants ship as
-  selectable pointers (assumed yes).
+- ~~The Calendar naming~~ — SEALED: pointer **Calendar**, wheels
+  **Zodiac/Almanac** in the Paint/Light slot; no wedge medallions,
+  pinned 1/2/3 slots, opacity lighting, both lighting modes
+  user-selectable.

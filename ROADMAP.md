@@ -86,17 +86,23 @@ lives in [The DOMY Canon](CANON.md).
    archetype section) stays HIDDEN behind the existing typed
    cipher — when the code is entered, the poem appears in the
    Encyclopedia, bound to the Seasons.
-7. **The Dozen pointer** (owner 2026-07-16, `Dozen.png`). A new
-   twelve-wedge pointer — 2h per wedge — in two variants: the
-   Zodiac Dozen (boundaries on the axes, 15°-shifted RGB wheel,
-   current sign lights) and the Month Dozen (wedges centered on the
-   axes, pure primaries, June top; its OWN real-calendar year
-   mapping — one ring tick ≈ one day, the 1st of each month on a
-   wedge line, solstices ~5–7 ticks off-axis; the Earth marker
-   gains a day-ARROW pointing at its exact tick; lighting = the
-   Chinese double-hours following the hand, existing animal
-   medallions). Full doctrine and palettes in
-   [The DOMY Canon](CANON.md) §The Dozen.
+7. **The Calendar pointer** (owner 2026-07-16, `Dozen.png`). A
+   twelve-wedge pointer, its two wheels **Zodiac / Almanac** in the
+   Paint/Light menu slot: Zodiac (sign boundaries on the axes,
+   15°-shifted RGB wheel) and Almanac (axis-centered wedges, pure
+   primaries; its OWN real-calendar year mapping — one ring tick ≈
+   one day, the 1st of each month on a wedge line; the Earth
+   marker's day-ARROW pointing at its exact tick). NO wedge
+   medallions — the pinned 1/2/3 slot layout carries user content;
+   a wedge lights by raising opacity, with BOTH lighting modes
+   user-selectable (by the hand's Chinese double-hour, and by the
+   year — month/sign). Full doctrine and palettes in
+   [The DOMY Canon](CANON.md) §The Calendar.
+8. **Easter egg idea (recorded, owner approved the recording):**
+   the owner's birth moment — 20 June, 12:15, the double Horse —
+   sits at the very TOP of the Calendar dial twice over (the Horse
+   double-hour centered on noon; the June-20 solstice tick). A
+   future hidden touch may honor that spot.
 
 <a id="engineering-backlog"></a>
 
