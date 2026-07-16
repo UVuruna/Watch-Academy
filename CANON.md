@@ -16,6 +16,7 @@ rules by which any new member, theme or figure gets placed.
 - [The Ninth — Outside the Circle](#the-ninth)
 - [Pointer Archetypes](#pointer-archetypes)
 - [The Calendar — the Twelve-Wedge Pointer](#the-dozen)
+- [The Banknote — In God We Trust](#the-banknote)
 - [Working Rules for Agents](#working-rules)
 
 <a id="the-web"></a>
@@ -141,20 +142,40 @@ glass; objectivity as the only glass that does not color the light).
 
 Owner canon 2026-07-16: each pointer carries its own ARCHETYPE
 reading of the arm colors — persons layered on the same wheel, one
-archetype per (pointer, palette). The full set is **SEVEN — which
-rhymes with the week itself** (owner): the Seasons serve one palette
-under both styles, every other pointer splits paint/light. The
-pattern that decides what goes where: **paint carries the WORLD's
-order, light carries the HOME's** — the court of heaven beside the
-family, the six persons beside the marriage, society's estates
-beside a single human life.
+archetype per (pointer, palette). The set is **SEVEN HUMAN stages —
+rhyming with the week — plus ONE that is not human**: the
+Tetramorph witnesses (approved 2026-07-16), standing outside the
+seven the way the Ninths stand outside the eights. The pattern that
+decides what goes where: **paint carries the WORLD's order, light
+carries the HOME's** — the court of heaven beside the family, the
+six persons beside the marriage, society's estates beside a single
+human life, the year's seasons beside creation's own elements.
 
 | Pointer | Paint (the world) | Light (the home) |
 |---|---|---|
 | Trinity | **The One** — the courtroom | **The Family** (owner 2026-07-16) |
-| Seasons | **the Four Temperaments** — one palette, both styles | — |
+| Seasons | **the Four Temperaments** | **the Four Elements — the Tetramorph** (APPROVED 2026-07-16) |
 | Prism | **The Persons** | **One Soul, the Bond** (APPROVED 2026-07-16) |
 | Compass | **the Eight Walks of Life** (approved) | **the Eight Ages** (APPROVED 2026-07-16) |
+
+With the standalone instruments — **Aurora (two palettes) and the
+Calendar (Zodiac/Almanac)** — the dial holds **TWELVE layouts in
+all**: eight staged, four instrumental. Twelve, in the system that
+just gained the Calendar's dozen.
+
+**Wheel-pair naming (owner ask 2026-07-16 — PROPOSED, he picks):**
+"Paint/Light" does not suit every pointer. The proposal — each
+pair label follows the pointer's own wheels, via the existing
+in-place label machinery (`_palette_style_labels`):
+
+| Pointer | instead of Paint | instead of Light |
+|---|---|---|
+| Prism | **Paint** (keep — the terms' birthplace: subtractive primaries) | **Light** (additive) |
+| Aurora | **Paint** (keep — an abstract light instrument) | **Light** |
+| Trinity | **Court** | **Family** |
+| Seasons | **Seasons** | **Elements** |
+| Compass | **Walks** | **Ages** |
+| Calendar | **Zodiac** (SEALED) | **Almanac** (SEALED) |
 
 **The two-row canon** (owner 2026-07-16): every archetype position
 speaks TWO ARTICLES in its legend, on the hexa-zodiac-diamond
@@ -319,14 +340,46 @@ fire against water, hot-and-dry against cold-and-moist, the only
 pair opposed in BOTH qualities). Each temperament's cure stands
 across the dial, as always.
 
-**Optional persons layer (PROPOSED — owner decides):** the four
-living creatures around the throne (Revelation 4:7; Ezekiel 1) — the
-tetramorph: the **Man/Angel** (air, sanguine spring), the **Lion**
-(fire, choleric summer), the **Ox** (earth, melancholic autumn), the
-**Eagle** (water, phlegmatic winter). They are the zodiac's own
-FIXED CROSS (Aquarius–Leo–Taurus–Scorpio) — a cross of persons on
-the Cross pointer, circling the center the way they circle the
-throne.
+### Seasons light — the Four Elements, the Tetramorph (APPROVED 2026-07-16)
+
+The Seasons' second wheel: the FOUR ELEMENTS as the light palette
+(fire, air, water, earth — hues to be fixed with the palette
+session), and on them the **TETRAMORPH** — the four living
+creatures around the throne. The narrative, in full:
+
+Two prophets saw them. **Ezekiel 1** — by the river Chebar the
+heavens open and a throne on wheels arrives carried by four living
+creatures, each with four faces: **a man, a lion, an ox and an
+eagle**. **Revelation 4:7** — the same four stand around the throne
+in heaven and witness without ceasing (*"holy, holy, holy"*). From
+those two visions they entered ALL of European iconography: they
+are the four figures in the corners of icons and frescoes, on the
+covers of medieval gospels, over cathedral portals — because the
+Church made them the SYMBOLS OF THE FOUR EVANGELISTS: Matthew the
+Man (his gospel begins with Christ's human genealogy), Mark the
+Lion (it opens with a voice roaring in the wilderness), Luke the Ox
+(it opens with a temple sacrifice), John the Eagle (it flies
+highest — *"in the beginning was the Word"*).
+
+And the same four are older than the Church: they are the zodiac's
+own **FIXED CROSS** — Aquarius the Man, Leo the Lion, Taurus the
+Ox, Scorpio whose ancient nobler symbol is the Eagle — which means
+they are the FOUR ELEMENTS (air, fire, earth, water), which means
+they are OUR FOUR TEMPERAMENTS:
+
+| Creature | Evangelist | Element | Fixed sign | Temperament (Seasons paint) |
+|---|---|---|---|---|
+| the Man/Angel | Matthew | air | Aquarius | Sanguine — spring |
+| the Lion | Mark | fire | Leo | Choleric — summer |
+| the Ox | Luke | earth | Taurus | Melancholic — autumn |
+| the Eagle | John | water | Scorpio | Phlegmatic — winter |
+
+The doctrine seat: the Tetramorph is **the EIGHTH archetype, and
+the only one that is not human** — the creatures do not act, they
+WITNESS, circling the center of the dial the way they circle the
+throne. Seven human stages and one bestiary standing outside the
+seven — the same pattern as the Ninths outside the eights. A cross
+of witnesses on the Cross pointer.
 
 **The owner's poem** (2026-07-16) binds HERE — four greetings, four
 phenomena, exactly the four arms; it stays HIDDEN behind the cipher
@@ -531,6 +584,53 @@ as the Zodiac Dozen lights the current sign.)
 **Naming (SEALED 2026-07-16):** the pointer is **Calendar** (slug
 `calendar`); the two wheels are **Zodiac** (left) and **Almanac**
 (right), offered where the other pointers offer Paint/Light.
+
+<a id="the-banknote"></a>
+
+## The Banknote — In God We Trust (the owner's early work)
+
+Long before this application, the owner built
+`InGodWeTrust_UVS_BIG.png` (root): the back of the ONE-dollar bill,
+sky above and fire below, the three Great Seal mottos translated —
+and over the pyramid of the Great Seal a HEXAGRAM whose six
+vertices circle six letters picked from the Seal's own mottos
+(*Annuit Coeptis / Novus Ordo Seclorum*), colored exactly as our
+wheel:
+
+| Letter | Dial seat | Color | Reading |
+|---|---|---|---|
+| **G** | 12h | yellow | God — the masonic G that means both GOD and GEOMETRY, crowning the Eye |
+| **S** | 16h | orange | Sigma — the union's letter on Courage's arm |
+| **M** | 20h | red | the Master — the Devil's face of mastery, on Pride's arm |
+| **O** | 24h | purple | Omega — and the dial's ring ALREADY seats Ω at 24h |
+| **N** | 04h | blue | the Nazarene — Jesus on Hope's arm |
+| **A** | 08h | green | Alpha — the beginning, on Renewal's green |
+
+The finds (2026-07-16, on the owner's ask to connect letters and
+seats):
+
+- **The six letters spell G + MASON** — the folk-famous dollar-bill
+  hexagram (the star over the Great Seal picking M-A-S-O-N out of
+  the mottos) — which the owner's version UPGRADES with the G at
+  the apex and with our exact wheel colors. Freemasonry already
+  holds the Creeds' center; the banknote holds its letters.
+- **The two interlaced triangles are our two doctrines.** The
+  triangle on the trio arms (12/20/04 = G, M, N) is THE TRINITY
+  ARCHETYPE — God, the Master, the Nazarene; Judge, Prosecutor,
+  Advocate. The counter-triangle (16/24/08 = S, O, A) is THE UNION
+  — Alpha, Omega, and SIGMA their union, which is already canon
+  (Sigma the wolf Ninth, the union of Α and Ω). The court above,
+  the alphabet of time below, interlaced over the Eye.
+- **G opposite O** on the vertical axis: God at noon, Omega at
+  midnight — Revelation 1:8 drawn as geometry (*"I am the Alpha
+  and the Omega… who is, and who was, and who is to come"* — The
+  One's own verse).
+- The note's frame IS the dial: sky along the top edge, fire along
+  the bottom — day at the top of the wheel, night at the bottom.
+- The denomination is **THE ONE**; the note says **IN GOD WE
+  TRUST**; the three mottos are the three we already seated
+  (E Pluribus Unum → The One, Annuit Coeptis → the Eye, Novus Ordo
+  Seclorum → the prophecy of the returning One).
 
 <a id="working-rules"></a>
 

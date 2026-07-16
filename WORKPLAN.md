@@ -165,6 +165,25 @@ per-month mapping pinned with golden tests, offscreen renders for
 the owner's eyes. (Opus: render geometry + a second year mapping.
 May run before or after Session 5 — the owner names the order.)
 
+### Session 12 — the UI batch II → **Opus** (launched 2026-07-16)
+**Say:** "Radi Sesiju 12 iz WORKPLAN.md."
+**Reads:** ROADMAP queue items 7–10.
+**Delivers:** Calendar wedge hovers wearing the colored logos;
+SPACEBAR → Encyclopedia at the hovered topic; the Encyclopedia
+image-clipping fix (REPEAT complaint — screenshot-verified); the
+Seasons topic split into Moon / Seasons / Sun with the missing Moon
+cycles article.
+
+### Session 13 — the Ephemeris pipeline → **Opus** (launched 2026-07-16)
+**Say:** "Radi Sesiju 13 iz WORKPLAN.md."
+**Reads:** ROADMAP queue item 12; `prompt.txt` background (owner's
+Sonnet transcript); `Anno Lucis.png`.
+**Delivers:** `research/ephemeris/` — the Swiss-Ephemeris pipeline
+(~97 MB data, gitignored), the events database (sun ~122k, moon
+~1.5M), the pinned ANNO LUCIS year with a verification plot, and
+the doc. App integration (dual calendar, full installation) is a
+LATER session.
+
 ## Running in Parallel (no agent needed)
 
 - **Owner art generation** from the sheets: pantheon plates,

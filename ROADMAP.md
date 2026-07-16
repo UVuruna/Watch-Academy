@@ -86,7 +86,36 @@ lives in [The DOMY Canon](CANON.md).
    archetype section) stays HIDDEN behind the existing typed
    cipher — when the code is entered, the poem appears in the
    Encyclopedia, bound to the Seasons.
-7. **The Calendar pointer** (owner 2026-07-16, `Dozen.png`). A
+7. **Calendar wedge hovers wear OUR logos** (owner 2026-07-16,
+   with screenshots): the wedge tooltip must show the CHINESE
+   COLORED medallion for the double-hour animal and the zodiac
+   COLORED LOGO for the sign — never plain text or a unicode glyph.
+8. **SPACEBAR opens the Encyclopedia at the hovered topic** (owner
+   2026-07-16): while any themed hover is active (with or without
+   the legend visible), Space opens the Encyclopedia on that
+   topic's page.
+9. **Image clipping in the Encyclopedia — REPEAT COMPLAINT** (owner
+   2026-07-16, "OVO NIJE PRVI PUT!"): the title above and the
+   style/nav row below overlap the medallion image. The layout must
+   RESERVE the image's full space at every window size — verify
+   with screenshots at the owner's sizes.
+10. **Encyclopedia: split the Seasons topic into THREE** (owner
+    2026-07-16): Moon (the lunations — currently MISSING an
+    article), Seasons, and Sun (equinoxes/solstices).
+11. **Per-pointer wheel-pair names** (owner 2026-07-16): replace
+    the universal Paint/Light labels per the CANON proposal table
+    (Court/Family, Seasons/Elements, Walks/Ages — Zodiac/Almanac
+    already sealed) once the owner picks.
+12. **The Ephemeris project — Anno Lucis** (owner 2026-07-16,
+    prompt.txt + `Anno Lucis.png`): DE441-span data (via Swiss
+    Ephemeris, −13000…+17000) → a research pipeline extracting all
+    solstices/equinoxes (~122k) and moon phases (~1.5M), pinning
+    the exact ANNO LUCIS year (the smoothed crossing where the
+    light half-year outgrows the dark, ≈4000 BCE) — then TWO
+    calendars everywhere (AD and Anno Lucis), and eventually TWO
+    INSTALLATIONS (full = the whole span for Time Travel, partial
+    = the current bundle).
+13. **The Calendar pointer** (owner 2026-07-16, `Dozen.png`). A
    twelve-wedge pointer, its two wheels **Zodiac / Almanac** in the
    Paint/Light menu slot: Zodiac (sign boundaries on the axes,
    15°-shifted RGB wheel) and Almanac (axis-centered wedges, pure
@@ -98,7 +127,7 @@ lives in [The DOMY Canon](CANON.md).
    user-selectable (by the hand's Chinese double-hour, and by the
    year — month/sign). Full doctrine and palettes in
    [The DOMY Canon](CANON.md) §The Calendar.
-8. **Easter egg idea (recorded, owner approved the recording):**
+14. **Easter egg idea (recorded, owner approved the recording):**
    the owner's birth moment — 20 June, 12:15, the double Horse —
    sits at the very TOP of the Calendar dial twice over (the Horse
    double-hour centered on noon; the June-20 solstice tick). A
