@@ -89,9 +89,11 @@ MOON_PHASE_FRACTIONS = {
 }
 MOON_CYCLE_QUARTER = 0.25           # fraction between consecutive principal phases
 
-# --- Bundled database coverage --------------------------------------------------
-SEASONS_YEAR_RANGE = (1560, 2640)
-MOON_PHASES_YEAR_RANGE = (1551, 2649)
+# The bundled databases' coverage is READ FROM THE DATA, never hardcoded
+# (Rule #4): SeasonsRepository.coverage() / MoonPhaseRepository.coverage()
+# return the min/max year keys, so a Deep Time pack widens coverage by
+# swapping the JSON alone. Time Travel intersects the two and validates
+# every target before the day build (app/time_travel.py, controller).
 
 # --- Geography -------------------------------------------------------------------
 LATITUDE_RANGE = (-90.0, 90.0)

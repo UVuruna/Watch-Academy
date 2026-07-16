@@ -11,7 +11,7 @@ from pathlib import Path
 
 from config import constants, paths
 from core.moon import MoonWindow
-from data._io import load_json_checked
+from data._io import load_json_checked, year_bounds
 
 
 class MoonPhaseRepository:
@@ -19,13 +19,20 @@ class MoonPhaseRepository:
         self._path = path or (paths.database_dir() / "moonPhases_utc.json")
         self._cache: dict[int, MoonWindow] = {}
 
+    def coverage(self) -> tuple[int, int]:
+        """The inclusive (first, last) calendar years the bundled moon
+        database actually holds, read from the data — Time Travel
+        intersects this with the seasons coverage to validate a target
+        before the day build (owner 2026-07-16)."""
+        return year_bounds(load_json_checked(self._path, "Moon phases database"))
+
     def moon_window(self, year: int) -> MoonWindow:
         """All principal-phase events of `year` plus its neighbor years,
         so any instant inside `year` has bracketing events."""
         if year not in self._cache:
             data = load_json_checked(self._path, "Moon phases database")
             if str(year) not in data:
-                low, high = constants.MOON_PHASES_YEAR_RANGE
+                low, high = year_bounds(data)
                 raise ValueError(
                     f"Moon phases database covers {low}-{high}; no entry for {year}"
                 )

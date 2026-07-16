@@ -1715,6 +1715,15 @@ class AppController(QObject):
         native.set_autostart(dialog.autostart_selected())
         self._flush_position()
 
+    def _travel_coverage(self) -> tuple[int, int]:
+        """The years Time Travel can render — the INTERSECTION of the two
+        bundled databases' coverage (both are needed to build a day). Read
+        from the data, so the Deep Time pack widens it automatically (owner
+        2026-07-16)."""
+        seasons_first, seasons_last = self._seasons.coverage()
+        moon_first, moon_last = self._moon_phases.coverage()
+        return max(seasons_first, moon_first), min(seasons_last, moon_last)
+
     def _open_time_travel(self) -> None:
         # A running simulation SEEDS the dialog (owner 2026-07-14):
         # after a quick jump the offered coordinates and moment are
@@ -1732,6 +1741,7 @@ class AppController(QObject):
             latitude, longitude,
             overlay=self._translation_overlay,
             initial_moment=initial,
+            coverage=self._travel_coverage(),
         )
         result = dialog.exec()
         if result == TimeTravelDialog.RETURN_TO_NOW:
@@ -1756,7 +1766,14 @@ class AppController(QObject):
     def _start_simulation(self, moment: datetime, observer) -> None:
         """Render the (moment, observer) situation for the standard
         Time Travel minute, then return to the present — any new
-        travel restarts the minute (owner 2026-07-14)."""
+        travel restarts the minute (owner 2026-07-14). Final coverage
+        backstop (owner 2026-07-16): a moment the databases cannot render
+        is refused here, so no travel path can reach the day build's
+        die-visibly box — the dialog already explained why; a quick jump
+        simply stays put."""
+        first, last = self._travel_coverage()
+        if not (first <= moment.year <= last):
+            return
         self._simulation = (moment, observer)
         self._simulation_ends = monotonic() + defaults.TIME_TRAVEL_DURATION_S
         self._day = None                    # rebuild with the simulated situation
@@ -1780,28 +1797,47 @@ class AppController(QObject):
             base_observer = self._observer
         moment, observer = base_moment, base_observer
         if kind in ("next_sun", "prev_sun", "next_moon", "prev_moon"):
+            # Gather turning points only from years the databases cover, so
+            # the anchor lookup itself never steps off the edge (owner
+            # 2026-07-16). year_anchors(N) already reaches into N-1/N+1.
+            first, last = self._travel_coverage()
+            years = [
+                year
+                for year in (base_moment.year - 1, base_moment.year,
+                             base_moment.year + 1)
+                if first <= year <= last
+            ]
             if kind.endswith("sun"):
                 instants = sorted({
                     instant
-                    for year in (base_moment.year - 1, base_moment.year,
-                                 base_moment.year + 1)
+                    for year in years
                     for instant in self._seasons.year_anchors(year).instants
                 })
             else:
-                instants = [
-                    when for when, _ in
-                    self._moon_phases.moon_window(base_moment.year).events
-                ]
+                instants = sorted({
+                    when
+                    for year in years
+                    for when, _ in self._moon_phases.moon_window(year).events
+                })
+            # Never LAND on an instant whose local year the databases can't
+            # render — the day build would die visibly. Clamp to coverage.
+            instants = [
+                w for w in instants
+                if first <= w.astimezone(base_moment.tzinfo).year <= last
+            ]
             # The simulated moment is floored to the minute, so the
             # landed-on instant lies seconds AHEAD of it — the strict
             # one-minute guard keeps "next" from re-picking it.
             if kind.startswith("next"):
-                moment = min(
-                    w for w in instants
-                    if w > base_moment + timedelta(minutes=1)
-                )
+                ahead = [w for w in instants if w > base_moment + timedelta(minutes=1)]
+                if not ahead:
+                    return              # clamp: already at the coverage edge
+                moment = min(ahead)
             else:
-                moment = max(w for w in instants if w < base_moment)
+                behind = [w for w in instants if w < base_moment]
+                if not behind:
+                    return              # clamp: already at the coverage edge
+                moment = max(behind)
             moment = moment.astimezone(base_moment.tzinfo)
         elif kind in ("north_pole", "south_pole"):
             sign = 1 if kind == "north_pole" else -1

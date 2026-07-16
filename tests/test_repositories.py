@@ -120,3 +120,21 @@ class TestCoverageErrors:
     def test_moon_out_of_range(self):
         with pytest.raises(ValueError, match="1551-2649"):
             MoonPhaseRepository().moon_window(1400)
+
+
+class TestCoverage:
+    """coverage() reads the span straight from the bundled data (Rule #4
+    — no hardcoded 1560/2640), so Time Travel can validate before the day
+    build (owner 2026-07-16)."""
+
+    def test_seasons_coverage_matches_data(self):
+        assert SeasonsRepository().coverage() == (1560, 2640)
+
+    def test_moon_coverage_matches_data(self):
+        assert MoonPhaseRepository().coverage() == (1551, 2649)
+
+    def test_error_message_matches_coverage(self):
+        # The out-of-range message names exactly what coverage() reports.
+        first, last = SeasonsRepository().coverage()
+        with pytest.raises(ValueError, match=f"{first}-{last}"):
+            SeasonsRepository().year_anchors(first - 1)

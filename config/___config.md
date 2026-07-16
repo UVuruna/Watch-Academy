@@ -31,11 +31,18 @@ solstice), the Chinese zodiac cycle (animals, elements, the CNY new-
 moon window), the octa slot modes with their art folders, the Earth
 style names, the season/moon glow windows (±12 h / ±6 h) and event names,
 sun thresholds (civil depression, horizon/twilight elevations), the six
-year-anchor angles, moon phase → fraction mapping, and the bundled
-database coverage ranges.
+year-anchor angles, and the moon phase → fraction mapping. The bundled
+database coverage is NO LONGER hardcoded here (owner 2026-07-16, Rule
+#4): the repositories' `coverage()` reads the year span from the data.
 
 ### `defaults.py` — Developer Tunables
-Window sizing, the spontaneous-hide watchdog delay, tick scheduling
+Window sizing (`DIAL_WINDOW_MARGIN_FRACTION` is DERIVED — owner
+2026-07-16 — as the larger of the ring-letter overhang floor and the
+event-glow extent, so neither the letters nor a hover-enlarged bottom-of-
+ring halo can be square-cut at the window edge; tuning `GLOW_*` re-sizes
+the window automatically), the Time Travel coverage-warning color and the
+Deep Time advertised span (`DEEP_TIME_YEAR_RANGE`), the spontaneous-hide
+watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
@@ -47,7 +54,8 @@ opacity + lit delta and the Almanac day-arrow geometry
 (`CALENDAR_WEDGE_ALPHA`, `CALENDAR_WEDGE_LIT_DELTA`, `CALENDAR_ARROW_*`),
 the Umbra contrast spans, the octa slot text width fraction, the event glow
 rendering (owner rework 2026-07-16: the ring-band relocation radius, the
-golden Sun / silver Moon colors, the alpha stops and halo scale), tray
+golden Sun / silver Moon colors, the alpha stops, the halo scale and the
+larger-marker scale that sizes the window margin), tray
 icon geometry, the
 PANTHEON roster tables (`WEEKDAY_PANTHEON`: per theme the candidate
 plate paths, seated names, article set and the Sunday dual) with

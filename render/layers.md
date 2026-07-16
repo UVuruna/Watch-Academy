@@ -249,7 +249,13 @@ compact halo via `draw_event_glow()` STRADDLES the ring — shining both
 inside and outside the circle and reading over any background instead of
 having to be huge. The colors carry the source: the Sun's events glow
 GOLDEN (`GLOW_SUN_COLOR`), the Moon's phases SILVER (`GLOW_MOON_COLOR`);
-the halo diameter stays 2× the marker's.
+the halo diameter stays 2× the marker's. Because the glow sits at the
+ring band and can be hover-enlarged, its worst-case extent (owner
+2026-07-16 bug: a bottom-of-ring halo was square-cut at the window edge)
+is folded into the transparent window margin — `DIAL_WINDOW_MARGIN_FRACTION`
+is DERIVED from `GLOW_RING_RADIUS_FRACTION`, `GLOW_MARKER_MAX_SCALE`,
+`GLOW_RADIUS_SCALE` and the hover-enlarge maximum, so the halo can never
+clip at any angle and re-tuning the glow re-sizes the window automatically.
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and

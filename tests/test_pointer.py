@@ -1740,6 +1740,103 @@ def test_moon_glow_relocates_to_ring_band_and_is_silver(app):
     assert dr - db <= 6
 
 
+def _render_window_frame(compositor, day, tick, dial_diameter):
+    """Render the compositor at the WIDGET's full window size — the dial
+    plus its transparent margin on every side — exactly like
+    ClockWidget.paintEvent (translate by the margin, then paint the dial).
+    An offscreen the size of the dial ALONE would clip the ring-band glow
+    at the image edge and hide the very bug under test (owner 2026-07-16).
+    """
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    margin = round(dial_diameter * defaults.DIAL_WINDOW_MARGIN_FRACTION)
+    window = dial_diameter + 2 * margin
+    compositor.set_day(day)
+    image = QImage(window, window, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.translate(margin, margin)
+    compositor.paint(painter, float(dial_diameter), 1.0, tick)
+    painter.end()
+    return image, window, margin
+
+
+def _max_border_alpha(image, window):
+    """The largest alpha on the outermost ring of pixels — 0 means nothing
+    reaches the window edge (no hard square cut)."""
+    peak = 0
+    for i in range(window):
+        for x, y in ((i, 0), (i, window - 1), (0, i), (window - 1, i)):
+            peak = max(peak, image.pixelColor(x, y).alpha())
+    return peak
+
+
+def test_full_moon_glow_never_clipped_at_window_edge(app):
+    """Owner bug 2026-07-16: a full-moon glow at the BOTTOM of the ring
+    was square-cut by the window edge. At the WIDGET's full window size the
+    silver halo must fade to nothing INSIDE the window — no glow pixel may
+    touch the outermost row/column — while still clearly rendering."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    seasons = SeasonsRepository().year_anchors(2026)
+    moon = MoonPhaseRepository().moon_window(2026)
+    reference = datetime(2026, 6, 15, 12, 0, tzinfo=tz)
+    scout = build_day_context(reference, observer, seasons, moon)
+    instant, _ = min(
+        (event for event in scout.moon_events if event[1] == "Full Moon"),
+        key=lambda event: abs(event[0] - reference),
+    )
+    local = instant.astimezone(tz)
+    day = build_day_context(local, observer, seasons, moon)
+    tick = build_tick_state(local, day)
+    assert tick.moon_event == "Full Moon"          # fraction 0.5 -> the bottom
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    frame, window, margin = _render_window_frame(
+        Compositor(skin, AssetCache()), day, tick, 540
+    )
+    assert _max_border_alpha(frame, window) <= 6   # halo faded; nothing clipped
+    # ... and the halo really drew at the relocated ring-band bottom.
+    radius = 270.0
+    marker_y = radius + radius * defaults.GLOW_RING_RADIUS_FRACTION
+    glow_probe_y = marker_y + radius * defaults.DEFAULT_SKIN.year_marker.moon_scale
+    lit = frame.pixelColor(
+        round(radius + margin + 12), round(glow_probe_y + margin)
+    )
+    assert lit.alpha() > 30
+
+
+def test_earth_solstice_glow_never_clipped_even_when_hovered(app):
+    """The worst case the window margin is DERIVED for (owner 2026-07-16):
+    the larger Earth marker at a solstice, at the bottom of the ring, AND
+    hover-enlarged to the slider maximum. Its golden halo reaches furthest
+    of any glow yet must still fade inside the window edge."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    anchors = SeasonsRepository().year_anchors(2026)
+    moon = MoonPhaseRepository().moon_window(2026)
+    # anchors.instants[4] = the December solstice of 2026 -> Earth at the
+    # bottom (year_angle 180).
+    local = anchors.instants[4].astimezone(tz)
+    day = build_day_context(local, observer, anchors, moon)
+    tick = build_tick_state(local, day)
+    assert tick.season_event == "Winter Solstice"
+    skin = dataclasses.replace(
+        defaults.DEFAULT_SKIN, solar_rotation=False,
+        hover_enlarge=constants.HOVER_ENLARGE_RANGE[1],
+    )
+    compositor = Compositor(skin, AssetCache())
+    compositor._hovered = "earth"                  # force the enlarge factor
+    frame, window, _ = _render_window_frame(compositor, day, tick, 540)
+    assert _max_border_alpha(frame, window) <= 6
+
+
 def test_half_contrast_renders_a_gentler_night(july_wednesday):
     """The bottom of the dial (solar midnight, no hue overlay in July) is
     near-black on full contrast and clearly lifted on half."""

@@ -23,5 +23,10 @@ from `seasons_utc.json`, once per year, discarding the parsed file.
 ### SeasonsRepository
 - `year_anchors(year)`: `[entry.start, spring.start, summer.start,
   autumn.start, winter.start, entry.end]` → `YearAnchors`; outside
-  1560–2640 raises `ValueError` naming the supported range. Never touches
-  `winter.duration` (it belongs to the PREVIOUS winter — verified trap).
+  1560–2640 raises `ValueError` naming the supported range (derived from
+  the data, not hardcoded). Never touches `winter.duration` (it belongs
+  to the PREVIOUS winter — verified trap).
+- `coverage()`: the inclusive `(first, last)` calendar years the bundled
+  file holds, read straight from the data (owner 2026-07-16) — Time
+  Travel intersects this with the moon coverage and validates a target
+  BEFORE the day build, so a far-year jump can no longer crash the app.

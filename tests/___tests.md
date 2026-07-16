@@ -52,7 +52,16 @@ sector in July daylight.
 Against the LIVE Database files: 5 continents, 241 countries, 121
 mixed-depth, 45,649 cities (post-curation shape); the audited
 admin-nested sample (Serbia→Banat→Ada); the macro-region curation;
-Belgrade lookup; loud unknown-path and out-of-coverage errors.
+Belgrade lookup; loud unknown-path and out-of-coverage errors; and
+`coverage()` reading (1560–2640 / 1551–2649) straight from the data,
+with the error message matching what coverage reports.
+
+### `test_time_travel.py`
+The Time Travel coverage guard (owner 2026-07-16): the dialog refuses a
+far-future (4500) or ancient (150) target inline and does NOT accept,
+accepts an in-range year (2100), treats the bundle bounds inclusively,
+and the refused year is exactly what `year_anchors()` raises on — proof
+the guard blocks the die-visibly SystemExit path.
 
 ### `test_settings_store.py`
 Round-trip, atomic-write cleanup, BOM tolerance, corruption and

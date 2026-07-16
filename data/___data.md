@@ -19,13 +19,15 @@ Extract-and-discard over `seasons_utc.json` (1560–2640): parses once per
 year, keeps a tiny `YearAnchors`, drops the dict. Handles the verified
 field trap: a year's `winter.start` is the December solstice OF that year
 (ending the entry), while `winter.duration` describes the winter that
-BEGAN it — the two are never paired. See [Seasons](seasons.md).
+BEGAN it — the two are never paired. `coverage()` returns the (first,
+last) years straight from the data. See [Seasons](seasons.md).
 
 ### `moon_phases.py` — Moon Phases Repository
 Windowed extraction over `moonPhases_utc.json` (1551–2649): the target
 year plus both neighbors, month keys filtered with `isdigit()` (year
 entries mix month dicts with aggregate count keys), "Last Quarter"
-normalized to "Third Quarter". See [Moon Phases](moon_phases.md).
+normalized to "Third Quarter". `coverage()` returns the (first, last)
+years straight from the data. See [Moon Phases](moon_phases.md).
 
 ### `symbolism.py` — Symbolism Repository
 Per-body blurbs and the full ARTICLE corpus from `symbolism.json` (the
@@ -57,7 +59,9 @@ packs beside the settings file. See [Hand Packs](hands.md).
 
 ### `_io.py` — Shared Loader
 `load_json_checked()` — a plain function, not a base class (a few small
-repositories do not justify a hierarchy).
+repositories do not justify a hierarchy). `year_bounds(data)` reads the
+(first, last) integer year keys of a bundled database, so coverage is
+never hardcoded (Rule #4) — a Deep Time pack widens the file alone.
 
 ## Connections
 

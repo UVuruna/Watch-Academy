@@ -5,7 +5,7 @@ position, chosen city, chosen skin) lives in the user settings file owned
 by app/settings_store.py.
 """
 
-from config import paths
+from config import constants, paths
 from skins.manifest import (
     BackgroundSpec,
     HandSpec,
@@ -76,6 +76,12 @@ HOVER_BYPASS_MODIFIER = "ControlModifier"
 # Time Travel (scenario tester in the menu): the dial renders the entered
 # moment/position for this long, then returns to the present by itself.
 TIME_TRAVEL_DURATION_S = 60
+# A target outside the bundled coverage is refused inline (owner
+# 2026-07-16). The warning names the future Deep Time pack's reach; the
+# actual coverage comes from the databases (SeasonsRepository/
+# MoonPhaseRepository .coverage()), never hardcoded.
+TIME_TRAVEL_WARNING_COLOR = "#C8553D"    # warm red-clay — reads on the dialog
+DEEP_TIME_YEAR_RANGE = (-13000, 17000)   # the coming pack's advertised span
 
 # --- Settings persistence ----------------------------------------------------
 SETTINGS_SCHEMA_VERSION = 1
@@ -803,11 +809,11 @@ TRANSLATE_TIMEOUT_S = 15
 
 # Transparent margin around the dial INSIDE the window (owner bug
 # report: M and Omega touch the window square and their overhang and
-# shadow get clipped). Sized for the worst case: ring letters at the
-# 200% slider maximum reach ~7.9% beyond the dial radius plus their
-# halo (~9.4% total) — 6% of the DIAMETER per side (= 12% of the
-# radius) leaves real headroom; 5% left only ~2 px at 800 px.
-DIAL_WINDOW_MARGIN_FRACTION = 0.06
+# shadow get clipped; owner 2026-07-16: the event glow at the bottom of
+# the ring was square-cut too). The value is DERIVED from the ring-letter
+# and event-glow constants — see DIAL_WINDOW_MARGIN_FRACTION in the
+# event-glow section below (it needs GLOW_* which are defined there), so
+# re-tuning either overhang can never re-clip it.
 
 # Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
 #   full  — the whole gray range: sectioned ladders run endpoint-
@@ -838,9 +844,36 @@ GLOW_RING_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION  # ring band centerline
 GLOW_SUN_COLOR = "#FFCC33"           # golden — distinct from the yellow arms
 GLOW_MOON_COLOR = "#E8EBEE"          # silver — bright, reads on the dark ring
 GLOW_CORE_ALPHA = 1.0
-GLOW_MID_ALPHA = 0.7
-GLOW_MID_STOP = 0.55                 # gradient position of the mid alpha
-GLOW_RADIUS_SCALE = 2.0              # halo radius, multiple of the marker radius
+GLOW_MID_ALPHA = 0.85
+GLOW_MID_STOP = 0.75                 # gradient position of the mid alpha
+GLOW_RADIUS_SCALE = 1.5              # halo radius, multiple of the marker radius
+GLOW_MARKER_MAX_SCALE = 0.11         # the LARGER glowing marker (the Earth; the
+                                     # Moon is 0.08) — whose halo reaches
+                                     # furthest; mirrors
+                                     # DEFAULT_SKIN.year_marker.scale
+
+# The transparent window margin (DIAL_WINDOW_MARGIN_FRACTION, forward-
+# declared in the Window section) must cover BOTH things that overhang the
+# dial square, or either gets a hard square cut at the window edge:
+#   * ring LETTERS at the 200% scale slider (~9.4% beyond the radius with
+#     their halo) — the empirically tuned 0.06-of-diameter floor;
+#   * the event GLOW — the glowing marker relocates to the ring band
+#     (GLOW_RING_RADIUS_FRACTION), is hover-enlarged up to the slider max
+#     (HOVER_ENLARGE_RANGE[1]), and its halo reaches
+#     GLOW_MARKER_MAX_SCALE * GLOW_RADIUS_SCALE further (owner 2026-07-16
+#     bug: a full-moon halo at the bottom of the ring was square-cut).
+# The glow extent is a fraction of the dial RADIUS; the window margin is a
+# fraction of the DIAMETER applied per side, i.e. half the radius-fraction
+# overhang beyond 1.0, plus a hair of safety so anti-aliasing never bleeds
+# into the outermost row. DERIVED, so tuning any source constant re-sizes
+# the window automatically.
+_GLOW_WINDOW_EXTENT = (
+    GLOW_RING_RADIUS_FRACTION
+    + GLOW_MARKER_MAX_SCALE * GLOW_RADIUS_SCALE * constants.HOVER_ENLARGE_RANGE[1]
+)
+DIAL_WINDOW_MARGIN_FRACTION = max(
+    0.06, (_GLOW_WINDOW_EXTENT - 1.0) / 2.0 + 0.01
+)
 
 # --- Shared app content (NOT skin-specific — a skin is a dial design) -----------
 # Skeleton folders with 1x1 placeholders ship in the repo; the owner

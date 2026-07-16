@@ -11,15 +11,22 @@ that BEGINS the entry, so it must never be paired with `winter.start`.
 from datetime import datetime
 from pathlib import Path
 
-from config import constants, paths
+from config import paths
 from core.year_wheel import YearAnchors
-from data._io import load_json_checked
+from data._io import load_json_checked, year_bounds
 
 
 class SeasonsRepository:
     def __init__(self, path: Path | None = None):
         self._path = path or (paths.database_dir() / "seasons_utc.json")
         self._cache: dict[int, YearAnchors] = {}
+
+    def coverage(self) -> tuple[int, int]:
+        """The inclusive (first, last) calendar years the bundled seasons
+        database actually holds, read from the data — so Time Travel can
+        validate a target BEFORE it reaches the day build (owner
+        2026-07-16: a far-year jump used to crash the app)."""
+        return year_bounds(load_json_checked(self._path, "Seasons database"))
 
     def year_anchors(self, year: int) -> YearAnchors:
         """Six anchor instants bracketing `year`, parsed once per year;
@@ -28,7 +35,7 @@ class SeasonsRepository:
             data = load_json_checked(self._path, "Seasons database")
             entry = data.get(str(year))
             if entry is None:
-                low, high = constants.SEASONS_YEAR_RANGE
+                low, high = year_bounds(data)
                 raise ValueError(
                     f"Seasons database covers {low}-{high}; no entry for {year}"
                 )

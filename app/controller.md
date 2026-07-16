@@ -157,6 +157,15 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   OPEN (the `stay_open` action property on the `_StayOpenMenu`), and
   the dialog seeds from the simulation; the dialog's blue Now button
   (left of OK/Cancel) ends the simulation through `RETURN_TO_NOW`
+- `_travel_coverage()`: the years Time Travel can render — the
+  INTERSECTION of the two bundled databases' `coverage()` (both are
+  needed to build a day). The dialog validates against it BEFORE
+  travelling (a far-year target is refused with an inline message, owner
+  2026-07-16), the sun/moon quick jumps CLAMP their turning-point search
+  to it (a step at the coverage edge is a no-op, never an off-range
+  lookup), and `_start_simulation()` re-checks it as a final backstop —
+  so no travel path can reach the day build's die-visibly SystemExit box;
+  the REAL current-day protection in `_on_tick` is untouched
 - `_collect_secret(char)`: the HIDDEN MODE unlock — printable keys on
   the focused dial roll through a buffer; matching
   `constants.HIDDEN_MODE_SECRET` flips the RUNTIME
