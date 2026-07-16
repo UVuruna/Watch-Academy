@@ -36,6 +36,17 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
   letters/ticks — starts (or restarts) the 60-second reveal-week
   window (`compositor.trigger_reveal_week()`); any other double-click
   falls through to Qt's default handling
+- `keyPressEvent()`: SPACE is handled FIRST (owner 2026-07-16, ROADMAP
+  queue #8) — over a themed hover target (weekday body, astrology/
+  ascendant/Chinese slot, hexa sign diamond, Calendar wedge) it asks
+  `compositor.encyclopedia_target()` for the last hover position and
+  emits `open_encyclopedia(topic, entry)`; because " " is printable this
+  MUST precede the typed path (otherwise Space would feed the hidden-mode
+  code buffer). A target with no encyclopedia topic does nothing. Every
+  other printable key still emits `typed`. `mouseMoveEvent` records the
+  last dial-origin cursor (`_last_hover`) that the jump reads
+- `open_encyclopedia`: Signal(topic key, entry index) — the controller
+  opens the Encyclopedia on that page
 - `set_renderer(compositor)` / `set_tick(tick)`: painting inputs; each new
   tick schedules a repaint
 - `paintEvent()`: delegates to `compositor.paint(painter, size, dpr, tick)`

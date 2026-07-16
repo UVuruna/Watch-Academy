@@ -26,6 +26,8 @@ class ClockWidget(QWidget):
     moved = Signal()
     typed = Signal(str)                 # printable keys while focused —
                                         # the hidden-mode code listener
+    open_encyclopedia = Signal(str, int)  # (topic key, entry index) —
+                                        # Spacebar over a themed target
 
     def __init__(self, diameter: int, menu: QMenu, legend):
         super().__init__()
@@ -35,6 +37,7 @@ class ClockWidget(QWidget):
         self._renderer = None
         self._tick = None
         self._click_through = False
+        self._last_hover = None          # last dial-origin cursor (x, y)
 
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint
@@ -144,6 +147,20 @@ class ClockWidget(QWidget):
         super().mouseDoubleClickEvent(event)
 
     def keyPressEvent(self, event) -> None:
+        # SPACE opens the Encyclopedia at the hovered topic (owner
+        # 2026-07-16, ROADMAP queue #8) — handled BEFORE the typed path
+        # because " " is printable and would otherwise feed the
+        # hidden-mode code buffer. Over a target with no encyclopedia
+        # topic (or with no hover yet), it does nothing.
+        if event.key() == Qt.Key.Key_Space:
+            if self._renderer is not None and self._last_hover is not None:
+                target = self._renderer.encyclopedia_target(
+                    self._last_hover[0], self._last_hover[1],
+                    float(self._dial_diameter),
+                )
+                if target is not None:
+                    self.open_encyclopedia.emit(target[0], target[1])
+            return
         text = event.text()
         if text and text.isprintable():
             self.typed.emit(text)
@@ -168,6 +185,7 @@ class ClockWidget(QWidget):
             size = float(self._dial_diameter)
             x = event.position().x() - self._margin_px
             y = event.position().y() - self._margin_px
+            self._last_hover = (x, y)    # for the Spacebar jump
             if self._renderer.set_hover(x, y, size):
                 self.update()           # hover-enlarge target changed
             tip = self._renderer.tooltip_at(x, y, size)

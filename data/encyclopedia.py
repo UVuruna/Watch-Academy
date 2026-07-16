@@ -33,26 +33,38 @@ class EncyclopediaRepository:
                 )
         return out
 
+    def _section(self, section: str, key: str) -> dict:
+        """{title, base} of one entry in a top-level encyclopedia
+        section — the ONE localized lookup shared by every topic
+        (Rule #5)."""
+        return self._localized(
+            f"encyclopedia/{section}/{key}", self._load()[section][key]
+        )
+
     def instrument(self, key: str) -> dict:
         """{title, base} of one functionality article ("dial",
         "twilight", "year_wheel"...)."""
-        return self._localized(
-            f"encyclopedia/instrument/{key}",
-            self._load()["instrument"][key],
-        )
+        return self._section("instrument", key)
 
     def week(self, body: str) -> dict:
         """{title, base} of one WEEK day page (body = sun..saturn)."""
-        return self._localized(
-            f"encyclopedia/week/{body}", self._load()["week"][body]
-        )
+        return self._section("week", body)
 
     def season(self, key: str) -> dict:
-        """{title, base} of one SEASONS article ("Spring", "Equinox",
-        "Wet_Season", "Meteorological"...) — owner 2026-07-13."""
-        return self._localized(
-            f"encyclopedia/seasons/{key}", self._load()["seasons"][key]
-        )
+        """{title, base} of one SEASONS article ("Spring", "Wet_Season",
+        "Meteorological"...) — owner 2026-07-13; the turning points moved
+        to the SUN topic in the 2026-07-16 three-way split."""
+        return self._section("seasons", key)
+
+    def sun(self, key: str) -> dict:
+        """{title, base} of one SUN article — the equinoxes and
+        solstices (owner 2026-07-16, ROADMAP queue #10 split)."""
+        return self._section("sun", key)
+
+    def moon(self, key: str) -> dict:
+        """{title, base} of one MOON article — the lunations (owner
+        2026-07-16, ROADMAP queue #10 split)."""
+        return self._section("moon", key)
 
     def entry(self, family: str, name: str) -> dict:
         """{base} of one emblem-family article — family is "virtues" |

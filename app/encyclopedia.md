@@ -32,6 +32,24 @@ screens —
    `[[Subhead]]` markers drawn as centered bold headings hugging
    their paragraph.
 
+**The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
+Seasons topic became THREE — **Moon** (a new house-voice article on the
+lunations: the four phases, the ~29.53-day synodic month and how the
+dial's Moon marker and ring reading work), **Seasons** (the quarters,
+the tropics' halves and the meteorological block — the hidden poem still
+closes it) and **Sun** (the solstices and equinoxes). The turning-point
+entries moved from the `seasons` section of `encyclopedia.json` to a new
+`sun` section, and a `moon` section was added; the repository reads all
+three through the shared `_section()` helper, and the SR-Latn bundle
+carries the moved keys and the new Moon translation (hash = sha1 of the
+EN source). The topic titles Moon/Seasons/Sun reuse existing `ui/` keys.
+
+**The Spacebar jump (owner 2026-07-16, ROADMAP queue #8):** the dialog
+accepts an `initial_topic`/`initial_entry`; when set it skips the gallery
+and opens straight onto that entry (an unknown topic falls back to the
+gallery). The controller passes the (topic, entry) the widget's Space
+key resolved through `compositor.encyclopedia_target()`.
+
 The window is RESIZABLE: each entry is ONE block spanning
 `ENCYCLOPEDIA_TEXT_WIDTH_FRACTION` of the width, CENTERED with even
 side margins (owner 2026-07-14 — supersedes the 2026-07-13 left-hug),
@@ -45,6 +63,17 @@ image grid is built ONCE per look (`_render_cell`); window resizes
 only RE-FIT the pixmaps in place (`_resize_cell`) — tearing the grid
 down per resize left ghost labels and stale container heights that
 CLIPPED the art (owner bug 2026-07-14: the full-size crop).
+
+**Reserving the image rectangle (owner REPEAT complaint 2026-07-16,
+ROADMAP queue #9):** `_resize_cell` now fixes each image LABEL to its
+scaled pixmap (`setFixedSize`). This makes the whole image grid's
+MINIMUM size equal the art, so the surrounding `QVBoxLayout` can never
+squeeze the container below it — the entry title above and the
+style-carousel ("◄ Colored ►") below can no longer cut into the
+medallion, and the art is never clipped. When vertical space is tight
+the existing `READER_IMAGE_MAX_HEIGHT_FRACTION` ceiling has already
+scaled the WHOLE image down. Every topic entry (gallery-driven, poem,
+instrument and Spacebar-jumped alike) flows through this one path.
 
 ## Connections
 

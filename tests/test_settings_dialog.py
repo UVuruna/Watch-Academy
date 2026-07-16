@@ -272,8 +272,11 @@ def test_hidden_mode_binds_the_poem_to_seasons_too(app):
     fresh dialog opens locked."""
     from app.encyclopedia import EncyclopediaDialog
 
+    # The Seasons topic holds SEVEN entries after the three-way split
+    # (owner 2026-07-16, ROADMAP queue #10) — the turning points moved
+    # to the Sun topic; the poem still closes Seasons under the cipher.
     locked = EncyclopediaDialog()
-    assert len(locked._topics["seasons"]["entries"]) == 10
+    assert len(locked._topics["seasons"]["entries"]) == 7
     assert all(
         entry.get("poem") is not True
         for entry in locked._topics["seasons"]["entries"]
@@ -282,7 +285,7 @@ def test_hidden_mode_binds_the_poem_to_seasons_too(app):
 
     unlocked = EncyclopediaDialog(hidden_unlocked=True)
     entries = unlocked._topics["seasons"]["entries"]
-    assert len(entries) == 11
+    assert len(entries) == 8
     poem = entries[-1]
     assert poem["poem"] is True
     assert poem["name"] == "Četiri pozdrava"
@@ -299,8 +302,31 @@ def test_hidden_mode_binds_the_poem_to_seasons_too(app):
     assert "rebirth" in text
     unlocked._show_topic("seasons")
     unlocked._step(-1)                       # wrap onto the poem page
-    assert unlocked._counter.text() == "11 / 11"
+    assert unlocked._counter.text() == "8 / 8"
     unlocked.deleteLater()
+
+
+def test_encyclopedia_opens_at_the_spacebar_target(app):
+    """The Spacebar jump (owner 2026-07-16, ROADMAP queue #8): given an
+    initial (topic, entry) the dialog skips the gallery and opens on
+    that page; an unknown topic falls back to the gallery."""
+    from app.encyclopedia import EncyclopediaDialog
+
+    jumped = EncyclopediaDialog(initial_topic="chinese", initial_entry=6)
+    assert jumped._topic_key == "chinese" and jumped._entry_index == 6
+    assert jumped._back.isVisible() or True         # on an entry page
+    assert "Horse" in jumped._entry_name(
+        jumped._topics["chinese"]["entries"][6]
+    )
+    jumped.deleteLater()
+    # No target (menu open) shows the gallery.
+    gallery = EncyclopediaDialog()
+    assert gallery._topic_key is None
+    gallery.deleteLater()
+    # An unknown topic cannot open a page — it stays on the gallery.
+    unknown = EncyclopediaDialog(initial_topic="does_not_exist")
+    assert unknown._topic_key is None
+    unknown.deleteLater()
 
 
 def test_art_source_resolves_with_fallback():
@@ -556,10 +582,15 @@ def test_encyclopedia_expansion_wiring():
     from data.encyclopedia import EncyclopediaRepository
     union = EncyclopediaRepository().entry("duality", "The Union")["base"]
     assert "hexagram" in union and "antidote" in union
-    # The Seasons topic (badges + articles) and the trinity emblems.
-    assert len(topics["seasons"]["entries"]) == 10
+    # The Seasons/Moon/Sun topics (badges + articles) after the split
+    # (owner 2026-07-16, ROADMAP queue #10) and the trinity emblems.
+    assert len(topics["seasons"]["entries"]) == 7
     met = topics["seasons"]["entries"][-1]
     assert len(met["images"]) == 4            # the four measured twins
+    assert [e["name"][1] for e in topics["sun"]["entries"]] == [
+        "Summer_Solstice", "Winter_Solstice", "Equinox",
+    ]
+    assert len(topics["moon"]["entries"]) == 1
     assert all(
         _paths.art_file(entry["images"][0]).exists()
         for entry in topics["trinity"]["entries"]
@@ -568,14 +599,18 @@ def test_encyclopedia_expansion_wiring():
     # texts resolve (a Wednesday page must name its planet).
     dialog = EncyclopediaDialog()
     for key in (
-        "week", "instrument", "seasons", "virtues", "sins", "moods",
-        "greek", "wolf", "bee", "elephant",
+        "week", "instrument", "moon", "seasons", "sun", "virtues",
+        "sins", "moods", "greek", "wolf", "bee", "elephant",
     ):
         dialog._show_topic(key)
     assert "Mercury" in dialog._article_text(("week", "mercury"))
     assert "6°" in dialog._article_text(("instrument", "twilight"))
     assert dialog._article_text(("emblem", "virtues", "Justice"))
     assert "Goethe" in dialog._article_text(("season", "Spring"))
+    # The three-way split (owner 2026-07-16): the Moon article speaks
+    # the synodic month, the Sun article the solstice.
+    assert "29.53" in dialog._article_text(("moon", "Moon"))
+    assert "solstice" in dialog._article_text(("sun", "Summer_Solstice"))
     # The topic SLIDER (owner plan round E, 2026-07-14): one entry per
     # page, ← / → wrap around like the Guide, the pager hides on the
     # gallery and the counter tracks the position.

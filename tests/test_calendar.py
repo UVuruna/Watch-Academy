@@ -232,13 +232,42 @@ def test_calendar_renders_and_the_hover_reads_the_wheel(app):
     almanac.render_offscreen(360.0, 1.0, day, tick)
     top = almanac.tooltip_at(180.0, 120.0, 360.0)            # inside the top wedge
     assert top is not None and "June" in top and "Horse" in top
-    # Zodiac wedge hover at the top: Cancer with its dates.
+    # The wedge WEARS OUR ART (owner 2026-07-16, ROADMAP queue #7): the
+    # Chinese COLORED medallion (a real image tag), never a plain-text
+    # stand-in — the src is the scaled raster-cache copy of the colored
+    # animal medallion.
+    assert "<img" in top and "raster_cache" in top
+    # Zodiac wedge hover at the top: Cancer with its dates + the sign's
+    # COLORED LOGO art.
     zodiac = Compositor(_calendar_skin(palette_style="paint"), AssetCache())
     zodiac.render_offscreen(360.0, 1.0, day, tick)
     top_sign = zodiac.tooltip_at(200.0, 120.0, 360.0)        # top-right wedge
     assert top_sign is not None and (
         "Cancer" in top_sign or "Leo" in top_sign
     )
+    assert "<img" in top_sign and "raster_cache" in top_sign
+
+
+def test_spacebar_encyclopedia_target_maps_the_hovered_wheel(app):
+    """The Spacebar jump (owner 2026-07-16, ROADMAP queue #8): the
+    ONE element→topic mapping opens the hovered Calendar wedge's page —
+    the Almanac's Chinese animal, the Zodiac's sign — indexing the
+    topic's own entry order. Works with the legend OFF (geometry, not
+    tooltip text)."""
+    day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
+    almanac = Compositor(
+        _calendar_skin(palette_style="light", legend=False), AssetCache()
+    )
+    almanac.render_offscreen(360.0, 1.0, day, tick)
+    assert almanac.tooltip_at(180.0, 120.0, 360.0) is None     # legend off
+    # The top Almanac wedge is the Horse double-hour → Chinese entry 6.
+    assert almanac.encyclopedia_target(180.0, 120.0, 360.0) == ("chinese", 6)
+    zodiac = Compositor(_calendar_skin(palette_style="paint"), AssetCache())
+    zodiac.render_offscreen(360.0, 1.0, day, tick)
+    topic, index = zodiac.encyclopedia_target(200.0, 120.0, 360.0)
+    assert topic == "astrology" and 0 <= index < 12
+    # Off any target (dial center) there is nothing to open.
+    assert zodiac.encyclopedia_target(180.0, 180.0, 360.0) is None
 
 
 def test_calendar_lit_index_none_off_the_pointer(app):

@@ -593,6 +593,9 @@ class AppController(QObject):
         # keys typed on the focused dial roll through a buffer.
         self._secret_buffer = ""
         self._widget.typed.connect(self._collect_secret)
+        # Spacebar over a themed hover target opens the Encyclopedia on
+        # that topic's page (owner 2026-07-16, ROADMAP queue #8).
+        self._widget.open_encyclopedia.connect(self._open_encyclopedia_at)
 
         # In click-through mode the window receives no mouse input, so the
         # hover tooltips are driven by polling the global cursor instead.
@@ -1598,10 +1601,7 @@ class AppController(QObject):
         menu.addAction(settings_action)
         encyclopedia = QAction(f"🏛️ {tr('Encyclopedia…')}", menu)
         encyclopedia.triggered.connect(
-            lambda: EncyclopediaDialog(
-                self._translation_overlay,
-                hidden_unlocked=self._hidden_unlocked,
-            ).exec()
+            lambda: self._open_encyclopedia_at(None, 0)
         )
         menu.addAction(encyclopedia)
         guide = QAction(f"📖 {tr('Guide…')}", menu)
@@ -1666,6 +1666,19 @@ class AppController(QObject):
 
     def _open_report(self) -> None:
         ReportDialog(self._translation_overlay).exec()
+
+    def _open_encyclopedia_at(
+        self, topic: str | None = None, entry: int = 0
+    ) -> None:
+        """Open the Encyclopedia — from the menu (topic None = the
+        gallery) or on a Spacebar jump to a hovered topic's entry
+        (owner 2026-07-16, ROADMAP queue #8)."""
+        EncyclopediaDialog(
+            self._translation_overlay,
+            hidden_unlocked=self._hidden_unlocked,
+            initial_topic=topic,
+            initial_entry=entry,
+        ).exec()
 
     def _open_settings(self) -> None:
         dialog = SettingsDialog(

@@ -91,7 +91,7 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
 # their signs, the remaining week themes with the Trinity, the
 # religions, and the cross-cure emblem families last.
 _TOPIC_GROUPS = (
-    ("The Clock", ("week", "instrument", "seasons")),
+    ("The Clock", ("week", "instrument", "moon", "seasons", "sun")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
     ("Themes", ("alchemy", "japan", "profession", "trinity", "cosmos")),
@@ -102,9 +102,10 @@ _TOPIC_GROUPS = (
      ("virtues", "sins", "moods", "duality", "intelligences")),
 )
 
-# The SEASONS topic (owner 2026-07-13): the year's quarters, the
-# tropics' halves, the turning points and the measured twins — badges
-# from assets/season/, articles from encyclopedia.json.
+# The SEASONS topic (owner 2026-07-13; split 2026-07-16, ROADMAP queue
+# #10): the year's quarters, the tropics' halves and the measured twins
+# — the turning points moved to the SUN topic below. Badges from
+# assets/badge/season/, articles from encyclopedia.json.
 _SEASON_ENTRIES = (
     ("Spring", "Spring.png"),
     ("Summer", "Summer.png"),
@@ -112,10 +113,15 @@ _SEASON_ENTRIES = (
     ("Winter", "Winter.png"),
     ("Wet_Season", "Wet_Season.png"),
     ("Dry_Season", "Dry_Season.png"),
+    ("Meteorological", None),          # four badges in one entry
+)
+
+# The SUN topic (owner 2026-07-16, ROADMAP queue #10): the turning
+# points — the two solstices and the shared-badge equinox.
+_SUN_ENTRIES = (
     ("Summer_Solstice", "turning_point/Summer_Solstice.png"),
     ("Winter_Solstice", "turning_point/Winter_Solstice.png"),
     ("Equinox", "turning_point/Equinox.png"),
-    ("Meteorological", None),          # four badges in one entry
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -602,6 +608,22 @@ def _topics() -> dict:
             for virtue in ("Faith", "Hope", "Love")
         ],
     }
+    # THE MOON (owner 2026-07-16, ROADMAP queue #10): the lunations —
+    # the four phases, the synodic month and the dial's Moon marker and
+    # ring reading, in one house-voice article.
+    moon_plate = defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png"
+    topics["moon"] = {
+        "title": "Moon",
+        "icon": moon_plate,
+        "entries": [
+            {
+                "images": (moon_plate,),
+                "name": ("moon_title", "Moon"),
+                "article": ("moon", "Moon"),
+                "accents": (),
+            }
+        ],
+    }
     topics["seasons"] = {
         "title": "Seasons",
         "icon": defaults.SEASON_ART_DIR / "Summer.png",
@@ -624,6 +646,22 @@ def _topics() -> dict:
             for key, art in _SEASON_ENTRIES
         ],
     }
+    # THE SUN (owner 2026-07-16, ROADMAP queue #10): the turning points
+    # — the solstices and the equinoxes and their glow.
+    topics["sun"] = {
+        "title": "Sun",
+        "icon": defaults.SEASON_ART_DIR / "turning_point"
+        / "Summer_Solstice.png",
+        "entries": [
+            {
+                "images": (defaults.SEASON_ART_DIR / art,),
+                "name": ("sun_title", key),
+                "article": ("sun", key),
+                "accents": (),
+            }
+            for key, art in _SUN_ENTRIES
+        ],
+    }
     return topics
 
 
@@ -632,6 +670,8 @@ class EncyclopediaDialog(QDialog):
         self,
         translations: dict | None = None,
         hidden_unlocked: bool = False,
+        initial_topic: str | None = None,
+        initial_entry: int = 0,
     ):
         super().__init__()
         self._overlay = translations or {}
@@ -737,6 +777,16 @@ class EncyclopediaDialog(QDialog):
             defaults.GUIDE_INITIAL_IMAGE_PX + 220,
         )
         self._show_topics()
+        # The Spacebar jump (owner 2026-07-16, ROADMAP queue #8): open
+        # straight onto the hovered topic's matching entry, skipping the
+        # gallery — unknown topics fall back to the gallery.
+        if initial_topic is not None and initial_topic in self._topics:
+            self._topic_key = initial_topic
+            entries = self._topics[initial_topic]["entries"]
+            self._entry_index = (
+                min(initial_entry, len(entries) - 1) if entries else 0
+            )
+            self._show_entry()
 
     def _article_text(self, ref: tuple) -> str:
         kind = ref[0]
@@ -762,6 +812,10 @@ class EncyclopediaDialog(QDialog):
             return self._encyclopedia.instrument(ref[1])["base"]
         if kind == "season":
             return self._encyclopedia.season(ref[1])["base"]
+        if kind == "sun":
+            return self._encyclopedia.sun(ref[1])["base"]
+        if kind == "moon":
+            return self._encyclopedia.moon(ref[1])["base"]
         if kind == "emblem":
             return self._encyclopedia.entry(ref[1], ref[2])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
@@ -777,6 +831,10 @@ class EncyclopediaDialog(QDialog):
                 return self._encyclopedia.week(name[1])["title"]
             if name[0] == "season_title":
                 return self._encyclopedia.season(name[1])["title"]
+            if name[0] == "sun_title":
+                return self._encyclopedia.sun(name[1])["title"]
+            if name[0] == "moon_title":
+                return self._encyclopedia.moon(name[1])["title"]
             return self._encyclopedia.instrument(name[1])["title"]
         return self._tr(name)
 
@@ -1191,6 +1249,15 @@ class EncyclopediaDialog(QDialog):
                     Qt.TransformationMode.SmoothTransformation,
                 )
             label.setPixmap(pixmap)
+            # RESERVE the image's full rectangle (owner REPEAT complaint
+            # 2026-07-16, ROADMAP queue #9: the title above and the
+            # style/nav row below cut into the art). Fixing the label to
+            # the pixmap makes the whole grid's minimum size equal the
+            # scaled image, so the QVBoxLayout can never squeeze the
+            # container below it — no neighbour overlaps it, and the
+            # image is never clipped. When space is tight the height
+            # ceiling above has already scaled the WHOLE image down.
+            label.setFixedSize(pixmap.size())
 
     def _cycle_look(self, state: dict, step: int) -> None:
         """The ◀ / ▶ arrows (owner 2026-07-13): the next look of this

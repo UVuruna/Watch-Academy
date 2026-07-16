@@ -42,6 +42,32 @@ def frame(app):
     return compositor.render_offscreen(360.0, 1.0, day, tick)
 
 
+def test_encyclopedia_target_maps_body_and_ignores_untopiced(app):
+    """The Spacebar jump's element→topic mapping (owner 2026-07-16,
+    ROADMAP queue #8): the centered Sun body opens the active weekday
+    theme's page at the Sun entry; a spot with no themed target opens
+    nothing."""
+    city = defaults.DEFAULT_CITY
+    now = datetime(2026, 7, 7, 12, 0, tzinfo=ZoneInfo(city["timezone"]))
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        now, observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    # The default hexa layout carries the Sun in the center.
+    assert comp.encyclopedia_target(180.0, 180.0, 360.0) == (
+        defaults.DEFAULT_SKIN.weekday_theme, 0,
+    )
+    # A transparent corner is over nothing themed.
+    assert comp.encyclopedia_target(4.0, 4.0, 360.0) is None
+
+
 def test_frame_size_and_transparency(frame):
     assert frame.width() == 360 and frame.height() == 360
     # Corners lie outside the dial circle -> fully transparent.

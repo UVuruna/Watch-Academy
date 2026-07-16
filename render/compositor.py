@@ -315,6 +315,22 @@ def _build_layers(skin: SkinDefinition) -> list[Layer]:
 # March equinox <-> September).
 _SOUTH_ANCHOR_FLIP = {270.0: 450.0, 360.0: 540.0, 450.0: 270.0, 540.0: 360.0}
 
+# The Astrology encyclopedia topic lists its signs in astronomical
+# order (Aries first), NOT the year-wheel order of constants.ZODIAC_SIGNS
+# — the Spacebar jump (owner 2026-07-16, ROADMAP queue #8) indexes into
+# this order to open the hovered sign's page.
+_ENC_ZODIAC_ORDER = (
+    "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+    "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces",
+)
+
+# The weekday encyclopedia topics list their seven bodies in this order
+# (Sun first) — the Spacebar jump indexes a hovered body's page by it,
+# mirroring app.encyclopedia._WEEK_ORDER.
+_ENC_WEEK_ORDER = (
+    "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn",
+)
+
 _MONTHS = (
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December",
@@ -564,6 +580,119 @@ class Compositor:
         # Last in the chain (owner rework 5 & 6): the sunlit arc answers
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
+
+    def encyclopedia_target(
+        self, x: float, y: float, size: float
+    ) -> tuple[str, int] | None:
+        """The (topic key, entry index) the Encyclopedia should open on
+        for the element under the cursor — the ONE element→topic mapping
+        (owner 2026-07-16, ROADMAP queue #8): a weekday body, an
+        Astrology / Ascendant / Chinese slot, a hexa sign diamond or a
+        Calendar wedge. Works whether or not the legend is visible (it
+        reuses the hover GEOMETRY, not the tooltip text). Elements with
+        no encyclopedia topic — the Moon, the Earth, the digital slots,
+        the twilight bands, the ring band — return None."""
+        if self._day is None or self._last_tick is None:
+            return None
+        radius = size / 2
+        point = QPointF(x - radius, y - radius)
+        rotation = self._rotation()
+        today = constants.WEEKDAY_BODIES[self._day.weekday_index]
+        element = self._element_at(point, radius, rotation, today)
+        if element is not None:
+            if element.startswith("body:") or element == "sun_servant":
+                body = "sun" if element == "sun_servant" else element[5:]
+                theme = self._skin.weekday_theme
+                if (
+                    body in _ENC_WEEK_ORDER
+                    and theme in defaults.WEEKDAY_THEME_TITLES
+                ):
+                    return theme, _ENC_WEEK_ORDER.index(body)
+                return None
+            if element.startswith("slot:"):
+                mode = slot_view(self._skin, int(element[len("slot:"):]))[0]
+                if mode == "zodiac":
+                    return (
+                        "astrology",
+                        _ENC_ZODIAC_ORDER.index(self._day.zodiac_name),
+                    )
+                if mode == "ascendant":
+                    return (
+                        "astrology",
+                        _ENC_ZODIAC_ORDER.index(
+                            self._last_tick.ascendant_sign
+                        ),
+                    )
+                if mode == "chinese":
+                    animal = self._day.chinese_name.split()[1]
+                    return "chinese", constants.CHINESE_ANIMALS.index(animal)
+            return None
+        sign = self._arm_zodiac_sign(point, radius, rotation)
+        if sign is not None:
+            return "astrology", _ENC_ZODIAC_ORDER.index(sign)
+        if self._skin.pointer == "calendar":
+            return self._calendar_wedge_target(point, radius)
+        return None
+
+    def _arm_zodiac_sign(
+        self, point: QPointF, radius: float, rotation: float
+    ) -> str | None:
+        """The zodiac sign whose HEXA diamond the cursor sits in (owner
+        2026-07-16, the Spacebar jump) — None off the hexa pointer or
+        between the arms. Mirrors the _arm_tooltip diamond geometry; the
+        cursor's half of the 60° arc picks which of the two signs."""
+        if not self._skin.show_pointer or self._skin.pointer != "hexa":
+            return None
+        distance = math.hypot(point.x(), point.y())
+        star_tip = radius * self._skin.star.radius_fraction
+        if not (radius * 0.08 <= distance <= star_tip):
+            return None
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        arms = constants.POINTER_POINTS["hexa"]
+        arm_step = 360.0 / arms
+        arm_angle = (
+            round(((theta - rotation) % 360.0) / arm_step) * arm_step
+        ) % 360.0
+        half = constants.POINTER_ARM_HALF_ANGLE_DEG["hexa"]
+        inner = star_tip / (2.0 * math.cos(math.radians(half)))
+        drawn = arm_angle + rotation
+        diamond = QPolygonF([
+            QPointF(0.0, 0.0),
+            dial_point(drawn - half, inner),
+            dial_point(drawn, star_tip),
+            dial_point(drawn + half, inner),
+        ])
+        if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
+            return None
+        rel = ((theta - rotation - arm_angle + 180.0) % 360.0) - 180.0
+        start_angle = (arm_angle + (-30.0 if rel < 0.0 else 0.0)) % 360.0
+        if self._day.southern_hemisphere:
+            start_angle = (start_angle + 180.0) % 360.0
+        return constants.ZODIAC_SIGNS[int(start_angle) // 30][0]
+
+    def _calendar_wedge_target(
+        self, point: QPointF, radius: float
+    ) -> tuple[str, int] | None:
+        """The (topic, entry) for the Calendar wedge under the cursor
+        (owner 2026-07-16, the Spacebar jump) — Almanac wedges open the
+        Chinese animal, Zodiac wedges the sign. Mirrors the
+        _calendar_tooltip angle math."""
+        from render.layers import calendar_wheel
+
+        distance = math.hypot(point.x(), point.y())
+        outer = radius * self._skin.background.aura_radius_fraction
+        if not (radius * 0.08 <= distance <= outer):
+            return None
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
+        step = constants.CALENDAR_WEDGE_DEG
+        if calendar_wheel(self._skin) == "almanac":
+            index = int((theta + step / 2.0) // step) % 12
+            return "chinese", (index - 6) % 12
+        start_angle = int(theta // step) * step
+        if self._day.southern_hemisphere:
+            start_angle = (start_angle + 180.0) % 360.0
+        name = constants.ZODIAC_SIGNS[int(start_angle) // 30][0]
+        return "astrology", _ENC_ZODIAC_ORDER.index(name)
 
     @profiling.timed("Hit test")
     def _element_at(
@@ -1669,9 +1798,12 @@ class Compositor:
         """The Calendar wedge hover (owner 2026-07-16, kept modest —
         full articles arrive with the archetype engine). Almanac: the
         month name and the wedge's Chinese double-hour animal with its
-        clock span. Zodiac: the sign name with its date span (the
-        existing year-wheel cusps)."""
-        from render.layers import calendar_wheel
+        clock span, above OUR Chinese COLORED medallion of that animal.
+        Zodiac: the sign name with its date span (the existing
+        year-wheel cusps), above the sign's COLORED LOGO art — never a
+        unicode glyph standing in for the art (owner 2026-07-16, ROADMAP
+        queue #7)."""
+        from render.layers import calendar_wheel, octa_slot_art
 
         distance = math.hypot(point.x(), point.y())
         outer = radius * self._skin.background.aura_radius_fraction
@@ -1686,7 +1818,10 @@ class Compositor:
             animal = constants.CHINESE_ANIMALS[(index - 6) % 12]
             center_hour = (2 * index - 12) % 24
             start_hour, end_hour = (center_hour - 1) % 24, (center_hour + 1) % 24
-            return _centered_html(
+            art = octa_slot_art(
+                constants.CHINESE_STYLE_ART_DIRS["colored"], animal
+            )
+            return _hover_badge(art) + _centered_html(
                 f"<b>{html.escape(self._tr(_MONTHS[month - 1]))}</b>",
                 "",
                 html.escape(self._tr(animal)),
@@ -1701,7 +1836,8 @@ class Compositor:
         start, end = zodiac_span(day.year_anchors, start_angle)
         start = start.astimezone(day.tzinfo)
         last = end.astimezone(day.tzinfo) - timedelta(days=1)
-        return _centered_html(
+        art = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name)
+        return _hover_badge(art) + _centered_html(
             f"<b>{html.escape(symbol)} {html.escape(self._tr(name))}</b>",
             f"{self._ord(start.day)} {html.escape(self._month(start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))}",

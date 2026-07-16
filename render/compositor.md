@@ -126,6 +126,20 @@ draws the MINUTE layers (hands, year marker) live.
   the body spots, pointer off the arm regions and the octa slot,
   earth/moon off their markers
 
+The Calendar wedge hover (`_calendar_tooltip`) now WEARS OUR ART (owner
+2026-07-16, ROADMAP queue #7): the Almanac wedge shows the double-hour
+animal's Chinese COLORED medallion, the Zodiac wedge the sign's COLORED
+LOGO — a real `_hover_badge` image above the text, never a unicode glyph.
+
+- `encyclopedia_target(x, y, size) -> (topic, entry) | None` (owner
+  2026-07-16, ROADMAP queue #8): the ONE element→encyclopedia-topic
+  mapping behind the Spacebar jump — a weekday body → its theme page at
+  that body, an Astrology/Ascendant/Chinese slot → the sign/animal page,
+  a hexa sign diamond (`_arm_zodiac_sign`) and a Calendar wedge
+  (`_calendar_wedge_target`) → the sign/animal page. It reuses the hover
+  GEOMETRY, not the tooltip text, so it works with the legend OFF; the
+  Moon, Earth, digital slots, twilight bands and ring band map to None.
+
 The layer stack follows `skin.z_order`, skipping the layers of
 switched-off Elements (star, weekday set, year marker when both
 markers are off, the seconds hand); angle-seated slots draw BELOW the
