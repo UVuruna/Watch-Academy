@@ -614,15 +614,19 @@ def _topics() -> dict:
     # its myth and the tides (spring at new/full, neap at the quarters).
     # The order is constants.MOON_PHASE_NAMES, so the Spacebar jump
     # (compositor._element_encyclopedia_target) indexes a hovered phase
-    # straight into this list. The single moon plate backs every page
-    # until per-phase art lands.
+    # straight into this list. Every page wears ITS OWN phase plate
+    # (owner 2026-07-16) — rendered from the full-moon master by
+    # setup/make_moon_phases.py with the dial's terminator geometry.
     moon_plate = defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png"
     topics["moon"] = {
         "title": "Moon",
         "icon": moon_plate,
         "entries": [
             {
-                "images": (moon_plate,),
+                "images": (
+                    defaults.MOON_PHASE_ART_DIR
+                    / f"{phase.lower().replace(' ', '_')}.png",
+                ),
                 "name": ("moon_title", phase),
                 "article": ("moon", phase),
                 "accents": (),

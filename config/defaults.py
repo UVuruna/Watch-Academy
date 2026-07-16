@@ -862,6 +862,10 @@ EMBLEM_ART_DIRS = {
 # and the one Equinox) and meteorological/ (the measured twins).
 TRINITY_ART_DIR = paths.assets_dir() / "badge" / "trinity"
 SEASON_ART_DIR = paths.assets_dir() / "badge" / "season"
+# The EIGHT moon-phase plates (owner 2026-07-16) — generated from the
+# full-moon master by setup/make_moon_phases.py with the dial's own
+# terminator geometry; the Encyclopedia's Moon pages wear them.
+MOON_PHASE_ART_DIR = paths.assets_dir() / "moon"
 # Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128
