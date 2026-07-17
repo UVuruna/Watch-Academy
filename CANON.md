@@ -755,8 +755,8 @@ them.)
   forced — we already have more than enough).
 
 **The philosophy boundary (owner closure 2026-07-17):** the
-population/世 readings around the family circuit stay OUT of the
-dial — the Encyclopedia writes the MECHANISM only ("when the
+population and world-politics readings around the family circuit
+stay OUT of the dial — the Encyclopedia writes the MECHANISM only ("when the
 queen's need finds a throne outside the house, the hearth loses its
 queen"), timeless, unpolitical. Sealed with the owner's "može".
 
