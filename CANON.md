@@ -682,11 +682,13 @@ as the Zodiac Dozen lights the current sign.)
 
 <a id="the-triads"></a>
 
-## The Triads — the Trio's Stacked Readings (owner 2026-07-17)
+## The Triads — the Trio's Stacked Readings (owner 2026-07-17, time FLIPPED same day)
 
 The trio pointer's three angles (12h · 20h · 04h) accumulate
-READINGS the way the whole dial stacks canons — and the owner's
-triads INTERLOCK on the same three seats:
+READINGS the way the whole dial stacks canons. The triads are NOT
+new archetypes — the Trinity archetype stays ONE; the stack lives
+in its TWO-ROW ARTICLES and the Encyclopedia's Triads page (owner
+concern resolved 2026-07-17: textual layers, not visual modes).
 
 | 12h (yellow) | 20h (red) | 04h (blue) |
 |---|---|---|
@@ -694,21 +696,36 @@ triads INTERLOCK on the same three seats:
 | **God (The One)** | **the Devil** | **Jesus** |
 | **the Child** *(light: green top)* | **the Mother** | **the Father** |
 | **Faith** | **Love** | **Hope** |
-| **the PRESENT** | **the PAST** | **the FUTURE** |
+| **the PRESENT** | **the FUTURE** | **the PAST** |
 | **the WORD** | **the DEED** | **the THOUGHT** |
 
-**The interlocking law (the find):** the three new rows are not
-three separate ideas — they are the courtroom seen through time.
-The PROSECUTOR holds your PAST (he charges what was DONE — the
-deed); the ADVOCATE holds your FUTURE (he pleads what you may yet
-become — the thought, the intent); the JUDGE rules in the PRESENT
-(the word — the verdict spoken NOW). And the scripture anchors are
-exact: *"In the beginning was the WORD, and the Word was God"*
-(John 1:1 — the Word on God's arm); *"let us not love in word…
-but in DEED"* (1 John 3:18 — the deed on Love's arm); Hope is the
-thought of what is not yet (Romans 8:24). The oldest triple of all
-blesses the process row: Zoroaster's *humata, hukhta, hvarshta* —
-good thoughts, good words, good deeds.
+**The time mapping is the OWNER'S (2026-07-17), flipping the
+agent's first draft — and his arguments won on every axis:**
+
+- **Clockwise reads as time:** past (04h) → present (12h) → future
+  (20h) — the hand's own direction carries the arrow of time; the
+  first draft made time run backwards.
+- **The psychology seals it:** JUDAS' weakness — the blue arm's —
+  is DWELLING ON PAST mistakes, the road to depression; LUCIFER'S —
+  the red arm's — is GAZING AT A GORGEOUS FUTURE he feels entitled
+  to: ideals, appetite, pride. Blue is the past's captive, red the
+  future's.
+- **The court agrees:** the ADVOCATE defends deeds ALREADY DONE
+  (he works in the past); the PROSECUTOR seeks to RUIN a future
+  (he strikes forward).
+- **The process agrees:** thoughts mostly dwell on what WAS; the
+  FUTURE is built of DEEDS; the WORD is spoken now.
+
+**The cure doctrine (the agent's addition on the owner's flip):**
+each arm's time-fixation is its shadow, and the arm's own VIRTUE is
+the cure — Judas drowned in the past, and HOPE was the medicine he
+refused (*"forgetting those things which are behind, and reaching
+forth unto those things which are before"* — Philippians 3:13, the
+blue arm's prescription); Lucifer was drunk on his own future, and
+LOVE-IN-DEED — given to others, now — was the cure he refused
+(1 John 3:18 stays on the red arm). The WORD remains on God's arm
+(John 1:1). Zoroaster's *humata, hukhta, hvarshta* blesses the
+process row.
 
 **Owner doctrine for Misli–Reči–Dela:** each of the three is a
 place where a person can do wrong or do good — three gates to
@@ -716,14 +733,32 @@ guard. (Article material: a fault in thought is temptation, in word
 false witness, in deed the crime — and the three courts that judge
 them.)
 
-**PROPOSED additions (agent offers — owner picks):**
-- **Thesis – Antithesis – Synthesis** (Hegel): the courtroom IS
-  dialectics — prosecution thesis, defense antithesis, verdict
-  synthesis at the top.
-- **Spirit – Body – Soul** (1 Thess 5:23): spirit at noon, body at
-  the deed's arm, soul at the thought's.
-- **Sun – Earth – Moon**: the instrument's own three bodies as its
-  own triad.
+**PROPOSED additions (status after the owner's 2026-07-17 review):**
+
+- **Thesis – Antithesis – Synthesis** (Hegel) — owner unsure, the
+  agent's defense stands for his verdict: the THESIS is what
+  STANDS (the past's order, 04h), the ANTITHESIS is what
+  CHALLENGES (the future's strike, 20h), the SYNTHESIS rules above
+  (the present, 12h) — and Hegel's engine is CIRCULAR: every
+  synthesis becomes the next thesis, the wheel turns — dialectics
+  belongs on a dial.
+- **Spirit – Body – Soul** — owner will accept IF the
+  spirit/soul difference convinces him; the offered mapping: the
+  SOUL (duša) is the inner personal life — mind, feelings, will,
+  what makes you YOU — and it THINKS (04h, the inner blue); the
+  BODY ACTS (20h, the deed); the SPIRIT is the God-facing faculty
+  — conscience, worship — and it SPEAKS (12h: *"the words that I
+  speak unto you, they are SPIRIT"* — John 6:63). The soul faces
+  the world, the spirit faces heaven.
+- **Sun – Earth – Moon** — PARKED (owner unsure, agent agrees the
+  colors do not land naturally; the owner's law stands: nothing is
+  forced — we already have more than enough).
+
+**The philosophy boundary (owner closure 2026-07-17):** the
+population/世 readings around the family circuit stay OUT of the
+dial — the Encyclopedia writes the MECHANISM only ("when the
+queen's need finds a throne outside the house, the hearth loses its
+queen"), timeless, unpolitical. Sealed with the owner's "može".
 
 **The Family circuit's three GIFTS (owner 2026-07-17 — the article
 and logo spec for each leg):**
