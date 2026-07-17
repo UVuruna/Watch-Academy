@@ -305,6 +305,13 @@ lives in [The DOMY Canon](CANON.md).
      Replace with a compact analytic elongation series (pure
      Python, no data files), golden-tested against our own
      events.sqlite instants; rise/set already match to the minute.
+15d. **Visibility: two Z modes (owner 2026-07-17, Settings).**
+   1 — the current: the clock always BELOW everything except the
+   desktop (WindowStaysOnBottom); 2 — NEW: always ON TOP of
+   everything (max Z) — a small clock the user always sees whatever
+   he does. A Settings choice (and the window flags swap needs the
+   documented Windows re-parenting care: flags change before
+   show(), or hide/re-show).
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
