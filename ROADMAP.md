@@ -258,6 +258,27 @@ lives in [The DOMY Canon](CANON.md).
    the app), the light−dark envelope with the eras marked, the
    eclipse timeline, the local day-length curve; dark
    QPainter-drawn, series toggles, bundled compact JSON series.
+15a2. **The year line doctrine (owner 2026-07-17).** Everywhere a
+   year shows, BOTH forms show: the official year and the Anno
+   Lucis year ("2026 · 6105. Anno Lucis"). Settings govern the
+   official labels (BCE/CE default or BC/AD; positive years BARE by
+   default — "2026", the suffix only on opt-in or for negative
+   years) and an optional THIRD era on the line: AUC (CE+753),
+   Byzantine AM (CE+5509), Hebrew AM (CE+3760), Anno Hegirae
+   (lunar, display-grade approximation) — amendment sent into
+   Session 16. The ±200,000-year Laskar span is CHARTS-ONLY
+   (Observatory) — Time Travel stays within the precise
+   −13000…+17000 pack (owner confirmed: not precise enough for
+   dates beyond).
+15a3. **Era terms in the Encyclopedia + their LOGOS (owner
+   2026-07-17).** "Age of Light", "Age of Darkness" and the STARRY
+   SEASONS (spring/summer/autumn/winter of the eras, with the
+   measured transitions) each get an Encyclopedia article — and a
+   PROMPT SHEET for their LOGOS/emblems (a new
+   research/prompts/era/ sheet: an emblem per era and per starry
+   season, house register). The "Eras of the World" article grows
+   the owner's list: AUC, Byzantine AM, Hebrew AM, AH — plus the
+   Chinese count and the Buddhist Era (543 BCE) as my additions.
 15b. **The MASON G ring (owner 2026-07-16).** A new bundled ring
    preset on the seal layout: **G(12) S(16) M(20) Ω(24) N(4)
    A(8)** — the banknote's letters on the dial (CANON §The
