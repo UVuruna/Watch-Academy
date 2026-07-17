@@ -16,6 +16,7 @@ rules by which any new member, theme or figure gets placed.
 - [The Ninth — Outside the Circle](#the-ninth)
 - [Pointer Archetypes](#pointer-archetypes)
 - [The Calendar — the Twelve-Wedge Pointer](#the-dozen)
+- [The Triads — the Trio's Stacked Readings](#the-triads)
 - [The Banknote — In God We Trust](#the-banknote)
 - [Working Rules for Agents](#working-rules)
 
@@ -678,6 +679,63 @@ as the Zodiac Dozen lights the current sign.)
 **Naming (SEALED 2026-07-16):** the pointer is **Calendar** (slug
 `calendar`); the two wheels are **Zodiac** (left) and **Almanac**
 (right), offered where the other pointers offer Paint/Light.
+
+<a id="the-triads"></a>
+
+## The Triads — the Trio's Stacked Readings (owner 2026-07-17)
+
+The trio pointer's three angles (12h · 20h · 04h) accumulate
+READINGS the way the whole dial stacks canons — and the owner's
+triads INTERLOCK on the same three seats:
+
+| 12h (yellow) | 20h (red) | 04h (blue) |
+|---|---|---|
+| **Judge** | **Prosecutor** | **Advocate** |
+| **God (The One)** | **the Devil** | **Jesus** |
+| **the Child** *(light: green top)* | **the Mother** | **the Father** |
+| **Faith** | **Love** | **Hope** |
+| **the PRESENT** | **the PAST** | **the FUTURE** |
+| **the WORD** | **the DEED** | **the THOUGHT** |
+
+**The interlocking law (the find):** the three new rows are not
+three separate ideas — they are the courtroom seen through time.
+The PROSECUTOR holds your PAST (he charges what was DONE — the
+deed); the ADVOCATE holds your FUTURE (he pleads what you may yet
+become — the thought, the intent); the JUDGE rules in the PRESENT
+(the word — the verdict spoken NOW). And the scripture anchors are
+exact: *"In the beginning was the WORD, and the Word was God"*
+(John 1:1 — the Word on God's arm); *"let us not love in word…
+but in DEED"* (1 John 3:18 — the deed on Love's arm); Hope is the
+thought of what is not yet (Romans 8:24). The oldest triple of all
+blesses the process row: Zoroaster's *humata, hukhta, hvarshta* —
+good thoughts, good words, good deeds.
+
+**Owner doctrine for Misli–Reči–Dela:** each of the three is a
+place where a person can do wrong or do good — three gates to
+guard. (Article material: a fault in thought is temptation, in word
+false witness, in deed the crime — and the three courts that judge
+them.)
+
+**PROPOSED additions (agent offers — owner picks):**
+- **Thesis – Antithesis – Synthesis** (Hegel): the courtroom IS
+  dialectics — prosecution thesis, defense antithesis, verdict
+  synthesis at the top.
+- **Spirit – Body – Soul** (1 Thess 5:23): spirit at noon, body at
+  the deed's arm, soul at the thought's.
+- **Sun – Earth – Moon**: the instrument's own three bodies as its
+  own triad.
+
+**The Family circuit's three GIFTS (owner 2026-07-17 — the article
+and logo spec for each leg):**
+
+| Leg | The gift | The emblem |
+|---|---|---|
+| child → father | **Security, Protection** | **the Shield** (sealed — exists as a rondel) |
+| father → mother | **Emotional support** | proposed: **the Heart in open hands** (the healer's Renewal mark) |
+| mother → child | **Leadership — the high seat of the house** | proposed: **the small Crown of the hearth** (the household as her kingdom — the Matriarch's own echo) |
+
+Each leg gets its story (text), an example and its logo — queued
+with the Family articles.
 
 <a id="the-banknote"></a>
 
