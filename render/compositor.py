@@ -48,7 +48,7 @@ from render.layers import (
     HoverLiftLayer,
     archetype_active,
     archetype_art_ready,
-    archetype_center_height,
+    archetype_set_height,
     archetype_key,
     archetype_lit_index,
     dial_point,
@@ -62,6 +62,7 @@ from render.layers import (
     slot_view,
     sunday_dual_face,
     weekday_body_orbit,
+    weekday_body_size,
     today_slot_theta,
     visible_occupant,
     weekday_classic_slot,
@@ -611,7 +612,13 @@ class Compositor:
         today's body, the Earth marker (day/week ordinals, zodiac sign
         with its dates, the date — plus the season event while it glows),
         the Moon marker (phase + illumination, day in the cycle), the
-        octa zodiac slot and the twilight bands."""
+        octa zodiac slot and the twilight bands. The timed shell over
+        `_tooltip_at` — the background warm sweep calls the impl
+        directly so the owner's Hover text profile keeps measuring
+        REAL hovers only."""
+        return self._tooltip_at(x, y, size)
+
+    def _tooltip_at(self, x: float, y: float, size: float) -> str | None:
         if self._day is None or self._last_tick is None:
             return None
         if not self._skin.legend:
@@ -719,6 +726,57 @@ class Compositor:
         # Last in the chain (owner rework 5 & 6): the sunlit arc answers
         # with the day, the dark of the wheel with the night.
         return self._period_tooltip(point, radius)
+
+    @profiling.timed("Hover warmup")
+    def warm_hover_articles(
+        self, size: float, should_stop=None, progress=None
+    ) -> int:
+        """Pre-build EVERY hover article this skin can speak TODAY, off
+        the GUI thread (owner 2026-07-18, asked twice: the user never
+        hovers in the first seconds after launch — spend them loading,
+        so the FIRST hover is as instant as the tenth). The sweep walks
+        a dense polar grid through the REAL `_tooltip_at` dispatch — no
+        second file-resolution path to drift — so every article builds
+        once and every embedded image's downscaled variant lands in the
+        disk cache (and the OS file cache: that IS the in-RAM copy the
+        tooltip loads instantly afterwards). Grid pitch ≈ half the
+        smallest hover target (the Moon marker), so nothing slips
+        between probes; a probe that finds no element costs
+        microseconds. Ring-paced with a short sleep — slow and polite,
+        image by image, per the owner's spec. Re-run on skin install
+        and day change (`should_stop` aborts a sweep the controller
+        obsoleted); a warm re-run costs header reads only. Returns how
+        many probes spoke an article."""
+        from time import sleep
+
+        if self._day is None or self._last_tick is None:
+            return 0
+        spoken = 0
+        radius = size / 2
+        rings = defaults.HOVER_WARM_RADIAL_STEPS
+        angles = defaults.HOVER_WARM_ANGLE_STEPS
+        # Center first (the hexa/trio Sun, center seats), then the rings.
+        if self._tooltip_at(radius, radius, size) is not None:
+            spoken += 1
+        for ring in range(1, rings + 1):
+            fraction = ring / rings
+            for step in range(angles):
+                if should_stop is not None and should_stop():
+                    return spoken
+                theta = math.radians(step * 360.0 / angles)
+                if self._tooltip_at(
+                    radius + math.sin(theta) * radius * fraction,
+                    radius - math.cos(theta) * radius * fraction,
+                    size,
+                ) is not None:
+                    spoken += 1
+            if progress is not None and ring % 10 == 0:
+                progress(
+                    f"hover warmup ring {ring}/{rings} "
+                    f"({spoken} articles spoken)"
+                )
+            sleep(defaults.HOVER_WARM_RING_PAUSE_S)
+        return spoken
 
     def encyclopedia_target(
         self, x: float, y: float, size: float
@@ -1025,7 +1083,7 @@ class Compositor:
             center = archetypes.center(key)
             if center is not None and hit(
                 QPointF(0.0, 0.0),
-                archetype_center_height(self._skin, radius, key) / 2.0,
+                archetype_set_height(self._skin, radius, key) / 2.0,
             ):
                 return "archetype:center"
         marker = self._skin.year_marker
@@ -1110,7 +1168,14 @@ class Compositor:
             center_body = "sun"          # today's opaque Sun or the ghost Sun
         if center_body is not None and hit(
             QPointF(0, 0),
-            radius * weekday.center_scale * slot_seat_scale(self._skin),
+            # The hit disc mirrors the DRAWN size (owner 2026-07-18):
+            # hexa/trio centers match the diamond bodies; the
+            # center-only showcase keeps center_scale — WITHOUT the
+            # seat factor this path used to add (the disc overhung the
+            # image by 1.5×).
+            radius * weekday.center_scale
+            if weekday.display_mode == "center_only"
+            else weekday_body_size(self._skin, radius) / 2,
         ):
             return center_body
         if weekday.display_mode == "center_only":

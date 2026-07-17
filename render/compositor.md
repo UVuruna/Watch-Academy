@@ -130,7 +130,9 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   the LIVE Moon hover reads the TRUE analytic `tick.moon_illumination`.
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
-  hyphens instead of long dashes), in priority order — the WEEKDAY
+  hyphens instead of long dashes) — a `@timed("Hover text")` shell over
+  `_tooltip_at`, so the owner's profile measures REAL hovers only while
+  the warm sweep (below) calls the impl directly — in priority order — the WEEKDAY
   BODIES (every visible body within its image region: the entity's
   NAME as a bigger bold title — Odin, Farmer, Islam… (owner spec
   2026-07-11, `defaults.ARTICLE_TITLE_PX`) — the active day adds
@@ -209,6 +211,22 @@ The Calendar wedge hover (`_calendar_tooltip`) now WEARS OUR ART (owner
 2026-07-16, ROADMAP queue #7): the Almanac wedge shows the double-hour
 animal's Chinese COLORED medallion, the Zodiac wedge the sign's COLORED
 LOGO — a real `_hover_badge` image above the text, never a unicode glyph.
+
+- `warm_hover_articles(size, should_stop, progress) -> int` (owner
+  2026-07-18, asked twice — the FIRST hover must be as instant as the
+  tenth): the background pre-build of every hover article the skin can
+  speak TODAY. It walks a dense polar probe grid
+  (`HOVER_WARM_ANGLE_STEPS × HOVER_WARM_RADIAL_STEPS`, pitch under half
+  the smallest hover target) through the REAL `_tooltip_at` dispatch —
+  no second file-resolution path to drift — so every embedded image's
+  downscaled variant lands in the disk cache and the OS file cache
+  before the user's first hover ever fires; ring-paced with
+  `HOVER_WARM_RING_PAUSE_S` (slow and polite, image by image, per the
+  owner's words). `@timed("Hover warmup")` — its cost shows in the
+  owner's profile under its OWN name, never polluting "Hover text".
+  The controller runs it after the working-set warmup and re-runs it
+  on skin install and day change (`should_stop` aborts an obsoleted
+  sweep); a warm re-run costs header reads only.
 
 - `encyclopedia_target(x, y, size) -> (topic, entry) | None` (owner
   2026-07-16, ROADMAP queue #8, "sve znači SVE" round 2026-07-16): the

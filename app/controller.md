@@ -35,7 +35,16 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (DPI/monitor moves flush every rasterized cache). The remembered
   position is kept if ANY attached screen shows part of the dial
   (multi-monitor safe); otherwise — first run or monitors rearranged —
-  the widget centers on the primary screen
+  the widget centers on the primary screen. One background thread
+  (`_warm_caches`) then chains the working-set warmup and the HOVER
+  ARTICLE sweep (owner 2026-07-18, asked twice: the user never hovers
+  in the first seconds — pre-build every article the dial can speak
+  today, so the FIRST hover is instant)
+- `_start_hover_warm()` / `_warm_hover_articles()`: re-run the sweep
+  (`compositor.warm_hover_articles`) on skin install and day change —
+  the generation counter (`_hover_warm_generation`) obsoletes a sweep
+  whose skin/day was replaced mid-run; a warm re-run costs header
+  reads only
 - `_on_tick(clock_jumped)`: day-context rebuild on cache-key change or
   clock jump; unreadable/out-of-coverage astronomical data dies VISIBLY
   (dialog, then exit) — never a silently wrong dial
@@ -242,7 +251,7 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - `_open_report()`: the hidden [Report](report.md) — the
   [Profiling](../config/profiling.md) statistics (`@timed` on the
   tick, day rebuild, skin build, paint, composite rebuild, hit test,
-  hover text, subdial recolor, working-set warmup and translation
-  chunks), flushed once per minute and at quit
+  hover text, hover warmup, subdial recolor, working-set warmup and
+  translation chunks), flushed once per minute and at quit
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

@@ -116,10 +116,15 @@ ARCHETYPE CLOCK. The machinery:
   composite on it, like the Calendar's shichen wedge.
 - `ArchetypeLayer` (DAILY but HOVER-VARIABLE — painted LIVE, never in
   the cached composite, owner 2026-07-17 ROADMAP 15f; at the weekday_set
-  z spot): the figures at the romb center (`weekday_body_orbit`), each
-  sized by `archetype_figure_height()` — the desired fraction of the star
-  tip (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP`) CLAMPED into the romb for the
-  art's own aspect (`archetype_fit_height`, owner slika 8 2026-07-17 —
+  z spot): the figures at the romb center (`weekday_body_orbit`), ALL
+  at the layout's ONE `archetype_set_height()` (owner 2026-07-18, 15g
+  round two: the real glass arrives with slightly different aspects,
+  so the per-art clamp alone split the arms into different heights —
+  the set adopts the SMALLEST clamped height across its figures, every
+  figure equal and inside its diamond; `archetype_figure_height()` is
+  the per-art term — the desired fraction of the star tip
+  (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP`) CLAMPED into the romb for the
+  art's own aspect via `archetype_fit_height`, owner slika 8 —
   the glass never overflows its diamond) with the arm color visible
   around them; the lit figure FULL, the rest at the weekday
   `ghost_opacity`; the reveal window turns everything full. With Names
@@ -132,11 +137,11 @@ ARCHETYPE CLOCK. The machinery:
   CenterBodyLayer): the center figure — the Eye / Hearth / Seal /
   Union / Throne, none on the Compass — full opacity, hover-enlarged
   as `"archetype:center"` (its lift twin joins HoverLiftLayer). It is
-  the SAME size as the arm figures now (owner 2026-07-17, ROADMAP 15g:
-  `archetype_center_height()` adopts the arm figures' clamped height —
-  no longer the weekday Sun's `center_scale`, which sized it larger, nor
-  its own square-Seal clamp, which would size it smaller — and reveal
-  can no longer resize it; the `_element_at` hit disc matches).
+  the SAME size as the arm figures now (owner 2026-07-17/18, ROADMAP
+  15g: it adopts the layout's `archetype_set_height()` — no longer the
+  weekday Sun's `center_scale`, which sized it larger, nor its own
+  square-Seal clamp, which would size it smaller — and reveal can no
+  longer resize it; the `_element_at` hit disc matches).
 - `archetype_art_ready(path)` + `draw_archetype_figure()` — the
   graceful placeholder path: a missing file or a committed 1×1
   placeholder draws the figure's NAME in the outlined label style
@@ -286,14 +291,24 @@ Draws only while a slot DRIVES the classic unit
 `slot angle + hexagram_rotation`, current day opaque, rest at
 `ghost_opacity`; the hexa and trio layouts additionally center a ghost
 Sun (cross/octa seat the Sun on an arm). "center_only": nothing here —
-the center pass draws it. Bodies draw a skin image when provided,
+the center pass draws it. EVERY body — the diamond slots AND the
+hexa/trio center Sun — is `weekday_body_size()` (owner 2026-07-18,
+his screenshots: the center used to draw `center_scale × seat factor`,
+~170 px against 144 px diamonds, and the reveal center dropped the seat
+factor and SHRANK to ~114 px; one formula now, both states, and it
+retired the old "Sun is 1.20×" note — only the center_only showcase
+keeps `center_scale`). Bodies draw a skin image when provided,
 otherwise a colored disc; the white label is the weekday SHORT name
 (MON/TUE/…) below 720 px, the full name from 720 up.
 
 ### CenterBodyLayer (MINUTE)
 The current day's CENTER image ABOVE the hands: the opaque Sun on
 Sundays in ghost mode (hexa only), or today's body in center_only mode.
-Slot images never move up here.
+Slot images never move up here. Sized by `weekday_body_size()` — the
+same as the diamond bodies, in the normal state and during the reveal
+alike (owner 2026-07-18); center_only keeps its own `center_scale`
+showcase, and the compositor's center hit disc mirrors both drawn
+sizes exactly.
 
 ### SlotLayer (MINUTE)
 One instance per placement pass draws every SEATED slot from

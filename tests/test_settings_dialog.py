@@ -361,29 +361,40 @@ def test_encyclopedia_opens_at_the_spacebar_target(app):
     unknown.deleteLater()
 
 
-def test_art_source_resolves_with_fallback():
+def test_art_source_resolves_with_fallback(tmp_path, monkeypatch):
     """Owner 2026-07-14: the Gemini and ChatGPT generations coexist
     under assets/<root>/<source>/ — canonical paths resolve into the
-    active source, FALL BACK to the other where a file is missing
-    (partial ChatGPT coverage), the emblem step-up lands under the
-    REAL root, and settings validate the stored value."""
+    active source, FALL BACK to the other where a file is missing,
+    the emblem step-up lands under the REAL root, and settings
+    validate the stored value. Pinned on a SYNTHETIC assets tree with
+    controlled coverage (the real tree's gaps close file by file as
+    the owner's generations land — 2026-07-18 they broke the old
+    'no ChatGPT Greek yet' premise)."""
     from config import constants, paths
 
-    canonical = defaults.WEEKDAY_ART_DIR / "greek/primary/Zeus.png"
+    assets = tmp_path / "assets"
+    for rel in (
+        "weekday/gemini/greek/primary/Zeus.png",       # gemini-only
+        "weekday/chatgpt/wolf/primary/alpha.png",      # chatgpt-only
+        "emblem/gemini/virtue/Justice.png",            # step-up target
+    ):
+        target = assets.joinpath(*rel.split("/"))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(b"png")
+    monkeypatch.setattr(paths, "assets_dir", lambda: assets)
+
+    weekday = assets / "weekday"
+    canonical = weekday / "greek/primary/Zeus.png"
     resolved = paths.art_file(canonical)
     assert "gemini" in resolved.parts and resolved.exists()
-    stepup = paths.art_file(
-        defaults.WEEKDAY_ART_DIR / "../emblem/virtue/Justice.png"
-    )
+    stepup = paths.art_file(weekday / "../emblem/virtue/Justice.png")
     assert stepup.parts[-4:-2] == ("emblem", "gemini")
     assert stepup.exists()
     try:
         paths.set_art_source("chatgpt")
-        wolf = paths.art_file(
-            defaults.WEEKDAY_ART_DIR / "wolf/primary/alpha.png"
-        )
+        wolf = paths.art_file(weekday / "wolf/primary/alpha.png")
         assert "chatgpt" in wolf.parts and wolf.exists()
-        fallback = paths.art_file(canonical)     # no ChatGPT Greek yet
+        fallback = paths.art_file(canonical)   # no ChatGPT copy in the tree
         assert "gemini" in fallback.parts and fallback.exists()
     finally:
         paths.set_art_source(constants.ART_SOURCE_DEFAULT)

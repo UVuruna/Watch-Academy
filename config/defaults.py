@@ -974,6 +974,17 @@ MOON_PHASE_ART_DIR = paths.assets_dir() / "moon"
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128
 
+# --- Hover article warm sweep (owner 2026-07-18) --------------------------------
+# The background pre-build of every hover article (compositor
+# .warm_hover_articles): a polar probe grid over the whole dial, walked
+# through the real tooltip dispatch. 180 angles x 40 rings keeps the
+# pitch under half the smallest hover target (the Moon marker) at every
+# supported diameter; the per-ring pause keeps the sweep slow and
+# polite — image by image, never a CPU burst at startup.
+HOVER_WARM_ANGLE_STEPS = 180
+HOVER_WARM_RADIAL_STEPS = 40
+HOVER_WARM_RING_PAUSE_S = 0.05
+
 # --- Weekday body themes (SYMBOLISM.md canon) -----------------------------------
 # Display names per theme, body -> name (the weekday hover reads
 # "Wednesday, Odin" in the norse theme). "planets" keeps the skin's own
@@ -1553,7 +1564,11 @@ DEFAULT_SKIN = SkinDefinition(
         },
         display_mode="ghost",           # owner default; "center_only" selectable
         ghost_opacity=0.15,
-        center_scale=0.132,             # owner spec: Sun is 1.20x the others
+        center_scale=0.132,             # center_only showcase ONLY (owner
+                                        # 2026-07-18: the hexa/trio center
+                                        # matches the diamond bodies —
+                                        # layers.weekday_body_size; this
+                                        # retired the "Sun is 1.20x" note)
         diamond_scale=0.11,
         orbit_fraction=0.38,
     ),

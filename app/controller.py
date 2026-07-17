@@ -641,6 +641,10 @@ class AppController(QObject):
         self._hover_poller.setInterval(defaults.CLICK_THROUGH_HOVER_POLL_MS)
         self._hover_poller.timeout.connect(self._poll_hover)
         self._last_hover_tip: str | None = None
+        # Hover article warm sweeps (owner 2026-07-18): the generation
+        # counter obsoletes a running sweep when the skin or day it was
+        # warming is replaced.
+        self._hover_warm_generation = 0
 
     # --- Lifecycle --------------------------------------------------------------
 
@@ -672,10 +676,35 @@ class AppController(QObject):
             self._hover_poller.start()
         # The WORKING SET warms in the background (owner 2026-07-15:
         # full-res originals ship, the downscaled dial copies build at
-        # start) — a no-op once every derived file exists.
+        # start) — a no-op once every derived file exists. The HOVER
+        # ARTICLE sweep chains right after it on the same thread (owner
+        # 2026-07-18, asked twice): every article the dial can speak
+        # today pre-builds slowly, image by image, so the user's FIRST
+        # hover is instant.
+        threading.Thread(target=self._warm_caches, daemon=True).start()
+
+    def _warm_caches(self) -> None:
+        warm_working_set(progress=print)
+        self._warm_hover_articles()
+
+    def _start_hover_warm(self) -> None:
+        """Obsolete any running sweep and start a fresh one — called on
+        skin install and day change (a new skin/day speaks new articles;
+        a warm re-run costs header reads only)."""
+        self._hover_warm_generation += 1
         threading.Thread(
-            target=lambda: warm_working_set(progress=print), daemon=True
+            target=self._warm_hover_articles, daemon=True
         ).start()
+
+    def _warm_hover_articles(self) -> None:
+        compositor = self._compositor
+        generation = self._hover_warm_generation
+        compositor.warm_hover_articles(
+            float(self._settings.diameter),
+            should_stop=lambda: self._hover_warm_generation != generation
+            or self._compositor is not compositor,
+            progress=print,
+        )
 
     def quit(self) -> None:
         self._widget.mark_closing()
@@ -713,7 +742,8 @@ class AppController(QObject):
             observer = self._observer
             cycles = 0
         day_key = (now.date(), now.utcoffset())
-        if self._day is None or self._day.cache_key != day_key or clock_jumped:
+        first_day_build = self._day is None
+        if first_day_build or self._day.cache_key != day_key or clock_jumped:
             try:
                 with profiling.measure("Day context"):
                     # The repositories take the REAL astronomical year
@@ -752,6 +782,10 @@ class AppController(QObject):
                 )
                 raise SystemExit(1) from error
             self._compositor.set_day(self._day)
+            if not first_day_build:
+                # A NEW day (or travel jump) speaks new articles — the
+                # startup chain already covers the first build.
+                self._start_hover_warm()
         self._widget.set_tick(build_tick_state(now, self._day))
 
     def _on_wake(self) -> None:
@@ -928,6 +962,10 @@ class AppController(QObject):
             or _slot_seconds(self._settings)
         )
         self._widget.update()
+        if self._day is not None:
+            # The new skin speaks new articles (theme, slots, pointer) —
+            # re-warm them in the background (owner 2026-07-18).
+            self._start_hover_warm()
 
     def _set_ring(self, ring: str) -> None:
         if ring == self._settings.ring:

@@ -2111,3 +2111,57 @@ def test_umbra_forms_render(july_wednesday, form):
         night_left = image.pixelColor(124, 277).red()
         assert bottom < 40 < top                 # dark bottom, light top...
         assert abs(night_left - night_right) <= 2    # ...mirrored sides
+
+
+def test_weekday_center_body_matches_the_diamond_bodies(app, july_wednesday, monkeypatch):
+    """Owner 2026-07-18 (his two screenshots): the hexa/trio CENTER body
+    is the SAME size as the diamond bodies — in the normal state AND
+    during the Omega reveal. Normal drew center_scale x the seat factor
+    (~170 px against 144 px diamonds on his dial); the reveal center
+    dropped the seat factor and SHRANK (~114 px). One formula now:
+    `weekday_body_size`, shared by the slots, the ghost center and the
+    above-the-hands center pass."""
+    import render.layers as layers
+    from render.layers import CenterBodyLayer, RenderContext, WeekdayLayer
+
+    day, tick = july_wednesday
+    calls = []
+    monkeypatch.setattr(
+        layers, "draw_weekday_body",
+        lambda painter, ctx, body, pos, size, opacity: calls.append(
+            ((pos.x(), pos.y()), size)
+        ),
+    )
+    for pointer in ("hexa", "trio"):
+        skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer=pointer)
+        for reveal in (False, True):
+            calls.clear()
+            ctx = RenderContext(
+                skin=skin, day=day, tick=tick, radius=180.0,
+                cache=AssetCache(), dpr=1.0, reveal_active=reveal,
+            )
+            WeekdayLayer(skin).paint(None, ctx)
+            CenterBodyLayer(skin).paint(None, ctx)
+            centers = {size for pos, size in calls if pos == (0.0, 0.0)}
+            slots = {size for pos, size in calls if pos != (0.0, 0.0)}
+            assert len(centers) == 1, (pointer, reveal)   # the center drew
+            assert len(slots) == 1, (pointer, reveal)     # diamonds uniform
+            assert centers == slots, (pointer, reveal)    # center == diamonds
+
+
+def test_hover_warm_sweep_speaks_through_the_real_dispatch(app, july_wednesday, monkeypatch):
+    """Owner 2026-07-18 (asked twice): the background sweep pre-builds
+    the hover articles through the REAL tooltip dispatch. On a reduced
+    grid most probes speak (the day/night period answers everywhere),
+    a second sweep is a warm no-op with the same coverage, and
+    `should_stop` aborts the rings immediately."""
+    day, tick = july_wednesday
+    monkeypatch.setattr(defaults, "HOVER_WARM_ANGLE_STEPS", 24)
+    monkeypatch.setattr(defaults, "HOVER_WARM_RADIAL_STEPS", 6)
+    monkeypatch.setattr(defaults, "HOVER_WARM_RING_PAUSE_S", 0.0)
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)      # day + tick installed
+    spoken = comp.warm_hover_articles(360.0)
+    assert spoken > 24                    # the sweep reached real articles
+    assert comp.warm_hover_articles(360.0) == spoken  # warm re-run, same coverage
+    assert comp.warm_hover_articles(360.0, should_stop=lambda: True) <= 1

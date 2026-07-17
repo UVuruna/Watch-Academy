@@ -124,19 +124,23 @@ def test_center_table_is_the_sealed_one():
     assert archetypes.center("compass_light") is None
 
 
-def test_reused_scale_glass_is_real_art(app):
+def test_reused_scale_glass_is_real_art(app, tmp_path):
     """Prism paint's Lucifer and Judas REUSE the owner's Scale glass
-    (canon: no new art for those two seats) — the files are on disk
-    and pass the readiness check, unlike the 1×1 placeholders."""
+    (canon: no new art for those two seats) — the files are on disk and
+    pass the readiness check. The placeholder rejection is pinned on a
+    SYNTHETIC 1×1 (the shipping placeholders are being replaced by real
+    art file by file — owner drop 2026-07-18 — so no asset stays a
+    placeholder forever)."""
     figs = archetypes.figures("prism_paint")
     lucifer, judas = figs[2], figs[4]
     assert lucifer["file"].name == "Lucifer_Triangle.png"
     assert judas["file"].name == "Judas_Triangle.png"
     assert archetype_art_ready(lucifer["file"])
     assert archetype_art_ready(judas["file"])
-    # The freshly committed placeholders are NOT ready — the renderer
-    # falls back to the name for them.
-    assert not archetype_art_ready(figs[0]["file"])          # One_Love 1×1
+    # A 1×1 stand-in is NOT ready — the renderer falls back to the name.
+    placeholder = tmp_path / "stand_in.png"
+    QImage(1, 1, QImage.Format.Format_ARGB32).save(str(placeholder))
+    assert not archetype_art_ready(placeholder)
 
 
 def test_family_and_temperament_seatings():
@@ -329,33 +333,32 @@ def test_placeholder_falls_back_to_the_name(app, tmp_path):
 # --- The reveal gesture hides the hands -------------------------------------------
 
 
-def test_reveal_hides_the_hands(app):
+def test_reveal_hides_the_hands(app, monkeypatch):
     """The repurposed Omega double-click (owner seal 2026-07-16): while
-    the reveal runs the HANDS are not drawn — at noon sharp all hands
-    stack straight up, so the probe band above the center reads pure
-    arm fill with the reveal on and a hand shaft without it."""
+    the reveal runs the HANDS are not drawn — the compositor SKIPS
+    HandLayer entirely. Pinned semantically on the layer skip (the old
+    pixel probe band broke the day the owner's real center glass landed
+    over it, 2026-07-18): normal frame paints hands, reveal frame paints
+    none, toggle-off paints them again."""
+    from render.layers import HandLayer
+
     day, tick = _dt(datetime(2026, 7, 16, 12, 0))
     skin = _archetype_skin("trio", show_weekday_names=False)
     comp = Compositor(skin, AssetCache())
-    base = comp.render_offscreen(360.0, 1.0, day, tick)
+    painted = []
+    monkeypatch.setattr(
+        HandLayer, "paint",
+        lambda self, painter, ctx: painted.append(type(self).__name__),
+    )
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    assert painted                            # hands drawn normally
+    painted.clear()
     assert comp.trigger_reveal_week() is True
-    revealed = comp.render_offscreen(360.0, 1.0, day, tick)
-
-    def non_fill(image):
-        """Pixels in the probe band that are NOT the lit yellow arm
-        fill (the placeholder name text sits higher, ~y 92–115)."""
-        return sum(
-            1
-            for x in range(174, 187)
-            for y in range(125, 146)
-            if not (
-                image.pixelColor(x, y).red() > 180
-                and image.pixelColor(x, y).blue() < 120
-            )
-        )
-
-    assert non_fill(base) > 0        # a hand shaft crosses the band
-    assert non_fill(revealed) == 0   # hands hidden — clean theme
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    assert not painted                        # reveal: HandLayer skipped
+    assert comp.trigger_reveal_week() is False    # toggle-off
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    assert painted                            # hands are back
 
 
 # --- Hovers, articles and the encyclopedia -----------------------------------------
@@ -430,39 +433,32 @@ def test_archetype_fit_height_clamps_into_the_diamond():
     )
 
 
-def test_archetype_center_matches_the_arm_figures(app):
-    """Owner 2026-07-17, ROADMAP 15g: ALL archetype figures are ONE size.
-    The center uses the SAME diamond-clamped height as the arm figures —
-    NOT the weekday Sun's `center_scale` (which sized it larger, ~170 vs
-    ~144 px) nor its own square-Seal clamp (which would size it smaller).
-    On the Trinity, the owner's named case, every arm and the center share
-    one height."""
-    from render.layers import archetype_center_height, archetype_figure_height
+def test_archetype_figures_share_one_set_height(app):
+    """Owner 2026-07-17 (15g) + 2026-07-18 (round two, real glass): ALL
+    figures of a layout are ONE size in BOTH states. The real art
+    arrives with slightly different aspects, so the per-art clamp alone
+    split the arms into different heights — the layout therefore adopts
+    the SMALLEST clamped height across its figures (everything equal,
+    everything inside its diamond), and the CENTER adopts the same
+    value — never the weekday Sun's `center_scale`."""
+    from render.layers import archetype_figure_height, archetype_set_height
 
     for key, pointer, style in (
         ("trinity_paint", "trio", "paint"),
         ("trinity_light", "trio", "light"),
+        ("prism_paint", "hexa", "paint"),
     ):
         skin = _archetype_skin(pointer, style)
         radius = 180.0
-        arms = [
+        shared = archetype_set_height(skin, radius, key)
+        clamps = [
             archetype_figure_height(skin, radius, fig["file"])
             for fig in archetypes.figures(key)
         ]
-        center = archetype_center_height(skin, radius, key)
-        assert len({round(h, 6) for h in arms}) == 1        # arms uniform
-        assert round(center, 6) == round(arms[0], 6)         # center == arms
-        # The old path (2·radius·center_scale) sized it differently.
-        assert abs(center - 2 * radius * skin.weekday_set.center_scale) > 1.0
-    # The hexa (Persons) center adopts the arm-figure size the same way.
-    hexa = _archetype_skin("hexa")
-    assert round(
-        archetype_center_height(hexa, 180.0, "prism_paint"), 6
-    ) == round(
-        archetype_figure_height(
-            hexa, 180.0, archetypes.figures("prism_paint")[0]["file"]
-        ), 6,
-    )
+        assert shared == pytest.approx(min(clamps))     # the set minimum...
+        assert all(shared <= c + 1e-9 for c in clamps)  # ...fits every diamond
+        # Never the weekday Sun's center_scale system.
+        assert abs(shared - 2 * radius * skin.weekday_set.center_scale) > 1.0
 
 
 def test_archetype_center_size_is_reveal_invariant(app):
