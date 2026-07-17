@@ -3,54 +3,68 @@
 **Script:** [Time Travel (script)](time_travel.py)
 
 ## Purpose
-The owner's scenario tester, opened from the menu: enter any moment
-(calendar picker) and any latitude/longitude — the dial renders that
-exact situation (sun arc, hexagram tilt, Earth and Moon positions, moon
-phase, hovers) for `TIME_TRAVEL_DURATION_S`, then returns to the present
-by itself. The entered wall time is interpreted in the active timezone.
+The owner's scenario tester, opened from the menu: enter any moment and
+any latitude/longitude — the dial renders that exact situation (sun arc,
+hexagram tilt, Earth and Moon positions, moon phase, hovers) for
+`TIME_TRAVEL_DURATION_S`, then returns to the present by itself. The
+entered wall time is interpreted in the active timezone. Since Session
+16 (owner slika 13, 2026-07-17) the moment editor accepts ANY year of
+the active coverage INCLUDING BCE.
 
 ## Connections
 
 ### Uses
-- [Config (folder)](../config/___config.md) — coordinate ranges, default
-  city prefill, duration, the coverage-warning color and the Deep Time
-  advertised span
+- [Config (folder)](../config/___config.md) — coordinate ranges,
+  duration, the warning color, the advertised Deep Time span, era
+  constants
+- [Deep Time](../core/deep_time.md) — era mapping, the proxy frame,
+  month lengths, the year-line formatters
 - [UI Style](ui_style.md) — the shared vivid button pills
 
 ### Used by
 - [App Controller](controller.md) — `_open_time_travel()` passes the
-  bundled coverage in (`_travel_coverage()`, the seasons ∩ moon
-  intersection) and feeds the frozen (moment, observer) into the tick flow
+  ACTIVE coverage (bundled ∩, widened by the pack), the bundled core
+  coverage (the tier line), the year-line settings and the pack flag;
+  feeds the frozen (proxy moment, cycles, observer) into the tick flow
 
 ## Classes
 
 ### TimeTravelDialog
-Stay-on-top `QDialog`: `QDateTimeEdit` (calendar popup) + two
-`QDoubleSpinBox` for latitude/longitude, prefilled with now/Belgrade
-(a running simulation seeds them instead). The button row wears the
-shared vivid style (owner 2026-07-15): blue **Now** on the LEFT —
-closes with `RETURN_TO_NOW`, the controller ends the simulation and
-the dial returns to the present immediately — then green OK and
-neutral Cancel on the right.
+Stay-on-top `QDialog`. The MOMENT editor (Session 16): a day spinbox +
+month combo + year spinbox + ERA combo (labels per the `era_notation`
+setting — BCE/CE default or BC/AD; the year INPUT is official-only,
+owner amendment 2026-07-17) + an HH:mm time editor — QDateTimeEdit
+cannot hold negative years. Internally everything is the ASTRONOMICAL
+year (1 BCE = year 0); `moment()` returns the 400-year PROXY datetime
+and `cycles()` its cycle count. The day spinbox re-clamps live to the
+proleptic month length (Feb 29 only in leap astronomical years — year
+0 IS leap). Latitude/longitude spinboxes and the vivid button row
+(blue **Now** → `RETURN_TO_NOW`, green OK, neutral Cancel) as before.
 
-**Coverage guard (owner 2026-07-16).** The moment editor spans the whole
-representable calendar (year 1 → 9999, widened past Qt's default 1752
-floor) so the owner can dial into deep time and READ the message rather
-than have an ancient target silently clamped. When OK is pressed with a
-target OUTSIDE the bundled `coverage` (the seasons ∩ moon year span the
-controller supplies), a red inline label appears — "Time Travel covers
-{first}–{last} for now — the Deep Time data pack extends it to
-−13000…+17000 (coming)" — and the dialog stays open WITHOUT travelling,
-so Time Travel can never reach the day build's die-visibly SystemExit box.
-A far-future/ancient jump that used to close the whole app now just
-explains itself.
+**The dual-calendar header (owner amendment 2026-07-17).** A live bold
+line pairs the target with its Anno Lucis year — "21 Jun 4500 BCE ·
+-420. Anno Lucis" — plus the optional third calendar, through the ONE
+formatter (`core.deep_time.format_year_line`).
+
+**Coverage and the precision tiers (documented in-app).** A live
+coverage line ("Coverage: 12999 BCE … 16993") and the tier line for the
+ENTERED year: (i) bundled core years → "minute-exact"; (ii) inside the
+pack span → "events exact; the local clock drifts ±hours at the far
+extremes (ΔT)"; (iii) beyond → "only era lengths are known (Laskar), no
+dates". The year spinbox deliberately reaches PAST the active coverage
+(the greater of coverage and the advertised span) so an out-of-range
+year can be DIALED and its refusal READ (owner 2026-07-16) — OK then
+shows the warning inline and the dialog stays open, never travelling:
+with the pack the message names the Laskar tier, without it the Deep
+Time pack ("not installed").
 
 #### Methods
-- `moment()`: naive wall time (controller attaches the timezone)
+- `astro_year()`: the entered astronomical year (1 BCE = 0)
+- `moment()` / `cycles()`: the naive PROXY wall time (the controller
+  attaches the timezone) and its 400-year cycle count
 - `latitude()` / `longitude()`
-- `target_within_coverage()`: True when the entered year lies inside the
-  supplied coverage (always True when none was given) — the guard tested
-  directly, and the gate `accept()` checks before travelling
-- `accept()`: refuses an out-of-range target inline (shows the message,
-  stays open) instead of accepting
+- `target_within_coverage()`: True when the entered year lies inside
+  the supplied ACTIVE coverage (always True when none was given)
+- `accept()`: refuses an out-of-range target inline (message per the
+  pack state, stays open) instead of accepting
 - `RETURN_TO_NOW`: the third dialog result code, produced by Now

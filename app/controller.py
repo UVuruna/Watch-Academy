@@ -40,6 +40,15 @@ from app.widget import ClockWidget
 from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
+from core.deep_time import (
+    canonical_proxy,
+    julian_day_of,
+    proxy_cycles,
+    real_year,
+    shift_calendar,
+)
+from core.moon import chinese_name_of_year
+from data.deep_time import DeepTimeRepository
 from data.hands import HAND_NAMES, hand_packs
 from data.moon_phases import MoonPhaseRepository
 from data.rings import ring_presets
@@ -471,6 +480,9 @@ def apply_display_settings(skin, settings: Settings):
         earth_style=settings.earth_style,
         weekday_theme=settings.weekday_theme,
         legend=settings.legend,
+        era_notation=settings.era_notation,
+        show_era_suffix=settings.show_era_suffix,
+        third_era=settings.third_era,
         show_earth=settings.show_earth,
         show_moon=settings.show_moon,
         show_weekday=settings.show_weekday,
@@ -521,6 +533,9 @@ class AppController(QObject):
         # every launch starts locked — the code must be typed again.
         # Lives BEFORE the menu build: the Report entry reads it.
         self._hidden_unlocked = False
+        # DEEP TIME detection (Session 16) also lives BEFORE the menu
+        # build — the eclipse jump entries gray without the pack.
+        self._deep = DeepTimeRepository.detect()
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
@@ -545,8 +560,13 @@ class AppController(QObject):
         self._observer = astral.Observer(
             latitude=self._settings.latitude, longitude=self._settings.longitude
         )
-        self._seasons = SeasonsRepository()
-        self._moon_phases = MoonPhaseRepository()
+        # DEEP TIME (Session 16): the pack detected once above (the ONE
+        # resolution point) is injected into both repositories; present
+        # → Time Travel spans the full pack coverage and the eclipse
+        # jumps are alive; absent → the bundled span with the friendly
+        # clamp.
+        self._seasons = SeasonsRepository(deep=self._deep)
+        self._moon_phases = MoonPhaseRepository(deep=self._deep)
         # Translation overlay (owner spec): apply whatever the cache
         # already holds; missing entries translate in the background.
         self._translation_thread: threading.Thread | None = None
@@ -579,9 +599,12 @@ class AppController(QObject):
         )
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
-        # present until the deadline passes.
+        # present until the deadline passes. Deep travel carries the
+        # moment in the 400-year PROXY frame; _sim_cycles is its cycle
+        # count (0 = the ordinary frame).
         self._simulation: tuple[datetime, astral.Observer] | None = None
         self._simulation_ends: float = 0.0
+        self._sim_cycles: int = 0
         self._widget.set_renderer(self._compositor)
         seconds_hand = (
             self._skin.hands.second is not None
@@ -667,22 +690,43 @@ class AppController(QObject):
     def _on_tick(self, clock_jumped: bool) -> None:
         if self._simulation is not None and monotonic() >= self._simulation_ends:
             self._simulation = None
+            self._sim_cycles = 0
             self._day = None                # force the rebuild back to the present
         if self._simulation is not None:
             now, observer = self._simulation
+            cycles = self._sim_cycles
         else:
             now = datetime.now(self._tz)
             observer = self._observer
+            cycles = 0
         day_key = (now.date(), now.utcoffset())
         if self._day is None or self._day.cache_key != day_key or clock_jumped:
             try:
                 with profiling.measure("Day context"):
+                    # The repositories take the REAL astronomical year
+                    # (deep travel un-shifts the proxy frame) and answer
+                    # in the SAME frame — canonical_proxy and the repos
+                    # share proxy_cycles, so the anchors always bracket.
+                    astro_year = real_year(now.year, cycles)
                     self._day = build_day_context(
                         now,
                         observer,
-                        self._seasons.year_anchors(now.year),
-                        self._moon_phases.moon_window(now.year),
+                        self._seasons.year_anchors(astro_year),
+                        self._moon_phases.moon_window(astro_year),
                     )
+                    if cycles:
+                        # Stamp the frame on the context (display sites
+                        # un-shift years; the illumination evaluates at
+                        # the real epoch) and rename the Chinese year
+                        # from the REAL year — a 400-year shift moves
+                        # the sexagenary cycle by 40.
+                        self._day = dataclasses.replace(
+                            self._day,
+                            deep_cycles=cycles,
+                            chinese_name=chinese_name_of_year(
+                                real_year(self._day.chinese_start.year, cycles)
+                            ),
+                        )
             except Exception as error:
                 # Bundled data unreadable, out of coverage, or schema-
                 # malformed (KeyError/TypeError from a bad year entry) —
@@ -1691,18 +1735,20 @@ class AppController(QObject):
         time_travel = QAction(f"🕰️ {tr('Time Travel…')}", menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
-        # QUICK JUMP (owner 2026-07-14): one-click Time Travel presets
-        # right below the dialog entry — same minute-then-back rules.
+        # QUICK JUMP (owner 2026-07-14; Session 16 rework per slika 12):
+        # one-click Time Travel presets right below the dialog entry —
+        # same minute-then-back rules. Short arrow labels (owner rounds
+        # 2026-07-14/15): the TEXT always in the middle, the ARROW
+        # always on its own side and the logo on the opposite end —
+        # forward = logo-text-arrow, backward = arrow-text-logo. Both
+        # arrows are the SAME heavy monochrome pair (U+1F844/U+1F846 —
+        # the emoji ⬅ renders as a blue badge in Windows menus, owner
+        # veto); repeated clicks CHAIN through the years and the menu
+        # STAYS OPEN for exactly that. NOW ends the simulation — back
+        # to the present in one click. The eclipse jumps (🌑 solar /
+        # 🌘 lunar — stand-ins until the owner draws the two icons)
+        # need the Deep Time pack and gray out without it.
         jumps = self._submenu(menu, f"⚡ {tr('Quick Jump')}")
-        # Short arrow labels (owner rounds 2026-07-14/15): the TEXT
-        # always in the middle, the ARROW always on its own side and
-        # the logo on the opposite end — forward = logo-text-arrow,
-        # backward = arrow-text-logo. Both arrows are the SAME heavy
-        # monochrome pair (U+1F844/U+1F846 — the emoji ⬅ renders as a
-        # blue badge in Windows menus, owner veto); repeated clicks
-        # CHAIN through the years and the menu STAYS OPEN for exactly
-        # that. NOW ends the simulation — back to the present in one
-        # click.
         now_action = QAction(tr("Now"), jumps)
         now_action.setProperty("stay_open", True)
         now_action.triggered.connect(
@@ -1710,26 +1756,87 @@ class AppController(QObject):
         )
         jumps.addAction(now_action)
         jumps.addSeparator()
-        for kind, label in (
-            ("next_sun", f"☀️ {tr('Sun')} \U0001F846"),
-            ("prev_sun", f"\U0001F844 {tr('Sun')} ☀️"),
-            ("next_moon", f"🌙 {tr('Moon')} \U0001F846"),
-            ("prev_moon", f"\U0001F844 {tr('Moon')} 🌙"),
-            (None, None),
-            ("north_pole", tr("North Pole")),
-            ("south_pole", tr("South Pole")),
-            (None, None),
-            ("greenwich", tr("Greenwich")),
-        ):
-            if kind is None:
-                jumps.addSeparator()
-                continue
-            action = QAction(label, jumps)
+
+        def jump_action(parent, kind: str, label: str, city: dict | None = None):
+            action = QAction(label, parent)
             action.setProperty("stay_open", True)
             action.triggered.connect(
-                lambda checked=False, kind=kind: self._quick_jump(kind)
+                lambda checked=False, kind=kind, city=city:
+                self._quick_jump(kind, city)
             )
-            jumps.addAction(action)
+            parent.addAction(action)
+            return action
+
+        forward, backward = "\U0001F846", "\U0001F844"
+        sun_menu = self._submenu(jumps, f"🌞 {tr('Sun')}")
+        sun_menu.setToolTipsVisible(True)
+        jump_action(sun_menu, "next_sun", f"☀️ {tr('Sun')} {forward}")
+        jump_action(sun_menu, "prev_sun", f"{backward} {tr('Sun')} ☀️")
+        sun_menu.addSeparator()
+        eclipse_entries = [
+            jump_action(
+                sun_menu, "next_solar_eclipse", f"🌑 {tr('Eclipse')} {forward}"
+            ),
+            jump_action(
+                sun_menu, "prev_solar_eclipse", f"{backward} {tr('Eclipse')} 🌑"
+            ),
+        ]
+        moon_menu = self._submenu(jumps, f"🌙 {tr('Moon')}")
+        moon_menu.setToolTipsVisible(True)
+        jump_action(moon_menu, "next_moon", f"🌙 {tr('Moon')} {forward}")
+        jump_action(moon_menu, "prev_moon", f"{backward} {tr('Moon')} 🌙")
+        moon_menu.addSeparator()
+        eclipse_entries += [
+            jump_action(
+                moon_menu, "next_lunar_eclipse", f"🌘 {tr('Eclipse')} {forward}"
+            ),
+            jump_action(
+                moon_menu, "prev_lunar_eclipse", f"{backward} {tr('Eclipse')} 🌘"
+            ),
+        ]
+        for action in eclipse_entries:
+            # Static per build: the pack cannot appear mid-run.
+            action.setEnabled(self._deep is not None)
+            if self._deep is None:
+                action.setToolTip(
+                    tr("Needs the Deep Time data pack (full installation).")
+                )
+        ymd_menu = self._submenu(
+            jumps, f"📅 {tr('Year')} · {tr('Month')} · {tr('Day')}"
+        )
+        for kind, label in (
+            ("next_year", f"📅 {tr('Year')} {forward}"),
+            ("prev_year", f"{backward} {tr('Year')} 📅"),
+            ("next_month", f"📅 {tr('Month')} {forward}"),
+            ("prev_month", f"{backward} {tr('Month')} 📅"),
+            ("next_day", f"📅 {tr('Day')} {forward}"),
+            ("prev_day", f"{backward} {tr('Day')} 📅"),
+        ):
+            jump_action(ymd_menu, kind, label)
+        # 🏛 over ⏳ (the agent's call, licensed by the owner's "🏛 or
+        # ⏳" — it matches his own listing of the submenu).
+        era_menu = self._submenu(
+            jumps, f"🏛 {tr('Century')} · {tr('Millennium')}"
+        )
+        for kind, label in (
+            ("next_century", f"🏛 {tr('Century')} {forward}"),
+            ("prev_century", f"{backward} {tr('Century')} 🏛"),
+            ("next_millennium", f"🏛 {tr('Millennium')} {forward}"),
+            ("prev_millennium", f"{backward} {tr('Millennium')} 🏛"),
+        ):
+            jump_action(era_menu, kind, label)
+        location_menu = self._submenu(jumps, f"📍 {tr('Location')}")
+        jump_action(location_menu, "north_pole", tr("North Pole"))
+        jump_action(location_menu, "south_pole", tr("South Pole"))
+        jump_action(location_menu, "greenwich", tr("Greenwich"))
+        # The user's own places (owner slika 12): picked in Settings,
+        # each jump moves the OBSERVER there — the moment stays.
+        if self._settings.jump_cities:
+            location_menu.addSeparator()
+            for city in self._settings.jump_cities:
+                jump_action(
+                    location_menu, "city", f"📍 {city['name']}", dict(city)
+                )
         menu.addSeparator()
         # The hidden REPORT (owner 2026-07-15): function efficiency
         # statistics, visible only after the session unlock — above
@@ -1799,14 +1906,23 @@ class AppController(QObject):
         native.set_autostart(dialog.autostart_selected())
         self._flush_position()
 
-    def _travel_coverage(self) -> tuple[int, int]:
-        """The years Time Travel can render — the INTERSECTION of the two
-        bundled databases' coverage (both are needed to build a day). Read
-        from the data, so the Deep Time pack widens it automatically (owner
-        2026-07-16)."""
+    def _bundled_coverage(self) -> tuple[int, int]:
+        """The INTERSECTION of the two bundled databases' coverage —
+        the minute-exact core tier (both are needed to build a day).
+        Read from the data, never hardcoded."""
         seasons_first, seasons_last = self._seasons.coverage()
         moon_first, moon_last = self._moon_phases.coverage()
         return max(seasons_first, moon_first), min(seasons_last, moon_last)
+
+    def _travel_coverage(self) -> tuple[int, int]:
+        """The years Time Travel can render: the bundled intersection,
+        widened to the Deep Time pack's own coverage when the pack is
+        present (Session 16) — both spans read from their data."""
+        first, last = self._bundled_coverage()
+        if self._deep is not None:
+            deep_first, deep_last = self._deep.coverage()
+            return min(first, deep_first), max(last, deep_last)
+        return first, last
 
     def _open_time_travel(self) -> None:
         # A running simulation SEEDS the dialog (owner 2026-07-14):
@@ -1815,17 +1931,25 @@ class AppController(QObject):
         if self._simulation is not None:
             sim_moment, sim_observer = self._simulation
             initial = sim_moment.astimezone(self._tz).replace(tzinfo=None)
+            cycles = self._sim_cycles
             latitude = sim_observer.latitude
             longitude = sim_observer.longitude
         else:
-            initial = None
+            initial = datetime.now(self._tz).replace(tzinfo=None)
+            cycles = 0
             latitude = self._settings.latitude
             longitude = self._settings.longitude
         dialog = TimeTravelDialog(
             latitude, longitude,
             overlay=self._translation_overlay,
             initial_moment=initial,
+            initial_cycles=cycles,
             coverage=self._travel_coverage(),
+            core_coverage=self._bundled_coverage(),
+            era_notation=self._settings.era_notation,
+            show_era_suffix=self._settings.show_era_suffix,
+            third_era=self._settings.third_era,
+            deep_pack=self._deep is not None,
         )
         result = dialog.exec()
         if result == TimeTravelDialog.RETURN_TO_NOW:
@@ -1833,96 +1957,186 @@ class AppController(QObject):
             return
         if result != TimeTravelDialog.DialogCode.Accepted:
             return
-        moment = dialog.moment().replace(second=0, microsecond=0, tzinfo=self._tz)
+        moment = dialog.moment().replace(tzinfo=self._tz)
         observer = astral.Observer(
             latitude=dialog.latitude(), longitude=dialog.longitude()
         )
-        self._start_simulation(moment, observer)
+        self._start_simulation(moment, observer, dialog.cycles())
 
     def _end_simulation(self) -> None:
         """NOW (owner 2026-07-15): back to the present immediately —
         the running simulation ends and the dial rebuilds from the
         real wall clock; a no-op when nothing is simulated."""
         self._simulation = None
+        self._sim_cycles = 0
         self._day = None
         self._on_tick(clock_jumped=False)
 
-    def _start_simulation(self, moment: datetime, observer) -> None:
+    def _start_simulation(self, moment: datetime, observer, cycles: int = 0) -> None:
         """Render the (moment, observer) situation for the standard
         Time Travel minute, then return to the present — any new
-        travel restarts the minute (owner 2026-07-14). Final coverage
-        backstop (owner 2026-07-16): a moment the databases cannot render
-        is refused here, so no travel path can reach the day build's
-        die-visibly box — the dialog already explained why; a quick jump
-        simply stays put."""
+        travel restarts the minute (owner 2026-07-14). The moment is
+        FIRST re-canonicalized (Session 16): a jump or a timezone
+        conversion may have drifted the proxy year across a canonical
+        window edge, and the repositories answer in the canonical frame
+        — one enforcement point keeps every path consistent. Final
+        coverage backstop (owner 2026-07-16): a moment the databases
+        cannot render is refused here, so no travel path can reach the
+        day build's die-visibly box — the dialog already explained why;
+        a quick jump simply stays put."""
+        astro_year = real_year(moment.year, cycles)
+        canonical = proxy_cycles(astro_year)
+        if canonical != cycles:
+            moment = moment.replace(
+                year=astro_year + canonical * constants.GREGORIAN_CYCLE_YEARS
+            )
+            cycles = canonical
         first, last = self._travel_coverage()
-        if not (first <= moment.year <= last):
+        if not (first <= astro_year <= last):
             return
         self._simulation = (moment, observer)
+        self._sim_cycles = cycles
         self._simulation_ends = monotonic() + defaults.TIME_TRAVEL_DURATION_S
         self._day = None                    # rebuild with the simulated situation
         self._on_tick(clock_jumped=False)
 
-    def _quick_jump(self, kind: str) -> None:
-        """One-click Time Travel presets (owner rounds 2026-07-14).
-        The jumps CHAIN: while a simulation runs, the next jump starts
-        from the SIMULATED situation — a time jump keeps the simulated
-        PLACE, a place jump keeps the simulated MOMENT — so repeated
-        "→ Sun" walks the turning points year after year, and a pole
-        or Greenwich pick stays under you while you travel. The three
-        places are REAL coordinates with their REAL clocks: Greenwich
-        at the observatory in its own timezone (BST in summer — the
-        sun honestly culminates near 13:00 then), the poles on UTC.
-        Every jump restarts the standard minute-then-back."""
+    # Quick Jump unit table (owner slika 12): kind -> (unit, sign).
+    _UNIT_JUMPS = {
+        "next_day": ("day", 1), "prev_day": ("day", -1),
+        "next_month": ("month", 1), "prev_month": ("month", -1),
+        "next_year": ("year", 1), "prev_year": ("year", -1),
+        "next_century": ("century", 1), "prev_century": ("century", -1),
+        "next_millennium": ("millennium", 1), "prev_millennium": ("millennium", -1),
+    }
+    _ECLIPSE_JUMPS = {
+        "next_solar_eclipse": ("solar", 1), "prev_solar_eclipse": ("solar", -1),
+        "next_lunar_eclipse": ("lunar", 1), "prev_lunar_eclipse": ("lunar", -1),
+    }
+
+    def _quick_jump(self, kind: str, city: dict | None = None) -> None:
+        """One-click Time Travel presets (owner rounds 2026-07-14;
+        Session 16 rework, owner slika 12). The jumps CHAIN: while a
+        simulation runs, the next jump starts from the SIMULATED
+        situation — a time jump keeps the simulated PLACE, a place jump
+        keeps the simulated MOMENT — so repeated "→ Sun" walks the
+        turning points year after year, and a place pick stays under
+        you while you travel. Places are REAL coordinates with their
+        REAL clocks: Greenwich and the user's Quick Jump cities in
+        their own timezones, the poles on UTC. Deep travel runs in the
+        400-year proxy frame — event instants are REBASED into the
+        simulation's frame before comparing, and _start_simulation
+        re-canonicalizes the landing. Every jump clamps to the active
+        coverage (an edge step is a no-op, never a crash) and restarts
+        the standard minute-then-back."""
         if self._simulation is not None:
             base_moment, base_observer = self._simulation
+            base_cycles = self._sim_cycles
         else:
             base_moment = datetime.now(self._tz)
             base_observer = self._observer
-        moment, observer = base_moment, base_observer
+            base_cycles = 0
+        moment, observer, cycles = base_moment, base_observer, base_cycles
+        first, last = self._travel_coverage()
+        astro_base = real_year(base_moment.year, base_cycles)
         if kind in ("next_sun", "prev_sun", "next_moon", "prev_moon"):
             # Gather turning points only from years the databases cover, so
             # the anchor lookup itself never steps off the edge (owner
             # 2026-07-16). year_anchors(N) already reaches into N-1/N+1.
-            first, last = self._travel_coverage()
+            # Each year answers in ITS canonical proxy frame — candidates
+            # are compared on the frame-free JULIAN DAY (rebasing the
+            # datetimes themselves would overflow years 0/10000 at the
+            # datetime boundaries) and the landing re-canonicalizes.
             years = [
                 year
-                for year in (base_moment.year - 1, base_moment.year,
-                             base_moment.year + 1)
+                for year in (astro_base - 1, astro_base, astro_base + 1)
                 if first <= year <= last
             ]
-            if kind.endswith("sun"):
-                instants = sorted({
-                    instant
-                    for year in years
-                    for instant in self._seasons.year_anchors(year).instants
-                })
-            else:
-                instants = sorted({
-                    when
-                    for year in years
-                    for when, _ in self._moon_phases.moon_window(year).events
-                })
-            # Never LAND on an instant whose local year the databases can't
-            # render — the day build would die visibly. Clamp to coverage.
-            instants = [
-                w for w in instants
-                if first <= w.astimezone(base_moment.tzinfo).year <= last
-            ]
+            candidates: dict[float, tuple[datetime, int]] = {}
+            for year in years:
+                cycles_of_year = proxy_cycles(year)
+                if kind.endswith("sun"):
+                    source = self._seasons.year_anchors(year).instants
+                else:
+                    source = tuple(
+                        when
+                        for when, _ in self._moon_phases.moon_window(year).events
+                    )
+                for when in source:
+                    candidates[julian_day_of(when, cycles_of_year)] = (
+                        when, cycles_of_year,
+                    )
+            base_jd = julian_day_of(base_moment, base_cycles)
             # The simulated moment is floored to the minute, so the
             # landed-on instant lies seconds AHEAD of it — the strict
             # one-minute guard keeps "next" from re-picking it.
             if kind.startswith("next"):
-                ahead = [w for w in instants if w > base_moment + timedelta(minutes=1)]
-                if not ahead:
-                    return              # clamp: already at the coverage edge
-                moment = min(ahead)
+                order = sorted(jd for jd in candidates if jd > base_jd + 1.0 / 1440.0)
             else:
-                behind = [w for w in instants if w < base_moment]
-                if not behind:
-                    return              # clamp: already at the coverage edge
-                moment = max(behind)
-            moment = moment.astimezone(base_moment.tzinfo)
+                order = sorted(
+                    (jd for jd in candidates if jd < base_jd), reverse=True
+                )
+            for jd in order:
+                when, cycles_of_year = candidates[jd]
+                proxy, cycles = canonical_proxy(
+                    real_year(when.year, cycles_of_year), when.month,
+                    when.day, when.hour, when.minute,
+                )
+                landing = proxy.replace(tzinfo=timezone.utc).astimezone(
+                    base_moment.tzinfo
+                )
+                # Never LAND on an instant whose LOCAL year the databases
+                # can't render — the day build would die visibly.
+                if first <= real_year(landing.year, cycles) <= last:
+                    moment = landing
+                    break
+            else:
+                return                  # clamp: already at the coverage edge
+        elif kind in self._ECLIPSE_JUMPS:
+            # The eclipse navigation (owner 2026-07-16, ROADMAP 12/14a)
+            # — fed by the Deep Time pack; the menu entries are grayed
+            # without it, this guard is the belt to that suspender.
+            if self._deep is None:
+                return
+            eclipse_kind, direction = self._ECLIPSE_JUMPS[kind]
+            jd = julian_day_of(base_moment, base_cycles)
+            if direction > 0:
+                # The same one-minute guard as the event jumps: the
+                # landed minute-floored moment must not re-pick itself.
+                event = self._deep.eclipse_after(jd + 1.0 / 1440.0, eclipse_kind)
+            else:
+                event = self._deep.eclipse_before(jd, eclipse_kind)
+            if event is None or not first <= event.year <= last:
+                return                  # clamp: catalog edge
+            proxy, cycles = canonical_proxy(
+                event.year, event.month, event.day,
+                event.second_of_day // 3600,
+                (event.second_of_day % 3600) // 60,
+            )
+            moment = proxy.replace(tzinfo=timezone.utc).astimezone(
+                base_moment.tzinfo
+            )
+        elif kind in self._UNIT_JUMPS:
+            # Year · Month · Day and Century · Millennium (owner slika
+            # 12): calendar arithmetic on the REAL astronomical date —
+            # the wall time stays, day clamps to the target month.
+            unit, sign = self._UNIT_JUMPS[kind]
+            if unit == "day":
+                target_date = base_moment.date() + timedelta(days=sign)
+                y = real_year(target_date.year, base_cycles)
+                m, d = target_date.month, target_date.day
+            else:
+                years = {"year": 1, "century": 100, "millennium": 1000}
+                y, m, d = shift_calendar(
+                    astro_base, base_moment.month, base_moment.day,
+                    years=years.get(unit, 0) * sign,
+                    months=sign if unit == "month" else 0,
+                )
+            if not first <= y <= last:
+                return                  # clamp: coverage edge, stay put
+            proxy, cycles = canonical_proxy(
+                y, m, d, base_moment.hour, base_moment.minute
+            )
+            moment = proxy.replace(tzinfo=base_moment.tzinfo)
         elif kind in ("north_pole", "south_pole"):
             sign = 1 if kind == "north_pole" else -1
             observer = astral.Observer(
@@ -1930,6 +2144,11 @@ class AppController(QObject):
                 longitude=0.0,
             )
             moment = base_moment.astimezone(timezone.utc)
+        elif kind == "city":                # the user's own place (slika 12)
+            observer = astral.Observer(
+                latitude=city["latitude"], longitude=city["longitude"]
+            )
+            moment = base_moment.astimezone(ZoneInfo(city["timezone"]))
         else:                               # greenwich — the REAL place
             observer = astral.Observer(
                 latitude=defaults.GREENWICH_LATITUDE,
@@ -1939,7 +2158,7 @@ class AppController(QObject):
                 ZoneInfo(defaults.GREENWICH_TIMEZONE)
             )
         self._start_simulation(
-            moment.replace(second=0, microsecond=0), observer
+            moment.replace(second=0, microsecond=0), observer, cycles
         )
 
     # --- Translation (owner spec: translate once, cache, display) -----------------

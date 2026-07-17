@@ -944,7 +944,9 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     assert "Phase:</b>" not in moon
     assert "font-weight:bold" in moon
     assert "Waning" in moon or "Waxing" in moon or "Moon" in moon
-    assert "Illumination:</b> 42.8%" in moon   # one decimal (owner spec)
+    # The TRUE analytic illumination since Session 16 (the linear
+    # interpolation read 42.8% here — up to 3 p.p. off mid-phase).
+    assert "Illumination:</b> 43.3%" in moon   # one decimal (owner spec)
     assert "of 29.53" in moon and "&nbsp;" in moon
     # 8 Jul 2026 is a SKIP day in Belgrade — the moon sets at 13:53 but
     # does not rise (rises again just after midnight on the 9th); the

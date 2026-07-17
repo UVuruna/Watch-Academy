@@ -64,6 +64,14 @@ class DayContext:
     tzinfo: object                  # the active timezone (hover instant display)
     latitude: float = 0.0           # observer coordinates — the minute tick
     longitude: float = 0.0          # computes the ASCENDANT from them
+    # Deep Time (Session 16): every datetime above lives in the 400-year
+    # PROXY frame, shifted by deep_cycles Gregorian cycles (0 in normal
+    # operation). The REAL astronomical year of any of them is
+    # core.deep_time.real_year(dt.year, deep_cycles) — display sites
+    # convert before formatting a year, the illumination evaluates at
+    # the real epoch. The controller stamps it after the build
+    # (build_day_context itself is frame-agnostic).
+    deep_cycles: int = 0
 
     @property
     def cache_key(self) -> tuple[date, timedelta]:
@@ -166,7 +174,9 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         second_angle=angles.second_hand_angle(now_local),
         year_angle=year_angle,
         moon_fraction=moon_fraction,
-        moon_illumination=illumination(moon_fraction),
+        # TRUE analytic illumination at the instant (Session 16, owner
+        # slike 4-7) — evaluated at the REAL epoch in deep travel.
+        moon_illumination=illumination(now_local, day.deep_cycles),
         is_daylight=_is_daylight(now_local, day.sun),
         is_moon_up=_is_moon_up(now_local, day),
         time_hm=now_local.strftime("%H:%M"),

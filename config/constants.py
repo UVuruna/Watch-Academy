@@ -100,6 +100,75 @@ MOON_CYCLE_QUARTER = 0.25           # fraction between consecutive principal pha
 # swapping the JSON alone. Time Travel intersects the two and validates
 # every target before the day build (app/time_travel.py, controller).
 
+# --- Deep Time (Session 16, owner 2026-07-17) --------------------------------------
+# The optional full-span data pack (Database/deep_time.sqlite, built by
+# setup/make_deep_time.py, gitignored — ships only with the FULL
+# installation). Detected at startup; the season/moon repositories CHAIN
+# to it when the bundled coverage is exceeded. Its own coverage is read
+# from its meta table, never hardcoded.
+DEEP_TIME_DB_FILENAME = "deep_time.sqlite"
+
+# Era notation (Settings, owner amendment 2026-07-17): governs ONLY the
+# OFFICIAL year form's labels — "bce_ce" (default) or "bc_ad". Positive
+# years render BARE ("2026", as the world writes it) unless the user
+# opts into the suffix (Settings show_era_suffix); negative years ALWAYS
+# carry their label ("44 BCE"). The ANNO LUCIS year is NOT a mode: it
+# ALWAYS accompanies the official year in legends/hovers/the Time
+# Travel header ("2026 · 6105. Anno Lucis") — see
+# core.deep_time.format_year_line, the ONE pairing place.
+ERA_NOTATIONS = ("bce_ce", "bc_ad")
+ERA_NOTATION_TITLES = {"bce_ce": "BCE / CE", "bc_ad": "BC / AD"}
+# (current era, before era) labels per notation.
+ERA_NAMES = {"bce_ce": ("CE", "BCE"), "bc_ad": ("AD", "BC")}
+# ANNO LUCIS — the owner's measured world-era (SEALED 2026-07-16):
+# A.L. 1 = 4079 BCE, the first year of the unbroken light era, so
+# A.L. = CE + 4079 (2026 CE = A.L. 6105). Details in
+# research/ephemeris/anno_lucis.json.
+ANNO_LUCIS_OFFSET = 4079
+ANNO_LUCIS_LABEL = "Anno Lucis"      # "6105. Anno Lucis" (owner's form)
+
+# The optional THIRD calendar on the year line (owner amendment
+# 2026-07-17, Settings third_era; default none). Offsets live on the
+# ASTRONOMICAL axis (1 BCE = 0), where every "CE + N" convention
+# becomes a uniform +N: AUC 1 = 753 BCE = astro −752 (+753 → 1 ✓);
+# Byzantine A.M. 1 = 5509 BCE (September epoch — tooltip note only);
+# Hebrew A.M. counts from Tishri 3761 BCE (civil-axis convention
+# CE + 3760 — tooltip note only). Anno Hegirae is LUNAR and has no
+# fixed offset — displayed via the standard display-grade
+# approximation AH ≈ (CE − 622) × 33/32 (core.deep_time).
+THIRD_ERAS = ("none", "auc", "byzantine", "hebrew", "hegirae")
+THIRD_ERA_TITLES = {
+    "none": "None",
+    "auc": "Ab Urbe Condita (Rome)",
+    "byzantine": "Byzantine Anno Mundi",
+    "hebrew": "Hebrew Anno Mundi",
+    "hegirae": "Anno Hegirae (Islamic)",
+}
+THIRD_ERA_OFFSETS = {"auc": 753, "byzantine": 5509, "hebrew": 3760}
+THIRD_ERA_LABELS = {
+    "auc": "AUC",
+    "byzantine": "Byzantine A.M.",
+    "hebrew": "Hebrew A.M.",
+    "hegirae": "AH",
+}
+# Epoch fine print for the Settings combo tooltips (owner amendment:
+# tooltip only, never on the year line).
+THIRD_ERA_NOTES = {
+    "byzantine": "Year starts 1 September (5509 BCE epoch).",
+    "hebrew": "Year starts at Tishri (autumn); civil convention CE + 3760.",
+    "hegirae": "Lunar years — displayed via the AH ≈ (CE − 622) × 33/32 "
+               "approximation; exact AH needs lunisolar math.",
+}
+
+# The 400-year proleptic-Gregorian cycle (146,097 days — exactly 20,871
+# weeks): shifting a moment by whole cycles preserves leap structure,
+# weekdays and all intervals, which is what lets datetime (years 1-9999)
+# carry Deep Time moments. Proxy years land in [PROXY_WINDOW_FIRST,
+# PROXY_WINDOW_FIRST + GREGORIAN_CYCLE_YEARS) — opened at 2000 for
+# modern tzdata rules and the sun model's reference era.
+GREGORIAN_CYCLE_YEARS = 400
+PROXY_WINDOW_FIRST = 2000
+
 # --- Geography -------------------------------------------------------------------
 LATITUDE_RANGE = (-90.0, 90.0)
 LONGITUDE_RANGE = (-180.0, 180.0)

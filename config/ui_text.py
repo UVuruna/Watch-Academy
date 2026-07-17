@@ -156,6 +156,38 @@ UI_STRINGS: tuple[str, ...] = (
     # the turning points to arrow labels built from Sun/Moon).
     "Quick Jump",
     "North Pole", "South Pole", "Greenwich",
+    # DEEP TIME (Session 16, owner 2026-07-17): the reworked Quick
+    # Jump tree, the BCE moment editor, the coverage/precision lines
+    # and the year-line Settings group. English ships; the SR bundle
+    # catches up in the TRANSLATION session (owner policy 2026-07-16).
+    "Eclipse", "Year", "Month", "Day", "Century", "Millennium",
+    "Location",
+    "Needs the Deep Time data pack (full installation).",
+    "CE", "BCE", "AD", "BC",
+    "Coverage: {first} … {last}",
+    "Precision: minute-exact (core years {first}–{last}).",
+    "Precision: events exact; the local clock drifts ±hours at the "
+    "far extremes (ΔT).",
+    "Precision: beyond the data — only era lengths are known "
+    "(Laskar), no dates.",
+    "Time Travel covers {span} — beyond the Deep Time span only era "
+    "lengths are known (Laskar), no exact dates.",
+    "Time Travel covers {span} for now — the Deep Time data pack "
+    "extends it to {deep_first}…{deep_last} (not installed).",
+    "Quick Jump cities", "Add", "Cities", "Remove selected",
+    "Each city appears in Quick Jump ▸ Location and moves the "
+    "observer there — the traveled moment stays.",
+    "Calendar eras", "Era labels", "Third calendar",
+    "Write the era after positive years too (2026 CE)",
+    "Years in legends read as official · Anno Lucis (A.L. = CE + "
+    "4079, the measured light era) — the third calendar joins that "
+    "line.",
+    "Ab Urbe Condita (Rome)", "Byzantine Anno Mundi",
+    "Hebrew Anno Mundi", "Anno Hegirae (Islamic)",
+    "Year starts 1 September (5509 BCE epoch).",
+    "Year starts at Tishri (autumn); civil convention CE + 3760.",
+    "Lunar years — displayed via the AH ≈ (CE − 622) × 33/32 "
+    "approximation; exact AH needs lunisolar math.",
     # NOW (owner 2026-07-15): back to the present — in the Quick Jump
     # menu and as the Time Travel dialog's left button.
     "Now", "OK", "Cancel",

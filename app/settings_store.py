@@ -122,6 +122,19 @@ class Settings:
     theme_metals: dict = field(default_factory=dict)
     theme_metal_follow_ring: bool = False
     language: str = "en"                # translation target (en = originals)
+    # THE YEAR LINE (Session 16, owner amendment 2026-07-17): the
+    # official form's era labels ("bce_ce" default / "bc_ad"), whether
+    # positive years carry the suffix (default bare — "2026"), and the
+    # optional THIRD calendar beside the always-shown Anno Lucis
+    # (none/auc/byzantine/hebrew/hegirae).
+    era_notation: str = "bce_ce"
+    show_era_suffix: bool = False
+    third_era: str = "none"
+    # QUICK JUMP CITIES (owner slika 12): the user's own places in the
+    # Quick Jump ▸ Location submenu — tuples of {name, latitude,
+    # longitude, timezone} picked from the location database in
+    # Settings; a jump moves the OBSERVER there, the moment stays.
+    jump_cities: tuple = ()
     # Location (M6 picker; defaults = the Belgrade preset).
     city_name: str = defaults.DEFAULT_CITY["name"]
     city_path: tuple[str, ...] = ()     # picker combo restore; () = never picked
@@ -182,6 +195,10 @@ class SettingsStore:
             custom_rings = tuple(
                 _normalized_ring_card(entry)
                 for entry in raw.get("custom_rings", ())
+            )
+            jump_cities = tuple(
+                _normalized_jump_city(entry)
+                for entry in raw.get("jump_cities", ())
             )
             by_fold = {
                 name.lower(): name for name in ring_presets(custom_rings)
@@ -245,6 +262,8 @@ class SettingsStore:
                 ("third_slot_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("art_source", constants.ART_SOURCE_DEFAULT,
                  constants.ART_SOURCES),
+                ("era_notation", "bce_ce", constants.ERA_NOTATIONS),
+                ("third_era", "none", constants.THIRD_ERAS),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -275,6 +294,7 @@ class SettingsStore:
                 diameter=diameter,
                 # Additive keys (still schema 1): absent in older files.
                 click_through=_load_bool(raw, "click_through", False),
+                show_era_suffix=_load_bool(raw, "show_era_suffix", False),
                 archetype_mode=_load_bool(raw, "archetype_mode", False),
                 archetype_earth_day=_load_bool(
                     raw, "archetype_earth_day", False
@@ -335,6 +355,7 @@ class SettingsStore:
                 timezone=timezone,
                 ring=ring,
                 custom_rings=custom_rings,
+                jump_cities=jump_cities,
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 moon_scale=_load_scale(raw, "moon_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
@@ -415,6 +436,10 @@ class SettingsStore:
             "theme_metals": dict(settings.theme_metals),
             "theme_metal_follow_ring": settings.theme_metal_follow_ring,
             "language": settings.language,
+            "era_notation": settings.era_notation,
+            "show_era_suffix": settings.show_era_suffix,
+            "third_era": settings.third_era,
+            "jump_cities": [dict(city) for city in settings.jump_cities],
             "location": {
                 "name": settings.city_name,
                 "path": list(settings.city_path),
@@ -455,6 +480,34 @@ def _normalized_ring_card(entry: dict) -> dict:
         "name": card["name"],
         "positions": list(card["positions"]),
         "letters": list(card["letters"]),
+    }
+
+
+def _normalized_jump_city(entry: dict) -> dict:
+    """One Quick Jump city (Session 16), validated field by field — a
+    hand-edited coordinate or timezone must fail HERE, not inside a
+    jump (Rule #1)."""
+    name = str(entry["name"]).strip()
+    if not name:
+        raise ValueError("jump city with an empty name")
+    latitude = float(entry["latitude"])
+    longitude = float(entry["longitude"])
+    if not constants.LATITUDE_RANGE[0] <= latitude <= constants.LATITUDE_RANGE[1]:
+        raise ValueError(f"jump city {name!r}: latitude {latitude} out of range")
+    if not constants.LONGITUDE_RANGE[0] <= longitude <= constants.LONGITUDE_RANGE[1]:
+        raise ValueError(f"jump city {name!r}: longitude {longitude} out of range")
+    timezone = str(entry["timezone"])
+    try:
+        ZoneInfo(timezone)
+    except Exception as exc:
+        raise ValueError(
+            f"jump city {name!r}: timezone {timezone!r} unknown: {exc}"
+        ) from exc
+    return {
+        "name": name,
+        "latitude": latitude,
+        "longitude": longitude,
+        "timezone": timezone,
     }
 
 

@@ -26,8 +26,12 @@ out-of-span failure; mockup-day Earth within 2° of the top; the
 
 ### `test_moon.py`
 Fraction 0.74 on 2026-07-07; exactness at anchor instants; May 2026 has
-5 events (two full moons); "Last Quarter" normalization; illumination
-curve.
+5 events (two full moons); "Last Quarter" normalization; the nominal
+cosine curve — and the TRUE analytic illumination goldens (Session 16):
+~0/50/100/50 at every 2026 bundled principal instant (±0.6 p.p.), the
+owner's cross-check (2026-07-17 10:11 → 11.5 ± 0.5%), the deep
+proxy-frame un-shift, and the research-database sweep across the whole
+span (skips cleanly when the gitignored research db is absent).
 
 ### `test_clock_state.py`
 Composition through the real repositories for Belgrade 2026-07-07 12:00
@@ -69,15 +73,33 @@ Belgrade lookup; loud unknown-path and out-of-coverage errors; and
 with the error message matching what coverage reports.
 
 ### `test_time_travel.py`
-The Time Travel coverage guard (owner 2026-07-16): the dialog refuses a
-far-future (4500) or ancient (150) target inline and does NOT accept,
-accepts an in-range year (2100), treats the bundle bounds inclusively,
-and the refused year is exactly what `year_anchors()` raises on — proof
-the guard blocks the die-visibly SystemExit path.
+The BCE-capable moment editor (Session 16, owner slika 13): 4500 BCE
+accepted with the pack coverage (era combo + spin → astro −4499, proxy
+2301/cycles 17), the refusal messages (pack absent names the pack;
+beyond the pack names the Laskar tier), the live precision-tier and
+coverage lines, the dual-calendar header (Anno Lucis always paired;
+third calendar joins), era labels per notation, proleptic Feb-29
+clamping (year 0 IS leap), the inclusive bounds — and the proof the
+guard blocks the die-visibly SystemExit path.
+
+### `deep_fixture.py` + `test_deep_time.py`
+Session 16: the SMALL fixture pack builder (same schema as the
+generator — never the 92 MB build) and the Deep Time goldens: the
+year-line formatters (owner amendment 2026-07-17), 1 BCE = year 0
+round-trips, third-era years, the 400-year proxy frame (canonical
+window, leap/weekday preservation), proleptic Julian Day (modern
+goldens + a real-pack sweep that skips when the pack is absent), ΔT
+sanity against measured Swiss Ephemeris values, quick-jump calendar
+arithmetic (leap clamps, era edges), pack detection present/absent,
+proxy-shifted anchors/windows, loud missing-year errors, repository
+chaining (bundled years stay bit-identical), and eclipse next/prev
+with the catalog-edge clamp.
 
 ### `test_settings_store.py`
 Round-trip, atomic-write cleanup, BOM tolerance, corruption and
-diameter-range errors, quarantine-to-.bak.
+diameter-range errors, quarantine-to-.bak; the Session 16 keys
+(era_notation/show_era_suffix/third_era/jump_cities) round-trip and
+validate loudly.
 
 ### `test_profiling.py`
 The `@timed` statistics store (owner 2026-07-15): cumulative

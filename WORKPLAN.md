@@ -196,7 +196,7 @@ Sonnet transcript); `Anno Lucis.png`.
 the doc. App integration (dual calendar, full installation) is a
 LATER session.
 
-### Session 16 — Deep Time integration → **Fable** (the big database enters the app)
+### Session 16 — Deep Time integration → **Fable** (the big database enters the app) (launched 2026-07-17)
 **Say:** "Radi Sesiju 16 iz WORKPLAN.md."
 **Reads:** ROADMAP queue item 12 (all phases); `research/ephemeris/___ephemeris.md`;
 `data/seasons.md`, `data/moon_phases.md`, `app/time_travel.md`.

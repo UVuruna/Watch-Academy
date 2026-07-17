@@ -59,7 +59,16 @@ wear Greek Planetary beside slot 2 in Greek Pantheon).
 `art_source` ("gemini" | "chatgpt") picks the art world;
 `theme_rotation_group` (None or a kinship group / "custom") drives the
 daily theme rotation; `subdial_style` ("theme" | "black") picks the
-complication plate look (owner A/B spec 2026-07-15). The hidden mode is deliberately NOT here (owner
+complication plate look (owner A/B spec 2026-07-15). THE YEAR LINE
+(Session 16, owner amendment 2026-07-17): `era_notation` ("bce_ce"
+default | "bc_ad" — the OFFICIAL labels only; Anno Lucis always
+accompanies the official year and is not a mode), `show_era_suffix`
+(False — positive years render bare unless opted in) and `third_era`
+("none" | "auc" | "byzantine" | "hebrew" | "hegirae" — the optional
+third calendar on the line). `jump_cities` (Session 16, owner slika
+12): the user's own Quick Jump ▸ Location places — validated
+{name, latitude, longitude, timezone} dicts picked from the location
+database in Settings. The hidden mode is deliberately NOT here (owner
 2026-07-15): the unlock lives per session in the controller. The M6
 keys: the location block (`city_name`, `city_path` for combo restore,
 `latitude`/`longitude` range-checked, `timezone` verified against

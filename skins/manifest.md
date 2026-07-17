@@ -49,8 +49,12 @@ the ring preset and the user's display choices onto it at build time.
   (`info_slot_theme`/`info_slot_metal`/`info_slot_roster` and the
   `third_slot_*` mirror — the roster is PER SLOT, owner 2026-07-15:
   "planetary" | "pantheon" picked in the theme's own dropdown, so the
-  same theme can sit twice with two casts), plus
-  `octa_slot_scale` and `hover_enlarge` (owner EXTRAS; the
+  same theme can sit twice with two casts), the YEAR LINE trio
+  (Session 16, owner amendment 2026-07-17): `era_notation` /
+  `show_era_suffix` / `third_era` — consumed by
+  `core.deep_time.format_year_line` (hovers pair the official year
+  with Anno Lucis) and `format_official` (the compact dial texts),
+  plus `octa_slot_scale` and `hover_enlarge` (owner EXTRAS; the
   Earth/Moon/Weekday size multipliers scale their spec values in
   apply_display_settings instead)
 - `BackgroundSpec` — the Umbra (custom art, or None for the procedural

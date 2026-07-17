@@ -71,6 +71,14 @@ draws the MINUTE layers (hands, year marker) live.
   follows each FIGURE's own (topic, entry) — today only the Walks
   map onto the Professions pages, everything else answers None
   gracefully (Sessions 6/8 add the topics)
+- `_year(when)`: every hover YEAR renders through this one method
+  (Session 16, owner amendment 2026-07-17) —
+  `core.deep_time.format_year_line`: the official year with the Anno
+  Lucis year always beside it ("2026 · 6105. Anno Lucis") plus the
+  optional third calendar, un-shifting the deep proxy frame first
+  (`day.deep_cycles`). The ring-tick hover's hypothetical cycle
+  reading uses `nominal_illumination` (the ring's own cosine mapping);
+  the LIVE Moon hover reads the TRUE analytic `tick.moon_illumination`.
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes), in priority order — the WEEKDAY

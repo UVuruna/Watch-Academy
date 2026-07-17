@@ -32,8 +32,11 @@ power/clock wake filter. See [Native](native.md).
 
 ### `time_travel.py` — Time Travel
 Scenario-tester dialog: any moment + position rendered for a minute,
-then auto-reset (prefilled with the configured location).
-See [Time Travel](time_travel.md).
+then auto-reset (prefilled with the configured location). Since
+Session 16 (owner 2026-07-17) the moment editor spans the whole Deep
+Time coverage INCLUDING BCE (spinbox + era combo over the 400-year
+proxy frame), with the dual-calendar header and the in-app precision
+tier lines. See [Time Travel](time_travel.md).
 
 ### `settings_dialog.py` — Settings Dialog
 The M6 window: cascading location picker over the bundled city

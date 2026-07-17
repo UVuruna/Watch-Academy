@@ -31,10 +31,19 @@ the equinoxes and is rejected by the golden tests).
 See [Year Wheel](year_wheel.md).
 
 ### `moon.py` — Moon Phase
-Cycle-fraction interpolation between principal-phase instants +
-illumination fraction; exact at the anchors, ~0.0001 cycle accurate in
-between (astral.moon is day-granular and not used).
-See [Moon](moon.md).
+Cycle-fraction interpolation between principal-phase instants (exact
+at the anchors, ~0.0001 cycle accurate in between; astral.moon is
+day-granular and not used) + the TRUE analytic illumination since
+Session 16 (Meeus 48.4 elongation series, ΔT-aware, golden-tested
+against the DE441 events database). See [Moon](moon.md).
+
+### `deep_time.py` — Deep Time Calendar Mathematics
+Session 16 (owner 2026-07-17): the year-line formatters (the official
+year with Anno Lucis always beside it — owner amendment), the
+astronomical-year convention (1 BCE = year 0), the exact 400-year
+Gregorian PROXY mapping that lets datetime carry −13000…+17000
+moments, the proleptic Julian Day, ΔT (Espenak–Meeus) and the
+quick-jump calendar arithmetic. See [Deep Time](deep_time.md).
 
 ### `clock_state.py` — Two-Tier State
 `DayContext` (frozen per-day bundle; cache key `(local_date, utcoffset)`

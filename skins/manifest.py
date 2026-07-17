@@ -204,6 +204,15 @@ class SkinDefinition:
                                        # Greek/Norse gods, religions, professions
     legend: bool = True                # False -> NO hovers at all (with
                                        # click-through: zero interaction)
+    # THE YEAR LINE (Session 16, owner amendment 2026-07-17): the
+    # official form's labels (BCE/CE vs BC/AD), the optional suffix on
+    # positive years, and the optional third calendar — consumed by
+    # core.deep_time.format_year_line/format_official, the ONE
+    # formatting place (hovers pair the official year with Anno Lucis;
+    # the compact dial texts stay official-only).
+    era_notation: str = "bce_ce"
+    show_era_suffix: bool = False
+    third_era: str = "none"
     # Elements switches (owner spec, FINAL.txt #5) — each removes one
     # dial element; what always stays is the day/twilight indication:
     show_earth: bool = True            # the orbiting Earth date marker

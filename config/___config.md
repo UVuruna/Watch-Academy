@@ -34,6 +34,13 @@ sun thresholds (civil depression, horizon/twilight elevations), the six
 year-anchor angles, and the moon phase → fraction mapping. The bundled
 database coverage is NO LONGER hardcoded here (owner 2026-07-16, Rule
 #4): the repositories' `coverage()` reads the year span from the data.
+DEEP TIME (Session 16, owner 2026-07-17): the pack filename, the era
+notations with their labels (owner amendment: bce_ce/bc_ad only — Anno
+Lucis always accompanies the official year; `ANNO_LUCIS_OFFSET` 4079,
+sealed), the THIRD-calendar tables (AUC/Byzantine/Hebrew offsets on
+the astronomical axis, the AH label, the epoch tooltip notes) and the
+400-year Gregorian proxy cycle with its canonical window
+(`GREGORIAN_CYCLE_YEARS`, `PROXY_WINDOW_FIRST`).
 
 ### `defaults.py` — Developer Tunables
 Window sizing (`DIAL_WINDOW_MARGIN_FRACTION` is DERIVED — owner
@@ -91,7 +98,9 @@ flushed by the controller. See [Profiling](profiling.md).
 ### `paths.py` — Frozen-Safe Paths
 Resolves `Database/`, `assets/skins/` and `%APPDATA%/DOMY Watch/` from
 `Path(__file__)` / `sys._MEIPASS` — never from the working directory, so a
-PyInstaller `--onedir` bundle finds its data. Also hosts the ART SOURCE
+PyInstaller `--onedir` bundle finds its data; `deep_time_path()` names
+the optional Deep Time pack the controller detects at startup
+(Session 16). Also hosts the ART SOURCE
 resolver (owner 2026-07-14: the Gemini and ChatGPT generations coexist
 under `assets/<root>/<source>/`): `set_art_source(source)` switches the
 active source and `art_file(path)` maps a canonical source-less path

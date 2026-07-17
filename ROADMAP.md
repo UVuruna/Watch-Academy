@@ -22,7 +22,8 @@ lives in [The DOMY Canon](CANON.md).
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/
   metal/roster skin system, Settings with the city picker,
   Encyclopedia, Guide, Time Travel, translations (SR bundle synced).
-- **Suite:** 242 green tests (`python -m pytest tests`).
+- **Suite:** 331 green tests (`python -m pytest tests`; Session 16
+  added the Deep Time and analytic-illumination goldens).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
 - **`dist/DOMYWatch/DOMYWatch.exe` is an ad-hoc PyInstaller test
@@ -177,6 +178,18 @@ lives in [The DOMY Canon](CANON.md).
     (ii) the Deep Time span −13000…+17000 — physics exact, local
     clock ±hours (ΔT); (iii) beyond — Laskar: era lengths and
     amplitudes only, no dates.
+    **SESSION 16 DELIVERED (2026-07-17):** the Deep Time data pack
+    (`setup/make_deep_time.py` → `Database/deep_time.sqlite`, 56.6 MB,
+    coverage −12997…+16993, gitignored — the M7 FULL installer bundles
+    it), startup detection with repository chaining, Time Travel over
+    the whole span incl. BCE (proxy-frame moment editor), the reworked
+    Quick Jump tree with the ECLIPSE navigation and unit jumps, the
+    year line pairing Anno Lucis everywhere (owner amendment same day:
+    official + always-A.L. + optional third calendar), the precision
+    tiers documented in-app, and the TRUE analytic moon illumination.
+    Still open from this item: the Eras-of-the-World Encyclopedia
+    article, the Observatory charts (Session 17), the on-dial eclipse
+    display (14a).
     **Phase III (OPTIONAL research, owner interest 2026-07-16):**
     the LONG envelope. Beyond DE441 the day-exact ephemerides are
     unreliable, but the ENVELOPE's drivers (eccentricity, climatic

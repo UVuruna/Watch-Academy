@@ -1,7 +1,7 @@
 # data/
 
-Four repositories over `Database/*.json` — the only code that knows the
-file schemas. Loud failures with the supported range in the message
+Repositories over `Database/*` — the only code that knows the file
+schemas. Loud failures with the supported range in the message
 (Rule #1); plain dataclasses out; no Qt (enforced by the purity test).
 
 ## Files
@@ -20,14 +20,27 @@ year, keeps a tiny `YearAnchors`, drops the dict. Handles the verified
 field trap: a year's `winter.start` is the December solstice OF that year
 (ending the entry), while `winter.duration` describes the winter that
 BEGAN it — the two are never paired. `coverage()` returns the (first,
-last) years straight from the data. See [Seasons](seasons.md).
+last) years straight from the data. Years the bundled JSON does not hold
+CHAIN to the injected Deep Time pack (Session 16); bundled years stay
+bundled, bit-identical. See [Seasons](seasons.md).
 
 ### `moon_phases.py` — Moon Phases Repository
 Windowed extraction over `moonPhases_utc.json` (1551–2649): the target
 year plus both neighbors, month keys filtered with `isdigit()` (year
 entries mix month dicts with aggregate count keys), "Last Quarter"
 normalized to "Third Quarter". `coverage()` returns the (first, last)
-years straight from the data. See [Moon Phases](moon_phases.md).
+years straight from the data. Missing years chain to the Deep Time pack
+like the seasons (whole windows from one source, never mixed).
+See [Moon Phases](moon_phases.md).
+
+### `deep_time.py` — Deep Time Repository
+Session 16 (owner 2026-07-17): read-only over the OPTIONAL full-span
+pack `Database/deep_time.sqlite` (−12997…+16993; gitignored, FULL
+installation only). `detect()` is the ONE resolution point; the
+controller injects the instance into the two repositories above.
+Serves proxy-shifted `YearAnchors`/`MoonWindow` for any pack year and
+the eclipse catalog (next/prev by Julian Day) behind the Quick Jump
+eclipse navigation. See [Deep Time Repository](deep_time.md).
 
 ### `symbolism.py` — Symbolism Repository
 Per-body blurbs and the full ARTICLE corpus from `symbolism.json` (the

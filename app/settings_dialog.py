@@ -78,9 +78,14 @@ class SettingsDialog(QDialog):
         # The dialog outgrew small screens (owner question 2026-07-12):
         # the groups live in a SCROLL AREA capped to the screen height,
         # with OK/Cancel always visible below it.
+        # QUICK JUMP CITIES (Session 16, owner slika 12): the working
+        # list starts from the saved settings; the group below edits it.
+        self._jump_cities = [dict(city) for city in settings.jump_cities]
+
         content = QWidget()
         column = QVBoxLayout(content)
         column.addWidget(self._build_location_group())
+        column.addWidget(self._build_jump_cities_group())
         column.addWidget(self._build_opacity_group())
         column.addWidget(self._build_sizes_group())
         column.addWidget(self._build_palette_group())
@@ -90,6 +95,7 @@ class SettingsDialog(QDialog):
         column.addWidget(self._build_theme_rotation_group())
         column.addWidget(self._build_artwork_group())
         column.addWidget(self._build_language_group())
+        column.addWidget(self._build_era_group())
         column.addWidget(self._build_system_group())
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
@@ -388,6 +394,104 @@ class SettingsDialog(QDialog):
 
     def _current_path(self) -> tuple[str, ...]:
         return self._group_path() + (self._city.currentText(),)
+
+    # --- Quick Jump cities (Session 16, owner slika 12) -------------------------
+
+    def _build_jump_cities_group(self) -> QGroupBox:
+        """The user's own places for the Quick Jump ▸ Location submenu:
+        a search box over the SAME 45k-city machinery as the location
+        picker (fold_name matching, the same results list), but a pick
+        here ADDS to the jump list instead of touching the home
+        location — navigating the home combos to add a jump city would
+        silently change home on OK."""
+        tr = self._tr
+        group = QGroupBox(tr("Quick Jump cities"))
+        form = QFormLayout(group)
+        self._jump_search = QLineEdit()
+        self._jump_search.setPlaceholderText(tr("City name…"))
+        self._jump_search.textChanged.connect(self._filter_jump_cities)
+        form.addRow(tr("Add"), self._jump_search)
+        self._jump_results = QListWidget()
+        self._jump_results.setMaximumHeight(120)
+        self._jump_results.hide()
+        self._jump_results.itemClicked.connect(self._add_jump_city)
+        form.addRow("", self._jump_results)
+        self._jump_list = QListWidget()
+        self._jump_list.setMaximumHeight(120)
+        form.addRow(tr("Cities"), self._jump_list)
+        remove = QPushButton(tr("Remove selected"))
+        remove.clicked.connect(self._remove_jump_city)
+        form.addRow("", remove)
+        note = QLabel(
+            tr(
+                "Each city appears in Quick Jump ▸ Location and moves "
+                "the observer there — the traveled moment stays."
+            )
+        )
+        note.setWordWrap(True)
+        form.addRow(note)
+        self._refresh_jump_list()
+        return group
+
+    def _filter_jump_cities(self, text: str) -> None:
+        """The same live search as the home picker, feeding the jump
+        results list (Rule #5: one city collection, one folding)."""
+        text = text.strip()
+        if len(text) < 2:
+            self._jump_results.hide()
+            return
+        if self._all_cities is None:
+            self._all_cities = self._locations.all_cities()
+        wanted = fold_name(text)
+        matches = [
+            (display, path)
+            for folded, display, path in self._all_cities
+            if wanted in folded
+        ]
+        matches.sort(key=lambda m: (not fold_name(m[0]).startswith(wanted), m[0]))
+        self._jump_results.clear()
+        for display, path in matches[:30]:
+            item = QListWidgetItem(f"{display}  —  {' / '.join(path[:-1])}")
+            item.setData(Qt.ItemDataRole.UserRole, path)
+            self._jump_results.addItem(item)
+        self._jump_results.setVisible(bool(matches))
+
+    def _add_jump_city(self, item: QListWidgetItem) -> None:
+        path = tuple(item.data(Qt.ItemDataRole.UserRole))
+        node = next(
+            (
+                child for child in self._locations.children(path[:-1])
+                if child.is_city and child.name == path[-1]
+            ),
+            None,
+        )
+        if node is None:
+            return
+        record = node.record
+        city = {
+            "name": record.name,
+            "latitude": record.latitude,
+            "longitude": record.longitude,
+            "timezone": record.timezone,
+        }
+        if city not in self._jump_cities:
+            self._jump_cities.append(city)
+            self._refresh_jump_list()
+        self._jump_results.hide()
+        self._jump_search.clear()
+
+    def _remove_jump_city(self) -> None:
+        row = self._jump_list.currentRow()
+        if 0 <= row < len(self._jump_cities):
+            del self._jump_cities[row]
+            self._refresh_jump_list()
+
+    def _refresh_jump_list(self) -> None:
+        self._jump_list.clear()
+        for city in self._jump_cities:
+            self._jump_list.addItem(
+                f"{city['name']}  —  {city['timezone']}"
+            )
 
     # --- Opacity --------------------------------------------------------------------
 
@@ -1034,6 +1138,57 @@ class SettingsDialog(QDialog):
         row.addStretch(1)
         return group
 
+    def _build_era_group(self) -> QGroupBox:
+        """THE YEAR LINE (Session 16, owner amendment 2026-07-17): the
+        Anno Lucis year always accompanies the official year — here the
+        user picks the OFFICIAL labels (BCE/CE vs BC/AD), whether
+        positive years carry the suffix (default bare), and the
+        optional THIRD calendar on the line. Placed under Language —
+        the documented call."""
+        tr = self._tr
+        group = QGroupBox(tr("Calendar eras"))
+        form = QFormLayout(group)
+        self._era_combo = QComboBox()
+        for notation in constants.ERA_NOTATIONS:
+            self._era_combo.addItem(
+                constants.ERA_NOTATION_TITLES[notation], notation
+            )
+        index = self._era_combo.findData(self._settings.era_notation)
+        if index >= 0:
+            self._era_combo.setCurrentIndex(index)
+        form.addRow(tr("Era labels"), self._era_combo)
+        self._era_suffix_check = QCheckBox(
+            tr("Write the era after positive years too (2026 CE)")
+        )
+        self._era_suffix_check.setChecked(self._settings.show_era_suffix)
+        form.addRow("", self._era_suffix_check)
+        self._third_era_combo = QComboBox()
+        for era in constants.THIRD_ERAS:
+            self._third_era_combo.addItem(
+                tr(constants.THIRD_ERA_TITLES[era]), era
+            )
+            note = constants.THIRD_ERA_NOTES.get(era)
+            if note:
+                # Epoch fine print (owner amendment: tooltip ONLY).
+                self._third_era_combo.setItemData(
+                    self._third_era_combo.count() - 1, tr(note),
+                    Qt.ItemDataRole.ToolTipRole,
+                )
+        index = self._third_era_combo.findData(self._settings.third_era)
+        if index >= 0:
+            self._third_era_combo.setCurrentIndex(index)
+        form.addRow(tr("Third calendar"), self._third_era_combo)
+        note = QLabel(
+            tr(
+                "Years in legends read as official · Anno Lucis (A.L. = "
+                "CE + 4079, the measured light era) — the third "
+                "calendar joins that line."
+            )
+        )
+        note.setWordWrap(True)
+        form.addRow(note)
+        return group
+
     def autostart_selected(self) -> bool:
         return self._autostart_check.isChecked()
 
@@ -1159,6 +1314,10 @@ class SettingsDialog(QDialog):
             ring_tint=self._ring_tint,
             custom_rings=tuple(self._custom_rings),
             language=self._language_combo.currentData(),
+            era_notation=self._era_combo.currentData(),
+            show_era_suffix=self._era_suffix_check.isChecked(),
+            third_era=self._third_era_combo.currentData(),
+            jump_cities=tuple(self._jump_cities),
             art_source=self._art_source_combo.currentData(),
             **{
                 key: slider.value() / 100

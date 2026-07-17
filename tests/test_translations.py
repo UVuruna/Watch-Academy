@@ -89,7 +89,12 @@ def test_phase2_chrome_speaks_the_overlay():
     assert "№Location" in titles
     assert "№Language" in titles
     assert "№Custom ring" in titles
-    travel = TimeTravelDialog(44.0, 20.0, overlay=overlay)
+    from datetime import datetime as _datetime
+
+    travel = TimeTravelDialog(
+        44.0, 20.0, overlay=overlay,
+        initial_moment=_datetime(2026, 7, 8, 12, 0),
+    )
     assert "№Time Travel" in travel.windowTitle()
     # The English fallback stays intact without an overlay.
     bare = SettingsDialog(settings, build_skin(settings))

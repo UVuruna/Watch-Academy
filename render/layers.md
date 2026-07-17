@@ -130,7 +130,18 @@ ARCHETYPE CLOCK. The machinery:
   (fitted to the diamond width), never a stretched pixel.
 - The Earth marker stays (it is the instrument, not a slot): with
   `skin.archetype_earth_day` on, `_draw_date` shifts the date up and
-  writes the abbreviated weekday (`WEEKDAY_LABELS`) beneath it.
+  writes the abbreviated weekday (`WEEKDAY_LABELS`) beneath it. During
+  a DEEP travel (Session 16 — `day.deep_cycles != 0`) the second row
+  carries the YEAR instead (`display_year` — the compact OFFICIAL
+  form, "4500 BCE"): far from the present the marker must say WHEN,
+  and the weekday row yields.
+
+**Year texts (Session 16, owner amendment 2026-07-17):** the date
+complication's year row and the Earth marker's deep-year row render
+the compact OFFICIAL form via `display_year(ctx)` →
+`core.deep_time.format_official` (the subdials cannot carry the full
+paired line); the Anno Lucis pairing lives in the hover legends
+([Compositor](compositor.md)).
 
 <a id="the-slot-system"></a>
 

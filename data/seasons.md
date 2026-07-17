@@ -11,6 +11,8 @@ from `seasons_utc.json`, once per year, discarding the parsed file.
 ### Uses
 - [Config (folder)](../config/___config.md) — database path, coverage range
 - [Year Wheel](../core/year_wheel.md) — the `YearAnchors` dataclass
+- [Deep Time Repository](deep_time.md) — the optional chain target
+  beyond the bundle (Session 16)
 - `_io.load_json_checked`
 
 ### Used by
@@ -21,12 +23,17 @@ from `seasons_utc.json`, once per year, discarding the parsed file.
 ## Classes
 
 ### SeasonsRepository
+- Constructed with the optional Deep Time pack (`deep=`, Session 16):
+  the controller detects the pack ONCE and injects it here.
 - `year_anchors(year)`: `[entry.start, spring.start, summer.start,
-  autumn.start, winter.start, entry.end]` → `YearAnchors`; outside
-  1560–2640 raises `ValueError` naming the supported range (derived from
-  the data, not hardcoded). Never touches `winter.duration` (it belongs
-  to the PREVIOUS winter — verified trap).
-- `coverage()`: the inclusive `(first, last)` calendar years the bundled
-  file holds, read straight from the data (owner 2026-07-16) — Time
-  Travel intersects this with the moon coverage and validates a target
-  BEFORE the day build, so a far-year jump can no longer crash the app.
+  autumn.start, winter.start, entry.end]` → `YearAnchors`. A year the
+  bundled file does not hold chains to the pack (proxy-shifted where
+  datetime cannot carry it); without the pack it raises `ValueError`
+  naming the supported range (derived from the data, not hardcoded).
+  Bundled years NEVER go to the pack — the minute-exact tier stays
+  bit-identical. Never touches `winter.duration` (it belongs to the
+  PREVIOUS winter — verified trap).
+- `coverage()`: the inclusive `(first, last)` calendar years the BUNDLED
+  file holds, read straight from the data (owner 2026-07-16) — the
+  controller intersects it with the moon coverage for the minute-exact
+  core tier and widens with the pack's own coverage when present.

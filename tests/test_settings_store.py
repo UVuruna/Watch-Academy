@@ -115,6 +115,37 @@ def test_display_choices_round_trip(store):
     assert migrated.info_slot_style == "bronze"
 
 
+def test_year_line_and_jump_cities_round_trip(store):
+    """Session 16: the era labels, the suffix opt-in, the third
+    calendar and the Quick Jump cities persist and validate."""
+    saved = replace(
+        Settings(),
+        era_notation="bc_ad",
+        show_era_suffix=True,
+        third_era="hebrew",
+        jump_cities=(
+            {
+                "name": "Tromso", "latitude": 69.6489,
+                "longitude": 18.9551, "timezone": "Europe/Oslo",
+            },
+        ),
+    )
+    store.save(saved)
+    assert store.load() == saved
+
+
+def test_bad_jump_city_raises(store):
+    store.save(Settings())
+    raw = store.path.read_text(encoding="utf-8").replace(
+        '"jump_cities": []',
+        '"jump_cities": [{"name": "X", "latitude": 200, '
+        '"longitude": 0, "timezone": "Europe/Oslo"}]',
+    )
+    store.path.write_text(raw, encoding="utf-8")
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
 @pytest.mark.parametrize(
     "key",
     [
@@ -126,6 +157,8 @@ def test_display_choices_round_trip(store):
         "earth_style",
         "ring_finish",
         "ring_tint",
+        "era_notation",
+        "third_era",
     ],
 )
 def test_unknown_display_choice_raises(store, key):

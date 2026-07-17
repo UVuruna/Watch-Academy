@@ -26,6 +26,19 @@ it began with.
 ### `moonPhases_utc.json` (~3 MB)
 Principal moon phase instants (UTC), 1551–2649, keyed by year/month.
 
+### `deep_time.sqlite` (~57 MB, GITIGNORED — Session 16, owner 2026-07-17)
+The OPTIONAL full-span Deep Time pack: every solstice/equinox
+(~120k), every principal moon phase (~1.5M) and both eclipse catalogs
+(~141k, solar with greatest-eclipse geometry) over −12997…+16993,
+extracted from the research events database by
+`setup/make_deep_time.py` (rerunnable; regenerate locally — the M7
+FULL installer bundles it, the partial installation ships without it).
+Detected at startup (`config.paths.deep_time_path()`): present → Time
+Travel spans the whole pack; absent → the bundled span with the
+friendly clamp. Read ONLY by the
+[Deep Time Repository](../data/deep_time.md); coverage lives in its
+`meta` table (from the data, never hardcoded).
+
 ### `seasons_large.json`
 Moved to [Research (folder)](../research/___research.md) — an oversized
 variant kept for analysis only, not bundled.

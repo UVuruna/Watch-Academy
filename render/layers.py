@@ -30,6 +30,7 @@ from PySide6.QtGui import (
 from config import archetypes, constants, defaults, paths
 from core import angles
 from core.clock_state import DayContext, TickState
+from core.deep_time import format_official, real_year
 from core.sun import DaylightRegime, SunDay
 from core.year_wheel import almanac_marker_angle
 from render.assets import AssetCache, ring_face_color, subdial_plate_file
@@ -1258,11 +1259,12 @@ class SlotLayer(Layer):
             draw_small_seconds(painter, ctx, pos, size)
             return
         if mode == "date":
-            # The full date in two rows (owner 2026-07-14).
+            # The full date in two rows (owner 2026-07-14); the year
+            # row wears the era notation (Session 16 dual calendar).
             draw_slot_roundel(painter, ctx, pos, size)
             draw_two_lines(
                 painter, ctx, pos, inner,
-                slot_text("date", ctx), str(ctx.day.local_date.year),
+                slot_text("date", ctx), display_year(ctx),
             )
             return
         if mode in ("time", "day_length"):
@@ -1506,6 +1508,20 @@ def slot_text(mode: str, ctx: RenderContext) -> str:
     if mode == "date":
         return f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
     return ctx.day.day_length            # "day_length" (validated set)
+
+
+def display_year(ctx: RenderContext) -> str:
+    """Today's year for the COMPACT dial texts (the date
+    complication's year row, the Earth marker's deep-travel row): the
+    OFFICIAL form only — the subdials cannot carry the full paired
+    line; the Anno Lucis pairing lives in the hovers/legends
+    (compositor, owner amendment 2026-07-17). The real astronomical
+    year un-shifts the deep proxy frame first."""
+    return format_official(
+        real_year(ctx.day.local_date.year, ctx.day.deep_cycles),
+        ctx.skin.era_notation,
+        ctx.skin.show_era_suffix,
+    )
 
 
 def _subdial_seat(pos: QPointF) -> str:
@@ -1885,14 +1901,21 @@ class YearMarkerLayer(Layer):
         In archetype mode with the Day-of-week option on (owner
         2026-07-16, archetype_earth_day) the abbreviated weekday joins
         it: the date shifts up and TUE/THU… writes beneath — the same
-        label machinery, one marker, two rows."""
+        label machinery, one marker, two rows. During a DEEP travel
+        (Session 16, deep proxy frame active) the second row carries the
+        YEAR in the era notation instead — far from the present the
+        marker must say WHEN, and the weekday row yields (the weekday
+        still reads on the bodies and hovers)."""
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         font = QFont()
         font.setPixelSize(
             max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
         )
         font.setBold(True)
-        if not (ctx.skin.archetype_earth_day and archetype_active(ctx.skin)):
+        deep_travel = ctx.day.deep_cycles != 0
+        if not deep_travel and not (
+            ctx.skin.archetype_earth_day and archetype_active(ctx.skin)
+        ):
             draw_outlined_text(painter, pos, text, font)
             return
         offset = size * archetypes.ARCHETYPE_EARTH_DAY_OFFSET
@@ -1907,10 +1930,13 @@ class YearMarkerLayer(Layer):
             )
         )
         day_font.setBold(True)
-        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        if deep_travel:
+            second_row = display_year(ctx)
+        else:
+            today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+            second_row = constants.WEEKDAY_LABELS[today]
         draw_outlined_text(
-            painter, QPointF(pos.x(), pos.y() + offset),
-            constants.WEEKDAY_LABELS[today], day_font,
+            painter, QPointF(pos.x(), pos.y() + offset), second_row, day_font,
         )
 
     def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:

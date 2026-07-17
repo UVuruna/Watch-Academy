@@ -1,11 +1,19 @@
 """Moon-phase golden values against the LIVE moon phases database."""
 
 from datetime import datetime, timezone
+from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import pytest
 
-from core.moon import illumination, phase_fraction
+from core.deep_time import canonical_proxy
+from core.moon import illumination, nominal_illumination, phase_fraction
 from data.moon_phases import MoonPhaseRepository
+
+RESEARCH_DB = (
+    Path(__file__).resolve().parents[1]
+    / "research" / "ephemeris" / "events.sqlite"
+)
 
 
 @pytest.fixture(scope="module")
@@ -144,8 +152,79 @@ def test_phase_names_follow_the_common_convention():
     assert phase_name(0.6) == "Waning Gibbous"
 
 
-def test_illumination_curve():
-    assert illumination(0.0) == pytest.approx(0.0)
-    assert illumination(0.25) == pytest.approx(0.5)
-    assert illumination(0.5) == pytest.approx(1.0)
-    assert illumination(0.75) == pytest.approx(0.5)
+def test_nominal_illumination_curve():
+    """The ring's own cosine mapping of a cycle POSITION — kept for the
+    hypothetical ring-tick hover only (Session 16); the live moon reads
+    the analytic illumination below."""
+    assert nominal_illumination(0.0) == pytest.approx(0.0)
+    assert nominal_illumination(0.25) == pytest.approx(0.5)
+    assert nominal_illumination(0.5) == pytest.approx(1.0)
+    assert nominal_illumination(0.75) == pytest.approx(0.5)
+
+
+# --- TRUE analytic illumination (Session 16, owner slike 4-7) -----------------
+
+
+def test_analytic_illumination_at_bundled_principal_instants(window_2026):
+    """At every 2026 principal-phase instant the analytic series must
+    read ~0/50/100/50 — the compact Meeus 48.4 form against the
+    DE441-derived bundled instants (measured max deviation 0.35 p.p.
+    in the modern era; the bound here is 0.6 p.p. + the exact-0/1
+    cosine flatness near new/full)."""
+    for instant, fraction in window_2026.events:
+        k = illumination(instant)
+        expected = {0.0: 0.0, 0.25: 0.5, 0.5: 1.0, 0.75: 0.5}[fraction]
+        assert k == pytest.approx(expected, abs=0.006), (instant, fraction)
+
+
+def test_analytic_illumination_owner_cross_check():
+    """Owner slike 4-7 (2026-07-17 10:11 UTC+2): our dial read 10.3%
+    from the linear interpolation while the true value is ~11.5% — the
+    analytic form must land within ±0.5 p.p. of the truth."""
+    when = datetime(2026, 7, 17, 10, 11, tzinfo=ZoneInfo("Europe/Belgrade"))
+    assert illumination(when) * 100 == pytest.approx(11.5, abs=0.5)
+
+
+def test_analytic_illumination_unshifts_the_deep_proxy_frame():
+    """In deep travel the proxy datetime carries a 400-year shift; the
+    series must evaluate at the REAL epoch — the same proxy instant
+    with and without cycles answers differently, and the deep answer
+    stays a sane fraction."""
+    proxy, cycles = canonical_proxy(-4499, 6, 21, 12, 0)
+    when = proxy.replace(tzinfo=timezone.utc)
+    deep = illumination(when, cycles)
+    modern = illumination(when)
+    assert 0.0 <= deep <= 1.0
+    assert deep != pytest.approx(modern, abs=1e-6)
+
+
+@pytest.mark.skipif(not RESEARCH_DB.exists(), reason="research db not built")
+def test_analytic_illumination_against_the_research_span():
+    """The spec's golden: at research-database principal instants the
+    analytic illumination reads ~0/50/100/50 — tight in the modern era,
+    within 3 p.p. at the ±13000-year edges (ΔT model dominated;
+    measured 2.4 p.p. max on 2026-07-17)."""
+    import sqlite3
+
+    expected = {0: 0.0, 90: 0.5, 180: 1.0, 270: 0.5}
+    con = sqlite3.connect(f"file:{RESEARCH_DB.as_posix()}?mode=ro", uri=True)
+    for like, bound in (
+        ("+02026-%", 0.006),
+        ("-04499-%", 0.01),
+        ("-12990-%", 0.03),
+        ("+16990-%", 0.03),
+    ):
+        rows = con.execute(
+            "SELECT iso_ut, type FROM moon_events WHERE iso_ut LIKE ?",
+            (like,),
+        ).fetchall()
+        assert rows, like
+        for iso, event_type in rows:
+            year = int(iso[:6])
+            month, day = int(iso[7:9]), int(iso[10:12])
+            hh, mm, ss = int(iso[13:15]), int(iso[16:18]), int(iso[19:21])
+            proxy, k = canonical_proxy(year, month, day, hh, mm)
+            when = proxy.replace(second=ss, tzinfo=timezone.utc)
+            assert illumination(when, k) == pytest.approx(
+                expected[event_type], abs=bound
+            ), iso

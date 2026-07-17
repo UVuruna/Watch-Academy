@@ -163,25 +163,45 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (wired to the native PowerEventFilter)
 - `_open_time_travel()` / `_quick_jump()` / `_end_simulation()`:
   frozen (moment, observer) rendered instead of the present for
-  `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back; the QUICK
-  JUMP submenu (owner 2026-07-14) leads with NOW (back to the present
-  immediately) and offers the next/previous sun and moon turning
-  points (big ➜/⬅ arrows — forward reads logo-text-arrow, backward
-  arrow-logo-text, owner 2026-07-15), the two poles and Greenwich —
-  jumps CHAIN off the running simulation (time keeps its place when
-  the place changes and vice versa), every jump entry keeps the menu
-  OPEN (the `stay_open` action property on the `_StayOpenMenu`), and
-  the dialog seeds from the simulation; the dialog's blue Now button
-  (left of OK/Cancel) ends the simulation through `RETURN_TO_NOW`
-- `_travel_coverage()`: the years Time Travel can render — the
-  INTERSECTION of the two bundled databases' `coverage()` (both are
-  needed to build a day). The dialog validates against it BEFORE
-  travelling (a far-year target is refused with an inline message, owner
-  2026-07-16), the sun/moon quick jumps CLAMP their turning-point search
-  to it (a step at the coverage edge is a no-op, never an off-range
-  lookup), and `_start_simulation()` re-checks it as a final backstop —
-  so no travel path can reach the day build's die-visibly SystemExit box;
-  the REAL current-day protection in `_on_tick` is untouched
+  `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back. Deep travel
+  (Session 16) carries the moment in the 400-year PROXY frame with
+  `_sim_cycles` beside it; `_on_tick` asks the repositories for the
+  REAL astronomical year, stamps `deep_cycles` on the built context
+  and renames the Chinese year from the real year (a 400-year shift
+  moves the sexagenary cycle by 40). The QUICK JUMP submenu (owner
+  2026-07-14; Session 16 rework per slika 12) leads with NOW, then:
+  **🌞 Sun** (next/prev turning point + next/prev SOLAR eclipse — 🌑
+  stand-in icon), **🌙 Moon** (next/prev phase + next/prev LUNAR
+  eclipse — 🌘), **📅 Year · Month · Day** (six unit jumps), **🏛
+  Century · Millennium** (four — 🏛 the agent's pick from the owner's
+  "🏛 or ⏳"), **📍 Location** (poles, Greenwich + the user's
+  `jump_cities` from Settings — a place jump moves the OBSERVER, the
+  moment stays). Eclipse entries need the pack and GRAY without it
+  (tooltip names the full installation); eclipse picks land on the
+  catalog instant via `julian_day_of` next/prev queries; unit jumps
+  are calendar arithmetic on the real astronomical date
+  (`shift_calendar` — Feb 29 clamps, era edges are plain arithmetic);
+  event instants from differently-canonicalized years are REBASED into
+  the sim frame before comparing (whole Gregorian cycles — exact).
+  Jumps CHAIN off the running simulation, every jump entry keeps the
+  menu OPEN (`stay_open`), all jumps clamp to the active coverage (an
+  edge step is a no-op), and the dialog seeds from the simulation; the
+  dialog's blue Now button ends the simulation through `RETURN_TO_NOW`
+- `_bundled_coverage()` / `_travel_coverage()`: the minute-exact core
+  tier (the INTERSECTION of the two bundled databases' `coverage()`)
+  and the ACTIVE span — the core widened to the Deep Time pack's own
+  coverage when the pack is present (`DeepTimeRepository.detect()`
+  runs ONCE in the constructor, before the menu build, and the
+  instance is injected into both repositories — the one resolution
+  point). The dialog validates against the active span BEFORE
+  travelling (inline refusal, owner 2026-07-16), the quick jumps clamp
+  their searches to it, and `_start_simulation()` re-checks it as a
+  final backstop — after FIRST re-canonicalizing the proxy frame (a
+  jump or timezone conversion may drift the proxy year across a
+  canonical window edge; one enforcement point keeps every path
+  consistent with the repositories) — so no travel path can reach the
+  day build's die-visibly SystemExit box; the REAL current-day
+  protection in `_on_tick` is untouched
 - `_collect_secret(char)`: the HIDDEN MODE unlock — printable keys on
   the focused dial roll through a buffer; matching
   `constants.HIDDEN_MODE_SECRET` flips the RUNTIME

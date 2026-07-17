@@ -46,9 +46,25 @@ submenus cannot express:
   Symbols sections with unselectable headers
   (`constants.RING_LETTER_GROUPS`). Add validates the card and OK
   persists it (it appears under Theme ▸ Ring).
+- **Quick Jump cities** (Session 16, owner slika 12) — the user's own
+  places for Quick Jump ▸ Location: a search box over the SAME
+  45k-city machinery as the home picker (`fold_name` matching, the
+  same results-list pattern) whose pick ADDS to the jump list instead
+  of touching the home combos (navigating the home picker to add a
+  jump city would silently change home on OK — the deliberate design
+  reason for the separate box), plus the current list and a Remove
+  button. Each saved city jumps the OBSERVER there; the moment stays.
 - **Language** — all provider languages; the first pick translates
   the whole corpus in the background and caches it. The Default
   button jumps back to English (the shipped originals).
+- **Calendar eras** (Session 16, owner amendment 2026-07-17; placed
+  under Language — the documented call) — the year-line choices: the
+  official era labels (BCE/CE default vs BC/AD), the "write the era
+  after positive years too" opt-in (default off — the world writes
+  "2026" bare), and the optional THIRD calendar combo
+  (None/AUC/Byzantine A.M./Hebrew A.M./Anno Hegirae — the epoch fine
+  print lives in the combo tooltips only). Anno Lucis is NOT an
+  option: it always accompanies the official year.
 
 OK applies and persists everything; Cancel discards. The dialog loads
 the location tree on open and releases it on close (the repository's

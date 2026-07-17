@@ -17,9 +17,14 @@ from data._io import load_json_checked, year_bounds
 
 
 class SeasonsRepository:
-    def __init__(self, path: Path | None = None):
+    def __init__(self, path: Path | None = None, deep=None):
         self._path = path or (paths.database_dir() / "seasons_utc.json")
         self._cache: dict[int, YearAnchors] = {}
+        # The optional Deep Time pack (Session 16): the controller
+        # detects it ONCE at startup and injects it — years the bundled
+        # JSON does not hold chain to it; bundled years stay bundled
+        # (the minute-exact tier, bit-identical to before).
+        self._deep = deep
 
     def coverage(self) -> tuple[int, int]:
         """The inclusive (first, last) calendar years the bundled seasons
@@ -35,6 +40,11 @@ class SeasonsRepository:
             data = load_json_checked(self._path, "Seasons database")
             entry = data.get(str(year))
             if entry is None:
+                if self._deep is not None:
+                    # Beyond the bundle: the Deep Time pack serves the
+                    # year (proxy-shifted where datetime cannot hold it).
+                    self._cache[year] = self._deep.year_anchors(year)
+                    return self._cache[year]
                 low, high = year_bounds(data)
                 raise ValueError(
                     f"Seasons database covers {low}-{high}; no entry for {year}"

@@ -24,6 +24,15 @@ def database_dir() -> Path:
     return app_root() / "Database"
 
 
+def deep_time_path() -> Path:
+    """The OPTIONAL Deep Time pack (Session 16): present → Time Travel
+    spans the full pack coverage; absent → the bundled span with the
+    friendly clamp. Gitignored; built by setup/make_deep_time.py and
+    bundled only with the FULL installation. Frozen-safe like every
+    other bundled path."""
+    return database_dir() / constants.DEEP_TIME_DB_FILENAME
+
+
 def assets_dir() -> Path:
     """Shared app content (ring art, weekday themes, zodiac art) —
     NOT skin-specific: a skin is a dial design, the content is common."""

@@ -23,7 +23,8 @@ from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
-from core.moon import illumination, phase_name
+from core.deep_time import format_year_line, real_year
+from core.moon import nominal_illumination, phase_name
 from core.year_wheel import (
     instant_at_marker_angle,
     meteorological_span,
@@ -464,6 +465,20 @@ class Compositor:
 
     def _month_short(self, when) -> str:
         return self._tr(_MONTHS_SHORT[when.month - 1])
+
+    def _year(self, when) -> str:
+        """A hover date's YEAR through the ONE pairing formatter
+        (Session 16, owner amendment 2026-07-17): the official year
+        with the Anno Lucis year always beside it — "2026 · 6105. Anno
+        Lucis" — plus the optional third calendar; the real
+        astronomical year un-shifts the deep proxy frame first. Every
+        hover that prints a year prints it via this."""
+        return format_year_line(
+            real_year(when.year, self._day.deep_cycles),
+            self._skin.era_notation,
+            self._skin.show_era_suffix,
+            self._skin.third_era,
+        )
 
     def set_day(self, day: DayContext) -> None:
         self._day = day
@@ -1139,7 +1154,8 @@ class Compositor:
             date = self._day.local_date
             title += (
                 f"<br/>{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES[body]))}, "
-                f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}"
+                f"{self._ord(date.day)} {html.escape(self._month(date))} "
+                f"{self._year(date)}"
             )
         return _article_html(
             image, title, text,
@@ -1247,7 +1263,8 @@ class Compositor:
             date = self._day.local_date
             title += (
                 f"<br/>{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES['sun']))}, "
-                f"{self._ord(date.day)} {html.escape(self._month(date))} {date.year}"
+                f"{self._ord(date.day)} {html.escape(self._month(date))} "
+                f"{self._year(date)}"
             )
         return _article_html(
             image, title, text, accents=defaults.BODY_ACCENT_HUES["sun"],
@@ -1431,7 +1448,7 @@ class Compositor:
             ) + _centered_html(
                 "",
                 f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
-                f"{instant.year} - {instant:%H:%M}",
+                f"{self._year(instant)} - {instant:%H:%M}",
                 f"{self._label('Daylight')} {int(hours)}h {int(minutes)}min",
             )
             if self._skin.pointer != "cross":
@@ -1468,10 +1485,10 @@ class Compositor:
             ) + _centered_html(
                 "",
                 f"<b>{self._tr('From')}</b> {self._ord(met_start.day)} "
-                f"{self._month(met_start)} {met_start.year} - "
+                f"{self._month(met_start)} {self._year(met_start)} - "
                 f"{met_start:%H:%M}",
                 f"<b>{self._tr('To')}</b> {self._ord(met_end.day)} "
-                f"{self._month(met_end)} {met_end.year} - "
+                f"{self._month(met_end)} {self._year(met_end)} - "
                 f"{met_end:%H:%M}",
                 f"{self._label('Duration')} {met_days:.1f} "
                 f"{html.escape(self._tr('Days'))}",
@@ -1552,9 +1569,9 @@ class Compositor:
         ) + _centered_html(
             "",
             f"<b>{self._tr('From')}</b> {self._ord(start.day)} "
-            f"{self._month(start)} {start.year}",
+            f"{self._month(start)} {self._year(start)}",
             f"<b>{self._tr('To')}</b> {self._ord(end.day)} "
-            f"{self._month(end)} {end.year}",
+            f"{self._month(end)} {self._year(end)}",
             f"{self._label('Duration')} {days:.1f} "
             f"{html.escape(self._tr('Days'))}",
         )
@@ -1586,9 +1603,9 @@ class Compositor:
                 element=self._tr(element), animal=self._tr(animal)
             ),
             f"{day.chinese_start.day} {self._month_short(day.chinese_start)} "
-            f"{day.chinese_start.year} – "
+            f"{self._year(day.chinese_start)} – "
             f"{day.chinese_end.day} {self._month_short(day.chinese_end)} "
-            f"{day.chinese_end.year}",
+            f"{self._year(day.chinese_end)}",
         )
         # The animal's article, then the ELEMENT paragraph qualifying
         # THIS return of it (owner spec — each return wears a new one).
@@ -1783,7 +1800,7 @@ class Compositor:
         local = instant.astimezone(day.tzinfo)
         line_date = (
             f"{self._label('Date')} {self._ord(local.day)} "
-            f"{html.escape(self._month(local))} {local.year}"
+            f"{html.escape(self._month(local))} {self._year(local)}"
         )
         event = next(
             (
@@ -1822,7 +1839,7 @@ class Compositor:
         cycle_day = f"{fraction * constants.SYNODIC_MONTH_DAYS:.1f}"
         line_moon = (
             f"{self._label('Illumination')} "
-            f"{illumination(fraction) * 100:.1f}% - "
+            f"{nominal_illumination(fraction) * 100:.1f}% - "
             f"{html.escape(self._tr(phase_name(fraction)))} - "
             + html.escape(
                 self._tr("Day {day} of {total}").format(
@@ -2015,7 +2032,7 @@ class Compositor:
         last = day.zodiac_end - timedelta(days=1)
         lines = [
             f"{self._label('Date')} {self._ord(date.day)} "
-            f"{html.escape(self._month(date))} {date.year}",
+            f"{html.escape(self._month(date))} {self._year(date)}",
             self._tr("{ordinal} Day - {ordinal_week} Week").format(
                 ordinal=self._ord(date.timetuple().tm_yday),
                 ordinal_week=self._ord(date.isocalendar().week),

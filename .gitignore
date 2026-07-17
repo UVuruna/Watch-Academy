@@ -37,6 +37,10 @@ design/weekday/
 # case-insensitively).
 /chatGPT/
 
+# The Deep Time pack (~60-90 MB) — regenerate via setup/make_deep_time.py
+# from the research events database; the M7 FULL installer bundles it.
+Database/deep_time.sqlite
+
 # Legacy exclusions
 Database_Create/
 Side/
