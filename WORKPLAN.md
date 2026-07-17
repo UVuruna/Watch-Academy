@@ -213,7 +213,7 @@ small icons); the on-dial ECLIPSE DISPLAY per the owner's pick from
 the brainstorm (ROADMAP item 12, display options). ΔT honesty
 strings in the hovers at deep-time extremes.
 
-### Session 17 — the Observatory → **Fable** (the statistics window)
+### Session 17 — the Observatory → **Opus** (owner tier correction 2026-07-17: Fable only for truly cross-system novel work)
 **Say:** "Radi Sesiju 17 iz WORKPLAN.md."
 **Reads:** ROADMAP queue item 15 (the charts list);
 `research/ephemeris/season_halves.json` + `eclipses_summary.json`;
