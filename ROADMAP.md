@@ -401,6 +401,17 @@ lives in [The DOMY Canon](CANON.md).
    the numbers. Secondary: Hover text max 622 ms first-hover spikes
    — check the article image loads ride the working-set downscales
    and consider caching the built article HTML per (element, day).
+15g. **ARCHETYPE FIGURE SIZES UNIFORM (owner 2026-07-17, measured
+   radii in UV/prompt.txt) — rides Session 20.** On the hexa
+   (Persons) dial today the six outer figures render at ~144 px
+   radius while the CENTER figure is ~170 px in the normal state and
+   SHRINKS to ~114 px after the Omega double-click (reveal mode).
+   Owner rule: ALL figures the SAME dimensions in BOTH situations —
+   one shared figure size for the outer arms and the center, and no
+   size change between normal and reveal. The same rule applies to
+   the trio (Trinity) dial. One sizing path: the center figure uses
+   the SAME computed size as the diamond-clamped outer figures, and
+   reveal mode must not alter it.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
