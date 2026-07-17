@@ -90,7 +90,10 @@ the Earth day-label geometry, the pending line). See
 
 ### `winapi.py` — Win32 Literals
 The only sanctioned home for Win32 API constants (documented enum-exception
-to Rule #4). Consumed by `app/native.py` from M4.
+to Rule #4). Consumed by `app/native.py` from M4 — the click-through /
+NCHITTEST / power literals, plus the `SetWindowPos` topmost set
+(`HWND_TOPMOST`, `SWP_NOMOVE`/`SWP_NOSIZE`/`SWP_NOACTIVATE`) the "top"
+z-mode uses to re-assert TRUE always-on-top (owner 2026-07-17, ROADMAP 15e).
 
 ### `profiling.py` — Profiling
 The `@timed` / `measure()` execution-time statistics store behind the

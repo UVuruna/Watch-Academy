@@ -609,6 +609,28 @@ class SettingsDialog(QDialog):
             row.addWidget(reset)
             self._size_sliders[key] = slider
             form.addRow(title, row)
+        # The custom DIAMETER slider (owner 2026-07-17, ROADMAP 15e): any
+        # value between the smallest and largest menu presets applies
+        # exactly like a preset pick (the fixed presets stay in the menu).
+        low, high = defaults.SIZE_PRESETS[0], defaults.SIZE_PRESETS[-1]
+        self._diameter_slider = QSlider(Qt.Orientation.Horizontal)
+        self._diameter_slider.setRange(low, high)
+        self._diameter_slider.setValue(min(max(self._settings.diameter, low), high))
+        diameter_label = QLabel(f"{self._diameter_slider.value()} px")
+        self._diameter_slider.valueChanged.connect(
+            lambda new_value, lab=diameter_label: lab.setText(f"{new_value} px")
+        )
+        diameter_reset = QPushButton(tr("Default"))
+        diameter_reset.clicked.connect(
+            lambda checked: self._diameter_slider.setValue(
+                defaults.DEFAULT_DIAL_DIAMETER
+            )
+        )
+        diameter_row = QHBoxLayout()
+        diameter_row.addWidget(self._diameter_slider)
+        diameter_row.addWidget(diameter_label)
+        diameter_row.addWidget(diameter_reset)
+        form.addRow(tr("Diameter"), diameter_row)
         return group
 
     # --- Palette --------------------------------------------------------------------
@@ -1328,6 +1350,7 @@ class SettingsDialog(QDialog):
             jump_cities=tuple(self._jump_cities),
             art_source=self._art_source_combo.currentData(),
             z_mode=self._z_mode_combo.currentData(),
+            diameter=self._diameter_slider.value(),
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

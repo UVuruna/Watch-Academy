@@ -24,10 +24,19 @@ knows nothing about the dial itself.
 first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
 `WA_TranslucentBackground`, `WA_ShowWithoutActivating`). The Z hint is the
 one flag that changes later, via `set_z_mode()` (owner 2026-07-17,
-ROADMAP 15d): "bottom" (below all windows, the default) ↔ "top" (always
-on top) — a window-flag change re-parents on Windows, so it is done in
-ONE place with hide → `setWindowFlags` → show, preserving the position and
-guarding the spontaneous-hide watchdog (`_z_transition`). The transparent
+ROADMAP 15e): THREE modes — "bottom" (below all windows, the default,
+`WindowStaysOnBottomHint`), "normal" (a plain window, above only while
+focused — NO Z hint, the accidental middle mode the owner asked to keep)
+and "top" (always on top, `WindowStaysOnTopHint`). A window-flag change
+re-parents on Windows, so it is done in ONE place with
+hide → `setWindowFlags` → show, preserving the position and guarding the
+spontaneous-hide watchdog (`_z_transition`). Qt's StaysOnTop hint DEGRADES
+to normal stacking after that swap recreates the native window, so "top"
+re-asserts TRUE topmost NATIVELY (`native.assert_topmost`) after the swap
+and after every show/reshow (`_assert_topmost`, `reassert_z_order`).
+`set_z_mode` returns True when the flags actually changed — the controller
+reconnects `screenChanged`, which the native-window recreation drops (the
+S18 caveat). The transparent
 window margin is LIVE from the settings: `set_dial_diameter(diameter,
 margin_fraction)` takes the fraction the controller computes from
 `defaults.dial_window_margin_fraction(skin)` on every skin install (owner

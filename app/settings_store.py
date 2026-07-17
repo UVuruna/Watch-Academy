@@ -295,7 +295,7 @@ class SettingsStore:
                 ZoneInfo(timezone)
             except Exception as exc:
                 raise ValueError(f"timezone {timezone!r} unknown: {exc}") from exc
-            return Settings(
+            loaded = Settings(
                 schema_version=int(raw["schema_version"]),
                 window_x=None if window["x"] is None else int(window["x"]),
                 window_y=None if window["y"] is None else int(window["y"]),
@@ -389,6 +389,15 @@ class SettingsStore:
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
+            # EARTH LABEL EXCLUSIVITY (owner 2026-07-17, ROADMAP 15e): the
+            # date and the abbreviated weekday are mutually exclusive on the
+            # Earth marker. Both-on is an invalid state a hand-edited or an
+            # older file (pre-exclusivity) may carry — normalize it here so
+            # the render never has to arbitrate: the DATE wins, the weekday
+            # clears.
+            if loaded.show_earth_date and loaded.earth_weekday:
+                loaded = dataclasses.replace(loaded, earth_weekday=False)
+            return loaded
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             raise SettingsCorruptError(self._path, exc) from exc
 

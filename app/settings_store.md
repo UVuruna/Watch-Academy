@@ -40,11 +40,15 @@ pointer paint = Zodiac wheel, light = Almanac wheel),
 2026-07-16: the diamonds carry the active wheel's archetype figures
 and the weekday model and all three slots switch OFF at the render
 level only, so every slot key here keeps the user's choice for the
-toggle-back), `earth_weekday` (False — the abbreviated day under the
-Earth marker's date, a GENERAL Earth option since 2026-07-17 working in
-both modes; renamed from `archetype_earth_day`, which the load migrates)
-and `z_mode` ("bottom" | "top" — the visibility Z mode, owner 2026-07-17
-ROADMAP 15d: below all windows or always on top),
+toggle-back), `earth_weekday` (False — the abbreviated weekday on the
+Earth marker, a GENERAL Earth option since 2026-07-17 working in both
+modes; renamed from `archetype_earth_day`, which the load migrates).
+`show_earth_date` and `earth_weekday` are MUTUALLY EXCLUSIVE (owner
+2026-07-17, ROADMAP 15e): `load()` normalizes a both-on file (hand-edited
+or pre-exclusivity) so the DATE wins and the weekday clears.
+`z_mode` ("bottom" | "normal" | "top" — the visibility Z mode, owner
+2026-07-17 ROADMAP 15e: below all windows / a plain window / always on
+top),
 `solar_rotation`
 (True), `earth_style` ("clean"), `legend` (True), plus the six
 Elements switches (all True: `show_earth`, `show_moon`, `show_weekday`,

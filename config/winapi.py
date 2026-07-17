@@ -25,6 +25,15 @@ PBT_APMRESUMEAUTOMATIC = 0x0012
 # WM_NCHITTEST return value: "this point is not mine, pass it through"
 HTTRANSPARENT = -1
 
+# SetWindowPos: the TRUE always-on-top assertion (owner 2026-07-17,
+# ROADMAP 15e). Qt's WindowStaysOnTopHint degrades to normal stacking
+# after a flag swap recreates the native window, so the "top" z-mode
+# re-asserts topmost natively after every flag swap and every show.
+HWND_TOPMOST = -1                        # place above all non-topmost windows
+SWP_NOSIZE = 0x0001                      # keep the current size
+SWP_NOMOVE = 0x0002                      # keep the current position
+SWP_NOACTIVATE = 0x0010                  # do not steal focus
+
 # Undocumented Progman message that spawns the WorkerW wallpaper host
 # (optional "glue to wallpaper" mode, best-effort on Windows 11 24H2)
 WM_SPAWN_WORKERW = 0x052C

@@ -38,6 +38,7 @@ class ClockWidget(QWidget):
         # reshow race.
         self._z_transition = False
         self._menu = menu
+        self._z_mode = "bottom"          # the current Z hint (set below)
         self._legend = legend           # the shared LegendPopup
         self._renderer = None
         self._tick = None
@@ -64,27 +65,34 @@ class ClockWidget(QWidget):
     @staticmethod
     def _window_flags(z_mode: str) -> "Qt.WindowType":
         """The frameless tool-window flags with the Z hint for `z_mode`
-        (owner 2026-07-17, ROADMAP 15d): "bottom" stays below every
-        window except the desktop, "top" rides above everything."""
-        return (
-            Qt.WindowType.FramelessWindowHint
-            | Qt.WindowType.Tool
-            | (
-                Qt.WindowType.WindowStaysOnTopHint
-                if z_mode == "top"
-                else Qt.WindowType.WindowStaysOnBottomHint
-            )
-        )
+        (owner 2026-07-17, ROADMAP 15e). THREE modes: "bottom" stays below
+        every window except the desktop (WindowStaysOnBottomHint), "normal"
+        is a plain window that rides above only while focused (NO Z hint —
+        the accidental middle mode the owner asked to keep), "top" rides
+        above everything (WindowStaysOnTopHint, re-asserted natively — see
+        set_z_mode)."""
+        base = Qt.WindowType.FramelessWindowHint | Qt.WindowType.Tool
+        if z_mode == "top":
+            return base | Qt.WindowType.WindowStaysOnTopHint
+        if z_mode == "bottom":
+            return base | Qt.WindowType.WindowStaysOnBottomHint
+        return base                      # "normal" — no Z hint
 
-    def set_z_mode(self, z_mode: str) -> None:
-        """Swap the always-on-bottom / always-on-top window hint (owner
-        2026-07-17, ROADMAP 15d). Changing window flags re-parents the
-        native window on Windows, so it MUST be done in one place: guard
-        the watchdog, hide, set the flags, restore the position, show —
-        preserving the exact spot. A no-op when the flags already match."""
+    def set_z_mode(self, z_mode: str) -> bool:
+        """Swap the Z hint between the three modes (owner 2026-07-17,
+        ROADMAP 15e). Changing window flags re-parents the native window on
+        Windows, so it MUST be done in one place: guard the watchdog, hide,
+        set the flags, restore the position, show — preserving the exact
+        spot. For "top" Qt's StaysOnTop hint DEGRADES to ordinary stacking
+        after the swap recreates the window, so topmost is re-asserted
+        NATIVELY afterwards (and on every reshow). Returns True when the
+        flags actually changed — the caller reconnects `screenChanged`,
+        which the native-window recreation drops (the S18 caveat)."""
+        self._z_mode = z_mode
         flags = self._window_flags(z_mode)
         if flags == self.windowFlags():
-            return
+            self._assert_topmost()       # honour a redundant re-request
+            return False
         pos = self.pos()
         was_visible = self.isVisible()
         self._z_transition = True
@@ -97,6 +105,20 @@ class ClockWidget(QWidget):
                 self.show()
         finally:
             self._z_transition = False
+        self._assert_topmost()
+        return True
+
+    def _assert_topmost(self) -> None:
+        """Re-assert TRUE topmost natively while in the "top" z-mode —
+        after a flag swap and after every show (owner 2026-07-17). A no-op
+        in the other modes or before the window exists."""
+        if self._z_mode == "top" and self.isVisible():
+            native.assert_topmost(int(self.winId()))
+
+    def reassert_z_order(self) -> None:
+        """Public hook for the controller to re-enforce topmost after the
+        first show() and after a monitor/DPI change."""
+        self._assert_topmost()
 
     def mark_closing(self) -> None:
         """Tell the spontaneous-hide watchdog that the coming hide is
@@ -306,3 +328,7 @@ class ClockWidget(QWidget):
     def _reshow(self) -> None:
         if not self._closing:
             self.show()
+            # A spontaneous hide re-shows behind the stack; in the "top"
+            # z-mode re-assert native topmost so the reshow rides above
+            # again (owner 2026-07-17).
+            self._assert_topmost()

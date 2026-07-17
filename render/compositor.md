@@ -74,11 +74,16 @@ draws the MINUTE layers (hands, year marker) live.
   stained glass — real art only — the figure's name, row 1, a rule,
   the second-row name, row 2, resolved through
   `SymbolismRepository.archetype_article`; an unwritten set shows the
-  name + the pending line, never a KeyError) — EXCEPT the Ages
-  (compass light), which show `_archetype_three_side(index)`: a
-  THREE-COLUMN layout (owner slika 6, "oba odmah") the width of the
-  two-side legend — the age's text, the Tree register and the
-  Menagerie register at once. The center answers via
+  name + the pending line, never a KeyError) — EXCEPT the two
+  THREE-COLUMN layouts (the width of the two-side legend): the Ages
+  (compass light) show `_archetype_three_side(index)` (owner slika 6,
+  "oba odmah") — the age's text, the Tree register and the Menagerie
+  register at once; the Tetramorph (seasons light) shows
+  `_tetramorph_three_side(index)` (owner 2026-07-17, "sva 3 ako se
+  podudaraju") — the creature (glass + name + text), the EVANGELIST it
+  became (Mark/Luke/John/Matthew) and the ELEMENT its fixed-cross season
+  arm holds (`archetypes.tetramorph_element`, in the active wheel hue from
+  `palette_for`). The center answers via
   `_archetype_center_tooltip`; `encyclopedia_target` follows each
   FIGURE's own (topic, entry) — today only the Walks map onto the
   Professions pages, everything else answers None gracefully

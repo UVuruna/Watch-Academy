@@ -133,6 +133,24 @@ def test_dialog_z_mode_round_trips(app):
     index = dialog._z_mode_combo.findData("bottom")
     dialog._z_mode_combo.setCurrentIndex(index)
     assert dialog.result_settings().z_mode == "bottom"
+    # The middle "normal" mode is offered too (ROADMAP 15e).
+    assert dialog._z_mode_combo.findData("normal") >= 0
+    dialog.done(0)
+
+
+def test_dialog_diameter_slider(app):
+    """The custom diameter slider (owner 2026-07-17, ROADMAP 15e): its
+    range spans the smallest to the largest menu preset, it restores the
+    stored diameter, and result_settings applies any value like a preset
+    pick."""
+    from app.settings_store import replace
+
+    dialog = SettingsDialog(replace(Settings(), diameter=540), defaults.DEFAULT_SKIN)
+    assert dialog._diameter_slider.minimum() == defaults.SIZE_PRESETS[0]
+    assert dialog._diameter_slider.maximum() == defaults.SIZE_PRESETS[-1]
+    assert dialog._diameter_slider.value() == 540
+    dialog._diameter_slider.setValue(933)          # an arbitrary in-range value
+    assert dialog.result_settings().diameter == 933
     dialog.done(0)
 
 

@@ -52,6 +52,7 @@ from render.layers import (
     archetype_lit_index,
     dial_point,
     earth_region,
+    palette_for,
     servant_holds_the_seat,
     slot_layout,
     slot_seat_orbit,
@@ -1200,12 +1201,15 @@ class Compositor:
         """One arm figure's archetype legend (owner 2026-07-16): the
         TWO-ROW article per the two-row canon — person+calling, member+
         hearth-role, temperament+age, person+quality, pillar+shadow,
-        estate+object. EXCEPT the Ages (compass light), which show the
-        THREE-SIDE layout (owner 2026-07-17): the age's text and BOTH
-        life registers at once — the Tree and the Menagerie."""
+        estate+object. EXCEPT the two THREE-SIDE layouts (owner
+        2026-07-17): the Ages (compass light) show the age's text and BOTH
+        life registers (the Tree + the Menagerie); the Tetramorph (seasons
+        light) show the creature + the evangelist + the element."""
         key = archetype_key(self._skin)
         if key == "compass_light":
             return self._archetype_three_side(index)
+        if key == "seasons_light":
+            return self._tetramorph_three_side(index)
         fig = archetypes.figures(key)[index]
         return self._archetype_two_rows(
             key, fig["name"], fig["row2"], fig["entity"], fig["file"]
@@ -1258,6 +1262,57 @@ class Compositor:
             f"<td width='{width}'>{register_column('The Tree', tree_fig)}</td>"
             f"<td width='{width}'>"
             f"{register_column('The Menagerie', animals_fig)}</td>"
+            "</tr></table>"
+        )
+
+    def _tetramorph_three_side(self, index: int) -> str:
+        """The TETRAMORPH three-side hover (owner 2026-07-17, ROADMAP 15e:
+        "sva 3 ako se podudaraju"): a THREE-COLUMN article — the same
+        machinery and total width as the Ages three-side — carrying the
+        CREATURE (its glass, name and text), the EVANGELIST it became
+        (Mark/Luke/John/Matthew), and the ELEMENT its fixed-cross season
+        arm holds (Fire/Earth/Water/Air), the element name in its own wheel
+        hue. The article set has no texts until Session 6, so the creature
+        column falls back to the pending line — never a KeyError."""
+        key = "seasons_light"
+        fig = archetypes.figures(key)[index]
+        set_name = archetypes.ARCHETYPES[key]["articles"]
+        node = self._symbolism.archetype_article(set_name, fig["entity"])
+        rows = (node or {}).get("rows") or ()
+        # Column 1 — the creature (glass + name + text).
+        creature_col = _hover_title(html.escape(self._tr(fig["name"])))
+        if archetype_art_ready(fig["file"]):
+            small = scaled_variant_file(
+                fig["file"], 2 * defaults.ARTICLE_THREE_IMAGE_PX
+            )
+            creature_col += (
+                f"<div align='center'><img src='{small.as_uri()}' "
+                f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
+            )
+        if rows:
+            creature_col += _article_paragraphs(rows[0], tr=self._tr)
+        else:
+            creature_col += _centered_html(
+                "", html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE))
+            )
+        # Column 2 — the Evangelist (the figure's row-2 name).
+        evangelist_col = _hover_title(
+            html.escape(self._tr("The Evangelist"))
+        ) + _centered_html(f"<b>{html.escape(self._tr(fig['row2']))}</b>")
+        # Column 3 — the Element, in its active wheel hue.
+        hue = palette_for(self._skin)[index]
+        element_col = _hover_title(
+            html.escape(self._tr("The Element"))
+        ) + _centered_html(
+            f"<b style='color: {hue}'>"
+            f"{html.escape(self._tr(archetypes.tetramorph_element(index)))}</b>"
+        )
+        width = defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
+        return (
+            "<table cellspacing='10'><tr>"
+            f"<td width='{width}'>{creature_col}</td>"
+            f"<td width='{width}'>{evangelist_col}</td>"
+            f"<td width='{width}'>{element_col}</td>"
             "</tr></table>"
         )
 

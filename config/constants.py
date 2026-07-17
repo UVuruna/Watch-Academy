@@ -123,9 +123,10 @@ ERA_NOTATION_TITLES = {"bce_ce": "BCE / CE", "bc_ad": "BC / AD"}
 # "bottom" — the clock stays BELOW every window except the desktop
 # (WindowStaysOnBottomHint, the default); "top" — always ON TOP of
 # everything (WindowStaysOnTopHint, a small clock the user always sees).
-Z_MODES = ("bottom", "top")
+Z_MODES = ("bottom", "normal", "top")
 Z_MODE_TITLES = {
     "bottom": "Below all windows (desktop layer)",
+    "normal": "Normal window (above when focused)",
     "top": "Always on top",
 }
 # (current era, before era) labels per notation.

@@ -105,3 +105,8 @@ there and the menu grays the toggle.
 - `figures(key)`: the ordered figure tuple (resolving the Ages
   register)
 - `center(key)`: the center dict or None
+- `tetramorph_element(index)` + `TETRAMORPH_ELEMENTS` (owner 2026-07-17,
+  ROADMAP 15e): the element name (Fire/Earth/Water/Air) each Tetramorph
+  creature rides — one ordering shared with the `seasons_light` figures
+  and the Four-Elements wheel hues; the THIRD column of the tetramorph
+  three-side hover.

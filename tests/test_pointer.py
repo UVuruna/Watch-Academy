@@ -1646,6 +1646,116 @@ def test_event_glow_is_visible_even_over_the_yellow_wedge(app):
     assert lit.red() - plain.red() >= 8 or lit.green() - plain.green() >= 8
 
 
+def test_window_margin_is_tight_and_never_clips():
+    """MARGIN GAP diagnosis (owner slika 4, ROADMAP 15e). The reserved
+    window half-extent must COVER the glowing hovered marker's full reach
+    (never clips) and exceed it by ONLY the tiny anti-aliasing epsilon
+    (tight — the old fixed 0.01 slab, ~7 px at a 720 dial, was the gap).
+    Pinned at default AND at max-everything settings."""
+    import dataclasses as dc
+
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings
+
+    for earth_scale, hover, letters in ((1.0, 1.2, 1.0), (2.0, 2.0, 2.0)):
+        settings = dc.replace(
+            Settings(), earth_scale=earth_scale, moon_scale=earth_scale,
+            hover_enlarge=hover, ring_letter_scale=letters,
+        )
+        skin = apply_display_settings(defaults.DEFAULT_SKIN, settings)
+        margin = defaults.dial_window_margin_fraction(skin)
+        # The window half-extent as a fraction of the dial RADIUS.
+        window_half = 1.0 + 2.0 * margin
+        marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
+        glow_reach = (
+            defaults.GLOW_RING_RADIUS_FRACTION
+            + marker * defaults.GLOW_RADIUS_SCALE * skin.hover_enlarge
+        )
+        letter_reach = (
+            defaults.RING_LETTER_RADIUS_FRACTION
+            + defaults.RING_LETTER_ART_SCALE * skin.ring_letter_scale
+            * (1.0 + 2.0 * defaults.RING_LETTER_SHADOW_RADIUS)
+        )
+        reach = max(glow_reach, letter_reach)
+        # Lower bound — never clips the drawn extent.
+        assert window_half >= reach
+        # Upper bound — the ONLY slack is 2·epsilon (tight, no waste).
+        assert window_half - reach == pytest.approx(
+            2.0 * defaults.DIAL_WINDOW_MARGIN_EPSILON
+        )
+        # That slack is ~2 px at a 720 dial (radius 360), not the old ~7.
+        assert (window_half - reach) * 360.0 < 3.0
+
+
+def test_window_margin_renders_glow_without_clipping(app):
+    """The pixel side of the margin fix (owner slika 4): a glowing Earth
+    rendered into the LIVE margin-sized window reaches near the edge but
+    the outer frame stays fully transparent (never clipped). Hover is
+    baked into the marker scale (hover_enlarge 1.0), so the drawn extent
+    equals the margin's scale × glow reservation."""
+    import dataclasses as dc
+
+    from PySide6.QtCore import Qt as _Qt
+    from PySide6.QtGui import QImage, QPainter
+
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    solstice = datetime(2026, 6, 21, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        solstice, observer,
+        SeasonsRepository().year_anchors(2026),
+        MoonPhaseRepository().moon_window(2026),
+    )
+    tick = build_tick_state(solstice, day)
+    assert tick.season_event == "Summer Solstice"
+    tick = dc.replace(tick, moon_event=None)     # only the Earth glows
+
+    settings = dc.replace(
+        Settings(), earth_scale=2.0, hover_enlarge=1.0,
+        solar_rotation=False, show_moon=False,
+    )
+    skin = apply_display_settings(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False),
+        settings,
+    )
+    diameter = 720
+    margin_px = round(diameter * defaults.dial_window_margin_fraction(skin))
+    window = diameter + 2 * margin_px
+
+    comp = Compositor(skin, AssetCache())
+    comp.set_day(day)
+    image = QImage(window, window, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(_Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.translate(margin_px, margin_px)     # the widget's own offset
+    comp.paint(painter, float(diameter), 1.0, tick)
+    painter.end()
+
+    # NEVER CLIPPED — the outermost 1-px frame is fully transparent.
+    border_alpha = max(
+        max(
+            image.pixelColor(i, 0).alpha(),
+            image.pixelColor(i, window - 1).alpha(),
+            image.pixelColor(0, i).alpha(),
+            image.pixelColor(window - 1, i).alpha(),
+        )
+        for i in range(window)
+    )
+    assert border_alpha == 0
+    # TIGHT — the solstice Earth glow (at the top) reaches near the edge.
+    top_row = next(
+        y for y in range(window)
+        if any(image.pixelColor(x, y).alpha() > 30 for x in range(window))
+    )
+    assert top_row <= 15
+
+
 def test_moon_event_glow_renders(app):
     """Owner report: the moon glow "doesn't work" — pin that the halo
     really draws at a principal instant (it only shows within ±6 h of

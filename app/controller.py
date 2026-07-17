@@ -657,6 +657,10 @@ class AppController(QObject):
         self._widget.set_z_mode(self._settings.z_mode)
         self._position_widget()
         self._widget.show()
+        # TRUE topmost is re-asserted natively after the first show (owner
+        # 2026-07-17): Qt's StaysOnTop hint alone degrades to normal
+        # stacking once the window has been shown.
+        self._widget.reassert_z_order()
         self._tray.show()
         self._scheduler.start()
         # windowHandle() exists only after show(); a monitor/DPI change
@@ -1077,6 +1081,93 @@ class AppController(QObject):
             # pointer or an element must not close the open menu).
             self._refresh_menu_gating()
 
+    def _toggle_earth_label(self, key: str, checked: bool) -> None:
+        """The Earth Date/Weekday toggles are MUTUALLY EXCLUSIVE (owner
+        2026-07-17, ROADMAP 15e): checking one unchecks the other; both
+        may be off. Turning `key` on clears its sibling; turning it off is
+        a plain clear. One skin install for the whole change."""
+        sibling_key = (
+            "earth_weekday" if key == "show_earth_date" else "show_earth_date"
+        )
+        sibling_toggle = (
+            self._earth_weekday_toggle
+            if sibling_key == "earth_weekday"
+            else self._earth_date_toggle
+        )
+        updates = {key: checked}
+        if checked and getattr(self._settings, sibling_key):
+            updates[sibling_key] = False
+            # Mirror the sibling checkbox without re-entering this handler.
+            sibling_toggle.blockSignals(True)
+            sibling_toggle.setChecked(False)
+            sibling_toggle.blockSignals(False)
+        if getattr(self._settings, key) == checked and (
+            sibling_key not in updates
+        ):
+            return                        # nothing actually changed
+        self._settings = replace(self._settings, **updates)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
+    def _slot_chain_allows(self, enable_key: str) -> bool:
+        """Whether the 1 → 2 → 3 slot enable chain permits ENABLING
+        `enable_key` right now (owner 2026-07-14): the 2nd needs the 1st,
+        the 3rd needs both."""
+        settings = self._settings
+        if enable_key == "show_octa_slot":
+            return settings.show_weekday
+        if enable_key == "show_third_slot":
+            return settings.show_weekday and settings.show_octa_slot
+        return True                       # show_weekday — the root
+
+    def _toggle_slot_ordinal(self, enable_key: str, checked: bool) -> None:
+        """A top-level slot ordinal click (owner 2026-07-17, slika 3) —
+        the same effect as the slot's dropdown Enable, gated by the same
+        chain. Enabling against the chain is a no-op and the check restores;
+        disabling is always allowed."""
+        if checked and not self._slot_chain_allows(enable_key):
+            self._refresh_menu_gating()   # forbidden — restore the check
+            return
+        self._set_display_choice(enable_key, checked)
+
+    def _set_element(self, key: str, checked: bool) -> None:
+        """One element toggle (owner 2026-07-17): the shared display
+        setter, then the top-level Elements check follows (it shows only
+        while every element is on)."""
+        self._set_display_choice(key, checked)
+        self._refresh_elements_check()
+
+    def _refresh_elements_check(self) -> None:
+        """The Elements ordinal is checked ONLY when every element in the
+        dropdown is on (owner 2026-07-17, ROADMAP 15e)."""
+        self._elements_menu_action.setChecked(
+            all(getattr(self._settings, key) for _, key in self._element_toggles)
+        )
+
+    def _toggle_all_elements(self) -> None:
+        """Clicking the Elements top-level entry (owner 2026-07-17): all
+        on → all off, otherwise → all on. One skin install for the whole
+        batch; the child checkboxes and the gating follow."""
+        keys = [key for _, key in self._element_toggles]
+        target = not all(getattr(self._settings, key) for key in keys)
+        changes = {
+            key: target for key in keys if getattr(self._settings, key) != target
+        }
+        if not changes:
+            self._refresh_elements_check()
+            return
+        self._settings = replace(self._settings, **changes)
+        for action, key in self._element_toggles:
+            # Mirror the children without re-entering their handlers.
+            action.blockSignals(True)
+            action.setChecked(target)
+            action.blockSignals(False)
+        self._install_skin(build_skin(self._settings))
+        # Toggling the Pointer/Seconds elements moves the gating matrix.
+        self._refresh_menu_gating()
+        self._refresh_elements_check()
+        self._flush_position()
+
     def _palette_labels(self, pointer: str) -> tuple:
         """The wheel-pair labels for a pointer (owner 2026-07-17): its
         own pair, or the default Paint/Light (Prism, Aurora)."""
@@ -1140,7 +1231,9 @@ class AppController(QObject):
             action.setChecked(effective[key])
             # The whole slot submenu grays IN PLACE while the mode
             # overrides the slots (owner 2026-07-16) — the settings
-            # underneath stay untouched for the toggle-back.
+            # underneath stay untouched for the toggle-back. The 1 → 2 → 3
+            # chain does NOT gray the ordinal (it stays openable): the
+            # ordinal CLICK handler enforces the chain instead (slika 3).
             action.setEnabled(not archetype_on)
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
@@ -1269,10 +1362,16 @@ class AppController(QObject):
         # Compass = Walks/Ages, Calendar = Zodiac/Almanac; Prism and
         # Aurora keep Paint/Light. The labels swap IN PLACE with the
         # pointer, no rebuild of the stay-open menu.
+        # Naming refinements (owner 2026-07-17, ROADMAP 15e): the Seasons
+        # pair is Temperaments/Elements (killing the Seasons-inside-Seasons
+        # duplicate) and Aurora gets its OWN pair — Warm/Cool — instead of
+        # a second Paint/Light (its paint leans warm orange, its light
+        # cyan-cool). Prism alone keeps the bare Paint/Light labels.
         self._palette_style_labels = {
             "trio": (tr("Court"), tr("Family")),
-            "cross": (tr("Seasons"), tr("Elements")),
+            "cross": (tr("Temperaments"), tr("Elements")),
             "octa": (tr("Walks"), tr("Ages")),
+            "aurora": (tr("Warm"), tr("Cool")),
             "calendar": (tr("Zodiac"), tr("Almanac")),
             "default": (tr("Paint palette"), tr("Light palette")),
         }
@@ -1372,7 +1471,7 @@ class AppController(QObject):
         # switch, grayed out below the size that can draw it at all.
         self._earth_date_toggle = self._add_toggle(
             earth_menu, tr("Date"), settings.show_earth_date,
-            lambda checked: self._set_display_choice("show_earth_date", checked),
+            lambda checked: self._toggle_earth_label("show_earth_date", checked),
             tr(
                 "The date written on the Earth marker (shown from "
                 "{size} px up)."
@@ -1387,10 +1486,10 @@ class AppController(QObject):
         # mode. Same size gate as the Date (it writes under the date row).
         self._earth_weekday_toggle = self._add_toggle(
             earth_menu, tr("Weekday"), settings.earth_weekday,
-            lambda checked: self._set_display_choice("earth_weekday", checked),
+            lambda checked: self._toggle_earth_label("earth_weekday", checked),
             tr(
-                "The abbreviated day (TUE, THU…) written under the "
-                "Earth marker's date."
+                "The abbreviated day (TUE, THU…) on the Earth marker. "
+                "Mutually exclusive with the Date."
             ),
         )
         self._earth_weekday_toggle.setEnabled(
@@ -1658,11 +1757,21 @@ class AppController(QObject):
         for action, key in self._slot_menu_checks:
             action.setCheckable(True)
             action.setChecked(getattr(settings, key))
+            # Clicking the top-level ordinal does EXACTLY what the slot's
+            # own Enable does (owner 2026-07-17, slika 3): the SAME enable
+            # key with the SAME 1 → 2 → 3 chain gating. The ordinal is NOT
+            # grayed by the chain (it must stay openable as a submenu), so
+            # the handler enforces the chain — a forbidden enable is a no-op
+            # and the check restores. The submenu still opens on hover/arrow.
+            action.triggered.connect(
+                lambda checked, key=key: self._toggle_slot_ordinal(key, checked)
+            )
         # Elements (owner spec): plain on/off switches — the slots
         # enable INSIDE their own submenus now (owner 2026-07-14), so
         # only the star, its colors, the two markers and the seconds
         # hand remain.
         elements_menu = self._submenu(menu, f"🧩 {tr('Elements')}")
+        self._element_toggles: list = []
         for key, label, tip in (
             (
                 "show_pointer", tr("Pointer"),
@@ -1691,14 +1800,25 @@ class AppController(QObject):
         ):
             action = self._add_toggle(
                 elements_menu, label, getattr(settings, key),
-                lambda checked, key=key: self._set_display_choice(key, checked),
+                lambda checked, key=key: self._set_element(key, checked),
                 tip,
             )
+            self._element_toggles.append((action, key))
             if key == "show_seconds":
                 # The big hand yields while a slot runs the
                 # small-seconds complication (owner 2026-07-14).
                 self._menu_gates["seconds"] = action
                 action.setEnabled(not _slot_seconds(settings))
+        # Clicking the top-level Elements entry flips ALL of them at once
+        # (owner 2026-07-17, ROADMAP 15e): the check shows ONLY when every
+        # element is on; a click while all-on turns them all off, otherwise
+        # it turns them all on. The submenu still opens on hover/arrow.
+        self._elements_menu_action = elements_menu.menuAction()
+        self._elements_menu_action.setCheckable(True)
+        self._elements_menu_action.triggered.connect(
+            lambda checked=False: self._toggle_all_elements()
+        )
+        self._refresh_elements_check()
         menu.addSeparator()
         self._add_toggle(
             menu, f"📜 {tr('Legend')}", settings.legend,
@@ -1921,8 +2041,14 @@ class AppController(QObject):
         # default") actually clear instead of sticking.
         self._install_skin(build_skin(self._settings))
         # The visibility Z mode may have changed (owner 2026-07-17): swap
-        # the window flags (a no-op when unchanged).
-        self._widget.set_z_mode(self._settings.z_mode)
+        # the window flags (a no-op when unchanged). The swap recreates the
+        # native window and DROPS the screenChanged connection (the S18
+        # caveat) — reconnect it on the fresh handle when it actually
+        # swapped; set_z_mode itself re-asserts native topmost for "top".
+        if self._widget.set_z_mode(self._settings.z_mode):
+            self._widget.windowHandle().screenChanged.connect(
+                self._on_screen_changed
+            )
         self._on_tick(clock_jumped=False)
         # The menu mirrors the settings (checkmarks, custom rings in
         # Theme > Ring) — rebuild it wholesale after every dialog OK.

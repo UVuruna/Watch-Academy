@@ -134,15 +134,17 @@ ARCHETYPE CLOCK. The machinery:
   graceful placeholder path: a missing file or a committed 1×1
   placeholder draws the figure's NAME in the outlined label style
   (fitted to the diamond width), never a stretched pixel.
-- The Earth marker stays (it is the instrument, not a slot): with
-  `skin.earth_weekday` on, `_draw_date` shifts the date up and writes
-  the abbreviated weekday (`WEEKDAY_LABELS`) beneath it — a GENERAL
-  Earth option since 2026-07-17 (Design ▸ Earth), working in BOTH
-  normal and archetype mode (renamed from `archetype_earth_day`). During
-  a DEEP travel (Session 16 — `day.deep_cycles != 0`) the second row
-  carries the YEAR instead (`display_year` — the compact OFFICIAL
-  form, "4500 BCE"): far from the present the marker must say WHEN,
-  and the weekday row yields.
+- The Earth marker stays (it is the instrument, not a slot): its label
+  is drawn by `_draw_earth_label`, where the DATE and the abbreviated
+  WEEKDAY are MUTUALLY EXCLUSIVE (owner 2026-07-17, ROADMAP 15e — the two
+  Design ▸ Earth switches). WEEKDAY alone (`skin.earth_weekday`) writes
+  "FRI" centered (it must work without the date); DATE alone
+  (`skin.show_earth_date`) writes "8 Jul" centered. Both are GENERAL Earth
+  options working in normal AND archetype mode. During a DEEP travel
+  (Session 16 — `day.deep_cycles != 0`) the DATE additionally carries the
+  YEAR beneath it (`display_year` — the compact OFFICIAL form, "4500
+  BCE"): far from the present the marker must say WHEN. The exclusivity is
+  normalized at settings load, so the render never sees both on.
 
 **Year texts (Session 16, owner amendment 2026-07-17):** the date
 complication's year row and the Earth marker's deep-year row render
@@ -323,7 +325,15 @@ the LARGER of the Earth/Moon markers (each carrying its earth/moon scale)
 relocated to `GLOW_RING_RADIUS_FRACTION`, × `GLOW_RADIUS_SCALE` × the
 user's `hover_enlarge`, against the ring-letter overhang at the
 letter-scale slider — so the halo can never clip and any size/hover/
-letter slider re-sizes the window to fit exactly (no waste).
+letter slider re-sizes the window to fit exactly (no waste). The MARGIN
+GAP fix (owner slika 4, ROADMAP 15e): the only over-reservation was the
+anti-aliasing epsilon (`DIAL_WINDOW_MARGIN_EPSILON`, tightened 0.01 → 0.003
+of the diameter — the old value left a fixed ~7 px gap at a 720 dial); the
+`max(earth, moon)`, the glow-halo × hover product and the ring-letter floor
+are each an exact bound, not waste (both markers glow at the ring band,
+hover and glow do stack, and the letters genuinely overhang). At
+max-everything the hovered glowing marker now lands within ~1–2 px of the
+edge and never clips (pinned both ways by the margin tests).
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and

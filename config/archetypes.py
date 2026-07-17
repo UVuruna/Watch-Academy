@@ -302,6 +302,20 @@ ARCHETYPES = {
 }
 
 
+# The four elements the TETRAMORPH creatures ride (owner 2026-07-17,
+# CANON §Seasons light). Index = the arm/hour-space index, in the SAME
+# order as the seasons_light figures and the _CROSS_ELEMENTS hues: fire
+# (summer/Lion), earth (autumn/Ox), water (winter/Eagle), air
+# (spring/Man). The THIRD column of the tetramorph three-side hover.
+TETRAMORPH_ELEMENTS = ("Fire", "Earth", "Water", "Air")
+
+
+def tetramorph_element(index: int) -> str:
+    """The element name for one Tetramorph arm (Rule #5: one ordering
+    shared with the figures and the Four-Elements wheel hues)."""
+    return TETRAMORPH_ELEMENTS[index]
+
+
 def grid_key(pointer: str, palette_style: str) -> str | None:
     """The archetype of one (pointer, wheel) grid seat — None on the
     archetype-less instruments (Aurora, Calendar)."""

@@ -118,10 +118,12 @@ def test_display_choices_round_trip(store):
 
 def test_earth_weekday_migrates_from_the_old_key(store):
     """Rename 2026-07-17: an older file's archetype_earth_day carries
-    over as earth_weekday; the new key wins when both are present."""
+    over as earth_weekday; the new key wins when both are present. The
+    Date is turned OFF so the migrated Weekday survives the exclusivity
+    normalization (ROADMAP 15e: Date wins when both are on)."""
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
-        ' "archetype_earth_day": true}',
+        ' "show_earth_date": false, "archetype_earth_day": true}',
         encoding="utf-8",
     )
     assert store.load().earth_weekday is True
@@ -133,9 +135,39 @@ def test_earth_weekday_migrates_from_the_old_key(store):
     assert store.load().earth_weekday is False
 
 
+def test_earth_date_and_weekday_are_mutually_exclusive_on_load(store):
+    """EARTH LABEL EXCLUSIVITY (owner 2026-07-17, ROADMAP 15e): a file
+    (hand-edited or pre-exclusivity) with BOTH the date and the weekday on
+    normalizes to the DATE winning — the weekday clears. Either one alone
+    survives untouched, and both-off stays both-off."""
+    base = '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+    store.path.write_text(
+        base + ' "show_earth_date": true, "earth_weekday": true}',
+        encoding="utf-8",
+    )
+    both = store.load()
+    assert both.show_earth_date is True and both.earth_weekday is False
+    store.path.write_text(
+        base + ' "show_earth_date": false, "earth_weekday": true}',
+        encoding="utf-8",
+    )
+    weekday = store.load()
+    assert weekday.show_earth_date is False and weekday.earth_weekday is True
+    store.path.write_text(
+        base + ' "show_earth_date": false, "earth_weekday": false}',
+        encoding="utf-8",
+    )
+    neither = store.load()
+    assert neither.show_earth_date is False and neither.earth_weekday is False
+
+
 def test_z_mode_round_trip_and_default(store):
-    """Visibility Z mode (owner 2026-07-17): persists, defaults to
-    'bottom' in older files, and rejects an unknown value."""
+    """Visibility Z mode (owner 2026-07-17): all THREE modes persist
+    (ROADMAP 15e added 'normal'), defaults to 'bottom' in older files, and
+    rejects an unknown value."""
+    for mode in ("bottom", "normal", "top"):
+        store.save(replace(Settings(), z_mode=mode))
+        assert store.load().z_mode == mode
     store.save(replace(Settings(), z_mode="top"))
     assert store.load().z_mode == "top"
     store.path.write_text(

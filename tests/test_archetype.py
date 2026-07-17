@@ -470,6 +470,25 @@ def test_ages_arm_shows_the_three_side_layout(app):
     )
 
 
+def test_tetramorph_arm_shows_the_three_side_layout(app):
+    """Owner 2026-07-17 ("sva 3 ako se podudaraju"): the Tetramorph
+    (seasons light) arm hover is a THREE-COLUMN layout — the creature, the
+    evangelist it became, and the element its season arm holds — the same
+    machinery and total width as the Ages three-side."""
+    day, tick = _dt(datetime(2026, 7, 16, 14, 30))
+    tetra = Compositor(_archetype_skin("cross", "light"), AssetCache())
+    tetra.render_offscreen(360.0, 1.0, day, tick)
+    tip = tetra.tooltip_at(*_arm_px(180.0, 0.0), 360.0)     # top arm = the Lion
+    assert tip is not None
+    assert tip.count("<td") == 3                            # three columns
+    assert "The Lion" in tip                                # the creature
+    assert "The Evangelist" in tip and "Mark" in tip        # the evangelist
+    assert "The Element" in tip and "Fire" in tip           # the element
+    # The bottom arm creature is the Eagle → John → Water.
+    bottom = tetra.tooltip_at(*_arm_px(180.0, 180.0), 360.0)
+    assert "The Eagle" in bottom and "John" in bottom and "Water" in bottom
+
+
 def test_archetype_article_resolution_is_graceful(app):
     """SymbolismRepository.archetype_article: an unwritten set (and an
     unwritten entity) answer None — the resolution path Session 6
@@ -489,9 +508,10 @@ def test_archetype_article_resolution_is_graceful(app):
 
 def test_earth_weekday_label_joins_the_date(app):
     """earth_weekday (owner 2026-07-17, default OFF; renamed from
-    archetype_earth_day): the abbreviated weekday joins the Earth date —
+    archetype_earth_day): the abbreviated weekday on the Earth marker —
     a GENERAL Earth option now, so it changes the render in BOTH archetype
-    AND normal mode."""
+    AND normal mode (exclusive with the date since ROADMAP 15e: with it on
+    the marker shows the weekday instead of the date)."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday
     size = 720.0                     # the date label draws from 540 up
     marker = defaults.DEFAULT_SKIN.year_marker
@@ -528,6 +548,55 @@ def test_earth_weekday_label_joins_the_date(app):
         AssetCache(),
     ).render_offscreen(size, 1.0, day, tick)
     assert differing(normal_off, normal_on) > 0
+
+
+def test_earth_label_date_and_weekday_are_exclusive_in_render(app):
+    """EARTH LABEL EXCLUSIVITY (owner 2026-07-17, ROADMAP 15e): on the
+    Earth marker the DATE and the WEEKDAY are mutually exclusive — weekday
+    ALONE draws (it must work without the date), date alone draws, and the
+    two produce DIFFERENT pixels (different glyphs). Both-off draws neither."""
+    day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday → THU
+    size = 720.0
+    marker = defaults.DEFAULT_SKIN.year_marker
+    pos = dial_point(tick.year_angle, 360.0 * marker.orbit_fraction)
+    cx, cy = 360 + pos.x(), 360 + pos.y()
+    box = 55
+
+    def skin(**kw):
+        return dataclasses.replace(
+            defaults.DEFAULT_SKIN, solar_rotation=False, **kw
+        )
+
+    def render(**kw):
+        return Compositor(skin(**kw), AssetCache()).render_offscreen(
+            size, 1.0, day, tick
+        )
+
+    def label_pixels(image):
+        return sum(
+            1
+            for x in range(int(cx) - box, int(cx) + box)
+            for y in range(int(cy) - box, int(cy) + box)
+            if image.pixelColor(x, y).alpha() > 0
+        )
+
+    neither = render(show_earth_date=False, earth_weekday=False)
+    date_only = render(show_earth_date=True, earth_weekday=False)
+    weekday_only = render(show_earth_date=False, earth_weekday=True)
+
+    def differing(a, b):
+        return sum(
+            1
+            for x in range(int(cx) - box, int(cx) + box)
+            for y in range(int(cy) - box, int(cy) + box)
+            if a.pixelColor(x, y) != b.pixelColor(x, y)
+        )
+
+    # Weekday ALONE actually draws (owner: "FRI must work without Date").
+    assert differing(weekday_only, neither) > 0
+    # Date alone draws, and differs from the weekday (different glyphs).
+    assert differing(date_only, neither) > 0
+    assert differing(date_only, weekday_only) > 0
 
 
 # --- The menu gating ----------------------------------------------------------------
@@ -604,10 +673,15 @@ def test_per_pointer_palette_labels_and_calendar_visibility(app, tmp_path, monke
         controller._set_display_choice("pointer", "trio")
         assert labels() == ["Court", "Family"] and all_live()
         assert not lighting_visible()
+        # Naming refinements (owner 2026-07-17, ROADMAP 15e): the Seasons
+        # pair is Temperaments/Elements now, and Aurora has its OWN pair
+        # (Warm/Cool) instead of a second Paint/Light.
         controller._set_display_choice("pointer", "cross")
-        assert labels() == ["Seasons", "Elements"] and all_live()  # not grayed
+        assert labels() == ["Temperaments", "Elements"] and all_live()
         controller._set_display_choice("pointer", "octa")
         assert labels() == ["Walks", "Ages"] and all_live()
+        controller._set_display_choice("pointer", "aurora")
+        assert labels() == ["Warm", "Cool"] and all_live()
         controller._set_display_choice("pointer", "hexa")
         assert labels() == ["Paint palette", "Light palette"] and all_live()
         controller._set_display_choice("pointer", "calendar")
@@ -616,3 +690,72 @@ def test_per_pointer_palette_labels_and_calendar_visibility(app, tmp_path, monke
     finally:
         controller._profiling_timer.stop()
         controller._tray.hide()
+
+
+def test_slot_ordinal_click_follows_the_enable_chain(app, tmp_path, monkeypatch):
+    """Top-level slot ordinal CLICK = its dropdown Enable (owner
+    2026-07-17, slika 3): clicking enables/disables the slot through the
+    same key, gated by the same 1 → 2 → 3 chain — a forbidden enable is a
+    no-op and the check restores. TEMP home."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        info_action = next(
+            a for a, k in c._slot_menu_checks if k == "show_octa_slot"
+        )
+        # Defaults: 1st on, 2nd & 3rd off.
+        assert c._settings.show_weekday
+        assert not c._settings.show_octa_slot
+        # The chain ALLOWS enabling the 2nd (1st is on), then the 3rd.
+        c._toggle_slot_ordinal("show_octa_slot", True)
+        assert c._settings.show_octa_slot and info_action.isChecked()
+        c._toggle_slot_ordinal("show_third_slot", True)
+        assert c._settings.show_third_slot
+        # Disabling the 1st is always allowed; the 2nd's ordinal check then
+        # restores to unchecked (its EFFECTIVE state is off).
+        c._toggle_slot_ordinal("show_weekday", False)
+        assert not c._settings.show_weekday
+        assert not info_action.isChecked()
+        # A FORBIDDEN enable is a no-op: with the 1st off, re-enabling the
+        # 2nd does nothing (same gate as its grayed dropdown Enable).
+        c._toggle_slot_ordinal("show_octa_slot", False)
+        assert not c._settings.show_octa_slot
+        c._toggle_slot_ordinal("show_octa_slot", True)
+        assert not c._settings.show_octa_slot          # forbidden — unchanged
+        assert not info_action.isChecked()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+def test_elements_top_level_toggles_all_on_off(app, tmp_path, monkeypatch):
+    """Elements top-level CLICK = all on / all off (owner 2026-07-17,
+    ROADMAP 15e): the ordinal check shows ONLY when every element is on;
+    clicking while all-on turns them all off, otherwise turns them all on;
+    turning ONE off unchecks the ordinal. TEMP home."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        keys = [k for _, k in c._element_toggles]
+        # Defaults: every element on → the ordinal is checked.
+        assert all(getattr(c._settings, k) for k in keys)
+        assert c._elements_menu_action.isChecked()
+        # Click Elements → all off, ordinal unchecks, children mirror off.
+        c._toggle_all_elements()
+        assert not any(getattr(c._settings, k) for k in keys)
+        assert not c._elements_menu_action.isChecked()
+        assert all(not a.isChecked() for a, _ in c._element_toggles)
+        # Click again → all on.
+        c._toggle_all_elements()
+        assert all(getattr(c._settings, k) for k in keys)
+        assert c._elements_menu_action.isChecked()
+        # Turning a SINGLE element off unchecks the ordinal.
+        c._set_element(keys[0], False)
+        assert not c._elements_menu_action.isChecked()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()

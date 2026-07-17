@@ -56,10 +56,12 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   menu so Qt never deletes a visible popup). Emoji-fronted top level:
   🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
   style, Theme background / Classic black (owner A/B spec 2026-07-15)
-  — | Hands, Earth — with the Date switch — | Size), 🥇 1ˢᵗ Slot,
+  — | Hands, Earth — with the EXCLUSIVE Date / Weekday switches
+  (owner 2026-07-17, ROADMAP 15e: checking one unchecks the other via
+  `_toggle_earth_label`; both may be off) — | Size), 🥇 1ˢᵗ Slot,
   🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
-  📜 Legend, 🔆 Solar rotation, 🎭 Archetype (+ its 🌍 Earth weekday
-  sub-toggle), 🖱️ Click-through | ⚙️ Settings…,
+  📜 Legend, 🔆 Solar rotation, 🎭 Archetype,
+  🖱️ Click-through | ⚙️ Settings…,
   🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The three
   slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
   a Weekday submenu in KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`: Ancient
@@ -80,7 +82,12 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Seasons three-slot case locks the 1st on the classic weekday unit
   (`first_lock`). Each slot's top-level entry carries a CHECK MARK
   beside its ordinal while the slot is enabled (owner 2026-07-15),
-  refreshed in place with the gating. Since the ROUNDEL round (owner
+  refreshed in place with the gating. CLICKING an ordinal now does
+  EXACTLY what its dropdown Enable does (owner 2026-07-17, slika 3,
+  `_toggle_slot_ordinal`): the same enable key gated by the same 1 → 2 → 3
+  chain — a forbidden enable is a no-op and the check restores; the
+  submenu still opens on hover/arrow (the ordinal is never grayed by the
+  chain, only by the Archetype override). Since the ROUNDEL round (owner
   2026-07-14) TEXT is
   real under EVERY pointer — text and the flat astrology art draw on
   the watch-face subdial. Pointer, show_weekday and show_pointer
@@ -120,19 +127,25 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   the Calendar pointer (`_menu_gates["calendar_lighting"]`). Then
   Size (360…1440),
   Elements (the FINAL.txt #5 on/off switches, via the shared
-  `_add_toggle()` helper: Earth — with its Clean/Atmosphere style
-  group nested — Moon, Weekday, Pointer, Colorful — off draws the
-  day/twilight arcs as plain white transparency — and Seconds, which
-  also switches the tick cadence through
-  `MinuteScheduler.set_per_second`), the Legend toggle (off = no
+  `_add_toggle()` helper: Pointer, Colorful — off draws the day/twilight
+  arcs as plain white transparency — Earth, Moon and Seconds, which also
+  switches the tick cadence through `MinuteScheduler.set_per_second`).
+  CLICKING the Elements top-level entry flips them ALL at once (owner
+  2026-07-17, ROADMAP 15e, `_toggle_all_elements`): the ordinal check
+  shows ONLY when every element is on; a click while all-on turns them all
+  off, otherwise all on (`_refresh_elements_check` keeps the ordinal in
+  sync as single elements toggle via `_set_element`). Then the Legend
+  toggle (off = no
   hovers at all; with click-through the dial has zero interaction),
   the Solar rotation toggle (off = upright Star/Aura/Umbra), the
   ARCHETYPE toggle (owner sealed package 2026-07-16): 🎭
   Archetype — the stay-open checkable that turns the mode on (the
   render-level override; the slot settings stay untouched). The Earth
-  Weekday toggle moved to Design ▸ Earth as a GENERAL option
-  (`earth_weekday`, owner 2026-07-17 slika 10 — works in both modes,
-  gated only by the dial size like the Date). `_refresh_menu_gating`
+  Date and Weekday toggles live in Design ▸ Earth as GENERAL, MUTUALLY
+  EXCLUSIVE options (`show_earth_date` / `earth_weekday`, owner 2026-07-17
+  slika 10 + ROADMAP 15e — both work in either mode, gated by the dial
+  size; `_toggle_earth_label` clears the sibling when one is checked).
+  `_refresh_menu_gating`
   grays the Archetype toggle
   where no archetype exists (Aurora, Calendar, Pointer element off)
   and, WHILE THE MODE IS ON, grays the three slot submenus and their
@@ -156,10 +169,14 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   settings (`defaults.dial_window_margin_fraction(skin)`, owner slike
   1–3 2026-07-17) so a size/hover/letter slider re-sizes the window
   exactly, and `run()`/`_open_settings()` apply the `z_mode` window-flag
-  swap (ROADMAP 15d). The wheel-pair labels are per pointer
-  (`_palette_labels`: Court/Family, Seasons/Elements, Walks/Ages,
-  Zodiac/Almanac, else Paint/Light) and the pair is never grayed; the
-  Calendar lighting entries are non-visible off the Calendar
+  swap (ROADMAP 15e — three modes bottom/normal/top; `run()` re-asserts
+  native topmost after the first show, and `_open_settings()` reconnects
+  `screenChanged` when the swap recreated the native window — the S18
+  caveat). The wheel-pair labels are per pointer
+  (`_palette_labels`, owner 2026-07-17 ROADMAP 15e: Court/Family,
+  Temperaments/Elements, Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac,
+  else Paint/Light) and the pair is never grayed; the Calendar lighting
+  entries are non-visible off the Calendar
 - `_open_settings()`: the M6 dialog — location (new observer/timezone →
   full day-context rebuild), opacity and palette results applied by
   reinstalling the PRISTINE pack (so cleared overrides really clear)

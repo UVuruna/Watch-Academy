@@ -22,6 +22,12 @@ _user32.GetWindowLongPtrW.restype = ctypes.c_ssize_t
 _user32.GetWindowLongPtrW.argtypes = (wintypes.HWND, ctypes.c_int)
 _user32.SetWindowLongPtrW.restype = ctypes.c_ssize_t
 _user32.SetWindowLongPtrW.argtypes = (wintypes.HWND, ctypes.c_int, ctypes.c_ssize_t)
+_user32.SetWindowPos.restype = wintypes.BOOL
+_user32.SetWindowPos.argtypes = (
+    wintypes.HWND, wintypes.HWND,
+    ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int,
+    ctypes.c_uint,
+)
 
 # Deliberately never closed: the mutex must live exactly as long as the
 # process so a second launch can detect us.
@@ -96,6 +102,20 @@ def set_click_through(hwnd: int, enabled: bool) -> None:
     else:
         style &= ~winapi.WS_EX_TRANSPARENT
     _user32.SetWindowLongPtrW(wintypes.HWND(hwnd), winapi.GWL_EXSTYLE, style)
+
+
+def assert_topmost(hwnd: int) -> None:
+    """Force the window to the TRUE top of the Z-order (owner 2026-07-17,
+    ROADMAP 15e). Qt's WindowStaysOnTopHint degrades to ordinary stacking
+    after a setWindowFlags() call recreates the native window, so the
+    "top" z-mode re-asserts HWND_TOPMOST natively after every flag swap
+    and every show — without moving, resizing or activating the window."""
+    _user32.SetWindowPos(
+        wintypes.HWND(hwnd),
+        wintypes.HWND(winapi.HWND_TOPMOST),
+        0, 0, 0, 0,
+        winapi.SWP_NOMOVE | winapi.SWP_NOSIZE | winapi.SWP_NOACTIVATE,
+    )
 
 
 def nchittest_falls_outside(message_ptr: int) -> bool:

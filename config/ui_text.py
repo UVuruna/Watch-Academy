@@ -31,6 +31,9 @@ UI_STRINGS: tuple[str, ...] = (
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",
     "Full contrast", "Half contrast", "Light contrast", "Dark contrast",
     "Paint palette", "Light palette",
+    # Wheel-pair naming refinements (owner 2026-07-17, ROADMAP 15e): the
+    # Seasons pair is Temperaments/Elements, Aurora's own pair is Warm/Cool.
+    "Temperaments", "Warm", "Cool",
     # The Calendar pointer (owner 2026-07-16): the wheel pair riding
     # the Paint/Light slot, and its two lighting modes.
     "Calendar", "Almanac",
@@ -81,6 +84,8 @@ UI_STRINGS: tuple[str, ...] = (
     "being written.",
     # --- Settings dialog --------------------------------------------------------
     "Location", "Opacity", "Element sizes", "Custom ring", "Language",
+    # The custom diameter slider (owner 2026-07-17, ROADMAP 15e).
+    "Diameter",
     "Palette — {pointer} {style}",
     "Clock tint — dial, hands and Umbra (letters excluded)",
     "Custom hands", "Hours", "Minutes", "Seconds", "Browse…",
@@ -253,6 +258,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat",
     "Monkey", "Rooster", "Dog", "Pig",
     "Wood", "Fire", "Water", "Metal",
+    # The Tetramorph three-side hover columns (owner 2026-07-17): the
+    # creature + the evangelist + the element (Fire/Water above, Earth in
+    # the menu, Air new).
+    "Air", "The Evangelist", "The Element",
     "Summer", "Autumn", "Winter", "Spring",
     "Summer Solstice", "Winter Solstice", "Spring Equinox", "Autumn Equinox",
     "June Solstice", "December Solstice", "March Equinox", "September Equinox",

@@ -901,7 +901,31 @@ GLOW_RADIUS_SCALE = 1.5              # halo radius, multiple of the marker radiu
 # into the outermost row. The OLD fixed value was 0.1465 (max markers ×
 # max hover); at default settings this shrinks well below it, and at max
 # settings it grows past it — exact reservation, no waste, no clip.
-DIAL_WINDOW_MARGIN_EPSILON = 0.01    # anti-aliasing safety (owner: small)
+#
+# MARGIN GAP DIAGNOSIS (owner slika 4, 2026-07-17: a hovered glowing Earth
+# stopped visibly short of the window edge). Term by term, the reserved
+# window half-extent equals `max(glow_extent, letter_extent) + 2·EPSILON`
+# (radius fractions), against the marker+glow that actually reaches
+# `glow_extent`. Auditing each candidate:
+#   * the EPSILON — this was the whole gap. At 0.01 of the DIAMETER it
+#     reserves 2·0.01 = 0.02 of the RADIUS beyond the glow, i.e. ~7 px at
+#     a 720 dial, ~14 px at 1440. That fixed slab is the "stops visibly
+#     short". Tightened to 0.003 → ~2 px at 720, still a sub-pixel-safe
+#     anti-aliasing guard so the faint halo tail never hard-clips.
+#   * max(earth, moon) — NOT waste: BOTH markers relocate to the ring band
+#     (GLOW_RING_RADIUS_FRACTION) and glow there — the Earth at a
+#     sun event (golden), the Moon at a moon event (silver) — so the
+#     LARGER of the two is the genuine worst case for a square window.
+#   * the glow-halo × hover product — NOT waste: slika 4 IS a hovered
+#     glowing marker, so hover and glow do stack; the halo reaches
+#     GLOW_RADIUS_SCALE past the hover-enlarged marker and must be covered.
+#   * the ring-letter floor — NOT waste: the letters overhang the ring by
+#     half their height plus the shadow; taken as the max against the glow
+#     because either can be the binding radius on the square window.
+# So the single real over-reservation was the epsilon; everything else is
+# an exact bound. After the tighten the hovered glowing marker lands within
+# ~1–2 px of the edge and never clips (pinned both ways by the pixel test).
+DIAL_WINDOW_MARGIN_EPSILON = 0.003   # anti-aliasing safety (owner: small)
 
 
 def dial_window_margin_fraction(skin) -> float:

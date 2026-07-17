@@ -29,6 +29,13 @@ that must refresh the dial immediately.
   outside the window's inscribed circle? Uses the HWND from the message
   itself — calling `winId()` here would force window creation from
   inside window creation and loop forever (learned the hard way)
+- `assert_topmost(hwnd)` (owner 2026-07-17, ROADMAP 15e): forces the
+  window to TRUE topmost via `SetWindowPos(HWND_TOPMOST,
+  SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE)`. Qt's `WindowStaysOnTopHint`
+  degrades to ordinary stacking once a `setWindowFlags()` call recreates
+  the native window, so the "top" z-mode re-asserts topmost natively after
+  every flag swap and every show/reshow (the widget calls it). Moves,
+  resizes and focus are all left untouched.
 
 ## Classes
 
