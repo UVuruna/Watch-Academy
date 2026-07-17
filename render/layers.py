@@ -357,6 +357,49 @@ def archetype_fit_height(aspect: float, tip: float, tan_half: float) -> float:
     return tip * tan_half / (aspect + tan_half)
 
 
+def archetype_figure_height(
+    skin: SkinDefinition, radius: float, art_file,
+) -> float:
+    """The height EVERY archetype figure uses — the six/four/eight arm
+    figures AND the center alike (owner 2026-07-17, ROADMAP 15g: ONE
+    size for all figures, and no change between the normal and the
+    reveal states). It is the desired fraction of the star tip
+    (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]`, config-derived — never a
+    magic number), CLAMPED into the arm diamond for the art's OWN aspect
+    (owner slika 8: the glass never overflows its romb); a
+    missing/placeholder file keeps the desired height. Reveal is not a
+    parameter, so the size is reveal-invariant BY CONSTRUCTION — the
+    Omega double-click can no longer shrink the center, and the center no
+    longer rides the weekday Sun's `center_scale` (which sized it larger
+    than the arms). The one home for the archetype figure size (Rule
+    #5): the ArchetypeLayer arms and the ArchetypeCenterLayer both call
+    it, so the center matches the arms exactly."""
+    tip = radius * skin.star.radius_fraction
+    half = constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
+    tan_half = math.tan(math.radians(half))
+    desired = tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[skin.pointer]
+    size = archetype_art_size(art_file)
+    if size is None:
+        return desired
+    return min(
+        desired,
+        archetype_fit_height(size.width() / size.height(), tip, tan_half),
+    )
+
+
+def archetype_center_height(skin: SkinDefinition, radius: float, key: str) -> float:
+    """The center figure's height (owner 2026-07-17, ROADMAP 15g): it
+    ADOPTS the arm figures' diamond-clamped size rather than clamping the
+    center's OWN (rosette / seal / eye) aspect — the arms share the set's
+    lancet aspect, so the first arm's height IS the shared figure size,
+    and the center sits at the roomy hub where it needs no diamond clamp
+    of its own. This is what makes 'the center uses the SAME computed size
+    as the diamond-clamped outer figures' literally true (owner words) —
+    a square Seal would otherwise clamp smaller than the tall Person
+    lancets around it."""
+    return archetype_figure_height(skin, radius, archetypes.figures(key)[0]["file"])
+
+
 def draw_archetype_figure(
     painter: QPainter, ctx: "RenderContext", fig: dict, pos: QPointF,
     height: float, arm_width: float, opacity: float, named: bool,
@@ -738,6 +781,14 @@ def aurora_bands(
 
 class Layer(ABC):
     cadence: Cadence
+    # HOVER-VARIABLE layers (owner 2026-07-17, ROADMAP 15f): even though
+    # their content is DAILY, their APPEARANCE changes with the hover-
+    # enlarge target and the reveal window, so the compositor NEVER bakes
+    # them into the cached composite — it draws them LIVE every frame
+    # (their pixmaps are already rasterize-cached). A hover enter/leave or
+    # an Omega reveal then rebuilds NOTHING. The WeekdayLayer and the
+    # ArchetypeLayer set this True.
+    hover_variable: bool = False
 
     def __init__(self, skin: SkinDefinition, lift: bool = False):
         self._skin = skin
@@ -1148,6 +1199,10 @@ class WeekdayLayer(Layer):
     spec; slot images are unaffected)."""
 
     cadence = Cadence.DAILY
+    # Hover-enlarge and the reveal window both change these bodies, so
+    # the compositor draws the layer LIVE, never in the cached composite
+    # (owner 2026-07-17, ROADMAP 15f) — a hover no longer rebuilds it.
+    hover_variable = True
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
@@ -1450,6 +1505,10 @@ class ArchetypeLayer(Layer):
     Calendar's shichen wedge."""
 
     cadence = Cadence.DAILY
+    # The lit figure, the reveal window and the hover-enlarge all change
+    # the figures, so the compositor draws this layer LIVE, never in the
+    # cached composite (owner 2026-07-17, ROADMAP 15f).
+    hover_variable = True
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         key = archetype_key(ctx.skin)
@@ -1458,11 +1517,7 @@ class ArchetypeLayer(Layer):
         orbit = ctx.radius * weekday_body_orbit(ctx.skin)
         tip = ctx.radius * ctx.skin.star.radius_fraction
         half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
-        tan_half = math.tan(math.radians(half))
-        arm_width = tip * tan_half           # the diamond's widest width
-        desired = (
-            tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[ctx.skin.pointer]
-        )
+        arm_width = tip * math.tan(math.radians(half))   # diamond's widest
         names_on = ctx.skin.show_weekday_names
         for index, fig in enumerate(archetypes.figures(key)):
             # Per-arm hover target (owner slika 8): the base pass skips
@@ -1472,21 +1527,11 @@ class ArchetypeLayer(Layer):
             if not self._gate(ctx, element):
                 continue
             lit = ctx.reveal_active or index == ctx.archetype_lit
-            # CLAMP the glass into the diamond for its own aspect (owner
-            # slika 8: it must never overflow the romb); a placeholder
-            # keeps the desired height (the NAME fits the width itself).
-            size = archetype_art_size(fig["file"])
-            height = desired
-            if size is not None:
-                height = min(
-                    desired,
-                    archetype_fit_height(
-                        size.width() / size.height(), tip, tan_half
-                    ),
-                )
-            # HOVER-ENLARGE like every slot (slot_seat_scale is already
-            # folded into ARCHETYPE_FIGURE_HEIGHT_OF_TIP's tuning).
+            # ONE sizing path (owner 2026-07-17, ROADMAP 15g): the shared
+            # diamond-clamped height — the CENTER uses the very same
+            # helper, so every figure matches — hover-scaled.
             hf = hover_factor(ctx, element)
+            height = archetype_figure_height(ctx.skin, ctx.radius, fig["file"])
             draw_archetype_figure(
                 painter, ctx, fig,
                 dial_point(fig["angle"] + ctx.rotation, orbit),
@@ -1513,18 +1558,24 @@ class ArchetypeCenterLayer(Layer):
         center = archetypes.center(key)
         if center is None or not self._gate(ctx, "archetype:center"):
             return
-        size = (
-            2 * ctx.radius * ctx.skin.weekday_set.center_scale
+        # ONE sizing path (owner 2026-07-17, ROADMAP 15g): the center
+        # ADOPTS the arm figures' size — no longer the weekday Sun's
+        # center_scale (which sized it LARGER, ~170 vs ~144 px) nor its
+        # own square-Seal clamp (which would size it smaller than the
+        # tall Person lancets) — and the reveal window can no longer
+        # resize it (the height helper has no reveal term).
+        height = (
+            archetype_center_height(ctx.skin, ctx.radius, key)
             * hover_factor(ctx, "archetype:center")
         )
         painter.save()
         if archetype_art_ready(center["file"]):
             draw_pixmap_centered(
-                painter, ctx, center["file"], QPointF(0, 0), size
+                painter, ctx, center["file"], QPointF(0, 0), height
             )
         else:
             _draw_archetype_name(
-                painter, center["name"], QPointF(0, 0), size, size
+                painter, center["name"], QPointF(0, 0), height, height
             )
         painter.restore()
 

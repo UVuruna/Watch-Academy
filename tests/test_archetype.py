@@ -430,6 +430,68 @@ def test_archetype_fit_height_clamps_into_the_diamond():
     )
 
 
+def test_archetype_center_matches_the_arm_figures(app):
+    """Owner 2026-07-17, ROADMAP 15g: ALL archetype figures are ONE size.
+    The center uses the SAME diamond-clamped height as the arm figures —
+    NOT the weekday Sun's `center_scale` (which sized it larger, ~170 vs
+    ~144 px) nor its own square-Seal clamp (which would size it smaller).
+    On the Trinity, the owner's named case, every arm and the center share
+    one height."""
+    from render.layers import archetype_center_height, archetype_figure_height
+
+    for key, pointer, style in (
+        ("trinity_paint", "trio", "paint"),
+        ("trinity_light", "trio", "light"),
+    ):
+        skin = _archetype_skin(pointer, style)
+        radius = 180.0
+        arms = [
+            archetype_figure_height(skin, radius, fig["file"])
+            for fig in archetypes.figures(key)
+        ]
+        center = archetype_center_height(skin, radius, key)
+        assert len({round(h, 6) for h in arms}) == 1        # arms uniform
+        assert round(center, 6) == round(arms[0], 6)         # center == arms
+        # The old path (2·radius·center_scale) sized it differently.
+        assert abs(center - 2 * radius * skin.weekday_set.center_scale) > 1.0
+    # The hexa (Persons) center adopts the arm-figure size the same way.
+    hexa = _archetype_skin("hexa")
+    assert round(
+        archetype_center_height(hexa, 180.0, "prism_paint"), 6
+    ) == round(
+        archetype_figure_height(
+            hexa, 180.0, archetypes.figures("prism_paint")[0]["file"]
+        ), 6,
+    )
+
+
+def test_archetype_center_size_is_reveal_invariant(app):
+    """Owner 2026-07-17, ROADMAP 15g: the Omega reveal must NOT resize any
+    figure. The center figure draws IDENTICALLY with the reveal off and on
+    — the sizing helper has no reveal term, so size(normal) == size(reveal)
+    to the pixel."""
+    from render.layers import ArchetypeCenterLayer, RenderContext
+
+    skin = _archetype_skin("trio")
+    layer = ArchetypeCenterLayer(skin)
+
+    def render(reveal):
+        image = QImage(360, 360, QImage.Format.Format_ARGB32_Premultiplied)
+        image.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(image)
+        painter.translate(180, 180)
+        ctx = RenderContext(
+            skin=skin, day=SimpleNamespace(), tick=None,
+            radius=180.0, cache=AssetCache(), dpr=1.0,
+            reveal_active=reveal, archetype_lit=0,
+        )
+        layer.paint(painter, ctx)
+        painter.end()
+        return image
+
+    assert render(False) == render(True)     # reveal never resizes the center
+
+
 def test_archetype_arm_is_a_hover_target(app):
     """Owner slika 8: an archetype arm is a hover-enlarge target
     ("archetype:<index>") through the arm-diamond geometry — set_hover

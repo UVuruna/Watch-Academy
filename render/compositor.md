@@ -3,10 +3,30 @@
 **Script:** [Compositor (script)](compositor.py)
 
 ## Purpose
-Owns the layer stack and the cadence-driven cache: STATIC+DAILY layers
-render into one pixmap at device resolution (rebuilt when the day
-context, size or DPI changes); each minute-paint blits the cache and
-draws the MINUTE layers (hands, year marker) live.
+Owns the layer stack and the cadence-driven cache. The z-ordered stack
+is partitioned into paint STEPS (owner 2026-07-17, ROADMAP 15f): each
+maximal run of hover-INVARIANT STATIC/DAILY layers becomes ONE cached
+pixmap at device resolution; the MINUTE layers AND the HOVER-VARIABLE
+layers (the weekday bodies, the archetype figures) paint LIVE every
+frame. Because the default `z_order` seats the weekday_set BELOW the
+ring, pulling it out splits the cache into TWO segments (base below the
+live bodies, ring above them), so the z-order is preserved to the pixel.
+
+### The rebuild triggers (the COMPLETE list)
+A cached segment is rebuilt ONLY when the composite key changes —
+`(round(size·dpr), day.cache_key, calendar_lit)`:
+
+- **size / DPI change** — `invalidate()` (also flushes the asset cache);
+- **day change** — `set_day()`;
+- **skin / theme install** — the controller builds a FRESH compositor
+  (`_install_skin`), so the segments start empty;
+- **settings apply** — same `_install_skin` path;
+- **the Calendar's intraday lit wedge** (`calendar_lit`) — the shichen
+  relights ~12×/day (BackgroundLayer is cached).
+
+A **hover** enter/leave and an **Omega reveal** toggle rebuild NOTHING —
+the weekday bodies and archetype figures that vary with them are drawn
+LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
 
 ## Connections
 
@@ -22,16 +42,25 @@ draws the MINUTE layers (hands, year marker) live.
 ## Classes
 
 ### Compositor
-- `set_day(day)`: new day context, drops the composite
-- `invalidate()`: size/DPI/screen change — drops composite AND rasterized assets
-- `paint(painter, size, dpr, tick)`: blit composite + MINUTE layers;
-  raises if called before the first day context (startup order is a
-  controller guarantee)
+- `_plan_steps(layers)`: partitions the z-ordered stack into paint STEPS
+  (owner 2026-07-17, ROADMAP 15f) — runs of cacheable (non-MINUTE,
+  hover-invariant) layers coalesce into one cached pixmap each; MINUTE
+  and hover-variable layers become LIVE steps. Returns
+  `(cached_groups, steps)`; a step is `("cache", group_index)` or
+  `("live", layer)`, in z-order.
+- `set_day(day)`: new day context, drops the cached segments
+- `invalidate()`: size/DPI/screen change — drops the segments AND rasterized assets
+- `paint(painter, size, dpr, tick)`: walk the steps — blit each cached
+  segment (rebuilding it if its key changed) and paint each live layer
+  in z-order; the reveal window skips the HandLayers; raises if called
+  before the first day context (startup order is a controller guarantee)
 - `render_offscreen(size, dpr, day, tick) -> QImage`: same path, headless
 - `set_hover(x, y, size) -> bool`: tracks the element under the cursor
   for the HOVER-ENLARGE effect (owner EXTRAS — one shared factor draws
-  it larger); True = target changed, the widget repaints (weekday
-  bodies live in the DAILY composite, so one rebuild per change).
+  it larger); True = target changed, the widget repaints. Rebuilds
+  NOTHING (owner 2026-07-17, ROADMAP 15f: the weekday bodies and
+  archetype figures paint LIVE, so the enlarge is a handful of cached
+  blits on the next frame).
   `_element_at()` is the ONE geometry shared with the tooltips
   (body/seated slots/moon/earth, in hover priority — seated slots
   reuse the layer's exact seat geometry: `slot_seat_rotation` /
@@ -51,17 +80,20 @@ draws the MINUTE layers (hands, year marker) live.
   True), the next one ends it (a toggle-off, not a restart; False).
   While it runs `paint()` SKIPS the HandLayers — the hands are
   hidden so the whole theme, pointer and dial read clean — and the
-  live flag keys the composite, so the DAILY WeekdayLayer redraws
-  ghosts at full opacity and steps aside for CenterBodyLayer to lift
-  the ghost center Sun above the hands; in ARCHETYPE MODE every
-  figure draws full instead (the same "show me everything"
-  semantics). The hidden-mode Four Greetings hover (below) moved to
+  reveal flag rides `RenderContext.reveal_active` into the LIVE
+  weekday/archetype layers (owner 2026-07-17, ROADMAP 15f: no composite
+  rebuild), so the WeekdayLayer redraws ghosts at full opacity and steps
+  aside for CenterBodyLayer to lift the ghost center Sun above the hands;
+  in ARCHETYPE MODE every figure draws full instead (the same "show me
+  everything" semantics). The hidden-mode Four Greetings hover (below) moved to
   the 12h letter ONLY in the same round — Omega no longer answers it
 - THE ARCHETYPE MODE plumbing (owner sealed package 2026-07-16;
   tables in [Archetypes](../config/archetypes.md), layers in
   [Layers](layers.md) §The Archetype Mode): `_archetype_lit(tick)`
-  computes the hour-space figure from the live tick and keys the
-  DAILY composite on it (the Calendar-wedge pattern);
+  computes the hour-space figure from the live tick and feeds it into the
+  LIVE ArchetypeLayer via `RenderContext.archetype_lit` (owner
+  2026-07-17, ROADMAP 15f: the figures paint live now — the lit index no
+  longer keys any cache, so the intraday relight is free);
   `_build_layers()` seats `ArchetypeLayer` at the weekday_set z spot
   and appends `ArchetypeCenterLayer` above the hands while the mode
   is active; `_element_at` answers `"archetype:center"` over the

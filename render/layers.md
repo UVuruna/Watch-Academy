@@ -114,9 +114,11 @@ ARCHETYPE CLOCK. The machinery:
   on its arm; the spaces ride the DRAWN (solar-rotated) arms. The
   compositor computes it from the live tick and keys the DAILY
   composite on it, like the Calendar's shichen wedge.
-- `ArchetypeLayer` (DAILY, at the weekday_set z spot): the figures at
-  the romb center (`weekday_body_orbit`), scaled into the diamond by
-  `ARCHETYPE_FIGURE_HEIGHT_OF_TIP` and then CLAMPED to the romb for the
+- `ArchetypeLayer` (DAILY but HOVER-VARIABLE — painted LIVE, never in
+  the cached composite, owner 2026-07-17 ROADMAP 15f; at the weekday_set
+  z spot): the figures at the romb center (`weekday_body_orbit`), each
+  sized by `archetype_figure_height()` — the desired fraction of the star
+  tip (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP`) CLAMPED into the romb for the
   art's own aspect (`archetype_fit_height`, owner slika 8 2026-07-17 —
   the glass never overflows its diamond) with the arm color visible
   around them; the lit figure FULL, the rest at the weekday
@@ -129,7 +131,12 @@ ARCHETYPE CLOCK. The machinery:
 - `ArchetypeCenterLayer` (MINUTE, above the hands like
   CenterBodyLayer): the center figure — the Eye / Hearth / Seal /
   Union / Throne, none on the Compass — full opacity, hover-enlarged
-  as `"archetype:center"` (its lift twin joins HoverLiftLayer).
+  as `"archetype:center"` (its lift twin joins HoverLiftLayer). It is
+  the SAME size as the arm figures now (owner 2026-07-17, ROADMAP 15g:
+  `archetype_center_height()` adopts the arm figures' clamped height —
+  no longer the weekday Sun's `center_scale`, which sized it larger, nor
+  its own square-Seal clamp, which would size it smaller — and reveal
+  can no longer resize it; the `_element_at` hit disc matches).
 - `archetype_art_ready(path)` + `draw_archetype_figure()` — the
   graceful placeholder path: a missing file or a committed 1×1
   placeholder draws the figure's NAME in the outlined label style
@@ -219,9 +226,13 @@ drop shadow; while seated it replaces the big seconds hand.
 ## Classes
 
 ### Cadence / Layer / RenderContext
-STATIC | DAILY | MINUTE; the ABC every layer implements; the frozen
-per-paint context (skin, day, tick, radius, cache, dpr — `tick` is None
-while compositing non-MINUTE layers).
+STATIC | DAILY | MINUTE; the ABC every layer implements, plus the
+`Layer.hover_variable` flag (default False; True on WeekdayLayer and
+ArchetypeLayer — a DAILY layer whose APPEARANCE changes with hover/reveal,
+so the compositor draws it LIVE and never bakes it into the cached
+composite, owner 2026-07-17 ROADMAP 15f); the frozen per-paint context
+(skin, day, tick, radius, cache, dpr — `tick` is None while compositing
+non-MINUTE layers).
 
 ### BackgroundLayer (DAILY)
 The UMBRA (gray brightness wheel) rotated with the star, then the AURA
@@ -265,7 +276,11 @@ owner's gold/silver LETTER art overlaid by calculation
 never touches the letters; otherwise the procedural donut with ticks,
 numerals, letter substitutions and minute numbers (untinted fallback).
 
-### WeekdayLayer (DAILY)
+### WeekdayLayer (DAILY, hover-variable — painted LIVE)
+`hover_variable = True` (owner 2026-07-17, ROADMAP 15f): the bodies
+enlarge on hover and go full on reveal, so the compositor draws this
+layer LIVE every frame instead of baking it into the cached composite — a
+hover enter/leave rebuilds NOTHING.
 Draws only while a slot DRIVES the classic unit
 (`weekday_classic_slot`). "ghost": bodies on the pointer's slots at
 `slot angle + hexagram_rotation`, current day opaque, rest at

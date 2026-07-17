@@ -48,6 +48,7 @@ from render.layers import (
     HoverLiftLayer,
     archetype_active,
     archetype_art_ready,
+    archetype_center_height,
     archetype_key,
     archetype_lit_index,
     dial_point,
@@ -385,6 +386,17 @@ class Compositor:
         self._skin = skin
         self._cache = cache
         self._layers = _build_layers(skin)
+        # The z-ordered stack is partitioned into paint STEPS (owner
+        # 2026-07-17, ROADMAP 15f): each maximal run of hover-INVARIANT
+        # STATIC/DAILY layers becomes ONE cached pixmap; the MINUTE and
+        # the HOVER-VARIABLE layers (the weekday bodies, the archetype
+        # figures) paint LIVE. Because the default z_order seats the
+        # weekday_set BELOW the ring (a STATIC layer), pulling it out
+        # splits the cache into two segments — the base (background,
+        # star) below the live bodies and the ring above them — so the
+        # z-order is preserved to the pixel while a hover enter/leave or
+        # an Omega reveal rebuilds NOTHING.
+        self._cached_groups, self._steps = self._plan_steps(self._layers)
         # The controller passes a repository with the active language's
         # translation overlay; standalone uses read the originals. The
         # same overlay (Phase 2b) also translates the hover INFO lines
@@ -393,7 +405,12 @@ class Compositor:
         self._overlay = overlay or {}
         self._day: DayContext | None = None
         self._last_tick: TickState | None = None
-        self._composite: QPixmap | None = None
+        # One cached pixmap per hover-invariant segment (None = needs a
+        # rebuild); the shared key covers size/DPI, the day and the
+        # Calendar's intraday lit wedge — NOT hover or reveal.
+        self._composites: list[QPixmap | None] = [None] * len(
+            self._cached_groups
+        )
         self._composite_key: tuple | None = None
         self._hovered: str | None = None    # hover-enlarge target
         # Hidden mode (owner 2026-07-14, top-only round 2026-07-16):
@@ -403,6 +420,38 @@ class Compositor:
         # every non-active weekday body to full opacity until this
         # monotonic deadline; None = no reveal running.
         self._reveal_until: float | None = None
+
+    @staticmethod
+    def _plan_steps(
+        layers: list[Layer],
+    ) -> tuple[list[list[Layer]], list[tuple[str, object]]]:
+        """Partition the z-ordered stack into paint steps (owner
+        2026-07-17, ROADMAP 15f). A layer is CACHEABLE when its cadence
+        is not MINUTE AND it is not hover-variable; consecutive cacheable
+        layers coalesce into one group (one cached pixmap). MINUTE and
+        hover-variable layers become LIVE steps painted every frame. The
+        steps preserve the exact z-order — a cache blit and a live layer
+        interleave in list order — so the split is invisible on screen.
+        Returns (cached_groups, steps): a step is ("cache", group_index)
+        or ("live", layer)."""
+        groups: list[list[Layer]] = []
+        steps: list[tuple[str, object]] = []
+        current: list[Layer] | None = None
+        for layer in layers:
+            cacheable = (
+                layer.cadence is not Cadence.MINUTE
+                and not layer.hover_variable
+            )
+            if cacheable:
+                if current is None:
+                    current = []
+                    groups.append(current)
+                    steps.append(("cache", len(groups) - 1))
+                current.append(layer)
+            else:
+                current = None
+                steps.append(("live", layer))
+        return groups, steps
 
     def set_hidden_unlocked(self, unlocked: bool) -> None:
         self._hidden_unlocked = unlocked
@@ -436,10 +485,11 @@ class Compositor:
         moment = monotonic() if now is None else now
         if self.reveal_active(moment):
             self._reveal_until = None
-            self._composite = None    # ghosts/figures fall back
+            # No composite drop (owner 2026-07-17, ROADMAP 15f): the
+            # ghosts/figures live in the LIVE weekday/archetype layers now
+            # — the next paint reflects the toggle-off with zero rebuild.
             return False
         self._reveal_until = moment + defaults.REVEAL_WEEK_DURATION_S
-        self._composite = None    # the DAILY layers must redraw
         return True
 
     def reveal_active(self, now: float | None = None) -> bool:
@@ -483,11 +533,11 @@ class Compositor:
 
     def set_day(self, day: DayContext) -> None:
         self._day = day
-        self._composite = None
+        self._composites = [None] * len(self._cached_groups)
 
     def invalidate(self) -> None:
-        """Size/DPI/screen change: drop the composite and rasterized assets."""
-        self._composite = None
+        """Size/DPI/screen change: drop the composites and rasterized assets."""
+        self._composites = [None] * len(self._cached_groups)
         self._cache.flush()
 
     def _rotation(self) -> float:
@@ -501,34 +551,30 @@ class Compositor:
         self._last_tick = tick
         reveal = self.reveal_active()
         # The Calendar's lit wedge (the shichen under the hour hand)
-        # changes INTRADAY, so it keys the DAILY composite too — the
-        # wedges live below the ring (in the composite), and this keeps
-        # them relighting ~12 times a day instead of once (owner spec).
+        # changes INTRADAY, so it keys the cached segments too — the
+        # wedges live below the ring (BackgroundLayer, cached), and this
+        # keeps them relighting ~12 times a day instead of once (owner
+        # spec).
         calendar_lit = self._calendar_lit(tick)
         # The archetype hour-space (owner 2026-07-16) turns with the
-        # hour hand the same way — the lit figure keys the composite.
+        # hour hand the same way — but the archetype figures paint LIVE
+        # now (ROADMAP 15f), so the lit index no longer keys any cache.
         archetype_lit = self._archetype_lit(tick)
-        key = (
-            round(size * dpr), self._day.cache_key, reveal, calendar_lit,
-            archetype_lit,
-        )
-        if self._composite is None or self._composite_key != key:
-            with profiling.measure("Composite rebuild"):
-                self._composite = self._render_composite(
-                    size, dpr, reveal, calendar_lit, archetype_lit
-                )
+        # The cached segments depend ONLY on size/DPI, the day and the
+        # Calendar's lit wedge — NEITHER hover NOR reveal (those live in
+        # the hover-variable layers painted live below). This is the
+        # whole point of the 15f split: a hover enter/leave rebuilds
+        # NOTHING (the count of "Composite rebuild" stays flat).
+        key = (round(size * dpr), self._day.cache_key, calendar_lit)
+        if self._composite_key != key:
+            self._composites = [None] * len(self._cached_groups)
             self._composite_key = key
-        # The composite carries the window's transparent margin (the
-        # ring letters and event glow overhang the dial square) — blit it
-        # back-shifted so the dial lands at (0, 0). The margin is LIVE
-        # from the user's settings (owner 2026-07-17), matching the
+        # The cached segments carry the window's transparent margin (the
+        # ring letters and event glow overhang the dial square) — each is
+        # blit back-shifted so the dial lands at (0, 0). The margin is
+        # LIVE from the user's settings (owner 2026-07-17), matching the
         # widget's own window sizing.
         overhang = size * defaults.dial_window_margin_fraction(self._skin)
-        painter.drawPixmap(QPointF(-overhang, -overhang), self._composite)
-
-        painter.save()
-        painter.setRenderHints(_RENDER_HINTS)
-        painter.translate(size / 2, size / 2)
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=tick,
             radius=size / 2, cache=self._cache, dpr=dpr,
@@ -536,16 +582,28 @@ class Compositor:
             reveal_active=reveal, calendar_lit=calendar_lit,
             archetype_lit=archetype_lit,
         )
-        for layer in self._layers:
-            if layer.cadence is Cadence.MINUTE:
-                if reveal and isinstance(layer, HandLayer):
-                    # The reveal window HIDES THE HANDS (owner seal
-                    # 2026-07-16) — the theme reads clean beneath.
-                    continue
-                painter.save()   # isolate pen/brush/opacity/rotation leaks
-                layer.paint(painter, ctx)
-                painter.restore()
-        painter.restore()
+        for kind, payload in self._steps:
+            if kind == "cache":
+                pixmap = self._composites[payload]
+                if pixmap is None:
+                    with profiling.measure("Composite rebuild"):
+                        pixmap = self._render_group(
+                            self._cached_groups[payload], size, dpr,
+                            calendar_lit,
+                        )
+                    self._composites[payload] = pixmap
+                painter.drawPixmap(QPointF(-overhang, -overhang), pixmap)
+                continue
+            layer = payload
+            if reveal and isinstance(layer, HandLayer):
+                # The reveal window HIDES THE HANDS (owner seal
+                # 2026-07-16) — the theme reads clean beneath.
+                continue
+            painter.save()   # isolate pen/brush/opacity/rotation leaks
+            painter.setRenderHints(_RENDER_HINTS)
+            painter.translate(size / 2, size / 2)
+            layer.paint(painter, ctx)
+            painter.restore()
 
     @profiling.timed("Hover text")
     def tooltip_at(self, x: float, y: float, size: float) -> str | None:
@@ -958,12 +1016,16 @@ class Compositor:
                 # opaque on Sunday (owner 2026-07-13).
                 return "sun_servant"
         if archetype_active(self._skin):
-            # The archetype CENTER (owner 2026-07-16) sits where the
-            # weekday center used to — same hit disc, hover-enlarge
-            # included; the Compass has no center to hit.
-            center = archetypes.center(archetype_key(self._skin))
+            # The archetype CENTER (owner 2026-07-16) sits at the hub;
+            # its hit disc matches the DRAWN figure — the unified
+            # diamond-clamped size (owner 2026-07-17, ROADMAP 15g), the
+            # same helper ArchetypeCenterLayer draws with, halved to a
+            # radius — hover-enlarge included; the Compass has no center.
+            key = archetype_key(self._skin)
+            center = archetypes.center(key)
             if center is not None and hit(
-                QPointF(0.0, 0.0), radius * weekday.center_scale
+                QPointF(0.0, 0.0),
+                archetype_center_height(self._skin, radius, key) / 2.0,
             ):
                 return "archetype:center"
         marker = self._skin.year_marker
@@ -1010,9 +1072,10 @@ class Compositor:
         if hovered == self._hovered:
             return False
         self._hovered = hovered
-        # Weekday bodies live in the cached DAILY composite — one
-        # rebuild per hover change, not per frame.
-        self._composite = None
+        # No composite drop (owner 2026-07-17, ROADMAP 15f): the weekday
+        # bodies and archetype figures paint LIVE now, so the enlarge is
+        # a handful of cached blits on the next frame — ZERO composite
+        # rebuilds per hover enter/leave.
         return True
 
     def _combo_key(self) -> str:
@@ -2377,15 +2440,18 @@ class Compositor:
             self._skin.pointer, tick.hour_angle, self._rotation()
         )
 
-    def _render_composite(
-        self, size: float, dpr: float, reveal_active: bool = False,
-        calendar_lit: int | None = None, archetype_lit: int | None = None,
+    def _render_group(
+        self, layers: list[Layer], size: float, dpr: float,
+        calendar_lit: int | None = None,
     ) -> QPixmap:
-        # STATIC/DAILY layers include the ring letters, which OVERHANG
-        # the dial square (owner spec) — the composite is padded by the
-        # same LIVE margin the window carries (owner 2026-07-17), or they
-        # clip right here (owner bug report: the Omega's bottom was cut
-        # flat).
+        """Rasterize ONE contiguous run of hover-invariant STATIC/DAILY
+        layers into a padded pixmap (owner 2026-07-17, ROADMAP 15f).
+        These layers include the ring letters, which OVERHANG the dial
+        square (owner spec) — the pixmap is padded by the same LIVE
+        margin the window carries (owner 2026-07-17), or they clip right
+        here (owner bug report: the Omega's bottom was cut flat). Hover
+        and reveal are deliberately ABSENT — those layers paint live — so
+        this pixmap survives every hover enter/leave."""
         overhang = size * defaults.dial_window_margin_fraction(self._skin)
         px = round((size + 2 * overhang) * dpr)
         pixmap = QPixmap(px, px)
@@ -2397,15 +2463,14 @@ class Compositor:
         ctx = RenderContext(
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
-            rotation=self._rotation(), hovered=self._hovered,
-            reveal_active=reveal_active, calendar_lit=calendar_lit,
-            archetype_lit=archetype_lit,
+            rotation=self._rotation(), hovered=None,
+            reveal_active=False, calendar_lit=calendar_lit,
+            archetype_lit=None,
         )
-        for layer in self._layers:
-            if layer.cadence is not Cadence.MINUTE:
-                painter.save()   # isolate pen/brush/opacity/rotation leaks
-                layer.paint(painter, ctx)
-                painter.restore()
+        for layer in layers:
+            painter.save()   # isolate pen/brush/opacity/rotation leaks
+            layer.paint(painter, ctx)
+            painter.restore()
         painter.end()
         pixmap.setDevicePixelRatio(dpr)
         return pixmap

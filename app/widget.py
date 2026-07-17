@@ -215,9 +215,9 @@ class ClockWidget(QWidget):
                 self.update()
                 if started:
                     # Snap BACK on time: without this the expiry would
-                    # wait for the next minute tick to repaint (the
-                    # weekday layer is daily-cached). A stale shot
-                    # after a toggle-off repaints harmlessly.
+                    # wait for the next minute tick to repaint (nothing
+                    # else schedules a frame at that moment). A stale
+                    # shot after a toggle-off repaints harmlessly.
                     QTimer.singleShot(
                         defaults.REVEAL_WEEK_DURATION_S * 1000 + 50,
                         self.update,

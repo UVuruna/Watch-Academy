@@ -225,6 +225,78 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
     assert target == ("moon", expected)
 
 
+def _repaint(comp, size=360.0):
+    from PySide6.QtGui import QImage, QPainter
+
+    image = QImage(round(size), round(size), QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(0)
+    painter = QPainter(image)
+    comp.paint(painter, size, 1.0, comp._last_tick)
+    painter.end()
+    return image
+
+
+def test_hover_and_reveal_never_rebuild_the_composite(app):
+    """Owner 2026-07-17, ROADMAP 15f: the hover-enlarge and the Omega
+    reveal draw the weekday bodies LIVE, so a hover enter/leave or a reveal
+    toggle rebuilds NONE of the cached composite segments — the exact same
+    cached pixmaps survive (object-identity check, independent of the perf
+    store)."""
+    import dataclasses
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 14, 30))
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)        # builds the segments
+    cached = list(comp._composites)
+    assert len(cached) == 2 and all(px is not None for px in cached)
+
+    def unchanged():
+        return len(comp._composites) == len(cached) and all(
+            a is b for a, b in zip(comp._composites, cached)
+        )
+
+    # Hover onto the centered Sun body, then leave — no segment rebuild.
+    assert comp.set_hover(180.0, 180.0, 360.0)
+    _repaint(comp)
+    assert unchanged()
+    assert comp.set_hover(-1.0e9, -1.0e9, 360.0)
+    _repaint(comp)
+    assert unchanged()
+    # The Omega reveal toggle on and off — also no rebuild.
+    comp.trigger_reveal_week()
+    _repaint(comp)
+    assert unchanged()
+    comp.trigger_reveal_week()
+    _repaint(comp)
+    assert unchanged()
+
+
+def test_composite_segments_split_around_the_live_bodies(app):
+    """The z-ordered stack splits into TWO cached segments around the live
+    WeekdayLayer (owner 2026-07-17, ROADMAP 15f): the default z_order seats
+    the weekday_set BELOW the ring, so pulling it out leaves the base
+    (background, star) below the bodies and the ring above them — the
+    weekday/archetype layers paint LIVE between the two blits."""
+    from render.layers import ArchetypeLayer, RingLayer, WeekdayLayer
+
+    day, tick = _dt(app, datetime(2026, 7, 16, 14, 30))
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    kinds = [step[0] for step in comp._steps]
+    live = [type(p).__name__ for k, p in comp._steps if k == "live"]
+    assert kinds.count("cache") == 2                     # base + ring
+    assert "WeekdayLayer" in live                         # bodies paint live
+    # The ring is cached ABOVE the live bodies (z-order preserved).
+    cache_groups = comp._cached_groups
+    assert any(isinstance(l, RingLayer) for group in cache_groups for l in group)
+    assert not any(
+        isinstance(l, (WeekdayLayer, ArchetypeLayer))
+        for group in cache_groups
+        for l in group
+    )
+
+
 def test_frame_size_and_transparency(frame):
     assert frame.width() == 360 and frame.height() == 360
     # Corners lie outside the dial circle -> fully transparent.

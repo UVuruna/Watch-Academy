@@ -13,7 +13,12 @@ the CENTER table (the Eye / the Hearth / the Seal / the Union / the
 Throne — the Compass has none), the article-set names Session 6 writes
 into `Database/symbolism.json`, and the render tunables (figure
 heights per pointer, name sizing, the placeholder threshold, the Earth
-day-label geometry).
+day-label geometry). `ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]` is the ONE
+figure size for the whole archetype (owner 2026-07-17, ROADMAP 15g): the
+render's `archetype_figure_height()` clamps it into the arm diamond and
+`archetype_center_height()` makes the CENTER adopt the SAME arm size — so
+every figure, arms and center, is one size in both the normal and the
+reveal states (no `center_scale` for the archetype center anymore).
 
 The EIGHT archetypes and their grid seats (owner 2026-07-17: the
 Seasons split into two — PAINT the Temperaments, LIGHT the Tetramorph):
