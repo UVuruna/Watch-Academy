@@ -9,7 +9,7 @@ ONE genuinely generated plate the theme owns: the Sunday dual.
 
 ---
 
-## The Sunday dual — Eclipsed Sun (`dual/sun_eclipse.png`)
+## The Sunday dual — Eclipsed Sun (`assets/weekday/planets/primary/dual/sun_eclipse.png`)
 
 Moved verbatim from the retired `sunday_duality.md` (2026-07-12). The
 Planets theme has no named second character for Sunday, but the owner

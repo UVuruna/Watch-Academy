@@ -80,7 +80,7 @@ tested by drought; the colored Saturday shows the test.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the great matriarch elephant striding at the head of her family, trunk raised high, ears spread wide like a crown, a gilded sun disc of rays in low relief directly behind her head; behind her the herd follows in single file — cows, young ones, a small calf holding its mother's tail with its trunk — every line of the column bending to her lead. Border: bronze ring carved with acacia thorn branches interlaced with paired crescent tusks, and four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the gilded sun disc the only brighter metal.
 ```
 
-**Memory (sunday dual)** → `dual/Memory.png`
+**Memory (sunday dual)** → `assets/weekday/elephant/primary/dual/Memory.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the herd gathered in a still half-circle around the weathered skull and long bones of an old elephant lying in the grass, the young matriarch at the center resting the tip of her trunk gently on the skull's brow — the one who taught her the map; the others reach their trunks toward the bones, touching them lightly; high in the dark sky a thin eclipsed sun, a black disc rimmed by a slender gilded corona ring. Nothing moves. Border: darkened bronze ring carved with acacia thorn branches interlaced with paired crescent tusks, and four small roundels bearing the Sun glyph. Palette: darkened bronze dominant; the corona ring the only brighter metal.
 ```
@@ -123,49 +123,49 @@ Fresh full-color paintings of the same compositions; the seven skies
 walk the savanna's year from golden dawn through storm and green
 plenty to white drought. Generate the whole set in one session.
 
-**Matriarch (sunday)** → `colored/Matriarch.png`
+**Matriarch (sunday)** → `assets/weekday/elephant/colored/Matriarch.png`
 ```
 Ornate circular badge, vivid full-color painted savanna over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the great matriarch leading her family in single file across golden dawn grassland, the rising sun blazing directly behind her raised head like a crown, warm light along the backs of the whole column, a small calf holding its mother's tail. Border: bronze ring of acacia branches and paired tusks, four gold roundels bearing the Sun glyph. Colors: dawn gold, warm amber grass, gray-brown hide rimmed with light, soft violet horizon.
 ```
 
-**Memory (sunday dual)** → `dual/colored/Memory.png`
+**Memory (sunday dual)** → `assets/weekday/elephant/primary/dual/colored/Memory.png`
 ```
 Ornate circular badge, vivid full-color painted savanna over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the herd in a still half-circle around a weathered white skull and scattered bones in gray-green grass, the young matriarch resting her trunk on the skull's brow, every trunk reaching gently toward the bones; overhead a total eclipse — a black sun rimmed with a slender golden corona — dusk-dark light over the whole plate, the bones the palest thing in it. Border: darkened bronze ring of acacia branches and paired tusks, four gold roundels bearing the Sun glyph. Colors: eclipse gray-blue, bone white, dark hide, one golden corona ring.
 ```
 
-**Allomother (monday)** → `colored/Allomother.png`
+**Allomother (monday)** → `assets/weekday/elephant/colored/Allomother.png`
 ```
 Ornate circular badge, vivid full-color painted savanna night over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a young allomother standing over a calf asleep between her front legs under a huge full moon in a deep blue star-filled sky, moonlight silvering the curve of her back and the calf's ear, the sleeping herd dark mounds around them. Border: cool bronze ring of acacia branches and paired tusks, four silver roundels bearing the Moon crescent. Colors: deep night blue, moonlight silver, soft gray hide, warm dark earth.
 ```
 
-**Musth (tuesday)** → `colored/Musth.png`
+**Musth (tuesday)** → `assets/weekday/elephant/colored/Musth.png`
 ```
 Ornate circular badge, vivid full-color painted savanna over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a massive bull in full musth charging through a red dust storm, ears forward, dark temporin streaking his cheeks, dust exploding copper-red around his stamping feet, a burning red-orange sky boiling behind him. Border: dark bronze ring of acacia branches and paired tusks, four red roundels bearing the Mars glyph. Colors: ember red-orange, boiling dust copper, near-black hide, white tusk flash.
 ```
 
-**Caller (wednesday)** → `colored/Caller.png`
+**Caller (wednesday)** → `assets/weekday/elephant/colored/Caller.png`
 ```
 Ornate circular badge, vivid full-color painted savanna dusk over bronze, photorealistic render, perfectly centered, isolated on white background. Center: an elephant cow standing still in violet-gray dusk — the hour the deep calls carry farthest — ears spread full, one forefoot pressed flat to the cracked earth, faint concentric shimmer-rings spreading through the ground from her feet toward a tiny distant herd lifting their heads on the horizon under the first stars. Border: bronze ring of acacia branches and paired tusks, four purple roundels bearing the Mercury glyph. Colors: violet-gray dusk, deep mauve horizon, silver ground-shimmer, dark hide.
 ```
 
-**Mentor (thursday)** → `colored/Mentor.png`
+**Mentor (thursday)** → `assets/weekday/elephant/colored/Mentor.png`
 ```
 Ornate circular badge, vivid full-color painted savanna over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the huge old tusker under a clear high-noon blue sky at the full river's edge, laying his trunk firmly across the shoulders of a rearing adolescent bull, pressing him calmly back to earth, two young bulls watching subdued in the bright honest daylight, the river glittering behind. Border: bronze ring of acacia branches and paired tusks, four sky-blue roundels bearing the Jupiter glyph. Colors: high-noon blue, glittering river silver, sunlit gray-brown hide, warm sand.
 ```
 
-**Reunion (friday)** → `colored/Reunion.png`
+**Reunion (friday)** → `assets/weekday/elephant/colored/Reunion.png`
 ```
 Ornate circular badge, vivid full-color painted savanna over rose-bronze, photorealistic render, perfectly centered, isolated on white background. Center: two elephant families rushing together through lush green wet-season grass, the lead cows with trunks wound around each other and foreheads together, ears wide, calves tumbling between legs, a soft rose-amber evening sky above the green — joy in full color. Border: rose-bronze ring of acacia branches and paired tusks, four rose roundels bearing the Venus glyph. Colors: lush wet-season green, rose-amber sky, warm gray hide, gold rim-light.
 ```
 
-**Elder (saturday)** → `colored/Elder.png`
+**Elder (saturday)** → `assets/weekday/elephant/colored/Elder.png`
 ```
 Ornate circular badge, vivid full-color painted savanna drought over aged bronze, photorealistic render, perfectly centered, isolated on white background. Center: the ancient cow with sunken temples and one broken tusk kneeling in a white-hot bone-dry cracked riverbed under a bleached colorless sky, digging with trunk and forefoot — and the miracle: a dark gleam of water rising in the sand exactly where she remembered it; the thirsty herd waits in line behind her, a dead white tree at the edge, long pale shadows. Border: aged dark bronze ring of acacia branches and paired tusks, four gunmetal roundels bearing the Saturn glyph. Colors: drought white, cracked earth pale gray, dusty hide, one dark gleam of found water.
 ```
 
 ---
 
-## The Ninth — the Graveyard (`graveyard.png`)
+## The Ninth — the Graveyard (`assets/weekday/elephant/primary/graveyard.png`)
 
 Owner clarification (2026-07-14, the Ninth-as-regular-member
 correction): the Graveyard is a REGULAR NINTH member of the Elephant
@@ -182,7 +182,7 @@ society, so it is not forced here.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a moonlit hidden valley seen from its narrow rocky entrance — the ground inside worked with great curved tusks and ribcages half-sunk in earth, a worn single-file path leading in through the gap, and NO living elephant anywhere in the frame; above the valley a thin crescent moon in low relief. Border: bronze ring carved with acacia thorn branches whose leaves are FALLING, drifting loose between paired crescent tusks, with four small roundels bearing a single tusk lying horizontal. Palette: aged bronze dominant, cold silver sheen on the moonlit bones, no gilded sun anywhere.
 ```
 
-**The Graveyard (colored)** → `colored/graveyard.png`
+**The Graveyard (colored)** → `assets/weekday/elephant/colored/graveyard.png`
 ```
 Ornate circular badge, vivid full-color painted savanna night over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a moonlit hidden valley seen from its narrow rocky entrance, pale curved tusks and pearl-white ribcages half-sunk in silvered earth, a worn path leading in through the gap under a deep indigo star-filled sky, no living elephant anywhere in the frame, a thin crescent moon glowing cold above the valley. Border: silver-bronze ring of acacia branches with leaves visibly falling between paired crescent tusks, four gunmetal roundels bearing a single tusk lying horizontal. Colors: deep night indigo, moonlit bone white, cold silver, no warm gold anywhere.
 ```

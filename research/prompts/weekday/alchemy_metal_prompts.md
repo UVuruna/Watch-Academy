@@ -44,12 +44,12 @@ own border so the new center lands inside the old frame.
 
 **Prima materia link:** the lead plate hides the faintest thread of
 gold inside its raw ore block — the same promise the Sunday dual
-plate (`dual/ore.png`, black ore split by a gold vein) makes loud.
+plate (`assets/weekday/alchemy/primary/dual/ore.png`, black ore split by a gold vein) makes loud.
 Saturday whispers what Sunday shouts.
 
 **Drop:** over the existing stems in `assets/weekday/alchemy/primary/`
 (`gold.png`, `silver.png`, `iron.png`, `mercury.png`, `tin.png`,
-`copper.png`, `lead.png`). `dual/ore.png` is untouched.
+`copper.png`, `lead.png`). `assets/weekday/alchemy/primary/dual/ore.png` is untouched.
 
 ---
 
@@ -90,7 +90,7 @@ Ornate circular medallion, photorealistic render, perfectly centered, isolated o
 
 ---
 
-## The Sunday dual — refined gold / raw ore (`dual/ore.png`)
+## The Sunday dual — refined gold / raw ore (`assets/weekday/alchemy/primary/dual/ore.png`)
 
 Moved verbatim from the retired `sunday_duality.md` (2026-07-12): the
 metal's Glory and Eclipse in one pair — gold's incorruptible shine
@@ -108,7 +108,7 @@ Circular medallion, polished gold relief border with a matte, unpolished center 
 
 ---
 
-## The Ninth — The Philosopher's Stone (`stone.png`)
+## The Ninth — The Philosopher's Stone (`assets/weekday/alchemy/primary/stone.png`)
 
 Owner 8+1 extension (2026-07-14): the Philosopher's Stone is the
 Ninth of the Alchemy Metals set — bronze/single-look only, since this

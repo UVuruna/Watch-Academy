@@ -61,7 +61,7 @@ at `assets/badge/<source>/scale/glass/` — see the reuse notes.
 
 ## The four new persons
 
-**The One — Love (yellow arm, 12h)** → `persons/One_Love.png`
+**The One — Love (yellow arm, 12h)** → `assets/archetype/persons/One_Love.png`
 
 *(Color-fidelity note: The One also holds the yellow/gold summit in
 the Trinity paint set — but there he is argued as the VEILED JUDGE
@@ -76,13 +76,13 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 ```
 
 **Michael the Archangel — Courage (orange arm, 16h)** →
-`persons/Michael_Courage.png`
+`assets/archetype/persons/Michael_Courage.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Warm orange, molten gold and bronze glass throughout, no cold tones. Center: the armored archangel of Revelation standing in mid-victory — great feathered wings spread wide and haloed in orange radiance, burnished breastplate catching the light, a long spear driven straight DOWN with both hands into the coils of a great dark dragon pinned and writhing beneath his feet at the lancet's base; his face calm and unafraid, lifted toward the light above, not down at the beast. Upper left panel: the war in heaven — small winged figures driving darker shapes downward through storm-glass; upper right panel: a set of scales held steady in one gauntleted hand. Border: banded gothic leadwork in dark bronze; three rim roundels — an upright sword at the apex, a shield at one side, a trumpet at the other. Palette: warm orange, molten gold, bronze, black-iron lead. NO lettering anywhere.
 ```
 
-**the Devil — Hatred (purple arm, 24h)** → `persons/Devil_Hatred.png`
+**the Devil — Hatred (purple arm, 24h)** → `assets/archetype/persons/Devil_Hatred.png`
 
 *(Color-fidelity note: the Devil wears RED in the Trinity paint set,
 where he is argued as the PROSECUTOR who enjoys punishing —
@@ -97,7 +97,7 @@ hatred turned outward that turns Courage into wrath and overreach
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Deep violet, amethyst-purple and blue-black glass throughout, cold and starless, no warm tones. Center: a gaunt horned figure standing at the dead midnight of the window, arms thrown out in TWO opposite directions — one hand pressing DOWNWARD, dragging a small cowering figure down into a black pit at the lancet's base (the hatred turned inward), the other hand flung UPWARD hurling a second small figure outward off a broken height into the storm (the hatred turned outward); his own face twisted with cold loathing, no fire in him, only violet shadow; from his heart two dark veins of purple lead split and run to the two victims. Upper left panel: a mouth curled in a soundless snarl; upper right panel: a mirror shattered into black shards. Border: knotted thorn leadwork in blue-black; three rim roundels — a broken heart at the apex, a downward-pulling chain at one side, an outward-breaking crack at the other. Palette: deep violet, amethyst, blue-black, iron lead, no warm hue anywhere. NO lettering anywhere.
 ```
 
-**Jesus — Humility (green arm, 08h)** → `persons/Jesus_Humility.png`
+**Jesus — Humility (green arm, 08h)** → `assets/archetype/persons/Jesus_Humility.png`
 
 *(Color-fidelity note: Jesus wears BLUE in the Trinity paint set,
 where he is the ADVOCATE who steps between the accused and the dark.

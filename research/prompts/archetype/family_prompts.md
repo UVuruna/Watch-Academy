@@ -50,21 +50,21 @@ owner wants a second look.
 ## The three members
 
 **the Father — the Shield (light blue arm, 04h)** →
-`family/Father_Shield.png`
+`assets/archetype/family/Father_Shield.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Soft light-blue and clear silver glass throughout, calm and cool, no warm tones. Center: the father standing as the PILLAR of the house — a broad protective figure with one arm curved shelteringly over those who lean into him, the other hand resting steady on a large kite shield planted at his side like a wall against the night; a still, wide-shouldered stance, the guardian at rest but never off watch. Upper left panel: a small child sleeping soundly in the lee of a raised shield; upper right panel: a lantern held high, its steady beam cutting the dark ahead. Border: interlaced oak-and-rivet leadwork in slate blue; three rim roundels — a kite shield at the apex, a steady lantern at one side, a keystone at the other. Palette: light sky-blue, clear silver, cool slate-blue lead. NO lettering anywhere.
 ```
 
 **the Mother — the Heart (light red arm, 20h)** →
-`family/Mother_Heart.png`
+`assets/archetype/family/Mother_Heart.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Warm light-red, rose and soft coral glass throughout, tender and glowing, no cold tones. Center: the mother as the HEART of the house — a seated or gently bending figure gathering the household into her arms, one hand cupped warmly over a small child at her breast, the other reaching to draw the whole family close; a soft warm radiance blooms from her chest like a lamp behind rose glass, the warmth that holds everyone together. Upper left panel: a full table set and hands reaching to share bread; upper right panel: two clasped hands wrapped in a single warm cloth. Border: braided rose-vine leadwork in warm carmine; three rim roundels — a glowing heart at the apex, a loaf of bread at one side, two clasped hands at the other. Palette: light rose-red, warm coral, soft gold glow, carmine lead. NO lettering anywhere.
 ```
 
 **the Child — the Dawn (green arm, TOP 12h)** →
-`family/Child_Dawn.png`
+`assets/archetype/family/Child_Dawn.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Fresh spring-green and pale gold glass throughout, young and rising, the brightest of the three lancets. Center: the child as the DAWN — a small radiant figure standing at the very top, arms lifting toward a rising light, face turned upward into a break of pale gold; new leaves and first shoots curl up the glass around the feet, everything reaching UPWARD; the two darker arm colors of the parents braid faintly into the lead at the base, feeding the growth. Upper panel: a rising sun cresting a green hill in pale-gold clear glass, the first light of day. Border: young-vine-and-bud leadwork in leaf green; three rim roundels — a rising sun at the apex, a single sprouting seedling at one side, an open bird's nest with a fledgling at the other. Palette: spring green, pale gold dawn-light, leaf-green lead. NO lettering anywhere.
@@ -74,7 +74,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 
 ## The Hearth — the union of the three
 
-**the Hearth** → `family/Hearth.png`
+**the Hearth** → `assets/archetype/family/Hearth.png`
 
 *(the union of the three members, seated at the CENTER of the dial
 during the archetype reveal — the family's answer to the paint trio's
@@ -95,19 +95,19 @@ The archetype articles run in TWO ROWS (member + hearth-role). The rows
 can share the lancet; generate these three small rondels ONLY if the
 owner wants the hearth-role row to carry its own image:
 
-**the Shield rondel** → `family/rondel_Shield.png`
+**the Shield rondel** → `assets/archetype/family/rondel_Shield.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A large kite shield planted upright with a steady lantern beside it, light-blue and clear silver glass, oak-and-rivet leadwork rim. NO lettering anywhere.
 ```
 
-**the Heart rondel** → `family/rondel_Heart.png`
+**the Heart rondel** → `assets/archetype/family/rondel_Heart.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A softly glowing heart cradling a loaf of bread, warm light-red and coral glass, braided rose-vine leadwork rim. NO lettering anywhere.
 ```
 
-**the Dawn rondel** → `family/rondel_Dawn.png`
+**the Dawn rondel** → `assets/archetype/family/rondel_Dawn.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A sun rising over a green hill above a single sprouting seedling, spring-green and pale-gold glass, young-vine-and-bud leadwork rim. NO lettering anywhere.

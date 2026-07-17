@@ -31,7 +31,7 @@ rosters.
 
 ## Planetary — bronze plates
 
-**Sunday — Ra** → `ra.png`
+**Sunday — Ra** → `assets/weekday/egypt/primary/ra.png`
 
 *Ra-Horakhty, the falcon-headed risen sun, aboard the day barque
 Mandjet — the article's opening image.*
@@ -40,7 +40,7 @@ Mandjet — the article's opening image.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Ra-Horakhty, the falcon-headed risen sun, standing at the prow of the day barque Mandjet, a blazing disc burning above his brow with the cobra Wadjet coiled around it, her hooded head rearing beside the fire, the striped royal headdress falling to a broad collar, columns of hieroglyphs engraved down his chest. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Sun glyph in relief. No text, no watermark.
 ```
 
-**Monday — Khonsu** → `khonsu.png`
+**Monday — Khonsu** → `assets/weekday/egypt/primary/khonsu.png`
 
 *"The traveller" drawn young and bound, per the article: a child
 swaddled like the dead, carrying the regalia of eternity.*
@@ -49,7 +49,7 @@ swaddled like the dead, carrying the regalia of eternity.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Khonsu, a beardless boy with the sidelock of youth falling over one shoulder, his body wrapped close in mummiform linen, the full silver moon-disk cradled inside a crescent on his head, his hands free of the wrappings to hold the crook and flail of kingship crossed with the was-scepter of power. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Moon crescent glyph in relief. No text, no watermark.
 ```
 
-**Tuesday — Montu** → `montu.png`
+**Tuesday — Montu** → `assets/weekday/egypt/primary/montu.png`
 
 *The falcon-headed war god of Thebes, marked by the double-cobra crown
 and the martial Buchis bull.*
@@ -58,7 +58,7 @@ and the martial Buchis bull.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Montu the falcon-headed war god, crowned with a solar disk reared by two uraeus cobras beneath a pair of tall twin plumes, a bronze khopesh sickle-sword raised in his grip, the white-bodied, black-faced Buchis bull standing as his living herald beside him. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Mars glyph in relief. No text, no watermark.
 ```
 
-**Wednesday — Thoth** → `thoth.png`
+**Wednesday — Thoth** → `assets/weekday/egypt/primary/thoth.png`
 
 *The scribe of the gods, fixed for three thousand years: ibis head,
 palette, reed pen, ankh close at hand.*
@@ -67,7 +67,7 @@ palette, reed pen, ankh close at hand.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Thoth, a man with the head of an ibis, its long beak curving like the crescent he wears — a full lunar disk cupped in a silver crescent above his brow — the scribe's palette in one hand and the reed pen poised in the other, an ankh resting close by. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Mercury glyph in relief. No text, no watermark.
 ```
 
-**Thursday — Amun** → `amun.png`
+**Thursday — Amun** → `assets/weekday/egypt/primary/amun.png`
 
 *The Hidden One enthroned in the full regalia of Thebes' king of
 gods, crook and ankh crossed in his hands.*
@@ -76,7 +76,7 @@ gods, crook and ankh crossed in his hands.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Amun the Hidden One enthroned in majesty, wearing the crown of two tall plumes rising from a striped royal headdress, an ankh crossed in one hand and the curved heqa crook in the other. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Jupiter glyph in relief. No text, no watermark.
 ```
 
-**Friday — Hathor** → `hathor.png`
+**Friday — Hathor** → `assets/weekday/egypt/primary/hathor.png`
 
 *The sky as a golden house for the falcon sun: cow horns, sistrum and
 ankh crossed in her arms.*
@@ -85,7 +85,7 @@ ankh crossed in her arms.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Hathor with the sun disc riding between tall cow horns on her brow, a cow's ears flanking her human face beneath the striped headdress, her crossed arms holding the arched sistrum rattle in one hand and the ankh in the other, a broad beaded collar over her shoulders. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Venus glyph in relief. No text, no watermark.
 ```
 
-**Saturday — Osiris** → `osiris.png`
+**Saturday — Osiris** → `assets/weekday/egypt/primary/osiris.png`
 
 *The first civilizer turned lord of the dead: mummiform, atef crown,
 crook and flail crossed at the chest.*
@@ -94,7 +94,7 @@ crook and flail crossed at the chest.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Osiris mummiform, wrapped in banded linen, wearing the tall atef crown between two ribbed ostrich plumes, the crook and flail crossed at his chest, an ankh knotted at his belt. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Saturn glyph in relief. No text, no watermark.
 ```
 
-**Sunday (dual) — Afu-Ra** → `dual/afu_ra.png`
+**Sunday (dual) — Afu-Ra** → `assets/weekday/egypt/primary/dual/afu_ra.png`
 
 *"The day barque in Glory, the night barque through the Duat in
 Eclipse, one god in two boats" — the article's own doctrine.*
@@ -111,51 +111,51 @@ The theme never got a colored companion set; these eight are fresh
 full-color paintings of the same compositions, not recolors of the
 bronze plates. Generate the whole set in one chat session so the
 series stays consistent. Drop under `colored/` (same stems) and the
-dual under `colored/dual/afu_ra.png`.
+dual under `assets/weekday/egypt/colored/dual/afu_ra.png`.
 
-**Ra (sunday)** → `colored/ra.png`
+**Ra (sunday)** → `assets/weekday/egypt/colored/ra.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Ra-Horakhty in gleaming gold and lapis, the falcon head crowned with a blazing orange-gold sun disc, the cobra Wadjet in emerald green coiled around it, a broad turquoise-and-gold collar, hieroglyphs in gold down a lapis-blue chest, standing at the prow of the golden day barque against a glowing amber sky. Border: gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a lapis scarab, each framing the Sun glyph. Colors: radiant gold, lapis blue, emerald green, amber sky.
 ```
 
-**Khonsu (monday)** → `colored/khonsu.png`
+**Khonsu (monday)** → `assets/weekday/egypt/colored/khonsu.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Khonsu as a beardless youth in pale cream linen wrappings, a silvered lunar disk cradled in a silver crescent above his brow, the crook and flail in gold crossed with a silver was-scepter, a deep indigo starlit sky behind him. Border: silver-and-gold hieroglyph cartouche band, broken by four painted roundels alternating a pale ankh and a silver scarab, each framing the Moon crescent glyph. Colors: silver, indigo night, cream linen, pale gold.
 ```
 
-**Montu (tuesday)** → `colored/montu.png`
+**Montu (tuesday)** → `assets/weekday/egypt/colored/montu.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Montu the falcon-headed war god in gleaming bronze-gold armor, twin emerald uraeus cobras rearing from his crimson solar-disk crown, a glowing bronze khopesh raised high, the white Buchis bull with a black face standing beside him against a burning ember-orange sky. Border: bronze-gold hieroglyph cartouche band, broken by four painted roundels alternating a crimson ankh and a bronze scarab, each framing the Mars glyph. Colors: crimson, ember orange, bronze gold, emerald.
 ```
 
-**Thoth (wednesday)** → `colored/thoth.png`
+**Thoth (wednesday)** → `assets/weekday/egypt/colored/thoth.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Thoth the ibis-headed scribe in cream-white linen, a silver lunar crescent cradling a pale moon above his brow, a gold-rimmed palette in one hand and a reed pen poised in the other over a deep violet twilight sky. Border: silver hieroglyph cartouche band, broken by four painted roundels alternating a violet ankh and a silver scarab, each framing the Mercury glyph. Colors: silver, deep violet, papyrus cream, pale gold.
 ```
 
-**Amun (thursday)** → `colored/amun.png`
+**Amun (thursday)** → `assets/weekday/egypt/colored/amun.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Amun enthroned in radiant gold, his crown of tall twin plumes glowing against a royal-purple sky, an ankh and heqa crook crossed in gold-ringed hands, emerald accents glinting along his collar. Border: royal-gold hieroglyph cartouche band, broken by four painted roundels alternating a purple ankh and a gold scarab, each framing the Jupiter glyph. Colors: royal gold, deep purple, emerald, warm amber.
 ```
 
-**Hathor (friday)** → `colored/hathor.png`
+**Hathor (friday)** → `assets/weekday/egypt/colored/hathor.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Hathor in pale gold and turquoise, a warm amber sun disc between her cow horns, a rose-gold sistrum and ankh crossed in her hands, a broad beaded collar of turquoise and carnelian over her shoulders. Border: rose-gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a carnelian scarab, each framing the Venus glyph. Colors: turquoise, rose gold, warm amber, carnelian red.
 ```
 
-**Osiris (saturday)** → `colored/osiris.png`
+**Osiris (saturday)** → `assets/weekday/egypt/colored/osiris.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Osiris mummiform in bronze-banded linen against glowing malachite green, the tall white atef crown between green ostrich plumes, the crook in lapis blue and gold, the flail in bronze, crossed at his chest. Border: malachite-green hieroglyph cartouche band, broken by four painted roundels alternating a lapis ankh and a bronze scarab, each framing the Saturn glyph. Colors: malachite green, bronze, lapis blue, pale gold.
 ```
 
-**Afu-Ra (sunday dual)** → `colored/dual/afu_ra.png`
+**Afu-Ra (sunday dual)** → `assets/weekday/egypt/colored/dual/afu_ra.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Afu-Ra ram-headed in dulled bronze and indigo, the night barque Mesektet gliding through deep indigo waters, the sun dimmed to a black disc rimmed by a faint gold corona, the emerald serpent Apophis coiled beneath the hull, pale stars standing in for daylight. Border: dulled-bronze hieroglyph cartouche band, broken by four painted roundels alternating a dark ankh and a dark scarab, each framing the Sun glyph. Colors: indigo night, dulled bronze, faint gold corona, emerald serpent.
@@ -180,7 +180,7 @@ shares the Planetary Afu-Ra dual).
 **Sunday — Ra** → REUSE `../primary/ra.png` — no new render; the one
 throne where supreme and solar agree.
 
-**Monday — Isis** → `pantheon/isis.png`
+**Monday — Isis** → `assets/weekday/egypt/pantheon/isis.png`
 
 *The healer-mother who gathered her brother-husband whole again —
 Monday's blue calm read as devotion, the Physician archetype
@@ -190,7 +190,7 @@ embodied.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Isis, the hieroglyphic throne sign rising in gold from her brow, her arms spread into broad feathered wings as she gathers the scattered form of Osiris back into wholeness beneath her, the tyet knot of Isis crossed with an ankh at her waist, a broad beaded collar over her shoulders. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Moon crescent glyph in relief. No text, no watermark.
 ```
 
-**Tuesday — Horus** → `pantheon/horus.png`
+**Tuesday — Horus** → `assets/weekday/egypt/pantheon/horus.png`
 
 *The avenger crowned already, the Wedjat eye proof that even a
 torn-out eye returns whole — Courage with a cause the article draws
@@ -203,7 +203,7 @@ Ornate circular medallion, aged bronze relief, photorealistic render, perfectly 
 **Wednesday — Thoth** → REUSE `../primary/thoth.png` — no new render;
 wisdom's own scribe, unchallenged in both rosters.
 
-**Thursday — Anubis** → `pantheon/anubis.png`
+**Thursday — Anubis** → `assets/weekday/egypt/pantheon/anubis.png`
 
 *Not the horror-register jackal at the tomb door but the rite-master
 presiding — the weighing of the heart as Thursday's own ledger of
@@ -213,7 +213,7 @@ Generosity, the PRIEST register.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Anubis, jackal-headed in solemn black, robed as the rite-master presiding over the weighing of the heart, a golden scale balanced in his outstretched hand between a small heart and the feather of Ma'at, an ankh held close at his other side, his stance calm and priestly rather than fearsome. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Jupiter glyph in relief. No text, no watermark.
 ```
 
-**Friday — Bastet** → `pantheon/bastet.png`
+**Friday — Bastet** → `assets/weekday/egypt/pantheon/bastet.png`
 
 *Music, joy, protection — the cat goddess reads Friday warm rather
 than fierce, a sistrum instead of a blade.*
@@ -230,7 +230,7 @@ confirmed the repeat over Geb).
 Planetary, no new render; the night-barque is Ra's own shadow face
 and serves both modes (doctrine point 1).
 
-**Ninth (both modes) — The Pharaoh** → `pantheon/pharaoh.png`
+**Ninth (both modes) — The Pharaoh** → `assets/weekday/egypt/pantheon/pharaoh.png`
 
 *Horus in life, Osiris in death, one living body wearing both
 thrones — the Union the doctrine asked for, outranking every seated
@@ -256,13 +256,13 @@ first, or alongside these five.
 **Sunday — Ra** → REUSE `../colored/ra.png` — no new render (pending
 the Planetary colored generation above).
 
-**Monday — Isis** → `pantheon/colored/isis.png`
+**Monday — Isis** → `assets/weekday/egypt/pantheon/colored/isis.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Isis in warm gold and sky-blue, the golden throne sign rising from her brow, feathered wings dyed azure and gold spread wide as she gathers the sun-dappled form of Osiris back into wholeness, a turquoise tyet knot crossed with a gold ankh at her waist, a deep indigo night sky glowing behind her. Border: azure-and-gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a gold scarab, each framing the Moon crescent glyph. Colors: sky blue, radiant gold, turquoise, indigo night.
 ```
 
-**Tuesday — Horus** → `pantheon/colored/horus.png`
+**Tuesday — Horus** → `assets/weekday/egypt/pantheon/colored/horus.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Horus in gleaming bronze-gold plumage, fierce amber eyes rimmed in black kohl, the red-and-white double crown glowing warm against a fiery orange sky, the Wedjat eye rendered in lapis blue and gold at his chest, a bronze harpoon raised over a coiled emerald serpent pinned beneath his talons. Border: bronze-gold hieroglyph cartouche band, broken by four painted roundels alternating a crimson ankh and a bronze scarab, each framing the Mars glyph. Colors: bronze gold, crimson, lapis blue, ember orange.
@@ -271,13 +271,13 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 **Wednesday — Thoth** → REUSE `../colored/thoth.png` — no new render
 (pending the Planetary colored generation above).
 
-**Thursday — Anubis** → `pantheon/colored/anubis.png`
+**Thursday — Anubis** → `assets/weekday/egypt/pantheon/colored/anubis.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Anubis in glossy obsidian black, robed in gold-trimmed priestly white, presiding in calm dignity over the weighing of the heart, a gold scale balanced between a crimson heart and the pale feather of Ma'at, an ankh in lapis blue held at his side against a deep violet dusk. Border: gold hieroglyph cartouche band, broken by four painted roundels alternating a violet ankh and a gold scarab, each framing the Jupiter glyph. Colors: obsidian black, gold, crimson, deep violet.
 ```
 
-**Friday — Bastet** → `pantheon/colored/bastet.png`
+**Friday — Bastet** → `assets/weekday/egypt/pantheon/colored/bastet.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Bastet in warm gold and amber fur, a turquoise-and-carnelian aegis collar draped over her chest, a gold sistrum raised high in one hand, a basket of pale cream kittens cradled in the other against a rose-warm sunset sky, her tail curling content around rose-gold anklets. Border: rose-gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a carnelian scarab, each framing the Venus glyph. Colors: warm amber, turquoise, carnelian red, rose gold.
@@ -290,7 +290,7 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 Planetary, no new render (pending the Planetary colored generation
 above).
 
-**Ninth (both modes) — The Pharaoh** → `pantheon/colored/pharaoh.png`
+**Ninth (both modes) — The Pharaoh** → `assets/weekday/egypt/pantheon/colored/pharaoh.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: the Pharaoh in the full gleam of Tutankhamun's golden mask, the nemes headcloth striped lapis blue and gold, the cobra and vulture reared in turquoise and gold at his brow, a gold crook and a lapis-blue flail crossed at his chest against a deep royal-purple dusk — the living Horus becoming the eternal Osiris in one radiant face. Border: radiant gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a lapis scarab, each doubled with the crook and flail in miniature — the fullest, most unbroken ring in the set. Colors: radiant gold, lapis blue, turquoise, royal purple.
@@ -327,8 +327,8 @@ not exclusion but union, not a lesser exile but the culture's own
 center.
 
 The bronze prompt is listed under "Pantheon — bronze plates" above
-(`pantheon/pharaoh.png`); the colored prompt under "Pantheon —
-colored plates" above (`pantheon/colored/pharaoh.png`). Both are
+(`assets/weekday/egypt/pantheon/pharaoh.png`); the colored prompt under "Pantheon —
+colored plates" above (`assets/weekday/egypt/pantheon/colored/pharaoh.png`). Both are
 listed exactly once each in this sheet — not reproduced here to keep
 one prompt block per plate.
 

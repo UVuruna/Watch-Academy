@@ -68,7 +68,7 @@ and the ore plate hides as a vein.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the alpha wolf standing atop a high rock outcrop, head high, chest out, tail raised like a banner, the rising sun worked as a gilded disc of rays in low relief directly behind his head like a crown; below the rock, the rest of the pack gazing up at him. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise, interlaced with small pine sprigs, with four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the gilded sun disc the only brighter metal.
 ```
 
-**Omega (sunday dual)** → `dual/Omega.png`
+**Omega (sunday dual)** → `assets/weekday/wolf/primary/dual/Omega.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the omega wolf, lowest of the pack, body lowered, ears folded back, tail curled close so its sweep traces a faint omega curve — carrying a bone in his jaws to two small pups at the mouth of the den, one pup already clambering over his shoulder; behind them, distant and small, the pack feeds at the kill he left first. High in the dark sky a thin eclipsed sun: a black disc rimmed by a slender gilded corona ring. His bearing is lowly but his eyes are calm and dignified — the servant the pups love best. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise, interlaced with small pine sprigs, with four small roundels bearing the Sun glyph. Palette: darkened bronze dominant; the corona ring the only brighter metal.
 ```
@@ -112,49 +112,49 @@ painting of the same composition, and the seven skies walk the day's
 own hours light-to-dark, echoing the compass palette arc. Generate
 the whole set in one chat session so the series stays consistent.
 
-**Alpha (sunday)** → `colored/Alpha.png`
+**Alpha (sunday)** → `assets/weekday/wolf/colored/Alpha.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the alpha wolf with a rich gray-and-cream coat standing atop a high rock outcrop at golden dawn, the rising sun blazing directly behind his head like a crown of rays, warm light flooding the valley where the pack gazes up. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small gold roundels bearing the Sun glyph. Colors: dawn gold, warm amber, gray-cream fur, deep valley green.
 ```
 
-**Omega (sunday dual)** → `dual/colored/Omega.png`
+**Omega (sunday dual)** → `assets/weekday/wolf/primary/dual/colored/Omega.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the omega wolf with a humble dark-gray coat, body lowered and tail curled in a faint omega sweep, carrying a bone to two warm-lit pups at the den mouth, one pup clambering over his shoulder, the distant pack at the kill behind; the sky holds a total eclipse — a black sun rimmed by a slender golden corona ring, dusk-dark light over everything except the pups' warm fur. Border: darkened bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small gold roundels bearing the Sun glyph. Colors: eclipse dusk blue-gray, black sun with gold corona, warm pup amber, dark gray fur.
 ```
 
-**Luna (monday)** → `colored/Luna.png`
+**Luna (monday)** → `assets/weekday/wolf/colored/Luna.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a silver-white she-wolf utterly alone on a cliff edge — no pack anywhere — howling at a huge smooth full moon without rays in a deep blue starry night, moonlight silvering her fur and her rising breath, moonlit pine tops far below. Border: cool bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small silver roundels bearing the Moon crescent. Colors: moonlight silver, deep night blue, white fur, cold star white.
 ```
 
-**Hunter (tuesday)** → `colored/Hunter.png`
+**Hunter (tuesday)** → `assets/weekday/wolf/colored/Hunter.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a dark battle-gray wolf at full stretch mid-leap through deep snow under a burning red-orange dusk sky, closing on a great elk turning at bay with lowered antlers, snow bursting copper-lit from their strides. Border: dark bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small red roundels bearing the Mars glyph. Colors: ember red-orange dusk, blue-white snow, dark gray fur, black antler silhouette.
 ```
 
-**Scout (wednesday)** → `colored/Scout.png`
+**Scout (wednesday)** → `assets/weekday/wolf/colored/Scout.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a lean tawny wolf alone on a windswept ridge in violet-gray first light, one forepaw raised, nose high reading the wind, morning mist streaming past him, his track-line winding behind and the tiny waiting pack far below. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small purple roundels bearing the Mercury glyph. Colors: violet-gray dawn mist, tawny fur, cold silver wind, muted pine green.
 ```
 
-**Beta (thursday)** → `colored/Beta.png`
+**Beta (thursday)** → `assets/weekday/wolf/colored/Beta.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a broad-chested russet-and-gray wolf standing calm over a juvenile rolled belly-up in play-discipline under a clear high-noon blue sky, two yearlings sitting in file watching the lesson, bright honest daylight on an open meadow. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small sky-blue roundels bearing the Jupiter glyph. Colors: high-noon blue, sunlit meadow green, russet-gray fur, warm amber eyes.
 ```
 
-**Mate (friday)** → `colored/Mate.png`
+**Mate (friday)** → `assets/weekday/wolf/colored/Mate.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over rose-bronze, photorealistic render, perfectly centered, isolated on white background. Center: two wolves — one pale cream, one charcoal gray — standing chest to chest with necks crossed and eyes closed in a rose-amber sunset, tails wrapped around one another on a quiet rise of stone, the low sun gilding the rims of their coats. Border: rose-bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small rose roundels bearing the Venus glyph. Colors: rose-amber sunset, cream and charcoal fur, soft gold rim-light, dusk mauve.
 ```
 
-**Elder (saturday)** → `colored/Elder.png`
+**Elder (saturday)** → `assets/weekday/wolf/colored/Elder.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over aged bronze, photorealistic render, perfectly centered, isolated on white background. Center: an old scar-eared wolf with a frost-white muzzle seated apart on a low flat stone beneath a bare winter tree, watching the distant pack at play under a pale overcast winter sky, a low silver sun stretching long blue shadows across the snow toward him. Border: aged dark bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small gunmetal roundels bearing the Saturn glyph. Colors: winter white, pale silver sun, long blue shadows, frost-gray fur.
 ```
 
 ---
 
-## The Ninth — Sigma (`sigma.png`)
+## The Ninth — Sigma (`assets/weekday/wolf/primary/sigma.png`)
 
 Owner clarification (2026-07-14, the Ninth-as-regular-member
 correction): Sigma is a REGULAR NINTH member of the Wolf Pack set,
@@ -170,7 +170,7 @@ duality is forced onto it here.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf silhouette walking away into rolling mist, deliberately HALF-CARVED — the head and shoulders in finished bronze relief, the hindquarters dissolving into raw uncut stone as if the sculptor abandoned the work, no pack anywhere, an empty rock outcrop faint in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise with small pine sprigs — but the trail BREAKS and fades to smooth uncarved stone along the bottom quarter, and the four roundels are blank polished discs bearing no glyph at all. Palette: aged bronze dominant, raw gray stone where the carving dissolves, no gilded metal anywhere.
 ```
 
-**Sigma (colored)** → `colored/sigma.png`
+**Sigma (colored)** → `assets/weekday/wolf/colored/sigma.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf walking away into rolling mist, deliberately HALF-PAINTED — the head and shoulders rendered in rich full color, silver-gray coat catching warm amber eye-light, the hindquarters dissolving into bare unpainted canvas with visible pencil underdrawing and a few dry brush strokes, no pack anywhere, an empty rock outcrop faint and unfinished in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, but the trail fades to blank canvas along the bottom quarter, four roundels left as bare pale discs with no glyph painted in. Colors: rich silver-gray and amber where finished, fading to raw canvas white and pencil gray where the painting stops.
 ```

@@ -365,7 +365,7 @@ Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly 
 
 ---
 
-## The Thirteenth — Ophiuchus (`sign/Ophiuchus.png`, `logo/Ophiuchus.png`, `constellation/Ophiuchus.png`, `colored/Ophiuchus.png`)
+## The Thirteenth — Ophiuchus (`assets/zodiac/astrology/sign/Ophiuchus.png`, `assets/zodiac/astrology/primary/Ophiuchus.png`, `assets/zodiac/astrology/constellation/Ophiuchus.png`, `assets/zodiac/astrology/colored/Ophiuchus.png`)
 
 **Encyclopedia-only — the excluded thirteenth (the Sun crosses it Nov
 30 – Dec 17; excluded since Babylon to keep twelve).** Per the owner's
@@ -387,25 +387,25 @@ four-element palette rule, blending twilight indigo and deep teal
 instead. No Judas–Lucifer reading applies — its exclusion is
 calendrical, not moral.
 
-### SIGN look — Ophiuchus (`sign/Ophiuchus.png`)
+### SIGN look — Ophiuchus (`assets/zodiac/astrology/sign/Ophiuchus.png`)
 
 ```
 Ornate circular medallion, photorealistic render, perfectly centered, isolated on white background, no text or watermark. Serpent-bearer sign — STRICT palette: twilight indigo, deep teal and faint ember-orange only, no other hues anywhere, the one plate allowed to blend fire and water since Ophiuchus stands between both triads. Center: a robed figure gripping a great serpent with both hands, the snake's body coiled once around his waist and trailing beyond the disc's edge on both sides, his bare feet planted on a scorpion crushed underfoot, indigo-teal twilight light catching the serpent's scales and a faint ember warmth along the figure's shoulders. Border: a bronze-silver ring in twilight tone with four small roundels evenly spaced bearing the Ophiuchus glyph in pale teal on indigo enamel. Palette: deep twilight indigo-teal field dominant, glossy, faint ember sparks caught in the serpent's coils.
 ```
 
-### LOGO look — Ophiuchus (`logo/Ophiuchus.png`)
+### LOGO look — Ophiuchus (`assets/zodiac/astrology/primary/Ophiuchus.png`)
 
 ```
 Minimalist emblem, square 1:1, perfectly centered, isolated on white background, no text or watermark. Center: the proposed Ophiuchus glyph — a wide U-shaped cradle stroke with a short serpent-tilde rising from its base, coiling once before straightening — rendered as a single bold solid white/silver mark with a soft metallic sheen, on a deep near-black circular field. Border: a thin silver outline ring framing the field, no other ornament — crisp and instantly legible even at 64px.
 ```
 
-### CONSTELLATION look — Ophiuchus (`constellation/Ophiuchus.png`)
+### CONSTELLATION look — Ophiuchus (`assets/zodiac/astrology/constellation/Ophiuchus.png`)
 
 ```
 Photorealistic astronomical illustration, square 1:1, perfectly centered, isolated on white background, no text, no glyph. Center: a deep midnight-blue to black night-sky field scattered with faint background stars; the Ophiuchus constellation traced as bright white star points joined by thin silver lines in a broad house-shaped pentagon, one bright star crowning it like a head, one of the largest patterns in the whole sky yet excluded from the zodiac's twelve; behind the stars, the serpent-bearer's form appears faintly ghosted in translucent smoky outline, a serpent coiling through his arms, barely visible.
 ```
 
-### COLORED look — Ophiuchus (`colored/Ophiuchus.png`)
+### COLORED look — Ophiuchus (`assets/zodiac/astrology/colored/Ophiuchus.png`)
 
 ```
 Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Serpent-bearer sign - STRICT palette: twilight indigo, deep teal and faint ember-orange only, no other hues anywhere, the one plate allowed to blend fire and water since Ophiuchus stands between both triads. Center: a robed figure gripping a great serpent with both hands, the snake's body coiled once around his waist and trailing beyond the badge's edge on both sides, his bare feet planted on a scorpion crushed underfoot, the Ophiuchus glyph in pale teal above; glossy deep twilight indigo-teal field with faint ember sparks caught in the serpent's coils. Border: bronze-silver ring of coiled-serpent scrollwork with four small roundels bearing the pale-teal Ophiuchus glyph on indigo enamel. Colors: twilight indigo, deep teal, faint ember-orange.

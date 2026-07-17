@@ -68,7 +68,7 @@ the same folder. This rework moves two files, and both moves are
   for the full move note (`religion/secondary/sikhism.png` →
   `religion/primary/sikhism.png`).
 - **unknown_god.png** — arrives here as a real cross-tree move,
-  `religion/primary/unknown_god.png` → `religion/secondary/unknown_god.png`,
+  `religion/primary/unknown_god.png` → `assets/weekday/religion/secondary/unknown_god.png`,
   becoming this theme's Ninth plate; its Creeds-era prompt border text
   (which lists Creeds' six/seven faith emblems — chain of tools,
   strapwork, lotus, bagua, Om, cross, star) is kept byte-identical per
@@ -80,13 +80,13 @@ Stems below are exact and lowercase, matching
 
 | Day | Body | Tradition | File |
 |---|---|---|---|
-| Sunday | sun | Mithraism (dual: Corax) | `mithraism.png` / `dual/corax.png` |
-| Monday | moon | Druidism | `druidism.png` |
-| Tuesday | mars | Zoroastrianism | `zoroastrianism.png` |
-| Wednesday | mercury | Shamanism | `shamanism.png` |
-| Thursday | jupiter | Eleusinian Mysteries | `eleusis.png` |
-| Friday | venus | Babylon | `babylon.png` |
-| Saturday | saturn | Voodoo | `voodoo.png` |
+| Sunday | sun | Mithraism (dual: Corax) | `assets/weekday/religion/secondary/mithraism.png` / `assets/weekday/religion/secondary/dual/corax.png` |
+| Monday | moon | Druidism | `assets/weekday/religion/secondary/druidism.png` |
+| Tuesday | mars | Zoroastrianism | `assets/weekday/religion/secondary/zoroastrianism.png` |
+| Wednesday | mercury | Shamanism | `assets/weekday/religion/secondary/shamanism.png` |
+| Thursday | jupiter | Eleusinian Mysteries | `assets/weekday/religion/secondary/eleusis.png` |
+| Friday | venus | Babylon | `assets/weekday/religion/secondary/babylon.png` |
+| Saturday | saturn | Voodoo | `assets/weekday/religion/secondary/voodoo.png` |
 
 Sikhism no longer occupies a seat here at all — it promotes to Creeds'
 Friday seat (see `religion_prompts.md`).
@@ -95,7 +95,7 @@ Friday seat (see `religion_prompts.md`).
 
 ## The roster — seven plates
 
-**Sunday — Mithraism** → `mithraism.png`
+**Sunday — Mithraism** → `assets/weekday/religion/secondary/mithraism.png`
 
 *KEEP verbatim. The tauroctony, the cult's one universal icon — Mithras
 astride the bull beneath the radiate face of Sol, per the article's
@@ -105,7 +105,7 @@ opening image.*
 Ornate circular medallion, bronze-and-gold relief on starred lapis-blue stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: Mithras in a Phrygian cap kneeling astride a great white bull, drawing a dagger across its flank, a raven alighting on his billowing cloak, a dog and a serpent leaping toward the wound, a scorpion at the bull's loins — the tauroctony — and above a stone arch the radiate face of the sun blazing in a sunburst. Border: a rim weaving ravens, hounds, scorpions and stars between plain unlettered roundels, gold on silver over deep starlit blue. Palette: bronze-and-gold relief on starred lapis-blue stone dominant; the radiate sunburst the brightest accent. No text, no watermark.
 ```
 
-**Monday — Druidism** → `druidism.png`
+**Monday — Druidism** → `assets/weekday/religion/secondary/druidism.png`
 
 *KEEP verbatim. The golden Tree of Life with its green heart-glow, per
 the article's opening image.*
@@ -114,7 +114,7 @@ the article's opening image.*
 Ornate circular medallion, gold-and-silver relief, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Tree of Life whose roots braid downward as its branches climb, a soft green light glowing at the trunk's heart. Border: silver Celtic knotwork threaded with small red-capped fly-agaric mushrooms. Palette: gold-and-silver relief dominant; the green heart-glow the only cool accent. No text, no watermark.
 ```
 
-**Tuesday — Zoroastrianism** → `zoroastrianism.png`
+**Tuesday — Zoroastrianism** → `assets/weekday/religion/secondary/zoroastrianism.png`
 
 *KEEP verbatim. The golden Faravahar rising from a winged disc, per the
 article's opening image.*
@@ -123,7 +123,7 @@ article's opening image.*
 Ornate circular medallion, gold-and-silver relief on night-dark stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Faravahar — a crowned, bearded figure rising from a winged disc, one hand raised, the other holding a ring of covenant — set on night-dark stone. Border: silver rim engraved with small stylized flames. Palette: gold-and-silver relief on night-dark stone dominant; the flame motifs the only warm-orange accent. No text, no watermark.
 ```
 
-**Wednesday — Shamanism** → `shamanism.png`
+**Wednesday — Shamanism** → `assets/weekday/religion/secondary/shamanism.png`
 
 *KEEP verbatim. The totem-and-drum glowing like a fire in a dark tent,
 per the article's opening image.*
@@ -132,7 +132,7 @@ per the article's opening image.*
 Ornate circular medallion, firelit bronze-and-ember relief in a dark tent-like field, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a totem of thunderbird, wolf and bear stacked atop a round hide drum laced with crossed cords, ember-light glowing up from beneath. Border: a rim of pewter feathers and antlers. Palette: firelit bronze-and-ember relief dominant; the drum's ember glow the only warm accent. No text, no watermark.
 ```
 
-**Thursday — Eleusinian Mysteries** → `eleusis.png`
+**Thursday — Eleusinian Mysteries** → `assets/weekday/religion/secondary/eleusis.png`
 
 *NEW plate — no canon paragraph yet (pending a symbolism.json round);
 imagery per the owner's rework brief: the greatest mystery cult of
@@ -143,7 +143,7 @@ procession, Demeter-and-Kore silhouettes.*
 Ornate circular medallion, gold-and-silver relief on night-dark stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden sheaf of wheat bound upright beside a wide silver kykeon cup, a torchlit procession of hooded silhouettes winding away into the dark behind them, two facing silhouettes — one crowned in wheat, one crowned in narcissus flowers — standing just beyond the torches like mother and daughter reunited. Border: a rim of silver torches alternating with small poppy-pod roundels, flames caught mid-flicker. Palette: gold-and-silver relief on night-dark stone dominant; the torch-flames the only warm accent. No text, no watermark.
 ```
 
-**Friday — Babylon** → `babylon.png`
+**Friday — Babylon** → `assets/weekday/religion/secondary/babylon.png`
 
 *KEEP verbatim. Ishtar's eight-pointed star in burning copper with her
 lion beneath it, per the article's opening image.*
@@ -152,7 +152,7 @@ lion beneath it, per the article's opening image.*
 Ornate circular medallion, copper-and-silver relief on starry lapis-blue stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: an eight-pointed star in burning copper, the sign of Venus set at its heart, a striding lion beneath it. Border: silver rim parading lion-head roundels between palm fronds. Palette: copper-and-silver relief on starry lapis-blue stone dominant; the eight-pointed star the brightest accent. No text, no watermark.
 ```
 
-**Saturday — Voodoo** → `voodoo.png`
+**Saturday — Voodoo** → `assets/weekday/religion/secondary/voodoo.png`
 
 *KEEP verbatim. The burlap-and-copper doll that "restores dignity to
 the emblem outsiders know best," per the article's own framing.*
@@ -163,7 +163,7 @@ Ornate circular medallion, burlap-and-copper relief, photorealistic render, perf
 
 ---
 
-## Dual — Mithraism / Corax (`dual/corax.png`)
+## Dual — Mithraism / Corax (`assets/weekday/religion/secondary/dual/corax.png`)
 
 **UNCHANGED by this rework.** The Raven serving the Father at the
 grade-banquet — Humility before any rank has been climbed, per the
@@ -183,7 +183,7 @@ faceless, its face left completely smooth and unlettered. Genuinely
 ancient, unlike Creeds' living faiths, which is why it belongs here now
 — the Union reading: the God behind all creeds. **Kept and reseated
 per instruction, file and prompt untouched** (moves
-`religion/primary/unknown_god.png` → `religion/secondary/unknown_god.png`,
+`religion/primary/unknown_god.png` → `assets/weekday/religion/secondary/unknown_god.png`,
 a real cross-tree file move — see `religion_prompts.md` for the
 matching note). Flag for the owner: the border clause below still
 enumerates Creeds' six faith emblems ("no chain of tools, no strapwork,
@@ -215,7 +215,7 @@ Ornate circular medallion, gold-and-silver relief on night-dark stone, photoreal
 ## Generation-order checklist
 
 1. **Generate NEW art — one plate:** Eleusinian Mysteries
-   (`eleusis.png`, jupiter/Thursday). Everything else in this theme
+   (`assets/weekday/religion/secondary/eleusis.png`, jupiter/Thursday). Everything else in this theme
    already exists.
 2. **Move in — unknown_god.png**: copy `assets/weekday/religion/primary/unknown_god.png`
    → `assets/weekday/religion/secondary/unknown_god.png`; becomes this

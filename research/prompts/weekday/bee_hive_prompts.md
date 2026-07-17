@@ -83,7 +83,7 @@ Forager under open sky. The week opens like the hive does.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the queen bee at the heart of the comb, long-bodied and regal, laying an egg into an open hexagonal cell, her retinue of workers ringed around her all facing inward, antennae reaching toward her like rays of a living corona; behind her a round patch of golden comb worked as a gilded sun disc of perfect hexagons. Border: bronze ring worked as a band of hexagonal honeycomb cells, some open, some wax-capped, with tiny worker bees crawling the lattice, and four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the gilded comb-sun the only brighter metal.
 ```
 
-**Cleaner (sunday dual)** → `dual/Cleaner.png`
+**Cleaner (sunday dual)** → `assets/weekday/bee/primary/dual/Cleaner.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a just-hatched young worker bee, fuzzy and soft, wings still crumpled from the cell, head and forelegs deep inside an open hexagonal cell polishing its walls — cleaning the very cell she was born in; around her the comb stretches away toward a distant warm glow where the queen's retinue circles, small and far; directly above her one dark EMPTY cell rimmed with a thin gilded ring of fresh wax — the hive's own eclipsed sun. Her posture is lowly, her work exact. Border: bronze ring worked as a band of hexagonal honeycomb cells, some open, some wax-capped, with tiny worker bees crawling the lattice, and four small roundels bearing the Sun glyph. Palette: darkened bronze dominant; the gilded cell-ring the only brighter metal.
 ```
@@ -126,49 +126,49 @@ Fresh full-color paintings of the same compositions; the set walks
 from the hive's honey-lit interior to the open sky as the week walks
 the worker's life outward. Generate the whole set in one session.
 
-**Queen (sunday)** → `colored/Queen.png`
+**Queen (sunday)** → `assets/weekday/bee/colored/Queen.png`
 ```
 Ornate circular badge, vivid full-color painted hive interior over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the queen bee glowing amber-gold at the heart of deep honey-lit comb, laying an egg into an open cell, her retinue ringed around her facing inward like a living crown, golden light welling up through the wax as if the comb itself were the sun. Border: bronze honeycomb ring with tiny bees, four gold roundels bearing the Sun glyph. Colors: deep honey amber, glowing gold, warm wax yellow, dark hive brown.
 ```
 
-**Cleaner (sunday dual)** → `dual/colored/Cleaner.png`
+**Cleaner (sunday dual)** → `assets/weekday/bee/primary/dual/colored/Cleaner.png`
 ```
 Ornate circular badge, vivid full-color painted hive interior over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a soft fuzzy just-hatched worker bee, wings still crumpled, half inside an open cell polishing its walls in the brown-dark comb, the queen's court a far warm glow behind her; directly above her one dark empty cell rimmed with a thin ring of bright golden new wax — the hive's eclipsed sun — the only strong light on the plate falling from that ring onto her small bowed back. Border: darkened bronze honeycomb ring with tiny bees, four gold roundels bearing the Sun glyph. Colors: dark hive umber, one golden wax ring, soft dusty fur gray-gold, distant amber glow.
 ```
 
-**Nurse (monday)** → `colored/Nurse.png`
+**Nurse (monday)** → `assets/weekday/bee/colored/Nurse.png`
 ```
 Ornate circular badge, vivid full-color painted hive interior over silver-bronze, photorealistic render, perfectly centered, isolated on white background. Center: a nurse bee bowed over an open brood cell feeding a pearl-white curled larva a gleaming drop of royal jelly, the field of capped brood cells around them pale and round as small moons, cool blue-white wax light in the warm dark. Border: cool bronze honeycomb ring with tiny bees, four silver roundels bearing the Moon crescent. Colors: moon-pale wax white, cool silver-blue, pearl larva white, warm dark comb behind.
 ```
 
-**Guard (tuesday)** → `colored/Guard.png`
+**Guard (tuesday)** → `assets/weekday/bee/colored/Guard.png`
 ```
 Ornate circular badge, vivid full-color painted hive threshold over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a guard bee planted on the landing board at the hive's dark doorway under a burning red-orange evening sky, wings raised, sting bared, facing the huge dark shape of a hornet descending with the low sun behind it — her small shadow long and unmoving on the board. Border: dark bronze honeycomb ring with tiny bees, four red roundels bearing the Mars glyph. Colors: ember red-orange sky, black hornet silhouette, warm board brown, golden fur catching the last light.
 ```
 
-**Scout (wednesday)** → `colored/Scout.png`
+**Scout (wednesday)** → `assets/weekday/bee/colored/Scout.png`
 ```
 Ornate circular badge, vivid full-color painted hive interior over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a scout bee dancing her figure-eight on the vertical comb in a violet-gray shaft of morning light from the entrance, the dance path worn bright into the wax, a tight ring of foragers around her reading the angle, and high at the comb's top a small mark of true gold where the sun stands. Border: bronze honeycomb ring with tiny bees, four purple roundels bearing the Mercury glyph. Colors: violet-gray morning light, warm comb amber, one true-gold sun mark, dusty fur gold.
 ```
 
-**Builder (thursday)** → `colored/Builder.png`
+**Builder (thursday)** → `assets/weekday/bee/colored/Builder.png`
 ```
 Ornate circular badge, vivid full-color painted hive interior over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a living chain of builder bees hanging from the comb's bright growing edge under a high clear light from above, the lowest bee shaping a fresh hexagon, new wax scales gleaming white-gold as they pass down the chain; the finished comb below crisp and crystalline. Border: bronze honeycomb ring with tiny bees, four sky-blue roundels bearing the Jupiter glyph. Colors: bright noon white-gold, fresh wax cream, clear sky-blue light, warm amber depth.
 ```
 
-**Drone (friday)** → `colored/Drone.png`
+**Drone (friday)** → `assets/weekday/bee/colored/Drone.png`
 ```
 Ornate circular badge, vivid full-color painted open sky over rose-bronze, photorealistic render, perfectly centered, isolated on white background. Center: the stocky huge-eyed drone climbing in full vertical flight through a rose-amber evening sky, wings alight, toward the young queen a bright gleam high above him near the sun's molten edge; far below, tiny, the hive board he will never touch again. Border: rose-bronze honeycomb ring with tiny bees, four rose roundels bearing the Venus glyph. Colors: rose-amber sky, molten gold sun edge, warm brown fur, soft mauve dusk below.
 ```
 
-**Forager (saturday)** → `colored/Forager.png`
+**Forager (saturday)** → `assets/weekday/bee/colored/Forager.png`
 ```
 Ornate circular badge, vivid full-color painted open field over aged bronze, photorealistic render, perfectly centered, isolated on white background. Center: an old forager bee landing heavy on the weathered gray hive board in pale low winter-gold light, wing edges frayed and translucent, pollen baskets full and bright orange — the one strong color on the plate — her long blue shadow reaching toward the dark entrance. Border: aged dark bronze honeycomb ring with tiny bees, four gunmetal roundels bearing the Saturn glyph. Colors: pale winter gold, weathered gray board, bright pollen orange, long blue shadow.
 ```
 
 ---
 
-## The Ninth — the Swarm (`swarm.png`)
+## The Ninth — the Swarm (`assets/weekday/bee/primary/swarm.png`)
 
 Owner clarification (2026-07-14, the Ninth-as-regular-member
 correction): the Swarm is a REGULAR NINTH member of the Bee Hive set,
@@ -184,7 +184,7 @@ either extreme of an axis.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the swarm in flight — a great rising column of thousands of bees lifting from an abandoned comb as one living cloud, the old queen a slightly larger form at the heart of the vortex, the comb below left EMPTY with every hexagonal cell open and bare; the cloud's upper edge curling like smoke about to leave the frame. Border: bronze ring worked as a band of hexagonal honeycomb cells — all of them OPEN and uncapped, not a single sealed cell, with four small roundels bearing a tiny rising-cloud spiral. Palette: aged bronze dominant, the empty comb a shade darker, no gilded metal — the gold left with the hive.
 ```
 
-**The Swarm (colored)** → `colored/swarm.png`
+**The Swarm (colored)** → `assets/weekday/bee/colored/swarm.png`
 ```
 Ornate circular badge, vivid full-color painted open sky over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the swarm in flight — a great rising column of thousands of amber-gold bees lifting from an abandoned comb as one living cloud against a warm dusk sky, the old queen a slightly larger golden form at the heart of the vortex, the pale comb below left empty, every hexagonal cell open and bare in the fading light. Border: bronze honeycomb ring with tiny bees, all cells open and uncapped, four small gold roundels bearing a tiny rising-cloud spiral. Colors: warm dusk gold, amber swarm-cloud, pale empty comb, soft rose sky.
 ```

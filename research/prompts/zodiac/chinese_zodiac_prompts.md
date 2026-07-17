@@ -173,7 +173,7 @@ Ornate circular badge, vivid cloisonné enamel in Chinese festival style, photor
 
 ---
 
-## The Thirteenth — the Cat (`Cat.png`, `colored/Cat.png`)
+## The Thirteenth — the Cat (`assets/zodiac/chinese/primary/Cat.png`, `assets/zodiac/chinese/colored/Cat.png`)
 
 **Encyclopedia-only — the excluded thirteenth, no dial seat.** Per the
 owner's round-four doctrine ruling (`../../pantheon_catalog.md`,
@@ -190,12 +190,12 @@ self-love/self-hate axis to begin with. (This corrects the 2026-07-14
 draft note below the bronze set that had floated a possible Ninth
 dial seat — round four settles it: encyclopedia-only.)
 
-**Bronze** → `Cat.png`
+**Bronze** → `assets/zodiac/chinese/primary/Cat.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a sleek cat frozen mid-leap at a riverbank, one paw still reaching for a departing raft already too far to catch, the rat's small silhouette visible riding it away toward the far shore, small auspicious bronze cloud scrolls drifting undisturbed around the scene as if the race had already been decided. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls — strictly Chinese ornament, no Greek meander — with five small enamel element roundels set into the ring at the five points of a pentagram: the kanji 火 over flames on deep red at the very top, 土 over a small mountain on deep red-brown at the upper right, 金 over an ingot on pale gold at the lower right, 水 over waves on deep blue at the lower left, 木 over a small tree on green at the upper left. Palette: aged bronze dominant; the only bright accent the cat's sharp amber eyes fixed on the departing raft.
 ```
 
-**Colored** → `colored/Cat.png`
+**Colored** → `assets/zodiac/chinese/colored/Cat.png`
 ```
 Ornate circular badge, vivid cloisonné enamel in Chinese festival style, photorealistic render, perfectly centered, isolated on white background. Center: a sleek gray-and-white Cat frozen mid-leap at a riverbank, one paw still reaching for a departing raft already too far to catch, the Rat's small silhouette visible riding it away toward the far shore, auspicious clouds swirling undisturbed as if the race had already been decided; glossy crimson-red field. Border: gold ring of cloud scrolls with four small roundels bearing the kanji 貓 in gold. Colors: crimson red, gold, silver gray, amber.
 ```

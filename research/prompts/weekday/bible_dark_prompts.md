@@ -35,7 +35,7 @@ and blood red standing in for each day's usual hue, and embers/coal
 glow standing in for the light sets' gold backlight. The oculus itself
 is kept in every plate but rendered in smoked amber-red glass instead
 of clear gold, its rays thin and reluctant — Providence still watches
-the Fall, it simply watches through soot. `lucifer.png` is the
+the Fall, it simply watches through soot. `assets/weekday/bible/dark/lucifer.png` is the
 reference plate every other Bible Dark prompt cross-references for the
 tracery/oculus. Every figure below states its light-set mirror in the
 rationale, per the brief.
@@ -52,7 +52,7 @@ rationale, per the brief.
 | Delilah (Friday) | `assets/weekday/bible/dark/delilah.png` | Ruth / Samson |
 | Cain (Saturday) | `assets/weekday/bible/dark/cain.png` | Joseph |
 
-### Sunday, ruler face — Lucifer (`lucifer.png`)
+### Sunday, ruler face — Lucifer (`assets/weekday/bible/dark/lucifer.png`)
 
 Mirrors Abraham's Sunday-ruler slot: the morning star's fall (Isaiah
 14:12, Luke 10:18) is scripture's own Glory-becomes-Eclipse story, the
@@ -67,7 +67,7 @@ Section C below.
 Circular stained-glass rose-window medallion, backlit by a cold black-violet night sky through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring as the light-set plates, but read as a night window; mirrors abraham.png's Sunday-ruler slot as the Fall's own Glory-to-Eclipse story. Center: Lucifer, the morning star, caught mid-fall — still radiant and beautiful, wings trailing streamers of gold-white fire guttering to ember-red as he drops, his crown tilted and slipping from his brow; behind him, high in the glass, the blinding flash of a supernova — a star burning everything it has in one final blaze, briefly outshining the whole window exactly as it dies. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a falling-star-and-slipping-crown emblem, an upward RED triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top rendered in smoked amber-red glass, its rays thin and reluctant. Colors: deep black-violet dominant, guttering ember-red and gold-white in the falling fire, cold blue-black at the ring's rim, no warm gold except the dying fire itself.
 ```
 
-### Sunday, servant face (dual) — Judas (`dual/judas.png`)
+### Sunday, servant face (dual) — Judas (`assets/weekday/bible/dark/dual/judas.png`)
 
 Mirrors Isaac's Sunday-servant slot: the servant who betrays instead
 of trusting. His celestial image (owner canon 2026-07-13) is the
@@ -87,7 +87,7 @@ on the ground, untouched — never around his neck, never in use.
 Circular stained-glass rose-window medallion, backlit by cold torch-ember light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked-amber oculus as lucifer.png, but the glass reads even lower and quieter, no majesty left in it; mirrors isaac.png's Sunday-servant slot, trust curdled into despair. Center: Judas alone on bare ground, thirty silver coins spilled from an open pouch and scattered around his sandals, catching a thin cold light; a length of rope lying coiled and still at his feet, untouched, resting rather than in use; his head bowed into both hands, shoulders drawn in — sober grief rendered plainly, no sneer, no caricature; low in the glass behind him, a collapsed dark star — a perfect black ring swallowing its own faint corona, the light that is not allowed to leave. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a scattered-coins emblem, a downward BLUE triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top in smoked amber-red glass, its rays thin and reluctant, same placement as lucifer.png. Colors: cold slate-blue dominant, tarnished silver coins, near-black lead, one thin cold ember accent from the distant torch-light.
 ```
 
-### Monday — Lilith (`lilith.png`)
+### Monday — Lilith (`assets/weekday/bible/dark/lilith.png`)
 
 Mirrors Mary: the moon's other face, the night's first refusal instead
 of serene acceptance.
@@ -96,7 +96,7 @@ of serene acceptance.
 Circular stained-glass rose-window medallion, backlit by pale cold moonlight through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors mary.png's Monday slot, the moon's other face. Center: Lilith perched as an owl-winged silhouette on a cracked, moonlit windowsill of a ruined house, wings folded high and sharp behind her shoulders, her face turned half into shadow, the same pale crescent moon from the Mary plate now behind her, tarnished and edged in cold violet instead of frosted white. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a broken-sill-and-owl emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: deep violet-blue dominant, tarnished moon-white, near-black feather shadow, one cold silver accent.
 ```
 
-### Tuesday — Goliath (`goliath.png`)
+### Tuesday — Goliath (`assets/weekday/bible/dark/goliath.png`)
 
 Mirrors David. **Note:** of the whole Dark roster, Goliath is the
 thinnest mirror psychologically — he has no interior arc of his own
@@ -109,7 +109,7 @@ awareness for tonal consistency across the set.
 Circular stained-glass rose-window medallion, backlit by deep blood-red ember light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors david.png's Tuesday slot, the giant David's sling brought down. Center: Goliath towering in dark bronze-glass armor at the edge of the battle line, spear planted and thick as a weaver's beam, mouth open mid-taunt, shield-bearer a small dim silhouette behind him; the valley of Elah rendered in smoldering blood-red dusk rather than the David plate's fierce sunset-orange. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a weaver's-beam-spear emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: deep blood red dominant, dark bronze armor, iron-black shadow, one dull ember-orange accent.
 ```
 
-### Wednesday — the Serpent (`serpent.png`)
+### Wednesday — the Serpent (`assets/weekday/bible/dark/serpent.png`)
 
 Mirrors Moses: the staff-serpent that healed (Nehushtan, Numbers 21)
 set against the tree-serpent that first spoke (Genesis 3).
@@ -118,7 +118,7 @@ set against the tree-serpent that first spoke (Genesis 3).
 Circular stained-glass rose-window medallion, backlit by deep violet twilight through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors moses.png's Wednesday slot — the staff-serpent that healed set against the tree-serpent that first spoke. Center: the serpent coiled low through the branches of the tree in Eden, one bitten apple glowing with a faint sourceless light along its scales, its head turned close as if mid-whisper, the fruit-shadow falling long across dark garden leaves. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a coiled-serpent-and-apple emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: deep violet dominant, garden-black green, one glowing apple-gold highlight along the scales, cold shadow.
 ```
 
-### Thursday, primary — Herod (`herod.png`)
+### Thursday, primary — Herod (`assets/weekday/bible/dark/herod.png`)
 
 Mirrors Solomon: the judge-king's wisdom curdled into a paranoid
 king's fear. **Concern (Gemini safety):** the source event is the
@@ -131,7 +131,7 @@ depicted, purely implied through silhouette and the king's own fear.
 Circular stained-glass rose-window medallion, backlit by sickly amber-yellow torchlight through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors solomon.png's Thursday slot — the judge-king's wisdom curdled into a paranoid king's fear. Center: Herod alone on his throne, both hands clutched tight around his own crown as though it might be pulled from his head, his face turned toward a half-open doorway where only the long dark shadows of soldiers pass by outside, unseen and undepicted beyond their silhouettes; the throne room otherwise empty and dim. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a clutched-crown emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: sickly amber-yellow dominant, deep shadow black, one cold sliver of doorway-gray light, no bright color.
 ```
 
-### Thursday, alternative — Nebuchadnezzar (`nebuchadnezzar_alt.png`)
+### Thursday, alternative — Nebuchadnezzar (`assets/weekday/bible/dark/nebuchadnezzar_alt.png`)
 
 Mirrors Solomon via a different failure mode: wisdom traded for an
 idol's worship (Daniel 3 / Daniel 4's madness). **Minor concern:** the
@@ -144,7 +144,7 @@ the first generation before committing to the final asset.
 Circular stained-glass rose-window medallion, backlit by heavy molten-gold torchlight through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors solomon.png's Thursday slot, an alternative to herod.png — the king's wisdom traded for an idol's worship. Center: Nebuchadnezzar seated before his own towering golden idol, its blank glass face looming behind him, his own eyes rendered subtly wrong — too wide, the iris gone faintly feral — one hand still raised in a king's gesture of command though his posture has begun to stoop toward the animal. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a golden-idol emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: heavy molten gold dominant, deep black shadow, one unsettling pale highlight in the eyes.
 ```
 
-### Friday — Delilah (`delilah.png`)
+### Friday — Delilah (`assets/weekday/bible/dark/delilah.png`)
 
 Mirrors Ruth/Samson: devotion's field traded for betrayal's chamber.
 **Concern (Gemini safety):** kept to the moment BEFORE the cut, not
@@ -155,7 +155,7 @@ composition's tension is her turned-away gaze, not an act in progress.
 Circular stained-glass rose-window medallion, backlit by deep blood-rose light through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors ruth.png's Friday slot — devotion's field traded for betrayal's chamber. Center: Delilah seated with a pair of bronze shears resting closed in her lap, Samson's dark hair spread heavy across her knees as she looks away toward a curtained doorway rather than down at him, her expression unreadable — love used as a blade, the moment before rather than the cut itself. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a closed-shears emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: deep blood-rose dominant, dark hair-black, tarnished bronze shears, one cold accent at the doorway.
 ```
 
-### Saturday — Cain (`cain.png`)
+### Saturday — Cain (`assets/weekday/bible/dark/cain.png`)
 
 Mirrors Joseph, and Saturday's own vice, Envy, directly: where Joseph
 is envy's OBJECT (his brothers envy him), Cain is envy's SUBJECT (he
@@ -182,7 +182,7 @@ emblem, not its roster.
 
 ---
 
-## The Ninth — The Ninth Circle (`ninth_circle.png`)
+## The Ninth — The Ninth Circle (`assets/weekday/bible/dark/ninth_circle.png`)
 
 **Doctrine (`pantheon_catalog.md`, owner round two/four/five, the
 owner's OWN worked example of the Union form):** *"nema osobe koja je
@@ -207,7 +207,7 @@ Circular stained-glass rose-window medallion, backlit by faint cold starlight th
 
 ---
 
-## SUPERSEDED — Legion (do NOT generate `legion.png`)
+## SUPERSEDED — Legion (do NOT generate `assets/weekday/bible/dark/legion.png`)
 
 **Owner ruling 2026-07-15** (`pantheon_catalog.md`, doctrine
 crystallization round four/five): Legion is retired as Bible Dark's
@@ -237,20 +237,20 @@ Circular stained-glass rose-window medallion, backlit by cold slate-gray night l
 Per `ROSTER.md` (last generated 2026-07-15):
 
 **Bible Dark (`bible_dark`):**
-- Seated seven + Sunday dual — all exist (✔ Gemini): `lucifer.png`,
-  `lilith.png`, `goliath.png`, `serpent.png`, `herod.png`,
-  `delilah.png`, `cain.png`, `dual/judas.png`. (`nebuchadnezzar_alt.png`
+- Seated seven + Sunday dual — all exist (✔ Gemini): `assets/weekday/bible/dark/lucifer.png`,
+  `assets/weekday/bible/dark/lilith.png`, `assets/weekday/bible/dark/goliath.png`, `assets/weekday/bible/dark/serpent.png`, `assets/weekday/bible/dark/herod.png`,
+  `assets/weekday/bible/dark/delilah.png`, `assets/weekday/bible/dark/cain.png`, `assets/weekday/bible/dark/dual/judas.png`. (`assets/weekday/bible/dark/nebuchadnezzar_alt.png`
   is the recorded Thursday alternative, not the seated pick.)
 - **Ninth — Legion:** never generated (— Gemini, — ChatGPT) — good,
   nothing to discard. SUPERSEDED, do not generate.
 - **Ninth — The Ninth Circle:** NEW, not yet in `ROSTER.md` — needs
-  `ninth_circle.png` generated.
+  `assets/weekday/bible/dark/ninth_circle.png` generated.
 
 **Section C (Two Triangles scale badges):** unaffected by this round —
 `Lucifer_Triangle.png` and `Judas_Triangle.png` both exist (✔ Gemini)
 and both already ship.
 
-**Net new generation work from this round:** `ninth_circle.png`.
+**Net new generation work from this round:** `assets/weekday/bible/dark/ninth_circle.png`.
 
 ---
 

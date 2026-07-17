@@ -240,43 +240,43 @@ Slavic/Alchemy/Religion — see any of those themes' own prompt sheets).
 | The Bride and Bridegroom | `assets/weekday/bible/primary/song_of_songs.png` |
 | Joseph | `assets/weekday/bible/primary/joseph.png` |
 
-### Sun — Ancient of Days (`ancient_of_days.png`)
+### Sun — Ancient of Days (`assets/weekday/bible/primary/ancient_of_days.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by warm daylight through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background. Center: the Ancient of Days from Daniel 7 enthroned in white-gold glass, hair and robe like pure wool-white, seated on a throne of blazing fire-glass with wheels of burning flame beneath it, streams of golden light pouring outward, countless small ministering figures in pale glass rendered tiny at the throne's foot, an open book of glowing amber glass laid across his knees. Border: dark lead-came tracery ring of trefoil lancets, four small jewel-roundels bearing a radiant seven-flame lampstand, and a golden triangle oculus at the top holding the Eye of Providence, radiant lead-lines streaming from it like sunbeams. Colors: white-gold and fire-amber dominant, deep ember orange in the throne-flames, small sapphire accents in the crowd of small figures.
 ```
 
-### Sunday dual — The Son as Servant (`dual/son_servant.png`)
+### Sunday dual — The Son as Servant (`assets/weekday/bible/primary/dual/son_servant.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by cool dawn light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery ring, trefoil lancets and Eye-of-Providence oculus as ancient_of_days.png, but the glass reads low and quiet instead of blazing. Center: Christ kneeling in a plain ivory-glass robe, an outer garment folded aside, washing a disciple's bare foot in a simple silver-glass basin, a folded linen towel over one arm, eyes lowered; the same throne from the Ancient of Days plate stands empty and unlit in the background, its fire-glass gone cold and clear. Border: identical dark lead-came trefoil tracery to ancient_of_days.png, but the lampstand roundels are replaced with small jewel-roundels bearing a basin-and-towel emblem, and the golden Eye-of-Providence oculus at the top glows softer, dawn-grey instead of fire-gold. Colors: same white-gold family as the Ancient of Days plate, read cooler — ivory, pale dawn-grey, quiet silver — no blazing fire-amber.
 ```
 
-### Moon — Mary (`mary.png`)
+### Moon — Mary (`assets/weekday/bible/primary/mary.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by pale moonlit blue light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Mary as the woman of Revelation 12, deep Marian-blue robe, standing on a pale crescent moon of frosted white glass, a mandorla of golden sun-rays radiating behind her, a crown of twelve small star-glass points above her head, hands folded low in serene stillness. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a white lily, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep Marian blue dominant, frosted moon-white, small gold star accents, soft silver.
 ```
 
-### Mars — David (`david.png`)
+### Mars — David (`assets/weekday/bible/primary/david.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by ember-orange light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: the young shepherd David mid-swing, sling whirling overhead in amber-glass motion lines, five smooth stones in a leather pouch at his hip, the looming dark-glass silhouette of Goliath toppling at the frame's edge, a shepherd's staff dropped in the grass behind him, sunset-orange glass field glowing low and fierce. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a sling-and-stone emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: ember orange dominant, amber gold, iron-gray for Goliath's falling shadow, small crimson accent.
 ```
 
-### Mercury — Moses (`moses.png`)
+### Mercury — Moses (`assets/weekday/bible/primary/moses.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by deep twilight-purple light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Moses holding the two stone tablets of the Law against one shoulder, his face rendered with faint radiant beams of glass light (Exodus 34:29), his other hand raised holding a wooden staff topped by the bronze serpent Nehushtan coiled around it, his robe a deep royal purple, small sparks of gold glass tracing the tablets' engraved letters. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing the bronze serpent-on-a-staff emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep royal purple dominant, aged bronze-gold, small radiant white beams at his brow.
 ```
 
-### Jupiter — Solomon (`solomon.png`)
+### Jupiter — Solomon (`assets/weekday/bible/primary/solomon.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by warm golden-yellow light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Solomon enthroned in judgment, crowned and robed in radiant yellow-gold glass, one hand raised in a gesture of decree, a swaddled infant held gently below him between two kneeling women in postures of plea, a small glass silhouette of the newly built Temple's pillars glowing faintly behind the throne. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a set of balance scales, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: warm golden yellow dominant, deep amber, small ivory-white accents for the infant and the women's robes.
 ```
 
-### Venus — Adam and Eve (`adam_and_eve.png`)
+### Venus — Adam and Eve (`assets/weekday/bible/primary/adam_and_eve.png`)
 
 **Owner verdict 2026-07-13** (supersedes the Song of Songs pick below:
 "Adam i Eva mi je ipak — za njih svi znaju, za one pesme ne baš"): the
@@ -288,7 +288,7 @@ and the first union is the plainest Love a window can tell.
 Circular stained-glass rose-window medallion, backlit by warm crimson-rose light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Adam and Eve standing hand in hand in the garden of Eden rendered in glass — modestly composed, greenery and blossoms wrapping their figures, the Tree of Life rising luminous between and behind them with ruby fruit among emerald leaves, a small white dove perched above their joined hands, animals of the garden as tiny stained-glass silhouettes at their feet. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a two-figures-and-tree emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep rose red dominant, garden emerald green, ruby fruit, warm flesh-toned ivory glass.
 ```
 
-### Venus — the Bride and Bridegroom (`song_of_songs.png`) — SUPERSEDED
+### Venus — the Bride and Bridegroom (`assets/weekday/bible/primary/song_of_songs.png`) — SUPERSEDED
 
 Kept for the record; the owner picked Adam and Eve above.
 
@@ -296,7 +296,7 @@ Kept for the record; the owner picked Adam and Eve above.
 Circular stained-glass rose-window medallion, backlit by warm crimson-rose light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: the Bridegroom and Bride of the Song of Songs embracing within a walled garden of glass — pomegranate trees heavy with ruby-glass fruit, white lilies at their feet, two doves circling above their joined hands, a small golden wax-seal shape glowing where their hands meet, echoing "set me as a seal upon your heart" (Song 8:6). Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a pomegranate-and-dove emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep rose red dominant, ruby pomegranate, garden green, pearl-white doves.
 ```
 
-### Saturn — Joseph (`joseph.png`)
+### Saturn — Joseph (`assets/weekday/bible/primary/joseph.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by fresh green harvest light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as ancient_of_days.png. Center: Joseph standing in his coat of many colors amid a ring of golden wheat sheaves bowing low around one upright central sheaf (Genesis 37:7), granaries of Egypt glowing faintly gold in the distance behind him, his expression calm and unhurried, the deep green glass field of the harvest field surrounding the scene. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a single wheat sheaf, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: fresh harvest green dominant, wheat gold, multicolor glass accents in the coat, warm amber granary light.
@@ -304,7 +304,7 @@ Circular stained-glass rose-window medallion, backlit by fresh green harvest lig
 
 ---
 
-## The Ninth — The Holy Trinity (`holy_trinity.png`)
+## The Ninth — The Holy Trinity (`assets/weekday/bible/primary/holy_trinity.png`)
 
 **Owner ruling 2026-07-15** (`pantheon_catalog.md`, doctrine
 crystallization round two, the owner's OWN worked example of the
@@ -339,14 +339,14 @@ Circular stained-glass rose-window medallion, backlit by radiant white-gold ligh
 Per `ROSTER.md` (last generated 2026-07-15), theme `bible`:
 
 - **Seated seven + Sunday dual** — all exist (✔ Gemini):
-  `ancient_of_days.png`, `mary.png`, `david.png`, `moses.png`,
-  `solomon.png`, `adam_and_eve.png`, `joseph.png`,
-  `dual/son_servant.png`.
+  `assets/weekday/bible/primary/ancient_of_days.png`, `assets/weekday/bible/primary/mary.png`, `assets/weekday/bible/primary/david.png`, `assets/weekday/bible/primary/moses.png`,
+  `assets/weekday/bible/primary/solomon.png`, `assets/weekday/bible/primary/adam_and_eve.png`, `assets/weekday/bible/primary/joseph.png`,
+  `assets/weekday/bible/primary/dual/son_servant.png`.
 - **Ninth — Melchizedek:** never generated (— Gemini, — ChatGPT) —
   good, nothing to discard. RELOCATED to Bible II as ITS Ninth; no
   longer this theme's figure. See `bible2_prompts.md`.
 - **Ninth — The Holy Trinity:** NEW, not yet in `ROSTER.md` — needs
-  `holy_trinity.png` generated.
+  `assets/weekday/bible/primary/holy_trinity.png` generated.
 
 **Net new generation work for this theme: 1 plate** (the Holy
 Trinity). Everything else in the Bible set is already on disk.

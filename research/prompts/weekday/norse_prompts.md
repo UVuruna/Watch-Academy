@@ -45,7 +45,7 @@ prompts are needed here.
 variant's own `dual/`, matching the code's authoritative convention
 in `config/defaults.py` `WEEKDAY_DUAL_FILES` — the colored dual swaps
 only the `primary` → `colored` segment, e.g. `primary/dual/Skoll.png`
-→ `colored/dual/Skoll.png`):
+→ `assets/weekday/norse/colored/dual/Skoll.png`):
 
 ```
 📁 assets/weekday/norse/
@@ -68,7 +68,7 @@ Sunday dual Skoll — regenerates all eight plates from the canon in
 `Database/symbolism.json` so the owner can drop fresh renders straight
 over the existing files. Copied verbatim, unchanged.
 
-**Sunday — Sol** → `Sol.png`
+**Sunday — Sol** → `assets/weekday/norse/primary/Sol.png`
 
 *She holds the sun up like a lamp for the world, the wolf Skoll
 already at her heels — the article's opening image.*
@@ -77,7 +77,7 @@ already at her heels — the article's opening image.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Sol in full scale armor, golden hair streaming, holding the blazing sun disc aloft in one raised hand like a lamp for the world, a two-horse chariot (Arvakr and Alsvidr) racing above the waves behind her, the wolf Skoll forever at their heels. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Sun glyph between the runes. No text, no watermark.
 ```
 
-**Monday — Mani** → `Mani.png`
+**Monday — Mani** → `assets/weekday/norse/primary/Mani.png`
 
 *Sol's brother shown twice over — the moon as phase and as whole —
 with his own pursuer, the wolf Hati.*
@@ -86,7 +86,7 @@ with his own pursuer, the wolf Hati.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Mani, an older god with long silver hair and a braided beard, bronze scale armor under a night-blue cloak spangled with tiny stars, a silver crescent raised in his right hand, a silver orb marked with its own crescent cradled in his left, his chariot riding above the waves behind him with the wolf Hati at its heels. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Moon crescent glyph between the runes. No text, no watermark.
 ```
 
-**Tuesday — Tyr** → `Tyr.png`
+**Tuesday — Tyr** → `assets/weekday/norse/primary/Tyr.png`
 
 *The stump held high and unhidden — the honest price paid at Fenrir's
 binding, per the article.*
@@ -95,7 +95,7 @@ binding, per the article.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Tyr raising his right arm like a banner, the arm ending at the wrist in a bandage-wrapped, blood-streaked stump, a snarling wolf's head carved at his shoulder, a bloodied sword gripped point-down in his remaining hand, runes arcing through the field around him. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Mars glyph between the runes. No text, no watermark.
 ```
 
-**Wednesday — Odin** → `Odin.png`
+**Wednesday — Odin** → `assets/weekday/norse/primary/Odin.png`
 
 *Everything he has, he bought: the traded eye, the runes won by
 hanging, the ravens Thought and Memory.*
@@ -104,7 +104,7 @@ hanging, the ravens Thought and Memory.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Odin the wanderer-sage, an eyepatch over the eye he traded for wisdom, the spear Gungnir gripped in his fist with runes glowing faintly along the shaft, his ravens Huginn and Muninn perched one on the spear-arm and one at his shoulder, a great bare tree rising behind him. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Mercury glyph between the runes. No text, no watermark.
 ```
 
-**Thursday — Thor** → `Thor.png`
+**Thursday — Thor** → `assets/weekday/norse/primary/Thor.png`
 
 *Not a portrait of majesty but of labor — the whole relief caught
 mid-blow, per the article.*
@@ -113,7 +113,7 @@ mid-blow, per the article.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Thor in a winged helmet with a braided beard, both hands locked on the short haft of Mjolnir, the rune-carved hammer swept across his body mid-blow, knees bent in a wide braced stance, the girdle of might at his waist, his cape flaring behind him. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Jupiter glyph between the runes. No text, no watermark.
 ```
 
-**Friday — Freya** → `Freya.png`
+**Friday — Freya** → `assets/weekday/norse/primary/Freya.png`
 
 *Double-armed: the sword the Roman Venus hides, kept in the same
 hands as the feather-cloak.*
@@ -122,7 +122,7 @@ hands as the feather-cloak.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Freya standing double-armed, a raised sword in one hand and a single golden falcon feather from her feather-cloak in the other, a winged diadem on her brow, the amber-stoned Brisingamen at her throat, a boar and the prow of a longship at her side. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Venus glyph between the runes. No text, no watermark.
 ```
 
-**Saturday — Loki** → `Loki.png`
+**Saturday — Loki** → `assets/weekday/norse/primary/Loki.png`
 
 *The only smiling god on the dial, every object at his feet either his
 invention or his sentence.*
@@ -131,7 +131,7 @@ invention or his sentence.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Loki grinning, red-gold braids framing the smirk, one hand gripping a spear whose head glows poison-green above green-lit runes, the other lifting a golden woven net, a serpent coiling over a small fire at his feet and a wolf snarling at the lower edge. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Saturn glyph between the runes. No text, no watermark.
 ```
 
-**Sunday (dual) — Skoll** → `dual/Skoll.png`
+**Sunday (dual) — Skoll** → `assets/weekday/norse/primary/dual/Skoll.png`
 
 *"No mythology stages Glory and Eclipse more honestly: Skoll catches
 her at Ragnarok — the Eclipse foretold — yet the Eddas promise her
@@ -152,42 +152,42 @@ plates. Plus the ONE plate that section never had: **the colored
 Skoll dual**, missing from every source until now (the owner's
 coverage complaint) — written fresh in the same register below.
 
-**Sunday — Sol** → `colored/Sol.png`
+**Sunday — Sol** → `assets/weekday/norse/colored/Sol.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Sol the Norse sun goddess driving her sun chariot across the sky, golden hair blazing like fire, the bright sun disc behind her, the shadowy wolf Skoll chasing at the horizon; glossy amber-gold field with aurora streaks. Border: carved knotwork ring painted gold and red with small roundels bearing golden sun wheels. Colors: blazing gold, amber, aurora green, wolf gray.
 ```
 
-**Monday — Mani** → `colored/Mani.png`
+**Monday — Mani** → `assets/weekday/norse/colored/Mani.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Mani the Norse moon god steering the pale moon chariot through a star-strewn night, silver-white hair and cloak, the full moon glowing behind him, the wolf Hati lurking below; glossy deep-blue night field with green aurora curtains. Border: carved knotwork ring painted silver and blue with small roundels bearing silver crescents. Colors: silver, deep night blue, aurora green, white.
 ```
 
-**Tuesday — Tyr** → `colored/Tyr.png`
+**Tuesday — Tyr** → `assets/weekday/norse/colored/Tyr.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Tyr the one-handed Norse god of war and oaths in scale armor and a red cloak, sword raised in his left hand, his right arm ending at the wrist, the great wolf Fenrir bound in chains behind him; glossy ember-orange field. Border: carved knotwork ring painted iron gray and red with small roundels bearing the Tiwaz rune. Colors: ember orange, iron gray, blood red, chain silver.
 ```
 
-**Wednesday — Odin** → `colored/Odin.png`
+**Wednesday — Odin** → `assets/weekday/norse/colored/Odin.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Odin the wanderer-sage with a wide-brimmed hat shadowing his one eye, deep blue cloak, the spear Gungnir with glowing runes, ravens Huginn and Muninn on his shoulders, the world-tree Yggdrasil faint behind; glossy royal-purple twilight field. Border: carved knotwork ring painted purple and silver with small roundels bearing the Ansuz rune. Colors: royal purple, deep blue, raven black, rune silver.
 ```
 
-**Thursday — Thor** → `colored/Thor.png`
+**Thursday — Thor** → `assets/weekday/norse/colored/Thor.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Thor red-bearded and mighty, swinging the hammer Mjolnir wreathed in white-blue lightning, his belt of strength glowing, storm clouds and rain behind, two goats at his feet; glossy golden-yellow field split by lightning. Border: carved knotwork ring painted gold and storm blue with small roundels bearing hammer emblems. Colors: golden yellow, storm blue, lightning white, red beard.
 ```
 
-**Friday — Freya** → `colored/Freya.png`
+**Friday — Freya** → `assets/weekday/norse/colored/Freya.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Freya the Norse goddess of love and war, golden hair braided, wearing the amber necklace Brisingamen glowing at her throat, a falcon-feather cloak over one shoulder, two gray cats drawing her chariot; glossy warm red field with golden sparks. Border: carved knotwork ring painted rose gold and red with small roundels bearing amber gems. Colors: warm red, amber gold, rose, cat gray.
 ```
 
-**Saturday — Loki** → `colored/Loki.png`
+**Saturday — Loki** → `assets/weekday/norse/colored/Loki.png`
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Loki the trickster half-smiling, sharp-featured in green and black, small flames dancing between his fingers, a serpent coiling around his arm, faint chains at the edge hinting at his binding; glossy emerald-green field with smoke curls. Border: carved knotwork ring painted green and dark gold with small roundels bearing coiled serpents. Colors: emerald green, flame orange, black, dark gold.
 ```
 
-**Sunday (dual) — Skoll** → `colored/dual/Skoll.png` — **NEW, the missing plate**
+**Sunday (dual) — Skoll** → `assets/weekday/norse/colored/dual/Skoll.png` — **NEW, the missing plate**
 
 *The owner's coverage complaint, closed: no colored Skoll prompt
 existed in this register anywhere before this rewrite (see the
@@ -209,7 +209,7 @@ Odin/the Wanderer dual, Yggdrasil the ninth. Three seats REUSE
 existing Planetary art on a DIFFERENT weekday (no new plate, no new
 generation) — read the day-shift note on each before skipping it.
 
-**Sunday — Odin the Allfather** → `pantheon/Odin.png` — **NEW**
+**Sunday — Odin the Allfather** → `assets/weekday/norse/pantheon/Odin.png` — **NEW**
 
 *The sovereign face, not the wanderer: enthroned on the high seat
 that sees into every world, Pride that hanged itself on the tree for
@@ -222,7 +222,7 @@ plate, reused.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Odin the Allfather enthroned upon Hlidskjalf, the high seat that sees into every world, a heavy cloak thrown over gilded armor, the empty socket of his traded eye left bare and unhidden beneath a crown rather than a wanderer's hood, the spear Gungnir held upright like a scepter of rule at his shoulder, his ravens Huginn and Muninn perched one on each armrest of the throne, the wolves Geri and Freki lying watchful at his feet. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Sun glyph between the runes. No text, no watermark.
 ```
 
-**Monday — Hel** → `pantheon/Hel.png` — **NEW**
+**Monday — Hel** → `assets/weekday/norse/pantheon/Hel.png` — **NEW**
 
 *The half-dead queen who keeps the stillest Calm on the whole dial —
 Monday's Fear face given a throne rather than a monster.*
@@ -253,7 +253,7 @@ GIVEN into Fenrir's mouth is Generosity by sacrifice, the priest of
 oaths and law. Point the Pantheon Thursday slot at the existing
 `assets/weekday/norse/primary/Tyr.png`.
 
-**Friday — Frigg** → `pantheon/Frigg.png` — **NEW**
+**Friday — Frigg** → `assets/weekday/norse/pantheon/Frigg.png` — **NEW**
 
 *Marriage and devotion — the mother who wove oaths around her son;
 Love as devotion rather than passion (Freya keeps the Planetary
@@ -263,7 +263,7 @@ Friday passion-reading unchanged), her grief the seat's shadow.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Frigg standing composed and regal, a ring of household keys at her belt, a distaff spinning pale cloud-thread lifted in one hand, her other hand pressed flat over her heart, a single sprig of mistletoe resting apart in the lower field — the one oath she never thought to ask — her seat Hlidskjalf glimpsed empty behind her, hinting at everything she sees and cannot change. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Venus glyph between the runes. No text, no watermark.
 ```
 
-**Saturday — Freyr** → `pantheon/Freyr.png` — **NEW**
+**Saturday — Freyr** → `assets/weekday/norse/pantheon/Freyr.png` — **NEW**
 
 *THE harvest god — green Patience, the field's Renewal, ending the
 week the way Demeter does for Greece.*
@@ -280,7 +280,7 @@ structure in the whole catalog" (the owner's own words). Point the
 Pantheon dual slot at the existing `assets/weekday/norse/primary/Odin.png`
 (the Planetary Wednesday plate, unchanged).
 
-**Ninth (both rosters) — Yggdrasil** → `pantheon/Yggdrasil.png` — **NEW**
+**Ninth (both rosters) — Yggdrasil** → `assets/weekday/norse/pantheon/Yggdrasil.png` — **NEW**
 
 *Replaces the old Baldur ninth entirely (see the SUPERSEDED note at
 the top of this file). Doctrine: the Ninth is either the Excluded One
@@ -304,45 +304,45 @@ the same "painted North, aurora accents" register as the Planetary
 colored set. The four REUSE seats point at their existing colored
 files — no new generation.
 
-**Sunday — Odin the Allfather** → `pantheon/colored/Odin.png` — **NEW**
+**Sunday — Odin the Allfather** → `assets/weekday/norse/pantheon/colored/Odin.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Odin the Allfather enthroned upon Hlidskjalf in deep gold and midnight blue, the bare socket of his traded eye left unhidden beneath a low crown, the spear Gungnir held upright as a scepter with faintly glowing runes, his ravens Huginn and Muninn perched on the throne's armrests, the wolves Geri and Freki lying watchful at his feet; glossy midnight-blue field with pale gold aurora streaks crowning the throne. Border: carved knotwork ring painted gold and deep blue with small roundels bearing golden sun wheels. Colors: royal gold, midnight blue, raven black, aurora pale-green.
 ```
 
-**Monday — Hel** → `pantheon/colored/Hel.png` — **NEW**
+**Monday — Hel** → `assets/weekday/norse/pantheon/colored/Hel.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Hel enthroned at the edge of Helheim, her body split exactly down the middle — one side a fair queen in pale living skin, the other a rotted blue-black corpse to the bone — both halves seated in the same unmoving calm, her hall Eljudnir rising in cold mist behind her, the hound Garm chained faint at the gate; glossy ice-blue field fading to graveyard black on her dead side. Border: carved knotwork ring painted half silver, half corpse-blue with small roundels bearing silver crescents. Colors: pale living skin, corpse blue-black, ice blue, bone white.
 ```
 
-**Tuesday — Thor** → REUSE `colored/Thor.png`
+**Tuesday — Thor** → REUSE `assets/weekday/norse/colored/Thor.png`
 
 *No new plate.* Same day-shift as the bronze note above — point at
 `assets/weekday/norse/colored/Thor.png`.
 
-**Wednesday — Loki** → REUSE `colored/Loki.png`
+**Wednesday — Loki** → REUSE `assets/weekday/norse/colored/Loki.png`
 
 *No new plate.* Point at `assets/weekday/norse/colored/Loki.png`.
 
-**Thursday — Tyr** → REUSE `colored/Tyr.png`
+**Thursday — Tyr** → REUSE `assets/weekday/norse/colored/Tyr.png`
 
 *No new plate.* Point at `assets/weekday/norse/colored/Tyr.png`.
 
-**Friday — Frigg** → `pantheon/colored/Frigg.png` — **NEW**
+**Friday — Frigg** → `assets/weekday/norse/pantheon/colored/Frigg.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Frigg composed and regal in deep blue-violet robes, a ring of golden household keys at her belt, a distaff spinning pale cloud-thread in one raised hand, her other hand pressed over her heart, a small sprig of mistletoe resting apart in the lower field, her empty seat Hlidskjalf glimpsed faintly behind her; glossy dusk-violet field streaked with soft cloud-white. Border: carved knotwork ring painted violet and gold with small roundels bearing golden keys. Colors: dusk violet, cloud white, warm gold, quiet gray grief.
 ```
 
-**Saturday — Freyr** → `pantheon/colored/Freyr.png` — **NEW**
+**Saturday — Freyr** → `assets/weekday/norse/pantheon/colored/Freyr.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Freyr standing in a ripened golden field, the boar Gullinbursti gleaming beside him like struck sunlight, a great sheaf of wheat cradled in one arm, a stag's antler raised in the other hand in place of the sword he traded for love, his folded ship Skidbladnir bright and small at his feet; glossy harvest-gold field with warm green undertones. Border: carved knotwork ring painted green and gold with small roundels bearing wheat sheaves. Colors: harvest gold, leaf green, boar-bristle amber, warm earth brown.
 ```
 
-**Sunday (dual) — Odin the Wanderer** → REUSE `colored/Odin.png`
+**Sunday (dual) — Odin the Wanderer** → REUSE `assets/weekday/norse/colored/Odin.png`
 
 *No new plate.* Point at `assets/weekday/norse/colored/Odin.png` (the
 Planetary Wednesday colored plate, unchanged).
 
-**Ninth (both rosters) — Yggdrasil** → `pantheon/colored/Yggdrasil.png` — **NEW**
+**Ninth (both rosters) — Yggdrasil** → `assets/weekday/norse/pantheon/colored/Yggdrasil.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Yggdrasil the world-tree filling the whole disc in deep greens and gold, three great roots plunging into three glowing wells, nine worlds glowing faintly among the branches and roots — golden Asgard's hall crowning the highest branch, Hel's cold blue-lit realm glowing in the deepest root, Midgard's green ring at the trunk's waist — an eagle at the crown, the serpent Nidhogg coiled at the root, the squirrel Ratatoskr racing the bark between them; glossy deep-green field with aurora curtains rising behind the crown. Border: carved knotwork ring painted gold and forest green, all seven planetary glyphs woven root to crown in a continuous rune frieze — no single day claims the tree. Colors: deep forest green, aurora green and violet, root-well blue, crown gold.
 ```

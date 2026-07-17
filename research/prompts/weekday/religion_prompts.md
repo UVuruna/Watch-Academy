@@ -90,13 +90,13 @@ Stems below are exact and lowercase, matching
 
 | Day | Body | Creed | File |
 |---|---|---|---|
-| Sunday | sun | Christianity (dual: Satanism) | `christianity.png` / `dual/satanism.png` |
-| Monday | moon | Islam | `islam.png` |
-| Tuesday | mars | Buddhism | `buddhism.png` |
-| Wednesday | mercury | Taoism | `taoism.png` |
-| Thursday | jupiter | Hinduism | `hinduism.png` |
-| Friday | venus | Sikhism | `sikhism.png` |
-| Saturday | saturn | Judaism | `judaism.png` |
+| Sunday | sun | Christianity (dual: Satanism) | `assets/weekday/religion/primary/christianity.png` / `assets/weekday/religion/primary/dual/satanism.png` |
+| Monday | moon | Islam | `assets/weekday/religion/primary/islam.png` |
+| Tuesday | mars | Buddhism | `assets/weekday/religion/primary/buddhism.png` |
+| Wednesday | mercury | Taoism | `assets/weekday/religion/primary/taoism.png` |
+| Thursday | jupiter | Hinduism | `assets/weekday/religion/primary/hinduism.png` |
+| Friday | venus | Sikhism | `assets/weekday/religion/primary/sikhism.png` |
+| Saturday | saturn | Judaism | `assets/weekday/religion/primary/judaism.png` |
 
 Freemasonry no longer occupies a weekday seat at all — it moves to
 The Ninth, below.
@@ -105,7 +105,7 @@ The Ninth, below.
 
 ## The roster — seven plates
 
-**Sunday — Christianity** → `christianity.png`
+**Sunday — Christianity** → `assets/weekday/religion/primary/christianity.png`
 
 *REUSE, moved from Friday (venus → sun) — file and prompt untouched.
 The glowing white cross with the Chi-Rho at the crossing and the crown
@@ -115,7 +115,7 @@ of thorns at its foot, per the article.*
 Ornate circular medallion, silver sculptural relief on black stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a glowing white cross, a simple Chi-Rho monogram at the crossing point, a crown of thorns resting quietly at the cross's foot. Border: silver rim weaving grapevines with tiny fish shapes threaded between the leaves. Palette: black stone and silver relief dominant; the cross's soft white glow the only bright accent. No text, no watermark.
 ```
 
-**Monday — Islam** → `islam.png`
+**Monday — Islam** → `assets/weekday/religion/primary/islam.png`
 
 *KEEP verbatim. The golden crescent filled with arabesque vinework, no
 image of the divine, only pattern — the article's own rule.*
@@ -124,7 +124,7 @@ image of the divine, only pattern — the article's own rule.*
 Ornate circular medallion, silver sculptural relief on deep lapis-blue stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden crescent moon filled with intricate arabesque vinework, a five-pointed star nested in its embrace like a rosette — pattern and geometry only, nothing figural, no calligraphy, no depiction of any person. Border: silver rim tiled with small repeating eight-point geometric star medallions (girih strapwork). Palette: silver relief and deep lapis-blue stone dominant; the crescent and star the only warm gold accent. No text, no calligraphy, no watermark.
 ```
 
-**Tuesday — Buddhism** → `buddhism.png`
+**Tuesday — Buddhism** → `assets/weekday/religion/primary/buddhism.png`
 
 *KEEP verbatim. The eight-spoked Dharma wheel with the seated Buddha at
 its hub, per the article's opening image.*
@@ -133,7 +133,7 @@ its hub, per the article's opening image.*
 Ornate circular medallion, silver sculptural relief on lapis-blue stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden eight-spoked Dharma wheel, a serene silver Buddha seated cross-legged in meditation at its hub, hands resting in his lap, eyes closed, utterly still. Border: a rim of silver lotus blossoms rising in low relief, clean petals lifting as if straight out of unseen mud. Palette: silver relief and lapis-blue stone dominant; the golden wheel the only warm accent. No text, no watermark.
 ```
 
-**Wednesday — Taoism** → `taoism.png`
+**Wednesday — Taoism** → `assets/weekday/religion/primary/taoism.png`
 
 *KEEP verbatim. The taijitu cut in gold and dark metal, clouds against
 mountains and waves — the article's own image.*
@@ -142,7 +142,7 @@ mountains and waves — the article's own image.*
 Ornate circular medallion, silver-and-gold sculptural relief on near-black marble, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a taijitu cut in gold and dark silver-toned metal, the bright half engraved with scrolling clouds, the dark half with mountains and waves — heaven turning inside earth. Border: silver rim alternating eight bagua trigram marks with small yin-yang roundels. Palette: silver-and-black relief dominant; the taijitu's gold half the only warm accent. No text, no watermark.
 ```
 
-**Thursday — Hinduism** → `hinduism.png`
+**Thursday — Hinduism** → `assets/weekday/religion/primary/hinduism.png`
 
 *KEEP verbatim. The golden Om with the crescent and bindu floating
 above it like the sound's last trace, per the article.*
@@ -151,7 +151,7 @@ above it like the sound's last trace, per the article.*
 Ornate circular medallion, silver sculptural relief on amber-toned stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Om symbol raised in fine filigree, a crescent and dot floating above its curve like the sound's last trace. Border: silver rim stringing flower rosettes with small Om-shaped roundels set at the four quarters. Palette: silver relief and amber stone dominant; the golden Om the only warm accent. No text, no watermark.
 ```
 
-**Friday — Sikhism** → `sikhism.png`
+**Friday — Sikhism** → `assets/weekday/religion/primary/sikhism.png`
 
 *REUSE, moved in from Ancient Religions (jupiter → venus, a real
 cross-tree file move — see the header) — file and prompt untouched,
@@ -163,7 +163,7 @@ crossed kirpans, per the article's opening image.*
 Ornate circular medallion, gold-and-silver relief on a starry midnight field, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Khanda — a double-edged sword upright inside a circular chakkar ring, two curved kirpans crossed behind it — set against a starry midnight field. Border: silver rim alternating lotus flowers with small khanda-shaped roundels. Palette: gold-and-silver relief on starry midnight stone dominant; the Khanda the brightest accent. No text, no watermark.
 ```
 
-**Saturday — Judaism** → `judaism.png`
+**Saturday — Judaism** → `assets/weekday/religion/primary/judaism.png`
 
 *KEEP verbatim. The Star of David woven from two interlocked triangles,
 per the article — bands left plain rather than lettered.*
@@ -174,7 +174,7 @@ Ornate circular medallion, silver sculptural relief on dark slate, photorealisti
 
 ---
 
-## Dual — Christianity / Satanism (`dual/satanism.png`)
+## Dual — Christianity / Satanism (`assets/weekday/religion/primary/dual/satanism.png`)
 
 **NEW plate (this rework)** — the faith's adversary as its shadow face:
 the red horned Devil rendered as a dignified, logo-like emblem, not a
@@ -268,7 +268,7 @@ Circular medallion, polished silver sculptural relief on black marble, photoreal
 ## Generation-order checklist
 
 1. **Generate NEW art — one plate:** the Satanism dual
-   (`dual/satanism.png`). Everything else in this theme already exists.
+   (`assets/weekday/religion/primary/dual/satanism.png`). Everything else in this theme already exists.
 2. **Move — sikhism.png**: copy `assets/weekday/religion/secondary/sikhism.png`
    → `assets/weekday/religion/primary/sikhism.png` (implementation
    work, no regeneration).
