@@ -495,7 +495,7 @@ def apply_display_settings(skin, settings: Settings):
         show_seconds=settings.show_seconds
         and not (_slot_seconds(settings) and not archetype_on),
         archetype_mode=settings.archetype_mode,
-        archetype_earth_day=settings.archetype_earth_day,
+        earth_weekday=settings.earth_weekday,
         show_octa_slot=settings.show_octa_slot,
         show_earth_date=settings.show_earth_date,
         show_weekday_names=settings.show_weekday_names,
@@ -646,6 +646,15 @@ class AppController(QObject):
 
     def run(self) -> None:
         self._on_tick(clock_jumped=False)   # first frame BEFORE show()
+        # Reserve the window margin for the ACTIVE skin (the compositor is
+        # built in __init__, bypassing _install_skin) and apply the
+        # visibility Z mode BEFORE the first show() — window flags must be
+        # set before show() on Windows (owner 2026-07-17).
+        self._widget.set_dial_diameter(
+            self._settings.diameter,
+            defaults.dial_window_margin_fraction(self._skin),
+        )
+        self._widget.set_z_mode(self._settings.z_mode)
         self._position_widget()
         self._widget.show()
         self._tray.show()
@@ -891,6 +900,15 @@ class AppController(QObject):
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
         self._skin = skin
+        # Re-reserve the transparent window margin from the LIVE settings
+        # (owner slike 1–3, 2026-07-17): earth/moon scale, hover-enlarge
+        # and letter scale all feed it, so the window re-sizes to fit
+        # exactly (no waste, no clip) on every skin install — the ONE
+        # point where a size/hover/letter slider takes effect.
+        self._widget.set_dial_diameter(
+            self._settings.diameter,
+            defaults.dial_window_margin_fraction(skin),
+        )
         self._compositor = Compositor(
             skin, AssetCache(), self._symbolism(),
             overlay=self._translation_overlay,
@@ -1059,6 +1077,13 @@ class AppController(QObject):
             # pointer or an element must not close the open menu).
             self._refresh_menu_gating()
 
+    def _palette_labels(self, pointer: str) -> tuple:
+        """The wheel-pair labels for a pointer (owner 2026-07-17): its
+        own pair, or the default Paint/Light (Prism, Aurora)."""
+        return self._palette_style_labels.get(
+            pointer, self._palette_style_labels["default"]
+        )
+
     def _refresh_menu_gating(self) -> None:
         """Recompute every gated menu entry from the CURRENT settings
         without rebuilding (the stay-open menu keeps its window; only
@@ -1071,14 +1096,14 @@ class AppController(QObject):
         # THE ARCHETYPE MODE gating (owner sealed package 2026-07-16):
         # the toggle grays where no archetype exists — Aurora and the
         # Calendar — and with the Pointer element off (no diamonds, no
-        # figures); the Earth-weekday sub-toggle needs the mode itself.
+        # figures). (The Earth-weekday toggle is a general Earth option
+        # now, gated only by the dial size — owner 2026-07-17.)
         archetype_available = (
             settings.show_pointer
             and archetypes.has_archetype(settings.pointer)
         )
         archetype_on = archetype_available and settings.archetype_mode
         self._archetype_action.setEnabled(archetype_available)
-        self._archetype_earth_action.setEnabled(archetype_on)
         locked = (
             settings.pointer == "cross"
             and settings.show_pointer
@@ -1120,24 +1145,22 @@ class AppController(QObject):
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
-        # Paint/Light gating (owner 2026-07-16, revised with the CANON
-        # Family wheel): the Trinity now carries TWO wheels — Court
-        # paint / Family light — so the pair is LIVE there; only the
-        # Seasons keep one palette (and one archetype) under both
-        # styles, so only the cross grays the group.
-        palette_grayed = settings.pointer == "cross"
-        labels = self._palette_style_labels[
-            "calendar" if settings.pointer == "calendar" else "default"
-        ]
+        # The wheel-pair labels swap per pointer (owner 2026-07-17,
+        # ROADMAP 11) and the pair is never grayed now — every pointer
+        # carries two distinct wheels (the Seasons gained the Elements).
         for action, label in zip(
-            self._menu_gates["palette_style"], labels
+            self._menu_gates["palette_style"],
+            self._palette_labels(settings.pointer),
         ):
-            action.setEnabled(not palette_grayed)
+            action.setEnabled(True)
             action.setText(label)
-        # Calendar lighting only means anything on the Calendar pointer.
-        calendar_off = settings.pointer != "calendar"
+        # The Calendar lighting entries are visible only on the Calendar
+        # (owner 2026-07-17, slika 11): non-visible elsewhere, inline
+        # while active — never grayed-visible.
+        calendar_on = settings.pointer == "calendar"
+        self._calendar_lighting_separator.setVisible(calendar_on)
         for action in self._menu_gates["calendar_lighting"]:
-            action.setEnabled(not calendar_off)
+            action.setVisible(calendar_on)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -1229,11 +1252,9 @@ class AppController(QObject):
             lambda value: self._set_display_choice("pointer", value),
         )
         pointer_menu.addSeparator()
-        # Paint/Light is GRAYED only while the Seasons drive the
-        # pointer now (owner 2026-07-16, revised with the CANON Family
-        # wheel): the Trinity carries TWO wheels — Court paint /
-        # Family light — so the choice is live there; the cross alone
-        # keeps one palette under both styles.
+        # The wheel-pair is NEVER grayed now (owner 2026-07-17, slika 11):
+        # every pointer carries TWO distinct wheels — the Seasons gained
+        # the Elements wheel, so the cross no longer grays the pair either.
         palette_style_actions = self._add_choice_group(
             design_menu, pointer_menu,
             [
@@ -1242,32 +1263,30 @@ class AppController(QObject):
             ],
             settings.palette_style,
             lambda value: self._set_display_choice("palette_style", value),
-            disabled=(
-                constants.PALETTE_STYLES
-                if settings.pointer == "cross" else ()
-            ),
         )
-        # On the Calendar the pair IS the wheel (owner seal 2026-07-16:
-        # Zodiac/Almanac sit in the Paint/Light slot) — the labels swap
-        # IN PLACE with the pointer, no rebuild of the stay-open menu.
+        # The wheel-pair LABELS follow the pointer (owner 2026-07-17,
+        # ROADMAP 11): Trinity = Court/Family, Seasons = Seasons/Elements,
+        # Compass = Walks/Ages, Calendar = Zodiac/Almanac; Prism and
+        # Aurora keep Paint/Light. The labels swap IN PLACE with the
+        # pointer, no rebuild of the stay-open menu.
         self._palette_style_labels = {
+            "trio": (tr("Court"), tr("Family")),
+            "cross": (tr("Seasons"), tr("Elements")),
+            "octa": (tr("Walks"), tr("Ages")),
             "calendar": (tr("Zodiac"), tr("Almanac")),
             "default": (tr("Paint palette"), tr("Light palette")),
         }
         for action, label in zip(
-            palette_style_actions,
-            self._palette_style_labels[
-                "calendar" if settings.pointer == "calendar" else "default"
-            ],
+            palette_style_actions, self._palette_labels(settings.pointer)
         ):
             action.setText(label)
         # The Calendar lighting mode (owner 2026-07-16): which wedge
         # lights — the shichen under the hour hand, or the current
-        # month/sign. GRAYED off the Calendar pointer (like Paint/Light
-        # on trio/cross). On the Calendar, Paint/Light PICK THE WHEEL
-        # (paint = Zodiac, light = Almanac — the labels stay, the
-        # equivalence is documented).
-        pointer_menu.addSeparator()
+        # month/sign. NON-VISIBLE off the Calendar pointer (owner
+        # 2026-07-17, slika 11: never grayed-visible); INLINE while the
+        # Calendar is active (where paint/light PICK THE WHEEL —
+        # Zodiac/Almanac).
+        self._calendar_lighting_separator = pointer_menu.addSeparator()
         calendar_lighting_actions = self._add_choice_group(
             design_menu, pointer_menu,
             [
@@ -1276,11 +1295,11 @@ class AppController(QObject):
             ],
             settings.calendar_lighting,
             lambda value: self._set_display_choice("calendar_lighting", value),
-            disabled=(
-                constants.CALENDAR_LIGHTING_MODES
-                if settings.pointer != "calendar" else ()
-            ),
         )
+        calendar_on = settings.pointer == "calendar"
+        self._calendar_lighting_separator.setVisible(calendar_on)
+        for action in calendar_lighting_actions:
+            action.setVisible(calendar_on)
         ring_menu = self._add_choice_submenu(
             design_menu, tr("Ring"),
             [
@@ -1360,6 +1379,21 @@ class AppController(QObject):
             ).format(size=defaults.FULL_TEXT_MIN_DIAMETER),
         )
         self._earth_date_toggle.setEnabled(
+            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
+        )
+        # The abbreviated weekday UNDER the Earth date (owner 2026-07-17,
+        # slika 10): a GENERAL Earth option now — moved here from the
+        # archetype sub-toggle, and it works in BOTH normal and archetype
+        # mode. Same size gate as the Date (it writes under the date row).
+        self._earth_weekday_toggle = self._add_toggle(
+            earth_menu, tr("Weekday"), settings.earth_weekday,
+            lambda checked: self._set_display_choice("earth_weekday", checked),
+            tr(
+                "The abbreviated day (TUE, THU…) written under the "
+                "Earth marker's date."
+            ),
+        )
+        self._earth_weekday_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         design_menu.addSeparator()
@@ -1700,18 +1734,8 @@ class AppController(QObject):
                 "step aside while it runs."
             ),
         )
-        # The small checkable under the toggle (owner 2026-07-16): the
-        # abbreviated day on the Earth marker while the mode runs.
-        self._archetype_earth_action = self._add_toggle(
-            menu, f"🌍 {tr('Earth weekday')}", settings.archetype_earth_day,
-            lambda checked: self._set_display_choice(
-                "archetype_earth_day", checked
-            ),
-            tr(
-                "The abbreviated day (TUE, THU…) written under the "
-                "Earth marker's date while the Archetype mode runs."
-            ),
-        )
+        # (The Earth-weekday toggle moved to Design ▸ Earth as a general
+        # option, owner 2026-07-17 slika 10 — it works in both modes now.)
         self._add_toggle(
             menu, f"🖱️ {tr('Click-through')}", self._settings.click_through,
             self._set_click_through,
@@ -1896,6 +1920,9 @@ class AppController(QObject):
         # Rebuild from DEFAULT_SKIN so cleared overrides (back to "skin
         # default") actually clear instead of sticking.
         self._install_skin(build_skin(self._settings))
+        # The visibility Z mode may have changed (owner 2026-07-17): swap
+        # the window flags (a no-op when unchanged).
+        self._widget.set_z_mode(self._settings.z_mode)
         self._on_tick(clock_jumped=False)
         # The menu mirrors the settings (checkmarks, custom rings in
         # Theme > Ring) — rebuild it wholesale after every dialog OK.
@@ -2296,8 +2323,12 @@ class AppController(QObject):
         if diameter == self._settings.diameter:
             return
         self._settings = replace(self._settings, diameter=diameter)
-        # The Earth date switch only applies where the label can draw.
+        # The Earth date and weekday switches only apply where the label
+        # can draw (owner 2026-07-17: the weekday joined the Earth menu).
         self._earth_date_toggle.setEnabled(
+            diameter >= defaults.FULL_TEXT_MIN_DIAMETER
+        )
+        self._earth_weekday_toggle.setEnabled(
             diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         self._widget.set_dial_diameter(diameter)

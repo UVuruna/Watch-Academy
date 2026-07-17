@@ -65,6 +65,10 @@ submenus cannot express:
   (None/AUC/Byzantine A.M./Hebrew A.M./Anno Hegirae — the epoch fine
   print lives in the combo tooltips only). Anno Lucis is NOT an
   option: it always accompanies the official year.
+- **System** — Start with Windows (the HKCU Run entry) plus the
+  VISIBILITY Z mode combo (owner 2026-07-17, ROADMAP 15d): below all
+  windows (the desktop layer, default) or always on top; the controller
+  swaps the window flags on OK via `ClockWidget.set_z_mode`.
 
 OK applies and persists everything; Cancel discards. The dialog loads
 the location tree on open and releases it on close (the repository's

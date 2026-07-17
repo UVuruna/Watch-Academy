@@ -15,13 +15,15 @@ into `Database/symbolism.json`, and the render tunables (figure
 heights per pointer, name sizing, the placeholder threshold, the Earth
 day-label geometry).
 
-The SEVEN archetypes and their grid seats:
+The EIGHT archetypes and their grid seats (owner 2026-07-17: the
+Seasons split into two — PAINT the Temperaments, LIGHT the Tetramorph):
 
 | Grid key | (pointer, style) | Archetype | Art dir | Center |
 |---|---|---|---|---|
 | `trinity_paint` | trio · paint | the Courtroom (God / the Devil / Jesus) | `archetype/trinity/` | the Eye |
 | `trinity_light` | trio · light | the Family (Child / Mother / Father) | `archetype/family/` | the Hearth |
-| `seasons` | cross · BOTH | the Four Temperaments | `archetype/temperaments/` | the Throne |
+| `seasons_paint` | cross · paint | the Four Temperaments | `archetype/temperaments/` | the Throne |
+| `seasons_light` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
 | `prism_paint` | hexa · paint | the Persons (six on the paint wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
 | `prism_light` | hexa · light | One Soul, the Bond (six pillars) | `archetype/one_soul/` | the Union |
 | `compass_paint` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
@@ -49,18 +51,26 @@ there and the menu grays the toggle.
 - **Figure order = lit order.** Each archetype's figures tuple is
   ordered by arm position `k · 360/N`, so the tuple index IS the
   hour-space index `archetype_lit_index()` returns (pinned by test).
-- **Seasons figures are COLOR-fixed.** The temperaments sit on the
-  palette hues (Choleric = summer yellow top …), not on the season
-  instants — the southern hemisphere does NOT flip them, exactly as
-  the palette itself never flips.
+- **Seasons figures are COLOR-fixed.** The temperaments (paint) sit on
+  the palette hues (Choleric = summer yellow top …), not on the season
+  instants — the southern hemisphere does NOT flip them, exactly as the
+  palette itself never flips. The LIGHT wheel (owner 2026-07-17) seats
+  the TETRAMORPH — the Lion/Ox/Eagle/Man on the FOUR ELEMENTS wheel
+  (`_CROSS_ELEMENTS`), each creature on its canonical fixed-cross season
+  arm (fire summer, earth autumn, water winter, air spring); row 2 is
+  the Evangelist (Mark/Luke/John/Matthew). The Throne is the center of
+  both wheels.
 - **The Ages ship TWO registers** (owner "oba", CANON §Compass
   light): the Tree and the Menagerie both have full file tables;
   `ARCHETYPE_LIFE_REGISTER` picks the rendered one (default `tree`,
   the ★-marked recommendation) until the owner wires a user-facing
   choice.
 - **Article sets are named by GRID SEAT** (`archetype_trinity_paint`,
-  `archetype_seasons`, …) so a future theme rename (One Soul → The
-  Vow) never orphans texts. Session 6 writes, per entity, a
+  `archetype_seasons_paint`, `archetype_seasons_light`, …) so a future
+  theme rename (One Soul → The Vow) never orphans texts. The Seasons
+  rename (`archetype_seasons` → `_paint`, 2026-07-17) stayed consistent
+  because `symbolism.json` carries no archetype nodes yet — Session 6
+  writes, per entity, a
   `{"rows": [row1, row2]}` node into
   `Database/symbolism.json → articles.<set>`; until then
   `SymbolismRepository.archetype_article()` returns None and the

@@ -24,8 +24,12 @@ _SCALE_GLASS_DIR = paths.assets_dir() / "badge" / "scale"
 ARCHETYPE_GRID = {
     ("trio", "paint"): "trinity_paint",
     ("trio", "light"): "trinity_light",
-    ("cross", "paint"): "seasons",
-    ("cross", "light"): "seasons",
+    # The Seasons carry TWO archetypes now (owner 2026-07-17, CANON
+    # §Seasons light): PAINT = the Four Temperaments on the seasons
+    # palette; LIGHT = the Tetramorph on the Four Elements wheel. Both
+    # keep the Throne at the center.
+    ("cross", "paint"): "seasons_paint",
+    ("cross", "light"): "seasons_light",
     ("hexa", "paint"): "prism_paint",
     ("hexa", "light"): "prism_light",
     ("octa", "paint"): "compass_paint",
@@ -56,9 +60,11 @@ ARCHETYPE_NAME_MAX_OF_FIGURE = 0.24
 # placeholder (the WORKPLAN missing-art rule) — the renderer draws the
 # figure's NAME instead of a stretched pixel.
 ARCHETYPE_ART_MIN_PX = 8
-# The Earth day-label option (archetype_earth_day): the date shifts up
-# and the abbreviated weekday writes below it, both as fractions of
-# the marker size.
+# The Earth Weekday option (settings.earth_weekday — a GENERAL Earth
+# marker option since 2026-07-17, no longer archetype-only): the date
+# shifts up and the abbreviated weekday writes below it, both as
+# fractions of the marker size. The geometry lives here beside the other
+# Earth-marker archetype tunables.
 ARCHETYPE_EARTH_DAY_OFFSET = 0.16
 ARCHETYPE_EARTH_DAY_TEXT_SIZE = 0.26
 
@@ -85,6 +91,7 @@ def _fig(angle, file, name, row2, entity, enc=None):
 _TRINITY_DIR = ARCHETYPE_ART_DIR / "trinity"
 _FAMILY_DIR = ARCHETYPE_ART_DIR / "family"
 _TEMPERAMENTS_DIR = ARCHETYPE_ART_DIR / "temperaments"
+_TETRAMORPH_DIR = ARCHETYPE_ART_DIR / "tetramorph"
 _PERSONS_DIR = ARCHETYPE_ART_DIR / "persons"
 _ONE_SOUL_DIR = ARCHETYPE_ART_DIR / "one_soul"
 _WALKS_DIR = ARCHETYPE_ART_DIR / "walks"
@@ -158,13 +165,16 @@ ARCHETYPES = {
             "name": "The Hearth", "entity": "center",
         },
     },
-    # Seasons, BOTH wheels — the Four Temperaments (CANON §Seasons).
-    # COLOR-fixed: the humors sit on the palette hues (Choleric =
-    # summer yellow top), so the southern hemisphere does NOT flip
-    # them — the palette itself never flips either. Row 2 = the age
-    # of man (the tetramorph stands as the reserve second row).
-    "seasons": {
-        "articles": "archetype_seasons",
+    # Seasons PAINT — the Four Temperaments (CANON §Seasons). COLOR-fixed:
+    # the humors sit on the palette hues (Choleric = summer yellow top),
+    # so the southern hemisphere does NOT flip them — the palette itself
+    # never flips either. Row 2 = the age of man. (Renamed from "seasons"
+    # 2026-07-17 when the Seasons gained a second, LIGHT archetype — the
+    # article set has no texts yet, so the rename is consistent
+    # everywhere: symbolism.json carries no archetype nodes until
+    # Session 6, and archetype_article() answers None gracefully.)
+    "seasons_paint": {
+        "articles": "archetype_seasons_paint",
         "figures": (
             _fig(0.0, _TEMPERAMENTS_DIR / "Choleric.png",
                  "Choleric", "The Prime", "choleric"),
@@ -174,6 +184,31 @@ ARCHETYPES = {
                  "Phlegmatic", "Old Age", "phlegmatic"),
             _fig(270.0, _TEMPERAMENTS_DIR / "Sanguine.png",
                  "Sanguine", "Childhood & Youth", "sanguine"),
+        ),
+        "center": {
+            "file": _TEMPERAMENTS_DIR / "Throne.png",
+            "name": "The Throne", "entity": "center",
+        },
+    },
+    # Seasons LIGHT — the TETRAMORPH (owner 2026-07-17, CANON §Seasons
+    # light): the four living creatures of Ezekiel 1 / Revelation 4 on
+    # the Four Elements wheel, each on its canonical FIXED-CROSS season
+    # arm. Row 2 = the Evangelist the creature became (Mark/Luke/John/
+    # Matthew). The EIGHTH archetype, the only non-human one — the
+    # creatures WITNESS, circling the Throne (kept as the center). Ordered
+    # by arm angle (0/90/180/270 = summer/autumn/winter/spring), matching
+    # the _CROSS_ELEMENTS hues (fire/earth/water/air).
+    "seasons_light": {
+        "articles": "archetype_seasons_light",
+        "figures": (
+            _fig(0.0, _TETRAMORPH_DIR / "Lion.png",
+                 "The Lion", "Mark", "lion"),
+            _fig(90.0, _TETRAMORPH_DIR / "Ox.png",
+                 "The Ox", "Luke", "ox"),
+            _fig(180.0, _TETRAMORPH_DIR / "Eagle.png",
+                 "The Eagle", "John", "eagle"),
+            _fig(270.0, _TETRAMORPH_DIR / "Man.png",
+                 "The Man", "Matthew", "man"),
         ),
         "center": {
             "file": _TEMPERAMENTS_DIR / "Throne.png",

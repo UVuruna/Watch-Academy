@@ -43,11 +43,13 @@ the astronomical axis, the AH label, the epoch tooltip notes) and the
 (`GREGORIAN_CYCLE_YEARS`, `PROXY_WINDOW_FIRST`).
 
 ### `defaults.py` — Developer Tunables
-Window sizing (`DIAL_WINDOW_MARGIN_FRACTION` is DERIVED — owner
-2026-07-16 — as the larger of the ring-letter overhang floor and the
-event-glow extent, so neither the letters nor a hover-enlarged bottom-of-
-ring halo can be square-cut at the window edge; tuning `GLOW_*` re-sizes
-the window automatically), the Time Travel coverage-warning color and the
+Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
+owner slike 1–3, 2026-07-17 — as the larger of the ring-letter overhang
+(at the letter-scale slider) and the event-glow extent (the larger of the
+Earth/Moon markers at their user scale, relocated to the ring band,
+hover-enlarged), so neither the letters nor a bottom-of-ring halo can be
+square-cut and any size/hover/letter slider re-sizes the window to fit
+exactly), the Time Travel coverage-warning color and the
 Deep Time advertised span (`DEEP_TIME_YEAR_RANGE`), the spontaneous-hide
 watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the

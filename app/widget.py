@@ -32,18 +32,26 @@ class ClockWidget(QWidget):
     def __init__(self, diameter: int, menu: QMenu, legend):
         super().__init__()
         self._closing = False
+        # Guards the spontaneous-hide watchdog during a deliberate
+        # z-mode window-flag swap (owner 2026-07-17): the hide in the
+        # middle of hide → setWindowFlags → show must not trigger a
+        # reshow race.
+        self._z_transition = False
         self._menu = menu
         self._legend = legend           # the shared LegendPopup
         self._renderer = None
         self._tick = None
         self._click_through = False
         self._last_hover = None          # last dial-origin cursor (x, y)
-
-        self.setWindowFlags(
-            Qt.WindowType.FramelessWindowHint
-            | Qt.WindowType.Tool
-            | Qt.WindowType.WindowStaysOnBottomHint
+        # The transparent margin fraction is LIVE from the settings
+        # (owner slike 1–3, 2026-07-17): the controller re-supplies it on
+        # every skin install via set_dial_diameter; this default matches
+        # the out-of-the-box skin until then.
+        self._margin_fraction = defaults.dial_window_margin_fraction(
+            defaults.DEFAULT_SKIN
         )
+
+        self.setWindowFlags(self._window_flags("bottom"))
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self.setWindowTitle(constants.APP_NAME)
@@ -53,17 +61,63 @@ class ClockWidget(QWidget):
         self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
         self.set_dial_diameter(diameter)
 
+    @staticmethod
+    def _window_flags(z_mode: str) -> "Qt.WindowType":
+        """The frameless tool-window flags with the Z hint for `z_mode`
+        (owner 2026-07-17, ROADMAP 15d): "bottom" stays below every
+        window except the desktop, "top" rides above everything."""
+        return (
+            Qt.WindowType.FramelessWindowHint
+            | Qt.WindowType.Tool
+            | (
+                Qt.WindowType.WindowStaysOnTopHint
+                if z_mode == "top"
+                else Qt.WindowType.WindowStaysOnBottomHint
+            )
+        )
+
+    def set_z_mode(self, z_mode: str) -> None:
+        """Swap the always-on-bottom / always-on-top window hint (owner
+        2026-07-17, ROADMAP 15d). Changing window flags re-parents the
+        native window on Windows, so it MUST be done in one place: guard
+        the watchdog, hide, set the flags, restore the position, show —
+        preserving the exact spot. A no-op when the flags already match."""
+        flags = self._window_flags(z_mode)
+        if flags == self.windowFlags():
+            return
+        pos = self.pos()
+        was_visible = self.isVisible()
+        self._z_transition = True
+        try:
+            if was_visible:
+                self.hide()
+            self.setWindowFlags(flags)
+            self.move(pos)
+            if was_visible:
+                self.show()
+        finally:
+            self._z_transition = False
+
     def mark_closing(self) -> None:
         """Tell the spontaneous-hide watchdog that the coming hide is
         intentional."""
         self._closing = True
 
-    def set_dial_diameter(self, diameter: int) -> None:
+    def set_dial_diameter(
+        self, diameter: int, margin_fraction: float | None = None
+    ) -> None:
         """The window is the dial plus a transparent margin on every
-        side (owner spec: the 12/24 letters' overhang and halo were
-        clipped by the window square)."""
+        side (owner spec: the 12/24 letters' overhang and halo, and the
+        event glow, were clipped by the window square). `margin_fraction`
+        is the LIVE reservation from the current settings (owner slike
+        1–3, 2026-07-17); the controller re-supplies it on every skin
+        install so a size/hover/letter slider re-sizes the window to fit
+        exactly. Omit it to keep the last fraction (e.g. a bare size
+        change)."""
+        if margin_fraction is not None:
+            self._margin_fraction = margin_fraction
         self._dial_diameter = diameter
-        self._margin_px = round(diameter * defaults.DIAL_WINDOW_MARGIN_FRACTION)
+        self._margin_px = round(diameter * self._margin_fraction)
         self.resize(
             diameter + 2 * self._margin_px, diameter + 2 * self._margin_px
         )
@@ -235,7 +289,9 @@ class ClockWidget(QWidget):
 
     def hideEvent(self, event) -> None:
         super().hideEvent(event)
-        if event.spontaneous() and not self._closing:
+        # A deliberate z-mode flag swap hides the window mid-transition —
+        # the watchdog must not fight it (owner 2026-07-17).
+        if event.spontaneous() and not self._closing and not self._z_transition:
             QTimer.singleShot(defaults.WATCHDOG_RESHOW_MS, self._reshow)
 
     def changeEvent(self, event) -> None:

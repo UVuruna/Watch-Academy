@@ -75,15 +75,16 @@ def _hour_angle(hours: int, minutes: int) -> float:
 # --- The grid and the tables ---------------------------------------------------
 
 
-def test_grid_covers_the_seven_archetypes():
-    """CANON: SEVEN archetypes over 4 pointers × 2 wheels — the
-    Seasons serve ONE under both; Aurora and the Calendar have none."""
+def test_grid_covers_the_eight_archetypes():
+    """CANON (owner 2026-07-17): EIGHT archetypes — the Seasons split
+    into PAINT (the Four Temperaments) and LIGHT (the Tetramorph); Aurora
+    and the Calendar have none."""
     assert set(archetypes.ARCHETYPE_GRID.values()) == {
-        "trinity_paint", "trinity_light", "seasons",
+        "trinity_paint", "trinity_light", "seasons_paint", "seasons_light",
         "prism_paint", "prism_light", "compass_paint", "compass_light",
     }
-    assert archetypes.grid_key("cross", "paint") == "seasons"
-    assert archetypes.grid_key("cross", "light") == "seasons"
+    assert archetypes.grid_key("cross", "paint") == "seasons_paint"
+    assert archetypes.grid_key("cross", "light") == "seasons_light"
     assert archetypes.grid_key("aurora", "paint") is None
     assert archetypes.grid_key("calendar", "light") is None
     for pointer in ("trio", "cross", "hexa", "octa"):
@@ -117,7 +118,8 @@ def test_center_table_is_the_sealed_one():
     assert archetypes.center("trinity_light")["file"].name == "Hearth.png"
     assert archetypes.center("prism_paint")["file"].name == "Seal.png"
     assert archetypes.center("prism_light")["file"].name == "Union.png"
-    assert archetypes.center("seasons")["file"].name == "Throne.png"
+    assert archetypes.center("seasons_paint")["file"].name == "Throne.png"
+    assert archetypes.center("seasons_light")["file"].name == "Throne.png"
     assert archetypes.center("compass_paint") is None
     assert archetypes.center("compass_light") is None
 
@@ -145,9 +147,14 @@ def test_family_and_temperament_seatings():
     assert [fig["name"] for fig in family] == [
         "The Child", "The Mother", "The Father",
     ]
-    seasons = archetypes.figures("seasons")
+    seasons = archetypes.figures("seasons_paint")
     assert [fig["name"] for fig in seasons] == [
         "Choleric", "Melancholic", "Phlegmatic", "Sanguine",
+    ]
+    # The LIGHT wheel seats the Tetramorph on the same season arms.
+    tetramorph = archetypes.figures("seasons_light")
+    assert [fig["name"] for fig in tetramorph] == [
+        "The Lion", "The Ox", "The Eagle", "The Man",
     ]
 
 
@@ -294,7 +301,7 @@ def test_placeholder_falls_back_to_the_name(app, tmp_path):
         fig = {"file": path, "name": "Testling", "row2": "-",
                "entity": "t", "enc": None}
         draw_archetype_figure(
-            painter, ctx, fig, QPointF(0, 0), 80.0, 1.0, named=False,
+            painter, ctx, fig, QPointF(0, 0), 80.0, 40.0, 1.0, named=False,
         )
         painter.end()
         return image
@@ -403,6 +410,66 @@ def test_center_hover_and_targets(app):
     assert center_tip is None or "The Seal" not in center_tip
 
 
+def test_archetype_fit_height_clamps_into_the_diamond():
+    """Owner slika 8: archetype_fit_height keeps a figure INSIDE its arm's
+    rhombus. A SQUARE figure (aspect 1) fits exactly to the diamond edge
+    (a/p + b/q == 1); a tall lancet fits taller than a wide banner."""
+    import math
+
+    from render.layers import archetype_fit_height
+
+    tip = 100.0
+    tan_half = math.tan(math.radians(30.0))        # hexa arm
+    h = archetype_fit_height(1.0, tip, tan_half)   # a square figure
+    p = tip * tan_half / 2.0                        # perpendicular half-diagonal
+    q = tip / 2.0                                    # along-arm half-diagonal
+    a = b = h / 2.0
+    assert abs(a / p + b / q - 1.0) < 1e-9          # touches, never overflows
+    assert archetype_fit_height(0.3, tip, tan_half) > archetype_fit_height(
+        2.0, tip, tan_half
+    )
+
+
+def test_archetype_arm_is_a_hover_target(app):
+    """Owner slika 8: an archetype arm is a hover-enlarge target
+    ("archetype:<index>") through the arm-diamond geometry — set_hover
+    locks on and the enlarged figure redraws above (the HoverLift twin)."""
+    from render.layers import archetype_lit_index
+
+    day, tick = _dt(datetime(2026, 7, 16, 14, 30))
+    skin = _archetype_skin("octa", hover_enlarge=1.8)   # solar rotation off
+    comp = Compositor(skin, AssetCache())
+    plain = comp.render_offscreen(360.0, 1.0, day, tick)
+    lit = archetype_lit_index("octa", tick.hour_angle, 0.0)   # a full figure
+    x, y = _arm_px(180.0, lit * 45.0)
+    assert comp.set_hover(x, y, 360.0)              # the target changed
+    assert comp._hovered == f"archetype:{lit}"
+    hovered = comp.render_offscreen(360.0, 1.0, day, tick)
+    assert hovered != plain                         # the figure grew above
+    assert comp.set_hover(-1.0e9, -1.0e9, 360.0)    # leaving clears it
+    assert comp.render_offscreen(360.0, 1.0, day, tick) == plain
+
+
+def test_ages_arm_shows_the_three_side_layout(app):
+    """Owner slika 6 ("oba odmah"): the Ages (compass light) arm hover is
+    a THREE-COLUMN layout — the age's text plus BOTH life registers at
+    once (the Tree and the Menagerie) — distinct from the two-row form,
+    its total width the same as the two-side layout."""
+    day, tick = _dt(datetime(2026, 7, 16, 14, 30))
+    ages = Compositor(_archetype_skin("octa", "light"), AssetCache())
+    ages.render_offscreen(360.0, 1.0, day, tick)
+    tip = ages.tooltip_at(*_arm_px(180.0, 0.0), 360.0)     # top arm = Youth
+    assert tip is not None
+    assert "The Tree" in tip and "The Menagerie" in tip    # both registers
+    assert "The Blossoming Crown" in tip and "The Lion" in tip  # both beings
+    assert tip.count("<td") == 3                            # three columns
+    # Total width stays within the two-side width (owner).
+    assert (
+        3 * defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
+        <= 2 * defaults.ARTICLE_COLUMN_WIDTH_PX + 2
+    )
+
+
 def test_archetype_article_resolution_is_graceful(app):
     """SymbolismRepository.archetype_article: an unwritten set (and an
     unwritten entity) answer None — the resolution path Session 6
@@ -420,19 +487,13 @@ def test_archetype_article_resolution_is_graceful(app):
 # --- The Earth day label -----------------------------------------------------------
 
 
-def test_earth_day_label_joins_the_date(app):
-    """archetype_earth_day (owner 2026-07-16, default OFF): with the
-    option on IN the mode, the Earth marker's label block changes (the
-    date shifts up, the abbreviated day joins); off the mode the flag
-    is inert."""
+def test_earth_weekday_label_joins_the_date(app):
+    """earth_weekday (owner 2026-07-17, default OFF; renamed from
+    archetype_earth_day): the abbreviated weekday joins the Earth date —
+    a GENERAL Earth option now, so it changes the render in BOTH archetype
+    AND normal mode."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday
-    plain = Compositor(_archetype_skin("octa"), AssetCache())
-    labeled = Compositor(
-        _archetype_skin("octa", archetype_earth_day=True), AssetCache()
-    )
     size = 720.0                     # the date label draws from 540 up
-    base = plain.render_offscreen(size, 1.0, day, tick)
-    dated = labeled.render_offscreen(size, 1.0, day, tick)
     marker = defaults.DEFAULT_SKIN.year_marker
     pos = dial_point(tick.year_angle, 360.0 * marker.orbit_fraction)
     cx, cy = 360 + pos.x(), 360 + pos.y()
@@ -446,20 +507,27 @@ def test_earth_day_label_joins_the_date(app):
             if a.pixelColor(x, y) != b.pixelColor(x, y)
         )
 
+    # In ARCHETYPE mode the label block changes when the option turns on.
+    base = Compositor(
+        _archetype_skin("octa"), AssetCache()
+    ).render_offscreen(size, 1.0, day, tick)
+    dated = Compositor(
+        _archetype_skin("octa", earth_weekday=True), AssetCache()
+    ).render_offscreen(size, 1.0, day, tick)
     assert differing(base, dated) > 0
-    # Off the mode the flag does nothing.
-    off_a = Compositor(
-        dataclasses.replace(
-            defaults.DEFAULT_SKIN, solar_rotation=False
-        ), AssetCache()
+    # And now ALSO in NORMAL mode (the general Earth option, no longer
+    # gated by archetype mode).
+    normal_off = Compositor(
+        dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False),
+        AssetCache(),
     ).render_offscreen(size, 1.0, day, tick)
-    off_b = Compositor(
+    normal_on = Compositor(
         dataclasses.replace(
-            defaults.DEFAULT_SKIN, solar_rotation=False,
-            archetype_earth_day=True,
-        ), AssetCache()
+            defaults.DEFAULT_SKIN, solar_rotation=False, earth_weekday=True
+        ),
+        AssetCache(),
     ).render_offscreen(size, 1.0, day, tick)
-    assert differing(off_a, off_b) == 0
+    assert differing(normal_off, normal_on) > 0
 
 
 # --- The menu gating ----------------------------------------------------------------
@@ -468,15 +536,18 @@ def test_earth_day_label_joins_the_date(app):
 def test_menu_gating(app, tmp_path, monkeypatch):
     """The Archetype toggle grays on the archetype-less Aurora/Calendar
     (and with the Pointer element off); while the mode is ON the three
-    slot submenus gray IN PLACE and the Earth-weekday sub-toggle goes
-    live — the full controller wiring, against a TEMP settings home."""
+    slot submenus gray IN PLACE. The Earth-weekday toggle is a general
+    Earth option now (owner 2026-07-17) — enabled at the default 720 px
+    regardless of the mode. The full controller wiring, TEMP home."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from app.controller import AppController
 
     controller = AppController(app)
     try:
         assert controller._archetype_action.isEnabled()      # hexa default
-        assert not controller._archetype_earth_action.isEnabled()
+        # The Earth-weekday toggle lives in Design ▸ Earth now, gated by
+        # the dial size (720 default), NOT the archetype mode.
+        assert controller._earth_weekday_toggle.isEnabled()
         controller._set_display_choice("pointer", "aurora")
         assert not controller._archetype_action.isEnabled()
         controller._set_display_choice("pointer", "calendar")
@@ -488,7 +559,8 @@ def test_menu_gating(app, tmp_path, monkeypatch):
             for action, _ in controller._slot_menu_checks
         )
         controller._set_display_choice("archetype_mode", True)
-        assert controller._archetype_earth_action.isEnabled()
+        # Still enabled in the mode (general option, not gated by it).
+        assert controller._earth_weekday_toggle.isEnabled()
         assert not any(
             action.isEnabled()
             for action, _ in controller._slot_menu_checks
@@ -500,15 +572,47 @@ def test_menu_gating(app, tmp_path, monkeypatch):
             action.isEnabled()
             for action, _ in controller._slot_menu_checks
         )
-        # Paint/Light stays LIVE on the Trinity (the Family wheel) and
-        # grays only on the Seasons.
-        assert all(
-            a.isEnabled() for a in controller._menu_gates["palette_style"]
-        )
+    finally:
+        controller._profiling_timer.stop()
+        controller._tray.hide()
+
+
+def test_per_pointer_palette_labels_and_calendar_visibility(app, tmp_path, monkeypatch):
+    """The wheel-pair labels follow the pointer (owner 2026-07-17,
+    ROADMAP 11) and the pair is NEVER grayed — every pointer has two
+    distinct wheels (the Seasons gained the Elements). The Calendar
+    lighting entries are NON-VISIBLE off the Calendar, INLINE on it."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    controller = AppController(app)
+    try:
+        def labels():
+            return [a.text() for a in controller._menu_gates["palette_style"]]
+
+        def all_live():
+            return all(
+                a.isEnabled() for a in controller._menu_gates["palette_style"]
+            )
+
+        def lighting_visible():
+            return any(
+                a.isVisible()
+                for a in controller._menu_gates["calendar_lighting"]
+            )
+
+        controller._set_display_choice("pointer", "trio")
+        assert labels() == ["Court", "Family"] and all_live()
+        assert not lighting_visible()
         controller._set_display_choice("pointer", "cross")
-        assert not any(
-            a.isEnabled() for a in controller._menu_gates["palette_style"]
-        )
+        assert labels() == ["Seasons", "Elements"] and all_live()  # not grayed
+        controller._set_display_choice("pointer", "octa")
+        assert labels() == ["Walks", "Ages"] and all_live()
+        controller._set_display_choice("pointer", "hexa")
+        assert labels() == ["Paint palette", "Light palette"] and all_live()
+        controller._set_display_choice("pointer", "calendar")
+        assert labels() == ["Zodiac", "Almanac"] and all_live()
+        assert lighting_visible()        # inline only on the Calendar
     finally:
         controller._profiling_timer.stop()
         controller._tray.hide()

@@ -38,6 +38,11 @@ class Settings:
     window_y: int | None = None
     diameter: int = defaults.DEFAULT_DIAL_DIAMETER
     click_through: bool = False
+    # Visibility Z mode (owner 2026-07-17, ROADMAP 15d): "bottom" — the
+    # clock stays below every window except the desktop (the default);
+    # "top" — always on top of everything (the always-visible small
+    # clock). The widget swaps the window flags; not a render setting.
+    z_mode: str = "bottom"
     ring: str = "DOMY"                  # ring preset CARD name (bundled or custom)
     ring_tint: str | None = None        # #RRGGBB multiplying ring+hands+Umbra
     ring_finish: str = "gold"           # letter metals (triangle/12h rules)
@@ -58,9 +63,11 @@ class Settings:
     # all three slots switch OFF — at the RENDER level only, so the
     # slot keys below keep the user's choices untouched.
     archetype_mode: bool = False
-    # The optional abbreviated day on the Earth marker while the mode
-    # runs (owner: default OFF).
-    archetype_earth_day: bool = False
+    # The optional abbreviated weekday on the Earth marker under its date
+    # (owner: default OFF). A GENERAL Earth option since 2026-07-17 (Design
+    # ▸ Earth) — works in BOTH normal and archetype mode. Renamed from
+    # archetype_earth_day (load migrates the old key).
+    earth_weekday: bool = False
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
     day_slot_style: str = "sign"        # the DAY slot badge's own style
@@ -264,6 +271,7 @@ class SettingsStore:
                  constants.ART_SOURCES),
                 ("era_notation", "bce_ce", constants.ERA_NOTATIONS),
                 ("third_era", "none", constants.THIRD_ERAS),
+                ("z_mode", "bottom", constants.Z_MODES),
             ):
                 value = str(raw.get(key, default))
                 if value not in allowed:
@@ -296,8 +304,12 @@ class SettingsStore:
                 click_through=_load_bool(raw, "click_through", False),
                 show_era_suffix=_load_bool(raw, "show_era_suffix", False),
                 archetype_mode=_load_bool(raw, "archetype_mode", False),
-                archetype_earth_day=_load_bool(
-                    raw, "archetype_earth_day", False
+                # Renamed 2026-07-17: the old archetype_earth_day value
+                # carries over as the default when the new key is absent
+                # (external user data migration, not an API shim).
+                earth_weekday=_load_bool(
+                    raw, "earth_weekday",
+                    _load_bool(raw, "archetype_earth_day", False),
                 ),
                 solar_rotation=_load_bool(raw, "solar_rotation", True),
                 legend=_load_bool(raw, "legend", True),
@@ -399,7 +411,8 @@ class SettingsStore:
             "palette_style": settings.palette_style,
             "calendar_lighting": settings.calendar_lighting,
             "archetype_mode": settings.archetype_mode,
-            "archetype_earth_day": settings.archetype_earth_day,
+            "earth_weekday": settings.earth_weekday,
+            "z_mode": settings.z_mode,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
             "day_slot_style": settings.day_slot_style,

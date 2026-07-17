@@ -1126,16 +1126,24 @@ class SettingsDialog(QDialog):
     def _build_system_group(self) -> QGroupBox:
         """Start with Windows (owner spec 2026-07-12): a standard-user
         HKCU Run entry — the registry is the store, read live here and
-        applied by the controller on OK."""
+        applied by the controller on OK. Plus the VISIBILITY Z mode
+        (owner 2026-07-17, ROADMAP 15d): below all windows (default) or
+        always on top."""
         from app import native
 
         tr = self._tr
         group = QGroupBox(tr("System"))
-        row = QHBoxLayout(group)
+        form = QFormLayout(group)
         self._autostart_check = QCheckBox(tr("Start with Windows"))
         self._autostart_check.setChecked(native.autostart_enabled())
-        row.addWidget(self._autostart_check)
-        row.addStretch(1)
+        form.addRow(self._autostart_check)
+        self._z_mode_combo = QComboBox()
+        for mode in constants.Z_MODES:
+            self._z_mode_combo.addItem(tr(constants.Z_MODE_TITLES[mode]), mode)
+        index = self._z_mode_combo.findData(self._settings.z_mode)
+        if index >= 0:
+            self._z_mode_combo.setCurrentIndex(index)
+        form.addRow(tr("Visibility"), self._z_mode_combo)
         return group
 
     def _build_era_group(self) -> QGroupBox:
@@ -1319,6 +1327,7 @@ class SettingsDialog(QDialog):
             third_era=self._third_era_combo.currentData(),
             jump_cities=tuple(self._jump_cities),
             art_source=self._art_source_combo.currentData(),
+            z_mode=self._z_mode_combo.currentData(),
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

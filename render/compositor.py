@@ -408,20 +408,20 @@ class Compositor:
 
     def hit_omega(self, x: float, y: float, size: float) -> bool:
         """True when (x, y) — widget-local, same coordinates as
-        `set_hover`/`tooltip_at` — lands on the Omega (24h) ring letter
-        region: the same geometry family as the greetings letter band
-        and the tick ring, seated at the bottom instead of the top."""
+        `set_hover`/`tooltip_at` — lands on the Omega (24h) ring seat:
+        the FULL ROUND AREA (owner slika 9, 2026-07-17), a circle CENTERED
+        on the Omega letter position (180°, the ring letter band) whose
+        radius covers the whole letter cell. The old narrow annular wedge
+        only answered on the letter glyph itself (practically its lower
+        part), so the double-click kept missing; the round area lands
+        anywhere on the seat. The toggle semantics are untouched."""
         radius = size / 2
         point = QPointF(x - radius, y - radius)
-        distance = math.hypot(point.x(), point.y())
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        half = defaults.OMEGA_HIT_HALF_DEG
-        return (
-            radius * defaults.TICK_HOVER_OUTER_FRACTION
-            < distance
-            <= radius * defaults.OMEGA_HIT_OUTER_FRACTION
-            and abs(theta - 180.0) <= half
-        )
+        center = dial_point(180.0, radius * defaults.RING_LETTER_RADIUS_FRACTION)
+        hit_radius = radius * defaults.OMEGA_HIT_RADIUS_FRACTION
+        return math.hypot(
+            point.x() - center.x(), point.y() - center.y()
+        ) <= hit_radius
 
     def trigger_reveal_week(self, now: float | None = None) -> bool:
         """The Omega double-click, REPURPOSED (owner seal 2026-07-16):
@@ -518,9 +518,11 @@ class Compositor:
                 )
             self._composite_key = key
         # The composite carries the window's transparent margin (the
-        # ring letters overhang the dial square) — blit it back-shifted
-        # so the dial lands at (0, 0).
-        overhang = size * defaults.DIAL_WINDOW_MARGIN_FRACTION
+        # ring letters and event glow overhang the dial square) — blit it
+        # back-shifted so the dial lands at (0, 0). The margin is LIVE
+        # from the user's settings (owner 2026-07-17), matching the
+        # widget's own window sizing.
+        overhang = size * defaults.dial_window_margin_fraction(self._skin)
         painter.drawPixmap(QPointF(-overhang, -overhang), self._composite)
 
         painter.save()
@@ -590,6 +592,12 @@ class Compositor:
                 # CANON paragraph — gracefully pending until Session 6
                 # writes the set (owner 2026-07-16).
                 return self._archetype_center_tooltip()
+            if element.startswith("archetype:"):
+                # An archetype ARM figure (owner slika 8): its TWO-ROW
+                # article — or the three-side Ages layout (owner slika 6).
+                return self._archetype_arm_tooltip(
+                    int(element[len("archetype:"):])
+                )
             if element == "sun_servant":
                 # The SERVANT face at 24h (owner 2026-07-13): its own
                 # name, its own plate, its own text.
@@ -710,6 +718,12 @@ class Compositor:
             return "seasons", self._season_topic_index()
         if element == "archetype:center":
             return None      # the centers have no pages yet (Session 6/8)
+        if element.startswith("archetype:"):
+            # An archetype ARM figure (owner slika 8): its OWN target —
+            # today only the Walks map onto the Professions pages; the
+            # rest answer None gracefully (Sessions 6/8 add topics).
+            index = int(element[len("archetype:"):])
+            return archetypes.figures(archetype_key(self._skin))[index]["enc"]
         if element.startswith("slot:"):
             mode, _style, theme, _metal, _roster = slot_view(
                 self._skin, int(element[len("slot:"):])
@@ -776,31 +790,28 @@ class Compositor:
             return _ENC_SUN_ORDER.index("Summer_Solstice")
         return _ENC_SUN_ORDER.index("Winter_Solstice")
 
-    def _arm_encyclopedia_target(
+    def _arm_angle_at(
         self, point: QPointF, radius: float, rotation: float
-    ) -> tuple[str, int] | None:
-        """The page for the star arm under the cursor (owner 2026-07-16,
-        "sve znači SVE"): hexa diamonds → the zodiac sign; cross/octa
-        CARDINAL arms → the Sun topic's solstice/equinox; octa DIAGONAL
-        arms → the Seasons topic's season (or tropical half); trio arms →
-        the Trinity virtue. None off the arms or on the pointer-less
-        wheels. Mirrors `_arm_tooltip`'s diamond geometry."""
-        if not self._skin.show_pointer:
+    ) -> float | None:
+        """The unrotated arm angle whose DIAMOND contains `point`, or None
+        (off the arms, Pointer off, or the arm-less Aurora/Calendar) — the
+        ONE arm-diamond geometry (Rule #5) shared by the arm tooltip, the
+        Spacebar jump and the archetype hover-enlarge."""
+        if not self._skin.show_pointer or self._skin.pointer in (
+            "aurora", "calendar"
+        ):
             return None
-        pointer = self._skin.pointer
-        if pointer in ("aurora", "calendar"):
-            return None                       # no arms exist
         distance = math.hypot(point.x(), point.y())
         star_tip = radius * self._skin.star.radius_fraction
         if not (radius * 0.08 <= distance <= star_tip):
             return None
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        arms = constants.POINTER_POINTS[pointer]
+        arms = constants.POINTER_POINTS[self._skin.pointer]
         arm_step = 360.0 / arms
         arm_angle = (
             round(((theta - rotation) % 360.0) / arm_step) * arm_step
         ) % 360.0
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG[pointer]
+        half = constants.POINTER_ARM_HALF_ANGLE_DEG[self._skin.pointer]
         inner = star_tip / (2.0 * math.cos(math.radians(half)))
         drawn = arm_angle + rotation
         diamond = QPolygonF([
@@ -811,16 +822,23 @@ class Compositor:
         ])
         if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
             return None
-        if archetype_active(self._skin):
-            # ARCHETYPE MODE (owner 2026-07-16): the Spacebar jump
-            # follows the FIGURE's own encyclopedia target — today only
-            # the Walks map onto the Professions pages; the persons,
-            # temperaments, pillars, family and ages have no topics yet
-            # (Sessions 6/8) and answer None gracefully.
-            fig = archetypes.figures(archetype_key(self._skin))[
-                self._archetype_arm_index(arm_angle)
-            ]
-            return fig["enc"]
+        return arm_angle
+
+    def _arm_encyclopedia_target(
+        self, point: QPointF, radius: float, rotation: float
+    ) -> tuple[str, int] | None:
+        """The page for the star arm under the cursor (owner 2026-07-16,
+        "sve znači SVE"): hexa diamonds → the zodiac sign; cross/octa
+        CARDINAL arms → the Sun topic's solstice/equinox; octa DIAGONAL
+        arms → the Seasons topic's season (or tropical half); trio arms →
+        the Trinity virtue. None off the arms or on the pointer-less
+        wheels. (In archetype mode the ARM figures answer through
+        `_element_at`/`_element_encyclopedia_target`, not here.)"""
+        arm_angle = self._arm_angle_at(point, radius, rotation)
+        if arm_angle is None:
+            return None
+        pointer = self._skin.pointer
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
         if pointer == "hexa":
             # The cursor's half of the 60° arc picks which of the two signs.
             rel = ((theta - rotation - arm_angle + 180.0) % 360.0) - 180.0
@@ -961,6 +979,15 @@ class Compositor:
             radius * marker.scale,
         ):
             return "earth"
+        if archetype_active(self._skin):
+            # The archetype ARM figures inherit the slot hover-enlarge
+            # (owner slika 8): the whole diamond is the target, the same
+            # geometry the arm tooltip uses — checked AFTER the markers so
+            # the Earth/Moon (the instrument) keep priority where they
+            # overlap an arm.
+            arm_angle = self._arm_angle_at(point, radius, rotation)
+            if arm_angle is not None:
+                return f"archetype:{self._archetype_arm_index(arm_angle)}"
         return None
 
     def set_hover(self, x: float, y: float, size: float) -> bool:
@@ -1169,15 +1196,69 @@ class Compositor:
         arms = constants.POINTER_POINTS[self._skin.pointer]
         return int(round(arm_angle / (360.0 / arms))) % arms
 
-    def _archetype_arm_tooltip(self, arm_angle: float) -> str:
-        """An arm's archetype legend (owner 2026-07-16): the TWO-ROW
-        article per the two-row canon — person+calling, member+
+    def _archetype_arm_tooltip(self, index: int) -> str:
+        """One arm figure's archetype legend (owner 2026-07-16): the
+        TWO-ROW article per the two-row canon — person+calling, member+
         hearth-role, temperament+age, person+quality, pillar+shadow,
-        estate+object, age+being."""
+        estate+object. EXCEPT the Ages (compass light), which show the
+        THREE-SIDE layout (owner 2026-07-17): the age's text and BOTH
+        life registers at once — the Tree and the Menagerie."""
         key = archetype_key(self._skin)
-        fig = archetypes.figures(key)[self._archetype_arm_index(arm_angle)]
+        if key == "compass_light":
+            return self._archetype_three_side(index)
+        fig = archetypes.figures(key)[index]
         return self._archetype_two_rows(
             key, fig["name"], fig["row2"], fig["entity"], fig["file"]
+        )
+
+    def _archetype_three_side(self, index: int) -> str:
+        """The AGES three-side hover (owner 2026-07-17, "oba odmah"): a
+        THREE-COLUMN article whose total width stays the TWO-SIDE width —
+        the age's text, the Tree register (image + being), the Menagerie
+        register (image + being). Each register image resolves from its
+        own life/<register> path and shows only when REAL art has landed
+        (placeholders fall back to the being name, gracefully as before)."""
+        key = "compass_light"
+        registers = archetypes.ARCHETYPES[key]["registers"]
+        tree_fig = registers["tree"][index]
+        animals_fig = registers["animals"][index]
+        set_name = archetypes.ARCHETYPES[key]["articles"]
+        node = self._symbolism.archetype_article(set_name, tree_fig["entity"])
+        rows = (node or {}).get("rows") or ()
+        # Column 1 — the age name and its text (or the pending line).
+        text_col = _hover_title(html.escape(self._tr(tree_fig["name"])))
+        if rows:
+            text_col += _article_paragraphs(rows[0], tr=self._tr)
+        else:
+            text_col += _centered_html(
+                "",
+                html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE)),
+            )
+
+        def register_column(caption: str, fig: dict) -> str:
+            image = ""
+            if archetype_art_ready(fig["file"]):
+                small = scaled_variant_file(
+                    fig["file"], 2 * defaults.ARTICLE_THREE_IMAGE_PX
+                )
+                image = (
+                    f"<div align='center'><img src='{small.as_uri()}' "
+                    f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
+                )
+            return (
+                _hover_title(html.escape(self._tr(caption)))
+                + image
+                + _centered_html(f"<b>{html.escape(self._tr(fig['row2']))}</b>")
+            )
+
+        width = defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
+        return (
+            "<table cellspacing='10'><tr>"
+            f"<td width='{width}'>{text_col}</td>"
+            f"<td width='{width}'>{register_column('The Tree', tree_fig)}</td>"
+            f"<td width='{width}'>"
+            f"{register_column('The Menagerie', animals_fig)}</td>"
+            "</tr></table>"
         )
 
     def _archetype_center_tooltip(self) -> str:
@@ -1277,42 +1358,15 @@ class Compositor:
         the solstice/equinox they point at; octa diagonal arms describe
         their season (dates, duration, the middle date the arrow points
         at). With solar rotation on, a trailing * flags the slight
-        offset from the year-wheel positions."""
-        if not self._skin.show_pointer:
-            # Pointer element off: no visible arms, no arm hovers.
-            return None
-        if self._skin.pointer in ("aurora", "calendar"):
-            return None      # no arms exist (owner spec: the wheel is it)
-        distance = math.hypot(point.x(), point.y())
-        star_tip = radius * self._skin.star.radius_fraction
-        if not (radius * 0.08 <= distance <= star_tip):
-            return None
-        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
-        arms = constants.POINTER_POINTS[self._skin.pointer]
-        arm_step = 360.0 / arms
-        arm_angle = (round(((theta - rotation) % 360.0) / arm_step) * arm_step) % 360.0
+        offset from the year-wheel positions. (In archetype mode the ARM
+        figures answer through `_element_at`/`tooltip_at`, not here.)"""
         # Only INSIDE the drawn diamond (owner bug report): between the
         # arms the wheel itself answers — the Aura's day or the Umbra's
-        # night. Same polygon as StarLayer draws.
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG[self._skin.pointer]
-        inner = star_tip / (2.0 * math.cos(math.radians(half)))
-        drawn = arm_angle + rotation
-        diamond = QPolygonF(
-            [
-                QPointF(0.0, 0.0),
-                dial_point(drawn - half, inner),
-                dial_point(drawn, star_tip),
-                dial_point(drawn + half, inner),
-            ]
-        )
-        if not diamond.containsPoint(point, Qt.FillRule.OddEvenFill):
+        # night. The ONE arm-diamond geometry lives in `_arm_angle_at`.
+        arm_angle = self._arm_angle_at(point, radius, rotation)
+        if arm_angle is None:
             return None
-        if archetype_active(self._skin):
-            # ARCHETYPE MODE (owner 2026-07-16): the arm answers its
-            # archetype's TWO-ROW article instead of the sign/season/
-            # virtue readings — a different kind of watch while it
-            # runs; the weekday and slot hovers are already silent.
-            return self._archetype_arm_tooltip(arm_angle)
+        theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
         star = "*" if self._skin.solar_rotation else ""
 
         if self._skin.pointer == "hexa":
@@ -2274,9 +2328,10 @@ class Compositor:
     ) -> QPixmap:
         # STATIC/DAILY layers include the ring letters, which OVERHANG
         # the dial square (owner spec) — the composite is padded by the
-        # same margin the window carries, or they clip right here (owner
-        # bug report: the Omega's bottom was cut flat).
-        overhang = size * defaults.DIAL_WINDOW_MARGIN_FRACTION
+        # same LIVE margin the window carries (owner 2026-07-17), or they
+        # clip right here (owner bug report: the Omega's bottom was cut
+        # flat).
+        overhang = size * defaults.dial_window_margin_fraction(self._skin)
         px = round((size + 2 * overhang) * dpr)
         pixmap = QPixmap(px, px)
         pixmap.fill(Qt.GlobalColor.transparent)

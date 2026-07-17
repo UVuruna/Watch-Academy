@@ -127,11 +127,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `MinuteScheduler.set_per_second`), the Legend toggle (off = no
   hovers at all; with click-through the dial has zero interaction),
   the Solar rotation toggle (off = upright Star/Aura/Umbra), the
-  ARCHETYPE toggle pair (owner sealed package 2026-07-16): 🎭
+  ARCHETYPE toggle (owner sealed package 2026-07-16): 🎭
   Archetype — the stay-open checkable that turns the mode on (the
-  render-level override; the slot settings stay untouched) — with 🌍
-  Earth weekday beneath it (`archetype_earth_day`, live only while
-  the mode runs); `_refresh_menu_gating` grays the Archetype toggle
+  render-level override; the slot settings stay untouched). The Earth
+  Weekday toggle moved to Design ▸ Earth as a GENERAL option
+  (`earth_weekday`, owner 2026-07-17 slika 10 — works in both modes,
+  gated only by the dial size like the Date). `_refresh_menu_gating`
+  grays the Archetype toggle
   where no archetype exists (Aurora, Calendar, Pointer element off)
   and, WHILE THE MODE IS ON, grays the three slot submenus and their
   enables IN PLACE and releases the big-seconds gate (a seated
@@ -147,9 +149,17 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `_install_skin()` (fresh compositor, day context kept) and persist;
   `apply_display_settings(skin, settings)` (pure, testable) overlays
   the display choices, opacity overrides and the custom palette —
-  including `archetype_mode`/`archetype_earth_day` (owner 2026-07-16;
+  including `archetype_mode`/`earth_weekday` (owner 2026-07-16/17;
   while the mode is active a seated small-seconds slot no longer
-  silences the big hand, since the slots are overridden off)
+  silences the big hand, since the slots are overridden off).
+  `_install_skin()` also re-reserves the window margin from the LIVE
+  settings (`defaults.dial_window_margin_fraction(skin)`, owner slike
+  1–3 2026-07-17) so a size/hover/letter slider re-sizes the window
+  exactly, and `run()`/`_open_settings()` apply the `z_mode` window-flag
+  swap (ROADMAP 15d). The wheel-pair labels are per pointer
+  (`_palette_labels`: Court/Family, Seasons/Elements, Walks/Ages,
+  Zodiac/Almanac, else Paint/Light) and the pair is never grayed; the
+  Calendar lighting entries are non-visible off the Calendar
 - `_open_settings()`: the M6 dialog — location (new observer/timezone →
   full day-context rebuild), opacity and palette results applied by
   reinstalling the PRISTINE pack (so cleared overrides really clear)

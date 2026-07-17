@@ -67,7 +67,8 @@ def test_display_choices_round_trip(store):
         umbra_contrast="half",
         palette_style="light",
         archetype_mode=True,
-        archetype_earth_day=True,
+        earth_weekday=True,
+        z_mode="top",
         solar_rotation=False,
         octa_slot="ascendant",
         day_slot_style="colored",
@@ -113,6 +114,42 @@ def test_display_choices_round_trip(store):
     migrated = store.load()
     assert migrated.octa_slot == "chinese"
     assert migrated.info_slot_style == "bronze"
+
+
+def test_earth_weekday_migrates_from_the_old_key(store):
+    """Rename 2026-07-17: an older file's archetype_earth_day carries
+    over as earth_weekday; the new key wins when both are present."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "archetype_earth_day": true}',
+        encoding="utf-8",
+    )
+    assert store.load().earth_weekday is True
+    # A brand-new file with neither key keeps the default OFF.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    assert store.load().earth_weekday is False
+
+
+def test_z_mode_round_trip_and_default(store):
+    """Visibility Z mode (owner 2026-07-17): persists, defaults to
+    'bottom' in older files, and rejects an unknown value."""
+    store.save(replace(Settings(), z_mode="top"))
+    assert store.load().z_mode == "top"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    assert store.load().z_mode == "bottom"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "z_mode": "sideways"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
 
 
 def test_year_line_and_jump_cities_round_trip(store):

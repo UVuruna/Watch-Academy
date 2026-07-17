@@ -122,6 +122,20 @@ def test_dialog_defaults_keep_skin_opacities(app):
     dialog.done(0)
 
 
+def test_dialog_z_mode_round_trips(app):
+    """Visibility Z mode (owner 2026-07-17, ROADMAP 15d): the System-group
+    combo reflects the stored value and result_settings returns the pick."""
+    from app.settings_store import replace
+
+    dialog = SettingsDialog(replace(Settings(), z_mode="top"), defaults.DEFAULT_SKIN)
+    assert dialog._z_mode_combo.currentData() == "top"
+    assert dialog.result_settings().z_mode == "top"
+    index = dialog._z_mode_combo.findData("bottom")
+    dialog._z_mode_combo.setCurrentIndex(index)
+    assert dialog.result_settings().z_mode == "bottom"
+    dialog.done(0)
+
+
 def test_dialog_sliders_set_independent_overrides(app):
     """Owner spec: the Aura's sunlight and twilight opacities move
     independently — touching one leaves the other on the skin value."""

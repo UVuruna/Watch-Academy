@@ -116,10 +116,16 @@ ARCHETYPE CLOCK. The machinery:
   composite on it, like the Calendar's shichen wedge.
 - `ArchetypeLayer` (DAILY, at the weekday_set z spot): the figures at
   the romb center (`weekday_body_orbit`), scaled into the diamond by
-  `ARCHETYPE_FIGURE_HEIGHT_OF_TIP` with the arm color visible around
-  them; the lit figure FULL, the rest at the weekday
-  `ghost_opacity`; the reveal window turns everything full. With
-  Names on the lit figure carries its display name.
+  `ARCHETYPE_FIGURE_HEIGHT_OF_TIP` and then CLAMPED to the romb for the
+  art's own aspect (`archetype_fit_height`, owner slika 8 2026-07-17 —
+  the glass never overflows its diamond) with the arm color visible
+  around them; the lit figure FULL, the rest at the weekday
+  `ghost_opacity`; the reveal window turns everything full. With Names
+  on the lit figure carries its display name. Each figure is a per-arm
+  HOVER-ENLARGE target (`"archetype:<index>"`, owner slika 8): the base
+  pass skips the hovered figure and the HoverLift twin
+  (`ArchetypeLayer(lift=True)`) redraws it enlarged above the hands —
+  exactly like the slots.
 - `ArchetypeCenterLayer` (MINUTE, above the hands like
   CenterBodyLayer): the center figure — the Eye / Hearth / Seal /
   Union / Throne, none on the Compass — full opacity, hover-enlarged
@@ -129,8 +135,10 @@ ARCHETYPE CLOCK. The machinery:
   placeholder draws the figure's NAME in the outlined label style
   (fitted to the diamond width), never a stretched pixel.
 - The Earth marker stays (it is the instrument, not a slot): with
-  `skin.archetype_earth_day` on, `_draw_date` shifts the date up and
-  writes the abbreviated weekday (`WEEKDAY_LABELS`) beneath it. During
+  `skin.earth_weekday` on, `_draw_date` shifts the date up and writes
+  the abbreviated weekday (`WEEKDAY_LABELS`) beneath it — a GENERAL
+  Earth option since 2026-07-17 (Design ▸ Earth), working in BOTH
+  normal and archetype mode (renamed from `archetype_earth_day`). During
   a DEEP travel (Session 16 — `day.deep_cycles != 0`) the second row
   carries the YEAR instead (`display_year` — the compact OFFICIAL
   form, "4500 BCE"): far from the present the marker must say WHEN,
@@ -307,12 +315,15 @@ inside and outside the circle and reading over any background instead of
 having to be huge. The colors carry the source: the Sun's events glow
 GOLDEN (`GLOW_SUN_COLOR`), the Moon's phases SILVER (`GLOW_MOON_COLOR`);
 the halo diameter stays 2× the marker's. Because the glow sits at the
-ring band and can be hover-enlarged, its worst-case extent (owner
-2026-07-16 bug: a bottom-of-ring halo was square-cut at the window edge)
-is folded into the transparent window margin — `DIAL_WINDOW_MARGIN_FRACTION`
-is DERIVED from `GLOW_RING_RADIUS_FRACTION`, `GLOW_MARKER_MAX_SCALE`,
-`GLOW_RADIUS_SCALE` and the hover-enlarge maximum, so the halo can never
-clip at any angle and re-tuning the glow re-sizes the window automatically.
+ring band and can be hover-enlarged, its extent (owner 2026-07-16 bug:
+a bottom-of-ring halo was square-cut at the window edge) is folded into
+the transparent window margin — `defaults.dial_window_margin_fraction(skin)`
+computes it LIVE from the user's settings (owner slike 1–3, 2026-07-17):
+the LARGER of the Earth/Moon markers (each carrying its earth/moon scale)
+relocated to `GLOW_RING_RADIUS_FRACTION`, × `GLOW_RADIUS_SCALE` × the
+user's `hover_enlarge`, against the ring-letter overhang at the
+letter-scale slider — so the halo can never clip and any size/hover/
+letter slider re-sizes the window to fit exactly (no waste).
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and

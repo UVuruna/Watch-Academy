@@ -320,46 +320,61 @@ def archetype_lit_index(
     return int(round(((hour_angle - rotation) % 360.0) / step)) % arms
 
 
-def archetype_art_ready(path) -> bool:
-    """Whether REAL archetype art is on disk: the file exists and is
-    larger than the committed 1×1 placeholders (the WORKPLAN
-    missing-art rule). While it is not, the renderer draws the
-    figure's NAME instead — never a stretched pixel or a crash."""
+def archetype_art_size(path):
+    """The pixel size of REAL archetype art (the owner's glass) — or
+    None when the file is missing or a committed 1×1 placeholder (the
+    WORKPLAN missing-art rule, ARCHETYPE_ART_MIN_PX). The one place the
+    header is read; readiness AND the diamond CLAMP both derive from it."""
     resolved = paths.art_file(path)
     if resolved is None or not resolved.exists():
-        return False
+        return None
     size = QImageReader(str(resolved)).size()
-    return (
-        size.isValid()
-        and size.width() > archetypes.ARCHETYPE_ART_MIN_PX
-        and size.height() > archetypes.ARCHETYPE_ART_MIN_PX
-    )
+    if (
+        not size.isValid()
+        or size.width() <= archetypes.ARCHETYPE_ART_MIN_PX
+        or size.height() <= archetypes.ARCHETYPE_ART_MIN_PX
+    ):
+        return None
+    return size
+
+
+def archetype_art_ready(path) -> bool:
+    """Whether REAL archetype art is on disk (larger than the committed
+    1×1 placeholders). While it is not, the renderer draws the figure's
+    NAME instead — never a stretched pixel or a crash."""
+    return archetype_art_size(path) is not None
+
+
+def archetype_fit_height(aspect: float, tip: float, tan_half: float) -> float:
+    """The tallest figure of aspect ratio `aspect` (width/height) that
+    fits INSIDE its arm's diamond (owner slika 8: the glass CLAMPS into
+    the romb, never overflows its bounds). The diamond is a rhombus
+    centered at the romb center with along-arm half-diagonal tip/2 and
+    perpendicular half-diagonal tip·tan(half)/2; a centered inscribed
+    rectangle of half a×b fits iff a/p + b/q ≤ 1, so a figure scaled to
+    height h (width = aspect·h) fits up to
+    h = tip·tan(half)/(aspect + tan(half))."""
+    return tip * tan_half / (aspect + tan_half)
 
 
 def draw_archetype_figure(
     painter: QPainter, ctx: "RenderContext", fig: dict, pos: QPointF,
-    height: float, opacity: float, named: bool,
+    height: float, arm_width: float, opacity: float, named: bool,
 ) -> None:
     """One archetype figure in its diamond: the stained glass scaled
-    into the arm (color visible around it) at `opacity`; `named` adds
-    the display name in the label style. Missing/placeholder art draws
-    the NAME alone — the documented fallback until the owner's glass
-    lands."""
+    into the arm (color visible around it) at `opacity`. `height` is
+    already CLAMPED to the diamond and hover-scaled by the caller;
+    `arm_width` is the diamond's widest width (for the name fit).
+    `named` adds the display name in the label style. Missing/placeholder
+    art draws the NAME alone — the documented fallback until the owner's
+    glass lands."""
     painter.save()
     painter.setOpacity(opacity)
     ready = archetype_art_ready(fig["file"])
     if ready:
         draw_pixmap_centered(painter, ctx, fig["file"], pos, height)
     if named or not ready:
-        # The diamond's widest width is tip·tan(half) — recovered from
-        # the figure height (= tip · the per-pointer height fraction).
-        width = (
-            height * math.tan(math.radians(
-                constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
-            ))
-            / archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[ctx.skin.pointer]
-        )
-        _draw_archetype_name(painter, fig["name"], pos, width, height)
+        _draw_archetype_name(painter, fig["name"], pos, arm_width, height)
     painter.restore()
 
 
@@ -1442,16 +1457,40 @@ class ArchetypeLayer(Layer):
             return
         orbit = ctx.radius * weekday_body_orbit(ctx.skin)
         tip = ctx.radius * ctx.skin.star.radius_fraction
-        height = (
+        half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
+        tan_half = math.tan(math.radians(half))
+        arm_width = tip * tan_half           # the diamond's widest width
+        desired = (
             tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[ctx.skin.pointer]
         )
         names_on = ctx.skin.show_weekday_names
         for index, fig in enumerate(archetypes.figures(key)):
+            # Per-arm hover target (owner slika 8): the base pass skips
+            # the hovered figure, the HoverLift twin redraws it enlarged
+            # above — exactly like the slots.
+            element = f"archetype:{index}"
+            if not self._gate(ctx, element):
+                continue
             lit = ctx.reveal_active or index == ctx.archetype_lit
+            # CLAMP the glass into the diamond for its own aspect (owner
+            # slika 8: it must never overflow the romb); a placeholder
+            # keeps the desired height (the NAME fits the width itself).
+            size = archetype_art_size(fig["file"])
+            height = desired
+            if size is not None:
+                height = min(
+                    desired,
+                    archetype_fit_height(
+                        size.width() / size.height(), tip, tan_half
+                    ),
+                )
+            # HOVER-ENLARGE like every slot (slot_seat_scale is already
+            # folded into ARCHETYPE_FIGURE_HEIGHT_OF_TIP's tuning).
+            hf = hover_factor(ctx, element)
             draw_archetype_figure(
                 painter, ctx, fig,
                 dial_point(fig["angle"] + ctx.rotation, orbit),
-                height,
+                height * hf, arm_width * hf,
                 1.0 if lit else ctx.skin.weekday_set.ghost_opacity,
                 named=names_on and lit,
             )
@@ -1898,14 +1937,15 @@ class YearMarkerLayer(Layer):
 
     def _draw_date(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
         """Large dials write the date ("8 Jul") ON the Earth marker.
-        In archetype mode with the Day-of-week option on (owner
-        2026-07-16, archetype_earth_day) the abbreviated weekday joins
-        it: the date shifts up and TUE/THU… writes beneath — the same
-        label machinery, one marker, two rows. During a DEEP travel
-        (Session 16, deep proxy frame active) the second row carries the
-        YEAR in the era notation instead — far from the present the
-        marker must say WHEN, and the weekday row yields (the weekday
-        still reads on the bodies and hovers)."""
+        With the Weekday option on (owner 2026-07-17, settings.earth_weekday
+        — a GENERAL Earth option now, working in BOTH normal and archetype
+        mode) the abbreviated weekday joins it: the date shifts up and
+        TUE/THU… writes beneath — the same label machinery, one marker,
+        two rows. During a DEEP travel (Session 16, deep proxy frame
+        active) the second row carries the YEAR in the era notation
+        instead — far from the present the marker must say WHEN, and the
+        weekday row yields (the weekday still reads on the bodies and
+        hovers)."""
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         font = QFont()
         font.setPixelSize(
@@ -1913,9 +1953,7 @@ class YearMarkerLayer(Layer):
         )
         font.setBold(True)
         deep_travel = ctx.day.deep_cycles != 0
-        if not deep_travel and not (
-            ctx.skin.archetype_earth_day and archetype_active(ctx.skin)
-        ):
+        if not deep_travel and not ctx.skin.earth_weekday:
             draw_outlined_text(painter, pos, text, font)
             return
         offset = size * archetypes.ARCHETYPE_EARTH_DAY_OFFSET
@@ -2000,8 +2038,10 @@ class HoverLiftLayer(Layer):
             WeekdayLayer(skin, lift=True),
             SlotLayer(skin, lift=True),
             YearMarkerLayer(skin, lift=True),
-            # The archetype CENTER enlarges like the old center body
-            # (owner sealed package 2026-07-16) — inert off the mode.
+            # The archetype ARM figures and the CENTER enlarge like the
+            # slots and the old center body (owner 2026-07-16/17) — both
+            # inert off the mode.
+            ArchetypeLayer(skin, lift=True),
             ArchetypeCenterLayer(skin, lift=True),
         )
 

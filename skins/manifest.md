@@ -31,9 +31,10 @@ the ring preset and the user's display choices onto it at build time.
   (pointer, palette_style) shows ITS archetype: figures in the
   diamonds, the hour hand lighting the current hour-space, the weekday
   model and all three slots overridden OFF at the RENDER level so the
-  slot fields below keep the user's choices) and `archetype_earth_day`
-  (the optional abbreviated day under the Earth marker's date while
-  the mode runs — default False),
+  slot fields below keep the user's choices) and `earth_weekday`
+  (the optional abbreviated day under the Earth marker's date — a
+  GENERAL Earth option since 2026-07-17, working in BOTH normal and
+  archetype mode; renamed from `archetype_earth_day`, default False),
   `solar_rotation` (False →
   Star/Aura/Umbra stand upright), `octa_slot` (one of
   `OCTA_SLOT_MODES`: time/date/day length, tropical zodiac as

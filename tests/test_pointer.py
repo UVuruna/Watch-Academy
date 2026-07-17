@@ -520,10 +520,21 @@ def test_palette_presets_cover_every_pointer_and_style():
             assert len(palette) == arms, (pointer, style)
 
 
-def test_cross_serves_one_seasons_palette_under_both_styles():
+def test_cross_wheels_are_seasons_paint_and_elements_light():
+    """Owner 2026-07-17 (CANON §Seasons light): the cross PAINT stays the
+    seasons temperaments palette; the cross LIGHT is now the FOUR ELEMENTS
+    wheel, seating the Tetramorph — the two wheels DIFFER, and each hue
+    lands on its canonical season arm (fire summer-top, earth autumn-right,
+    water winter-bottom, air spring-left)."""
+    assert defaults.PALETTE_PRESETS[("cross", "paint")] == (
+        "#D9D900", "#D4330F", "#0A70D8", "#129412",
+    )
+    assert defaults.PALETTE_PRESETS[("cross", "light")] == (
+        "#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0",
+    )
     assert (
         defaults.PALETTE_PRESETS[("cross", "paint")]
-        == defaults.PALETTE_PRESETS[("cross", "light")]
+        != defaults.PALETTE_PRESETS[("cross", "light")]
     )
 
 
@@ -1026,14 +1037,15 @@ def test_omega_double_click_reveals_the_week(july_wednesday):
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
 
-    outer = (
-        defaults.TICK_HOVER_OUTER_FRACTION + defaults.OMEGA_HIT_OUTER_FRACTION
-    ) / 2
+    # The hit region is the FULL ROUND AREA centered on the Omega letter
+    # (owner 2026-07-17, slika 9): the letter CENTER point lands (the old
+    # annular wedge MISSED it — it sat just inside the ring band).
     # hit_omega takes WIDGET-LOCAL coordinates (the dial center sits at
     # (radius, radius), same convention as set_hover/tooltip_at).
-    x, y = 180.0, 180.0 + 180.0 * outer        # bottom = 24h/Omega
+    letter = defaults.RING_LETTER_RADIUS_FRACTION
+    x, y = 180.0, 180.0 + 180.0 * letter        # bottom = 24h/Omega center
     assert compositor.hit_omega(x, y, 360.0)
-    assert not compositor.hit_omega(180.0, 180.0 - 180.0 * outer, 360.0)  # top: not Omega
+    assert not compositor.hit_omega(180.0, 180.0 - 180.0 * letter, 360.0)  # top: not Omega
 
     assert not compositor.reveal_active()
     assert compositor.trigger_reveal_week(now=1000.0) is True   # started
@@ -1051,6 +1063,31 @@ def test_omega_double_click_reveals_the_week(july_wednesday):
     assert compositor.trigger_reveal_week(now=1200.0) is True
     assert compositor.reveal_active(now=1200.0 + defaults.REVEAL_WEEK_DURATION_S - 1)
     assert not compositor.reveal_active(now=1200.0 + defaults.REVEAL_WEEK_DURATION_S)
+
+
+def test_omega_hit_is_the_full_letter_circle(july_wednesday):
+    """Owner slika 9 (2026-07-17): the Omega double-click hit is the FULL
+    ROUND AREA at the 24h seat — a circle on the letter cell. The letter
+    CENTER and points in the GAP between its strokes all land now; the OLD
+    narrow annulus sat just OUTSIDE the ring band (>0.945R) and missed
+    them. Points well outside the circle still do not answer."""
+    day, tick = july_wednesday
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    radius = 180.0
+    letter_r = radius * defaults.RING_LETTER_RADIUS_FRACTION
+    # The letter centre lands — and it sits BELOW the old annulus's inner
+    # bound (the exact spot the owner's screenshot kept missing).
+    assert comp.hit_omega(180.0, 180.0 + letter_r, 360.0)
+    assert defaults.RING_LETTER_RADIUS_FRACTION < defaults.TICK_HOVER_OUTER_FRACTION
+    # A point ABOVE the centre (the gap between the strokes) lands too.
+    inset = radius * defaults.OMEGA_HIT_RADIUS_FRACTION * 0.5
+    assert comp.hit_omega(180.0, 180.0 + letter_r - inset, 360.0)
+    # Well outside the circle — radially and laterally — does not.
+    assert not comp.hit_omega(180.0, 180.0 + letter_r + radius * 0.3, 360.0)
+    assert not comp.hit_omega(180.0 + radius * 0.3, 180.0 + letter_r, 360.0)
+    # The TOP (12h) letter is never the Omega.
+    assert not comp.hit_omega(180.0, 180.0 - letter_r, 360.0)
 
 
 def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesday):
@@ -1100,39 +1137,29 @@ def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesd
     assert center_alpha > 0.0                   # ...CenterBodyLayer lifts it
 
 
-def test_palette_style_grays_on_cross_only(app):
-    """Paint/Light gating, revised with the CANON Family wheel (owner
-    2026-07-16): the Trinity now carries TWO wheels — the Court paint
-    trio and the APPROVED Family light trio (green Child at the top,
-    light red Mother at 20h, light blue Father at 4h) — so the pair is
-    LIVE there; only the Seasons keep ONE palette (and one archetype)
-    under both styles and stay grayed. Same `_add_choice_group`
-    `disabled` shape as before."""
+def test_every_pointer_wheel_pair_differs(app):
+    """The wheel-pair is NEVER grayed now (owner 2026-07-17): EVERY armed
+    pointer carries TWO DISTINCT wheels — the Seasons gained the Elements
+    wheel, so the cross no longer collapses. The `_add_choice_group`
+    primitive still honors an explicit `disabled` set (its contract)."""
     from app.controller import AppController
     from PySide6.QtWidgets import QMenu
 
-    for pointer, expect_grayed in (
-        ("trio", False), ("cross", True),
-        ("hexa", False), ("octa", False), ("aurora", False),
-    ):
-        menu = QMenu()
-        submenu = QMenu()
-        disabled = constants.PALETTE_STYLES if pointer == "cross" else ()
-        actions = AppController._add_choice_group(
-            None, menu, submenu,
-            [(style, style) for style in constants.PALETTE_STYLES],
-            constants.PALETTE_STYLES[0], lambda value: None,
-            disabled=disabled,
+    for pointer in ("trio", "cross", "hexa", "octa", "aurora", "calendar"):
+        assert (
+            defaults.PALETTE_PRESETS[(pointer, "paint")]
+            != defaults.PALETTE_PRESETS[(pointer, "light")]
         )
-        assert len(actions) == len(constants.PALETTE_STYLES)
-        assert all(not a.isEnabled() for a in actions) == expect_grayed
-        assert all(a.isEnabled() for a in actions) == (not expect_grayed)
-    # The Trinity's two wheels differ now (Court vs the Family trio —
-    # the top stays the derivation from the hexa light primaries);
-    # the Seasons really do carry ONE preset under both styles.
-    assert defaults.PALETTE_PRESETS[("trio", "paint")] != defaults.PALETTE_PRESETS[("trio", "light")]
-    assert defaults.PALETTE_PRESETS[("trio", "light")][0] == "#00DC00"
-    assert defaults.PALETTE_PRESETS[("cross", "paint")] == defaults.PALETTE_PRESETS[("cross", "light")]
+    # The primitive still grays when asked (used nowhere for the palette
+    # pair now, but the contract stands).
+    menu, submenu = QMenu(), QMenu()
+    actions = AppController._add_choice_group(
+        None, menu, submenu,
+        [(style, style) for style in constants.PALETTE_STYLES],
+        constants.PALETTE_STYLES[0], lambda value: None,
+        disabled=constants.PALETTE_STYLES,
+    )
+    assert all(not a.isEnabled() for a in actions)
 
 
 def test_lunation_before_the_years_first_new_moon(app, july_wednesday):
@@ -1767,7 +1794,9 @@ def _render_window_frame(compositor, day, tick, dial_diameter):
     from PySide6.QtCore import Qt
     from PySide6.QtGui import QImage, QPainter
 
-    margin = round(dial_diameter * defaults.DIAL_WINDOW_MARGIN_FRACTION)
+    margin = round(
+        dial_diameter * defaults.dial_window_margin_fraction(compositor._skin)
+    )
     window = dial_diameter + 2 * margin
     compositor.set_day(day)
     image = QImage(window, window, QImage.Format.Format_ARGB32_Premultiplied)
@@ -1852,6 +1881,70 @@ def test_earth_solstice_glow_never_clipped_even_when_hovered(app):
     compositor._hovered = "earth"                  # force the enlarge factor
     frame, window, _ = _render_window_frame(compositor, day, tick, 540)
     assert _max_border_alpha(frame, window) <= 6
+
+
+def test_window_margin_is_live_from_the_settings(app):
+    """Owner slike 1–3 (2026-07-17): the transparent margin is COMPUTED
+    from the user's ACTUAL settings, not a fixed max constant. At DEFAULT
+    settings it shrinks below the old fixed 0.1465; at MAX-everything it
+    grows past it — and the worst-case glow still fits at BOTH extremes."""
+    from app.controller import build_skin
+    from app.settings_store import Settings, replace
+
+    default_margin = defaults.dial_window_margin_fraction(build_skin(Settings()))
+    assert default_margin < 0.1465                 # the old fixed value
+    max_skin = build_skin(
+        replace(
+            Settings(), earth_scale=2.0, moon_scale=2.0,
+            hover_enlarge=2.0, ring_letter_scale=2.0,
+        )
+    )
+    assert defaults.dial_window_margin_fraction(max_skin) > 0.1465
+    # The boundary pixel test at the MAX extreme: the biggest possible
+    # glow (Earth ×2 at a solstice, hover ×2, at the ring bottom) must
+    # still fade INSIDE the window edge at the live (larger) margin.
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    anchors = SeasonsRepository().year_anchors(2026)
+    moon = MoonPhaseRepository().moon_window(2026)
+    local = anchors.instants[4].astimezone(tz)     # December solstice
+    day = build_day_context(local, observer, anchors, moon)
+    tick = build_tick_state(local, day)
+    assert tick.season_event == "Winter Solstice"
+    compositor = Compositor(
+        dataclasses.replace(max_skin, solar_rotation=False), AssetCache()
+    )
+    compositor._hovered = "earth"                  # force the enlarge factor
+    frame, window, _ = _render_window_frame(compositor, day, tick, 540)
+    assert _max_border_alpha(frame, window) <= 6
+
+
+def test_widget_z_mode_swaps_the_window_flags(app):
+    """Owner 2026-07-17 (ROADMAP 15d): set_z_mode swaps the always-on-
+    bottom / always-on-top hint in place, keeping the frameless-tool base;
+    unchanged is a no-op."""
+    from PySide6.QtCore import Qt
+    from PySide6.QtWidgets import QMenu
+
+    from app.widget import ClockWidget
+
+    widget = ClockWidget(360, QMenu(), None)
+    try:
+        flags = widget.windowFlags()
+        assert flags & Qt.WindowType.WindowStaysOnBottomHint     # default
+        widget.set_z_mode("top")
+        flags = widget.windowFlags()
+        assert flags & Qt.WindowType.WindowStaysOnTopHint
+        assert not (flags & Qt.WindowType.WindowStaysOnBottomHint)
+        assert flags & Qt.WindowType.FramelessWindowHint         # base kept
+        assert flags & Qt.WindowType.Tool
+        widget.set_z_mode("bottom")
+        assert widget.windowFlags() & Qt.WindowType.WindowStaysOnBottomHint
+    finally:
+        widget.close()
 
 
 def test_half_contrast_renders_a_gentler_night(july_wednesday):

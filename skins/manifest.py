@@ -177,8 +177,10 @@ class SkinDefinition:
     # is inert there.
     archetype_mode: bool = False
     # The optional abbreviated day (TUE, THU…) the Earth marker writes
-    # under its date label while the mode runs (owner: default OFF).
-    archetype_earth_day: bool = False
+    # under its date label (owner: default OFF). A GENERAL Earth option
+    # since 2026-07-17 (moved to Design ▸ Earth) — it works in BOTH
+    # normal and archetype mode.
+    earth_weekday: bool = False
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     day_slot_style: str = "sign"       # the DAY slot badge's own style

@@ -20,9 +20,19 @@ knows nothing about the dial itself.
 ## Classes
 
 ### ClockWidget
-`QWidget` subclass; all flags/attributes are set in `__init__` before the
+`QWidget` subclass; the flags/attributes are set in `__init__` before the
 first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
-`WA_TranslucentBackground`, `WA_ShowWithoutActivating`).
+`WA_TranslucentBackground`, `WA_ShowWithoutActivating`). The Z hint is the
+one flag that changes later, via `set_z_mode()` (owner 2026-07-17,
+ROADMAP 15d): "bottom" (below all windows, the default) ↔ "top" (always
+on top) — a window-flag change re-parents on Windows, so it is done in
+ONE place with hide → `setWindowFlags` → show, preserving the position and
+guarding the spontaneous-hide watchdog (`_z_transition`). The transparent
+window margin is LIVE from the settings: `set_dial_diameter(diameter,
+margin_fraction)` takes the fraction the controller computes from
+`defaults.dial_window_margin_fraction(skin)` on every skin install (owner
+slike 1–3 2026-07-17), so a size/hover/letter slider re-sizes the window
+to fit exactly.
 
 #### Attributes
 - `moved`: Signal emitted on every `moveEvent` (debounced save upstream)
@@ -32,8 +42,8 @@ first `show()` (`FramelessWindowHint | Tool | WindowStaysOnBottomHint`,
   intentional hide/exit
 - `mouseDoubleClickEvent()` (owner seal 2026-07-16, REPURPOSED the
   same day): a left double-click on the Omega (24h) ring letter —
-  hit-tested via `compositor.hit_omega()`, the same geometry family
-  as the ring letters/ticks — TOGGLES the reveal window
+  hit-tested via `compositor.hit_omega()` — the FULL ROUND AREA at the
+  24h seat (owner slika 9, 2026-07-17) — TOGGLES the reveal window
   (`compositor.trigger_reveal_week()`): the first click HIDES THE
   HANDS for `REVEAL_WEEK_DURATION_S` (with the weekday model on the
   ghosts rise to full in the same gesture; in archetype mode every

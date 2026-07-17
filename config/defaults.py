@@ -5,7 +5,7 @@ position, chosen city, chosen skin) lives in the user settings file owned
 by app/settings_store.py.
 """
 
-from config import constants, paths
+from config import paths
 from skins.manifest import (
     BackgroundSpec,
     HandSpec,
@@ -383,6 +383,23 @@ WORKING_SET_CEILINGS = {
 # right, winter blue bottom, spring green left — solstices/equinoxes at
 # the arm centers), served under both styles.
 _CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
+# The Seasons' SECOND wheel — the FOUR ELEMENTS (owner 2026-07-17,
+# CANON §Seasons light): the cross PAINT stays the seasons temperaments
+# palette, the cross LIGHT becomes the elements, seating the Tetramorph
+# (Lion/Ox/Eagle/Man). Hues clockwise from the top arm — the SAME arm
+# order as _CROSS_SEASONS (summer top, autumn right, winter bottom,
+# spring left) — so each element lands on its canonical season arm:
+#   * summer arm (top)    = FIRE  — a hot flame red-orange, hotter than
+#     autumn's blood red so the two cross wheels never read alike;
+#   * autumn arm (right)  = EARTH — an olive green-brown, the soil (a
+#     muddy green, distinct from spring's pure green in the paint wheel);
+#   * winter arm (bottom) = WATER — a deep water blue;
+#   * spring arm (left)   = AIR   — a pale white-yellow, the luminous
+#     lightest of the four (owner: "air spring-arm white-yellow").
+# The classical Western element colours (fire red, air yellow/white,
+# water blue, earth green) laid on the seasons the fixed-cross zodiac
+# already ties them to (Leo/Taurus/Scorpio/Aquarius).
+_CROSS_ELEMENTS = ("#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0")
 # The TRIO's PAINT wheel carries the theological trio (owner spec,
 # FINAL.txt #7): Faith yellow at 12h, Love red at 20h, Hope blue at
 # 4h — the hexa paint hues at the M, Y, D ring-letter positions. Its
@@ -423,7 +440,7 @@ PALETTE_PRESETS = {
         "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     ),
     ("cross", "paint"): _CROSS_SEASONS,
-    ("cross", "light"): _CROSS_SEASONS,
+    ("cross", "light"): _CROSS_ELEMENTS,
     ("trio", "paint"): _TRINITY,
     ("trio", "light"): _FAMILY,
     # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
@@ -493,6 +510,14 @@ ARTICLE_COLUMN_WIDTH_PX = 400        # the hexa TWO-COLUMN legend: each sign's
                                      # column; two of them + spacing must fit
                                      # LEGEND_MAX_WIDTH_FRACTION of a 1080p
                                      # screen (0.45 × 1920 = 864)
+# The THREE-SIDE article (owner 2026-07-17): a three-column layout whose
+# TOTAL width stays the two-column width (2 × ARTICLE_COLUMN_WIDTH_PX) —
+# each column narrower so the text wraps more. First consumer: the Ages
+# archetype hover (age text + the Tree register + the Menagerie
+# register, "oba odmah"). The image columns scale their register art to
+# the column width.
+ARTICLE_THREE_COLUMN_WIDTH_PX = round(2 * ARTICLE_COLUMN_WIDTH_PX / 3)   # ≈ 267
+ARTICLE_THREE_IMAGE_PX = 240         # each register image in its column
 # Subheading spacing (owner 2026-07-14 round two): the heading sits
 # CENTERED and visibly closer to ITS paragraph than to the previous one
 # — Qt collapses adjacent block margins to the larger, so the paragraph
@@ -674,14 +699,16 @@ GREETINGS_LETTER_HALF_DEG = 6.0
 GREETINGS_LETTER_OUTER_FRACTION = 1.08
 GREETINGS_STANZA_GAP_PX = 6
 
-# Omega (24h) double-click = reveal the week (owner 2026-07-16): the
-# hit region mirrors the greetings letter geometry above, seated at
-# 180° instead of 0°/360°. A double-click raises every non-active
-# weekday body (ghosts and, on Trinity/Prism, the ghost center Sun) to
-# full opacity for REVEAL_WEEK_DURATION_S, restarting on every new
-# double-click.
-OMEGA_HIT_HALF_DEG = 6.0
-OMEGA_HIT_OUTER_FRACTION = 1.08
+# Omega (24h) double-click (owner 2026-07-16; hit region reworked
+# 2026-07-17, slika 9): the hit is the FULL ROUND AREA at the 24h ring
+# seat — a circle CENTERED on the Omega letter position (180°, the ring
+# letter band) with a radius covering the whole letter cell. The old
+# narrow annular wedge only answered on the letter glyph itself (its
+# lower part), so the double-click kept missing; the round area is
+# derived from the ring-letter art size (a letter spans ~2× its
+# ART_SCALE of the radius, so 1.5× the ART_SCALE comfortably covers the
+# cell and its corners without reaching the 22h/2h numerals). Tunable.
+OMEGA_HIT_RADIUS_FRACTION = RING_LETTER_ART_SCALE * 1.5
 REVEAL_WEEK_DURATION_S = 60.0
 
 # Time Travel QUICK JUMPS (owner 2026-07-14): one-click presets under
@@ -817,10 +844,10 @@ TRANSLATE_TIMEOUT_S = 15
 # Transparent margin around the dial INSIDE the window (owner bug
 # report: M and Omega touch the window square and their overhang and
 # shadow get clipped; owner 2026-07-16: the event glow at the bottom of
-# the ring was square-cut too). The value is DERIVED from the ring-letter
-# and event-glow constants — see DIAL_WINDOW_MARGIN_FRACTION in the
-# event-glow section below (it needs GLOW_* which are defined there), so
-# re-tuning either overhang can never re-clip it.
+# the ring was square-cut too). It is COMPUTED LIVE from the user's
+# settings — see dial_window_margin_fraction() in the event-glow section
+# below (it needs GLOW_* which are defined there), so any size/hover/
+# letter slider re-sizes the window to fit exactly (owner 2026-07-17).
 
 # Umbra contrast spans, (lightest, darkest) window bounds. Owner spec:
 #   full  — the whole gray range: sectioned ladders run endpoint-
@@ -854,33 +881,46 @@ GLOW_CORE_ALPHA = 1.0
 GLOW_MID_ALPHA = 0.85
 GLOW_MID_STOP = 0.75                 # gradient position of the mid alpha
 GLOW_RADIUS_SCALE = 1.5              # halo radius, multiple of the marker radius
-GLOW_MARKER_MAX_SCALE = 0.11         # the LARGER glowing marker (the Earth; the
-                                     # Moon is 0.08) — whose halo reaches
-                                     # furthest; mirrors
-                                     # DEFAULT_SKIN.year_marker.scale
 
-# The transparent window margin (DIAL_WINDOW_MARGIN_FRACTION, forward-
-# declared in the Window section) must cover BOTH things that overhang the
-# dial square, or either gets a hard square cut at the window edge:
-#   * ring LETTERS at the 200% scale slider (~9.4% beyond the radius with
-#     their halo) — the empirically tuned 0.06-of-diameter floor;
-#   * the event GLOW — the glowing marker relocates to the ring band
-#     (GLOW_RING_RADIUS_FRACTION), is hover-enlarged up to the slider max
-#     (HOVER_ENLARGE_RANGE[1]), and its halo reaches
-#     GLOW_MARKER_MAX_SCALE * GLOW_RADIUS_SCALE further (owner 2026-07-16
-#     bug: a full-moon halo at the bottom of the ring was square-cut).
-# The glow extent is a fraction of the dial RADIUS; the window margin is a
-# fraction of the DIAMETER applied per side, i.e. half the radius-fraction
-# overhang beyond 1.0, plus a hair of safety so anti-aliasing never bleeds
-# into the outermost row. DERIVED, so tuning any source constant re-sizes
-# the window automatically.
-_GLOW_WINDOW_EXTENT = (
-    GLOW_RING_RADIUS_FRACTION
-    + GLOW_MARKER_MAX_SCALE * GLOW_RADIUS_SCALE * constants.HOVER_ENLARGE_RANGE[1]
-)
-DIAL_WINDOW_MARGIN_FRACTION = max(
-    0.06, (_GLOW_WINDOW_EXTENT - 1.0) / 2.0 + 0.01
-)
+# The transparent window margin (owner slike 1–3, 2026-07-17): LIVE from
+# the user's ACTUAL settings, not a fixed max-everything constant. The
+# margin per side (a fraction of the window DIAMETER) must cover BOTH
+# things that overhang the dial square, or either gets a hard square cut
+# at the window edge:
+#   * the event GLOW — the glowing marker (the LARGER of the Earth/Moon,
+#     each carrying the user's earth/moon scale) relocates to the ring
+#     band (GLOW_RING_RADIUS_FRACTION), is hover-enlarged by the user's
+#     hover_enlarge, and its halo reaches GLOW_RADIUS_SCALE further
+#     (owner 2026-07-16 bug: a full-moon halo at the bottom of the ring
+#     was square-cut);
+#   * ring LETTERS — at the user's letter-scale slider, the Omega/M
+#     overhang the ring by their half-height plus the shadow halo.
+# The extents are fractions of the dial RADIUS; the margin is a fraction
+# of the DIAMETER applied per side, i.e. half the radius-fraction overhang
+# beyond 1.0, plus a small safety epsilon so anti-aliasing never bleeds
+# into the outermost row. The OLD fixed value was 0.1465 (max markers ×
+# max hover); at default settings this shrinks well below it, and at max
+# settings it grows past it — exact reservation, no waste, no clip.
+DIAL_WINDOW_MARGIN_EPSILON = 0.01    # anti-aliasing safety (owner: small)
+
+
+def dial_window_margin_fraction(skin) -> float:
+    """The per-side transparent window margin (fraction of the dial
+    DIAMETER) for the CURRENT skin (owner 2026-07-17). Recomputed on
+    every skin install so moving a size/hover/letter slider re-sizes the
+    window to fit exactly. `skin.year_marker.scale`/`.moon_scale` already
+    carry the user's earth/moon multiplier (apply_display_settings)."""
+    marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
+    glow_extent = (
+        GLOW_RING_RADIUS_FRACTION
+        + marker * GLOW_RADIUS_SCALE * skin.hover_enlarge
+    )
+    letter_extent = (
+        RING_LETTER_RADIUS_FRACTION
+        + RING_LETTER_ART_SCALE * skin.ring_letter_scale
+        * (1.0 + 2.0 * RING_LETTER_SHADOW_RADIUS)
+    )
+    return (max(glow_extent, letter_extent) - 1.0) / 2.0 + DIAL_WINDOW_MARGIN_EPSILON
 
 # --- Shared app content (NOT skin-specific — a skin is a dial design) -----------
 # Skeleton folders with 1x1 placeholders ship in the repo; the owner

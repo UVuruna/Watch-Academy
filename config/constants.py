@@ -118,6 +118,16 @@ DEEP_TIME_DB_FILENAME = "deep_time.sqlite"
 # core.deep_time.format_year_line, the ONE pairing place.
 ERA_NOTATIONS = ("bce_ce", "bc_ad")
 ERA_NOTATION_TITLES = {"bce_ce": "BCE / CE", "bc_ad": "BC / AD"}
+
+# Visibility Z modes (owner 2026-07-17, ROADMAP 15d; Settings z_mode):
+# "bottom" — the clock stays BELOW every window except the desktop
+# (WindowStaysOnBottomHint, the default); "top" — always ON TOP of
+# everything (WindowStaysOnTopHint, a small clock the user always sees).
+Z_MODES = ("bottom", "top")
+Z_MODE_TITLES = {
+    "bottom": "Below all windows (desktop layer)",
+    "top": "Always on top",
+}
 # (current era, before era) labels per notation.
 ERA_NAMES = {"bce_ce": ("CE", "BCE"), "bc_ad": ("AD", "BC")}
 # ANNO LUCIS — the owner's measured world-era (SEALED 2026-07-16):

@@ -41,8 +41,12 @@ draws the MINUTE layers (hands, year marker) live.
   off or a factor of 1.0 keeps the dial inert
 - `hit_omega(x, y, size) -> bool` / `trigger_reveal_week()` /
   `reveal_active()` (owner 2026-07-16, REPURPOSED by the same-day
-  seal): the Omega (24h) double-click hit region — the greetings
-  letter geometry seated at 180° — and the reveal window it TOGGLES:
+  seal): the Omega (24h) double-click hit region — the FULL ROUND AREA
+  at the 24h seat (owner slika 9, 2026-07-17: a circle centered on the
+  Omega letter position covering the whole letter cell,
+  `OMEGA_HIT_RADIUS_FRACTION`; the old narrow annular wedge only
+  answered on the glyph's lower part) — and the reveal window it
+  TOGGLES:
   the first double-click starts `REVEAL_WEEK_DURATION_S` (returning
   True), the next one ends it (a toggle-off, not a restart; False).
   While it runs `paint()` SKIPS the HandLayers — the hands are
@@ -61,16 +65,24 @@ draws the MINUTE layers (hands, year marker) live.
   `_build_layers()` seats `ArchetypeLayer` at the weekday_set z spot
   and appends `ArchetypeCenterLayer` above the hands while the mode
   is active; `_element_at` answers `"archetype:center"` over the
-  center disc; the arm hovers return the archetype's TWO-ROW article
-  (`_archetype_arm_tooltip` → `_archetype_two_rows`: the stained
-  glass — real art only — the figure's name, row 1, a rule, the
-  second-row name, row 2, resolved through
-  `SymbolismRepository.archetype_article`; an unwritten set shows
-  the name + the pending line, never a KeyError) and the center the
-  same via `_archetype_center_tooltip`; `encyclopedia_target`
-  follows each FIGURE's own (topic, entry) — today only the Walks
-  map onto the Professions pages, everything else answers None
-  gracefully (Sessions 6/8 add the topics)
+  center disc AND `"archetype:<index>"` over each arm DIAMOND (owner
+  slika 8, 2026-07-17: the arm figures are hover-enlarge targets
+  through `_arm_angle_at`, the one arm-diamond geometry — checked
+  after the Earth/Moon so the instrument keeps priority); the arm
+  figures return the archetype's TWO-ROW article
+  (`_archetype_arm_tooltip(index)` → `_archetype_two_rows`: the
+  stained glass — real art only — the figure's name, row 1, a rule,
+  the second-row name, row 2, resolved through
+  `SymbolismRepository.archetype_article`; an unwritten set shows the
+  name + the pending line, never a KeyError) — EXCEPT the Ages
+  (compass light), which show `_archetype_three_side(index)`: a
+  THREE-COLUMN layout (owner slika 6, "oba odmah") the width of the
+  two-side legend — the age's text, the Tree register and the
+  Menagerie register at once. The center answers via
+  `_archetype_center_tooltip`; `encyclopedia_target` follows each
+  FIGURE's own (topic, entry) — today only the Walks map onto the
+  Professions pages, everything else answers None gracefully
+  (Sessions 6/8 add the topics)
 - `_year(when)`: every hover YEAR renders through this one method
   (Session 16, owner amendment 2026-07-17) —
   `core.deep_time.format_year_line`: the official year with the Anno
