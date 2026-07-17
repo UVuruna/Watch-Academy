@@ -69,6 +69,8 @@ full badge visible with margin, no text/watermark.
 
 ### 1. Bodily-Kinesthetic — "Body Smart" (Prism Zeal arm, orange)
 
+**Bodily-Kinesthetic — "Body Smart"** → `assets/emblem/intelligence/BodilyKinesthetic.png`
+
 Zeal is Mars' working-day ember, the soldier's afternoon; the Body
 Smart's whole domain is muscle and motion, so it inherits the action
 arm outright.
@@ -79,6 +81,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 2. Interpersonal — "People Smart" (Prism Passion arm, red)
 
+**Interpersonal — "People Smart"** → `assets/emblem/intelligence/Interpersonal.png`
+
 Passion is Venus's own arm, the evening of relationship; reading and
 connecting with other people is Venus's proper domain.
 
@@ -87,6 +91,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 ```
 
 ### 3. Linguistic — "Word Smart" (Prism Sorrow arm, purple)
+
+**Linguistic — "Word Smart"** → `assets/emblem/intelligence/Linguistic.png`
 
 Sorrow is "Odin's hour, wisdom bought by sacrifice in the dark" —
 Mercury/Odin is the canon's own god of language and writing, so Word
@@ -98,6 +104,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 4. Naturalist — "Nature Smart" (Prism Calm arm, blue)
 
+**Naturalist — "Nature Smart"** → `assets/emblem/intelligence/Naturalist.png`
+
 Calm is "the still, moonlit hour" of the Moon's pre-dawn watch — the
 patient quiet in which nature is actually observed.
 
@@ -106,6 +114,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 ```
 
 ### 5. Logical-Mathematical — "Number Smart" (Prism Renewal arm, green)
+
+**Logical-Mathematical — "Number Smart"** → `assets/emblem/intelligence/LogicalMathematical.png`
 
 Renewal is Saturn's own patient order, and Saturn is astrology's
 planet of structure, time and measurement — the Number Smart's natural
@@ -117,6 +127,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 6. Musical — "Sound Smart" (Prism Joy arm, yellow)
 
+**Musical — "Sound Smart"** → `assets/emblem/intelligence/Musical.png`
+
 Joy is Jupiter's noon bell, "the day's peak" — Jupiter/Zeus is
 classically music and celebration's own patron.
 
@@ -125,6 +137,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 ```
 
 ### 7. Existential — "Life Smart" (Trinity Faith arm, yellow-gold)
+
+**Existential — "Life Smart"** → `assets/emblem/intelligence/Existential.png`
 
 Faith is the Trio's vertical axis, "the question aimed at noon" — the
 unanswerable question pointed straight up is existential thought's own
@@ -136,6 +150,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 8. Intrapersonal — "Self Smart" (Trinity Hope arm, blue)
 
+**Intrapersonal — "Self Smart"** → `assets/emblem/intelligence/Intrapersonal.png`
+
 Hope is "the inward lamp before dawn" — the dawn arm turned inward,
 looking at the self before the world wakes.
 
@@ -144,6 +160,8 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 ```
 
 ### 9. Spatial — "Picture Smart" (Trinity Love arm, red)
+
+**Spatial — "Picture Smart"** → `assets/emblem/intelligence/Spatial.png`
 
 Love's arm is already read as "the seeing heart of the evening" — an
 astrolabe is a visual-spatial instrument that maps the whole sky by
@@ -192,11 +210,15 @@ literal characters to render.
 
 ### Wheel of Moods (default)
 
+**Wheel of Moods** → `assets/emblem/mood/Wheel_of_Moods.png`
+
 ```
 Circular medallion, vivid allegorical enamel in polished silver cameo, photorealistic render, perfectly centered, isolated on white background. The face divides into six equal enamel wedges arranged clockwise from the top like a sundial's hour marks: bright golden-yellow at 12 o'clock, deep amber-orange at 2 o'clock, blood red at 4 o'clock, dark violet-purple at 6 o'clock, vivid royal blue at 8 o'clock, forest green at 10 o'clock — each wedge a glossy enamel slice with a fine engraved sundial hour-tick along its outer edge. Center: a small radiant WHITE boss standing proud above the six wedges, blazing pure white light as though all six enamel colors were gathered back into one source. Rim: a thin dark oxidized-silver outer ring running the full circumference, broken only at the very bottom beneath the violet-purple wedge by one small pale-silver crescent moon inlaid into the ring like a quiet watching eye. Colors: golden yellow, amber orange, blood red, violet purple, royal blue and forest green enamel wedges, a blazing white center boss, one pale-silver crescent accent.
 ```
 
-### Wheel of Moods — dark variant (optional, `Wheel_of_Moods_dark.png`)
+### Wheel of Moods — dark variant (optional)
+
+**Wheel of Moods — dark variant** → `assets/emblem/mood/Wheel_of_Moods_dark.png`
 
 Same composition, cast in a darker frame so the plate reads cleanly
 against the app's dark theme; still delivered white-background per the

@@ -50,7 +50,7 @@ domain — the hour's changing light, not a fixed moral stance).
 
 ## The plates
 
-**Glory (Sunday — Ruler face)**
+**Glory (Sunday — Ruler face)** → `assets/emblem/mood/Glory.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: the sun at its exact zenith, a crowned figure standing in a blinding noon halo casting no shadow at all, arms thrown open to the light; glossy gradient sky-disc blazing pure white-gold at the center and fading to deep noon blue at the rim. Border: polished silver ring with a sundial hour-tick motif, four small white-gold enamel roundels bearing a tiny sun-at-zenith mark. Colors: silver dominant, blinding white-gold, noon blue.
 ```
@@ -58,37 +58,37 @@ Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradie
 **Awe (Sunday — Servant face, the DUAL)** — *owner rename 2026-07-14:
 the servant's mood is AWE (Plutchik's own fear + surprise compound —
 the feeling of standing under something larger than yourself);
-Eclipse stays an EVENT, not a feeling.*
+Eclipse stays an EVENT, not a feeling.* → `assets/emblem/mood/Awe.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a servant figure kneeling low near the bottom rim, face lifted and eyes wide, one hand half-raised to shield them — watching from far below as an immense sun blazes at the zenith wearing a thin dark eclipse ring, his long shadow stretching behind him; fear and wonder held in one upturned face; glossy gradient sky-disc pale silver-blue at the base climbing to one blinding white-gold point high in the field. Border: polished silver ring with a sundial hour-tick motif, four small black-enamel roundels with silver trim bearing a tiny upturned crescent. Colors: silver dominant, pale silver-blue, blinding white-gold point, deep charcoal shadow.
 ```
 
-**Calm (Monday)**
+**Calm (Monday)** → `assets/emblem/mood/Calm.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a still lake at the blue hour before sunrise, a heron standing motionless on one leg, a crescent moon and the first pale star mirrored on the water without a ripple; glossy gradient sky-disc washing from deep pre-dawn blue at the rim to pale silver-blue at the center. Border: polished silver ring with a sundial hour-tick motif, four small blue-enamel roundels bearing a tiny standing heron. Colors: silver dominant, pre-dawn blue, pale moon white.
 ```
 
-**Zeal (Tuesday)**
+**Zeal (Tuesday)** → `assets/emblem/mood/Zeal.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a blacksmith's hammer striking sparks off molten iron at the height of the working day, a runner mid-stride trailing embers just beyond the anvil; glossy gradient sky-disc washing from deep afternoon amber at the rim to blazing ember-orange at the center. Border: polished silver ring with a sundial hour-tick motif, four small orange-enamel roundels bearing a tiny striking hammer. Colors: silver dominant, ember orange, forge amber.
 ```
 
-**Sorrow (Wednesday)**
+**Sorrow (Wednesday)** → `assets/emblem/mood/Sorrow.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a cloaked figure bowed beneath a midnight sky, a single tear-shaped amethyst falling toward still dark water, faint ripples catching the last purple light; glossy gradient sky-disc washing from starless black at the rim to deep mourning purple at the center. Border: polished silver ring with a sundial hour-tick motif, four small purple-enamel roundels bearing a tiny falling teardrop. Colors: silver dominant, mourning purple, midnight black.
 ```
 
-**Joy (Thursday)**
+**Joy (Thursday)** → `assets/emblem/mood/Joy.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a figure laughing with arms thrown wide beneath a golden noon sun, bursts of golden light scattering around them like fireworks; glossy gradient sky-disc washing from warm gold at the rim to brilliant sun-yellow at the center. Border: polished silver ring with a sundial hour-tick motif, four small yellow-enamel roundels bearing a tiny burst of light. Colors: silver dominant, sun yellow, warm gold.
 ```
 
-**Passion (Friday)**
+**Passion (Friday)** → `assets/emblem/mood/Passion.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: two dancers mid-turn in flame-red silk against a burning sunset horizon, hands almost touching as the sky bleeds red behind them; glossy gradient sky-disc washing from deep dusk violet at the rim to passionate sunset-red at the center. Border: polished silver ring with a sundial hour-tick motif, four small red-enamel roundels bearing a tiny pair of entwined hands. Colors: silver dominant, sunset red, dusk violet.
 ```
 
-**Renewal (Saturday)**
+**Renewal (Saturday)** → `assets/emblem/mood/Renewal.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a green sprout breaking through dew-soaked morning soil, sunrise breaking gold over a freshly plowed field behind it; glossy gradient sky-disc washing from pale morning gold at the rim to fresh dew-green at the center. Border: polished silver ring with a sundial hour-tick motif, four small green-enamel roundels bearing a tiny green sprout. Colors: silver dominant, fresh green, morning gold.
 ```
@@ -102,7 +102,7 @@ plate below is its canon art (`Eclipse.png` — it remains the Ninth
 Mood's own plate; it is no longer the Sunday dual's name, which is
 Awe above).
 
-**Eclipse (the Ninth Mood)**
+**Eclipse (the Ninth Mood)** → `assets/emblem/mood/Eclipse.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished silver cameo, gradient sky-disc field, photorealistic render, perfectly centered, isolated on white background. Center: a darkened sun disc ringed by a thin silver corona, a crown resting alone on an empty throne in shadow, a single candle guttering beside it; glossy gradient sky-disc black at the center with a thin silver corona ring bleeding to charcoal at the rim. Border: polished silver ring with a sundial hour-tick motif, four small black-enamel roundels with silver trim bearing a tiny corona ring. Colors: silver dominant, eclipse black, corona silver.
 ```

@@ -45,42 +45,42 @@ one family with no dial metal of its own — corrosion, not alchemy).
 
 ## The plates
 
-**Pride (Sunday — Ruler face)**
+**Pride (Sunday — Ruler face)** → `assets/emblem/sin/Pride.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: the crowned Ruler gazing into a tall gilded mirror that reflects his own crown doubled and enlarged, peacock feathers fanned behind the throne like a second, false halo; glossy cracked-obsidian field with jagged fissures glowing blinding white-gold like sunlight leaking through black glass. Border: blackened iron ring with a thorned-bramble motif, four small white-gold enamel roundels bearing a tiny broken mirror shard. Colors: black iron dominant, blinding white-gold glow, tarnished bronze.
 ```
 
-**Servility (Sunday — Servant face, the DUAL)**
+**Servility (Sunday — Servant face, the DUAL)** → `assets/emblem/sin/Servility.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: a bowed servant figure on both knees, wrists bound by ribbons disguised as royal sashes, thin strings running up from his shoulders into the dark like a puppet's; glossy cracked-obsidian field with jagged fissures glowing pale silver-black like moonlight through cracked stone. Border: blackened iron ring with a thorned-bramble motif, four small black-enamel roundels with silver trim bearing a tiny puppet cross. Colors: black iron dominant, cold silver glow, ash gray.
 ```
 
-**Fear (Monday)**
+**Fear (Monday)** → `assets/emblem/sin/Fear.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: a small hunched figure shrinking from its own shadow, cast impossibly long and monstrous by a cold blue moon, one hand clutching a candle guttering down to its last flame; glossy cracked-obsidian field with jagged fissures glowing pale cold blue like moonlight through cracked ice. Border: blackened iron ring with a thorned-bramble motif, four small blue-enamel roundels bearing a tiny guttering candle. Colors: black iron dominant, cold blue glow, ash white.
 ```
 
-**Wrath (Tuesday)**
+**Wrath (Tuesday)** → `assets/emblem/sin/Wrath.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: a shattered shield and a broken spear crossed beneath a raised fist wreathed in ember flame, storm clouds boiling behind; glossy cracked-obsidian field with jagged fissures glowing furious ember-orange like a forge crack. Border: blackened iron ring with a thorned-bramble motif, four small orange-enamel roundels bearing a tiny broken spearhead. Colors: black iron dominant, ember-orange glow, blood red.
 ```
 
-**Greed (Wednesday)**
+**Greed (Wednesday)** → `assets/emblem/sin/Greed.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: grasping hands clutching an overflowing chest of coins that spill uncounted through the fingers, a padlock still clamped shut on an already-open lid; glossy cracked-obsidian field with jagged fissures glowing sickly purple like poisoned twilight through cracked stone. Border: blackened iron ring with a thorned-bramble motif, four small purple-enamel roundels bearing a tiny broken padlock. Colors: black iron dominant, sickly purple glow, tarnished coin gold.
 ```
 
-**Excess (Thursday)**
+**Excess (Thursday)** → `assets/emblem/sin/Excess.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: a banquet table collapsing under its own overflowing plenty, a golden goblet spilling wine that never stops, a bloated figure slumped back in gluttonous exhaustion; glossy cracked-obsidian field with jagged fissures glowing golden-yellow like molten honey through cracked stone. Border: blackened iron ring with a thorned-bramble motif, four small yellow-enamel roundels bearing a tiny overturned goblet. Colors: black iron dominant, golden-yellow glow, spilled-wine amber.
 ```
 
-**Jealousy (Friday)**
+**Jealousy (Friday)** → `assets/emblem/sin/Jealousy.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: a serpent coiled possessively around a rose already wilting in its grip, one suspicious eye peering out from behind a half-drawn curtain; glossy cracked-obsidian field with jagged fissures glowing jealous crimson-red like embers through cracked stone. Border: blackened iron ring with a thorned-bramble motif, four small red-enamel roundels bearing a tiny coiled serpent. Colors: black iron dominant, crimson-red glow, wilted-rose brown.
 ```
 
-**Envy (Saturday)**
+**Envy (Saturday)** → `assets/emblem/sin/Envy.png`
 ```
 Ornate circular badge, vivid allegorical enamel in blackened iron cameo, fissured obsidian field, photorealistic render, perfectly centered, isolated on white background. Center: a gaunt figure peering over a low stone wall at a neighbor's greener field, eyes narrowed and faintly green-tinged, one hand reaching through the fence toward wheat just out of grasp; glossy cracked-obsidian field with jagged fissures glowing bitter green like moss-light through cracked stone. Border: blackened iron ring with a thorned-bramble motif, four small green-enamel roundels bearing a tiny reaching hand. Colors: black iron dominant, bitter green glow, dead-vine brown.
 ```

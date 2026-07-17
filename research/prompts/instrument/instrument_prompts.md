@@ -50,6 +50,8 @@ centered) rather than the paraphrase.
 
 ## Section logo — aged bronze cameo, gear-tooth field
 
+**The Instrument section logo** → `assets/instrument/logo.png`
+
 ```
 Ornate circular badge, aged bronze relief, engraved gear-tooth field, photorealistic render, perfectly centered, isolated on white background. Center: a weathered brass instrument face — a full 24-hour clock, noon marked at the very top and midnight at the very bottom, a slender hour hand standing partway down the right side and a thinner minute hand ticking just past it, fine engraved numerals running once around the rim from 1 to 24, small exposed gears and a tiny pendulum bob visible beneath the hands where the mechanism shows through the case. Read plainly as a working timekeeping instrument, NOT a zodiac wheel: no star signs, no constellations, no astrological glyphs anywhere on the face or the border. Border: aged bronze ring machined with fine tick-tooth relief like the dial's own 360-degree rim, four small dark-patina roundels at the cardinal points each bearing a tiny embossed cog. Colors: aged bronze dominant, warm brass highlight, deep patina shadow.
 ```
@@ -144,6 +146,8 @@ are the app's own Seasons/Compass rendering.
 ---
 
 ## Paint and Light (`paint_light`) — GEMINI PROMPT
+
+**Paint and Light** → `assets/instrument/paint_light.png`
 
 Genuinely abstract: pre-Newton pigment theory vs. post-Newton light
 theory, and the one twist the article hangs everything on — mixed

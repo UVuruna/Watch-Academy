@@ -12,6 +12,25 @@ retired (the old Hades/Baldur/Set/Crnobog/Jester/Legion ninths).
 Check the root [Roster](../../ROSTER.md) for what is already on disk
 per source.
 
+## Before writing a NEW sheet
+
+Read [How to Write a Prompt Sheet](../../../PromptPainter/instructions.md)
+first — PromptPainter's own sheet contract, owned and enforced by its
+parser (`painter/sheet_parser.py`), also behind the GUI's own
+**Instructions** button. Every image needs a
+`**Title** → \`path.png\`` line right in its own entry; skip it and
+the tool silently drops that image with ZERO warning — no error, no
+log, nothing (`intelligences_prompts.md` shipped with only 1 of 11
+entries loading until caught 2026-07-17). Verify any sheet before
+handing it to the owner:
+
+```bash
+python main.py "path/to/your_sheet.md" --dry-run
+```
+
+run from `Gadgets/PromptPainter/` — zero problems and the expected
+item count means the sheet is safe to queue.
+
 ## Files
 
 ### `weekday/` — one complete sheet per theme
