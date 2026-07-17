@@ -40,7 +40,6 @@ in [Roadmap](ROADMAP.md).
   📁 design/            ← mockups and reference images (not bundled)
   📁 illustrator/       ← vector sources for skin assets (not bundled)
   📁 research/          ← one-off analysis scripts and oversized data (not bundled)
-  📁 tools/             ← owner-run asset utilities (background remover)
 ```
 
 ## Documentation
@@ -66,8 +65,9 @@ in [Roadmap](ROADMAP.md).
 - [Tests (folder)](tests/___tests.md)
 - [Setup (folder)](setup/___setup.md)
 - [Design (folder)](design/___design.md)
-- [Research (folder)](research/___research.md)
-- [Tools (folder)](tools/___tools.md) — owner-run background remover
+- [Research (folder)](research/___research.md) — image-generation
+  prompt sheets live here; see [How to Write a Prompt
+  Sheet](../PromptPainter/instructions.md) before authoring a new one
 - [Roster — the Master Systematics](ROSTER.md) — every theme, every
   figure, its seat, per-source art coverage (generated:
   `python research/build_roster.py`)
