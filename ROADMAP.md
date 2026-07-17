@@ -266,6 +266,45 @@ lives in [The DOMY Canon](CANON.md).
    own symbolism — DOMY traces the INVERTED cross, MORPH the
    upright cross, MASON G / NUMBERS / Templar the hexagram/seal
    (owner: "malo legende oko tih naših odabira").
+15c. **THE PUNCH LIST (owner 2026-07-17, with screenshots) — Session
+   18, runs AFTER Deep Time (both edit the controller menu):**
+   - **Archetype figures must inherit the SLOT behavior** (slika 8):
+     the image CLAMPS inside the diamond (never overflows) and
+     HOVER-ENLARGES exactly like every other slot — same sizing
+     family, same lift.
+   - **Omega double-click hit = the FULL circle** around the letter
+     (slika 9): today only the glyph (even just its lower part)
+     answers; the whole round area at the 24h seat must.
+   - **Earth Date + Weekday switches live in Design ▸ Earth**
+     (slika 10): move the archetype Earth-weekday toggle there,
+     beside Clean/Atmosphere/Date — two switches: Date, Weekday.
+   - **Wheel-pair naming rework (ROADMAP 11) IMPLEMENTS NOW**
+     (slika 11) + owner seals: the Calendar-only lighting entries
+     are NON-VISIBLE on other pointers (never grayed-visible); on
+     the Calendar they appear INLINE only while it is active (no
+     extra dropdown level). Seasons stops being fully grayed: its
+     pair becomes **Seasons / Elements** — implement the ELEMENTS
+     wheel (fire/air/water/earth hues, canon) and seat the
+     TETRAMORPH figures on it (Man/Angel, Lion, Ox, Eagle —
+     placeholders per the house rule), un-graying the pair.
+   - **The THREE-SIDE article** (owner): a three-column article
+     layout — total width stays the TWO-SIDE width, columns
+     narrower, text wraps more; first use: the Ages archetype
+     shows BOTH registers at once (age text + the Tree + the
+     Menagerie — owner: "oba odmah").
+   - **Window margin derived from the LIVE settings** (slike 1–3):
+     yesterday's derived margin uses a fixed max-marker constant —
+     it over-reserves at default sizes and still clips at max
+     Earth size × max hover. Recompute the margin from the user's
+     ACTUAL earth/moon scale × hover-enlarge × glow constants on
+     every settings change — exact reservation, no waste, no clip.
+   - **TRUE moon illumination** (slike 4–7): today's illumination
+     interpolates LINEARLY between the four bundled principal
+     phases — exact at the principals, up to ~1.5–3 p.p. off
+     mid-phase (ours 10.3% vs the true ~11.5% on 2026-07-17).
+     Replace with a compact analytic elongation series (pure
+     Python, no data files), golden-tested against our own
+     events.sqlite instants; rise/set already match to the minute.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
