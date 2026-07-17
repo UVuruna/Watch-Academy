@@ -385,6 +385,22 @@ lives in [The DOMY Canon](CANON.md).
      + 2 secondary + 2 darkened twilight hues, not the full
      palette) — flagged changeable if the owner prefers other
      words.
+15f. **THE HOVER PERFORMANCE ROUND (owner 2026-07-17, with the
+   profiling report) — Session 20.** The owner's report: Composite
+   rebuild 2,083 calls × 38.9 ms avg (max 725 ms), total 81 s —
+   because the weekday bodies and archetype figures live INSIDE the
+   cached DAILY composite, every hover enter/leave rebuilds the
+   whole composite (the long-known "split the weekday layer out of
+   the static composite" debt, now due). THE FIX: move the
+   hover-variable layers (weekday bodies, archetype figures) OUT of
+   the composite into live per-paint drawing (their pixmaps are
+   already rasterize-cached — a handful of blits); hover then
+   rebuilds NOTHING. Targets: zero composite rebuilds on hover;
+   paint frame stays in single-digit ms at 720 px; measure
+   before/after with the existing @timed instrumentation and report
+   the numbers. Secondary: Hover text max 622 ms first-hover spikes
+   — check the article image loads ride the working-set downscales
+   and consider caching the built article HTML per (element, day).
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
