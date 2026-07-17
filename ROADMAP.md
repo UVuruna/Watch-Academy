@@ -346,6 +346,45 @@ lives in [The DOMY Canon](CANON.md).
    he does. A Settings choice (and the window flags swap needs the
    documented Windows re-parenting care: flags change before
    show(), or hide/re-show).
+15e. **THE VERIFICATION ROUND II (owner 2026-07-17, screenshots) —
+   Session 19:**
+   - **Earth Date/Weekday are EXCLUSIVE** (slike 1–2): Weekday
+     alone must work (today it draws nothing without Date); both
+     together is wrong — clicking one unchecks the other (either,
+     or neither).
+   - **Margin gap** (slika 4): the hovered glowing Earth still
+     stops short of the window edge — diagnose the formula term by
+     term (epsilon? max(earth,moon) reserving for the larger
+     unhovered marker? glow reserve when no glow?) and tighten;
+     explain the final formula in the report.
+   - **TRUE always-on-top** (owner test): the Qt StaysOnTop hint
+     degrades to normal-window behavior after toggling (flags
+     recreate the native window). THREE z-modes now: "bottom" /
+     "normal" (the accidental middle mode — keep it, the owner
+     liked it) / "top" enforced NATIVELY (SetWindowPos
+     HWND_TOPMOST via app/native, re-asserted after every flag
+     swap and show). Also reconnect screenChanged after the swap
+     (the S18 caveat).
+   - **Top-level slot ordinals CLICK = ENABLE** (slika 3): clicking
+     1st/2nd/3rd Slot in the main menu must do exactly what their
+     dropdown Enable does (the 1→2→3 chain still gates); today it
+     only flips the checkmark visually.
+   - **Elements top-level CLICK = all on / all off**: the check
+     shows ONLY when every element is on; clicking then turns all
+     off.
+   - **Custom SIZE slider** (owner ask): beside the fixed presets
+     (360…1440), a Settings slider for any diameter in that range.
+   - **Tetramorph three-side** (owner: "sva 3 ako se podudaraju"):
+     the tetramorph article uses the three-side layout — creature +
+     evangelist + element.
+   - **Wheel-pair naming refinements** (owner primedbe): Seasons
+     pair renames to "Temperaments / Elements" (kills the
+     Seasons-inside-Seasons duplicate); Aurora gets its OWN pair
+     instead of a second Paint/Light — "Warm / Cool" (its paint
+     leans orange-warm, its light cyan-cool; aurora uses 3 primary
+     + 2 secondary + 2 darkened twilight hues, not the full
+     palette) — flagged changeable if the owner prefers other
+     words.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
