@@ -735,24 +735,36 @@ them.)
 
 **PROPOSED additions (status after the owner's 2026-07-17 review):**
 
-- **Thesis – Antithesis – Synthesis** (Hegel) — owner unsure, the
-  agent's defense stands for his verdict: the THESIS is what
-  STANDS (the past's order, 04h), the ANTITHESIS is what
-  CHALLENGES (the future's strike, 20h), the SYNTHESIS rules above
-  (the present, 12h) — and Hegel's engine is CIRCULAR: every
-  synthesis becomes the next thesis, the wheel turns — dialectics
-  belongs on a dial.
-- **Spirit – Body – Soul** — owner will accept IF the
-  spirit/soul difference convinces him; the offered mapping: the
-  SOUL (duša) is the inner personal life — mind, feelings, will,
-  what makes you YOU — and it THINKS (04h, the inner blue); the
-  BODY ACTS (20h, the deed); the SPIRIT is the God-facing faculty
-  — conscience, worship — and it SPEAKS (12h: *"the words that I
-  speak unto you, they are SPIRIT"* — John 6:63). The soul faces
-  the world, the spirit faces heaven.
-- **Sun – Earth – Moon** — PARKED (owner unsure, agent agrees the
-  colors do not land naturally; the owner's law stands: nothing is
-  forced — we already have more than enough).
+- **Thesis – Antithesis – Synthesis** (Hegel) — STILL OPEN, owner
+  studying the three concepts (the agent's compressed "synthesis
+  becomes the next thesis" was rightly corrected by the owner: the
+  full turn is thesis → antithesis → synthesis, and the synthesis
+  STANDS as a new thesis only until life raises a NEW antithesis
+  against it — the wheel needs all three every turn). The teaching
+  example on file (the family's own): the child OBEYS (thesis),
+  the youth REBELS (antithesis), the adult understands both rule
+  and freedom (synthesis) — and as a parent his order becomes the
+  thesis his own child will one day challenge. Dial mapping if
+  adopted: thesis = what stands (the past, 04h), antithesis = what
+  challenges (the future, 20h), synthesis = the judgment above
+  (12h) — and today's verdict is tomorrow's precedent.
+- **Spirit – Body – Soul — SEALED WITH THE OWNER'S OWN DEFINITION
+  (2026-07-17):** the SOUL enters the body and life begins; at
+  death it leaves the body and rejoins the COMMUNITY OF SOULS —
+  and that sea of souls is THE SPIRIT. Cyclical, as befits a dial.
+  This is DOMY's own theology (we forge symbolism): it has real
+  lineage (the Stoic world-breath, Emerson's Over-Soul, the Slavic
+  ancestors' souls) and the language itself testifies — Serbian
+  says a dying man "PREDADE DUH" (surrendered the spirit; Christ's
+  own words on the cross, Luke 23:46): the soul is GIVEN BACK to
+  the Spirit. And it LOCKS onto the sealed Ages wheel: Death at
+  24h wears pure white (INTO the light), and the Unborn wedge at
+  03h — the ancestors AND the not-yet-born in one moonlight pool —
+  IS the community of souls the owner named. Trio seats: the
+  SPIRIT above (12h, the sea souls come from and return to), the
+  BODY at the deed's arm (20h), the SOUL at the inner blue (04h).
+- **Sun – Earth – Moon** — CLOSED (owner 2026-07-17: "nećemo" —
+  the colors do not land; nothing is forced).
 
 **The philosophy boundary (owner closure 2026-07-17):** the
 population and world-politics readings around the family circuit
