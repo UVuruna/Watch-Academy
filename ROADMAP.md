@@ -412,6 +412,52 @@ lives in [The DOMY Canon](CANON.md).
    the trio (Trinity) dial. One sizing path: the center figure uses
    the SAME computed size as the diamond-clamped outer figures, and
    reveal mode must not alter it.
+15h. **THE OWNER ROUND OF 2026-07-18 (UV/prompt.txt, nine points) —
+   Session 21 material.** DONE the same day: the Earth label trio
+   (Date / Weekday / Full Date — accepted names, both-bools = full);
+   the tetramorph files moved to the config path
+   (`archetype/<source>/tetramorph/<Creature>.png`) with the sheet
+   corrected and the missing Throne + Seal center prompts written.
+   RECORDED, in owner priority order:
+   1. **Menu rework** — left column of TITLES only, each opening its
+      submenu panel on the right; related groups may share one title
+      (e.g. Palette + Clock Tint = color). The SIZE slider (360–1440)
+      exists in Settings since 0.14.314 — owner may not have seen it
+      pre-restart; if he means the MENU too, add it there.
+   2. **SPACE without focus** — the encyclopedia jump works only
+      after the widget was clicked (Qt keyboard focus); owner rule:
+      it must work whenever the HOVER works. Needs a key path that
+      does not depend on focus (native hook or focus-on-hover).
+   3. **Top-mode bugs**: (A) with the clock focused the HOVER popup
+      opens BEHIND the topmost dial — invisible (not focused → fine);
+      the popup must ride above the TOPMOST window. (B) with the
+      clock focused SPACE opens the encyclopedia even off the themed
+      elements ("i za osnovnog sata") — investigate the fallthrough.
+      (C) occasional CRASH on SPACE, not reproducible — add crash
+      logging (faulthandler to a user-dir file) so the next one
+      leaves a trace.
+   4. **Archetype names**: an option to show figures WITHOUT names
+      (like the weekday Names toggle); a MAX FONT SIZE cap for ALL
+      dial name labels (long vs short texts diverge wildly today);
+      two-word names wrap to TWO lines (e.g. the Compass Walks).
+   5. **Archetype center display trigger** — owner asks for ideas;
+      proposal delivered (always-ghost / solar-noon window /
+      changing-of-the-guard flash), awaiting his pick.
+   6. **Hover color-theme alignment** (standard, not archetype):
+      owner grades — Compass Walks seasons 3/5, turnings 4-5/5;
+      Compass Ages seasons 4-5/5, turnings 3/5; Seasons Temperaments
+      5/5; Seasons ELEMENTS 1-2/5 — the weak one. Proposal: re-seat
+      the Elements hues on the classical humoral pairing
+      (spring=Air white, summer=Fire red, autumn=Earth green,
+      winter=Water blue) — awaiting the owner's verdict.
+   8. **Click-cycles in the menu**: clicking the ACTIVE parent entry
+      cycles its sub-list (Seasons click → Temperaments↔Elements;
+      same for Ring/Umbra/Earth top-bottom pairs; Planetary/Pantheon
+      cycled by clicking the color entry — or the reverse). PLUS the
+      caught BUG: both sub-options can be UNCHECKED today (slika 2) —
+      one must always hold.
+   9. **Articles for the new themes** — Session 6 (Opus) queued next;
+      the master list lives in WORKPLAN/ROADMAP so nothing is lost.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over

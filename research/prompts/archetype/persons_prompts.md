@@ -54,8 +54,9 @@ look.
 
 **Drop paths:** `assets/archetype/<source>/persons/` —
 `One_Love.png`, `Michael_Courage.png`, `Devil_Hatred.png`,
-`Jesus_Humility.png`. The two remaining seats REUSE the Scale glass
-at `assets/badge/<source>/scale/glass/` — see the reuse notes.
+`Jesus_Humility.png` + the center `Seal.png` (its section below). The
+two remaining seats REUSE the Scale glass at
+`assets/badge/<source>/scale/glass/` — see the reuse notes.
 
 ---
 
@@ -137,6 +138,20 @@ coins slipping into the dark. It serves this seat unchanged.
   [Scale Prompts](../badge/scale_badge_prompts.md)).
 - Same triangle-vs-lancet note as Lucifer: re-cut the frame if the
   owner wants a matched shape; the figure and palette stay.
+
+---
+
+## The center — the Seal (Prism PAINT)
+
+The sealed center of the six persons (owner 2026-07-16: Eye — Hearth —
+Seal — Union — Throne; this is the Prism paint seat). It was missing
+from every sheet until 2026-07-18 (owner catch).
+
+**the Seal** → `assets/archetype/persons/Seal.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background. A great wax-seal read in glass: a six-pointed star of interlaced ribbons at the center — six strands of colored light (gold, white, ember-red, midnight-blue, green, violet) braided into ONE knot that cannot be untied — pressed into a disc of deep amber glass like a signet into wax. Around the knot the six ribbons run outward to the rim, each keeping its own color, all bound at the center. A quiet white-gold glow sits behind the knot. Border: a ring of rope-and-signet leadwork, six small bosses on the rim where the ribbons meet it. Palette: signet amber, the six arm hues, deep umber lead. NO lettering anywhere.
+```
 
 ---
 

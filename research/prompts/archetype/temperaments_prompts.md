@@ -1,12 +1,13 @@
-# Seasons Archetype Prompts (Gemini) — the Four Temperaments
+﻿# Seasons Archetype Prompts (Gemini) — the Four Temperaments
 
 The SEASONS pointer's archetype (owner doctrine 2026-07-16, canon in
 [The DOMY Canon](../../../CANON.md)): the oldest four-fold reading of
 man there is — Hippocrates' four humors — laid on the four season arms
 in their classical correspondence, on the seasons palette's OWN colors.
-Unlike the trio pointers, the Seasons serve ONE palette under both
-styles: there is no paint/light split here, one set of four windows
-does the whole work. Each window personifies one temperament — its
+The Seasons DO split by wheel now (owner seal 2026-07-17, CANON
+§Seasons light): PAINT = these Four Temperaments; LIGHT = the
+Tetramorph on the Four Elements wheel (its section below); both share
+the ONE Throne center. Each window personifies one temperament — its
 humor, its element, its person-type (the way the Trinity has its
 syndromes), a bright and a dark face, and its age of man. Owner's
 image brief, verbatim intent:
@@ -44,8 +45,14 @@ metal-cameo register can be added later if the owner wants a second
 look.
 
 **Drop paths:** `assets/archetype/<source>/temperaments/` —
-`Sanguine.png`, `Choleric.png`, `Melancholic.png`, `Phlegmatic.png`
-(+ the optional tetramorph files below).
+`Sanguine.png`, `Choleric.png`, `Melancholic.png`, `Phlegmatic.png`;
+the tetramorph set drops into `assets/archetype/<source>/tetramorph/` —
+`Man.png`, `Lion.png`, `Ox.png`, `Eagle.png` (SEALED — the Seasons
+LIGHT wheel's own figures; the old `temperaments/tetramorph_*.png`
+paths in earlier copies of this sheet were WRONG — the app reads
+`tetramorph/<Creature>.png`); the shared center drops as
+`assets/archetype/<source>/temperaments/Throne.png` (BOTH Seasons
+wheels use the one Throne).
 
 ---
 
@@ -81,45 +88,60 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 
 ---
 
-## Optional — the tetramorph persons layer (PROPOSED — owner has NOT approved)
+## The tetramorph — the Seasons LIGHT wheel's figures (SEALED 2026-07-17)
 
-**Not yet approved by the owner — do not generate until he says so.**
-The reserve SECOND ROW for the Seasons articles: the four living
-creatures around the throne (Revelation 4:7; Ezekiel 1) — the
-tetramorph, which is also the zodiac's own FIXED CROSS
+SEALED as the Seasons split (CANON §Seasons): PAINT carries the Four
+Temperaments above, LIGHT carries the TETRAMORPH on the Four Elements
+wheel — the four living creatures around the throne (Revelation 4:7;
+Ezekiel 1), which is also the zodiac's own FIXED CROSS
 (Aquarius–Leo–Taurus–Scorpio), a cross of persons on the Cross pointer
 circling the center the way they circle the throne. Each pairs to its
 temperament by element: the **Man/Angel** (air, sanguine spring), the
 **Lion** (fire, choleric summer), the **Ox** (earth, melancholic
-autumn), the **Eagle** (water, phlegmatic winter). Generate these ONLY
-on the owner's word, as four rondels (shown here) or as window crowns.
+autumn), the **Eagle** (water, phlegmatic winter). First batch
+generated and placed 2026-07-18.
 
 **the Man/Angel rondel** (air · Sanguine) →
-`assets/archetype/temperaments/tetramorph_Man.png`
+`assets/archetype/tetramorph/Man.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A winged human face — the Man/Angel of the tetramorph — amid a light spring wind, spring-green and pale-gold glass, blossom-and-swallow leadwork rim. NO lettering anywhere.
 ```
 
 **the Lion rondel** (fire · Choleric) →
-`assets/archetype/temperaments/tetramorph_Lion.png`
+`assets/archetype/tetramorph/Lion.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A winged lion's head roaring against a hot corona — the Lion of the tetramorph — summer-yellow and molten-gold glass, sunburst-and-flame leadwork rim. NO lettering anywhere.
 ```
 
 **the Ox rondel** (earth · Melancholic) →
-`assets/archetype/temperaments/tetramorph_Ox.png`
+`assets/archetype/tetramorph/Ox.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A winged ox's head bowed under a yoke among falling leaves — the Ox of the tetramorph — autumn-red and burnt-amber glass, falling-leaf-and-vine leadwork rim. NO lettering anywhere.
 ```
 
 **the Eagle rondel** (water · Phlegmatic) →
-`assets/archetype/temperaments/tetramorph_Eagle.png`
+`assets/archetype/tetramorph/Eagle.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A winged eagle's head still and watchful over a frozen lake — the Eagle of the tetramorph — winter-blue and ice-white glass, frost-and-icicle leadwork rim. NO lettering anywhere.
+```
+
+---
+
+## The center — the Throne (BOTH Seasons wheels)
+
+The ONE center over the four seasons (owner seal 2026-07-16: Throne
+for Seasons paint AND light — one throne, two readings of the same
+wheel; Revelation 4: the throne the four living creatures circle).
+It was missing from every sheet until 2026-07-18 (owner catch).
+
+**the Throne** → `assets/archetype/temperaments/Throne.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background. An EMPTY royal throne seen straight on — high-backed, carved, radiant — standing on a small dais at the still center of a four-fold rose window; from its seat four rays of colored light divide the surrounding glass into four quarters: spring green with blossom, summer gold with flame, autumn red with falling leaves, winter blue with frost — the four seasons wheeling around the unmoved seat. A faint glory of white-gold light crowns the empty seat (the ruler of the year is never pictured, only the throne). Border: a braided four-season leadwork ring — blossom, flame, leaf and frost joined in one circle. Palette: the four golden season hues around white-gold and deep umber lead. NO lettering anywhere.
 ```
 
 ---
@@ -134,8 +156,9 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 - Golden season colors used verbatim: Sanguine green `#129412`,
   Choleric yellow `#D9D900`, Melancholic red `#D4330F`, Phlegmatic
   blue `#0A70D8`.
-- The tetramorph persons layer is PROPOSED only — **do not generate**
-  the tetramorph files until the owner approves the second row.
+- The tetramorph is SEALED (owner 2026-07-17) as the Seasons LIGHT
+  wheel's figure set; the first batch landed 2026-07-18 under
+  `assets/archetype/<source>/tetramorph/`.
 - Quote/poem anchors for the articles only (never in art): the humor
   square (Sanguine–Melancholic, Choleric–Phlegmatic opposites) and the
   owner's four-greetings poem, which binds to these four arms and stays
