@@ -1119,32 +1119,46 @@ class AppController(QObject):
             # pointer or an element must not close the open menu).
             self._refresh_menu_gating()
 
-    def _toggle_earth_label(self, key: str, checked: bool) -> None:
-        """The Earth Date/Weekday toggles are MUTUALLY EXCLUSIVE (owner
-        2026-07-17, ROADMAP 15e): checking one unchecks the other; both
-        may be off. Turning `key` on clears its sibling; turning it off is
-        a plain clear. One skin install for the whole change."""
-        sibling_key = (
-            "earth_weekday" if key == "show_earth_date" else "show_earth_date"
+    # The Earth label trio (owner 2026-07-18, the accepted names Date /
+    # Weekday / Full Date): each menu option maps onto the TWO stored
+    # bools — full = both on, so old settings files need no migration.
+    _EARTH_LABEL_MODES = {
+        "date": (True, False),
+        "weekday": (False, True),
+        "full": (True, True),
+    }
+
+    def _set_earth_label(self, mode: str, checked: bool) -> None:
+        """THREE mutually exclusive Earth label options: checking one
+        unchecks the others, unchecking the active one turns the label
+        off entirely. One skin install for the whole change."""
+        date_on, weekday_on = (
+            self._EARTH_LABEL_MODES[mode] if checked else (False, False)
         )
-        sibling_toggle = (
-            self._earth_weekday_toggle
-            if sibling_key == "earth_weekday"
-            else self._earth_date_toggle
+        changed = (
+            self._settings.show_earth_date != date_on
+            or self._settings.earth_weekday != weekday_on
         )
-        updates = {key: checked}
-        if checked and getattr(self._settings, sibling_key):
-            updates[sibling_key] = False
-            # Mirror the sibling checkbox without re-entering this handler.
-            sibling_toggle.blockSignals(True)
-            sibling_toggle.setChecked(False)
-            sibling_toggle.blockSignals(False)
-        if getattr(self._settings, key) == checked and (
-            sibling_key not in updates
+        if changed:
+            self._settings = replace(
+                self._settings,
+                show_earth_date=date_on, earth_weekday=weekday_on,
+            )
+            self._install_skin(build_skin(self._settings))
+        self._sync_earth_label_toggles()
+
+    def _sync_earth_label_toggles(self) -> None:
+        """Mirror the three checkboxes onto the stored pair without
+        re-entering the handler."""
+        state = (self._settings.show_earth_date, self._settings.earth_weekday)
+        for toggle, mode in (
+            (self._earth_date_toggle, "date"),
+            (self._earth_weekday_toggle, "weekday"),
+            (self._earth_full_toggle, "full"),
         ):
-            return                        # nothing actually changed
-        self._settings = replace(self._settings, **updates)
-        self._install_skin(build_skin(self._settings))
+            toggle.blockSignals(True)
+            toggle.setChecked(state == self._EARTH_LABEL_MODES[mode])
+            toggle.blockSignals(False)
         self._flush_position()
 
     def _slot_chain_allows(self, enable_key: str) -> bool:
@@ -1508,8 +1522,9 @@ class AppController(QObject):
         # The date label ON the Earth marker (owner spec): its own
         # switch, grayed out below the size that can draw it at all.
         self._earth_date_toggle = self._add_toggle(
-            earth_menu, tr("Date"), settings.show_earth_date,
-            lambda checked: self._toggle_earth_label("show_earth_date", checked),
+            earth_menu, tr("Date"),
+            settings.show_earth_date and not settings.earth_weekday,
+            lambda checked: self._set_earth_label("date", checked),
             tr(
                 "The date written on the Earth marker (shown from "
                 "{size} px up)."
@@ -1518,19 +1533,33 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        # The abbreviated weekday UNDER the Earth date (owner 2026-07-17,
-        # slika 10): a GENERAL Earth option now — moved here from the
-        # archetype sub-toggle, and it works in BOTH normal and archetype
-        # mode. Same size gate as the Date (it writes under the date row).
+        # The abbreviated weekday on the Earth marker (owner 2026-07-17,
+        # slika 10): a GENERAL Earth option, working in BOTH normal and
+        # archetype mode. Same size gate as the Date.
         self._earth_weekday_toggle = self._add_toggle(
-            earth_menu, tr("Weekday"), settings.earth_weekday,
-            lambda checked: self._toggle_earth_label("earth_weekday", checked),
+            earth_menu, tr("Weekday"),
+            settings.earth_weekday and not settings.show_earth_date,
+            lambda checked: self._set_earth_label("weekday", checked),
             tr(
-                "The abbreviated day (TUE, THU…) on the Earth marker. "
-                "Mutually exclusive with the Date."
+                "The abbreviated day (TUE, THU…) on the Earth marker."
             ),
         )
         self._earth_weekday_toggle.setEnabled(
+            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
+        )
+        # FULL DATE (owner 2026-07-18, the accepted trio): date + month
+        # + abbreviated weekday together — the third exclusive option,
+        # stored as both bools on.
+        self._earth_full_toggle = self._add_toggle(
+            earth_menu, tr("Full Date"),
+            settings.show_earth_date and settings.earth_weekday,
+            lambda checked: self._set_earth_label("full", checked),
+            tr(
+                "The date with the abbreviated day beneath it — "
+                "everything on the Earth marker."
+            ),
+        )
+        self._earth_full_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         design_menu.addSeparator()

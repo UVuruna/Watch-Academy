@@ -135,18 +135,18 @@ def test_earth_weekday_migrates_from_the_old_key(store):
     assert store.load().earth_weekday is False
 
 
-def test_earth_date_and_weekday_are_mutually_exclusive_on_load(store):
-    """EARTH LABEL EXCLUSIVITY (owner 2026-07-17, ROADMAP 15e): a file
-    (hand-edited or pre-exclusivity) with BOTH the date and the weekday on
-    normalizes to the DATE winning — the weekday clears. Either one alone
-    survives untouched, and both-off stays both-off."""
+def test_earth_label_modes_survive_the_load(store):
+    """The Earth label trio (owner 2026-07-18, Date / Weekday / Full
+    Date): BOTH bools on is the valid FULL DATE mode now — the old 15e
+    date-wins normalization is retired, so all four combinations load
+    untouched."""
     base = '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
     store.path.write_text(
         base + ' "show_earth_date": true, "earth_weekday": true}',
         encoding="utf-8",
     )
     both = store.load()
-    assert both.show_earth_date is True and both.earth_weekday is False
+    assert both.show_earth_date is True and both.earth_weekday is True
     store.path.write_text(
         base + ' "show_earth_date": false, "earth_weekday": true}',
         encoding="utf-8",

@@ -2007,18 +2007,18 @@ class YearMarkerLayer(Layer):
             painter.drawEllipse(pos, size / 2, size / 2)
 
     def _draw_earth_label(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
-        """The Earth marker's text — the date OR the abbreviated weekday
-        (owner 2026-07-17, ROADMAP 15e: the two switches are EXCLUSIVE, so
-        exactly one of them is on here). The Weekday option is a GENERAL
-        Earth option, working in BOTH normal and archetype mode: WEEKDAY
-        alone writes "FRI" centered; DATE alone writes "8 Jul" centered.
-        During a DEEP travel (Session 16, deep proxy frame active) the DATE
-        additionally carries the YEAR beneath it — far from the present the
-        marker must say WHEN — as a two-row label (the date shifts up)."""
+        """The Earth marker's text — THREE modes (owner 2026-07-18, the
+        accepted trio): WEEKDAY alone writes "FRI" centered; DATE alone
+        writes "8 Jul" centered; FULL DATE (both switches on) writes the
+        date with the abbreviated weekday BENEATH it as a two-row label.
+        During a DEEP travel (Session 16, deep proxy frame active) the
+        YEAR row OUTRANKS the weekday — far from the present the marker
+        must say WHEN — so Full Date degrades to the date+year pair."""
         bold_font = QFont()
         bold_font.setBold(True)
         deep_travel = ctx.day.deep_cycles != 0
-        if ctx.skin.earth_weekday:
+        today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        if ctx.skin.earth_weekday and not ctx.skin.show_earth_date:
             # Weekday ALONE — a single centered row (owner: "FRI" must work
             # without the date). Uses the date font size (it is the only
             # row, so it gets the full label size).
@@ -2028,34 +2028,40 @@ class YearMarkerLayer(Layer):
                     round(size * defaults.EARTH_DATE_TEXT_SIZE),
                 )
             )
-            today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
             draw_outlined_text(
                 painter, pos, constants.WEEKDAY_LABELS[today], bold_font
             )
             return
-        # Date (with an optional deep-travel YEAR row beneath it).
+        # Date — alone, or over a second row: the deep-travel YEAR
+        # (priority), else the Full Date weekday.
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         bold_font.setPixelSize(
             max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
         )
-        if not deep_travel:
+        if deep_travel:
+            second_row = display_year(ctx)
+        elif ctx.skin.earth_weekday:
+            second_row = constants.WEEKDAY_LABELS[today]
+        else:
+            second_row = None
+        if second_row is None:
             draw_outlined_text(painter, pos, text, bold_font)
             return
         offset = size * archetypes.ARCHETYPE_EARTH_DAY_OFFSET
         draw_outlined_text(
             painter, QPointF(pos.x(), pos.y() - offset), text, bold_font
         )
-        year_font = QFont()
-        year_font.setPixelSize(
+        row_font = QFont()
+        row_font.setPixelSize(
             max(
                 defaults.BODY_LABEL_MIN_PX,
                 round(size * archetypes.ARCHETYPE_EARTH_DAY_TEXT_SIZE),
             )
         )
-        year_font.setBold(True)
+        row_font.setBold(True)
         draw_outlined_text(
-            painter, QPointF(pos.x(), pos.y() + offset), display_year(ctx),
-            year_font,
+            painter, QPointF(pos.x(), pos.y() + offset), second_row,
+            row_font,
         )
 
     def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:

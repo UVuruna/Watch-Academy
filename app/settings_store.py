@@ -389,14 +389,10 @@ class SettingsStore:
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
-            # EARTH LABEL EXCLUSIVITY (owner 2026-07-17, ROADMAP 15e): the
-            # date and the abbreviated weekday are mutually exclusive on the
-            # Earth marker. Both-on is an invalid state a hand-edited or an
-            # older file (pre-exclusivity) may carry — normalize it here so
-            # the render never has to arbitrate: the DATE wins, the weekday
-            # clears.
-            if loaded.show_earth_date and loaded.earth_weekday:
-                loaded = dataclasses.replace(loaded, earth_weekday=False)
+            # EARTH LABEL: both-on is the FULL DATE mode now (owner
+            # 2026-07-18, the accepted trio Date / Weekday / Full Date) —
+            # the 15e date-wins normalization is retired; all four bool
+            # combinations are valid states (off / date / weekday / full).
             return loaded
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             raise SettingsCorruptError(self._path, exc) from exc

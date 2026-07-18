@@ -655,6 +655,11 @@ def test_earth_label_date_and_weekday_are_exclusive_in_render(app):
     # Date alone draws, and differs from the weekday (different glyphs).
     assert differing(date_only, neither) > 0
     assert differing(date_only, weekday_only) > 0
+    # FULL DATE (owner 2026-07-18, the third mode): both bools on draws
+    # the date WITH the weekday row — more than the date alone.
+    full = render(show_earth_date=True, earth_weekday=True)
+    assert differing(full, date_only) > 0
+    assert differing(full, neither) > 0
 
 
 # --- The menu gating ----------------------------------------------------------------
