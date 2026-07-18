@@ -378,6 +378,24 @@ def test_every_theme_skeleton_is_complete():
                 continue
 
 
+def test_encyclopedia_stay_on_top_flag_follows_the_z_mode(app):
+    """Fix round A (owner verdict 2026-07-19, screenshots): with the
+    dial in "top" z-mode it is natively HWND_TOPMOST, so the
+    Encyclopedia must carry WindowStaysOnTopHint too to open ABOVE it
+    (matching Settings/Time Travel/Guide) — off by default (2026-07-13
+    intent: a normal window everywhere else, yielding to focus)."""
+    from PySide6.QtCore import Qt
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    normal = EncyclopediaDialog()
+    assert not (normal.windowFlags() & Qt.WindowType.WindowStaysOnTopHint)
+    normal.deleteLater()
+    on_top = EncyclopediaDialog(stay_on_top=True)
+    assert on_top.windowFlags() & Qt.WindowType.WindowStaysOnTopHint
+    on_top.deleteLater()
+
+
 def test_hidden_mode_unlocks_the_four_greetings(app):
     """Owner 2026-07-14: typing the secret sequence on the focused
     dial unlocks the hidden extras — the Trinity topic gains the Four

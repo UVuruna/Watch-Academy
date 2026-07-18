@@ -128,6 +128,28 @@ def _open(deep):
     return dialog
 
 
+def test_stay_on_top_flag_follows_the_z_mode(app):
+    """Fix round A (owner verdict 2026-07-19, screenshots): with the
+    dial in "top" z-mode it is natively HWND_TOPMOST, so the Observatory
+    must carry WindowStaysOnTopHint too to open ABOVE it (matching
+    Settings/Time Travel/Guide) — off by default (2026-07-13 intent:
+    a normal window everywhere else)."""
+    from PySide6.QtCore import Qt
+
+    from app.observatory import ObservatoryDialog
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    now = datetime(2026, 7, 18, 12, 0, tzinfo=tz)
+    normal = ObservatoryDialog(now, observer, tz)
+    assert not (normal.windowFlags() & Qt.WindowType.WindowStaysOnTopHint)
+    on_top = ObservatoryDialog(now, observer, tz, stay_on_top=True)
+    assert on_top.windowFlags() & Qt.WindowType.WindowStaysOnTopHint
+
+
 def test_render_smoke_without_deep_pack(app):
     """The partial installation: every chart draws from the committed
     bundles alone (the eclipse chart on its density fallback)."""

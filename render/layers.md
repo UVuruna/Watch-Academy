@@ -120,25 +120,39 @@ ARCHETYPE CLOCK. The machinery:
   compositor computes it from the live tick and keys the DAILY
   composite on it, like the Calendar's shichen wedge.
 - **THE TWO-TYPE LAW** (owner decree 2026-07-18, round two —
-  screenshots): `archetype_figure_size(skin, radius, art_file)` is the
-  ONE sizing entry for every archetype figure, arms AND center —
-  classified by the art's OWN aspect ratio (width/height), no per-art
-  clamp, no set-minimum (the 15g clamp era —
-  `archetype_set_height()` / `archetype_figure_height()` /
-  `archetype_fit_height()` — is deleted whole; `ARCHETYPE_FIGURE_
-  HEIGHT_OF_TIP` survives, repurposed below). Two types:
-  - **CIRCLE** (aspect ≥ `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
-    medallions, the square Scale glass, and WIDE art like Saturn's
-    rings, and any missing/placeholder art) wears
+  screenshots; height law FIXED round A 2026-07-19 — screenshots showed
+  lancets overflowing their diamonds and the Trinity center huge):
+  `archetype_figure_size(skin, radius, art_file)` is the ONE sizing
+  entry for every archetype figure, arms AND center — classified by the
+  art's OWN aspect ratio (width/height), no per-art clamp, no
+  set-minimum (the 15g clamp era — `archetype_set_height()` /
+  `archetype_figure_height()` / `archetype_fit_height()` — is deleted
+  whole; `ARCHETYPE_FIGURE_HEIGHT_OF_TIP` is ALSO gone now — round A
+  replaced the free per-pointer fraction with the inscribed-height law
+  below). Two types:
+  - **CIRCLE** (aspect ≥ `ARCHETYPE_PORTRAIT_ASPECT_MAX` = 0.70 —
+    rondels, medallions, the square Scale glass, and WIDE art like
+    Saturn's rings, and any missing/placeholder art) wears
     `weekday_body_size(skin, radius)` — THE SLOT SIZE, IDENTICAL to
     the weekday bodies. Wide art stays height-based ON PURPOSE (owner:
     "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
     matches every other circle, the rings overflow the frame,
-    deliberately — no clamp, no defensive code).
+    deliberately — no clamp, no defensive code). Round A tightened the
+    threshold 0.85 → 0.70 (measured lancet cluster 0.37–0.58, rondel
+    cluster 0.99–1.03) after the ChatGPT-set Providence_Eye center
+    (aspect 0.842) wrongly fell PORTRAIT-side under 0.85 and drew at
+    the tall lancet height — the "Trinity ogroman centar" bug.
   - **PORTRAIT** (aspect < the threshold — the tall lancet vitraž
-    windows: persons, temperaments) wears the per-pointer desired
-    fraction of the star tip, `tip * ARCHETYPE_FIGURE_HEIGHT_OF_TIP
-    [pointer]` — UNIFORM for every portrait in the set.
+    windows: persons, temperaments) wears `archetype_portrait_height
+    (tip, tan_half)` — the INSCRIBED height for the STANDARD aspect
+    (`ARCHETYPE_PORTRAIT_STANDARD_ASPECT` = 0.5, i.e. 1:2), not the
+    art's own aspect: the old `archetype_fit_height` formula
+    (`tip·tan_half / (aspect + tan_half)`) reintroduced as a small
+    helper and evaluated at the STANDARD aspect instead of per-art, so
+    every portrait is UNIFORM and a 1:2 lancet inscribes its diamond
+    EXACTLY. Art wider than 0.5 may still overflow sideways until the
+    owner reforces it to the standard — transitional, documented, not
+    clamped.
 - `ArchetypeLayer` (DAILY but HOVER-VARIABLE — painted LIVE, never in
   the cached composite, owner 2026-07-17 ROADMAP 15f; at the weekday_set
   z spot): the figures at the romb center (`weekday_body_orbit`), EACH

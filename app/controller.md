@@ -158,7 +158,16 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `_toggle_slot_ordinal`): the same enable key gated by the same 1 → 2 → 3
   chain — a forbidden enable is a no-op and the check restores; the
   submenu still opens on hover/arrow (the ordinal is never grayed by the
-  chain, only by the Archetype override). Since the ROUNDEL round (owner
+  chain, only by the Archetype override). **The two check marks stay in
+  sync (fix round A, owner verdict 2026-07-19):** the ordinal's own
+  check mark and its dropdown Enable action are TWO VIEWS of the same
+  enable state — `self._slot_enable_actions` (built alongside
+  `_slot_menu_checks`) resyncs the Enable checkbox in
+  `_refresh_menu_gating`, the SAME spot that already resyncs the
+  ordinal, both reading the effective enable-chain state (the
+  `_sync_earth_label_toggles` pattern: block signals, `setChecked`,
+  unblock, so the mirror never re-enters `_set_display_choice`) — a
+  click on either surface now updates both. Since the ROUNDEL round (owner
   2026-07-14) TEXT is
   real under EVERY pointer — text and the flat astrology art draw on
   the watch-face subdial. Pointer, show_weekday and show_pointer
@@ -261,7 +270,24 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   swap (ROADMAP 15e — three modes bottom/normal/top; `run()` re-asserts
   native topmost after the first show, and `_open_settings()` reconnects
   `screenChanged` when the swap recreated the native window — the S18
-  caveat). The wheel-pair labels are per pointer
+  caveat). **DIALOG Z-ORDER over the topmost dial (fix round A, owner
+  verdict 2026-07-19 — screenshots showed Guide/Settings/Time Travel
+  opening OVER the dial in "top" z-mode but Encyclopedia/Observatory
+  opening UNDER it):** the root cause was `WindowStaysOnTopHint` itself
+  — `SettingsDialog`/`TimeTravelDialog`/`GuideDialog` set it
+  unconditionally in `__init__`, but `EncyclopediaDialog`/
+  `ObservatoryDialog` were built as deliberately NORMAL windows (owner
+  2026-07-13: "must yield to whatever has focus, like any other
+  application") — harmless in every OTHER z-mode, but in "top" the dial
+  is natively `HWND_TOPMOST` (`native.assert_topmost`, the LegendPopup
+  precedent) and an ordinary window then opens underneath it. Both
+  dialogs gained an optional `stay_on_top` constructor parameter
+  (default False, preserving the 2026-07-13 intent everywhere else);
+  `_open_observatory()`/`_open_encyclopedia_at()` pass
+  `stay_on_top=(z_mode == "top")` so only THIS z-mode flips the flag —
+  no `native.assert_topmost` call needed, `WindowStaysOnTopHint` alone
+  is what already clears the dial for the other three dialogs. The
+  wheel-pair labels are per pointer
   (`_palette_labels`, owner 2026-07-17 ROADMAP 15e: Court/Family,
   Temperaments/Elements, Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac,
   else Paint/Light) and the pair is never grayed; the Calendar lighting
@@ -292,7 +318,18 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Century · Millennium** (four — 🏛 the agent's pick from the owner's
   "🏛 or ⏳"), **📍 Location** (poles, Greenwich + the user's
   `jump_cities` from Settings — a place jump moves the OBSERVER, the
-  moment stays). Eclipse entries need the pack and GRAY without it
+  moment stays). **The pole/Greenwich rows carry sealed emojis**
+  (ROADMAP 15h item 10, owner reminder 2026-07-19): ❄ on the LEFT of
+  both poles, then a season emoji on the RIGHT that switches between
+  polar DAY (🔆) and polar NIGHT (🌑) by TODAY's real calendar date —
+  `defaults.pole_emoji(pole, date.today())`, a simple date-window check
+  (`defaults.POLE_LIGHT_WINDOW`, the ±6° declination approximation: north
+  Mar 3 – Oct 9, south Sep 7 – Apr 5 wrapping the year boundary), never
+  an astronomy call, and never the active Time Travel simulation's
+  moment (a pole's season is a real-world fact). Greenwich carries 🌐
+  (sealed owner pick, `defaults.GREENWICH_EMOJI`). These labels are
+  rebuilt with the menu (same cadence as every other menu label), so
+  the emoji is always current. Eclipse entries need the pack and GRAY without it
   (tooltip names the full installation); eclipse picks land on the
   catalog instant via `julian_day_of` next/prev queries; unit jumps
   are calendar arithmetic on the real astronomical date
@@ -332,7 +369,9 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   (owner 2026-07-16) with the EFFECTIVE `(moment, observer, tz, cycles)`
   — the frozen Time Travel simulation tuple when active, else the live
   present — and the optional Deep Time pack (exact nearest-eclipse
-  instants for the eclipse timeline when installed)
+  instants for the eclipse timeline when installed). Passes
+  `stay_on_top=z_mode == "top"` (fix round A, owner verdict 2026-07-19
+  — see the Z-ORDER note below)
 - `_open_report()`: the hidden [Report](report.md) — the
   [Profiling](../config/profiling.md) statistics (`@timed` on the
   tick, day rebuild, skin build, paint, composite rebuild, hit test,
@@ -340,7 +379,9 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   translation chunks), flushed once per minute and at quit
 - `_open_encyclopedia_at(topic, entry)`: opens the [Encyclopedia](encyclopedia.md)
   — from the menu (topic None = the gallery) or on a Spacebar jump to a
-  hovered topic's entry (the widget's `open_encyclopedia` signal). GUARDED
+  hovered topic's entry (the widget's `open_encyclopedia` signal). Passes
+  `stay_on_top=z_mode == "top"` (fix round A, owner verdict 2026-07-19 —
+  see the Z-ORDER note below). GUARDED
   against re-entrant opens (owner 15h item 3C, Session 21): the dialog is
   MODAL (`exec` runs a nested loop), and a second SPACE jump — an
   auto-repeat or a fresh press dispatched inside that loop — would

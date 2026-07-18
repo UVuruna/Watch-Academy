@@ -86,7 +86,12 @@ hidden Report chart tokens (`REPORT_*`) and the OBSERVATORY chart
 tokens (`OBSERVATORY_*`, Session 17: the bundle filenames, the fixed
 per-series canon colors — season cross-wheel hues, light/dark gold vs
 slate — the surface/grid/crosshair palette, the day-length sample step
-and the eclipse-window size) live here too.
+and the eclipse-window size) live here too. The POLE emoji windows
+(ROADMAP 15h item 10, owner reminder 2026-07-19): `pole_is_light(pole,
+on_date)` / `pole_emoji(pole, on_date)` — a simple CALENDAR date-window
+check (`POLE_LIGHT_WINDOW`, no astronomy call) the Quick Jump ▸
+Location submenu reads to swap the North/South Pole row's season emoji
+(🔆/🌑); `GREENWICH_EMOJI` is the sealed 🌐 pick for the Greenwich row.
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package

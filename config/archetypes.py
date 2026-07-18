@@ -58,19 +58,27 @@ ARCHETYPE_LIFE_REGISTERS = ("tree", "animals")
 #     matches every other circle, the rings overflow the frame — no
 #     clamp, deliberately).
 #   - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
-#     windows: persons, temperaments) wears the per-pointer desired
-#     fraction of the star tip, ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]
-#     — UNIFORM for every portrait in the set.
+#     windows: persons, temperaments) wears the INSCRIBED height for
+#     the STANDARD aspect (`ARCHETYPE_PORTRAIT_STANDARD_ASPECT`), via
+#     `render.layers.archetype_portrait_height()` — UNIFORM for every
+#     portrait in the set regardless of its OWN art's aspect.
 # Missing/placeholder art (the name-fallback path) reads CIRCLE-sized —
 # there is no art to classify.
-ARCHETYPE_PORTRAIT_ASPECT_MAX = 0.85
-# Portrait figure height as a fraction of the star TIP radius, per
-# pointer — the lancet scales INTO the diamond with the arm color
-# visible around it (the slim-armed cross/octa carry smaller glass).
-# Owner tunes when the real art lands.
-ARCHETYPE_FIGURE_HEIGHT_OF_TIP = {
-    "trio": 0.62, "hexa": 0.58, "cross": 0.46, "octa": 0.40,
-}
+# FIX ROUND A (owner verdict 2026-07-19, screenshots — lancets
+# overflowing their diamonds, the Trinity center huge): 0.85 let the
+# ChatGPT-set Providence_Eye center (measured aspect 0.842, a rondel)
+# wrongly classify as PORTRAIT and draw at the tall lancet height.
+# 0.70 sits cleanly between the measured lancet cluster (0.37-0.58,
+# median ~0.50) and the rondel/center cluster (0.99-1.03), with
+# Providence_Eye's 0.842 now safely CIRCLE-side.
+ARCHETYPE_PORTRAIT_ASPECT_MAX = 0.70
+# The STANDARD portrait aspect (owner reforcing ALL lancet art to this
+# exact ratio) — portrait height is the height that INSCRIBES a
+# rectangle of THIS aspect (not the art's own) into the arm diamond, so
+# every portrait is uniform and a 1:2 lancet fits its diamond EXACTLY.
+# Art wider than 1:2 may slightly overflow sideways until the owner
+# reforces it to the standard — transitional, documented, not clamped.
+ARCHETYPE_PORTRAIT_STANDARD_ASPECT = 0.5
 # The figure NAME label (the lit figure with Names on, and the
 # fallback while art is missing/placeholder) shares its fitting and its
 # NAME_LABEL_MAX_PX cap with the weekday body label — one helper,

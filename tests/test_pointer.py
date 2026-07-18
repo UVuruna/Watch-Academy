@@ -2133,6 +2133,45 @@ def test_window_margin_is_live_from_the_settings(app):
     assert _max_border_alpha(frame, window) <= 6
 
 
+def test_pole_light_window_math():
+    """ROADMAP 15h item 10, owner reminder 2026-07-19: the North/South
+    Pole emoji switches 🔆 (light half) / 🌑 (dark half) by a simple
+    CALENDAR date window, `defaults.pole_is_light`/`pole_emoji` — no
+    astronomy call. North: Mar 3 - Oct 9, wholly inside one year.
+    South: Sep 7 - Apr 5, WRAPS the year boundary."""
+    from datetime import date as _date
+
+    # North — inside the window (mid-June, midsummer) and outside it
+    # (midwinter, and each boundary day itself).
+    assert defaults.pole_is_light("north", _date(2026, 6, 20))
+    assert not defaults.pole_is_light("north", _date(2026, 12, 20))
+    assert defaults.pole_is_light("north", _date(2026, 3, 3))     # start, inclusive
+    assert defaults.pole_is_light("north", _date(2026, 10, 9))    # end, inclusive
+    assert not defaults.pole_is_light("north", _date(2026, 3, 2))
+    assert not defaults.pole_is_light("north", _date(2026, 10, 10))
+
+    # South — the WRAPPED window: lit across New Year's Eve, dark at
+    # the June northern-summer midpoint.
+    assert defaults.pole_is_light("south", _date(2026, 12, 20))
+    assert defaults.pole_is_light("south", _date(2026, 1, 1))
+    assert not defaults.pole_is_light("south", _date(2026, 6, 20))
+    assert defaults.pole_is_light("south", _date(2026, 9, 7))     # start, inclusive
+    assert defaults.pole_is_light("south", _date(2026, 4, 5))     # end, inclusive
+    assert not defaults.pole_is_light("south", _date(2026, 9, 6))
+    assert not defaults.pole_is_light("south", _date(2026, 4, 6))
+
+    # The two poles are OPPOSITE at any date NOT in an overlap gap —
+    # both windows leave a short shoulder (Apr 6-Sep 6 south-dark /
+    # north-window-inclusive) so spot-check the unambiguous midpoints.
+    assert defaults.pole_is_light("north", _date(2026, 6, 20)) != (
+        defaults.pole_is_light("south", _date(2026, 6, 20))
+    )
+    assert defaults.pole_emoji("north", _date(2026, 6, 20)) == defaults.POLE_LIGHT_EMOJI
+    assert defaults.pole_emoji("south", _date(2026, 6, 20)) == defaults.POLE_DARK_EMOJI
+    assert defaults.pole_emoji("north", _date(2026, 12, 20)) == defaults.POLE_DARK_EMOJI
+    assert defaults.pole_emoji("south", _date(2026, 12, 20)) == defaults.POLE_LIGHT_EMOJI
+
+
 def test_widget_z_mode_swaps_the_window_flags(app):
     """Owner 2026-07-17 (ROADMAP 15d): set_z_mode swaps the always-on-
     bottom / always-on-top hint in place, keeping the frameless-tool base;

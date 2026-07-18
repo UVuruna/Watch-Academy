@@ -14,23 +14,33 @@ Throne — the Compass has none), the article-set names Session 6 writes
 into `Database/symbolism.json`, and the render tunables (name sizing,
 the placeholder threshold, the center's noon/midnight lighting window,
 the Earth day-label geometry, and the two figure-size tunables below).
-**THE TWO-TYPE LAW (owner decree 2026-07-18, round two — screenshots):**
-figure SIZE is no longer a per-art CLAMP (the 15g machinery —
+**THE TWO-TYPE LAW (owner decree 2026-07-18, round two — screenshots;
+height law FIXED round A 2026-07-19 — screenshots showed lancets
+overflowing their diamonds and the Trinity center huge):** figure SIZE
+is no longer a per-art CLAMP (the 15g machinery —
 `archetype_figure_height()`, `archetype_set_height()`,
 `archetype_fit_height()` — is deleted); instead every archetype figure
 classifies ONCE by its OWN art aspect ratio (width/height), via
 `render.layers.archetype_figure_size()`:
-- **CIRCLE** type (aspect ≥ `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
-  medallions, the square Scale glass, and WIDE art like Saturn's rings)
-  wears `weekday_body_size(skin, radius)` — the SLOT size, IDENTICAL to
-  the weekday bodies. Wide art stays height-based on purpose (owner:
-  "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
-  matches every other circle, the rings overflow the frame,
-  deliberately — no clamp).
+- **CIRCLE** type (aspect ≥ `ARCHETYPE_PORTRAIT_ASPECT_MAX` = 0.70 —
+  rondels, medallions, the square Scale glass, and WIDE art like
+  Saturn's rings) wears `weekday_body_size(skin, radius)` — the SLOT
+  size, IDENTICAL to the weekday bodies. Wide art stays height-based on
+  purpose (owner: "planeta istih dimenzija kao ostale, prstenovi vire"
+  — the ball matches every other circle, the rings overflow the frame,
+  deliberately — no clamp). Round A tightened the threshold 0.85 → 0.70
+  (measured lancet cluster 0.37–0.58, rondel cluster 0.99–1.03) after
+  the ChatGPT-set Providence_Eye center (aspect 0.842) wrongly fell
+  PORTRAIT-side under 0.85 and drew at the tall lancet height.
 - **PORTRAIT** type (aspect below the threshold — the tall lancet
   vitraž windows: persons, temperaments) wears
-  `ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]` of the star tip, UNIFORM
-  for every portrait in the set.
+  `render.layers.archetype_portrait_height(tip, tan_half)` — the
+  INSCRIBED height for the STANDARD aspect
+  (`ARCHETYPE_PORTRAIT_STANDARD_ASPECT` = 0.5, i.e. 1:2), not the art's
+  own aspect: the owner is reforcing every portrait to exactly 1:2, so
+  a lancet at the standard inscribes its diamond EXACTLY; art wider
+  than 0.5 may still overflow sideways until reforced (transitional,
+  documented, not clamped). UNIFORM for every portrait in the set.
 
 Missing/placeholder art reads CIRCLE-sized (there is no art to
 classify). The center follows its OWN art's type exactly like an arm

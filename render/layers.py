@@ -425,13 +425,33 @@ def archetype_art_ready(path) -> bool:
     return archetype_art_size(path) is not None
 
 
+def archetype_portrait_height(tip: float, tan_half: float) -> float:
+    """The PORTRAIT figure height that exactly INSCRIBES the STANDARD
+    aspect (`archetypes.ARCHETYPE_PORTRAIT_STANDARD_ASPECT`, 1:2) into
+    its arm's diamond — the old `archetype_fit_height` formula (15g
+    clamp era), reintroduced here for ONE purpose only: sizing the
+    UNIFORM portrait at the standard aspect, never per-art (owner
+    two-type law round two, 2026-07-18, fix round A 2026-07-19). The
+    diamond is a rhombus centered at the romb center with along-arm
+    half-diagonal tip/2 and perpendicular half-diagonal tip*tan(half)/2;
+    a centered inscribed rectangle of half a×b fits iff a/p + b/q <= 1,
+    so a figure of aspect `a` scaled to height h (width = a*h) fits up
+    to h = tip*tan(half)/(a + tan(half)) — evaluated at the STANDARD
+    aspect so a 1:2 lancet inscribes its diamond EXACTLY; art wider than
+    1:2 may still overflow sideways until the owner reforces it to the
+    standard (transitional, documented, not clamped)."""
+    return tip * tan_half / (
+        archetypes.ARCHETYPE_PORTRAIT_STANDARD_ASPECT + tan_half
+    )
+
+
 def archetype_figure_size(
     skin: SkinDefinition, radius: float, art_file,
 ) -> float:
     """THE ONE sizing entry for every archetype figure — arms AND center
-    (owner two-type law, 2026-07-18 round two): the art divides into TWO
-    TYPES by its OWN aspect ratio (width/height), classified once — no
-    per-art clamp, no set-minimum.
+    (owner two-type law, 2026-07-18 round two; height law fixed round A
+    2026-07-19): the art divides into TWO TYPES by its OWN aspect ratio
+    (width/height), classified once — no per-art clamp, no set-minimum.
 
     - CIRCLE type (aspect >= `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
       medallions, the square Scale glass, and WIDE art like Saturn's
@@ -441,9 +461,9 @@ def archetype_figure_size(
       matches every other circle, the rings overflow the frame,
       deliberately — no clamp).
     - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
-      windows: persons, temperaments) wears the per-pointer desired
-      fraction of the star tip (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP`),
-      UNIFORM for every portrait in the set.
+      windows: persons, temperaments) wears `archetype_portrait_height()`
+      — the height inscribing the STANDARD aspect (not the art's own)
+      into the diamond, UNIFORM for every portrait in the set.
 
     Missing/placeholder art (the name-fallback path) reads CIRCLE-sized
     — there is no art to classify."""
@@ -453,7 +473,9 @@ def archetype_figure_size(
     ):
         return weekday_body_size(skin, radius)
     tip = radius * skin.star.radius_fraction
-    return tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[skin.pointer]
+    half = constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
+    tan_half = math.tan(math.radians(half))
+    return archetype_portrait_height(tip, tan_half)
 
 
 def draw_archetype_figure(

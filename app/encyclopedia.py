@@ -765,6 +765,7 @@ class EncyclopediaDialog(QDialog):
         hidden_unlocked: bool = False,
         initial_topic: str | None = None,
         initial_entry: int = 0,
+        stay_on_top: bool = False,
     ):
         super().__init__()
         self._overlay = translations or {}
@@ -772,8 +773,18 @@ class EncyclopediaDialog(QDialog):
         self.setWindowTitle(
             f"{constants.APP_NAME} — {self._tr('Encyclopedia')}"
         )
-        # A NORMAL window (owner 2026-07-13: no stay-on-top — it must
-        # yield to whatever has focus, like any other application).
+        # A NORMAL window by default (owner 2026-07-13: no stay-on-top —
+        # it must yield to whatever has focus, like any other
+        # application). FIX ROUND A (owner verdict 2026-07-19,
+        # screenshots): in "top" z-mode the dial forces itself to the
+        # TRUE top of the Z-order (`native.assert_topmost`,
+        # HWND_TOPMOST) — an ordinary window then opens UNDER it, unlike
+        # Settings/Time Travel/Guide (which already carry
+        # WindowStaysOnTopHint unconditionally). `stay_on_top` is the
+        # controller's `z_mode == "top"` reading — the 2026-07-13 intent
+        # (yield to focus) is UNCHANGED for every other z-mode.
+        if stay_on_top:
+            self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         # Maximize/minimize live in the title bar (owner 2026-07-13:
         # "treba button maximize da se proširi preko celog ekrana").
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)

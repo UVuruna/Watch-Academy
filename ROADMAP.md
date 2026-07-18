@@ -644,6 +644,19 @@ lives in [The DOMY Canon](CANON.md).
       machinery (`archetype_set_height`, `archetype_figure_height`,
       `archetype_fit_height`) is deleted; `ARCHETYPE_FIGURE_HEIGHT_
       OF_TIP` survives, repurposed for the portrait type.
+      **FIX ROUND A (owner verdict 2026-07-19, screenshots — lancets
+      overflowing their diamonds, the Trinity center huge):** the free
+      per-pointer fraction overflowed non-standard art, and
+      `ARCHETYPE_PORTRAIT_ASPECT_MAX` (0.85) let the ChatGPT-set
+      Providence_Eye center (aspect 0.842, a rondel) wrongly classify
+      PORTRAIT. Tightened to 0.70 (clean gap between the measured
+      lancet cluster 0.37–0.58 and the rondel cluster 0.99–1.03);
+      `ARCHETYPE_FIGURE_HEIGHT_OF_TIP` is deleted (Rule #6) and replaced
+      by `ARCHETYPE_PORTRAIT_STANDARD_ASPECT` (0.5) plus
+      `render.layers.archetype_portrait_height(tip, tan_half)` — the
+      reintroduced `archetype_fit_height` formula evaluated at the
+      STANDARD aspect (not per-art), so a 1:2 lancet inscribes its
+      diamond exactly and every portrait is uniform.
    17. **SATURATION slider — DONE (Session 21-C, owner 2026-07-18):** a
       new Settings ▸ Display slider (0–100%, `palette_saturation`
       0.0–1.0) scales the active Star+Aura palette's HSV saturation at

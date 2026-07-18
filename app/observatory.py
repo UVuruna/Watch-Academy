@@ -483,11 +483,22 @@ class _EclipseChart(_ChartBase):
 
 
 class ObservatoryDialog(QDialog):
-    def __init__(self, now, observer, tz, cycles=0, deep=None, translations=None):
+    def __init__(
+        self, now, observer, tz, cycles=0, deep=None, translations=None,
+        stay_on_top: bool = False,
+    ):
         super().__init__()
         self._overlay = translations or {}
         self._tr = lambda text: ui(self._overlay, text)
         self.setWindowTitle(f"{constants.APP_NAME} — {self._tr('Observatory')}")
+        # FIX ROUND A (owner verdict 2026-07-19, screenshots): a NORMAL
+        # window by default, like the Encyclopedia — but in "top" z-mode
+        # the dial forces itself to the TRUE top of the Z-order
+        # (`native.assert_topmost`, HWND_TOPMOST), so an ordinary window
+        # opens UNDER it. `stay_on_top` is the controller's
+        # `z_mode == "top"` reading; every other z-mode is unchanged.
+        if stay_on_top:
+            self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
         self.resize(860, 720)

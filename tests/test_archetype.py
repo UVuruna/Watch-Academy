@@ -545,15 +545,19 @@ def test_archetype_figure_size_circle_and_portrait_types(app, tmp_path):
     art divides into TWO TYPES by its OWN aspect ratio — no per-art
     clamp. CIRCLE art (square, or WIDE like Saturn's rings, or missing/
     placeholder) wears `weekday_body_size` — IDENTICAL to the weekday
-    bodies; PORTRAIT art (the tall lancets) wears the per-pointer
-    fraction of the star tip, `ARCHETYPE_FIGURE_HEIGHT_OF_TIP`."""
-    from render.layers import archetype_figure_size, weekday_body_size
+    bodies; PORTRAIT art (the tall lancets) wears the STANDARD-aspect
+    inscribed height, `archetype_portrait_height`."""
+    from render.layers import (
+        archetype_figure_size, archetype_portrait_height, weekday_body_size,
+    )
 
     skin = _archetype_skin("trio")
     radius = 180.0
     circle_size = weekday_body_size(skin, radius)
     tip = radius * skin.star.radius_fraction
-    portrait_size = tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP["trio"]
+    half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
+    tan_half = math.tan(math.radians(half))
+    portrait_size = archetype_portrait_height(tip, tan_half)
     assert portrait_size != pytest.approx(circle_size)   # a real distinction
 
     # CIRCLE: a square medallion.
@@ -576,13 +580,17 @@ def test_archetype_figure_size_circle_and_portrait_types(app, tmp_path):
 
 def test_archetype_figure_size_boundary_is_the_threshold(tmp_path):
     """The CIRCLE/PORTRAIT split sits exactly at
-    `ARCHETYPE_PORTRAIT_ASPECT_MAX`: aspect AT the threshold reads
-    CIRCLE (>=), just below it reads PORTRAIT."""
-    from render.layers import archetype_figure_size, weekday_body_size
+    `ARCHETYPE_PORTRAIT_ASPECT_MAX` (fix round A 2026-07-19: 0.70, not
+    the old 0.85): aspect AT the threshold reads CIRCLE (>=), just
+    below it reads PORTRAIT."""
+    from render.layers import (
+        archetype_figure_size, archetype_portrait_height, weekday_body_size,
+    )
 
     skin = _archetype_skin("trio")
     radius = 180.0
     threshold = archetypes.ARCHETYPE_PORTRAIT_ASPECT_MAX
+    assert threshold == pytest.approx(0.70)
     height = 1000
     at_threshold = _rect_png(
         tmp_path, "at_threshold.png", round(height * threshold), height
@@ -592,9 +600,30 @@ def test_archetype_figure_size_boundary_is_the_threshold(tmp_path):
     )
     circle_size = weekday_body_size(skin, radius)
     tip = radius * skin.star.radius_fraction
-    portrait_size = tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP["trio"]
+    half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
+    tan_half = math.tan(math.radians(half))
+    portrait_size = archetype_portrait_height(tip, tan_half)
     assert archetype_figure_size(skin, radius, at_threshold) == pytest.approx(circle_size)
     assert archetype_figure_size(skin, radius, just_below) == pytest.approx(portrait_size)
+
+
+def test_archetype_figure_size_providence_eye_aspect_classifies_circle(tmp_path):
+    """Owner fix round A 2026-07-19: the ChatGPT-set Providence_Eye
+    center (measured aspect 0.842) is a ROUND rondel that wrongly
+    classified as PORTRAIT under the old 0.85 threshold and drew at the
+    tall lancet height (the "Trinity ogroman centar" bug). At 0.70 it
+    classifies CIRCLE and wears the slot size."""
+    from render.layers import archetype_figure_size, weekday_body_size
+
+    skin = _archetype_skin("trio")
+    radius = 180.0
+    height = 1000
+    providence_eye_like = _rect_png(
+        tmp_path, "providence_eye.png", round(height * 0.842), height
+    )
+    assert archetype_figure_size(skin, radius, providence_eye_like) == pytest.approx(
+        weekday_body_size(skin, radius)
+    )
 
 
 def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
@@ -645,8 +674,11 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
     )
     portrait_center = _rect_png(tmp_path, "portrait_center.png", 400, 800)
     tip = radius * skin.star.radius_fraction
+    half = constants.POINTER_ARM_HALF_ANGLE_DEG["trio"]
+    tan_half = math.tan(math.radians(half))
+    from render.layers import archetype_portrait_height
     assert rendered_height(portrait_center) == pytest.approx(
-        tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP["trio"]
+        archetype_portrait_height(tip, tan_half)
     )
 
 
@@ -1181,6 +1213,47 @@ def test_menu_size_slider_applies_only_on_release(app, tmp_path, monkeypatch):
 # --- The both-unchecked bug (ROADMAP 15h item 8's surviving bug) ------------------
 
 
+def test_quick_jump_location_carries_the_pole_and_greenwich_emojis(
+    app, tmp_path, monkeypatch
+):
+    """ROADMAP 15h item 10, owner reminder 2026-07-19: the Quick Jump ▸
+    Location rows carry the sealed emojis — ❄ + a season emoji on both
+    poles, 🌐 on Greenwich. Today's actual pole state is asserted via
+    the same helper the menu build uses (Rule #5, no duplicated date
+    math), so the test stays correct on every run date."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from datetime import date
+
+    from app.controller import AppController
+    from config import defaults
+
+    c = AppController(app)
+    try:
+        jumps = next(
+            a for a in c._menu.actions() if "Quick Jump" in a.text()
+        ).menu()
+        location_menu = next(
+            a for a in jumps.actions() if "Location" in a.text()
+        ).menu()
+        entries = {a.text() for a in location_menu.actions() if a.text()}
+        today = date.today()
+        north_expected = (
+            f"{defaults.POLE_COLD_EMOJI} North Pole "
+            f"{defaults.pole_emoji('north', today)}"
+        )
+        south_expected = (
+            f"{defaults.POLE_COLD_EMOJI} South Pole "
+            f"{defaults.pole_emoji('south', today)}"
+        )
+        greenwich_expected = f"{defaults.GREENWICH_EMOJI} Greenwich"
+        assert north_expected in entries
+        assert south_expected in entries
+        assert greenwich_expected in entries
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
 def test_exclusive_choice_group_click_on_checked_stays_checked(app, tmp_path, monkeypatch):
     """The general `_add_choice_group` guard: clicking the ALREADY
     checked member of an exclusive group (e.g. Umbra's contrast picks)
@@ -1409,6 +1482,40 @@ def test_slot_ordinal_click_follows_the_enable_chain(app, tmp_path, monkeypatch)
         c._toggle_slot_ordinal("show_octa_slot", True)
         assert not c._settings.show_octa_slot          # forbidden — unchanged
         assert not info_action.isChecked()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+def test_slot_ordinal_and_dropdown_enable_stay_in_sync(app, tmp_path, monkeypatch):
+    """Fix round A (owner verdict 2026-07-19, screenshots 2/3, repeat
+    complaint): clicking the ordinal to DISABLE a slot must update the
+    checkmark on the dropdown's own Enable action too, and vice versa —
+    the two are the SAME state (`_slot_enable_actions` mirrors
+    `_slot_menu_checks`, both resynced in `_refresh_menu_gating`)."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        ordinal_action = next(
+            a for a, k in c._slot_menu_checks if k == "show_weekday"
+        )
+        dropdown_action = next(
+            a for a, k in c._slot_enable_actions if k == "show_weekday"
+        )
+        assert ordinal_action.isChecked() and dropdown_action.isChecked()
+
+        # Ordinal click OFF -> dropdown Enable check goes false too.
+        c._toggle_slot_ordinal("show_weekday", False)
+        assert not ordinal_action.isChecked()
+        assert not dropdown_action.isChecked()
+
+        # Dropdown Enable click ON -> ordinal check goes true too.
+        dropdown_action.trigger()
+        assert c._settings.show_weekday
+        assert ordinal_action.isChecked()
+        assert dropdown_action.isChecked()
     finally:
         c._profiling_timer.stop()
         c._tray.hide()

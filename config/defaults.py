@@ -5,6 +5,8 @@ position, chosen city, chosen skin) lives in the user settings file owned
 by app/settings_store.py.
 """
 
+from datetime import date
+
 from config import paths
 from skins.manifest import (
     BackgroundSpec,
@@ -1764,3 +1766,42 @@ DEFAULT_SKIN = SkinDefinition(
         second_reach_fraction=HAND_SECOND_REACH_FRACTION,
     ),
 )
+
+# --- Pole light/dark emoji windows (ROADMAP 15h item 10, fix round A
+# owner reminder 2026-07-19) -----------------------------------------------------
+# The North/South Pole rows in the location picker/Quick-Jump submenu
+# carry a season-dependent emoji switching between POLAR DAY and POLAR
+# NIGHT — owner: NOT the sun emoji used elsewhere, 🔆 for the light
+# half and 🌑 for the dark half. Computed from a simple CALENDAR date
+# window (the pole is lit while the sun's declination sits on ITS
+# hemisphere, roughly the ±6° civil-twilight boundary) — no astronomy
+# call needed, just a date-in-range check. (month, day) pairs, inclusive
+# both ends; the North window sits wholly inside one calendar year, the
+# South window WRAPS across the year boundary.
+POLE_LIGHT_WINDOW = {
+    "north": ((3, 3), (10, 9)),      # Mar 3 - Oct 9
+    "south": ((9, 7), (4, 5)),       # Sep 7 - Apr 5 (wraps New Year's)
+}
+POLE_LIGHT_EMOJI = "🔆"
+POLE_DARK_EMOJI = "🌑"
+POLE_COLD_EMOJI = "❄"                # left-side glyph, both poles
+GREENWICH_EMOJI = "🌐"                # sealed owner pick
+
+
+def pole_is_light(pole: str, on_date: date) -> bool:
+    """Whether `pole` ("north"/"south") sits in its LIT half of the
+    year on `on_date` — the `POLE_LIGHT_WINDOW` calendar approximation
+    (no astronomy call). The South window wraps the year boundary
+    (Sep 7 -> Dec 31 -> Apr 5)."""
+    start, end = POLE_LIGHT_WINDOW[pole]
+    today = (on_date.month, on_date.day)
+    if start <= end:
+        return start <= today <= end
+    return today >= start or today <= end
+
+
+def pole_emoji(pole: str, on_date: date) -> str:
+    """The season-dependent RIGHT-side emoji for one pole's row —
+    `POLE_LIGHT_EMOJI` through the lit half, `POLE_DARK_EMOJI` through
+    the dark half, by `pole_is_light`."""
+    return POLE_LIGHT_EMOJI if pole_is_light(pole, on_date) else POLE_DARK_EMOJI

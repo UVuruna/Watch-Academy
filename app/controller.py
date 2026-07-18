@@ -10,7 +10,7 @@ import dataclasses
 import sys
 import random
 import threading
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from time import monotonic
 from zoneinfo import ZoneInfo
 
@@ -1353,6 +1353,17 @@ class AppController(QObject):
             # chain does NOT gray the ordinal (it stays openable): the
             # ordinal CLICK handler enforces the chain instead (slika 3).
             action.setEnabled(not archetype_on)
+        # FIX ROUND A (owner verdict 2026-07-19, screenshots — clicking
+        # a slot's ordinal to DISABLE it left the dropdown's own Enable
+        # checkbox stuck checked): the dropdown Enable action is the
+        # SAME state as the ordinal check mark — both mirror `effective`
+        # here, the ONE place both views resync (the pattern
+        # `_sync_earth_label_toggles` uses: block signals, set, unblock,
+        # so the mirrored setChecked never re-enters this handler).
+        for action, key in self._slot_enable_actions:
+            action.blockSignals(True)
+            action.setChecked(effective[key])
+            action.blockSignals(False)
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
@@ -1952,7 +1963,7 @@ class AppController(QObject):
             )
             return enable, lockable, names_action
 
-        _, first_lockable, self._weekday_names_action = build_slot_menu(
+        enable1, first_lockable, self._weekday_names_action = build_slot_menu(
             day_slot_menu, 1,
             settings.weekday_slot, settings.day_slot_style,
             settings.weekday_theme, "show_weekday_names",
@@ -1996,6 +2007,16 @@ class AppController(QObject):
         self._menu_gates["enable3"] = enable3
         enable2.setEnabled(settings.show_weekday)
         enable3.setEnabled(settings.show_weekday and settings.show_octa_slot)
+        # FIX ROUND A (owner verdict 2026-07-19): the dropdown Enable
+        # action and the top-level ordinal check mark are TWO VIEWS of
+        # the same enable state — resynced together in
+        # `_refresh_menu_gating` (the `_sync_earth_label_toggles`
+        # pattern), so clicking either one updates both.
+        self._slot_enable_actions = (
+            (enable1, "show_weekday"),
+            (enable2, "show_octa_slot"),
+            (enable3, "show_third_slot"),
+        )
         # A check mark LEFT of the slot ordinals while the slot is
         # active (owner 2026-07-15: the state at a glance, without
         # opening the submenu) — refreshed in place on every enable
@@ -2230,9 +2251,29 @@ class AppController(QObject):
         ):
             jump_action(era_menu, kind, label)
         location_menu = self._submenu(jumps, f"📍 {tr('Location')}")
-        jump_action(location_menu, "north_pole", tr("North Pole"))
-        jump_action(location_menu, "south_pole", tr("South Pole"))
-        jump_action(location_menu, "greenwich", tr("Greenwich"))
+        # POLE + GREENWICH EMOJIS (ROADMAP 15h item 10, owner reminder
+        # 2026-07-19): ❄ marks both poles on the LEFT; the RIGHT-side
+        # glyph switches between polar DAY (🔆) and polar NIGHT (🌑) by
+        # TODAY's calendar date (`defaults.pole_emoji` — a date-window
+        # helper, no astronomy call). Greenwich carries 🌐 (sealed owner
+        # pick). Today reads the WALL CLOCK, not any active Time Travel
+        # simulation — a pole's season is a real-world calendar fact,
+        # not something a simulated moment should relabel.
+        today = date.today()
+        jump_action(
+            location_menu, "north_pole",
+            f"{defaults.POLE_COLD_EMOJI} {tr('North Pole')} "
+            f"{defaults.pole_emoji('north', today)}",
+        )
+        jump_action(
+            location_menu, "south_pole",
+            f"{defaults.POLE_COLD_EMOJI} {tr('South Pole')} "
+            f"{defaults.pole_emoji('south', today)}",
+        )
+        jump_action(
+            location_menu, "greenwich",
+            f"{defaults.GREENWICH_EMOJI} {tr('Greenwich')}",
+        )
         # The user's own places (owner slika 12): picked in Settings,
         # each jump moves the OBSERVER there — the moment stays.
         if self._settings.jump_cities:
@@ -2277,6 +2318,12 @@ class AppController(QObject):
         ObservatoryDialog(
             now, observer, self._tz, cycles=cycles,
             deep=self._deep, translations=self._translation_overlay,
+            # FIX ROUND A (owner verdict 2026-07-19): in "top" z-mode
+            # the dial is natively HWND_TOPMOST — this dialog must also
+            # carry WindowStaysOnTopHint to open ABOVE it, matching
+            # Settings/Time Travel/Guide; every other z-mode stays a
+            # normal window (owner 2026-07-13 intent, unchanged).
+            stay_on_top=self._settings.z_mode == "top",
         ).exec()
 
     def _open_encyclopedia_at(
@@ -2296,6 +2343,11 @@ class AppController(QObject):
                 hidden_unlocked=self._hidden_unlocked,
                 initial_topic=topic,
                 initial_entry=entry,
+                # FIX ROUND A (owner verdict 2026-07-19): see the
+                # matching Observatory comment — "top" z-mode needs
+                # WindowStaysOnTopHint to clear the dial's native
+                # HWND_TOPMOST; every other z-mode stays normal.
+                stay_on_top=self._settings.z_mode == "top",
             ).exec()
         finally:
             self._encyclopedia_open = False
