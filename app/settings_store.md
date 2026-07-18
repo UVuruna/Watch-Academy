@@ -40,7 +40,15 @@ pointer paint = Zodiac wheel, light = Almanac wheel),
 2026-07-16: the diamonds carry the active wheel's archetype figures
 and the weekday model and all three slots switch OFF at the render
 level only, so every slot key here keeps the user's choice for the
-toggle-back), `earth_weekday` (False — the abbreviated weekday on the
+toggle-back), `archetype_names` (True — owner 2026-07-18, Session
+21-C: its OWN independent switch for the archetype figures' names, no
+longer sharing `show_weekday_names` with the weekday bodies; a
+Settings ▸ Display checkbox, `render.layers.ArchetypeLayer` reads it
+directly), `palette_saturation` (1.0, range 0.0–1.0 — the Saturation
+slider, owner 2026-07-18: scales the Star+Aura palette's HSV
+saturation at `render.layers.palette_for`, the one spot feeding both
+the pointer and the Aura wedges, so they stay in step; Umbra untouched),
+`earth_weekday` (False — the abbreviated weekday on the
 Earth marker, a GENERAL Earth option since 2026-07-17 working in both
 modes; renamed from `archetype_earth_day`, which the load migrates).
 `show_earth_date` and `earth_weekday` are MUTUALLY EXCLUSIVE (owner

@@ -59,6 +59,19 @@ def test_diameter_out_of_range_raises(store):
         store.load()
 
 
+def test_palette_saturation_out_of_range_raises(store):
+    """The Saturation slider (owner 2026-07-18, Session 21-C) is a
+    0.0..1.0 factor — same corrupt-on-out-of-range law as every other
+    size multiplier."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "palette_saturation": 1.5}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
 def test_display_choices_round_trip(store):
     saved = replace(
         Settings(),
@@ -67,6 +80,8 @@ def test_display_choices_round_trip(store):
         umbra_contrast="half",
         palette_style="light",
         archetype_mode=True,
+        archetype_names=False,
+        palette_saturation=0.4,
         earth_weekday=True,
         z_mode="top",
         solar_rotation=False,

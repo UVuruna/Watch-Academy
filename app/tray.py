@@ -48,6 +48,19 @@ class TrayController:
         self._menu = menu
         self._icon.setContextMenu(menu)
 
+    def on_double_click(self, callback) -> None:
+        """Wire `callback()` to a tray icon DOUBLE-CLICK (owner
+        2026-07-18, ROADMAP 15h — the "Show" affordance's second
+        trigger, beside the menu entry). The caller decides whether the
+        gesture means anything right now (it is a no-op outside
+        "normal" z-mode) — this is just the Qt activation-reason
+        plumbing."""
+        def on_activated(reason: QSystemTrayIcon.ActivationReason) -> None:
+            if reason == QSystemTrayIcon.ActivationReason.DoubleClick:
+                callback()
+
+        self._icon.activated.connect(on_activated)
+
     def show(self) -> None:
         self._icon.show()
 

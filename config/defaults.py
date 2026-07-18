@@ -117,14 +117,14 @@ BODY_LABEL_MIN_PX = 6
 # short-weekday "TUE" look (~40 px at the default skin) — a flat pixel
 # ceiling on purpose, symmetric with BODY_LABEL_MIN_PX's flat floor
 # above, not a fraction of the dial (a giant dial must not grow giant
-# single-word labels either).
+# single-word labels either). The two-line WRAP the owner asked for on
+# 2026-07-18 was REVOKED the same day (Session 21-C, his slika: a huge
+# "Youth" beside a tiny "Childhood" reads ugly) — replaced by the
+# SET-UNIFORM law: every name sharing a ring wears the size of the
+# SMALLEST fitted member (`render.layers.weekday_label_set_px` /
+# `archetype_label_set_px`), so no per-line offset constant is needed.
 NAME_LABEL_MAX_PX = 40
 NAME_LABEL_WIDTH_FRACTION = 0.92     # of the available width (arm/body)
-# Two-line wrap (owner ROADMAP 15h item 4c, e.g. "Compass Walks"): the
-# half-offset of each stacked line from center, as a multiple of the
-# fitted font's pixel size — the same proportion already proven for the
-# subdial's two-row texts (draw_two_lines).
-NAME_LABEL_LINE_OFFSET_FRACTION = 0.62
 MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
 MARKER_BORDER_RGBA = (255, 255, 255, 200)
 

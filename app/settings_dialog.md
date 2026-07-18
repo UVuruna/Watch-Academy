@@ -20,7 +20,7 @@ where the owner's own example applies — Palette + Clock tint = Colors):
 | Section | Groups |
 |---|---|
 | Location | Location, Quick Jump cities |
-| Display | Opacity, Element sizes |
+| Display | Opacity, Element sizes, Archetype |
 | Colors | Palette, Clock (ring) tint |
 | Custom art | Custom ring, Custom hands |
 | Themes | Theme rotation, Artwork |
@@ -50,6 +50,13 @@ like before.
   Aura twilight as two INDEPENDENT overrides (owner spec — no coupling
   ratio between them). "Skin default" resets a slider and clears its
   override.
+- **Archetype** (owner 2026-07-18, Session 21-C — "nemoj ispod nego u
+  Settings — ON/OFF, spreman sam za predloge") — one checkbox,
+  "Archetype names": its OWN independent switch (`archetype_names`) for
+  the archetype figures' display names, separate from the weekday
+  bodies' own Names option; `render.layers.ArchetypeLayer` reads it
+  directly. The whole control for now — the owner is open to a richer
+  dropdown here later.
 - **Palette** — one BIG color circle per hue of the ACTIVE (pointer,
   style) preset (owner spec 2026-07-11: Paint-style swatches);
   hovering a circle names the arm position it colors (Top / Bottom
@@ -68,7 +75,12 @@ like before.
   range) synced TWO-WAY with it — either widget moving drags the other
   along (`sync_spin`/`sync_slider`, each guarded with `blockSignals` to
   avoid feedback) — applied together on OK exactly like a menu preset
-  pick.
+  pick. Also here: the SATURATION slider (owner 2026-07-18, Session
+  21-C) — 0-100%, `palette_saturation` (0.0-1.0) — scales the active
+  Star+Aura palette's HSV saturation at `render.layers.palette_for`,
+  the ONE spot feeding both the pointer diamonds and the Aura wedges,
+  so they move together; Umbra (already gray) is untouched. "Default"
+  resets to 100%.
 - **Ring tint** — one hue for the whole clock body (ring art, hands,
   Umbra; the letter art stays untouched): TWO labeled Paint-style
   grids from `defaults.RING_TINT_GROUPS` (owner 2026-07-15: the flat

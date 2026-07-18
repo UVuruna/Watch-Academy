@@ -526,6 +526,7 @@ def apply_display_settings(skin, settings: Settings):
         show_seconds=settings.show_seconds
         and not (_slot_seconds(settings) and not archetype_on),
         archetype_mode=settings.archetype_mode,
+        archetype_names=settings.archetype_names,
         earth_weekday=settings.earth_weekday,
         show_octa_slot=settings.show_octa_slot,
         show_earth_date=settings.show_earth_date,
@@ -539,6 +540,7 @@ def apply_display_settings(skin, settings: Settings):
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
         ),
+        palette_saturation=settings.palette_saturation,
     )
 
 
@@ -577,6 +579,10 @@ class AppController(QObject):
             # inherits this instead of the generic Windows icon (owner
             # report 2026-07-11); the built EXE gets the M7 ICO on top.
             self._app.setWindowIcon(icon)
+            # SHOW on tray DOUBLE-CLICK (owner 2026-07-18, ROADMAP 15h):
+            # the same "normal" z-mode-only affordance as the menu entry
+            # above it.
+            self._tray.on_double_click(self._show_if_normal_z_mode)
         except ValueError as error:
             # A broken/missing logo must be SEEN (review finding) — in a
             # windowed build a bare traceback dies with no window at all.
@@ -1147,7 +1153,6 @@ class AppController(QObject):
         if key in (
             "pointer", "show_weekday", "show_pointer",
             "show_octa_slot", "show_third_slot", "archetype_mode",
-            "show_weekday_names",
         ):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
@@ -1155,14 +1160,11 @@ class AppController(QObject):
             # chain and the slot check marks) — re-gray the gated
             # entries IN PLACE (owner 2026-07-13: switching the
             # pointer or an element must not close the open menu).
-            # `show_weekday_names` joined the list (ROADMAP 15h item 4a):
-            # TWO separate QAction objects (the buried Weekday > Names
-            # and the top-level Archetype names) now write the SAME key,
-            # and only one is ever reachable at a time — the other's
-            # CHECKED display would otherwise go stale the moment the
-            # reachable one is clicked, since nothing else keeps them in
-            # sync (menu structure stays intact — no rebuild — so this
-            # is the ONE place to resync both).
+            # `show_weekday_names` dropped OUT of this list (Session
+            # 21-C): the menu twin it needed resyncing against is gone —
+            # Archetype names is its own Settings switch now
+            # (`archetype_names`), so the buried Weekday ▸ Names toggle
+            # needs no special re-gating beyond the ordinary slot gating.
             self._refresh_menu_gating()
 
     # The Earth label trio (owner 2026-07-18, the accepted names Date /
@@ -1282,6 +1284,9 @@ class AppController(QObject):
         order, and the big seconds hand while a slot runs the
         small-seconds complication."""
         settings = self._settings
+        # SHOW (owner 2026-07-18): meaningless outside "normal" z-mode —
+        # HIDDEN there, not grayed.
+        self._show_action.setVisible(settings.z_mode == "normal")
         # THE ARCHETYPE MODE gating (owner sealed package 2026-07-16):
         # the toggle grays where no archetype exists — Aurora and the
         # Calendar — and with the Pointer element off (no diamonds, no
@@ -1293,24 +1298,6 @@ class AppController(QObject):
         )
         archetype_on = archetype_available and settings.archetype_mode
         self._archetype_action.setEnabled(archetype_available)
-        # The reachable Names switch (ROADMAP 15h item 4a) is enabled
-        # exactly opposite the nested Weekday ▸ Names it mirrors: that
-        # one loses its submenu the moment the mode turns ON, this one
-        # only means something once it did — so at any moment EXACTLY
-        # ONE of the two is clickable. TWO SEPARATE QAction objects write
-        # the SAME `show_weekday_names` key, though, so the one sitting
-        # disabled can still go visually stale — clicking the reachable
-        # one updates only ITS OWN checked flag, not its twin's; both are
-        # explicitly resynced here (blockSignals — a resync must never
-        # re-fire the setter) every time gating runs, which now includes
-        # every `show_weekday_names` change (see `_set_display_choice`).
-        self._archetype_names_action.setEnabled(archetype_on)
-        for names_action in (
-            self._archetype_names_action, self._weekday_names_action,
-        ):
-            names_action.blockSignals(True)
-            names_action.setChecked(settings.show_weekday_names)
-            names_action.blockSignals(False)
         locked = (
             settings.pointer == "cross"
             and settings.show_pointer
@@ -1426,6 +1413,19 @@ class AppController(QObject):
         menu = _StayOpenMenu()
         settings = self._settings
         tr = self._ui
+        # SHOW (owner 2026-07-18, ROADMAP 15h, Session 21-C): in
+        # "normal" z-mode the dial rides above other windows ONLY while
+        # focused — the owner loses it under other windows otherwise.
+        # This entry raises it on demand; MEANINGLESS in "bottom" (never
+        # above anything) and "top" (already always above), so it is
+        # HIDDEN there, not merely grayed — `_refresh_menu_gating`
+        # updates its visibility on every z_mode change. Sits at the
+        # very TOP of the menu (owner: "na samom vrhu").
+        self._show_action = QAction(f"👁️ {tr('Show')}", menu)
+        self._show_action.triggered.connect(self._show_if_normal_z_mode)
+        self._show_action.setVisible(settings.z_mode == "normal")
+        menu.addAction(self._show_action)
+        menu.addSeparator()
         # Menu rework (owner 2026-07-13): emoji-fronted top level —
         # Design / Primary Slot / Secondary Slot / Elements, then the
         # three switches, the four windows, Exit — and checkable picks
@@ -2075,31 +2075,12 @@ class AppController(QObject):
                 "step aside while it runs."
             ),
         )
-        # ARCHETYPE NAMES (owner ROADMAP 15h item 4a, 2026-07-18: "he
-        # cannot turn archetype names off"). ROOT CAUSE: the figures'
-        # names are the SAME `show_weekday_names` flag ArchetypeLayer
-        # already reads (render.layers, verified) — but its only menu
-        # switch lives inside 1st Slot ▸ Weekday ▸ Names, and
-        # `_refresh_menu_gating` grays the WHOLE 1st/2nd/3rd Slot
-        # submenus while the mode is on (they no longer apply), taking
-        # that switch down with them — unreachable, not merely hidden.
-        # LEAST-NEW-SURFACE FIX: no new setting, no change to the slot
-        # gating (which is correct — the slots truly do not apply); one
-        # more reachable action for the SAME key, sitting right beside
-        # the toggle that makes it relevant, gated identically to
-        # Archetype itself so it grays exactly when there is nothing to
-        # name.
-        self._archetype_names_action = self._add_toggle(
-            menu, tr("Archetype names"), settings.show_weekday_names,
-            lambda checked: self._set_display_choice(
-                "show_weekday_names", checked
-            ),
-            tr(
-                "The lit figure's name — the same switch as the weekday "
-                "bodies' Names (1st Slot ▸ Weekday), reachable here "
-                "because that submenu grays out while Archetype runs."
-            ),
-        )
+        # ARCHETYPE NAMES moved into Settings ▸ Display as its OWN
+        # independent switch (owner 2026-07-18, ROADMAP 15h, Session
+        # 21-C: "nemoj ispod nego u Settings — ON/OFF") — the menu twin
+        # that used to sit here, writing the shared `show_weekday_names`
+        # key, is GONE; `archetype_names` is its own setting now,
+        # `ArchetypeLayer` reads it directly.
         # (The Earth-weekday toggle moved to Design ▸ Earth as a general
         # option, owner 2026-07-17 slika 10 — it works in both modes now.)
         self._add_toggle(
@@ -2649,6 +2630,14 @@ class AppController(QObject):
                 ),
                 critical=False,
             )
+
+    def _show_if_normal_z_mode(self) -> None:
+        """The tray double-click / menu "Show" gesture (owner
+        2026-07-18, ROADMAP 15h): a no-op outside "normal" z-mode,
+        where raising the dial is meaningless (bottom never rides above
+        anything, top already does)."""
+        if self._settings.z_mode == "normal":
+            self._widget.raise_and_focus()
 
     def _set_click_through(self, enabled: bool) -> None:
         self._widget.set_click_through(enabled)

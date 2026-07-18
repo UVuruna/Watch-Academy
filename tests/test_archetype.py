@@ -12,6 +12,7 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import dataclasses
+import math
 from datetime import datetime, timedelta
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
@@ -317,7 +318,8 @@ def test_placeholder_falls_back_to_the_name(app, tmp_path):
         fig = {"file": path, "name": "Testling", "row2": "-",
                "entity": "t", "enc": None}
         draw_archetype_figure(
-            painter, ctx, fig, QPointF(0, 0), 80.0, 40.0, 1.0, named=False,
+            painter, ctx, fig, QPointF(0, 0), 80.0, 1.0,
+            named=False, label_px=32.0,
         )
         painter.end()
         return image
@@ -342,7 +344,10 @@ def test_placeholder_falls_back_to_the_name(app, tmp_path):
     assert real.pixelColor(100, 100).red() > 200
 
 
-# --- Name label fitting: the shared MAX-PX cap and wrap (ROADMAP 15h item 4b/4c) --
+# --- Name label fitting: the shared MAX-PX cap, and the SET-UNIFORM law -----------
+# (ROADMAP 15h item 4, owner verdict 2026-07-18: the two-line wrap is REVOKED —
+# every name is one line again; a set of names sharing a ring wears the size
+# of its SMALLEST fitted member.)
 
 
 def test_short_name_is_capped_at_name_label_max_px(app):
@@ -353,7 +358,7 @@ def test_short_name_is_capped_at_name_label_max_px(app):
     import render.layers as layers_mod
 
     assert (
-        layers_mod._fit_name_lines(("Ox",), target_width=10_000.0)
+        layers_mod.name_label_px("Ox", target_width=10_000.0)
         == defaults.NAME_LABEL_MAX_PX
     )
 
@@ -363,42 +368,15 @@ def test_long_name_still_shrinks_to_fit(app):
     space still measures DOWN to fit, and grows again with more room."""
     import render.layers as layers_mod
 
-    narrow = layers_mod._fit_name_lines(
-        ("The Eye of Providence",), target_width=80.0
-    )
-    wide = layers_mod._fit_name_lines(
-        ("The Eye of Providence",), target_width=800.0
-    )
+    narrow = layers_mod.name_label_px("The Eye of Providence", target_width=80.0)
+    wide = layers_mod.name_label_px("The Eye of Providence", target_width=800.0)
     assert defaults.BODY_LABEL_MIN_PX <= narrow < wide <= defaults.NAME_LABEL_MAX_PX
 
 
-def test_two_word_name_wraps_when_it_reads_bigger(app):
-    """4c (owner example: the Compass Walks): a two-word name in a
-    narrow arm wraps to two lines exactly when that yields a BIGGER font
-    than forcing it onto one line — both candidates measured and capped
-    the same way."""
-    import render.layers as layers_mod
-
-    lines = layers_mod._wrap_name_lines("Compass Walks")
-    assert lines == ("Compass", "Walks")
-    assert layers_mod._wrap_name_lines("Ox") is None       # single word — no wrap
-
-    narrow_target = 90.0
-    single_px = layers_mod._fit_name_lines(("Compass Walks",), narrow_target)
-    two_px = layers_mod._fit_name_lines(lines, narrow_target)
-    assert two_px > single_px          # wrapping genuinely reads bigger here
-
-    roomy_target = 10_000.0
-    single_px = layers_mod._fit_name_lines(("Compass Walks",), roomy_target)
-    two_px = layers_mod._fit_name_lines(lines, roomy_target)
-    assert two_px <= single_px         # both hit the cap — single line wins/ties
-
-
-def test_draw_name_label_wraps_to_two_centered_lines_when_bigger(app, monkeypatch):
-    """Render pin (item 4c): in a narrow target width `draw_name_label`
-    actually DRAWS two stacked, centered lines sharing one font size —
-    pinned on the captured draw_outlined_text calls, never on guessed
-    pixel colors."""
+def test_draw_name_label_draws_exactly_one_line(app, monkeypatch):
+    """Owner verdict 2026-07-18: the two-line wrap is GONE — every name,
+    long or short, draws as exactly ONE outlined line at the given
+    pixel size (no more measuring/splitting inside the draw call)."""
     import render.layers as layers_mod
 
     calls = []
@@ -409,28 +387,72 @@ def test_draw_name_label_wraps_to_two_centered_lines_when_bigger(app, monkeypatc
     )
     image = QImage(200, 200, QImage.Format.Format_ARGB32_Premultiplied)
     painter = QPainter(image)
-    layers_mod.draw_name_label(painter, "Compass Walks", QPointF(0, 0), 90.0)
+    layers_mod.draw_name_label(painter, "Compass Walks", QPointF(0, 0), 42.0)
     painter.end()
-    assert [c[0] for c in calls] == ["Compass", "Walks"]
-    assert calls[0][1] < 0.0 < calls[1][1]         # stacked above/below center
-    assert calls[0][2] == calls[1][2]              # one shared font size
+    assert calls == [("Compass Walks", 0.0, 42)]
 
 
-def test_draw_name_label_stays_single_line_when_wrap_is_not_bigger(app, monkeypatch):
-    """A single word (nothing to wrap) always draws exactly one call,
-    regardless of available width."""
+def test_weekday_label_set_uses_the_smallest_fitted_member(app):
+    """21-C owner verdict: ALL names of one weekday ring wear the size
+    of the SMALLEST fitted member — a set containing one long name
+    drags every member down to its size, the cap/floor still hold."""
     import render.layers as layers_mod
 
-    calls = []
-    monkeypatch.setattr(
-        layers_mod, "draw_outlined_text",
-        lambda painter, pos, text, font: calls.append((text, pos.y())),
+    skin = _archetype_skin("hexa", show_weekday_names=True)
+    day, tick = _dt(datetime(2026, 7, 16, 12, 0))
+    ctx = RenderContext(
+        skin=dataclasses.replace(skin, archetype_mode=False),
+        day=day, tick=tick, radius=200.0, cache=AssetCache(), dpr=1.0,
     )
-    image = QImage(200, 200, QImage.Format.Format_ARGB32_Premultiplied)
-    painter = QPainter(image)
-    layers_mod.draw_name_label(painter, "Ox", QPointF(0, 0), 300.0)
-    painter.end()
-    assert calls == [("Ox", 0.0)]
+    set_px = layers_mod.weekday_label_set_px(ctx)
+    # Every individual body's OWN fit is >= the set answer (the set
+    # picks the narrowest-fitting member, never inflates past it).
+    slot_size = layers_mod.weekday_body_size(ctx.skin, ctx.radius)
+    target = slot_size * defaults.NAME_LABEL_WIDTH_FRACTION
+    own_fits = [
+        layers_mod.name_label_px(layers_mod.weekday_label_text(ctx, body), target)
+        for body in constants.WEEKDAY_BODIES
+    ]
+    assert set_px == min(own_fits)
+    assert defaults.BODY_LABEL_MIN_PX <= set_px <= defaults.NAME_LABEL_MAX_PX
+
+
+def test_archetype_label_set_uses_the_smallest_fitted_member(app):
+    """21-C owner verdict: the archetype figures AND the center share
+    ONE set — a long figure/center name drags every label in the
+    layout down to its own smaller fitted size."""
+    import render.layers as layers_mod
+
+    skin = _archetype_skin("trio")
+    ctx = RenderContext(
+        skin=skin, day=SimpleNamespace(), tick=None,
+        radius=200.0, cache=AssetCache(), dpr=1.0,
+    )
+    key = layers_mod.archetype_key(skin)
+    arm_width = (
+        ctx.radius * skin.star.radius_fraction
+        * math.tan(
+            math.radians(constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer])
+        )
+    )
+    set_px = layers_mod.archetype_label_set_px(ctx, key, arm_width)
+    target = arm_width * defaults.NAME_LABEL_WIDTH_FRACTION
+    fits = [
+        layers_mod.name_label_px(fig["name"], target)
+        for fig in archetypes.figures(key)
+    ]
+    center = archetypes.center(key)
+    if center is not None:
+        center_height = layers_mod.archetype_figure_size(
+            skin, ctx.radius, center["file"]
+        )
+        fits.append(
+            layers_mod.name_label_px(
+                center["name"], center_height * defaults.NAME_LABEL_WIDTH_FRACTION,
+            )
+        )
+    assert set_px == min(fits)
+    assert defaults.BODY_LABEL_MIN_PX <= set_px <= defaults.NAME_LABEL_MAX_PX
 
 
 # --- The reveal gesture hides the hands -------------------------------------------
@@ -942,86 +964,60 @@ def test_menu_gating(app, tmp_path, monkeypatch):
         controller._tray.hide()
 
 
-def test_archetype_names_toggle_reachable_in_archetype_mode(app, tmp_path, monkeypatch):
-    """ROADMAP 15h item 4a (owner 2026-07-18: 'he cannot turn archetype
-    names off'). The figures' names ARE `show_weekday_names`
-    (render.layers.ArchetypeLayer reads it directly, verified) — the bug
-    was that its only menu switch lives inside 1st Slot ▸ Weekday ▸
-    Names, and the WHOLE slot submenu grays out the instant Archetype
-    turns on, taking that switch down with it. Fix: one more action for
-    the SAME key, enabled exactly opposite the buried one — at any
-    moment exactly one of the two is reachable (`_refresh_menu_gating`
-    also explicitly resyncs both CHECKED states, see the next test)."""
+def test_archetype_names_is_its_own_settings_switch(app, tmp_path, monkeypatch):
+    """Owner 2026-07-18, Session 21-C ('nemoj ispod nego u Settings —
+    ON/OFF'): the menu twin the previous round added is GONE — there is
+    no `_archetype_names_action` on the controller any more — and the
+    figures' names are governed by their OWN INDEPENDENT setting,
+    `archetype_names`, entirely separate from the weekday bodies'
+    `show_weekday_names`."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from app.controller import AppController
 
     c = AppController(app)
     try:
-        assert c._settings.pointer == "hexa"          # ships with an archetype
-        assert not c._settings.archetype_mode
-        # Off the mode: the buried Weekday > Names is the reachable one.
-        assert not c._archetype_names_action.isEnabled()
-        c._set_display_choice("archetype_mode", True)
-        assert c._archetype_names_action.isEnabled()
-        assert c._archetype_names_action.isChecked() == c._settings.show_weekday_names
-        assert c._settings.show_weekday_names        # default: names on
-        c._archetype_names_action.trigger()
+        assert not hasattr(c, "_archetype_names_action")
+        assert c._settings.archetype_names is True     # default: names on
+        # Toggling the weekday Names switch must NOT move archetype_names.
+        c._set_display_choice("show_weekday_names", False)
+        assert c._settings.archetype_names is True
+        c._set_display_choice("archetype_names", False)
         assert c._settings.show_weekday_names is False
-        assert not c._archetype_names_action.isChecked()
-        # Toggling back on works too — a real, usable switch either way.
-        c._archetype_names_action.trigger()
-        assert c._settings.show_weekday_names is True
-        # Turning the mode back off returns the reachable side to the
-        # buried Weekday > Names entry.
-        c._set_display_choice("archetype_mode", False)
-        assert not c._archetype_names_action.isEnabled()
+        assert c._settings.archetype_names is False
     finally:
         c._profiling_timer.stop()
         c._tray.hide()
 
 
-def test_archetype_names_twin_actions_stay_synced(app, tmp_path, monkeypatch):
-    """A regression caught in self-review while building the fix above:
-    the buried Weekday > Names and the top-level Archetype names toggle
-    are TWO SEPARATE QAction objects writing the SAME
-    `show_weekday_names` key — clicking whichever one is reachable only
-    updates ITS OWN checked flag by itself, so the OTHER (disabled) one
-    could show a STALE checkmark the next time it became reachable.
-    Pins that both stay correct across a full off -> on -> off round
-    trip through EITHER control."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+def test_archetype_names_gates_the_render(app, monkeypatch):
+    """`ArchetypeLayer` reads `archetype_names` — NOT
+    `show_weekday_names` — for the figures' names: with real art, the
+    LIT figure's name draws when `archetype_names` is on and is
+    SKIPPED when off, regardless of the weekday bodies' own switch."""
+    import render.layers as layers_mod
 
-    def action(menu, text):
-        return next(a for a in menu.actions() if a.text() == text)
+    monkeypatch.setattr(layers_mod, "archetype_art_ready", lambda path: True)
+    monkeypatch.setattr(layers_mod, "draw_pixmap_centered", lambda *a, **kw: None)
+    calls = []
+    monkeypatch.setattr(
+        layers_mod, "draw_name_label",
+        lambda painter, name, pos, label_px: calls.append(name),
+    )
+    day, tick = _dt(datetime(2026, 7, 16, 12, 0))
 
-    c = AppController(app)
-    try:
-        slot_menu = next(
-            a for a in c._menu.actions() if "1ˢᵗ Slot" in a.text()
-        ).menu()
-        weekday_menu = action(slot_menu, "Weekday").menu()
-        buried = action(weekday_menu, "Names")
-        assert buried is c._weekday_names_action
+    def render(archetype_names):
+        skin = _archetype_skin(
+            "trio", show_weekday_names=False, archetype_names=archetype_names,
+        )
+        comp = Compositor(skin, AssetCache())
+        comp.render_offscreen(360.0, 1.0, day, tick)
 
-        # Turn OFF via the buried control (mode is off — it's the one
-        # reachable), then enter the mode: the top-level twin must show
-        # the SAME (now-False) state, not its own stale construction-time
-        # snapshot.
-        buried.trigger()
-        assert c._settings.show_weekday_names is False
-        c._set_display_choice("archetype_mode", True)
-        assert c._archetype_names_action.isChecked() is False
-
-        # Turn back ON via the now-reachable top-level control, then
-        # leave the mode: the buried twin must reflect the new True.
-        c._archetype_names_action.trigger()
-        assert c._settings.show_weekday_names is True
-        c._set_display_choice("archetype_mode", False)
-        assert buried.isChecked() is True
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
+    calls.clear()
+    render(False)
+    assert calls == []                # names OFF — nothing drawn
+    calls.clear()
+    render(True)
+    assert calls != []                # names ON — the lit figure speaks
 
 
 # --- The compact SIZE slider in the menu (ROADMAP 15h item 12a) -------------------
@@ -1317,6 +1313,56 @@ def test_elements_top_level_toggles_all_on_off(app, tmp_path, monkeypatch):
         # Turning a SINGLE element off unchecks the ordinal.
         c._set_element(keys[0], False)
         assert not c._elements_menu_action.isChecked()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+# --- THE "SHOW" AFFORDANCE for "normal" z-mode (ROADMAP 15h, owner 2026-07-18) ----
+
+
+def test_show_action_visible_only_in_normal_z_mode(app, tmp_path, monkeypatch):
+    """The Show entry sits at the very top of the menu, HIDDEN (not
+    grayed) outside "normal" z-mode — meaningless in "bottom" (never
+    above anything) and "top" (already always above)."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        assert c._menu.actions()[0] is c._show_action   # the very top
+        assert c._settings.z_mode == "bottom"           # default
+        assert not c._show_action.isVisible()
+        c._settings = dataclasses.replace(c._settings, z_mode="normal")
+        c._refresh_menu_gating()
+        assert c._show_action.isVisible()
+        c._settings = dataclasses.replace(c._settings, z_mode="top")
+        c._refresh_menu_gating()
+        assert not c._show_action.isVisible()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+def test_show_action_and_tray_double_click_raise_only_in_normal_mode(
+    app, tmp_path, monkeypatch,
+):
+    """Triggering Show (menu or tray double-click) raises the dial only
+    while z_mode == "normal" — a no-op in "bottom"/"top" (defense in
+    depth beyond the menu's own visibility gate)."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        calls = []
+        monkeypatch.setattr(c._widget, "raise_and_focus", lambda: calls.append(1))
+        assert c._settings.z_mode == "bottom"
+        c._show_if_normal_z_mode()
+        assert calls == []                              # no-op outside normal
+        c._settings = dataclasses.replace(c._settings, z_mode="normal")
+        c._show_if_normal_z_mode()
+        assert calls == [1]
     finally:
         c._profiling_timer.stop()
         c._tray.hide()

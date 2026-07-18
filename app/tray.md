@@ -26,3 +26,9 @@ menu (Qt does not own them; the GC would destroy the menu mid-use).
 - `show()` / `hide()`
 - `notify(title, message)`: non-blocking critical balloon (mid-run
   settings-save failures)
+- `on_double_click(callback)` (owner 2026-07-18, ROADMAP 15h, Session
+  21-C): wires `callback()` to a tray icon DOUBLE-CLICK
+  (`QSystemTrayIcon.activated`, filtered to `ActivationReason.
+  DoubleClick`) — the "Show" affordance's second trigger. The
+  controller registers `_show_if_normal_z_mode` here (a no-op outside
+  "normal" z-mode).

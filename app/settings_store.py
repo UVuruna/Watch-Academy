@@ -63,6 +63,13 @@ class Settings:
     # all three slots switch OFF — at the RENDER level only, so the
     # slot keys below keep the user's choices untouched.
     archetype_mode: bool = False
+    # Whether the ARCHETYPE FIGURES carry their display name (owner
+    # 2026-07-18, ROADMAP 15h — Session 21-C): an INDEPENDENT Settings
+    # switch, no longer piggybacking on `show_weekday_names` through a
+    # menu twin — `ArchetypeLayer` reads THIS key for the figures' names
+    # while the weekday Names switches (`show_weekday_names`,
+    # `show_info_slot_names`) stay untouched for the weekday bodies.
+    archetype_names: bool = True
     # The optional abbreviated weekday on the Earth marker under its date
     # (owner: default OFF). A GENERAL Earth option since 2026-07-17 (Design
     # ▸ Earth) — works in BOTH normal and archetype mode. Renamed from
@@ -159,6 +166,13 @@ class Settings:
     slot_scale: float = 1.0
     ring_letter_scale: float = 1.0
     hover_enlarge: float = 1.2
+    # SATURATION (owner 2026-07-18, Settings ▸ Display, Session 21-C):
+    # scales the Star+Aura palette's HSV saturation at skin build
+    # (`render.layers.palette_for`, the ONE spot the palette flows into
+    # both the pointer AND the Aura wedges, so they stay in step) —
+    # 1.0 = the owner preset unchanged, 0.0 = grayed to each hue's own
+    # brightness. Umbra (already gray) is untouched.
+    palette_saturation: float = 1.0
     # Display overrides (None = the skin's own value). The Aura's
     # sunlight and twilight opacities are INDEPENDENT (owner spec).
     star_alpha: float | None = None
@@ -304,6 +318,7 @@ class SettingsStore:
                 click_through=_load_bool(raw, "click_through", False),
                 show_era_suffix=_load_bool(raw, "show_era_suffix", False),
                 archetype_mode=_load_bool(raw, "archetype_mode", False),
+                archetype_names=_load_bool(raw, "archetype_names", True),
                 # Renamed 2026-07-17: the old archetype_earth_day value
                 # carries over as the default when the new key is absent
                 # (external user data migration, not an API shim).
@@ -386,6 +401,10 @@ class SettingsStore:
                 ),
                 ring_letter_scale=_load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 hover_enlarge=_load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
+                palette_saturation=_load_scale(
+                    raw, "palette_saturation",
+                    *constants.PALETTE_SATURATION_RANGE, 1.0,
+                ),
                 star_alpha=_load_alpha(raw, "star_alpha"),
                 aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
                 aura_twilight_alpha=_load_alpha(raw, "aura_twilight_alpha"),
@@ -419,6 +438,7 @@ class SettingsStore:
             "palette_style": settings.palette_style,
             "calendar_lighting": settings.calendar_lighting,
             "archetype_mode": settings.archetype_mode,
+            "archetype_names": settings.archetype_names,
             "earth_weekday": settings.earth_weekday,
             "z_mode": settings.z_mode,
             "solar_rotation": settings.solar_rotation,
@@ -473,6 +493,7 @@ class SettingsStore:
             "slot_scale": settings.slot_scale,
             "ring_letter_scale": settings.ring_letter_scale,
             "hover_enlarge": settings.hover_enlarge,
+            "palette_saturation": settings.palette_saturation,
             "star_alpha": settings.star_alpha,
             "aura_day_alpha": settings.aura_day_alpha,
             "aura_twilight_alpha": settings.aura_twilight_alpha,

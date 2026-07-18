@@ -98,6 +98,7 @@ class SettingsDialog(QDialog):
             ]),
             (tr("Display"), [
                 self._build_opacity_group(), self._build_sizes_group(),
+                self._build_archetype_group(),
             ]),
             (tr("Colors"), [
                 self._build_palette_group(), self._build_ring_tint_group(),
@@ -613,6 +614,21 @@ class SettingsDialog(QDialog):
         row.addWidget(reset)
         return slider, row
 
+    # --- Archetype (owner 2026-07-18, Session 21-C) ----------------------------------
+
+    def _build_archetype_group(self) -> QGroupBox:
+        """The archetype figures' names, ON/OFF (owner: "nemoj ispod
+        nego u Settings — ON/OFF, spreman sam za predloge") — an
+        INDEPENDENT switch from the weekday bodies' own Names option;
+        the owner is open to a richer dropdown here later."""
+        tr = self._tr
+        group = QGroupBox(tr("Archetype"))
+        form = QFormLayout(group)
+        self._archetype_names_check = QCheckBox(tr("Archetype names"))
+        self._archetype_names_check.setChecked(self._settings.archetype_names)
+        form.addRow(self._archetype_names_check)
+        return group
+
     # --- Element sizes (owner EXTRAS) ------------------------------------------------
 
     def _build_sizes_group(self) -> QGroupBox:
@@ -694,6 +710,32 @@ class SettingsDialog(QDialog):
         diameter_row.addWidget(self._diameter_spin)
         diameter_row.addWidget(diameter_reset)
         form.addRow(tr("Diameter"), diameter_row)
+        # SATURATION (owner 2026-07-18, Session 21-C): scales the
+        # Star+Aura palette's hues at skin build (render.layers.
+        # palette_for, the one spot feeding both the pointer and the
+        # Aura wedges) — 0 grays them to their own brightness, 100 is
+        # the owner preset unchanged.
+        low, high = constants.PALETTE_SATURATION_RANGE
+        self._saturation_slider = QSlider(Qt.Orientation.Horizontal)
+        self._saturation_slider.setRange(round(low * 100), round(high * 100))
+        self._saturation_slider.setSingleStep(
+            constants.PALETTE_SATURATION_SLIDER_STEP
+        )
+        sat_value = round(self._settings.palette_saturation * 100)
+        self._saturation_slider.setValue(sat_value)
+        saturation_label = QLabel(f"{sat_value}%")
+        self._saturation_slider.valueChanged.connect(
+            lambda value: saturation_label.setText(f"{value}%")
+        )
+        saturation_reset = QPushButton(tr("Default"))
+        saturation_reset.clicked.connect(
+            lambda checked: self._saturation_slider.setValue(100)
+        )
+        saturation_row = QHBoxLayout()
+        saturation_row.addWidget(self._saturation_slider)
+        saturation_row.addWidget(saturation_label)
+        saturation_row.addWidget(saturation_reset)
+        form.addRow(tr("Saturation"), saturation_row)
         return group
 
     # --- Palette --------------------------------------------------------------------
@@ -1419,6 +1461,8 @@ class SettingsDialog(QDialog):
             art_source=self._art_source_combo.currentData(),
             z_mode=self._z_mode_combo.currentData(),
             diameter=self._diameter_slider.value(),
+            archetype_names=self._archetype_names_check.isChecked(),
+            palette_saturation=self._saturation_slider.value() / 100,
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

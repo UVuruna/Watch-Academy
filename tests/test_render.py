@@ -487,3 +487,32 @@ def test_noon_sector_is_yellowish(frame):
     assert color.alpha() > 200
     assert color.red() > 150 and color.green() > 120
     assert color.blue() < color.red()  # yellow/orange family, not blue
+
+
+def test_palette_saturation_grays_the_star_and_aura_hues(app):
+    """The Saturation slider (owner 2026-07-18, Settings ▸ Display,
+    Session 21-C) scales BOTH the pointer (Star) and the background
+    (Aura) wedges through the ONE shared source, `render.layers.
+    palette_for` — 0.0 grays every hue to its own brightness (HSV
+    saturation zeroed, value/hue untouched); the ring/letters (a
+    separate art path, never touching palette_for) are untouched."""
+    import dataclasses
+
+    from PySide6.QtGui import QColor
+
+    from render.layers import palette_for
+
+    full = dataclasses.replace(defaults.DEFAULT_SKIN, palette_saturation=1.0)
+    gray = dataclasses.replace(defaults.DEFAULT_SKIN, palette_saturation=0.0)
+    full_hues = palette_for(full)
+    gray_hues = palette_for(gray)
+    assert full_hues == defaults.PALETTE_PRESETS[(full.pointer, full.palette_style)]
+    assert len(gray_hues) == len(full_hues)
+    for original, grayed in zip(full_hues, gray_hues):
+        color = QColor(grayed)
+        h, s, v, a = color.getHsvF()
+        assert s == pytest.approx(0.0, abs=1e-6)      # fully desaturated
+        # Value (brightness) is untouched — the color grays to ITS OWN
+        # brightness, not to a flat mid-gray.
+        orig_v = QColor(original).getHsvF()[2]
+        assert v == pytest.approx(orig_v, abs=1e-6)

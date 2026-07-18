@@ -47,6 +47,15 @@ to fit exactly.
 - `moved`: Signal emitted on every `moveEvent` (debounced save upstream)
 
 #### Methods
+- `raise_and_focus()` (owner 2026-07-18, ROADMAP 15h, Session 21-C —
+  the "Show" affordance): `raise_()` + `activateWindow()` — brings the
+  dial above other windows on demand. Meant for "normal" z-mode, where
+  the window otherwise rides above others ONLY while focused and gets
+  lost under whatever else the user is doing; stealing focus here is
+  deliberate (the user explicitly asked to see the clock). The method
+  itself has no opinion about z_mode — the controller's
+  `_show_if_normal_z_mode` gates both callers (the menu entry and the
+  tray double-click) to "normal" only.
 - `mark_closing()`: disarms the spontaneous-hide watchdog before an
   intentional hide/exit
 - `mouseDoubleClickEvent()` (owner seal 2026-07-16, REPURPOSED the

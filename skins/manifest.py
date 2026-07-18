@@ -176,6 +176,12 @@ class SkinDefinition:
     # restores everything. Aurora/Calendar have no archetype: the mode
     # is inert there.
     archetype_mode: bool = False
+    # Whether the archetype FIGURES carry their display name (owner
+    # 2026-07-18, ROADMAP 15h, Session 21-C) — an INDEPENDENT switch,
+    # its own Settings ▸ Display checkbox, no longer sharing
+    # `show_weekday_names` with the weekday bodies. `ArchetypeLayer`
+    # reads THIS key exclusively for the figures' names.
+    archetype_names: bool = True
     # The optional abbreviated day (TUE, THU…) the Earth marker writes
     # under its date label (owner: default OFF). A GENERAL Earth option
     # since 2026-07-17 (moved to Design ▸ Earth) — it works in BOTH
@@ -255,6 +261,10 @@ class SkinDefinition:
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None
+    # SATURATION (owner 2026-07-18, Settings ▸ Display): scales the
+    # Star+Aura palette's HSV saturation in `render.layers.palette_for`
+    # — 1.0 unchanged, 0.0 grays every hue to its own brightness.
+    palette_saturation: float = 1.0
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

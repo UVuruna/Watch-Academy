@@ -139,10 +139,29 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
 def palette_for(skin: SkinDefinition) -> tuple:
     """The active Star+Aura palette — ONE source for both the star
     diamonds and the background wedges (owner spec): the user's custom
-    hues when set (settings dialog), otherwise the owner preset."""
-    if skin.palette_override is not None:
-        return skin.palette_override
-    return defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
+    hues when set (settings dialog), otherwise the owner preset. The
+    SATURATION slider (owner 2026-07-18, Settings ▸ Display, Session
+    21-C) multiplies every hue's HSV saturation here — the one spot the
+    palette flows into BOTH the pointer and the Aura wedges, so they
+    stay in step; 1.0 leaves the hues untouched, Umbra (gray) never
+    reads this at all."""
+    hues = (
+        skin.palette_override if skin.palette_override is not None
+        else defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
+    )
+    if skin.palette_saturation == 1.0:
+        return hues
+    return tuple(_saturate_hue(hue, skin.palette_saturation) for hue in hues)
+
+
+def _saturate_hue(hue: str, factor: float) -> str:
+    """Scale one `#RRGGBB` hue's HSV saturation by `factor` (0.0..1.0,
+    clamped) — value and hue untouched, so 0.0 grays the color to its
+    OWN brightness rather than to a flat white/black."""
+    color = QColor(hue)
+    h, s, v, a = color.getHsvF()
+    color.setHsvF(max(h, 0.0), max(0.0, min(1.0, s * factor)), v, a)
+    return color.name()
 
 
 def calendar_wheel(skin: SkinDefinition) -> str:
@@ -394,41 +413,40 @@ def archetype_figure_size(
 
 def draw_archetype_figure(
     painter: QPainter, ctx: "RenderContext", fig: dict, pos: QPointF,
-    height: float, arm_width: float, opacity: float, named: bool,
+    height: float, opacity: float, named: bool, label_px: float,
 ) -> None:
     """One archetype figure in its diamond: the stained glass scaled
     into the arm (color visible around it) at `opacity`. `height` is
     already TYPE-CLASSIFIED (`archetype_figure_size` — circle vs
-    portrait) and hover-scaled by the caller; `arm_width` is the
-    diamond's widest width (for the name fit). `named` adds the display
-    name in the label style. Missing/placeholder art draws the NAME
-    alone — the documented fallback until the owner's glass lands."""
+    portrait) and hover-scaled by the caller; `label_px` is the SET-
+    UNIFORM label size (owner verdict 2026-07-18, ROADMAP 15h — the
+    caller computed it once per paint via `archetype_label_set_px`,
+    already hover-scaled). `named` adds the display name in the label
+    style. Missing/placeholder art draws the NAME alone — the
+    documented fallback until the owner's glass lands."""
     painter.save()
     painter.setOpacity(opacity)
     ready = archetype_art_ready(fig["file"])
     if ready:
         draw_pixmap_centered(painter, ctx, fig["file"], pos, height)
     if named or not ready:
-        draw_name_label(
-            painter, fig["name"], pos,
-            arm_width * defaults.NAME_LABEL_WIDTH_FRACTION,
-        )
+        draw_name_label(painter, fig["name"], pos, label_px)
     painter.restore()
 
 
-def _fit_name_lines(lines: tuple[str, ...], target_width: float) -> int:
-    """The measured pixel font size that fits the WIDEST of `lines`
-    within `target_width`, capped at `defaults.NAME_LABEL_MAX_PX` — the
-    shared fitting core behind `draw_name_label` (Rule #5, ROADMAP 15h
-    item 4b): a SHORT text no longer inflates past a sane ceiling, a
-    LONG one still shrinks to fit (measured, never guessed)."""
+def name_label_px(name: str, target_width: float) -> int:
+    """The measured pixel font size that fits `name` within
+    `target_width`, capped at `defaults.NAME_LABEL_MAX_PX`, floored at
+    `defaults.BODY_LABEL_MIN_PX` — the shared per-name fit (Rule #5):
+    a SHORT text no longer inflates past a sane ceiling, a LONG one
+    still shrinks to fit (measured, never guessed)."""
     font = QFont()
     font.setBold(True)
     font.setPixelSize(100)
     metrics = QFontMetricsF(font)
-    widest = max(metrics.horizontalAdvance(line) for line in lines)
+    width = metrics.horizontalAdvance(name)
     fitted = (
-        math.floor(100.0 * target_width / widest) if widest > 0
+        math.floor(100.0 * target_width / width) if width > 0
         else defaults.NAME_LABEL_MAX_PX
     )
     return max(
@@ -436,62 +454,21 @@ def _fit_name_lines(lines: tuple[str, ...], target_width: float) -> int:
     )
 
 
-def _wrap_name_lines(name: str) -> tuple[str, str] | None:
-    """Split a multi-word name at the word boundary whose two halves are
-    most BALANCED (measured width, not a blind half split — "The Eye of
-    Providence" wants a different cut than "Compass Walks") — None for
-    a single word, nothing to wrap."""
-    words = name.split()
-    if len(words) < 2:
-        return None
-    font = QFont()
-    font.setBold(True)
-    font.setPixelSize(100)
-    metrics = QFontMetricsF(font)
-    best_lines: tuple[str, str] | None = None
-    best_width: float | None = None
-    for split in range(1, len(words)):
-        first = " ".join(words[:split])
-        second = " ".join(words[split:])
-        width = max(
-            metrics.horizontalAdvance(first), metrics.horizontalAdvance(second)
-        )
-        if best_width is None or width < best_width:
-            best_width, best_lines = width, (first, second)
-    return best_lines
-
-
 def draw_name_label(
-    painter: QPainter, name: str, pos: QPointF, target_width: float,
+    painter: QPainter, name: str, pos: QPointF, label_px: float,
 ) -> None:
     """ONE on-dial name-label draw shared by the weekday bodies and the
-    archetype figures (Rule #5, ROADMAP 15h item 4): fits `name` to
-    `target_width` (measured, never guessed), capped at
-    `defaults.NAME_LABEL_MAX_PX` (item 4b — reasoned from the 720-dial
-    short-weekday "TUE" look: short names no longer inflate past it,
-    long ones still shrink to fit). A multi-word name (owner example:
-    the Compass Walks) WRAPS to two centered lines exactly when that
-    reads LARGER than the single-line fit (item 4c) — both candidates
-    measured and capped the same way, the bigger wins."""
-    single_px = _fit_name_lines((name,), target_width)
-    wrapped = _wrap_name_lines(name)
-    if wrapped is not None:
-        two_px = _fit_name_lines(wrapped, target_width)
-        if two_px > single_px:
-            font = QFont()
-            font.setBold(True)
-            font.setPixelSize(two_px)
-            offset = two_px * defaults.NAME_LABEL_LINE_OFFSET_FRACTION
-            draw_outlined_text(
-                painter, QPointF(pos.x(), pos.y() - offset), wrapped[0], font,
-            )
-            draw_outlined_text(
-                painter, QPointF(pos.x(), pos.y() + offset), wrapped[1], font,
-            )
-            return
+    archetype figures (Rule #5, ROADMAP 15h item 4): draws `name` as a
+    SINGLE outlined line at `label_px` (owner REVOKED the two-line wrap
+    2026-07-18 — every name is one line again). `label_px` is decided
+    by the CALLER, never measured here: the SET-UNIFORM law (owner
+    verdict 2026-07-18) says every name sharing a ring (a dial's
+    weekday bodies, an archetype layout's figures) wears the size of
+    the SMALLEST fitted member of its set — computed ONCE per paint via
+    `name_label_px` over the whole set, not per label."""
     font = QFont()
     font.setBold(True)
-    font.setPixelSize(single_px)
+    font.setPixelSize(round(label_px))
     draw_outlined_text(painter, pos, name, font)
 
 
@@ -1201,24 +1178,66 @@ class RingLayer(Layer):
             painter.restore()
 
 
-def draw_body_label(
-    painter: QPainter, ctx: RenderContext, body: str,
-    pos: QPointF, size: float,
-) -> None:
-    """The weekday-name label on a body — shared by the weekday unit
-    and the info slot's second body (Rule #5): short until the largest
-    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER. Fitted through the
-    SAME shared helper as the archetype figures (`draw_name_label`,
-    ROADMAP 15h item 4b) — measured to the body's own width and capped
-    at `defaults.NAME_LABEL_MAX_PX`, so "MON" no longer renders at a
-    fixed size regardless of "Wednesday" overflowing right beside it."""
+def weekday_label_text(ctx: RenderContext, body: str) -> str:
+    """The displayed weekday text for `body`: short until the largest
+    preset, full from `WEEKDAY_FULL_NAME_MIN_DIAMETER`."""
     full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
-    label = (
-        constants.WEEKDAY_FULL_NAMES[body]
-        if full_text
+    return (
+        constants.WEEKDAY_FULL_NAMES[body] if full_text
         else constants.WEEKDAY_LABELS[body]
     )
-    draw_name_label(painter, label, pos, size * defaults.NAME_LABEL_WIDTH_FRACTION)
+
+
+def weekday_label_set_px(ctx: RenderContext) -> int:
+    """The SET-UNIFORM label size (owner verdict 2026-07-18, ROADMAP
+    15h) for the weekday bodies of THIS dial: every name sharing the
+    ring — the diamond slot occupants, and the hexa/trio center Sun
+    whichever of WeekdayLayer/CenterBodyLayer draws it this frame —
+    wears the size of the SMALLEST fitted member, computed once here
+    (a pure, cheap text-measurement pass) rather than per label. Two
+    separate paint passes (WeekdayLayer is DAILY, CenterBodyLayer is
+    MINUTE) call this same pure function and agree on one size without
+    sharing mutable state."""
+    spec = ctx.skin.weekday_set
+    today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+    if spec.display_mode == "center_only":
+        # A set of one — its own fit is the whole answer.
+        text = weekday_label_text(ctx, today)
+        width = (
+            2 * ctx.radius * spec.center_scale
+            * defaults.NAME_LABEL_WIDTH_FRACTION
+        )
+        return name_label_px(text, width)
+    slot_size = weekday_body_size(ctx.skin, ctx.radius)
+    target_width = slot_size * defaults.NAME_LABEL_WIDTH_FRACTION
+    servant = servant_holds_the_seat(ctx.skin, today)
+    bodies = set()
+    for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
+        if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:
+            continue
+        bodies.add(visible_occupant(occupants, today))
+    if ctx.skin.pointer in ("hexa", "trio"):
+        bodies.add("sun")     # the ghost/opaque center Sun joins the set
+    texts = {weekday_label_text(ctx, body) for body in bodies}
+    return min(name_label_px(text, target_width) for text in texts)
+
+
+def draw_body_label(
+    painter: QPainter, ctx: RenderContext, body: str,
+    pos: QPointF, size: float, label_px: float | None = None,
+) -> None:
+    """The weekday-name label on a body — shared by the weekday unit
+    and the info slot's second body (Rule #5). `label_px` is the SET-
+    UNIFORM size (owner verdict 2026-07-18) the caller computed once
+    per paint via `weekday_label_set_px`, already hover-scaled; when
+    omitted (a standalone single-body caller — the info slot's own
+    seated body is a set of one) this body's own fit is used."""
+    label = weekday_label_text(ctx, body)
+    px = (
+        label_px if label_px is not None
+        else name_label_px(label, size * defaults.NAME_LABEL_WIDTH_FRACTION)
+    )
+    draw_name_label(painter, label, pos, px)
 
 
 def draw_weekday_body(
@@ -1228,11 +1247,14 @@ def draw_weekday_body(
     pos: QPointF,
     size: float,
     opacity: float,
+    label_px: float | None = None,
 ) -> None:
     """One weekday body with its white outlined label — shared by the
     diamond slots and the above-the-hands center pass (Rule #5). The
     label is the weekday name (owner spec): short until the largest
-    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER."""
+    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER. `label_px`
+    threads the SET-UNIFORM size through to `draw_body_label` (owner
+    verdict 2026-07-18)."""
     spec = ctx.skin.weekday_set
     painter.save()
     painter.setOpacity(opacity)
@@ -1254,7 +1276,7 @@ def draw_weekday_body(
         painter.setBrush(QColor(spec.body_colors[body]))
         painter.drawEllipse(pos, size / 2, size / 2)
     if names_on:
-        draw_body_label(painter, ctx, body, pos, size)
+        draw_body_label(painter, ctx, body, pos, size, label_px)
     painter.restore()
 
 
@@ -1284,6 +1306,15 @@ class WeekdayLayer(Layer):
         if spec.display_mode == "center_only":
             return                       # the center pass draws it above the hands
 
+        # SET-UNIFORM label size (owner verdict 2026-07-18, ROADMAP 15h):
+        # computed ONCE per paint for the whole weekday ring, never per
+        # label — the hover-enlarged twin scales this same base size.
+        names_on = (
+            ctx.skin.show_weekday_names
+            and ctx.skin.weekday_theme != "planet_signs"
+        )
+        base_label_px = weekday_label_set_px(ctx) if names_on else None
+
         if (
             ctx.skin.pointer in ("hexa", "trio")
             and today != "sun"
@@ -1293,10 +1324,12 @@ class WeekdayLayer(Layer):
             # The hexa and trio layouts center the Sun; on Sundays — or
             # during the reveal window (owner 2026-07-16) — the CENTER
             # pass draws it opaque ABOVE the hands instead.
-            center_size = weekday_body_size(ctx.skin, ctx.radius)
-            center_size *= hover_factor(ctx, "body:sun")
+            hf = hover_factor(ctx, "body:sun")
+            center_size = weekday_body_size(ctx.skin, ctx.radius) * hf
             draw_weekday_body(
-                painter, ctx, "sun", QPointF(0, 0), center_size, spec.ghost_opacity
+                painter, ctx, "sun", QPointF(0, 0), center_size,
+                spec.ghost_opacity,
+                base_label_px * hf if base_label_px is not None else None,
             )
         orbit = ctx.radius * weekday_body_orbit(ctx.skin)
         slot_size = weekday_body_size(ctx.skin, ctx.radius)
@@ -1308,10 +1341,12 @@ class WeekdayLayer(Layer):
             if not self._gate(ctx, f"body:{body}"):
                 continue
             theta = slot_angle + ctx.rotation
+            hf = hover_factor(ctx, f"body:{body}")
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
-                slot_size * hover_factor(ctx, f"body:{body}"),
+                slot_size * hf,
                 1.0 if body == today or ctx.reveal_active else spec.ghost_opacity,
+                base_label_px * hf if base_label_px is not None else None,
             )
         if servant and self._gate(ctx, "sun_servant"):
             # THE SERVANT FACE at 24h (owner 2026-07-13): it stands all
@@ -1559,9 +1594,44 @@ class CenterBodyLayer(Layer):
             if spec.display_mode == "center_only"
             else weekday_body_size(ctx.skin, ctx.radius)
         )
-        center_size *= hover_factor(ctx, f"body:{today}")
+        hf = hover_factor(ctx, f"body:{today}")
+        center_size *= hf
         body = "sun" if ghost_reveal else today
-        draw_weekday_body(painter, ctx, body, QPointF(0, 0), center_size, 1.0)
+        names_on = (
+            ctx.skin.show_weekday_names
+            and ctx.skin.weekday_theme != "planet_signs"
+        )
+        # SET-UNIFORM label size (owner verdict 2026-07-18): the SAME
+        # pure computation WeekdayLayer uses, agreeing on one size
+        # across the two separate paint passes without shared state.
+        label_px = weekday_label_set_px(ctx) * hf if names_on else None
+        draw_weekday_body(
+            painter, ctx, body, QPointF(0, 0), center_size, 1.0, label_px
+        )
+
+
+def archetype_label_set_px(
+    ctx: RenderContext, key: str, arm_width: float,
+) -> int:
+    """The SET-UNIFORM label size (owner verdict 2026-07-18, ROADMAP
+    15h) for ONE archetype layout: every name — the arm figures AND the
+    center, kept in the SAME set on purpose (owner's slika showed the
+    center joining the arms' ring for uniformity) — wears the size of
+    the SMALLEST fitted member. A pure, cheap (text measurement only)
+    function so ArchetypeLayer (DAILY) and ArchetypeCenterLayer
+    (MINUTE) — two separate paint passes — agree on one size without
+    sharing mutable state."""
+    target = arm_width * defaults.NAME_LABEL_WIDTH_FRACTION
+    fits = [name_label_px(fig["name"], target) for fig in archetypes.figures(key)]
+    center = archetypes.center(key)
+    if center is not None:
+        center_height = archetype_figure_size(ctx.skin, ctx.radius, center["file"])
+        fits.append(
+            name_label_px(
+                center["name"], center_height * defaults.NAME_LABEL_WIDTH_FRACTION,
+            )
+        )
+    return min(fits)
 
 
 class ArchetypeLayer(Layer):
@@ -1592,7 +1662,14 @@ class ArchetypeLayer(Layer):
         tip = ctx.radius * ctx.skin.star.radius_fraction
         half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
         arm_width = tip * math.tan(math.radians(half))   # diamond's widest
-        names_on = ctx.skin.show_weekday_names
+        # The archetype names switch is now its OWN Settings on/off
+        # (owner 2026-07-18, ROADMAP 15h — replaces the buried menu twin
+        # that shared `show_weekday_names`).
+        names_on = ctx.skin.archetype_names
+        # SET-UNIFORM label size (owner verdict 2026-07-18): computed
+        # ONCE per paint for the whole layout (arms AND the center),
+        # never per label — the hover-enlarged twin scales this base.
+        label_px = archetype_label_set_px(ctx, key, arm_width)
         for index, fig in enumerate(archetypes.figures(key)):
             # Per-arm hover target (owner slika 8): the base pass skips
             # the hovered figure, the HoverLift twin redraws it enlarged
@@ -1610,9 +1687,10 @@ class ArchetypeLayer(Layer):
             draw_archetype_figure(
                 painter, ctx, fig,
                 dial_point(fig["angle"] + ctx.rotation, orbit),
-                height * hf, arm_width * hf,
+                height * hf,
                 1.0 if lit else ctx.skin.weekday_set.ghost_opacity,
                 named=names_on and lit,
+                label_px=label_px * hf,
             )
 
 
@@ -1663,10 +1741,18 @@ class ArchetypeCenterLayer(Layer):
                 painter, ctx, center["file"], QPointF(0, 0), height
             )
         else:
-            draw_name_label(
-                painter, center["name"], QPointF(0, 0),
-                height * defaults.NAME_LABEL_WIDTH_FRACTION,
+            # SET-UNIFORM label size (owner verdict 2026-07-18): the
+            # SAME pure computation ArchetypeLayer uses (the center
+            # shares the arms' set), agreeing on one size across the
+            # two separate paint passes without shared state.
+            tip = ctx.radius * ctx.skin.star.radius_fraction
+            half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
+            arm_width = tip * math.tan(math.radians(half))
+            label_px = (
+                archetype_label_set_px(ctx, key, arm_width)
+                * hover_factor(ctx, "archetype:center")
             )
+            draw_name_label(painter, center["name"], QPointF(0, 0), label_px)
         painter.restore()
 
 

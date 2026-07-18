@@ -68,6 +68,23 @@ def test_three_z_modes_swap_and_top_asserts_native_topmost(app, monkeypatch):
         widget.close()
 
 
+def test_raise_and_focus_raises_and_activates(app, monkeypatch):
+    """The "Show" affordance (owner 2026-07-18, ROADMAP 15h, Session
+    21-C): raise_() + activateWindow(), the Qt path for bringing the
+    dial above other windows on demand in "normal" z-mode."""
+    widget = _make_widget()
+    try:
+        calls = []
+        monkeypatch.setattr(widget, "raise_", lambda: calls.append("raise"))
+        monkeypatch.setattr(
+            widget, "activateWindow", lambda: calls.append("activate")
+        )
+        widget.raise_and_focus()
+        assert calls == ["raise", "activate"]
+    finally:
+        widget.close()
+
+
 def test_reshow_reasserts_topmost_in_top_mode(app, monkeypatch):
     """The spontaneous-hide watchdog's reshow path re-asserts native
     topmost too (owner 2026-07-17) — a reshow behind the stack must ride

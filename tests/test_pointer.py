@@ -1807,6 +1807,52 @@ def test_moon_event_glow_renders(app):
     )
 
 
+def test_moon_marker_hover_outranks_the_ring_tick_during_glow(app):
+    """Owner slika 3, Session 21-C bug: during a GLOW event the Moon
+    marker RELOCATES to the ring band centerline (same radius the ring
+    numerals/letters sit at) — hovering it there used to answer with
+    the RING TICK reading instead of the Moon's own hover, because the
+    hit-test checked the marker's NORMAL orbit position, never its
+    relocated one. THE MARKERS OUTRANK THE RING wherever they sit
+    (owner law): the fix hit-tests the SAME relocated position
+    `YearMarkerLayer` draws at."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    seasons = SeasonsRepository().year_anchors(2026)
+    window = MoonPhaseRepository().moon_window(2026)
+    reference = datetime(2026, 7, 7, 12, 0, tzinfo=tz)
+    scout = build_day_context(reference, observer, seasons, window)
+    instant, name = min(
+        scout.moon_events, key=lambda event: abs(event[0] - reference)
+    )
+    local = instant.astimezone(tz)
+    day = build_day_context(local, observer, seasons, window)
+    glowing = build_tick_state(local, day)
+    assert glowing.moon_event == name
+
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(540.0, 1.0, day, glowing)
+    radius = 270.0
+    moon_angle = math.radians(glowing.moon_fraction * 360.0)
+    # The RELOCATED position (ring band centerline) — where the marker
+    # is actually DRAWN during the glow window, not its normal orbit.
+    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    moon_x = radius + orbit * math.sin(moon_angle)
+    moon_y = radius - orbit * math.cos(moon_angle)
+    point = QPointF(moon_x - radius, moon_y - radius)
+    element = comp._element_at(
+        point, radius, comp._rotation(),
+        constants.WEEKDAY_BODIES[day.weekday_index],
+    )
+    assert element == "moon"          # not None (which would fall to the tick)
+    tooltip = comp.tooltip_at(moon_x, moon_y, 540.0)
+    assert tooltip == comp._moon_text()
+
+
 def test_season_glow_relocates_to_ring_band_and_is_golden(app):
     """Turning-point rework (owner 2026-07-16): at a solstice the Earth
     marker relocates radially to the ring band centerline at its year
@@ -2133,7 +2179,7 @@ def test_weekday_center_body_matches_the_diamond_bodies(app, july_wednesday, mon
     calls = []
     monkeypatch.setattr(
         layers, "draw_weekday_body",
-        lambda painter, ctx, body, pos, size, opacity: calls.append(
+        lambda painter, ctx, body, pos, size, opacity, label_px=None: calls.append(
             ((pos.x(), pos.y()), size)
         ),
     )

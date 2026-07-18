@@ -67,7 +67,25 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   `slot_seat_scale` / `slot_seat_orbit`; the classic weekday bodies
   mirror `WeekdayLayer` — `slot_seat_scale` size and the
   `weekday_body_orbit` romb-center ride, servant seat included); legend
-  off or a factor of 1.0 keeps the dial inert
+  off or a factor of 1.0 keeps the dial inert.
+  **THE MARKERS OUTRANK THE RING (owner bug fix, Session 21-C,
+  2026-07-18, slika 3):** during a GLOW window (`tick.moon_event` /
+  `tick.season_event`) `YearMarkerLayer` RELOCATES the Moon/Earth
+  marker radially to the ring band centerline
+  (`defaults.GLOW_RING_RADIUS_FRACTION` — the same radius the ring
+  numerals/letters sit at, see [Layers](layers.md)'s YearMarkerLayer).
+  `_element_at`'s marker hit-test used to check only the marker's
+  NORMAL orbit position (`marker.moon_orbit_fraction` / `marker.
+  orbit_fraction`), so a relocated marker missed its own hit circle and
+  fell through to `_tick_tooltip` (the ring band) underneath it — the
+  owner's report: hovering the Moon at a glow moment answered with the
+  ring's angle reading instead of the Moon's own hover. FIX: the
+  hit-test now branches on the SAME `moon_event`/`season_event` check
+  `YearMarkerLayer.paint` uses, hit-testing the marker at
+  `GLOW_RING_RADIUS_FRACTION` whenever it glows — the exact DRAWN
+  position — so the marker answers first wherever it actually sits;
+  `encyclopedia_target` inherits the fix for free (it calls
+  `_element_at` directly).
 - `hit_omega(x, y, size) -> bool` / `trigger_reveal_week()` /
   `reveal_active()` (owner 2026-07-16, REPURPOSED by the same-day
   seal): the Omega (24h) double-click hit region — the FULL ROUND AREA

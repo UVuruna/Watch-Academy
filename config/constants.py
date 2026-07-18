@@ -714,6 +714,13 @@ TRANSLATION_LANGUAGES = {
 # much larger; 1.0 disables the effect).
 ELEMENT_SCALE_RANGE = (0.5, 2.0)
 HOVER_ENLARGE_RANGE = (1.0, 2.0)
+# The Saturation slider (owner 2026-07-18, Settings ▸ Display, Session
+# 21-C): scales the Star+Aura palette's HSV saturation — 0.0 grays the
+# pointer and its background wedges to their own brightness, 1.0 is the
+# owner preset unchanged. The slider itself is 0-100; the stored
+# setting is the 0.0-1.0 factor.
+PALETTE_SATURATION_RANGE = (0.0, 1.0)
+PALETTE_SATURATION_SLIDER_STEP = 1
 
 # The tropics span the Tropic of Cancer to the Tropic of Capricorn;
 # their year splits into WET and DRY halves bounded by the equinoxes

@@ -8,7 +8,9 @@ The dial layers, each tagged with a rebuild `Cadence`. Shared helpers
 angles (clockwise from top) to Qt's counterclockwise-from-3-o'clock
 system. Pointer-variant helpers live here too: `palette_for()` (the
 active Star+Aura palette preset — one source for the star diamonds AND
-the background wedges), `visible_occupant()` (shared-slot priority),
+the background wedges, ALSO the one spot the Saturation slider scales
+both in step — owner 2026-07-18, Session 21-C), `visible_occupant()`
+(shared-slot priority),
 `today_slot_theta()` (today's slot angle, None for the hexa center Sun),
 `draw_event_glow()` (the season/moon event halo), the SLOT system:
 `slot_layout()`, `slot_view()`, `weekday_classic_slot()` and the seat
@@ -141,8 +143,10 @@ ARCHETYPE CLOCK. The machinery:
   circle and portrait figures — e.g. Prism paint's reused Scale glass
   next to the Person lancets) with the arm color visible around them;
   the lit figure FULL, the rest at the weekday `ghost_opacity`; the
-  reveal window turns everything full. With Names on the lit figure
-  carries its display name. Each figure is a per-arm HOVER-ENLARGE
+  reveal window turns everything full. With `skin.archetype_names` on
+  (owner 2026-07-18, Session 21-C — its OWN Settings switch, separate
+  from the weekday bodies' `show_weekday_names`) the lit figure carries
+  its display name. Each figure is a per-arm HOVER-ENLARGE
   target (`"archetype:<index>"`, owner slika 8): the base pass skips
   the hovered figure and the HoverLift twin (`ArchetypeLayer(lift=True)`)
   redraws it enlarged above the hands — exactly like the slots.
@@ -170,29 +174,41 @@ ARCHETYPE CLOCK. The machinery:
   placeholder draws the figure's NAME in the outlined label style
   (fitted to the diamond width), never a stretched pixel — through the
   shared `draw_name_label()` below.
-- **`draw_name_label()`** (owner ROADMAP 15h item 4b/4c, 2026-07-18) —
-  the ONE on-dial NAME-label draw shared by the weekday bodies
-  (`draw_body_label`, the diamond slots' and the info slot's body text)
-  AND the archetype figures (`draw_archetype_figure`'s named/fallback
-  path, `ArchetypeCenterLayer`'s placeholder path) — Rule #5: one path
-  used to fit-to-width, the other drew at a fixed fraction of the body
-  size regardless of the text, so a long full weekday name ("Wednesday")
-  could overflow while a short one ("MON") never grew past its own
-  fixed size. Both now measure through the shared core
-  (`_fit_name_lines`): the largest bold pixel size whose WIDEST line
-  spans `target_width`, capped at `defaults.NAME_LABEL_MAX_PX` (item
-  4b — a flat pixel ceiling, deliberately dial-size-independent, reasoned
-  from the 720-dial short-weekday "TUE" look — symmetric with
-  `BODY_LABEL_MIN_PX`'s flat floor). A multi-word name (owner example:
-  the Compass Walks) may WRAP to two centered lines (item 4c,
-  `_wrap_name_lines` picks the word-boundary split whose wider half is
-  narrowest — "The Eye of Providence" does not just split down the
-  middle) — `draw_name_label` fits BOTH the single-line and the wrapped
-  candidate the same way and draws whichever is LARGER; a single word
-  never wraps. The old per-path constants (`ARCHETYPE_NAME_WIDTH_
-  FRACTION`, `ARCHETYPE_NAME_MAX_OF_FIGURE`, `BODY_LABEL_SIZE`) are
-  gone — `defaults.NAME_LABEL_WIDTH_FRACTION` is the one shared width
-  fraction, `defaults.NAME_LABEL_MAX_PX` the one shared cap.
+- **`draw_name_label()`** (owner ROADMAP 15h item 4, reworked 2026-07-18
+  Session 21-C — owner verdict) — the ONE on-dial NAME-label draw
+  shared by the weekday bodies (`draw_body_label`, the diamond slots'
+  and the info slot's body text) AND the archetype figures
+  (`draw_archetype_figure`'s named/fallback path, `ArchetypeCenterLayer`'s
+  placeholder path). `draw_name_label` itself is now DUMB: it draws
+  `name` as ONE outlined line at the `label_px` the CALLER supplies —
+  no measuring, no wrapping inside the draw call. THE TWO-LINE WRAP
+  (item 4c, `_wrap_name_lines`) IS REVOKED (owner slika: the Compass
+  Ages dial showed "Youth" huge beside a tiny "Childhood" — ugly) —
+  `_wrap_name_lines` and its tests are gone whole (Rule #6, no
+  leftovers); every name is one line again.
+  THE SET-UNIFORM LAW (owner verdict 2026-07-18, replaces the per-label
+  fit): every name sharing a RING — the archetype layout's figures
+  (arms AND the center, kept in the SAME set on purpose for uniformity)
+  and the weekday bodies of a dial (the diamond slots and the hexa/trio
+  ghost/opaque center Sun, whichever draws) — wears the size of the
+  SMALLEST fitted member. `name_label_px(name, target_width)` is the
+  per-name fit (the largest bold pixel size whose width spans
+  `target_width`, capped at `defaults.NAME_LABEL_MAX_PX`, floored at
+  `BODY_LABEL_MIN_PX` — a flat pixel ceiling, deliberately dial-size-
+  independent, reasoned from the 720-dial short-weekday "TUE" look);
+  `weekday_label_set_px(ctx)` and `archetype_label_set_px(ctx, key,
+  arm_width)` compute the SET's answer ONCE per paint (not per label) —
+  each is a PURE, cheap (text measurement only) function, so two
+  separate paint passes that share one ring (`WeekdayLayer`/
+  `CenterBodyLayer`; `ArchetypeLayer`/`ArchetypeCenterLayer`) recompute
+  the identical set and agree on one size without any shared mutable
+  state. The hover-enlarged twin scales that same base size (multiplies
+  the SET answer by its own `hover_factor`, never recomputes the set).
+  The old per-path constants (`ARCHETYPE_NAME_WIDTH_FRACTION`,
+  `ARCHETYPE_NAME_MAX_OF_FIGURE`, `BODY_LABEL_SIZE`,
+  `NAME_LABEL_LINE_OFFSET_FRACTION`) are gone — `defaults.
+  NAME_LABEL_WIDTH_FRACTION` is the one shared width fraction,
+  `defaults.NAME_LABEL_MAX_PX` the one shared cap.
 - The Earth marker stays (it is the instrument, not a slot): its label
   is drawn by `_draw_earth_label`, where the DATE and the abbreviated
   WEEKDAY are MUTUALLY EXCLUSIVE (owner 2026-07-17, ROADMAP 15e — the two

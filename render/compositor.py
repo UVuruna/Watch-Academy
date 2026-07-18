@@ -1087,16 +1087,35 @@ class Compositor:
             ):
                 return "archetype:center"
         marker = self._skin.year_marker
+        # THE MARKERS OUTRANK THE RING (owner Session 21-C bug, slika
+        # 3): during a GLOW window `YearMarkerLayer` RELOCATES the Moon/
+        # Earth marker radially to the ring band centerline
+        # (`GLOW_RING_RADIUS_FRACTION`, same as the drawn glow) — this
+        # hit-test used to check only the marker's NORMAL orbit
+        # position, so a relocated marker missed its own hit circle and
+        # fell through to the ring TICK band underneath it. Mirroring
+        # the SAME relocation `YearMarkerLayer.paint` applies fixes it:
+        # hit-test the DRAWN position, whichever radius that is.
+        moon_orbit = (
+            defaults.GLOW_RING_RADIUS_FRACTION
+            if self._last_tick.moon_event is not None
+            else marker.moon_orbit_fraction
+        )
         if self._skin.show_moon and hit(
             dial_point(
                 angles.moon_cycle_angle(self._last_tick.moon_fraction),
-                radius * marker.moon_orbit_fraction,
+                radius * moon_orbit,
             ),
             radius * marker.moon_scale,
         ):
             return "moon"
+        earth_orbit = (
+            defaults.GLOW_RING_RADIUS_FRACTION
+            if self._last_tick.season_event is not None
+            else marker.orbit_fraction
+        )
         if self._skin.show_earth and hit(
-            dial_point(self._last_tick.year_angle, radius * marker.orbit_fraction),
+            dial_point(self._last_tick.year_angle, radius * earth_orbit),
             radius * marker.scale,
         ):
             return "earth"

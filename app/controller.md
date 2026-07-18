@@ -62,7 +62,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   2026-07-13), every level a `_StayOpenMenu` — CHECKABLE picks keep
   the menu open for several settings in one visit; plain actions
   close as usual (a rebuild while open closes and RETAINS the old
-  menu so Qt never deletes a visible popup). Emoji-fronted top level:
+  menu so Qt never deletes a visible popup). AT THE VERY TOP (owner
+  2026-07-18, ROADMAP 15h, Session 21-C): `self._show_action` — "👁️
+  Show", raising the dial on demand (`raise_and_focus`, via
+  `_show_if_normal_z_mode`), VISIBLE only while `z_mode == "normal"`
+  (hidden, not grayed, in "bottom"/"top" where it means nothing) —
+  `_refresh_menu_gating` keeps its visibility in sync with the live
+  z_mode. Then the emoji-fronted top level:
   🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
   style, Theme background / Classic black (owner A/B spec 2026-07-15)
   — | Hands, Earth — with the label TRIO Date / Weekday / Full Date
@@ -195,32 +201,20 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   the Solar rotation toggle (off = upright Star/Aura/Umbra), the
   ARCHETYPE toggle (owner sealed package 2026-07-16): 🎭
   Archetype — the stay-open checkable that turns the mode on (the
-  render-level override; the slot settings stay untouched), immediately
-  followed by an "Archetype names" toggle (`self._archetype_names_action`,
-  owner ROADMAP 15h item 4a, 2026-07-18) — same `show_weekday_names` key
-  the buried 1st Slot ▸ Weekday ▸ Names switch already writes
-  (`render.layers.ArchetypeLayer` reads it directly; the wiring was never
-  broken). ROOT CAUSE of "cannot turn archetype names off": the WHOLE
-  1st/2nd/3rd Slot submenus — Names' only other home — gray out the
-  instant the mode turns on (see `_refresh_menu_gating` below), taking
-  the switch down with them. LEAST-NEW-SURFACE FIX: no new setting, one
-  more action for the SAME key, `setEnabled` to `archetype_on` — the
-  exact OPPOSITE gating of the buried entry, so at any moment EXACTLY
-  ONE of the two is clickable. Since they are still TWO SEPARATE
-  `QAction` objects writing one key, `_refresh_menu_gating` also
-  explicitly resyncs BOTH checked states from the live setting
-  (`blockSignals` — a resync must never re-fire the setter) — caught
-  by a self-review after the first pass shipped enabled-gating alone
-  and left the disabled twin showing a stale checkmark; `_set_display_
-  choice` now runs the gating refresh on every `show_weekday_names`
-  change too, not just the mode/pointer keys. The Earth
+  render-level override; the slot settings stay untouched). The
+  "Archetype names" menu twin that 21-B added here (writing the shared
+  `show_weekday_names` key) is GONE (owner 2026-07-18, Session 21-C:
+  "nemoj ispod nego u Settings — ON/OFF") — the figures' names are now
+  `archetype_names`, an INDEPENDENT setting with its own Settings ▸
+  Display checkbox; `show_weekday_names` dropped out of `_set_display_
+  choice`'s re-gating list along with the twin (nothing else needed
+  resyncing against it). The Earth
   Date and Weekday toggles live in Design ▸ Earth as GENERAL, MUTUALLY
   EXCLUSIVE options (`show_earth_date` / `earth_weekday`, owner 2026-07-17
   slika 10 + ROADMAP 15e — both work in either mode, gated by the dial
   size; `_toggle_earth_label` clears the sibling when one is checked).
   `_refresh_menu_gating`
-  grays the Archetype toggle AND the Archetype-names toggle (opposite
-  sense — the latter enables exactly WHILE the mode is on)
+  grays the Archetype toggle
   where no archetype exists (Aurora, Calendar, Pointer element off)
   and, WHILE THE MODE IS ON, grays the three slot submenus and their
   enables IN PLACE and releases the big-seconds gate (a seated
@@ -328,3 +322,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   flag makes the duplicate a no-op
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)
+- `_show_if_normal_z_mode()`: the "Show" gesture's shared guard (owner
+  2026-07-18, ROADMAP 15h) — a no-op outside `z_mode == "normal"` (in
+  "bottom"/"top" raising the dial means nothing), otherwise calls
+  `ClockWidget.raise_and_focus`. Wired to BOTH triggers: the menu's
+  `_show_action` (see `_build_menu`) and a [Tray Controller](tray.md)
+  `on_double_click` callback registered right after the tray icon is
+  built — a tray icon DOUBLE-CLICK (`QSystemTrayIcon.ActivationReason.
+  DoubleClick`) does the same thing.

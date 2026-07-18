@@ -133,6 +133,18 @@ class ClockWidget(QWidget):
         first show() and after a monitor/DPI change."""
         self._assert_topmost()
 
+    def raise_and_focus(self) -> None:
+        """The "Show" affordance (owner 2026-07-18, ROADMAP 15h): raise
+        the dial above other windows on demand — meant for "normal"
+        z-mode, where the window rides above others ONLY while focused
+        and gets lost under whatever the user is doing. Qt's raise_() +
+        activateWindow() is the preferred path (stealing focus is
+        acceptable here — the user explicitly asked to see the clock);
+        the menu/tray callers gate this to "normal" mode, this method
+        itself has no opinion about z_mode."""
+        self.raise_()
+        self.activateWindow()
+
     def mark_closing(self) -> None:
         """Tell the spontaneous-hide watchdog that the coming hide is
         intentional — and tear the SPACE hook down deterministically

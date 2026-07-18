@@ -459,23 +459,36 @@ lives in [The DOMY Canon](CANON.md).
       (`faulthandler` + `sys.excepthook` → `%APPDATA%/DOMY Watch/crash.log`);
       the likeliest crasher (re-entrant modal opens on repeated SPACE) is
       hardened directly with a re-entrancy guard + auto-repeat de-dupe.
-   4. **Archetype names — DONE (Session 21-B):** (a) the figures'
+   4. **Archetype names — DONE (Session 21-B), REWORKED (Session
+      21-C, owner verdict 2026-07-18):** (a) the figures'
       names were ALREADY `show_weekday_names` end to end
       (`ArchetypeLayer` reads it directly) — the bug was that its only
       menu switch (1st Slot ▸ Weekday ▸ Names) goes unreachable the
       instant Archetype mode grays the whole slot submenu tree; fixed
       with one more reachable action for the SAME key
       ("Archetype names", enabled exactly opposite the buried one — the
-      least-new-surface option). (b) a MAX FONT SIZE cap
+      least-new-surface option) — **SUPERSEDED the same round (Session
+      21-C): the menu twin is GONE; "nemoj ispod nego u Settings —
+      ON/OFF"** — the figures' names are now `archetype_names`, an
+      INDEPENDENT setting with its own Settings ▸ Display checkbox,
+      separate from the weekday bodies' `show_weekday_names`. (b) a MAX
+      FONT SIZE cap
       (`defaults.NAME_LABEL_MAX_PX = 40`, reasoned from the 720-dial
       short-weekday "TUE" look) now applies to BOTH the weekday body
       label and the archetype figure label through ONE shared helper,
       `render.layers.draw_name_label` (Rule #5 — the weekday path used
       to ignore text length entirely, the archetype path fit-to-width
-      with no ceiling). (c) two-word names WRAP to two centered lines
-      (e.g. the Compass Walks) exactly when that reads LARGER than the
-      single-line fit — pinned by metrics and render tests in
-      `tests/test_archetype.py`.
+      with no ceiling) — STILL STANDS. (c) two-word names WRAP to two
+      centered lines (e.g. the Compass Walks) exactly when that reads
+      LARGER than the single-line fit — **SUPERSEDED (Session 21-C,
+      owner verdict 2026-07-18): the wrap is REVOKED** (his slika: the
+      Compass Ages dial showed "Youth" huge beside a tiny "Childhood" —
+      ugly); `_wrap_name_lines` and its tests are deleted whole (Rule
+      #6). Replaced by the SET-UNIFORM law: every name of ONE SET (the
+      archetype layout's figures, arms AND center together; the weekday
+      bodies of a dial) wears the size of the SMALLEST fitted member,
+      computed ONCE per paint (`render.layers.weekday_label_set_px` /
+      `archetype_label_set_px`) — pinned in `tests/test_archetype.py`.
    5. **Archetype center display trigger — SEALED AND DONE (owner
       pick 2026-07-18):** the solar-noon window EXTENDED to both
       poles of the axis — the center burns FULL within ±1h of TRUE
@@ -533,7 +546,18 @@ lives in [The DOMY Canon](CANON.md).
       marker darkened with a BRONZE glow (the blood-moon copper —
       physically true). The ±3h event window stands; idea recorded:
       scale the glow strength by the eclipse MAGNITUDE from
-      `Database/deep_time.sqlite`'s eclipse catalog.
+      `Database/deep_time.sqlite`'s eclipse catalog. The render itself
+      stays QUEUED (not implemented this round). **MARKER-PRIORITY NOTE
+      (Session 21-C, 2026-07-18):** whatever draws at the eclipse's
+      RELOCATED ring-band position must hit-test THERE too — the same
+      bug this round fixed for the moon-phase/season glow (see item 19
+      below) applies identically to the eclipse display once it lands;
+      `render.compositor._element_at` already hit-tests the Moon/Earth
+      marker at its GLOWING position (`GLOW_RING_RADIUS_FRACTION`) via
+      the `tick.moon_event`/`tick.season_event` check, so an eclipse
+      window sharing that same relocation gets the fix for free — only
+      a NEW glow condition (not a new hit-test path) is needed when the
+      eclipse render is implemented.
    12. **SIZE slider in the right-click menu — DONE (Session 21-B):** a
       COMPACT `QWidgetAction`-hosted `QSlider` lives in Design ▸ Size
       itself (360–1440, `singleStep` 10, narrow width — coarse tune,
@@ -561,6 +585,44 @@ lives in [The DOMY Canon](CANON.md).
       machinery (`archetype_set_height`, `archetype_figure_height`,
       `archetype_fit_height`) is deleted; `ARCHETYPE_FIGURE_HEIGHT_
       OF_TIP` survives, repurposed for the portrait type.
+   17. **SATURATION slider — DONE (Session 21-C, owner 2026-07-18):** a
+      new Settings ▸ Display slider (0–100%, `palette_saturation`
+      0.0–1.0) scales the active Star+Aura palette's HSV saturation at
+      the ONE spot both flow through, `render.layers.palette_for` — the
+      pointer diamonds and the Aura wedges move together; Umbra (gray)
+      and the ring/letters are untouched. Config-driven range/step
+      (`constants.PALETTE_SATURATION_RANGE`), store-validated, pinned
+      by a render test (0.0 grays the star+aura hues, ring/letters
+      unaffected).
+   18. **"Show" affordance for the normal Z-mode — DONE (Session 21-C,
+      owner 2026-07-18):** in "normal" z-mode the dial rides above other
+      windows only while focused — the owner loses it under other
+      windows otherwise. A "Show" entry now sits at the very TOP of the
+      right-click/tray menu, VISIBLE only while `z_mode == "normal"`
+      (hidden, not grayed, in "bottom"/"top" where it means nothing;
+      `_refresh_menu_gating` keeps it in sync), and a tray icon
+      DOUBLE-CLICK does the same thing — both call
+      `ClockWidget.raise_and_focus()` (`raise_()` + `activateWindow()`,
+      focus theft accepted here — the user explicitly asked to see the
+      clock) through the shared `_show_if_normal_z_mode()` guard.
+   19. **Marker-before-ring hover priority bug — FIXED (Session 21-C,
+      owner slika 3, 2026-07-18):** during a GLOW event the Moon/Earth
+      marker RELOCATES to the ring band centerline (owner's 2026-07-16
+      turning-point rework) — hovering it there used to answer with the
+      RING TICK reading instead of the marker's own hover. ROOT CAUSE
+      (verified): `render.compositor._element_at`'s marker hit-test
+      checked only the marker's NORMAL orbit position, never the
+      relocated one `YearMarkerLayer.paint` actually draws during
+      `tick.moon_event`/`tick.season_event` — a relocated marker missed
+      its own hit circle and fell through to `_tick_tooltip`. FIX: the
+      hit-test now branches on the SAME event check the render layer
+      uses, testing the marker at `GLOW_RING_RADIUS_FRACTION` whenever
+      it glows (Rule #5, reusing the render layer's own relocation
+      logic/constant rather than re-deriving it) — the owner's law
+      ("the MARKERS outrank the ring wherever they sit") now holds
+      during glow windows too; `encyclopedia_target` inherits the fix
+      for free (shares `_element_at`). Pinned by a hover test at a real
+      full-moon glow instant in `tests/test_pointer.py`.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over
