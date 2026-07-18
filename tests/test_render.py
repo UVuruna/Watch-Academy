@@ -489,21 +489,23 @@ def test_noon_sector_is_yellowish(frame):
     assert color.blue() < color.red()  # yellow/orange family, not blue
 
 
-def test_palette_saturation_grays_the_star_and_aura_hues(app):
-    """The Saturation slider (owner 2026-07-18, Settings ▸ Display,
-    Session 21-C) scales BOTH the pointer (Star) and the background
-    (Aura) wedges through the ONE shared source, `render.layers.
-    palette_for` — 0.0 grays every hue to its own brightness (HSV
-    saturation zeroed, value/hue untouched); the ring/letters (a
-    separate art path, never touching palette_for) are untouched."""
+def test_pointer_saturation_grays_the_star_and_aura_hues(app):
+    """The Pointer Saturation slider (owner 2026-07-18, Settings ▸
+    Colors, renamed from "palette_saturation" in Session 21-D now that
+    RING has its own independent slider) scales BOTH the pointer (Star)
+    and the background (Aura) wedges through the ONE shared source,
+    `render.layers.palette_for` — 0.0 grays every hue to its own
+    brightness (HSV saturation zeroed, value/hue untouched); the
+    ring/letters (a separate art path, never touching palette_for) are
+    untouched."""
     import dataclasses
 
     from PySide6.QtGui import QColor
 
     from render.layers import palette_for
 
-    full = dataclasses.replace(defaults.DEFAULT_SKIN, palette_saturation=1.0)
-    gray = dataclasses.replace(defaults.DEFAULT_SKIN, palette_saturation=0.0)
+    full = dataclasses.replace(defaults.DEFAULT_SKIN, pointer_saturation=1.0)
+    gray = dataclasses.replace(defaults.DEFAULT_SKIN, pointer_saturation=0.0)
     full_hues = palette_for(full)
     gray_hues = palette_for(gray)
     assert full_hues == defaults.PALETTE_PRESETS[(full.pointer, full.palette_style)]
@@ -516,3 +518,58 @@ def test_palette_saturation_grays_the_star_and_aura_hues(app):
         # brightness, not to a flat mid-gray.
         orig_v = QColor(original).getHsvF()[2]
         assert v == pytest.approx(orig_v, abs=1e-6)
+
+
+def test_ring_saturation_grays_the_tinted_ring_plate_not_the_pointer(app):
+    """The Ring Saturation slider (owner 2026-07-18, Settings ▸ Colors,
+    Session 21-D — its OWN slider, independent of Pointer): scales the
+    ring plate's (and letter overlay's) saturation at
+    `render.assets.AssetCache._saturated`, applied AFTER the ring_tint
+    recolor — so a colorful ring_tint grays out at ring_saturation=0.0
+    while the Star/Aura palette (a completely different asset/path)
+    stays exactly as saturated as ever, and vice versa."""
+    import dataclasses
+
+    from PySide6.QtGui import QColor
+
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    now = datetime(2025, 6, 20, 12, 0, tzinfo=ZoneInfo("Europe/Belgrade"))
+    observer = astral.Observer(latitude=44.82, longitude=20.46)
+    day = build_day_context(
+        now, observer, SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+
+    # A saturated ring tint so a gray-out is visible against it.
+    tinted = dataclasses.replace(
+        defaults.DEFAULT_SKIN, ring_tint="#3050E0", ring_saturation=1.0,
+    )
+    grayed_ring = dataclasses.replace(tinted, ring_saturation=0.0)
+    grayed_pointer = dataclasses.replace(
+        tinted, pointer_saturation=0.0, ring_saturation=1.0,
+    )
+
+    def ring_pixel(skin):
+        image = Compositor(skin, AssetCache()).render_offscreen(
+            480.0, 1.0, day, tick
+        )
+        # Inside the donut band, on the horizontal axis (18h side) —
+        # away from any hand/star overlay; probed to land on a
+        # colorful (not white/black-edge) pixel of the tinted plate.
+        return image.pixelColor(470, 240)
+
+    full_px = ring_pixel(tinted)
+    grayed_px = ring_pixel(grayed_ring)
+    pointer_grayed_px = ring_pixel(grayed_pointer)
+
+    full_s = QColor(full_px).getHsvF()[1]
+    grayed_s = QColor(grayed_px).getHsvF()[1]
+    pointer_grayed_s = QColor(pointer_grayed_px).getHsvF()[1]
+
+    # ring_saturation=0.0 measurably desaturates the ring pixel...
+    assert grayed_s < full_s - 0.05
+    # ...but pointer_saturation=0.0 (the OTHER slider) leaves it alone.
+    assert pointer_grayed_s == pytest.approx(full_s, abs=1e-3)

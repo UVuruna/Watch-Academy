@@ -7,7 +7,7 @@ nothing about the dial.
 """
 
 from PySide6.QtCore import QEvent, Qt, QTimer, Signal
-from PySide6.QtGui import QPainter
+from PySide6.QtGui import QAction, QPainter
 from PySide6.QtWidgets import QMenu, QWidget
 
 from app import native
@@ -31,7 +31,7 @@ class ClockWidget(QWidget):
     _space_pressed = Signal()           # the native LL hook's queued hop
                                         # to the GUI thread (SPACE, no focus)
 
-    def __init__(self, diameter: int, menu: QMenu, legend):
+    def __init__(self, diameter: int, menu: QMenu, legend, show_action: QAction):
         super().__init__()
         self._closing = False
         # Guards the spontaneous-hide watchdog during a deliberate
@@ -40,6 +40,16 @@ class ClockWidget(QWidget):
         # reshow race.
         self._z_transition = False
         self._menu = menu
+        # SHOW, TRAY-ONLY (owner 2026-07-18, Session 21-D — "ako smo
+        # kliknuli znači da ga vidim"): the SAME shared QMenu carries the
+        # "Show" entry, but the dial's right-click popup must never
+        # offer it — you already see the dial, that is why you could
+        # right-click it. `contextMenuEvent` hides the action for its
+        # OWN popup only and restores the tray's own gated state
+        # (z_mode == "normal") once that popup closes; the tray's native
+        # popup (QSystemTrayIcon.setContextMenu) never goes through this
+        # widget at all, so it always sees the gated state undisturbed.
+        self._show_action = show_action
         self._z_mode = "bottom"          # the current Z hint (set below)
         self._legend = legend           # the shared LegendPopup
         self._renderer = None
@@ -183,6 +193,13 @@ class ClockWidget(QWidget):
         """Swap the shared context menu (rebuilt after Settings — e.g. a
         new custom ring joins Theme ▸ Ring)."""
         self._menu = menu
+
+    def set_show_action(self, show_action: QAction) -> None:
+        """`_build_menu` mints a FRESH `_show_action` on every rebuild
+        (skin install, settings apply) — the widget must track the
+        CURRENT one so `contextMenuEvent` hides/restores the right
+        object, never a stale action from a menu that no longer shows."""
+        self._show_action = show_action
 
     def set_click_through(self, enabled: bool) -> None:
         """TRUE click-through: the whole window stops taking mouse input
@@ -356,7 +373,15 @@ class ClockWidget(QWidget):
         super().leaveEvent(event)
 
     def contextMenuEvent(self, event) -> None:
+        """The dial's own right-click popup — SHOW never appears here
+        (owner 2026-07-18, Session 21-D): "if we clicked it, we can see
+        it". `exec()` blocks until the menu closes, so the hide/restore
+        wraps it exactly; the restore uses THIS widget's own `_z_mode`
+        (already tracked live by `set_z_mode`) so it lands back on the
+        same gated state the tray's popup would show."""
+        self._show_action.setVisible(False)
         self._menu.exec(event.globalPos())
+        self._show_action.setVisible(self._z_mode == "normal")
 
     def moveEvent(self, event) -> None:
         super().moveEvent(event)

@@ -59,10 +59,18 @@ def test_diameter_out_of_range_raises(store):
         store.load()
 
 
-def test_palette_saturation_out_of_range_raises(store):
-    """The Saturation slider (owner 2026-07-18, Session 21-C) is a
-    0.0..1.0 factor — same corrupt-on-out-of-range law as every other
-    size multiplier."""
+def test_pointer_saturation_out_of_range_raises(store):
+    """The Saturation sliders (owner 2026-07-18, Session 21-C/D) are
+    0.0..1.0 factors — same corrupt-on-out-of-range law as every other
+    size multiplier. The OLD key ("palette_saturation") still validates
+    too, since it feeds the new key's fallback default."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "pointer_saturation": 1.5}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
         ' "palette_saturation": 1.5}',
@@ -70,6 +78,45 @@ def test_palette_saturation_out_of_range_raises(store):
     )
     with pytest.raises(SettingsCorruptError):
         store.load()
+
+
+def test_ring_saturation_out_of_range_raises(store):
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "ring_saturation": -0.1}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
+def test_pointer_saturation_migrates_from_the_old_key(store):
+    """Rename (Session 21-D, owner clarity request now that RING has its
+    own independent slider): an older file's "palette_saturation" carries
+    over as pointer_saturation; the new key wins when both are present."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "palette_saturation": 0.3}',
+        encoding="utf-8",
+    )
+    assert store.load().pointer_saturation == pytest.approx(0.3)
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "palette_saturation": 0.3, "pointer_saturation": 0.7}',
+        encoding="utf-8",
+    )
+    assert store.load().pointer_saturation == pytest.approx(0.7)
+    # Neither key present: default stays 1.0.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    assert store.load().pointer_saturation == pytest.approx(1.0)
+    # Saving after a migration writes ONLY the new key.
+    store.save(store.load())
+    raw = store.path.read_text(encoding="utf-8")
+    assert '"palette_saturation"' not in raw
+    assert '"pointer_saturation"' in raw
 
 
 def test_display_choices_round_trip(store):
@@ -81,7 +128,8 @@ def test_display_choices_round_trip(store):
         palette_style="light",
         archetype_mode=True,
         archetype_names=False,
-        palette_saturation=0.4,
+        pointer_saturation=0.4,
+        ring_saturation=0.6,
         earth_weekday=True,
         z_mode="top",
         solar_rotation=False,

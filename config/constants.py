@@ -718,13 +718,22 @@ TRANSLATION_LANGUAGES = {
 # much larger; 1.0 disables the effect).
 ELEMENT_SCALE_RANGE = (0.5, 2.0)
 HOVER_ENLARGE_RANGE = (1.0, 2.0)
-# The Saturation slider (owner 2026-07-18, Settings ▸ Display, Session
-# 21-C): scales the Star+Aura palette's HSV saturation — 0.0 grays the
-# pointer and its background wedges to their own brightness, 1.0 is the
-# owner preset unchanged. The slider itself is 0-100; the stored
-# setting is the 0.0-1.0 factor.
-PALETTE_SATURATION_RANGE = (0.0, 1.0)
-PALETTE_SATURATION_SLIDER_STEP = 1
+# The Saturation sliders (owner 2026-07-18, Settings ▸ Colors, Session
+# 21-D — moved out of Display/Element sizes into their OWN "Saturation"
+# group beside Palette + Ring tint): 0.0 grays the target to its own
+# brightness, 1.0 is the owner preset unchanged. The slider itself is
+# 0-100; the stored setting is the 0.0-1.0 factor.
+# POINTER (formerly "palette_saturation" — renamed for clarity now that
+# a second, independent RING slider exists): the Star+Aura palette's
+# HSV saturation (`render.layers.palette_for`).
+POINTER_SATURATION_RANGE = (0.0, 1.0)
+POINTER_SATURATION_SLIDER_STEP = 1
+# RING (new, Session 21-D): the ring band art's HSV saturation — the
+# ring plate AND its letter/numeral overlay (`render.layers.RingLayer`,
+# after the ring_tint recolor). The Umbra and hands do not read this —
+# see layers.md's RingLayer note for the ground-truthed scope.
+RING_SATURATION_RANGE = (0.0, 1.0)
+RING_SATURATION_SLIDER_STEP = 1
 
 # The tropics span the Tropic of Cancer to the Tropic of Capricorn;
 # their year splits into WET and DRY halves bounded by the equinoxes

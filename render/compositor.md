@@ -146,6 +146,27 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   (`day.deep_cycles`). The ring-tick hover's hypothetical cycle
   reading uses `nominal_illumination` (the ring's own cosine mapping);
   the LIVE Moon hover reads the TRUE analytic `tick.moon_illumination`.
+- **THE ESCAPING LAW (owner bug, angry, Session 21-D, "nemoj da ga
+  rešavamo 100 puta"):** `self._ord(n)` returns SAFE HTML already —
+  English carries a raw `<sup>` suffix (`_ordinal`), every other
+  language a plain `"12."`. Every hover builder MUST `html.escape()`
+  each free-form/translated PIECE on its own BEFORE joining it with
+  `self._ord()`'s output — never escape the already-composed line, or
+  the raw `<sup>` gets escaped right along with it and renders as the
+  literal text `2&lt;sup&gt;nd&lt;/sup&gt;` (the owner's exact report:
+  "2<sup>nd</sup> August" printing as text). `_eclipse_hover_line` had
+  exactly this bug (`html.escape()` wrapped around the whole composed
+  f-string, after `self._ord()` had already run) — fixed by escaping
+  `title`/`kind`/`self._month(instant)` individually and letting the
+  ordinal ride in raw, matching every other builder's pattern (e.g. the
+  season-turning-point block a few hundred lines up). GUARDED FOR GOOD:
+  `tests/test_eclipse.py::test_hover_sweep_never_leaks_escaped_markup`
+  sweeps a coarse polar grid through `_tooltip_at` (the same geometry
+  `warm_hover_articles` warms, far fewer probes — cheap on purpose) over
+  a PLAIN day and an ECLIPSE-WINDOW day (solar and lunar), asserting no
+  tooltip string anywhere contains `&lt;sup&gt;`/`&lt;b&gt;`/`&lt;i&gt;`
+  — any FUTURE builder that escapes markup it shouldn't fails CI
+  immediately, not on the next owner screenshot.
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes) — a `@timed("Hover text")` shell over

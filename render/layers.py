@@ -91,15 +91,18 @@ def draw_pie(painter: QPainter, radius: float, start_deg: float, end_deg: float)
 def draw_pixmap_centered(
     painter: QPainter, ctx: "RenderContext", asset: Path, pos: QPointF,
     height: float, tint: str | None = None, desaturate: bool = False,
-    metal: str | None = None,
+    metal: str | None = None, saturation: float = 1.0,
 ) -> None:
     """Asset rasterized to `height` and drawn centered at `pos` — the one
     shared image path of weekday bodies and the year marker (Rule #5).
     `tint` tritone-maps the image; `desaturate` grays it first;
     `metal` runs the hue-SELECTIVE bronze-to-gold/silver swap (only the
-    warm bronze pixels change — owner insight 2026-07-12)."""
+    warm bronze pixels change — owner insight 2026-07-12); `saturation`
+    scales the FINAL pixmap's HSV saturation (owner 2026-07-18, Session
+    21-D — the Ring saturation slider's one recolor spot; 1.0 is a
+    no-op for every OTHER caller, which never passes it)."""
     pixmap = ctx.cache.pixmap_by_height(
-        asset, height, ctx.dpr, tint, desaturate, metal
+        asset, height, ctx.dpr, tint, desaturate, metal, saturation
     )
     logical_w = pixmap.width() / ctx.dpr
     painter.drawPixmap(QPointF(pos.x() - logical_w / 2, pos.y() - height / 2), pixmap)
@@ -140,18 +143,19 @@ def palette_for(skin: SkinDefinition) -> tuple:
     """The active Star+Aura palette — ONE source for both the star
     diamonds and the background wedges (owner spec): the user's custom
     hues when set (settings dialog), otherwise the owner preset. The
-    SATURATION slider (owner 2026-07-18, Settings ▸ Display, Session
-    21-C) multiplies every hue's HSV saturation here — the one spot the
-    palette flows into BOTH the pointer and the Aura wedges, so they
-    stay in step; 1.0 leaves the hues untouched, Umbra (gray) never
-    reads this at all."""
+    POINTER SATURATION slider (owner 2026-07-18, Settings ▸ Colors,
+    renamed from "palette_saturation" in Session 21-D now that RING has
+    its own independent slider) multiplies every hue's HSV saturation
+    here — the one spot the palette flows into BOTH the pointer and the
+    Aura wedges, so they stay in step; 1.0 leaves the hues untouched,
+    Umbra (gray) never reads this at all."""
     hues = (
         skin.palette_override if skin.palette_override is not None
         else defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
     )
-    if skin.palette_saturation == 1.0:
+    if skin.pointer_saturation == 1.0:
         return hues
-    return tuple(_saturate_hue(hue, skin.palette_saturation) for hue in hues)
+    return tuple(_saturate_hue(hue, skin.pointer_saturation) for hue in hues)
 
 
 def _saturate_hue(hue: str, factor: float) -> str:
@@ -1089,10 +1093,15 @@ class RingLayer(Layer):
             # The ring art carries numerals and minutes; the ring tint
             # multiplies the art. The LETTERS are the owner's separate
             # gold/silver art, overlaid by calculation so the tint never
-            # touches them (1x1 placeholders until his files land).
+            # touches them (1x1 placeholders until his files land). The
+            # RING SATURATION slider (owner 2026-07-18, Session 21-D)
+            # scales the plate's saturation AFTER the tint recolor — the
+            # plate is grayscale-mastered, so saturating the pre-tint
+            # source would be a no-op; the tinted OUTPUT is what actually
+            # carries hue.
             draw_pixmap_centered(
                 painter, ctx, spec.asset, QPointF(0, 0), 2 * ctx.radius,
-                tint=ctx.skin.ring_tint,
+                tint=ctx.skin.ring_tint, saturation=ctx.skin.ring_saturation,
             )
             self._draw_letter_art(painter, ctx)
             return
@@ -1162,7 +1171,11 @@ class RingLayer(Layer):
         its place on the circle (tangentially; the lower half flips 180°
         to stay readable — Ω stands upright at the bottom), rides a
         tight dark halo (owner spec: a gradient border, lit from above)
-        and is UNTINTED by the ring hue."""
+        and is UNTINTED by the ring hue — but the RING SATURATION slider
+        (owner 2026-07-18, Session 21-D: "the ring plate + its letters"
+        is one target) still grays it, since the letters are part of
+        the ring band's own art, not the tint recolor. The shadow copy
+        skips it — a pure black silhouette has no saturation to scale."""
         height = (
             2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
             * ctx.skin.ring_letter_scale
@@ -1174,7 +1187,9 @@ class RingLayer(Layer):
             rotation = theta - 180.0 if 90.0 < theta < 270.0 else (
                 theta if theta <= 90.0 else theta - 360.0
             )
-            pixmap = ctx.cache.pixmap_by_height(asset, height, ctx.dpr)
+            pixmap = ctx.cache.pixmap_by_height(
+                asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation
+            )
             shadow = ctx.cache.pixmap_by_height(
                 asset, height, ctx.dpr, tint="#000000"
             )

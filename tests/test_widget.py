@@ -13,6 +13,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import QApplication, QMenu
 
 
@@ -25,7 +26,8 @@ def _make_widget():
     from app.legend_popup import LegendPopup
     from app.widget import ClockWidget
 
-    return ClockWidget(360, QMenu(), LegendPopup())
+    menu = QMenu()
+    return ClockWidget(360, menu, LegendPopup(), QAction("Show", menu))
 
 
 def test_three_z_modes_swap_and_top_asserts_native_topmost(app, monkeypatch):

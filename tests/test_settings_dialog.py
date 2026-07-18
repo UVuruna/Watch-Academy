@@ -234,6 +234,41 @@ def test_dialog_colors_section_shares_palette_and_ring_tint(app):
     dialog.done(0)
 
 
+def test_dialog_saturation_group_lives_in_colors_with_two_sliders(app):
+    """Owner verdict (Session 21-D): Saturation does NOT belong in
+    Element sizes — it moves into Colors (beside Palette + Ring tint)
+    as its OWN group with two INDEPENDENT sliders, Pointer and Ring."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    colors_row = next(
+        i for i in range(dialog._nav_list.count())
+        if dialog._nav_list.item(i).text().startswith("Colors")
+    )
+    page = dialog._stack.widget(colors_row).widget()
+    group_titles = [child.title() for child in page.findChildren(QGroupBox)]
+    assert any("Saturation" in title for title in group_titles)
+    # The old "Element sizes" panel (Display) no longer hosts it.
+    display_row = next(
+        i for i in range(dialog._nav_list.count())
+        if dialog._nav_list.item(i).text().startswith("Display")
+    )
+    display_page = dialog._stack.widget(display_row).widget()
+    display_titles = [
+        child.title() for child in display_page.findChildren(QGroupBox)
+    ]
+    assert not any("Saturation" in title for title in display_titles)
+    dialog.done(0)
+
+
+def test_dialog_saturation_sliders_round_trip_independently(app):
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    dialog._pointer_saturation_slider.setValue(40)
+    dialog._ring_saturation_slider.setValue(70)
+    result = dialog.result_settings()
+    assert result.pointer_saturation == pytest.approx(0.4)
+    assert result.ring_saturation == pytest.approx(0.7)
+    dialog.done(0)
+
+
 def test_dialog_sliders_set_independent_overrides(app):
     """Owner spec: the Aura's sunlight and twilight opacities move
     independently — touching one leaves the other on the skin value."""

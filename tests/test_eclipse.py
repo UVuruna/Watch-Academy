@@ -9,6 +9,7 @@ before this round."""
 import dataclasses
 import math
 import os
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -368,3 +369,104 @@ def test_moon_hover_names_the_lunar_eclipse(app):
     assert "Lunar Eclipse" in moon
     assert "Total" in moon
     assert "1.15" in moon
+
+
+# --- THE SUPERSCRIPT LEAK, KILLED FOR GOOD (owner, angry, Session 21-D) -------
+#
+# `_eclipse_hover_line` used to `html.escape()` the WHOLE composed line
+# AFTER `self._ord()` had already inserted a raw `<sup>` tag, turning it
+# into the literal text "2&lt;sup&gt;nd&lt;/sup&gt; August" on screen.
+# This is a REGRESSION GUARD, not just a fix for that one line: it walks
+# a coarse polar grid through the REAL `_tooltip_at` dispatch (the same
+# geometry `warm_hover_articles` warms, at a fraction of its pitch — cheap
+# on purpose) over BOTH a plain day and a day sitting inside an eclipse
+# window, and fails CI the moment ANY hover builder (existing or future)
+# escapes markup it should have left raw.
+
+_ESCAPED_MARKUP = re.compile(r"&lt;(sup|/sup|b|/b|i|/i)&gt;", re.IGNORECASE)
+
+
+def _sweep_tooltip_texts(comp, size=480.0, rings=6, angles=24):
+    """Coarse polar sweep over `_tooltip_at` (owner spec — reuse the
+    warm-sweep grid): far fewer probes than `warm_hover_articles`'s
+    production pitch (`defaults.HOVER_WARM_RADIAL_STEPS` × `_ANGLE_STEPS`)
+    since a regression test only needs to VISIT every hover builder once,
+    not warm the asset cache. Returns every non-empty tooltip string."""
+    radius = size / 2
+    texts = []
+    center = comp._tooltip_at(radius, radius, size)
+    if center is not None:
+        texts.append(center)
+    for ring in range(1, rings + 1):
+        fraction = ring / rings
+        for step in range(angles):
+            theta = math.radians(step * 360.0 / angles)
+            text = comp._tooltip_at(
+                radius + math.sin(theta) * radius * fraction,
+                radius - math.cos(theta) * radius * fraction,
+                size,
+            )
+            if text is not None:
+                texts.append(text)
+    return texts
+
+
+def test_hover_sweep_never_leaks_escaped_markup(app):
+    """Sweeps a NORMAL day (no eclipse) and an ECLIPSE-WINDOW day (both
+    solar and lunar), asserting no tooltip string anywhere in either
+    sweep contains a literally-escaped tag. Reproduces the owner's exact
+    report (2<sup>nd</sup> August rendering as text) and guards every
+    OTHER hover builder against the same class of bug."""
+    tz = ZoneInfo("Europe/Belgrade")
+    size = 480.0
+
+    # A plain day — every ordinary hover builder in the chain.
+    plain_now = datetime(2026, 7, 9, 15, 0, tzinfo=tz)
+    plain_day = _belgrade_day(plain_now)
+    plain_tick = build_tick_state(plain_now, plain_day)
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(size, 1.0, plain_day, plain_tick)
+    plain_texts = _sweep_tooltip_texts(comp, size)
+    assert plain_texts, "the plain-day sweep found no hovers at all"
+
+    # The solar eclipse window (Earth marker names it).
+    solar_now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
+    solar_day = _belgrade_day(solar_now)
+    solar_plain_tick = build_tick_state(solar_now, solar_day)
+    solar_tick = dataclasses.replace(
+        solar_plain_tick,
+        eclipse_event=EclipseEvent(
+            kind="solar",
+            instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
+            type="total", magnitude=1.0395,
+        ),
+    )
+    comp.render_offscreen(size, 1.0, solar_day, solar_tick)
+    solar_texts = _sweep_tooltip_texts(comp, size)
+    assert any("Solar Eclipse" in t for t in solar_texts), (
+        "the solar-eclipse sweep never reached the Earth marker hover"
+    )
+
+    # The lunar eclipse window (Moon marker names it).
+    lunar_now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    lunar_day = _belgrade_day(lunar_now)
+    lunar_plain_tick = build_tick_state(lunar_now, lunar_day)
+    lunar_tick = dataclasses.replace(
+        lunar_plain_tick,
+        eclipse_event=EclipseEvent(
+            kind="lunar", instant=lunar_now.astimezone(timezone.utc),
+            type="total", magnitude=1.15,
+        ),
+    )
+    comp.render_offscreen(size, 1.0, lunar_day, lunar_tick)
+    lunar_texts = _sweep_tooltip_texts(comp, size)
+    assert any("Lunar Eclipse" in t for t in lunar_texts), (
+        "the lunar-eclipse sweep never reached the Moon marker hover"
+    )
+
+    for text in plain_texts + solar_texts + lunar_texts:
+        leak = _ESCAPED_MARKUP.search(text)
+        assert leak is None, (
+            f"escaped markup leaked into a hover tooltip: {leak.group(0)!r} "
+            f"in {text!r}"
+        )

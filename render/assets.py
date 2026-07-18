@@ -334,21 +334,25 @@ class AssetCache:
         tint: str | None = None,
         desaturate: bool = False,
         metal: str | None = None,
+        saturation: float = 1.0,
     ) -> QPixmap:
         """The image scaled (aspect preserved) so its logical height is
         `logical_height`, rasterized at device resolution, optionally
         DESATURATED (user hand packs: colored art grays out so the
-        clock tint has gray to work on), optionally tinted, and
-        optionally METAL-SWAPPED (bronze-plate medallions: only the
-        warm bronze pixels turn gold/silver — the gray stone stays;
-        owner insight 2026-07-12). Raises ValueError for missing/
-        unreadable assets — a broken skin must be visible, never
-        silently blank. (Silver and bronze ring letters are
-        PRE-RENDERED files — setup/make_*_letters.py — not runtime
-        effects.)"""
+        clock tint has gray to work on), optionally tinted, optionally
+        METAL-SWAPPED (bronze-plate medallions: only the warm bronze
+        pixels turn gold/silver — the gray stone stays; owner insight
+        2026-07-12), and optionally SATURATION-scaled (owner 2026-07-18,
+        Session 21-D — the Ring saturation slider: multiplies the FINAL
+        pixmap's HSV saturation, after any tint, so a tinted ring plate
+        actually grays; 1.0 is a no-op, the default for every OTHER
+        caller). Raises ValueError for missing/unreadable assets — a
+        broken skin must be visible, never silently blank. (Silver and
+        bronze ring letters are PRE-RENDERED files —
+        setup/make_*_letters.py — not runtime effects.)"""
         path = art_file(path)
         px_height = max(1, round(logical_height * dpr))
-        key = (str(path), px_height, tint, desaturate, metal)
+        key = (str(path), px_height, tint, desaturate, metal, saturation)
         if key not in self._pixmaps:
             # The WORKING SET (owner 2026-07-15): a full-res original
             # decodes through its downscaled working copy whenever the
@@ -366,6 +370,8 @@ class AssetCache:
                 pixmap = self._desaturated(pixmap)
             if tint is not None:
                 pixmap = self._tinted(pixmap, tint)
+            if saturation != 1.0:
+                pixmap = self._saturated(pixmap, saturation)
             self._pixmaps[key] = pixmap
         return self._pixmaps[key]
 
@@ -460,6 +466,40 @@ class AssetCache:
         painter.drawPixmap(0, 0, source)
         painter.end()
         return result
+
+    @staticmethod
+    def _saturated(source: QPixmap, factor: float) -> QPixmap:
+        """Scale every pixel's HSV SATURATION by `factor` (owner
+        2026-07-18, Session 21-D — the Ring saturation slider's one
+        recolor spot), hue and value untouched: lerping each RGB channel
+        toward the pixel's OWN max channel (= V in HSV) by `1 - factor`
+        is exactly the HSV saturation scale (the same "gray to its own
+        brightness" law as `_saturate_hue`'s flat-color twin) —
+        vectorized like the metal swap, no per-pixel Python in the
+        render path. Alpha is untouched."""
+        dpr = source.devicePixelRatio()
+        image = source.toImage().convertToFormat(
+            QImage.Format.Format_RGBA8888
+        )
+        width, height = image.width(), image.height()
+        stride = image.bytesPerLine() // 4
+        buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
+        rgba = (
+            buffer.reshape(height, stride, 4)[:, :width, :]
+            .astype(np.float64) / 255.0
+        )
+        rgb = rgba[..., :3]
+        value = rgb.max(axis=-1, keepdims=True)
+        rgba[..., :3] = np.clip(value + (rgb - value) * factor, 0.0, 1.0)
+        out_bytes = np.ascontiguousarray(
+            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
+        )
+        out = QImage(
+            out_bytes.tobytes(), width, height, width * 4,
+            QImage.Format.Format_RGBA8888,
+        ).copy()
+        out.setDevicePixelRatio(dpr)
+        return QPixmap.fromImage(out)
 
     @staticmethod
     def _tinted(source: QPixmap, tint: str) -> QPixmap:

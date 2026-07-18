@@ -52,7 +52,11 @@ the procedural circle.
 ## Classes
 
 ### AssetCache
-- `pixmap_by_height(path, logical_height, dpr, tint=None)`:
+- `pixmap_by_height(path, logical_height, dpr, tint=None, desaturate=False, metal=None, saturation=1.0)`:
   aspect-preserving, device-resolution pixmap with `devicePixelRatio`
-  set; `tint` = #RRGGBB multiply (ring art and hands under a ring tint)
+  set; `tint` = #RRGGBB multiply (ring art and hands under a ring tint);
+  `saturation` (owner 2026-07-18, Session 21-D — the Ring saturation
+  slider) scales the FINAL pixmap's HSV saturation, applied AFTER
+  `tint` — 1.0 is a no-op, the default for every caller except
+  `RingLayer` (the plate and its letter overlay)
 - `flush()`: drop everything (screen/DPI or skin change)

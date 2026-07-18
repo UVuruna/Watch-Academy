@@ -102,6 +102,7 @@ class SettingsDialog(QDialog):
             ]),
             (tr("Colors"), [
                 self._build_palette_group(), self._build_ring_tint_group(),
+                self._build_saturation_group(),
             ]),
             (tr("Custom art"), [
                 self._build_custom_ring_group(), self._build_custom_hands_group(),
@@ -710,32 +711,56 @@ class SettingsDialog(QDialog):
         diameter_row.addWidget(self._diameter_spin)
         diameter_row.addWidget(diameter_reset)
         form.addRow(tr("Diameter"), diameter_row)
-        # SATURATION (owner 2026-07-18, Session 21-C): scales the
-        # Star+Aura palette's hues at skin build (render.layers.
-        # palette_for, the one spot feeding both the pointer and the
-        # Aura wedges) — 0 grays them to their own brightness, 100 is
-        # the owner preset unchanged.
-        low, high = constants.PALETTE_SATURATION_RANGE
-        self._saturation_slider = QSlider(Qt.Orientation.Horizontal)
-        self._saturation_slider.setRange(round(low * 100), round(high * 100))
-        self._saturation_slider.setSingleStep(
-            constants.PALETTE_SATURATION_SLIDER_STEP
+        return group
+
+    # --- Saturation (owner 2026-07-18, Session 21-D — moved out of ----------------
+    # Element sizes into its OWN Colors group beside Palette + Ring tint,
+    # split into two independent 0-100% sliders) --------------------------------
+
+    def _build_saturation_group(self) -> QGroupBox:
+        """TWO independent saturation sliders (owner verdict: Saturation
+        does not belong in Element sizes — Colors is where Palette and
+        Ring tint already live). POINTER (`pointer_saturation`, renamed
+        from "palette_saturation") scales the Star+Aura palette's HSV
+        saturation at `render.layers.palette_for` — the star diamonds
+        and the Aura wedges move together. RING (`ring_saturation`, new)
+        scales the ring band art's (plate + letter overlay) saturation
+        at `render.layers.RingLayer`, after the ring_tint recolor. Both
+        0-100%, default 100% (unchanged); "Default" resets each to 100."""
+        tr = self._tr
+        group = QGroupBox(tr("Saturation"))
+        form = QFormLayout(group)
+
+        def add_row(title: str, value_attr: str, range_const, step_const):
+            low, high = range_const
+            slider = QSlider(Qt.Orientation.Horizontal)
+            slider.setRange(round(low * 100), round(high * 100))
+            slider.setSingleStep(step_const)
+            value = round(getattr(self._settings, value_attr) * 100)
+            slider.setValue(value)
+            label = QLabel(f"{value}%")
+            slider.valueChanged.connect(
+                lambda new_value, lab=label: lab.setText(f"{new_value}%")
+            )
+            reset = QPushButton(tr("Default"))
+            reset.clicked.connect(lambda checked, s=slider: s.setValue(100))
+            row = QHBoxLayout()
+            row.addWidget(slider)
+            row.addWidget(label)
+            row.addWidget(reset)
+            form.addRow(title, row)
+            return slider
+
+        self._pointer_saturation_slider = add_row(
+            tr("Pointer"), "pointer_saturation",
+            constants.POINTER_SATURATION_RANGE,
+            constants.POINTER_SATURATION_SLIDER_STEP,
         )
-        sat_value = round(self._settings.palette_saturation * 100)
-        self._saturation_slider.setValue(sat_value)
-        saturation_label = QLabel(f"{sat_value}%")
-        self._saturation_slider.valueChanged.connect(
-            lambda value: saturation_label.setText(f"{value}%")
+        self._ring_saturation_slider = add_row(
+            tr("Ring"), "ring_saturation",
+            constants.RING_SATURATION_RANGE,
+            constants.RING_SATURATION_SLIDER_STEP,
         )
-        saturation_reset = QPushButton(tr("Default"))
-        saturation_reset.clicked.connect(
-            lambda checked: self._saturation_slider.setValue(100)
-        )
-        saturation_row = QHBoxLayout()
-        saturation_row.addWidget(self._saturation_slider)
-        saturation_row.addWidget(saturation_label)
-        saturation_row.addWidget(saturation_reset)
-        form.addRow(tr("Saturation"), saturation_row)
         return group
 
     # --- Palette --------------------------------------------------------------------
@@ -1462,7 +1487,8 @@ class SettingsDialog(QDialog):
             z_mode=self._z_mode_combo.currentData(),
             diameter=self._diameter_slider.value(),
             archetype_names=self._archetype_names_check.isChecked(),
-            palette_saturation=self._saturation_slider.value() / 100,
+            pointer_saturation=self._pointer_saturation_slider.value() / 100,
+            ring_saturation=self._ring_saturation_slider.value() / 100,
             **{
                 key: slider.value() / 100
                 for key, slider in self._size_sliders.items()

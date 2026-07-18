@@ -68,7 +68,22 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `_show_if_normal_z_mode`), VISIBLE only while `z_mode == "normal"`
   (hidden, not grayed, in "bottom"/"top" where it means nothing) —
   `_refresh_menu_gating` keeps its visibility in sync with the live
-  z_mode. Then the emoji-fronted top level:
+  z_mode. **TRAY-ONLY (owner correction, Session 21-D — "ako smo
+  kliknuli znači da ga vidim"):** the SAME shared `QMenu` pops from TWO
+  call sites — the tray's native popup
+  (`TrayController`/`QSystemTrayIcon.setContextMenu`) and the dial's own
+  right-click ([Clock Widget](widget.md)'s `contextMenuEvent`) — but
+  Show is meaningless on the second: you already see the dial, that is
+  how you right-clicked it. `ClockWidget` owns the visibility split
+  now: it holds the live `_show_action` reference (constructor param,
+  kept current via `set_show_action()` on every menu rebuild — the
+  controller calls it beside every `set_menu()`), and
+  `contextMenuEvent` hides the action right before its OWN `exec()`
+  call and restores it to the widget's own tracked `_z_mode` right
+  after (`exec()` blocks until the popup closes, so the hide/restore
+  wraps it exactly) — the tray's popup never runs this code at all, so
+  it always sees the `_refresh_menu_gating`-controlled state
+  undisturbed. Then the emoji-fronted top level:
   🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
   style, Theme background / Classic black (owner A/B spec 2026-07-15)
   — | Hands, Earth — with the label TRIO Date / Weekday / Full Date

@@ -540,7 +540,8 @@ def apply_display_settings(skin, settings: Settings):
         palette_override=settings.palettes.get(
             f"{settings.pointer}_{settings.palette_style}"
         ),
-        palette_saturation=settings.palette_saturation,
+        pointer_saturation=settings.pointer_saturation,
+        ring_saturation=settings.ring_saturation,
     )
 
 
@@ -571,7 +572,9 @@ class AppController(QObject):
         self._deep = DeepTimeRepository.detect()
         self._menu = self._build_menu()
         self._legend = LegendPopup()
-        self._widget = ClockWidget(self._settings.diameter, self._menu, self._legend)
+        self._widget = ClockWidget(
+            self._settings.diameter, self._menu, self._legend, self._show_action
+        )
         try:
             icon = logo_icon()
             self._tray = TrayController(self._menu, icon)
@@ -1144,6 +1147,7 @@ class AppController(QObject):
         retired = self._menu
         self._menu = self._build_menu()
         self._widget.set_menu(self._menu)
+        self._widget.set_show_action(self._show_action)
         self._tray.set_menu(self._menu)
         retired.close()
         self._retired_menu = retired
@@ -2299,6 +2303,7 @@ class AppController(QObject):
         # Theme > Ring) — rebuild it wholesale after every dialog OK.
         self._menu = self._build_menu()
         self._widget.set_menu(self._menu)
+        self._widget.set_show_action(self._show_action)
         self._tray.set_menu(self._menu)
         self._configure_theme_rotation()
         native.set_autostart(dialog.autostart_selected())
@@ -2623,6 +2628,7 @@ class AppController(QObject):
             self._install_skin(build_skin(self._settings))
             self._menu = self._build_menu()
             self._widget.set_menu(self._menu)
+            self._widget.set_show_action(self._show_action)
             self._tray.set_menu(self._menu)
         if failed is not None:
             self._tray.notify(

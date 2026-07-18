@@ -166,13 +166,21 @@ class Settings:
     slot_scale: float = 1.0
     ring_letter_scale: float = 1.0
     hover_enlarge: float = 1.2
-    # SATURATION (owner 2026-07-18, Settings ▸ Display, Session 21-C):
-    # scales the Star+Aura palette's HSV saturation at skin build
-    # (`render.layers.palette_for`, the ONE spot the palette flows into
-    # both the pointer AND the Aura wedges, so they stay in step) —
-    # 1.0 = the owner preset unchanged, 0.0 = grayed to each hue's own
-    # brightness. Umbra (already gray) is untouched.
-    palette_saturation: float = 1.0
+    # SATURATION (owner 2026-07-18, Settings ▸ Colors, Session 21-D —
+    # moved out of Display/Element sizes into its OWN "Saturation" group
+    # beside Palette + Ring tint, split into two independent sliders).
+    # POINTER (renamed from "palette_saturation" — one release migrates
+    # the old key, see SettingsStore.load): scales the Star+Aura
+    # palette's HSV saturation at skin build (`render.layers.
+    # palette_for`, the ONE spot the palette flows into both the
+    # pointer AND the Aura wedges, so they stay in step) — 1.0 = the
+    # owner preset unchanged, 0.0 = grayed to each hue's own brightness.
+    pointer_saturation: float = 1.0
+    # RING (new, Session 21-D): scales the ring band art's (the ring
+    # plate + its letter overlay) HSV saturation, applied AFTER the
+    # ring_tint recolor (`render.layers.RingLayer`) — 1.0 unchanged,
+    # 0.0 grayed. The Umbra and hands do not read this.
+    ring_saturation: float = 1.0
     # Display overrides (None = the skin's own value). The Aura's
     # sunlight and twilight opacities are INDEPENDENT (owner spec).
     star_alpha: float | None = None
@@ -401,9 +409,22 @@ class SettingsStore:
                 ),
                 ring_letter_scale=_load_scale(raw, "ring_letter_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
                 hover_enlarge=_load_scale(raw, "hover_enlarge", *constants.HOVER_ENLARGE_RANGE, 1.2),
-                palette_saturation=_load_scale(
-                    raw, "palette_saturation",
-                    *constants.PALETTE_SATURATION_RANGE, 1.0,
+                # One-release migration (Session 21-D, owner rename for
+                # clarity now that RING has its own saturation slider):
+                # "palette_saturation" is read as the fallback default
+                # when the new key is absent; the file is rewritten
+                # under the new key on the next save.
+                pointer_saturation=_load_scale(
+                    raw, "pointer_saturation",
+                    *constants.POINTER_SATURATION_RANGE,
+                    _load_scale(
+                        raw, "palette_saturation",
+                        *constants.POINTER_SATURATION_RANGE, 1.0,
+                    ),
+                ),
+                ring_saturation=_load_scale(
+                    raw, "ring_saturation",
+                    *constants.RING_SATURATION_RANGE, 1.0,
                 ),
                 star_alpha=_load_alpha(raw, "star_alpha"),
                 aura_day_alpha=_load_alpha(raw, "aura_day_alpha"),
@@ -493,7 +514,8 @@ class SettingsStore:
             "slot_scale": settings.slot_scale,
             "ring_letter_scale": settings.ring_letter_scale,
             "hover_enlarge": settings.hover_enlarge,
-            "palette_saturation": settings.palette_saturation,
+            "pointer_saturation": settings.pointer_saturation,
+            "ring_saturation": settings.ring_saturation,
             "star_alpha": settings.star_alpha,
             "aura_day_alpha": settings.aura_day_alpha,
             "aura_twilight_alpha": settings.aura_twilight_alpha,

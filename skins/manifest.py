@@ -261,10 +261,19 @@ class SkinDefinition:
     # Runtime-only (settings dialog): the user's custom hues for the
     # active (pointer, palette_style) — never serialized to skin.json.
     palette_override: tuple[str, ...] | None = None
-    # SATURATION (owner 2026-07-18, Settings ▸ Display): scales the
-    # Star+Aura palette's HSV saturation in `render.layers.palette_for`
-    # — 1.0 unchanged, 0.0 grays every hue to its own brightness.
-    palette_saturation: float = 1.0
+    # SATURATION (owner 2026-07-18, Settings ▸ Colors, Session 21-D —
+    # moved out of Display and split into two independent sliders):
+    # POINTER scales the Star+Aura palette's HSV saturation in
+    # `render.layers.palette_for` — 1.0 unchanged, 0.0 grays every hue
+    # to its own brightness. Renamed from "palette_saturation" for
+    # clarity now that RING is its own separate slider.
+    pointer_saturation: float = 1.0
+    # RING (new, Session 21-D): scales the RING BAND art's (the ring
+    # plate + its letter/numeral overlay) HSV saturation in
+    # `render.layers.RingLayer`, applied AFTER the ring_tint recolor —
+    # 1.0 unchanged, 0.0 grays it to its own brightness. The Umbra and
+    # hands do not read this (see layers.md's RingLayer note).
+    ring_saturation: float = 1.0
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

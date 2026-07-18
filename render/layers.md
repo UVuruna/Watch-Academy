@@ -8,8 +8,11 @@ The dial layers, each tagged with a rebuild `Cadence`. Shared helpers
 angles (clockwise from top) to Qt's counterclockwise-from-3-o'clock
 system. Pointer-variant helpers live here too: `palette_for()` (the
 active Star+Aura palette preset — one source for the star diamonds AND
-the background wedges, ALSO the one spot the Saturation slider scales
-both in step — owner 2026-07-18, Session 21-C), `visible_occupant()`
+the background wedges, ALSO the one spot the POINTER Saturation slider
+scales both in step, `skin.pointer_saturation` — owner 2026-07-18,
+renamed from `palette_saturation` in Session 21-D now that the RING has
+its OWN independent Saturation slider, `ring_saturation`, applied at
+`RingLayer` instead — see its note below), `visible_occupant()`
 (shared-slot priority),
 `today_slot_theta()` (today's slot angle, None for the hexa center Sun),
 `draw_event_glow()` (the season/moon event halo), the SLOT system:
@@ -343,6 +346,29 @@ owner's gold/silver LETTER art overlaid by calculation
 (`RING_LETTER_RADIUS_FRACTION` / `RING_LETTER_ART_SCALE`) so the tint
 never touches the letters; otherwise the procedural donut with ticks,
 numerals, letter substitutions and minute numbers (untinted fallback).
+
+**RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
+Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`
+scales `AssetCache._saturated`'s HSV desaturation on the ring PLATE
+pixmap, applied AFTER the tint recolor (`draw_pixmap_centered(...,
+tint=ring_tint, saturation=ring_saturation)` — saturating the PRE-tint
+source would be a no-op, since the master plate art is grayscale), and
+on the letter overlay's own pixmap (`_draw_letter_art`, saturation
+only — the letters are explicitly UNTINTED by `ring_tint`, but the
+owner's ask groups plate + letters as one "ring band" saturation
+target, so both take the slider; the letter SHADOW copy is skipped —
+a pure black silhouette has none to scale).
+
+**GROUND-TRUTHED SCOPE (owner explicitly asked "what does the ring path
+actually cover"):** `ring_tint` itself reaches FAR beyond the ring —
+it also recolors the HANDS (`HandLayer.paint`, "the hands follow the
+clock tint... one hue recolors the whole body") and the UMBRA
+(`BackgroundLayer._draw_umbra`, "the Umbra follows the ring hue") and,
+under the "theme" plate style, the SUBDIAL plate
+(`draw_slot_roundel`/`subdial_plate_file`). `ring_saturation` is
+DELIBERATELY narrower: it touches ONLY the ring band's own art (the
+plate + its letters) — the hands, Umbra and subdial plate are
+untouched by this slider even though they share `ring_tint`.
 
 ### WeekdayLayer (DAILY, hover-variable — painted LIVE)
 `hover_variable = True` (owner 2026-07-17, ROADMAP 15f): the bodies

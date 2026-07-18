@@ -21,7 +21,7 @@ where the owner's own example applies — Palette + Clock tint = Colors):
 |---|---|
 | Location | Location, Quick Jump cities |
 | Display | Opacity, Element sizes, Archetype |
-| Colors | Palette, Clock (ring) tint |
+| Colors | Palette, Clock (ring) tint, Saturation |
 | Custom art | Custom ring, Custom hands |
 | Themes | Theme rotation, Artwork |
 | Language | Language, Calendar eras |
@@ -75,14 +75,12 @@ like before.
   range) synced TWO-WAY with it — either widget moving drags the other
   along (`sync_spin`/`sync_slider`, each guarded with `blockSignals` to
   avoid feedback) — applied together on OK exactly like a menu preset
-  pick. Also here: the SATURATION slider (owner 2026-07-18, Session
-  21-C) — 0-100%, `palette_saturation` (0.0-1.0) — scales the active
-  Star+Aura palette's HSV saturation at `render.layers.palette_for`,
-  the ONE spot feeding both the pointer diamonds and the Aura wedges,
-  so they move together; Umbra (already gray) is untouched. "Default"
-  resets to 100%.
+  pick. The SATURATION slider that used to live here moved OUT (owner
+  verdict, Session 21-D: Saturation does not belong in Element sizes)
+  into its OWN group in Colors, below.
 - **Ring tint** — one hue for the whole clock body (ring art, hands,
-  Umbra; the letter art stays untouched): TWO labeled Paint-style
+  Umbra, and the subdial's "theme" plate style; the letter art stays
+  untouched): TWO labeled Paint-style
   grids from `defaults.RING_TINT_GROUPS` (owner 2026-07-15: the flat
   palette read too light) — **Lighter** (the gold palette, silvers and
   pastels) and **Darker** (the deep ring variants plus the fashion
@@ -91,6 +89,26 @@ like before.
   owner-tunable; names live in the tooltips, the active swatch wears
   a white ring, "Gray" = the untouched art) plus a free QColorDialog
   picker.
+- **Saturation** (owner verdict, Session 21-D — "Saturation does not
+  belong in Element sizes"; his allowed options were a Display-own-group
+  or Colors, and Colors is where Palette + Ring tint already live) —
+  its OWN group, TWO INDEPENDENT 0–100% sliders, both default 100%,
+  each with its own "Default" reset:
+  - **Pointer** (`pointer_saturation`, renamed from `palette_saturation`
+    — a one-release load migration reads the old key as the fallback
+    default) — exactly what the slider used to do under Element sizes:
+    scales the active Star+Aura palette's HSV saturation at
+    `render.layers.palette_for`, the one spot feeding both the star
+    diamonds and the Aura wedges, so they move together.
+  - **Ring** (`ring_saturation`, new) — scales the RING PLATE's and its
+    letter overlay's HSV saturation at `render.assets.AssetCache.
+    _saturated`, applied via `render.layers.RingLayer` AFTER the ring_tint
+    recolor. GROUND-TRUTHED SCOPE (owner asked for it explicitly): this
+    is DELIBERATELY narrower than `ring_tint`'s own reach — ring_tint
+    also recolors the hands, the Umbra, and the subdial's "theme" plate
+    style, but `ring_saturation` touches ONLY the ring band's own art
+    (the plate + its letters); the hands, Umbra and subdial are
+    untouched by this slider.
 - **Custom ring** — the ring card builder: a layout (Flame /
   Chalice / Seal), a library letter per position and a unique name;
   the per-position dropdown is GROUPED (owner spec 2026-07-11) into

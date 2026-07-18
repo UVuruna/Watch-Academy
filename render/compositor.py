@@ -2284,16 +2284,25 @@ class Compositor:
         """The eclipse hover line (ROADMAP 15h item 11, owner spec:
         NAME the eclipse): type + magnitude + local instant, plain
         (non-bold) like the season-event line it stands beside/replaces
-        on the Earth/Moon hover."""
+        on the Earth/Moon hover.
+
+        `self._ord()` already returns safe HTML (a raw `<sup>` suffix in
+        English). It MUST NOT be escaped again — escaping the composed
+        line (owner bug 2026-07-18, Session 21-D: the superscript leak)
+        turned `<sup>` into the literal text `&lt;sup&gt;...`. Every
+        free-form/translated piece is escaped on its OWN before joining;
+        the ordinal rides in raw."""
         instant = eclipse.instant.astimezone(self._day.tzinfo)
-        title = self._tr(
+        title = html.escape(self._tr(
             "Solar Eclipse" if eclipse.kind == "solar" else "Lunar Eclipse"
-        )
-        kind = self._tr(eclipse.type.capitalize())
+        ))
+        kind = html.escape(self._tr(eclipse.type.capitalize()))
+        mag_label = html.escape(self._tr("mag."))
         mag = f"{eclipse.magnitude:.2f}" if eclipse.magnitude is not None else "?"
-        return html.escape(
-            f"{title} ({kind}, {self._tr('mag.')} {mag}) — "
-            f"{self._ord(instant.day)} {self._month(instant)} {instant:%H:%M}"
+        return (
+            f"{title} ({kind}, {mag_label} {mag}) — "
+            f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
+            f"{instant:%H:%M}"
         )
 
     def _label(self, text: str) -> str:

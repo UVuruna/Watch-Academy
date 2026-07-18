@@ -44,11 +44,18 @@ toggle-back), `archetype_names` (True — owner 2026-07-18, Session
 21-C: its OWN independent switch for the archetype figures' names, no
 longer sharing `show_weekday_names` with the weekday bodies; a
 Settings ▸ Display checkbox, `render.layers.ArchetypeLayer` reads it
-directly), `palette_saturation` (1.0, range 0.0–1.0 — the Saturation
-slider, owner 2026-07-18: scales the Star+Aura palette's HSV
-saturation at `render.layers.palette_for`, the one spot feeding both
-the pointer and the Aura wedges, so they stay in step; Umbra untouched),
-`earth_weekday` (False — the abbreviated weekday on the
+directly), `pointer_saturation` (1.0, range 0.0–1.0 — renamed from
+`palette_saturation` in Session 21-D, one-release load migration reads
+the old key as the fallback default and the new key is what gets
+written back out: scales the Star+Aura palette's HSV saturation at
+`render.layers.palette_for`, the one spot feeding both the pointer and
+the Aura wedges, so they stay in step; Umbra untouched), `ring_saturation`
+(1.0, range 0.0–1.0, new in Session 21-D — the RING band's own
+Saturation slider, independent of `pointer_saturation`: scales the ring
+plate's and its letter overlay's HSV saturation, applied AFTER the
+ring_tint recolor, in `render.layers.RingLayer`; the hands, Umbra and
+subdial plate — which DO follow `ring_tint` — are untouched by this
+one), `earth_weekday` (False — the abbreviated weekday on the
 Earth marker, a GENERAL Earth option since 2026-07-17 working in both
 modes; renamed from `archetype_earth_day`, which the load migrates).
 `show_earth_date` and `earth_weekday` are MUTUALLY EXCLUSIVE (owner

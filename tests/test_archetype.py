@@ -1439,3 +1439,48 @@ def test_show_action_and_tray_double_click_raise_only_in_normal_mode(
     finally:
         c._profiling_timer.stop()
         c._tray.hide()
+
+
+def test_show_action_hidden_only_in_the_dial_context_menu(
+    app, tmp_path, monkeypatch,
+):
+    """Show only in the TRAY (owner 2026-07-18, Session 21-D: "ako smo
+    kliknuli znači da ga vidim") — the entry must NOT appear in the
+    dial's right-click context menu, even while z_mode == "normal" makes
+    it meaningful for the tray. The SAME shared QMenu is popped from two
+    call sites: `ClockWidget.contextMenuEvent` hides `_show_action`
+    before its own `exec()` and restores the z_mode-gated state right
+    after; the tray's native popup (QSystemTrayIcon.setContextMenu)
+    never runs this code at all, so it always sees the gated state
+    undisturbed. `exec()` is stubbed here — a real popup would block the
+    test waiting for a user."""
+    from PySide6.QtCore import QPoint
+    from PySide6.QtGui import QContextMenuEvent
+
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        c._settings = dataclasses.replace(c._settings, z_mode="normal")
+        c._refresh_menu_gating()
+        c._widget.set_z_mode("normal")
+        # The TRAY sees the gated state: visible in "normal".
+        assert c._show_action.isVisible()
+
+        visible_during_popup = []
+
+        def fake_exec(pos):
+            visible_during_popup.append(c._show_action.isVisible())
+
+        monkeypatch.setattr(c._menu, "exec", fake_exec)
+        event = QContextMenuEvent(
+            QContextMenuEvent.Reason.Mouse, QPoint(0, 0), QPoint(0, 0)
+        )
+        c._widget.contextMenuEvent(event)
+
+        assert visible_during_popup == [False]      # hidden for the DIAL's own popup
+        assert c._show_action.isVisible()           # restored for the tray afterward
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()

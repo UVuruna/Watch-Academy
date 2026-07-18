@@ -110,7 +110,15 @@ to fit exactly.
   edge a large neighbour legend covered the smaller weekday body —
   hold, glide past, release inside the wanted element); the
   controller's click-through poller obeys the same key
-- `contextMenuEvent()`: opens the shared menu
+- `contextMenuEvent()`: opens the shared menu — Show is HIDDEN here on
+  purpose (owner 2026-07-18, Session 21-D: "if we already clicked it,
+  we can see it") — the widget holds the live `_show_action` reference
+  (constructor param, kept current via `set_show_action()` whenever the
+  controller rebuilds the menu) and hides it right before `exec()`,
+  restoring it to THIS widget's own tracked `_z_mode` right after
+  (`exec()` blocks until the popup closes, so the wrap is exact); the
+  tray's own native popup never runs this code, so it always shows Show
+  gated by the live z_mode as before
 - `set_click_through()`: TRUE pass-through (`WS_EX_TRANSPARENT`) — no
   clicks, no system hover; recovery via the tray, hover via the
   controller's cursor poller

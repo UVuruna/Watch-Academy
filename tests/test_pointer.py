@@ -2088,11 +2088,13 @@ def test_widget_z_mode_swaps_the_window_flags(app):
     bottom / always-on-top hint in place, keeping the frameless-tool base;
     unchanged is a no-op."""
     from PySide6.QtCore import Qt
+    from PySide6.QtGui import QAction
     from PySide6.QtWidgets import QMenu
 
     from app.widget import ClockWidget
 
-    widget = ClockWidget(360, QMenu(), None)
+    menu = QMenu()
+    widget = ClockWidget(360, menu, None, QAction("Show", menu))
     try:
         flags = widget.windowFlags()
         assert flags & Qt.WindowType.WindowStaysOnBottomHint     # default

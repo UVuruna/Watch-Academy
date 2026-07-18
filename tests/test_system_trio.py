@@ -26,7 +26,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest
 from PySide6.QtCore import QEvent, QPointF, Qt
-from PySide6.QtGui import QMouseEvent
+from PySide6.QtGui import QAction, QMouseEvent
 from PySide6.QtWidgets import QApplication, QMenu
 
 from app import native
@@ -64,7 +64,8 @@ def _make_widget(monkeypatch, hook):
 
     monkeypatch.setattr(widget_mod.native, "KeyboardHook", lambda on_space: hook)
     monkeypatch.setattr(native, "assert_topmost", lambda hwnd: None)
-    widget = ClockWidget(360, QMenu(), LegendPopup())
+    menu = QMenu()
+    widget = ClockWidget(360, menu, LegendPopup(), QAction("Show", menu))
     renderer = _FakeRenderer()
     widget.set_renderer(renderer)
     widget.set_tick(object())            # mouseMoveEvent needs a tick
