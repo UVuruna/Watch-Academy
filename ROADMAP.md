@@ -669,9 +669,14 @@ lives in [The DOMY Canon](CANON.md).
 
 ## Engineering Backlog
 
-- **Wider Pantheon Encyclopedia topics** — one per culture for the
-  A-list figures no seat could hold (retired ninths stay in
-  `encyclopedia.json` for this wave).
+- **Wider Pantheon Encyclopedia topics** — DONE (WORKPLAN Session 8):
+  four topics (Greek/Norse/Egyptian/Slavic), 15 seatless A-list
+  figures in the new `encyclopedia.json` "wider" family, wired into
+  The Wider Pantheon gallery group; the retired ninths Set/Baldur/
+  Crnobog folded in (Hades stays seated as the Greek dual, the other
+  retired ninths — the Jester/Lost Mystery/Legion — remain in-file,
+  their themes having no per-culture wider topic). Plates wired ahead
+  under `<theme>/wider/` (graceful when absent).
 - **The Bond theme** (relationship pillars, owner notes 2026-07-16)
   — definition draft in `research/bond_theme.md`; the Child ninth
   and the family triangle approved; the NAME still open

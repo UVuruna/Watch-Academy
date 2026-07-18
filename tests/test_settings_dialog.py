@@ -794,6 +794,81 @@ def test_encyclopedia_expansion_wiring():
     dialog.deleteLater()
 
 
+def test_wider_pantheon_topics():
+    """WORKPLAN Session 8 (owner 2026-07-15): one Encyclopedia topic per
+    culture for the A-list figures no dial seat could hold. Each topic
+    resolves every article, images degrade gracefully (the wired plates
+    have not landed), the retired ninths' material folds into the new
+    entries, and the gallery gains The Wider Pantheon group."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import (
+        EncyclopediaDialog,
+        _TOPIC_GROUPS,
+        _topics,
+    )
+    from config import paths as _paths
+    from data.encyclopedia import EncyclopediaRepository
+    from data.translations import collect_corpus
+
+    QApplication.instance() or QApplication([])
+    topics = _topics()
+    # Four topics, one per culture, with the reconciled seatless rosters
+    # (round-four/five: Artemis/Hera/Frigg/Mokoš/Bastet seated and gone;
+    # the retired ninths Set/Baldur/Crnobog folded back in).
+    expected = {
+        "wider_greek": ["Dionysus", "Hephaestus", "Hestia"],
+        "wider_norse": ["Baldur", "Heimdall", "Njord"],
+        "wider_egypt": ["Set", "Nut", "Geb", "Ptah", "Sekhmet"],
+        "wider_slavic": ["Crnobog", "Stribog", "Jarilo", "Rod"],
+    }
+    for key, names in expected.items():
+        assert [e["name"] for e in topics[key]["entries"]] == names, key
+        # The gallery card icon reuses an existing culture plate.
+        assert _paths.art_file(topics[key]["icon"]).exists(), key
+        for entry in topics[key]["entries"]:
+            # Every entry wires a plate, and it degrades gracefully:
+            # the art has not landed, so nothing is shown (like the
+            # ninth plates wired ahead of their art).
+            assert entry["images"]
+            resolved = _paths.art_file(entry["images"][0])
+            assert resolved is None or resolved.suffix == ".png"
+
+    # The Wider Pantheon group is wired into the gallery.
+    groups = dict(_TOPIC_GROUPS)
+    assert groups["The Wider Pantheon"] == (
+        "wider_greek", "wider_norse", "wider_egypt", "wider_slavic",
+    )
+
+    # Every wider article resolves through the encyclopedia "wider"
+    # family, and the retired ninths' written material is reused.
+    repo = EncyclopediaRepository()
+    for names in expected.values():
+        for name in names:
+            assert repo.entry("wider", name)["base"].strip(), name
+    assert "Cain" in repo.entry("wider", "Set")["base"]          # Egyptian Cain
+    assert "mistletoe" in repo.entry("wider", "Baldur")["base"]  # Ragnarok start
+    assert "Helmold" in repo.entry("wider", "Crnobog")["base"]   # source caveat
+
+    # The corpus collects the wider keys (English content — the SR pass
+    # is the one pre-build Translation session, owner 2026-07-16).
+    corpus = collect_corpus()
+    assert sum(
+        1 for k in corpus if k.startswith("encyclopedia/wider/")
+    ) == 15
+    assert "encyclopedia/wider/Hestia/base" in corpus
+
+    # The dialog opens each wider topic without crashing and the texts
+    # resolve on the page.
+    dialog = EncyclopediaDialog()
+    for key in expected:
+        dialog._show_topic(key)
+        assert dialog._entry_index == 0
+    assert "hearth" in dialog._article_text(("emblem", "wider", "Hestia"))
+    assert "wind" in dialog._article_text(("emblem", "wider", "Stribog"))
+    dialog.deleteLater()
+
+
 def test_guide_pages_cover_every_slide_exactly_once():
     """The page structure covers each slide exactly once; every slide
     has a caption with a title line plus a body (owner content)."""

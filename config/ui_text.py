@@ -307,6 +307,12 @@ UI_STRINGS: tuple[str, ...] = (
     "Baldur", "Set", "Crnobog", "The Philosopher's Stone", "The Jester",
     "The Unknown God", "The Lost Mystery", "Melchizedek", "Legion",
     "The Cat", "Ophiuchus",
+    # The Wider Pantheon (WORKPLAN Session 8): the gallery group and the
+    # seatless A-list figure names — one topic per culture. Baldur, Set,
+    # Crnobog (the folded-in retired ninths) already live above.
+    "The Wider Pantheon", "Greek", "Norse", "Egyptian", "Slavic",
+    "Dionysus", "Hephaestus", "Hestia", "Nut", "Geb", "Ptah", "Sekhmet",
+    "Heimdall", "Njord", "Stribog", "Jarilo", "Rod",
     # The Nine Intelligences topic.
     "The Nine Intelligences", "Bodily-Kinesthetic", "Interpersonal",
     "Linguistic", "Naturalist", "Logical-Mathematical", "Musical",

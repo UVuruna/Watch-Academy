@@ -83,7 +83,7 @@ def collect_corpus() -> dict:
                 corpus[f"encyclopedia/{section}/{key}/title"] = node["title"]
                 corpus[f"encyclopedia/{section}/{key}/base"] = node["base"]
         for family in ("virtues", "sins", "moods", "duality",
-                       "ninths", "intelligence"):
+                       "ninths", "wider", "intelligence"):
             for name, node in data[family].items():
                 corpus[f"encyclopedia/{family}/{name}/base"] = node["base"]
     captions = defaults.GUIDE_DIR / "captions.json"

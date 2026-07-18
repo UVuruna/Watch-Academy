@@ -15,6 +15,8 @@ def test_corpus_covers_every_article_family():
     assert "chinese_articles/Horse/base" in corpus
     assert "chinese_elements/Fire/base" in corpus
     assert "trio_articles/Faith/base" in corpus
+    # The Wider Pantheon topics (WORKPLAN Session 8) join the corpus.
+    assert "encyclopedia/wider/Set/base" in corpus
     assert all(text.strip() for text in corpus.values())
 
 

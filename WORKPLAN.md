@@ -121,13 +121,20 @@ text); `app/encyclopedia.md`; the hidden-mode listener in
 poem in the Encyclopedia, bound to the Seasons; hidden otherwise;
 test pins the gate.
 
-### Session 8 — Wider Pantheon topics → **Opus** (writers)
+### Session 8 — Wider Pantheon topics → **Opus** (writers) — DONE
 **Say:** "Radi Sesiju 8 iz WORKPLAN.md — Wider Pantheon
 enciklopedijski topici."
 **Reads:** CANON.md; `research/pantheon_catalog.md`;
 `Database/encyclopedia.json` family structure (the Union ninths).
-**Delivers:** one topic per culture for the A-list figures no seat
-could hold; retired ninthsʼ material reused; SR synced.
+**Delivered:** four topics — Greek (Dionysus, Hephaestus, Hestia),
+Norse (Baldur, Heimdall, Njord), Egyptian (Set, Nut, Geb, Ptah,
+Sekhmet), Slavic (Crnobog, Stribog, Jarilo, Rod) — 15 seatless
+A-list figures in the new `encyclopedia.json` "wider" family, wired
+into The Wider Pantheon gallery group and the translation corpus
+(ENGLISH ONLY — the old "SR synced" line is superseded by the owner's
+2026-07-16 no-SR-during-development policy). The retired ninths
+Set/Baldur/Crnobog folded in; `test_wider_pantheon_topics` pins
+coverage/structure/graceful art.
 
 ### Session 9 — Mechanical sweep → **Haiku** (Sonnet where judgment is needed)
 **Say:** "Radi Sesiju 9 iz WORKPLAN.md — mehanički prolaz."

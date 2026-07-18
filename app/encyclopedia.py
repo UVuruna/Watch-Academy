@@ -94,6 +94,13 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
 _TOPIC_GROUPS = (
     ("The Clock", ("week", "instrument", "moon", "seasons", "sun")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
+    # THE WIDER PANTHEON (owner 2026-07-15, WORKPLAN Session 8): one
+    # topic per culture for the A-list figures no dial seat could hold
+    # — the seatless famous names, plus the retired ninths whose
+    # written material folds in here (Set, Baldur, Crnobog). Seated
+    # figures keep their weekday topics; these carry only the omitted.
+    ("The Wider Pantheon",
+     ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic")),
     ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
     ("Themes", ("alchemy", "japan", "profession", "trinity", "cosmos")),
     ("Creeds & Mysteries", ("religion", "religion_alt")),
@@ -153,6 +160,31 @@ _INSTRUMENT_KEYS = (
 
 
 _WEEK_ORDER = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
+
+# THE WIDER PANTHEON (WORKPLAN Session 8): (topic key, gallery title,
+# theme dir, icon plate, figure names). The figures are the culture's
+# famous A-list gods that NEITHER roster seats (the pantheon catalog's
+# Wider-Pantheon lane), reconciled against the round-four/five locks:
+# figures the Pantheon roster went on to seat (Artemis, Hera, Frigg,
+# Mokoš, Bastet) drop off, and the retired ninths whose canon moved
+# them out of a seat fold back in (Set, Baldur, Crnobog). The already-
+# plated Planetary figures (Hermes, Helios, Selene, Cronus, Amun,
+# Khonsu, Montu, Sól, Máni, Hors) keep their own weekday topics and
+# are not re-articled here (Rule #5). Each figure's article lives in
+# the encyclopedia.json "wider" section; the plate is wired ahead of
+# the art under <theme>/wider/ (missing files stay hidden, like every
+# topic). The icon reuses the culture's existing ninth plate so the
+# gallery card always shows a face.
+_WIDER_TOPICS = (
+    ("wider_greek", "Greek", "greek", "greek/pantheon/gaia.png",
+     ("Dionysus", "Hephaestus", "Hestia")),
+    ("wider_norse", "Norse", "norse", "norse/pantheon/Yggdrasil.png",
+     ("Baldur", "Heimdall", "Njord")),
+    ("wider_egypt", "Egyptian", "egypt", "egypt/pantheon/pharaoh.png",
+     ("Set", "Nut", "Geb", "Ptah", "Sekhmet")),
+    ("wider_slavic", "Slavic", "slavic", "slavic/primary/triglav.png",
+     ("Crnobog", "Stribog", "Jarilo", "Rod")),
+)
 
 
 def _metal_looks(base: Path, colored: Path | None) -> tuple:
@@ -673,6 +705,26 @@ def _topics() -> dict:
             for key, art in _SUN_ENTRIES
         ],
     }
+    # THE WIDER PANTHEON (WORKPLAN Session 8): the seatless A-list
+    # figures, one topic per culture. Every article resolves through
+    # the encyclopedia "wider" family; the wired plates land later.
+    for topic_key, title, theme, icon, figures in _WIDER_TOPICS:
+        topics[topic_key] = {
+            "title": title,
+            "icon": defaults.WEEKDAY_ART_DIR / icon,
+            "entries": [
+                {
+                    "images": (
+                        defaults.WEEKDAY_ART_DIR / theme / "wider"
+                        / f"{figure.lower()}.png",
+                    ),
+                    "name": figure,
+                    "article": ("emblem", "wider", figure),
+                    "accents": (),
+                }
+                for figure in figures
+            ],
+        }
     return topics
 
 

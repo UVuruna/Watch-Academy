@@ -37,5 +37,6 @@ Serbian and any machine-translated language apply automatically.
 - `instrument(key)`: `{title, base}` of one functionality article
 - `week(body)`: `{title, base}` of one weekday page (body = sun..saturn)
 - `season(key)`: `{title, base}` of one SEASONS article
-- `entry(family, name)`: `{base}` of one virtues/sins/moods/duality
-  article
+- `entry(family, name)`: `{base}` of one virtues/sins/moods/duality/
+  ninths/intelligence/wider article (the WIDER family holds the
+  seatless A-list pantheon figures — WORKPLAN Session 8)

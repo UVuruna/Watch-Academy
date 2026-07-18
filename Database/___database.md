@@ -70,8 +70,13 @@ weekday and slot hovers read it via the
 The Encyclopedia's OWN content (owner expansion 2026-07-13), separate
 from the dial articles: the eight INSTRUMENT functionality articles
 (the dial, solar rotation, twilight, the year wheel, lunations,
-Paint/Light, metals, the ring letters), the seven WEEK day pages and
-the 24 VIRTUES/SINS/MOODS emblem entries. Read by the
+Paint/Light, metals, the ring letters), the seven WEEK day pages, the
+24 VIRTUES/SINS/MOODS emblem entries, the DUALITY/NINTHS/INTELLIGENCE
+families and the WIDER pantheon (WORKPLAN Session 8): 15 seatless
+A-list figures, one topic per culture — Greek (Dionysus, Hephaestus,
+Hestia), Norse (Baldur, Heimdall, Njord), Egyptian (Set, Nut, Geb,
+Ptah, Sekhmet), Slavic (Crnobog, Stribog, Jarilo, Rod), the retired
+ninths (Set, Baldur, Crnobog) folded in. Read by the
 [Encyclopedia Repository](../data/encyclopedia.md); translated through
 `encyclopedia/<section>/<key>/...` overlay keys.
 
