@@ -61,36 +61,18 @@ here.
 
 ---
 
-## Resource Economy (Agents & Models)
+## Resource Economy — Stricter Deltas to Root Rule #15
 
-**Token budget discipline is a requirement, not a preference.** Expensive
-multi-agent orchestration has burned session limits twice on this project.
+Model economy is now root Rule #15 (inline default, haiku/sonnet/opus
+tiering, reuse, tight scoping, one workflow at a time). Because expensive
+orchestration has burned session limits TWICE on this project, STRICTER
+caps apply here:
 
-1. **Default = inline work, zero subagents.** Ordinary implementation,
-   docs, fixes, tests and verification (pytest, `python -m core`, GUI
-   drive) are done directly — a local test run is cheaper and more
-   reliable than a verification agent.
-2. **Multi-agent workflows only when the owner asks, or once per
-   milestone** (a single review at milestone end — never per-change), and
-   bounded: at most 3 finder agents, at most 1 verifier per finding, and
-   verify only findings that would change code (skip verifying doc nits —
-   just fix them).
-3. **Model tiering for any subagent:**
-   - `haiku` — mechanical work: link checking, file inventories, grep-like
-     sweeps, formatting audits, doc consistency;
-   - `sonnet` — standard reviews and research;
-   - `opus` — only for genuinely hard verification (astronomy math,
-     rendering geometry) and at most a couple per run;
-   - the top-tier session model is NEVER used for routine subagent work.
-4. **Reuse instead of rerun:** resume interrupted workflows
-   (`resumeFromRunId` — completed agents replay from cache); read the
-   existing research/journal files under the session directory before
-   launching a new research agent for something already answered.
-5. **Scope prompts tightly:** a subagent gets the exact files and a
-   structured deliverable, never "look around the project" (root Rule #9
-   already requires structured deliverables — here it also caps cost).
-6. **One background workflow at a time.** Parallel reviews double the
-   burn and race each other on limits.
+- **Multi-agent workflows only when the owner asks, or once per
+  milestone** (a single review at milestone end — never per-change),
+  bounded: at most 3 finder agents, at most 1 verifier per finding, and
+  verify only findings that would change code (doc nits are just fixed).
+- **`opus` verification only for astronomy math and rendering geometry.**
 
 ---
 
