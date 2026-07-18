@@ -482,18 +482,65 @@ Deep Time pack — see [Deep Time](../data/deep_time.md) for the absence
 rule) rides the SAME relocation-to-ring-band mechanic as the
 season/moon glow — no new hit-test path, exactly as the Session 21-C
 note predicted. A SOLAR eclipse (`kind == "solar"`) makes the Earth
-marker's OWN existing "season event" glow turn RED
-(`GLOW_ECLIPSE_SOLAR_COLOR`) instead of golden and swaps its drawn art
+marker's OWN existing "season event" glow turn RED/orange-red
+(depending on state, below) instead of golden and swaps its drawn art
 to `ECLIPSE_SOLAR_ART` — the Planets theme's Eclipsed-Sun dual
 (`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-mapped
 by `paths.art_file`, falling back to whichever art source actually
 ships the file). A LUNAR eclipse (`kind == "lunar"`) turns the Moon
 marker's glow the blood-moon BRONZE (`GLOW_ECLIPSE_LUNAR_COLOR`, the
 SAME hex as `BRONZE_LETTER_TINT` — reused verbatim, not a new color)
-and `_draw_moon(..., darkened=True)` washes the WHOLE disc (lit and
-unlit halves alike — totality dims the full face) with a translucent
-bronze overlay (`ECLIPSE_MOON_DARK_COLOR`/`ECLIPSE_MOON_DARK_ALPHA`)
-over the normal phase render.
+and darkens the disc — see THE STATE TABLE below.
+
+**THE STATE TABLE (fix round C, owner decree 2026-07-19):** the type→state
+lookup, `eclipse_render_state(event)`, maps `(event.kind, event.type)`
+through `defaults.ECLIPSE_TYPE_STATE`. The catalog's TYPE vocabulary was
+ground-truthed directly from `Database/deep_time.sqlite`'s real rows —
+solar: `partial` / `annular` / `total` / `hybrid`; lunar: `partial` /
+`penumbral` / `total` (no other values exist in either table). `hybrid`
+has no dedicated owner state and maps to `solar_total` — a hybrid
+eclipse shows true totality along most of its ground track, the closer
+of the two sealed states, a deliberate choice rather than the
+unknown-type fallback. An unknown/missing type (should not occur — the
+generator only ever writes the vocabulary above) documented-falls-back
+to the kind's `partial` state via `defaults.ECLIPSE_STATE_FALLBACK`
+(Rule #1: a plausible middle ground, never a crash).
+
+| State | Disc brightness | Glow strength | Fringe |
+|---|---|---|---|
+| lunar_total | 7% | 1.0 (full) | yes |
+| lunar_partial | 18% | 0.6 | yes |
+| lunar_penumbral | 60% | 0.25 | no |
+| solar_total | n/a (art only) | 1.0 (full) | n/a |
+| solar_annular | n/a (art only) | 1.0, own orange-red hue | n/a |
+| solar_partial | n/a (art only) | magnitude-linear (unchanged) | n/a |
+
+The state alone sets the disc BRIGHTNESS — never magnitude, never
+translucency — via `defaults.ECLIPSE_STATE_MOON_BRIGHTNESS`. The owner's
+complaint about the old build: a TRANSLUCENT bronze `SourceOver` wash
+whose alpha ALSO scaled with magnitude read as "a visible moon shining
+bronze, sometimes more sometimes less transparent". The fix:
+`_draw_moon(..., darken_state=...)` fills the WHOLE disc (lit and unlit
+halves alike — totality dims the full face) with
+`QPainter.CompositionMode_Multiply` against an OPAQUE neutral gray whose
+value is the state's brightness fraction (0..1 → 0..255) — multiplying
+by a neutral gray scales R/G/B equally, i.e. true value-down with the
+hue untouched, drawn fully opaque over the normal phase render (never a
+partial-alpha overlay a bright pixel can bleed through). Solar states
+never darken the disc — only the ANNULAR "ring of fire" gets its own
+glow color (`GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR`, hotter orange-red than
+the plain `GLOW_ECLIPSE_SOLAR_COLOR`), same black-sun art as total.
+
+Glow STRENGTH is likewise state-driven
+(`eclipse_state_glow_strength(state, magnitude)`,
+`defaults.ECLIPSE_STATE_GLOW_STRENGTH`) EXCEPT `solar_partial`, the
+owner's one named exception ("SOLAR partial: art + glow scaled by
+magnitude") — it alone keeps the original magnitude-linear mapping via
+`eclipse_glow_strength(magnitude)`, linear between
+`ECLIPSE_GLOW_STRENGTH_MIN/MAX` over `ECLIPSE_MAGNITUDE_MIN/MAX`,
+clamped outside. The turquoise fringe (Option C, below) is likewise
+withheld for `lunar_penumbral` (`defaults.ECLIPSE_STATE_FRINGE`) — real
+penumbral eclipses show no visible ozone-band rim.
 
 **LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18):** the bronze glow
 gains a thin TURQUOISE FRINGE at its OUTER edge — the real ozone-band
@@ -507,18 +554,20 @@ bronze mid stop and BEFORE the fully-transparent edge stop so it reads
 as a separate ring rather than blending into the bronze core. The
 lunar eclipse call is the only one that passes
 `fringe_color=ECLIPSE_LUNAR_FRINGE_COLOR` (`#40E0D0`-family turquoise,
-`ECLIPSE_LUNAR_FRINGE_ALPHA` peak, scaled by the same magnitude
-`strength` as the bronze glow itself).
+`ECLIPSE_LUNAR_FRINGE_ALPHA` peak, scaled by the state/magnitude
+`strength` exactly like the bronze glow itself, and withheld outright
+for `lunar_penumbral`, see THE STATE TABLE above).
 
-Both glows scale their STRENGTH by the
-catalog MAGNITUDE via `eclipse_glow_strength(magnitude)` — linear
-between `ECLIPSE_GLOW_STRENGTH_MIN/MAX` over
-`ECLIPSE_MAGNITUDE_MIN/MAX`, clamped outside — a new optional `strength`
-parameter on `draw_event_glow()` (default 1.0, so every pre-existing
-season/moon call is unchanged). The Earth/Moon hover text (`_earth_text`/
-`_moon_text` in [Compositor](compositor.md)) NAMES the active eclipse
-(kind, type, magnitude, local instant) via `_eclipse_hover_line()`,
-outranking the plain season-event line on the Earth hover.
+`draw_event_glow()`'s optional `strength` parameter (default 1.0, so
+every pre-existing season/moon call is unchanged) is where every glow
+color above lands, whichever function computed it (state-fixed via
+`eclipse_state_glow_strength`, or magnitude-linear via
+`eclipse_glow_strength` for `solar_partial`). The Earth/Moon hover text
+(`_earth_text`/`_moon_text` in [Compositor](compositor.md)) NAMES the
+active eclipse (kind, type, magnitude, local instant) via
+`_eclipse_hover_line()`, reading `EclipseEvent.type` directly — the
+SAME vocabulary the state table maps — outranking the plain
+season-event line on the Earth hover.
 
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and

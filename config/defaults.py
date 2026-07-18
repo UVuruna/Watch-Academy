@@ -1568,12 +1568,14 @@ BRONZE_LETTER_CONTRAST = 1.0
 # tint. Both ride the EXISTING relocation-to-ring-band mechanic
 # (GLOW_RING_RADIUS_FRACTION) — only the color/art/strength differ.
 GLOW_ECLIPSE_SOLAR_COLOR = "#FF3B30"       # red — the eclipsed Sun's glow
+# The "ring of fire" (owner decree 2026-07-19, fix round C): an ANNULAR
+# solar eclipse keeps the black-sun art but its glow shifts to a hotter
+# orange-red than the plain total/partial red, so the two read distinct.
+GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR = "#FF7A1A"
 GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
 ECLIPSE_SOLAR_ART = (
     WEEKDAY_ART_DIR / "planets" / "primary" / "dual" / "sun_eclipse.png"
 )                                            # source-mapped by paths.art_file
-ECLIPSE_MOON_DARK_COLOR = BRONZE_LETTER_TINT
-ECLIPSE_MOON_DARK_ALPHA = 0.55               # overlay strength over the disc
 # LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
 # bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —
 # the real ozone-band color at the umbra's rim during totality. A
@@ -1588,10 +1590,73 @@ ECLIPSE_LUNAR_FRINGE_ALPHA = 0.85             # peak alpha before the magnitude 
 # of the normal glow alpha, magnitude at/above MAX (a comfortable
 # totality margin) maps to the full alpha — linear between, clamped
 # outside (Rule #4: config-driven, no magic numbers at the call site).
+# Fix round C (owner decree 2026-07-19) narrows this mapping to ONE
+# remaining caller — the SOLAR PARTIAL state — every other state's glow
+# strength is now a fixed TYPE constant below.
 ECLIPSE_MAGNITUDE_MIN = 0.0
 ECLIPSE_MAGNITUDE_MAX = 1.2
 ECLIPSE_GLOW_STRENGTH_MIN = 0.4
 ECLIPSE_GLOW_STRENGTH_MAX = 1.0
+
+# THE ECLIPSE STATE TABLE (owner decree 2026-07-19, fix round C — the
+# lunar "translucent bronze wash" complaint: the old darkening scaled a
+# translucent overlay's ALPHA by magnitude, so a bright moon under a
+# weak wash still read as "a visible moon shining bronze". The fix: the
+# catalog TYPE (ground-truthed from Database/deep_time.sqlite's actual
+# rows — solar {partial, annular, total, hybrid}, lunar {partial,
+# penumbral, total}) selects ONE fixed render STATE. The state alone
+# sets the disc BRIGHTNESS (never translucency, never magnitude); it
+# also sets the glow STRENGTH for every state except "solar_partial",
+# which keeps the original magnitude-linear mapping
+# (`render.layers.eclipse_glow_strength`) — the owner's one named
+# exception ("SOLAR partial: art + glow scaled by magnitude").
+#
+# `hybrid` (annular-total transitional, ~3.2k of ~70k solar rows) has no
+# dedicated owner state — it is mapped to "solar_total" (not the
+# unknown-type fallback): a hybrid eclipse shows true totality along
+# most of its ground track, the closer of the two sealed states.
+ECLIPSE_TYPE_STATE = {
+    ("lunar", "total"): "lunar_total",
+    ("lunar", "partial"): "lunar_partial",
+    ("lunar", "penumbral"): "lunar_penumbral",
+    ("solar", "total"): "solar_total",
+    ("solar", "hybrid"): "solar_total",       # nearest sealed state, see above
+    ("solar", "annular"): "solar_annular",
+    ("solar", "partial"): "solar_partial",
+}
+# Unknown/missing catalog type (should not occur — the generator only
+# ever writes the vocabulary above) documented fallback: the kind's
+# PARTIAL state — a plausible middle ground, never a crash (Rule #1).
+ECLIPSE_STATE_FALLBACK = {"solar": "solar_partial", "lunar": "lunar_partial"}
+
+# Moon-disc BRIGHTNESS as a fraction of full value (0..1) — a true
+# multiply-darken of the rendered disc, not an alpha wash (owner: "DARKEN
+# means BRIGHTNESS DOWN... unmistakably an eclipse"). Solar states are
+# absent — the solar disc art (the eclipsed-Sun dual) never darkens,
+# only its glow color/strength change.
+ECLIPSE_STATE_MOON_BRIGHTNESS = {
+    "lunar_total": 0.07,       # near-black disc
+    "lunar_partial": 0.18,
+    "lunar_penumbral": 0.60,   # real penumbral eclipses are barely visible
+}
+# Fixed glow-strength fraction per state (0..1, same scale as
+# `eclipse_glow_strength`'s return). "solar_partial" is intentionally
+# absent — it keeps the magnitude-linear mapping instead.
+ECLIPSE_STATE_GLOW_STRENGTH = {
+    "lunar_total": 1.0,
+    "lunar_partial": 0.6,
+    "lunar_penumbral": 0.25,
+    "solar_total": 1.0,
+    "solar_annular": 1.0,
+}
+# The turquoise ozone fringe (Option C) reads only where totality/near-
+# totality actually darkens the sky rim — real penumbral eclipses show
+# no such band, so the fringe is withheld there (owner spec, this round).
+ECLIPSE_STATE_FRINGE = {
+    "lunar_total": True,
+    "lunar_partial": True,
+    "lunar_penumbral": False,
+}
 
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.

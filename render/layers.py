@@ -327,6 +327,29 @@ def eclipse_glow_strength(magnitude: float | None) -> float:
     return lo_strength + fraction * (hi_strength - lo_strength)
 
 
+def eclipse_render_state(event) -> str:
+    """The catalog (kind, type) -> render STATE lookup (owner decree
+    2026-07-19, fix round C — `defaults.ECLIPSE_TYPE_STATE`). An
+    unknown/missing type (should not occur — see the config comment)
+    documented-falls-back to the kind's PARTIAL state rather than
+    raising, since a malformed catalog row must still render something
+    plausible (Rule #1: visible degradation, not a crash)."""
+    state = defaults.ECLIPSE_TYPE_STATE.get((event.kind, event.type))
+    if state is not None:
+        return state
+    return defaults.ECLIPSE_STATE_FALLBACK[event.kind]
+
+
+def eclipse_state_glow_strength(state: str, magnitude: float | None) -> float:
+    """Glow strength for an eclipse render STATE: every state carries a
+    fixed TYPE-driven fraction (`defaults.ECLIPSE_STATE_GLOW_STRENGTH`)
+    EXCEPT "solar_partial", the owner's one named exception, which keeps
+    the original magnitude-linear mapping (`eclipse_glow_strength`)."""
+    if state == "solar_partial":
+        return eclipse_glow_strength(magnitude)
+    return defaults.ECLIPSE_STATE_GLOW_STRENGTH[state]
+
+
 def hover_factor(ctx: "RenderContext", element: str) -> float:
     """The hover-enlarge multiplier when `element` is under the cursor
     (owner EXTRAS: one shared factor for every element), else 1.0."""
@@ -2157,7 +2180,12 @@ class YearMarkerLayer(Layer):
             lunar_eclipse = (
                 eclipse if eclipse is not None and eclipse.kind == "lunar" else None
             )
-            glowing = ctx.tick.moon_event is not None or lunar_eclipse is not None
+            lunar_state = (
+                eclipse_render_state(lunar_eclipse)
+                if lunar_eclipse is not None
+                else None
+            )
+            glowing = ctx.tick.moon_event is not None or lunar_state is not None
             orbit = (
                 defaults.GLOW_RING_RADIUS_FRACTION
                 if glowing
@@ -2167,12 +2195,12 @@ class YearMarkerLayer(Layer):
             if glowing:
                 color = (
                     defaults.GLOW_ECLIPSE_LUNAR_COLOR
-                    if lunar_eclipse is not None
+                    if lunar_state is not None
                     else defaults.GLOW_MOON_COLOR
                 )
                 strength = (
-                    eclipse_glow_strength(lunar_eclipse.magnitude)
-                    if lunar_eclipse is not None
+                    eclipse_state_glow_strength(lunar_state, lunar_eclipse.magnitude)
+                    if lunar_state is not None
                     else 1.0
                 )
                 draw_event_glow(
@@ -2183,7 +2211,8 @@ class YearMarkerLayer(Layer):
                     strength,
                     fringe_color=(
                         defaults.ECLIPSE_LUNAR_FRINGE_COLOR
-                        if lunar_eclipse is not None
+                        if lunar_state is not None
+                        and defaults.ECLIPSE_STATE_FRINGE[lunar_state]
                         else None
                     ),
                 )
@@ -2191,7 +2220,7 @@ class YearMarkerLayer(Layer):
             painter.setOpacity(painter.opacity() * opacity)
             self._draw_moon(
                 painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
-                darkened=lunar_eclipse is not None,
+                darken_state=lunar_state,
             )
             painter.restore()
 
@@ -2228,16 +2257,23 @@ class YearMarkerLayer(Layer):
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
         if glowing:
-            color = (
-                defaults.GLOW_ECLIPSE_SOLAR_COLOR
+            solar_state = (
+                eclipse_render_state(solar_eclipse)
                 if solar_eclipse is not None
-                else defaults.GLOW_SUN_COLOR
+                else None
             )
-            strength = (
-                eclipse_glow_strength(solar_eclipse.magnitude)
-                if solar_eclipse is not None
-                else 1.0
-            )
+            if solar_state is None:
+                color = defaults.GLOW_SUN_COLOR
+                strength = 1.0
+            else:
+                color = (
+                    defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
+                    if solar_state == "solar_annular"
+                    else defaults.GLOW_ECLIPSE_SOLAR_COLOR
+                )
+                strength = eclipse_state_glow_strength(
+                    solar_state, solar_eclipse.magnitude
+                )
             draw_event_glow(painter, pos, size / 2, color, strength)
         if almanac:
             # The day-ARROW at the marker's exact tick (owner 2026-07-16):
@@ -2356,16 +2392,25 @@ class YearMarkerLayer(Layer):
 
     def _draw_moon(
         self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float,
-        darkened: bool = False,
+        darken_state: str | None = None,
     ) -> None:
         """Moon image (or procedural disc) with the unlit part shadowed:
         the lit region is the half-disc on the lit side combined with the
         terminator half-ellipse (semi-axis a = R*|cos 2pi*f|) — union when
         gibbous, difference when crescent; everything else is darkened.
-        `darkened` (a LUNAR eclipse, ROADMAP 15h item 11) washes the WHOLE
-        disc — lit and unlit halves alike, since totality dims the full
-        face — with the blood-moon BRONZE copper tint, drawn over the
-        normal phase render."""
+
+        `darken_state` (a LUNAR eclipse render STATE, fix round C
+        2026-07-19 — `render.layers.eclipse_render_state`) is a TRUE
+        brightness reduction of the WHOLE disc — lit and unlit halves
+        alike, since totality dims the full face — via
+        `QPainter.CompositionMode_Multiply` against an OPAQUE gray whose
+        value is `defaults.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]`
+        (0..1 of full value). Multiplying by a NEUTRAL gray scales R/G/B
+        equally, i.e. it is exactly "value down" with the hue untouched —
+        the owner's fix for the old translucent bronze wash
+        (`SourceOver` at a magnitude-scaled alpha), which let a bright
+        moon bleed through and read as "still shining, just tinted".
+        Fully opaque, TYPE-driven only — magnitude never reaches here."""
         spec = self._skin.year_marker
         fraction = ctx.tick.moon_fraction
         radius = size / 2
@@ -2404,12 +2449,17 @@ class YearMarkerLayer(Layer):
             painter.fillPath(disc.subtracted(lit), shadow)
         else:
             painter.fillPath(lit, QColor(spec.moon_lit_color))
-        if darkened:
+        if darken_state is not None:
             disc = QPainterPath()
             disc.addEllipse(QRectF(-radius, -radius, size, size))
-            overlay = QColor(defaults.ECLIPSE_MOON_DARK_COLOR)
-            overlay.setAlphaF(defaults.ECLIPSE_MOON_DARK_ALPHA)
-            painter.fillPath(disc, overlay)
+            brightness = defaults.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]
+            value = round(255 * brightness)
+            painter.save()
+            painter.setCompositionMode(
+                QPainter.CompositionMode.CompositionMode_Multiply
+            )
+            painter.fillPath(disc, QColor(value, value, value))
+            painter.restore()
         painter.restore()
 
 

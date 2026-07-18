@@ -32,7 +32,11 @@ from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import eclipse_glow_strength
+from render.layers import (
+    eclipse_glow_strength,
+    eclipse_render_state,
+    eclipse_state_glow_strength,
+)
 from tests.deep_fixture import build_fixture_pack
 
 REAL_PACK = Path(__file__).resolve().parents[1] / "Database" / "deep_time.sqlite"
@@ -324,6 +328,175 @@ def test_lunar_eclipse_hit_test_rides_the_relocated_marker(app):
     assert comp._element_at(
         point, radius, comp._rotation(), constants.WEEKDAY_BODIES[day.weekday_index],
     ) == "moon"
+
+
+# --- The type -> state table (fix round C, owner decree 2026-07-19) -----------
+
+
+def test_type_state_mapping_covers_the_ground_truthed_vocabulary():
+    """The catalog's ACTUAL type vocabulary (ground-truthed from
+    Database/deep_time.sqlite: solar {partial, annular, total, hybrid},
+    lunar {partial, penumbral, total}) each resolve to a named state;
+    hybrid is a deliberate map to solar_total, not the unknown fallback."""
+    assert eclipse_render_state(
+        EclipseEvent(kind="lunar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="total", magnitude=1.1)
+    ) == "lunar_total"
+    assert eclipse_render_state(
+        EclipseEvent(kind="lunar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="partial", magnitude=0.5)
+    ) == "lunar_partial"
+    assert eclipse_render_state(
+        EclipseEvent(kind="lunar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="penumbral", magnitude=0.9)
+    ) == "lunar_penumbral"
+    assert eclipse_render_state(
+        EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="total", magnitude=1.05)
+    ) == "solar_total"
+    assert eclipse_render_state(
+        EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="hybrid", magnitude=1.0)
+    ) == "solar_total"
+    assert eclipse_render_state(
+        EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="annular", magnitude=0.95)
+    ) == "solar_annular"
+    assert eclipse_render_state(
+        EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="partial", magnitude=0.3)
+    ) == "solar_partial"
+
+
+def test_unknown_type_falls_back_to_the_kind_partial_state():
+    """Documented fallback (Rule #1): a malformed catalog row still
+    renders — the kind's PARTIAL state, never a crash."""
+    assert eclipse_render_state(
+        EclipseEvent(kind="lunar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="bogus", magnitude=0.5)
+    ) == "lunar_partial"
+    assert eclipse_render_state(
+        EclipseEvent(kind="solar", instant=datetime(2026, 1, 1, tzinfo=timezone.utc), type="bogus", magnitude=0.5)
+    ) == "solar_partial"
+
+
+def test_solar_partial_is_the_one_state_still_magnitude_scaled():
+    """Every other state carries a FIXED glow-strength constant; only
+    `solar_partial` keeps the original magnitude-linear mapping (owner's
+    named exception)."""
+    for state in (
+        "lunar_total", "lunar_partial", "lunar_penumbral",
+        "solar_total", "solar_annular",
+    ):
+        assert eclipse_state_glow_strength(state, 0.01) == pytest.approx(
+            eclipse_state_glow_strength(state, 1.19)
+        ), f"{state} must ignore magnitude"
+    lo = eclipse_state_glow_strength("solar_partial", defaults.ECLIPSE_MAGNITUDE_MIN)
+    hi = eclipse_state_glow_strength("solar_partial", defaults.ECLIPSE_MAGNITUDE_MAX)
+    assert lo < hi        # solar_partial alone still tracks magnitude
+
+
+# --- Render: per-state lunar darkening (fix round C, owner decree 2026-07-19) --
+
+
+def _lunar_moon_pixel(app, type_: str, magnitude: float):
+    """Renders a lunar eclipse of the given TYPE and samples the Moon
+    marker's own pixel at its relocated (ring-band) center — the moon's
+    OWN art occludes the glow halo directly under it, so this reads only
+    the darkened disc, never the bronze glow bleeding through."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    plain = build_tick_state(now, day)
+    # Pinned above the horizon (owner's separate hidden-alpha dimming,
+    # `moon_hidden_alpha`, would otherwise blend the marker toward the
+    # background and confound a pure disc-brightness measurement).
+    quiet = dataclasses.replace(
+        plain, season_event=None, moon_event=None, is_moon_up=True,
+    )
+    eclipsed = dataclasses.replace(
+        quiet,
+        eclipse_event=EclipseEvent(
+            kind="lunar", instant=now.astimezone(timezone.utc),
+            type=type_, magnitude=magnitude,
+        ),
+    )
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
+    radius = 270.0
+    moon_angle = math.radians(quiet.moon_fraction * 360.0)
+    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    x = round(radius + orbit * math.sin(moon_angle))
+    y = round(radius - orbit * math.cos(moon_angle))
+    return image.pixelColor(x, y)
+
+
+def test_lunar_total_disc_is_genuinely_near_black(app):
+    """The owner's exact complaint: a TOTAL lunar eclipse must read as an
+    unmistakably darkened, near-black disc — not a bright moon under a
+    translucent wash. Max channel value stays under a hard threshold
+    well below the old translucent overlay would ever reach."""
+    pixel = _lunar_moon_pixel(app, "total", 1.15)
+    assert max(pixel.red(), pixel.green(), pixel.blue()) < 55
+
+
+def test_lunar_penumbral_clearly_brighter_than_partial(app):
+    """Type alone sets brightness (60% vs 18% of full value) — the
+    penumbral disc must read distinctly brighter than the partial disc,
+    same magnitude, same everything else."""
+    partial = _lunar_moon_pixel(app, "partial", 1.0)
+    penumbral = _lunar_moon_pixel(app, "penumbral", 1.0)
+    partial_sum = partial.red() + partial.green() + partial.blue()
+    penumbral_sum = penumbral.red() + penumbral.green() + penumbral.blue()
+    assert penumbral_sum > partial_sum + 40
+
+
+def test_lunar_partial_clearly_brighter_than_total(app):
+    total = _lunar_moon_pixel(app, "total", 1.0)
+    partial = _lunar_moon_pixel(app, "partial", 1.0)
+    total_sum = total.red() + total.green() + total.blue()
+    partial_sum = partial.red() + partial.green() + partial.blue()
+    assert partial_sum > total_sum + 20
+
+
+def test_lunar_disc_brightness_ignores_magnitude(app):
+    """The owner's core decree: disc brightness is TYPE-driven only —
+    magnitude may vary the GLOW, never the disc's see-through-ness."""
+    low = _lunar_moon_pixel(app, "total", defaults.ECLIPSE_MAGNITUDE_MIN)
+    high = _lunar_moon_pixel(app, "total", defaults.ECLIPSE_MAGNITUDE_MAX)
+    assert max(low.red(), low.green(), low.blue()) < 55
+    assert max(high.red(), high.green(), high.blue()) < 55
+
+
+# --- Render: solar annular "ring of fire" glow color ---------------------------
+
+
+def _solar_glow_pixel(app, type_: str, magnitude: float):
+    tz = ZoneInfo("Europe/Belgrade")
+    solstice_noon = datetime(2026, 6, 21, 12, 0, tzinfo=tz)
+    day = _belgrade_day(solstice_noon)
+    plain_glow = build_tick_state(solstice_noon, day)
+    quiet = dataclasses.replace(plain_glow, season_event=None, moon_event=None)
+    eclipsed = dataclasses.replace(
+        quiet,
+        eclipse_event=EclipseEvent(
+            kind="solar", instant=solstice_noon.astimezone(timezone.utc),
+            type=type_, magnitude=magnitude,
+        ),
+    )
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    image = Compositor(skin, AssetCache()).render_offscreen(540.0, 1.0, day, eclipsed)
+    marker_y = 270 - round(270 * defaults.GLOW_RING_RADIUS_FRACTION)
+    return image.pixelColor(289, marker_y + 33)
+
+
+def test_solar_annular_glow_hue_differs_from_total(app):
+    """The "ring of fire" (owner decree, fix round C): an ANNULAR solar
+    eclipse keeps the same black-sun art but its glow shifts to a
+    hotter orange-red than a TOTAL eclipse's plain red — measurably more
+    green in the halo at the same probe point."""
+    total_px = _solar_glow_pixel(app, "total", 1.05)
+    annular_px = _solar_glow_pixel(app, "annular", 0.95)
+    assert annular_px.green() > total_px.green() + 15
+
+
+def test_solar_total_and_annular_glow_are_full_strength_regardless_of_magnitude():
+    """Fix round C: total/annular glow strength is FIXED (1.0), unlike
+    the old build where every solar state scaled with magnitude."""
+    assert eclipse_state_glow_strength("solar_total", 0.01) == pytest.approx(1.0)
+    assert eclipse_state_glow_strength("solar_annular", 0.01) == pytest.approx(1.0)
 
 
 # --- Hover text NAMES the eclipse -----------------------------------------------

@@ -580,27 +580,62 @@ lives in [The DOMY Canon](CANON.md).
       at a pole is only days from the equinox (atmospheric refraction
       ~34′ + the solar semi-diameter 16′ lift the visible sun).
    11. **Eclipse display — DONE (2026-07-18, ECLIPSE DISPLAY round);
-      OPTION C sealed (2026-07-18, Session 21-E).** Refines the sealed
-      glow-metal triad. A SOLAR eclipse shows the Planets-theme eclipse
-      art
+      OPTION C sealed (2026-07-18, Session 21-E); STATES REWORK — DONE
+      (2026-07-19, fix round C).** Refines the sealed glow-metal triad.
+      A SOLAR eclipse shows the Planets-theme eclipse art
       (`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-
-      mapped by `paths.art_file`) on the EARTH marker with a RED glow
-      ring (instead of the plain golden season glow); a LUNAR eclipse
-      shows the MOON marker darkened (a bronze wash over the whole
-      disc) with a BRONZE glow (the blood-moon copper — physically
-      true, the exact `BRONZE_LETTER_TINT` hex reused, not a new
-      color) plus a thin TURQUOISE FRINGE at the glow's outer edge —
-      OPTION C, the real ozone-band color at the umbra's rim during
-      totality (`ECLIPSE_LUNAR_FRINGE_COLOR`/`_STOP`/`_HALF_WIDTH`/
-      `_ALPHA`; `draw_event_glow()`'s optional `fringe_color` param
-      adds three extra gradient stops — transparent → peak →
-      transparent — after the bronze mid stop, before the transparent
-      edge; None for every other glow caller, unchanged). The ±3h event
-      window (`constants.ECLIPSE_GLOW_WINDOW_H`)
-      stands; the glow STRENGTH scales with the eclipse MAGNITUDE from
-      `Database/deep_time.sqlite`'s eclipse catalog
-      (`render.layers.eclipse_glow_strength`, linear between
-      `ECLIPSE_GLOW_STRENGTH_MIN/MAX` over `ECLIPSE_MAGNITUDE_MIN/MAX`).
+      mapped by `paths.art_file`) on the EARTH marker with a glow ring
+      (instead of the plain golden season glow); a LUNAR eclipse shows
+      the MOON marker darkened with a BRONZE glow (the blood-moon
+      copper — physically true, the exact `BRONZE_LETTER_TINT` hex
+      reused, not a new color) plus a thin TURQUOISE FRINGE at the
+      glow's outer edge — OPTION C, the real ozone-band color at the
+      umbra's rim during totality (`ECLIPSE_LUNAR_FRINGE_COLOR`/`_STOP`/
+      `_HALF_WIDTH`/`_ALPHA`; `draw_event_glow()`'s optional
+      `fringe_color` param adds three extra gradient stops —
+      transparent → peak → transparent — after the bronze mid stop,
+      before the transparent edge; None for every other glow caller,
+      unchanged). The ±3h event window (`constants.ECLIPSE_GLOW_WINDOW_H`)
+      stands.
+
+      **THE STATE TABLE (fix round C, owner decree 2026-07-19):** the
+      old darkening was a TRANSLUCENT bronze overlay whose ALPHA also
+      scaled with magnitude — a bright moon under a weak wash still
+      read as "a visible moon shining bronze". The catalog's exact TYPE
+      (ground-truthed from `Database/deep_time.sqlite`'s real rows —
+      solar: `partial`/`annular`/`total`/`hybrid`; lunar:
+      `partial`/`penumbral`/`total`) now selects ONE fixed render STATE
+      (`defaults.ECLIPSE_TYPE_STATE`, `render.layers.eclipse_render_state`);
+      `hybrid` maps to `solar_total` (the closer of the two sealed
+      states — a hybrid eclipse shows true totality along most of its
+      ground track); an unknown/missing type documented-falls-back to
+      the kind's `partial` state (Rule #1). The state alone sets the
+      disc BRIGHTNESS — never magnitude, never translucency — and (with
+      one exception) the glow STRENGTH:
+
+      | State | Disc brightness | Glow strength | Fringe |
+      |---|---|---|---|
+      | lunar_total | 7% | 1.0 (full) | yes |
+      | lunar_partial | 18% | 0.6 | yes |
+      | lunar_penumbral | 60% | 0.25 | no |
+      | solar_total | n/a (art only) | 1.0 (full) | n/a |
+      | solar_annular | n/a (art only) | 1.0, orange-red hue | n/a |
+      | solar_partial | n/a (art only) | magnitude-linear (unchanged) | n/a |
+
+      The disc darkening is a TRUE brightness reduction —
+      `YearMarkerLayer._draw_moon`'s `darken_state` param fills the whole
+      disc with `QPainter.CompositionMode_Multiply` against an OPAQUE
+      neutral gray at the state's brightness value (0..1 → 0..255),
+      which scales R/G/B equally (hue untouched, value down) — never a
+      `SourceOver` alpha wash that lets bright pixels bleed through. The
+      annular "ring of fire" gets its OWN glow color
+      (`GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR`, a hotter orange-red than the
+      plain `GLOW_ECLIPSE_SOLAR_COLOR`), same black-sun art. Magnitude
+      still scales glow strength, but ONLY for `solar_partial`
+      (`render.layers.eclipse_state_glow_strength`, the owner's one
+      named exception) — every other state's strength is the fixed
+      table value above.
+
       Data path: `data.deep_time.DeepTimeRepository.eclipses_near()`
       (two indexed jd_ut lookups per kind, never a table scan) feeds
       `core.clock_state.EclipseEvent` candidates into `DayContext.
@@ -608,15 +643,17 @@ lives in [The DOMY Canon](CANON.md).
       without the optional Deep Time pack `eclipses` stays `()` and no
       eclipse ever renders, identical to before this round. The hover
       text (Earth/Moon) NAMES the eclipse (type, magnitude, local
-      instant). **MARKER-PRIORITY NOTE (Session 21-C, 2026-07-18)
-      resolved as predicted:** the eclipse window rides the SAME
-      relocation-to-ring-band mechanic as the season/moon glow, so
-      `render.compositor._element_at` hit-tests it for free — only the
-      NEW glow/art condition was needed, no new hit-test path. Tests:
-      `tests/test_eclipse.py` (window on/off, magnitude mapping, solar
-      art swap + red glow + hit-test, lunar darkening + bronze glow +
-      hit-test, hover naming, the golden 2026-08-12 total solar eclipse
-      against the real pack when built, and the absent-pack path).
+      instant), reading `EclipseEvent.type` directly — the same
+      vocabulary the state table maps. **MARKER-PRIORITY NOTE (Session
+      21-C, 2026-07-18) resolved as predicted:** the eclipse window
+      rides the SAME relocation-to-ring-band mechanic as the season/moon
+      glow, so `render.compositor._element_at` hit-tests it for free —
+      only the NEW glow/art condition was needed, no new hit-test path.
+      Tests: `tests/test_eclipse.py` (window on/off, magnitude mapping,
+      solar art swap + red/annular glow + hit-test, per-state lunar
+      darkening goldens + bronze glow + hit-test, hover naming, the
+      golden 2026-08-12 total solar eclipse against the real pack when
+      built, and the absent-pack path).
    12. **SIZE slider in the right-click menu — DONE (Session 21-B):** a
       COMPACT `QWidgetAction`-hosted `QSlider` lives in Design ▸ Size
       itself (360–1440, `singleStep` 10, narrow width — coarse tune,
