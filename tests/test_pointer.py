@@ -1119,6 +1119,11 @@ def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesd
         """Returns (weekday-layer alpha, center-layer alpha) sampled at
         the dial center, where only the ghost/reveal Sun can land."""
         image = QImage(361, 361, QImage.Format.Format_ARGB32_Premultiplied)
+        # A fresh QImage is UNINITIALIZED memory (Qt docs) — without this
+        # fill the first alpha read depends on RAM garbage. This was the
+        # suite's one intermitent failure (flaked once in a full run,
+        # 2026-07-18); every other render test constructs-then-fills.
+        image.fill(0)
         painter = QPainter(image)
         painter.translate(180.5, 180.5)
         ctx = RenderContext(
