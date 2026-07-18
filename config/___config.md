@@ -31,7 +31,14 @@ solstice), the Chinese zodiac cycle (animals, elements, the CNY new-
 moon window), the octa slot modes with their art folders, the Earth
 style names, the season/moon glow windows (±12 h / ±6 h) and event names,
 sun thresholds (civil depression, horizon/twilight elevations), the six
-year-anchor angles, and the moon phase → fraction mapping. The bundled
+year-anchor angles, and the moon phase → fraction mapping. The metal-
+capable weekday themes (`METAL_THEMES`) and their four looks
+(`THEME_METALS`: gold/bronze/silver/colored) live here too, with a
+per-theme override (`THEME_METALS_OVERRIDE` + the `theme_metals(theme)`
+lookup, owner 2026-07-18) for themes whose art has no `colored/`
+subfolder — `planets_art` (the Planets "Art" medallion look) offers only
+gold/bronze/silver; every menu/dialog/validation call site reads the
+allowed set through this one function rather than the flat tuple. The bundled
 database coverage is NO LONGER hardcoded here (owner 2026-07-16, Rule
 #4): the repositories' `coverage()` reads the year span from the data.
 DEEP TIME (Session 16, owner 2026-07-17): the pack filename, the era

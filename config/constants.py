@@ -529,10 +529,27 @@ WEEKDAY_THEMES = (
 METAL_THEMES = (
     "greek", "norse", "profession", "wolf", "bee", "elephant",
     "cosmos",              # bronze star-chart medallions + colored arc
+    "planets_art",         # the Planets "Art" look (owner 2026-07-18)
 )
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
 THEME_METALS = ("gold", "bronze", "silver", "colored")
+# Per-theme override (owner 2026-07-18): planets_art is bronze-plate
+# medallion art like the pantheon sets, but its source has NO colored/
+# subfolder — a half-available look must never be offered, so it drops
+# "colored" from its own allowed set. Absent entries fall back to the
+# full THEME_METALS tuple; every call site that offers a theme's metal
+# choices (menu, Settings dialog, settings validation, tests) must read
+# through `theme_metals()` rather than the flat tuple.
+THEME_METALS_OVERRIDE: dict[str, tuple[str, ...]] = {
+    "planets_art": ("gold", "bronze", "silver"),
+}
+
+
+def theme_metals(theme: str) -> tuple[str, ...]:
+    """The metal looks `theme` may wear — THEME_METALS unless the theme
+    overrides it (documented exceptions only, see THEME_METALS_OVERRIDE)."""
+    return THEME_METALS_OVERRIDE.get(theme, THEME_METALS)
 
 # Theme -> symbolism.json blurb key (the encyclopedic text under the
 # hexa diamond hover follows the active theme).

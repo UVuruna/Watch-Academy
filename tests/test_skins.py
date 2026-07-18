@@ -175,6 +175,11 @@ def test_bronze_finish_and_theme_metals():
         for path in colored.bodies.values()
     )
     for theme in c.METAL_THEMES:
+        if "colored" not in c.theme_metals(theme):
+            # planets_art (owner 2026-07-18): bronze medallions with NO
+            # colored/ subfolder — offering "Colored" for it would
+            # dangle on a missing asset, so it is excluded up front.
+            continue
         # colored is the variant SIBLING (owner restructure 2026-07-14).
         folder = (
             defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
@@ -184,6 +189,20 @@ def test_bronze_finish_and_theme_metals():
             assert _paths.art_file(
                 folder / f"{stem}.png"
             ).exists(), (theme, body)
+    # planets_art itself DOES ship gold/bronze/silver (owner 2026-07-18):
+    # the render-chain gate is METAL_THEMES membership + _theme_metal —
+    # confirm the tint actually reaches the theme's WeekdaySpec.
+    gold_planets_art = build_skin(replace(
+        Settings(), weekday_theme="planets_art",
+        theme_metals={"planets_art": "gold"},
+    )).weekday_set
+    assert gold_planets_art.metal == "gold"
+    plain_planets_art = build_skin(replace(
+        Settings(), weekday_theme="planets_art",
+    )).weekday_set
+    assert plain_planets_art.metal is None            # bronze = as drawn
+    assert c.theme_metals("planets_art") == ("gold", "bronze", "silver")
+    assert "colored" not in c.theme_metals("planets_art")
     for animal in c.CHINESE_ANIMALS:
         assert _paths.art_file(
             defaults.ZODIAC_ART_DIR / "chinese" / "colored" / f"{animal}.png"
@@ -214,6 +233,44 @@ def test_bronze_finish_and_theme_metals():
     gray_out = swapped.pixelColor(1, 0)
     assert bronze_out.saturationF() < 0.15           # bronze went silver
     assert gray_out == QColor("#808080")             # gray untouched
+
+
+def test_planets_art_body_renders_differently_by_metal():
+    """Render-chain confirmation (owner 2026-07-18): the real
+    planets/art/sun.png plate — a bronze medallion like the pantheon
+    sets — must actually come out of AssetCache looking different
+    under gold vs bronze, not just carry a different metal LABEL."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication
+
+    from config import paths as _paths
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+    sun = (
+        defaults.WEEKDAY_ART_DIR
+        / defaults.WEEKDAY_THEME_DIRS["planets_art"] / "sun.png"
+    )
+    assert _paths.art_file(sun).exists()
+    cache = AssetCache()
+    bronze = cache.pixmap_by_height(sun, 128, 1.0, metal=None).toImage()
+    gold = cache.pixmap_by_height(sun, 128, 1.0, metal="gold").toImage()
+    silver = cache.pixmap_by_height(sun, 128, 1.0, metal="silver").toImage()
+    assert bronze.width() == gold.width() == silver.width()
+    differing_gold = sum(
+        1 for x in range(0, bronze.width(), 4)
+        for y in range(0, bronze.height(), 4)
+        if bronze.pixelColor(x, y) != gold.pixelColor(x, y)
+    )
+    differing_silver = sum(
+        1 for x in range(0, bronze.width(), 4)
+        for y in range(0, bronze.height(), 4)
+        if bronze.pixelColor(x, y) != silver.pixelColor(x, y)
+    )
+    assert differing_gold > 0
+    assert differing_silver > 0
 
 
 def test_pre_rendered_silver_letters_are_grayscale():

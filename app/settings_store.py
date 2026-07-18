@@ -355,7 +355,10 @@ class SettingsStore:
                         raw.get("theme_metals", {})
                     ).items()
                     if str(theme) in constants.METAL_THEMES
-                    and str(metal) in constants.THEME_METALS
+                    # Per-theme allowed set (owner 2026-07-18): planets_art
+                    # has no colored/ folder, so "colored" is rejected for
+                    # it even though it is metal-capable.
+                    and str(metal) in constants.theme_metals(str(theme))
                 },
                 theme_metal_follow_ring=_load_bool(
                     raw, "theme_metal_follow_ring", False

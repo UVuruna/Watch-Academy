@@ -1605,83 +1605,101 @@ class AppController(QObject):
             active: bool, current_theme: str, on_theme, names_key: str,
             current_roster: str = "planetary",
         ) -> None:
-            """The IDENTICAL Weekday submenu of both slots, in KINSHIP
-            GROUPS (owner menu rework 2026-07-13: Ancient Gods /
-            Society / Animals / Arcana): the bronze-plate themes open
-            their metal dropdown in place, Planets nests its Image and
-            Sign looks — plus the slot's OWN Names switch. Picking a
-            theme also picks the slot's weekday mode."""
+            """The IDENTICAL Weekday submenu of both slots: Planets sits
+            FIRST and flat (owner 2026-07-18, `WEEKDAY_MENU_TOP`) —
+            nesting Image/Sign plain plus the metal-capable Art look —
+            above the KINSHIP GROUPS below it (owner menu rework
+            2026-07-13: Ancient Gods / Society / Scripture / Animals /
+            The Inner Wheel / Arcana, `WEEKDAY_MENU_GROUPS`): the
+            bronze-plate themes open their metal dropdown in place —
+            plus the slot's OWN Names switch. Picking a theme also
+            picks the slot's weekday mode."""
             sub = self._submenu(parent, tr("Weekday"))
-            for group_title, keys in defaults.WEEKDAY_MENU_GROUPS:
-                group_menu = self._submenu(sub, tr(group_title))
-                for key in keys:
-                    title = defaults.WEEKDAY_THEME_TITLES[key]
-                    if key == "planets":
-                        # Image/Sign/Art as three options of ONE entry
-                        # (owner: planet_signs and planets_art stay
-                        # themes underneath, nested).
-                        planet_menu = self._submenu(group_menu, tr(title))
-                        for pkey, plabel in (
-                            ("planets", tr("Image")),
-                            ("planet_signs", tr("Sign")),
-                            ("planets_art", tr("Art")),
-                        ):
-                            slot_action(
-                                planet_menu, group, plabel,
-                                active and current_theme == pkey,
-                                lambda checked, t=pkey: on_theme(t),
-                            )
-                    elif key in constants.METAL_THEMES:
-                        metal_menu = self._submenu(group_menu, tr(title))
-                        for metal in constants.THEME_METALS:
-                            slot_action(
-                                metal_menu, group, tr(metal.capitalize()),
-                                active and current_theme == key
-                                and _theme_metal(settings, key) == metal,
-                                lambda checked, t=key, m=metal: on_theme(t, m),
-                            )
-                        if key in defaults.WEEKDAY_PANTHEON:
-                            # The roster pair sits BELOW the metals in
-                            # the same dropdown (owner 2026-07-15: like
-                            # the Pointer picking variant AND color) —
-                            # per slot, so slot 1 can wear Planetary
-                            # while slot 2 wears the Pantheon. Its OWN
-                            # exclusive group: metal and roster checks
-                            # must coexist.
-                            metal_menu.addSeparator()
-                            roster_group = QActionGroup(menu)
-                            roster_group.setExclusive(True)
-                            for roster in constants.FIGURE_ROSTERS:
-                                slot_action(
-                                    metal_menu, roster_group,
-                                    tr(roster.capitalize()),
-                                    active and current_theme == key
-                                    and current_roster == roster,
-                                    lambda checked, t=key, r=roster:
-                                    on_theme(t, None, r),
-                                )
-                    elif key in defaults.WEEKDAY_PANTHEON:
-                        # Non-metal pantheon themes (Egyptian, Slavic)
-                        # have no other variant, so the dropdown IS the
-                        # roster pair; either pick also picks the theme.
-                        roster_menu = self._submenu(group_menu, tr(title))
+
+            def add_theme_entry(container: QMenu, key: str) -> None:
+                title = defaults.WEEKDAY_THEME_TITLES[key]
+                if key == "planets":
+                    # Image/Sign plain, Art nests its OWN metal dropdown
+                    # (owner 2026-07-18: the art/ plates are bronze
+                    # medallions like the pantheon sets, but the source
+                    # carries no colored/ folder — gold/bronze/silver
+                    # only; planet_signs stays flat glyph art, plain,
+                    # never tinted).
+                    planet_menu = self._submenu(container, tr(title))
+                    for pkey, plabel in (
+                        ("planets", tr("Image")),
+                        ("planet_signs", tr("Sign")),
+                    ):
+                        slot_action(
+                            planet_menu, group, plabel,
+                            active and current_theme == pkey,
+                            lambda checked, t=pkey: on_theme(t),
+                        )
+                    art_menu = self._submenu(planet_menu, tr("Art"))
+                    for metal in constants.theme_metals("planets_art"):
+                        slot_action(
+                            art_menu, group, tr(metal.capitalize()),
+                            active and current_theme == "planets_art"
+                            and _theme_metal(settings, "planets_art") == metal,
+                            lambda checked, m=metal: on_theme("planets_art", m),
+                        )
+                elif key in constants.METAL_THEMES:
+                    metal_menu = self._submenu(container, tr(title))
+                    for metal in constants.theme_metals(key):
+                        slot_action(
+                            metal_menu, group, tr(metal.capitalize()),
+                            active and current_theme == key
+                            and _theme_metal(settings, key) == metal,
+                            lambda checked, t=key, m=metal: on_theme(t, m),
+                        )
+                    if key in defaults.WEEKDAY_PANTHEON:
+                        # The roster pair sits BELOW the metals in the
+                        # same dropdown (owner 2026-07-15: like the
+                        # Pointer picking variant AND color) — per slot,
+                        # so slot 1 can wear Planetary while slot 2
+                        # wears the Pantheon. Its OWN exclusive group:
+                        # metal and roster checks must coexist.
+                        metal_menu.addSeparator()
                         roster_group = QActionGroup(menu)
                         roster_group.setExclusive(True)
                         for roster in constants.FIGURE_ROSTERS:
                             slot_action(
-                                roster_menu, roster_group,
+                                metal_menu, roster_group,
                                 tr(roster.capitalize()),
                                 active and current_theme == key
                                 and current_roster == roster,
                                 lambda checked, t=key, r=roster:
                                 on_theme(t, None, r),
                             )
-                    else:
+                elif key in defaults.WEEKDAY_PANTHEON:
+                    # Non-metal pantheon themes (Egyptian, Slavic) have
+                    # no other variant, so the dropdown IS the roster
+                    # pair; either pick also picks the theme.
+                    roster_menu = self._submenu(container, tr(title))
+                    roster_group = QActionGroup(menu)
+                    roster_group.setExclusive(True)
+                    for roster in constants.FIGURE_ROSTERS:
                         slot_action(
-                            group_menu, group, tr(title),
-                            active and current_theme == key,
-                            lambda checked, t=key: on_theme(t),
+                            roster_menu, roster_group,
+                            tr(roster.capitalize()),
+                            active and current_theme == key
+                            and current_roster == roster,
+                            lambda checked, t=key, r=roster:
+                            on_theme(t, None, r),
                         )
+                else:
+                    slot_action(
+                        container, group, tr(title),
+                        active and current_theme == key,
+                        lambda checked, t=key: on_theme(t),
+                    )
+
+            for key in defaults.WEEKDAY_MENU_TOP:
+                add_theme_entry(sub, key)
+            for group_title, keys in defaults.WEEKDAY_MENU_GROUPS:
+                group_menu = self._submenu(sub, tr(group_title))
+                for key in keys:
+                    add_theme_entry(group_menu, key)
             sub.addSeparator()
             self._add_toggle(
                 sub, tr("Names"), getattr(settings, names_key),

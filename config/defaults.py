@@ -1485,11 +1485,16 @@ WEEKDAY_THEME_TITLES = {
     "moods": "Moods",
 }
 
+# The Weekday submenu's TOP entries (owner 2026-07-18): rendered FIRST,
+# flat, ABOVE the kinship groups below — Planets is the DEFAULT theme
+# and no longer hides inside Arcana. Nests Image/Sign plain plus the
+# metal-capable Art look (planet_signs stays its own theme underneath;
+# planets_art carries its Gold/Bronze/Silver dropdown via METAL_THEMES).
+WEEKDAY_MENU_TOP = ("planets",)
+
 # The Weekday submenu GROUPS (owner menu rework 2026-07-13): kinship
-# submenus instead of the flat theme list. Planets nests its SIGN look
-# as a second option (planet_signs stays its own theme underneath);
-# The Inner Wheel (Virtues/Sins/Moods) joins once those themes gain
-# their dial texts.
+# submenus below the top entries. The Inner Wheel (Virtues/Sins/Moods)
+# joins once those themes gain their dial texts.
 WEEKDAY_MENU_GROUPS = (
     ("Ancient Gods", ("egypt", "greek", "norse", "slavic")),
     ("Society", ("profession", "religion", "religion_alt")),
@@ -1498,7 +1503,9 @@ WEEKDAY_MENU_GROUPS = (
     ("Animals", ("wolf", "elephant", "bee")),
     # The emblem families on the dial (owner 2026-07-14).
     ("The Inner Wheel", ("virtues", "sins", "moods")),
-    ("Arcana", ("planets", "alchemy", "japan", "cosmos")),
+    # Planets moved to WEEKDAY_MENU_TOP (owner 2026-07-18) — Arcana now
+    # holds only the remaining three.
+    ("Arcana", ("alchemy", "japan", "cosmos")),
 )
 
 DEFAULT_SKIN = SkinDefinition(

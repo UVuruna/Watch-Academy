@@ -105,6 +105,23 @@ def test_display_choices_round_trip(store):
     )
     store.path.write_text(raw, encoding="utf-8")
     assert store.load().theme_metals == {}
+    # planets_art (owner 2026-07-18): metal-capable like the pantheon
+    # sets, but its art has no colored/ subfolder — gold/bronze/silver
+    # are accepted, "colored" is dropped like an unknown theme/metal.
+    planets_art_metals = replace(
+        Settings(),
+        theme_metals={"planets_art": "gold"},
+    )
+    store.save(planets_art_metals)
+    assert store.load().theme_metals == {"planets_art": "gold"}
+    store.save(replace(Settings(), theme_metals={"planets_art": "silver"}))
+    assert store.load().theme_metals == {"planets_art": "silver"}
+    store.save(replace(Settings(), theme_metals={"planets_art": "bronze"}))
+    assert store.load().theme_metals == {"planets_art": "bronze"}
+    store.save(replace(Settings(), theme_metals={"planets_art": "colored"}))
+    raw = store.path.read_text(encoding="utf-8")
+    assert '"colored"' in raw               # written as-is (unvalidated write)
+    assert store.load().theme_metals == {}  # but rejected on load
     # The six OLD combined South-slot values migrate to mode + style
     # (2026-07-12) instead of raising SettingsCorruptError.
     raw = store.path.read_text(encoding="utf-8").replace(

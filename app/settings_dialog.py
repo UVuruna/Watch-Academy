@@ -1084,11 +1084,16 @@ class SettingsDialog(QDialog):
         self._metal_combos: dict[str, QComboBox] = {}
         self._metal_labels: dict[str, QLabel] = {}
         for theme in constants.METAL_THEMES:
+            # planets_art has no top-level menu title (owner 2026-07-18:
+            # it nests as the Planets "Art" look) — it never gets an
+            # independent rotation row here.
+            if theme not in defaults.WEEKDAY_THEME_TITLES:
+                continue
             label = QLabel(tr(defaults.WEEKDAY_THEME_TITLES[theme]))
             self._metal_labels[theme] = label
             metal_row.addWidget(label)
             combo = QComboBox()
-            for metal in constants.THEME_METALS:
+            for metal in constants.theme_metals(theme):
                 combo.addItem(tr(metal.capitalize()), metal)
             combo.setCurrentIndex(
                 combo.findData(
@@ -1138,7 +1143,7 @@ class SettingsDialog(QDialog):
         group_key = self._rotation_group.currentData()
         self._rotation_grid_host.setVisible(group_key == "custom")
         selected = set(self._rotation_selection())
-        for theme in constants.METAL_THEMES:
+        for theme in self._metal_labels:
             visible = theme in selected
             self._metal_labels[theme].setVisible(visible)
             self._metal_combos[theme].setVisible(visible)

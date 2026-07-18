@@ -65,23 +65,34 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   menu so Qt never deletes a visible popup). Emoji-fronted top level:
   🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
   style, Theme background / Classic black (owner A/B spec 2026-07-15)
-  — | Hands, Earth — with the EXCLUSIVE Date / Weekday switches
-  (owner 2026-07-17, ROADMAP 15e: checking one unchecks the other via
-  `_toggle_earth_label`; both may be off) — | Size), 🥇 1ˢᵗ Slot,
+  — | Hands, Earth — with the label TRIO Date / Weekday / Full Date
+  (owner 2026-07-18, the accepted names: three exclusive toggles over
+  the two stored bools via `_set_earth_label`/`_sync_earth_label_toggles`;
+  full = both on, all three may be off) — | Size), 🥇 1ˢᵗ Slot,
   🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
   📜 Legend, 🔆 Solar rotation, 🎭 Archetype,
   🖱️ Click-through | ⚙️ Settings…,
   🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The three
   slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
-  a Weekday submenu in KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`: Ancient
-  Gods / Society — Professions, Creeds, Mysteries — / Animals /
-  Arcana, where Planets nests its Image and Sign looks; the metal
-  themes open a Gold/Bronze/Silver/Colored metal dropdown whose pick
-  activates theme AND metal, releasing follow-the-ring; the pantheon
-  themes carry a Planetary/Pantheon roster pair in the same dropdown
-  — below the metals on Greek/Norse, the whole dropdown on Egyptian/
-  Slavic — writing that slot's OWN `*_roster` key, owner 2026-07-15:
-  slot 1 Greek Planetary can sit beside slot 2 Greek Pantheon) — plus the
+  a Weekday submenu that leads with Planets FIRST, flat (owner
+  2026-07-18, `WEEKDAY_MENU_TOP` — the default theme no longer hides
+  inside a group), nesting Image and Sign as plain options plus an Art
+  option that opens its OWN Gold/Bronze/Silver dropdown (`planets_art`
+  joined `METAL_THEMES`, but its per-theme override in
+  `constants.theme_metals()` drops Colored — the medallion source has
+  no colored/ folder; Sign stays plain, its glyph art is not
+  bronze-styled); below it the KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`:
+  Ancient Gods / Society — Professions, Creeds, Mysteries — /
+  Scripture / Animals / The Inner Wheel / Arcana — alchemy, japan,
+  cosmos now that Planets moved out). The metal-capable themes each
+  open a dropdown built from `constants.theme_metals(theme)` (Gold/
+  Bronze/Silver/Colored for the rest, Gold/Bronze/Silver only for
+  planets_art) whose pick activates theme AND metal, releasing
+  follow-the-ring; the pantheon themes carry a Planetary/Pantheon
+  roster pair in the same dropdown — below the metals on Greek/Norse,
+  the whole dropdown on Egyptian/Slavic — writing that slot's OWN
+  `*_roster` key, owner 2026-07-15: slot 1 Greek Planetary can sit
+  beside slot 2 Greek Pantheon) — plus the
   slot's OWN Names switch — the COMPLICATIONS submenu (Digital time /
   Date / Day length / Seconds — the seated small seconds silences the
   big hand and its Elements toggle), and the Astrology / Ascendant /

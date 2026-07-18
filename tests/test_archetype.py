@@ -851,6 +851,51 @@ def test_menu_gating(app, tmp_path, monkeypatch):
         controller._tray.hide()
 
 
+def test_weekday_menu_planets_first_with_art_metals(app, tmp_path, monkeypatch):
+    """Planets menu placement + Art metals (owner 2026-07-18): the
+    Weekday submenu shows Planets FIRST, flat, above the kinship groups
+    — Arcana no longer carries it, so Planets appears exactly once —
+    and its Art option nests its OWN Gold/Bronze/Silver dropdown (no
+    Colored: the planets/art/ plates have no colored/ folder), wired
+    through the same on_theme(theme, metal) path as the METAL_THEMES
+    entries. Image and Sign stay plain options. TEMP home."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    def action(menu, text):
+        return next(a for a in menu.actions() if a.text() == text)
+
+    c = AppController(app)
+    try:
+        slot_menu = next(
+            a for a in c._menu.actions() if "1ˢᵗ Slot" in a.text()
+        ).menu()
+        weekday_menu = action(slot_menu, "Weekday").menu()
+        entries = [a.text() for a in weekday_menu.actions() if a.text()]
+        # Planets leads, flat — the kinship groups (and Names) follow.
+        assert entries[0] == "Planets"
+        assert entries.index("Arcana") > entries.index("Planets")
+        assert entries.count("Planets") == 1     # never inside Arcana too
+
+        planets_menu = action(weekday_menu, "Planets").menu()
+        assert [a.text() for a in planets_menu.actions()] == [
+            "Image", "Sign", "Art",
+        ]
+        art_menu = action(planets_menu, "Art").menu()
+        assert [a.text() for a in art_menu.actions()] == [
+            "Gold", "Bronze", "Silver",
+        ]
+
+        arcana_menu = action(weekday_menu, "Arcana").menu()
+        assert "Planets" not in [a.text() for a in arcana_menu.actions()]
+        assert [a.text() for a in arcana_menu.actions()] == [
+            "Alchemy", "Japanese week", "Cosmos",
+        ]
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
 def test_per_pointer_palette_labels_and_calendar_visibility(app, tmp_path, monkeypatch):
     """The wheel-pair labels follow the pointer (owner 2026-07-17,
     ROADMAP 11) and the pair is NEVER grayed — every pointer has two

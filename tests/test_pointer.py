@@ -369,6 +369,11 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
             continue
         assert theme in defaults.WEEKDAY_DUAL_NAMES
     for theme in constants.METAL_THEMES:
+        if "colored" not in constants.theme_metals(theme):
+            # planets_art (owner 2026-07-18): bronze medallions with NO
+            # colored/ subfolder — the metal-capable set is not 1:1
+            # with the colored-capable set any more.
+            continue
         # The colored dual is the SIBLING variant (owner restructure
         # 2026-07-14): the variant segment swaps to colored/.
         rel = defaults.WEEKDAY_DUAL_FILES[theme].replace(
