@@ -32,6 +32,7 @@ from PySide6.QtWidgets import (
     QTimeEdit,
 )
 
+from app.theme import apply_theme
 from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
@@ -196,6 +197,7 @@ class TimeTravelDialog(QDialog):
         self._month.currentIndexChanged.connect(self._refresh)
         self._year.valueChanged.connect(self._refresh)
         self._era.currentIndexChanged.connect(self._on_era)
+        apply_theme(self)
         self._refresh()
 
     # --- The astronomical target ---------------------------------------------

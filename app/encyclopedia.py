@@ -41,6 +41,7 @@ from PySide6.QtWidgets import (
 
 import html as _html
 
+from app.theme import apply_theme
 from app.ui_style import style_button
 from config import constants, defaults, paths
 from config.ui_text import ui
@@ -786,6 +787,7 @@ class EncyclopediaDialog(QDialog):
             defaults.GUIDE_INITIAL_IMAGE_PX + 90,
             defaults.GUIDE_INITIAL_IMAGE_PX + 220,
         )
+        apply_theme(self)
         self._show_topics()
         # The Spacebar jump (owner 2026-07-16, ROADMAP queue #8): open
         # straight onto the hovered topic's matching entry, skipping the

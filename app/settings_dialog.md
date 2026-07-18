@@ -164,6 +164,8 @@ controller passes the active overlay.
 ### Uses
 - [Locations](../data/locations.md) — the hierarchy and city records
 - [Settings Store](settings_store.md) — reads/writes the chosen values
+- [Theme](theme.md) — the Rule #16 POLISH round's dark QSS: nav column,
+  group-box cards, every slider/combo/spinbox/checkbox, OK/Cancel
 - [Config (folder)](../config/___config.md) — palette presets, ranges
 
 ### Used by

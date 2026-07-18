@@ -102,6 +102,8 @@ instrument and Spacebar-jumped alike) flows through this one path.
 - [UI Text Catalog](../config/ui_text.md) — chrome + entity names
 - [Compositor](../render/compositor.md) — `_article_body_html` (the
   one wrap/highlight implementation, Rule #5)
+- [Theme](theme.md) — the dark dialog surface (buttons stay on
+  [UI Style](ui_style.md)'s own gradient pills)
 - [Config (folder)](../config/___config.md) — art directories, accent
   tables
 

@@ -61,6 +61,11 @@ captions. See [Guide Dialog](guide.md).
 Shared modern gradient-pill button styling for the reader dialogs —
 roles, sizes and colors all from defaults. See [UI Style](ui_style.md).
 
+### `theme.py` — Theme
+The Rule #16 POLISH round's dark QSS theme for dialog chrome — surfaces,
+group-box cards, sliders/combos/spinboxes/checkboxes/tables, applied to
+the Settings dialog and the reader dialogs. See [Theme](theme.md).
+
 ### `report.py` — Report
 The hidden efficiency report (owner 2026-07-15): the session unlock
 reveals 📊 Report above Exit — sortable function statistics, a

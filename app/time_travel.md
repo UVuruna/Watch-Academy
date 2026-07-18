@@ -20,6 +20,8 @@ the active coverage INCLUDING BCE.
 - [Deep Time](../core/deep_time.md) — era mapping, the proxy frame,
   month lengths, the year-line formatters
 - [UI Style](ui_style.md) — the shared vivid button pills
+- [Theme](theme.md) — the dark dialog surface + the moment editor's
+  combos/spinboxes
 
 ### Used by
 - [App Controller](controller.md) — `_open_time_travel()` passes the

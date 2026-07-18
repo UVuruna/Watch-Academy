@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.theme import apply_theme
 from app.ui_style import style_button
 from config import constants, defaults, profiling
 from config.ui_text import ui
@@ -243,6 +244,7 @@ class ReportDialog(QDialog):
         row.addWidget(close)
         column.addLayout(row)
 
+        apply_theme(self)
         self._snapshot: dict[str, dict] = {}
         self._refresh()
         self._timer = QTimer(self)

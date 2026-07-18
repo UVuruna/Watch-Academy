@@ -39,6 +39,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.settings_store import Settings, replace
+from app.theme import apply_theme, style_dialog_buttons
 from config import constants, defaults
 from config.ui_text import ui
 from data.locations import LocationRepository, fold_name
@@ -147,7 +148,9 @@ class SettingsDialog(QDialog):
         )
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
+        style_dialog_buttons(buttons)
         layout.addWidget(buttons)
+        apply_theme(self)
         screen = QApplication.primaryScreen().availableGeometry()
         content_width = max(page.sizeHint().width() for page in pages)
         content_height = max(page.sizeHint().height() for page in pages)

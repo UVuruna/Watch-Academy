@@ -14,6 +14,7 @@ over slides the owner prepares. Slides live in `assets/guide/` as
 ### Uses
 - [Config (folder)](../config/___config.md) — the slides folder path
 - [Assets (folder)](../assets/___assets.md) — guide slides
+- [Theme](theme.md) — the dark dialog surface
 
 ### Used by
 - [App Controller](controller.md) — the menu's Guide… entry

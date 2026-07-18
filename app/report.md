@@ -13,6 +13,7 @@ with call counts and execution-time statistics.
 ### Uses
 - [Profiling](../config/profiling.md) — `snapshot()` / `reset()`
 - [UI Style](ui_style.md) — the vivid button pills
+- [Theme](theme.md) — the dark dialog surface + the results table
 - [Config (folder)](../config/___config.md) — colors, sizes, ui text
 
 ### Used by

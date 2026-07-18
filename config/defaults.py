@@ -709,6 +709,27 @@ UI_BUTTON_COLORS = {
     "download": ("#CE93D8", "#6A1B9A"),     # violet — save the entry
     "neutral": ("#B0BEC5", "#546E7A"),      # the look arrows
 }
+# Dialog theme (Rule #16 POLISH round, 2026-07-18): the dark-first
+# palette for the Settings dialog's chrome (nav column, group-box
+# cards, sliders/combos/spinboxes/checkboxes) and the other dialogs'
+# base surface — see monorepo DESIGN.md. Anchored on the dial's own
+# slate identity (`#2A3439` family) with the gold accent the owner's
+# opacity-slider screenshot already wears; `app/theme.py` is the only
+# consumer — every other file reaches colors through THEME_COLORS, no
+# hex literals scattered in widget code (Rule #4).
+THEME_COLORS = {
+    "surface_0": "#1A1F22",     # dialog window background
+    "surface_1": "#20272B",     # group-box cards
+    "surface_2": "#2A3439",     # inputs, nav column (the dial's slate)
+    "surface_3": "#333F45",     # hover / raised elevation
+    "border": "rgba(255, 255, 255, 28)",
+    "text_primary": "#F2F3F4",
+    "text_secondary": "#A6B0B4",
+    "accent": "#E8B23D",        # gold — the dial's own opacity-slider hue
+}
+THEME_RADIUS_CONTROL_PX = 8      # buttons, inputs, combos
+THEME_RADIUS_CARD_PX = 14        # group-box cards
+THEME_RADIUS_PILL_PX = 999       # nav selection pill, checkbox indicator
 # Reader image ceiling (owner imperative 2026-07-14): no article or
 # Guide image may eat the page — anything taller than this fraction of
 # the viewport height scales down to it, leaving room for the text.

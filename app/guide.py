@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from app.theme import apply_theme
 from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
@@ -97,6 +98,7 @@ class GuideDialog(QDialog):
             defaults.GUIDE_INITIAL_IMAGE_PX + 90,
             defaults.GUIDE_INITIAL_IMAGE_PX + 320,
         )
+        apply_theme(self)
         self._show_page()
 
     def _step(self, delta: int) -> None:
