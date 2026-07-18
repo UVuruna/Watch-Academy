@@ -88,10 +88,12 @@ ARCHETYPE_ART_MIN_PX = 8
 # the rest of the time it draws at the weekday ghost_opacity, exactly
 # like an un-lit arm figure. The reveal gesture still forces it full.
 ARCHETYPE_CENTER_WINDOW_DEG = 15.0
-# The Earth Weekday option (settings.earth_weekday — a GENERAL Earth
-# marker option since 2026-07-17, no longer archetype-only): the date
-# shifts up and the abbreviated weekday writes below it, both as
-# fractions of the marker size. The geometry lives here beside the other
+# The Earth marker's two-row label geometry (owner 2026-07-18, ROADMAP
+# 15h — `skin.earth_label`, a GENERAL Earth marker option, no longer
+# archetype-only): shared by BOTH two-row modes, "date_weekday" (date
+# over the abbreviated weekday) and "full" (date over the YEAR) — the
+# date shifts up and the second row writes below it, both as fractions
+# of the marker size. The geometry lives here beside the other
 # Earth-marker archetype tunables.
 ARCHETYPE_EARTH_DAY_OFFSET = 0.16
 ARCHETYPE_EARTH_DAY_TEXT_SIZE = 0.26

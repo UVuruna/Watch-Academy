@@ -31,10 +31,12 @@ the ring preset and the user's display choices onto it at build time.
   (pointer, palette_style) shows ITS archetype: figures in the
   diamonds, the hour hand lighting the current hour-space, the weekday
   model and all three slots overridden OFF at the RENDER level so the
-  slot fields below keep the user's choices) and `earth_weekday`
-  (the optional abbreviated day under the Earth marker's date — a
-  GENERAL Earth option since 2026-07-17, working in BOTH normal and
-  archetype mode; renamed from `archetype_earth_day`, default False),
+  slot fields below keep the user's choices) and `earth_label`
+  (owner 2026-07-18, ROADMAP 15h — the Earth marker's label MODE,
+  `constants.EARTH_LABEL_MODES`: "off" | "date" | "weekday" |
+  "date_weekday" | "full", default "date"; replaces the old
+  `show_earth_date`/`earth_weekday` bool pair — a GENERAL Earth option,
+  working in BOTH normal and archetype mode),
   `solar_rotation` (False →
   Star/Aura/Umbra stand upright), `octa_slot` (one of
   `OCTA_SLOT_MODES`: time/date/day length, tropical zodiac as

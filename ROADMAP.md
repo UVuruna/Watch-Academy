@@ -415,6 +415,10 @@ lives in [The DOMY Canon](CANON.md).
 15h. **THE OWNER ROUND OF 2026-07-18 (UV/prompt.txt, nine points) —
    Session 21 material.** DONE the same day: the Earth label trio
    (Date / Weekday / Full Date — accepted names, both-bools = full);
+   **Session 21-E reworked this into the FOUR-mode `earth_label` enum**
+   (Date / Weekday / Date & Weekday / Full Date — Date & Weekday is the
+   OLD combined "Full Date" meaning, renamed now that a true Full Date
+   — date over the YEAR — exists; see [Layers](render/layers.md));
    the tetramorph files moved to the config path
    (`archetype/<source>/tetramorph/<Creature>.png`) with the sheet
    corrected and the missing Throne + Seal center prompts written.
@@ -539,16 +543,24 @@ lives in [The DOMY Canon](CANON.md).
       the January perihelion (orbital eccentricity). TRUE sunrise/sunset
       at a pole is only days from the equinox (atmospheric refraction
       ~34′ + the solar semi-diameter 16′ lift the visible sun).
-   11. **Eclipse display — DONE (2026-07-18, ECLIPSE DISPLAY round):**
-      refines the sealed glow-metal triad. A SOLAR eclipse shows the
-      Planets-theme eclipse art
+   11. **Eclipse display — DONE (2026-07-18, ECLIPSE DISPLAY round);
+      OPTION C sealed (2026-07-18, Session 21-E).** Refines the sealed
+      glow-metal triad. A SOLAR eclipse shows the Planets-theme eclipse
+      art
       (`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-
       mapped by `paths.art_file`) on the EARTH marker with a RED glow
       ring (instead of the plain golden season glow); a LUNAR eclipse
       shows the MOON marker darkened (a bronze wash over the whole
       disc) with a BRONZE glow (the blood-moon copper — physically
       true, the exact `BRONZE_LETTER_TINT` hex reused, not a new
-      color). The ±3h event window (`constants.ECLIPSE_GLOW_WINDOW_H`)
+      color) plus a thin TURQUOISE FRINGE at the glow's outer edge —
+      OPTION C, the real ozone-band color at the umbra's rim during
+      totality (`ECLIPSE_LUNAR_FRINGE_COLOR`/`_STOP`/`_HALF_WIDTH`/
+      `_ALPHA`; `draw_event_glow()`'s optional `fringe_color` param
+      adds three extra gradient stops — transparent → peak →
+      transparent — after the bronze mid stop, before the transparent
+      edge; None for every other glow caller, unchanged). The ±3h event
+      window (`constants.ECLIPSE_GLOW_WINDOW_H`)
       stands; the glow STRENGTH scales with the eclipse MAGNITUDE from
       `Database/deep_time.sqlite`'s eclipse catalog
       (`render.layers.eclipse_glow_strength`, linear between

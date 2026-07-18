@@ -893,11 +893,10 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
 
 
 def test_earth_weekday_label_joins_the_date(app):
-    """earth_weekday (owner 2026-07-17, default OFF; renamed from
-    archetype_earth_day): the abbreviated weekday on the Earth marker —
-    a GENERAL Earth option now, so it changes the render in BOTH archetype
-    AND normal mode (exclusive with the date since ROADMAP 15e: with it on
-    the marker shows the weekday instead of the date)."""
+    """earth_label="weekday" (owner 2026-07-18, ROADMAP 15h — the
+    four-mode enum, replacing the old earth_weekday bool): the
+    abbreviated weekday on the Earth marker — a GENERAL Earth option, so
+    it changes the render in BOTH archetype AND normal mode."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday
     size = 720.0                     # the date label draws from 540 up
     marker = defaults.DEFAULT_SKIN.year_marker
@@ -918,7 +917,7 @@ def test_earth_weekday_label_joins_the_date(app):
         _archetype_skin("octa"), AssetCache()
     ).render_offscreen(size, 1.0, day, tick)
     dated = Compositor(
-        _archetype_skin("octa", earth_weekday=True), AssetCache()
+        _archetype_skin("octa", earth_label="weekday"), AssetCache()
     ).render_offscreen(size, 1.0, day, tick)
     assert differing(base, dated) > 0
     # And now ALSO in NORMAL mode (the general Earth option, no longer
@@ -929,18 +928,22 @@ def test_earth_weekday_label_joins_the_date(app):
     ).render_offscreen(size, 1.0, day, tick)
     normal_on = Compositor(
         dataclasses.replace(
-            defaults.DEFAULT_SKIN, solar_rotation=False, earth_weekday=True
+            defaults.DEFAULT_SKIN, solar_rotation=False, earth_label="weekday"
         ),
         AssetCache(),
     ).render_offscreen(size, 1.0, day, tick)
     assert differing(normal_off, normal_on) > 0
 
 
-def test_earth_label_date_and_weekday_are_exclusive_in_render(app):
-    """EARTH LABEL EXCLUSIVITY (owner 2026-07-17, ROADMAP 15e): on the
-    Earth marker the DATE and the WEEKDAY are mutually exclusive — weekday
-    ALONE draws (it must work without the date), date alone draws, and the
-    two produce DIFFERENT pixels (different glyphs). Both-off draws neither."""
+def test_earth_label_four_modes_render_distinctly(app):
+    """THE EARTH LABEL QUARTET (owner 2026-07-18, ROADMAP 15h, Session
+    21-E): the single `earth_label` enum drives FOUR exclusive on-dial
+    forms plus off — weekday alone draws (must work without the date),
+    date alone draws with different glyphs than the weekday,
+    "date_weekday" stacks the date over the weekday (more pixels than
+    the date alone), and "full" stacks the date over the YEAR (also
+    more than the date alone, and different from "date_weekday" since
+    the second row reads a year, not a weekday)."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))     # a Thursday → THU
     size = 720.0
     marker = defaults.DEFAULT_SKIN.year_marker
@@ -958,18 +961,6 @@ def test_earth_label_date_and_weekday_are_exclusive_in_render(app):
             size, 1.0, day, tick
         )
 
-    def label_pixels(image):
-        return sum(
-            1
-            for x in range(int(cx) - box, int(cx) + box)
-            for y in range(int(cy) - box, int(cy) + box)
-            if image.pixelColor(x, y).alpha() > 0
-        )
-
-    neither = render(show_earth_date=False, earth_weekday=False)
-    date_only = render(show_earth_date=True, earth_weekday=False)
-    weekday_only = render(show_earth_date=False, earth_weekday=True)
-
     def differing(a, b):
         return sum(
             1
@@ -978,16 +969,27 @@ def test_earth_label_date_and_weekday_are_exclusive_in_render(app):
             if a.pixelColor(x, y) != b.pixelColor(x, y)
         )
 
+    off = render(earth_label="off")
+    date_only = render(earth_label="date")
+    weekday_only = render(earth_label="weekday")
+
     # Weekday ALONE actually draws (owner: "FRI must work without Date").
-    assert differing(weekday_only, neither) > 0
+    assert differing(weekday_only, off) > 0
     # Date alone draws, and differs from the weekday (different glyphs).
-    assert differing(date_only, neither) > 0
+    assert differing(date_only, off) > 0
     assert differing(date_only, weekday_only) > 0
-    # FULL DATE (owner 2026-07-18, the third mode): both bools on draws
-    # the date WITH the weekday row — more than the date alone.
-    full = render(show_earth_date=True, earth_weekday=True)
+    # DATE & WEEKDAY (the old combined "Full Date" meaning): the date
+    # WITH the weekday row — more than the date alone.
+    date_weekday = render(earth_label="date_weekday")
+    assert differing(date_weekday, date_only) > 0
+    assert differing(date_weekday, off) > 0
+    # FULL DATE (owner 2026-07-18, the TRUE Full Date): the date WITH
+    # the year row — also more than the date alone, and a distinct
+    # render from Date & Weekday (a year reads differently than "THU").
+    full = render(earth_label="full")
     assert differing(full, date_only) > 0
-    assert differing(full, neither) > 0
+    assert differing(full, off) > 0
+    assert differing(full, date_weekday) > 0
 
 
 # --- The menu gating ----------------------------------------------------------------

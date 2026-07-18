@@ -102,15 +102,16 @@ def test_compass_slot_has_its_own_switch():
 
 
 def test_earth_date_switch_gates_the_label(july_wednesday):
-    """Owner spec: the date ON the Earth marker has its own switch —
-    render differs at 720 px when toggled, and stays identical at
-    360 px where the label never draws anyway."""
+    """Owner spec: the date ON the Earth marker has its own switch
+    (`earth_label`, "date" the DEFAULT_SKIN default) — render differs at
+    720 px when turned off, and stays identical at 360 px where the
+    label never draws anyway."""
     day, tick = july_wednesday
     with_date = Compositor(defaults.DEFAULT_SKIN, AssetCache()).render_offscreen(
         720.0, 1.0, day, tick
     )
     without = Compositor(
-        dataclasses.replace(defaults.DEFAULT_SKIN, show_earth_date=False),
+        dataclasses.replace(defaults.DEFAULT_SKIN, earth_label="off"),
         AssetCache(),
     ).render_offscreen(720.0, 1.0, day, tick)
     assert with_date != without
@@ -118,7 +119,7 @@ def test_earth_date_switch_gates_the_label(july_wednesday):
         360.0, 1.0, day, tick
     )
     small_off = Compositor(
-        dataclasses.replace(defaults.DEFAULT_SKIN, show_earth_date=False),
+        dataclasses.replace(defaults.DEFAULT_SKIN, earth_label="off"),
         AssetCache(),
     ).render_offscreen(360.0, 1.0, day, tick)
     assert small_on == small_off

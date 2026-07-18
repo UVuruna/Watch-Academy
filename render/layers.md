@@ -213,16 +213,22 @@ ARCHETYPE CLOCK. The machinery:
   NAME_LABEL_WIDTH_FRACTION` is the one shared width fraction,
   `defaults.NAME_LABEL_MAX_PX` the one shared cap.
 - The Earth marker stays (it is the instrument, not a slot): its label
-  is drawn by `_draw_earth_label`, where the DATE and the abbreviated
-  WEEKDAY are MUTUALLY EXCLUSIVE (owner 2026-07-17, ROADMAP 15e — the two
-  Design ▸ Earth switches). WEEKDAY alone (`skin.earth_weekday`) writes
-  "FRI" centered (it must work without the date); DATE alone
-  (`skin.show_earth_date`) writes "8 Jul" centered. Both are GENERAL Earth
-  options working in normal AND archetype mode. During a DEEP travel
-  (Session 16 — `day.deep_cycles != 0`) the DATE additionally carries the
-  YEAR beneath it (`display_year` — the compact OFFICIAL form, "4500
-  BCE"): far from the present the marker must say WHEN. The exclusivity is
-  normalized at settings load, so the render never sees both on.
+  is drawn by `_draw_earth_label`, reading the single `skin.earth_label`
+  enum (owner 2026-07-18, ROADMAP 15h — replaces the old
+  `show_earth_date`/`earth_weekday` bool pair, Rule #6, deleted
+  everywhere) — FOUR EXCLUSIVE modes, the Design ▸ Earth submenu:
+  "off" draws nothing; "weekday" writes "FRI" centered (it must work
+  without the date); "date" writes "8 Jul" centered; "date_weekday"
+  stacks the date over the abbreviated weekday (the OLD combined "Full
+  Date" meaning, renamed now that a true Full Date exists); "full"
+  stacks the date over the YEAR (`display_year` — the compact OFFICIAL
+  form, "4500 BCE" — the exact two-row shape the deep-travel year
+  complication already uses). All four work in normal AND archetype
+  mode. During a DEEP travel (Session 16 — `day.deep_cycles != 0`) the
+  YEAR row OUTRANKS the weekday in "date_weekday" mode — far from the
+  present the marker must say WHEN; in "full" mode a deep travel is a
+  no-op difference, since the year row is already showing (`display_year`
+  un-shifts the deep proxy frame regardless of mode).
 
 **Year texts (Session 16, owner amendment 2026-07-17):** the date
 complication's year row and the Earth marker's deep-year row render
@@ -473,7 +479,24 @@ SAME hex as `BRONZE_LETTER_TINT` — reused verbatim, not a new color)
 and `_draw_moon(..., darkened=True)` washes the WHOLE disc (lit and
 unlit halves alike — totality dims the full face) with a translucent
 bronze overlay (`ECLIPSE_MOON_DARK_COLOR`/`ECLIPSE_MOON_DARK_ALPHA`)
-over the normal phase render. Both glows scale their STRENGTH by the
+over the normal phase render.
+
+**LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18):** the bronze glow
+gains a thin TURQUOISE FRINGE at its OUTER edge — the real ozone-band
+color at the umbra's rim during totality. `draw_event_glow()` takes an
+optional `fringe_color` parameter (None for every other caller,
+unchanged): when given, it adds THREE extra gradient stops on top of
+the existing core/mid/edge triad — transparent → peak → transparent —
+straddling `ECLIPSE_LUNAR_FRINGE_STOP` (a fraction of the halo radius,
+`ECLIPSE_LUNAR_FRINGE_HALF_WIDTH` wide either side), inserted AFTER the
+bronze mid stop and BEFORE the fully-transparent edge stop so it reads
+as a separate ring rather than blending into the bronze core. The
+lunar eclipse call is the only one that passes
+`fringe_color=ECLIPSE_LUNAR_FRINGE_COLOR` (`#40E0D0`-family turquoise,
+`ECLIPSE_LUNAR_FRINGE_ALPHA` peak, scaled by the same magnitude
+`strength` as the bronze glow itself).
+
+Both glows scale their STRENGTH by the
 catalog MAGNITUDE via `eclipse_glow_strength(magnitude)` — linear
 between `ECLIPSE_GLOW_STRENGTH_MIN/MAX` over
 `ECLIPSE_MAGNITUDE_MIN/MAX`, clamped outside — a new optional `strength`

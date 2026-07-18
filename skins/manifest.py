@@ -182,11 +182,13 @@ class SkinDefinition:
     # `show_weekday_names` with the weekday bodies. `ArchetypeLayer`
     # reads THIS key exclusively for the figures' names.
     archetype_names: bool = True
-    # The optional abbreviated day (TUE, THU…) the Earth marker writes
-    # under its date label (owner: default OFF). A GENERAL Earth option
-    # since 2026-07-17 (moved to Design ▸ Earth) — it works in BOTH
-    # normal and archetype mode.
-    earth_weekday: bool = False
+    # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — FOUR
+    # exclusive Design ▸ Earth toggles, replacing the old show_earth_date/
+    # earth_weekday bool pair, `constants.EARTH_LABEL_MODES`): "off",
+    # "date" ("8 Jul"), "weekday" ("FRI"), "date_weekday" (date over the
+    # abbreviated weekday) or "full" (date over the YEAR). A GENERAL
+    # Earth option — works in BOTH normal and archetype mode.
+    earth_label: str = "date"
     solar_rotation: bool = True        # False -> Star/Aura/Umbra stand upright
     octa_slot: str = "time"            # South slot MODE (OCTA_SLOT_MODES)
     day_slot_style: str = "sign"       # the DAY slot badge's own style
@@ -231,8 +233,6 @@ class SkinDefinition:
                                        # transparency instead of palette hues
     show_seconds: bool = True          # the seconds hand (and its cadence)
     show_octa_slot: bool = False       # canon 2026-07-14: ONE slot only
-    show_earth_date: bool = True       # the date label ON the Earth marker
-                                       # (only draws from 540 px up anyway)
     show_weekday_names: bool = True    # the day-name text on the weekday
                                        # bodies (owner spec 2026-07-12:
                                        # its own switch under Theme ▸

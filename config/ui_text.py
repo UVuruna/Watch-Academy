@@ -262,8 +262,10 @@ UI_STRINGS: tuple[str, ...] = (
     # creature + the evangelist + the element (Fire/Water above, Earth in
     # the menu, Air new).
     "Air", "The Evangelist", "The Element",
-    # The Earth label trio (owner 2026-07-18): the third, combined mode.
-    "Full Date",
+    # The Earth label quartet (owner 2026-07-18, ROADMAP 15h): "Date &
+    # Weekday" is the OLD combined "Full Date" meaning, renamed now that
+    # a true Full Date (date + year) exists below.
+    "Date & Weekday", "Full Date",
     "Summer", "Autumn", "Winter", "Spring",
     "Summer Solstice", "Winter Solstice", "Spring Equinox", "Autumn Equinox",
     "June Solstice", "December Solstice", "March Equinox", "September Equinox",

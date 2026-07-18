@@ -119,6 +119,14 @@ DEEP_TIME_DB_FILENAME = "deep_time.sqlite"
 ERA_NOTATIONS = ("bce_ce", "bc_ad")
 ERA_NOTATION_TITLES = {"bce_ce": "BCE / CE", "bc_ad": "BC / AD"}
 
+# The Earth marker's label mode (owner 2026-07-18, ROADMAP 15h — the FOUR
+# exclusive Design ▸ Earth toggles, replacing the old show_earth_date/
+# earth_weekday bool pair): "off" (no label), "date" ("8 Jul"), "weekday"
+# ("FRI"), "date_weekday" (the date over the abbreviated weekday — the
+# OLD combined "Full Date" meaning) and "full" (the date over the YEAR,
+# the true Full Date, reusing the deep-travel year row's two-row shape).
+EARTH_LABEL_MODES = ("off", "date", "weekday", "date_weekday", "full")
+
 # Visibility Z modes (owner 2026-07-17, ROADMAP 15d; Settings z_mode):
 # "bottom" — the clock stays BELOW every window except the desktop
 # (WindowStaysOnBottomHint, the default); "top" — always ON TOP of

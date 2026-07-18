@@ -130,7 +130,7 @@ def test_display_choices_round_trip(store):
         archetype_names=False,
         pointer_saturation=0.4,
         ring_saturation=0.6,
-        earth_weekday=True,
+        earth_label="weekday",
         z_mode="top",
         solar_rotation=False,
         octa_slot="ascendant",
@@ -152,7 +152,6 @@ def test_display_choices_round_trip(store):
         colorful=False,
         show_seconds=False,
         show_octa_slot=False,
-        show_earth_date=False,
         language="sr-Latn",
         ring="MORPH",
         theme_metals={"greek": "gold", "norse": "silver"},
@@ -196,49 +195,71 @@ def test_display_choices_round_trip(store):
     assert migrated.info_slot_style == "bronze"
 
 
-def test_earth_weekday_migrates_from_the_old_key(store):
-    """Rename 2026-07-17: an older file's archetype_earth_day carries
-    over as earth_weekday; the new key wins when both are present. The
-    Date is turned OFF so the migrated Weekday survives the exclusivity
-    normalization (ROADMAP 15e: Date wins when both are on)."""
-    store.path.write_text(
-        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
-        ' "show_earth_date": false, "archetype_earth_day": true}',
-        encoding="utf-8",
-    )
-    assert store.load().earth_weekday is True
-    # A brand-new file with neither key keeps the default OFF.
-    store.path.write_text(
-        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
-        encoding="utf-8",
-    )
-    assert store.load().earth_weekday is False
-
-
-def test_earth_label_modes_survive_the_load(store):
-    """The Earth label trio (owner 2026-07-18, Date / Weekday / Full
-    Date): BOTH bools on is the valid FULL DATE mode now — the old 15e
-    date-wins normalization is retired, so all four combinations load
-    untouched."""
+def test_earth_label_migrates_from_the_old_bool_pair(store):
+    """Session 21-E (owner 2026-07-18, ROADMAP 15h): the old
+    show_earth_date/earth_weekday bool pair migrates onto the new
+    earth_label enum — T,F -> "date"; F,T -> "weekday"; T,T ->
+    "date_weekday" (the OLD combined "Full Date" meaning, before "full"
+    meant date+year); F,F -> "off". The pre-rename archetype_earth_day
+    key still feeds the weekday side when earth_weekday itself is
+    absent. The new earth_label key wins outright when present."""
     base = '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
     store.path.write_text(
-        base + ' "show_earth_date": true, "earth_weekday": true}',
+        base + ' "show_earth_date": true, "earth_weekday": false}',
         encoding="utf-8",
     )
-    both = store.load()
-    assert both.show_earth_date is True and both.earth_weekday is True
+    assert store.load().earth_label == "date"
     store.path.write_text(
         base + ' "show_earth_date": false, "earth_weekday": true}',
         encoding="utf-8",
     )
-    weekday = store.load()
-    assert weekday.show_earth_date is False and weekday.earth_weekday is True
+    assert store.load().earth_label == "weekday"
+    store.path.write_text(
+        base + ' "show_earth_date": true, "earth_weekday": true}',
+        encoding="utf-8",
+    )
+    assert store.load().earth_label == "date_weekday"
     store.path.write_text(
         base + ' "show_earth_date": false, "earth_weekday": false}',
         encoding="utf-8",
     )
-    neither = store.load()
-    assert neither.show_earth_date is False and neither.earth_weekday is False
+    assert store.load().earth_label == "off"
+    # A brand-new file with none of the old keys keeps the enum default.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    assert store.load().earth_label == "date"
+    # The pre-rename key still feeds the weekday side when earth_weekday
+    # itself is absent.
+    store.path.write_text(
+        base + ' "show_earth_date": false, "archetype_earth_day": true}',
+        encoding="utf-8",
+    )
+    assert store.load().earth_label == "weekday"
+    # The new key wins outright when present, regardless of the old pair.
+    store.path.write_text(
+        base + ' "show_earth_date": true, "earth_weekday": false,'
+        ' "earth_label": "full"}',
+        encoding="utf-8",
+    )
+    assert store.load().earth_label == "full"
+
+
+def test_earth_label_modes_round_trip(store):
+    """All FIVE earth_label values persist through save/load (owner
+    2026-07-18, ROADMAP 15h: Date / Weekday / Date & Weekday / Full
+    Date, plus off) and an unknown value raises visibly (Rule #1)."""
+    for mode in ("off", "date", "weekday", "date_weekday", "full"):
+        store.save(replace(Settings(), earth_label=mode))
+        assert store.load().earth_label == mode
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "earth_label": "bogus"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
 
 
 def test_z_mode_round_trip_and_default(store):

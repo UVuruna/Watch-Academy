@@ -262,7 +262,7 @@ def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
 
 def draw_event_glow(
     painter: QPainter, pos: QPointF, marker_radius: float, color: str,
-    strength: float = 1.0,
+    strength: float = 1.0, fringe_color: str | None = None,
 ) -> None:
     """Radial halo behind a year marker relocated to the ring band
     centerline during a season/moon/eclipse event window (owner rework
@@ -272,7 +272,16 @@ def draw_event_glow(
     RED/bronze for an eclipse (ROADMAP 15h item 11). `strength` (0..1)
     scales the core/mid alpha — the eclipse call scales it by the
     catalog MAGNITUDE (`eclipse_glow_strength`); every other caller
-    passes the default 1.0, unchanged from before."""
+    passes the default 1.0, unchanged from before.
+
+    `fringe_color` (LUNAR ECLIPSE OPTION C, owner sealed 2026-07-18): an
+    optional thin RING of a second color layered at the OUTER edge of
+    the glow — the ozone-band turquoise at the umbra's rim during
+    totality — three extra gradient stops (transparent -> peak ->
+    transparent) straddling `ECLIPSE_LUNAR_FRINGE_STOP`, added AFTER the
+    mid stop and BEFORE the fully-transparent edge so it reads as a
+    separate ring rather than a blend with the bronze core. None for
+    every other caller, unchanged."""
     halo = marker_radius * defaults.GLOW_RADIUS_SCALE
     gradient = QRadialGradient(pos, halo)
     core = QColor(color)
@@ -283,6 +292,16 @@ def draw_event_glow(
     edge.setAlphaF(0.0)
     gradient.setColorAt(0.0, core)
     gradient.setColorAt(defaults.GLOW_MID_STOP, mid)
+    if fringe_color is not None:
+        fringe_transparent = QColor(fringe_color)
+        fringe_transparent.setAlphaF(0.0)
+        fringe_peak = QColor(fringe_color)
+        fringe_peak.setAlphaF(defaults.ECLIPSE_LUNAR_FRINGE_ALPHA * strength)
+        stop = defaults.ECLIPSE_LUNAR_FRINGE_STOP
+        half_width = defaults.ECLIPSE_LUNAR_FRINGE_HALF_WIDTH
+        gradient.setColorAt(stop - half_width, fringe_transparent)
+        gradient.setColorAt(stop, fringe_peak)
+        gradient.setColorAt(stop + half_width, fringe_transparent)
     gradient.setColorAt(1.0, edge)
     painter.save()
     painter.setPen(Qt.PenStyle.NoPen)
@@ -2140,6 +2159,11 @@ class YearMarkerLayer(Layer):
                     ctx.radius * spec.moon_scale * factor,
                     color,
                     strength,
+                    fringe_color=(
+                        defaults.ECLIPSE_LUNAR_FRINGE_COLOR
+                        if lunar_eclipse is not None
+                        else None
+                    ),
                 )
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
@@ -2223,11 +2247,11 @@ class YearMarkerLayer(Layer):
             painter.restore()
             if (
                 2 * ctx.radius >= defaults.FULL_TEXT_MIN_DIAMETER
-                and (ctx.skin.show_earth_date or ctx.skin.earth_weekday)
+                and ctx.skin.earth_label != "off"
             ):
-                # The Earth label — the date OR the abbreviated weekday
-                # (owner 2026-07-17, ROADMAP 15e: the two are EXCLUSIVE) —
-                # never fits below the full-text threshold anyway.
+                # The Earth label — FOUR exclusive modes (owner
+                # 2026-07-18: Date / Weekday / Date & Weekday / Full
+                # Date) — never fits below the full-text threshold anyway.
                 self._draw_earth_label(painter, ctx, pos, size)
         else:
             color = spec.day_color if ctx.tick.is_daylight else spec.night_color
@@ -2241,18 +2265,26 @@ class YearMarkerLayer(Layer):
             painter.drawEllipse(pos, size / 2, size / 2)
 
     def _draw_earth_label(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
-        """The Earth marker's text — THREE modes (owner 2026-07-18, the
-        accepted trio): WEEKDAY alone writes "FRI" centered; DATE alone
-        writes "8 Jul" centered; FULL DATE (both switches on) writes the
-        date with the abbreviated weekday BENEATH it as a two-row label.
-        During a DEEP travel (Session 16, deep proxy frame active) the
-        YEAR row OUTRANKS the weekday — far from the present the marker
-        must say WHEN — so Full Date degrades to the date+year pair."""
+        """The Earth marker's text — FOUR exclusive modes (owner
+        2026-07-18, the Design ▸ Earth submenu: Date / Weekday / Date &
+        Weekday / Full Date), stored as `skin.earth_label`: "weekday"
+        writes "FRI" centered (must work without the date); "date"
+        writes "8 Jul" centered; "date_weekday" stacks the date over the
+        abbreviated weekday (the OLD combined "Full Date" meaning,
+        renamed); "full" stacks the date over the YEAR — the TRUE Full
+        Date, reusing `display_year` (already un-shifts a deep-travel
+        proxy frame), the same two-row shape the deep-travel year already
+        uses on this marker. During a DEEP travel (Session 16, deep proxy
+        frame active) the YEAR row OUTRANKS the weekday in "date_weekday"
+        mode — far from the present the marker must say WHEN; "full"
+        mode already shows the year, so a deep travel is a no-op
+        difference there."""
         bold_font = QFont()
         bold_font.setBold(True)
         deep_travel = ctx.day.deep_cycles != 0
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
-        if ctx.skin.earth_weekday and not ctx.skin.show_earth_date:
+        mode = ctx.skin.earth_label
+        if mode == "weekday":
             # Weekday ALONE — a single centered row (owner: "FRI" must work
             # without the date). Uses the date font size (it is the only
             # row, so it gets the full label size).
@@ -2266,16 +2298,18 @@ class YearMarkerLayer(Layer):
                 painter, pos, constants.WEEKDAY_LABELS[today], bold_font
             )
             return
-        # Date — alone, or over a second row: the deep-travel YEAR
-        # (priority), else the Full Date weekday.
+        # "date", "date_weekday" and "full" all lead with the date row.
         text = f"{ctx.day.local_date.day} {ctx.day.local_date:%b}"
         bold_font.setPixelSize(
             max(defaults.BODY_LABEL_MIN_PX, round(size * defaults.EARTH_DATE_TEXT_SIZE))
         )
-        if deep_travel:
+        if mode == "full":
             second_row = display_year(ctx)
-        elif ctx.skin.earth_weekday:
-            second_row = constants.WEEKDAY_LABELS[today]
+        elif mode == "date_weekday":
+            second_row = (
+                display_year(ctx) if deep_travel
+                else constants.WEEKDAY_LABELS[today]
+            )
         else:
             second_row = None
         if second_row is None:

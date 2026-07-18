@@ -86,10 +86,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   undisturbed. Then the emoji-fronted top level:
   🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
   style, Theme background / Classic black (owner A/B spec 2026-07-15)
-  — | Hands, Earth — with the label TRIO Date / Weekday / Full Date
-  (owner 2026-07-18, the accepted names: three exclusive toggles over
-  the two stored bools via `_set_earth_label`/`_sync_earth_label_toggles`;
-  full = both on, all three may be off) — | Size), 🥇 1ˢᵗ Slot,
+  — | Hands, Earth — with the label QUARTET Date / Weekday / Date &
+  Weekday / Full Date (owner 2026-07-18, ROADMAP 15h: four exclusive
+  toggles over the single `earth_label` enum via
+  `_set_earth_label`/`_sync_earth_label_toggles` — "Date & Weekday" is
+  the OLD combined "Full Date" meaning, renamed now that a true Full
+  Date exists — date over the YEAR; all four may be off) — | Size),
+  🥇 1ˢᵗ Slot,
   🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
   📜 Legend, 🔆 Solar rotation, 🎭 Archetype,
   🖱️ Click-through | ⚙️ Settings…,
@@ -224,10 +227,12 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Display checkbox; `show_weekday_names` dropped out of `_set_display_
   choice`'s re-gating list along with the twin (nothing else needed
   resyncing against it). The Earth
-  Date and Weekday toggles live in Design ▸ Earth as GENERAL, MUTUALLY
-  EXCLUSIVE options (`show_earth_date` / `earth_weekday`, owner 2026-07-17
-  slika 10 + ROADMAP 15e — both work in either mode, gated by the dial
-  size; `_toggle_earth_label` clears the sibling when one is checked).
+  label QUARTET (Date / Weekday / Date & Weekday / Full Date) lives in
+  Design ▸ Earth as a GENERAL, four-way EXCLUSIVE option (the single
+  `earth_label` enum, owner 2026-07-17 slika 10 + 2026-07-18 ROADMAP
+  15h — works in either mode, gated by the dial size;
+  `_set_earth_label`/`_sync_earth_label_toggles` keep exactly one
+  member checked, or none).
   `_refresh_menu_gating`
   grays the Archetype toggle
   where no archetype exists (Aurora, Calendar, Pointer element off)
@@ -245,7 +250,7 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   `_install_skin()` (fresh compositor, day context kept) and persist;
   `apply_display_settings(skin, settings)` (pure, testable) overlays
   the display choices, opacity overrides and the custom palette —
-  including `archetype_mode`/`earth_weekday` (owner 2026-07-16/17;
+  including `archetype_mode`/`earth_label` (owner 2026-07-16/18;
   while the mode is active a seated small-seconds slot no longer
   silences the big hand, since the slots are overridden off).
   `_install_skin()` also re-reserves the window margin from the LIVE

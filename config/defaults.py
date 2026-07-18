@@ -1516,6 +1516,15 @@ ECLIPSE_SOLAR_ART = (
 )                                            # source-mapped by paths.art_file
 ECLIPSE_MOON_DARK_COLOR = BRONZE_LETTER_TINT
 ECLIPSE_MOON_DARK_ALPHA = 0.55               # overlay strength over the disc
+# LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
+# bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —
+# the real ozone-band color at the umbra's rim during totality. A
+# turquoise ring, not a flat teal, so it reads distinctly against the
+# warm bronze on the dark dial.
+ECLIPSE_LUNAR_FRINGE_COLOR = "#40E0D0"
+ECLIPSE_LUNAR_FRINGE_STOP = 0.92              # gradient position (0..1 of halo radius)
+ECLIPSE_LUNAR_FRINGE_HALF_WIDTH = 0.05        # ring thickness either side of the stop
+ECLIPSE_LUNAR_FRINGE_ALPHA = 0.85             # peak alpha before the magnitude scale
 # Glow STRENGTH scales with the catalog MAGNITUDE (owner idea, ROADMAP
 # 15h item 11): magnitude 0 (grazing partial) maps to the MIN fraction
 # of the normal glow alpha, magnitude at/above MAX (a comfortable

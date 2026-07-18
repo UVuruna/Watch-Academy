@@ -70,11 +70,13 @@ class Settings:
     # while the weekday Names switches (`show_weekday_names`,
     # `show_info_slot_names`) stay untouched for the weekday bodies.
     archetype_names: bool = True
-    # The optional abbreviated weekday on the Earth marker under its date
-    # (owner: default OFF). A GENERAL Earth option since 2026-07-17 (Design
-    # ▸ Earth) — works in BOTH normal and archetype mode. Renamed from
-    # archetype_earth_day (load migrates the old key).
-    earth_weekday: bool = False
+    # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — the
+    # Design ▸ Earth submenu's FOUR exclusive toggles: Date / Weekday /
+    # Date & Weekday / Full Date, `constants.EARTH_LABEL_MODES`).
+    # Replaces the old show_earth_date/earth_weekday bool pair (Rule #6 —
+    # load() migrates an older file's pair, and the pre-rename
+    # archetype_earth_day key, onto this single enum).
+    earth_label: str = "date"
     solar_rotation: bool = True
     octa_slot: str = "time"             # South slot MODE
     day_slot_style: str = "sign"        # the DAY slot badge's own style
@@ -114,7 +116,6 @@ class Settings:
     colorful: bool = True               # off -> white Aura instead of hues
     show_seconds: bool = True
     show_octa_slot: bool = False        # canon 2026-07-14: ONE slot only
-    show_earth_date: bool = True        # the date label on the Earth marker
     show_weekday_names: bool = True     # the day-name text on the bodies
     show_info_slot_names: bool = True   # the day-name text on the info
                                         # slot's second body (owner bug
@@ -327,13 +328,7 @@ class SettingsStore:
                 show_era_suffix=_load_bool(raw, "show_era_suffix", False),
                 archetype_mode=_load_bool(raw, "archetype_mode", False),
                 archetype_names=_load_bool(raw, "archetype_names", True),
-                # Renamed 2026-07-17: the old archetype_earth_day value
-                # carries over as the default when the new key is absent
-                # (external user data migration, not an API shim).
-                earth_weekday=_load_bool(
-                    raw, "earth_weekday",
-                    _load_bool(raw, "archetype_earth_day", False),
-                ),
+                earth_label=_load_earth_label(raw),
                 solar_rotation=_load_bool(raw, "solar_rotation", True),
                 legend=_load_bool(raw, "legend", True),
                 show_earth=_load_bool(raw, "show_earth", True),
@@ -345,7 +340,6 @@ class SettingsStore:
                 # Canon (owner 2026-07-14): ONE slot out of the box.
                 show_octa_slot=_load_bool(raw, "show_octa_slot", False),
                 show_third_slot=_load_bool(raw, "show_third_slot", False),
-                show_earth_date=_load_bool(raw, "show_earth_date", True),
                 show_weekday_names=_load_bool(raw, "show_weekday_names", True),
                 show_info_slot_names=_load_bool(
                     raw, "show_info_slot_names", True
@@ -432,10 +426,6 @@ class SettingsStore:
                 palettes=_load_palettes(raw.get("palettes", {})),
                 **choices,
             )
-            # EARTH LABEL: both-on is the FULL DATE mode now (owner
-            # 2026-07-18, the accepted trio Date / Weekday / Full Date) —
-            # the 15e date-wins normalization is retired; all four bool
-            # combinations are valid states (off / date / weekday / full).
             return loaded
         except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
             raise SettingsCorruptError(self._path, exc) from exc
@@ -460,7 +450,7 @@ class SettingsStore:
             "calendar_lighting": settings.calendar_lighting,
             "archetype_mode": settings.archetype_mode,
             "archetype_names": settings.archetype_names,
-            "earth_weekday": settings.earth_weekday,
+            "earth_label": settings.earth_label,
             "z_mode": settings.z_mode,
             "solar_rotation": settings.solar_rotation,
             "octa_slot": settings.octa_slot,
@@ -487,7 +477,6 @@ class SettingsStore:
             "colorful": settings.colorful,
             "show_seconds": settings.show_seconds,
             "show_octa_slot": settings.show_octa_slot,
-            "show_earth_date": settings.show_earth_date,
             "show_weekday_names": settings.show_weekday_names,
             "show_info_slot_names": settings.show_info_slot_names,
             "moon_hidden_alpha": settings.moon_hidden_alpha,
@@ -611,6 +600,35 @@ def _load_bool(raw: dict, key: str, default: bool) -> bool:
     value = raw.get(key, default)
     if not isinstance(value, bool):
         raise ValueError(f"{key} {value!r} is not true/false")
+    return value
+
+
+def _load_earth_label(raw: dict) -> str:
+    """The Earth marker's label enum (owner 2026-07-18, ROADMAP 15h):
+    the new `earth_label` key wins outright when present; otherwise it
+    is derived from the OLD bool pair (`show_earth_date`/`earth_weekday`,
+    the latter falling back to the pre-rename `archetype_earth_day`
+    key) — T,F -> "date"; F,T -> "weekday"; T,T -> "date_weekday" (the
+    old combined "Full Date" meaning, before "full" meant date+year);
+    F,F -> "off". External user data migration, not an API shim
+    (Rule #6 — the old bool pair no longer exists anywhere else)."""
+    if "earth_label" in raw:
+        value = str(raw["earth_label"])
+    else:
+        old_date = _load_bool(raw, "show_earth_date", True)
+        old_weekday = _load_bool(
+            raw, "earth_weekday", _load_bool(raw, "archetype_earth_day", False)
+        )
+        if old_date and old_weekday:
+            value = "date_weekday"
+        elif old_date:
+            value = "date"
+        elif old_weekday:
+            value = "weekday"
+        else:
+            value = "off"
+    if value not in constants.EARTH_LABEL_MODES:
+        raise ValueError(f"earth_label {value!r} unknown")
     return value
 
 

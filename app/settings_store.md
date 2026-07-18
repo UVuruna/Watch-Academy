@@ -55,12 +55,16 @@ Saturation slider, independent of `pointer_saturation`: scales the ring
 plate's and its letter overlay's HSV saturation, applied AFTER the
 ring_tint recolor, in `render.layers.RingLayer`; the hands, Umbra and
 subdial plate — which DO follow `ring_tint` — are untouched by this
-one), `earth_weekday` (False — the abbreviated weekday on the
-Earth marker, a GENERAL Earth option since 2026-07-17 working in both
-modes; renamed from `archetype_earth_day`, which the load migrates).
-`show_earth_date` and `earth_weekday` are MUTUALLY EXCLUSIVE (owner
-2026-07-17, ROADMAP 15e): `load()` normalizes a both-on file (hand-edited
-or pre-exclusivity) so the DATE wins and the weekday clears.
+one), `earth_label` (str, "date" default — owner 2026-07-18, ROADMAP
+15h: the Earth marker's label MODE, one of `constants.EARTH_LABEL_MODES`
+("off" | "date" | "weekday" | "date_weekday" | "full"), a GENERAL Earth
+option working in both normal and archetype mode. Replaces the old
+`show_earth_date`/`earth_weekday` bool pair (Rule #6 — deleted
+everywhere); `_load_earth_label()` migrates an older file's pair (and
+the pre-rename `archetype_earth_day` key) onto the enum — T,F → "date";
+F,T → "weekday"; T,T → "date_weekday" (the OLD combined "Full Date"
+meaning); F,F → "off" — the new `earth_label` key wins outright when
+present).
 `z_mode` ("bottom" | "normal" | "top" — the visibility Z mode, owner
 2026-07-17 ROADMAP 15e: below all windows / a plain window / always on
 top),

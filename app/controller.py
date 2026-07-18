@@ -527,9 +527,8 @@ def apply_display_settings(skin, settings: Settings):
         and not (_slot_seconds(settings) and not archetype_on),
         archetype_mode=settings.archetype_mode,
         archetype_names=settings.archetype_names,
-        earth_weekday=settings.earth_weekday,
+        earth_label=settings.earth_label,
         show_octa_slot=settings.show_octa_slot,
-        show_earth_date=settings.show_earth_date,
         show_weekday_names=settings.show_weekday_names,
         show_info_slot_names=settings.show_info_slot_names,
         ring_tint=settings.ring_tint,
@@ -1181,45 +1180,30 @@ class AppController(QObject):
             # needs no special re-gating beyond the ordinary slot gating.
             self._refresh_menu_gating()
 
-    # The Earth label trio (owner 2026-07-18, the accepted names Date /
-    # Weekday / Full Date): each menu option maps onto the TWO stored
-    # bools — full = both on, so old settings files need no migration.
-    _EARTH_LABEL_MODES = {
-        "date": (True, False),
-        "weekday": (False, True),
-        "full": (True, True),
-    }
-
     def _set_earth_label(self, mode: str, checked: bool) -> None:
-        """THREE mutually exclusive Earth label options: checking one
-        unchecks the others, unchecking the active one turns the label
-        off entirely. One skin install for the whole change."""
-        date_on, weekday_on = (
-            self._EARTH_LABEL_MODES[mode] if checked else (False, False)
-        )
-        changed = (
-            self._settings.show_earth_date != date_on
-            or self._settings.earth_weekday != weekday_on
-        )
-        if changed:
-            self._settings = replace(
-                self._settings,
-                show_earth_date=date_on, earth_weekday=weekday_on,
-            )
+        """FOUR mutually exclusive Earth label options (owner 2026-07-18,
+        ROADMAP 15h: Date / Weekday / Date & Weekday / Full Date, stored
+        as the single `earth_label` enum): checking one selects it
+        outright (Qt's exclusive group unchecks the others), unchecking
+        the active one turns the label off entirely. One skin install
+        for the whole change."""
+        new_mode = mode if checked else "off"
+        if self._settings.earth_label != new_mode:
+            self._settings = replace(self._settings, earth_label=new_mode)
             self._install_skin(build_skin(self._settings))
         self._sync_earth_label_toggles()
 
     def _sync_earth_label_toggles(self) -> None:
-        """Mirror the three checkboxes onto the stored pair without
+        """Mirror the four checkboxes onto the stored enum without
         re-entering the handler."""
-        state = (self._settings.show_earth_date, self._settings.earth_weekday)
         for toggle, mode in (
             (self._earth_date_toggle, "date"),
             (self._earth_weekday_toggle, "weekday"),
+            (self._earth_date_weekday_toggle, "date_weekday"),
             (self._earth_full_toggle, "full"),
         ):
             toggle.blockSignals(True)
-            toggle.setChecked(state == self._EARTH_LABEL_MODES[mode])
+            toggle.setChecked(self._settings.earth_label == mode)
             toggle.blockSignals(False)
         self._flush_position()
 
@@ -1597,11 +1581,13 @@ class AppController(QObject):
             lambda value: self._set_display_choice("earth_style", value),
         )
         earth_menu.addSeparator()
-        # The date label ON the Earth marker (owner spec): its own
-        # switch, grayed out below the size that can draw it at all.
+        # The Earth label — FOUR exclusive modes (owner 2026-07-18,
+        # ROADMAP 15h): Date / Weekday / Date & Weekday / Full Date, all
+        # stored as the single `earth_label` enum; every entry is grayed
+        # out below the size that can draw a label at all.
         self._earth_date_toggle = self._add_toggle(
             earth_menu, tr("Date"),
-            settings.show_earth_date and not settings.earth_weekday,
+            settings.earth_label == "date",
             lambda checked: self._set_earth_label("date", checked),
             tr(
                 "The date written on the Earth marker (shown from "
@@ -1611,12 +1597,12 @@ class AppController(QObject):
         self._earth_date_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        # The abbreviated weekday on the Earth marker (owner 2026-07-17,
-        # slika 10): a GENERAL Earth option, working in BOTH normal and
-        # archetype mode. Same size gate as the Date.
+        # The abbreviated weekday alone (owner 2026-07-17, slika 10): a
+        # GENERAL Earth option, working in BOTH normal and archetype
+        # mode. Same size gate as the Date.
         self._earth_weekday_toggle = self._add_toggle(
             earth_menu, tr("Weekday"),
-            settings.earth_weekday and not settings.show_earth_date,
+            settings.earth_label == "weekday",
             lambda checked: self._set_earth_label("weekday", checked),
             tr(
                 "The abbreviated day (TUE, THU…) on the Earth marker."
@@ -1625,16 +1611,29 @@ class AppController(QObject):
         self._earth_weekday_toggle.setEnabled(
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
-        # FULL DATE (owner 2026-07-18, the accepted trio): date + month
-        # + abbreviated weekday together — the third exclusive option,
-        # stored as both bools on.
+        # DATE & WEEKDAY (owner 2026-07-18): the date with the
+        # abbreviated weekday beneath it — this is the OLD "Full Date"
+        # meaning, renamed now that a true Full Date exists below.
+        self._earth_date_weekday_toggle = self._add_toggle(
+            earth_menu, tr("Date & Weekday"),
+            settings.earth_label == "date_weekday",
+            lambda checked: self._set_earth_label("date_weekday", checked),
+            tr(
+                "The date with the abbreviated day beneath it."
+            ),
+        )
+        self._earth_date_weekday_toggle.setEnabled(
+            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
+        )
+        # FULL DATE (owner 2026-07-18, the true Full Date): the date
+        # with the YEAR beneath it — the same two-row shape the
+        # deep-travel year row already uses on this marker.
         self._earth_full_toggle = self._add_toggle(
             earth_menu, tr("Full Date"),
-            settings.show_earth_date and settings.earth_weekday,
+            settings.earth_label == "full",
             lambda checked: self._set_earth_label("full", checked),
             tr(
-                "The date with the abbreviated day beneath it — "
-                "everything on the Earth marker."
+                "The date with the year beneath it."
             ),
         )
         self._earth_full_toggle.setEnabled(
@@ -2708,14 +2707,14 @@ class AppController(QObject):
         if diameter == self._settings.diameter:
             return
         self._settings = replace(self._settings, diameter=diameter)
-        # The Earth date and weekday switches only apply where the label
-        # can draw (owner 2026-07-17: the weekday joined the Earth menu).
-        self._earth_date_toggle.setEnabled(
-            diameter >= defaults.FULL_TEXT_MIN_DIAMETER
-        )
-        self._earth_weekday_toggle.setEnabled(
-            diameter >= defaults.FULL_TEXT_MIN_DIAMETER
-        )
+        # The four Earth label switches only apply where the label can
+        # draw (owner 2026-07-17/18: the whole trio-now-quartet joined
+        # the Earth menu, gated by the same size threshold).
+        for toggle in (
+            self._earth_date_toggle, self._earth_weekday_toggle,
+            self._earth_date_weekday_toggle, self._earth_full_toggle,
+        ):
+            toggle.setEnabled(diameter >= defaults.FULL_TEXT_MIN_DIAMETER)
         # Keep the compact menu slider in step with a PRESET pick (owner
         # ROADMAP 15h item 12) — setValue alone never fires
         # sliderReleased, so this cannot re-enter _set_diameter.
