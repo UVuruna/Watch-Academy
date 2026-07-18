@@ -6,7 +6,8 @@ the Trio *pointer*, but the same three names), the six **Seasons**
 (the four astronomical seasons plus the tropics' Wet/Dry pair), the
 three **Turning Points** (the two solstices plus one shared Equinox
 badge), and the four OPTIONAL **Meteorological** twins. Same house
-rules as [Virtue, Sin and Mood Prompts](virtue_sin_mood_prompts.md):
+rules as [Virtue](../emblem/virtue_prompts.md), [Sin](../emblem/sin_prompts.md)
+and [Mood Prompts](../emblem/mood_prompts.md):
 allegorical cameo badges, concrete objects and scenes, NO lettering
 anywhere in the image, circular, isolated on white background. Paste
 one prompt at a time; generate a whole family in one chat session so

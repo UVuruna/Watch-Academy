@@ -1,4 +1,4 @@
-# The Bible Theme — Stained-Glass Prompts (Gemini)
+﻿# The Bible Theme — Stained-Glass Prompts (Gemini)
 
 Owner brief (2026-07-12): "is there room for a BIBLE theme, Old and New
 Testament, find the 7-8 figures for the week; Sunday can be God himself
@@ -14,7 +14,7 @@ does. Figures are proper names, not doctrines.
 ## 1. The Day Mapping
 
 Colors, hour-moods, virtues and vices below are read straight off
-[SYMBOLISM.md](../SYMBOLISM.md)'s six-arms and virtue tables — they
+[SYMBOLISM.md](../../../SYMBOLISM.md)'s six-arms and virtue tables — they
 belong to the BODY, not to whichever religion currently sits on that
 day, so the 2026-07-12 religion remap does not move them.
 
@@ -189,7 +189,7 @@ enamel (Chinese). Glass that light passes THROUGH, rather than a
 surface light bounces off, is the one register nothing else occupies.
 
 It is also the one style with a direct line back to the dial's own
-founding metaphor. [SYMBOLISM.md's "Paint and Light" section](../SYMBOLISM.md#paint-and-light)
+founding metaphor. [SYMBOLISM.md's "Paint and Light" section](../../../SYMBOLISM.md#paint-and-light)
 already frames the whole cosmology as two readings of white light
 split into color — pigment before Newton, the prism's spectrum after.
 A stained-glass window is the THIRD reading of that exact idea, and

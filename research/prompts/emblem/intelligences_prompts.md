@@ -10,8 +10,9 @@ instead of a bolt-on list. **The Wheel of Moods** is a single medallion
 dial's own eight-mood wheel side by side with the Greek humors and
 Plutchik's wheel of emotions in the same article.
 
-Same house rules as [Virtue, Sin and Mood Prompts](virtue_sin_mood_prompts.md)
-and [Season & Trinity Badge Prompts](season_trinity_prompts.md):
+Same house rules as [Virtue](virtue_prompts.md), [Sin](sin_prompts.md)
+and [Mood Prompts](mood_prompts.md) and
+[Season & Trinity Badge Prompts](../badge/season_trinity_prompts.md):
 allegorical cameo badges, concrete objects and scenes, NO lettering
 anywhere in the image, isolated on white background. Paste one prompt
 at a time; generate each set in one chat session so it stays visually
@@ -180,7 +181,7 @@ three-way comparison (the Greek humors, Plutchik's wheel of emotions,
 and the dial's own wheel). Same silver-sundial family as the existing
 per-day Mood badges (`assets/emblem/mood/Joy.png` etc. — see the "Moods —
 silver sundial cameo" family description in
-[Virtue, Sin and Mood Prompts](virtue_sin_mood_prompts.md)): polished
+[Mood Prompts](mood_prompts.md)): polished
 silver cameo, sundial hour-tick motif, the hour's own light.
 
 Hues read directly from `config/defaults.py` `PALETTE_PRESETS[("hexa",

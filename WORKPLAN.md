@@ -95,7 +95,7 @@ Encyclopedia; TWO-ROW articles; Trinity center Eye / Hearth; works
 under Time Travel. The biggest remaining feature — render + data +
 menu + encyclopedia at once. (Fable: cross-system.)
 
-### Session 6 — Archetype articles wave → **Opus** (writers)
+### Session 6 — Archetype articles wave → **Opus** (writers) — DONE
 **Say:** "Radi Sesiju 6 iz WORKPLAN.md — dvoredni artikli za svih 7
 arhetipova."
 **Reads:** CANON.md IN FULL (persons, natures, quote anchors, the
@@ -136,7 +136,7 @@ into The Wider Pantheon gallery group and the translation corpus
 Set/Baldur/Crnobog folded in; `test_wider_pantheon_topics` pins
 coverage/structure/graceful art.
 
-### Session 9 — Mechanical sweep → **Haiku** (Sonnet where judgment is needed)
+### Session 9 — Mechanical sweep → **Haiku** (Sonnet where judgment is needed) — DONE
 **Say:** "Radi Sesiju 9 iz WORKPLAN.md — mehanički prolaz."
 **Reads:** README.md navigation chain; `research/build_roster.py`.
 **Delivers:** build_roster.py pantheon + glass columns and ROSTER.md
@@ -220,7 +220,7 @@ small icons); the on-dial ECLIPSE DISPLAY per the owner's pick from
 the brainstorm (ROADMAP item 12, display options). ΔT honesty
 strings in the hovers at deep-time extremes.
 
-### Session 17 — the Observatory → **Opus** (owner tier correction 2026-07-17: Fable only for truly cross-system novel work)
+### Session 17 — the Observatory → **Opus** (owner tier correction 2026-07-17: Fable only for truly cross-system novel work) — DONE
 **Say:** "Radi Sesiju 17 iz WORKPLAN.md."
 **Reads:** ROADMAP queue item 15 (the charts list);
 `research/ephemeris/season_halves.json` + `eclipses_summary.json`;

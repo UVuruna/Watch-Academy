@@ -2,7 +2,7 @@
 
 **GENERATED — do not edit by hand.** Regenerate with `python research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
 
-_Last generated: 2026-07-16_
+_Last generated: 2026-07-18_
 
 ## The Position System — seat archetypes
 
@@ -48,57 +48,57 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 ### Planets Art (`planets_art`)
 
-| Seat | Day | Figure | File | Gemini | ChatGPT |
-|---|---|---|---|---|---|
-| sun | Sunday | Sun | `sun` | ✔ | — |
-| moon | Monday | Moon | `moon` | ✔ | — |
-| mars | Tuesday | Mars | `mars` | ✔ | — |
-| mercury | Wednesday | Mercury | `mercury` | ✔ | — |
-| jupiter | Thursday | Jupiter | `jupiter` | ✔ | — |
-| venus | Friday | Venus | `venus` | ✔ | — |
-| saturn | Saturday | Saturn | `saturn` | ✔ | — |
-| dual | Sunday | Sun / Eclipsed Sun | `sun_eclipse` | ✔ | — |
+| Seat | Day | Figure | File | Gemini | ChatGPT | Colored G | Colored C |
+|---|---|---|---|---|---|---|---|
+| sun | Sunday | Sun | `sun` | ✔ | — | — | — |
+| moon | Monday | Moon | `moon` | ✔ | — | — | — |
+| mars | Tuesday | Mars | `mars` | ✔ | — | — | — |
+| mercury | Wednesday | Mercury | `mercury` | ✔ | — | — | — |
+| jupiter | Thursday | Jupiter | `jupiter` | ✔ | — | — | — |
+| venus | Friday | Venus | `venus` | ✔ | — | — | — |
+| saturn | Saturday | Saturn | `saturn` | ✔ | — | — | — |
+| dual | Sunday | Sun / Eclipsed Sun | `sun_eclipse` | ✔ | — | n/a | n/a |
 
 ### Greek gods (`greek`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT | Colored G | Colored C |
 |---|---|---|---|---|---|---|---|
-| sun | Sunday | Helios (Ἥλιος) | `Helios` | ✔ | — | ✔ | — |
-| moon | Monday | Selene (Σελήνη) | `Selene` | ✔ | — | ✔ | — |
-| mars | Tuesday | Ares (Ἄρης) | `Ares` | ✔ | — | ✔ | — |
-| mercury | Wednesday | Hermes (Ἑρμῆς) | `Hermes` | ✔ | — | ✔ | — |
-| jupiter | Thursday | Zeus (Ζεύς) | `Zeus` | ✔ | — | ✔ | — |
-| venus | Friday | Aphrodite (Ἀφροδίτη) | `Aphrodite` | ✔ | — | ✔ | — |
-| saturn | Saturday | Cronus (Κρόνος) | `Cronus` | ✔ | — | ✔ | — |
-| dual | Sunday | Helios / Phaethon | `Phaethon` | ✔ | — | ✔ | — |
+| sun | Sunday | Helios (Ἥλιος) | `Helios` | ✔ | ✔ | ✔ | ✔ |
+| moon | Monday | Selene (Σελήνη) | `Selene` | ✔ | ✔ | ✔ | ✔ |
+| mars | Tuesday | Ares (Ἄρης) | `Ares` | ✔ | ✔ | ✔ | ✔ |
+| mercury | Wednesday | Hermes (Ἑρμῆς) | `Hermes` | ✔ | ✔ | ✔ | ✔ |
+| jupiter | Thursday | Zeus (Ζεύς) | `Zeus` | ✔ | ✔ | ✔ | ✔ |
+| venus | Friday | Aphrodite (Ἀφροδίτη) | `Aphrodite` | ✔ | ✔ | ✔ | ✔ |
+| saturn | Saturday | Cronus (Κρόνος) | `Cronus` | ✔ | ✔ | ✔ | ✔ |
+| dual | Sunday | Helios / Phaethon | `Phaethon` | ✔ | ✔ | ✔ | ✔ |
 | ninth | — | Hades | `hades` | — | — | — | — |
 
 ### Norse gods (`norse`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT | Colored G | Colored C |
 |---|---|---|---|---|---|---|---|
-| sun | Sunday | Sól | `Sol` | ✔ | — | ✔ | — |
-| moon | Monday | Máni | `Mani` | ✔ | — | ✔ | — |
-| mars | Tuesday | Tyr (Týr) | `Tyr` | ✔ | — | ✔ | — |
-| mercury | Wednesday | Odin (Óðinn) | `Odin` | ✔ | — | ✔ | — |
-| jupiter | Thursday | Thor (Þórr) | `Thor` | ✔ | — | ✔ | — |
-| venus | Friday | Freya (Freyja) | `Freya` | ✔ | — | ✔ | — |
-| saturn | Saturday | Loki | `Loki` | ✔ | — | ✔ | — |
-| dual | Sunday | Sól / Skoll | `Skoll` | ✔ | — | ✔ | — |
+| sun | Sunday | Sól | `Sol` | ✔ | ✔ | ✔ | ✔ |
+| moon | Monday | Máni | `Mani` | ✔ | ✔ | ✔ | ✔ |
+| mars | Tuesday | Tyr (Týr) | `Tyr` | ✔ | ✔ | ✔ | ✔ |
+| mercury | Wednesday | Odin (Óðinn) | `Odin` | ✔ | ✔ | ✔ | ✔ |
+| jupiter | Thursday | Thor (Þórr) | `Thor` | ✔ | ✔ | ✔ | ✔ |
+| venus | Friday | Freya (Freyja) | `Freya` | ✔ | ✔ | ✔ | ✔ |
+| saturn | Saturday | Loki | `Loki` | ✔ | ✔ | ✔ | ✔ |
+| dual | Sunday | Sól / Skoll | `Skoll` | ✔ | ✔ | ✔ | ✔ |
 | ninth | — | Baldur | `baldur` | — | — | — | — |
 
 ### Egyptian gods (`egypt`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Ra | `ra` | ✔ | — |
-| moon | Monday | Khonsu | `khonsu` | ✔ | — |
-| mars | Tuesday | Montu | `montu` | ✔ | — |
-| mercury | Wednesday | Thoth | `thoth` | ✔ | — |
-| jupiter | Thursday | Amun | `amun` | ✔ | — |
-| venus | Friday | Hathor | `hathor` | ✔ | — |
-| saturn | Saturday | Osiris | `osiris` | ✔ | — |
-| dual | Sunday | Ra / Afu-Ra | `afu_ra` | ✔ | — |
+| sun | Sunday | Ra | `ra` | ✔ | ✔ |
+| moon | Monday | Khonsu | `khonsu` | ✔ | ✔ |
+| mars | Tuesday | Montu | `montu` | ✔ | ✔ |
+| mercury | Wednesday | Thoth | `thoth` | ✔ | ✔ |
+| jupiter | Thursday | Amun | `amun` | ✔ | ✔ |
+| venus | Friday | Hathor | `hathor` | ✔ | ✔ |
+| saturn | Saturday | Osiris | `osiris` | ✔ | ✔ |
+| dual | Sunday | Ra / Afu-Ra | `afu_ra` | ✔ | ✔ |
 | ninth | — | Set | `set` | — | — |
 
 ### Slavic gods (`slavic`)
@@ -119,15 +119,15 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Gold | `gold` | ✔ | — |
-| moon | Monday | Silver | `silver` | ✔ | — |
-| mars | Tuesday | Iron | `iron` | ✔ | — |
-| mercury | Wednesday | Quicksilver | `mercury` | ✔ | — |
-| jupiter | Thursday | Tin | `tin` | ✔ | — |
-| venus | Friday | Copper | `copper` | ✔ | — |
-| saturn | Saturday | Lead | `lead` | ✔ | — |
-| dual | Sunday | Gold / Raw Ore | `ore` | ✔ | — |
-| ninth | — | The Philosopher's Stone | `stone` | — | — |
+| sun | Sunday | Gold | `gold` | ✔ | ✔ |
+| moon | Monday | Silver | `silver` | ✔ | ✔ |
+| mars | Tuesday | Iron | `iron` | ✔ | ✔ |
+| mercury | Wednesday | Quicksilver | `mercury` | ✔ | ✔ |
+| jupiter | Thursday | Tin | `tin` | ✔ | ✔ |
+| venus | Friday | Copper | `copper` | ✔ | ✔ |
+| saturn | Saturday | Lead | `lead` | ✔ | ✔ |
+| dual | Sunday | Gold / Raw Ore | `ore` | ✔ | ✔ |
+| ninth | — | The Philosopher's Stone | `stone` | ✔ | ✔ |
 
 ### Japanese week (`japan`)
 
@@ -153,7 +153,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | jupiter | Thursday | Hinduism | `hinduism` | ✔ | — |
 | venus | Friday | Sikhism | `sikhism` | ✔ | — |
 | saturn | Saturday | Judaism | `judaism` | ✔ | — |
-| dual | Sunday | Christianity / Satanism | `satanism` | — | — |
+| dual | Sunday | Christianity / Satanism | `satanism` | ✔ | — |
 | ninth | — | The Unknown God | `unknown_god` | — | — |
 
 ### Ancient religions (`religion_alt`)
@@ -164,7 +164,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | moon | Monday | Druidism | `druidism` | ✔ | — |
 | mars | Tuesday | Zoroastrianism | `zoroastrianism` | ✔ | — |
 | mercury | Wednesday | Shamanism | `shamanism` | ✔ | — |
-| jupiter | Thursday | Eleusinian Mysteries | `eleusis` | — | — |
+| jupiter | Thursday | Eleusinian Mysteries | `eleusis` | ✔ | — |
 | venus | Friday | Babylon | `babylon` | ✔ | — |
 | saturn | Saturday | Voodoo | `voodoo` | ✔ | — |
 | dual | Sunday | Mithraism / Corax | `corax` | ✔ | — |
@@ -182,7 +182,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Artist | `Artist` | ✔ | — | ✔ | — |
 | saturn | Saturday | Farmer | `Farmer` | ✔ | — | ✔ | — |
 | dual | Sunday | Ruler / Servant | `Servant` | ✔ | — | ✔ | — |
-| ninth | — | The Jester | `Jester` | — | — | — | — |
+| ninth | — | The Jester | `Jester` | — | — | ✔ | — |
 
 ### Wolf Pack (`wolf`)
 
@@ -196,7 +196,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Mate | `mate` | ✔ | ✔ | ✔ | ✔ |
 | saturn | Saturday | Elder | `elder` | ✔ | ✔ | ✔ | ✔ |
 | dual | Sunday | Alpha / Omega | `omega` | ✔ | ✔ | ✔ | ✔ |
-| ninth | — | Sigma | `sigma` | — | ✔ | — | ✔ |
+| ninth | — | Sigma | `sigma` | ✔ | ✔ | ✔ | ✔ |
 
 ### Bee Hive (`bee`)
 
@@ -210,7 +210,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Drone | `Drone` | ✔ | ✔ | ✔ | ✔ |
 | saturn | Saturday | Forager | `Forager` | ✔ | ✔ | ✔ | ✔ |
 | dual | Sunday | Queen / Cleaner | `Cleaner` | ✔ | ✔ | ✔ | ✔ |
-| ninth | — | The Swarm | `swarm` | — | ✔ | — | ✔ |
+| ninth | — | The Swarm | `swarm` | ✔ | ✔ | ✔ | ✔ |
 
 ### Elephant Herd (`elephant`)
 
@@ -224,62 +224,62 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Reunion | `Reunion` | ✔ | ✔ | ✔ | ✔ |
 | saturn | Saturday | Elder | `Elder` | ✔ | ✔ | ✔ | ✔ |
 | dual | Sunday | Matriarch / Memory | `Memory` | ✔ | ✔ | ✔ | ✔ |
-| ninth | — | The Graveyard | `graveyard` | — | ✔ | — | ✔ |
+| ninth | — | The Graveyard | `graveyard` | ✔ | ✔ | ✔ | ✔ |
 
 ### Bible (`bible`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Ancient of Days · Son | `ancient_of_days` | ✔ | — |
-| moon | Monday | Mary | `mary` | ✔ | — |
-| mars | Tuesday | David | `david` | ✔ | — |
-| mercury | Wednesday | Moses | `moses` | ✔ | — |
-| jupiter | Thursday | Solomon | `solomon` | ✔ | — |
-| venus | Friday | Adam & Eve | `adam_and_eve` | ✔ | — |
-| saturn | Saturday | Joseph | `joseph` | ✔ | — |
-| dual | Sunday | Ancient of Days / Son | `son_servant` | ✔ | — |
+| sun | Sunday | Ancient of Days · Son | `ancient_of_days` | ✔ | ✔ |
+| moon | Monday | Mary | `mary` | ✔ | ✔ |
+| mars | Tuesday | David | `david` | ✔ | ✔ |
+| mercury | Wednesday | Moses | `moses` | ✔ | ✔ |
+| jupiter | Thursday | Solomon | `solomon` | ✔ | ✔ |
+| venus | Friday | Adam & Eve | `adam_and_eve` | ✔ | ✔ |
+| saturn | Saturday | Joseph | `joseph` | ✔ | ✔ |
+| dual | Sunday | Ancient of Days / Son | `son_servant` | ✔ | ✔ |
 | ninth | — | Melchizedek | `melchizedek` | — | — |
 
 ### Bible II (`bible2`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Abraham · Isaac | `abraham` | ✔ | — |
-| moon | Monday | Jonah | `jonah` | ✔ | — |
-| mars | Tuesday | Samson | `samson` | ✔ | — |
-| mercury | Wednesday | Jacob | `jacob` | ✔ | — |
-| jupiter | Thursday | Noah | `noah` | ✔ | — |
-| venus | Friday | Ruth | `ruth` | ✔ | — |
-| saturn | Saturday | Job | `job` | ✔ | — |
-| dual | Sunday | Abraham / Isaac | `isaac` | ✔ | — |
+| sun | Sunday | Abraham · Isaac | `abraham` | ✔ | ✔ |
+| moon | Monday | Jonah | `jonah` | ✔ | ✔ |
+| mars | Tuesday | Samson | `samson` | ✔ | ✔ |
+| mercury | Wednesday | Jacob | `jacob` | ✔ | ✔ |
+| jupiter | Thursday | Noah | `noah` | ✔ | ✔ |
+| venus | Friday | Ruth | `ruth` | ✔ | ✔ |
+| saturn | Saturday | Job | `job` | ✔ | ✔ |
+| dual | Sunday | Abraham / Isaac | `isaac` | ✔ | ✔ |
 
 ### Bible Dark (`bible_dark`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Lucifer · Judas | `lucifer` | ✔ | — |
-| moon | Monday | Lilith | `lilith` | ✔ | — |
-| mars | Tuesday | Goliath | `goliath` | ✔ | — |
-| mercury | Wednesday | The Serpent | `serpent` | ✔ | — |
-| jupiter | Thursday | Herod | `herod` | ✔ | — |
-| venus | Friday | Delilah | `delilah` | ✔ | — |
-| saturn | Saturday | Cain | `cain` | ✔ | — |
-| dual | Sunday | Lucifer / Judas | `judas` | ✔ | — |
-| ninth | — | Legion | `legion` | — | — |
+| sun | Sunday | Lucifer · Judas | `lucifer` | ✔ | ✔ |
+| moon | Monday | Lilith | `lilith` | ✔ | ✔ |
+| mars | Tuesday | Goliath | `goliath` | ✔ | ✔ |
+| mercury | Wednesday | The Serpent | `serpent` | ✔ | ✔ |
+| jupiter | Thursday | Herod | `herod` | ✔ | ✔ |
+| venus | Friday | Delilah | `delilah` | ✔ | ✔ |
+| saturn | Saturday | Cain | `cain` | ✔ | ✔ |
+| dual | Sunday | Lucifer / Judas | `judas` | ✔ | ✔ |
+| ninth | — | Legion | `legion` | ✔ | ✔ |
 
 ### Cosmos (`cosmos`)
 
 | Seat | Day | Figure | File | Gemini | ChatGPT | Colored G | Colored C |
 |---|---|---|---|---|---|---|---|
-| sun | Sunday | Sun · Black Hole | `sun` | ✔ | — | ✔ | — |
-| moon | Monday | Nebula | `nebula` | ✔ | — | ✔ | — |
-| mars | Tuesday | Supernova | `supernova` | ✔ | — | ✔ | — |
-| mercury | Wednesday | Pulsar | `pulsar` | ✔ | — | ✔ | — |
-| jupiter | Thursday | Galaxy | `galaxy` | ✔ | — | ✔ | — |
-| venus | Friday | Binary Stars | `binary_stars` | ✔ | — | ✔ | — |
-| saturn | Saturday | Comet | `comet` | ✔ | — | ✔ | — |
-| dual | Sunday | Sun / Black Hole | `black_hole` | ✔ | — | ✔ | — |
-| ninth | — | The Big Bang | `big_bang` | — | — | — | — |
+| sun | Sunday | Sun · Black Hole | `sun` | ✔ | ✔ | ✔ | ✔ |
+| moon | Monday | Nebula | `nebula` | ✔ | ✔ | ✔ | ✔ |
+| mars | Tuesday | Supernova | `supernova` | ✔ | ✔ | ✔ | ✔ |
+| mercury | Wednesday | Pulsar | `pulsar` | ✔ | ✔ | ✔ | ✔ |
+| jupiter | Thursday | Galaxy | `galaxy` | ✔ | ✔ | ✔ | ✔ |
+| venus | Friday | Binary Stars | `binary_stars` | ✔ | ✔ | ✔ | ✔ |
+| saturn | Saturday | Comet | `comet` | ✔ | ✔ | ✔ | ✔ |
+| dual | Sunday | Sun / Black Hole | `black_hole` | ✔ | ✔ | ✔ | — |
+| ninth | — | The Big Bang | `big_bang` | ✔ | ✔ | ✔ | ✔ |
 
 ### Virtues (`virtues`)
 
@@ -328,40 +328,40 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 | Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Zeus (Ζεύς) | `zeus`, `Zeus` | — ✔ | — — |
-| moon | Monday | Poseidon (Ποσειδῶν) | `poseidon` | — | — |
-| mars | Tuesday | Artemis (Ἄρτεμις) | `artemis` | — | — |
-| mercury | Wednesday | Athena (Ἀθηνᾶ) | `athena` | — | — |
-| jupiter | Thursday | Apollo (Ἀπόλλων) | `apollo` | — | — |
-| venus | Friday | Hera (Ἥρα) | `hera` | — | — |
-| saturn | Saturday | Demeter (Δημήτηρ) | `demeter` | — | — |
-| dual | Sunday | Zeus / Hades | `hades` | — | — |
+| sun | Sunday | Zeus (Ζεύς) | `zeus`, `Zeus` | — ✔ | — ✔ |
+| moon | Monday | Poseidon (Ποσειδῶν) | `poseidon` | ✔ | — |
+| mars | Tuesday | Artemis (Ἄρτεμις) | `artemis` | ✔ | — |
+| mercury | Wednesday | Athena (Ἀθηνᾶ) | `athena` | ✔ | — |
+| jupiter | Thursday | Apollo (Ἀπόλλων) | `apollo` | ✔ | — |
+| venus | Friday | Hera (Ἥρα) | `hera` | ✔ | — |
+| saturn | Saturday | Demeter (Δημήτηρ) | `demeter` | ✔ | — |
+| dual | Sunday | Zeus / Hades | `hades` | ✔ | — |
 
 ### Norse gods — Pantheon (`norse`)
 
 | Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Odin (Óðinn) | `Odin` | — | — |
-| moon | Monday | Hel | `Hel` | — | — |
-| mars | Tuesday | Thor (Þórr) | `Thor` | ✔ | — |
-| mercury | Wednesday | Loki | `Loki` | ✔ | — |
-| jupiter | Thursday | Tyr (Týr) | `Tyr` | ✔ | — |
-| venus | Friday | Frigg | `Frigg` | — | — |
-| saturn | Saturday | Freyr | `Freyr` | — | — |
-| dual | Sunday | Odin / The Wanderer | `Odin` | ✔ | — |
+| sun | Sunday | Odin (Óðinn) | `Odin` | ✔ | — |
+| moon | Monday | Hel | `Hel` | ✔ | — |
+| mars | Tuesday | Thor (Þórr) | `Thor` | ✔ | ✔ |
+| mercury | Wednesday | Loki | `Loki` | ✔ | ✔ |
+| jupiter | Thursday | Tyr (Týr) | `Tyr` | ✔ | ✔ |
+| venus | Friday | Frigg | `Frigg` | ✔ | — |
+| saturn | Saturday | Freyr | `Freyr` | ✔ | — |
+| dual | Sunday | Odin / The Wanderer | `Odin` | ✔ | ✔ |
 
 ### Egyptian gods — Pantheon (`egypt`)
 
 | Seat | Day | Pantheon Name | Candidates | Gemini | ChatGPT |
 |---|---|---|---|---|---|
-| sun | Sunday | Ra | `ra` | ✔ | — |
-| moon | Monday | Isis | `isis` | — | — |
-| mars | Tuesday | Horus | `horus` | — | — |
-| mercury | Wednesday | Thoth | `thoth` | ✔ | — |
-| jupiter | Thursday | Anubis | `anubis` | — | — |
-| venus | Friday | Bastet | `bastet` | — | — |
-| saturn | Saturday | Osiris | `osiris` | ✔ | — |
-| dual | Sunday | Ra / Afu-Ra | `afu_ra` | ✔ | — |
+| sun | Sunday | Ra | `ra` | ✔ | ✔ |
+| moon | Monday | Isis | `isis` | ✔ | ✔ |
+| mars | Tuesday | Horus | `horus` | ✔ | ✔ |
+| mercury | Wednesday | Thoth | `thoth` | ✔ | ✔ |
+| jupiter | Thursday | Anubis | `anubis` | ✔ | ✔ |
+| venus | Friday | Bastet | `bastet` | ✔ | ✔ |
+| saturn | Saturday | Osiris | `osiris` | ✔ | ✔ |
+| dual | Sunday | Ra / Afu-Ra | `afu_ra` | ✔ | ✔ |
 
 ### Slavic gods — Pantheon (`slavic`)
 
@@ -370,9 +370,9 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | sun | Sunday | Perun | `perun` | ✔ | — |
 | moon | Monday | Mokoš | `mokos` | ✔ | — |
 | mars | Tuesday | Svetovid | `svetovid` | ✔ | — |
-| mercury | Wednesday | Svarog | `svarog` | — | — |
+| mercury | Wednesday | Svarog | `svarog` | ✔ | — |
 | jupiter | Thursday | Dažbog | `dazbog` | ✔ | — |
-| venus | Friday | Lada | `lada` | — | — |
+| venus | Friday | Lada | `lada` | ✔ | — |
 | saturn | Saturday | Morana | `morana` | ✔ | — |
 | dual | Sunday | Perun / Veles | `veles` | ✔ | — |
 
@@ -392,7 +392,7 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | Aries | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
 | Taurus | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
 | Gemini | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Ophiuchus | — | — | — | — | — | — | — | — |
+| Ophiuchus | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
 
 ## Zodiac — Chinese (12 animals + the Cat)
 
@@ -410,7 +410,7 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | Rooster | ✔ | — | ✔ | — |
 | Dog | ✔ | — | ✔ | — |
 | Pig | ✔ | — | ✔ | — |
-| Cat | — | — | — | — |
+| Cat | ✔ | — | ✔ | — |
 
 ## Badges
 
@@ -423,10 +423,10 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | season | `Summer` | ✔ | ✔ |
 | season | `Autumn` | ✔ | ✔ |
 | season | `Winter` | ✔ | ✔ |
-| season | `WetSeason` | — | — |
-| season | `DrySeason` | — | — |
-| turning point | `SummerSolstice` | — | — |
-| turning point | `WinterSolstice` | — | — |
+| season | `WetSeason` | ✔ | ✔ |
+| season | `DrySeason` | ✔ | ✔ |
+| turning point | `SummerSolstice` | ✔ | ✔ |
+| turning point | `WinterSolstice` | ✔ | ✔ |
 | turning point | `Equinox` | ✔ | ✔ |
 | meteorological | `Spring` | ✔ | ✔ |
 | meteorological | `Summer` | ✔ | ✔ |
@@ -434,13 +434,13 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | meteorological | `Winter` | ✔ | ✔ |
 | scale | `Lucifer_Triangle` | ✔ | — |
 | scale | `Judas_Triangle` | ✔ | — |
-| scale | `Union` | ✔ | — |
+| scale | `Union` | ✔ | ✔ |
 | scale glass | `Judas_Triangle` | — | — |
 | scale glass | `Lucifer_Triangle` | — | — |
 | scale glass | `Judas_Triangle_v2` | — | — |
 | scale glass | `Lucifer_Triangle_v2` | — | — |
-| scale glass | `Union_Meeting` | — | — |
-| scale glass | `Union` | — | — |
+| scale glass | `Union_Meeting` | — | ✔ |
+| scale glass | `Union` | — | ✔ |
 | subdial (silver master) | `center` | ✔ | — |
 
 ## Emblems
@@ -484,7 +484,7 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 ## Shortage List — everything the tables marked —
 
-**chatgpt** (300):
+**chatgpt** (196):
 
 - weekday planets/primary/sun.png
 - weekday planets/primary/moon.png
@@ -503,57 +503,24 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weekday planets/signs/saturn.png
 - weekday planets/signs/dual/sun_eclipse.png
 - weekday planets/art/sun.png
+- weekday planets/colored/sun.png
 - weekday planets/art/moon.png
+- weekday planets/colored/moon.png
 - weekday planets/art/mars.png
+- weekday planets/colored/mars.png
 - weekday planets/art/mercury.png
+- weekday planets/colored/mercury.png
 - weekday planets/art/jupiter.png
+- weekday planets/colored/jupiter.png
 - weekday planets/art/venus.png
+- weekday planets/colored/venus.png
 - weekday planets/art/saturn.png
+- weekday planets/colored/saturn.png
 - weekday planets/art/dual/sun_eclipse.png
-- weekday greek/primary/Helios.png
-- weekday greek/colored/Helios.png
-- weekday greek/primary/Selene.png
-- weekday greek/colored/Selene.png
-- weekday greek/primary/Ares.png
-- weekday greek/colored/Ares.png
-- weekday greek/primary/Hermes.png
-- weekday greek/colored/Hermes.png
-- weekday greek/primary/Zeus.png
-- weekday greek/colored/Zeus.png
-- weekday greek/primary/Aphrodite.png
-- weekday greek/colored/Aphrodite.png
-- weekday greek/primary/Cronus.png
-- weekday greek/colored/Cronus.png
-- weekday greek/primary/dual/Phaethon.png
-- weekday greek/colored/dual/Phaethon.png
 - weekday greek/primary/hades.png
 - weekday greek/colored/hades.png
-- weekday norse/primary/Sol.png
-- weekday norse/colored/Sol.png
-- weekday norse/primary/Mani.png
-- weekday norse/colored/Mani.png
-- weekday norse/primary/Tyr.png
-- weekday norse/colored/Tyr.png
-- weekday norse/primary/Odin.png
-- weekday norse/colored/Odin.png
-- weekday norse/primary/Thor.png
-- weekday norse/colored/Thor.png
-- weekday norse/primary/Freya.png
-- weekday norse/colored/Freya.png
-- weekday norse/primary/Loki.png
-- weekday norse/colored/Loki.png
-- weekday norse/primary/dual/Skoll.png
-- weekday norse/colored/dual/Skoll.png
 - weekday norse/primary/baldur.png
 - weekday norse/colored/baldur.png
-- weekday egypt/primary/ra.png
-- weekday egypt/primary/khonsu.png
-- weekday egypt/primary/montu.png
-- weekday egypt/primary/thoth.png
-- weekday egypt/primary/amun.png
-- weekday egypt/primary/hathor.png
-- weekday egypt/primary/osiris.png
-- weekday egypt/primary/dual/afu_ra.png
 - weekday egypt/primary/set.png
 - weekday slavic/primary/dazbog.png
 - weekday slavic/primary/hors.png
@@ -564,15 +531,6 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weekday slavic/primary/morana.png
 - weekday slavic/primary/dual/dazbog_old.png
 - weekday slavic/primary/crnobog.png
-- weekday alchemy/primary/gold.png
-- weekday alchemy/primary/silver.png
-- weekday alchemy/primary/iron.png
-- weekday alchemy/primary/mercury.png
-- weekday alchemy/primary/tin.png
-- weekday alchemy/primary/copper.png
-- weekday alchemy/primary/lead.png
-- weekday alchemy/primary/dual/ore.png
-- weekday alchemy/primary/stone.png
 - weekday japan/primary/nichiyobi.png
 - weekday japan/primary/getsuyobi.png
 - weekday japan/primary/kayobi.png
@@ -617,52 +575,9 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weekday profession/colored/dual/Servant.png
 - weekday profession/primary/Jester.png
 - weekday profession/colored/Jester.png
-- weekday bible/primary/ancient_of_days.png
-- weekday bible/primary/mary.png
-- weekday bible/primary/david.png
-- weekday bible/primary/moses.png
-- weekday bible/primary/solomon.png
-- weekday bible/primary/adam_and_eve.png
-- weekday bible/primary/joseph.png
-- weekday bible/primary/dual/son_servant.png
 - weekday bible/primary/melchizedek.png
-- weekday bible/secondary/abraham.png
-- weekday bible/secondary/jonah.png
-- weekday bible/secondary/samson.png
-- weekday bible/secondary/jacob.png
-- weekday bible/secondary/noah.png
-- weekday bible/secondary/ruth.png
-- weekday bible/secondary/job.png
-- weekday bible/secondary/dual/isaac.png
-- weekday bible/dark/lucifer.png
-- weekday bible/dark/lilith.png
-- weekday bible/dark/goliath.png
-- weekday bible/dark/serpent.png
-- weekday bible/dark/herod.png
-- weekday bible/dark/delilah.png
-- weekday bible/dark/cain.png
-- weekday bible/dark/dual/judas.png
-- weekday bible/dark/legion.png
-- weekday cosmos/primary/sun.png
-- weekday cosmos/colored/sun.png
-- weekday cosmos/primary/nebula.png
-- weekday cosmos/colored/nebula.png
-- weekday cosmos/primary/supernova.png
-- weekday cosmos/colored/supernova.png
-- weekday cosmos/primary/pulsar.png
-- weekday cosmos/colored/pulsar.png
-- weekday cosmos/primary/galaxy.png
-- weekday cosmos/colored/galaxy.png
-- weekday cosmos/primary/binary_stars.png
-- weekday cosmos/colored/binary_stars.png
-- weekday cosmos/primary/comet.png
-- weekday cosmos/colored/comet.png
-- weekday cosmos/primary/dual/black_hole.png
 - weekday cosmos/colored/dual/black_hole.png
-- weekday cosmos/primary/big_bang.png
-- weekday cosmos/colored/big_bang.png
 - weekday greek/pantheon/zeus.png
-- weekday greek/primary/Zeus.png
 - weekday greek/pantheon/poseidon.png
 - weekday greek/pantheon/artemis.png
 - weekday greek/pantheon/athena.png
@@ -672,20 +587,8 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weekday greek/pantheon/dual/hades.png
 - weekday norse/pantheon/Odin.png
 - weekday norse/pantheon/Hel.png
-- weekday norse/primary/Thor.png
-- weekday norse/primary/Loki.png
-- weekday norse/primary/Tyr.png
 - weekday norse/pantheon/Frigg.png
 - weekday norse/pantheon/Freyr.png
-- weekday norse/primary/Odin.png
-- weekday egypt/primary/ra.png
-- weekday egypt/pantheon/isis.png
-- weekday egypt/pantheon/horus.png
-- weekday egypt/primary/thoth.png
-- weekday egypt/pantheon/anubis.png
-- weekday egypt/pantheon/bastet.png
-- weekday egypt/primary/osiris.png
-- weekday egypt/primary/dual/afu_ra.png
 - weekday slavic/primary/perun.png
 - weekday slavic/primary/mokos.png
 - weekday slavic/primary/svetovid.png
@@ -772,74 +675,34 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - zodiac chinese/colored/Pig.png
 - zodiac chinese/primary/Cat.png
 - zodiac chinese/colored/Cat.png
-- badge season/WetSeason.png
-- badge season/DrySeason.png
-- badge season/turning_point/SummerSolstice.png
-- badge season/turning_point/WinterSolstice.png
 - badge scale/Lucifer_Triangle.png
 - badge scale/Judas_Triangle.png
-- badge scale/Union.png
 - badge scale/glass/Judas_Triangle.png
 - badge scale/glass/Lucifer_Triangle.png
 - badge scale/glass/Judas_Triangle_v2.png
 - badge scale/glass/Lucifer_Triangle_v2.png
-- badge scale/glass/Union_Meeting.png
-- badge scale/glass/Union.png
 - badge subdial/silver/center.png
 
-**gemini** (57):
+**gemini** (24):
 
+- weekday planets/colored/sun.png
+- weekday planets/colored/moon.png
+- weekday planets/colored/mars.png
+- weekday planets/colored/mercury.png
+- weekday planets/colored/jupiter.png
+- weekday planets/colored/venus.png
+- weekday planets/colored/saturn.png
 - weekday greek/primary/hades.png
 - weekday greek/colored/hades.png
 - weekday norse/primary/baldur.png
 - weekday norse/colored/baldur.png
 - weekday egypt/primary/set.png
 - weekday slavic/primary/crnobog.png
-- weekday alchemy/primary/stone.png
-- weekday religion/primary/dual/satanism.png
 - weekday religion/primary/unknown_god.png
-- weekday religion/secondary/eleusis.png
 - weekday religion/secondary/lost_mystery.png
 - weekday profession/primary/Jester.png
-- weekday profession/colored/Jester.png
-- weekday wolf/primary/sigma.png
-- weekday wolf/colored/sigma.png
-- weekday bee/primary/swarm.png
-- weekday bee/colored/swarm.png
-- weekday elephant/primary/graveyard.png
-- weekday elephant/colored/graveyard.png
 - weekday bible/primary/melchizedek.png
-- weekday bible/dark/legion.png
-- weekday cosmos/primary/big_bang.png
-- weekday cosmos/colored/big_bang.png
 - weekday greek/pantheon/zeus.png
-- weekday greek/pantheon/poseidon.png
-- weekday greek/pantheon/artemis.png
-- weekday greek/pantheon/athena.png
-- weekday greek/pantheon/apollo.png
-- weekday greek/pantheon/hera.png
-- weekday greek/pantheon/demeter.png
-- weekday greek/pantheon/dual/hades.png
-- weekday norse/pantheon/Odin.png
-- weekday norse/pantheon/Hel.png
-- weekday norse/pantheon/Frigg.png
-- weekday norse/pantheon/Freyr.png
-- weekday egypt/pantheon/isis.png
-- weekday egypt/pantheon/horus.png
-- weekday egypt/pantheon/anubis.png
-- weekday egypt/pantheon/bastet.png
-- weekday slavic/pantheon/svarog.png
-- weekday slavic/pantheon/lada.png
-- zodiac astrology/sign/Ophiuchus.png
-- zodiac astrology/primary/Ophiuchus.png
-- zodiac astrology/constellation/Ophiuchus.png
-- zodiac astrology/colored/Ophiuchus.png
-- zodiac chinese/primary/Cat.png
-- zodiac chinese/colored/Cat.png
-- badge season/WetSeason.png
-- badge season/DrySeason.png
-- badge season/turning_point/SummerSolstice.png
-- badge season/turning_point/WinterSolstice.png
 - badge scale/glass/Judas_Triangle.png
 - badge scale/glass/Lucifer_Triangle.png
 - badge scale/glass/Judas_Triangle_v2.png

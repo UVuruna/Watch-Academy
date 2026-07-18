@@ -1,4 +1,4 @@
-# Roadmap — What Remains to Ship DOMY Watch
+﻿# Roadmap — What Remains to Ship DOMY Watch
 
 The taxative list of everything between today and the GitHub release
 (owner request 2026-07-16). Tasks are RECORDED here, not started —
@@ -22,7 +22,7 @@ lives in [The DOMY Canon](CANON.md).
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/
   metal/roster skin system, Settings with the city picker,
   Encyclopedia, Guide, Time Travel, translations (SR bundle synced).
-- **Suite:** 331 green tests (`python -m pytest tests`; Session 16
+- **Suite:** 434 green tests (`python -m pytest tests`; Session 16
   added the Deep Time and analytic-illumination goldens).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
@@ -283,7 +283,7 @@ lives in [The DOMY Canon](CANON.md).
    `deep_time.sqlite` (the split is documented). Each chart: one y-axis,
    fixed per-series canon colors (season cross-wheel hues; light/dark
    gold vs slate), a legend, a crosshair readout, the filter row above.
-   See [Observatory](../app/observatory.md).
+   See [Observatory](app/observatory.md).
 15a2. **The year line doctrine (owner 2026-07-17).** Everywhere a
    year shows, BOTH forms show: the official year and the Anno
    Lucis year ("2026 · 6105. Anno Lucis"). Settings govern the
@@ -466,7 +466,7 @@ lives in [The DOMY Canon](CANON.md).
       "▸"), each opening its panel on a `QStackedWidget` to the right;
       related groups SHARE one title exactly per the owner's example —
       Palette + Clock tint = one "Colors" section (seven sections total,
-      layout map in [Settings Dialog](../app/settings_dialog.md)). Every
+      layout map in [Settings Dialog](app/settings_dialog.md)). Every
       existing control kept, `result_settings()` untouched, each panel
       keeps its own scroll cap. The tray-menu SIZE slider (item 12 below)
       covers "if he means the MENU too."
@@ -489,7 +489,7 @@ lives in [The DOMY Canon](CANON.md).
       (C) occasional CRASH on SPACE, not reproducible — add crash
       logging (faulthandler to a user-dir file) so the next one
       leaves a trace.
-      → **Session 21-A:** (A) the [Legend Popup](../app/legend_popup.md)
+      → **Session 21-A:** (A) the [Legend Popup](app/legend_popup.md)
       now carries `WindowStaysOnTopHint` AND re-asserts native topmost on
       every show (`SWP_NOACTIVATE`) — owner real-machine check needed.
       (B) FIXED — the SPACE fallthrough was a STALE `_last_hover` that
@@ -757,7 +757,7 @@ Follow the monorepo build conventions (root CLAUDE.md):
    elevation) replacing the dev pythonw entry.
    - **Defender exclusion (Session 21):** the app now installs a
      low-level keyboard hook (`SetWindowsHookEx(WH_KEYBOARD_LL)` — the
-     SPACE-without-focus feature, see [Native](../app/native.md)). Per
+     SPACE-without-focus feature, see [Native](app/native.md)). Per
      the root CLAUDE.md build conventions, apps using low-level system
      hooks add a Defender exclusion in the installer; pair it with the
      code-signing step so SmartScreen/AV heuristics do not flag the

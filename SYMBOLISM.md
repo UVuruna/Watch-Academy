@@ -22,7 +22,7 @@ per pointer/palette combination; the weekday hover shows them.
 - [Virtues and Vices — the Cross-Cure Axes](#virtues-vices)
 - [The Seven Professions](#professions)
 - [The Theological Trio](#theological-trio)
-- [The Octa Extension: Dawn and Dusk](#octa-extension)
+- [The Octa Extension: the Eight Walks and the Eight Ages](#octa-extension)
 - [Light Palettes — the Prism Reading](#light-palettes)
 - [Layer Reference Tables](#reference-tables)
 
@@ -385,30 +385,40 @@ Faith 8h–16h, Love 16h–24h, Hope 0h–8h.)
 
 <a id="octa-extension"></a>
 
-## The Octa Extension: Dawn and Dusk
+## The Octa Extension: the Eight Walks and the Eight Ages
 
-The octa pointer adds two arms on the east–west axis — which on this
-dial are the hours of **18h and 06h: sunset and sunrise**. Their colors
-are the sky's own:
+The octa (Compass) pointer seats EIGHT arms, one per three-hour mark —
+superseding the earlier two-arm dawn/dusk reading (sealed 2026-07-16;
+full doctrine and article text in [The DOMY Canon](CANON.md) §Compass):
 
-- **cyan (west arm, 06h) — DAWN**: the pale blue-green sky before
-  sunrise; mood **Hope**, the emotion that looks forward.
-- **red-orange (east arm, 18h) — DUSK**: the burning sky of sunset;
-  mood **Longing**, the emotion that looks back.
+- **PAINT — the Eight Walks of Life**: one estate per hour, from the
+  King at noon to the Wanderer at midnight — King (12h, royal gold),
+  Merchant (15h, copper), Soldier (18h, iron-blood crimson), Artist
+  (21h, stage velvet violet), Wanderer (24h, road-dust indigo-charcoal),
+  Scholar (03h, lamplit ink blue), Farmer (06h, field green), Priest
+  (09h, alb ivory). Diagonal oppositions: King–Wanderer, Soldier–Farmer,
+  Merchant–Scholar, Artist–Priest.
+- **LIGHT — the Eight Ages, the Wheel of a Life**: the day as one
+  lifetime, sunrise to sunrise — Birth (06h), Childhood (09h), Youth
+  (12h, the zenith), Maturity (15h), the Elder (18h), Old age (21h),
+  Death (24h, pure white — the light register sends death INTO the
+  light), the Unborn (03h, holding both the ancestors and the not-yet-
+  born). The wheel CLOSES: after the Unborn, dawn births Birth again.
 
-Hope and Longing are true opposites — one faces what comes, the other
-what has passed. Color-theoretically the pair is exact too: red-orange
-and blue-green are complements on the twelve-hue wheel.
+Both registers keep the day-arc (brightest at noon, darkest at
+midnight); every arm now ties to its own substance or age instead of a
+shared nuance step.
 
 <a id="light-palettes"></a>
 
 ## Light Palettes — the Prism Reading
 
-The light palettes keep every positional meaning (the moods, the
-axes, dawn/dusk) and translate the hues into the prism's world:
-RGB + CMY for the hexa, with orange and azure as the octa's dawn/dusk
-pair. Paint is how the ancients painted the week; light is how Newton
-would have projected it. Same week, two readings.
+The light palettes keep every positional meaning (the moods, the axes)
+and translate the hues into the prism's world: RGB + CMY for the hexa.
+The octa's light preset is its own bespoke wheel — the Eight Ages (see
+above) — rather than a straight RGB translation of the paint hues.
+Paint is how the ancients painted the week; light is how Newton would
+have projected it. Same week, two readings.
 
 The AURORA pointer (owner spec 2026-07-12) abandons geometry entirely:
 no star, no arms — the day itself is the pointer. Five day hues (paint
@@ -439,12 +449,19 @@ The full weave, one arm per row (hexa paint canon):
 | Friday | Venus | Aphrodite | Freya | Christianity | red | Passion | Love | Jealousy | Artist |
 | Saturday | Saturn | Cronus | Loki | Judaism | green | Renewal | Patience | Envy | Farmer |
 
-Octa extras:
+Octa extras (paint — the Eight Walks of Life; see above for the light
+Eight Ages):
 
-| Arm | Phenomenon | Color | Mood |
-|---|---|---|---|
-| west (06h) | dawn | cyan | Hope |
-| east (18h) | dusk | red-orange | Longing |
+| Arm | Estate | Hue |
+|---|---|---|
+| 12h | King | royal gold |
+| 15h | Merchant | copper |
+| 18h | Soldier | iron-blood crimson |
+| 21h | Artist | stage velvet violet |
+| 24h | Wanderer | road-dust indigo-charcoal |
+| 03h | Scholar | lamplit ink blue |
+| 06h | Farmer | field green |
+| 09h | Priest | alb ivory |
 
 ## The Seasons Axis — Goethe's Poles (owner-approved 2026-07-12)
 

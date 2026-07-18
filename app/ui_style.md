@@ -14,7 +14,7 @@ never hardcoded per dialog.
 ## Connections
 
 ### Uses
-- [Defaults](../config/defaults.md) — `UI_BUTTON_COLORS` role pairs,
+- [Config (folder)](../config/___config.md) — `UI_BUTTON_COLORS` role pairs,
   font/radius/padding knobs.
 
 ### Used by

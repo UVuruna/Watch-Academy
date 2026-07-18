@@ -13,7 +13,7 @@ layout surgery) the reader dialogs. Every color and radius is a
 `THEME_RADIUS_CONTROL_PX/CARD_PX/PILL_PX`) — this module only builds
 the QSS string and applies it; no hex literal lives here.
 
-Palette follows monorepo [DESIGN.md](../../DESIGN.md) (Rule #16): dark
+Palette follows monorepo [DESIGN.md](../../../DESIGN.md) (Rule #16): dark
 surfaces stepped by elevation, one accent hue (the dial's own gold),
 8–14px corner radii, borders as low-opacity white rather than a flat
 gray line. `app/ui_style.py`'s vivid gradient buttons (Encyclopedia /
@@ -24,7 +24,7 @@ Settings dialog's own buttons (OK/Cancel, "Default", "Skin default").
 ## Connections
 
 ### Uses
-- [Defaults](../config/defaults.md) — `THEME_COLORS`, `THEME_RADIUS_*`.
+- [Config (folder)](../config/___config.md) — `THEME_COLORS`, `THEME_RADIUS_*` in `defaults.py`.
 
 ### Used by
 - [Settings Dialog](settings_dialog.md) — nav column, group-box cards,
