@@ -50,12 +50,28 @@ let the edge year crash the day build). Progress every 100k rows
 script as the way back) and ships only with the M7 FULL installation —
 the app detects it at startup and runs happily without it.
 
+### `make_observatory.py` — Observatory Series Generator
+One-time (rerunnable) generator (Session 17, owner 2026-07-16): builds
+the compact, COMMITTED chart bundles the [Observatory](../app/observatory.md)
+reads — `Database/observatory_seasons.json` (the four northern season
+durations, bin-mean decimated from `events.sqlite` sun_events, plus an
+`eras` block from `anno_lucis.json`) and `Database/observatory_eclipses.json`
+(solar/lunar counts per bucket + the per-type summary):
+
+    python setup/make_observatory.py
+
+Unlike the multi-megabyte sqlite packs these bundles are small
+(~55 KB + ~2 KB) and committed — the Observatory never requires
+deep_time.sqlite. Validates the derived light/dark halves against
+`season_halves.json` (Rule #1). Rerun the research pipeline first if
+`events.sqlite` is absent (gitignored, ~92 MB).
+
 ## Connections
 
 ### Uses
 - [Config (folder)](../config/___config.md) — letter file table and art dir
 - [Research Ephemeris (subfolder)](../research/ephemeris/___ephemeris.md)
-  — the events database `make_deep_time.py` reads
+  — the events database `make_deep_time.py` / `make_observatory.py` read
 
 ### Used by
 - Nobody at runtime — the app loads the generated PNGs like any asset;

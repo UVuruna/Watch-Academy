@@ -96,7 +96,8 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
   📜 Legend, 🔆 Solar rotation, 🎭 Archetype,
   🖱️ Click-through | ⚙️ Settings…,
-  🏛️ Encyclopedia…, 📖 Guide…, 🕰️ Time Travel… | 🚪 Exit. The three
+  🏛️ Encyclopedia…, 🔭 Observatory…, 📖 Guide…, 🕰️ Time Travel… | 🚪
+  Exit. The three
   slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
   a Weekday submenu that leads with Planets FIRST, flat (owner
   2026-07-18, `WEEKDAY_MENU_TOP` — the default theme no longer hides
@@ -327,6 +328,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   home (ROADMAP queue #6, owner 2026-07-16), a second reading in the
   Seasons topic, the CANON's three-line quote with an English framing
   of the four faces — and 📊 Report reveals itself above Exit
+- `_open_observatory()`: opens the [Observatory](observatory.md)
+  (owner 2026-07-16) with the EFFECTIVE `(moment, observer, tz, cycles)`
+  — the frozen Time Travel simulation tuple when active, else the live
+  present — and the optional Deep Time pack (exact nearest-eclipse
+  instants for the eclipse timeline when installed)
 - `_open_report()`: the hidden [Report](report.md) — the
   [Profiling](../config/profiling.md) statistics (`@timed` on the
   tick, day rebuild, skin build, paint, composite rebuild, hit test,

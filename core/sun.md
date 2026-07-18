@@ -34,7 +34,13 @@ documented behavior, not an error), `noon` (always present), `regime`.
   `try/except ValueError` — never `astral.sun.sun()`, which throws away
   four valid events when one is missing and whose polar-day/night
   messages are identical.
-- `day_length_hm(sun)`: daylight duration as "H:MM" (the octa slot
-  option) — 24:00 on polar days, 0:00 in polar night/twilight-only,
-  complement logic on inverted midnight-sun days, local-midnight bounds
-  on one-sided transitional days.
+- `day_length_minutes(sun)`: daylight duration in whole minutes (1440
+  on polar days, 0 in polar night/twilight-only; complement logic on
+  inverted midnight-sun days, local-midnight bounds on one-sided
+  transitional days) — the shared basis (Rule #5).
+- `day_length_hm(sun)`: `day_length_minutes` formatted "H:MM" (the octa
+  slot option).
+- `day_length_curve(observer, tz, year, step_days=1)`: the daylight-
+  minutes curve over one calendar `year` at `observer`, one sample every
+  `step_days` — the [Observatory](../app/observatory.md)'s local
+  day-length chart. Pure (the year is explicit; no wall clock read).

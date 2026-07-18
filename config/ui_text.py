@@ -338,4 +338,18 @@ UI_STRINGS: tuple[str, ...] = (
     "Babylon", "Voodoo",
     "Ruler", "Ruler · Servant", "Physician", "Soldier", "Merchant",
     "Priest", "Artist", "Farmer",
+    # --- The Observatory (Session 17, owner 2026-07-16) --------------------------
+    # The statistics window chrome — dark charts over the long ephemeris
+    # data. English ships; the pre-build Translation session localizes.
+    "Observatory", "Observatory…", "A.L.",
+    "Season durations", "The light − dark envelope", "Eclipse timeline",
+    "Day length over the year",
+    "light − dark", "light − dark (days)", "days", "day of year",
+    "day length", "magnitude", "eclipses per bucket", "year",
+    "Light", "Dark", "Solar", "Lunar", "now",
+    "Anno Lucis", "Age of Darkness", "light peak", "dark peak",
+    "Nearest solar and lunar eclipses around the moment "
+    "(exact instants from the full installation).",
+    "Eclipse density over the span — {solar}/{lunar} per century "
+    "(solar/lunar). Install the full pack for exact instants.",
 )

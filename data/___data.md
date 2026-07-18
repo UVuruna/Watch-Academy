@@ -42,6 +42,15 @@ Serves proxy-shifted `YearAnchors`/`MoonWindow` for any pack year and
 the eclipse catalog (next/prev by Julian Day) behind the Quick Jump
 eclipse navigation. See [Deep Time Repository](deep_time.md).
 
+### `observatory.py` — Observatory Data
+Session 17 (owner 2026-07-16): read-only over the committed chart
+bundles `observatory_seasons.json` / `observatory_eclipses.json`
+(setup/make_observatory.py) — the four bin-mean season durations plus
+the two derived half-years, the era markers, and the eclipse density +
+per-type summary. Always present (unlike deep_time.sqlite), so the
+[Observatory](../app/observatory.md) never requires the Deep Time pack.
+See [Observatory Data](observatory.md).
+
 ### `symbolism.py` — Symbolism Repository
 Per-body blurbs and the full ARTICLE corpus from `symbolism.json` (the
 machine-readable companion of [DOMY Symbolism](../SYMBOLISM.md)) — the

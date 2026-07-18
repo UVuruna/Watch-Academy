@@ -28,15 +28,15 @@ class DaylightRegime(Enum):
     POLAR_NIGHT = "polar_night"      # sun never comes near the horizon
 
 
-def day_length_hm(sun: "SunDay") -> str:
-    """Daylight duration of the day as "H:MM" (the octa bottom-arm
-    option). Polar day reads 24:00, polar night/twilight-only 0:00;
-    inverted midnight-sun days take the complement of the dark gap;
-    one-sided transitional days measure against the local midnights."""
+def day_length_minutes(sun: "SunDay") -> int:
+    """Daylight duration of the day in whole minutes. Polar day is
+    1440, polar night / twilight-only 0; inverted midnight-sun days take
+    the complement of the dark gap; one-sided transitional days measure
+    against the local midnights."""
     if sun.regime is DaylightRegime.POLAR_DAY:
-        return "24:00"
+        return 24 * 60
     if sun.regime in (DaylightRegime.POLAR_NIGHT, DaylightRegime.TWILIGHT_ONLY):
-        return "0:00"
+        return 0
     full_day = timedelta(days=1)
     if sun.sunrise is not None and sun.sunset is not None:
         if sun.sunset < sun.sunrise:
@@ -51,8 +51,30 @@ def day_length_hm(sun: "SunDay") -> str:
             lit = sun.sunset - day_start
         else:
             lit = full_day if sun.regime is DaylightRegime.WHITE_NIGHTS else timedelta()
-    minutes = round(lit.total_seconds() / 60)
+    return round(lit.total_seconds() / 60)
+
+
+def day_length_hm(sun: "SunDay") -> str:
+    """Daylight duration of the day as "H:MM" (the octa bottom-arm
+    option) — the readable form of `day_length_minutes` (Rule #5)."""
+    minutes = day_length_minutes(sun)
     return f"{minutes // 60}:{minutes % 60:02d}"
+
+
+def day_length_curve(
+    observer: "astral.Observer", tz: ZoneInfo, year: int, step_days: int = 1
+) -> list[tuple[date, int]]:
+    """The daylight-minutes curve over one calendar `year` at `observer`
+    (the Observatory's local day-length chart) — one sample every
+    `step_days` days, tz-aware. Pure: the year is explicit, no wall
+    clock is read."""
+    samples: list[tuple[date, int]] = []
+    day = date(year, 1, 1)
+    end = date(year, 12, 31)
+    while day <= end:
+        samples.append((day, day_length_minutes(compute_sun_day(observer, day, tz))))
+        day += timedelta(days=step_days)
+    return samples
 
 
 @dataclass(frozen=True)

@@ -72,6 +72,15 @@ reveals 📊 Report above Exit — sortable function statistics, a
 top-total bar chart and a recent-durations sparkline.
 See [Report](report.md).
 
+### `observatory.py` — Observatory
+The statistics sibling of the Encyclopedia (owner 2026-07-16; menu 🔭
+Observatory… beside 🏛️ Encyclopedia…): dark, QPainter-drawn interactive
+charts over the long ephemeris data — the season-duration oscillations
+(per-series checkboxes), the light−dark envelope with the eras marked,
+the eclipse timeline and the location's day-length curve; reads only the
+committed series bundles (never needs deep_time.sqlite). See
+[Observatory](observatory.md).
+
 Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
 24H2 — revisit on demand).
 

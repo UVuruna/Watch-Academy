@@ -81,7 +81,12 @@ the planetary bundle whole) consumed by the classic unit, the seated
 slots and the hovers alike — and
 `DEFAULT_SKIN` — a fully typed [Manifest](../skins/manifest.md)
 `SkinDefinition` instance that is serialized verbatim to
-`assets/skins/domy/skin.json` (re-serialize after editing it).
+`assets/skins/domy/skin.json` (re-serialize after editing it). The
+hidden Report chart tokens (`REPORT_*`) and the OBSERVATORY chart
+tokens (`OBSERVATORY_*`, Session 17: the bundle filenames, the fixed
+per-series canon colors — season cross-wheel hues, light/dark gold vs
+slate — the surface/grid/crosshair palette, the day-length sample step
+and the eclipse-window size) live here too.
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package

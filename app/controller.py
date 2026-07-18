@@ -31,6 +31,7 @@ from PySide6.QtWidgets import (
 
 from app import native
 from app.encyclopedia import EncyclopediaDialog
+from app.observatory import ObservatoryDialog
 from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
 from app.report import ReportDialog
@@ -2111,6 +2112,9 @@ class AppController(QObject):
             lambda: self._open_encyclopedia_at(None, 0)
         )
         menu.addAction(encyclopedia)
+        observatory = QAction(f"🔭 {tr('Observatory…')}", menu)
+        observatory.triggered.connect(self._open_observatory)
+        menu.addAction(observatory)
         guide = QAction(f"📖 {tr('Guide…')}", menu)
         guide.triggered.connect(
             lambda: GuideDialog(self._translation_overlay).exec()
@@ -2241,6 +2245,23 @@ class AppController(QObject):
 
     def _open_report(self) -> None:
         ReportDialog(self._translation_overlay).exec()
+
+    def _open_observatory(self) -> None:
+        """Open the [Observatory](observatory.md) with the EFFECTIVE
+        moment/observer — the frozen Time Travel tuple when simulating,
+        else the live present — and the optional Deep Time pack (exact
+        nearest-eclipse instants when installed)."""
+        if self._simulation is not None:
+            now, observer = self._simulation
+            cycles = self._sim_cycles
+        else:
+            now = datetime.now(self._tz)
+            observer = self._observer
+            cycles = 0
+        ObservatoryDialog(
+            now, observer, self._tz, cycles=cycles,
+            deep=self._deep, translations=self._translation_overlay,
+        ).exec()
 
     def _open_encyclopedia_at(
         self, topic: str | None = None, entry: int = 0

@@ -264,13 +264,26 @@ lives in [The DOMY Canon](CANON.md).
    disc in a golden glow ring, lunar = fully darkened moon in the
    corona glow. The Eclipse is already the
    NINTH MOOD in the emblem canon — the articles link there.
-15. **The Observatory — the statistics window (owner 2026-07-16).**
-   A right-click sibling of the Encyclopedia showing CHARTS over
-   the long data (Session 17): season-duration oscillations with
-   per-series checkboxes (the owner's own Anno Lucis graph, live in
-   the app), the light−dark envelope with the eras marked, the
-   eclipse timeline, the local day-length curve; dark
-   QPainter-drawn, series toggles, bundled compact JSON series.
+15. **The Observatory — the statistics window (owner 2026-07-16) —
+   DONE (Session 17, 2026-07-18).** A right-click sibling of the
+   Encyclopedia (🔭 Observatory… beside 🏛️ Encyclopedia…) of dark,
+   QPainter-drawn interactive CHARTS over the long data: the
+   season-duration oscillations with per-series checkboxes (four seasons
+   + the light/dark half-year pair — the owner's own Anno Lucis graph,
+   live in the app), the light−dark envelope with the Anno Lucis dawn
+   and the Age-of-Light/Darkness bands + starry-season transitions
+   marked, the eclipse timeline (nearest past/next solar+lunar from the
+   traveled moment when the Deep Time pack is present; the bundled
+   density + per-type summary otherwise), and the current location's
+   day-length curve over the year (live from the observer, honoring Time
+   Travel). Series ship as compact COMMITTED JSON under `Database/`
+   (`observatory_seasons.json` ~55 KB bin-mean decimated,
+   `observatory_eclipses.json` ~2 KB) built by
+   `setup/make_observatory.py` — the charts never require
+   `deep_time.sqlite` (the split is documented). Each chart: one y-axis,
+   fixed per-series canon colors (season cross-wheel hues; light/dark
+   gold vs slate), a legend, a crosshair readout, the filter row above.
+   See [Observatory](../app/observatory.md).
 15a2. **The year line doctrine (owner 2026-07-17).** Everywhere a
    year shows, BOTH forms show: the official year and the Anno
    Lucis year ("2026 · 6105. Anno Lucis"). Settings govern the

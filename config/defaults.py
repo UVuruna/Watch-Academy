@@ -872,6 +872,57 @@ REPORT_INK_COLOR = "#E8EAED"         # primary text on the chart
 REPORT_MUTED_COLOR = "#9AA0A6"       # secondary text / axis
 REPORT_SURFACE_COLOR = "#202124"     # chart surface
 
+# ─── THE OBSERVATORY (Session 17, owner 2026-07-16) ────────────────────
+# The statistics sibling of the Encyclopedia ("kao enciklopedija, samo
+# sa statistikom"): dark, QPainter-drawn interactive charts over the
+# long ephemeris data. Series data ships as compact BUNDLED JSON under
+# Database/ (setup/make_observatory.py). Colors are canon and FIXED per
+# series (color fidelity — never re-colored when a checkbox hides one):
+# the four seasons wear their cross-wheel ELEMENT hues, the light/dark
+# half-years gold vs slate; surface/ink/grid reuse the dark dialog
+# palette (THEME_COLORS) so the window wears apply_theme like every
+# other reader dialog.
+OBSERVATORY_BUNDLE_SEASONS = "observatory_seasons.json"
+OBSERVATORY_BUNDLE_ECLIPSES = "observatory_eclipses.json"
+OBSERVATORY_CHART_MIN_HEIGHT_PX = 240
+OBSERVATORY_SURFACE_COLOR = THEME_COLORS["surface_0"]      # chart body
+OBSERVATORY_INK_COLOR = THEME_COLORS["text_primary"]       # labels
+OBSERVATORY_MUTED_COLOR = THEME_COLORS["text_secondary"]   # axis / ticks
+OBSERVATORY_GRID_COLOR = "#3A464C"                          # recessive grid
+OBSERVATORY_CROSSHAIR_COLOR = "#E8B23D"                     # hover crosshair
+OBSERVATORY_LINE_WIDTH_PX = 2
+OBSERVATORY_GRID_WIDTH_PX = 1
+OBSERVATORY_MARK_RADIUS_PX = 3
+# The four seasons' canonical cross-wheel hues (Spring=air, Summer=fire,
+# Autumn=earth, Winter=water — the same _CROSS_ELEMENTS the Seasons
+# pointer paints) plus the two half-years (gold light, slate dark).
+OBSERVATORY_SERIES_COLORS = {
+    "spring": _CROSS_ELEMENTS[3],       # air — pale white-yellow
+    "summer": _CROSS_ELEMENTS[0],       # fire — red
+    "autumn": _CROSS_ELEMENTS[1],       # earth — olive green-brown
+    "winter": _CROSS_ELEMENTS[2],       # water — deep blue
+    "light": "#E8B23D",                 # the light half-year — gold
+    "dark": "#6E7B82",                  # the dark half-year — slate
+}
+# The eras painted on the light−dark chart: the Age of Light band gold,
+# the Age of Darkness band slate (low alpha wash), the Anno Lucis /
+# transition verticals in muted ink. (hex, alpha) — alpha applied live.
+OBSERVATORY_ERA_LIGHT_BAND = ("#E8B23D", 26)
+OBSERVATORY_ERA_DARK_BAND = ("#6E7B82", 30)
+OBSERVATORY_ERA_MARK_COLOR = "#C9CDD3"
+# The eclipse timeline: solar gold, lunar the blood-moon copper (the
+# same BRONZE family the on-dial lunar eclipse wears — color fidelity).
+OBSERVATORY_ECLIPSE_COLORS = {"solar": "#E8B23D", "lunar": "#B87333"}
+OBSERVATORY_NOW_MARK_COLOR = "#E8391E"          # the traveled moment line
+# The eclipse timeline's zoom (Deep Time mode): the nearest N eclipses
+# of EACH kind on EACH side of the moment (~2.4 of each kind per year,
+# so 60 ≈ a ±25-year window around the moment).
+OBSERVATORY_ECLIPSE_WINDOW_N = 60
+# The day-length curve at the current location: one gold line over the
+# year; astral is asked once every N days (a smooth curve, cheap open).
+OBSERVATORY_DAYLENGTH_STEP_DAYS = 2
+OBSERVATORY_DAYLENGTH_COLOR = "#E8B23D"
+
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and

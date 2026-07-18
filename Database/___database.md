@@ -39,6 +39,21 @@ friendly clamp. Read ONLY by the
 [Deep Time Repository](../data/deep_time.md); coverage lives in its
 `meta` table (from the data, never hardcoded).
 
+### `observatory_seasons.json` (~55 KB — Session 17, owner 2026-07-16)
+The COMMITTED season-durations chart bundle: the four northern
+astronomical seasons (spring/summer/autumn/winter, TT days) bin-mean
+decimated (20-yr bins) over −12998…+16993, plus an `eras` block (the
+Anno Lucis dawn and the starry-season transitions). Built from the
+research events database by `setup/make_observatory.py`; read by the
+[Observatory Data](../data/observatory.md). The light/dark half-years
+are derived in-app (`light = spring+summer`).
+
+### `observatory_eclipses.json` (~2 KB — Session 17, owner 2026-07-16)
+The COMMITTED eclipse-density bundle: solar/lunar counts per 500-yr
+bucket over the span plus the per-type summary and the ΔT caveat. The
+always-available fallback for the Observatory's eclipse timeline (exact
+nearest instants come from the optional `deep_time.sqlite`).
+
 ### `seasons_large.json`
 Moved to [Research (folder)](../research/___research.md) — an oversized
 variant kept for analysis only, not bundled.
