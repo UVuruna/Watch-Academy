@@ -649,6 +649,10 @@ ZODIAC_SPAN_DEG = 30.0
 # (MOON_PRINCIPAL_WINDOW above).
 SEASON_GLOW_WINDOW_H = 12.0
 MOON_GLOW_WINDOW_H = 6.0
+# Eclipse display (owner 2026-07-18, ROADMAP 15h item 11): the sealed
+# ±3h window, same shape as the season/moon windows above but its own
+# constant (the owner's spec is explicitly ±3h, not the moon's ±6h).
+ECLIPSE_GLOW_WINDOW_H = 3.0
 
 # Year-wheel anchor angle (mod 360) -> season event name, PER CLIMATE
 # ZONE (owner decision 2026-07-10): the southern hemisphere flips the

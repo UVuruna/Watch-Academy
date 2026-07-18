@@ -1096,9 +1096,11 @@ class Compositor:
         # fell through to the ring TICK band underneath it. Mirroring
         # the SAME relocation `YearMarkerLayer.paint` applies fixes it:
         # hit-test the DRAWN position, whichever radius that is.
+        eclipse = self._last_tick.eclipse_event
         moon_orbit = (
             defaults.GLOW_RING_RADIUS_FRACTION
             if self._last_tick.moon_event is not None
+            or (eclipse is not None and eclipse.kind == "lunar")
             else marker.moon_orbit_fraction
         )
         if self._skin.show_moon and hit(
@@ -1112,6 +1114,7 @@ class Compositor:
         earth_orbit = (
             defaults.GLOW_RING_RADIUS_FRACTION
             if self._last_tick.season_event is not None
+            or (eclipse is not None and eclipse.kind == "solar")
             else marker.orbit_fraction
         )
         if self._skin.show_earth and hit(
@@ -2202,6 +2205,9 @@ class Compositor:
             lines.append(f"{self._label('Moonrise')} {day.moonrise:%H:%M}")
         elif day.moonset is not None:
             lines.append(f"{self._label('Moonset')} {day.moonset:%H:%M}")
+        eclipse = tick.eclipse_event
+        if eclipse is not None and eclipse.kind == "lunar":
+            lines.insert(0, self._eclipse_hover_line(eclipse))
         cycle_day = tick.moon_fraction * constants.SYNODIC_MONTH_DAYS
         return title + _centered_html(
             "",
@@ -2274,6 +2280,22 @@ class Compositor:
         is_wet = starts_in_march != self._day.southern_hemisphere
         return start, end, is_wet
 
+    def _eclipse_hover_line(self, eclipse) -> str:
+        """The eclipse hover line (ROADMAP 15h item 11, owner spec:
+        NAME the eclipse): type + magnitude + local instant, plain
+        (non-bold) like the season-event line it stands beside/replaces
+        on the Earth/Moon hover."""
+        instant = eclipse.instant.astimezone(self._day.tzinfo)
+        title = self._tr(
+            "Solar Eclipse" if eclipse.kind == "solar" else "Lunar Eclipse"
+        )
+        kind = self._tr(eclipse.type.capitalize())
+        mag = f"{eclipse.magnitude:.2f}" if eclipse.magnitude is not None else "?"
+        return html.escape(
+            f"{title} ({kind}, {self._tr('mag.')} {mag}) — "
+            f"{self._ord(instant.day)} {self._month(instant)} {instant:%H:%M}"
+        )
+
     def _label(self, text: str) -> str:
         """A BOLD hover label with its colon (owner formatting round
         2026-07-12: labels bold, values plain)."""
@@ -2301,7 +2323,10 @@ class Compositor:
             f"{html.escape(self._month(day.zodiac_start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))})",
         ]
-        if self._last_tick.season_event is not None:
+        eclipse = self._last_tick.eclipse_event
+        if eclipse is not None and eclipse.kind == "solar":
+            lines.insert(0, self._eclipse_hover_line(eclipse))
+        elif self._last_tick.season_event is not None:
             lines.insert(
                 0, html.escape(self._tr(self._last_tick.season_event))
             )

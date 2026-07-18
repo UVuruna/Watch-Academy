@@ -794,11 +794,21 @@ class AppController(QObject):
                     # in the SAME frame — canonical_proxy and the repos
                     # share proxy_cycles, so the anchors always bracket.
                     astro_year = real_year(now.year, cycles)
+                    # The eclipse catalog (ROADMAP 15h item 11) is the
+                    # ONLY Deep Time feed with no bundled fallback —
+                    # absent the pack, no eclipse ever draws (the
+                    # documented absence rule, Rule #1).
+                    eclipses = (
+                        self._deep.eclipses_near(now, cycles)
+                        if self._deep is not None
+                        else ()
+                    )
                     self._day = build_day_context(
                         now,
                         observer,
                         self._seasons.year_anchors(astro_year),
                         self._moon_phases.moon_window(astro_year),
+                        eclipses,
                     )
                     if cycles:
                         # Stamp the frame on the context (display sites

@@ -14,7 +14,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from config import constants, paths
-from core.deep_time import proxy_cycles
+from core.clock_state import EclipseEvent
+from core.deep_time import julian_day_of, proxy_cycles
 from core.moon import MoonWindow
 from core.year_wheel import YearAnchors
 
@@ -181,6 +182,40 @@ class DeepTimeRepository:
             second_of_day=row[4], type=row[5], magnitude=row[6],
             lat=row[7], lon=row[8],
         )
+
+    def eclipses_near(self, now: datetime, cycles: int) -> tuple[EclipseEvent, ...]:
+        """The catalog eclipses bracketing `now` (a day-context build
+        instant, possibly proxy-shifted) — up to 4 rows: the nearest
+        solar/lunar eclipse strictly before and after it, each an
+        indexed jd_ut lookup (`eclipse_before`/`eclipse_after`), never a
+        table scan. Called ONCE per day-context rebuild; `build_tick_state`
+        then only compares instants already in hand — the ONLY DB I/O the
+        eclipse display costs. `cycles` un-shifts `now` to the real
+        astronomical Julian Day the catalog is ordered by, and re-shifts
+        the found instants back into `now`'s own proxy frame so they
+        compare directly against every other DayContext datetime."""
+        jd = julian_day_of(now, cycles)
+        shift = cycles * constants.GREGORIAN_CYCLE_YEARS
+        events = []
+        for kind in ("solar", "lunar"):
+            for eclipse in (
+                self.eclipse_before(jd, kind), self.eclipse_after(jd, kind)
+            ):
+                if eclipse is not None:
+                    events.append(_eclipse_event(eclipse, shift))
+        return tuple(events)
+
+
+def _eclipse_event(eclipse: DeepEclipse, shift: int) -> EclipseEvent:
+    return EclipseEvent(
+        kind=eclipse.kind,
+        instant=_instant(
+            (eclipse.year, eclipse.month, eclipse.day, eclipse.second_of_day),
+            shift,
+        ),
+        type=eclipse.type,
+        magnitude=eclipse.magnitude,
+    )
 
 
 def _instant(row, shift: int) -> datetime:

@@ -30,6 +30,23 @@ _MOON_EVENT_NAMES = {
 
 
 @dataclass(frozen=True)
+class EclipseEvent:
+    """One catalog eclipse near `now` (ROADMAP 15h item 11): `kind`
+    decides which marker the render affects ("solar" -> Earth,
+    "lunar" -> Moon), `instant`/`type`/`magnitude` feed the hover text
+    and the magnitude-scaled glow strength. Built ONLY from the
+    OPTIONAL Deep Time pack (data/deep_time.py); absent it,
+    DayContext.eclipses is always empty and no eclipse ever renders —
+    the absence is a supported state (Rule #1), not a silent gap."""
+
+    kind: str                       # "solar" | "lunar"
+    instant: datetime               # UT, proxy-shifted like every other
+                                    # DayContext instant in deep travel
+    type: str                       # total/annular/hybrid/partial/penumbral
+    magnitude: float | None
+
+
+@dataclass(frozen=True)
 class DayContext:
     """Everything that changes at most once per (local day, UTC offset)."""
 
@@ -64,6 +81,11 @@ class DayContext:
     tzinfo: object                  # the active timezone (hover instant display)
     latitude: float = 0.0           # observer coordinates — the minute tick
     longitude: float = 0.0          # computes the ASCENDANT from them
+    # Deep Time eclipse catalog (ROADMAP 15h item 11): up to 4 candidates
+    # (nearest solar/lunar eclipse before and after the day-context build
+    # instant) — always empty without the optional pack. build_tick_state
+    # picks the one (if any) whose ±3h window covers "now".
+    eclipses: tuple[EclipseEvent, ...] = ()
     # Deep Time (Session 16): every datetime above lives in the 400-year
     # PROXY frame, shifted by deep_cycles Gregorian cycles (0 in normal
     # operation). The REAL astronomical year of any of them is
@@ -96,6 +118,9 @@ class TickState:
     ascendant_sign: str = ""        # the rising sign right now ("Virgo") —
                                     # the South slot's Ascendant mode
                                     # (owner request 2026-07-12)
+    eclipse_event: EclipseEvent | None = None  # active catalog eclipse
+                                    # within ITS ±3h window, else None —
+                                    # always None without the Deep Time pack
 
 
 def build_day_context(
@@ -103,6 +128,7 @@ def build_day_context(
     observer: astral.Observer,
     year_anchors: YearAnchors,
     moon_window: MoonWindow,
+    eclipses: tuple[EclipseEvent, ...] = (),
 ) -> DayContext:
     sun_day = compute_sun_day(observer, now_local.date(), now_local.tzinfo)
     moonrise, moonset = moon_rise_set(observer, now_local.date(), now_local.tzinfo)
@@ -154,6 +180,7 @@ def build_day_context(
         tzinfo=now_local.tzinfo,
         latitude=observer.latitude,
         longitude=observer.longitude,
+        eclipses=eclipses,
     )
 
 
@@ -189,7 +216,23 @@ def build_tick_state(now_local: datetime, day: DayContext) -> TickState:
         moon_event=_active_event(
             now_local, day.moon_events, constants.MOON_GLOW_WINDOW_H
         ),
+        eclipse_event=_active_eclipse(
+            now_local, day.eclipses, constants.ECLIPSE_GLOW_WINDOW_H
+        ),
     )
+
+
+def _active_eclipse(
+    now: datetime, eclipses: tuple[EclipseEvent, ...], window_hours: float
+) -> EclipseEvent | None:
+    """The catalog eclipse (if any) whose instant lies within
+    ±window_hours of now — always None when `eclipses` is empty (no
+    Deep Time pack, ROADMAP 15h item 11 absence rule)."""
+    limit = timedelta(hours=window_hours)
+    for event in eclipses:
+        if abs(now - event.instant) <= limit:
+            return event
+    return None
 
 
 def _active_event(

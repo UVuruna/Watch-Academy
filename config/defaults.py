@@ -1478,6 +1478,33 @@ BRONZE_LETTER_TINT = "#CD7F32"
 BRONZE_LETTER_BRIGHTNESS = 1.0
 BRONZE_LETTER_CONTRAST = 1.0
 
+# ECLIPSE DISPLAY (owner 2026-07-18, ROADMAP 15h item 11 — refines the
+# sealed glow-metal triad; the Deep Time pack's eclipse catalog is the
+# OPTIONAL data source, see data/deep_time.md — absent it, none of this
+# ever draws). A SOLAR eclipse turns the Earth marker's OWN event glow
+# RED (instead of GLOW_SUN_COLOR) and swaps its art to the Planets
+# theme's Eclipsed-Sun dual; a LUNAR eclipse turns the Moon marker's
+# glow the blood-moon COPPER (the bronze metal tint, reused verbatim —
+# physically true, not a new color) and darkens the disc with the same
+# tint. Both ride the EXISTING relocation-to-ring-band mechanic
+# (GLOW_RING_RADIUS_FRACTION) — only the color/art/strength differ.
+GLOW_ECLIPSE_SOLAR_COLOR = "#FF3B30"       # red — the eclipsed Sun's glow
+GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
+ECLIPSE_SOLAR_ART = (
+    WEEKDAY_ART_DIR / "planets" / "primary" / "dual" / "sun_eclipse.png"
+)                                            # source-mapped by paths.art_file
+ECLIPSE_MOON_DARK_COLOR = BRONZE_LETTER_TINT
+ECLIPSE_MOON_DARK_ALPHA = 0.55               # overlay strength over the disc
+# Glow STRENGTH scales with the catalog MAGNITUDE (owner idea, ROADMAP
+# 15h item 11): magnitude 0 (grazing partial) maps to the MIN fraction
+# of the normal glow alpha, magnitude at/above MAX (a comfortable
+# totality margin) maps to the full alpha — linear between, clamped
+# outside (Rule #4: config-driven, no magic numbers at the call site).
+ECLIPSE_MAGNITUDE_MIN = 0.0
+ECLIPSE_MAGNITUDE_MAX = 1.2
+ECLIPSE_GLOW_STRENGTH_MIN = 0.4
+ECLIPSE_GLOW_STRENGTH_MAX = 1.0
+
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.
 WEEKDAY_THEME_TITLES = {

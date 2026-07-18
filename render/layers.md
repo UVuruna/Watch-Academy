@@ -428,6 +428,35 @@ hover and glow do stack, and the letters genuinely overhang). At
 max-everything the hovered glowing marker now lands within ~1–2 px of the
 edge and never clips (pinned both ways by the margin tests).
 
+**Eclipse display (owner 2026-07-18, ROADMAP 15h item 11 — implemented,
+refining the sealed glow-metal triad):** `ctx.tick.eclipse_event`
+(`core.clock_state.EclipseEvent`, ±3h window,
+`constants.ECLIPSE_GLOW_WINDOW_H`; always `None` without the OPTIONAL
+Deep Time pack — see [Deep Time](../data/deep_time.md) for the absence
+rule) rides the SAME relocation-to-ring-band mechanic as the
+season/moon glow — no new hit-test path, exactly as the Session 21-C
+note predicted. A SOLAR eclipse (`kind == "solar"`) makes the Earth
+marker's OWN existing "season event" glow turn RED
+(`GLOW_ECLIPSE_SOLAR_COLOR`) instead of golden and swaps its drawn art
+to `ECLIPSE_SOLAR_ART` — the Planets theme's Eclipsed-Sun dual
+(`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-mapped
+by `paths.art_file`, falling back to whichever art source actually
+ships the file). A LUNAR eclipse (`kind == "lunar"`) turns the Moon
+marker's glow the blood-moon BRONZE (`GLOW_ECLIPSE_LUNAR_COLOR`, the
+SAME hex as `BRONZE_LETTER_TINT` — reused verbatim, not a new color)
+and `_draw_moon(..., darkened=True)` washes the WHOLE disc (lit and
+unlit halves alike — totality dims the full face) with a translucent
+bronze overlay (`ECLIPSE_MOON_DARK_COLOR`/`ECLIPSE_MOON_DARK_ALPHA`)
+over the normal phase render. Both glows scale their STRENGTH by the
+catalog MAGNITUDE via `eclipse_glow_strength(magnitude)` — linear
+between `ECLIPSE_GLOW_STRENGTH_MIN/MAX` over
+`ECLIPSE_MAGNITUDE_MIN/MAX`, clamped outside — a new optional `strength`
+parameter on `draw_event_glow()` (default 1.0, so every pre-existing
+season/moon call is unchanged). The Earth/Moon hover text (`_earth_text`/
+`_moon_text` in [Compositor](compositor.md)) NAMES the active eclipse
+(kind, type, magnitude, local instant) via `_eclipse_hover_line()`,
+outranking the plain season-event line on the Earth hover.
+
 ### HandLayer (MINUTE)
 Owner convention: every hand canvas is exactly its designed size and
 rotates about a point `HAND_HUB_OFFSET_UNITS` (15) above the canvas

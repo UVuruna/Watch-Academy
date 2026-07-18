@@ -257,19 +257,24 @@ def umbra_ladder(shades: int, contrast: str) -> tuple[int, ...]:
 
 
 def draw_event_glow(
-    painter: QPainter, pos: QPointF, marker_radius: float, color: str
+    painter: QPainter, pos: QPointF, marker_radius: float, color: str,
+    strength: float = 1.0,
 ) -> None:
     """Radial halo behind a year marker relocated to the ring band
-    centerline during a season/moon event window (owner rework
+    centerline during a season/moon/eclipse event window (owner rework
     2026-07-16): compact — the halo diameter is twice the marker's — and
     intense, so it reads over any background while STRADDLING the ring.
-    `color` is GOLDEN for the Sun's events, SILVER for the Moon's."""
+    `color` is GOLDEN for the Sun's events, SILVER for the Moon's, and
+    RED/bronze for an eclipse (ROADMAP 15h item 11). `strength` (0..1)
+    scales the core/mid alpha — the eclipse call scales it by the
+    catalog MAGNITUDE (`eclipse_glow_strength`); every other caller
+    passes the default 1.0, unchanged from before."""
     halo = marker_radius * defaults.GLOW_RADIUS_SCALE
     gradient = QRadialGradient(pos, halo)
     core = QColor(color)
-    core.setAlphaF(defaults.GLOW_CORE_ALPHA)
+    core.setAlphaF(defaults.GLOW_CORE_ALPHA * strength)
     mid = QColor(color)
-    mid.setAlphaF(defaults.GLOW_MID_ALPHA)
+    mid.setAlphaF(defaults.GLOW_MID_ALPHA * strength)
     edge = QColor(color)
     edge.setAlphaF(0.0)
     gradient.setColorAt(0.0, core)
@@ -280,6 +285,23 @@ def draw_event_glow(
     painter.setBrush(QBrush(gradient))
     painter.drawEllipse(pos, halo, halo)
     painter.restore()
+
+
+def eclipse_glow_strength(magnitude: float | None) -> float:
+    """Glow intensity (0..1 fraction of the normal alpha) scaled by the
+    catalog MAGNITUDE (owner idea, ROADMAP 15h item 11): clamped to
+    `ECLIPSE_MAGNITUDE_MIN/MAX`, linearly mapped to
+    `ECLIPSE_GLOW_STRENGTH_MIN/MAX`. `magnitude` is None only for a
+    malformed catalog row — the schema always writes it, so a None
+    here reads as the strongest glow rather than guessing (Rule #7:
+    no defensive branch for a scenario the schema does not produce)."""
+    if magnitude is None:
+        return defaults.ECLIPSE_GLOW_STRENGTH_MAX
+    lo, hi = defaults.ECLIPSE_MAGNITUDE_MIN, defaults.ECLIPSE_MAGNITUDE_MAX
+    fraction = max(0.0, min(1.0, (magnitude - lo) / (hi - lo)))
+    lo_strength = defaults.ECLIPSE_GLOW_STRENGTH_MIN
+    hi_strength = defaults.ECLIPSE_GLOW_STRENGTH_MAX
+    return lo_strength + fraction * (hi_strength - lo_strength)
 
 
 def hover_factor(ctx: "RenderContext", element: str) -> float:
@@ -2071,8 +2093,15 @@ class YearMarkerLayer(Layer):
             factor = hover_factor(ctx, "moon")
             # During its ±6 h event window the Moon RELOCATES radially to
             # the ring band centerline (owner 2026-07-16), keeping its
-            # cycle angle, so the SILVER halo straddles the ring.
-            glowing = ctx.tick.moon_event is not None
+            # cycle angle, so the SILVER halo straddles the ring. A LUNAR
+            # eclipse (ROADMAP 15h item 11) rides the SAME relocation with
+            # the blood-moon BRONZE glow instead, scaled by its magnitude,
+            # and darkens the disc.
+            eclipse = ctx.tick.eclipse_event
+            lunar_eclipse = (
+                eclipse if eclipse is not None and eclipse.kind == "lunar" else None
+            )
+            glowing = ctx.tick.moon_event is not None or lunar_eclipse is not None
             orbit = (
                 defaults.GLOW_RING_RADIUS_FRACTION
                 if glowing
@@ -2080,16 +2109,28 @@ class YearMarkerLayer(Layer):
             )
             pos = dial_point(moon_angle, ctx.radius * orbit)
             if glowing:
+                color = (
+                    defaults.GLOW_ECLIPSE_LUNAR_COLOR
+                    if lunar_eclipse is not None
+                    else defaults.GLOW_MOON_COLOR
+                )
+                strength = (
+                    eclipse_glow_strength(lunar_eclipse.magnitude)
+                    if lunar_eclipse is not None
+                    else 1.0
+                )
                 draw_event_glow(
                     painter,
                     pos,
                     ctx.radius * spec.moon_scale * factor,
-                    defaults.GLOW_MOON_COLOR,
+                    color,
+                    strength,
                 )
             painter.save()
             painter.setOpacity(painter.opacity() * opacity)
             self._draw_moon(
-                painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor
+                painter, ctx, pos, 2 * ctx.radius * spec.moon_scale * factor,
+                darkened=lunar_eclipse is not None,
             )
             painter.restore()
 
@@ -2111,15 +2152,32 @@ class YearMarkerLayer(Layer):
         )
         # During its ±12 h event window the Earth RELOCATES radially to the
         # ring band centerline (owner 2026-07-16), keeping its year-wheel
-        # angle, so the GOLDEN halo straddles the ring.
-        glowing = ctx.tick.season_event is not None
+        # angle, so the GOLDEN halo straddles the ring. A SOLAR eclipse
+        # (ROADMAP 15h item 11) rides the SAME relocation with the RED
+        # glow instead, scaled by its magnitude, and swaps the Earth's
+        # art to the Planets theme's Eclipsed-Sun dual.
+        eclipse = ctx.tick.eclipse_event
+        solar_eclipse = (
+            eclipse if eclipse is not None and eclipse.kind == "solar" else None
+        )
+        glowing = ctx.tick.season_event is not None or solar_eclipse is not None
         orbit = (
             defaults.GLOW_RING_RADIUS_FRACTION if glowing else spec.orbit_fraction
         )
         pos = dial_point(year_angle, ctx.radius * orbit)
         size = 2 * ctx.radius * spec.scale * hover_factor(ctx, "earth")
         if glowing:
-            draw_event_glow(painter, pos, size / 2, defaults.GLOW_SUN_COLOR)
+            color = (
+                defaults.GLOW_ECLIPSE_SOLAR_COLOR
+                if solar_eclipse is not None
+                else defaults.GLOW_SUN_COLOR
+            )
+            strength = (
+                eclipse_glow_strength(solar_eclipse.magnitude)
+                if solar_eclipse is not None
+                else 1.0
+            )
+            draw_event_glow(painter, pos, size / 2, color, strength)
         if almanac:
             # The day-ARROW at the marker's exact tick (owner 2026-07-16):
             # a small procedural triangle pointing from inside the dial
@@ -2134,7 +2192,11 @@ class YearMarkerLayer(Layer):
             f"{earth_region(ctx.day.latitude, spec.default_variant)}_"
             f"{'day' if ctx.tick.is_daylight else 'night'}"
         )
-        asset = spec.variants.get(variant)
+        asset = (
+            defaults.ECLIPSE_SOLAR_ART
+            if solar_eclipse is not None
+            else spec.variants.get(variant)
+        )
         if asset is not None:
             # The Earth renders ship on an opaque space background — clip
             # to the marker disc so only the globe shows.
@@ -2221,11 +2283,18 @@ class YearMarkerLayer(Layer):
             row_font,
         )
 
-    def _draw_moon(self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float) -> None:
+    def _draw_moon(
+        self, painter: QPainter, ctx: RenderContext, pos: QPointF, size: float,
+        darkened: bool = False,
+    ) -> None:
         """Moon image (or procedural disc) with the unlit part shadowed:
         the lit region is the half-disc on the lit side combined with the
         terminator half-ellipse (semi-axis a = R*|cos 2pi*f|) — union when
-        gibbous, difference when crescent; everything else is darkened."""
+        gibbous, difference when crescent; everything else is darkened.
+        `darkened` (a LUNAR eclipse, ROADMAP 15h item 11) washes the WHOLE
+        disc — lit and unlit halves alike, since totality dims the full
+        face — with the blood-moon BRONZE copper tint, drawn over the
+        normal phase render."""
         spec = self._skin.year_marker
         fraction = ctx.tick.moon_fraction
         radius = size / 2
@@ -2264,6 +2333,12 @@ class YearMarkerLayer(Layer):
             painter.fillPath(disc.subtracted(lit), shadow)
         else:
             painter.fillPath(lit, QColor(spec.moon_lit_color))
+        if darkened:
+            disc = QPainterPath()
+            disc.addEllipse(QRectF(-radius, -radius, size, size))
+            overlay = QColor(defaults.ECLIPSE_MOON_DARK_COLOR)
+            overlay.setAlphaF(defaults.ECLIPSE_MOON_DARK_ALPHA)
+            painter.fillPath(disc, overlay)
         painter.restore()
 
 

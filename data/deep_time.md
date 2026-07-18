@@ -56,6 +56,19 @@ reported no surface point) and `jd_ut` (the catalog ordering key).
   nearest catalog eclipse strictly after/before a Julian Day — the
   Quick Jump prev/next feed; None at the catalog edge (the jump then
   stays put, the standard clamp).
+- `eclipses_near(now, cycles)` (ROADMAP 15h item 11): up to 4
+  `core.clock_state.EclipseEvent` — the nearest solar/lunar eclipse
+  before AND after `now` (a day-context build instant, possibly
+  proxy-shifted), via `eclipse_before`/`eclipse_after` — two INDEXED
+  jd_ut lookups per kind, never a table scan, called ONCE per
+  day-context rebuild. `cycles` un-shifts `now` to the real
+  astronomical Julian Day the catalog orders by
+  (`core.deep_time.julian_day_of`) and re-shifts the found instants
+  back into `now`'s own proxy frame, so they compare directly against
+  every other `DayContext` datetime. The controller feeds the result
+  straight into `build_day_context`; `core.clock_state.build_tick_state`
+  then only compares already-fetched instants — the display's ONLY
+  database read per day.
 
 ## Connections
 
@@ -80,3 +93,12 @@ reported no surface point) and `jd_ut` (the catalog ordering key).
 - Calendar fields are stored per event (not ISO strings) because
   `datetime.fromisoformat` cannot parse negative years; eclipses also
   carry `jd_ut` as the one monotonic ordering key across the whole span.
+- **The eclipse display's ABSENCE RULE (ROADMAP 15h item 11):** the
+  on-dial eclipse display (`render.layers.YearMarkerLayer`) has NO
+  bundled fallback — unlike seasons/moon phases, eclipses live ONLY in
+  this optional pack. `App Controller` feeds `eclipses_near()` into
+  `build_day_context` only when `DeepTimeRepository.detect()` found the
+  file; absent, `DayContext.eclipses` stays `()` and
+  `TickState.eclipse_event` is always `None` — the render never sees a
+  half-populated state, matching the app exactly as it behaved before
+  this round.

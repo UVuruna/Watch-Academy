@@ -539,25 +539,36 @@ lives in [The DOMY Canon](CANON.md).
       the January perihelion (orbital eccentricity). TRUE sunrise/sunset
       at a pole is only days from the equinox (atmospheric refraction
       ~34′ + the solar semi-diameter 16′ lift the visible sun).
-   11. **Eclipse display** (owner 2026-07-18, refines the sealed
-      glow-metal triad): a SOLAR eclipse shows the Planets-theme eclipse
-      art (`assets/weekday/planets/primary/dual/sun_eclipse.png`) with a
-      RED glow ring around the marker; a LUNAR eclipse shows the Moon
-      marker darkened with a BRONZE glow (the blood-moon copper —
-      physically true). The ±3h event window stands; idea recorded:
-      scale the glow strength by the eclipse MAGNITUDE from
-      `Database/deep_time.sqlite`'s eclipse catalog. The render itself
-      stays QUEUED (not implemented this round). **MARKER-PRIORITY NOTE
-      (Session 21-C, 2026-07-18):** whatever draws at the eclipse's
-      RELOCATED ring-band position must hit-test THERE too — the same
-      bug this round fixed for the moon-phase/season glow (see item 19
-      below) applies identically to the eclipse display once it lands;
-      `render.compositor._element_at` already hit-tests the Moon/Earth
-      marker at its GLOWING position (`GLOW_RING_RADIUS_FRACTION`) via
-      the `tick.moon_event`/`tick.season_event` check, so an eclipse
-      window sharing that same relocation gets the fix for free — only
-      a NEW glow condition (not a new hit-test path) is needed when the
-      eclipse render is implemented.
+   11. **Eclipse display — DONE (2026-07-18, ECLIPSE DISPLAY round):**
+      refines the sealed glow-metal triad. A SOLAR eclipse shows the
+      Planets-theme eclipse art
+      (`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-
+      mapped by `paths.art_file`) on the EARTH marker with a RED glow
+      ring (instead of the plain golden season glow); a LUNAR eclipse
+      shows the MOON marker darkened (a bronze wash over the whole
+      disc) with a BRONZE glow (the blood-moon copper — physically
+      true, the exact `BRONZE_LETTER_TINT` hex reused, not a new
+      color). The ±3h event window (`constants.ECLIPSE_GLOW_WINDOW_H`)
+      stands; the glow STRENGTH scales with the eclipse MAGNITUDE from
+      `Database/deep_time.sqlite`'s eclipse catalog
+      (`render.layers.eclipse_glow_strength`, linear between
+      `ECLIPSE_GLOW_STRENGTH_MIN/MAX` over `ECLIPSE_MAGNITUDE_MIN/MAX`).
+      Data path: `data.deep_time.DeepTimeRepository.eclipses_near()`
+      (two indexed jd_ut lookups per kind, never a table scan) feeds
+      `core.clock_state.EclipseEvent` candidates into `DayContext.
+      eclipses` → `TickState.eclipse_event`; the ABSENCE RULE holds —
+      without the optional Deep Time pack `eclipses` stays `()` and no
+      eclipse ever renders, identical to before this round. The hover
+      text (Earth/Moon) NAMES the eclipse (type, magnitude, local
+      instant). **MARKER-PRIORITY NOTE (Session 21-C, 2026-07-18)
+      resolved as predicted:** the eclipse window rides the SAME
+      relocation-to-ring-band mechanic as the season/moon glow, so
+      `render.compositor._element_at` hit-tests it for free — only the
+      NEW glow/art condition was needed, no new hit-test path. Tests:
+      `tests/test_eclipse.py` (window on/off, magnitude mapping, solar
+      art swap + red glow + hit-test, lunar darkening + bronze glow +
+      hit-test, hover naming, the golden 2026-08-12 total solar eclipse
+      against the real pack when built, and the absent-pack path).
    12. **SIZE slider in the right-click menu — DONE (Session 21-B):** a
       COMPACT `QWidgetAction`-hosted `QSlider` lives in Design ▸ Size
       itself (360–1440, `singleStep` 10, narrow width — coarse tune,

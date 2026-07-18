@@ -31,6 +31,21 @@ names (glow inputs) and the active tzinfo (hover instant display).
 `cache_key = (local_date, utc_offset)` — the offset component catches
 DST transitions, where the star legitimately jumps 15°.
 
+**`eclipses` (ROADMAP 15h item 11, owner 2026-07-18):** up to 4
+`EclipseEvent` candidates — the nearest catalog solar/lunar eclipse
+before and after the day-context build instant — fed by the OPTIONAL
+Deep Time pack (`data.deep_time.DeepTimeRepository.eclipses_near`,
+one indexed jd_ut query per side, never a table scan). Defaults to `()`
+and STAYS `()` without the pack — the documented absence: no eclipse
+ever renders, identical to the app before this round (Rule #1).
+
+### EclipseEvent
+Frozen: `kind` ("solar" | "lunar"), `instant` (UT, proxy-shifted like
+every other DayContext datetime in deep travel), `type`
+(total/annular/hybrid/partial/penumbral) and `magnitude` — the render's
+glow-strength input (`render.layers.eclipse_glow_strength`). Built ONLY
+by the data layer from the catalog; core never touches the database.
+
 **`deep_cycles` (Session 16, owner 2026-07-17):** every datetime in the
 context lives in the 400-year PROXY frame shifted by this many
 Gregorian cycles (0 in normal operation). The real astronomical year of
@@ -51,9 +66,12 @@ evaluated at the real epoch in deep travel),
 marker's day/night image — correct even on inverted midnight-sun
 transition days where sunset precedes sunrise), `time_hm` (the octa
 slot's digital time) and the active glow events: `season_event`
-(±12 h around a solstice/equinox) and `moon_event` (±6 h around a
-principal phase), None outside their windows.
+(±12 h around a solstice/equinox), `moon_event` (±6 h around a
+principal phase) and `eclipse_event` (±3 h around a catalog eclipse,
+`constants.ECLIPSE_GLOW_WINDOW_H` — ROADMAP 15h item 11), None outside
+their windows. `eclipse_event` is always None without the Deep Time
+pack (`DayContext.eclipses` stays empty).
 
 ## Functions
-- `build_day_context(now_local, observer, year_anchors, moon_window)`
+- `build_day_context(now_local, observer, year_anchors, moon_window, eclipses=())`
 - `build_tick_state(now_local, day_context)`
