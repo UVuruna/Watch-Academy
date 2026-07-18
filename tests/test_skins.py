@@ -36,6 +36,88 @@ def test_ring_preset_cards_load_and_validate():
         )
 
 
+def test_mason_g_preset_loads_and_splits_metal():
+    """The MASON G bundled preset (ROADMAP 15b, CANON.md §The Banknote):
+    G(12) S(16) M(20) Ω(24) N(4) A(8) on the seal layout, splitting the
+    metal into the Trinity triangle (12/20/4 = G,M,N) wearing the chosen
+    finish and the Union triangle (16/24/8 = S,Ω,A) wearing its counter-
+    metal — NOT the NUMBERS-style single finish on all six, because this
+    preset carries its own `triangle` override."""
+    from data.rings import ring_presets
+
+    presets = ring_presets()
+    mason = presets["MASON G"]
+    assert mason["layout"] == "seal"
+    assert mason["positions"] == (12, 16, 20, 24, 4, 8)
+    assert mason["letters"] == ("G", "S", "M", "Ω", "N", "A")
+    assert mason["triangle"] == (12, 20, 4)
+    assert set(mason["legend"]) == {12, 16, 20, 24, 4, 8}
+
+    art_dir = defaults.RING_LETTER_ART_DIR
+    gold = build_skin(replace(Settings(), ring="MASON G")).ring.letter_art
+    # Trinity (12/20/4 = G, M, N) wears the finish metal (gold, no suffix).
+    assert gold[12] == art_dir / "G.png"
+    assert gold[20] == art_dir / "M.png"
+    assert gold[4] == art_dir / "N.png"
+    # Union (16/24/8 = S, Ω, A) wears the counter-metal (silver here).
+    assert gold[16] == art_dir / "S_silver.png"
+    assert gold[0] == art_dir / "Omega_silver.png"       # 24h -> hour 0
+    assert gold[8] == art_dir / "A_silver.png"
+
+    silver = build_skin(
+        replace(Settings(), ring="MASON G", ring_finish="silver")
+    ).ring.letter_art
+    assert silver[12] == art_dir / "G_silver.png"
+    assert silver[20] == art_dir / "M_silver.png"
+    assert silver[4] == art_dir / "N_silver.png"
+    assert silver[16] == art_dir / "S.png"
+    assert silver[0] == art_dir / "Omega.png"
+    assert silver[8] == art_dir / "A.png"
+
+    assert missing_assets(build_skin(replace(Settings(), ring="MASON G"))) == []
+    assert missing_assets(
+        build_skin(replace(Settings(), ring="MASON G", ring_finish="silver"))
+    ) == []
+    assert missing_assets(
+        build_skin(replace(Settings(), ring="MASON G", ring_finish="bronze"))
+    ) == []
+
+    # NUMBERS keeps its own plain reading — untouched by the new override
+    # machinery (no `triangle` key on its card).
+    numbers = build_skin(replace(Settings(), ring="NUMBERS")).ring.letter_art
+    assert all(
+        not name.endswith(("_silver.png", "_bronze.png"))
+        for name in (p.name for p in numbers.values())
+    )
+
+
+def test_ring_preset_triangle_override_validation():
+    """A `triangle` override only makes sense on the seal (6-position)
+    layout, and must be exactly 3 of the preset's own positions."""
+    import pytest
+
+    from data.rings import validate_preset
+
+    with pytest.raises(ValueError):
+        # DOMY's own 4-position signature -> flame layout, not seal.
+        validate_preset({
+            "name": "BAD", "positions": [12, 20, 24, 4],
+            "letters": ["G", "M", "Ω", "N"], "triangle": [12, 20, 4],
+        })
+    with pytest.raises(ValueError):
+        validate_preset({
+            "name": "BAD", "positions": [12, 16, 20, 24, 4, 8],
+            "letters": ["G", "S", "M", "Ω", "N", "A"],
+            "triangle": [12, 20],  # only 2 positions
+        })
+    with pytest.raises(ValueError):
+        validate_preset({
+            "name": "BAD", "positions": [12, 16, 20, 24, 4, 8],
+            "letters": ["G", "S", "M", "Ω", "N", "A"],
+            "triangle": [12, 20, 99],  # 99 is not one of its positions
+        })
+
+
 def test_build_skin_swaps_only_the_ring():
     domy = build_skin(Settings())
     morph = build_skin(replace(Settings(), ring="MORPH"))

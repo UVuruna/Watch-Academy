@@ -317,3 +317,21 @@ answers the FOUR GREETINGS hover on the 12h ring letter ONLY (owner
 2026-07-16) once the hidden mode is unlocked for the session; the 24h
 (Omega) letter instead answers a double-click — see `hit_omega`
 above.
+
+**The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende oko
+tih naših odabira"):** `_tick_tooltip` checks every letter the active
+ring preset seats, not only 12h/24h — `_ring_letter_legend_tooltip`
+reads `skin.ring.letter_legend` (hour -> `{name, reading}`, built by
+`app.controller.build_skin` from the preset card's optional `legend`
+field, see [Ring Presets](../data/rings.md)) and, when the hovered
+angle falls within `GREETINGS_LETTER_HALF_DEG` of a legend letter's own
+position, answers with that letter's name as the hover TITLE and its
+CANON reading as the body — the exact same title/body shape as
+`_greetings_tooltip`. Unlike the Four Greetings this needs NO hidden-
+mode unlock (it is documentation, not an Easter egg) and it is checked
+in the SAME letter band (`in_letter_band`, shared with the Greetings
+check) right before the plain tick-band day/year/moon reading takes
+over — a preset without a `legend` (DOMY, MORPH, NUMBERS, any custom
+ring) returns `None` and the tick band answers as before. MASON G
+(ROADMAP 15b) is the first and, today, only preset that carries one:
+its six letters answer G/S/M/Ω/N/A per CANON.md §The Banknote.

@@ -75,7 +75,15 @@ def _letter_metal(position: int, layout: dict, finish: str) -> str:
     4-letter layouts — the trio of one metal forms the layout's
     TRIANGLE and the remaining letter wears the ACCENT metal (gold ->
     3 gold + 1 silver; silver -> 3 silver + 1 gold; bronze -> 3 bronze
-    + 1 silver); the SEAL wears the ONE finish metal on all six."""
+    + 1 silver); the SEAL wears the ONE finish metal on all six —
+    UNLESS the ring preset overrides the triangle (ROADMAP 15b, MASON
+    G: CANON.md §The Banknote reads the hexagram as TWO triangles, the
+    Trinity 12/20/4 and the Union 16/24/8 — `build_skin` passes the
+    preset's own `triangle` here when it carries one, so the Trinity
+    vertices wear the finish metal and the Union vertices the accent,
+    the same rule as the 4-letter layouts applied to a 3+3 split; NUMBERS
+    and every other seal preset keep the plain one-metal reading, since
+    their cards carry no override)."""
     if not layout["triangle"] or position in layout["triangle"]:
         return finish
     return "gold" if finish == "silver" else "silver"
@@ -229,19 +237,26 @@ def build_skin(settings: Settings):
     PACK and the user's display choices overlaid."""
     card = ring_presets(settings.custom_rings)[settings.ring]
     layout = constants.RING_LAYOUTS[card["layout"]]
+    # A preset may override the seal layout's own (empty) triangle —
+    # ROADMAP 15b, MASON G's Trinity/Union metal split — see
+    # `_letter_metal`'s docstring.
+    metal_layout = {"triangle": card["triangle"] or layout["triangle"]}
     letters = {}
     letter_art = {}
+    letter_legend = {}
     for position, glyph in zip(card["positions"], card["letters"]):
         hour = position % 24                     # cards say 24, hours say 0
         letters[hour] = glyph
         filename = constants.RING_LETTER_FILES[glyph]
-        metal = _letter_metal(position, layout, settings.ring_finish)
+        metal = _letter_metal(position, metal_layout, settings.ring_finish)
         if metal != "gold":
             # Silver and bronze letters are PRE-RENDERED art (owner
             # decision — setup/make_silver_letters.py and
             # make_bronze_letters.py), not a runtime effect.
             filename = f"{filename.rsplit('.', 1)[0]}_{metal}.png"
         letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
+        if position in card["legend"]:
+            letter_legend[hour] = card["legend"][position]
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
@@ -249,6 +264,7 @@ def build_skin(settings: Settings):
             asset=defaults.RING_FACE_DIR / layout["face"],
             letters=letters,
             letter_art=letter_art,
+            letter_legend=letter_legend,
         ),
         hands=_resolve_hands(settings),
     )

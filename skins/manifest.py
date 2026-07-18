@@ -60,6 +60,11 @@ class RingSpec:
     # are PRE-RENDERED by setup/make_silver_letters.py). The ring tint
     # never touches them.
     letter_art: dict[int, Path] = field(default_factory=dict)
+    # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
+    # hour -> {name, reading} for a preset that carries one (MASON G
+    # today; empty {} for DOMY/MORPH/NUMBERS and any custom ring) — see
+    # data.rings.validate_preset and render.compositor's ring-band hover.
+    letter_legend: dict[int, dict] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

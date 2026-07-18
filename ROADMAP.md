@@ -305,14 +305,27 @@ lives in [The DOMY Canon](CANON.md).
    season, house register). The "Eras of the World" article grows
    the owner's list: AUC, Byzantine AM, Hebrew AM, AH — plus the
    Chinese count and the Buddhist Era (543 BCE) as my additions.
-15b. **The MASON G ring (owner 2026-07-16).** A new bundled ring
-   preset on the seal layout: **G(12) S(16) M(20) Ω(24) N(4)
-   A(8)** — the banknote's letters on the dial (CANON §The
-   Banknote). Plus: HOVER LEGEND per letter (what G, S, M, Ω, N, A
-   each stand for), and ENCYCLOPEDIA lore for the ring presets'
-   own symbolism — DOMY traces the INVERTED cross, MORPH the
-   upright cross, MASON G / NUMBERS / Templar the hexagram/seal
-   (owner: "malo legende oko tih naših odabira").
+15b. **The MASON G ring — DONE (2026-07-18, MASON G RING round).** The
+   bundled preset **G(12) S(16) M(20) Ω(24) N(4) A(8)** on the seal
+   layout (`Database/ring_presets.json` — every letter's art already
+   shipped, gold/silver/bronze, no missing-art flag needed). The
+   preset's own optional `triangle` field (CANON §The Banknote's two
+   triangles — Trinity 12/20/4, Union 16/24/8) overrides the seal
+   layout's one-metal reading so `_letter_metal` splits MASON G 3+3
+   instead of NUMBERS' six-of-one (`data/rings.py`, `app/controller.py`).
+   The per-letter HOVER LEGEND rides a new optional `legend` card field
+   (hour -> `{name, reading}`, quoted verbatim from CANON) answered by
+   `render.compositor._ring_letter_legend_tooltip` in the SAME letter
+   band the 12h Four Greetings already use, minus the hidden-mode gate
+   (documentation, not an Easter egg) — see
+   [Compositor](render/compositor.md). ENCYCLOPEDIA lore for the ring
+   presets' own symbolism (DOMY traces the INVERTED cross, MORPH the
+   upright cross, the seal the hexagram — CANON §The Banknote closes
+   it) grows the EXISTING `instrument/ring_letters` article (Rule #5,
+   no new topic) with two `[[Subhead]]` sections — see
+   [Encyclopedia](app/encyclopedia.md). 4 new tests
+   (`tests/test_skins.py`, `tests/test_pointer.py`,
+   `tests/test_settings_dialog.py`), 433 green.
 15c. **THE PUNCH LIST (owner 2026-07-17, with screenshots) — Session
    18, runs AFTER Deep Time (both edit the controller menu):**
    - **Archetype figures must inherit the SLOT behavior** (slika 8):

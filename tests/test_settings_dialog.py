@@ -794,6 +794,39 @@ def test_encyclopedia_expansion_wiring():
     dialog.deleteLater()
 
 
+def test_ring_letters_article_carries_the_mason_g_lore():
+    """ROADMAP 15b (owner: "malo legende oko tih naših odabira"): the
+    ring presets' OWN symbolism — DOMY traces the inverted cross, MORPH
+    the upright cross, the seal (MASON G / NUMBERS) the hexagram — is
+    added to the EXISTING `instrument/ring_letters` article (Rule #5,
+    no duplicate topic), and the MASON G banknote reading (CANON.md
+    §The Banknote) closes it. The instrument topic still resolves and
+    keeps its entry count."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _topics
+    from data.encyclopedia import EncyclopediaRepository
+
+    QApplication.instance() or QApplication([])
+    topics = _topics()
+    assert len(topics["instrument"]["entries"]) == 8   # no new topic key
+
+    article = EncyclopediaRepository().instrument("ring_letters")["base"]
+    assert "inverted cross" in article
+    assert "UPRIGHT cross" in article
+    assert "hexagram" in article and "SEAL" in article
+    assert "MASON G" in article
+    assert "G-M-N" in article and "TRINITY" in article
+    assert "S-Omega-A" in article and "UNION" in article
+    assert "GOD and GEOMETRY" in article
+
+    dialog = EncyclopediaDialog()
+    dialog._show_topic("instrument")
+    text = dialog._article_text(("instrument", "ring_letters"))
+    assert "inverted cross" in text and "hexagram" in text.lower()
+    dialog.deleteLater()
+
+
 def test_wider_pantheon_topics():
     """WORKPLAN Session 8 (owner 2026-07-15): one Encyclopedia topic per
     culture for the A-list figures no dial seat could hold. Each topic

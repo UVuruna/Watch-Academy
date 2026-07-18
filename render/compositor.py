@@ -2051,14 +2051,30 @@ class Compositor:
         # to share this trigger; it now belongs to the reveal-week
         # double-click instead (see Compositor.hit_omega).
         half = defaults.GREETINGS_LETTER_HALF_DEG
-        if (
-            self._hidden_unlocked
-            and radius * defaults.TICK_HOVER_OUTER_FRACTION
+        in_letter_band = (
+            radius * defaults.TICK_HOVER_OUTER_FRACTION
             < distance
             <= radius * defaults.GREETINGS_LETTER_OUTER_FRACTION
+        )
+        if (
+            in_letter_band
+            and self._hidden_unlocked
             and (theta <= half or theta >= 360.0 - half)
         ):
             return self._greetings_tooltip()
+        # The per-letter HOVER LEGEND (owner ROADMAP 15b, "malo legende
+        # oko tih naših odabira"): a ring preset may carry a `legend`
+        # per position (Database/ring_presets.json — MASON G today) —
+        # what that letter stands for, quoted verbatim from CANON.md's
+        # Banknote table. Checked on every letter the active preset
+        # seats, independent of the hidden-mode unlock (unlike the Four
+        # Greetings, this is not an Easter egg); a preset without a
+        # legend (DOMY/MORPH/NUMBERS, every custom ring) falls through
+        # unchanged.
+        if in_letter_band:
+            legend = self._ring_letter_legend_tooltip(theta, half)
+            if legend is not None:
+                return legend
         if not (
             radius * defaults.TICK_HOVER_INNER_FRACTION
             <= distance
@@ -2138,6 +2154,34 @@ class Compositor:
             self._lunation_ordinal(next_cycle=next_cycle),
             line_moon,
         )
+
+    def _ring_letter_legend_tooltip(
+        self, theta: float, half: float
+    ) -> str | None:
+        """The per-letter HOVER LEGEND (ROADMAP 15b): `skin.ring.
+        letter_legend` is hour -> {name, reading}, built by
+        `app.controller.build_skin` from the active ring preset's
+        optional `legend` card (`data.rings.validate_preset`) — empty
+        for every preset but MASON G today. Finds the legend entry
+        whose OWN letter position is within `half` degrees of the
+        hovered angle (the same half-width the 12h Four Greetings
+        trigger uses — every ring letter occupies the same angular
+        slot) and returns its title + reading, or None off any legend
+        letter."""
+        legend = self._skin.ring.letter_legend
+        if not legend:
+            return None
+        for hour, entry in legend.items():
+            letter_theta = ((hour - 12) * 15.0) % 360.0
+            delta = min(
+                (theta - letter_theta) % 360.0,
+                (letter_theta - theta) % 360.0,
+            )
+            if delta <= half:
+                return _hover_title(
+                    html.escape(entry["name"])
+                ) + _article_body_html(entry["reading"])
+        return None
 
     def _ascendant_text(self, style: str | None = None) -> str:
         """The Ascendant hover (owner request 2026-07-12, formatting

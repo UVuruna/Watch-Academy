@@ -17,7 +17,14 @@ _SIGNATURES = {
 
 def validate_preset(entry: dict) -> dict:
     """One card checked: known positions signature, library letters,
-    matching counts. Returns {name, positions, letters, layout}."""
+    matching counts. Returns {name, positions, letters, layout, triangle,
+    legend}. `triangle` (ROADMAP 15b) is an optional 3-position override
+    of the SEAL layout's own metal triangle (which is empty — one finish
+    on all six, the NUMBERS way) so a 6-letter preset can split into two
+    3-letter metal groups instead (the MASON G banknote's Trinity/Union
+    read, CANON.md §The Banknote). `legend` is an optional hour(position)
+    -> {name, reading} map — the per-letter HOVER LEGEND text, quoted
+    verbatim from CANON."""
     name = str(entry.get("name", "")).strip()
     if not name:
         raise ValueError(f"ring preset without a name: {entry!r}")
@@ -46,11 +53,44 @@ def validate_preset(entry: dict) -> dict:
                 f"ring preset {name!r}: number {glyph} cannot stand at "
                 f"{position}h — numbers only fit their own position"
             )
+    triangle_raw = entry.get("triangle")
+    triangle = None
+    if triangle_raw is not None:
+        if layout != "seal":
+            raise ValueError(
+                f"ring preset {name!r}: a triangle override only applies "
+                f"to the seal layout (this preset resolved to {layout!r})"
+            )
+        triangle = tuple(int(p) for p in triangle_raw)
+        if len(triangle) != 3 or not set(triangle).issubset(positions):
+            raise ValueError(
+                f"ring preset {name!r}: triangle {triangle} must be "
+                f"exactly 3 of its own positions {positions}"
+            )
+    legend_raw = entry.get("legend") or {}
+    legend = {}
+    for key, value in legend_raw.items():
+        position = int(key)
+        if position not in positions:
+            raise ValueError(
+                f"ring preset {name!r}: legend position {position} is "
+                f"not one of its own positions {positions}"
+            )
+        letter_name = str(value.get("name", "")).strip()
+        reading = str(value.get("reading", "")).strip()
+        if not letter_name or not reading:
+            raise ValueError(
+                f"ring preset {name!r}: legend entry {position} needs "
+                "both a name and a reading"
+            )
+        legend[position] = {"name": letter_name, "reading": reading}
     return {
         "name": name,
         "positions": positions,
         "letters": letters,
         "layout": layout,
+        "triangle": triangle,
+        "legend": legend,
     }
 
 

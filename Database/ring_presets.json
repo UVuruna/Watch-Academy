@@ -1,5 +1,5 @@
 {
-  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs.",
+  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs. Optional 'triangle' (seal layout only, ROADMAP 15b): overrides the layout's own metal triangle so a 6-letter preset can split into two 3-letter metal groups instead of the NUMBERS-style single finish on all six. Optional 'legend': hour(as the position int) -> {name, reading} — the per-letter HOVER LEGEND (owner: what a letter stands for), quoted verbatim from CANON.md's Banknote table.",
   "presets": [
     {
       "name": "DOMY",
@@ -49,6 +49,52 @@
         "4",
         "8"
       ]
+    },
+    {
+      "name": "MASON G",
+      "positions": [
+        12,
+        16,
+        20,
+        24,
+        4,
+        8
+      ],
+      "letters": [
+        "G",
+        "S",
+        "M",
+        "Ω",
+        "N",
+        "A"
+      ],
+      "triangle": [12, 20, 4],
+      "legend": {
+        "12": {
+          "name": "G",
+          "reading": "God — the masonic G that means both GOD and GEOMETRY, crowning the Eye."
+        },
+        "16": {
+          "name": "S",
+          "reading": "Sigma — the union's letter on Courage's arm."
+        },
+        "20": {
+          "name": "M",
+          "reading": "the Master — the Devil's face of mastery, on Pride's arm."
+        },
+        "24": {
+          "name": "Ω",
+          "reading": "Omega — and the dial's ring already seats Ω at 24h."
+        },
+        "4": {
+          "name": "N",
+          "reading": "the Nazarene — Jesus on Hope's arm."
+        },
+        "8": {
+          "name": "A",
+          "reading": "Alpha — the beginning, on Renewal's green."
+        }
+      }
     }
   ]
 }
