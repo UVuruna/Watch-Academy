@@ -59,6 +59,17 @@ The REAL astronomical year of a proxy datetime is
 - `dual_year(astro_year, notation)`: `"4500 BCE · A.L. -420"` — the
   active notation's form beside the A.L. form (beside the CE form when
   the active notation IS Anno Lucis); the Time Travel header line.
+- `format_anno_lucis(astro_year)` (owner fix-round B, 2026-07-19): just
+  the Anno Lucis half of the year line — `"6105. Anno Lucis"` —
+  derived ONCE and reused by both `format_year_line` and the Earth
+  hover card's own era block (`render.compositor._earth_text`).
+- `is_age_of_light(astro_year)` (owner fix-round B, 2026-07-19): True
+  within the sealed Age of Light span — astronomical −4078…6423
+  inclusive (4079 BCE → 6423 CE,
+  `research/ephemeris/anno_lucis.json`) — else the Age of Darkness;
+  the boundary constants (`AGE_OF_LIGHT_START/END_YEAR`) live in
+  `config.constants`. The Earth hover card's era badge/title is its
+  only caller today.
 - `era_names(notation)`: the era combo entries — `("CE", "BCE")`,
   `("AD", "BC")`, or `()` for the era-free notations.
 - `display_from_astro(astro_year, notation)` /

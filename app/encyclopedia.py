@@ -133,9 +133,20 @@ _SUN_ENTRIES = (
 )
 
 # The ERA TERMS topic (ROADMAP 15a3, owner 2026-07-17): the two AGES
-# and the four STARRY SEASONS carry an emblem each — the comparative
-# "Eras of the World" essay closes the topic with no plate of its own.
-# Badges from assets/era/ (research/prompts/era/era_prompts.md).
+# and the four STARRY SEASONS carry an emblem each. Badges from
+# assets/era/ (research/prompts/era/era_prompts.md).
+# The comparative "Eras of the World" essay carries no plate of its
+# own — instead it strings the SIX calendar-system emblems the essay
+# compares (owner fix-round B, 2026-07-19, TASK 3): graceful-absent
+# until PromptPainter generates assets/era/calendar/*.png.
+_ERA_CALENDAR_ART = (
+    "calendar/AUC.png",
+    "calendar/Byzantine.png",
+    "calendar/Hebrew.png",
+    "calendar/Hegirae.png",
+    "calendar/Buddhist.png",
+    "calendar/Huangdi.png",
+)
 _ERA_ENTRIES = (
     ("Age_of_Light", "Age_of_Light.png"),
     ("Age_of_Darkness", "Age_of_Darkness.png"),
@@ -143,7 +154,7 @@ _ERA_ENTRIES = (
     ("Starry_Summer", "Starry_Summer.png"),
     ("Starry_Autumn", "Starry_Autumn.png"),
     ("Starry_Winter", "Starry_Winter.png"),
-    ("Eras_of_the_World", None),
+    ("Eras_of_the_World", _ERA_CALENDAR_ART),
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -727,7 +738,11 @@ def _topics() -> dict:
         "icon": defaults.ERA_ART_DIR / "Age_of_Light.png",
         "entries": [
             {
-                "images": (defaults.ERA_ART_DIR / art,) if art else (),
+                "images": (
+                    tuple(defaults.ERA_ART_DIR / a for a in art)
+                    if isinstance(art, tuple)
+                    else (defaults.ERA_ART_DIR / art,) if art else ()
+                ),
                 "name": ("era_title", key),
                 "article": ("era", key),
                 "accents": (),

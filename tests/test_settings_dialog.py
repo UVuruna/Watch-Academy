@@ -204,6 +204,25 @@ def test_dialog_navigation_lists_every_section(app):
     dialog.done(0)
 
 
+def test_third_era_combo_lists_chinese(app):
+    """Owner fix-round B, 2026-07-19: the Huangdi count appears in the
+    Third calendar combo (Calendar eras, under Language) and round-trips
+    through `result_settings()` exactly like every other option."""
+    from config import constants
+
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    values = [
+        dialog._third_era_combo.itemData(i)
+        for i in range(dialog._third_era_combo.count())
+    ]
+    assert values == list(constants.THIRD_ERAS)
+    index = dialog._third_era_combo.findData("chinese")
+    dialog._third_era_combo.setCurrentIndex(index)
+    dialog.accept()
+    assert dialog.result_settings().third_era == "chinese"
+    dialog.done(0)
+
+
 def test_dialog_navigation_switches_the_visible_panel(app):
     """Clicking a nav row shows THAT section's panel (owner's stated
     interaction) — the stacked widget follows the list's current row."""
@@ -949,7 +968,13 @@ def test_era_terms_topic():
         assert entry["images"]
         resolved = _paths.art_file(entry["images"][0])
         assert resolved is None or resolved.suffix == ".png"
-    assert era[-1]["images"] == ()          # Eras of the World: no plate
+    # Eras of the World: no plate of its own — instead it strings the
+    # six calendar-system emblems the essay compares (owner fix-round
+    # B, 2026-07-19), graceful-absent until PromptPainter generates them.
+    assert len(era[-1]["images"]) == 6
+    for image in era[-1]["images"]:
+        resolved = _paths.art_file(image)
+        assert resolved is None or resolved.suffix == ".png"
 
     groups = dict(_TOPIC_GROUPS)
     assert groups["The Clock"] == (

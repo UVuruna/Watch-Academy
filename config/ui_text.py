@@ -193,6 +193,11 @@ UI_STRINGS: tuple[str, ...] = (
     "Year starts at Tishri (autumn); civil convention CE + 3760.",
     "Lunar years — displayed via the AH ≈ (CE − 622) × 33/32 "
     "approximation; exact AH needs lunisolar math.",
+    # The Chinese (Huangdi) third-era count (owner fix-round B,
+    # 2026-07-19 — "zašto nismo ubacili kineski").
+    "Huangdi (China)",
+    "Continuous count from the Yellow Emperor's reign — sources "
+    "spread 2695–2698 BCE; this dial uses CE + 2697.",
     # NOW (owner 2026-07-15): back to the present — in the Quick Jump
     # menu and as the Time Travel dialog's left button.
     "Now", "OK", "Cancel",
@@ -358,4 +363,8 @@ UI_STRINGS: tuple[str, ...] = (
     "(exact instants from the full installation).",
     "Eclipse density over the span — {solar}/{lunar} per century "
     "(solar/lunar). Install the full pack for exact instants.",
+    # The Earth hover card's era block (owner fix-round B, 2026-07-19,
+    # SLIKA 4) — "Age of Darkness" already ships from the Observatory
+    # legend above.
+    "Age of Light",
 )

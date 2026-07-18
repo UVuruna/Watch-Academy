@@ -25,10 +25,13 @@ lettering.
 
 **Drop paths:** `assets/era/` — `Age_of_Light.png`,
 `Age_of_Darkness.png`, `Starry_Spring.png`, `Starry_Summer.png`,
-`Starry_Autumn.png`, `Starry_Winter.png`. No `<source>` split (a
-single generation batch, like the emblem/badge families) — the app
-reads `assets/era/<Name>.png` directly
-(`config/defaults.py` `ERA_ART_DIR`).
+`Starry_Autumn.png`, `Starry_Winter.png`, plus (owner fix-round B,
+2026-07-19, TASK 3) `Anno_Lucis.png` and, under `assets/era/calendar/`,
+`AUC.png`, `Byzantine.png`, `Hebrew.png`, `Hegirae.png`, `Buddhist.png`,
+`Huangdi.png`. No `<source>` split (a single generation batch, like the
+emblem/badge families) — the app reads `assets/era/<Name>.png` (or
+`assets/era/calendar/<Name>.png`) directly (`config/defaults.py`
+`ERA_ART_DIR`).
 
 **House rules carried from every other sheet:** photorealistic
 render, isolated background (no transparency-checkerboard artifact —
@@ -116,15 +119,100 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ---
 
+## Anno Lucis — the dial's own measured era
+
+**Anno Lucis** (owner fix-round B, 2026-07-19, TASK 3 — "treba da
+napraviš promptove") → `assets/era/Anno_Lucis.png`. Same round
+rose-window family as the six above, but the SUBJECT is the dawn
+itself rather than the reign it opens: the eleven-year flicker motif
+already carried as a border signature on every Age/Season plate here
+becomes the FOREGROUND — the first unbroken light year breaking free
+of the flicker's hesitation.
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The great year-wheel motif shared by the Age and Starry Season plates, but caught at its single hinge moment: eleven small flame-shaped glass tesserae march across the wheel's base in a broken, hesitating row — seven dark, then light, then dark once more — and at the row's very last tessera the flame catches and HOLDS, a fresh radiant gold-white dawn breaking upward from that one held flame to fill the wheel's upper arc, still climbing, not yet at its crest. A single sunburst begins to form at the top, still gathering itself. Border: the shared candle-flicker-and-tick leadwork rim, brightest exactly where the held flame sits. Palette: fresh dawn gold rising from a held ember, the last dark tesserae still visible behind it, warm dark-gold lead. NO lettering anywhere.
+```
+
+## The Eras of the World's own calendars
+
+**Six emblems** (owner fix-round B, 2026-07-19, TASK 3 — "zašto nismo
+ubacili kineski" prompted the whole round), one per calendar system the
+"Eras of the World" essay compares — SAME round rose-window family,
+SAME house rules (photorealistic, isolated background, the circular
+window shape IS the frame, NO lettering anywhere — no calligraphy, no
+numerals, no inscriptions of any kind, the doctrine drawn as image
+alone). Every emblem stays ANICONIC — no human figures, no faces, no
+portraiture of any founder or prophet — each speaks its epoch through
+CLASSICAL, RESPECTFUL iconography only, the same restraint a rose
+window itself keeps; these are living traditions, drawn with the same
+care the dial gives its own measured era, never a caricature.
+Drop path: `assets/era/calendar/`.
+
+**AUC — Ab Urbe Condita** (Rome, 753 BCE) →
+`assets/era/calendar/AUC.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The Capitoline she-wolf suckling the twin founders fills the disc's lower field in warm bronze-and-amber glass, a laurel wreath arcing above her, seven small hill-shaped tesserae set in a low arc behind her marking Rome's seven hills. Palette: warm bronze, amber and deep laurel green, aged-gold lead. Border: a simple laurel-and-tick leadwork rim. NO lettering anywhere, no human figures beyond the twin infants already fixed in the founding motif itself.
+```
+
+**Byzantine Anno Mundi** (1 September 5509 BCE) →
+`assets/era/calendar/Byzantine.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A great golden mosaic dome fills the disc's upper field in radiant Byzantine gold-glass tesserae, its curve echoing Hagia Sophia's own; below it a triple interlocking ring motif (the 19-year lunar, 28-year solar and 15-year indiction cycles the era was tuned to close together) sits in deep imperial purple and gold. Palette: radiant Byzantine gold, imperial purple, aged-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim, dressed in a fine mosaic-tessera texture. NO lettering anywhere, no figures.
+```
+
+**Hebrew Anno Mundi** (Tishri, 3761 BCE) →
+`assets/era/calendar/Hebrew.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A seven-branched menorah in warm gold glass rises from the disc's base, its central flame the brightest point in the whole medallion; behind it a soft autumn-toned sky (Tishri's own season) fades from amber near the flame to deep blue at the rim. Palette: warm menorah gold, deep autumn amber, twilight blue, aged-gold lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
+```
+
+**Anno Hegirae** (the Hijra, 622 CE) →
+`assets/era/calendar/Hegirae.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A slender crescent moon and a single bright star sit high in a deep midnight-blue glass sky filling the disc's upper field; below them a small caravan of tents and a winding desert path in warm sand-and-amber glass trace a journey toward the rim — the emigration itself, never a face among the tents. Palette: deep midnight blue, silver crescent, warm sand and amber, dark-iron lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere (no calligraphy of any kind — this is the one house rule that matters most here), no figures.
+```
+
+**Buddhist Era** (the Parinirvana, 543 BCE) →
+`assets/era/calendar/Buddhist.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A Bodhi leaf-shaped canopy of glass fills the disc's upper field in deep jade and gold, sheltering an empty stone seat below it (the aniconic Buddhist convention — presence marked by absence); a single lotus in soft pink-white glass floats at the base, fully open. Palette: deep jade, warm gold, soft lotus pink-white, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures — the empty seat and the footprint-free lotus carry the whole doctrine.
+```
+
+**Huangdi / Chinese** (the Yellow Emperor, conventionally 2697 BCE) →
+`assets/era/calendar/Huangdi.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. An Imperial-yellow jade disc (a bi, the ancient symbol of heaven) sits at the medallion's center, ringed by a single sinuous dragon in deep jade-green and gold tracing the disc's own circular window edge — the dragon never fully closing the circle, echoing the flicker motif's own broken row in spirit though not in literal form. Palette: imperial yellow-gold, deep jade green, dark lacquer-red accents, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
+```
+
+**Future use (owner note, not yet wired further than the essay art):**
+these six calendar emblems' art already backs the "Eras of the World"
+article's image strip (`app/encyclopedia.py` `_ERA_CALENDAR_ART`,
+graceful-absent — see [Encyclopedia](../../../app/encyclopedia.md));
+the owner's next planned use is the Settings/era-picker combo
+(`app/settings_dialog.py` Third calendar dropdown, currently text-only)
+wearing the matching emblem beside each option.
+
+---
+
 ## Status
 
-- New sheet (ROADMAP 15a3, owner 2026-07-17); NOT yet generated.
-- The "Eras of the World" comparative article (AUC, Byzantine AM,
-  Hebrew AM, AH, the Chinese count, the Buddhist Era, plus every
-  scriptural reckoner and our own measured Anno Lucis) carries NO
-  emblem — it is the essay that compares this dial's measurement
-  against every OTHER tradition's arithmetic, not a span the dial
-  itself owns an image for.
+- New sheet (ROADMAP 15a3, owner 2026-07-17); the six Age/Season
+  emblems NOT yet generated.
+- Extended (owner fix-round B, 2026-07-19, TASK 3 — "treba da napraviš
+  promptove"): Anno Lucis's own emblem plus six calendar-system
+  emblems (AUC, Byzantine AM, Hebrew AM, AH, Buddhist Era, Huangdi)
+  join the sheet — 13 images total, NONE generated yet. The "Eras of
+  the World" comparative article itself still carries no plate of its
+  OWN — it is the essay that compares this dial's measurement against
+  every OTHER tradition's arithmetic — but it now strings the six
+  calendar emblems as its own image strip (see the Future use note
+  above; `app/encyclopedia.py` wires the paths already, graceful-absent).
 - Verify with `python main.py "research/prompts/era/era_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner
-  (6 images expected).
+  (13 images expected — verified 2026-07-19, dry-run clean, 0 problems).

@@ -75,6 +75,44 @@ def test_third_era_years():
     # The documented display-grade lunar approximation: mid-2026 sits
     # at the AH 1447→1448 turn.
     assert third_era_year(2026, "hegirae") in (1447, 1448)
+    # The Chinese (Huangdi) count, owner fix-round B 2026-07-19: the
+    # CE + 2697 convention (sources spread 2695-2698).
+    assert third_era_year(2026, "chinese") == 4723
+
+
+def test_chinese_third_era_joins_the_year_line():
+    """The Huangdi count reads on the year line exactly like every
+    other third calendar (owner fix-round B 2026-07-19, "zašto nismo
+    ubacili kineski")."""
+    assert (
+        format_year_line(2026, "bce_ce", True, "chinese")
+        == "2026 CE · 6105. Anno Lucis · 4723. Huangdi"
+    )
+    assert "chinese" in constants.THIRD_ERAS
+    assert constants.THIRD_ERA_LABELS["chinese"] == "Huangdi"
+
+
+def test_format_anno_lucis_matches_the_year_line_pairing():
+    """`format_anno_lucis` is the SAME derivation `format_year_line`
+    reuses — never re-derived (Rule #5)."""
+    from core.deep_time import format_anno_lucis
+
+    assert format_anno_lucis(2026) == "6105. Anno Lucis"
+    assert format_anno_lucis(-4078) == "1. Anno Lucis"
+
+
+def test_is_age_of_light_matches_the_sealed_span():
+    """research/ephemeris/anno_lucis.json: light_era = [-4078, 6423]
+    inclusive; everything else covered is the Age of Darkness."""
+    from core.deep_time import is_age_of_light
+
+    assert is_age_of_light(-4078) is True           # first light year
+    assert is_age_of_light(2026) is True             # today
+    assert is_age_of_light(6423) is True             # last light year
+    assert is_age_of_light(6424) is False            # first dark year
+    assert is_age_of_light(-4079) is False           # last dark year before
+    assert is_age_of_light(10990) is False           # dark era trough
+    assert is_age_of_light(-9560) is False           # previous dark era peak
 
 
 def test_display_era_round_trip_incl_year_zero():

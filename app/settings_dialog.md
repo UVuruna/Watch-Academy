@@ -143,9 +143,11 @@ like before.
   official era labels (BCE/CE default vs BC/AD), the "write the era
   after positive years too" opt-in (default off — the world writes
   "2026" bare), and the optional THIRD calendar combo
-  (None/AUC/Byzantine A.M./Hebrew A.M./Anno Hegirae — the epoch fine
-  print lives in the combo tooltips only). Anno Lucis is NOT an
-  option: it always accompanies the official year.
+  (None/AUC/Byzantine A.M./Hebrew A.M./Anno Hegirae/Huangdi (China) —
+  the last added owner fix-round B, 2026-07-19, "zašto nismo ubacili
+  kineski"; the epoch fine print lives in the combo tooltips only).
+  Anno Lucis is NOT an option: it always accompanies the official
+  year.
 - **System** — Start with Windows (the HKCU Run entry) plus the
   VISIBILITY Z mode combo (owner 2026-07-17, ROADMAP 15e): the THREE
   modes — below all windows (the desktop layer, default), a normal window

@@ -304,6 +304,14 @@ def test_year_line_and_jump_cities_round_trip(store):
     assert store.load() == saved
 
 
+def test_chinese_third_era_round_trips(store):
+    """Owner fix-round B, 2026-07-19: the Huangdi count validates and
+    persists exactly like every other third calendar."""
+    saved = replace(Settings(), third_era="chinese")
+    store.save(saved)
+    assert store.load() == saved
+
+
 def test_bad_jump_city_raises(store):
     store.save(Settings())
     raw = store.path.read_text(encoding="utf-8").replace(

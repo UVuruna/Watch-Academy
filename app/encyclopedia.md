@@ -145,6 +145,19 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 
 ## Design Decisions
 
+**The Eras of the World carries SIX calendar emblems (owner fix-round
+B, 2026-07-19, TASK 3):** the comparative essay still has no plate of
+its OWN, but `_ERA_ENTRIES`'s last entry now supplies a TUPLE of six
+`assets/era/calendar/*.png` paths (AUC, Byzantine, Hebrew, Hegirae,
+Buddhist, Huangdi — one per calendar the essay compares) instead of
+`None`; `_topics()`'s `"images"` comprehension branches on `isinstance(
+art, tuple)` to build every path (Rule #5 — the SAME `images` tuple
+mechanism `_article_html` already draws side-by-side art with, e.g. the
+dual Sunday plates). Graceful-absent like every other era plate — none
+of the six PNGs exist yet (research/prompts/era/era_prompts.md carries
+the new prompts); a future Settings/era-picker use of the same art is
+noted in that sheet.
+
 **The hidden poem (owner 2026-07-16, ROADMAP queue #6):** when
 `hidden_unlocked` is true, `__init__` appends TWO extra entries from
 `Database/verses.json` — one closing the Trinity topic (the owner's

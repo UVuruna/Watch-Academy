@@ -23,7 +23,12 @@ from config.ui_text import ui
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
-from core.deep_time import format_year_line, real_year
+from core.deep_time import (
+    format_anno_lucis,
+    format_year_line,
+    is_age_of_light,
+    real_year,
+)
 from core.moon import nominal_illumination, phase_name
 from core.year_wheel import (
     instant_at_marker_angle,
@@ -2375,13 +2380,31 @@ class Compositor:
         return f"<b>{html.escape(self._tr(text))}:</b>"
 
     def _earth_text(self) -> str:
-        """Earth hover (owner formatting round 2026-07-12): a bold
-        Date label with the day/week ordinals beneath, a blank line,
-        then bold Season and Sign labels — plus the season event on
-        top while the marker glows."""
+        """Earth hover (owner fix-round B, 2026-07-19, SLIKA 4 — the
+        card rework): a Date TITLE over the date/day-of-year/week-of-
+        year rows, a blank row, the ERA badge (Age of Light/Darkness
+        per the CURRENT real year — deep-travel aware, `real_year`
+        un-shifts the proxy frame) over an era TITLE and its Anno
+        Lucis year line, a blank row, the SEASON badge (the turning-
+        point badge while a season event glows, else the current
+        season's own badge — the exact art the arm hovers use) over
+        the existing Season:/Sign: lines. Three HTML blocks are
+        concatenated directly (never passed as `_centered_html` LINES)
+        — `_hover_title`/`_hover_badge` already emit their own centered
+        div, matching how every other hover in this file layers badge +
+        title + `_centered_html` (the cardinal-arm block a few hundred
+        lines up). The eclipse/season-event line rides ahead of the
+        Season: line — inside the season block, right before it — not
+        at the very top of the whole card any more, since the card now
+        has sections above it."""
         day, date = self._day, self._day.local_date
         last = day.zodiac_end - timedelta(days=1)
-        lines = [
+        real = real_year(date.year, day.deep_cycles)
+        light = is_age_of_light(real)
+        era_name = "Age of Light" if light else "Age of Darkness"
+        era_file = "Age_of_Light.png" if light else "Age_of_Darkness.png"
+
+        date_block = _hover_title(html.escape(self._tr("Date"))) + _centered_html(
             f"{self._label('Date')} {self._ord(date.day)} "
             f"{html.escape(self._month(date))} {self._year(date)}",
             self._tr("{ordinal} Day - {ordinal_week} Week").format(
@@ -2389,21 +2412,41 @@ class Compositor:
                 ordinal_week=self._ord(date.isocalendar().week),
             ),
             "",
-            f"{self._label('Season')} {self._season_row()}",
+        )
+
+        era_block = (
+            _hover_badge(defaults.ERA_ART_DIR / era_file)
+            + _hover_title(html.escape(self._tr(era_name)))
+            + _centered_html(html.escape(format_anno_lucis(real)), "")
+        )
+
+        season_event = self._last_tick.season_event
+        if season_event is not None:
+            badge = (
+                "Equinox" if "Equinox" in season_event
+                else season_event.replace(" ", "_")
+            )
+            season_art = defaults.SEASON_ART_DIR / "turning_point" / f"{badge}.png"
+        else:
+            season_art = defaults.SEASON_ART_DIR / f"{self._current_season_key()}.png"
+
+        eclipse = self._last_tick.eclipse_event
+        tail = []
+        if eclipse is not None and eclipse.kind == "solar":
+            tail.append(self._eclipse_hover_line(eclipse))
+        elif season_event is not None:
+            tail.append(html.escape(self._tr(season_event)))
+        tail.append(f"{self._label('Season')} {self._season_row()}")
+        tail.append(
             f"{self._label('Sign')} {html.escape(day.zodiac_symbol)} "
             f"{html.escape(self._tr(day.zodiac_name))} "
             f"({self._ord(day.zodiac_start.day)} "
             f"{html.escape(self._month(day.zodiac_start))} - "
-            f"{self._ord(last.day)} {html.escape(self._month(last))})",
-        ]
-        eclipse = self._last_tick.eclipse_event
-        if eclipse is not None and eclipse.kind == "solar":
-            lines.insert(0, self._eclipse_hover_line(eclipse))
-        elif self._last_tick.season_event is not None:
-            lines.insert(
-                0, html.escape(self._tr(self._last_tick.season_event))
-            )
-        return _centered_html(*lines)
+            f"{self._ord(last.day)} {html.escape(self._month(last))})"
+        )
+        season_block = _hover_badge(season_art) + _centered_html(*tail)
+
+        return date_block + era_block + season_block
 
     def _period_earth_html(self, kind: str) -> str:
         """The active region's own Earth face rides the Day/Night hover

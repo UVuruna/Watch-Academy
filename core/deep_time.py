@@ -36,6 +36,17 @@ def format_official(
     return f"{1 - astro_year} {before}"
 
 
+def format_anno_lucis(astro_year: int) -> str:
+    """Just the Anno Lucis half of the year line — "6105. Anno Lucis"
+    (owner sealed 2026-07-16: A.L. = astronomical year + 4079). The
+    Earth hover card's own era block reuses this directly;
+    `format_year_line` reuses it too, so the form is derived ONCE."""
+    return (
+        f"{astro_year + constants.ANNO_LUCIS_OFFSET}. "
+        f"{constants.ANNO_LUCIS_LABEL}"
+    )
+
+
 def format_year_line(
     astro_year: int,
     notation: str,
@@ -49,8 +60,7 @@ def format_year_line(
     renders through here."""
     parts = [
         format_official(astro_year, notation, show_suffix),
-        f"{astro_year + constants.ANNO_LUCIS_OFFSET}. "
-        f"{constants.ANNO_LUCIS_LABEL}",
+        format_anno_lucis(astro_year),
     ]
     if third_era != "none":
         parts.append(
@@ -58,6 +68,18 @@ def format_year_line(
             f"{constants.THIRD_ERA_LABELS[third_era]}"
         )
     return " · ".join(parts)
+
+
+def is_age_of_light(astro_year: int) -> bool:
+    """True within the sealed Age of Light span — 4079 BCE → 6423 CE,
+    astronomical −4078…6423 (research/ephemeris/anno_lucis.json,
+    ROADMAP 15a3) — else the Age of Darkness (dark otherwise within
+    this dial's coverage, owner sealed 2026-07-16)."""
+    return (
+        constants.AGE_OF_LIGHT_START_YEAR
+        <= astro_year
+        <= constants.AGE_OF_LIGHT_END_YEAR
+    )
 
 
 def third_era_year(astro_year: int, third_era: str) -> int:

@@ -996,6 +996,60 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     assert "&lt;sup&gt;" not in title
 
 
+def test_earth_hover_card_layout_order(july_wednesday):
+    """Owner fix-round B, 2026-07-19, SLIKA 4 — the card rework: Date
+    TITLE -> date rows -> era badge/TITLE/A.L. line -> season badge ->
+    Season:/Sign: rows, in that exact order (8 July 2026 sits inside
+    the Age of Light)."""
+    day, tick = july_wednesday
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, tick)
+    earth = compositor._earth_text()
+    date_title = earth.index(">Date<")
+    date_row = earth.index("Date:</b>")
+    era_title = earth.index(">Age of Light<")
+    # "6105. Anno Lucis" appears TWICE — once paired onto the date row
+    # (`_year()`'s own pairing, unchanged since Session 16) and once as
+    # the era block's OWN Anno Lucis line; the era block's occurrence is
+    # the one after era_title.
+    al_line = earth.index("6105. Anno Lucis", era_title)
+    season_row = earth.index("Season:</b>")
+    sign_row = earth.index("Sign:</b>")
+    assert date_title < date_row < era_title < al_line < season_row < sign_row
+    assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
+
+
+def test_earth_hover_card_season_event_line_precedes_season_row(july_wednesday):
+    """A season-event GLOW line rides directly ahead of Season: — inside
+    the season block, never at the very top of the whole card any more
+    now that the card grew sections above it (owner instruction: verify
+    the eclipse-round placement still reads well after the rework)."""
+    day, tick = july_wednesday
+    glowing = dataclasses.replace(tick, season_event="Summer Solstice")
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, glowing)
+    earth = compositor._earth_text()
+    assert earth.index(">Date<") < earth.index("Summer Solstice")
+    assert earth.index("Summer Solstice") < earth.index("Season:</b>")
+
+
+def test_earth_hover_card_era_flips_to_darkness_past_6423(july_wednesday):
+    """Deep-travel aware (owner spec): the era block un-shifts the deep
+    proxy frame via `real_year(date.year, deep_cycles)` — the SAME
+    un-shifting `_year`/`format_year_line` already do. `deep_cycles`
+    alone drives it (`local_date`'s calendar year stays 2026 on
+    purpose, so the season/zodiac bookkeeping this test doesn't
+    exercise stays valid): -12 cycles reads real year 2026 + 4800 =
+    6826, past +6423 — the Age of Darkness."""
+    day, tick = july_wednesday
+    far_day = dataclasses.replace(day, deep_cycles=-12)
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, far_day, tick)
+    earth = compositor._earth_text()
+    assert ">Age of Darkness<" in earth
+    assert ">Age of Light<" not in earth
+
+
 def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
     """The hidden mode (owner 2026-07-14, placement round two; TOP-ONLY
     round 2026-07-16): unlocked, hovering the 12h ring LETTER — the band

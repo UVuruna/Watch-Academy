@@ -212,10 +212,30 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   beneath while its name holds, then **Illumination:** to one decimal
   and **Moonrise:**/
   **Moonset:**, a blank row, then the cycle day and the running
-  lunation); the Earth marker (bold **Date:** with the Nth Day - Nth
-  Week row beneath, a blank row, then **Season:** "Summer 18th of 94
-  Days" — southern hemisphere flips the name — and **Sign:** with the
-  zodiac span, plus the season event name while it glows); the ring
+  lunation); the Earth marker — THE CARD REWORK (owner fix-round B,
+  2026-07-19, SLIKA 4, `_earth_text`): three HTML blocks concatenated
+  directly (never passed as `_centered_html` LINES — `_hover_title`/
+  `_hover_badge` already emit their own centered div, the same pattern
+  every other badge-carrying hover in this file uses) —
+  1. a **Date** TITLE over the existing date row (bold **Date:** with
+     the day/week ordinals beneath — unchanged, still carries its own
+     `_year()` A.L. pairing) and a blank row;
+  2. the ERA badge (`assets/era/Age_of_Light.png` /
+     `Age_of_Darkness.png`, graceful-absent) over the era name as a
+     TITLE ("Age of Light"/"Age of Darkness") and its OWN Anno Lucis
+     line (`core.deep_time.format_anno_lucis`, the SAME derivation
+     `format_year_line` reuses — Rule #5) — `is_age_of_light(real)`
+     decides on the CURRENT real year, `real_year(date.year,
+     day.deep_cycles)` un-shifting the deep proxy frame first (deep-
+     travel aware, mirrors `_year()`'s own un-shift), and a blank row;
+  3. the SEASON badge — the turning-point badge
+     (`SEASON_ART_DIR/turning_point/<Event>.png`) while
+     `tick.season_event` glows, else the current season's own badge
+     (`SEASON_ART_DIR/<key>.png`, `_current_season_key()` — the exact
+     art the diagonal-arm hovers use) — over the eclipse/season-event
+     GLOW line (moved here, right ahead of **Season:**, from the old
+     flat layout's absolute top — the card grew sections above it) and
+     the existing **Season:**/**Sign:** lines); the ring
   TICK BAND (before the twilight wedges — in the overlapping annulus
   the circle wins): the 360 arrows answer in DOMY-titled sections
   separated by blank rows — **Day** (**Time:**/**Angle:** plus the

@@ -146,29 +146,45 @@ ERA_NAMES = {"bce_ce": ("CE", "BCE"), "bc_ad": ("AD", "BC")}
 ANNO_LUCIS_OFFSET = 4079
 ANNO_LUCIS_LABEL = "Anno Lucis"      # "6105. Anno Lucis" (owner's form)
 
+# The Age of Light / Age of Darkness boundary (SEALED 2026-07-16, the
+# doctrine research/ephemeris/anno_lucis.json measures): the current
+# reigning age runs astronomical −4078…6423 inclusive (= 4079 BCE →
+# 6423 CE, 10,501 unbroken years); every other covered year is the Age
+# of Darkness. Owner fix-round B, 2026-07-19 (Earth hover card).
+AGE_OF_LIGHT_START_YEAR = -4078
+AGE_OF_LIGHT_END_YEAR = 6423
+
 # The optional THIRD calendar on the year line (owner amendment
-# 2026-07-17, Settings third_era; default none). Offsets live on the
-# ASTRONOMICAL axis (1 BCE = 0), where every "CE + N" convention
+# 2026-07-17, Settings third_era; default none; "chinese" added owner
+# fix-round B 2026-07-19 — "zašto nismo ubacili kineski"). Offsets live
+# on the ASTRONOMICAL axis (1 BCE = 0), where every "CE + N" convention
 # becomes a uniform +N: AUC 1 = 753 BCE = astro −752 (+753 → 1 ✓);
 # Byzantine A.M. 1 = 5509 BCE (September epoch — tooltip note only);
 # Hebrew A.M. counts from Tishri 3761 BCE (civil-axis convention
 # CE + 3760 — tooltip note only). Anno Hegirae is LUNAR and has no
 # fixed offset — displayed via the standard display-grade
-# approximation AH ≈ (CE − 622) × 33/32 (core.deep_time).
-THIRD_ERAS = ("none", "auc", "byzantine", "hebrew", "hegirae")
+# approximation AH ≈ (CE − 622) × 33/32 (core.deep_time). The Chinese
+# (Huangdi) count uses the CE + 2697 convention (2026 CE → 4723) — the
+# most common modern reading; sources spread 2695–2698 (the Encyclopedia's
+# own "Eras of the World" article already flags the epoch drift).
+THIRD_ERAS = ("none", "auc", "byzantine", "hebrew", "hegirae", "chinese")
 THIRD_ERA_TITLES = {
     "none": "None",
     "auc": "Ab Urbe Condita (Rome)",
     "byzantine": "Byzantine Anno Mundi",
     "hebrew": "Hebrew Anno Mundi",
     "hegirae": "Anno Hegirae (Islamic)",
+    "chinese": "Huangdi (China)",
 }
-THIRD_ERA_OFFSETS = {"auc": 753, "byzantine": 5509, "hebrew": 3760}
+THIRD_ERA_OFFSETS = {
+    "auc": 753, "byzantine": 5509, "hebrew": 3760, "chinese": 2697,
+}
 THIRD_ERA_LABELS = {
     "auc": "AUC",
     "byzantine": "Byzantine A.M.",
     "hebrew": "Hebrew A.M.",
     "hegirae": "AH",
+    "chinese": "Huangdi",
 }
 # Epoch fine print for the Settings combo tooltips (owner amendment:
 # tooltip only, never on the year line).
@@ -177,6 +193,8 @@ THIRD_ERA_NOTES = {
     "hebrew": "Year starts at Tishri (autumn); civil convention CE + 3760.",
     "hegirae": "Lunar years — displayed via the AH ≈ (CE − 622) × 33/32 "
                "approximation; exact AH needs lunisolar math.",
+    "chinese": "Continuous count from the Yellow Emperor's reign — "
+               "sources spread 2695–2698 BCE; this dial uses CE + 2697.",
 }
 
 # The 400-year proleptic-Gregorian cycle (146,097 days — exactly 20,871
