@@ -494,22 +494,24 @@ def _arm_px(radius, dial_angle, star_fraction=0.86):
     return radius + pos.x(), radius + pos.y()
 
 
-def test_arm_hover_speaks_the_two_row_pending_article(app):
+def test_arm_hover_speaks_the_two_row_article(app):
     """Hovering an arm in the mode answers the archetype's TWO-ROW
-    legend; until Session 6 writes the sets it shows the figure's name,
-    the second-row name and the pending line — never a KeyError."""
+    legend (Session 6 wrote the sets): the figure's name, the second-row
+    name, and both rows of real prose — no longer the pending line."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
     comp = Compositor(_archetype_skin("trio"), AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
     tooltip = comp.tooltip_at(*_arm_px(180.0, 0.0), 360.0)
     assert tooltip is not None
     assert "The One" in tooltip and "Judge" in tooltip
-    assert archetypes.ARCHETYPE_PENDING_LINE in tooltip
+    assert archetypes.ARCHETYPE_PENDING_LINE not in tooltip
+    assert "Alpha and the Omega" in tooltip     # row-1 prose landed
     # The hexa two-sign columns are REPLACED by the archetype reading.
     soul = Compositor(_archetype_skin("hexa", "light"), AssetCache())
     soul.render_offscreen(360.0, 1.0, day, tick)
     tooltip = soul.tooltip_at(*_arm_px(180.0, 0.0), 360.0)
     assert "Gratitude" in tooltip and "Taking for Granted" in tooltip
+    assert archetypes.ARCHETYPE_PENDING_LINE not in tooltip
 
 
 def test_center_hover_and_targets(app):
@@ -803,17 +805,88 @@ def test_tetramorph_arm_shows_the_three_side_layout(app):
 
 
 def test_archetype_article_resolution_is_graceful(app):
-    """SymbolismRepository.archetype_article: an unwritten set (and an
-    unwritten entity) answer None — the resolution path Session 6
-    fills with {"rows": [...]} nodes under the documented set names."""
+    """SymbolismRepository.archetype_article: an unknown set and an
+    unknown entity still answer None (the graceful path stands); the
+    Compass has no center, so its "center" entity stays None even now
+    that Session 6 wrote the sets."""
     from data.symbolism import SymbolismRepository
 
     repo = SymbolismRepository()
-    assert repo.archetype_article("archetype_trinity_paint", "one") is None
+    assert repo.archetype_article("archetype_trinity_paint", "nobody") is None
+    assert repo.archetype_article("no_such_set", "one") is None
+    # The two Compass wheels are centerless (the rose is the wheel).
+    assert repo.archetype_article("archetype_compass_paint", "center") is None
     assert repo.archetype_article("archetype_compass_light", "center") is None
     # Every archetype declares its documented set name.
     for key, spec in archetypes.ARCHETYPES.items():
         assert spec["articles"] == f"archetype_{key}"
+
+
+def test_every_archetype_set_position_and_center_is_written(app):
+    """Session 6 coverage law: every archetype's every FIGURE position
+    (both life registers included) and every CENTER that exists resolves
+    to a non-pending {"rows": [...]} node with non-empty prose — so no
+    hover in the mode ever falls back to the pending line."""
+    from data.symbolism import SymbolismRepository
+
+    repo = SymbolismRepository()
+    checked = 0
+    for key, spec in archetypes.ARCHETYPES.items():
+        set_name = spec["articles"]
+        figs = []
+        if "registers" in spec:
+            for register in spec["registers"].values():
+                figs.extend(register)
+        else:
+            figs = list(spec["figures"])
+        entities = {fig["entity"] for fig in figs}
+        if spec["center"] is not None:
+            entities.add("center")
+        for entity in entities:
+            node = repo.archetype_article(set_name, entity)
+            assert node is not None, f"{set_name}.{entity} is pending"
+            rows = node.get("rows")
+            assert rows and all(
+                isinstance(r, str) and r.strip() for r in rows
+            ), f"{set_name}.{entity} has empty rows"
+            checked += 1
+    assert checked == 48        # 6 two-row sets + 2 three-side wheels
+
+
+def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
+    """Session 6 MANDATORY: the octa_paint/octa_light variant paragraphs
+    were rewritten off the OLD compass day-arc onto the sealed Walks
+    (paint) and Eight Ages (light) wheels — each weekday body carries its
+    fixed arm's NEW hue and no foreign arm hue leaks in."""
+    from data.symbolism import SymbolismRepository
+
+    # body -> (octa paint hue, octa light hue) at its fixed octa arm.
+    hues = {
+        "sun": ("#F0C420", "#FFE800"), "mars": ("#C87533", "#FFB400"),
+        "venus": ("#A02020", "#FF6A3C"), "mercury": ("#7A2E8E", "#9C6BD4"),
+        "moon": ("#1F5FA8", "#C8D7F0"), "saturn": ("#3E8914", "#8FA8C8"),
+        "jupiter": ("#EDEDE0", "#7CE577"),
+    }
+    all_hues = {h for pair in hues.values() for h in pair}
+    repo = SymbolismRepository()
+    data = repo._load()["articles"]
+    seen = 0
+    for set_name, entities in data.items():
+        for body, node in entities.items():
+            variants = node.get("variants", {})
+            if "octa_paint" not in variants:
+                continue
+            paint, light = variants["octa_paint"], variants["octa_light"]
+            own_paint, own_light = hues[body]
+            assert own_paint.lower() in paint.lower()
+            assert own_light.lower() in light.lower()
+            for hue in all_hues:
+                if hue != own_paint:
+                    assert hue.lower() not in paint.lower()
+                if hue != own_light:
+                    assert hue.lower() not in light.lower()
+            seen += 1
+    assert seen == 163
 
 
 # --- The Earth day label -----------------------------------------------------------

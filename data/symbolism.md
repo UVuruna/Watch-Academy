@@ -31,11 +31,21 @@ color and mood) below the two zodiac sign lines.
   `articles.<set>.<entity>` holding `{"rows": [row1, row2]}`. The set
   names live in [Archetypes](../config/archetypes.md)
   (`archetype_trinity_paint` … `archetype_compass_light`), the entity
-  keys per figure plus `"center"`. Session 6 WRITES the texts; until a
-  set/entity exists this returns **None** and the hover shows the
-  figure's name with the pending line — the documented graceful path,
-  never a KeyError. Translated rows overlay under
-  `articles/<set>/<entity>/rows/<i>`.
+  keys per figure plus `"center"`. **Session 6 WROTE all seven sets
+  (2026-07-18): 48 entities in total** — the two-row layouts carry both
+  rows (person+calling, member+hearth-role, temperament+age,
+  person+quality, pillar+shadow, estate+object), while the two
+  three-side wheels (`archetype_seasons_light` the Tetramorph,
+  `archetype_compass_light` the Ages) carry a SINGLE row (`rows[0]` —
+  the creature/age text; the compositor draws their second column,
+  evangelist/element or life-register being, from config). Centers
+  exist for all sets EXCEPT the two Compass wheels (the rose is the
+  wheel); the Seasons Throne is one shared article under both seasons
+  sets. A still-unknown set/entity returns **None** and the hover shows
+  the figure's name with the pending line — the documented graceful
+  path, never a KeyError. Translated rows overlay under
+  `articles/<set>/<entity>/rows/<i>` (the SR bundle is brought to
+  coverage in the pre-build Translation session, not here).
 
 The JSON also carries the `articles` set (35 encyclopedic texts, one
 per entity per theme) — not yet surfaced in the app; the owner decides
