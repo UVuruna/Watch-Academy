@@ -81,6 +81,17 @@ there and the menu grays the toggle.
   arm (fire summer, earth autumn, water winter, air spring); row 2 is
   the Evangelist (Mark/Luke/John/Matthew). The Throne is the center of
   both wheels.
+- **The Tetramorph three-side's second column has its OWN art table**
+  (owner 2026-07-18) — `TETRAMORPH_EVANGELIST_FILES` /
+  `tetramorph_evangelist_file(index)`: the four EVANGELIST rondels at
+  `assets/archetype/evangelist/{Mark,Luke,John,Matthew}.png`, indexed in
+  the same hour-space order as the figures (0 Mark, 1 Luke, 2 John, 3
+  Matthew). Unlike the figures, these have NO committed placeholder — the
+  three-side simply shows the evangelist's name alone until the rondel
+  lands (`archetype_art_ready`), a 1×1-placeholder-free path. The element
+  column reuses `tetramorph_element(index)` and the wheel hue; both column
+  articles live in `symbolism.json` as `rows[1]`/`rows[2]` of the creature
+  node (see [Symbolism (data)](../data/symbolism.md)).
 - **The Ages ship TWO registers** (owner "oba", CANON §Compass
   light): the Tree and the Menagerie both have full file tables;
   `ARCHETYPE_LIFE_REGISTER` picks the rendered one (default `tree`,

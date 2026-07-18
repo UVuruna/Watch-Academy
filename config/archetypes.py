@@ -122,6 +122,7 @@ _TRINITY_DIR = ARCHETYPE_ART_DIR / "trinity"
 _FAMILY_DIR = ARCHETYPE_ART_DIR / "family"
 _TEMPERAMENTS_DIR = ARCHETYPE_ART_DIR / "temperaments"
 _TETRAMORPH_DIR = ARCHETYPE_ART_DIR / "tetramorph"
+_EVANGELIST_DIR = ARCHETYPE_ART_DIR / "evangelist"
 _PERSONS_DIR = ARCHETYPE_ART_DIR / "persons"
 _ONE_SOUL_DIR = ARCHETYPE_ART_DIR / "one_soul"
 _WALKS_DIR = ARCHETYPE_ART_DIR / "walks"
@@ -339,11 +340,32 @@ ARCHETYPES = {
 # (spring/Man). The THIRD column of the tetramorph three-side hover.
 TETRAMORPH_ELEMENTS = ("Fire", "Earth", "Water", "Air")
 
+# The four EVANGELIST rondels (owner 2026-07-18) — the SECOND column of
+# the tetramorph three-side hover. Index = the arm/hour-space index, the
+# SAME order as the seasons_light figures (0 Lion/Mark, 1 Ox/Luke, 2
+# Eagle/John, 3 Man/Matthew). Small round stained-glass rondels of each
+# evangelist at his desk with his creature, in his season's palette;
+# they may not exist on disk yet — the three-side falls back to the
+# evangelist's name alone (archetype_art_ready), exactly like every
+# other archetype art (a 1×1-placeholder-free path).
+TETRAMORPH_EVANGELIST_FILES = (
+    _EVANGELIST_DIR / "Mark.png",
+    _EVANGELIST_DIR / "Luke.png",
+    _EVANGELIST_DIR / "John.png",
+    _EVANGELIST_DIR / "Matthew.png",
+)
+
 
 def tetramorph_element(index: int) -> str:
     """The element name for one Tetramorph arm (Rule #5: one ordering
     shared with the figures and the Four-Elements wheel hues)."""
     return TETRAMORPH_ELEMENTS[index]
+
+
+def tetramorph_evangelist_file(index: int):
+    """The evangelist rondel path for one Tetramorph arm (Rule #5: one
+    ordering shared with the figures, elements and wheel hues)."""
+    return TETRAMORPH_EVANGELIST_FILES[index]
 
 
 def grid_key(pointer: str, palette_style: str) -> str | None:

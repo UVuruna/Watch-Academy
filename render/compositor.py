@@ -1420,10 +1420,14 @@ class Compositor:
         "sva 3 ako se podudaraju"): a THREE-COLUMN article — the same
         machinery and total width as the Ages three-side — carrying the
         CREATURE (its glass, name and text), the EVANGELIST it became
-        (Mark/Luke/John/Matthew), and the ELEMENT its fixed-cross season
-        arm holds (Fire/Earth/Water/Air), the element name in its own wheel
-        hue. The article set has no texts until Session 6, so the creature
-        column falls back to the pending line — never a KeyError."""
+        (Mark/Luke/John/Matthew, with his rondel and article), and the
+        ELEMENT its fixed-cross season arm holds (Fire/Earth/Water/Air,
+        the name in its own wheel hue, with its humoral article). The
+        creature node carries the three columns' prose as its rows —
+        rows[0] the creature, rows[1] the evangelist, rows[2] the element
+        (Session 6 + the Tetramorph completion round); each column
+        degrades to its bare title/name when its row (or the evangelist
+        rondel) has not landed — never a KeyError."""
         key = "seasons_light"
         fig = archetypes.figures(key)[index]
         set_name = archetypes.ARCHETYPES[key]["articles"]
@@ -1445,11 +1449,25 @@ class Compositor:
             creature_col += _centered_html(
                 "", html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE))
             )
-        # Column 2 — the Evangelist (the figure's row-2 name).
-        evangelist_col = _hover_title(
-            html.escape(self._tr("The Evangelist"))
-        ) + _centered_html(f"<b>{html.escape(self._tr(fig['row2']))}</b>")
-        # Column 3 — the Element, in its active wheel hue.
+        # Column 2 — the Evangelist: his rondel (real art only), his name
+        # (the figure's row-2), then his article (rows[1] when written).
+        evangelist_col = _hover_title(html.escape(self._tr("The Evangelist")))
+        ev_file = archetypes.tetramorph_evangelist_file(index)
+        if archetype_art_ready(ev_file):
+            small = scaled_variant_file(
+                ev_file, 2 * defaults.ARTICLE_THREE_IMAGE_PX
+            )
+            evangelist_col += (
+                f"<div align='center'><img src='{small.as_uri()}' "
+                f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
+            )
+        evangelist_col += _centered_html(
+            f"<b>{html.escape(self._tr(fig['row2']))}</b>"
+        )
+        if len(rows) > 1:
+            evangelist_col += _article_paragraphs(rows[1], tr=self._tr)
+        # Column 3 — the Element: the name in its active wheel hue, then
+        # its humoral article (rows[2] when written).
         hue = palette_for(self._skin)[index]
         element_col = _hover_title(
             html.escape(self._tr("The Element"))
@@ -1457,6 +1475,8 @@ class Compositor:
             f"<b style='color: {hue}'>"
             f"{html.escape(self._tr(archetypes.tetramorph_element(index)))}</b>"
         )
+        if len(rows) > 2:
+            element_col += _article_paragraphs(rows[2], tr=self._tr)
         width = defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
         return (
             "<table cellspacing='10'><tr>"

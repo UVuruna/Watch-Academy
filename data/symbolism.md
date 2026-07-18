@@ -35,10 +35,15 @@ color and mood) below the two zodiac sign lines.
   (2026-07-18): 48 entities in total** — the two-row layouts carry both
   rows (person+calling, member+hearth-role, temperament+age,
   person+quality, pillar+shadow, estate+object), while the two
-  three-side wheels (`archetype_seasons_light` the Tetramorph,
-  `archetype_compass_light` the Ages) carry a SINGLE row (`rows[0]` —
-  the creature/age text; the compositor draws their second column,
-  evangelist/element or life-register being, from config). Centers
+  three-side wheels carry more per node. `archetype_compass_light` (the
+  Ages) carries a SINGLE row (`rows[0]` — the age text; the compositor
+  draws both life-register beings from config). `archetype_seasons_light`
+  (the Tetramorph) carries THREE rows per creature (Tetramorph completion
+  round 2026-07-18): `rows[0]` the creature, `rows[1]` the evangelist it
+  became (Mark/Luke/John/Matthew), `rows[2]` the element its arm holds
+  (Fire/Earth/Water/Air, humoral season reading) — one row per three-side
+  column; the creature glass and the evangelist rondel come from config,
+  the element hue from the wheel. Centers
   exist for all sets EXCEPT the two Compass wheels (the rose is the
   wheel); the Seasons Throne is one shared article under both seasons
   sets. A still-unknown set/entity returns **None** and the hover shows

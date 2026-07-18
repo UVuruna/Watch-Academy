@@ -799,9 +799,36 @@ def test_tetramorph_arm_shows_the_three_side_layout(app):
     assert "The Lion" in tip                                # the creature
     assert "The Evangelist" in tip and "Mark" in tip        # the evangelist
     assert "The Element" in tip and "Fire" in tip           # the element
+    # The evangelist and element columns now carry their OWN prose
+    # (Tetramorph completion round 2026-07-18), not just the names.
+    assert "crying in the wilderness" in tip                # Mark's article
+    assert "yellow bile" in tip                             # Fire's article
     # The bottom arm creature is the Eagle → John → Water.
     bottom = tetra.tooltip_at(*_arm_px(180.0, 180.0), 360.0)
     assert "The Eagle" in bottom and "John" in bottom and "Water" in bottom
+    assert "In the beginning was the Word" in bottom        # John's article
+    assert "humor of phlegm" in bottom                      # Water's article
+
+
+def test_tetramorph_three_side_survives_absent_evangelist_art(app):
+    """The evangelist rondels may not exist on disk yet (a
+    1x1-placeholder-free path): the three-side must still render the
+    evangelist column from text alone — the name and its article, no
+    crash, no stretched pixel."""
+    day, tick = _dt(datetime(2026, 7, 16, 14, 30))
+    tetra = Compositor(_archetype_skin("cross", "light"), AssetCache())
+    tetra.render_offscreen(360.0, 1.0, day, tick)
+    # The config path table maps each arm index to its evangelist rondel.
+    for index, name in enumerate(("Mark", "Luke", "John", "Matthew")):
+        assert (
+            archetypes.tetramorph_evangelist_file(index).name == f"{name}.png"
+        )
+    # With no evangelist art landed, the column carries the name and its
+    # article prose and does not crash on any of the four arms.
+    for arm, name in ((0.0, "Mark"), (90.0, "Luke"),
+                      (180.0, "John"), (270.0, "Matthew")):
+        tip = tetra.tooltip_at(*_arm_px(180.0, arm), 360.0)
+        assert tip is not None and name in tip
 
 
 def test_archetype_article_resolution_is_graceful(app):
@@ -851,6 +878,31 @@ def test_every_archetype_set_position_and_center_is_written(app):
             ), f"{set_name}.{entity} has empty rows"
             checked += 1
     assert checked == 48        # 6 two-row sets + 2 three-side wheels
+
+
+def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
+    """Tetramorph completion round 2026-07-18: each seasons_light
+    creature node carries THREE non-pending rows — the creature (rows[0]),
+    the evangelist it became (rows[1]), the element its arm holds
+    (rows[2]) — so all three columns of the three-side speak, never a
+    bare title. The four evangelist names and the four element humors are
+    named in their rows."""
+    from data.symbolism import SymbolismRepository
+
+    repo = SymbolismRepository()
+    expect = {
+        "lion": ("Mark", "yellow bile"),
+        "ox": ("Luke", "black bile"),
+        "eagle": ("John", "phlegm"),
+        "man": ("Matthew", "blood"),
+    }
+    for entity, (evangelist, humor) in expect.items():
+        node = repo.archetype_article("archetype_seasons_light", entity)
+        rows = node["rows"]
+        assert len(rows) == 3, f"{entity} needs creature+evangelist+element"
+        assert all(isinstance(r, str) and r.strip() for r in rows)
+        assert evangelist in rows[1], f"{entity} evangelist row"
+        assert humor in rows[2], f"{entity} element humor row"
 
 
 def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):

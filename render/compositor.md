@@ -130,10 +130,17 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   "oba odmah") — the age's text, the Tree register and the Menagerie
   register at once; the Tetramorph (seasons light) shows
   `_tetramorph_three_side(index)` (owner 2026-07-17, "sva 3 ako se
-  podudaraju") — the creature (glass + name + text), the EVANGELIST it
-  became (Mark/Luke/John/Matthew) and the ELEMENT its fixed-cross season
-  arm holds (`archetypes.tetramorph_element`, in the active wheel hue from
-  `palette_for`). The center answers via
+  podudaraju") — three FULL columns: the creature (glass + name +
+  `rows[0]`), the EVANGELIST it became (his rondel from
+  `archetypes.tetramorph_evangelist_file(index)` — real art only, the
+  name from the figure's `row2`, and `rows[1]`), and the ELEMENT its
+  fixed-cross season arm holds (`archetypes.tetramorph_element`, in the
+  active wheel hue from `palette_for`, and `rows[2]`). The creature
+  node carries all three columns' prose as its rows (rows[0] creature,
+  rows[1] evangelist, rows[2] element); each column degrades to its bare
+  title/name when its row (or the evangelist rondel) is missing — never
+  a KeyError, and the rondel path is 1×1-placeholder-free (text alone
+  until the art lands). The center answers via
   `_archetype_center_tooltip`; `encyclopedia_target` follows each
   FIGURE's own (topic, entry) — today only the Walks map onto the
   Professions pages, everything else answers None gracefully

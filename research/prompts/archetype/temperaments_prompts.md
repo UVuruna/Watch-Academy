@@ -131,6 +131,57 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 
 ---
 
+## The four evangelists — the three-side's SECOND column (SEALED 2026-07-18)
+
+The Tetramorph three-side hover shows THREE columns — the creature, the
+EVANGELIST it became, and the element its season arm holds (CANON
+§Seasons light; the classical Ezekiel/Revelation pairings). The second
+column carries a SMALL ROUND RONDEL of each evangelist: the man at his
+writing desk WITH his creature beside or above him, each in HIS SEASON'S
+palette so the rondel reads as kin to the creature glass at a glance —
+Mark summer gold, Luke autumn red-amber, John winter blue-ice, Matthew
+spring green-gold. Same register as the creature rondels above (the
+night-window stained-glass family); the house rule stands — images
+never carry lettering. The art may not exist yet: the three-side shows
+the evangelist's NAME alone until his rondel lands (a
+1×1-placeholder-free graceful path — `archetype_art_ready`), exactly
+like every other archetype art.
+
+**Drop paths:** `assets/archetype/<source>/evangelist/` — `Mark.png`,
+`Luke.png`, `John.png`, `Matthew.png` (the app reads
+`evangelist/<Name>.png`; ordered Lion→Mark, Ox→Luke, Eagle→John,
+Man→Matthew, matching the seasons_light figure order).
+
+**Mark the Evangelist** (the Lion · summer gold · the wilderness voice)
+→ `assets/archetype/evangelist/Mark.png`
+
+```
+SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. Saint Mark seated at his writing desk with pen and open scroll, mid-word; a winged lion rests beside him, head raised as if roaring, the beast of the wilderness voice. Summer-gold and molten-amber glass throughout, a hot corona of light behind the pair, a hint of open desert in the small side panels. Border: sunburst-and-flame leadwork in molten gold. Palette: summer gold, molten amber, dark-gold lead. NO lettering anywhere.
+```
+
+**Luke the Evangelist** (the Ox · autumn red-amber · the temple sacrifice)
+→ `assets/archetype/evangelist/Luke.png`
+
+```
+SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. Saint Luke seated at his writing desk with pen and open book, mid-word; a winged ox rests beside him, head bowed under a yoke, the beast of offering. Deep autumn-red, russet and burnt-amber glass throughout, a low altar fire glowing at the side, red leaves settling. Border: falling-leaf-and-vine leadwork in burnt umber. Palette: autumn red, russet, burnt amber, deep umber lead. NO lettering anywhere.
+```
+
+**John the Evangelist** (the Eagle · winter blue-ice · the soaring prologue)
+→ `assets/archetype/evangelist/John.png`
+
+```
+SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. Saint John seated at his writing desk with pen and open scroll, gazing upward mid-thought; a winged eagle rests beside him, wings half-raised, watchful, the beast that looks into the light. Cool winter-blue, ice-white and pale silver glass throughout, a cold clear high-air light, a still frozen distance in the side panels. Border: frost-and-icicle leadwork in pale steel-blue. Palette: winter blue, ice white, pale silver, steel-blue lead. NO lettering anywhere.
+```
+
+**Matthew the Evangelist** (the Man/Angel · spring green-gold · the human genealogy)
+→ `assets/archetype/evangelist/Matthew.png`
+
+```
+SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. Saint Matthew seated at his writing desk with pen and open book, mid-word; a winged man or angel leans beside him guiding his hand, the witness wearing a human face. Fresh spring-green and pale-gold glass throughout, bright and airy, blossom and new leaf in the side panels, a light spring wind in the light. Border: blossom-and-swallow leadwork in leaf green. Palette: spring green, pale gold, blossom white, leaf-green lead. NO lettering anywhere.
+```
+
+---
+
 ## The center — the Throne (BOTH Seasons wheels)
 
 The ONE center over the four seasons (owner seal 2026-07-16: Throne
@@ -159,6 +210,12 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 - The tetramorph is SEALED (owner 2026-07-17) as the Seasons LIGHT
   wheel's figure set; the first batch landed 2026-07-18 under
   `assets/archetype/<source>/tetramorph/`.
+- The four EVANGELIST rondels are SEALED (owner 2026-07-18) as the
+  three-side's SECOND column — `assets/archetype/<source>/evangelist/`
+  (`Mark.png`, `Luke.png`, `John.png`, `Matthew.png`); each evangelist
+  at his desk with his creature, in his season's palette. Not yet
+  generated — the three-side shows the evangelist's name alone until
+  they land (graceful `archetype_art_ready` fallback).
 - Quote/poem anchors for the articles only (never in art): the humor
   square (Sanguine–Melancholic, Choleric–Phlegmatic opposites) and the
   owner's four-greetings poem, which binds to these four arms and stays
