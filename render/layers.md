@@ -168,7 +168,31 @@ ARCHETYPE CLOCK. The machinery:
 - `archetype_art_ready(path)` + `draw_archetype_figure()` — the
   graceful placeholder path: a missing file or a committed 1×1
   placeholder draws the figure's NAME in the outlined label style
-  (fitted to the diamond width), never a stretched pixel.
+  (fitted to the diamond width), never a stretched pixel — through the
+  shared `draw_name_label()` below.
+- **`draw_name_label()`** (owner ROADMAP 15h item 4b/4c, 2026-07-18) —
+  the ONE on-dial NAME-label draw shared by the weekday bodies
+  (`draw_body_label`, the diamond slots' and the info slot's body text)
+  AND the archetype figures (`draw_archetype_figure`'s named/fallback
+  path, `ArchetypeCenterLayer`'s placeholder path) — Rule #5: one path
+  used to fit-to-width, the other drew at a fixed fraction of the body
+  size regardless of the text, so a long full weekday name ("Wednesday")
+  could overflow while a short one ("MON") never grew past its own
+  fixed size. Both now measure through the shared core
+  (`_fit_name_lines`): the largest bold pixel size whose WIDEST line
+  spans `target_width`, capped at `defaults.NAME_LABEL_MAX_PX` (item
+  4b — a flat pixel ceiling, deliberately dial-size-independent, reasoned
+  from the 720-dial short-weekday "TUE" look — symmetric with
+  `BODY_LABEL_MIN_PX`'s flat floor). A multi-word name (owner example:
+  the Compass Walks) may WRAP to two centered lines (item 4c,
+  `_wrap_name_lines` picks the word-boundary split whose wider half is
+  narrowest — "The Eye of Providence" does not just split down the
+  middle) — `draw_name_label` fits BOTH the single-line and the wrapped
+  candidate the same way and draws whichever is LARGER; a single word
+  never wraps. The old per-path constants (`ARCHETYPE_NAME_WIDTH_
+  FRACTION`, `ARCHETYPE_NAME_MAX_OF_FIGURE`, `BODY_LABEL_SIZE`) are
+  gone — `defaults.NAME_LABEL_WIDTH_FRACTION` is the one shared width
+  fraction, `defaults.NAME_LABEL_MAX_PX` the one shared cap.
 - The Earth marker stays (it is the instrument, not a slot): its label
   is drawn by `_draw_earth_label`, where the DATE and the abbreviated
   WEEKDAY are MUTUALLY EXCLUSIVE (owner 2026-07-17, ROADMAP 15e — the two

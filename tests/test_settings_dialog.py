@@ -6,7 +6,7 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import pytest
-from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QApplication, QGroupBox
 
 from app.controller import apply_display_settings
 from app.settings_dialog import SettingsDialog
@@ -151,6 +151,86 @@ def test_dialog_diameter_slider(app):
     assert dialog._diameter_slider.value() == 540
     dialog._diameter_slider.setValue(933)          # an arbitrary in-range value
     assert dialog.result_settings().diameter == 933
+    dialog.done(0)
+
+
+def test_dialog_diameter_spinbox_syncs_both_ways(app):
+    """The exact numeric input (owner ROADMAP 15h item 12b): same range
+    as the slider, restores the stored diameter, and either widget moving
+    drags the other along — applied together on OK."""
+    from app.settings_store import replace
+
+    dialog = SettingsDialog(replace(Settings(), diameter=540), defaults.DEFAULT_SKIN)
+    assert dialog._diameter_spin.minimum() == defaults.SIZE_PRESETS[0]
+    assert dialog._diameter_spin.maximum() == defaults.SIZE_PRESETS[-1]
+    assert dialog._diameter_spin.value() == 540
+    dialog._diameter_spin.setValue(801)
+    assert dialog._diameter_slider.value() == 801
+    assert dialog.result_settings().diameter == 801
+    dialog._diameter_slider.setValue(650)
+    assert dialog._diameter_spin.value() == 650
+    assert dialog.result_settings().diameter == 650
+    dialog.done(0)
+
+
+# --- The navigation rework (owner ROADMAP 15h item 1) -----------------------------
+
+
+def test_dialog_navigation_lists_every_section(app):
+    """The left column becomes a NAVIGATION of section titles (owner
+    2026-07-18) instead of one long scroll — every existing group still
+    exists, just filed under one of the sections, and clicking a title
+    switches the visible panel."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    assert dialog._nav_list.count() == dialog._stack.count()
+    assert dialog._nav_list.count() >= 7          # every group still fits somewhere
+    # Every nav title carries the right-arrow marker.
+    titles = [dialog._nav_list.item(i).text() for i in range(dialog._nav_list.count())]
+    assert all(title.rstrip().endswith("▸") for title in titles)
+    # Every widget from the old single-scroll layout is still reachable —
+    # spot-check one control from several different groups/sections.
+    assert dialog._search is not None                 # Location
+    assert dialog._star_slider is not None             # Opacity (Display)
+    assert dialog._diameter_slider is not None         # Sizes (Display)
+    assert dialog._chips                                # Palette (Colors)
+    assert dialog._tint_swatches                        # Ring tint (Colors)
+    assert dialog._ring_layout_combo is not None         # Custom ring
+    assert dialog._hand_name_edit is not None            # Custom hands
+    assert dialog._rotation_group is not None             # Theme rotation (Themes)
+    assert dialog._art_source_combo is not None            # Artwork (Themes)
+    assert dialog._language_combo is not None               # Language
+    assert dialog._era_combo is not None                     # Calendar eras (Language)
+    assert dialog._autostart_check is not None                # System
+    dialog.done(0)
+
+
+def test_dialog_navigation_switches_the_visible_panel(app):
+    """Clicking a nav row shows THAT section's panel (owner's stated
+    interaction) — the stacked widget follows the list's current row."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    assert dialog._stack.currentIndex() == 0
+    last = dialog._nav_list.count() - 1
+    dialog._nav_list.setCurrentRow(last)
+    assert dialog._stack.currentIndex() == last
+    dialog._nav_list.setCurrentRow(0)
+    assert dialog._stack.currentIndex() == 0
+    dialog.done(0)
+
+
+def test_dialog_colors_section_shares_palette_and_ring_tint(app):
+    """Owner's own example (ROADMAP 15h item 1): the Pointer palette and
+    the Clock/ring tint are both COLOR — one shared 'Colors' title."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    colors_row = next(
+        i for i in range(dialog._nav_list.count())
+        if dialog._nav_list.item(i).text().startswith("Colors")
+    )
+    page = dialog._stack.widget(colors_row).widget()
+    group_titles = [
+        child.title() for child in page.findChildren(QGroupBox)
+    ]
+    assert any("Palette" in title for title in group_titles)
+    assert any("tint" in title for title in group_titles)
     dialog.done(0)
 
 

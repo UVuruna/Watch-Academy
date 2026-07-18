@@ -342,6 +342,97 @@ def test_placeholder_falls_back_to_the_name(app, tmp_path):
     assert real.pixelColor(100, 100).red() > 200
 
 
+# --- Name label fitting: the shared MAX-PX cap and wrap (ROADMAP 15h item 4b/4c) --
+
+
+def test_short_name_is_capped_at_name_label_max_px(app):
+    """4b: a SHORT name with ample room must not inflate past
+    `defaults.NAME_LABEL_MAX_PX` — the flat ceiling reasoned from the
+    720-dial short-weekday "TUE" look, shared by the weekday body label
+    and the archetype figure label (Rule #5, ONE fitting helper)."""
+    import render.layers as layers_mod
+
+    assert (
+        layers_mod._fit_name_lines(("Ox",), target_width=10_000.0)
+        == defaults.NAME_LABEL_MAX_PX
+    )
+
+
+def test_long_name_still_shrinks_to_fit(app):
+    """4b: the cap is a ceiling, not a floor — a LONG name in a narrow
+    space still measures DOWN to fit, and grows again with more room."""
+    import render.layers as layers_mod
+
+    narrow = layers_mod._fit_name_lines(
+        ("The Eye of Providence",), target_width=80.0
+    )
+    wide = layers_mod._fit_name_lines(
+        ("The Eye of Providence",), target_width=800.0
+    )
+    assert defaults.BODY_LABEL_MIN_PX <= narrow < wide <= defaults.NAME_LABEL_MAX_PX
+
+
+def test_two_word_name_wraps_when_it_reads_bigger(app):
+    """4c (owner example: the Compass Walks): a two-word name in a
+    narrow arm wraps to two lines exactly when that yields a BIGGER font
+    than forcing it onto one line — both candidates measured and capped
+    the same way."""
+    import render.layers as layers_mod
+
+    lines = layers_mod._wrap_name_lines("Compass Walks")
+    assert lines == ("Compass", "Walks")
+    assert layers_mod._wrap_name_lines("Ox") is None       # single word — no wrap
+
+    narrow_target = 90.0
+    single_px = layers_mod._fit_name_lines(("Compass Walks",), narrow_target)
+    two_px = layers_mod._fit_name_lines(lines, narrow_target)
+    assert two_px > single_px          # wrapping genuinely reads bigger here
+
+    roomy_target = 10_000.0
+    single_px = layers_mod._fit_name_lines(("Compass Walks",), roomy_target)
+    two_px = layers_mod._fit_name_lines(lines, roomy_target)
+    assert two_px <= single_px         # both hit the cap — single line wins/ties
+
+
+def test_draw_name_label_wraps_to_two_centered_lines_when_bigger(app, monkeypatch):
+    """Render pin (item 4c): in a narrow target width `draw_name_label`
+    actually DRAWS two stacked, centered lines sharing one font size —
+    pinned on the captured draw_outlined_text calls, never on guessed
+    pixel colors."""
+    import render.layers as layers_mod
+
+    calls = []
+    monkeypatch.setattr(
+        layers_mod, "draw_outlined_text",
+        lambda painter, pos, text, font:
+            calls.append((text, pos.y(), font.pixelSize())),
+    )
+    image = QImage(200, 200, QImage.Format.Format_ARGB32_Premultiplied)
+    painter = QPainter(image)
+    layers_mod.draw_name_label(painter, "Compass Walks", QPointF(0, 0), 90.0)
+    painter.end()
+    assert [c[0] for c in calls] == ["Compass", "Walks"]
+    assert calls[0][1] < 0.0 < calls[1][1]         # stacked above/below center
+    assert calls[0][2] == calls[1][2]              # one shared font size
+
+
+def test_draw_name_label_stays_single_line_when_wrap_is_not_bigger(app, monkeypatch):
+    """A single word (nothing to wrap) always draws exactly one call,
+    regardless of available width."""
+    import render.layers as layers_mod
+
+    calls = []
+    monkeypatch.setattr(
+        layers_mod, "draw_outlined_text",
+        lambda painter, pos, text, font: calls.append((text, pos.y())),
+    )
+    image = QImage(200, 200, QImage.Format.Format_ARGB32_Premultiplied)
+    painter = QPainter(image)
+    layers_mod.draw_name_label(painter, "Ox", QPointF(0, 0), 300.0)
+    painter.end()
+    assert calls == [("Ox", 0.0)]
+
+
 # --- The reveal gesture hides the hands -------------------------------------------
 
 
@@ -507,9 +598,9 @@ def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
                 captured.append(height),
         )
         monkeypatch.setattr(
-            layers_mod, "_draw_archetype_name",
-            lambda painter, name, pos, arm_width, figure_height:
-                captured.append(figure_height),
+            layers_mod, "draw_name_label",
+            lambda painter, name, pos, target_width:
+                captured.append(target_width),
         )
         image = QImage(400, 400, QImage.Format.Format_ARGB32_Premultiplied)
         painter = QPainter(image)
@@ -849,6 +940,226 @@ def test_menu_gating(app, tmp_path, monkeypatch):
     finally:
         controller._profiling_timer.stop()
         controller._tray.hide()
+
+
+def test_archetype_names_toggle_reachable_in_archetype_mode(app, tmp_path, monkeypatch):
+    """ROADMAP 15h item 4a (owner 2026-07-18: 'he cannot turn archetype
+    names off'). The figures' names ARE `show_weekday_names`
+    (render.layers.ArchetypeLayer reads it directly, verified) — the bug
+    was that its only menu switch lives inside 1st Slot ▸ Weekday ▸
+    Names, and the WHOLE slot submenu grays out the instant Archetype
+    turns on, taking that switch down with it. Fix: one more action for
+    the SAME key, enabled exactly opposite the buried one — at any
+    moment exactly one of the two is reachable (`_refresh_menu_gating`
+    also explicitly resyncs both CHECKED states, see the next test)."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        assert c._settings.pointer == "hexa"          # ships with an archetype
+        assert not c._settings.archetype_mode
+        # Off the mode: the buried Weekday > Names is the reachable one.
+        assert not c._archetype_names_action.isEnabled()
+        c._set_display_choice("archetype_mode", True)
+        assert c._archetype_names_action.isEnabled()
+        assert c._archetype_names_action.isChecked() == c._settings.show_weekday_names
+        assert c._settings.show_weekday_names        # default: names on
+        c._archetype_names_action.trigger()
+        assert c._settings.show_weekday_names is False
+        assert not c._archetype_names_action.isChecked()
+        # Toggling back on works too — a real, usable switch either way.
+        c._archetype_names_action.trigger()
+        assert c._settings.show_weekday_names is True
+        # Turning the mode back off returns the reachable side to the
+        # buried Weekday > Names entry.
+        c._set_display_choice("archetype_mode", False)
+        assert not c._archetype_names_action.isEnabled()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+def test_archetype_names_twin_actions_stay_synced(app, tmp_path, monkeypatch):
+    """A regression caught in self-review while building the fix above:
+    the buried Weekday > Names and the top-level Archetype names toggle
+    are TWO SEPARATE QAction objects writing the SAME
+    `show_weekday_names` key — clicking whichever one is reachable only
+    updates ITS OWN checked flag by itself, so the OTHER (disabled) one
+    could show a STALE checkmark the next time it became reachable.
+    Pins that both stay correct across a full off -> on -> off round
+    trip through EITHER control."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    def action(menu, text):
+        return next(a for a in menu.actions() if a.text() == text)
+
+    c = AppController(app)
+    try:
+        slot_menu = next(
+            a for a in c._menu.actions() if "1ˢᵗ Slot" in a.text()
+        ).menu()
+        weekday_menu = action(slot_menu, "Weekday").menu()
+        buried = action(weekday_menu, "Names")
+        assert buried is c._weekday_names_action
+
+        # Turn OFF via the buried control (mode is off — it's the one
+        # reachable), then enter the mode: the top-level twin must show
+        # the SAME (now-False) state, not its own stale construction-time
+        # snapshot.
+        buried.trigger()
+        assert c._settings.show_weekday_names is False
+        c._set_display_choice("archetype_mode", True)
+        assert c._archetype_names_action.isChecked() is False
+
+        # Turn back ON via the now-reachable top-level control, then
+        # leave the mode: the buried twin must reflect the new True.
+        c._archetype_names_action.trigger()
+        assert c._settings.show_weekday_names is True
+        c._set_display_choice("archetype_mode", False)
+        assert buried.isChecked() is True
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+# --- The compact SIZE slider in the menu (ROADMAP 15h item 12a) -------------------
+
+
+def test_menu_size_slider_applies_only_on_release(app, tmp_path, monkeypatch):
+    """The Design ▸ Size submenu gains a compact slider (owner
+    2026-07-18): dragging it (valueChanged) must NOT re-render — only
+    sliderReleased applies, exactly like a preset pick."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        assert c._settings.diameter == 720
+        assert c._size_slider.minimum() == defaults.SIZE_PRESETS[0]
+        assert c._size_slider.maximum() == defaults.SIZE_PRESETS[-1]
+        assert c._size_slider.singleStep() == defaults.MENU_SIZE_SLIDER_STEP
+        assert c._size_slider.value() == 720
+        # Dragging (valueChanged only) must not touch settings.
+        c._size_slider.setValue(900)
+        assert c._settings.diameter == 720
+        # sliderReleased.emit() simulates the mouse-up — NOW it applies.
+        c._size_slider.sliderReleased.emit()
+        assert c._settings.diameter == 900
+        # A preset pick from the dropdown keeps the compact slider synced.
+        c._set_diameter(360)
+        assert c._size_slider.value() == 360
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+# --- The both-unchecked bug (ROADMAP 15h item 8's surviving bug) ------------------
+
+
+def test_exclusive_choice_group_click_on_checked_stays_checked(app, tmp_path, monkeypatch):
+    """The general `_add_choice_group` guard: clicking the ALREADY
+    checked member of an exclusive group (e.g. Umbra's contrast picks)
+    is a no-op that stays checked — Qt's own exclusive QActionGroup does
+    not by itself keep this promise for a user re-clicking the active
+    member."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    def action(menu, text):
+        return next(a for a in menu.actions() if a.text() == text)
+
+    c = AppController(app)
+    try:
+        design_menu = next(
+            a for a in c._menu.actions() if "Design" in a.text()
+        ).menu()
+        umbra_menu = action(design_menu, "Umbra").menu()
+        current = next(
+            a for a in umbra_menu.actions()
+            if a.text() == f"{c._settings.umbra_contrast.capitalize()} contrast"
+        )
+        assert current.isChecked()            # the default
+        current.trigger()                     # click the checked member
+        assert current.isChecked()            # stays checked — never empty
+        assert c._settings.umbra_contrast == "dark"
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+def test_roster_pair_always_keeps_one_checked(app, tmp_path, monkeypatch):
+    """The exact owner complaint (ROADMAP 15h item 8, slika 2): the
+    Planetary/Pantheon roster pair could end up with BOTH unchecked.
+    ROOT CAUSE (reproduced before the fix): the pair's checked state is
+    computed once at menu-BUILD time from whichever theme was active
+    then — picking a metal (Gold/Bronze/…) for a pantheon-capable theme
+    activates it WITHOUT ever touching the roster, and nothing resynced
+    the pair afterward, so it kept showing neither option checked even
+    though a real roster IS in effect. Also pins: a later roster click,
+    then ANOTHER metal click, must not revert the display to a stale
+    build-time roster; and clicking the checked roster option again is
+    a no-op."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    def action(menu, text):
+        return next(a for a in menu.actions() if a.text() == text)
+
+    c = AppController(app)
+    try:
+        slot_menu = next(
+            a for a in c._menu.actions() if "1ˢᵗ Slot" in a.text()
+        ).menu()
+        weekday_menu = action(slot_menu, "Weekday").menu()
+        ancient = action(weekday_menu, "Ancient Gods").menu()
+        greek = action(ancient, "Greek gods").menu()
+        planetary = next(a for a in greek.actions() if a.text() == "Planetary")
+        pantheon = next(a for a in greek.actions() if a.text() == "Pantheon")
+        gold = next(a for a in greek.actions() if a.text() == "Gold")
+        silver = next(a for a in greek.actions() if a.text() == "Silver")
+        bronze = next(a for a in greek.actions() if a.text() == "Bronze")
+
+        # Greek starts INACTIVE (Planets is the default theme) — neither
+        # roster option is checked, which is correct (no theme is active
+        # to hold a roster yet).
+        assert not planetary.isChecked() and not pantheon.isChecked()
+
+        # A METAL pick alone activates Greek — the roster pair must show
+        # EXACTLY ONE checked (the default, planetary), never zero.
+        gold.trigger()
+        assert c._settings.weekday_theme == "greek"
+        assert planetary.isChecked() and not pantheon.isChecked()
+
+        # Switching metal again (still no roster touch) keeps it in sync.
+        silver.trigger()
+        assert planetary.isChecked() and not pantheon.isChecked()
+
+        # Picking Pantheon explicitly flips the pair the normal way.
+        pantheon.trigger()
+        assert pantheon.isChecked() and not planetary.isChecked()
+        assert c._settings.weekday_roster == "pantheon"
+
+        # Clicking the now-checked Pantheon again is a no-op (item 8).
+        pantheon.trigger()
+        assert pantheon.isChecked() and not planetary.isChecked()
+
+        # A METAL click AFTER the roster was changed must reflect the
+        # LIVE roster (pantheon), not the stale build-time snapshot
+        # (planetary) — this is the regression the first fix attempt hit.
+        bronze.trigger()
+        assert pantheon.isChecked() and not planetary.isChecked()
+        assert c._settings.weekday_roster == "pantheon"
+
+        # Switching back to Planetary works and stays a real toggle.
+        planetary.trigger()
+        assert planetary.isChecked() and not pantheon.isChecked()
+        planetary.trigger()               # no-op on the checked member
+        assert planetary.isChecked() and not pantheon.isChecked()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
 
 
 def test_weekday_menu_planets_first_with_art_metals(app, tmp_path, monkeypatch):

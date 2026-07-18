@@ -409,25 +409,89 @@ def draw_archetype_figure(
     if ready:
         draw_pixmap_centered(painter, ctx, fig["file"], pos, height)
     if named or not ready:
-        _draw_archetype_name(painter, fig["name"], pos, arm_width, height)
+        draw_name_label(
+            painter, fig["name"], pos,
+            arm_width * defaults.NAME_LABEL_WIDTH_FRACTION,
+        )
     painter.restore()
 
 
-def _draw_archetype_name(
-    painter: QPainter, name: str, pos: QPointF, arm_width: float,
-    figure_height: float,
-) -> None:
-    """The figure's name in the outlined label style, FITTED to the
-    diamond's width (measured, never guessed — Melancholic must not
-    overflow the slim cross arm) and capped against the figure."""
+def _fit_name_lines(lines: tuple[str, ...], target_width: float) -> int:
+    """The measured pixel font size that fits the WIDEST of `lines`
+    within `target_width`, capped at `defaults.NAME_LABEL_MAX_PX` — the
+    shared fitting core behind `draw_name_label` (Rule #5, ROADMAP 15h
+    item 4b): a SHORT text no longer inflates past a sane ceiling, a
+    LONG one still shrinks to fit (measured, never guessed)."""
     font = QFont()
     font.setBold(True)
     font.setPixelSize(100)
-    advance = QFontMetricsF(font).horizontalAdvance(name)
-    target = arm_width * archetypes.ARCHETYPE_NAME_WIDTH_FRACTION
-    fitted = math.floor(100.0 * target / advance)
-    cap = round(figure_height * archetypes.ARCHETYPE_NAME_MAX_OF_FIGURE)
-    font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, min(fitted, cap)))
+    metrics = QFontMetricsF(font)
+    widest = max(metrics.horizontalAdvance(line) for line in lines)
+    fitted = (
+        math.floor(100.0 * target_width / widest) if widest > 0
+        else defaults.NAME_LABEL_MAX_PX
+    )
+    return max(
+        defaults.BODY_LABEL_MIN_PX, min(fitted, defaults.NAME_LABEL_MAX_PX)
+    )
+
+
+def _wrap_name_lines(name: str) -> tuple[str, str] | None:
+    """Split a multi-word name at the word boundary whose two halves are
+    most BALANCED (measured width, not a blind half split — "The Eye of
+    Providence" wants a different cut than "Compass Walks") — None for
+    a single word, nothing to wrap."""
+    words = name.split()
+    if len(words) < 2:
+        return None
+    font = QFont()
+    font.setBold(True)
+    font.setPixelSize(100)
+    metrics = QFontMetricsF(font)
+    best_lines: tuple[str, str] | None = None
+    best_width: float | None = None
+    for split in range(1, len(words)):
+        first = " ".join(words[:split])
+        second = " ".join(words[split:])
+        width = max(
+            metrics.horizontalAdvance(first), metrics.horizontalAdvance(second)
+        )
+        if best_width is None or width < best_width:
+            best_width, best_lines = width, (first, second)
+    return best_lines
+
+
+def draw_name_label(
+    painter: QPainter, name: str, pos: QPointF, target_width: float,
+) -> None:
+    """ONE on-dial name-label draw shared by the weekday bodies and the
+    archetype figures (Rule #5, ROADMAP 15h item 4): fits `name` to
+    `target_width` (measured, never guessed), capped at
+    `defaults.NAME_LABEL_MAX_PX` (item 4b — reasoned from the 720-dial
+    short-weekday "TUE" look: short names no longer inflate past it,
+    long ones still shrink to fit). A multi-word name (owner example:
+    the Compass Walks) WRAPS to two centered lines exactly when that
+    reads LARGER than the single-line fit (item 4c) — both candidates
+    measured and capped the same way, the bigger wins."""
+    single_px = _fit_name_lines((name,), target_width)
+    wrapped = _wrap_name_lines(name)
+    if wrapped is not None:
+        two_px = _fit_name_lines(wrapped, target_width)
+        if two_px > single_px:
+            font = QFont()
+            font.setBold(True)
+            font.setPixelSize(two_px)
+            offset = two_px * defaults.NAME_LABEL_LINE_OFFSET_FRACTION
+            draw_outlined_text(
+                painter, QPointF(pos.x(), pos.y() - offset), wrapped[0], font,
+            )
+            draw_outlined_text(
+                painter, QPointF(pos.x(), pos.y() + offset), wrapped[1], font,
+            )
+            return
+    font = QFont()
+    font.setBold(True)
+    font.setPixelSize(single_px)
     draw_outlined_text(painter, pos, name, font)
 
 
@@ -1143,18 +1207,18 @@ def draw_body_label(
 ) -> None:
     """The weekday-name label on a body — shared by the weekday unit
     and the info slot's second body (Rule #5): short until the largest
-    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER."""
+    preset, full from WEEKDAY_FULL_NAME_MIN_DIAMETER. Fitted through the
+    SAME shared helper as the archetype figures (`draw_name_label`,
+    ROADMAP 15h item 4b) — measured to the body's own width and capped
+    at `defaults.NAME_LABEL_MAX_PX`, so "MON" no longer renders at a
+    fixed size regardless of "Wednesday" overflowing right beside it."""
     full_text = 2 * ctx.radius >= defaults.WEEKDAY_FULL_NAME_MIN_DIAMETER
-    label_size = size * defaults.BODY_LABEL_SIZE * (0.62 if full_text else 1.0)
     label = (
         constants.WEEKDAY_FULL_NAMES[body]
         if full_text
         else constants.WEEKDAY_LABELS[body]
     )
-    font = QFont()
-    font.setPixelSize(max(defaults.BODY_LABEL_MIN_PX, round(label_size)))
-    font.setBold(True)
-    draw_outlined_text(painter, pos, label, font)
+    draw_name_label(painter, label, pos, size * defaults.NAME_LABEL_WIDTH_FRACTION)
 
 
 def draw_weekday_body(
@@ -1599,8 +1663,9 @@ class ArchetypeCenterLayer(Layer):
                 painter, ctx, center["file"], QPointF(0, 0), height
             )
         else:
-            _draw_archetype_name(
-                painter, center["name"], QPointF(0, 0), height, height
+            draw_name_label(
+                painter, center["name"], QPointF(0, 0),
+                height * defaults.NAME_LABEL_WIDTH_FRACTION,
             )
         painter.restore()
 

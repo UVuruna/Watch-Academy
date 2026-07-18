@@ -18,7 +18,16 @@ import astral
 
 from PySide6.QtCore import QObject, QRect, Qt, QTimer
 from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication
-from PySide6.QtWidgets import QApplication, QMenu, QMessageBox
+from PySide6.QtWidgets import (
+    QApplication,
+    QHBoxLayout,
+    QLabel,
+    QMenu,
+    QMessageBox,
+    QSlider,
+    QWidget,
+    QWidgetAction,
+)
 
 from app import native
 from app.encyclopedia import EncyclopediaDialog
@@ -69,6 +78,28 @@ def _letter_metal(position: int, layout: dict, finish: str) -> str:
     if not layout["triangle"] or position in layout["triangle"]:
         return finish
     return "gold" if finish == "silver" else "silver"
+
+
+def _guard_exclusive_choice(action: QAction, apply) -> None:
+    """Wire one member of an EXCLUSIVE QActionGroup so a click on the
+    ALREADY-CHECKED member is a no-op (ROADMAP 15h item 8's surviving
+    bug, owner screenshot: Planetary/Pantheon both unchecked). Qt's own
+    exclusive QActionGroup only auto-unchecks SIBLINGS when a DIFFERENT
+    member becomes checked (a `toggled`, not `triggered`, side effect);
+    it does nothing to stop the user clicking the sole checked member
+    itself, which flips it straight to unchecked and leaves the whole
+    group empty. One member must always hold, so a self-uncheck
+    restores the check instead of applying anything — the shared fix
+    behind `_add_choice_group` (Pointer/Ring/Umbra/…) AND the slot
+    menus' `slot_action` (Weekday themes, Complications, astrology
+    families, the roster pairs) — every exclusive QActionGroup in the
+    app menu routes through one of those two."""
+    def _on_triggered(checked: bool) -> None:
+        if not checked:
+            action.setChecked(True)
+            return
+        apply()
+    action.triggered.connect(_on_triggered)
 
 
 def _theme_metal(settings: Settings, theme: str) -> str:
@@ -1116,6 +1147,7 @@ class AppController(QObject):
         if key in (
             "pointer", "show_weekday", "show_pointer",
             "show_octa_slot", "show_third_slot", "archetype_mode",
+            "show_weekday_names",
         ):
             # These move the whole enablement matrix (the South slot's
             # availability, the weekday-badge availability, Aurora's
@@ -1123,6 +1155,14 @@ class AppController(QObject):
             # chain and the slot check marks) — re-gray the gated
             # entries IN PLACE (owner 2026-07-13: switching the
             # pointer or an element must not close the open menu).
+            # `show_weekday_names` joined the list (ROADMAP 15h item 4a):
+            # TWO separate QAction objects (the buried Weekday > Names
+            # and the top-level Archetype names) now write the SAME key,
+            # and only one is ever reachable at a time — the other's
+            # CHECKED display would otherwise go stale the moment the
+            # reachable one is clicked, since nothing else keeps them in
+            # sync (menu structure stays intact — no rebuild — so this
+            # is the ONE place to resync both).
             self._refresh_menu_gating()
 
     # The Earth label trio (owner 2026-07-18, the accepted names Date /
@@ -1253,6 +1293,24 @@ class AppController(QObject):
         )
         archetype_on = archetype_available and settings.archetype_mode
         self._archetype_action.setEnabled(archetype_available)
+        # The reachable Names switch (ROADMAP 15h item 4a) is enabled
+        # exactly opposite the nested Weekday ▸ Names it mirrors: that
+        # one loses its submenu the moment the mode turns ON, this one
+        # only means something once it did — so at any moment EXACTLY
+        # ONE of the two is clickable. TWO SEPARATE QAction objects write
+        # the SAME `show_weekday_names` key, though, so the one sitting
+        # disabled can still go visually stale — clicking the reachable
+        # one updates only ITS OWN checked flag, not its twin's; both are
+        # explicitly resynced here (blockSignals — a resync must never
+        # re-fire the setter) every time gating runs, which now includes
+        # every `show_weekday_names` change (see `_set_display_choice`).
+        self._archetype_names_action.setEnabled(archetype_on)
+        for names_action in (
+            self._archetype_names_action, self._weekday_names_action,
+        ):
+            names_action.blockSignals(True)
+            names_action.setChecked(settings.show_weekday_names)
+            names_action.blockSignals(False)
         locked = (
             settings.pointer == "cross"
             and settings.show_pointer
@@ -1328,7 +1386,7 @@ class AppController(QObject):
             action.setCheckable(True)
             action.setChecked(value == current)
             action.setEnabled(value not in disabled)
-            action.triggered.connect(lambda checked, chosen=value: setter(chosen))
+            _guard_exclusive_choice(action, lambda chosen=value: setter(chosen))
             group.addAction(action)
             submenu.addAction(action)
             actions.append(action)
@@ -1569,11 +1627,40 @@ class AppController(QObject):
             settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
         design_menu.addSeparator()
-        self._add_choice_submenu(
+        size_menu = self._add_choice_submenu(
             design_menu, tr("Size"),
             [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
             settings.diameter, self._set_diameter,
         )
+        # THE COMPACT SIZE SLIDER (owner ROADMAP 15h item 12,
+        # 2026-07-18): coarse tuning right in the menu — fine tuning
+        # stays in Settings, so a wide step and a narrow width are
+        # deliberate. Applies ONLY on release, NEVER mid-drag (owner:
+        # "da ne radim render na svakih ms") — a QWidgetAction hosting a
+        # plain QSlider, since a checkable choice entry cannot host a
+        # continuous value.
+        size_menu.addSeparator()
+        self._size_slider = QSlider(Qt.Orientation.Horizontal)
+        self._size_slider.setRange(defaults.SIZE_PRESETS[0], defaults.SIZE_PRESETS[-1])
+        self._size_slider.setSingleStep(defaults.MENU_SIZE_SLIDER_STEP)
+        self._size_slider.setPageStep(defaults.MENU_SIZE_SLIDER_STEP * 5)
+        self._size_slider.setFixedWidth(defaults.MENU_SIZE_SLIDER_WIDTH_PX)
+        self._size_slider.setValue(settings.diameter)
+        size_slider_label = QLabel(f"{settings.diameter} px")
+        self._size_slider.valueChanged.connect(
+            lambda value, lab=size_slider_label: lab.setText(f"{value} px")
+        )
+        self._size_slider.sliderReleased.connect(
+            lambda: self._set_diameter(self._size_slider.value())
+        )
+        size_slider_row = QWidget()
+        size_slider_layout = QHBoxLayout(size_slider_row)
+        size_slider_layout.setContentsMargins(12, 2, 12, 2)
+        size_slider_layout.addWidget(self._size_slider)
+        size_slider_layout.addWidget(size_slider_label)
+        size_slider_action = QWidgetAction(size_menu)
+        size_slider_action.setDefaultWidget(size_slider_row)
+        size_menu.addAction(size_slider_action)
         # The THREE SLOTS at the TOP level (owner 2026-07-14: the
         # 1st/2nd/3rd Slot system, superscripts in the labels). Every
         # slot has the same shape — the Weekday themes, the
@@ -1601,7 +1688,11 @@ class AppController(QObject):
             action.setCheckable(True)
             action.setChecked(checked)
             action.setEnabled(enabled)
-            action.triggered.connect(handler)
+            # Every slot-menu exclusive group (the weekday themes, the
+            # roster pairs, Complications, the astrology families) shares
+            # the SAME "one must always hold" guard as _add_choice_group —
+            # ROADMAP 15h item 8's bug lived here too.
+            _guard_exclusive_choice(action, lambda: handler(True))
             group.addAction(action)
             parent.addAction(action)
             return action
@@ -1610,7 +1701,8 @@ class AppController(QObject):
             parent: QMenu, group: QActionGroup,
             active: bool, current_theme: str, on_theme, names_key: str,
             current_roster: str = "planetary",
-        ) -> None:
+            roster_field: str = "weekday_roster",
+        ) -> QAction:
             """The IDENTICAL Weekday submenu of both slots: Planets sits
             FIRST and flat (owner 2026-07-18, `WEEKDAY_MENU_TOP`) —
             nesting Image/Sign plain plus the metal-capable Art look —
@@ -1651,14 +1743,48 @@ class AppController(QObject):
                         )
                 elif key in constants.METAL_THEMES:
                     metal_menu = self._submenu(container, tr(title))
+                    has_roster = key in defaults.WEEKDAY_PANTHEON
+                    # ROADMAP 15h item 8's surviving bug (owner
+                    # screenshot: Planetary/Pantheon BOTH unchecked):
+                    # ROOT CAUSE — the roster pair's checked state is
+                    # computed once at BUILD time from whichever theme
+                    # was active THEN. A metal pick (Gold/Bronze/…)
+                    # alone can make THIS pantheon theme the active one
+                    # (on_theme sets the theme unconditionally) without
+                    # ever touching the roster — nothing else resyncs
+                    # the pair afterward, so it keeps showing neither
+                    # option checked even though a real roster IS now in
+                    # effect. `metal_pick` closes that gap: a metal
+                    # click also re-checks the roster action matching
+                    # `current_roster` (valid here — nothing but a
+                    # roster click itself, handled separately below,
+                    # could have changed it since the menu was built).
+                    roster_actions: dict[str, QAction] = {}
+
+                    def resync_roster(actions=roster_actions) -> None:
+                        # LIVE settings, not the BUILD-time `current_roster`
+                        # snapshot — a roster click earlier in this same
+                        # open-menu session (handled by its own slot_action
+                        # below) already moved the real value; re-reading
+                        # it here keeps a LATER metal click from reverting
+                        # the display to the stale build-time roster.
+                        live = getattr(self._settings, roster_field)
+                        for value, roster_action in actions.items():
+                            roster_action.setChecked(value == live)
+
+                    def metal_pick(t: str, m: str) -> None:
+                        on_theme(t, m)
+                        if has_roster:
+                            resync_roster()
+
                     for metal in constants.theme_metals(key):
                         slot_action(
                             metal_menu, group, tr(metal.capitalize()),
                             active and current_theme == key
                             and _theme_metal(settings, key) == metal,
-                            lambda checked, t=key, m=metal: on_theme(t, m),
+                            lambda checked, t=key, m=metal: metal_pick(t, m),
                         )
-                    if key in defaults.WEEKDAY_PANTHEON:
+                    if has_roster:
                         # The roster pair sits BELOW the metals in the
                         # same dropdown (owner 2026-07-15: like the
                         # Pointer picking variant AND color) — per slot,
@@ -1669,7 +1795,7 @@ class AppController(QObject):
                         roster_group = QActionGroup(menu)
                         roster_group.setExclusive(True)
                         for roster in constants.FIGURE_ROSTERS:
-                            slot_action(
+                            roster_actions[roster] = slot_action(
                                 metal_menu, roster_group,
                                 tr(roster.capitalize()),
                                 active and current_theme == key
@@ -1707,7 +1833,7 @@ class AppController(QObject):
                 for key in keys:
                     add_theme_entry(group_menu, key)
             sub.addSeparator()
-            self._add_toggle(
+            return self._add_toggle(
                 sub, tr("Names"), getattr(settings, names_key),
                 lambda checked, key=names_key: self._set_display_choice(
                     key, checked
@@ -1727,19 +1853,20 @@ class AppController(QObject):
             theme_value: str, names_key: str, enabled_value: bool,
             enable_key: str, set_mode, set_style_mode, set_theme,
             roster_value: str = "planetary",
+            roster_field: str = "weekday_roster",
         ):
             """One slot submenu (owner 2026-07-14: all three share the
             shape): Weekday themes, the COMPLICATIONS dropdown, the
             astrology families — and the slot's own ENABLE below the
             separator. Returns (enable action, the 1st-slot lockable
-            entries)."""
+            entries, the slot's own Weekday > Names action)."""
             group = QActionGroup(menu)
             group.setExclusive(True)
             lockable = []
-            add_weekday_submenu(
+            names_action = add_weekday_submenu(
                 slot_menu, group,
                 mode_value == "weekday", theme_value, set_theme, names_key,
-                current_roster=roster_value,
+                current_roster=roster_value, roster_field=roster_field,
             )
             comps = self._submenu(slot_menu, tr("Complications"))
             lockable.append(comps.menuAction())
@@ -1793,9 +1920,9 @@ class AppController(QObject):
                 ),
                 tr("The slots enable in order — 1st, then 2nd, then 3rd."),
             )
-            return enable, lockable
+            return enable, lockable, names_action
 
-        _, first_lockable = build_slot_menu(
+        _, first_lockable, self._weekday_names_action = build_slot_menu(
             day_slot_menu, 1,
             settings.weekday_slot, settings.day_slot_style,
             settings.weekday_theme, "show_weekday_names",
@@ -1804,11 +1931,12 @@ class AppController(QObject):
             self._set_weekday_badge,
             self._set_weekday_theme,
             roster_value=settings.weekday_roster,
+            roster_field="weekday_roster",
         )
         # The Seasons with all three slots LOCK the 1st on the weekday
         # unit (owner 2026-07-14) — everything but Weekday grays.
         self._menu_gates["first_lock"] = first_lockable
-        enable2, _ = build_slot_menu(
+        enable2, _, _ = build_slot_menu(
             info_slot_menu, 2,
             settings.octa_slot, settings.info_slot_style,
             settings.info_slot_theme, "show_info_slot_names",
@@ -1819,8 +1947,9 @@ class AppController(QObject):
                 "weekday", theme=theme, metal=metal, roster=roster
             ),
             roster_value=settings.info_slot_roster,
+            roster_field="info_slot_roster",
         )
-        enable3, _ = build_slot_menu(
+        enable3, _, _ = build_slot_menu(
             third_slot_menu, 3,
             settings.third_slot, settings.third_slot_style,
             settings.third_slot_theme, "show_info_slot_names",
@@ -1831,6 +1960,7 @@ class AppController(QObject):
                 "weekday", theme=theme, metal=metal, roster=roster
             ),
             roster_value=settings.third_slot_roster,
+            roster_field="third_slot_roster",
         )
         self._menu_gates["enable2"] = enable2
         self._menu_gates["enable3"] = enable3
@@ -1943,6 +2073,31 @@ class AppController(QObject):
                 "figures; the hour hand lights the one whose "
                 "hour-space it is in. The weekday model and the slots "
                 "step aside while it runs."
+            ),
+        )
+        # ARCHETYPE NAMES (owner ROADMAP 15h item 4a, 2026-07-18: "he
+        # cannot turn archetype names off"). ROOT CAUSE: the figures'
+        # names are the SAME `show_weekday_names` flag ArchetypeLayer
+        # already reads (render.layers, verified) — but its only menu
+        # switch lives inside 1st Slot ▸ Weekday ▸ Names, and
+        # `_refresh_menu_gating` grays the WHOLE 1st/2nd/3rd Slot
+        # submenus while the mode is on (they no longer apply), taking
+        # that switch down with them — unreachable, not merely hidden.
+        # LEAST-NEW-SURFACE FIX: no new setting, no change to the slot
+        # gating (which is correct — the slots truly do not apply); one
+        # more reachable action for the SAME key, sitting right beside
+        # the toggle that makes it relevant, gated identically to
+        # Archetype itself so it grays exactly when there is nothing to
+        # name.
+        self._archetype_names_action = self._add_toggle(
+            menu, tr("Archetype names"), settings.show_weekday_names,
+            lambda checked: self._set_display_choice(
+                "show_weekday_names", checked
+            ),
+            tr(
+                "The lit figure's name — the same switch as the weekday "
+                "bodies' Names (1st Slot ▸ Weekday), reachable here "
+                "because that submenu grays out while Archetype runs."
             ),
         )
         # (The Earth-weekday toggle moved to Design ▸ Earth as a general
@@ -2556,6 +2711,10 @@ class AppController(QObject):
         self._earth_weekday_toggle.setEnabled(
             diameter >= defaults.FULL_TEXT_MIN_DIAMETER
         )
+        # Keep the compact menu slider in step with a PRESET pick (owner
+        # ROADMAP 15h item 12) — setValue alone never fires
+        # sliderReleased, so this cannot re-enter _set_diameter.
+        self._size_slider.setValue(diameter)
         self._widget.set_dial_diameter(diameter)
         self._compositor.invalidate()
         self._widget.update()

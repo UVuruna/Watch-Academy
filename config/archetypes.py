@@ -72,10 +72,10 @@ ARCHETYPE_FIGURE_HEIGHT_OF_TIP = {
     "trio": 0.62, "hexa": 0.58, "cross": 0.46, "octa": 0.40,
 }
 # The figure NAME label (the lit figure with Names on, and the
-# fallback while art is missing/placeholder): fitted to this fraction
-# of the diamond's widest width, capped against the figure height.
-ARCHETYPE_NAME_WIDTH_FRACTION = 0.92
-ARCHETYPE_NAME_MAX_OF_FIGURE = 0.24
+# fallback while art is missing/placeholder) shares its fitting and its
+# NAME_LABEL_MAX_PX cap with the weekday body label — one helper,
+# render.layers.draw_name_label (Rule #5); the width fraction lives at
+# defaults.NAME_LABEL_WIDTH_FRACTION, shared by both label paths.
 # A file at or under this many pixels per side is a committed 1×1
 # placeholder (the WORKPLAN missing-art rule) — the renderer draws the
 # figure's NAME instead of a stretched pixel.

@@ -419,11 +419,17 @@ lives in [The DOMY Canon](CANON.md).
    (`archetype/<source>/tetramorph/<Creature>.png`) with the sheet
    corrected and the missing Throne + Seal center prompts written.
    RECORDED, in owner priority order:
-   1. **Menu rework** — left column of TITLES only, each opening its
-      submenu panel on the right; related groups may share one title
-      (e.g. Palette + Clock Tint = color). The SIZE slider (360–1440)
-      exists in Settings since 0.14.314 — owner may not have seen it
-      pre-restart; if he means the MENU too, add it there.
+   1. **Menu rework — DONE (Session 21-B):** the SETTINGS DIALOG (the
+      owner's actual ask — the tray menu itself is a separate, deeper
+      nested-submenu tree the owner did not flag) left column becomes a
+      `QListWidget` NAVIGATION of section TITLES (each with a trailing
+      "▸"), each opening its panel on a `QStackedWidget` to the right;
+      related groups SHARE one title exactly per the owner's example —
+      Palette + Clock tint = one "Colors" section (seven sections total,
+      layout map in [Settings Dialog](../app/settings_dialog.md)). Every
+      existing control kept, `result_settings()` untouched, each panel
+      keeps its own scroll cap. The tray-menu SIZE slider (item 12 below)
+      covers "if he means the MENU too."
    2. **SPACE without focus** — the encyclopedia jump works only
       after the widget was clicked (Qt keyboard focus); owner rule:
       it must work whenever the HOVER works. Needs a key path that
@@ -453,10 +459,23 @@ lives in [The DOMY Canon](CANON.md).
       (`faulthandler` + `sys.excepthook` → `%APPDATA%/DOMY Watch/crash.log`);
       the likeliest crasher (re-entrant modal opens on repeated SPACE) is
       hardened directly with a re-entrancy guard + auto-repeat de-dupe.
-   4. **Archetype names**: an option to show figures WITHOUT names
-      (like the weekday Names toggle); a MAX FONT SIZE cap for ALL
-      dial name labels (long vs short texts diverge wildly today);
-      two-word names wrap to TWO lines (e.g. the Compass Walks).
+   4. **Archetype names — DONE (Session 21-B):** (a) the figures'
+      names were ALREADY `show_weekday_names` end to end
+      (`ArchetypeLayer` reads it directly) — the bug was that its only
+      menu switch (1st Slot ▸ Weekday ▸ Names) goes unreachable the
+      instant Archetype mode grays the whole slot submenu tree; fixed
+      with one more reachable action for the SAME key
+      ("Archetype names", enabled exactly opposite the buried one — the
+      least-new-surface option). (b) a MAX FONT SIZE cap
+      (`defaults.NAME_LABEL_MAX_PX = 40`, reasoned from the 720-dial
+      short-weekday "TUE" look) now applies to BOTH the weekday body
+      label and the archetype figure label through ONE shared helper,
+      `render.layers.draw_name_label` (Rule #5 — the weekday path used
+      to ignore text length entirely, the archetype path fit-to-width
+      with no ceiling). (c) two-word names WRAP to two centered lines
+      (e.g. the Compass Walks) exactly when that reads LARGER than the
+      single-line fit — pinned by metrics and render tests in
+      `tests/test_archetype.py`.
    5. **Archetype center display trigger — SEALED AND DONE (owner
       pick 2026-07-18):** the solar-noon window EXTENDED to both
       poles of the axis — the center burns FULL within ±1h of TRUE
@@ -476,9 +495,20 @@ lives in [The DOMY Canon](CANON.md).
    8. **Click-cycles in the menu — DROPPED** (owner 2026-07-18: "ne"):
       the cycle-on-click idea (Seasons click → Temperaments↔Elements;
       Ring/Umbra/Earth top-bottom pairs; Planetary/Pantheon via the
-      color entry) does not go forward. The caught BUG STAYS OPEN: both
-      sub-options (e.g. Planetary/Pantheon) can be UNCHECKED today
-      (slika 2) — one must always hold.
+      color entry) does not go forward. The caught BUG — **FIXED
+      (Session 21-B):** both sub-options (e.g. Planetary/Pantheon)
+      could show UNCHECKED (slika 2). ROOT CAUSE was a STALE BUILD-TIME
+      SNAPSHOT, not Qt's own exclusive `QActionGroup` (verified safe on
+      its own): a metal pick (Gold/Bronze/…) activates a pantheon theme
+      WITHOUT touching its roster, and nothing resynced the roster
+      pair's checkmarks afterward. Fixed at the source (`metal_pick`/
+      `resync_roster` in `app/controller.py`, reading the LIVE
+      `weekday_roster`/`info_slot_roster`/`third_slot_roster` per slot)
+      plus a CENTRAL defense (`_guard_exclusive_choice`, wired into both
+      `_add_choice_group` and `slot_action` — every exclusive
+      `QActionGroup` in the app menu): a click on the already-checked
+      member of ANY exclusive group is now a guaranteed no-op. One
+      member always holds.
    9. **Articles for the new themes** — Session 6 (Opus) queued next;
       the master list lives in WORKPLAN/ROADMAP so nothing is lost.
    10. **Location emoji** (owner 2026-07-18): the North/South Pole
@@ -504,12 +534,14 @@ lives in [The DOMY Canon](CANON.md).
       physically true). The ±3h event window stands; idea recorded:
       scale the glow strength by the eclipse MAGNITUDE from
       `Database/deep_time.sqlite`'s eclipse catalog.
-   12. **SIZE slider in the right-click menu** (owner 2026-07-18): a
-      COMPACT slider lives in the menu itself (coarse tune — narrow is
-      fine), applying ONLY on slider RELEASE — never re-render
-      per-millisecond while dragging. Fine tuning stays in Settings,
-      and the Settings dialog ADDS an exact numeric input beside its
-      own slider (e.g. 568 px), same 360–1440 range.
+   12. **SIZE slider in the right-click menu — DONE (Session 21-B):** a
+      COMPACT `QWidgetAction`-hosted `QSlider` lives in Design ▸ Size
+      itself (360–1440, `singleStep` 10, narrow width — coarse tune,
+      fine tuning stays in Settings), applying ONLY on `sliderReleased`
+      — never mid-drag; a preset pick keeps it synced. The Settings
+      dialog's diameter slider ADDS an exact `QSpinBox` beside it
+      (`self._diameter_spin`), synced two-way, same 360–1440 range,
+      applied together on OK.
    13. **Archetype figures — THE TWO-TYPE LAW — DONE 2026-07-18**
       (this round, TASK A, round two after owner screenshots): NOT
       everything wears the slot size — the art divides into TWO TYPES,

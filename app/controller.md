@@ -92,7 +92,33 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   roster pair in the same dropdown — below the metals on Greek/Norse,
   the whole dropdown on Egyptian/Slavic — writing that slot's OWN
   `*_roster` key, owner 2026-07-15: slot 1 Greek Planetary can sit
-  beside slot 2 Greek Pantheon) — plus the
+  beside slot 2 Greek Pantheon). THE BOTH-UNCHECKED BUG (ROADMAP 15h
+  item 8's surviving bug, owner slika 2 2026-07-18 — "one must ALWAYS
+  hold"): its ROOT CAUSE was NOT Qt's own exclusive `QActionGroup`
+  (verified safe — clicking the sole checked member of a plain exclusive
+  group is already a no-op) but a STALE BUILD-TIME SNAPSHOT — a
+  metal-capable pantheon theme's Gold/Bronze/Silver/Colored picks
+  activate the theme WITHOUT ever touching the roster, and nothing
+  resynced the roster pair's checkmarks afterward, so a theme could
+  become active while its roster radios still showed the "not yet
+  active" both-unchecked state computed when the menu was built. FIX
+  (`add_theme_entry`'s `metal_pick`/`resync_roster` closures, per
+  pantheon-capable `METAL_THEMES` entry): a metal click also re-checks
+  the roster action matching the LIVE `getattr(self._settings,
+  roster_field)` (`roster_field` threaded from `build_slot_menu` down —
+  `weekday_roster`/`info_slot_roster`/`third_slot_roster` per slot), so
+  a later metal pick after an explicit roster change never reverts the
+  display to a stale roster either. DEFENSE IN DEPTH, applied
+  CENTRALLY: `_guard_exclusive_choice(action, apply)` wraps EVERY
+  exclusive-group action's `triggered` connection — in `_add_choice_group`
+  (Pointer/Ring/Umbra/Complications-style groups) AND in `slot_action`
+  (the weekday themes, the roster pairs, Complications, the astrology
+  families — every exclusive `QActionGroup` in the app menu routes
+  through one of these two) — so a click on the ALREADY-checked member
+  of any exclusive group is a guaranteed no-op (`action.setChecked(True)`,
+  `apply()` skipped) instead of relying on Qt's own behavior. Together:
+  the roster pair (and every other exclusive group) always keeps
+  exactly one member checked. Plus the
   slot's OWN Names switch — the COMPLICATIONS submenu (Digital time /
   Date / Day length / Seconds — the seated small seconds silences the
   big hand and its Elements toggle), and the Astrology / Ascendant /
@@ -145,7 +171,16 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   light = Almanac (the labels stay, the equivalence is documented) — so
   the group stays live there; the Calendar lighting group is grayed off
   the Calendar pointer (`_menu_gates["calendar_lighting"]`). Then
-  Size (360…1440),
+  Size — the preset list (360…1440) PLUS a COMPACT SLIDER (owner
+  ROADMAP 15h item 12a, 2026-07-18): a `QWidgetAction` hosting a plain
+  `QSlider` (`self._size_slider`, range 360–1440, `singleStep`
+  `defaults.MENU_SIZE_SLIDER_STEP`, width
+  `defaults.MENU_SIZE_SLIDER_WIDTH_PX` — coarse and narrow on purpose,
+  fine tuning stays in Settings) that applies ONLY on `sliderReleased`,
+  never mid-drag ("da ne radim render na svakih ms") — dragging
+  (`valueChanged`) only updates its own live label. `_set_diameter()`
+  keeps the slider synced when a PRESET is picked instead, so the two
+  controls never show conflicting values.
   Elements (the FINAL.txt #5 on/off switches, via the shared
   `_add_toggle()` helper: Pointer, Colorful — off draws the day/twilight
   arcs as plain white transparency — Earth, Moon and Seconds, which also
@@ -160,13 +195,32 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   the Solar rotation toggle (off = upright Star/Aura/Umbra), the
   ARCHETYPE toggle (owner sealed package 2026-07-16): 🎭
   Archetype — the stay-open checkable that turns the mode on (the
-  render-level override; the slot settings stay untouched). The Earth
+  render-level override; the slot settings stay untouched), immediately
+  followed by an "Archetype names" toggle (`self._archetype_names_action`,
+  owner ROADMAP 15h item 4a, 2026-07-18) — same `show_weekday_names` key
+  the buried 1st Slot ▸ Weekday ▸ Names switch already writes
+  (`render.layers.ArchetypeLayer` reads it directly; the wiring was never
+  broken). ROOT CAUSE of "cannot turn archetype names off": the WHOLE
+  1st/2nd/3rd Slot submenus — Names' only other home — gray out the
+  instant the mode turns on (see `_refresh_menu_gating` below), taking
+  the switch down with them. LEAST-NEW-SURFACE FIX: no new setting, one
+  more action for the SAME key, `setEnabled` to `archetype_on` — the
+  exact OPPOSITE gating of the buried entry, so at any moment EXACTLY
+  ONE of the two is clickable. Since they are still TWO SEPARATE
+  `QAction` objects writing one key, `_refresh_menu_gating` also
+  explicitly resyncs BOTH checked states from the live setting
+  (`blockSignals` — a resync must never re-fire the setter) — caught
+  by a self-review after the first pass shipped enabled-gating alone
+  and left the disabled twin showing a stale checkmark; `_set_display_
+  choice` now runs the gating refresh on every `show_weekday_names`
+  change too, not just the mode/pointer keys. The Earth
   Date and Weekday toggles live in Design ▸ Earth as GENERAL, MUTUALLY
   EXCLUSIVE options (`show_earth_date` / `earth_weekday`, owner 2026-07-17
   slika 10 + ROADMAP 15e — both work in either mode, gated by the dial
   size; `_toggle_earth_label` clears the sibling when one is checked).
   `_refresh_menu_gating`
-  grays the Archetype toggle
+  grays the Archetype toggle AND the Archetype-names toggle (opposite
+  sense — the latter enables exactly WHILE the mode is on)
   where no archetype exists (Aurora, Calendar, Pointer element off)
   and, WHILE THE MODE IS ON, grays the three slot submenus and their
   enables IN PLACE and releases the big-seconds gate (a seated

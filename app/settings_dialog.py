@@ -33,6 +33,7 @@ from PySide6.QtWidgets import (
     QScrollArea,
     QSlider,
     QSpinBox,
+    QStackedWidget,
     QVBoxLayout,
     QWidget,
 )
@@ -75,34 +76,69 @@ class SettingsDialog(QDialog):
         )
         self._ring_tint = settings.ring_tint
 
-        # The dialog outgrew small screens (owner question 2026-07-12):
-        # the groups live in a SCROLL AREA capped to the screen height,
-        # with OK/Cancel always visible below it.
         # QUICK JUMP CITIES (Session 16, owner slika 12): the working
         # list starts from the saved settings; the group below edits it.
         self._jump_cities = [dict(city) for city in settings.jump_cities]
 
-        content = QWidget()
-        column = QVBoxLayout(content)
-        column.addWidget(self._build_location_group())
-        column.addWidget(self._build_jump_cities_group())
-        column.addWidget(self._build_opacity_group())
-        column.addWidget(self._build_sizes_group())
-        column.addWidget(self._build_palette_group())
-        column.addWidget(self._build_ring_tint_group())
-        column.addWidget(self._build_custom_ring_group())
-        column.addWidget(self._build_custom_hands_group())
-        column.addWidget(self._build_theme_rotation_group())
-        column.addWidget(self._build_artwork_group())
-        column.addWidget(self._build_language_group())
-        column.addWidget(self._build_era_group())
-        column.addWidget(self._build_system_group())
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setWidget(content)
+        # THE NAVIGATION REWORK (owner ROADMAP 15h item 1, 2026-07-18):
+        # a left column of SECTION TITLES (each with a right arrow ▸)
+        # replaces the old one-long-scroll layout — clicking a title
+        # shows THAT section's panel on the right. Related groups SHARE
+        # one title exactly where the owner's own example applies (the
+        # Pointer palette and the Clock/ring tint are both COLOR); every
+        # existing control moves into one section or another, none are
+        # dropped, `result_settings()` is untouched. Each panel keeps
+        # its OWN scroll area (owner: "keep the scroll cap for tall
+        # panels") — only ONE panel is visible at a time now, so the cap
+        # moved from the whole dialog onto each panel individually.
+        tr = self._tr
+        sections: list[tuple[str, list[QGroupBox]]] = [
+            (tr("Location"), [
+                self._build_location_group(), self._build_jump_cities_group(),
+            ]),
+            (tr("Display"), [
+                self._build_opacity_group(), self._build_sizes_group(),
+            ]),
+            (tr("Colors"), [
+                self._build_palette_group(), self._build_ring_tint_group(),
+            ]),
+            (tr("Custom art"), [
+                self._build_custom_ring_group(), self._build_custom_hands_group(),
+            ]),
+            (tr("Themes"), [
+                self._build_theme_rotation_group(), self._build_artwork_group(),
+            ]),
+            (tr("Language"), [
+                self._build_language_group(), self._build_era_group(),
+            ]),
+            (tr("System"), [self._build_system_group()]),
+        ]
+        self._nav_list = QListWidget()
+        self._nav_list.setFixedWidth(defaults.SETTINGS_NAV_WIDTH_PX)
+        self._stack = QStackedWidget()
+        pages: list[QWidget] = []
+        for title, groups in sections:
+            self._nav_list.addItem(f"{title}  ▸")
+            page = QWidget()
+            page_layout = QVBoxLayout(page)
+            page_layout.setContentsMargins(0, 0, 0, 0)
+            for group in groups:
+                page_layout.addWidget(group)
+            page_layout.addStretch(1)
+            pages.append(page)
+            panel_scroll = QScrollArea()
+            panel_scroll.setWidgetResizable(True)
+            panel_scroll.setFrameShape(QFrame.Shape.NoFrame)
+            panel_scroll.setWidget(page)
+            self._stack.addWidget(panel_scroll)
+        self._nav_list.currentRowChanged.connect(self._stack.setCurrentIndex)
+        self._nav_list.setCurrentRow(0)
+
         layout = QVBoxLayout(self)
-        layout.addWidget(scroll, stretch=1)
+        body = QHBoxLayout()
+        body.addWidget(self._nav_list)
+        body.addWidget(self._stack, stretch=1)
+        layout.addLayout(body, stretch=1)
         buttons = QDialogButtonBox(
             QDialogButtonBox.StandardButton.Ok
             | QDialogButtonBox.StandardButton.Cancel
@@ -111,9 +147,14 @@ class SettingsDialog(QDialog):
         buttons.rejected.connect(self.reject)
         layout.addWidget(buttons)
         screen = QApplication.primaryScreen().availableGeometry()
+        content_width = max(page.sizeHint().width() for page in pages)
+        content_height = max(page.sizeHint().height() for page in pages)
         self.resize(
-            min(content.sizeHint().width() + 48, screen.width() - 80),
-            min(content.sizeHint().height() + 96, round(screen.height() * 0.92)),
+            min(
+                content_width + defaults.SETTINGS_NAV_WIDTH_PX + 64,
+                screen.width() - 80,
+            ),
+            min(content_height + 96, round(screen.height() * 0.92)),
         )
 
         if settings.city_path:
@@ -617,9 +658,30 @@ class SettingsDialog(QDialog):
         self._diameter_slider.setRange(low, high)
         self._diameter_slider.setValue(min(max(self._settings.diameter, low), high))
         diameter_label = QLabel(f"{self._diameter_slider.value()} px")
-        self._diameter_slider.valueChanged.connect(
-            lambda new_value, lab=diameter_label: lab.setText(f"{new_value} px")
-        )
+        # The exact numeric input (owner ROADMAP 15h item 12b): a spinbox
+        # synced TWO-WAY with the slider — either one moves the other,
+        # both stay in step, applied together on OK.
+        self._diameter_spin = QSpinBox()
+        self._diameter_spin.setRange(low, high)
+        self._diameter_spin.setValue(self._diameter_slider.value())
+        self._diameter_spin.setSuffix(" px")
+
+        def sync_spin(value: int) -> None:
+            diameter_label.setText(f"{value} px")
+            if self._diameter_spin.value() != value:
+                self._diameter_spin.blockSignals(True)
+                self._diameter_spin.setValue(value)
+                self._diameter_spin.blockSignals(False)
+
+        def sync_slider(value: int) -> None:
+            if self._diameter_slider.value() != value:
+                self._diameter_slider.blockSignals(True)
+                self._diameter_slider.setValue(value)
+                self._diameter_slider.blockSignals(False)
+            diameter_label.setText(f"{value} px")
+
+        self._diameter_slider.valueChanged.connect(sync_spin)
+        self._diameter_spin.valueChanged.connect(sync_slider)
         diameter_reset = QPushButton(tr("Default"))
         diameter_reset.clicked.connect(
             lambda checked: self._diameter_slider.setValue(
@@ -629,6 +691,7 @@ class SettingsDialog(QDialog):
         diameter_row = QHBoxLayout()
         diameter_row.addWidget(self._diameter_slider)
         diameter_row.addWidget(diameter_label)
+        diameter_row.addWidget(self._diameter_spin)
         diameter_row.addWidget(diameter_reset)
         form.addRow(tr("Diameter"), diameter_row)
         return group
