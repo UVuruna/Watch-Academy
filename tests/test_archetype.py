@@ -12,7 +12,7 @@ import os
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
 import dataclasses
-from datetime import datetime
+from datetime import datetime, timedelta
 from types import SimpleNamespace
 from zoneinfo import ZoneInfo
 
@@ -31,6 +31,7 @@ from render.compositor import Compositor
 from render.layers import (
     archetype_active,
     archetype_art_ready,
+    archetype_center_lit,
     archetype_lit_index,
     dial_point,
     draw_archetype_figure,
@@ -465,7 +466,10 @@ def test_archetype_center_size_is_reveal_invariant(app):
     """Owner 2026-07-17, ROADMAP 15g: the Omega reveal must NOT resize any
     figure. The center figure draws IDENTICALLY with the reveal off and on
     — the sizing helper has no reveal term, so size(normal) == size(reveal)
-    to the pixel."""
+    to the pixel. Both renders sit AT solar noon (hour_angle == star_rotation)
+    so the 2026-07-18 center WINDOW also reads full in the non-reveal case —
+    isolating the size comparison from the window's own opacity term (pinned
+    separately by test_archetype_center_window_render)."""
     from render.layers import ArchetypeCenterLayer, RenderContext
 
     skin = _archetype_skin("trio")
@@ -477,7 +481,8 @@ def test_archetype_center_size_is_reveal_invariant(app):
         painter = QPainter(image)
         painter.translate(180, 180)
         ctx = RenderContext(
-            skin=skin, day=SimpleNamespace(), tick=None,
+            skin=skin, day=SimpleNamespace(star_rotation=0.0),
+            tick=SimpleNamespace(hour_angle=0.0),
             radius=180.0, cache=AssetCache(), dpr=1.0,
             reveal_active=reveal, archetype_lit=0,
         )
@@ -486,6 +491,70 @@ def test_archetype_center_size_is_reveal_invariant(app):
         return image
 
     assert render(False) == render(True)     # reveal never resizes the center
+
+
+def test_archetype_center_lit_window():
+    """Owner seal 2026-07-18: the center burns FULL exactly at TRUE solar
+    noon and at TRUE solar midnight, stays full within
+    ARCHETYPE_CENTER_WINDOW_DEG (15deg == +-1h) of either, and turns
+    ghost just past the boundary — on BOTH sides of each instant."""
+    noon = 40.0                                   # an arbitrary noon angle
+    midnight = (noon + 180.0) % 360.0
+    window = archetypes.ARCHETYPE_CENTER_WINDOW_DEG
+    assert archetype_center_lit(noon, noon)
+    assert archetype_center_lit(midnight, noon)
+    for sign in (+1.0, -1.0):
+        just_inside_noon = (noon + sign * (window - 0.1)) % 360.0
+        just_outside_noon = (noon + sign * (window + 0.1)) % 360.0
+        just_inside_midnight = (midnight + sign * (window - 0.1)) % 360.0
+        just_outside_midnight = (midnight + sign * (window + 0.1)) % 360.0
+        assert archetype_center_lit(just_inside_noon, noon)          # 14.9 deg
+        assert not archetype_center_lit(just_outside_noon, noon)     # 15.1 deg
+        assert archetype_center_lit(just_inside_midnight, noon)      # 14.9 deg
+        assert not archetype_center_lit(just_outside_midnight, noon)  # 15.1 deg
+
+
+def test_archetype_center_window_render(app):
+    """Owner seal 2026-07-18: the center draws differently in vs out of
+    the noon/midnight window on the same skin/day, and the reveal
+    gesture forces it full even OUT of the window."""
+    from render.layers import ArchetypeCenterLayer
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    base = datetime(2026, 7, 16, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        base, observer,
+        SeasonsRepository().year_anchors(base.year),
+        MoonPhaseRepository().moon_window(base.year),
+    )
+    in_window = build_tick_state(day.sun.noon, day)             # TRUE solar noon
+    out_window = build_tick_state(day.sun.noon + timedelta(hours=6), day)
+
+    skin = _archetype_skin("trio")
+    layer = ArchetypeCenterLayer(skin)
+
+    def render(tick, reveal=False):
+        image = QImage(360, 360, QImage.Format.Format_ARGB32_Premultiplied)
+        image.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(image)
+        painter.translate(180, 180)
+        ctx = RenderContext(
+            skin=skin, day=day, tick=tick, radius=180.0,
+            cache=AssetCache(), dpr=1.0, reveal_active=reveal, archetype_lit=0,
+        )
+        layer.paint(painter, ctx)
+        painter.end()
+        return image
+
+    lit = render(in_window)
+    ghost = render(out_window)
+    assert lit != ghost                       # the window changes the paint
+    revealed = render(out_window, reveal=True)
+    assert revealed == lit                    # reveal forces full, out-of-window
 
 
 def test_archetype_arm_is_a_hover_target(app):

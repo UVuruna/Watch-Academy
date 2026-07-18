@@ -440,16 +440,22 @@ lives in [The DOMY Canon](CANON.md).
       (like the weekday Names toggle); a MAX FONT SIZE cap for ALL
       dial name labels (long vs short texts diverge wildly today);
       two-word names wrap to TWO lines (e.g. the Compass Walks).
-   5. **Archetype center display trigger** — owner asks for ideas;
-      proposal delivered (always-ghost / solar-noon window /
-      changing-of-the-guard flash), awaiting his pick.
-   6. **Hover color-theme alignment** (standard, not archetype):
-      owner grades — Compass Walks seasons 3/5, turnings 4-5/5;
-      Compass Ages seasons 4-5/5, turnings 3/5; Seasons Temperaments
-      5/5; Seasons ELEMENTS 1-2/5 — the weak one. Proposal: re-seat
-      the Elements hues on the classical humoral pairing
-      (spring=Air white, summer=Fire red, autumn=Earth green,
-      winter=Water blue) — awaiting the owner's verdict.
+   5. **Archetype center display trigger — SEALED AND DONE (owner
+      pick 2026-07-18):** the solar-noon window EXTENDED to both
+      poles of the axis — the center burns FULL within ±1h of TRUE
+      solar noon AND true solar midnight (4 of 24 h, ~16.7%), ghost
+      otherwise; the Omega reveal still shows it full
+      (`ARCHETYPE_CENTER_WINDOW_DEG`, `archetype_center_lit`).
+   6. **Hover color-theme alignment — VERIFIED CANONICAL, closed
+      (2026-07-18):** an offscreen probe of every cross arm proved
+      the CURRENT code already speaks the humoral pairing on both
+      wheels (top Summer↔Fire `#E8391E`, right Autumn↔Earth
+      `#6B8E3A`, bottom Winter↔Water `#1E74D0`, left Spring↔Air
+      `#EFE9B0`; paint = the seasons hues) and the season NAMES
+      match the hues on every arm — the owner's 1-2/5 grade came
+      from his pre-restart build. Nothing changed; the owner
+      re-grades after restarting. (His green-vs-brown instinct:
+      the autumn hue is already the muddy olive green-BROWN soil.)
    8. **Click-cycles in the menu**: clicking the ACTIVE parent entry
       cycles its sub-list (Seasons click → Temperaments↔Elements;
       same for Ring/Umbra/Earth top-bottom pairs; Planetary/Pantheon
@@ -458,6 +464,29 @@ lives in [The DOMY Canon](CANON.md).
       one must always hold.
    9. **Articles for the new themes** — Session 6 (Opus) queued next;
       the master list lives in WORKPLAN/ROADMAP so nothing is lost.
+   10. **Location emoji** (owner 2026-07-18): the North/South Pole
+      entries in the location picker show ☀️/❄️ with the polar-day and
+      polar-night FROM–TO dates beneath (computed from the seasons/
+      twilight data, the most precise calculation available); Greenwich
+      gets a mark that says "the center" — proposal 🌐 (a globe with
+      meridians = the prime meridian), owner to confirm. Explanation of
+      the owner's observed transition dates (3 Mar / 9 Oct north, 5 Apr
+      / 7 Sep south): at the poles the sun's elevation equals its
+      declination (sign-flipped for the south), so those four dates are
+      the sun crossing ±6° declination — the CIVIL TWILIGHT boundary,
+      not sunrise; they sit ~2.5 weeks off the equinoxes, and the
+      north/south spans are asymmetric because Earth runs fastest near
+      the January perihelion (orbital eccentricity). TRUE sunrise/sunset
+      at a pole is only days from the equinox (atmospheric refraction
+      ~34′ + the solar semi-diameter 16′ lift the visible sun).
+   11. **Eclipse display** (owner 2026-07-18, refines the sealed
+      glow-metal triad): a SOLAR eclipse shows the Planets-theme eclipse
+      art (`assets/weekday/planets/primary/dual/sun_eclipse.png`) with a
+      RED glow ring around the marker; a LUNAR eclipse shows the Moon
+      marker darkened with a BRONZE glow (the blood-moon copper —
+      physically true). The ±3h event window stands; idea recorded:
+      scale the glow strength by the eclipse MAGNITUDE from
+      `Database/deep_time.sqlite`'s eclipse catalog.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over

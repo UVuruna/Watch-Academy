@@ -60,6 +60,14 @@ ARCHETYPE_NAME_MAX_OF_FIGURE = 0.24
 # placeholder (the WORKPLAN missing-art rule) — the renderer draws the
 # figure's NAME instead of a stretched pixel.
 ARCHETYPE_ART_MIN_PX = 8
+# THE CENTER WINDOW (owner seal 2026-07-18): the archetype CENTER
+# figure (ArchetypeCenterLayer — the Eye / Hearth / Seal / Union /
+# Throne) burns FULL only while the hour hand stands within this many
+# degrees of TRUE solar noon OR TRUE solar midnight (±1h == 15°, so
+# BOTH windows together cover 4 of the 24 hours, ~16.7% of the day) —
+# the rest of the time it draws at the weekday ghost_opacity, exactly
+# like an un-lit arm figure. The reveal gesture still forces it full.
+ARCHETYPE_CENTER_WINDOW_DEG = 15.0
 # The Earth Weekday option (settings.earth_weekday — a GENERAL Earth
 # marker option since 2026-07-17, no longer archetype-only): the date
 # shifts up and the abbreviated weekday writes below it, both as

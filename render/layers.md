@@ -135,13 +135,23 @@ ARCHETYPE CLOCK. The machinery:
   exactly like the slots.
 - `ArchetypeCenterLayer` (MINUTE, above the hands like
   CenterBodyLayer): the center figure — the Eye / Hearth / Seal /
-  Union / Throne, none on the Compass — full opacity, hover-enlarged
-  as `"archetype:center"` (its lift twin joins HoverLiftLayer). It is
+  Union / Throne, none on the Compass — hover-enlarged as
+  `"archetype:center"` (its lift twin joins HoverLiftLayer). It is
   the SAME size as the arm figures now (owner 2026-07-17/18, ROADMAP
   15g: it adopts the layout's `archetype_set_height()` — no longer the
   weekday Sun's `center_scale`, which sized it larger, nor its own
   square-Seal clamp, which would size it smaller — and reveal can no
-  longer resize it; the `_element_at` hit disc matches).
+  longer resize it; the `_element_at` hit disc matches). THE CENTER
+  WINDOW (owner seal 2026-07-18): it burns FULL only while the hour
+  hand stands within `ARCHETYPE_CENTER_WINDOW_DEG` (15°, ±1h) of TRUE
+  solar noon OR solar midnight (`archetype_center_lit()`) — 4 of the
+  24 hours, ~16.7% of the day — and draws at the weekday
+  `ghost_opacity` the rest of the time, exactly like an un-lit arm
+  figure; `noon_angle` is `day.star_rotation` (the hexagram's top
+  vertex, the SOLAR noon angle — correct in both upright and rotating
+  modes, never the drawn rotation). The reveal window ("show me
+  everything") still forces it full regardless, short-circuiting
+  before the window check ever reads `ctx.tick`.
 - `archetype_art_ready(path)` + `draw_archetype_figure()` — the
   graceful placeholder path: a missing file or a committed 1×1
   placeholder draws the figure's NAME in the outlined label style

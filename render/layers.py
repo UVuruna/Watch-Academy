@@ -320,6 +320,21 @@ def archetype_lit_index(
     return int(round(((hour_angle - rotation) % 360.0) / step)) % arms
 
 
+def archetype_center_lit(hour_angle: float, noon_angle: float) -> bool:
+    """Whether the archetype CENTER burns FULL (owner seal 2026-07-18):
+    true while the hour hand sits within
+    `archetypes.ARCHETYPE_CENTER_WINDOW_DEG` of TRUE solar noon OR
+    solar midnight (noon + 180). `noon_angle` is `day.star_rotation` —
+    the hexagram's top vertex, the SOLAR noon angle, correct in both
+    upright and rotating modes (never the drawn rotation). The circular
+    distance to noon folds through the midnight mirror to give the
+    distance to the noon-midnight AXIS, gated against the window."""
+    dist_noon = abs(hour_angle - noon_angle) % 360.0
+    dist_noon = min(dist_noon, 360.0 - dist_noon)
+    dist_axis = min(dist_noon, 180.0 - dist_noon)
+    return dist_axis <= archetypes.ARCHETYPE_CENTER_WINDOW_DEG
+
+
 def archetype_art_size(path):
     """The pixel size of REAL archetype art (the owner's glass) — or
     None when the file is missing or a committed 1×1 placeholder (the
@@ -1563,10 +1578,15 @@ class ArchetypeLayer(Layer):
 class ArchetypeCenterLayer(Layer):
     """The archetype's CENTER — the Eye / the Hearth / the Seal / the
     Union / the Throne (the Compass has none) — drawn where the
-    weekday center body used to live: ABOVE the hands, full opacity
-    (the union stands outside the hour lighting). Placeholder art
+    weekday center body used to live: ABOVE the hands. Placeholder art
     falls back to the center's name; the hover-enlarge lift twin
-    joins HoverLiftLayer under the "archetype:center" element."""
+    joins HoverLiftLayer under the "archetype:center" element. THE
+    WINDOW (owner seal 2026-07-18): it burns FULL only while the hour
+    hand stands within `ARCHETYPE_CENTER_WINDOW_DEG` of TRUE solar noon
+    OR solar midnight (`archetype_center_lit`) — 4 of the 24 hours — and
+    draws at the weekday `ghost_opacity` the rest of the day, exactly
+    like an un-lit arm figure; the reveal window ("show me everything")
+    still forces it full regardless."""
 
     cadence = Cadence.MINUTE
 
@@ -1587,7 +1607,16 @@ class ArchetypeCenterLayer(Layer):
             archetype_set_height(ctx.skin, ctx.radius, key)
             * hover_factor(ctx, "archetype:center")
         )
+        # THE WINDOW (owner seal 2026-07-18): full at solar noon/midnight
+        # (±ARCHETYPE_CENTER_WINDOW_DEG), ghost otherwise — the reveal
+        # gesture overrides regardless (short-circuits before touching
+        # ctx.tick, which the compositor guarantees on this MINUTE layer).
+        lit = ctx.reveal_active or archetype_center_lit(
+            ctx.tick.hour_angle, ctx.day.star_rotation
+        )
+        opacity = 1.0 if lit else ctx.skin.weekday_set.ghost_opacity
         painter.save()
+        painter.setOpacity(opacity)
         if archetype_art_ready(center["file"]):
             draw_pixmap_centered(
                 painter, ctx, center["file"], QPointF(0, 0), height
