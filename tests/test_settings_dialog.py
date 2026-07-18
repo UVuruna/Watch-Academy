@@ -902,6 +902,80 @@ def test_wider_pantheon_topics():
     dialog.deleteLater()
 
 
+def test_era_terms_topic():
+    """ROADMAP 15a3 (owner 2026-07-17): the Age of Light, the Age of
+    Darkness and the four Starry Seasons each get an Encyclopedia
+    article — sourced from the SEALED measured facts in
+    research/ephemeris/anno_lucis.json and ROADMAP 15a — closed by the
+    comparative "Eras of the World" essay (no emblem of its own). The
+    "era" topic joins The Clock gallery group; art degrades gracefully
+    (not yet generated)."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _TOPIC_GROUPS, _topics
+    from config import paths as _paths
+    from data.encyclopedia import EncyclopediaRepository
+    from data.translations import collect_corpus
+
+    QApplication.instance() or QApplication([])
+    topics = _topics()
+    era = topics["era"]["entries"]
+    assert [e["name"][1] for e in era] == [
+        "Age_of_Light", "Age_of_Darkness", "Starry_Spring",
+        "Starry_Summer", "Starry_Autumn", "Starry_Winter",
+        "Eras_of_the_World",
+    ]
+    # Every era entry but the comparative essay wires a plate; it
+    # degrades gracefully since the art has not landed yet.
+    for entry in era[:-1]:
+        assert entry["images"]
+        resolved = _paths.art_file(entry["images"][0])
+        assert resolved is None or resolved.suffix == ".png"
+    assert era[-1]["images"] == ()          # Eras of the World: no plate
+
+    groups = dict(_TOPIC_GROUPS)
+    assert groups["The Clock"] == (
+        "week", "instrument", "moon", "seasons", "sun", "era",
+    )
+
+    # Every article resolves and carries its own MEASURED numbers —
+    # never invented, always the sealed anno_lucis.json/ROADMAP figures.
+    repo = EncyclopediaRepository()
+    light = repo.era("Age_of_Light")["base"]
+    assert "4079 BCE" in light and "6423 CE" in light
+    assert "10,501" in light and "6105" in light
+    dark = repo.era("Age_of_Darkness")["base"]
+    assert "9561 BCE" in dark and "16429" in dark
+    spring = repo.era("Starry_Spring")["base"]
+    assert "1000 CE" in spring and "7.94" in spring
+    summer = repo.era("Starry_Summer")["base"]
+    assert "6105" in summer
+    autumn = repo.era("Starry_Autumn")["base"]
+    assert "10990" in autumn and "5.5" in autumn
+    winter = repo.era("Starry_Winter")["base"]
+    assert "16429" in winter
+    world = repo.era("Eras_of_the_World")["base"]
+    for term in ("AUC", "Byzantine", "Hebrew", "Hegirae", "Buddhist",
+                 "Chinese", "753", "5509", "3761", "543"):
+        assert term in world, term
+
+    # The corpus collects both title and base for every era key.
+    corpus = collect_corpus()
+    assert sum(1 for k in corpus if k.startswith("encyclopedia/era/")) == 14
+    assert "encyclopedia/era/Age_of_Light/title" in corpus
+    assert "encyclopedia/era/Eras_of_the_World/base" in corpus
+
+    # The dialog opens the topic and each page's title resolves without
+    # crashing (era_title dispatch in _entry_name).
+    dialog = EncyclopediaDialog()
+    dialog._show_topic("era")
+    assert dialog._counter.text() == "1 / 7"
+    for index in range(7):
+        dialog._entry_index = index
+        dialog._show_entry()
+    dialog.deleteLater()
+
+
 def test_guide_pages_cover_every_slide_exactly_once():
     """The page structure covers each slide exactly once; every slide
     has a caption with a title line plus a body (owner content)."""

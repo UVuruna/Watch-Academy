@@ -92,7 +92,7 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
 # their signs, the remaining week themes with the Trinity, the
 # religions, and the cross-cure emblem families last.
 _TOPIC_GROUPS = (
-    ("The Clock", ("week", "instrument", "moon", "seasons", "sun")),
+    ("The Clock", ("week", "instrument", "moon", "seasons", "sun", "era")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     # THE WIDER PANTHEON (owner 2026-07-15, WORKPLAN Session 8): one
     # topic per culture for the A-list figures no dial seat could hold
@@ -130,6 +130,20 @@ _SUN_ENTRIES = (
     ("Summer_Solstice", "turning_point/Summer_Solstice.png"),
     ("Winter_Solstice", "turning_point/Winter_Solstice.png"),
     ("Equinox", "turning_point/Equinox.png"),
+)
+
+# The ERA TERMS topic (ROADMAP 15a3, owner 2026-07-17): the two AGES
+# and the four STARRY SEASONS carry an emblem each — the comparative
+# "Eras of the World" essay closes the topic with no plate of its own.
+# Badges from assets/era/ (research/prompts/era/era_prompts.md).
+_ERA_ENTRIES = (
+    ("Age_of_Light", "Age_of_Light.png"),
+    ("Age_of_Darkness", "Age_of_Darkness.png"),
+    ("Starry_Spring", "Starry_Spring.png"),
+    ("Starry_Summer", "Starry_Summer.png"),
+    ("Starry_Autumn", "Starry_Autumn.png"),
+    ("Starry_Winter", "Starry_Winter.png"),
+    ("Eras_of_the_World", None),
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -705,6 +719,22 @@ def _topics() -> dict:
             for key, art in _SUN_ENTRIES
         ],
     }
+    # THE ERA TERMS (ROADMAP 15a3, owner 2026-07-17): the Age of Light,
+    # the Age of Darkness and the four Starry Seasons, closed by the
+    # comparative "Eras of the World" essay (no plate of its own).
+    topics["era"] = {
+        "title": "Eras & Ages",
+        "icon": defaults.ERA_ART_DIR / "Age_of_Light.png",
+        "entries": [
+            {
+                "images": (defaults.ERA_ART_DIR / art,) if art else (),
+                "name": ("era_title", key),
+                "article": ("era", key),
+                "accents": (),
+            }
+            for key, art in _ERA_ENTRIES
+        ],
+    }
     # THE WIDER PANTHEON (WORKPLAN Session 8): the seatless A-list
     # figures, one topic per culture. Every article resolves through
     # the encyclopedia "wider" family; the wired plates land later.
@@ -880,6 +910,8 @@ class EncyclopediaDialog(QDialog):
             return self._encyclopedia.sun(ref[1])["base"]
         if kind == "moon":
             return self._encyclopedia.moon(ref[1])["base"]
+        if kind == "era":
+            return self._encyclopedia.era(ref[1])["base"]
         if kind == "emblem":
             return self._encyclopedia.entry(ref[1], ref[2])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
@@ -899,6 +931,8 @@ class EncyclopediaDialog(QDialog):
                 return self._encyclopedia.sun(name[1])["title"]
             if name[0] == "moon_title":
                 return self._encyclopedia.moon(name[1])["title"]
+            if name[0] == "era_title":
+                return self._encyclopedia.era(name[1])["title"]
             return self._encyclopedia.instrument(name[1])["title"]
         return self._tr(name)
 

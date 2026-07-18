@@ -296,15 +296,25 @@ lives in [The DOMY Canon](CANON.md).
    (Observatory) — Time Travel stays within the precise
    −13000…+17000 pack (owner confirmed: not precise enough for
    dates beyond).
-15a3. **Era terms in the Encyclopedia + their LOGOS (owner
-   2026-07-17).** "Age of Light", "Age of Darkness" and the STARRY
-   SEASONS (spring/summer/autumn/winter of the eras, with the
-   measured transitions) each get an Encyclopedia article — and a
-   PROMPT SHEET for their LOGOS/emblems (a new
-   research/prompts/era/ sheet: an emblem per era and per starry
-   season, house register). The "Eras of the World" article grows
-   the owner's list: AUC, Byzantine AM, Hebrew AM, AH — plus the
-   Chinese count and the Buddhist Era (543 BCE) as my additions.
+15a3. **Era terms in the Encyclopedia + their LOGOS — DONE
+   (2026-07-18, ERA TERMS round).** "Age of Light", "Age of Darkness"
+   and the four STARRY SEASONS (spring/summer/autumn/winter of the
+   eras, each with its measured transition year — 4079 BCE, 1000 CE
+   +7.94 d peak, 6423 CE, 10990 CE −5.5 d trough, +16429) each carry
+   an Encyclopedia article, in a new "era" section of
+   `Database/encyclopedia.json` (`data/encyclopedia.py` `era(key)`),
+   wired as a new "era" topic in `app/encyclopedia.py`'s "The Clock"
+   gallery group. A new PROMPT SHEET
+   [Era Prompts](research/prompts/era/era_prompts.md) carries one
+   rose-window emblem per era and per starry season (house
+   night-window register, `assets/era/<Name>.png`) — not yet
+   generated. The "Eras of the World" article (new
+   `encyclopedia/era/Eras_of_the_World`) grows the owner's list: AUC,
+   Byzantine AM, Hebrew AM, AH, the Alexandrian era, Ussher, the
+   masonic Anno Lucis — plus the Chinese count and the Buddhist Era
+   (543 BCE) as my additions (the Chinese epoch is flagged uncertain
+   across sources — never invented past what the article states). 1
+   new test (`tests/test_settings_dialog.py`), 434 green.
 15b. **The MASON G ring — DONE (2026-07-18, MASON G RING round).** The
    bundled preset **G(12) S(16) M(20) Ω(24) N(4) A(8)** on the seal
    layout (`Database/ring_presets.json` — every letter's art already

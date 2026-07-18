@@ -1069,6 +1069,11 @@ SEASON_ART_DIR = paths.assets_dir() / "badge" / "season"
 # full-moon master by setup/make_moon_phases.py with the dial's own
 # terminator geometry; the Encyclopedia's Moon pages wear them.
 MOON_PHASE_ART_DIR = paths.assets_dir() / "moon"
+# The ERA TERMS emblems (ROADMAP 15a3, owner 2026-07-17): one per Age
+# (Light/Darkness) and per Starry Season (Spring/Summer/Autumn/Winter)
+# — the "Eras of the World" comparative article carries no plate of
+# its own. Prompt sheet: research/prompts/era/era_prompts.md.
+ERA_ART_DIR = paths.assets_dir() / "era"
 # Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128

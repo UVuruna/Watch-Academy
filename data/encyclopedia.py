@@ -66,6 +66,12 @@ class EncyclopediaRepository:
         2026-07-16, ROADMAP queue #10 split)."""
         return self._section("moon", key)
 
+    def era(self, key: str) -> dict:
+        """{title, base} of one ERA article — the Age of Light/Darkness,
+        the four Starry Seasons and the comparative Eras of the World
+        (ROADMAP 15a3, owner 2026-07-17)."""
+        return self._section("era", key)
+
     def entry(self, family: str, name: str) -> dict:
         """{base} of one emblem-family article — family is "virtues" |
         "sins" | "moods" | "duality" (the Judas–Lucifer scale, owner

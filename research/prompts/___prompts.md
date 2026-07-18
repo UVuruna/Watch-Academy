@@ -83,6 +83,13 @@ item count means the sheet is safe to queue.
 - `season_trinity_prompts.md` — Trinity, Seasons, Turning Points,
   Meteorological twins
 
+### `era/`
+- `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):
+  the Age of Light and Age of Darkness, plus the four Starry Seasons
+  inside them (spring/summer of the light era, autumn/winter of the
+  dark era) — one rose-window emblem each, night-window register; the
+  comparative "Eras of the World" article carries no emblem
+
 ### `emblem/` — one file per wheel theme
 - `virtue_prompts.md` — the eight Virtues (Humility dual)
 - `sin_prompts.md` — the eight Sins (Servility dual)
