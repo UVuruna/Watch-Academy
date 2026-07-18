@@ -13,6 +13,7 @@ from PySide6.QtCore import QPoint, Qt
 from PySide6.QtGui import QCursor, QGuiApplication, QTextDocument
 from PySide6.QtWidgets import QFrame, QLabel, QScrollArea, QVBoxLayout, QWidget
 
+from app import native
 from config import defaults
 
 
@@ -20,7 +21,14 @@ class LegendPopup(QWidget):
     def __init__(self):
         super().__init__(
             None,
-            Qt.WindowType.ToolTip | Qt.WindowType.FramelessWindowHint,
+            # WindowStaysOnTopHint puts the popup in the TOPMOST band so it
+            # can ride above the dial in its "top" z-mode (owner 15h item
+            # 3A: the legend was appearing BEHIND the topmost, focused
+            # dial — invisible). WA_ShowWithoutActivating keeps it from
+            # ever stealing focus.
+            Qt.WindowType.ToolTip
+            | Qt.WindowType.FramelessWindowHint
+            | Qt.WindowType.WindowStaysOnTopHint,
         )
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self._label = QLabel()
@@ -101,6 +109,13 @@ class LegendPopup(QWidget):
         self.move(max(screen.left(), x), max(screen.top(), y))
         if not self.isVisible():
             self.show()
+        # The WindowStaysOnTopHint flag lands the popup in the topmost
+        # band, but the dial's "top" z-mode asserts native HWND_TOPMOST
+        # AND is the focused window, which would otherwise sit at the top
+        # of that band. Mirror the dial's own trick (SWP_NOACTIVATE, no
+        # focus theft) to place the freshly shown popup ABOVE it (owner
+        # 15h item 3A). Harmless in the other z-modes.
+        native.assert_topmost(int(self.winId()))
 
     def hide_unless_hovered(self) -> None:
         """Hide — unless the cursor sits INSIDE the popup (crossing from

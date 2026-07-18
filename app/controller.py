@@ -634,6 +634,12 @@ class AppController(QObject):
         # Spacebar over a themed hover target opens the Encyclopedia on
         # that topic's page (owner 2026-07-16, ROADMAP queue #8).
         self._widget.open_encyclopedia.connect(self._open_encyclopedia_at)
+        # Re-entrancy guard (owner 15h item 3C): the Encyclopedia opens
+        # MODALLY (exec runs a nested loop). A second SPACE jump — a held
+        # key's auto-repeat, or a fresh press — is dispatched inside that
+        # loop and would stack a second modal on the first; the guard
+        # makes the duplicate a no-op.
+        self._encyclopedia_open = False
 
         # In click-through mode the window receives no mouse input, so the
         # hover tooltips are driven by polling the global cursor instead.
@@ -2092,13 +2098,21 @@ class AppController(QObject):
     ) -> None:
         """Open the Encyclopedia — from the menu (topic None = the
         gallery) or on a Spacebar jump to a hovered topic's entry
-        (owner 2026-07-16, ROADMAP queue #8)."""
-        EncyclopediaDialog(
-            self._translation_overlay,
-            hidden_unlocked=self._hidden_unlocked,
-            initial_topic=topic,
-            initial_entry=entry,
-        ).exec()
+        (owner 2026-07-16, ROADMAP queue #8). Guarded against re-entrant
+        opens (owner 15h item 3C): a second jump while the modal is up is
+        a no-op, never a stacked dialog."""
+        if self._encyclopedia_open:
+            return
+        self._encyclopedia_open = True
+        try:
+            EncyclopediaDialog(
+                self._translation_overlay,
+                hidden_unlocked=self._hidden_unlocked,
+                initial_topic=topic,
+                initial_entry=entry,
+            ).exec()
+        finally:
+            self._encyclopedia_open = False
 
     def _open_settings(self) -> None:
         dialog = SettingsDialog(

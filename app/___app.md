@@ -79,6 +79,15 @@ Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
 - `main.py` — creates the controller and runs the Qt event loop
 
 ## Design Decisions
+- **Crash forensics (owner 15h item 3C, Session 21):** `main.py`
+  installs permanent crash logging at startup — `faulthandler` (native
+  fatal-error dumps) plus a `sys.excepthook` (unhandled Python
+  tracebacks) BOTH appending to **`%APPDATA%/DOMY Watch/crash.log`**
+  under a timestamped session header. It only ADDS a trace; the original
+  excepthook still runs (nothing swallowed). After a crash the owner
+  sends that file. The occasional-SPACE crash is also hardened directly:
+  the Encyclopedia open is re-entrancy-guarded (no stacked modals) and
+  the SPACE hook de-dupes auto-repeat.
 - All window flags are set before the first `show()` — changing them later
   re-parents and hides the window on Windows.
 - Win+D on Windows 11 24H2 (verified empirically): the window receives NO

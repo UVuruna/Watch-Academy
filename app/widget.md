@@ -61,14 +61,32 @@ to fit exactly.
   after a toggle-off repaints harmlessly); any other double-click
   falls through to Qt's default handling
 - `keyPressEvent()`: SPACE is handled FIRST (owner 2026-07-16, ROADMAP
-  queue #8) — over a themed hover target (weekday body, astrology/
-  ascendant/Chinese slot, hexa sign diamond, Calendar wedge) it asks
-  `compositor.encyclopedia_target()` for the last hover position and
-  emits `open_encyclopedia(topic, entry)`; because " " is printable this
-  MUST precede the typed path (otherwise Space would feed the hidden-mode
-  code buffer). A target with no encyclopedia topic does nothing. Every
-  other printable key still emits `typed`. `mouseMoveEvent` records the
-  last dial-origin cursor (`_last_hover`) that the jump reads
+  queue #8) — it calls `_trigger_space_jump()`; because " " is printable
+  this MUST precede the typed path (otherwise Space would feed the
+  hidden-mode code buffer). This is the FOCUSED fallback; the UNFOCUSED
+  case comes through the native keyboard hook (see below). Every other
+  printable key still emits `typed`
+- `_trigger_space_jump()`: the ONE SPACE handler, shared by
+  `keyPressEvent` and the queued native-hook delivery — over a themed
+  hover target (weekday body, astrology/ascendant/Chinese slot, hexa sign
+  diamond, Calendar wedge) it asks `compositor.encyclopedia_target()` for
+  the LIVE `_last_hover` position and emits `open_encyclopedia(topic,
+  entry)`. A target with no topic, or a cleared `_last_hover`, does
+  NOTHING (owner 15h item 3B: SPACE off the themed elements is inert)
+- **SPACE without focus (owner law 2026-07-18, "treba uvek kao i
+  HOVER"):** a native low-level keyboard hook
+  ([`native.KeyboardHook`](native.md)) delivers SPACE to the dial even
+  when it does NOT hold keyboard focus — the dial is a desktop ornament
+  and must never grab focus from the user's active app on mere hover.
+  `mouseMoveEvent` ARMS the hook (`_update_space_hook`) only while the
+  cursor sits on a page-bearing target and DISARMS it otherwise; the hook
+  is also torn down on `leaveEvent`, `hideEvent`, `set_click_through`
+  (the widget stops getting mouse events there — the controller's poller
+  drives hover) and `mark_closing` (quit). The hook consumes SPACE, so
+  the focused `keyPressEvent` path never double-fires. `mouseMoveEvent`
+  records the last dial-origin cursor (`_last_hover`) that the jump
+  reads; `leaveEvent` and the hover-bypass path CLEAR it so a stale
+  on-target position can never answer SPACE after the cursor has left
 - `open_encyclopedia`: Signal(topic key, entry index) — the controller
   opens the Encyclopedia on that page
 - `set_renderer(compositor)` / `set_tick(tick)`: painting inputs; each new

@@ -264,5 +264,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   tick, day rebuild, skin build, paint, composite rebuild, hit test,
   hover text, hover warmup, subdial recolor, working-set warmup and
   translation chunks), flushed once per minute and at quit
+- `_open_encyclopedia_at(topic, entry)`: opens the [Encyclopedia](encyclopedia.md)
+  — from the menu (topic None = the gallery) or on a Spacebar jump to a
+  hovered topic's entry (the widget's `open_encyclopedia` signal). GUARDED
+  against re-entrant opens (owner 15h item 3C, Session 21): the dialog is
+  MODAL (`exec` runs a nested loop), and a second SPACE jump — an
+  auto-repeat or a fresh press dispatched inside that loop — would
+  otherwise stack a second modal on the first; the `_encyclopedia_open`
+  flag makes the duplicate a no-op
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)

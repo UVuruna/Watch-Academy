@@ -428,6 +428,13 @@ lives in [The DOMY Canon](CANON.md).
       after the widget was clicked (Qt keyboard focus); owner rule:
       it must work whenever the HOVER works. Needs a key path that
       does not depend on focus (native hook or focus-on-hover).
+      → **Session 21-A:** a native low-level keyboard hook
+      (`native.KeyboardHook`, `WH_KEYBOARD_LL`) armed ONLY while the
+      cursor hovers a page-bearing element — SPACE without focus, no
+      focus theft. Needs an owner real-machine check (see the M7
+      Defender note above). Click-through mode SPACE-on-hover is NOT
+      covered (the widget takes no input there; the poller could drive
+      the hook as a follow-up).
    3. **Top-mode bugs**: (A) with the clock focused the HOVER popup
       opens BEHIND the topmost dial — invisible (not focused → fine);
       the popup must ride above the TOPMOST window. (B) with the
@@ -436,6 +443,16 @@ lives in [The DOMY Canon](CANON.md).
       (C) occasional CRASH on SPACE, not reproducible — add crash
       logging (faulthandler to a user-dir file) so the next one
       leaves a trace.
+      → **Session 21-A:** (A) the [Legend Popup](../app/legend_popup.md)
+      now carries `WindowStaysOnTopHint` AND re-asserts native topmost on
+      every show (`SWP_NOACTIVATE`) — owner real-machine check needed.
+      (B) FIXED — the SPACE fallthrough was a STALE `_last_hover` that
+      survived the cursor leaving the dial; `_last_hover` is now cleared
+      on `leaveEvent` and the hover-bypass path, so SPACE off-target is
+      inert (pinned by a test). (C) crash logging landed
+      (`faulthandler` + `sys.excepthook` → `%APPDATA%/DOMY Watch/crash.log`);
+      the likeliest crasher (re-entrant modal opens on repeated SPACE) is
+      hardened directly with a re-entrancy guard + auto-repeat de-dupe.
    4. **Archetype names**: an option to show figures WITHOUT names
       (like the weekday Names toggle); a MAX FONT SIZE cap for ALL
       dial name labels (long vs short texts diverge wildly today);
@@ -580,6 +597,13 @@ Follow the monorepo build conventions (root CLAUDE.md):
 5. `setup/installer.nsi` — NSIS LZMA installer: desktop shortcut +
    autostart sections; autostart via HKCU Run (standard user, no
    elevation) replacing the dev pythonw entry.
+   - **Defender exclusion (Session 21):** the app now installs a
+     low-level keyboard hook (`SetWindowsHookEx(WH_KEYBOARD_LL)` — the
+     SPACE-without-focus feature, see [Native](../app/native.md)). Per
+     the root CLAUDE.md build conventions, apps using low-level system
+     hooks add a Defender exclusion in the installer; pair it with the
+     code-signing step so SmartScreen/AV heuristics do not flag the
+     `SetWindowsHookEx` usage on first run.
 6. Root registration — README.md + PROJECTS.md entries; logo copy
    `logos/DOMYWatch.svg` (already present, verify current).
 7. Release — smoke the installer on a clean profile, then

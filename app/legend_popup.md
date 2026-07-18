@@ -14,6 +14,7 @@ the article.
 
 ### Uses
 - [Config (folder)](../config/___config.md) — size caps, colors, offsets
+- [Native](native.md) — `assert_topmost` to ride above the topmost dial
 
 ### Used by
 - [Clock Widget](widget.md) — mouse-move/leave hover driving
@@ -24,7 +25,11 @@ the article.
 
 ### LegendPopup
 Frameless tooltip-class window (never takes focus), dark tooltip
-styling, a rich-text QLabel inside a QScrollArea.
+styling, a rich-text QLabel inside a QScrollArea. Carries
+`WindowStaysOnTopHint` so it sits in the TOPMOST band (owner 15h item
+3A, Session 21: the legend was appearing BEHIND the dial in its "top"
+z-mode — invisible, because the top-mode dial is native-topmost AND
+focused). `WA_ShowWithoutActivating` keeps it from ever stealing focus.
 
 #### Methods
 - `show_html(html, anchor)`: sets the content and SIZES BY MEASURING —
@@ -37,7 +42,10 @@ styling, a rich-text QLabel inside a QScrollArea.
   to the UNWRAPPED document). Content wider than the cap (the hexa
   two-column legend on a small screen) scrolls SIDEWAYS instead of
   clipping. Then positions beside the cursor and clamps fully on
-  screen; unchanged content only repositions
+  screen (unchanged content only repositions) and finally re-asserts
+  native topmost (`native.assert_topmost`, `SWP_NOACTIVATE` — no focus
+  theft) so a freshly shown legend rides ABOVE even the native-topmost,
+  focused dial in "top" z-mode
 - `hide_unless_hovered()`: hides unless the cursor is inside the popup
   (crossing from the dial INTO the popup must not close it)
 - `leaveEvent`: hides when the cursor leaves the popup itself

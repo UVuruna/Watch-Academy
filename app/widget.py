@@ -28,6 +28,8 @@ class ClockWidget(QWidget):
                                         # the hidden-mode code listener
     open_encyclopedia = Signal(str, int)  # (topic key, entry index) —
                                         # Spacebar over a themed target
+    _space_pressed = Signal()           # the native LL hook's queued hop
+                                        # to the GUI thread (SPACE, no focus)
 
     def __init__(self, diameter: int, menu: QMenu, legend):
         super().__init__()
@@ -60,6 +62,17 @@ class ClockWidget(QWidget):
         # A click gives the dial keyboard focus so the hidden-mode
         # code can be typed on it (owner 2026-07-14).
         self.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        # The native low-level keyboard hook that makes SPACE open the
+        # Encyclopedia WHENEVER hover works, focus or not (owner law
+        # 2026-07-18). It is live only while the cursor sits on an
+        # encyclopedia-capable target (installed/uninstalled from the
+        # hover path below). Its callback fires on the GUI thread but we
+        # still hop through a QUEUED signal so the modal article opens
+        # AFTER the fast hook proc has returned.
+        self._space_pressed.connect(
+            self._trigger_space_jump, Qt.ConnectionType.QueuedConnection
+        )
+        self._kbd_hook = native.KeyboardHook(self._space_pressed.emit)
         self.set_dial_diameter(diameter)
 
     @staticmethod
@@ -122,8 +135,10 @@ class ClockWidget(QWidget):
 
     def mark_closing(self) -> None:
         """Tell the spontaneous-hide watchdog that the coming hide is
-        intentional."""
+        intentional — and tear the SPACE hook down deterministically
+        before quit (a leaked low-level hook keeps eating SPACE)."""
         self._closing = True
+        self._kbd_hook.uninstall()
 
     def set_dial_diameter(
         self, diameter: int, margin_fraction: float | None = None
@@ -163,6 +178,12 @@ class ClockWidget(QWidget):
         beneath). Recovery is via the tray; hover tooltips come from the
         controller's cursor poller while the mode is on."""
         self._click_through = enabled
+        # Toggling click-through cuts off the widget's own mouse events
+        # (the controller's cursor poller drives hover from here on), so
+        # the hover path can no longer uninstall the SPACE hook — tear it
+        # down here or it leaks (owner law 2026-07-18: deterministic
+        # teardown). Idempotent in both directions.
+        self._kbd_hook.uninstall()
         native.set_click_through(int(self.winId()), enabled)
 
     # --- Rendering --------------------------------------------------------------
@@ -229,22 +250,33 @@ class ClockWidget(QWidget):
         # SPACE opens the Encyclopedia at the hovered topic (owner
         # 2026-07-16, ROADMAP queue #8) — handled BEFORE the typed path
         # because " " is printable and would otherwise feed the
-        # hidden-mode code buffer. Over a target with no encyclopedia
-        # topic (or with no hover yet), it does nothing.
+        # hidden-mode code buffer. This is the FOCUSED fallback; the
+        # unfocused case (owner law 2026-07-18) comes through the native
+        # hook, which consumes SPACE so this path never double-fires.
         if event.key() == Qt.Key.Key_Space:
-            if self._renderer is not None and self._last_hover is not None:
-                target = self._renderer.encyclopedia_target(
-                    self._last_hover[0], self._last_hover[1],
-                    float(self._dial_diameter),
-                )
-                if target is not None:
-                    self.open_encyclopedia.emit(target[0], target[1])
+            self._trigger_space_jump()
             return
         text = event.text()
         if text and text.isprintable():
             self.typed.emit(text)
         else:
             super().keyPressEvent(event)
+
+    def _trigger_space_jump(self) -> None:
+        """Open the Encyclopedia on the element currently under the
+        cursor — the ONE SPACE handler, shared by the focused
+        keyPressEvent and the queued native-hook delivery. The target is
+        recomputed LIVE from the last dial-origin cursor; a stale or
+        off-target hover (`_last_hover` cleared on leave) does nothing, so
+        SPACE off the themed elements is inert (owner 15h item 3B)."""
+        if self._renderer is None or self._last_hover is None:
+            return
+        target = self._renderer.encyclopedia_target(
+            self._last_hover[0], self._last_hover[1],
+            float(self._dial_diameter),
+        )
+        if target is not None:
+            self.open_encyclopedia.emit(target[0], target[1])
 
     def mouseMoveEvent(self, event) -> None:
         if self._renderer is not None and self._tick is not None:
@@ -253,12 +285,15 @@ class ClockWidget(QWidget):
                 # (owner 2026-07-16): a large neighbour legend — e.g.
                 # the hexa zodiac diamond's — can cover a smaller
                 # target near the screen edge; hold, glide past,
-                # release inside the element you actually want.
+                # release inside the element you actually want. With the
+                # hovers silenced the SPACE hook stands down too.
                 if self._renderer.set_hover(
                     -1.0e9, -1.0e9, float(self._dial_diameter)
                 ):
                     self.update()
                 self._legend.dismiss()
+                self._last_hover = None
+                self._update_space_hook(None)
                 super().mouseMoveEvent(event)
                 return
             size = float(self._dial_diameter)
@@ -270,15 +305,39 @@ class ClockWidget(QWidget):
             tip = self._renderer.tooltip_at(x, y, size)
             if tip:
                 self._legend.show_html(tip, event.globalPosition().toPoint())
+                # A tooltip is a NECESSARY condition for an encyclopedia
+                # page (every page-bearing element also speaks a hover),
+                # so the target is only worth computing when there IS a
+                # tip — install the SPACE hook when it has a page.
+                self._update_space_hook(
+                    self._renderer.encyclopedia_target(x, y, size)
+                )
             else:
                 self._legend.dismiss()
+                self._update_space_hook(None)
         super().mouseMoveEvent(event)
+
+    def _update_space_hook(self, target) -> None:
+        """Arm the native SPACE hook while the cursor sits on an
+        encyclopedia-capable target, disarm it otherwise — so SPACE opens
+        the article without the dial needing focus, yet never eats SPACE
+        from other apps at any other moment (owner law 2026-07-18). Both
+        calls are idempotent."""
+        if target is not None:
+            self._kbd_hook.install()
+        else:
+            self._kbd_hook.uninstall()
 
     def leaveEvent(self, event) -> None:
         if self._renderer is not None and self._renderer.set_hover(
             -1.0e9, -1.0e9, float(self._dial_diameter)
         ):
             self.update()               # shrink the enlarged element back
+        # The cursor left the dial: the last hover position is now STALE,
+        # so clear it (owner 15h item 3B — a stale on-target position let
+        # SPACE fire off the dial) and stand the SPACE hook down.
+        self._last_hover = None
+        self._update_space_hook(None)
         # Crossing INTO the legend popup must not close it — the wheel
         # scrolls the article there; its own leaveEvent hides it.
         self._legend.hide_unless_hovered()
@@ -311,6 +370,9 @@ class ClockWidget(QWidget):
 
     def hideEvent(self, event) -> None:
         super().hideEvent(event)
+        # A hidden dial has no hover, so stand the SPACE hook down (owner
+        # law 2026-07-18: uninstall on hide) — the next hover re-arms it.
+        self._kbd_hook.uninstall()
         # A deliberate z-mode flag swap hides the window mid-transition —
         # the watchdog must not fight it (owner 2026-07-17).
         if event.spontaneous() and not self._closing and not self._z_transition:
