@@ -23,9 +23,11 @@ procedural donut with ticks, numerals, per-skin letters), WeekdayLayer
 hands), YearMarkerLayer (Earth day/night variant, moon with terminator
 mask, event glow), HandLayer (one class, one shared scale, hub 15 design
 units above the canvas bottom). The ARCHETYPE layers are hover-variable
-too, and every archetype figure — arms AND center — shares ONE size via
-`archetype_figure_height()` / `archetype_center_height()` (owner
-2026-07-17, ROADMAP 15g). See [Layers](layers.md).
+too, and every archetype figure — arms AND center — is sized by
+`archetype_figure_size()`: the owner's TWO-TYPE LAW classifies each
+figure by its OWN art aspect — circle art wears `weekday_body_size()`
+(the weekday bodies' own size), portrait art the per-pointer lancet
+fraction (owner decree 2026-07-18, ROADMAP 15h). See [Layers](layers.md).
 
 ### `compositor.py` — Compositor
 Z-ordered stack from the skin's `z_order`, partitioned into paint STEPS

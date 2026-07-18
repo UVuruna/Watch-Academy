@@ -456,20 +456,20 @@ lives in [The DOMY Canon](CANON.md).
       from his pre-restart build. Nothing changed; the owner
       re-grades after restarting. (His green-vs-brown instinct:
       the autumn hue is already the muddy olive green-BROWN soil.)
-   8. **Click-cycles in the menu**: clicking the ACTIVE parent entry
-      cycles its sub-list (Seasons click → Temperaments↔Elements;
-      same for Ring/Umbra/Earth top-bottom pairs; Planetary/Pantheon
-      cycled by clicking the color entry — or the reverse). PLUS the
-      caught BUG: both sub-options can be UNCHECKED today (slika 2) —
-      one must always hold.
+   8. **Click-cycles in the menu — DROPPED** (owner 2026-07-18: "ne"):
+      the cycle-on-click idea (Seasons click → Temperaments↔Elements;
+      Ring/Umbra/Earth top-bottom pairs; Planetary/Pantheon via the
+      color entry) does not go forward. The caught BUG STAYS OPEN: both
+      sub-options (e.g. Planetary/Pantheon) can be UNCHECKED today
+      (slika 2) — one must always hold.
    9. **Articles for the new themes** — Session 6 (Opus) queued next;
       the master list lives in WORKPLAN/ROADMAP so nothing is lost.
    10. **Location emoji** (owner 2026-07-18): the North/South Pole
       entries in the location picker show ☀️/❄️ with the polar-day and
       polar-night FROM–TO dates beneath (computed from the seasons/
       twilight data, the most precise calculation available); Greenwich
-      gets a mark that says "the center" — proposal 🌐 (a globe with
-      meridians = the prime meridian), owner to confirm. Explanation of
+      gets a mark that says "the center" — SEALED 🌐 (a globe with
+      meridians = the prime meridian, owner pick 2026-07-18). Explanation of
       the owner's observed transition dates (3 Mar / 9 Oct north, 5 Apr
       / 7 Sep south): at the poles the sun's elevation equals its
       declination (sign-flipped for the south), so those four dates are
@@ -487,6 +487,31 @@ lives in [The DOMY Canon](CANON.md).
       physically true). The ±3h event window stands; idea recorded:
       scale the glow strength by the eclipse MAGNITUDE from
       `Database/deep_time.sqlite`'s eclipse catalog.
+   12. **SIZE slider in the right-click menu** (owner 2026-07-18): a
+      COMPACT slider lives in the menu itself (coarse tune — narrow is
+      fine), applying ONLY on slider RELEASE — never re-render
+      per-millisecond while dragging. Fine tuning stays in Settings,
+      and the Settings dialog ADDS an exact numeric input beside its
+      own slider (e.g. 568 px), same 360–1440 range.
+   13. **Archetype figures — THE TWO-TYPE LAW — DONE 2026-07-18**
+      (this round, TASK A, round two after owner screenshots): NOT
+      everything wears the slot size — the art divides into TWO TYPES,
+      classified once by its OWN aspect ratio (width/height), via the
+      new `archetype_figure_size(skin, radius, art_file)`, the ONE
+      sizing entry for `ArchetypeLayer` AND `ArchetypeCenterLayer`
+      (and the compositor's center hit disc): CIRCLE type (aspect ≥
+      `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels, medallions, the
+      square Scale glass, and WIDE art like Saturn's rings, plus any
+      missing/placeholder art) wears `weekday_body_size(skin, radius)`
+      — identical to the weekday bodies, wide art overflowing the
+      frame on purpose (owner: "planeta istih dimenzija kao ostale,
+      prstenovi vire"); PORTRAIT type (aspect below the threshold —
+      the tall lancet vitraž windows: persons, temperaments) wears
+      `ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]` of the star tip,
+      uniform for every portrait in the set. The 15g per-art CLAMP
+      machinery (`archetype_set_height`, `archetype_figure_height`,
+      `archetype_fit_height`) is deleted; `ARCHETYPE_FIGURE_HEIGHT_
+      OF_TIP` survives, repurposed for the portrait type.
 16. **Easter egg — APPROVED (owner 2026-07-16):** the owner's birth
    moment — **20 June 1990, 11:45, Ptuj, Slovenia** — the double
    Horse, sitting at the very TOP of the Calendar dial twice over

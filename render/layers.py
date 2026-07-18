@@ -339,7 +339,8 @@ def archetype_art_size(path):
     """The pixel size of REAL archetype art (the owner's glass) — or
     None when the file is missing or a committed 1×1 placeholder (the
     WORKPLAN missing-art rule, ARCHETYPE_ART_MIN_PX). The one place the
-    header is read; readiness AND the diamond CLAMP both derive from it."""
+    header is read; readiness AND the two-type classification both
+    derive from it."""
     resolved = paths.art_file(path)
     if resolved is None or not resolved.exists():
         return None
@@ -360,58 +361,35 @@ def archetype_art_ready(path) -> bool:
     return archetype_art_size(path) is not None
 
 
-def archetype_fit_height(aspect: float, tip: float, tan_half: float) -> float:
-    """The tallest figure of aspect ratio `aspect` (width/height) that
-    fits INSIDE its arm's diamond (owner slika 8: the glass CLAMPS into
-    the romb, never overflows its bounds). The diamond is a rhombus
-    centered at the romb center with along-arm half-diagonal tip/2 and
-    perpendicular half-diagonal tip·tan(half)/2; a centered inscribed
-    rectangle of half a×b fits iff a/p + b/q ≤ 1, so a figure scaled to
-    height h (width = aspect·h) fits up to
-    h = tip·tan(half)/(aspect + tan(half))."""
-    return tip * tan_half / (aspect + tan_half)
-
-
-def archetype_figure_height(
+def archetype_figure_size(
     skin: SkinDefinition, radius: float, art_file,
 ) -> float:
-    """ONE art file's diamond-clamped height — the per-figure TERM that
-    `archetype_set_height` minimizes over a layout (owner 2026-07-18:
-    the drawn size is the SET height, this is its ingredient). It is the
-    desired fraction of the star tip
-    (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]`, config-derived — never a
-    magic number), CLAMPED into the arm diamond for the art's OWN aspect
-    (owner slika 8: the glass never overflows its romb); a
-    missing/placeholder file keeps the desired height."""
-    tip = radius * skin.star.radius_fraction
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
-    tan_half = math.tan(math.radians(half))
-    desired = tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[skin.pointer]
+    """THE ONE sizing entry for every archetype figure — arms AND center
+    (owner two-type law, 2026-07-18 round two): the art divides into TWO
+    TYPES by its OWN aspect ratio (width/height), classified once — no
+    per-art clamp, no set-minimum.
+
+    - CIRCLE type (aspect >= `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
+      medallions, the square Scale glass, and WIDE art like Saturn's
+      rings) wears the SLOT size, `weekday_body_size()` — IDENTICAL to
+      the weekday bodies; wide art stays height-based ON PURPOSE (owner:
+      "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
+      matches every other circle, the rings overflow the frame,
+      deliberately — no clamp).
+    - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
+      windows: persons, temperaments) wears the per-pointer desired
+      fraction of the star tip (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP`),
+      UNIFORM for every portrait in the set.
+
+    Missing/placeholder art (the name-fallback path) reads CIRCLE-sized
+    — there is no art to classify."""
     size = archetype_art_size(art_file)
-    if size is None:
-        return desired
-    return min(
-        desired,
-        archetype_fit_height(size.width() / size.height(), tip, tan_half),
-    )
-
-
-def archetype_set_height(skin: SkinDefinition, radius: float, key: str) -> float:
-    """THE one figure height of a layout (owner 2026-07-18, round two of
-    ROADMAP 15g once the real glass landed): the arriving art carries
-    slightly DIFFERENT aspects, and the per-art diamond clamp alone gave
-    each arm its own height — three sizes on one dial. The owner rule is
-    ALL figures the SAME dimensions in BOTH states, so the layout adopts
-    the SMALLEST clamped height across its figures: every figure equal,
-    every figure inside its diamond. The center adopts the same value
-    (at the roomy hub it needs no clamp of its own — a square Seal would
-    otherwise clamp smaller than the Person lancets around it). Reveal
-    is not a parameter, so the size is reveal-invariant by
-    construction."""
-    return min(
-        archetype_figure_height(skin, radius, fig["file"])
-        for fig in archetypes.figures(key)
-    )
+    if size is None or (
+        size.width() / size.height() >= archetypes.ARCHETYPE_PORTRAIT_ASPECT_MAX
+    ):
+        return weekday_body_size(skin, radius)
+    tip = radius * skin.star.radius_fraction
+    return tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP[skin.pointer]
 
 
 def draw_archetype_figure(
@@ -420,11 +398,11 @@ def draw_archetype_figure(
 ) -> None:
     """One archetype figure in its diamond: the stained glass scaled
     into the arm (color visible around it) at `opacity`. `height` is
-    already CLAMPED to the diamond and hover-scaled by the caller;
-    `arm_width` is the diamond's widest width (for the name fit).
-    `named` adds the display name in the label style. Missing/placeholder
-    art draws the NAME alone — the documented fallback until the owner's
-    glass lands."""
+    already TYPE-CLASSIFIED (`archetype_figure_size` — circle vs
+    portrait) and hover-scaled by the caller; `arm_width` is the
+    diamond's widest width (for the name fit). `named` adds the display
+    name in the label style. Missing/placeholder art draws the NAME
+    alone — the documented fallback until the owner's glass lands."""
     painter.save()
     painter.setOpacity(opacity)
     ready = archetype_art_ready(fig["file"])
@@ -1551,12 +1529,6 @@ class ArchetypeLayer(Layer):
         half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
         arm_width = tip * math.tan(math.radians(half))   # diamond's widest
         names_on = ctx.skin.show_weekday_names
-        # ONE sizing path (owner 2026-07-18, 15g round two): the SET
-        # height — the smallest diamond-clamped height across the
-        # layout's figures, shared by every arm AND the center, so
-        # mixed-aspect glass can no longer split the arms into
-        # different sizes.
-        height = archetype_set_height(ctx.skin, ctx.radius, key)
         for index, fig in enumerate(archetypes.figures(key)):
             # Per-arm hover target (owner slika 8): the base pass skips
             # the hovered figure, the HoverLift twin redraws it enlarged
@@ -1566,6 +1538,11 @@ class ArchetypeLayer(Layer):
                 continue
             lit = ctx.reveal_active or index == ctx.archetype_lit
             hf = hover_factor(ctx, element)
+            # THE TWO-TYPE LAW (owner decree 2026-07-18, round two): each
+            # figure's OWN art aspect decides CIRCLE (the slot size) vs
+            # PORTRAIT (the per-pointer lancet fraction) — classified
+            # per figure, not once for the whole layout.
+            height = archetype_figure_size(ctx.skin, ctx.radius, fig["file"])
             draw_archetype_figure(
                 painter, ctx, fig,
                 dial_point(fig["angle"] + ctx.rotation, orbit),
@@ -1597,14 +1574,14 @@ class ArchetypeCenterLayer(Layer):
         center = archetypes.center(key)
         if center is None or not self._gate(ctx, "archetype:center"):
             return
-        # ONE sizing path (owner 2026-07-18, 15g round two): the center
-        # ADOPTS the layout's SET height — no longer the weekday Sun's
-        # center_scale (which sized it LARGER, ~170 vs ~144 px) nor its
-        # own square-Seal clamp (which would size it smaller than the
-        # tall Person lancets) — and the reveal window can no longer
-        # resize it (the height helper has no reveal term).
+        # THE TWO-TYPE LAW (owner decree 2026-07-18, round two): the
+        # center follows its OWN art's type — `archetype_figure_size`
+        # classifies it exactly like an arm figure (circle = the slot
+        # size, portrait = the lancet fraction) — no longer the weekday
+        # Sun's center_scale, and the reveal window can no longer resize
+        # it (the helper has no reveal term).
         height = (
-            archetype_set_height(ctx.skin, ctx.radius, key)
+            archetype_figure_size(ctx.skin, ctx.radius, center["file"])
             * hover_factor(ctx, "archetype:center")
         )
         # THE WINDOW (owner seal 2026-07-18): full at solar noon/midnight

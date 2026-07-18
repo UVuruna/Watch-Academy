@@ -44,10 +44,30 @@ ARCHETYPE_LIFE_REGISTER = "tree"
 ARCHETYPE_LIFE_REGISTERS = ("tree", "animals")
 
 # --- Render tunables -----------------------------------------------------------
-# Figure height as a fraction of the star TIP radius, per pointer —
-# the lancet scales INTO the diamond with the arm color visible around
-# it (the slim-armed cross/octa carry smaller glass). Owner tunes when
-# the real art lands.
+# THE TWO-TYPE LAW (owner decree 2026-07-18, round two — screenshots):
+# the archetype art divides into TWO TYPES by its OWN aspect ratio
+# (width/height), classified once by `render.layers.archetype_figure_
+# size()` — no per-art clamp, no set-minimum (the 15g clamp era is
+# over: `archetype_set_height`, `archetype_figure_height` and
+# `archetype_fit_height` are deleted):
+#   - CIRCLE type (aspect >= ARCHETYPE_PORTRAIT_ASPECT_MAX — rondels,
+#     medallions, the square Scale glass, and WIDE art like Saturn's
+#     rings) wears the SLOT size, `weekday_body_size()` — IDENTICAL to
+#     the weekday bodies. Wide art stays height-based on purpose (owner:
+#     "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
+#     matches every other circle, the rings overflow the frame — no
+#     clamp, deliberately).
+#   - PORTRAIT type (aspect < the threshold — the tall lancet vitraž
+#     windows: persons, temperaments) wears the per-pointer desired
+#     fraction of the star tip, ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]
+#     — UNIFORM for every portrait in the set.
+# Missing/placeholder art (the name-fallback path) reads CIRCLE-sized —
+# there is no art to classify.
+ARCHETYPE_PORTRAIT_ASPECT_MAX = 0.85
+# Portrait figure height as a fraction of the star TIP radius, per
+# pointer — the lancet scales INTO the diamond with the arm color
+# visible around it (the slim-armed cross/octa carry smaller glass).
+# Owner tunes when the real art lands.
 ARCHETYPE_FIGURE_HEIGHT_OF_TIP = {
     "trio": 0.62, "hexa": 0.58, "cross": 0.46, "octa": 0.40,
 }

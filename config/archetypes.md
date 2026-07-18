@@ -11,15 +11,30 @@ its archetype, the per-archetype FIGURE tables (arm angle, stained
 glass file, the two-row names, article entity, encyclopedia target),
 the CENTER table (the Eye / the Hearth / the Seal / the Union / the
 Throne — the Compass has none), the article-set names Session 6 writes
-into `Database/symbolism.json`, and the render tunables (figure
-heights per pointer, name sizing, the placeholder threshold, the
-center's noon/midnight lighting window, the Earth day-label geometry).
-`ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]` is the ONE
-figure size for the whole archetype (owner 2026-07-17, ROADMAP 15g): the
-render's `archetype_figure_height()` clamps it into the arm diamond and
-`archetype_center_height()` makes the CENTER adopt the SAME arm size — so
-every figure, arms and center, is one size in both the normal and the
-reveal states (no `center_scale` for the archetype center anymore).
+into `Database/symbolism.json`, and the render tunables (name sizing,
+the placeholder threshold, the center's noon/midnight lighting window,
+the Earth day-label geometry, and the two figure-size tunables below).
+**THE TWO-TYPE LAW (owner decree 2026-07-18, round two — screenshots):**
+figure SIZE is no longer a per-art CLAMP (the 15g machinery —
+`archetype_figure_height()`, `archetype_set_height()`,
+`archetype_fit_height()` — is deleted); instead every archetype figure
+classifies ONCE by its OWN art aspect ratio (width/height), via
+`render.layers.archetype_figure_size()`:
+- **CIRCLE** type (aspect ≥ `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
+  medallions, the square Scale glass, and WIDE art like Saturn's rings)
+  wears `weekday_body_size(skin, radius)` — the SLOT size, IDENTICAL to
+  the weekday bodies. Wide art stays height-based on purpose (owner:
+  "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
+  matches every other circle, the rings overflow the frame,
+  deliberately — no clamp).
+- **PORTRAIT** type (aspect below the threshold — the tall lancet
+  vitraž windows: persons, temperaments) wears
+  `ARCHETYPE_FIGURE_HEIGHT_OF_TIP[pointer]` of the star tip, UNIFORM
+  for every portrait in the set.
+
+Missing/placeholder art reads CIRCLE-sized (there is no art to
+classify). The center follows its OWN art's type exactly like an arm
+figure.
 
 The EIGHT archetypes and their grid seats (owner 2026-07-17: the
 Seasons split into two — PAINT the Temperaments, LIGHT the Tetramorph):

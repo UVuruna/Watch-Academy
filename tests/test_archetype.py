@@ -280,6 +280,17 @@ def _png(tmp_path, name: str, side: int, color=Qt.GlobalColor.red):
     return path
 
 
+def _rect_png(tmp_path, name: str, width: int, height: int):
+    """A non-square synthetic PNG (art-arrival-proof) for the two-type
+    classification tests — width/height picks CIRCLE (wide/square) vs
+    PORTRAIT (tall) without depending on the owner's real art landing."""
+    image = QImage(width, height, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(Qt.GlobalColor.red)
+    path = tmp_path / name
+    image.save(str(path))
+    return path
+
+
 def test_art_readiness_rejects_placeholders(app, tmp_path):
     """archetype_art_ready: a committed 1×1 placeholder (and a missing
     file) reads NOT ready; real art reads ready."""
@@ -414,52 +425,114 @@ def test_center_hover_and_targets(app):
     assert center_tip is None or "The Seal" not in center_tip
 
 
-def test_archetype_fit_height_clamps_into_the_diamond():
-    """Owner slika 8: archetype_fit_height keeps a figure INSIDE its arm's
-    rhombus. A SQUARE figure (aspect 1) fits exactly to the diamond edge
-    (a/p + b/q == 1); a tall lancet fits taller than a wide banner."""
-    import math
+def test_archetype_figure_size_circle_and_portrait_types(app, tmp_path):
+    """Owner decree 2026-07-18, round two (screenshots): the archetype
+    art divides into TWO TYPES by its OWN aspect ratio — no per-art
+    clamp. CIRCLE art (square, or WIDE like Saturn's rings, or missing/
+    placeholder) wears `weekday_body_size` — IDENTICAL to the weekday
+    bodies; PORTRAIT art (the tall lancets) wears the per-pointer
+    fraction of the star tip, `ARCHETYPE_FIGURE_HEIGHT_OF_TIP`."""
+    from render.layers import archetype_figure_size, weekday_body_size
 
-    from render.layers import archetype_fit_height
+    skin = _archetype_skin("trio")
+    radius = 180.0
+    circle_size = weekday_body_size(skin, radius)
+    tip = radius * skin.star.radius_fraction
+    portrait_size = tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP["trio"]
+    assert portrait_size != pytest.approx(circle_size)   # a real distinction
 
-    tip = 100.0
-    tan_half = math.tan(math.radians(30.0))        # hexa arm
-    h = archetype_fit_height(1.0, tip, tan_half)   # a square figure
-    p = tip * tan_half / 2.0                        # perpendicular half-diagonal
-    q = tip / 2.0                                    # along-arm half-diagonal
-    a = b = h / 2.0
-    assert abs(a / p + b / q - 1.0) < 1e-9          # touches, never overflows
-    assert archetype_fit_height(0.3, tip, tan_half) > archetype_fit_height(
-        2.0, tip, tan_half
+    # CIRCLE: a square medallion.
+    square = _rect_png(tmp_path, "square.png", 200, 200)
+    assert archetype_figure_size(skin, radius, square) == pytest.approx(circle_size)
+    # CIRCLE: WIDE art (Saturn's rings) stays height-based ON PURPOSE
+    # (owner: "planeta istih dimenzija kao ostale, prstenovi vire") —
+    # no clamp shrinks it to fit its own width.
+    wide = _rect_png(tmp_path, "wide.png", 400, 200)
+    assert archetype_figure_size(skin, radius, wide) == pytest.approx(circle_size)
+    # PORTRAIT: a tall lancet.
+    tall = _rect_png(tmp_path, "tall.png", 400, 800)
+    assert archetype_figure_size(skin, radius, tall) == pytest.approx(portrait_size)
+    # Missing / placeholder art reads CIRCLE-sized — nothing to classify.
+    placeholder = _png(tmp_path, "tiny.png", 1)
+    assert archetype_figure_size(skin, radius, placeholder) == pytest.approx(circle_size)
+    missing = tmp_path / "never_written.png"
+    assert archetype_figure_size(skin, radius, missing) == pytest.approx(circle_size)
+
+
+def test_archetype_figure_size_boundary_is_the_threshold(tmp_path):
+    """The CIRCLE/PORTRAIT split sits exactly at
+    `ARCHETYPE_PORTRAIT_ASPECT_MAX`: aspect AT the threshold reads
+    CIRCLE (>=), just below it reads PORTRAIT."""
+    from render.layers import archetype_figure_size, weekday_body_size
+
+    skin = _archetype_skin("trio")
+    radius = 180.0
+    threshold = archetypes.ARCHETYPE_PORTRAIT_ASPECT_MAX
+    height = 1000
+    at_threshold = _rect_png(
+        tmp_path, "at_threshold.png", round(height * threshold), height
     )
+    just_below = _rect_png(
+        tmp_path, "just_below.png", round(height * threshold) - 1, height
+    )
+    circle_size = weekday_body_size(skin, radius)
+    tip = radius * skin.star.radius_fraction
+    portrait_size = tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP["trio"]
+    assert archetype_figure_size(skin, radius, at_threshold) == pytest.approx(circle_size)
+    assert archetype_figure_size(skin, radius, just_below) == pytest.approx(portrait_size)
 
 
-def test_archetype_figures_share_one_set_height(app):
-    """Owner 2026-07-17 (15g) + 2026-07-18 (round two, real glass): ALL
-    figures of a layout are ONE size in BOTH states. The real art
-    arrives with slightly different aspects, so the per-art clamp alone
-    split the arms into different heights — the layout therefore adopts
-    the SMALLEST clamped height across its figures (everything equal,
-    everything inside its diamond), and the CENTER adopts the same
-    value — never the weekday Sun's `center_scale`."""
-    from render.layers import archetype_figure_height, archetype_set_height
+def test_archetype_center_follows_its_own_art_type(app, monkeypatch, tmp_path):
+    """The center is NOT special-cased — `ArchetypeCenterLayer` routes
+    its own figure's art through the same `archetype_figure_size`
+    classifier an arm figure uses (owner two-type law, 2026-07-18 round
+    two): a circle center wears the slot size, a portrait center the
+    lancet fraction, whichever art the archetype's center dict names."""
+    import config.archetypes as archetypes_mod
+    import render.layers as layers_mod
+    from render.layers import ArchetypeCenterLayer, weekday_body_size
 
-    for key, pointer, style in (
-        ("trinity_paint", "trio", "paint"),
-        ("trinity_light", "trio", "light"),
-        ("prism_paint", "hexa", "paint"),
-    ):
-        skin = _archetype_skin(pointer, style)
-        radius = 180.0
-        shared = archetype_set_height(skin, radius, key)
-        clamps = [
-            archetype_figure_height(skin, radius, fig["file"])
-            for fig in archetypes.figures(key)
-        ]
-        assert shared == pytest.approx(min(clamps))     # the set minimum...
-        assert all(shared <= c + 1e-9 for c in clamps)  # ...fits every diamond
-        # Never the weekday Sun's center_scale system.
-        assert abs(shared - 2 * radius * skin.weekday_set.center_scale) > 1.0
+    skin = _archetype_skin("trio")
+    radius = 180.0
+
+    def rendered_height(art_path):
+        monkeypatch.setattr(
+            archetypes_mod, "center",
+            lambda key: {"file": art_path, "name": "Testling", "entity": "center"},
+        )
+        captured = []
+        monkeypatch.setattr(
+            layers_mod, "draw_pixmap_centered",
+            lambda painter, ctx, asset, pos, height, *a, **kw:
+                captured.append(height),
+        )
+        monkeypatch.setattr(
+            layers_mod, "_draw_archetype_name",
+            lambda painter, name, pos, arm_width, figure_height:
+                captured.append(figure_height),
+        )
+        image = QImage(400, 400, QImage.Format.Format_ARGB32_Premultiplied)
+        painter = QPainter(image)
+        painter.translate(200, 200)
+        ctx = RenderContext(
+            skin=skin, day=SimpleNamespace(star_rotation=0.0),
+            tick=SimpleNamespace(hour_angle=0.0),
+            radius=radius, cache=AssetCache(), dpr=1.0, archetype_lit=0,
+        )
+        ArchetypeCenterLayer(skin).paint(painter, ctx)
+        painter.end()
+        monkeypatch.undo()
+        return captured[-1]
+
+    circle_center = _rect_png(tmp_path, "circle_center.png", 200, 200)
+    assert rendered_height(circle_center) == pytest.approx(
+        weekday_body_size(skin, radius)
+    )
+    portrait_center = _rect_png(tmp_path, "portrait_center.png", 400, 800)
+    tip = radius * skin.star.radius_fraction
+    assert rendered_height(portrait_center) == pytest.approx(
+        tip * archetypes.ARCHETYPE_FIGURE_HEIGHT_OF_TIP["trio"]
+    )
 
 
 def test_archetype_center_size_is_reveal_invariant(app):

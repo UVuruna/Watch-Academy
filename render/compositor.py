@@ -48,7 +48,7 @@ from render.layers import (
     HoverLiftLayer,
     archetype_active,
     archetype_art_ready,
-    archetype_set_height,
+    archetype_figure_size,
     archetype_key,
     archetype_lit_index,
     dial_point,
@@ -1074,16 +1074,16 @@ class Compositor:
                 # opaque on Sunday (owner 2026-07-13).
                 return "sun_servant"
         if archetype_active(self._skin):
-            # The archetype CENTER (owner 2026-07-16) sits at the hub;
-            # its hit disc matches the DRAWN figure — the unified
-            # diamond-clamped size (owner 2026-07-17, ROADMAP 15g), the
-            # same helper ArchetypeCenterLayer draws with, halved to a
-            # radius — hover-enlarge included; the Compass has no center.
+            # The archetype CENTER (owner decree 2026-07-18, two-type
+            # law) sits at the hub; its hit disc matches the DRAWN
+            # figure — `archetype_figure_size` classifies the center's
+            # OWN art exactly like ArchetypeCenterLayer does, halved to
+            # a radius — hover-enlarge included; the Compass has none.
             key = archetype_key(self._skin)
             center = archetypes.center(key)
             if center is not None and hit(
                 QPointF(0.0, 0.0),
-                archetype_set_height(self._skin, radius, key) / 2.0,
+                archetype_figure_size(self._skin, radius, center["file"]) / 2.0,
             ):
                 return "archetype:center"
         marker = self._skin.year_marker

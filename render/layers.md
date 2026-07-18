@@ -114,35 +114,48 @@ ARCHETYPE CLOCK. The machinery:
   on its arm; the spaces ride the DRAWN (solar-rotated) arms. The
   compositor computes it from the live tick and keys the DAILY
   composite on it, like the Calendar's shichen wedge.
+- **THE TWO-TYPE LAW** (owner decree 2026-07-18, round two —
+  screenshots): `archetype_figure_size(skin, radius, art_file)` is the
+  ONE sizing entry for every archetype figure, arms AND center —
+  classified by the art's OWN aspect ratio (width/height), no per-art
+  clamp, no set-minimum (the 15g clamp era —
+  `archetype_set_height()` / `archetype_figure_height()` /
+  `archetype_fit_height()` — is deleted whole; `ARCHETYPE_FIGURE_
+  HEIGHT_OF_TIP` survives, repurposed below). Two types:
+  - **CIRCLE** (aspect ≥ `ARCHETYPE_PORTRAIT_ASPECT_MAX` — rondels,
+    medallions, the square Scale glass, and WIDE art like Saturn's
+    rings, and any missing/placeholder art) wears
+    `weekday_body_size(skin, radius)` — THE SLOT SIZE, IDENTICAL to
+    the weekday bodies. Wide art stays height-based ON PURPOSE (owner:
+    "planeta istih dimenzija kao ostale, prstenovi vire" — the ball
+    matches every other circle, the rings overflow the frame,
+    deliberately — no clamp, no defensive code).
+  - **PORTRAIT** (aspect < the threshold — the tall lancet vitraž
+    windows: persons, temperaments) wears the per-pointer desired
+    fraction of the star tip, `tip * ARCHETYPE_FIGURE_HEIGHT_OF_TIP
+    [pointer]` — UNIFORM for every portrait in the set.
 - `ArchetypeLayer` (DAILY but HOVER-VARIABLE — painted LIVE, never in
   the cached composite, owner 2026-07-17 ROADMAP 15f; at the weekday_set
-  z spot): the figures at the romb center (`weekday_body_orbit`), ALL
-  at the layout's ONE `archetype_set_height()` (owner 2026-07-18, 15g
-  round two: the real glass arrives with slightly different aspects,
-  so the per-art clamp alone split the arms into different heights —
-  the set adopts the SMALLEST clamped height across its figures, every
-  figure equal and inside its diamond; `archetype_figure_height()` is
-  the per-art term — the desired fraction of the star tip
-  (`ARCHETYPE_FIGURE_HEIGHT_OF_TIP`) CLAMPED into the romb for the
-  art's own aspect via `archetype_fit_height`, owner slika 8 —
-  the glass never overflows its diamond) with the arm color visible
-  around them; the lit figure FULL, the rest at the weekday
-  `ghost_opacity`; the reveal window turns everything full. With Names
-  on the lit figure carries its display name. Each figure is a per-arm
-  HOVER-ENLARGE target (`"archetype:<index>"`, owner slika 8): the base
-  pass skips the hovered figure and the HoverLift twin
-  (`ArchetypeLayer(lift=True)`) redraws it enlarged above the hands —
-  exactly like the slots.
+  z spot): the figures at the romb center (`weekday_body_orbit`), EACH
+  sized by its OWN art via `archetype_figure_size` (a layout can mix
+  circle and portrait figures — e.g. Prism paint's reused Scale glass
+  next to the Person lancets) with the arm color visible around them;
+  the lit figure FULL, the rest at the weekday `ghost_opacity`; the
+  reveal window turns everything full. With Names on the lit figure
+  carries its display name. Each figure is a per-arm HOVER-ENLARGE
+  target (`"archetype:<index>"`, owner slika 8): the base pass skips
+  the hovered figure and the HoverLift twin (`ArchetypeLayer(lift=True)`)
+  redraws it enlarged above the hands — exactly like the slots.
 - `ArchetypeCenterLayer` (MINUTE, above the hands like
   CenterBodyLayer): the center figure — the Eye / Hearth / Seal /
   Union / Throne, none on the Compass — hover-enlarged as
-  `"archetype:center"` (its lift twin joins HoverLiftLayer). It is
-  the SAME size as the arm figures now (owner 2026-07-17/18, ROADMAP
-  15g: it adopts the layout's `archetype_set_height()` — no longer the
-  weekday Sun's `center_scale`, which sized it larger, nor its own
-  square-Seal clamp, which would size it smaller — and reveal can no
-  longer resize it; the `_element_at` hit disc matches). THE CENTER
-  WINDOW (owner seal 2026-07-18): it burns FULL only while the hour
+  `"archetype:center"` (its lift twin joins HoverLiftLayer). It follows
+  its OWN art's type via `archetype_figure_size` — no longer the
+  weekday Sun's `center_scale`, which sized it larger, nor a per-art
+  clamp of its own — and reveal can no longer resize it; the
+  `_element_at` hit disc matches (halved to a radius, the center's own
+  art type). THE CENTER WINDOW (owner seal 2026-07-18): it burns FULL
+  only while the hour
   hand stands within `ARCHETYPE_CENTER_WINDOW_DEG` (15°, ±1h) of TRUE
   solar noon OR solar midnight (`archetype_center_lit()`) — 4 of the
   24 hours, ~16.7% of the day — and draws at the weekday
