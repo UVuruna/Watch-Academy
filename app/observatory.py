@@ -3,12 +3,19 @@
 
 Dark, QPainter-drawn, interactive charts over the long ephemeris data:
 the season-duration oscillations (per-series checkboxes), the light−dark
-envelope with the Anno Lucis dawn and the era spans, the eclipse
-timeline (nearest past/next from the traveled moment when the Deep Time
-pack is present; the bundled density otherwise) and the current
-location's day-length curve over the year. Series data reads only the
-committed bundles (data/observatory.py) — the charts never require
-deep_time.sqlite.
+envelope with the Anno Lucis dawn, every measured light/dark peak and
+the era spans, the eclipse timeline (nearest past/next from the
+traveled moment when the Deep Time pack is present; the bundled density
+otherwise), the current location's day-length curve over the year, and
+the La2004 Laskar long envelope over +/-200,000 years (charts-only —
+ROADMAP 15a2). Series data reads only the committed bundles
+(data/observatory.py) — the charts never require deep_time.sqlite.
+
+Fix round D (owner verdicts 2026-07-19): every chart supports
+mouse-wheel zoom centered on the cursor, drag-to-pan while zoomed and a
+double-click reset, with the y axis auto-fitting the visible x slice on
+every change (_ChartBase); a Days/Hours switch governs every
+"light − dark" readout (_LineChart.set_y_fmt/set_diff_fmt).
 """
 
 import bisect
@@ -18,6 +25,7 @@ from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import (
     QCheckBox,
+    QComboBox,
     QDialog,
     QFrame,
     QHBoxLayout,
@@ -98,10 +106,23 @@ class _ChartBase(QWidget):
         self._x_title = ""
         self._y_title = ""
         self._xlo = self._xhi = self._ylo = self._yhi = 0.0
+        # Fix round D, Task 1: the full data extent (reset target) vs the
+        # current VIEW (self._xlo/_xhi double as the view — every mapper
+        # and probe already reads them, so zoom is "just" narrowing them).
+        self._full_xlo: float | None = None
+        self._full_xhi: float | None = None
+        self._drag_from_px: float | None = None
+        self._drag_view: tuple[float, float] | None = None
 
     # subclasses override -------------------------------------------------------
     def _has_data(self) -> bool:
         return True
+
+    def _fit_y_to_view(self) -> None:
+        """Recompute self._ylo/_yhi from the data visible in the current
+        x view (self._xlo/_xhi) — called after every zoom/pan/reset so
+        the y axis auto-fits (owner Task 1). No-op by default."""
+        return
 
     def _fmt_x(self, value: float) -> str:
         return f"{value:g}"
@@ -119,13 +140,88 @@ class _ChartBase(QWidget):
         """(snap_x_px, [(x_px, y_px, color)], [readout lines]) or None."""
         return None
 
+    # zoom / pan / reset (Fix round D, Task 1) -----------------------------------
+    def _reset_view(self) -> None:
+        """Restore the full x span (double-click) — the "Reset" affordance."""
+        if self._full_xlo is None:
+            return
+        self._xlo, self._xhi = self._full_xlo, self._full_xhi
+        self._fit_y_to_view()
+        self.update()
+
+    def _zoom_at(self, x_px: float, factor: float) -> None:
+        """Zoom the x view by `factor` (< 1 = in, > 1 = out), keeping the
+        data value under `x_px` fixed, clamped to the full extent, then
+        auto-fits the y axis to whatever slice is now visible."""
+        if self._full_xlo is None or not self._has_data():
+            return
+        rect = _plot_rect(self)
+        span = self._xhi - self._xlo or 1.0
+        data_x = self._xlo + (x_px - rect.left()) / rect.width() * span
+        full_span = self._full_xhi - self._full_xlo
+        if full_span <= 0:
+            return
+        min_span = full_span * defaults.OBSERVATORY_ZOOM_MIN_FRACTION
+        new_span = max(min_span, min(full_span, span * factor))
+        frac = (data_x - self._xlo) / span
+        new_lo = data_x - frac * new_span
+        new_hi = new_lo + new_span
+        if new_lo < self._full_xlo:
+            new_lo, new_hi = self._full_xlo, self._full_xlo + new_span
+        if new_hi > self._full_xhi:
+            new_hi, new_lo = self._full_xhi, self._full_xhi - new_span
+        self._xlo, self._xhi = new_lo, new_hi
+        self._fit_y_to_view()
+        self.update()
+
+    def wheelEvent(self, event) -> None:  # noqa: N802 — Qt override
+        delta = event.angleDelta().y()
+        if delta == 0 or self._full_xlo is None:
+            event.ignore()
+            return
+        factor = (
+            defaults.OBSERVATORY_ZOOM_FACTOR if delta > 0
+            else 1.0 / defaults.OBSERVATORY_ZOOM_FACTOR
+        )
+        self._zoom_at(event.position().x(), factor)
+        event.accept()
+
+    def mouseDoubleClickEvent(self, event) -> None:  # noqa: N802 — Qt override
+        self._reset_view()
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802 — Qt override
+        if event.button() == Qt.MouseButton.LeftButton and self._full_xlo is not None:
+            self._drag_from_px = event.position().x()
+            self._drag_view = (self._xlo, self._xhi)
+
+    def mouseReleaseEvent(self, event) -> None:  # noqa: N802 — Qt override
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._drag_from_px = None
+            self._drag_view = None
+
     # base painting -------------------------------------------------------------
     def mouseMoveEvent(self, event) -> None:  # noqa: N802 — Qt override
         self._hover = (event.position().x(), event.position().y())
+        if self._drag_from_px is not None and self._drag_view is not None:
+            rect = _plot_rect(self)
+            view_lo, view_hi = self._drag_view
+            span = view_hi - view_lo
+            dx = -(event.position().x() - self._drag_from_px) / rect.width() * span
+            new_lo, new_hi = view_lo + dx, view_hi + dx
+            if new_lo < self._full_xlo:
+                new_hi += self._full_xlo - new_lo
+                new_lo = self._full_xlo
+            if new_hi > self._full_xhi:
+                new_lo -= new_hi - self._full_xhi
+                new_hi = self._full_xhi
+            self._xlo, self._xhi = new_lo, new_hi
+            self._fit_y_to_view()
         self.update()
 
     def leaveEvent(self, event) -> None:  # noqa: N802 — Qt override
         self._hover = None
+        self._drag_from_px = None
+        self._drag_view = None
         self.update()
 
     def paintEvent(self, event) -> None:  # noqa: N802 — Qt override
@@ -245,7 +341,8 @@ class _LineChart(_ChartBase):
     visibility (identity kept), optional shaded era bands + labelled
     verticals, and a crosshair readout (nearest sample by x)."""
 
-    def __init__(self, x_title: str, y_title: str, y_fmt=None, x_fmt=None):
+    def __init__(self, x_title: str, y_title: str, y_fmt=None, x_fmt=None,
+                 diff_pair: tuple[str, str] | None = None):
         super().__init__()
         self._x_title = x_title
         self._y_title = y_title
@@ -255,25 +352,49 @@ class _LineChart(_ChartBase):
         self._bands: list[tuple] = []
         self._vmarks: list[tuple] = []
         self._fixed_y: tuple[float, float] | None = None
+        # Task 2: an optional (key_a, key_b) pair whose DIFFERENCE the
+        # crosshair also reports (e.g. light/dark), in its own unit —
+        # decoupled from the main y_fmt so the series' own axis stays in
+        # its natural unit (days) even when the delta switches to hours.
+        self._diff_pair = diff_pair
+        self._diff_fmt = self._y_fmt
 
     def set_series(self, series: list[dict]) -> None:
         self._series = [dict(entry, visible=True) for entry in series]
-        self._recompute()
+        self._reset_view()
 
     def set_bands(self, bands: list[tuple]) -> None:  # (x0, x1, (hex, alpha))
         self._bands = bands
 
     def set_vmarks(self, vmarks: list[tuple]) -> None:  # (x, label, color)
-        self._vmarks = vmarks
+        self._vmarks = sorted(vmarks, key=lambda mark: mark[0])
 
     def set_fixed_y(self, lo: float, hi: float) -> None:
         self._fixed_y = (lo, hi)
+        if self._full_xlo is not None:
+            self._fit_y_to_view()
+            self.update()
+
+    def set_y_fmt(self, fmt) -> None:
+        """Task 2: swap the y-axis/series formatter (the units switch) —
+        a pure display transform, the underlying series never change."""
+        self._y_fmt = fmt
+        self.update()
+
+    def set_y_title(self, title: str) -> None:
+        self._y_title = title
+        self.update()
+
+    def set_diff_fmt(self, fmt) -> None:
+        """Task 2: the formatter for the diff_pair crosshair line only."""
+        self._diff_fmt = fmt
+        self.update()
 
     def set_visible(self, key: str, on: bool) -> None:
         for entry in self._series:
             if entry["key"] == key:
                 entry["visible"] = on
-        self._recompute()
+        self._reset_view()
         self.update()
 
     def _visible(self) -> list[dict]:
@@ -282,18 +403,38 @@ class _LineChart(_ChartBase):
     def _has_data(self) -> bool:
         return bool(self._visible())
 
-    def _recompute(self) -> None:
+    def _reset_view(self) -> None:
         visible = self._visible()
         if not visible:
             return
-        self._xlo = min(entry["xs"][0] for entry in visible)
-        self._xhi = max(entry["xs"][-1] for entry in visible)
-        if self._fixed_y is not None:
+        self._full_xlo = min(entry["xs"][0] for entry in visible)
+        self._full_xhi = max(entry["xs"][-1] for entry in visible)
+        self._xlo, self._xhi = self._full_xlo, self._full_xhi
+        self._fit_y_to_view()
+
+    def _fit_y_to_view(self) -> None:
+        """Task 1: the y range for whatever x SLICE is currently visible
+        — the full un-zoomed view keeps the fixed range (day-length's
+        nice 0..24h axis) if one is set; any zoom auto-fits the slice."""
+        visible = self._visible()
+        if not visible:
+            return
+        zoomed = (self._xlo, self._xhi) != (self._full_xlo, self._full_xhi)
+        if self._fixed_y is not None and not zoomed:
             self._ylo, self._yhi = self._fixed_y
             return
-        lo = min(min(entry["ys"]) for entry in visible)
-        hi = max(max(entry["ys"]) for entry in visible)
-        pad = (hi - lo) * 0.08 or 1.0
+        ys: list[float] = []
+        for entry in visible:
+            xs, vals = entry["xs"], entry["ys"]
+            i0 = bisect.bisect_left(xs, self._xlo)
+            i1 = bisect.bisect_right(xs, self._xhi)
+            i0 = max(0, i0 - 1)          # one point of context past each edge
+            i1 = min(len(xs), i1 + 1)
+            ys.extend(vals[i0:i1])
+        if not ys:
+            return
+        lo, hi = min(ys), max(ys)
+        pad = (hi - lo) * defaults.OBSERVATORY_Y_FIT_PAD_FRACTION or 1.0
         self._ylo, self._yhi = lo - pad, hi + pad
 
     def _fmt_x(self, value: float) -> str:
@@ -303,7 +444,12 @@ class _LineChart(_ChartBase):
         return self._y_fmt(value)
 
     def _legend(self) -> list[tuple[str, str]]:
-        return [(entry["label"], entry["color"]) for entry in self._visible()]
+        # Dedupe by label — the Laskar envelope's +/- band is two series
+        # sharing one legend entry (Task 4).
+        seen: dict[str, str] = {}
+        for entry in self._visible():
+            seen.setdefault(entry["label"], entry["color"])
+        return list(seen.items())
 
     def _draw_data(self, painter: QPainter, rect: QRectF) -> None:
         for x0, x1, (hex_color, alpha) in self._bands:
@@ -314,15 +460,24 @@ class _LineChart(_ChartBase):
             painter.fillRect(
                 QRectF(left, rect.top(), max(0.0, right - left), rect.height()), color
             )
+        # Task 3: thin labels that would collide at the full (un-zoomed)
+        # span — zoomed in there is room, so every mark gets its label.
+        zoomed_in = (self._full_xlo is not None
+                     and (self._xhi - self._xlo) < (self._full_xhi - self._full_xlo) - 1e-6)
+        last_label_px: float | None = None
         for x, label, color in self._vmarks:
             if not self._xlo <= x <= self._xhi:
                 continue
             px = _xmap(rect, self._xlo, self._xhi, x)
             painter.setPen(QPen(QColor(color), 1, Qt.PenStyle.DashLine))
             painter.drawLine(int(px), int(rect.top()), int(px), int(rect.bottom()))
+            if (not zoomed_in and last_label_px is not None
+                    and abs(px - last_label_px) < defaults.OBSERVATORY_VMARK_MIN_SPACING_PX):
+                continue
+            last_label_px = px
             painter.setPen(QColor(color))
             painter.drawText(
-                int(px) + 3, int(rect.top()) + 2, 120, 14,
+                int(px) + 3, int(rect.top()) + 2, 160, 14,
                 Qt.AlignmentFlag.AlignLeft, label,
             )
         for entry in self._visible():
@@ -347,6 +502,7 @@ class _LineChart(_ChartBase):
         marks = []
         lines = []
         snap_x = None
+        values: dict[str, float] = {}
         for entry in visible:
             xs = entry["xs"]
             index = bisect.bisect_left(xs, data_x)
@@ -359,10 +515,15 @@ class _LineChart(_ChartBase):
             py = _ymap(rect, self._ylo, self._yhi, y)
             marks.append((px, py, entry["color"]))
             lines.append(f"{entry['label']}: {self._y_fmt(y)}")
+            values[entry["key"]] = y
             if snap_x is None:
                 snap_x = px
                 header = self._x_fmt(x)
         lines.insert(0, header)
+        # Task 2: the light/dark delta line, in the current diff unit.
+        if self._diff_pair and all(key in values for key in self._diff_pair):
+            key_a, key_b = self._diff_pair
+            lines.append(f"Δ: {self._diff_fmt(values[key_a] - values[key_b])}")
         return snap_x, marks, lines
 
 
@@ -388,9 +549,9 @@ class _EclipseChart(_ChartBase):
         self._y_title = self._tr("magnitude")
         points = solar + lunar
         years = [p[0] for p in points] + [now_year]
-        self._xlo, self._xhi = min(years), max(years)
-        mags = [p[1] for p in points if p[1] is not None] or [1.0]
-        self._ylo, self._yhi = 0.0, max(mags) * 1.1
+        self._full_xlo, self._full_xhi = min(years), max(years)
+        self._xlo, self._xhi = self._full_xlo, self._full_xhi
+        self._fit_y_to_view()
 
     def set_density(self, density: dict, now_year) -> None:
         self._deep_mode = False
@@ -398,12 +559,35 @@ class _EclipseChart(_ChartBase):
         self._now_year = now_year
         self._y_title = self._tr("eclipses per bucket")
         years = self._density[0]
-        self._xlo, self._xhi = min(years), max(years)
-        self._ylo = 0.0
-        self._yhi = max(max(self._density[1]), max(self._density[2])) * 1.1
+        self._full_xlo, self._full_xhi = min(years), max(years)
+        self._xlo, self._xhi = self._full_xlo, self._full_xhi
+        self._fit_y_to_view()
 
     def _has_data(self) -> bool:
         return bool(self._solar or self._lunar or self._density)
+
+    def _fit_y_to_view(self) -> None:
+        """Task 1: y auto-fits to the eclipses/buckets visible in the
+        current x view — magnitude scatter in deep mode, counts in the
+        density fallback."""
+        if self._deep_mode:
+            points = self._solar + self._lunar
+            mags = [
+                p[1] for p in points
+                if p[1] is not None and self._xlo <= p[0] <= self._xhi
+            ] or [1.0]
+            self._ylo, self._yhi = 0.0, max(mags) * 1.1
+            return
+        if self._density is None:
+            return
+        years, solar, lunar = self._density
+        counts = [
+            value for year, value in zip(years, solar) if self._xlo <= year <= self._xhi
+        ] + [
+            value for year, value in zip(years, lunar) if self._xlo <= year <= self._xhi
+        ]
+        self._ylo = 0.0
+        self._yhi = (max(counts) if counts else 1.0) * 1.1
 
     def _fmt_x(self, value: float) -> str:
         return _year_label(value)
@@ -522,7 +706,11 @@ class ObservatoryDialog(QDialog):
         # 1 — the season-duration oscillations with the checkbox filter.
         series = data.season_series()
         self._season_chart = _LineChart(
-            self._tr("year"), self._tr("days"), y_fmt=lambda v: f"{v:.1f}"
+            self._tr("year"), self._tr("days"), y_fmt=lambda v: f"{v:.1f}",
+            # Task 2: the crosshair also reports the light/dark delta,
+            # in whichever unit the switch picks — the series' own axis
+            # (raw durations) always stays in days.
+            diff_pair=("light", "dark"),
         )
         self._season_chart.set_series([
             {"key": key, "label": self._tr(key.capitalize()),
@@ -538,7 +726,7 @@ class ObservatoryDialog(QDialog):
         body.addLayout(self._season_filter())
         body.addWidget(self._season_chart)
 
-        # 2 — the light − dark envelope with the eras.
+        # 2 — the light − dark envelope with the eras and every peak.
         eras = data.season_eras()
         light_minus_dark = [
             round(light - dark, 4)
@@ -546,7 +734,7 @@ class ObservatoryDialog(QDialog):
         ]
         envelope = _LineChart(
             self._tr("year"), self._tr("light − dark (days)"),
-            y_fmt=lambda v: f"{v:+.0f}",
+            y_fmt=_days_fmt,
         )
         envelope.set_series([{
             "key": "envelope", "label": self._tr("light − dark"),
@@ -561,13 +749,18 @@ class ObservatoryDialog(QDialog):
             (light_to, last, defaults.OBSERVATORY_ERA_DARK_BAND),
         ])
         mark = defaults.OBSERVATORY_ERA_MARK_COLOR
-        transitions = eras["starry_transitions"]
-        envelope.set_vmarks([
+        # Task 3: EVERY light/dark peak of the measured record, not just
+        # the four sealed era marks — a simple neighbor-comparison over
+        # the decimated bundle (data.light_dark_extrema()); each one
+        # labeled with its year and value, thinned at full zoom.
+        vmarks = [
             (eras["anno_lucis_year"], self._tr("Anno Lucis"), mark),
-            (transitions["spring_peak"], self._tr("light peak"), mark),
             (light_to, self._tr("Age of Darkness"), mark),
-            (transitions["autumn_peak"], self._tr("dark peak"), mark),
-        ])
+        ]
+        for year, value, kind in data.light_dark_extrema():
+            peak_label = self._tr("light peak") if kind == "light_peak" else self._tr("dark peak")
+            vmarks.append((year, f"{peak_label} {_year_label(year)} {value:+.1f}d", mark))
+        envelope.set_vmarks(vmarks)
         self._envelope = envelope
         body.addWidget(self._section(self._tr("The light − dark envelope")))
         body.addWidget(envelope)
@@ -615,6 +808,51 @@ class ObservatoryDialog(QDialog):
         body.addWidget(self._section(self._tr("Day length over the year")))
         body.addWidget(day_chart)
 
+        # 5 — the La2004 Laskar long envelope, ±200,000 years, amplitude
+        # only (Fix round D, Task 4 — charts-only, ROADMAP 15a2 sealed).
+        laskar = data.laskar_envelope()
+        laskar_meta = data.laskar_envelope_meta()
+        laskar_chart = _LineChart(
+            self._tr("year"), self._tr("amplitude (± days)"),
+            y_fmt=lambda v: f"{v:+.1f}",
+        )
+        laskar_chart.set_series([
+            {"key": "envelope_hi", "label": self._tr("amplitude envelope"),
+             "color": defaults.OBSERVATORY_LASKAR_ENVELOPE_COLOR,
+             "xs": laskar["years"], "ys": laskar["envelope_days"]},
+            {"key": "envelope_lo", "label": self._tr("amplitude envelope"),
+             "color": defaults.OBSERVATORY_LASKAR_ENVELOPE_COLOR,
+             "xs": laskar["years"], "ys": [-v for v in laskar["envelope_days"]]},
+            {"key": "signed", "label": self._tr("light − dark (signed)"),
+             "color": defaults.OBSERVATORY_LASKAR_SIGNED_COLOR,
+             "xs": laskar["years"], "ys": laskar["signed_days"]},
+        ])
+        de441_lo, de441_hi = laskar_meta["de441_window_years"]
+        laskar_chart.set_bands([
+            (de441_lo, de441_hi, defaults.OBSERVATORY_LASKAR_DE441_BAND),
+        ])
+        ecc_min = laskar_meta["extrema"]["coming_ecc_min"]
+        laskar_chart.set_vmarks([(
+            ecc_min["year"],
+            f"{self._tr('eccentricity minimum')} {_year_label(ecc_min['year'])} "
+            f"(±{ecc_min['envelope_days']:.1f}d)",
+            defaults.OBSERVATORY_ERA_MARK_COLOR,
+        )])
+        self._laskar_chart = laskar_chart
+        body.addWidget(self._section(
+            self._tr("The Laskar long envelope (±200,000 years)")
+        ))
+        body.addWidget(laskar_chart)
+        body.addWidget(self._caption(self._tr(
+            "Analytic orbital solution (La2004) — amplitude trend only; "
+            "exact dates unreliable beyond the measured window."
+        )))
+
+        # Task 2: wire the Days/Hours switch now that every chart it
+        # touches (envelope + season) exists.
+        self._units_combo.currentIndexChanged.connect(self._on_units_changed)
+        self._on_units_changed(self._units_combo.currentIndex())
+
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
@@ -647,7 +885,11 @@ class ObservatoryDialog(QDialog):
 
     def _season_filter(self) -> QHBoxLayout:
         """The per-series checkboxes ABOVE chart 1 (owner: four seasons +
-        the light/dark half-year pair) — swatch-colored, identity fixed."""
+        the light/dark half-year pair) — swatch-colored, identity fixed
+        — plus the Days/Hours switch (Task 2), governing every
+        "light − dark" readout on charts 1 and 2. Built here but wired
+        (currentIndexChanged connected) once every chart it touches
+        exists — see the end of __init__."""
         row = QHBoxLayout()
         row.addStretch(1)
         for key in ("spring", "summer", "autumn", "winter", "light", "dark"):
@@ -661,8 +903,27 @@ class ObservatoryDialog(QDialog):
                 lambda on, k=key: self._season_chart.set_visible(k, on)
             )
             row.addWidget(box)
+        row.addSpacing(16)
+        row.addWidget(QLabel(self._tr("light − dark units:")))
+        self._units_combo = QComboBox()
+        self._units_combo.addItem(self._tr("Days"), "days")
+        self._units_combo.addItem(self._tr("Hours"), "hours")
+        self._units_combo.setCurrentIndex(
+            1 if defaults.OBSERVATORY_UNITS_DEFAULT == "hours" else 0
+        )
+        row.addWidget(self._units_combo)
         row.addStretch(1)
         return row
+
+    def _on_units_changed(self, index: int) -> None:
+        """Task 2: a pure display transform (×24) — the underlying
+        series never change, only the y-axis/crosshair labels."""
+        hours = self._units_combo.itemData(index) == "hours"
+        fmt = _hours_fmt if hours else _days_fmt
+        title = self._tr("light − dark (hours)") if hours else self._tr("light − dark (days)")
+        self._envelope.set_y_fmt(fmt)
+        self._envelope.set_y_title(title)
+        self._season_chart.set_diff_fmt(fmt)
 
     def _nearest_eclipses(self, deep, now, cycles):
         """The nearest OBSERVATORY_ECLIPSE_WINDOW_N eclipses of each kind
@@ -686,6 +947,14 @@ class ObservatoryDialog(QDialog):
 
 def _fraction(eclipse) -> float:
     return (eclipse.month - 1) / 12.0 + (eclipse.day - 1) / 372.0
+
+
+def _days_fmt(value: float) -> str:
+    return f"{value:+.1f} d"
+
+
+def _hours_fmt(value: float) -> str:
+    return f"{value * 24:+.0f} h"
 
 
 def _hm(minutes: float) -> str:

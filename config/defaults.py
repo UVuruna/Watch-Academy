@@ -886,6 +886,7 @@ REPORT_SURFACE_COLOR = "#202124"     # chart surface
 # other reader dialog.
 OBSERVATORY_BUNDLE_SEASONS = "observatory_seasons.json"
 OBSERVATORY_BUNDLE_ECLIPSES = "observatory_eclipses.json"
+OBSERVATORY_BUNDLE_ENVELOPE = "observatory_envelope.json"
 OBSERVATORY_CHART_MIN_HEIGHT_PX = 240
 OBSERVATORY_SURFACE_COLOR = THEME_COLORS["surface_0"]      # chart body
 OBSERVATORY_INK_COLOR = THEME_COLORS["text_primary"]       # labels
@@ -924,6 +925,41 @@ OBSERVATORY_ECLIPSE_WINDOW_N = 60
 # year; astral is asked once every N days (a smooth curve, cheap open).
 OBSERVATORY_DAYLENGTH_STEP_DAYS = 2
 OBSERVATORY_DAYLENGTH_COLOR = "#E8B23D"
+
+# ─── Fix round D (owner verdicts 2026-07-19) ───────────────────────────
+# Task 1 — mouse-wheel zoom, centered on the cursor's x, on every chart;
+# double-click resets to the full span. The Y axis auto-fits whatever x
+# slice is visible after each zoom change (owner: min at the bottom, max
+# at the top, with a little padding — matching the un-zoomed pad below).
+OBSERVATORY_ZOOM_FACTOR = 0.85          # per wheel notch (in); 1/factor = out
+OBSERVATORY_ZOOM_MIN_FRACTION = 0.01    # narrowest view, fraction of full x-span
+OBSERVATORY_Y_FIT_PAD_FRACTION = 0.08   # y padding above/below the visible slice
+
+# Task 2 — the Days<->Hours switch for every "light - dark" readout (the
+# envelope's y-axis/crosshair, the season chart's light/dark delta line).
+# Pure display transform (x24); the underlying series always stay in days.
+OBSERVATORY_UNITS_DEFAULT = "days"
+
+# Task 3 — every light/dark peak of the envelope gets a label (not just
+# the four sealed era marks); at full zoom, labels closer than this many
+# pixels are thinned (kept when zoomed in, where there is room). The
+# extrema finder needs a WINDOW wider than the season bundle's bin-mean
+# decimation stride (20 yr, setup/make_observatory.py SEASON_BIN_YEARS)
+# — a bare neighbor comparison flags the bin-to-bin rounding noise near
+# every true peak as dozens of spurious extrema; a candidate must be the
+# most extreme point within this many years on each side (the real
+# oscillation's half-period is ~10,000 years, so this comfortably
+# separates true peaks without merging two of them together).
+OBSERVATORY_VMARK_MIN_SPACING_PX = 46
+OBSERVATORY_EXTREMA_WINDOW_YEARS = 1000
+
+# Task 4 — the fifth chart: the La2004 Laskar long envelope (amplitude
+# only, charts-only doctrine — ROADMAP 15a2). Colors echo the research
+# plot (research/ephemeris/long_envelope.py): gold amplitude band, muted
+# silver signed oscillation, teal DE441-measured-window wash.
+OBSERVATORY_LASKAR_ENVELOPE_COLOR = "#E8B23D"
+OBSERVATORY_LASKAR_SIGNED_COLOR = "#C7CDD6"
+OBSERVATORY_LASKAR_DE441_BAND = ("#4FB0C6", 30)
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image

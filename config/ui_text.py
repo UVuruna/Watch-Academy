@@ -367,4 +367,13 @@ UI_STRINGS: tuple[str, ...] = (
     # SLIKA 4) — "Age of Darkness" already ships from the Observatory
     # legend above.
     "Age of Light",
+    # --- Observatory fix round D (owner verdicts 2026-07-19) ------------------
+    # Task 2 (the Days<->Hours "light − dark" units switch) and Task 4
+    # (the fifth chart — the La2004 Laskar long envelope, charts-only).
+    "light − dark (hours)", "light − dark units:",
+    "amplitude envelope", "light − dark (signed)", "eccentricity minimum",
+    "amplitude (± days)",
+    "The Laskar long envelope (±200,000 years)",
+    "Analytic orbital solution (La2004) — amplitude trend only; exact "
+    "dates unreliable beyond the measured window.",
 )

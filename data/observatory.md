@@ -5,8 +5,9 @@
 ## Purpose
 Read-only access to the Observatory's committed series bundles under
 `Database/` (`observatory_seasons.json`, `observatory_eclipses.json`,
-built by [Make Observatory](../setup/make_observatory.py)). These small
-JSON files are ALWAYS present (committed, unlike the gitignored
+`observatory_envelope.json`, built by
+[Make Observatory](../setup/make_observatory.py)). These small JSON
+files are ALWAYS present (committed, unlike the gitignored
 `deep_time.sqlite`), so the Observatory charts never require the Deep
 Time pack — they read only this data. The eclipse timeline may
 ADDITIONALLY use the Deep Time pack for exact nearest-eclipse instants
@@ -21,12 +22,12 @@ per-type summary are available (the documented split).
   bundle — a build-integrity error, Rule #1)
 
 ### Used by
-- [Observatory Dialog](../app/observatory.md) — the four charts
+- [Observatory Dialog](../app/observatory.md) — the five charts
 
 ## Classes
 
 ### ObservatoryData
-Loads both bundles once in `__init__`.
+Loads all three bundles once in `__init__`.
 
 #### Methods
 - `season_series()`: `{years, spring, summer, autumn, winter, light,
@@ -41,6 +42,17 @@ Loads both bundles once in `__init__`.
   time bucket (the always-available density timeline).
 - `eclipse_meta()`: per-century rates, per-type counts, totals and the
   ΔT caveat.
+- `light_dark_extrema()` (Fix round D, Task 3): every local peak/trough
+  of light-minus-dark over the whole bundled span —
+  `[(year, value_days, kind)]`, kind "light_peak"/"dark_peak". Windowed
+  against `OBSERVATORY_EXTREMA_WINDOW_YEARS` so the bin-mean series'
+  own rounding noise never registers as a spurious peak (see the
+  design note below).
+- `laskar_envelope()` (Fix round D, Task 4): `{years, signed_days,
+  envelope_days}` — the La2004 amplitude envelope + signed oscillation
+  over the owner's ±200,000-year chart window.
+- `laskar_envelope_meta()`: the DE441 overlap window, the sealed
+  extrema (coming eccentricity minimum etc.) and the doctrine caption.
 
 ## Design Decisions
 The bundles are pure data — no wall clock, no Qt. The two derived
@@ -50,3 +62,13 @@ season durations are bin-mean decimated (`SEASON_BIN_YEARS`) — the
 millennial Age-of-Light/Darkness trend is preserved well under chart
 resolution; the raw per-year record lives in
 `research/ephemeris/season_halves.json`.
+
+`light_dark_extrema()` cannot use a bare immediate-neighbor comparison:
+measured on the committed bundle, that flagged 27 "peaks" within a few
+bins of the true turning points, agreeing to 3 decimal places —
+decimation rounding noise, not real turning points. A candidate must be
+the most extreme point within a window of years on each side
+(comfortably smaller than the oscillation's ~10,000-year half-period),
+and near-duplicate survivors from a flat plateau are merged to the
+single most extreme point — settling to the 3 physically real extrema
+over the bundled span (2 dark peaks, 1 light peak).

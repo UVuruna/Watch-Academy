@@ -51,20 +51,29 @@ script as the way back) and ships only with the M7 FULL installation —
 the app detects it at startup and runs happily without it.
 
 ### `make_observatory.py` — Observatory Series Generator
-One-time (rerunnable) generator (Session 17, owner 2026-07-16): builds
-the compact, COMMITTED chart bundles the [Observatory](../app/observatory.md)
-reads — `Database/observatory_seasons.json` (the four northern season
+One-time (rerunnable) generator (Session 17, owner 2026-07-16; extended
+Fix round D, Task 4, 2026-07-19) builds the compact, COMMITTED chart
+bundles the [Observatory](../app/observatory.md) reads —
+`Database/observatory_seasons.json` (the four northern season
 durations, bin-mean decimated from `events.sqlite` sun_events, plus an
-`eras` block from `anno_lucis.json`) and `Database/observatory_eclipses.json`
-(solar/lunar counts per bucket + the per-type summary):
+`eras` block from `anno_lucis.json`), `Database/observatory_eclipses.json`
+(solar/lunar counts per bucket + the per-type summary), and
+`Database/observatory_envelope.json` (the La2004 Laskar amplitude
+envelope, sliced from `research/ephemeris/long_envelope.json` to the
+owner's ±200,000-year chart window — already 1-kyr step, so the slice
+alone is ~401 rows, no further decimation needed):
 
     python setup/make_observatory.py
 
 Unlike the multi-megabyte sqlite packs these bundles are small
-(~55 KB + ~2 KB) and committed — the Observatory never requires
+(~55 KB + ~2 KB + ~9 KB) and committed — the Observatory never requires
 deep_time.sqlite. Validates the derived light/dark halves against
 `season_halves.json` (Rule #1). Rerun the research pipeline first if
-`events.sqlite` is absent (gitignored, ~92 MB).
+`events.sqlite` is absent (gitignored, ~92 MB); the envelope slice needs
+`research/ephemeris/long_envelope.json` (committed — regenerate via the
+research venv's `long_envelope.py` per
+[Research Ephemeris (subfolder)](../research/ephemeris/___ephemeris.md)
+only if it is ever missing).
 
 ## Connections
 

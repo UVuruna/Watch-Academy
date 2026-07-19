@@ -23,6 +23,13 @@ Outputs (into Database/):
   * observatory_eclipses.json — solar/lunar eclipse COUNTS per time
     bucket over the span (the always-available density timeline) plus the
     per-type summary from research/ephemeris/eclipses_summary.json.
+  * observatory_envelope.json — the La2004 Laskar long envelope of the
+    light-minus-dark half-year AMPLITUDE (Fix round D, Task 4, owner
+    2026-07-19), sliced to the owner's +/-200,000-year chart window from
+    research/ephemeris/long_envelope.json (already 1-kyr step, so the
+    slice alone is ~401 rows — comfortably under the "~1000 points"
+    budget, no further decimation needed). Charts-only (ROADMAP 15a2):
+    amplitude trend only, never exact dates beyond the DE441 window.
 
 Decimation is bin-mean (the millennial Age-of-Light/Darkness trend is
 preserved to well under chart resolution; the raw per-year series lives
@@ -43,13 +50,16 @@ SOURCE = EPHEMERIS / "events.sqlite"
 SEASON_HALVES = EPHEMERIS / "season_halves.json"
 ANNO_LUCIS = EPHEMERIS / "anno_lucis.json"
 ECLIPSES_SUMMARY = EPHEMERIS / "eclipses_summary.json"
+LONG_ENVELOPE = EPHEMERIS / "long_envelope.json"
 TARGET_SEASONS = PROJECT_ROOT / "Database" / "observatory_seasons.json"
 TARGET_ECLIPSES = PROJECT_ROOT / "Database" / "observatory_eclipses.json"
+TARGET_ENVELOPE = PROJECT_ROOT / "Database" / "observatory_envelope.json"
 
 # Decimation windows (generation params — these files are chart fodder,
 # not the measured record; the raw series stays in research/).
 SEASON_BIN_YEARS = 20            # bin-mean stride for the season durations
 ECLIPSE_BUCKET_YEARS = 500       # count bucket for the eclipse density
+ENVELOPE_WINDOW_KYR = 200        # the owner's +/-200,000-year chart window
 
 # sun_events.type is the ecliptic crossing degree: 0 March equinox,
 # 90 June solstice, 180 September equinox, 270 December solstice — so a
@@ -246,6 +256,57 @@ def _write_eclipses(source: sqlite3.Connection) -> None:
     )
 
 
+def _write_envelope() -> None:
+    """The La2004 Laskar amplitude envelope, sliced to the owner's
+    +/-200,000-year chart window (Fix round D, Task 4). The source file
+    is already 1-kyr step, so the slice alone lands at ~401 rows — no
+    further decimation needed to stay under the "~1000 points" budget."""
+    source = json.loads(LONG_ENVELOPE.read_text(encoding="utf-8"))
+    t_kyr = source["t_kyr"]
+    signed = source["signed_light_minus_dark_days"]
+    envelope = source["envelope_days"]
+    years: list[int] = []
+    signed_out: list[float] = []
+    envelope_out: list[float] = []
+    for t, s, e in zip(t_kyr, signed, envelope):
+        if -ENVELOPE_WINDOW_KYR <= t <= ENVELOPE_WINDOW_KYR:
+            years.append(2000 + 1000 * t)
+            signed_out.append(s)
+            envelope_out.append(e)
+    meta_src = source["meta"]
+    payload = {
+        "meta": {
+            "what": "The La2004 long envelope of the light-minus-dark "
+                    "half-year amplitude, sliced to the +/-200,000-year "
+                    "chart window (Observatory chart 5, charts-only — "
+                    "ROADMAP 15a2).",
+            "source": meta_src["source"],
+            "formula": meta_src["formula"],
+            "units": "days",
+            "window_years": [years[0], years[-1]],
+            "n_points": len(years),
+            "de441_window_years": meta_src["validation_vs_de441"]["overlap_years"],
+            "extrema": meta_src["extrema"],
+            "caveat": meta_src["caveat"],
+            "doctrine": "Analytic orbital solution (La2004) - amplitude "
+                        "trend only; exact dates unreliable beyond the "
+                        "measured window.",
+            "built": date.today().isoformat(),
+        },
+        "years": years,
+        "signed_days": signed_out,
+        "envelope_days": envelope_out,
+    }
+    TARGET_ENVELOPE.write_text(
+        json.dumps(payload, separators=(",", ":")), encoding="utf-8"
+    )
+    size_kb = TARGET_ENVELOPE.stat().st_size / 1024
+    print(
+        f"envelope: {len(years)} points over "
+        f"{years[0]}..{years[-1]} | {size_kb:.0f} KB -> {TARGET_ENVELOPE.name}"
+    )
+
+
 def main() -> None:
     if not SOURCE.exists():
         raise SystemExit(
@@ -253,11 +314,18 @@ def main() -> None:
             f"Run the research/ephemeris pipeline first "
             f"(see research/ephemeris/___ephemeris.md)."
         )
+    if not LONG_ENVELOPE.exists():
+        raise SystemExit(
+            f"Laskar long envelope is missing: {LONG_ENVELOPE}\n"
+            f"Run research/ephemeris/long_envelope.py first (the research "
+            f"venv, per research/ephemeris/___ephemeris.md)."
+        )
     TARGET_SEASONS.parent.mkdir(parents=True, exist_ok=True)
     source = sqlite3.connect(f"file:{SOURCE.as_posix()}?mode=ro", uri=True)
     _write_seasons(source)
     _write_eclipses(source)
     source.close()
+    _write_envelope()
     print("done.")
 
 

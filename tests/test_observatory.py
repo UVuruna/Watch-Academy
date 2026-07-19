@@ -185,3 +185,138 @@ def test_season_checkbox_toggles_series_visibility(app):
     chart.set_visible("summer", True)
     assert "summer" in {entry["key"] for entry in chart._visible()}
     dialog.accept()
+
+
+# --- Fix round D (owner verdicts 2026-07-19) -----------------------------------
+
+# Task 1 — zoom math / y-fit ----------------------------------------------------
+
+def test_zoom_narrows_view_and_autofits_y(app):
+    """Zooming in around the cursor's x narrows the view symmetrically
+    toward that point, and the y axis re-fits to the narrower slice
+    (never wider than the un-zoomed y range for a monotonically-varying
+    series like the day-length curve)."""
+    dialog = _open(None)
+    chart = dialog._day_chart
+    chart.resize(800, 240)
+    full_span = chart._full_xhi - chart._full_xlo
+    full_ylo, full_yhi = chart._ylo, chart._yhi
+    # Zoom in repeatedly at the left edge of the plot (near day 1).
+    for _ in range(6):
+        chart._zoom_at(60.0, defaults.OBSERVATORY_ZOOM_FACTOR)
+    zoomed_span = chart._xhi - chart._xlo
+    assert zoomed_span < full_span
+    assert chart._xlo >= chart._full_xlo - 1e-6
+    assert chart._xhi <= chart._full_xhi + 1e-6
+    # The day-length curve is smooth — a narrow early-year slice has a
+    # tighter y range than the whole year (peak at the June solstice).
+    assert (chart._yhi - chart._ylo) < (full_yhi - full_ylo)
+    dialog.accept()
+
+
+def test_zoom_clamps_to_the_minimum_span(app):
+    dialog = _open(None)
+    chart = dialog._envelope
+    chart.resize(800, 240)
+    full_span = chart._full_xhi - chart._full_xlo
+    for _ in range(200):
+        chart._zoom_at(400.0, 0.5)
+    min_span = full_span * defaults.OBSERVATORY_ZOOM_MIN_FRACTION
+    assert (chart._xhi - chart._xlo) >= min_span - 1e-6
+    dialog.accept()
+
+
+def test_double_click_resets_the_view(app):
+    dialog = _open(None)
+    chart = dialog._envelope
+    chart.resize(800, 240)
+    chart._zoom_at(400.0, 0.3)
+    assert (chart._xhi - chart._xlo) < (chart._full_xhi - chart._full_xlo)
+    chart._reset_view()
+    assert chart._xlo == pytest.approx(chart._full_xlo)
+    assert chart._xhi == pytest.approx(chart._full_xhi)
+    dialog.accept()
+
+
+# Task 2 — the Days/Hours units switch ------------------------------------------
+
+def test_units_switch_is_a_pure_times_24_display_transform(app):
+    dialog = _open(None)
+    envelope = dialog._envelope
+    ys_before = list(envelope._series[0]["ys"])
+    # Default: days.
+    assert "24" not in envelope._fmt_y(1.0)
+    dialog._units_combo.setCurrentIndex(1)   # Hours
+    assert "24" in envelope._fmt_y(1.0)
+    # The underlying series is untouched by the unit switch — display only.
+    assert envelope._series[0]["ys"] == ys_before
+    dialog._units_combo.setCurrentIndex(0)   # back to days
+    assert "24" not in envelope._fmt_y(1.0)
+    dialog.accept()
+
+
+def test_units_switch_reaches_the_season_chart_diff_line(app):
+    dialog = _open(None)
+    season = dialog._season_chart
+    dialog._units_combo.setCurrentIndex(1)   # Hours
+    assert "24" in season._diff_fmt(1.0)
+    dialog._units_combo.setCurrentIndex(0)   # Days
+    assert "24" not in season._diff_fmt(1.0)
+    dialog.accept()
+
+
+# Task 3 — every light/dark peak marked ------------------------------------------
+
+def test_light_dark_extrema_finds_every_local_peak(data):
+    marks = data.light_dark_extrema()
+    assert len(marks) >= 2          # at least one light peak + one dark peak
+    kinds = {kind for _, _, kind in marks}
+    assert kinds <= {"light_peak", "dark_peak"}
+    assert "light_peak" in kinds and "dark_peak" in kinds
+    years = [year for year, _, _ in marks]
+    assert years == sorted(years)   # ascending, from the ascending bundle
+    # Peaks and troughs must alternate (a real local-extrema series).
+    for (_, _, a), (_, _, b) in zip(marks, marks[1:]):
+        assert a != b
+
+
+def test_envelope_vmarks_include_every_measured_peak(app):
+    dialog = _open(None)
+    extrema = ObservatoryData().light_dark_extrema()
+    # 2 sealed era marks (Anno Lucis, Age of Darkness) + one per extremum.
+    assert len(dialog._envelope._vmarks) == 2 + len(extrema)
+    dialog.accept()
+
+
+# Task 4 — the Laskar long envelope bundle + chart -------------------------------
+
+def test_laskar_envelope_bundle_integrity(data):
+    laskar = data.laskar_envelope()
+    years = laskar["years"]
+    assert len(years) == len(laskar["signed_days"]) == len(laskar["envelope_days"])
+    assert 300 < len(years) < 1000          # "~1000 points" budget (Task 4)
+    assert years == sorted(years)
+    assert min(years) <= -195000 and max(years) >= 195000   # +/-200,000-yr window
+    # The envelope is the |sin|=1 bound on the signed oscillation.
+    for signed, envelope in zip(laskar["signed_days"], laskar["envelope_days"]):
+        assert envelope >= 0
+        assert abs(signed) <= envelope + 1e-6
+    meta = data.laskar_envelope_meta()
+    lo, hi = meta["de441_window_years"]
+    assert lo < -12000 and hi > 16000        # the DE441-measured window
+    assert "coming_ecc_min" in meta["extrema"]
+    ecc_min = meta["extrema"]["coming_ecc_min"]
+    assert 20000 < ecc_min["year"] < 35000   # ~+28,000 CE (owner's suspected trough)
+    assert ecc_min["envelope_days"] < 3.0    # near-vanishing amplitude
+
+
+def test_laskar_envelope_render_smoke(app):
+    dialog = _open(None)
+    chart = dialog._laskar_chart
+    chart.resize(800, 240)
+    assert not chart.grab().isNull()
+    assert chart._full_xlo is not None
+    # The +/- band shares one legend entry (dedup, Task 4).
+    labels = [label for label, _ in chart._legend()]
+    assert labels.count(dialog._tr("amplitude envelope")) == 1
+    dialog.accept()

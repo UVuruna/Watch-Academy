@@ -265,25 +265,33 @@ lives in [The DOMY Canon](CANON.md).
    corona glow. The Eclipse is already the
    NINTH MOOD in the emblem canon — the articles link there.
 15. **The Observatory — the statistics window (owner 2026-07-16) —
-   DONE (Session 17, 2026-07-18).** A right-click sibling of the
-   Encyclopedia (🔭 Observatory… beside 🏛️ Encyclopedia…) of dark,
-   QPainter-drawn interactive CHARTS over the long data: the
-   season-duration oscillations with per-series checkboxes (four seasons
-   + the light/dark half-year pair — the owner's own Anno Lucis graph,
-   live in the app), the light−dark envelope with the Anno Lucis dawn
-   and the Age-of-Light/Darkness bands + starry-season transitions
-   marked, the eclipse timeline (nearest past/next solar+lunar from the
-   traveled moment when the Deep Time pack is present; the bundled
-   density + per-type summary otherwise), and the current location's
-   day-length curve over the year (live from the observer, honoring Time
-   Travel). Series ship as compact COMMITTED JSON under `Database/`
+   DONE (Session 17, 2026-07-18); EXTENDED (Fix round D, owner verdicts
+   2026-07-19).** A right-click sibling of the Encyclopedia
+   (🔭 Observatory… beside 🏛️ Encyclopedia…) of dark, QPainter-drawn
+   interactive CHARTS over the long data: the season-duration
+   oscillations with per-series checkboxes (four seasons + the
+   light/dark half-year pair — the owner's own Anno Lucis graph, live in
+   the app), the light−dark envelope with the Anno Lucis dawn, the
+   Age-of-Light/Darkness bands and EVERY measured light/dark peak marked
+   (not just the four sealed era marks), the eclipse timeline (nearest
+   past/next solar+lunar from the traveled moment when the Deep Time
+   pack is present; the bundled density + per-type summary otherwise),
+   the current location's day-length curve over the year (live from the
+   observer, honoring Time Travel), and a FIFTH chart — the La2004
+   Laskar long envelope of the season-oscillation amplitude over
+   ±200,000 years (see 15a2 below). Every chart supports mouse-wheel
+   zoom centered on the cursor with drag-to-pan and a double-click
+   reset, the y axis auto-fitting the visible x slice on every change;
+   a Days/Hours switch governs every "light − dark" readout. Series ship
+   as compact COMMITTED JSON under `Database/`
    (`observatory_seasons.json` ~55 KB bin-mean decimated,
-   `observatory_eclipses.json` ~2 KB) built by
-   `setup/make_observatory.py` — the charts never require
+   `observatory_eclipses.json` ~2 KB, `observatory_envelope.json` ~9 KB)
+   built by `setup/make_observatory.py` — the charts never require
    `deep_time.sqlite` (the split is documented). Each chart: one y-axis,
    fixed per-series canon colors (season cross-wheel hues; light/dark
-   gold vs slate), a legend, a crosshair readout, the filter row above.
-   See [Observatory](app/observatory.md).
+   gold vs slate; Laskar gold/silver/teal), a deduped legend, a
+   crosshair readout, the filter row above. See
+   [Observatory](app/observatory.md).
 15a2. **The year line doctrine (owner 2026-07-17).** Everywhere a
    year shows, BOTH forms show: the official year and the Anno
    Lucis year ("2026 · 6105. Anno Lucis"). Settings govern the
@@ -295,7 +303,11 @@ lives in [The DOMY Canon](CANON.md).
    Session 16. The ±200,000-year Laskar span is CHARTS-ONLY
    (Observatory) — Time Travel stays within the precise
    −13000…+17000 pack (owner confirmed: not precise enough for
-   dates beyond).
+   dates beyond). **CHARTS-ONLY delivered (Fix round D, 2026-07-19):**
+   the Observatory's fifth chart plots the La2004 amplitude envelope
+   over ±200,000 years (`Database/observatory_envelope.json`,
+   `setup/make_observatory.py`) with an honest doctrine caption; Time
+   Travel itself was never touched, exactly as sealed.
 15a3. **Era terms in the Encyclopedia + their LOGOS — DONE
    (2026-07-18, ERA TERMS round).** "Age of Light", "Age of Darkness"
    and the four STARRY SEASONS (spring/summer/autumn/winter of the
