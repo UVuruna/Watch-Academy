@@ -376,4 +376,7 @@ UI_STRINGS: tuple[str, ...] = (
     "The Laskar long envelope (±200,000 years)",
     "Analytic orbital solution (La2004) — amplitude trend only; exact "
     "dates unreliable beyond the measured window.",
+    # --- Observatory fix round G (owner verdicts 2026-07-19) ------------------
+    # Task 3 (the per-chart "Enlarge" button, maximized single-chart view).
+    "Enlarge",
 )

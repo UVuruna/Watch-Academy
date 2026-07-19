@@ -22,8 +22,9 @@ lives in [The DOMY Canon](CANON.md).
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/
   metal/roster skin system, Settings with the city picker,
   Encyclopedia, Guide, Time Travel, translations (SR bundle synced).
-- **Suite:** 434 green tests (`python -m pytest tests`; Session 16
-  added the Deep Time and analytic-illumination goldens).
+- **Suite:** 500 green tests (`python -m pytest tests`; Session 16
+  added the Deep Time and analytic-illumination goldens; Fix round G
+  added 12 more for the Observatory's adaptive ticks/splitter/enlarge).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
 - **`dist/DOMYWatch/DOMYWatch.exe` is an ad-hoc PyInstaller test
@@ -66,6 +67,27 @@ lives in [The DOMY Canon](CANON.md).
   content). See [Encyclopedia](app/encyclopedia.md),
   [Encyclopedia Repository](data/encyclopedia.md) and
   [Compositor](render/compositor.md). 11 new tests, 488 green.
+- **Fix round G (owner verdicts 2026-07-19, slika 8 + addendum) —
+  DONE:** the Observatory's last three asks. (1) ADAPTIVE AXIS TICKS —
+  the x/y tick pitch now adapts to the CURRENT view on every chart via a
+  generic "nice number" ladder (config targets
+  `OBSERVATORY_TARGET_X_TICKS`/`_Y_TICKS`), the y path honoring the
+  Days/Hours scale so hour-mode ticks land on round hour numbers, and
+  the day-length chart showing the 12 calendar months un-zoomed, real
+  calendar days when zoomed tight; a new absolute zoom floor
+  (`OBSERVATORY_ZOOM_MIN_SPAN_FLOOR`) lets max zoom on the
+  multi-millennial charts reach the handful of years where the ladder
+  bottoms out at a 1-year pitch (owner: "na max zumu TICK na 1 GODINU") —
+  the old 1%-of-full-span clamp alone never got there. (2) ADJUSTABLE
+  CHART HEIGHT — the five charts now live in one `QSplitter`, one
+  drag-resizable panel per chart, heights remembered for the SESSION
+  only (no settings key). (3) ENLARGE — every chart's filter row gained
+  an "Enlarge" button opening a maximized single-chart dialog that
+  REPARENTS the same panel (not a copy), so zoom/pan/checkboxes carry in
+  and back out for free; adds an extended legend (every series' color
+  chip + current value) and an info strip (title + whatever caption the
+  chart already has — the Laskar doctrine line survives). 12 new tests,
+  500 green. See [Observatory](app/observatory.md).
 
 - **THE ONE-IMAGE-ONE-PLACE LAW (owner 2026-07-19):** an image serves
   exactly ONE place; where a scene appears again it is RETOLD in a new
@@ -316,7 +338,10 @@ lives in [The DOMY Canon](CANON.md).
    NINTH MOOD in the emblem canon — the articles link there.
 15. **The Observatory — the statistics window (owner 2026-07-16) —
    DONE (Session 17, 2026-07-18); EXTENDED (Fix round D, owner verdicts
-   2026-07-19).** A right-click sibling of the Encyclopedia
+   2026-07-19); EXTENDED AGAIN (Fix round G, owner verdicts 2026-07-19,
+   slika 8 + addendum — adaptive ticks, per-chart resize, Enlarge; see
+   the "Where We Stand" entry above and [Observatory](app/observatory.md)
+   for the details).** A right-click sibling of the Encyclopedia
    (🔭 Observatory… beside 🏛️ Encyclopedia…) of dark, QPainter-drawn
    interactive CHARTS over the long data: the season-duration
    oscillations with per-series checkboxes (four seasons + the

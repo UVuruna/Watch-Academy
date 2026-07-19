@@ -20,8 +20,9 @@ every change (_ChartBase); a Days/Hours switch governs every
 
 import bisect
 import math
+from datetime import date, timedelta
 
-from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtCore import QPointF, QRectF, Qt, QTimer
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -32,6 +33,7 @@ from PySide6.QtWidgets import (
     QLabel,
     QPushButton,
     QScrollArea,
+    QSplitter,
     QVBoxLayout,
     QWidget,
 )
@@ -67,17 +69,32 @@ def _ymap(rect: QRectF, lo: float, hi: float, value: float) -> float:
     return rect.bottom() - (value - lo) / span * rect.height()
 
 
-def _nice_ticks(lo: float, hi: float, target: int = 6) -> list[float]:
+def _nice_step(span: float, target: int) -> float:
+    """Fix round G, Task 1 — the classic "nice number" ladder (1-2-5 per
+    decade: ...0.1/0.2/0.5/1/2/5/10/20/50/100/200/500/1k/2k/5k...),
+    generated arithmetically rather than hardcoded so it covers any
+    magnitude (fractional y-spans as readily as the Laskar chart's
+    ±200,000-year x-span). Returns the SMALLEST ladder rung that keeps
+    the tick count at/under `target`; once even the finest possible
+    rung at this magnitude still exceeds it (a span tighter than makes
+    sense to subdivide further), that rung is used anyway — more ticks
+    than the target, but nothing finer is meaningful for this axis."""
+    if span <= 0 or target <= 0:
+        return span or 1.0
+    raw = span / target
+    magnitude = 10 ** math.floor(math.log10(raw))
+    for factor in (1, 2, 5, 10):
+        step = factor * magnitude
+        if raw <= step:
+            return step
+    return 10 * magnitude  # unreachable — factor=10 always satisfies raw<=step
+
+
+def _nice_ticks(lo: float, hi: float, target: int) -> list[float]:
     span = hi - lo
     if span <= 0:
         return [lo]
-    raw = span / target
-    magnitude = 10 ** math.floor(math.log10(raw))
-    step = magnitude
-    for factor in (1, 2, 2.5, 5, 10):
-        step = factor * magnitude
-        if raw <= step:
-            break
+    step = _nice_step(span, target)
     start = math.ceil(lo / step) * step
     ticks: list[float] = []
     value = start
@@ -87,7 +104,32 @@ def _nice_ticks(lo: float, hi: float, target: int = 6) -> list[float]:
     return ticks
 
 
-def _year_label(year: float) -> str:
+def _min_zoom_span(full_span: float) -> float:
+    """Fix round G, Task 1 — the tightest x-span `_zoom_at` allows: the
+    existing fraction of the full span, OR the absolute floor, whichever
+    is SMALLER — see OBSERVATORY_ZOOM_MIN_SPAN_FLOOR's comment in
+    defaults.py for why the huge-span charts need the absolute floor to
+    ever reach a 1-unit tick pitch."""
+    return min(
+        full_span * defaults.OBSERVATORY_ZOOM_MIN_FRACTION,
+        defaults.OBSERVATORY_ZOOM_MIN_SPAN_FLOOR,
+    )
+
+
+def _nearest_index(xs: list[float], value: float) -> int:
+    """The index of the sample in the ascending `xs` closest to `value`
+    (bisect-based nearest-neighbor) — shared by the crosshair probe and
+    the enlarged view's extended-legend "current value" readout
+    (Fix round G, Task 3)."""
+    index = bisect.bisect_left(xs, value)
+    if index >= len(xs):
+        return len(xs) - 1
+    if index > 0 and abs(xs[index - 1] - value) < abs(xs[index] - value):
+        return index - 1
+    return index
+
+
+def _year_label(year: float, zoomed: bool = False) -> str:
     year = int(round(year))
     return f"{-year} BCE" if year < 0 else str(year)
 
@@ -113,6 +155,11 @@ class _ChartBase(QWidget):
         self._full_xhi: float | None = None
         self._drag_from_px: float | None = None
         self._drag_view: tuple[float, float] | None = None
+        # Fix round G, Task 1: the y-axis DISPLAY scale (the Days/Hours
+        # transform is x24) — nice y-ticks are computed in the SCALED
+        # (displayed) space then converted back, so round numbers land
+        # in whichever unit is actually shown, not the raw storage unit.
+        self._y_scale = 1.0
 
     # subclasses override -------------------------------------------------------
     def _has_data(self) -> bool:
@@ -140,6 +187,38 @@ class _ChartBase(QWidget):
         """(snap_x_px, [(x_px, y_px, color)], [readout lines]) or None."""
         return None
 
+    def _legend_values(self) -> dict[str, str]:
+        """Fix round G, Task 3 — per-legend-label CURRENT VALUE strings
+        for the enlarged view's extended legend: the crosshair's value
+        while hovering, else a sensible per-chart fallback. Empty (no
+        value column) by default."""
+        return {}
+
+    # adaptive ticks (Fix round G, Task 1) ---------------------------------------
+    def _is_zoomed(self) -> bool:
+        return (
+            self._full_xlo is not None
+            and (self._xhi - self._xlo) < (self._full_xhi - self._full_xlo) - 1e-6
+        )
+
+    def _x_ticks(self) -> list[float]:
+        """The x tick positions for the CURRENT view — adapts to the
+        visible span via the generic nice-step ladder. Overridden by
+        the day-length chart for calendar-aware month/day positions."""
+        return _nice_ticks(self._xlo, self._xhi, defaults.OBSERVATORY_TARGET_X_TICKS)
+
+    def _y_ticks(self) -> list[float]:
+        """The y tick positions for the current fitted range, computed
+        in the DISPLAY scale (`_y_scale` — the Days/Hours transform) so
+        nice numbers land in the shown unit, then converted back to the
+        raw axis coordinate."""
+        scale = self._y_scale
+        lo, hi = self._ylo * scale, self._yhi * scale
+        return [
+            value / scale
+            for value in _nice_ticks(lo, hi, defaults.OBSERVATORY_TARGET_Y_TICKS)
+        ]
+
     # zoom / pan / reset (Fix round D, Task 1) -----------------------------------
     def _reset_view(self) -> None:
         """Restore the full x span (double-click) — the "Reset" affordance."""
@@ -161,7 +240,7 @@ class _ChartBase(QWidget):
         full_span = self._full_xhi - self._full_xlo
         if full_span <= 0:
             return
-        min_span = full_span * defaults.OBSERVATORY_ZOOM_MIN_FRACTION
+        min_span = _min_zoom_span(full_span)
         new_span = max(min_span, min(full_span, span * factor))
         frac = (data_x - self._xlo) / span
         new_lo = data_x - frac * new_span
@@ -253,7 +332,7 @@ class _ChartBase(QWidget):
         muted = QColor(defaults.OBSERVATORY_MUTED_COLOR)
         painter.setPen(QPen(grid, defaults.OBSERVATORY_GRID_WIDTH_PX))
         painter.drawRect(rect)
-        for value in _nice_ticks(self._ylo, self._yhi):
+        for value in self._y_ticks():
             y = _ymap(rect, self._ylo, self._yhi, value)
             if rect.top() - 1 <= y <= rect.bottom() + 1:
                 painter.setPen(QPen(grid, defaults.OBSERVATORY_GRID_WIDTH_PX))
@@ -264,7 +343,7 @@ class _ChartBase(QWidget):
                     Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
                     self._fmt_y(value),
                 )
-        for value in _nice_ticks(self._xlo, self._xhi):
+        for value in self._x_ticks():
             x = _xmap(rect, self._xlo, self._xhi, value)
             if rect.left() - 1 <= x <= rect.right() + 1:
                 painter.setPen(QPen(grid, defaults.OBSERVATORY_GRID_WIDTH_PX))
@@ -385,6 +464,14 @@ class _LineChart(_ChartBase):
         self._y_title = title
         self.update()
 
+    def set_y_scale(self, factor: float) -> None:
+        """Fix round G, Task 1: the y-axis DISPLAY scale paired with
+        set_y_fmt (e.g. x24 for the Days->Hours switch) — nice y-ticks
+        are chosen in this scaled space so round numbers appear in the
+        unit actually shown."""
+        self._y_scale = factor
+        self.update()
+
     def set_diff_fmt(self, fmt) -> None:
         """Task 2: the formatter for the diff_pair crosshair line only."""
         self._diff_fmt = fmt
@@ -438,7 +525,7 @@ class _LineChart(_ChartBase):
         self._ylo, self._yhi = lo - pad, hi + pad
 
     def _fmt_x(self, value: float) -> str:
-        return self._x_fmt(value)
+        return self._x_fmt(value, self._is_zoomed())
 
     def _fmt_y(self, value: float) -> str:
         return self._y_fmt(value)
@@ -451,6 +538,25 @@ class _LineChart(_ChartBase):
             seen.setdefault(entry["label"], entry["color"])
         return list(seen.items())
 
+    def _legend_values(self) -> dict[str, str]:
+        """Fix round G, Task 3: per-label CURRENT VALUE for the enlarged
+        view's extended legend — the value under the cursor while
+        hovering, else the latest sample visible in the current view."""
+        visible = self._visible()
+        if not visible:
+            return {}
+        if self._hover is not None:
+            rect = _plot_rect(self)
+            span = self._xhi - self._xlo or 1.0
+            data_x = self._xlo + (self._hover[0] - rect.left()) / rect.width() * span
+        else:
+            data_x = self._xhi
+        values: dict[str, str] = {}
+        for entry in visible:
+            index = _nearest_index(entry["xs"], data_x)
+            values[entry["label"]] = self._y_fmt(entry["ys"][index])
+        return values
+
     def _draw_data(self, painter: QPainter, rect: QRectF) -> None:
         for x0, x1, (hex_color, alpha) in self._bands:
             color = QColor(hex_color)
@@ -462,8 +568,7 @@ class _LineChart(_ChartBase):
             )
         # Task 3: thin labels that would collide at the full (un-zoomed)
         # span — zoomed in there is room, so every mark gets its label.
-        zoomed_in = (self._full_xlo is not None
-                     and (self._xhi - self._xlo) < (self._full_xhi - self._full_xlo) - 1e-6)
+        zoomed_in = self._is_zoomed()
         last_label_px: float | None = None
         for x, label, color in self._vmarks:
             if not self._xlo <= x <= self._xhi:
@@ -505,11 +610,7 @@ class _LineChart(_ChartBase):
         values: dict[str, float] = {}
         for entry in visible:
             xs = entry["xs"]
-            index = bisect.bisect_left(xs, data_x)
-            if index >= len(xs):
-                index = len(xs) - 1
-            elif index > 0 and abs(xs[index - 1] - data_x) < abs(xs[index] - data_x):
-                index -= 1
+            index = _nearest_index(xs, data_x)
             x, y = xs[index], entry["ys"][index]
             px = _xmap(rect, self._xlo, self._xhi, x)
             py = _ymap(rect, self._ylo, self._yhi, y)
@@ -602,6 +703,27 @@ class _EclipseChart(_ChartBase):
             (self._tr("Lunar"), colors["lunar"]),
         ]
 
+    def _legend_values(self) -> dict[str, str]:
+        """Fix round G, Task 3: "current value" for a scatter/density
+        chart reads naturally as a COUNT — events visible in the current
+        view (deep mode) or the bucket nearest the view's right edge
+        (density fallback)."""
+        if self._deep_mode:
+            solar_n = sum(
+                1 for year, magnitude, _ in self._solar
+                if magnitude is not None and self._xlo <= year <= self._xhi
+            )
+            lunar_n = sum(
+                1 for year, magnitude, _ in self._lunar
+                if magnitude is not None and self._xlo <= year <= self._xhi
+            )
+            return {self._tr("Solar"): str(solar_n), self._tr("Lunar"): str(lunar_n)}
+        if self._density is None:
+            return {}
+        years, solar, lunar = self._density
+        index = _nearest_index(years, self._xhi)
+        return {self._tr("Solar"): str(solar[index]), self._tr("Lunar"): str(lunar[index])}
+
     def _draw_data(self, painter: QPainter, rect: QRectF) -> None:
         colors = defaults.OBSERVATORY_ECLIPSE_COLORS
         if self._now_year is not None and self._xlo <= self._now_year <= self._xhi:
@@ -666,6 +788,126 @@ class _EclipseChart(_ChartBase):
         return px, [(px, py, color)], lines
 
 
+class _DayLengthChart(_LineChart):
+    """Chart 4. The x axis is a day-of-year int; Fix round G, Task 1
+    (owner: "months -> days when zoomed tight") — the full (un-zoomed)
+    year shows the 12 calendar MONTH starts, zoomed in it falls back to
+    the generic day-pitch ladder, and labels reconstruct the true
+    calendar date (`_ref_year`, leap-year correct) instead of the old
+    crude day-of-year // 30 guess."""
+
+    def __init__(self, x_title: str, y_title: str, year: int, y_fmt=None):
+        super().__init__(x_title, y_title, y_fmt=y_fmt)
+        self._ref_year = year
+
+    def _month_starts(self) -> list[float]:
+        return [
+            date(self._ref_year, month, 1).timetuple().tm_yday
+            for month in range(1, 13)
+        ]
+
+    def _x_ticks(self) -> list[float]:
+        if self._is_zoomed():
+            return super()._x_ticks()
+        return [
+            value for value in self._month_starts()
+            if self._xlo - 1e-6 <= value <= self._xhi + 1e-6
+        ]
+
+    def _fmt_x(self, value: float) -> str:
+        day = date(self._ref_year, 1, 1) + timedelta(days=round(value) - 1)
+        if self._is_zoomed():
+            return f"{_MONTHS[day.month - 1]} {day.day}"
+        return _MONTHS[day.month - 1]
+
+
+# Fix round G, Task 2: the last-used per-chart splitter sizes for THIS
+# APP RUN only — a plain module-level cache, cleared on restart, since
+# there is no existing settings key for this dialog's own geometry to
+# piggyback on (it isn't persisted across opens either).
+_last_splitter_sizes: list[int] | None = None
+
+
+class _EnlargeDialog(QDialog):
+    """Fix round G, Task 3 — the "Enlarge" target: a maximized dialog
+    that temporarily HOSTS the caller's chart panel (reparented in on
+    open, back out on close by `ObservatoryDialog._open_enlarged`) so
+    zoom/pan/checkbox state carries over for free — there is only ever
+    one instance of these widgets, so there is nothing to keep in sync.
+    Adds an EXTENDED legend (every series, its color chip and its
+    current value, refreshed on a light timer as the user hovers/zooms)
+    and an INFO strip (the title plus whatever caption the chart already
+    has — the Laskar doctrine line, the eclipse install note; charts
+    without one just show the title)."""
+
+    def __init__(
+        self, panel: QWidget, chart: _ChartBase, title: str,
+        caption: str | None, tr, parent=None,
+    ):
+        super().__init__(parent)
+        self._chart = chart
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        self.setWindowTitle(f"{constants.APP_NAME} — {title}")
+        self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
+        self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
+
+        layout = QVBoxLayout(self)
+        header = QLabel(f"<b>{title}</b>")
+        header.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        header.setStyleSheet(f"font-size: {defaults.GUIDE_SUBTITLE_PX}px;")
+        layout.addWidget(header)
+        if caption:
+            cap = QLabel(caption)
+            cap.setWordWrap(True)
+            cap.setStyleSheet(f"color: {defaults.OBSERVATORY_MUTED_COLOR};")
+            layout.addWidget(cap)
+
+        panel.setParent(self)
+        layout.addWidget(panel, stretch=1)
+
+        self._legend_row = QHBoxLayout()
+        layout.addLayout(self._legend_row)
+        self._refresh_legend()
+        # A light poll (not a hot path — a handful of small labels) so
+        # the "current value" readout follows hover/zoom/pan without
+        # threading the shared chart base with new signal plumbing.
+        self._legend_timer = QTimer(self)
+        self._legend_timer.timeout.connect(self._refresh_legend)
+        self._legend_timer.start(200)
+        self.finished.connect(self._legend_timer.stop)
+
+        buttons = QHBoxLayout()
+        buttons.addStretch(1)
+        close = QPushButton(tr("Close"))
+        style_button(close, "neutral", small=True)
+        close.clicked.connect(self.accept)
+        buttons.addWidget(close)
+        layout.addLayout(buttons)
+
+        apply_theme(self)
+        self.showMaximized()
+
+    def _refresh_legend(self) -> None:
+        while self._legend_row.count():
+            item = self._legend_row.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        values = self._chart._legend_values()
+        for label, color in self._chart._legend():
+            chip = QLabel()
+            chip.setFixedSize(12, 12)
+            chip.setStyleSheet(f"background: {color}; border-radius: 6px;")
+            self._legend_row.addWidget(chip)
+            value = values.get(label)
+            text = QLabel(f"{label}: {value}" if value is not None else label)
+            text.setStyleSheet(
+                f"color: {defaults.OBSERVATORY_INK_COLOR}; font-weight: 600;"
+            )
+            self._legend_row.addWidget(text)
+            self._legend_row.addSpacing(14)
+        self._legend_row.addStretch(1)
+
+
 class ObservatoryDialog(QDialog):
     def __init__(
         self, now, observer, tz, cycles=0, deep=None, translations=None,
@@ -699,9 +941,16 @@ class ObservatoryDialog(QDialog):
         header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         column.addWidget(header)
 
-        content = QWidget()
-        body = QVBoxLayout(content)
-        body.setSpacing(defaults.GUIDE_SPACING_PX * 2)
+        # Fix round G, Task 2 (owner: every chart stretches vertically):
+        # a QSplitter over the chart column, one panel (title + filter
+        # row + chart [+ caption]) per chart — the natural Qt shape for
+        # a "drag to resize" affordance, and it plays fine with the
+        # surrounding QScrollArea (the splitter's minimumSizeHint is the
+        # sum of its panels', so once that exceeds the viewport the
+        # scroll area shows its bar exactly as the old plain VBox did;
+        # verified with an offscreen render at a small dialog size).
+        self._splitter = QSplitter(Qt.Orientation.Vertical)
+        self._splitter.setChildrenCollapsible(False)
 
         # 1 — the season-duration oscillations with the checkbox filter.
         series = data.season_series()
@@ -722,9 +971,10 @@ class ObservatoryDialog(QDialog):
         # the busy four-season lines do not crowd the first view.
         for key in ("spring", "summer", "autumn", "winter"):
             self._season_chart.set_visible(key, False)
-        body.addWidget(self._section(self._tr("Season durations")))
-        body.addLayout(self._season_filter())
-        body.addWidget(self._season_chart)
+        self._add_panel(
+            self._tr("Season durations"), self._season_chart,
+            filter_row=self._season_filter(),
+        )
 
         # 2 — the light − dark envelope with the eras and every peak.
         eras = data.season_eras()
@@ -762,8 +1012,7 @@ class ObservatoryDialog(QDialog):
             vmarks.append((year, f"{peak_label} {_year_label(year)} {value:+.1f}d", mark))
         envelope.set_vmarks(vmarks)
         self._envelope = envelope
-        body.addWidget(self._section(self._tr("The light − dark envelope")))
-        body.addWidget(envelope)
+        self._add_panel(self._tr("The light − dark envelope"), envelope)
 
         # 3 — the eclipse timeline.
         self._eclipse_chart = _EclipseChart(self._tr)
@@ -785,17 +1034,14 @@ class ObservatoryDialog(QDialog):
                 solar=meta["per_century"]["solar"],
                 lunar=meta["per_century"]["lunar"],
             )
-        body.addWidget(self._section(self._tr("Eclipse timeline")))
-        body.addWidget(self._eclipse_chart)
-        body.addWidget(self._caption(note))
+        self._add_panel(self._tr("Eclipse timeline"), self._eclipse_chart, caption=note)
 
         # 4 — the location's day-length curve over the year.
         curve = day_length_curve(
             observer, tz, now.year, defaults.OBSERVATORY_DAYLENGTH_STEP_DAYS
         )
-        day_chart = _LineChart(
-            self._tr("day of year"), self._tr("day length"),
-            y_fmt=_hm, x_fmt=lambda v: _MONTHS[max(0, min(11, int(v // 30)))],
+        day_chart = _DayLengthChart(
+            self._tr("day of year"), self._tr("day length"), now.year, y_fmt=_hm,
         )
         day_chart.set_series([{
             "key": "daylength", "label": self._tr("Day length"),
@@ -805,8 +1051,7 @@ class ObservatoryDialog(QDialog):
         }])
         day_chart.set_fixed_y(0.0, 24 * 60)
         self._day_chart = day_chart
-        body.addWidget(self._section(self._tr("Day length over the year")))
-        body.addWidget(day_chart)
+        self._add_panel(self._tr("Day length over the year"), day_chart)
 
         # 5 — the La2004 Laskar long envelope, ±200,000 years, amplitude
         # only (Fix round D, Task 4 — charts-only, ROADMAP 15a2 sealed).
@@ -839,24 +1084,34 @@ class ObservatoryDialog(QDialog):
             defaults.OBSERVATORY_ERA_MARK_COLOR,
         )])
         self._laskar_chart = laskar_chart
-        body.addWidget(self._section(
-            self._tr("The Laskar long envelope (±200,000 years)")
-        ))
-        body.addWidget(laskar_chart)
-        body.addWidget(self._caption(self._tr(
+        laskar_caption = self._tr(
             "Analytic orbital solution (La2004) — amplitude trend only; "
             "exact dates unreliable beyond the measured window."
-        )))
+        )
+        self._add_panel(
+            self._tr("The Laskar long envelope (±200,000 years)"), laskar_chart,
+            caption=laskar_caption,
+        )
 
         # Task 2: wire the Days/Hours switch now that every chart it
         # touches (envelope + season) exists.
         self._units_combo.currentIndexChanged.connect(self._on_units_changed)
         self._on_units_changed(self._units_combo.currentIndex())
 
+        # Fix round G, Task 2: restore the LAST splitter sizes used this
+        # session (module-level cache — no settings key, matching that
+        # this dialog's own window geometry isn't persisted either), then
+        # keep it updated on every drag.
+        global _last_splitter_sizes
+        if (_last_splitter_sizes is not None
+                and len(_last_splitter_sizes) == self._splitter.count()):
+            self._splitter.setSizes(_last_splitter_sizes)
+        self._splitter.splitterMoved.connect(self._on_splitter_moved)
+
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setFrameShape(QFrame.Shape.NoFrame)
-        scroll.setWidget(content)
+        scroll.setWidget(self._splitter)
         column.addWidget(scroll, stretch=1)
 
         buttons = QHBoxLayout()
@@ -882,6 +1137,58 @@ class ObservatoryDialog(QDialog):
             f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
         )
         return label
+
+    # Fix round G, Task 2 + 3: one panel per chart (title + filter row +
+    # chart [+ caption]), added as a QSplitter pane, with an "Enlarge"
+    # button appended to the filter row (a bare right-aligned row is
+    # created for charts that don't already have one).
+    def _add_panel(
+        self, title: str, chart: _ChartBase, *,
+        filter_row: QHBoxLayout | None = None, caption: str | None = None,
+    ) -> None:
+        panel = QWidget()
+        layout = QVBoxLayout(panel)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(defaults.GUIDE_SPACING_PX)
+        layout.addWidget(self._section(title))
+        if filter_row is None:
+            filter_row = QHBoxLayout()
+            filter_row.addStretch(1)
+        enlarge_button = QPushButton(self._tr("Enlarge"))
+        style_button(enlarge_button, "neutral", small=True)
+        filter_row.addWidget(enlarge_button)
+        layout.addLayout(filter_row)
+        layout.addWidget(chart, stretch=1)
+        if caption:
+            layout.addWidget(self._caption(caption))
+        enlarge_button.clicked.connect(
+            lambda: self._open_enlarged(panel, chart, title, caption, enlarge_button)
+        )
+        self._splitter.addWidget(panel)
+
+    def _on_splitter_moved(self, pos: int, index: int) -> None:
+        global _last_splitter_sizes
+        _last_splitter_sizes = self._splitter.sizes()
+
+    def _open_enlarged(
+        self, panel: QWidget, chart: _ChartBase, title: str,
+        caption: str | None, enlarge_button: QPushButton,
+    ) -> None:
+        """Task 3: reparent the SAME panel (title + filter + chart) into
+        a maximized dialog and back — the cleanest way to "share the
+        model/state" the current classes allow, since zoom/pan/checkbox
+        state all live directly on these widgets; moving them (instead
+        of building a parallel copy) carries that state for free and
+        needs no synchronization in either direction."""
+        index = self._splitter.indexOf(panel)
+        sizes = self._splitter.sizes()
+        enlarge_button.setVisible(False)
+        dialog = _EnlargeDialog(panel, chart, title, caption, self._tr, parent=self)
+        dialog.exec()
+        self._splitter.insertWidget(index, panel)
+        self._splitter.setSizes(sizes)
+        panel.show()
+        enlarge_button.setVisible(True)
 
     def _season_filter(self) -> QHBoxLayout:
         """The per-series checkboxes ABOVE chart 1 (owner: four seasons +
@@ -917,12 +1224,16 @@ class ObservatoryDialog(QDialog):
 
     def _on_units_changed(self, index: int) -> None:
         """Task 2: a pure display transform (×24) — the underlying
-        series never change, only the y-axis/crosshair labels."""
+        series never change, only the y-axis/crosshair labels. Fix round
+        G, Task 1: the envelope's y-tick PITCH also switches to the
+        scaled space (`set_y_scale`) so nice numbers land in hours, not
+        days-converted-to-odd-hours."""
         hours = self._units_combo.itemData(index) == "hours"
         fmt = _hours_fmt if hours else _days_fmt
         title = self._tr("light − dark (hours)") if hours else self._tr("light − dark (days)")
         self._envelope.set_y_fmt(fmt)
         self._envelope.set_y_title(title)
+        self._envelope.set_y_scale(24.0 if hours else 1.0)
         self._season_chart.set_diff_fmt(fmt)
 
     def _nearest_eclipses(self, deep, now, cycles):

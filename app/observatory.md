@@ -43,12 +43,13 @@ cross-wheel element hues, light/dark gold vs slate — never re-colored
 when a checkbox hides a series); thin marks, a recessive grid, a legend
 always drawn (deduped by label — the Laskar ± band shares one entry),
 direct labels on the era/peak marks; a crosshair hover readout on every
-chart; the filter row sits ABOVE the charts, not scattered.
+chart; the filter row sits ABOVE the charts, not scattered, and ends
+with an "Enlarge" button (Fix round G, Task 3) on every chart.
 
 ### Zoom, pan, units (Fix round D, owner verdicts 2026-07-19)
 Every chart (`_ChartBase`) supports mouse-wheel zoom centered on the
-cursor's x (`OBSERVATORY_ZOOM_FACTOR` per notch, clamped to
-`OBSERVATORY_ZOOM_MIN_FRACTION` of the full span), drag-to-pan with the
+cursor's x (`OBSERVATORY_ZOOM_FACTOR` per notch, clamped by
+`_min_zoom_span` — see Fix round G below), drag-to-pan with the
 left button while zoomed, and a double-click reset to the full span.
 Every zoom/pan change re-fits the y axis to whatever x slice is visible
 (`_fit_y_to_view`, `OBSERVATORY_Y_FIT_PAD_FRACTION` padding) — a fixed
@@ -56,6 +57,84 @@ y range (day-length's 0..24h) applies only at the un-zoomed full view.
 A Days/Hours combo in the season filter row (`OBSERVATORY_UNITS_DEFAULT`)
 is a pure ×24 DISPLAY transform (`_LineChart.set_y_fmt`/`set_diff_fmt`)
 — the underlying series never change.
+
+### Adaptive ticks, adjustable height, enlarge (Fix round G, owner verdicts 2026-07-19)
+Three owner asks from the same screenshot batch (slika 8 + addendum):
+
+**Task 1 — adaptive axis ticks.** The x/y tick PITCH now adapts to the
+CURRENT view on every chart, via a generic "nice number" ladder
+(`_nice_step` — the classic 1-2-5-per-decade progression, generated
+arithmetically so it covers any magnitude, not a hardcoded list) picking
+the smallest rung that keeps the tick count at/under a config target
+(`OBSERVATORY_TARGET_X_TICKS`/`_Y_TICKS`); once even the ladder's finest
+rung still exceeds the target (a span tighter than makes sense to
+subdivide further), that rung is used anyway. `_ChartBase._x_ticks()`/
+`_y_ticks()` replace the old direct `_nice_ticks(...)` calls in
+`_draw_axes` and are the overridable seam. The Y path is additionally
+SCALE-AWARE (`_y_scale`, paired with the Days/Hours `set_y_fmt` — see
+`_LineChart.set_y_scale`): nice numbers are chosen in the DISPLAYED unit
+(hours) then converted back to the raw (days) axis coordinate, so a
+switch to Hours doesn't leave odd day-fraction ticks. The day-length
+chart (`_DayLengthChart`) gets its own x-tick override: the full
+un-zoomed year shows the 12 calendar MONTH starts (leap-year correct via
+real `date` arithmetic, replacing the old crude `day // 30` guess),
+zoomed in tight it falls back to the generic day-pitch ladder with
+"Mon D" labels. Reaching a 1-year pitch at all requires zooming past
+where the OLD fraction-only clamp (`OBSERVATORY_ZOOM_MIN_FRACTION`,
+1% of the full span) would ever go on the multi-millennial charts — 1%
+of ~30,000 years is still ~300 years — so `_min_zoom_span` now clamps to
+whichever is SMALLER, that fraction OR the new absolute
+`OBSERVATORY_ZOOM_MIN_SPAN_FLOOR` (6 units); on the season/envelope/
+Laskar/eclipse-density charts the floor wins, letting max zoom reach a
+handful of years where the target-8 ladder naturally bottoms out at a
+1-year pitch (owner: "na max zumu TICK na 1 GODINU"). NOTE for the
+owner: the season/envelope bundle is itself BIN-MEAN DECIMATED at a
+20-year stride (`SEASON_BIN_YEARS`, `setup/make_observatory.py`) — a
+separate, un-touched concern from the axis-tick pitch fixed here; zoomed
+past that stride the plotted LINE still only bends every 20 years even
+though the grid itself is now finer.
+
+**Task 2 — adjustable chart height.** The five chart sections now live
+in one `QSplitter(Qt.Orientation.Vertical)` (`ObservatoryDialog._add_panel`),
+one panel (title + filter row + chart [+ caption]) per pane, dragged via
+the handles the shared theme now styles (`app/theme.py`
+`QSplitter::handle`). `setChildrenCollapsible(False)` keeps every chart
+at/above its `OBSERVATORY_CHART_MIN_HEIGHT_PX` floor. The splitter sits
+INSIDE the existing `QScrollArea` unchanged — its `minimumSizeHint` is
+the sum of its panels', so once that exceeds the viewport the scroll
+area shows its bar exactly as the old plain `QVBoxLayout` did (verified
+with an offscreen render at a small dialog size,
+`test_dialog_with_splitter_renders_at_a_small_size`). Per-chart heights
+persist for the SESSION only — a module-level cache
+(`_last_splitter_sizes`, restored via `setSizes()` on the next open,
+updated on `splitterMoved`) — no settings key, matching that this
+dialog's own window geometry was never persisted across opens either.
+
+**Task 3 — enlarge.** Every panel's filter row ends with an "Enlarge"
+button opening `_EnlargeDialog`, a maximized window that TEMPORARILY
+REPARENTS the SAME panel widget (`panel.setParent(self)`) in on open and
+back to its original splitter slot on close
+(`ObservatoryDialog._open_enlarged`, which records the splitter index
+before detaching). Reparenting the live widgets — instead of building a
+parallel copy fed from a shared model — was the cleanest fit for how
+this module is already shaped: zoom (`_xlo`/`_xhi`), pan and every
+checkbox's state already live directly ON these Qt widgets, there is no
+separate state object to hand to a second view, and Qt widgets are cheap
+to reparent at runtime. The result: zoom/pan/checkboxes carry into the
+enlarged view and back out for free, with no synchronization code in
+either direction, and Task 1's ticks work identically since it is
+IDENTICALLY the same `_ChartBase` instance. `_EnlargeDialog` adds an
+EXTENDED LEGEND (every series' color chip plus a "current value"
+readout — the crosshair's value while hovering, else the sample nearest
+the view's right edge; `_ChartBase._legend_values()`, refreshed on a
+200ms `QTimer` poll rather than new signal plumbing on the shared chart
+base) and an INFO STRIP (the title plus whatever caption string the
+panel already carries — the Laskar doctrine line, the eclipse install
+note; charts without one just show the title, never an invented one).
+`WA_DeleteOnClose` plus stopping the legend timer on `finished` avoid
+leaking a background timer per enlarge/close cycle. Esc / the native
+close box use `QDialog`'s default reject-on-Escape — unmodified,
+matching every other dialog in the app.
 
 ## Time Travel interplay
 The controller passes the EFFECTIVE `(moment, observer, tz, cycles)` —
@@ -93,7 +172,11 @@ inherits: `wheelEvent` (zoom at cursor), `mousePressEvent`/
 `mouseMoveEvent`/`mouseReleaseEvent` (drag-to-pan), `mouseDoubleClickEvent`
 (reset), `_zoom_at(x_px, factor)` and `_reset_view()` (the testable
 pure-math core), and the `_fit_y_to_view()` hook subclasses override to
-auto-fit the y axis to the current x view.
+auto-fit the y axis to the current x view. Fix round G adds
+`_is_zoomed()` (shared by the vmark-thinning and the day-length month/
+day switch), the overridable `_x_ticks()`/`_y_ticks()` seam (Task 1) and
+`_legend_values()` (the enlarged view's per-label current-value readout,
+Task 3 — empty by default).
 
 ### `_LineChart`
 A generic multi-series line chart: fixed per-series colors, toggleable
@@ -111,14 +194,33 @@ the moment, the moment drawn as a vertical line, crosshair readout of
 the eclipse under the cursor. Without it: the bundled density (solar /
 lunar counts per bucket) over the whole span + a "full installation"
 note. Its own `_fit_y_to_view()` fits to the scatter/density visible in
-the current zoom.
+the current zoom. `_legend_values()` (Fix round G, Task 3) reports a
+COUNT — events visible in view (deep mode) or the bucket nearest the
+view's right edge (density fallback) — the natural "current value" for
+a scatter/density series.
+
+### `_DayLengthChart`
+Chart 4 (Fix round G, Task 1). A thin `_LineChart` subclass whose x is a
+day-of-year int: `_x_ticks()` returns the 12 calendar month starts when
+un-zoomed, else defers to the generic ladder; `_fmt_x()` reconstructs
+the true calendar date (leap-year correct, `_ref_year`) for "Mon" /
+"Mon D" labels instead of the old `day // 30` approximation.
+
+### `_EnlargeDialog`
+Fix round G, Task 3 — the "Enlarge" target: see the walkthrough above.
+Owns nothing of the chart's OWN state; it only hosts the reparented
+panel plus its own extended-legend row and info-strip labels.
 
 ### ObservatoryDialog
-Normal resizable window; a scroll column of the five titled chart
-sections (chart 1 preceded by its checkbox + Days/Hours filter row)
-under a dual-calendar header line for the moment. Computes the
-day-length curve once in `__init__`; wires the units combo only after
-every chart it touches (`_envelope`, `_season_chart`) exists.
+Normal resizable window; a `QSplitter` column of the five titled chart
+panels (chart 1's panel carries its checkbox + Days/Hours filter row;
+every panel ends with an Enlarge button — Fix round G, Tasks 2/3) inside
+the existing scroll area, under a dual-calendar header line for the
+moment. Computes the day-length curve once in `__init__`; wires the
+units combo only after every chart it touches (`_envelope`,
+`_season_chart`) exists. `_add_panel()` is the one seam that builds a
+panel and registers its Enlarge callback; `_open_enlarged()` does the
+reparent-out/reparent-back dance around `_EnlargeDialog.exec()`.
 
 ## Design Decisions
 QPainter draws every chart — no plotting dependency (the same choice as

@@ -961,6 +961,43 @@ OBSERVATORY_LASKAR_ENVELOPE_COLOR = "#E8B23D"
 OBSERVATORY_LASKAR_SIGNED_COLOR = "#C7CDD6"
 OBSERVATORY_LASKAR_DE441_BAND = ("#4FB0C6", 30)
 
+# ─── Fix round G (owner verdicts 2026-07-19, slika 8 + addendum) ───────
+# Task 1 — the x/y tick PITCH must adapt to the visible span on every
+# chart. The chooser is the classic "nice number" ladder (1-2-5 per
+# decade — 1/2/5/10/20/50/100/200/500/1k/2k/5k/10k/20k/50k/… — generated
+# arithmetically, not hardcoded, so it also covers the fractional range
+# below 1 for small y-spans), picking the smallest rung that keeps the
+# tick count at/under the target; once even the ladder's finest rung
+# (1, in whatever unit the axis is in) exceeds the target count, that
+# rung is used anyway — more ticks than the target, but nothing finer
+# is meaningful. Separate targets for X (time) and Y (value) — X sits
+# a little denser, matching how a wide time axis reads.
+OBSERVATORY_TARGET_X_TICKS = 8
+OBSERVATORY_TARGET_Y_TICKS = 6
+# The zoom clamp (OBSERVATORY_ZOOM_MIN_FRACTION above) is a FRACTION of
+# each chart's own full span — fine for the day-length curve (365 days
+# -> ~3.6-day floor) but on the multi-millennial charts (season/
+# envelope/Laskar, tens to hundreds of thousands of years) 1% is still
+# hundreds to thousands of years, so the tick ladder could never reach
+# its 1-year rung no matter how far the user zoomed (owner's complaint,
+# "TICK na 1 GODINU" at max zoom). This ABSOLUTE floor is combined with
+# the fraction — whichever is SMALLER wins — so max zoom on every chart
+# reaches a handful of units, comfortably inside the target-8 threshold
+# where the ladder bottoms out at its finest (1-unit) rung.
+OBSERVATORY_ZOOM_MIN_SPAN_FLOOR = 6
+
+# Task 2 — every chart gets a QSplitter handle so the owner can stretch
+# it vertically; sizes remember the SESSION only (a module-level cache
+# in app/observatory.py, cleared on app restart) — no settings key,
+# matching that this dialog's own window size already isn't persisted
+# across opens.
+
+# Task 3 — the per-chart "Enlarge" button opens a maximized dialog
+# hosting the SAME chart widget (reparented, not copied — so zoom/pan/
+# checkbox state carries over for free) plus an extended legend and an
+# info strip. No new tokens needed — colors/fonts reuse the surface/ink/
+# muted triad above.
+
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and

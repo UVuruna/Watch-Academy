@@ -207,6 +207,19 @@ QHeaderView::section {{
     font-weight: 600;
 }}
 
+/* --- Splitter handles (the Observatory's per-chart resize grip) ---
+   Percentage margins are not a supported QSS length unit (pixels/pt/em
+   only) — a full-width bar is the reliable, and common, shape. --- */
+QSplitter::handle:vertical {{
+    background: {_C['surface_2']};
+    height: 6px;
+    margin: 2px 0;
+    border-radius: 3px;
+}}
+QSplitter::handle:vertical:hover {{
+    background: {_C['accent']};
+}}
+
 /* --- Scroll areas: no seam between panel and dialog background --- */
 QScrollArea {{
     background: transparent;
