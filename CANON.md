@@ -298,8 +298,16 @@ fights against the one who despaired). Michael's article anchor:
 Revelation 12 holds the WHOLE cast in one chapter — Michael wars
 against the dragon (12:7) and the Accuser is thrown down (12:10);
 he balances the wheel three-and-three (The One, Jesus, Michael
-against Lucifer, the Devil, Judas). Judas and Lucifer inherit their
-existing Scale glass windows — no new art for those two seats.
+against Lucifer, the Devil, Judas). ~~Judas and Lucifer inherit their
+existing Scale glass windows — no new art for those two seats.~~
+**AMENDED (owner 2026-07-19, the one-image-one-place law):** the
+Scale-glass reuse is REVOKED — one image serves one place, a scene is
+always retold anew where it appears again. The prism poles get their
+OWN lancets (`Lucifer_Pride.png` / `Judas_Fear.png`, prompts in the
+persons sheet); the Scale triangles stay the Scale badge's alone, in
+FOUR rotating versions each — Judas–Lucifer being a MAIN theme (every
+being lives between excessive self-criticism and excessive self-love),
+it carries multiple image sets used in rotation.
 
 ### Prism light — One Soul, the Bond (APPROVED 2026-07-16)
 

@@ -126,19 +126,20 @@ def test_center_table_is_the_sealed_one():
     assert archetypes.center("compass_light") is None
 
 
-def test_reused_scale_glass_is_real_art(app, tmp_path):
-    """Prism paint's Lucifer and Judas REUSE the owner's Scale glass
-    (canon: no new art for those two seats) — the files are on disk and
-    pass the readiness check. The placeholder rejection is pinned on a
-    SYNTHETIC 1×1 (the shipping placeholders are being replaced by real
-    art file by file — owner drop 2026-07-18 — so no asset stays a
-    placeholder forever)."""
+def test_prism_poles_wear_their_own_lancets(app, tmp_path):
+    """ONE IMAGE, ONE PLACE (owner law 2026-07-19): the Scale-glass
+    reuse for the prism poles is REVOKED — the triangles belong to the
+    Scale badge alone (in four rotating versions), and Lucifer/Judas
+    point at their OWN persons lancets (prompts sheeted; the name
+    fallback carries the seats until the art lands). The placeholder
+    rejection is pinned on a SYNTHETIC 1×1 so it never depends on which
+    real art has arrived."""
     figs = archetypes.figures("prism_paint")
     lucifer, judas = figs[2], figs[4]
-    assert lucifer["file"].name == "Lucifer_Triangle.png"
-    assert judas["file"].name == "Judas_Triangle.png"
-    assert archetype_art_ready(lucifer["file"])
-    assert archetype_art_ready(judas["file"])
+    assert lucifer["file"].name == "Lucifer_Pride.png"
+    assert judas["file"].name == "Judas_Fear.png"
+    for fig in figs:
+        assert "badge" not in fig["file"].parts     # nothing borrows the Scale
     # A 1×1 stand-in is NOT ready — the renderer falls back to the name.
     placeholder = tmp_path / "stand_in.png"
     QImage(1, 1, QImage.Format.Format_ARGB32).save(str(placeholder))

@@ -67,6 +67,20 @@ lives in [The DOMY Canon](CANON.md).
   [Encyclopedia Repository](data/encyclopedia.md) and
   [Compositor](render/compositor.md). 11 new tests, 488 green.
 
+- **THE ONE-IMAGE-ONE-PLACE LAW (owner 2026-07-19):** an image serves
+  exactly ONE place; where a scene appears again it is RETOLD in a new
+  image ("nikad nam nije teško da neku scenu predstavimo na 2
+  različita načina"). First application: the prism poles' Scale-glass
+  reuse revoked — own lancet prompts sheeted (`Lucifer_Pride`,
+  `Judas_Fear`), config repointed, name fallback until the art lands.
+  QUEUED FEATURE: the Scale badge's Judas/Lucifer keep FOUR versions
+  each (`assets/badge/.../scale/glass/*_v2…`) used IN ROTATION —
+  Judas–Lucifer is a main theme (every being between excessive
+  self-criticism and excessive self-love) and carries multiple image
+  sets; rotation cadence/design to be specced. `assets/EXTRA/` is
+  GONE (owner cleaned it 2026-07-19 — the audit's orphan row is
+  resolved).
+
 <a id="owner-queue"></a>
 
 ## Owner's Queued Feature Tasks (2026-07-16)

@@ -13,9 +13,10 @@ from config import paths
 # Canonical (source-less) art root — config.paths.art_file inserts the
 # active source (assets/archetype/<source>/...) at every disk boundary.
 ARCHETYPE_ART_DIR = paths.assets_dir() / "archetype"
-# The two REUSED Prism seats inherit the owner's Scale glass as it
-# exists on disk (owner assets are authoritative).
-_SCALE_GLASS_DIR = paths.assets_dir() / "badge" / "scale"
+# (The Scale-glass reuse for the two Prism poles was REVOKED by the
+# owner's one-image-one-place law, 2026-07-19 — the triangles belong to
+# the Scale badge alone, in four rotating versions; the prism seats get
+# their own lancets.)
 
 # The grid (CANON, owner 2026-07-16): paint carries the WORLD's order,
 # light the HOME's. The Seasons serve ONE archetype under both wheels
@@ -264,11 +265,15 @@ ARCHETYPES = {
                  "The One", "Love", "one"),
             _fig(60.0, _PERSONS_DIR / "Michael_Courage.png",
                  "Michael", "Courage", "michael"),
-            _fig(120.0, _SCALE_GLASS_DIR / "Lucifer_Triangle.png",
+            # ONE IMAGE, ONE PLACE (owner law 2026-07-19): the Scale
+            # TRIANGLES stay the Scale badge's own; the prism seats get
+            # their OWN lancet vitraži (prompts sheeted; the name
+            # fallback carries the seat until the art lands).
+            _fig(120.0, _PERSONS_DIR / "Lucifer_Pride.png",
                  "Lucifer", "Pride", "lucifer"),
             _fig(180.0, _PERSONS_DIR / "Devil_Hatred.png",
                  "The Devil", "Hatred", "devil"),
-            _fig(240.0, _SCALE_GLASS_DIR / "Judas_Triangle.png",
+            _fig(240.0, _PERSONS_DIR / "Judas_Fear.png",
                  "Judas", "Weakness (Fear)", "judas"),
             _fig(300.0, _PERSONS_DIR / "Jesus_Humility.png",
                  "Jesus", "Humility", "jesus"),

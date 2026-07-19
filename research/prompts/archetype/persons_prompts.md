@@ -113,31 +113,27 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 
 ---
 
-## The two REUSED poles
+## The two poles — OWN LANCETS (owner law 2026-07-19)
 
-**Lucifer — Pride (red arm, 20h)** — **REUSE, no new prompt.**
-The Scale stained-glass master already personifies Pride on ember-red
-glass: the winged rebel mid-rise reaching for the light he would rise
-above. It serves this seat unchanged.
+The old REUSE of the Scale triangles is **REVOKED**: one image, one
+place ("nikad nam nije teško da neku scenu predstavimo na 2 različita
+načina"). The Scale triangles remain the Scale badge's own — in FOUR
+rotating versions each, since Judas–Lucifer is a main theme (every
+being lives somewhere between excessive self-criticism and excessive
+self-love). The prism seats get their own TALL LANCETS in the set's
+register, same scenes retold in the window language.
 
-- Source: `assets/badge/<source>/scale/glass/Lucifer_Triangle.png`
-  (the owner's adopted Lucifer window — see
-  [Scale Prompts](../badge/scale_badge_prompts.md)).
-- The prism arm is a LANCET while the Scale master is a triangle; if
-  the owner wants the shape to match the other prism lancets, the
-  Lucifer glass can be re-cut into a lancet frame — but the FIGURE
-  and palette do not change. Owner's call.
+**Lucifer — Pride (red arm, 20h)** → `assets/archetype/persons/Lucifer_Pride.png`
 
-**Judas — Weakness / Fear (blue arm, 04h)** — **REUSE, no new
-prompt.** The Scale stained-glass master already personifies
-self-hate on midnight-blue glass: Judas half-turned from the light,
-coins slipping into the dark. It serves this seat unchanged.
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Ember-red, molten gold and black glass throughout, hot and ascending. Center: Lucifer mid-RISE — a winged figure of terrible beauty climbing a stair of light that thins beneath him, chin lifted ABOVE the light he reaches for, one hand grasping past a crown that already slips; morning-star radiance breaks around his head while the stair's lower steps burn away behind him; the love of self grown past all measure. Upper left panel: a throne set above cloud and star; upper right panel: the same throne falling, trailing fire. Border: flame-and-falling-feather leadwork in ember red; three rim roundels — the morning star at the apex, an upturned crown at one side, a single scorched feather at the other. Palette: ember red, molten gold, black glass, dark-gold lead. NO lettering anywhere.
+```
 
-- Source: `assets/badge/<source>/scale/glass/Judas_Triangle.png`
-  (the owner's adopted "judas1" master — see
-  [Scale Prompts](../badge/scale_badge_prompts.md)).
-- Same triangle-vs-lancet note as Lucifer: re-cut the frame if the
-  owner wants a matched shape; the figure and palette stay.
+**Judas — Weakness / Fear (blue arm, 04h)** → `assets/archetype/persons/Judas_Fear.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Midnight-blue, cold silver and iron-gray glass throughout, heavy and turned inward. Center: Judas half-turned FROM the light — a hunched figure at the edge of a lamplit doorway he cannot make himself enter, face in shadow, one hand pressed to his chest and the other letting coins slip through his fingers into the dark; the light inside the doorway stays warm and open, the refusal is his own; the criticism of self grown past all mercy. Upper left panel: a rope coiled on bare ground under a leafless tree; upper right panel: thirty scattered coins on temple stones. Border: thorn-and-coin leadwork in cold blue; three rim roundels — a closed door at the apex, a broken purse at one side, a bowed head at the other. Palette: midnight blue, cold silver, iron gray, black-blue lead. NO lettering anywhere.
+```
 
 ---
 
