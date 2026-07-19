@@ -22,11 +22,13 @@ lives in [The DOMY Canon](CANON.md).
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/
   metal/roster skin system, Settings with the city picker,
   Encyclopedia, Guide, Time Travel, translations (SR bundle synced).
-- **Suite:** 513 green tests (`python -m pytest tests`; Session 16
+- **Suite:** 521 green tests (`python -m pytest tests`; Session 16
   added the Deep Time and analytic-illumination goldens; Fix round G
   added 12 more for the Observatory's adaptive ticks/splitter/enlarge;
   the MOTO round added 13 more for the outer motto arc's angle math and
-  the axis-opposition legend lines).
+  the axis-opposition legend lines; the MASON/ICONS round added 6 more
+  for the tight-letter word-gap law, the Templar preset, the metal-split
+  toggle and the icon wiring).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
 - **`dist/DOMYWatch/DOMYWatch.exe` is an ad-hoc PyInstaller test
@@ -153,6 +155,34 @@ lives in [The DOMY Canon](CANON.md).
   `test_hidden_mode_binds_the_poem_to_seasons_too`), and found both
   exactly spec-shaped — no gap to close. See owner queue items 1 and
   6 above for the evidence. 515 tests green, unchanged.
+- **THE MASON/ICONS round (owner verdicts 2026-07-19, third batch) —
+  DONE.** Four tasks. (1) **THE ANNUIT WORD-GAP LAW** — ANNUIT COEPTIS's
+  own letters now sit TIGHT, at the same per-character step NOVUS ORDO
+  SECLORUM already reads (`RING_MOTTO_LETTER_STEP_DEG`, 60°/9 chars ≈
+  6.667°), advancing inward from BOTH its own pins; the leftover slack
+  becomes ONE BIG WORD GAP over the G's own seat instead of spreading
+  evenly across the whole span (the previous round's "too wide" look) —
+  `core.motto._tight_two_pin_angles`, the new 2-pin-only code path (3+
+  pins, NOVUS's own shape, is untouched). (2) **RING PRESET RENAMES +
+  TEMPLAR** — the bundled cards renamed "MORPH" → "Morph", "MASON G" →
+  "Mason", "NUMBERS" → "Omega" (`app.settings_store` migrates a stored
+  old name), plus a new bundled **Templar** preset (the seal layout, all
+  six positions wearing the templar-cross glyph, no motto, no legend).
+  (3) **THE METAL-SPLIT OPTION** — Mason/Omega/Templar (every seal
+  preset carrying its own `triangle` override) now offer a per-preset
+  "Two metals" toggle in the Ring menu (`Settings.ring_two_metals`,
+  `app.controller._ring_two_metals`, `constants.
+  RING_TWO_METALS_DEFAULT` — Mason on, Omega/Templar off, matching the
+  pre-round look) switching between the 3-3 split and one finish on all
+  six. (4) **OWNER ICONS WIRED** — the four owner-approved icons
+  (`assets/icons/light.png`/`dark.svg`/`eclipse_sun.svg`/
+  `eclipse_moon.png`, copied from his `UV/icons/` staging) replace the
+  Quick Jump pole rows' interim ⚪/⚫ emoji (documented emoji fallback
+  when a file is absent) and wire onto the Sun/Moon submenus' own
+  eclipse entries only — UI CHROME, not ART, so the one-image-one-place
+  law does not apply to them. See [Motto](core/motto.md), [Ring
+  Presets](data/rings.md), [App Controller](app/controller.md) and
+  [Config (folder)](config/___config.md). 6 new tests, 521 green.
 
 <a id="owner-queue"></a>
 
@@ -749,22 +779,28 @@ lives in [The DOMY Canon](CANON.md).
       member always holds.
    9. **Articles for the new themes** — Session 6 (Opus) queued next;
       the master list lives in WORKPLAN/ROADMAP so nothing is lost.
-   10. **Location emoji** (owner 2026-07-18): the North/South Pole
+   10. **Location emoji — DONE (2026-07-19, MASON/ICONS round, TASK
+      4).** (owner 2026-07-18): the North/South Pole
       entries in the location picker show ☀️/❄️ with the polar-day and
       polar-night FROM–TO dates beneath (computed from the seasons/
       twilight data, the most precise calculation available); Greenwich
       gets a mark that says "the center" — SEALED 🌐 (a globe with
       meridians = the prime meridian, owner pick 2026-07-18).
-      **REWORKED TWICE since (fix round E, owner verdict, 2026-07-19,
-      slika 6):** (a) 🔆/🌑 violated the owner's standing "no sun/moon
-      emojis" law — replaced with the neutral interim ⚪/⚫ pair,
-      dedicated SVG icons queued per his 2026-07-19 icon list; (b) the
-      light/dark glyph now follows the DISPLAYED moment
+      **REWORKED THREE TIMES since (fix round E, owner verdict,
+      2026-07-19, slika 6; ICONS WIRED, MASON/ICONS round, TASK 4):**
+      (a) 🔆/🌑 violated the owner's standing "no sun/moon emojis" law —
+      replaced with the neutral interim ⚪/⚫ pair; (b) the light/dark
+      glyph now follows the DISPLAYED moment
       (`AppController._effective_travel_date`) — the Time Travel
       traveled date while a simulation runs, else today — REVOKING round
       A's "never the simulation moment" choice; the Location submenu's
-      `aboutToShow` refreshes the two labels lazily since the menu
-      itself only rebuilds a few times a session. Explanation of
+      `aboutToShow` refreshes the two rows lazily since the menu itself
+      only rebuilds a few times a session; (c) the queued dedicated
+      icons landed and REPLACE the ⚪/⚫ pair outright
+      (`assets/icons/light.png`/`dark.svg`, `defaults.ICON_FILES`/
+      `pole_icon_name`) — the emoji stays the documented Rule #1
+      fallback for a partial install missing an icon file. Explanation
+      of
       the owner's observed transition dates (3 Mar / 9 Oct north, 5 Apr
       / 7 Sep south): at the poles the sun's elevation equals its
       declination (sign-flipped for the south), so those four dates are

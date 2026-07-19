@@ -154,9 +154,12 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ## Status
 
 - Owner canon: The Persons seated 2026-07-16 (Michael the orange
-  seat APPROVED the same day); Judas and Lucifer inherit their Scale
-  glass — no new art for those two seats (canon,
-  [The DOMY Canon](../../../CANON.md)).
+  seat APPROVED the same day). **Superseded 2026-07-19** (owner
+  one-image-one-place law, §The two poles above): Judas and Lucifer no
+  longer inherit the Scale glass — they wear their OWN lancets,
+  `Lucifer_Pride.png`/`Judas_Fear.png`, prompt entries above,
+  neither generated yet on either source (the name fallback carries
+  both seats — pinned by `test_prism_poles_wear_their_own_lancets`).
 - The Prism LIGHT archetype — One Soul, the Bond — has its own sheet:
   [One Soul Prompts](one_soul_prompts.md).
 - The all-seeing Eye is the Trinity center; the Prism paint set has

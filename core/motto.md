@@ -19,6 +19,16 @@ like the real seal — instead of the first round's mistaken single
 top-heavy sweep at two overlapping radii. The new `clockwise` flag
 picks the arc's reading direction.
 
+ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch): a
+motto pinned only at its own first and last character (ANNUIT COEPTIS)
+no longer spreads its letters evenly across the WHOLE pin-to-pin span —
+that read too wide next to NOVUS ORDO SECLORUM's own tight look.
+`_tight_two_pin_angles` now handles the 2-pin case: every letter
+advances at the fixed `config.defaults.RING_MOTTO_LETTER_STEP_DEG` step
+(NOVUS's own per-character step, 60°/9 chars) from BOTH pins inward,
+and the leftover angular slack lands as ONE BIG WORD GAP at the motto's
+own single interior space — see Design Decisions below.
+
 ## Connections
 
 ### Uses
@@ -26,6 +36,11 @@ picks the arc's reading direction.
   angle formula every ring seat, letter and now motto glyph shares) and
   `readable_rotation_deg` (the per-glyph tangential rotation, unchanged
   by this round — see Design Decisions)
+- [Config (folder)](../config/___config.md) — `defaults.
+  RING_MOTTO_LETTER_STEP_DEG` (ANNUIT WORD-GAP round: core reaching
+  into config for a numeric constant is the SAME established pattern
+  `core.angles` already uses for `constants.DIAL_OFFSET_DEG` — purity
+  (`tests/test_purity.py`) forbids Qt and the wall clock, not config)
 
 ### Used by
 - [Ring Presets](../data/rings.md) — `validate_preset` calls this at
@@ -38,7 +53,7 @@ picks the arc's reading direction.
 
 - `motto_glyph_angles(text, pins, clockwise=True)`: one angle per
   character of `text` (spaces included, so word gaps get their own
-  even slot); `pins` is `(letter, occurrence, ring_position)` triples —
+  slot); `pins` is `(letter, occurrence, ring_position)` triples —
   e.g. `("N", 1, 4)` pins the first "N" to the 4h seat. The first pin
   must resolve to index 0 and the last to the final character (every
   glyph belongs to an interior segment). `clockwise=True` (ANNUIT
@@ -47,13 +62,47 @@ picks the arc's reading direction.
   own bottom arc) unwraps it (-360 as needed) to stay BELOW the
   previous one instead — both read left-to-right to a viewer (see
   Design Decisions for why the direction must flip between the two
-  halves).
+  halves). With exactly 2 pins, delegates to `_tight_two_pin_angles`
+  (the ANNUIT WORD-GAP layout); with 3+ pins, every character strictly
+  between two consecutive pins is the EVEN linear interpolation of
+  that segment's own two pinned angles (NOVUS ORDO SECLORUM's own
+  3-pin case, unchanged by the word-gap round).
+- `_tight_two_pin_angles(text, resolved, clockwise)`: the 2-pin-only
+  layout (ANNUIT WORD-GAP round) — every letter advances at the fixed
+  `RING_MOTTO_LETTER_STEP_DEG` step from BOTH pins inward; the motto's
+  own single interior space absorbs whatever angular slack remains,
+  centered between its two flanking letters (the space itself never
+  draws). Requires the text to carry EXACTLY one interior space —
+  raises otherwise (Rule #7: a "pinned two-word motto" is the only
+  shape this ever draws).
 - `_occurrence_index(text, letter, occurrence)`: the 0-based index of
   the Nth appearance of `letter` — e.g. the 3rd "O" in "NOVUS ORDO
   SECLORUM" is the one ENDING "ORDO", not NOVUS's own O. Raises if
   `text` does not contain that many (Rule #1).
 
 ## Design Decisions
+
+**Why the word gap is centered, not evenly spaced (ANNUIT WORD-GAP
+round):** the motto's own interior space never draws
+(`app.controller.build_skin` drops every space character before
+handing glyphs to `RingLayer`) — so ANY angle assigned to it is
+inconsequential for rendering. Centering it between its two flanking
+letters keeps `motto_glyph_angles` returning "one angle per character,
+spaces included" (its own long-standing contract) without inventing an
+arbitrary asymmetric split.
+
+**Why NOVUS ORDO SECLORUM needed no change:** its own 3 pins (N at
+index 0, ORDO's own ending O at index 9, M at index 18) already split
+the text into two 9-character segments spanning exactly 60° each — the
+EVEN interpolation this round leaves untouched for 3+ pins already
+lands on 60°/9 = `RING_MOTTO_LETTER_STEP_DEG` per step, by construction.
+ANNUIT COEPTIS's own 2 pins (A, S) spanned the SAME 120° total but over
+13 character-steps in ONE segment, evenly, so its per-step angle
+(120°/13 ≈ 9.23°) came out wider than NOVUS's own tight 6.667° — the
+owner's "too wide" complaint. The fix keeps the two textually-plausible
+letter counts (6 in ANNUIT, 7 in COEPTIS) stepping at the SAME tight
+rate as NOVUS and pushes the now-larger total slack onto the one
+character position that was always going to be invisible anyway.
 
 **Why the bottom arc reads COUNTERCLOCKWISE (MOTO-FIX round):** dial-x
 (`render.layers.dial_point`'s own `distance * sin(theta)`) is monotonic

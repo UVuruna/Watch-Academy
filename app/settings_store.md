@@ -22,8 +22,19 @@ plus the additive keys; the city picker arrives with M6.
 Frozen dataclass: `schema_version`, `window_x`/`window_y` (`None` = first
 run), `diameter`, plus the additive keys (still schema 1 — absent in
 older files they take their defaults): `click_through` (False), `ring`
-("domy" — the ring preset), `ring_tint` (None or #RRGGBB — the whole-body
-recolor), `ring_finish` ("gold" | "silver" | "bronze" letter art), and
+("DOMY" — the ring preset name, case-insensitive fold on load; TASK 2,
+MASON/ICONS round, owner verdicts 2026-07-19, third batch: an older
+file's "MASON G"/"NUMBERS" migrates onto the renamed "Mason"/"Omega"
+via `_fold_ring_name`, "MORPH" → "Morph" needing no dedicated entry —
+a pure case change the existing fold bridges for free), `ring_tint`
+(None or #RRGGBB — the whole-body
+recolor), `ring_finish` ("gold" | "silver" | "bronze" letter art),
+`ring_two_metals` (dict, TASK 3, MASON/ICONS round: per-preset choice
+between the 3-3 two-metal split and one finish on all six, for every
+preset carrying its own `triangle` override — Mason/Omega/Templar
+today; `_fold_ring_name` resolves/migrates its keys too, dropping a
+non-bool value or a name that resolves to nothing loaded, the SAME
+lenient policy `theme_metals` uses), and
 the display choices, each validated against its closed
 set, `language` ("en" = the shipped originals; any
 `TRANSLATION_LANGUAGES` code triggers the translate-once cache), the

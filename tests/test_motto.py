@@ -1,10 +1,12 @@
 """The outer Great Seal motto arc — per-glyph angle math (TASK 1, owner
 "može radi" 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX
 round, owner correction 2026-07-19, the dollar's Great Seal reference
-image)."""
+image; corrected ANNUIT WORD-GAP round, owner correction 2026-07-19,
+third batch, the tight-letters-plus-one-big-word-gap look)."""
 
 import pytest
 
+from config.defaults import RING_MOTTO_LETTER_STEP_DEG
 from core.angles import readable_rotation_deg
 from core.motto import _occurrence_index, motto_glyph_angles
 
@@ -33,20 +35,36 @@ def test_occurrence_index_raises_when_not_enough_occurrences():
 
 
 def test_annuit_coeptis_pinned_letters_land_on_their_seats():
-    """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
-    reference image): the TOP arc — A pinned at 8h, S at 16h, reading
-    CLOCKWISE over the top through noon. Only 2 pins now (the previous
-    round's own O-at-noon pin is GONE) — no motto letter pins 12h
-    anymore, the arc simply passes over the G between two characters."""
+    """ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch):
+    the TOP arc — A pinned at 8h, S at 16h, reading CLOCKWISE over the
+    top through noon — but the 13 character-steps no longer spread
+    EVENLY across the whole 120 deg span (that read too wide); instead
+    ANNUIT's own 6 letters (indices 0-5) advance from A at the tight
+    `RING_MOTTO_LETTER_STEP_DEG` step, COEPTIS's own 7 letters (indices
+    7-13) advance backward from S at the same step, and the single
+    interior space (index 6, the word gap) absorbs the whole leftover
+    slack — a BIG gap that straddles the G's own seat (noon/360 deg,
+    between T at index 5 and C at index 7), never pinning to it."""
     text = "ANNUIT COEPTIS"
     angles = motto_glyph_angles(text, (("A", 1, 8), ("S", 1, 16)))
     assert len(angles) == len(text)
     assert angles[0] == pytest.approx(300.0)     # A -> 8h
     assert angles[13] == pytest.approx(420.0)    # S -> 16h (unwrapped)
-    # Even spacing across the WHOLE run — only one segment now (2 pins).
-    step = 120.0 / 13
-    spacing = [angles[i + 1] - angles[i] for i in range(0, 13)]
-    assert spacing == pytest.approx([step] * 13)
+    step = RING_MOTTO_LETTER_STEP_DEG
+    # ANNUIT's own tight run: A(0) N(1) N(2) U(3) I(4) T(5).
+    annuit_run = [angles[i + 1] - angles[i] for i in range(0, 5)]
+    assert annuit_run == pytest.approx([step] * 5)
+    # COEPTIS's own tight run: C(7) O(8) E(9) P(10) T(11) I(12) S(13).
+    coeptis_run = [angles[i + 1] - angles[i] for i in range(7, 13)]
+    assert coeptis_run == pytest.approx([step] * 6)
+    # The word gap (T at 5 -> space at 6 -> C at 7) is much WIDER than a
+    # single letter step — it absorbs the whole 120 deg span's leftover.
+    gap_span = angles[7] - angles[5]
+    assert gap_span == pytest.approx(46.0 + 2.0 / 3.0)
+    assert gap_span > step * 5
+    # The space itself sits centered in that gap (never drawn — RingLayer
+    # skips it — so only its neighbors' midpoint matters).
+    assert angles[6] == pytest.approx((angles[5] + angles[7]) / 2.0)
     # Monotonically increasing (reads clockwise); no character lands
     # exactly on noon/360 — the arc passes OVER the G, never pins to it.
     assert all(b > a for a, b in zip(angles, angles[1:]))

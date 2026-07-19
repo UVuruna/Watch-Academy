@@ -6,6 +6,7 @@ by app/settings_store.py.
 """
 
 from datetime import date
+from pathlib import Path
 
 from config import paths
 from skins.manifest import (
@@ -142,6 +143,34 @@ TRAY_ICON_SIZE = 64                  # px of the rasterized tray pixmap
 LOGO_ASSET = paths.assets_dir() / "logo.svg"
 LOGO_SETUP_ASSET = paths.assets_dir() / "logo-setup.svg"
 
+# --- UI icon chrome (TASK 4, MASON/ICONS round, owner icon list
+# 2026-07-19 approvals) -------------------------------------------------
+# Reusable UI GLYPHS — menu rows, hover badges — copied from the owner's
+# UV/icons/ staging folder (his approved four) with canonical names.
+# Distinct from the dial's own ART: the one-image-one-place law
+# (owner 2026-07-19) applies to ART, never to UI chrome — the SAME icon
+# file may legitimately answer in more than one menu spot. Every
+# consumer reads through `icon_path(name)`, which is None when the
+# file has not landed (a partial install) — the documented fallback is
+# the spot's own PRE-EXISTING emoji, never a broken/blank icon
+# (Rule #1).
+ICON_DIR = paths.assets_dir() / "icons"
+ICON_FILES = {
+    "light": ICON_DIR / "light.png",           # Quick Jump pole row: polar DAY
+    "dark": ICON_DIR / "dark.svg",              # Quick Jump pole row: polar NIGHT
+    "eclipse_sun": ICON_DIR / "eclipse_sun.svg",    # Quick Jump Sun's own eclipse entries
+    "eclipse_moon": ICON_DIR / "eclipse_moon.png",  # Quick Jump Moon's own eclipse entries
+}
+
+
+def icon_path(name: str) -> Path | None:
+    """The UI icon file for `name` (a key of `ICON_FILES`), or None when
+    it has not landed on disk yet — graceful-absent (Rule #1), so every
+    caller keeps drawing its documented emoji fallback instead of a
+    broken icon."""
+    path = ICON_FILES[name]
+    return path if path.exists() else None
+
 # --- Ring faces -------------------------------------------------------------------
 # Ring PRESETS are data now (Database/ring_presets.json + the user's
 # custom cards in settings, loaded by data/rings.py — owner spec): a
@@ -271,6 +300,18 @@ RING_MOTTO_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
                                      # AND the ring-letter hover ceiling
                                      # (GREETINGS_LETTER_OUTER_FRACTION,
                                      # 1.08) with margin
+
+# ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch): the
+# TIGHT per-character step every motto letter now advances at, derived
+# from NOVUS ORDO SECLORUM's own pin geometry (two 60 deg segments over
+# 9 characters each = 6.667 deg/char). A motto pinned only at its first
+# and last character (ANNUIT COEPTIS) advances every letter at this
+# fixed step from BOTH pins inward (`core.motto._tight_two_pin_angles`)
+# instead of spreading the whole span evenly — the owner's "too wide"
+# complaint — letting the single interior word gap absorb whatever
+# angular slack remains, so the eye/G area breathes like the Great
+# Seal's own gap over the eye.
+RING_MOTTO_LETTER_STEP_DEG = 60.0 / 9
 
 # --- Hand sizing (owner spec 2026-07-12) -------------------------------------------
 # Sizing uses TIP-TO-PIVOT lengths only: the seconds tip reaches the
@@ -2027,3 +2068,11 @@ def pole_emoji(pole: str, on_date: date) -> str:
     `POLE_LIGHT_EMOJI` through the lit half, `POLE_DARK_EMOJI` through
     the dark half, by `pole_is_light`."""
     return POLE_LIGHT_EMOJI if pole_is_light(pole, on_date) else POLE_DARK_EMOJI
+
+
+def pole_icon_name(pole: str, on_date: date) -> str:
+    """The `ICON_FILES` key for one pole's row (TASK 4, MASON/ICONS
+    round) — "light"/"dark" by the SAME `pole_is_light` split
+    `pole_emoji` already uses, so the icon and its documented emoji
+    fallback never disagree."""
+    return "light" if pole_is_light(pole, on_date) else "dark"

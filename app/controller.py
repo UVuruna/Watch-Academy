@@ -17,7 +17,7 @@ from zoneinfo import ZoneInfo
 import astral
 
 from PySide6.QtCore import QObject, QRect, Qt, QTimer
-from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication
+from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication, QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -76,17 +76,39 @@ def _letter_metal(position: int, layout: dict, finish: str) -> str:
     TRIANGLE and the remaining letter wears the ACCENT metal (gold ->
     3 gold + 1 silver; silver -> 3 silver + 1 gold; bronze -> 3 bronze
     + 1 silver); the SEAL wears the ONE finish metal on all six —
-    UNLESS the ring preset overrides the triangle (ROADMAP 15b, MASON
-    G: CANON.md §The Banknote reads the hexagram as TWO triangles, the
+    UNLESS the ring preset overrides the triangle (ROADMAP 15b, Mason:
+    CANON.md §The Banknote reads the hexagram as TWO triangles, the
     Trinity 12/20/4 and the Union 16/24/8 — `build_skin` passes the
-    preset's own `triangle` here when it carries one, so the Trinity
-    vertices wear the finish metal and the Union vertices the accent,
-    the same rule as the 4-letter layouts applied to a 3+3 split; NUMBERS
-    and every other seal preset keep the plain one-metal reading, since
-    their cards carry no override)."""
+    preset's own `triangle` here when it carries one AND the owner's
+    per-preset "Two metals" toggle is on (TASK 3, MASON/ICONS round,
+    `_ring_two_metals`), so the Trinity vertices wear the finish metal
+    and the Union vertices the accent, the same rule as the 4-letter
+    layouts applied to a 3+3 split; DOMY/MORPH's own triangle-less seal
+    presets, and any eligible preset with the toggle off, keep the plain
+    one-metal reading)."""
     if not layout["triangle"] or position in layout["triangle"]:
         return finish
     return "gold" if finish == "silver" else "silver"
+
+
+def _ring_two_metals(settings: Settings, card: dict) -> bool:
+    """Whether the ACTIVE preset splits into its own 3-3 two-metal
+    triangle or wears one finish on all six (TASK 3, MASON/ICONS round,
+    owner verdicts 2026-07-19, third batch) — only presets that carry
+    their OWN `triangle` override are eligible at all (Mason/Omega/
+    Templar today, `data.rings.validate_preset`'s optional card field);
+    every other preset (DOMY/MORPH's own 4-letter triangle already
+    always applies through the LAYOUT, not this switch; a custom seal
+    with no override) is untouched by this toggle and always reads
+    False here. The user's stored per-preset choice
+    (`Settings.ring_two_metals`) wins; absent, the owner's documented
+    per-preset default (`constants.RING_TWO_METALS_DEFAULT`, Mason
+    True, everything else False)."""
+    if card["triangle"] is None:
+        return False
+    return settings.ring_two_metals.get(
+        card["name"], constants.RING_TWO_METALS_DEFAULT.get(card["name"], False)
+    )
 
 
 def _guard_exclusive_choice(action: QAction, apply) -> None:
@@ -109,6 +131,17 @@ def _guard_exclusive_choice(action: QAction, apply) -> None:
             return
         apply()
     action.triggered.connect(_on_triggered)
+
+
+def _ui_icon(path) -> QIcon | None:
+    """One reusable UI CHROME icon (TASK 4, MASON/ICONS round) from a
+    `defaults.icon_path(name)` result — None in, None out (graceful-
+    absent, Rule #1), so every caller keeps its own documented emoji
+    fallback instead of a blank/broken icon. Distinct from the dial's
+    own ART: the one-image-one-place law (owner 2026-07-19) applies to
+    ART, never to UI chrome — the same icon file may legitimately
+    answer in more than one menu spot at once."""
+    return None if path is None else QIcon(str(path))
 
 
 def _theme_metal(settings: Settings, theme: str) -> str:
@@ -238,9 +271,12 @@ def build_skin(settings: Settings):
     card = ring_presets(settings.custom_rings)[settings.ring]
     layout = constants.RING_LAYOUTS[card["layout"]]
     # A preset may override the seal layout's own (empty) triangle —
-    # ROADMAP 15b, MASON G's Trinity/Union metal split — see
-    # `_letter_metal`'s docstring.
-    metal_layout = {"triangle": card["triangle"] or layout["triangle"]}
+    # ROADMAP 15b, Mason's Trinity/Union metal split — but only when the
+    # owner's per-preset "Two metals" toggle is actually on (TASK 3,
+    # MASON/ICONS round) — see `_letter_metal`'s and `_ring_two_metals`'s
+    # docstrings.
+    triangle_override = card["triangle"] if _ring_two_metals(settings, card) else None
+    metal_layout = {"triangle": triangle_override or layout["triangle"]}
     letters = {}
     letter_art = {}
     letter_metal = {}
@@ -1074,6 +1110,20 @@ class AppController(QObject):
         self._settings = replace(self._settings, ring=ring)
         self._install_skin(build_skin(self._settings))
         self._flush_position()
+        # The "Two metals" toggle's own eligibility/checked state
+        # depends on the ACTIVE preset (TASK 3) — re-gate in place, the
+        # same stay-open pattern every other menu re-sync uses.
+        self._refresh_menu_gating()
+
+    def _set_ring_two_metals(self, checked: bool) -> None:
+        """TASK 3 (MASON/ICONS round): the active preset's own metal-
+        split choice, stored keyed by preset name
+        (`Settings.ring_two_metals`, like `theme_metals`)."""
+        metals = dict(self._settings.ring_two_metals)
+        metals[self._settings.ring] = checked
+        self._settings = replace(self._settings, ring_two_metals=metals)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
 
     def _set_hands(self, hands: str) -> None:
         if hands == self._settings.hands:
@@ -1412,6 +1462,21 @@ class AppController(QObject):
         self._calendar_lighting_separator.setVisible(calendar_on)
         for action in self._menu_gates["calendar_lighting"]:
             action.setVisible(calendar_on)
+        # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round): visible
+        # only for the ACTIVE preset's own eligibility (a `triangle`
+        # override, Mason/Omega/Templar today) — its checked state
+        # follows the resolved choice (stored, else the per-preset
+        # default), blocked so a settings-driven resync never re-enters
+        # `_set_ring_two_metals` (the pattern above, `_slot_enable_actions`).
+        active_card = ring_presets(settings.custom_rings)[settings.ring]
+        two_metals_eligible = active_card["triangle"] is not None
+        self._ring_two_metals_separator.setVisible(two_metals_eligible)
+        self._ring_two_metals_action.setVisible(two_metals_eligible)
+        self._ring_two_metals_action.blockSignals(True)
+        self._ring_two_metals_action.setChecked(
+            _ring_two_metals(settings, active_card)
+        )
+        self._ring_two_metals_action.blockSignals(False)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -1592,6 +1657,26 @@ class AppController(QObject):
             settings.ring_finish,
             lambda value: self._set_display_choice("ring_finish", value),
         )
+        # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner
+        # verdicts 2026-07-19, third batch): visible only for a preset
+        # that carries its own `triangle` override (Mason/Omega/Templar
+        # today) — `_refresh_menu_gating` keeps both the visibility and
+        # the checked state synced to the ACTIVE ring on every change.
+        active_card = ring_presets(settings.custom_rings)[settings.ring]
+        self._ring_two_metals_separator = ring_menu.addSeparator()
+        self._ring_two_metals_action = self._add_toggle(
+            ring_menu, tr("Two metals"),
+            _ring_two_metals(settings, active_card),
+            self._set_ring_two_metals,
+            tr(
+                "Split the six letters into two metals (this preset's "
+                "own Trinity/Union triangle) instead of one finish on "
+                "all six."
+            ),
+        )
+        two_metals_eligible = active_card["triangle"] is not None
+        self._ring_two_metals_separator.setVisible(two_metals_eligible)
+        self._ring_two_metals_action.setVisible(two_metals_eligible)
         umbra_menu = self._add_choice_submenu(
             design_menu, tr("Umbra"),
             [
@@ -2251,9 +2336,24 @@ class AppController(QObject):
                 moon_menu, "prev_lunar_eclipse", f"{backward} {tr('Eclipse')} 🌘"
             ),
         ]
-        for action in eclipse_entries:
+        # THE ECLIPSE ICONS (TASK 4, MASON/ICONS round, owner icon list
+        # 2026-07-19 approvals): wired onto the eclipse entries ONLY —
+        # the plain Sun/Moon jump entries above keep their own ☀️/🌙
+        # emoji, untouched. Graceful-absent (Rule #1): no icon at all
+        # when the file has not landed, the row's own 🌑/🌘 emoji then
+        # carries the whole distinction alone, exactly as before. The
+        # one-image-one-place law (owner 2026-07-19) applies to ART, not
+        # UI chrome — the SAME icon may legitimately answer here AND on
+        # a future eclipse-related spot.
+        solar_icon = _ui_icon(defaults.icon_path("eclipse_sun"))
+        lunar_icon = _ui_icon(defaults.icon_path("eclipse_moon"))
+        for action, icon in zip(
+            eclipse_entries, (solar_icon, solar_icon, lunar_icon, lunar_icon)
+        ):
             # Static per build: the pack cannot appear mid-run.
             action.setEnabled(self._deep is not None)
+            if icon is not None:
+                action.setIcon(icon)
             if self._deep is None:
                 action.setToolTip(
                     tr("Needs the Deep Time data pack (full installation).")
@@ -2283,34 +2383,33 @@ class AppController(QObject):
         ):
             jump_action(era_menu, kind, label)
         location_menu = self._submenu(jumps, f"📍 {tr('Location')}")
-        # POLE + GREENWICH EMOJIS (ROADMAP 15h item 10, owner reminder
+        # POLE + GREENWICH ICONS (ROADMAP 15h item 10, owner reminder
         # 2026-07-19; REVOKED and REWORKED fix round E, 2026-07-19,
-        # slika 6): ❄ marks both poles on the LEFT; the RIGHT-side
-        # glyph switches between polar DAY (⚪, neutral interim — 🔆/🌑
-        # violated the owner's "no sun/moon emojis" law, dedicated SVG
-        # icons queued per his 2026-07-19 icon list) and polar NIGHT
-        # (⚫) by the DISPLAYED moment's date (`defaults.pole_emoji`, a
-        # date-window helper, no astronomy call) — `_effective_travel_
-        # date` now follows the Time Travel traveled date while a
-        # simulation runs (round A's "never the simulation moment"
-        # choice is REVOKED). Greenwich carries 🌐 (sealed owner pick).
-        # Because this submenu is built only a few times a session but
-        # the traveled date can change many times via chained Quick
-        # Jumps, `_refresh_pole_emoji_labels` recomputes the two labels
-        # lazily right before Location opens (`aboutToShow`) — the
-        # menu-rebuild cadence alone is too coarse now.
+        # slika 6; ICONS WIRED, TASK 4, MASON/ICONS round, owner icon
+        # list 2026-07-19 approvals): ❄ marks both poles on the LEFT;
+        # the RIGHT side used to carry a neutral interim ⚪/⚫ pair
+        # (🔆/🌑 violated the owner's "no sun/moon emojis" law) — now
+        # his approved light/dark icons (`defaults.ICON_FILES`) replace
+        # it outright, by the DISPLAYED moment's date
+        # (`defaults.pole_icon_name`, the SAME light/dark split
+        # `pole_emoji` used) — `_effective_travel_date` follows the
+        # Time Travel traveled date while a simulation runs. The ⚪/⚫
+        # emoji stays the documented Rule #1 FALLBACK for a partial
+        # install still missing the icon files (`_pole_row_text_and_
+        # icon` picks one or the other, never both). Greenwich carries
+        # 🌐 (sealed owner pick, untouched — no eclipse/light-dark
+        # state to iconify there). Because this submenu is built only a
+        # few times a session but the traveled date can change many
+        # times via chained Quick Jumps, `_refresh_pole_rows`
+        # recomputes both rows lazily right before Location opens
+        # (`aboutToShow`) — the menu-rebuild cadence alone is too
+        # coarse now.
         today = self._effective_travel_date()
-        self._north_pole_action = jump_action(
-            location_menu, "north_pole",
-            f"{defaults.POLE_COLD_EMOJI} {tr('North Pole')} "
-            f"{defaults.pole_emoji('north', today)}",
-        )
-        self._south_pole_action = jump_action(
-            location_menu, "south_pole",
-            f"{defaults.POLE_COLD_EMOJI} {tr('South Pole')} "
-            f"{defaults.pole_emoji('south', today)}",
-        )
-        location_menu.aboutToShow.connect(self._refresh_pole_emoji_labels)
+        self._north_pole_action = jump_action(location_menu, "north_pole", "")
+        self._south_pole_action = jump_action(location_menu, "south_pole", "")
+        self._apply_pole_row(self._north_pole_action, "north", today)
+        self._apply_pole_row(self._south_pole_action, "south", today)
+        location_menu.aboutToShow.connect(self._refresh_pole_rows)
         jump_action(
             location_menu, "greenwich",
             f"{defaults.GREENWICH_EMOJI} {tr('Greenwich')}",
@@ -2505,24 +2604,50 @@ class AppController(QObject):
             return moment.date()
         return date.today()
 
-    def _refresh_pole_emoji_labels(self) -> None:
+    def _pole_row_text_and_icon(self, pole: str, today: date) -> tuple[str, QIcon | None]:
+        """One pole row's own text + icon (TASK 4, MASON/ICONS round):
+        the owner's light/dark icon (`defaults.ICON_FILES`) replaces the
+        interim ⚪/⚫ emoji (`defaults.pole_emoji`) INSTEAD, when the icon
+        file exists; the emoji stays the documented Rule #1 fallback for
+        a partial install still missing the icon file."""
+        tr = self._ui
+        name = tr("North Pole" if pole == "north" else "South Pole")
+        icon = _ui_icon(defaults.icon_path(defaults.pole_icon_name(pole, today)))
+        if icon is not None:
+            return f"{defaults.POLE_COLD_EMOJI} {name}", icon
+        return (
+            f"{defaults.POLE_COLD_EMOJI} {name} {defaults.pole_emoji(pole, today)}",
+            None,
+        )
+
+    def _apply_pole_row(self, action: QAction, pole: str, today: date) -> None:
+        """Applies `_pole_row_text_and_icon` to one pole's QAction —
+        shared by the initial menu build and `_refresh_pole_rows`'s
+        lazy resync (Rule #5)."""
+        text, icon = self._pole_row_text_and_icon(pole, today)
+        action.setText(text)
+        action.setIcon(icon or QIcon())
+        # A plain custom property (the SAME pattern `stay_open` already
+        # uses on other QActions) so tests can confirm which icon is
+        # actually wired without depending on QIcon equality, which Qt
+        # does not define meaningfully between two separately
+        # constructed instances of the same file.
+        action.setProperty(
+            "icon_name",
+            defaults.pole_icon_name(pole, today) if icon is not None else None,
+        )
+
+    def _refresh_pole_rows(self) -> None:
         """Lazy refresh (owner fix round E, 2026-07-19): the Quick Jump
         menu is only rebuilt wholesale a few times a session (skin
         install, settings apply), but the traveled date can change many
-        times in between through chained Quick Jumps — recompute the
-        two pole labels right before the Location submenu opens
-        (`aboutToShow`) so the glyph always matches what the dial
+        times in between through chained Quick Jumps — recompute both
+        pole rows right before the Location submenu opens
+        (`aboutToShow`) so the text/icon always match what the dial
         currently shows."""
         today = self._effective_travel_date()
-        tr = self._ui
-        self._north_pole_action.setText(
-            f"{defaults.POLE_COLD_EMOJI} {tr('North Pole')} "
-            f"{defaults.pole_emoji('north', today)}"
-        )
-        self._south_pole_action.setText(
-            f"{defaults.POLE_COLD_EMOJI} {tr('South Pole')} "
-            f"{defaults.pole_emoji('south', today)}"
-        )
+        self._apply_pole_row(self._north_pole_action, "north", today)
+        self._apply_pole_row(self._south_pole_action, "south", today)
 
     def _end_simulation(self) -> None:
         """NOW (owner 2026-07-15): back to the present immediately —

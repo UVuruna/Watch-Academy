@@ -81,8 +81,10 @@ ninths (Set, Baldur, Crnobog) folded in. Read by the
 `encyclopedia/<section>/<key>/...` overlay keys.
 
 ### `ring_presets.json`
-The bundled ring styling cards — DOMY, MORPH and NUMBERS — loaded by
-[Ring Presets](../data/rings.md) together with the user's custom cards.
+The bundled ring styling cards — DOMY, Morph, Omega, Templar and Mason
+(renamed from MORPH/NUMBERS/MASON G, TASK 2, MASON/ICONS round, owner
+verdicts 2026-07-19) — loaded by [Ring Presets](../data/rings.md)
+together with the user's custom cards.
 
 ### `translations/`
 BUNDLED ORIGINAL translations (owner decision 2026-07-11): English is

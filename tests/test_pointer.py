@@ -1092,7 +1092,7 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
 
 def test_mason_g_ring_letters_answer_their_own_hover_legend(july_wednesday):
     """The per-letter HOVER LEGEND (ROADMAP 15b, "malo legende oko tih
-    naših odabira"): every MASON G ring letter answers what it stands
+    naših odabira"): every Mason ring letter answers what it stands
     for, quoted from CANON.md's Banknote table — independent of the
     hidden-mode unlock (unlike the Four Greetings), and a preset without
     a legend (the DEFAULT_SKIN's DOMY ring) stays silent in the same
@@ -1103,7 +1103,7 @@ def test_mason_g_ring_letters_answer_their_own_hover_legend(july_wednesday):
     from app.settings_store import Settings, replace as settings_replace
 
     day, tick = july_wednesday
-    mason_skin = build_skin(settings_replace(Settings(), ring="MASON G"))
+    mason_skin = build_skin(settings_replace(Settings(), ring="Mason"))
     compositor = Compositor(mason_skin, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     letters = (
@@ -1183,7 +1183,7 @@ def test_mason_g_motto_arc_paints_outside_the_ring(july_wednesday):
     dial_radius_px = dial_diameter / 2.0
     motto_radius_px = dial_radius_px * defaults.RING_MOTTO_RADIUS_FRACTION
 
-    mason_skin = build_skin(settings_replace(Settings(), ring="MASON G"))
+    mason_skin = build_skin(settings_replace(Settings(), ring="Mason"))
     mason_image, _, mason_margin = _render_window_frame(
         Compositor(mason_skin, AssetCache()), day, tick, dial_diameter
     )
@@ -2308,6 +2308,34 @@ def test_pole_light_window_math():
     assert defaults.pole_emoji("south", _date(2026, 6, 20)) == defaults.POLE_DARK_EMOJI
     assert defaults.pole_emoji("north", _date(2026, 12, 20)) == defaults.POLE_DARK_EMOJI
     assert defaults.pole_emoji("south", _date(2026, 12, 20)) == defaults.POLE_LIGHT_EMOJI
+
+
+def test_ui_icon_table_and_pole_icon_name(tmp_path, monkeypatch):
+    """TASK 4 (MASON/ICONS round, owner icon list 2026-07-19 approvals):
+    the four owner-approved icons ship at their canonical config paths
+    and `pole_icon_name` mirrors `pole_emoji`'s own light/dark split
+    exactly, so the icon and its documented emoji fallback never
+    disagree. `icon_path` is graceful-absent (Rule #1) for a name whose
+    file has not landed."""
+    from datetime import date as _date
+
+    assert defaults.ICON_FILES["light"].name == "light.png"
+    assert defaults.ICON_FILES["dark"].name == "dark.svg"
+    assert defaults.ICON_FILES["eclipse_sun"].name == "eclipse_sun.svg"
+    assert defaults.ICON_FILES["eclipse_moon"].name == "eclipse_moon.png"
+    for name, path in defaults.ICON_FILES.items():
+        assert defaults.icon_path(name) == path, name
+        assert path.exists(), name
+
+    assert defaults.pole_icon_name("north", _date(2026, 6, 20)) == "light"
+    assert defaults.pole_icon_name("south", _date(2026, 6, 20)) == "dark"
+    assert defaults.pole_icon_name("north", _date(2026, 12, 20)) == "dark"
+    assert defaults.pole_icon_name("south", _date(2026, 12, 20)) == "light"
+
+    # Graceful-absent: a name whose file does not exist answers None
+    # (`icon_path` checks the CURRENT file, not a cached existence flag).
+    monkeypatch.setitem(defaults.ICON_FILES, "light", tmp_path / "missing.png")
+    assert defaults.icon_path("light") is None
 
 
 def test_widget_z_mode_swaps_the_window_flags(app):

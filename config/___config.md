@@ -47,7 +47,12 @@ Lucis always accompanies the official year; `ANNO_LUCIS_OFFSET` 4079,
 sealed), the THIRD-calendar tables (AUC/Byzantine/Hebrew offsets on
 the astronomical axis, the AH label, the epoch tooltip notes) and the
 400-year Gregorian proxy cycle with its canonical window
-(`GREGORIAN_CYCLE_YEARS`, `PROXY_WINDOW_FIRST`).
+(`GREGORIAN_CYCLE_YEARS`, `PROXY_WINDOW_FIRST`). THE METAL-SPLIT OPTION
+(TASK 3, MASON/ICONS round, owner verdicts 2026-07-19, third batch):
+`RING_TWO_METALS_DEFAULT` — the per-preset default for the Design ▸
+Ring ▸ "Two metals" toggle (Mason True, every other eligible preset
+False, `app.controller._ring_two_metals` resolves it against the
+user's own stored `Settings.ring_two_metals` choice first).
 
 ### `defaults.py` — Developer Tunables
 Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
@@ -59,7 +64,11 @@ hover-enlarged) and, when the active preset carries one (TASK 1, owner
 (`RING_MOTTO_RADIUS_FRACTION`/`_STEP`/`_SIZE` — a no-op term for every
 preset without a `motto`), so neither the letters nor a bottom-of-ring
 halo nor the motto text can be square-cut and any size/hover/letter
-slider re-sizes the window to fit exactly), the Time Travel
+slider re-sizes the window to fit exactly), `RING_MOTTO_LETTER_STEP_DEG`
+(ANNUIT WORD-GAP round, owner correction 2026-07-19, third batch: the
+tight per-character step `core.motto._tight_two_pin_angles` advances a
+2-pin motto at, derived from NOVUS ORDO SECLORUM's own pin geometry —
+60°/9 chars), the Time Travel
 coverage-warning color and the
 Deep Time advertised span (`DEEP_TIME_YEAR_RANGE`), the spontaneous-hide
 watchdog delay, tick scheduling
@@ -91,11 +100,23 @@ tokens (`OBSERVATORY_*`, Session 17: the bundle filenames, the fixed
 per-series canon colors — season cross-wheel hues, light/dark gold vs
 slate — the surface/grid/crosshair palette, the day-length sample step
 and the eclipse-window size) live here too. The POLE emoji windows
-(ROADMAP 15h item 10, owner reminder 2026-07-19): `pole_is_light(pole,
+(ROADMAP 15h item 10, owner reminder 2026-07-19; fix round E,
+2026-07-19: the emoji became ⚪/⚫, never 🔆/🌑): `pole_is_light(pole,
 on_date)` / `pole_emoji(pole, on_date)` — a simple CALENDAR date-window
 check (`POLE_LIGHT_WINDOW`, no astronomy call) the Quick Jump ▸
-Location submenu reads to swap the North/South Pole row's season emoji
-(🔆/🌑); `GREENWICH_EMOJI` is the sealed 🌐 pick for the Greenwich row.
+Location submenu reads for the North/South Pole row's own light/dark
+state; `GREENWICH_EMOJI` is the sealed 🌐 pick for the Greenwich row.
+**UI ICON CHROME** (TASK 4, MASON/ICONS round, owner icon list
+2026-07-19 approvals): `ICON_DIR`/`ICON_FILES`/`icon_path(name)` — the
+four owner-approved reusable menu/hover glyphs (light/dark pole state,
+solar/lunar eclipse), copied from his `UV/icons/` staging into
+`assets/icons/` under canonical names; `icon_path` is graceful-absent
+(None when the file has not landed, Rule #1) so every consumer keeps
+its OWN documented emoji fallback. `pole_icon_name(pole, on_date)`
+mirrors `pole_emoji`'s own light/dark split so the two never disagree.
+These are UI CHROME, not ART — the one-image-one-place law (owner
+2026-07-19) applies to the dial's own ART only; a UI icon may
+legitimately answer in more than one menu spot.
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package

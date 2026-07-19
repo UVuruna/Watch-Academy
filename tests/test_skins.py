@@ -21,12 +21,12 @@ def test_ring_preset_cards_load_and_validate():
     presets = ring_presets()
     assert presets["DOMY"]["layout"] == "flame"
     assert presets["DOMY"]["letters"] == ("M", "Y", "Ω", "D")
-    assert presets["MORPH"]["layout"] == "chalice"
+    assert presets["Morph"]["layout"] == "chalice"
     # The third bundled styling (owner spec 2026-07-11): every hour
     # number on its OWN position, Omega on the bottom — a seal, so one
     # metal dresses all six.
-    assert presets["NUMBERS"]["layout"] == "seal"
-    assert presets["NUMBERS"]["letters"] == ("12", "16", "20", "Ω", "4", "8")
+    assert presets["Omega"]["layout"] == "seal"
+    assert presets["Omega"]["letters"] == ("12", "16", "20", "Ω", "4", "8")
     for layout in constants.RING_LAYOUTS.values():
         assert (defaults.RING_FACE_DIR / layout["face"]).exists()
     with pytest.raises(ValueError):
@@ -38,17 +38,17 @@ def test_ring_preset_cards_load_and_validate():
         )
 
 
-def test_mason_g_preset_loads_and_splits_metal():
-    """The MASON G bundled preset (ROADMAP 15b, CANON.md §The Banknote):
+def test_mason_preset_loads_and_splits_metal():
+    """The Mason bundled preset (ROADMAP 15b, CANON.md §The Banknote):
     G(12) S(16) M(20) Ω(24) N(4) A(8) on the seal layout, splitting the
     metal into the Trinity triangle (12/20/4 = G,M,N) wearing the chosen
     finish and the Union triangle (16/24/8 = S,Ω,A) wearing its counter-
-    metal — NOT the NUMBERS-style single finish on all six, because this
+    metal — NOT the Omega-style single finish on all six, because this
     preset carries its own `triangle` override."""
     from data.rings import ring_presets
 
     presets = ring_presets()
-    mason = presets["MASON G"]
+    mason = presets["Mason"]
     assert mason["layout"] == "seal"
     assert mason["positions"] == (12, 16, 20, 24, 4, 8)
     assert mason["letters"] == ("G", "S", "M", "Ω", "N", "A")
@@ -60,7 +60,7 @@ def test_mason_g_preset_loads_and_splits_metal():
     # live-render round); letter_metal carries the active finish per
     # hour — silver/bronze are derived from the gold master at paint
     # time (render.assets.letter_metal_file), never separate files.
-    gold_ring = build_skin(replace(Settings(), ring="MASON G")).ring
+    gold_ring = build_skin(replace(Settings(), ring="Mason")).ring
     assert gold_ring.letter_art[12] == art_dir / "G.png"
     assert gold_ring.letter_art[20] == art_dir / "M.png"
     assert gold_ring.letter_art[4] == art_dir / "N.png"
@@ -77,7 +77,7 @@ def test_mason_g_preset_loads_and_splits_metal():
     assert gold_ring.letter_metal[8] == "silver"
 
     silver_ring = build_skin(
-        replace(Settings(), ring="MASON G", ring_finish="silver")
+        replace(Settings(), ring="Mason", ring_finish="silver")
     ).ring
     assert silver_ring.letter_metal[12] == "silver"
     assert silver_ring.letter_metal[20] == "silver"
@@ -86,17 +86,17 @@ def test_mason_g_preset_loads_and_splits_metal():
     assert silver_ring.letter_metal[0] == "gold"
     assert silver_ring.letter_metal[8] == "gold"
 
-    assert missing_assets(build_skin(replace(Settings(), ring="MASON G"))) == []
+    assert missing_assets(build_skin(replace(Settings(), ring="Mason"))) == []
     assert missing_assets(
-        build_skin(replace(Settings(), ring="MASON G", ring_finish="silver"))
+        build_skin(replace(Settings(), ring="Mason", ring_finish="silver"))
     ) == []
     assert missing_assets(
-        build_skin(replace(Settings(), ring="MASON G", ring_finish="bronze"))
+        build_skin(replace(Settings(), ring="Mason", ring_finish="bronze"))
     ) == []
 
-    # NUMBERS keeps its own plain reading — untouched by the new override
+    # Omega keeps its own plain reading — untouched by the new override
     # machinery (no `triangle` key on its card).
-    numbers = build_skin(replace(Settings(), ring="NUMBERS")).ring
+    numbers = build_skin(replace(Settings(), ring="Omega")).ring
     assert all(metal == "gold" for metal in numbers.letter_metal.values())
 
 
@@ -127,7 +127,71 @@ def test_ring_preset_triangle_override_validation():
         })
 
 
-def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
+def test_templar_preset_loads_all_six_seats_with_the_cross_glyph():
+    """TASK 2 (MASON/ICONS round, owner verdicts 2026-07-19, third
+    batch): the new bundled Templar preset — the seal layout, all six
+    positions wearing the templar-cross glyph (the owner's gold master,
+    silver/bronze derived live like every other letter), no motto, no
+    legend."""
+    from data.rings import ring_presets
+
+    presets = ring_presets()
+    templar = presets["Templar"]
+    assert templar["layout"] == "seal"
+    assert templar["positions"] == (12, 16, 20, 24, 4, 8)
+    assert templar["letters"] == ("✠",) * 6
+    assert templar["triangle"] == (12, 20, 4)
+    assert templar["legend"] == {}
+    assert templar["motto"] == ()
+
+    art_dir = defaults.RING_LETTER_ART_DIR
+    skin = build_skin(replace(Settings(), ring="Templar")).ring
+    assert all(path == art_dir / "templar.png" for path in skin.letter_art.values())
+    assert missing_assets(build_skin(replace(Settings(), ring="Templar"))) == []
+
+
+def test_ring_two_metals_toggle_switches_the_split(monkeypatch):
+    """TASK 3 (MASON/ICONS round, owner verdicts 2026-07-19, third
+    batch): Mason/Omega/Templar all carry the SAME `triangle` override
+    now, but only actually SPLIT into two metals when the owner's
+    per-preset toggle resolves True — the stored choice first, else the
+    documented per-preset default (Mason True, everything else False —
+    "default matching today's look")."""
+    from config import constants
+
+    # Defaults, no stored choice at all: Mason splits, Omega/Templar don't.
+    mason = build_skin(replace(Settings(), ring="Mason")).ring
+    omega = build_skin(replace(Settings(), ring="Omega")).ring
+    templar = build_skin(replace(Settings(), ring="Templar")).ring
+    assert mason.letter_metal[12] == "gold" and mason.letter_metal[16] == "silver"
+    assert all(metal == "gold" for metal in omega.letter_metal.values())
+    assert all(metal == "gold" for metal in templar.letter_metal.values())
+
+    # Explicit stored choices invert both defaults.
+    mason_off = build_skin(replace(
+        Settings(), ring="Mason", ring_two_metals={"Mason": False},
+    )).ring
+    assert all(metal == "gold" for metal in mason_off.letter_metal.values())
+    omega_on = build_skin(replace(
+        Settings(), ring="Omega", ring_two_metals={"Omega": True},
+    )).ring
+    assert omega_on.letter_metal[12] == "gold" and omega_on.letter_metal[16] == "silver"
+    templar_on = build_skin(replace(
+        Settings(), ring="Templar", ring_two_metals={"Templar": True},
+    )).ring
+    assert templar_on.letter_metal[12] == "gold" and templar_on.letter_metal[16] == "silver"
+
+    # A preset with NO triangle override at all is never eligible, even
+    # if the settings dict names it (a stray/leftover key, harmless).
+    domy = build_skin(replace(
+        Settings(), ring="DOMY", ring_two_metals={"DOMY": True},
+    )).ring
+    assert domy.letter_metal[12] == "gold" and domy.letter_metal[0] == "silver"
+
+    assert constants.RING_TWO_METALS_DEFAULT == {"Mason": True}
+
+
+def test_mason_motto_arc_loads_and_pins_its_key_letters():
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
     reference image): ANNUIT COEPTIS pins its own A at 8h and S at 16h
     (the TOP arc); NOVUS ORDO SECLORUM pins its own N at 4h, ORDO's own
@@ -137,7 +201,7 @@ def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
     from data.rings import ring_presets
 
     presets = ring_presets()
-    mason = presets["MASON G"]
+    mason = presets["Mason"]
     assert [entry["text"] for entry in mason["motto"]] == [
         "ANNUIT COEPTIS", "NOVUS ORDO SECLORUM",
     ]
@@ -150,14 +214,14 @@ def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
 
     # Every OTHER bundled preset stays motto-free (graceful absence).
     assert presets["DOMY"]["motto"] == ()
-    assert presets["MORPH"]["motto"] == ()
-    assert presets["NUMBERS"]["motto"] == ()
+    assert presets["Morph"]["motto"] == ()
+    assert presets["Omega"]["motto"] == ()
 
     # build_skin resolves the motto onto real assets, one glyph per
     # NON-SPACE character (spaces are dropped — RingLayer's draw loop
     # never has to check for them), wearing the active ring_finish.
     art_dir = defaults.RING_LETTER_ART_DIR
-    gold_skin = build_skin(replace(Settings(), ring="MASON G")).ring
+    gold_skin = build_skin(replace(Settings(), ring="Mason")).ring
     assert gold_skin.motto_metal == "gold"
     assert len(gold_skin.motto) == 2
     annuit_glyphs, novus_glyphs = gold_skin.motto
@@ -168,11 +232,11 @@ def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
     assert first_angle % 360.0 == pytest.approx(300.0)
 
     silver_skin = build_skin(
-        replace(Settings(), ring="MASON G", ring_finish="silver")
+        replace(Settings(), ring="Mason", ring_finish="silver")
     ).ring
     assert silver_skin.motto_metal == "silver"
 
-    assert missing_assets(build_skin(replace(Settings(), ring="MASON G"))) == []
+    assert missing_assets(build_skin(replace(Settings(), ring="Mason"))) == []
 
 
 def test_motto_validation_rejects_bad_cards():
@@ -206,17 +270,17 @@ def test_motto_validation_rejects_bad_cards():
 def test_dial_window_margin_grows_only_for_a_motto_preset():
     """TASK 1's margin interaction: `dial_window_margin_fraction` must
     reserve enough for the outer motto arc's own reach when the active
-    preset carries one (MASON G), and stay UNCHANGED for every preset
+    preset carries one (Mason), and stay UNCHANGED for every preset
     that does not (DOMY) — the graceful-absence pattern `triangle`/
     `legend` already use. MOTO-FIX round (owner correction 2026-07-19):
     both mottos now share ONE radius, so the expected extent drops the
     old `RING_MOTTO_RADIUS_STEP` term (deleted, Rule #6)."""
     domy = build_skin(Settings())
-    mason = build_skin(replace(Settings(), ring="MASON G"))
+    mason = build_skin(replace(Settings(), ring="Mason"))
     domy_margin = defaults.dial_window_margin_fraction(domy)
     mason_margin = defaults.dial_window_margin_fraction(mason)
     assert mason_margin > domy_margin
-    # The motto arc's own outer reach is the binding term for MASON G.
+    # The motto arc's own outer reach is the binding term for Mason.
     expected_motto_extent = (
         defaults.RING_MOTTO_RADIUS_FRACTION
         + defaults.RING_MOTTO_SIZE * mason.ring_letter_scale
@@ -230,7 +294,7 @@ def test_dial_window_margin_grows_only_for_a_motto_preset():
 
 def test_build_skin_swaps_only_the_ring():
     domy = build_skin(Settings())
-    morph = build_skin(replace(Settings(), ring="MORPH"))
+    morph = build_skin(replace(Settings(), ring="Morph"))
     assert domy.ring.asset.name == "domy.png"
     assert morph.ring.asset.name == "morph.png"
     assert morph.ring.letters == {12: "M", 16: "Π", 8: "H", 0: "Ω"}
@@ -270,7 +334,7 @@ def test_default_config_assets_all_exist():
     """Every asset the built config references ships in the repo (a miss
     would otherwise surface inside paintEvent, where Qt swallows it)."""
     assert missing_assets(build_skin(Settings())) == []
-    assert missing_assets(build_skin(replace(Settings(), ring="MORPH"))) == []
+    assert missing_assets(build_skin(replace(Settings(), ring="Morph"))) == []
     assert missing_assets(
         build_skin(replace(Settings(), weekday_theme="norse", earth_style="atmo"))
     ) == []
@@ -292,13 +356,13 @@ def test_letter_art_follows_the_finish():
     assert silver.letter_metal[12] == "silver"          # the triangle inverts
     assert silver.letter_metal[20] == "silver"
     assert silver.letter_metal[0] == "gold"             # Omega back to gold
-    morph = build_skin(replace(Settings(), ring="MORPH")).ring
+    morph = build_skin(replace(Settings(), ring="Morph")).ring
     assert morph.letter_art[16] == art_dir / "Pi.png"   # triangle 8/16/24 gold
     assert morph.letter_metal[16] == "gold"
     assert morph.letter_metal[0] == "gold"
     assert morph.letter_metal[12] == "silver"
     morph_silver = build_skin(
-        replace(Settings(), ring="MORPH", ring_finish="silver")
+        replace(Settings(), ring="Morph", ring_finish="silver")
     ).ring
     assert morph_silver.letter_metal[12] == "gold"
     assert morph_silver.letter_metal[0] == "silver"

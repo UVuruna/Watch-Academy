@@ -186,8 +186,13 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   pair (plate, names, face texts) back to planetary. Theme ROTATION
   cycles inside a kinship group picked in Settings
   (`rotation_themes`).
-  Then Ring (DOMY/MORPH presets + the Gold/Silver/Bronze
-  letter-finish group; the tint color picker lives in Settings), Pointer
+  Then Ring (DOMY/Morph/Omega/Templar/Mason presets, renamed from
+  MORPH/NUMBERS/MASON G (TASK 2, MASON/ICONS round, owner verdicts
+  2026-07-19, third batch) + the Gold/Silver/Bronze letter-finish
+  group + a "Two metals" toggle visible only for the three presets
+  eligible for the 3-3 split — Mason/Omega/Templar, any card carrying
+  its own `triangle` override (TASK 3), `_ring_two_metals`; the tint
+  color picker lives in Settings), Pointer
   (three groups: Trinity/Seasons/Prism/Compass/Aurora/Calendar variant —
   the owner's display names for trio/cross/hexa/octa/aurora/calendar;
   Aurora and Calendar have no arm count, and Aurora forces solar
@@ -253,10 +258,11 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   and an in-place refresh share the ONE implementation. Then Time
   Travel…, Click-through toggle (turn back off via the TRAY — the
   dial itself no longer takes clicks), Exit
-- `_set_ring()` / `_set_display_choice(key, value)`: rebuild via the
-  module-level `build_skin(settings)` — DEFAULT_SKIN + the chosen RING
-  PRESET (DOMY and MORPH are ring preset names, nothing more) — or a
-  targeted `dataclasses.replace`, install through the shared
+- `_set_ring()` / `_set_ring_two_metals()` / `_set_display_choice(key,
+  value)`: rebuild via the module-level `build_skin(settings)` —
+  DEFAULT_SKIN + the chosen RING PRESET (DOMY/Morph/Omega/Templar/Mason
+  are ring preset names, nothing more) — or a targeted
+  `dataclasses.replace`, install through the shared
   `_install_skin()` (fresh compositor, day context kept) and persist;
   `apply_display_settings(skin, settings)` (pure, testable) overlays
   the display choices, opacity overrides and the custom palette —
@@ -318,28 +324,41 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   Century · Millennium** (four — 🏛 the agent's pick from the owner's
   "🏛 or ⏳"), **📍 Location** (poles, Greenwich + the user's
   `jump_cities` from Settings — a place jump moves the OBSERVER, the
-  moment stays). **The pole/Greenwich rows carry sealed emojis**
-  (ROADMAP 15h item 10, owner reminder 2026-07-19; REVOKED and REWORKED
-  fix round E, 2026-07-19, slika 6): ❄ on the LEFT of both poles, then a
-  glyph on the RIGHT that switches between polar DAY (⚪, NEUTRAL interim
-  — the old 🔆/🌑 violated the owner's standing "no sun/moon emojis" law;
-  dedicated SVG icons queued per his 2026-07-19 icon list) and polar
-  NIGHT (⚫) by a simple date-window check
-  (`defaults.pole_emoji`/`defaults.POLE_LIGHT_WINDOW`, the ±6°
+  moment stays). **The pole/Greenwich rows** (ROADMAP 15h item 10,
+  owner reminder 2026-07-19; REVOKED and REWORKED fix round E,
+  2026-07-19, slika 6; ICONS WIRED, TASK 4, MASON/ICONS round, owner
+  icon list 2026-07-19 approvals): ❄ on the LEFT of both poles, then
+  EITHER an icon or an emoji on the RIGHT — the owner's own light/dark
+  icons (`assets/icons/light.png`/`dark.svg`, `defaults.ICON_FILES`)
+  now REPLACE the interim ⚪/⚫ pair outright (the earlier 🔆/🌑 had
+  violated the owner's standing "no sun/moon emojis" law); the ⚪/⚫
+  emoji stays the documented Rule #1 FALLBACK for a partial install
+  still missing an icon file (`_pole_row_text_and_icon` picks text-only
+  or icon-only, never both; `_apply_pole_row` applies either to the
+  QAction and stamps a plain `icon_name` property so tests can confirm
+  which without depending on QIcon equality). Light/dark is a simple
+  date-window check (`defaults.pole_icon_name`/`pole_emoji`/
+  `POLE_LIGHT_WINDOW`, the ±6°
   declination approximation: north Mar 3 – Oct 9, south Sep 7 – Apr 5
   wrapping the year boundary), never an astronomy call. **The date
   itself is now the DISPLAYED moment** (`_effective_travel_date`): the
   Time Travel traveled date while a simulation runs, else today's wall
   clock — round A's "never the simulation moment" choice is REVOKED
   (owner: a pole's glyph must follow what the dial actually shows).
-  Greenwich carries 🌐 (sealed owner pick, `defaults.GREENWICH_EMOJI`).
+  Greenwich carries 🌐 (sealed owner pick, `defaults.GREENWICH_EMOJI`,
+  untouched — no light/dark or eclipse state to iconify there).
   Because the Quick Jump menu is only rebuilt wholesale a few times a
   session but the traveled date can change many times via chained Quick
   Jumps, the Location submenu's `aboutToShow` calls
-  `_refresh_pole_emoji_labels` to recompute the two pole labels lazily
+  `_refresh_pole_rows` to recompute both rows lazily
   right before it opens — the menu-rebuild cadence alone is too coarse
-  for a value that can now change mid-session. Eclipse entries need the pack and GRAY without it
-  (tooltip names the full installation); eclipse picks land on the
+  for a value that can now change mid-session. **The Sun/Moon
+  submenus' own eclipse entries** (TASK 4) wear the owner's eclipse
+  icons (`assets/icons/eclipse_sun.svg`/`eclipse_moon.png`) — wired onto
+  those four entries ONLY, never the plain sun/moon jump entries above
+  them (`_ui_icon`, graceful-absent). Eclipse entries need the pack and GRAY without it
+  (tooltip names the full installation, independent of their own icon,
+  which shows either way); eclipse picks land on the
   catalog instant via `julian_day_of` next/prev queries; unit jumps
   are calendar arithmetic on the real astronomical date
   (`shift_calendar` — Feb 29 clamps, era edges are plain arithmetic);

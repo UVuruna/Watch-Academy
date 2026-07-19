@@ -153,7 +153,8 @@ def test_display_choices_round_trip(store):
         show_seconds=False,
         show_octa_slot=False,
         language="sr-Latn",
-        ring="MORPH",
+        ring="Morph",
+        ring_two_metals={"Mason": False, "Omega": True},
         theme_metals={"greek": "gold", "norse": "silver"},
         theme_metal_follow_ring=True,
     )
@@ -193,6 +194,64 @@ def test_display_choices_round_trip(store):
     migrated = store.load()
     assert migrated.octa_slot == "chinese"
     assert migrated.info_slot_style == "bronze"
+
+
+def test_ring_renames_migrate_stored_settings(store):
+    """TASK 2 (MASON/ICONS round, owner verdicts 2026-07-19, third
+    batch): the bundled ring presets renamed "MASON G" -> "Mason" and
+    "NUMBERS" -> "Omega" (external user data, not an API shim, Rule
+    #6) — an older settings file naming either old value loads onto
+    the new one instead of raising SettingsCorruptError. "MORPH" ->
+    "Morph" is a pure CASE change, already bridged by the pre-existing
+    case-insensitive fold (no dedicated migration entry needed)."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "MASON G"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "Mason"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "NUMBERS"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "Omega"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "MORPH"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "Morph"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "no such preset"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
+def test_ring_two_metals_round_trips_and_drops_stale_entries(store):
+    """TASK 3 (MASON/ICONS round): the per-preset "Two metals" choice
+    round-trips keyed by preset name; a non-bool value or a name that
+    resolves to nothing loaded is silently dropped on load — the SAME
+    lenient policy `theme_metals` already uses, rather than corrupting
+    the whole file over one stale entry."""
+    saved = replace(
+        Settings(), ring_two_metals={"Mason": False, "Omega": True},
+    )
+    store.save(saved)
+    assert store.load() == saved
+    raw = store.path.read_text(encoding="utf-8").replace(
+        '"Mason": false', '"Mason": false, "MASON G": true, "Ghost": true'
+    ).replace('"Omega": true', '"Omega": "yes"')
+    store.path.write_text(raw, encoding="utf-8")
+    lenient = store.load()
+    # "MASON G" folds onto "Mason" (rename migration) but "Mason" was
+    # already written first, so the raw dict's OWN later key wins —
+    # both resolve to the same True; the unknown "Ghost" name and the
+    # non-bool "yes" value are both dropped.
+    assert lenient.ring_two_metals == {"Mason": True}
 
 
 def test_earth_label_migrates_from_the_old_bool_pair(store):

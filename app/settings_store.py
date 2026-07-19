@@ -49,6 +49,14 @@ class Settings:
     # The user's custom ring cards ({name, positions, letters}) — merged
     # with Database/ring_presets.json by data/rings.py.
     custom_rings: tuple = ()
+    # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts
+    # 2026-07-19, third batch): per-preset choice between the 3-3
+    # two-metal split and one finish on all six, for every seal preset
+    # that carries its own `triangle` override (Mason/Omega/Templar
+    # today) — keyed by preset name, like `theme_metals` below. A
+    # preset absent here falls back to `constants.RING_TWO_METALS_DEFAULT`
+    # (`app.controller._ring_two_metals` resolves both).
+    ring_two_metals: dict = field(default_factory=dict)
     # Install defaults per the owner's 2026-07-12 list: hexa paint,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
     pointer: str = "hexa"
@@ -234,9 +242,22 @@ class SettingsStore:
                 name.lower(): name for name in ring_presets(custom_rings)
             }
             ring_value = str(raw.get("ring", "DOMY"))
-            ring = by_fold.get(ring_value.lower())
+            ring = _fold_ring_name(ring_value, by_fold)
             if ring is None:
                 raise ValueError(f"ring {ring_value!r} unknown")
+            # THE METAL-SPLIT OPTION (TASK 3): per-preset dict, same
+            # lenient policy `theme_metals` already uses below — a
+            # non-bool value or a name that resolves to nothing loaded
+            # (a stale bundled rename, a deleted custom ring) is simply
+            # dropped rather than corrupting the whole file over one
+            # stale entry.
+            ring_two_metals = {}
+            for raw_name, value in dict(raw.get("ring_two_metals", {})).items():
+                if not isinstance(value, bool):
+                    continue
+                resolved = _fold_ring_name(str(raw_name), by_fold)
+                if resolved is not None:
+                    ring_two_metals[resolved] = value
             # One-time migration (2026-07-12): the South slot became a
             # MODE + per-family STYLE pair — the six old combined
             # values map onto it (external user data, not an API shim).
@@ -387,6 +408,7 @@ class SettingsStore:
                 timezone=timezone,
                 ring=ring,
                 custom_rings=custom_rings,
+                ring_two_metals=ring_two_metals,
                 jump_cities=jump_cities,
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
@@ -443,6 +465,7 @@ class SettingsStore:
             "ring_tint": settings.ring_tint,
             "ring_finish": settings.ring_finish,
             "custom_rings": [dict(card) for card in settings.custom_rings],
+            "ring_two_metals": dict(settings.ring_two_metals),
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
@@ -523,6 +546,27 @@ class SettingsStore:
         backup = self._path.with_suffix(".json.bak")
         os.replace(self._path, backup)
         return backup
+
+
+# RING PRESET RENAMES (TASK 2, MASON/ICONS round, owner verdicts
+# 2026-07-19, third batch): a stored settings file's OLD bundled preset
+# name migrates onto its new one (external user data, not an API shim,
+# Rule #6) — a bare case-insensitive fold alone cannot bridge these
+# (unlike "MORPH" -> "Morph", a pure case change the existing fold
+# already handles for free).
+_LEGACY_RING_NAMES = {"mason g": "Mason", "numbers": "Omega"}
+
+
+def _fold_ring_name(raw_name: str, by_fold: dict) -> str | None:
+    """One stored ring name resolved to its CURRENT bundled/custom name
+    — the TASK 2 rename migration first, then the existing case-
+    insensitive fold (older files stored "domy") — or None when it
+    names nothing loaded (a stale bundled rename, or a custom ring the
+    user later deleted). Shared by the top-level `ring` field (which
+    must raise on a miss) and `ring_two_metals`'s dict keys (which
+    silently drop a miss, `theme_metals`'s own lenient policy)."""
+    renamed = _LEGACY_RING_NAMES.get(raw_name.lower(), raw_name)
+    return by_fold.get(renamed.lower())
 
 
 def _normalized_ring_card(entry: dict) -> dict:

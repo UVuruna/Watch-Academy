@@ -212,6 +212,12 @@ carry `"poem": True`, which routes them through the centered-stanza
 renderer instead of the normal justified article flow. Neither entry
 exists in `_topics()` at all when locked — the SAME cipher unlocks
 both (there is no second code); the unlock is SESSION-only, like the
-Report. The Seasons entry's badge is a 1×1 px placeholder at
-`assets/badge/<source>/season/Poem.png` (owner art pending, per the
-WORKPLAN "Missing owner art" rule).
+Report. The Seasons entry's badge, `assets/badge/<source>/season/
+Poem.png`, does not exist on disk yet (owner art pending, per the
+WORKPLAN "Missing owner art" rule) — PURGE round 2026-07-19 removed
+the committed 1x1 stand-in that used to sit there (it was giving
+PromptPainter and the roster the false idea the art already existed);
+the entry renders through the SAME `resolved.exists()` filter every
+other image reference goes through (`_render_cell`), so the poem's
+text and title show with no image at all until the real plate lands —
+a genuinely missing file, never a placeholder pretending to be one.

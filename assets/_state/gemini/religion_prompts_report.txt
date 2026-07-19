@@ -1,0 +1,11 @@
+====================================================================
+Creeds — the Seven Faiths Weekday Theme (silver plates)  [Gemini]
+Run started:  2026-07-19 17:37:10  (0/8 pending)
+SKIPPED by the sheet (L3): Rework (owner GO 2026-07-15, `research/pantheon_catalog.md` → "The Religion rework"): — SUPERSEDED
+SKIPPED by the sheet (L206): Ninth — Freemasonry — SUPERSEDED — The Rough Ashlar
+SKIPPED by the sheet (L219): RELOCATED — The Unknown God — REUSE
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-19 17:37:10  (all pending items done)
+

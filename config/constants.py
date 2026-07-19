@@ -484,6 +484,19 @@ RING_LAYOUTS = {
         "theme": "Union",
     },
 }
+# THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner verdicts
+# 2026-07-19, third batch): for every seal preset that carries its own
+# `triangle` override (Mason/Omega/Templar today — `data.rings.
+# validate_preset`'s optional card field) the owner can choose EITHER
+# the 3-3 two-metal split OR one finish on all six
+# (`app.controller._ring_two_metals`, `Settings.ring_two_metals`). This
+# is the per-preset DEFAULT when the user has never touched the toggle
+# for that preset — Mason keeps its pre-Task-3 split look, every other
+# eligible preset starts single-metal (documented owner spec: "default
+# matching today's look"). A preset absent here (or one with no
+# `triangle` at all) simply defaults to False — ineligible presets
+# never read this table.
+RING_TWO_METALS_DEFAULT = {"Mason": True}
 # The full letter library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,

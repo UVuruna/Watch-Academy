@@ -36,7 +36,7 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
     broken pin config (a typo'd occurrence, an out-of-order pin) fails
     loudly at startup, never mid-paint. Returns a tuple of
     `{"text": str, "angles": tuple[float, ...]}`, empty for every
-    preset without a `motto` field (DOMY, MORPH, NUMBERS, every custom
+    preset without a `motto` field (DOMY, Morph, Omega, Templar, every custom
     ring)."""
     resolved = []
     for motto_entry in raw:
@@ -76,8 +76,8 @@ def validate_preset(entry: dict) -> dict:
     matching counts. Returns {name, positions, letters, layout, triangle,
     legend, motto}. `triangle` (ROADMAP 15b) is an optional 3-position
     override of the SEAL layout's own metal triangle (which is empty —
-    one finish on all six, the NUMBERS way) so a 6-letter preset can
-    split into two 3-letter metal groups instead (the MASON G banknote's
+    one finish on all six, the plain seal reading) so a 6-letter preset
+    can split into two 3-letter metal groups instead (the Mason banknote's
     Trinity/Union read, CANON.md §The Banknote). `legend` is an optional
     hour(position) -> {name, reading} map — the per-letter HOVER LEGEND
     text, quoted verbatim from CANON. `motto` (TASK 1) is an optional

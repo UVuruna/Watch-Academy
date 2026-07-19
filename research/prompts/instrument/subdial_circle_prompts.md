@@ -87,3 +87,19 @@ too — the intake maps informal folder names onto these stems.
 procedural circle where a file is missing, and keeps drawing the
 content (fitted text, glyph art, the mini seconds hand) centered on
 top at `SLOT_ROUNDEL_CONTENT_FRACTION` of the diameter.
+
+## Ground truth (PURGE round, 2026-07-19)
+
+`assets/badge/gemini/subdial/silver/center.png` is the ONE master
+plate on disk today — generated from THIS sheet's brief, not a
+make-script (no `setup/make_subdial*.py` exists; confirmed by the
+intake commit, "0.14.227 Owner round six": *"THE OWNER'S FIRST SUBDIAL
+PLATE ... intaken ... exactly the sheet brief"*). `subdial_plate_file()`
+already covers every seat and every finish from this ONE master —
+missing SEATS fall back to `center`, missing FINISHES recolor another
+finish's master live — so the gap is pure ART GENERATION against the
+11 remaining entries above, not a missing prompt: strictly the code
+only needs ONE finish per remaining LIGHT variant (`south`, `h3`,
+`h21` — any of gold/silver/bronze, whichever the owner generates
+first) to give those three seats their own plate instead of reusing
+`center`'s.

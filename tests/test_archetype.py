@@ -1214,14 +1214,17 @@ def test_menu_size_slider_applies_only_on_release(app, tmp_path, monkeypatch):
 # --- The both-unchecked bug (ROADMAP 15h item 8's surviving bug) ------------------
 
 
-def test_quick_jump_location_carries_the_pole_and_greenwich_emojis(
+def test_quick_jump_location_carries_the_pole_icons_and_greenwich_emoji(
     app, tmp_path, monkeypatch
 ):
-    """ROADMAP 15h item 10, owner reminder 2026-07-19: the Quick Jump ▸
-    Location rows carry the sealed emojis — ❄ + a season emoji on both
-    poles, 🌐 on Greenwich. Today's actual pole state is asserted via
-    the same helper the menu build uses (Rule #5, no duplicated date
-    math), so the test stays correct on every run date."""
+    """ROADMAP 15h item 10, owner reminder 2026-07-19; ICONS WIRED, TASK
+    4, MASON/ICONS round, owner icon list 2026-07-19 approvals: the
+    Quick Jump ▸ Location rows carry ❄ + the pole's own light/dark icon
+    (`assets/icons/light.png`/`dark.svg`, both shipped, so the ⚪/⚫
+    emoji fallback never triggers here), 🌐 on Greenwich. Today's actual
+    pole state is asserted via the same helpers the menu build uses
+    (Rule #5, no duplicated date math), so the test stays correct on
+    every run date."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from datetime import date
 
@@ -1236,40 +1239,41 @@ def test_quick_jump_location_carries_the_pole_and_greenwich_emojis(
         location_menu = next(
             a for a in jumps.actions() if "Location" in a.text()
         ).menu()
-        entries = {a.text() for a in location_menu.actions() if a.text()}
+        by_text = {a.text(): a for a in location_menu.actions() if a.text()}
         today = date.today()
-        north_expected = (
-            f"{defaults.POLE_COLD_EMOJI} North Pole "
-            f"{defaults.pole_emoji('north', today)}"
+        assert f"{defaults.POLE_COLD_EMOJI} North Pole" in by_text
+        assert f"{defaults.POLE_COLD_EMOJI} South Pole" in by_text
+        north_action = by_text[f"{defaults.POLE_COLD_EMOJI} North Pole"]
+        south_action = by_text[f"{defaults.POLE_COLD_EMOJI} South Pole"]
+        assert not north_action.icon().isNull()
+        assert not south_action.icon().isNull()
+        assert north_action.property("icon_name") == defaults.pole_icon_name(
+            "north", today
         )
-        south_expected = (
-            f"{defaults.POLE_COLD_EMOJI} South Pole "
-            f"{defaults.pole_emoji('south', today)}"
+        assert south_action.property("icon_name") == defaults.pole_icon_name(
+            "south", today
         )
         greenwich_expected = f"{defaults.GREENWICH_EMOJI} Greenwich"
-        assert north_expected in entries
-        assert south_expected in entries
-        assert greenwich_expected in entries
+        assert greenwich_expected in by_text
     finally:
         c._profiling_timer.stop()
         c._tray.hide()
 
 
-def test_pole_emoji_follows_the_traveled_date_not_today(app, tmp_path, monkeypatch):
+def test_pole_icon_follows_the_traveled_date_not_today(app, tmp_path, monkeypatch):
     """Fix round E (owner verdict 2026-07-19, slika 6 — REVOKES round
-    A's "never the simulation moment" choice): while Time Travel is
-    running, the poles' light/dark glyph must follow the TRAVELED date,
-    not the wall clock. 19 October at the North Pole is past its light
-    window (Mar 3 - Oct 9) — the traveled date reads DARK (⚫, the
-    neutral interim glyph — 🔆/🌑 violated the owner's no-sun/moon-
-    emoji law) even if today's real calendar date is inside it."""
+    A's "never the simulation moment" choice); ICONS WIRED (TASK 4,
+    MASON/ICONS round): while Time Travel is running, the poles' icon
+    must follow the TRAVELED date, not the wall clock. 19 October at
+    the North Pole is past its light window (Mar 3 - Oct 9) — the
+    traveled date reads DARK (the "dark" icon) even if today's real
+    calendar date is inside it."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from datetime import datetime
 
     import astral
 
     from app.controller import AppController
-    from config import defaults
 
     c = AppController(app)
     try:
@@ -1284,10 +1288,51 @@ def test_pole_emoji_follows_the_traveled_date_not_today(app, tmp_path, monkeypat
             a for a in jumps.actions() if "Location" in a.text()
         ).menu()
         location_menu.aboutToShow.emit()
-        assert (
-            f"{defaults.POLE_COLD_EMOJI} North Pole {defaults.POLE_DARK_EMOJI}"
-            == c._north_pole_action.text()
-        )
+        assert c._north_pole_action.property("icon_name") == "dark"
+        assert not c._north_pole_action.icon().isNull()
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
+def test_quick_jump_eclipse_entries_wear_their_icon(app, tmp_path, monkeypatch):
+    """TASK 4 (MASON/ICONS round, owner icon list 2026-07-19 approvals):
+    the Quick Jump Sun/Moon submenus' ECLIPSE entries only — not the
+    plain sun/moon jump entries above them — carry the owner's eclipse
+    icon (`assets/icons/eclipse_sun.svg`/`eclipse_moon.png`, both
+    shipped)."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from app.controller import AppController
+
+    c = AppController(app)
+    try:
+        jumps = next(
+            a for a in c._menu.actions() if "Quick Jump" in a.text()
+        ).menu()
+        sun_menu = next(
+            a for a in jumps.actions() if "Sun" in a.text()
+        ).menu()
+        moon_menu = next(
+            a for a in jumps.actions() if "Moon" in a.text()
+        ).menu()
+        sun_actions = {a.text(): a for a in sun_menu.actions() if a.text()}
+        moon_actions = {a.text(): a for a in moon_menu.actions() if a.text()}
+        eclipse_actions = [
+            a for text, a in sun_actions.items() if "Eclipse" in text
+        ] + [a for text, a in moon_actions.items() if "Eclipse" in text]
+        assert len(eclipse_actions) == 4
+        assert all(not a.icon().isNull() for a in eclipse_actions)
+        # The plain sun/moon jump entries keep NO icon — the wiring is
+        # scoped to the eclipse entries alone.
+        plain_actions = [
+            a for text, a in sun_actions.items()
+            if "Eclipse" not in text and "Sun" in text
+        ] + [
+            a for text, a in moon_actions.items()
+            if "Eclipse" not in text and "Moon" in text
+        ]
+        assert plain_actions
+        assert all(a.icon().isNull() for a in plain_actions)
     finally:
         c._profiling_timer.stop()
         c._tray.hide()

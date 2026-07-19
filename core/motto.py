@@ -1,10 +1,11 @@
 """The outer Great Seal motto arc — pure per-glyph angle math.
 
 TASK 1 (owner "može radi" 2026-07-19, CANON.md §The Banknote): while
-the MASON G ring preset is active, the two Great Seal mottos render as
-curved text OUTSIDE the ring band, laid out so specific KEY LETTERS
-land exactly on the ring's own six hexagram seats — MASON outside, G
-inside, the dollar-bill mechanic on our dial. Given a motto string and
+the Mason ring preset is active (renamed from "MASON G", TASK 2,
+MASON/ICONS round), the two Great Seal mottos render as curved text
+OUTSIDE the ring band, laid out so specific KEY LETTERS land exactly on
+the ring's own six hexagram seats — MASON outside, G inside, the
+dollar-bill mechanic on our dial. Given a motto string and
 its PINNED letter -> ring-position constraints, `motto_glyph_angles`
 solves every character's dial angle: pinned characters land exactly on
 their seat, and the run of characters between two consecutive pins is
@@ -30,8 +31,26 @@ flag is needed for the GLYPH rotation itself —
 `core.angles.readable_rotation_deg` already derives tops-outward (top
 half) or tops-inward (bottom half) purely from the angle, unchanged by
 this round.
+
+ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch — "the
+letters should sit TIGHT... and the leftover slack becomes ONE BIG WORD
+GAP"): a motto pinned ONLY at its first and last character (ANNUIT
+COEPTIS's own 2 pins, A and S) no longer spreads its 13 character-steps
+EVENLY across the whole 120 deg span — that read too wide next to NOVUS
+ORDO SECLORUM's own tight look. NOVUS's 3 pins already happen to divide
+its two segments into 9 steps of exactly `defaults.
+RING_MOTTO_LETTER_STEP_DEG` each (60 deg / 9 chars) — this round makes
+that step a named config constant and reuses it explicitly for the
+2-pin case: letters advance inward from BOTH pins at that fixed step,
+and whatever angular slack remains lands as one big gap at the motto's
+own (single) interior space — the eye/G area breathes like the Great
+Seal's own gap over the eye. `_tight_two_pin_angles` is the new
+2-pin-only code path; NOVUS's 3-pin case is untouched (its own even
+per-segment interpolation already produces the tight look by
+construction).
 """
 
+from config import defaults
 from core.angles import ring_position_angle
 
 
@@ -52,6 +71,55 @@ def _occurrence_index(text: str, letter: str, occurrence: int) -> int:
         f"{letter!r} does not appear {occurrence} time(s) in {text!r} "
         f"(found {seen})"
     )
+
+
+def _tight_two_pin_angles(
+    text: str,
+    resolved: list[tuple[int, int]],
+    clockwise: bool,
+) -> tuple[float, ...]:
+    """ANNUIT WORD-GAP round (owner correction 2026-07-19, third batch):
+    the layout for a motto pinned ONLY at its first and last character —
+    "a pinned two-word motto" (ANNUIT COEPTIS today). Every letter
+    advances from BOTH pins INWARD at the fixed
+    `defaults.RING_MOTTO_LETTER_STEP_DEG` step (the same tight
+    per-character spacing NOVUS ORDO SECLORUM's own 3-pin segments
+    already produce), instead of spreading the whole span evenly across
+    every character (the previous round's "too wide" look). Whatever
+    angular slack is left over lands entirely on the motto's own single
+    INTERIOR SPACE — centered between its two flanking letters, since a
+    space never draws (`RingLayer`'s draw loop skips it) so its own
+    angle is otherwise inconsequential. Requires exactly one interior
+    space: a "pinned two-word motto" is the only shape this ever draws
+    (Rule #7) — a future 2-pin motto of a different shape fails loudly
+    here rather than silently drawing pins that never meet the gap."""
+    (index_a, position_a), (index_b, position_b) = resolved
+    angle_a = ring_position_angle(position_a)
+    angle_b = ring_position_angle(position_b)
+    step = defaults.RING_MOTTO_LETTER_STEP_DEG
+    if clockwise:
+        while angle_b <= angle_a:
+            angle_b += 360.0
+    else:
+        while angle_b >= angle_a:
+            angle_b -= 360.0
+        step = -step
+    spaces = [index for index, char in enumerate(text) if char == " "]
+    if len(spaces) != 1:
+        raise ValueError(
+            f"motto {text!r}: the tight two-pin layout needs exactly one "
+            f"interior word gap (found {len(spaces)})"
+        )
+    gap = spaces[0]
+    angles = [0.0] * len(text)
+    angles[index_a] = angle_a
+    for k in range(index_a + 1, gap):
+        angles[k] = angle_a + step * (k - index_a)
+    angles[index_b] = angle_b
+    for k in range(index_b - 1, gap, -1):
+        angles[k] = angle_b - step * (index_b - k)
+    angles[gap] = (angles[gap - 1] + angles[gap + 1]) / 2.0
+    return tuple(angles)
 
 
 def motto_glyph_angles(
@@ -97,8 +165,18 @@ def motto_glyph_angles(
     needs no matching flag — it already derives tops-outward (top half)
     or tops-inward (bottom half) from the angle alone, so feeding it
     either direction's angles draws every glyph upright automatically.
-    Every character strictly between two pins is the EVEN linear
-    interpolation of the two pinned angles."""
+
+    With exactly 2 pins (a motto pinned only at its own first and last
+    character, e.g. ANNUIT COEPTIS) the ANNUIT WORD-GAP layout applies
+    (`_tight_two_pin_angles`, owner correction 2026-07-19, third batch):
+    every letter advances at the fixed `defaults.
+    RING_MOTTO_LETTER_STEP_DEG` step from BOTH pins inward, and the
+    leftover slack becomes one big gap at the motto's own single
+    interior space. With 3+ pins (NOVUS ORDO SECLORUM's own 3) every
+    character strictly between two consecutive pins is instead the EVEN
+    linear interpolation of that segment's own two pinned angles —
+    unchanged by this round, since NOVUS's own segments already land on
+    the tight step by construction."""
     if len(pins) < 2:
         raise ValueError("motto_glyph_angles needs at least 2 pins to interpolate")
     resolved = sorted(
@@ -115,6 +193,8 @@ def motto_glyph_angles(
             f"motto pins for {text!r} must cover index 0 and "
             f"{len(text) - 1} (resolved to {[index for index, _ in resolved]})"
         )
+    if len(resolved) == 2:
+        return _tight_two_pin_angles(text, resolved, clockwise)
     angles = [0.0] * len(text)
     prev_index, prev_angle = resolved[0][0], ring_position_angle(resolved[0][1])
     angles[prev_index] = prev_angle
