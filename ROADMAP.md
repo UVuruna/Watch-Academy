@@ -138,14 +138,37 @@ lives in [The DOMY Canon](CANON.md).
   Selene myth) and the Paschal full Moon (the moon that still fixes
   Easter). ROADMAP 8b marked done. See [Encyclopedia](app/encyclopedia.md).
   1 new test, 515 green.
+- **Session 7 verification (2026-07-19) — DONE-ALREADY, no code
+  changes.** WORKPLAN Session 7 ("the poem Easter egg") and owner
+  queue item 1 ("hidden hover only at the top") were both already
+  fully shipped in earlier rounds — item 6's poem in commit
+  `c88113d` (0.14.274, itself labelled "session 7"), item 1's
+  top-only hover restriction in commit `22435a5` (0.14.271,
+  "session 1") — but neither WORKPLAN nor ROADMAP had been marked
+  DONE, so this round re-ran as assigned, ground-truthed the code
+  (`render/compositor.py`'s `_tick_tooltip`/`_greetings_tooltip`,
+  `app/encyclopedia.py`'s `EncyclopediaDialog.__init__`,
+  `app/controller.py`'s `_collect_secret`) and the pinned tests
+  (`test_greetings_ride_the_top_ring_letter_only_when_unlocked`,
+  `test_hidden_mode_binds_the_poem_to_seasons_too`), and found both
+  exactly spec-shaped — no gap to close. See owner queue items 1 and
+  6 above for the evidence. 515 tests green, unchanged.
 
 <a id="owner-queue"></a>
 
 ## Owner's Queued Feature Tasks (2026-07-16)
 
-1. **Hidden hover only at the top.** The HIDDEN hover trigger moves
-   to 12h only — the letter/sign/number seated at the top; nowhere
-   else on the ring.
+1. **Hidden hover only at the top — DONE (session 1, commit
+   `22435a5`; re-verified Session 7, 2026-07-19).** The HIDDEN hover
+   trigger answers ONLY at 12h. `render/compositor.py`'s
+   `_tick_tooltip` gates the Four Greetings on
+   `theta <= half or theta >= 360.0 - half` (the top angle alone,
+   half-width `GREETINGS_LETTER_HALF_DEG`) — arithmetically no other
+   ring position can match; the 24h (Omega) letter answers the
+   reveal-week double-click instead (`Compositor.hit_omega`). Pinned
+   by `tests/test_pointer.py::
+   test_greetings_ride_the_top_ring_letter_only_when_unlocked` (top
+   open with the full poem text, Omega/bottom silent).
 2. **Omega double-click = reveal week.** Double-click on Omega (24h)
    raises the opacity of ALL weekday bodies to full — ghosts AND the
    center body where one exists (Trinity, Prism) — with the center
@@ -190,11 +213,28 @@ lives in [The DOMY Canon](CANON.md).
    survive e.g. a white Compass tip, and a yellow sun-glow fights
    the yellow top arms. New colors: the **Sun glows GOLDEN, the
    Moon glows SILVER**.
-6. **The poem Easter egg** (owner 2026-07-16). The owner's
-   four-greeting poem (text in [The DOMY Canon](CANON.md), Seasons
-   archetype section) stays HIDDEN behind the existing typed
-   cipher — when the code is entered, the poem appears in the
-   Encyclopedia, bound to the Seasons.
+6. **The poem Easter egg — DONE (WORKPLAN Session 7, commit
+   `c88113d`; re-verified 2026-07-19).** The owner's four-greeting
+   poem (text in [The DOMY Canon](CANON.md), Seasons archetype
+   section) stays HIDDEN behind the existing typed cipher. When
+   `_hidden_unlocked` flips, `EncyclopediaDialog.__init__` appends a
+   poem entry closing BOTH the Trinity topic (the full four-stanza
+   verses) and the Seasons topic — its CANONICAL home — reading
+   `Database/verses.json`'s `"seasons"` block: the CANON's
+   three-line quote verbatim plus a short English framing of the
+   four faces (day = faith in a better tomorrow, evening = life
+   flowing in love, night = the peaceful death, morning = rebirth
+   without the past). Neither entry exists in the topic dict at all
+   while locked (not in the gallery, not reachable by index), and
+   `data/translations.py`'s corpus walk never touches `verses.json`
+   (no leak into the translation bundle either); the unlock is
+   SESSION-scoped, exactly `_hidden_unlocked`'s own lifetime — no
+   new persistence rule invented. Pinned by
+   `tests/test_settings_dialog.py::
+   test_hidden_mode_binds_the_poem_to_seasons_too` (locked → 7
+   Seasons entries, none `poem`; unlocked → 8, the last verbatim and
+   framed). The Seasons badge is a 1×1 px placeholder at
+   `assets/badge/<source>/season/Poem.png` (owner art pending).
 7. **Calendar wedge hovers wear OUR logos** (owner 2026-07-16,
    with screenshots): the wedge tooltip must show the CHINESE
    COLORED medallion for the double-hour animal and the zodiac

@@ -112,14 +112,19 @@ everything at once)**. **MANDATORY in this session:** the ~327
 `Database/symbolism.json` still describe the OLD compass hues
 (found in Session 3) — rewrite them to the Walks/Ages wheels.
 
-### Session 7 — The poem Easter egg → **Sonnet**
+### Session 7 — The poem Easter egg → **Sonnet** — DONE
 **Say:** "Radi Sesiju 7 iz WORKPLAN.md — pesma iza šifre."
 **Reads:** ROADMAP queue task 6; CANON.md Seasons section (the poem
 text); `app/encyclopedia.md`; the hidden-mode listener in
 `app/controller.md` / `app/report.md`.
-**Delivers:** typing the cipher reveals the owner's four-greeting
+**Delivered:** typing the cipher reveals the owner's four-greeting
 poem in the Encyclopedia, bound to the Seasons; hidden otherwise;
-test pins the gate.
+test pins the gate. **Landed already as commit `c88113d`
+(0.14.274)** — this session's own re-run (2026-07-19) ground-truthed
+the unlock flow and the pinned test
+(`test_hidden_mode_binds_the_poem_to_seasons_too`) and found it
+exactly spec-shaped; no code changes were needed. See ROADMAP queue
+item 6 for the evidence.
 
 ### Session 8 — Wider Pantheon topics → **Opus** (writers) — DONE
 **Say:** "Radi Sesiju 8 iz WORKPLAN.md — Wider Pantheon
