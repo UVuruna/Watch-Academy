@@ -131,6 +131,142 @@ def test_eclipse_window_on_and_off_boundary():
     assert outside.eclipse_event is None
 
 
+# --- Visibility (TASK 4, owner verdict "može", fix round E, 2026-07-19) -------
+
+
+def test_eclipse_visibility_solar_distance_ground_truthed(app):
+    """SOLAR visible <=> Sun above horizon AND within
+    `ECLIPSE_SOLAR_VISIBILITY_KM` of the catalog's greatest-eclipse
+    point. Ground-truthed against the SAME primitives `core.clock_state`
+    uses (astral's own sun elevation at the instant, plain haversine)
+    for the real 2026-08-12 total solar eclipse's greatest-eclipse
+    instant (~17:46 UT) observed from Belgrade — whatever those say, the
+    built TickState must agree, against a near AND a clearly-far catalog
+    ground point."""
+    import astral.sun
+
+    tz = ZoneInfo("Europe/Belgrade")
+    instant = datetime(2026, 8, 12, 17, 46, tzinfo=timezone.utc)
+    local_now = instant.astimezone(tz)
+    city = defaults.DEFAULT_CITY
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    sun_up = astral.sun.elevation(
+        observer, instant, with_refraction=False
+    ) > constants.HORIZON_ELEVATION_DEG
+    # Ground truth, read from astral directly (not assumed): 17:46 UT is
+    # 19:46 local in mid-August Belgrade, well within evening daylight.
+    assert sun_up is True
+
+    def haversine(lat1, lon1, lat2, lon2):
+        r = constants.EARTH_RADIUS_KM
+        p1, p2 = math.radians(lat1), math.radians(lat2)
+        dp, dl = math.radians(lat2 - lat1), math.radians(lon2 - lon1)
+        a = (
+            math.sin(dp / 2) ** 2
+            + math.cos(p1) * math.cos(p2) * math.sin(dl / 2) ** 2
+        )
+        return 2 * r * math.asin(math.sqrt(a))
+
+    # A nearby ground point (well inside Europe) and a clearly distant
+    # one (Sydney) — both distances computed independently of the code
+    # under test, so the assertions below are ground truth, not circular.
+    near_lat, near_lon = 46.0, 20.0
+    far_lat, far_lon = -33.87, 151.21
+    near_distance = haversine(city["latitude"], city["longitude"], near_lat, near_lon)
+    far_distance = haversine(city["latitude"], city["longitude"], far_lat, far_lon)
+    assert near_distance <= constants.ECLIPSE_SOLAR_VISIBILITY_KM
+    assert far_distance > constants.ECLIPSE_SOLAR_VISIBILITY_KM
+
+    near_day = _belgrade_day(
+        local_now,
+        (EclipseEvent(
+            kind="solar", instant=instant, type="total", magnitude=1.0,
+            lat=near_lat, lon=near_lon,
+        ),),
+    )
+    far_day = _belgrade_day(
+        local_now,
+        (EclipseEvent(
+            kind="solar", instant=instant, type="total", magnitude=1.0,
+            lat=far_lat, lon=far_lon,
+        ),),
+    )
+    near_tick = build_tick_state(local_now, near_day)
+    far_tick = build_tick_state(local_now, far_day)
+    # The FAR point fails on distance alone, regardless of daylight.
+    assert far_tick.eclipse_event.visible is False
+    assert far_tick.eclipse_event.distance_km == pytest.approx(far_distance, abs=1.0)
+    # The NEAR point is within range — its visibility rests purely on
+    # the ground-truthed daylight fact above (the sun has set).
+    assert near_tick.eclipse_event.visible == sun_up
+    assert near_tick.eclipse_event.distance_km == pytest.approx(near_distance, abs=1.0)
+
+
+def test_eclipse_visibility_lunar_moon_altitude_ground_truthed(app):
+    """LUNAR visible <=> the Moon stands above the horizon at the eclipse
+    instant — ground-truthed directly against astral's own
+    `astral.moon.elevation` (the same primitive `core.clock_state`
+    uses), picking one instant it reads above and one it reads below
+    from a spread of candidates rather than assuming either from
+    memory."""
+    import astral.moon
+
+    tz = ZoneInfo("Europe/Belgrade")
+    city = defaults.DEFAULT_CITY
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    candidates = [
+        datetime(2026, 3, 3, h, 0, tzinfo=timezone.utc) for h in range(0, 24, 3)
+    ]
+    elevations = {
+        instant: astral.moon.elevation(observer, instant) for instant in candidates
+    }
+    above = next(i for i, e in elevations.items() if e > 0.0)
+    below = next(i for i, e in elevations.items() if e <= 0.0)
+
+    def tick_for(instant):
+        local_now = instant.astimezone(tz)
+        day = _belgrade_day(
+            local_now,
+            (EclipseEvent(
+                kind="lunar", instant=instant, type="total", magnitude=1.2,
+            ),),
+        )
+        return build_tick_state(local_now, day)
+
+    assert tick_for(above).eclipse_event.visible is True
+    assert tick_for(below).eclipse_event.visible is False
+
+
+def test_eclipse_invisible_hover_names_the_reason(app):
+    """The hover line appends the reason (owner spec, round numbers, the
+    km threshold never printed): "below the horizon" for a horizon miss,
+    "path {d} km away" for a solar distance miss."""
+    tz = ZoneInfo("Europe/Belgrade")
+    instant = datetime(2026, 8, 12, 17, 46, tzinfo=timezone.utc)
+    local_now = instant.astimezone(tz)
+    day = _belgrade_day(local_now)
+    compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    compositor.render_offscreen(360.0, 1.0, day, build_tick_state(local_now, day))
+
+    far_event = EclipseEvent(
+        kind="solar", instant=instant, type="total", magnitude=1.0,
+        lat=-33.87, lon=151.21, visible=False, distance_km=16123.4,
+    )
+    horizon_event = EclipseEvent(
+        kind="lunar", instant=instant, type="total", magnitude=1.2,
+        visible=False,
+    )
+    far_line = compositor._eclipse_hover_line(far_event)
+    horizon_line = compositor._eclipse_hover_line(horizon_event)
+    assert "16123 km away" in far_line
+    assert "below the horizon" in horizon_line
+    assert str(constants.ECLIPSE_SOLAR_VISIBILITY_KM) not in far_line
+
+
 def test_absent_pack_never_populates_eclipses():
     """The ABSENCE RULE (Rule #1-compatible documented fallback): the
     default `eclipses=()` (no Deep Time pack) means TickState.eclipse_event
@@ -430,6 +566,17 @@ def test_lunar_total_disc_is_genuinely_near_black(app):
     well below the old translucent overlay would ever reach."""
     pixel = _lunar_moon_pixel(app, "total", 1.15)
     assert max(pixel.red(), pixel.green(), pixel.blue()) < 55
+
+
+def test_lunar_total_disc_wears_copper_not_neutral_gray(app):
+    """Fix round E (owner verdict "može"): the TOTAL lunar disc multiplies
+    with a deep COPPER tone (`defaults.ECLIPSE_TOTAL_MOON_TINT`) instead
+    of neutral gray — dark (same near-black ceiling as the plain
+    near-black test) AND red-DOMINANT (red channel clearly ahead of
+    green/blue, a neutral gray would tie all three)."""
+    pixel = _lunar_moon_pixel(app, "total", 1.15)
+    assert max(pixel.red(), pixel.green(), pixel.blue()) < 55
+    assert pixel.red() > pixel.green() > pixel.blue()
 
 
 def test_lunar_penumbral_clearly_brighter_than_partial(app):

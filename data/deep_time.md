@@ -40,6 +40,11 @@ astronomical calendar instant (`year, month, day, second_of_day`, UT),
 `type` (total/annular/hybrid/partial/penumbral), `magnitude`,
 greatest-eclipse `lat`/`lon` (solar only, None where the finder
 reported no surface point) and `jd_ut` (the catalog ordering key).
+`lat`/`lon` ride straight through `_eclipse_event` into
+`core.clock_state.EclipseEvent` (TASK 4, fix round E, 2026-07-19) — the
+observer-relative visibility check itself happens in `core.clock_state`
+once an observer is in hand, never here (this repository stays a pure
+catalog reader).
 
 ### DeepTimeRepository
 - `detect(path=None)`: classmethod — the pack file exists → repository,

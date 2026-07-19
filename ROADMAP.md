@@ -30,6 +30,19 @@ lives in [The DOMY Canon](CANON.md).
   build from 2026-07-08** — stale (predates the roster/slots/Union
   arcs), unsigned, no icon/version resource, no installer. Not a
   release artifact.
+- **Fix round E (owner verdicts 2026-07-19, second screenshot batch)
+  — DONE:** the Earth hover card's date row drops its bold "Date:"
+  label and Anno Lucis pairing (the era block already restates the
+  year); the Aura Saturation slider (re-scoped and relabeled from
+  "Pointer") now touches only the background wedges, never the star
+  diamonds; the Quick Jump pole glyph follows the DISPLAYED (traveled)
+  moment and wears the neutral ⚪/⚫ pair instead of 🔆/🌑; eclipse
+  markers gain observer-relative VISIBILITY (muted silver glow + a
+  named hover reason when not actually visible from here); the TOTAL
+  lunar disc darkens to a copper tint instead of neutral gray. See
+  [Clock State](core/clock_state.md), [Layers](render/layers.md),
+  [Compositor](render/compositor.md) and [App Controller](app/controller.md)
+  for the details.
 
 <a id="owner-queue"></a>
 
@@ -581,7 +594,17 @@ lives in [The DOMY Canon](CANON.md).
       polar-night FROM–TO dates beneath (computed from the seasons/
       twilight data, the most precise calculation available); Greenwich
       gets a mark that says "the center" — SEALED 🌐 (a globe with
-      meridians = the prime meridian, owner pick 2026-07-18). Explanation of
+      meridians = the prime meridian, owner pick 2026-07-18).
+      **REWORKED TWICE since (fix round E, owner verdict, 2026-07-19,
+      slika 6):** (a) 🔆/🌑 violated the owner's standing "no sun/moon
+      emojis" law — replaced with the neutral interim ⚪/⚫ pair,
+      dedicated SVG icons queued per his 2026-07-19 icon list; (b) the
+      light/dark glyph now follows the DISPLAYED moment
+      (`AppController._effective_travel_date`) — the Time Travel
+      traveled date while a simulation runs, else today — REVOKING round
+      A's "never the simulation moment" choice; the Location submenu's
+      `aboutToShow` refreshes the two labels lazily since the menu
+      itself only rebuilds a few times a session. Explanation of
       the owner's observed transition dates (3 Mar / 9 Oct north, 5 Apr
       / 7 Sep south): at the poles the sun's elevation equals its
       declination (sign-flipped for the south), so those four dates are
@@ -661,6 +684,33 @@ lives in [The DOMY Canon](CANON.md).
       rides the SAME relocation-to-ring-band mechanic as the season/moon
       glow, so `render.compositor._element_at` hit-tests it for free —
       only the NEW glow/art condition was needed, no new hit-test path.
+
+      **VISIBILITY — DONE (fix round E, owner verdict "may", 2026-07-19).**
+      An eclipse now shows as VISIBLE or MUTED from the current observer:
+      LUNAR visible ⟺ the Moon is above the horizon at the eclipse
+      instant (`astral.moon.elevation`); SOLAR visible ⟺ the Sun is
+      above the horizon at the instant (`astral.sun.elevation`,
+      geometric) AND the observer's great-circle distance to the
+      catalog's greatest-eclipse point is within
+      `constants.ECLIPSE_SOLAR_VISIBILITY_KM` (3500 km, haversine).
+      Computed in `core.clock_state._with_visibility` (purity law — the
+      only astronomy call at tick time, stamped onto the winning
+      candidate by `_active_eclipse`) and carried on the new
+      `EclipseEvent.visible`/`.distance_km`/`.lat`/`.lon` fields
+      (default `visible=True` — every pre-existing caller/test is
+      unaffected). A muted eclipse still shows — the art swap and disc
+      darkening are untouched, the event is real — but its glow swaps
+      to `defaults.GLOW_ECLIPSE_INVISIBLE_COLOR` (desaturated silver) at
+      `ECLIPSE_INVISIBLE_STRENGTH_FACTOR` (0.5) strength, and the hover
+      line appends "— below the horizon" or "— path {d} km away" (round
+      numbers; the km threshold itself never appears in the UI).
+
+      **BLOOD MOON — DONE (fix round E, owner verdict "may", 2026-07-19).**
+      The `lunar_total` disc darkening now multiplies against
+      `defaults.ECLIPSE_TOTAL_MOON_TINT` (a deep copper-red) through the
+      SAME `tinted_gray` tritone `RingLayer`'s recolor uses, instead of
+      neutral gray — dark AND visibly red, the true "blood moon" look;
+      `lunar_partial`/`lunar_penumbral` keep the plain neutral gray.
       Tests: `tests/test_eclipse.py` (window on/off, magnitude mapping,
       solar art swap + red/annular glow + hit-test, per-state lunar
       darkening goldens + bronze glow + hit-test, hover naming, the

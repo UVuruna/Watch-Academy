@@ -146,19 +146,30 @@ def moon_transit_opacity(spec, year_angle: float, moon_angle: float) -> float:
 
 
 def palette_for(skin: SkinDefinition) -> tuple:
-    """The active Star+Aura palette — ONE source for both the star
+    """The active Star+Aura BASE palette — ONE source for both the star
     diamonds and the background wedges (owner spec): the user's custom
-    hues when set (settings dialog), otherwise the owner preset. The
-    POINTER SATURATION slider (owner 2026-07-18, Settings ▸ Colors,
-    renamed from "palette_saturation" in Session 21-D now that RING has
-    its own independent slider) multiplies every hue's HSV saturation
-    here — the one spot the palette flows into BOTH the pointer and the
-    Aura wedges, so they stay in step; 1.0 leaves the hues untouched,
-    Umbra (gray) never reads this at all."""
-    hues = (
+    hues when set (settings dialog), otherwise the owner preset. RAW —
+    no saturation applied here any more (owner fix round E, 2026-07-19,
+    slika 2: the Saturation slider must move the AURA only, never the
+    star diamonds). `StarLayer` reads THIS function directly; the Aura
+    consumption path reads `aura_palette_for` below instead."""
+    return (
         skin.palette_override if skin.palette_override is not None
         else defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
     )
+
+
+def aura_palette_for(skin: SkinDefinition) -> tuple:
+    """`palette_for(skin)` with the Aura Saturation slider applied (owner
+    fix round E, 2026-07-19, slika 2: re-scoped from "Pointer" — the
+    slider now scales ONLY the colored period wedges behind/around the
+    diamonds, `BackgroundLayer`'s Aura, never the star diamonds
+    themselves). The storage key stays `pointer_saturation` (Settings ▸
+    Colors label renamed to "Aura"; migrating the persisted key would
+    add a settings-migration path for a purely internal name with zero
+    user-visible benefit, so the field keeps its name — this docstring
+    is the pointer). 1.0 leaves the hues untouched."""
+    hues = palette_for(skin)
     if skin.pointer_saturation == 1.0:
         return hues
     return tuple(_saturate_hue(hue, skin.pointer_saturation) for hue in hues)
@@ -983,7 +994,7 @@ class BackgroundLayer(Layer):
         # stays visible on the shortest and the longest day alike.
         if ctx.skin.colorful and ctx.skin.pointer == "aurora":
             bands, solar_frame = aurora_bands(
-                ctx.day.sun, palette_for(ctx.skin), spec.day_alpha,
+                ctx.day.sun, aura_palette_for(ctx.skin), spec.day_alpha,
             )
             for start, end, hue, alpha in bands:
                 painter.save()
@@ -1003,7 +1014,7 @@ class BackgroundLayer(Layer):
         # lit index rides the RenderContext (the compositor computes it
         # from the live tick and keys the composite on it).
         if ctx.skin.pointer == "calendar":
-            palette = palette_for(ctx.skin)
+            palette = aura_palette_for(ctx.skin)
             wheel = calendar_wheel(ctx.skin)
             cal_radius = ctx.radius * (
                 ctx.skin.background.aura_radius_fraction
@@ -1026,7 +1037,7 @@ class BackgroundLayer(Layer):
         # indicated, but in plain white — a one-entry palette draws a
         # single full wedge under the same clip and alphas.
         palette = (
-            palette_for(ctx.skin)
+            aura_palette_for(ctx.skin)
             if ctx.skin.colorful
             else (defaults.COLORFUL_OFF_COLOR,)
         )
@@ -2216,6 +2227,14 @@ class YearMarkerLayer(Layer):
                     if lunar_state is not None
                     else 1.0
                 )
+                # INVISIBLE-FROM-HERE muting (owner verdict "može", fix
+                # round E, 2026-07-19): the event is real (the disc
+                # darkening/art swap below stay untouched) but the
+                # observer cannot actually see it — mute the glow to a
+                # desaturated silver at half strength instead.
+                if lunar_state is not None and not lunar_eclipse.visible:
+                    color = defaults.GLOW_ECLIPSE_INVISIBLE_COLOR
+                    strength *= defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
                 draw_event_glow(
                     painter,
                     pos,
@@ -2287,6 +2306,11 @@ class YearMarkerLayer(Layer):
                 strength = eclipse_state_glow_strength(
                     solar_state, solar_eclipse.magnitude
                 )
+                # INVISIBLE-FROM-HERE muting (owner verdict "može", fix
+                # round E, 2026-07-19) — same rule as the lunar marker.
+                if not solar_eclipse.visible:
+                    color = defaults.GLOW_ECLIPSE_INVISIBLE_COLOR
+                    strength *= defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
             draw_event_glow(painter, pos, size / 2, color, strength)
         if almanac:
             # The day-ARROW at the marker's exact tick (owner 2026-07-16):
@@ -2456,11 +2480,20 @@ class YearMarkerLayer(Layer):
             disc.addEllipse(QRectF(-radius, -radius, size, size))
             brightness = defaults.ECLIPSE_STATE_MOON_BRIGHTNESS[darken_state]
             value = round(255 * brightness)
+            # BLOOD MOON (owner verdict "može", fix round E, 2026-07-19):
+            # TOTAL alone wears a deep COPPER tone instead of neutral
+            # gray — `tinted_gray`'s tritone at this brightness reads
+            # dark AND red-dominant; partial/penumbral stay neutral.
+            tint = (
+                defaults.ECLIPSE_TOTAL_MOON_TINT
+                if darken_state == "lunar_total"
+                else None
+            )
             painter.save()
             painter.setCompositionMode(
                 QPainter.CompositionMode.CompositionMode_Multiply
             )
-            painter.fillPath(disc, QColor(value, value, value))
+            painter.fillPath(disc, tinted_gray(value, tint))
             painter.restore()
         painter.restore()
 

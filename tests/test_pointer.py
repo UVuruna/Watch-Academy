@@ -969,7 +969,11 @@ def test_hover_rework_moon_and_earth_formats(july_wednesday):
     # hover shows the side that exists.
     assert "Moonset:</b> 13:53" in moon
     earth = compositor._earth_text()
-    assert "Date:</b> 8<sup>th</sup> July 2026" in earth
+    # Fix round E (owner verdict 2026-07-19, slika 1): the date row is
+    # the plain date alone — no "Date:" label, no Anno Lucis pairing
+    # (the era block right below restates the year in full).
+    assert "8<sup>th</sup> July 2026" in earth
+    assert "Date:</b>" not in earth
     assert "Season:</b>" in earth and "Sign:</b>" in earth
     assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
     assert "Summer 18<sup>th</sup> of 94 Days" in earth
@@ -1000,22 +1004,23 @@ def test_earth_hover_card_layout_order(july_wednesday):
     """Owner fix-round B, 2026-07-19, SLIKA 4 — the card rework: Date
     TITLE -> date rows -> era badge/TITLE/A.L. line -> season badge ->
     Season:/Sign: rows, in that exact order (8 July 2026 sits inside
-    the Age of Light)."""
+    the Age of Light). Fix round E (owner verdict, slika 1): the date
+    row itself carries no "Date:" label and no Anno Lucis pairing any
+    more — "6105. Anno Lucis" now appears exactly ONCE, in the era
+    block."""
     day, tick = july_wednesday
     compositor = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     earth = compositor._earth_text()
     date_title = earth.index(">Date<")
-    date_row = earth.index("Date:</b>")
+    date_row = earth.index("8<sup>th</sup> July 2026")
     era_title = earth.index(">Age of Light<")
-    # "6105. Anno Lucis" appears TWICE — once paired onto the date row
-    # (`_year()`'s own pairing, unchanged since Session 16) and once as
-    # the era block's OWN Anno Lucis line; the era block's occurrence is
-    # the one after era_title.
-    al_line = earth.index("6105. Anno Lucis", era_title)
+    al_line = earth.index("6105. Anno Lucis")
     season_row = earth.index("Season:</b>")
     sign_row = earth.index("Sign:</b>")
     assert date_title < date_row < era_title < al_line < season_row < sign_row
+    assert earth.count("6105. Anno Lucis") == 1
+    assert "Date:</b>" not in earth
     assert "189<sup>th</sup> Day - 28<sup>th</sup> Week" in earth
 
 

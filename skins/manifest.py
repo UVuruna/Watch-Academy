@@ -272,10 +272,14 @@ class SkinDefinition:
     palette_override: tuple[str, ...] | None = None
     # SATURATION (owner 2026-07-18, Settings ▸ Colors, Session 21-D —
     # moved out of Display and split into two independent sliders):
-    # POINTER scales the Star+Aura palette's HSV saturation in
-    # `render.layers.palette_for` — 1.0 unchanged, 0.0 grays every hue
-    # to its own brightness. Renamed from "palette_saturation" for
-    # clarity now that RING is its own separate slider.
+    # field name kept as `pointer_saturation` (Rule #6 would normally
+    # demand a rename, but this is a persisted settings key with zero
+    # user-visible spelling — migrating it buys nothing) but RE-SCOPED
+    # and RELABELED "Aura" (owner fix round E, 2026-07-19, slika 2): it
+    # scales ONLY the Aura wedges' HSV saturation, via
+    # `render.layers.aura_palette_for` — the star diamonds
+    # (`render.layers.palette_for`, now RAW) no longer move with it.
+    # 1.0 unchanged, 0.0 grays every Aura hue to its own brightness.
     pointer_saturation: float = 1.0
     # RING (new, Session 21-D): scales the RING BAND art's (the ring
     # plate + its letter/numeral overlay) HSV saturation in

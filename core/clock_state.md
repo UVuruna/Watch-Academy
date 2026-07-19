@@ -46,6 +46,25 @@ every other DayContext datetime in deep travel), `type`
 glow-strength input (`render.layers.eclipse_glow_strength`). Built ONLY
 by the data layer from the catalog; core never touches the database.
 
+**VISIBILITY (TASK 4, owner verdict "may", fix round E, 2026-07-19):**
+`lat`/`lon` (greatest-eclipse ground point, solar only — carried
+straight through from `data.deep_time.DeepEclipse`, None for lunar and
+for solar rows the finder reported no point), `visible` (bool, default
+True so any pre-existing caller that never touches it is unaffected)
+and `distance_km` (the observer's great-circle distance to the ground
+point, solar only, None when unknown). `visible`/`distance_km` are
+stamped by `_with_visibility` — a PURE function of the event and the
+observer's coordinates (no wall clock, matching the purity law) — the
+moment `_active_eclipse` picks the winning candidate for the tick, since
+that is the first point an observer is in hand: LUNAR visible ⟺ the
+Moon's `astral.moon.elevation` at the instant is above 0°; SOLAR visible
+⟺ the Sun's `astral.sun.elevation` (geometric, `with_refraction=False`,
+same `constants.HORIZON_ELEVATION_DEG` threshold `core.sun` uses) is
+above the horizon AND the haversine distance to `(lat, lon)` is within
+`constants.ECLIPSE_SOLAR_VISIBILITY_KM` (3500 km). Evaluated at the
+eclipse's own INSTANT, never the day's rise/set edges — the ±3h glow
+window is short enough that only the instant matters.
+
 **`deep_cycles` (Session 16, owner 2026-07-17):** every datetime in the
 context lives in the 400-year PROXY frame shifted by this many
 Gregorian cycles (0 in normal operation). The real astronomical year of

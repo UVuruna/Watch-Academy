@@ -723,13 +723,16 @@ class SettingsDialog(QDialog):
     def _build_saturation_group(self) -> QGroupBox:
         """TWO independent saturation sliders (owner verdict: Saturation
         does not belong in Element sizes — Colors is where Palette and
-        Ring tint already live). POINTER (`pointer_saturation`, renamed
-        from "palette_saturation") scales the Star+Aura palette's HSV
-        saturation at `render.layers.palette_for` — the star diamonds
-        and the Aura wedges move together. RING (`ring_saturation`, new)
-        scales the ring band art's (plate + letter overlay) saturation
-        at `render.layers.RingLayer`, after the ring_tint recolor. Both
-        0-100%, default 100% (unchanged); "Default" resets each to 100."""
+        Ring tint already live). AURA (`pointer_saturation`, storage key
+        unchanged — RE-SCOPED and RELABELED fix round E, 2026-07-19,
+        slika 2: the label reads "Aura" now, and the slider scales only
+        the colored period wedges behind/around the diamonds via
+        `render.layers.aura_palette_for` — the star diamonds themselves
+        no longer move with it, `render.layers.palette_for` stays raw).
+        RING (`ring_saturation`) scales the ring band art's (plate +
+        letter overlay) saturation at `render.layers.RingLayer`, after
+        the ring_tint recolor. Both 0-100%, default 100% (unchanged);
+        "Default" resets each to 100."""
         tr = self._tr
         group = QGroupBox(tr("Saturation"))
         form = QFormLayout(group)
@@ -755,7 +758,7 @@ class SettingsDialog(QDialog):
             return slider
 
         self._pointer_saturation_slider = add_row(
-            tr("Pointer"), "pointer_saturation",
+            tr("Aura"), "pointer_saturation",
             constants.POINTER_SATURATION_RANGE,
             constants.POINTER_SATURATION_SLIDER_STEP,
         )

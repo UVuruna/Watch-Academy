@@ -1254,6 +1254,44 @@ def test_quick_jump_location_carries_the_pole_and_greenwich_emojis(
         c._tray.hide()
 
 
+def test_pole_emoji_follows_the_traveled_date_not_today(app, tmp_path, monkeypatch):
+    """Fix round E (owner verdict 2026-07-19, slika 6 — REVOKES round
+    A's "never the simulation moment" choice): while Time Travel is
+    running, the poles' light/dark glyph must follow the TRAVELED date,
+    not the wall clock. 19 October at the North Pole is past its light
+    window (Mar 3 - Oct 9) — the traveled date reads DARK (⚫, the
+    neutral interim glyph — 🔆/🌑 violated the owner's no-sun/moon-
+    emoji law) even if today's real calendar date is inside it."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    from datetime import datetime
+
+    import astral
+
+    from app.controller import AppController
+    from config import defaults
+
+    c = AppController(app)
+    try:
+        traveled = datetime(2026, 10, 19, 12, 0, tzinfo=c._tz)
+        c._start_simulation(
+            traveled, astral.Observer(latitude=89.99, longitude=0.0)
+        )
+        jumps = next(
+            a for a in c._menu.actions() if "Quick Jump" in a.text()
+        ).menu()
+        location_menu = next(
+            a for a in jumps.actions() if "Location" in a.text()
+        ).menu()
+        location_menu.aboutToShow.emit()
+        assert (
+            f"{defaults.POLE_COLD_EMOJI} North Pole {defaults.POLE_DARK_EMOJI}"
+            == c._north_pole_action.text()
+        )
+    finally:
+        c._profiling_timer.stop()
+        c._tray.hide()
+
+
 def test_exclusive_choice_group_click_on_checked_stays_checked(app, tmp_path, monkeypatch):
     """The general `_add_choice_group` guard: clicking the ALREADY
     checked member of an exclusive group (e.g. Umbra's contrast picks)

@@ -215,6 +215,12 @@ def _eclipse_event(eclipse: DeepEclipse, shift: int) -> EclipseEvent:
         ),
         type=eclipse.type,
         magnitude=eclipse.magnitude,
+        # Greatest-eclipse ground point (solar only; None on lunar rows
+        # and on solar rows the finder reported no surface point) — the
+        # observer-visibility distance check (fix round E, 2026-07-19)
+        # is stamped later, once an observer is in hand (core.clock_state).
+        lat=eclipse.lat,
+        lon=eclipse.lon,
     )
 
 

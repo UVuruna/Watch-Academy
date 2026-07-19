@@ -7,13 +7,16 @@ The dial layers, each tagged with a rebuild `Cadence`. Shared helpers
 `dial_point()` and `draw_pie()` are the only places that convert dial
 angles (clockwise from top) to Qt's counterclockwise-from-3-o'clock
 system. Pointer-variant helpers live here too: `palette_for()` (the
-active Star+Aura palette preset — one source for the star diamonds AND
-the background wedges, ALSO the one spot the POINTER Saturation slider
-scales both in step, `skin.pointer_saturation` — owner 2026-07-18,
-renamed from `palette_saturation` in Session 21-D now that the RING has
-its OWN independent Saturation slider, `ring_saturation`, applied at
-`RingLayer` instead — see its note below), `visible_occupant()`
-(shared-slot priority),
+active Star+Aura BASE palette preset — one source for both the star
+diamonds AND, through `aura_palette_for()`, the background wedges) and
+`aura_palette_for()` (fix round E, owner verdict 2026-07-19, slika 2 —
+RE-SCOPED from `palette_for` itself: `skin.pointer_saturation`, the
+slider now labeled "Aura" in Settings ▸ Colors, scales ONLY the Aura
+wedges here — `StarLayer` reads `palette_for` directly and stays
+perfectly raw regardless of the slider; the storage key is unchanged,
+only the scope and the label moved. RING has its OWN independent
+Saturation slider, `ring_saturation`, applied at `RingLayer` instead —
+see its note below), `visible_occupant()` (shared-slot priority),
 `today_slot_theta()` (today's slot angle, None for the hexa center Sun),
 `draw_event_glow()` (the season/moon event halo), the SLOT system:
 `slot_layout()`, `slot_view()`, `weekday_classic_slot()` and the seat
@@ -543,14 +546,36 @@ whose alpha ALSO scaled with magnitude read as "a visible moon shining
 bronze, sometimes more sometimes less transparent". The fix:
 `_draw_moon(..., darken_state=...)` fills the WHOLE disc (lit and unlit
 halves alike — totality dims the full face) with
-`QPainter.CompositionMode_Multiply` against an OPAQUE neutral gray whose
-value is the state's brightness fraction (0..1 → 0..255) — multiplying
-by a neutral gray scales R/G/B equally, i.e. true value-down with the
-hue untouched, drawn fully opaque over the normal phase render (never a
-partial-alpha overlay a bright pixel can bleed through). Solar states
-never darken the disc — only the ANNULAR "ring of fire" gets its own
-glow color (`GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR`, hotter orange-red than
-the plain `GLOW_ECLIPSE_SOLAR_COLOR`), same black-sun art as total.
+`QPainter.CompositionMode_Multiply` against an OPAQUE gray whose value
+is the state's brightness fraction (0..1 → 0..255) — multiplying by a
+neutral gray scales R/G/B equally, i.e. true value-down with the hue
+untouched, drawn fully opaque over the normal phase render (never a
+partial-alpha overlay a bright pixel can bleed through). **BLOOD MOON
+(TASK 5, owner verdict "may", fix round E, 2026-07-19):** `lunar_total`
+ALONE swaps the neutral gray for `tinted_gray(value,
+defaults.ECLIPSE_TOTAL_MOON_TINT)` — the SAME black→tint→white tritone
+`RingLayer`'s ring recolor uses (see its own note below) — so the
+near-black disc reads dark AND visibly copper-red, not a flat gray;
+`lunar_partial`/`lunar_penumbral` keep the plain neutral gray (only
+totality dims the whole face enough for a color cast to read honestly).
+Solar states never darken the disc — only the ANNULAR "ring of fire"
+gets its own glow color (`GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR`, hotter
+orange-red than the plain `GLOW_ECLIPSE_SOLAR_COLOR`), same black-sun
+art as total.
+
+**VISIBILITY (TASK 4, owner verdict "may", fix round E, 2026-07-19):**
+`EclipseEvent.visible` (computed observer-relative in
+`core.clock_state._with_visibility` — see
+[Clock State](../core/clock_state.md), per the purity law — never here)
+mutes BOTH markers' glow the SAME way when False: color swaps to
+`defaults.GLOW_ECLIPSE_INVISIBLE_COLOR` (a desaturated silver-gray) and
+`strength` is multiplied by `defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR`
+(0.5) — checked AFTER the normal state color/strength are computed, so
+it overrides them regardless of type/state. The art swap
+(`ECLIPSE_SOLAR_ART`) and the disc darkening/copper tint above are
+UNTOUCHED by visibility — the event is real, only the glow reads
+"can't actually see this one from here". `Compositor._eclipse_hover_line`
+names the reason (see [Compositor](compositor.md)).
 
 Glow STRENGTH is likewise state-driven
 (`eclipse_state_glow_strength(state, magnitude)`,

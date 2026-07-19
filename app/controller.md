@@ -319,17 +319,26 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   "🏛 or ⏳"), **📍 Location** (poles, Greenwich + the user's
   `jump_cities` from Settings — a place jump moves the OBSERVER, the
   moment stays). **The pole/Greenwich rows carry sealed emojis**
-  (ROADMAP 15h item 10, owner reminder 2026-07-19): ❄ on the LEFT of
-  both poles, then a season emoji on the RIGHT that switches between
-  polar DAY (🔆) and polar NIGHT (🌑) by TODAY's real calendar date —
-  `defaults.pole_emoji(pole, date.today())`, a simple date-window check
-  (`defaults.POLE_LIGHT_WINDOW`, the ±6° declination approximation: north
-  Mar 3 – Oct 9, south Sep 7 – Apr 5 wrapping the year boundary), never
-  an astronomy call, and never the active Time Travel simulation's
-  moment (a pole's season is a real-world fact). Greenwich carries 🌐
-  (sealed owner pick, `defaults.GREENWICH_EMOJI`). These labels are
-  rebuilt with the menu (same cadence as every other menu label), so
-  the emoji is always current. Eclipse entries need the pack and GRAY without it
+  (ROADMAP 15h item 10, owner reminder 2026-07-19; REVOKED and REWORKED
+  fix round E, 2026-07-19, slika 6): ❄ on the LEFT of both poles, then a
+  glyph on the RIGHT that switches between polar DAY (⚪, NEUTRAL interim
+  — the old 🔆/🌑 violated the owner's standing "no sun/moon emojis" law;
+  dedicated SVG icons queued per his 2026-07-19 icon list) and polar
+  NIGHT (⚫) by a simple date-window check
+  (`defaults.pole_emoji`/`defaults.POLE_LIGHT_WINDOW`, the ±6°
+  declination approximation: north Mar 3 – Oct 9, south Sep 7 – Apr 5
+  wrapping the year boundary), never an astronomy call. **The date
+  itself is now the DISPLAYED moment** (`_effective_travel_date`): the
+  Time Travel traveled date while a simulation runs, else today's wall
+  clock — round A's "never the simulation moment" choice is REVOKED
+  (owner: a pole's glyph must follow what the dial actually shows).
+  Greenwich carries 🌐 (sealed owner pick, `defaults.GREENWICH_EMOJI`).
+  Because the Quick Jump menu is only rebuilt wholesale a few times a
+  session but the traveled date can change many times via chained Quick
+  Jumps, the Location submenu's `aboutToShow` calls
+  `_refresh_pole_emoji_labels` to recompute the two pole labels lazily
+  right before it opens — the menu-rebuild cadence alone is too coarse
+  for a value that can now change mid-session. Eclipse entries need the pack and GRAY without it
   (tooltip names the full installation); eclipse picks land on the
   catalog instant via `julian_day_of` next/prev queries; unit jumps
   are calendar arithmetic on the real astronomical date

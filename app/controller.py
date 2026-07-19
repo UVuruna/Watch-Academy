@@ -587,6 +587,12 @@ class AppController(QObject):
         # DEEP TIME detection (Session 16) also lives BEFORE the menu
         # build — the eclipse jump entries gray without the pack.
         self._deep = DeepTimeRepository.detect()
+        # Time Travel state also lives BEFORE the menu build now (fix
+        # round E, 2026-07-19): the Quick Jump pole labels read the
+        # traveled date via `_effective_travel_date`, which checks
+        # `self._simulation`. No simulation can be running yet at
+        # startup, but the attribute must EXIST for that check.
+        self._simulation: tuple[datetime, astral.Observer] | None = None
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._widget = ClockWidget(
@@ -656,10 +662,10 @@ class AppController(QObject):
         )
         self._day = None
         # Time Travel: a frozen (moment, observer) rendered instead of the
-        # present until the deadline passes. Deep travel carries the
-        # moment in the 400-year PROXY frame; _sim_cycles is its cycle
+        # present until the deadline passes (`self._simulation` itself is
+        # initialized earlier, before the menu build). Deep travel carries
+        # the moment in the 400-year PROXY frame; _sim_cycles is its cycle
         # count (0 = the ordinary frame).
-        self._simulation: tuple[datetime, astral.Observer] | None = None
         self._simulation_ends: float = 0.0
         self._sim_cycles: int = 0
         self._widget.set_renderer(self._compositor)
@@ -2253,24 +2259,33 @@ class AppController(QObject):
             jump_action(era_menu, kind, label)
         location_menu = self._submenu(jumps, f"📍 {tr('Location')}")
         # POLE + GREENWICH EMOJIS (ROADMAP 15h item 10, owner reminder
-        # 2026-07-19): ❄ marks both poles on the LEFT; the RIGHT-side
-        # glyph switches between polar DAY (🔆) and polar NIGHT (🌑) by
-        # TODAY's calendar date (`defaults.pole_emoji` — a date-window
-        # helper, no astronomy call). Greenwich carries 🌐 (sealed owner
-        # pick). Today reads the WALL CLOCK, not any active Time Travel
-        # simulation — a pole's season is a real-world calendar fact,
-        # not something a simulated moment should relabel.
-        today = date.today()
-        jump_action(
+        # 2026-07-19; REVOKED and REWORKED fix round E, 2026-07-19,
+        # slika 6): ❄ marks both poles on the LEFT; the RIGHT-side
+        # glyph switches between polar DAY (⚪, neutral interim — 🔆/🌑
+        # violated the owner's "no sun/moon emojis" law, dedicated SVG
+        # icons queued per his 2026-07-19 icon list) and polar NIGHT
+        # (⚫) by the DISPLAYED moment's date (`defaults.pole_emoji`, a
+        # date-window helper, no astronomy call) — `_effective_travel_
+        # date` now follows the Time Travel traveled date while a
+        # simulation runs (round A's "never the simulation moment"
+        # choice is REVOKED). Greenwich carries 🌐 (sealed owner pick).
+        # Because this submenu is built only a few times a session but
+        # the traveled date can change many times via chained Quick
+        # Jumps, `_refresh_pole_emoji_labels` recomputes the two labels
+        # lazily right before Location opens (`aboutToShow`) — the
+        # menu-rebuild cadence alone is too coarse now.
+        today = self._effective_travel_date()
+        self._north_pole_action = jump_action(
             location_menu, "north_pole",
             f"{defaults.POLE_COLD_EMOJI} {tr('North Pole')} "
             f"{defaults.pole_emoji('north', today)}",
         )
-        jump_action(
+        self._south_pole_action = jump_action(
             location_menu, "south_pole",
             f"{defaults.POLE_COLD_EMOJI} {tr('South Pole')} "
             f"{defaults.pole_emoji('south', today)}",
         )
+        location_menu.aboutToShow.connect(self._refresh_pole_emoji_labels)
         jump_action(
             location_menu, "greenwich",
             f"{defaults.GREENWICH_EMOJI} {tr('Greenwich')}",
@@ -2454,6 +2469,35 @@ class AppController(QObject):
             latitude=dialog.latitude(), longitude=dialog.longitude()
         )
         self._start_simulation(moment, observer, dialog.cycles())
+
+    def _effective_travel_date(self) -> date:
+        """The date driving the poles' Quick Jump light/dark glyph
+        (owner revocation, fix round E, 2026-07-19, slika 6): the
+        DISPLAYED moment — the Time Travel traveled date while a
+        simulation runs, else today's wall-clock date."""
+        if self._simulation is not None:
+            moment, _observer = self._simulation
+            return moment.date()
+        return date.today()
+
+    def _refresh_pole_emoji_labels(self) -> None:
+        """Lazy refresh (owner fix round E, 2026-07-19): the Quick Jump
+        menu is only rebuilt wholesale a few times a session (skin
+        install, settings apply), but the traveled date can change many
+        times in between through chained Quick Jumps — recompute the
+        two pole labels right before the Location submenu opens
+        (`aboutToShow`) so the glyph always matches what the dial
+        currently shows."""
+        today = self._effective_travel_date()
+        tr = self._ui
+        self._north_pole_action.setText(
+            f"{defaults.POLE_COLD_EMOJI} {tr('North Pole')} "
+            f"{defaults.pole_emoji('north', today)}"
+        )
+        self._south_pole_action.setText(
+            f"{defaults.POLE_COLD_EMOJI} {tr('South Pole')} "
+            f"{defaults.pole_emoji('south', today)}"
+        )
 
     def _end_simulation(self) -> None:
         """NOW (owner 2026-07-15): back to the present immediately —

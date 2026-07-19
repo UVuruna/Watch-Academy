@@ -683,6 +683,15 @@ MOON_GLOW_WINDOW_H = 6.0
 # constant (the owner's spec is explicitly ±3h, not the moon's ±6h).
 ECLIPSE_GLOW_WINDOW_H = 3.0
 
+# Eclipse VISIBILITY (owner verdict "može", fix round E, 2026-07-19):
+# a SOLAR eclipse is visible to the observer only within this great-
+# circle distance of the catalog's greatest-eclipse point (the path of
+# totality/partiality does not reach much farther); LUNAR visibility has
+# no distance term — a lunar eclipse is visible from the whole night
+# hemisphere, so only "Moon above the horizon" gates it.
+ECLIPSE_SOLAR_VISIBILITY_KM = 3500.0
+EARTH_RADIUS_KM = 6371.0            # mean radius — the great-circle distance basis
+
 # Year-wheel anchor angle (mod 360) -> season event name, PER CLIMATE
 # ZONE (owner decision 2026-07-10): the southern hemisphere flips the
 # seasonal names (their Summer Solstice is the December one) and the

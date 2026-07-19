@@ -1606,6 +1606,15 @@ GLOW_ECLIPSE_SOLAR_COLOR = "#FF3B30"       # red — the eclipsed Sun's glow
 # orange-red than the plain total/partial red, so the two read distinct.
 GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR = "#FF7A1A"
 GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
+# INVISIBLE-FROM-HERE muting (owner verdict "može", fix round E,
+# 2026-07-19): an eclipse the observer cannot actually see (below the
+# horizon, or — solar only — too far from the ground track) still
+# shows — the event is real — but its glow swaps to a desaturated
+# silver at HALF strength instead of its normal color, and the hover
+# names the reason. The art swap/moon-darkening stay untouched (the
+# type-driven state is a catalog fact, not an observer fact).
+GLOW_ECLIPSE_INVISIBLE_COLOR = "#8A9096"       # desaturated silver-gray
+ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5
 ECLIPSE_SOLAR_ART = (
     WEEKDAY_ART_DIR / "planets" / "primary" / "dual" / "sun_eclipse.png"
 )                                            # source-mapped by paths.art_file
@@ -1672,6 +1681,14 @@ ECLIPSE_STATE_MOON_BRIGHTNESS = {
     "lunar_partial": 0.18,
     "lunar_penumbral": 0.60,   # real penumbral eclipses are barely visible
 }
+# BLOOD MOON DISC (owner verdict "može", fix round E, 2026-07-19): the
+# TOTAL state's multiply-darken uses this deep copper-red instead of
+# neutral gray — `render.layers.tinted_gray`'s black->tint->white
+# tritone at `ECLIPSE_STATE_MOON_BRIGHTNESS["lunar_total"]` (~7%) reads
+# dark AND visibly red, the real "blood moon" look; partial/penumbral
+# keep the plain neutral gray (only totality dims the WHOLE face enough
+# for a color cast to read honestly).
+ECLIPSE_TOTAL_MOON_TINT = "#8B2E12"
 # Fixed glow-strength fraction per state (0..1, same scale as
 # `eclipse_glow_strength`'s return). "solar_partial" is intentionally
 # absent — it keeps the magnitude-linear mapping instead.
@@ -1880,8 +1897,13 @@ POLE_LIGHT_WINDOW = {
     "north": ((3, 3), (10, 9)),      # Mar 3 - Oct 9
     "south": ((9, 7), (4, 5)),       # Sep 7 - Apr 5 (wraps New Year's)
 }
-POLE_LIGHT_EMOJI = "🔆"
-POLE_DARK_EMOJI = "🌑"
+# Fix round E (owner verdict 2026-07-19, slika 6, angry): 🔆/🌑 violate
+# the owner's standing "no sun/moon emojis" law. NEUTRAL interim glyphs
+# until dedicated SVG icons land (owner icon list, 2026-07-19) — a
+# plain filled/empty circle carries the light/dark contrast without
+# borrowing a sun or moon pictograph.
+POLE_LIGHT_EMOJI = "⚪"
+POLE_DARK_EMOJI = "⚫"
 POLE_COLD_EMOJI = "❄"                # left-side glyph, both poles
 GREENWICH_EMOJI = "🌐"                # sealed owner pick
 

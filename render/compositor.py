@@ -25,6 +25,7 @@ from core import angles
 from core.clock_state import DayContext, TickState
 from core.deep_time import (
     format_anno_lucis,
+    format_official,
     format_year_line,
     is_age_of_light,
     real_year,
@@ -2368,11 +2369,34 @@ class Compositor:
         kind = html.escape(self._tr(eclipse.type.capitalize()))
         mag_label = html.escape(self._tr("mag."))
         mag = f"{eclipse.magnitude:.2f}" if eclipse.magnitude is not None else "?"
-        return (
+        line = (
             f"{title} ({kind}, {mag_label} {mag}) — "
             f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
             f"{instant:%H:%M}"
         )
+        # VISIBILITY REASON (owner verdict "može", fix round E,
+        # 2026-07-19): the event is real (the marker still shows it,
+        # muted) — name WHY the observer cannot actually see it. A
+        # SOLAR eclipse failing the distance gate names the distance;
+        # everything else (any lunar miss, or a solar sun-down miss)
+        # reads "below the horizon" — the only other gate either kind
+        # can fail. Round numbers; the km threshold itself is never
+        # printed (owner spec: config, not UI text).
+        if not eclipse.visible:
+            if (
+                eclipse.kind == "solar"
+                and eclipse.distance_km is not None
+                and eclipse.distance_km > constants.ECLIPSE_SOLAR_VISIBILITY_KM
+            ):
+                reason = html.escape(
+                    self._tr("path {km} km away").format(
+                        km=round(eclipse.distance_km)
+                    )
+                )
+            else:
+                reason = html.escape(self._tr("below the horizon"))
+            line += f" — {reason}"
+        return line
 
     def _label(self, text: str) -> str:
         """A BOLD hover label with its colon (owner formatting round
@@ -2404,9 +2428,15 @@ class Compositor:
         era_name = "Age of Light" if light else "Age of Darkness"
         era_file = "Age_of_Light.png" if light else "Age_of_Darkness.png"
 
+        # Fix round E (owner verdict 2026-07-19, slika 1): this row is
+        # ONLY the plain date — no bold "Date:" label prefix (the title
+        # above already says "Date") and no Anno Lucis pairing (the era
+        # block right below restates it via `format_anno_lucis`). The
+        # official year alone, deep-travel aware (`real_year` un-shifts
+        # the proxy frame first, matching every other year read here).
         date_block = _hover_title(html.escape(self._tr("Date"))) + _centered_html(
-            f"{self._label('Date')} {self._ord(date.day)} "
-            f"{html.escape(self._month(date))} {self._year(date)}",
+            f"{self._ord(date.day)} {html.escape(self._month(date))} "
+            f"{html.escape(format_official(real, self._skin.era_notation, self._skin.show_era_suffix))}",
             self._tr("{ordinal} Day - {ordinal_week} Week").format(
                 ordinal=self._ord(date.timetuple().tm_yday),
                 ordinal_week=self._ord(date.isocalendar().week),

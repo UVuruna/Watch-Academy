@@ -174,6 +174,17 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   tooltip string anywhere contains `&lt;sup&gt;`/`&lt;b&gt;`/`&lt;i&gt;`
   — any FUTURE builder that escapes markup it shouldn't fails CI
   immediately, not on the next owner screenshot.
+
+- **VISIBILITY REASON (TASK 4, owner verdict "may", fix round E,
+  2026-07-19):** `_eclipse_hover_line` appends `— {reason}` whenever
+  `EclipseEvent.visible` is False (visibility itself is computed in
+  `core.clock_state._with_visibility`, per the purity law — see
+  [Clock State](../core/clock_state.md)). A SOLAR miss whose
+  `distance_km` exceeds `constants.ECLIPSE_SOLAR_VISIBILITY_KM` names
+  "path {d} km away" (round km, the threshold itself never printed);
+  every other miss (any lunar miss, or a solar sun-down miss) reads
+  "below the horizon" — the only other gate either kind can fail. Each
+  piece is escaped individually per THE ESCAPING LAW above.
 - `tooltip_at(x, y, size) -> str | None`: hover text at every dial size
   (the owner's hover-rework formats: raised `<sup>` ordinal suffixes,
   hyphens instead of long dashes) — a `@timed("Hover text")` shell over
@@ -217,9 +228,12 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   directly (never passed as `_centered_html` LINES — `_hover_title`/
   `_hover_badge` already emit their own centered div, the same pattern
   every other badge-carrying hover in this file uses) —
-  1. a **Date** TITLE over the existing date row (bold **Date:** with
-     the day/week ordinals beneath — unchanged, still carries its own
-     `_year()` A.L. pairing) and a blank row;
+  1. a **Date** TITLE over the plain date row (fix round E, owner
+     verdict 2026-07-19, slika 1: no bold **Date:** label any more — the
+     title above already says it — and no Anno Lucis pairing on THIS
+     row, since the era block right below restates the year in full;
+     the row is `format_official(real, era_notation, show_era_suffix)`
+     over the day/week ordinals) and a blank row;
   2. the ERA badge (`assets/era/Age_of_Light.png` /
      `Age_of_Darkness.png`, graceful-absent) over the era name as a
      TITLE ("Age of Light"/"Age of Darkness") and its OWN Anno Lucis

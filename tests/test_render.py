@@ -489,25 +489,30 @@ def test_noon_sector_is_yellowish(frame):
     assert color.blue() < color.red()  # yellow/orange family, not blue
 
 
-def test_pointer_saturation_grays_the_star_and_aura_hues(app):
-    """The Pointer Saturation slider (owner 2026-07-18, Settings ▸
-    Colors, renamed from "palette_saturation" in Session 21-D now that
-    RING has its own independent slider) scales BOTH the pointer (Star)
-    and the background (Aura) wedges through the ONE shared source,
-    `render.layers.palette_for` — 0.0 grays every hue to its own
-    brightness (HSV saturation zeroed, value/hue untouched); the
-    ring/letters (a separate art path, never touching palette_for) are
-    untouched."""
+def test_aura_saturation_grays_only_the_aura_hues_not_the_star(app):
+    """The Aura Saturation slider (owner fix round E, 2026-07-19, slika
+    2 — RE-SCOPED and RELABELED from "Pointer": storage key stays
+    `pointer_saturation`, but it now scales ONLY the Aura wedges behind/
+    around the diamonds, `render.layers.aura_palette_for` — 0.0 grays
+    every hue to its own brightness (HSV saturation zeroed, value/hue
+    untouched). `render.layers.palette_for` — what `StarLayer` reads for
+    the diamonds themselves — stays perfectly RAW regardless of the
+    slider; the ring/letters (a separate art path) are untouched too."""
     import dataclasses
 
     from PySide6.QtGui import QColor
 
-    from render.layers import palette_for
+    from render.layers import aura_palette_for, palette_for
 
     full = dataclasses.replace(defaults.DEFAULT_SKIN, pointer_saturation=1.0)
     gray = dataclasses.replace(defaults.DEFAULT_SKIN, pointer_saturation=0.0)
-    full_hues = palette_for(full)
-    gray_hues = palette_for(gray)
+
+    # The star diamonds' own source is untouched by the slider either way.
+    assert palette_for(full) == palette_for(gray)
+    assert palette_for(full) == defaults.PALETTE_PRESETS[(full.pointer, full.palette_style)]
+
+    full_hues = aura_palette_for(full)
+    gray_hues = aura_palette_for(gray)
     assert full_hues == defaults.PALETTE_PRESETS[(full.pointer, full.palette_style)]
     assert len(gray_hues) == len(full_hues)
     for original, grayed in zip(full_hues, gray_hues):
