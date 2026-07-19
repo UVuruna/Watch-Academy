@@ -16,12 +16,14 @@ register as the archetype sheets — see
 [Trinity Prompts](../archetype/trinity_prompts.md) and
 [Calendar Prompts](../archetype/calendar_prompts.md)) — so the era
 emblems sit beside the pointer archetypes and the Almanac medallions
-without a style break. All six are ROUND rose-window medallions
-reading as ONE set: the same great year-wheel motif split into a
-light arc and a dark arc in every entry, only the BALANCE between the
-two arcs and the position of the eleven-year dawn-flicker motif
-changing entry to entry — the doctrine drawn as proportion, never as
-lettering.
+without a style break. All seven are ROUND rose-window medallions
+reading as ONE set, THE SAME rose window caught at a different moment
+of one giant day (the sealed GREAT DAY design, owner "kreni prozori"
+fix round, 2026-07-19, superseding the earlier year-wheel-and-seam
+device this sheet used before). The sun's own POSITION carries the
+doctrine's direction — rising, past its own zenith, sinking, or
+absent — while the light's QUANTITY carries its measure; the
+doctrine is drawn as one day's own arc, never as lettering.
 
 **Drop paths:** `assets/era/` — `Age_of_Light.png`,
 `Age_of_Darkness.png`, `Starry_Spring.png`, `Starry_Summer.png`,
@@ -55,17 +57,18 @@ SUMMER/WINTER:
 
 | Emblem | Span | Reading |
 |---|---|---|
-| Age of Light | 4079 BCE → 6423 CE | the wheel almost entirely gold, one thin dark sliver, the flicker already won |
-| Age of Darkness | 6423 CE → 16429 CE | the wheel almost entirely indigo-black, one thin gold sliver, the flicker reversed |
-| Starry Spring | 4079 BCE → 1000 CE | the dark sliver visibly SHRINKING, the flicker fresh and close behind |
-| Starry Summer | 1000 CE → 6423 CE — WE LIVE HERE | gold at its most generous, past its own crest, easing back slowly |
-| Starry Autumn | 6423 CE → 10990 CE | the dark arc visibly GROWING, chasing back a retreating gold wedge |
-| Starry Winter | 10990 CE → 16429 CE | indigo-black at its own deepest, one thin patient gold sliver waiting |
+| Age of Light | 4079 BCE → 6423 CE | the whole window ablaze in day, a CROWNED sun enthroned at the top — the day entire, unbroken |
+| Age of Darkness | 6423 CE → 16429 CE | the whole window deep night, a BLACK sun where the crown stood — the night entire, unbroken |
+| Starry Spring | 4079 BCE → 1000 CE | DAWN: light pouring up from the horizon, gold conquering the lower half and still climbing |
+| Starry Summer | 1000 CE → 6423 CE — WE LIVE HERE | NOON JUST PAST: the window flooded from above, one first thin shadow just creeping up a single edge |
+| Starry Autumn | 6423 CE → 10990 CE | DUSK: darkness holding the majority, embers of light sinking along the bottom edge |
+| Starry Winter | 10990 CE → 16429 CE | MIDNIGHT: star-glass, no sun, the thinnest hint of foredawn already at the rim |
 
-The shared leadwork border across all six — a candle-flicker-and-tick
-rim, small flame-shaped tesserae evenly spaced — is the family's own
-signature: the eleven-year dawn flicker made a recurring border motif
-rather than a caption.
+The shared leadwork border across all seven (the six Age/Season
+plates and Anno Lucis alike) — a twelve-ray sundial rim, one slender
+ray-tick for each hour of the day evenly spaced — is the family's own
+signature: the single day the whole set shares made a recurring
+border motif rather than a caption.
 
 ---
 
@@ -75,14 +78,14 @@ rather than a caption.
 unbroken years) → `assets/era/Age_of_Light.png`
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A great year-wheel fills the whole disc, split by a soft diagonal seam: the wide majority arc blazing radiant gold-white daylight glass, the narrow remaining sliver deep indigo-black night glass pushed nearly to the rim's edge — the light utterly dominant, unbroken. At the seam itself, tiny and easy to miss, eleven small flame-shaped glass tesserae flicker in a short broken row — the dawn's own hesitation, already won and left behind. A radiant sunburst crowns the wheel's top. Border: a candle-flicker-and-tick leadwork rim, small flame-tick motifs evenly spaced. Palette: radiant gold-white dominant, one thin indigo-black sliver, dark-gold lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The great rose window caught as THE WHOLE DAY: the entire glass ablaze in radiant gold-white daylight, no shadow and no dark sliver anywhere on the disc, every pane lit at once. A CROWNED sun sits enthroned at the top center, a fine radiant crown resting on the sun disc itself — the one mark its own Starry Summer noon still lacks. Border: the shared twelve-ray sundial leadwork rim, brightest and most even all the way round. Palette: radiant gold-white dominant throughout, warm bright-gold lead. NO lettering anywhere.
 ```
 
 **Age of Darkness** (6423 CE → 16429 CE, the coming era) →
 `assets/era/Age_of_Darkness.png`
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great year-wheel, its balance now reversed: the wide majority arc deep indigo-black night glass, one thin sliver of radiant gold-white daylight glass pushed to the rim's edge — the long night utterly dominant. At the seam, a short broken row of eleven small flame-shaped glass tesserae flicker again, in mirror — the reverse hesitation before the dark finally holds. A single cold star crowns the wheel's top where the sunburst stood before. Border: the same candle-flicker-and-tick leadwork rim, tarnished dark. Palette: deep indigo-black dominant, one thin gold-white sliver, black-iron lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught as THE WHOLE NIGHT: the entire glass deep blue-black, a full star field scattered edge to edge across the disc, no gold anywhere. A BLACK sun sits at the top center where the crowned sun stood before — a dark disc rimmed only by a thin cold corona of starlight. Border: the shared twelve-ray sundial leadwork rim, tarnished dark all the way round. Palette: deep blue-black dominant throughout, cold starlight accents, black-iron lead. NO lettering anywhere.
 ```
 
 ---
@@ -93,28 +96,28 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 half) → `assets/era/Starry_Spring.png`
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The year-wheel's dark sliver is shrinking visibly clockwise, chased back by an advancing gold-white dawn light still climbing toward its own crest; the eleven small flame-tesserae of the dawn flicker sit fresh and bright at the wheel's base, only just behind the light's advancing edge — the hesitation just ended, the climb still young. Fresh pale-gold light, rising, unfinished. Border: the shared candle-flicker-and-tick leadwork rim, newly bright. Palette: pale rising gold, thinning indigo, bright dark-gold lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The great rose window caught at DAWN: golden-white light pours from the horizon UPWARD at the disc's base, slanted rays climbing the glass in a widening fan, the gold conquering the lower half of the window and still visibly winning ground toward the crown; the upper reaches still hold the last dark blue-violet glass of the retreating night, thinning as the light climbs. The sun itself just cresting the rim at the base, small and low — light winning, and still GROWING. Border: the shared twelve-ray sundial leadwork rim, brightest along its lower arc where the dawn ray meets it. Palette: rising gold-white and rose against fading indigo-violet, warm dawn-gold lead. NO lettering anywhere.
 ```
 
 **Starry Summer** (1000 CE → 6423 CE, the Age of Light's falling half
 — WE LIVE HERE) → `assets/era/Starry_Summer.png`
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The year-wheel's gold-white light glass fills nearly the whole disc at its most generous, past its own crest and only just beginning to ease back, the dark sliver still thin and patient at the rim; the eleven flame-tesserae of the dawn flicker now sit far behind, small and distant at the wheel's base. A long, unhurried, high afternoon light. Border: the shared candle-flicker-and-tick leadwork rim, warm and settled. Palette: deep unhurried gold, a thin patient dark sliver, warm dark-gold lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught NOON JUST PAST: radiant gold-white light floods the glass from directly overhead, the sun disc sitting a touch past the window's own zenith, the whole rosette awash in high unbroken daylight glass; along a single edge, ONE first thin shadow creeps upward, a slender cool-violet sliver barely climbing from the rim — the only sign the light has begun, ever so slightly, to lean past its own peak. The long afternoon we live in. Border: the shared twelve-ray sundial leadwork rim, warm and evenly lit but for that one shadowed tick. Palette: deep unhurried overhead gold-white, one thin cool-violet shadow, warm dark-gold lead. NO lettering anywhere.
 ```
 
 **Starry Autumn** (6423 CE → 10990 CE, the Age of Darkness' rising
 half) → `assets/era/Starry_Autumn.png`
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The year-wheel's indigo-black dark glass is advancing visibly clockwise, chasing back a retreating gold-white light still holding a stubborn wedge; a short broken row of eleven flame-tesserae flickers again at the seam, the reverse hesitation only just past, the night's climb still young. Fading amber light losing ground to advancing indigo. Border: the shared candle-flicker-and-tick leadwork rim, dimming. Palette: fading amber-gold, advancing indigo-black, dimming dark lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught at DUSK: deep indigo-violet night glass now holds the majority of the disc, only embers of amber-gold light still SINKING along the bottom edge, rays slanting DOWNWARD toward the horizon as the sun itself dips below the rim; the last light glows warm and low, visibly losing ground to the climbing dark above it. Border: the shared twelve-ray sundial leadwork rim, dimming along its lower arc where the last ember sinks. Palette: fading amber-gold embers against advancing indigo-violet night, dimming dark-gold lead. NO lettering anywhere.
 ```
 
 **Starry Winter** (10990 CE → 16429 CE, the Age of Darkness' falling
 half) → `assets/era/Starry_Winter.png`
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The year-wheel's indigo-black dark glass fills nearly the whole disc at its own deepest, past its crest and only just beginning to ease back, one thin patient gold-white sliver waiting at the rim; far ahead at the wheel's base a faint, barely-lit row of eleven flame-tesserae waits unlit — the next dawn's own flicker, not yet struck. The longest, stillest night. Border: the shared candle-flicker-and-tick leadwork rim, nearly dark. Palette: deepest indigo-black, one thin waiting gold sliver, near-black lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught at MIDNIGHT: deep indigo-black star-glass fills the whole disc, no sun anywhere in the window, a full field of small bright star-tesserae scattered across the dark glass; at the very rim of the horizon, along the base, the THINNEST hint of foredawn glows — one faint pale-gold seam where the dark has already, almost imperceptibly, begun to recede. Border: the shared twelve-ray sundial leadwork rim, nearly dark but for that one faint tick at the base. Palette: deepest indigo-black and starlight, one thin pale-gold foredawn seam, near-black lead. NO lettering anywhere.
 ```
 
 ---
@@ -122,15 +125,15 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ## Anno Lucis — the dial's own measured era
 
 **Anno Lucis** (owner fix-round B, 2026-07-19, TASK 3 — "treba da
-napraviš promptove") → `assets/era/Anno_Lucis.png`. Same round
-rose-window family as the six above, but the SUBJECT is the dawn
-itself rather than the reign it opens: the eleven-year flicker motif
-already carried as a border signature on every Age/Season plate here
-becomes the FOREGROUND — the first unbroken light year breaking free
-of the flicker's hesitation.
+napraviš promptove"; redrawn on the sealed GREAT DAY design, owner
+"kreni prozori" fix round, 2026-07-19) → `assets/era/Anno_Lucis.png`.
+Same round rose-window family as the six above, but the SUBJECT is
+the dawn itself rather than the reign it opens: where every other
+plate reads the sun's position across a whole day, this one plate
+holds the single INSTANT the first ray breaks — THE FIRST RAY.
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The great year-wheel motif shared by the Age and Starry Season plates, but caught at its single hinge moment: eleven small flame-shaped glass tesserae march across the wheel's base in a broken, hesitating row — seven dark, then light, then dark once more — and at the row's very last tessera the flame catches and HOLDS, a fresh radiant gold-white dawn breaking upward from that one held flame to fill the wheel's upper arc, still climbing, not yet at its crest. A single sunburst begins to form at the top, still gathering itself. Border: the shared candle-flicker-and-tick leadwork rim, brightest exactly where the held flame sits. Palette: fresh dawn gold rising from a held ember, the last dark tesserae still visible behind it, warm dark-gold lead. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window still in NIGHT glass, deep indigo-black and starlit — but at its CENTER, in place of the usual rosette medallion, the ALL-SEEING EYE sits open within a single triangle of light, rendered in the window's own stained-glass register, never an engraving; from the Eye ONE single golden ray breaks downward and outward, cutting clean through the dark glass to touch the horizon at the base — the first morning, the year from which the light never breaks again. Border: the shared twelve-ray sundial leadwork rim, dark all round but for the one tick the golden ray touches, struck bright. Palette: deep indigo-black night glass, one unbroken golden ray, warm gold-on-dark lead. NO lettering anywhere.
 ```
 
 ## The Eras of the World's own calendars
@@ -207,12 +210,25 @@ wearing the matching emblem beside each option.
 - Extended (owner fix-round B, 2026-07-19, TASK 3 — "treba da napraviš
   promptove"): Anno Lucis's own emblem plus six calendar-system
   emblems (AUC, Byzantine AM, Hebrew AM, AH, Buddhist Era, Huangdi)
-  join the sheet — 13 images total, NONE generated yet. The "Eras of
-  the World" comparative article itself still carries no plate of its
-  OWN — it is the essay that compares this dial's measurement against
-  every OTHER tradition's arithmetic — but it now strings the six
-  calendar emblems as its own image strip (see the Future use note
-  above; `app/encyclopedia.py` wires the paths already, graceful-absent).
+  join the sheet — 13 images total. The "Eras of the World" comparative
+  article itself still carries no plate of its OWN — it is the essay
+  that compares this dial's measurement against every OTHER tradition's
+  arithmetic — but it now strings the six calendar emblems as its own
+  image strip (see the Future use note above; `app/encyclopedia.py`
+  wires the paths already, graceful-absent).
+- **SUPERSEDED (owner "kreni prozori" fix round, 2026-07-19):** the
+  seven era/starry briefs — `Age_of_Light.png`, `Age_of_Darkness.png`,
+  `Starry_Spring.png`, `Starry_Summer.png`, `Starry_Autumn.png`,
+  `Starry_Winter.png`, `Anno_Lucis.png` — are REWRITTEN on the sealed
+  GREAT DAY design (one rose window caught at a different moment of
+  one giant day; sun position carries direction, light quantity carries
+  measure). The seven files already generated under the OLD
+  wheel-and-seam/flicker device no longer match these prompts. **Owner
+  action required:** delete `assets/era/gemini/*.png` (the seven era7
+  files ONLY — `assets/era/gemini/calendar/` is untouched, its six
+  prompts unchanged) and rerun PromptPainter on this sheet to
+  regenerate the seven. The six calendar emblems below need no
+  regeneration.
 - Verify with `python main.py "research/prompts/era/era_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner
   (13 images expected — verified 2026-07-19, dry-run clean, 0 problems).
