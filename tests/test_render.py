@@ -225,6 +225,29 @@ def test_spacebar_moon_marker_opens_the_current_phase(app):
     assert target == ("moon", expected)
 
 
+def test_spacebar_moon_marker_pins_new_and_full(app):
+    """The Moon-marker Spacebar mapping pinned at TWO fractions (owner
+    2026-07-16, queue #8b): a New Moon (cycle fraction 0.0) opens the
+    topic's FIRST page and a Full Moon (0.5) its FIFTH — the two anchors
+    the eight-page order (constants.MOON_PHASE_NAMES) hangs on. Driven
+    through `_element_encyclopedia_target`'s own moon branch with a stub
+    tick, so it also proves the lunar-eclipse override stays inert while
+    no eclipse is in the window (eclipse_event is None)."""
+    from types import SimpleNamespace
+
+    from config import constants
+
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    for fraction, page in ((0.0, 0), (0.5, 4)):
+        comp._last_tick = SimpleNamespace(
+            eclipse_event=None, moon_fraction=fraction
+        )
+        assert comp._element_encyclopedia_target("moon", "sun") == (
+            "moon",
+            page,
+        )
+
+
 def _repaint(comp, size=360.0):
     from PySide6.QtGui import QImage, QPainter
 

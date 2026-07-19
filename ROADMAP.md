@@ -123,6 +123,21 @@ lives in [The DOMY Canon](CANON.md).
   CANON.md §The Banknote verbatim. See [The DOMY Canon](CANON.md),
   [Ring Presets](data/rings.md), [Layers](render/layers.md) and
   [Motto](core/motto.md). 13 new tests, 513 green.
+- **THE MOON PAGES round (owner 2026-07-16 writers' queue #8b) —
+  DONE (2026-07-19).** The bulk had already landed in session 14
+  (commit `fd52ffd`): the `moon` topic's EIGHT house-voice phase
+  articles, the tides woven as passages inside the four principal
+  pages (SPRING at the New/Full syzygies, NEAP at the two Quarters),
+  the live `moon_phase_file` image per page at its canonical eighth
+  fraction, the Spacebar jump to the current phase and its
+  full-suite tests. This round VERIFIED all of it against the spec
+  and finished the two open ends: the Spacebar mapping is now pinned
+  at TWO fractions (New Moon → page 0, Full Moon → page 4) beside the
+  existing end-to-end geometry test, and the Full Moon `[[The Story]]`
+  gained the two spec-named anchors it still lacked — Endymion (the
+  Selene myth) and the Paschal full Moon (the moon that still fixes
+  Easter). ROADMAP 8b marked done. See [Encyclopedia](app/encyclopedia.md).
+  1 new test, 515 green.
 
 <a id="owner-queue"></a>
 
@@ -194,12 +209,34 @@ lives in [The DOMY Canon](CANON.md).
    events (equinoxes, solstices, seasons → the Sun/Seasons pages),
    the Moon marker → its CURRENT phase's page, the Earth marker,
    the Chinese slot — everything with a page.
-8b. **The Moon topic grows to EIGHT pages** (owner 2026-07-16): one
-   per phase — the four turning points and the four between (waxing
-   crescent/gibbous, waning gibbous/crescent) — each with a
-   description and a mythological/astrological connection; plus the
-   TIDES explained: spring tide at new/full (Sun and Moon pulling
-   the water together/apart), neap tide at the quarters.
+8b. **The Moon topic grows to EIGHT pages — DONE (session 14, commit
+   `fd52ffd`; verified + finished, MOON PAGES round 2026-07-19).**
+   (owner 2026-07-16): one per phase — the four turning points and the
+   four between (waxing crescent/gibbous, waning gibbous/crescent) —
+   each with a description and a mythological/astrological connection;
+   plus the TIDES explained: spring tide at new/full (Sun and Moon
+   pulling the water together/apart), neap tide at the quarters. The
+   `moon` section of `encyclopedia.json` holds eight house-voice
+   articles keyed by and ordered as `constants.MOON_PHASE_NAMES`, each
+   with a `[[The Sky]]` (geometry + rough rise/set + visibility),
+   `[[The Story]]` (myth/astrology) and `[[On the Dial]]` (the marker
+   on its lunation orbit, the live terminator, the silver glow at the
+   four principal events). The TIDES ride as passages INSIDE the four
+   principal pages — spring at the New/Full syzygies, neap at the two
+   Quarters — not a ninth page (chosen so the tide physics stays fused
+   to the exact geometry that causes it, and the topic's page count
+   stays the eight the Spacebar jump indexes; see
+   [Encyclopedia](app/encyclopedia.md)). Each page's image is the LIVE
+   `render.assets.moon_phase_file(index/8, name)` render at its
+   canonical fraction (0.0, 0.125 … 0.875), disk-cached — no pre-baked
+   plates. The Moon-marker Spacebar jump opens the CURRENT phase's page
+   (`compositor._element_encyclopedia_target`, the lunar-eclipse
+   override from round F staying ahead of it), pinned at two fractions
+   (New→0, Full→4) plus the end-to-end geometry test. The MOON PAGES
+   round also enriched the Full Moon `[[The Story]]` with the two
+   spec-named anchors it still lacked — Endymion and the Paschal full
+   Moon. Corpus keys ride `collect_corpus()`'s `moon` walk (English
+   only, per the translation policy). 1 new test, 515 green.
 9. **Image clipping in the Encyclopedia — REPEAT COMPLAINT** (owner
    2026-07-16, "OVO NIJE PRVI PUT!"): the title above and the
    style/nav row below overlap the medallion image. The layout must
