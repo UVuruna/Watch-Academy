@@ -128,10 +128,11 @@ def test_ring_preset_triangle_override_validation():
 
 
 def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
-    """TASK 1 (owner "može radi" 2026-07-19, CANON.md §The Banknote):
-    the two Great Seal mottos, their pinned letters landing on the SAME
-    six hexagram seats the ring's own MASON-G letters occupy — N on 4h,
-    O on noon, M on 20h, A on 8h, S on 16h."""
+    """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
+    reference image): ANNUIT COEPTIS pins its own A at 8h and S at 16h
+    (the TOP arc); NOVUS ORDO SECLORUM pins its own N at 4h, ORDO's own
+    final O at the bottom/24h, and M at 20h (the BOTTOM arc, reading
+    counterclockwise)."""
     from config import constants
     from data.rings import ring_presets
 
@@ -142,11 +143,9 @@ def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
     ]
     annuit, novus = mason["motto"]
     assert annuit["angles"][0] % 360.0 == pytest.approx(300.0)    # A -> 8h
-    assert annuit["angles"][8] % 360.0 == pytest.approx(0.0)      # O -> noon
     assert annuit["angles"][13] % 360.0 == pytest.approx(60.0)    # S -> 16h
     assert novus["angles"][0] % 360.0 == pytest.approx(240.0)     # N -> 4h
-    assert novus["angles"][9] % 360.0 == pytest.approx(0.0)       # O -> noon
-    assert novus["angles"][11] % 360.0 == pytest.approx(60.0)     # S -> 16h
+    assert novus["angles"][9] % 360.0 == pytest.approx(180.0)     # O -> 24h (bottom)
     assert novus["angles"][18] % 360.0 == pytest.approx(120.0)    # M -> 20h
 
     # Every OTHER bundled preset stays motto-free (graceful absence).
@@ -209,7 +208,9 @@ def test_dial_window_margin_grows_only_for_a_motto_preset():
     reserve enough for the outer motto arc's own reach when the active
     preset carries one (MASON G), and stay UNCHANGED for every preset
     that does not (DOMY) — the graceful-absence pattern `triangle`/
-    `legend` already use."""
+    `legend` already use. MOTO-FIX round (owner correction 2026-07-19):
+    both mottos now share ONE radius, so the expected extent drops the
+    old `RING_MOTTO_RADIUS_STEP` term (deleted, Rule #6)."""
     domy = build_skin(Settings())
     mason = build_skin(replace(Settings(), ring="MASON G"))
     domy_margin = defaults.dial_window_margin_fraction(domy)
@@ -217,7 +218,7 @@ def test_dial_window_margin_grows_only_for_a_motto_preset():
     assert mason_margin > domy_margin
     # The motto arc's own outer reach is the binding term for MASON G.
     expected_motto_extent = (
-        defaults.RING_MOTTO_RADIUS_FRACTION + defaults.RING_MOTTO_RADIUS_STEP
+        defaults.RING_MOTTO_RADIUS_FRACTION
         + defaults.RING_MOTTO_SIZE * mason.ring_letter_scale
         * (1.0 + 2.0 * defaults.RING_LETTER_SHADOW_RADIUS)
     )

@@ -1314,20 +1314,19 @@ class RingLayer(Layer):
             )
 
     def _draw_motto(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
-        2026-07-19, CANON.md §The Banknote): each character of the
-        preset's `motto` texts — pre-solved to its own dial angle by
-        `data.rings`/`core.motto` (pinned letters land exactly on their
-        hexagram seat: N on 4h, O on noon, M on 20h, A on 8h, S on
-        16h — MASON outside, G inside) — drawn via the SAME stamp the
-        ring's own six letters use (`_draw_ring_glyph`, Rule #5), just
-        smaller (`RING_MOTTO_SIZE`) and further out. Two concentric
-        arcs by list order (`RING_MOTTO_RADIUS_FRACTION` for the first
-        entry, +`RING_MOTTO_RADIUS_STEP` for the second) — several
-        pinned letters land at the IDENTICAL angle in both mottos on
-        purpose (both mottos' own O at noon, own S at 16h), so they can
-        only coexist at two different radii. Empty (no-op) for every
-        preset without a motto."""
+        """The outer GREAT SEAL MOTTO ARC (MOTO-FIX round, owner
+        correction 2026-07-19, the dollar's Great Seal reference
+        image): each character of the preset's `motto` texts —
+        pre-solved to its own dial angle by `data.rings`/`core.motto`
+        (ANNUIT COEPTIS's own A/S pin the TOP arc at 8h/16h, NOVUS ORDO
+        SECLORUM's own N/O/M pin the BOTTOM arc at 4h/24h/20h — MASON
+        outside, G inside) — drawn via the SAME stamp the ring's own
+        six letters use (`_draw_ring_glyph`, Rule #5), just smaller
+        (`RING_MOTTO_SIZE`) and further out. The two arcs are angularly
+        DISJOINT (top 300-360-60 deg, bottom 120-180-240 deg) so both
+        share ONE radius (`RING_MOTTO_RADIUS_FRACTION`) — no more two
+        concentric rings of text. Empty (no-op) for every preset
+        without a motto."""
         mottos = self._skin.ring.motto
         if not mottos:
             return
@@ -1335,15 +1334,11 @@ class RingLayer(Layer):
             2 * ctx.radius * defaults.RING_MOTTO_SIZE * ctx.skin.ring_letter_scale
         )
         metal = self._skin.ring.motto_metal
-        radii = (
-            defaults.RING_MOTTO_RADIUS_FRACTION,
-            defaults.RING_MOTTO_RADIUS_FRACTION + defaults.RING_MOTTO_RADIUS_STEP,
-        )
-        for motto, radius_fraction in zip(mottos, radii):
+        for motto in mottos:
             for gold_asset, theta in motto["glyphs"]:
                 self._draw_ring_glyph(
                     painter, ctx, gold_asset, metal, theta % 360.0,
-                    radius_fraction, height,
+                    defaults.RING_MOTTO_RADIUS_FRACTION, height,
                 )
 
 

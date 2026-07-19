@@ -70,19 +70,23 @@ class RingSpec:
     # data.rings.validate_preset and render.compositor's ring-band hover.
     letter_legend: dict[int, dict] = field(default_factory=dict)
     # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
-    # 2026-07-19, CANON.md §The Banknote): built once by
-    # app.controller.build_skin from the preset's own `motto` card field
-    # (data.rings.validate_preset -> core.motto.motto_glyph_angles) —
-    # curved text just outside the ring band, its pinned letters landing
-    # on the SAME six hexagram seats the ring's own MASON-G letters
-    # occupy (MASON outside, G inside). Each entry: {"text": the motto
-    # string (spaces included, for reference), "glyphs": a tuple of
-    # (gold_asset_path, dial_angle) pairs, ONE per non-space character,
-    # ready for render.layers.RingLayer to draw — spaces are already
-    # filtered out here, so the render loop never checks for them.
-    # Empty for every preset but MASON G today; list ORDER is the radius
-    # order (see RING_MOTTO_RADIUS_FRACTION's note) — index 0 draws at
-    # the inner radius, index 1 at the outer.
+    # 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX round,
+    # owner correction 2026-07-19, the dollar's Great Seal reference
+    # image): built once by app.controller.build_skin from the preset's
+    # own `motto` card field (data.rings.validate_preset ->
+    # core.motto.motto_glyph_angles) — curved text just outside the
+    # ring band, its pinned letters landing on the SAME six hexagram
+    # seats the ring's own MASON-G letters occupy (MASON outside, G
+    # inside). Each entry: {"text": the motto string (spaces included,
+    # for reference), "glyphs": a tuple of (gold_asset_path, dial_angle)
+    # pairs, ONE per non-space character, ready for render.layers.
+    # RingLayer to draw — spaces are already filtered out here, so the
+    # render loop never checks for them. Empty for every preset but
+    # MASON G today; both entries now draw at the SAME
+    # RING_MOTTO_RADIUS_FRACTION — the two arcs are angularly disjoint
+    # (ANNUIT COEPTIS over the top, NOVUS ORDO SECLORUM under the
+    # bottom) so they never collide; the old two-radius-by-list-order
+    # scheme is gone.
     motto: tuple[dict, ...] = ()
     # The SINGLE finish every motto glyph wears (owner: "in the ring
     # letter metal/color family") — the same settings.ring_finish the

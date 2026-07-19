@@ -14,6 +14,22 @@ wall clock (core purity, tests/test_purity.py); render.layers.RingLayer
 draws the result, data.rings.validate_preset calls this at LOAD time so
 a broken pin config (a typo'd occurrence, an out-of-order pin) fails
 loudly there, never mid-paint.
+
+MOTO-FIX round (owner correction 2026-07-19, the dollar's Great Seal
+reference image — the first layout was "katastrofa", both mottos
+sweeping the SAME overlapping top-heavy arc at two radii): the two
+mottos now sit on DISJOINT arcs, exactly like the real seal — ANNUIT
+COEPTIS over the TOP (8h -> 16h through noon), NOVUS ORDO SECLORUM
+under the BOTTOM (4h -> 20h through the bottom/24h) — sharing ONE
+radius. The new `clockwise` parameter picks the arc: the top arc reads
+increasing angle, the bottom arc DEcreasing (`clockwise=False`) — both
+read left-to-right to a viewer despite the opposite angle direction,
+since dial-x is monotonic in opposite senses across the top and bottom
+halves (see the function's own docstring). No separate orientation
+flag is needed for the GLYPH rotation itself —
+`core.angles.readable_rotation_deg` already derives tops-outward (top
+half) or tops-inward (bottom half) purely from the angle, unchanged by
+this round.
 """
 
 from core.angles import ring_position_angle
@@ -39,12 +55,15 @@ def _occurrence_index(text: str, letter: str, occurrence: int) -> int:
 
 
 def motto_glyph_angles(
-    text: str, pins: tuple[tuple[str, int, int], ...]
+    text: str,
+    pins: tuple[tuple[str, int, int], ...],
+    clockwise: bool = True,
 ) -> tuple[float, ...]:
     """One dial angle (degrees, clockwise from the top, UNWRAPPED so the
-    sweep direction stays obvious — may exceed 360) per CHARACTER of
-    `text`, spaces included (a space still consumes one evenly-spaced
-    slot, so word gaps read naturally; the caller skips drawing them).
+    sweep direction stays obvious — may exceed 360 or go negative) per
+    CHARACTER of `text`, spaces included (a space still consumes one
+    evenly-spaced slot, so word gaps read naturally; the caller skips
+    drawing them).
 
     `pins` is `(letter, occurrence, ring_position)` triples — e.g.
     `("N", 1, 4)` pins the first "N" in `text` to the 4h ring seat.
@@ -58,10 +77,27 @@ def motto_glyph_angles(
     silently drawing a lopsided arc (Rule #7 — no defensive handling for
     a scenario our own data never produces).
 
-    Consecutive pins must read CLOCKWISE (owner spec: "both mottos read
-    continuously clockwise") — each pin's angle is unwrapped (+360 as
-    many times as needed) to exceed the previous one, then every
-    character strictly between two pins is the EVEN linear
+    `clockwise` (MOTO-FIX round, owner correction 2026-07-19, the
+    dollar's Great Seal reference image) picks which of the two arcs
+    this text draws. True (the default) is the TOP-arc reading — each
+    next pin's angle is unwrapped (+360 as many times as needed) to
+    EXCEED the previous one, so the text sweeps clockwise over the top
+    (ANNUIT COEPTIS's own arc, 8h -> 16h through noon). False is the
+    BOTTOM-arc reading — each next pin's angle is unwrapped (-360 as
+    many times as needed) to stay BELOW the previous one, so the text
+    sweeps counterclockwise under the bottom (NOVUS ORDO SECLORUM's own
+    arc, 4h -> 20h through the bottom/24h). Both directions read
+    left-to-right to a VIEWER (never mirrored) even though the angle
+    moves opposite ways, because dial-x (`render.layers.dial_point`'s
+    `distance * sin(theta)`) is monotonic in OPPOSITE senses across the
+    two halves of the circle: increasing theta moves screen-x
+    left-to-right over the top but right-to-left under the bottom, so
+    the bottom arc must DEcrease theta to still read left-to-right. The
+    per-glyph tangential ROTATION (`core.angles.readable_rotation_deg`)
+    needs no matching flag — it already derives tops-outward (top half)
+    or tops-inward (bottom half) from the angle alone, so feeding it
+    either direction's angles draws every glyph upright automatically.
+    Every character strictly between two pins is the EVEN linear
     interpolation of the two pinned angles."""
     if len(pins) < 2:
         raise ValueError("motto_glyph_angles needs at least 2 pins to interpolate")
@@ -84,8 +120,12 @@ def motto_glyph_angles(
     angles[prev_index] = prev_angle
     for index, position in resolved[1:]:
         angle = ring_position_angle(position)
-        while angle <= prev_angle:
-            angle += 360.0
+        if clockwise:
+            while angle <= prev_angle:
+                angle += 360.0
+        else:
+            while angle >= prev_angle:
+                angle -= 360.0
         step = (angle - prev_angle) / (index - prev_index)
         for k in range(prev_index + 1, index + 1):
             angles[k] = prev_angle + step * (k - prev_index)

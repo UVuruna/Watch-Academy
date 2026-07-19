@@ -25,7 +25,13 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
     SAME hexagram seats the ring's own letters occupy) and every
     character of `text` must be a space or a letter the shared library
     (`constants.RING_LETTER_FILES`) can draw — the motto reuses that
-    exact PNG library, never new art. The per-glyph angle math itself
+    exact PNG library, never new art. Each entry may also carry
+    `clockwise` (MOTO-FIX round, owner correction 2026-07-19; default
+    true): true reads the arc sweeping increasing angle (the TOP arc,
+    ANNUIT COEPTIS's own), false sweeps decreasing angle (the BOTTOM
+    arc, NOVUS ORDO SECLORUM's own) — see `core.motto.motto_glyph_angles`
+    for why the bottom arc must reverse direction to still read
+    left-to-right to a viewer. The per-glyph angle math itself
     (`core.motto.motto_glyph_angles`) runs HERE, at load time, so a
     broken pin config (a typo'd occurrence, an out-of-order pin) fails
     loudly at startup, never mid-paint. Returns a tuple of
@@ -54,8 +60,9 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
                     f"is not one of its own positions {positions}"
                 )
             pins.append((str(letter), int(occurrence), int(position)))
+        clockwise = bool(motto_entry.get("clockwise", True))
         try:
-            angles = motto_glyph_angles(text, tuple(pins))
+            angles = motto_glyph_angles(text, tuple(pins), clockwise=clockwise)
         except ValueError as error:
             raise ValueError(
                 f"ring preset {name!r}: motto {text!r}: {error}"

@@ -49,36 +49,46 @@ OPTIONAL card fields, both wired through `validate_preset` and
   letter as the pointer — see [The DOMY Canon](../CANON.md)'s §The
   Banknote for the sealed wording.
 
-- **`motto`** (TASK 1, owner "može radi" 2026-07-19) — a list of Great
-  Seal motto entries, each `{text, pins}`: `text` is the motto string
-  (spaces included) and `pins` is a list of `[letter, occurrence,
-  position]` triples — e.g. `["N", 1, 4]` pins the FIRST "N" in `text`
-  to the 4h ring seat, `["O", 3, 12]` the THIRD "O" to noon (occurrence
+- **`motto`** (TASK 1, owner "može radi" 2026-07-19; corrected
+  MOTO-FIX round, owner correction 2026-07-19, the dollar's Great Seal
+  reference image) — a list of Great Seal motto entries, each `{text,
+  pins, clockwise}`: `text` is the motto string (spaces included),
+  `pins` is a list of `[letter, occurrence, position]` triples — e.g.
+  `["N", 1, 4]` pins the FIRST "N" in `text` to the 4h ring seat,
+  `["O", 3, 24]` the THIRD "O" to the bottom/24h seat (occurrence
   counting from 1, so a repeated letter can be pinned at any of its
-  appearances — the O ENDING "ORDO", not NOVUS's own O). Validated and
-  ANGLE-SOLVED by `validate_preset` (delegating the actual per-glyph
-  math to [Motto](../core/motto.md)'s `motto_glyph_angles`) at LOAD
-  time, so a broken pin (an out-of-range occurrence, a position that
-  is not one of the preset's own six, a letter the shared PNG library
-  cannot draw) fails loudly at startup — never a silently blank or
-  lopsided arc. Card entries resolve to `{"text", "angles"}` (one angle
-  per character, spaces included); `app.controller.build_skin` then
-  pairs every NON-space character with its gold-master asset path into
+  appearances — the O ENDING "ORDO", not NOVUS's own O) — and the
+  optional `clockwise` (default true) picks the arc's reading
+  direction: true sweeps increasing angle (the TOP arc), false sweeps
+  decreasing angle (the BOTTOM arc — see [Motto](../core/motto.md)'s
+  Design Decisions for why the bottom must reverse direction to still
+  read left-to-right to a viewer). Validated and ANGLE-SOLVED by
+  `validate_preset` (delegating the actual per-glyph math to
+  [Motto](../core/motto.md)'s `motto_glyph_angles`) at LOAD time, so a
+  broken pin (an out-of-range occurrence, a position that is not one
+  of the preset's own six, a letter the shared PNG library cannot
+  draw) fails loudly at startup — never a silently blank or lopsided
+  arc. Card entries resolve to `{"text", "angles"}` (one angle per
+  character, spaces included); `app.controller.build_skin` then pairs
+  every NON-space character with its gold-master asset path into
   `SkinDefinition.ring.motto`, which `RingLayer._draw_motto` draws
   outside the ring band (see [Layers](../render/layers.md)). Only
   MASON G carries one today:
 
-  | Motto | Pins (letter, occurrence, seat) | Own arc |
-  |---|---|---|
-  | ANNUIT COEPTIS | A→1st→8h, O→1st→12h, S→1st→16h | 8h → 16h (120°, through noon) |
-  | NOVUS ORDO SECLORUM | N→1st→4h, O→3rd→12h, S→2nd→16h, M→1st→20h | 4h → 20h (240°, the long way through 8h/12h/16h) |
+  | Motto | Pins (letter, occurrence, seat) | Direction | Own arc |
+  |---|---|---|---|
+  | ANNUIT COEPTIS | A→1st→8h, S→1st→16h | clockwise | 8h → 16h (120°, over the TOP through noon) |
+  | NOVUS ORDO SECLORUM | N→1st→4h, O→3rd→24h, M→1st→20h | counterclockwise | 4h → 20h (120°, under the BOTTOM through 24h) |
 
-  The two arcs' pinned O (noon) and S (16h) land at the IDENTICAL
-  angle on purpose — "MASON outside, G inside" reads TWICE — so they
-  draw at two different radii (`RING_MOTTO_RADIUS_FRACTION` for
-  ANNUIT COEPTIS, `+ RING_MOTTO_RADIUS_STEP` for NOVUS ORDO SECLORUM);
-  see [Motto](../core/motto.md)'s Design Decisions for why one arc
-  could not serve both.
+  The two arcs are now angularly DISJOINT (top 300°-360°-60°, bottom
+  120°-180°-240°) — exactly like the real seal, ANNUIT COEPTIS over the
+  pyramid, NOVUS ORDO SECLORUM under it — so BOTH draw at the SAME
+  `RING_MOTTO_RADIUS_FRACTION` (the first round's two-radius scheme,
+  `RING_MOTTO_RADIUS_STEP`, is deleted — Rule #6). The MOTO-FIX round
+  (owner correction 2026-07-19, the Great Seal reference image) undid
+  the first round's mistaken "MASON reads twice" shared-angle design
+  (both mottos' own O and own S landing on the identical seat); see
+  [Motto](../core/motto.md)'s Design Decisions for the full reasoning.
 
 ## Connections
 

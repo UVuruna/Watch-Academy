@@ -1165,33 +1165,53 @@ def _max_alpha_in_box(image, cx, cy, half):
 
 
 def test_mason_g_motto_arc_paints_outside_the_ring(july_wednesday):
-    """TASK 1 (owner "može radi" 2026-07-19): the outer motto arc
-    actually reaches OUTSIDE the ring plate, and only where a pin
-    exists. Straight up from the center (noon) at the motto's own
-    inner radius is exactly where ANNUIT COEPTIS's own "O" is pinned —
-    opaque nearby; the SAME radius straight down (24h/Ω) is a point
-    NEITHER motto's angular sweep ever reaches (core/motto.md's Design
-    Decisions: Novus spans 4h..20h the long way through 8/12/16, Annuit
-    spans 8h..16h — both skip 24h) — transparent, confirming the arc
-    does not blanket the whole circle."""
+    """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
+    reference image): ANNUIT COEPTIS now arcs over the TOP (its own A
+    pinned at 8h, S at 16h) and NOVUS ORDO SECLORUM under the BOTTOM
+    (its own N at 4h, ORDO's own final O at the bottom/24h, M at 20h) —
+    both at the SAME radius. Ink lands exactly at every pin, including
+    the bottom/24h seat that the FIRST round's arc never reached (it is
+    now exactly where ORDO's own O pins). No motto letter pins noon
+    anymore (the arc passes OVER the G, never onto it) and the 90/270
+    deg gaps — the dial's left/right sides, in the 60 deg dead zones
+    between the two 120 deg arcs — stay transparent."""
     from app.controller import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
     day, tick = july_wednesday
     dial_diameter = 720
     dial_radius_px = dial_diameter / 2.0
-    motto_y_offset = dial_radius_px * defaults.RING_MOTTO_RADIUS_FRACTION
+    motto_radius_px = dial_radius_px * defaults.RING_MOTTO_RADIUS_FRACTION
 
     mason_skin = build_skin(settings_replace(Settings(), ring="MASON G"))
     mason_image, _, mason_margin = _render_window_frame(
         Compositor(mason_skin, AssetCache()), day, tick, dial_diameter
     )
-    cx = round(mason_margin + dial_radius_px)
-    top_y = round(mason_margin + dial_radius_px - motto_y_offset)
-    assert _max_alpha_in_box(mason_image, cx, top_y, 10) > 0
+    cx = mason_margin + dial_radius_px
+    cy = mason_margin + dial_radius_px
 
-    bottom_y = round(mason_margin + dial_radius_px + motto_y_offset)
-    assert _max_alpha_in_box(mason_image, cx, bottom_y, 10) == 0
+    def alpha_at(theta_deg: float) -> int:
+        offset = dial_point(theta_deg, motto_radius_px)
+        return _max_alpha_in_box(
+            mason_image, round(cx + offset.x()), round(cy + offset.y()), 10
+        )
+
+    # ANNUIT COEPTIS's own pins: A at 8h, S at 16h.
+    assert alpha_at(300.0) > 0    # A -> 8h
+    assert alpha_at(60.0) > 0     # S -> 16h
+    # NOVUS ORDO SECLORUM's own pins: N at 4h, ORDO's own O at the
+    # bottom (24h, straight down — unreachable in the first round), M
+    # at 20h.
+    assert alpha_at(240.0) > 0    # N -> 4h
+    assert alpha_at(180.0) > 0    # O (ORDO's own) -> 24h
+    assert alpha_at(120.0) > 0    # M -> 20h
+
+    # No motto letter pins noon anymore — the arc passes OVER the G.
+    assert alpha_at(0.0) == 0
+    # The dial's left/right sides sit in the 60 deg gaps neither arc
+    # reaches (top 300-360-60, bottom 120-180-240).
+    assert alpha_at(90.0) == 0
+    assert alpha_at(270.0) == 0
 
 
 def test_omega_double_click_reveals_the_week(july_wednesday):

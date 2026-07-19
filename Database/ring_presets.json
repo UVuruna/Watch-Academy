@@ -1,5 +1,5 @@
 {
-  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs. Optional 'triangle' (seal layout only, ROADMAP 15b): overrides the layout's own metal triangle so a 6-letter preset can split into two 3-letter metal groups instead of the NUMBERS-style single finish on all six. Optional 'legend': hour(as the position int) -> {name, reading} — the per-letter HOVER LEGEND (owner: what a letter stands for), quoted verbatim from CANON.md's Banknote table; each reading may carry a second '\\n\\n'-separated paragraph, the axis-opposition line (TASK 2, owner 'moze'). Optional 'motto' (TASK 1, owner 'moze radi'): a list of Great Seal motto entries {text, pins}, pins = [letter, occurrence, position] triples — the outer curved-text arc outside the ring band, validated and angle-solved by data.rings.validate_preset/core.motto.",
+  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs. Optional 'triangle' (seal layout only, ROADMAP 15b): overrides the layout's own metal triangle so a 6-letter preset can split into two 3-letter metal groups instead of the NUMBERS-style single finish on all six. Optional 'legend': hour(as the position int) -> {name, reading} — the per-letter HOVER LEGEND (owner: what a letter stands for), quoted verbatim from CANON.md's Banknote table; each reading may carry a second '\\n\\n'-separated paragraph, the axis-opposition line (TASK 2, owner 'moze'). Optional 'motto' (TASK 1, owner 'moze radi'; corrected MOTO-FIX round, owner correction 2026-07-19, the dollar's Great Seal reference image): a list of Great Seal motto entries {text, pins, clockwise}, pins = [letter, occurrence, position] triples; optional per-entry 'clockwise' (default true) picks the arc's reading direction — true sweeps increasing angle (the TOP arc), false sweeps decreasing (the BOTTOM arc) — the outer curved-text arc outside the ring band, validated and angle-solved by data.rings.validate_preset/core.motto.",
   "presets": [
     {
       "name": "DOMY",
@@ -98,11 +98,12 @@
       "motto": [
         {
           "text": "ANNUIT COEPTIS",
-          "pins": [["A", 1, 8], ["O", 1, 12], ["S", 1, 16]]
+          "pins": [["A", 1, 8], ["S", 1, 16]]
         },
         {
           "text": "NOVUS ORDO SECLORUM",
-          "pins": [["N", 1, 4], ["O", 3, 12], ["S", 2, 16], ["M", 1, 20]]
+          "pins": [["N", 1, 4], ["O", 3, 24], ["M", 1, 20]],
+          "clockwise": false
         }
       ]
     }

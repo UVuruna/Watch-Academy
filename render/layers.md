@@ -405,39 +405,57 @@ DELIBERATELY narrower: it touches ONLY the ring band's own art (the
 plate + its letters) — the hands, Umbra and subdial plate are
 untouched by this slider even though they share `ring_tint`.
 
-**THE OUTER MOTTO ARC (TASK 1, owner "može radi" 2026-07-19, CANON.md
-§The Banknote):** while the active preset carries a `motto`
+**THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
+dollar's Great Seal reference image — the first round's layout was
+"katastrofa", both mottos sweeping the same overlapping top-heavy
+arc):** while the active preset carries a `motto`
 (`data.rings.validate_preset`, MASON G today), `_draw_motto` draws the
-two Great Seal mottos as curved text just OUTSIDE the ring band, their
-pinned letters landing on the SAME six hexagram seats the ring's own
-MASON-G letters occupy — N on 4h, O on noon, M on 20h, A on 8h, S on
-16h ("MASON outside, G inside" — the dollar-bill mechanic on our dial).
-The per-glyph angles are pre-solved at LOAD time by
+two Great Seal mottos as curved text just OUTSIDE the ring band,
+EXACTLY like the real seal: ANNUIT COEPTIS arcs over the TOP (its own A
+pinned at 8h, S at 16h, reading CLOCKWISE the short way through noon —
+no motto letter pins noon anymore, the arc simply passes over the G)
+and NOVUS ORDO SECLORUM arcs under the BOTTOM (its own N pinned at 4h,
+ORDO's own final O at the bottom/24h, M at 20h, reading
+COUNTERCLOCKWISE — `core.motto.motto_glyph_angles`'s new `clockwise`
+flag, False for this one — left to right THROUGH the bottom, the
+classic coin lower-banner direction). The two arcs are now angularly
+DISJOINT (top 300-360-60 deg, bottom 120-180-240 deg, each a 120 deg
+span) — "MASON outside, G inside" reads ONCE around the outside now,
+not twice. The per-glyph angles are pre-solved at LOAD time by
 [Motto](../core/motto.md)'s `motto_glyph_angles` (never recomputed at
 paint time); `RingLayer` only draws. The stamp itself — metal finish,
 dark halo, tangential rotation that flips 180° through the lower half
-(`core.angles.readable_rotation_deg`) — is now the SHARED
-`_draw_ring_glyph` helper (Rule #5): `_draw_letter_art` (the ring's own
-six letters) and `_draw_motto` both call it, differing only in asset,
-radius and height. The motto reuses the EXACT SAME PNG library the
-ring's own letters draw from (`constants.RING_LETTER_FILES` — zero new
-art) at a smaller size (`RING_MOTTO_SIZE`, half `RING_LETTER_ART_SCALE`)
-and wears ONE finish for the whole inscription
-(`RingSpec.motto_metal` = the active `settings.ring_finish` — read as
-continuous text, not a seat-by-seat split like `letter_metal`).
+(`core.angles.readable_rotation_deg`) — is the SHARED `_draw_ring_glyph`
+helper (Rule #5): `_draw_letter_art` (the ring's own six letters) and
+`_draw_motto` both call it, differing only in asset, radius and
+height. NEITHER the rotation formula nor `_draw_ring_glyph` itself
+changed for this round — `readable_rotation_deg` already derives "tops
+outward" (top half) or "tops inward" (bottom half, the classic coin
+orientation) from the angle alone, so feeding it the new bottom arc's
+decreasing angles draws every glyph upright automatically; the
+MOTO-FIX round only corrected the ANGLE math (`core.motto`) and the pin
+config (`Database/ring_presets.json`). The motto reuses the EXACT SAME
+PNG library the ring's own letters draw from
+(`constants.RING_LETTER_FILES` — zero new art) at a smaller size
+(`RING_MOTTO_SIZE`, half `RING_LETTER_ART_SCALE`) and wears ONE finish
+for the whole inscription (`RingSpec.motto_metal` = the active
+`settings.ring_finish` — read as continuous text, not a seat-by-seat
+split like `letter_metal`).
 
-TWO CONCENTRIC RADII, not one: several pinned letters land at the
-IDENTICAL angle in BOTH mottos by design (both mottos' own O at noon,
-own S at 16h — the doubled MASON reading), so ANNUIT COEPTIS (the
-shorter, 120° arc) draws at `RING_MOTTO_RADIUS_FRACTION` and NOVUS
-ORDO SECLORUM (the 240° arc, the long way through 8h/12h/16h) at
-`+ RING_MOTTO_RADIUS_STEP` — two glyphs sharing an angle can only
-coexist at two different radii. `defaults.dial_window_margin_fraction`
-grows to cover the motto's own outer reach whenever `skin.ring.motto`
-is non-empty (a no-op term in its `max()` for every other preset —
-DOMY/MORPH/NUMBERS and every custom ring keep their old margin
-exactly). See [Ring Presets](../data/rings.md) for the exact pin table
-and [The DOMY Canon](../CANON.md)'s §The Banknote for the doctrine.
+ONE SHARED RADIUS, not two: the first round gave each motto its own
+radius because pinned letters intentionally OVERLAPPED in angle (both
+mottos' own O at noon, own S at 16h — the "MASON reads twice" design).
+The corrected layout drops that shared-angle design — the two arcs
+never share an angle now — so both draw at the SAME
+`RING_MOTTO_RADIUS_FRACTION` (`RING_MOTTO_RADIUS_STEP` is deleted, Rule
+#6 — no leftover unused constant). `defaults.dial_window_margin_fraction`
+still grows to cover the motto's own outer reach whenever
+`skin.ring.motto` is non-empty (a no-op term in its `max()` for every
+other preset — DOMY/MORPH/NUMBERS and every custom ring keep their old
+margin exactly), now measured from the single shared radius instead of
+the outer of two. See [Ring Presets](../data/rings.md) for the exact
+pin table and [The DOMY Canon](../CANON.md)'s §The Banknote for the
+doctrine.
 
 ### WeekdayLayer (DAILY, hover-variable — painted LIVE)
 `hover_variable = True` (owner 2026-07-17, ROADMAP 15f): the bodies

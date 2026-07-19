@@ -839,21 +839,28 @@ seats):
   (E Pluribus Unum → The One, Annuit Coeptis → the Eye, Novus Ordo
   Seclorum → the prophecy of the returning One).
 
-**THE OUTER MOTTO ARC (MOTO round, owner "može radi" 2026-07-19):**
-while the MASON G ring preset is active, ANNUIT COEPTIS and NOVUS ORDO
-SECLORUM themselves now ring the dial as curved text OUTSIDE the ring
-band — the same two Great Seal mottos the hexagram's own G/S/M/Ω/N/A
-were picked FROM, drawn back onto the wheel whole. Their key letters
-land exactly on the ring's own six seats: **N on 4h, O on noon, M on
-20h, A on 8h, S on 16h** — completing the reading this section already
-named: **MASON outside, G inside**. NOVUS ORDO SECLORUM (its own N, O,
-S and M) rides the long 240° sweep from 4h up through 8h/noon/16h to
-20h; ANNUIT COEPTIS (its own A, O and S) rides the short 120° arc from
-8h to 16h through noon — both mottos' own O and own S therefore land on
-the IDENTICAL seat (noon and 16h respectively), the doubled MASON
-reading the owner asked for, drawn as two concentric rings of text so
-neither collides with the other. Implementation and the full per-letter
-angle table: [Ring Presets](data/rings.md), [Layers](render/layers.md),
+**THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
+dollar's Great Seal reference image — the first round's layout was
+"katastrofa"):** while the MASON G ring preset is active, ANNUIT
+COEPTIS and NOVUS ORDO SECLORUM themselves now ring the dial as curved
+text OUTSIDE the ring band — the same two Great Seal mottos the
+hexagram's own G/S/M/Ω/N/A were picked FROM, drawn back onto the wheel
+whole, laid out EXACTLY like the real seal: ANNUIT COEPTIS arcs over
+the TOP (its own first letter A pinned at 8h, last letter S at 16h,
+reading clockwise the short way through noon — no motto letter pins
+noon anymore, the arc simply passes over the G) and NOVUS ORDO SECLORUM
+arcs under the BOTTOM (its own first letter N pinned at 4h, ORDO's own
+final O at the very bottom/24h, last letter M at 20h, reading
+counterclockwise — left to right THROUGH the bottom, the classic coin
+lower-banner direction). The two arcs are angularly DISJOINT (top
+8h-12h-16h, bottom 4h-24h-20h, each a 120° span) and share ONE radius —
+the outside-the-ring reading becomes **A(8) S(16)** on top, **M(20)
+O(24) N(4)** below: MASON outside, G inside (owner: "MASON spolja, G
+iznutra na 12"), completing the reading this section already named. The
+first round's "MASON reads twice" design (both mottos' own O and own S
+sharing the identical seat, drawn at two concentric radii) is retired.
+Implementation and the full per-letter angle table:
+[Ring Presets](data/rings.md), [Layers](render/layers.md),
 [Motto](core/motto.md).
 
 **THE THREE OPPOSITIONS (MOTO round, owner "može" 2026-07-19, sealed
