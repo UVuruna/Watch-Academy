@@ -90,6 +90,15 @@ item count means the sheet is safe to queue.
   dark era) — one rose-window emblem each, night-window register; the
   comparative "Eras of the World" article carries no emblem
 
+### `eclipse/`
+- `eclipse_prompts.md` — the ECLIPSES Encyclopedia set (fix round F,
+  owner order 2026-07-19): one night-window rose-window emblem per
+  category the dial distinguishes — SOLAR total/annular/partial/hybrid
+  and LUNAR total/partial/penumbral (7 images, `assets/eclipse/<Name>.png`),
+  each doctrine-true to the sealed state table (pearl corona, ring of
+  fire, copper blood moon, turquoise fringe, penumbral veil). Backs both
+  the Encyclopedia chapters and the on-dial eclipse hover badge
+
 ### `emblem/` — one file per wheel theme
 - `virtue_prompts.md` — the eight Virtues (Humility dual)
 - `sin_prompts.md` — the eight Sins (Servility dual)

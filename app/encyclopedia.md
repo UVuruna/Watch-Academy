@@ -67,7 +67,47 @@ falls back to the gallery). The controller passes the (topic, entry) the
 widget's Space key resolved through `compositor.encyclopedia_target()` —
 which now covers EVERY hover with a page (seated-slot and pinned weekday
 bodies in their own theme, the Compass/Seasons arms, the Moon at its
-phase, the Earth at its season).
+phase, the Earth at its season, and — during an eclipse window — the
+Earth/Moon marker at the active eclipse CATEGORY, see the Eclipses
+section below).
+
+**The Eclipses (fix round F, owner order 2026-07-19, "posebno za mesec
+i sunce"):** TWO topics in The Clock group — **Solar Eclipses**
+(`eclipse_solar`) and **Lunar Eclipses** (`eclipse_lunar`), one per
+body. Each opens with a per-body OVERVIEW page (the entry-zero — the
+whole phenomenon, its geometry and how the dial shows it — a reader
+meets before the specifics; justified as its own entry-zero because
+"posebno" wants each body introduced on its own terms) then one chapter
+per CATEGORY the dial distinguishes: solar **Total / Annular / Partial /
+Hybrid**, lunar **Total / Partial / Penumbral** — nine chapters total in
+the `eclipse` section of `encyclopedia.json` (`data/encyclopedia.py`
+`eclipse(key)`). Every chapter DESCRIBES its exact sealed state-table
+representation (the black-sun art + red glow, the annular ring-of-fire
+orange, the copper blood-moon disc at ~7 %, the turquoise ozone fringe,
+the honest penumbral 60 % veil, the silver muted not-visible glow with
+its hover reason) so the reader's page and the render can never drift
+apart. Each category chapter wears its own emblem
+(`assets/eclipse/<Stem>.png`, `defaults.ECLIPSE_ART_DIR`,
+graceful-absent — `research/prompts/eclipse/eclipse_prompts.md`); the
+overview strings its body's category emblems as a strip, the same
+`isinstance(art, tuple)` `images` mechanism the Eras essay uses.
+`_ECLIPSE_SOLAR_ENTRIES`/`_ECLIPSE_LUNAR_ENTRIES` fix the chapter ORDER,
+kept in lockstep with `compositor._ENC_ECLIPSE_SOLAR_ORDER` /
+`_ENC_ECLIPSE_LUNAR_ORDER` so the Spacebar jump indexes the active
+type's chapter (hybrid keeps its OWN chapter here even though the render
+state table folds it into `solar_total`). `_article_text` /
+`_entry_name` gain an `"eclipse"` / `"eclipse_title"` branch.
+
+**The Great Oscillations (fix round F, owner "bravo"):** a Clock-group
+ESSAY appended to the `era` topic (a new `era/The_Great_Oscillations`
+entry, read through the existing `era(key)`) on the season-length
+oscillations and the Milankovitch cycles — eccentricity / obliquity /
+precession, what the Observatory's fifth-chart envelope shows, and the
+HONEST ice-age line (low eccentricity = muted seasonal forcing, the
+~100 k glacial pacing correlation, the +28,000 minimum at ~±1.1 d —
+never "an ice age starts then"), naming Milutin Milankovitch. Like the
+Eras essay it carries NO plate of its own (`_ERA_ENTRIES` last entry,
+`None` → empty `images`).
 
 The window is RESIZABLE: each entry is ONE block spanning
 `ENCYCLOPEDIA_TEXT_WIDTH_FRACTION` of the width, CENTERED with even

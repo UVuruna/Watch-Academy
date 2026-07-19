@@ -965,28 +965,33 @@ def test_era_terms_topic():
     QApplication.instance() or QApplication([])
     topics = _topics()
     era = topics["era"]["entries"]
+    # Fix round F (owner "bravo"): The Great Oscillations joins the era
+    # topic after the comparative essay.
     assert [e["name"][1] for e in era] == [
         "Age_of_Light", "Age_of_Darkness", "Starry_Spring",
         "Starry_Summer", "Starry_Autumn", "Starry_Winter",
-        "Eras_of_the_World",
+        "Eras_of_the_World", "The_Great_Oscillations",
     ]
-    # Every era entry but the comparative essay wires a plate; it
-    # degrades gracefully since the art has not landed yet.
-    for entry in era[:-1]:
+    # The six Age/Season entries each wire a single plate; graceful-absent.
+    for entry in era[:6]:
         assert entry["images"]
         resolved = _paths.art_file(entry["images"][0])
         assert resolved is None or resolved.suffix == ".png"
     # Eras of the World: no plate of its own — instead it strings the
     # six calendar-system emblems the essay compares (owner fix-round
     # B, 2026-07-19), graceful-absent until PromptPainter generates them.
-    assert len(era[-1]["images"]) == 6
-    for image in era[-1]["images"]:
+    assert len(era[6]["images"]) == 6
+    for image in era[6]["images"]:
         resolved = _paths.art_file(image)
         assert resolved is None or resolved.suffix == ".png"
+    # The Great Oscillations is an ESSAY — no emblem of its own (like the
+    # Eras essay's own text), so its image tuple is empty (fix round F).
+    assert era[7]["images"] == ()
 
     groups = dict(_TOPIC_GROUPS)
     assert groups["The Clock"] == (
         "week", "instrument", "moon", "seasons", "sun", "era",
+        "eclipse_solar", "eclipse_lunar",
     )
 
     # Every article resolves and carries its own MEASURED numbers —
@@ -1009,19 +1014,99 @@ def test_era_terms_topic():
     for term in ("AUC", "Byzantine", "Hebrew", "Hegirae", "Buddhist",
                  "Chinese", "753", "5509", "3761", "543"):
         assert term in world, term
+    # The Great Oscillations (fix round F): the Milankovitch essay carries
+    # its MEASURED figures (the +28,000 minimum, ~±1.1 d) and names the
+    # scientist — never claiming an ice age "starts" then.
+    osc = repo.era("The_Great_Oscillations")["base"]
+    assert "Milankovitch" in osc and "28,000" in osc and "1.1" in osc
 
-    # The corpus collects both title and base for every era key.
+    # The corpus collects both title and base for every era key (8 now).
     corpus = collect_corpus()
-    assert sum(1 for k in corpus if k.startswith("encyclopedia/era/")) == 14
+    assert sum(1 for k in corpus if k.startswith("encyclopedia/era/")) == 16
     assert "encyclopedia/era/Age_of_Light/title" in corpus
     assert "encyclopedia/era/Eras_of_the_World/base" in corpus
+    assert "encyclopedia/era/The_Great_Oscillations/base" in corpus
 
     # The dialog opens the topic and each page's title resolves without
     # crashing (era_title dispatch in _entry_name).
     dialog = EncyclopediaDialog()
     dialog._show_topic("era")
-    assert dialog._counter.text() == "1 / 7"
-    for index in range(7):
+    assert dialog._counter.text() == "1 / 8"
+    for index in range(8):
+        dialog._entry_index = index
+        dialog._show_entry()
+    dialog.deleteLater()
+
+
+def test_eclipse_topics():
+    """Fix round F (owner order 2026-07-19, "posebno za mesec i sunce"):
+    two Encyclopedia topics — Solar and Lunar — each an OVERVIEW page
+    then one chapter per category we distinguish (solar total/annular/
+    partial/hybrid, lunar total/partial/penumbral). Every chapter wires
+    its own emblem (graceful-absent), the overview strings its body's
+    emblems, both join The Clock gallery group, every article resolves
+    with its exact state-table representation, and the corpus collects
+    all nine keys × 2."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _TOPIC_GROUPS, _topics
+    from config import paths as _paths
+    from data.encyclopedia import EncyclopediaRepository
+    from data.translations import collect_corpus
+
+    QApplication.instance() or QApplication([])
+    topics = _topics()
+    assert [e["name"][1] for e in topics["eclipse_solar"]["entries"]] == [
+        "Solar_Overview", "Solar_Total", "Solar_Annular",
+        "Solar_Partial", "Solar_Hybrid",
+    ]
+    assert [e["name"][1] for e in topics["eclipse_lunar"]["entries"]] == [
+        "Lunar_Overview", "Lunar_Total", "Lunar_Partial", "Lunar_Penumbral",
+    ]
+    # The overview strings its body's category emblems (4 solar / 3
+    # lunar); each category chapter wires exactly one emblem. All
+    # graceful-absent until PromptPainter generates them.
+    assert len(topics["eclipse_solar"]["entries"][0]["images"]) == 4
+    assert len(topics["eclipse_lunar"]["entries"][0]["images"]) == 3
+    for topic_key in ("eclipse_solar", "eclipse_lunar"):
+        for entry in topics[topic_key]["entries"][1:]:
+            assert len(entry["images"]) == 1
+            resolved = _paths.art_file(entry["images"][0])
+            assert resolved is None or resolved.suffix == ".png"
+
+    # Both topics ride The Clock group, after the era topic.
+    groups = dict(_TOPIC_GROUPS)
+    assert groups["The Clock"][-2:] == ("eclipse_solar", "eclipse_lunar")
+
+    # Every chapter's article resolves and DESCRIBES its exact dial
+    # representation (the sealed state table — the reader's page and the
+    # render must never drift).
+    repo = EncyclopediaRepository()
+    assert "ring of fire" in repo.eclipse("Solar_Annular")["base"]
+    assert "corona" in repo.eclipse("Solar_Total")["base"]
+    assert "MAGNITUDE" in repo.eclipse("Solar_Partial")["base"]
+    assert "totality" in repo.eclipse("Solar_Hybrid")["base"]
+    lunar_total = repo.eclipse("Lunar_Total")["base"]
+    assert "seven percent" in lunar_total and "copper" in lunar_total
+    assert "turquoise" in lunar_total
+    assert "eighteen percent" in repo.eclipse("Lunar_Partial")["base"]
+    penumbral = repo.eclipse("Lunar_Penumbral")["base"]
+    assert "sixty percent" in penumbral and "NO turquoise" in penumbral
+
+    # The corpus collects title + base for all nine chapters.
+    corpus = collect_corpus()
+    assert sum(1 for k in corpus if k.startswith("encyclopedia/eclipse/")) == 18
+    assert "encyclopedia/eclipse/Solar_Total/title" in corpus
+    assert "encyclopedia/eclipse/Lunar_Penumbral/base" in corpus
+
+    # The dialog opens each topic and pages through every chapter
+    # without crashing (eclipse_title dispatch in _entry_name).
+    dialog = EncyclopediaDialog()
+    dialog._show_topic("eclipse_solar")
+    assert dialog._counter.text() == "1 / 5"
+    dialog._show_topic("eclipse_lunar")
+    assert dialog._counter.text() == "1 / 4"
+    for index in range(4):
         dialog._entry_index = index
         dialog._show_entry()
     dialog.deleteLater()

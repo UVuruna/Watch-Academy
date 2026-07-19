@@ -691,6 +691,170 @@ def test_moon_hover_names_the_lunar_eclipse(app):
     assert "1.15" in moon
 
 
+# --- THE ECLIPSES ENCYCLOPEDIA (fix round F, owner order 2026-07-19) -----------
+#
+# TASK 4 (Spacebar jump to the active category's chapter) and TASK 3 (the
+# category emblem on the Earth/Moon hover card, graceful-absent).
+
+
+def _eclipse_marker_probe(kind, type_, magnitude=1.05):
+    """Render an eclipse window and return (compositor, x, y, size) at the
+    relocated marker's ring-band position — the SAME geometry the
+    hit-test goldens above use, so the Spacebar target is read at the
+    exact drawn spot."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = (
+        datetime(2026, 3, 3, 12, 0, tzinfo=tz) if kind == "lunar"
+        else datetime(2026, 3, 1, 12, 0, tzinfo=tz)
+    )
+    day = _belgrade_day(now)
+    plain = build_tick_state(now, day)
+    eclipsed = dataclasses.replace(
+        plain, season_event=None, moon_event=None,
+        eclipse_event=EclipseEvent(
+            kind=kind, instant=now.astimezone(timezone.utc),
+            type=type_, magnitude=magnitude,
+        ),
+    )
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(540.0, 1.0, day, eclipsed)
+    radius = 270.0
+    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    theta = math.radians(
+        plain.year_angle if kind == "solar"
+        else plain.moon_fraction * 360.0
+    )
+    x = radius + orbit * math.sin(theta)
+    y = radius - orbit * math.cos(theta)
+    return comp, x, y, 540.0
+
+
+@pytest.mark.parametrize("kind,type_,topic,index", [
+    ("solar", "total", "eclipse_solar", 1),
+    ("solar", "annular", "eclipse_solar", 2),
+    ("solar", "partial", "eclipse_solar", 3),
+    ("solar", "hybrid", "eclipse_solar", 4),
+    ("lunar", "total", "eclipse_lunar", 1),
+    ("lunar", "partial", "eclipse_lunar", 2),
+    ("lunar", "penumbral", "eclipse_lunar", 3),
+])
+def test_space_jump_opens_the_active_eclipse_chapter(app, kind, type_, topic, index):
+    """TASK 4 golden: while an eclipse window is active, Space over the
+    Earth (solar) / Moon (lunar) marker opens the Encyclopedia at THAT
+    category's chapter — every one of the seven categories, indexed by
+    the active type; hybrid keeps its OWN chapter (index 4), not
+    solar_total's."""
+    comp, x, y, size = _eclipse_marker_probe(kind, type_)
+    assert comp.encyclopedia_target(x, y, size) == (topic, index)
+
+
+def test_space_jump_falls_back_to_seasons_and_phase_without_eclipse(app):
+    """Without an eclipse window the Earth still opens SEASONS and the
+    Moon its current PHASE — the eclipse branch never hijacks the plain
+    targets (Rule #6: no behavior change for the non-eclipse path)."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 6, 21, 12, 0, tzinfo=tz)      # summer-solstice glow
+    day = _belgrade_day(now)
+    tick = build_tick_state(now, day)
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(540.0, 1.0, day, tick)
+    radius = 270.0
+    orbit = radius * defaults.GLOW_RING_RADIUS_FRACTION
+    theta = math.radians(tick.year_angle)
+    earth = comp.encyclopedia_target(
+        radius + orbit * math.sin(theta), radius - orbit * math.cos(theta), 540.0
+    )
+    assert earth is not None and earth[0] == "seasons"
+
+
+def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
+    """TASK 3 mapping: `_eclipse_emblem` resolves each (kind, type) to
+    its own category emblem under assets/eclipse/, an unknown type to
+    None, and the badge degrades to EMPTY while the art is absent
+    (graceful-absent — the sheet's art has not landed)."""
+    from render.compositor import _hover_badge
+
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, build_tick_state(now, day))
+    expected = {
+        ("solar", "total"): "Solar_Total.png",
+        ("solar", "annular"): "Solar_Annular.png",
+        ("solar", "partial"): "Solar_Partial.png",
+        ("solar", "hybrid"): "Solar_Hybrid.png",
+        ("lunar", "total"): "Lunar_Total.png",
+        ("lunar", "partial"): "Lunar_Partial.png",
+        ("lunar", "penumbral"): "Lunar_Penumbral.png",
+    }
+    for (kind, type_), stem in expected.items():
+        event = EclipseEvent(
+            kind=kind, instant=now.astimezone(timezone.utc),
+            type=type_, magnitude=1.0,
+        )
+        path = comp._eclipse_emblem(event)
+        assert path is not None and path.name == stem
+        assert path.parent == defaults.ECLIPSE_ART_DIR
+        # Graceful: no file on disk yet -> the badge is empty, no crash.
+        assert _hover_badge(path) == ""
+    unknown = EclipseEvent(
+        kind="solar", instant=now.astimezone(timezone.utc),
+        type="bogus", magnitude=1.0,
+    )
+    assert comp._eclipse_emblem(unknown) is None
+
+
+def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeypatch):
+    """TASK 3 wiring: when the category emblem art DOES exist, the badge
+    appears on BOTH cards — the Earth card for a solar eclipse and the
+    Moon card for a lunar one — beside the eclipse line (owner slika 7).
+    A real (tiny) PNG under a monkeypatched eclipse dir proves the slot
+    is wired, not just the graceful-absent path."""
+    from PySide6.QtGui import QImage
+
+    monkeypatch.setattr(defaults, "ECLIPSE_ART_DIR", tmp_path)
+    swatch = QImage(8, 8, QImage.Format.Format_ARGB32)
+    swatch.fill(0xFFCC5522)
+    for stem in ("Solar_Total.png", "Lunar_Total.png"):
+        assert swatch.save(str(tmp_path / stem))
+
+    tz = ZoneInfo("Europe/Belgrade")
+    # Solar — the Earth card.
+    solar_now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
+    solar_day = _belgrade_day(solar_now)
+    solar_tick = dataclasses.replace(
+        build_tick_state(solar_now, solar_day),
+        eclipse_event=EclipseEvent(
+            kind="solar",
+            instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
+            type="total", magnitude=1.04,
+        ),
+    )
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    comp.render_offscreen(360.0, 1.0, solar_day, solar_tick)
+    earth = comp._earth_text()
+    assert "Solar Eclipse" in earth
+    assert tmp_path.joinpath("Solar_Total.png").as_uri() in earth
+
+    # Lunar — the Moon card.
+    lunar_now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    lunar_day = _belgrade_day(lunar_now)
+    lunar_tick = dataclasses.replace(
+        build_tick_state(lunar_now, lunar_day),
+        eclipse_event=EclipseEvent(
+            kind="lunar", instant=lunar_now.astimezone(timezone.utc),
+            type="total", magnitude=1.15,
+        ),
+    )
+    comp.render_offscreen(360.0, 1.0, lunar_day, lunar_tick)
+    moon = comp._moon_text()
+    assert "Lunar Eclipse" in moon
+    assert tmp_path.joinpath("Lunar_Total.png").as_uri() in moon
+
+
 # --- THE SUPERSCRIPT LEAK, KILLED FOR GOOD (owner, angry, Session 21-D) -------
 #
 # `_eclipse_hover_line` used to `html.escape()` the WHOLE composed line

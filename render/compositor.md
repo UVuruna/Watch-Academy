@@ -175,6 +175,21 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   — any FUTURE builder that escapes markup it shouldn't fails CI
   immediately, not on the next owner screenshot.
 
+- **THE CATEGORY EMBLEM ON THE CARD (fix round F, owner slika 7,
+  2026-07-19):** during an eclipse window the Earth card (`_earth_text`,
+  solar) and the Moon card (`_moon_text`, lunar) already carry the
+  eclipse text line; they now also show the active category's EMBLEM
+  IMAGE beside/above it. `_eclipse_emblem(eclipse)` resolves
+  `defaults.ECLIPSE_TYPE_EMBLEM[(kind, type)]` to
+  `assets/eclipse/<Stem>.png` (None for an unknown type), drawn through
+  the shared `_hover_badge` — which is graceful-absent (empty string
+  when the art is missing, so until the sheet's art lands the card reads
+  exactly as before, no crash, no placeholder). On the Earth card the
+  eclipse badge rides just after the season badge, inside the season
+  block; on the Moon card it rides between the phase title and the
+  centered data, above the eclipse line. The SAME emblem backs the
+  Encyclopedia chapter (`app.encyclopedia`), so the on-dial hover and
+  the article page always show one picture.
 - **VISIBILITY REASON (TASK 4, owner verdict "may", fix round E,
   2026-07-19):** `_eclipse_hover_line` appends `— {reason}` whenever
   `EclipseEvent.visible` is False (visibility itself is computed in
@@ -331,9 +346,25 @@ LOGO — a real `_hover_badge` image above the text, never a unicode glyph.
     arms → the Trinity virtue.
   - **Moon marker** → the Moon topic at the CURRENT phase's page
     (`phase_name` indexed into `constants.MOON_PHASE_NAMES`, the topic's
-    eight-page order — ROADMAP queue #8b).
+    eight-page order — ROADMAP queue #8b) — UNLESS a LUNAR eclipse
+    window is active, when it opens the eclipse category chapter instead
+    (see the eclipse note below).
   - **Earth marker** → the Seasons topic at the current season
-    (`_season_topic_index`/`_current_season_key`, mirroring `_season_row`).
+    (`_season_topic_index`/`_current_season_key`, mirroring `_season_row`)
+    — UNLESS a SOLAR eclipse window is active, when it opens the eclipse
+    category chapter instead.
+  - **Eclipse windows (fix round F, owner order 2026-07-19)** —
+    `_eclipse_encyclopedia_target(eclipse)` maps the active eclipse to
+    its CATEGORY chapter: `eclipse_solar`/`eclipse_lunar` topic, indexed
+    by `eclipse.type.capitalize()` into `_ENC_ECLIPSE_SOLAR_ORDER` /
+    `_ENC_ECLIPSE_LUNAR_ORDER` (the same order `app.encyclopedia`'s
+    `_ECLIPSE_SOLAR_ENTRIES`/`_LUNAR_ENTRIES` build — entry-zero is the
+    Overview, so `total`→1, `annular`→2, …). `hybrid` keeps its OWN
+    chapter here even though the render state table folds it into
+    `solar_total`; an unknown type lands on the Overview (index 0). It
+    reuses `_element_at`'s marker geometry for free — the eclipse marker
+    already relocates to the ring band like the season/moon glow, so no
+    new hit-test path (mirrors the render-side note).
   - **Calendar wedges** (`_calendar_wedge_target`) → the sign/animal page.
   - No page — the digital slots, the twilight bands and the ring band —
     returns None.

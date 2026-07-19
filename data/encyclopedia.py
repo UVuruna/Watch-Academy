@@ -68,9 +68,18 @@ class EncyclopediaRepository:
 
     def era(self, key: str) -> dict:
         """{title, base} of one ERA article — the Age of Light/Darkness,
-        the four Starry Seasons and the comparative Eras of the World
-        (ROADMAP 15a3, owner 2026-07-17)."""
+        the four Starry Seasons, the comparative Eras of the World
+        (ROADMAP 15a3, owner 2026-07-17) and The Great Oscillations (the
+        season-length / Milankovitch essay near the Observatory, fix
+        round F, owner 2026-07-19)."""
         return self._section("era", key)
+
+    def eclipse(self, key: str) -> dict:
+        """{title, base} of one ECLIPSE chapter — the seven categories
+        (solar total/annular/partial/hybrid, lunar total/partial/
+        penumbral) plus the two per-body overviews (fix round F, owner
+        order 2026-07-19: "posebno za mesec i sunce")."""
+        return self._section("eclipse", key)
 
     def entry(self, family: str, name: str) -> dict:
         """{base} of one emblem-family article — family is "virtues" |

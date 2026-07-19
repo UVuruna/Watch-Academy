@@ -372,6 +372,16 @@ _ENC_SEASON_ORDER = (
 _ENC_SUN_ORDER = ("Summer_Solstice", "Winter_Solstice", "Equinox")
 _ENC_TRIO_ORDER = ("Faith", "Hope", "Love")
 
+# The ECLIPSE chapter order per body (fix round F, owner order
+# 2026-07-19) — the Spacebar jump indexes an active eclipse's TYPE
+# (capitalized) into these, mirroring app.encyclopedia's
+# `_ECLIPSE_SOLAR_ENTRIES`/`_ECLIPSE_LUNAR_ENTRIES` (entry-zero is the
+# body Overview). `hybrid` keeps its OWN chapter here — the render state
+# table folds it into solar_total, but the reader gets the distinct
+# page. An unknown/missing type falls to the Overview (index 0).
+_ENC_ECLIPSE_SOLAR_ORDER = ("Overview", "Total", "Annular", "Partial", "Hybrid")
+_ENC_ECLIPSE_LUNAR_ORDER = ("Overview", "Total", "Partial", "Penumbral")
+
 _MONTHS = (
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December",
@@ -834,10 +844,22 @@ class Compositor:
         slot's OWN theme/roster; the Moon opens at its current phase, the
         Earth at its current season."""
         if element == "moon":
+            # During a LUNAR eclipse window the Moon marker's Spacebar
+            # jump opens the active category's chapter instead of the
+            # phase page (fix round F, owner slika: Space over the
+            # eclipsing Moon lands on THAT chapter).
+            eclipse = self._last_tick.eclipse_event
+            if eclipse is not None and eclipse.kind == "lunar":
+                return self._eclipse_encyclopedia_target(eclipse)
             return "moon", constants.MOON_PHASE_NAMES.index(
                 phase_name(self._last_tick.moon_fraction)
             )
         if element == "earth":
+            # During a SOLAR eclipse window the Earth marker opens the
+            # active category's chapter instead of the season page.
+            eclipse = self._last_tick.eclipse_event
+            if eclipse is not None and eclipse.kind == "solar":
+                return self._eclipse_encyclopedia_target(eclipse)
             return "seasons", self._season_topic_index()
         if element == "archetype:center":
             return None      # the centers have no pages yet (Session 6/8)
@@ -912,6 +934,29 @@ class Compositor:
         if "Summer" in event_name:
             return _ENC_SUN_ORDER.index("Summer_Solstice")
         return _ENC_SUN_ORDER.index("Winter_Solstice")
+
+    def _eclipse_encyclopedia_target(self, eclipse) -> tuple[str, int]:
+        """The (topic, entry) for the active eclipse's CATEGORY chapter
+        (fix round F, owner order 2026-07-19) — the SOLAR topic for a
+        solar eclipse, LUNAR for lunar, indexed by the eclipse's TYPE
+        (the same vocabulary the state table maps). An unknown/missing
+        type lands on the body Overview (index 0), never a crash — the
+        catalog only ever writes the known vocabulary, so this is the
+        documented fallback, not an expected path."""
+        if eclipse.kind == "solar":
+            topic, order = "eclipse_solar", _ENC_ECLIPSE_SOLAR_ORDER
+        else:
+            topic, order = "eclipse_lunar", _ENC_ECLIPSE_LUNAR_ORDER
+        label = eclipse.type.capitalize()
+        return topic, order.index(label) if label in order else 0
+
+    def _eclipse_emblem(self, eclipse):
+        """The active eclipse's category emblem Path (fix round F, owner
+        slika 7 — the hover-card badge), or None for an unknown type;
+        `_hover_badge(None)` degrades to empty, so a missing/unknown
+        emblem simply shows no image (graceful-absent)."""
+        stem = defaults.ECLIPSE_TYPE_EMBLEM.get((eclipse.kind, eclipse.type))
+        return defaults.ECLIPSE_ART_DIR / f"{stem}.png" if stem else None
 
     def _arm_angle_at(
         self, point: QPointF, radius: float, rotation: float
@@ -2276,10 +2321,15 @@ class Compositor:
         elif day.moonset is not None:
             lines.append(f"{self._label('Moonset')} {day.moonset:%H:%M}")
         eclipse = tick.eclipse_event
+        eclipse_badge = ""
         if eclipse is not None and eclipse.kind == "lunar":
             lines.insert(0, self._eclipse_hover_line(eclipse))
+            # The category emblem rides ABOVE the eclipse line (owner
+            # slika 7; graceful-absent until the art lands), following
+            # the card's badge pattern.
+            eclipse_badge = _hover_badge(self._eclipse_emblem(eclipse))
         cycle_day = tick.moon_fraction * constants.SYNODIC_MONTH_DAYS
-        return title + _centered_html(
+        return title + eclipse_badge + _centered_html(
             "",
             *lines,
             "",
@@ -2462,8 +2512,13 @@ class Compositor:
 
         eclipse = self._last_tick.eclipse_event
         tail = []
+        eclipse_badge = ""
         if eclipse is not None and eclipse.kind == "solar":
             tail.append(self._eclipse_hover_line(eclipse))
+            # The category emblem (owner slika 7) rides with the eclipse
+            # block, below the era/season imagery, following the card's
+            # badge pattern (graceful-absent until the art lands).
+            eclipse_badge = _hover_badge(self._eclipse_emblem(eclipse))
         elif season_event is not None:
             tail.append(html.escape(self._tr(season_event)))
         tail.append(f"{self._label('Season')} {self._season_row()}")
@@ -2474,7 +2529,9 @@ class Compositor:
             f"{html.escape(self._month(day.zodiac_start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))})"
         )
-        season_block = _hover_badge(season_art) + _centered_html(*tail)
+        season_block = (
+            _hover_badge(season_art) + eclipse_badge + _centered_html(*tail)
+        )
 
         return date_block + era_block + season_block
 

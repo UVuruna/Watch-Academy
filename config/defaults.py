@@ -1708,6 +1708,28 @@ ECLIPSE_STATE_FRINGE = {
     "lunar_penumbral": False,
 }
 
+# The ECLIPSES ENCYCLOPEDIA category emblems (fix round F, owner order
+# 2026-07-19): one rose-window night-window medallion per category we
+# distinguish, at assets/eclipse/<Stem>.png — graceful-absent until
+# PromptPainter generates them (research/prompts/eclipse/eclipse_prompts.md).
+# The SAME emblem backs the chapter page (app.encyclopedia) AND the
+# eclipse-window hover badge on the Earth/Moon card (render.compositor).
+ECLIPSE_ART_DIR = paths.assets_dir() / "eclipse"
+# (kind, type) -> category emblem stem. `hybrid` keeps its OWN chapter
+# and emblem here even though the RENDER state table folds it into
+# solar_total — the reader still gets the distinct hybrid page; an
+# unknown/missing type resolves to None (no badge, graceful — the
+# render state table already documents its own fallback).
+ECLIPSE_TYPE_EMBLEM = {
+    ("solar", "total"): "Solar_Total",
+    ("solar", "annular"): "Solar_Annular",
+    ("solar", "partial"): "Solar_Partial",
+    ("solar", "hybrid"): "Solar_Hybrid",
+    ("lunar", "total"): "Lunar_Total",
+    ("lunar", "partial"): "Lunar_Partial",
+    ("lunar", "penumbral"): "Lunar_Penumbral",
+}
+
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.
 WEEKDAY_THEME_TITLES = {

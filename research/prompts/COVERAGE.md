@@ -167,15 +167,21 @@ subdial art instead of the procedural fallback circle.
 
 <a id="eclipse-queued"></a>
 
-## Eclipse Category Images — KNOWN-QUEUED
+## Eclipse Category Images — WRITTEN (fix round F, 2026-07-19)
 
-Per the task brief: the eclipse-state art (the categories touched by
-the Round C "eclipse states by type" work — solar total/annular/
-hybrid/partial and lunar total/partial/penumbral) is being handled by
-a parallel-planned round. Recorded here as **KNOWN-QUEUED, not
-written** — no prompt sheet for it exists yet under `research/
-prompts/`, and none should be added by this audit; the writers' round
-owns it.
+The eclipse-category art the Round C "eclipse states by type" work
+touched is now **written, not yet generated**. The writers' round (fix
+round F) added the sheet
+[`eclipse/eclipse_prompts.md`](eclipse/eclipse_prompts.md): SEVEN
+night-window rose-window emblems — solar total/annular/partial/hybrid,
+lunar total/partial/penumbral — dropping at `assets/eclipse/<Stem>.png`
+(`config/defaults.py` `ECLIPSE_ART_DIR`), each doctrine-true to the
+sealed state table. The wiring is live and graceful-absent on BOTH
+consumers: the Encyclopedia chapters (`app/encyclopedia.py`
+`eclipse_solar`/`eclipse_lunar` topics) and the on-dial eclipse hover
+badge (`render/compositor.py` `_eclipse_emblem`). **Art: ZERO of 7** —
+the sheet is ready to queue; verified `--dry-run` clean (7 images, 0
+problems) 2026-07-19.
 
 <a id="missing-prompts"></a>
 
@@ -200,9 +206,12 @@ tracking gap (Roster's subdial row):
 6. Everything on [Roster](../../ROSTER.md)'s Shortage List (196
    ChatGPT + 24 Gemini) — sheets already exist per theme, tracked
    there, not repeated here.
-7. The eclipse-category images — KNOWN-QUEUED, do not write yet.
+7. `assets/eclipse/*` — the seven category emblems (solar total/
+   annular/partial/hybrid, lunar total/partial/penumbral); sheet
+   WRITTEN (fix round F, `eclipse/eclipse_prompts.md`), none generated.
 
-No item above needs a NEW prompt sheet written; items 1–5 need art
-generated against sheets that already exist, and the Walks/Trinity/
-Family rondels (§Compass Object Question) need a wiring decision
-before more of that art would even be seen anywhere.
+No item above needs a NEW prompt sheet written (item 7's sheet landed
+this round); items 1–5 and 7 need art generated against sheets that
+already exist, and the Walks/Trinity/Family rondels (§Compass Object
+Question) need a wiring decision before more of that art would even be
+seen anywhere.

@@ -36,7 +36,16 @@ Serbian and any machine-translated language apply automatically.
 #### Methods
 - `instrument(key)`: `{title, base}` of one functionality article
 - `week(body)`: `{title, base}` of one weekday page (body = sun..saturn)
-- `season(key)`: `{title, base}` of one SEASONS article
+- `season(key)` / `sun(key)` / `moon(key)`: `{title, base}` of one
+  SEASONS / SUN / MOON article (the three-way split, ROADMAP queue #10)
+- `era(key)`: `{title, base}` of one ERA article — the two Ages, the
+  four Starry Seasons, the comparative "Eras of the World" and (fix
+  round F, owner "bravo") **The Great Oscillations** — the season-length
+  / Milankovitch essay near the Observatory
+- `eclipse(key)`: `{title, base}` of one ECLIPSE chapter (fix round F,
+  owner order 2026-07-19) — the two per-body overviews plus the seven
+  categories (solar total/annular/partial/hybrid, lunar total/partial/
+  penumbral), all in the `eclipse` section
 - `entry(family, name)`: `{base}` of one virtues/sins/moods/duality/
   ninths/intelligence/wider article (the WIDER family holds the
   seatless A-list pantheon figures — WORKPLAN Session 8)

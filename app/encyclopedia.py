@@ -92,7 +92,9 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
 # their signs, the remaining week themes with the Trinity, the
 # religions, and the cross-cure emblem families last.
 _TOPIC_GROUPS = (
-    ("The Clock", ("week", "instrument", "moon", "seasons", "sun", "era")),
+    ("The Clock",
+     ("week", "instrument", "moon", "seasons", "sun", "era",
+      "eclipse_solar", "eclipse_lunar")),
     ("Gods", ("greek", "norse", "egypt", "slavic")),
     # THE WIDER PANTHEON (owner 2026-07-15, WORKPLAN Session 8): one
     # topic per culture for the A-list figures no dial seat could hold
@@ -155,6 +157,47 @@ _ERA_ENTRIES = (
     ("Starry_Autumn", "Starry_Autumn.png"),
     ("Starry_Winter", "Starry_Winter.png"),
     ("Eras_of_the_World", _ERA_CALENDAR_ART),
+    # The Great Oscillations (fix round F, owner "bravo"): the season-
+    # length / Milankovitch essay near the Observatory — an ESSAY, no
+    # plate of its own (like the comparative Eras article), None -> ().
+    ("The_Great_Oscillations", None),
+)
+
+# THE ECLIPSES ENCYCLOPEDIA (fix round F, owner order 2026-07-19:
+# "posebno za mesec i sunce"): two topics, one per body, each opened
+# by a per-body OVERVIEW (the entry-zero — a whole-phenomenon page a
+# reader meets before the specific kinds) then one chapter per category
+# we distinguish. Each category chapter wears its OWN category emblem
+# (assets/eclipse/<Stem>.png, graceful-absent); the overview strings its
+# body's category emblems as a strip, like the Eras essay. The chapter
+# ORDER here is the golden the Spacebar jump indexes into
+# (render.compositor._ENC_ECLIPSE_SOLAR_ORDER / _LUNAR_ORDER) — keep
+# them in lockstep.
+_ECLIPSE_SOLAR_EMBLEMS = (
+    "Solar_Total.png", "Solar_Annular.png",
+    "Solar_Partial.png", "Solar_Hybrid.png",
+)
+_ECLIPSE_LUNAR_EMBLEMS = (
+    "Lunar_Total.png", "Lunar_Partial.png", "Lunar_Penumbral.png",
+)
+_ECLIPSE_SOLAR_ENTRIES = (
+    ("Solar_Overview", _ECLIPSE_SOLAR_EMBLEMS),
+    ("Solar_Total", "Solar_Total.png"),
+    ("Solar_Annular", "Solar_Annular.png"),
+    ("Solar_Partial", "Solar_Partial.png"),
+    ("Solar_Hybrid", "Solar_Hybrid.png"),
+)
+_ECLIPSE_LUNAR_ENTRIES = (
+    ("Lunar_Overview", _ECLIPSE_LUNAR_EMBLEMS),
+    ("Lunar_Total", "Lunar_Total.png"),
+    ("Lunar_Partial", "Lunar_Partial.png"),
+    ("Lunar_Penumbral", "Lunar_Penumbral.png"),
+)
+_ECLIPSE_TOPICS = (
+    ("eclipse_solar", "Solar Eclipses", "Solar_Total.png",
+     _ECLIPSE_SOLAR_ENTRIES),
+    ("eclipse_lunar", "Lunar Eclipses", "Lunar_Total.png",
+     _ECLIPSE_LUNAR_ENTRIES),
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -753,6 +796,29 @@ def _topics() -> dict:
             for key, art in _ERA_ENTRIES
         ],
     }
+    # THE ECLIPSES (fix round F, owner order 2026-07-19): two topics —
+    # Solar and Lunar — one per body, each an overview page then a
+    # category chapter per kind. Every category chapter wears its own
+    # emblem; the overview strings its body's emblems as a strip
+    # (isinstance tuple), graceful-absent until the art lands.
+    for topic_key, title, icon_stem, entry_specs in _ECLIPSE_TOPICS:
+        topics[topic_key] = {
+            "title": title,
+            "icon": defaults.ECLIPSE_ART_DIR / icon_stem,
+            "entries": [
+                {
+                    "images": (
+                        tuple(defaults.ECLIPSE_ART_DIR / a for a in art)
+                        if isinstance(art, tuple)
+                        else (defaults.ECLIPSE_ART_DIR / art,)
+                    ),
+                    "name": ("eclipse_title", key),
+                    "article": ("eclipse", key),
+                    "accents": (),
+                }
+                for key, art in entry_specs
+            ],
+        }
     # THE WIDER PANTHEON (WORKPLAN Session 8): the seatless A-list
     # figures, one topic per culture. Every article resolves through
     # the encyclopedia "wider" family; the wired plates land later.
@@ -941,6 +1007,8 @@ class EncyclopediaDialog(QDialog):
             return self._encyclopedia.moon(ref[1])["base"]
         if kind == "era":
             return self._encyclopedia.era(ref[1])["base"]
+        if kind == "eclipse":
+            return self._encyclopedia.eclipse(ref[1])["base"]
         if kind == "emblem":
             return self._encyclopedia.entry(ref[1], ref[2])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
@@ -962,6 +1030,8 @@ class EncyclopediaDialog(QDialog):
                 return self._encyclopedia.moon(name[1])["title"]
             if name[0] == "era_title":
                 return self._encyclopedia.era(name[1])["title"]
+            if name[0] == "eclipse_title":
+                return self._encyclopedia.eclipse(name[1])["title"]
             return self._encyclopedia.instrument(name[1])["title"]
         return self._tr(name)
 

@@ -43,6 +43,29 @@ lives in [The DOMY Canon](CANON.md).
   [Clock State](core/clock_state.md), [Layers](render/layers.md),
   [Compositor](render/compositor.md) and [App Controller](app/controller.md)
   for the details.
+- **Fix round F — THE ECLIPSES ENCYCLOPEDIA (owner order 2026-07-19,
+  "posebno za mesec i sunce") — DONE:** a whole encyclopedia theme on
+  eclipses, SEPARATE topics for the Sun and the Moon — **Solar
+  Eclipses** and **Lunar Eclipses** in The Clock group, each an
+  overview page then one chapter per category the dial distinguishes
+  (solar total/annular/partial/hybrid, lunar total/partial/penumbral —
+  nine chapters, every one describing its exact sealed state-table
+  representation). A new prompt sheet
+  [Eclipse Prompts](research/prompts/eclipse/eclipse_prompts.md) carries
+  the seven category emblems (`assets/eclipse/<Stem>.png`,
+  `ECLIPSE_ART_DIR`, graceful-absent); the same emblem shows on the
+  Earth/Moon HOVER CARD during an eclipse window (owner slika 7,
+  `_eclipse_emblem`) and SPACE over the eclipsing marker opens that
+  category's chapter (`_eclipse_encyclopedia_target`, golden-tested per
+  category). Also added: **The Great Oscillations** (owner "bravo"), a
+  Clock-group era essay on the season-length oscillations and the
+  Milankovitch cycles (eccentricity/obliquity/precession, the
+  Observatory envelope, the honest ice-age line — the +28,000 minimum
+  at ~±1.1 d, never "an ice age starts then" — Milutin Milankovitch
+  named). Translation corpus keys wired for everything (English
+  content). See [Encyclopedia](app/encyclopedia.md),
+  [Encyclopedia Repository](data/encyclopedia.md) and
+  [Compositor](render/compositor.md). 11 new tests, 488 green.
 
 <a id="owner-queue"></a>
 
