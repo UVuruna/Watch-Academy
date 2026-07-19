@@ -354,7 +354,7 @@ WEEKDAY_PANTHEON = {
             "venus": "Hera (\u1f2d\u03c1\u03b1)",
             "saturn": "Demeter (\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1)",
         },
-        "dual": ("greek/pantheon/dual/hades",),
+        "dual": ("greek/pantheon/hades",),
         "dual_names": ("Zeus", "Hades"),
     },
     "norse": {
@@ -393,7 +393,7 @@ WEEKDAY_PANTHEON = {
             "mercury": "Thoth", "jupiter": "Anubis",
             "venus": "Bastet", "saturn": "Osiris",
         },
-        "dual": ("egypt/primary/dual/afu_ra",),
+        "dual": ("egypt/primary/afu_ra",),
         "dual_names": ("Ra", "Afu-Ra"),
     },
     "slavic": {
@@ -1508,8 +1508,10 @@ _LOWERCASE_THEMES = (
 # is <family>/<variant> — related themes share a family (religion =
 # primary Creeds + secondary Mysteries; planets = primary photos +
 # signs glyphs + art medallions; bible = primary/secondary/dark), and
-# a variant's colored arc is its SIBLING <family>/colored with dual/
-# INSIDE each variant.
+# a variant's colored arc is its SIBLING <family>/colored (owner DUAL
+# FLATTEN 2026-07-19: every file, dual included, sits FLAT inside its
+# variant — no dual/ subfolder anywhere; WHO a file is lives only in
+# WEEKDAY_DUAL_FILES/WEEKDAY_PANTHEON, never in a folder name).
 WEEKDAY_THEME_DIRS = {
     "planet_signs": "planets/signs",
     "greek": "greek/primary",
@@ -1661,29 +1663,40 @@ WEEKDAY_DUAL_NAMES = {
     "sins": ("Pride", "Servility"),
     "moods": ("Glory", "Awe"),
 }
-# Dual paths live INSIDE the theme's variant dir; the colored dual is
-# the same path with the variant segment swapped to colored/ (owner
-# restructure 2026-07-14).
+# Dual paths live FLAT inside the theme's variant dir (owner DUAL
+# FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
+# runtime — the config table already IS the identity, so the folder
+# only added a navigation step); the colored dual is the same path
+# with the variant segment swapped to colored/ (owner restructure
+# 2026-07-14, unaffected by the flatten — the swap only ever touched
+# the "primary"/"colored" segment).
 WEEKDAY_DUAL_FILES = {
-    "planets": "planets/primary/dual/sun_eclipse",
-    "planet_signs": "planets/signs/dual/sun_eclipse",
-    "greek": "greek/primary/dual/Phaethon",
-    "norse": "norse/primary/dual/Skoll",
-    "egypt": "egypt/primary/dual/afu_ra",
-    "slavic": "slavic/primary/dual/dazbog_old",
-    "alchemy": "alchemy/primary/dual/ore",
-    "japan": "japan/primary/dual/ama_no_iwato",
-    "religion": "religion/primary/dual/satanism",
-    "religion_alt": "religion/secondary/dual/corax",
-    "profession": "profession/primary/dual/Servant",
-    "wolf": "wolf/primary/dual/omega",
-    "bee": "bee/primary/dual/Cleaner",
-    "elephant": "elephant/primary/dual/Memory",
-    "bible": "bible/primary/dual/son_servant",
-    "bible2": "bible/secondary/dual/isaac",
-    "bible_dark": "bible/dark/dual/judas",
-    "cosmos": "cosmos/primary/dual/black_hole",
-    "planets_art": "planets/art/dual/sun_eclipse",
+    "planets": "planets/primary/sun_eclipse",
+    "planet_signs": "planets/signs/sun_eclipse",
+    "greek": "greek/primary/Phaethon",
+    "norse": "norse/primary/Skoll",
+    "egypt": "egypt/primary/afu_ra",
+    "slavic": "slavic/primary/dazbog_old",
+    "alchemy": "alchemy/primary/ore",
+    "japan": "japan/primary/ama_no_iwato",
+    "religion": "religion/primary/satanism",
+    "religion_alt": "religion/secondary/corax",
+    # profession's flat "Servant" stem collides with an already-flat,
+    # unreferenced orphan file the owner has separately at
+    # profession/primary/Servant.png (different art, different hash —
+    # a true collision found flattening this round) — config-side
+    # rename to "Servant_dual" resolves it without touching the
+    # unrelated orphan (Rule #3: never delete without the owner's own
+    # look).
+    "profession": "profession/primary/Servant_dual",
+    "wolf": "wolf/primary/omega",
+    "bee": "bee/primary/Cleaner",
+    "elephant": "elephant/primary/Memory",
+    "bible": "bible/primary/son_servant",
+    "bible2": "bible/secondary/isaac",
+    "bible_dark": "bible/dark/judas",
+    "cosmos": "cosmos/primary/black_hole",
+    "planets_art": "planets/art/sun_eclipse",
     "virtues": "../emblem/virtue/Humility",
     "sins": "../emblem/sin/Servility",
     "moods": "../emblem/mood/Awe",
@@ -1737,7 +1750,7 @@ GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
 GLOW_ECLIPSE_INVISIBLE_COLOR = "#8A9096"       # desaturated silver-gray
 ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5
 ECLIPSE_SOLAR_ART = (
-    WEEKDAY_ART_DIR / "planets" / "primary" / "dual" / "sun_eclipse.png"
+    WEEKDAY_ART_DIR / "planets" / "primary" / "sun_eclipse.png"
 )                                            # source-mapped by paths.art_file
 # LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
 # bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —

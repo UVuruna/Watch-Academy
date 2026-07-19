@@ -1,0 +1,14 @@
+====================================================================
+Seasons Archetype Prompts (Gemini) — the Four Temperaments  [Gemini]
+Run started:  2026-07-19 18:30:40  (5/13 pending)
+--------------------------------------------------------------------
+2026-07-19 18:31:25  assets/archetype/evangelist/Mark.png         gen    5.7s  ours   37.2s   1024x1024 -> 800x808    1.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: done]
+2026-07-19 18:32:13  assets/archetype/evangelist/Luke.png         gen    7.7s  ours   37.3s   1024x1024 -> 800x800    994 KB  [REMOVE BG: done, CROP: done, UPSCALE: done]
+2026-07-19 18:32:49  assets/archetype/evangelist/John.png         gen    7.8s  ours   26.0s   1024x1024 -> 863x864    1.2 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:33:08  assets/archetype/evangelist/Matthew.png      gen    7.8s  ours    9.4s   1024x1024 -> 826x824    1.2 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:33:19  assets/archetype/temperaments/Throne.png     gen    7.3s  ours    1.1s   1024x1024 -> 948x950    1.6 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 22s/image
+Total AI + our time: 2m 27s  (wall clock: 2m 39s)
+Run finished: 2026-07-19 18:33:19  (all pending items done)
+

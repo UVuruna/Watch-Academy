@@ -24,7 +24,7 @@ prefer a different name (`planets_bronze/`, `planets_medal/`, …).
 
 - `assets/weekday/planets/art/` — `assets/weekday/planets/art/sun.png`, `assets/weekday/planets/art/moon.png`, `assets/weekday/planets/art/mars.png`,
   `assets/weekday/planets/art/mercury.png`, `assets/weekday/planets/art/jupiter.png`, `assets/weekday/planets/art/venus.png`, `assets/weekday/planets/art/saturn.png`
-- `assets/weekday/planets/art/dual/sun_eclipse.png`
+- `assets/weekday/planets/art/sun_eclipse.png`
 - Bronze only, no `colored/` arc requested for this section.
 
 ### Sun (`assets/weekday/planets/art/sun.png`)
@@ -69,7 +69,7 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: Saturn cast in full bronze relief, its rings worked as a set of fine concentric bronze wires standing proud of the disc's surface, banded clouds carved in low relief beneath them. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Saturn glyph. Palette: darkened aged bronze dominant; the only bright accent the pale glint along the ring wires.
 ```
 
-### Sun eclipse (dual) (`assets/weekday/planets/art/dual/sun_eclipse.png`)
+### Sun eclipse (dual) (`assets/weekday/planets/art/sun_eclipse.png`)
 
 The eclipse as a medallion: black disc, corona ring — the family
 mirror of the Cosmos black hole plate, but the Sun hidden, not

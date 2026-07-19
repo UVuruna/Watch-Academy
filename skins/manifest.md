@@ -74,10 +74,10 @@ the ring preset and the user's display choices onto it at build time.
   build_skin for the active finish) is overlaid on the art so the ring
   TINT never touches the letters; `letter_legend` (hour → {name,
   reading}) the per-letter hover legend text (empty for every preset but
-  MASON G); `motto`/`motto_metal` (TASK 1, owner "može radi" 2026-07-19)
+  Mason); `motto`/`motto_metal` (TASK 1, owner "može radi" 2026-07-19)
   the outer Great Seal motto arc — a tuple of {"text", "glyphs":
   (asset, angle) pairs} built by build_skin from the preset's own
-  `motto` card field, empty for every preset but MASON G today; see
+  `motto` card field, empty for every preset but Mason today; see
   [Ring Presets](../data/rings.md) and [Layers](../render/layers.md)
 - `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit,

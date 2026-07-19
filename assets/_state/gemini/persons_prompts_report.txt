@@ -1,0 +1,12 @@
+====================================================================
+Prism Archetype Prompts (Gemini) — The Persons, the six on the paint hexa  [Gemini]
+Run started:  2026-07-19 18:29:19  (3/7 pending)
+--------------------------------------------------------------------
+2026-07-19 18:29:54  assets/archetype/persons/Lucifer_Pride.png   gen    6.7s  ours   26.8s    506x1024 -> 423x921    725 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:30:13  assets/archetype/persons/Judas_Fear.png      gen    7.2s  ours    9.4s    506x1024 -> 390x913    565 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:30:38  assets/archetype/persons/Seal.png            gen    7.7s  ours   14.9s   1024x1024 -> 800x805    902 KB  [REMOVE BG: done, CROP: done, UPSCALE: done]
+--------------------------------------------------------------------
+Images: 3  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 17s/image
+Total AI + our time: 1m 13s  (wall clock: 1m 20s)
+Run finished: 2026-07-19 18:30:38  (all pending items done)
+

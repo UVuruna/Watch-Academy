@@ -99,7 +99,7 @@ each spring so the year can turn.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Morana, a gaunt, veiled figure enthroned in winter, her death's face half-hidden, tattered robes hung with icicles and rimed with frost, a staff crowned with a crescent moon lifted in one hand with a small bound doll hanging from it, a poppy seed-pod cradled in the other, bare dead trees and snow filling the field, a serpent coiled in the frost at her feet, small straw effigies standing at her side. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels, each cradling the Saturn glyph in relief. No text, no watermark.
 ```
 
-**Sunday (dual) — Old Dažbog** → `assets/weekday/slavic/primary/dual/dazbog_old.png`
+**Sunday (dual) — Old Dažbog** → `assets/weekday/slavic/primary/dazbog_old.png`
 
 *"His Eclipse the winter dimming, when the grandfather of the people
 walks his road old and gray, trusting the spring to crown him again."*
@@ -116,7 +116,7 @@ The theme never got a colored companion set; these eight are fresh
 full-color paintings of the same compositions, not recolors of the
 bronze plates. Generate the whole set in one chat session so the
 series stays consistent. Drop under `colored/` (same stems) and the
-dual under `assets/weekday/slavic/colored/dual/dazbog_old.png`.
+dual under `assets/weekday/slavic/colored/dazbog_old.png`.
 
 **Dažbog (sunday)** → `assets/weekday/slavic/colored/dazbog.png`
 
@@ -160,7 +160,7 @@ Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-g
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Morana gaunt and veiled on a winter throne, frost-rimed gray robes hung with pale blue icicles, a crescent-topped staff with a small bound doll in one hand, a poppy seed-pod in the other, bare snow-white trees and pale winter light filling the field. Border: frost-gray rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in pale silver, each framing the Saturn glyph. Colors: frost blue-white, pale gray, winter silver.
 ```
 
-**Old Dažbog (sunday dual)** → `assets/weekday/slavic/colored/dual/dazbog_old.png`
+**Old Dažbog (sunday dual)** → `assets/weekday/slavic/colored/dazbog_old.png`
 
 ```
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: an aged Dažbog in dulled gray-gold, his winged helm rimed with frost, walking bent along a snow-pale road, his once-blazing corona faded to a thin silver-gray ring, an emptied horn of plenty cracked at his side, bare wintry trees around him under a pale winter sky. Border: dulled-gold rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in faded gold, each framing the Sun glyph. Colors: dull gray-gold, frost white, faded amber.
@@ -359,8 +359,8 @@ Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-g
 
 **Planetary set — unchanged, already on disk:** `assets/weekday/slavic/primary/dazbog.png` ·
 `assets/weekday/slavic/primary/hors.png` · `assets/weekday/slavic/primary/svetovid.png` · `assets/weekday/slavic/primary/veles.png` · `assets/weekday/slavic/primary/perun.png` · `assets/weekday/slavic/primary/mokos.png`
-· `assets/weekday/slavic/primary/morana.png` · `assets/weekday/slavic/primary/dual/dazbog_old.png`, plus all eight `colored/`
-companions and `assets/weekday/slavic/colored/dual/dazbog_old.png`. Nothing to regenerate.
+· `assets/weekday/slavic/primary/morana.png` · `assets/weekday/slavic/primary/dazbog_old.png`, plus all eight `colored/`
+companions and `assets/weekday/slavic/colored/dazbog_old.png`. Nothing to regenerate.
 
 **New art this pass — generate in this order, one chat session per
 register so each series stays consistent:**

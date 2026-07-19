@@ -1,0 +1,10 @@
+====================================================================
+Trinity Archetype Prompts (Gemini) — the Courtroom Trio and the Eye  [Gemini]
+Run started:  2026-07-19 18:33:20  (1/7 pending)
+--------------------------------------------------------------------
+2026-07-19 18:33:30  assets/archetype/trinity/Devil_Prosecutor.png gen    6.2s  ours    0.8s    687x1024 -> 354x958    618 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 6s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 7s  (wall clock: 9s)
+Run finished: 2026-07-19 18:33:30  (all pending items done)
+

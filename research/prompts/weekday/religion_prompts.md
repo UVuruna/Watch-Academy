@@ -90,7 +90,7 @@ Stems below are exact and lowercase, matching
 
 | Day | Body | Creed | File |
 |---|---|---|---|
-| Sunday | sun | Christianity (dual: Satanism) | `assets/weekday/religion/primary/christianity.png` / `assets/weekday/religion/primary/dual/satanism.png` |
+| Sunday | sun | Christianity (dual: Satanism) | `assets/weekday/religion/primary/christianity.png` / `assets/weekday/religion/primary/satanism.png` |
 | Monday | moon | Islam | `assets/weekday/religion/primary/islam.png` |
 | Tuesday | mars | Buddhism | `assets/weekday/religion/primary/buddhism.png` |
 | Wednesday | mercury | Taoism | `assets/weekday/religion/primary/taoism.png` |
@@ -174,7 +174,7 @@ Ornate circular medallion, silver sculptural relief on dark slate, photorealisti
 
 ---
 
-## Dual — Christianity / Satanism (`assets/weekday/religion/primary/dual/satanism.png`)
+## Dual — Christianity / Satanism (`assets/weekday/religion/primary/satanism.png`)
 
 **NEW plate (this rework)** — the faith's adversary as its shadow face:
 the red horned Devil rendered as a dignified, logo-like emblem, not a
@@ -191,11 +191,11 @@ below) always echo their bright face's border, dimmed or reversed.
 Ornate circular medallion, dark-red sculptural relief on black stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a horned devil's head rendered as a clean, logo-like emblem — twin curved horns, a goat-bearded jaw, eyes closed in cold repose — facing forward at the medallion's heart, a small inverted pentagram traced faintly in the stone behind the crown of the horns. Border: the same grapevine-and-fish rim as the bright face, cast in the same dark-red metal, the vines withered and the fish turned tail-first, circling the opposite way. Palette: dark-red relief and black stone dominant, the theme's one deliberate break from its silver register; no other bright accent. No text, no watermark.
 ```
 
-**SUPERSEDED — The Rough Ashlar** (Freemasonry's old Servant face,
-`dual/rough_ashlar.png`): no longer wired into the theme now that
-Freemasonry has left Sunday for the Ninth. The plate stays on disk as
-historical art — nothing to delete, nothing to regenerate. Prompt kept
-here for the record only:
+**SUPERSEDED — The Rough Ashlar** (Freemasonry's old Servant face, now
+flat at `assets/weekday/religion/primary/rough_ashlar.png`): no longer
+wired into the theme now that Freemasonry has left Sunday for the
+Ninth. The plate stays on disk as historical art — nothing to delete,
+nothing to regenerate. Prompt kept here for the record only:
 
 ```
 Ornate circular medallion, silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a rough-hewn cubic stone block resting on a tracing board, its faces still cracked and unworked, a gavel and chisel leaning against its base and a plumb line hanging beside it; high above in the gloom the All-Seeing Eye watches faintly, one thin ray touching only the stone's top edge — the work not yet begun, the light only promised. Border: the same chain of silver working tools, darker and quieter. Palette: darkened silver relief and black marble dominant; the single thin ray of light the only bright accent. No text, no watermark.
@@ -237,7 +237,8 @@ deliberate choice.
 documented above under "Dual — Christianity / Satanism" as SUPERSEDED
 — not repeated here to avoid two copies of the same plate.
 
-**Washbasin — Christianity's retired dual** (`dual/washbasin.png`):
+**Washbasin — Christianity's retired dual** (now flat at
+`assets/weekday/religion/primary/washbasin.png`):
 before this rework, Christianity's Sunday dual was the washbasin-and-
 towel pairing ("the king who washes feet, the God who empties
 himself... the king of kings who kneels to wash feet is the
@@ -249,8 +250,9 @@ Circular medallion, polished silver relief on black marble stone, photorealistic
 ```
 
 **Perfect Ashlar — optional bright counterpart to the Rough Ashlar**
-(`dual/perfect_ashlar.png`, only if the owner wants the pair as TWO new
-images instead of reusing `freemasonry.png`):
+(now flat at `assets/weekday/religion/primary/perfect_ashlar.png`, only
+if the owner wants the pair as TWO new images instead of reusing
+`freemasonry.png`):
 
 ```
 Circular medallion, polished silver sculptural relief on black marble, photorealistic render, perfectly centered, isolated on transparent background — same finish and border family as the owner's freemasonry religion medallion. Center: a perfectly squared and polished cubic ashlar on a masonic tracing board, its faces mirror-smooth and returning the light, suspended from a lewis hook above a builder's level; the All-Seeing Eye within a radiant triangle blazes directly over it, its glory rays breaking on the cube's edges into small stars. Border: silver ring bearing small roundels that alternate the square-and-compasses with a tiny radiant delta. Palette: silver, graphite black, radiant white-gold rays — matching the religion set's black-stone finish exactly.
@@ -268,7 +270,7 @@ Circular medallion, polished silver sculptural relief on black marble, photoreal
 ## Generation-order checklist
 
 1. **Generate NEW art — one plate:** the Satanism dual
-   (`assets/weekday/religion/primary/dual/satanism.png`). Everything else in this theme already exists.
+   (`assets/weekday/religion/primary/satanism.png`). Everything else in this theme already exists.
 2. **Move — sikhism.png**: copy `assets/weekday/religion/secondary/sikhism.png`
    → `assets/weekday/religion/primary/sikhism.png` (implementation
    work, no regeneration).
@@ -278,7 +280,7 @@ Circular medallion, polished silver sculptural relief on black marble, photoreal
    changes from the Sunday seat to the Ninth-topic plate.
 5. **Move out — unknown_god.png**: relocates to Ancient Religions
    (documented in full over there).
-6. **Leave on disk, unused — dual/rough_ashlar.png**: the superseded
-   Freemasonry dual; historical art, not wired into the theme anymore.
+6. **Leave on disk, unused — `assets/weekday/religion/primary/rough_ashlar.png`**: the superseded
+   Freemasonry dual, now flat; historical art, not wired into the theme anymore.
 7. Islam, Buddhism, Taoism, Hinduism, Judaism: unchanged, no action
    needed.

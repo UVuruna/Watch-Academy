@@ -39,12 +39,12 @@ without ever attempting text.
 Files land in `assets/weekday/japan/primary/`. Stems below are the exact
 lowercase romaji stems from `WEEKDAY_THEME_FILES["japan"]` (macrons and
 the apostrophe already folded — `kinyobi`, not `kin'yōbi`); the Sunday
-dual sits at `assets/weekday/japan/primary/dual/ama_no_iwato.png` per
+dual sits flat at `assets/weekday/japan/primary/ama_no_iwato.png` per
 `WEEKDAY_DUAL_FILES["japan"]`.
 
 | Day | Body | Yōbi figure | File |
 |---|---|---|---|
-| Sunday | sun | Amaterasu (dual: Ama-no-Iwato) | `assets/weekday/japan/primary/nichiyobi.png` / `assets/weekday/japan/primary/dual/ama_no_iwato.png` |
+| Sunday | sun | Amaterasu (dual: Ama-no-Iwato) | `assets/weekday/japan/primary/nichiyobi.png` / `assets/weekday/japan/primary/ama_no_iwato.png` |
 | Monday | moon | Tsukuyomi's moon rabbit | `assets/weekday/japan/primary/getsuyobi.png` |
 | Tuesday | mars | Kagutsuchi / samurai kabuto | `assets/weekday/japan/primary/kayobi.png` |
 | Wednesday | mercury | Ryujin | `assets/weekday/japan/primary/suiyobi.png` |
@@ -65,7 +65,7 @@ below it, per the article's opening image.*
 Ornate circular medallion, gold relief against a crimson sun-orb, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a blaze of gold — a rising-sun fan of cream-and-amber rays spreading behind a glossy crimson sun-orb, a black three-legged crow standing across the orb with wings flung wide, a vermilion torii gate marking the threshold beneath the disc. Border: a thin seigaiha wave band framing the rim, chrysanthemum crests alternating with plain kiku roundels. Palette: gold relief dominant against the crimson sun-orb; the torii's vermilion the only cool-toned accent. No kanji, no text, no watermark.
 ```
 
-**Sunday (dual) — Ama-no-Iwato** → `assets/weekday/japan/primary/dual/ama_no_iwato.png`
+**Sunday (dual) — Ama-no-Iwato** → `assets/weekday/japan/primary/ama_no_iwato.png`
 
 *The sealed cave with one sliver of gold light leaking through, per
 the article's own Servant-face paragraph.*

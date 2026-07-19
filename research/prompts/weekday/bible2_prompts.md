@@ -36,7 +36,7 @@ tracery/oculus, the same way the base set cross-references
 | Figure | File stem |
 |---|---|
 | Abraham (Sunday, ruler face) | `assets/weekday/bible/secondary/abraham.png` |
-| Isaac (Sunday, servant face, dual) | `assets/weekday/bible/secondary/dual/isaac.png` |
+| Isaac (Sunday, servant face, dual) | `assets/weekday/bible/secondary/isaac.png` |
 | Jonah (Monday) | `assets/weekday/bible/secondary/jonah.png` |
 | Samson (Tuesday) | `assets/weekday/bible/secondary/samson.png` |
 | Jacob (Wednesday) | `assets/weekday/bible/secondary/jacob.png` |
@@ -62,7 +62,7 @@ not "the moment before a strike."
 Circular stained-glass rose-window medallion, backlit by warm white-gold dawn light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as the base Bible set's ancient_of_days.png. Center: Abraham on Moriah's altar of stacked stone, his raised arm caught mid-motion by an angel's hand closing firmly around his wrist, the knife's blade turned harmlessly skyward rather than toward the bound figure below; his face turned upward in startled relief, not strain; a ram with curling gold-glass horns already caught by its horns in a thicket of dark branches at the altar's foot, the exact instant of reprieve. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a ram-in-the-thicket emblem, and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: warm white-gold dominant, altar-stone gray, small ember accents in the ram's horns, a thin cool-silver glass beam where the angel's hand closes.
 ```
 
-### Sunday, servant face (dual) — Isaac (`assets/weekday/bible/secondary/dual/isaac.png`)
+### Sunday, servant face (dual) — Isaac (`assets/weekday/bible/secondary/isaac.png`)
 
 The bound son, eyes upward, trusting — the Servant's Humility pole,
 rendered cooler/quieter than the Ruler plate exactly as
@@ -206,7 +206,7 @@ Per `ROSTER.md` (last generated 2026-07-15):
 
 - **Seated seven + Sunday dual** — all exist (✔ Gemini): `assets/weekday/bible/secondary/abraham.png`,
   `assets/weekday/bible/secondary/jonah.png`, `assets/weekday/bible/secondary/samson.png`, `assets/weekday/bible/secondary/jacob.png`, `assets/weekday/bible/secondary/noah.png`, `assets/weekday/bible/secondary/ruth.png`,
-  `assets/weekday/bible/secondary/job.png`, `assets/weekday/bible/secondary/dual/isaac.png`. (`assets/weekday/bible/secondary/esther_alt.png` is the recorded
+  `assets/weekday/bible/secondary/job.png`, `assets/weekday/bible/secondary/isaac.png`. (`assets/weekday/bible/secondary/esther_alt.png` is the recorded
   Friday alternative, not the seated pick — out of scope here.)
 - **Ninth — Melchizedek:** relocated here from the base Bible theme;
   never generated anywhere, before or after the move (— Gemini, —
@@ -230,7 +230,6 @@ story/figure rather than always the literal character name
 (`ancient_of_days.png`, `song_of_songs.png` in the base set), each
 figure dropped directly in the theme's weekday folder
 (`assets/weekday/bible/secondary/<stem>.png`), with the Sunday
-duality's second face one level down in a `dual/` subfolder
-(`assets/weekday/bible/secondary/dual/<stem>.png`) — the same
-cross-theme `dual/` convention already used across the weekday theme
-sheets (e.g. `greek_prompts.md`, `profession_prompts.md`).
+duality's second face sitting FLAT alongside the rest, no `dual/`
+subfolder — the same flat convention now used across the weekday
+theme sheets (e.g. `greek_prompts.md`, `profession_prompts.md`).

@@ -43,7 +43,7 @@ rationale, per the brief.
 | Figure | File stem | Mirrors |
 |---|---|---|
 | Lucifer (Sunday, ruler face) | `assets/weekday/bible/dark/lucifer.png` | Abraham / Ancient of Days |
-| Judas (Sunday, servant face, dual) | `assets/weekday/bible/dark/dual/judas.png` | Isaac / Son as Servant |
+| Judas (Sunday, servant face, dual) | `assets/weekday/bible/dark/judas.png` | Isaac / Son as Servant |
 | Lilith (Monday) | `assets/weekday/bible/dark/lilith.png` | Mary |
 | Goliath (Tuesday) | `assets/weekday/bible/dark/goliath.png` | David |
 | the Serpent (Wednesday) | `assets/weekday/bible/dark/serpent.png` | Moses |
@@ -67,7 +67,7 @@ Section C below.
 Circular stained-glass rose-window medallion, backlit by a cold black-violet night sky through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring as the light-set plates, but read as a night window; mirrors abraham.png's Sunday-ruler slot as the Fall's own Glory-to-Eclipse story. Center: Lucifer, the morning star, caught mid-fall — still radiant and beautiful, wings trailing streamers of gold-white fire guttering to ember-red as he drops, his crown tilted and slipping from his brow; behind him, high in the glass, the blinding flash of a supernova — a star burning everything it has in one final blaze, briefly outshining the whole window exactly as it dies. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a falling-star-and-slipping-crown emblem, an upward RED triangle worked into the tracery at the four corners of the frame, and the Eye-of-Providence oculus at the top rendered in smoked amber-red glass, its rays thin and reluctant. Colors: deep black-violet dominant, guttering ember-red and gold-white in the falling fire, cold blue-black at the ring's rim, no warm gold except the dying fire itself.
 ```
 
-### Sunday, servant face (dual) — Judas (`assets/weekday/bible/dark/dual/judas.png`)
+### Sunday, servant face (dual) — Judas (`assets/weekday/bible/dark/judas.png`)
 
 Mirrors Isaac's Sunday-servant slot: the servant who betrays instead
 of trusting. His celestial image (owner canon 2026-07-13) is the
@@ -239,7 +239,7 @@ Per `ROSTER.md` (last generated 2026-07-15):
 **Bible Dark (`bible_dark`):**
 - Seated seven + Sunday dual — all exist (✔ Gemini): `assets/weekday/bible/dark/lucifer.png`,
   `assets/weekday/bible/dark/lilith.png`, `assets/weekday/bible/dark/goliath.png`, `assets/weekday/bible/dark/serpent.png`, `assets/weekday/bible/dark/herod.png`,
-  `assets/weekday/bible/dark/delilah.png`, `assets/weekday/bible/dark/cain.png`, `assets/weekday/bible/dark/dual/judas.png`. (`assets/weekday/bible/dark/nebuchadnezzar_alt.png`
+  `assets/weekday/bible/dark/delilah.png`, `assets/weekday/bible/dark/cain.png`, `assets/weekday/bible/dark/judas.png`. (`assets/weekday/bible/dark/nebuchadnezzar_alt.png`
   is the recorded Thursday alternative, not the seated pick.)
 - **Ninth — Legion:** never generated (— Gemini, — ChatGPT) — good,
   nothing to discard. SUPERSEDED, do not generate.
@@ -272,10 +272,9 @@ story/figure rather than always the literal character name
 (`ancient_of_days.png`, `song_of_songs.png` in the base set), each
 figure dropped directly in the theme's weekday folder
 (`assets/weekday/bible/dark/<stem>.png`), with the Sunday duality's
-second face one level down in a `dual/` subfolder
-(`assets/weekday/bible/dark/dual/<stem>.png`) — the same cross-theme
-`dual/` convention already used across the weekday theme sheets (e.g.
-`greek_prompts.md`, `profession_prompts.md`). The two scale badges use
+second face sitting FLAT alongside the rest, no `dual/` subfolder —
+the same flat convention now used across the weekday theme sheets
+(e.g. `greek_prompts.md`, `profession_prompts.md`). The two scale badges use
 the PascalCase names the owner specified directly
 (`Judas_Triangle.png`, `Lucifer_Triangle.png`) rather than the weekday
 snake_case convention — kept as given since `assets/badge/scale/` is a

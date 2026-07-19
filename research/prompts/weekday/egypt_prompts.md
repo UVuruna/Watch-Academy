@@ -94,7 +94,7 @@ crook and flail crossed at the chest.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Osiris mummiform, wrapped in banded linen, wearing the tall atef crown between two ribbed ostrich plumes, the crook and flail crossed at his chest, an ankh knotted at his belt. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling the Saturn glyph in relief. No text, no watermark.
 ```
 
-**Sunday (dual) — Afu-Ra** → `assets/weekday/egypt/primary/dual/afu_ra.png`
+**Sunday (dual) — Afu-Ra** → `assets/weekday/egypt/primary/afu_ra.png`
 
 *"The day barque in Glory, the night barque through the Duat in
 Eclipse, one god in two boats" — the article's own doctrine.*
@@ -111,7 +111,7 @@ The theme never got a colored companion set; these eight are fresh
 full-color paintings of the same compositions, not recolors of the
 bronze plates. Generate the whole set in one chat session so the
 series stays consistent. Drop under `colored/` (same stems) and the
-dual under `assets/weekday/egypt/colored/dual/afu_ra.png`.
+dual under `assets/weekday/egypt/colored/afu_ra.png`.
 
 **Ra (sunday)** → `assets/weekday/egypt/colored/ra.png`
 
@@ -155,7 +155,7 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Osiris mummiform in bronze-banded linen against glowing malachite green, the tall white atef crown between green ostrich plumes, the crook in lapis blue and gold, the flail in bronze, crossed at his chest. Border: malachite-green hieroglyph cartouche band, broken by four painted roundels alternating a lapis ankh and a bronze scarab, each framing the Saturn glyph. Colors: malachite green, bronze, lapis blue, pale gold.
 ```
 
-**Afu-Ra (sunday dual)** → `assets/weekday/egypt/colored/dual/afu_ra.png`
+**Afu-Ra (sunday dual)** → `assets/weekday/egypt/colored/afu_ra.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Afu-Ra ram-headed in dulled bronze and indigo, the night barque Mesektet gliding through deep indigo waters, the sun dimmed to a black disc rimmed by a faint gold corona, the emerald serpent Apophis coiled beneath the hull, pale stars standing in for daylight. Border: dulled-bronze hieroglyph cartouche band, broken by four painted roundels alternating a dark ankh and a dark scarab, each framing the Sun glyph. Colors: indigo night, dulled bronze, faint gold corona, emerald serpent.
@@ -173,9 +173,9 @@ Osiris, and the Afu-Ra dual. Locked by the owner
 moon Isis, mars Horus, jupiter Anubis, venus Bastet, ninth the
 Pharaoh. Drop the new renders under `pantheon/` (bronze) and
 `pantheon/colored/` (colored) — sibling folders to `primary/` and
-`colored/`; the ninth `pharaoh.png` sits directly in `pantheon/`, no
-`dual/` or `ninth/` subfolder (Pantheon has no dual of its own, it
-shares the Planetary Afu-Ra dual).
+`colored/`; the ninth `pharaoh.png` sits directly in `pantheon/`, flat,
+no subfolder of its own (Pantheon has no dual of its own, it reuses
+the Planetary Afu-Ra dual directly).
 
 **Sunday — Ra** → REUSE `../primary/ra.png` — no new render; the one
 throne where supreme and solar agree.
@@ -226,7 +226,7 @@ Ornate circular medallion, aged bronze relief, photorealistic render, perfectly 
 render; grain, death, Renewal already the seat's story (ROUND FIVE
 confirmed the repeat over Geb).
 
-**Dual — Afu-Ra** → REUSE `../primary/dual/afu_ra.png` — shared with
+**Dual — Afu-Ra** → REUSE `../primary/afu_ra.png` — shared with
 Planetary, no new render; the night-barque is Ra's own shadow face
 and serves both modes (doctrine point 1).
 
@@ -286,7 +286,7 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 **Saturday — Osiris** → REUSE `../colored/osiris.png` — no new render
 (pending the Planetary colored generation above).
 
-**Dual — Afu-Ra** → REUSE `../colored/dual/afu_ra.png` — shared with
+**Dual — Afu-Ra** → REUSE `../colored/afu_ra.png` — shared with
 Planetary, no new render (pending the Planetary colored generation
 above).
 

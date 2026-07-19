@@ -43,7 +43,8 @@ her own cradle below.
 
 Weathered **bronze sculptural relief on dark cracked stone** (the
 greek/norse/chinese/wolf house material) so the gold/silver hue swap
-works unchanged; plus a `colored/` set and the `dual/` pair.
+works unchanged; plus a `colored/` set and the Sunday dual, both flat —
+no `dual/` subfolder.
 
 **Border language (collides with nothing):** a bronze ring worked as
 a band of **hexagonal honeycomb cells — some open, some wax-capped —
@@ -70,9 +71,9 @@ Forager under open sky. The week opens like the hive does.
 **Drop (wiring follows once the art lands):**
 - `assets/weekday/bee/primary/` — `Queen.png`, `Nurse.png`, `Guard.png`,
   `Scout.png`, `Builder.png`, `Drone.png`, `Forager.png`
-- `assets/weekday/bee/primary/dual/Cleaner.png`
+- `assets/weekday/bee/primary/Cleaner.png`
 - `assets/weekday/bee/colored/` — same seven stems
-- `assets/weekday/bee/primary/dual/colored/Cleaner.png`
+- `assets/weekday/bee/colored/Cleaner.png`
 
 ---
 
@@ -83,7 +84,7 @@ Forager under open sky. The week opens like the hive does.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the queen bee at the heart of the comb, long-bodied and regal, laying an egg into an open hexagonal cell, her retinue of workers ringed around her all facing inward, antennae reaching toward her like rays of a living corona; behind her a round patch of golden comb worked as a gilded sun disc of perfect hexagons. Border: bronze ring worked as a band of hexagonal honeycomb cells, some open, some wax-capped, with tiny worker bees crawling the lattice, and four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the gilded comb-sun the only brighter metal.
 ```
 
-**Cleaner (sunday dual)** → `assets/weekday/bee/primary/dual/Cleaner.png`
+**Cleaner (sunday dual)** → `assets/weekday/bee/primary/Cleaner.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a just-hatched young worker bee, fuzzy and soft, wings still crumpled from the cell, head and forelegs deep inside an open hexagonal cell polishing its walls — cleaning the very cell she was born in; around her the comb stretches away toward a distant warm glow where the queen's retinue circles, small and far; directly above her one dark EMPTY cell rimmed with a thin gilded ring of fresh wax — the hive's own eclipsed sun. Her posture is lowly, her work exact. Border: bronze ring worked as a band of hexagonal honeycomb cells, some open, some wax-capped, with tiny worker bees crawling the lattice, and four small roundels bearing the Sun glyph. Palette: darkened bronze dominant; the gilded cell-ring the only brighter metal.
 ```
@@ -131,7 +132,7 @@ the worker's life outward. Generate the whole set in one session.
 Ornate circular badge, vivid full-color painted hive interior over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the queen bee glowing amber-gold at the heart of deep honey-lit comb, laying an egg into an open cell, her retinue ringed around her facing inward like a living crown, golden light welling up through the wax as if the comb itself were the sun. Border: bronze honeycomb ring with tiny bees, four gold roundels bearing the Sun glyph. Colors: deep honey amber, glowing gold, warm wax yellow, dark hive brown.
 ```
 
-**Cleaner (sunday dual)** → `assets/weekday/bee/primary/dual/colored/Cleaner.png`
+**Cleaner (sunday dual)** → `assets/weekday/bee/colored/Cleaner.png`
 ```
 Ornate circular badge, vivid full-color painted hive interior over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a soft fuzzy just-hatched worker bee, wings still crumpled, half inside an open cell polishing its walls in the brown-dark comb, the queen's court a far warm glow behind her; directly above her one dark empty cell rimmed with a thin ring of bright golden new wax — the hive's eclipsed sun — the only strong light on the plate falling from that ring onto her small bowed back. Border: darkened bronze honeycomb ring with tiny bees, four gold roundels bearing the Sun glyph. Colors: dark hive umber, one golden wax ring, soft dusty fur gray-gold, distant amber glow.
 ```

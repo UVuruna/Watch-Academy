@@ -182,7 +182,7 @@ not yet shown — Coarse (13 shades) and the seamless Gradient — beside
 the existing Fine examples, making the Form × Contrast matrix explicit.
 
 **7 — The Ring: Faces, Finish and Numbers.** Unchanged DOMY/MORPH gold
-and silver explanation; adds the third bundled ring **NUMBERS** (a Seal
+and silver explanation; adds the third bundled ring **Omega** (a Seal
 layout wearing digits 12/16/20/Ω/4/8 instead of letters — a clean
 demonstration that the Seal always wears ONE metal on all six), the
 **Bronze** finish (never shown before, though its art has shipped since
@@ -319,14 +319,14 @@ see the [appendix](#appendix-reused).
 <td>Close crop matching 22/23's framing: the M/Y/D triangle in bronze, Omega in silver (the bronze finish's accent rule).</td></tr>
 
 <tr><td>64</td><td>ring_numbers_seal</td>
-<td>Design ▸ Ring ▸ NUMBERS.</td>
-<td>Ring = NUMBERS. Shoot once at Gold finish and, if the owner has time, again at Silver — one is enough for the Guide, both are useful for the caption text.</td>
+<td>Design ▸ Ring ▸ Omega.</td>
+<td>Ring = Omega. Shoot once at Gold finish and, if the owner has time, again at Silver — one is enough for the Guide, both are useful for the caption text.</td>
 <td>Close crop of the full ring showing all six positions (12/16/20/Ω/4/8) wearing digits instead of letters, all six in the SAME metal (the Seal's one-metal-on-all-six rule).</td></tr>
 
 <tr><td>65</td><td>menu_design_ring</td>
 <td>Right-click ▸ Design ▸ Ring, expanded but not yet clicked.</td>
 <td>Baseline, at least one custom ring already added in Settings so the submenu shows more than the three bundled cards (optional but more representative).</td>
-<td>The Ring submenu: DOMY / MORPH / NUMBERS (+ any custom cards) above the separator, Gold/Silver/Bronze letters below it.</td></tr>
+<td>The Ring submenu: DOMY / MORPH / Omega (+ any custom cards) above the separator, Gold/Silver/Bronze letters below it.</td></tr>
 
 <tr><td>66</td><td>hands_classic</td>
 <td>Design ▸ Hands ▸ CLASSIC.</td>

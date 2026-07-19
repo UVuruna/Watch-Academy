@@ -28,11 +28,15 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              user picks in Settings), then the
                              FAMILY/VARIANT tree (owner restructure
                              2026-07-14):
-                             <source>/<family>/<variant>/[dual/]<Entity>.png
+                             <source>/<family>/<variant>/<Entity>.png
                              — source gemini/ or chatgpt/ (a file missing in
-                             one source falls back to the other), dual/
-                             sits INSIDE each variant, colored is a variant
-                             SIBLING. Families:
+                             one source falls back to the other). Every
+                             file sits FLAT inside its variant — the Sunday
+                             dual included (owner DUAL FLATTEN 2026-07-19:
+                             no `dual/` subfolder anywhere; WHO a file is
+                             lives only in config, `WEEKDAY_DUAL_FILES`/
+                             `WEEKDAY_PANTHEON`, never in a folder name).
+                             colored is a variant SIBLING. Families:
                              planets/ → primary/ (real renders) + signs/
                              (glyphs) + art/ (bronze medallions)
                              bible/ → primary/ + secondary/ (Bible II) +

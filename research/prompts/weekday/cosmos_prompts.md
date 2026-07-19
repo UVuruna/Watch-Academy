@@ -29,7 +29,7 @@ vocabulary, not the same roster twice.
 | Day | Object | File stem | Virtue / Mood |
 |-----|--------|-----------|----------------|
 | Sun ☉ (ruler) | **Sun** | `assets/weekday/cosmos/primary/sun.png` | the star that neither explodes nor collapses — the zero of the scale |
-| Sun ☉ (servant, dual) | **Black Hole** | `assets/weekday/cosmos/primary/dual/black_hole.png` | the star that fell into itself, light not allowed to leave |
+| Sun ☉ (servant, dual) | **Black Hole** | `assets/weekday/cosmos/primary/black_hole.png` | the star that fell into itself, light not allowed to leave |
 | Mon ☽ | **Nebula** | `assets/weekday/cosmos/primary/nebula.png` | Calm / Serenity — a stellar nursery |
 | Tue ♂ | **Supernova** | `assets/weekday/cosmos/primary/supernova.png` | Zeal, Courage / Wrath — the explosion |
 | Wed ☿ | **Pulsar** | `assets/weekday/cosmos/primary/pulsar.png` | the midnight mind — precise as ticking |
@@ -41,7 +41,7 @@ vocabulary, not the same roster twice.
 
 Same **weathered bronze sculptural relief on dark cracked stone**
 register as wolf/greek/norse/chinese, plus a `colored/` full-color
-arc and the cross-theme `dual/` convention (see any theme's own
+arc and the cross-theme flat-dual convention (see any theme's own
 prompt sheet, e.g. `greek_prompts.md` or `profession_prompts.md`).
 
 **Border language (must not collide with the other bronze themes):**
@@ -69,9 +69,9 @@ and `bible_dark_prompts.md` already use for their casts.
 **Drop (wiring follows once the art lands):**
 - `assets/weekday/cosmos/primary/` — `assets/weekday/cosmos/primary/sun.png`, `assets/weekday/cosmos/primary/nebula.png`, `assets/weekday/cosmos/primary/supernova.png`,
   `assets/weekday/cosmos/primary/pulsar.png`, `assets/weekday/cosmos/primary/galaxy.png`, `assets/weekday/cosmos/primary/binary_stars.png`, `assets/weekday/cosmos/primary/comet.png`
-- `assets/weekday/cosmos/primary/dual/black_hole.png`
+- `assets/weekday/cosmos/primary/black_hole.png`
 - `assets/weekday/cosmos/colored/` — same seven stems
-- `assets/weekday/cosmos/primary/dual/colored/black_hole.png`
+- `assets/weekday/cosmos/colored/black_hole.png`
 
 ---
 
@@ -86,7 +86,7 @@ collapse.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the Sun as a living body filling the plate, its face threaded with slow granulation cells and shallow looping prominences, unhurried rays streaming outward past the rim in every direction like water poured freely from a full vessel — no flare bursting past the disc's edge, no eruption, only the calm ceaseless bestowal of a star that neither explodes nor collapses. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the radiant disc and its streaming rays are the one element meant to hue-swap WITH the metal on the gold/silver plates.
 ```
 
-### Sunday, servant face (dual) — Black Hole (`assets/weekday/cosmos/primary/dual/black_hole.png`)
+### Sunday, servant face (dual) — Black Hole (`assets/weekday/cosmos/primary/black_hole.png`)
 
 The owner's event-horizon brief: a perfect black disc, thin bright
 accretion ring, gravitationally lensed halo — the star that fell into
@@ -164,7 +164,7 @@ whole set together so the series stays visually consistent.
 Ornate circular badge, vivid full-color painted cosmos over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the Sun as a living golden-white sphere, granulation and looping prominences glowing across its face, warm rays streaming outward in every direction like light poured freely from a full vessel — steady, unhurried, endlessly given. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny gold six-point stars — four small gold roundels bearing the Sun glyph. Colors: blazing gold-white core, warm amber rays, deep space black at the rim.
 ```
 
-### Sunday, servant face (dual) — Black Hole (`assets/weekday/cosmos/primary/dual/colored/black_hole.png`)
+### Sunday, servant face (dual) — Black Hole (`assets/weekday/cosmos/colored/black_hole.png`)
 
 ```
 Ornate circular badge, vivid full-color painted cosmos over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a perfect matte-black disc at the center, wrapped by a searing orange-white accretion ring; a faint blue-white halo of light bends around the sphere above and below and folds back on itself, the last light of a star that fell into itself, none of it allowed to leave. Border: darkened bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — four small orange roundels bearing the Sun glyph, mirroring the Ruler plate. Colors: void black core, searing orange-white ring, cold blue-white lensed halo.

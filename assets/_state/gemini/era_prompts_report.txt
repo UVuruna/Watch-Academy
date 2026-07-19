@@ -1,0 +1,22 @@
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [Gemini]
+Run started:  2026-07-19 18:15:56  (13/13 pending)
+--------------------------------------------------------------------
+2026-07-19 18:16:33  assets/era/Age_of_Light.png                  gen    6.4s  ours   28.2s   1024x1024 -> 872x883    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:17:05  assets/era/Age_of_Darkness.png               gen    8.2s  ours   21.6s   1024x1024 -> 871x883    765 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:17:44  assets/era/Starry_Spring.png                 gen    8.2s  ours   28.0s   1024x1024 -> 872x885    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:18:19  assets/era/Starry_Summer.png                 gen    8.3s  ours   24.2s   1024x1024 -> 871x885   1019 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:18:39  assets/era/Starry_Autumn.png                 gen    7.7s  ours    9.7s   1024x1024 -> 871x883    808 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:19:04  assets/era/Starry_Winter.png                 gen    8.2s  ours   14.7s   1024x1024 -> 871x883    730 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:19:26  assets/era/Anno_Lucis.png                    gen    8.8s  ours    9.9s   1024x1024 -> 871x883    789 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:20:00  assets/era/calendar/AUC.png                  gen    8.3s  ours   24.4s   1024x1024 -> 950x948    1.2 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:20:40  assets/era/calendar/Byzantine.png            gen    7.8s  ours   29.3s   1024x1024 -> 920x920    1.5 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:21:05  assets/era/calendar/Hebrew.png               gen    9.8s  ours   12.6s   1024x1024 -> 878x878    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:21:33  assets/era/calendar/Hegirae.png              gen    9.3s  ours   15.7s   1024x1024 -> 877x877    890 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:21:55  assets/era/calendar/Buddhist.png             gen    8.9s  ours   10.9s   1024x1024 -> 877x877    924 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:22:09  assets/era/calendar/Huangdi.png              gen   10.3s  ours    1.6s   1024x1024 -> 876x877    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 13  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 5m 41s  (wall clock: 6m 14s)
+Run finished: 2026-07-19 18:22:09  (all pending items done)
+

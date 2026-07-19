@@ -409,7 +409,7 @@ untouched by this slider even though they share `ring_tint`.
 dollar's Great Seal reference image — the first round's layout was
 "katastrofa", both mottos sweeping the same overlapping top-heavy
 arc):** while the active preset carries a `motto`
-(`data.rings.validate_preset`, MASON G today), `_draw_motto` draws the
+(`data.rings.validate_preset`, Mason today), `_draw_motto` draws the
 two Great Seal mottos as curved text just OUTSIDE the ring band,
 EXACTLY like the real seal: ANNUIT COEPTIS arcs over the TOP (its own A
 pinned at 8h, S at 16h, reading CLOCKWISE the short way through noon —
@@ -451,7 +451,7 @@ never share an angle now — so both draw at the SAME
 #6 — no leftover unused constant). `defaults.dial_window_margin_fraction`
 still grows to cover the motto's own outer reach whenever
 `skin.ring.motto` is non-empty (a no-op term in its `max()` for every
-other preset — DOMY/MORPH/NUMBERS and every custom ring keep their old
+other preset — DOMY/MORPH/Omega and every custom ring keep their old
 margin exactly), now measured from the single shared radius instead of
 the outer of two. See [Ring Presets](../data/rings.md) for the exact
 pin table and [The DOMY Canon](../CANON.md)'s §The Banknote for the
@@ -563,7 +563,7 @@ note predicted. A SOLAR eclipse (`kind == "solar"`) makes the Earth
 marker's OWN existing "season event" glow turn RED/orange-red
 (depending on state, below) instead of golden and swaps its drawn art
 to `ECLIPSE_SOLAR_ART` — the Planets theme's Eclipsed-Sun dual
-(`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-mapped
+(`assets/weekday/planets/primary/sun_eclipse.png`, source-mapped
 by `paths.art_file`, falling back to whichever art source actually
 ships the file). A LUNAR eclipse (`kind == "lunar"`) turns the Moon
 marker's glow the blood-moon BRONZE (`GLOW_ECLIPSE_LUNAR_COLOR`, the

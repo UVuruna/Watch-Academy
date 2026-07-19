@@ -841,7 +841,7 @@ seats):
 
 **THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
 dollar's Great Seal reference image — the first round's layout was
-"katastrofa"):** while the MASON G ring preset is active, ANNUIT
+"katastrofa"):** while the Mason ring preset is active, ANNUIT
 COEPTIS and NOVUS ORDO SECLORUM themselves now ring the dial as curved
 text OUTSIDE the ring band — the same two Great Seal mottos the
 hexagram's own G/S/M/Ω/N/A were picked FROM, drawn back onto the wheel

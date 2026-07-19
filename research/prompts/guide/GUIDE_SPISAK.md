@@ -35,7 +35,7 @@ na 720 px dial-u osim gde piše drugačije.
 | 8 | `earth_card.png` | nova Earth kartica (Date naslov, era emblem, sezona) | hover na Zemlju |
 | 9 | `eclipse_solar.png` | solarna eklipsa na prstenu (crno sunce + crveni glow) | Time Travel → 2. avg 2027, 12:06 |
 | 10 | `eclipse_lunar.png` | lunarna totalna (bakarni disk + bronza + tirkiz) | Time Travel → najbliža totalna lunarna (Quick Jump ▸ Moon) |
-| 11 | `mason_g_motto.png` | MASON G prsten sa moto lukovima | Design ▸ Ring ▸ MASON G |
+| 11 | `mason_g_motto.png` | Mason prsten sa moto lukovima | Design ▸ Ring ▸ Mason |
 | 12 | `observatory_full.png` | Observatory svih 5 grafikona | 🔭 iz menija |
 | 13 | `observatory_zoom.png` | zumiran grafikon sa godišnjim tickovima | zumiraj envelope na ~10 godina |
 | 14 | `observatory_enlarge.png` | Enlarge preko celog ekrana sa legendom | Enlarge na Laskar grafikon |

@@ -33,12 +33,12 @@ accordingly.
 | Thursday | Jupiter | Tin | yellow | `assets/weekday/planets/signs/jupiter.png` |
 | Friday | Venus | Copper | red | `assets/weekday/planets/signs/venus.png` |
 | Saturday | Saturn | Lead | green | `assets/weekday/planets/signs/saturn.png` |
-| — | Sun, eclipsed (dual) | Gold, darkened | dimmed white-gold | `assets/weekday/planets/signs/dual/sun_eclipse.png` |
+| — | Sun, eclipsed (dual) | Gold, darkened | dimmed white-gold | `assets/weekday/planets/signs/sun_eclipse.png` |
 
 **File stems (must match exactly — regenerations drop over these):**
 `assets/weekday/planets/signs/sun.png`, `assets/weekday/planets/signs/moon.png`, `assets/weekday/planets/signs/mars.png`, `assets/weekday/planets/signs/mercury.png`, `assets/weekday/planets/signs/jupiter.png`,
 `assets/weekday/planets/signs/venus.png`, `assets/weekday/planets/signs/saturn.png` in `assets/weekday/planets/signs/`, plus
-`assets/weekday/planets/signs/dual/sun_eclipse.png`.
+`assets/weekday/planets/signs/sun_eclipse.png`.
 
 Shared skeleton: *Ornate circular sigil, polished metal relief,
 photorealistic render, perfectly centered, isolated on white
@@ -87,7 +87,7 @@ Ornate circular sigil, polished metal relief, photorealistic render, perfectly c
 Ornate circular sigil, polished metal relief, photorealistic render, perfectly centered, isolated on white background, no text, no watermark, no labels. Center: the classical Saturn glyph — a cross atop a tall curved hook, like a sickle blade curling beneath a crossbar — rendered as a single bold lead sigil in high relief, dark matte blue-gray that swallows the light, dusted with whitish oxide, one hairline crack glinting faintly green in its shadow. Field: a subtle starfield disc behind the glyph, faint pinpoint stars scattered across a deep forest-black night sky, softly out of focus behind the raised metal. Border: a thin unadorned lead rim ring, letting the glyph and the starfield carry the whole plate.
 ```
 
-**Sun, eclipsed (dual)** — `assets/weekday/planets/signs/dual/sun_eclipse.png`
+**Sun, eclipsed (dual)** — `assets/weekday/planets/signs/sun_eclipse.png`
 ```
 Ornate circular sigil, polished metal relief, photorealistic render, perfectly centered, isolated on white background, no text, no watermark, no labels. Center: the same Sun glyph as the sun.png plate — a circle with a central dot — but now a perfect dark disc slides across it from one side, overlapping the gold circle almost fully and leaving only a thin brilliant corona of gold light bleeding around the dark disc's edge and a last sliver of the gold rim showing at one side, the central dot still faintly visible through the shadow. Field: the same starfield disc as sun.png, but dimmed and cooled around the eclipsed glyph, a few more pinpoint stars now visible now that the light is blocked. Border: the same thin unadorned gold rim ring as sun.png.
 ```

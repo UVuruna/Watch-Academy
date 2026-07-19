@@ -353,7 +353,7 @@ def _weekday_topic(theme: str):
                 / f"{body}.png"
             )
             sign_dual = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "signs" / "dual"
+                defaults.WEEKDAY_ART_DIR / "planets" / "signs"
                 / "sun_eclipse.png"
             )
             art = (
@@ -361,7 +361,7 @@ def _weekday_topic(theme: str):
                 / f"{body}.png"
             )
             art_dual = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "art" / "dual"
+                defaults.WEEKDAY_ART_DIR / "planets" / "art"
                 / "sun_eclipse.png"
             )
             entry["looks"] = (

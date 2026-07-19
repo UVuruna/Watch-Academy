@@ -30,8 +30,8 @@ takes a paragraph naming Sigma as the modern myth it is.
 
 Weathered **bronze sculptural relief on dark cracked stone**, the
 greek/norse/chinese house material, so the gold/silver hue swap
-works unchanged; plus a `colored/` full-color set and the `dual/`
-pair, exactly like greek and norse.
+works unchanged; plus a `colored/` full-color set and the Sunday
+dual, both flat — no `dual/` subfolder, exactly like greek and norse.
 
 **Border language (must NOT collide with the other bronze themes):**
 no Celtic knotwork (norse), no meander (greek), no huiwen (chinese).
@@ -55,9 +55,9 @@ and the ore plate hides as a vein.
 - `assets/weekday/wolf/primary/` — `Alpha.png`, `Luna.png`, `Hunter.png`,
   `Scout.png`, `Beta.png`, `Mate.png`, `Elder.png` (capitalized,
   greek/norse convention)
-- `assets/weekday/wolf/primary/dual/Omega.png`
+- `assets/weekday/wolf/primary/Omega.png`
 - `assets/weekday/wolf/colored/` — same seven stems
-- `assets/weekday/wolf/primary/dual/colored/Omega.png`
+- `assets/weekday/wolf/colored/Omega.png`
 
 ---
 
@@ -68,7 +68,7 @@ and the ore plate hides as a vein.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the alpha wolf standing atop a high rock outcrop, head high, chest out, tail raised like a banner, the rising sun worked as a gilded disc of rays in low relief directly behind his head like a crown; below the rock, the rest of the pack gazing up at him. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise, interlaced with small pine sprigs, with four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the gilded sun disc the only brighter metal.
 ```
 
-**Omega (sunday dual)** → `assets/weekday/wolf/primary/dual/Omega.png`
+**Omega (sunday dual)** → `assets/weekday/wolf/primary/Omega.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the omega wolf, lowest of the pack, body lowered, ears folded back, tail curled close so its sweep traces a faint omega curve — carrying a bone in his jaws to two small pups at the mouth of the den, one pup already clambering over his shoulder; behind them, distant and small, the pack feeds at the kill he left first. High in the dark sky a thin eclipsed sun: a black disc rimmed by a slender gilded corona ring. His bearing is lowly but his eyes are calm and dignified — the servant the pups love best. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise, interlaced with small pine sprigs, with four small roundels bearing the Sun glyph. Palette: darkened bronze dominant; the corona ring the only brighter metal.
 ```
@@ -117,7 +117,7 @@ the whole set in one chat session so the series stays consistent.
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the alpha wolf with a rich gray-and-cream coat standing atop a high rock outcrop at golden dawn, the rising sun blazing directly behind his head like a crown of rays, warm light flooding the valley where the pack gazes up. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small gold roundels bearing the Sun glyph. Colors: dawn gold, warm amber, gray-cream fur, deep valley green.
 ```
 
-**Omega (sunday dual)** → `assets/weekday/wolf/primary/dual/colored/Omega.png`
+**Omega (sunday dual)** → `assets/weekday/wolf/colored/Omega.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the omega wolf with a humble dark-gray coat, body lowered and tail curled in a faint omega sweep, carrying a bone to two warm-lit pups at the den mouth, one pup clambering over his shoulder, the distant pack at the kill behind; the sky holds a total eclipse — a black sun rimmed by a slender golden corona ring, dusk-dark light over everything except the pups' warm fur. Border: darkened bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, four small gold roundels bearing the Sun glyph. Colors: eclipse dusk blue-gray, black sun with gold corona, warm pup amber, dark gray fur.
 ```

@@ -80,7 +80,7 @@ Stems below are exact and lowercase, matching
 
 | Day | Body | Tradition | File |
 |---|---|---|---|
-| Sunday | sun | Mithraism (dual: Corax) | `assets/weekday/religion/secondary/mithraism.png` / `assets/weekday/religion/secondary/dual/corax.png` |
+| Sunday | sun | Mithraism (dual: Corax) | `assets/weekday/religion/secondary/mithraism.png` / `assets/weekday/religion/secondary/corax.png` |
 | Monday | moon | Druidism | `assets/weekday/religion/secondary/druidism.png` |
 | Tuesday | mars | Zoroastrianism | `assets/weekday/religion/secondary/zoroastrianism.png` |
 | Wednesday | mercury | Shamanism | `assets/weekday/religion/secondary/shamanism.png` |
@@ -163,7 +163,7 @@ Ornate circular medallion, burlap-and-copper relief, photorealistic render, perf
 
 ---
 
-## Dual — Mithraism / Corax (`assets/weekday/religion/secondary/dual/corax.png`)
+## Dual — Mithraism / Corax (`assets/weekday/religion/secondary/corax.png`)
 
 **UNCHANGED by this rework.** The Raven serving the Father at the
 grade-banquet — Humility before any rank has been climbed, per the

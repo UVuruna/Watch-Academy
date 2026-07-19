@@ -1,0 +1,16 @@
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [Gemini]
+Run started:  2026-07-19 18:23:00  (7/7 pending)
+--------------------------------------------------------------------
+2026-07-19 18:23:27  assets/eclipse/Solar_Total.png               gen    5.8s  ours   18.8s   1024x1024 -> 855x856    850 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:23:48  assets/eclipse/Solar_Annular.png             gen    7.2s  ours   10.9s   1024x1024 -> 832x833    814 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:24:24  assets/eclipse/Solar_Partial.png             gen    9.2s  ours   23.8s   1024x1024 -> 815x812    637 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:25:11  assets/eclipse/Solar_Hybrid.png              gen    7.3s  ours   36.8s   1024x1024 -> 801x800    682 KB  [REMOVE BG: done, CROP: done, UPSCALE: done]
+2026-07-19 18:25:36  assets/eclipse/Lunar_Total.png               gen    7.3s  ours   15.1s   1024x1024 -> 820x819    600 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:26:14  assets/eclipse/Lunar_Partial.png             gen    7.7s  ours   27.8s   1024x1024 -> 820x817    751 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:26:25  assets/eclipse/Lunar_Penumbral.png           gen    7.2s  ours    1.4s   1024x1024 -> 852x852    600 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 3m 06s  (wall clock: 3m 25s)
+Run finished: 2026-07-19 18:26:25  (all pending items done)
+

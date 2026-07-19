@@ -30,14 +30,18 @@ theme's sheet should carry everything it needs, no hunting across
 files for a theme's colored plates).
 
 Files land in `assets/weekday/profession/primary/`. Stems below are the exact
-Capitalized names from `WEEKDAY_THEME_FILES["profession"]` — note the
-Sunday dual is `assets/weekday/profession/primary/Servant.png`, sitting DIRECTLY in the folder, NOT under
-a `dual/` subfolder, per `WEEKDAY_DUAL_FILES["profession"] =
-"profession/Servant"`.
+Capitalized names from `WEEKDAY_THEME_FILES["profession"]` — the
+Sunday dual sits FLAT in the same folder, named `Servant_dual.png`
+(owner DUAL FLATTEN 2026-07-19: no `dual/` subfolder anywhere), per
+`WEEKDAY_DUAL_FILES["profession"] = "profession/primary/Servant_dual"`.
+The `_dual` suffix is NOT decorative — a separate, unrelated plate
+already occupies the plain `Servant.png` name in this same folder (a
+different image, owner-dropped, not wired into any config table);
+drop the dual plate as `Servant_dual.png` and do not overwrite it.
 
 | Day | Body | Calling | File |
 |---|---|---|---|
-| Sunday | sun | Ruler (dual: Servant) | `assets/weekday/profession/primary/Ruler.png` / `assets/weekday/profession/primary/Servant.png` |
+| Sunday | sun | Ruler (dual: Servant) | `assets/weekday/profession/primary/Ruler.png` / `assets/weekday/profession/primary/Servant_dual.png` |
 | Monday | moon | Physician | `assets/weekday/profession/primary/Physician.png` |
 | Tuesday | mars | Soldier | `assets/weekday/profession/primary/Soldier.png` |
 | Wednesday | mercury | Merchant | `assets/weekday/profession/primary/Merchant.png` |
@@ -58,7 +62,7 @@ his side — the article's opening image.*
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a crowned, bearded king enthroned, a tall scepter upright in his right hand, a small cross-topped orb resting open in his left palm, an eagle-blazoned shield leaning at the throne's side, imperial eagles engraved into the stone behind him. Border: bronze ring of small eagle-crest roundels alternating with laurel sprigs. Palette: aged bronze dominant; the crown and orb the only brighter gilt accent. No text, no watermark.
 ```
 
-**Sunday (dual) — Servant** → `assets/weekday/profession/primary/Servant.png`
+**Sunday (dual) — Servant** → `assets/weekday/profession/primary/Servant_dual.png`
 
 *The king before his own empty throne, crown lifted from his head —
 the article's own Servant-face paragraph.*
@@ -173,8 +177,9 @@ Ornate circular badge, vivid full-color guild-crest style, photorealistic render
 ```
 
 **Servant (dual, colored)** — matches `colored/Ruler.png`; drop at
-`assets/weekday/profession/colored/Servant.png` (sitting directly in
-the folder, same convention as the bronze Servant above)
+`assets/weekday/profession/colored/Servant_dual.png` (sitting directly
+in the folder, same convention as the bronze Servant above — the
+`_dual` suffix again avoids the unrelated `Servant.png` already there)
 
 ```
 Ornate circular badge, vivid full-color guild-crest style, photorealistic render, perfectly centered, isolated on white background. Center: the Ruler's Servant face kneeling before his own empty golden throne, the crown lifted from his own head and held low in both hands, eyes downcast, the ermine-and-gold robe replaced by a plain ivory-white tunic with a simple rope belt, one bare foot resting in a golden basin of water; a soft, low dawn-grey glow behind him instead of a blazing halo — the muted, quiet twin of the Ruler's radiant noon field, same white-gold family read cooler and lower. Border: polished gold ring with small white-enamel roundels bearing a basin-and-towel emblem (echoing the Ruler badge's crown roundels), laurel scrollwork between them. Colors: white and gold dominant — same family as the Ruler badge — with cool dawn-grey accents in place of its warm sunrise-orange.

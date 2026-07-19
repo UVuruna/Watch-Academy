@@ -41,7 +41,8 @@ say so and the sheet reshuffles Monday.)
 ## Style — the Sixth Metal Theme
 
 Weathered **bronze sculptural relief on dark cracked stone**, the
-house material, hue-swap safe; plus `colored/` and `dual/`.
+house material, hue-swap safe; plus `colored/` and the Sunday dual,
+both flat — no `dual/` subfolder.
 
 **Border language (collides with nothing):** a bronze ring carved
 with **acacia thorn branches interlaced with paired crescent
@@ -67,9 +68,9 @@ tested by drought; the colored Saturday shows the test.
 **Drop (wiring follows once the art lands):**
 - `assets/weekday/elephant/primary/` — `Matriarch.png`, `Allomother.png`,
   `Musth.png`, `Caller.png`, `Mentor.png`, `Reunion.png`, `Elder.png`
-- `assets/weekday/elephant/primary/dual/Memory.png`
+- `assets/weekday/elephant/primary/Memory.png`
 - `assets/weekday/elephant/colored/` — same seven stems
-- `assets/weekday/elephant/primary/dual/colored/Memory.png`
+- `assets/weekday/elephant/colored/Memory.png`
 
 ---
 
@@ -80,7 +81,7 @@ tested by drought; the colored Saturday shows the test.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the great matriarch elephant striding at the head of her family, trunk raised high, ears spread wide like a crown, a gilded sun disc of rays in low relief directly behind her head; behind her the herd follows in single file — cows, young ones, a small calf holding its mother's tail with its trunk — every line of the column bending to her lead. Border: bronze ring carved with acacia thorn branches interlaced with paired crescent tusks, and four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the gilded sun disc the only brighter metal.
 ```
 
-**Memory (sunday dual)** → `assets/weekday/elephant/primary/dual/Memory.png`
+**Memory (sunday dual)** → `assets/weekday/elephant/primary/Memory.png`
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the herd gathered in a still half-circle around the weathered skull and long bones of an old elephant lying in the grass, the young matriarch at the center resting the tip of her trunk gently on the skull's brow — the one who taught her the map; the others reach their trunks toward the bones, touching them lightly; high in the dark sky a thin eclipsed sun, a black disc rimmed by a slender gilded corona ring. Nothing moves. Border: darkened bronze ring carved with acacia thorn branches interlaced with paired crescent tusks, and four small roundels bearing the Sun glyph. Palette: darkened bronze dominant; the corona ring the only brighter metal.
 ```
@@ -128,7 +129,7 @@ plenty to white drought. Generate the whole set in one session.
 Ornate circular badge, vivid full-color painted savanna over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the great matriarch leading her family in single file across golden dawn grassland, the rising sun blazing directly behind her raised head like a crown, warm light along the backs of the whole column, a small calf holding its mother's tail. Border: bronze ring of acacia branches and paired tusks, four gold roundels bearing the Sun glyph. Colors: dawn gold, warm amber grass, gray-brown hide rimmed with light, soft violet horizon.
 ```
 
-**Memory (sunday dual)** → `assets/weekday/elephant/primary/dual/colored/Memory.png`
+**Memory (sunday dual)** → `assets/weekday/elephant/colored/Memory.png`
 ```
 Ornate circular badge, vivid full-color painted savanna over bronze, photorealistic render, perfectly centered, isolated on white background. Center: the herd in a still half-circle around a weathered white skull and scattered bones in gray-green grass, the young matriarch resting her trunk on the skull's brow, every trunk reaching gently toward the bones; overhead a total eclipse — a black sun rimmed with a slender golden corona — dusk-dark light over the whole plate, the bones the palest thing in it. Border: darkened bronze ring of acacia branches and paired tusks, four gold roundels bearing the Sun glyph. Colors: eclipse gray-blue, bone white, dark hide, one golden corona ring.
 ```

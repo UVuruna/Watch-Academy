@@ -225,14 +225,15 @@ literal architecture — sunlight, through glass, telling scripture.
 ## 3. The Prompts
 
 Suggested drop location: `assets/weekday/bible/primary/`, with the Sunday
-second face at `assets/weekday/bible/primary/dual/son_servant.png` (matching
-the `dual/` convention already used for Greek/Norse/Egypt/Japan/
-Slavic/Alchemy/Religion — see any of those themes' own prompt sheets).
+second face sitting flat at `assets/weekday/bible/primary/son_servant.png`
+(matching the flat Sunday-dual convention already used for Greek/Norse/
+Egypt/Japan/Slavic/Alchemy/Religion — see any of those themes' own
+prompt sheets).
 
 | Figure | File stem |
 |---|---|
 | The Ancient of Days | `assets/weekday/bible/primary/ancient_of_days.png` |
-| The Son as Servant (dual) | `assets/weekday/bible/primary/dual/son_servant.png` |
+| The Son as Servant (dual) | `assets/weekday/bible/primary/son_servant.png` |
 | Mary | `assets/weekday/bible/primary/mary.png` |
 | David | `assets/weekday/bible/primary/david.png` |
 | Moses | `assets/weekday/bible/primary/moses.png` |
@@ -246,7 +247,7 @@ Slavic/Alchemy/Religion — see any of those themes' own prompt sheets).
 Circular stained-glass rose-window medallion, backlit by warm daylight through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background. Center: the Ancient of Days from Daniel 7 enthroned in white-gold glass, hair and robe like pure wool-white, seated on a throne of blazing fire-glass with wheels of burning flame beneath it, streams of golden light pouring outward, countless small ministering figures in pale glass rendered tiny at the throne's foot, an open book of glowing amber glass laid across his knees. Border: dark lead-came tracery ring of trefoil lancets, four small jewel-roundels bearing a radiant seven-flame lampstand, and a golden triangle oculus at the top holding the Eye of Providence, radiant lead-lines streaming from it like sunbeams. Colors: white-gold and fire-amber dominant, deep ember orange in the throne-flames, small sapphire accents in the crowd of small figures.
 ```
 
-### Sunday dual — The Son as Servant (`assets/weekday/bible/primary/dual/son_servant.png`)
+### Sunday dual — The Son as Servant (`assets/weekday/bible/primary/son_servant.png`)
 
 ```
 Circular stained-glass rose-window medallion, backlit by cool dawn light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery ring, trefoil lancets and Eye-of-Providence oculus as ancient_of_days.png, but the glass reads low and quiet instead of blazing. Center: Christ kneeling in a plain ivory-glass robe, an outer garment folded aside, washing a disciple's bare foot in a simple silver-glass basin, a folded linen towel over one arm, eyes lowered; the same throne from the Ancient of Days plate stands empty and unlit in the background, its fire-glass gone cold and clear. Border: identical dark lead-came trefoil tracery to ancient_of_days.png, but the lampstand roundels are replaced with small jewel-roundels bearing a basin-and-towel emblem, and the golden Eye-of-Providence oculus at the top glows softer, dawn-grey instead of fire-gold. Colors: same white-gold family as the Ancient of Days plate, read cooler — ivory, pale dawn-grey, quiet silver — no blazing fire-amber.
@@ -341,7 +342,7 @@ Per `ROSTER.md` (last generated 2026-07-15), theme `bible`:
 - **Seated seven + Sunday dual** — all exist (✔ Gemini):
   `assets/weekday/bible/primary/ancient_of_days.png`, `assets/weekday/bible/primary/mary.png`, `assets/weekday/bible/primary/david.png`, `assets/weekday/bible/primary/moses.png`,
   `assets/weekday/bible/primary/solomon.png`, `assets/weekday/bible/primary/adam_and_eve.png`, `assets/weekday/bible/primary/joseph.png`,
-  `assets/weekday/bible/primary/dual/son_servant.png`.
+  `assets/weekday/bible/primary/son_servant.png`.
 - **Ninth — Melchizedek:** never generated (— Gemini, — ChatGPT) —
   good, nothing to discard. RELOCATED to Bible II as ITS Ninth; no
   longer this theme's figure. See `bible2_prompts.md`.

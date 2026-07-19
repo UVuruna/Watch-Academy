@@ -480,7 +480,7 @@ until spring thunder). Recommendation: share Old Dažbog.
 | ninth | Sigma | Sigma (both modes) | doctrine |
 
 The audit found something important: **Omega is not missing — Omega
-is already the Sunday DUAL** (`wolf/primary/dual/omega.png`, the
+is already the Sunday DUAL** (`wolf/primary/omega.png`, the
 Alpha & Omega pair — scripture-grade symbolism already in the dial).
 So the famous ladder completes with **Gamma** (the enforcer-hunter)
 and **Delta** (the runner-messenger) taking Tuesday and Wednesday,
@@ -546,6 +546,7 @@ colored where the theme has them, duals, ninths, REUSE marks for
 plates that already exist) so the owner generates in order without
 hunting; (2) symbolism.json articles; (3) the `figure_roster` code
 round. Pantheon art drops:
-`assets/weekday/<theme>/pantheon/…` (+ `pantheon/colored/`,
-`pantheon/dual/`); reused figures point at their existing primary
+`assets/weekday/<theme>/pantheon/…` (+ `pantheon/colored/`, the
+pantheon dual FLAT alongside them — no `dual/` subfolder, owner DUAL
+FLATTEN 2026-07-19); reused figures point at their existing primary
 files — no regeneration.

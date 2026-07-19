@@ -839,7 +839,7 @@ def test_encyclopedia_expansion_wiring():
     dialog.deleteLater()
 
 
-def test_ring_letters_article_carries_the_mason_g_lore():
+def test_ring_letters_article_carries_the_mason_lore():
     """ROADMAP 15b (owner: "malo legende oko tih naših odabira"): the
     ring presets' OWN symbolism — DOMY traces the inverted cross, MORPH
     the upright cross, the seal (MASON G / NUMBERS) the hexagram — is

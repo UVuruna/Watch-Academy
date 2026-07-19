@@ -141,10 +141,10 @@ more `[[Subhead]]` sections. `[[The Shapes]]` reads the ring layouts'
 own geometry: DOMY's flame triangle (12/20/4) traces the INVERTED
 cross (its base — 20h/4h — sits low, near the bottom, St Peter's own
 cross), MORPH's chalice triangle (8/16/24) the UPRIGHT cross (its base
-— 16h/8h — sits high, near the crown), and the seal layout (NUMBERS,
-MASON G) the interlaced hexagram — Solomon's Seal, the same six-point
+— 16h/8h — sits high, near the crown), and the seal layout (Omega,
+Mason) the interlaced hexagram — Solomon's Seal, the same six-point
 star Freemasonry and the Templars both carry. `[[The Banknote]]` tells
-the MASON G preset's own origin (CANON.md §The Banknote — the owner's
+the Mason preset's own origin (CANON.md §The Banknote — the owner's
 `InGodWeTrust_UVS_BIG.png` hexagram, G+MASON out of the Great Seal's
 mottos) and closes with the two-triangle reading: G-M-N (12/20/4) is
 the TRINITY read as a court, S-Ω-A (16/24/8) is the UNION of Alpha and

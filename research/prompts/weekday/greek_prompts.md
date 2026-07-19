@@ -31,14 +31,14 @@ image — no lettering, no text, no watermark, anywhere.
 
 **Drop directories:**
 - Planetary bronze → `assets/weekday/greek/primary/<file>.png` (dual
-  → `primary/dual/<file>.png`)
+  → `primary/<file>.png`, flat, same folder)
 - Planetary colored → `assets/weekday/greek/colored/<file>.png` (dual
-  → `colored/dual/<file>.png`)
+  → `colored/<file>.png`, flat, same folder)
 - Pantheon bronze → `assets/weekday/greek/pantheon/<file>.png` (dual
-  → `pantheon/dual/<file>.png`; the ninth `gaia.png` drops straight in
+  → `pantheon/<file>.png`, flat; the ninth `gaia.png` drops straight in
   `pantheon/`, no subfolder)
 - Pantheon colored → `assets/weekday/greek/pantheon/colored/<file>.png`
-  (dual → `pantheon/colored/dual/<file>.png`)
+  (dual → `pantheon/colored/<file>.png`, flat)
 
 **SUPERSEDED — read before generating anything:** earlier versions of
 this sheet carried Hades as the Greek NINTH (`hades.png` /
@@ -50,7 +50,7 @@ Pantheon Greek dual is **Zeus / Hades** — the throne above and the
 throne below — and the Pantheon ninth is **Gaia**, the Union of both
 lines. **Do not generate a ninth Hades plate, bronze or colored.**
 Hades's art is the Pantheon DUAL plate below instead
-(`assets/weekday/greek/pantheon/dual/hades.png` and `assets/weekday/greek/pantheon/colored/dual/hades.png`).
+(`assets/weekday/greek/pantheon/hades.png` and `assets/weekday/greek/pantheon/colored/hades.png`).
 
 ---
 
@@ -126,7 +126,7 @@ scythe, the clock face, the cog-ring halo, the swallowed child.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Cronus the crowned titan glowering from a stone throne, a great scythe laid across his body, a clock face with Roman numerals cradled in his left hand with gearwork showing behind it, a toothed cog-ring circling his crown like a mechanical halo, a small winged child stained with blood floating in the upper corner, a bare gnarled tree behind him and a young golden tree near his feet. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Saturn glyph in relief. No text, no watermark.
 ```
 
-**Sunday (dual) — Phaethon (on disk ✔)** → `assets/weekday/greek/primary/dual/Phaethon.png`
+**Sunday (dual) — Phaethon (on disk ✔)** → `assets/weekday/greek/primary/Phaethon.png`
 
 *The article's own gloss on the Sunday duality: "the chariot in a
 son's proud hands is Pride, the scorched sky its Eclipse."*
@@ -179,7 +179,7 @@ Ornate circular badge, vivid full-color enamel over rose gold, photorealistic re
 Ornate circular badge, vivid full-color enamel over aged gold, photorealistic render, perfectly centered, isolated on white background. Center: Cronus the Titan of time and harvest, gray-bearded in a deep green hooded robe, holding a great curved scythe and an hourglass with golden sand, sheaves of wheat at his feet; glossy deep green field. Border: aged gold Greek key pattern with small dark-green roundels bearing golden hourglasses. Colors: deep green, aged gold, wheat amber, gray.
 ```
 
-**Phaethon (dual, colored, on disk ✔)** → `assets/weekday/greek/colored/dual/Phaethon.png`
+**Phaethon (dual, colored, on disk ✔)** → `assets/weekday/greek/colored/Phaethon.png`
 
 *Found already written in `sunday_duality.md` (the colored-metal-theme
 follow-up, 2026-07-12) — moved here verbatim so the whole Greek theme
@@ -267,7 +267,7 @@ own return, the seat's whole bundle in one myth.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Demeter seated with a sheaf of ripe wheat cradled in one arm and a lit torch raised in the other hand — the torch she carried searching the world without rest — a young woman's hand (Persephone's) just visible clasping hers at the frame's edge as if newly returned, a bare wintered field on one side of the throne and the same field green and sprouting on the other, poppies growing at her feet. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Saturn glyph in relief. No text, no watermark.
 ```
 
-**Hades — Pantheon dual** → `assets/weekday/greek/pantheon/dual/hades.png` *(not yet
+**Hades — Pantheon dual** → `assets/weekday/greek/pantheon/hades.png` *(not yet
 generated — this REPLACES the retired ninth-Hades plate)*
 
 *The throne below, not evil — the shadow face of the same kingship
@@ -339,7 +339,7 @@ generated)*
 Ornate circular badge, vivid full-color enamel over aged gold, photorealistic render, perfectly centered, isolated on white background. Center: Demeter in a flowing wheat-gold gown, a sheaf of ripe golden wheat cradled in one arm, a lit torch raised in the other hand, poppies blooming at her feet, one side of the field behind her bare winter brown and the other lush spring green where Persephone's hand reaches to meet hers; glossy deep harvest-green field. Border: aged-gold Greek key pattern with small green roundels bearing golden wheat sheaves. Colors: harvest green, wheat gold, poppy red, earth brown.
 ```
 
-**Hades — Pantheon dual, colored** → `assets/weekday/greek/pantheon/colored/dual/hades.png`
+**Hades — Pantheon dual, colored** → `assets/weekday/greek/pantheon/colored/hades.png`
 *(not yet generated — this REPLACES the retired colored ninth-Hades
 plate)*
 ```

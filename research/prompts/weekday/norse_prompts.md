@@ -41,22 +41,18 @@ prompts are needed here.
 - Isolated on a plain white background.
 - No text, no watermark, no lettering of any kind anywhere — runes and glyphs are carved symbols, never alphabetic characters.
 
-**Drop dirs** (`assets/weekday/norse/…`; duals nest under each
-variant's own `dual/`, matching the code's authoritative convention
-in `config/defaults.py` `WEEKDAY_DUAL_FILES` — the colored dual swaps
-only the `primary` → `colored` segment, e.g. `primary/dual/Skoll.png`
-→ `assets/weekday/norse/colored/dual/Skoll.png`):
+**Drop dirs** (`assets/weekday/norse/…`; the dual sits FLAT inside
+each variant's own folder, no `dual/` subfolder, matching the code's
+authoritative convention in `config/defaults.py` `WEEKDAY_DUAL_FILES`
+— the colored dual swaps only the `primary` → `colored` segment, e.g.
+`primary/Skoll.png` → `assets/weekday/norse/colored/Skoll.png`):
 
 ```
 📁 assets/weekday/norse/
-  📁 primary/            Planetary bronze — 7 gods
-    📁 dual/              Planetary bronze dual — Skoll
+  📁 primary/            Planetary bronze — 7 gods + dual Skoll
   📁 colored/            Planetary colored — 7 gods + Skoll
-    📁 dual/              Planetary colored dual — Skoll
-  📁 pantheon/           Pantheon bronze — new figures; REUSE figures point at primary/
-    📁 dual/              Pantheon bronze dual — the Wanderer (REUSE, points at primary/Odin.png)
-    📁 colored/           Pantheon colored — new figures; REUSE figures point at colored/
-      📁 dual/             Pantheon colored dual — the Wanderer (REUSE, points at colored/Odin.png)
+  📁 pantheon/           Pantheon bronze — new figures + dual the Wanderer (REUSE, points at primary/Odin.png); REUSE figures point at primary/
+    📁 colored/           Pantheon colored — new figures + dual the Wanderer (REUSE, points at colored/Odin.png); REUSE figures point at colored/
 ```
 
 ---
@@ -131,7 +127,7 @@ invention or his sentence.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Loki grinning, red-gold braids framing the smirk, one hand gripping a spear whose head glows poison-green above green-lit runes, the other lifting a golden woven net, a serpent coiling over a small fire at his feet and a wolf snarling at the lower edge. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels, each holding the Saturn glyph between the runes. No text, no watermark.
 ```
 
-**Sunday (dual) — Skoll** → `assets/weekday/norse/primary/dual/Skoll.png`
+**Sunday (dual) — Skoll** → `assets/weekday/norse/primary/Skoll.png`
 
 *"No mythology stages Glory and Eclipse more honestly: Skoll catches
 her at Ragnarok — the Eclipse foretold — yet the Eddas promise her
@@ -187,7 +183,7 @@ Ornate circular badge, vivid full-color Nordic painted style, photorealistic ren
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Loki the trickster half-smiling, sharp-featured in green and black, small flames dancing between his fingers, a serpent coiling around his arm, faint chains at the edge hinting at his binding; glossy emerald-green field with smoke curls. Border: carved knotwork ring painted green and dark gold with small roundels bearing coiled serpents. Colors: emerald green, flame orange, black, dark gold.
 ```
 
-**Sunday (dual) — Skoll** → `assets/weekday/norse/colored/dual/Skoll.png` — **NEW, the missing plate**
+**Sunday (dual) — Skoll** → `assets/weekday/norse/colored/Skoll.png` — **NEW, the missing plate**
 
 *The owner's coverage complaint, closed: no colored Skoll prompt
 existed in this register anywhere before this rewrite (see the

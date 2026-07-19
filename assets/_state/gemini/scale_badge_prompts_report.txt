@@ -1,0 +1,15 @@
+====================================================================
+Scale Prompts (Gemini) — the Judas–Lucifer Scale, both registers  [Gemini]
+Run started:  2026-07-19 18:26:26  (6/9 pending)
+--------------------------------------------------------------------
+2026-07-19 18:26:54  assets/badge/scale/glass/Judas_Triangle.png  gen    6.2s  ours   19.5s   1024x1024 -> 861x980    885 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:27:20  assets/badge/scale/glass/Lucifer_Triangle.png gen    8.2s  ours   15.0s   1024x1024 -> 938x806    791 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:27:58  assets/badge/scale/glass/Judas_Triangle_v2.png gen    7.2s  ours   28.3s   1024x1024 -> 986x983    859 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:28:35  assets/badge/scale/glass/Lucifer_Triangle_v2.png gen    7.2s  ours   27.9s   1024x1024 -> 990x926    923 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:29:05  assets/badge/scale/glass/Union_Meeting.png   gen    7.8s  ours   19.6s   1024x1024 -> 926x927    1.4 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:29:18  assets/badge/scale/glass/Union.png           gen    8.7s  ours    1.2s   1024x1024 -> 826x850    931 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 6  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 2m 37s  (wall clock: 2m 51s)
+Run finished: 2026-07-19 18:29:18  (all pending items done)
+

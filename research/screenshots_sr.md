@@ -77,9 +77,9 @@ Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 - [ ] 63 — 63_ring_domy_bronze.png — Design ▸ Ring ▸ DOMY; Design ▸ Ring ▸ Bronze slova — Blizak kadar isti kao 22/23: trougao M/Y/D u bronzi, Omega u srebru (pravilo bronze finiša za akcenat).
 
-- [ ] 64 — 64_ring_numbers_seal.png — Design ▸ Ring ▸ NUMBERS; snimi jednom u Gold finišu, a ako ima vremena i u Silver — jedan snimak je dovoljan za Guide, oba korisna za tekst — Blizak kadar celog prstena, svih šest pozicija (12/16/20/Ω/4/8) sa ciframa umesto slova, svih šest u ISTOM metalu (Seal-ovo pravilo jedan-metal-za-svih-šest).
+- [ ] 64 — 64_ring_numbers_seal.png — Design ▸ Ring ▸ Omega; snimi jednom u Gold finišu, a ako ima vremena i u Silver — jedan snimak je dovoljan za Guide, oba korisna za tekst — Blizak kadar celog prstena, svih šest pozicija (12/16/20/Ω/4/8) sa ciframa umesto slova, svih šest u ISTOM metalu (Seal-ovo pravilo jedan-metal-za-svih-šest).
 
-- [ ] 65 — 65_menu_design_ring.png — Desni klik ▸ Design ▸ Ring, razvijeno ali ništa kliknuto; baseline, poželjno bar jedan sopstveni (custom) prsten već dodat kroz Settings da podmeni pokaže više od tri ugrađene kartice (opciono) — Podmeni Ring: DOMY / MORPH / NUMBERS (+ eventualne custom kartice) iznad separatora, Gold/Silver/Bronze slova ispod njega.
+- [ ] 65 — 65_menu_design_ring.png — Desni klik ▸ Design ▸ Ring, razvijeno ali ništa kliknuto; baseline, poželjno bar jedan sopstveni (custom) prsten već dodat kroz Settings da podmeni pokaže više od tri ugrađene kartice (opciono) — Podmeni Ring: DOMY / MORPH / Omega (+ eventualne custom kartice) iznad separatora, Gold/Silver/Bronze slova ispod njega.
 
 - [ ] 66 — 66_hands_classic.png — Design ▸ Hands ▸ CLASSIC — Blizak kadar centriran na osovinu, sve tri kap-oblik kazaljke jasno vidljive u čitljivom trenutku (npr. ekvivalent ~10:10 na 24h numeračniku) da se vidi razlika u dužinama.
 

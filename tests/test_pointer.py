@@ -1090,7 +1090,7 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
     assert "zora povratka" not in poem
 
 
-def test_mason_g_ring_letters_answer_their_own_hover_legend(july_wednesday):
+def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     """The per-letter HOVER LEGEND (ROADMAP 15b, "malo legende oko tih
     naših odabira"): every Mason ring letter answers what it stands
     for, quoted from CANON.md's Banknote table — independent of the
@@ -1164,7 +1164,7 @@ def _max_alpha_in_box(image, cx, cy, half):
     return best
 
 
-def test_mason_g_motto_arc_paints_outside_the_ring(july_wednesday):
+def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
     reference image): ANNUIT COEPTIS now arcs over the TOP (its own A
     pinned at 8h, S at 16h) and NOVUS ORDO SECLORUM under the BOTTOM

@@ -1,0 +1,11 @@
+====================================================================
+The Nine Intelligences & The Wheel of Moods — Gemini Prompts  [Gemini]
+Run started:  2026-07-19 18:22:11  (2/11 pending)
+--------------------------------------------------------------------
+2026-07-19 18:22:48  assets/emblem/intelligence/BodilyKinesthetic.png gen    5.7s  ours   29.3s   1024x1024 -> 820x822    981 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 18:22:59  assets/emblem/intelligence/LogicalMathematical.png gen    8.2s  ours    1.3s   1024x1024 -> 802x801    873 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 45s  (wall clock: 49s)
+Run finished: 2026-07-19 18:22:59  (all pending items done)
+

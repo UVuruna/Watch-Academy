@@ -106,8 +106,8 @@ lives in [The DOMY Canon](CANON.md).
   sets; rotation cadence/design to be specced. `assets/EXTRA/` is
   GONE (owner cleaned it 2026-07-19 — the audit's orphan row is
   resolved).
-- **THE MOTO ROUND (owner "može radi" 2026-07-19) — DONE:** two
-  features on the MASON G ring. (1) THE OUTER MOTTO ARC — ANNUIT
+- **THE MOTO ROUND (owner "може radi" 2026-07-19) — DONE:** two
+  features on the Mason ring. (1) THE OUTER MOTTO ARC — ANNUIT
   COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside
   the ring band, their key letters pinned exactly onto the ring's own
   six seats (N/4h, O/noon, M/20h, A/8h, S/16h — "MASON outside, G
@@ -530,14 +530,14 @@ lives in [The DOMY Canon](CANON.md).
    (543 BCE) as my additions (the Chinese epoch is flagged uncertain
    across sources — never invented past what the article states). 1
    new test (`tests/test_settings_dialog.py`), 434 green.
-15b. **The MASON G ring — DONE (2026-07-18, MASON G RING round).** The
+15b. **The Mason ring — DONE (2026-07-18, MASON G RING round).** The
    bundled preset **G(12) S(16) M(20) Ω(24) N(4) A(8)** on the seal
    layout (`Database/ring_presets.json` — every letter's art already
    shipped, gold/silver/bronze, no missing-art flag needed). The
    preset's own optional `triangle` field (CANON §The Banknote's two
    triangles — Trinity 12/20/4, Union 16/24/8) overrides the seal
-   layout's one-metal reading so `_letter_metal` splits MASON G 3+3
-   instead of NUMBERS' six-of-one (`data/rings.py`, `app/controller.py`).
+   layout's one-metal reading so `_letter_metal` splits Mason 3+3
+   instead of Omega's six-of-one (`data/rings.py`, `app/controller.py`).
    The per-letter HOVER LEGEND rides a new optional `legend` card field
    (hour -> `{name, reading}`, quoted verbatim from CANON) answered by
    `render.compositor._ring_letter_legend_tooltip` in the SAME letter
@@ -814,7 +814,7 @@ lives in [The DOMY Canon](CANON.md).
       OPTION C sealed (2026-07-18, Session 21-E); STATES REWORK — DONE
       (2026-07-19, fix round C).** Refines the sealed glow-metal triad.
       A SOLAR eclipse shows the Planets-theme eclipse art
-      (`assets/weekday/planets/primary/dual/sun_eclipse.png`, source-
+      (`assets/weekday/planets/primary/sun_eclipse.png`, source-
       mapped by `paths.art_file`) on the EARTH marker with a glow ring
       (instead of the plain golden season glow); a LUNAR eclipse shows
       the MOON marker darkened with a BRONZE glow (the blood-moon

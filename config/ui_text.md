@@ -17,7 +17,7 @@ edit re-translates exactly that entry (the hash mechanism in
 [Translations](../data/translations.md)).
 
 Protected terms stay English in every language (product and brand
-words): DOMY Watch, DOMY / MORPH / NUMBERS, Trinity / Seasons /
+words): DOMY Watch, DOMY / MORPH / Omega, Trinity / Seasons /
 Prism / Compass, Paint / Light, Umbra, Aura, Flame / Chalice / Seal,
 Gold / Silver as finish names inside composed labels.
 
