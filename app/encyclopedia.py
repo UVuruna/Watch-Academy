@@ -21,6 +21,7 @@ Resizable: everything rescales live.
 
 import json
 import shutil
+from datetime import date
 from pathlib import Path
 
 from PySide6.QtCore import QSize, Qt
@@ -373,11 +374,16 @@ def _weekday_topic(theme: str):
     return _theme_body_art(theme, "sun"), entries
 
 
-def _topics() -> dict:
+def _topics(travel_date: date | None = None) -> dict:
     """topic key -> {title, icon, entries}; article refs resolve lazily
     against the repository so the overlay always applies. Every entry
     carries an `images` TUPLE — Astrology pairs the sign logo with its
-    constellation (owner spec: both, side by side)."""
+    constellation (owner spec: both, side by side). `travel_date`
+    drives the Scale rotation (owner decree 2026-07-19/20, "koje cemo
+    koristiti na smenu") — defaults to today when the caller has no
+    Time Travel moment to hand in."""
+    if travel_date is None:
+        travel_date = date.today()
     topics: dict = {}
     for theme, title in defaults.WEEKDAY_THEME_TITLES.items():
         icon, entries = _weekday_topic(theme)
@@ -664,13 +670,20 @@ def _topics() -> dict:
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing
     # files stay hidden); the Union pairs both triangles.
+    # THE SCALE ROTATION (owner decree 2026-07-19/20, CANON.md
+    # one-image-one-place amendment — Judas-Lucifer is a MAIN theme,
+    # "koje cemo koristiti na smenu"): Lucifer and Judas each keep
+    # MULTIPLE generated versions on disk; the shown face advances
+    # with `travel_date` instead of freezing on one master. Only the
+    # two poles rotate — the Union stays fixed.
     topics["duality"] = {
         "title": "The Two Triangles",
         "icon": defaults.SCALE_ART_DIR / "Union.png",
         "entries": [
             {
                 "images": (
-                    defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
+                    defaults.scale_variant_file("Lucifer", travel_date)
+                    or defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
                 ),
                 "name": "Lucifer",
                 "article": ("emblem", "duality", "Lucifer"),
@@ -678,7 +691,8 @@ def _topics() -> dict:
             },
             {
                 "images": (
-                    defaults.SCALE_ART_DIR / "Judas_Triangle.png",
+                    defaults.scale_variant_file("Judas", travel_date)
+                    or defaults.SCALE_ART_DIR / "Judas_Triangle.png",
                 ),
                 "name": "Judas",
                 "article": ("emblem", "duality", "Judas"),
@@ -850,6 +864,7 @@ class EncyclopediaDialog(QDialog):
         initial_topic: str | None = None,
         initial_entry: int = 0,
         stay_on_top: bool = False,
+        travel_date: date | None = None,
     ):
         super().__init__()
         self._overlay = translations or {}
@@ -875,7 +890,7 @@ class EncyclopediaDialog(QDialog):
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
         self._symbolism = SymbolismRepository(overlay=self._overlay)
         self._encyclopedia = EncyclopediaRepository(overlay=self._overlay)
-        self._topics = _topics()
+        self._topics = _topics(travel_date)
         if hidden_unlocked:
             # The Four Greetings (owner 2026-07-14): the owner's own
             # verses, Serbian in EVERY language, unlocked by the

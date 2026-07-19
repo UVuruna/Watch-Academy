@@ -117,6 +117,16 @@ mirrors `pole_emoji`'s own light/dark split so the two never disagree.
 These are UI CHROME, not ART — the one-image-one-place law (owner
 2026-07-19) applies to the dial's own ART only; a UI icon may
 legitimately answer in more than one menu spot.
+**SCALE ROTATION** (owner decree 2026-07-19/20, CANON.md
+one-image-one-place amendment — Judas–Lucifer is a MAIN theme, kept
+"na smenu"): `SCALE_ROTATION_DAYS` (cadence), `SCALE_ART_STEMS` (the
+known filename stems per figure — the owner's naming stayed irregular
+across batches) and `scale_variant_file(figure, on_date)` — DISCOVERS
+every version actually on disk for the active source, in both
+`SCALE_ART_DIR` and its `glass/` register, tolerant of `_v`/`_v1`/
+`_v2`/`_v3` suffixes, and rotates by the date's proleptic ordinal.
+Sole consumer: the [Encyclopedia](../app/encyclopedia.md)'s "The Two
+Triangles" duality topic.
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package

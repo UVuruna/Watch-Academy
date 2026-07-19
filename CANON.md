@@ -308,6 +308,22 @@ persons sheet); the Scale triangles stay the Scale badge's alone, in
 FOUR rotating versions each — Judas–Lucifer being a MAIN theme (every
 being lives between excessive self-criticism and excessive self-love),
 it carries multiple image sets used in rotation.
+**LIVE (Scale Rotation round, 2026-07-20):** the rotation is delivered,
+not just decreed — `config.defaults.scale_variant_file(figure, date)`
+DISCOVERS whatever actually sits on disk for the active source, in
+BOTH the metal-cameo `scale/` root and the stained-glass `scale/glass/`
+register (globs every `SCALE_ART_STEMS[figure]` stem's bare file plus
+its `_v*` siblings in each, tolerant of the owner's irregular
+suffixes), and picks by the date's proleptic ordinal, so the shown
+face changes with the day; the Encyclopedia's "The Two Triangles"
+topic is the sole wired consumer. Currently 7 versions per pole for
+ChatGPT (the cameo master, the two glass windows, and the
+`judas`/`judas_v1..v3` refresh batch, mirrored for Lucifer) and 3 per
+pole for Gemini (the cameo master plus its two glass windows) — the
+count is READ from disk, never hardcoded, so more art dropped in later
+starts rotating on its own. Cadence lives at `SCALE_ROTATION_DAYS`
+(currently every day); deep travel drives the shown face by the
+TRAVELED date, same law as the poles' glyphs.
 
 ### Prism light — One Soul, the Bond (APPROVED 2026-07-16)
 

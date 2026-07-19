@@ -99,13 +99,18 @@ lives in [The DOMY Canon](CANON.md).
   različita načina"). First application: the prism poles' Scale-glass
   reuse revoked — own lancet prompts sheeted (`Lucifer_Pride`,
   `Judas_Fear`), config repointed, name fallback until the art lands.
-  QUEUED FEATURE: the Scale badge's Judas/Lucifer keep FOUR versions
-  each (`assets/badge/.../scale/glass/*_v2…`) used IN ROTATION —
-  Judas–Lucifer is a main theme (every being between excessive
-  self-criticism and excessive self-love) and carries multiple image
-  sets; rotation cadence/design to be specced. `assets/EXTRA/` is
-  GONE (owner cleaned it 2026-07-19 — the audit's orphan row is
-  resolved).
+  SCALE ROTATION — DONE (2026-07-20): the Scale badge's Judas/Lucifer
+  keep multiple versions used IN ROTATION — Judas–Lucifer is a main
+  theme (every being between excessive self-criticism and excessive
+  self-love) and carries multiple image sets. `config.defaults.
+  scale_variant_file(figure, date)` discovers whatever the active
+  source actually has (the metal-cameo root plus the `scale/glass/`
+  register, tolerant of the owner's irregular `_v`/`_v1`/`_v2`/`_v3`
+  suffixes) and rotates by the date's proleptic ordinal — 7 versions
+  per pole for ChatGPT, 3 for Gemini today, growing as more art lands.
+  `SCALE_ROTATION_DAYS` sets the cadence; deep travel drives the shown
+  face by the traveled date. `assets/EXTRA/` is GONE (owner cleaned it
+  2026-07-19 — the audit's orphan row is resolved).
 - **THE MOTO ROUND (owner "може radi" 2026-07-19) — DONE:** two
   features on the Mason ring. (1) THE OUTER MOTTO ARC — ANNUIT
   COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside

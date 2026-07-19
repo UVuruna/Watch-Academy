@@ -5,6 +5,7 @@ position, chosen city, chosen skin) lives in the user settings file owned
 by app/settings_store.py.
 """
 
+import re
 from datetime import date
 from pathlib import Path
 
@@ -623,6 +624,95 @@ ARTICLE_SUBHEAD_GAP_BELOW_PX = 2
 # medallions illustrating "The Two Triangles" — wired before the art
 # lands; the Encyclopedia hides missing files.
 SCALE_ART_DIR = paths.assets_dir() / "badge" / "scale"
+# SCALE ROTATION (owner decree 2026-07-19, CANON.md one-image-one-place
+# amendment — "koje cemo koristiti na smenu"): Judas-Lucifer is a MAIN
+# theme, every being living between excessive self-criticism and
+# excessive self-love, so BOTH poles keep MULTIPLE generated versions
+# instead of freezing on one master. The cadence: how many days each
+# shown file stays before advancing (1 = a new face every day).
+SCALE_ROTATION_DAYS = 1
+# Known filename STEMS per figure, inside SCALE_ART_DIR for the active
+# source — the owner's batches landed under more than one stem (the
+# canonical "_Triangle" master beside a later lowercase refresh);
+# scale_variant_file globs "<stem>.png" and "<stem>_v*.png" for EVERY
+# stem below and merges the matches into one rotation.
+SCALE_ART_STEMS = {
+    "Judas": ("Judas_Triangle", "judas"),
+    "Lucifer": ("Lucifer_Triangle", "lucifer"),
+}
+_SCALE_VERSION_SUFFIX = re.compile(r"^_v\d*$", re.IGNORECASE)
+
+
+def _scale_candidates_in(directory: Path, stems: tuple[str, ...]) -> list[Path]:
+    """Every file DIRECTLY inside `directory` matching a bare stem or a
+    `stem_v*` sibling, for any stem in `stems` — the single-folder glob
+    behind `_scale_candidates`, factored out so a synthetic tmp tree can
+    exercise the owner's naming-zoo tolerance directly (no dependency
+    on the real bundled assets)."""
+    if not directory.is_dir():
+        return []
+    candidates: list[Path] = []
+    seen_names: set[str] = set()
+    for stem in stems:
+        stem_lower = stem.lower()
+        for entry in directory.iterdir():
+            if entry.name in seen_names or entry.suffix.lower() != ".png":
+                continue
+            name_stem = entry.stem
+            if not name_stem.lower().startswith(stem_lower):
+                continue
+            suffix = name_stem[len(stem):]
+            if suffix == "" or _SCALE_VERSION_SUFFIX.match(suffix):
+                candidates.append(entry)
+                seen_names.add(entry.name)
+    return candidates
+
+
+def _scale_candidates(
+    directories: tuple[Path, ...], stems: tuple[str, ...]
+) -> list[Path]:
+    """Every version found across `directories` (each searched
+    independently, non-recursively — the metal-cameo register and the
+    stained-glass register both count, they simply live in different
+    folders), sorted by (filename, full path) for a rotation order that
+    is deterministic even when two registers share a basename."""
+    candidates = [
+        entry
+        for directory in directories
+        for entry in _scale_candidates_in(directory, stems)
+    ]
+    candidates.sort(key=lambda p: (p.name, str(p)))
+    return candidates
+
+
+def scale_variant_file(figure: str, on_date: date) -> Path | None:
+    """One Scale badge file for `figure` ("Judas"/"Lucifer") on
+    `on_date` — DISCOVERS what actually exists on disk for the ACTIVE
+    art source at call time (`_scale_candidates` against SCALE_ART_DIR
+    AND its `glass/` register — the metal cameo and the stained-glass
+    windows are two parallel batches of the SAME two figures, tolerant
+    of the owner's naming zoo: a bare stem file, "_v", "_v1", "_v2",
+    "_v3" all count as versions), then picks by `on_date`'s proleptic
+    ordinal modulo the count — the SAME date always yields the SAME
+    file, consecutive dates advance through the set, and Lucifer/Judas
+    called with the SAME date stay IN STEP (one index driving two
+    independent counts). Deep travel: the caller passes the TRAVELED
+    date, consistent with the poles' light/dark glyph law
+    (`controller._effective_travel_date`). Zero files found -> None
+    (the caller keeps its old single-file fallback); exactly one ->
+    that one file every day (nothing to rotate)."""
+    root = paths.art_file(SCALE_ART_DIR)
+    candidates = _scale_candidates(
+        (root, root / "glass"), SCALE_ART_STEMS[figure]
+    )
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    index = (on_date.toordinal() // SCALE_ROTATION_DAYS) % len(candidates)
+    return candidates[index]
+
+
 INSTRUMENT_ART_DIR = paths.assets_dir() / "instrument"
 # The Astrology/Ascendant hover image trio (owner 2026-07-13): the
 # ACTIVE style's art large in the middle, the two remaining styles

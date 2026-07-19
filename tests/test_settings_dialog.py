@@ -947,6 +947,53 @@ def test_wider_pantheon_topics():
     dialog.deleteLater()
 
 
+def test_duality_topic_rotates_lucifer_and_judas_by_travel_date():
+    """SCALE ROTATION (owner decree 2026-07-19/20): the duality topic's
+    Lucifer/Judas entries resolve through `defaults.scale_variant_file`
+    keyed on the caller's `travel_date`, not a fixed master — the Union
+    entry stays fixed. Wired end to end: `_topics(travel_date)` and
+    `EncyclopediaDialog(travel_date=...)` both reach the SAME resolved
+    file `defaults.scale_variant_file` would pick directly."""
+    from datetime import date
+
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _topics
+    from config import defaults
+
+    QApplication.instance() or QApplication([])
+    day = date(2026, 7, 20)
+    topics = _topics(day)
+    duality = topics["duality"]["entries"]
+    lucifer_entry = next(e for e in duality if e["name"] == "Lucifer")
+    judas_entry = next(e for e in duality if e["name"] == "Judas")
+    union_entry = next(e for e in duality if e["name"] == "The Union")
+
+    expected_lucifer = (
+        defaults.scale_variant_file("Lucifer", day)
+        or defaults.SCALE_ART_DIR / "Lucifer_Triangle.png"
+    )
+    expected_judas = (
+        defaults.scale_variant_file("Judas", day)
+        or defaults.SCALE_ART_DIR / "Judas_Triangle.png"
+    )
+    assert lucifer_entry["images"] == (expected_lucifer,)
+    assert judas_entry["images"] == (expected_judas,)
+    # The Union never rotates — always the fixed hexagram badge.
+    assert union_entry["images"] == (defaults.SCALE_ART_DIR / "Union.png",)
+
+    # A different travel date is free to pick a different file (real
+    # art currently gives both poles more than one version) — but the
+    # dialog wiring must reach the exact same resolution either way.
+    dialog = EncyclopediaDialog(travel_date=day)
+    dialog_duality = dialog._topics["duality"]["entries"]
+    assert (
+        next(e for e in dialog_duality if e["name"] == "Lucifer")["images"]
+        == (expected_lucifer,)
+    )
+    dialog.deleteLater()
+
+
 def test_era_terms_topic():
     """ROADMAP 15a3 (owner 2026-07-17): the Age of Light, the Age of
     Darkness and the four Starry Seasons each get an Encyclopedia

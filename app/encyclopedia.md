@@ -10,8 +10,9 @@ screens —
 1. **Topics** — a gallery in the owner's GROUPS (`_TOPIC_GROUPS`):
    The Clock, Gods, Zodiac, Themes, Religions, Animal Societies and
    The Inner Wheel (Virtues, Sins, Moods and THE TWO TRIANGLES — the
-   Judas–Lucifer scale of self, owner 2026-07-13; its badge art is
-   wired ahead of landing) — EVERYTHING centered (owner 2026-07-13: headers
+   Judas–Lucifer scale of self, owner 2026-07-13; its Lucifer/Judas
+   badges ROTATE by date, see Scale Rotation below) — EVERYTHING
+   centered (owner 2026-07-13: headers
    and card rows alike) and the cards RESPONSIVE: `_rescale_topics`
    grows/shrinks the icons with the window between
    `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`; only below the minimum does
@@ -171,8 +172,10 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 ## Classes
 
 ### EncyclopediaDialog
-- `__init__(translations)`: builds the topic gallery and the styled
-  chrome (Home / Download / ← Previous / counter / Next →)
+- `__init__(translations, travel_date=None)`: builds the topic gallery
+  and the styled chrome (Home / Download / ← Previous / counter /
+  Next →); `travel_date` (the controller's `_effective_travel_date()`,
+  today when omitted) drives the Scale Rotation entries
 - `_show_topic(key)`: opens the topic slider at its first entry
 - `_step(delta)` / `_show_entry()`: the pager — one entry per page,
   wraps both ways, pager hidden on single-entry topics
@@ -184,6 +187,26 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 - `_pixmap(path)`: the decoded-image cache behind the lazy looks
 
 ## Design Decisions
+
+**Scale Rotation (owner decree 2026-07-19/20, CANON.md
+one-image-one-place amendment — "koje cemo koristiti na smenu"):** the
+"duality" topic's Lucifer and Judas entries no longer point at one
+fixed master. `_topics(travel_date)` calls
+`defaults.scale_variant_file("Lucifer"/"Judas", travel_date)`, which
+DISCOVERS every version actually on disk for the active art source
+(the metal-cameo `badge/<source>/scale/` root AND its `glass/`
+stained-glass register, tolerant of the owner's naming zoo — a bare
+stem file, `_v`, `_v1`, `_v2`, `_v3` all count) and picks one by
+`travel_date`'s proleptic ordinal modulo the count found, falling back
+to the original `Judas_Triangle.png`/`Lucifer_Triangle.png` path
+(`or ...`) when nothing is discovered. The Union entry stays FIXED —
+only the two poles rotate, called with the SAME date so they advance
+in step (independent counts, one shared index driver). `__init__`
+takes `travel_date` from the controller
+(`self._effective_travel_date()` — the Time Travel simulation's date
+while one runs, else today), the SAME law the poles' Quick Jump
+light/dark glyph already follows. `SCALE_ROTATION_DAYS` and
+`SCALE_ART_STEMS` live in `config/defaults.py` beside `SCALE_ART_DIR`.
 
 **The Eras of the World carries SIX calendar emblems (owner fix-round
 B, 2026-07-19, TASK 3):** the comparative essay still has no plate of

@@ -2488,6 +2488,10 @@ class AppController(QObject):
                 # WindowStaysOnTopHint to clear the dial's native
                 # HWND_TOPMOST; every other z-mode stays normal.
                 stay_on_top=self._settings.z_mode == "top",
+                # The Scale rotation (owner decree 2026-07-19/20) reads
+                # the same TRAVELED date as the poles' light/dark glyph
+                # law — a running Time Travel simulation, else today.
+                travel_date=self._effective_travel_date(),
             ).exec()
         finally:
             self._encyclopedia_open = False
