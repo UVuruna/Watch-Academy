@@ -51,6 +51,12 @@ catches DST — the star legitimately jumps 15° at transitions) and
 `TickState` (per-minute hand angles + smooth year angle + the rising
 sign). See [Clock State](clock_state.md).
 
+### `motto.py` — Outer Motto Arc Angle Math
+TASK 1 (owner "može radi" 2026-07-19): given a motto string and its
+pinned letter→ring-position constraints, solves every character's dial
+angle — pinned letters land exactly on their ring seat, unpinned
+letters between two pins are spaced EVENLY. See [Motto](motto.md).
+
 ### `ascendant.py` — Rising Sign
 The natal ascendant ("podznak", owner request 2026-07-12): Julian date
 → sidereal time → the ascendant ecliptic longitude; validated against

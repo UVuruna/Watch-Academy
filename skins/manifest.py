@@ -69,6 +69,27 @@ class RingSpec:
     # today; empty {} for DOMY/MORPH/NUMBERS and any custom ring) — see
     # data.rings.validate_preset and render.compositor's ring-band hover.
     letter_legend: dict[int, dict] = field(default_factory=dict)
+    # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
+    # 2026-07-19, CANON.md §The Banknote): built once by
+    # app.controller.build_skin from the preset's own `motto` card field
+    # (data.rings.validate_preset -> core.motto.motto_glyph_angles) —
+    # curved text just outside the ring band, its pinned letters landing
+    # on the SAME six hexagram seats the ring's own MASON-G letters
+    # occupy (MASON outside, G inside). Each entry: {"text": the motto
+    # string (spaces included, for reference), "glyphs": a tuple of
+    # (gold_asset_path, dial_angle) pairs, ONE per non-space character,
+    # ready for render.layers.RingLayer to draw — spaces are already
+    # filtered out here, so the render loop never checks for them.
+    # Empty for every preset but MASON G today; list ORDER is the radius
+    # order (see RING_MOTTO_RADIUS_FRACTION's note) — index 0 draws at
+    # the inner radius, index 1 at the outer.
+    motto: tuple[dict, ...] = ()
+    # The SINGLE finish every motto glyph wears (owner: "in the ring
+    # letter metal/color family") — the same settings.ring_finish the
+    # ring's own Trinity-triangle letters wear, resolved once in
+    # build_skin. Unlike `letter_metal` this is NOT per-hour: the motto
+    # is read as ONE continuous inscription, not a seat-by-seat split.
+    motto_metal: str = "gold"
 
 
 @dataclass(frozen=True)
@@ -302,6 +323,7 @@ def missing_assets(skin: SkinDefinition) -> list[Path]:
         skin.hands.minute.asset,
         skin.hands.second.asset if skin.hands.second else None,
         *skin.ring.letter_art.values(),
+        *(path for motto in skin.ring.motto for path, _ in motto["glyphs"]),
         *skin.weekday_set.bodies.values(),
         *skin.year_marker.variants.values(),
     ]

@@ -34,7 +34,9 @@ rotation off (upright mode — better for reading exact positions).
 ## Connections
 
 ### Uses
-- [Angles](../core/angles.md) — sun-event → arc-angle mapping
+- [Angles](../core/angles.md) — sun-event → arc-angle mapping;
+  `ring_position_angle`/`readable_rotation_deg` for the ring's own
+  letters AND the outer motto arc
 - [Clock State](../core/clock_state.md), [Sun](../core/sun.md) — regime
   branches for the background bands
 - [Assets](assets.md) — pixmap rasterization
@@ -402,6 +404,40 @@ under the "theme" plate style, the SUBDIAL plate
 DELIBERATELY narrower: it touches ONLY the ring band's own art (the
 plate + its letters) — the hands, Umbra and subdial plate are
 untouched by this slider even though they share `ring_tint`.
+
+**THE OUTER MOTTO ARC (TASK 1, owner "može radi" 2026-07-19, CANON.md
+§The Banknote):** while the active preset carries a `motto`
+(`data.rings.validate_preset`, MASON G today), `_draw_motto` draws the
+two Great Seal mottos as curved text just OUTSIDE the ring band, their
+pinned letters landing on the SAME six hexagram seats the ring's own
+MASON-G letters occupy — N on 4h, O on noon, M on 20h, A on 8h, S on
+16h ("MASON outside, G inside" — the dollar-bill mechanic on our dial).
+The per-glyph angles are pre-solved at LOAD time by
+[Motto](../core/motto.md)'s `motto_glyph_angles` (never recomputed at
+paint time); `RingLayer` only draws. The stamp itself — metal finish,
+dark halo, tangential rotation that flips 180° through the lower half
+(`core.angles.readable_rotation_deg`) — is now the SHARED
+`_draw_ring_glyph` helper (Rule #5): `_draw_letter_art` (the ring's own
+six letters) and `_draw_motto` both call it, differing only in asset,
+radius and height. The motto reuses the EXACT SAME PNG library the
+ring's own letters draw from (`constants.RING_LETTER_FILES` — zero new
+art) at a smaller size (`RING_MOTTO_SIZE`, half `RING_LETTER_ART_SCALE`)
+and wears ONE finish for the whole inscription
+(`RingSpec.motto_metal` = the active `settings.ring_finish` — read as
+continuous text, not a seat-by-seat split like `letter_metal`).
+
+TWO CONCENTRIC RADII, not one: several pinned letters land at the
+IDENTICAL angle in BOTH mottos by design (both mottos' own O at noon,
+own S at 16h — the doubled MASON reading), so ANNUIT COEPTIS (the
+shorter, 120° arc) draws at `RING_MOTTO_RADIUS_FRACTION` and NOVUS
+ORDO SECLORUM (the 240° arc, the long way through 8h/12h/16h) at
+`+ RING_MOTTO_RADIUS_STEP` — two glyphs sharing an angle can only
+coexist at two different radii. `defaults.dial_window_margin_fraction`
+grows to cover the motto's own outer reach whenever `skin.ring.motto`
+is non-empty (a no-op term in its `max()` for every other preset —
+DOMY/MORPH/NUMBERS and every custom ring keep their old margin
+exactly). See [Ring Presets](../data/rings.md) for the exact pin table
+and [The DOMY Canon](../CANON.md)'s §The Banknote for the doctrine.
 
 ### WeekdayLayer (DAILY, hover-variable — painted LIVE)
 `hover_variable = True` (owner 2026-07-17, ROADMAP 15f): the bodies

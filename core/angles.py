@@ -37,6 +37,31 @@ def moon_cycle_angle(fraction: float) -> float:
     return (fraction * 360.0) % 360.0
 
 
+def ring_position_angle(position: int) -> float:
+    """Dial angle of a FIXED ring position/hour (0 top, clockwise) — the
+    six hexagram seats (12/16/20/24/4/8) and every other ring hour share
+    this one mapping. Equivalent to, and replacing, the two inline copies
+    this used to be (`RingLayer._draw_letter_art`'s
+    `(hour*15+DIAL_OFFSET_DEG)%360` and the compositor's per-letter
+    legend hover's `((hour-12)*15)%360` — both the SAME formula written
+    two ways; Rule #5, one shared function now). Used by the ring's own
+    letters, the per-letter hover legend and the outer Great Seal motto
+    arc (`core.motto`) alike, so a pinned letter and its ring seat always
+    agree by construction."""
+    return (position * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
+
+
+def readable_rotation_deg(theta: float) -> float:
+    """The glyph rotation that keeps ring-band letters upright as they
+    travel around the circle (owner spec): tangential, but the LOWER
+    half (90-270 deg) flips 180 deg so text never reads upside down —
+    Omega stands upright at the bottom. Shared by the ring's own letters
+    and the outer motto arc (`render.layers.RingLayer`, Rule #5)."""
+    if 90.0 < theta < 270.0:
+        return theta - 180.0
+    return theta if theta <= 90.0 else theta - 360.0
+
+
 def star_rotation_deg(solar_noon: datetime) -> float:
     """Rotation of the star (and solar-noon arrow) from the dial top.
 

@@ -1185,6 +1185,7 @@ class RingLayer(Layer):
                 tint=ctx.skin.ring_tint, saturation=ctx.skin.ring_saturation,
             )
             self._draw_letter_art(painter, ctx)
+            self._draw_motto(painter, ctx)
             return
         outer, inner = ctx.radius, ctx.radius * (1.0 - spec.width_fraction)
 
@@ -1245,62 +1246,105 @@ class RingLayer(Layer):
             rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
 
-    def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
-        """The owner's letter art at the preset's hour positions —
-        gold masters and PRE-RENDERED silver files (the accent letter
-        wears the opposite metal, owner spec). Each letter ROTATES with
-        its place on the circle (tangentially; the lower half flips 180°
-        to stay readable — Ω stands upright at the bottom), rides a
+    def _draw_ring_glyph(
+        self, painter: QPainter, ctx: RenderContext, gold_asset: Path,
+        metal: str, theta: float, radius_fraction: float, height: float,
+    ) -> None:
+        """One letter-art glyph stamped on the ring circle — the shared
+        stamp (Rule #5) behind BOTH the ring's own six MASON-G letters
+        (`_draw_letter_art`) and the outer motto arc (`_draw_motto`,
+        TASK 1, owner "može radi" 2026-07-19): the metal finish (derived
+        from the gold master, `render.assets.letter_metal_file`), a
         tight dark halo (owner spec: a gradient border, lit from above)
-        and is UNTINTED by the ring hue — but the RING SATURATION slider
-        (owner 2026-07-18, Session 21-D: "the ring plate + its letters"
-        is one target) still grays it, since the letters are part of
-        the ring band's own art, not the tint recolor. The shadow copy
-        skips it — a pure black silhouette has no saturation to scale."""
+        and a tangential ROTATION that flips 180° through the lower half
+        so text never reads upside down (Ω stands upright at the
+        bottom — `core.angles.readable_rotation_deg`). UNTINTED by the
+        ring hue either way, but the RING SATURATION slider still grays
+        it (owner 2026-07-18, Session 21-D: "the ring plate + its
+        letters" is one target); the shadow copy skips it — a pure
+        black silhouette has no saturation to scale."""
+        shadow_radius = height * defaults.RING_LETTER_SHADOW_RADIUS
+        samples = defaults.RING_LETTER_SHADOW_SAMPLES
+        # Silver/bronze are derived from the gold master AT LOAD (owner
+        # 2026-07-19), disk-cached like every other derived asset — the
+        # shadow silhouette is metal-invariant (same alpha mask on every
+        # finish), so it always reads the gold file directly.
+        asset = letter_metal_file(gold_asset, metal)
+        pixmap = ctx.cache.pixmap_by_height(
+            asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation
+        )
+        shadow = ctx.cache.pixmap_by_height(
+            gold_asset, height, ctx.dpr, tint="#000000"
+        )
+        logical_w = pixmap.width() / ctx.dpr
+        pos = dial_point(theta, ctx.radius * radius_fraction)
+        rotation = angles.readable_rotation_deg(theta)
+        painter.save()
+        painter.translate(pos)
+        painter.rotate(rotation)
+        painter.setOpacity(defaults.RING_LETTER_SHADOW_ALPHA)
+        for k in range(samples):
+            angle = 2.0 * math.pi * k / samples
+            painter.drawPixmap(
+                QPointF(
+                    -logical_w / 2 + shadow_radius * math.cos(angle),
+                    -height / 2 + shadow_radius * math.sin(angle),
+                ),
+                shadow,
+            )
+        painter.setOpacity(1.0)
+        painter.drawPixmap(QPointF(-logical_w / 2, -height / 2), pixmap)
+        painter.restore()
+
+    def _draw_letter_art(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The owner's letter art at the preset's hour positions — gold
+        masters, silver/bronze derived at load (the accent letter wears
+        the opposite metal, owner spec). Stamped by `_draw_ring_glyph`
+        (Rule #5, shared with the outer motto arc)."""
         height = (
             2 * ctx.radius * defaults.RING_LETTER_ART_SCALE
             * ctx.skin.ring_letter_scale
         )
-        shadow_radius = height * defaults.RING_LETTER_SHADOW_RADIUS
-        samples = defaults.RING_LETTER_SHADOW_SAMPLES
         for hour, gold_asset in self._skin.ring.letter_art.items():
-            theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
-            rotation = theta - 180.0 if 90.0 < theta < 270.0 else (
-                theta if theta <= 90.0 else theta - 360.0
-            )
-            # Silver/bronze are derived from the gold master AT LOAD
-            # (owner 2026-07-19), disk-cached like every other derived
-            # asset — the shadow silhouette is metal-invariant (same
-            # alpha mask on every finish), so it always reads the gold
-            # file directly.
+            theta = angles.ring_position_angle(hour)
             metal = self._skin.ring.letter_metal.get(hour, "gold")
-            asset = letter_metal_file(gold_asset, metal)
-            pixmap = ctx.cache.pixmap_by_height(
-                asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation
+            self._draw_ring_glyph(
+                painter, ctx, gold_asset, metal, theta,
+                defaults.RING_LETTER_RADIUS_FRACTION, height,
             )
-            shadow = ctx.cache.pixmap_by_height(
-                gold_asset, height, ctx.dpr, tint="#000000"
-            )
-            logical_w = pixmap.width() / ctx.dpr
-            pos = dial_point(
-                theta, ctx.radius * defaults.RING_LETTER_RADIUS_FRACTION
-            )
-            painter.save()
-            painter.translate(pos)
-            painter.rotate(rotation)
-            painter.setOpacity(defaults.RING_LETTER_SHADOW_ALPHA)
-            for k in range(samples):
-                angle = 2.0 * math.pi * k / samples
-                painter.drawPixmap(
-                    QPointF(
-                        -logical_w / 2 + shadow_radius * math.cos(angle),
-                        -height / 2 + shadow_radius * math.sin(angle),
-                    ),
-                    shadow,
+
+    def _draw_motto(self, painter: QPainter, ctx: RenderContext) -> None:
+        """The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
+        2026-07-19, CANON.md §The Banknote): each character of the
+        preset's `motto` texts — pre-solved to its own dial angle by
+        `data.rings`/`core.motto` (pinned letters land exactly on their
+        hexagram seat: N on 4h, O on noon, M on 20h, A on 8h, S on
+        16h — MASON outside, G inside) — drawn via the SAME stamp the
+        ring's own six letters use (`_draw_ring_glyph`, Rule #5), just
+        smaller (`RING_MOTTO_SIZE`) and further out. Two concentric
+        arcs by list order (`RING_MOTTO_RADIUS_FRACTION` for the first
+        entry, +`RING_MOTTO_RADIUS_STEP` for the second) — several
+        pinned letters land at the IDENTICAL angle in both mottos on
+        purpose (both mottos' own O at noon, own S at 16h), so they can
+        only coexist at two different radii. Empty (no-op) for every
+        preset without a motto."""
+        mottos = self._skin.ring.motto
+        if not mottos:
+            return
+        height = (
+            2 * ctx.radius * defaults.RING_MOTTO_SIZE * ctx.skin.ring_letter_scale
+        )
+        metal = self._skin.ring.motto_metal
+        radii = (
+            defaults.RING_MOTTO_RADIUS_FRACTION,
+            defaults.RING_MOTTO_RADIUS_FRACTION + defaults.RING_MOTTO_RADIUS_STEP,
+        )
+        for motto, radius_fraction in zip(mottos, radii):
+            for gold_asset, theta in motto["glyphs"]:
+                self._draw_ring_glyph(
+                    painter, ctx, gold_asset, metal, theta % 360.0,
+                    radius_fraction, height,
                 )
-            painter.setOpacity(1.0)
-            painter.drawPixmap(QPointF(-logical_w / 2, -height / 2), pixmap)
-            painter.restore()
 
 
 def weekday_label_text(ctx: RenderContext, body: str) -> str:

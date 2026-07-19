@@ -1096,7 +1096,9 @@ def test_mason_g_ring_letters_answer_their_own_hover_legend(july_wednesday):
     for, quoted from CANON.md's Banknote table — independent of the
     hidden-mode unlock (unlike the Four Greetings), and a preset without
     a legend (the DEFAULT_SKIN's DOMY ring) stays silent in the same
-    spot."""
+    spot. TASK 2 (owner "može" 2026-07-19): each letter's legend also
+    carries the AXIS-OPPOSITION line — the three diameters across the
+    center (N↔S, A↔M, G↔Ω) — as a second paragraph."""
     from app.controller import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
@@ -1117,22 +1119,79 @@ def test_mason_g_ring_letters_answer_their_own_hover_legend(july_wednesday):
     g_hover = compositor._tick_tooltip(point_at(12), radius)
     assert "God" in g_hover
     assert "GEOMETRY" in g_hover
+    assert "Across the wheel" in g_hover and "End" in g_hover
     s_hover = compositor._tick_tooltip(point_at(16), radius)
     assert "Sigma" in s_hover and "Courage" in s_hover
+    assert "Satan" in s_hover and "Nazarene" in s_hover
     m_hover = compositor._tick_tooltip(point_at(20), radius)
     assert "Master" in m_hover and "Pride" in m_hover
+    assert "Angel" in m_hover
     omega_hover = compositor._tick_tooltip(point_at(24), radius)
     assert "Omega" in omega_hover
+    assert "Across the wheel" in omega_hover and "God" in omega_hover
     n_hover = compositor._tick_tooltip(point_at(4), radius)
     assert "Nazarene" in n_hover and "Hope" in n_hover
+    assert "Satan" in n_hover
     a_hover = compositor._tick_tooltip(point_at(8), radius)
     assert "Alpha" in a_hover and "Renewal" in a_hover
+    assert "Angel" in a_hover and "Master" in a_hover
+
+    # Each axis reads the SAME opposition from both its own seats —
+    # N's "Nazarene against Satan" and S's own line quote the identical
+    # pairing, just naming the OTHER letter as the pointer.
+    assert "Nazarene against Satan" in n_hover
+    assert "Satan against the Nazarene" in s_hover
+    assert "Angel against the Master" in a_hover
+    assert "Master against the Angel" in m_hover
+    assert "God against the End" in g_hover
+    assert "End against God" in omega_hover
 
     # A preset with no legend (the default DOMY ring) stays silent at
     # the same radius/angle — the mechanism never invents an answer.
     domy = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     domy.render_offscreen(360.0, 1.0, day, tick)
     assert domy._tick_tooltip(point_at(16), radius) is None
+
+
+def _max_alpha_in_box(image, cx, cy, half):
+    """The largest alpha over a small (2*half+1) square centered at
+    (cx, cy) — robust to sampling the hollow middle of a ring-shaped
+    glyph like "O" (a single exact-center pixel can land in its hole)."""
+    best = 0
+    for dx in range(-half, half + 1):
+        for dy in range(-half, half + 1):
+            best = max(best, image.pixelColor(cx + dx, cy + dy).alpha())
+    return best
+
+
+def test_mason_g_motto_arc_paints_outside_the_ring(july_wednesday):
+    """TASK 1 (owner "može radi" 2026-07-19): the outer motto arc
+    actually reaches OUTSIDE the ring plate, and only where a pin
+    exists. Straight up from the center (noon) at the motto's own
+    inner radius is exactly where ANNUIT COEPTIS's own "O" is pinned —
+    opaque nearby; the SAME radius straight down (24h/Ω) is a point
+    NEITHER motto's angular sweep ever reaches (core/motto.md's Design
+    Decisions: Novus spans 4h..20h the long way through 8/12/16, Annuit
+    spans 8h..16h — both skip 24h) — transparent, confirming the arc
+    does not blanket the whole circle."""
+    from app.controller import build_skin
+    from app.settings_store import Settings, replace as settings_replace
+
+    day, tick = july_wednesday
+    dial_diameter = 720
+    dial_radius_px = dial_diameter / 2.0
+    motto_y_offset = dial_radius_px * defaults.RING_MOTTO_RADIUS_FRACTION
+
+    mason_skin = build_skin(settings_replace(Settings(), ring="MASON G"))
+    mason_image, _, mason_margin = _render_window_frame(
+        Compositor(mason_skin, AssetCache()), day, tick, dial_diameter
+    )
+    cx = round(mason_margin + dial_radius_px)
+    top_y = round(mason_margin + dial_radius_px - motto_y_offset)
+    assert _max_alpha_in_box(mason_image, cx, top_y, 10) > 0
+
+    bottom_y = round(mason_margin + dial_radius_px + motto_y_offset)
+    assert _max_alpha_in_box(mason_image, cx, bottom_y, 10) == 0
 
 
 def test_omega_double_click_reveals_the_week(july_wednesday):

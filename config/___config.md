@@ -52,11 +52,15 @@ the astronomical axis, the AH label, the epoch tooltip notes) and the
 ### `defaults.py` — Developer Tunables
 Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
 owner slike 1–3, 2026-07-17 — as the larger of the ring-letter overhang
-(at the letter-scale slider) and the event-glow extent (the larger of the
+(at the letter-scale slider), the event-glow extent (the larger of the
 Earth/Moon markers at their user scale, relocated to the ring band,
-hover-enlarged), so neither the letters nor a bottom-of-ring halo can be
-square-cut and any size/hover/letter slider re-sizes the window to fit
-exactly), the Time Travel coverage-warning color and the
+hover-enlarged) and, when the active preset carries one (TASK 1, owner
+"može radi" 2026-07-19), the outer MOTTO ARC's own outer reach
+(`RING_MOTTO_RADIUS_FRACTION`/`_STEP`/`_SIZE` — a no-op term for every
+preset without a `motto`), so neither the letters nor a bottom-of-ring
+halo nor the motto text can be square-cut and any size/hover/letter
+slider re-sizes the window to fit exactly), the Time Travel
+coverage-warning color and the
 Deep Time advertised span (`DEEP_TIME_YEAR_RANGE`), the spontaneous-hide
 watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the

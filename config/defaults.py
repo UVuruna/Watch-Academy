@@ -248,6 +248,32 @@ RING_LETTER_SHADOW_RADIUS = 0.05     # of the letter height
 RING_LETTER_SHADOW_ALPHA = 0.55      # per stamp (stamps overlap -> intense)
 RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
 
+# The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi" 2026-07-19,
+# CANON.md §The Banknote): curved text OUTSIDE the ring band, reusing
+# the SAME letter-art library/finish/shadow stamp as the ring's own six
+# letters (`render.layers.RingLayer._draw_ring_glyph`), just smaller and
+# further out — decorative inscription, not the primary MASON G seats.
+# Two concentric radii (owner design, `core.motto.md`'s Design
+# Decisions): several pinned letters (O at noon, S at 16h) land at the
+# SAME angle in BOTH mottos on purpose (MASON reads twice, once per
+# motto) — two glyphs at one angle can only coexist at two radii, so
+# ANNUIT COEPTIS (the shorter arc) draws at the INNER radius and NOVUS
+# ORDO SECLORUM at the OUTER one (`RingSpec.motto`'s own list order).
+RING_MOTTO_SIZE = 0.0375             # motto letter height, of the dial
+                                     # diameter — half RING_LETTER_ART_SCALE
+                                     # (decorative, smaller than the six
+                                     # primary MASON-G letters)
+RING_MOTTO_RADIUS_FRACTION = 1.13    # inner arc (ANNUIT COEPTIS) — clears
+                                     # the primary letters' own max reach
+                                     # (~1.0255 with shadow at scale 1.0)
+                                     # AND the ring-letter hover ceiling
+                                     # (GREETINGS_LETTER_OUTER_FRACTION,
+                                     # 1.08) with margin
+RING_MOTTO_RADIUS_STEP = 0.10        # inner -> outer arc gap (NOVUS ORDO
+                                     # SECLORUM sits at RING_MOTTO_RADIUS_
+                                     # FRACTION + this) — clears the inner
+                                     # arc's own half-height + shadow
+
 # --- Hand sizing (owner spec 2026-07-12) -------------------------------------------
 # Sizing uses TIP-TO-PIVOT lengths only: the seconds tip reaches the
 # ring (the end of the 360-dot scale), the minutes tip the minute
@@ -1107,7 +1133,14 @@ def dial_window_margin_fraction(skin) -> float:
     DIAMETER) for the CURRENT skin (owner 2026-07-17). Recomputed on
     every skin install so moving a size/hover/letter slider re-sizes the
     window to fit exactly. `skin.year_marker.scale`/`.moon_scale` already
-    carry the user's earth/moon multiplier (apply_display_settings)."""
+    carry the user's earth/moon multiplier (apply_display_settings).
+
+    TASK 1 (owner "može radi" 2026-07-19): a preset with a `motto` arc
+    (MASON G today) reaches further out than the plain ring letters —
+    `motto_extent` is 0.0 (a no-op term in the max()) for every OTHER
+    preset, exactly the graceful-absence pattern `triangle`/`legend`
+    already use, so this never grows the margin for DOMY/MORPH/NUMBERS
+    or a custom ring."""
     marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
     glow_extent = (
         GLOW_RING_RADIUS_FRACTION
@@ -1118,7 +1151,16 @@ def dial_window_margin_fraction(skin) -> float:
         + RING_LETTER_ART_SCALE * skin.ring_letter_scale
         * (1.0 + 2.0 * RING_LETTER_SHADOW_RADIUS)
     )
-    return (max(glow_extent, letter_extent) - 1.0) / 2.0 + DIAL_WINDOW_MARGIN_EPSILON
+    motto_extent = 0.0
+    if skin.ring.motto:
+        motto_extent = (
+            RING_MOTTO_RADIUS_FRACTION + RING_MOTTO_RADIUS_STEP
+            + RING_MOTTO_SIZE * skin.ring_letter_scale
+            * (1.0 + 2.0 * RING_LETTER_SHADOW_RADIUS)
+        )
+    return (
+        max(glow_extent, letter_extent, motto_extent) - 1.0
+    ) / 2.0 + DIAL_WINDOW_MARGIN_EPSILON
 
 # --- Shared app content (NOT skin-specific — a skin is a dial design) -----------
 # Skeleton folders with 1x1 placeholders ship in the repo; the owner

@@ -399,4 +399,9 @@ check) right before the plain tick-band day/year/moon reading takes
 over — a preset without a `legend` (DOMY, MORPH, NUMBERS, any custom
 ring) returns `None` and the tick band answers as before. MASON G
 (ROADMAP 15b) is the first and, today, only preset that carries one:
-its six letters answer G/S/M/Ω/N/A per CANON.md §The Banknote.
+its six letters answer G/S/M/Ω/N/A per CANON.md §The Banknote. **TASK 2
+(owner "može" 2026-07-19):** each `reading` is now TWO `_article_body_
+html` paragraphs (the existing `\n\n` split already handled this — no
+code change here) — the letter's own identity, then a second
+"Across the wheel: …" paragraph naming its AXIS OPPOSITION across the
+center (N↔S, A↔M, G↔Ω — CANON.md §The Banknote's own dated addendum).

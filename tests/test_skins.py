@@ -1,6 +1,8 @@
 """Ring presets and the built render config (the skin-pack system is
 gone — DOMY and MORPH are ring preset names, nothing more)."""
 
+import pytest
+
 from app.controller import build_skin
 from app.settings_store import Settings, replace
 from config import defaults
@@ -123,6 +125,106 @@ def test_ring_preset_triangle_override_validation():
             "letters": ["G", "S", "M", "Ω", "N", "A"],
             "triangle": [12, 20, 99],  # 99 is not one of its positions
         })
+
+
+def test_mason_g_motto_arc_loads_and_pins_its_key_letters():
+    """TASK 1 (owner "može radi" 2026-07-19, CANON.md §The Banknote):
+    the two Great Seal mottos, their pinned letters landing on the SAME
+    six hexagram seats the ring's own MASON-G letters occupy — N on 4h,
+    O on noon, M on 20h, A on 8h, S on 16h."""
+    from config import constants
+    from data.rings import ring_presets
+
+    presets = ring_presets()
+    mason = presets["MASON G"]
+    assert [entry["text"] for entry in mason["motto"]] == [
+        "ANNUIT COEPTIS", "NOVUS ORDO SECLORUM",
+    ]
+    annuit, novus = mason["motto"]
+    assert annuit["angles"][0] % 360.0 == pytest.approx(300.0)    # A -> 8h
+    assert annuit["angles"][8] % 360.0 == pytest.approx(0.0)      # O -> noon
+    assert annuit["angles"][13] % 360.0 == pytest.approx(60.0)    # S -> 16h
+    assert novus["angles"][0] % 360.0 == pytest.approx(240.0)     # N -> 4h
+    assert novus["angles"][9] % 360.0 == pytest.approx(0.0)       # O -> noon
+    assert novus["angles"][11] % 360.0 == pytest.approx(60.0)     # S -> 16h
+    assert novus["angles"][18] % 360.0 == pytest.approx(120.0)    # M -> 20h
+
+    # Every OTHER bundled preset stays motto-free (graceful absence).
+    assert presets["DOMY"]["motto"] == ()
+    assert presets["MORPH"]["motto"] == ()
+    assert presets["NUMBERS"]["motto"] == ()
+
+    # build_skin resolves the motto onto real assets, one glyph per
+    # NON-SPACE character (spaces are dropped — RingLayer's draw loop
+    # never has to check for them), wearing the active ring_finish.
+    art_dir = defaults.RING_LETTER_ART_DIR
+    gold_skin = build_skin(replace(Settings(), ring="MASON G")).ring
+    assert gold_skin.motto_metal == "gold"
+    assert len(gold_skin.motto) == 2
+    annuit_glyphs, novus_glyphs = gold_skin.motto
+    assert len(annuit_glyphs["glyphs"]) == 13    # "ANNUIT COEPTIS" minus 1 space
+    assert len(novus_glyphs["glyphs"]) == 17     # "NOVUS ORDO SECLORUM" minus 2 spaces
+    first_asset, first_angle = annuit_glyphs["glyphs"][0]
+    assert first_asset == art_dir / "A.png"
+    assert first_angle % 360.0 == pytest.approx(300.0)
+
+    silver_skin = build_skin(
+        replace(Settings(), ring="MASON G", ring_finish="silver")
+    ).ring
+    assert silver_skin.motto_metal == "silver"
+
+    assert missing_assets(build_skin(replace(Settings(), ring="MASON G"))) == []
+
+
+def test_motto_validation_rejects_bad_cards():
+    """Unknown letters, pin positions outside the preset's own six, and
+    a broken angle solve (data.rings delegates to core.motto) all fail
+    loudly at load time (Rule #1) — never a silent blank arc."""
+    from data.rings import validate_preset
+
+    base = {
+        "name": "BAD", "positions": [12, 16, 20, 24, 4, 8],
+        "letters": ["G", "S", "M", "Ω", "N", "A"],
+    }
+    with pytest.raises(ValueError):
+        # "Ž" is not in RING_LETTER_FILES.
+        validate_preset({
+            **base, "motto": [{"text": "ŽANNUIT", "pins": [["Ž", 1, 8]]}],
+        })
+    with pytest.raises(ValueError):
+        # 10 is not one of this preset's own positions.
+        validate_preset({
+            **base,
+            "motto": [{"text": "AB", "pins": [["A", 1, 10], ["B", 1, 12]]}],
+        })
+    with pytest.raises(ValueError):
+        # Only 1 pin — core.motto needs at least 2 to interpolate.
+        validate_preset({
+            **base, "motto": [{"text": "AB", "pins": [["A", 1, 8]]}],
+        })
+
+
+def test_dial_window_margin_grows_only_for_a_motto_preset():
+    """TASK 1's margin interaction: `dial_window_margin_fraction` must
+    reserve enough for the outer motto arc's own reach when the active
+    preset carries one (MASON G), and stay UNCHANGED for every preset
+    that does not (DOMY) — the graceful-absence pattern `triangle`/
+    `legend` already use."""
+    domy = build_skin(Settings())
+    mason = build_skin(replace(Settings(), ring="MASON G"))
+    domy_margin = defaults.dial_window_margin_fraction(domy)
+    mason_margin = defaults.dial_window_margin_fraction(mason)
+    assert mason_margin > domy_margin
+    # The motto arc's own outer reach is the binding term for MASON G.
+    expected_motto_extent = (
+        defaults.RING_MOTTO_RADIUS_FRACTION + defaults.RING_MOTTO_RADIUS_STEP
+        + defaults.RING_MOTTO_SIZE * mason.ring_letter_scale
+        * (1.0 + 2.0 * defaults.RING_LETTER_SHADOW_RADIUS)
+    )
+    expected_margin = (
+        expected_motto_extent - 1.0
+    ) / 2.0 + defaults.DIAL_WINDOW_MARGIN_EPSILON
+    assert mason_margin == pytest.approx(expected_margin)
 
 
 def test_build_skin_swaps_only_the_ring():

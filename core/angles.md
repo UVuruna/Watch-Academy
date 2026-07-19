@@ -21,3 +21,12 @@ the dial top — ready for `QPainter.rotate()`.
 - `minute_hand_angle(t)`: one revolution per hour
 - `star_rotation_deg(solar_noon)`: +15°/hour of solar-noon lateness
   (positive = clockwise = west-in-zone or DST; negative = east-in-zone)
+- `ring_position_angle(position)`: dial angle of a FIXED ring
+  position/hour (the six hexagram seats and every other ring hour) —
+  replaces the two inline copies of this formula `RingLayer` and the
+  compositor's per-letter legend hover used to carry (Rule #5); also
+  the base every [Motto](motto.md) glyph angle is built from.
+- `readable_rotation_deg(theta)`: the glyph rotation that keeps
+  ring-band letters upright all the way around the circle (the lower
+  half flips 180°) — shared by the ring's own letters and the outer
+  motto arc.

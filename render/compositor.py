@@ -2223,7 +2223,7 @@ class Compositor:
         if not legend:
             return None
         for hour, entry in legend.items():
-            letter_theta = ((hour - 12) * 15.0) % 360.0
+            letter_theta = angles.ring_position_angle(hour)
             delta = min(
                 (theta - letter_theta) % 360.0,
                 (letter_theta - theta) % 360.0,

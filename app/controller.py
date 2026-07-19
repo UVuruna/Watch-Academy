@@ -257,6 +257,26 @@ def build_skin(settings: Settings):
         letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
             letter_legend[hour] = card["legend"][position]
+    # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
+    # 2026-07-19): the preset's own `motto` card already carries the
+    # resolved per-glyph angles (data.rings.validate_preset ->
+    # core.motto.motto_glyph_angles) — here we only pair each non-space
+    # character with its gold-master asset path (spaces are dropped, so
+    # RingLayer's draw loop never has to check for them) and pick the
+    # ONE finish the whole inscription wears (the same settings.
+    # ring_finish the Trinity-triangle letters use — the motto is read
+    # as one continuous inscription, not a seat-by-seat split).
+    motto = tuple(
+        {
+            "text": entry["text"],
+            "glyphs": tuple(
+                (defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[char], angle)
+                for char, angle in zip(entry["text"], entry["angles"])
+                if char != " "
+            ),
+        }
+        for entry in card["motto"]
+    )
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         ring=dataclasses.replace(
@@ -266,6 +286,8 @@ def build_skin(settings: Settings):
             letter_art=letter_art,
             letter_metal=letter_metal,
             letter_legend=letter_legend,
+            motto=motto,
+            motto_metal=settings.ring_finish,
         ),
         hands=_resolve_hands(settings),
     )

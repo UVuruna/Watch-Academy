@@ -22,9 +22,11 @@ lives in [The DOMY Canon](CANON.md).
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/
   metal/roster skin system, Settings with the city picker,
   Encyclopedia, Guide, Time Travel, translations (SR bundle synced).
-- **Suite:** 500 green tests (`python -m pytest tests`; Session 16
+- **Suite:** 513 green tests (`python -m pytest tests`; Session 16
   added the Deep Time and analytic-illumination goldens; Fix round G
-  added 12 more for the Observatory's adaptive ticks/splitter/enlarge).
+  added 12 more for the Observatory's adaptive ticks/splitter/enlarge;
+  the MOTO round added 13 more for the outer motto arc's angle math and
+  the axis-opposition legend lines).
 - **Autostart today runs SOURCE** — the HKCU Run entry launches
   `pythonw.exe main.py`; the M7 installer will point it at the EXE.
 - **`dist/DOMYWatch/DOMYWatch.exe` is an ad-hoc PyInstaller test
@@ -102,6 +104,25 @@ lives in [The DOMY Canon](CANON.md).
   sets; rotation cadence/design to be specced. `assets/EXTRA/` is
   GONE (owner cleaned it 2026-07-19 — the audit's orphan row is
   resolved).
+- **THE MOTO ROUND (owner "može radi" 2026-07-19) — DONE:** two
+  features on the MASON G ring. (1) THE OUTER MOTTO ARC — ANNUIT
+  COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside
+  the ring band, their key letters pinned exactly onto the ring's own
+  six seats (N/4h, O/noon, M/20h, A/8h, S/16h — "MASON outside, G
+  inside"); the per-glyph angle math is pure (`core.motto.
+  motto_glyph_angles`, even spacing between pins, solved once at load
+  by `data.rings.validate_preset`), the draw reuses the ring's own
+  letter-art stamp (`render.layers.RingLayer._draw_ring_glyph`, shared
+  with `_draw_letter_art`, Rule #5) at two concentric radii (the two
+  mottos' own O/S pins share an angle by design), and
+  `defaults.dial_window_margin_fraction` grows to fit whenever a preset
+  carries a `motto` (no-op for every other preset). (2) THE OPPOSITION
+  READINGS — the per-letter hover legend gains a second paragraph, the
+  THREE AXES across the center (N↔S the Nazarene against Satan, A↔M
+  the Angel against the Master, G↔Ω God against the End) — sealed into
+  CANON.md §The Banknote verbatim. See [The DOMY Canon](CANON.md),
+  [Ring Presets](data/rings.md), [Layers](render/layers.md) and
+  [Motto](core/motto.md). 13 new tests, 513 green.
 
 <a id="owner-queue"></a>
 

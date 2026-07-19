@@ -839,6 +839,51 @@ seats):
   (E Pluribus Unum → The One, Annuit Coeptis → the Eye, Novus Ordo
   Seclorum → the prophecy of the returning One).
 
+**THE OUTER MOTTO ARC (MOTO round, owner "može radi" 2026-07-19):**
+while the MASON G ring preset is active, ANNUIT COEPTIS and NOVUS ORDO
+SECLORUM themselves now ring the dial as curved text OUTSIDE the ring
+band — the same two Great Seal mottos the hexagram's own G/S/M/Ω/N/A
+were picked FROM, drawn back onto the wheel whole. Their key letters
+land exactly on the ring's own six seats: **N on 4h, O on noon, M on
+20h, A on 8h, S on 16h** — completing the reading this section already
+named: **MASON outside, G inside**. NOVUS ORDO SECLORUM (its own N, O,
+S and M) rides the long 240° sweep from 4h up through 8h/noon/16h to
+20h; ANNUIT COEPTIS (its own A, O and S) rides the short 120° arc from
+8h to 16h through noon — both mottos' own O and own S therefore land on
+the IDENTICAL seat (noon and 16h respectively), the doubled MASON
+reading the owner asked for, drawn as two concentric rings of text so
+neither collides with the other. Implementation and the full per-letter
+angle table: [Ring Presets](data/rings.md), [Layers](render/layers.md),
+[Motto](core/motto.md).
+
+**THE THREE OPPOSITIONS (MOTO round, owner "može" 2026-07-19, sealed
+verbatim):** the six letters also read as THREE AXES across the
+center — the hexagram's own geometry gives this for free, since every
+seat's true opposite sits exactly 12h/180° away:
+
+- **N(4h) ↔ S(16h)** — the Nazarene against Satan: the Advocate
+  against the Accuser (1 John 2:1; Revelation 12:10) — the SAME pairing
+  the Trinity archetype already argues from, now read across this
+  ring's own diameter.
+- **A(8h) ↔ M(20h)** — the Angel against the Master: Alpha's own
+  reading gains the owner's second face here — the ministering spirit
+  "sent forth to minister" (Hebrews 1:14) against Pride's boss-syndrome
+  mastery (already this ring's own reading for M). The SAME 08h/20h
+  diameter the Trinity light Persons wheel already reads as
+  Humility against Pride (this section, above) — a second wheel
+  landing on the identical axis, unprompted.
+- **G(12h) ↔ Ω(24h)** — God against the End, or the Sum: the Alpha who
+  begins facing the Omega who completes and sums the whole
+  (Revelation 1:8) — the SAME vertical axis this section already
+  singled out ("G opposite O... Revelation 1:8 drawn as geometry"), now
+  given its own line.
+
+These three lines are the ring's per-letter HOVER LEGEND's own second
+paragraph (`render.compositor._ring_letter_legend_tooltip`,
+`Database/ring_presets.json`'s `legend` field) — quoted verbatim from
+this entry; each letter's own line names the OTHER letter of its axis
+as the pointer, so both seats of a pair read the identical clause.
+
 <a id="working-rules"></a>
 
 ## Working Rules for Agents
