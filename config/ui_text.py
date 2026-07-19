@@ -33,7 +33,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Paint palette", "Light palette",
     # Wheel-pair naming refinements (owner 2026-07-17, ROADMAP 15e): the
     # Seasons pair is Temperaments/Elements, Aurora's own pair is Warm/Cool.
+    # The full pair set joined the corpus 2026-07-19 (a pre-existing gap)
+    # with the owner's "Walks of Life" pick (the full idiom, never caste).
     "Temperaments", "Warm", "Cool",
+    "Court", "Family", "Walks of Life", "Ages",
     # The Calendar pointer (owner 2026-07-16): the wheel pair riding
     # the Paint/Light slot, and its two lighting modes.
     "Calendar", "Almanac",

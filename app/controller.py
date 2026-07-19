@@ -1519,7 +1519,10 @@ class AppController(QObject):
         self._palette_style_labels = {
             "trio": (tr("Court"), tr("Family")),
             "cross": (tr("Temperaments"), tr("Elements")),
-            "octa": (tr("Walks"), tr("Ages")),
+            # The FULL idiom (owner pick 2026-07-19: "Walks of Life", ne
+            # kasta — the paths one walks, open to all, against the
+            # closed hereditary caste reading).
+            "octa": (tr("Walks of Life"), tr("Ages")),
             "aurora": (tr("Warm"), tr("Cool")),
             "calendar": (tr("Zodiac"), tr("Almanac")),
             "default": (tr("Paint palette"), tr("Light palette")),

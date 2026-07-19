@@ -1475,7 +1475,7 @@ def test_per_pointer_palette_labels_and_calendar_visibility(app, tmp_path, monke
         controller._set_display_choice("pointer", "cross")
         assert labels() == ["Temperaments", "Elements"] and all_live()
         controller._set_display_choice("pointer", "octa")
-        assert labels() == ["Walks", "Ages"] and all_live()
+        assert labels() == ["Walks of Life", "Ages"] and all_live()
         controller._set_display_choice("pointer", "aurora")
         assert labels() == ["Warm", "Cool"] and all_live()
         controller._set_display_choice("pointer", "hexa")
