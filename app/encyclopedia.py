@@ -47,7 +47,7 @@ from config import constants, defaults, paths
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
-from render.assets import metal_variant_file
+from render.assets import metal_variant_file, moon_phase_file
 from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
 
 
@@ -672,9 +672,10 @@ def _topics() -> dict:
     # its myth and the tides (spring at new/full, neap at the quarters).
     # The order is constants.MOON_PHASE_NAMES, so the Spacebar jump
     # (compositor._element_encyclopedia_target) indexes a hovered phase
-    # straight into this list. Every page wears ITS OWN phase plate
-    # (owner 2026-07-16) — rendered from the full-moon master by
-    # setup/make_moon_phases.py with the dial's terminator geometry.
+    # straight into this list. Every page wears ITS OWN phase plate,
+    # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
+    # mesta nego 15MB fajlova") from the full-moon master with the
+    # dial's own terminator geometry — moon_phase_file, disk-cached.
     moon_plate = defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png"
     topics["moon"] = {
         "title": "Moon",
@@ -682,14 +683,16 @@ def _topics() -> dict:
         "entries": [
             {
                 "images": (
-                    defaults.MOON_PHASE_ART_DIR
-                    / f"{phase.lower().replace(' ', '_')}.png",
+                    moon_phase_file(
+                        index / len(constants.MOON_PHASE_NAMES),
+                        phase.lower().replace(" ", "_"),
+                    ),
                 ),
                 "name": ("moon_title", phase),
                 "article": ("moon", phase),
                 "accents": (),
             }
-            for phase in constants.MOON_PHASE_NAMES
+            for index, phase in enumerate(constants.MOON_PHASE_NAMES)
         ],
     }
     topics["seasons"] = {

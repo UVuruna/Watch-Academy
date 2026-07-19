@@ -15,8 +15,8 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PySide6.QtCore import Qt, QRectF
-from PySide6.QtGui import QColor, QImage, QImageReader, QPainter, QPixmap
+from PySide6.QtCore import Qt, QPointF, QRectF
+from PySide6.QtGui import QColor, QImage, QImageReader, QPainter, QPainterPath, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 
 from config import defaults, paths, profiling
@@ -67,6 +67,165 @@ def ring_face_color(path: Path | None) -> QColor:
                 color = samples[len(samples) // 2]
     _ring_face_colors[key] = color
     return color
+
+
+# The MOON terminator geometry (owner 2026-07-16; quarter-degeneracy
+# fix 2026-07-19, live-render round): the lit region is the half-disc
+# on the lit side combined (gibbous) or reduced (crescent) with the
+# terminator half-ellipse (semi-axis a = R*|cos(2*pi*f)|). ONE shared
+# function — `render.layers.YearMarkerLayer._draw_moon` (the dial) and
+# `moon_phase_image` below (the Encyclopedia's live-rendered Moon
+# pages) both call it, so the two never drift apart.
+MOON_TERMINATOR_EPSILON = 1e-6   # of the radius — the exact-quarter guard
+
+
+def moon_lit_region(fraction: float, radius: float) -> QPainterPath:
+    """The lit region of a moon disc of `radius` centered at the
+    origin (waxing, fraction < 0.5, lit on the right). AT THE EXACT
+    QUARTERS (fraction 0.25 / 0.75) the terminator semi-axis is
+    mathematically zero: Qt's `addEllipse` on a zero-width rect
+    degenerates, and routing that through `united`/`subtracted`
+    resolves to an EMPTY path — the moon rendered fully dark instead
+    of exactly half-lit (the bug the pre-rendered plates shipped with
+    at first/third quarter). Fixed by skipping the boolean op
+    entirely whenever the semi-axis collapses and returning the
+    half-disc outright — the mathematically exact answer at a
+    quarter anyway."""
+    size = 2.0 * radius
+    lit_right = fraction < 0.5
+    half = QPainterPath()
+    half.moveTo(0.0, -radius)
+    # 90 deg is the top in Qt's CCW system; sweep -180 covers the right
+    # half, +180 the left half.
+    half.arcTo(
+        QRectF(-radius, -radius, size, size),
+        90.0, -180.0 if lit_right else 180.0,
+    )
+    half.closeSubpath()
+    semi_axis = radius * abs(math.cos(2.0 * math.pi * fraction))
+    if semi_axis <= radius * MOON_TERMINATOR_EPSILON:
+        return half
+    gibbous = 0.25 < fraction < 0.75
+    terminator = QPainterPath()
+    terminator.addEllipse(QRectF(-semi_axis, -radius, 2.0 * semi_axis, size))
+    return half.united(terminator) if gibbous else half.subtracted(terminator)
+
+
+def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> QImage:
+    """The full-moon master art shadowed by `moon_lit_region` for the
+    given illuminated FRACTION — the pure render the Encyclopedia's
+    Moon pages now call live instead of shipping eight pre-baked
+    plates (owner decree 2026-07-19: "bolje crtati na licu mesta nego
+    15MB fajlova"). Mirrors `_draw_moon`'s two branches exactly: with
+    a master (the shipped default) only the UNLIT half darkens under
+    the shadow color/alpha; without one (a missing/placeholder asset)
+    a plain dark disc gets the LIT half painted bright instead — the
+    same graceful fallback the dial itself falls back to."""
+    marker = defaults.DEFAULT_SKIN.year_marker
+    resolved = art_file(
+        master if master is not None
+        else defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png"
+    )
+    image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+    painter.translate(size / 2.0, size / 2.0)
+    painter.setPen(Qt.PenStyle.NoPen)
+    radius = size / 2.0
+    lit = moon_lit_region(fraction, radius)
+    disc = QPainterPath()
+    disc.addEllipse(QRectF(-radius, -radius, size, size))
+    has_asset = resolved is not None and resolved.exists()
+    if has_asset:
+        pixmap = QPixmap(str(resolved)).scaled(
+            size, size,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        painter.drawPixmap(
+            QPointF(-pixmap.width() / 2.0, -pixmap.height() / 2.0), pixmap
+        )
+        shadow = QColor(marker.moon_dark_color)
+        shadow.setAlphaF(marker.moon_shadow_alpha)
+        painter.fillPath(disc.subtracted(lit), shadow)
+    else:
+        painter.setBrush(QColor(marker.moon_dark_color))
+        painter.drawEllipse(QPointF(0, 0), radius, radius)
+        painter.fillPath(lit, QColor(marker.moon_lit_color))
+    painter.end()
+    return image
+
+
+def moon_phase_file(fraction: float, name: str, size: int = 800) -> Path:
+    """A disk-cached copy of `moon_phase_image` — the Encyclopedia's
+    Moon topic wants a PATH like every other article image (owner
+    2026-07-19: the eight pre-baked plates in `assets/moon/` are
+    retired; this is the live-render replacement, the cost paid once
+    per (phase, size) through the raster cache instead of shipping
+    ~7 MB of PNGs)."""
+    master = art_file(defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png")
+    stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
+    mtime = int(master.stat().st_mtime) if master.exists() else 0
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{mtime}_moon_{name}_{size}.png"
+    )
+    if not cache.exists():
+        image = moon_phase_image(fraction, size, master)
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            if not image.save(str(cache)):
+                raise OSError(f"QImage.save returned False for {cache}")
+        except OSError as error:
+            # A cold cache is only slower, never wrong — but say so.
+            print(f"moon phase cache write failed: {error}", file=sys.stderr)
+            return master
+    return cache
+
+
+def letter_metal_file(path: Path, metal: str) -> Path:
+    """The ring letter's SILVER or BRONZE finish, derived AT LOAD from
+    the GOLD master (owner decree 2026-07-19: "bolje crtati na licu
+    mesta nego 15MB fajlova" — retiring the 76 pre-rendered
+    `_silver.png`/`_bronze.png` files and setup/make_silver_letters.py
+    / make_bronze_letters.py). The sealed recipes, reproduced exactly:
+    silver is a straight grayscale desaturation with the source alpha
+    kept (`AssetCache._desaturated`); bronze is a straight per-channel
+    multiply with `defaults.BRONZE_LETTER_TINT` off the SILVER result
+    (`AssetCache._bronzed`) — brightness/contrast sit at 1.0 (an
+    identity step), the owner's verdict that darkened candidates read
+    darker than the bronze medallions. `metal="gold"` is a no-op
+    passthrough (the gold master IS the art). Disk-cached like every
+    other derived asset (`metal_variant_file`'s pattern) — paid once
+    per (file, metal), never per paint."""
+    path = art_file(path)
+    if metal == "gold" or path is None:
+        return path
+    stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{int(path.stat().st_mtime)}_letter_{metal}.png"
+    )
+    if not cache.exists():
+        source = QPixmap(str(path))
+        if source.isNull():
+            raise ValueError(f"cannot load image asset: {path}")
+        silver = AssetCache._desaturated(source)
+        result = (
+            silver if metal == "silver"
+            else AssetCache._bronzed(silver, defaults.BRONZE_LETTER_TINT)
+        )
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            if not result.save(str(cache)):
+                raise OSError(f"QPixmap.save returned False for {cache}")
+        except OSError as error:
+            # A cold cache is only slower, never wrong — but say so.
+            print(f"letter metal cache write failed: {error}", file=sys.stderr)
+            return path
+    return cache
 
 
 def subdial_plate_file(
@@ -466,6 +625,44 @@ class AssetCache:
         painter.drawPixmap(0, 0, source)
         painter.end()
         return result
+
+    @staticmethod
+    def _bronzed(source: QPixmap, tint: str) -> QPixmap:
+        """The ring-letter BRONZE recipe (owner decision 2026-07-12,
+        retired setup/make_bronze_letters.py — live-derived now):
+        `source` is a GRAYSCALE (silver-desaturated) pixmap, R=G=B on
+        every opaque pixel; a brightness/contrast LUT (identity at the
+        sealed 1.0/1.0 values — darkened candidates read darker than
+        the bronze medallions, owner verdict) then a straight
+        per-channel multiply with `tint`. Alpha carried through
+        unchanged."""
+        dpr = source.devicePixelRatio()
+        image = source.toImage().convertToFormat(
+            QImage.Format.Format_RGBA8888
+        )
+        width, height = image.width(), image.height()
+        stride = image.bytesPerLine() // 4
+        buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
+        rgba = (
+            buffer.reshape(height, stride, 4)[:, :width, :]
+            .astype(np.float64) / 255.0
+        )
+        gray = rgba[..., 0]      # grayscale source: R == G == B
+        brightness = defaults.BRONZE_LETTER_BRIGHTNESS
+        contrast = defaults.BRONZE_LETTER_CONTRAST
+        gray = np.clip((gray * brightness - 0.5) * contrast + 0.5, 0.0, 1.0)
+        color = QColor(tint)
+        tint_rgb = np.array([color.redF(), color.greenF(), color.blueF()])
+        rgba[..., :3] = gray[..., None] * tint_rgb[None, None, :]
+        out_bytes = np.ascontiguousarray(
+            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
+        )
+        out = QImage(
+            out_bytes.tobytes(), width, height, width * 4,
+            QImage.Format.Format_RGBA8888,
+        ).copy()
+        out.setDevicePixelRatio(dpr)
+        return QPixmap.fromImage(out)
 
     @staticmethod
     def _saturated(source: QPixmap, factor: float) -> QPixmap:

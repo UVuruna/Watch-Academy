@@ -1103,10 +1103,6 @@ EMBLEM_ART_DIRS = {
 # and the one Equinox) and meteorological/ (the measured twins).
 TRINITY_ART_DIR = paths.assets_dir() / "badge" / "trinity"
 SEASON_ART_DIR = paths.assets_dir() / "badge" / "season"
-# The EIGHT moon-phase plates (owner 2026-07-16) — generated from the
-# full-moon master by setup/make_moon_phases.py with the dial's own
-# terminator geometry; the Encyclopedia's Moon pages wear them.
-MOON_PHASE_ART_DIR = paths.assets_dir() / "moon"
 # The ERA TERMS emblems (ROADMAP 15a3, owner 2026-07-17): one per Age
 # (Light/Darkness) and per Starry Season (Spring/Summer/Autumn/Winter)
 # — the "Eras of the World" comparative article carries no plate of
@@ -1584,11 +1580,12 @@ METAL_SWAP_TARGETS = {
     "gold": {"hue": 48.0, "sat_mul": 1.25, "val_mul": 1.25},
     "silver": {"hue": 220.0, "sat_mul": 0.06, "val_mul": 1.22},
 }
-# Bronze ring LETTERS are PRE-RENDERED from the silver ones
-# (setup/make_bronze_letters.py). Final recipe = a STRAIGHT multiply
-# with classic bronze, no brightness/contrast change (owner verdict
-# revised on the live dial 2026-07-12: the darkened candidates sat
-# darker than the bronze medallions — candidate C matches).
+# Bronze ring LETTERS are derived AT LOAD from the silver ones
+# (owner 2026-07-19, `render.assets.letter_metal_file` — retired the
+# pre-rendered files). Final recipe = a STRAIGHT multiply with classic
+# bronze, no brightness/contrast change (owner verdict revised on the
+# live dial 2026-07-12: the darkened candidates sat darker than the
+# bronze medallions — candidate C matches).
 BRONZE_LETTER_TINT = "#CD7F32"
 BRONZE_LETTER_BRIGHTNESS = 1.0
 BRONZE_LETTER_CONTRAST = 1.0

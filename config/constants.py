@@ -444,7 +444,8 @@ EARTH_STYLES = ("clean", "atmo")
 # forms a TRIANGLE — the GOLD finish puts the layout's triangle in gold
 # and the rest in silver, the SILVER finish is the exact inverse; on
 # the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
-# letters are pre-rendered files (setup/make_silver_letters.py).
+# and bronze letters are derived from the gold master AT LOAD (owner
+# 2026-07-19, render.assets.letter_metal_file).
 RING_FINISHES = ("gold", "silver", "bronze")
 
 # The subdial PLATE styles (owner 2026-07-15, his A/B spec): "theme" —
@@ -484,8 +485,10 @@ RING_LAYOUTS = {
     },
 }
 # The full letter library (glyph -> art file) — presets and the custom
-# ring builder choose from these; every glyph also ships a pre-rendered
-# <Stem>_silver.png. The library is GROUPED (owner spec 2026-07-11):
+# ring builder choose from these, GOLD masters only; silver and bronze
+# are derived from the gold master at load (owner 2026-07-19,
+# render.assets.letter_metal_file — no more pre-rendered files). The
+# library is GROUPED (owner spec 2026-07-11):
 # the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
 # exist ONLY for the six ring positions they belong to (owner decision:
 # a number makes no sense away from its own hour) — 24h wears Ω in the

@@ -754,6 +754,24 @@ lives in [The DOMY Canon](CANON.md).
 
 ## Engineering Backlog
 
+- **Live-render cleanup** — DONE (owner decree 2026-07-19: "bolje
+  crtati na licu mesta nego 15MB fajlova"): retired ~22 MB of
+  pre-rendered derived art in favor of computing it at load/on demand,
+  through the existing disk raster cache like every other derived
+  asset. (1) Ring letters — the 76 pre-rendered `<Stem>_silver.png`/
+  `<Stem>_bronze.png` files (~15 MB) and their two generators
+  (`setup/make_silver_letters.py`, `setup/make_bronze_letters.py`) are
+  gone; `render.assets.letter_metal_file` derives both from the gold
+  master at paint time (silver = grayscale desaturation, bronze = a
+  straight multiply with `BRONZE_LETTER_TINT` off the silver result —
+  the sealed recipes, reproduced exactly). (2) The Encyclopedia's eight
+  Moon-phase plates (~7 MB, `assets/moon/`) and their generator
+  (`setup/make_moon_phases.py`) are gone; `render.assets.moon_phase_image`
+  renders them live from the full-moon master, sharing the terminator
+  geometry with the dial's own `_draw_moon` via the newly extracted
+  `render.assets.moon_lit_region` — the extraction also fixed a real
+  bug, an exact-quarter (0.25/0.75) degeneracy that rendered the moon
+  fully dark instead of exactly half-lit.
 - **Wider Pantheon Encyclopedia topics** — DONE (WORKPLAN Session 8):
   four topics (Greek/Norse/Egyptian/Slavic), 15 seatless A-list
   figures in the new `encyclopedia.json` "wider" family, wired into

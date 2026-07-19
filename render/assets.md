@@ -26,7 +26,27 @@ requests keep the original, small sources stay untouched.
 Module helpers beyond the cache: `ring_face_color()` (the ring art's
 median-luminance face sample, the procedural subdial fill),
 `metal_variant_file()` / `scaled_variant_file()` (disk-cached derived
-images), and `subdial_plate_file(finish, seat, tint=None)` — the
+images), `letter_metal_file(path, metal)` (owner decree 2026-07-19,
+"bolje crtati na licu mesta nego 15MB fajlova" — retired the ~15 MB of
+pre-rendered `<Stem>_silver.png`/`<Stem>_bronze.png` ring-letter files
+and their two generator scripts: silver is a straight grayscale
+desaturation of the gold master, `AssetCache._desaturated`; bronze a
+straight per-channel multiply with `defaults.BRONZE_LETTER_TINT` off
+the silver result, `AssetCache._bronzed` — the sealed recipes,
+reproduced exactly, disk-cached like every other derived asset;
+`metal="gold"` is a no-op passthrough), `moon_lit_region(fraction,
+radius)` / `moon_phase_image(fraction, size, master=None)` /
+`moon_phase_file(fraction, name, size=800)` (the SAME retirement for
+the Encyclopedia's eight Moon-phase plates: `moon_lit_region` is the
+terminator geometry extracted out of
+[Layers](layers.md)`.YearMarkerLayer._draw_moon` so the dial and the
+Encyclopedia's live render share ONE function — fixing an exact-quarter
+degeneracy, `fraction` 0.25/0.75, where Qt's `addEllipse` on a
+zero-width terminator rect used to degenerate the union/difference to
+an empty path, i.e. a moon rendered fully DARK instead of exactly
+half-lit; `moon_phase_image` is the pure QImage render, `moon_phase_file`
+its disk-cached path wrapper for the Encyclopedia's path-based image
+tuples), and `subdial_plate_file(finish, seat, tint=None)` — the
 owner's subdial plate for a (letter finish, seat) pair: his art wins
 as drawn, a missing seat borrows the center plate, and a missing
 FINISH is `_recolored_plate()`-ed from another finish's master (numpy

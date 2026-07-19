@@ -9,12 +9,14 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   🖼️ logo.svg              ← the owner's GOLD watch — tray icon now, EXE/installer art in M7
   🖼️ logo-setup.svg        ← the rose-gold variant (NSIS wizard art)
   📁 ring/                 ← dial ring faces: domy.png, morph.png (+ future rings)
-    📁 letters/            ← the owner's GOLD letter library: latin SVG (D,G,H,I,M,P,S,
-                             U,V,X,Y,Z) + greek PNG (Omega,Phi,Pi,Psi,Sigma,Theta),
-                             plus PRE-RENDERED <Stem>_silver.png for the active letters
-                             (setup/make_silver_letters.py — rerun when a new letter
-                             becomes active). Active per preset (RING_LETTER_FILES):
-                             domy M/D/Y+Omega, morph M/Pi/H+Omega. Overlaid by
+    📁 letters/            ← the owner's GOLD letter library ONLY (owner decree
+                             2026-07-19, "bolje crtati na licu mesta nego 15MB
+                             fajlova": the pre-rendered <Stem>_silver.png/
+                             <Stem>_bronze.png files and their two generators are
+                             retired — silver/bronze are now derived from the gold
+                             master AT LOAD, render.assets.letter_metal_file, disk-
+                             cached). Active per preset (RING_LETTER_FILES): domy
+                             M/D/Y+Omega, morph M/Pi/H+Omega. Overlaid by
                              calculation so the ring TINT never touches them; each
                              preset's ACCENT letter wears the opposite metal (domy
                              inverts its Omega, morph inverts its M)

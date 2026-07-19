@@ -1,4 +1,10 @@
-"""Moon-phase golden values against the LIVE moon phases database."""
+"""Moon-phase golden values against the LIVE moon phases database, plus
+(below) the RENDER geometry pins for the live-render round (owner
+decree 2026-07-19: "bolje crtati na licu mesta nego 15MB fajlova") —
+the shared terminator geometry `render.assets.moon_lit_region` and its
+callers `moon_phase_image` (the Encyclopedia's live Moon pages,
+replacing the retired pre-baked plates) and the dial's own
+`YearMarkerLayer._draw_moon`."""
 
 from datetime import datetime, timezone
 from pathlib import Path
@@ -196,6 +202,151 @@ def test_analytic_illumination_unshifts_the_deep_proxy_frame():
     modern = illumination(when)
     assert 0.0 <= deep <= 1.0
     assert deep != pytest.approx(modern, abs=1e-6)
+
+
+# --- RENDER geometry (owner 2026-07-19, live-render round) -------------------
+
+
+def test_moon_lit_region_quarter_is_exact_half_disc():
+    """The exact-quarter degeneracy fix: at fraction 0.25/0.75 the
+    terminator semi-axis (radius * |cos(2*pi*f)|) is mathematically
+    zero — Qt's `addEllipse` on a zero-width rect used to degenerate
+    the `united`/`subtracted` boolean op to an EMPTY path (the moon
+    rendering fully DARK instead of exactly half-lit — the bug the
+    retired pre-baked plates shipped with). `moon_lit_region` must
+    resolve to the exact half-disc instead."""
+    from PySide6.QtCore import QPointF
+
+    from render.assets import moon_lit_region
+
+    radius = 100.0
+    # fraction < 0.5 -> lit on the right (+x); >= 0.5 -> lit on the left.
+    for fraction, lit_x in ((0.25, 1.0), (0.75, -1.0)):
+        region = moon_lit_region(fraction, radius)
+        assert not region.isEmpty(), fraction
+        assert region.contains(QPointF(lit_x * radius * 0.5, 0.0))
+        assert not region.contains(QPointF(-lit_x * radius * 0.5, 0.0))
+        bounds = region.boundingRect()
+        assert bounds.width() == pytest.approx(radius, abs=1.0), fraction
+
+
+def _mean_lightness(image, x_range, y_step=5):
+    total, n = 0, 0
+    for x in x_range:
+        for y in range(0, image.height(), y_step):
+            pixel = image.pixelColor(x, y)
+            if pixel.alpha() > 0:
+                total += pixel.lightness()
+                n += 1
+    assert n > 0
+    return total / n
+
+
+def test_moon_phase_image_new_and_full_are_dark_and_lit():
+    """The pure QImage render (owner 2026-07-19, replacing the retired
+    `assets/moon/` plates): New Moon reads much darker than Full Moon
+    over the whole disc."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import moon_phase_image
+
+    QApplication.instance() or QApplication([])
+    size = 200
+    new = moon_phase_image(0.0, size)
+    full = moon_phase_image(0.5, size)
+    assert _mean_lightness(new, range(0, size, 5)) < (
+        _mean_lightness(full, range(0, size, 5)) - 30
+    )
+
+
+def test_moon_phase_image_quarter_is_half_lit_not_fully_dark():
+    """The regression pin for the fixed bug: at fraction 0.25 (First
+    Quarter) and 0.75 (Third Quarter) the left/right halves must read
+    STRONGLY different brightness — not both dark."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import moon_phase_image
+
+    QApplication.instance() or QApplication([])
+    size = 200
+    for fraction in (0.25, 0.75):
+        image = moon_phase_image(fraction, size)
+        left = _mean_lightness(image, range(0, size // 2, 5))
+        right = _mean_lightness(image, range(size // 2, size, 5))
+        assert abs(left - right) > 20, fraction
+
+
+def test_dial_moon_stays_half_lit_at_exact_quarter():
+    """End-to-end pin: the dial's OWN `YearMarkerLayer._draw_moon`
+    shares `moon_lit_region` with the Encyclopedia's live render — at
+    tick.moon_fraction == 0.25 the drawn marker must not collapse to a
+    uniform dark disc either."""
+    import dataclasses
+    import os
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    import astral
+    from PySide6.QtWidgets import QApplication
+
+    from config import defaults
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    QApplication.instance() or QApplication([])
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 7, 10, 12, 0, tzinfo=tz)
+    observer = astral.Observer(latitude=44.82, longitude=20.46)
+    day = build_day_context(
+        now, observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    quarter = dataclasses.replace(
+        tick, moon_fraction=0.25, moon_event=None, eclipse_event=None,
+    )
+    skin = dataclasses.replace(defaults.DEFAULT_SKIN, solar_rotation=False)
+    image = Compositor(skin, AssetCache()).render_offscreen(
+        540.0, 1.0, day, quarter
+    )
+    radius = 270.0
+    import math
+
+    moon_angle = math.radians(quarter.moon_fraction * 360.0)
+    orbit = radius * defaults.DEFAULT_SKIN.year_marker.moon_orbit_fraction
+    cx = round(radius + orbit * math.sin(moon_angle))
+    cy = round(radius - orbit * math.cos(moon_angle))
+    marker_size = round(
+        2 * radius * defaults.DEFAULT_SKIN.year_marker.moon_scale
+    )
+    half = max(1, marker_size // 2 - 2)
+
+    def crop_mean(x_range, y_range):
+        total, n = 0, 0
+        for x in x_range:
+            for y in y_range:
+                pixel = image.pixelColor(x, y)
+                if pixel.alpha() > 0:
+                    total += pixel.lightness()
+                    n += 1
+        assert n > 0
+        return total / n
+
+    y_span = range(cy - half, cy + half, 2)
+    left = crop_mean(range(cx - half, cx, 2), y_span)
+    right = crop_mean(range(cx, cx + half, 2), y_span)
+    assert abs(left - right) > 15
 
 
 @pytest.mark.skipif(not RESEARCH_DB.exists(), reason="research db not built")

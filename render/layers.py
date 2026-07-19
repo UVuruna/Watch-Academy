@@ -33,7 +33,13 @@ from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
 from core.sun import DaylightRegime, SunDay
 from core.year_wheel import almanac_marker_angle
-from render.assets import AssetCache, ring_face_color, subdial_plate_file
+from render.assets import (
+    AssetCache,
+    letter_metal_file,
+    moon_lit_region,
+    ring_face_color,
+    subdial_plate_file,
+)
 from skins.manifest import HandSpec, SkinDefinition
 
 
@@ -1246,16 +1252,23 @@ class RingLayer(Layer):
         )
         shadow_radius = height * defaults.RING_LETTER_SHADOW_RADIUS
         samples = defaults.RING_LETTER_SHADOW_SAMPLES
-        for hour, asset in self._skin.ring.letter_art.items():
+        for hour, gold_asset in self._skin.ring.letter_art.items():
             theta = (hour * 15.0 + constants.DIAL_OFFSET_DEG) % 360.0
             rotation = theta - 180.0 if 90.0 < theta < 270.0 else (
                 theta if theta <= 90.0 else theta - 360.0
             )
+            # Silver/bronze are derived from the gold master AT LOAD
+            # (owner 2026-07-19), disk-cached like every other derived
+            # asset — the shadow silhouette is metal-invariant (same
+            # alpha mask on every finish), so it always reads the gold
+            # file directly.
+            metal = self._skin.ring.letter_metal.get(hour, "gold")
+            asset = letter_metal_file(gold_asset, metal)
             pixmap = ctx.cache.pixmap_by_height(
                 asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation
             )
             shadow = ctx.cache.pixmap_by_height(
-                asset, height, ctx.dpr, tint="#000000"
+                gold_asset, height, ctx.dpr, tint="#000000"
             )
             logical_w = pixmap.width() / ctx.dpr
             pos = dial_point(
@@ -2428,18 +2441,7 @@ class YearMarkerLayer(Layer):
             painter.setBrush(QColor(spec.moon_dark_color))
             painter.drawEllipse(QPointF(0, 0), radius, radius)
 
-        lit_right = fraction < 0.5          # waxing: lit on the right
-        gibbous = 0.25 < fraction < 0.75
-        half = QPainterPath()
-        half.moveTo(0.0, -radius)
-        # 90 deg is the top in Qt's CCW system; sweep -180 covers the right
-        # half, +180 the left half.
-        half.arcTo(QRectF(-radius, -radius, size, size), 90.0, -180.0 if lit_right else 180.0)
-        half.closeSubpath()
-        semi_axis = radius * abs(math.cos(2.0 * math.pi * fraction))
-        terminator = QPainterPath()
-        terminator.addEllipse(QRectF(-semi_axis, -radius, 2 * semi_axis, size))
-        lit = half.united(terminator) if gibbous else half.subtracted(terminator)
+        lit = moon_lit_region(fraction, radius)
 
         if spec.moon_asset is not None:
             disc = QPainterPath()

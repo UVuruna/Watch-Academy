@@ -5,28 +5,22 @@ build.py, installer.nsi, svg_to_ico.py, certificates — lands here).
 
 ## Files
 
-### `make_silver_letters.py` — Silver Letter Generator
-One-time (rerunnable) generator: rasterizes each ACTIVE gold ring
-letter at high resolution, desaturates it offline (grayscale with the
-alpha kept) and saves `<Stem>_silver.png` beside the gold master in
-`assets/ring/letters/`. Run it again whenever a new letter becomes
-active in a ring preset (owner decision: silver is pre-rendered art,
-not a runtime effect).
-
-### `make_moon_phases.py` — Moon Phase Plate Generator
-One-time (rerunnable) generator (owner 2026-07-16): renders the
-EIGHT moon-phase plates for the Encyclopedia's Moon pages from the
-full-moon master, using the dial's own terminator geometry
-(half-disc ∪/∖ terminator half-ellipse, the year-marker shadow
-color and alpha) — output `assets/moon/<source>/<phase>.png`. Rerun
-when the moon master or the shadow tunables change.
-
-### `make_bronze_letters.py` — Bronze Letter Generator
-Derives `<Stem>_bronze.png` from each pre-rendered silver letter: a
-straight multiply with `BRONZE_LETTER_TINT` (brightness/contrast knobs
-exist but sit at 1.0 — the owner's verdict on the live dial: darkened
-candidates sat darker than the bronze medallions). Run AFTER
-`make_silver_letters.py` whenever a letter master changes.
+**LIVE-RENDER CLEANUP (owner decree 2026-07-19: "bolje crtati na licu
+mesta nego 15MB fajlova")** — three one-time generators are RETIRED
+whole (Rule #6, no leftovers), their output now computed at load/on
+demand instead of shipped as pre-rendered files:
+- `make_silver_letters.py` / `make_bronze_letters.py` (ring letters):
+  the ~15 MB of `<Stem>_silver.png`/`<Stem>_bronze.png` in
+  `assets/ring/letters/` are deleted; `render.assets.letter_metal_file`
+  derives both from the gold master at load (silver = grayscale
+  desaturation, bronze = a straight multiply with `BRONZE_LETTER_TINT`
+  off the silver result), disk-cached like every other derived asset.
+- `make_moon_phases.py` (Encyclopedia Moon pages): the ~7 MB of
+  `assets/moon/<source>/<phase>.png` plates are deleted;
+  `render.assets.moon_phase_image` (the shared terminator geometry
+  extracted out of `render.layers._draw_moon` as `moon_lit_region`,
+  fixing an exact-quarter degeneracy the plates shipped with) plus
+  `moon_phase_file` (disk-cached path wrapper) render each phase live.
 
 ### `make_deep_time.py` — Deep Time Pack Generator
 One-time (rerunnable) generator (Session 16, owner 2026-07-17):

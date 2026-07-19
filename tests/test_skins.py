@@ -54,25 +54,35 @@ def test_mason_g_preset_loads_and_splits_metal():
     assert set(mason["legend"]) == {12, 16, 20, 24, 4, 8}
 
     art_dir = defaults.RING_LETTER_ART_DIR
-    gold = build_skin(replace(Settings(), ring="MASON G")).ring.letter_art
+    # letter_art is ALWAYS the gold master now (owner 2026-07-19
+    # live-render round); letter_metal carries the active finish per
+    # hour — silver/bronze are derived from the gold master at paint
+    # time (render.assets.letter_metal_file), never separate files.
+    gold_ring = build_skin(replace(Settings(), ring="MASON G")).ring
+    assert gold_ring.letter_art[12] == art_dir / "G.png"
+    assert gold_ring.letter_art[20] == art_dir / "M.png"
+    assert gold_ring.letter_art[4] == art_dir / "N.png"
+    assert gold_ring.letter_art[16] == art_dir / "S.png"
+    assert gold_ring.letter_art[0] == art_dir / "Omega.png"    # 24h -> hour 0
+    assert gold_ring.letter_art[8] == art_dir / "A.png"
     # Trinity (12/20/4 = G, M, N) wears the finish metal (gold, no suffix).
-    assert gold[12] == art_dir / "G.png"
-    assert gold[20] == art_dir / "M.png"
-    assert gold[4] == art_dir / "N.png"
+    assert gold_ring.letter_metal[12] == "gold"
+    assert gold_ring.letter_metal[20] == "gold"
+    assert gold_ring.letter_metal[4] == "gold"
     # Union (16/24/8 = S, Ω, A) wears the counter-metal (silver here).
-    assert gold[16] == art_dir / "S_silver.png"
-    assert gold[0] == art_dir / "Omega_silver.png"       # 24h -> hour 0
-    assert gold[8] == art_dir / "A_silver.png"
+    assert gold_ring.letter_metal[16] == "silver"
+    assert gold_ring.letter_metal[0] == "silver"                # 24h -> hour 0
+    assert gold_ring.letter_metal[8] == "silver"
 
-    silver = build_skin(
+    silver_ring = build_skin(
         replace(Settings(), ring="MASON G", ring_finish="silver")
-    ).ring.letter_art
-    assert silver[12] == art_dir / "G_silver.png"
-    assert silver[20] == art_dir / "M_silver.png"
-    assert silver[4] == art_dir / "N_silver.png"
-    assert silver[16] == art_dir / "S.png"
-    assert silver[0] == art_dir / "Omega.png"
-    assert silver[8] == art_dir / "A.png"
+    ).ring
+    assert silver_ring.letter_metal[12] == "silver"
+    assert silver_ring.letter_metal[20] == "silver"
+    assert silver_ring.letter_metal[4] == "silver"
+    assert silver_ring.letter_metal[16] == "gold"
+    assert silver_ring.letter_metal[0] == "gold"
+    assert silver_ring.letter_metal[8] == "gold"
 
     assert missing_assets(build_skin(replace(Settings(), ring="MASON G"))) == []
     assert missing_assets(
@@ -84,11 +94,8 @@ def test_mason_g_preset_loads_and_splits_metal():
 
     # NUMBERS keeps its own plain reading — untouched by the new override
     # machinery (no `triangle` key on its card).
-    numbers = build_skin(replace(Settings(), ring="NUMBERS")).ring.letter_art
-    assert all(
-        not name.endswith(("_silver.png", "_bronze.png"))
-        for name in (p.name for p in numbers.values())
-    )
+    numbers = build_skin(replace(Settings(), ring="NUMBERS")).ring
+    assert all(metal == "gold" for metal in numbers.letter_metal.values())
 
 
 def test_ring_preset_triangle_override_validation():
@@ -145,20 +152,14 @@ def test_custom_ring_card_builds_a_seal():
     )
     assert skin.ring.asset.name == "hexagram.png"
     assert len(skin.ring.letter_art) == 6
-    assert all(
-        not path.name.endswith("_silver.png")
-        for path in skin.ring.letter_art.values()
-    )
+    assert all(metal == "gold" for metal in skin.ring.letter_metal.values())
     silver = build_skin(
         replace(
             Settings(), ring="SOLOMON", ring_finish="silver",
             custom_rings=(card,),
         )
     )
-    assert all(
-        path.name.endswith("_silver.png")
-        for path in silver.ring.letter_art.values()
-    )
+    assert all(metal == "silver" for metal in silver.ring.letter_metal.values())
     assert missing_assets(silver) == []
 
 
@@ -178,52 +179,64 @@ def test_letter_art_follows_the_finish():
     always forms a TRIANGLE — gold finish = the layout triangle in
     gold + the rest silver; silver finish = the exact inverse."""
     art_dir = defaults.RING_LETTER_ART_DIR
-    gold = build_skin(Settings()).ring.letter_art
-    assert gold[12] == art_dir / "M.png"          # triangle 12/20/4 gold
-    assert gold[20] == art_dir / "Y.png"
-    assert gold[4] == art_dir / "D.png"
-    assert gold[0] == art_dir / "Omega_silver.png"
-    silver = build_skin(replace(Settings(), ring_finish="silver")).ring.letter_art
-    assert silver[12] == art_dir / "M_silver.png"  # the triangle inverts
-    assert silver[20] == art_dir / "Y_silver.png"
-    assert silver[0] == art_dir / "Omega.png"      # Omega back to gold
-    morph = build_skin(replace(Settings(), ring="MORPH")).ring.letter_art
-    assert morph[16] == art_dir / "Pi.png"        # triangle 8/16/24 gold
-    assert morph[0] == art_dir / "Omega.png"
-    assert morph[12] == art_dir / "M_silver.png"
+    gold = build_skin(Settings()).ring
+    assert gold.letter_art[12] == art_dir / "M.png"    # triangle 12/20/4 gold
+    assert gold.letter_art[20] == art_dir / "Y.png"
+    assert gold.letter_art[4] == art_dir / "D.png"
+    assert gold.letter_metal[12] == "gold"
+    assert gold.letter_metal[0] == "silver"
+    silver = build_skin(replace(Settings(), ring_finish="silver")).ring
+    assert silver.letter_metal[12] == "silver"          # the triangle inverts
+    assert silver.letter_metal[20] == "silver"
+    assert silver.letter_metal[0] == "gold"             # Omega back to gold
+    morph = build_skin(replace(Settings(), ring="MORPH")).ring
+    assert morph.letter_art[16] == art_dir / "Pi.png"   # triangle 8/16/24 gold
+    assert morph.letter_metal[16] == "gold"
+    assert morph.letter_metal[0] == "gold"
+    assert morph.letter_metal[12] == "silver"
     morph_silver = build_skin(
         replace(Settings(), ring="MORPH", ring_finish="silver")
-    ).ring.letter_art
-    assert morph_silver[12] == art_dir / "M.png"
-    assert morph_silver[0] == art_dir / "Omega_silver.png"
+    ).ring
+    assert morph_silver.letter_metal[12] == "gold"
+    assert morph_silver.letter_metal[0] == "silver"
 
 
 def test_bronze_finish_and_theme_metals():
     """Owner 2026-07-12: (1) BRONZE ring finish — the triangle wears
     bronze, the accent letter silver, the Seal all six bronze, and the
-    pre-rendered bronze files exist for every glyph; (2) the bronze-
-    plate weekday themes wear the chosen METAL as a render tint —
-    gold/silver tritone, bronze = the art as drawn; follow-the-ring
+    live-derived bronze pixmap resolves for every glyph (owner
+    2026-07-19 live-render round: no more pre-rendered files); (2) the
+    bronze-plate weekday themes wear the chosen METAL as a render tint
+    — gold/silver tritone, bronze = the art as drawn; follow-the-ring
     maps the ring finish onto them; full-color themes never tint."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtWidgets import QApplication
+
+    QApplication.instance() or QApplication([])
+
     art_dir = defaults.RING_LETTER_ART_DIR
-    bronze = build_skin(replace(Settings(), ring_finish="bronze")).ring.letter_art
-    assert bronze[12] == art_dir / "M_bronze.png"   # triangle 12/20/4 bronze
-    assert bronze[4] == art_dir / "D_bronze.png"
-    assert bronze[0] == art_dir / "Omega_silver.png"  # accent stays silver
+    bronze_ring = build_skin(replace(Settings(), ring_finish="bronze")).ring
+    assert bronze_ring.letter_metal[12] == "bronze"   # triangle 12/20/4 bronze
+    assert bronze_ring.letter_metal[4] == "bronze"
+    assert bronze_ring.letter_metal[0] == "silver"     # accent stays silver
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
     from config import constants as c
+    from render.assets import letter_metal_file
 
     for filename in c.RING_LETTER_FILES.values():
-        stem = filename.rsplit(".", 1)[0]
-        assert (art_dir / f"{stem}_bronze.png").exists(), stem
+        derived = letter_metal_file(art_dir / filename, "bronze")
+        assert derived.exists(), filename
+        assert derived != art_dir / filename
     seal = {
         "name": "SEALB", "positions": [4, 8, 12, 16, 20, 24],
         "letters": ["S", "O", "L", "M", "N", "A"],
     }
-    seal_art = build_skin(replace(
+    seal_ring = build_skin(replace(
         Settings(), ring="SEALB", ring_finish="bronze", custom_rings=(seal,),
-    )).ring.letter_art
-    assert all(p.name.endswith("_bronze.png") for p in seal_art.values())
+    )).ring
+    assert all(metal == "bronze" for metal in seal_ring.letter_metal.values())
     # Theme metals: explicit choice, the bronze rest state, follow-ring.
     gold_greek = build_skin(replace(
         Settings(), weekday_theme="greek", theme_metals={"greek": "gold"},
@@ -355,9 +368,11 @@ def test_planets_art_body_renders_differently_by_metal():
     assert differing_silver > 0
 
 
-def test_pre_rendered_silver_letters_are_grayscale():
-    """The generated silver files exist for every active letter, read
-    R=G=B on opaque pixels and keep their surroundings transparent."""
+def test_live_derived_silver_letters_are_grayscale():
+    """The LIVE-derived silver letters (owner 2026-07-19 live-render
+    round — `render.assets.letter_metal_file`, replacing the retired
+    pre-rendered `_silver.png` files) read R=G=B on opaque pixels and
+    keep their surroundings transparent, for every active letter."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -365,32 +380,144 @@ def test_pre_rendered_silver_letters_are_grayscale():
     from PySide6.QtWidgets import QApplication
 
     from config import constants
+    from render.assets import letter_metal_file
 
     QApplication.instance() or QApplication([])
     for filename in constants.RING_LETTER_FILES.values():
-        stem = filename.rsplit(".", 1)[0]
-        path = defaults.RING_LETTER_ART_DIR / f"{stem}_silver.png"
-        assert path.exists(), path
-        image = QImage(str(path))
+        gold = defaults.RING_LETTER_ART_DIR / filename
+        derived = letter_metal_file(gold, "silver")
+        assert derived.exists() and derived != gold, filename
+        image = QImage(str(derived))
         seen_opaque = False
         for x in range(0, image.width(), 25):
             for y in range(0, image.height(), 25):
                 color = image.pixelColor(x, y)
                 if color.alpha() > 200:
                     seen_opaque = True
-                    assert color.red() == color.green() == color.blue(), path
-        assert seen_opaque, path
-    omega = QImage(str(defaults.RING_LETTER_ART_DIR / "Omega_silver.png"))
+                    assert color.red() == color.green() == color.blue(), filename
+        assert seen_opaque, filename
+    omega = QImage(str(letter_metal_file(
+        defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["Ω"], "silver"
+    )))
     assert omega.pixelColor(0, 0).alpha() == 0
+
+
+def test_live_derived_bronze_matches_the_retired_recipe():
+    """Regression pin (owner 2026-07-19 live-render round): the live
+    `letter_metal_file(gold, "bronze")` must read like the RETIRED
+    pre-rendered recipe (setup/make_bronze_letters.py) — a straight
+    multiply of the grayscale silver with BRONZE_LETTER_TINT
+    (#CD7F32): opaque pixels carry that hue and are strictly darker
+    than pure white (never a translucent wash), matching the owner's
+    sealed channel statistics rather than pixel-exact PIL output
+    (Qt's Multiply-mode float blending vs. PIL's integer floor
+    division round slightly differently)."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    from PySide6.QtGui import QColor, QImage
+    from PySide6.QtWidgets import QApplication
+
+    from config import constants
+    from render.assets import letter_metal_file
+
+    QApplication.instance() or QApplication([])
+    gold = defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["M"]
+    silver = QImage(str(letter_metal_file(gold, "silver")))
+    bronze = QImage(str(letter_metal_file(gold, "bronze")))
+    assert bronze.size() == silver.size()
+    tint = QColor(defaults.BRONZE_LETTER_TINT)
+    seen_opaque = False
+    for x in range(0, bronze.width(), 10):
+        for y in range(0, bronze.height(), 10):
+            silver_px = silver.pixelColor(x, y)
+            if silver_px.alpha() <= 200:
+                continue
+            seen_opaque = True
+            bronze_px = bronze.pixelColor(x, y)
+            assert bronze_px.alpha() == silver_px.alpha()
+            # A straight multiply can only darken (or match at 0) —
+            # never brighten a channel above the tint's own ceiling.
+            assert bronze_px.red() <= tint.red() + 1
+            assert bronze_px.green() <= tint.green() + 1
+            assert bronze_px.blue() <= tint.blue() + 1
+            # Where the silver source is bright, the bronze result
+            # reads the tint hue itself (a warm, low-saturation-blue
+            # copper, not gray) — checked at the brightest sampled
+            # pixel below.
+    assert seen_opaque
+    # The letter's brightest silver pixel (near-white, the glyph
+    # core) must bronze to something close to the tint color itself.
+    brightest = max(
+        (
+            (silver.pixelColor(x, y).lightness(), x, y)
+            for x in range(0, silver.width(), 4)
+            for y in range(0, silver.height(), 4)
+            if silver.pixelColor(x, y).alpha() > 200
+        ),
+    )
+    _, bx, by = brightest
+    core = bronze.pixelColor(bx, by)
+    assert abs(core.red() - tint.red()) <= 12
+    assert abs(core.green() - tint.green()) <= 12
+    assert abs(core.blue() - tint.blue()) <= 12
+
+
+def test_full_dial_renders_distinctly_per_letter_finish():
+    """Smoke test (owner 2026-07-19 live-render round): a full offscreen
+    dial render must actually come out DIFFERENT under gold/silver/
+    bronze ring finishes — not just carry a different label — now that
+    the letters are derived live instead of loading separate files."""
+    import os
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    import astral
+    from PySide6.QtWidgets import QApplication
+
+    from core.clock_state import build_day_context, build_tick_state
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    QApplication.instance() or QApplication([])
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 7, 10, 12, 0, tzinfo=tz)
+    observer = astral.Observer(latitude=44.82, longitude=20.46)
+    day = build_day_context(
+        now, observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    tick = build_tick_state(now, day)
+    images = {}
+    for finish in ("gold", "silver", "bronze"):
+        skin = build_skin(replace(Settings(), ring_finish=finish))
+        image = Compositor(skin, AssetCache()).render_offscreen(
+            360.0, 1.0, day, tick
+        )
+        assert not image.isNull()
+        images[finish] = image
+    finishes = list(images)
+    for i, a in enumerate(finishes):
+        for b in finishes[i + 1:]:
+            differing = sum(
+                1
+                for x in range(0, images[a].width(), 8)
+                for y in range(0, images[a].height(), 8)
+                if images[a].pixelColor(x, y) != images[b].pixelColor(x, y)
+            )
+            assert differing > 0, (a, b)
 
 
 def test_letter_groups_cover_the_library_exactly():
     """The builder's grouped dropdown (owner spec 2026-07-11: Latin /
     Greek / Numbers / Symbols sections) must offer every library glyph
-    exactly once — and every glyph must ship BOTH its gold art and its
-    pre-rendered silver twin."""
-    from pathlib import Path
-
+    exactly once — and every glyph's gold master must exist (silver/
+    bronze are derived at load, owner 2026-07-19 — no separate files
+    to check)."""
     from config import constants
 
     grouped = [
@@ -403,11 +530,7 @@ def test_letter_groups_cover_the_library_exactly():
     assert len(constants.RING_LETTER_GROUPS["Latin"]) == 26   # the full alphabet
     for glyph, filename in constants.RING_LETTER_FILES.items():
         gold = defaults.RING_LETTER_ART_DIR / filename
-        silver = (
-            defaults.RING_LETTER_ART_DIR / f"{Path(filename).stem}_silver.png"
-        )
         assert gold.exists(), glyph
-        assert silver.exists(), glyph
 
 
 def test_earth_marker_follows_the_location_continent():

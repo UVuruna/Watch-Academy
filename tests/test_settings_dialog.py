@@ -791,6 +791,14 @@ def test_encyclopedia_expansion_wiring():
     assert [e["name"][1] for e in topics["moon"]["entries"]] == list(
         _constants.MOON_PHASE_NAMES
     )
+    # LIVE-RENDERED (owner 2026-07-19, retiring the eight pre-baked
+    # assets/moon/ plates): every phase image resolves to a real,
+    # disk-cached file — the OLD path (defaults.MOON_PHASE_ART_DIR
+    # without the source subdir) never actually existed, so this is
+    # also a fix, not just a parity check.
+    assert all(
+        entry["images"][0].exists() for entry in topics["moon"]["entries"]
+    )
     assert all(
         _paths.art_file(entry["images"][0]).exists()
         for entry in topics["trinity"]["entries"]

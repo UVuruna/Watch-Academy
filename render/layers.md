@@ -362,10 +362,20 @@ top tip IS the solar-noon pointer.
 ### RingLayer (STATIC)
 The full ring image when the skin provides one (numerals and minutes
 baked into the art), channel-multiplied by the ring tint, with the
-owner's gold/silver LETTER art overlaid by calculation
+owner's gold LETTER art overlaid by calculation
 (`RING_LETTER_RADIUS_FRACTION` / `RING_LETTER_ART_SCALE`) so the tint
 never touches the letters; otherwise the procedural donut with ticks,
 numerals, letter substitutions and minute numbers (untinted fallback).
+`RingSpec.letter_art` holds the GOLD master per hour; `RingSpec.
+letter_metal` the active finish ("gold"/"silver"/"bronze") — silver and
+bronze are no longer pre-rendered files (owner decree 2026-07-19:
+"bolje crtati na licu mesta nego 15MB fajlova", retiring
+setup/make_silver_letters.py / make_bronze_letters.py and their ~15 MB
+of `<Stem>_silver.png`/`<Stem>_bronze.png`) — `_draw_letter_art`
+resolves the finish through `render.assets.letter_metal_file(gold_asset,
+metal)` at paint time, disk-cached like every other derived asset; the
+shadow silhouette always reads the gold file directly (the alpha mask
+is identical on every finish).
 
 **RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
 Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`
@@ -442,7 +452,18 @@ backgrounds) and the Moon (`show_moon`: rides its own cycle via
 `moon_cycle_angle`, new at top, full at bottom, clockwise; the moon image
 gets the unlit part shadowed by the terminator mask — half-disc ∪/−
 ellipse with a = R·|cos 2πf| — and flips 180° for southern-hemisphere
-cities). With both markers on they share the rim at orbit 0.75 and the
+cities. This geometry is `render.assets.moon_lit_region(fraction,
+radius)` (extracted 2026-07-19 out of `_draw_moon` so the
+Encyclopedia's live-rendered Moon pages,
+`render.assets.moon_phase_image`, share the EXACT same shape and never
+drift apart — replacing the eight pre-baked plates, owner decree
+"bolje crtati na licu mesta nego 15MB fajlova"); the extraction fixed a
+real bug — AT THE EXACT QUARTERS (fraction 0.25/0.75) the terminator
+semi-axis is mathematically zero, and Qt's `addEllipse` on a
+zero-width rect used to degenerate the `united`/`subtracted` boolean
+op to an EMPTY path, rendering the moon fully DARK instead of exactly
+half-lit; `moon_lit_region` now special-cases the collapse and returns
+the half-disc directly). With both markers on they share the rim at orbit 0.75 and the
 smaller Moon transits OVER the Earth at `MOON_TRANSIT_OPACITY` when they
 meet. The Earth draws the user's `earth_style` variant (clean or
 atmosphere — both bundled per continent and day/night). During event windows

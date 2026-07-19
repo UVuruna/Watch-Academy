@@ -243,18 +243,18 @@ def build_skin(settings: Settings):
     metal_layout = {"triangle": card["triangle"] or layout["triangle"]}
     letters = {}
     letter_art = {}
+    letter_metal = {}
     letter_legend = {}
     for position, glyph in zip(card["positions"], card["letters"]):
         hour = position % 24                     # cards say 24, hours say 0
         letters[hour] = glyph
-        filename = constants.RING_LETTER_FILES[glyph]
-        metal = _letter_metal(position, metal_layout, settings.ring_finish)
-        if metal != "gold":
-            # Silver and bronze letters are PRE-RENDERED art (owner
-            # decision — setup/make_silver_letters.py and
-            # make_bronze_letters.py), not a runtime effect.
-            filename = f"{filename.rsplit('.', 1)[0]}_{metal}.png"
-        letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
+        # The letter art is ALWAYS the gold master — silver/bronze are
+        # derived from it AT LOAD (owner 2026-07-19,
+        # render.assets.letter_metal_file), never pre-rendered files.
+        letter_art[hour] = (
+            defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[glyph]
+        )
+        letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
             letter_legend[hour] = card["legend"][position]
     skin = dataclasses.replace(
@@ -264,6 +264,7 @@ def build_skin(settings: Settings):
             asset=defaults.RING_FACE_DIR / layout["face"],
             letters=letters,
             letter_art=letter_art,
+            letter_metal=letter_metal,
             letter_legend=letter_legend,
         ),
         hands=_resolve_hands(settings),

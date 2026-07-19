@@ -54,12 +54,16 @@ class RingSpec:
     letter_color: str
     width_fraction: float              # ring thickness as fraction of the dial radius
     letters: dict[int, str] = field(default_factory=dict)  # hour -> letter replacing the numeral
-    # The owner's letter art overlaid on the ring: hour -> the resolved
-    # file for the active finish — built by the controller's build_skin
-    # (the preset's accent letter wears the opposite metal; silver files
-    # are PRE-RENDERED by setup/make_silver_letters.py). The ring tint
-    # never touches them.
+    # The owner's GOLD letter art: hour -> the master file, ALWAYS gold
+    # (built by the controller's build_skin). The ring tint never
+    # touches it.
     letter_art: dict[int, Path] = field(default_factory=dict)
+    # hour -> the active FINISH ("gold"/"silver"/"bronze", the preset's
+    # accent letter wearing the opposite metal) — silver/bronze are
+    # derived from the gold master AT LOAD (owner 2026-07-19,
+    # `render.assets.letter_metal_file`; retired the ~15 MB of
+    # pre-rendered `_silver.png`/`_bronze.png` files).
+    letter_metal: dict[int, str] = field(default_factory=dict)
     # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
     # hour -> {name, reading} for a preset that carries one (MASON G
     # today; empty {} for DOMY/MORPH/NUMBERS and any custom ring) — see
