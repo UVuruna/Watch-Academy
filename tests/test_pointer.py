@@ -312,12 +312,20 @@ def test_subdial_plate_recolors_to_every_finish(app):
     else:
         assert h3_plate == master                         # seat borrow
     version = defaults.SUBDIAL_RECOLOR_VERSION
+    recolored_finish = None
     for finish in ("gold", "bronze"):
         plate = subdial_plate_file(finish, "center")
         assert plate is not None and plate != master, finish
-        assert plate.name.endswith(
-            f"_subdial{version}_{finish}.png"
-        ), finish
+        own = _paths.art_file(
+            defaults.SUBDIAL_ART_DIR / finish / "center.png"
+        )
+        if own is not None and own.exists():
+            assert plate == own, finish       # the real generated plate wins
+        else:
+            assert plate.name.endswith(
+                f"_subdial{version}_{finish}.png"
+            ), finish
+            recolored_finish = recolored_finish or finish
         assert plate.exists(), finish
     # The "theme" plate style (owner A/B spec 2026-07-15): a clock
     # TINT recolors the tapisserie field — that pass runs even on the
@@ -327,26 +335,27 @@ def test_subdial_plate_recolors_to_every_finish(app):
     assert tinted.name.endswith(f"_subdial{version}_silver_5a3fa0.png")
     assert tinted.exists()
     # The metal stays INSIDE the radial bezel band (owner correction
-    # 2026-07-15: his three side-by-side grabs showed the field
-    # drinking bronze/gold) — the recolored interior must match the
-    # master's interior exactly.
-    import numpy as _np
-    from PySide6.QtGui import QImage as _QImage
+    # 2026-07-15) — verifiable only on a RECOLORED plate (a real
+    # generated plate has its own interior, nothing to compare); once
+    # the owner's plates cover all three finishes this block idles.
+    if recolored_finish is not None:
+        import numpy as _np
+        from PySide6.QtGui import QImage as _QImage
 
-    def interior(path):
-        image = _QImage(str(path)).convertToFormat(
-            _QImage.Format.Format_RGBA8888
-        )
-        w, h = image.width(), image.height()
-        stride = image.bytesPerLine() // 4
-        data = _np.frombuffer(image.constBits(), dtype=_np.uint8)
-        data = data.reshape(h, stride, 4)[:, :w, :]
-        ys, xs = _np.mgrid[0:h, 0:w]
-        r = _np.hypot(xs - (w - 1) / 2, ys - (h - 1) / 2) / (w / 2)
-        return data[r < defaults.SUBDIAL_RECOLOR_RIM_RADIUS[0]]
+        def interior(path):
+            image = _QImage(str(path)).convertToFormat(
+                _QImage.Format.Format_RGBA8888
+            )
+            w, h = image.width(), image.height()
+            stride = image.bytesPerLine() // 4
+            data = _np.frombuffer(image.constBits(), dtype=_np.uint8)
+            data = data.reshape(h, stride, 4)[:, :w, :]
+            ys, xs = _np.mgrid[0:h, 0:w]
+            r = _np.hypot(xs - (w - 1) / 2, ys - (h - 1) / 2) / (w / 2)
+            return data[r < defaults.SUBDIAL_RECOLOR_RIM_RADIUS[0]]
 
-    gold = subdial_plate_file("gold", "center")
-    assert _np.array_equal(interior(gold), interior(master))
+        plate = subdial_plate_file(recolored_finish, "center")
+        assert _np.array_equal(interior(plate), interior(master))
 
 
 def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
