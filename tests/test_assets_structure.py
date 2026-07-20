@@ -109,3 +109,34 @@ def test_alt_folders_mirror_their_parent_names():
             if entry.is_file() and not (parent / entry.name).exists():
                 offenders.append(str(entry.relative_to(assets_root)))
     assert offenders == []
+
+
+def test_every_sourced_root_is_registered():
+    """The silent-absence tripwire (GUIDE shoot find, 2026-07-20): a
+    top-level assets/<root> whose art ships in gemini/ or chatgpt/
+    subtrees MUST be listed in constants.ART_SOURCED_ROOTS, or
+    `paths.art_file` passes the sourceless canonical path straight
+    through and every consumer quietly draws nothing. "era" (fixed in
+    the Rule #19 round) and "eclipse" (found by the GUIDE screenshot
+    session — chapter plates and hover badges absent) both died of
+    exactly this; this walk ends the class."""
+    from config import constants
+
+    assets_root = paths.assets_dir()
+    sourced_on_disk = sorted(
+        child.name
+        for child in assets_root.iterdir()
+        if child.is_dir()
+        # _-prefixed roots are meta, not art (assets/_state holds the
+        # PromptPainter per-source run reports)
+        and not child.name.startswith("_")
+        and any((child / source).is_dir() for source in constants.ART_SOURCES)
+    )
+    missing = [
+        name for name in sourced_on_disk
+        if name not in constants.ART_SOURCED_ROOTS
+    ]
+    assert not missing, (
+        f"assets roots with per-source subtrees not in ART_SOURCED_ROOTS: "
+        f"{missing} — their art resolves to nonexistent sourceless paths"
+    )

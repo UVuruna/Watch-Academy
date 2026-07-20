@@ -68,6 +68,12 @@ ART_SOURCED_ROOTS = (
     # straight through and every era badge silently failed its own
     # existence check).
     "era",
+    # The eclipse category emblems (GUIDE shoot find, 2026-07-20 —
+    # the same silent-absence class as "era" above: the ChatGPT batch
+    # landed as assets/eclipse/chatgpt/<Kind>_<Type>.png, but with the
+    # root missing here the encyclopedia chapter plates and the
+    # hover-card badges resolved the sourceless path and drew nothing).
+    "eclipse",
 )
 
 # --- Moon ----------------------------------------------------------------------

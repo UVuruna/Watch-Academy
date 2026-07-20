@@ -798,8 +798,15 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
         path = comp._eclipse_emblem(event)
         assert path is not None and path.name == stem
         assert path.parent == defaults.ECLIPSE_ART_DIR
-        # Graceful: no file on disk yet -> the badge is empty, no crash.
-        assert _hover_badge(path) == ""
+        # Art-arrival-proof (the subdial lesson, 0.14.367): while the
+        # art is absent the badge degrades to EMPTY (graceful), and the
+        # moment a source subtree carries the file (the ChatGPT batch,
+        # unlocked by registering the "eclipse" root) it must RENDER.
+        from config import paths as _paths
+        if _paths.art_file(path).exists():
+            assert _hover_badge(path) != ""
+        else:
+            assert _hover_badge(path) == ""
     unknown = EclipseEvent(
         kind="solar", instant=now.astimezone(timezone.utc),
         type="bogus", magnitude=1.0,
