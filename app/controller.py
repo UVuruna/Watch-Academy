@@ -45,7 +45,7 @@ from app.settings_store import (
     rotation_themes,
 )
 from app.time_travel import TimeTravelDialog
-from app.tray import TrayController, logo_icon
+from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
 from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
@@ -657,12 +657,15 @@ class AppController(QObject):
             self._settings.diameter, self._menu, self._legend, self._show_action
         )
         try:
-            icon = logo_icon()
-            self._tray = TrayController(self._menu, icon)
-            # Every dialog title bar (Settings, Time Travel, Guide)
-            # inherits this instead of the generic Windows icon (owner
-            # report 2026-07-11); the built EXE gets the M7 ICO on top.
-            self._app.setWindowIcon(icon)
+            self._tray = TrayController(self._menu, logo_icon())
+            # Every dialog title bar (Settings, Time Travel, Guide,
+            # Encyclopedia, Observatory) inherits this MULTI-RESOLUTION
+            # icon instead of the generic Windows icon (owner report
+            # 2026-07-11; multi-res + AppUserModelID fix owner
+            # screenshot 2026-07-20 — see app.native.set_app_user_model_id
+            # for the taskbar-grouping half of that fix); the built EXE
+            # additionally gets the M7 ICO on top.
+            self._app.setWindowIcon(window_icon())
             # SHOW on tray DOUBLE-CLICK (owner 2026-07-18, ROADMAP 15h):
             # the same "normal" z-mode-only affordance as the menu entry
             # above it.

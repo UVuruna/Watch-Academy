@@ -8,6 +8,11 @@ Win32 API literals live in winapi.py.
 APP_NAME = "DOMY Watch"
 ORGANIZATION = "UVuruna"
 SINGLE_INSTANCE_MUTEX = "DOMYWatch.SingleInstance"
+# Windows taskbar/AppUserModelID identity (owner screenshot 2026-07-20):
+# without an explicit ID, Windows groups every window this interpreter
+# opens under python.exe's OWN identity and can fall back to ITS icon
+# for the taskbar button — see app.native.set_app_user_model_id.
+APP_USER_MODEL_ID = "UVuruna.DOMYWatch"
 
 # --- Dial identity -----------------------------------------------------------
 # The dial is a 24-hour clock face, CLOCKWISE, with 12:00 noon at the TOP

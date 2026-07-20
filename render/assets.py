@@ -373,7 +373,11 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
         / f"{stamp}_{int(path.stat().st_mtime)}_{metal}.png"
     )
     if not cache.exists():
-        swapped = AssetCache._metal_swapped(QPixmap(str(path)), metal)
+        # QImage end to end — this runs on the background hover-warm
+        # thread too, where QPixmap is forbidden (R1b find, 2026-07-20:
+        # the one off-GUI-thread QPixmap in the codebase, the prime
+        # suspect for the untraced whole-app aborts).
+        swapped = AssetCache._metal_swapped(QImage(str(path)), metal)
         try:
             cache.parent.mkdir(parents=True, exist_ok=True)
             swapped.save(str(cache))
@@ -532,7 +536,9 @@ class AssetCache:
                 source = scaled_variant_file(path, ceiling)
             pixmap = self._rasterize(source, px_height, dpr)
             if metal is not None:
-                pixmap = self._metal_swapped(pixmap, metal)
+                pixmap = QPixmap.fromImage(
+                    self._metal_swapped(pixmap.toImage(), metal)
+                )
             if desaturate:
                 pixmap = self._desaturated(pixmap)
             if tint is not None:
@@ -543,16 +549,20 @@ class AssetCache:
         return self._pixmaps[key]
 
     @staticmethod
-    def _metal_swapped(source: QPixmap, metal: str) -> QPixmap:
+    def _metal_swapped(source: QImage, metal: str) -> QImage:
         """The hue-SELECTIVE metal swap (owner insight 2026-07-12): the
         bronze-plate art mixes warm bronze details with GRAY stone and
         engravings — a soft warm-hue window with a saturation ramp
         selects only the bronze pixels, which take the target metal's
         hue/saturation/value; everything else stays as drawn. numpy
-        vectorized (per-pixel Python is banned in the render path)."""
+        vectorized (per-pixel Python is banned in the render path).
+        QImage in, QImage out (R1b threading find, 2026-07-20): the
+        background hover-warm sweep reaches this through
+        `metal_variant_file`, and QPixmap must never be touched off the
+        GUI thread — GUI-thread callers wrap with QPixmap.fromImage."""
         target = defaults.METAL_SWAP_TARGETS[metal]
         dpr = source.devicePixelRatio()
-        image = source.toImage().convertToFormat(
+        image = source.convertToFormat(
             QImage.Format.Format_RGBA8888
         )
         width, height = image.width(), image.height()
@@ -612,7 +622,7 @@ class AssetCache:
             QImage.Format.Format_RGBA8888,
         ).copy()
         out.setDevicePixelRatio(dpr)
-        return QPixmap.fromImage(out)
+        return out
 
     @staticmethod
     def _desaturated(source: QPixmap) -> QPixmap:

@@ -59,6 +59,14 @@ def _install_crash_logging() -> None:
 def main() -> int:
     # A trace for the next crash BEFORE anything else can crash.
     _install_crash_logging()
+
+    from app import native
+
+    # Give the process its OWN taskbar identity BEFORE any window exists
+    # (owner screenshot 2026-07-20: Encyclopedia/Guide/Observatory showed
+    # python's own logo in the taskbar) — needs no QApplication and no
+    # HWND, so it runs first.
+    native.set_app_user_model_id(constants.APP_USER_MODEL_ID)
     # Must run before QApplication exists: 125%/150% Windows scaling should
     # yield true fractional devicePixelRatio, not a rounded integer.
     QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
@@ -71,7 +79,6 @@ def main() -> int:
     # without this, closing any dialog would quit the whole app.
     app.setQuitOnLastWindowClosed(False)
 
-    from app import native
     from app.controller import AppController
 
     if not native.acquire_single_instance(constants.SINGLE_INSTANCE_MUTEX):

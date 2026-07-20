@@ -15,7 +15,8 @@ that delivers Spacebar to the UNFOCUSED dial (Session 21).
 - [Config (folder)](../config/___config.md) — `winapi.py` literals
 
 ### Used by
-- `main.py` — single-instance gate
+- `main.py` — single-instance gate, AppUserModelID (called BEFORE
+  `QApplication` exists — the very first thing `main()` does)
 - [Clock Widget](widget.md) — WM_NCHITTEST circular pass-through
 - [App Controller](controller.md) — click-through toggle, wake filter
 
@@ -23,6 +24,15 @@ that delivers Spacebar to the UNFOCUSED dial (Session 21).
 
 - `acquire_single_instance(name)`: named kernel mutex; the handle
   deliberately lives as long as the process
+- `set_app_user_model_id(app_id)` (owner screenshot 2026-07-20):
+  `shell32.SetCurrentProcessExplicitAppUserModelID` — gives the process
+  its OWN taskbar identity so Windows stops grouping every window this
+  interpreter opens under python.exe's identity (which could fall back
+  to ITS icon for the taskbar button regardless of what
+  `QApplication.setWindowIcon` set). Needs no QApplication/HWND; raises
+  `OSError` on a non-S_OK HRESULT (Rule #1 — practically never fails on
+  a supported Windows version, so a failure is let through loud rather
+  than guarded, Rule #7).
 - `set_click_through(hwnd, enabled)`: TRUE click-through via
   `WS_EX_TRANSPARENT` — the window takes no mouse input at all; hover
   info survives through the controller's cursor poller

@@ -12,16 +12,15 @@ from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 from config import constants, defaults
 
 
-def logo_icon() -> QIcon:
-    """The owner's gold watch (assets/logo.svg) rasterized to the tray
-    size, aspect kept and centered — the ONE app face: the tray and the
-    app-wide window icon (dialog title bars) both wear it; the built
-    EXE additionally embeds the M7 ICO. A missing/broken logo must be
-    visible — the app raises instead of showing an empty tray."""
+def _rasterize_logo(size: int) -> QPixmap:
+    """The owner's gold watch (assets/logo.svg) rasterized to `size` px,
+    aspect kept and centered — the shared rasterizer behind both the
+    fixed-size tray icon and the multi-resolution window icon. A
+    missing/broken logo must be visible — callers propagate the
+    ValueError instead of showing an empty/generic icon."""
     renderer = QSvgRenderer(str(defaults.LOGO_ASSET))
     if not renderer.isValid():
-        raise ValueError(f"cannot load the tray logo: {defaults.LOGO_ASSET}")
-    size = defaults.TRAY_ICON_SIZE
+        raise ValueError(f"cannot load the app logo: {defaults.LOGO_ASSET}")
     pixmap = QPixmap(size, size)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
@@ -33,7 +32,27 @@ def logo_icon() -> QIcon:
         painter, QRectF((size - width) / 2, (size - height) / 2, width, height)
     )
     painter.end()
-    return QIcon(pixmap)
+    return pixmap
+
+
+def logo_icon() -> QIcon:
+    """The tray icon — ONE fixed size, the tray never asks for another."""
+    return QIcon(_rasterize_logo(defaults.TRAY_ICON_SIZE))
+
+
+def window_icon() -> QIcon:
+    """The app-wide WINDOW icon (owner screenshot 2026-07-20): every
+    dialog title bar, Alt-Tab thumbnail and taskbar button wears this —
+    MULTIPLE resolutions in one QIcon, so Windows picks the sharpest
+    match for each context instead of blurrily scaling a single size (a
+    single-size icon was part of why Settings/Time Travel/Guide/
+    Encyclopedia/Observatory windows fell back to python.exe's own
+    logo in the taskbar; `native.set_app_user_model_id` fixes the other
+    half — the process identity itself)."""
+    icon = QIcon()
+    for size in defaults.WINDOW_ICON_SIZES_PX:
+        icon.addPixmap(_rasterize_logo(size))
+    return icon
 
 
 class TrayController:

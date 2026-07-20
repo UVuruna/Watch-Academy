@@ -488,9 +488,7 @@ def test_bronze_finish_and_theme_metals():
     probe.fill(QColor("#B08050"))                    # warm bronze
     image = probe.toImage()
     image.setPixelColor(1, 0, QColor("#808080"))     # neutral gray
-    swapped = AssetCache._metal_swapped(
-        QPixmap.fromImage(image), "silver"
-    ).toImage()
+    swapped = AssetCache._metal_swapped(image, "silver")
     bronze_out = swapped.pixelColor(0, 0)
     gray_out = swapped.pixelColor(1, 0)
     assert bronze_out.saturationF() < 0.15           # bronze went silver

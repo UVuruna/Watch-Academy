@@ -17,6 +17,10 @@ from config import winapi
 
 _user32 = ctypes.windll.user32
 _kernel32 = ctypes.windll.kernel32
+_shell32 = ctypes.windll.shell32
+
+_shell32.SetCurrentProcessExplicitAppUserModelID.restype = ctypes.c_long  # HRESULT
+_shell32.SetCurrentProcessExplicitAppUserModelID.argtypes = (wintypes.LPCWSTR,)
 
 _user32.GetWindowLongPtrW.restype = ctypes.c_ssize_t
 _user32.GetWindowLongPtrW.argtypes = (wintypes.HWND, ctypes.c_int)
@@ -51,6 +55,26 @@ def acquire_single_instance(name: str) -> bool:
     global _instance_mutex
     _instance_mutex = _kernel32.CreateMutexW(None, False, name)
     return _kernel32.GetLastError() != winapi.ERROR_ALREADY_EXISTS
+
+
+def set_app_user_model_id(app_id: str) -> None:
+    """Give the process its OWN taskbar identity (owner screenshot
+    2026-07-20: Encyclopedia/Guide/Observatory showed python's own logo
+    in the Windows taskbar). Without this, Windows groups every window
+    an unfrozen interpreter opens under python.exe's identity, and can
+    fall back to ITS icon resource for the taskbar button regardless of
+    what `QApplication.setWindowIcon` set at the Qt level — the two are
+    separate identities. MUST run before the first window is created;
+    it needs no QApplication and no HWND, so main() calls it first
+    thing. An OS API failure here is a real, visible bug (Rule #1) —
+    the call practically never fails on a supported Windows version, so
+    a failure is let through loud rather than guarded (Rule #7)."""
+    hr = _shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
+    if hr != 0:                                              # S_OK
+        raise OSError(
+            "SetCurrentProcessExplicitAppUserModelID failed: "
+            f"hr=0x{hr & 0xFFFFFFFF:08X}"
+        )
 
 
 _RUN_KEY = r"Software\Microsoft\Windows\CurrentVersion\Run"
