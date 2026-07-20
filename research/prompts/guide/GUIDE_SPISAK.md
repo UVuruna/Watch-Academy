@@ -49,6 +49,21 @@ na 720 px dial-u osim gde piše drugačije.
 Ako u međuvremenu dodamo feature — dopisujemo red; jedan fajl, jedna
 tabela, kao i za ikonice.
 
+## Status (2026-07-20)
+
+Svih 20 snimaka snimljeno programski (Qt drajver na pravom hardveru,
+720 px dial, podne 20.7.2026): dial kadrovi su PROVIDNI PNG-ovi
+(alpha), hover karte i meniji screen-capture bez dev okruženja,
+dijalozi ceo prozor. Umesto `aurora_calendar.png` — dva fajla
+`pointer_Aurora/Calendar.png`; metali `metal_gold/bronze/silver.png`
+(grčka tema). Eklipse: solarna 2.8.2027 12:06, lunarna totalna
+31.12.2028 (bakar + tirkiz). Usput nađen i popravljen bug: `eclipse`
+je falio u `ART_SOURCED_ROOTS` pa su emblemi poglavlja i hover
+bedževi bili tiho odsutni. Novi `pages.json` + `captions.json`
+složeni (14 strana, engleski tekstovi — SR tek u S15); starih 88
+numerisanih slajdova iz jula penzionisano. Preostaje: tvoje čitanje
+tekstova.
+
 ## Redosled
 
 Snimaš JEDNOM, na kraju: posle tvog art talasa (era/eklipse/jevanđelisti/
