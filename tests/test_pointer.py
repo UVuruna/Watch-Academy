@@ -302,7 +302,15 @@ def test_subdial_plate_recolors_to_every_finish(app):
     )
     assert master.exists()
     assert subdial_plate_file("silver", "center") == master
-    assert subdial_plate_file("silver", "h3") == master   # seat borrow
+    # Seat resolution is art-arrival-proof (owner generation is landing
+    # plate by plate, 2026-07-20): a seat with its OWN plate on disk
+    # returns it, a seat without one borrows the center master.
+    h3_own = _paths.art_file(defaults.SUBDIAL_ART_DIR / "silver" / "h3.png")
+    h3_plate = subdial_plate_file("silver", "h3")
+    if h3_own is not None and h3_own.exists():
+        assert h3_plate == h3_own                         # own seat plate
+    else:
+        assert h3_plate == master                         # seat borrow
     version = defaults.SUBDIAL_RECOLOR_VERSION
     for finish in ("gold", "bronze"):
         plate = subdial_plate_file(finish, "center")

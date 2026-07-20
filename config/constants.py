@@ -167,7 +167,14 @@ AGE_OF_LIGHT_END_YEAR = 6423
 # (Huangdi) count uses the CE + 2697 convention (2026 CE → 4723) — the
 # most common modern reading; sources spread 2695–2698 (the Encyclopedia's
 # own "Eras of the World" article already flags the epoch drift).
-THIRD_ERAS = ("none", "auc", "byzantine", "hebrew", "hegirae", "chinese")
+# "maya" (MAYA round, owner 2026-07-20: "Jel Maje nisu imale kalendar?")
+# is the ODD ONE OUT here — every other third era is a uniform "CE + N"
+# offset on the astronomical-year axis, but the Maya Long Count is a
+# TRUE DAY COUNT from a fixed epoch (no year concept at all), so it has
+# no THIRD_ERA_OFFSETS entry and is NOT handled by `third_era_year` —
+# `core.deep_time.maya_long_count` walks the real calendar date's
+# Julian Day Number instead (`format_year_line` special-cases it).
+THIRD_ERAS = ("none", "auc", "byzantine", "hebrew", "hegirae", "chinese", "maya")
 THIRD_ERA_TITLES = {
     "none": "None",
     "auc": "Ab Urbe Condita (Rome)",
@@ -175,6 +182,7 @@ THIRD_ERA_TITLES = {
     "hebrew": "Hebrew Anno Mundi",
     "hegirae": "Anno Hegirae (Islamic)",
     "chinese": "Huangdi (China)",
+    "maya": "Maya Long Count",
 }
 THIRD_ERA_OFFSETS = {
     "auc": 753, "byzantine": 5509, "hebrew": 3760, "chinese": 2697,
@@ -185,6 +193,7 @@ THIRD_ERA_LABELS = {
     "hebrew": "Hebrew A.M.",
     "hegirae": "AH",
     "chinese": "Huangdi",
+    "maya": "Long Count",
 }
 # Epoch fine print for the Settings combo tooltips (owner amendment:
 # tooltip only, never on the year line).
@@ -195,7 +204,18 @@ THIRD_ERA_NOTES = {
                "approximation; exact AH needs lunisolar math.",
     "chinese": "Continuous count from the Yellow Emperor's reign — "
                "sources spread 2695–2698 BCE; this dial uses CE + 2697.",
+    "maya": "A true day count (baktun.katun.tun.uinal.kin), not a year "
+            "offset — GMT correlation epoch 11 Aug 3114 BCE; 21 Dec 2012 "
+            "was 13.0.0.0.0, a cycle rolling over, not an ending.",
 }
+# The Maya Long Count's GMT correlation constant (Goodman-Martinez-
+# Thompson, the most widely accepted): Julian Day Number 584,283 =
+# Long Count 0.0.0.0.0 = 11 August 3114 BCE proleptic Gregorian (6
+# September 3114 BCE Julian). `core.deep_time.maya_long_count` golden-
+# tested against two independently known, mutually consistent anchors
+# (tests/test_deep_time.py): 21 Dec 2012 = 13.0.0.0.0, 1 Jan 2000 =
+# 12.19.6.15.2.
+MAYA_EPOCH_JDN = 584283
 
 # The 400-year proleptic-Gregorian cycle (146,097 days — exactly 20,871
 # weeks): shifting a moment by whole cycles preserves leap structure,

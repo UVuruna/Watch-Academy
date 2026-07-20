@@ -101,8 +101,11 @@ complication plate look (owner A/B spec 2026-07-15). THE YEAR LINE
 default | "bc_ad" — the OFFICIAL labels only; Anno Lucis always
 accompanies the official year and is not a mode), `show_era_suffix`
 (False — positive years render bare unless opted in) and `third_era`
-("none" | "auc" | "byzantine" | "hebrew" | "hegirae" — the optional
-third calendar on the line). `jump_cities` (Session 16, owner slika
+("none" | "auc" | "byzantine" | "hebrew" | "hegirae" | "chinese" |
+"maya" — the optional third calendar on the line; "maya", MAYA round
+owner 2026-07-20, is the odd one out, a true day count rather than a
+year offset — see [Deep Time](../core/deep_time.md)). `jump_cities`
+(Session 16, owner slika
 12): the user's own Quick Jump ▸ Location places — validated
 {name, latitude, longitude, timezone} dicts picked from the location
 database in Settings. The hidden mode is deliberately NOT here (owner

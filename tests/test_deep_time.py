@@ -20,6 +20,7 @@ from core.deep_time import (
     format_year_line,
     is_leap,
     julian_day,
+    maya_long_count,
     month_length,
     proxy_cycles,
     real_year,
@@ -90,6 +91,51 @@ def test_chinese_third_era_joins_the_year_line():
     )
     assert "chinese" in constants.THIRD_ERAS
     assert constants.THIRD_ERA_LABELS["chinese"] == "Huangdi"
+
+
+def test_maya_long_count_golden_anchors():
+    """The TRUE Maya Long Count (MAYA round, owner 2026-07-20) — a pure
+    day count from the GMT correlation epoch (JDN 584,283), NOT a year
+    offset. Two independently known anchors, mutually consistent from
+    the sealed epoch+13.0.0.0.0 pair alone (cross-checked against
+    `datetime.date` subtraction independent of `julian_day`, agrees
+    exactly — see the MAYA round deliverable notes)."""
+    assert maya_long_count(2012, 12, 21) == "13.0.0.0.0"
+    assert maya_long_count(2000, 1, 1) == "12.19.6.15.2"
+    # The epoch itself reads all-zero.
+    assert maya_long_count(-3113, 8, 11) == "0.0.0.0.0"
+
+
+def test_maya_long_count_round_trip_day_after_day():
+    """Every consecutive day advances the kin place by exactly one
+    (wrapping through uinal/tun/katun/baktun) — the pure day-count
+    arithmetic has no calendar irregularities to trip on."""
+    assert maya_long_count(2012, 12, 20) == "12.19.19.17.19"
+    assert maya_long_count(2012, 12, 22) == "13.0.0.0.1"
+
+
+def test_maya_third_era_joins_the_year_line():
+    """The Long Count reads on the year line like every other third
+    calendar, but carries the full date through (not offset-based)."""
+    assert (
+        format_year_line(2026, "bce_ce", True, "maya", 12, 21)
+        == "2026 CE · 6105. Anno Lucis · 13.0.14.3.13. Long Count"
+    )
+    assert "maya" in constants.THIRD_ERAS
+    assert constants.THIRD_ERA_LABELS["maya"] == "Long Count"
+
+
+def test_maya_deep_travel_case():
+    """A deep-travel BCE moment (the un-shifted real date drives the
+    Long Count, same law as everything else in this module) — the Age
+    of Light's own dawn, 4079 BCE, is EARLIER than the Long Count
+    epoch (3114 BCE): an honest pre-epoch reading, negative baktun
+    with the floor-division remainder still positive (Python's
+    `divmod`, no special-casing needed — Rule #7)."""
+    assert maya_long_count(-4078, 1, 1) == "-3.11.0.5.18"
+    assert format_year_line(-4078, "bce_ce", False, "maya", 1, 1) == (
+        "4079 BCE · 1. Anno Lucis · -3.11.0.5.18. Long Count"
+    )
 
 
 def test_format_anno_lucis_matches_the_year_line_pairing():

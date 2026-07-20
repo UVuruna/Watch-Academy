@@ -150,7 +150,7 @@ here.
 
 ## Era Terms (`assets/era/`, `config.defaults.ERA_ART_DIR`)
 
-**Prompt sheet: EXISTS and is COMPLETE — 13 entries, not 6.** The
+**Prompt sheet: EXISTS and is COMPLETE — 14 entries, not 6.** The
 prior revision of this document only knew about the original 6 (2
 Ages + 4 Starry Seasons); `research/prompts/era/era_prompts.md` grew a
 7th entry (`Anno_Lucis.png`) and a `calendar/` sub-collection of 6 more
@@ -158,13 +158,16 @@ Ages + 4 Starry Seasons); `research/prompts/era/era_prompts.md` grew a
 own "fix-round B, TASK 3" — confirmed wired in
 `app/encyclopedia.py`'s `_ERA_ENTRIES`/`_ERA_CALENDAR_ART` and
 dry-run-verified clean (13 images, 0 problems, per the sheet's own
-Status section).
+Status section). The MAYA round (owner 2026-07-20) added a 7th
+calendar emblem, `Maya.png`, to the same `calendar/` sub-collection —
+14 entries total; the sheet's own Status section still needs its own
+fresh dry-run pass on the new entry.
 
 | Collection | Expected by code | On disk | Sheet entry | Verdict |
 |---|---|---|---|---|
 | `era/*` — 2 Ages + 4 Starry Seasons | Age_of_Light, Age_of_Darkness, Starry_{Spring,Summer,Autumn,Winter} | 0/6 | `era_prompts.md` ✔ | ART GAP — full generation pending, wired + graceful-absent on the Encyclopedia's ERA topic |
 | `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `assets/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
-| `era/calendar/*` — 6 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi | 0/6 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent |
+| `era/calendar/*` — 7 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya | 0/7 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent |
 
 <a id="eclipse"></a>
 

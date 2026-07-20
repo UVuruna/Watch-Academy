@@ -139,9 +139,10 @@ _SUN_ENTRIES = (
 # and the four STARRY SEASONS carry an emblem each. Badges from
 # assets/era/ (research/prompts/era/era_prompts.md).
 # The comparative "Eras of the World" essay carries no plate of its
-# own — instead it strings the SIX calendar-system emblems the essay
-# compares (owner fix-round B, 2026-07-19, TASK 3): graceful-absent
-# until PromptPainter generates assets/era/calendar/*.png.
+# own — instead it strings the calendar-system emblems the essay
+# compares (owner fix-round B, 2026-07-19, TASK 3; Maya added the MAYA
+# round, owner 2026-07-20): graceful-absent until PromptPainter
+# generates assets/era/calendar/*.png.
 _ERA_CALENDAR_ART = (
     "calendar/AUC.png",
     "calendar/Byzantine.png",
@@ -149,6 +150,7 @@ _ERA_CALENDAR_ART = (
     "calendar/Hegirae.png",
     "calendar/Buddhist.png",
     "calendar/Huangdi.png",
+    "calendar/Maya.png",
 )
 _ERA_ENTRIES = (
     ("Age_of_Light", "Age_of_Light.png"),

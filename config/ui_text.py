@@ -201,6 +201,12 @@ UI_STRINGS: tuple[str, ...] = (
     "Huangdi (China)",
     "Continuous count from the Yellow Emperor's reign — sources "
     "spread 2695–2698 BCE; this dial uses CE + 2697.",
+    # The Maya Long Count (MAYA round, owner 2026-07-20 — "Jel Maje
+    # nisu imale kalendar? Zašto nemamo njihov?").
+    "Maya Long Count",
+    "A true day count (baktun.katun.tun.uinal.kin), not a year "
+    "offset — GMT correlation epoch 11 Aug 3114 BCE; 21 Dec 2012 "
+    "was 13.0.0.0.0, a cycle rolling over, not an ending.",
     # NOW (owner 2026-07-15): back to the present — in the Quick Jump
     # menu and as the Time Travel dialog's left button.
     "Now", "OK", "Cancel",

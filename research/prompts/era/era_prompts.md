@@ -30,10 +30,10 @@ doctrine is drawn as one day's own arc, never as lettering.
 `Starry_Autumn.png`, `Starry_Winter.png`, plus (owner fix-round B,
 2026-07-19, TASK 3) `Anno_Lucis.png` and, under `assets/era/calendar/`,
 `AUC.png`, `Byzantine.png`, `Hebrew.png`, `Hegirae.png`, `Buddhist.png`,
-`Huangdi.png`. No `<source>` split (a single generation batch, like the
-emblem/badge families) — the app reads `assets/era/<Name>.png` (or
-`assets/era/calendar/<Name>.png`) directly (`config/defaults.py`
-`ERA_ART_DIR`).
+`Huangdi.png`, `Maya.png` (MAYA round, owner 2026-07-20). No `<source>`
+split (a single generation batch, like the emblem/badge families) —
+the app reads `assets/era/<Name>.png` (or `assets/era/calendar/<Name>.png`)
+directly (`config/defaults.py` `ERA_ART_DIR`).
 
 **House rules carried from every other sheet:** photorealistic
 render, isolated background (no transparency-checkerboard artifact —
@@ -138,9 +138,11 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The Eras of the World's own calendars
 
-**Six emblems** (owner fix-round B, 2026-07-19, TASK 3 — "zašto nismo
-ubacili kineski" prompted the whole round), one per calendar system the
-"Eras of the World" essay compares — SAME round rose-window family,
+**Seven emblems** (six from owner fix-round B, 2026-07-19, TASK 3 —
+"zašto nismo ubacili kineski" prompted the whole round — plus Maya,
+MAYA round, owner 2026-07-20, "Jel Maje nisu imale kalendar? Zašto
+nemamo njihov?"), one per calendar system the "Eras of the World"
+essay compares — SAME round rose-window family,
 SAME house rules (photorealistic, isolated background, the circular
 window shape IS the frame, NO lettering anywhere — no calligraphy, no
 numerals, no inscriptions of any kind, the doctrine drawn as image
@@ -193,8 +195,15 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. An Imperial-yellow jade disc (a bi, the ancient symbol of heaven) sits at the medallion's center, ringed by a single sinuous dragon in deep jade-green and gold tracing the disc's own circular window edge — the dragon never fully closing the circle, echoing the flicker motif's own broken row in spirit though not in literal form. Palette: imperial yellow-gold, deep jade green, dark lacquer-red accents, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
 ```
 
+**Maya Long Count** (the GMT correlation epoch, 11 August 3114 BCE) →
+`assets/era/calendar/Maya.png` (MAYA round, owner 2026-07-20)
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A stepped pyramid in the silhouette of El Castillo rises from the disc's base in warm limestone-and-shadow glass, its narrow staircase climbing dead center toward the summit; the sun's disc sits low and bright, just cresting the pyramid's own summit stair, a single warm ray spilling down the steps. Above the pyramid a deep indigo-black sky fills the rest of the window, scattered with a full field of small bright star-tesserae — day just breaking over a night still holding the upper glass, the count's own turning point caught mid-dawn. Palette: warm limestone gold-gray, deep indigo-black sky, bright starlight, dark-stone lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere (no glyphs of any kind — Maya script is writing, not permitted in this house, exactly like the Hegirae plate's calligraphy ban), no figures.
+```
+
 **Future use (owner note, not yet wired further than the essay art):**
-these six calendar emblems' art already backs the "Eras of the World"
+these seven calendar emblems' art already backs the "Eras of the World"
 article's image strip (`app/encyclopedia.py` `_ERA_CALENDAR_ART`,
 graceful-absent — see [Encyclopedia](../../../app/encyclopedia.md));
 the owner's next planned use is the Settings/era-picker combo
@@ -225,10 +234,20 @@ wearing the matching emblem beside each option.
   measure). The seven files already generated under the OLD
   wheel-and-seam/flicker device no longer match these prompts. **Owner
   action required:** delete `assets/era/gemini/*.png` (the seven era7
-  files ONLY — `assets/era/gemini/calendar/` is untouched, its six
-  prompts unchanged) and rerun PromptPainter on this sheet to
-  regenerate the seven. The six calendar emblems below need no
-  regeneration.
+  files ONLY — `assets/era/gemini/calendar/` is untouched, its prompts
+  unchanged) and rerun PromptPainter on this sheet to regenerate the
+  seven. The calendar emblems below need no regeneration.
+- **Extended again (MAYA round, owner 2026-07-20 — "Jel Maje nisu
+  imale kalendar? Zašto nemamo njihov?"):** a seventh calendar-system
+  emblem, `Maya.png` (El Castillo's stepped-pyramid silhouette under a
+  star field, the sun cresting its summit stair — no lettering, no
+  Maya glyphs), joins the six above — 14 images total. The `third_era`
+  setting itself also grew a Maya option this round
+  (`core/deep_time.py` `maya_long_count`, TRUE Long Count arithmetic,
+  not an offset — see [Deep Time](../../../core/deep_time.md)); this
+  sheet only covers the ARTWORK.
 - Verify with `python main.py "research/prompts/era/era_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner
-  (13 images expected — verified 2026-07-19, dry-run clean, 0 problems).
+  (14 images expected — the six-calendar dry-run was verified clean,
+  0 problems, on 2026-07-19; the Maya addition still needs its own
+  dry-run pass).

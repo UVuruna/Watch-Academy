@@ -515,7 +515,16 @@ lives in [The DOMY Canon](CANON.md).
    the Observatory's fifth chart plots the La2004 amplitude envelope
    over ±200,000 years (`Database/observatory_envelope.json`,
    `setup/make_observatory.py`) with an honest doctrine caption; Time
-   Travel itself was never touched, exactly as sealed.
+   Travel itself was never touched, exactly as sealed. The THIRD era
+   combo went on to grow two more picks: Huangdi/Chinese (CE+2697,
+   owner fix-round B, 2026-07-19) and, unlike every offset era above,
+   the Maya LONG COUNT (MAYA round, owner 2026-07-20, "Jel Maje nisu
+   imale kalendar?") — a TRUE day count from the GMT correlation epoch
+   (JDN 584,283), not a year offset; `core.deep_time.maya_long_count`
+   walks the displayed date's Julian Day Number through the
+   baktun/katun/tun/uinal/kin radix chain, golden-tested against 21
+   Dec 2012 = 13.0.0.0.0 and 1 Jan 2000 = 12.19.6.15.2 (see
+   [Deep Time](core/deep_time.md)).
 15a3. **Era terms in the Encyclopedia + their LOGOS — DONE
    (2026-07-18, ERA TERMS round).** "Age of Light", "Age of Darkness"
    and the four STARRY SEASONS (spring/summer/autumn/winter of the
@@ -534,7 +543,15 @@ lives in [The DOMY Canon](CANON.md).
    masonic Anno Lucis — plus the Chinese count and the Buddhist Era
    (543 BCE) as my additions (the Chinese epoch is flagged uncertain
    across sources — never invented past what the article states). 1
-   new test (`tests/test_settings_dialog.py`), 434 green.
+   new test (`tests/test_settings_dialog.py`), 434 green. **Extended
+   (MAYA round, owner 2026-07-20 — "Jel Maje nisu imale kalendar?
+   Zašto nemamo njihov?"):** the article grows a Maya paragraph — the
+   Tzolk'in (260 d) and Haab' (365 d) calendars, the Long Count epoch,
+   and the 2012 baktun-turn told honestly (a cycle rolled, nothing
+   ended) — plus a seventh calendar emblem, `Maya.png`
+   (`research/prompts/era/era_prompts.md`), and the Maya Long Count
+   joins `third_era` as a real, non-offset THIRD_ERAS entry (15a2
+   above; `core/deep_time.md`).
 15b. **The Mason ring — DONE (2026-07-18, MASON G RING round).** The
    bundled preset **G(12) S(16) M(20) Ω(24) N(4) A(8)** on the seal
    layout (`Database/ring_presets.json` — every letter's art already

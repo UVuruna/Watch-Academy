@@ -308,7 +308,10 @@ class TimeTravelDialog(QDialog):
         self._header.setText(
             f"<b>{self._day.value()} "
             f"{self._tr(_MONTHS_SHORT[self._month.currentIndex()])} "
-            f"{format_year_line(year, self._notation, self._suffix, self._third_era)}</b>"
+            f"{format_year_line(
+                year, self._notation, self._suffix, self._third_era,
+                self._month.currentIndex() + 1, self._day.value(),
+            )}</b>"
         )
         if self._coverage is not None:
             first, last = self._coverage

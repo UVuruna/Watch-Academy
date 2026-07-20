@@ -52,17 +52,30 @@ def format_year_line(
     notation: str,
     show_suffix: bool = False,
     third_era: str = "none",
+    month: int = 1,
+    day: int = 1,
 ) -> str:
     """THE year line (owner amendment 2026-07-17, ONE pairing place):
     the Anno Lucis year ALWAYS accompanies the official year —
     "2026 · 6105. Anno Lucis" — and the optional third calendar joins
     the line ("… · 2779. AUC"). Every legend/hover/dialog-header year
-    renders through here."""
+    renders through here.
+
+    `month`/`day` matter ONLY for "maya" (MAYA round, owner 2026-07-20):
+    the Long Count is a true day count, not a year offset, so it needs
+    the full displayed date — every caller whose `third_era` can be
+    "maya" MUST pass the real calendar date. Every other era ignores
+    them, so the 1 Jan default keeps their call sites/tests unchanged."""
     parts = [
         format_official(astro_year, notation, show_suffix),
         format_anno_lucis(astro_year),
     ]
-    if third_era != "none":
+    if third_era == "maya":
+        parts.append(
+            f"{maya_long_count(astro_year, month, day)}. "
+            f"{constants.THIRD_ERA_LABELS['maya']}"
+        )
+    elif third_era != "none":
         parts.append(
             f"{third_era_year(astro_year, third_era)}. "
             f"{constants.THIRD_ERA_LABELS[third_era]}"
@@ -87,10 +100,34 @@ def third_era_year(astro_year: int, third_era: str) -> int:
     eras are uniform +N on the astronomical axis; Anno Hegirae is
     LUNAR — the standard display-grade approximation
     AH ≈ (CE − 622) × 33/32 (exact AH needs lunisolar month math,
-    documented in constants.THIRD_ERA_NOTES)."""
+    documented in constants.THIRD_ERA_NOTES). NOT called for "maya" —
+    the Long Count is a day count, not a year offset; see
+    `maya_long_count`/`format_year_line`."""
     if third_era == "hegirae":
         return round((astro_year - 622) * 33 / 32)
     return astro_year + constants.THIRD_ERA_OFFSETS[third_era]
+
+
+def maya_long_count(astro_year: int, month: int, day: int) -> str:
+    """The TRUE Maya Long Count (MAYA round, owner 2026-07-20) — a pure
+    day count from the GMT correlation epoch (Julian Day Number
+    584,283 = 11 August 3114 BCE proleptic Gregorian, 6 September
+    3114 BCE Julian; `constants.MAYA_EPOCH_JDN`), radix
+    baktun(144000 days)/katun(7200)/tun(360)/uinal(20)/kin(1 day).
+    Unlike every other THIRD_ERA this is not a year offset, so it
+    needs the full displayed DATE, not just the year — `julian_day`
+    with `day_fraction=0.5` (noon) lands exactly on the integer JDN
+    (the same trick `julian_day_of`/the eclipse lookups already lean
+    on). Golden-tested against two independently known, mutually
+    consistent anchors (tests/test_deep_time.py): 21 Dec 2012 =
+    13.0.0.0.0, 1 Jan 2000 = 12.19.6.15.2 — cross-checked against the
+    2012 anchor via plain `datetime.date` subtraction, agrees exactly."""
+    days = int(julian_day(astro_year, month, day, 0.5)) - constants.MAYA_EPOCH_JDN
+    baktun, days = divmod(days, 144000)
+    katun, days = divmod(days, 7200)
+    tun, days = divmod(days, 360)
+    uinal, kin = divmod(days, 20)
+    return f"{baktun}.{katun}.{tun}.{uinal}.{kin}"
 
 
 def era_names(notation: str) -> tuple[str, str]:

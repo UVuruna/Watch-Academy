@@ -2,7 +2,7 @@
 
 **GENERATED — do not edit by hand.** Regenerate with `python research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
 
-_Last generated: 2026-07-19_
+_Last generated: 2026-07-20_
 
 ## The Position System — seat archetypes
 
@@ -181,7 +181,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | jupiter | Thursday | Priest | `Priest` | ✔ | ✔ | ✔ | — |
 | venus | Friday | Artist | `Artist` | ✔ | ✔ | ✔ | — |
 | saturn | Saturday | Farmer | `Farmer` | ✔ | ✔ | ✔ | — |
-| dual | Sunday | Ruler / Servant | `Servant_dual` | ✔ | — | ✔ | — |
+| dual | Sunday | Ruler / Servant | `Servant_dual` | ✔ | ✔ | ✔ | — |
 | ninth | — | The Jester | `Jester` | — | — | ✔ | ✔ |
 
 ### Wolf Pack (`wolf`)
@@ -247,10 +247,10 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | sun | Sunday | Abraham · Isaac | `abraham` | ✔ | ✔ |
 | moon | Monday | Jonah | `jonah` | ✔ | ✔ |
 | mars | Tuesday | Samson | `samson` | ✔ | ✔ |
-| mercury | Wednesday | Jacob | `jacob` | ✔ | — |
-| jupiter | Thursday | Noah | `noah` | ✔ | — |
-| venus | Friday | Ruth | `ruth` | ✔ | — |
-| saturn | Saturday | Job | `job` | ✔ | — |
+| mercury | Wednesday | Jacob | `jacob` | ✔ | ✔ |
+| jupiter | Thursday | Noah | `noah` | ✔ | ✔ |
+| venus | Friday | Ruth | `ruth` | ✔ | ✔ |
+| saturn | Saturday | Job | `job` | ✔ | ✔ |
 | dual | Sunday | Abraham / Isaac | `isaac` | ✔ | ✔ |
 
 ### Bible Dark (`bible_dark`)
@@ -380,19 +380,19 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 | Sign | sign G | sign C | logo G | logo C | constellation G | constellation C | colored G | colored C |
 |---|---|---|---|---|---|---|---|---|
-| Cancer | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Leo | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Virgo | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Libra | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Scorpio | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Sagittarius | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Capricorn | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Aquarius | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Pisces | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Aries | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Taurus | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Gemini | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
-| Ophiuchus | ✔ | — | ✔ | — | ✔ | — | ✔ | — |
+| Cancer | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Leo | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Virgo | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Libra | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Scorpio | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Sagittarius | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Capricorn | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Aquarius | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Pisces | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Aries | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Taurus | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Gemini | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
+| Ophiuchus | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |
 
 ## Zodiac — Chinese (12 animals + the Cat)
 
@@ -410,7 +410,7 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | Rooster | ✔ | — | ✔ | — |
 | Dog | ✔ | — | ✔ | — |
 | Pig | ✔ | — | ✔ | — |
-| Cat | ✔ | — | ✔ | — |
+| Cat | ✔ | ✔ | ✔ | ✔ |
 
 ## Badges
 
@@ -435,12 +435,12 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | scale | `Lucifer_Triangle` | ✔ | ✔ |
 | scale | `Judas_Triangle` | ✔ | ✔ |
 | scale | `Union` | ✔ | ✔ |
-| scale glass | `Judas_Triangle` | ✔ | — |
-| scale glass | `Lucifer_Triangle` | ✔ | — |
-| scale glass | `Judas_Triangle_v2` | ✔ | — |
-| scale glass | `Lucifer_Triangle_v2` | ✔ | — |
-| scale glass | `Union_Meeting` | ✔ | — |
-| scale glass | `Union` | ✔ | — |
+| scale glass | `Judas_Triangle` | ✔ | ✔ |
+| scale glass | `Lucifer_Triangle` | ✔ | ✔ |
+| scale glass | `Judas_Triangle_v2` | ✔ | ✔ |
+| scale glass | `Lucifer_Triangle_v2` | ✔ | ✔ |
+| scale glass | `Union_Meeting` | ✔ | ✔ |
+| scale glass | `Union` | ✔ | ✔ |
 | subdial (silver master) | `center` | ✔ | — |
 
 ## Emblems
@@ -484,7 +484,7 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 ## Shortage List — everything the tables marked —
 
-**chatgpt** (123):
+**chatgpt** (58):
 
 - weekday planets/primary/sun.png
 - weekday planets/primary/moon.png
@@ -515,67 +515,10 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - weekday profession/colored/Priest.png
 - weekday profession/colored/Artist.png
 - weekday profession/colored/Farmer.png
-- weekday profession/primary/Servant_dual.png
 - weekday profession/colored/Servant_dual.png
 - weekday profession/primary/Jester.png
 - weekday bible/primary/melchizedek.png
-- weekday bible/secondary/jacob.png
-- weekday bible/secondary/noah.png
-- weekday bible/secondary/ruth.png
-- weekday bible/secondary/job.png
 - weekday greek/pantheon/zeus.png
-- zodiac astrology/sign/Cancer.png
-- zodiac astrology/primary/Cancer.png
-- zodiac astrology/constellation/Cancer.png
-- zodiac astrology/colored/Cancer.png
-- zodiac astrology/sign/Leo.png
-- zodiac astrology/primary/Leo.png
-- zodiac astrology/constellation/Leo.png
-- zodiac astrology/colored/Leo.png
-- zodiac astrology/sign/Virgo.png
-- zodiac astrology/primary/Virgo.png
-- zodiac astrology/constellation/Virgo.png
-- zodiac astrology/colored/Virgo.png
-- zodiac astrology/sign/Libra.png
-- zodiac astrology/primary/Libra.png
-- zodiac astrology/constellation/Libra.png
-- zodiac astrology/colored/Libra.png
-- zodiac astrology/sign/Scorpio.png
-- zodiac astrology/primary/Scorpio.png
-- zodiac astrology/constellation/Scorpio.png
-- zodiac astrology/colored/Scorpio.png
-- zodiac astrology/sign/Sagittarius.png
-- zodiac astrology/primary/Sagittarius.png
-- zodiac astrology/constellation/Sagittarius.png
-- zodiac astrology/colored/Sagittarius.png
-- zodiac astrology/sign/Capricorn.png
-- zodiac astrology/primary/Capricorn.png
-- zodiac astrology/constellation/Capricorn.png
-- zodiac astrology/colored/Capricorn.png
-- zodiac astrology/sign/Aquarius.png
-- zodiac astrology/primary/Aquarius.png
-- zodiac astrology/constellation/Aquarius.png
-- zodiac astrology/colored/Aquarius.png
-- zodiac astrology/sign/Pisces.png
-- zodiac astrology/primary/Pisces.png
-- zodiac astrology/constellation/Pisces.png
-- zodiac astrology/colored/Pisces.png
-- zodiac astrology/sign/Aries.png
-- zodiac astrology/primary/Aries.png
-- zodiac astrology/constellation/Aries.png
-- zodiac astrology/colored/Aries.png
-- zodiac astrology/sign/Taurus.png
-- zodiac astrology/primary/Taurus.png
-- zodiac astrology/constellation/Taurus.png
-- zodiac astrology/colored/Taurus.png
-- zodiac astrology/sign/Gemini.png
-- zodiac astrology/primary/Gemini.png
-- zodiac astrology/constellation/Gemini.png
-- zodiac astrology/colored/Gemini.png
-- zodiac astrology/sign/Ophiuchus.png
-- zodiac astrology/primary/Ophiuchus.png
-- zodiac astrology/constellation/Ophiuchus.png
-- zodiac astrology/colored/Ophiuchus.png
 - zodiac chinese/primary/Rat.png
 - zodiac chinese/colored/Rat.png
 - zodiac chinese/primary/Ox.png
@@ -600,14 +543,6 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 - zodiac chinese/colored/Dog.png
 - zodiac chinese/primary/Pig.png
 - zodiac chinese/colored/Pig.png
-- zodiac chinese/primary/Cat.png
-- zodiac chinese/colored/Cat.png
-- badge scale/glass/Judas_Triangle.png
-- badge scale/glass/Lucifer_Triangle.png
-- badge scale/glass/Judas_Triangle_v2.png
-- badge scale/glass/Lucifer_Triangle_v2.png
-- badge scale/glass/Union_Meeting.png
-- badge scale/glass/Union.png
 - badge subdial/silver/center.png
 
 **gemini** (18):

@@ -546,6 +546,8 @@ class Compositor:
             self._skin.era_notation,
             self._skin.show_era_suffix,
             self._skin.third_era,
+            when.month,
+            when.day,
         )
 
     def set_day(self, day: DayContext) -> None:

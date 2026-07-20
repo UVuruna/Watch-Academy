@@ -149,7 +149,9 @@ class Settings:
     # official form's era labels ("bce_ce" default / "bc_ad"), whether
     # positive years carry the suffix (default bare — "2026"), and the
     # optional THIRD calendar beside the always-shown Anno Lucis
-    # (none/auc/byzantine/hebrew/hegirae).
+    # (none/auc/byzantine/hebrew/hegirae/chinese/maya — maya is the
+    # odd one out, a true day count rather than a year offset, MAYA
+    # round, owner 2026-07-20).
     era_notation: str = "bce_ce"
     show_era_suffix: bool = False
     third_era: str = "none"

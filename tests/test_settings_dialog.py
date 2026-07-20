@@ -223,6 +223,20 @@ def test_third_era_combo_lists_chinese(app):
     dialog.done(0)
 
 
+def test_third_era_combo_lists_maya(app):
+    """MAYA round, owner 2026-07-20: the Long Count appears in the
+    Third calendar combo generically (`THIRD_ERAS` iteration, no
+    special-casing needed in the dialog) and round-trips through
+    `result_settings()` exactly like every other option."""
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    index = dialog._third_era_combo.findData("maya")
+    assert index >= 0
+    dialog._third_era_combo.setCurrentIndex(index)
+    dialog.accept()
+    assert dialog.result_settings().third_era == "maya"
+    dialog.done(0)
+
+
 def test_dialog_navigation_switches_the_visible_panel(app):
     """Clicking a nav row shows THAT section's panel (owner's stated
     interaction) — the stacked widget follows the list's current row."""
@@ -1025,9 +1039,10 @@ def test_era_terms_topic():
         resolved = _paths.art_file(entry["images"][0])
         assert resolved is None or resolved.suffix == ".png"
     # Eras of the World: no plate of its own — instead it strings the
-    # six calendar-system emblems the essay compares (owner fix-round
-    # B, 2026-07-19), graceful-absent until PromptPainter generates them.
-    assert len(era[6]["images"]) == 6
+    # calendar-system emblems the essay compares (six from owner
+    # fix-round B, 2026-07-19; Maya added the MAYA round, owner
+    # 2026-07-20), graceful-absent until PromptPainter generates them.
+    assert len(era[6]["images"]) == 7
     for image in era[6]["images"]:
         resolved = _paths.art_file(image)
         assert resolved is None or resolved.suffix == ".png"
@@ -1059,7 +1074,11 @@ def test_era_terms_topic():
     assert "16429" in winter
     world = repo.era("Eras_of_the_World")["base"]
     for term in ("AUC", "Byzantine", "Hebrew", "Hegirae", "Buddhist",
-                 "Chinese", "753", "5509", "3761", "543"):
+                 "Chinese", "753", "5509", "3761", "543",
+                 # MAYA round (owner 2026-07-20): the three calendars,
+                 # the epoch and the honest 2012 baktun-turn.
+                 "Tzolk'in", "Haab'", "Long Count", "3114 BCE",
+                 "584,283", "13.0.0.0.0", "260", "365"):
         assert term in world, term
     # The Great Oscillations (fix round F): the Milankovitch essay carries
     # its MEASURED figures (the +28,000 minimum, ~±1.1 d) and names the
