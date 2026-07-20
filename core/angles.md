@@ -19,6 +19,13 @@ the dial top — ready for `QPainter.rotate()`.
 ## Functions
 - `time_to_dial_angle(t)`: 12:00→0°, 18:00→90°, 00:00→180°, 06:00→270°
 - `minute_hand_angle(t)`: one revolution per hour
+- `hours_between(angle_a, angle_b)`: shortest SIGNED hours from
+  `angle_b` to `angle_a` on the 24h dial, wrapped to [-12, 12) —
+  15°/hour, the same mapping `time_to_dial_angle` uses (round R3b item
+  3). Pure building block for [Layers](../render/layers.md)'
+  `center_face` — a solar noon/midnight anchor angle against the live
+  hour-hand angle — but knows nothing about either, so any future
+  solar-anchor time-window test can reuse it (Rule #5).
 - `star_rotation_deg(solar_noon)`: +15°/hour of solar-noon lateness
   (positive = clockwise = west-in-zone or DST; negative = east-in-zone)
 - `ring_position_angle(position)`: dial angle of a FIXED ring

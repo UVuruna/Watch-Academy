@@ -176,6 +176,33 @@ def test_dialog_diameter_spinbox_syncs_both_ways(app):
 # --- The navigation rework (owner ROADMAP 15h item 1) -----------------------------
 
 
+def test_dialog_subdial_set_combo_round_trips(app):
+    """The SUBDIAL PLATE SET picker (owner decree 2026-07-21, Rsub
+    round) sits beside Artwork in Themes: five entries labeled
+    1/2/3/4/Solo, restores the stored value, and result_settings()
+    returns the pick."""
+    from app.settings_store import replace
+    from config import constants
+
+    dialog = SettingsDialog(replace(Settings(), subdial_set="set3"), defaults.DEFAULT_SKIN)
+    assert dialog._subdial_set_combo.currentData() == "set3"
+    values = [
+        dialog._subdial_set_combo.itemData(i)
+        for i in range(dialog._subdial_set_combo.count())
+    ]
+    assert values == list(constants.SUBDIAL_SETS)
+    labels = [
+        dialog._subdial_set_combo.itemText(i)
+        for i in range(dialog._subdial_set_combo.count())
+    ]
+    assert labels == ["1", "2", "3", "4", "Solo"]
+    assert dialog.result_settings().subdial_set == "set3"
+    index = dialog._subdial_set_combo.findData("solo")
+    dialog._subdial_set_combo.setCurrentIndex(index)
+    assert dialog.result_settings().subdial_set == "solo"
+    dialog.done(0)
+
+
 def test_dialog_navigation_lists_every_section(app):
     """The left column becomes a NAVIGATION of section titles (owner
     2026-07-18) instead of one long scroll — every existing group still
@@ -198,6 +225,7 @@ def test_dialog_navigation_lists_every_section(app):
     assert dialog._hand_name_edit is not None            # Custom hands
     assert dialog._rotation_group is not None             # Theme rotation (Themes)
     assert dialog._art_source_combo is not None            # Artwork (Themes)
+    assert dialog._subdial_set_combo is not None            # Subdial plate (Themes)
     assert dialog._language_combo is not None               # Language
     assert dialog._era_combo is not None                     # Calendar eras (Language)
     assert dialog._autostart_check is not None                # System
@@ -761,22 +789,26 @@ def test_encyclopedia_expansion_wiring():
     assert _paths.art_file(moods[-1]["images"][0]).exists()
     # ARTICLE ORDER restructure (owner spec, round R3): entry 0 is now
     # the theme's OWN title page (no "looks" — graceful-absent plate),
-    # Monday..Saturday follow at 1-6, then the week-duality title (7)
-    # and the merged Sunday DUAL page (8) — the metal themes still
-    # cycle four looks COLORED FIRST (owner default 2026-07-13) and the
-    # dual page's two plates still stand SIDE BY SIDE, Ruler left,
-    # Servant right (owner correction 2026-07-13).
+    # Monday..Saturday follow at 1-6, then the week-duality title (7).
+    # SPLIT round R3b item 1 (owner verdict A): Sunday's old MERGED dual
+    # page is now TWO separate pages — GOOD (8) and EVIL (9), each an
+    # ordinary single-plate page (never "dual": True any more) — the
+    # metal themes still cycle four looks COLORED FIRST on EACH half
+    # independently.
     assert "looks" not in topics["greek"]["entries"][0]
     assert topics["greek"]["entries"][0]["name"] == ("theme_title", "greek")
-    greek_dual = topics["greek"]["entries"][8]
-    assert greek_dual["dual"] is True
-    assert [label for label, _ in greek_dual["looks"]] == [
-        "Colored", "Bronze", "Gold", "Silver",
-    ]
-    assert all(
-        len(rows) == 1 and len(rows[0]) == 2
-        for _, rows in greek_dual["looks"]
-    )
+    greek_good = topics["greek"]["entries"][8]
+    greek_evil = topics["greek"]["entries"][9]
+    assert "dual" not in greek_good and "dual" not in greek_evil
+    assert greek_good["name"] == "Helios" and greek_evil["name"] == "Phaethon"
+    for entry in (greek_good, greek_evil):
+        assert [label for label, _ in entry["looks"]] == [
+            "Colored", "Bronze", "Gold", "Silver",
+        ]
+        assert all(
+            len(rows) == 1 and len(rows[0]) == 1
+            for _, rows in entry["looks"]
+        )
     # Chinese and Astrology are NOT weekday-restructured (their own
     # 12-sign/12-animal builders, untouched by the round R3 order
     # change) — they stay exactly as before. Planets IS restructured —
@@ -805,19 +837,21 @@ def test_encyclopedia_expansion_wiring():
     assert len(gods_rows[0]) == len(gods_rows[1]) == 4
     monday = topics["week"]["entries"][1]
     assert len(monday["looks"][0][1]) == 1        # single row off-Sunday
-    # The animal societies are metal themes with the full four looks
-    # and their own side-by-side dual-page pairs (owner 2026-07-13) —
-    # the dual page sits at index 8 after the round R3 restructure.
+    # The animal societies are metal themes with the full four looks;
+    # their GOOD/EVIL Sunday halves are separate pages at 8/9 (round
+    # R3b item 1 split, owner verdict A — supersedes the R3 merged
+    # dual page these indices used to share).
     for theme in ("wolf", "bee", "elephant"):
-        entry = topics[theme]["entries"][8]
-        assert entry["dual"] is True, theme
-        assert [l for l, _ in entry["looks"]] == [
-            "Colored", "Bronze", "Gold", "Silver",
-        ], theme
-        assert all(
-            len(rows) == 1 and len(rows[0]) == 2
-            for _, rows in entry["looks"]
-        ), theme
+        for index in (8, 9):
+            entry = topics[theme]["entries"][index]
+            assert "dual" not in entry, theme
+            assert [l for l, _ in entry["looks"]] == [
+                "Colored", "Bronze", "Gold", "Silver",
+            ], theme
+            assert all(
+                len(rows) == 1 and len(rows[0]) == 1
+                for _, rows in entry["looks"]
+            ), theme
     # The Two Triangles (owner 2026-07-13): the Judas–Lucifer scale —
     # three entries; the Union pairs both badges, articles resolve.
     duality = topics["duality"]["entries"]
@@ -875,15 +909,17 @@ def test_encyclopedia_expansion_wiring():
     assert "NEAP" in dialog._article_text(("moon", "First Quarter"))
     # The topic SLIDER (owner plan round E, 2026-07-14): one entry per
     # page, ← / → wrap around like the Guide, the pager hides on the
-    # gallery and the counter tracks the position. Round R3: Title +
-    # 6 weekdays + duality title + dual page + Gaia = 10 pages.
-    dialog._show_topic("greek")
+    # gallery and the counter tracks the position. Round R3b item 1:
+    # Title + 6 weekdays + duality title + GOOD + EVIL + Sigma = 11
+    # pages ("wolf" — not one of the four Pantheon-merged themes, so
+    # its count stays the plain post-split shape).
+    dialog._show_topic("wolf")
     assert dialog._entry_index == 0
-    assert dialog._counter.text() == "1 / 10"     # Title + 6 + duality + dual + Gaia
+    assert dialog._counter.text() == "1 / 11"
     assert len(dialog._blocks) == 1
     dialog._step(-1)                              # wraps to the Ninth
-    assert dialog._entry_index == 9
-    assert dialog._counter.text() == "10 / 10"
+    assert dialog._entry_index == 10
+    assert dialog._counter.text() == "11 / 11"
     dialog._step(+1)
     assert dialog._entry_index == 0
     dialog._show_topics()
@@ -998,6 +1034,122 @@ def test_wider_pantheon_topics():
         assert dialog._entry_index == 0
     assert "hearth" in dialog._article_text(("emblem", "wider", "Hestia"))
     assert "wind" in dialog._article_text(("emblem", "wider", "Stribog"))
+    dialog.deleteLater()
+
+
+def test_pantheon_planetary_merge():
+    """Ency INSTRUCTIONS.txt rule 5, round R3b item 2 (the PANTHEON/
+    PLANETARY MERGE, deferred out of R3): greek/norse/egypt/slavic —
+    the four themes with a documented Pantheon roster
+    (`defaults.WEEKDAY_PANTHEON`) — become ONE topic of 22 pages:
+    pages 1-11 the Planetary run (title, Mon..Sat, duality title, good,
+    evil, ninth), pages 12-22 the SAME shape for the Pantheon roster,
+    both closing on the IDENTICAL Ninth entry (CANON.md: one Ninth per
+    theme, outside BOTH rosters)."""
+    from app.encyclopedia import (
+        _PANTHEON_BLOCK_SIZE,
+        _PANTHEON_MERGED_THEMES,
+        _topics,
+    )
+    from config import defaults as _defaults
+    from data.encyclopedia import EncyclopediaRepository
+
+    assert _PANTHEON_MERGED_THEMES == frozenset(_defaults.WEEKDAY_PANTHEON)
+    assert _PANTHEON_MERGED_THEMES == {"greek", "norse", "egypt", "slavic"}
+    assert _PANTHEON_BLOCK_SIZE == 11
+
+    topics = _topics()
+    repo = EncyclopediaRepository()
+    for theme in _PANTHEON_MERGED_THEMES:
+        entries = topics[theme]["entries"]
+        assert len(entries) == 22, theme
+        planetary, pantheon = entries[:11], entries[11:]
+        # Both blocks open on THEIR OWN title, and the Pantheon title
+        # resolves under the "<theme>_pantheon" key with real prose.
+        assert planetary[0]["name"] == ("theme_title", theme)
+        assert pantheon[0]["name"] == ("theme_title", f"{theme}_pantheon")
+        title = repo.theme_title(f"{theme}_pantheon")
+        duality = repo.week_duality(f"{theme}_pantheon")
+        assert len(title["base"]) > 80, theme
+        assert len(duality["base"]) > 60, theme
+        # Monday..Saturday in both blocks (owner: "mora ponovo redom
+        # svi bogovi od ponedeljka do nedelje").
+        assert len(planetary[1:7]) == 6 and len(pantheon[1:7]) == 6
+        assert pantheon[7]["name"] == (
+            "week_duality_title", f"{theme}_pantheon"
+        )
+        # Pantheon's GOOD/EVIL (index 8/9 of ITS OWN block) carry the
+        # culture's supreme throne pair, never the planetary dual names.
+        pantheon_good, pantheon_evil = pantheon[8], pantheon[9]
+        ruler, servant = _defaults.WEEKDAY_PANTHEON[theme]["dual_names"]
+        assert pantheon_good["name"] == ruler
+        assert pantheon_evil["name"] == servant
+        # BOTH blocks close on the IDENTICAL Ninth entry — the SAME
+        # dict object, never a second seatless figure per roster.
+        assert planetary[10] is pantheon[10]
+        assert planetary[10]["article"] == ("emblem", "ninths", planetary[10]["name"])
+
+    # A theme with NO Pantheon table stays its plain post-split length
+    # (title+6+duality+good+evil[+ninth]) — the merge never leaks
+    # beyond its four owners.
+    assert len(topics["wolf"]["entries"]) == 11
+    assert len(topics["japan"]["entries"]) == 10
+
+
+def test_pantheon_switch_button():
+    """The LOGO BUTTON between Home and Download (round R3b item 2):
+    hidden outside the four merged themes; on a merged theme its icon
+    names the roster a click would SWITCH TO, and `_switch_roster`
+    jumps to the SAME position (day) in the other 11-page block —
+    Monday stays Monday, the dual title stays the dual title."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import (
+        EncyclopediaDialog,
+        _PANTHEON_BLOCK_SIZE,
+    )
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    dialog.show()
+    # A non-merged theme never shows the button.
+    dialog._show_topic("wolf")
+    dialog._entry_index = 1
+    dialog._show_entry()
+    assert not dialog._roster_button.isVisible()
+
+    dialog._show_topic("greek")
+    for index in range(22):
+        dialog._entry_index = index
+        dialog._show_entry()
+        assert dialog._roster_button.isVisible(), index
+        icon = dialog._roster_button.icon()
+        expected = (
+            dialog._planetary_icon if index >= _PANTHEON_BLOCK_SIZE
+            else dialog._pantheon_icon
+        )
+        assert icon.cacheKey() == expected.cacheKey(), index
+
+    # Monday (index 1, Planetary) switches to Monday's Pantheon page
+    # (index 12) and back — the SAME day, the other roster.
+    dialog._entry_index = 1
+    dialog._show_entry()
+    dialog._switch_roster()
+    assert dialog._entry_index == 1 + _PANTHEON_BLOCK_SIZE
+    dialog._switch_roster()
+    assert dialog._entry_index == 1
+    # Paging NEXT across the 11/12 boundary flips the icon too, with
+    # no separate boundary-watch — `_show_entry` recomputes it always.
+    dialog._entry_index = _PANTHEON_BLOCK_SIZE - 1     # the Ninth, page 11
+    dialog._show_entry()
+    assert dialog._roster_button.icon().cacheKey() == (
+        dialog._pantheon_icon.cacheKey()
+    )
+    dialog._step(+1)                                   # crosses into Pantheon
+    assert dialog._entry_index == _PANTHEON_BLOCK_SIZE
+    assert dialog._roster_button.icon().cacheKey() == (
+        dialog._planetary_icon.cacheKey()
+    )
     dialog.deleteLater()
 
 
@@ -1413,14 +1565,18 @@ def test_gallery_min_width_and_no_horizontal_overflow():
 def test_article_order_restructure():
     """Owner ARTICLE ORDER spec, round R3: every weekday-structured
     theme opens on ITS OWN title page, then Monday..Saturday (owner:
-    "Ponedeljak PRVI"), then the week-duality title, then the merged
-    Sunday DUAL page, then the Ninth where the theme has one."""
+    "Ponedeljak PRVI"), then the week-duality title, then Sunday's GOOD
+    and EVIL halves as their OWN separate pages (round R3b item 1,
+    owner verdict A — supersedes the R3 merged dual page), then the
+    Ninth where the theme has one."""
     from app.encyclopedia import _topics
+    from config import defaults as _defaults
 
     topics = _topics()
-    # "wolf" HAS a Ninth (Sigma) — 10 pages total.
+    # "wolf" HAS a Ninth (Sigma) — 11 pages total (title+6+duality
+    # title+good+evil+ninth).
     wolf = topics["wolf"]["entries"]
-    assert len(wolf) == 10
+    assert len(wolf) == 11
     assert wolf[0]["name"] == ("theme_title", "wolf")
     assert "dual" not in wolf[0] and "looks" not in wolf[0]
     monday_saturday = [entry["name"] for entry in wolf[1:7]]
@@ -1428,13 +1584,16 @@ def test_article_order_restructure():
         "Luna", "Hunter (Gamma)", "Scout (Delta)", "Beta", "Mate", "Elder",
     ]
     assert wolf[7]["name"] == ("week_duality_title", "wolf")
-    assert wolf[8]["dual"] is True
-    assert wolf[8]["theme"] == "wolf"
-    assert wolf[9]["name"] == "Sigma"        # the Ninth, unchanged content
-    # "japan" has NO Ninth — 9 pages total, dual page is the LAST page.
+    alpha, omega = _defaults.WEEKDAY_DUAL_NAMES["wolf"]
+    assert "dual" not in wolf[8] and wolf[8]["name"] == alpha
+    assert "dual" not in wolf[9] and wolf[9]["name"] == omega
+    assert wolf[10]["name"] == "Sigma"        # the Ninth, unchanged content
+    # "japan" has NO Ninth — 10 pages total, EVIL is the LAST page.
     japan = topics["japan"]["entries"]
-    assert len(japan) == 9
-    assert japan[8]["dual"] is True
+    assert len(japan) == 10
+    assert "dual" not in japan[8] and "dual" not in japan[9]
+    ama, iwato = _defaults.WEEKDAY_DUAL_NAMES["japan"]
+    assert japan[8]["name"] == ama and japan[9]["name"] == iwato
     # Every restructured theme's title/duality text resolves and is
     # non-trivial (Rule #2 — no capacity lies: written now, not a
     # placeholder pretending to be content).
@@ -1455,37 +1614,44 @@ def test_article_order_restructure():
         assert duality["title"], theme
 
 
-def test_dual_article_layout_side_by_side():
-    """Owner INSTRUCTION #6 (encyclopedia side): the week-duality DUAL
-    page shows TWO texts — good/Ruler LEFT, evil/Servant RIGHT, each
-    under its own name/logo — never the old single "base" article."""
-    from PySide6.QtWidgets import QApplication
-
+def test_dual_page_split_into_good_and_evil(app):
+    """Owner verdict A, round R3b item 1 (supersedes owner INSTRUCTION
+    #6's merged two-column page): the week-duality Sunday is now TWO
+    SEPARATE pages — GOOD (Ruler) then EVIL (Servant) — each its own
+    ordinary single-image, single-text page, own name, own logo. Every
+    text label spans the FULL block width now (no more columns=2 half-
+    width split)."""
     from app.encyclopedia import EncyclopediaDialog, _topics
     from config import defaults as _defaults
 
-    QApplication.instance() or QApplication([])
     topics = _topics()
-    greek_dual = topics["greek"]["entries"][8]
-    assert greek_dual["dual"] is True
+    greek_good = topics["greek"]["entries"][8]
+    greek_evil = topics["greek"]["entries"][9]
+    assert "dual" not in greek_good and "dual" not in greek_evil
+    ruler_name, servant_name = _defaults.WEEKDAY_DUAL_NAMES["greek"]
+    assert greek_good["name"] == ruler_name == "Helios"
+    assert greek_evil["name"] == servant_name == "Phaethon"
 
     dialog = EncyclopediaDialog()
     dialog._show_topic("greek")
     dialog._entry_index = 8
     dialog._show_entry()
-    ruler_text, servant_text = dialog._article_faces(greek_dual["article"])
-    assert ruler_text != servant_text
-    assert "Helios" in ruler_text
-    assert "Phaethon" in servant_text
-    # Two text labels, each pinned to HALF the block width (columns=2)
-    # — never the single full-width column a normal page uses.
-    dual_labels = [
-        (label, columns) for label, columns in dialog._text_labels
-        if columns == 2
-    ]
-    assert len(dual_labels) == 2
-    ruler_name, servant_name = _defaults.WEEKDAY_DUAL_NAMES["greek"]
-    assert ruler_name == "Helios" and servant_name == "Phaethon"
+    good_text = dialog._article_text(greek_good["article"])
+    assert dialog._entry_name(greek_good) == "Helios"
+    # Every label is a PLAIN QLabel now (no (label, columns) tuple —
+    # the DUAL page's half-width columns retired with the merge).
+    assert len(dialog._text_labels) == 1
+    dialog._entry_index = 9
+    dialog._show_entry()
+    evil_text = dialog._article_text(greek_evil["article"])
+    assert dialog._entry_name(greek_evil) == "Phaethon"
+    assert len(dialog._text_labels) == 1
+    assert good_text != evil_text
+    assert "Helios" in good_text
+    assert "Phaethon" in evil_text
+    # Each half has its OWN plate — different images, side by side in
+    # page order rather than merged onto one page.
+    assert greek_good["looks"] != greek_evil["looks"]
     dialog.deleteLater()
 
 
@@ -1581,16 +1747,20 @@ def test_space_jump_index_remap_survives_the_restructure():
     jump — compositor.encyclopedia_target still emits the OLD raw
     weekday index (sun=0, moon=1..saturn=6); the dialog remaps it onto
     the NEW page order (Monday..Saturday keep their old index, sun
-    lands on the merged dual page)."""
+    lands on the GOOD half — round R3b item 1, the split's default
+    jump target, see `_WEEKDAY_DUAL_PAGE_INDEX`'s own docstring)."""
     from PySide6.QtWidgets import QApplication
 
     from app.encyclopedia import EncyclopediaDialog
+    from config import defaults as _defaults
 
     QApplication.instance() or QApplication([])
-    # raw index 0 ("sun") -> the dual page (index 8), NOT the title page.
+    # raw index 0 ("sun") -> the GOOD half (index 8), NOT the title page.
     sun_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=0)
     assert sun_jump._entry_index == 8
-    assert sun_jump._topics["wolf"]["entries"][8]["dual"] is True
+    good_entry = sun_jump._topics["wolf"]["entries"][8]
+    assert "dual" not in good_entry
+    assert good_entry["name"] == _defaults.WEEKDAY_DUAL_NAMES["wolf"][0]
     sun_jump.deleteLater()
     # raw index 1 ("moon"/Monday) is UNCHANGED — still index 1.
     monday_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=1)

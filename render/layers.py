@@ -814,6 +814,68 @@ def servant_holds_the_seat(skin: SkinDefinition, today: str) -> bool:
     return not seat or visible_occupant(seat + ("sun",), today) == "sun"
 
 
+def center_dual_face(skin: SkinDefinition) -> bool:
+    """True while the Sunday duality lives in ONE CENTER image instead
+    of the Compass/Seasons' two separate seats (round R3b item 3) — the
+    complementary case to `sunday_dual_face`: the Prism and Trinity
+    ALWAYS merge the classic unit's Sun into the center (their own
+    docstring above: "keep one image... speak the second face in the
+    hover"), and `center_only` mode merges it for EVERY pointer (there
+    are no slot seats to hold a second face there). Given a dual asset
+    exists, a theme's Sunday resolves through EXACTLY one of these two
+    laws — never both, never neither."""
+    spec = skin.weekday_set
+    if weekday_classic_slot(skin) is None:
+        return False
+    if spec.dual_asset is None or not paths.art_file(spec.dual_asset).exists():
+        return False
+    if spec.display_mode == "center_only":
+        return True
+    return skin.pointer in ("hexa", "trio")
+
+
+def theme_ninth(theme: str) -> tuple[str, Path] | None:
+    """(display name, resolved asset path) of `theme`'s Ninth plate, or
+    None when the theme names no Ninth (`constants.WEEKDAY_THEME_NINTHS`)
+    or its plate has not landed on disk yet — the ONE existence-gated
+    lookup `CenterBodyLayer` (paint) and the compositor's hover share
+    (Rule #5), matching the graceful-absent law every other Ninth plate
+    already follows."""
+    entry = constants.WEEKDAY_THEME_NINTHS.get(theme)
+    if entry is None:
+        return None
+    name, rel = entry
+    asset = defaults.WEEKDAY_ART_DIR / rel
+    if not paths.art_file(asset).exists():
+        return None
+    return name, asset
+
+
+def center_face(day: DayContext, tick: TickState, has_ninth: bool) -> str:
+    """Which face the CENTER seat's Sunday duality shows RIGHT NOW
+    (owner INSTRUCTION #5 + solar amendment, round R3b item 3):
+    "ruler" (GOOD) normally, "servant" (EVIL) near SOLAR MIDNIGHT,
+    "ninth" near SOLAR NOON for a theme that names one — the midnight
+    window widens when there is no Ninth to also claim noon (owner:
+    "za one koje nemaju 9tog... izmedju 22h i 2h"). SOLAR, not
+    wall-clock: `day.sun.noon` is the SAME anchor the hexagram's own
+    rotation reads (`star_rotation_deg`) — reused via `angles.
+    hours_between`, never a parallel clock (Rule #5/#6)."""
+    noon_angle = angles.time_to_dial_angle(day.sun.noon)
+    midnight_angle = (noon_angle + 180.0) % 360.0
+    from_noon = abs(angles.hours_between(tick.hour_angle, noon_angle))
+    from_midnight = abs(angles.hours_between(tick.hour_angle, midnight_angle))
+    if has_ninth:
+        if from_noon <= constants.CENTER_NOON_WINDOW_HOURS:
+            return "ninth"
+        if from_midnight <= constants.CENTER_MIDNIGHT_WINDOW_HOURS:
+            return "servant"
+        return "ruler"
+    if from_midnight <= constants.CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH:
+        return "servant"
+    return "ruler"
+
+
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
     """Clip path for the pie between two dial angles going clockwise."""
     path = QPainterPath()
@@ -1769,6 +1831,42 @@ class CenterBodyLayer(Layer):
         # pure computation WeekdayLayer uses, agreeing on one size
         # across the two separate paint passes without shared state.
         label_px = weekday_label_set_px(ctx) * hf if names_on else None
+        # THE DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 +
+        # solar amendment, round R3b item 3): on an ACTUAL Sunday
+        # (never the ghost-reveal Sun, which always reads plain — the
+        # reveal promises the ordinary "two persons, a union" read) the
+        # SOLAR clock, not the wall clock, may swap the center's face
+        # to EVIL (the Servant) or — where the theme names one — THE
+        # UNFOUND (the Ninth). `center_dual_face` is the complementary
+        # law to `sunday_dual_face` (Compass/Seasons keep their own
+        # two-seat mechanic, untouched).
+        if today == "sun" and not ghost_reveal and center_dual_face(self._skin):
+            ninth = theme_ninth(ctx.skin.weekday_theme)
+            face = center_face(ctx.day, ctx.tick, ninth is not None)
+            if face != "ruler":
+                if face == "servant":
+                    asset = spec.dual_asset
+                    name = (
+                        spec.dual_names
+                        or defaults.WEEKDAY_DUAL_NAMES[ctx.skin.weekday_theme]
+                    )[1]
+                else:
+                    name, asset = ninth
+                painter.save()
+                painter.setOpacity(1.0)
+                draw_pixmap_centered(
+                    painter, ctx, asset, QPointF(0, 0), center_size,
+                    metal=spec.metal,
+                )
+                if names_on:
+                    draw_name_label(
+                        painter, name, QPointF(0, 0),
+                        name_label_px(
+                            name, center_size * defaults.NAME_LABEL_WIDTH_FRACTION
+                        ),
+                    )
+                painter.restore()
+                return
         draw_weekday_body(
             painter, ctx, body, QPointF(0, 0), center_size, 1.0, label_px
         )

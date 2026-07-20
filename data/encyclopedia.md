@@ -56,4 +56,9 @@ Serbian and any machine-translated language apply automatically.
   (round R3 ARTICLE ORDER restructure — `theme_title`/`week_duality`
   sections, one entry per `WEEKDAY_THEME_TITLES` key except virtues/
   sins/moods, which the emblem-family pass keeps out of the weekday
-  shape entirely)
+  shape entirely). Round R3b (item 2, the PANTHEON/PLANETARY MERGE)
+  adds FOUR more keys — `greek_pantheon`/`norse_pantheon`/
+  `egypt_pantheon`/`slavic_pantheon` — the Pantheon block's own title
+  and week-duality pages, argued from the culture's OWN throne-room
+  rank rather than the day-ruler canon; `app.encyclopedia._pantheon_
+  topic` reads them the same way, `f"{theme}_pantheon"` as the key.

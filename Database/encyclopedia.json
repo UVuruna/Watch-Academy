@@ -487,6 +487,22 @@
    "title": "Slavic gods",
    "base": "[[The Planetary Fit]] Dažbog the giving sun opens the week; Hors walks its night as the moon, four-faced Svetovid rides to war on Tuesday, the horned trader Veles keeps Wednesday's counsel, thundering Perun rules Thursday's noon, spinning Mokoš keeps Friday's threads, and Morana — winter drowned each spring — closes the week on the arm of renewal.\n\n[[Sunday's Two Faces]] Six days and the sun's throne open the theme; Sunday itself closes it as the week's own duality — the young Dažbog crowned at dawn beside the old Dažbog the winter wears him down into, reborn every solstice."
   },
+  "greek_pantheon": {
+   "title": "Greek Pantheon",
+   "base": "[[The Pantheon Fit]] Olympus read by its OWN throne room instead of the calendar: Zeus the sky-king takes the Sun's seat outright, Poseidon shakes Monday's tides, huntress Artemis commands Tuesday's war, wise Athena keeps Wednesday's counsel, radiant Apollo claims Thursday, queenly Hera rules Friday's court, and Demeter's harvest closes the week on Saturday — every figure argued by RANK inside the pantheon, not by the day's ancient astrology.\n\n[[Sunday's Two Faces]] Six days and the throne's own Sunday open this run; Sunday itself closes it as the week's own duality — Zeus enthroned above beside Hades who rules the dead below, the two brothers who divided the world between them at the fall of the Titans."
+  },
+  "norse_pantheon": {
+   "title": "Norse Pantheon",
+   "base": "[[The Pantheon Fit]] The Æsir read by RANK instead of the day-ruler canon: Odin the Allfather claims the throne outright, Hel governs Monday's dead, Thor's hammer still commands Tuesday, the bound trickster Loki keeps Wednesday's mischief, Tyr's lost hand claims Thursday's oath, Frigg's foresight rules Friday, and Freyr's harvest closes Saturday — the same nine worlds, seated by their OWN hierarchy this time.\n\n[[Sunday's Two Faces]] Six days and the Allfather's own Sunday open this run; Sunday itself closes it as the week's own duality — Odin enthroned in Asgard beside the Wanderer, the same god walking the nine worlds in a grey cloak, owning nothing but the road."
+  },
+  "egypt_pantheon": {
+   "title": "Egyptian Pantheon",
+   "base": "[[The Pantheon Fit]] Egypt's own court instead of its planetary week: Ra still crosses the sky at noon, but Isis now claims Monday's magic, falcon-eyed Horus Tuesday's kingship, jackal-headed Anubis Thursday's weighing of the heart, cat-goddess Bastet Friday's hearth, and Osiris — already the planetary Saturn — keeps his patient last day; Thoth alone sits Wednesday in both rosters, the one seat the two hierarchies agree on outright.\n\n[[Sunday's Two Faces]] Six days and Ra's own Sunday open this run; Sunday itself closes it as the week's own duality — Ra crossing the visible sky by day beside Afu-Ra, the SAME ram-headed god rowing the Duat's twelve dark hours by night, precisely the pair the Planetary block already closes on (Egypt's sun never had a second face to invent)."
+  },
+  "slavic_pantheon": {
+   "title": "Slavic Pantheon",
+   "base": "[[The Pantheon Fit]] The Slavic gods read by their OWN standing instead of the day-ruler week: thundering Perun takes the throne outright, spinning Mokoš keeps Monday's threads, four-faced Svetovid still rides to Tuesday's war, smith-god Svarog claims Wednesday's forge, giving Dažbog now sits Thursday instead of the throne, hearth-goddess Lada warms Friday, and Morana closes Saturday exactly as she does in the Planetary run.\n\n[[Sunday's Two Faces]] Six days and Perun's own Sunday open this run; Sunday itself closes it as the week's own duality — Perun thundering above beside Veles, the horned god of the underworld he wars against every year, the oldest rivalry in the Slavic sky."
+  },
   "alchemy": {
    "title": "Alchemy",
    "base": "[[The Seven Metals]] The classical planet-metal correspondence gives every day its own element: gold for the sun, silver for the moon, iron's war for Tuesday, quicksilver's speed for Wednesday, tin for Thursday, copper's love for Friday, lead's patience for Saturday — one still life of bars, nuggets and coiled wire per day, each wearing its metal.\n\n[[Sunday's Two Faces]] Six days and the sun's own gold open the theme; Sunday itself closes it as the week's own duality — refined Gold beside the Raw Ore it was dug and smelted out of, the whole Work compressed into one medallion pair."
@@ -560,6 +576,22 @@
   "slavic": {
    "title": "The Week's Duality",
    "base": "[[Young and Old Dažbog]] Sunday's two faces are one god's own year: the young Dažbog crowned each spring, giving sun and warmth, aging across the months into the old Dažbog winter wears down to almost nothing — then reborn at the next solstice. The Ruler IS his own Servant, on a longer clock than a day."
+  },
+  "greek_pantheon": {
+   "title": "The Week's Duality",
+   "base": "[[Zeus and Hades]] The Pantheon's Sunday splits the two brothers who drew lots for the world after the Titans fell: Zeus won the sky and the throne, Hades the dead and everything beneath the earth — not a fall, not a punishment, just the world divided between equals by chance."
+  },
+  "norse_pantheon": {
+   "title": "The Week's Duality",
+   "base": "[[Odin and the Wanderer]] The Pantheon's Sunday keeps ONE god in two postures: Odin enthroned in Asgard, all-seeing, and the Wanderer — the same Allfather in a grey cloak and wide hat, walking Midgard's roads incognito, testing hosts and gathering wisdom nobody on a throne could ever learn."
+  },
+  "egypt_pantheon": {
+   "title": "The Week's Duality",
+   "base": "[[Ra and Afu-Ra]] The Pantheon closes on the SAME pair the Planetary run does — Egypt's sun never needed a second face invented for it: Ra by day, Afu-Ra rowing the Duat by night, one god, two crossings."
+  },
+  "slavic_pantheon": {
+   "title": "The Week's Duality",
+   "base": "[[Perun and Veles]] The Pantheon's Sunday is the oldest quarrel in the Slavic sky: Perun the thunder-god above, Veles the horned god of cattle, water and the dead below — their yearly battle, Perun's lightning striking Veles back into the underworld each spring, is the myth every storm reenacts."
   },
   "alchemy": {
    "title": "The Week's Duality",

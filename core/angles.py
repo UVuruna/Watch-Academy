@@ -62,6 +62,17 @@ def readable_rotation_deg(theta: float) -> float:
     return theta if theta <= 90.0 else theta - 360.0
 
 
+def hours_between(angle_a: float, angle_b: float) -> float:
+    """Shortest SIGNED hours from dial angle `angle_b` to `angle_a`,
+    wrapped to [-12, 12) — 15 deg/hour, the SAME clockwise-from-top
+    mapping `time_to_dial_angle` uses. Shared pure building block for
+    every SOLAR-ANCHOR time-window test (round R3b item 3, the CENTER
+    seat's dual/ninth face law) — the two angles are typically the
+    live hour hand and a solar noon/midnight anchor, but the function
+    itself knows nothing about either, so it stays reusable."""
+    return ((angle_a - angle_b + 180.0) % 360.0 - 180.0) / 15.0
+
+
 def star_rotation_deg(solar_noon: datetime) -> float:
     """Rotation of the star (and solar-noon arrow) from the dial top.
 

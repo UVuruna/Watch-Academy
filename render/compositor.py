@@ -20,6 +20,7 @@ from PySide6.QtGui import QImage, QPainter, QPixmap, QPolygonF
 
 from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
+from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
 from core import angles
 from core.clock_state import DayContext, TickState
@@ -57,6 +58,8 @@ from render.layers import (
     archetype_figure_size,
     archetype_key,
     archetype_lit_index,
+    center_dual_face,
+    center_face,
     dial_point,
     earth_region,
     palette_for,
@@ -67,6 +70,7 @@ from render.layers import (
     slot_seat_scale,
     slot_view,
     sunday_dual_face,
+    theme_ninth,
     weekday_body_orbit,
     weekday_body_size,
     today_slot_theta,
@@ -399,6 +403,7 @@ class Compositor:
         cache: AssetCache,
         symbolism: SymbolismRepository | None = None,
         overlay: dict | None = None,
+        encyclopedia: EncyclopediaRepository | None = None,
     ):
         self._skin = skin
         self._cache = cache
@@ -420,6 +425,13 @@ class Compositor:
         # — labels, day/month/sign/phase names.
         self._symbolism = symbolism or SymbolismRepository()
         self._overlay = overlay or {}
+        # THE NINTH's own article family lives in encyclopedia.json, not
+        # symbolism.json (round R3b item 3/4: the CENTER seat's solar-
+        # window hover speaks it) — the SAME overlay, a sibling
+        # repository, never a second translation path.
+        self._encyclopedia = encyclopedia or EncyclopediaRepository(
+            overlay=self._overlay
+        )
         self._day: DayContext | None = None
         self._last_tick: TickState | None = None
         # One cached pixmap per hover-invariant segment (None = needs a
@@ -699,6 +711,13 @@ class Compositor:
                     return self._sun_face_tooltip(
                         "ruler", active=today == "sun"
                     )
+                if body == "sun" and center_dual_face(self._skin):
+                    # The Prism/Trinity/center_only CENTER seat (round
+                    # R3b items 3/4): a 2-face theme speaks BOTH sides
+                    # always; a 3-face theme speaks GOOD alone outside
+                    # its solar windows, the matching TWO-COLUMN card
+                    # inside them.
+                    return self._center_dual_tooltip(active=today == "sun")
                 # The classic unit may be DRIVEN by the 2nd slot
                 # (owner 2026-07-15) — the hover speaks that theme,
                 # in that slot's OWN roster and metal.
@@ -1629,6 +1648,72 @@ class Compositor:
             image, title, text, accents=defaults.BODY_ACCENT_HUES["sun"],
             tr=self._tr,
         )
+
+    def _dual_face_columns(self, theme: str, faces: tuple[str, str]) -> str:
+        """The CENTER seat's TWO-FACE hover CARD (owner verdict B, round
+        R3b items 2/4 — "po principu ZODIAC na PRISM diamond hover"):
+        two texts side by side, a divider between, each under its own
+        emblem — the SAME two-column table `_arm_tooltip`'s hexa
+        zodiac-diamond hover builds below (Rule #5), fed by `faces`, a
+        pair picked from up to three: "ruler" (GOOD), "servant" (EVIL),
+        "ninth" (THE UNFOUND)."""
+        spec = self._skin.weekday_set
+        dual_names = spec.dual_names or defaults.WEEKDAY_DUAL_NAMES[theme]
+        article_set = spec.article_set or constants.WEEKDAY_THEME_ARTICLES[theme]
+        columns = []
+        for face in faces:
+            if face == "ninth":
+                name, asset = theme_ninth(theme)
+                text = self._encyclopedia.entry("ninths", name)["base"]
+                accents = ()
+            else:
+                ruler = face == "ruler"
+                name = dual_names[0 if ruler else 1]
+                asset = metal_variant_file(
+                    spec.bodies.get("sun") if ruler else spec.dual_asset,
+                    spec.metal,
+                )
+                node = self._symbolism.article(article_set, "sun")
+                text = node.get("faces", {}).get(face) or node["base"]
+                if ruler:
+                    variant = node["variants"].get(self._combo_key())
+                    if variant:
+                        text += "\n\n" + variant
+                accents = defaults.BODY_ACCENT_HUES["sun"]
+            columns.append(
+                _hover_badge(asset)
+                + _hover_title(f"<b>{html.escape(self._tr(name))}</b>")
+                + _article_paragraphs(text, accents=accents, tr=self._tr)
+            )
+        return (
+            "<table cellspacing='12'><tr>"
+            f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>{columns[0]}</td>"
+            f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>{columns[1]}</td>"
+            "</tr></table>"
+        )
+
+    def _center_dual_tooltip(self, active: bool) -> str:
+        """The CENTER seat's Sunday duality hover (owner INSTRUCTION #5
+        + solar amendment, round R3b items 3/4): a ghost read on a
+        non-Sunday day stays the single GOOD/Ruler article (unchanged
+        from before this round); on the real Sunday, a theme with only
+        TWO faces ALWAYS speaks BOTH side by side (owner: "HOVER su
+        uvek OBA jedan pored drugog"), a theme with a NINTH speaks GOOD
+        alone outside its solar windows and the matching TWO-COLUMN
+        pair inside them (GOOD+NINTH near solar noon, EVIL+NINTH near
+        solar midnight) — `center_face` decides which."""
+        if not active:
+            return self._sun_face_tooltip("ruler", active=False)
+        theme = self._skin.weekday_theme
+        ninth = theme_ninth(theme)
+        if ninth is None:
+            return self._dual_face_columns(theme, ("ruler", "servant"))
+        face = center_face(self._day, self._last_tick, has_ninth=True)
+        if face == "servant":
+            return self._dual_face_columns(theme, ("servant", "ninth"))
+        if face == "ninth":
+            return self._dual_face_columns(theme, ("ruler", "ninth"))
+        return self._sun_face_tooltip("ruler", active=True)
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
         """Hover over a star arm (owner spec): hexa arms name their TWO

@@ -52,7 +52,15 @@ the astronomical axis, the AH label, the epoch tooltip notes) and the
 `RING_TWO_METALS_DEFAULT` — the per-preset default for the Design ▸
 Ring ▸ "Two metals" toggle (Mason True, every other eligible preset
 False, `app.controller._ring_two_metals` resolves it against the
-user's own stored `Settings.ring_two_metals` choice first).
+user's own stored `Settings.ring_two_metals` choice first). THE NINTH
+TABLE AND ITS SOLAR WINDOWS (round R3b item 3): `WEEKDAY_THEME_NINTHS`
+— the (display name, plate path) per weekday theme, extracted out of
+`app.encyclopedia`'s own ninths loop so [Layers](../render/layers.md)
+and [Compositor](../render/compositor.md) can read the SAME table for
+the CENTER seat's solar-window face law (Rule #5) — and
+`CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
+`CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH`, the tunable hour-widths of
+those windows around solar noon/midnight.
 
 ### `defaults.py` — Developer Tunables
 Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —

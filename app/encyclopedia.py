@@ -24,8 +24,9 @@ import shutil
 from datetime import date
 from pathlib import Path
 
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QFont, QIcon, QPixmap
+from PySide6.QtCore import QByteArray, QRectF, QSize, Qt
+from PySide6.QtGui import QFont, QIcon, QPainter, QPixmap
+from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import (
     QDialog,
     QFileDialog,
@@ -99,6 +100,57 @@ def _image_tooltip(path: Path) -> str:
     so every tooltip reads as a name, not a raw file token."""
     stem = path.stem.replace("_", " ")
     return stem.title() if stem.islower() else stem
+
+
+# THE ROSTER-SWITCH LOGOS (Ency INSTRUCTIONS.txt rule 5, round R3b
+# item 2): simple line-art SVGs, small enough to read at 24-32px —
+# a planetary orbit for PLANETARY, a temple pediment for PANTHEON.
+# NOTE for a future ImageGeneration pass (owner: "da pravimo preko
+# ImageGeneration i neki SVG"): these are the placeholder-grade marks
+# the owner asked for THIS round; a generated pair may replace them
+# later without changing `_svg_icon`'s call sites.
+_ROSTER_ICON_COLOR = "#D9B978"
+_PLANETARY_ORBIT_SVG = f"""<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="12" r="2.6" fill="{_ROSTER_ICON_COLOR}"/>
+  <ellipse cx="12" cy="12" rx="9.6" ry="4.1" fill="none"
+    stroke="{_ROSTER_ICON_COLOR}" stroke-width="1.4"
+    transform="rotate(-24 12 12)"/>
+  <circle cx="20.3" cy="8.1" r="1.35" fill="{_ROSTER_ICON_COLOR}"/>
+</svg>"""
+_PANTHEON_TEMPLE_SVG = f"""<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2 8.4 L12 2.2 L22 8.4 Z" fill="none"
+    stroke="{_ROSTER_ICON_COLOR}" stroke-width="1.4"
+    stroke-linejoin="round"/>
+  <rect x="1.4" y="8.4" width="21.2" height="1.6" fill="{_ROSTER_ICON_COLOR}"/>
+  <line x1="4.6" y1="10" x2="4.6" y2="20" stroke="{_ROSTER_ICON_COLOR}" stroke-width="1.6"/>
+  <line x1="9.3" y1="10" x2="9.3" y2="20" stroke="{_ROSTER_ICON_COLOR}" stroke-width="1.6"/>
+  <line x1="14.7" y1="10" x2="14.7" y2="20" stroke="{_ROSTER_ICON_COLOR}" stroke-width="1.6"/>
+  <line x1="19.4" y1="10" x2="19.4" y2="20" stroke="{_ROSTER_ICON_COLOR}" stroke-width="1.6"/>
+  <rect x="1.4" y="20" width="21.2" height="1.6" fill="{_ROSTER_ICON_COLOR}"/>
+</svg>"""
+
+
+def _svg_icon(svg_source: str, size: int) -> QIcon:
+    """Rasterize an INLINE SVG string to a QIcon at `size` px (round
+    R3b item 2) — mirrors `app.tray._rasterize_logo`'s centered-scale
+    recipe (Rule #5: the same QSvgRenderer render-to-QPixmap path, no
+    second rasterizer) but for a literal SVG source string instead of
+    an asset FILE, since the roster-switch marks are inline, not
+    wired art."""
+    renderer = QSvgRenderer(QByteArray(svg_source.encode("utf-8")))
+    pixmap = QPixmap(size, size)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(pixmap)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    design = renderer.defaultSize()
+    scale = size / max(design.width(), design.height())
+    width, height = design.width() * scale, design.height() * scale
+    renderer.render(
+        painter, QRectF((size - width) / 2, (size - height) / 2, width, height)
+    )
+    painter.end()
+    return QIcon(pixmap)
+
 
 # THE FIVE SECTIONS (owner-approved decision, sealed 2026-07-20, round
 # R3 — supersedes the nine-group 2026-07-12/13 layout): the owner's own
@@ -268,9 +320,15 @@ _WEEK_ORDER = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
 # moon=1..saturn=6 (`_ENC_WEEK_ORDER`, unaware of the restructure).
 # `_weekday_topic`'s new order happens to leave Monday..Saturday at
 # that SAME index (Title only pushes in at 0; Sunday moves OUT to the
-# end) — only raw index 0 (the Sun) needs remapping, to the merged
-# Ruler|Servant DUAL page's new seat: Title(0) + Mon..Sat(1-6) +
-# Duality title(7) + Dual(8). Applied once in `__init__`.
+# end) — only raw index 0 (the Sun) needs remapping, to the GOOD
+# (Ruler) half's new seat: Title(0) + Mon..Sat(1-6) + Duality title(7)
+# + Good(8) [+ Evil(9) — round R3b item 1 split, EVIL is not a jump
+# target of its own: a Spacebar press always lands on GOOD, matching
+# the pre-split "jump to the merged dual page" intent]. Applied once
+# in `__init__`. The GOOD half happens to land on the SAME raw index
+# (8) the R3 merged dual page used to occupy — pure coincidence of the
+# arithmetic (title+6+duality-title=8), not a second meaning read into
+# the number.
 _WEEKDAY_DUAL_PAGE_INDEX = 8
 # Every `_weekday_topic`-built topic — every WEEKDAY_THEME_TITLES key
 # EXCEPT virtues/sins/moods (those get OVERWRITTEN by the emblem-family
@@ -399,22 +457,23 @@ def _theme_dual_art(theme: str, colored: bool = False) -> Path:
 
 def _weekday_topic(theme: str):
     """(icon path, entries) for one weekday theme (owner ARTICLE ORDER
-    restructure, round R3): entry 0 is the theme's OWN title page
-    (`theme_title` — describes the whole theme; the plate is a
-    documented graceful-absent slot for a future theme plate, the TEXT
-    is written now); entries 1-6 are Monday..Saturday, in that order
-    (owner: "Ponedeljak PRVI"); entry 7 is the WEEK-DUALITY title page
-    (`week_duality`); entry 8 is the merged Sunday DUAL page — the
-    Ruler and the Servant sharing ONE page (owner INSTRUCTION #6,
-    encyclopedia side: LEFT/RIGHT columns, a divider, each under its
-    own image — `_show_entry` reads `entry["dual"]` to switch to that
-    layout). Every look is a tuple of ROWS — the dual page's two
-    plates stand SIDE BY SIDE, Ruler left, Servant right (owner
-    correction 2026-07-13: never stacked); the metal themes cycle
-    Colored/Bronze/Gold/Silver; the planets cycle their photos and the
-    sign glyphs — unchanged per-look mechanics, just relocated. The
-    Ninth (where the theme has one) is appended AFTER this function
-    returns (`_topics`' ninths loop), landing last either way."""
+    restructure, round R3; SPLIT into two separate GOOD/EVIL pages,
+    round R3b item 1 — owner verdict A, supersedes the R3 MERGED dual
+    page): entry 0 is the theme's OWN title page (`theme_title` —
+    describes the whole theme; the plate is a documented graceful-
+    absent slot for a future theme plate, the TEXT is written now);
+    entries 1-6 are Monday..Saturday, in that order (owner: "Ponedeljak
+    PRVI"); entry 7 is the WEEK-DUALITY title page (`week_duality`);
+    entry 8 is the GOOD (Ruler) half of Sunday, its own ordinary single-
+    image page; entry 9 is the EVIL (Servant) half, ALSO its own
+    ordinary single-image page with its OWN plate — the R3 two-column-
+    in-one-page dual layout is retired (each half is now indistinguish-
+    able in shape from a Monday..Saturday page, just fed through
+    `evil_looks_for` for the Servant side). The metal themes still
+    cycle Colored/Bronze/Gold/Silver on EACH half independently; the
+    planets still cycle their photos and the sign glyphs. The Ninth
+    (where the theme has one) is appended AFTER this function returns
+    (`_topics`' ninths loop), landing last either way."""
     article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
     if theme == "planets":
         names = defaults.DEFAULT_SKIN.weekday_set.body_names
@@ -427,9 +486,12 @@ def _weekday_topic(theme: str):
             return ((ruler, servant),)
         return ((ruler,),)
 
-    def looks_for(body: str, dual: bool) -> tuple:
+    def looks_for(body: str) -> tuple:
+        """A Monday..Saturday (or GOOD/Ruler) page's own looks — always
+        a SINGLE image per look now (round R3b item 1: the old
+        `dual=True` two-plate-per-row branch retired with the merged
+        page; `evil_looks_for` below is EVIL's own sibling)."""
         base = _theme_body_art(theme, body)
-        servant = _theme_dual_art(theme) if dual else None
         if metal:
             colored = (
                 defaults.WEEKDAY_ART_DIR
@@ -437,17 +499,6 @@ def _weekday_topic(theme: str):
             ).parent / "colored" / (
                 f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
             )
-            if dual:
-                return tuple(
-                    (label, rows(one, two))
-                    for (label, one), (_, two) in zip(
-                        _metal_looks(base, colored),
-                        _metal_looks(
-                            _theme_dual_art(theme),
-                            _theme_dual_art(theme, colored=True),
-                        ),
-                    )
-                )
             return tuple(
                 (label, rows(path, None))
                 for label, path in _metal_looks(base, colored)
@@ -457,37 +508,70 @@ def _weekday_topic(theme: str):
             # glyphs and the bronze medallions ride the arrows.
             sign = defaults.WEEKDAY_ART_DIR / "planets" / "signs" / f"{body}.png"
             art = defaults.WEEKDAY_ART_DIR / "planets" / "art" / f"{body}.png"
+            return (
+                ("Planets", rows(base, None)),
+                ("Signs", rows(sign, None)),
+                ("Art", rows(art, None)),
+            )
+        return (("", rows(base, None)),)
+
+    def evil_looks_for() -> tuple:
+        """The EVIL half's OWN page (owner verdict A, round R3b item 1
+        — the Servant plate ALONE, never paired with the Ruler's any
+        more): mirrors `looks_for`'s per-metal/per-planets-look cycle
+        exactly, built from `_theme_dual_art` instead of
+        `_theme_body_art` (Rule #5 — the same shapes, the Servant's own
+        files)."""
+        servant = _theme_dual_art(theme)
+        if metal:
+            colored = _theme_dual_art(theme, colored=True)
+            return tuple(
+                (label, rows(path, None))
+                for label, path in _metal_looks(servant, colored)
+            )
+        if theme == "planets":
             sign_dual = (
                 defaults.WEEKDAY_ART_DIR / "planets" / "signs" / "sun_eclipse.png"
-                if dual else None
             )
             art_dual = (
                 defaults.WEEKDAY_ART_DIR / "planets" / "art" / "sun_eclipse.png"
-                if dual else None
             )
             return (
-                ("Planets", rows(base, servant)),
-                ("Signs", rows(sign, sign_dual)),
-                ("Art", rows(art, art_dual)),
+                ("Planets", rows(servant, None)),
+                ("Signs", rows(sign_dual, None)),
+                ("Art", rows(art_dual, None)),
             )
-        return (("", rows(base, servant)),)
+        return (("", rows(servant, None)),)
 
     def body_entry(body: str) -> dict:
         return {
-            "looks": looks_for(body, dual=False),
+            "looks": looks_for(body),
             "name": names[body],
             "article": ("article", article_set, body),
             "accents": defaults.BODY_ACCENT_HUES[body],
         }
 
-    def dual_entry() -> dict:
+    def good_entry() -> dict:
+        """The GOOD (Ruler) half of Sunday — its OWN page now (owner
+        verdict A, round R3b item 1), an ordinary single-image page
+        exactly shaped like Monday..Saturday's."""
+        ruler_name, _servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
         return {
-            "looks": looks_for("sun", dual=True),
-            "name": names["sun"],
-            "article": ("article", article_set, "sun"),
+            "looks": looks_for("sun"),
+            "name": ruler_name,
+            "article": ("article_face", article_set, "sun", "ruler"),
             "accents": defaults.BODY_ACCENT_HUES["sun"],
-            "dual": True,
-            "theme": theme,   # WEEKDAY_DUAL_NAMES[theme] names the columns
+        }
+
+    def evil_entry() -> dict:
+        """The EVIL (Servant) half of Sunday — its OWN page, its OWN
+        plate (owner verdict A, round R3b item 1)."""
+        _ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
+        return {
+            "looks": evil_looks_for(),
+            "name": servant_name,
+            "article": ("article_face", article_set, "sun", "servant"),
+            "accents": defaults.BODY_ACCENT_HUES["sun"],
         }
 
     title_entry = {
@@ -505,9 +589,125 @@ def _weekday_topic(theme: str):
     entries = (
         [title_entry]
         + [body_entry(body) for body in _WEEK_ORDER[1:]]   # Monday..Saturday
-        + [duality_title_entry, dual_entry()]
+        + [duality_title_entry, good_entry(), evil_entry()]
     )
     return _theme_body_art(theme, "sun"), entries
+
+
+# THE PANTHEON/PLANETARY MERGE (Ency INSTRUCTIONS.txt rule 5, round
+# R3b item 2): the four themes with a documented Pantheon roster
+# (`defaults.WEEKDAY_PANTHEON`) become ONE topic each — pages 1-11 the
+# Planetary run `_weekday_topic` already builds (title, Mon..Sat, week-
+# duality title, good, evil, ninth), pages 12-22 the SAME 11-page shape
+# again for the Pantheon roster (`_pantheon_topic` below), reusing the
+# Planetary block's OWN Ninth (CANON.md: a theme names ONE Ninth,
+# outside BOTH rosters, never a second seatless figure per roster) —
+# both blocks close on the identical Gaia/Yggdrasil/Pharaoh/Triglav
+# page. `_PANTHEON_BLOCK_SIZE` is the fixed span every merged theme's
+# Planetary block occupies (11 — all four Pantheon cultures also carry
+# a Ninth, so the arithmetic never varies): the roster-switch button
+# jumps `entry_index +/- _PANTHEON_BLOCK_SIZE`.
+_PANTHEON_BLOCK_SIZE = 11
+_PANTHEON_MERGED_THEMES = frozenset(defaults.WEEKDAY_PANTHEON)
+
+
+def _pantheon_topic(theme: str) -> list[dict]:
+    """The PANTHEON roster's OWN 11-page run for `theme` (round R3b
+    item 2) — the SAME [title, Monday..Saturday, week-duality title,
+    good, evil] shape `_weekday_topic` builds (the Ninth is appended
+    separately, shared with the Planetary block — see
+    `_PANTHEON_MERGED_THEMES` above), sourced from
+    `defaults.WEEKDAY_PANTHEON[theme]` through `defaults.pantheon_seat`
+    — the SAME safety law the live dial's Pantheon roster reads (Rule
+    #5, CANON.md "Two Rosters"): a seat whose pantheon plate has not
+    landed keeps the WHOLE planetary bundle (file + name + article
+    together), and a missing pantheon DUAL pulls the whole Sunday pair
+    (both faces) back to the planetary bundle too — never a pantheon
+    name paired with planetary art or the reverse. Metal cycling
+    follows the theme's OWN rule (`theme in constants.METAL_THEMES`) —
+    greek/norse cycle Colored/Bronze/Gold/Silver on the Pantheon plates
+    too (a sibling `pantheon/colored/` folder exists for all four
+    cultures); egypt/slavic stay a single plain plate, like their
+    Planetary block."""
+    table = defaults.WEEKDAY_PANTHEON[theme]
+    metal = theme in constants.METAL_THEMES
+
+    def seated(body: str) -> tuple[Path, str, str, str]:
+        """(plate, name, article_set, article_body) for one body."""
+        found = defaults.pantheon_seat(theme, body)
+        if found is not None:
+            path, name, (article_set, article_body) = found
+            return path, name, article_set, article_body
+        return (
+            _theme_body_art(theme, body),
+            defaults.WEEKDAY_THEME_NAMES[theme][body],
+            constants.WEEKDAY_THEME_ARTICLES[theme],
+            body,
+        )
+
+    def looks_for(path: Path) -> tuple:
+        if metal:
+            colored = path.parent / "colored" / path.name
+            return tuple(
+                (label, ((one,),))
+                for label, one in _metal_looks(path, colored)
+            )
+        return (("", ((path,),)),)
+
+    def body_entry(body: str) -> dict:
+        path, name, article_set, article_body = seated(body)
+        return {
+            "looks": looks_for(path),
+            "name": name,
+            "article": ("article", article_set, article_body),
+            "accents": defaults.BODY_ACCENT_HUES[body],
+        }
+
+    sun_path, _sun_name, _sun_set, _sun_body = seated("sun")
+    dual_path = defaults.WEEKDAY_ART_DIR / f"{table['dual'][0]}.png"
+    if paths.art_file(dual_path).exists():
+        ruler_name, servant_name = table["dual_names"]
+        face_article_set = table["articles"]
+    else:
+        # The safety law's Sunday half (CANON.md "Two Rosters"): a
+        # missing pantheon dual pulls the WHOLE Sunday pair back to
+        # the planetary bundle — never a pantheon Ruler over a
+        # planetary Servant, or the reverse.
+        sun_path = _theme_body_art(theme, "sun")
+        dual_path = _theme_dual_art(theme)
+        ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
+        face_article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
+
+    title_key = f"{theme}_pantheon"
+    title_entry = {
+        "images": (),
+        "name": ("theme_title", title_key),
+        "article": ("theme_title", title_key),
+        "accents": (),
+    }
+    duality_title_entry = {
+        "images": (),
+        "name": ("week_duality_title", title_key),
+        "article": ("week_duality", title_key),
+        "accents": (),
+    }
+    good_entry = {
+        "looks": looks_for(sun_path),
+        "name": ruler_name,
+        "article": ("article_face", face_article_set, "sun", "ruler"),
+        "accents": defaults.BODY_ACCENT_HUES["sun"],
+    }
+    evil_entry = {
+        "looks": looks_for(dual_path),
+        "name": servant_name,
+        "article": ("article_face", face_article_set, "sun", "servant"),
+        "accents": defaults.BODY_ACCENT_HUES["sun"],
+    }
+    return (
+        [title_entry]
+        + [body_entry(body) for body in _WEEK_ORDER[1:]]   # Monday..Saturday
+        + [duality_title_entry, good_entry, evil_entry]
+    )
 
 
 def _topics(travel_date: date | None = None) -> dict:
@@ -770,31 +970,16 @@ def _topics(travel_date: date | None = None) -> dict:
     # the Ninth Circle/Freemasonry — supersede the old exile ninths;
     # Melchizedek relocates to Bible II, the Unknown God to the
     # Ancient set. Retired entries stay in encyclopedia.json for the
-    # Wider-Pantheon wave.
+    # Wider-Pantheon wave. The 15 WEEKDAY themes' ninths now live in
+    # `constants.WEEKDAY_THEME_NINTHS` (round R3b item 3 — the SAME
+    # table the CENTER seat's solar-window face law reads, Rule #5);
+    # the two ZODIAC-only ninths (no weekday Sunday duality) stay
+    # local, since render never needs them.
     for topic_key, name, plate in (
-        ("wolf", "Sigma", _w / "wolf/primary/sigma.png"),
-        ("bee", "The Swarm", _w / "bee/primary/swarm.png"),
-        ("elephant", "The Graveyard",
-         _w / "elephant/primary/graveyard.png"),
-        ("cosmos", "The Big Bang", _w / "cosmos/primary/big_bang.png"),
-        ("greek", "Gaia", _w / "greek/pantheon/gaia.png"),
-        ("norse", "Yggdrasil", _w / "norse/pantheon/Yggdrasil.png"),
-        ("egypt", "The Pharaoh", _w / "egypt/pantheon/pharaoh.png"),
-        ("slavic", "Triglav", _w / "slavic/pantheon/triglav.png"),
-        ("alchemy", "The Philosopher's Stone",
-         _w / "alchemy/primary/stone.png"),
-        ("profession", "The Polymath",
-         _w / "profession/primary/Polymath.png"),
-        ("religion", "Freemasonry",
-         _w / "religion/primary/freemasonry.png"),
-        ("religion_alt", "The Unknown God",
-         _w / "religion/secondary/unknown_god.png"),
-        ("bible", "The Holy Trinity",
-         _w / "bible/primary/holy_trinity.png"),
-        ("bible2", "Melchizedek",
-         _w / "bible/secondary/melchizedek.png"),
-        ("bible_dark", "The Ninth Circle",
-         _w / "bible/dark/ninth_circle.png"),
+        *(
+            (theme, name, _w / rel)
+            for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
+        ),
         ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
         ("astrology", "Ophiuchus", _z / "astrology/sign/Ophiuchus.png"),
     ):
@@ -811,6 +996,18 @@ def _topics(travel_date: date | None = None) -> dict:
         if ninth_looks is not None:
             ninth_entry["looks"] = ninth_looks
         topics[topic_key]["entries"].append(ninth_entry)
+    # THE PANTHEON/PLANETARY MERGE (round R3b item 2): pages 12-22 —
+    # the SAME 11-page shape all over again, in the culture's OWN
+    # hierarchy roster, reusing the ninth entry the loop above JUST
+    # appended (`entries[-1]`) rather than building a second one — the
+    # SAME figure closes both blocks (CANON.md: one Ninth per theme).
+    for theme in _PANTHEON_MERGED_THEMES:
+        entries = topics[theme]["entries"]
+        assert len(entries) == _PANTHEON_BLOCK_SIZE, (
+            theme, len(entries)
+        )  # every Pantheon culture also names a Ninth (documented)
+        entries.extend(_pantheon_topic(theme))
+        entries.append(entries[_PANTHEON_BLOCK_SIZE - 1])
     # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing
@@ -1097,12 +1294,11 @@ class EncyclopediaDialog(QDialog):
             })
         self._cells: list[dict] = []
         self._blocks: list[QWidget] = []
-        # (label, columns) — columns=1 spans the whole block, columns=2
-        # is one half of a DUAL page's two side-by-side text columns
-        # (owner INSTRUCTION #6, encyclopedia side) — `_rescale` widths
-        # and reserves each label's height the same way either way,
-        # just against a HALF share for a dual column.
-        self._text_labels: list[tuple[QLabel, int]] = []
+        # Every text label spans the FULL block width now (round R3b
+        # item 1: the old DUAL page's two side-by-side half-width
+        # columns retired with the merged page — GOOD and EVIL are
+        # each an ordinary single-column page).
+        self._text_labels: list[QLabel] = []
         self._name_labels: list[QLabel] = []
         self._topic_cards: list[QToolButton] = []
         self._pixmap_cache: dict[str, QPixmap] = {}
@@ -1130,6 +1326,17 @@ class EncyclopediaDialog(QDialog):
         self._back = QPushButton("⌂  " + self._tr("Home"))
         self._back.clicked.connect(self._show_topics)
         style_button(self._back, "home")
+        # THE PANTHEON/PLANETARY ROSTER SWITCH (Ency INSTRUCTIONS.txt
+        # rule 5, round R3b item 2): between Home and Download, ONLY on
+        # the four merged themes — its logo shows the roster the click
+        # would SWITCH TO (built once here, restyled per page by
+        # `_update_roster_button`, called from `_show_entry`).
+        self._planetary_icon = _svg_icon(_PLANETARY_ORBIT_SVG, 28)
+        self._pantheon_icon = _svg_icon(_PANTHEON_TEMPLE_SVG, 28)
+        self._roster_button = QToolButton()
+        style_button(self._roster_button, "neutral", small=True)
+        self._roster_button.setIconSize(QSize(24, 24))
+        self._roster_button.clicked.connect(self._switch_roster)
         self._download = QPushButton("⬇  " + self._tr("Download"))
         self._download.clicked.connect(self._download_entry)
         style_button(self._download, "download")
@@ -1163,6 +1370,7 @@ class EncyclopediaDialog(QDialog):
         self._look_forward.clicked.connect(lambda: self._cycle_look(1))
         top = QHBoxLayout()
         top.addWidget(self._back)
+        top.addWidget(self._roster_button)
         top.addStretch(1)
         top.addWidget(self._look_back)
         top.addWidget(self._look_caption)
@@ -1245,6 +1453,16 @@ class EncyclopediaDialog(QDialog):
             ))
         if kind == "article":
             return self._symbolism.article(ref[1], ref[2])["base"]
+        if kind == "article_face":
+            # The GOOD/EVIL split pages (owner verdict A, round R3b
+            # item 1): ref = ("article_face", article_set, body, face)
+            # — resolves through the SAME "faces" register the dial
+            # hover reads (`render.compositor._sun_face_tooltip`),
+            # falling back to "base" for a theme whose split has not
+            # landed (documented graceful path, Rule #1 — never a
+            # KeyError, just the shared read until then).
+            node = self._symbolism.article(ref[1], ref[2])
+            return node.get("faces", {}).get(ref[3]) or node["base"]
         if kind == "zodiac":
             return self._symbolism.zodiac_article(ref[1])["base"]
         if kind == "chinese":
@@ -1272,16 +1490,6 @@ class EncyclopediaDialog(QDialog):
         if kind == "week_duality":
             return self._encyclopedia.week_duality(ref[1])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
-
-    def _article_faces(self, ref: tuple) -> tuple[str, str]:
-        """Both texts of a DUAL entry (owner INSTRUCTION #6, encyclopedia
-        side — round R3): (ruler_text, servant_text), the SAME ref
-        `_article_text` reads, resolved through the "faces" register
-        instead of "base". Every weekday theme's Sunday article carries
-        both faces (`data/symbolism.py` — round R3 ground-truthed all
-        eighteen)."""
-        faces = self._symbolism.article(ref[1], ref[2])["faces"]
-        return faces["ruler"], faces["servant"]
 
     def _entry_name(self, entry: dict) -> str:
         """An entry's display name: the WEEK, INSTRUMENT and SEASONS
@@ -1330,6 +1538,7 @@ class EncyclopediaDialog(QDialog):
         self._look_back.hide()
         self._look_caption.hide()
         self._look_forward.hide()
+        self._roster_button.hide()
         self._look_state = None
         self._cells = []
         self._blocks = []
@@ -1397,6 +1606,37 @@ class EncyclopediaDialog(QDialog):
         self._entry_index = (self._entry_index + delta) % len(entries)
         self._show_entry()
 
+    def _switch_roster(self) -> None:
+        """The PANTHEON <-> PLANETARY logo button (Ency
+        INSTRUCTIONS.txt rule 5, round R3b item 2): jumps to the SAME
+        position inside the other 11-page block — Monday stays Monday,
+        the dual title stays the dual title, and so on."""
+        span = _PANTHEON_BLOCK_SIZE
+        self._entry_index = (
+            self._entry_index + span if self._entry_index < span
+            else self._entry_index - span
+        )
+        self._show_entry()
+
+    def _update_roster_button(self) -> None:
+        """Show/restyle the roster-switch button for the OPEN page
+        (round R3b item 2) — hidden outside the four merged themes;
+        otherwise its logo shows the roster a click would SWITCH TO,
+        and it flips automatically when Next/Previous cross the 11/12
+        boundary (this is called from `_show_entry` on every page turn,
+        so no separate boundary-watch is needed)."""
+        if self._topic_key not in _PANTHEON_MERGED_THEMES:
+            self._roster_button.hide()
+            return
+        in_pantheon_block = self._entry_index >= _PANTHEON_BLOCK_SIZE
+        self._roster_button.setIcon(
+            self._planetary_icon if in_pantheon_block else self._pantheon_icon
+        )
+        self._roster_button.setToolTip(
+            self._tr("Planetary") if in_pantheon_block else self._tr("Pantheon")
+        )
+        self._roster_button.show()
+
     def _download_entry(self) -> None:
         """⬇ Download (owner 2026-07-14): save the OPEN entry — the
         current look's image(s) and the article text (headings kept
@@ -1412,32 +1652,17 @@ class EncyclopediaDialog(QDialog):
             ch if ch.isalnum() or ch in " ·-_()" else "_" for ch in name
         ).strip()
         lines = [name, ""]
-        if entry.get("dual"):
-            # A DUAL page saves BOTH faces (owner INSTRUCTION #6):
-            # Ruler's text, then Servant's, each under its own name.
-            ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[
-                entry["theme"]
-            ]
-            ruler_text, servant_text = self._article_faces(entry["article"])
-            for side_name, side_text in (
-                (ruler_name, ruler_text), (servant_name, servant_text),
-            ):
-                lines.append(f"[{self._tr(side_name)}]")
-                side_text = _HEX_NOTE.sub("", side_text)
-                for paragraph in side_text.split("\n\n"):
-                    match = _SUBHEAD.match(paragraph)
-                    if match:
-                        lines.append(f"[{self._tr(match.group(1))}]")
-                        paragraph = paragraph[match.end():]
-                    lines += [paragraph, ""]
-        else:
-            text = _HEX_NOTE.sub("", self._article_text(entry["article"]))
-            for paragraph in text.split("\n\n"):
-                match = _SUBHEAD.match(paragraph)
-                if match:
-                    lines.append(f"[{self._tr(match.group(1))}]")
-                    paragraph = paragraph[match.end():]
-                lines += [paragraph, ""]
+        # Every page — including the GOOD/EVIL halves since their split
+        # (round R3b item 1) — is now a single-text page like any
+        # other; the old two-face DUAL branch retired with the merged
+        # page (Rule #6, no dead special case left behind).
+        text = _HEX_NOTE.sub("", self._article_text(entry["article"]))
+        for paragraph in text.split("\n\n"):
+            match = _SUBHEAD.match(paragraph)
+            if match:
+                lines.append(f"[{self._tr(match.group(1))}]")
+                paragraph = paragraph[match.end():]
+            lines += [paragraph, ""]
         (Path(target) / f"{safe}.txt").write_text(
             "\n".join(lines), encoding="utf-8"
         )
@@ -1462,6 +1687,7 @@ class EncyclopediaDialog(QDialog):
         self._title.setText(self._tr(topic["title"]))
         self._back.show()
         self._download.show()
+        self._update_roster_button()
         self._counter.setText(f"{self._entry_index + 1} / {len(entries)}")
         pager = len(entries) > 1
         self._previous.setVisible(pager)
@@ -1567,59 +1793,8 @@ class EncyclopediaDialog(QDialog):
             text.setWordWrap(True)
             text.setTextFormat(Qt.TextFormat.RichText)
             text.setAlignment(Qt.AlignmentFlag.AlignTop)
-            self._text_labels.append((text, 1))
+            self._text_labels.append(text)
             cell.addWidget(text)
-        elif entry.get("dual"):
-            # THE WEEK-DUALITY DUAL PAGE (owner INSTRUCTION #6,
-            # encyclopedia side, round R3): the Ruler's text LEFT, the
-            # Servant's RIGHT, a divider between, each under its own
-            # NAME here (the two plates already stand side by side
-            # above, via the normal image-row mechanism — Rule #5, no
-            # second image path).
-            ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[
-                entry["theme"]
-            ]
-            ruler_text, servant_text = self._article_faces(entry["article"])
-            dual_row = QHBoxLayout()
-            dual_row.setSpacing(defaults.GUIDE_SPACING_PX * 2)
-            for side_name, side_text in (
-                (ruler_name, ruler_text), (servant_name, servant_text),
-            ):
-                side_column = QVBoxLayout()
-                heading = QLabel(
-                    f"<b>{_html.escape(self._tr(side_name))}</b>"
-                )
-                heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                self._name_labels.append(heading)
-                side_column.addWidget(heading)
-                side_text_label = QLabel(
-                    _flow_html(
-                        side_text, accents=entry["accents"], tr=self._tr
-                    )
-                )
-                side_text_label.setWordWrap(True)
-                side_text_label.setTextFormat(Qt.TextFormat.RichText)
-                side_text_label.setAlignment(Qt.AlignmentFlag.AlignTop)
-                self._text_labels.append((side_text_label, 2))
-                side_column.addWidget(side_text_label)
-                # A trailing stretch (found rendering this round's own
-                # screenshots): the two columns rarely run the same
-                # length, and `dual_row`'s HBoxLayout equalizes both
-                # columns to the TALLER one's height — with no stretch
-                # to absorb that slack, Qt hands it to the only OTHER
-                # flexible widget in the column, the `heading` label,
-                # stretching a one-line heading tall and vertically
-                # centering it (Qt's QLabel default) into a false gap
-                # above the shorter column's own text. The slack now
-                # lands here instead, below the text, where it belongs.
-                side_column.addStretch(1)
-                dual_row.addLayout(side_column, 1)
-                if side_name == ruler_name:
-                    divider = QFrame()
-                    divider.setFrameShape(QFrame.Shape.VLine)
-                    divider.setFrameShadow(QFrame.Shadow.Sunken)
-                    dual_row.addWidget(divider)
-            cell.addLayout(dual_row)
         else:
             text = QLabel(
                 _flow_html(
@@ -1631,7 +1806,7 @@ class EncyclopediaDialog(QDialog):
             text.setWordWrap(True)
             text.setTextFormat(Qt.TextFormat.RichText)
             text.setAlignment(Qt.AlignmentFlag.AlignTop)
-            self._text_labels.append((text, 1))
+            self._text_labels.append(text)
             cell.addWidget(text)
         self._blocks.append(block)
         # The block sits CENTERED with even side margins (owner
@@ -1685,7 +1860,7 @@ class EncyclopediaDialog(QDialog):
                 ),
             ),
         )
-        for label, columns in self._text_labels:
+        for label in self._text_labels:
             # A real QFont (owner bug fix round R3, THE INVISIBLE
             # CLIPPER: "Nevidljivi element seče pasus The Lesson"):
             # `setStyleSheet` routes a font-size change through Qt's
@@ -1700,26 +1875,16 @@ class EncyclopediaDialog(QDialog):
             font = label.font()
             font.setPixelSize(font_px)
             label.setFont(font)
-            # A DUAL page's two columns (owner INSTRUCTION #6) share
-            # the block width with the divider between them — pin the
-            # column's own width too, not just its height, so its
-            # heightForWidth is measured against what it will ACTUALLY
-            # be given (columns == 1 keeps the old behavior: the whole
-            # block already constrains a single column's width).
-            width = (
-                block_width if columns == 1
-                else (block_width - defaults.GUIDE_SPACING_PX * 3) // 2
-            )
-            if columns != 1:
-                label.setFixedWidth(width)
             # RESERVE the article's full height (the same law as the
             # image reservation below, ROADMAP queue #9): now that the
             # font is final, `heightForWidth` measures true — pinning
             # it here means the block/scroll canvas negotiate around
             # the REAL text height on their one and only pass, instead
             # of settling on whatever a stale intermediate guess left
-            # behind (THE INVISIBLE CLIPPER bug, fix round R3).
-            label.setFixedHeight(label.heightForWidth(width))
+            # behind (THE INVISIBLE CLIPPER bug, fix round R3). Every
+            # label spans the full block width (round R3b item 1: the
+            # DUAL page's half-width columns retired with the merge).
+            label.setFixedHeight(label.heightForWidth(block_width))
         for label in self._name_labels:
             font = label.font()
             font.setPixelSize(font_px + 3)

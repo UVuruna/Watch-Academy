@@ -481,12 +481,35 @@ otherwise a colored disc; the white label is the weekday SHORT name
 
 ### CenterBodyLayer (MINUTE)
 The current day's CENTER image ABOVE the hands: the opaque Sun on
-Sundays in ghost mode (hexa only), or today's body in center_only mode.
+Sundays in ghost mode (hexa/trio), or today's body in center_only mode.
 Slot images never move up here. Sized by `weekday_body_size()` — the
 same as the diamond bodies, in the normal state and during the reveal
 alike (owner 2026-07-18); center_only keeps its own `center_scale`
 showcase, and the compositor's center hit disc mirrors both drawn
 sizes exactly.
+
+**THE DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
+amendment, round R3b item 3):** on a real Sunday, when the classic
+unit's duality lives in ONE merged center image instead of the
+Compass/Seasons' two separate seats — `center_dual_face(skin)`, the
+COMPLEMENT of `sunday_dual_face` (hexa/trio ALWAYS merge the Sun into
+the center; `center_only` mode merges it for every pointer, since there
+are no seats to hold a second face there) — the SOLAR clock, not the
+wall clock, may swap which face draws: `center_face(day, tick,
+has_ninth)` reads `day.sun.noon` (the SAME anchor the hexagram's own
+rotation reads) through `core.angles.hours_between` and returns
+`"ruler"` (GOOD, the default), `"servant"` (EVIL, near solar midnight)
+or — only for a theme that names one — `"ninth"` (near solar noon).
+`theme_ninth(theme)` is the ONE existence-gated lookup into
+`constants.WEEKDAY_THEME_NINTHS` both this layer and the compositor's
+hover share (Rule #5) — a theme with no table entry, or whose plate has
+not landed, never offers "ninth"; its midnight window then WIDENS from
+±1h to ±2h (owner: "za one koje nemaju 9tog… 22h i 2h"). The
+ghost-reveal Sun (`ctx.reveal_active`) always reads plain — the reveal
+promises the ordinary "two persons, a union", never a third face.
+`CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
+`CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH` (`config/constants.py`) are the
+tunable window widths.
 
 ### SlotLayer (MINUTE)
 One instance per placement pass draws every SEATED slot from

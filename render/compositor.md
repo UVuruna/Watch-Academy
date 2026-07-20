@@ -33,6 +33,9 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
 ### Uses
 - [Layers](layers.md), [Assets](assets.md),
   [Clock State](../core/clock_state.md), [Skins (folder)](../skins/___skins.md)
+- [Encyclopedia Repository](../data/encyclopedia.md) — round R3b: the
+  CENTER seat's Ninth hover text (`self._encyclopedia`, a sibling of
+  `self._symbolism`)
 
 ### Used by
 - [Clock Widget](../app/widget.md) — `paintEvent` delegate
@@ -224,8 +227,28 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   Greek Planetary beside slot 2 Greek Pantheon — same theme, two
   casts); a pantheon seat otherwise resolves identity, plate and
   article through `defaults.pantheon_seat`, planetary-whole on
-  missing art, the Sunday dual pair falling back together. Then the
-  seated slots
+  missing art, the Sunday dual pair falling back together.
+  **THE CENTER SEAT'S DUAL/NINTH SOLAR WINDOWS (owner INSTRUCTION #5 +
+  solar amendment, round R3b items 3/4):** while `render.layers.
+  center_dual_face(skin)` holds (hexa/trio, or ANY pointer in
+  center_only mode — the complement of `sunday_dual_face`'s own
+  Compass/Seasons two-seat law), `_center_dual_tooltip` replaces the
+  old single combined-plate legend on a Sunday: a theme with only two
+  faces speaks BOTH sides ALWAYS, as a two-column CARD
+  (`_dual_face_columns` — the SAME two-column table
+  `_arm_tooltip`'s hexa zodiac-diamond hover builds, Rule #5, "po
+  principu ZODIAC na PRISM diamond hover"); a theme with a Ninth
+  (`render.layers.theme_ninth`, existence-gated against
+  `constants.WEEKDAY_THEME_NINTHS`) speaks the single GOOD/Ruler
+  article outside its solar windows and the matching pair — GOOD+NINTH
+  near solar noon, EVIL+NINTH near solar midnight — inside them,
+  `render.layers.center_face` deciding which. The Ninth's OWN article
+  text comes from a NEW dependency, `self._encyclopedia`
+  (`data.encyclopedia.EncyclopediaRepository`, `entry("ninths", name)`)
+  — the Ninth's family lives in `encyclopedia.json`, not
+  `symbolism.json`, so `Compositor.__init__` now takes an optional
+  `encyclopedia=` repository beside `symbolism=`, defaulting to a
+  fresh instance built from the SAME `overlay`. Then the seated slots
   ("slot:N" via `slot_view` — weekday seats answer the body article,
   zodiac/ascendant/Chinese their sign texts, digital faces stay
   silent) — the Astrology/Ascendant hovers lead with a bold title

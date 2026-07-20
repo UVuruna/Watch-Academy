@@ -151,19 +151,80 @@ screens —
   the medallion) — the color-switcher case is additionally made
   structurally impossible by moving the switcher out of the per-entry
   block entirely (see above).
-- **DEFERRED to a follow-up round**: the Planetary+Pantheon
-  dual-block merge for Greek/Norse/Egyptian/Slavic (owner rule 5 — a
-  SECOND "Pantheon" 9-page block per culture, reached via a LOGO
-  BUTTON between Home and Download that also auto-swaps at the 11→12
-  page boundary). The data this needs already exists and is READY
-  (`defaults.WEEKDAY_PANTHEON`, `pantheon_seat`, the `*_pantheon`
-  article sets, all with "faces" for their own Sunday) — the merge
-  itself, its inline SVG orbit/pediment logos and the boundary-swap
-  logic are a substantial independent feature the owner's own rough
-  page-count note was internally inconsistent about (9 vs 11 pages);
-  it deserves its own focused design pass rather than a rushed
-  implementation this round. See the round R3 report for the design
-  sketch.
+- **DEFERRED to round R3b**: the Planetary+Pantheon dual-block merge
+  for Greek/Norse/Egyptian/Slavic — implemented below, see ROUND R3b.
+
+**ROUND R3b — the DUAL DOCTRINE round (owner verdicts 2026-07-21):**
+
+- **THE DUAL PAGE SPLITS IN TWO (item 1, owner verdict A — supersedes
+  the R3 merged two-column page above)**: `_weekday_topic`'s Sunday
+  entry is no longer ONE page with two text columns — it is TWO
+  ordinary pages, each shaped exactly like a Monday..Saturday page
+  (one plate, one text, full block width): the **GOOD** half (entry
+  8, the Ruler's own plate + `article_face` ref reading the "ruler"
+  face) then the **EVIL** half (entry 9, the Servant's OWN plate via
+  the new `evil_looks_for` — mirrors `looks_for`'s per-metal/per-
+  planets-look cycle exactly, built from `_theme_dual_art` instead of
+  `_theme_body_art`). A theme with a Ninth appends it at entry 10 —
+  every restructured theme is now 10 pages (no Ninth: title+6+duality
+  title+good+evil) or 11 (with one). The OLD `entry["dual"]`/
+  `entry["theme"]` keys, `_article_faces`, and `_show_entry`'s/
+  `_download_entry`'s two-column-in-one-page branches are DELETED
+  whole (Rule #6) — a GOOD/EVIL page now flows through the exact same
+  code path every other page does. `self._text_labels` drops its
+  `(label, columns)` tuple shape too — every label is a plain `QLabel`
+  spanning the full block width now, since `columns=2` never occurs
+  again. `_article_text` gains an `"article_face"` kind: `("article_
+  face", article_set, body, face)` resolves through the SAME "faces"
+  register the dial hover reads (`render.compositor._sun_face_
+  tooltip`), falling back to "base" — one shared read, never a second
+  path. `_WEEKDAY_DUAL_PAGE_INDEX` (still 8 — the arithmetic happens
+  to land the GOOD half on the SAME raw index the old merged page
+  occupied, pure coincidence, not a second meaning) still remaps the
+  Spacebar jump's raw "sun" index onto GOOD only — the jump does NOT
+  yet follow the live solar window onto EVIL/NINTH (a deliberate scope
+  cut this round, see the round report's doubts).
+
+- **THE PANTHEON/PLANETARY MERGE (item 2, `Ency INSTRUCTIONS.txt`
+  rule 5 — the piece R3 deferred)**: the four themes with a
+  documented Pantheon roster (`defaults.WEEKDAY_PANTHEON` —
+  greek/norse/egypt/slavic, `_PANTHEON_MERGED_THEMES`) become ONE
+  topic of 22 pages: pages 1-11 the Planetary run `_weekday_topic`
+  already builds, pages 12-22 the SAME 11-page shape again
+  (`_pantheon_topic`, `_PANTHEON_BLOCK_SIZE = 11`) for the culture's
+  OWN hierarchy — sourced through `defaults.pantheon_seat`'s existing
+  safety law (a missing pantheon seat/dual keeps the WHOLE planetary
+  bundle, file+name+article together — never a pantheon name over
+  planetary art). BOTH blocks close on the IDENTICAL Ninth entry (the
+  SAME dict object, appended twice) — CANON.md names ONE Ninth per
+  theme, outside BOTH rosters, never a second seatless figure per
+  roster. The Pantheon block's own title/week-duality pages resolve
+  through NEW `Database/encyclopedia.json` keys, `"<theme>_pantheon"`
+  (`greek_pantheon`/`norse_pantheon`/`egypt_pantheon`/`slavic_
+  pantheon`), written this round — the culture's OWN throne-room
+  argument (RANK inside the pantheon) rather than the day-ruler
+  canon. A LOGO BUTTON (`self._roster_button`, between Home and the
+  finish switcher) appears ONLY on these four themes: its icon shows
+  the roster a click would SWITCH TO (`_svg_icon` rasterizes two
+  INLINE SVG marks — `_PLANETARY_ORBIT_SVG`, `_PANTHEON_TEMPLE_SVG` —
+  via `QSvgRenderer`, mirroring `app.tray._rasterize_logo`'s recipe
+  for a literal SVG string instead of a file; a future ImageGeneration
+  pass may replace these placeholder-grade marks without touching the
+  call sites), `_switch_roster` jumps `entry_index ± _PANTHEON_
+  BLOCK_SIZE` (the SAME day/page in the other block), and
+  `_update_roster_button` — called from every `_show_entry`, so
+  Next/Previous crossing the 11/12 boundary flips the icon with no
+  separate boundary-watch — restyles it per page.
+
+- **THE NINTH TABLE MOVES TO `config/constants.py`
+  (`WEEKDAY_THEME_NINTHS`, item 3 groundwork)**: the 15 weekday
+  themes' (name, plate) ninths — previously an inline tuple only
+  `_topics()`'s ninths loop read — are now the ONE shared table
+  [Compositor](../render/compositor.md) and
+  [Layers](../render/layers.md) also read for the CENTER seat's
+  solar-window face law (Rule #5); the two ZODIAC-only ninths
+  (Chinese "The Cat", Astrology "Ophiuchus" — no weekday Sunday
+  duality) stay local to `_topics()`, since render never needs them.
 
 **The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
 Seasons topic became THREE — **Moon** (the lunations), **Seasons** (the
@@ -343,16 +404,19 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   (the menu's plain re-open leaves the current page untouched)
 - `_step(delta)` / `_show_entry()`: the pager — one entry per page,
   wraps both ways, pager hidden on single-entry topics; `_show_entry`
-  branches on `entry["poem"]` / `entry["dual"]` / the normal path
+  branches on `entry["poem"]` / the normal path (round R3b item 1: the
+  old `entry["dual"]` two-column branch is gone — GOOD/EVIL are
+  ordinary pages now) and calls `_update_roster_button()`
 - `_cycle_look(step)` / `_update_look_caption()`: the persistent TOP-
   ROW finish switcher (round R3) — cycles `self._look_state` and
   records the pick as `self._preferred_look_label` (finish
   persistence, owner INSTRUCTION #3)
-- `_article_faces(ref)`: both texts of a DUAL page (owner INSTRUCTION
-  #6) — mirrors `_article_text`, resolves through the "faces" register
+- `_switch_roster()` / `_update_roster_button()` (round R3b item 2):
+  the PANTHEON/PLANETARY logo button — jumps `entry_index ±
+  _PANTHEON_BLOCK_SIZE`, and shows/restyles the button per page
+  (hidden outside `_PANTHEON_MERGED_THEMES`)
 - `_download_entry()`: saves the open entry's current-look image(s)
-  and its text (headings as `[Label]` lines, both faces for a DUAL
-  page) into a picked folder
+  and its text (headings as `[Label]` lines) into a picked folder
 - `_rescale()`: live sizing on resize — gallery cards through
   `_rescale_topics()` (round R3: WRAPS at
   `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS`, width-driven only); entry pages

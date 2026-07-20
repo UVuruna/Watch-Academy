@@ -288,57 +288,90 @@ def test_classic_unit_wears_the_driving_slots_theme():
     assert _classic_slot_theme(third)[0] == "planets"
 
 
-def test_subdial_plate_recolors_to_every_finish(app):
-    """Rule #19 first enforcement (owner decree 2026-07-20, "Compute,
-    Don't Generate"): the twelve-plate seat×finish sheet collapsed to
-    ONE master per source — his master serves every letter finish, the
-    SEAT never reaches the file at all any more (only the live shadow,
-    see `test_subdial_shadow_direction_follows_the_seat`). The
-    master's own finish (`SUBDIAL_MASTER_FINISH`) returns it as drawn;
-    the other two return disk-cached live recolors."""
+def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
+    """Rsub round (owner decree 2026-07-21, retiring the Rule #19
+    one-master-per-source model): sets 1-4 are three HAND-DRAWN
+    finishes each — `subdial_plate_file` (reading the active set off
+    `config.paths.subdial_set()`, mirroring the art-source switch)
+    returns the exact matching file, no recolor, no cache entry."""
     from config import paths as _paths
     from render.assets import subdial_plate_file
 
-    master = _paths.art_file(defaults.SUBDIAL_ART_DIR / "master.png")
-    assert master.exists()
-    source = master.relative_to(_paths.assets_dir()).parts[1]
-    own_finish = defaults.SUBDIAL_MASTER_FINISH[source]
-    assert subdial_plate_file(own_finish) == master
-    version = defaults.SUBDIAL_RECOLOR_VERSION
-    other_finishes = [
-        f for f in ("gold", "silver", "bronze") if f != own_finish
-    ]
-    for finish in other_finishes:
-        plate = subdial_plate_file(finish)
-        assert plate is not None and plate != master, finish
-        assert plate.name.endswith(f"_subdial{version}_{finish}.png"), finish
-        assert plate.exists(), finish
-    # The "theme" plate style (owner A/B spec 2026-07-15): a clock
-    # TINT recolors the tapisserie field — that pass runs even on the
-    # exact finish, into its own cache entry.
-    tinted = subdial_plate_file(own_finish, tint="#5A3FA0")
-    assert tinted is not None and tinted != master
-    assert tinted.name.endswith(f"_subdial{version}_{own_finish}_5a3fa0.png")
-    assert tinted.exists()
-    # The metal stays INSIDE the radial bezel band (owner correction
-    # 2026-07-15) — verifiable on a recolored plate against the master.
-    import numpy as _np
-    from PySide6.QtGui import QImage as _QImage
+    try:
+        for set_name in ("set1", "set2", "set3", "set4"):
+            _paths.set_subdial_set(set_name)
+            for finish in ("gold", "silver", "bronze"):
+                expected = (
+                    defaults.SUBDIAL_ROOT_DIR / set_name / f"{finish}.png"
+                )
+                assert expected.exists(), (set_name, finish)
+                assert subdial_plate_file(finish) == expected, (
+                    set_name, finish,
+                )
+        # Switching sets genuinely changes which file draws.
+        _paths.set_subdial_set("set1")
+        set1_gold = subdial_plate_file("gold")
+        _paths.set_subdial_set("set2")
+        set2_gold = subdial_plate_file("gold")
+        assert set1_gold != set2_gold
+    finally:
+        _paths.set_subdial_set(constants.SUBDIAL_SET_DEFAULT)
 
-    def interior(path):
-        image = _QImage(str(path)).convertToFormat(
-            _QImage.Format.Format_RGBA8888
-        )
-        w, h = image.width(), image.height()
-        stride = image.bytesPerLine() // 4
-        data = _np.frombuffer(image.constBits(), dtype=_np.uint8)
-        data = data.reshape(h, stride, 4)[:, :w, :]
-        ys, xs = _np.mgrid[0:h, 0:w]
-        r = _np.hypot(xs - (w - 1) / 2, ys - (h - 1) / 2) / (w / 2)
-        return data[r < defaults.SUBDIAL_RECOLOR_RIM_RADIUS[0]]
 
-    plate = subdial_plate_file(other_finishes[0])
-    assert _np.array_equal(interior(plate), interior(master))
+def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
+    """The SOLO set ships ONE hand-drawn file (silver) — gold/bronze
+    are disk-cached live recolors of it, the SAME recipe the retired
+    one-master model always used (`render.assets._recolored_plate`,
+    Rule #5 shared with the ring letters)."""
+    from config import paths as _paths
+    from render.assets import subdial_plate_file
+
+    try:
+        _paths.set_subdial_set("solo")
+        master = defaults.SUBDIAL_ROOT_DIR / "solo" / "silver.png"
+        assert master.exists()
+        assert subdial_plate_file("silver") == master
+        version = defaults.SUBDIAL_RECOLOR_VERSION
+        for finish in ("gold", "bronze"):
+            plate = subdial_plate_file(finish)
+            assert plate is not None and plate != master, finish
+            assert plate.name.endswith(f"_subdial{version}_{finish}.png"), finish
+            assert plate.exists(), finish
+        # The "theme" plate style (owner A/B spec 2026-07-15): a clock
+        # TINT recolors the tapisserie field — that pass runs even on
+        # the exact finish (silver), into its own cache entry.
+        tinted = subdial_plate_file("silver", tint="#5A3FA0")
+        assert tinted is not None and tinted != master
+        assert tinted.name.endswith(f"_subdial{version}_silver_5a3fa0.png")
+        assert tinted.exists()
+        # The metal stays INSIDE the radial bezel band (owner correction
+        # 2026-07-15) — verifiable on a recolored plate against the master.
+        import numpy as _np
+        from PySide6.QtGui import QImage as _QImage
+
+        def interior(path):
+            image = _QImage(str(path)).convertToFormat(
+                _QImage.Format.Format_RGBA8888
+            )
+            w, h = image.width(), image.height()
+            stride = image.bytesPerLine() // 4
+            data = _np.frombuffer(image.constBits(), dtype=_np.uint8)
+            data = data.reshape(h, stride, 4)[:, :w, :]
+            ys, xs = _np.mgrid[0:h, 0:w]
+            r = _np.hypot(xs - (w - 1) / 2, ys - (h - 1) / 2) / (w / 2)
+            return data[r < defaults.SUBDIAL_RECOLOR_RIM_RADIUS[0]]
+
+        plate = subdial_plate_file("gold")
+        assert _np.array_equal(interior(plate), interior(master))
+    finally:
+        _paths.set_subdial_set(constants.SUBDIAL_SET_DEFAULT)
+
+
+def test_subdial_set_rejects_unknown_value():
+    from config import paths as _paths
+
+    with pytest.raises(ValueError):
+        _paths.set_subdial_set("bogus")
 
 
 def test_subdial_shadow_direction_follows_the_seat():
@@ -517,6 +550,199 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         ),
     )
     assert not sunday_dual_face(center_only)
+
+
+def test_center_dual_face_is_the_complement_of_sunday_dual_face(app):
+    """`center_dual_face` (round R3b item 3) is the SAME "does this
+    theme's dual asset exist" test as `sunday_dual_face`, gated on the
+    OPPOSITE pointer/mode split — every combination resolves through
+    EXACTLY one of the two laws, never both, never neither."""
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+    from render.layers import center_dual_face, sunday_dual_face
+
+    for pointer in ("hexa", "trio", "octa", "cross"):
+        skin = apply_display_settings(
+            defaults.DEFAULT_SKIN,
+            replace(Settings(), pointer=pointer, solar_rotation=False),
+        )
+        assert sunday_dual_face(skin) != center_dual_face(skin), pointer
+        if pointer in ("hexa", "trio"):
+            assert center_dual_face(skin), pointer
+        else:
+            assert sunday_dual_face(skin), pointer
+        # center_only OVERRIDES every pointer to the center law.
+        center_only = dataclasses.replace(
+            skin, weekday_set=dataclasses.replace(
+                skin.weekday_set, display_mode="center_only"
+            ),
+        )
+        assert center_dual_face(center_only) and not sunday_dual_face(
+            center_only
+        ), pointer
+
+
+def test_center_face_solar_windows_golden(app):
+    """DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
+    amendment, round R3b item 3) — golden-tested against a REAL solar
+    noon: Belgrade, 2026-07-19 (a Sunday), solar noon 12:44:28 CEST
+    (`python -m core --city Belgrade --at 2026-07-19T12:00:00`; the
+    owner's own rough note, "2026-07-20 solar noon 12:41", named a
+    Monday and was off by a few minutes — this pins the GROUND-TRUTHED
+    value instead). A theme WITH a Ninth: noon +/-1h -> "ninth",
+    midnight +/-1h -> "servant", elsewhere -> "ruler". A theme with
+    only two faces: midnight +/-2h -> "servant" (owner: "22h i 2h"),
+    else "ruler" — solar noon is never special for it."""
+    from render import layers as render_layers
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    now = datetime(2026, 7, 19, 12, 0, tzinfo=tz)
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+    day = build_day_context(
+        now, observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    assert day.sun.noon.strftime("%H:%M:%S") == "12:44:28"
+    tick = build_tick_state(now, day)
+
+    def at(hh: int, mm: int, ss: int = 0):
+        moment = datetime(2026, 7, 19, hh, mm, ss, tzinfo=tz)
+        return dataclasses.replace(
+            tick, hour_angle=render_layers.angles.time_to_dial_angle(moment)
+        )
+
+    golden_with_ninth = {
+        (12, 44, 28): "ninth",     # solar noon exactly
+        (11, 44, 28): "ninth",     # -1h, boundary
+        (11, 43, 28): "ruler",     # -1h-1min, just outside
+        (13, 44, 28): "ninth",     # +1h, boundary
+        (13, 45, 28): "ruler",     # +1h+1min
+        (0, 44, 28): "servant",    # solar midnight exactly
+        (1, 44, 28): "servant",    # +1h, boundary
+        (1, 45, 28): "ruler",      # +1h+1min
+        (23, 44, 28): "servant",   # -1h, boundary
+        (23, 43, 28): "ruler",     # -1h-1min
+        (18, 0, 0): "ruler",       # broad afternoon
+    }
+    for (hh, mm, ss), expected in golden_with_ninth.items():
+        assert render_layers.center_face(day, at(hh, mm, ss), True) == (
+            expected
+        ), (hh, mm, ss)
+
+    golden_no_ninth = {
+        (12, 44, 28): "ruler",     # solar noon is NOT special without a Ninth
+        (2, 44, 28): "servant",    # +2h, boundary
+        (2, 45, 28): "ruler",
+        (22, 44, 28): "servant",   # -2h, boundary
+        (22, 43, 28): "ruler",
+    }
+    for (hh, mm, ss), expected in golden_no_ninth.items():
+        assert render_layers.center_face(day, at(hh, mm, ss), False) == (
+            expected
+        ), (hh, mm, ss)
+
+
+def test_theme_ninth_matches_the_encyclopedia_table(app):
+    """`render.layers.theme_ninth` (round R3b item 3) reads the SAME
+    `constants.WEEKDAY_THEME_NINTHS` table the Encyclopedia's ninths
+    pass now builds from (Rule #5) — every listed theme resolves its
+    OWN name and an EXISTING plate, graceful-absent otherwise (`slavic`
+    Triglav has not landed on disk yet — the ONLY exception today,
+    matching this file's own `test_dual_sunday_two_faces_on_compass_
+    and_seasons`, which carves out the SAME kind of single documented
+    pending-art exception for its own table); a theme absent from the
+    table entirely (no weekday Sunday duality) always answers None."""
+    from config import paths as _paths
+    from render.layers import theme_ninth
+
+    for theme, (name, _rel) in constants.WEEKDAY_THEME_NINTHS.items():
+        found = theme_ninth(theme)
+        if theme == "slavic":
+            assert found is None, theme       # Triglav's plate is pending
+            continue
+        assert found is not None, theme
+        assert found[0] == name, theme
+        assert _paths.art_file(found[1]).exists(), theme
+    for theme in ("planets", "planet_signs", "japan"):
+        assert theme_ninth(theme) is None, theme
+
+
+def test_center_dual_hover_pairs_by_solar_window(app):
+    """The CENTER seat's Sunday hover CARD (owner INSTRUCTION #5 +
+    solar amendment, round R3b items 3/4): a theme with a Ninth speaks
+    the single GOOD article outside its solar windows, GOOD+NINTH near
+    solar noon, EVIL+NINTH near solar midnight; a theme with only two
+    faces ALWAYS speaks both side by side, any hour."""
+    from app.controller import apply_display_settings
+    from app.settings_store import Settings, replace
+
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    observer = astral.Observer(
+        latitude=city["latitude"], longitude=city["longitude"]
+    )
+
+    def day_tick_at(hh: int, mm: int, ss: int = 0):
+        now = datetime(2026, 7, 19, hh, mm, ss, tzinfo=tz)   # a Sunday
+        day = build_day_context(
+            now, observer,
+            SeasonsRepository().year_anchors(now.year),
+            MoonPhaseRepository().moon_window(now.year),
+        )
+        return day, build_tick_state(now, day)
+
+    wolf = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(
+            Settings(), pointer="hexa", weekday_theme="wolf",
+            solar_rotation=False,
+        ),
+    )
+    comp = Compositor(wolf, AssetCache())
+
+    day, tick = day_tick_at(18, 0)                    # broad afternoon
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    outside = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert outside is not None
+    assert "Alpha" in outside and "Sigma" not in outside
+    assert outside.count(f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>") == 0
+
+    day, tick = day_tick_at(12, 44, 28)               # solar noon
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    at_noon = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert at_noon is not None
+    assert "Alpha" in at_noon and "Sigma" in at_noon
+    assert at_noon.count(f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>") == 2
+
+    day, tick = day_tick_at(0, 44, 28)                # solar midnight
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    at_midnight = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert at_midnight is not None
+    assert "Omega" in at_midnight and "Sigma" in at_midnight
+    assert at_midnight.count(
+        f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+    ) == 2
+
+    # A 2-face theme (no Ninth): ALWAYS both, regardless of the hour.
+    planets = apply_display_settings(
+        defaults.DEFAULT_SKIN,
+        replace(
+            Settings(), pointer="hexa", weekday_theme="planets",
+            solar_rotation=False,
+        ),
+    )
+    planets_comp = Compositor(planets, AssetCache())
+    day, tick = day_tick_at(18, 0)
+    planets_comp.render_offscreen(360.0, 1.0, day, tick)
+    always_both = planets_comp.tooltip_at(180.0, 180.0, 360.0)
+    assert always_both is not None
+    assert always_both.count(
+        f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>"
+    ) == 2
 
 
 # --- Shared-slot priority (owner rule) --------------------------------------------

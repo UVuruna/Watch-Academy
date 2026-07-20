@@ -538,6 +538,20 @@ RING_FINISHES = ("gold", "silver", "bronze")
 # hand and complication texts in the letter-finish metal, shadowed.
 SUBDIAL_STYLES = ("theme", "black")
 
+# The subdial PLATE SETS (owner decree 2026-07-21, Rsub round —
+# retires the Rule #19 one-master-per-source model): the plate is its
+# OWN shared thing now, not a Gemini/ChatGPT split — five hand-picked
+# sets live under assets/subdial/ (see assets/___assets.md for why
+# that root sits OUTSIDE ART_SOURCED_ROOTS). "set1".."set4" are each
+# three hand-drawn finishes (no recolor); "solo" ships one hand-drawn
+# silver file and the algorithm derives gold/bronze from it exactly
+# like before.
+SUBDIAL_SETS = ("set1", "set2", "set3", "set4", "solo")
+SUBDIAL_SET_DEFAULT = "set1"
+SUBDIAL_SET_TITLES = {
+    "set1": "1", "set2": "2", "set3": "3", "set4": "4", "solo": "Solo",
+}
+
 # The two figure ROSTERS (owner doctrine 2026-07-15): "planetary" —
 # the day-ruler counterparts (the shipped canon); "pantheon" — the
 # culture's own hierarchy seated on our archetypes. Themes without a
@@ -733,6 +747,50 @@ WEEKDAY_THEME_ARTICLES = {
     "sins": "sins",
     "moods": "moods",
 }
+
+# THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
+# Circle"; owner 8+1 doctrine 2026-07-14): (display name, plate path
+# RELATIVE to WEEKDAY_ART_DIR). Themes absent from this table (planets,
+# planet_signs, japan, virtues, sins, moods) run DUAL-only — two faces,
+# no Ninth. Extracted round R3b (item 3) as the ONE shared table the
+# Encyclopedia's ninths pass (app.encyclopedia) and the CENTER seat's
+# solar-window face law (render.layers/compositor) both read — a
+# parallel copy would drift the moment either side's roster changes
+# (Rule #5). The zodiac-only ninths (Chinese "The Cat", Astrology
+# "Ophiuchus") stay OUT of this table on purpose — they carry no
+# weekday Sunday duality, so the render side never needs them.
+WEEKDAY_THEME_NINTHS = {
+    "wolf": ("Sigma", "wolf/primary/sigma.png"),
+    "bee": ("The Swarm", "bee/primary/swarm.png"),
+    "elephant": ("The Graveyard", "elephant/primary/graveyard.png"),
+    "cosmos": ("The Big Bang", "cosmos/primary/big_bang.png"),
+    "greek": ("Gaia", "greek/pantheon/gaia.png"),
+    "norse": ("Yggdrasil", "norse/pantheon/Yggdrasil.png"),
+    "egypt": ("The Pharaoh", "egypt/pantheon/pharaoh.png"),
+    "slavic": ("Triglav", "slavic/pantheon/triglav.png"),
+    "alchemy": ("The Philosopher's Stone", "alchemy/primary/stone.png"),
+    "profession": ("The Polymath", "profession/primary/Polymath.png"),
+    "religion": ("Freemasonry", "religion/primary/freemasonry.png"),
+    "religion_alt": (
+        "The Unknown God", "religion/secondary/unknown_god.png",
+    ),
+    "bible": ("The Holy Trinity", "bible/primary/holy_trinity.png"),
+    "bible2": ("Melchizedek", "bible/secondary/melchizedek.png"),
+    "bible_dark": ("The Ninth Circle", "bible/dark/ninth_circle.png"),
+}
+
+# DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
+# amendment, round R3b item 3): hours either side of the day's SOLAR
+# anchors (never wall-clock noon/midnight — `core.angles.hours_between`
+# reads the actual `DayContext.sun.noon`) during which the CENTER seat
+# of a hexa/trio/center_only weekday unit swaps its Sunday face. A
+# theme with a Ninth shows it near solar NOON (owner: "Izmedju 11 i
+# 13h"); EVIL (the Servant) shows near solar MIDNIGHT, narrower when a
+# Ninth also claims noon ("Izmedju 23 i 1h") than when it is the ONLY
+# alternate face a 2-face theme has ("izmedju 22h i 2h").
+CENTER_NOON_WINDOW_HOURS = 1.0
+CENTER_MIDNIGHT_WINDOW_HOURS = 1.0
+CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH = 2.0
 
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,
 # the element every 10 (two years per element). Year N maps via
