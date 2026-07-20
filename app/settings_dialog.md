@@ -144,6 +144,19 @@ always stays the requested 50% exactly (each panel's own vertical
 - **Artwork** (owner 2026-07-14) — the ART SOURCE pick (Gemini vs
   ChatGPT generations): one combo switches every plate, emblem and
   badge; files missing in the chosen source fall back to the other.
+- **Subdial plate** (owner decree 2026-07-21, Rsub round — sits right
+  beside Artwork, though it is deliberately INDEPENDENT of the art
+  source pick: `assets/subdial/` is not a Gemini/ChatGPT family) — one
+  combo, five entries labeled "1"/"2"/"3"/"4"/"Solo"
+  (`constants.SUBDIAL_SET_TITLES`) over `constants.SUBDIAL_SETS`,
+  restored from `Settings.subdial_set` (default "set1") and applied via
+  `config.paths.set_subdial_set` in `app.controller.
+  apply_display_settings` — mirrors the Artwork combo's own
+  plumbing exactly. The active letter finish (Design ▸ tray menu,
+  `ring_finish`) still decides which color draws within the chosen
+  set; sets 1-4 carry three hand-drawn finishes each, "solo" carries
+  one hand-drawn silver with gold/bronze derived live
+  ([Assets](../render/assets.md)`.subdial_plate_file`).
 - **Language** — all provider languages; the first pick translates
   the whole corpus in the background and caches it. The Default
   button jumps back to English (the shipped originals).

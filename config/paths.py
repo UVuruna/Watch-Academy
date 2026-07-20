@@ -70,6 +70,26 @@ def art_source() -> str:
     return _art_source
 
 
+# The active SUBDIAL PLATE SET (owner decree 2026-07-21, Rsub round) —
+# mirrors the art-source switch above exactly. `render.assets.
+# subdial_plate_file` is the ONE reader, so a module global here avoids
+# threading a new parameter through `render.layers.draw_slot_roundel`'s
+# existing call site (the seat/finish/tint signature stays untouched).
+_subdial_set = constants.SUBDIAL_SET_DEFAULT
+
+
+def set_subdial_set(name: str) -> None:
+    """Switch the active subdial plate set ("set1".."set4" or "solo")."""
+    global _subdial_set
+    if name not in constants.SUBDIAL_SETS:
+        raise ValueError(f"unknown subdial set: {name}")
+    _subdial_set = name
+
+
+def subdial_set() -> str:
+    return _subdial_set
+
+
 def art_file(path: Path | None) -> Path | None:
     """Map a CANONICAL (source-less) asset path into the active source
     subtree — assets/<root>/<source>/<rest> — falling back to the OTHER

@@ -1016,24 +1016,28 @@ GREENWICH_TIMEZONE = "Europe/London"
 
 # The slot ROUNDEL (owner 2026-07-14, watch-subdial inspiration):
 # every TEXT display and the flat astrology art (sign / logo /
-# constellation) sit on a subdial. THE MASTER (Rule #19, "Compute,
-# Don't Generate" — owner decree 2026-07-20): ONE plate per source,
-# assets/badge/subdial/master.png — draws when it exists, recolored
-# live to any letter FINISH (render.assets.subdial_plate_file); with
-# no art at all the PROCEDURAL circle takes over: the ring's own face
-# color, rimmed in the letter FINISH metal. Circular plates
-# (medallions, planets, colored badges) stay bare. The twelve-plate
-# sheet this used to be (4 seats x 3 finishes) is retired whole — the
-# SEAT never touched the file, only the LIVE shadow
-# (`render.layers._draw_subdial_shadow`), so generating one per seat
-# was pure waste (the failure Rule #19 was written to end).
-SUBDIAL_ART_DIR = paths.assets_dir() / "badge" / "subdial"
-# Which letter finish EACH source's master happens to be drawn in — a
-# no-op passthrough for that one finish, `_recolored_plate` derives
-# the other two live. The metal no longer matters much once recolor
-# covers the rest; recorded here only because the function must still
-# know which finish IS "as drawn".
-SUBDIAL_MASTER_FINISH = {"gemini": "silver", "chatgpt": "gold"}
+# constellation) sit on a subdial; with no art at all the PROCEDURAL
+# circle takes over — the ring's own face color, rimmed in the letter
+# FINISH metal. Circular plates (medallions, planets, colored badges)
+# stay bare.
+#
+# THE FIVE SETS (owner decree 2026-07-21, Rsub round — retires the
+# Rule #19 "one master per source" model this constant used to name):
+# the plate is its OWN shared thing now, no longer split by art
+# source. Five hand-picked sets live under assets/subdial/ (see
+# assets/___assets.md for why that root sits OUTSIDE
+# ART_SOURCED_ROOTS): "set1".."set4" are each three hand-drawn
+# finishes (`render.assets.subdial_plate_file` returns the matching
+# file directly, no recolor); "solo" ships ONE hand-drawn file
+# (SUBDIAL_SOLO_FINISH) and the algorithm derives the other two live,
+# same recipe as before. The user picks the SET in Settings
+# (`Settings.subdial_set`); the letter FINISH (ring_finish, tray Design
+# menu) still decides which color draws within it. The SEAT never
+# touches the file at all, only the LIVE shadow
+# (`render.layers._draw_subdial_shadow`) — unchanged since Rule #19's
+# first enforcement.
+SUBDIAL_ROOT_DIR = paths.assets_dir() / "subdial"
+SUBDIAL_SOLO_FINISH = "silver"      # the solo set's one hand-drawn file
 SLOT_ROUNDEL_BORDER_FRACTION = 0.045     # rim width, of the diameter
 SLOT_ROUNDEL_CONTENT_FRACTION = 0.78     # content size inside the rim
 SLOT_ROUNDEL_FILL_FALLBACK = "#39434D"   # unreadable/missing ring art
@@ -1092,15 +1096,17 @@ SUBDIAL_SHADOW_RGBA = (0, 0, 0, 100)
 SUBDIAL_SHADOW_OFFSET_FRACTION = 0.05    # of the subdial diameter
 SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 
-# Recoloring the owner's subdial master to the other two letter
-# finishes (owner 2026-07-15: one master plate, the code paints the
-# metals — collapsed to the ONE true master under Rule #19, 2026-07-20):
-# only BRIGHT, LOW-SATURATION pixels take the finish color multiplied
-# by their own luminance — and ONLY inside the radial BEZEL band
-# (owner correction, his three side-by-side grabs: without the radial
-# mask the field's own specular highlights drank the metal and the
-# three finishes' interiors stopped matching). Measured on his master:
-# the field runs to r≈0.85, the brushed bezel starts there.
+# Recoloring the SOLO set's silver master to the other two letter
+# finishes (owner 2026-07-15 recipe, still live for the solo set after
+# the Rsub round, 2026-07-21 — sets 1-4 are hand-drawn per finish and
+# never reach this function for their finish, only for the optional
+# "theme" tint pass): only BRIGHT, LOW-SATURATION pixels take the
+# finish color multiplied by their own luminance — and ONLY inside the
+# radial BEZEL band (owner correction, his three side-by-side grabs:
+# without the radial mask the field's own specular highlights drank
+# the metal and the three finishes' interiors stopped matching).
+# Measured on the solo master: the field runs to r≈0.85, the brushed
+# bezel starts there.
 SUBDIAL_RECOLOR_VALUE_RAMP = (0.30, 0.60)
 SUBDIAL_RECOLOR_SAT_CUTOFF = (0.10, 0.30)
 SUBDIAL_RECOLOR_RIM_RADIUS = (0.82, 0.87)   # radial ramp, of plate radius

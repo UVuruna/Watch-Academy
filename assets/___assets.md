@@ -56,8 +56,23 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   📁 badge/                ← <source>/season/ (+ turning_point/,
                              meteorological/), <source>/trinity/,
                              <source>/scale/ (the two triangles + Union,
-                             ROTATING — see below), <source>/subdial/
-                             (ONE master.png, recolored live)
+                             ROTATING — see below)
+  📁 subdial/              ← NOT art-sourced (owner decree 2026-07-21,
+                             Rsub round — deliberately OUTSIDE
+                             ART_SOURCED_ROOTS: the plate is its OWN
+                             shared thing, orthogonal to the Gemini/
+                             ChatGPT pick, not nested under it). Five
+                             hand-picked sets: set1/, set2/, set3/,
+                             set4/ each hold THREE hand-drawn finishes
+                             (gold.png, silver.png, bronze.png — no
+                             recolor, `render.assets.subdial_plate_file`
+                             returns them as drawn); solo/ holds ONLY
+                             silver.png, gold/bronze derived live
+                             (`_recolored_plate`, the same recipe the
+                             ring letters use). The user picks the SET
+                             in Settings (`Settings.subdial_set`); the
+                             letter FINISH (ring_finish) still picks
+                             the color within it.
   📁 era/                  ← <source>/<Name>.png — the Age/Starry-Season
                              rose windows (ROTATING — see below) +
                              <source>/calendar/ (the "Eras of the

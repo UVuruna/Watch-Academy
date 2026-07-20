@@ -231,49 +231,67 @@ def letter_metal_file(path: Path, metal: str) -> Path:
 def subdial_plate_file(
     finish: str, tint: str | None = None
 ) -> Path | None:
-    """The owner's ONE subdial master (Rule #19, "Compute, Don't
-    Generate" — owner decree 2026-07-20, its first enforcement): the
-    twelve-plate sheet (4 seats x 3 finishes) collapsed to a SINGLE
-    generated image per source — the directional shadow is one line of
-    circle math (`render.layers._draw_subdial_shadow`, keyed off the
-    seat's own dial position, nothing to do with the FILE), and the
-    seat dimension never touches this function at all any more. His
-    master wins AS DRAWN for its own finish (`SUBDIAL_MASTER_FINISH`
-    names which); the other two finishes are disk-cached recolors of
-    that SAME master, exactly like the ring letters derive silver/
-    bronze from gold live. A TINT (the "theme" plate style, owner
-    2026-07-15 A/B spec) recolors the dark tapisserie field to the
-    clock tint — that pass runs even on the exact finish, into its own
-    cache entry. None = no master art at all (the layer then draws the
-    procedural circle)."""
-    master = paths.art_file(defaults.SUBDIAL_ART_DIR / "master.png")
-    if master is None or not master.exists():
+    """The active SUBDIAL SET's plate for `finish` (owner decree
+    2026-07-21, Rsub round — retires the Rule #19 one-master-per-source
+    model this function used to implement). The set itself is picked in
+    Settings and lives as a `config.paths` module global
+    (`paths.subdial_set()`, mirroring the art-source switch exactly) —
+    it is NOT threaded as a parameter here since this is its only
+    reader, keeping `render.layers.draw_slot_roundel`'s existing call
+    untouched.
+
+    Sets 1-4 are three hand-drawn finishes each: the matching file
+    returns AS DRAWN, no recolor, no cache — the seat dimension never
+    touched this function even before (only the LIVE shadow,
+    `render.layers._draw_subdial_shadow`, keyed off the seat's own dial
+    position, does). The SOLO set ships one hand-drawn file
+    (`defaults.SUBDIAL_SOLO_FINISH`, silver): silver wins AS DRAWN,
+    gold/bronze are disk-cached live recolors of it, exactly like the
+    ring letters derive silver/bronze from gold. A TINT (the "theme"
+    plate style, owner 2026-07-15 A/B spec) recolors the dark
+    tapisserie field to the clock tint on TOP of whichever plate above
+    was resolved — that pass runs even on an already-correct finish,
+    into its own cache entry. None = no plate art at all for the active
+    set (the layer then draws the procedural circle)."""
+    active_set = paths.subdial_set()
+    if active_set == "solo":
+        master = (
+            defaults.SUBDIAL_ROOT_DIR / "solo"
+            / f"{defaults.SUBDIAL_SOLO_FINISH}.png"
+        )
+        if not master.exists():
+            return None
+        if finish == defaults.SUBDIAL_SOLO_FINISH and tint is None:
+            return master
+        return _recolored_plate(master, finish, tint)
+    plate = defaults.SUBDIAL_ROOT_DIR / active_set / f"{finish}.png"
+    if not plate.exists():
         return None
-    source = master.relative_to(paths.assets_dir()).parts[1]
-    own_finish = defaults.SUBDIAL_MASTER_FINISH[source]
-    if finish == own_finish and tint is None:
-        return master
-    return _recolored_plate(master, finish, tint)
+    if tint is None:
+        return plate
+    return _recolored_plate(plate, finish, tint)
 
 
 @profiling.timed("Subdial recolor")
 def _recolored_plate(
     master: Path, finish: str, tint: str | None = None
 ) -> Path:
-    """The master plate with its brushed metal BEZEL colorized to
-    `finish` — built the SAME recipe the ring letters use to derive
-    silver/bronze live from gold (Rule #5, `letter_metal_file`): SILVER
-    is the achromatic VALUE alone (no hue at all, whatever metal the
-    master itself happens to be drawn in — the letters' "straight
-    desaturation" rule, masked here to the rim only); GOLD and BRONZE
-    tint that same achromatic base by their own color (the letters'
-    "tint the desaturated result" rule). Only bright, unsaturated
-    pixels INSIDE the radial bezel band take the recolor — the field's
-    own specular highlights stay neutral (owner correction 2026-07-15:
-    without the radial mask the interiors drank the metal and the
-    three finishes stopped matching). With a TINT the interior (the
-    tapisserie field) is colorized the same way to the clock tint (the
-    "theme" plate style); without one the field stays as drawn."""
+    """`master` (the resolved plate — the solo set's silver file, or any
+    set's file under a "theme" tint request) with its brushed metal
+    BEZEL colorized to `finish` — built the SAME recipe the ring
+    letters use to derive silver/bronze live from gold (Rule #5,
+    `letter_metal_file`): SILVER is the achromatic VALUE alone (no hue
+    at all, whatever metal `master` itself happens to be drawn in — the
+    letters' "straight desaturation" rule, masked here to the rim
+    only); GOLD and BRONZE tint that same achromatic base by their own
+    color (the letters' "tint the desaturated result" rule). Only
+    bright, unsaturated pixels INSIDE the radial bezel band take the
+    recolor — the field's own specular highlights stay neutral (owner
+    correction 2026-07-15: without the radial mask the interiors drank
+    the metal and the three finishes stopped matching). With a TINT the
+    interior (the tapisserie field) is colorized the same way to the
+    clock tint (the "theme" plate style); without one the field stays
+    as drawn."""
     stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
     tint_tag = f"_{tint.lstrip('#').lower()}" if tint else ""
     cache = (

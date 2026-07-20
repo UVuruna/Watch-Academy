@@ -46,26 +46,37 @@ zero-width terminator rect used to degenerate the union/difference to
 an empty path, i.e. a moon rendered fully DARK instead of exactly
 half-lit; `moon_phase_image` is the pure QImage render, `moon_phase_file`
 its disk-cached path wrapper for the Encyclopedia's path-based image
-tuples), and `subdial_plate_file(finish, tint=None)` — Rule #19's
-first enforcement (owner decree 2026-07-20, "Compute, Don't Generate"):
-the twelve-plate seat×finish sheet collapsed to ONE master per source
-(`assets/badge/subdial/master.png`) — the SEAT never reached the file
-at all, only the LIVE shadow the layer draws
-([Layers](layers.md)`._draw_subdial_shadow`, keyed off the seat's own
-dial position), so generating one per seat was pure waste. The
-master's own finish (`SUBDIAL_MASTER_FINISH`, one entry per source —
-gemini's is silver, chatgpt's is gold) draws AS DRAWN; the other two
+tuples), and `subdial_plate_file(finish, tint=None)` — reworked in
+the Rsub round (owner decree 2026-07-21), which RETIRES Rule #19's
+first enforcement (owner decree 2026-07-20, "Compute, Don't Generate")
+for this family: the subdial plate stops being a Rule #19
+one-master-per-art-source case at all. It reads the ACTIVE SET off
+`config.paths.subdial_set()` — a module global mirroring the
+art-source switch exactly (set by `app.controller.
+apply_display_settings` from `Settings.subdial_set`), chosen this way
+specifically so the function's OWN signature never had to change and
+[Layers](layers.md)`.draw_slot_roundel`'s existing call stays
+untouched. Five hand-picked sets live under `assets/subdial/` (see
+[Assets (folder)](../assets/___assets.md) for why that root sits
+OUTSIDE `ART_SOURCED_ROOTS`): for "set1".."set4" the matching
+hand-drawn file (`assets/subdial/<set>/<finish>.png`) returns AS
+DRAWN — no recolor, no cache entry. For "solo" the one hand-drawn file
+(silver, `defaults.SUBDIAL_SOLO_FINISH`) returns AS DRAWN; gold/bronze
 are `_recolored_plate()`-ed from it live, built the SAME recipe the
 ring letters use (Rule #5): SILVER is the achromatic VALUE alone (no
-stored hue, whatever metal the master itself is), GOLD/BRONZE tint
+stored hue, whatever metal the source itself is), GOLD/BRONZE tint
 that same value by their own color — masked to only the bright,
 low-saturation brushed rim (numpy, `SUBDIAL_RECOLOR_*` knobs,
 disk-cached in `raster_cache/`). A TINT (the "theme" plate style,
 owner A/B spec 2026-07-15) colorizes the dark tapisserie field to the
 clock tint the same way, lifted by the field gain so the hue reads —
-that pass runs even on the exact finish, into its own cache entry.
-Returns None when no master art exists at all — the layer then draws
-the procedural circle.
+that pass runs on top of WHICHEVER plate above was resolved, even an
+already-correct hand-drawn finish, into its own cache entry. Returns
+None when no plate art exists for the active set — the layer then
+draws the procedural circle. The SEAT still never reaches the file at
+all, only the LIVE shadow the layer draws
+([Layers](layers.md)`._draw_subdial_shadow`, keyed off the seat's own
+dial position, unchanged since Rule #19's first enforcement).
 
 ## Connections
 

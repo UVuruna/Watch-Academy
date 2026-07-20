@@ -485,6 +485,10 @@ def apply_display_settings(skin, settings: Settings):
     # The ART SOURCE switch (owner 2026-07-14: Gemini vs ChatGPT) —
     # every disk boundary resolves canonical paths through it.
     paths.set_art_source(settings.art_source)
+    # THE SUBDIAL SET switch (owner decree 2026-07-21, Rsub round) —
+    # mirrors the art-source switch above; render.assets.
+    # subdial_plate_file reads it directly (its only reader).
+    paths.set_subdial_set(settings.subdial_set)
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
     # while the drawn pointer carries an archetype. The overriding
     # itself happens at the RENDER level (render.layers.enabled_slots

@@ -109,6 +109,7 @@ class SettingsDialog(QDialog):
             ]),
             (tr("Themes"), [
                 self._build_theme_rotation_group(), self._build_artwork_group(),
+                self._build_subdial_set_group(),
             ]),
             (tr("Language"), [
                 self._build_language_group(), self._build_era_group(),
@@ -1388,6 +1389,30 @@ class SettingsDialog(QDialog):
         row.addStretch(1)
         return group
 
+    def _build_subdial_set_group(self) -> QGroupBox:
+        """The SUBDIAL PLATE SET pick (owner decree 2026-07-21, Rsub
+        round — retires the Rule #19 one-master-per-source model):
+        five hand-picked plates — four full hand-drawn looks plus a
+        fifth (Solo) whose silver is hand-drawn and gold/bronze are
+        the algorithmic recolor (`render.assets.subdial_plate_file`).
+        The active letter finish (ring_finish, picked in the tray
+        Design menu) still decides WHICH color draws within the
+        chosen set — this combo only picks the set."""
+        tr = self._tr
+        group = QGroupBox(tr("Subdial plate"))
+        row = QHBoxLayout(group)
+        self._subdial_set_combo = QComboBox()
+        for name in constants.SUBDIAL_SETS:
+            self._subdial_set_combo.addItem(
+                tr(constants.SUBDIAL_SET_TITLES[name]), name
+            )
+        index = self._subdial_set_combo.findData(self._settings.subdial_set)
+        if index >= 0:
+            self._subdial_set_combo.setCurrentIndex(index)
+        row.addWidget(self._subdial_set_combo)
+        row.addStretch(1)
+        return group
+
     def _build_language_group(self) -> QGroupBox:
         tr = self._tr
         group = QGroupBox(tr("Language"))
@@ -1493,6 +1518,7 @@ class SettingsDialog(QDialog):
             third_era=self._third_era_combo.currentData(),
             jump_cities=tuple(self._jump_cities),
             art_source=self._art_source_combo.currentData(),
+            subdial_set=self._subdial_set_combo.currentData(),
             z_mode=self._z_mode_combo.currentData(),
             diameter=self._diameter_slider.value(),
             archetype_names=self._archetype_names_check.isChecked(),

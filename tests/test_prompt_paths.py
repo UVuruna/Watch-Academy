@@ -19,15 +19,16 @@ is ignored), and asserts each is either:
     module's top-level namespace is walked recursively (Path objects
     and path-shaped strings, nested inside dicts/tuples to any depth —
     this alone covers every family that is exhaustively enumerated in
-    config: era, subdial, scale, the archetype figure/center tables,
+    config: era, scale, the archetype figure/center tables,
     trinity/season/sun turning points, eclipse emblems), PLUS the same
     walk over `app/encyclopedia.py`, `render/compositor.py`, `render.
     layers.py` and `render/assets.py` (the modules that actually
     consume these tables and occasionally hold their own), PLUS a
     plain TEXT scan of those same files for quoted `"....png"`/
     `"....svg"` literals (catches a filename built inside a function
-    body, e.g. `SUBDIAL_ART_DIR / "master.png"`, that a namespace walk
-    can never see since it is never bound to a module-level name).
+    body, e.g. the "moon.png" default in `render.assets.
+    moon_phase_image`, that a namespace walk can never see since it is
+    never bound to a module-level name).
     Matched on the canonical path AFTER stripping both a leading
     `assets/` and any art-SOURCE segment (sheets state source-less
     paths; some config entries are bare relative tails without a
@@ -80,8 +81,9 @@ _SCAN_MODULES = (
 _PATH_PATTERN = re.compile(r"`(assets/[^`<*]+\.(?:png|svg))`")
 
 # A quoted filename literal anywhere in scanned source TEXT — the
-# fallback for names built inside a function body (e.g.
-# `SUBDIAL_ART_DIR / "master.png"`), invisible to namespace introspection.
+# fallback for names built inside a function body (e.g. the "moon.png"
+# default in `render.assets.moon_phase_image`), invisible to namespace
+# introspection.
 _LITERAL_FILENAME = re.compile(r"[\"']([\w .\-]+\.(?:png|svg))[\"']")
 
 # Family roots whose individual filenames are DATA-DRIVEN (owner's

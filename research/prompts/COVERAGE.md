@@ -32,7 +32,7 @@ one-sided gap), and test the pixel size.
 - [The Compass Object Question](#compass-objects)
 - [Era Terms (incl. the Eras-of-the-World calendars)](#era-terms)
 - [Eclipse Category Images](#eclipse)
-- [Subdial Masters](#subdial-masters)
+- [Subdial Plates](#subdial-masters)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -195,19 +195,25 @@ graceful-absent.
 
 <a id="subdial-masters"></a>
 
-## Subdial Masters (`assets/badge/subdial/`, `SUBDIAL_ART_DIR`)
+## Subdial Plates (`assets/subdial/`, formerly `SUBDIAL_ART_DIR`)
 
-**SUPERSEDED (RULE-19 round, owner decree 2026-07-20 — "Compute, Don't
-Generate", monorepo root `CLAUDE.md`).** Everything below this line
-described the twelve-combination sheet (4 seat/light variants × 3
-finishes) as an ART GAP to fill — that framing was the failure Rule
-#19 exists to end: the seat never needed its own file (the shadow is
-one line of circle math, `render.layers._draw_subdial_shadow`), and
-the finish never needed its own file either (`_recolored_plate` derives
-gold/silver/bronze live). The sheet was run to completion anyway before
-the owner caught it (12/12 Gemini, 9/12 ChatGPT) and the resulting 20
-extra files were deleted the same round. Current state: ONE master per
-source, `assets/badge/subdial/master.png` — see
+**SUPERSEDED TWICE (RULE-19 round 2026-07-20, then Rsub round
+2026-07-21 — owner decree, monorepo root `CLAUDE.md`).** Everything
+below this line described the twelve-combination sheet (4 seat/light
+variants × 3 finishes) as an ART GAP to fill — that framing was the
+failure Rule #19 exists to end: the seat never needed its own file
+(the shadow is one line of circle math, `render.layers.
+_draw_subdial_shadow`), and the finish never needed its own file
+either for the ONE-MASTER-PER-SOURCE model that followed
+(`_recolored_plate` derived gold/silver/bronze live). The sheet was
+run to completion anyway before the owner caught it (12/12 Gemini,
+9/12 ChatGPT) and the resulting 20 extra files were deleted the same
+round. The one-master model itself is NOW ALSO retired (Rsub round,
+2026-07-21): the plate is no longer an art-SOURCE family at all — five
+hand-picked sets live under `assets/subdial/<set>/<finish>.png`
+(`<set>` = set1..set4, `<finish>` = gold/silver/bronze) plus
+`assets/subdial/solo/<finish>.png` (only silver hand-drawn, gold/
+bronze still algorithmic) — see
 [Subdial Prompts](instrument/subdial_circle_prompts.md) for the full
 story and the derivation-check paragraph Rule #19 requires. This row
 is CLOSED, not a gap.

@@ -96,7 +96,11 @@ wear Greek Planetary beside slot 2 in Greek Pantheon).
 `art_source` ("gemini" | "chatgpt") picks the art world;
 `theme_rotation_group` (None or a kinship group / "custom") drives the
 daily theme rotation; `subdial_style` ("theme" | "black") picks the
-complication plate look (owner A/B spec 2026-07-15). THE YEAR LINE
+complication plate look (owner A/B spec 2026-07-15); `subdial_set`
+("set1".."set4" | "solo", default "set1" — owner decree 2026-07-21,
+Rsub round) picks WHICH of the five hand-picked subdial plates draws,
+independent of `art_source` (`assets/subdial/` is not a Gemini/ChatGPT
+family). THE YEAR LINE
 (Session 16, owner amendment 2026-07-17): `era_notation` ("bce_ce"
 default | "bc_ad" — the OFFICIAL labels only; Anno Lucis always
 accompanies the official year and is not a mode), `show_era_suffix`

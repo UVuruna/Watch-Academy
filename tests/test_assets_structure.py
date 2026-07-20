@@ -118,6 +118,27 @@ def test_alt_folders_mirror_their_parent_names():
     assert offenders == []
 
 
+def test_subdial_sets_are_shared_not_per_art_source():
+    """Rsub round (owner decree 2026-07-21): the subdial plate is its
+    OWN shared thing, not a Gemini/ChatGPT split — `assets/subdial/`
+    is deliberately OUTSIDE `constants.ART_SOURCED_ROOTS` (see
+    `assets/___assets.md`). Pins the five hand-picked sets are exactly
+    what is on disk: sets 1-4 carry all THREE hand-drawn finishes,
+    "solo" carries ONLY silver (gold/bronze are algorithmic, never
+    shipped as files)."""
+    from config import constants
+
+    assert "subdial" not in constants.ART_SOURCED_ROOTS
+    root = paths.assets_dir() / "subdial"
+    for set_name in ("set1", "set2", "set3", "set4"):
+        for finish in ("gold", "silver", "bronze"):
+            assert (root / set_name / f"{finish}.png").is_file(), (
+                set_name, finish,
+            )
+    solo_files = sorted(p.name for p in (root / "solo").iterdir())
+    assert solo_files == ["silver.png"]
+
+
 def test_every_sourced_root_is_registered():
     """The silent-absence tripwire (GUIDE shoot find, 2026-07-20): a
     top-level assets/<root> whose art ships in gemini/ or chatgpt/

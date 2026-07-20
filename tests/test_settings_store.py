@@ -344,6 +344,29 @@ def test_z_mode_round_trip_and_default(store):
         store.load()
 
 
+def test_subdial_set_round_trip_and_default(store):
+    """The SUBDIAL PLATE SET (owner decree 2026-07-21, Rsub round): all
+    FIVE sets persist, default to "set1" in older files, and reject an
+    unknown value."""
+    from config import constants
+
+    for name in constants.SUBDIAL_SETS:
+        store.save(replace(Settings(), subdial_set=name))
+        assert store.load().subdial_set == name
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    assert store.load().subdial_set == "set1"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "subdial_set": "set9"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
 def test_year_line_and_jump_cities_round_trip(store):
     """Session 16: the era labels, the suffix opt-in, the third
     calendar and the Quick Jump cities persist and validate."""
@@ -396,6 +419,7 @@ def test_bad_jump_city_raises(store):
         "ring_tint",
         "era_notation",
         "third_era",
+        "subdial_set",
     ],
 )
 def test_unknown_display_choice_raises(store, key):

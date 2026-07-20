@@ -3,59 +3,85 @@
 The slot ROUNDEL (owner 2026-07-14) is the watch-face plate every flat
 slot face (text modes, flat astrology art) sits on. This sheet used to
 carry TWELVE briefs — 4 seat/light variants × 3 letter finishes — for
-what the program can compute from ONE image. Rule #19, "Compute, Don't
+what the program can compute from ONE image; Rule #19, "Compute, Don't
 Generate" (owner decree 2026-07-20, monorepo root `CLAUDE.md`), was
-written FOR this exact failure and is enforced here first: the sheet
-now carries exactly ONE entry.
+written FOR that exact failure and collapsed the sheet to ONE master
+per art source. **THE Rsub ROUND (owner decree 2026-07-21) retires
+that one-master model in turn** — the subdial plate is not an
+AI-generation family any more at all. Kept below only as the historical
+record of what the one master's brief asked for; see "Status" for the
+current model.
 
 ## The derivation check (Rule #19)
 
-- **Tint/metal** — NEVER a separate image. `render.assets.
-  subdial_plate_file()` recolors the master to any letter finish live
-  (numpy, disk-cached): the master's OWN finish draws as drawn
-  (`config.defaults.SUBDIAL_MASTER_FINISH`), the other two are derived
-  the same recipe the ring letters use — silver is the achromatic
-  value alone, gold/bronze tint that value by their own color — masked
-  to the brushed rim only, the dark tapisserie field untouched.
-- **Lighting/shadow** — NEVER a separate image. The plate's soft
-  outward drop shadow is one line of circle math,
-  `render.layers._draw_subdial_shadow`: the offset direction IS the
-  seat's own dial angle (south straight down, an arm seat toward its
-  own outward corner, the center seat symmetric — distance 0, no
-  offset), drawn live under the plate every paint. The twelve-brief
-  sheet asked for this shadow FOUR TIMES, pre-baked, per seat — the
-  exact waste Rule #19 exists to end.
-- **The irreducible core** — the engine-turned tapisserie field and
-  brushed bezel texture itself: one master, generated once, under flat
-  and neutral (dead-overhead) lighting so no baked shadow direction
-  ever fights the live one drawn on top of it.
+- **Lighting/shadow** — still NEVER a separate image, unchanged by
+  this round: the plate's soft outward drop shadow is one line of
+  circle math, `render.layers._draw_subdial_shadow` — the offset
+  direction IS the seat's own dial angle (south straight down, an arm
+  seat toward its own outward corner, the center seat symmetric —
+  distance 0, no offset), drawn live under the plate every paint.
+- **Tint/metal, SETS 1-4** — an owner-directed EXCEPTION (sealed
+  2026-07-21): the three letter finishes are hand-drawn PER SET now,
+  not derived — his explicit call after weighing the algorithmic
+  recolor against hand color for four picked looks and preferring hand
+  color. Twelve files, twelve looks, no apology needed: Rule #19 exists
+  to stop GENERATING what a formula already computes for free, not to
+  forbid an artist's own finished color choice once made and handed
+  over.
+- **Tint/metal, the SOLO set** — Rule #19 stands exactly as it did for
+  the retired one-master model: ONE hand-drawn master (silver) plus a
+  disk-cached ALGORITHMIC recolor for gold/bronze
+  (`render.assets._recolored_plate`, the same recipe the ring letters
+  use — silver is the achromatic value alone, gold/bronze tint that
+  value by their own color, masked to the brushed rim only, the dark
+  tapisserie field untouched).
+- **The irreducible core** — the owner's own hand-picked plates ARE the
+  core now; nothing under `assets/subdial/` is a candidate for further
+  collapse by this round.
 
-## The one master
+## The retired one master (historical brief, kept for reference)
 
-**Drop path:** `assets/badge/subdial/master.png` — a single
-generation per source (no `<finish>` or `<seat>` split any more; the
-canonical path resolves through `config.paths.art_file`/
-`config.defaults.SUBDIAL_ART_DIR` exactly like every other sourced
-family).
+> A single circular watch SUBDIAL plate, viewed perfectly straight-on,
+> isolated on a fully transparent background, high-resolution render,
+> nothing outside the circle. RIM: a narrow raised bezel ring in a
+> brushed metal, the same brushed, softly antiqued texture as an
+> engraved luxury watch letter — fine lengthwise brushing, gentle wear
+> on the edges, a slight three-dimensional rounded profile that catches
+> the light. INTERIOR: a dark slate-graphite engine-turned field
+> (guilloché tapisserie — a fine repeating machined pattern of tiny
+> squares or circular ripples), matte, elegant, COMPLETELY EMPTY: no
+> numerals, no hands, no text, no logo — the plate is a blank canvas
+> for content drawn later. LIGHTING: flat and neutral, lit evenly from
+> directly overhead with no directional shadow of any kind — the render
+> code casts its own shadow live, so the plate itself must read as if
+> lit from dead center, no side, top or bottom bias. Palette strictly:
+> a neutral brushed metal rim, dark slate/graphite interior; no bright
+> colors, no color cast from the metal choice — the program recolors
+> the rim live. Square canvas, the circle filling ~95% of it,
+> transparent corners. NO lettering anywhere.
 
-**The Subdial Master** → `assets/badge/subdial/master.png`
-
-```
-A single circular watch SUBDIAL plate, viewed perfectly straight-on, isolated on a fully transparent background, high-resolution render, nothing outside the circle. RIM: a narrow raised bezel ring in a brushed metal, the same brushed, softly antiqued texture as an engraved luxury watch letter — fine lengthwise brushing, gentle wear on the edges, a slight three-dimensional rounded profile that catches the light. INTERIOR: a dark slate-graphite engine-turned field (guilloché tapisserie — a fine repeating machined pattern of tiny squares or circular ripples), matte, elegant, COMPLETELY EMPTY: no numerals, no hands, no text, no logo — the plate is a blank canvas for content drawn later. LIGHTING: flat and neutral, lit evenly from directly overhead with no directional shadow of any kind — the render code casts its own shadow live, so the plate itself must read as if lit from dead center, no side, top or bottom bias. Palette strictly: a neutral brushed metal rim, dark slate/graphite interior; no bright colors, no color cast from the metal choice — the program recolors the rim live. Square canvas, the circle filling ~95% of it, transparent corners. NO lettering anywhere.
-```
-
-Any metal reads for the rim brief above — the program recolors it, so
-only the TEXTURE (brushing, wear, rounded profile) and the flat
-lighting matter. One clean generation per source is enough.
+Any metal read the rim brief above — the program recolored it, so only
+the TEXTURE (brushing, wear, rounded profile) and the flat lighting
+mattered. This brief no longer drives any generation; it stays here
+only as visual-target inspiration should the owner ever want a NEW set
+generated in a similar spirit.
 
 ## Wiring (live)
 
-`subdial_plate_file(finish, tint=None)` resolves the ONE master
-through `config.paths.art_file`, returns it AS DRAWN when `finish`
-matches the master's own metal (`SUBDIAL_MASTER_FINISH`) and no tint
-is requested, and otherwise returns a disk-cached live recolor. The
-layer draws the directional shadow separately, underneath, keyed off
-the seat's own dial position — never the file.
+`subdial_plate_file(finish, tint=None)` reads the ACTIVE set from
+`config.paths.subdial_set()` (a module global set by
+`app.controller.apply_display_settings` from `Settings.subdial_set`,
+mirroring the art-source switch — the function's own signature never
+changed, so `render.layers.draw_slot_roundel`'s call site did not need
+to either). For sets 1-4 it returns the matching hand-drawn file
+directly — `assets/subdial/<set>/<finish>.png` (`<set>` = set1..set4,
+`<finish>` = gold/silver/bronze — twelve files, no placeholder glob
+needed since every combination is a real file on disk). For "solo" it
+returns `assets/subdial/solo/<finish>.png` where `<finish>` = silver AS
+DRAWN (the only hand-drawn file — the owner's original silver plate),
+or a disk-cached live recolor for gold/bronze. The layer draws the
+directional shadow separately, underneath, keyed off the seat's own
+dial position — never the file, in either model.
 
 ## Status
 
@@ -70,22 +96,26 @@ the seat's own dial position — never the file.
   live, so eleven of Gemini's twelve renders and eight of ChatGPT's
   nine were pure waste — generated, then deleted the same round
   ("da obrišemo ostatak").
-- **RULE #19 ENFORCEMENT (owner decree 2026-07-20, same round):** this
-  sheet rewritten to the single master above. Kept:
-  `assets/badge/gemini/subdial/master.png` (the PURGE round's original
-  silver `center` plate — the "original good master", per the owner)
-  and `assets/badge/chatgpt/subdial/master.png` (one of the fresh gold
-  `center` generations — picked because it existed and was clean; the
-  `center` variant's own brief already asked for the most neutral,
-  dead-overhead lighting of the four, so both masters happen to carry
-  only a thin, even vignette rather than a strong baked directional
-  shadow). Deleted: the other 20 files (11 Gemini + 8 ChatGPT
-  variants, plus one stray `silver/center2.png` duplicate) — `git rm`/
-  plain deletion, no replacement needed, `render.assets.
-  subdial_plate_file` and `render.layers._draw_subdial_shadow` cover
-  every seat and finish live.
-- **Future work (documented, not required):** both current masters
-  still carry their own small baked vignette from the `center` brief's
-  "thin uniform shadow ring". A future regeneration against the fully
-  flat brief above would remove even that — optional, since the live
-  shadow already draws on top and the existing vignette is faint.
+- **RULE #19 ENFORCEMENT (owner decree 2026-07-20, same round):** the
+  sheet collapsed to a single master per source — gemini's silver
+  `center` plate (the PURGE round's original) and one of chatgpt's
+  fresh gold `center` generations, each dropped as a source's own
+  subdial/master.png — with every OTHER finish derived live via
+  `render.assets.subdial_plate_file`/`_recolored_plate`.
+- **THE Rsub ROUND (owner decree 2026-07-21) — CURRENT MODEL:** the
+  one-master-per-source idea retired WHOLE, not refined. The subdial
+  plate stops being an art-SOURCE family at all — the owner hand-picked
+  13 plates (`UV/subdial/` inbox) forming FIVE SETS: four full sets of
+  three hand-drawn finishes each (gold/silver/bronze — "set1".."set4"),
+  plus a fifth "solo" set carrying only a hand-drawn silver, gold/
+  bronze still algorithmic. Both former per-source master files are
+  `git rm`-ed (their subdial/ folders are gone with them); the new tree
+  lives at `assets/subdial/<set>/<finish>.png` (`<set>` = set1..set4,
+  `<finish>` = gold/silver/bronze) and `assets/subdial/solo/<finish>.png`
+  (`<finish>` = silver, the only hand-drawn file there) — a root
+  deliberately OUTSIDE `constants.ART_SOURCED_ROOTS` (see
+  `assets/___assets.md`: the set choice is now orthogonal to the
+  Gemini/ChatGPT art-source pick, not nested under it). The user picks
+  the SET in Settings (`Settings.subdial_set`, default `"set1"`); the
+  letter FINISH (`ring_finish`, tray Design menu) still decides which
+  color draws within it, exactly as before.

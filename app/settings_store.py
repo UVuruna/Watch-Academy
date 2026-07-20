@@ -110,6 +110,11 @@ class Settings:
                                         # 2026-07-15): "theme" tints the
                                         # tapisserie field, "black" keeps
                                         # the standard dark AP field
+    # THE SUBDIAL SET (owner decree 2026-07-21, Rsub round): which of
+    # the five hand-picked plates (assets/subdial/set1..4, solo) draws
+    # — the active letter finish (ring_finish) still picks the color
+    # WITHIN the chosen set. "set1" is the owner's install default.
+    subdial_set: str = "set1"
     # Artwork source (owner 2026-07-14): the Gemini and ChatGPT
     # generations coexist on disk; this picks which one the dial and
     # the readers show (missing files fall back to the other source).
@@ -310,6 +315,7 @@ class SettingsStore:
                 ("earth_style", "atmo", constants.EARTH_STYLES),
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
                 ("subdial_style", "black", constants.SUBDIAL_STYLES),
+                ("subdial_set", "set1", constants.SUBDIAL_SETS),
                 ("weekday_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("info_slot_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("third_slot_roster", "planetary", constants.FIGURE_ROSTERS),
@@ -490,6 +496,7 @@ class SettingsStore:
             "earth_style": settings.earth_style,
             "weekday_theme": settings.weekday_theme,
             "subdial_style": settings.subdial_style,
+            "subdial_set": settings.subdial_set,
             "weekday_roster": settings.weekday_roster,
             "info_slot_roster": settings.info_slot_roster,
             "third_slot_roster": settings.third_slot_roster,
