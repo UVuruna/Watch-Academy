@@ -136,6 +136,139 @@ leaking a background timer per enlarge/close cycle. Esc / the native
 close box use `QDialog`'s default reject-on-Escape — unmodified,
 matching every other dialog in the app.
 
+### Fix round R1a (owner instruction batch 2026-07-20)
+
+**THE CRASH (13 hits in the owner's crash.log, fixed first).**
+`_open_enlarged` threw `RuntimeError: Internal C++ object already
+deleted` at `self._splitter.insertWidget(index, panel)`, and the chart
+never came back to the main window. Root cause: `_EnlargeDialog` set
+`WA_DeleteOnClose`, which queues the DIALOG's own C++ destruction via
+`deleteLater()`; since `panel` had been reparented onto it
+(`panel.setParent(self)`) as a REAL Qt child, that queued deletion
+could — and empirically did — destroy `panel` too before
+`_open_enlarged` got a chance to reinsert it. The mocked-`exec()`
+pattern every PRE-EXISTING enlarge test used (`class _RecordingEnlarge
+… def exec(self): … return 0`) never called Qt's real `QDialog.exec()`
+loop, so none of them ever exercised the actual `WA_DeleteOnClose`
+timing — the bug was invisible to the suite. Fix: `_EnlargeDialog` no
+longer sets `WA_DeleteOnClose`; `_open_enlarged` reparents `panel` back
+to the splitter FIRST (guaranteed safe — nothing else can delete the
+dialog out from under it) and only THEN calls `dialog.deleteLater()`
+explicitly. `tests/test_observatory.py::
+test_enlarge_close_cycle_survives_a_real_qt_event_loop_twice` drives
+the REAL event loop (`_EnlargeDialog.__init__` schedules its own
+`accept()` a tick later; `exec()` is left un-mocked) through all 5
+charts, twice — the crash log's repeats, and a deleted-object bug bites
+hardest on the second round trip.
+
+**Item 1 — Enlarge sizing.** `_EnlargeDialog._size_to_owner_spec`
+replaces the old `showMaximized()`: height = 50% of the screen's
+`availableGeometry()`, width = that height × 16/9
+(`OBSERVATORY_ENLARGE_HEIGHT_FRACTION`/`_ASPECT_W`/`_ASPECT_H`) — on a
+16:9 screen this collapses to exactly 25% of the screen's area (the
+owner's own arithmetic; see the defaults.py comment). Still a normal
+resizable/maximizable window (the hints are unchanged), just not
+maximized on open. Qt's own layout system still won't let the dialog
+shrink below its genuine content minimum (the fixed-width info panel
+included) — on a very small screen the request is clamped UP, never
+crushed; any real monitor is comfortably larger than that minimum.
+
+**Item 2 — the INFO layer.** `_build_info_panel` is the Enlarge
+dialog's collapsible right-side column (`OBSERVATORY_INFO_PANEL_WIDTH_PX`,
+toggled by the "Hide info"/"Show info" button in the button row): the
+chart's own caption text (the SAME string a compact-view caption
+already shows — one authoritative description, not two competing
+ones) plus, for the eclipse chart only, one row per eclipse KIND
+actually present (`ObservatoryDialog._eclipse_kind_rows`) — a color
+swatch matching the chart's own dots and a one-line meaning
+(`OBSERVATORY_ECLIPSE_KIND_INFO`). Every chart now carries an honest,
+DATA-DERIVED caption (span read straight off the bundle, minutes/hi-lo
+read straight off the computed curve — never a hand-typed number that
+could drift): season, envelope, day-length are new; eclipse and Laskar
+already had one and keep it (Laskar's now also states its shown
+window). The eclipse legend ALSO recolors by real TYPE, not just
+solar/lunar: solar walks yellow→orange→red (`partial` mildest to
+`total` most complete), lunar walks navy→blue→cyan (`penumbral`
+faintest to `total` most complete) — `OBSERVATORY_ECLIPSE_KIND_COLORS`,
+`_kind_color()` (falls back to the plain family color for any type
+outside the ground-truthed vocabulary — defensive, since `kind` is read
+off the external Deep Time SQLite catalog). The density (no-pack)
+fallback has no per-instance kind data to plot, so its ON-CHART legend
+stays the two family colors; its info-panel rows list the FULL
+ground-truthed vocabulary instead (the bundle's own `counts_by_type`
+meta already confirms every kind occurs somewhere across the span).
+
+**Item 3 — the title appears once.** The Enlarge dialog's centered
+header is now the chart's ONLY in-page title; the panel's own title
+label (needed above its filter row when it lives in the main splitter)
+is hidden for the duration of the reparent (`panel.title_label`, set in
+`_add_panel`) and restored by `_open_enlarged` on the way back out. The
+OS window-title-bar text is unaffected (chrome, not "in-page").
+
+**Item 4 — settings beside their chart.** The Days/Hours units combo
+used to sit in the SEASON panel's filter row (`_season_filter`) but
+visibly redraws the ENVELOPE chart's own y-axis/title/scale — it now
+lives in `_envelope_filter`, built and wired exactly where it was
+before, just attached to the other panel. It still ALSO reaches the
+season chart's own crosshair delta line (`set_diff_fmt`) — a secondary,
+already-documented effect of the same switch, unchanged.
+
+**Item 5 — per-chart MIN TICK / MAX ZOOM.** The single global
+`OBSERVATORY_ZOOM_MIN_SPAN_FLOOR` clamp (still `_ChartBase._zoom_floor`'s
+DEFAULT, used only as a fallback) is now overridden per chart, DERIVED
+FROM THE CHART'S OWN DATA — "pick from the data's sampling", per the
+owner:
+- `_LineChart._zoom_floor` floors at `_data_stride()` — the MEDIAN gap
+  between consecutive x samples in the first visible series (every
+  series on one `_LineChart` shares an x grid here). Season/envelope
+  share the 20-year bin-mean stride (`SEASON_BIN_YEARS`); the Laskar
+  chart floors at its bundle's 1000-year stride — you can no longer
+  zoom to the owner's "1-year view of 1000-year-apart samples" (ZOOM do
+  1 GOD.png), which showed nothing but a straight interpolation.
+- `_EclipseChart._zoom_floor` floors at the median gap between eclipse
+  YEARS (deep mode, solar+lunar interleaved) or the density bucket
+  width (`bucket_years`, fallback mode).
+- The day-length curve now samples every REAL day
+  (`OBSERVATORY_DAYLENGTH_STEP_DAYS = 1`, was 2) so its own floor —
+  and its own MIN TICK — can honestly reach a 1-day pitch: `_nice_step`/
+  `_nice_ticks` gained a `min_step` parameter, and `_DayLengthChart.
+  _x_ticks()`'s zoomed branch passes `OBSERVATORY_DAYLENGTH_MIN_TICK_DAYS`
+  (1.0) so the ladder never subdivides below a whole calendar day (its
+  "Mon D" labels round to the nearest day; anything finer would print
+  the same label on two adjacent gridlines).
+
+**Item 6 — thousands separator.** `_year_label` and the eclipse
+chart's count formatters (`_fmt_y`, `_legend_values`) now print
+`000,000`-style — the Laskar chart's 6-digit BCE years were the
+motivating case, but every year/count print in the module goes through
+one of these two paths.
+
+**Item 7 — the splitter drag and per-chart collapse.**
+*Root cause of "RESIZE ne radi":* `_ChartBase` paints its own surface
+and has no Qt layout of its own, so its DEFAULT `sizeHint()` is
+invalid — every panel's NATURAL splitter allocation collapsed to
+exactly its `OBSERVATORY_CHART_MIN_HEIGHT_PX` floor. The instant the
+dialog is shorter than the splitter's full natural content height (any
+realistic default open — confirmed with a real `QTest` mouse-press/
+move/release drive at the dialog's own 860×720 default), the
+surrounding `QScrollArea` gives the splitter ONLY that natural size (no
+stretch slack), and `setChildrenCollapsible(False)` forbids shrinking
+anything further — every panel is already pinned at its neighbor's
+floor simultaneously, so a drag has nothing left to redistribute and
+silently does nothing. Fix: `_ChartBase.sizeHint()` now returns a real
+preferred size (`OBSERVATORY_CHART_PREFERRED_HEIGHT_PX`, genuinely
+above the floor), giving every panel headroom to trade with its
+neighbor regardless of window size.
+*Collapse/Show:* every panel's filter row gains a "Collapse" button
+beside "Enlarge" (`ObservatoryDialog._toggle_collapsed`) — hiding the
+chart (and its caption) drops them out of the panel's layout sizing
+entirely (Qt's default for hidden widgets), so the panel shrinks to
+just its title + filter row and hands the freed room to whatever chart
+the owner is comparing; the SAME button, now reading "Show", restores
+it. State lives on the chart widget itself (`chart._row_collapsed`),
+not on Qt's own `isVisible()` (ambiguous before the dialog's first
+show, since it also depends on the whole ancestor chain).
+
 ## Time Travel interplay
 The controller passes the EFFECTIVE `(moment, observer, tz, cycles)` —
 the frozen simulation tuple when Time Travel is active, else the live
@@ -176,7 +309,10 @@ auto-fit the y axis to the current x view. Fix round G adds
 `_is_zoomed()` (shared by the vmark-thinning and the day-length month/
 day switch), the overridable `_x_ticks()`/`_y_ticks()` seam (Task 1) and
 `_legend_values()` (the enlarged view's per-label current-value readout,
-Task 3 — empty by default).
+Task 3 — empty by default). Fix round R1a adds the overridable
+`_zoom_floor(full_span)` seam (Item 5 — the base heuristic; `_LineChart`/
+`_EclipseChart` override it with a data-derived one) and a real
+`sizeHint()` (Item 7 — the splitter-drag root-cause fix).
 
 ### `_LineChart`
 A generic multi-series line chart: fixed per-series colors, toggleable
@@ -186,6 +322,9 @@ would collide — `OBSERVATORY_VMARK_MIN_SPACING_PX`), a deduped legend,
 and a crosshair readout (nearest sample by x, plus an optional
 `diff_pair` delta line). `set_y_fmt`/`set_y_title`/`set_diff_fmt` are
 the Days/Hours switch's pure display hooks. Used by charts 1, 2, 4 and 5.
+Fix round R1a adds `_data_stride()` (the median x-gap of the first
+visible series — every series on one `_LineChart` shares an x grid
+here) and a `_zoom_floor()` override that floors MAX ZOOM at it.
 
 ### `_EclipseChart`
 Chart 3. With the Deep Time pack: a magnitude scatter of the nearest
@@ -197,30 +336,46 @@ note. Its own `_fit_y_to_view()` fits to the scatter/density visible in
 the current zoom. `_legend_values()` (Fix round G, Task 3) reports a
 COUNT — events visible in view (deep mode) or the bucket nearest the
 view's right edge (density fallback) — the natural "current value" for
-a scatter/density series.
+a scatter/density series. Fix round R1a: deep-mode dots and the legend
+are colored per real eclipse TYPE (`_kind_color`,
+`OBSERVATORY_ECLIPSE_KIND_COLORS` — solar yellow→orange→red, lunar
+navy→blue→cyan), and `_zoom_floor()` floors MAX ZOOM at the median gap
+between eclipse years (deep mode) or the density bucket width
+(fallback mode).
 
 ### `_DayLengthChart`
 Chart 4 (Fix round G, Task 1). A thin `_LineChart` subclass whose x is a
 day-of-year int: `_x_ticks()` returns the 12 calendar month starts when
-un-zoomed, else defers to the generic ladder; `_fmt_x()` reconstructs
-the true calendar date (leap-year correct, `_ref_year`) for "Mon" /
-"Mon D" labels instead of the old `day // 30` approximation.
+un-zoomed, else defers to the generic ladder (Fix round R1a: with a
+`min_step=OBSERVATORY_DAYLENGTH_MIN_TICK_DAYS` floor, since "Mon D"
+labels round to the nearest whole day); `_fmt_x()` reconstructs the
+true calendar date (leap-year correct, `_ref_year`) for "Mon" / "Mon D"
+labels instead of the old `day // 30` approximation. Its data now
+samples every real day (`OBSERVATORY_DAYLENGTH_STEP_DAYS = 1`), so its
+inherited `_zoom_floor()` (from `_LineChart`) honestly reaches 1.0.
 
 ### `_EnlargeDialog`
 Fix round G, Task 3 — the "Enlarge" target: see the walkthrough above.
 Owns nothing of the chart's OWN state; it only hosts the reparented
-panel plus its own extended-legend row and info-strip labels.
+panel plus its own extended-legend row, the collapsible info panel
+(`_build_info_panel`, Fix round R1a Item 2) and the sizing/ownership
+fixes documented in Fix round R1a above (Items 1 and the crash).
 
 ### ObservatoryDialog
 Normal resizable window; a `QSplitter` column of the five titled chart
-panels (chart 1's panel carries its checkbox + Days/Hours filter row;
-every panel ends with an Enlarge button — Fix round G, Tasks 2/3) inside
-the existing scroll area, under a dual-calendar header line for the
-moment. Computes the day-length curve once in `__init__`; wires the
-units combo only after every chart it touches (`_envelope`,
+panels (chart 1's panel carries its checkbox filter row, chart 2's the
+Days/Hours filter row — Fix round R1a Item 4; every panel ends with a
+Collapse and an Enlarge button — Fix round G Tasks 2/3, Fix round R1a
+Item 7) inside the existing scroll area, under a dual-calendar header
+line for the moment. Computes the day-length curve once in `__init__`;
+wires the units combo only after every chart it touches (`_envelope`,
 `_season_chart`) exists. `_add_panel()` is the one seam that builds a
-panel and registers its Enlarge callback; `_open_enlarged()` does the
-reparent-out/reparent-back dance around `_EnlargeDialog.exec()`.
+panel (storing its title label on `panel.title_label` — Item 3) and
+registers its Collapse/Enlarge callbacks; `_toggle_collapsed()` is the
+Collapse/Show handler (Item 7); `_open_enlarged()` does the
+reparent-out/reparent-back-then-`deleteLater()` dance around
+`_EnlargeDialog.exec()` (the crash fix); `_eclipse_kind_rows()` builds
+the eclipse panel's info-row list (Item 2).
 
 ## Design Decisions
 QPainter draws every chart — no plotting dependency (the same choice as

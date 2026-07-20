@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 
 import astral
 import pytest
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
     QApplication,
     QCheckBox,
@@ -223,22 +223,56 @@ def test_zoom_narrows_view_and_autofits_y(app):
 
 
 def test_zoom_clamps_to_the_minimum_span(app):
-    """Fix round G, Task 1: the clamp is now the SMALLER of the fraction
-    and the absolute floor (`_min_zoom_span`) — on the envelope's huge
-    multi-millennial span the absolute floor wins, letting the user zoom
-    far tighter than the old fraction-only clamp allowed."""
-    from app.observatory import _min_zoom_span
-
+    """Fix round R1a, Item 5: the floor is now PER-CHART, read straight
+    off the chart's own data resolution (`_zoom_floor`/`_data_stride`)
+    instead of one global constant — the envelope shares the season
+    bundle's 20-year bin-mean stride (SEASON_BIN_YEARS,
+    setup/make_observatory.py), far tighter than the OLD absolute floor
+    would have allowed, but never tighter than a single real sample."""
     dialog = _open(None)
     chart = dialog._envelope
     chart.resize(800, 240)
     full_span = chart._full_xhi - chart._full_xlo
     for _ in range(200):
         chart._zoom_at(400.0, 0.5)
-    min_span = _min_zoom_span(full_span)
+    min_span = chart._zoom_floor(full_span)
+    assert min_span == pytest.approx(20.0)
     assert min_span < full_span * defaults.OBSERVATORY_ZOOM_MIN_FRACTION
     assert (chart._xhi - chart._xlo) >= min_span - 1e-6
     assert (chart._xhi - chart._xlo) <= min_span + 1e-6
+    dialog.accept()
+
+
+def test_zoom_floor_falls_back_to_the_base_heuristic_without_a_series(app):
+    """A chart with fewer than 2 points (or no visible series) cannot
+    measure a data stride — `_zoom_floor` must fall back to the base
+    `_ChartBase` heuristic rather than crash or floor at zero."""
+    dialog = _open(None)
+    chart = dialog._envelope
+    for entry in chart._series:
+        entry["visible"] = False
+    assert chart._data_stride() is None
+    full_span = 1000.0
+    from app.observatory import _ChartBase
+
+    assert chart._zoom_floor(full_span) == _ChartBase._zoom_floor(chart, full_span)
+    dialog.accept()
+
+
+def test_laskar_zoom_floor_matches_its_1000_year_sampling(app):
+    """The Laskar bundle is sampled every 1000 years — the owner's own
+    complaint (ZOOM do 1 GOD.png): a 1-year zoom on 1000-year-apart
+    samples shows nothing but a straight interpolation, "absurd" by the
+    owner's own word. The per-chart floor must equal that stride, not
+    the old one-size-fits-all absolute floor of 6."""
+    dialog = _open(None)
+    chart = dialog._laskar_chart
+    chart.resize(800, 240)
+    full_span = chart._full_xhi - chart._full_xlo
+    assert chart._zoom_floor(full_span) == pytest.approx(1000.0)
+    for _ in range(400):
+        chart._zoom_at(400.0, 0.5)
+    assert (chart._xhi - chart._xlo) >= 1000.0 - 1e-6
     dialog.accept()
 
 
@@ -379,8 +413,11 @@ def test_nice_step_ladder_is_year_friendly():
 
 def test_tick_pitch_adapts_from_full_span_to_max_zoom(app):
     """The tick-ladder unit test the round asks for: the SAME chart, at
-    its full span, shows a coarse pitch; zoomed to the tightened max
-    (OBSERVATORY_ZOOM_MIN_SPAN_FLOOR), the pitch is exactly 1 year."""
+    its full span, shows a coarse pitch; zoomed to its OWN per-chart max
+    (Fix round R1a, Item 5 — the season/envelope bundle's 20-year bin
+    stride), the pitch lands on a genuinely finer, still-honest 5-year
+    rung — not the old fixed-6 floor's 1-year rung, which would have
+    implied precision the 20-year-decimated bundle doesn't have."""
     dialog = _open(None)
     chart = dialog._envelope
     chart.resize(800, 240)
@@ -389,12 +426,46 @@ def test_tick_pitch_adapts_from_full_span_to_max_zoom(app):
     full_step = full_ticks[1] - full_ticks[0]
     assert full_step >= 1000
 
+    full_span = chart._full_xhi - chart._full_xlo
     for _ in range(200):
         chart._zoom_at(400.0, 0.5)
-    assert (chart._xhi - chart._xlo) <= defaults.OBSERVATORY_ZOOM_MIN_SPAN_FLOOR + 1e-6
+    assert (chart._xhi - chart._xlo) <= chart._zoom_floor(full_span) + 1e-6
     zoomed_ticks = chart._x_ticks()
     assert len(zoomed_ticks) >= 2
-    assert zoomed_ticks[1] - zoomed_ticks[0] == 1
+    assert zoomed_ticks[1] - zoomed_ticks[0] == 5
+    dialog.accept()
+
+
+def test_day_length_reaches_a_1_day_tick_at_its_own_max_zoom(app):
+    """Item 5's concrete Day Length ask: unlike the multi-millennial
+    bundles, the day-length curve now samples every REAL day
+    (OBSERVATORY_DAYLENGTH_STEP_DAYS = 1), so its own max zoom can
+    honestly reach a 1-day tick pitch — never finer (Item 5's MIN TICK:
+    `_nice_ticks(..., min_step=OBSERVATORY_DAYLENGTH_MIN_TICK_DAYS)`),
+    since "Mon D" labels round to the nearest whole day."""
+    from app.observatory import _nice_step
+
+    dialog = _open(None)
+    chart = dialog._day_chart
+    chart.resize(800, 240)
+    full_span = chart._full_xhi - chart._full_xlo
+    assert chart._zoom_floor(full_span) == pytest.approx(1.0)
+    for _ in range(200):
+        chart._zoom_at(400.0, 0.5)
+    zoomed_span = chart._xhi - chart._xlo
+    assert zoomed_span <= 1.0 + 1e-6
+    # The MIN TICK floor (Item 5): at this span the raw ladder alone
+    # would ask for a sub-day rung — the day chart's own min_step clamp
+    # holds it at a whole day, matching what `_x_ticks()` actually uses.
+    assert _nice_step(zoomed_span, defaults.OBSERVATORY_TARGET_X_TICKS) < 1.0
+    assert _nice_step(
+        zoomed_span, defaults.OBSERVATORY_TARGET_X_TICKS,
+        min_step=defaults.OBSERVATORY_DAYLENGTH_MIN_TICK_DAYS,
+    ) == 1.0
+    zoomed_ticks = chart._x_ticks()
+    assert len(zoomed_ticks) >= 1
+    for a, b in zip(zoomed_ticks, zoomed_ticks[1:]):
+        assert b - a == pytest.approx(1.0)
     dialog.accept()
 
 
@@ -650,6 +721,180 @@ def test_enlarge_dialog_render_smoke_for_every_chart(app, monkeypatch):
         assert chart_embedded == [True]
         assert grabbed_ok == [True]
     dialog.close()
+
+
+# --- Fix round R1a (owner instruction batch 2026-07-20) ------------------------
+
+def test_enlarge_close_cycle_survives_a_real_qt_event_loop_twice(app, monkeypatch):
+    """THE CRASH (13 hits in the owner's crash.log): `_open_enlarged`
+    threw "RuntimeError: Internal C++ object already deleted" at
+    `self._splitter.insertWidget(index, panel)`, and the chart never
+    came back — WA_DeleteOnClose queued the ENLARGE DIALOG's own C++
+    destruction, which (since `panel` was a real Qt child of it)
+    destroyed `panel` too before the reinsert ran.
+
+    Every OTHER enlarge test in this file overrides `_EnlargeDialog.
+    exec()` to return immediately WITHOUT ever calling the real
+    QDialog.exec() — so none of them ever exercised Qt's actual
+    WA_DeleteOnClose timing, exactly where the bug lived. This test
+    drives the REAL event loop: `_EnlargeDialog.__init__` schedules its
+    own `accept()` a tick later, and `exec()` is NOT overridden, so
+    Qt's genuine modal loop (and genuine deferred-deletion timing) runs
+    end to end. The whole 5-chart cycle repeats TWICE — the crash log
+    shows repeat hits, and a deleted-object bug is exactly the kind
+    that bites hardest on the SECOND round trip."""
+    import app.observatory as observatory_module
+
+    class _AutoCloseEnlarge(observatory_module._EnlargeDialog):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            QTimer.singleShot(0, self.accept)
+
+    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _AutoCloseEnlarge)
+
+    dialog = _open(None)
+    dialog.resize(900, 3000)
+    dialog.show()
+    QApplication.processEvents()
+
+    charts = (
+        dialog._season_chart, dialog._envelope, dialog._eclipse_chart,
+        dialog._day_chart, dialog._laskar_chart,
+    )
+    for cycle in range(2):
+        for chart in charts:
+            panel = _panel_of(chart)
+            index_before = dialog._splitter.indexOf(panel)
+            button = _enlarge_button_of(chart)
+            button.click()  # runs the REAL exec() to completion (auto-accepts)
+            QApplication.processEvents()
+            assert dialog._splitter.count() == 5, (
+                f"cycle {cycle}: a panel vanished after enlarging {chart}"
+            )
+            assert dialog._splitter.indexOf(panel) == index_before
+            assert panel.title_label.isVisible()
+            assert button.isVisible()
+            assert not chart.grab().isNull()   # still a live, paintable widget
+    dialog.close()
+
+
+def test_collapse_button_hides_the_chart_and_toggles_to_show(app):
+    """Item 7's second half (owner: add a per-chart COLLAPSE button to
+    hide it, and a SHOW to bring it back). ONE button does both: hidden
+    widgets drop out of their layout's size calculation, so the panel
+    shrinks to just its title + filter row, and the Enlarge button is
+    disabled while there is nothing to enlarge."""
+    dialog = _open(None)
+    dialog.show()
+    QApplication.processEvents()
+    chart = dialog._season_chart
+    panel = _panel_of(chart)
+    collapse = [
+        b for b in panel.findChildren(QPushButton) if b.text() == "Collapse"
+    ]
+    assert len(collapse) == 1
+    collapse_button = collapse[0]
+    enlarge_button = _enlarge_button_of(chart)
+    tall_before = panel.sizeHint().height()
+
+    collapse_button.click()
+    assert not chart.isVisible()
+    assert collapse_button.text() == "Show"
+    assert not enlarge_button.isEnabled()
+    assert panel.sizeHint().height() < tall_before
+
+    collapse_button.click()
+    assert chart.isVisible()
+    assert collapse_button.text() == "Collapse"
+    assert enlarge_button.isEnabled()
+    dialog.close()
+
+
+def test_enlarge_dialog_sizes_to_16_9_at_half_screen_height(app, monkeypatch):
+    """Item 1 (owner): the Enlarge dialog opens at ASPECT 16:9, height
+    = 50% of the (available) screen height — not maximized."""
+    import app.observatory as observatory_module
+
+    dialog = _open(None)
+    dialog.resize(900, 3000)
+    dialog.show()
+    QApplication.processEvents()
+    chart = dialog._laskar_chart
+
+    captured = []
+
+    class _CapturingEnlarge(observatory_module._EnlargeDialog):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            captured.append(self.size())
+            QTimer.singleShot(0, self.accept)
+
+    monkeypatch.setattr(observatory_module, "_EnlargeDialog", _CapturingEnlarge)
+    _enlarge_button_of(chart).click()
+    QApplication.processEvents()
+
+    assert len(captured) == 1
+    size = captured[0]
+    screen = dialog.screen() or QApplication.primaryScreen()
+    available = screen.availableGeometry()
+    expected_height = int(available.height() * defaults.OBSERVATORY_ENLARGE_HEIGHT_FRACTION)
+    expected_width = int(
+        expected_height * defaults.OBSERVATORY_ENLARGE_ASPECT_W
+        / defaults.OBSERVATORY_ENLARGE_ASPECT_H
+    )
+    assert size.height() == expected_height
+    # >= rather than ==: on the offscreen test platform's tiny 800x800
+    # virtual screen, the 16:9 width is narrower than this dialog's own
+    # content (the fixed-width info panel + chart) can honestly shrink
+    # to, so Qt's layout clamps the resize() UP to its real minimum —
+    # correct behavior (never crush the content), just not exactly
+    # 16:9 on a screen this small. Any real monitor is comfortably
+    # larger than that minimum, so the exact aspect holds in practice.
+    assert size.width() >= expected_width
+    dialog.close()
+
+
+def test_eclipse_chart_colors_each_kind_from_its_own_family(app):
+    """Item 2 (owner: solar yellow->orange->red, lunar navy->blue->
+    cyan, "lakše razlikuje... mesec PLAVIM a Sunce ZUTIM"). Uses the
+    bundled density fallback's info rows (always available, no Deep
+    Time pack needed) — every kind in the ground-truthed vocabulary
+    gets its own color, all solar hues distinct from all lunar hues."""
+    dialog = _open(None)
+    rows = dialog._eclipse_kind_rows(None, None)
+    labels = {label for label, _, _ in rows}
+    assert any(label.startswith("Solar") for label in labels)
+    assert any(label.startswith("Lunar") for label in labels)
+    colors = [color for _, color, _ in rows]
+    assert len(colors) == len(set(colors))          # every kind distinct
+    solar_colors = {c for label, c, _ in rows if label.startswith("Solar")}
+    lunar_colors = {c for label, c, _ in rows if label.startswith("Lunar")}
+    assert solar_colors.isdisjoint(lunar_colors)
+    dialog.close()
+
+
+def test_units_combo_moved_beside_the_envelope_panel(app):
+    """Item 4 (owner screenshot "Settings na pogresnom mestu"): the
+    Days/Hours combo used to live in the SEASON panel's filter row; it
+    now lives in the ENVELOPE panel's, the chart it actually redraws."""
+    dialog = _open(None)
+    season_panel = _panel_of(dialog._season_chart)
+    envelope_panel = _panel_of(dialog._envelope)
+    from PySide6.QtWidgets import QComboBox
+
+    assert dialog._units_combo.parentWidget() is not None
+    assert not season_panel.findChildren(QComboBox)
+    assert dialog._units_combo in envelope_panel.findChildren(QComboBox)
+    dialog.close()
+
+
+def test_year_label_carries_a_thousands_separator(app):
+    """Item 6 (owner: "FORMAT brojeva je 000,000")."""
+    from app.observatory import _year_label
+
+    assert _year_label(139622) == "139,622"
+    assert _year_label(-139622) == "139,622 BCE"
+    assert _year_label(500) == "500"
 
 
 def test_dialog_with_splitter_renders_at_a_small_size(app):

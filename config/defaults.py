@@ -143,6 +143,12 @@ MOON_TRANSIT_OPACITY = 0.5
 TRAY_ICON_SIZE = 64                  # px of the rasterized tray pixmap
 LOGO_ASSET = paths.assets_dir() / "logo.svg"
 LOGO_SETUP_ASSET = paths.assets_dir() / "logo-setup.svg"
+# The app-wide WINDOW icon (title bar, Alt-Tab, taskbar button) needs
+# several resolutions in ONE QIcon — Windows picks whichever matches the
+# context instead of blurrily scaling a single size (owner screenshot
+# 2026-07-20: dialogs showed python's own logo in the taskbar). Mirrors
+# the documented EXE-icon ladder (root CLAUDE.md Build Pipeline).
+WINDOW_ICON_SIZES_PX = (16, 24, 32, 48, 64, 128, 256)
 
 # --- UI icon chrome (TASK 4, MASON/ICONS round, owner icon list
 # 2026-07-19 approvals) -------------------------------------------------
@@ -1144,7 +1150,7 @@ OBSERVATORY_NOW_MARK_COLOR = "#E8391E"          # the traveled moment line
 OBSERVATORY_ECLIPSE_WINDOW_N = 60
 # The day-length curve at the current location: one gold line over the
 # year; astral is asked once every N days (a smooth curve, cheap open).
-OBSERVATORY_DAYLENGTH_STEP_DAYS = 2
+# The step itself is set below (Fix round R1a, Item 5 — 1-day ticks).
 OBSERVATORY_DAYLENGTH_COLOR = "#E8B23D"
 
 # ─── Fix round D (owner verdicts 2026-07-19) ───────────────────────────
@@ -1218,6 +1224,82 @@ OBSERVATORY_ZOOM_MIN_SPAN_FLOOR = 6
 # checkbox state carries over for free) plus an extended legend and an
 # info strip. No new tokens needed — colors/fonts reuse the surface/ink/
 # muted triad above.
+
+# ─── Fix round R1a (owner instruction batch 2026-07-20) ────────────────
+# Item 1 — the Enlarge dialog no longer maximizes; it opens at a fixed
+# ASPECT (16:9) sized to a FRACTION of the screen's available height
+# (0.5 -> exactly 25% of screen AREA on a 16:9 screen, the owner's own
+# arithmetic, since area = (fraction*H)^2 * (w/h) and on a 16:9 screen
+# H*(w/h) = W, collapsing to fraction^2 regardless of the screen's own
+# size). Still resizable/maximizable by hand (the window hints stay).
+OBSERVATORY_ENLARGE_HEIGHT_FRACTION = 0.5
+OBSERVATORY_ENLARGE_ASPECT_W = 16
+OBSERVATORY_ENLARGE_ASPECT_H = 9
+
+# Item 2 — the eclipse legend recolor (owner: "lakše razlikuje... mesec
+# PLAVIM a Sunce ZUTIM"): solar kinds walk yellow->orange->red (mildest
+# to most total), lunar kinds walk navy->blue->cyan (faintest penumbral
+# to most total) — the ground-truthed type vocabulary is pinned by
+# tests/test_eclipse.py::test_type_state_mapping_covers_the_ground_truthed_vocabulary.
+OBSERVATORY_ECLIPSE_KIND_COLORS = {
+    "solar": {
+        "partial": "#F4D35E",
+        "annular": "#F2994A",
+        "hybrid": "#EB5E28",
+        "total": "#D62828",
+    },
+    "lunar": {
+        "penumbral": "#2E4A7A",
+        "partial": "#2F6FED",
+        "total": "#4FD5E8",
+    },
+}
+# One honest sentence per kind for the Enlarge info panel's eclipse
+# legend rows (owner: "sa strane tekst o svakoj ukratko opisano šta
+# označava").
+OBSERVATORY_ECLIPSE_KIND_INFO = {
+    ("solar", "partial"): "The Moon covers only part of the Sun's disc.",
+    ("solar", "annular"): (
+        "The Moon's disc is too small to fully cover the Sun — a bright ring remains."
+    ),
+    ("solar", "hybrid"): "The eclipse shifts between annular and total along its path.",
+    ("solar", "total"): "The Moon fully covers the Sun's disc.",
+    ("lunar", "penumbral"): "The Moon crosses only Earth's faint outer shadow.",
+    ("lunar", "partial"): "Part of the Moon enters Earth's dark umbral shadow.",
+    ("lunar", "total"): (
+        'The Moon fully enters Earth\'s dark umbral shadow (a "blood moon").'
+    ),
+}
+
+# Item 5 — the day-length curve now samples every REAL day (was every 2)
+# so the chart's own data genuinely supports a 1-day tick pitch at deep
+# zoom (owner: "MIN TICK ... Day Length" — the old 2-day stride made a
+# 1-day pitch a lie the ladder could still draw). Cheap: 365 astral
+# lookups once per dialog open, not a hot path.
+OBSERVATORY_DAYLENGTH_STEP_DAYS = 1
+# Fix round R1a Task 5's floor for the day chart's tick ladder: never
+# subdivide a whole calendar day (see _DayLengthChart._x_ticks) — its
+# "Mon D" labels round to the nearest day, so any finer pitch would
+# print duplicate labels on distinct gridlines.
+OBSERVATORY_DAYLENGTH_MIN_TICK_DAYS = 1.0
+
+# The Enlarge dialog's collapsible right-side info panel (Item 2).
+OBSERVATORY_INFO_PANEL_WIDTH_PX = 280
+
+# The Observatory's own splitter/collapse bug fix (Item 7 — "RESIZE ne
+# radi"): `_ChartBase` is a bare-painted QWidget with NO layout of its
+# own, so its default sizeHint() is invalid (-1,-1) and every panel's
+# NATURAL size collapses to exactly its `OBSERVATORY_CHART_MIN_HEIGHT_PX`
+# floor — meaning every panel sits pinned at its own minimum the moment
+# the dialog is smaller than the splitter's full natural height (the
+# QScrollArea then gives the splitter ONLY its natural size, no stretch
+# slack, and `setChildrenCollapsible(False)` forbids shrinking anything
+# further) — so an interactive drag has NOTHING to redistribute and
+# silently does nothing (confirmed with a real QTest mouse-press/move/
+# release drive at the dialog's own default size). A real `sizeHint()`
+# genuinely larger than the floor gives every panel headroom to trade
+# with its neighbor regardless of window size.
+OBSERVATORY_CHART_PREFERRED_HEIGHT_PX = 320
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
 # group related images (pages.json), captions.json holds per-image
