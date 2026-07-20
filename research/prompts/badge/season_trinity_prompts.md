@@ -18,9 +18,15 @@ Suggested drop locations (flat PNGs, matching the existing
 
 - `assets/badge/trinity/Faith.png`, `Hope.png`, `Love.png`
 - `assets/badge/season/Spring.png`, `Summer.png`, `Autumn.png`, `Winter.png`,
-  `WetSeason.png`, `DrySeason.png`
-- `assets/badge/season/turning_point/SummerSolstice.png`,
-  `WinterSolstice.png`, `Equinox.png`
+  `Wet_Season.png`, `Dry_Season.png` (owner correction, RULE-19 round
+  2026-07-20 — the code reads the UNDERSCORED stems,
+  `render.compositor._current_season_key`; the two bare `WetSeason.png`/
+  `DrySeason.png` names below were dead weight, `research/ASSETS_AUDIT.md`
+  §Structure Inconsistencies #3)
+- `assets/badge/season/turning_point/Summer_Solstice.png`,
+  `Winter_Solstice.png`, `Equinox.png` (same correction — the code
+  reads the underscored stems, `render.compositor._earth_text`'s
+  `season_event.replace(" ", "_")`)
 - `assets/badge/season/meteorological/Spring.png`, `Summer.png`, `Autumn.png`,
   `Winter.png` *(OPTIONAL set)*
 
@@ -108,12 +114,12 @@ Ornate circular badge, vivid allegorical enamel in weathered copper cameo, engra
 Ornate circular badge, vivid allegorical enamel in weathered copper cameo, engraved growth-ring field, photorealistic render, perfectly centered, isolated on white background. Center: a single bare tree standing alone in deep snow under a moonlit midnight-blue sky, icicles hanging from its lowest branch catching cold silver-blue light; glossy growth-ring field of concentric rings deepening to the darkest midnight blue at the very center. Border: weathered verdigris-copper ring with a wheel-of-the-year quarter-spoke motif, four small copper-patina roundels at the cardinal turning points bearing a tiny icicle. Colors: copper dominant, deep midnight blue, frost silver.
 ```
 
-**Wet Season (lush green & rain silver — the tropics' light half)** → `assets/badge/season/WetSeason.png`
+**Wet Season (lush green & rain silver — the tropics' light half)** → `assets/badge/season/Wet_Season.png`
 ```
 Ornate circular badge, vivid allegorical enamel in weathered copper cameo, engraved growth-ring field, photorealistic render, perfectly centered, isolated on white background. Center: monsoon rain falling in silver sheets over a lush green jungle canopy, a swollen river catching the rain's silver light below, broad banana leaves glistening wet in the foreground; glossy growth-ring field of concentric rings in saturated jungle green streaked with silver rain. Border: weathered verdigris-copper ring with a wheel-of-the-year quarter-spoke motif, four small copper-patina roundels at the cardinal turning points bearing a tiny raindrop. Colors: copper dominant, lush jungle green, monsoon silver.
 ```
 
-**Dry Season (bleached gold & dust — the tropics' other half)** → `assets/badge/season/DrySeason.png`
+**Dry Season (bleached gold & dust — the tropics' other half)** → `assets/badge/season/Dry_Season.png`
 ```
 Ornate circular badge, vivid allegorical enamel in weathered copper cameo, engraved growth-ring field, photorealistic render, perfectly centered, isolated on white background. Center: sun-cracked red earth stretching to a shimmering heat-haze horizon, tall grass bleached to pale gold, a small dust devil spiraling up in the distance past a lone baobab silhouette; glossy growth-ring field of concentric rings in bleached dust-gold deepening to cracked-earth brown at the rim. Border: weathered verdigris-copper ring with a wheel-of-the-year quarter-spoke motif, four small copper-patina roundels at the cardinal turning points bearing a tiny dust devil. Colors: copper dominant, bleached gold, cracked-earth brown.
 ```
@@ -127,12 +133,12 @@ September crossing — "the day of perfect balance" reads the same
 either way. Field and border literally draw the dial's own hexagram
 pointer (`CLAUDE.md` — top vertex always points at true solar noon).
 
-**Summer Solstice (all gold — the year's shortest shadow)** → `assets/badge/season/turning_point/SummerSolstice.png`
+**Summer Solstice (all gold — the year's shortest shadow)** → `assets/badge/season/turning_point/Summer_Solstice.png`
 ```
 Ornate circular badge, vivid allegorical enamel in polished gold cameo, engraved hexagram field, photorealistic render, perfectly centered, isolated on white background. Center: the sun standing motionless at its highest point of the year, a golden hexagram of six blazing rays crossing behind it exactly like the dial's own hexagram pointer, a standing gnomon below casting a shadow reduced to almost nothing at high noon. Border: polished gold ring, unbroken, with a sundial gnomon motif marking the year's shortest shadow. Colors: gold dominant, blazing white-gold, high-noon sky blue.
 ```
 
-**Winter Solstice (all silver-blue — the year's longest shadow)** → `assets/badge/season/turning_point/WinterSolstice.png`
+**Winter Solstice (all silver-blue — the year's longest shadow)** → `assets/badge/season/turning_point/Winter_Solstice.png`
 ```
 Ornate circular badge, vivid allegorical enamel in oxidized silver cameo, engraved hexagram field, photorealistic render, perfectly centered, isolated on white background. Center: the sun barely clearing a snow-bound horizon at its lowest arc of the year, a silver hexagram of six pale rays crossing behind it exactly like the dial's own hexagram pointer, a standing gnomon casting the longest shadow of the year across frozen ground. Border: oxidized silver ring, unbroken, with a sundial gnomon motif marking the year's longest shadow. Colors: silver dominant, deep winter blue, frost white.
 ```

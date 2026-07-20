@@ -2496,8 +2496,15 @@ class Compositor:
             "",
         )
 
+        # THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20):
+        # the canonical era badge plus any `_v2`/`alt/` siblings rotate
+        # daily by the VIEWED date — the same one the card's own date
+        # row reads (deep-travel aware, `real` already un-shifted it).
+        era_art = defaults.rotating_art_file(
+            defaults.ERA_ART_DIR / era_file, date
+        ) or defaults.ERA_ART_DIR / era_file
         era_block = (
-            _hover_badge(defaults.ERA_ART_DIR / era_file)
+            _hover_badge(era_art)
             + _hover_title(html.escape(self._tr(era_name)))
             + _centered_html(html.escape(format_anno_lucis(real)), "")
         )

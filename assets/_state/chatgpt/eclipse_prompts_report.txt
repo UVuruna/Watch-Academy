@@ -1,0 +1,24 @@
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [ChatGPT]
+Run started:  2026-07-19 19:17:59  (7/7 pending)
+--------------------------------------------------------------------
+2026-07-19 19:19:19  assets/eclipse/Solar_Total.png               gen   44.7s  ours   33.0s   1024x1024 -> 828x814    1.2 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:20:39  assets/eclipse/Solar_Annular.png             gen   46.7s  ours   30.6s   1024x1024 -> 827x817    952 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:22:06  assets/eclipse/Solar_Partial.png             gen   52.8s  ours   26.5s   1024x1024 -> 827x817    1.1 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:23:29  assets/eclipse/Solar_Hybrid.png              gen   53.7s  ours   26.1s   1024x1024 -> 828x817    1.2 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:24:51  assets/eclipse/Lunar_Total.png               gen   52.3s  ours   27.5s   1024x1024 -> 827x817    1.2 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:26:05  assets/eclipse/Lunar_Partial.png             gen   58.3s  ours   12.9s   1024x1024 -> 827x817    1.2 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:27:11  assets/eclipse/Lunar_Penumbral.png           gen   62.8s  ours    0.5s   1024x1024 -> 827x817    1.2 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 53s/image  |  average our time (save+bgfix+pause): 22s/image
+Total AI + our time: 8m 48s  (wall clock: 9m 12s)
+Run finished: 2026-07-19 19:27:11  (all pending items done)
+
+====================================================================
+Eclipse Category Prompts — the seven category emblems  [ChatGPT]
+Run started:  2026-07-20 00:44:28  (0/7 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-20 00:44:28  (all pending items done)
+

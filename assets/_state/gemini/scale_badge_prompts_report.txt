@@ -13,3 +13,16 @@ Images: 6  |  average generation (AI): 8s/image  |  average our time (save+bgfix
 Total AI + our time: 2m 37s  (wall clock: 2m 51s)
 Run finished: 2026-07-19 18:29:18  (all pending items done)
 
+====================================================================
+Scale Prompts (Gemini) — the Judas–Lucifer Scale, both registers  [Gemini]
+Run started:  2026-07-20 01:53:04  (4/9 pending)
+--------------------------------------------------------------------
+2026-07-20 01:53:38  assets/badge/scale/glass/Judas_Triangle.png  gen    5.8s  ours   25.7s   1024x1024 -> 878x939    882 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:54:02  assets/badge/scale/glass/Lucifer_Triangle.png gen    7.3s  ours   14.1s  1024x1024 -> 966x1024    807 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:54:32  assets/badge/scale/glass/Judas_Triangle_v2.png gen    6.7s  ours   20.4s   1024x1024 -> 880x842    683 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:54:43  assets/badge/scale/glass/Lucifer_Triangle_v2.png gen    7.2s  ours    1.3s   1024x1024 -> 916x859    769 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 4  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 1m 28s  (wall clock: 1m 39s)
+Run finished: 2026-07-20 01:54:43  (all pending items done)
+

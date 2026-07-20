@@ -202,14 +202,23 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 - Concept APPROVED (owner 2026-07-16); full temperament definition in
   [The DOMY Canon](../../../CANON.md) (humor · element · type · bright
   and dark face · age of man).
-- ONE palette, both styles: the Seasons do NOT split paint/light — this
-  single set of four windows serves the whole pointer.
+- **SUPERSEDED (owner seal 2026-07-17, CANON §Seasons light):** the
+  Seasons DO split by wheel now — PAINT keeps this ONE set of four
+  Temperament windows, LIGHT seats the Tetramorph below instead; the
+  Throne alone still serves both wheels as the shared center.
 - Golden season colors used verbatim: Sanguine green `#129412`,
   Choleric yellow `#D9D900`, Melancholic red `#D4330F`, Phlegmatic
   blue `#0A70D8`.
 - The tetramorph is SEALED (owner 2026-07-17) as the Seasons LIGHT
-  wheel's figure set; the first batch landed 2026-07-18 under
-  `assets/archetype/<source>/tetramorph/`.
+  wheel's figure set; the first (canonical) batch landed 2026-07-18
+  under `assets/archetype/<source>/tetramorph/`. **A second, newer
+  generation landed on the stale pre-correction path (RULE-19 round,
+  owner decree 2026-07-20)** — `temperaments/tetramorph_<Creature>
+  .png` — moved to `tetramorph/alt/<Creature>.png` instead of
+  overwriting the canonical set: THE UNIVERSAL ROTATION CONVENTION
+  ([Assets (folder)](../../../assets/___assets.md)) now shows the two
+  takes in daily rotation, `config.archetypes._fig(..., rotates=True)`
+  / `render.layers.ArchetypeLayer`.
 - The four EVANGELIST rondels are SEALED (owner 2026-07-18) as the
   three-side's SECOND column — `assets/archetype/<source>/evangelist/`
   (`Mark.png`, `Luke.png`, `John.png`, `Matthew.png`); each evangelist

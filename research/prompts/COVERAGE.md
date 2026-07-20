@@ -186,28 +186,20 @@ graceful-absent.
 
 ## Subdial Masters (`assets/badge/subdial/`, `SUBDIAL_ART_DIR`)
 
-**Prompt sheet: EXISTS and is COMPLETE for all 12 combinations**
-(`research/prompts/instrument/subdial_circle_prompts.md`: 4 light
-variants — `south`, `h3`, `h21`, `center` — × 3 finishes; the code
-only strictly needs ONE finish per variant since `subdial_plate_file`
-recolors gold/silver/bronze live from whichever finish lands).
-
-**Ground truth on the one plate that exists** (owner's question, this
-round — "was there a make-script?"): **No.** `grep`-confirmed: no
-`setup/make_subdial*.py` exists anywhere in the repo.
-`assets/badge/gemini/subdial/silver/center.png` was AI-GENERATED
-directly from this sheet's brief — confirmed by its own intake commit
-("0.14.227 Owner round six": *"THE OWNER'S FIRST SUBDIAL PLATE ...
-intaken ... exactly the sheet brief"*, which also logged "11 plates
-remain on the owner's list" at the time, matching 12 total − 1 done).
-This is the derivation note that closes the row — no new prompt entry
-was needed, the sheet already covered this exact plate before it was
-generated.
-
-| Collection | Expected by code | On disk | Sheet entry | Verdict |
-|---|---|---|---|---|
-| `badge/subdial/*/center.png` | 3 finishes | 1/3 (gemini silver only; the other 2 finishes recolor live from it) | `subdial_circle_prompts.md` ✔ | OK by design — recoloring covers the other 2 finishes, no more art needed for this seat |
-| `badge/subdial/*/{south,h3,h21}.png` | 3 seats × 3 finishes = 9 files (1 needed per seat minimum) | 0/9 | `subdial_circle_prompts.md` ✔ (all 9 entries written) | ART GAP — these 3 seats currently reuse the `center` plate via `subdial_plate_file`'s own seat-fallback (not the procedural circle — a plate already shows, just the wrong lighting direction); generating ONE finish per seat (3 files minimum) closes it |
+**SUPERSEDED (RULE-19 round, owner decree 2026-07-20 — "Compute, Don't
+Generate", monorepo root `CLAUDE.md`).** Everything below this line
+described the twelve-combination sheet (4 seat/light variants × 3
+finishes) as an ART GAP to fill — that framing was the failure Rule
+#19 exists to end: the seat never needed its own file (the shadow is
+one line of circle math, `render.layers._draw_subdial_shadow`), and
+the finish never needed its own file either (`_recolored_plate` derives
+gold/silver/bronze live). The sheet was run to completion anyway before
+the owner caught it (12/12 Gemini, 9/12 ChatGPT) and the resulting 20
+extra files were deleted the same round. Current state: ONE master per
+source, `assets/badge/subdial/master.png` — see
+[Subdial Prompts](instrument/subdial_circle_prompts.md) for the full
+story and the derivation-check paragraph Rule #19 requires. This row
+is CLOSED, not a gap.
 
 <a id="other"></a>
 
@@ -237,9 +229,10 @@ built with no AI sheet needed.** No item anywhere in this document's
 scope needs a NEW prompt written. The outstanding work is entirely:
 
 1. **Art generation** against sheets that already exist — era (13),
-   eclipse (7), subdial (3 minimum), the archetype gaps in the table
-   above (Throne, Seal, Lucifer_Pride, Judas_Fear, the 8 evangelist
-   files, the 1 one-sided Devil_Prosecutor).
+   eclipse (7), the archetype gaps in the table above (Throne, Seal,
+   Lucifer_Pride, Judas_Fear, the 8 evangelist files, the 1 one-sided
+   Devil_Prosecutor). Subdial is CLOSED (RULE-19 round, 2026-07-20) —
+   see the superseded note above, no more generation needed there.
 2. **Two wiring decisions**, not art gaps — the row2 rondels (Trinity/
    Family/Walks, 40 files sitting painted and unread) and Anno Lucis
    (1 file, once generated, has nowhere to draw yet).

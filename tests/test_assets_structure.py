@@ -87,3 +87,25 @@ def test_weekday_variant_whitelist_has_no_unused_members():
             if theme_dir.is_dir():
                 seen.update(_all_dir_names(theme_dir))
     assert WEEKDAY_VARIANT_WHITELIST <= seen
+
+
+def test_alt_folders_mirror_their_parent_names():
+    """THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20):
+    `alt/` is a legal subfolder ANYWHERE under assets/ — it opts a
+    family into daily rotation (`config.defaults.rotating_art_file`)
+    beside the `<Name>_v2.png`-style suffix siblings — so this test does
+    NOT whitelist where an `alt/` folder may appear. It only pins the
+    one real invariant: `alt/` mirrors its parent's names, one level
+    up, file for file. An `alt/<Name>.png` with no `<Name>.png` sibling
+    in the parent is an ORPHAN — nothing computes a rotation pool for a
+    stem the canonical directory doesn't also carry."""
+    assets_root = paths.assets_dir()
+    offenders = []
+    for alt_dir in assets_root.rglob("alt"):
+        if not alt_dir.is_dir():
+            continue
+        parent = alt_dir.parent
+        for entry in alt_dir.iterdir():
+            if entry.is_file() and not (parent / entry.name).exists():
+                offenders.append(str(entry.relative_to(assets_root)))
+    assert offenders == []

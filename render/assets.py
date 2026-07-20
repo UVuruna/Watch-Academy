@@ -229,48 +229,51 @@ def letter_metal_file(path: Path, metal: str) -> Path:
 
 
 def subdial_plate_file(
-    finish: str, seat: str, tint: str | None = None
+    finish: str, tint: str | None = None
 ) -> Path | None:
-    """The owner's subdial plate for (letter finish, seat). His art
-    wins as drawn; a missing SEAT falls back to the center plate (the
-    directional shadow is rendered live by the layer, owner
-    2026-07-15); a missing FINISH recolors another finish's master —
-    only the bright, low-saturation brushed rim takes the finish
-    color, the dark tapisserie field never moves (disk-cached like
-    the metal variants). A TINT (the "theme" plate style, owner
-    2026-07-15 A/B spec) recolors the DARK field to the clock tint —
-    that always runs through the recolor pass, even on the exact
-    finish. None = no plate art at all."""
-    base = defaults.SUBDIAL_ART_DIR
-    for stem in (seat, "center"):
-        exact = paths.art_file(base / finish / f"{stem}.png")
-        if exact.exists():
-            return (
-                _recolored_plate(exact, finish, tint) if tint else exact
-            )
-    for source_finish in defaults.SUBDIAL_RECOLOR_COLORS:
-        if source_finish == finish:
-            continue
-        for stem in (seat, "center"):
-            master = paths.art_file(base / source_finish / f"{stem}.png")
-            if master.exists():
-                return _recolored_plate(master, finish, tint)
-    return None
+    """The owner's ONE subdial master (Rule #19, "Compute, Don't
+    Generate" — owner decree 2026-07-20, its first enforcement): the
+    twelve-plate sheet (4 seats x 3 finishes) collapsed to a SINGLE
+    generated image per source — the directional shadow is one line of
+    circle math (`render.layers._draw_subdial_shadow`, keyed off the
+    seat's own dial position, nothing to do with the FILE), and the
+    seat dimension never touches this function at all any more. His
+    master wins AS DRAWN for its own finish (`SUBDIAL_MASTER_FINISH`
+    names which); the other two finishes are disk-cached recolors of
+    that SAME master, exactly like the ring letters derive silver/
+    bronze from gold live. A TINT (the "theme" plate style, owner
+    2026-07-15 A/B spec) recolors the dark tapisserie field to the
+    clock tint — that pass runs even on the exact finish, into its own
+    cache entry. None = no master art at all (the layer then draws the
+    procedural circle)."""
+    master = paths.art_file(defaults.SUBDIAL_ART_DIR / "master.png")
+    if master is None or not master.exists():
+        return None
+    source = master.relative_to(paths.assets_dir()).parts[1]
+    own_finish = defaults.SUBDIAL_MASTER_FINISH[source]
+    if finish == own_finish and tint is None:
+        return master
+    return _recolored_plate(master, finish, tint)
 
 
 @profiling.timed("Subdial recolor")
 def _recolored_plate(
     master: Path, finish: str, tint: str | None = None
 ) -> Path:
-    """The master plate with its brushed metal BEZEL colorized to the
-    finish: bright, unsaturated pixels INSIDE the radial bezel band
-    become the finish color multiplied by their own luminance — the
-    brushing survives, and the field's own specular highlights stay
-    neutral (owner correction 2026-07-15: without the radial mask the
-    interiors drank the metal and the three finishes stopped
-    matching). With a TINT the interior (the tapisserie field) is
-    colorized the same way to the clock tint (the "theme" plate
-    style); without one the field stays as drawn."""
+    """The master plate with its brushed metal BEZEL colorized to
+    `finish` — built the SAME recipe the ring letters use to derive
+    silver/bronze live from gold (Rule #5, `letter_metal_file`): SILVER
+    is the achromatic VALUE alone (no hue at all, whatever metal the
+    master itself happens to be drawn in — the letters' "straight
+    desaturation" rule, masked here to the rim only); GOLD and BRONZE
+    tint that same achromatic base by their own color (the letters'
+    "tint the desaturated result" rule). Only bright, unsaturated
+    pixels INSIDE the radial bezel band take the recolor — the field's
+    own specular highlights stay neutral (owner correction 2026-07-15:
+    without the radial mask the interiors drank the metal and the
+    three finishes stopped matching). With a TINT the interior (the
+    tapisserie field) is colorized the same way to the clock tint (the
+    "theme" plate style); without one the field stays as drawn."""
     stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
     tint_tag = f"_{tint.lstrip('#').lower()}" if tint else ""
     cache = (
@@ -315,11 +318,16 @@ def _recolored_plate(
         * (1.0 - smoothstep((sat - sat_low) / (sat_high - sat_low)))
         * smoothstep((radius - rim_low) / (rim_high - rim_low))
     )[..., None]
-    target = QColor(defaults.SUBDIAL_RECOLOR_COLORS[finish])
-    finish_rgb = np.array([
-        target.redF(), target.greenF(), target.blueF()
-    ])
-    rim = finish_rgb[None, None, :] * value[..., None]
+    if finish == "silver":
+        # The achromatic base alone, masked to the rim — the same
+        # "silver is a straight desaturation" recipe letters use.
+        rim = np.repeat(value[..., None], 3, axis=-1)
+    else:
+        target = QColor(defaults.SUBDIAL_RECOLOR_COLORS[finish])
+        finish_rgb = np.array([
+            target.redF(), target.greenF(), target.blueF()
+        ])
+        rim = finish_rgb[None, None, :] * value[..., None]
     if tint:
         # The "theme" plate style: the dark tapisserie field takes the
         # clock tint, luminance-preserving like the rim but lifted by

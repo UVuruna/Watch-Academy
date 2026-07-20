@@ -321,8 +321,9 @@ ChatGPT (the cameo master, the two glass windows, and the
 `judas`/`judas_v1..v3` refresh batch, mirrored for Lucifer) and 3 per
 pole for Gemini (the cameo master plus its two glass windows) — the
 count is READ from disk, never hardcoded, so more art dropped in later
-starts rotating on its own. Cadence lives at `SCALE_ROTATION_DAYS`
-(currently every day); deep travel drives the shown face by the
+starts rotating on its own. Cadence lives at `ROTATION_DAYS` (THE
+UNIVERSAL ROTATION CONVENTION's shared cadence, generalized 2026-07-20
+— currently every day); deep travel drives the shown face by the
 TRAVELED date, same law as the poles' glyphs.
 
 ### Prism light — One Soul, the Bond (APPROVED 2026-07-16)

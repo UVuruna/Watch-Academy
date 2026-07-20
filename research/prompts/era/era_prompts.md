@@ -25,15 +25,26 @@ doctrine's direction — rising, past its own zenith, sinking, or
 absent — while the light's QUANTITY carries its measure; the
 doctrine is drawn as one day's own arc, never as lettering.
 
-**Drop paths:** `assets/era/` — `Age_of_Light.png`,
+**Drop paths:** `assets/era/<source>/` — `Age_of_Light.png`,
 `Age_of_Darkness.png`, `Starry_Spring.png`, `Starry_Summer.png`,
 `Starry_Autumn.png`, `Starry_Winter.png`, plus (owner fix-round B,
-2026-07-19, TASK 3) `Anno_Lucis.png` and, under `assets/era/calendar/`,
-`AUC.png`, `Byzantine.png`, `Hebrew.png`, `Hegirae.png`, `Buddhist.png`,
-`Huangdi.png`, `Maya.png` (MAYA round, owner 2026-07-20). No `<source>`
-split (a single generation batch, like the emblem/badge families) —
-the app reads `assets/era/<Name>.png` (or `assets/era/calendar/<Name>.png`)
-directly (`config/defaults.py` `ERA_ART_DIR`).
+2026-07-19, TASK 3) `Anno_Lucis.png` and, under
+`assets/era/<source>/calendar/`, `AUC.png`, `Byzantine.png`,
+`Hebrew.png`, `Hegirae.png`, `Buddhist.png`, `Huangdi.png`, `Maya.png`
+(MAYA round, owner 2026-07-20). **CORRECTED (RULE-19 round, owner
+decree 2026-07-20):** this sheet used to claim "no `<source>` split" —
+WRONG, both sources always generated their own subtree exactly like
+every other sourced family; `"era"` had simply never been added to
+`config.constants.ART_SOURCED_ROOTS`, so every era badge silently
+failed its own existence check despite the art sitting right there.
+Fixed the same round — the app reads `assets/era/<Name>.png` (or
+`.../calendar/<Name>.png`) through `config.paths.art_file`
+(`config/defaults.py` `ERA_ART_DIR`) exactly like the badge/weekday/
+archetype families. The six Age/Starry-Season plates (not Anno Lucis,
+not the calendar strip) additionally ROTATE daily against an `alt/`
+sibling — THE UNIVERSAL ROTATION CONVENTION,
+[Assets (folder)](../../../assets/___assets.md) — the owner's `new/`
+folders renamed to `alt/` this round.
 
 **House rules carried from every other sheet:** photorealistic
 render, isolated background (no transparency-checkerboard artifact —
@@ -251,3 +262,12 @@ wearing the matching emblem beside each option.
   (14 images expected — the six-calendar dry-run was verified clean,
   0 problems, on 2026-07-19; the Maya addition still needs its own
   dry-run pass).
+- **ART LANDED + WIRED (RULE-19 round, owner decree 2026-07-20):** all
+  seven era/starry emblems generated for both sources under the GREAT
+  DAY design. Two fixes landed the same round: (1) `"era"` added to
+  `config.constants.ART_SOURCED_ROOTS` — see the corrected Drop paths
+  note above, the badges were silently invisible before this; (2) the
+  owner's `new/` folders renamed to `alt/` and both consumers (the
+  Earth hover card's era badge, the Encyclopedia's era entries) wired
+  through `config.defaults.rotating_art_file` — see
+  [Assets (folder)](../../../assets/___assets.md).

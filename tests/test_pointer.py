@@ -289,73 +289,99 @@ def test_classic_unit_wears_the_driving_slots_theme():
 
 
 def test_subdial_plate_recolors_to_every_finish(app):
-    """Owner 2026-07-15 ('ti si taj koji treba da renderuješ zlatnu i
-    bronzanu boju'), pinned: his ONE silver master serves every letter
-    finish — silver returns the master as drawn, gold and bronze
-    return disk-cached recolors of it; a seat with no plate of its
-    own borrows the center plate."""
+    """Rule #19 first enforcement (owner decree 2026-07-20, "Compute,
+    Don't Generate"): the twelve-plate seat×finish sheet collapsed to
+    ONE master per source — his master serves every letter finish, the
+    SEAT never reaches the file at all any more (only the live shadow,
+    see `test_subdial_shadow_direction_follows_the_seat`). The
+    master's own finish (`SUBDIAL_MASTER_FINISH`) returns it as drawn;
+    the other two return disk-cached live recolors."""
     from config import paths as _paths
     from render.assets import subdial_plate_file
 
-    master = _paths.art_file(
-        defaults.SUBDIAL_ART_DIR / "silver" / "center.png"
-    )
+    master = _paths.art_file(defaults.SUBDIAL_ART_DIR / "master.png")
     assert master.exists()
-    assert subdial_plate_file("silver", "center") == master
-    # Seat resolution is art-arrival-proof (owner generation is landing
-    # plate by plate, 2026-07-20): a seat with its OWN plate on disk
-    # returns it, a seat without one borrows the center master.
-    h3_own = _paths.art_file(defaults.SUBDIAL_ART_DIR / "silver" / "h3.png")
-    h3_plate = subdial_plate_file("silver", "h3")
-    if h3_own is not None and h3_own.exists():
-        assert h3_plate == h3_own                         # own seat plate
-    else:
-        assert h3_plate == master                         # seat borrow
+    source = master.relative_to(_paths.assets_dir()).parts[1]
+    own_finish = defaults.SUBDIAL_MASTER_FINISH[source]
+    assert subdial_plate_file(own_finish) == master
     version = defaults.SUBDIAL_RECOLOR_VERSION
-    recolored_finish = None
-    for finish in ("gold", "bronze"):
-        plate = subdial_plate_file(finish, "center")
+    other_finishes = [
+        f for f in ("gold", "silver", "bronze") if f != own_finish
+    ]
+    for finish in other_finishes:
+        plate = subdial_plate_file(finish)
         assert plate is not None and plate != master, finish
-        own = _paths.art_file(
-            defaults.SUBDIAL_ART_DIR / finish / "center.png"
-        )
-        if own is not None and own.exists():
-            assert plate == own, finish       # the real generated plate wins
-        else:
-            assert plate.name.endswith(
-                f"_subdial{version}_{finish}.png"
-            ), finish
-            recolored_finish = recolored_finish or finish
+        assert plate.name.endswith(f"_subdial{version}_{finish}.png"), finish
         assert plate.exists(), finish
     # The "theme" plate style (owner A/B spec 2026-07-15): a clock
     # TINT recolors the tapisserie field — that pass runs even on the
     # exact finish, into its own cache entry.
-    tinted = subdial_plate_file("silver", "center", tint="#5A3FA0")
+    tinted = subdial_plate_file(own_finish, tint="#5A3FA0")
     assert tinted is not None and tinted != master
-    assert tinted.name.endswith(f"_subdial{version}_silver_5a3fa0.png")
+    assert tinted.name.endswith(f"_subdial{version}_{own_finish}_5a3fa0.png")
     assert tinted.exists()
     # The metal stays INSIDE the radial bezel band (owner correction
-    # 2026-07-15) — verifiable only on a RECOLORED plate (a real
-    # generated plate has its own interior, nothing to compare); once
-    # the owner's plates cover all three finishes this block idles.
-    if recolored_finish is not None:
-        import numpy as _np
-        from PySide6.QtGui import QImage as _QImage
+    # 2026-07-15) — verifiable on a recolored plate against the master.
+    import numpy as _np
+    from PySide6.QtGui import QImage as _QImage
 
-        def interior(path):
-            image = _QImage(str(path)).convertToFormat(
-                _QImage.Format.Format_RGBA8888
-            )
-            w, h = image.width(), image.height()
-            stride = image.bytesPerLine() // 4
-            data = _np.frombuffer(image.constBits(), dtype=_np.uint8)
-            data = data.reshape(h, stride, 4)[:, :w, :]
-            ys, xs = _np.mgrid[0:h, 0:w]
-            r = _np.hypot(xs - (w - 1) / 2, ys - (h - 1) / 2) / (w / 2)
-            return data[r < defaults.SUBDIAL_RECOLOR_RIM_RADIUS[0]]
+    def interior(path):
+        image = _QImage(str(path)).convertToFormat(
+            _QImage.Format.Format_RGBA8888
+        )
+        w, h = image.width(), image.height()
+        stride = image.bytesPerLine() // 4
+        data = _np.frombuffer(image.constBits(), dtype=_np.uint8)
+        data = data.reshape(h, stride, 4)[:, :w, :]
+        ys, xs = _np.mgrid[0:h, 0:w]
+        r = _np.hypot(xs - (w - 1) / 2, ys - (h - 1) / 2) / (w / 2)
+        return data[r < defaults.SUBDIAL_RECOLOR_RIM_RADIUS[0]]
 
-        plate = subdial_plate_file(recolored_finish, "center")
-        assert _np.array_equal(interior(plate), interior(master))
+    plate = subdial_plate_file(other_finishes[0])
+    assert _np.array_equal(interior(plate), interior(master))
+
+
+def test_subdial_shadow_direction_follows_the_seat():
+    """Rule #19's own worked example (owner decree 2026-07-20): the
+    live shadow is "one line of circle math" — the offset direction IS
+    the seat's own dial angle, south straight down, an arm seat toward
+    its own outward corner, the center seat symmetric (distance 0, no
+    favored side) — exactly the reason the twelve pre-baked plates
+    were waste."""
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QImage, QPainter
+    from render.layers import _draw_subdial_shadow
+
+    def alpha_at(pos, probe, diameter=80.0):
+        image = QImage(240, 240, QImage.Format.Format_ARGB32_Premultiplied)
+        image.fill(Qt.GlobalColor.transparent)
+        painter = QPainter(image)
+        painter.translate(120, 120)
+        _draw_subdial_shadow(painter, pos, diameter)
+        painter.end()
+        return image.pixelColor(
+            round(120 + probe.x()), round(120 + probe.y())
+        ).alpha()
+
+    # South seat: the point just below the plate reads MORE shadow
+    # than the mirror point just above it.
+    south = QPointF(0.0, 100.0)
+    assert alpha_at(south, QPointF(0.0, 145.0)) > alpha_at(
+        south, QPointF(0.0, 55.0)
+    )
+    # An arm seat toward 3 o'clock: the shift is HORIZONTAL here, so
+    # the same-style pair now reads asymmetric on the horizontal axis
+    # instead — direction genuinely tracks the seat, not a fixed side.
+    east = QPointF(100.0, 0.0)
+    assert alpha_at(east, QPointF(145.0, 0.0)) > alpha_at(
+        east, QPointF(55.0, 0.0)
+    )
+    # The center seat (the Compass): distance 0 draws NO offset at all
+    # — an even ring, no favored side.
+    center = QPointF(0.0, 0.0)
+    assert alpha_at(center, QPointF(0.0, 45.0)) == alpha_at(
+        center, QPointF(0.0, -45.0)
+    )
 
 
 def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):

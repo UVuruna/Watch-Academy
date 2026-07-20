@@ -1,0 +1,23 @@
+====================================================================
+Scale Prompts (Gemini) — the Judas–Lucifer Scale, both registers  [ChatGPT]
+Run started:  2026-07-19 19:10:16  (6/9 pending)
+--------------------------------------------------------------------
+2026-07-19 19:11:27  assets/badge/scale/glass/Judas_Triangle.png  gen   43.8s  ours   25.0s   1024x1024 -> 991x881    1.0 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:12:46  assets/badge/scale/glass/Lucifer_Triangle.png gen   53.8s  ours   21.3s   1024x1024 -> 995x917    1.1 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:14:11  assets/badge/scale/glass/Judas_Triangle_v2.png gen   46.6s  ours   36.0s   1024x1024 -> 997x874    1.1 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:15:38  assets/badge/scale/glass/Lucifer_Triangle_v2.png gen   49.1s  ours   34.8s   1024x1024 -> 995x894    1.1 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:16:51  assets/badge/scale/glass/Union_Meeting.png   gen   59.4s  ours   10.4s   1024x1024 -> 961x959    1.9 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:17:58  assets/badge/scale/glass/Union.png           gen   63.0s  ours    0.5s   1024x1024 -> 954x933    1.9 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 6  |  average generation (AI): 53s/image  |  average our time (save+bgfix+pause): 21s/image
+Total AI + our time: 7m 24s  (wall clock: 7m 42s)
+Run finished: 2026-07-19 19:17:58  (all pending items done)
+
+====================================================================
+Scale Prompts (Gemini) — the Judas–Lucifer Scale, both registers  [ChatGPT]
+Run started:  2026-07-20 00:44:28  (0/9 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-20 00:44:28  (all pending items done)
+

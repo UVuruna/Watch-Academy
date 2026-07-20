@@ -303,11 +303,13 @@ seated).
 **Subdials:** every flat slot face (text modes, flat astrology art)
 sits on the watch-face plate drawn by `draw_slot_roundel()`: a LIVE
 outward shadow first (`_draw_subdial_shadow` — offset away from the
-dial center where the sun lives, symmetric on the center seat), then
-the owner's plate art resolved by
-[Assets](assets.md)`.subdial_plate_file()` (per letter finish and seat,
-recolored from his one master when a finish has no art of its own);
-with no plate art at all, a procedural circle in the ring's face color
+dial center where the sun lives, keyed off THIS seat's own dial
+position, symmetric on the center seat), then the owner's ONE master
+plate resolved by [Assets](assets.md)`.subdial_plate_file()` (Rule #19,
+owner decree 2026-07-20 — the old twelve-plate seat×finish sheet is
+retired; the seat never reaches the file, only the shadow above;
+recolored live to any letter finish that isn't the master's own); with
+no plate art at all, a procedural circle in the ring's face color
 rimmed with the finish metal. Two PLATE STYLES (owner A/B spec
 2026-07-15, `skin.subdial_style`): "theme" colorizes the tapisserie
 field to the clock tint, "black" keeps the standard dark AP field.

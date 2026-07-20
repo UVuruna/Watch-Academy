@@ -795,6 +795,16 @@ def _topics(travel_date: date | None = None) -> dict:
     # THE ERA TERMS (ROADMAP 15a3, owner 2026-07-17): the Age of Light,
     # the Age of Darkness and the four Starry Seasons, closed by the
     # comparative "Eras of the World" essay (no plate of its own).
+    def _era_image(art: str):
+        """One rotating era emblem (THE UNIVERSAL ROTATION CONVENTION,
+        owner decree 2026-07-20): the canonical file plus any `_v2`
+        siblings and its `alt/` twin feed one daily pool, keyed by
+        `travel_date` exactly like the Scale rotation above. Zero
+        candidates (art not landed yet) keeps the plain canonical path
+        — graceful-absent, the Encyclopedia hides missing art."""
+        canonical = defaults.ERA_ART_DIR / art
+        return defaults.rotating_art_file(canonical, travel_date) or canonical
+
     topics["era"] = {
         "title": "Eras & Ages",
         "icon": defaults.ERA_ART_DIR / "Age_of_Light.png",
@@ -803,7 +813,7 @@ def _topics(travel_date: date | None = None) -> dict:
                 "images": (
                     tuple(defaults.ERA_ART_DIR / a for a in art)
                     if isinstance(art, tuple)
-                    else (defaults.ERA_ART_DIR / art,) if art else ()
+                    else (_era_image(art),) if art else ()
                 ),
                 "name": ("era_title", key),
                 "article": ("era", key),

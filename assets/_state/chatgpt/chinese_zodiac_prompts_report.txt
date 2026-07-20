@@ -1,0 +1,11 @@
+====================================================================
+Chinese Zodiac — Bronze Plates v2 (Gemini)  [ChatGPT]
+Run started:  2026-07-20 01:13:04  (2/2 pending)
+--------------------------------------------------------------------
+2026-07-20 01:14:13  assets/zodiac/chinese/primary/Cat.png        gen   53.8s  ours   11.8s   1024x1024 -> 937x927    2.0 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:15:01  assets/zodiac/chinese/colored/Cat.png        gen   45.2s  ours    0.3s   1024x1024 -> 939x929    2.0 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 49s/image  |  average our time (save+bgfix+pause): 6s/image
+Total AI + our time: 1m 51s  (wall clock: 1m 57s)
+Run finished: 2026-07-20 01:15:01  (all pending items done)
+

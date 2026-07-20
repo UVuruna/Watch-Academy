@@ -165,6 +165,23 @@ def test_family_and_temperament_seatings():
     ]
 
 
+def test_tetramorph_figures_declare_rotation():
+    """THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20): the
+    Tetramorph is the first ArchetypeLayer consumer to opt in — every
+    other archetype figure and every center stays a fixed master, so
+    `ArchetypeLayer.paint()`'s rotation branch never fires for them."""
+    tetramorph = archetypes.figures("seasons_light")
+    assert all(fig["rotates"] for fig in tetramorph)
+    for key in archetypes.ARCHETYPE_GRID.values():
+        if key == "seasons_light":
+            continue
+        assert not any(fig["rotates"] for fig in archetypes.figures(key)), key
+        center = archetypes.center(key)
+        if center is not None:
+            assert not center.get("rotates")
+    assert not archetypes.center("seasons_light").get("rotates")
+
+
 # --- The render-level override --------------------------------------------------
 
 

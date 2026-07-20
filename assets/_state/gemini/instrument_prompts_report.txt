@@ -6,3 +6,13 @@ Run started:  2026-07-19 18:15:56  (0/2 pending)
 Images: 0
 Run finished: 2026-07-19 18:15:56  (all pending items done)
 
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-20 01:58:08  (1/2 pending)
+--------------------------------------------------------------------
+2026-07-20 01:58:17  assets/instrument/logo.png                   gen    5.3s  ours    1.3s   1024x1024 -> 820x819    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 5s/image  |  average our time (save+bgfix+pause): 1s/image
+Total AI + our time: 7s  (wall clock: 9s)
+Run finished: 2026-07-20 01:58:17  (all pending items done)
+

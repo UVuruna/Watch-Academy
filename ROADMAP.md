@@ -108,9 +108,32 @@ lives in [The DOMY Canon](CANON.md).
   register, tolerant of the owner's irregular `_v`/`_v1`/`_v2`/`_v3`
   suffixes) and rotates by the date's proleptic ordinal — 7 versions
   per pole for ChatGPT, 3 for Gemini today, growing as more art lands.
-  `SCALE_ROTATION_DAYS` sets the cadence; deep travel drives the shown
+  `ROTATION_DAYS` sets the cadence; deep travel drives the shown
   face by the traveled date. `assets/EXTRA/` is GONE (owner cleaned it
   2026-07-19 — the audit's orphan row is resolved).
+  THE UNIVERSAL ROTATION CONVENTION — DONE (owner decree 2026-07-20,
+  RULE-19 round): the Scale mechanism generalized into ONE shared
+  `config.defaults.rotating_art_file(canonical_path, on_date)` — beside
+  any canonical `<dir>/<Name>.png`, `<dir>/<Name>_v2.png`-style siblings
+  OR a same-named `<dir>/alt/<Name>.png` feed one pool, opt-in per
+  consumer, never on the hot `art_file` path. Two new adopters this
+  round: the era/age rose windows (`assets/era/<source>/new/` renamed
+  to `alt/`) and the Tetramorph figures (see 15a3/15h below); doc'd in
+  full in [Assets (folder)](assets/___assets.md). Structure lock:
+  `tests/test_assets_structure.py` `test_alt_folders_mirror_their_
+  parent_names` — `alt/` is legal anywhere, but every file inside one
+  must mirror a same-named canonical sibling.
+  SUBDIAL MASTER — DONE (2026-07-20, Rule #19's FIRST enforcement,
+  monorepo root `CLAUDE.md` — "Compute, Don't Generate"): the subdial
+  sheet's twelve plates (4 seats x 3 finishes) collapsed to ONE master
+  per source, `assets/badge/subdial/master.png` — the seat never
+  reached the file (only the LIVE shadow, `render.layers.
+  _draw_subdial_shadow`, already keyed off the seat's own dial angle),
+  and the other two finishes are live recolors built the ring-letter
+  recipe (silver = achromatic value, gold/bronze = that value tinted).
+  20 generated files deleted the same round (11 Gemini + 8 ChatGPT
+  variants + 1 stray duplicate) — see
+  [Subdial Prompts](research/prompts/instrument/subdial_circle_prompts.md).
 - **THE MOTO ROUND (owner "може radi" 2026-07-19) — DONE:** two
   features on the Mason ring. (1) THE OUTER MOTTO ARC — ANNUIT
   COEPTIS and NOVUS ORDO SECLORUM render as curved text just outside
@@ -552,6 +575,19 @@ lives in [The DOMY Canon](CANON.md).
    (`research/prompts/era/era_prompts.md`), and the Maya Long Count
    joins `third_era` as a real, non-offset THIRD_ERAS entry (15a2
    above; `core/deep_time.md`).
+   **ART LANDED + WIRED (RULE-19 round, owner decree 2026-07-20):** the
+   seven era/starry rose windows generated for both sources; a real
+   bug found and fixed the same round — `"era"` was never added to
+   `config.constants.ART_SOURCED_ROOTS`, so `config.paths.art_file`
+   passed the sourceless canonical path straight through and every era
+   badge silently failed its own existence check despite the art
+   sitting right there under `assets/era/<source>/`. Now source-routed
+   like every other family, AND wired through THE UNIVERSAL ROTATION
+   CONVENTION (see the ONE-IMAGE-ONE-PLACE LAW note above): the owner's
+   `new/` folders renamed to `alt/`, both the Earth hover card's era
+   badge (`render.compositor._earth_text`) and the Encyclopedia's era
+   entry images (`app.encyclopedia._topics`) resolve through
+   `rotating_art_file`, keyed by the viewed/traveled date.
 15b. **The Mason ring — DONE (2026-07-18, MASON G RING round).** The
    bundled preset **G(12) S(16) M(20) Ω(24) N(4) A(8)** on the seal
    layout (`Database/ring_presets.json` — every letter's art already
@@ -695,6 +731,14 @@ lives in [The DOMY Canon](CANON.md).
    the tetramorph files moved to the config path
    (`archetype/<source>/tetramorph/<Creature>.png`) with the sheet
    corrected and the missing Throne + Seal center prompts written.
+   **NEWER GENERATIONS ROTATED IN (RULE-19 round, owner decree
+   2026-07-20):** a second tetramorph batch had landed on the stale
+   pre-correction path (`temperaments/tetramorph_<Creature>.png`) —
+   moved to `tetramorph/alt/<Creature>.png` (THE UNIVERSAL ROTATION
+   CONVENTION) instead of overwriting the sealed 2026-07-18 canonical
+   set; `config.archetypes._fig(..., rotates=True)` marks the four
+   Tetramorph figures, `render.layers.ArchetypeLayer` resolves each
+   through `rotating_art_file` fresh every paint.
    RECORDED, in owner priority order:
    1. **Menu rework — DONE (Session 21-B):** the SETTINGS DIALOG (the
       owner's actual ask — the tray menu itself is a separate, deeper

@@ -61,6 +61,13 @@ ART_SOURCED_ROOTS = (
     # The archetype stained glass (owner sealed package 2026-07-16):
     # assets/archetype/<source>/<archetype>/<file>.png.
     "archetype",
+    # The era/age rose windows (owner fix, 2026-07-20 — the generated
+    # files always shipped as assets/era/<source>/<Name>.png, one
+    # subtree per source like every other family; this root was simply
+    # never added, so `art_file` passed the sourceless canonical path
+    # straight through and every era badge silently failed its own
+    # existence check).
+    "era",
 )
 
 # --- Moon ----------------------------------------------------------------------

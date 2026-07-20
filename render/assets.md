@@ -46,17 +46,25 @@ zero-width terminator rect used to degenerate the union/difference to
 an empty path, i.e. a moon rendered fully DARK instead of exactly
 half-lit; `moon_phase_image` is the pure QImage render, `moon_phase_file`
 its disk-cached path wrapper for the Encyclopedia's path-based image
-tuples), and `subdial_plate_file(finish, seat, tint=None)` — the
-owner's subdial plate for a (letter finish, seat) pair: his art wins
-as drawn, a missing seat borrows the center plate, and a missing
-FINISH is `_recolored_plate()`-ed from another finish's master (numpy
-colorize: only the bright, low-saturation brushed rim takes the
-finish color × its own luminance; `SUBDIAL_RECOLOR_*` knobs,
+tuples), and `subdial_plate_file(finish, tint=None)` — Rule #19's
+first enforcement (owner decree 2026-07-20, "Compute, Don't Generate"):
+the twelve-plate seat×finish sheet collapsed to ONE master per source
+(`assets/badge/subdial/master.png`) — the SEAT never reached the file
+at all, only the LIVE shadow the layer draws
+([Layers](layers.md)`._draw_subdial_shadow`, keyed off the seat's own
+dial position), so generating one per seat was pure waste. The
+master's own finish (`SUBDIAL_MASTER_FINISH`, one entry per source —
+gemini's is silver, chatgpt's is gold) draws AS DRAWN; the other two
+are `_recolored_plate()`-ed from it live, built the SAME recipe the
+ring letters use (Rule #5): SILVER is the achromatic VALUE alone (no
+stored hue, whatever metal the master itself is), GOLD/BRONZE tint
+that same value by their own color — masked to only the bright,
+low-saturation brushed rim (numpy, `SUBDIAL_RECOLOR_*` knobs,
 disk-cached in `raster_cache/`). A TINT (the "theme" plate style,
 owner A/B spec 2026-07-15) colorizes the dark tapisserie field to the
 clock tint the same way, lifted by the field gain so the hue reads —
 that pass runs even on the exact finish, into its own cache entry.
-Returns None when no plate art exists at all — the layer then draws
+Returns None when no master art exists at all — the layer then draws
 the procedural circle.
 
 ## Connections

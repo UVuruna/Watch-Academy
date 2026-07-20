@@ -1,0 +1,18 @@
+====================================================================
+Professions — the Seven Callings Weekday Theme (bronze plates)  [ChatGPT]
+Run started:  2026-07-19 19:52:44  (1/11 pending)
+--------------------------------------------------------------------
+2026-07-19 19:53:36  assets/weekday/profession/primary/Servant_dual.png gen   48.6s  ours    0.3s   1024x1024 -> 902x894    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 49s/image  |  average our time (save+bgfix+pause): 0s/image
+Total AI + our time: 49s  (wall clock: 52s)
+Run finished: 2026-07-19 19:53:36  (all pending items done)
+
+====================================================================
+Professions — the Seven Callings Weekday Theme (bronze plates)  [ChatGPT]
+Run started:  2026-07-20 00:45:11  (0/11 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-20 00:45:11  (all pending items done)
+

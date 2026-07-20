@@ -20,3 +20,35 @@ Images: 13  |  average generation (AI): 8s/image  |  average our time (save+bgfi
 Total AI + our time: 5m 41s  (wall clock: 6m 14s)
 Run finished: 2026-07-19 18:22:09  (all pending items done)
 
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [Gemini]
+Run started:  2026-07-20 01:24:28  (7/13 pending)
+--------------------------------------------------------------------
+2026-07-20 01:24:45  assets/era/Age_of_Light.png                  gen    5.8s  ours    9.1s   1024x1024 -> 863x872    1.4 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:25:22  assets/era/Age_of_Darkness.png               gen    7.3s  ours   26.2s   1024x1024 -> 861x870    1.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:25:49  assets/era/Starry_Spring.png                 gen    7.3s  ours   18.1s   1024x1024 -> 861x870    1.3 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:26:23  assets/era/Starry_Summer.png                 gen    7.3s  ours   24.7s   1024x1024 -> 861x870    1.3 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:26:42  assets/era/Starry_Autumn.png                 gen    6.8s  ours    8.9s   1024x1024 -> 861x870    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:27:06  assets/era/Starry_Winter.png                 gen    7.2s  ours   14.6s   1024x1024 -> 861x870    823 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:27:17  assets/era/Anno_Lucis.png                    gen    7.8s  ours    1.6s   1024x1024 -> 861x870    890 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 2m 33s  (wall clock: 2m 49s)
+Run finished: 2026-07-20 01:27:17  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [Gemini]
+Run started:  2026-07-20 01:35:30  (7/13 pending)
+--------------------------------------------------------------------
+2026-07-20 01:36:01  assets/era/Age_of_Light.png                  gen    7.8s  ours   20.1s  1024x1024 -> 1024x944   1009 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:36:39  assets/era/Age_of_Darkness.png               gen    7.8s  ours   28.0s   1024x1024 -> 864x862    980 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:37:10  assets/era/Starry_Spring.png                 gen    8.3s  ours   20.1s   1024x1024 -> 864x864    965 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:37:30  assets/era/Starry_Summer.png                 gen    7.8s  ours   10.8s   1024x1024 -> 865x862    837 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:38:05  assets/era/Starry_Autumn.png                 gen    8.3s  ours   25.1s   1024x1024 -> 864x862    694 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:38:44  assets/era/Starry_Winter.png                 gen    8.3s  ours   28.3s   1024x1024 -> 865x862    625 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:38:58  assets/era/Anno_Lucis.png                    gen    9.3s  ours    1.8s   1024x1024 -> 864x862    876 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 3m 12s  (wall clock: 3m 27s)
+Run finished: 2026-07-20 01:38:58  (all pending items done)
+

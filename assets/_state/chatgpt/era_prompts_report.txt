@@ -1,0 +1,65 @@
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-19 19:27:12  (13/13 pending)
+--------------------------------------------------------------------
+2026-07-19 19:28:03  assets/era/Age_of_Light.png                  gen   38.1s  ours    9.7s   1024x1024 -> 891x878    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:29:08  assets/era/Age_of_Darkness.png               gen   53.7s  ours    8.4s   1024x1024 -> 878x879    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:30:28  assets/era/Starry_Spring.png                 gen   54.9s  ours   22.3s   1024x1024 -> 879x878    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:31:35  assets/era/Starry_Summer.png                 gen   50.2s  ours   13.8s   1024x1024 -> 878x869    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:33:06  assets/era/Starry_Autumn.png                 gen   52.3s  ours   35.8s   1024x1024 -> 877x869    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:34:37  assets/era/Starry_Winter.png                 gen   63.9s  ours   24.5s   1024x1024 -> 879x870    1.4 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:35:47  assets/era/Anno_Lucis.png                    gen   54.0s  ours   12.8s   1024x1024 -> 878x865    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:37:51  assets/era/calendar/AUC.png                  REFUSED — ChatGPT: prompt refused (matched 'content polic'): We’re so sorry, but the image we created may violate our content poli
+2026-07-19 19:39:36  assets/era/calendar/Byzantine.png            gen   59.3s  ours   10.8s   1024x1024 -> 885x872    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:41:15  assets/era/calendar/Hebrew.png               gen   60.8s  ours   35.3s   1024x1024 -> 878x870    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:42:29  assets/era/calendar/Hegirae.png              gen   56.9s  ours   13.8s   1024x1024 -> 877x874    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:44:08  assets/era/calendar/Buddhist.png             gen   75.9s  ours   20.3s   1024x1024 -> 877x864    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:45:18  assets/era/calendar/Huangdi.png              gen   63.5s  ours    3.5s  1254x1254 -> 1195x1221    3.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 12  |  average generation (AI): 57s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 14m 55s  (wall clock: 18m 06s)
+Run finished: 2026-07-19 19:45:18  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-20 00:44:28  (1/13 pending)
+--------------------------------------------------------------------
+2026-07-20 00:45:10  assets/era/calendar/AUC.png                  gen   40.1s  ours    0.3s   1024x1024 -> 839x817    1.4 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 40s/image  |  average our time (save+bgfix+pause): 0s/image
+Total AI + our time: 40s  (wall clock: 43s)
+Run finished: 2026-07-20 00:45:10  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-20 01:24:25  (7/13 pending)
+--------------------------------------------------------------------
+2026-07-20 01:25:49  assets/era/Age_of_Light.png                  gen   50.5s  ours   30.3s   1024x1024 -> 889x915    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:26:53  assets/era/Age_of_Darkness.png               gen   53.3s  ours    8.5s   1024x1024 -> 888x917    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:28:14  assets/era/Starry_Spring.png                 gen   49.8s  ours   27.8s   1024x1024 -> 890x918    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:29:33  assets/era/Starry_Summer.png                 gen   46.2s  ours   30.3s   1024x1024 -> 889x916    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:30:44  assets/era/Starry_Autumn.png                 gen   51.3s  ours   17.4s   1024x1024 -> 891x917    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:31:47  assets/era/Starry_Winter.png                 gen   50.2s  ours    9.9s   1024x1024 -> 891x917    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:32:34  assets/era/Anno_Lucis.png                    gen   43.7s  ours    0.4s   1024x1024 -> 890x917    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 49s/image  |  average our time (save+bgfix+pause): 18s/image
+Total AI + our time: 7m 49s  (wall clock: 8m 09s)
+Run finished: 2026-07-20 01:32:34  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-20 01:35:02  (7/13 pending)
+--------------------------------------------------------------------
+2026-07-20 01:36:15  assets/era/Age_of_Light.png                  gen   51.4s  ours   17.8s   1024x1024 -> 888x918    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:37:39  assets/era/Age_of_Darkness.png               gen   52.3s  ours   29.5s   1024x1024 -> 889x920    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:38:51  assets/era/Starry_Spring.png                 gen   42.2s  ours   27.5s  1254x1254 -> 1221x1240    3.2 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:40:26  assets/era/Starry_Summer.png                 gen   55.8s  ours   35.8s   1024x1024 -> 888x919    1.9 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:41:37  assets/era/Starry_Autumn.png                 gen   54.0s  ours   14.9s   1024x1024 -> 888x920    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:42:44  assets/era/Starry_Winter.png                 gen   51.9s  ours   12.0s   1024x1024 -> 888x918    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:43:31  assets/era/Anno_Lucis.png                    gen   44.3s  ours    0.5s   1024x1024 -> 888x920    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 50s/image  |  average our time (save+bgfix+pause): 20s/image
+Total AI + our time: 8m 10s  (wall clock: 8m 29s)
+Run finished: 2026-07-20 01:43:31  (all pending items done)
+

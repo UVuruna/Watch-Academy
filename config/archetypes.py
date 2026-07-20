@@ -116,14 +116,18 @@ ARCHETYPE_PENDING_LINE = (
 )
 
 
-def _fig(angle, file, name, row2, entity, enc=None):
+def _fig(angle, file, name, row2, entity, enc=None, rotates=False):
     """One figure row: unrotated arm angle (dial degrees from the
     top), canonical art path, the TWO-ROW names (row 1 the figure,
     row 2 its calling/role/quality/shadow/object/being), the article
-    entity key, and the encyclopedia (topic, entry) or None."""
+    entity key, the encyclopedia (topic, entry) or None, and `rotates`
+    — THE UNIVERSAL ROTATION CONVENTION opt-in (owner decree
+    2026-07-20): False for every figure except where declared,
+    `ArchetypeLayer` resolves `file` through `rotating_art_file` at
+    paint time only when this is True."""
     return {
         "angle": angle, "file": file, "name": name, "row2": row2,
-        "entity": entity, "enc": enc,
+        "entity": entity, "enc": enc, "rotates": rotates,
     }
 
 
@@ -240,15 +244,21 @@ ARCHETYPES = {
     # the _CROSS_ELEMENTS hues (fire/earth/water/air).
     "seasons_light": {
         "articles": "archetype_seasons_light",
+        # rotates=True (owner decree 2026-07-20): the FIRST ArchetypeLayer
+        # consumer to opt into THE UNIVERSAL ROTATION CONVENTION — the
+        # newer generations that landed on the stale
+        # archetype/<source>/temperaments/tetramorph_<Creature>.png path
+        # now live at tetramorph/alt/<Creature>.png and rotate daily
+        # against the sealed 2026-07-18 canonical figures below.
         "figures": (
             _fig(0.0, _TETRAMORPH_DIR / "Lion.png",
-                 "The Lion", "Mark", "lion"),
+                 "The Lion", "Mark", "lion", rotates=True),
             _fig(90.0, _TETRAMORPH_DIR / "Ox.png",
-                 "The Ox", "Luke", "ox"),
+                 "The Ox", "Luke", "ox", rotates=True),
             _fig(180.0, _TETRAMORPH_DIR / "Eagle.png",
-                 "The Eagle", "John", "eagle"),
+                 "The Eagle", "John", "eagle", rotates=True),
             _fig(270.0, _TETRAMORPH_DIR / "Man.png",
-                 "The Man", "Matthew", "man"),
+                 "The Man", "Matthew", "man", rotates=True),
         ),
         "center": {
             "file": _TEMPERAMENTS_DIR / "Throne.png",

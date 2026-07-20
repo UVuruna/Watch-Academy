@@ -90,7 +90,14 @@ there and the menu grays the toggle.
   (`_CROSS_ELEMENTS`), each creature on its canonical fixed-cross season
   arm (fire summer, earth autumn, water winter, air spring); row 2 is
   the Evangelist (Mark/Luke/John/Matthew). The Throne is the center of
-  both wheels.
+  both wheels. **The Tetramorph figures ROTATE** (owner decree
+  2026-07-20, THE UNIVERSAL ROTATION CONVENTION —
+  [Assets (folder)](../assets/___assets.md)): `_fig(..., rotates=True)`
+  marks all four; `render.layers.ArchetypeLayer` resolves each
+  through `config.defaults.rotating_art_file` fresh every paint (the
+  canonical `tetramorph/<Creature>.png` plus its `alt/<Creature>.png`
+  twin feed one daily pool) — every OTHER archetype figure and every
+  center stays a fixed master, `rotates` defaulting False.
 - **The Tetramorph three-side's second column has its OWN art table**
   (owner 2026-07-18) — `TETRAMORPH_EVANGELIST_FILES` /
   `tetramorph_evangelist_file(index)`: the four EVANGELIST rondels at

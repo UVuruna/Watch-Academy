@@ -6,3 +6,73 @@ Run started:  2026-07-19 18:15:52  (52/52 pending)
 Images: 0
 Run finished: 2026-07-19 18:16:01  (quota / rate limit — stopped (reset in ~42m 00s))
 
+====================================================================
+Zodiac Signs — Sign / Logo / Constellation Plates (ChatGPT)  [ChatGPT]
+Run started:  2026-07-19 19:54:30  (52/52 pending)
+--------------------------------------------------------------------
+2026-07-19 19:55:59  assets/zodiac/astrology/sign/Aries.png       gen   57.2s  ours   29.4s   1024x1024 -> 845x818    1.3 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:57:24  assets/zodiac/astrology/sign/Taurus.png      gen   60.8s  ours   20.7s   1024x1024 -> 834x816    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 19:58:43  assets/zodiac/astrology/sign/Gemini.png      gen   70.4s  ours    6.7s   1024x1024 -> 840x814    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:00:23  assets/zodiac/astrology/sign/Cancer.png      gen   64.3s  ours   32.3s   1024x1024 -> 838x817    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:02:08  assets/zodiac/astrology/sign/Leo.png         gen   90.6s  ours   11.3s   1024x1024 -> 841x820    1.4 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:03:21  assets/zodiac/astrology/sign/Virgo.png       gen   60.3s  ours   10.2s   1024x1024 -> 840x820    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:04:57  assets/zodiac/astrology/sign/Libra.png       gen   69.9s  ours   22.3s   1024x1024 -> 839x819    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:06:23  assets/zodiac/astrology/sign/Scorpio.png     gen   55.3s  ours   27.8s   1024x1024 -> 839x819    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:07:27  assets/zodiac/astrology/sign/Sagittarius.png gen   49.7s  ours   12.3s   1024x1024 -> 840x818    1.4 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:08:57  assets/zodiac/astrology/sign/Capricorn.png   gen   59.8s  ours   27.7s   1024x1024 -> 840x820    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:11:11  assets/zodiac/astrology/sign/Aquarius.png    gen  100.6s  ours   31.2s   1024x1024 -> 839x819    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:12:56  assets/zodiac/astrology/sign/Pisces.png      gen   66.8s  ours   35.2s   1024x1024 -> 840x819    1.6 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:14:43  assets/zodiac/astrology/primary/Aries.png    gen   86.6s  ours   17.8s  1254x1254 -> 1128x1140    1.6 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:16:00  assets/zodiac/astrology/primary/Taurus.png   gen   46.9s  ours   26.6s  1254x1254 -> 1176x1179    1.7 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:17:14  assets/zodiac/astrology/primary/Gemini.png   gen   45.9s  ours   24.6s  1254x1254 -> 1133x1147    1.5 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:18:26  assets/zodiac/astrology/primary/Cancer.png   gen   60.4s  ours    9.3s   1024x1024 -> 847x855    888 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:19:48  assets/zodiac/astrology/primary/Leo.png      gen   49.9s  ours   29.5s  1254x1254 -> 1146x1162    1.4 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:21:12  assets/zodiac/astrology/primary/Virgo.png    gen   51.3s  ours   29.3s  1254x1254 -> 1199x1216    1.4 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:22:22  assets/zodiac/astrology/primary/Libra.png    gen   49.2s  ours   18.3s  1254x1254 -> 1239x1247    1.2 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:23:19  assets/zodiac/astrology/primary/Scorpio.png  gen   37.6s  ours   16.1s  1254x1254 -> 1184x1218    967 KB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:24:37  assets/zodiac/astrology/primary/Sagittarius.png gen   45.7s  ours   29.8s  1254x1254 -> 1157x1170    1.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:26:32  assets/zodiac/astrology/primary/Capricorn.png gen   79.1s  ours   32.8s  1254x1254 -> 1185x1212    1.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:27:55  assets/zodiac/astrology/primary/Aquarius.png gen   46.3s  ours   33.2s  1254x1254 -> 1187x1213    1.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:29:07  assets/zodiac/astrology/primary/Pisces.png   gen   47.8s  ours   21.6s  1254x1254 -> 1192x1223    1.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:30:36  assets/zodiac/astrology/constellation/Aries.png gen   56.4s  ours   29.2s  1254x1254 -> 1247x1250    1.9 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:32:10  assets/zodiac/astrology/constellation/Taurus.png gen   62.6s  ours   28.6s  1254x1254 -> 1248x1250    2.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:33:24  assets/zodiac/astrology/constellation/Gemini.png gen   55.9s  ours   14.8s  1254x1254 -> 1248x1250    2.1 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:34:30  assets/zodiac/astrology/constellation/Cancer.png gen   45.8s  ours   16.8s  1254x1254 -> 1251x1252    2.0 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-19 20:35:42  assets/zodiac/astrology/constellation/Leo.png gen   62.0s  ours    7.3s   1024x1024 -> 910x884    1.2 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-19 20:37:11  assets/zodiac/astrology/constellation/Virgo.png gen   59.9s  ours   26.7s   1024x1024 -> 978x912    1.4 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 30  |  average generation (AI): 1m 00s/image  |  average our time (save+bgfix+pause): 23s/image
+Total AI + our time: 41m 14s  (wall clock: 44m 19s)
+Run finished: 2026-07-19 20:38:49  (aborted: DriverError)
+
+====================================================================
+Zodiac Signs — Sign / Logo / Constellation Plates (ChatGPT)  [ChatGPT]
+Run started:  2026-07-20 00:45:11  (22/52 pending)
+--------------------------------------------------------------------
+2026-07-20 00:46:05  assets/zodiac/astrology/constellation/Libra.png gen   40.0s  ours   11.0s   1024x1024 -> 639x736    592 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 00:47:24  assets/zodiac/astrology/constellation/Scorpio.png gen   38.1s  ours   37.5s   1024x1024 -> 810x800    580 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: done]
+2026-07-20 00:48:42  assets/zodiac/astrology/constellation/Sagittarius.png gen   38.1s  ours   37.7s   1024x1024 -> 800x833    665 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: done]
+2026-07-20 00:50:10  assets/zodiac/astrology/constellation/Capricorn.png gen   41.6s  ours   43.7s   1024x1024 -> 800x805    591 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: done]
+2026-07-20 00:51:41  assets/zodiac/astrology/constellation/Aquarius.png gen   41.7s  ours   46.2s   1024x1024 -> 800x880    628 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: done]
+2026-07-20 00:52:54  assets/zodiac/astrology/constellation/Pisces.png gen   48.7s  ours   21.9s   1024x1024 -> 885x792    836 KB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 00:54:20  assets/zodiac/astrology/colored/Aries.png    gen   48.2s  ours   35.4s   1024x1024 -> 889x890    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 00:55:46  assets/zodiac/astrology/colored/Leo.png      gen   50.3s  ours   32.4s   1024x1024 -> 889x891    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 00:57:09  assets/zodiac/astrology/colored/Sagittarius.png gen   46.2s  ours   33.4s   1024x1024 -> 889x890    1.5 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 00:58:37  assets/zodiac/astrology/colored/Taurus.png   gen   51.3s  ours   33.8s   1024x1024 -> 888x890    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 00:59:42  assets/zodiac/astrology/colored/Virgo.png    gen   48.7s  ours   13.3s   1024x1024 -> 888x890    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:00:46  assets/zodiac/astrology/colored/Capricorn.png gen   50.8s  ours   10.3s   1024x1024 -> 888x890    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:02:26  assets/zodiac/astrology/colored/Gemini.png   gen   62.9s  ours   33.8s   1024x1024 -> 889x892    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:03:30  assets/zodiac/astrology/colored/Libra.png    gen   48.4s  ours   12.8s   1024x1024 -> 889x892    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:04:54  assets/zodiac/astrology/colored/Aquarius.png gen   49.2s  ours   31.3s   1024x1024 -> 889x892    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:06:08  assets/zodiac/astrology/colored/Cancer.png   gen   59.4s  ours   11.3s   1024x1024 -> 889x892    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:07:33  assets/zodiac/astrology/colored/Scorpio.png  gen   50.9s  ours   31.8s   1024x1024 -> 888x892    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:08:43  assets/zodiac/astrology/colored/Pisces.png   gen   44.2s  ours   22.3s   1024x1024 -> 888x892    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:09:55  assets/zodiac/astrology/sign/Ophiuchus.png   gen   48.8s  ours   20.9s   1024x1024 -> 888x893    1.7 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:11:04  assets/zodiac/astrology/primary/Ophiuchus.png gen   35.3s  ours   31.2s  1254x1254 -> 1171x1183    1.8 MB  [REMOVE BG: done, CROP: done, UPSCALE: nothing]
+2026-07-20 01:12:12  assets/zodiac/astrology/constellation/Ophiuchus.png gen   57.9s  ours    7.1s   1024x1024 -> 924x937    1.9 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+2026-07-20 01:13:04  assets/zodiac/astrology/colored/Ophiuchus.png gen   48.8s  ours    0.4s   1024x1024 -> 948x932    1.8 MB  [REMOVE BG: nothing, CROP: done, UPSCALE: nothing]
+--------------------------------------------------------------------
+Images: 22  |  average generation (AI): 48s/image  |  average our time (save+bgfix+pause): 25s/image
+Total AI + our time: 26m 49s  (wall clock: 27m 52s)
+Run finished: 2026-07-20 01:13:04  (all pending items done)
+

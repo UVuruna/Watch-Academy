@@ -119,7 +119,9 @@ These are UI CHROME, not ART — the one-image-one-place law (owner
 legitimately answer in more than one menu spot.
 **SCALE ROTATION** (owner decree 2026-07-19/20, CANON.md
 one-image-one-place amendment — Judas–Lucifer is a MAIN theme, kept
-"na smenu"): `SCALE_ROTATION_DAYS` (cadence), `SCALE_ART_STEMS` (the
+"na smenu"): `ROTATION_DAYS` (THE UNIVERSAL ROTATION CONVENTION's
+shared cadence — generalized 2026-07-20, see
+[Assets (folder)](../assets/___assets.md)), `SCALE_ART_STEMS` (the
 known filename stems per figure — the owner's naming stayed irregular
 across batches) and `scale_variant_file(figure, on_date)` — DISCOVERS
 every version actually on disk for the active source, in both

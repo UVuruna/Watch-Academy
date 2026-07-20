@@ -55,10 +55,61 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              also holds Wheel_of_Moods[_dark].png)
   📁 badge/                ← <source>/season/ (+ turning_point/,
                              meteorological/), <source>/trinity/,
-                             <source>/scale/ (the two triangles + Union)
+                             <source>/scale/ (the two triangles + Union,
+                             ROTATING — see below), <source>/subdial/
+                             (ONE master.png, recolored live)
+  📁 era/                  ← <source>/<Name>.png — the Age/Starry-Season
+                             rose windows (ROTATING — see below) +
+                             <source>/calendar/ (the "Eras of the
+                             World" comparison strip, not rotating)
+  📁 archetype/            ← <source>/<archetype>/<Figure>.png — the
+                             pointer-archetype stained glass; the
+                             Tetramorph figures ROTATE (see below)
   📁 instrument/           ← <source>/ → the Instrument section logo +
                              article images
 ```
+
+## Rotating families (`alt/`)
+
+THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20, sealed
+alongside monorepo root `CLAUDE.md` Rule #19 "Compute, Don't
+Generate"): most families freeze on ONE canonical file per name — a
+few, where the owner deliberately wants MULTIPLE generated takes shown
+in rotation instead of a single frozen master, opt in instead. Beside
+the canonical `<dir>/<Name>.png`, additional versions live EITHER as
+`<dir>/<Name>_v2.png`-style suffix siblings OR as a same-named file
+inside a `<dir>/alt/` subfolder — both pools merge into ONE daily
+rotation, picked deterministically by the viewed (or time-traveled)
+date's proleptic ordinal. `alt/` is a legal subfolder ANYWHERE under
+`assets/` for exactly this reason (`tests/test_assets_structure.py`
+`test_alt_folders_mirror_their_parent_names` pins the one real rule:
+every file inside an `alt/` folder must mirror a same-named canonical
+sibling one level up — an `alt/` file with no canonical twin is an
+orphan, since nothing computes a rotation pool for a stem the parent
+doesn't also carry).
+
+The mechanism is ONE shared function, `config.defaults.
+rotating_art_file(canonical_path, on_date)` — it resolves the active
+art SOURCE first (`config.paths.art_file`, so callers keep passing
+canonical source-less paths like every other asset table entry), then
+pools the resolved directory's own `<Name>`/`<Name>_v*` files with the
+same search one level down in `alt/`. It is OPT-IN per consumer, never
+wired onto the hot `art_file` path itself. Current adopters:
+
+- **The Scale badge** (Judas/Lucifer, `assets/badge/scale/`) — the
+  family the convention was generalized FROM; it keeps its own
+  naming-zoo tolerance (more than one valid stem, a `glass/` register
+  instead of `alt/` — an established second STYLE, not a generic
+  version pool) as a thin caller of the shared machinery
+  (`scale_variant_file`).
+- **The era/age rose windows** (`assets/era/<source>/`) — the Earth
+  hover card's era badge and the Encyclopedia's era entry images both
+  resolve through `rotating_art_file`, keyed by the viewed/traveled
+  date.
+- **The Tetramorph figures** (`assets/archetype/<source>/tetramorph/`)
+  — `render.layers.ArchetypeLayer` resolves each `rotates=True` figure
+  fresh every paint (the layer already paints LIVE, never cached, so a
+  day change re-resolves with no extra invalidation).
 
 **Dropping new art:** ChatGPT generations go into the untracked
 `chatGPT/` inbox at the project root (informal folder names are fine —

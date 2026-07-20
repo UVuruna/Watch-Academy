@@ -620,35 +620,31 @@ ARTICLE_THREE_IMAGE_PX = 240         # each register image in its column
 ARTICLE_SUBHEAD_GAP_ABOVE_PX = 18
 ARTICLE_SUBHEAD_GAP_BELOW_PX = 2
 
-# The Judas–Lucifer scale badges (owner 2026-07-13): the two triangle
-# medallions illustrating "The Two Triangles" — wired before the art
-# lands; the Encyclopedia hides missing files.
-SCALE_ART_DIR = paths.assets_dir() / "badge" / "scale"
-# SCALE ROTATION (owner decree 2026-07-19, CANON.md one-image-one-place
-# amendment — "koje cemo koristiti na smenu"): Judas-Lucifer is a MAIN
-# theme, every being living between excessive self-criticism and
-# excessive self-love, so BOTH poles keep MULTIPLE generated versions
-# instead of freezing on one master. The cadence: how many days each
-# shown file stays before advancing (1 = a new face every day).
-SCALE_ROTATION_DAYS = 1
-# Known filename STEMS per figure, inside SCALE_ART_DIR for the active
-# source — the owner's batches landed under more than one stem (the
-# canonical "_Triangle" master beside a later lowercase refresh);
-# scale_variant_file globs "<stem>.png" and "<stem>_v*.png" for EVERY
-# stem below and merges the matches into one rotation.
-SCALE_ART_STEMS = {
-    "Judas": ("Judas_Triangle", "judas"),
-    "Lucifer": ("Lucifer_Triangle", "lucifer"),
-}
-_SCALE_VERSION_SUFFIX = re.compile(r"^_v\d*$", re.IGNORECASE)
+# THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20, sealed
+# alongside Rule #19 "Compute, Don't Generate" — this is the sanctioned
+# way an asset family gets MULTIPLE generated versions instead of one
+# frozen master, so it never re-grows into another twelve-plate
+# mistake): beside any canonical asset `<dir>/<Name>.png`, additional
+# versions live EITHER as `<dir>/<Name>_v2.png`-style suffix siblings
+# OR same-named files inside a `<dir>/alt/` subfolder — both pools
+# merge into ONE daily rotation, picked deterministically by the
+# traveled date's proleptic ordinal modulo the candidate count. Opt-in
+# ONLY (never on the hot `art_file` path): a consumer calls
+# `rotating_art_file` explicitly. The cadence — how many days each
+# shown file stays before advancing (1 = a new face every day) — is
+# shared by every rotating family.
+ROTATION_DAYS = 1
+_VERSION_SUFFIX = re.compile(r"^_v\d*$", re.IGNORECASE)
 
 
-def _scale_candidates_in(directory: Path, stems: tuple[str, ...]) -> list[Path]:
+def _rotation_candidates_in(
+    directory: Path, stems: tuple[str, ...]
+) -> list[Path]:
     """Every file DIRECTLY inside `directory` matching a bare stem or a
     `stem_v*` sibling, for any stem in `stems` — the single-folder glob
-    behind `_scale_candidates`, factored out so a synthetic tmp tree can
-    exercise the owner's naming-zoo tolerance directly (no dependency
-    on the real bundled assets)."""
+    behind `_rotation_candidates`, factored out so a synthetic tmp tree
+    can exercise the naming tolerance directly (no dependency on the
+    real bundled assets)."""
     if not directory.is_dir():
         return []
     candidates: list[Path] = []
@@ -662,55 +658,110 @@ def _scale_candidates_in(directory: Path, stems: tuple[str, ...]) -> list[Path]:
             if not name_stem.lower().startswith(stem_lower):
                 continue
             suffix = name_stem[len(stem):]
-            if suffix == "" or _SCALE_VERSION_SUFFIX.match(suffix):
+            if suffix == "" or _VERSION_SUFFIX.match(suffix):
                 candidates.append(entry)
                 seen_names.add(entry.name)
     return candidates
 
 
-def _scale_candidates(
+def _rotation_candidates(
     directories: tuple[Path, ...], stems: tuple[str, ...]
 ) -> list[Path]:
     """Every version found across `directories` (each searched
-    independently, non-recursively — the metal-cameo register and the
-    stained-glass register both count, they simply live in different
-    folders), sorted by (filename, full path) for a rotation order that
-    is deterministic even when two registers share a basename."""
+    independently, non-recursively — a second register, e.g. an
+    `alt/` subfolder, counts exactly like the canonical directory,
+    they simply live in different folders), sorted by (filename, full
+    path) for a rotation order that is deterministic even when two
+    registers share a basename."""
     candidates = [
         entry
         for directory in directories
-        for entry in _scale_candidates_in(directory, stems)
+        for entry in _rotation_candidates_in(directory, stems)
     ]
     candidates.sort(key=lambda p: (p.name, str(p)))
     return candidates
 
 
-def scale_variant_file(figure: str, on_date: date) -> Path | None:
-    """One Scale badge file for `figure` ("Judas"/"Lucifer") on
-    `on_date` — DISCOVERS what actually exists on disk for the ACTIVE
-    art source at call time (`_scale_candidates` against SCALE_ART_DIR
-    AND its `glass/` register — the metal cameo and the stained-glass
-    windows are two parallel batches of the SAME two figures, tolerant
-    of the owner's naming zoo: a bare stem file, "_v", "_v1", "_v2",
-    "_v3" all count as versions), then picks by `on_date`'s proleptic
-    ordinal modulo the count — the SAME date always yields the SAME
-    file, consecutive dates advance through the set, and Lucifer/Judas
-    called with the SAME date stay IN STEP (one index driving two
-    independent counts). Deep travel: the caller passes the TRAVELED
-    date, consistent with the poles' light/dark glyph law
-    (`controller._effective_travel_date`). Zero files found -> None
-    (the caller keeps its old single-file fallback); exactly one ->
-    that one file every day (nothing to rotate)."""
-    root = paths.art_file(SCALE_ART_DIR)
-    candidates = _scale_candidates(
-        (root, root / "glass"), SCALE_ART_STEMS[figure]
-    )
+def _pick_rotation(candidates: list[Path], on_date: date) -> Path | None:
+    """The ONE shared date-modulo pick every rotating family uses: zero
+    candidates -> None (the caller keeps its own fallback), exactly one
+    -> that one every day (nothing to rotate), otherwise the SAME date
+    always yields the SAME file and consecutive dates advance through
+    the set."""
     if not candidates:
         return None
     if len(candidates) == 1:
         return candidates[0]
-    index = (on_date.toordinal() // SCALE_ROTATION_DAYS) % len(candidates)
+    index = (on_date.toordinal() // ROTATION_DAYS) % len(candidates)
     return candidates[index]
+
+
+def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
+    """ONE asset from a rotating family, THE UNIVERSAL CONVENTION above
+    applied generically: `canonical_path` (a sourceless `<dir>/<Name>
+    .png`, exactly like every other config path table entry) resolves
+    through the active art SOURCE first (`paths.art_file`), then the
+    candidate pool is the resolved directory's own `<Name>` /
+    `<Name>_v*` siblings UNION the same search one level down in
+    `alt/`. Opt-in per consumer (scale duality, the era emblems,
+    tetramorph figures) — never called from the hot `art_file` path
+    itself. None when the canonical path itself does not resolve to an
+    existing file (nothing to rotate at all, not even a master)."""
+    resolved = paths.art_file(canonical_path)
+    if resolved is None or not resolved.exists():
+        return None
+    directory = resolved.parent
+    candidates = _rotation_candidates(
+        (directory, directory / "alt"), (resolved.stem,)
+    )
+    return _pick_rotation(candidates, on_date)
+
+
+# The Judas–Lucifer scale badges (owner 2026-07-13): the two triangle
+# medallions illustrating "The Two Triangles" — wired before the art
+# lands; the Encyclopedia hides missing files.
+SCALE_ART_DIR = paths.assets_dir() / "badge" / "scale"
+# SCALE ROTATION (owner decree 2026-07-19, CANON.md one-image-one-place
+# amendment — "koje cemo koristiti na smenu"): Judas-Lucifer is a MAIN
+# theme, every being living between excessive self-criticism and
+# excessive self-love, so BOTH poles keep MULTIPLE generated versions
+# instead of freezing on one master — the FIRST family the universal
+# rotation convention above was generalized FROM (2026-07-20); it keeps
+# its own naming-zoo tolerance (more than one valid STEM per figure,
+# `glass/` instead of `alt/` — an established second STYLE register,
+# not a generic version pool) rather than becoming a plain
+# `rotating_art_file` caller.
+# Known filename STEMS per figure, inside SCALE_ART_DIR for the active
+# source — the owner's batches landed under more than one stem (the
+# canonical "_Triangle" master beside a later lowercase refresh);
+# scale_variant_file globs "<stem>.png" and "<stem>_v*.png" for EVERY
+# stem below and merges the matches into one rotation.
+SCALE_ART_STEMS = {
+    "Judas": ("Judas_Triangle", "judas"),
+    "Lucifer": ("Lucifer_Triangle", "lucifer"),
+}
+
+
+def scale_variant_file(figure: str, on_date: date) -> Path | None:
+    """One Scale badge file for `figure` ("Judas"/"Lucifer") on
+    `on_date` — DISCOVERS what actually exists on disk for the ACTIVE
+    art source at call time (`_rotation_candidates` against
+    SCALE_ART_DIR AND its `glass/` register — the metal cameo and the
+    stained-glass windows are two parallel batches of the SAME two
+    figures, tolerant of the owner's naming zoo: more than one valid
+    STEM per figure, "_v", "_v1", "_v2", "_v3" all count as versions),
+    picked by the SHARED `_pick_rotation` — the SAME date always
+    yields the SAME file, consecutive dates advance through the set,
+    and Lucifer/Judas called with the SAME date stay IN STEP (one
+    index driving two independent counts, since both figures' counts
+    move together as art lands). Deep travel: the caller passes the
+    TRAVELED date, consistent with the poles' light/dark glyph law
+    (`controller._effective_travel_date`)."""
+    root = paths.art_file(SCALE_ART_DIR)
+    candidates = _rotation_candidates(
+        (root, root / "glass"), SCALE_ART_STEMS[figure]
+    )
+    return _pick_rotation(candidates, on_date)
 
 
 INSTRUMENT_ART_DIR = paths.assets_dir() / "instrument"
@@ -929,13 +980,24 @@ GREENWICH_TIMEZONE = "Europe/London"
 
 # The slot ROUNDEL (owner 2026-07-14, watch-subdial inspiration):
 # every TEXT display and the flat astrology art (sign / logo /
-# constellation) sit on a subdial. The owner's PLATE ART (tapisserie
-# field + finish bezel, assets/badge/subdial/<finish>/<seat>.png)
-# draws when it exists — seat falls back to center.png, and with no
-# art at all the PROCEDURAL circle takes over: the ring's own face
+# constellation) sit on a subdial. THE MASTER (Rule #19, "Compute,
+# Don't Generate" — owner decree 2026-07-20): ONE plate per source,
+# assets/badge/subdial/master.png — draws when it exists, recolored
+# live to any letter FINISH (render.assets.subdial_plate_file); with
+# no art at all the PROCEDURAL circle takes over: the ring's own face
 # color, rimmed in the letter FINISH metal. Circular plates
-# (medallions, planets, colored badges) stay bare.
+# (medallions, planets, colored badges) stay bare. The twelve-plate
+# sheet this used to be (4 seats x 3 finishes) is retired whole — the
+# SEAT never touched the file, only the LIVE shadow
+# (`render.layers._draw_subdial_shadow`), so generating one per seat
+# was pure waste (the failure Rule #19 was written to end).
 SUBDIAL_ART_DIR = paths.assets_dir() / "badge" / "subdial"
+# Which letter finish EACH source's master happens to be drawn in — a
+# no-op passthrough for that one finish, `_recolored_plate` derives
+# the other two live. The metal no longer matters much once recolor
+# covers the rest; recorded here only because the function must still
+# know which finish IS "as drawn".
+SUBDIAL_MASTER_FINISH = {"gemini": "silver", "chatgpt": "gold"}
 SLOT_ROUNDEL_BORDER_FRACTION = 0.045     # rim width, of the diameter
 SLOT_ROUNDEL_CONTENT_FRACTION = 0.78     # content size inside the rim
 SLOT_ROUNDEL_FILL_FALLBACK = "#39434D"   # unreadable/missing ring art
@@ -994,8 +1056,9 @@ SUBDIAL_SHADOW_RGBA = (0, 0, 0, 100)
 SUBDIAL_SHADOW_OFFSET_FRACTION = 0.05    # of the subdial diameter
 SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 
-# Recoloring the owner's subdial plate to a missing letter finish
-# (owner 2026-07-15: one master plate, the code paints the metals):
+# Recoloring the owner's subdial master to the other two letter
+# finishes (owner 2026-07-15: one master plate, the code paints the
+# metals — collapsed to the ONE true master under Rule #19, 2026-07-20):
 # only BRIGHT, LOW-SATURATION pixels take the finish color multiplied
 # by their own luminance — and ONLY inside the radial BEZEL band
 # (owner correction, his three side-by-side grabs: without the radial
@@ -1005,15 +1068,18 @@ SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 SUBDIAL_RECOLOR_VALUE_RAMP = (0.30, 0.60)
 SUBDIAL_RECOLOR_SAT_CUTOFF = (0.10, 0.30)
 SUBDIAL_RECOLOR_RIM_RADIUS = (0.82, 0.87)   # radial ramp, of plate radius
-SUBDIAL_RECOLOR_VERSION = 2      # cache tag — bump on recolor math changes
+SUBDIAL_RECOLOR_VERSION = 3      # cache tag — bump on recolor math changes
 # The "theme" plate style multiplies the DARK field by the clock tint;
 # the raw luminance (~0.2) would leave the hue barely readable, so the
 # field brightens by this gain before the tint lands (texture intact).
 SUBDIAL_RECOLOR_FIELD_GAIN = 1.9
+# SILVER has no entry here on purpose (2026-07-20 rework): it is the
+# achromatic VALUE alone, the exact letter-metal "straight desaturation"
+# recipe (`letter_metal_file`) — never a stored target color like gold/
+# bronze, so it can never drift toward a hue by accident.
 SUBDIAL_RECOLOR_COLORS = {
     "gold": "#FFD235",
     "bronze": "#CD7F32",
-    "silver": "#C9CDD3",
 }
 
 # The hidden REPORT window (owner 2026-07-15): function efficiency

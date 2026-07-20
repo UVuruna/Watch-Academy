@@ -1843,6 +1843,17 @@ class ArchetypeLayer(Layer):
                 continue
             lit = ctx.reveal_active or index == ctx.archetype_lit
             hf = hover_factor(ctx, element)
+            # THE UNIVERSAL ROTATION CONVENTION (owner decree
+            # 2026-07-20): a figure that opted in (currently the
+            # Tetramorph alone) resolves its file fresh every paint —
+            # ArchetypeLayer is hover_variable/painted LIVE already, so
+            # a day change re-resolves with no extra invalidation.
+            if fig.get("rotates"):
+                resolved = defaults.rotating_art_file(
+                    fig["file"], ctx.day.local_date
+                )
+                if resolved is not None:
+                    fig = {**fig, "file": resolved}
             # THE TWO-TYPE LAW (owner decree 2026-07-18, round two): each
             # figure's OWN art aspect decides CIRCLE (the slot size) vs
             # PORTRAIT (the per-pointer lancet fraction) — classified
@@ -1954,27 +1965,16 @@ def display_year(ctx: RenderContext) -> str:
     )
 
 
-def _subdial_seat(pos: QPointF) -> str:
-    """Which subdial PLATE a slot position wears (owner 2026-07-14:
-    the sun lives at the dial center, every seat shadows outward):
-    the exact center, the 3h seat (lower left), the 21h seat (lower
-    right), or the lone southern spot."""
-    if abs(pos.x()) < 1.0 and abs(pos.y()) < 1.0:
-        return "center"
-    theta = math.degrees(math.atan2(pos.x(), -pos.y())) % 360.0
-    if abs(theta - constants.AURORA_DUAL_WEEKDAY_ANGLE) <= 30.0:
-        return "h3"
-    if abs(theta - constants.AURORA_DUAL_SLOT_ANGLE) <= 30.0:
-        return "h21"
-    return "south"
-
-
 def _draw_subdial_shadow(
     painter: QPainter, pos: QPointF, diameter: float
 ) -> None:
     """The subdial's LIVE shadow (owner 2026-07-15: the sun lives at
-    the dial center, the shadow is rendered — never baked): offset
-    OUTWARD from the center, symmetric on the center seat."""
+    the dial center, the shadow is rendered — never baked; reaffirmed
+    under Rule #19, 2026-07-20 — this one function is WHY the
+    twelve-plate seat/finish sheet was pure waste): offset OUTWARD
+    from the center — the seat's own dial angle, south straight down,
+    an arm seat toward its own outward corner — symmetric on the
+    center seat (distance 0, no offset at all)."""
     distance = math.hypot(pos.x(), pos.y())
     if distance > 1.0:
         offset = diameter * defaults.SUBDIAL_SHADOW_OFFSET_FRACTION
@@ -2004,11 +2004,12 @@ def draw_slot_roundel(
     """The watch-face SUBDIAL behind flat slot content (owner
     2026-07-14) — worn by every text mode and by the flat astrology
     art (sign / logo / constellation); the circular plates
-    (medallions, planets, colored badges) stay bare. The owner's
-    PLATE ART draws whenever ANY plate exists — a missing finish is
-    RECOLORED from his master, a missing seat borrows the center
-    plate — under a LIVE outward shadow (owner 2026-07-15: one master
-    plate, the code paints the metals and the light). The "theme"
+    (medallions, planets, colored badges) stay bare. THE MASTER (Rule
+    #19, owner decree 2026-07-20) draws whenever it exists — a missing
+    finish is RECOLORED from it live — under a LIVE outward shadow
+    keyed off THIS seat's own dial position (owner 2026-07-15: one
+    master plate, the code paints the metals and the light; the seat
+    never reaches the FILE any more, only the shadow). The "theme"
     plate style (owner A/B spec) colorizes the tapisserie field to
     the clock tint; "black" keeps the standard dark field. With no
     art at all: the procedural circle, the ring's own face color
@@ -2016,7 +2017,6 @@ def draw_slot_roundel(
     _draw_subdial_shadow(painter, pos, diameter)
     plate = subdial_plate_file(
         ctx.skin.ring_finish,
-        _subdial_seat(pos),
         tint=(
             ctx.skin.ring_tint
             if ctx.skin.subdial_style == "theme"

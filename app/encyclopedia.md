@@ -205,8 +205,10 @@ in step (independent counts, one shared index driver). `__init__`
 takes `travel_date` from the controller
 (`self._effective_travel_date()` — the Time Travel simulation's date
 while one runs, else today), the SAME law the poles' Quick Jump
-light/dark glyph already follows. `SCALE_ROTATION_DAYS` and
-`SCALE_ART_STEMS` live in `config/defaults.py` beside `SCALE_ART_DIR`.
+light/dark glyph already follows. `ROTATION_DAYS` (THE UNIVERSAL
+ROTATION CONVENTION's shared cadence, owner decree 2026-07-20 — see
+[Assets (folder)](../assets/___assets.md)) and `SCALE_ART_STEMS` live
+in `config/defaults.py` beside `SCALE_ART_DIR`.
 
 **The Eras of the World carries SEVEN calendar emblems (six from owner
 fix-round B, 2026-07-19, TASK 3; Maya added the MAYA round, owner
