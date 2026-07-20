@@ -36,6 +36,31 @@ interactive charts over the long ephemeris data. FIVE charts:
    unreliable beyond the measured window. Charts-only — Time Travel
    never leaves the precise −13000…+17000 pack.
 
+### R4 (owner instruction batch 2026-07-20)
+
+**ITEM 1 — NON-MODAL.** The controller `.show()`s `ObservatoryDialog`
+instead of `.exec()`ing it — the dial stays interactive while it is
+open; a second open request raises the ONE live instance instead of
+opening a duplicate ([App Controller](controller.md)). The dialog
+itself gained `WA_DeleteOnClose` (safe here — unlike `_EnlargeDialog`,
+this outer dialog never has a REAL child reparented INTO it from
+somewhere else; it only ever LENDS a panel out). The Enlarge flow
+(`_open_enlarged`) is non-modal too now — see the updated Task 3/Item-1
+entries below; `_EnlargeDialog.__init__` already called `.show()` at
+its own end, so dropping the caller's `dialog.exec()` and moving its
+post-close cleanup into a `finished` signal handler
+(`_close_enlarged`) was the whole change, with the Fix round R1a crash
+fix's ownership order (`panel` reparents back BEFORE `deleteLater()`)
+preserved exactly.
+
+**ITEM 3 — OPENING SIZE.** The old fixed `self.resize(860, 720)`
+becomes A4 portrait (210:297) at 80% of the screen's available height
+(`app.theme.size_to_screen`, `defaults.DIALOG_A4_*`) — still a normal
+resizable/maximizable window past that first paint. Unrelated to (and
+untouched by) `_EnlargeDialog`'s own 16:9-at-50%-height sizing below
+(Fix round R1a, Item 1) — two different dialogs, two different owner
+specs.
+
 ## Chart quality rules (the project's dataviz doctrine)
 Dark-first on the theme surface; ONE y-axis per chart (never dual);
 series colors FIXED per series (the four seasons wear their canonical
@@ -111,11 +136,14 @@ updated on `splitterMoved`) — no settings key, matching that this
 dialog's own window geometry was never persisted across opens either.
 
 **Task 3 — enlarge.** Every panel's filter row ends with an "Enlarge"
-button opening `_EnlargeDialog`, a maximized window that TEMPORARILY
-REPARENTS the SAME panel widget (`panel.setParent(self)`) in on open and
-back to its original splitter slot on close
-(`ObservatoryDialog._open_enlarged`, which records the splitter index
-before detaching). Reparenting the live widgets — instead of building a
+button opening `_EnlargeDialog`, a NON-MODAL window (R4 ITEM 1, owner
+instruction batch 2026-07-20 — was a blocking `.exec()` before; see the
+R4 section above) that TEMPORARILY REPARENTS the SAME panel widget
+(`panel.setParent(self)`) in on open and back to its original splitter
+slot when it closes (`ObservatoryDialog._open_enlarged` builds and
+shows it, connecting its `finished` signal to `_close_enlarged`, which
+runs the restore — records the splitter index before detaching).
+Reparenting the live widgets — instead of building a
 parallel copy fed from a shared model — was the cleanest fit for how
 this module is already shaped: zoom (`_xlo`/`_xhi`), pan and every
 checkbox's state already live directly ON these Qt widgets, there is no
@@ -372,10 +400,12 @@ wires the units combo only after every chart it touches (`_envelope`,
 `_season_chart`) exists. `_add_panel()` is the one seam that builds a
 panel (storing its title label on `panel.title_label` — Item 3) and
 registers its Collapse/Enlarge callbacks; `_toggle_collapsed()` is the
-Collapse/Show handler (Item 7); `_open_enlarged()` does the
-reparent-out/reparent-back-then-`deleteLater()` dance around
-`_EnlargeDialog.exec()` (the crash fix); `_eclipse_kind_rows()` builds
-the eclipse panel's info-row list (Item 2).
+Collapse/Show handler (Item 7); `_open_enlarged()` builds and shows the
+NON-MODAL `_EnlargeDialog` (R4 ITEM 1) and wires its `finished` signal
+to `_close_enlarged()`, which does the reparent-back-then-
+`deleteLater()` dance the crash fix established (Fix round R1a);
+`_eclipse_kind_rows()` builds the eclipse panel's info-row list
+(Item 2).
 
 ## Design Decisions
 QPainter draws every chart — no plotting dependency (the same choice as

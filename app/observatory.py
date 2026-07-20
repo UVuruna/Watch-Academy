@@ -38,7 +38,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from app.theme import apply_theme
+from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
@@ -1140,7 +1140,24 @@ class ObservatoryDialog(QDialog):
             self.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
-        self.resize(860, 720)
+        # NON-MODAL lifecycle (ITEM 1, R4 owner instruction batch
+        # 2026-07-20): the controller `.show()`s this dialog instead of
+        # `.exec()`ing it — the dial stays interactive while it is
+        # open. The controller keeps the ONE live instance as an
+        # attribute and clears it on this dialog's `finished` signal;
+        # WA_DeleteOnClose tears the C++ object down the moment the
+        # window closes. Unrelated to `_EnlargeDialog`'s own explicit
+        # ownership (that one still needs it BECAUSE it reparents a
+        # REAL child, `panel`, borrowed from THIS dialog's splitter —
+        # see its docstring); this outer dialog reparents nothing INTO
+        # itself, so the plain Qt idiom is safe here.
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        # OPENING SIZE (owner DESIGN #1): A4 portrait at 80% of the
+        # screen's available height.
+        size_to_screen(
+            self, defaults.DIALOG_A4_ASPECT_W, defaults.DIALOG_A4_ASPECT_H,
+            defaults.DIALOG_A4_HEIGHT_FRACTION,
+        )
 
         data = ObservatoryData()
         column = QVBoxLayout(self)
@@ -1466,18 +1483,39 @@ class ObservatoryDialog(QDialog):
         of building a parallel copy) carries that state for free and
         needs no synchronization in either direction.
 
-        Fix round R1a (the crash): `panel` is reparented back to the
-        splitter BEFORE this dialog is destroyed — `_EnlargeDialog` no
-        longer sets WA_DeleteOnClose, so nothing deletes it out from
-        under us while `exec()` runs; the explicit `deleteLater()` below
-        only fires once `panel` is already safely back home."""
+        NON-MODAL now (ITEM 1, R4 owner instruction batch 2026-07-20):
+        `_EnlargeDialog` already calls `.show()` at the end of its own
+        `__init__` — the old `dialog.exec()` right after construction
+        was what re-entered it as a BLOCKING application-modal loop
+        (`exec()` forces that regardless of the dialog's own
+        windowModality), stalling the dial AND the Observatory itself
+        for as long as the chart stayed enlarged. Dropping the `exec()`
+        call and moving the cleanup that used to run right after it
+        into a `finished` signal handler (`_close_enlarged`) keeps
+        EXACTLY the same ownership order the Fix round R1a crash fix
+        established — `panel` reparents back to the splitter BEFORE the
+        dialog is destroyed — just triggered by the signal instead of a
+        blocking return."""
         index = self._splitter.indexOf(panel)
         sizes = self._splitter.sizes()
         enlarge_button.setVisible(False)
         dialog = _EnlargeDialog(
             panel, chart, title, caption, self._tr, info_rows, parent=self
         )
-        dialog.exec()
+        dialog.finished.connect(
+            lambda _result: self._close_enlarged(
+                dialog, panel, index, sizes, enlarge_button
+            )
+        )
+
+    def _close_enlarged(
+        self, dialog: "_EnlargeDialog", panel: QWidget, index: int,
+        sizes: list[int], enlarge_button: QPushButton,
+    ) -> None:
+        """The `_open_enlarged` cleanup, now signal-driven — `panel` is
+        reparented back to the splitter BEFORE the dialog is destroyed
+        (the Fix round R1a crash fix's ownership order, preserved
+        exactly), then the enlarged dialog is `deleteLater()`d."""
         self._splitter.insertWidget(index, panel)
         self._splitter.setSizes(sizes)
         panel.title_label.setVisible(True)

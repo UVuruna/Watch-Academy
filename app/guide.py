@@ -26,7 +26,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from app.theme import apply_theme
+from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
@@ -42,6 +42,14 @@ class GuideDialog(QDialog):
         # as the Encyclopedia).
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
+        # NON-MODAL lifecycle (ITEM 1, R4 owner instruction batch
+        # 2026-07-20): the controller now `.show()`s this dialog instead
+        # of `.exec()`ing it, so the dial stays interactive while it is
+        # open — the controller keeps the ONE live instance as an
+        # attribute and this flag lets Qt tear the C++ object down the
+        # moment the window closes, matching the Python reference it
+        # clears on the same `finished` signal.
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
 
         pages_path = defaults.GUIDE_DIR / "pages.json"
         self._pages = json.loads(pages_path.read_text(encoding="utf-8"))["pages"]
@@ -94,10 +102,12 @@ class GuideDialog(QDialog):
         layout.addWidget(self._scroll, stretch=1)
         layout.addLayout(row)
 
-        self.resize(
-            defaults.GUIDE_INITIAL_IMAGE_PX + 90,
-            defaults.GUIDE_INITIAL_IMAGE_PX + 320,
-        )
+        # OPENING SIZE (owner DESIGN #1): square, 50% of the screen's
+        # available height — the images already rescale live with the
+        # window (`_rescale`/`resizeEvent`/`showEvent` below), so a
+        # shape different from the old GUIDE_INITIAL_IMAGE_PX-derived
+        # rectangle costs nothing.
+        size_to_screen(self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION)
         apply_theme(self)
         self._show_page()
 

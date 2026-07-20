@@ -112,6 +112,20 @@ Asserts nothing under `core/` or `data/` mentions PySide6 — and that
 library code reads no wall clock (`datetime.now`/`.today`/`time.time`;
 `core/__main__.py` is exempt as CLI glue).
 
+### `test_controller_dialogs.py`
+R4 owner instruction batch 2026-07-20, ITEM 1/3: Encyclopedia/Guide/
+Observatory open NON-MODAL (`.show()`, `isModal()` False) and stay that
+way while the dial keeps processing events; a second open request
+RAISES the live instance (identity-checked) instead of stacking a
+duplicate; a themed second SPACE jump NAVIGATES the live Encyclopedia
+window (`navigate_to`); closing a dialog clears the controller's own
+reference; `quit()` closes every still-open one. Opening sizes: A4
+portrait at 80% screen height (Encyclopedia respecting its own
+gallery min-width law, Observatory), square at 50% (Guide, Settings
+respecting its own content-width floor) — built against a REAL
+`AppController`, exactly like `main.py` minus the single-instance
+mutex and `run()`'s tray/scheduler/background-thread side effects.
+
 ## Connections
 
 ### Uses

@@ -31,10 +31,19 @@ Each panel is wrapped in its OWN `QScrollArea` (`panel_scroll`,
 `setWidgetResizable(True)`) — the scroll cap that used to sit around
 the WHOLE dialog now sits around each panel individually, since only
 one panel is visible at a time; a tall panel still scrolls internally.
-The dialog's own size is `max(sizeHint)` over every panel's inner
-content widget (not the wrapping scroll area) plus the nav column's
-fixed width (`defaults.SETTINGS_NAV_WIDTH_PX`), capped to the screen
-like before.
+
+**OPENING SIZE (owner DESIGN #1, R4 instruction batch 2026-07-20):**
+square (1:1) at 50% of the screen's available height
+(`app.theme.size_to_screen`, `defaults.DIALOG_SQUARE_HEIGHT_FRACTION`)
+— the dialog used to size itself purely from content (`max(sizeHint)`
+over every panel's inner content widget plus the nav column's fixed
+width, capped to the screen); that content-driven width is now the
+`min_width` FLOOR passed into `size_to_screen` instead ("whichever is
+larger wins", the same resolution the Encyclopedia's own 4-gallery-tile
+law uses) — it wins over the square width whenever the busy panels
+would otherwise need a horizontal scrollbar to fit, but the HEIGHT
+always stays the requested 50% exactly (each panel's own vertical
+`QScrollArea` already absorbs any height it does not fit in).
 
 ### The groups
 

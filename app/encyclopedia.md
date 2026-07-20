@@ -248,6 +248,29 @@ side margins (owner 2026-07-14 — supersedes the 2026-07-13 left-hug),
 images share the block, and the font grows with the width at the
 gentle em-like coefficient (`ENCYCLOPEDIA_FONT_GROWTH`, capped).
 
+**NON-MODAL lifecycle (ITEM 1, R4 owner instruction batch 2026-07-20 —
+"kada su otvoreni Sat treba da ostane MOGUC ZA INTERAKCIJU"):** the
+controller `.show()`s this dialog instead of `.exec()`ing it — `exec()`
+forced APPLICATION modality (blocking the dial too, not just this
+window) for as long as it stayed open; `.show()` never does.
+`WA_DeleteOnClose` tears the C++ object down the moment the window
+closes; the controller keeps the ONE live instance as its own
+`self._encyclopedia` attribute, raising it (`raise_()` +
+`activateWindow()`) instead of opening a duplicate on a second request,
+and clears the attribute on this dialog's `finished` signal. The OLD
+re-entrancy guard (owner 15h item 3C — back when a second SPACE jump
+dispatched inside `exec()`'s nested loop risked stacking a second
+modal) is now `navigate_to(topic, entry)`: a themed second jump moves
+the SAME live window to the new target instead of being swallowed — a
+strict improvement, not just a safe no-op.
+
+**OPENING SIZE (owner DESIGN #1):** A4 portrait (210:297) at 80% of the
+screen's available height (`app.theme.size_to_screen`) — the round R3
+MIN WIDTH law (4 gallery tiles) still wins when it is the wider of the
+two ("whichever is larger wins", the documented resolution), so the
+4-column gallery row never spills sideways even on a narrow-but-tall
+screen.
+
 It is a NORMAL window (owner 2026-07-13: no stay-on-top). The look
 images decode LAZILY through the `_pixmap` cache (owner 2026-07-13:
 The Week opened far too slowly when every look decoded upfront). The
@@ -312,6 +335,12 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   when omitted) drives the Scale Rotation entries; the Spacebar jump
   applies the round R3 index remap for restructured weekday topics
 - `_show_topic(key)`: opens the topic slider at its first entry
+- `navigate_to(topic, entry)`: jumps this LIVE window to a new
+  (topic, entry) target (ITEM 1, R4) — the exact placement logic
+  `__init__` used to run once inline, extracted so the controller can
+  call it again on a second SPACE jump instead of treating the window
+  as re-entrancy-locked; `topic=None` or an unknown topic is a no-op
+  (the menu's plain re-open leaves the current page untouched)
 - `_step(delta)` / `_show_entry()`: the pager — one entry per page,
   wraps both ways, pager hidden on single-entry topics; `_show_entry`
   branches on `entry["poem"]` / `entry["dual"]` / the normal path

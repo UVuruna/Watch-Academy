@@ -758,12 +758,22 @@ class AppController(QObject):
         # Spacebar over a themed hover target opens the Encyclopedia on
         # that topic's page (owner 2026-07-16, ROADMAP queue #8).
         self._widget.open_encyclopedia.connect(self._open_encyclopedia_at)
-        # Re-entrancy guard (owner 15h item 3C): the Encyclopedia opens
-        # MODALLY (exec runs a nested loop). A second SPACE jump — a held
-        # key's auto-repeat, or a fresh press — is dispatched inside that
-        # loop and would stack a second modal on the first; the guard
-        # makes the duplicate a no-op.
-        self._encyclopedia_open = False
+        # NON-MODAL Encyclopedia/Guide/Observatory (ITEM 1, R4 owner
+        # instruction batch 2026-07-20): these three now `.show()`
+        # instead of `.exec()` — the dial stays fully interactive
+        # (hover, right-click, move) while any of them is open. Each
+        # attribute holds the ONE live instance of its dialog type (or
+        # None); a second open request RAISES it instead of stacking a
+        # duplicate (the Encyclopedia's old re-entrancy guard becomes
+        # "focus the live one" — a SPACE jump while it is open now
+        # NAVIGATES it to the new target, `EncyclopediaDialog.navigate_
+        # to`, a strict improvement over the old modal no-op). Settings
+        # and Time Travel are UNCHANGED — they still `.exec()` (they
+        # mutate state transactionally and must not be left half-applied
+        # by a stray close).
+        self._encyclopedia: EncyclopediaDialog | None = None
+        self._observatory: ObservatoryDialog | None = None
+        self._guide: GuideDialog | None = None
 
         # In click-through mode the window receives no mouse input, so the
         # hover tooltips are driven by polling the global cursor instead.
@@ -838,6 +848,13 @@ class AppController(QObject):
 
     def quit(self) -> None:
         self._widget.mark_closing()
+        # The non-modal trio (ITEM 1, R4) can now be open at Exit time —
+        # close them explicitly instead of leaving them to the process
+        # teardown, so their own `finished` handlers (and WA_DeleteOnClose)
+        # run in the ordinary way rather than being cut off mid-flight.
+        for dialog in (self._encyclopedia, self._observatory, self._guide):
+            if dialog is not None:
+                dialog.close()
         self._scheduler.stop()
         if self._save_timer.isActive():
             self._save_timer.stop()
@@ -2273,9 +2290,7 @@ class AppController(QObject):
         observatory.triggered.connect(self._open_observatory)
         menu.addAction(observatory)
         guide = QAction(f"📖 {tr('Guide…')}", menu)
-        guide.triggered.connect(
-            lambda: GuideDialog(self._translation_overlay).exec()
-        )
+        guide.triggered.connect(self._open_guide)
         menu.addAction(guide)
         time_travel = QAction(f"🕰️ {tr('Time Travel…')}", menu)
         time_travel.triggered.connect(self._open_time_travel)
@@ -2444,13 +2459,43 @@ class AppController(QObject):
         return menu
 
     def _open_report(self) -> None:
+        # The hidden debug Report stays MODAL — an admin/statistics
+        # snapshot the owner never asked to leave open alongside the
+        # dial (item 1's non-modal trio is Encyclopedia/Guide/
+        # Observatory only).
         ReportDialog(self._translation_overlay).exec()
 
+    def _open_guide(self) -> None:
+        """Open (or raise) the [Guide](guide.md) — NON-MODAL (ITEM 1, R4
+        owner instruction batch 2026-07-20): `.show()` instead of
+        `.exec()`, so the dial stays interactive while it is open. A
+        second open request RAISES the ONE live instance instead of
+        stacking a duplicate."""
+        if self._guide is not None:
+            self._guide.raise_()
+            self._guide.activateWindow()
+            return
+        dialog = GuideDialog(self._translation_overlay)
+        dialog.finished.connect(self._on_guide_closed)
+        self._guide = dialog
+        dialog.show()
+
+    def _on_guide_closed(self, _result: int = 0) -> None:
+        self._guide = None
+
     def _open_observatory(self) -> None:
-        """Open the [Observatory](observatory.md) with the EFFECTIVE
-        moment/observer — the frozen Time Travel tuple when simulating,
-        else the live present — and the optional Deep Time pack (exact
-        nearest-eclipse instants when installed)."""
+        """Open (or raise) the [Observatory](observatory.md) with the
+        EFFECTIVE moment/observer — the frozen Time Travel tuple when
+        simulating, else the live present — and the optional Deep Time
+        pack (exact nearest-eclipse instants when installed).
+        NON-MODAL (ITEM 1, R4): `.show()` instead of `.exec()`, so the
+        dial stays interactive while it is open; a second open request
+        RAISES the ONE live instance (its own Enlarge flow already runs
+        non-modal too — see `ObservatoryDialog._open_enlarged`)."""
+        if self._observatory is not None:
+            self._observatory.raise_()
+            self._observatory.activateWindow()
+            return
         if self._simulation is not None:
             now, observer = self._simulation
             cycles = self._sim_cycles
@@ -2458,7 +2503,7 @@ class AppController(QObject):
             now = datetime.now(self._tz)
             observer = self._observer
             cycles = 0
-        ObservatoryDialog(
+        dialog = ObservatoryDialog(
             now, observer, self._tz, cycles=cycles,
             deep=self._deep, translations=self._translation_overlay,
             # FIX ROUND A (owner verdict 2026-07-19): in "top" z-mode
@@ -2467,37 +2512,56 @@ class AppController(QObject):
             # Settings/Time Travel/Guide; every other z-mode stays a
             # normal window (owner 2026-07-13 intent, unchanged).
             stay_on_top=self._settings.z_mode == "top",
-        ).exec()
+        )
+        dialog.finished.connect(self._on_observatory_closed)
+        self._observatory = dialog
+        dialog.show()
+
+    def _on_observatory_closed(self, _result: int = 0) -> None:
+        self._observatory = None
 
     def _open_encyclopedia_at(
         self, topic: str | None = None, entry: int = 0
     ) -> None:
-        """Open the Encyclopedia — from the menu (topic None = the
-        gallery) or on a Spacebar jump to a hovered topic's entry
-        (owner 2026-07-16, ROADMAP queue #8). Guarded against re-entrant
-        opens (owner 15h item 3C): a second jump while the modal is up is
-        a no-op, never a stacked dialog."""
-        if self._encyclopedia_open:
+        """Open (or navigate) the Encyclopedia — from the menu (topic
+        None = the gallery) or on a Spacebar jump to a hovered topic's
+        entry (owner 2026-07-16, ROADMAP queue #8). NON-MODAL (ITEM 1,
+        R4 owner instruction batch 2026-07-20): `.show()` instead of
+        `.exec()`, so the dial stays interactive while it is open. The
+        old re-entrancy guard (owner 15h item 3C) becomes "act on the
+        live one" — a THEMED second jump (a real topic — a held key's
+        auto-repeat, or a fresh SPACE press over a different target)
+        NAVIGATES the live window to the new target
+        (`EncyclopediaDialog.navigate_to`, a strict improvement over the
+        old modal no-op); the menu's plain "Encyclopedia…" re-open
+        (topic=None) just raises it without disturbing what the user is
+        already browsing."""
+        if self._encyclopedia is not None:
+            self._encyclopedia.navigate_to(topic, entry)
+            self._encyclopedia.raise_()
+            self._encyclopedia.activateWindow()
             return
-        self._encyclopedia_open = True
-        try:
-            EncyclopediaDialog(
-                self._translation_overlay,
-                hidden_unlocked=self._hidden_unlocked,
-                initial_topic=topic,
-                initial_entry=entry,
-                # FIX ROUND A (owner verdict 2026-07-19): see the
-                # matching Observatory comment — "top" z-mode needs
-                # WindowStaysOnTopHint to clear the dial's native
-                # HWND_TOPMOST; every other z-mode stays normal.
-                stay_on_top=self._settings.z_mode == "top",
-                # The Scale rotation (owner decree 2026-07-19/20) reads
-                # the same TRAVELED date as the poles' light/dark glyph
-                # law — a running Time Travel simulation, else today.
-                travel_date=self._effective_travel_date(),
-            ).exec()
-        finally:
-            self._encyclopedia_open = False
+        dialog = EncyclopediaDialog(
+            self._translation_overlay,
+            hidden_unlocked=self._hidden_unlocked,
+            initial_topic=topic,
+            initial_entry=entry,
+            # FIX ROUND A (owner verdict 2026-07-19): see the
+            # matching Observatory comment — "top" z-mode needs
+            # WindowStaysOnTopHint to clear the dial's native
+            # HWND_TOPMOST; every other z-mode stays normal.
+            stay_on_top=self._settings.z_mode == "top",
+            # The Scale rotation (owner decree 2026-07-19/20) reads
+            # the same TRAVELED date as the poles' light/dark glyph
+            # law — a running Time Travel simulation, else today.
+            travel_date=self._effective_travel_date(),
+        )
+        dialog.finished.connect(self._on_encyclopedia_closed)
+        self._encyclopedia = dialog
+        dialog.show()
+
+    def _on_encyclopedia_closed(self, _result: int = 0) -> None:
+        self._encyclopedia = None
 
     def _open_settings(self) -> None:
         dialog = SettingsDialog(

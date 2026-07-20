@@ -13,7 +13,6 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
 from PySide6.QtWidgets import (
-    QApplication,
     QCheckBox,
     QColorDialog,
     QComboBox,
@@ -39,7 +38,7 @@ from PySide6.QtWidgets import (
 )
 
 from app.settings_store import Settings, replace
-from app.theme import apply_theme, style_dialog_buttons
+from app.theme import apply_theme, size_to_screen, style_dialog_buttons
 from config import constants, defaults
 from config.ui_text import ui
 from data.locations import LocationRepository, fold_name
@@ -151,15 +150,19 @@ class SettingsDialog(QDialog):
         style_dialog_buttons(buttons)
         layout.addWidget(buttons)
         apply_theme(self)
-        screen = QApplication.primaryScreen().availableGeometry()
+        # OPENING SIZE (owner DESIGN #1, R4): square (1:1) at 50% of the
+        # screen's available height — the dialog's own CONTENT floor
+        # (nav column + widest panel, each panel already scrolling
+        # vertically on its own) still wins when it is the wider of the
+        # two (`size_to_screen`'s documented resolution, the same
+        # "whichever is larger wins" rule the Encyclopedia's gallery
+        # min-width applies), so a busy panel never needs a horizontal
+        # scrollbar just to satisfy the square shape.
         content_width = max(page.sizeHint().width() for page in pages)
-        content_height = max(page.sizeHint().height() for page in pages)
-        self.resize(
-            min(
-                content_width + defaults.SETTINGS_NAV_WIDTH_PX + 64,
-                screen.width() - 80,
-            ),
-            min(content_height + 96, round(screen.height() * 0.92)),
+        min_width = content_width + defaults.SETTINGS_NAV_WIDTH_PX + 64
+        size_to_screen(
+            self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION,
+            min_width=min_width,
         )
 
         if settings.city_path:

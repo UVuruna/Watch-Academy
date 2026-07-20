@@ -1332,6 +1332,18 @@ OBSERVATORY_INFO_PANEL_WIDTH_PX = 280
 OBSERVATORY_CHART_PREFERRED_HEIGHT_PX = 320
 
 # The Guide window (owner spec: a paged, RESIZABLE help book): pages
+# DIALOG OPENING SIZES (owner DESIGN #1, R4 instruction batch
+# 2026-07-20): Encyclopedia and Observatory open A4-PORTRAIT shaped
+# (the 210:297mm paper ratio) at this fraction of the screen's
+# available height; Settings and Guide open perfectly SQUARE (1:1) at
+# this fraction — `app.theme.size_to_screen` applies both. Every one
+# of the four dialogs stays a normal resizable/maximizable window past
+# this first paint; only the OPENING size is fixed here.
+DIALOG_A4_HEIGHT_FRACTION = 0.8
+DIALOG_A4_ASPECT_W = 210
+DIALOG_A4_ASPECT_H = 297
+DIALOG_SQUARE_HEIGHT_FRACTION = 0.5
+
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and
 # scale live with the window.

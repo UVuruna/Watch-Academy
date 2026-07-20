@@ -9,7 +9,7 @@ these general rules, so nothing that already carries a deliberate
 per-instance color is touched.
 """
 
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QGuiApplication
 from PySide6.QtWidgets import QDialogButtonBox, QWidget
 
 from config import defaults
@@ -251,6 +251,41 @@ def apply_theme(widget: QWidget) -> None:
     """Apply the shared dark theme to `widget` and its whole subtree
     (QSS cascades to every descendant of the widget it's set on)."""
     widget.setStyleSheet(_QSS)
+
+
+def size_to_screen(
+    dialog: QWidget,
+    aspect_w: float,
+    aspect_h: float,
+    height_fraction: float,
+    min_width: int = 0,
+) -> None:
+    """OPENING SIZE (owner DESIGN #1, R4 instruction batch 2026-07-20):
+    resize+center `dialog` to the `aspect_w:aspect_h` shape at
+    `height_fraction` of the ACTIVE screen's available height —
+    Encyclopedia/Observatory call this with the A4-portrait ratio at
+    80%, Settings/Guide with a square (1:1) ratio at 50%
+    (`config.defaults.DIALOG_A4_*`/`DIALOG_SQUARE_HEIGHT_FRACTION`).
+
+    `min_width` is an existing PER-DIALOG width floor (the
+    Encyclopedia's 4-gallery-tile law, Settings' own content minimum)
+    that would otherwise clip if the aspect-derived width came out
+    smaller — the documented resolution (owner: "whichever is larger
+    wins"): only the WIDTH grows to cover it, the HEIGHT always stays
+    the requested fraction exactly (never re-derived from the wider
+    width, so a min-width dialog reads as a wider-than-A4 rectangle at
+    the SAME height rather than a taller one). The whole result then
+    clamps to the screen so it can never spill off — every one of
+    these dialogs stays a normal resizable/maximizable window past
+    this first paint; this only sets the size it OPENS at."""
+    screen = dialog.screen() or QGuiApplication.primaryScreen()
+    available = screen.availableGeometry()
+    height = min(round(available.height() * height_fraction), available.height())
+    width = min(
+        max(round(height * aspect_w / aspect_h), min_width), available.width()
+    )
+    dialog.resize(width, height)
+    dialog.move(available.center() - dialog.rect().center())
 
 
 def style_dialog_buttons(box: QDialogButtonBox) -> None:

@@ -45,6 +45,58 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   the generation counter (`_hover_warm_generation`) obsoletes a sweep
   whose skin/day was replaced mid-run; a warm re-run costs header
   reads only
+
+**ITEM 2 audit (R4 owner instruction batch 2026-07-20 — "sporedne niti
+... nikako ne smije da blokira glavnu nit... preko threadinga nećeš
+moći da dobiješ pravi paralelizam"):** measured offscreen
+(`AppController` built exactly like `main.py`, minus the mutex and
+`run()`'s tray/scheduler/thread side effects — see
+`tests/test_controller_dialogs.py`'s fixture for the same safe
+pattern) rather than guessed:
+  - `AppController(app)` construction (settings load, `build_skin`,
+    `Compositor`, the whole right-click/tray menu): ~235 ms, entirely
+    before `show()` — unavoidably on the GUI thread (Qt widgets/menus
+    can only be built there), but the window is not on screen yet at
+    this point, so nothing the user can see is stalled.
+  - First real paint after `show()`: ~235 ms on a machine whose
+    raster cache already has SOME entries (this dev box, from the test
+    suite's own runs) — genuinely cold (`raster_cache` deleted first),
+    a single hover-sized probe ranged 0.6–100 ms depending on how many
+    images that ONE probe's article still needed to decode; the SAME
+    probe replayed immediately after (now cached) cost 2–3 ms total —
+    an 85× speedup, confirming the disk-cache-then-OS-file-cache
+    design (`render/assets.md`) already does its job once warm.
+  - The GUI thread's OWN steady-state cost is trivial: 300
+    `tooltip_at()` + `widget.update()` calls back-to-back cost 117 ms
+    alone (0.39 ms/call) — nowhere near anything a human would call
+    "lag".
+  - **The owner's GIL doubt, answered empirically:** running the two
+    heaviest documented background operations (`_metal_swapped`'s
+    numpy hue-swap, `scaled_variant_file`'s PNG decode/scale/save) in
+    an UNTHROTTLED loop on a second thread while the SAME 300-probe
+    GUI-thread test ran concurrently cost 150 ms instead of 117 ms — a
+    1.28× slowdown, not the "still only 1 CPU active" full
+    serialization the owner expected. This is the concrete answer:
+    Qt's own image codecs and numpy's C-level array ops both RELEASE
+    the GIL for the duration of their C code (the same way file I/O
+    does), so the interpreter is free to run the GUI thread's Python
+    bytecode (event dispatch, `tooltip_at`, `paintEvent`) during that
+    window — genuine, if imperfect, parallelism, exactly as
+    `render/assets.py`'s existing "QImage in, QImage out... QPixmap
+    must never be touched off the GUI thread" comments already assume.
+  - A genuinely COLD full warm-up (`warm_working_set()` +
+    `warm_hover_articles()` with `raster_cache` empty) measured ~84 s
+    + ~6.5 s ≈ 90 s of real background CPU work (417 downscaled
+    copies, 6,661 spoken hover probes) — slower than the `_warm_
+    hover_articles` docstring's "the user never hovers in the first
+    SECONDS" assumption on a truly fresh install, but this is
+    BACKGROUND-thread time, already off the GUI thread by design, and
+    the 1.28× figure above shows it does not meaningfully starve
+    interaction while it runs. **Conclusion: no code change made for
+    ITEM 2** — the GUI thread was already clean (Rule #8: report
+    honestly instead of adding machinery the measurements don't
+    justify); a process pool would trade this modest, already-
+    overlapping cost for IPC/pickling overhead with no measured upside.
 - `_on_tick(clock_jumped)`: day-context rebuild on cache-key change or
   clock jump; unreadable/out-of-coverage astronomical data dies VISIBLY
   (dialog, then exit) — never a silently wrong dial
@@ -393,32 +445,66 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   home (ROADMAP queue #6, owner 2026-07-16), a second reading in the
   Seasons topic, the CANON's three-line quote with an English framing
   of the four faces — and 📊 Report reveals itself above Exit
-- `_open_observatory()`: opens the [Observatory](observatory.md)
+**ITEM 1 — NON-MODAL Encyclopedia/Guide/Observatory (R4 owner
+instruction batch 2026-07-20 — "kada su otvoreni Sat treba da ostane
+MOGUC ZA INTERAKCIJU"):** these three now `.show()` instead of
+`.exec()` — `exec()` forces APPLICATION modality for its duration
+regardless of the dialog's own `windowModality` (Qt: "blocking input
+to any other application window"), which is exactly what was locking
+the dial out; `.show()` never does. Each dialog's LIVE instance (or
+`None`) lives on the controller as `self._encyclopedia` /
+`self._observatory` / `self._guide` — a second open request RAISES the
+one already open (`raise_()` + `activateWindow()`) instead of stacking
+a duplicate; closing it (`finished` signal, fired by both Accept/Close
+and the window's X button) clears the attribute back to `None`, and
+each dialog carries `WA_DeleteOnClose` so Qt tears down the C++ object
+the moment it closes (`quit()` also closes any still-open one
+explicitly, so Exit never leaves a stray window mid-teardown). Settings
+and Time Travel are UNCHANGED (still `.exec()` — Rule: they mutate
+state transactionally and must not be left half-applied by a stray
+close). Verified in
+[tests/test_controller_dialogs.py](../tests/test_controller_dialogs.py)
+(non-modal `isVisible()`/`not isModal()`, second-open-raises identity,
+size math) — headless, built exactly like `main.py` minus the mutex.
+
+- `_open_observatory()`: opens (or raises the live) [Observatory](observatory.md)
   (owner 2026-07-16) with the EFFECTIVE `(moment, observer, tz, cycles)`
   — the frozen Time Travel simulation tuple when active, else the live
   present — and the optional Deep Time pack (exact nearest-eclipse
   instants for the eclipse timeline when installed). Passes
   `stay_on_top=z_mode == "top"` (fix round A, owner verdict 2026-07-19
-  — see the Z-ORDER note below)
+  — see the Z-ORDER note below). Its own internal Enlarge flow
+  (`ObservatoryDialog._open_enlarged`) is non-modal too now, for the
+  same ITEM 1 reason — see [Observatory](observatory.md)
+- `_open_guide()`: opens (or raises the live) [Guide](guide.md) — the
+  menu used to build-and-`.exec()` a fresh `GuideDialog` inline in
+  `_build_menu`'s lambda; ITEM 1 gave it the same live-instance-
+  tracking shape as the other two, so it earned its own method
 - `_open_report()`: the hidden [Report](report.md) — the
   [Profiling](../config/profiling.md) statistics (`@timed` on the
   tick, day rebuild, skin build, paint, composite rebuild, hit test,
   hover text, hover warmup, subdial recolor, working-set warmup and
-  translation chunks), flushed once per minute and at quit
-- `_open_encyclopedia_at(topic, entry)`: opens the [Encyclopedia](encyclopedia.md)
-  — from the menu (topic None = the gallery) or on a Spacebar jump to a
-  hovered topic's entry (the widget's `open_encyclopedia` signal). Passes
+  translation chunks), flushed once per minute and at quit. Stays
+  MODAL — an admin snapshot, outside ITEM 1's non-modal trio
+- `_open_encyclopedia_at(topic, entry)`: opens (or navigates the live)
+  [Encyclopedia](encyclopedia.md) — from the menu (topic None = the
+  gallery) or on a Spacebar jump to a hovered topic's entry (the
+  widget's `open_encyclopedia` signal). Passes
   `stay_on_top=z_mode == "top"` (fix round A, owner verdict 2026-07-19 —
   see the Z-ORDER note below) and `travel_date=_effective_travel_date()`
   (owner decree 2026-07-19/20) so the Scale badge's Judas/Lucifer
   rotation reads the SAME displayed moment as the poles' light/dark
   glyph — the Time Travel traveled date while a simulation runs, else
-  today. GUARDED
-  against re-entrant opens (owner 15h item 3C, Session 21): the dialog is
-  MODAL (`exec` runs a nested loop), and a second SPACE jump — an
-  auto-repeat or a fresh press dispatched inside that loop — would
-  otherwise stack a second modal on the first; the `_encyclopedia_open`
-  flag makes the duplicate a no-op
+  today. The old re-entrancy guard (owner 15h item 3C, Session 21 —
+  back when the dialog was MODAL and a second SPACE jump dispatched
+  inside `exec()`'s nested loop would have stacked a second modal on
+  the first) is now ITEM 1's live-instance dance: a THEMED second jump
+  (a real topic) calls `EncyclopediaDialog.navigate_to(topic, entry)`
+  on the SAME live window — a strict improvement over the old no-op,
+  since the window genuinely moves to the new target instead of
+  swallowing the jump; the menu's plain "Encyclopedia…" re-open
+  (topic=None) just raises it, leaving whatever page the user is
+  already browsing untouched
 - `_critical_box()`: shared stay-on-top critical dialog (errors must be
   seen even when other windows cover the screen)
 - `_show_if_normal_z_mode()`: the "Show" gesture's shared guard (owner

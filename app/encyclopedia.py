@@ -42,7 +42,7 @@ from PySide6.QtWidgets import (
 
 import html as _html
 
-from app.theme import apply_theme
+from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, style_finish_frame
 from config import constants, defaults, paths
 from config.ui_text import ui
@@ -1051,6 +1051,15 @@ class EncyclopediaDialog(QDialog):
         # "treba button maximize da se proširi preko celog ekrana").
         self.setWindowFlag(Qt.WindowType.WindowMaximizeButtonHint, True)
         self.setWindowFlag(Qt.WindowType.WindowMinimizeButtonHint, True)
+        # NON-MODAL lifecycle (ITEM 1, R4 owner instruction batch
+        # 2026-07-20): the controller `.show()`s this dialog instead of
+        # `.exec()`ing it — the dial stays interactive while it is
+        # open. The controller keeps the ONE live instance as an
+        # attribute (raising it, or navigating it via `navigate_to`,
+        # on a second open request instead of stacking a duplicate) and
+        # clears it on this dialog's `finished` signal; WA_DeleteOnClose
+        # tears the C++ object down the moment the window closes.
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         self._symbolism = SymbolismRepository(overlay=self._overlay)
         self._encyclopedia = EncyclopediaRepository(overlay=self._overlay)
         self._topics = _topics(travel_date)
@@ -1171,10 +1180,6 @@ class EncyclopediaDialog(QDialog):
         layout.addWidget(self._title)
         layout.addWidget(self._scroll, stretch=1)
         layout.addLayout(row)
-        self.resize(
-            defaults.GUIDE_INITIAL_IMAGE_PX + 90,
-            defaults.GUIDE_INITIAL_IMAGE_PX + 220,
-        )
         # LAYOUT fix round R3 (owner: MIN WIDTH = 4 * the single theme
         # tile, "788px width, tiles clipping" dies here) — never let the
         # window shrink so far that a max-width (4-column) gallery row
@@ -1184,27 +1189,49 @@ class EncyclopediaDialog(QDialog):
             defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
             + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
         )
-        self.setMinimumWidth(tile * defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS)
+        min_width = tile * defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+        self.setMinimumWidth(min_width)
+        # OPENING SIZE (owner DESIGN #1, R4): A4 portrait at 80% of the
+        # screen's available height — the R3 min-width law above still
+        # wins when it is the larger of the two (`size_to_screen`'s
+        # documented resolution), so the 4-tile gallery row never spills.
+        size_to_screen(
+            self, defaults.DIALOG_A4_ASPECT_W, defaults.DIALOG_A4_ASPECT_H,
+            defaults.DIALOG_A4_HEIGHT_FRACTION, min_width=min_width,
+        )
         apply_theme(self)
         self._show_topics()
         # The Spacebar jump (owner 2026-07-16, ROADMAP queue #8): open
         # straight onto the hovered topic's matching entry, skipping the
-        # gallery — unknown topics fall back to the gallery. Round R3
-        # item 9: a restructured weekday topic's raw compositor index
-        # is remapped first (see _WEEKDAY_DUAL_PAGE_INDEX above).
-        if initial_topic is not None and initial_topic in self._topics:
-            self._topic_key = initial_topic
-            entries = self._topics[initial_topic]["entries"]
-            entry_index = initial_entry
-            if (
-                initial_topic in _WEEKDAY_RESTRUCTURED_TOPICS
-                and initial_entry == 0
-            ):
-                entry_index = _WEEKDAY_DUAL_PAGE_INDEX
-            self._entry_index = (
-                min(entry_index, len(entries) - 1) if entries else 0
-            )
-            self._show_entry()
+        # gallery — unknown topics fall back to the gallery. Reused by
+        # `navigate_to` below (ITEM 1, R4): a second SPACE jump while
+        # this window is already open now NAVIGATES it live instead of
+        # being a no-op.
+        self.navigate_to(initial_topic, initial_entry)
+
+    def navigate_to(self, topic: str | None, entry: int = 0) -> None:
+        """Jump this LIVE window to a new (topic, entry) target — the
+        exact placement logic `__init__` runs once at construction,
+        reused now that a second SPACE jump while the Encyclopedia is
+        already open navigates the live window instead of being a
+        no-op (ITEM 1, R4 owner instruction batch 2026-07-20).
+        `topic=None` (the menu's plain "Encyclopedia…" entry re-opening
+        onto an already-live window) leaves the window on whatever page
+        the user is already browsing — only a THEMED jump (a real
+        topic) moves it. Unknown topics are also a no-op (defensive:
+        the controller only ever passes a topic the compositor itself
+        named). Round R3 item 9: a restructured weekday topic's raw
+        compositor index is remapped first (see
+        `_WEEKDAY_DUAL_PAGE_INDEX` above)."""
+        if topic is None or topic not in self._topics:
+            return
+        self._topic_key = topic
+        entries = self._topics[topic]["entries"]
+        entry_index = entry
+        if topic in _WEEKDAY_RESTRUCTURED_TOPICS and entry == 0:
+            entry_index = _WEEKDAY_DUAL_PAGE_INDEX
+        self._entry_index = min(entry_index, len(entries) - 1) if entries else 0
+        self._show_entry()
 
     def _article_text(self, ref: tuple) -> str:
         kind = ref[0]

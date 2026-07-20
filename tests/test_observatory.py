@@ -617,21 +617,18 @@ def test_enlarge_dialog_hosts_the_same_chart_and_carries_zoom_state(app, monkeyp
     index_before = dialog._splitter.indexOf(_panel_of(chart))
 
     captured = []
-    mid_flight = {}
+    real_cls = observatory_module._EnlargeDialog
 
-    class _RecordingEnlarge(observatory_module._EnlargeDialog):
-        def exec(self):
-            # IMPORTANT: inspect the "genuinely open" state IN HERE —
-            # _open_enlarged only restores the panel to the splitter
-            # AFTER exec() returns (matching the real modal flow, where
-            # restoration happens after the user closes the window).
-            # Checking `self` from OUTSIDE exec() would see the panel
-            # already moved back out.
-            mid_flight["chart_embedded"] = chart.parentWidget() is not None
-            mid_flight["grab_ok"] = not self.grab().isNull()
-            mid_flight["view"] = (chart._xlo, chart._xhi)
+    class _RecordingEnlarge(real_cls):
+        # NON-MODAL now (ITEM 1, R4 owner instruction batch 2026-07-20):
+        # `_open_enlarged` no longer calls `.exec()` — `__init__` itself
+        # already `.show()`s at the end (unchanged), so the dialog is
+        # genuinely open the instant construction returns; capturing
+        # `self` here (instead of overriding the no-longer-called
+        # `exec()`) is the new hook point.
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
             captured.append(self)
-            return 0
 
     monkeypatch.setattr(observatory_module, "_EnlargeDialog", _RecordingEnlarge)
 
@@ -642,9 +639,14 @@ def test_enlarge_dialog_hosts_the_same_chart_and_carries_zoom_state(app, monkeyp
     assert len(captured) == 1
     enlarged = captured[0]
     assert enlarged._chart is chart          # the SAME widget, not a copy
-    assert mid_flight["chart_embedded"]      # genuinely hosted while "open"
-    assert mid_flight["grab_ok"]             # builds and paints without error
-    assert mid_flight["view"] == view_before  # zoom carried IN
+    assert chart.parentWidget() is not None  # genuinely hosted while open
+    assert not enlarged.grab().isNull()      # builds and paints without error
+    assert (chart._xlo, chart._xhi) == view_before  # zoom carried IN
+
+    # Closing it (the "Close" button's real path, `accept()`) fires
+    # `_close_enlarged` off the `finished` signal — the dial/Observatory
+    # never blocked for any of this.
+    enlarged.accept()
 
     # State survived the round trip untouched.
     assert (chart._xlo, chart._xhi) == view_before
@@ -670,11 +672,15 @@ def test_enlarge_dialog_extended_legend_and_laskar_caption(app, monkeypatch):
     chart = dialog._laskar_chart
 
     captured = []
+    real_cls = observatory_module._EnlargeDialog
 
-    class _RecordingEnlarge(observatory_module._EnlargeDialog):
-        def exec(self):
+    class _RecordingEnlarge(real_cls):
+        # NON-MODAL now (ITEM 1, R4): capture at construction — see the
+        # matching comment above `test_enlarge_dialog_hosts_the_same_
+        # chart_and_carries_zoom_state`.
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
             captured.append(self)
-            return 0
 
     monkeypatch.setattr(observatory_module, "_EnlargeDialog", _RecordingEnlarge)
     _enlarge_button_of(chart).click()
@@ -685,6 +691,7 @@ def test_enlarge_dialog_extended_legend_and_laskar_caption(app, monkeypatch):
     # Every legend label appears with a ": value" readout.
     for label, _ in chart._legend():
         assert any(text.startswith(f"{label}:") for text in texts)
+    enlarged.accept()
     dialog.close()
 
 
@@ -700,14 +707,16 @@ def test_enlarge_dialog_render_smoke_for_every_chart(app, monkeypatch):
     dialog.show()
     QApplication.processEvents()
 
-    grabbed_ok = []
-    chart_embedded = []
+    captured = []
+    real_cls = observatory_module._EnlargeDialog
 
-    class _RecordingEnlarge(observatory_module._EnlargeDialog):
-        def exec(self):
-            chart_embedded.append(self._chart.parentWidget() is not None)
-            grabbed_ok.append(not self.grab().isNull())
-            return 0
+    class _RecordingEnlarge(real_cls):
+        # NON-MODAL now (ITEM 1, R4): capture at construction — see the
+        # matching comment above `test_enlarge_dialog_hosts_the_same_
+        # chart_and_carries_zoom_state`.
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            captured.append(self)
 
     monkeypatch.setattr(observatory_module, "_EnlargeDialog", _RecordingEnlarge)
 
@@ -715,11 +724,13 @@ def test_enlarge_dialog_render_smoke_for_every_chart(app, monkeypatch):
         dialog._season_chart, dialog._envelope, dialog._eclipse_chart,
         dialog._day_chart, dialog._laskar_chart,
     ):
-        grabbed_ok.clear()
-        chart_embedded.clear()
+        captured.clear()
         _enlarge_button_of(chart).click()
-        assert chart_embedded == [True]
-        assert grabbed_ok == [True]
+        assert len(captured) == 1
+        enlarged = captured[0]
+        assert enlarged._chart.parentWidget() is not None
+        assert not enlarged.grab().isNull()
+        enlarged.accept()
     dialog.close()
 
 
