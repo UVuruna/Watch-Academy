@@ -210,22 +210,36 @@ ROTATION CONVENTION's shared cadence, owner decree 2026-07-20 — see
 [Assets (folder)](../assets/___assets.md)) and `SCALE_ART_STEMS` live
 in `config/defaults.py` beside `SCALE_ART_DIR`.
 
-**The Eras of the World carries SEVEN calendar emblems (six from owner
+**The Eras of the World carries TEN calendar emblems (six from owner
 fix-round B, 2026-07-19, TASK 3; Maya added the MAYA round, owner
-2026-07-20 — "Jel Maje nisu imale kalendar?"):** the comparative essay
-still has no plate of its OWN, but `_ERA_ENTRIES`'s last entry now
-supplies a TUPLE of seven `assets/era/calendar/*.png` paths (AUC,
-Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya — one per calendar
-the essay compares) instead of `None`; `_topics()`'s `"images"`
-comprehension branches on `isinstance(art, tuple)` to build every path
-(Rule #5 — the SAME `images` tuple mechanism `_article_html` already
-draws side-by-side art with, e.g. the dual Sunday plates).
-Graceful-absent like every other era plate — none of the seven PNGs
-exist yet (research/prompts/era/era_prompts.md carries the new
-prompts); a future Settings/era-picker use of the same art is noted in
-that sheet. The Maya's OWN `third_era` setting (the Long Count on the
-year line) is a separate mechanism — see
-[Deep Time](../core/deep_time.md).
+2026-07-20 — "Jel Maje nisu imale kalendar?"; Kali Yuga/Olympiad/Unix
+added the ERA-TRIO round, owner 2026-07-20 — "može sve 3"):** the
+comparative essay still has no plate of its OWN, but `_ERA_ENTRIES`'s
+last entry now supplies a TUPLE of ten `assets/era/calendar/*.png`
+paths (AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya, Kali
+Yuga, Olympiad, Unix — one per calendar the essay compares) instead of
+`None`; `_topics()`'s `"images"` comprehension branches on
+`isinstance(art, tuple)` to build every path (Rule #5 — the SAME
+`images` tuple mechanism `_article_html` already draws side-by-side
+art with, e.g. the dual Sunday plates). Graceful-absent like every
+other era plate — none of the ten PNGs exist yet
+(research/prompts/era/era_prompts.md carries the new prompts); a
+future Settings/era-picker use of the same art is noted in that sheet.
+The Maya/Olympiad/Kali's OWN `third_era` setting (the year-line third
+calendar) is a separate mechanism — see [Deep Time](../core/deep_time.md).
+
+**The calendar strip ALSO rotates now (ERA-TRIO round, owner
+2026-07-20 — ground-truthed and fixed):** every calendar-tuple entry
+used to bypass `rotating_art_file` entirely, a straight
+`ERA_ART_DIR / a` lookup — since the six Age/Starry plates already
+routed through the shared `_era_image` helper, the calendar strip
+should have too (THE UNIVERSAL ROTATION CONVENTION is meant to be
+universal); `_topics()`'s `isinstance(art, tuple)` branch now calls
+`_era_image(a)` per path instead. This makes the owner's Byzantine v2
+emblem (`assets/era/calendar/alt/Byzantine.png`, the tetragrammatic
+cross with four firesteels) an actual rotation partner for the
+canonical `Byzantine.png` once both land — see
+[Assets (folder)](../assets/___assets.md).
 
 **The hidden poem (owner 2026-07-16, ROADMAP queue #6):** when
 `hidden_unlocked` is true, `__init__` appends TWO extra entries from

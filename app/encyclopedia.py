@@ -141,8 +141,13 @@ _SUN_ENTRIES = (
 # The comparative "Eras of the World" essay carries no plate of its
 # own — instead it strings the calendar-system emblems the essay
 # compares (owner fix-round B, 2026-07-19, TASK 3; Maya added the MAYA
+# round, owner 2026-07-20; Kali Yuga/Olympiad/Unix added the ERA-TRIO
 # round, owner 2026-07-20): graceful-absent until PromptPainter
-# generates assets/era/calendar/*.png.
+# generates assets/era/calendar/*.png. Every entry here (Byzantine
+# included) rotates through `_era_image` below like the six Age/Starry
+# plates — the Byzantine v2 emblem (ERA-TRIO round) is a same-named
+# `calendar/alt/Byzantine.png` sibling, discovered automatically, no
+# second entry needed here.
 _ERA_CALENDAR_ART = (
     "calendar/AUC.png",
     "calendar/Byzantine.png",
@@ -151,6 +156,9 @@ _ERA_CALENDAR_ART = (
     "calendar/Buddhist.png",
     "calendar/Huangdi.png",
     "calendar/Maya.png",
+    "calendar/KaliYuga.png",
+    "calendar/Olympiad.png",
+    "calendar/Unix.png",
 )
 _ERA_ENTRIES = (
     ("Age_of_Light", "Age_of_Light.png"),
@@ -801,7 +809,15 @@ def _topics(travel_date: date | None = None) -> dict:
         siblings and its `alt/` twin feed one daily pool, keyed by
         `travel_date` exactly like the Scale rotation above. Zero
         candidates (art not landed yet) keeps the plain canonical path
-        — graceful-absent, the Encyclopedia hides missing art."""
+        — graceful-absent, the Encyclopedia hides missing art. Used for
+        BOTH the six single Age/Starry-Season entries below AND every
+        emblem in the "Eras of the World" calendar strip (ERA-TRIO
+        round, owner 2026-07-20 — ground-truthed: the calendar strip
+        used to bypass rotation entirely, a straight `ERA_ART_DIR / a`
+        with no `rotating_art_file` call, so a `calendar/alt/*`
+        sibling like the Byzantine v2 emblem would never have been
+        found; fixed the same round, since the convention is
+        universal)."""
         canonical = defaults.ERA_ART_DIR / art
         return defaults.rotating_art_file(canonical, travel_date) or canonical
 
@@ -811,7 +827,7 @@ def _topics(travel_date: date | None = None) -> dict:
         "entries": [
             {
                 "images": (
-                    tuple(defaults.ERA_ART_DIR / a for a in art)
+                    tuple(_era_image(a) for a in art)
                     if isinstance(art, tuple)
                     else (_era_image(art),) if art else ()
                 ),

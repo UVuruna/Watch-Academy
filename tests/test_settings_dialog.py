@@ -237,6 +237,32 @@ def test_third_era_combo_lists_maya(app):
     dialog.done(0)
 
 
+def test_third_era_combo_lists_kali_olympiad_unix(app):
+    """ERA-TRIO round, owner 2026-07-20 ("može sve 3"): Kali Yuga,
+    Olympiad and Unix Epoch all appear in the Third calendar combo
+    generically (`THIRD_ERAS` iteration, no special-casing needed in
+    the dialog) and each round-trips through `result_settings()`
+    exactly like every other option — verified independently for all
+    three since they cover three different internal shapes (a uniform
+    offset, a year-only formatter, a date-level formatter)."""
+    from config import constants
+
+    dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
+    values = [
+        dialog._third_era_combo.itemData(i)
+        for i in range(dialog._third_era_combo.count())
+    ]
+    for era in ("kali", "olympiad", "unix"):
+        assert era in values
+        assert era in constants.THIRD_ERA_TITLES
+        index = dialog._third_era_combo.findData(era)
+        assert index >= 0
+        dialog._third_era_combo.setCurrentIndex(index)
+        dialog.accept()
+        assert dialog.result_settings().third_era == era
+    dialog.done(0)
+
+
 def test_dialog_navigation_switches_the_visible_panel(app):
     """Clicking a nav row shows THAT section's panel (owner's stated
     interaction) — the stacked widget follows the list's current row."""
@@ -1041,8 +1067,13 @@ def test_era_terms_topic():
     # Eras of the World: no plate of its own — instead it strings the
     # calendar-system emblems the essay compares (six from owner
     # fix-round B, 2026-07-19; Maya added the MAYA round, owner
-    # 2026-07-20), graceful-absent until PromptPainter generates them.
-    assert len(era[6]["images"]) == 7
+    # 2026-07-20; Kali Yuga/Olympiad/Unix added the ERA-TRIO round,
+    # owner 2026-07-20), graceful-absent until PromptPainter generates
+    # them. Every one of the ten now also rotates against its own
+    # `alt/`/`_v2` siblings (ERA-TRIO round: the strip used to bypass
+    # `rotating_art_file` entirely) — `art_file` resolution is
+    # unaffected either way since no calendar art exists yet.
+    assert len(era[6]["images"]) == 10
     for image in era[6]["images"]:
         resolved = _paths.art_file(image)
         assert resolved is None or resolved.suffix == ".png"
@@ -1078,7 +1109,12 @@ def test_era_terms_topic():
                  # MAYA round (owner 2026-07-20): the three calendars,
                  # the epoch and the honest 2012 baktun-turn.
                  "Tzolk'in", "Haab'", "Long Count", "3114 BCE",
-                 "584,283", "13.0.0.0.0", "260", "365"):
+                 "584,283", "13.0.0.0.0", "260", "365",
+                 # ERA-TRIO round (owner 2026-07-20, "može sve 3"):
+                 # Kali Yuga's epoch, the Olympiad's own anchor and
+                 # second checkable anchor, and the Unix epoch/billennium.
+                 "Kali Yuga", "3102 BCE", "5127", "Olympiad", "Coroebus",
+                 "776 BCE", "293", "Unix", "1970-01-01", "billennium"):
         assert term in world, term
     # The Great Oscillations (fix round F): the Milankovitch essay carries
     # its MEASURED figures (the +28,000 minimum, ~±1.1 d) and names the

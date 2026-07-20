@@ -61,7 +61,10 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   📁 era/                  ← <source>/<Name>.png — the Age/Starry-Season
                              rose windows (ROTATING — see below) +
                              <source>/calendar/ (the "Eras of the
-                             World" comparison strip, not rotating)
+                             World" comparison strip, ALSO ROTATING as
+                             of the ERA-TRIO round, owner 2026-07-20 —
+                             ground-truthed and fixed: it used to
+                             bypass `rotating_art_file` entirely)
   📁 archetype/            ← <source>/<archetype>/<Figure>.png — the
                              pointer-archetype stained glass; the
                              Tetramorph figures ROTATE (see below)
@@ -105,7 +108,11 @@ wired onto the hot `art_file` path itself. Current adopters:
 - **The era/age rose windows** (`assets/era/<source>/`) — the Earth
   hover card's era badge and the Encyclopedia's era entry images both
   resolve through `rotating_art_file`, keyed by the viewed/traveled
-  date.
+  date. Its `calendar/` sub-collection (the "Eras of the World"
+  comparison strip) joined the same wiring in the ERA-TRIO round
+  (owner 2026-07-20) — the Byzantine v2 emblem, a tetragrammatic-cross-
+  with-firesteels take living at `calendar/alt/Byzantine.png`, is the
+  strip's first rotation sibling.
 - **The Tetramorph figures** (`assets/archetype/<source>/tetramorph/`)
   — `render.layers.ArchetypeLayer` resolves each `rotates=True` figure
   fresh every paint (the layer already paints LIVE, never cached, so a

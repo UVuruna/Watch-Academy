@@ -31,8 +31,12 @@ doctrine is drawn as one day's own arc, never as lettering.
 2026-07-19, TASK 3) `Anno_Lucis.png` and, under
 `assets/era/<source>/calendar/`, `AUC.png`, `Byzantine.png`,
 `Hebrew.png`, `Hegirae.png`, `Buddhist.png`, `Huangdi.png`, `Maya.png`
-(MAYA round, owner 2026-07-20). **CORRECTED (RULE-19 round, owner
-decree 2026-07-20):** this sheet used to claim "no `<source>` split" —
+(MAYA round, owner 2026-07-20), plus `KaliYuga.png`, `Olympiad.png`,
+`Unix.png` (ERA-TRIO round, owner 2026-07-20, "može sve 3") — and one
+ROTATION sibling, `assets/era/<source>/calendar/alt/Byzantine.png`,
+the owner's own idea for a second Byzantine take (the same round).
+**CORRECTED (RULE-19 round, owner decree 2026-07-20):** this sheet
+used to claim "no `<source>` split" —
 WRONG, both sources always generated their own subtree exactly like
 every other sourced family; `"era"` had simply never been added to
 `config.constants.ART_SOURCED_ROOTS`, so every era badge silently
@@ -40,11 +44,16 @@ failed its own existence check despite the art sitting right there.
 Fixed the same round — the app reads `assets/era/<Name>.png` (or
 `.../calendar/<Name>.png`) through `config.paths.art_file`
 (`config/defaults.py` `ERA_ART_DIR`) exactly like the badge/weekday/
-archetype families. The six Age/Starry-Season plates (not Anno Lucis,
-not the calendar strip) additionally ROTATE daily against an `alt/`
-sibling — THE UNIVERSAL ROTATION CONVENTION,
-[Assets (folder)](../../../assets/___assets.md) — the owner's `new/`
-folders renamed to `alt/` this round.
+archetype families. The six Age/Starry-Season plates (not Anno Lucis)
+additionally ROTATE daily against an `alt/` sibling — THE UNIVERSAL
+ROTATION CONVENTION, [Assets (folder)](../../../assets/___assets.md)
+— the owner's `new/` folders renamed to `alt/` this round. **The
+calendar strip joined the same rotation in the ERA-TRIO round (owner
+2026-07-20):** it used to bypass `rotating_art_file` entirely (a
+straight, non-rotating `ERA_ART_DIR / a` lookup) — ground-truthed and
+fixed the same round `app/encyclopedia.py`'s `_era_image` now covers
+every calendar emblem too, so the Byzantine v2 emblem below
+(`calendar/alt/Byzantine.png`) is actually discovered.
 
 **House rules carried from every other sheet:** photorealistic
 render, isolated background (no transparency-checkerboard artifact —
@@ -149,11 +158,12 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The Eras of the World's own calendars
 
-**Seven emblems** (six from owner fix-round B, 2026-07-19, TASK 3 —
+**Ten emblems** (six from owner fix-round B, 2026-07-19, TASK 3 —
 "zašto nismo ubacili kineski" prompted the whole round — plus Maya,
 MAYA round, owner 2026-07-20, "Jel Maje nisu imale kalendar? Zašto
-nemamo njihov?"), one per calendar system the "Eras of the World"
-essay compares — SAME round rose-window family,
+nemamo njihov?" — plus Kali Yuga, Olympiad and Unix, ERA-TRIO round,
+owner 2026-07-20, "može sve 3"), one per calendar system the "Eras of
+the World" essay compares — SAME round rose-window family,
 SAME house rules (photorealistic, isolated background, the circular
 window shape IS the frame, NO lettering anywhere — no calligraphy, no
 numerals, no inscriptions of any kind, the doctrine drawn as image
@@ -162,7 +172,11 @@ portraiture of any founder or prophet — each speaks its epoch through
 CLASSICAL, RESPECTFUL iconography only, the same restraint a rose
 window itself keeps; these are living traditions, drawn with the same
 care the dial gives its own measured era, never a caricature.
-Drop path: `assets/era/calendar/`.
+Drop path: `assets/era/calendar/`. The set also carries ONE rotation
+ALT (the owner's own idea, ERA-TRIO round): a second Byzantine take
+living at `assets/era/calendar/alt/Byzantine.png`, discovered by
+`rotating_art_file` beside the canonical `Byzantine.png` — see its own
+entry below.
 
 **AUC — Ab Urbe Condita** (Rome, 753 BCE) →
 `assets/era/calendar/AUC.png`
@@ -213,8 +227,46 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A stepped pyramid in the silhouette of El Castillo rises from the disc's base in warm limestone-and-shadow glass, its narrow staircase climbing dead center toward the summit; the sun's disc sits low and bright, just cresting the pyramid's own summit stair, a single warm ray spilling down the steps. Above the pyramid a deep indigo-black sky fills the rest of the window, scattered with a full field of small bright star-tesserae — day just breaking over a night still holding the upper glass, the count's own turning point caught mid-dawn. Palette: warm limestone gold-gray, deep indigo-black sky, bright starlight, dark-stone lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere (no glyphs of any kind — Maya script is writing, not permitted in this house, exactly like the Hegirae plate's calligraphy ban), no figures.
 ```
 
+**Kali Yuga** (the fourth age, epoch 3102 BCE) →
+`assets/era/calendar/KaliYuga.png` (ERA-TRIO round, owner 2026-07-20)
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A powerful bull rendered in warm ochre-and-umber stained glass stands at the disc's center, but only ONE leg reaches the ground — the other three drawn raised and folded beneath the body, unbroken but plainly not bearing weight — the bull balanced and steady on that single standing leg, never toppling (the classical dharma-bull image: four legs lost to three, to two, to this one). Behind it a darkening star field spreads across the upper glass, a few last embers of gold-white light still clinging low at the horizon while indigo night presses down from above. Palette: warm ochre-and-umber bull against advancing indigo-black star-glass, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim, dimming toward its upper arc. NO lettering anywhere, no figures — the bull alone carries the whole doctrine.
+```
+
+**Olympiad** (the ancient Games, first recorded 776 BCE) →
+`assets/era/calendar/Olympiad.png` (ERA-TRIO round, owner 2026-07-20)
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A woven laurel wreath in deep glass-green circles the disc just inside its own leadwork rim; at the medallion's center a single torch burns upright, its flame rendered in bright warm-gold and amber glass, the one source of light in the whole window. Palette: deep laurel green ring, bright gold-amber flame at center, warm-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
+```
+
+**Unix Epoch** (1970-01-01 00:00 UTC, computing's own zero) →
+`assets/era/calendar/Unix.png` (ERA-TRIO round, owner 2026-07-20)
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A sun built entirely from fine glowing circuit-trace lines — its disc and rays rendered as branching copper-gold pathways on dark glass rather than a solid orb — rises from a circuit-board horizon at the disc's base, the board's own traces running like a skyline of low geometric towers along the bottom edge. Above it a deep near-black glass sky holds a scatter of small square pixel-like points of light standing in for stars. Palette: glowing copper-gold circuit traces, dark circuit-green horizon, near-black sky, dark-metal lead. Border: the shared candle-flicker-and-tick leadwork rim, traced with the same fine circuit-line texture. NO lettering anywhere (no digits, no cursor blocks, no glyphs of any kind), no figures.
+```
+
+**Byzantine Anno Mundi — v2** (the rotation ALT, the owner's own idea
+— the Palaiologos inheritance) →
+`assets/era/calendar/alt/Byzantine.png` (ERA-TRIO round, owner
+2026-07-20)
+
+A second, genuinely different take on the Byzantine emblem — not a
+regeneration of the same prompt, a distinct design that becomes the
+canonical `Byzantine.png`'s rotation partner (THE UNIVERSAL ROTATION
+CONVENTION, [Assets (folder)](../../../assets/___assets.md)): the β of
+Byzantium rendered not as a mosaic dome but as heraldry, the
+tetragrammatic cross of the Palaiologos dynasty with its four
+firesteels.
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A great tetragrammatic cross in radiant gold-glass sits at the medallion's center, its four arms reaching toward the rim; in each of the four quarters between the arms sits ONE firesteel (ocilo), its open crescent facing OUTWARD toward the rim — a stylized heraldic crescent-and-hook fire-striker shape, doubled and mirrored the way the Serbian cross wears its own four ocila — rendered as glass heraldic ornament, explicitly NOT a letterform (never the Greek β this emblem's own "Byzantine" would suggest, and never the Cyrillic С the Serbian cross's own ocila are sometimes read as). Deep imperial purple fills the quarters behind the firesteels, the cross itself the brightest gold in the window. Palette: radiant Byzantine gold cross, imperial purple ground, aged-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim, dressed in the same fine mosaic-tessera texture as the primary Byzantine emblem. NO lettering anywhere (the firesteels are heraldic ornament only, never a letterform), no figures.
+```
+
 **Future use (owner note, not yet wired further than the essay art):**
-these seven calendar emblems' art already backs the "Eras of the World"
+these ten calendar emblems' art already backs the "Eras of the World"
 article's image strip (`app/encyclopedia.py` `_ERA_CALENDAR_ART`,
 graceful-absent — see [Encyclopedia](../../../app/encyclopedia.md));
 the owner's next planned use is the Settings/era-picker combo
@@ -257,11 +309,30 @@ wearing the matching emblem beside each option.
   (`core/deep_time.py` `maya_long_count`, TRUE Long Count arithmetic,
   not an offset — see [Deep Time](../../../core/deep_time.md)); this
   sheet only covers the ARTWORK.
+- **Extended again (ERA-TRIO round, owner 2026-07-20 — "može sve 3"):**
+  three more calendar-system emblems join the seven above — `KaliYuga.png`
+  (the dharma bull on its one standing leg), `Olympiad.png` (the laurel
+  wreath around a burning torch) and `Unix.png` (a sun of circuit
+  traces over a circuit-board horizon) — plus ONE rotation ALT,
+  `alt/Byzantine.png` (the tetragrammatic cross with four heraldic
+  firesteels, the owner's own idea, the Palaiologos inheritance) —
+  18 images total. The `third_era` setting grew three matching options
+  this round: Kali Yuga is a uniform offset like AUC/Byzantine/Hebrew/
+  Chinese (`core/deep_time.py` `third_era_year`, `constants.
+  THIRD_ERA_OFFSETS["kali"] = 3101`); Olympiad and Unix are FORMATTERS
+  like Maya, not offsets (`olympiad_year`, `unix_epoch_seconds` — see
+  [Deep Time](../../../core/deep_time.md)). Also ground-truthed and
+  fixed this round: the calendar strip's consumer
+  (`app/encyclopedia.py` `_era_image`) used to bypass
+  `rotating_art_file` entirely for the whole strip — now every
+  calendar emblem rotates against its own `alt/`/`_v2` siblings like
+  every other era plate, so the Byzantine v2 emblem is actually
+  discovered once generated. This sheet covers the ARTWORK only.
 - Verify with `python main.py "research/prompts/era/era_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner
-  (14 images expected — the six-calendar dry-run was verified clean,
-  0 problems, on 2026-07-19; the Maya addition still needs its own
-  dry-run pass).
+  (18 images expected — the six-calendar dry-run was verified clean,
+  0 problems, on 2026-07-19; the Maya and ERA-TRIO additions still
+  need their own dry-run pass).
 - **ART LANDED + WIRED (RULE-19 round, owner decree 2026-07-20):** all
   seven era/starry emblems generated for both sources under the GREAT
   DAY design. Two fixes landed the same round: (1) `"era"` added to

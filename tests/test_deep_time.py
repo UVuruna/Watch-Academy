@@ -22,10 +22,12 @@ from core.deep_time import (
     julian_day,
     maya_long_count,
     month_length,
+    olympiad_year,
     proxy_cycles,
     real_year,
     shift_calendar,
     third_era_year,
+    unix_epoch_seconds,
 )
 from data.deep_time import DeepTimeRepository
 from data.moon_phases import MoonPhaseRepository
@@ -93,6 +95,21 @@ def test_chinese_third_era_joins_the_year_line():
     assert constants.THIRD_ERA_LABELS["chinese"] == "Huangdi"
 
 
+def test_kali_yuga_third_era():
+    """Kali Yuga (ERA-TRIO round, owner 2026-07-20, "može sve 3"): a
+    uniform CE + 3101 offset like AUC/Byzantine/Hebrew/Chinese — epoch
+    3102 BCE (astro -3101); 2026 CE reads Kali year 5127, the figure
+    every Hindu almanac cites for this year (independently confirmed,
+    not just internally self-consistent)."""
+    assert third_era_year(2026, "kali") == 5127
+    assert (
+        format_year_line(2026, "bce_ce", True, "kali")
+        == "2026 CE · 6105. Anno Lucis · 5127. Kali Yuga"
+    )
+    assert "kali" in constants.THIRD_ERAS
+    assert constants.THIRD_ERA_LABELS["kali"] == "Kali Yuga"
+
+
 def test_maya_long_count_golden_anchors():
     """The TRUE Maya Long Count (MAYA round, owner 2026-07-20) — a pure
     day count from the GMT correlation epoch (JDN 584,283), NOT a year
@@ -136,6 +153,86 @@ def test_maya_deep_travel_case():
     assert format_year_line(-4078, "bce_ce", False, "maya", 1, 1) == (
         "4079 BCE · 1. Anno Lucis · -3.11.0.5.18. Long Count"
     )
+
+
+def test_olympiad_year_golden_anchors():
+    """The ancient Greek Olympiad count (ERA-TRIO round, owner
+    2026-07-20) — a FORMATTER era like Maya/Unix, needing only the
+    YEAR, not a uniform "CE + N" offset: every 4 years is one Olympiad
+    from the first Games (776 BCE, astro -775). Two independent
+    anchors: the epoch itself reads Olympiad 1, Year 1; the classical
+    chronographers' own running count reached the 293rd Olympiad in
+    393 CE, the conventional date of the last ancient Games under
+    Theodosius I — this dial's plain arithmetic reproduces that number
+    exactly (verified via WebSearch + direct computation, not assumed
+    — the same standard of honesty the Maya round set)."""
+    assert olympiad_year(-775) == "1. Olympiad · Year 1"
+    assert olympiad_year(393) == "293. Olympiad · Year 1"
+
+
+def test_olympiad_year_cycle_boundaries():
+    """Every 4th astro year rolls the Olympiad forward; Year K runs 1
+    to 4 within each cycle — the Games themselves fell in Year 1."""
+    assert olympiad_year(-774) == "1. Olympiad · Year 2"
+    assert olympiad_year(-772) == "1. Olympiad · Year 4"
+    assert olympiad_year(-771) == "2. Olympiad · Year 1"
+
+
+def test_olympiad_year_today():
+    """2024 CE and 2026 CE, computed — not assumed — from the same
+    776 BCE anchor (Rule #2 honesty): 2024 lands Year 4 of the 700th
+    Olympiad, not a guessed Year 3; 2026 is the 701st Olympiad, close
+    to but not exactly the round "~700th" estimate."""
+    assert olympiad_year(2024) == "700. Olympiad · Year 4"
+    assert olympiad_year(2026) == "701. Olympiad · Year 2"
+
+
+def test_olympiad_third_era_joins_the_year_line():
+    assert (
+        format_year_line(2026, "bce_ce", True, "olympiad")
+        == "2026 CE · 6105. Anno Lucis · 701. Olympiad · Year 2"
+    )
+    assert "olympiad" in constants.THIRD_ERAS
+    assert constants.THIRD_ERA_LABELS["olympiad"] == "Olympiad"
+
+
+def test_unix_epoch_seconds_golden_anchors():
+    """Unix time (ERA-TRIO round, owner 2026-07-20) — seconds since
+    1970-01-01 00:00 UTC at the displayed date's OWN midnight UTC (a
+    date-level count, never intraday, the documented convention)."""
+    assert unix_epoch_seconds(1970, 1, 1) == 0
+    # HONESTY CHECK (Rule #2 — verify, don't trust the popular trivia
+    # figure): the widely-cited "Unix billennium" (1,000,000,000 s)
+    # fell at 2001-09-09 01:46:40 UTC (confirmed via WebSearch), NOT
+    # at that date's own midnight — this dial's midnight-anchored
+    # reading is 999,993,600, 6,400 s (1h46m40s) earlier, verified by
+    # direct day counting against the epoch.
+    assert unix_epoch_seconds(2001, 9, 9) == 999_993_600
+
+
+def test_unix_epoch_seconds_either_side_of_the_epoch():
+    """Dates before 1970 read as honest negative seconds — plain
+    subtraction, no special-casing (Rule #7, the same law the Maya's
+    negative baktun already leans on)."""
+    assert unix_epoch_seconds(1969, 12, 31) == -86400
+    assert unix_epoch_seconds(1970, 1, 2) == 86400
+
+
+def test_unix_third_era_joins_the_year_line():
+    """The Unix count reads on the year line like Maya — needs the
+    full date, space-grouped digits, and the line's own " · " glue
+    instead of the offset eras' ". LABEL" suffix (a plain period
+    right after a space-grouped number reads poorly)."""
+    assert (
+        format_year_line(1970, "bce_ce", True, "unix", 1, 1)
+        == "1970 CE · 6049. Anno Lucis · 0 s · Unix"
+    )
+    assert (
+        format_year_line(2001, "bce_ce", True, "unix", 9, 9)
+        == "2001 CE · 6080. Anno Lucis · 999 993 600 s · Unix"
+    )
+    assert "unix" in constants.THIRD_ERAS
+    assert constants.THIRD_ERA_LABELS["unix"] == "Unix"
 
 
 def test_format_anno_lucis_matches_the_year_line_pairing():

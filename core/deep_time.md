@@ -9,9 +9,12 @@ formatter used everywhere a year displays), the astronomical-year
 convention (1 BCE = year 0), the 400-year Gregorian PROXY mapping that
 lets Python `datetime` (years 1–9999) carry moments across
 −13000…+17000, the proleptic-Gregorian Julian Day, the ΔT model the
-analytic moon illumination needs, and (MAYA round, owner 2026-07-20)
-the TRUE Maya Long Count — the one THIRD_ERAS entry that is a pure day
-count rather than a year offset.
+analytic moon illumination needs, (MAYA round, owner 2026-07-20) the
+TRUE Maya Long Count, and (ERA-TRIO round, owner 2026-07-20, "može sve
+3") three more THIRD_ERAS: Kali Yuga (a uniform offset), the ancient
+Olympiad (a year-only cycle formatter) and Unix time (a date-level
+formatter like Maya) — see [The three formatter
+shapes](#third-era-shapes) below.
 
 ## The proxy mapping (why it is exact)
 
@@ -64,6 +67,48 @@ grew two new (defaulted, backward-compatible) parameters, `month`/`day`
 — every caller whose `third_era` can be "maya" passes the real
 displayed date; the offset eras ignore them entirely.
 
+<a id="third-era-shapes"></a>
+
+## The three THIRD_ERA shapes (ERA-TRIO round, owner 2026-07-20)
+
+Owner request: "može sve 3" — Kali Yuga, the ancient Olympiad and Unix
+time join the third-calendar system in one round, each landing in a
+DIFFERENT one of the three shapes `format_year_line` now dispatches on:
+
+1. **Uniform OFFSET** (`third_era_year`, `constants.THIRD_ERA_OFFSETS`)
+   — Kali Yuga joins AUC/Byzantine/Hebrew/Chinese here, no new code:
+   epoch 3102 BCE (astro −3101, the Puranic "night of 17/18 February"),
+   `THIRD_ERA_OFFSETS["kali"] = 3101` (2026 CE → Kali year 5127,
+   independently confirmed against the figure Hindu almanacs cite for
+   this year). Documented ±1 near the Chaitra (spring) new-year
+   boundary, the same class of honesty as the Chinese spread note.
+2. **Year-only FORMATTER** (`olympiad_year`) — a 4-year CYCLE count
+   from the first Olympiad (776 BCE, astro −775,
+   `constants.OLYMPIAD_EPOCH_YEAR`), not a uniform offset: displays
+   `"N. Olympiad · Year K"` (K 1..4, the Games themselves fell in
+   Year 1). Ground-truthed against a SECOND, independent anchor: the
+   classical chronographers' own running count reached the 293rd
+   Olympiad in 393 CE, the conventional date of the last ancient Games
+   under Theodosius I — this formula reproduces exactly (293, Year 1)
+   from the same epoch. Needs only the year, like the offset eras.
+3. **Date-level FORMATTER** (`unix_epoch_seconds`) — a pure count like
+   Maya, needing the full `month`/`day`: seconds since the Unix epoch
+   (1970-01-01 00:00 UTC) to the displayed date's OWN midnight UTC,
+   via the same `julian_day(..., 0.5)` noon-trick `maya_long_count`
+   already uses for an exact integer day delta. HONESTY NOTE: the
+   popular "Unix billennium" trivia (exactly 1,000,000,000 s) fell at
+   2001-09-09 01:46:40 UTC, NOT at that date's midnight — this dial's
+   own midnight-anchored reading of 2001-09-09 is 999,993,600, 6,400 s
+   earlier; the golden test pins the VERIFIED value, not the popular
+   figure (Rule #2). Displayed space-grouped ("999 993 600 s · Unix")
+   since a plain period after a grouped number reads poorly — the
+   value/label glue reuses the year line's own " · " separator instead
+   of the offset eras' ". LABEL" suffix.
+
+`format_year_line`'s `month`/`day` parameters now matter for BOTH
+"maya" and "unix" (still defaulted to 1 Jan for every other era,
+including "olympiad", which needs only the year).
+
 ## Connections
 
 ### Uses
@@ -93,17 +138,28 @@ displayed date; the offset eras ignore them entirely.
   THE dual-calendar formatter — the official year with the Anno Lucis
   year always beside it (`"2026 · 6105. Anno Lucis"`), plus the
   optional third calendar (`"… · 2779. AUC"`). `month`/`day` (MAYA
-  round, owner 2026-07-20, default 1 Jan) matter ONLY for `third_era
-  == "maya"` — see [The Maya Long Count](#maya-long-count) above;
-  every other era ignores them.
+  round, owner 2026-07-20, default 1 Jan; ERA-TRIO round, owner
+  2026-07-20, extended to "unix") matter ONLY for `third_era ==
+  "maya"` or `"unix"` — see [The Maya Long Count](#maya-long-count) and
+  [The three THIRD_ERA shapes](#third-era-shapes) above; every other
+  era, including the year-only "olympiad" formatter, ignores them.
 - `third_era_year(astro_year, third_era)`: the offset eras' third-
-  calendar year — uniform `+N` on the astronomical axis, except Anno
-  Hegirae's lunar display-grade approximation. NOT called for "maya"
-  (a day count, not a year offset) — `format_year_line` special-cases
-  that branch to `maya_long_count` instead.
+  calendar year — uniform `+N` on the astronomical axis (Kali Yuga
+  included, ERA-TRIO round), except Anno Hegirae's lunar display-grade
+  approximation. NOT called for "maya"/"olympiad"/"unix" (none of the
+  three is a year offset) — `format_year_line` special-cases those
+  branches to `maya_long_count`/`olympiad_year`/`unix_epoch_seconds`
+  instead.
 - `maya_long_count(astro_year, month, day)` (MAYA round, owner
   2026-07-20): the true Long Count string, `"baktun.katun.tun.uinal.kin"`
   — see the dedicated section above.
+- `olympiad_year(astro_year)` (ERA-TRIO round, owner 2026-07-20): the
+  ancient Greek Olympiad count, `"N. Olympiad · Year K"` — see
+  [The three THIRD_ERA shapes](#third-era-shapes) above.
+- `unix_epoch_seconds(astro_year, month, day)` (ERA-TRIO round, owner
+  2026-07-20): seconds since the Unix epoch to the displayed date's
+  own midnight UTC — see [The three THIRD_ERA
+  shapes](#third-era-shapes) above.
 - `format_anno_lucis(astro_year)` (owner fix-round B, 2026-07-19): just
   the Anno Lucis half of the year line — `"6105. Anno Lucis"` —
   derived ONCE and reused by both `format_year_line` and the Earth

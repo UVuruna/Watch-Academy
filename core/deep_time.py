@@ -61,11 +61,13 @@ def format_year_line(
     the line ("… · 2779. AUC"). Every legend/hover/dialog-header year
     renders through here.
 
-    `month`/`day` matter ONLY for "maya" (MAYA round, owner 2026-07-20):
-    the Long Count is a true day count, not a year offset, so it needs
-    the full displayed date — every caller whose `third_era` can be
-    "maya" MUST pass the real calendar date. Every other era ignores
-    them, so the 1 Jan default keeps their call sites/tests unchanged."""
+    `month`/`day` matter ONLY for "maya" and "unix" (MAYA round /
+    ERA-TRIO round, owner 2026-07-20): both are DAY counts, not year
+    offsets, so they need the full displayed date — every caller whose
+    `third_era` can be "maya" or "unix" MUST pass the real calendar
+    date. Every other era — including "olympiad", a year-only 4-year
+    CYCLE count — ignores them, so the 1 Jan default keeps their call
+    sites/tests unchanged."""
     parts = [
         format_official(astro_year, notation, show_suffix),
         format_anno_lucis(astro_year),
@@ -75,6 +77,18 @@ def format_year_line(
             f"{maya_long_count(astro_year, month, day)}. "
             f"{constants.THIRD_ERA_LABELS['maya']}"
         )
+    elif third_era == "unix":
+        # Space-grouped digits (the year line's own readability
+        # convention for this one large number) — a plain period after
+        # a space-grouped figure reads poorly, so the value/label glue
+        # reuses the line's own " · " separator instead of the offset
+        # eras' ". LABEL" suffix.
+        grouped = f"{unix_epoch_seconds(astro_year, month, day):,}".replace(
+            ",", " "
+        )
+        parts.append(f"{grouped} s · {constants.THIRD_ERA_LABELS['unix']}")
+    elif third_era == "olympiad":
+        parts.append(olympiad_year(astro_year))
     elif third_era != "none":
         parts.append(
             f"{third_era_year(astro_year, third_era)}. "
@@ -108,6 +122,30 @@ def third_era_year(astro_year: int, third_era: str) -> int:
     return astro_year + constants.THIRD_ERA_OFFSETS[third_era]
 
 
+def olympiad_year(astro_year: int) -> str:
+    """The ancient Greek Olympiad count (ERA-TRIO round, owner
+    2026-07-20) — a FORMATTER era like Maya/Unix, not a uniform
+    "CE + N" offset: every 4 years is one Olympiad, counted from the
+    first Olympiad's own Games (776 BCE, astro year −775,
+    `constants.OLYMPIAD_EPOCH_YEAR`); the historical midsummer
+    games-boundary is honestly approximated by the plain calendar year
+    here, the same class of rounding the Byzantine September epoch and
+    the Hebrew Tishri epoch already carry. Year K within the cycle
+    runs 1..4 — the Games themselves fell in Year 1 of each Olympiad.
+    Needs only the YEAR (unlike Maya/Unix, no month/day). Ground-
+    truthed against a SECOND, independent anchor: the classical
+    chronographers' own running count reached the 293rd Olympiad in
+    393 CE, the conventional date of the last ancient Games under
+    Theodosius I — this formula reproduces exactly (293, Year 1) from
+    the same 776 BCE epoch (tests/test_deep_time.py)."""
+    elapsed = astro_year - constants.OLYMPIAD_EPOCH_YEAR
+    cycle, year_in_cycle = divmod(elapsed, 4)
+    return (
+        f"{cycle + 1}. {constants.THIRD_ERA_LABELS['olympiad']} · "
+        f"Year {year_in_cycle + 1}"
+    )
+
+
 def maya_long_count(astro_year: int, month: int, day: int) -> str:
     """The TRUE Maya Long Count (MAYA round, owner 2026-07-20) — a pure
     day count from the GMT correlation epoch (Julian Day Number
@@ -128,6 +166,30 @@ def maya_long_count(astro_year: int, month: int, day: int) -> str:
     tun, days = divmod(days, 360)
     uinal, kin = divmod(days, 20)
     return f"{baktun}.{katun}.{tun}.{uinal}.{kin}"
+
+
+def unix_epoch_seconds(astro_year: int, month: int, day: int) -> int:
+    """Seconds since the Unix epoch (1970-01-01 00:00 UTC) to the
+    displayed date's OWN midnight UTC (ERA-TRIO round, owner
+    2026-07-20) — a date-level count, like every calendar on this
+    dial's year line, never an intraday instant. `julian_day(..., 0.5)`
+    lands exactly on the integer JDN (the noon trick `maya_long_count`
+    already uses above), so the day delta needs no rounding;
+    multiplying by SECONDS_PER_DAY gives the exact count, honest for
+    dates on either side of the epoch (Python's plain subtraction, no
+    special-casing needed — Rule #7, the same law the Maya's negative
+    baktun already leans on).
+
+    HONESTY NOTE: the widely-cited "Unix billennium" (exactly
+    1,000,000,000 seconds) fell at 2001-09-09 01:46:40 UTC, NOT at
+    that date's own midnight — this dial's midnight-anchored reading
+    of 2001-09-09 is 999,993,600, 6,400 s (1h46m40s) earlier; verified
+    by direct day counting against the epoch, not assumed from the
+    popular trivia figure (tests/test_deep_time.py)."""
+    days = int(julian_day(astro_year, month, day, 0.5)) - int(
+        julian_day(1970, 1, 1, 0.5)
+    )
+    return days * constants.SECONDS_PER_DAY
 
 
 def era_names(notation: str) -> tuple[str, str]:

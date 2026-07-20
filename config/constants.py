@@ -173,15 +173,30 @@ AGE_OF_LIGHT_END_YEAR = 6423
 # approximation AH ≈ (CE − 622) × 33/32 (core.deep_time). The Chinese
 # (Huangdi) count uses the CE + 2697 convention (2026 CE → 4723) — the
 # most common modern reading; sources spread 2695–2698 (the Encyclopedia's
-# own "Eras of the World" article already flags the epoch drift).
-# "maya" (MAYA round, owner 2026-07-20: "Jel Maje nisu imale kalendar?")
-# is the ODD ONE OUT here — every other third era is a uniform "CE + N"
-# offset on the astronomical-year axis, but the Maya Long Count is a
-# TRUE DAY COUNT from a fixed epoch (no year concept at all), so it has
-# no THIRD_ERA_OFFSETS entry and is NOT handled by `third_era_year` —
-# `core.deep_time.maya_long_count` walks the real calendar date's
-# Julian Day Number instead (`format_year_line` special-cases it).
-THIRD_ERAS = ("none", "auc", "byzantine", "hebrew", "hegirae", "chinese", "maya")
+# own "Eras of the World" article already flags the epoch drift). Kali
+# Yuga (ERA-TRIO round, owner 2026-07-20) is a uniform CE + 3101 offset
+# like the four above — epoch 3102 BCE = astro −3101 (the night of
+# 17/18 February, Puranic tradition) — but its own Hindu luni-solar new
+# year (Chaitra, in spring, not January) makes the reading ±1
+# conventional near that boundary, the same class of honesty as the
+# Chinese spread note above.
+# THREE third eras are FORMATTERS rather than offsets, each a
+# different shape: "maya" (MAYA round, owner 2026-07-20: "Jel Maje
+# nisu imale kalendar?") is a TRUE DAY COUNT from a fixed epoch (no
+# year concept at all) — `core.deep_time.maya_long_count` walks the
+# real calendar date's Julian Day Number. "unix" (ERA-TRIO round) is
+# likewise a day/second count, not a year — seconds since the Unix
+# epoch (1970-01-01 00:00 UTC) at the displayed date's OWN midnight UTC
+# — `core.deep_time.unix_epoch_seconds`. "olympiad" (ERA-TRIO round)
+# needs only the YEAR, like the offset eras, but is not a uniform "CE +
+# N": it is a 4-year CYCLE count from the first Olympiad (776 BCE,
+# astro −775) — `core.deep_time.olympiad_year`. None of the three has a
+# THIRD_ERA_OFFSETS entry and none is handled by `third_era_year` —
+# `format_year_line` special-cases all three branches.
+THIRD_ERAS = (
+    "none", "auc", "byzantine", "hebrew", "hegirae", "chinese", "maya",
+    "kali", "olympiad", "unix",
+)
 THIRD_ERA_TITLES = {
     "none": "None",
     "auc": "Ab Urbe Condita (Rome)",
@@ -190,9 +205,13 @@ THIRD_ERA_TITLES = {
     "hegirae": "Anno Hegirae (Islamic)",
     "chinese": "Huangdi (China)",
     "maya": "Maya Long Count",
+    "kali": "Kali Yuga (Hindu)",
+    "olympiad": "Olympiad (Ancient Greece)",
+    "unix": "Unix Epoch (Computing)",
 }
 THIRD_ERA_OFFSETS = {
     "auc": 753, "byzantine": 5509, "hebrew": 3760, "chinese": 2697,
+    "kali": 3101,
 }
 THIRD_ERA_LABELS = {
     "auc": "AUC",
@@ -201,6 +220,14 @@ THIRD_ERA_LABELS = {
     "hegirae": "AH",
     "chinese": "Huangdi",
     "maya": "Long Count",
+    "kali": "Kali Yuga",
+    # "olympiad"/"unix" embed their own label mid-string rather than
+    # appending it (their display shape differs from every offset
+    # era's "value. LABEL" — see `core.deep_time.olympiad_year`/
+    # `format_year_line`'s unix branch) — kept here anyway (Rule #4)
+    # so the words themselves stay data, not a second hardcoded copy.
+    "olympiad": "Olympiad",
+    "unix": "Unix",
 }
 # Epoch fine print for the Settings combo tooltips (owner amendment:
 # tooltip only, never on the year line).
@@ -214,6 +241,15 @@ THIRD_ERA_NOTES = {
     "maya": "A true day count (baktun.katun.tun.uinal.kin), not a year "
             "offset — GMT correlation epoch 11 Aug 3114 BCE; 21 Dec 2012 "
             "was 13.0.0.0.0, a cycle rolling over, not an ending.",
+    "kali": "The fourth and current age of Hindu cosmology — epoch "
+            "3102 BCE; the Chaitra (spring) new year makes CE + 3101 a "
+            "±1 approximation near the boundary.",
+    "olympiad": "A 4-year cycle from the first Games, 776 BCE; the "
+                "historical midsummer games-boundary is approximated "
+                "by the calendar year.",
+    "unix": "Seconds since 1970-01-01 00:00 UTC, read at this date's "
+            "own midnight UTC — a day-level count, not the exact "
+            "instant.",
 }
 # The Maya Long Count's GMT correlation constant (Goodman-Martinez-
 # Thompson, the most widely accepted): Julian Day Number 584,283 =
@@ -223,6 +259,15 @@ THIRD_ERA_NOTES = {
 # (tests/test_deep_time.py): 21 Dec 2012 = 13.0.0.0.0, 1 Jan 2000 =
 # 12.19.6.15.2.
 MAYA_EPOCH_JDN = 584283
+# The Olympiad's own epoch (ERA-TRIO round, owner 2026-07-20): the
+# first Olympiad's Games, summer 776 BCE = astronomical year −775
+# (`core.deep_time.astro_from_display`: 1 − 776 = −775). Golden-tested
+# against a second, independent anchor: the classical chronographers'
+# own running count reached the 293rd Olympiad in 393 CE, the
+# conventional date of the last ancient Games under Theodosius I —
+# `core.deep_time.olympiad_year` reproduces that number exactly from
+# this same epoch (tests/test_deep_time.py).
+OLYMPIAD_EPOCH_YEAR = -775
 
 # The 400-year proleptic-Gregorian cycle (146,097 days — exactly 20,871
 # weeks): shifting a moment by whole cycles preserves leap structure,

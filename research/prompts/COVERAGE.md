@@ -150,7 +150,7 @@ here.
 
 ## Era Terms (`assets/era/`, `config.defaults.ERA_ART_DIR`)
 
-**Prompt sheet: EXISTS and is COMPLETE — 14 entries, not 6.** The
+**Prompt sheet: EXISTS and is COMPLETE — 18 entries, not 6.** The
 prior revision of this document only knew about the original 6 (2
 Ages + 4 Starry Seasons); `research/prompts/era/era_prompts.md` grew a
 7th entry (`Anno_Lucis.png`) and a `calendar/` sub-collection of 6 more
@@ -160,14 +160,25 @@ own "fix-round B, TASK 3" — confirmed wired in
 dry-run-verified clean (13 images, 0 problems, per the sheet's own
 Status section). The MAYA round (owner 2026-07-20) added a 7th
 calendar emblem, `Maya.png`, to the same `calendar/` sub-collection —
-14 entries total; the sheet's own Status section still needs its own
-fresh dry-run pass on the new entry.
+14 entries total. The ERA-TRIO round (owner 2026-07-20, "može sve 3")
+added three more calendar emblems (`KaliYuga.png`, `Olympiad.png`,
+`Unix.png`) plus ONE rotation ALT (`calendar/alt/Byzantine.png`, the
+owner's own second Byzantine take) — 18 entries total; the sheet's own
+Status section still needs its own fresh dry-run pass on the new
+entries. The SAME round also fixed a WIRING gap this table's prior
+revision missed: the calendar strip's own consumer
+(`app/encyclopedia.py` `_era_image`) used to bypass
+`rotating_art_file` entirely, a straight non-rotating lookup — now
+every calendar emblem rotates against its own `alt/`/`_v2` siblings
+like every other era plate, so the Byzantine v2 emblem is actually
+discoverable once both files land.
 
 | Collection | Expected by code | On disk | Sheet entry | Verdict |
 |---|---|---|---|---|
 | `era/*` — 2 Ages + 4 Starry Seasons | Age_of_Light, Age_of_Darkness, Starry_{Spring,Summer,Autumn,Winter} | 0/6 | `era_prompts.md` ✔ | ART GAP — full generation pending, wired + graceful-absent on the Encyclopedia's ERA topic |
 | `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `assets/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
-| `era/calendar/*` — 7 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya | 0/7 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent |
+| `era/calendar/*` — 10 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya, Kali Yuga, Olympiad, Unix | 0/10 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent, NOW ALSO ROTATING (ERA-TRIO round) |
+| `era/calendar/alt/Byzantine.png` — the Byzantine v2 rotation ALT | 1 file | 0/1 | `era_prompts.md` ✔ (§The Eras of the World's own calendars, "Byzantine Anno Mundi — v2") | ART GAP — a genuinely new design (tetragrammatic cross, four firesteels), not a regeneration of the canonical prompt; discovered automatically by `rotating_art_file` once both this file AND the canonical `Byzantine.png` exist, no separate code entry needed (THE UNIVERSAL ROTATION CONVENTION) |
 
 <a id="eclipse"></a>
 

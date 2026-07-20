@@ -207,6 +207,19 @@ UI_STRINGS: tuple[str, ...] = (
     "A true day count (baktun.katun.tun.uinal.kin), not a year "
     "offset — GMT correlation epoch 11 Aug 3114 BCE; 21 Dec 2012 "
     "was 13.0.0.0.0, a cycle rolling over, not an ending.",
+    # The ERA-TRIO calendars (owner 2026-07-20, "može sve 3"): Kali
+    # Yuga (a uniform offset), the ancient Olympiad and the Unix epoch
+    # (both formatters, not offsets).
+    "Kali Yuga (Hindu)",
+    "The fourth and current age of Hindu cosmology — epoch 3102 BCE; "
+    "the Chaitra (spring) new year makes CE + 3101 a ±1 approximation "
+    "near the boundary.",
+    "Olympiad (Ancient Greece)",
+    "A 4-year cycle from the first Games, 776 BCE; the historical "
+    "midsummer games-boundary is approximated by the calendar year.",
+    "Unix Epoch (Computing)",
+    "Seconds since 1970-01-01 00:00 UTC, read at this date's own "
+    "midnight UTC — a day-level count, not the exact instant.",
     # NOW (owner 2026-07-15): back to the present — in the Quick Jump
     # menu and as the Time Travel dialog's left button.
     "Now", "OK", "Cancel",

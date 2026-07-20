@@ -224,17 +224,31 @@ def _reference_set() -> set[str]:
 
 
 _ROTATION_SUFFIX = re.compile(r"_v\d+$")
+# THE UNIVERSAL ROTATION CONVENTION's SECOND legal form (ERA-TRIO
+# round, owner 2026-07-20): a same-named file one level down in an
+# `alt/` subfolder, exactly like `rotating_art_file`'s own
+# `directory / "alt"` search — matches "/alt" only when immediately
+# followed by another "/" (so "/alternate/" never false-positives).
+_ROTATION_ALT_SEGMENT = re.compile(r"/alt(?=/)")
 
 
 def _is_referenced(sheet_path_norm: str, references: set[str]) -> bool:
     stem_norm = sheet_path_norm.rsplit(".", 1)[0]     # extension-free tail form
     # THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20): a
-    # `_v2`-style sibling is discovered on disk at runtime, by stem,
-    # never enumerated by exact name anywhere — strip the suffix
-    # before matching, exactly like `rotating_art_file`/
-    # `scale_variant_file`'s own glob does.
+    # rotation sibling is discovered ON DISK at runtime, by stem, never
+    # enumerated by exact name anywhere — strip either of its two legal
+    # forms before matching, exactly like `rotating_art_file`'s own
+    # candidate search does: a `_v2`-style suffix, or an `/alt/` path
+    # segment one level below the canonical file's own directory (the
+    # Byzantine v2 calendar emblem, `calendar/alt/Byzantine.png`, is
+    # the first sheet entry to actually DECLARE a concrete alt/-nested
+    # path — every combination of the two forms is tried).
     destemmed = _ROTATION_SUFFIX.sub("", stem_norm)
-    candidates = {stem_norm, destemmed}
+    candidates = {
+        stem_norm, destemmed,
+        _ROTATION_ALT_SEGMENT.sub("", stem_norm),
+        _ROTATION_ALT_SEGMENT.sub("", destemmed),
+    }
     for ref in references:
         if sheet_path_norm == ref:
             return True
