@@ -81,6 +81,20 @@ class EncyclopediaRepository:
         order 2026-07-19: "posebno za mesec i sunce")."""
         return self._section("eclipse", key)
 
+    def theme_title(self, theme: str) -> dict:
+        """{title, base} of a weekday theme's OWN opening page (owner
+        spec, round R3 restructure: "Sve teme imaju minimum 1 ARTICLE
+        TITLE" — every weekday-structured theme's whole-theme overview,
+        page ONE)."""
+        return self._section("theme_title", theme)
+
+    def week_duality(self, theme: str) -> dict:
+        """{title, base} of a weekday theme's WEEK-DUALITY title page
+        (owner spec, round R3 restructure: the page introducing Sunday
+        as the theme's own dual center, right before the merged Ruler|
+        Servant article)."""
+        return self._section("week_duality", theme)
+
     def entry(self, family: str, name: str) -> dict:
         """{base} of one emblem-family article — family is "virtues" |
         "sins" | "moods" | "duality" (the Judas–Lucifer scale, owner

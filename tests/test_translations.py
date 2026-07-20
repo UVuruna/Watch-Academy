@@ -17,6 +17,11 @@ def test_corpus_covers_every_article_family():
     assert "trio_articles/Faith/base" in corpus
     # The Wider Pantheon topics (WORKPLAN Session 8) join the corpus.
     assert "encyclopedia/wider/Set/base" in corpus
+    # The round R3 ARTICLE ORDER restructure's new title pages join too
+    # (theme_title/week_duality, one per weekday-structured theme).
+    assert "encyclopedia/theme_title/wolf/base" in corpus
+    assert "encyclopedia/theme_title/wolf/title" in corpus
+    assert "encyclopedia/week_duality/wolf/base" in corpus
     assert all(text.strip() for text in corpus.values())
 
 

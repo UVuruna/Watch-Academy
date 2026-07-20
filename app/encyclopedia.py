@@ -25,7 +25,7 @@ from datetime import date
 from pathlib import Path
 
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtGui import QFont, QIcon, QPixmap
 from PySide6.QtWidgets import (
     QDialog,
     QFileDialog,
@@ -43,7 +43,7 @@ from PySide6.QtWidgets import (
 import html as _html
 
 from app.theme import apply_theme
-from app.ui_style import style_button
+from app.ui_style import style_button, style_finish_frame
 from config import constants, defaults, paths
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
@@ -88,29 +88,51 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
         )
     return "<div>" + "".join(parts) + "</div>"
 
-# The gallery groups (owner UX rounds 2026-07-12/13): the clock's own
-# story first, gods together, the zodiac family with the planets and
-# their signs, the remaining week themes with the Trinity, the
-# religions, and the cross-cure emblem families last.
+
+def _image_tooltip(path: Path) -> str:
+    """IMAGE HOVER (owner spec, round R3: "posebno vazno kod onih gde
+    ima više slika" — critical on multi-image pages like the era
+    calendars, e.g. hovering a plate should read "Byzantine"): the
+    filename stem, underscores opened to spaces. Stems already carrying
+    a real capital somewhere (Byzantine, KaliYuga, Solar_Total) are
+    left as drawn — a bare lowercase stem (sigma, swarm) is Title-Cased
+    so every tooltip reads as a name, not a raw file token."""
+    stem = path.stem.replace("_", " ")
+    return stem.title() if stem.islower() else stem
+
+# THE FIVE SECTIONS (owner-approved decision, sealed 2026-07-20, round
+# R3 — supersedes the nine-group 2026-07-12/13 layout): the owner's own
+# names, exact. "planet_signs" is NOT listed on its own — Planets and
+# Planet Signs are ONE topic now, distinguished by the existing
+# Planets/Signs/Art look switcher (`_weekday_topic`'s special-cased
+# "planets" theme already builds exactly that); the "planet_signs" key
+# stays wired in `_topics()` ONLY so a dial slot dressed in that theme
+# still resolves a Spacebar jump (compositor contract, item 9) — it is
+# never a gallery card.
 _TOPIC_GROUPS = (
-    ("The Clock",
+    ("The Celestial Engine",
      ("week", "instrument", "moon", "seasons", "sun", "era",
-      "eclipse_solar", "eclipse_lunar")),
-    ("Gods", ("greek", "norse", "egypt", "slavic")),
-    # THE WIDER PANTHEON (owner 2026-07-15, WORKPLAN Session 8): one
-    # topic per culture for the A-list figures no dial seat could hold
-    # — the seatless famous names, plus the retired ninths whose
-    # written material folds in here (Set, Baldur, Crnobog). Seated
-    # figures keep their weekday topics; these carry only the omitted.
-    ("The Wider Pantheon",
-     ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic")),
-    ("Zodiac", ("astrology", "chinese", "planets", "planet_signs")),
-    ("Themes", ("alchemy", "japan", "profession", "trinity", "cosmos")),
-    ("Creeds & Mysteries", ("religion", "religion_alt")),
-    ("Scripture", ("bible", "bible2", "bible_dark")),
-    ("Animal Societies", ("wolf", "bee", "elephant")),
-    ("The Inner Wheel",
-     ("virtues", "sins", "moods", "duality", "intelligences")),
+      "eclipse_solar", "eclipse_lunar", "astrology", "chinese",
+      "planets", "cosmos")),
+    ("The Divine",
+     ("greek", "norse", "egypt", "slavic",
+      "wider_greek", "wider_norse", "wider_egypt", "wider_slavic",
+      "religion", "religion_alt", "bible", "bible2", "bible_dark")),
+    ("The Human Wheel",
+     ("virtues", "sins", "moods", "intelligences", "profession",
+      "trinity", "duality")),
+    ("The Living World", ("wolf", "bee", "elephant", "alchemy", "japan")),
+    # THE ARCHETYPES (owner: "its OWN section — do not scatter them"):
+    # its own group exists NOW so future archetype topics land here
+    # rather than being folded into The Divine/The Human Wheel later.
+    # Empty on purpose — `config/archetypes.py` names the figures and
+    # `render.compositor` already resolves SOME of their Spacebar
+    # targets onto OTHER topics (the Walks onto Professions), but no
+    # archetype has its OWN encyclopedia topic yet (Sessions 6/8, per
+    # the existing ARCHETYPE_PENDING_LINE convention) — that is new
+    # content, out of THIS round's scope (encyclopedia.py structure +
+    # Database/encyclopedia.json, not a new article-writing pass).
+    ("The Archetypes", ()),
 )
 
 # The SEASONS topic (owner 2026-07-13; split 2026-07-16, ROADMAP queue
@@ -240,6 +262,50 @@ _INSTRUMENT_KEYS = (
 
 _WEEK_ORDER = ("sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn")
 
+# THE SPACE-JUMP INDEX REMAP (owner contract, round R3 restructure,
+# item 9): `render.compositor._weekday_encyclopedia_target` (out of
+# this round's scope) still returns the OLD raw index — sun=0,
+# moon=1..saturn=6 (`_ENC_WEEK_ORDER`, unaware of the restructure).
+# `_weekday_topic`'s new order happens to leave Monday..Saturday at
+# that SAME index (Title only pushes in at 0; Sunday moves OUT to the
+# end) — only raw index 0 (the Sun) needs remapping, to the merged
+# Ruler|Servant DUAL page's new seat: Title(0) + Mon..Sat(1-6) +
+# Duality title(7) + Dual(8). Applied once in `__init__`.
+_WEEKDAY_DUAL_PAGE_INDEX = 8
+# Every `_weekday_topic`-built topic — every WEEKDAY_THEME_TITLES key
+# EXCEPT virtues/sins/moods (those get OVERWRITTEN by the emblem-family
+# pass in `_topics()` below and are never weekday-shaped in the end).
+_WEEKDAY_RESTRUCTURED_TOPICS = frozenset(defaults.WEEKDAY_THEME_TITLES) - {
+    "virtues", "sins", "moods",
+}
+
+# THE NINTH SEAT'S PHILOSOPHICAL NAME (owner decree 2026-07-20, round
+# R3): across every theme the Ninth is the SAME archetype underneath
+# its many costumes (CANON.md "The Ninth — Outside the Circle") — a
+# potential member who never found its place and was never found BY
+# the eight, the union or the exile alike. UV/INSTRUCTION.txt #7 walks
+# the case studies: the Sigma wolf is a potential leader with no pack,
+# the shepherd with no flock, the sailor with no sea, Freemasonry's own
+# undefined god (the Unknown God, Ancient religions), the profession
+# that knows a little of everything and is master of none, the
+# existential intelligence that questions every OTHER intelligence,
+# the virtue of Balance/objectivity (never loving, trusting or giving
+# too much OR too little), the sin of WISH — the root every other sin
+# grows from (wanting to be loved: servility; wanting to rule: pride;
+# wanting what others have or keeping what is one's own: envy/
+# jealousy). The sealed name for this position is **The Unfound**.
+# Alternatives discussed and rejected the same evening: **The
+# Uncalled** (implies someone else's failure to call, not the figure's
+# own unsettled nature), **The Ninth Door** (a place, not a person —
+# most Ninths ARE persons), **The Seeker** (too active/heroic — several
+# Ninths, like Melchizedek or the Union badges, are not searching for
+# anything), **The Unclaimed** (close, but reads as ownable property
+# rather than a member who could belong and does not) — "The Unfound"
+# won because it holds BOTH readings the owner insisted on keeping
+# open at once (never found itself / never found by others), where
+# every alternative above only covers one.
+NINTH_SEAT_PHILOSOPHICAL_NAME = "The Unfound"
+
 # THE WIDER PANTHEON (WORKPLAN Session 8): (topic key, gallery title,
 # theme dir, icon plate, figure names). The figures are the culture's
 # famous A-list gods that NEITHER roster seats (the pantheon catalog's
@@ -281,6 +347,34 @@ def _metal_looks(base: Path, colored: Path | None) -> tuple:
     return tuple(looks)
 
 
+def _ninth_looks(theme: str, plate: Path) -> tuple | None:
+    """The Ninth's OWN look switcher (owner bug, "Gaia screenshot":
+    the 9th member's page carried the color switcher for NONE of its
+    metal-plate themes) — every theme whose seated eight cycle Colored/
+    Bronze/Gold/Silver gives its Ninth the SAME cycle, `colored` found
+    the same way (a sibling `colored/` folder, graceful-absent); the
+    Chinese Ninth (The Cat) mirrors the OTHER eleven animals' Bronze-
+    first order instead. Themes with no per-metal art (egypt, slavic,
+    the plain-color families) return None — the Ninth stays the single
+    plain plate, same as before, since there is nothing to switch."""
+    if theme == "chinese":
+        return tuple(
+            (label, ((path,),))
+            for label, path in (
+                ("Bronze", plate),
+                ("Gold", metal_variant_file(plate, "gold")),
+                ("Silver", metal_variant_file(plate, "silver")),
+                ("Colored", plate.parent.parent / "colored" / plate.name),
+            )
+        )
+    if theme not in constants.METAL_THEMES:
+        return None
+    colored = plate.parent.parent / "colored" / plate.name
+    return tuple(
+        (label, ((path,),)) for label, path in _metal_looks(plate, colored)
+    )
+
+
 def _theme_body_art(theme: str, body: str) -> Path:
     """One theme's plate for one body (bronze / canon file)."""
     if theme == "planets":
@@ -304,35 +398,38 @@ def _theme_dual_art(theme: str, colored: bool = False) -> Path:
 
 
 def _weekday_topic(theme: str):
-    """(icon path, entries) for one weekday theme: seven bodies in
-    week order. Every look is a tuple of ROWS — the sun's two plates
-    stand SIDE BY SIDE, Ruler left, Servant right (owner correction
-    2026-07-13: never stacked); the metal themes cycle Colored/Bronze/
-    Gold/Silver; the planets cycle their photos and the sign glyphs."""
+    """(icon path, entries) for one weekday theme (owner ARTICLE ORDER
+    restructure, round R3): entry 0 is the theme's OWN title page
+    (`theme_title` — describes the whole theme; the plate is a
+    documented graceful-absent slot for a future theme plate, the TEXT
+    is written now); entries 1-6 are Monday..Saturday, in that order
+    (owner: "Ponedeljak PRVI"); entry 7 is the WEEK-DUALITY title page
+    (`week_duality`); entry 8 is the merged Sunday DUAL page — the
+    Ruler and the Servant sharing ONE page (owner INSTRUCTION #6,
+    encyclopedia side: LEFT/RIGHT columns, a divider, each under its
+    own image — `_show_entry` reads `entry["dual"]` to switch to that
+    layout). Every look is a tuple of ROWS — the dual page's two
+    plates stand SIDE BY SIDE, Ruler left, Servant right (owner
+    correction 2026-07-13: never stacked); the metal themes cycle
+    Colored/Bronze/Gold/Silver; the planets cycle their photos and the
+    sign glyphs — unchanged per-look mechanics, just relocated. The
+    Ninth (where the theme has one) is appended AFTER this function
+    returns (`_topics`' ninths loop), landing last either way."""
     article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
     if theme == "planets":
         names = defaults.DEFAULT_SKIN.weekday_set.body_names
     else:
         names = defaults.WEEKDAY_THEME_NAMES[theme]
     metal = theme in constants.METAL_THEMES
-    entries = []
-    for body in _WEEK_ORDER:
+
+    def rows(ruler: Path, servant: Path | None) -> tuple:
+        if servant is not None and paths.art_file(servant).exists():
+            return ((ruler, servant),)
+        return ((ruler,),)
+
+    def looks_for(body: str, dual: bool) -> tuple:
         base = _theme_body_art(theme, body)
-        sun = body == "sun"
-
-        def rows(ruler: Path, servant: Path | None) -> tuple:
-            if servant is not None and paths.art_file(servant).exists():
-                return ((ruler, servant),)
-            return ((ruler,),)
-
-        entry = {
-            "looks": ((
-                "", rows(base, _theme_dual_art(theme) if sun else None),
-            ),),
-            "name": names[body],
-            "article": ("article", article_set, body),
-            "accents": defaults.BODY_ACCENT_HUES[body],
-        }
+        servant = _theme_dual_art(theme) if dual else None
         if metal:
             colored = (
                 defaults.WEEKDAY_ART_DIR
@@ -340,8 +437,8 @@ def _weekday_topic(theme: str):
             ).parent / "colored" / (
                 f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
             )
-            if sun:
-                entry["looks"] = tuple(
+            if dual:
+                return tuple(
                     (label, rows(one, two))
                     for (label, one), (_, two) in zip(
                         _metal_looks(base, colored),
@@ -351,36 +448,65 @@ def _weekday_topic(theme: str):
                         ),
                     )
                 )
-            else:
-                entry["looks"] = tuple(
-                    (label, rows(path, None))
-                    for label, path in _metal_looks(base, colored)
-                )
-        elif theme == "planets":
+            return tuple(
+                (label, rows(path, None))
+                for label, path in _metal_looks(base, colored)
+            )
+        if theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
             # glyphs and the bronze medallions ride the arrows.
-            sign = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "signs"
-                / f"{body}.png"
-            )
+            sign = defaults.WEEKDAY_ART_DIR / "planets" / "signs" / f"{body}.png"
+            art = defaults.WEEKDAY_ART_DIR / "planets" / "art" / f"{body}.png"
             sign_dual = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "signs"
-                / "sun_eclipse.png"
-            )
-            art = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "art"
-                / f"{body}.png"
+                defaults.WEEKDAY_ART_DIR / "planets" / "signs" / "sun_eclipse.png"
+                if dual else None
             )
             art_dual = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "art"
-                / "sun_eclipse.png"
+                defaults.WEEKDAY_ART_DIR / "planets" / "art" / "sun_eclipse.png"
+                if dual else None
             )
-            entry["looks"] = (
-                ("Planets", rows(base, _theme_dual_art("planets") if sun else None)),
-                ("Signs", rows(sign, sign_dual if sun else None)),
-                ("Art", rows(art, art_dual if sun else None)),
+            return (
+                ("Planets", rows(base, servant)),
+                ("Signs", rows(sign, sign_dual)),
+                ("Art", rows(art, art_dual)),
             )
-        entries.append(entry)
+        return (("", rows(base, servant)),)
+
+    def body_entry(body: str) -> dict:
+        return {
+            "looks": looks_for(body, dual=False),
+            "name": names[body],
+            "article": ("article", article_set, body),
+            "accents": defaults.BODY_ACCENT_HUES[body],
+        }
+
+    def dual_entry() -> dict:
+        return {
+            "looks": looks_for("sun", dual=True),
+            "name": names["sun"],
+            "article": ("article", article_set, "sun"),
+            "accents": defaults.BODY_ACCENT_HUES["sun"],
+            "dual": True,
+            "theme": theme,   # WEEKDAY_DUAL_NAMES[theme] names the columns
+        }
+
+    title_entry = {
+        "images": (),      # graceful-absent — a future theme plate's slot
+        "name": ("theme_title", theme),
+        "article": ("theme_title", theme),
+        "accents": (),
+    }
+    duality_title_entry = {
+        "images": (),
+        "name": ("week_duality_title", theme),
+        "article": ("week_duality", theme),
+        "accents": (),
+    }
+    entries = (
+        [title_entry]
+        + [body_entry(body) for body in _WEEK_ORDER[1:]]   # Monday..Saturday
+        + [duality_title_entry, dual_entry()]
+    )
     return _theme_body_art(theme, "sun"), entries
 
 
@@ -634,7 +760,9 @@ def _topics(travel_date: date | None = None) -> dict:
     }
     # THE NINTHS close their topics (owner 8+1 doctrine 2026-07-14):
     # the excluded member, the event, the myth, the legend — plates
-    # wired ahead of the art (missing files stay hidden).
+    # wired ahead of the art (missing files stay hidden). Their shared
+    # philosophical NAME is NINTH_SEAT_PHILOSOPHICAL_NAME (module level,
+    # above) — see there for the discussed alternatives.
     _w = defaults.WEEKDAY_ART_DIR
     _z = defaults.ZODIAC_ART_DIR
     # Round-four/five verdicts (owner 2026-07-15): the Union ninths —
@@ -670,12 +798,19 @@ def _topics(travel_date: date | None = None) -> dict:
         ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
         ("astrology", "Ophiuchus", _z / "astrology/sign/Ophiuchus.png"),
     ):
-        topics[topic_key]["entries"].append({
+        ninth_entry = {
             "images": (plate,),
             "name": name,
             "article": ("emblem", "ninths", name),
             "accents": (),
-        })
+        }
+        # THE NINTH'S OWN FINISH SWITCHER (owner bug, Gaia screenshot —
+        # round R3): every metal-plate theme's Ninth gets the SAME
+        # Colored/Bronze/Gold/Silver cycle as its seated eight.
+        ninth_looks = _ninth_looks(topic_key, plate)
+        if ninth_looks is not None:
+            ninth_entry["looks"] = ninth_looks
+        topics[topic_key]["entries"].append(ninth_entry)
     # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing
@@ -953,10 +1088,22 @@ class EncyclopediaDialog(QDialog):
             })
         self._cells: list[dict] = []
         self._blocks: list[QWidget] = []
-        self._text_labels: list[QLabel] = []
+        # (label, columns) — columns=1 spans the whole block, columns=2
+        # is one half of a DUAL page's two side-by-side text columns
+        # (owner INSTRUCTION #6, encyclopedia side) — `_rescale` widths
+        # and reserves each label's height the same way either way,
+        # just against a HALF share for a dual column.
+        self._text_labels: list[tuple[QLabel, int]] = []
         self._name_labels: list[QLabel] = []
         self._topic_cards: list[QToolButton] = []
         self._pixmap_cache: dict[str, QPixmap] = {}
+        # FINISH PERSISTENCE (owner INSTRUCTION #3): once picked, a
+        # look/finish (e.g. Bronze) rides EVERY following entry that
+        # offers it — never resets to the topic's own default on a page
+        # turn or a topic change. `None` = no preference set yet (each
+        # entry opens on ITS own default look, index 0).
+        self._preferred_look_label: str | None = None
+        self._look_state: dict | None = None
 
         self._title = QLabel()
         self._title.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -988,8 +1135,29 @@ class EncyclopediaDialog(QDialog):
         self._next = QPushButton(self._tr("Next →"))
         self._next.clicked.connect(lambda: self._step(+1))
         style_button(self._next, "next")
+        # THE FINISH SWITCHER (owner fix round R3, Color Switcher.png):
+        # moved to the TOP row, in line with Home and Download — ONE
+        # persistent set of widgets (not rebuilt per entry, like the
+        # pager) driving whichever entry's `self._look_state` is
+        # active; `_show_entry` swaps that reference and shows/hides
+        # the trio, `_cycle_look` restyles the caption per finish.
+        self._look_back = QToolButton()
+        self._look_back.setText("◀")
+        style_button(self._look_back, "neutral", small=True)
+        self._look_back.clicked.connect(lambda: self._cycle_look(-1))
+        self._look_caption = QLabel()
+        self._look_caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._look_caption.setMinimumWidth(120)
+        self._look_forward = QToolButton()
+        self._look_forward.setText("▶")
+        style_button(self._look_forward, "neutral", small=True)
+        self._look_forward.clicked.connect(lambda: self._cycle_look(1))
         top = QHBoxLayout()
         top.addWidget(self._back)
+        top.addStretch(1)
+        top.addWidget(self._look_back)
+        top.addWidget(self._look_caption)
+        top.addWidget(self._look_forward)
         top.addStretch(1)
         top.addWidget(self._download)
         row = QHBoxLayout()
@@ -1007,16 +1175,34 @@ class EncyclopediaDialog(QDialog):
             defaults.GUIDE_INITIAL_IMAGE_PX + 90,
             defaults.GUIDE_INITIAL_IMAGE_PX + 220,
         )
+        # LAYOUT fix round R3 (owner: MIN WIDTH = 4 * the single theme
+        # tile, "788px width, tiles clipping" dies here) — never let the
+        # window shrink so far that a max-width (4-column) gallery row
+        # would have to spill sideways; the scroll area's own vertical
+        # bar is the only overflow this dialog ever needs.
+        tile = (
+            defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
+            + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
+        )
+        self.setMinimumWidth(tile * defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS)
         apply_theme(self)
         self._show_topics()
         # The Spacebar jump (owner 2026-07-16, ROADMAP queue #8): open
         # straight onto the hovered topic's matching entry, skipping the
-        # gallery — unknown topics fall back to the gallery.
+        # gallery — unknown topics fall back to the gallery. Round R3
+        # item 9: a restructured weekday topic's raw compositor index
+        # is remapped first (see _WEEKDAY_DUAL_PAGE_INDEX above).
         if initial_topic is not None and initial_topic in self._topics:
             self._topic_key = initial_topic
             entries = self._topics[initial_topic]["entries"]
+            entry_index = initial_entry
+            if (
+                initial_topic in _WEEKDAY_RESTRUCTURED_TOPICS
+                and initial_entry == 0
+            ):
+                entry_index = _WEEKDAY_DUAL_PAGE_INDEX
             self._entry_index = (
-                min(initial_entry, len(entries) - 1) if entries else 0
+                min(entry_index, len(entries) - 1) if entries else 0
             )
             self._show_entry()
 
@@ -1054,7 +1240,21 @@ class EncyclopediaDialog(QDialog):
             return self._encyclopedia.eclipse(ref[1])["base"]
         if kind == "emblem":
             return self._encyclopedia.entry(ref[1], ref[2])["base"]
+        if kind == "theme_title":
+            return self._encyclopedia.theme_title(ref[1])["base"]
+        if kind == "week_duality":
+            return self._encyclopedia.week_duality(ref[1])["base"]
         return self._symbolism.trio_article(ref[1])["base"]
+
+    def _article_faces(self, ref: tuple) -> tuple[str, str]:
+        """Both texts of a DUAL entry (owner INSTRUCTION #6, encyclopedia
+        side — round R3): (ruler_text, servant_text), the SAME ref
+        `_article_text` reads, resolved through the "faces" register
+        instead of "base". Every weekday theme's Sunday article carries
+        both faces (`data/symbolism.py` — round R3 ground-truthed all
+        eighteen)."""
+        faces = self._symbolism.article(ref[1], ref[2])["faces"]
+        return faces["ruler"], faces["servant"]
 
     def _entry_name(self, entry: dict) -> str:
         """An entry's display name: the WEEK, INSTRUMENT and SEASONS
@@ -1075,15 +1275,24 @@ class EncyclopediaDialog(QDialog):
                 return self._encyclopedia.era(name[1])["title"]
             if name[0] == "eclipse_title":
                 return self._encyclopedia.eclipse(name[1])["title"]
+            if name[0] == "theme_title":
+                return self._encyclopedia.theme_title(name[1])["title"]
+            if name[0] == "week_duality_title":
+                return self._encyclopedia.week_duality(name[1])["title"]
             return self._encyclopedia.instrument(name[1])["title"]
         return self._tr(name)
 
     def _show_topics(self) -> None:
-        """Screen 1 — the topic gallery in the owner's groups,
+        """Screen 1 — the topic gallery in the owner's FIVE sections,
         EVERYTHING centered (owner 2026-07-13: headers and cards
         alike); the card icons are RESPONSIVE — _rescale grows and
-        shrinks them with the window between the two bounds, and only
-        below the minimum does the scrollbar take over."""
+        shrinks them with the window between the two bounds. LAYOUT
+        fix round R3: a group never spills past
+        ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row — it WRAPS into
+        further rows instead (a QGridLayout, not a QHBoxLayout), so a
+        horizontal scrollbar can never happen; the dialog's own MIN
+        WIDTH (set once in __init__) keeps a full row readable even at
+        the minimum icon size."""
         self._title.setText(self._tr("Encyclopedia"))
         self._topic_key = None
         self._back.hide()
@@ -1091,6 +1300,10 @@ class EncyclopediaDialog(QDialog):
         self._previous.hide()
         self._counter.hide()
         self._next.hide()
+        self._look_back.hide()
+        self._look_caption.hide()
+        self._look_forward.hide()
+        self._look_state = None
         self._cells = []
         self._blocks = []
         self._text_labels = []
@@ -1099,6 +1312,7 @@ class EncyclopediaDialog(QDialog):
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX)
+        max_columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
         for group_title, keys in _TOPIC_GROUPS:
             header = QLabel(self._tr(group_title))
             header.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -1112,10 +1326,11 @@ class EncyclopediaDialog(QDialog):
             rule.setFrameShape(QFrame.Shape.HLine)
             rule.setFrameShadow(QFrame.Shadow.Sunken)
             column.addWidget(rule)
-            row = QHBoxLayout()
-            row.setSpacing(defaults.GUIDE_SPACING_PX * 2)
-            row.addStretch(1)
-            for key in keys:
+            if not keys:
+                continue          # The Archetypes: empty until Sessions 6/8
+            grid = QGridLayout()
+            grid.setSpacing(defaults.GUIDE_SPACING_PX * 2)
+            for index, key in enumerate(keys):
                 topic = self._topics[key]
                 card = QToolButton()
                 card.setToolButtonStyle(
@@ -1130,10 +1345,14 @@ class EncyclopediaDialog(QDialog):
                 card.clicked.connect(
                     lambda checked=False, chosen=key: self._show_topic(chosen)
                 )
-                row.addWidget(card)
+                grid_row, grid_col = divmod(index, max_columns)
+                grid.addWidget(card, grid_row, grid_col)
                 self._topic_cards.append(card)
-            row.addStretch(1)
-            column.addLayout(row)
+            wrap = QHBoxLayout()
+            wrap.addStretch(1)
+            wrap.addLayout(grid)
+            wrap.addStretch(1)
+            column.addLayout(wrap)
         column.addStretch(1)
         self._scroll.setWidget(content)
         self._rescale()
@@ -1165,14 +1384,33 @@ class EncyclopediaDialog(QDialog):
         safe = "".join(
             ch if ch.isalnum() or ch in " ·-_()" else "_" for ch in name
         ).strip()
-        text = _HEX_NOTE.sub("", self._article_text(entry["article"]))
         lines = [name, ""]
-        for paragraph in text.split("\n\n"):
-            match = _SUBHEAD.match(paragraph)
-            if match:
-                lines.append(f"[{self._tr(match.group(1))}]")
-                paragraph = paragraph[match.end():]
-            lines += [paragraph, ""]
+        if entry.get("dual"):
+            # A DUAL page saves BOTH faces (owner INSTRUCTION #6):
+            # Ruler's text, then Servant's, each under its own name.
+            ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[
+                entry["theme"]
+            ]
+            ruler_text, servant_text = self._article_faces(entry["article"])
+            for side_name, side_text in (
+                (ruler_name, ruler_text), (servant_name, servant_text),
+            ):
+                lines.append(f"[{self._tr(side_name)}]")
+                side_text = _HEX_NOTE.sub("", side_text)
+                for paragraph in side_text.split("\n\n"):
+                    match = _SUBHEAD.match(paragraph)
+                    if match:
+                        lines.append(f"[{self._tr(match.group(1))}]")
+                        paragraph = paragraph[match.end():]
+                    lines += [paragraph, ""]
+        else:
+            text = _HEX_NOTE.sub("", self._article_text(entry["article"]))
+            for paragraph in text.split("\n\n"):
+                match = _SUBHEAD.match(paragraph)
+                if match:
+                    lines.append(f"[{self._tr(match.group(1))}]")
+                    paragraph = paragraph[match.end():]
+                lines += [paragraph, ""]
         (Path(target) / f"{safe}.txt").write_text(
             "\n".join(lines), encoding="utf-8"
         )
@@ -1247,12 +1485,18 @@ class EncyclopediaDialog(QDialog):
         ]
         look_rows = [look_rows[index] for index in keep]
         titles = [titles[index] for index in keep]
+        # FINISH PERSISTENCE (owner INSTRUCTION #3): a page opens on the
+        # LAST look the user picked, if this entry offers it — never a
+        # silent reset to the topic's own default (owner: "sve naredne
+        # slike treba da ostanu u BRONZE a ne da uvek FORSIRA COLORED").
+        start_index = 0
+        if self._preferred_look_label in titles:
+            start_index = titles.index(self._preferred_look_label)
         state = {
             "container": None,
             "looks": look_rows,
             "titles": titles,
-            "index": 0,
-            "caption": None,
+            "index": start_index,
         }
         if look_rows:
             container = QWidget()
@@ -1261,34 +1505,17 @@ class EncyclopediaDialog(QDialog):
                 container, alignment=Qt.AlignmentFlag.AlignHCenter
             )
             self._cells.append(state)
-        if len(look_rows) > 1:
-            arrows = QHBoxLayout()
-            arrows.addStretch(1)
-            back = QToolButton()
-            back.setText("◀")
-            style_button(back, "neutral", small=True)
-            caption = QLabel(self._tr(state["titles"][0]))
-            caption.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            caption.setMinimumWidth(140)
-            caption.setStyleSheet(
-                f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
-                "font-weight: bold;"
-            )
-            state["caption"] = caption
-            forward = QToolButton()
-            forward.setText("▶")
-            style_button(forward, "neutral", small=True)
-            back.clicked.connect(
-                lambda checked=False, s=state: self._cycle_look(s, -1)
-            )
-            forward.clicked.connect(
-                lambda checked=False, s=state: self._cycle_look(s, 1)
-            )
-            arrows.addWidget(back)
-            arrows.addWidget(caption)
-            arrows.addWidget(forward)
-            arrows.addStretch(1)
-            cell.addLayout(arrows)
+        # THE FINISH SWITCHER (owner fix round R3): the persistent top-
+        # row trio (Home | ◀ finish ▶ | Download) drives WHICHEVER
+        # entry is open — no per-entry widgets to build or wire here
+        # anymore, just point it at this entry's look state.
+        self._look_state = state if len(look_rows) > 1 else None
+        multi_look = self._look_state is not None
+        self._look_back.setVisible(multi_look)
+        self._look_caption.setVisible(multi_look)
+        self._look_forward.setVisible(multi_look)
+        if multi_look:
+            self._update_look_caption()
         name = QLabel(f"<b>{self._entry_name(entry)}</b>")
         name.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._name_labels.append(name)
@@ -1310,6 +1537,62 @@ class EncyclopediaDialog(QDialog):
             text = QLabel(stanzas + _flow_html(
                 data["explanation"] + "\n\n" + data["commentary"]
             ))
+            text.setWordWrap(True)
+            text.setTextFormat(Qt.TextFormat.RichText)
+            text.setAlignment(Qt.AlignmentFlag.AlignTop)
+            self._text_labels.append((text, 1))
+            cell.addWidget(text)
+        elif entry.get("dual"):
+            # THE WEEK-DUALITY DUAL PAGE (owner INSTRUCTION #6,
+            # encyclopedia side, round R3): the Ruler's text LEFT, the
+            # Servant's RIGHT, a divider between, each under its own
+            # NAME here (the two plates already stand side by side
+            # above, via the normal image-row mechanism — Rule #5, no
+            # second image path).
+            ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[
+                entry["theme"]
+            ]
+            ruler_text, servant_text = self._article_faces(entry["article"])
+            dual_row = QHBoxLayout()
+            dual_row.setSpacing(defaults.GUIDE_SPACING_PX * 2)
+            for side_name, side_text in (
+                (ruler_name, ruler_text), (servant_name, servant_text),
+            ):
+                side_column = QVBoxLayout()
+                heading = QLabel(
+                    f"<b>{_html.escape(self._tr(side_name))}</b>"
+                )
+                heading.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                self._name_labels.append(heading)
+                side_column.addWidget(heading)
+                side_text_label = QLabel(
+                    _flow_html(
+                        side_text, accents=entry["accents"], tr=self._tr
+                    )
+                )
+                side_text_label.setWordWrap(True)
+                side_text_label.setTextFormat(Qt.TextFormat.RichText)
+                side_text_label.setAlignment(Qt.AlignmentFlag.AlignTop)
+                self._text_labels.append((side_text_label, 2))
+                side_column.addWidget(side_text_label)
+                # A trailing stretch (found rendering this round's own
+                # screenshots): the two columns rarely run the same
+                # length, and `dual_row`'s HBoxLayout equalizes both
+                # columns to the TALLER one's height — with no stretch
+                # to absorb that slack, Qt hands it to the only OTHER
+                # flexible widget in the column, the `heading` label,
+                # stretching a one-line heading tall and vertically
+                # centering it (Qt's QLabel default) into a false gap
+                # above the shorter column's own text. The slack now
+                # lands here instead, below the text, where it belongs.
+                side_column.addStretch(1)
+                dual_row.addLayout(side_column, 1)
+                if side_name == ruler_name:
+                    divider = QFrame()
+                    divider.setFrameShape(QFrame.Shape.VLine)
+                    divider.setFrameShadow(QFrame.Shadow.Sunken)
+                    dual_row.addWidget(divider)
+            cell.addLayout(dual_row)
         else:
             text = QLabel(
                 _flow_html(
@@ -1318,19 +1601,36 @@ class EncyclopediaDialog(QDialog):
                     tr=self._tr,
                 )
             )
-        text.setWordWrap(True)
-        text.setTextFormat(Qt.TextFormat.RichText)
-        self._text_labels.append(text)
-        cell.addWidget(text)
+            text.setWordWrap(True)
+            text.setTextFormat(Qt.TextFormat.RichText)
+            text.setAlignment(Qt.AlignmentFlag.AlignTop)
+            self._text_labels.append((text, 1))
+            cell.addWidget(text)
         self._blocks.append(block)
         # The block sits CENTERED with even side margins (owner
         # 2026-07-14: "ravnomerno po sredini" — supersedes the
         # left-hug of 2026-07-13).
         column.addWidget(block, alignment=Qt.AlignmentFlag.AlignHCenter)
         column.addStretch(1)
+        # THE INVISIBLE CLIPPER (owner bug, "Nevidljivi element seče
+        # pasus The Lesson" — root cause found fix round R3): fit the
+        # block's width/font/pixmaps BEFORE `setWidget` ever hands this
+        # widget to the scroll area. QScrollArea's widgetResizable path
+        # sizes a FRESH widget to the viewport on its first pass and
+        # only grows it to the true heightForWidth sizeHint on a SECOND
+        # pass — but Next/Previous never yield to the event loop, so
+        # the single frame the user sees is the too-short guess: the
+        # tail of the article is clipped AND the scrollbar range comes
+        # back 0 (the text "counts as in view" — nothing below it
+        # exists to scroll to). Calling `_rescale()` while `content` is
+        # NOT YET the scroll area's widget sidesteps the race: `_blocks`
+        # / `_text_labels` / `_cells` are already populated above, so
+        # the width fit, font size and image grid all resolve to their
+        # FINAL sizes first, and `setWidget` then only ever sees one,
+        # already-correct, geometry.
+        self._rescale()
         self._scroll.setWidget(content)
         self._scroll.verticalScrollBar().setValue(0)
-        self._rescale()
 
     def _rescale(self) -> None:
         """Everything follows the window — on the gallery the card
@@ -1358,10 +1658,45 @@ class EncyclopediaDialog(QDialog):
                 ),
             ),
         )
-        for label in self._text_labels:
-            label.setStyleSheet(f"font-size: {font_px}px;")
+        for label, columns in self._text_labels:
+            # A real QFont (owner bug fix round R3, THE INVISIBLE
+            # CLIPPER: "Nevidljivi element seče pasus The Lesson"):
+            # `setStyleSheet` routes a font-size change through Qt's
+            # CSS engine, which only takes effect on the widget's NEXT
+            # style polish — a rich-text QLabel's `heightForWidth`
+            # queried (by the surrounding QVBoxLayout, mid-relayout)
+            # before that polish still measures the OLD font, so the
+            # label is allocated a shorter box than the new font
+            # actually needs and the tail of the article is silently
+            # clipped. `setFont` applies synchronously, so the very
+            # first layout pass already measures the right font.
+            font = label.font()
+            font.setPixelSize(font_px)
+            label.setFont(font)
+            # A DUAL page's two columns (owner INSTRUCTION #6) share
+            # the block width with the divider between them — pin the
+            # column's own width too, not just its height, so its
+            # heightForWidth is measured against what it will ACTUALLY
+            # be given (columns == 1 keeps the old behavior: the whole
+            # block already constrains a single column's width).
+            width = (
+                block_width if columns == 1
+                else (block_width - defaults.GUIDE_SPACING_PX * 3) // 2
+            )
+            if columns != 1:
+                label.setFixedWidth(width)
+            # RESERVE the article's full height (the same law as the
+            # image reservation below, ROADMAP queue #9): now that the
+            # font is final, `heightForWidth` measures true — pinning
+            # it here means the block/scroll canvas negotiate around
+            # the REAL text height on their one and only pass, instead
+            # of settling on whatever a stale intermediate guess left
+            # behind (THE INVISIBLE CLIPPER bug, fix round R3).
+            label.setFixedHeight(label.heightForWidth(width))
         for label in self._name_labels:
-            label.setStyleSheet(f"font-size: {font_px + 3}px;")
+            font = label.font()
+            font.setPixelSize(font_px + 3)
+            label.setFont(font)
         for state in self._cells:
             # First pass builds the grid; resizes only re-fit pixmaps.
             if "cells" in state:
@@ -1370,29 +1705,25 @@ class EncyclopediaDialog(QDialog):
                 self._render_cell(state, block_width)
 
     def _rescale_topics(self) -> None:
-        """The gallery cards follow the window (owner 2026-07-13):
-        the icon side grows until the widest group fills the WIDTH or
-        the stacked groups fill the HEIGHT — whichever bound bites
-        first — clamped between the two configured sizes; below the
-        minimum the scroll area takes over."""
+        """The gallery cards follow the window (owner 2026-07-13, LAYOUT
+        fix round R3): every group now WRAPS at
+        ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row instead of
+        stretching a single row to fit the widest group, so the icon
+        side is sized from WIDTH alone — exactly `max_columns` cards
+        always fit the viewport, by construction, so a horizontal
+        scrollbar can never appear; the vertical scrollbar is the only
+        overflow this gallery ever needs. Clamped between the two
+        configured bounds; the dialog's own MIN WIDTH (__init__) keeps
+        a full row readable even at the minimum icon size."""
         viewport = self._scroll.viewport()
-        columns = max(len(keys) for _, keys in _TOPIC_GROUPS)
+        columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
         spacing = defaults.GUIDE_SPACING_PX * 2
         width_share = (
             (viewport.width() - 48) // columns - spacing
         )
-        # Per-group vertical overhead: header + rule + the card's own
-        # caption line + spacings (estimate — the scrollbar catches
-        # whatever the estimate misses).
-        overhead = defaults.GUIDE_SUBTITLE_PX + 2 + 64
-        height_share = viewport.height() // len(_TOPIC_GROUPS) - overhead
         icon = max(
             defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX,
-            min(
-                defaults.ENCYCLOPEDIA_TOPIC_ICON_MAX_PX,
-                width_share,
-                height_share,
-            ),
+            min(defaults.ENCYCLOPEDIA_TOPIC_ICON_MAX_PX, width_share),
         )
         for card in self._topic_cards:
             card.setIconSize(QSize(icon, icon))
@@ -1451,6 +1782,10 @@ class EncyclopediaDialog(QDialog):
                 art = self._pixmap(path)
                 label = QLabel()
                 label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                # IMAGE HOVER (owner spec: critical on multi-image
+                # pages like the era calendars — "Byzantine"): every
+                # article image names itself on hover.
+                label.setToolTip(_image_tooltip(path))
                 state["cells"].append((label, art, columns))
                 grid.addWidget(
                     label, row_index, offset + col_index,
@@ -1499,19 +1834,39 @@ class EncyclopediaDialog(QDialog):
             # ceiling above has already scaled the WHOLE image down.
             label.setFixedSize(pixmap.size())
 
-    def _cycle_look(self, state: dict, step: int) -> None:
-        """The ◀ / ▶ arrows (owner 2026-07-13): the next look of this
-        entry — a metal finish or a kinship group — caption updated."""
+    def _cycle_look(self, step: int) -> None:
+        """The ◀ / ▶ switcher (owner fix round R3: moved to the TOP
+        row, in line with Home/Download — ONE persistent widget trio
+        driving `self._look_state`, the OPEN entry's look) — the next
+        look of this entry, a metal finish or a kinship group. Every
+        pick becomes the session's PREFERRED finish (owner
+        INSTRUCTION #3: "sve naredne slike treba da ostanu" — it rides
+        every following entry that offers the same look, never a
+        silent reset)."""
+        state = self._look_state
+        if state is None:
+            return
         state["index"] = (state["index"] + step) % len(state["looks"])
-        if state["caption"] is not None:
-            state["caption"].setText(
-                self._tr(state["titles"][state["index"]])
-            )
+        self._preferred_look_label = state["titles"][state["index"]]
+        self._update_look_caption()
         block_width = round(
             max(320, self._scroll.viewport().width())
             * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
         )
         self._render_cell(state, block_width)
+
+    def _update_look_caption(self) -> None:
+        """Restyle the persistent top-row caption to the OPEN entry's
+        CURRENT look — a border-only frame in the finish's own color
+        (owner fix round R3), or the neutral accent border for a
+        kinship-group switcher (Planets/Signs/Art and the like, never
+        the Colored gradient)."""
+        state = self._look_state
+        if state is None:
+            return
+        label = state["titles"][state["index"]]
+        self._look_caption.setText(self._tr(label))
+        style_finish_frame(self._look_caption, label)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)

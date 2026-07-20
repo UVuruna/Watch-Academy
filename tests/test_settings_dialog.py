@@ -759,23 +759,32 @@ def test_encyclopedia_expansion_wiring():
     assert _paths.art_file(moods[0]["images"][0]).exists()
     assert moods[-1]["name"] == "The Ninth Mood"
     assert _paths.art_file(moods[-1]["images"][0]).exists()
-    # The metal themes cycle four looks, COLORED FIRST (owner default
-    # 2026-07-13); the sun's two plates stand SIDE BY SIDE — Ruler
-    # left, Servant right (owner correction 2026-07-13).
-    greek_sun = topics["greek"]["entries"][0]
-    assert [label for label, _ in greek_sun["looks"]] == [
+    # ARTICLE ORDER restructure (owner spec, round R3): entry 0 is now
+    # the theme's OWN title page (no "looks" — graceful-absent plate),
+    # Monday..Saturday follow at 1-6, then the week-duality title (7)
+    # and the merged Sunday DUAL page (8) — the metal themes still
+    # cycle four looks COLORED FIRST (owner default 2026-07-13) and the
+    # dual page's two plates still stand SIDE BY SIDE, Ruler left,
+    # Servant right (owner correction 2026-07-13).
+    assert "looks" not in topics["greek"]["entries"][0]
+    assert topics["greek"]["entries"][0]["name"] == ("theme_title", "greek")
+    greek_dual = topics["greek"]["entries"][8]
+    assert greek_dual["dual"] is True
+    assert [label for label, _ in greek_dual["looks"]] == [
         "Colored", "Bronze", "Gold", "Silver",
     ]
     assert all(
         len(rows) == 1 and len(rows[0]) == 2
-        for _, rows in greek_sun["looks"]
+        for _, rows in greek_dual["looks"]
     )
-    # Chinese stays BRONZE-first; planets cycle photo/sign; astrology
-    # leads with the logo+constellation pair.
+    # Chinese and Astrology are NOT weekday-restructured (their own
+    # 12-sign/12-animal builders, untouched by the round R3 order
+    # change) — they stay exactly as before. Planets IS restructured —
+    # Monday (index 1) cycles photo/sign/art, same as the old entry 0.
     assert [l for l, _ in topics["chinese"]["entries"][0]["looks"]] == [
         "Bronze", "Gold", "Silver", "Colored",
     ]
-    assert [l for l, _ in topics["planets"]["entries"][0]["looks"]] == [
+    assert [l for l, _ in topics["planets"]["entries"][1]["looks"]] == [
         "Planets", "Signs", "Art",
     ]
     assert [l for l, _ in topics["astrology"]["entries"][0]["looks"]] == [
@@ -797,9 +806,11 @@ def test_encyclopedia_expansion_wiring():
     monday = topics["week"]["entries"][1]
     assert len(monday["looks"][0][1]) == 1        # single row off-Sunday
     # The animal societies are metal themes with the full four looks
-    # and their own side-by-side Sunday pairs (owner 2026-07-13).
+    # and their own side-by-side dual-page pairs (owner 2026-07-13) —
+    # the dual page sits at index 8 after the round R3 restructure.
     for theme in ("wolf", "bee", "elephant"):
-        entry = topics[theme]["entries"][0]
+        entry = topics[theme]["entries"][8]
+        assert entry["dual"] is True, theme
         assert [l for l, _ in entry["looks"]] == [
             "Colored", "Bronze", "Gold", "Silver",
         ], theme
@@ -864,14 +875,15 @@ def test_encyclopedia_expansion_wiring():
     assert "NEAP" in dialog._article_text(("moon", "First Quarter"))
     # The topic SLIDER (owner plan round E, 2026-07-14): one entry per
     # page, ← / → wrap around like the Guide, the pager hides on the
-    # gallery and the counter tracks the position.
+    # gallery and the counter tracks the position. Round R3: Title +
+    # 6 weekdays + duality title + dual page + Gaia = 10 pages.
     dialog._show_topic("greek")
     assert dialog._entry_index == 0
-    assert dialog._counter.text() == "1 / 8"      # 7 bodies + Hades
+    assert dialog._counter.text() == "1 / 10"     # Title + 6 + duality + dual + Gaia
     assert len(dialog._blocks) == 1
     dialog._step(-1)                              # wraps to the Ninth
-    assert dialog._entry_index == 7
-    assert dialog._counter.text() == "8 / 8"
+    assert dialog._entry_index == 9
+    assert dialog._counter.text() == "10 / 10"
     dialog._step(+1)
     assert dialog._entry_index == 0
     dialog._show_topics()
@@ -952,11 +964,13 @@ def test_wider_pantheon_topics():
             resolved = _paths.art_file(entry["images"][0])
             assert resolved is None or resolved.suffix == ".png"
 
-    # The Wider Pantheon group is wired into the gallery.
+    # The Wider Pantheon topics ride THE DIVINE group (owner-approved
+    # FIVE-section regroup, sealed 2026-07-20, round R3 — supersedes the
+    # nine-group 2026-07-12/13 layout the "Wider Pantheon" group used
+    # to be part of).
     groups = dict(_TOPIC_GROUPS)
-    assert groups["The Wider Pantheon"] == (
-        "wider_greek", "wider_norse", "wider_egypt", "wider_slavic",
-    )
+    for key in ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic"):
+        assert key in groups["The Divine"]
 
     # Every wider article resolves through the encyclopedia "wider"
     # family, and the retired ninths' written material is reused.
@@ -1081,11 +1095,18 @@ def test_era_terms_topic():
     # Eras essay's own text), so its image tuple is empty (fix round F).
     assert era[7]["images"] == ()
 
+    # THE CELESTIAL ENGINE (owner-approved FIVE-section regroup, sealed
+    # 2026-07-20, round R3 — supersedes "The Clock"): the clock topics
+    # keep their relative order, now followed by Zodiac + Cosmos in the
+    # SAME group (Planets/Planet Signs fold into one "planets" card).
     groups = dict(_TOPIC_GROUPS)
-    assert groups["The Clock"] == (
+    assert groups["The Celestial Engine"][:8] == (
         "week", "instrument", "moon", "seasons", "sun", "era",
         "eclipse_solar", "eclipse_lunar",
     )
+    assert "planet_signs" not in groups["The Celestial Engine"]
+    for key in ("astrology", "chinese", "planets", "cosmos"):
+        assert key in groups["The Celestial Engine"]
 
     # Every article resolves and carries its own MEASURED numbers —
     # never invented, always the sealed anno_lucis.json/ROADMAP figures.
@@ -1176,9 +1197,15 @@ def test_eclipse_topics():
             resolved = _paths.art_file(entry["images"][0])
             assert resolved is None or resolved.suffix == ".png"
 
-    # Both topics ride The Clock group, after the era topic.
+    # Both topics ride The Celestial Engine group (owner-approved
+    # FIVE-section regroup, sealed 2026-07-20, round R3), right after
+    # the era topic — Zodiac/Cosmos trail them in the same group.
     groups = dict(_TOPIC_GROUPS)
-    assert groups["The Clock"][-2:] == ("eclipse_solar", "eclipse_lunar")
+    engine = groups["The Celestial Engine"]
+    era_index = engine.index("era")
+    assert engine[era_index + 1:era_index + 3] == (
+        "eclipse_solar", "eclipse_lunar",
+    )
 
     # Every chapter's article resolves and DESCRIBES its exact dial
     # representation (the sealed state table — the reader's page and the
@@ -1326,3 +1353,304 @@ def test_custom_palette_reaches_the_render():
         defaults.DEFAULT_SKIN, replace(settings, palette_style="light")
     )
     assert palette_for(other) == defaults.PALETTE_PRESETS[("hexa", "light")]
+
+
+# --- ROUND R3: LAYOUT + ARTICLE ORDER + FINISH SWITCHER ------------------------
+
+
+def test_gallery_five_sections():
+    """Owner-approved decision, sealed 2026-07-20: the gallery regroups
+    into exactly FIVE sections, the owner's own names. Planets and
+    Planet Signs are ONE topic (the existing Planets/Signs/Art look
+    switcher) — "planet_signs" never appears as a gallery card, but
+    stays wired in `_topics()` so a dial slot dressed in that theme
+    still resolves a Spacebar jump."""
+    from app.encyclopedia import _TOPIC_GROUPS, _topics
+
+    assert [name for name, _ in _TOPIC_GROUPS] == [
+        "The Celestial Engine", "The Divine", "The Human Wheel",
+        "The Living World", "The Archetypes",
+    ]
+    groups = dict(_TOPIC_GROUPS)
+    every_card = [key for keys in groups.values() for key in keys]
+    assert "planet_signs" not in every_card
+    assert len(every_card) == len(set(every_card)), "no topic in two groups"
+    # The Archetypes section exists (owner: "do not scatter them") but
+    # carries no cards yet — that content is a future session.
+    assert groups["The Archetypes"] == ()
+    # Every card key actually resolves in _topics() — a stale name in a
+    # group would KeyError the gallery build.
+    topics = _topics()
+    for key in every_card:
+        assert key in topics, key
+    # planet_signs itself must still resolve (compositor contract).
+    assert "planet_signs" in topics
+
+
+def test_gallery_min_width_and_no_horizontal_overflow():
+    """LAYOUT fix round R3 (owner: "788px width, tiles clipping" dies
+    here): MIN WIDTH = 4 * the single theme tile, and no group ever
+    lays out more than ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row
+    — it wraps into further rows instead of spilling sideways."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _TOPIC_GROUPS
+    from config import defaults as _defaults
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    tile = (
+        _defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
+        + _defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
+    )
+    assert dialog.minimumWidth() == tile * _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    # The Celestial Engine has more than 4 cards — it MUST wrap.
+    groups = dict(_TOPIC_GROUPS)
+    assert len(groups["The Celestial Engine"]) > _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    dialog.deleteLater()
+
+
+def test_article_order_restructure():
+    """Owner ARTICLE ORDER spec, round R3: every weekday-structured
+    theme opens on ITS OWN title page, then Monday..Saturday (owner:
+    "Ponedeljak PRVI"), then the week-duality title, then the merged
+    Sunday DUAL page, then the Ninth where the theme has one."""
+    from app.encyclopedia import _topics
+
+    topics = _topics()
+    # "wolf" HAS a Ninth (Sigma) — 10 pages total.
+    wolf = topics["wolf"]["entries"]
+    assert len(wolf) == 10
+    assert wolf[0]["name"] == ("theme_title", "wolf")
+    assert "dual" not in wolf[0] and "looks" not in wolf[0]
+    monday_saturday = [entry["name"] for entry in wolf[1:7]]
+    assert monday_saturday == [
+        "Luna", "Hunter (Gamma)", "Scout (Delta)", "Beta", "Mate", "Elder",
+    ]
+    assert wolf[7]["name"] == ("week_duality_title", "wolf")
+    assert wolf[8]["dual"] is True
+    assert wolf[8]["theme"] == "wolf"
+    assert wolf[9]["name"] == "Sigma"        # the Ninth, unchanged content
+    # "japan" has NO Ninth — 9 pages total, dual page is the LAST page.
+    japan = topics["japan"]["entries"]
+    assert len(japan) == 9
+    assert japan[8]["dual"] is True
+    # Every restructured theme's title/duality text resolves and is
+    # non-trivial (Rule #2 — no capacity lies: written now, not a
+    # placeholder pretending to be content).
+    from data.encyclopedia import EncyclopediaRepository
+
+    repo = EncyclopediaRepository()
+    for theme in (
+        "planets", "planet_signs", "greek", "norse", "egypt", "slavic",
+        "alchemy", "japan", "religion", "religion_alt", "profession",
+        "wolf", "bee", "elephant", "bible", "bible2", "bible_dark",
+        "cosmos",
+    ):
+        title = repo.theme_title(theme)
+        duality = repo.week_duality(theme)
+        assert len(title["base"]) > 80, theme
+        assert len(duality["base"]) > 60, theme
+        assert title["title"], theme
+        assert duality["title"], theme
+
+
+def test_dual_article_layout_side_by_side():
+    """Owner INSTRUCTION #6 (encyclopedia side): the week-duality DUAL
+    page shows TWO texts — good/Ruler LEFT, evil/Servant RIGHT, each
+    under its own name/logo — never the old single "base" article."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _topics
+    from config import defaults as _defaults
+
+    QApplication.instance() or QApplication([])
+    topics = _topics()
+    greek_dual = topics["greek"]["entries"][8]
+    assert greek_dual["dual"] is True
+
+    dialog = EncyclopediaDialog()
+    dialog._show_topic("greek")
+    dialog._entry_index = 8
+    dialog._show_entry()
+    ruler_text, servant_text = dialog._article_faces(greek_dual["article"])
+    assert ruler_text != servant_text
+    assert "Helios" in ruler_text
+    assert "Phaethon" in servant_text
+    # Two text labels, each pinned to HALF the block width (columns=2)
+    # — never the single full-width column a normal page uses.
+    dual_labels = [
+        (label, columns) for label, columns in dialog._text_labels
+        if columns == 2
+    ]
+    assert len(dual_labels) == 2
+    ruler_name, servant_name = _defaults.WEEKDAY_DUAL_NAMES["greek"]
+    assert ruler_name == "Helios" and servant_name == "Phaethon"
+    dialog.deleteLater()
+
+
+def test_finish_persistence_across_pages():
+    """Owner INSTRUCTION #3: once a finish (e.g. Bronze) is picked, it
+    rides EVERY following page/topic that offers it — never a silent
+    reset to the topic's own Colored default."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    # Entry 0 is now the title page (no switcher) — Monday (index 1) is
+    # the first page that actually offers the finish cycle.
+    dialog._show_topic("wolf")
+    dialog._entry_index = 1
+    dialog._show_entry()
+    assert dialog._look_state["titles"][dialog._look_state["index"]] == "Colored"
+    dialog._cycle_look(1)                     # -> Bronze
+    assert dialog._preferred_look_label == "Bronze"
+    dialog._step(1)                           # a different entry, same topic
+    assert dialog._look_state["titles"][dialog._look_state["index"]] == "Bronze"
+    dialog._show_topics()
+    dialog._show_topic("bee")                 # a DIFFERENT metal topic
+    dialog._entry_index = 1
+    dialog._show_entry()
+    assert dialog._look_state["titles"][dialog._look_state["index"]] == "Bronze"
+    # A topic whose looks do NOT include "Bronze" falls back to ITS OWN
+    # default (index 0) without erroring.
+    dialog._show_topic("astrology")
+    assert dialog._look_state["titles"][dialog._look_state["index"]] == (
+        "Logo & Constellation"
+    )
+    dialog.deleteLater()
+
+
+def test_ninth_seat_philosophical_name():
+    """Owner decree, round R3: the 9th seat's philosophical name is
+    "The Unfound" — documented as a module constant with the discussed
+    alternatives in a code comment where it is defined."""
+    from app import encyclopedia
+
+    assert encyclopedia.NINTH_SEAT_PHILOSOPHICAL_NAME == "The Unfound"
+
+
+def test_ninth_carries_the_finish_switcher():
+    """Owner bug (Gaia screenshot): the 9th member's page carried NO
+    color switcher at all for any metal-plate theme. Every metal theme's
+    Ninth now cycles the same four looks as its seated eight; a
+    non-metal theme's Ninth (egypt, slavic — no per-metal art exists)
+    correctly stays a single plain plate."""
+    from app.encyclopedia import _topics
+
+    topics = _topics()
+    gaia = topics["greek"]["entries"][-1]
+    assert gaia["name"] == "Gaia"
+    gaia_labels = [label for label, _ in gaia["looks"]]
+    # Bronze/Gold/Silver always cycle (Gold/Silver are LIVE recolors of
+    # the bronze master); "Colored" joins only once a colored/Gaia.png
+    # actually lands on disk (graceful-absent, no art generated yet).
+    assert gaia_labels[-3:] == ["Bronze", "Gold", "Silver"]
+    assert set(gaia_labels) <= {"Colored", "Bronze", "Gold", "Silver"}
+    cat = topics["chinese"]["entries"][-1]
+    assert cat["name"] == "The Cat"
+    assert [label for label, _ in cat["looks"]] == [
+        "Bronze", "Gold", "Silver", "Colored",
+    ]
+    pharaoh = topics["egypt"]["entries"][-1]
+    assert pharaoh["name"] == "The Pharaoh"
+    assert "looks" not in pharaoh          # egypt carries no metal art
+
+
+def test_image_hover_names_the_plate():
+    """Owner spec: hovering any article image shows its NAME — critical
+    on multi-image pages like the era calendars ("Byzantine")."""
+    from app.encyclopedia import _image_tooltip
+    from config import defaults as _defaults
+
+    assert _image_tooltip(_defaults.ERA_ART_DIR / "calendar" / "Byzantine.png") == (
+        "Byzantine"
+    )
+    assert _image_tooltip(
+        _defaults.WEEKDAY_ART_DIR / "wolf" / "primary" / "sigma.png"
+    ) == "Sigma"
+    assert _image_tooltip(
+        _defaults.ECLIPSE_ART_DIR / "Solar_Total.png"
+    ) == "Solar Total"
+
+
+def test_space_jump_index_remap_survives_the_restructure():
+    """Owner item 9: the reordering must not break the dial's Spacebar
+    jump — compositor.encyclopedia_target still emits the OLD raw
+    weekday index (sun=0, moon=1..saturn=6); the dialog remaps it onto
+    the NEW page order (Monday..Saturday keep their old index, sun
+    lands on the merged dual page)."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    QApplication.instance() or QApplication([])
+    # raw index 0 ("sun") -> the dual page (index 8), NOT the title page.
+    sun_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=0)
+    assert sun_jump._entry_index == 8
+    assert sun_jump._topics["wolf"]["entries"][8]["dual"] is True
+    sun_jump.deleteLater()
+    # raw index 1 ("moon"/Monday) is UNCHANGED — still index 1.
+    monday_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=1)
+    assert monday_jump._entry_index == 1
+    assert monday_jump._topics["wolf"]["entries"][1]["name"] == "Luna"
+    monday_jump.deleteLater()
+    # raw index 6 ("saturn"/Saturday) is UNCHANGED — still index 6.
+    saturday_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=6)
+    assert saturday_jump._entry_index == 6
+    saturday_jump.deleteLater()
+    # A non-restructured topic (moon phases) never remaps.
+    moon_jump = EncyclopediaDialog(initial_topic="moon", initial_entry=0)
+    assert moon_jump._entry_index == 0
+    moon_jump.deleteLater()
+
+
+def test_finish_switcher_lives_in_the_top_row():
+    """Owner fix round R3 (Color Switcher.png): the finish switcher
+    moves to the TOP row, in line with Home and Download — ONE
+    persistent widget trio (not rebuilt per entry, like the pager) —
+    and is restyled to border-only frames in the finish's own color,
+    never the old filled gradient pill; "Colored" wears the swept-
+    spectrum gradient border, exact owner order."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    # The trio sits in the SAME QHBoxLayout as Home/Download — the
+    # dialog's own top-level layout's first item.
+    top_row = dialog.layout().itemAt(0).layout()
+    top_widgets = [
+        top_row.itemAt(i).widget() for i in range(top_row.count())
+        if top_row.itemAt(i).widget() is not None
+    ]
+    assert dialog._back in top_widgets
+    assert dialog._download in top_widgets
+    assert dialog._look_back in top_widgets
+    assert dialog._look_caption in top_widgets
+    assert dialog._look_forward in top_widgets
+    assert top_widgets.index(dialog._look_caption) > top_widgets.index(
+        dialog._back
+    )
+    assert top_widgets.index(dialog._look_caption) < top_widgets.index(
+        dialog._download
+    )
+    # Border-only styling: Bronze is a SOLID hex border, no fill;
+    # Colored wears the exact gradient sweep the owner specified.
+    dialog._show_topic("wolf")
+    dialog._entry_index = 1                        # Monday — offers the switcher
+    dialog._show_entry()
+    dialog._cycle_look(1)                          # -> Bronze
+    bronze_qss = dialog._look_caption.styleSheet()
+    assert "background: transparent" in bronze_qss
+    assert "#CD7F32" in bronze_qss
+    assert "qlineargradient" not in bronze_qss
+    dialog._cycle_look(-1)                         # back to Colored
+    colored_qss = dialog._look_caption.styleSheet()
+    assert "qlineargradient" in colored_qss
+    for hue in defaults.ENCYCLOPEDIA_FINISH_GRADIENT:
+        assert hue in colored_qss
+    dialog.deleteLater()

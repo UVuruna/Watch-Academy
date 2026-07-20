@@ -12,9 +12,11 @@ wheel, lunations, Paint/Light, metals, the ring letters), the WEEK
 pages (seven cross-theme day portraits — everything a day owns woven
 into one prose page), the SEASONS articles, the VIRTUES / SINS /
 MOODS entries (one short article per cross-cure emblem, 8 per family,
-Sunday counted twice) and the DUALITY family (owner 2026-07-13: "The
+Sunday counted twice), the DUALITY family (owner 2026-07-13: "The
 Two Triangles" — Lucifer, Judas and The Union, the scale of self
-whose zero no individual reaches).
+whose zero no individual reaches) and, since round R3, every weekday
+theme's own THEME_TITLE opening page and WEEK_DUALITY title page (the
+ARTICLE ORDER restructure — see [Encyclopedia Dialog](../app/encyclopedia.md)).
 
 Every text rides the same translation overlay as the articles
 (`encyclopedia/<section>/<key>/base|title` keys), so the bundled
@@ -49,3 +51,9 @@ Serbian and any machine-translated language apply automatically.
 - `entry(family, name)`: `{base}` of one virtues/sins/moods/duality/
   ninths/intelligence/wider article (the WIDER family holds the
   seatless A-list pantheon figures — WORKPLAN Session 8)
+- `theme_title(theme)` / `week_duality(theme)`: `{title, base}` of a
+  weekday theme's OWN opening page / its WEEK-DUALITY title page
+  (round R3 ARTICLE ORDER restructure — `theme_title`/`week_duality`
+  sections, one entry per `WEEKDAY_THEME_TITLES` key except virtues/
+  sins/moods, which the emblem-family pass keeps out of the weekday
+  shape entirely)

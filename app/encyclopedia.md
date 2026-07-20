@@ -7,24 +7,37 @@ The article BROWSER (owner spec 2026-07-12; menu Encyclopedia… below
 Time Travel…): every legend readable without hovering the dial, on two
 screens —
 
-1. **Topics** — a gallery in the owner's GROUPS (`_TOPIC_GROUPS`):
-   The Clock, Gods, Zodiac, Themes, Religions, Animal Societies and
-   The Inner Wheel (Virtues, Sins, Moods and THE TWO TRIANGLES — the
+1. **Topics** — a gallery in the owner's FIVE SECTIONS (`_TOPIC_GROUPS`,
+   owner-approved decision sealed 2026-07-20, round R3 — supersedes the
+   nine-group 2026-07-12/13 layout): **The Celestial Engine** (the
+   clock topics + Zodiac + Cosmos — Planets and Planet Signs are ONE
+   card, distinguished by the Planets/Signs/Art look switcher),
+   **The Divine** (gods + the Wider Pantheon + Creeds/Mysteries +
+   Scripture), **The Human Wheel** (Virtues, Sins, Moods, the Nine
+   Intelligences, Professions, Trinity and THE TWO TRIANGLES — the
    Judas–Lucifer scale of self, owner 2026-07-13; its Lucifer/Judas
-   badges ROTATE by date, see Scale Rotation below) — EVERYTHING
-   centered (owner 2026-07-13: headers
-   and card rows alike) and the cards RESPONSIVE: `_rescale_topics`
-   grows/shrinks the icons with the window between
-   `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`; only below the minimum does
-   the scrollbar take over.
+   badges ROTATE by date, see Scale Rotation below), **The Living
+   World** (Wolf/Bee/Elephant/Alchemy/Japanese week) and **The
+   Archetypes** (its OWN section, empty until a future session gives
+   the archetypes their own topics — see round R3 below) — EVERYTHING
+   centered (owner 2026-07-13: headers and card rows alike) and the
+   cards RESPONSIVE: `_rescale_topics` grows/shrinks the icons with
+   the window between `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`. LAYOUT fix
+   round R3: a group never lays out more than
+   `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS` (4) cards per row — it WRAPS
+   into further rows instead of spilling sideways, and the dialog's
+   own `setMinimumWidth` (4 tiles) keeps a full row readable even at
+   the minimum icon size — a horizontal scrollbar can no longer happen;
+   the vertical scrollbar is the only overflow this gallery ever needs.
 2. **Articles** — a SLIDER (owner plan round E, 2026-07-14): one entry
    per page, ← Previous / Next → wrap around with a counter between
    them; the chrome wears the shared gradient pills ([UI
    Style](ui_style.md)) — ⌂ Home top-left back to the gallery,
-   ⬇ Download top-right saves the open entry's image(s) and text.
-   The entity image(s) — Astrology shows the sign LOGO and its
-   CONSTELLATION side by side, every Sunday RULER/SERVANT pair stands
-   side by side on THEME pages, while the WEEK pages STACK each pair
+   ⬇ Download top-right saves the open entry's image(s) and text, and
+   (round R3) a persistent FINISH SWITCHER between them — see
+   below. The entity image(s) — Astrology shows the sign LOGO and its
+   CONSTELLATION side by side, every theme's DUAL page's RULER/SERVANT
+   pair stands side by side, while the WEEK pages STACK each pair
    (owner 2026-07-14: Ruler on top, its Servant directly under,
    themes as columns) — then the NAME as a bold title and the full
    base article, translated through the active overlay and with the
@@ -32,6 +45,125 @@ screens —
    blue, vices red, moods yellow, the entity's own arm hue), the
    `[[Subhead]]` markers drawn as centered bold headings hugging
    their paragraph.
+
+**ROUND R3 — the owner's fix-round batch, folder `UV/Encyclopedia`
+(owner-approved decisions sealed 2026-07-20):**
+
+- **ARTICLE ORDER restructure** (`_weekday_topic`): every weekday-
+  structured theme (the 18 `WEEKDAY_THEME_TITLES` keys minus virtues/
+  sins/moods, which the emblem-family pass overwrites) now opens
+  `[Title, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday,
+  Week-Duality title, Dual page, (Ninth if the theme has one)]` —
+  entry 0 is the theme's OWN title page (`Database/encyclopedia.json`
+  new `theme_title` section, one text per theme; the plate is a
+  documented graceful-absent slot for a future theme plate — owner:
+  "sliku koju ćemo napraviti"), Monday leads the week (owner: "Uvek…
+  Ponedeljak PRVI"), and Sunday's old single "sun" page is now TWO
+  pages: a `week_duality` title page introducing the theme's dual
+  center, then the DUAL PAGE itself (`entry["dual"] = True`).
+- **DUAL ARTICLE LAYOUT** (owner INSTRUCTION #6, encyclopedia side
+  only): the dual page shows the Ruler's plate LEFT / Servant's plate
+  RIGHT (the pre-existing side-by-side image row, unchanged) and, NEW,
+  TWO TEXT COLUMNS underneath — Ruler LEFT, Servant RIGHT, a `QFrame`
+  VLine divider between, each under its own bold name
+  (`defaults.WEEKDAY_DUAL_NAMES[theme]`). The texts come from
+  `SymbolismRepository.article(...)["faces"]` (`{"ruler", "servant"}`
+  — every one of the 18 themes' Sunday article already carried this,
+  ground-truthed this round) via the new `_article_faces` (mirrors
+  `_article_text`, resolves through "faces" instead of "base"). Each
+  column is a `(label, columns=2)` entry in `self._text_labels` —
+  `_rescale` reserves its HALF-share of the block width the same law
+  the full-width case uses (see THE INVISIBLE CLIPPER below).
+- **THE SPACE-JUMP INDEX REMAP** (item 9, `_WEEKDAY_DUAL_PAGE_INDEX`):
+  `render.compositor._weekday_encyclopedia_target` (out of this
+  round's scope) still emits the OLD raw index — sun=0, moon=1..
+  saturn=6. The new order happens to leave Monday..Saturday at that
+  SAME index (Title only pushes in at 0; Sunday moves OUT to the end)
+  — only raw index 0 needs remapping, to the merged dual page's new
+  seat (index 8). Applied once in `__init__`, gated on
+  `_WEEKDAY_RESTRUCTURED_TOPICS` so non-weekday topics (moon phases,
+  seasons, eclipses, zodiac…) are never touched.
+- **THE FINISH SWITCHER moves to the TOP row** (owner fix, Color
+  Switcher.png): ONE persistent widget trio (`self._look_back` /
+  `_look_caption` / `_look_forward`, built once in `__init__`, never
+  rebuilt per entry like the old per-block arrows) sits between Home
+  and Download; `_show_entry` points `self._look_state` at the open
+  entry and shows/hides the trio. Restyled from the old filled
+  gradient pill to a BORDER-ONLY frame in the finish's own color
+  (`app.ui_style.style_finish_frame`, `defaults.
+  ENCYCLOPEDIA_FINISH_BORDER_COLORS`) — "Colored" wears a swept-
+  spectrum gradient border (`ENCYCLOPEDIA_FINISH_GRADIENT`: lavender→
+  blue→cyan→green→yellow→orange→red, faked via QSS `border-color:
+  qlineargradient(...)`, verified rendering offscreen); a non-finish
+  arrow-cycle (Planets/Signs/Art, the Week's kinship groups) wears the
+  neutral accent border instead — the gradient is reserved for the
+  literal Colored option.
+- **FINISH PERSISTENCE** (owner INSTRUCTION #3): `self.
+  _preferred_look_label` remembers the last finish the user picked
+  (`_cycle_look`); every subsequent `_show_entry` opens on that label
+  if the new entry offers it (`titles.index(...)`), falling back to
+  index 0 (the entry's own default) otherwise — never a silent reset
+  to Colored on a page turn or topic change.
+- **THE NINTH'S OWN FINISH SWITCHER** (owner bug, Gaia screenshot: the
+  9th member's page carried NO color switcher at all): `_ninth_looks`
+  gives every METAL_THEMES ninth (Gaia, Yggdrasil, the Polymath,
+  Sigma, the Swarm, the Graveyard, the Big Bang) the SAME Colored/
+  Bronze/Gold/Silver cycle its seated eight already had, and the
+  Chinese Ninth (The Cat) the SAME Bronze-first cycle the other eleven
+  animals wear; a theme with no per-metal art (egypt, slavic, the
+  plain-color families) correctly keeps its Ninth a single plain
+  plate — nothing to switch.
+- **IMAGE HOVER names the plate** (owner spec, critical on multi-image
+  pages like the era calendars): every article image's `QLabel` now
+  carries `setToolTip(_image_tooltip(path))` — the filename stem,
+  underscores opened to spaces, Title-Cased only when the stem itself
+  carries no capital (so "Byzantine", "KaliYuga" and "Solar_Total" →
+  "Solar Total" are left as drawn, "sigma" → "Sigma").
+- **THE UNFOUND** (owner decree — the Ninth seat's philosophical
+  name): documented as a module-level constant beside the ninths loop,
+  with the discussed-and-rejected alternatives (The Uncalled, The
+  Ninth Door, The Seeker, The Unclaimed) in the comment there.
+- **THE INVISIBLE CLIPPER, root cause found** (owner bug, "Nevidljivi
+  element seče pasus The Lesson" — the WORST of the three reported
+  element-intersection bugs): ground-truthed offscreen by reproducing
+  the EXACT single-frame timing a real Next/Previous click sees
+  (`QApplication.processEvents()` pumped ONCE, matching a click
+  handler that never yields to the event loop) — the scrollbar's
+  range came back **0**, provably matching "blocking scroll because
+  the text counts as in view". Root cause: `QScrollArea`'s
+  `widgetResizable` path sizes a FRESHLY `setWidget()`-ed
+  heightForWidth-dependent widget to the VIEWPORT on its first layout
+  pass and only grows it to the true `sizeHint` on a SECOND pass —
+  which a single click handler never gets. THREE changes close it
+  together: (1) `_show_entry` now calls `_rescale()` BEFORE
+  `self._scroll.setWidget(content)` (the width/font/pixmap fit
+  resolves on widgets that are not yet the scroll area's tracked
+  widget, so `setWidget` only ever sees one, final, geometry); (2)
+  text/name labels get their font via `QFont`/`setFont` instead of a
+  `setStyleSheet` font-size rule (a stylesheet change only takes
+  effect on the widget's NEXT style polish, so `heightForWidth`
+  queried immediately after still measured the OLD font); (3) every
+  text label reserves its own full height
+  (`label.setFixedHeight(label.heightForWidth(width))`), the same law
+  `ROADMAP queue #9` already applied to images. The SAME timing bug
+  plausibly explains the other two element-intersection screenshots
+  (the title overlapping the image, the color switcher overlapping
+  the medallion) — the color-switcher case is additionally made
+  structurally impossible by moving the switcher out of the per-entry
+  block entirely (see above).
+- **DEFERRED to a follow-up round**: the Planetary+Pantheon
+  dual-block merge for Greek/Norse/Egyptian/Slavic (owner rule 5 — a
+  SECOND "Pantheon" 9-page block per culture, reached via a LOGO
+  BUTTON between Home and Download that also auto-swaps at the 11→12
+  page boundary). The data this needs already exists and is READY
+  (`defaults.WEEKDAY_PANTHEON`, `pantheon_seat`, the `*_pantheon`
+  article sets, all with "faces" for their own Sunday) — the merge
+  itself, its inline SVG orbit/pediment logos and the boundary-swap
+  logic are a substantial independent feature the owner's own rough
+  page-count note was internally inconsistent about (9 vs 11 pages);
+  it deserves its own focused design pass rather than a rushed
+  implementation this round. See the round R3 report for the design
+  sketch.
 
 **The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
 Seasons topic became THREE — **Moon** (the lunations), **Seasons** (the
@@ -161,7 +293,8 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 - [Compositor](../render/compositor.md) — `_article_body_html` (the
   one wrap/highlight implementation, Rule #5)
 - [Theme](theme.md) — the dark dialog surface (buttons stay on
-  [UI Style](ui_style.md)'s own gradient pills)
+  [UI Style](ui_style.md)'s own gradient pills; the round R3 finish
+  switcher uses that module's `style_finish_frame` border-only frames)
 - [Config (folder)](../config/___config.md) — art directories, accent
   tables
 
@@ -172,18 +305,31 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 ## Classes
 
 ### EncyclopediaDialog
-- `__init__(translations, travel_date=None)`: builds the topic gallery
-  and the styled chrome (Home / Download / ← Previous / counter /
-  Next →); `travel_date` (the controller's `_effective_travel_date()`,
-  today when omitted) drives the Scale Rotation entries
+- `__init__(translations, travel_date=None)`: builds the topic gallery,
+  the MIN WIDTH (round R3: 4 gallery tiles) and the styled chrome
+  (Home / finish switcher / Download / ← Previous / counter / Next →);
+  `travel_date` (the controller's `_effective_travel_date()`, today
+  when omitted) drives the Scale Rotation entries; the Spacebar jump
+  applies the round R3 index remap for restructured weekday topics
 - `_show_topic(key)`: opens the topic slider at its first entry
 - `_step(delta)` / `_show_entry()`: the pager — one entry per page,
-  wraps both ways, pager hidden on single-entry topics
+  wraps both ways, pager hidden on single-entry topics; `_show_entry`
+  branches on `entry["poem"]` / `entry["dual"]` / the normal path
+- `_cycle_look(step)` / `_update_look_caption()`: the persistent TOP-
+  ROW finish switcher (round R3) — cycles `self._look_state` and
+  records the pick as `self._preferred_look_label` (finish
+  persistence, owner INSTRUCTION #3)
+- `_article_faces(ref)`: both texts of a DUAL page (owner INSTRUCTION
+  #6) — mirrors `_article_text`, resolves through the "faces" register
 - `_download_entry()`: saves the open entry's current-look image(s)
-  and its text (headings as `[Label]` lines) into a picked folder
+  and its text (headings as `[Label]` lines, both faces for a DUAL
+  page) into a picked folder
 - `_rescale()`: live sizing on resize — gallery cards through
-  `_rescale_topics()`; entry pages re-fit fonts and pixmaps
-  (`_resize_cell`) without rebuilding the grid
+  `_rescale_topics()` (round R3: WRAPS at
+  `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS`, width-driven only); entry pages
+  re-fit fonts and pixmaps (`_resize_cell`) without rebuilding the
+  grid, and reserve each text label's own height/width
+  (THE INVISIBLE CLIPPER fix, round R3)
 - `_pixmap(path)`: the decoded-image cache behind the lazy looks
 
 ## Design Decisions

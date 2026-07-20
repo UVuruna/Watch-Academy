@@ -57,3 +57,48 @@ def style_button(button, role: str, small: bool = False) -> None:
     """Dress a QPushButton / QToolButton as the role's gradient pill."""
     button.setStyleSheet(_qss(role, small))
     button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+
+def style_finish_frame(label, finish: str) -> None:
+    """The FINISH SWITCHER's caption (owner fix round R3, Color
+    Switcher.png): a border-only frame in the finish's own color — NO
+    fill, so it reads as a selector chip rather than another solid
+    button. "Colored" wears a swept-spectrum gradient border (owner
+    exact order: lavender/blue/cyan/green/yellow/orange/red) — QSS has
+    no gradient BORDER property, so the gradient is faked the standard
+    Qt way: the OUTER widget paints the gradient as its background and
+    the inset padding shows through as a colored "border ring" around
+    the INNER text (owner's `background-clip` trick made portable) —
+    here the label draws directly on the dialog surface, so the ring
+    shows the gradient itself with the surface color inset instead.
+    NOT every topic's arrow-cycle is a metal finish (Planets/Signs/Art,
+    the Week's kinship groups, Astrology's Logo & Constellation/Colored/
+    Sign) — anything outside the four finish names wears the neutral
+    accent border, never the gradient (that reads specifically as
+    "every color", reserved for the actual Colored finish)."""
+    if finish == "Colored":
+        stops = defaults.ENCYCLOPEDIA_FINISH_GRADIENT
+        step = 1 / max(1, len(stops) - 1)
+        stops_css = ", ".join(
+            f"stop:{round(i * step, 3)} {hue}" for i, hue in enumerate(stops)
+        )
+        border = (
+            "3px solid transparent; border-image: none; "
+            "border-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+            f"{stops_css}) 1"
+        )
+    else:
+        solid = defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS.get(
+            finish, defaults.THEME_COLORS["accent"]
+        )
+        border = f"3px solid {solid}"
+    label.setStyleSheet(
+        f"color: {defaults.THEME_COLORS['text_primary']};"
+        "font-weight: bold;"
+        f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
+        f"padding: {defaults.UI_BUTTON_SMALL_PADDING_PX[0]}px "
+        f"{defaults.UI_BUTTON_SMALL_PADDING_PX[1]}px;"
+        f"border-radius: {defaults.UI_BUTTON_RADIUS_PX}px;"
+        "background: transparent;"
+        f"border: {border};"
+    )

@@ -907,6 +907,36 @@ ENCYCLOPEDIA_MAX_FONT_PX = 21
 # two bounds; below the minimum the scrollbar takes over).
 ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
 ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
+# LAYOUT fix round R3 (owner: "788px width, tiles clipping" — that class
+# dies here): a group NEVER spills more than this many cards per row —
+# it WRAPS instead, never a horizontal scrollbar. The single-tile unit
+# a card claims at the minimum icon size (the icon plus the existing
+# `_rescale_topics` label/padding allowance) times this many columns is
+# the dialog's own MIN WIDTH (owner: "MIN WIDTH = 4 * pojedinacni
+# karton"), enforced once in `EncyclopediaDialog.__init__`.
+ENCYCLOPEDIA_GALLERY_MAX_COLUMNS = 4
+ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX = 40   # matches _rescale_topics' + 40/+44
+# THE FINISH SWITCHER (owner fix round R3: moved to the top row, in
+# line with Home/Download; restyled from filled gradient pills to
+# border-only frames in the finish's OWN color — Colored/Bronze/Gold/
+# Silver read at a glance instead of hiding behind a generic caption).
+# Bronze matches BRONZE_LETTER_TINT (below, out of definition order —
+# copied as a literal rather than forward-referenced) so the switcher
+# border and the ring-letter bronze read as the SAME bronze; gold/
+# silver are the classic heraldic metals, unused as a plain hex
+# anywhere else in the palette tables.
+ENCYCLOPEDIA_FINISH_BORDER_COLORS = {
+    "Bronze": "#CD7F32",         # == BRONZE_LETTER_TINT
+    "Gold": "#D4AF37",
+    "Silver": "#C0C0C0",
+}
+# The COLORED option's border (owner spec, exact order): lavender,
+# blue, cyan, green, yellow, orange, red — a full spectrum sweep so
+# "Colored" reads as "every color", never mistaken for one finish.
+ENCYCLOPEDIA_FINISH_GRADIENT = (
+    "#B57EDC", "#3B5FE0", "#00C2D1", "#2FA84F", "#E8D000", "#E8890A",
+    "#D8362A",
+)
 # Modern reader buttons (owner 2026-07-14: "veći, upečatljiviji,
 # življih boja — ne kao app iz 1990-e"): vivid gradient pills shared by
 # the Encyclopedia and the Guide. Each role owns a (top, bottom)

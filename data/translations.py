@@ -80,7 +80,7 @@ def collect_corpus() -> dict:
         data = json.loads(encyclopedia.read_text(encoding="utf-8"))
         for section in (
             "instrument", "week", "seasons", "sun", "moon", "era",
-            "eclipse",
+            "eclipse", "theme_title", "week_duality",
         ):
             for key, node in data.get(section, {}).items():
                 corpus[f"encyclopedia/{section}/{key}/title"] = node["title"]

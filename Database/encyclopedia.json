@@ -1,5 +1,5 @@
 {
- "note": "Encyclopedia-only content (owner expansion 2026-07-13): the INSTRUMENT functionality articles, the WEEK day pages and the VIRTUES/SINS/MOODS emblem entries. Translated through the encyclopedia/<section>/<key>/... overlay keys.",
+ "note": "Encyclopedia-only content (owner expansion 2026-07-13): the INSTRUMENT functionality articles, the WEEK day pages and the VIRTUES/SINS/MOODS emblem entries. Round R3 (2026-07-20) added THEME_TITLE (every weekday theme's own opening page) and WEEK_DUALITY (the title page introducing Sunday as the theme's dual center, right before the merged Ruler/Servant DUAL page) as part of the ARTICLE ORDER restructure. Translated through the encyclopedia/<section>/<key>/... overlay keys.",
  "instrument": {
   "dial": {
    "title": "The 24-Hour Dial",
@@ -460,6 +460,154 @@
   "The_Great_Oscillations": {
    "title": "The Great Oscillations",
    "base": "[[The Long Breath]] The dial measures where the balance between the light half-year and the dark half-year falls, and pins the Anno Lucis to the year that balance tipped. But that balance is not fixed. Run the measurement across tens of thousands of years and the season lengths themselves breathe slowly in and out — the light half-year swelling and shrinking against the dark by whole days over the millennia. The Observatory's charts plot exactly this: the long, patient oscillation of the seasons.\n\n[[The Three Cycles]] The rhythm has a name and a cause — the Milankovitch cycles, three slow wobbles in the Earth's motion. ECCENTRICITY: the orbit stretches from nearly circular to slightly oval and back over roughly 100,000 and 405,000 years. OBLIQUITY: the axial tilt nods between about 22.1 and 24.5 degrees over some 41,000 years, deepening or easing the seasons themselves. PRECESSION: the axis swings like a spinning top over about 26,000 years, sliding which season falls at the near point of the orbit. Together they set how strong and how lopsided the seasons run, and their beat is what the season-length oscillation follows.\n\n[[What the Envelope Shows]] The Observatory's fifth chart plots the AMPLITUDE of that oscillation — how far the seasons swing from balance — over roughly 200,000 years each way, drawn from Laskar's La2004 orbital solution, the same physics the deep-past sciences use. It is drawn as an envelope, not as dated events, because beyond the precise bundled span the day-exact clock dissolves into hours of uncertainty: the SHAPE is trustworthy, the exact dates are not. Right now the amplitude is falling toward a deep minimum around the year 28,000, where the seasonal swing shrinks to roughly plus or minus 1.1 days — the orbit at its most circular, the light and dark half-years running nearly even all year round.\n\n[[The Honest Ice-Age Line]] Those same low-eccentricity spells correlate with the ~100,000-year pacing of the ice ages: low eccentricity means muted seasonal forcing — cooler summers that fail to melt the winter's snow — and that is the leading modern account of why glaciations come and go. But a correlation is not a calendar. The dial does NOT say an ice age begins in the year 28,000: real climate is driven as much by oceans, ice sheets and carbon as by orbit, and human forcing today has almost certainly cancelled the next glacial cue outright. What the chart shows is the astronomical INVITATION — the tilt of the table — never the roll of the dice.\n\n[[Milankovitch]] The mathematics is the work of Milutin Milankovitch, the Serbian engineer and mathematician who, through the First World War and the years after, computed the whole of it by hand — the incoming sunlight at every latitude across the ages — and first tied those orbital rhythms to the Earth's ice ages. It took decades and, finally, deep-sea and ice-core data to vindicate him; the cycles carry his name because he did the patient arithmetic no one else would sit still long enough to finish."
+  }
+ },
+ "theme_title": {
+  "planets": {
+   "title": "Planets",
+   "base": "[[The Roster]] The seven classical bodies — Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn — are the neutral roster every other themed week borrows its shape from: one body per day, in the order the ancient astrologers already fixed. This topic shows them AS THEMSELVES, before any myth is laid over them — the photograph, then (on the same page, one look away) the zodiac glyph each rules and a painted portrait.\n\n[[The Look Switcher]] Planets and Planet Signs are ONE topic here, not two — the Planets / Signs / Art arrows above the medallion cycle between the photograph, the glyph and the painting of the SAME seven bodies, so nothing about the roster is duplicated to say it twice."
+  },
+  "planet_signs": {
+   "title": "Planet signs",
+   "base": "[[The Same Seven]] This is not a second roster — it is the Planets topic's OWN glyph face, wired here only so a dial arm dressed in the sign look still opens on the right page. Open the Planets topic and reach for the Signs look on its arrows to read it in context, glyph beside photograph."
+  },
+  "greek": {
+   "title": "Greek gods",
+   "base": "[[The Planetary Fit]] Olympus supplies a body for every classical planet: Helios drives the sun's own chariot, Selene the moon's cool disc, war-quick Ares takes Tuesday, the messenger Hermes Wednesday, the sky-king Zeus Thursday, Aphrodite Friday's love, and old Cronus — Time itself — the slow last day. Each seat is argued from the god's OWN nature against the day's bundle, never from name alone.\n\n[[Sunday's Two Faces]] Six days and the sun's throne come first here, Monday to Saturday; Sunday itself closes the theme as the week's own duality, Helios crowned beside the son who nearly burned the world driving his chariot for a day."
+  },
+  "norse": {
+   "title": "Norse gods",
+   "base": "[[The Planetary Fit]] The Æsir take the same seven seats by the same law: Sól rides the sun's wagon one step ahead of the wolf that hunts her, Máni walks the moon, Týr's lost hand earns Tuesday's courage, Óðinn's cunning takes Wednesday, Þórr's hammer Thursday, Freyja's love Friday, and the bound trickster Loki closes the week as Cronus' cold northern mirror.\n\n[[Sunday's Two Faces]] The six weekdays and Sunday's throne open the theme; Sunday itself closes it as the week's own duality — Sól at the wheel, Sköll the wolf forever a stride behind her, the chase that ends the world at Ragnarök."
+  },
+  "egypt": {
+   "title": "Egyptian gods",
+   "base": "[[The Planetary Fit]] Ra crosses the sky by day and Khonsu walks it by night; falcon-headed Montu carries Tuesday's war, ibis-scribe Thoth Wednesday's word, king Amun Thursday's throne, Hathor Friday's love and music, and Osiris — killed, judged and reborn — the patient last day.\n\n[[Sunday's Two Faces]] Six days and the sun's throne open the theme; Sunday itself closes it as the week's own duality — Ra at noon and Afu-Ra, the ram-headed night sun rowing through the Duat's twelve dark hours until dawn returns him whole."
+  },
+  "slavic": {
+   "title": "Slavic gods",
+   "base": "[[The Planetary Fit]] Dažbog the giving sun opens the week; Hors walks its night as the moon, four-faced Svetovid rides to war on Tuesday, the horned trader Veles keeps Wednesday's counsel, thundering Perun rules Thursday's noon, spinning Mokoš keeps Friday's threads, and Morana — winter drowned each spring — closes the week on the arm of renewal.\n\n[[Sunday's Two Faces]] Six days and the sun's throne open the theme; Sunday itself closes it as the week's own duality — the young Dažbog crowned at dawn beside the old Dažbog the winter wears him down into, reborn every solstice."
+  },
+  "alchemy": {
+   "title": "Alchemy",
+   "base": "[[The Seven Metals]] The classical planet-metal correspondence gives every day its own element: gold for the sun, silver for the moon, iron's war for Tuesday, quicksilver's speed for Wednesday, tin for Thursday, copper's love for Friday, lead's patience for Saturday — one still life of bars, nuggets and coiled wire per day, each wearing its metal.\n\n[[Sunday's Two Faces]] Six days and the sun's own gold open the theme; Sunday itself closes it as the week's own duality — refined Gold beside the Raw Ore it was dug and smelted out of, the whole Work compressed into one medallion pair."
+  },
+  "japan": {
+   "title": "Japanese week",
+   "base": "[[The Yōbi Week]] The Japanese day names ARE the planetary week under different characters: nichiyōbi the sun's day, getsuyōbi the moon's, then the five Wu Xing element stars — kayōbi's fire (Mars), suiyōbi's water (Mercury), mokuyōbi's wood (Jupiter), kin'yōbi's metal (Venus), doyōbi's earth (Saturn) — the same seven-day sky read through a second cosmology laid straight over the first.\n\n[[Sunday's Two Faces]] Six days and the sun's own day open the theme; Sunday itself closes it as the week's own duality — Amaterasu radiant on her throne beside the Ama-no-Iwato, the cave she once hid the whole world's light inside."
+  },
+  "religion": {
+   "title": "Creeds",
+   "base": "[[Narrative-First]] Each living tradition sits on the day its OWN canon points to, never merely its rest day: Christianity's Sunday resurrection, Islam's lunar calendar (Quran 2:189), Buddhism's war-day victory without weapons, Taoism's watchful Wednesday, Hinduism's Thursday teachers, Sikhism's Friday compassion, Judaism's Saturday Sabbath — seven living creeds, seven arguments.\n\n[[Sunday's Two Faces]] Six days and Christianity's own Sunday open the theme; Sunday itself closes it as the week's own duality — the faith that keeps the day beside the inversion that mocks it, Satanism reading every Christian symbol backward on the same throne."
+  },
+  "religion_alt": {
+   "title": "Ancient religions",
+   "base": "[[The Older Cults]] A second, older set fills the same seven seats by the same narrative-first law: Mithraism's Sol Invictus IS dies Solis, Druidism's moon-reckoned rites, Zoroastrianism's fire-and-sword Tuesday, Shamanism's spirit-walking Wednesday, the Eleusinian Mysteries' Thursday initiation, Ishtar's Babylon (which invented the seven-day week itself) on Friday, and Voodoo's ancestor Saturday.\n\n[[Sunday's Two Faces]] Six days and Mithraism's own Sunday open the theme; Sunday itself closes it as the week's own duality — the Sun-soldier's Mithraism beside Corax, the lowest of its seven initiation grades, the Raven who has not yet climbed toward the light."
+  },
+  "profession": {
+   "title": "Professions",
+   "base": "[[The Estates]] A medieval-to-modern career per day: the Physician's Monday care, the Soldier's Tuesday war, the Merchant's Wednesday trade, the Priest's Thursday counsel, the Artist's Friday craft, the Farmer's patient Saturday harvest — the world's work laid across the week the way the Compass lays it across the eight Walks of Life.\n\n[[Sunday's Two Faces]] Six days and the throne's own Sunday open the theme; Sunday itself closes it as the week's own duality — the Ruler who commands beside the Servant who carries out the command, one seat, two roles no estate escapes."
+  },
+  "wolf": {
+   "title": "Wolf Pack",
+   "base": "[[The Pack Order]] A real wolf pack's ranks fill the week: Luna's solitary Monday howl, the Hunter's Tuesday kill, the Scout's Wednesday range, Beta's Thursday second-in-command, the Mate's Friday bond, the Elder's Saturday memory of every hunt before this one — rank read as biology, not cruelty.\n\n[[Sunday's Two Faces]] Six days and the Leader's own Sunday open the theme; Sunday itself closes it as the week's own duality — Alpha at the front of the pack beside Omega at its back, the two ends the whole order is measured between (Sigma, the pack's Ninth, belongs to neither)."
+  },
+  "bee": {
+   "title": "Bee Hive",
+   "base": "[[The Hive's Clock]] A worker bee's whole career IS a clock: the Nurse's Monday cell-tending, the Guard's Tuesday watch, the Scout's Wednesday search, the Builder's Thursday wax, the Drone's Friday one purpose, the Forager's Saturday miles — age itself the schedule, no bee ever out of step with her own life.\n\n[[Sunday's Two Faces]] Six days and the Queen's own Sunday open the theme; Sunday itself closes it as the week's own duality — the Queen who founded the whole hive beside the Cleaner, the newest daughter doing the humblest work at the hive's true center."
+  },
+  "elephant": {
+   "title": "Elephant Herd",
+   "base": "[[The Herd's Memory]] A matriarchal herd across the week: the Allomother's Monday babysitting, Musth's Tuesday surge, the Caller's Wednesday infrasound, the Mentor's Thursday teaching, the Reunion's Friday joy, the Elder's Saturday bones remembered at a graveside — an intelligence built entirely on what the herd chooses to carry forward.\n\n[[Sunday's Two Faces]] Six days and the Matriarch's own Sunday open the theme; Sunday itself closes it as the week's own duality — the living Matriarch who leads beside Memory itself, the dead she still leads by, at the graveyard only elephants keep."
+  },
+  "bible": {
+   "title": "Bible",
+   "base": "[[The First Set]] Seven figures across the week: Mary's Monday grace, David's Tuesday battle, Moses' Wednesday law, Solomon's Thursday wisdom, Adam and Eve's Friday love and fall, Joseph's Saturday patience through betrayal — the Old and New Testaments read across the same seven-armed dial as everything else.\n\n[[Sunday's Two Faces]] Six days and the throne's own Sunday open the theme; Sunday itself closes it as the week's own duality — the Ancient of Days on His throne beside the Son who sits at His right hand, not two opposites but the Trinity's own eternal pair."
+  },
+  "bible2": {
+   "title": "Bible II",
+   "base": "[[The Second Set]] A second seven from the same scriptures: Jonah's Monday flight and return, Samson's Tuesday strength, Jacob's Wednesday wrestling, Noah's Thursday flood, Ruth's Friday loyalty, Job's Saturday trial — figures whose stories test faith rather than command it.\n\n[[Sunday's Two Faces]] Six days and Abraham's own Sunday open the theme; Sunday itself closes it as the week's own duality — the father who believed beside the son bound on the altar and then spared, obedience and mercy sharing one seat."
+  },
+  "bible_dark": {
+   "title": "Bible Dark",
+   "base": "[[The Fallen]] Every figure here fell, tempted or was cast out: Lilith's Monday exile, Goliath's Tuesday pride, the Serpent's Wednesday temptation, Herod's Thursday cruelty, Delilah's Friday betrayal, Cain's Saturday first murder — the theme's whole roster is a warning, read honestly rather than sanitized.\n\n[[Sunday's Two Faces]] Six days and Lucifer's own Sunday open the theme; Sunday itself closes it as the week's own duality — the fallen angel beside the fallen apostle, pride's rebellion against Heaven and greed's betrayal of one friend, the theme's two founding falls."
+  },
+  "cosmos": {
+   "title": "Cosmos",
+   "base": "[[The Deep Sky]] A star-chart medallion per day: the Nebula's Monday birth-cloud, the Supernova's Tuesday violence, the Pulsar's Wednesday precise beat, the Galaxy's Thursday vast wheel, Binary Stars' Friday orbit, the Comet's Saturday long return — the sky's OWN objects standing in for the myths every other theme tells.\n\n[[Sunday's Two Faces]] Six days and the Sun's own Sunday open the theme; Sunday itself closes it as the week's own duality — the living Sun beside the Black Hole every massive enough star eventually becomes, light and its own final silence."
+  }
+ },
+ "week_duality": {
+  "planets": {
+   "title": "The Week's Duality",
+   "base": "[[Sun and Shadow]] Every themed week folds its seventh day in two: a bright Ruler face and a Servant/shadow face sharing the same seat. On the neutral Planets roster this is the Sun itself and the Eclipsed Sun — the ordinary disc, then the same disc with the Moon drawn dark across it, the one day a year the ruler visibly yields."
+  },
+  "planet_signs": {
+   "title": "The Week's Duality",
+   "base": "[[Sun and Shadow]] The SAME duality as the Planets topic, read in glyphs instead of photographs — the sun sign beside its own eclipsed mark, the one moment a year the ruling glyph visibly dims."
+  },
+  "greek": {
+   "title": "The Week's Duality",
+   "base": "[[Helios and Phaethon]] Every theme folds Sunday into two faces sharing one throne. Helios is the Ruler who has driven the sun's chariot since before memory, its reins second nature; Phaethon is his own son, given the reins for one day and unable to hold them, scorching a black streak across the sky before he falls. Mastery and its nearest, most human failure, on the same seat."
+  },
+  "norse": {
+   "title": "The Week's Duality",
+   "base": "[[Sól and Sköll]] Sunday's two faces are a race, not a throne room: Sól drives the sun-wagon across the sky one length ahead of Sköll, the wolf born to chase and, at Ragnarök, finally catch her. The Ruler here is defined entirely by the Servant hunting her — the whole Norse sky runs on that unfinished chase."
+  },
+  "egypt": {
+   "title": "The Week's Duality",
+   "base": "[[Ra and Afu-Ra]] Sunday folds into the sun god's own two half-days: Ra crossing the visible sky by light, then Afu-Ra — the ram-headed night form of the SAME god — rowing his barque through the Duat's twelve dark hours, fighting Apep the chaos-serpent every single night so dawn can return him whole. Not two persons — one god's day and night faces."
+  },
+  "slavic": {
+   "title": "The Week's Duality",
+   "base": "[[Young and Old Dažbog]] Sunday's two faces are one god's own year: the young Dažbog crowned each spring, giving sun and warmth, aging across the months into the old Dažbog winter wears down to almost nothing — then reborn at the next solstice. The Ruler IS his own Servant, on a longer clock than a day."
+  },
+  "alchemy": {
+   "title": "The Week's Duality",
+   "base": "[[Gold and Raw Ore]] Sunday folds the Great Work itself in two: refined Gold, the goal every alchemist's furnace chased, beside the Raw Ore it began as — unsmelted, unworked, dug out of the same earth. The whole theme's seven metals are really one question asked seven times: what does this base matter become when it is finished?"
+  },
+  "japan": {
+   "title": "The Week's Duality",
+   "base": "[[Amaterasu and Ama-no-Iwato]] Sunday's two faces retell Japan's own founding myth: Amaterasu radiant on her throne, and the Ama-no-Iwato, the cave she once sealed herself inside after her brother's cruelty — plunging the whole world into darkness until the other gods' laughter drew her back out. The sun goddess and the one door that can hide her."
+  },
+  "religion": {
+   "title": "The Week's Duality",
+   "base": "[[Christianity and Satanism]] Sunday folds the theme's own central argument in two: Christianity keeping the day of the Resurrection, Satanism reading every one of its symbols in reverse on the same seat. Not a second faith so much as the first faith's own mirror, defined entirely by what it inverts."
+  },
+  "religion_alt": {
+   "title": "The Week's Duality",
+   "base": "[[Mithraism and Corax]] Sunday's two faces are one cult's own ladder: Mithraism as the Sun-soldier's faith entire — Sol Invictus, the bull, the seven grades of initiation — and Corax, the Raven, the LOWEST of those seven grades, the newest initiate who has not yet climbed toward the light he serves."
+  },
+  "profession": {
+   "title": "The Week's Duality",
+   "base": "[[Ruler and Servant]] Sunday's two faces are the theme's own thesis stated plainly: the Ruler who commands and the Servant who carries the command out, one throne built from both halves of every hierarchy the six weekday professions serve."
+  },
+  "wolf": {
+   "title": "The Week's Duality",
+   "base": "[[Alpha and Omega]] Sunday's two faces are the pack's own two ends: Alpha leading the hunt at the front, Omega absorbing the pack's tension at the back — the whole rank order exists to be measured between them (Sigma, the pack's Ninth, is neither end — the wolf with no pack at all)."
+  },
+  "bee": {
+   "title": "The Week's Duality",
+   "base": "[[Queen and Cleaner]] Sunday's two faces are the hive's own beginning and its newest daughter: the Queen who founded every cell in the comb, and the Cleaner tending the humblest work at that same founding cell — the hive's whole history compressed into one wall."
+  },
+  "elephant": {
+   "title": "The Week's Duality",
+   "base": "[[Matriarch and Memory]] Sunday's two faces are the living herd and the dead one still leading it: the Matriarch who decides where the herd walks today, and Memory — the map of every drought, predator and grave she carries from matriarchs before her. The herd's whole intelligence is what it refuses to forget."
+  },
+  "bible": {
+   "title": "The Week's Duality",
+   "base": "[[Ancient of Days and Son]] Sunday's two faces are not opposites but the Trinity's own pair: the Ancient of Days on His eternal throne, and the Son seated at His right hand — Father and Son sharing one seat the way this whole theme's Sunday shares its throne with every OTHER theme's Ruler and Servant, argued honestly rather than forced into a mold that does not fit it."
+  },
+  "bible2": {
+   "title": "The Week's Duality",
+   "base": "[[Abraham and Isaac]] Sunday's two faces are father and bound son: Abraham who believed enough to raise the knife, and Isaac who was spared at the altar's edge — obedience and mercy sharing one seat, the same seat every OTHER theme's Ruler and Servant occupy, read here through its own story instead of forced into theirs."
+  },
+  "bible_dark": {
+   "title": "The Week's Duality",
+   "base": "[[Lucifer and Judas]] Sunday's two faces are the theme's own twin founding falls: Lucifer's rebellion against Heaven out of pride, Judas' betrayal of one friend out of greed — the Two Triangles' own scale (see The Human Wheel) walks this exact pair in far more depth; here they simply share the seat every theme's Sunday shares."
+  },
+  "cosmos": {
+   "title": "The Week's Duality",
+   "base": "[[Sun and Black Hole]] Sunday's two faces are one star's whole life, compressed: the living Sun burning steady, and the Black Hole every star massive enough eventually becomes when its own light finally runs out — the Ruler's brightest hour and the Servant's own final silence, on the same seat."
   }
  }
 }
