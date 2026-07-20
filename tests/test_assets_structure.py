@@ -27,7 +27,14 @@ from config import paths
 #   signs     — planets' zodiac-glyph variant
 #   art       — planets' bronze-medallion variant
 WEEKDAY_VARIANT_WHITELIST = frozenset(
-    {"primary", "colored", "pantheon", "secondary", "dark", "signs", "art"}
+    {"primary", "colored", "pantheon", "secondary", "dark", "signs", "art",
+     # The universal rotation convention (owner decree 2026-07-20): an
+     # `alt/` folder mirrors its parent's filenames and rotates daily by
+     # the traveled date. The owner's first weekday drop is
+     # bible/dark/alt/ (both sources, 2026-07-20 night) — the weekday
+     # consumers still need the rotating_art_file wiring (queued), but
+     # the FOLDER is legal everywhere the convention reaches.
+     "alt"}
 )
 
 
