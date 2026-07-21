@@ -82,7 +82,7 @@ def test_phase2_chrome_speaks_the_overlay():
     from PySide6.QtWidgets import QApplication, QGroupBox
 
     from app.controller import build_skin
-    from app.settings_dialog import SettingsDialog
+    from app.settings_dialog.dialog import SettingsDialog
     from app.settings_store import SettingsStore
     from app.time_travel import TimeTravelDialog
     from config import ui_text

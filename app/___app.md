@@ -69,10 +69,13 @@ R5 MENU REWORK mini window: the old Design submenu's whole chain
 tabbed window, images where real preview art exists. See
 [Design Window](design_window.md).
 
-### `settings_dialog.py` — Settings Dialog
+### `settings_dialog/` — Settings Dialog (folder)
 The M6 window: cascading location picker over the bundled city
 database with lat/lng fine-tune, Star/Aura opacity sliders and the
-palette chip editor. See [Settings Dialog](settings_dialog.md).
+palette chip editor — one plain-Python mixin per navigation section
+composed onto a `QDialog` shell (MIXIN PILOT, God-File Split Phase 2
+Step 2, `research/REFACTOR_PLAN.md` §7). See [Settings Dialog
+(subfolder)](settings_dialog/___settings_dialog.md).
 
 ### `legend_popup.py` — Legend Popup
 The scrollable hover window replacing QToolTip: capped to screen

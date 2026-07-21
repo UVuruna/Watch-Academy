@@ -747,7 +747,7 @@ lives in [The DOMY Canon](CANON.md).
       "▸"), each opening its panel on a `QStackedWidget` to the right;
       related groups SHARE one title exactly per the owner's example —
       Palette + Clock tint = one "Colors" section (seven sections total,
-      layout map in [Settings Dialog](app/settings_dialog.md)). Every
+      layout map in [Settings Dialog](app/settings_dialog/___settings_dialog.md)). Every
       existing control kept, `result_settings()` untouched, each panel
       keeps its own scroll cap. The tray-menu SIZE slider (item 12 below)
       covers "if he means the MENU too."

@@ -33,7 +33,7 @@ from app.controller import WatchController
 from app.encyclopedia import EncyclopediaDialog
 from app.guide import GuideDialog
 from app.observatory import ObservatoryDialog
-from app.settings_dialog import SettingsDialog
+from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings
 from config import defaults
 

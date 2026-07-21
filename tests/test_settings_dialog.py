@@ -9,7 +9,7 @@ import pytest
 from PySide6.QtWidgets import QApplication, QGroupBox
 
 from app.controller import apply_display_settings
-from app.settings_dialog import SettingsDialog
+from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
 from config import defaults
 from render.layers import palette_for
@@ -468,7 +468,7 @@ def test_dialog_open_close_keeps_the_location(app):
     the user — the combo cascade lands on the alphabetically first city,
     but the settings' name/timezone/coordinates always win (first run
     AND fine-tuned coordinates with a stored path)."""
-    from app.settings_dialog import SettingsDialog
+    from app.settings_dialog.dialog import SettingsDialog
     from config import defaults as d
 
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)

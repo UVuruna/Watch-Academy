@@ -51,7 +51,7 @@ from app.legend_popup import LegendPopup
 from app.pointer_theme import PointerThemeDialog
 from app.report import ReportDialog
 from app.scheduler import MinuteScheduler
-from app.settings_dialog import SettingsDialog
+from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import (
     Settings,
     SettingsCorruptError,

@@ -125,8 +125,8 @@ family). THE METAL SHADES (R8a round, owner spec 2026-07-21 night):
 against `config.constants.METAL_SHADE_NAMES`, defaults "classic"/
 "bronze"/"silver") pick which selectable shade each metal wears
 everywhere it appears — see [Assets](../render/assets.md) for the
-recolor algorithm and [Settings Dialog](settings_dialog.md) for the
-picker. THE YEAR LINE
+recolor algorithm and [Themes Section](settings_dialog/themes_section.md)
+for the picker. THE YEAR LINE
 (Session 16, owner amendment 2026-07-17): `era_notation` ("bce_ce"
 default | "bc_ad" — the OFFICIAL labels only; Anno Lucis always
 accompanies the official year and is not a mode), `show_era_suffix`

@@ -33,8 +33,8 @@ follow the pack's own hours/minutes ratio
 - [Watch Controller](../app/controller.md) — `build_skin` resolves the
   chosen pack into `HandsSpec` (image sizes read there, Qt side); the
   Design ▸ Hands menu lists every loaded name
-- [Settings Dialog](../app/settings_dialog.md) — the Custom hands
-  builder validates against and writes user packs
+- [Custom Art Section](../app/settings_dialog/custom_art_section.md) —
+  the Custom hands builder validates against and writes user packs
 
 ## Functions
 

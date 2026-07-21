@@ -33,8 +33,8 @@ as a real choice.
 - [Config (folder)](../config/___config.md) — `THEME_COLORS`, `THEME_RADIUS_*` in `defaults.py`.
 
 ### Used by
-- [Settings Dialog](settings_dialog.md) — nav column, group-box cards,
-  every slider/combo/spinbox/checkbox, OK/Cancel/Default buttons.
+- [Settings Dialog](settings_dialog/dialog.md) — nav column, group-box
+  cards, every slider/combo/spinbox/checkbox, OK/Cancel/Default buttons.
 - [Encyclopedia Dialog](encyclopedia.md), [Guide Dialog](guide.md),
   [Time Travel Dialog](time_travel.md), [Report Dialog](report.md) —
   base surface + (Time Travel only) its QComboBox/QSpinBox controls;
@@ -64,7 +64,7 @@ ONE sizing routine behind all four top-level dialogs — [Encyclopedia
 Dialog](encyclopedia.md) and [Observatory](observatory.md) call it with
 the A4-portrait ratio (`defaults.DIALOG_A4_ASPECT_W/H`, 210:297) at
 `defaults.DIALOG_A4_HEIGHT_FRACTION` (80%); [Settings
-Dialog](settings_dialog.md) and [Guide Dialog](guide.md) call it with a
+Dialog](settings_dialog/dialog.md) and [Guide Dialog](guide.md) call it with a
 square ratio (1:1) at `defaults.DIALOG_SQUARE_HEIGHT_FRACTION` (50%).
 Resizes+centers `dialog` to that shape at that fraction of the ACTIVE
 screen's available height, clamped so the result never exceeds the

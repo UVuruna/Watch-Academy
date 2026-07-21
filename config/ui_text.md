@@ -31,7 +31,7 @@ Gold / Silver as finish names inside composed labels.
   `UI_STRINGS` into the corpus as `ui/<text>` entries
 - [Watch Controller](../app/controller.md) — menu labels, tooltips,
   tray balloons, error boxes
-- [Settings Dialog](../app/settings_dialog.md),
+- [Settings Dialog](../app/settings_dialog/___settings_dialog.md),
   [Time Travel](../app/time_travel.md), [Guide](../app/guide.md),
   [Design Window](../app/design_window.md),
   [Pointer Theme](../app/pointer_theme.md),

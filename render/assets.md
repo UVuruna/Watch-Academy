@@ -120,9 +120,9 @@ apply_display_settings` pushes them into `config.paths` module globals
 (`set_metal_shade`/`metal_shade`, mirroring `set_subdial_set`'s exact
 pattern — ONE global per metal because it is a single user preference
 reached from many render call sites, never threaded as a parameter);
-`app.settings_dialog._build_metal_shade_group` (`app/settings_dialog.md`)
-is the picker, one combo per metal, filed in Themes beside the Subdial
-plate picker.
+`app.settings_dialog.themes_section._build_metal_shade_group`
+(`app/settings_dialog/themes_section.md`) is the picker, one combo per
+metal, filed in Themes beside the Subdial plate picker.
 
 ## Connections
 

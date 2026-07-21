@@ -574,9 +574,9 @@ RING_FINISHES = ("gold", "silver", "bronze")
 # after the adaptive-percentile attempt was reverted for flattening
 # every relief into a wash, see config.defaults's NOTE above
 # METAL_SHADES): each metal offers several SELECTABLE shades, picked in
-# Settings (app.settings_dialog._build_metal_shade_group) and stored one
-# per metal (`Settings.metal_shade_gold/_bronze/_silver`). Names here are
-# the validation/enumeration source; the numeric (hue, saturation,
+# Settings (app.settings_dialog.themes_section._build_metal_shade_group)
+# and stored one per metal (`Settings.metal_shade_gold/_bronze/_silver`).
+# Names here are the validation/enumeration source; the numeric (hue, saturation,
 # reference value) recipe per shade lives in `config.defaults.
 # METAL_SHADES` — kept in `defaults` because it depends on nothing else,
 # same split as SUBDIAL_SETS (names, here) vs SUBDIAL_RECOLOR_COLORS
