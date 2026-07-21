@@ -650,19 +650,21 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     """`render.layers.theme_ninth` (round R3b item 3) reads the SAME
     `constants.WEEKDAY_THEME_NINTHS` table the Encyclopedia's ninths
     pass now builds from (Rule #5) — every listed theme resolves its
-    OWN name and an EXISTING plate, graceful-absent otherwise (`slavic`
-    Triglav has not landed on disk yet — the ONLY exception today,
-    matching this file's own `test_dual_sunday_two_faces_on_compass_
-    and_seasons`, which carves out the SAME kind of single documented
-    pending-art exception for its own table); a theme absent from the
-    table entirely (no weekday Sunday duality) always answers None."""
+    OWN name and an EXISTING plate, graceful-absent otherwise. Two
+    documented pending-art exceptions today: `slavic` Triglav and
+    `continents` Zealandia (the owner-sealed Continents theme, R7a
+    2026-07-21 — its Ninth plate is wired ahead of the owner's art,
+    exactly like Triglav), both matching this file's own
+    `test_dual_sunday_two_faces_on_compass_and_seasons` pending-art
+    carve-out. A theme absent from the table entirely (no weekday Sunday
+    duality) always answers None."""
     from config import paths as _paths
     from render.layers import theme_ninth
 
     for theme, (name, _rel) in constants.WEEKDAY_THEME_NINTHS.items():
         found = theme_ninth(theme)
-        if theme == "slavic":
-            assert found is None, theme       # Triglav's plate is pending
+        if theme in ("slavic", "continents"):
+            assert found is None, theme       # Triglav/Zealandia plates pending
             continue
         assert found is not None, theme
         assert found[0] == name, theme

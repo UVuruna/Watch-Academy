@@ -47,7 +47,10 @@ from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, style_finish_frame
 from config import constants, defaults, paths
 from config.ui_text import ui
+from core import continents
 from data.encyclopedia import EncyclopediaRepository
+from data.moon_phases import MoonPhaseRepository
+from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
 from render.assets import metal_variant_file, moon_phase_file
 from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
@@ -165,7 +168,14 @@ _TOPIC_GROUPS = (
     ("The Celestial Engine",
      ("week", "instrument", "moon", "seasons", "sun", "era",
       "eclipse_solar", "eclipse_lunar", "astrology", "chinese",
-      "planets", "cosmos")),
+      "planets", "cosmos",
+      # THE CONTINENTS (owner-sealed matrix 2026-07-21): the Earth takes
+      # its seat among the celestial bodies. It rides the Engine — not
+      # the Living World — because the theme IS the dial's own Earth
+      # marker read as the week: built from the instrument's day/night
+      # faces, poles and season/moon machinery, its Ninth switching by
+      # the very sky the Engine computes.
+      "continents")),
     ("The Divine",
      ("greek", "norse", "egypt", "slavic",
       "wider_greek", "wider_norse", "wider_egypt", "wider_slavic",
@@ -703,6 +713,104 @@ def _pantheon_topic(theme: str) -> list[dict]:
     )
 
 
+def _continents_topic(travel_date: date) -> dict:
+    """THE CONTINENTS topic (owner-sealed matrix 2026-07-21) — a CUSTOM
+    weekday-shaped topic that OVERWRITES the generic `_weekday_topic`
+    build so it can carry the world-map TITLE page and the Atmosphere/
+    Clean · Day/Night LOOK SWITCHER on every earth-face page (the generic
+    build gives a single unlabeled look). The eleven pages keep the same
+    ORDER as every restructured theme (title, Monday..Saturday, duality
+    title, Antarctic Ruler, Arctic Servant, Ninth) so the Spacebar remap
+    and the article-order canon still hold.
+
+    The six continent bodies and the two poles reuse the dial's OWN Earth
+    faces (assets/earth/, owner exception, sealed) and their prose is the
+    SAME symbolism.json articles the dial hover reads (Rule #5). The Ninth
+    is LIVING: Zealandia the Unfound normally, Pangea on a Pangea day
+    (`core.continents` against the traveled date and the bundled Seasons/
+    Moon data) — both articles exist; the plate is graceful-absent until
+    the owner's art lands, like every wired-ahead Ninth.
+
+    THE LOOK-SWITCHER default (honest choice): the static gallery cannot
+    read the live sky, so every earth-face page OPENS on "Atmosphere"
+    (atmo · day) and offers all four looks; the LIVE-sky default belongs
+    to the dial, where `continents_body_art` reads the tick. Finish
+    persistence carries the chosen look across the pages exactly as it
+    does the metal finishes."""
+    def region_looks(region: str) -> tuple:
+        return tuple(
+            (label, ((defaults.earth_face_art(style, region, phase),),))
+            for label, style, phase in (
+                ("Atmosphere", "atmo", "day"),
+                ("Atmosphere · Night", "atmo", "night"),
+                ("Clean", "clean", "day"),
+                ("Clean · Night", "clean", "night"),
+            )
+        )
+
+    def body_entry(body: str) -> dict:
+        return {
+            "looks": region_looks(defaults.CONTINENTS_REGIONS[body]),
+            "name": defaults.WEEKDAY_THEME_NAMES["continents"][body],
+            "article": ("article", "continents", body),
+            "accents": defaults.BODY_ACCENT_HUES[body],
+        }
+
+    ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES["continents"]
+    title_entry = {
+        "images": (defaults.CONTINENTS_TITLE_IMAGE,),
+        "name": ("theme_title", "continents"),
+        "article": ("theme_title", "continents"),
+        "accents": (),
+    }
+    duality_title_entry = {
+        # The two poles in eternal antiphase, side by side.
+        "images": (
+            defaults.earth_face_art("atmo", "south_pole", "day"),
+            defaults.earth_face_art("atmo", "north_pole", "day"),
+        ),
+        "name": ("week_duality_title", "continents"),
+        "article": ("week_duality", "continents"),
+        "accents": (),
+    }
+    good_entry = {
+        "looks": region_looks("south_pole"),
+        "name": ruler_name,
+        "article": ("article_face", "continents", "sun", "ruler"),
+        "accents": defaults.BODY_ACCENT_HUES["sun"],
+    }
+    evil_entry = {
+        "looks": region_looks("north_pole"),
+        "name": servant_name,
+        "article": ("article_face", "continents", "sun", "servant"),
+        "accents": defaults.BODY_ACCENT_HUES["sun"],
+    }
+    pangea = continents.ninth_is_pangea_from_repos(
+        travel_date, SeasonsRepository(), MoonPhaseRepository()
+    )
+    ninth_name, ninth_rel = (
+        constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"]
+        if pangea
+        else constants.WEEKDAY_THEME_NINTHS["continents"]
+    )
+    ninth_entry = {
+        "images": (defaults.WEEKDAY_ART_DIR / ninth_rel,),
+        "name": ninth_name,
+        "article": ("emblem", "ninths", ninth_name),
+        "accents": (),
+    }
+    entries = (
+        [title_entry]
+        + [body_entry(body) for body in _WEEK_ORDER[1:]]   # Monday..Saturday
+        + [duality_title_entry, good_entry, evil_entry, ninth_entry]
+    )
+    return {
+        "title": defaults.WEEKDAY_THEME_TITLES["continents"],
+        "icon": defaults.CONTINENTS_TITLE_IMAGE,
+        "entries": entries,
+    }
+
+
 def _topics(travel_date: date | None = None) -> dict:
     """topic key -> {title, icon, entries}; article refs resolve lazily
     against the repository so the overlay always applies. Every entry
@@ -717,6 +825,12 @@ def _topics(travel_date: date | None = None) -> dict:
     for theme, title in defaults.WEEKDAY_THEME_TITLES.items():
         icon, entries = _weekday_topic(theme)
         topics[theme] = {"title": title, "icon": icon, "entries": entries}
+    # THE CONTINENTS overwrite its generic weekday build with the custom
+    # topic (world-map title, look switcher, living Ninth) — same 11-page
+    # order, so the Spacebar remap below still lands (owner-sealed matrix
+    # 2026-07-21). Its Ninth is built HERE, so the shared ninths loop
+    # skips it (see the guard there).
+    topics["continents"] = _continents_topic(travel_date)
     topics["astrology"] = {
         "title": "Astrology",
         "icon": defaults.ZODIAC_ART_DIR / "astrology" / "sign" / "Leo.png",
@@ -972,6 +1086,11 @@ def _topics(travel_date: date | None = None) -> dict:
         *(
             (theme, name, _w / rel)
             for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
+            # THE CONTINENTS builds its own LIVING Ninth inside
+            # `_continents_topic` (Zealandia/Pangea by the traveled day),
+            # so this shared static append must skip it (owner-sealed
+            # matrix 2026-07-21).
+            if theme != "continents"
         ),
         ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
         ("astrology", "Ophiuchus", _z / "astrology/sign/Ophiuchus.png"),

@@ -242,7 +242,10 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   `constants.WEEKDAY_THEME_NINTHS`) speaks the single GOOD/Ruler
   article outside its solar windows and the matching pair — GOOD+NINTH
   near solar noon, EVIL+NINTH near solar midnight — inside them,
-  `render.layers.center_face` deciding which. The Ninth's OWN article
+  `render.layers.center_face` deciding which. For the **Continents**
+  theme (round R7a) `_center_pangea` feeds the day's Pangea flag
+  (`core.continents`) into `theme_ninth(theme, pangea=...)`, so the
+  hover card and the dial agree on Zealandia vs Pangea. The Ninth's OWN article
   text comes from a NEW dependency, `self._encyclopedia`
   (`data.encyclopedia.EncyclopediaRepository`, `entry("ninths", name)`)
   — the Ninth's family lives in `encyclopedia.json`, not

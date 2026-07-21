@@ -63,6 +63,14 @@ The natal ascendant ("podznak", owner request 2026-07-12): Julian date
 the owner's own birth chart (Belgrade 20.6.1990 12:15 → Virgo).
 See [Ascendant](ascendant.md).
 
+### `continents.py` — the Continents Ninth Easter-Egg Law
+Owner-sealed matrix 2026-07-21 (round R7a): decides Zealandia (default)
+vs Pangea (when the sky is doing something — an eclipse, a season
+turning point, or a full/new moon day) for the Continents theme's Ninth
+seat. One boolean over three triggers, fed by two thin wrappers (the
+dial's pre-built event lists, the Encyclopedia's date + repositories) so
+astronomy is never recomputed. See [Continents](continents.md).
+
 ### `__main__.py` — CLI Selftest
 `python -m core --city NAME [--at ISO]` (or `--lat --lng --tz`) prints
 the full computed state — the time-travel flag for eyeballing DST, polar

@@ -49,6 +49,32 @@ screens —
 **ROUND R3 — the owner's fix-round batch, folder `UV/Encyclopedia`
 (owner-approved decisions sealed 2026-07-20):**
 
+- **THE CONTINENTS topic** (`_continents_topic`, owner-sealed matrix
+  2026-07-21, round R7a): a CUSTOM weekday-shaped topic that OVERWRITES
+  the generic `_weekday_topic` build for `"continents"` right after the
+  weekday loop, so it can carry the **world-map title page**
+  (`defaults.CONTINENTS_TITLE_IMAGE`, also the gallery card icon) and the
+  **Atmosphere/Clean · Day/Night look switcher** (four looks per earth-
+  face page — the generic build gives only a single unlabeled look).
+  The eleven pages keep the SAME restructured order (title, Monday..
+  Saturday continents, duality title, Antarctica the Ruler, Arctic the
+  Servant, Ninth) so the Spacebar remap and the article-order canon still
+  hold. The six continent bodies and the two poles reuse the dial's OWN
+  Earth faces (`assets/earth/`, sealed owner exception — see
+  [Assets](../assets/___assets.md)); their prose is the SAME
+  `symbolism.json` `articles.continents` set the dial hover reads (Rule
+  #5), the poles through the `sun` body's ruler/servant `faces`. The
+  Ninth is **LIVING**: Zealandia the Unfound normally, **Pangea** on a
+  Pangea day (`core.continents.ninth_is_pangea_from_repos` against the
+  traveled date + the bundled Seasons/Moon data — an eclipse, a season
+  turning point, or a full/new moon day); both `ninths` articles exist,
+  the plate graceful-absent until the owner's art lands. The shared
+  static ninths loop SKIPS `"continents"` (it builds its own living
+  Ninth). It rides the **The Celestial Engine** hall (the Earth taking
+  its seat among the celestial bodies — the theme IS the dial's own
+  Earth marker read as the week). The look-switcher's live-sky default
+  belongs to the dial (the static gallery opens on "Atmosphere" and
+  offers all four looks — documented honest choice).
 - **ARTICLE ORDER restructure** (`_weekday_topic`): every weekday-
   structured theme (the 18 `WEEKDAY_THEME_TITLES` keys minus virtues/
   sins/moods, which the emblem-family pass overwrites) now opens

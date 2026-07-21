@@ -988,7 +988,10 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
                 if hue != own_light:
                     assert hue.lower() not in light.lower()
             seen += 1
-    assert seen == 163
+    # 163 through Session 6; +7 for the owner-sealed Continents theme
+    # (R7a 2026-07-21), whose seven bodies carry the SAME sealed Walks/
+    # Ages octa hues on their own fixed arms.
+    assert seen == 170
 
 
 # --- The Earth day label -----------------------------------------------------------

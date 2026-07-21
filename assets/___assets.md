@@ -22,7 +22,9 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              inverts its Omega, morph inverts its M)
   📁 hands/                ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
-  📁 earth/                ← earth_{clean|atmo}_{continent}_{day|night}.png
+  📁 earth/                ← earth_{clean|atmo}_{continent|pole}_{day|night}.png
+                             (+ world.png map; the Continents theme's bodies —
+                             see the earth-reuse exception below)
   📁 weekday/              ← body art per THEME: SOURCE first (owner
                              2026-07-14: Gemini and ChatGPT coexist, the
                              user picks in Settings), then the
@@ -154,10 +156,29 @@ masters change.
 
 `earth_<style>_<continent>_<day|night>.png` with style `clean` (default)
 or `atmo`, continents: europe, north_america, south_america, africa,
-asia, oceania. The night variant is shown between sunset and sunrise. The
-moon marker reuses `weekday/planets/primary/moon.png` with a procedural
-terminator shadow. PNG or SVG both work (detected by extension,
-rasterized once by the asset cache).
+asia, oceania, plus the two poles north_pole / south_pole. The night
+variant is shown between sunset and sunrise. The moon marker reuses
+`weekday/planets/primary/moon.png` with a procedural terminator shadow.
+PNG or SVG both work (detected by extension, rasterized once by the asset
+cache). `world.png` (the flat map, converted from `UV/earth map.jpg`) is
+the Continents Encyclopedia topic's title/gallery image.
+
+### The Continents theme's earth-reuse exception (owner-sealed 2026-07-21)
+
+`assets/earth/` is deliberately NOT sourced (no gemini/chatgpt subtree),
+and its faces are reused UNCHANGED as the bodies of the **Continents**
+weekday theme — the SIX inhabited continents on the six weekday
+columns, the two poles as the Sunday dual (Antarctica the Ruler /
+Arctic the Servant), and `zealandia.png` / `pangea.png` (wired ahead of
+the owner's art) as the living Ninth. This is an owner-sealed EXCEPTION
+to the one-image-one-place law (CANON amendment 2026-07-19): the globes
+are quality art never shown large elsewhere, so the theme borrows the
+dial's own Earth marker rather than generating a second set. On the dial
+the body follows the user's `earth_style` and the live sky's day/night
+(`config.defaults.continents_body_art`); the atmo-day face is only the
+baked still frame the Encyclopedia gallery previews with. See
+[Continents (script)](../core/continents.md) for the Ninth easter-egg
+law and [Encyclopedia](../app/encyclopedia.md) for the topic.
 
 ## Connections
 

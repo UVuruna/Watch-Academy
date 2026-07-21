@@ -60,7 +60,18 @@ and [Compositor](../render/compositor.md) can read the SAME table for
 the CENTER seat's solar-window face law (Rule #5) — and
 `CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
 `CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH`, the tunable hour-widths of
-those windows around solar noon/midnight. **R5 MENU REWORK**:
+those windows around solar noon/midnight. **THE CONTINENTS theme**
+(owner-sealed matrix 2026-07-21, round R7a): registered across the
+standard weekday tables (`WEEKDAY_THEMES`, `_TITLES`, `_NAMES`, `_DIRS`
+= `"../earth"`, `_FILES`, `_DUAL_NAMES`/`_FILES` = the poles, `_ARTICLES`
+= `"continents"`, `_BLURBS`, `_NINTHS` = Zealandia) PLUS its own
+`CONTINENTS_REGIONS` (body → continent), `earth_face_art` /
+`continents_body_art` / `continents_dual_art` (the live earth_style ×
+day/night resolvers), `CONTINENTS_TITLE_IMAGE` (the world map), and
+`WEEKDAY_THEME_NINTH_EASTER_EGG` (Pangea, the easter-egg face). Its
+bodies reuse the dial's own `assets/earth/` faces (owner exception to
+one-image-one-place) and its Ninth switches Zealandia/Pangea by
+[Continents](../core/continents.md)'s law. **R5 MENU REWORK**:
 `POINTER_PALETTE_LABELS` — the RAW English wheel-pair label per
 pointer (Court/Family, Temperaments/Elements, Walks of Life/Ages,
 Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback),

@@ -28,7 +28,7 @@ from PySide6.QtGui import (
 )
 
 from config import archetypes, constants, defaults, paths
-from core import angles
+from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
 from core.sun import DaylightRegime, SunDay
@@ -834,14 +834,23 @@ def center_dual_face(skin: SkinDefinition) -> bool:
     return skin.pointer in ("hexa", "trio")
 
 
-def theme_ninth(theme: str) -> tuple[str, Path] | None:
+def theme_ninth(theme: str, pangea: bool = False) -> tuple[str, Path] | None:
     """(display name, resolved asset path) of `theme`'s Ninth plate, or
     None when the theme names no Ninth (`constants.WEEKDAY_THEME_NINTHS`)
     or its plate has not landed on disk yet — the ONE existence-gated
     lookup `CenterBodyLayer` (paint) and the compositor's hover share
     (Rule #5), matching the graceful-absent law every other Ninth plate
-    already follows."""
-    entry = constants.WEEKDAY_THEME_NINTHS.get(theme)
+    already follows.
+
+    `pangea` is the Continents theme's easter-egg switch (owner-sealed
+    matrix 2026-07-21): when the traveled day is a Pangea day
+    (`core.continents.ninth_is_pangea_*`) the seat shows PANGEA in place
+    of ZEALANDIA — same graceful-absent gate, its own alt plate."""
+    entry = None
+    if pangea:
+        entry = constants.WEEKDAY_THEME_NINTH_EASTER_EGG.get(theme)
+    if entry is None:
+        entry = constants.WEEKDAY_THEME_NINTHS.get(theme)
     if entry is None:
         return None
     name, rel = entry
@@ -1491,6 +1500,18 @@ def draw_weekday_body(
         and ctx.skin.weekday_theme != "planet_signs"
     )
     asset = spec.bodies.get(body)
+    if ctx.skin.weekday_theme == "continents" and body in defaults.CONTINENTS_REGIONS:
+        # THE CONTINENTS live art (owner-sealed matrix 2026-07-21): the
+        # baked skin body is only the atmo-day still frame — on the dial
+        # the continent follows the user's earth_style (one setting, whole
+        # instrument) and the SKY'S OWN day/night (`ctx.tick.is_daylight`,
+        # the same sun-elevation law the Earth marker already computes,
+        # never recomputed here). Graceful-absent if the face is missing.
+        live = defaults.continents_body_art(
+            body, ctx.skin.earth_style, ctx.tick.is_daylight
+        )
+        if paths.art_file(live).exists():
+            asset = live
     if asset is not None:
         # The theme's metal (owner 2026-07-12): the hue-selective swap
         # turns only the bronze details gold/silver; None = as drawn.
@@ -1581,12 +1602,21 @@ class WeekdayLayer(Layer):
             # metal themes' swap recolors it exactly like the Ruler
             # plate. Image only — the Names label belongs to the Ruler
             # face.
+            servant_asset = spec.dual_asset
+            if ctx.skin.weekday_theme == "continents":
+                # The Arctic Servant follows earth_style + live sky like
+                # the six arms (owner-sealed matrix 2026-07-21).
+                live = defaults.continents_dual_art(
+                    ctx.skin.earth_style, ctx.tick.is_daylight
+                )
+                if paths.art_file(live).exists():
+                    servant_asset = live
             painter.save()
             painter.setOpacity(
                 1.0 if today == "sun" or ctx.reveal_active else spec.ghost_opacity
             )
             draw_pixmap_centered(
-                painter, ctx, spec.dual_asset,
+                painter, ctx, servant_asset,
                 dial_point(
                     constants.SOUTH_SLOT_ANGLE + ctx.rotation, orbit
                 ),
@@ -1841,11 +1871,32 @@ class CenterBodyLayer(Layer):
         # law to `sunday_dual_face` (Compass/Seasons keep their own
         # two-seat mechanic, untouched).
         if today == "sun" and not ghost_reveal and center_dual_face(self._skin):
-            ninth = theme_ninth(ctx.skin.weekday_theme)
+            # THE CONTINENTS Ninth easter egg (owner-sealed matrix
+            # 2026-07-21): Pangea replaces Zealandia while the sky is
+            # doing something, read from the day's OWN pre-built anchors
+            # and eclipse flag (never recomputed — core.continents).
+            pangea = (
+                ctx.skin.weekday_theme == "continents"
+                and continents.ninth_is_pangea_from_events(
+                    ctx.day.local_date,
+                    ctx.day.season_events,
+                    ctx.day.moon_events,
+                    ctx.tick.eclipse_event is not None,
+                )
+            )
+            ninth = theme_ninth(ctx.skin.weekday_theme, pangea)
             face = center_face(ctx.day, ctx.tick, ninth is not None)
             if face != "ruler":
                 if face == "servant":
                     asset = spec.dual_asset
+                    if ctx.skin.weekday_theme == "continents":
+                        # The Arctic Servant follows earth_style + live
+                        # sky like the Ruler and the six arms.
+                        live = defaults.continents_dual_art(
+                            ctx.skin.earth_style, ctx.tick.is_daylight
+                        )
+                        if paths.art_file(live).exists():
+                            asset = live
                     name = (
                         spec.dual_names
                         or defaults.WEEKDAY_DUAL_NAMES[ctx.skin.weekday_theme]

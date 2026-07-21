@@ -743,6 +743,66 @@ _CONTINENTS = (
 # polar settlements honestly see the pole.
 EARTH_POLE_LATITUDE = 75.0
 
+# THE CONTINENTS weekday theme (owner-sealed matrix 2026-07-21). The six
+# weekday bodies ride the six continents — the dial's OWN Earth-marker
+# faces are the theme's bodies (owner exception to the one-image-one-
+# place law, sealed). Body -> earth REGION stem (Sunday's "sun" is the
+# Ruler pole; the Servant pole is the dual, below). Column assignments
+# straight from the sealed matrix: Moon/Oceania, Mars/Europe, Mercury/
+# Asia, Jupiter/Africa, Venus/South America, Saturn/North America.
+EARTH_ART_DIR = paths.assets_dir() / "earth"
+CONTINENTS_REGIONS = {
+    "moon": "oceania",
+    "mars": "europe",
+    "mercury": "asia",
+    "jupiter": "africa",
+    "venus": "south_america",
+    "saturn": "north_america",
+    "sun": "south_pole",          # Antarctica — the Ruler face
+}
+CONTINENTS_DUAL_REGION = "north_pole"   # the Arctic — the Servant face
+# The still frame the Encyclopedia gallery/theme picker previews with,
+# and the plate baked into the skin as a fallback (the live dial
+# overrides both axes at render — see continents_body_art): the owner's
+# atmosphere globes lit by day.
+CONTINENTS_PREVIEW_STYLE = "atmo"
+# THE CONTINENTS TITLE IMAGE (owner-sealed matrix 2026-07-21): the flat
+# world map — the whole Earth seen at once, the week's field before it is
+# walked. Copied from UV/earth map.jpg into the earth family as a PNG
+# (setup/convert step), the canonical home for the theme's own art; the
+# Encyclopedia topic uses it for both the gallery card and the title page.
+CONTINENTS_TITLE_IMAGE = EARTH_ART_DIR / "world.png"
+
+
+def earth_face_art(style: str, region: str, phase: str = "day") -> Path:
+    """One Earth-marker face on disk — the SAME `{style}_{region}_
+    {phase}` naming the YearMarkerSpec variants use (Rule #5), reused as
+    the Continents theme's body art (owner exception, sealed 2026-07-21).
+    Pure path construction; existence is the caller's concern."""
+    return EARTH_ART_DIR / f"earth_{style}_{region}_{phase}.png"
+
+
+def continents_body_art(body: str, earth_style: str, is_daylight: bool) -> Path:
+    """The live Continents body plate for one weekday `body` — the
+    earth face for its region in the user's `earth_style` (atmo/clean,
+    one setting for the whole instrument) at the sky's current phase
+    (`is_daylight` from the render tick — the SAME sun-elevation law the
+    Earth marker already computes, never recomputed here). The Sunday
+    center resolves through "sun" -> south_pole; the Arctic Servant uses
+    `continents_dual_art`."""
+    region = CONTINENTS_REGIONS[body]
+    return earth_face_art(earth_style, region, "day" if is_daylight else "night")
+
+
+def continents_dual_art(earth_style: str, is_daylight: bool) -> Path:
+    """The live Continents SERVANT plate — the Arctic (north_pole) face,
+    the Antarctic Ruler's eternal antiphase mirror — in the user's
+    `earth_style` at the sky's current phase (same law as
+    `continents_body_art`)."""
+    return earth_face_art(
+        earth_style, CONTINENTS_DUAL_REGION, "day" if is_daylight else "night"
+    )
+
 # The WORKING SET (owner 2026-07-15): originals ship at full
 # resolution; the dial reads a once-per-file DOWNSCALED copy instead —
 # quality and performance both, for a little disk. Ceilings per assets
@@ -2065,6 +2125,21 @@ WEEKDAY_THEME_NAMES = {
         "saturn": "Renewal",
     },
 }
+# THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
+# columns are the six continents; Sunday's body is Antarctica, the
+# Ruler face of the polar dual (the Arctic Servant lives in
+# WEEKDAY_DUAL_NAMES). Added after the literal so the FILES auto-build
+# below still folds every OTHER theme's names; the continents file
+# stems are the earth faces, overridden explicitly (like greek/norse).
+WEEKDAY_THEME_NAMES["continents"] = {
+    "sun": "Antarctica",
+    "moon": "Oceania",
+    "mars": "Europe",
+    "mercury": "Asia",
+    "jupiter": "Africa",
+    "venus": "South America",
+    "saturn": "North America",
+}
 
 # File stems on disk: the display names folded to ASCII (Sól -> Sol,
 # Dažbog -> dazbog); the owner's religion, planet-sign, egypt, slavic
@@ -2108,6 +2183,11 @@ WEEKDAY_THEME_DIRS = {
     "virtues": "../emblem/virtue",
     "sins": "../emblem/sin",
     "moods": "../emblem/mood",
+    # THE CONTINENTS reuse the dial's OWN Earth faces (assets/earth/,
+    # owner exception 2026-07-21) — the relative step-up reaches them,
+    # exactly like the emblem families reach assets/emblem/. The stems
+    # (overridden below) are the earth_{style}_{region}_{phase} faces.
+    "continents": "../earth",
 }
 WEEKDAY_THEME_FILES = {
     theme: {
@@ -2199,6 +2279,15 @@ WEEKDAY_THEME_FILES["moods"] = {
     "mercury": "Sorrow", "jupiter": "Joy", "venus": "Passion",
     "saturn": "Renewal",
 }
+# THE CONTINENTS' file stems ARE the Earth faces (owner exception
+# 2026-07-21): the atmosphere-lit day globe per region is the baked
+# preview/fallback stem; the live dial overrides both style and phase
+# at render (continents_body_art). Built straight from CONTINENTS_
+# REGIONS so the mapping lives in exactly one place (Rule #5).
+WEEKDAY_THEME_FILES["continents"] = {
+    body: f"earth_{CONTINENTS_PREVIEW_STYLE}_{region}_day"
+    for body, region in CONTINENTS_REGIONS.items()
+}
 
 # THE DUAL SUNDAY (owner 2026-07-12): every theme's center day has a
 # SECOND face — the Servant to the Ruler. On the Compass and the
@@ -2234,6 +2323,13 @@ WEEKDAY_DUAL_NAMES = {
     "virtues": ("Justice", "Humility"),
     "sins": ("Pride", "Servility"),
     "moods": ("Glory", "Awe"),
+    # THE POLAR DUAL (owner-sealed matrix 2026-07-21): ANTARCTICA the
+    # Ruler — a true continent, real rock under the ice — and the ARCTIC
+    # the Servant — walkable ice with no land beneath, reality and its
+    # shadow. The two live in eternal antiphase (polar day on one is
+    # polar night on the other): the Ruler/Servant solar-window law made
+    # planetary.
+    "continents": ("Antarctica", "Arctic"),
 }
 # Dual paths live FLAT inside the theme's variant dir (owner DUAL
 # FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
@@ -2272,6 +2368,13 @@ WEEKDAY_DUAL_FILES = {
     "virtues": "../emblem/virtue/Humility",
     "sins": "../emblem/sin/Servility",
     "moods": "../emblem/mood/Awe",
+    # THE ARCTIC SERVANT (owner exception 2026-07-21): the north_pole
+    # Earth face, the Antarctic Ruler's antiphase mirror — the atmo-day
+    # still frame is the baked stem (the live dial overrides style/phase
+    # via continents_dual_art). Reaches the earth family with the same
+    # "../earth" step-up the emblem duals use.
+    "continents":
+        f"../earth/earth_{CONTINENTS_PREVIEW_STYLE}_{CONTINENTS_DUAL_REGION}_day",
 }
 
 
@@ -2476,6 +2579,12 @@ WEEKDAY_THEME_TITLES = {
     "bible2": "Bible II",
     "bible_dark": "Bible Dark",
     "cosmos": "Cosmos",
+    # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six lands ride
+    # the six weekday columns; its Encyclopedia topic is CUSTOM-built
+    # (`app.encyclopedia._continents_topic`) rather than the generic
+    # weekday shape, so it can carry the world-map title page and the
+    # Atmosphere/Clean · Day/Night look switcher.
+    "continents": "Continents",
     # The Inner Wheel dial themes; their ENCYCLOPEDIA topics stay the
     # emblem pages (the later family pass overwrites the weekday
     # topics built from these titles — deliberate).
@@ -2503,8 +2612,9 @@ WEEKDAY_MENU_GROUPS = (
     # The emblem families on the dial (owner 2026-07-14).
     ("The Inner Wheel", ("virtues", "sins", "moods")),
     # Planets moved to WEEKDAY_MENU_TOP (owner 2026-07-18) — Arcana now
-    # holds only the remaining three.
-    ("Arcana", ("alchemy", "japan", "cosmos")),
+    # holds only the remaining three, plus the Continents (the world
+    # itself, sitting beside the deep-sky Cosmos — owner 2026-07-21).
+    ("Arcana", ("alchemy", "japan", "cosmos", "continents")),
 )
 
 DEFAULT_SKIN = SkinDefinition(

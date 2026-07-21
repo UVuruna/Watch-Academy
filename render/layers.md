@@ -500,7 +500,7 @@ has_ninth)` reads `day.sun.noon` (the SAME anchor the hexagram's own
 rotation reads) through `core.angles.hours_between` and returns
 `"ruler"` (GOOD, the default), `"servant"` (EVIL, near solar midnight)
 or — only for a theme that names one — `"ninth"` (near solar noon).
-`theme_ninth(theme)` is the ONE existence-gated lookup into
+`theme_ninth(theme, pangea=False)` is the ONE existence-gated lookup into
 `constants.WEEKDAY_THEME_NINTHS` both this layer and the compositor's
 hover share (Rule #5) — a theme with no table entry, or whose plate has
 not landed, never offers "ninth"; its midnight window then WIDENS from
@@ -510,6 +510,25 @@ promises the ordinary "two persons, a union", never a third face.
 `CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
 `CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH` (`config/constants.py`) are the
 tunable window widths.
+
+**THE CONTINENTS theme (owner-sealed matrix 2026-07-21, round R7a).** Two
+render hooks, both keyed off `ctx.skin.weekday_theme == "continents"`:
+
+- **Live body art.** `draw_weekday_body` (the six arms + the ruler
+  center) and the two Servant draw sites override the baked atmo-day
+  face with `defaults.continents_body_art` / `continents_dual_art` — the
+  region's earth face in the user's `earth_style` (one setting, whole
+  instrument) at the sky's own phase (`ctx.tick.is_daylight`, the SAME
+  sun-elevation law the Earth marker already uses, never recomputed).
+  Graceful-absent: a missing face keeps the baked plate.
+- **The Ninth easter egg.** `theme_ninth`'s `pangea` flag reads
+  `constants.WEEKDAY_THEME_NINTH_EASTER_EGG` (Pangea) instead of
+  `WEEKDAY_THEME_NINTHS` (Zealandia) when the traveled day is a Pangea
+  day. `CenterBodyLayer` computes that flag from the day's OWN pre-built
+  anchors + eclipse via `core.continents.ninth_is_pangea_from_events`
+  (never recomputing astronomy) and passes it in; the compositor's
+  `_center_pangea` feeds the same law to the hover so card and dial
+  agree.
 
 ### SlotLayer (MINUTE)
 One instance per placement pass draws every SEATED slot from

@@ -22,7 +22,7 @@ from config import archetypes, constants, defaults, paths, profiling
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
-from core import angles
+from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import (
     format_anno_lucis,
@@ -1663,7 +1663,7 @@ class Compositor:
         columns = []
         for face in faces:
             if face == "ninth":
-                name, asset = theme_ninth(theme)
+                name, asset = theme_ninth(theme, self._center_pangea())
                 text = self._encyclopedia.entry("ninths", name)["base"]
                 accents = ()
             else:
@@ -1692,6 +1692,24 @@ class Compositor:
             "</tr></table>"
         )
 
+    def _center_pangea(self) -> bool:
+        """The Continents theme's Ninth easter-egg flag for the hover
+        (owner-sealed matrix 2026-07-21) — the SAME `core.continents`
+        law the paint pass reads, fed from this compositor's own day and
+        last tick so the card and the dial never disagree."""
+        if self._skin.weekday_theme != "continents" or self._day is None:
+            return False
+        return continents.ninth_is_pangea_from_events(
+            self._day.local_date,
+            self._day.season_events,
+            self._day.moon_events,
+            (
+                self._last_tick.eclipse_event is not None
+                if self._last_tick is not None
+                else False
+            ),
+        )
+
     def _center_dual_tooltip(self, active: bool) -> str:
         """The CENTER seat's Sunday duality hover (owner INSTRUCTION #5
         + solar amendment, round R3b items 3/4): a ghost read on a
@@ -1705,7 +1723,7 @@ class Compositor:
         if not active:
             return self._sun_face_tooltip("ruler", active=False)
         theme = self._skin.weekday_theme
-        ninth = theme_ninth(theme)
+        ninth = theme_ninth(theme, self._center_pangea())
         if ninth is None:
             return self._dual_face_columns(theme, ("ruler", "servant"))
         face = center_face(self._day, self._last_tick, has_ninth=True)

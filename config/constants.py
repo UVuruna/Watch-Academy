@@ -686,6 +686,15 @@ WEEKDAY_THEMES = (
     "bible_dark",
     "cosmos",
     "planets_art",
+    # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
+    # columns ride the six continents — the dial's OWN Earth-marker faces
+    # (assets/earth/) elevated to a weekday theme (owner exception to the
+    # one-image-one-place law, sealed: quality art never shown large
+    # elsewhere). Bodies follow the user's earth_style and the live sky's
+    # day/night at render (config.defaults.continents_body_art); the
+    # Sunday dual is the two poles (Antarctic Ruler / Arctic Servant), the
+    # Ninth is Zealandia with the Pangea easter-egg (core.continents).
+    "continents",
     # The Inner Wheel on the dial (owner 2026-07-14): the emblem
     # families as weekday themes — the art lives in assets/emblem/.
     "virtues",
@@ -745,6 +754,10 @@ WEEKDAY_THEME_BLURBS = {
     "bible_dark": "day",
     "cosmos": "day",
     "planets_art": "day",
+    # The continents reuse the generic day blurb (the hexa-diamond
+    # blurb path never grew a themed set of its own — its rich text
+    # lives in the article, not the one-line arm blurb).
+    "continents": "day",
     "virtues": "day",
     "sins": "day",
     "moods": "day",
@@ -774,6 +787,7 @@ WEEKDAY_THEME_ARTICLES = {
     # The medallion look shares the planet articles — same entities,
     # different art (like the glyphs).
     "planets_art": "planets",
+    "continents": "continents",
     "virtues": "virtues",
     "sins": "sins",
     "moods": "moods",
@@ -808,6 +822,24 @@ WEEKDAY_THEME_NINTHS = {
     "bible": ("The Holy Trinity", "bible/primary/holy_trinity.png"),
     "bible2": ("Melchizedek", "bible/secondary/melchizedek.png"),
     "bible_dark": ("The Ninth Circle", "bible/dark/ninth_circle.png"),
+    # THE CONTINENTS' NINTH (owner-sealed matrix 2026-07-21): ZEALANDIA,
+    # the literal Unfound — a true continent 94% drowned, unrecognized
+    # until 2017. Its plate is wired ahead of the owner's art (relative
+    # to WEEKDAY_ART_DIR, reaching the earth family: assets/earth/),
+    # graceful-absent until it lands, exactly like Triglav.
+    "continents": ("Zealandia", "../earth/zealandia.png"),
+}
+
+# THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21): Pangea shows
+# INSTEAD of Zealandia on the Ninth seat ONLY when the sky is doing
+# something on the traveled day — an eclipse, a season turning point, or
+# a full/new moon day (~1/11 of the year). Same story, deeper time: was
+# once ALL, split, and by the supercontinent cycle will return. The LAW
+# lives in core.continents; render.layers.theme_ninth reads this alt
+# table when the law fires. Plate wired ahead of the owner's art
+# (graceful-absent), same earth-family home as Zealandia.
+WEEKDAY_THEME_NINTH_EASTER_EGG = {
+    "continents": ("Pangea", "../earth/pangea.png"),
 }
 
 # DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
