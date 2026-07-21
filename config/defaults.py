@@ -965,11 +965,13 @@ CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring letters/ticks
 # Gregorian month (`gregorian`, 1..12 — the Almanac wheel already maps
 # month->wedge via core.year_wheel.almanac_month_index). `stem` is the
 # ASCII plate stem under MONTHS_ART_DIR (assets/months/<stem>.png,
-# graceful-absent). NOTE — the RENDER of the mounted marks (drawing the
-# twelve plates at CALENDAR_MOUNT_RADIUS_FRACTION, and a Settings
-# selector for WHICH 12-set mounts) is a FUTURE round; this table + the
-# Encyclopedia topic are the minimal registration (see config/___config.md
-# and app/encyclopedia.md for what remains).
+# graceful-absent — the mount draws the Croatian name instead until the
+# owner's prompt sheet lands, `render.layers.calendar_mount_entries`).
+# The MOUNT ITSELF (R9a round, 2026-07-21): drawing the twelve marks at
+# CALENDAR_MOUNT_RADIUS_FRACTION and the Settings picker for WHICH
+# 12-set mounts are both live now (render.layers.BackgroundLayer,
+# app.design_window's Pointer tab) — see config/___config.md and
+# app/encyclopedia.md for the Encyclopedia side.
 SLAVIC_MONTHS = (
     # (croatian proper noun, english gloss, ascii stem, gregorian month)
     ("Siječanj", "the Month of Felling", "Sijecanj", 1),
@@ -986,8 +988,20 @@ SLAVIC_MONTHS = (
     ("Prosinac", "the Month of Shining-Through", "Prosinac", 12),
 )
 # The mid-radius the DESIGN ZODIAC law fixes for a mounted 12-set's marks
-# (60-70% of the dial radius). The RENDER that consumes it is queued.
+# (60-70% of the dial radius) — clear of the rim-riding Earth/Moon and
+# the Calendar's own pinned South subdial (orbit ~0.43R).
 CALENDAR_MOUNT_RADIUS_FRACTION = 0.65
+# The mark's own drawn HEIGHT, fraction of the dial DIAMETER (the SAME
+# unit WeekdaySpec.diamond_scale/YearMarkerSpec.scale use) — sized well
+# under the 30-deg wedge's own arc gap at the mount radius (~0.17 of the
+# diameter between neighboring mark centers) so twelve marks never touch.
+CALENDAR_MOUNT_MARK_SCALE = 0.08
+# The mark's resting opacity and the extra the CURRENT sign/month earns
+# (owner spec: "the mark can inherit that brightness" — the SAME
+# base+delta shape CALENDAR_WEDGE_ALPHA/CALENDAR_WEDGE_LIT_DELTA use for
+# the wedges, sized so the current mark reaches full opacity).
+CALENDAR_MOUNT_ALPHA = 0.65
+CALENDAR_MOUNT_LIT_DELTA = 0.35
 
 # Octa bottom-arm text (time/date/...): sized to span this fraction of
 # the slot width (owner: big font, must not overflow the slot).

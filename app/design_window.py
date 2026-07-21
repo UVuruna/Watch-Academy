@@ -154,6 +154,22 @@ class DesignDialog(QDialog):
                     lambda m=mode: self._setters["calendar_lighting"](m),
                 ))
             layout.addLayout(lighting_row)
+            # THE 12-SET MOUNT (DESIGN ZODIAC law, R9a round): twelve
+            # marks at CALENDAR_MOUNT_RADIUS_FRACTION — the Calendar
+            # pointer's OWN options row, right beside its lighting mode
+            # (owner spec: "put it where the Calendar pointer's own
+            # options already live").
+            mount_row = QHBoxLayout()
+            for mode, title in (
+                ("off", "No 12-set mount"),
+                ("zodiac", "Mount zodiac signs"),
+                ("months", "Mount Slavic months"),
+            ):
+                mount_row.addWidget(self._pill(
+                    self._tr(title), settings.calendar_mount == mode,
+                    lambda m=mode: self._setters["calendar_mount"](m),
+                ))
+            layout.addLayout(mount_row)
         widget = QWidget()
         widget.setLayout(layout)
         return widget

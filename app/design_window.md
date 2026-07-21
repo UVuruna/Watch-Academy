@@ -5,12 +5,12 @@
 ## Purpose
 
 The mini WINDOW replacing the old Design submenu's deep chain — Pointer
-(variant + palette style + Calendar lighting), Ring (preset + finish +
-Two metals), Umbra (form + contrast), Complications (plate style),
-Hands and Earth (style + label mode) and Size — as ONE tabbed window
-with images wherever real preview art exists (R5 MENU REWORK item 3D,
-owner spec: "Isto kao sada samo u lepsem meniju u Window sa slikama kao
-i kod ostalih").
+(variant + palette style + Calendar lighting + the Calendar's 12-set
+mount), Ring (preset + finish + Two metals), Umbra (form + contrast),
+Complications (plate style), Hands and Earth (style + label mode) and
+Size — as ONE tabbed window with images wherever real preview art
+exists (R5 MENU REWORK item 3D, owner spec: "Isto kao sada samo u
+lepsem meniju u Window sa slikama kao i kod ostalih").
 
 **Asset honesty note:** only Ring (the layout's own face art,
 `assets/ring/`), Hands (each pack's own hour-hand file) and Earth

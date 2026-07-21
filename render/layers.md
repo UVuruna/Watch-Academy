@@ -100,6 +100,61 @@ to the day. The Moon marker keeps its own lunation orbit. The wedge
 HOVER (`Compositor._calendar_tooltip`) is modest: the month + the
 double-hour's animal (Almanac) or the sign + its dates (Zodiac).
 
+<a id="the-12-set-mount"></a>
+
+#### The 12-SET Mount (DESIGN ZODIAC law, R9a round 2026-07-21)
+The owner's ZODIAC law (`UV/DESIGN/DESIGN INSTRUCTIONS.txt`): "Zodiac i
+sve što ima 12 TREBA da bude moguće da se AKTIVIRA na CALENDAR POINTER
+(TO MU JE DEFAULT)" — any twelve-fold set may MOUNT twelve small marks
+on the Calendar pointer, one per wedge, at `CALENDAR_MOUNT_RADIUS_FRACTION`
+(60-70% of the dial radius — clear of the rim-riding Earth/Moon and the
+Calendar's own pinned South subdial). `SkinDefinition.calendar_mount`
+(`constants.CALENDAR_MOUNT_MODES`, Settings-picked in the Design ▸
+Pointer tab, right beside the lighting row) picks the set: **"off"**
+(nothing extra), **"zodiac"** (the astrology sign register's COLORED
+badges — the SAME art the wedge hover already shows) or **"months"**
+(the twelve Slavic months, `defaults.SLAVIC_MONTHS`, graceful-absent
+art). Ships **"zodiac"** by default — the owner's law names the
+Calendar pointer as the 12-set's default home, and an offscreen render
+confirmed the badges read cleanly at the mount radius without crowding
+the ring, the hands or the pinned subdial.
+
+A mount rides its OWN fixed wheel geometry, independent of whichever
+wheel `palette_style` paints as the background wedges
+(`calendar_mount_wheel(mount)`: zodiac → the ZODIAC wheel's cardinal-
+START wedges, since sign *i*'s wedge already IS its own honest 30-deg
+arc; months → the ALMANAC wheel's cardinal-CENTERED wedges, June
+leading). `calendar_mount_angle(mount, index)` is each mark's dial
+angle (its wedge's CENTER, Calendar-fixed — no `ctx.rotation`, exactly
+like the wedges themselves); `calendar_mount_entries(mount)` resolves
+the twelve (name, art-or-None) pairs — zodiac through the existing
+`octa_slot_art(ZODIAC_STYLE_ART_DIRS["colored"], name)`, months through
+the sourceless `MONTHS_ART_DIR` (never a gap: a missing plate resolves
+to `None`, drawn as the entity's NAME through `draw_name_label` — the
+SAME graceful-absent convention `draw_archetype_figure` uses, Rule #5).
+`calendar_mount_current_index(mount, day)` is the emphasis mark —
+mirroring `calendar_lit_index`'s own "year" branches (Rule #5) but
+**never** hemisphere-mirrored: the mark always sits on its own fixed
+wedge identity, matching what is actually drawn there, unlike the Earth
+marker's orbit (which mirrors south). `_draw_calendar_mount` (called
+from `BackgroundLayer.paint`, DAILY cadence, right after the wedge
+loop) draws each mark at `CALENDAR_MOUNT_ALPHA` opacity, raised by
+`CALENDAR_MOUNT_LIT_DELTA` (reaching exactly 1.0) on the current mark —
+"the mark can inherit that brightness" (owner spec), computed, no new
+art.
+
+The HOVER reuses the existing machinery rather than forking
+(`Compositor._calendar_mount_tooltip`, checked BEFORE the broader
+whole-wedge `_calendar_tooltip` in `_tooltip_at` since a mark is a
+smaller, more specific target sitting inside that same area): a small
+circular hit disc at each mark's drawn position answers with its name —
+zodiac through `_zodiac_wedge_html(index)` (factored out of
+`_calendar_tooltip`'s own zodiac branch so the mark speaks the IDENTICAL
+sign+dates+badge text the background wedge hover already does), months
+through `_months_wedge_html(index)` (the Croatian proper noun + its
+English gloss, graceful-absent art via the same `_hover_badge`
+empty-string rule every other emblem uses).
+
 <a id="the-archetype-mode"></a>
 
 ## The Archetype Mode

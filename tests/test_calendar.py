@@ -26,6 +26,10 @@ from render.compositor import Compositor
 from render.layers import (
     calendar_day_arrow,
     calendar_lit_index,
+    calendar_mount_angle,
+    calendar_mount_current_index,
+    calendar_mount_entries,
+    calendar_mount_wheel,
     calendar_wedge_bounds,
     calendar_wheel,
     dial_point,
@@ -278,3 +282,128 @@ def test_calendar_lit_index_none_off_the_pointer(app):
     comp.set_day(day)
     comp._last_tick = tick
     assert comp._calendar_lit(tick) is None
+
+
+# --- The 12-SET MOUNT (DESIGN ZODIAC law, R9a round 2026-07-21) ------------------
+# "Zodiac i sve što ima 12 TREBA da bude moguće da se AKTIVIRA na CALENDAR
+# POINTER (TO MU JE DEFAULT)": twelve marks, one per wedge, at 60-70% of
+# the dial radius, independent of which wheel paints the background.
+
+
+def test_mount_wheel_is_independent_of_the_active_background_wheel():
+    """Zodiac marks always ride the ZODIAC wheel's own cardinal-START
+    wedges (sign i's wedge IS its own 30-deg arc — the honest alignment
+    already used for the wedge-lit law, no separate approximation);
+    months always ride the ALMANAC wheel's cardinal-CENTERED wedges."""
+    assert calendar_mount_wheel("zodiac") == "zodiac"
+    assert calendar_mount_wheel("months") == "almanac"
+    assert calendar_mount_angle("zodiac", 0) == pytest.approx(15.0)   # Cancer wedge center
+    assert calendar_mount_angle("months", 0) == pytest.approx(0.0)    # June, on the axis
+    # Twelve marks, evenly spaced 30 deg apart, on EITHER geometry.
+    for mount in ("zodiac", "months"):
+        angles = [calendar_mount_angle(mount, i) for i in range(12)]
+        assert len(set(angles)) == 12
+        gaps = {
+            round((angles[i + 1] - angles[i]) % 360.0, 6) for i in range(11)
+        }
+        assert gaps == {30.0}
+
+
+def test_zodiac_mount_entries_carry_the_real_committed_badges():
+    """The zodiac mount reads the SAME astrology COLORED badges the
+    background wedge hover already shows (Rule #5) — real art, shipped
+    today, never a gap."""
+    entries = calendar_mount_entries("zodiac")
+    assert len(entries) == 12
+    assert [name for name, _art in entries] == [
+        name for name, _symbol in constants.ZODIAC_SIGNS
+    ]
+    assert all(art is not None and art.exists() for _name, art in entries)
+
+
+def test_months_mount_entries_are_graceful_absent_and_wedge_aligned():
+    """The Slavic months mount in the Almanac's own June-leads order
+    (index 0 = Lipanj/June, matching almanac_month_index) with NO art
+    yet (owner R7b: the prompt sheet has not landed) — the name is
+    always present so the caller never draws a gap."""
+    entries = calendar_mount_entries("months")
+    assert len(entries) == 12
+    assert entries[0][0] == "Lipanj"                 # June leads
+    assert entries[almanac_month_index(1)][0] == "Siječanj"   # January
+    assert all(name for name, _art in entries)       # every wedge named
+    assert all(art is None for _name, art in entries)         # no plates yet
+
+
+def test_mount_current_index_matches_todays_sign_and_month_no_hemisphere_flip(app):
+    """The emphasis mark is the SAME lookup calendar_lit_index's "year"
+    branches use (Rule #5) — never hemisphere-mirrored, since the mark
+    sits on its own fixed wedge identity (unlike the Earth marker's
+    orbit)."""
+    day, _tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
+    names = [name for name, _symbol in constants.ZODIAC_SIGNS]
+    assert calendar_mount_current_index("zodiac", day) == names.index(day.zodiac_name)
+    assert calendar_mount_current_index("months", day) == almanac_month_index(
+        day.local_date.month
+    )
+
+
+def test_mount_lit_delta_raises_the_current_mark_to_full_opacity():
+    """"the mark can inherit that brightness" (owner spec) — the SAME
+    base+delta shape the wedges use, sized so the current mark reaches
+    (but never exceeds) full opacity."""
+    assert 0.0 < defaults.CALENDAR_MOUNT_ALPHA < 1.0
+    assert defaults.CALENDAR_MOUNT_ALPHA + defaults.CALENDAR_MOUNT_LIT_DELTA == (
+        pytest.approx(1.0)
+    )
+
+
+def test_calendar_mount_renders_and_a_mark_hover_outranks_the_wedge(app):
+    """The mount paints without a crash and a mark's own small hit
+    target wins over the broader whole-wedge hover beneath it: zodiac
+    speaks sign + dates + its colored badge, months speaks the Croatian
+    name + English gloss (graceful-absent art, never a broken image)."""
+    day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
+    radius = 180.0
+
+    def px(mount: str, index: int) -> tuple[float, float]:
+        point = dial_point(
+            calendar_mount_angle(mount, index),
+            radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION,
+        )
+        return radius + point.x(), radius + point.y()
+
+    zodiac = Compositor(
+        _calendar_skin(palette_style="paint", calendar_mount="zodiac"),
+        AssetCache(),
+    )
+    zodiac.render_offscreen(360.0, 1.0, day, tick)
+    x, y = px("zodiac", 0)                       # Cancer's own mark
+    text = zodiac.tooltip_at(x, y, 360.0)
+    assert text is not None and "Cancer" in text and "<img" in text
+
+    months = Compositor(
+        _calendar_skin(palette_style="light", calendar_mount="months"),
+        AssetCache(),
+    )
+    months.render_offscreen(360.0, 1.0, day, tick)
+    x2, y2 = px("months", 0)                     # Lipanj's own mark
+    text2 = months.tooltip_at(x2, y2, 360.0)
+    assert text2 is not None and "Lipanj" in text2 and "Linden" in text2
+    assert "<img" not in text2                   # graceful-absent: no broken image
+
+
+def test_calendar_mount_off_speaks_no_mark_hover(app):
+    """Off leaves the position to the broader wedge hover instead — the
+    mark-specific hit test is simply absent, never a crash."""
+    day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
+    skin = _calendar_skin(calendar_mount="off")
+    comp = Compositor(skin, AssetCache())
+    comp.set_day(day)
+    comp._last_tick = tick
+    point = dial_point(15.0, 180.0 * defaults.CALENDAR_MOUNT_RADIUS_FRACTION)
+    assert comp._calendar_mount_tooltip(point, 180.0) is None
+
+
+def test_calendar_mount_modes_and_default():
+    assert constants.CALENDAR_MOUNT_MODES == ("off", "zodiac", "months")
+    assert defaults.DEFAULT_SKIN.calendar_mount in constants.CALENDAR_MOUNT_MODES

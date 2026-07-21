@@ -504,6 +504,7 @@ def test_bad_jump_city_raises(store):
         "era_notation",
         "third_era",
         "subdial_set",
+        "calendar_mount",
     ],
 )
 def test_unknown_display_choice_raises(store, key):
@@ -514,6 +515,18 @@ def test_unknown_display_choice_raises(store, key):
     )
     with pytest.raises(SettingsCorruptError):
         store.load()
+
+
+def test_calendar_mount_round_trips_and_defaults_to_zodiac(store):
+    """The 12-SET MOUNT (DESIGN ZODIAC law, R9a round): "zodiac" ships
+    as the default (the owner's law names the Calendar pointer as the
+    12-set's default home) — a fresh settings file, and every other
+    choice, round-trip through save/load."""
+    assert Settings().calendar_mount == "zodiac"
+    for mount in ("off", "zodiac", "months"):
+        saved = replace(Settings(), calendar_mount=mount)
+        store.save(saved)
+        assert store.load().calendar_mount == mount
 
 
 def test_string_boolean_is_corrupt(store):

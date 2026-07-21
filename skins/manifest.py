@@ -201,6 +201,11 @@ class SkinDefinition:
                                        # WHEEL: paint = Zodiac, light = Almanac
     calendar_lighting: str = "hour"    # "hour" (the shichen under the hand) |
                                        # "year" (the current month/sign wedge)
+    calendar_mount: str = "zodiac"     # the DESIGN ZODIAC law's 12-SET MOUNT
+                                       # (R9a, config.constants.CALENDAR_MOUNT_
+                                       # MODES): "off" | "zodiac" | "months" —
+                                       # twelve marks at CALENDAR_MOUNT_RADIUS_
+                                       # FRACTION, independent of palette_style
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): the active
     # (pointer, palette_style) shows ITS archetype — the diamonds carry
     # the stained-glass figures, the hour hand lights the one whose

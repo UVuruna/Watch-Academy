@@ -634,6 +634,34 @@ def test_design_pointer_tab_shows_calendar_lighting_only_on_calendar(controller)
     assert not any("shichen" in l for l in labels)
 
 
+def test_design_pointer_tab_shows_the_mount_row_only_on_calendar(controller):
+    """The 12-SET MOUNT picker (DESIGN ZODIAC law, R9a round): lives
+    beside calendar_lighting, the Calendar pointer's own options row —
+    off any other pointer it is simply absent, like the lighting row."""
+    from PySide6.QtWidgets import QPushButton
+
+    controller._set_display_choice("pointer", "calendar")
+    controller._open_design()
+    tab = controller._design._pointer_tab()
+    labels = [b.text() for b in tab.findChildren(QPushButton)]
+    assert any("Mount zodiac signs" in l for l in labels)
+    assert any("Mount Slavic months" in l for l in labels)
+    controller._set_display_choice("pointer", "hexa")
+    tab = controller._design._pointer_tab()
+    labels = [b.text() for b in tab.findChildren(QPushButton)]
+    assert not any("Mount zodiac signs" in l for l in labels)
+
+
+def test_design_mount_pick_applies_and_refreshes_the_open_window(controller):
+    controller._set_display_choice("pointer", "calendar")
+    controller._open_design()
+    assert controller._settings.calendar_mount == "zodiac"     # shipped default
+    controller._design_setters()["calendar_mount"]("months")
+    assert controller._settings.calendar_mount == "months"
+    controller._design_setters()["calendar_mount"]("off")
+    assert controller._settings.calendar_mount == "off"
+
+
 def test_design_ring_pick_applies_and_refreshes_the_open_window(controller):
     from data.rings import ring_presets
 

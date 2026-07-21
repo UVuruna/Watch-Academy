@@ -760,8 +760,14 @@ class Compositor:
         # The Calendar wedges (owner 2026-07-16): a lit-capable wedge
         # answers with its month + double-hour animal (Almanac) or its
         # sign + dates (Zodiac). The wheel covers the whole dial, so it
-        # pre-empts the day/night period hover below.
+        # pre-empts the day/night period hover below. The MOUNTED 12-set
+        # mark (DESIGN ZODIAC law, R9a round) is a smaller, more specific
+        # target sitting INSIDE that same area — it outranks the broad
+        # wedge hover, checked first.
         if self._skin.pointer == "calendar":
+            mount = self._calendar_mount_tooltip(point, radius)
+            if mount is not None:
+                return mount
             calendar = self._calendar_tooltip(point, radius)
             if calendar is not None:
                 return calendar
@@ -2746,8 +2752,22 @@ class Compositor:
         start_angle = int(theta // step) * step
         if day.southern_hemisphere:
             start_angle = (start_angle + 180.0) % 360.0
-        name, symbol = constants.ZODIAC_SIGNS[int(start_angle) // 30]
-        start, end = zodiac_span(day.year_anchors, start_angle)
+        return self._zodiac_wedge_html(int(start_angle) // 30)
+
+    def _zodiac_wedge_html(self, index: int) -> str:
+        """Sign name + date span + the COLORED badge for the FIXED
+        `constants.ZODIAC_SIGNS[index]` wedge identity — factored out of
+        `_calendar_tooltip`'s own zodiac branch (Rule #5) so the mounted
+        zodiac mark hover (`_calendar_mount_tooltip`, drawn on this exact
+        wedge, never hemisphere-mirrored) speaks the identical text the
+        background wedge hover already does."""
+        from render.layers import octa_slot_art
+
+        day = self._day
+        name, symbol = constants.ZODIAC_SIGNS[index]
+        start, end = zodiac_span(
+            day.year_anchors, index * constants.CALENDAR_WEDGE_DEG
+        )
         start = start.astimezone(day.tzinfo)
         last = end.astimezone(day.tzinfo) - timedelta(days=1)
         art = octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name)
@@ -2756,6 +2776,44 @@ class Compositor:
             f"{self._ord(start.day)} {html.escape(self._month(start))} - "
             f"{self._ord(last.day)} {html.escape(self._month(last))}",
         )
+
+    def _months_wedge_html(self, index: int) -> str:
+        """The mounted Slavic-months mark's hover (owner spec: "month
+        name + gloss"): the Croatian proper noun as the bold title, the
+        English gloss beneath, above the plate art — graceful-absent
+        (owner R7b contract) via the SAME `_hover_badge` empty-string
+        rule every other emblem uses until the prompt sheet lands."""
+        month = (index + 5) % 12 + 1
+        croatian, gloss, stem, _gregorian = next(
+            entry for entry in defaults.SLAVIC_MONTHS if entry[3] == month
+        )
+        art = paths.art_file(defaults.MONTHS_ART_DIR / f"{stem}.png")
+        art = art if art.exists() else None
+        return _hover_badge(art) + _centered_html(
+            f"<b>{html.escape(self._tr(croatian))}</b>",
+            html.escape(self._tr(gloss)),
+        )
+
+    def _calendar_mount_tooltip(self, point: QPointF, radius: float) -> str | None:
+        """The mounted 12-set mark under the cursor (DESIGN ZODIAC law,
+        R9a round) — a small circular target at CALENDAR_MOUNT_RADIUS_
+        FRACTION, outranking the broader whole-wedge hover beneath it
+        (checked first in `_tooltip_at`). Off while no set is mounted."""
+        mount = self._skin.calendar_mount
+        if mount == "off":
+            return None
+        from render.layers import calendar_mount_angle, dial_point
+
+        mount_radius = radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
+        hit_radius = radius * defaults.CALENDAR_MOUNT_MARK_SCALE
+        for index in range(12):
+            center = dial_point(calendar_mount_angle(mount, index), mount_radius)
+            dx, dy = point.x() - center.x(), point.y() - center.y()
+            if dx * dx + dy * dy <= hit_radius * hit_radius:
+                if mount == "zodiac":
+                    return self._zodiac_wedge_html(index)
+                return self._months_wedge_html(index)
+        return None
 
     def _period_tooltip(self, point: QPointF, radius: float) -> str | None:
         """Aura/Umbra hovers (owner formatting round 2026-07-12): a mini

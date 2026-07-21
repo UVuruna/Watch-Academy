@@ -308,13 +308,15 @@ screens —
   prompt sheet under the canonical **sourceless** `months/` root
   (`defaults.MONTHS_ART_DIR`, OUTSIDE `ART_SOURCED_ROOTS` — the subdial
   precedent, see [Assets (folder)](../assets/___assets.md)),
-  graceful-absent until it lands. **WHAT REMAINS for the pointer
-  mount** (out of this round's scope, a FUTURE render round): the DESIGN
-  ZODIAC law wants the twelve marks DRAWN on the Calendar pointer at
-  `defaults.CALENDAR_MOUNT_RADIUS_FRACTION` (60-70% radius) with a
-  Settings selector for WHICH 12-set mounts (zodiac signs / months /…);
-  this round delivers only the registration table + the Encyclopedia
-  topic. Pinned by `tests/test_months.py`.
+  graceful-absent until it lands (the pointer mount draws the Croatian
+  name instead in the meantime). Pinned by `tests/test_months.py`.
+  **THE POINTER MOUNT** (R9a round, 2026-07-21): the DESIGN ZODIAC
+  law's twelve marks now DRAW on the Calendar pointer at
+  `defaults.CALENDAR_MOUNT_RADIUS_FRACTION` (60-70% radius), with a
+  Settings picker for WHICH 12-set mounts (off / zodiac signs / this
+  months set, `SkinDefinition.calendar_mount`, the Design ▸ Pointer
+  tab) — see [Layers](../render/layers.md)'s own "The 12-SET Mount"
+  section; pinned by `tests/test_calendar.py`.
 
 **ROUND R8b — ENCYCLOPEDIA REVIEW PACK (owner batch `UV/prompt.txt`
 2026-07-21):**

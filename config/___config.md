@@ -13,8 +13,10 @@ Values that define what DOMY Watch is and never change: app identity, the
 the weekday → celestial body mapping, the pointer variants (hexa 6 /
 cross 4 / octa 8 / trio 3 arms, aurora and calendar armless; display
 names Prism / Seasons / Compass / Trinity / Aurora / Calendar; the
-Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`
-and its `CALENDAR_LIGHTING_MODES` — hour/year, owner 2026-07-16) with
+Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`,
+its `CALENDAR_LIGHTING_MODES` (hour/year, owner 2026-07-16) and its
+`CALENDAR_MOUNT_MODES` (off/zodiac/months, the DESIGN ZODIAC law's
+12-set mount, R9a round 2026-07-21) with
 their weekday slot layouts (slots rotate
 WITH the star; shared slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
@@ -116,16 +118,23 @@ single, aurora bands, and the Calendar's two twelve-hue wheels —
 paint = Zodiac, light = Almanac, owner 2026-07-16), the Calendar wedge
 opacity + lit delta and the Almanac day-arrow geometry
 (`CALENDAR_WEDGE_ALPHA`, `CALENDAR_WEDGE_LIT_DELTA`, `CALENDAR_ARROW_*`),
-the Calendar-pointer 12-SET registration (owner-sealed R7b 2026-07-21):
+the Calendar-pointer 12-SET MOUNT (owner-sealed R7b 2026-07-21
+registration, R9a 2026-07-21 render + picker):
 `SLAVIC_MONTHS` (the twelve Croatian months as (croatian, gloss, ascii
 stem, gregorian-month) rows — the first mount-set beyond the zodiac
 signs / Chinese animals the pointer already reads), `MONTHS_ART_DIR`
 (the canonical **sourceless** `assets/months/` root, OUTSIDE
 `ART_SOURCED_ROOTS` — the subdial precedent; graceful-absent, a future
-prompt sheet) and `CALENDAR_MOUNT_RADIUS_FRACTION` (0.65, the DESIGN
-ZODIAC law's 60-70% mount radius) — REGISTRATION only, the render that
-draws the marks + a Settings selector for which 12-set mounts is a
-future round (see [Encyclopedia](../app/encyclopedia.md)),
+prompt sheet), `CALENDAR_MOUNT_RADIUS_FRACTION` (0.65, the DESIGN
+ZODIAC law's 60-70% mount radius), `CALENDAR_MOUNT_MARK_SCALE` (the
+mark's own drawn height) and `CALENDAR_MOUNT_ALPHA`/
+`CALENDAR_MOUNT_LIT_DELTA` (the current-mark emphasis, reaching exactly
+1.0) — `constants.CALENDAR_MOUNT_MODES` ("off"/"zodiac"/"months",
+Settings-validated) is the mode enum; the render itself
+(`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
+`calendar_mount_angle`, the Design ▸ Pointer tab's mount row) is covered
+in [Layers](../render/layers.md)'s own Calendar Pointer section (see
+[Encyclopedia](../app/encyclopedia.md) for the Slavic Months topic),
 the Umbra contrast spans, the octa slot text width fraction, the event glow
 rendering (owner rework 2026-07-16: the ring-band relocation radius, the
 golden Sun / silver Moon colors, the alpha stops, the halo scale and the

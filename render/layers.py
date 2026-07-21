@@ -33,7 +33,7 @@ from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
 from core.sun import DaylightRegime, SunDay
-from core.year_wheel import almanac_marker_angle
+from core.year_wheel import almanac_marker_angle, almanac_month_index
 from render.assets import (
     AssetCache,
     letter_metal_file,
@@ -241,6 +241,94 @@ def calendar_day_arrow(angle_deg: float, radius: float) -> QPolygonF:
             dial_point(angle_deg + half, base),
         ]
     )
+
+
+# --- Calendar-pointer 12-SET MOUNT (DESIGN ZODIAC law, R9a round 2026-07-21) --
+# "Zodiac i sve što ima 12 TREBA da bude moguće da se AKTIVIRA na CALENDAR
+# POINTER" (UV/DESIGN/DESIGN INSTRUCTIONS.txt): twelve small marks, one
+# per wedge, mounted at CALENDAR_MOUNT_RADIUS_FRACTION — clear of the
+# rim-riding Earth/Moon and the center subdial. A mount rides its OWN
+# fixed wheel geometry (calendar_mount_wheel), independent of whichever
+# wheel the background wedges currently paint (palette_style) — so the
+# marks never jump when the owner switches Zodiac/Almanac colors.
+
+
+def calendar_mount_wheel(mount: str) -> str:
+    """Which `calendar_wedge_bounds` geometry a mount set's marks ride:
+    zodiac signs own the ZODIAC wheel's cardinal-START wedges (sign i's
+    wedge IS its own 30-deg arc — the honest alignment, no separate
+    month-based approximation needed); Slavic months own the ALMANAC
+    wheel's cardinal-CENTERED wedges (their Gregorian equivalent already
+    indexes core.year_wheel.almanac_month_index)."""
+    return "zodiac" if mount == "zodiac" else "almanac"
+
+
+def calendar_mount_angle(mount: str, index: int) -> float:
+    """Dial angle (clockwise from top) of mount mark `index` — the
+    CENTER of its own wedge, Calendar-fixed (no rotation, matching the
+    wedges themselves)."""
+    start, end = calendar_wedge_bounds(calendar_mount_wheel(mount))[index]
+    return (start + end) / 2.0
+
+
+def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
+    """The twelve (display_name, art_path_or_None) pairs of a mount set,
+    in WEDGE INDEX order (0..11). Zodiac reads the SAME astrology
+    COLORED badges the wedge hover already shows (Rule #5) — real,
+    committed art. Months read the sourceless MONTHS_ART_DIR plates,
+    graceful-absent (owner R7b contract) until the owner's prompt sheet
+    lands — None routes the caller to the name-fallback, never a gap."""
+    if mount == "zodiac":
+        return tuple(
+            (name, octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name))
+            for name, _symbol in constants.ZODIAC_SIGNS
+        )
+    entries: list[tuple[str, Path | None]] = [("", None)] * 12
+    for croatian, _gloss, stem, gregorian in defaults.SLAVIC_MONTHS:
+        index = almanac_month_index(gregorian)
+        resolved = paths.art_file(defaults.MONTHS_ART_DIR / f"{stem}.png")
+        entries[index] = (
+            croatian, resolved if resolved.exists() else None,
+        )
+    return tuple(entries)
+
+
+def calendar_mount_current_index(mount: str, day: DayContext) -> int:
+    """The wedge index (0..11) TODAY'S sign/month owns on the mount's
+    own wheel — the mark that earns the emphasis (owner spec: "the mark
+    can inherit that brightness"). Mirrors calendar_lit_index's own
+    "year" branches (Rule #5), but never hemisphere-mirrored — the mark
+    always sits on its OWN fixed wedge identity, matching what is drawn
+    there (unlike the Earth marker's orbit, which mirrors south)."""
+    if mount == "zodiac":
+        names = [name for name, _ in constants.ZODIAC_SIGNS]
+        return names.index(day.zodiac_name)
+    return almanac_month_index(day.local_date.month)
+
+
+def _draw_calendar_mount(
+    painter: QPainter, ctx: "RenderContext", mount: str
+) -> None:
+    """The mounted 12-set's marks — one per wedge, DAILY cadence (the
+    current-mark emphasis is a day computation, never per-tick). Missing
+    art (the months set, pre-owner-art) falls back to the entity's NAME,
+    the SAME convention archetype figures/weekday bodies use
+    (`draw_archetype_figure`) — never a blank gap."""
+    mount_radius = ctx.radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
+    mark_height = 2 * ctx.radius * defaults.CALENDAR_MOUNT_MARK_SCALE
+    current = calendar_mount_current_index(mount, ctx.day)
+    for index, (name, art) in enumerate(calendar_mount_entries(mount)):
+        pos = dial_point(calendar_mount_angle(mount, index), mount_radius)
+        alpha = defaults.CALENDAR_MOUNT_ALPHA + (
+            defaults.CALENDAR_MOUNT_LIT_DELTA if index == current else 0.0
+        )
+        painter.save()
+        painter.setOpacity(min(1.0, alpha))
+        if art is not None:
+            draw_pixmap_centered(painter, ctx, art, pos, mark_height)
+        else:
+            draw_name_label(painter, name, pos, name_label_px(name, mark_height))
+        painter.restore()
 
 
 def tinted_gray(value: int, tint: str | None) -> QColor:
@@ -1112,6 +1200,8 @@ class BackgroundLayer(Layer):
                 painter.setBrush(QColor(palette[index]))
                 draw_pie(painter, cal_radius, start, end)
                 painter.restore()
+            if ctx.skin.calendar_mount != "off":
+                _draw_calendar_mount(painter, ctx, ctx.skin.calendar_mount)
             return
 
         # Colorful off (Elements switch): the day/twilight arcs are still

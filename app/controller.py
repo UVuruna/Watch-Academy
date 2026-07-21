@@ -674,6 +674,7 @@ def apply_display_settings(skin, settings: Settings):
         umbra_contrast=settings.umbra_contrast,
         palette_style=settings.palette_style,
         calendar_lighting=settings.calendar_lighting,
+        calendar_mount=settings.calendar_mount,
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
         # bands anchor to the real sun events, so the whole wheel keeps
         # the solar frame regardless of the toggle.
@@ -2412,6 +2413,9 @@ class WatchController(QObject):
             ),
             "calendar_lighting": wrap(
                 lambda v: self._set_display_choice("calendar_lighting", v)
+            ),
+            "calendar_mount": wrap(
+                lambda v: self._set_display_choice("calendar_mount", v)
             ),
             "ring": wrap(self._set_ring),
             "ring_finish": wrap(

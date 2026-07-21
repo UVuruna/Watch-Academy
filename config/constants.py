@@ -365,6 +365,14 @@ CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
 # double-hour, shichen); "year" — the current MONTH's wedge (Almanac)
 # or the current SIGN's wedge (Zodiac).
 CALENDAR_LIGHTING_MODES = ("hour", "year")
+# The CALENDAR-POINTER 12-SET MOUNT (owner DESIGN ZODIAC law, R9a round
+# 2026-07-21): "off" — no marks; "zodiac" — the astrology sign register
+# (the SAME colored badges the wedge hover already shows); "months" —
+# the Slavic months (defaults.SLAVIC_MONTHS, graceful-absent art). ONE
+# mount at a time, independent of `palette_style`/`calendar_lighting` —
+# a mount rides its OWN fixed wheel geometry regardless of which wheel
+# paints the background wedges (render.layers.calendar_mount_wheel).
+CALENDAR_MOUNT_MODES = ("off", "zodiac", "months")
 
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
 # stay hexa/cross/octa/trio (settings and code stability); the menu and
