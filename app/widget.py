@@ -19,11 +19,11 @@ _HOVER_BYPASS = getattr(
     Qt.KeyboardModifier, defaults.HOVER_BYPASS_MODIFIER
 )
 
-# The keyboard SHORTCUT map (R5 MENU REWORK), resolved ONCE from
-# `defaults.SHORTCUTS` into real Qt.Key/Qt.KeyboardModifier values —
-# the same config-stays-Qt-free convention `_HOVER_BYPASS` above uses.
-# A single-modifier tuple reduces to that one flag (every entry today
-# carries exactly one — ControlModifier).
+# The keyboard SHORTCUT map (R5 MENU REWORK; R5b FINAL MAP round),
+# resolved ONCE from `defaults.SHORTCUTS` into real Qt.Key/
+# Qt.KeyboardModifier values — the same config-stays-Qt-free convention
+# `_HOVER_BYPASS` above uses. A modifier tuple ("ControlModifier",) or
+# ("ControlModifier", "AltModifier") combines with bitwise OR.
 def _resolved_modifiers(names: tuple[str, ...]) -> Qt.KeyboardModifier:
     combined = Qt.KeyboardModifier.NoModifier
     for name in names:
@@ -35,6 +35,15 @@ _SHORTCUTS = tuple(
     (action_id, getattr(Qt.Key, key_name), _resolved_modifiers(modifier_names))
     for action_id, key_name, modifier_names, _description in defaults.SHORTCUTS
 )
+# A numpad-originated key event (R5b: Ctrl+numpad-plus, the
+# `fast_travel_future` alternate binding) carries Qt's OWN
+# `KeypadModifier` flag alongside whatever the user actually held —
+# that flag names WHICH physical key group fired, not an intended
+# modifier, so it is masked out of `event.modifiers()` before matching
+# against the table (every SHORTCUTS entry lists only INTENDED
+# modifiers). Harmless for every non-numpad combo, which never carries
+# the flag to begin with.
+_IGNORED_MODIFIERS = Qt.KeyboardModifier.KeypadModifier
 
 
 class ClockWidget(QWidget):
@@ -302,16 +311,25 @@ class ClockWidget(QWidget):
         # hidden-mode code buffer. This is the FOCUSED fallback; the
         # unfocused case (owner law 2026-07-18) comes through the native
         # hook, which consumes SPACE so this path never double-fires.
-        if event.key() == Qt.Key.Key_Space:
+        # BARE Space only (R5b FINAL MAP round): Ctrl+Space is now
+        # `location_greenwich` in `defaults.SHORTCUTS` — without this
+        # guard a held Ctrl would still match `Key_Space` here FIRST and
+        # the shortcut table below would never be reached.
+        if (
+            event.key() == Qt.Key.Key_Space
+            and event.modifiers() == Qt.KeyboardModifier.NoModifier
+        ):
             self._trigger_space_jump()
             return
         # KEYBOARD SHORTCUTS (R5 MENU REWORK, `defaults.SHORTCUTS`) —
         # checked BEFORE the typed/secret-buffer path (though every
         # entry carries a modifier, so `event.text()` would already be
         # non-printable and fall to `super()` below on its own; this
-        # ordering just keeps the intent obvious).
+        # ordering just keeps the intent obvious). `_IGNORED_MODIFIERS`
+        # is masked out first — see its own comment above.
+        held = event.modifiers() & ~_IGNORED_MODIFIERS
         for action_id, key, modifiers in _SHORTCUTS:
-            if event.key() == key and event.modifiers() == modifiers:
+            if event.key() == key and held == modifiers:
                 self.shortcut_triggered.emit(action_id)
                 return
         text = event.text()

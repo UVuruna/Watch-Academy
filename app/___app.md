@@ -79,6 +79,12 @@ The scrollable hover window replacing QToolTip: capped to screen
 fractions, taller articles scroll, stays open while the cursor is over
 it. See [Legend Popup](legend_popup.md).
 
+### `fast_travel_flash.py` — Fast Travel Flash
+The small transient overlay (R5b FINAL MAP round, owner spec sealed
+2026-07-21) flashed above the dial on every Ctrl+[ / Ctrl+] Fast Travel
+theme/option change — icon + option text, auto-fading. See
+[Fast Travel Flash](fast_travel_flash.md).
+
 ### `encyclopedia.py` — Encyclopedia Dialog
 The article browser: a grouped topic gallery, then a SLIDER paging one
 entry at a time with Home / Download and the look arrows.

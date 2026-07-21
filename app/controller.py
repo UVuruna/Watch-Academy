@@ -16,6 +16,7 @@ a `WatchController` itself still knows nothing about its siblings.
 """
 
 import dataclasses
+import re
 import sys
 import random
 import threading
@@ -43,6 +44,7 @@ from PySide6.QtWidgets import (
 from app import native
 from app.design_window import DesignDialog
 from app.encyclopedia import EncyclopediaDialog
+from app.fast_travel_flash import FastTravelFlash
 from app.observatory import ObservatoryDialog
 from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
@@ -217,6 +219,64 @@ def _next_rotation_theme(current: str, selected: tuple[str, ...]) -> str:
     if current in selected:
         return selected[(selected.index(current) + 1) % len(selected)]
     return selected[0]
+
+
+# FAST TRAVEL (R5b round, owner spec sealed 2026-07-21): the Sun/Moon
+# Quick Jump kinds gained an optional PHASE FILTER suffix so the SAME
+# `_compute_jump` branch that already answers "next_sun"/"prev_sun"/
+# "next_moon"/"prev_moon" (any turning point/phase — the Time Travel
+# dialog's own rows, unchanged) also answers the narrower
+# "next_sun_solstice"/"next_sun_equinox"/"next_moon_new"/
+# "next_moon_full"/"next_moon_quarter" kinds `defaults.
+# FAST_TRAVEL_THEMES` builds its `jump_stem`s from — one path, not a
+# second copy (Rule #5).
+_SUN_MOON_JUMP_PATTERN = re.compile(
+    r"^(next|prev)_(sun|moon)(?:_(solstice|equinox|new|full|quarter))?$"
+)
+# Index into `SeasonsRepository.year_anchors().instants` (the 6 anchors,
+# `constants.YEAR_ANCHOR_ANGLES` order: prev Dec solstice, spring
+# equinox, summer solstice, autumn equinox, this Dec solstice, next
+# spring equinox) — solstices sit at the EVEN indices, equinoxes at the
+# ODD.
+_SOLSTICE_ANCHOR_INDICES = (0, 2, 4)
+_EQUINOX_ANCHOR_INDICES = (1, 3, 5)
+# MoonWindow events carry the phase as a FRACTION
+# (constants.MOON_PHASE_FRACTIONS): New 0.0, First Quarter 0.25, Full
+# 0.5, Third Quarter 0.75.
+_QUARTER_MOON_FRACTIONS = (0.25, 0.75)
+
+
+def _filtered_sun_anchors(
+    instants: tuple[datetime, ...], phase_filter: str | None
+) -> tuple[datetime, ...]:
+    """The year's 6 season anchors, narrowed to solstices/equinoxes only
+    when `phase_filter` asks for it — None (the plain "any turning
+    point" row) keeps all six, unchanged from before this filter
+    existed."""
+    if phase_filter == "solstice":
+        return tuple(instants[i] for i in _SOLSTICE_ANCHOR_INDICES)
+    if phase_filter == "equinox":
+        return tuple(instants[i] for i in _EQUINOX_ANCHOR_INDICES)
+    return instants
+
+
+def _filtered_moon_events(
+    events: tuple[tuple[datetime, float], ...], phase_filter: str | None
+) -> tuple[datetime, ...]:
+    """The year's principal-phase events, narrowed to New/Full/Quarter
+    only when `phase_filter` asks for it — None keeps every phase,
+    unchanged from before this filter existed."""
+    if phase_filter == "new":
+        return tuple(when for when, fraction in events if fraction == 0.0)
+    if phase_filter == "full":
+        return tuple(when for when, fraction in events if fraction == 0.5)
+    if phase_filter == "quarter":
+        return tuple(
+            when
+            for when, fraction in events
+            if fraction in _QUARTER_MOON_FRACTIONS
+        )
+    return tuple(when for when, _fraction in events)
 
 
 def _earth_continent(settings: Settings) -> str:
@@ -722,8 +782,16 @@ class WatchController(QObject):
         self._design: DesignDialog | None = None
         self._pointer_theme: PointerThemeDialog | None = None
         self._slot_theme: SlotThemeDialog | None = None
+        # FAST TRAVEL / LOCATIONS shortcut state (R5b round, owner spec,
+        # sealed 2026-07-21) — SESSION-only, like the hidden-mode unlock:
+        # the theme/option cursors and the custom-city cursor start fresh
+        # on every launch, nothing here is persisted to settings.
+        self._fast_travel_theme_index = 0
+        self._fast_travel_option_indices: dict[str, int] = {}
+        self._jump_city_index = 0
         self._menu = self._build_menu()
         self._legend = LegendPopup()
+        self._fast_travel_flash = FastTravelFlash()
         self._widget = ClockWidget(
             self._settings.diameter, self._menu, self._legend, self._show_action
         )
@@ -1201,10 +1269,15 @@ class WatchController(QObject):
     _WEEKDAY_THEME_ORDER = defaults.WEEKDAY_MENU_TOP + tuple(
         key for _title, keys in defaults.WEEKDAY_MENU_GROUPS for key in keys
     )
+    #: The 4 Complication modes, in `constants.SLOT_COMPLICATION_TITLES`'s
+    #: own dict order (Digital Time -> Date -> Day length -> Seconds) —
+    #: the R5b SLOTS shortcuts (Ctrl+1/2/3) cycle through exactly this.
+    _SLOT_COMPLICATION_ORDER = tuple(constants.SLOT_COMPLICATION_TITLES)
 
     def _on_shortcut(self, action_id: str) -> None:
         """Dispatch one `defaults.SHORTCUTS` entry (owner "OSMISLITI ŠTA
-        SVE" — the full map is designed and pinned by
+        SVE"; R5b FINAL MAP round for the SLOTS/FAST TRAVEL/LOCATIONS
+        additions — the full map is designed and pinned by
         `tests/test_shortcuts.py`). Every shortcut needs the dial to
         hold keyboard focus (`ClockWidget.keyPressEvent` is the only
         source of this signal)."""
@@ -1219,6 +1292,21 @@ class WatchController(QObject):
             "open_time_travel": self._open_time_travel,
             "return_to_now": self._end_simulation,
             "toggle_archetype": self._toggle_archetype_shortcut,
+            "cycle_slot1_complication": lambda: self._cycle_slot_complication(1),
+            "cycle_slot2_complication": lambda: self._cycle_slot_complication(2),
+            "cycle_slot3_complication": lambda: self._cycle_slot_complication(3),
+            "cycle_slot1_theme": lambda: self._cycle_slot_weekday_theme(1),
+            "cycle_slot2_theme": lambda: self._cycle_slot_weekday_theme(2),
+            "cycle_slot3_theme": lambda: self._cycle_slot_weekday_theme(3),
+            "fast_travel_theme": self._cycle_fast_travel_theme,
+            "fast_travel_option": self._cycle_fast_travel_option,
+            "fast_travel_past": lambda: self._step_fast_travel(-1),
+            "fast_travel_future": lambda: self._step_fast_travel(1),
+            "location_north_pole": lambda: self._jump_to_place("north_pole"),
+            "location_south_pole": lambda: self._jump_to_place("south_pole"),
+            "location_greenwich": lambda: self._jump_to_place("greenwich"),
+            "location_prev_city": lambda: self._cycle_jump_city(-1),
+            "location_next_city": lambda: self._cycle_jump_city(1),
         }
         handlers[action_id]()
 
@@ -1232,16 +1320,205 @@ class WatchController(QObject):
         current = names.index(self._settings.ring)
         self._set_ring(names[(current + 1) % len(names)])
 
+    def _weekday_theme_on_diamonds(self) -> bool:
+        """True when the 1st Slot's `weekday_theme` is the theme
+        actually PAINTED on the star's diamonds right now (R5b round,
+        owner spec for Ctrl+W: "ONLY when the theme is displayed on the
+        DIAMONDS"). Four conditions: the pointer HAS diamonds at all
+        (Aurora/Calendar draw none — `constants.POINTER_ARM_HALF_ANGLE_DEG`'s
+        own membership is the existing test for that), the Pointer
+        element is visible, the 1st Slot is visible, and its EFFECTIVE
+        mode is "weekday" (`_effective_weekday_slot`) rather than a
+        digital/astrology complication. Under this last condition
+        `_classic_slot_theme` ALWAYS returns `weekday_theme` — its own
+        Seasons/Compass redirect to `info_slot_theme` fires ONLY when
+        `_effective_weekday_slot` is NOT "weekday" (see that function's
+        docstring) — so nothing else can be silently wearing a
+        DIFFERENT theme on the diamonds while this predicate holds."""
+        settings = self._settings
+        return (
+            settings.pointer in constants.POINTER_ARM_HALF_ANGLE_DEG
+            and settings.show_pointer
+            and settings.show_weekday
+            and _effective_weekday_slot(settings) == "weekday"
+        )
+
     def _cycle_weekday_theme(self) -> None:
         """Ctrl+W: the next Weekday theme (the 1st Slot's own —
         `_WEEKDAY_THEME_ORDER`, the Weekday grid's own order); the
         roster/metal the theme is already wearing stays untouched, like
-        clicking the plain theme tile. `_set_weekday_theme` runs
-        `_install_skin`, which refreshes the Pointer Theme / Slot Theme
-        windows in place when either happens to be open."""
+        clicking the plain theme tile. STRICT NO-OP (R5b round, owner
+        spec) unless `_weekday_theme_on_diamonds()` — cycling a theme
+        nobody can see would be a silent, invisible state change.
+        `_set_weekday_theme` runs `_install_skin`, which refreshes the
+        Pointer Theme / Slot Theme windows in place when either happens
+        to be open."""
+        if not self._weekday_theme_on_diamonds():
+            return
         order = self._WEEKDAY_THEME_ORDER
         current = order.index(self._settings.weekday_theme)
         self._set_weekday_theme(order[(current + 1) % len(order)])
+
+    # --- SLOTS shortcuts (R5b round, owner spec) --------------------------------
+
+    def _slot_active(self, index: int) -> bool:
+        """Whether Slot `index` (1/2/3) is currently active/visible —
+        the SAME effective enablement `apply_display_settings` renders
+        with (the 3rd only counts on top of the 2nd, `show_third_slot
+        and show_octa_slot` — the "slots enable IN ORDER" rule)."""
+        settings = self._settings
+        if index == 1:
+            return settings.show_weekday
+        if index == 2:
+            return settings.show_octa_slot
+        return settings.show_third_slot and settings.show_octa_slot
+
+    def _slot_mode_state(self, index: int) -> tuple[str, Callable[[str], None]]:
+        """(current mode, setter) for Slot `index`'s own MODE field —
+        the SAME setters `_slot_descriptors()` wires the Slot Theme
+        window's own mode picker through (Rule #5)."""
+        settings = self._settings
+        if index == 1:
+            return settings.weekday_slot, (
+                lambda mode: self._set_display_choice("weekday_slot", mode)
+            )
+        if index == 2:
+            return settings.octa_slot, self._set_south_slot
+        return settings.third_slot, self._set_third_slot
+
+    def _slot_theme_state(self, index: int) -> tuple[str, Callable[[str], None]]:
+        """(current weekday theme, setter) for Slot `index` — the setter
+        ALSO switches that slot's mode to "weekday" as a side effect
+        (the SAME `_set_weekday_theme`/`_set_south_slot`/
+        `_set_third_slot` behavior the Slot Theme window's own theme
+        picker already relies on), so cycling the theme via the
+        keyboard is also how you switch a slot INTO weekday-display
+        mode with one repeated press."""
+        settings = self._settings
+        if index == 1:
+            return settings.weekday_theme, self._set_weekday_theme
+        if index == 2:
+            return settings.info_slot_theme, (
+                lambda theme: self._set_south_slot("weekday", theme=theme)
+            )
+        return settings.third_slot_theme, (
+            lambda theme: self._set_third_slot("weekday", theme=theme)
+        )
+
+    def _cycle_slot_complication(self, index: int) -> None:
+        """Ctrl+1/2/3: the next Complication (Digital Time -> Date ->
+        Day length -> Seconds, `_SLOT_COMPLICATION_ORDER`) in Slot
+        `index` — a strict no-op while that slot is not active/visible
+        (`_slot_active`). A slot currently showing a NON-complication
+        (Weekday/Zodiac/Ascendant/Chinese) starts the cycle from the
+        top, the SAME "outside the list starts fresh" rule
+        `_next_rotation_theme` already applies to theme rotation."""
+        if not self._slot_active(index):
+            return
+        mode, setter = self._slot_mode_state(index)
+        setter(_next_rotation_theme(mode, self._SLOT_COMPLICATION_ORDER))
+
+    def _cycle_slot_weekday_theme(self, index: int) -> None:
+        """Ctrl+Alt+1/2/3: the next Weekday theme in Slot `index`
+        (`_WEEKDAY_THEME_ORDER`) — a strict no-op while that slot is not
+        active/visible (`_slot_active`). Unlike Ctrl+W this carries NO
+        "already displaying a theme" guard: the setter itself switches
+        the slot's mode to "weekday" (see `_slot_theme_state`), so one
+        press both picks the next theme AND makes it visible — the
+        direct route into weekday-display mode for slots 2/3, which
+        have no dedicated "show weekday bodies here" toggle of their
+        own beyond picking a theme."""
+        if not self._slot_active(index):
+            return
+        theme, setter = self._slot_theme_state(index)
+        setter(_next_rotation_theme(theme, self._WEEKDAY_THEME_ORDER))
+
+    # --- FAST TRAVEL shortcuts (R5b round, owner spec) --------------------------
+
+    def _fast_travel_theme(self) -> dict:
+        return defaults.FAST_TRAVEL_THEMES[self._fast_travel_theme_index]
+
+    def _fast_travel_option_index(self, theme_id: str) -> int:
+        """The REMEMBERED option cursor for `theme_id` (owner spec: each
+        theme keeps its own pick across Ctrl+[ switches) — 0 (the
+        theme's first option) for a theme never touched this session."""
+        return self._fast_travel_option_indices.get(theme_id, 0)
+
+    def _cycle_fast_travel_theme(self) -> None:
+        """Ctrl+[: the next Fast Travel theme (Sun -> Moon -> Calendar
+        -> Sun, `defaults.FAST_TRAVEL_THEMES`'s own order) — flashes the
+        NEW theme's logo (owner spec: every Ctrl+[ / Ctrl+] change
+        flashes)."""
+        self._fast_travel_theme_index = (
+            self._fast_travel_theme_index + 1
+        ) % len(defaults.FAST_TRAVEL_THEMES)
+        self._flash_fast_travel()
+
+    def _cycle_fast_travel_option(self) -> None:
+        """Ctrl+]: the next OPTION inside the ACTIVE theme — flashes it
+        (owner spec)."""
+        theme = self._fast_travel_theme()
+        count = len(theme["options"])
+        index = self._fast_travel_option_index(theme["id"])
+        self._fast_travel_option_indices[theme["id"]] = (index + 1) % count
+        self._flash_fast_travel()
+
+    def _flash_fast_travel(self) -> None:
+        """Show the ACTIVE (theme, option)'s icon + option text above
+        THIS watch's own dial (owner spec: "per-watch — the focused
+        watch flashes its own" — trivially true here since a shortcut
+        only ever reaches the FOCUSED widget's `_on_shortcut` to begin
+        with)."""
+        theme = self._fast_travel_theme()
+        option = theme["options"][self._fast_travel_option_index(theme["id"])]
+        icon_key = theme["icon_key"]
+        icon_path = defaults.icon_path(icon_key) if icon_key is not None else None
+        self._fast_travel_flash.flash(
+            self._widget, icon_path, theme["emoji"], self._ui(option["title"])
+        )
+
+    def _step_fast_travel(self, direction: int) -> None:
+        """Ctrl+minus/Ctrl+plus: one step past (`direction=-1`)/future
+        (`direction=1`) along the ACTIVE (theme, option) — riding the
+        SAME `_compute_jump` kinds Quick Jump uses (owner spec:
+        "chaining law — each jump starts from the active simulation",
+        `_active_simulation_or_now`). No flash on a step (owner spec
+        scopes the flash to the Ctrl+[ / Ctrl+] PICKERS only)."""
+        theme = self._fast_travel_theme()
+        option = theme["options"][self._fast_travel_option_index(theme["id"])]
+        kind = f"{'next' if direction > 0 else 'prev'}_{option['jump_stem']}"
+        moment, observer, cycles = self._active_simulation_or_now()
+        self._apply_jump(moment, observer, cycles, kind)
+
+    # --- LOCATIONS shortcuts (R5b round, owner spec) -----------------------------
+
+    def _jump_to_place(self, kind: str) -> None:
+        """Ctrl+Up/Down/Space: jump the ACTIVE simulation (or, absent
+        one, the live now) to `kind` ("north_pole"/"south_pole"/
+        "greenwich") — the SAME `_compute_jump` kinds the Time Travel
+        dialog's own place buttons use (Rule #5), applied straight to
+        the live dial instead of a dialog draft."""
+        moment, observer, cycles = self._active_simulation_or_now()
+        self._apply_jump(moment, observer, cycles, kind)
+
+    def _cycle_jump_city(self, direction: int) -> None:
+        """Ctrl+Left/Right: step through the user's own CUSTOM Quick
+        Jump cities (owner spec) — a STRICT no-op with none defined (no
+        index change, no jump). `_jump_city_index` names the city THIS
+        press lands on (shown first, THEN advanced for the NEXT press)
+        — so the very FIRST press, either direction, lands on the
+        FIRST custom city (index 0, the natural "nothing chosen yet"
+        starting point) and only the SECOND press actually reveals which
+        direction was held. Session-only cursor, like the Fast Travel
+        theme/option cursors."""
+        cities = self._settings.jump_cities
+        if not cities:
+            return
+        count = len(cities)
+        city = cities[self._jump_city_index % count]
+        self._jump_city_index = (self._jump_city_index + direction) % count
+        moment, observer, cycles = self._active_simulation_or_now()
+        self._apply_jump(moment, observer, cycles, "city", dict(city))
 
     def _cycle_slots(self) -> None:
         """Ctrl+N: the number of visible Slots, 0 → 1 → 2 → 3 → 0 (the
@@ -1780,6 +2057,21 @@ class WatchController(QObject):
         """The active language's form of a chrome string (Phase 2)."""
         return ui(self._translation_overlay, text)
 
+    @staticmethod
+    def _labeled(text: str, action_id: str) -> str:
+        """R5 doubt 4 FOLLOW-UP (R5b round, owner spec): appends the
+        shortcut's own "Ctrl+X" combo to a flat menu entry's text via a
+        tab character — Qt's own convention for a right-aligned
+        accelerator-style hint in a QMenu row, WITHOUT wiring a real
+        competing `QAction.setShortcut` (every shortcut already fires
+        through `ClockWidget.keyPressEvent` -> `shortcut_triggered`; a
+        second Qt-level shortcut on the SAME key would double-dispatch).
+        Only entries with a DIRECT, unambiguous 1:1 shortcut (the five
+        dialog openers + Archetype) use this — the cycling/Fast-Travel/
+        Location shortcuts live inside mini windows or have no menu
+        surface of their own at all."""
+        return f"{text}\t{defaults.shortcut_display(action_id)}"
+
     def _build_menu(self) -> QMenu:
         menu = _StayOpenMenu()
         settings = self._settings
@@ -1946,7 +2238,9 @@ class WatchController(QObject):
         # model and all three slots step aside (render-level override —
         # the slot settings stay put). Grayed on Aurora/Calendar.
         self._archetype_action = self._add_toggle(
-            menu, f"🎭 {tr('Archetype')}", settings.archetype_mode,
+            menu,
+            self._labeled(f"🎭 {tr('Archetype')}", "toggle_archetype"),
+            settings.archetype_mode,
             lambda checked: self._set_display_choice(
                 "archetype_mode", checked
             ),
@@ -1972,21 +2266,34 @@ class WatchController(QObject):
                "hover info still works. Turn it back off here in the tray."),
         )
         menu.addSeparator()
-        settings_action = QAction(f"⚙️ {tr('Settings…')}", menu)
+        settings_action = QAction(
+            self._labeled(f"⚙️ {tr('Settings…')}", "open_settings"), menu
+        )
         settings_action.triggered.connect(self._open_settings)
         menu.addAction(settings_action)
-        encyclopedia = QAction(f"🏛️ {tr('Encyclopedia…')}", menu)
+        encyclopedia = QAction(
+            self._labeled(f"🏛️ {tr('Encyclopedia…')}", "open_encyclopedia"),
+            menu,
+        )
         encyclopedia.triggered.connect(
             lambda: self._open_encyclopedia_at(None, 0)
         )
         menu.addAction(encyclopedia)
-        observatory = QAction(f"🔭 {tr('Observatory…')}", menu)
+        observatory = QAction(
+            self._labeled(f"🔭 {tr('Observatory…')}", "open_observatory"),
+            menu,
+        )
         observatory.triggered.connect(self._open_observatory)
         menu.addAction(observatory)
-        guide = QAction(f"📖 {tr('Guide…')}", menu)
+        guide = QAction(
+            self._labeled(f"📖 {tr('Guide…')}", "open_guide"), menu
+        )
         guide.triggered.connect(self._open_guide)
         menu.addAction(guide)
-        time_travel = QAction(f"🕰️ {tr('Time Travel…')}", menu)
+        time_travel = QAction(
+            self._labeled(f"🕰️ {tr('Time Travel…')}", "open_time_travel"),
+            menu,
+        )
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
         # QUICK JUMP DIED HERE (owner rounds 2026-07-14/15; Session 16
@@ -2383,21 +2690,40 @@ class WatchController(QObject):
             return min(first, deep_first), max(last, deep_last)
         return first, last
 
+    def _active_simulation_or_now(self) -> tuple[datetime, astral.Observer, int]:
+        """The (moment, observer, cycles) every LIVE travel path chains
+        from (owner spec, R5b round: "each jump starts from the active
+        simulation") — the running simulation while one is live, else
+        the real wall clock at the home observer. Used directly by
+        every keyboard Fast Travel/Location shortcut
+        (`_jump_to_place`/`_cycle_jump_city`/`_step_fast_travel`) and, by
+        `_open_time_travel` below, to seed the DIALOG'S own fields —
+        the SAME rule this round factored out of that seeding (Rule #5:
+        one source for "what does 'right now' mean while travelling")."""
+        if self._simulation is not None:
+            moment, observer = self._simulation
+            return moment, observer, self._sim_cycles
+        return datetime.now(self._tz), self._observer, 0
+
+    def _apply_jump(
+        self, moment: datetime, observer, cycles: int, kind: str,
+        city: dict | None = None,
+    ) -> None:
+        """One `_compute_jump` step, applied straight to the LIVE dial
+        (`_start_simulation`) instead of a dialog draft — the shared
+        tail every keyboard travel shortcut uses. A clamp (`None`) is a
+        silent no-op, matching every other Quick Jump caller."""
+        result = self._compute_jump(moment, observer, cycles, kind, city)
+        if result is not None:
+            self._start_simulation(*result)
+
     def _open_time_travel(self) -> None:
         # A running simulation SEEDS the dialog (owner 2026-07-14):
         # after a quick jump the offered coordinates and moment are
         # the simulated ones, not the home city's.
-        if self._simulation is not None:
-            sim_moment, sim_observer = self._simulation
-            initial = sim_moment.astimezone(self._tz).replace(tzinfo=None)
-            cycles = self._sim_cycles
-            latitude = sim_observer.latitude
-            longitude = sim_observer.longitude
-        else:
-            initial = datetime.now(self._tz).replace(tzinfo=None)
-            cycles = 0
-            latitude = self._settings.latitude
-            longitude = self._settings.longitude
+        moment, observer, cycles = self._active_simulation_or_now()
+        initial = moment.astimezone(self._tz).replace(tzinfo=None)
+        latitude, longitude = observer.latitude, observer.longitude
         dialog = TimeTravelDialog(
             latitude, longitude,
             overlay=self._translation_overlay,
@@ -2511,7 +2837,9 @@ class WatchController(QObject):
         moment, observer, cycles = base_moment, base_observer, base_cycles
         first, last = self._travel_coverage()
         astro_base = real_year(base_moment.year, base_cycles)
-        if kind in ("next_sun", "prev_sun", "next_moon", "prev_moon"):
+        sun_moon_match = _SUN_MOON_JUMP_PATTERN.match(kind)
+        if sun_moon_match:
+            direction, body, phase_filter = sun_moon_match.groups()
             # Gather turning points only from years the databases cover, so
             # the anchor lookup itself never steps off the edge (owner
             # 2026-07-16). year_anchors(N) already reaches into N-1/N+1.
@@ -2527,12 +2855,13 @@ class WatchController(QObject):
             candidates: dict[float, tuple[datetime, int]] = {}
             for year in years:
                 cycles_of_year = proxy_cycles(year)
-                if kind.endswith("sun"):
-                    source = self._seasons.year_anchors(year).instants
+                if body == "sun":
+                    source = _filtered_sun_anchors(
+                        self._seasons.year_anchors(year).instants, phase_filter
+                    )
                 else:
-                    source = tuple(
-                        when
-                        for when, _ in self._moon_phases.moon_window(year).events
+                    source = _filtered_moon_events(
+                        self._moon_phases.moon_window(year).events, phase_filter
                     )
                 for when in source:
                     candidates[julian_day_of(when, cycles_of_year)] = (
@@ -2542,7 +2871,7 @@ class WatchController(QObject):
             # The simulated moment is floored to the minute, so the
             # landed-on instant lies seconds AHEAD of it — the strict
             # one-minute guard keeps "next" from re-picking it.
-            if kind.startswith("next"):
+            if direction == "next":
                 order = sorted(jd for jd in candidates if jd > base_jd + 1.0 / 1440.0)
             else:
                 order = sorted(

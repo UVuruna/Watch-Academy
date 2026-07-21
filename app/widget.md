@@ -69,20 +69,30 @@ to fit exactly.
   restart. The snap-back QTimer fires only on a START (a stale shot
   after a toggle-off repaints harmlessly); any other double-click
   falls through to Qt's default handling
-- `keyPressEvent()`: SPACE is handled FIRST (owner 2026-07-16, ROADMAP
-  queue #8) — it calls `_trigger_space_jump()`; because " " is printable
-  this MUST precede the typed path (otherwise Space would feed the
+- `keyPressEvent()`: BARE SPACE is handled FIRST (owner 2026-07-16,
+  ROADMAP queue #8; NO-MODIFIER guard added R5b FINAL MAP round — Ctrl+
+  Space is now `location_greenwich`, so the branch must let a HELD
+  modifier fall through instead of eating every Space unconditionally)
+  — it calls `_trigger_space_jump()`; because " " is printable this
+  MUST precede the typed path (otherwise Space would feed the
   hidden-mode code buffer). This is the FOCUSED fallback; the UNFOCUSED
   case comes through the native keyboard hook (see below). Next, the
-  KEYBOARD SHORTCUTS table (R5 MENU REWORK, `defaults.SHORTCUTS`,
-  resolved once at import time into `_SHORTCUTS` — the SAME config-
-  stays-Qt-free convention `_HOVER_BYPASS` already uses): a matching
-  `(key, modifiers)` pair emits `shortcut_triggered(action_id)` and
-  returns. Every shortcut carries a MODIFIER by construction, so it can
-  never reach the typed path below it — this ordering is belt-and-
-  suspenders, not load-bearing (a held-modifier key event already
-  produces non-printable `event.text()`). Every OTHER printable key
-  still emits `typed`
+  KEYBOARD SHORTCUTS table (R5 MENU REWORK, extended R5b FINAL MAP
+  round, `defaults.SHORTCUTS`, resolved once at import time into
+  `_SHORTCUTS` — the SAME config-stays-Qt-free convention
+  `_HOVER_BYPASS` already uses): `event.modifiers()` is first masked
+  against `_IGNORED_MODIFIERS` (`Qt.KeyboardModifier.KeypadModifier` —
+  a numpad-originated key, e.g. the `fast_travel_future` alternate
+  Ctrl+numpad-plus binding, carries this flag alongside whatever the
+  user actually held; it names WHICH physical key group fired, not an
+  intended modifier, so matching against the RAW `event.modifiers()`
+  would silently miss every numpad combo) and a matching `(key,
+  modifiers)` pair emits `shortcut_triggered(action_id)` and returns.
+  Every shortcut carries a MODIFIER by construction, so it can never
+  reach the typed path below it — this ordering is belt-and-suspenders,
+  not load-bearing (a held-modifier key event already produces
+  non-printable `event.text()`). Every OTHER printable key still emits
+  `typed`
 - `_trigger_space_jump()`: the ONE SPACE handler, shared by
   `keyPressEvent` and the queued native-hook delivery — over a themed
   hover target (weekday body, astrology/ascendant/Chinese slot, hexa sign

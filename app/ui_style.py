@@ -63,8 +63,8 @@ def style_finish_frame(label, finish: str) -> None:
     """The FINISH SWITCHER's caption (owner fix round R3, Color
     Switcher.png): a border-only frame in the finish's own color — NO
     fill, so it reads as a selector chip rather than another solid
-    button. "Colored" wears a swept-spectrum gradient border (owner
-    exact order: lavender/blue/cyan/green/yellow/orange/red) — QSS has
+    button. "Colored" wears a two-stop gradient border (owner
+    correction 2026-07-21: blue on the left flowing to red) — QSS has
     no gradient BORDER property, so the gradient is faked the standard
     Qt way: the OUTER widget paints the gradient as its background and
     the inset padding shows through as a colored "border ring" around

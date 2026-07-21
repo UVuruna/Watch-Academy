@@ -40,6 +40,8 @@ See [Watch Manager](watch_manager.md) for the roster-level mechanics
 - [Compositor](../render/compositor.md), [Assets](../render/assets.md) — rendering
 - [Design Window](design_window.md), [Pointer Theme](pointer_theme.md),
   [Slot Theme](slot_theme.md) — the three R5 mini windows
+- [Fast Travel Flash](fast_travel_flash.md) — one instance per watch
+  (R5b round); `_flash_fast_travel()` shows it on every Ctrl+[/Ctrl+]
 - [Time Travel](time_travel.md) — now hosts its own Quick Jump rows
   (item 3A), fed by `_dialog_jump`/`_compute_jump`
 - [Config (folder)](../config/___config.md) — defaults (DEFAULT_CITY, DEFAULT_SKIN,
@@ -214,6 +216,18 @@ pattern) rather than guessed:
   the one-watch-only teardown, Exit is deliberately process-wide). The
   QUICK JUMP submenu (the OTHER half of the "4-5 levels" complaint) is
   GONE — absorbed into the Time Travel dialog itself (item 3A).
+  **R5 doubt 4 FOLLOW-UP (R5b round):** the six flat entries with a
+  DIRECT 1:1 keyboard shortcut (Encyclopedia, Guide, Settings,
+  Observatory, Time Travel, Archetype) carry the combo appended via
+  `_labeled(text, action_id)` — a tab character plus
+  `defaults.shortcut_display(action_id)`, Qt's own convention for a
+  right-aligned accelerator hint in a `QMenu` row, deliberately WITHOUT
+  a real `QAction.setShortcut` (every shortcut already dispatches
+  through `ClockWidget.keyPressEvent` → `shortcut_triggered`; a second
+  Qt-level shortcut on the same key would double-fire). The
+  cycling/Fast-Travel/Location shortcuts have no single corresponding
+  flat entry (they live inside a mini window, or have no menu surface
+  at all) and are left unlabeled.
   **TRAY-ONLY Show (owner correction, Session 21-D — "ako smo kliknuli
   znači da ga vidim"):** the SAME shared `QMenu` pops from TWO call
   sites — the tray's native popup
@@ -239,24 +253,75 @@ pattern) rather than guessed:
   naziv ako nema potrebe"). Kept as ONE function so that round only had
   to loop it, never reinvent it.
 - `_on_shortcut(action_id)` (R5 MENU REWORK item 2, `defaults.
-  SHORTCUTS`): dispatches one keyboard shortcut, fired by the focused
+  SHORTCUTS`; extended R5b FINAL MAP round, owner spec sealed
+  2026-07-21): dispatches one keyboard shortcut, fired by the focused
   [Clock Widget](widget.md)'s `keyPressEvent` →
   `shortcut_triggered` signal (every combo needs the dial to hold
   keyboard focus — no new global hook this round beyond the existing
   SPACE hook). `_cycle_ring`/`_cycle_weekday_theme` (Ctrl+R/Ctrl+W)
   walk `sorted(ring_presets(...))`/`_WEEKDAY_THEME_ORDER` and delegate
   to `_set_ring`/`_set_weekday_theme`, which already refresh any open
-  mini window through `_install_skin`. `_cycle_slots` (Ctrl+N) walks
-  the 1 → 2 → 3 chain directly, 0→1→2→3→0 — the SAME chain the Slot
-  Theme window's medals respect, and the bootstrap out of "no slot
-  visible" (Slot Theme's own gray condition). `_toggle_archetype_
-  shortcut` (Ctrl+A) mirrors the menu's own Archetype toggle
-  (including its checked-state QAction, bypassed by the shortcut
-  path) — a no-op where the mode is unavailable. The five dialog-
-  opener actions (Ctrl+E/G/,/O/T) and `return_to_now` (Ctrl+Home) call
-  the existing `_open_*`/`_end_simulation` methods directly. A z-mode
-  shortcut was considered and DROPPED (Ctrl+Z's pre-existing "Undo"
-  expectation, which this app has nothing to honor).
+  mini window through `_install_skin`. `_cycle_weekday_theme` gained a
+  STRICT no-op guard this round (`_weekday_theme_on_diamonds()`): the
+  Pointer visible, the pointer variant actually HAS diamonds
+  (`constants.POINTER_ARM_HALF_ANGLE_DEG` excludes Aurora/Calendar),
+  the 1st Slot visible, and its effective mode is "weekday" — under
+  that last condition `_classic_slot_theme` is PROVABLY always reading
+  `weekday_theme` (its own Seasons/Compass redirect only fires when the
+  effective mode is NOT "weekday"), so the guard is exactly "would this
+  cycle be visible". `_cycle_slots` (Ctrl+N) walks the 1 → 2 → 3 chain
+  directly, 0→1→2→3→0 — the SAME chain the Slot Theme window's medals
+  respect, and the bootstrap out of "no slot visible" (Slot Theme's own
+  gray condition). `_toggle_archetype_shortcut` (Ctrl+A) mirrors the
+  menu's own Archetype toggle (including its checked-state QAction,
+  bypassed by the shortcut path) — a no-op where the mode is
+  unavailable. The five dialog-opener actions (now Ctrl+E/G/M/O/T — the
+  R5b map moved Settings off Ctrl+, Rule #6, no leftover binding) and
+  `return_to_now` (Ctrl+Home, now the FULL reset — now AND the home
+  location, since `self._observer`/the home coordinates were never
+  mutated by a simulation to begin with) call the existing
+  `_open_*`/`_end_simulation` methods directly. A z-mode shortcut was
+  considered and DROPPED (Ctrl+Z's pre-existing "Undo" expectation,
+  which this app has nothing to honor).
+  **R5b's three new families** (also dispatched here):
+  - **SLOTS** (Ctrl+1/2/3 Complication, Ctrl+Alt+1/2/3 Weekday theme,
+    per slot): `_slot_active(index)` is the shared strict no-op guard
+    (the "slots enable IN ORDER" rule — slot 3 also needs slot 2 on).
+    `_cycle_slot_complication` walks `_SLOT_COMPLICATION_ORDER`
+    (`tuple(constants.SLOT_COMPLICATION_TITLES)`) via the SAME
+    `_next_rotation_theme` helper the weekday-theme rotation timer
+    already uses (Rule #5) — a slot currently on a NON-complication
+    (Weekday/Zodiac/...) starts the cycle from the top.
+    `_cycle_slot_weekday_theme` walks `_WEEKDAY_THEME_ORDER` the same
+    way, but its OWN setter (`_slot_theme_state`) ALSO switches that
+    slot's mode to "weekday" as a side effect — the direct one-press
+    route into weekday-display mode, since slots 2/3 have no dedicated
+    toggle for it beyond picking a theme.
+  - **FAST TRAVEL** (Ctrl+[ theme, Ctrl+] option, Ctrl+minus/plus
+    step): `_fast_travel_theme_index`/`_fast_travel_option_indices`
+    (session-only state, like the hidden-mode unlock) walk
+    `defaults.FAST_TRAVEL_THEMES` — EACH theme remembers its own
+    option cursor across Ctrl+[ switches. `_step_fast_travel` builds a
+    `_compute_jump` kind as `f"{'next'/'prev'}_{option['jump_stem']}"`
+    from `_active_simulation_or_now()` (the chaining law: "each jump
+    starts from the active simulation") through the shared
+    `_apply_jump` tail (`_compute_jump` then, on a landing,
+    `_start_simulation`). `_flash_fast_travel` fires ONLY from the
+    theme/option pickers (owner spec scopes the flash to Ctrl+[/Ctrl+]
+    — a step carries no flash) — see [Fast Travel Flash](fast_travel_flash.md).
+  - **LOCATIONS** (Ctrl+Up/Down poles, Ctrl+Space Greenwich,
+    Ctrl+Left/Right custom cities): `_jump_to_place(kind)` and
+    `_cycle_jump_city(direction)` both chain from
+    `_active_simulation_or_now()` through the SAME `_apply_jump` tail —
+    the poles/Greenwich kinds never clamp; the city cycle is a strict
+    no-op with `settings.jump_cities` empty, otherwise it walks its own
+    session-only `_jump_city_index` cursor (wrapping) and jumps to the
+    landed city via `_compute_jump`'s existing `"city"` kind.
+  `_active_simulation_or_now()` (factored out this round, Rule #5) is
+  the ONE (moment, observer, cycles) every LIVE travel shortcut AND
+  `_open_time_travel`'s own dialog-seeding both read: the running
+  simulation while one is live, else the real wall clock at the home
+  observer.
 - `_open_design()` / `_open_pointer_theme()` / `_open_slot_theme()`:
   open (or raise the live) [Design Window](design_window.md) /
   [Pointer Theme](pointer_theme.md) / [Slot Theme](slot_theme.md) — the
@@ -337,7 +402,11 @@ pattern) rather than guessed:
   (wired to the native PowerEventFilter)
 - `_open_time_travel()` / `_end_simulation()`: frozen (moment,
   observer) rendered instead of the present for
-  `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back. Deep travel
+  `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back.
+  `_open_time_travel` now seeds the dialog's fields FROM
+  `_active_simulation_or_now()` (R5b round, Rule #5 — factored out
+  rather than duplicated once the Fast Travel/Location shortcuts
+  needed the SAME "what does 'right now' mean while travelling" rule). Deep travel
   (Session 16) carries the moment in the 400-year PROXY frame with
   `_sim_cycles` beside it; `_on_tick` asks the repositories for the
   REAL astronomical year, stamps `deep_cycles` on the built context
@@ -358,9 +427,27 @@ pattern) rather than guessed:
   old submenu survives verbatim (places are REAL coordinates with
   their REAL clocks, deep-travel event instants are REBASED into the
   caller's frame via `julian_day_of` before comparing, unit jumps are
-  calendar arithmetic via `shift_calendar`). Nothing calls it to
-  START a live simulation any more — `_dialog_jump` is its only
-  caller now.
+  calendar arithmetic via `shift_calendar`). `_dialog_jump` is its
+  dialog-facing caller; R5b's `_apply_jump` (below) is its LIVE-dial
+  caller — nothing calls it to start a simulation directly any more.
+  **R5b PHASE FILTER extension:** the "next_sun"/"prev_sun"/
+  "next_moon"/"prev_moon" branch (module-level `_SUN_MOON_JUMP_PATTERN`)
+  now also matches an optional `_solstice`/`_equinox` (Sun) or
+  `_new`/`_full`/`_quarter` (Moon) suffix — `defaults.
+  FAST_TRAVEL_THEMES`' own `jump_stem`s build these — narrowing the
+  candidate turning-point set via `_filtered_sun_anchors`/
+  `_filtered_moon_events` (module-level, pure) BEFORE the SAME
+  compare-on-Julian-Day/land/re-canonicalize logic runs; the plain
+  (no-suffix) kinds the Time Travel dialog's own rows use are
+  UNCHANGED (the filter is `None`, both helpers pass every candidate
+  through). The Moon theme's "eclipse" option and every CALENDAR
+  option reuse the EXISTING `_ECLIPSE_JUMPS`/`_UNIT_JUMPS` kinds
+  verbatim — no `_compute_jump` change needed for those two.
+- `_apply_jump(moment, observer, cycles, kind, city=None)` (R5b round):
+  one `_compute_jump` step applied straight to the LIVE dial
+  (`_start_simulation` on a landing, a silent no-op on a clamp) — the
+  shared tail `_jump_to_place`/`_cycle_jump_city`/`_step_fast_travel`
+  all use.
 - `_dialog_jump(moment, cycles, latitude, longitude, kind, city)`: the
   Time Travel window's own Quick Jump row callback (item 3A) — wraps
   `_compute_jump` around the DIALOG'S current fields (never the live

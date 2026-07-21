@@ -146,16 +146,35 @@ every version actually on disk for the active source, in both
 Sole consumer: the [Encyclopedia](../app/encyclopedia.md)'s "The Two
 Triangles" duality topic.
 **R5 MENU REWORK (owner "OSMISLITI ŠTA SVE" — design the full
-shortcut map):** `SHORTCUTS` — the ONE keyboard-shortcut table
+shortcut map; EXTENDED by the R5b FINAL MAP round, owner spec sealed
+2026-07-21):** `SHORTCUTS` — the ONE keyboard-shortcut table
 (action_id, `Qt.Key` NAME, `Qt.KeyboardModifier` NAME tuple,
 description; config stays Qt-free, [Clock Widget](../app/widget.md)
 resolves it once at import time like `HOVER_BYPASS_MODIFIER` already
 does) and `shortcut_display(action_id)` (the "Ctrl+R" menu-column
 label, pure/Qt-free). Every entry carries a modifier by construction
 so it can never feed `HIDDEN_MODE_SECRET`'s printable-no-modifier
-buffer. Three new `ICON_FILES` entries (`north_pole`/`south_pole`/
-`compass`) for the [Time Travel](../app/time_travel.md) Quick Jump
-rows' pole/Greenwich icons, `TIME_TRAVEL_ROW_ICON_PX`/
+buffer; an action_id may appear TWICE (`fast_travel_future`) when two
+physical combos fire the same action. R5b's SEALED map: Settings moved
+off Ctrl+, onto Ctrl+M (Rule #6, no leftover binding); SLOTS
+(Ctrl+1/2/3 Complication, Ctrl+Alt+1/2/3 Weekday theme, per slot); FAST
+TRAVEL (Ctrl+[/Ctrl+] the theme/option pickers, Ctrl+minus/Ctrl+plus —
+bound to BOTH the main-row "=" and the numpad "+" — the past/future
+step), config'd by `FAST_TRAVEL_THEMES` (Sun/Moon/Calendar, each a
+tuple of `{id, title, jump_stem}` options — `app.controller.
+_compute_jump`'s SUN/MOON branch grew an optional phase-filter suffix
+this round to answer the narrower Solstice/Equinox/New/Full/Quarter
+`jump_stem`s, the Calendar and Moon-Eclipse options reuse EXISTING
+`_UNIT_JUMPS`/`_ECLIPSE_JUMPS` kinds verbatim); LOCATIONS (Ctrl+Up/Down
+poles, Ctrl+Space Greenwich, Ctrl+Left/Right the user's custom Quick
+Jump cities). `FAST_TRAVEL_FLASH_*` — geometry/timing constants for
+[Fast Travel Flash](../app/fast_travel_flash.md), the small transient
+overlay the theme/option pickers flash above the dial. Three new
+`ICON_FILES` entries (`north_pole`/`south_pole`/`compass`) for the
+[Time Travel](../app/time_travel.md) Quick Jump rows' pole/Greenwich
+icons (R5b's Fast Travel flash reuses the EXISTING `eclipse_sun`/
+`eclipse_moon` entries instead of adding new ones — UI chrome may
+answer more than one spot), `TIME_TRAVEL_ROW_ICON_PX`/
 `TIME_TRAVEL_ARROW_BUTTON_PX` (the row icon/arrow-button pixel sizes),
 and `weekday_theme_body_art(theme, body)` — one theme's representative
 plate (moved here FROM `app.encyclopedia._theme_body_art`, Rule #5,

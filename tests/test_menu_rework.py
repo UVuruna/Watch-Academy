@@ -137,17 +137,19 @@ def test_tray_tooltip_follows_a_pointer_change(controller):
 
 
 def test_shortcut_table_covers_the_owner_named_candidates():
-    """Ring cycle, Weekday theme cycle, Slot count cycle, the five
-    dialog openers, and the two named power-user extras (return-to-now,
-    Archetype toggle) — a z-mode shortcut was explicitly considered and
-    dropped (Ctrl+Z's pre-existing Undo expectation)."""
+    """R5's original candidates, still present verbatim under the R5b
+    FINAL MAP (owner spec sealed 2026-07-21) — the SLOTS/FAST TRAVEL/
+    LOCATIONS additions are covered by their own tests in
+    test_shortcuts_r5b.py, this one just pins that nothing from the R5
+    draft silently vanished. A z-mode shortcut was explicitly considered
+    and dropped (Ctrl+Z's pre-existing Undo expectation)."""
     action_ids = {entry[0] for entry in defaults.SHORTCUTS}
-    assert action_ids == {
+    assert {
         "cycle_ring", "cycle_weekday_theme", "cycle_slots",
         "open_encyclopedia", "open_guide", "open_settings",
         "open_observatory", "open_time_travel",
         "return_to_now", "toggle_archetype",
-    }
+    } <= action_ids
 
 
 def test_shortcut_table_never_collides_with_the_hidden_mode_secret():
@@ -161,8 +163,10 @@ def test_shortcut_table_never_collides_with_the_hidden_mode_secret():
 
 
 def test_shortcut_display_renders_ctrl_combo_text():
+    """R5b FINAL MAP round: Settings moved off Ctrl+, onto Ctrl+M
+    (Rule #6 — the comma binding is gone, not kept alongside)."""
     assert defaults.shortcut_display("cycle_ring") == "Ctrl+R"
-    assert defaults.shortcut_display("open_settings") == "Ctrl+,"
+    assert defaults.shortcut_display("open_settings") == "Ctrl+M"
     assert defaults.shortcut_display("return_to_now") == "Ctrl+Home"
 
 
@@ -210,6 +214,8 @@ def test_widget_does_not_feed_the_secret_buffer_on_a_shortcut_combo(app):
 
 
 def test_on_shortcut_dispatches_every_action_id(controller, monkeypatch):
+    """Every `defaults.SHORTCUTS` action_id reaches a real handler — R5's
+    original ten plus R5b's SLOTS/FAST TRAVEL/LOCATIONS additions."""
     calls = []
     monkeypatch.setattr(controller, "_cycle_ring", lambda: calls.append("cycle_ring"))
     monkeypatch.setattr(
@@ -243,6 +249,38 @@ def test_on_shortcut_dispatches_every_action_id(controller, monkeypatch):
     monkeypatch.setattr(
         controller, "_toggle_archetype_shortcut",
         lambda: calls.append("toggle_archetype"),
+    )
+    monkeypatch.setattr(
+        controller, "_cycle_slot_complication",
+        lambda index: calls.append(f"cycle_slot{index}_complication"),
+    )
+    monkeypatch.setattr(
+        controller, "_cycle_slot_weekday_theme",
+        lambda index: calls.append(f"cycle_slot{index}_theme"),
+    )
+    monkeypatch.setattr(
+        controller, "_cycle_fast_travel_theme",
+        lambda: calls.append("fast_travel_theme"),
+    )
+    monkeypatch.setattr(
+        controller, "_cycle_fast_travel_option",
+        lambda: calls.append("fast_travel_option"),
+    )
+    monkeypatch.setattr(
+        controller, "_step_fast_travel",
+        lambda direction: calls.append(
+            "fast_travel_past" if direction < 0 else "fast_travel_future"
+        ),
+    )
+    monkeypatch.setattr(
+        controller, "_jump_to_place",
+        lambda kind: calls.append(f"location_{kind}"),
+    )
+    monkeypatch.setattr(
+        controller, "_cycle_jump_city",
+        lambda direction: calls.append(
+            "location_prev_city" if direction < 0 else "location_next_city"
+        ),
     )
     for action_id, *_rest in defaults.SHORTCUTS:
         controller._on_shortcut(action_id)

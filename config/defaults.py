@@ -84,7 +84,9 @@ CLICK_THROUGH_HOVER_POLL_MS = 200
 HOVER_BYPASS_MODIFIER = "ControlModifier"
 
 # --- Keyboard shortcuts (R5 MENU REWORK, owner "OSMISLITI ŠTA SVE" —
-# design the whole map) -------------------------------------------------------
+# design the whole map; R5b FINAL MAP round, owner spec sealed
+# 2026-07-21, extends and partly REPLACES the R5 draft — Rule #6, no
+# leftovers) -------------------------------------------------------------
 # ONE table, pinned by tests/test_shortcuts.py, rendered into each menu
 # entry's shortcut column too (`app.controller._build_menu`). Every
 # shortcut needs the dial to hold KEYBOARD FOCUS — wired through the
@@ -99,14 +101,29 @@ HOVER_BYPASS_MODIFIER = "ControlModifier"
 # feed it. `key` is a `Qt.Key` enum NAME and `modifiers` a tuple of
 # `Qt.KeyboardModifier` enum NAMES (config stays Qt-free — the SAME
 # convention `HOVER_BYPASS_MODIFIER` above already uses); `app.widget`
-# resolves both once at import time.
+# resolves both once at import time. An action_id may appear TWICE
+# (`fast_travel_future`, below) when the owner wants two physical combos
+# to fire the SAME action — `app.widget` already loops the whole table,
+# so a second row needs no special casing there.
 #
 # Chosen mnemonics: R=Ring, W=Weekday, N=Number of slots, E=Encyclopedia,
-# G=Guide, comma=Settings (the Chrome/VS Code "preferences" convention),
-# O=Observatory, T=Time Travel, A=Archetype; Ctrl+Home ("go home") ends
-# a running Time Travel simulation. A z-mode shortcut was CONSIDERED and
-# DROPPED (Ctrl+Z carries a strong pre-existing "Undo" expectation this
-# app has no Undo to honor — better no binding than a confusing one).
+# G=Guide, M=Menu/Settings (Ctrl+, DIED this round — R5b sealed map,
+# freeing the comma; M is the mnemonic that survives every layout),
+# O=Observatory, T=Time Travel, A=Archetype; Ctrl+Home ("go home") is
+# the FULL reset now — now AND the home location, replacing R5's
+# time-only return (R5b, Rule #6: the old time-only meaning is gone, not
+# kept alongside). 1/2/3 = the three Slots (bare = Complication,
+# +Alt = Weekday theme); [ ] = step the Fast Travel THEME/OPTION picker
+# (bracket keys read left-to-right as "theme, then its option", the
+# SAME visual order the picker itself is read in); minus/plus = step a
+# Fast Travel jump back/forward in time (the universal past/future
+# sense); arrows = the four LOCATIONS compass directions (Up/Down poles,
+# Left/Right custom cities) plus Space for Greenwich (a bare tap "there
+# and back", already free — SPACE's own unmodified Encyclopedia jump
+# only fires with NO modifier, see `app.widget.ClockWidget.keyPressEvent`).
+# A z-mode shortcut was CONSIDERED and DROPPED (Ctrl+Z carries a strong
+# pre-existing "Undo" expectation this app has no Undo to honor — better
+# no binding than a confusing one).
 SHORTCUTS = (
     # (action_id, key name, modifier names, description)
     (
@@ -115,7 +132,8 @@ SHORTCUTS = (
     ),
     (
         "cycle_weekday_theme", "Key_W", ("ControlModifier",),
-        "Cycle to the next Weekday theme",
+        "Cycle to the next Weekday theme (only while it is displayed "
+        "on the diamonds)",
     ),
     (
         "cycle_slots", "Key_N", ("ControlModifier",),
@@ -126,7 +144,7 @@ SHORTCUTS = (
         "Open the Encyclopedia",
     ),
     ("open_guide", "Key_G", ("ControlModifier",), "Open the Guide"),
-    ("open_settings", "Key_Comma", ("ControlModifier",), "Open Settings"),
+    ("open_settings", "Key_M", ("ControlModifier",), "Open Settings"),
     (
         "open_observatory", "Key_O", ("ControlModifier",),
         "Open the Observatory",
@@ -137,18 +155,105 @@ SHORTCUTS = (
     ),
     (
         "return_to_now", "Key_Home", ("ControlModifier",),
-        "End the running simulation, return to now",
+        "End the running simulation — the full reset: now, at the "
+        "home location",
     ),
     (
         "toggle_archetype", "Key_A", ("ControlModifier",),
         "Toggle Archetype mode",
     ),
+    # SLOTS (R5b round): the COMPLICATION cycle (Digital Time -> Date ->
+    # Day length -> Seconds, `SLOT_COMPLICATION_TITLES`'s own order) and
+    # the WEEKDAY THEME cycle, once per slot — both strict no-ops while
+    # their own slot is not active/visible (`WatchController._slot_active`).
+    (
+        "cycle_slot1_complication", "Key_1", ("ControlModifier",),
+        "Cycle the 1st Slot's Complication",
+    ),
+    (
+        "cycle_slot2_complication", "Key_2", ("ControlModifier",),
+        "Cycle the 2nd Slot's Complication",
+    ),
+    (
+        "cycle_slot3_complication", "Key_3", ("ControlModifier",),
+        "Cycle the 3rd Slot's Complication",
+    ),
+    (
+        "cycle_slot1_theme", "Key_1", ("ControlModifier", "AltModifier"),
+        "Cycle the 1st Slot's Weekday theme",
+    ),
+    (
+        "cycle_slot2_theme", "Key_2", ("ControlModifier", "AltModifier"),
+        "Cycle the 2nd Slot's Weekday theme",
+    ),
+    (
+        "cycle_slot3_theme", "Key_3", ("ControlModifier", "AltModifier"),
+        "Cycle the 3rd Slot's Weekday theme",
+    ),
+    # FAST TRAVEL (R5b round): the theme/option pickers flash the theme's
+    # logo (`app.fast_travel_flash.FastTravelFlash`); the past/future
+    # step rides the SAME `_compute_jump` machinery Quick Jump uses,
+    # chained from the ACTIVE simulation. Ctrl+plus is bound to BOTH the
+    # main-row "=" key (no Shift needed) and the numpad "+" (owner:
+    # "Ctrl++ needs Shift on most layouts" — `app.widget` masks out
+    # `KeypadModifier` before matching, so the numpad's OWN modifier
+    # flag never blocks the match).
+    (
+        "fast_travel_theme", "Key_BracketLeft", ("ControlModifier",),
+        "Cycle the Fast Travel theme (Sun / Moon / Calendar)",
+    ),
+    (
+        "fast_travel_option", "Key_BracketRight", ("ControlModifier",),
+        "Cycle the option within the active Fast Travel theme",
+    ),
+    (
+        "fast_travel_past", "Key_Minus", ("ControlModifier",),
+        "Fast Travel one step into the past",
+    ),
+    (
+        "fast_travel_future", "Key_Equal", ("ControlModifier",),
+        "Fast Travel one step into the future",
+    ),
+    (
+        "fast_travel_future", "Key_Plus", ("ControlModifier",),
+        "Fast Travel one step into the future (numpad +)",
+    ),
+    # LOCATIONS (R5b round): the poles and Greenwich ride `_compute_jump`
+    # kinds that never clamp; the custom-city cycle is a strict no-op
+    # with none defined (`WatchController._cycle_jump_city`).
+    (
+        "location_north_pole", "Key_Up", ("ControlModifier",),
+        "Travel to the North Pole",
+    ),
+    (
+        "location_south_pole", "Key_Down", ("ControlModifier",),
+        "Travel to the South Pole",
+    ),
+    (
+        "location_greenwich", "Key_Space", ("ControlModifier",),
+        "Travel to Greenwich",
+    ),
+    (
+        "location_prev_city", "Key_Left", ("ControlModifier",),
+        "Cycle to the previous custom Quick Jump city",
+    ),
+    (
+        "location_next_city", "Key_Right", ("ControlModifier",),
+        "Cycle to the next custom Quick Jump city",
+    ),
 )
-_SHORTCUT_MODIFIER_DISPLAY = {"ControlModifier": "Ctrl"}
+_SHORTCUT_MODIFIER_DISPLAY = {"ControlModifier": "Ctrl", "AltModifier": "Alt"}
 # Symbol/special keys whose Qt enum NAME does not read as its own
 # display glyph (everything else strips the "Key_" prefix verbatim —
-# "Key_R" -> "R").
-_SHORTCUT_KEY_DISPLAY_OVERRIDES = {"Key_Comma": ",", "Key_Home": "Home"}
+# "Key_R" -> "R", "Key_Up" -> "Up").
+_SHORTCUT_KEY_DISPLAY_OVERRIDES = {
+    "Key_Home": "Home",
+    "Key_BracketLeft": "[",
+    "Key_BracketRight": "]",
+    "Key_Minus": "-",
+    "Key_Equal": "=",
+    "Key_Plus": "+",
+}
 
 
 def shortcut_display(action_id: str) -> str:
@@ -164,6 +269,74 @@ def shortcut_display(action_id: str) -> str:
             )
             return f"{mod_label}+{key_label}"
     raise KeyError(action_id)
+
+
+# --- Fast Travel (R5b round, owner spec sealed 2026-07-21) -------------------
+# Ctrl+[ cycles the THEME, Ctrl+] the OPTION inside it (`WatchController.
+# _cycle_fast_travel_theme`/`_cycle_fast_travel_option`); Ctrl+minus/plus
+# step the ACTIVE (theme, option) one unit past/future, riding the SAME
+# `_compute_jump` kinds Quick Jump already uses (Rule #5) — every
+# option's `jump_stem` is what `_compute_jump` sees as
+# f"next_{stem}"/f"prev_{stem}". ONE table (owner: a config table he
+# will keep tuning) — `icon_key` reuses an EXISTING `ICON_FILES` entry
+# (UI chrome may legitimately answer more than one spot, unlike the
+# dial's own one-image-one-place ART); a theme with no dedicated file
+# yet (Calendar — nothing "calendar-ish" has landed in assets/icons/)
+# falls back to its own documented `emoji` (Rule #1, the SAME
+# graceful-absent contract `icon_path()` already guarantees).
+FAST_TRAVEL_THEMES = (
+    {
+        "id": "sun", "title": "Sun", "icon_key": "eclipse_sun", "emoji": "☀️",
+        "options": (
+            {"id": "any", "title": "Any turning point", "jump_stem": "sun"},
+            {
+                "id": "solstice", "title": "Solstices only",
+                "jump_stem": "sun_solstice",
+            },
+            {
+                "id": "equinox", "title": "Equinoxes only",
+                "jump_stem": "sun_equinox",
+            },
+        ),
+    },
+    {
+        "id": "moon", "title": "Moon", "icon_key": "eclipse_moon", "emoji": "🌙",
+        "options": (
+            {"id": "full", "title": "Full", "jump_stem": "moon_full"},
+            {"id": "new", "title": "New", "jump_stem": "moon_new"},
+            {"id": "quarter", "title": "Quarters", "jump_stem": "moon_quarter"},
+            # The lunar catalog specifically (paired thematically with
+            # the Moon; the Sun theme carries no eclipse option of its
+            # own) — the SAME kind `_ECLIPSE_JUMPS` already serves.
+            {"id": "eclipse", "title": "Eclipse", "jump_stem": "lunar_eclipse"},
+        ),
+    },
+    {
+        "id": "calendar", "title": "Calendar", "icon_key": None, "emoji": "📅",
+        "options": (
+            {"id": "day", "title": "Day", "jump_stem": "day"},
+            {"id": "month", "title": "Month", "jump_stem": "month"},
+            {"id": "year", "title": "Year", "jump_stem": "year"},
+            {"id": "century", "title": "Century", "jump_stem": "century"},
+            {"id": "millennium", "title": "Millennium", "jump_stem": "millennium"},
+        ),
+    },
+)
+
+# --- Fast Travel FLASH (R5b round, owner spec) --------------------------------
+# The small transient overlay ([Fast Travel Flash](../app/fast_travel_flash.md))
+# flashed above the dial on every Ctrl+[ / Ctrl+] theme/option change —
+# icon + option text, auto-fading, falling BELOW the dial instead when
+# the dial hugs the screen top.
+FAST_TRAVEL_FLASH_DURATION_S = 1.2   # total time on screen (hold + fade)
+FAST_TRAVEL_FLASH_FADE_MS = 250      # the trailing fade-out's own span
+FAST_TRAVEL_FLASH_GAP_PX = 12        # gap between the flash and the dial edge
+FAST_TRAVEL_FLASH_ICON_PX = 28
+FAST_TRAVEL_FLASH_FONT_PX = 15
+FAST_TRAVEL_FLASH_PADDING_PX = 10
+FAST_TRAVEL_FLASH_RADIUS_PX = 10
+FAST_TRAVEL_FLASH_BG = "rgba(20, 20, 26, 220)"
+FAST_TRAVEL_FLASH_TEXT_COLOR = "#F0F0F0"
 
 
 # Time Travel (scenario tester in the menu): the dial renders the entered
@@ -1039,13 +1212,10 @@ ENCYCLOPEDIA_FINISH_BORDER_COLORS = {
     "Gold": "#D4AF37",
     "Silver": "#C0C0C0",
 }
-# The COLORED option's border (owner spec, exact order): lavender,
-# blue, cyan, green, yellow, orange, red — a full spectrum sweep so
-# "Colored" reads as "every color", never mistaken for one finish.
-ENCYCLOPEDIA_FINISH_GRADIENT = (
-    "#B57EDC", "#3B5FE0", "#00C2D1", "#2FA84F", "#E8D000", "#E8890A",
-    "#D8362A",
-)
+# The COLORED option's border (owner correction 2026-07-21: the full
+# seven-stop spectrum "baš loše ispao" — a plain two-stop sweep reads
+# cleaner): BLUE on the left flowing to RED on the right.
+ENCYCLOPEDIA_FINISH_GRADIENT = ("#3B5FE0", "#D8362A")
 # Modern reader buttons (owner 2026-07-14: "veći, upečatljiviji,
 # življih boja — ne kao app iz 1990-e"): vivid gradient pills shared by
 # the Encyclopedia and the Guide. Each role owns a (top, bottom)
