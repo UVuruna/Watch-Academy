@@ -1301,12 +1301,16 @@ ENCYCLOPEDIA_MAX_FONT_PX = 21
 ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
 ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
 # LAYOUT fix round R3 (owner: "788px width, tiles clipping" — that class
-# dies here): a group NEVER spills more than this many cards per row —
-# it WRAPS instead, never a horizontal scrollbar. The single-tile unit
-# a card claims at the minimum icon size (the icon plus the existing
-# `_rescale_topics` label/padding allowance) times this many columns is
-# the dialog's own MIN WIDTH (owner: "MIN WIDTH = 4 * pojedinacni
-# karton"), enforced once in `EncyclopediaDialog.__init__`.
+# dies here); the WIDTH ARITHMETIC corrected round R8b item 5a (the
+# original formula silently dropped the inter-card spacing and the
+# gallery column's own margins, reliably overflowing the frame by
+# ~100px — the "X scroll again" regression): a group NEVER spills more
+# than this many cards per row — it WRAPS instead, never a horizontal
+# scrollbar. `app.encyclopedia._gallery_content_width`/
+# `_gallery_icon_ceiling` (one matched pair, Rule #5) are the ONE
+# correct formula, both for the dialog's own MIN WIDTH
+# (`EncyclopediaDialog.__init__`) and the live per-resize icon ceiling
+# (`_rescale_topics`, zoom-clamped).
 ENCYCLOPEDIA_GALLERY_MAX_COLUMNS = 4
 ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX = 40   # matches _rescale_topics' + 40/+44
 # THE FINISH SWITCHER (owner fix round R3: moved to the top row, in
@@ -2468,45 +2472,103 @@ def weekday_theme_body_art(
         return canonical
     return rotating_art_file(canonical, on_date) or canonical
 
-# THE ADAPTIVE GOLD/BRONZE RAMPS (owner COLORS verdict 2026-07-20/21,
-# ART-INFRA round — "SILVER JE SOLIDAN u oba" / "algoritam primenjujemo
-# drugačije na različita početna stanja"): GOLD_RAMP_HUE_DEG and
-# GOLD_RAMP_SAT_VAL_STEPS are sampled DIRECTLY off the owner's reference
+# THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the retry
+# after the FIRST attempt (ART-INFRA round, 013b5ca) was reverted the
+# SAME day the owner saw it: an adaptive PERCENTILE STRETCH remapped
+# each pixel's brightness by its own rank in the source's histogram —
+# a nonlinear per-pixel remap that flattened every relief (engraving
+# lines, drapery folds, background texture) into a detail-free yellow
+# wash ("nemamo kontrast, sve je svetlo, izgubili smo sve moguće
+# detalje" — see git show 013b5ca for the corpse). THE LAW THIS ROUND
+# FOLLOWS INSTEAD: hue and saturation are REPLACED outright by the
+# chosen shade's fixed target — never scaled from the source's own
+# (unreliable, art-to-art varying) hue/saturation — while VALUE is the
+# SOURCE PIXEL'S OWN, multiplied by ONE bounded GLOBAL scalar gain (a
+# single number for the whole masked region, computed from ITS OWN mean
+# value so differently-lit source plates land near the same shade
+# brightness) — never a per-pixel remap, so every relative light/dark
+# relationship in the relief survives EXACTLY (a straight multiply
+# preserves ratios; a percentile stretch does not — that was the whole
+# bug). This is precisely why the SILVER recipe already worked before
+# this round: it always scaled the source's own value by a near-
+# identity multiplier instead of replacing it. `render.assets.
+# AssetCache._recolor_to_shade` is the ONE function implementing this
+# (Rule #5/#19) — `_metal_swapped` (badge medallions) and
+# `letter_metal_file` (ring letters) both call it, differing only in
+# how their MASK (which pixels are "metal") is computed.
+#
+# GOLD's five bands are sampled DIRECTLY off the owner's reference
 # swatch (`UV/DESIGN/gold pallete.png`, 5 bands — QColor.getHsvF() read
-# at each band's own center pixel): the hue is flat across all five
-# bands (~45deg, true gold/amber) — only saturation/value step from
-# dark-amber to pale. `render.assets._metal_ramp_rgb` walks this (S, V)
-# progression at ANY hue; BRONZE_LETTER_TINT (below) supplies bronze's
-# own hue so the SAME five-step shape reads as bronze instead of gold
-# (one formula, two hues — never two hand-invented palettes).
-# NOTE (owner verdict 2026-07-21 night): the ART-INFRA round's ADAPTIVE
-# ramp constants that lived here were REVERTED with the algorithm the
-# same day — the percentile stretch flattened every relief into a
-# detail-free wash. The pre-adaptive recipes below are back verbatim.
-# The NEXT attempt is specced by the owner: several selectable SHADE
-# presets per metal (gold from `UV/DESIGN/gold pallete.png`, bronze and
-# silver ramps to be designed), a Settings option choosing the shade,
-# the mask still touching ONLY the metal-colored pixels, and the
-# source's CONTRAST and overall lightness carried over, never crushed.
+# at each band's own center pixel): hue is flat ~44.9deg across all
+# five — only saturation/value step from dark-amber to pale. BRONZE is
+# a 3-step ramp around BRONZE_LETTER_TINT's own hue/saturation (the
+# sealed #CD7F32 family). SILVER is a 3-step ramp at zero saturation —
+# hue is irrelevant there, matching the achromatic recipe that already
+# read as "solidan u oba" (solid in both) before this round.
+#
+# Each entry: (hue_deg, saturation, reference_value) — reference_value
+# is the level the masked region's MEAN value is nudged toward (see
+# METAL_RECOLOR_GAIN_RANGE for the bound). Picked in Settings
+# (`Settings.metal_shade_gold/_bronze/_silver`, names validated against
+# `config.constants.METAL_SHADE_NAMES`), read at render time through
+# `config.paths.metal_shade`.
+#
+# The bright three gold bands (classic/pale/champagne) share
+# reference_value 0.85, NOT the palette swatch's own flat-color V=1.00:
+# a flat swatch has no relief to protect, but a real ring LETTER is
+# already bright (masked mean ~0.88) — chasing V=1.00 there forces a
+# gain that clips a big share of the glyph to solid white, shrinking
+# its own highlight relief for no visual gain (measured on real art
+# during this round's verification, see render/assets.md). Badge
+# medallions are far darker (masked mean ~0.40) and hit the SAME gain
+# ceiling either way, so this is a strict win: less letter clipping,
+# zero change to badges. amber/dark_amber sit low enough to be
+# unaffected by this concern.
+METAL_SHADES = {
+    "gold": {
+        "dark_amber": (44.9, 1.000, 0.65),
+        "amber":      (44.9, 0.749, 0.75),
+        "classic":    (44.9, 1.000, 0.85),    # DEFAULT — today's look
+        "pale":       (44.9, 0.749, 0.85),
+        "champagne":  (44.9, 0.549, 0.85),
+    },
+    "bronze": {
+        "dark_bronze":  (29.8, 0.85, 0.45),
+        "bronze":       (29.8, 0.756, 0.55),  # DEFAULT — BRONZE_LETTER_TINT family
+        "light_bronze": (29.8, 0.60, 0.70),
+    },
+    "silver": {
+        "gunmetal": (220.0, 0.0, 0.55),
+        "silver":   (220.0, 0.0, 0.75),       # DEFAULT — the sealed recipe
+        "platinum": (220.0, 0.0, 0.95),
+    },
+}
+# The bounded GLOBAL gain (never a per-pixel stretch — see the NOTE
+# above): clamps how far ONE scalar may push a masked region's mean
+# value toward its shade's reference_value, so a very dark source (a
+# dim bronze medallion) cannot get blown to a flat white, and a very
+# bright one (a ring letter) cannot get crushed to black. Tuned by eye
+# against real badges (mean value ~0.40) and real ring letters (~0.88) —
+# see render/assets.md for the swatch-sheet verification this round.
+METAL_RECOLOR_GAIN_RANGE = (0.70, 1.90)
+METAL_SWAP_VERSION = 5      # cache tag — bump on recolor math changes
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
 # the medallions mix bronze details with GRAY stone and engravings —
 # only the warm bronze pixels may change, the gray stays). Detection =
-# a warm-hue window with soft edges + a saturation ramp; per-target
-# hue/saturation/value mapping. Bronze = the art as drawn (no swap).
+# a warm-hue window with soft edges + a saturation ramp — UNCHANGED by
+# the R8a redo ("the mask stays"). Membership only (badges never
+# bronze-swap — bronze is the art as drawn, out of this round's scope;
+# the per-metal recolor recipe itself now lives in METAL_SHADES above).
 METAL_SWAP_HUE_WINDOW = (10.0, 60.0)   # degrees, warm bronze range
 METAL_SWAP_HUE_SOFT = 8.0              # soft edge width outside the window
 METAL_SWAP_SAT_RAMP = (0.10, 0.28)     # smoothstep: below gray, above bronze
-METAL_SWAP_TARGETS = {
-    "gold": {"hue": 48.0, "sat_mul": 1.25, "val_mul": 1.25},
-    "silver": {"hue": 220.0, "sat_mul": 0.06, "val_mul": 1.22},
-}
-# Bronze ring LETTERS are derived AT LOAD from the silver ones
-# (owner 2026-07-19, `render.assets.letter_metal_file` — retired the
-# pre-rendered files). Final recipe = a STRAIGHT multiply with classic
-# bronze, no brightness/contrast change (owner verdict revised on the
-# live dial 2026-07-12: the darkened candidates sat darker than the
-# ring plate itself).
+METAL_SWAP_TARGETS = ("gold", "silver")
+# Bronze ring LETTERS are derived AT LOAD from the gold master (owner
+# 2026-07-19, `render.assets.letter_metal_file` — retired the
+# pre-rendered files); BRONZE_LETTER_TINT anchors the "bronze" shade's
+# hue/saturation above and still supplies the eclipse glow color below —
+# it is a COLOR CONSTANT, not a recipe (the recipe itself is METAL_SHADES).
 BRONZE_LETTER_TINT = "#CD7F32"
 
 # ECLIPSE DISPLAY (owner 2026-07-18, ROADMAP 15h item 11 — refines the

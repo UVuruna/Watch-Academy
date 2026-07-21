@@ -203,6 +203,42 @@ def test_dialog_subdial_set_combo_round_trips(app):
     dialog.done(0)
 
 
+def test_dialog_metal_shade_combos_round_trip(app):
+    """THE METAL SHADES picker (R8a round, owner spec 2026-07-21 night)
+    sits beside Subdial plate in Themes: one combo per metal, each
+    listing exactly that metal's shades in
+    config.constants.METAL_SHADE_NAMES order, restores the stored
+    picks, and result_settings() returns all three."""
+    from app.settings_store import replace
+    from config import constants
+
+    dialog = SettingsDialog(
+        replace(
+            Settings(), metal_shade_gold="amber",
+            metal_shade_bronze="light_bronze", metal_shade_silver="platinum",
+        ),
+        defaults.DEFAULT_SKIN,
+    )
+    combos = dialog._metal_shade_combos
+    assert set(combos) == {"gold", "bronze", "silver"}
+    for metal, names in constants.METAL_SHADE_NAMES.items():
+        values = [
+            combos[metal].itemData(i) for i in range(combos[metal].count())
+        ]
+        assert values == list(names), metal
+    assert combos["gold"].currentData() == "amber"
+    assert combos["bronze"].currentData() == "light_bronze"
+    assert combos["silver"].currentData() == "platinum"
+    result = dialog.result_settings()
+    assert result.metal_shade_gold == "amber"
+    assert result.metal_shade_bronze == "light_bronze"
+    assert result.metal_shade_silver == "platinum"
+    index = combos["gold"].findData("champagne")
+    combos["gold"].setCurrentIndex(index)
+    assert dialog.result_settings().metal_shade_gold == "champagne"
+    dialog.done(0)
+
+
 def test_dialog_navigation_lists_every_section(app):
     """The left column becomes a NAVIGATION of section titles (owner
     2026-07-18) instead of one long scroll — every existing group still
@@ -226,6 +262,7 @@ def test_dialog_navigation_lists_every_section(app):
     assert dialog._rotation_group is not None             # Theme rotation (Themes)
     assert dialog._art_source_combo is not None            # Artwork (Themes)
     assert dialog._subdial_set_combo is not None            # Subdial plate (Themes)
+    assert dialog._metal_shade_combos                        # Metal shades (Themes)
     assert dialog._language_combo is not None               # Language
     assert dialog._era_combo is not None                     # Calendar eras (Language)
     assert dialog._autostart_check is not None                # System
@@ -960,81 +997,26 @@ def test_ring_letters_article_carries_the_mason_lore():
     dialog.deleteLater()
 
 
-def test_wider_pantheon_topics():
-    """WORKPLAN Session 8 (owner 2026-07-15): one Encyclopedia topic per
-    culture for the A-list figures no dial seat could hold. Each topic
-    resolves every article, images degrade gracefully (the wired plates
-    have not landed), the retired ninths' material folds into the new
-    entries, and the gallery gains The Wider Pantheon group."""
-    from PySide6.QtWidgets import QApplication
+def test_wider_pantheon_topics_removed_as_duplicate_tiles():
+    """Owner round R8b item 6 ("zasto i dalje imamo ove dve verzije" —
+    KILL THE LEFTOVER DUPLICATE TILES): the WORKPLAN Session 8 Wider-
+    Pantheon topics (superseding `test_wider_pantheon_topics`, which
+    this replaces) sat as confusing second "Greek"/"Norse"/"Egyptian"/
+    "Slavic" tiles right beside the round-R3b merged "Greek gods"/etc.
+    topic — deleted completely per the owner's verdict; the merged
+    22-page topics are the only home now (Rule #6). The encyclopedia.json
+    "wider" article text is left ON DISK untouched (content, not code,
+    stays out of this deletion) — this only asserts the GALLERY/topic
+    surface is gone, so a future round could still re-wire it (e.g. as
+    trailing pages of the merged topic) without having lost the prose."""
+    from app.encyclopedia import _TOPIC_GROUPS, _topics
 
-    from app.encyclopedia import (
-        EncyclopediaDialog,
-        _TOPIC_GROUPS,
-        _topics,
-    )
-    from config import paths as _paths
-    from data.encyclopedia import EncyclopediaRepository
-    from data.translations import collect_corpus
-
-    QApplication.instance() or QApplication([])
     topics = _topics()
-    # Four topics, one per culture, with the reconciled seatless rosters
-    # (round-four/five: Artemis/Hera/Frigg/Mokoš/Bastet seated and gone;
-    # the retired ninths Set/Baldur/Crnobog folded back in).
-    expected = {
-        "wider_greek": ["Dionysus", "Hephaestus", "Hestia"],
-        "wider_norse": ["Baldur", "Heimdall", "Njord"],
-        "wider_egypt": ["Set", "Nut", "Geb", "Ptah", "Sekhmet"],
-        "wider_slavic": ["Crnobog", "Stribog", "Jarilo", "Rod"],
-    }
-    for key, names in expected.items():
-        assert [e["name"] for e in topics[key]["entries"]] == names, key
-        # The gallery card icon reuses an existing culture plate.
-        assert _paths.art_file(topics[key]["icon"]).exists(), key
-        for entry in topics[key]["entries"]:
-            # Every entry wires a plate, and it degrades gracefully:
-            # the art has not landed, so nothing is shown (like the
-            # ninth plates wired ahead of their art).
-            assert entry["images"]
-            resolved = _paths.art_file(entry["images"][0])
-            assert resolved is None or resolved.suffix == ".png"
-
-    # The Wider Pantheon topics ride THE DIVINE group (owner-approved
-    # FIVE-section regroup, sealed 2026-07-20, round R3 — supersedes the
-    # nine-group 2026-07-12/13 layout the "Wider Pantheon" group used
-    # to be part of).
     groups = dict(_TOPIC_GROUPS)
     for key in ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic"):
-        assert key in groups["The Divine"]
-
-    # Every wider article resolves through the encyclopedia "wider"
-    # family, and the retired ninths' written material is reused.
-    repo = EncyclopediaRepository()
-    for names in expected.values():
-        for name in names:
-            assert repo.entry("wider", name)["base"].strip(), name
-    assert "Cain" in repo.entry("wider", "Set")["base"]          # Egyptian Cain
-    assert "mistletoe" in repo.entry("wider", "Baldur")["base"]  # Ragnarok start
-    assert "Helmold" in repo.entry("wider", "Crnobog")["base"]   # source caveat
-
-    # The corpus collects the wider keys (English content — the SR pass
-    # is the one pre-build Translation session, owner 2026-07-16).
-    corpus = collect_corpus()
-    assert sum(
-        1 for k in corpus if k.startswith("encyclopedia/wider/")
-    ) == 15
-    assert "encyclopedia/wider/Hestia/base" in corpus
-
-    # The dialog opens each wider topic without crashing and the texts
-    # resolve on the page.
-    dialog = EncyclopediaDialog()
-    for key in expected:
-        dialog._show_topic(key)
-        assert dialog._entry_index == 0
-    assert "hearth" in dialog._article_text(("emblem", "wider", "Hestia"))
-    assert "wind" in dialog._article_text(("emblem", "wider", "Stribog"))
-    dialog.deleteLater()
+        assert key not in topics, key
+        for keys in groups.values():
+            assert key not in keys, key
 
 
 def test_pantheon_planetary_merge():
@@ -1094,6 +1076,39 @@ def test_pantheon_planetary_merge():
     # beyond its four owners.
     assert len(topics["wolf"]["entries"]) == 11
     assert len(topics["japan"]["entries"]) == 10
+
+
+def test_pantheon_pages_offer_colored_like_the_planetary_pages():
+    """Owner round R8b item 3 ("Panteon bogovi nemaju Colored verzije
+    u switchu"): every Greek/Norse Pantheon seat (metal themes) must
+    offer Colored, exactly like its Planetary counterpart — including
+    a seat that FALLS BACK to the shared planetary plate (Zeus, Thor,
+    Loki, Tyr — none of the four grew dedicated Pantheon art) and the
+    shared Ninth (Gaia, Yggdrasil), both pantheon-rooted plates the old
+    `_colored_sibling`-less code (a single hardcoded nesting depth)
+    could not find. Egypt/Slavic stay a single plain plate BOTH blocks
+    (never metal themes) — unaffected by this fix."""
+    from app.encyclopedia import _PANTHEON_BLOCK_SIZE, _topics
+
+    topics = _topics()
+    for theme in ("greek", "norse"):
+        entries = topics[theme]["entries"]
+        pantheon = entries[_PANTHEON_BLOCK_SIZE:]
+        for entry in pantheon:
+            looks = entry.get("looks")
+            if not looks:
+                continue          # title/duality-title pages carry no looks
+            titles = [label for label, _ in looks]
+            assert "Colored" in titles, (theme, entry["name"])
+    for theme in ("egypt", "slavic"):
+        entries = topics[theme]["entries"]
+        pantheon = entries[_PANTHEON_BLOCK_SIZE:]
+        for entry in pantheon:
+            looks = entry.get("looks")
+            if not looks:
+                continue
+            titles = [label for label, _ in looks]
+            assert "Colored" not in titles, (theme, entry["name"])
 
 
 def test_pantheon_switch_button():
@@ -1541,25 +1556,132 @@ def test_gallery_five_sections():
 
 def test_gallery_min_width_and_no_horizontal_overflow():
     """LAYOUT fix round R3 (owner: "788px width, tiles clipping" dies
-    here): MIN WIDTH = 4 * the single theme tile, and no group ever
-    lays out more than ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row
-    — it wraps into further rows instead of spilling sideways."""
+    here); MIN WIDTH formula corrected round R8b item 5a
+    (`_gallery_content_width` — the old `tile * columns` arithmetic
+    dropped the inter-card spacing and the gallery column's own
+    margins, reliably undersizing this minimum): no group ever lays
+    out more than ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row — it
+    wraps into further rows instead of spilling sideways."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _TOPIC_GROUPS
+    from app.encyclopedia import (
+        EncyclopediaDialog,
+        _TOPIC_GROUPS,
+        _gallery_content_width,
+    )
     from config import defaults as _defaults
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
-    tile = (
+    assert dialog.minimumWidth() == _gallery_content_width(
         _defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
-        + _defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
     )
-    assert dialog.minimumWidth() == tile * _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
     # The Celestial Engine has more than 4 cards — it MUST wrap.
     groups = dict(_TOPIC_GROUPS)
     assert len(groups["The Celestial Engine"]) > _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
     dialog.deleteLater()
+
+
+def test_gallery_never_shows_a_horizontal_scrollbar():
+    """Owner round R8b item 5a, GALLERY LAYOUT REWORK v2 ("Rekao sam ti
+    da ne treba da bude X scroll... da ne sme da izlazi iz OKVIRA" —
+    his screenshot showed the regression again): the LIVE gallery's own
+    horizontal scrollbar range must be zero at the dialog's own MIN
+    WIDTH, a mid-size window, and a wide one — the width-driven icon
+    ceiling (`_gallery_icon_ceiling`) is a HARD cap, so this must hold
+    at every width, not just the ones this test happens to probe."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    app = QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    dialog.show()
+    app.processEvents()
+    min_width = dialog.minimumWidth()
+    for width in (min_width, min_width + 300, 1400):
+        dialog.resize(width, 800)
+        app.processEvents()
+        dialog._rescale()
+        app.processEvents()
+        assert dialog._scroll.horizontalScrollBar().maximum() == 0, width
+    dialog.close()
+    dialog.deleteLater()
+
+
+def test_gallery_subgroups_partition_their_hall_exactly():
+    """Owner round R8b item 5c: `_GALLERY_SUBGROUPS`'s partition of
+    each overloaded hall (The Celestial Engine, The Divine) must be
+    EXHAUSTIVE and NON-OVERLAPPING against that hall's own
+    `_TOPIC_GROUPS` membership — no topic silently dropped from the
+    gallery, none duplicated across two subgroup headings. Every OTHER
+    hall stays un-partitioned (one flat run of rows, item 5)."""
+    from app.encyclopedia import _GALLERY_SUBGROUPS, _TOPIC_GROUPS
+
+    groups = dict(_TOPIC_GROUPS)
+    assert set(_GALLERY_SUBGROUPS) == {"The Celestial Engine", "The Divine"}
+    for hall, subgroups in _GALLERY_SUBGROUPS.items():
+        flat = [key for _, keys in subgroups for key in keys]
+        assert len(flat) == len(set(flat)), hall          # no duplicates
+        assert set(flat) == set(groups[hall]), hall        # exhaustive
+    # Item 6: the Gods subgroup is exactly the four merged cultures.
+    gods = dict(_GALLERY_SUBGROUPS["The Divine"])["Gods"]
+    assert gods == ("greek", "norse", "egypt", "slavic")
+
+
+def test_short_gallery_row_is_centered():
+    """Owner round R8b item 5d ("red sa manje od 4 clana... oni su
+    centrirani" — a row with fewer than 4 tiles is centered): every row
+    `_build_gallery_rows` produces is its OWN QHBoxLayout bracketed by
+    a stretch on both sides — checked here on "The Year Wheels" (2
+    tiles, one short row) and confirmed a FULL row gets the identical
+    treatment (no special case, item 5d's own point)."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    short_row = dialog._build_gallery_rows(("era", "months"))
+    assert short_row.count() == 1
+    row = short_row.itemAt(0).layout()
+    assert row.itemAt(0).spacerItem() is not None            # leading stretch
+    assert row.itemAt(row.count() - 1).spacerItem() is not None  # trailing stretch
+    assert row.count() == 2 + 2                               # stretch+2 cards+stretch
+    full_row = dialog._build_gallery_rows(("greek", "norse", "egypt", "slavic"))
+    row = full_row.itemAt(0).layout()
+    assert row.itemAt(0).spacerItem() is not None
+    assert row.itemAt(row.count() - 1).spacerItem() is not None
+    dialog.deleteLater()
+
+
+def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
+    """Owner round R8b item 5b: Ctrl+MouseWheel zoom is clamped to
+    ENCYCLOPEDIA_ZOOM_RANGE and, "persisted for the session at least",
+    survives a Home -> reopen (a NEW dialog instance seeds from the
+    module-level `_session_zoom` the previous one left behind — never
+    written to settings, resets on app restart)."""
+    import app.encyclopedia as encyclopedia_module
+    from app.encyclopedia import EncyclopediaDialog
+    from config import constants as _constants
+
+    low, high = _constants.ENCYCLOPEDIA_ZOOM_RANGE
+    original = encyclopedia_module._session_zoom
+    try:
+        first = EncyclopediaDialog()
+        first._apply_zoom_delta(120 * 1000)          # way past the ceiling
+        assert first._zoom == high
+        first._apply_zoom_delta(-120 * 1000)          # way past the floor
+        assert first._zoom == low
+        first._apply_zoom_delta(120)                  # one notch back up
+        expected = min(high, low + _constants.ENCYCLOPEDIA_ZOOM_STEP)
+        assert first._zoom == pytest.approx(expected)
+        second = EncyclopediaDialog()                 # a fresh "reopen"
+        assert second._zoom == first._zoom
+        first.deleteLater()
+        second.deleteLater()
+    finally:
+        encyclopedia_module._session_zoom = original
 
 
 def test_article_order_restructure():
@@ -1637,14 +1759,16 @@ def test_dual_page_split_into_good_and_evil(app):
     dialog._entry_index = 8
     dialog._show_entry()
     good_text = dialog._article_text(greek_good["article"])
-    assert dialog._entry_name(greek_good) == "Helios"
+    # TITLES CARRY THE DAY (owner round R8b item 8): both Sunday faces
+    # append " — Sunday" now, the ONE build point (`_entry_name`).
+    assert dialog._entry_name(greek_good) == "Helios — Sunday"
     # Every label is a PLAIN QLabel now (no (label, columns) tuple —
     # the DUAL page's half-width columns retired with the merge).
     assert len(dialog._text_labels) == 1
     dialog._entry_index = 9
     dialog._show_entry()
     evil_text = dialog._article_text(greek_evil["article"])
-    assert dialog._entry_name(greek_evil) == "Phaethon"
+    assert dialog._entry_name(greek_evil) == "Phaethon — Sunday"
     assert len(dialog._text_labels) == 1
     assert good_text != evil_text
     assert "Helios" in good_text
@@ -1652,6 +1776,67 @@ def test_dual_page_split_into_good_and_evil(app):
     # Each half has its OWN plate — different images, side by side in
     # page order rather than merged onto one page.
     assert greek_good["looks"] != greek_evil["looks"]
+    dialog.deleteLater()
+
+
+def test_titles_carry_the_day_and_the_section():
+    """Owner round R8b item 8 ("Selene — Monday", "mora gore pored
+    naslova... da li smo na sekciji Panteon ili Planetary", "no
+    duplicated bare topic name twice — 'Greek gods' stacked over
+    'Greek gods'"): every weekday-figure caption ends " — {Weekday}"
+    (the ONE build point, `_entry_name`); a merged theme's TOP header
+    additionally names its section; the two spots never repeat the
+    identical bare string."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+
+    # A weekday figure (Monday, Planetary block) carries its day.
+    dialog._show_topic("greek")
+    dialog._entry_index = 1
+    dialog._show_entry()
+    entry = dialog._topics["greek"]["entries"][1]
+    assert dialog._entry_name(entry).endswith(" — Monday")
+
+    # A non-weekday theme (no "weekday" key on any entry) never grows
+    # a day suffix — the machinery is opt-in, never blanket.
+    dialog._show_topic("moon")
+    entry = dialog._topics["moon"]["entries"][0]
+    assert "weekday" not in entry
+    assert " — " not in dialog._entry_name(entry)
+
+    # The Ninth sits OUTSIDE the weekday (CANON.md) — no day suffix.
+    ninth = dialog._topics["greek"]["entries"][10]
+    assert ninth["name"] == "Gaia"
+    assert "weekday" not in ninth
+    assert dialog._entry_name(ninth) == "Gaia"
+
+    # The TOP header names the SECTION on a merged theme, and reads
+    # differently from the entry caption below it (no bare duplicate).
+    dialog._show_topic("greek")
+    dialog._entry_index = 0                 # Planetary title page
+    dialog._show_entry()
+    top = dialog._topic_display_title()
+    caption = dialog._entry_name(dialog._topics["greek"]["entries"][0])
+    assert top == "Greek — Planetary"
+    assert top != caption
+    dialog._entry_index = 11                # Pantheon title page
+    dialog._show_entry()
+    top_pantheon = dialog._topic_display_title()
+    caption_pantheon = dialog._entry_name(dialog._topics["greek"]["entries"][11])
+    assert top_pantheon == "Greek — Pantheon"
+    assert top_pantheon != caption_pantheon
+    assert top_pantheon != top               # the two sections read apart
+
+    # A theme with only ONE section carries no section suffix at all.
+    dialog._show_topic("wolf")
+    dialog._entry_index = 0
+    dialog._show_entry()
+    assert " — Planetary" not in dialog._topic_display_title()
+    assert " — Pantheon" not in dialog._topic_display_title()
     dialog.deleteLater()
 
 
@@ -1780,10 +1965,13 @@ def test_space_jump_index_remap_survives_the_restructure():
 def test_finish_switcher_lives_in_the_top_row():
     """Owner fix round R3 (Color Switcher.png): the finish switcher
     moves to the TOP row, in line with Home and Download — ONE
-    persistent widget trio (not rebuilt per entry, like the pager) —
-    and is restyled to border-only frames in the finish's own color,
-    never the old filled gradient pill; "Colored" wears the swept-
-    spectrum gradient border, exact owner order."""
+    persistent widget trio (not rebuilt per entry, like the pager).
+    Owner round R8b item 4 ("jel me stvarno zezas da ne mozes da
+    napravis gradient button") retired the R3 border-only frame
+    (a QSS `border-color` gradient never renders as a real sweep) for a
+    FILLED pill: Bronze is a SOLID fill in its own metal hex with dark
+    text (YIQ-readable), Colored wears the swept blue->red gradient as
+    its FILL, white text throughout since both ends are dark enough."""
     from PySide6.QtWidgets import QApplication
 
     from app.encyclopedia import EncyclopediaDialog
@@ -1808,19 +1996,22 @@ def test_finish_switcher_lives_in_the_top_row():
     assert top_widgets.index(dialog._look_caption) < top_widgets.index(
         dialog._download
     )
-    # Border-only styling: Bronze is a SOLID hex border, no fill;
-    # Colored wears the exact gradient sweep the owner specified.
+    # Filled-pill styling: Bronze is a SOLID hex FILL with dark text;
+    # Colored wears the exact gradient sweep as its FILL, white text.
     dialog._show_topic("wolf")
     dialog._entry_index = 1                        # Monday — offers the switcher
     dialog._show_entry()
     dialog._cycle_look(1)                          # -> Bronze
     bronze_qss = dialog._look_caption.styleSheet()
-    assert "background: transparent" in bronze_qss
-    assert "#CD7F32" in bronze_qss
-    assert "qlineargradient" not in bronze_qss
+    assert "background: transparent" not in bronze_qss
+    assert f"background: {defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS['Bronze']}" in (
+        bronze_qss
+    )
+    assert defaults.THEME_COLORS["surface_0"] in bronze_qss  # dark text
     dialog._cycle_look(-1)                         # back to Colored
     colored_qss = dialog._look_caption.styleSheet()
     assert "qlineargradient" in colored_qss
+    assert defaults.THEME_COLORS["text_primary"] in colored_qss  # white text
     for hue in defaults.ENCYCLOPEDIA_FINISH_GRADIENT:
         assert hue in colored_qss
     dialog.deleteLater()

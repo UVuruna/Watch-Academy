@@ -83,14 +83,23 @@ class TimeTravelDialog(QDialog):
     ):
         """`jump_callback(moment, cycles, latitude, longitude, kind,
         city) -> (moment, cycles, latitude, longitude) | None` (item 3A,
-        R5 MENU REWORK): the pure computation behind every Quick Jump
-        row below — owned by the controller (it alone holds the season/
-        moon/deep-time repositories), called with THIS dialog's own
-        current fields and never the live simulation, so a chain of
-        jumps only ever edits the draft; OK still applies the final
-        choice transactionally. None (the default) hides the whole
-        Quick Jump section — every production caller supplies it; tests
-        that only exercise the moment editor may omit it."""
+        R5 MENU REWORK; TT LIVE TRAVEL, owner round R8b item 1): the
+        computation behind every Quick Jump row below — owned by the
+        controller (it alone holds the season/moon/deep-time
+        repositories), called with THIS dialog's own current fields.
+        Since R8b the controller's own `_dialog_jump` ALSO starts/
+        refreshes the LIVE simulation as a side effect of computing the
+        landing — "ono sto smo radili na uvek Quick Jump dok je bio na
+        right clicku", the owner's old right-click behavior — so every
+        jump travels the watch immediately; the return value only tells
+        THIS dialog what to mirror onto its own fields, so a chain of
+        jumps reads consistently while the dial is already moving. OK
+        simply re-asserts the fields' current moment/coordinates (a
+        no-op after a jump, unless the owner also hand-edited a field);
+        Return to Now still ends the simulation outright. None (the
+        default) hides the whole Quick Jump section — every production
+        caller supplies it; tests that only exercise the moment editor
+        may omit it."""
         super().__init__(parent)
         tr = lambda text: ui(overlay or {}, text)  # noqa: E731 — dialog chrome
         self._tr = tr
@@ -518,10 +527,14 @@ class TimeTravelDialog(QDialog):
             button.setText(f"  {defaults.POLE_COLD_EMOJI} {name} {suffix}")
 
     def _on_jump(self, kind: str, city: dict | None = None) -> None:
-        """One Quick Jump row/arrow click (item 3A): chains from THIS
-        dialog's own current fields — `_jump_callback` returns None on
-        an edge clamp (a no-op, never a crash), matching the old menu's
-        own "already at the coverage edge" behavior."""
+        """One Quick Jump row/arrow click (item 3A; TT LIVE TRAVEL,
+        R8b item 1): chains from THIS dialog's own current fields —
+        `_jump_callback` (the controller's `_dialog_jump`) travels the
+        LIVE watch as a side effect and hands back the landed fields,
+        which `_apply_moment` below mirrors onto this dialog so the two
+        never disagree; a clamp (`None`) is a no-op, never a crash,
+        matching the old menu's own "already at the coverage edge"
+        behavior."""
         result = self._jump_callback(
             self.moment(), self.cycles(), self.latitude(), self.longitude(),
             kind, city,

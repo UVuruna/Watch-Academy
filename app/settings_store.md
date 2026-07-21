@@ -120,7 +120,13 @@ complication plate look (owner A/B spec 2026-07-15); `subdial_set`
 ("set1".."set4" | "solo", default "set1" — owner decree 2026-07-21,
 Rsub round) picks WHICH of the five hand-picked subdial plates draws,
 independent of `art_source` (`assets/subdial/` is not a Gemini/ChatGPT
-family). THE YEAR LINE
+family). THE METAL SHADES (R8a round, owner spec 2026-07-21 night):
+`metal_shade_gold`/`_bronze`/`_silver` (one per metal, names validated
+against `config.constants.METAL_SHADE_NAMES`, defaults "classic"/
+"bronze"/"silver") pick which selectable shade each metal wears
+everywhere it appears — see [Assets](../render/assets.md) for the
+recolor algorithm and [Settings Dialog](settings_dialog.md) for the
+picker. THE YEAR LINE
 (Session 16, owner amendment 2026-07-17): `era_notation` ("bce_ce"
 default | "bc_ad" — the OFFICIAL labels only; Anno Lucis always
 accompanies the official year and is not a mode), `show_era_suffix`

@@ -188,41 +188,42 @@ def moon_phase_file(fraction: float, name: str, size: int = 800) -> Path:
 
 
 def letter_metal_file(path: Path, metal: str) -> Path:
-    """The ring letter's SILVER or BRONZE finish, derived AT LOAD from
-    the GOLD master (owner decree 2026-07-19: "bolje crtati na licu
-    mesta nego 15MB fajlova" — retiring the 76 pre-rendered
-    `_silver.png`/`_bronze.png` files and setup/make_silver_letters.py
-    / make_bronze_letters.py). The sealed recipes, reproduced exactly:
-    silver is a straight grayscale desaturation with the source alpha
-    kept (`AssetCache._desaturated`); bronze is a straight per-channel
-    multiply with `defaults.BRONZE_LETTER_TINT` off the SILVER result
-    (`AssetCache._bronzed`) — brightness/contrast sit at 1.0 (an
-    identity step), the owner's verdict that darkened candidates read
-    darker than the bronze medallions. `metal="gold"` is a no-op
-    passthrough (the gold master IS the art). Disk-cached like every
-    other derived asset (`metal_variant_file`'s pattern) — paid once
-    per (file, metal), never per paint."""
+    """The ring letter's GOLD, SILVER or BRONZE finish, derived AT LOAD
+    from the GOLD master (owner decree 2026-07-19: "bolje crtati na
+    licu mesta nego 15MB fajlova" — retiring the 76 pre-rendered
+    `_silver.png`/`_bronze.png` files) — now SHADE-aware (R8a redo,
+    owner spec 2026-07-21 night, replacing both the retired straight-
+    multiply bronze recipe the owner called "weak" AND the gold
+    passthrough): every metal, including gold, runs through
+    `AssetCache._recolor_to_shade` (the SAME kernel `_metal_swapped`
+    uses for badge medallions, Rule #5) with the WHOLE opaque glyph as
+    the mask — a ring letter mixes no gray stone the way a medallion
+    does, so unlike the badge's hue-window detection every alpha>0
+    pixel simply IS a metal pixel. The active SHADE per metal comes
+    from `config.paths.metal_shade` (a Settings choice, not a
+    parameter here — same reasoning as `subdial_plate_file`'s active
+    set). Disk-cached like every other derived asset, keyed by shade
+    and `defaults.METAL_SWAP_VERSION` — paid once per (file, metal,
+    shade), never per paint."""
     path = art_file(path)
-    if metal == "gold" or path is None:
+    if path is None:
         return path
+    shade = paths.metal_shade(metal)
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_letter_{metal}.png"
+        / f"{stamp}_{int(path.stat().st_mtime)}_letter_{metal}_{shade}"
+        f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
     if not cache.exists():
-        source = QPixmap(str(path))
-        if source.isNull():
-            raise ValueError(f"cannot load image asset: {path}")
-        silver = AssetCache._desaturated(source)
-        result = (
-            silver if metal == "silver"
-            else AssetCache._bronzed(silver, defaults.BRONZE_LETTER_TINT)
-        )
+        # QImage end to end (the same R1b threading law _metal_swapped
+        # documents) — a future background warmup of letter glyphs must
+        # never trip the QPixmap-off-GUI-thread crash class.
+        result = AssetCache._letter_recolored(QImage(str(path)), metal, shade)
         try:
             cache.parent.mkdir(parents=True, exist_ok=True)
             if not result.save(str(cache)):
-                raise OSError(f"QPixmap.save returned False for {cache}")
+                raise OSError(f"QImage.save returned False for {cache}")
         except OSError as error:
             # A cold cache is only slower, never wrong — but say so.
             print(f"letter metal cache write failed: {error}", file=sys.stderr)
@@ -383,14 +384,18 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
     (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed
     the BRONZE file even under the gold/silver look — QToolTip embeds
     files, not pixmaps). Cached in the raster cache keyed by the file's
-    mtime; None or a non-swap metal returns the original path."""
+    mtime, the active SHADE and `defaults.METAL_SWAP_VERSION` (R8a redo,
+    2026-07-21 night); None or a non-swap metal returns the original
+    path."""
     path = art_file(path)
     if path is None or metal not in defaults.METAL_SWAP_TARGETS:
         return path
+    shade = paths.metal_shade(metal)
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_{metal}.png"
+        / f"{stamp}_{int(path.stat().st_mtime)}_{metal}_{shade}"
+        f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
     if not cache.exists():
         # QImage end to end — this runs on the background hover-warm
@@ -569,18 +574,67 @@ class AssetCache:
         return self._pixmaps[key]
 
     @staticmethod
+    def _recolor_to_shade(
+        rgb: np.ndarray, weight: np.ndarray, value: np.ndarray,
+        hue_deg: float, sat_target: float, ref_value: float,
+    ) -> np.ndarray:
+        """THE metal recolor kernel (R8a redo, owner spec 2026-07-21
+        night — replaces the reverted percentile-stretch attempt, see
+        the NOTE above `config.defaults.METAL_SHADES`): hue and
+        saturation are REPLACED outright by the chosen shade's fixed
+        target; VALUE is `value` UNCHANGED per pixel save for one
+        bounded GLOBAL gain — a single scalar for the whole masked
+        region, computed from ITS OWN mean so the shade lands near its
+        reference brightness regardless of how dark/bright the source
+        art happens to be, clamped to `defaults.
+        METAL_RECOLOR_GAIN_RANGE` so highlights never blow past white
+        and shadows never crush to black. A straight multiply preserves
+        every relative light/dark relationship in the source exactly —
+        the relief survives because nothing here remaps by RANK
+        (percentile) the way the reverted attempt did.
+
+        `_metal_swapped` (badge medallions, hue-window mask) and
+        `letter_metal_file`'s `_letter_recolored` (ring letters, whole-
+        glyph mask) both call this ONE function (Rule #5/#19) — they
+        differ only in how `weight`/`value` are computed, never in the
+        recolor math. Pure numpy, no per-pixel Python (the render-path
+        rule the metal swap has followed since 2026-07-12)."""
+        gain_lo, gain_hi = defaults.METAL_RECOLOR_GAIN_RANGE
+        masked = weight > 0.05
+        gain = (
+            np.clip(ref_value / max(value[masked].mean(), 1e-6), gain_lo, gain_hi)
+            if masked.any() else 1.0
+        )
+        new_val = np.clip(value * gain, 0.0, 1.0)
+        sector = (hue_deg % 360.0) / 60.0
+        index = int(sector) % 6
+        fraction = sector - int(sector)
+        p = new_val * (1.0 - sat_target)
+        q = new_val * (1.0 - sat_target * fraction)
+        t = new_val * (1.0 - sat_target * (1.0 - fraction))
+        order = [
+            (new_val, t, p), (q, new_val, p), (p, new_val, t),
+            (p, q, new_val), (t, p, new_val), (new_val, p, q),
+        ][index]
+        swapped = np.stack(order, axis=-1)
+        return rgb * (1.0 - weight[..., None]) + swapped * weight[..., None]
+
+    @staticmethod
     def _metal_swapped(source: QImage, metal: str) -> QImage:
         """The hue-SELECTIVE metal swap (owner insight 2026-07-12): the
         bronze-plate art mixes warm bronze details with GRAY stone and
         engravings — a soft warm-hue window with a saturation ramp
-        selects only the bronze pixels, which take the target metal's
-        hue/saturation/value; everything else stays as drawn. numpy
+        selects only the bronze pixels (UNCHANGED by the R8a shade
+        redo — "the mask stays"), which take the active SHADE's
+        hue/saturation while their OWN value survives through
+        `_recolor_to_shade`; everything else stays as drawn. numpy
         vectorized (per-pixel Python is banned in the render path).
         QImage in, QImage out (R1b threading find, 2026-07-20): the
         background hover-warm sweep reaches this through
         `metal_variant_file`, and QPixmap must never be touched off the
         GUI thread — GUI-thread callers wrap with QPixmap.fromImage."""
-        target = defaults.METAL_SWAP_TARGETS[metal]
+        shade = paths.metal_shade(metal)
+        hue_deg, sat_target, ref_value = defaults.METAL_SHADES[metal][shade]
         dpr = source.devicePixelRatio()
         image = source.convertToFormat(
             QImage.Format.Format_RGBA8888
@@ -617,23 +671,49 @@ class AssetCache:
             smoothstep((hue - (low - soft)) / soft)
             * (1.0 - smoothstep((hue - high) / soft))
             * smoothstep((sat - sat_lo) / (sat_hi - sat_lo))
-        )[..., None]
+        )
 
-        new_sat = np.clip(sat * target["sat_mul"], 0.0, 1.0)
-        new_val = np.clip(maxc * target["val_mul"], 0.0, 1.0)
-        sector = (target["hue"] % 360.0) / 60.0
-        index = int(sector) % 6
-        fraction = sector - int(sector)
-        p = new_val * (1.0 - new_sat)
-        q = new_val * (1.0 - new_sat * fraction)
-        t = new_val * (1.0 - new_sat * (1.0 - fraction))
-        order = [
-            (new_val, t, p), (q, new_val, p), (p, new_val, t),
-            (p, q, new_val), (t, p, new_val), (new_val, p, q),
-        ][index]
-        swapped = np.stack(order, axis=-1)
+        rgba[..., :3] = AssetCache._recolor_to_shade(
+            rgb, weight, maxc, hue_deg, sat_target, ref_value
+        )
+        out_bytes = np.ascontiguousarray(
+            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
+        )
+        out = QImage(
+            out_bytes.tobytes(), width, height, width * 4,
+            QImage.Format.Format_RGBA8888,
+        ).copy()
+        out.setDevicePixelRatio(dpr)
+        return out
 
-        rgba[..., :3] = rgb * (1.0 - weight) + swapped * weight
+    @staticmethod
+    def _letter_recolored(source: QImage, metal: str, shade: str) -> QImage:
+        """A ring letter glyph recolored to `metal`'s `shade` — the
+        SAME `_recolor_to_shade` kernel `_metal_swapped` uses, but with
+        the WHOLE opaque glyph as the mask (weight 1 wherever alpha >
+        0): a letter mixes no gray stone the way a medallion does, so
+        there is nothing to detect — every drawn pixel already IS the
+        metal (R8a redo, owner spec 2026-07-21 night, replacing both
+        the retired straight-multiply bronze recipe ("weak," owner
+        verdict) and the old gold no-op passthrough — gold is now just
+        another shade like the rest, so cache keys stay honest about
+        what actually produced each file)."""
+        hue_deg, sat_target, ref_value = defaults.METAL_SHADES[metal][shade]
+        dpr = source.devicePixelRatio()
+        image = source.convertToFormat(QImage.Format.Format_RGBA8888)
+        width, height = image.width(), image.height()
+        stride = image.bytesPerLine() // 4
+        buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
+        rgba = (
+            buffer.reshape(height, stride, 4)[:, :width, :]
+            .astype(np.float64) / 255.0
+        )
+        rgb = rgba[..., :3]
+        value = rgb.max(axis=-1)
+        weight = np.where(rgba[..., 3] > 0.0, 1.0, 0.0)
+        rgba[..., :3] = AssetCache._recolor_to_shade(
+            rgb, weight, value, hue_deg, sat_target, ref_value
+        )
         out_bytes = np.ascontiguousarray(
             (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
         )
@@ -663,44 +743,6 @@ class AssetCache:
         painter.drawPixmap(0, 0, source)
         painter.end()
         return result
-
-    @staticmethod
-    def _bronzed(source: QPixmap, tint: str) -> QPixmap:
-        """The ring-letter BRONZE recipe (owner decision 2026-07-12,
-        retired setup/make_bronze_letters.py — live-derived now):
-        `source` is a GRAYSCALE (silver-desaturated) pixmap, R=G=B on
-        every opaque pixel; a brightness/contrast LUT (identity at the
-        sealed 1.0/1.0 values — darkened candidates read darker than
-        the bronze medallions, owner verdict) then a straight
-        per-channel multiply with `tint`. Alpha carried through
-        unchanged."""
-        dpr = source.devicePixelRatio()
-        image = source.toImage().convertToFormat(
-            QImage.Format.Format_RGBA8888
-        )
-        width, height = image.width(), image.height()
-        stride = image.bytesPerLine() // 4
-        buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
-        rgba = (
-            buffer.reshape(height, stride, 4)[:, :width, :]
-            .astype(np.float64) / 255.0
-        )
-        gray = rgba[..., 0]      # grayscale source: R == G == B
-        brightness = defaults.BRONZE_LETTER_BRIGHTNESS
-        contrast = defaults.BRONZE_LETTER_CONTRAST
-        gray = np.clip((gray * brightness - 0.5) * contrast + 0.5, 0.0, 1.0)
-        color = QColor(tint)
-        tint_rgb = np.array([color.redF(), color.greenF(), color.blueF()])
-        rgba[..., :3] = gray[..., None] * tint_rgb[None, None, :]
-        out_bytes = np.ascontiguousarray(
-            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
-        )
-        out = QImage(
-            out_bytes.tobytes(), width, height, width * 4,
-            QImage.Format.Format_RGBA8888,
-        ).copy()
-        out.setDevicePixelRatio(dpr)
-        return QPixmap.fromImage(out)
 
     @staticmethod
     def _saturated(source: QPixmap, factor: float) -> QPixmap:

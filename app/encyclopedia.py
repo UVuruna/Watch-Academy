@@ -24,7 +24,7 @@ import shutil
 from datetime import date
 from pathlib import Path
 
-from PySide6.QtCore import QByteArray, QRectF, QSize, Qt
+from PySide6.QtCore import QByteArray, QEvent, QRectF, QSize, Qt
 from PySide6.QtGui import QFont, QIcon, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import (
@@ -44,7 +44,7 @@ from PySide6.QtWidgets import (
 import html as _html
 
 from app.theme import apply_theme, size_to_screen
-from app.ui_style import style_button, style_finish_frame
+from app.ui_style import style_button, style_look_chip
 from config import constants, defaults, paths
 from config.ui_text import ui
 from core import continents
@@ -181,9 +181,18 @@ _TOPIC_GROUPS = (
       # because it IS the year's wheel (the same wheel the Almanac reads),
       # not a myth or a craft.
       "months")),
+    # THE GODS/FAITHS SPLIT (owner round R8b item 6: "zasto i dalje
+    # imamo ove dve verzije" — the standalone Wider-Pantheon topics
+    # (WORKPLAN Session 8: "Greek"/"Norse"/"Egyptian"/"Slavic", the
+    # culture's seatless A-listers) sat as confusing SECOND tiles right
+    # beside the merged "Greek gods"/etc. topic once round R3b folded
+    # Planetary+Pantheon into ONE 22-page topic per culture — deleted
+    # completely per the owner's verdict; the merged topics are the
+    # only home now (Rule #6). The subgroup split itself lives in
+    # `_GALLERY_SUBGROUPS` below (item 5c) — this flat tuple is still
+    # the group's full membership `_show_topics` iterates.
     ("The Divine",
      ("greek", "norse", "egypt", "slavic",
-      "wider_greek", "wider_norse", "wider_egypt", "wider_slavic",
       "religion", "religion_alt", "bible", "bible2", "bible_dark")),
     ("The Human Wheel",
      ("virtues", "sins", "moods", "intelligences", "profession",
@@ -201,6 +210,91 @@ _TOPIC_GROUPS = (
     # Database/encyclopedia.json, not a new article-writing pass).
     ("The Archetypes", ()),
 )
+
+# THE GALLERY SUBGROUPS (owner round R8b item 5c, GALLERY LAYOUT REWORK
+# v2: "imamo te velike grupacije sa velikim naslovom po sredini... a
+# onda imamo podnaslove koji su centrirani levo i koji objedinjuju manje
+# grupacije... Ovo za podgrupe vazi samo za one tematike koje su
+# prenatrpane tj. The Celestial Engine, The Divine"): a LEFT-ALIGNED
+# subheading partitions an overloaded HALL's own tiles into smaller
+# kinship clusters; every OTHER hall stays one flat run of rows under
+# its own big centered title. Each hall's own partition here is
+# EXHAUSTIVE and non-overlapping against its `_TOPIC_GROUPS` membership
+# (`test_gallery_subgroups_partition_their_hall_exactly` pins this).
+#
+# Celestial: the CLOCK BODIES riding the dial itself (the day/week
+# figures, the instrument's own parts, the two zodiacs, the earth-as-
+# weekday theme) / the transient SKY EVENTS (moon phases, seasons, the
+# solstice-equinox turning points, both eclipse families) / the year's
+# own structural YEAR WHEELS (the calendar-systems essay, the Slavic
+# months). Divine: GODS (item 6 — the four merged Planetary/Pantheon
+# cultures, now titled by their bare demonym) / FAITHS & CREEDS (the two
+# religion sets, the three Bible mirrors).
+_GALLERY_SUBGROUPS = {
+    "The Celestial Engine": (
+        ("The Clock Bodies", (
+            "week", "instrument", "planets", "astrology", "chinese",
+            "cosmos", "continents",
+        )),
+        ("The Sky Events", (
+            "moon", "seasons", "sun", "eclipse_solar", "eclipse_lunar",
+        )),
+        ("The Year Wheels", ("era", "months")),
+    ),
+    "The Divine": (
+        ("Gods", ("greek", "norse", "egypt", "slavic")),
+        ("Faiths & Creeds", (
+            "religion", "religion_alt", "bible", "bible2", "bible_dark",
+        )),
+    ),
+}
+
+# THE GALLERY ROW GEOMETRY (owner round R8b item 5a fix — ground-
+# truthed against a LIVE dialog's own horizontal scrollbar, not
+# re-derived on paper): the OLD icon-sizing formula
+# (`(viewport.width() - 48) // columns - spacing`) silently dropped the
+# `columns * ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX` term from its own
+# budget — a full 4-column row reliably overflowed the frame by
+# ~100px at any viewport narrower than the point where the icon
+# saturates at its own MAX ceiling (exactly the "X scroll again"
+# regression the owner's screenshot showed). `_show_topics` sets the
+# gallery column's own left/right margin to a KNOWN, explicit
+# GUIDE_SPACING_PX (never Qt's unstated QVBoxLayout default) so these
+# two functions — one pair, Rule #5 — have no hidden fudge factor left:
+# `_gallery_content_width` sizes the dialog's own MIN WIDTH (__init__)
+# and `_gallery_icon_ceiling` is its exact inverse, the live per-resize
+# HARD ceiling `_rescale_topics` clamps every icon size to, zoom
+# included — so a full row can never spill past its viewport at ANY
+# window width or zoom level.
+def _gallery_content_width(icon_px: int) -> int:
+    """The pixel width one full ENCYCLOPEDIA_GALLERY_MAX_COLUMNS row
+    needs at `icon_px` icon size: the cards side by side with their own
+    padding, the inter-card spacing, and the column's own margins."""
+    columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    spacing = defaults.GUIDE_SPACING_PX * 2
+    margins = defaults.GUIDE_SPACING_PX * 2
+    card = icon_px + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
+    return columns * card + (columns - 1) * spacing + margins
+
+
+def _gallery_icon_ceiling(viewport_width: int) -> int:
+    """The LARGEST icon size a full row can wear inside `viewport_width`
+    without overflowing it — the exact inverse of
+    `_gallery_content_width` above."""
+    columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    spacing = defaults.GUIDE_SPACING_PX * 2
+    margins = defaults.GUIDE_SPACING_PX * 2
+    available = viewport_width - margins - (columns - 1) * spacing
+    return available // columns - defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
+
+
+# THE SESSION ZOOM (owner round R8b item 5b): Ctrl+MouseWheel scales
+# fonts/images/tiles together; module-level so it SURVIVES a Home ->
+# reopen within the same app run ("persisted for the session at
+# least") without touching `app.settings_store` (owned by the parallel
+# METAL_SWAP/settings agent this round) — never written to disk, resets
+# on app restart.
+_session_zoom = 1.0
 
 # The SEASONS topic (owner 2026-07-13; split 2026-07-16, ROADMAP queue
 # #10): the year's quarters, the tropics' halves and the measured twins
@@ -379,30 +473,21 @@ _WEEKDAY_RESTRUCTURED_TOPICS = frozenset(defaults.WEEKDAY_THEME_TITLES) - {
 # every alternative above only covers one.
 NINTH_SEAT_PHILOSOPHICAL_NAME = "The Unfound"
 
-# THE WIDER PANTHEON (WORKPLAN Session 8): (topic key, gallery title,
-# theme dir, icon plate, figure names). The figures are the culture's
-# famous A-list gods that NEITHER roster seats (the pantheon catalog's
-# Wider-Pantheon lane), reconciled against the round-four/five locks:
-# figures the Pantheon roster went on to seat (Artemis, Hera, Frigg,
-# Mokoš, Bastet) drop off, and the retired ninths whose canon moved
-# them out of a seat fold back in (Set, Baldur, Crnobog). The already-
-# plated Planetary figures (Hermes, Helios, Selene, Cronus, Amun,
-# Khonsu, Montu, Sól, Máni, Hors) keep their own weekday topics and
-# are not re-articled here (Rule #5). Each figure's article lives in
-# the encyclopedia.json "wider" section; the plate is wired ahead of
-# the art under <theme>/wider/ (missing files stay hidden, like every
-# topic). The icon reuses the culture's existing ninth plate so the
-# gallery card always shows a face.
-_WIDER_TOPICS = (
-    ("wider_greek", "Greek", "greek", "greek/pantheon/gaia.png",
-     ("Dionysus", "Hephaestus", "Hestia")),
-    ("wider_norse", "Norse", "norse", "norse/pantheon/Yggdrasil.png",
-     ("Baldur", "Heimdall", "Njord")),
-    ("wider_egypt", "Egyptian", "egypt", "egypt/pantheon/pharaoh.png",
-     ("Set", "Nut", "Geb", "Ptah", "Sekhmet")),
-    ("wider_slavic", "Slavic", "slavic", "slavic/primary/triglav.png",
-     ("Crnobog", "Stribog", "Jarilo", "Rod")),
-)
+# THE GOD-TOPIC GALLERY TITLE (owner round R8b item 6): "Ubuduce posto
+# ce biti podnaslov Gods onda ce nazivi biti samo Greek, Egypt, Norse
+# ... itd" — with a "Gods" SUBGROUP heading now sitting above these four
+# cards (`_GALLERY_SUBGROUPS` below, item 5c), the "gods" suffix is
+# redundant on the tile itself. This overrides ONLY the gallery card
+# text and the reader's own top header (`_topic_display_title`) — every
+# OTHER reader of `defaults.WEEKDAY_THEME_TITLES` (the Ancient Gods
+# menu, the Weekday theme picker, Settings) is a DIFFERENT surface the
+# owner never asked to rename, so the shared table itself stays
+# untouched (Rule #5: one shared name would have widened the blast
+# radius past what was asked). Demonyms per the owner's own pick:
+# "Egypt" (not "Egyptian"), "Norse" stays Norse (not "Nordic").
+_GOD_TOPIC_GALLERY_TITLES = {
+    "greek": "Greek", "norse": "Norse", "egypt": "Egypt", "slavic": "Slavic",
+}
 
 
 def _metal_looks(base: Path, colored: Path | None) -> tuple:
@@ -420,15 +505,45 @@ def _metal_looks(base: Path, colored: Path | None) -> tuple:
     return tuple(looks)
 
 
+def _colored_sibling(path: Path) -> Path:
+    """The COLORED twin of a bronze-plate FILE (owner round R8b item 3:
+    "Panteon bogovi nemaju Colored verzije u switchu" — the Pantheon
+    pages lack Colored even though the art landed). The asset tree
+    nests `colored/` at TWO different depths depending on where the
+    bronze file itself lives: an ordinary plate under `<theme>/primary/
+    <File>.png` has its colored twin as a SIBLING of `primary/` itself
+    (`<theme>/colored/<File>.png`, two parents up); a SEATED Pantheon
+    plate under `<theme>/pantheon/<file>.png` nests its colored twin
+    ONE level in, directly inside `pantheon/`
+    (`<theme>/pantheon/colored/<file>.png`) — the shape the owner's art
+    pipeline actually shipped (ground-truthed against
+    assets/weekday/*/greek/pantheon/colored/ and .../norse/pantheon/
+    colored/). The old call sites each hardcoded ONE of these two
+    depths: `_pantheon_topic.looks_for` assumed the shallow pantheon
+    nesting (right for a genuine Pantheon-only figure like Poseidon,
+    silently missing for a seat that FALLS BACK to the planetary
+    primary plate, like Zeus/Thor/Loki/Tyr, since none of those four
+    Norse/Greek pantheon seats grew their own dedicated art); the
+    Ninth's `_ninth_looks` assumed the deep primary-sibling shape
+    unconditionally, missing Gaia/Yggdrasil (both pantheon-rooted
+    plates). One function, one rule, checked against the folder name
+    itself rather than guessed from the call site (Rule #5/#6)."""
+    if path.parent.name == "pantheon":
+        return path.parent / "colored" / path.name
+    return path.parent.parent / "colored" / path.name
+
+
 def _ninth_looks(theme: str, plate: Path) -> tuple | None:
     """The Ninth's OWN look switcher (owner bug, "Gaia screenshot":
     the 9th member's page carried the color switcher for NONE of its
     metal-plate themes) — every theme whose seated eight cycle Colored/
     Bronze/Gold/Silver gives its Ninth the SAME cycle, `colored` found
-    the same way (a sibling `colored/` folder, graceful-absent); the
-    Chinese Ninth (The Cat) mirrors the OTHER eleven animals' Bronze-
-    first order instead. Themes with no per-metal art (egypt, slavic,
-    the plain-color families) return None — the Ninth stays the single
+    via `_colored_sibling` (owner round R8b item 3 fix — Gaia/Yggdrasil
+    sit under `pantheon/`, the shallow-nested colored twin the old
+    unconditional `parent.parent` guess always missed); the Chinese
+    Ninth (The Cat) mirrors the OTHER eleven animals' Bronze-first
+    order instead. Themes with no per-metal art (egypt, slavic, the
+    plain-color families) return None — the Ninth stays the single
     plain plate, same as before, since there is nothing to switch."""
     if theme == "chinese":
         return tuple(
@@ -437,14 +552,14 @@ def _ninth_looks(theme: str, plate: Path) -> tuple | None:
                 ("Bronze", plate),
                 ("Gold", metal_variant_file(plate, "gold")),
                 ("Silver", metal_variant_file(plate, "silver")),
-                ("Colored", plate.parent.parent / "colored" / plate.name),
+                ("Colored", _colored_sibling(plate)),
             )
         )
     if theme not in constants.METAL_THEMES:
         return None
-    colored = plate.parent.parent / "colored" / plate.name
     return tuple(
-        (label, ((path,),)) for label, path in _metal_looks(plate, colored)
+        (label, ((path,),))
+        for label, path in _metal_looks(plate, _colored_sibling(plate))
     )
 
 
@@ -557,6 +672,9 @@ def _weekday_topic(theme: str):
             "name": names[body],
             "article": ("article", article_set, body),
             "accents": defaults.BODY_ACCENT_HUES[body],
+            # TITLES CARRY THE DAY (owner round R8b item 8): read by
+            # `_entry_name`, the ONE build point that appends it.
+            "weekday": constants.WEEKDAY_FULL_NAMES[body],
         }
 
     def good_entry() -> dict:
@@ -569,6 +687,7 @@ def _weekday_topic(theme: str):
             "name": ruler_name,
             "article": ("article_face", article_set, "sun", "ruler"),
             "accents": defaults.BODY_ACCENT_HUES["sun"],
+            "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
         }
 
     def evil_entry() -> dict:
@@ -580,6 +699,7 @@ def _weekday_topic(theme: str):
             "name": servant_name,
             "article": ("article_face", article_set, "sun", "servant"),
             "accents": defaults.BODY_ACCENT_HUES["sun"],
+            "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
         }
 
     title_entry = {
@@ -634,9 +754,13 @@ def _pantheon_topic(theme: str) -> list[dict]:
     name paired with planetary art or the reverse. Metal cycling
     follows the theme's OWN rule (`theme in constants.METAL_THEMES`) —
     greek/norse cycle Colored/Bronze/Gold/Silver on the Pantheon plates
-    too (a sibling `pantheon/colored/` folder exists for all four
-    cultures); egypt/slavic stay a single plain plate, like their
-    Planetary block."""
+    too, `_colored_sibling` finding the twin at whichever depth the
+    seat's OWN plate lives at (owner round R8b item 3 fix: a seat that
+    falls back to the planetary primary plate — Zeus, Thor, Loki, Tyr,
+    none of whom grew dedicated Pantheon art — used to silently drop
+    Colored, since the old code only ever checked the shallow
+    `pantheon/colored/` nesting); egypt/slavic stay a single plain
+    plate, like their Planetary block."""
     table = defaults.WEEKDAY_PANTHEON[theme]
     metal = theme in constants.METAL_THEMES
 
@@ -655,10 +779,9 @@ def _pantheon_topic(theme: str) -> list[dict]:
 
     def looks_for(path: Path) -> tuple:
         if metal:
-            colored = path.parent / "colored" / path.name
             return tuple(
                 (label, ((one,),))
-                for label, one in _metal_looks(path, colored)
+                for label, one in _metal_looks(path, _colored_sibling(path))
             )
         return (("", ((path,),)),)
 
@@ -669,6 +792,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
             "name": name,
             "article": ("article", article_set, article_body),
             "accents": defaults.BODY_ACCENT_HUES[body],
+            "weekday": constants.WEEKDAY_FULL_NAMES[body],
         }
 
     sun_path, _sun_name, _sun_set, _sun_body = seated("sun")
@@ -704,12 +828,14 @@ def _pantheon_topic(theme: str) -> list[dict]:
         "name": ruler_name,
         "article": ("article_face", face_article_set, "sun", "ruler"),
         "accents": defaults.BODY_ACCENT_HUES["sun"],
+        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     evil_entry = {
         "looks": looks_for(dual_path),
         "name": servant_name,
         "article": ("article_face", face_article_set, "sun", "servant"),
         "accents": defaults.BODY_ACCENT_HUES["sun"],
+        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     return (
         [title_entry]
@@ -759,6 +885,7 @@ def _continents_topic(travel_date: date) -> dict:
             "name": defaults.WEEKDAY_THEME_NAMES["continents"][body],
             "article": ("article", "continents", body),
             "accents": defaults.BODY_ACCENT_HUES[body],
+            "weekday": constants.WEEKDAY_FULL_NAMES[body],
         }
 
     ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES["continents"]
@@ -783,12 +910,14 @@ def _continents_topic(travel_date: date) -> dict:
         "name": ruler_name,
         "article": ("article_face", "continents", "sun", "ruler"),
         "accents": defaults.BODY_ACCENT_HUES["sun"],
+        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     evil_entry = {
         "looks": region_looks("north_pole"),
         "name": servant_name,
         "article": ("article_face", "continents", "sun", "servant"),
         "accents": defaults.BODY_ACCENT_HUES["sun"],
+        "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     pangea = continents.ninth_is_pangea_from_repos(
         travel_date, SeasonsRepository(), MoonPhaseRepository()
@@ -1352,26 +1481,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 for key, art in entry_specs
             ],
         }
-    # THE WIDER PANTHEON (WORKPLAN Session 8): the seatless A-list
-    # figures, one topic per culture. Every article resolves through
-    # the encyclopedia "wider" family; the wired plates land later.
-    for topic_key, title, theme, icon, figures in _WIDER_TOPICS:
-        topics[topic_key] = {
-            "title": title,
-            "icon": defaults.WEEKDAY_ART_DIR / icon,
-            "entries": [
-                {
-                    "images": (
-                        defaults.WEEKDAY_ART_DIR / theme / "wider"
-                        / f"{figure.lower()}.png",
-                    ),
-                    "name": figure,
-                    "article": ("emblem", "wider", figure),
-                    "accents": (),
-                }
-                for figure in figures
-            ],
-        }
     return topics
 
 
@@ -1478,6 +1587,14 @@ class EncyclopediaDialog(QDialog):
         self._scroll = QScrollArea()
         self._scroll.setWidgetResizable(True)
         self._scroll.setFrameShape(QFrame.Shape.NoFrame)
+        # THE SESSION ZOOM (owner round R8b item 5b): seeded from
+        # whatever the LAST open Encyclopedia window left it at
+        # (`_session_zoom`, module-level); an event filter on the
+        # scroll area's own VIEWPORT catches Ctrl+wheel before the
+        # scroll logic ever sees it — plain wheel keeps scrolling
+        # normally (`eventFilter` below).
+        self._zoom = _session_zoom
+        self._scroll.viewport().installEventFilter(self)
         self._topic_key: str | None = None
         self._entry_index = 0
         # The reader chrome (owner 2026-07-14: big, vivid, modern —
@@ -1548,15 +1665,18 @@ class EncyclopediaDialog(QDialog):
         layout.addWidget(self._scroll, stretch=1)
         layout.addLayout(row)
         # LAYOUT fix round R3 (owner: MIN WIDTH = 4 * the single theme
-        # tile, "788px width, tiles clipping" dies here) — never let the
-        # window shrink so far that a max-width (4-column) gallery row
-        # would have to spill sideways; the scroll area's own vertical
-        # bar is the only overflow this dialog ever needs.
-        tile = (
+        # tile, "788px width, tiles clipping" dies here); the WIDTH
+        # itself is `_gallery_content_width` (owner round R8b item 5a
+        # fix — the old ad hoc `tile * columns` arithmetic dropped the
+        # inter-card spacing and the column's own margins, reliably
+        # undersizing this minimum and letting the frame overflow at
+        # exactly this width) — never let the window shrink so far that
+        # a max-width (4-column) gallery row would have to spill
+        # sideways; the scroll area's own vertical bar is the only
+        # overflow this dialog ever needs.
+        min_width = _gallery_content_width(
             defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
-            + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
         )
-        min_width = tile * defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
         self.setMinimumWidth(min_width)
         # OPENING SIZE (owner DESIGN #1, R4): A4 portrait at 80% of the
         # screen's available height — the R3 min-width law above still
@@ -1651,42 +1771,106 @@ class EncyclopediaDialog(QDialog):
         return self._symbolism.trio_article(ref[1])["base"]
 
     def _entry_name(self, entry: dict) -> str:
-        """An entry's display name: the WEEK, INSTRUMENT and SEASONS
-        pages take their titles from the encyclopedia database
-        (localized there); everything else translates through the UI
-        overlay."""
+        """An entry's display name — THE ONE BUILD POINT (owner round
+        R8b item 8: "Selene — Monday", every weekday-figure title shows
+        its day; "encyclopedia builds titles centrally, do it at the
+        ONE build point"): the WEEK, INSTRUMENT and SEASONS pages take
+        their titles from the encyclopedia database (localized there);
+        everything else translates through the UI overlay. A
+        `"weekday"` key on `entry` (set by `_weekday_topic`/
+        `_pantheon_topic`/`_continents_topic`'s body/good/evil builders
+        — never the title pages or the Ninth, which sits OUTSIDE the
+        weekday, CANON.md) appends " — {Weekday}" here and ONLY here,
+        so no other call site needs to know the convention exists."""
         name = entry["name"]
         if isinstance(name, tuple):
             if name[0] == "week_title":
-                return self._encyclopedia.week(name[1])["title"]
-            if name[0] == "season_title":
-                return self._encyclopedia.season(name[1])["title"]
-            if name[0] == "sun_title":
-                return self._encyclopedia.sun(name[1])["title"]
-            if name[0] == "moon_title":
-                return self._encyclopedia.moon(name[1])["title"]
-            if name[0] == "era_title":
-                return self._encyclopedia.era(name[1])["title"]
-            if name[0] == "eclipse_title":
-                return self._encyclopedia.eclipse(name[1])["title"]
-            if name[0] == "theme_title":
-                return self._encyclopedia.theme_title(name[1])["title"]
-            if name[0] == "week_duality_title":
-                return self._encyclopedia.week_duality(name[1])["title"]
-            return self._encyclopedia.instrument(name[1])["title"]
-        return self._tr(name)
+                base = self._encyclopedia.week(name[1])["title"]
+            elif name[0] == "season_title":
+                base = self._encyclopedia.season(name[1])["title"]
+            elif name[0] == "sun_title":
+                base = self._encyclopedia.sun(name[1])["title"]
+            elif name[0] == "moon_title":
+                base = self._encyclopedia.moon(name[1])["title"]
+            elif name[0] == "era_title":
+                base = self._encyclopedia.era(name[1])["title"]
+            elif name[0] == "eclipse_title":
+                base = self._encyclopedia.eclipse(name[1])["title"]
+            elif name[0] == "theme_title":
+                base = self._encyclopedia.theme_title(name[1])["title"]
+            elif name[0] == "week_duality_title":
+                base = self._encyclopedia.week_duality(name[1])["title"]
+            else:
+                base = self._encyclopedia.instrument(name[1])["title"]
+        else:
+            base = self._tr(name)
+        weekday = entry.get("weekday")
+        if weekday:
+            return f"{base} — {self._tr(weekday)}"
+        return base
+
+    def _build_topic_card(self, key: str) -> QToolButton:
+        """One gallery tile — factored out of `_show_topics` (owner
+        round R8b item 5c: the subgroup rewrite builds MANY row runs,
+        not one shared grid, so every caller needs the SAME card
+        recipe, Rule #5). `_GOD_TOPIC_GALLERY_TITLES` overrides the
+        four god topics' tile text (item 6: "Greek", not "Greek
+        gods")."""
+        topic = self._topics[key]
+        card = QToolButton()
+        card.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+        card.setText(
+            self._tr(_GOD_TOPIC_GALLERY_TITLES.get(key, topic["title"]))
+        )
+        icon = paths.art_file(topic["icon"])
+        if icon is not None and icon.exists():
+            # The FULL-RES art backs the icon — QIcon renders whatever
+            # size _rescale_topics asks for.
+            card.setIcon(QIcon(str(icon)))
+        card.clicked.connect(
+            lambda checked=False, chosen=key: self._show_topic(chosen)
+        )
+        self._topic_cards.append(card)
+        return card
+
+    def _build_gallery_rows(self, keys: tuple[str, ...]) -> QVBoxLayout:
+        """`keys` chunked into ENCYCLOPEDIA_GALLERY_MAX_COLUMNS-wide
+        rows (owner round R8b item 5): each row is its OWN QHBoxLayout
+        with a stretch on BOTH sides, so every row — a full one or a
+        trailing short one — centers as a block with no special case
+        (item 5d: "red sa manje od 4 clana... centrirani"). The fixed
+        per-row card count plus `_rescale_topics`'s own
+        `min(icon, width_share)` ceiling together guarantee no row can
+        ever force a horizontal scrollbar (item 5a), at any window
+        width or zoom level."""
+        rows = QVBoxLayout()
+        rows.setSpacing(defaults.GUIDE_SPACING_PX * 2)
+        columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+        for start in range(0, len(keys), columns):
+            row = QHBoxLayout()
+            row.setSpacing(defaults.GUIDE_SPACING_PX * 2)
+            row.addStretch(1)
+            for key in keys[start:start + columns]:
+                row.addWidget(self._build_topic_card(key))
+            row.addStretch(1)
+            rows.addLayout(row)
+        return rows
 
     def _show_topics(self) -> None:
-        """Screen 1 — the topic gallery in the owner's FIVE sections,
-        EVERYTHING centered (owner 2026-07-13: headers and cards
-        alike); the card icons are RESPONSIVE — _rescale grows and
-        shrinks them with the window between the two bounds. LAYOUT
-        fix round R3: a group never spills past
-        ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row — it WRAPS into
-        further rows instead (a QGridLayout, not a QHBoxLayout), so a
-        horizontal scrollbar can never happen; the dialog's own MIN
-        WIDTH (set once in __init__) keeps a full row readable even at
-        the minimum icon size."""
+        """Screen 1 — the topic gallery in the owner's FIVE sections
+        (GALLERY LAYOUT REWORK v2, owner round R8b item 5), EVERYTHING
+        centered (owner 2026-07-13): every hall's own BIG CENTERED
+        title always leads (unchanged); an OVERLOADED hall additionally
+        partitions into LEFT-ALIGNED subgroup headings
+        (`_GALLERY_SUBGROUPS`, item 5c) that unify its tiles into
+        smaller kinship clusters — every other hall stays one flat run
+        of rows. `_build_gallery_rows` (not a QGridLayout any more)
+        both centers short rows (item 5d) and, together with
+        `_rescale_topics`'s width-clamped icon size, keeps this gallery
+        from EVER spilling a horizontal scrollbar (item 5a) — the
+        dialog's own MIN WIDTH (set once in __init__) keeps a full row
+        readable even at the minimum icon size and zoomed all the way
+        out."""
         self._title.setText(self._tr("Encyclopedia"))
         self._topic_key = None
         self._back.hide()
@@ -1707,7 +1891,16 @@ class EncyclopediaDialog(QDialog):
         content = QWidget()
         column = QVBoxLayout(content)
         column.setSpacing(defaults.GUIDE_SPACING_PX)
-        max_columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+        # A KNOWN, explicit margin (owner round R8b item 5a fix) — NOT
+        # Qt's unstated QVBoxLayout default (9px each side): the exact
+        # value `_gallery_content_width`/`_gallery_icon_ceiling` above
+        # both bake in, so the no-overflow guarantee has no hidden
+        # fudge factor left to drift if a future Qt/theme change alters
+        # that default.
+        column.setContentsMargins(
+            defaults.GUIDE_SPACING_PX, defaults.GUIDE_SPACING_PX,
+            defaults.GUIDE_SPACING_PX, defaults.GUIDE_SPACING_PX,
+        )
         for group_title, keys in _TOPIC_GROUPS:
             header = QLabel(self._tr(group_title))
             header.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -1723,31 +1916,20 @@ class EncyclopediaDialog(QDialog):
             column.addWidget(rule)
             if not keys:
                 continue          # The Archetypes: empty until Sessions 6/8
-            grid = QGridLayout()
-            grid.setSpacing(defaults.GUIDE_SPACING_PX * 2)
-            for index, key in enumerate(keys):
-                topic = self._topics[key]
-                card = QToolButton()
-                card.setToolButtonStyle(
-                    Qt.ToolButtonStyle.ToolButtonTextUnderIcon
+            subgroups = _GALLERY_SUBGROUPS.get(group_title)
+            if subgroups is None:
+                column.addLayout(self._build_gallery_rows(keys))
+                continue
+            for sub_title, sub_keys in subgroups:
+                sub_header = QLabel(self._tr(sub_title))
+                sub_header.setAlignment(Qt.AlignmentFlag.AlignLeft)
+                sub_header.setStyleSheet(
+                    f"font-size: {defaults.GUIDE_SUBTITLE_PX}px;"
+                    "font-weight: bold;"
+                    f"margin-top: {defaults.GUIDE_SPACING_PX}px;"
                 )
-                card.setText(self._tr(topic["title"]))
-                icon = paths.art_file(topic["icon"])
-                if icon is not None and icon.exists():
-                    # The FULL-RES art backs the icon — QIcon renders
-                    # whatever size _rescale asks for.
-                    card.setIcon(QIcon(str(icon)))
-                card.clicked.connect(
-                    lambda checked=False, chosen=key: self._show_topic(chosen)
-                )
-                grid_row, grid_col = divmod(index, max_columns)
-                grid.addWidget(card, grid_row, grid_col)
-                self._topic_cards.append(card)
-            wrap = QHBoxLayout()
-            wrap.addStretch(1)
-            wrap.addLayout(grid)
-            wrap.addStretch(1)
-            column.addLayout(wrap)
+                column.addWidget(sub_header)
+                column.addLayout(self._build_gallery_rows(sub_keys))
         column.addStretch(1)
         self._scroll.setWidget(content)
         self._rescale()
@@ -1835,6 +2017,31 @@ class EncyclopediaDialog(QDialog):
                     path, Path(target) / f"{safe}{suffix}.png"
                 )
 
+    def _topic_display_title(self) -> str:
+        """The reader's TOP header (owner round R8b item 8: "mora gore
+        pored naslova cele tematike da piše i da li smo na sekciji
+        Panteon ili Planetary" — fix BOTH title spots to a coherent
+        pair, no bare topic name stacked twice, his screenshot showed
+        "Greek gods" over "Greek gods"): the topic's own title —
+        `_GOD_TOPIC_GALLERY_TITLES` overriding the god-topic tiles
+        exactly like the gallery card (item 6) — plus, for the four
+        merged Planetary/Pantheon themes ONLY, which SECTION this page
+        belongs to. The per-entry caption below (`_entry_name`) reads
+        the DATABASE's own theme_title text ("Greek gods" / "Greek
+        Pantheon") — a different string in a different register, so
+        the pair never repeats the identical bare name twice."""
+        topic = self._topics[self._topic_key]
+        title = self._tr(
+            _GOD_TOPIC_GALLERY_TITLES.get(self._topic_key, topic["title"])
+        )
+        if self._topic_key in _PANTHEON_MERGED_THEMES:
+            section = (
+                self._tr("Pantheon") if self._entry_index >= _PANTHEON_BLOCK_SIZE
+                else self._tr("Planetary")
+            )
+            title = f"{title} — {section}"
+        return title
+
     def _show_entry(self) -> None:
         """The current entry's PAGE: the images row (the Astrology
         pair sits side by side), the bold name and the text, all
@@ -1843,7 +2050,7 @@ class EncyclopediaDialog(QDialog):
         topic = self._topics[self._topic_key]
         entries = topic["entries"]
         entry = entries[self._entry_index]
-        self._title.setText(self._tr(topic["title"]))
+        self._title.setText(self._topic_display_title())
         self._back.show()
         self._download.show()
         self._update_roster_button()
@@ -1993,19 +2200,38 @@ class EncyclopediaDialog(QDialog):
         self._scroll.setWidget(content)
         self._scroll.verticalScrollBar().setValue(0)
 
+    def _block_width(self) -> int:
+        """The article block's width — ONE formula (Rule #5: `_rescale`
+        and `_cycle_look` both need it, and used to drift when each
+        computed it separately) — the configured fraction of the
+        viewport, `self._zoom` (item 5b) scaling it further but NEVER
+        past the viewport itself (item 5a: no horizontal scrollbar,
+        ever)."""
+        viewport = max(320, self._scroll.viewport().width())
+        return min(
+            viewport,
+            round(
+                viewport * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
+                * self._zoom
+            ),
+        )
+
     def _rescale(self) -> None:
         """Everything follows the window — on the gallery the card
         icons resize between their bounds; on a topic each entry BLOCK
         spans the configured width fraction, the images share the
         block, and the font grows with the width at the gentle em-like
-        coefficient."""
+        coefficient. `self._zoom` (owner round R8b item 5b, Ctrl+wheel)
+        then scales the RESULT on top: the block width may grow up to
+        the full viewport (never past it — item 5a's no-overflow
+        invariant still wins), and fonts/images grow past their
+        width-driven ceiling once the block has nowhere wider to go, so
+        zooming in keeps doing something even at max block width."""
         if self._topic_cards:
             self._rescale_topics()
             return
         viewport = max(320, self._scroll.viewport().width())
-        block_width = round(
-            viewport * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
-        )
+        block_width = self._block_width()
         for block in self._blocks:
             block.setFixedWidth(block_width)
         font_px = min(
@@ -2019,6 +2245,7 @@ class EncyclopediaDialog(QDialog):
                 ),
             ),
         )
+        font_px = max(1, round(font_px * self._zoom))
         for label in self._text_labels:
             # A real QFont (owner bug fix round R3, THE INVISIBLE
             # CLIPPER: "Nevidljivi element seče pasus The Lesson"):
@@ -2057,28 +2284,34 @@ class EncyclopediaDialog(QDialog):
 
     def _rescale_topics(self) -> None:
         """The gallery cards follow the window (owner 2026-07-13, LAYOUT
-        fix round R3): every group now WRAPS at
-        ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row instead of
-        stretching a single row to fit the widest group, so the icon
-        side is sized from WIDTH alone — exactly `max_columns` cards
-        always fit the viewport, by construction, so a horizontal
-        scrollbar can never appear; the vertical scrollbar is the only
-        overflow this gallery ever needs. Clamped between the two
-        configured bounds; the dialog's own MIN WIDTH (__init__) keeps
-        a full row readable even at the minimum icon size."""
-        viewport = self._scroll.viewport()
-        columns = defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
-        spacing = defaults.GUIDE_SPACING_PX * 2
-        width_share = (
-            (viewport.width() - 48) // columns - spacing
-        )
+        fix round R3; GALLERY LAYOUT REWORK v2, owner round R8b item 5):
+        every row (`_build_gallery_rows`) holds exactly
+        ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards, so the icon side is
+        sized from WIDTH alone — `_gallery_icon_ceiling` is the exact
+        LARGEST icon one column of the fixed row can ever afford, by
+        construction, so a horizontal scrollbar can never appear (item
+        5a; the R8b ground-truthed fix — the OLD `width_share`
+        arithmetic silently dropped the columns*CARD_PADDING term,
+        reliably overflowing the live dialog's own scrollbar). Zoom
+        (item 5b) then scales the WIDTH-driven natural size up or down,
+        but `min(icon, ceiling)` is a HARD cap regardless of zoom —
+        zooming in on a narrow window saturates at the per-column
+        budget instead of overflowing it; `card.setFixedSize` (not
+        `setMinimumSize`) makes that ceiling absolute even against a
+        long translated label that would otherwise widen its own
+        button past the budget."""
+        ceiling = _gallery_icon_ceiling(self._scroll.viewport().width())
         icon = max(
             defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX,
-            min(defaults.ENCYCLOPEDIA_TOPIC_ICON_MAX_PX, width_share),
+            min(defaults.ENCYCLOPEDIA_TOPIC_ICON_MAX_PX, ceiling),
         )
+        icon = max(1, min(round(icon * self._zoom), ceiling))
         for card in self._topic_cards:
             card.setIconSize(QSize(icon, icon))
-            card.setMinimumSize(icon + 40, icon + 44)
+            card.setFixedSize(
+                icon + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX,
+                icon + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX + 4,
+            )
         # Commit the new card geometry NOW (owner bug 2026-07-13: the
         # first open drew the groups overlapping — the rows kept their
         # pre-show heights until a manual resize forced a relayout).
@@ -2151,11 +2384,15 @@ class EncyclopediaDialog(QDialog):
         ceiling (owner imperative 2026-07-14 round two: the WHOLE image
         grid never eats more than READER_IMAGE_MAX_HEIGHT_FRACTION of
         the page — stacked rows SHARE the ceiling — so the text stays
-        on screen)."""
+        on screen). `self._zoom` (item 5b) scales the ceiling itself —
+        WIDTH stays bounded by `block_width` alone (never the frame,
+        item 5a), so zooming in only ever grows the page taller
+        (vertical scroll, always allowed), never wider."""
         rows = max(1, state.get("rows", 1))
         ceiling = round(
             self._scroll.viewport().height()
             * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION
+            * self._zoom
         )
         max_height = max(
             24,
@@ -2200,24 +2437,20 @@ class EncyclopediaDialog(QDialog):
         state["index"] = (state["index"] + step) % len(state["looks"])
         self._preferred_look_label = state["titles"][state["index"]]
         self._update_look_caption()
-        block_width = round(
-            max(320, self._scroll.viewport().width())
-            * defaults.ENCYCLOPEDIA_TEXT_WIDTH_FRACTION
-        )
-        self._render_cell(state, block_width)
+        self._render_cell(state, self._block_width())
 
     def _update_look_caption(self) -> None:
         """Restyle the persistent top-row caption to the OPEN entry's
-        CURRENT look — a border-only frame in the finish's own color
-        (owner fix round R3), or the neutral accent border for a
-        kinship-group switcher (Planets/Signs/Art and the like, never
-        the Colored gradient)."""
+        CURRENT look — a FILLED pill in the finish/globe-look's own
+        color (owner round R8b item 4, superseding the R3 border-only
+        frame), or the neutral filled chip for a kinship-group switcher
+        (Planets/Signs/Art and the like, never a metal or globe fill)."""
         state = self._look_state
         if state is None:
             return
         label = state["titles"][state["index"]]
         self._look_caption.setText(self._tr(label))
-        style_finish_frame(self._look_caption, label)
+        style_look_chip(self._look_caption, label)
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -2229,3 +2462,52 @@ class EncyclopediaDialog(QDialog):
         # deformed until a manual resize).
         super().showEvent(event)
         self._rescale()
+
+    def _apply_zoom_delta(self, angle_delta_y: int) -> None:
+        """One Ctrl+wheel notch (owner round R8b item 5b) — Qt reports
+        ±120 `angleDelta().y()` per notch on a standard wheel (finer
+        high-resolution wheels report smaller steps; `/120` still lands
+        a fair fraction of one STEP for those). Clamped to
+        `ENCYCLOPEDIA_ZOOM_RANGE` and written back to the MODULE-level
+        `_session_zoom` so the next Encyclopedia window this app run
+        opens seeds from where this one left off ("persisted for the
+        session at least")."""
+        global _session_zoom
+        low, high = constants.ENCYCLOPEDIA_ZOOM_RANGE
+        steps = angle_delta_y / 120.0
+        self._zoom = max(
+            low, min(high, self._zoom + steps * constants.ENCYCLOPEDIA_ZOOM_STEP)
+        )
+        _session_zoom = self._zoom
+        self._rescale()
+
+    def wheelEvent(self, event) -> None:  # noqa: N802 — Qt override
+        """Ctrl+MouseWheel zooms the WHOLE encyclopedia (item 5b) when
+        the cursor sits over the dialog's OWN chrome — the top button
+        row, the title, the pager — outside the scroll viewport, which
+        installs the identical guard as an event filter instead (Qt
+        delivers a wheel event to whichever widget is under the cursor,
+        not the top-level window, so both paths are needed to cover
+        every cursor position). Plain wheel here is a no-op — there is
+        nothing to scroll outside the viewport."""
+        if event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+            self._apply_zoom_delta(event.angleDelta().y())
+            event.accept()
+            return
+        super().wheelEvent(event)
+
+    def eventFilter(self, obj, event) -> bool:  # noqa: N802 — Qt override
+        """The SAME Ctrl+wheel zoom guard as `wheelEvent` above,
+        installed on the scroll area's own VIEWPORT (item 5b, "Ctrl +
+        moushe wheel... dakle idemo u 2 pristup"): a plain wheel here is
+        NEVER touched — it falls through to the viewport's own
+        wheelEvent and scrolls exactly as before; only Ctrl+wheel is
+        intercepted before the scroll logic ever sees it."""
+        if (
+            obj is self._scroll.viewport()
+            and event.type() == QEvent.Type.Wheel
+            and event.modifiers() & Qt.KeyboardModifier.ControlModifier
+        ):
+            self._apply_zoom_delta(event.angleDelta().y())
+            return True
+        return super().eventFilter(obj, event)

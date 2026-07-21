@@ -113,6 +113,30 @@ def subdial_set() -> str:
     return _subdial_set
 
 
+# The active METAL SHADE per metal (R8a round, owner spec 2026-07-21
+# night) — mirrors the art-source/subdial-set switches above: ONE
+# global per metal (never threaded as a parameter) because it is a
+# single user preference reached from many call sites (`render.assets.
+# AssetCache._metal_swapped` for badges, `render.assets.
+# letter_metal_file` for ring letters) exactly like `subdial_set`'s own
+# docstring explains for its one reader.
+_metal_shades: dict[str, str] = dict(constants.METAL_SHADE_DEFAULT)
+
+
+def set_metal_shade(metal: str, shade: str) -> None:
+    """Switch the active SHADE for `metal` ("gold" / "bronze" /
+    "silver")."""
+    if metal not in constants.METAL_SHADE_NAMES:
+        raise ValueError(f"unknown metal: {metal}")
+    if shade not in constants.METAL_SHADE_NAMES[metal]:
+        raise ValueError(f"unknown shade for {metal}: {shade}")
+    _metal_shades[metal] = shade
+
+
+def metal_shade(metal: str) -> str:
+    return _metal_shades.get(metal, constants.METAL_SHADE_DEFAULT[metal])
+
+
 def art_file(path: Path | None) -> Path | None:
     """Map a CANONICAL (source-less) asset path into the active source
     subtree — assets/<root>/<source>/<rest> — falling back to the OTHER

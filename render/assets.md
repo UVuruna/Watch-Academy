@@ -23,30 +23,87 @@ startup (idempotent, progress-logged), and `pixmap_by_height` routes
 any request that fits under the ceiling through the copy — oversized
 requests keep the original, small sources stay untouched.
 
-**ADAPTIVE gold/bronze recolor (owner COLORS verdict 2026-07-20/21,
-ART-INFRA round — "SILVER JE SOLIDAN u oba [letter i badge], LETTER
-BRONZE i BADGE GOLD" needed a rethink):** the retired flat recipes —
-letter bronze's straight per-channel multiply, badge gold's flat
-hue/sat/val remap — both read muddy/grayish depending on how bright or
-dark the SOURCE art happened to render. Replaced by a shared engine,
-module-level (not private to `AssetCache`, both `_bronzed` and
-`_metal_swapped` call it): `_metal_ramp_rgb(hue_deg)` builds a 5-step
-(saturation, value) ramp at any hue from `defaults.
-GOLD_RAMP_SAT_VAL_STEPS` (sampled off the owner's own
-`UV/DESIGN/gold pallete.png` reference); `_percentile_stretch(values,
-mask, low_pct, high_pct)` contrast-stretches the SOURCE's own masked-
-region lightness so its 5th-95th percentile lands on [0, 1] — the
-owner's "računamo početno stanje" ask, an over-bright and an over-dark
-source both normalize to the same range; `_ramp_lookup(stretched,
-ramp)` walks the stretched value through the ramp. `AssetCache.
-_bronzed` (letters) and the "gold" branch of `AssetCache.
-_metal_swapped` (badges) both run stretch-then-lookup now; SILVER is
-UNTOUCHED in both (`_desaturated` and `_metal_swapped`'s "silver"
-branch keep their original flat recipes verbatim — the owner's "SILVER
-JE SOLIDAN"). Every cache key carrying either recipe's output
-(`letter_metal_file`, `metal_variant_file`) folds in
-`defaults.ADAPTIVE_METAL_RECOLOR_VERSION` so a future curve change
-invalidates stale PNGs instead of serving the old recipe forever.
+**THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the redo
+after an ADAPTIVE PERCENTILE-STRETCH attempt was reverted the SAME day
+it landed, `git show 013b5ca` for the corpse):** that first attempt
+contrast-stretched each source's own masked-region lightness onto a
+fixed 5-step ramp per pixel RANK — a nonlinear per-pixel remap that
+flattened every relief (engraving lines, drapery folds, background
+texture) into a detail-free yellow wash ("nemamo kontrast, sve je
+svetlo, izgubili smo sve moguće detalje," owner verdict). `git show
+11a993e` reverted the algorithm to the pre-ramp recipes verbatim; THIS
+round replaces those pre-ramp recipes for good with a properly designed
+one, following the owner's law instead of guessing at it: hue and
+saturation are REPLACED outright by a chosen SHADE's fixed target —
+never scaled from the source's own unreliable hue/saturation — while
+VALUE is the source pixel's OWN, multiplied by ONE bounded GLOBAL
+scalar gain (a single number for the whole masked region, computed from
+its own mean so differently-lit source plates land near the same shade
+brightness, clamped to `defaults.METAL_RECOLOR_GAIN_RANGE`). A straight
+multiply preserves every relative light/dark relationship in the relief
+exactly — nothing here remaps by percentile RANK the way the reverted
+attempt did. This is precisely why the pre-round SILVER recipe already
+read as "solidan u oba" (solid in both, badge and letter): it always
+scaled the source's own value by a near-identity multiplier instead of
+replacing it — gold and bronze now follow the same philosophy with
+their own hue/saturation.
+
+`AssetCache._recolor_to_shade(rgb, weight, value, hue_deg, sat_target,
+ref_value)` is the ONE kernel implementing this (Rule #5/#19) — every
+metal recolor in the codebase calls it:
+- `AssetCache._metal_swapped(source, metal)` (badge medallions): the
+  hue-window + saturation-ramp MASK is UNCHANGED from before this round
+  ("the mask stays") — only warm bronze-plate pixels are detected, gray
+  stone and engravings never move. `metal` resolves its active SHADE
+  through `config.paths.metal_shade(metal)` (a Settings choice, see
+  below), looks the `(hue_deg, sat_target, ref_value)` triple up in
+  `defaults.METAL_SHADES[metal][shade]`, and feeds the kernel.
+  `defaults.METAL_SWAP_TARGETS` is now just the membership tuple
+  `("gold", "silver")` — badges never bronze-swap; bronze medallions
+  stay the art as drawn, unaffected by the bronze shade pick (out of
+  this round's scope — the owner's two complaints were badge GOLD and
+  letter BRONZE, never badge bronze).
+- `AssetCache._letter_recolored(source, metal, shade)` (ring letters,
+  called from the module-level `letter_metal_file`): the mask is the
+  WHOLE opaque glyph (weight 1 wherever alpha > 0) — a letter mixes no
+  gray stone the way a medallion does, so every drawn pixel already IS
+  the metal. ALL THREE metals run through this now, including gold —
+  the old "gold is a no-op passthrough" shortcut is gone now that gold
+  itself has five selectable shades; the DEFAULT "classic" shade is
+  tuned to read close to the retired passthrough's look.
+
+Each metal offers several SELECTABLE shades (`defaults.METAL_SHADES`,
+names validated against `config.constants.METAL_SHADE_NAMES`): GOLD's
+five bands are sampled directly off the owner's reference swatch
+(`UV/DESIGN/gold pallete.png`, `QColor.getHsvF()` at each band's
+center — hue flat ~44.9deg across all five, only saturation/reference-
+value step dark-amber to pale/champagne); BRONZE is a 3-step ramp
+around `BRONZE_LETTER_TINT`'s own hue/saturation (~30deg/0.76); SILVER
+is a 3-step ramp at saturation EXACTLY 0.0 (hue is irrelevant there —
+this is what makes `_letter_recolored`'s silver output exact R==G==B,
+not merely close). The bright gold bands (classic/pale/champagne) use
+`reference_value` 0.85 rather than the palette swatch's own flat-color
+1.00: a flat color swatch has no relief to protect, but a real ring
+LETTER is already bright (masked mean ~0.88) — chasing 1.00 there
+forces a gain that clips a big share of the glyph to solid white for no
+visual gain, found during this round's verification sweep on the real
+`assets/ring/letters/*.png` files; badge medallions are far darker
+(masked mean ~0.40) and hit the SAME gain ceiling either way, so this
+was a strict win — zero change to badges, less needless letter
+clipping. Every derived cache filename folds in the metal, the active
+SHADE and `defaults.METAL_SWAP_VERSION` (`letter_metal_file`,
+`metal_variant_file`) so a shade switch or a future recolor-math change
+never serves a stale PNG.
+
+**The Settings side:** `Settings.metal_shade_gold/_bronze/_silver`
+(`app/settings_store.md`) persist the pick; `app.controller.
+apply_display_settings` pushes them into `config.paths` module globals
+(`set_metal_shade`/`metal_shade`, mirroring `set_subdial_set`'s exact
+pattern — ONE global per metal because it is a single user preference
+reached from many render call sites, never threaded as a parameter);
+`app.settings_dialog._build_metal_shade_group` (`app/settings_dialog.md`)
+is the picker, one combo per metal, filed in Themes beside the Subdial
+plate picker.
 
 Module helpers beyond the cache: `ring_face_color()` (the ring art's
 median-luminance face sample, the procedural subdial fill),
@@ -54,12 +111,8 @@ median-luminance face sample, the procedural subdial fill),
 images), `letter_metal_file(path, metal)` (owner decree 2026-07-19,
 "bolje crtati na licu mesta nego 15MB fajlova" — retired the ~15 MB of
 pre-rendered `<Stem>_silver.png`/`<Stem>_bronze.png` ring-letter files
-and their two generator scripts: silver is a straight grayscale
-desaturation of the gold master, `AssetCache._desaturated`; bronze the
-ADAPTIVE ramp recolor off the silver result, `AssetCache._bronzed`
-(see above — this WAS a straight per-channel multiply, superseded the
-same round the ADAPTIVE engine landed), disk-cached like every other
-derived asset; `metal="gold"` is a no-op passthrough),
+and their two generator scripts; now SHADE-aware, see above — every
+metal, including gold, is disk-cached per (file, metal, shade)),
 `eclipse_solar_type_icon(type_)` (ECLIPSE ICON WIRING round — the
 small per-type solar icon: total/partial ride their
 `assets/icons/sun_eclipse{,'2'}.png` source as drawn, annular is

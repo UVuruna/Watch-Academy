@@ -80,6 +80,14 @@ extracted so `app.controller._build_menu`'s translated copy and
 from the ONE table (Rule #5); `SLOT_COMPLICATION_TITLES` — the four
 Complication mode display titles (Digital Time/Date/Day length/
 Seconds), read by [Slot Theme](../app/slot_theme.md)'s own tab.
+**THE METAL SHADES (R8a round, owner spec 2026-07-21 night):**
+`METAL_SHADE_NAMES` (metal → its shade-name tuple, gold five/bronze
+three/silver three), `METAL_SHADE_DEFAULT` (the per-metal install
+default) and `METAL_SHADE_TITLES` (shade → its Settings-combo display
+title) — the validation/enumeration surface; the numeric
+(hue, saturation, reference value) recipe per shade lives in
+`defaults.METAL_SHADES` (see that file's own entry, and
+[Assets](../render/assets.md) for the full algorithm).
 
 ### `defaults.py` — Developer Tunables
 Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
@@ -166,19 +174,32 @@ every version actually on disk for the active source, in both
 `_v2`/`_v3` suffixes, and rotates by the date's proleptic ordinal.
 Sole consumer: the [Encyclopedia](../app/encyclopedia.md)'s "The Two
 Triangles" duality topic.
-**ADAPTIVE GOLD/BRONZE RAMP (owner COLORS verdict 2026-07-20/21,
-ART-INFRA round):** `GOLD_RAMP_HUE_DEG` / `GOLD_RAMP_SAT_VAL_STEPS` —
-the 5-step (hue, then per-step saturation/value) ramp sampled straight
-off `UV/DESIGN/gold pallete.png`; `ADAPTIVE_METAL_PERCENTILES` — the
-5th/95th percentile window `render.assets._percentile_stretch`
-contrast-stretches the SOURCE's own masked-region lightness to before
-the ramp lookup (the owner's "računamo početno stanje" ask);
-`ADAPTIVE_METAL_RECOLOR_VERSION` — the cache-key salt both
-`letter_metal_file` and `metal_variant_file` fold in so a curve change
-invalidates stale PNGs. `BRONZE_LETTER_TINT` now supplies ONLY the
-bronze ramp's hue (its own brightness/contrast knobs, sealed at 1.0
-identity, are RETIRED along with the flat-multiply recipe they tuned).
-Full recipe: [Assets](../render/assets.md).
+**THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the redo
+after an adaptive percentile-stretch attempt, `GOLD_RAMP_HUE_DEG` /
+`GOLD_RAMP_SAT_VAL_STEPS` / `ADAPTIVE_METAL_PERCENTILES` /
+`ADAPTIVE_METAL_RECOLOR_VERSION`, was reverted the same day it landed
+for flattening every relief into a wash):** `METAL_SHADES` — per metal
+(gold/bronze/silver) a table of selectable shade name →
+`(hue_deg, saturation, reference_value)`; gold's five bands are sampled
+directly off `UV/DESIGN/gold pallete.png` (hue flat ~44.9deg, only
+saturation/reference-value step dark-amber to pale/champagne — the
+bright three share reference_value 0.85 rather than the swatch's own
+flat-color 1.00, tuned against real ring letters during this round's
+verification so their highlights stop over-clipping), bronze ramps
+around `BRONZE_LETTER_TINT`'s own hue/saturation, silver ramps at
+saturation EXACTLY 0.0. `METAL_RECOLOR_GAIN_RANGE` — the ONE bounded
+global gain every shade's `reference_value` is nudged toward from a
+masked region's own mean (never a per-pixel remap — the lesson of the
+reverted attempt). `METAL_SWAP_VERSION` — the cache-key salt
+`letter_metal_file` and `metal_variant_file` fold in (alongside the
+active shade name) so a shade switch or a recolor-math change never
+serves a stale PNG. `METAL_SWAP_HUE_WINDOW`/`_SOFT`/`METAL_SWAP_SAT_RAMP`
+(the badge medallion MASK — unchanged by this round) and
+`METAL_SWAP_TARGETS` (now just the membership tuple `("gold",
+"silver")` — badges never bronze-swap) stay as before. `constants.py`
+holds the shade NAME tables (`METAL_SHADE_NAMES`, `METAL_SHADE_DEFAULT`,
+`METAL_SHADE_TITLES`) since `defaults.py` is downstream of `paths.py`'s
+validation needs. Full recipe: [Assets](../render/assets.md).
 **ECLIPSE TYPE ICONS (same round):** `ECLIPSE_LUNAR_TYPE_ICON` +
 `eclipse_lunar_type_icon(type_)` — the owner-APPROVED red/gold/blue
 mapping (total/partial/penumbral) riding
@@ -301,6 +322,14 @@ plain `settings.json`, watch N (2+) its own `settings.<N>.json`, and a
 startup scan finding every one that already exists on disk (see
 [Settings Store](../app/settings_store.md) for the full rule and
 [Watch Manager](../app/watch_manager.md) for the roster it rebuilds).
+Also hosts the active SUBDIAL SET (`set_subdial_set`/`subdial_set`) and,
+R8a round (owner spec 2026-07-21 night), the active METAL SHADE per
+metal (`set_metal_shade(metal, shade)`/`metal_shade(metal)`) — the
+SAME module-global pattern as the art source: ONE global per metal
+because it is a single user preference reached from many render call
+sites (`render.assets.AssetCache._metal_swapped` for badges,
+`render.assets.letter_metal_file` for ring letters), never threaded as
+a parameter.
 
 ## Connections
 

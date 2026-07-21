@@ -23,7 +23,7 @@ where the owner's own example applies — Palette + Clock tint = Colors):
 | Display | Opacity, Element sizes, Archetype |
 | Colors | Palette, Clock (ring) tint, Saturation |
 | Custom art | Custom ring, Custom hands |
-| Themes | Theme rotation, Artwork |
+| Themes | Theme rotation, Artwork, Subdial plate, Metal shades |
 | Language | Language, Calendar eras |
 | System | System (autostart + Visibility Z mode) |
 
@@ -157,6 +157,20 @@ always stays the requested 50% exactly (each panel's own vertical
   set; sets 1-4 carry three hand-drawn finishes each, "solo" carries
   one hand-drawn silver with gold/bronze derived live
   ([Assets](../render/assets.md)`.subdial_plate_file`).
+- **Metal shades** (R8a round, owner spec 2026-07-21 night — the redo
+  after the adaptive-percentile attempt was reverted for flattening
+  relief) — three combos, one per metal (gold five shades, bronze
+  three, silver three; `constants.METAL_SHADE_NAMES`/
+  `METAL_SHADE_TITLES`), restored from `Settings.metal_shade_gold/
+  _bronze/_silver` and applied via `config.paths.set_metal_shade` in
+  `app.controller.apply_display_settings` — same plumbing pattern as
+  Subdial plate. The picked shade recolors ring letters everywhere
+  ([Assets](../render/assets.md)`.letter_metal_file`) and badge
+  medallions wherever gold/silver is chosen
+  (`AssetCache._metal_swapped`) — bronze medallions stay the art as
+  drawn regardless of the bronze shade pick (out of this round's
+  scope; the owner's two complaints were badge GOLD and letter
+  BRONZE, never badge bronze).
 - **Language** — all provider languages; the first pick translates
   the whole corpus in the background and caches it. The Default
   button jumps back to English (the shipped originals).

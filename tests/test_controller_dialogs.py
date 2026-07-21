@@ -228,6 +228,8 @@ def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
 # --- opening sizes (DESIGN #1) ---------------------------------------------------
 
 def test_encyclopedia_opens_a4_portrait_at_80pct_height_respecting_min_width(controller):
+    from app.encyclopedia import _gallery_content_width
+
     controller._open_encyclopedia_at(None, 0)
     dialog = controller._encyclopedia
     available = _available(dialog)
@@ -238,11 +240,12 @@ def test_encyclopedia_opens_a4_portrait_at_80pct_height_respecting_min_width(con
     a4_width = round(
         expected_height * defaults.DIALOG_A4_ASPECT_W / defaults.DIALOG_A4_ASPECT_H
     )
-    tile = (
-        defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
-        + defaults.ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX
-    )
-    min_width = tile * defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    # MIN WIDTH (owner round R8b item 5a fix): `_gallery_content_width`
+    # replaces the old ad hoc `tile * columns` arithmetic, which
+    # dropped the inter-card spacing and the gallery column's own
+    # margins entirely and reliably let the frame overflow at exactly
+    # this width — see app/encyclopedia.py's own geometry comment.
+    min_width = _gallery_content_width(defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX)
     expected_width = min(max(a4_width, min_width), available.width())
 
     assert dialog.height() == expected_height

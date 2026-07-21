@@ -6,6 +6,13 @@ gradient pill with bold white text. The role picks its (top, bottom)
 gradient pair from `defaults.UI_BUTTON_COLORS`; hover lightens and
 pressed darkens the same pair, so a new role needs only two hex
 values.
+
+A second builder, `style_look_chip` (owner round R8b item 4), dresses
+the Encyclopedia's look/finish switcher CAPTION the same filled-pill
+way — metal finishes, the continents globe looks and every kinship-
+group switcher all read through the ONE function, `_LOOK_FILLS` naming
+the palette and `_readable_text` deriving light/dark text from each
+fill's own luminance.
 """
 
 from PySide6.QtCore import Qt
@@ -59,46 +66,87 @@ def style_button(button, role: str, small: bool = False) -> None:
     button.setCursor(Qt.CursorShape.PointingHandCursor)
 
 
-def style_finish_frame(label, finish: str) -> None:
-    """The FINISH SWITCHER's caption (owner fix round R3, Color
-    Switcher.png): a border-only frame in the finish's own color — NO
-    fill, so it reads as a selector chip rather than another solid
-    button. "Colored" wears a two-stop gradient border (owner
-    correction 2026-07-21: blue on the left flowing to red) — QSS has
-    no gradient BORDER property, so the gradient is faked the standard
-    Qt way: the OUTER widget paints the gradient as its background and
-    the inset padding shows through as a colored "border ring" around
-    the INNER text (owner's `background-clip` trick made portable) —
-    here the label draws directly on the dialog surface, so the ring
-    shows the gradient itself with the surface color inset instead.
-    NOT every topic's arrow-cycle is a metal finish (Planets/Signs/Art,
-    the Week's kinship groups, Astrology's Logo & Constellation/Colored/
-    Sign) — anything outside the four finish names wears the neutral
-    accent border, never the gradient (that reads specifically as
-    "every color", reserved for the actual Colored finish)."""
-    if finish == "Colored":
-        stops = defaults.ENCYCLOPEDIA_FINISH_GRADIENT
-        step = 1 / max(1, len(stops) - 1)
-        stops_css = ", ".join(
-            f"stop:{round(i * step, 3)} {hue}" for i, hue in enumerate(stops)
+# THE LOOK-SWITCHER FILL PALETTE (owner round R8b item 4: "jel me
+# stvarno zezas da ne mozes da napravis gradient button" — the R3
+# border-gradient chip (`style_finish_frame`, retired below) FAILED
+# visually: QSS has no real gradient-BORDER primitive, so a
+# `border-color` gradient only ever paints the four corner miters, never
+# a smooth sweep. Every switcher option now wears a FILL instead, same
+# recipe as the reader buttons above. Colored keeps the owner's blue-
+# left/red-right sweep (`defaults.ENCYCLOPEDIA_FINISH_GRADIENT`, reused
+# — Rule #5), now filling the whole chip; Bronze/Gold/Silver reuse their
+# own existing border hex (`defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS`)
+# as a SOLID fill. The continents GLOBE looks are new this round — the
+# owner's own four suggested words ("atmosphere = sky-blue gradient,
+# clean = deep ocean blue, day = warm gold, night = navy") realized as
+# one coherent family: Atmosphere leads sky-blue and ends warm gold (the
+# DAY pairing), Atmosphere · Night leads navy and ends the SAME blue the
+# Colored gradient uses (family cohesion across the whole palette),
+# Clean is a solid ocean teal by day and the SAME navy by night. Text
+# color is NEVER hand-picked (`_readable_text`, YIQ luminance per fill)
+# so a future palette retune can never silently go illegible.
+_LOOK_FILLS: dict[str, str | tuple[str, str]] = {
+    "Bronze": defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Bronze"],
+    "Gold": defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Gold"],
+    "Silver": defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Silver"],
+    "Colored": defaults.ENCYCLOPEDIA_FINISH_GRADIENT,
+    "Atmosphere": ("#4FC3F7", "#FFB74D"),
+    "Atmosphere · Night": ("#0B1F3A", "#3B5FE0"),
+    "Clean": "#0E6B8C",
+    "Clean · Night": "#0B1F3A",
+}
+
+
+def _yiq(hex_color: str) -> float:
+    """The standard YIQ perceived-brightness estimate (0..255) — one
+    formula, reused for every fill so "readable" is derived, never
+    hand-guessed per color (Rule #4)."""
+    color = QColor(hex_color)
+    return (color.red() * 299 + color.green() * 587 + color.blue() * 114) / 1000
+
+
+def _readable_text(fill) -> str:
+    """Light text on a dark fill, dark text on a light one — checked
+    against EVERY stop of a gradient fill, so a two-tone sweep only
+    gets white text when BOTH ends are dark enough to carry it."""
+    stops = fill if isinstance(fill, tuple) else (fill,)
+    dark_fill = all(_yiq(stop) < 128 for stop in stops)
+    return (
+        defaults.THEME_COLORS["text_primary"] if dark_fill
+        else defaults.THEME_COLORS["surface_0"]
+    )
+
+
+def style_look_chip(label, look_label: str) -> None:
+    """The look/finish switcher's caption (owner fix round R8b, item 4)
+    — every option wears a FILL now (`_LOOK_FILLS` above), not the R3
+    border-only frame it replaces (`style_finish_frame`, retired: the
+    gradient-BORDER trick never rendered as a real sweep). A
+    `look_label` outside that table — a kinship-group switcher never
+    meant to read as a metal or a globe look (Planets/Signs/Art, the
+    Week's Canon/Gods/Religions/Themes/Animals, Astrology's Logo &
+    Constellation/Colored/Sign) — wears a neutral dark chip instead,
+    the SAME dialog-surface tone `app.theme` already uses, always
+    readable with light text (Rule #5: no second hand-picked neutral)."""
+    fill = _LOOK_FILLS.get(look_label)
+    if fill is None:
+        background = defaults.THEME_COLORS["surface_3"]
+        text = defaults.THEME_COLORS["text_primary"]
+    elif isinstance(fill, tuple):
+        background = (
+            "qlineargradient(x1:0, y1:0, x2:1, y2:0, "
+            f"stop:0 {fill[0]}, stop:1 {fill[1]})"
         )
-        border = (
-            "3px solid transparent; border-image: none; "
-            "border-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, "
-            f"{stops_css}) 1"
-        )
+        text = _readable_text(fill)
     else:
-        solid = defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS.get(
-            finish, defaults.THEME_COLORS["accent"]
-        )
-        border = f"3px solid {solid}"
+        background = fill
+        text = _readable_text(fill)
     label.setStyleSheet(
-        f"color: {defaults.THEME_COLORS['text_primary']};"
-        "font-weight: bold;"
+        f"color: {text}; font-weight: bold;"
         f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
         f"padding: {defaults.UI_BUTTON_SMALL_PADDING_PX[0]}px "
         f"{defaults.UI_BUTTON_SMALL_PADDING_PX[1]}px;"
         f"border-radius: {defaults.UI_BUTTON_RADIUS_PX}px;"
-        "background: transparent;"
-        f"border: {border};"
+        f"background: {background};"
+        "border: 1px solid rgba(0, 0, 0, 130);"
     )

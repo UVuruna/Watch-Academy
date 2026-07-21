@@ -562,6 +562,30 @@ EARTH_STYLES = ("clean", "atmo")
 # 2026-07-19, render.assets.letter_metal_file).
 RING_FINISHES = ("gold", "silver", "bronze")
 
+# THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the retry
+# after the adaptive-percentile attempt was reverted for flattening
+# every relief into a wash, see config.defaults's NOTE above
+# METAL_SHADES): each metal offers several SELECTABLE shades, picked in
+# Settings (app.settings_dialog._build_metal_shade_group) and stored one
+# per metal (`Settings.metal_shade_gold/_bronze/_silver`). Names here are
+# the validation/enumeration source; the numeric (hue, saturation,
+# reference value) recipe per shade lives in `config.defaults.
+# METAL_SHADES` — kept in `defaults` because it depends on nothing else,
+# same split as SUBDIAL_SETS (names, here) vs SUBDIAL_RECOLOR_COLORS
+# (recipe, defaults).
+METAL_SHADE_NAMES = {
+    "gold": ("dark_amber", "amber", "classic", "pale", "champagne"),
+    "bronze": ("dark_bronze", "bronze", "light_bronze"),
+    "silver": ("gunmetal", "silver", "platinum"),
+}
+METAL_SHADE_DEFAULT = {"gold": "classic", "bronze": "bronze", "silver": "silver"}
+METAL_SHADE_TITLES = {
+    "dark_amber": "Dark amber", "amber": "Amber", "classic": "Classic gold",
+    "pale": "Pale gold", "champagne": "Champagne",
+    "dark_bronze": "Dark bronze", "bronze": "Bronze", "light_bronze": "Light bronze",
+    "gunmetal": "Gunmetal", "silver": "Silver", "platinum": "Platinum",
+}
+
 # The subdial PLATE styles (owner 2026-07-15, his A/B spec): "theme" —
 # the tapisserie field wears the clock tint (the AP design in the
 # theme color) and the tick circle joins the finish metal; "black" —
@@ -967,6 +991,18 @@ TRANSLATION_LANGUAGES = {
     "th": "Thai", "tr": "Turkish", "uk": "Ukrainian", "ur": "Urdu",
     "uz": "Uzbek", "vi": "Vietnamese", "cy": "Welsh",
 }
+
+# The Encyclopedia's Ctrl+MouseWheel ZOOM (owner round R8b item 5b:
+# "uvodimo novu funkcionalnost CTRL + MOUSHE WHEEL... za smanjenje
+# svega ili povecanje" — one factor scaling fonts, images and gallery
+# tiles together). The RANGE bounds are the fixed product invariant
+# (same pattern as ELEMENT_SCALE_RANGE above); the live factor itself
+# is session-only state on `app.encyclopedia` (never written to
+# settings — the owner asked for "the session at least", not
+# persistence across restarts). STEP is the zoom delta per wheel notch
+# (Qt reports ±120 angleDelta per notch — one notch = one STEP).
+ENCYCLOPEDIA_ZOOM_RANGE = (0.6, 2.5)
+ENCYCLOPEDIA_ZOOM_STEP = 0.1
 
 # Element size multipliers (Settings sliders, owner EXTRAS) and the
 # shared hover-enlarge factor (the element under the cursor draws this

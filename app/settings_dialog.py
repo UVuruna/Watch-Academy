@@ -109,7 +109,7 @@ class SettingsDialog(QDialog):
             ]),
             (tr("Themes"), [
                 self._build_theme_rotation_group(), self._build_artwork_group(),
-                self._build_subdial_set_group(),
+                self._build_subdial_set_group(), self._build_metal_shade_group(),
             ]),
             (tr("Language"), [
                 self._build_language_group(), self._build_era_group(),
@@ -1413,6 +1413,38 @@ class SettingsDialog(QDialog):
         row.addStretch(1)
         return group
 
+    def _build_metal_shade_group(self) -> QGroupBox:
+        """THE METAL SHADES (R8a round, owner spec 2026-07-21 night —
+        the retry after the adaptive-percentile attempt was reverted
+        for flattening relief): one combo per metal picks its shade
+        (gold's five bands sampled off the owner's palette strip,
+        bronze/silver three-step ramps) — the SAME (hue, saturation,
+        reference value) recipe recolors ring letters everywhere and
+        badge medallions wherever gold/silver is chosen (bronze
+        medallions stay the art as drawn, unaffected by the bronze
+        shade pick — out of this round's scope, documented in
+        render.assets.md)."""
+        tr = self._tr
+        group = QGroupBox(tr("Metal shades"))
+        form = QFormLayout(group)
+        self._metal_shade_combos: dict[str, QComboBox] = {}
+        titles = {"gold": tr("Gold"), "bronze": tr("Bronze"), "silver": tr("Silver")}
+        current = {
+            "gold": self._settings.metal_shade_gold,
+            "bronze": self._settings.metal_shade_bronze,
+            "silver": self._settings.metal_shade_silver,
+        }
+        for metal in ("gold", "bronze", "silver"):
+            combo = QComboBox()
+            for shade in constants.METAL_SHADE_NAMES[metal]:
+                combo.addItem(tr(constants.METAL_SHADE_TITLES[shade]), shade)
+            index = combo.findData(current[metal])
+            if index >= 0:
+                combo.setCurrentIndex(index)
+            self._metal_shade_combos[metal] = combo
+            form.addRow(titles[metal], combo)
+        return group
+
     def _build_language_group(self) -> QGroupBox:
         tr = self._tr
         group = QGroupBox(tr("Language"))
@@ -1519,6 +1551,9 @@ class SettingsDialog(QDialog):
             jump_cities=tuple(self._jump_cities),
             art_source=self._art_source_combo.currentData(),
             subdial_set=self._subdial_set_combo.currentData(),
+            metal_shade_gold=self._metal_shade_combos["gold"].currentData(),
+            metal_shade_bronze=self._metal_shade_combos["bronze"].currentData(),
+            metal_shade_silver=self._metal_shade_combos["silver"].currentData(),
             z_mode=self._z_mode_combo.currentData(),
             diameter=self._diameter_slider.value(),
             archetype_names=self._archetype_names_check.isChecked(),

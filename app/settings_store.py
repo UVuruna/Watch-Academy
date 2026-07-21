@@ -115,6 +115,16 @@ class Settings:
     # — the active letter finish (ring_finish) still picks the color
     # WITHIN the chosen set. "set1" is the owner's install default.
     subdial_set: str = "set1"
+    # THE METAL SHADES (R8a round, owner spec 2026-07-21 night): which
+    # selectable shade each metal wears everywhere it appears (ring
+    # letters always; badge medallions for gold/silver — bronze badges
+    # stay the art as drawn). Names validated against
+    # `config.constants.METAL_SHADE_NAMES`; defaults are the shade
+    # closest to the pre-redo look (`config.constants.
+    # METAL_SHADE_DEFAULT`).
+    metal_shade_gold: str = "classic"
+    metal_shade_bronze: str = "bronze"
+    metal_shade_silver: str = "silver"
     # Artwork source (owner 2026-07-14): the Gemini and ChatGPT
     # generations coexist on disk; this picks which one the dial and
     # the readers show (missing files fall back to the other source).
@@ -316,6 +326,12 @@ class SettingsStore:
                 ("weekday_theme", "planets", constants.WEEKDAY_THEMES),
                 ("subdial_style", "black", constants.SUBDIAL_STYLES),
                 ("subdial_set", "set1", constants.SUBDIAL_SETS),
+                ("metal_shade_gold", constants.METAL_SHADE_DEFAULT["gold"],
+                 constants.METAL_SHADE_NAMES["gold"]),
+                ("metal_shade_bronze", constants.METAL_SHADE_DEFAULT["bronze"],
+                 constants.METAL_SHADE_NAMES["bronze"]),
+                ("metal_shade_silver", constants.METAL_SHADE_DEFAULT["silver"],
+                 constants.METAL_SHADE_NAMES["silver"]),
                 ("weekday_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("info_slot_roster", "planetary", constants.FIGURE_ROSTERS),
                 ("third_slot_roster", "planetary", constants.FIGURE_ROSTERS),
@@ -497,6 +513,9 @@ class SettingsStore:
             "weekday_theme": settings.weekday_theme,
             "subdial_style": settings.subdial_style,
             "subdial_set": settings.subdial_set,
+            "metal_shade_gold": settings.metal_shade_gold,
+            "metal_shade_bronze": settings.metal_shade_bronze,
+            "metal_shade_silver": settings.metal_shade_silver,
             "weekday_roster": settings.weekday_roster,
             "info_slot_roster": settings.info_slot_roster,
             "third_slot_roster": settings.third_slot_roster,

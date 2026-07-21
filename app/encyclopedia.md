@@ -12,23 +12,34 @@ screens —
    nine-group 2026-07-12/13 layout): **The Celestial Engine** (the
    clock topics + Zodiac + Cosmos — Planets and Planet Signs are ONE
    card, distinguished by the Planets/Signs/Art look switcher),
-   **The Divine** (gods + the Wider Pantheon + Creeds/Mysteries +
-   Scripture), **The Human Wheel** (Virtues, Sins, Moods, the Nine
-   Intelligences, Professions, Trinity and THE TWO TRIANGLES — the
-   Judas–Lucifer scale of self, owner 2026-07-13; its Lucifer/Judas
-   badges ROTATE by date, see Scale Rotation below), **The Living
-   World** (Wolf/Bee/Elephant/Alchemy/Japanese week) and **The
-   Archetypes** (its OWN section, empty until a future session gives
-   the archetypes their own topics — see round R3 below) — EVERYTHING
-   centered (owner 2026-07-13: headers and card rows alike) and the
-   cards RESPONSIVE: `_rescale_topics` grows/shrinks the icons with
-   the window between `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`. LAYOUT fix
-   round R3: a group never lays out more than
-   `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS` (4) cards per row — it WRAPS
-   into further rows instead of spilling sideways, and the dialog's
-   own `setMinimumWidth` (4 tiles) keeps a full row readable even at
-   the minimum icon size — a horizontal scrollbar can no longer happen;
-   the vertical scrollbar is the only overflow this gallery ever needs.
+   **The Divine** (the four merged gods cultures + Creeds/Mysteries +
+   Scripture — the old standalone Wider-Pantheon topics were DELETED
+   round R8b item 6, see below), **The Human Wheel** (Virtues, Sins,
+   Moods, the Nine Intelligences, Professions, Trinity and THE TWO
+   TRIANGLES — the Judas–Lucifer scale of self, owner 2026-07-13; its
+   Lucifer/Judas badges ROTATE by date, see Scale Rotation below),
+   **The Living World** (Wolf/Bee/Elephant/Alchemy/Japanese week) and
+   **The Archetypes** (its OWN section, empty until a future session
+   gives the archetypes their own topics — see round R3 below) —
+   EVERYTHING centered (owner 2026-07-13: headers and card rows alike)
+   and the cards RESPONSIVE: `_rescale_topics` grows/shrinks the icons
+   with the window between `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`, then
+   `self._zoom` (round R8b item 5b) scales that result further. LAYOUT
+   fix round R3, REWORKED round R8b item 5a: a group never lays out
+   more than `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS` (4) cards per row — it
+   WRAPS into further rows instead of spilling sideways — and the
+   dialog's own `setMinimumWidth` uses the CORRECTED
+   `_gallery_content_width` formula (the old ad hoc `tile * columns`
+   arithmetic silently dropped the inter-card spacing and the
+   gallery's own margins, reliably overflowing the frame by ~100px at
+   any width below the icon's own MAX ceiling — the exact regression
+   the owner's screenshot showed) — a horizontal scrollbar can no
+   longer happen at ANY window width or zoom level; the vertical
+   scrollbar is the only overflow this gallery ever needs. Two
+   overloaded halls (The Celestial Engine, The Divine) additionally
+   partition their tiles under LEFT-ALIGNED subgroup headings
+   (`_GALLERY_SUBGROUPS`, item 5c — see ROUND R8b below); every row,
+   full or short, centers as its own block (item 5d).
 2. **Articles** — a SLIDER (owner plan round E, 2026-07-14): one entry
    per page, ← Previous / Next → wrap around with a counter between
    them; the chrome wears the shared gradient pills ([UI
@@ -114,16 +125,12 @@ screens —
   `_look_caption` / `_look_forward`, built once in `__init__`, never
   rebuilt per entry like the old per-block arrows) sits between Home
   and Download; `_show_entry` points `self._look_state` at the open
-  entry and shows/hides the trio. Restyled from the old filled
-  gradient pill to a BORDER-ONLY frame in the finish's own color
-  (`app.ui_style.style_finish_frame`, `defaults.
-  ENCYCLOPEDIA_FINISH_BORDER_COLORS`) — "Colored" wears a swept-
-  spectrum gradient border (`ENCYCLOPEDIA_FINISH_GRADIENT`: lavender→
-  blue→cyan→green→yellow→orange→red, faked via QSS `border-color:
-  qlineargradient(...)`, verified rendering offscreen); a non-finish
-  arrow-cycle (Planets/Signs/Art, the Week's kinship groups) wears the
-  neutral accent border instead — the gradient is reserved for the
-  literal Colored option.
+  entry and shows/hides the trio. Restyled round R3 from the ORIGINAL
+  filled pill to a border-only frame, then back to a FILLED pill round
+  R8b item 4 ("jel me stvarno zezas da ne mozes da napravis gradient
+  button" — the border-only chip never rendered as a real gradient;
+  QSS has no `border-color` gradient primitive) — see ROUND R8b below,
+  `app.ui_style.style_look_chip`.
 - **FINISH PERSISTENCE** (owner INSTRUCTION #3): `self.
   _preferred_look_label` remembers the last finish the user picked
   (`_cycle_look`); every subsequent `_show_entry` opens on that label
@@ -307,6 +314,109 @@ screens —
   this round delivers only the registration table + the Encyclopedia
   topic. Pinned by `tests/test_months.py`.
 
+**ROUND R8b — ENCYCLOPEDIA REVIEW PACK (owner batch `UV/prompt.txt`
+2026-07-21):**
+
+- **TT LIVE TRAVEL (item 1)** lives in [Time Travel](time_travel.md)
+  and [Watch Controller](controller.md) — `WatchController._dialog_jump`
+  now starts/refreshes the LIVE simulation as a side effect of every
+  Quick Jump row/arrow click, not just a dialog-local draft; this
+  module's own `_on_jump`/`_apply_moment` were UNCHANGED (they only
+  ever mirrored whatever the callback returned).
+- **PANTHEON COLORED (item 3, "Panteon bogovi nemaju Colored verzije u
+  switchu")**: `_colored_sibling(path)` replaces two DIFFERENT
+  hardcoded guesses at where a bronze plate's `colored/` twin lives —
+  `_pantheon_topic.looks_for` assumed the shallow `pantheon/colored/`
+  nesting (right for a genuine Pantheon-only figure like Poseidon,
+  silently missing for a seat that FALLS BACK to the shared planetary
+  plate — Zeus, Thor, Loki, Tyr, none of whom grew dedicated Pantheon
+  art), `_ninth_looks` assumed the deep `theme/colored/` sibling
+  unconditionally (missing Gaia/Yggdrasil, both pantheon-rooted). One
+  function now checks the immediate parent folder's OWN name
+  (`"pantheon"` nests one level in, everything else is a sibling of
+  its own immediate folder) — ground-truthed against the actual asset
+  tree, not re-derived on paper.
+- **FILLED-PILL SWITCHER (item 4, "jel me stvarno zezas da ne mozes da
+  napravis gradient button")**: `app.ui_style.style_look_chip`
+  replaces the R3 border-only `style_finish_frame` — every look now
+  wears a FILL, Bronze/Gold/Silver solid in their own metal hex,
+  Colored the owner's blue→red sweep as a `qlineargradient`
+  BACKGROUND (not a `border-color`, which QSS can only paint at the
+  corner miters — the root cause of the R3 chip's visual failure). The
+  continents globe looks get their own new fills — Atmosphere leads
+  sky-blue and ends warm gold (`#4FC3F7`→`#FFB74D`, the DAY pairing),
+  Atmosphere · Night leads navy and ends the SAME blue Colored uses
+  (`#0B1F3A`→`#3B5FE0`, family cohesion), Clean is solid ocean teal by
+  day (`#0E6B8C`) and the SAME navy by night (`#0B1F3A`) — realizing
+  the owner's own four suggested words ("atmosphere = sky-blue
+  gradient, clean = deep ocean blue, day = warm gold, night = navy")
+  as one coherent palette. Text color is derived per-fill by YIQ
+  luminance (`_readable_text`), never hand-picked; see
+  [UI Style](ui_style.md).
+- **GALLERY LAYOUT REWORK v2 (item 5)**: (a) NO horizontal scrollbar
+  can appear at any window width or zoom level — `_gallery_content_
+  width`/`_gallery_icon_ceiling` (a matched pair, Rule #5) replace the
+  OLD icon-sizing arithmetic, which silently dropped the
+  `columns * CARD_PADDING` term from its own budget and reliably
+  overflowed the live dialog's own frame by ~100px; `_show_topics`
+  also sets the gallery column's margin to a KNOWN explicit
+  `GUIDE_SPACING_PX` instead of relying on Qt's unstated QVBoxLayout
+  default, so the formula has no hidden fudge factor left. Cards moved
+  from `QGridLayout` + `setMinimumSize` to per-row `QHBoxLayout` +
+  `setFixedSize` (`_build_gallery_rows`) — a card can no longer force
+  its row wider than budgeted even against a long label. (b) Ctrl+
+  MouseWheel ZOOMS the whole encyclopedia — `self._zoom` (module-level
+  `_session_zoom` seeds each new dialog, so it survives a Home ->
+  reopen within the same app run; never written to settings) scales
+  article fonts/images and gallery tiles together, `ENCYCLOPEDIA_ZOOM_
+  RANGE`/`_STEP` (config/constants.py) bounding it; the block width may
+  grow toward the FULL viewport but never past it, so zooming in only
+  ever adds vertical scroll once the block is already maxed. (c) TWO
+  overloaded halls (The Celestial Engine: 14 topics; The Divine: 9,
+  post item-6 deletion) partition into LEFT-ALIGNED subgroup headings,
+  `_GALLERY_SUBGROUPS` — Celestial: **The Clock Bodies** (week,
+  instrument, planets, astrology, chinese, cosmos, continents — the
+  weekday-shaped body/instrument sets) / **The Sky Events** (moon,
+  seasons, sun, eclipse_solar, eclipse_lunar — transient phenomena) /
+  **The Year Wheels** (era, months — calendar/year structure); Divine:
+  **Gods** (greek, norse, egypt, slavic) / **Faiths & Creeds**
+  (religion, religion_alt, bible, bible2, bible_dark). Every OTHER
+  hall stays one flat run of rows. (d) every row `_build_gallery_rows`
+  builds is its OWN `QHBoxLayout` bracketed by a stretch on both
+  sides, so a trailing short row centers exactly like a full one, no
+  special case.
+- **KILL THE LEFTOVER DUPLICATE TILES (item 6, "zasto i dalje imamo
+  ove dve verzije")**: the WORKPLAN Session 8 Wider-Pantheon topics
+  (`wider_greek`/`wider_norse`/`wider_egypt`/`wider_slavic` — titled
+  bare "Greek"/"Norse"/"Egyptian"/"Slavic") sat as confusing SECOND
+  tiles right beside the round-R3b merged "Greek gods"/etc. topic —
+  `_WIDER_TOPICS` and its `_topics()` build loop are DELETED completely
+  (Rule #6: the merged 22-page topics are the only home); their 15
+  articles stay untouched in `encyclopedia.json` but are unreachable
+  from the UI until a future round re-wires them. The surviving merged
+  topics' GALLERY tile and reader TOP HEADER (never the shared
+  `defaults.WEEKDAY_THEME_TITLES`, which the Ancient Gods menu/Weekday
+  picker/Settings still read unchanged) now read the bare demonym via
+  `_GOD_TOPIC_GALLERY_TITLES` — "Greek", "Norse", "Egypt", "Slavic" —
+  now that the new Gods subgroup heading (item 5c) already says "Gods".
+- **TITLES CARRY THE DAY AND THE SECTION (item 8, "Selene — Monday")**:
+  `_entry_name` — the ONE build point — appends " — {Weekday}" when the
+  entry carries a `"weekday"` key (set by `_weekday_topic`/
+  `_pantheon_topic`/`_continents_topic`'s body/good/evil builders;
+  never the title pages, never the Ninth, which sits OUTSIDE the
+  weekday per CANON.md). A merged theme's reader TOP header
+  (`_topic_display_title`) additionally names its SECTION — "Greek —
+  Planetary" / "Greek — Pantheon" — reusing the SAME "Planetary"/
+  "Pantheon" translation keys `_update_roster_button`'s tooltip
+  already used (Rule #5); the entry caption below reads the
+  DATABASE's own `theme_title` text ("Greek gods" / "Greek Pantheon"),
+  a different string in a different register, so the two spots no
+  longer stack the identical bare name twice (the owner's screenshot).
+  The three Sunday-seat position LABELS (Ruler/Servant/Ninth-shaped)
+  are UNTOUCHED this round — already one shared table
+  (`defaults.WEEKDAY_DUAL_NAMES`, `NINTH_SEAT_PHILOSOPHICAL_NAME`),
+  ready to relabel whenever the owner seals the universal names.
+
 **The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
 Seasons topic became THREE — **Moon** (the lunations), **Seasons** (the
 quarters, the tropics' halves and the meteorological block — the hidden
@@ -458,13 +568,16 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 - [Compositor](../render/compositor.md) — `_article_body_html` (the
   one wrap/highlight implementation, Rule #5)
 - [Theme](theme.md) — the dark dialog surface (buttons stay on
-  [UI Style](ui_style.md)'s own gradient pills; the round R3 finish
-  switcher uses that module's `style_finish_frame` border-only frames)
+  [UI Style](ui_style.md)'s own gradient pills; the finish switcher
+  uses that module's `style_look_chip` filled pill, round R8b item 4)
 - [Config (folder)](../config/___config.md) — art directories, accent
   tables; `defaults.weekday_theme_body_art` (R5 MENU REWORK — moved
   here FROM this module's own `_theme_body_art`, which is now a plain
   alias, since [Pointer Theme](pointer_theme.md)/[Slot Theme](slot_theme.md)
-  need the SAME per-theme preview art for their picker grids, Rule #5)
+  need the SAME per-theme preview art for their picker grids, Rule #5);
+  `constants.ENCYCLOPEDIA_ZOOM_RANGE`/`_STEP` (round R8b item 5b — the
+  Ctrl+wheel zoom bounds, the same RANGE-constant pattern
+  `ELEMENT_SCALE_RANGE` already uses)
 
 ### Used by
 - [Watch Controller](../app/controller.md) — opens it from the menu
@@ -503,11 +616,20 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   and its text (headings as `[Label]` lines) into a picked folder
 - `_rescale()`: live sizing on resize — gallery cards through
   `_rescale_topics()` (round R3: WRAPS at
-  `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS`, width-driven only); entry pages
-  re-fit fonts and pixmaps (`_resize_cell`) without rebuilding the
-  grid, and reserve each text label's own height/width
-  (THE INVISIBLE CLIPPER fix, round R3)
+  `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS`, width-driven only, `_gallery_
+  icon_ceiling` a HARD cap round R8b item 5a); entry pages re-fit
+  fonts and pixmaps (`_resize_cell`) without rebuilding the grid, and
+  reserve each text label's own height/width (THE INVISIBLE CLIPPER
+  fix, round R3); `self._zoom` (round R8b item 5b) scales fonts,
+  images and gallery tiles together, capped so it can never force an
+  overflow (see ROUND R8b below)
 - `_pixmap(path)`: the decoded-image cache behind the lazy looks
+- `eventFilter(obj, event)` / `wheelEvent(event)` (round R8b item 5b):
+  Ctrl+MouseWheel zooms — the SAME guard installed both on the scroll
+  area's own viewport (an event filter, since Qt delivers wheel events
+  to whichever widget sits under the cursor) and on the dialog itself
+  (for cursor positions over its own chrome); plain wheel is untouched
+  either way, so normal scrolling is unaffected
 
 ## Design Decisions
 

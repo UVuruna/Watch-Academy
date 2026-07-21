@@ -590,6 +590,12 @@ def apply_display_settings(skin, settings: Settings):
     # mirrors the art-source switch above; render.assets.
     # subdial_plate_file reads it directly (its only reader).
     paths.set_subdial_set(settings.subdial_set)
+    # THE METAL SHADES (R8a round, owner spec 2026-07-21 night) — same
+    # module-global pattern: render.assets._metal_swapped and
+    # letter_metal_file read paths.metal_shade(metal) directly.
+    paths.set_metal_shade("gold", settings.metal_shade_gold)
+    paths.set_metal_shade("bronze", settings.metal_shade_bronze)
+    paths.set_metal_shade("silver", settings.metal_shade_silver)
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
     # while the drawn pointer carries an archetype. The overriding
     # itself happens at the RENDER level (render.layers.enabled_slots
@@ -2980,14 +2986,28 @@ class WatchController(QObject):
     ) -> tuple[datetime, int, float, float] | None:
         """The Time Travel window's OWN Quick Jump rows (item 3A, R5
         MENU REWORK — the rows the old deep Quick Jump submenu chain
-        used to hold, `UV/DESIGN/RIGHT CLICK MENU.txt`): chains from
-        the DIALOG'S own current fields, never the live simulation —
-        `_compute_jump` is the SAME pure computation the menu's old
-        immediate jumps used (Rule #5), just handed back to the dialog
-        instead of `_start_simulation`, so OK still applies the final
-        choice transactionally. `moment` is naive (the dialog's own
-        editor, interpreted in the configured timezone, same convention
-        `_open_time_travel` already uses); returns naive too."""
+        used to hold, `UV/DESIGN/RIGHT CLICK MENU.txt`) — TT LIVE TRAVEL
+        (owner round R8b item 1, slika 1-6: "ono sto smo radili na uvek
+        Quick Jump dok je bio na right clicku" — a jump row/arrow inside
+        the dialog must travel the WATCH immediately, exactly like the
+        old right-click menu did, not sit as a draft the owner has to
+        OK before anything moves; "ne kao sada da moram svaki put da
+        kliknem okej pa da se vratimo taj meni" — no more click-OK-
+        reopen per jump). Chains from the DIALOG'S own current fields
+        (so a jump chain still reads consistently even mid-travel) —
+        `_compute_jump` is the SAME pure computation the old menu's
+        immediate jumps used (Rule #5) — but now ALSO starts/refreshes
+        the LIVE simulation with the landed moment via `_start_simulation`,
+        the exact tail `_apply_jump` uses for every keyboard travel
+        shortcut. The dialog then mirrors the SAME fields back onto its
+        own widgets (`_on_jump`/`_apply_moment`, app/time_travel.py) so
+        it never drifts from what the dial is actually showing — OK
+        (`_open_time_travel` below) simply re-asserts whatever the
+        fields hold when clicked (a no-op if nothing changed since the
+        last jump), Return to Now still ends the simulation outright.
+        `moment` is naive (the dialog's own editor, interpreted in the
+        configured timezone, same convention `_open_time_travel`
+        already uses); returns naive too."""
         observer = astral.Observer(latitude=latitude, longitude=longitude)
         result = self._compute_jump(
             moment.replace(tzinfo=self._tz), observer, cycles, kind, city,
@@ -2995,6 +3015,7 @@ class WatchController(QObject):
         if result is None:
             return None
         new_moment, new_observer, new_cycles = result
+        self._start_simulation(new_moment, new_observer, new_cycles)
         return (
             new_moment.astimezone(self._tz).replace(tzinfo=None), new_cycles,
             new_observer.latitude, new_observer.longitude,

@@ -422,6 +422,35 @@ def test_subdial_set_round_trip_and_default(store):
         store.load()
 
 
+def test_metal_shade_round_trip_and_default(store):
+    """THE METAL SHADES (R8a round, owner spec 2026-07-21 night): every
+    shade of every metal persists, older files default to
+    config.constants.METAL_SHADE_DEFAULT, and an unknown shade name
+    raises loudly (Rule #1) rather than silently falling back."""
+    from config import constants
+
+    for metal, names in constants.METAL_SHADE_NAMES.items():
+        field = f"metal_shade_{metal}"
+        for shade in names:
+            store.save(replace(Settings(), **{field: shade}))
+            assert getattr(store.load(), field) == shade
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360}}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.metal_shade_gold == constants.METAL_SHADE_DEFAULT["gold"]
+    assert loaded.metal_shade_bronze == constants.METAL_SHADE_DEFAULT["bronze"]
+    assert loaded.metal_shade_silver == constants.METAL_SHADE_DEFAULT["silver"]
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "metal_shade_gold": "rose_gold"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(SettingsCorruptError):
+        store.load()
+
+
 def test_year_line_and_jump_cities_round_trip(store):
     """Session 16: the era labels, the suffix opt-in, the third
     calendar and the Quick Jump cities persist and validate."""

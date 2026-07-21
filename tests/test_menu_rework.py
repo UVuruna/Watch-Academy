@@ -361,7 +361,12 @@ def test_open_time_travel_wires_the_jump_callback_and_cities(controller, monkeyp
     controller._open_time_travel()
 
 
-def test_sun_row_arrow_updates_the_dialog_moment_not_a_live_simulation(controller):
+def test_sun_row_arrow_mirrors_whatever_the_jump_callback_lands_on(controller):
+    """`_on_jump` (app/time_travel.py) only ever mirrors the callback's
+    OWN return value onto the dialog's fields — a stub callback here
+    isolates that mirroring from `_dialog_jump`'s own live-travel side
+    effect (see `test_dialog_jump_travels_the_live_watch_and_mirrors_
+    the_dialog` below for the REAL production callback, R8b item 1)."""
     seen = {}
 
     def fake_jump(moment, cycles, latitude, longitude, kind, city):
@@ -378,8 +383,59 @@ def test_sun_row_arrow_updates_the_dialog_moment_not_a_live_simulation(controlle
     dialog._on_jump("next_sun")
     assert seen["kind"] == "next_sun"
     assert dialog._year.value() == before_year + 1
-    # Never touched the live app simulation — only the dialog's own state.
+    # The stub never touches the controller — this is not evidence
+    # either way about the REAL callback's live-travel behavior.
     assert controller._simulation is None
+
+
+def test_dialog_jump_travels_the_live_watch_and_mirrors_the_dialog(controller):
+    """TT LIVE TRAVEL (owner round R8b item 1, slika 1-6): a Quick Jump
+    row/arrow inside the dialog must travel the WATCH immediately —
+    "ono sto smo radili na uvek Quick Jump dok je bio na right klikku"
+    — not sit as a draft the owner has to OK before anything moves.
+    `controller._dialog_jump` is the REAL production callback: one
+    arrow click already runs the live simulation on the landed moment,
+    and the dialog's own fields mirror exactly what the dial now
+    shows."""
+    assert controller._simulation is None
+    dialog = TimeTravelDialog(
+        controller._settings.latitude, controller._settings.longitude,
+        initial_moment=datetime(2026, 6, 20, 12, 0),
+        coverage=controller._travel_coverage(),
+        core_coverage=controller._bundled_coverage(),
+        jump_callback=controller._dialog_jump,
+    )
+    dialog._on_jump("next_day")
+    assert controller._simulation is not None
+    sim_moment, sim_observer = controller._simulation
+    assert dialog.moment().replace(tzinfo=controller._tz) == sim_moment
+    assert dialog.latitude() == sim_observer.latitude
+    assert dialog.longitude() == sim_observer.longitude
+    # A second jump chains from the ALREADY-live landing, not a reset
+    # back to the dialog's pre-open snapshot.
+    first_landing = controller._simulation
+    dialog._on_jump("next_day")
+    assert controller._simulation != first_landing
+    dialog.deleteLater()
+
+
+def test_return_to_now_still_ends_the_simulation_after_live_jumps(controller):
+    """Return to Now (owner 2026-07-15) keeps ending the simulation
+    outright even though jumps now travel live (R8b item 1) — the
+    dialog's own `RETURN_TO_NOW` exit code is unaffected by the new
+    per-jump side effect."""
+    dialog = TimeTravelDialog(
+        controller._settings.latitude, controller._settings.longitude,
+        initial_moment=datetime(2026, 6, 20, 12, 0),
+        coverage=controller._travel_coverage(),
+        core_coverage=controller._bundled_coverage(),
+        jump_callback=controller._dialog_jump,
+    )
+    dialog._on_jump("next_day")
+    assert controller._simulation is not None
+    controller._end_simulation()
+    assert controller._simulation is None
+    dialog.deleteLater()
 
 
 def test_jump_clamp_returns_none_and_leaves_the_dialog_untouched():

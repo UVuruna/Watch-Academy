@@ -450,11 +450,17 @@ pattern) rather than guessed:
   all use.
 - `_dialog_jump(moment, cycles, latitude, longitude, kind, city)`: the
   Time Travel window's own Quick Jump row callback (item 3A) — wraps
-  `_compute_jump` around the DIALOG'S current fields (never the live
-  simulation) and hands the landed state back for the dialog to apply
-  to ITS OWN widgets; OK still applies the final choice
-  transactionally. Wired into `TimeTravelDialog(jump_callback=...)` in
-  `_open_time_travel`.
+  `_compute_jump` around the DIALOG'S current fields and hands the
+  landed state back for the dialog to mirror onto ITS OWN widgets.
+  **TT LIVE TRAVEL (owner round R8b item 1):** it now ALSO calls
+  `_start_simulation` on the landing as a side effect — "ono sto smo
+  radili na uvek Quick Jump dok je bio na right klikku" — so the watch
+  travels immediately on every row/arrow click, exactly like
+  `_apply_jump` does for every keyboard shortcut; the dialog stays
+  open and its own fields just mirror whatever the dial now shows. OK
+  (`_open_time_travel`) simply re-asserts the fields' current state —
+  a no-op after a pure jump chain. Wired into
+  `TimeTravelDialog(jump_callback=...)` in `_open_time_travel`.
 - `_bundled_coverage()` / `_travel_coverage()`: the minute-exact core
   tier (the INTERSECTION of the two bundled databases' `coverage()`)
   and the ACTIVE span — the core widened to the Deep Time pack's own

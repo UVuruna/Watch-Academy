@@ -13,7 +13,14 @@ the active coverage INCLUDING BCE. **R5 MENU REWORK (item 3A, owner
 spec: "TIME TRAVEL ostaje trenutni i proširuje se nadole"):** the
 dialog now GROWS DOWN with its own Quick Jump section — see below —
 absorbing the whole deep Quick Jump submenu chain the old right-click
-menu used to hold (Rule #6, no both-paths).
+menu used to hold (Rule #6, no both-paths). **TT LIVE TRAVEL (owner
+round R8b item 1, slika 1-6: "ono sto smo radili na uvek Quick Jump
+dok je bio na right klikku"):** since R8b every Quick Jump row/arrow
+click travels the LIVE watch immediately (exactly like the old right-
+click menu did) — the dialog's own fields still mirror the landing so
+a chain of jumps reads consistently, but OK is no longer the only way
+to see the dial move; see [Watch Controller](controller.md)'s
+`_dialog_jump`.
 
 ## Connections
 
@@ -97,12 +104,19 @@ owner's own shape:
   constructor argument (📍, no dedicated icon).
 - `_on_jump(kind, city=None)`: calls the constructor's
   `jump_callback(moment(), cycles(), latitude(), longitude(), kind,
-  city)` — a pure function owned by the controller
-  (`WatchController._dialog_jump`/`_compute_jump`) that chains from
-  THIS dialog's own current fields, never a live simulation; `None`
-  (an edge clamp) is a no-op, otherwise `_apply_moment`/the lat-lon
-  spinboxes update in place. OK still applies the final choice
-  transactionally — a chain of jumps only ever edits the draft.
+  city)` — owned by the controller (`WatchController._dialog_jump`,
+  itself built on the pure `_compute_jump`) that chains from THIS
+  dialog's own current fields. Since R8b item 1 (TT LIVE TRAVEL),
+  `_dialog_jump` ALSO starts/refreshes the LIVE simulation as a side
+  effect of computing the landing — "ono sto smo radili na uvek Quick
+  Jump dok je bio na right klikku" — so the watch travels immediately;
+  the return value only tells THIS dialog what to mirror onto its own
+  fields (`_apply_moment`/the lat-lon spinboxes), so a jump chain
+  keeps reading consistently while the dial is already moving. `None`
+  (an edge clamp) is a no-op. OK (`_open_time_travel`) simply
+  re-asserts whatever the fields currently hold — a no-op after a pure
+  jump chain, or the final choice if the owner hand-edited a field
+  afterward; Return to Now still ends the simulation outright.
 - `_apply_moment(moment, cycles)`: loads a landed jump into the
   moment-editor widgets (signals blocked so ONE row click repaints
   `_refresh()` exactly once, not once per widget touched) — the SAME
