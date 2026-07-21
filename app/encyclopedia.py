@@ -1303,6 +1303,24 @@ def _topics(travel_date: date | None = None) -> dict:
                 "accents": (),
             }
             for croatian, gloss, stem, _month in defaults.SLAVIC_MONTHS
+        ] + [
+            # THE BLUE MOON LAW's SOL/MODRENIK (owner-sealed 2026-07-22,
+            # R12): the year's own THIRTEENTH pair — closes the topic
+            # exactly like a Ninth closes every other one (the wheel
+            # itself stays twelve; these two live ONLY in the dial
+            # CENTER, in a blue-moon year, inside their own short
+            # window — core.blue_moon). Same graceful-absent contract
+            # as the twelve above: the plate is a future prompt sheet.
+            {
+                "images": (defaults.MONTHS_ART_DIR / f"{key}.png",),
+                "name": name,
+                "article": ("emblem", "months", key),
+                "accents": (),
+            }
+            for key, name in (
+                ("Sol", "Sol (the Sun's Month)"),
+                ("Modrenik", "Modrenik (the Blue Moon Month)"),
+            )
         ],
     }
     # THE NINTHS close their topics (owner 8+1 doctrine 2026-07-14):

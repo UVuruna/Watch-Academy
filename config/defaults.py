@@ -1002,6 +1002,12 @@ CALENDAR_MOUNT_MARK_SCALE = 0.08
 # the wedges, sized so the current mark reaches full opacity).
 CALENDAR_MOUNT_ALPHA = 0.65
 CALENDAR_MOUNT_LIT_DELTA = 0.35
+# THE CAT'S DIMMING LAW (owner spec, item 5, R12 — Blue Moon): the
+# "chinese" mount's doubled-month mark while The Cat holds the center —
+# well below CALENDAR_MOUNT_ALPHA (present, but visibly lending its
+# month away), never zero (a vanished mark would read as a rendering
+# bug, not a story).
+CALENDAR_MOUNT_DIMMED_ALPHA = 0.20
 
 # Octa bottom-arm text (time/date/...): sized to span this fraction of
 # the slot width (owner: big font, must not overflow the slot).

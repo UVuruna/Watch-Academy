@@ -228,6 +228,16 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   casts); a pantheon seat otherwise resolves identity, plate and
   article through `defaults.pantheon_seat`, planetary-whole on
   missing art, the Sunday dual pair falling back together.
+  **THE BLUE MOON LAW (owner-sealed 2026-07-22, R12) — checked BEFORE
+  the dual/Ninth windows below:** whenever the hovered body key equals
+  `render.layers.center_seat_body_key(skin, today)` (the physical center
+  seat, regardless of duality), `_active_thirteenth()` reads the SAME
+  pre-computed `DayContext.active_thirteenth` the paint pass uses; if
+  set, `_thirteenth_tooltip(key)` answers instead — the 13th's OWN
+  article (`self._encyclopedia.entry(family, name)`, `constants.
+  THIRTEENTHS`) leads, a closing `[[The Thirteenth]]` paragraph naming
+  the theme that "steps aside" while it holds the seat (item 7: "the
+  hover says both"). See [Blue Moon](../core/blue_moon.md).
   **THE CENTER SEAT'S DUAL/NINTH SOLAR WINDOWS (owner INSTRUCTION #5 +
   solar amendment, round R3b items 3/4):** while `render.layers.
   center_dual_face(skin)` holds (hexa/trio, or ANY pointer in
@@ -332,6 +342,10 @@ The Calendar wedge hover (`_calendar_tooltip`) now WEARS OUR ART (owner
 2026-07-16, ROADMAP queue #7): the Almanac wedge shows the double-hour
 animal's Chinese COLORED medallion, the Zodiac wedge the sign's COLORED
 LOGO — a real `_hover_badge` image above the text, never a unicode glyph.
+The mounted "chinese" set's own mark hover (`_chinese_mount_wedge_html`,
+owner R12) speaks the branch animal's name over its badge, plus — only
+on the ONE mark `render.layers.chinese_mount_dimmed_index` names —
+a short note that it is lending its month to The Cat this year.
 
 - `warm_hover_articles(size, should_stop, progress) -> int` (owner
   2026-07-18, asked twice — the FIRST hover must be as instant as the

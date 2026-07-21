@@ -15,8 +15,9 @@ cross 4 / octa 8 / trio 3 arms, aurora and calendar armless; display
 names Prism / Seasons / Compass / Trinity / Aurora / Calendar; the
 Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`,
 its `CALENDAR_LIGHTING_MODES` (hour/year, owner 2026-07-16) and its
-`CALENDAR_MOUNT_MODES` (off/zodiac/months, the DESIGN ZODIAC law's
-12-set mount, R9a round 2026-07-21) with
+`CALENDAR_MOUNT_MODES` (off/zodiac/months/chinese, the DESIGN ZODIAC
+law's 12-set mount, R9a round 2026-07-21, "chinese" added owner R12)
+with
 their weekday slot layouts (slots rotate
 WITH the star; shared slots resolve by the next-upcoming-day rule
 over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
@@ -73,7 +74,21 @@ day/night resolvers), `CONTINENTS_TITLE_IMAGE` (the world map), and
 `WEEKDAY_THEME_NINTH_EASTER_EGG` (Pangea, the easter-egg face). Its
 bodies reuse the dial's own `assets/earth/` faces (owner exception to
 one-image-one-place) and its Ninth switches Zealandia/Pangea by
-[Continents](../core/continents.md)'s law. **R5 MENU REWORK**:
+[Continents](../core/continents.md)'s law. **THE BLUE MOON LAW**
+(owner-sealed 2026-07-22, R12): `THIRTEENTHS` — key ("ophiuchus"/
+"sol"/"modrenik"/"chinese") → (display name, encyclopedia family,
+encyclopedia entry name), the SAME two-level shape `WEEKDAY_THEME_NINTHS`
+uses, read by both the dial (`render.layers.thirteenth_plate`) and its
+hover; `OPHIUCHUS_WINDOW`/`SOL_WINDOW` (year-agnostic (month, day)
+bounds) and `MODRENIK_WINDOW_HALF_DAYS` (14, computed from the REAL
+December solstice instant, never a fixed date) — each 13th's own short
+window; `CHINESE_MONTH_BRANCH_ANIMALS` (Gregorian month → the
+traditional solar-term branch animal — Feb Tiger … Dec Rat, the
+December-solstice month — fixing ONE animal per Gregorian month for
+the "chinese" calendar mount, `render.layers.calendar_mount_entries`).
+The trigger/window/precedence law itself lives in
+[Blue Moon](../core/blue_moon.md); pinned by `tests/test_blue_moon.py`.
+**R5 MENU REWORK**:
 `POINTER_PALETTE_LABELS` — the RAW English wheel-pair label per
 pointer (Court/Family, Temperaments/Elements, Walks of Life/Ages,
 Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback),
@@ -127,9 +142,11 @@ signs / Chinese animals the pointer already reads), `MONTHS_ART_DIR`
 `ART_SOURCED_ROOTS` — the subdial precedent; graceful-absent, a future
 prompt sheet), `CALENDAR_MOUNT_RADIUS_FRACTION` (0.65, the DESIGN
 ZODIAC law's 60-70% mount radius), `CALENDAR_MOUNT_MARK_SCALE` (the
-mark's own drawn height) and `CALENDAR_MOUNT_ALPHA`/
+mark's own drawn height), `CALENDAR_MOUNT_ALPHA`/
 `CALENDAR_MOUNT_LIT_DELTA` (the current-mark emphasis, reaching exactly
-1.0) — `constants.CALENDAR_MOUNT_MODES` ("off"/"zodiac"/"months",
+1.0) and `CALENDAR_MOUNT_DIMMED_ALPHA` (0.20, owner R12 — The Cat's
+dimming law, below the resting alpha but never zero) —
+`constants.CALENDAR_MOUNT_MODES` ("off"/"zodiac"/"months"/"chinese",
 Settings-validated) is the mode enum; the render itself
 (`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
 `calendar_mount_angle`, the Design ▸ Pointer tab's mount row) is covered

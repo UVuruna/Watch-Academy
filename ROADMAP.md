@@ -1128,7 +1128,7 @@ file). Wiring is live and falls back gracefully until each drop:
 - Pantheon plates per the theme sheets (Greek/Norse/Egypt/Slavic).
 - Creeds: the Satanism Sunday dual; Ancient religions: Eleusis.
 - The scale GLASS set (6 files incl. Union_Meeting + Union).
-- Cat (thirteenth) and Ophiuchus; season badges.
+- Season badges.
 
 <a id="m7-build-release"></a>
 

@@ -10,7 +10,8 @@ per-day bundle and a tiny per-minute tick.
 
 ### Uses
 - [Angles](angles.md), [Sun](sun.md), [Year Wheel](year_wheel.md),
-  [Moon](moon.md)
+  [Moon](moon.md), [Blue Moon](blue_moon.md) — the Blue Moon Law's
+  resolved 13th, computed once per day
 
 ### Used by
 - [Watch Controller](../app/controller.md) (M3) — rebuild/tick flow
@@ -64,6 +65,19 @@ above the horizon AND the haversine distance to `(lat, lon)` is within
 `constants.ECLIPSE_SOLAR_VISIBILITY_KM` (3500 km). Evaluated at the
 eclipse's own INSTANT, never the day's rise/set edges — the ±3h glow
 window is short enough that only the instant matters.
+
+**`active_thirteenth`/`chinese_leap_month_number` (owner-sealed
+2026-07-22, R12 Blue Moon Law):** `active_thirteenth` is one of
+`config.constants.THIRTEENTHS`' keys ("ophiuchus"/"sol"/"modrenik"/
+"chinese") or `None` — computed ONCE here via
+`core.blue_moon.active_thirteenth` (fed `core.blue_moon.
+chinese_leap_month(year_anchors, moon_window)`, also computed once),
+never recomputed on the MINUTE-cadence paint pass
+(`render.layers.CenterBodyLayer`) or the hover. `chinese_leap_month_number`
+is the doubled lunar month (1-12) ONLY while `active_thirteenth ==
+"chinese"` (`None` otherwise) — the Chinese calendar-mount's own
+dimming law (`render.layers.chinese_mount_dimmed_index`) reads it
+directly.
 
 **`deep_cycles` (Session 16, owner 2026-07-17):** every datetime in the
 context lives in the 400-year PROXY frame shifted by this many

@@ -32,6 +32,7 @@ from render.layers import (
     calendar_mount_wheel,
     calendar_wedge_bounds,
     calendar_wheel,
+    chinese_mount_dimmed_index,
     dial_point,
     slot_layout,
     slot_seat_rotation,
@@ -405,5 +406,73 @@ def test_calendar_mount_off_speaks_no_mark_hover(app):
 
 
 def test_calendar_mount_modes_and_default():
-    assert constants.CALENDAR_MOUNT_MODES == ("off", "zodiac", "months")
+    assert constants.CALENDAR_MOUNT_MODES == ("off", "zodiac", "months", "chinese")
     assert defaults.DEFAULT_SKIN.calendar_mount in constants.CALENDAR_MOUNT_MODES
+
+
+# --- The Chinese MONTHLY-animal mount (owner R12, Blue Moon round) --------------
+
+
+def test_chinese_mount_wheel_and_entries_are_gregorian_fixed_with_real_art():
+    """The Chinese mount (owner R12: "Mount Chinese zodiac") rides the
+    SAME Gregorian-fixed Almanac geometry as the months mount, keyed by
+    `constants.CHINESE_MONTH_BRANCH_ANIMALS` — real, committed COLORED
+    badges (Rule #5), never a gap. June leads with the Horse (the
+    branch that begins ~Jun 6), December with the Rat (the branch that
+    holds the winter solstice — core.blue_moon.chinese_leap_month reads
+    the SAME fact)."""
+    assert calendar_mount_wheel("chinese") == "almanac"
+    entries = calendar_mount_entries("chinese")
+    assert len(entries) == 12
+    assert entries[0][0] == "Horse"                      # June
+    assert entries[almanac_month_index(12)][0] == "Rat"   # December
+    assert entries[almanac_month_index(2)][0] == "Tiger"  # February
+    assert all(art is not None and art.exists() for _name, art in entries)
+
+
+def test_chinese_mount_current_index_matches_todays_month(app):
+    day, _tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
+    assert calendar_mount_current_index("chinese", day) == almanac_month_index(7)
+
+
+def test_chinese_mount_dims_the_doubled_months_animal_during_a_leap_month(app):
+    """THE CAT'S DIMMING LAW (owner spec, item 5): while a Chinese leap
+    month holds the center, the mount mark of the DOUBLED month's own
+    animal — never the current-month mark — dims below its resting
+    alpha. 2025 is a real leap-6th-month year (Jul 25 - Aug 22): the
+    doubled lunar month is the 6th, whose branch animal is the Goat
+    (jianyin numbering: L1 Tiger .. L6 Goat .. L11 Rat .. L12 Ox), whose
+    Gregorian mount seat is July."""
+    from core.blue_moon import chinese_leap_month
+    from data.moon_phases import MoonPhaseRepository
+    from data.seasons import SeasonsRepository
+
+    anchors = SeasonsRepository().year_anchors(2025)
+    window = MoonPhaseRepository().moon_window(2025)
+    leap = chinese_leap_month(anchors, window)
+    assert leap is not None and leap.number == 6
+
+    inside = _day_tick(app, datetime(2025, 8, 1, 12, 0))[0]
+    assert inside.chinese_leap_month_number == 6
+    dimmed = chinese_mount_dimmed_index(inside)
+    assert dimmed == almanac_month_index(7)                # the Goat's own July seat
+
+    outside = _day_tick(app, datetime(2025, 3, 1, 12, 0))[0]
+    assert outside.chinese_leap_month_number is None
+    assert chinese_mount_dimmed_index(outside) is None
+
+
+def test_chinese_mount_renders_and_hover_names_the_animal(app):
+    day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
+    radius = 180.0
+    chinese = Compositor(
+        _calendar_skin(palette_style="light", calendar_mount="chinese"),
+        AssetCache(),
+    )
+    chinese.render_offscreen(360.0, 1.0, day, tick)
+    point = dial_point(
+        calendar_mount_angle("chinese", 0), radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
+    )
+    text = chinese.tooltip_at(radius + point.x(), radius + point.y(), 360.0)
+    assert text is not None and "Horse" in text and "<img" in text
+    assert "June" in text                     # "animal + its month" (owner spec)

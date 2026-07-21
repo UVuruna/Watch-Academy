@@ -368,11 +368,13 @@ CALENDAR_LIGHTING_MODES = ("hour", "year")
 # The CALENDAR-POINTER 12-SET MOUNT (owner DESIGN ZODIAC law, R9a round
 # 2026-07-21): "off" — no marks; "zodiac" — the astrology sign register
 # (the SAME colored badges the wedge hover already shows); "months" —
-# the Slavic months (defaults.SLAVIC_MONTHS, graceful-absent art). ONE
-# mount at a time, independent of `palette_style`/`calendar_lighting` —
-# a mount rides its OWN fixed wheel geometry regardless of which wheel
+# the Slavic months (defaults.SLAVIC_MONTHS, graceful-absent art);
+# "chinese" — the twelve MONTHLY animals (owner R12, CHINESE_MONTH_
+# BRANCH_ANIMALS), NOT the Chinese YEAR zodiac already read elsewhere.
+# ONE mount at a time, independent of `palette_style`/`calendar_lighting`
+# — a mount rides its OWN fixed wheel geometry regardless of which wheel
 # paints the background wedges (render.layers.calendar_mount_wheel).
-CALENDAR_MOUNT_MODES = ("off", "zodiac", "months")
+CALENDAR_MOUNT_MODES = ("off", "zodiac", "months", "chinese")
 
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
 # stay hexa/cross/octa/trio (settings and code stability); the menu and
@@ -900,6 +902,23 @@ CHINESE_ELEMENTS = ("Wood", "Fire", "Earth", "Metal", "Water")
 CHINESE_NEW_YEAR_WINDOW = ((1, 21), (2, 20))   # (month, day) bounds, China time
 CHINA_UTC_OFFSET_HOURS = 8
 
+# THE CHINESE MONTH-BRANCH ANIMALS (owner R12, "Mount Chinese zodiac"):
+# the traditional solar-term month branches — Yin (Tiger) begins at
+# lichun (start of spring, ~Feb 4) and each subsequent branch begins at
+# the next "jie" solar term, ~30 days apart; Zi (Rat) begins at daxue
+# (~Dec 7) and so holds the December solstice, which is why the
+# classical calendar calls that lunar month "the eleventh"
+# (core.blue_moon.chinese_leap_month reads the SAME fact). Each solar
+# term's start nearly always falls in the FIRST week of its Gregorian
+# month, so — exactly like defaults.SLAVIC_MONTHS mounts by Gregorian
+# month rather than by the true (locally-drifting) bloom date — this
+# table fixes ONE animal per Gregorian month for the static 12-wedge
+# mount; the LIVE lunar month (core.moon.chinese_zodiac) is unaffected.
+CHINESE_MONTH_BRANCH_ANIMALS = {
+    1: "Ox", 2: "Tiger", 3: "Rabbit", 4: "Dragon", 5: "Snake", 6: "Horse",
+    7: "Goat", 8: "Monkey", 9: "Rooster", 10: "Dog", 11: "Pig", 12: "Rat",
+}
+
 # Tropical zodiac: (name, symbol), indexed by dial angle // 30 on the
 # year wheel — Cancer's first point IS the summer solstice (dial top),
 # Capricorn's the winter solstice (bottom), Aries' the spring equinox.
@@ -920,6 +939,35 @@ ZODIAC_SIGNS = (
     ("Gemini", "♊"),
 )
 ZODIAC_SPAN_DEG = 30.0
+
+# --- THE BLUE MOON LAW (owner-sealed 2026-07-22) ------------------------------
+# The 13th member of every 12-set — hidden except in a blue-moon year
+# (core.blue_moon.thirteen_moon_year: the calendar year holds 13 Full
+# Moons, ~37% of years) AND inside its own short date window. `key` ->
+# (display name, encyclopedia family, encyclopedia entry name) — the
+# SAME two-level lookup WEEKDAY_THEME_NINTHS uses for its (name, path),
+# read by both the dial (render.layers.thirteenth_plate) and its hover
+# (render.compositor). "chinese" (The Cat) is NOT solar-triggered — see
+# core.blue_moon.chinese_leap_month — it shares this table only because
+# it shares the CENTER seat.
+THIRTEENTHS = {
+    "ophiuchus": ("Ophiuchus", "ninths", "Ophiuchus"),
+    "chinese": ("The Cat", "ninths", "The Cat"),
+    "sol": ("Sol", "months", "Sol"),
+    "modrenik": ("Modrenik", "months", "Modrenik"),
+}
+# Year-agnostic (month, day) bounds, inclusive both ends — core.blue_moon
+# stamps the trigger year on. Ophiuchus: the astronomical transit (the
+# Sun's real path through the constellation, Nov 29 - Dec 17). Sol:
+# carries the June solstice (International Fixed Calendar's Year Day
+# analogue — CANON's "the Sun's thirteenth at the year's top").
+OPHIUCHUS_WINDOW = ((11, 29), (12, 17))
+SOL_WINDOW = ((6, 18), (7, 15))
+# Modrenik has no fixed calendar dates — it is computed FROM the real
+# December solstice instant (core.year_wheel.YearAnchors), this many
+# days either side ("CANON's the Moon's thirteenth at the year's
+# bottom" — honest across years, unlike a fixed MM-DD pair).
+MODRENIK_WINDOW_HALF_DAYS = 14
 
 # Season/moon event glow windows (owner spec): the Earth marker glows
 # ±12 h around the four season instants, the Moon marker ±6 h around the

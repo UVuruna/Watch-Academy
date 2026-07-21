@@ -37,6 +37,20 @@ WEEKDAY_VARIANT_WHITELIST = frozenset(
      "alt"}
 )
 
+# The GAMING multi-block themes (owner-sealed rosters 2026-07-22, sheets
+# 0.14.392): wow/cyberpunk/starwars nest ONE block level between the
+# theme and its registers — weekday/<source>/wow/<block>/{primary,
+# colored}/ — the block names are the sheets' own sealed vocabulary.
+# A SEPARATE set from the variant whitelist because blocks arrive with
+# the owner's generation over time — the no-unused-members law applies
+# only to the variant names, never to blocks still awaiting their art
+# (the owner's first drop, wow/alliance, landed 2026-07-22).
+WEEKDAY_BLOCK_WHITELIST = frozenset(
+    {"alliance", "horde", "evil",          # wow
+     "gangs", "street", "power",           # cyberpunk
+     "svetla", "tamna", "nova"}            # starwars
+)
+
 
 def _all_dir_names(root: Path) -> list[str]:
     return [p.name for p in root.rglob("*") if p.is_dir()]
@@ -74,7 +88,9 @@ def test_weekday_theme_subfolders_are_all_whitelisted():
             if not theme_dir.is_dir():
                 continue
             for name in _all_dir_names(theme_dir):
-                if name not in WEEKDAY_VARIANT_WHITELIST:
+                if name not in (
+                    WEEKDAY_VARIANT_WHITELIST | WEEKDAY_BLOCK_WHITELIST
+                ):
                     offenders.append(
                         f"{source_dir.name}/{theme_dir.name}/.../{name}"
                     )

@@ -314,9 +314,26 @@ screens —
   law's twelve marks now DRAW on the Calendar pointer at
   `defaults.CALENDAR_MOUNT_RADIUS_FRACTION` (60-70% radius), with a
   Settings picker for WHICH 12-set mounts (off / zodiac signs / this
-  months set, `SkinDefinition.calendar_mount`, the Design ▸ Pointer
-  tab) — see [Layers](../render/layers.md)'s own "The 12-SET Mount"
+  months set / the Chinese monthly animals, `SkinDefinition.
+  calendar_mount`, the Design ▸ Pointer tab) — see
+  [Layers](../render/layers.md)'s own "The 12-SET Mount"
   section; pinned by `tests/test_calendar.py`.
+  **THE THIRTEENTH PAIR (owner-sealed 2026-07-22, R12 Blue Moon Law):**
+  the topic closes with two MORE entries appended after the twelve —
+  **Sol (the Sun's Month)** (Cotsworth's International Fixed Calendar,
+  the real 13×28 reform Kodak ran internally 1928-1989, its inserted
+  month between June and July named for the summer solstice it
+  carries) and **Modrenik (the Blue Moon Month)** (this dial's own
+  invented sibling — "modri mesec", the blue moon, answered in a
+  Slavic tongue that never needed the word). Same "Name (Gloss)" title
+  convention as the twelve real months; each article weaves the OTHER's
+  name in (the owner's duality: Sol the Sun's thirteenth at the year's
+  TOP, Modrenik the Moon's at its BOTTOM). Unlike the twelve, these two
+  never MOUNT on the wheel at all — the Blue Moon Law keeps every
+  12-set at twelve; they live only in the dial CENTER, in a blue-moon
+  year, inside their own short window
+  (see [Blue Moon](../core/blue_moon.md)). Pinned by
+  `tests/test_months.py`/`tests/test_blue_moon.py`.
 
 **ROUND R8b — ENCYCLOPEDIA REVIEW PACK (owner batch `UV/prompt.txt`
 2026-07-21):**

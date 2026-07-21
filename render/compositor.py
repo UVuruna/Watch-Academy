@@ -62,6 +62,8 @@ from render.layers import (
     archetype_lit_index,
     center_dual_face,
     center_face,
+    center_seat_body_key,
+    chinese_mount_dimmed_index,
     dial_point,
     earth_region,
     palette_for,
@@ -73,6 +75,7 @@ from render.layers import (
     slot_view,
     sunday_dual_face,
     theme_ninth,
+    thirteenth_plate,
     weekday_body_orbit,
     weekday_body_size,
     today_slot_theta,
@@ -706,6 +709,14 @@ class Compositor:
                 # Weekday hover rework (owner spec): the ACTIVE body
                 # leads with the date, ghosts show their article alone.
                 body = element[len("body:"):]
+                if body == center_seat_body_key(self._skin, today):
+                    # THE BLUE MOON LAW (owner-sealed 2026-07-22): the
+                    # 13th OUTRANKS every other center-seat hover below
+                    # — checked on ANY day, independent of Sunday or of
+                    # whether this theme even carries a duality.
+                    thirteenth = self._active_thirteenth()
+                    if thirteenth is not None:
+                        return self._thirteenth_tooltip(thirteenth)
                 if body == "sun" and sunday_dual_face(self._skin):
                     # The north face on the Compass/Seasons speaks the
                     # RULER face alone (owner 2026-07-13) — the 24h
@@ -1713,6 +1724,38 @@ class Compositor:
             f"<td width='{defaults.ARTICLE_COLUMN_WIDTH_PX}'>{columns[1]}</td>"
             "</tr></table>"
         )
+
+    def _active_thirteenth(self) -> str | None:
+        """THE BLUE MOON LAW's resolved 13th for today (owner-sealed
+        2026-07-22) — reads the SAME pre-computed `DayContext` field
+        the paint pass uses (`core.blue_moon.active_thirteenth`,
+        computed once per day, never recomputed here); None before the
+        first day build (mirrors `_center_pangea`'s own graceful
+        guard)."""
+        return self._day.active_thirteenth if self._day is not None else None
+
+    def _thirteenth_tooltip(self, key: str) -> str:
+        """THE BLUE MOON LAW's 13th (owner-sealed 2026-07-22, item 7):
+        its own article and badge lead, OUTRANKING the theme's
+        ordinary center face for as long as its window holds — the
+        closing paragraph names what stepped aside, so the hover
+        "says both" (owner spec: "Ophiuchus — the thirteenth;
+        [theme center] steps aside")."""
+        name, asset = thirteenth_plate(key)
+        _display, family, article_name = constants.THIRTEENTHS[key]
+        text = self._encyclopedia.entry(family, article_name)["base"]
+        theme_title = defaults.WEEKDAY_THEME_TITLES.get(
+            self._skin.weekday_theme, self._skin.weekday_theme
+        )
+        text += (
+            "\n\n[[The Thirteenth]] A blue-moon guest: for as long as "
+            f"it holds this seat, {theme_title}'s own center steps aside."
+        )
+        title = (
+            f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
+            f"<b>{html.escape(self._tr(name))}</b></span>"
+        )
+        return _article_html(asset, title, text, tr=self._tr)
 
     def _center_pangea(self) -> bool:
         """The Continents theme's Ninth easter-egg flag for the hover
@@ -2791,6 +2834,28 @@ class Compositor:
             html.escape(self._tr(gloss)),
         )
 
+    def _chinese_mount_wedge_html(self, index: int) -> str:
+        """The mounted Chinese MONTHLY animal's hover (owner R12: "animal
+        + its month"): the animal's name over its own colored badge,
+        its Gregorian month beneath — the SAME register the year-zodiac
+        Chinese slot hover already reads. While this exact wedge is the
+        one lending its month to The Cat (`chinese_mount_dimmed_index`),
+        a short note says so."""
+        from render.layers import octa_slot_art
+
+        gregorian = (index + 5) % 12 + 1
+        animal = constants.CHINESE_MONTH_BRANCH_ANIMALS[gregorian]
+        art = octa_slot_art("chinese/colored", animal)
+        lines = [
+            f"<b>{html.escape(self._tr(animal))}</b>",
+            html.escape(self._tr(_MONTHS[gregorian - 1])),
+        ]
+        if self._day is not None and index == chinese_mount_dimmed_index(self._day):
+            lines.append(
+                html.escape(self._tr("lending its month to The Cat this year"))
+            )
+        return _hover_badge(art) + _centered_html(*lines)
+
     def _calendar_mount_tooltip(self, point: QPointF, radius: float) -> str | None:
         """The mounted 12-set mark under the cursor (DESIGN ZODIAC law,
         R9a round) — a small circular target at CALENDAR_MOUNT_RADIUS_
@@ -2809,6 +2874,8 @@ class Compositor:
             if dx * dx + dy * dy <= hit_radius * hit_radius:
                 if mount == "zodiac":
                     return self._zodiac_wedge_html(index)
+                if mount == "chinese":
+                    return self._chinese_mount_wedge_html(index)
                 return self._months_wedge_html(index)
         return None
 

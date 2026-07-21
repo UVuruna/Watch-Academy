@@ -253,9 +253,10 @@ def calendar_mount_wheel(mount: str) -> str:
     """Which `calendar_wedge_bounds` geometry a mount set's marks ride:
     zodiac signs own the ZODIAC wheel's cardinal-START wedges (sign i's
     wedge IS its own 30-deg arc — the honest alignment, no separate
-    month-based approximation needed); Slavic months own the ALMANAC
-    wheel's cardinal-CENTERED wedges (their Gregorian equivalent already
-    indexes core.year_wheel.almanac_month_index)."""
+    month-based approximation needed); Slavic months and the Chinese
+    MONTHLY animals (owner R12) both own the ALMANAC wheel's cardinal-
+    CENTERED wedges (each keyed by a Gregorian month, already indexed
+    by core.year_wheel.almanac_month_index)."""
     return "zodiac" if mount == "zodiac" else "almanac"
 
 
@@ -273,12 +274,24 @@ def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
     COLORED badges the wedge hover already shows (Rule #5) — real,
     committed art. Months read the sourceless MONTHS_ART_DIR plates,
     graceful-absent (owner R7b contract) until the owner's prompt sheet
-    lands — None routes the caller to the name-fallback, never a gap."""
+    lands — None routes the caller to the name-fallback, never a gap.
+    Chinese (owner R12) mounts the twelve MONTHLY animals
+    (`constants.CHINESE_MONTH_BRANCH_ANIMALS`, NOT the Chinese YEAR
+    zodiac already read elsewhere) — real, committed COLORED badges,
+    the same register the Almanac wedge hover's Chinese branch already
+    shows."""
     if mount == "zodiac":
         return tuple(
             (name, octa_slot_art(constants.ZODIAC_STYLE_ART_DIRS["colored"], name))
             for name, _symbol in constants.ZODIAC_SIGNS
         )
+    if mount == "chinese":
+        entries: list[tuple[str, Path | None]] = [("", None)] * 12
+        for gregorian, animal in constants.CHINESE_MONTH_BRANCH_ANIMALS.items():
+            entries[almanac_month_index(gregorian)] = (
+                animal, octa_slot_art("chinese/colored", animal),
+            )
+        return tuple(entries)
     entries: list[tuple[str, Path | None]] = [("", None)] * 12
     for croatian, _gloss, stem, gregorian in defaults.SLAVIC_MONTHS:
         index = almanac_month_index(gregorian)
@@ -295,11 +308,36 @@ def calendar_mount_current_index(mount: str, day: DayContext) -> int:
     can inherit that brightness"). Mirrors calendar_lit_index's own
     "year" branches (Rule #5), but never hemisphere-mirrored — the mark
     always sits on its OWN fixed wedge identity, matching what is drawn
-    there (unlike the Earth marker's orbit, which mirrors south)."""
+    there (unlike the Earth marker's orbit, which mirrors south). The
+    Chinese mount emphasizes the same Gregorian month's wedge as the
+    Slavic months mount — both are Gregorian-fixed 12-sets."""
     if mount == "zodiac":
         names = [name for name, _ in constants.ZODIAC_SIGNS]
         return names.index(day.zodiac_name)
     return almanac_month_index(day.local_date.month)
+
+
+def chinese_mount_dimmed_index(day: DayContext) -> int | None:
+    """THE CAT'S DIMMING LAW (owner spec, item 5, R12): the wedge index
+    to DIM on the "chinese" mount while The Cat holds the CENTER —
+    "the first pass of the month belongs to its animal, the second
+    pass — the month that does not exist — belongs to the Cat". None
+    outside a Chinese-leap-month window (`DayContext.
+    chinese_leap_month_number` is None then, the same field the CENTER
+    seat itself reads)."""
+    number = day.chinese_leap_month_number
+    if number is None:
+        return None
+    # The doubled LUNAR month's own animal — lunar month N always names
+    # CHINESE_ANIMALS[(N + 1) % 12] (month 1 = Tiger, index 2; month 11
+    # = Rat, index 0; month 12 = Ox, index 1 — the fixed jianyin
+    # numbering core.blue_moon.chinese_leap_month itself counts in).
+    animal = constants.CHINESE_ANIMALS[(number + 1) % 12]
+    gregorian = next(
+        month for month, name in constants.CHINESE_MONTH_BRANCH_ANIMALS.items()
+        if name == animal
+    )
+    return almanac_month_index(gregorian)
 
 
 def _draw_calendar_mount(
@@ -309,15 +347,23 @@ def _draw_calendar_mount(
     current-mark emphasis is a day computation, never per-tick). Missing
     art (the months set, pre-owner-art) falls back to the entity's NAME,
     the SAME convention archetype figures/weekday bodies use
-    (`draw_archetype_figure`) — never a blank gap."""
+    (`draw_archetype_figure`) — never a blank gap. On the "chinese"
+    mount, the doubled month's own animal DIMS below its resting alpha
+    while The Cat holds the center (`chinese_mount_dimmed_index`) —
+    checked BEFORE the current-month emphasis, so the two never both
+    apply to the one mark."""
     mount_radius = ctx.radius * defaults.CALENDAR_MOUNT_RADIUS_FRACTION
     mark_height = 2 * ctx.radius * defaults.CALENDAR_MOUNT_MARK_SCALE
     current = calendar_mount_current_index(mount, ctx.day)
+    dimmed = chinese_mount_dimmed_index(ctx.day) if mount == "chinese" else None
     for index, (name, art) in enumerate(calendar_mount_entries(mount)):
         pos = dial_point(calendar_mount_angle(mount, index), mount_radius)
-        alpha = defaults.CALENDAR_MOUNT_ALPHA + (
-            defaults.CALENDAR_MOUNT_LIT_DELTA if index == current else 0.0
-        )
+        if index == dimmed:
+            alpha = defaults.CALENDAR_MOUNT_DIMMED_ALPHA
+        else:
+            alpha = defaults.CALENDAR_MOUNT_ALPHA + (
+                defaults.CALENDAR_MOUNT_LIT_DELTA if index == current else 0.0
+            )
         painter.save()
         painter.setOpacity(min(1.0, alpha))
         if art is not None:
@@ -917,6 +963,48 @@ def center_dual_face(skin: SkinDefinition) -> bool:
     if spec.display_mode == "center_only":
         return True
     return skin.pointer in ("hexa", "trio")
+
+
+def center_seat_body_key(skin: SkinDefinition, today: str) -> str | None:
+    """The weekday-body KEY occupying the classic unit's CENTER seat on
+    this skin, or None where no such seat exists — "sun" for the
+    Prism/Trinity hexa/trio layouts (the ONLY body ever drawn there —
+    `WeekdayLayer` seats every other body on an arm), `today` for the
+    center_only showcase (its one and only seat, no arms at all). Both
+    `CenterBodyLayer` and the compositor's hover gate the Blue Moon
+    Law's 13th on this SAME physical seat (Rule #5) — independent of
+    whether the theme carries a Ruler/Servant duality at all
+    (`center_dual_face` additionally requires a `dual_asset`, which the
+    13th does not need: it needs only the seat, never the theme's own
+    duality)."""
+    if weekday_classic_slot(skin) is None:
+        return None
+    if skin.weekday_set.display_mode == "center_only":
+        return today
+    if skin.pointer in ("hexa", "trio"):
+        return "sun"
+    return None
+
+
+def thirteenth_plate(key: str) -> tuple[str, Path | None]:
+    """(display name, resolved asset path or None) of the Blue Moon
+    Law's 13th `key` (one of `constants.THIRTEENTHS`) — mirrors
+    `theme_ninth`'s graceful-absent contract (Rule #5): the caller draws
+    the name-only fallback when the path is None. Ophiuchus/The Cat
+    resolve through the SAME zodiac/chinese registers every sign/animal
+    already uses (the "sign"/"primary" looks, matching the Encyclopedia
+    ninth-entry icon exactly); Sol/Modrenik read the sourceless
+    MONTHS_ART_DIR, exactly like the twelve Slavic months (graceful-
+    absent until the owner's prompt sheet lands)."""
+    name, _family, _article = constants.THIRTEENTHS[key]
+    if key == "ophiuchus":
+        art = octa_slot_art("astrology/sign", name)
+    elif key == "chinese":
+        art = octa_slot_art("chinese/primary", "Cat")
+    else:
+        resolved = paths.art_file(defaults.MONTHS_ART_DIR / f"{name}.png")
+        art = resolved if resolved.exists() else None
+    return name, art
 
 
 def theme_ninth(
@@ -1940,6 +2028,16 @@ class CenterBodyLayer(Layer):
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
         if weekday_classic_slot(ctx.skin) is None:
             return          # every slot sits in a seat
+        center_key = center_seat_body_key(ctx.skin, today)
+        if center_key is not None and ctx.day.active_thirteenth is not None:
+            # THE BLUE MOON LAW (owner-sealed 2026-07-22): the 13th
+            # OUTRANKS the theme's ordinary center face for as long as
+            # its trigger+window holds — checked BEFORE the Sunday
+            # dual/Ninth law below, on ANY day of the week (its window
+            # is a calendar fact, never tied to Sunday or to whether
+            # this theme even carries a duality).
+            self._draw_thirteenth(painter, ctx, ctx.day.active_thirteenth, center_key)
+            return
         ghost_reveal = (
             ctx.reveal_active
             and spec.display_mode != "center_only"
@@ -2039,6 +2137,38 @@ class CenterBodyLayer(Layer):
         draw_weekday_body(
             painter, ctx, body, QPointF(0, 0), center_size, 1.0, label_px
         )
+
+    def _draw_thirteenth(
+        self, painter: QPainter, ctx: RenderContext, key: str, center_key: str,
+    ) -> None:
+        """THE BLUE MOON LAW's 13th (owner-sealed 2026-07-22) — drawn
+        exactly where the ordinary center face would sit, opaque, ABOVE
+        the hands. Graceful-absent like the calendar mount's own months
+        (a NAME-ONLY fallback, never a hidden feature) — UNLIKE
+        `theme_ninth`, whose missing plate makes a theme act as if it
+        carried no Ninth at all: the 13th's whole point is its
+        trigger+window, which must read provably even before Sol/
+        Modrenik's art lands."""
+        spec = self._skin.weekday_set
+        name, asset = thirteenth_plate(key)
+        center_size = (
+            2 * ctx.radius * spec.center_scale
+            if spec.display_mode == "center_only"
+            else weekday_body_size(ctx.skin, ctx.radius)
+        )
+        center_size *= hover_factor(ctx, f"body:{center_key}")
+        painter.save()
+        painter.setOpacity(1.0)
+        if asset is not None:
+            draw_pixmap_centered(painter, ctx, asset, QPointF(0, 0), center_size)
+        if asset is None or ctx.skin.show_weekday_names:
+            draw_name_label(
+                painter, name, QPointF(0, 0),
+                name_label_px(
+                    name, center_size * defaults.NAME_LABEL_WIDTH_FRACTION
+                ),
+            )
+        painter.restore()
 
 
 def archetype_label_set_px(

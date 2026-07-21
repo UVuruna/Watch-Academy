@@ -60,6 +60,29 @@ def july_wednesday(app):
     return day, build_tick_state(now, day)
 
 
+@pytest.fixture(scope="module")
+def blue_moon_free_wednesday(app):
+    """2026-09-09 (a Wednesday, exactly 9 weeks after `july_wednesday`'s
+    own 2026-07-08) at noon in Belgrade — for tests whose SUBJECT is the
+    ordinary hexa/trio center seat or a full hover-dispatch sweep, never
+    the Blue Moon Law (R12) itself: 2026 is a 13-Full-Moon year, and
+    `july_wednesday` sits inside Sol's own Jun18-Jul15 window, which
+    would otherwise take the center over whatever these tests are
+    actually probing. Sep 9 is safely outside every window (Sol,
+    Ophiuchus Nov29-Dec17, Modrenik ~Dec7-Jan4)."""
+    city = defaults.DEFAULT_CITY
+    tz = ZoneInfo(city["timezone"])
+    now = datetime(2026, 9, 9, 12, 0, tzinfo=tz)
+    observer = astral.Observer(latitude=city["latitude"], longitude=city["longitude"])
+    day = build_day_context(
+        now,
+        observer,
+        SeasonsRepository().year_anchors(now.year),
+        MoonPhaseRepository().moon_window(now.year),
+    )
+    return day, build_tick_state(now, day)
+
+
 # --- Slot layouts ---------------------------------------------------------------
 
 
@@ -475,7 +498,11 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
 
     city = defaults.DEFAULT_CITY
     tz = ZoneInfo(city["timezone"])
-    now = datetime(2026, 7, 12, 12, 0, tzinfo=tz)          # a Sunday
+    # A Sunday outside every Blue Moon Law window (R12) — see
+    # test_render.test_sunday_sun_covers_the_hands for why Jul 12 (in
+    # Sol's own Jun18-Jul15 window of this 13-Full-Moon year) is unsafe
+    # for a plain Sunday-duality check; Jul 19 is the next Sunday.
+    now = datetime(2026, 7, 19, 12, 0, tzinfo=tz)          # a Sunday
     day = build_day_context(
         now,
         astral.Observer(
@@ -1549,7 +1576,9 @@ def test_omega_hit_is_the_full_letter_circle(july_wednesday):
     assert not comp.hit_omega(180.0, 180.0 - letter_r, 360.0)
 
 
-def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesday):
+def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(
+    blue_moon_free_wednesday,
+):
     """The reveal window (owner 2026-07-16) raises every non-active
     weekday body — the arm ghosts AND, on Trinity/Prism, the ghost
     center Sun — to full opacity, and the center Sun moves from
@@ -1560,7 +1589,7 @@ def test_reveal_week_raises_ghost_opacity_and_lifts_the_center_body(july_wednesd
 
     from render.layers import CenterBodyLayer, RenderContext, WeekdayLayer
 
-    day, tick = july_wednesday
+    day, tick = blue_moon_free_wednesday
     skin = dc.replace(defaults.DEFAULT_SKIN, pointer="trio")
     today = constants.WEEKDAY_BODIES[day.weekday_index]
     assert today != "sun"                       # Wednesday: Sun is a ghost
@@ -2766,7 +2795,9 @@ def test_umbra_forms_render(july_wednesday, form):
         assert abs(night_left - night_right) <= 2    # ...mirrored sides
 
 
-def test_weekday_center_body_matches_the_diamond_bodies(app, july_wednesday, monkeypatch):
+def test_weekday_center_body_matches_the_diamond_bodies(
+    app, blue_moon_free_wednesday, monkeypatch,
+):
     """Owner 2026-07-18 (his two screenshots): the hexa/trio CENTER body
     is the SAME size as the diamond bodies — in the normal state AND
     during the Omega reveal. Normal drew center_scale x the seat factor
@@ -2777,7 +2808,7 @@ def test_weekday_center_body_matches_the_diamond_bodies(app, july_wednesday, mon
     import render.layers as layers
     from render.layers import CenterBodyLayer, RenderContext, WeekdayLayer
 
-    day, tick = july_wednesday
+    day, tick = blue_moon_free_wednesday
     calls = []
     monkeypatch.setattr(
         layers, "draw_weekday_body",

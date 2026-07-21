@@ -72,14 +72,35 @@ def test_topic_page_order_title_then_twelve():
     from app.encyclopedia import _topics
 
     entries = _topics(date(2026, 7, 7))["months"]["entries"]
-    assert len(entries) == 13
+    # Title + twelve Slavic months + the Blue Moon Law's Sol/Modrenik
+    # pair (owner-sealed 2026-07-22, R12) closing the topic.
+    assert len(entries) == 15
     assert entries[0]["name"] == "The Slavic Months"
     assert entries[0]["article"] == ("emblem", "months", "The Slavic Months")
     for entry, (cro, gloss, _stem, _m) in zip(
-        entries[1:], defaults.SLAVIC_MONTHS
+        entries[1:13], defaults.SLAVIC_MONTHS
     ):
         assert entry["name"] == f"{cro} ({gloss})"
         assert entry["article"] == ("emblem", "months", cro)
+    assert entries[13]["name"] == "Sol (the Sun's Month)"
+    assert entries[13]["article"] == ("emblem", "months", "Sol")
+    assert entries[14]["name"] == "Modrenik (the Blue Moon Month)"
+    assert entries[14]["article"] == ("emblem", "months", "Modrenik")
+
+
+def test_the_thirteenth_pair_articles_carry_the_duality():
+    """Sol and Modrenik (owner-sealed 2026-07-22, R12): each names its
+    own real-world/invented origin AND weaves the OTHER's name in (the
+    owner's duality — the Sun's thirteenth at the year's top, the
+    Moon's at its bottom)."""
+    enc = EncyclopediaRepository()
+    sol = enc.entry("months", "Sol")["base"]
+    modrenik = enc.entry("months", "Modrenik")["base"]
+    assert len(sol) > 300 and len(modrenik) > 300
+    assert "Cotsworth" in sol and "Kodak" in sol
+    assert "Modrenik" in sol                          # weaves the sibling in
+    assert "Sol" in modrenik                          # weaves the sibling in
+    assert "blue" in modrenik.lower()                 # modar/blue moon etymology
 
 
 def test_topic_rides_the_celestial_engine_once():

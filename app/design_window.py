@@ -164,6 +164,7 @@ class DesignDialog(QDialog):
                 ("off", "No 12-set mount"),
                 ("zodiac", "Mount zodiac signs"),
                 ("months", "Mount Slavic months"),
+                ("chinese", "Mount Chinese zodiac"),
             ):
                 mount_row.addWidget(self._pill(
                     self._tr(title), settings.calendar_mount == mode,

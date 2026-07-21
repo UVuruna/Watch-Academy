@@ -483,7 +483,12 @@ def test_sunday_sun_covers_the_hands(app):
     from data.seasons import SeasonsRepository
 
     tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
-    sunday_noon = datetime(2026, 7, 12, 12, 0, tzinfo=tz)   # a Sunday
+    # A Sunday safely OUTSIDE every Blue Moon Law window (R12) — 2026 is
+    # itself a 13-Full-Moon year, and Jul 12 sits inside Sol's own
+    # Jun18-Jul15 window, which would otherwise take the center over the
+    # plain Sunday Sun this test is actually about; Jul 19 is the very
+    # next Sunday, just past Sol's window.
+    sunday_noon = datetime(2026, 7, 19, 12, 0, tzinfo=tz)   # a Sunday
     observer = astral.Observer(
         latitude=defaults.DEFAULT_CITY["latitude"],
         longitude=defaults.DEFAULT_CITY["longitude"],

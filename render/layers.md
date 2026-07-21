@@ -112,12 +112,13 @@ Calendar's own pinned South subdial). `SkinDefinition.calendar_mount`
 (`constants.CALENDAR_MOUNT_MODES`, Settings-picked in the Design ▸
 Pointer tab, right beside the lighting row) picks the set: **"off"**
 (nothing extra), **"zodiac"** (the astrology sign register's COLORED
-badges — the SAME art the wedge hover already shows) or **"months"**
+badges — the SAME art the wedge hover already shows), **"months"**
 (the twelve Slavic months, `defaults.SLAVIC_MONTHS`, graceful-absent
-art). Ships **"zodiac"** by default — the owner's law names the
-Calendar pointer as the 12-set's default home, and an offscreen render
-confirmed the badges read cleanly at the mount radius without crowding
-the ring, the hands or the pinned subdial.
+art) or **"chinese"** (owner R12 — the twelve MONTHLY animals, real
+COLORED badges, see below). Ships **"zodiac"** by default — the owner's
+law names the Calendar pointer as the 12-set's default home, and an
+offscreen render confirmed the badges read cleanly at the mount radius
+without crowding the ring, the hands or the pinned subdial.
 
 A mount rides its OWN fixed wheel geometry, independent of whichever
 wheel `palette_style` paints as the background wedges
@@ -153,7 +154,26 @@ zodiac through `_zodiac_wedge_html(index)` (factored out of
 sign+dates+badge text the background wedge hover already does), months
 through `_months_wedge_html(index)` (the Croatian proper noun + its
 English gloss, graceful-absent art via the same `_hover_badge`
-empty-string rule every other emblem uses).
+empty-string rule every other emblem uses), chinese through
+`_chinese_mount_wedge_html(index)` (the animal's name over its own
+COLORED badge).
+
+**"chinese" — the MONTHLY animals (owner R12, Blue Moon round):**
+`constants.CHINESE_MONTH_BRANCH_ANIMALS` fixes one branch animal per
+Gregorian month (the traditional solar-term reckoning — Yin/Tiger
+begins at lichun, ~Feb 4, each subsequent branch ~30 days later; Zi/Rat
+begins at daxue, ~Dec 7, and so holds the December solstice, which is
+why the classical calendar calls that lunar month "the eleventh" —
+`core.blue_moon.chinese_leap_month` reads the identical fact). This is
+the Chinese YEAR zodiac's monthly sibling, never the animal the Almanac
+wedge already lights by year. `chinese_mount_dimmed_index(day)` is THE
+CAT'S DIMMING LAW (item 5): while `DayContext.chinese_leap_month_number`
+is set (The Cat holds the dial CENTER — see below), the doubled lunar
+month's OWN branch animal's mount mark dims to
+`CALENDAR_MOUNT_DIMMED_ALPHA` — "the first pass of the month belongs to
+its animal, the second pass — the month that does not exist — belongs
+to the Cat" — checked in `_draw_calendar_mount` BEFORE the current-month
+emphasis, so the two never both apply to one mark.
 
 <a id="the-archetype-mode"></a>
 
@@ -542,6 +562,22 @@ same as the diamond bodies, in the normal state and during the reveal
 alike (owner 2026-07-18); center_only keeps its own `center_scale`
 showcase, and the compositor's center hit disc mirrors both drawn
 sizes exactly.
+
+**THE BLUE MOON LAW (owner-sealed 2026-07-22, R12) — checked FIRST,
+before everything below:** `center_seat_body_key(skin, today)` names
+the body key occupying this SAME physical seat ("sun" for hexa/trio,
+`today` for center_only) — independent of whether the theme carries a
+duality at all (unlike `center_dual_face`, which additionally requires
+a `dual_asset`). Whenever `DayContext.active_thirteenth` is not None
+(`core.blue_moon.active_thirteenth`, resolved once per day), `_draw_
+thirteenth` draws that 13th here instead — OUTRANKING the ordinary
+face, the Servant, and even the Ninth, on ANY day of the week (the
+13th's window is a calendar fact, never tied to Sunday). Graceful-absent
+like the calendar mount's own months (`thirteenth_plate(key)` — a
+NAME-ONLY fallback, never a hidden feature, unlike `theme_ninth` below,
+whose missing plate silently withdraws the Ninth face entirely). See
+[Blue Moon](../core/blue_moon.md) for the trigger/window/precedence law
+itself.
 
 **THE DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
 amendment, round R3b item 3):** on a real Sunday, when the classic
