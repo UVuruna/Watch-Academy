@@ -1,4 +1,4 @@
-﻿"""THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-22):
+"""THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-22):
 every 12-set on this dial gains a hidden 13th member. It exists ONLY
 under its own trigger, during its own short date window; outside
 trigger+window it does not exist anywhere, dial or Encyclopedia.

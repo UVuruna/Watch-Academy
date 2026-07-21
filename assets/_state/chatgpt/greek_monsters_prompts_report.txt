@@ -1,0 +1,6 @@
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-21 18:39:03  (18/18 pending)
+--------------------------------------------------------------------
+2026-07-21 18:40:00  assets/weekday/monsters/primary/Medusa.png   gen   45.9s  ours    7.2s   1024x1024 -> 953x941    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 18:41:36  assets/weekday/monsters/colored/Medusa.png   gen   82.5s  ours   11.2s   1024x1024 -> 931x929    1.7 MB  [REMOVE BG: nothing, CROP: done]

@@ -305,7 +305,20 @@ def size_to_screen(
     clamps to the screen so it can never spill off — every one of
     these dialogs stays a normal resizable/maximizable window past
     this first paint; this only sets the size it OPENS at."""
-    screen = dialog.screen() or QGuiApplication.primaryScreen()
+    # QWidget.screen() on a not-yet-shown dialog intermittently walks a
+    # dead C++ QScreen under the offscreen test platform — a hard access
+    # violation no except can catch (chronic in test_menu_rework's
+    # open/close churn, 2026-07-22). Resolve through the window HANDLE
+    # instead: pre-show there is none (primary screen — which is what
+    # screen() returned there anyway), post-show the handle's screen is
+    # the real one, multi-monitor correct.
+    handle = dialog.windowHandle()
+    screen = (
+        handle.screen() if handle is not None
+        else QGuiApplication.primaryScreen()
+    )
+    if screen is None:          # screenless headless session: keep defaults
+        return
     available = screen.availableGeometry()
     height = min(round(available.height() * height_fraction), available.height())
     width = min(

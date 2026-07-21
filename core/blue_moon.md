@@ -1,4 +1,4 @@
-﻿# Blue Moon — the Thirteenth Member
+# Blue Moon — the Thirteenth Member
 
 **Script:** [Blue Moon (script)](blue_moon.py)
 
