@@ -149,8 +149,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Ebony", "Smoky Plum", "Periwinkle", "Lavender Gray", "Espresso",
     "Anthracite", "Granite", "Dim Gray", "Stone", "Nevada", "Aluminium",
     # The FIGURE ROSTER (owner 2026-07-15) + the Pantheon names, the
-    # reworked Creeds and the wolf rank parentheticals.
-    "Figures", "Planetary", "Pantheon", "Ancient religions",
+    # reworked Creeds and the wolf rank parentheticals. "Wider Court"
+    # (round R8d) is the merged culture topics' THIRD reader section,
+    # alongside these same two.
+    "Figures", "Planetary", "Pantheon", "Wider Court", "Ancient religions",
     "Poseidon (Ποσειδῶν)",
     "Artemis (Ἄρτεμις)",
     "Athena (Ἀθηνᾶ)",

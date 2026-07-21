@@ -14,7 +14,9 @@ screens —
    card, distinguished by the Planets/Signs/Art look switcher),
    **The Divine** (the four merged gods cultures + Creeds/Mysteries +
    Scripture — the old standalone Wider-Pantheon topics were DELETED
-   round R8b item 6, see below), **The Human Wheel** (Virtues, Sins,
+   round R8b item 6 as duplicate GALLERY tiles, then their fifteen
+   ARTICLES folded back in as each merged topic's own trailing third
+   block, round R8d, see below), **The Human Wheel** (Virtues, Sins,
    Moods, the Nine Intelligences, Professions, Trinity and THE TWO
    TRIANGLES — the Judas–Lucifer scale of self, owner 2026-07-13; its
    Lucifer/Judas badges ROTATE by date, see Scale Rotation below),
@@ -417,6 +419,66 @@ screens —
   (`defaults.WEEKDAY_DUAL_NAMES`, `NINTH_SEAT_PHILOSOPHICAL_NAME`),
   ready to relabel whenever the owner seals the universal names.
 
+**ROUND R8d — THE WIDER COURT RE-WIRE (owner-approved 2026-07-22):**
+
+- **THE MISDIAGNOSIS**: round R8b item 6 deleted `_WIDER_TOPICS` and
+  its four standalone gallery cards whole, reading the owner's "zasto i
+  dalje imamo ove dve verzije" complaint as "delete the topics" — the
+  complaint was actually about the DUPLICATE gallery tiles sitting
+  beside the merged culture topics, never about the fifteen articles
+  themselves (Dionysus, Hephaestus, Hestia; Baldur, Heimdall, Njord;
+  Set, Nut, Geb, Ptah, Sekhmet; Crnobog, Stribog, Jarilo, Rod), which
+  stayed untouched, real owner-era prose, in `Database/encyclopedia.
+  json`'s `wider` family the whole time — just unreachable from the UI.
+  The sealed fix: fold them INTO the four merged culture topics as a
+  trailing THIRD block, instead of restoring their own standalone
+  topics/tiles.
+- **THE WIDER COURT BLOCK (`_wider_topic`)**: each merged culture topic
+  grows a third block after the Pantheon run — a section TITLE page
+  (`"<theme>_wider"`, new `Database/encyclopedia.json` `theme_title`
+  keys, the SAME family `"<theme>_pantheon"` already uses, 2-3
+  sentences per culture in the existing title-page voice: "Nine seats…
+  cannot hold every X — N more stand outside both rosters…") then one
+  ordinary single-image page per figure, sourced from the SAME
+  `EncyclopediaRepository.entry("wider", name)` family the deleted
+  topics read (prose untouched, only its HOME moved). The page map
+  (`_PANTHEON_BLOCK_SIZE = 11`, `_WIDER_BLOCK_START = 2 *
+  _PANTHEON_BLOCK_SIZE = 22`): pages 1-11 Planetary, 12-22 Pantheon, 23
+  The Wider Court title, 24+ the culture's wider figures (Greek/Norse
+  end at 26, Slavic at 27, Egypt — five figures — at 28). NO `looks`
+  key on any wider-figure entry: ground-truthed against the asset tree
+  (`assets/weekday/<source>/<theme>/wider/`) — none of the fifteen
+  figures has landed ANY art yet, not even a bronze master, so there is
+  nothing to cycle; the page renders on `"images"` alone and stays
+  gracefully absent (a name and a text, no plate) exactly like the old
+  standalone topics did, until the owner's art lands.
+- **THE SECTION INDICATOR LEARNS A THIRD NAME**: `_topic_display_title`
+  (round R8b item 8's "Greek — Planetary" / "Greek — Pantheon" header)
+  gains "Greek — Wider Court" for `entry_index >= _WIDER_BLOCK_START` —
+  the same three-way `_tr("Planetary")` / `_tr("Pantheon")` /
+  `_tr("Wider Court")` pattern extended, not a new mechanism.
+- **THE ROSTER-SWITCH BUTTON HIDES ON THE WIDER COURT (owner's own
+  call, justified)**: `_update_roster_button` now hides the button for
+  `entry_index >= _WIDER_BLOCK_START` too — the SAME "hidden outside
+  the merged themes" guard the button already had, not a new special
+  case. Reasoning: the button's whole contract is "jump to the SAME
+  day in the OTHER 11-page roster" (Monday stays Monday); The Wider
+  Court is a single trailing run with no twin block the same length to
+  jump to, so there is no position-preserving destination to name on
+  its icon — showing an icon that claims "back to Planetary" would
+  either be arbitrary (which page does it land on?) or misleading
+  (implying a correspondence that does not exist). Hiding is the
+  honest choice, matching how the button already behaves on every
+  non-merged topic.
+- **REACHABILITY, NOT REGROWTH**: `tests/test_settings_dialog.py`
+  `test_wider_court_block` pins all fifteen articles reachable again BY
+  TITLE, in the old standalone topics' own per-culture order;
+  `test_wider_court_gallery_has_no_extra_tiles` (companion to the
+  R8b `test_wider_pantheon_topics_removed_as_duplicate_tiles`, both
+  kept) confirms the gallery gains no fifth "Wider Court" tile and no
+  `wider_greek`/etc. topic keys return — the fold-in is PAGES inside an
+  existing topic, never a new gallery card.
+
 **The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
 Seasons topic became THREE — **Moon** (the lunations), **Seasons** (the
 quarters, the tropics' halves and the meteorological block — the hidden
@@ -611,7 +673,8 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
 - `_switch_roster()` / `_update_roster_button()` (round R3b item 2):
   the PANTHEON/PLANETARY logo button — jumps `entry_index ±
   _PANTHEON_BLOCK_SIZE`, and shows/restyles the button per page
-  (hidden outside `_PANTHEON_MERGED_THEMES`)
+  (hidden outside `_PANTHEON_MERGED_THEMES`, AND on The Wider Court
+  block, `entry_index >= _WIDER_BLOCK_START` — round R8d, see there)
 - `_download_entry()`: saves the open entry's current-look image(s)
   and its text (headings as `[Label]` lines) into a picked folder
 - `_rescale()`: live sizing on resize — gallery cards through

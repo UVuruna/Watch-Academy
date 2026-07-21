@@ -734,9 +734,33 @@ def _weekday_topic(theme: str):
 # page. `_PANTHEON_BLOCK_SIZE` is the fixed span every merged theme's
 # Planetary block occupies (11 — all four Pantheon cultures also carry
 # a Ninth, so the arithmetic never varies): the roster-switch button
-# jumps `entry_index +/- _PANTHEON_BLOCK_SIZE`.
+# jumps `entry_index +/- _PANTHEON_BLOCK_SIZE`. Page 23 onward is a
+# THIRD block, The Wider Court (`_wider_topic` below, round R8d) — see
+# there for why it is NOT a third roster the switch button cycles into.
 _PANTHEON_BLOCK_SIZE = 11
+# The fixed span of BOTH the Planetary and Pantheon blocks together —
+# page 23 (0-indexed 22) is where The Wider Court title opens.
+_WIDER_BLOCK_START = 2 * _PANTHEON_BLOCK_SIZE
 _PANTHEON_MERGED_THEMES = frozenset(defaults.WEEKDAY_PANTHEON)
+
+# THE WIDER COURT'S FIGURES (round R8d, THE WIDER COURT RE-WIRE, owner-
+# approved 2026-07-22 — restores WORKPLAN Session 8's content after
+# round R8b's `_WIDER_TOPICS` deletion turned out to be a MISDIAGNOSIS:
+# the owner's "zasto i dalje imamo ove dve verzije" complaint was about
+# the standalone topics sitting as confusing SECOND gallery tiles next
+# to the merged culture topics — never about the fifteen articles
+# themselves, which stayed untouched in `encyclopedia.json` the whole
+# time, simply unreachable from the UI). Same figure roster the deleted
+# `_WIDER_TOPICS` carried verbatim — the culture's famous A-list gods
+# that NEITHER roster seats (see the old comment preserved in git
+# history, commit 4081445, for the full reconciliation reasoning against
+# the round-four/five ninth-seat locks).
+_WIDER_FIGURES = {
+    "greek": ("Dionysus", "Hephaestus", "Hestia"),
+    "norse": ("Baldur", "Heimdall", "Njord"),
+    "egypt": ("Set", "Nut", "Geb", "Ptah", "Sekhmet"),
+    "slavic": ("Crnobog", "Stribog", "Jarilo", "Rod"),
+}
 
 
 def _pantheon_topic(theme: str) -> list[dict]:
@@ -842,6 +866,45 @@ def _pantheon_topic(theme: str) -> list[dict]:
         + [body_entry(body) for body in _WEEK_ORDER[1:]]   # Monday..Saturday
         + [duality_title_entry, good_entry, evil_entry]
     )
+
+
+def _wider_topic(theme: str) -> list[dict]:
+    """THE WIDER COURT — a culture's seatless A-list figures, folded
+    back in as a TRAILING third block (round R8d, restoring WORKPLAN
+    Session 8's content after round R8b deleted its standalone topics
+    as misdiagnosed "duplicate tiles" — see `_WIDER_FIGURES` above): a
+    section TITLE page (`"<theme>_wider"` in `encyclopedia.json`'s
+    `theme_title` family, the SAME family `_pantheon_topic`'s
+    `"<theme>_pantheon"` title reads, Rule #5) followed by one ordinary
+    single-image page per figure — sourced from the exact same
+    `EncyclopediaRepository.entry("wider", name)` family the deleted
+    topics read, so the prose is untouched, only its HOME moved. NO
+    `looks` key: ground-truthed against the asset tree
+    (`assets/weekday/<source>/<theme>/wider/`) — none of the fifteen
+    figures has ANY art yet, not even a bronze master, so there is
+    nothing to cycle; the page renders on `"images"` alone and stays
+    gracefully absent (a name and a text, no plate) exactly like the
+    old standalone topics did, until the owner's art lands."""
+    title_key = f"{theme}_wider"
+    title_entry = {
+        "images": (),
+        "name": ("theme_title", title_key),
+        "article": ("theme_title", title_key),
+        "accents": (),
+    }
+    figure_entries = [
+        {
+            "images": (
+                defaults.WEEKDAY_ART_DIR / theme / "wider"
+                / f"{figure.lower()}.png",
+            ),
+            "name": figure,
+            "article": ("emblem", "wider", figure),
+            "accents": (),
+        }
+        for figure in _WIDER_FIGURES[theme]
+    ]
+    return [title_entry] + figure_entries
 
 
 def _continents_topic(travel_date: date) -> dict:
@@ -1289,6 +1352,8 @@ def _topics(travel_date: date | None = None) -> dict:
     # hierarchy roster, reusing the ninth entry the loop above JUST
     # appended (`entries[-1]`) rather than building a second one — the
     # SAME figure closes both blocks (CANON.md: one Ninth per theme).
+    # THE WIDER COURT (round R8d) then trails as a third block, page 23
+    # onward — see `_wider_topic` above.
     for theme in _PANTHEON_MERGED_THEMES:
         entries = topics[theme]["entries"]
         assert len(entries) == _PANTHEON_BLOCK_SIZE, (
@@ -1296,6 +1361,7 @@ def _topics(travel_date: date | None = None) -> dict:
         )  # every Pantheon culture also names a Ninth (documented)
         entries.extend(_pantheon_topic(theme))
         entries.append(entries[_PANTHEON_BLOCK_SIZE - 1])
+        entries.extend(_wider_topic(theme))
     # THE TWO TRIANGLES (owner 2026-07-13): the Judas–Lucifer scale —
     # the two fallen extremes of self and the zero no individual
     # reaches. The badge art is wired ahead of its landing (missing
@@ -1965,8 +2031,19 @@ class EncyclopediaDialog(QDialog):
         otherwise its logo shows the roster a click would SWITCH TO,
         and it flips automatically when Next/Previous cross the 11/12
         boundary (this is called from `_show_entry` on every page turn,
-        so no separate boundary-watch is needed)."""
-        if self._topic_key not in _PANTHEON_MERGED_THEMES:
+        so no separate boundary-watch is needed). HIDDEN on The Wider
+        Court block too (round R8d, page 23 on): the button's whole
+        contract is "jump to the SAME day in the OTHER 11-page roster"
+        (Monday stays Monday) — the Wider Court has no such twin block
+        to jump to (it is a single trailing run of figures, not a
+        second roster the length of the other two), so there is no
+        sane destination to name on its icon. Hiding it here is the
+        SAME guard this method already applies to every non-merged
+        topic, not a new special case."""
+        if (
+            self._topic_key not in _PANTHEON_MERGED_THEMES
+            or self._entry_index >= _WIDER_BLOCK_START
+        ):
             self._roster_button.hide()
             return
         in_pantheon_block = self._entry_index >= _PANTHEON_BLOCK_SIZE
@@ -2029,16 +2106,19 @@ class EncyclopediaDialog(QDialog):
         belongs to. The per-entry caption below (`_entry_name`) reads
         the DATABASE's own theme_title text ("Greek gods" / "Greek
         Pantheon") — a different string in a different register, so
-        the pair never repeats the identical bare name twice."""
+        the pair never repeats the identical bare name twice. Learns a
+        THIRD section (round R8d): "Wider Court", page 23 on."""
         topic = self._topics[self._topic_key]
         title = self._tr(
             _GOD_TOPIC_GALLERY_TITLES.get(self._topic_key, topic["title"])
         )
         if self._topic_key in _PANTHEON_MERGED_THEMES:
-            section = (
-                self._tr("Pantheon") if self._entry_index >= _PANTHEON_BLOCK_SIZE
-                else self._tr("Planetary")
-            )
+            if self._entry_index >= _WIDER_BLOCK_START:
+                section = self._tr("Wider Court")
+            elif self._entry_index >= _PANTHEON_BLOCK_SIZE:
+                section = self._tr("Pantheon")
+            else:
+                section = self._tr("Planetary")
             title = f"{title} — {section}"
         return title
 

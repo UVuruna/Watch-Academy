@@ -1023,14 +1023,17 @@ def test_pantheon_planetary_merge():
     """Ency INSTRUCTIONS.txt rule 5, round R3b item 2 (the PANTHEON/
     PLANETARY MERGE, deferred out of R3): greek/norse/egypt/slavic —
     the four themes with a documented Pantheon roster
-    (`defaults.WEEKDAY_PANTHEON`) — become ONE topic of 22 pages:
-    pages 1-11 the Planetary run (title, Mon..Sat, duality title, good,
-    evil, ninth), pages 12-22 the SAME shape for the Pantheon roster,
-    both closing on the IDENTICAL Ninth entry (CANON.md: one Ninth per
-    theme, outside BOTH rosters)."""
+    (`defaults.WEEKDAY_PANTHEON`) — become ONE topic whose first 22
+    pages are pages 1-11 the Planetary run (title, Mon..Sat, duality
+    title, good, evil, ninth), pages 12-22 the SAME shape for the
+    Pantheon roster, both closing on the IDENTICAL Ninth entry
+    (CANON.md: one Ninth per theme, outside BOTH rosters) — a THIRD
+    block, The Wider Court, trails from page 23 (round R8d, see
+    `test_wider_court_block` below)."""
     from app.encyclopedia import (
         _PANTHEON_BLOCK_SIZE,
         _PANTHEON_MERGED_THEMES,
+        _WIDER_BLOCK_START,
         _topics,
     )
     from config import defaults as _defaults
@@ -1039,13 +1042,16 @@ def test_pantheon_planetary_merge():
     assert _PANTHEON_MERGED_THEMES == frozenset(_defaults.WEEKDAY_PANTHEON)
     assert _PANTHEON_MERGED_THEMES == {"greek", "norse", "egypt", "slavic"}
     assert _PANTHEON_BLOCK_SIZE == 11
+    assert _WIDER_BLOCK_START == 22
 
     topics = _topics()
     repo = EncyclopediaRepository()
     for theme in _PANTHEON_MERGED_THEMES:
         entries = topics[theme]["entries"]
-        assert len(entries) == 22, theme
-        planetary, pantheon = entries[:11], entries[11:]
+        assert len(entries) >= _WIDER_BLOCK_START, theme
+        planetary = entries[:_PANTHEON_BLOCK_SIZE]
+        pantheon = entries[_PANTHEON_BLOCK_SIZE:_WIDER_BLOCK_START]
+        assert len(planetary) == 11 and len(pantheon) == 11, theme
         # Both blocks open on THEIR OWN title, and the Pantheon title
         # resolves under the "<theme>_pantheon" key with real prose.
         assert planetary[0]["name"] == ("theme_title", theme)
@@ -1078,6 +1084,86 @@ def test_pantheon_planetary_merge():
     assert len(topics["japan"]["entries"]) == 10
 
 
+def test_wider_court_block():
+    """Round R8d, THE WIDER COURT RE-WIRE (owner-approved 2026-07-22):
+    the fifteen seatless A-list figures round R8b's `_WIDER_TOPICS`
+    deletion made unreachable (a misdiagnosis — the owner's complaint
+    was the standalone topics' DUPLICATE gallery tiles, never the
+    articles themselves) are folded back in as a trailing THIRD block
+    on each merged culture topic, page 23 on: a section title page
+    (`"<theme>_wider"`) then one ordinary page per figure, its prose
+    read from the SAME `encyclopedia.json` "wider" family the deleted
+    topics used — every one of the fifteen articles is reachable again,
+    pinned here by TITLE."""
+    from app.encyclopedia import (
+        _PANTHEON_MERGED_THEMES,
+        _WIDER_BLOCK_START,
+        _WIDER_FIGURES,
+        _topics,
+    )
+    from data.encyclopedia import EncyclopediaRepository
+
+    topics = _topics()
+    repo = EncyclopediaRepository()
+    expected_figures = {
+        "greek": ("Dionysus", "Hephaestus", "Hestia"),
+        "norse": ("Baldur", "Heimdall", "Njord"),
+        "egypt": ("Set", "Nut", "Geb", "Ptah", "Sekhmet"),
+        "slavic": ("Crnobog", "Stribog", "Jarilo", "Rod"),
+    }
+    assert dict(_WIDER_FIGURES) == expected_figures
+
+    for theme in _PANTHEON_MERGED_THEMES:
+        entries = topics[theme]["entries"]
+        figures = expected_figures[theme]
+        # The page map: 1-11 Planetary, 12-22 Pantheon, 23 Wider Court
+        # title, 24+ the wider figures — total length pinned exactly.
+        assert len(entries) == _WIDER_BLOCK_START + 1 + len(figures), theme
+        wider = entries[_WIDER_BLOCK_START:]
+        title_entry = wider[0]
+        assert title_entry["name"] == ("theme_title", f"{theme}_wider")
+        assert title_entry["article"] == ("theme_title", f"{theme}_wider")
+        title = repo.theme_title(f"{theme}_wider")
+        assert title["title"] == "The Wider Court"
+        assert len(title["base"]) > 100, theme
+        # Every figure, in the OLD standalone topic's own order, reachable
+        # again — pinned by its exact display name (an ordinary bare
+        # string here, never a tuple like the title pages).
+        figure_entries = wider[1:]
+        assert [e["name"] for e in figure_entries] == list(figures), theme
+        for entry in figure_entries:
+            assert entry["article"] == ("emblem", "wider", entry["name"])
+            # No "looks" key: none of the fifteen figures has landed ANY
+            # art yet (ground-truthed against the asset tree) — a plain
+            # single-image page, exactly like the deleted standalone
+            # topics built, never a finish switcher with nothing to show.
+            assert "looks" not in entry, (theme, entry["name"])
+            article = repo.entry("wider", entry["name"])
+            assert len(article["base"]) > 50, entry["name"]
+
+
+def test_wider_court_gallery_has_no_extra_tiles():
+    """Companion to `test_wider_pantheon_topics_removed_as_duplicate_
+    tiles` above: folding the fifteen figures INTO the merged topics
+    (round R8d) must not regrow the deleted standalone gallery cards —
+    the only new topic-dict keys this round adds are figure PAGES
+    inside the four existing merged topics, never new top-level topic
+    keys or gallery cards."""
+    from app.encyclopedia import _TOPIC_GROUPS, _topics
+
+    topics = _topics()
+    groups = dict(_TOPIC_GROUPS)
+    for key in ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic"):
+        assert key not in topics, key
+        for keys in groups.values():
+            assert key not in keys, key
+    # The Divine hall still names exactly the same four culture cards —
+    # no fifth "Wider Court" tile of its own.
+    divine = dict(_TOPIC_GROUPS)["The Divine"]
+    assert {"greek", "norse", "egypt", "slavic"} <= set(divine)
+    assert not any(k.startswith("wider") for k in divine)
+
+
 def test_pantheon_pages_offer_colored_like_the_planetary_pages():
     """Owner round R8b item 3 ("Panteon bogovi nemaju Colored verzije
     u switchu"): every Greek/Norse Pantheon seat (metal themes) must
@@ -1087,13 +1173,16 @@ def test_pantheon_pages_offer_colored_like_the_planetary_pages():
     shared Ninth (Gaia, Yggdrasil), both pantheon-rooted plates the old
     `_colored_sibling`-less code (a single hardcoded nesting depth)
     could not find. Egypt/Slavic stay a single plain plate BOTH blocks
-    (never metal themes) — unaffected by this fix."""
-    from app.encyclopedia import _PANTHEON_BLOCK_SIZE, _topics
+    (never metal themes) — unaffected by this fix. Sliced to END at
+    `_WIDER_BLOCK_START` (round R8d) — the trailing Wider Court figures
+    carry no `looks` at all (no art landed yet), a different, correct
+    absence this test is not about."""
+    from app.encyclopedia import _PANTHEON_BLOCK_SIZE, _WIDER_BLOCK_START, _topics
 
     topics = _topics()
     for theme in ("greek", "norse"):
         entries = topics[theme]["entries"]
-        pantheon = entries[_PANTHEON_BLOCK_SIZE:]
+        pantheon = entries[_PANTHEON_BLOCK_SIZE:_WIDER_BLOCK_START]
         for entry in pantheon:
             looks = entry.get("looks")
             if not looks:
@@ -1102,7 +1191,7 @@ def test_pantheon_pages_offer_colored_like_the_planetary_pages():
             assert "Colored" in titles, (theme, entry["name"])
     for theme in ("egypt", "slavic"):
         entries = topics[theme]["entries"]
-        pantheon = entries[_PANTHEON_BLOCK_SIZE:]
+        pantheon = entries[_PANTHEON_BLOCK_SIZE:_WIDER_BLOCK_START]
         for entry in pantheon:
             looks = entry.get("looks")
             if not looks:
@@ -1116,12 +1205,17 @@ def test_pantheon_switch_button():
     hidden outside the four merged themes; on a merged theme its icon
     names the roster a click would SWITCH TO, and `_switch_roster`
     jumps to the SAME position (day) in the other 11-page block —
-    Monday stays Monday, the dual title stays the dual title."""
+    Monday stays Monday, the dual title stays the dual title. Round
+    R8d: the button HIDES again once the page enters The Wider Court
+    (page 23 on) — that trailing block has no twin roster to name on
+    the icon, the SAME "hidden outside the merged themes" guard, not a
+    new special case (see `_update_roster_button`'s own docstring)."""
     from PySide6.QtWidgets import QApplication
 
     from app.encyclopedia import (
         EncyclopediaDialog,
         _PANTHEON_BLOCK_SIZE,
+        _WIDER_BLOCK_START,
     )
 
     QApplication.instance() or QApplication([])
@@ -1134,7 +1228,7 @@ def test_pantheon_switch_button():
     assert not dialog._roster_button.isVisible()
 
     dialog._show_topic("greek")
-    for index in range(22):
+    for index in range(_WIDER_BLOCK_START):
         dialog._entry_index = index
         dialog._show_entry()
         assert dialog._roster_button.isVisible(), index
@@ -1144,6 +1238,11 @@ def test_pantheon_switch_button():
             else dialog._pantheon_icon
         )
         assert icon.cacheKey() == expected.cacheKey(), index
+    # The Wider Court block (title + 3 Greek figures): hidden throughout.
+    for index in range(_WIDER_BLOCK_START, len(dialog._topics["greek"]["entries"])):
+        dialog._entry_index = index
+        dialog._show_entry()
+        assert not dialog._roster_button.isVisible(), index
 
     # Monday (index 1, Planetary) switches to Monday's Pantheon page
     # (index 12) and back — the SAME day, the other roster.
@@ -1165,6 +1264,41 @@ def test_pantheon_switch_button():
     assert dialog._roster_button.icon().cacheKey() == (
         dialog._planetary_icon.cacheKey()
     )
+    # Paging NEXT across the 21/22 boundary hides it (into Wider Court).
+    dialog._entry_index = _WIDER_BLOCK_START - 1        # Pantheon's Ninth, page 22
+    dialog._show_entry()
+    assert dialog._roster_button.isVisible()
+    dialog._step(+1)                                    # crosses into Wider Court
+    assert dialog._entry_index == _WIDER_BLOCK_START
+    assert not dialog._roster_button.isVisible()
+    dialog.deleteLater()
+
+
+def test_topic_display_title_names_all_three_sections():
+    """`_topic_display_title` (owner round R8b item 8) learns the
+    THIRD section (round R8d): "Greek — Planetary" / "Greek —
+    Pantheon" / "Greek — Wider Court", the same header pattern
+    extended rather than a new mechanism."""
+    from PySide6.QtWidgets import QApplication
+
+    from app.encyclopedia import EncyclopediaDialog, _WIDER_BLOCK_START
+
+    QApplication.instance() or QApplication([])
+    dialog = EncyclopediaDialog()
+    dialog.show()
+    dialog._show_topic("greek")
+
+    dialog._entry_index = 0
+    dialog._show_entry()
+    assert dialog._topic_display_title() == "Greek — Planetary"
+
+    dialog._entry_index = 11
+    dialog._show_entry()
+    assert dialog._topic_display_title() == "Greek — Pantheon"
+
+    dialog._entry_index = _WIDER_BLOCK_START
+    dialog._show_entry()
+    assert dialog._topic_display_title() == "Greek — Wider Court"
     dialog.deleteLater()
 
 
@@ -1888,11 +2022,16 @@ def test_ninth_carries_the_finish_switcher():
     color switcher at all for any metal-plate theme. Every metal theme's
     Ninth now cycles the same four looks as its seated eight; a
     non-metal theme's Ninth (egypt, slavic — no per-metal art exists)
-    correctly stays a single plain plate."""
-    from app.encyclopedia import _topics
+    correctly stays a single plain plate. The four merged culture
+    topics' Ninth sits at a FIXED index (`_PANTHEON_BLOCK_SIZE - 1`,
+    page 11) — no longer `entries[-1]` since round R8d appended The
+    Wider Court's own trailing figures after it (chinese/astrology are
+    untouched by that merge, so their Ninth stays the true last entry)."""
+    from app.encyclopedia import _PANTHEON_BLOCK_SIZE, _topics
 
     topics = _topics()
-    gaia = topics["greek"]["entries"][-1]
+    ninth_index = _PANTHEON_BLOCK_SIZE - 1
+    gaia = topics["greek"]["entries"][ninth_index]
     assert gaia["name"] == "Gaia"
     gaia_labels = [label for label, _ in gaia["looks"]]
     # Bronze/Gold/Silver always cycle (Gold/Silver are LIVE recolors of
@@ -1905,7 +2044,7 @@ def test_ninth_carries_the_finish_switcher():
     assert [label for label, _ in cat["looks"]] == [
         "Bronze", "Gold", "Silver", "Colored",
     ]
-    pharaoh = topics["egypt"]["entries"][-1]
+    pharaoh = topics["egypt"]["entries"][ninth_index]
     assert pharaoh["name"] == "The Pharaoh"
     assert "looks" not in pharaoh          # egypt carries no metal art
 
