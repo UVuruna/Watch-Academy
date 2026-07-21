@@ -103,14 +103,19 @@ item count means the sheet is safe to queue.
   title plate (Typhon & Echidna) is cross-referenced into
   `titles/theme_title_prompts.md`, not written twice
 
-### `chinese/` (PROMPT SHEETS round, owner-approved 2026-07-21 night)
+### `chinese/` (PROMPT SHEETS round, owner-approved 2026-07-21 night;
+SEALED v2 roster, owner 2026-07-21, "Bravo, sve mi se sviđa")
 - `chinese_myth_prompts.md` — the Chinese Mythology weekday theme (a
   NEW theme, single roster; NOT the `chinese` zodiac-animal theme under
-  `zodiac/`): six immortal seats, the Buddha / Yanluo Wang dual, the
-  Excluded Ninth Sun Wukong. Night-window register wearing its own
-  cloud-scroll (xiangyun) border, jade-and-lacquer palette; its title
-  plate (The Peach Banquet) is cross-referenced into
-  `titles/theme_title_prompts.md`, not written twice
+  `zodiac/`): six immortal seats (Guan Yu on Wednesday as the
+  merchant's own patron, Caishen guesting in his scene; Erlang Shen on
+  Tuesday), the Sun Wukong / Six-Eared Macaque dual (the Monkey King
+  crowned against his own perfect false double), the Excluded Ninth
+  Buddha (master of the dual's own tell, and of the Ninth seat's sin,
+  Wish). Night-window register wearing its own cloud-scroll (xiangyun)
+  border, jade-and-lacquer palette; its title plate (The Peach Banquet)
+  is cross-referenced into `titles/theme_title_prompts.md`, not written
+  twice
 
 ### `titles/` (PROMPT SHEETS round, owner item 7, 2026-07-21)
 - `theme_title_prompts.md` — fills every weekday theme's (plus

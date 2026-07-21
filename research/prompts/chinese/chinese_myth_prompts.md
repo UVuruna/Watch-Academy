@@ -42,25 +42,41 @@ file/root — see the cross-reference at the bottom).
 | Day | Arm color · vice/virtue | Figure |
 |---|---|---|
 | Monday | blue · Fear/Serenity | **Chang'e** |
-| Tuesday | orange · Wrath/Courage | **Guan Yu** |
-| Wednesday | purple · Greed/Wisdom | **Caishen** |
+| Tuesday | orange · Wrath/Courage | **Erlang Shen** |
+| Wednesday | purple · Greed/Wisdom | **Guan Yu** |
 | Thursday | yellow · Excess/Generosity | **Zhu Bajie** |
 | Friday | red · Jealousy/Love | **Zhinü** |
 | Saturday | green · Envy/Patience | **Shennong** |
-| Sunday (Ruler) | white-gold · Pride/Justice | **Buddha** |
-| Sunday (Servant, dual) | black-silver · Servility/Humility | **Yanluo Wang** |
-| Ninth (Excluded) | — | **Sun Wukong** |
+| Sunday (Ruler, dual) | white-gold · Pride/Justice | **Sun Wukong** |
+| Sunday (Servant, dual) | black-silver · Servility/Humility | **the Six-Eared Macaque** |
+| Ninth (Excluded) | — | **Buddha** |
 | Title plate | — | **The Peach Banquet** |
 
-The dual reads exactly like the Bible themes' own Sunday pair
-(Ancient of Days / the Son as Servant): not good-against-evil but
-authority above meeting authority below — the enlightened crown that
-once stopped the Ninth's own rebellion, and the underworld judge who
-still keeps his book. The Ninth, Sun Wukong, is the **Excluded** kind
-(CANON.md "The Ninth"): "neither god, demon nor man" — he belongs to
-every scene in this roster's own myth-cycle (the Peach Banquet he
-wrecks, the Buddha's palm that catches him, the underworld ledger
-Yanluo keeps on him) yet sits in none of the eight seats.
+**SEALED v2 (owner 2026-07-21, "Bravo, sve mi se sviđa" — the Black
+Myth: Wukong reading):** this roster supersedes the round's first cut.
+Guan Yu moves off Tuesday onto Wednesday, taking the merchant's own
+patronage (his shrine stands in every Chinese shop and restaurant to
+this day) — Caishen loses the seat but GUESTS inside Guan Yu's own
+scene (ingots and coins on the shrine altar behind him), no separate
+plate. Erlang Shen — heaven's greatest warrior, the general who fought
+Wukong to a standstill in the duel of transformations — takes Tuesday.
+The dual is no longer Buddha/Yanluo Wang: it is **Sun Wukong himself**
+crowned Ruler — the self-taken title "Great Sage Equal to Heaven,"
+Pride itself — against **the Six-Eared Macaque**, his perfect false
+double as Servant (the canonical Journey to the West episode where all
+of Heaven failed to tell the two apart — the same duel the Black Myth
+finale is built from): the SAME silhouette deliberately, crown for
+crown and staff for staff, only the palette inverted to night and the
+eyes gone subtly wrong. **Buddha moves from the dual onto the Ninth** —
+not the Ninth's victim but its MASTER: he is the one being who told the
+true monkey from the false (the Ninth seeing through both faces of the
+week it sits outside of), and the Ninth seat's own sin is WISH — Buddha
+is the one being who EXTINGUISHED wish rather than suffered it
+(nirvana, the blowing-out), so he holds this seat by conquest, not by
+exclusion alone. He is still the **Excluded** kind (CANON.md "The
+Ninth") in the strict sense — a figure outside the eight seats — but
+reads as an overseer of the week's own dual rather than a figure merely
+left out of it.
 
 ---
 
@@ -80,34 +96,38 @@ Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photo
 
 ---
 
-## Tuesday — Guan Yu (`assets/weekday/chinese_myth/primary/GuanYu.png`)
+## Tuesday — Erlang Shen (`assets/weekday/chinese_myth/primary/ErlangShen.png`)
 
-*The deified god of war — green robe, red face, the guandao at rest
-rather than raised, a general's discipline over a berserker's rage.*
+*Heaven's greatest warrior — the third eye on his brow, the general who
+fought Sun Wukong to a standstill in the duel of transformations; the
+three-pointed double-edged lance, the celestial hound at his heel.*
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep jade-green and ember-red glass, disciplined and still. Center: Guan Yu standing in full ceremonial armor beneath a long flowing green robe, his famous crimson face calm and unhurried, a long beard bound in silk, his crescent-bladed guandao planted upright at rest rather than swung — command shown as stillness, not fury. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Mars glyph in dark leadwork relief. Palette: jade green, deep crimson, dull iron blade, dark warm wood. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep ember-orange and iron-grey glass, tensed and watchful. Center: Erlang Shen standing in full battle stance, a vertical third eye set in the center of his brow beside his two ordinary eyes, both hands gripping a three-pointed double-edged lance planted haft-down before him, a lean celestial hound crouched alert at his heel, his gaze fixed as if still mid-duel with a shapeshifting rival. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Mars glyph in dark leadwork relief. Palette: ember orange, iron grey, one pale violet-white accent at the third eye. NO lettering anywhere.
 ```
 
-**Guan Yu (colored)** → `assets/weekday/chinese_myth/colored/GuanYu.png`
+**Erlang Shen (colored)** → `assets/weekday/chinese_myth/colored/ErlangShen.png`
 ```
-Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Guan Yu in full color, a flowing emerald-green robe over lacquer-red armor, his signature crimson face calm beneath a long black beard bound in gold thread, the crescent guandao planted upright and gleaming beside him. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing an orange Mars glyph. Colors: emerald green, lacquer red, gold trim, crimson face.
+Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Erlang Shen in full color, ceremonial silver-grey armor over a warrior's build, a luminous third eye glowing faint violet-white on his brow, a three-pointed double-edged lance held upright in both hands, a lean white celestial hound sitting alert at his heel. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing an orange Mars glyph. Colors: iron-silver armor, ember orange, third-eye violet-white, hound white.
 ```
 
 ---
 
-## Wednesday — Caishen (`assets/weekday/chinese_myth/primary/Caishen.png`)
+## Wednesday — Guan Yu (`assets/weekday/chinese_myth/primary/GuanYu.png`)
 
-*The god of wealth — the merchant's own god, ingots and coins, not a
-king's throne but a counting-house abundance.*
+*The merchant's own patron — his shrine stands in every Chinese shop
+and restaurant to this day; green robe, the guandao, the
+ledger-and-loyalty reading of the merchant seat. Caishen GUESTS in the
+scene (ingots and coins on the shrine altar) rather than keeping his
+own seat.*
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Rich amber-gold and deep lacquer-purple glass, dense with treasure. Center: Caishen seated in fine merchant's silks, both hands cupping a stack of gleaming gold ingots (yuanbao), strings of bronze coins looped over one shoulder and spilling into an open chest at his feet, a small black bat (fu, the pun on fortune) hovering just above his crown. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Mercury glyph in dark leadwork relief. Palette: amber gold, deep lacquer-purple, bronze coin-brown, jet-black bat accent. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep jade-green and lacquer-purple glass, watchful and grave. Center: Guan Yu standing before a small shopkeeper's shrine, his flowing green robe and famous crimson face unmistakable, one hand resting on an open ledger book rather than his blade, his crescent-bladed guandao leaning at rest against the shrine wall; on the shrine's low altar behind him, a scatter of small gold ingots and strung coins sits as a guest offering — Caishen's own emblem, borrowed into the loyal god's own house. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Mercury glyph in dark leadwork relief. Palette: jade green, lacquer purple, ledger-page cream, one small gold-ingot accent. NO lettering anywhere.
 ```
 
-**Caishen (colored)** → `assets/weekday/chinese_myth/colored/Caishen.png`
+**Guan Yu (colored)** → `assets/weekday/chinese_myth/colored/GuanYu.png`
 ```
-Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Caishen in full color, deep purple silk robes trimmed in gold, both hands cupping bright gold ingots, strings of bronze coins spilling from an open chest at his feet, a small black bat hovering above his head. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing a purple Mercury glyph. Colors: gold ingot-shine, royal purple silk, bronze coin, jet-black bat.
+Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Guan Yu in full color, a flowing emerald-green robe over lacquer-red armor, his signature crimson face steady beneath a long black beard bound in gold thread, one hand resting on an open cream ledger, the crescent guandao leaning at rest against a small shrine altar behind him scattered with gold ingots and strung coins — Caishen's own emblem, a guest in the loyal god's house. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing a purple Mercury glyph. Colors: emerald green, lacquer red, ledger cream, gold-ingot accent.
 ```
 
 ---
@@ -161,51 +181,57 @@ Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photo
 
 ---
 
-## Sunday — Buddha (Ruler face, `assets/weekday/chinese_myth/primary/Buddha.png`)
+## Sunday — Sun Wukong (Ruler face, dual, `assets/weekday/chinese_myth/primary/SunWukong.png`)
 
-*The enlightened crown — the palm that stopped Sun Wukong when all
-heaven's armies could not.*
-
-```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white-gold glass, the brightest window of the whole set. Center: the Buddha seated in perfect stillness, one open palm raised outward filling the lower half of the disc — the same palm that once became a mountain — a soft halo of white-gold light rising behind his crown, lotus petals settling weightless around him. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Sun glyph in bright gold leadwork relief. Palette: radiant white-gold, lotus-petal cream, calm jade-green undertone. NO lettering anywhere.
-```
-
-**Buddha (colored)** → `assets/weekday/chinese_myth/colored/Buddha.png`
-```
-Ornate circular badge, vivid full-color enamel over bright gold, photorealistic render, perfectly centered, isolated on white background. Center: the Buddha in full color, warm gold-skinned serenity, one open palm raised outward, a radiant white-gold halo rising behind his crown, cream lotus petals drifting weightless around him. Border: the cloud-scroll band recut in polished gold, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, lotus cream, soft jade undertone.
-```
-
----
-
-## Sunday — Yanluo Wang (Servant face, dual, `assets/weekday/chinese_myth/primary/YanluoWang.png`)
-
-*King of the underworld court — the midnight judge of souls, the book
-that never forgets a name.*
+*The Monkey King crowned — Great Sage Equal to Heaven, the self-taken
+title, PRIDE itself; golden fillet, the staff, the sun-crowned
+trickster.*
 
 ```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Near-black glass with a thin cold-jade edge, the darkest window of the set. Center: Yanluo Wang enthroned in formal judge's robes and a tall dark crown, an open ledger book resting on his knees, a writing brush poised above an entry, his gaze level and unhurried rather than cruel — authority below meeting authority above. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Sun glyph in dull ember-gold leadwork relief — the same glyph the Ruler's own seat wears, the shadow face of the same Sunday crown. Palette: near-black, cold jade edge, one dull ember-gold accent only. NO lettering anywhere.
-```
-
-**Yanluo Wang (colored)** → `assets/weekday/chinese_myth/colored/YanluoWang.png`
-```
-Ornate circular badge, vivid full-color enamel over dark jade and iron, photorealistic render, perfectly centered, isolated on white background. Center: Yanluo Wang in full color, dark judge's robes trimmed in cold jade-green, a tall black crown, an open ledger book on his knees and a brush poised above it, his expression level and unhurried. Border: the cloud-scroll band recut in dark jade and iron, four small roundels bearing a dull ember-gold Sun glyph. Colors: iron black, cold jade, one ember-gold accent only.
-```
-
----
-
-## The Ninth (Excluded) — Sun Wukong (`assets/weekday/chinese_myth/primary/SunWukong.png`)
-
-*Born of stone — neither god, demon nor man; heaven's false titles,
-the erased name in the book of death, five hundred years under the
-mountain. His WISH — to be acknowledged — is the Ninth's own sin.*
-
-```
-ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Restless amber-gold glass shot through with cracked mountain-grey, neither settled nor calm. Center: Sun Wukong straining upward against a mountain's crushing weight of grey stone, one hand alone still free and reaching, his golden staff pinned uselessly beside him, a torn imperial banner reading no true rank crumpled at the mountain's foot, a small stone egg-shape faintly visible cracking open at the very bottom edge — his own birth, closing the circle beneath his punishment. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, its links fraying open at the top where the mountain crushes through, no roundel glyph — Sun Wukong answers to no single day. Palette: amber gold, mountain grey, one small stone-birth accent. NO lettering anywhere.
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white-gold glass, the brightest window of the whole set. Center: Sun Wukong seated on a self-claimed throne, a golden fillet crown pressing his brow, his iron-banded staff held upright like a scepter across his knees, a plain banner planted beside the throne — its field left blank, claimed before any court dared grant him one — a blazing sun-disc halo rising behind his head, his grin equal parts triumph and challenge. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Sun glyph in bright gold leadwork relief. Palette: radiant white-gold, tawny fur-gold, sun-disc brilliance. NO lettering anywhere.
 ```
 
 **Sun Wukong (colored)** → `assets/weekday/chinese_myth/colored/SunWukong.png`
 ```
-Ornate circular badge, vivid full-color enamel over amber and stone-grey, photorealistic render, perfectly centered, isolated on white background. Center: Sun Wukong in full color, tawny-gold fur and a torn yellow warrior's tunic, straining against crushing grey mountain stone, one hand free and reaching, his golden staff pinned beside him, a cracked stone egg-shape visible at the base. Border: the cloud-scroll band recut in amber-gold, its links fraying open at the top, no day-glyph roundel. Colors: tawny gold, mountain grey, faded imperial yellow, stone-crack accent.
+Ornate circular badge, vivid full-color enamel over bright gold, photorealistic render, perfectly centered, isolated on white background. Center: Sun Wukong in full color, tawny-gold fur, a golden fillet crown catching the light, seated on a self-claimed throne with his iron-banded staff held upright across his knees, a blazing white-gold sun disc behind his head, his grin equal parts triumph and challenge. Border: the cloud-scroll band recut in polished gold, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, tawny fur, sun-white highlight.
+```
+
+---
+
+## Sunday — the Six-Eared Macaque (Servant face, dual, `assets/weekday/chinese_myth/primary/SixEaredMacaque.png`)
+
+*Wukong's PERFECT FALSE DOUBLE — the dark second face (the canonical
+Journey to the West episode where all of Heaven failed to tell them
+apart): the SAME silhouette as the Ruler, deliberately, palette
+inverted to night, six subtle ears, the wrongness in the eyes.*
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Near-black glass with a thin cold-silver edge, the darkest window of the set — the EXACT same silhouette as the Ruler's own throne-seat, deliberately, down to the same golden fillet and the same iron-banded staff held across the knees. Center: the Six-Eared Macaque seated in the identical pose, identical crown, identical staff — only the palette inverted to night and, on close look, six faint additional ear-shapes traced along his skull where there should be two, and something almost imperceptibly wrong behind his eyes, a stillness the real Sage never holds. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Sun glyph in dull ember-gold leadwork relief — the same glyph the Ruler's own seat wears, the shadow face of the same Sunday crown. Palette: near-black, cold silver edge, one dull ember-gold accent only. NO lettering anywhere.
+```
+
+**The Six-Eared Macaque (colored)** → `assets/weekday/chinese_myth/colored/SixEaredMacaque.png`
+```
+Ornate circular badge, vivid full-color enamel over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical composition to the Ruler's own colored plate, palette inverted to night. Center: the Six-Eared Macaque in full color, ash-grey fur where the Ruler's is tawny gold, the same golden fillet crown, the same iron-banded staff across his knees, six faint ear-shapes traced in shadow along his skull, his eyes a flat unreadable black. Border: the cloud-scroll band recut in dark iron and cold silver, four small roundels bearing a dull ember-gold Sun glyph. Colors: ash grey, iron black, cold silver, one ember-gold accent only.
+```
+
+---
+
+## The Ninth (Excluded) — Buddha (`assets/weekday/chinese_myth/primary/Buddha.png`)
+
+*Two sealed reasons: he is the ONLY being who told the true monkey
+from the false (the Ninth seeing through both faces of the week it
+sits outside), and the Ninth seat's own sin is WISH — Buddha is the
+one being who EXTINGUISHED wish rather than suffered it (nirvana, the
+blowing-out). He holds this seat as its master, not its victim; the
+palm-that-contains-the-somersault is his own image.*
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white-gold glass shading into a still, colorless clarity at the very center — light with nothing left to burn. Center: the Buddha seated in perfect stillness, one open palm raised and filling the lower half of the disc, and resting weightless within the lines of that palm, two tiny identical golden monkey-figures caught mid-somersault, indistinguishable from each other to any eye but his — one true, one false, only his gaze able to tell them apart. A single small flame at his brow guttering out to one thread of grey smoke — the wish extinguished, not merely denied. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, its links parting open at the top into plain unbroken glass, no roundel glyph — the Buddha answers to no single day. Palette: radiant white-gold, still lotus-white, one thread of grey smoke. NO lettering anywhere.
+```
+
+**Buddha (colored)** → `assets/weekday/chinese_myth/colored/Buddha.png`
+```
+Ornate circular badge, vivid full-color enamel over bright gold, photorealistic render, perfectly centered, isolated on white background. Center: the Buddha in full color, warm gold-skinned serenity, one open palm raised outward, two tiny identical golden monkey-figures caught mid-somersault within the lines of his palm, indistinguishable but for his own knowing gaze, a single flame at his brow just guttering into one thread of grey smoke. Border: the cloud-scroll band recut in polished gold, its links parting open at the top into plain glass, no day-glyph roundel. Colors: radiant gold, lotus white, one thread of grey smoke.
 ```
 
 ---
@@ -220,11 +246,15 @@ brief) for two reasons: (1) a banquet stages as ONE coherent circular
 scene the way an abstract "court" cannot — a table, guests, a single
 readable composition; (2) it is the roster's own hinge myth — the
 Peach Banquet is the event Sun Wukong crashes, eating the peaches of
-immortality after being denied a seat at the gods' own table, so the
-title plate doubles as the ORIGIN of the Ninth's grievance ("his WISH —
-to be acknowledged — is the Ninth's own sin"), the same way the Greek
-sheet's Typhon & Echidna plate hooks its dual and Ninth back to their
-shared parents. Its brief and drop path live in
+immortality after being denied a seat at the gods' own table.
+**Re-verified against the SEALED v2 roster (owner 2026-07-21): the
+rhyme still holds, now even more directly** — the Banquet is the exact
+myth-beat that MADE the Day Face's own Pride (the self-taken title
+"Great Sage Equal to Heaven" is the same appetite that ate the
+gods' own peaches uninvited), so the title plate now doubles as the
+origin scene of the very throne Sun Wukong sits on as this week's
+Ruler, the same way the Greek sheet's Typhon & Echidna plate hooks its
+dual back to its shared parents. Its brief and drop path live in
 [Theme Title Prompts](../titles/theme_title_prompts.md), NOT here — see
 that sheet's own entry for `chinese_myth`. Do not duplicate the brief
 in this file.
@@ -240,6 +270,18 @@ in this file.
   (`tests/test_prompt_paths.py`'s `_DATA_DRIVEN_ROOTS`), so every path
   in this sheet passes the sheet-path lint today with no whitelist
   entry needed.
+- **SEALED v2 (owner 2026-07-21, "Bravo, sve mi se sviđa"):** the
+  roster shipped in the first cut of this sheet is SUPERSEDED — see
+  the roster table's own v2 note. Guan Yu: Tuesday → Wednesday
+  (merchant's patron; Caishen loses the seat, guests in-scene only,
+  its own dedicated `Caishen.png` pair is RETIRED, never generate it).
+  New Tuesday: Erlang Shen. The Sunday dual is now Sun Wukong (Ruler)
+  / the Six-Eared Macaque (Servant) — `YanluoWang.png` is RETIRED,
+  never generate it. Buddha moves from the dual onto the Ninth,
+  reusing the `Buddha.png` stem (now the Ninth's plate, not the
+  Ruler's). Total slot count is UNCHANGED (9 figures × 2 registers —
+  one seat traded for another, not added), so no `assets/titles/`
+  whitelist or count changes anywhere in this round.
 - **Art: 0/18** (9 figures × 2 registers; the title plate is tracked
   separately, see above).
 - Verify with `python main.py "research/prompts/chinese/chinese_myth_prompts.md" --dry-run`

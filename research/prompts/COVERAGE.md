@@ -290,16 +290,28 @@ tracked here the moment they're written, per this file's own charter.
   [Chinese Myth Prompts](chinese/chinese_myth_prompts.md). A NEW
   weekday theme, same single-roster shape, NOT to be confused with the
   existing `chinese` zodiac-animal theme
-  (`zodiac/chinese_zodiac_prompts.md`). Six weekday immortal seats, a
-  Sunday dual (Buddha / Yanluo Wang), an Excluded Ninth (Sun Wukong),
-  and a title plate (The Peach Banquet — the sheet's own justified pick
-  over "the celestial court panorama," doubling as the Ninth's own
-  origin myth). Night-window register wearing its OWN cloud-scroll
+  (`zodiac/chinese_zodiac_prompts.md`). **SEALED v2 (owner 2026-07-21,
+  "Bravo, sve mi se sviđa" — the Black Myth: Wukong reading), replacing
+  this round's own first cut:** six weekday immortal seats (Guan Yu
+  moved Tuesday → Wednesday as the merchant's own patron, Caishen loses
+  the seat and guests in Guan Yu's scene instead, Erlang Shen — the
+  general who fought Wukong to a standstill — takes Tuesday), a Sunday
+  dual (Sun Wukong crowned Ruler, Pride itself, against his own perfect
+  false double the Six-Eared Macaque as Servant — the canonical
+  tell-them-apart episode the Black Myth finale is built from), an
+  Excluded Ninth (Buddha — not the dual's victim but its master: the
+  one being who told the true monkey from the false, and the one being
+  who EXTINGUISHED the Ninth seat's own sin, Wish, rather than suffered
+  it), and a title plate (The Peach Banquet — the sheet's own justified
+  pick over "the celestial court panorama," now rhyming directly with
+  the Ruler's own Pride: the banquet is the myth-beat that MADE the
+  self-taken title). Night-window register wearing its OWN cloud-scroll
   (xiangyun) border in a jade-and-lacquer palette — deliberately NOT
   the Greek key, per the owner's own instruction. Drop root
   `assets/weekday/chinese_myth/{primary,colored}/<Stem>.png`. **Art:
-  0/18.** Same data-driven-root, zero-whitelist-needed status as
-  Greek Monsters.
+  0/18** (slot count unchanged by the v2 reseat — one figure traded per
+  seat, none added). Same data-driven-root, zero-whitelist-needed
+  status as Greek Monsters.
 - **Theme Title Plates** —
   [Theme Title Prompts](titles/theme_title_prompts.md). Fills the
   documented graceful-absent `title_entry["images"]` slot every weekday
