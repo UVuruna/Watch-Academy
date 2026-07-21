@@ -537,39 +537,74 @@ Ornate circular medallion, brushed-steel-and-glass corporate seal, engraved reli
 
 ---
 
-## Cross-referenced (written in their own theme sheets, not here)
+## The PROMPT SHEETS round title plates (R8c, written in full — the gap closed 2026-07-22)
 
-- **`monsters` — Greek Monsters** → `assets/titles/monsters.png`. Brief:
-  Typhon & Echidna, the parents of the roster, in
-  [Greek Monsters Prompts](../monsters/greek_monsters_prompts.md)'s own
-  "Cross-reference" section.
-- **`chinese_myth` — Chinese Mythology** → `assets/titles/chinese_myth.png`.
-  Brief: The Peach Banquet, in
-  [Chinese Myth Prompts](../chinese/chinese_myth_prompts.md)'s own
-  "Cross-reference" section.
+The two entries the intro above promised "at the very end" — named and
+cross-referenced from their own theme sheets since R8c (2026-07-21),
+but never actually written as a fenced generatable body until now (the
+exact class of gap this whole canonical-root convention exists to
+prevent). Written here, matching every sibling entry's own convention;
+each theme sheet keeps its short pointer, never a duplicate.
+
+### `monsters` — Greek Monsters (`assets/titles/monsters.png`)
+
+*Typhon & Echidna, the parents of the roster — father and mother of
+monsters whose children now hold the week (Nemean Lion and Cerberus
+literal brothers among them) — the "parent, not seat-holder" device
+`wow_evil`'s Sargeras and Cyberpunk Power's Soulkiller both borrow from
+this plate's own precedent. Night-window register and Greek-key
+(meander) border, the same family the seated roster wears, recut as
+dark leadwork — never the bronze the Olympian gods' own title plate
+wears one file over.*
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep primordial black-and-ember glass, older and darker than any single seat's own window. Center: Typhon and Echidna together at the roster's own root, filling the disc shoulder to shoulder — Typhon a mountain-tall storm-titan with a hundred serpent heads hissing from his shoulders in place of arms, Echidna coiled beside him, a woman above the waist and a great serpent below — both turned protectively inward around a small nest of newly-hatched shapes at their feet: a many-necked serpent-head still small, a lion cub with an already-unmarked golden pelt, a three-headed pup barely able to lift its middle head — the roster's own cast, glimpsed here as children before any of them held a day of the week. Border: leadwork rim carved as a continuous Greek key (meander) band, the same family the seated roster's own borders wear, broken by no single roundel glyph — the parents who begot them all answer to no one day. Along the base, a cracked leadwork plaque bears "GREEK MONSTERS" in weathered bestiary lapidary capitals, the Attic family pitted and claw-scratched — the ONE piece of text anywhere in the image. Palette: primordial black, ember orange, cold serpent-green, one small nest-gold accent.
+```
+
+### `chinese_myth` — Chinese Mythology (`assets/titles/chinese_myth.png`)
+
+*The Peach Banquet — the myth-beat that MADE the roster's own Ruler
+his Pride: Sun Wukong crashes the gods' own banquet and eats the
+peaches of immortality after being denied a seat, the self-taken
+title "Great Sage Equal to Heaven" born in this exact moment. Chosen
+over "the celestial court panorama" because a banquet stages as ONE
+coherent circular scene the way an abstract court cannot. Night-window
+register and the theme's OWN cloud-scroll (xiangyun) border in
+jade-and-lacquer — deliberately NOT the Greek key, the same
+instruction that shapes the seated roster's own borders.*
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep jade-green and lacquer-gold glass, festive and about to be broken. Center: the Peach Banquet in full swing, a long celestial table spread with golden peaches of immortality and untouched place-settings laid for gods who have not yet arrived, and at its head, uninvited, Sun Wukong already seated with peach juice on his chin and three more peaches cradled in one arm — the exact appetite that will crown him Pride itself, caught in the single moment before the gods return and find their own table already raided. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, the same family the seated roster's own borders wear, jade-and-lacquer palette rather than the Greek key, broken by no single roundel glyph — the banquet belongs to no one day. Along the base, a red-lacquer plinth bears "CHINESE MYTHOLOGY" in seal-script flavored capitals, blocky zhuanshu strokes cut into red lacquer — the ONE piece of text anywhere in the image. Palette: jade green, peach gold, red lacquer, one warm stolen-fruit accent.
+```
 
 ---
 
 ## Status
 
 - New sheet (R8c PROMPT SHEETS round, owner item 7, 2026-07-21).
-  **Art: 0/24** in the original 24 entries; the 2 cross-referenced
-  monsters/chinese plates are tracked in their own sheets' Status
-  sections. `assets/titles/**` is NOT a data-driven root and no code
-  reads it yet (the wiring is a future round) — every one of the 26
-  paths this family declared (24 here + 2 cross-referenced) needed an
-  explicit `tests/test_prompt_paths.py` whitelist entry, added that
-  round.
+  **Art: 0/24** in the original 24 entries. `assets/titles/**` is NOT a
+  data-driven root and no code reads it yet (the wiring is a future
+  round) — every one of the 26 paths this family declared (24 here + 2
+  named from the monsters/chinese sheets) needed an explicit
+  `tests/test_prompt_paths.py` whitelist entry, added that round.
 - **R10 GAMING + CORPORATION SHEET WAVE (2026-07-22) added TEN more,
   written in full here** (see "The GAMING + CORPORATION SHEET WAVE
   title plates" section above) — `wow_alliance`, `wow_horde`,
   `wow_evil`, `cyberpunk_gangs`, `cyberpunk_street`, `cyberpunk_power`,
   `starwars_svetla`, `starwars_tamna`, `starwars_nova`, `corporate`.
-  **Art: 0/10** for this batch. Family total across this file: **0/34**
-  (24 + 10), plus the 2 still cross-referenced in monsters/chinese = 36
-  title plates project-wide. All ten new paths needed their own
+  **Art: 0/10** for this batch. All ten new paths needed their own
   explicit `tests/test_prompt_paths.py` whitelist entries, added this
   round alongside the nine existing ones.
+- **GAP CLOSED 2026-07-22:** `monsters` (Typhon & Echidna) and
+  `chinese_myth` (The Peach Banquet) were named and cross-referenced
+  from their own theme sheets since R8c but never actually carried a
+  fenced generatable prompt body anywhere — the exact "sheet's own
+  register-preamble law vs. what's actually written" class of gap this
+  sheet-writing round exists to close. Both are now written in full
+  above (see "The PROMPT SHEETS round title plates" section). **Art:
+  0/2** for this pair. Family total across this file: **0/36** (24 + 10
+  + 2) — the whole title-plate family, project-wide, in one place, as
+  the canonical root always intended.
 - `continents` is deliberately ABSENT from this sheet — it already has
   a real, wired title image (`assets/earth/world.png`,
   `defaults.CONTINENTS_TITLE_IMAGE`) — see the owner's own SKIP

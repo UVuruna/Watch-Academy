@@ -11,22 +11,27 @@ Ninth) with its own cast. `Throne` / `Mirror` / `Unfound` name the
 Ruler / Servant(dual) / Ninth(Excluded) seats, same vocabulary
 `wow_prompts.md` establishes.
 
-**Register — neon-chrome holo-medallion, its own family:** every plate
-is a ROUND chrome-bezel medallion, a brushed-chrome ring holding a
-semi-volumetric holographic projection — the visual language of an
-in-game shard, ID-badge or holo-ICE construct — with faint glitch-scan
-distortion breaking the image's own edges, never the carved stone the
-WoW sheet wears, never the painted enamel the myth sheets wear. Every
-plate carries a `primary/` holo-projection version and a `colored/`
-full-saturated neon-noir-poster version (richer color, less "glitch,"
-poster-vivid rather than volumetric) — the same two-register convention
-every other weekday theme ships. Gangs and factions wear their OWN
-canonical in-game neon color (Maelstrom's toxic acid-green, Arasaka's
-imperial crimson, and so on, named per entry below); the BORDER motif —
-a continuous circuit-trace (PCB) ring breaking into brief glitch-static
-glyphs at four points, one flickering that day's ruling-planet glyph —
+**Register — TWO deliberately different objects, the project-wide
+law (corrected 2026-07-22):** `primary` is a MONOCHROME AGED-BRONZE
+CARVED RELIEF — a sculpture in ONE metal (warm bronze patina, darker
+recesses, polished highlights; no other colors, no enamel, no
+gang-neon paint), every emblem carved as relief in the same bronze —
+this is the recolor master the metal-shade pipeline strikes gold/
+silver from, the same law `greek_prompts.md`'s planetary bronze plates
+set. `colored` is the vivid full-saturated neon-noir-poster version — a
+fresh full-color repaint, never a recolor of the bronze art, still
+carrying each gang/faction's OWN canonical in-game neon color
+(Maelstrom's toxic acid-green, Arasaka's imperial crimson, and so on,
+named per entry below). The two MUST read as different objects — a
+sculpture, not a painting — never near-duplicates of each other. The
+BORDER motif — a continuous circuit-trace (PCB) ring broken by four
+small roundels, one bearing that day's ruling-planet glyph, carved in
+bronze relief on `primary` and recut in chrome/neon on `colored` —
 stays constant across all three blocks, the same house convention
-every weekday sheet's roundels use.
+every weekday sheet's roundels use. Every plate carries a `primary/`
+aged-bronze-relief version and a `colored/` full-saturated poster
+version — the per-figure IDENTITY survives entirely through the scene
+itself, never through paint.
 
 **Derivation check (Rule #19):** every plate is an irreducible scene —
 a different figure or faction, a different beat; `primary`/`colored` is
@@ -115,7 +120,7 @@ one raid away from breaking the circle.*
 
 **Aldecaldos** → `assets/weekday/cyberpunk/gangs/primary/Aldecaldos.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep desert-dusk blue holo-light throughout, faint glitch-scan lines breaking at the rim. Center: an Aldecaldos convoy circled at night around a low fire, sun-bleached orange-and-tan car hoods forming a ring like a wagon-fort, a lone scout's silhouette watching the dark horizon beyond the firelight. Border: a continuous circuit-trace (PCB) ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Moon crescent glyph. Palette: desert-dusk blue, convoy orange, firelight amber. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: an Aldecaldos convoy circled at night around a low fire, sun-bleached orange-and-tan car hoods forming a ring like a wagon-fort, a lone scout's silhouette watching the dark horizon beyond the firelight. Border: a continuous circuit-trace (PCB) ring carved in bronze relief, broken by four small roundels, one bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Aldecaldos (colored)** → `assets/weekday/cyberpunk/gangs/colored/Aldecaldos.png`
@@ -125,7 +130,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Mox (alt)** → `assets/weekday/cyberpunk/gangs/primary/alt/Aldecaldos.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep neon-lavender-blue holo-light throughout, faint glitch-scan lines breaking at the rim. Center: a Mox sentinel in hot-pink-and-lavender leathers standing watch at Lizzie's Bar's own neon-lit doorway, one hand resting easy near a holstered pistol, her stance relaxed but her eyes scanning the street beyond the threshold. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Moon crescent glyph. Palette: neon lavender, hot pink, deep dusk blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Mox sentinel in hot-pink-and-lavender leathers standing watch at Lizzie's Bar's own neon-lit doorway, one hand resting easy near a holstered pistol, her stance relaxed but her eyes scanning the street beyond the threshold. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Mox (alt, colored)** → `assets/weekday/cyberpunk/gangs/colored/alt/Aldecaldos.png`
@@ -140,7 +145,7 @@ Badlands cold, three faces of the same fire (the three-face rotation).*
 
 **Maelstrom** → `assets/weekday/cyberpunk/gangs/primary/Maelstrom.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Toxic acid-green-and-orange holo-light throughout, heavy glitch-scan distortion tearing at the rim. Center: a Maelstrom enforcer bristling with exposed chrome and cybernetic overgrowth, both arms replaced by heavy weapon-limbs raised mid-swing, a wall of scavenged machine parts welded into a barricade behind him. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: acid green, ember orange, exposed chrome. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Maelstrom enforcer bristling with exposed chrome and cybernetic overgrowth, both arms replaced by heavy weapon-limbs raised mid-swing, a wall of scavenged machine parts welded into a barricade behind him. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Maelstrom (colored)** → `assets/weekday/cyberpunk/gangs/colored/Maelstrom.png`
@@ -150,7 +155,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Barghest (alt)** → `assets/weekday/cyberpunk/gangs/primary/alt/Maelstrom.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep navy-and-olive holo-light throughout, heavy glitch-scan distortion tearing at the rim. Center: a Barghest operator in disciplined ex-Militech tactical gear, rifle held low-ready rather than swinging wild, a squad's hand-signal frozen mid-order — precision replacing chaos as this Wrath's own shape. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: navy blue, olive drab, tactical black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Barghest operator in disciplined ex-Militech tactical gear, rifle held low-ready rather than swinging wild, a squad's hand-signal frozen mid-order — precision replacing chaos as this Wrath's own shape. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Barghest (alt, colored)** → `assets/weekday/cyberpunk/gangs/colored/alt/Maelstrom.png`
@@ -160,7 +165,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Wraiths (alt2)** → `assets/weekday/cyberpunk/gangs/primary/Maelstrom_v2.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Pale ice-white-and-frost-blue holo-light throughout, heavy glitch-scan distortion tearing at the rim. Center: a Wraith raider in white-and-grey Badlands wraps, a cryo-frost weapon exhaling a thin white vapor, standing atop a frozen, snow-dusted wreck in the open waste — wrath frozen down to something patient and lethal instead of hot. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: ice white, frost blue, wasteland grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Wraith raider in white-and-grey Badlands wraps, a cryo-frost weapon exhaling a thin white vapor, standing atop a frozen, snow-dusted wreck in the open waste — wrath frozen down to something patient and lethal instead of hot. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Wraiths (alt2, colored)** → `assets/weekday/cyberpunk/gangs/colored/Maelstrom_v2.png`
@@ -175,7 +180,7 @@ wisdom — greed and cunning in two very different uniforms.*
 
 **Voodoo Boys** → `assets/weekday/cyberpunk/gangs/primary/VoodooBoys.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep teal-and-black holo-light throughout, faint glitch-scan lines breaking at the rim. Center: a Voodoo Boys netrunner deep in trance, veve sigils glowing teal across his bared skin, both hands raised into a cascade of raw code, a small distant glimpse of the Blackwall's own storm visible in the data behind him. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mercury glyph. Palette: teal, deep black, code-green data. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Voodoo Boys netrunner deep in trance, veve sigils glowing teal across his bared skin, both hands raised into a cascade of raw code, a small distant glimpse of the Blackwall's own storm visible in the data behind him. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Voodoo Boys (colored)** → `assets/weekday/cyberpunk/gangs/colored/VoodooBoys.png`
@@ -185,7 +190,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **6th Street (alt)** → `assets/weekday/cyberpunk/gangs/primary/alt/VoodooBoys.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep desert-tan-and-faded-red holo-light throughout, faint glitch-scan lines breaking at the rim. Center: a 6th Street patriot in faded stars-and-stripes gear, standing sentry over a checkpoint of stacked tires and painted oil drums, one hand raised to wave a car through, his gaze equal parts protective and proprietary over the block he's claimed. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mercury glyph. Palette: desert tan, faded star-red, checkpoint grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a 6th Street patriot in faded stars-and-stripes gear, standing sentry over a checkpoint of stacked tires and painted oil drums, one hand raised to wave a car through, his gaze equal parts protective and proprietary over the block he's claimed. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **6th Street (alt, colored)** → `assets/weekday/cyberpunk/gangs/colored/alt/VoodooBoys.png`
@@ -200,7 +205,7 @@ excess prices.*
 
 **Tyger Claws** → `assets/weekday/cyberpunk/gangs/primary/TygerClaws.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Rich hot-pink-and-red neon holo-light throughout, heavy glitch-scan distortion at the rim. Center: a Tyger Claws enforcer in a sharp neon-trimmed suit, katana held loose at his side, standing before a wall of stacked braindance parlor signage and overflowing neon vice-district light, his expression a host's practiced smile over a debt-collector's eyes. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Jupiter glyph. Palette: hot pink, neon red, chrome-blade silver. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Tyger Claws enforcer in a sharp neon-trimmed suit, katana held loose at his side, standing before a wall of stacked braindance parlor signage and overflowing neon vice-district light, his expression a host's practiced smile over a debt-collector's eyes. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Tyger Claws (colored)** → `assets/weekday/cyberpunk/gangs/colored/TygerClaws.png`
@@ -215,7 +220,7 @@ block that raised him.*
 
 **Valentinos** → `assets/weekday/cyberpunk/gangs/primary/Valentinos.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep purple-and-gold holo-light throughout, faint glitch-scan lines breaking at the rim. Center: a Valentinos lieutenant in a purple satin jacket, one hand pressed over a gold chain and a small framed photo tucked at his chest, standing before a lowrider hood painted with his own family's name, his stance a wall between the street and everyone he loves behind him. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Venus glyph. Palette: purple, gold, lowrider chrome. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Valentinos lieutenant in a purple satin jacket, one hand pressed over a gold chain and a small framed photo tucked at his chest, standing before a lowrider hood painted with his own family's name, his stance a wall between the street and everyone he loves behind him. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Valentinos (colored)** → `assets/weekday/cyberpunk/gangs/colored/Valentinos.png`
@@ -230,7 +235,7 @@ harvester of flesh.*
 
 **Animals** → `assets/weekday/cyberpunk/gangs/primary/Animals.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep burnt-orange-and-black holo-light throughout, faint glitch-scan lines breaking at the rim. Center: an Animals bodybuilder mid-lift in a scrapyard gym, muscle-and-chrome physique gleaming with sweat and oil in equal measure, a slow patient count visible on a chalk-marked wall behind him. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Saturn glyph. Palette: burnt orange, oiled-chrome tan, scrapyard black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: an Animals bodybuilder mid-lift in a scrapyard gym, muscle-and-chrome physique gleaming with sweat and oil in equal measure, a slow patient count visible on a chalk-marked wall behind him. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Animals (colored)** → `assets/weekday/cyberpunk/gangs/colored/Animals.png`
@@ -240,7 +245,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Scavengers (alt)** → `assets/weekday/cyberpunk/gangs/primary/alt/Animals.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep rust-red-and-surgical-green holo-light throughout, faint glitch-scan lines breaking at the rim. Center: a Scavenger surgeon in a stained apron over an improvised operating table, one hand steady on a chrome bone-saw, rows of harvested organs preserved in glowing green cold-storage jars lining the wall behind — the same iron patience as the Animals' own discipline, turned toward a far darker harvest, taken instead of grown. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Saturn glyph. Palette: rust red, surgical green, cold-storage glass. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Scavenger surgeon in a stained apron over an improvised operating table, one hand steady on a chrome bone-saw, rows of harvested organs preserved in glowing green cold-storage jars lining the wall behind — the same iron patience as the Animals' own discipline, turned toward a far darker harvest, taken instead of grown. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Scavengers (alt, colored)** → `assets/weekday/cyberpunk/gangs/colored/alt/Animals.png`
@@ -255,7 +260,7 @@ in.*
 
 **Arasaka** → `assets/weekday/cyberpunk/gangs/primary/Arasaka.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Radiant crimson-and-black holo-light throughout, the brightest window of the block. Center: the Arasaka Tower itself rising as a great obsidian-and-crimson spire, its own imperial crest — a stylized eye-in-diamond — blazing at the tower's crown, a thin ring of security drones orbiting it like a crown's own points. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Sun glyph. Palette: radiant crimson, obsidian black, imperial gold trim. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block. Center: the Arasaka Tower itself rising as a great obsidian-and-crimson spire, its own imperial crest — a stylized eye-in-diamond — blazing at the tower's crown, a thin ring of security drones orbiting it like a crown's own points. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Arasaka (colored)** → `assets/weekday/cyberpunk/gangs/colored/Arasaka.png`
@@ -270,7 +275,7 @@ silhouette as Arasaka's own throne, deliberately.*
 
 **Militech** → `assets/weekday/cyberpunk/gangs/primary/Militech.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the block — the SAME tower silhouette as Arasaka's own throne, deliberately, a rival spire rising just as tall, crowned with its own crest — a stylized eagle-and-star — in place of the eye-in-diamond. Center: the Militech Tower standing in the identical composition, navy-and-white instead of crimson-and-black, its own drone ring orbiting in perfect mirrored formation — sixty years of corporate war distilled into two towers that have learned to reflect each other exactly. Border: a continuous circuit-trace ring, broken by four roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, navy-blue trim. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME tower silhouette as Arasaka's own throne, deliberately, a rival spire rising just as tall, crowned with its own crest — a stylized eagle-and-star — in place of the eye-in-diamond. Center: the Militech Tower standing in the identical composition, navy-and-white instead of crimson-and-black, its own drone ring orbiting in perfect mirrored formation — sixty years of corporate war distilled into two towers that have learned to reflect each other exactly. Border: a continuous circuit-trace ring carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **Militech (colored)** → `assets/weekday/cyberpunk/gangs/colored/Militech.png`
@@ -285,7 +290,7 @@ nowhere.*
 
 **Netwatch** → `assets/weekday/cyberpunk/gangs/primary/Netwatch.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep cyan-white holo-light shading to pure static at the rim, a light that belongs to no physical place. Center: a faceless Netwatch agent rendered almost as pure code, an outline more than a body, standing before the storming grey wall of the Blackwall itself, watching rather than acting. Border: a continuous circuit-trace ring, its own lines dissolving into static at the top, no roundel glyph — Netwatch answers to no single day. Palette: cyan white, Blackwall storm-grey, code-outline blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a light that belongs to no physical place. Center: a faceless Netwatch agent rendered almost as pure code, an outline more than a body, standing before the storming grey wall of the Blackwall itself, watching rather than acting. Border: a continuous circuit-trace ring carved in bronze relief, its own lines fading into bare metal at the top, no roundel glyph — Netwatch answers to no single day. NO lettering anywhere.
 ```
 
 **Netwatch (colored)** → `assets/weekday/cyberpunk/gangs/colored/Netwatch.png`
@@ -319,7 +324,7 @@ cutting.*
 
 **Viktor Vektor** → `assets/weekday/cyberpunk/street/primary/Viktor.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep clinic-blue holo-light throughout, faint glitch-scan lines breaking at the rim. Center: Viktor Vektor at his ripperdoc's chair, steady hands mid-surgery over an open chrome arm-port, surgical light haloing his bald head, his face calm and unhurried even with a half-finished patient before him. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Moon crescent glyph. Palette: clinic blue, chrome steel, warm surgical-light gold. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: Viktor Vektor at his ripperdoc's chair, steady hands mid-surgery over an open chrome arm-port, surgical light haloing his bald head, his face calm and unhurried even with a half-finished patient before him. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Viktor Vektor (colored)** → `assets/weekday/cyberpunk/street/colored/Viktor.png`
@@ -334,7 +339,7 @@ banked wrath.*
 
 **Jackie** → `assets/weekday/cyberpunk/street/primary/Jackie.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange holo-light throughout, hot and reckless, faint glitch-scan tearing at the rim. Center: Jackie Welles mid-charge, chrome-plated arm raised, a wide grin under a thick mustache, a lucha libre mask hanging from his belt. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: ember orange, chrome silver, warm brown skin. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, hot and reckless. Center: Jackie Welles mid-charge, chrome-plated arm raised, a wide grin under a thick mustache, a lucha libre mask hanging from his belt. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Jackie (colored)** → `assets/weekday/cyberpunk/street/colored/Jackie.png`
@@ -344,7 +349,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Panam (alt)** → `assets/weekday/cyberpunk/street/primary/alt/Jackie.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep desert-orange holo-light throughout, hot and steady, faint glitch-scan tearing at the rim. Center: Panam Palmer braced atop a Basilisk's open hatch, rifle raised toward the Badlands horizon, goggles pushed up into wind-blown hair. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: desert orange, dust tan, gunmetal grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, hot and steady. Center: Panam Palmer braced atop a Basilisk's open hatch, rifle raised toward the Badlands horizon, goggles pushed up into wind-blown hair. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Panam (alt, colored)** → `assets/weekday/cyberpunk/street/colored/alt/Jackie.png`
@@ -354,7 +359,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **River (alt2)** → `assets/weekday/cyberpunk/street/primary/Jackie_v2.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep badge-blue-and-orange holo-light throughout, steady and righteous, faint glitch-scan tearing at the rim. Center: River Ward, ex-NCPD detective, standing his ground in a modest jacket rather than armor, a worn badge held up in one hand though it no longer means what it used to, his gaze fixed forward against a system he no longer trusts. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: badge blue, ember orange, worn denim. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, steady and righteous. Center: River Ward, ex-NCPD detective, standing his ground in a modest jacket rather than armor, a worn badge held up in one hand though it no longer means what it used to, his gaze fixed forward against a system he no longer trusts. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **River (alt2, colored)** → `assets/weekday/cyberpunk/street/colored/Jackie_v2.png`
@@ -369,7 +374,7 @@ wisdom weighed before any price is named.*
 
 **Wakako** → `assets/weekday/cyberpunk/street/primary/Wakako.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep jade-violet holo-light throughout, patient and calculating, faint glitch-scan lines breaking at the rim. Center: Wakako Okada seated at a low table in a quiet teahouse-fixer's den, a data-shard held delicately between two fingers over a spread of untouched tea, her expression unreadable. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mercury glyph. Palette: jade, deep violet, warm tea-gold. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and calculating. Center: Wakako Okada seated at a low table in a quiet teahouse-fixer's den, a data-shard held delicately between two fingers over a spread of untouched tea, her expression unreadable. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Wakako (colored)** → `assets/weekday/cyberpunk/street/colored/Wakako.png`
@@ -379,7 +384,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Padre (alt)** → `assets/weekday/cyberpunk/street/primary/alt/Wakako.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep violet-and-candle-gold holo-light throughout, patient and knowing, faint glitch-scan lines breaking at the rim. Center: Padre in a threadbare clerical collar behind a fixer's makeshift desk inside a converted chapel, a rosary wound once around one wrist beside a stack of eddie-chits, his half-smile equally at home hearing a confession or closing a deal. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mercury glyph. Palette: candle gold, deep violet, worn wood-brown. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and knowing. Center: Padre in a threadbare clerical collar behind a fixer's makeshift desk inside a converted chapel, a rosary wound once around one wrist beside a stack of eddie-chits, his half-smile equally at home hearing a confession or closing a deal. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Padre (alt, colored)** → `assets/weekday/cyberpunk/street/colored/alt/Wakako.png`
@@ -394,7 +399,7 @@ the cards turn.*
 
 **Misty** → `assets/weekday/cyberpunk/street/primary/Misty.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Rich amber-gold holo-light throughout, warm and generous, faint glitch-scan lines breaking at the rim. Center: Misty in flowing esoteric layers behind a table scattered with major arcana tarot cards, one card turned face-up and glowing softly, her hands open in an offering gesture over the spread, incense smoke curling into the holo-light. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Jupiter glyph. Palette: amber gold, incense-smoke violet, tarot-card gold-leaf. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and generous. Center: Misty in flowing esoteric layers behind a table scattered with major arcana tarot cards, one card turned face-up and glowing softly, her hands open in an offering gesture over the spread, incense smoke curling into the holo-light. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Misty (colored)** → `assets/weekday/cyberpunk/street/colored/Misty.png`
@@ -409,7 +414,7 @@ spotlight — jealousy in two different registers of fame.*
 
 **Kerry** → `assets/weekday/cyberpunk/street/primary/Kerry.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep rose-red holo-light throughout, warm and restless, faint glitch-scan lines breaking at the rim. Center: Kerry Eurodyne mid-riff on a battered electric guitar under a single spotlight, silver hair falling across his face, a faded Samurai-era backstage pass clipped to his jacket. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Venus glyph. Palette: rose red, spotlight gold, silver hair. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and restless. Center: Kerry Eurodyne mid-riff on a battered electric guitar under a single spotlight, silver hair falling across his face, a faded Samurai-era backstage pass clipped to his jacket. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Kerry (colored)** → `assets/weekday/cyberpunk/street/colored/Kerry.png`
@@ -419,7 +424,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Lizzy Wizzy (alt)** → `assets/weekday/cyberpunk/street/primary/alt/Kerry.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep hot-pink holo-light throughout, dazzling and restless, faint glitch-scan lines breaking at the rim. Center: Lizzy Wizzy mid-performance, twin chrome-bladed cyberarms flashing under stage light, a crowd's worth of adoration implied in the glow around her but her own eyes fixed somewhere just past the camera. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Venus glyph. Palette: hot pink, chrome-blade silver, stage-light white. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, dazzling and restless. Center: Lizzy Wizzy mid-performance, twin chrome-bladed cyberarms flashing under stage light, a crowd's worth of adoration implied in the glow around her but her own eyes fixed somewhere just past the camera. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Lizzy Wizzy (alt, colored)** → `assets/weekday/cyberpunk/street/colored/alt/Kerry.png`
@@ -434,7 +439,7 @@ exactly right.*
 
 **Judy** → `assets/weekday/cyberpunk/street/primary/Judy.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep teal-green holo-light throughout, careful and unhurried, faint glitch-scan lines breaking at the rim. Center: Judy Alvarez seated at a braindance editing rig, headset half-lowered, both hands moving with slow deliberate precision over a floating timeline of recorded memory, her focus total. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Saturn glyph. Palette: teal green, editing-rig blue-white, warm brown skin. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, careful and unhurried. Center: Judy Alvarez seated at a braindance editing rig, headset half-lowered, both hands moving with slow deliberate precision over a floating timeline of recorded memory, her focus total. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Judy (colored)** → `assets/weekday/cyberpunk/street/colored/Judy.png`
@@ -448,7 +453,7 @@ Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, phot
 
 **Johnny Silverhand** → `assets/weekday/cyberpunk/street/primary/Johnny.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Radiant crimson-and-chrome holo-light throughout, the brightest window of the block. Center: Johnny Silverhand enthroned in his own legend, the iconic Samurai jacket worn open over bare chrome, his silver cybernetic arm resting along the armrest like a scepter, an electric guitar leaned against the seat beside him. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Sun glyph. Palette: radiant crimson, silver-chrome arm, Samurai-jacket black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block. Center: Johnny Silverhand enthroned in his own legend, the iconic Samurai jacket worn open over bare chrome, his silver cybernetic arm resting along the armrest like a scepter, an electric guitar leaned against the seat beside him. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Johnny Silverhand (colored)** → `assets/weekday/cyberpunk/street/colored/Johnny.png`
@@ -463,7 +468,7 @@ kept behind her bar. The SAME throne silhouette as Johnny's own seat.*
 
 **Rogue** → `assets/weekday/cyberpunk/street/primary/Rogue.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the block — the SAME throne silhouette as Johnny's own seat, deliberately, a queen's bearing instead of a king's. Center: Rogue seated behind the Afterlife's own bar in the identical enthroned pose, decades written into her face, Johnny's own silver-plated pistol mounted in a place of honor on the wall behind her rather than an armrest. Border: a continuous circuit-trace ring, broken by four roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, one warm amber bar-light. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME throne silhouette as Johnny's own seat, deliberately, a queen's bearing instead of a king's. Center: Rogue seated behind the Afterlife's own bar in the identical enthroned pose, decades written into her face, Johnny's own silver-plated pistol mounted in a place of honor on the wall behind her rather than an armrest. Border: a continuous circuit-trace ring carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **Rogue (colored)** → `assets/weekday/cyberpunk/street/colored/Rogue.png`
@@ -479,7 +484,7 @@ note.*
 
 **V** → `assets/weekday/cyberpunk/street/primary/V.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep static-white holo-light shading to flickering corruption at the rim, a light that belongs to no fixed identity. Center: V rendered as a deliberately AMBIGUOUS silhouette — a mirrored full-face visor reflecting the city back instead of any single face, build and stance read as neither clearly masculine nor feminine, one hand pressed to their own temple where a second flickering silhouette (Johnny's own outline) bleeds faintly through. Border: a continuous circuit-trace ring, its own lines glitching and doubling at the top, no roundel glyph — V answers to no single day, still becoming. Palette: static white, city-reflection neon, flickering double-exposure blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a light that belongs to no fixed identity. Center: V rendered as a deliberately AMBIGUOUS silhouette — a mirrored full-face visor reflecting the city back instead of any single face, build and stance read as neither clearly masculine nor feminine, one hand pressed to their own temple where a second flickering silhouette (Johnny's own outline) bleeds faintly through. Border: a continuous circuit-trace ring carved in bronze relief, its own lines doubling at the top, no roundel glyph — V answers to no single day, still becoming. NO lettering anywhere.
 ```
 
 **V (colored)** → `assets/weekday/cyberpunk/street/colored/V.png`
@@ -515,7 +520,7 @@ day's own blue.*
 
 **Songbird** → `assets/weekday/cyberpunk/power/primary/Songbird.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep clinical-blue holo-light throughout, faint glitch-scan lines breaking at the rim, threaded with fine red netrunner data-lines that pulse like a fever. Center: Songbird slumped against a cold diagnostic wall, breathing mask fogged, both hands pressed over her own chest as red neural warning-lines crawl visibly under her skin, her eyes fixed not on any enemy but on a small distant light she cannot yet reach. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Moon crescent glyph. Palette: clinical blue, warning-red data-lines, pale exhausted skin. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: Songbird slumped against a cold diagnostic wall, breathing mask fogged, both hands pressed over her own chest as red neural warning-lines crawl visibly under her skin, her eyes fixed not on any enemy but on a small distant light she cannot yet reach. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Songbird (colored)** → `assets/weekday/cyberpunk/power/colored/Songbird.png`
@@ -530,7 +535,7 @@ restrain it.*
 
 **Adam Smasher** → `assets/weekday/cyberpunk/power/primary/AdamSmasher.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange holo-light throughout, heavy and merciless, faint glitch-scan tearing at the rim. Center: Adam Smasher, a towering full-body cyborg with barely a scrap of visible human tissue left, twin heavy weapon-fists raised, a single unblinking red optic sensor where a face should be, standing in a wreckage-strewn corridor. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mars glyph. Palette: ember orange, gunmetal chrome, single red optic. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, heavy and merciless. Center: Adam Smasher, a towering full-body cyborg with barely a scrap of visible human tissue left, twin heavy weapon-fists raised, a single unblinking red optic sensor where a face should be, standing in a wreckage-strewn corridor. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Adam Smasher (colored)** → `assets/weekday/cyberpunk/power/colored/AdamSmasher.png`
@@ -545,7 +550,7 @@ toward himself.*
 
 **Dexter DeShawn** → `assets/weekday/cyberpunk/power/primary/Dexter.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep violet holo-light throughout, smooth and self-serving, faint glitch-scan lines breaking at the rim. Center: Dexter DeShawn in a sharp gold-trimmed suit, a golden prosthetic hand closed around a credchip, his other hand extended for a handshake that is already a betrayal, a hidden second contract folded just out of sight beneath his sleeve. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Mercury glyph. Palette: deep violet, gold prosthetic, smooth chrome. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, smooth and self-serving. Center: Dexter DeShawn in a sharp gold-trimmed suit, a golden prosthetic hand closed around a credchip, his other hand extended for a handshake that is already a betrayal, a hidden second contract folded just out of sight beneath his sleeve. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Dexter DeShawn (colored)** → `assets/weekday/cyberpunk/power/colored/Dexter.png`
@@ -560,7 +565,7 @@ freely.*
 
 **Solomon Reed** → `assets/weekday/cyberpunk/power/primary/Solomon.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Rich amber-gold holo-light throughout, warm and world-weary, faint glitch-scan lines breaking at the rim. Center: Solomon Reed in a weathered field coat, kneeling to steady a younger operative's aim with one guiding hand on their shoulder, his own eyes carrying the excess weight of every asset he has ever had to spend. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Jupiter glyph. Palette: amber gold, weathered field-coat brown, steady grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and world-weary. Center: Solomon Reed in a weathered field coat, kneeling to steady a younger operative's aim with one guiding hand on their shoulder, his own eyes carrying the excess weight of every asset he has ever had to spend. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Solomon Reed (colored)** → `assets/weekday/cyberpunk/power/colored/Solomon.png`
@@ -575,7 +580,7 @@ it.*
 
 **Evelyn Parker** → `assets/weekday/cyberpunk/power/primary/Evelyn.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep rose-red holo-light throughout, aching and fragile, faint glitch-scan lines breaking at the rim. Center: Evelyn Parker seated at a mirror in doll-perfect makeup and a glittering dress, one hand reaching to touch her own reflection rather than her real face, the mirror's surface subtly cracked at the edges. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Venus glyph. Palette: rose red, mirror-silver, doll-porcelain skin. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, aching and fragile. Center: Evelyn Parker seated at a mirror in doll-perfect makeup and a glittering dress, one hand reaching to touch her own reflection rather than her real face, the mirror's surface subtly cracked at the edges. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Evelyn Parker (colored)** → `assets/weekday/cyberpunk/power/colored/Evelyn.png`
@@ -590,7 +595,7 @@ left to give.*
 
 **Takemura** → `assets/weekday/cyberpunk/power/primary/Takemura.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep jade-green holo-light throughout, still and disciplined, faint glitch-scan lines breaking at the rim. Center: Goro Takemura kneeling in formal seiza posture, a katana laid across his knees rather than drawn, his gaze steady on a small photograph propped before him of an era already gone. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Saturn glyph. Palette: jade green, formal-black cloth, katana-steel silver. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, still and disciplined. Center: Goro Takemura kneeling in formal seiza posture, a katana laid across his knees rather than drawn, his gaze steady on a small photograph propped before him of an era already gone. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Takemura (colored)** → `assets/weekday/cyberpunk/power/colored/Takemura.png`
@@ -605,7 +610,7 @@ different empires. Synchronized with Mirror and Unfound below.*
 
 **Saburo Arasaka** → `assets/weekday/cyberpunk/power/primary/SaburoArasaka.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Radiant crimson-and-gold holo-light throughout, the brightest window of the block. Center: Saburo Arasaka enthroned in a formal dark suit within his own tower's highest office, the Arasaka eye-in-diamond crest inlaid in the floor beneath his seat, his hands folded with absolute stillness. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Sun glyph. Palette: radiant crimson, imperial gold, formal black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block. Center: Saburo Arasaka enthroned in a formal dark suit within his own tower's highest office, the Arasaka eye-in-diamond crest inlaid in the floor beneath his seat, his hands folded with absolute stillness. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Saburo Arasaka (colored)** → `assets/weekday/cyberpunk/power/colored/SaburoArasaka.png`
@@ -615,7 +620,7 @@ Ornate circular badge, vivid saturated neon-noir paint over polished bright gold
 
 **Rosalind Myers (alt)** → `assets/weekday/cyberpunk/power/primary/alt/SaburoArasaka.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Radiant crimson-and-gold holo-light throughout, the brightest window of the block — the SAME enthroned composition, an authority that answers to no visible tower at all. Center: Rosalind Myers seated in the identical formal stillness inside a windowless FIA office, a wall of sealed case-files standing in for the Arasaka crest behind her, her folded hands carrying the same unshowy certainty — a different empire, the same seat. Border: a continuous circuit-trace ring in brushed chrome, breaking into brief glitch-static glyphs at four points, one flickering the Sun glyph. Palette: radiant crimson, muted federal gold, formal black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block — the SAME enthroned composition, an authority that answers to no visible tower at all. Center: Rosalind Myers seated in the identical formal stillness inside a windowless FIA office, a wall of sealed case-files standing in for the Arasaka crest behind her, her folded hands carrying the same unshowy certainty — a different empire, the same seat. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Rosalind Myers (alt, colored)** → `assets/weekday/cyberpunk/power/colored/alt/SaburoArasaka.png`
@@ -630,7 +635,7 @@ midnight state. The SAME throne silhouette as the Throne's own seat.*
 
 **Yorinobu** → `assets/weekday/cyberpunk/power/primary/Yorinobu.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the block — the SAME throne silhouette as Saburo's own seat, deliberately. Center: Yorinobu Arasaka seated in the identical composition, younger and restless where his father was still, the same eye-in-diamond crest beneath him now cracked through its center, his father's own engram flickering faintly in the air just behind his shoulder like a shadow that refuses to leave. Border: a continuous circuit-trace ring, broken by four roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, one flickering engram-blue accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME throne silhouette as Saburo's own seat, deliberately. Center: Yorinobu Arasaka seated in the identical composition, younger and restless where his father was still, the same eye-in-diamond crest beneath him now cracked through its center, his father's own engram flickering faintly in the air just behind his shoulder like a shadow that refuses to leave. Border: a continuous circuit-trace ring carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **Yorinobu (colored)** → `assets/weekday/cyberpunk/power/colored/Yorinobu.png`
@@ -640,7 +645,7 @@ Ornate circular badge, vivid saturated neon-noir paint over dark iron and cold s
 
 **Kurt Hansen (alt)** → `assets/weekday/cyberpunk/power/primary/alt/Yorinobu.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the block — the SAME throne silhouette, a different kind of usurped seat. Center: Colonel Kurt Hansen seated in the identical composition inside a fortified compound of his own making, a hand-painted militia insignia standing in for any corporate crest, a wall of surveillance screens flickering behind him like a throne room built entirely from stolen watchfulness. Border: a continuous circuit-trace ring, broken by four roundels bearing the Sun glyph in dull ember-silver relief. Palette: near-black, cold silver, one flickering screen-blue accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME throne silhouette, a different kind of usurped seat. Center: Colonel Kurt Hansen seated in the identical composition inside a fortified compound of his own making, a hand-painted militia insignia standing in for any corporate crest, a wall of surveillance screens flickering behind him like a throne room built entirely from stolen watchfulness. Border: a continuous circuit-trace ring carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief. NO lettering anywhere.
 ```
 
 **Kurt Hansen (alt, colored)** → `assets/weekday/cyberpunk/power/colored/alt/Yorinobu.png`
@@ -655,7 +660,7 @@ in the net. Two legends dissolved into the same net-space.*
 
 **Alt Cunningham** → `assets/weekday/cyberpunk/power/primary/AltCunningham.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep static-white holo-light shading into pure net-space at the rim, a light with no physical source. Center: Alt Cunningham rendered as a luminous translucent presence made entirely of code, no body left behind her at all, standing within the storming architecture of the Blackwall itself as though it were both her prison and her only remaining home. Border: a continuous circuit-trace ring, its own lines dissolving into pure static at the top, no roundel glyph — Alt answers to no single day. Palette: static white, Blackwall storm-grey, translucent code-blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a light with no physical source. Center: Alt Cunningham rendered as a luminous translucent presence made entirely of code, no body left behind her at all, standing within the storming architecture of the Blackwall itself as though it were both her prison and her only remaining home. Border: a continuous circuit-trace ring carved in bronze relief, its own lines fading into bare metal at the top, no roundel glyph — Alt answers to no single day. NO lettering anywhere.
 ```
 
 **Alt Cunningham (colored)** → `assets/weekday/cyberpunk/power/colored/AltCunningham.png`
@@ -665,7 +670,7 @@ Ornate circular badge, vivid saturated neon-noir paint over pale static-chrome, 
 
 **Rache Bartmoss (alt)** → `assets/weekday/cyberpunk/power/primary/alt/AltCunningham.png`
 ```
-ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, isolated background, the circular shape IS the frame. Deep static-white holo-light shading into pure net-space at the rim — the SAME dissolving composition, the other half of the same old net-legend. Center: Rache Bartmoss rendered as a ragged, half-corporeal netrunner silhouette, a physical body reduced to a single cryo-fridge glimpsed faintly in the static behind him while his mind sprawls vast and formless through the net he himself tore open. Border: a continuous circuit-trace ring, its own lines dissolving into static at the top, no roundel glyph. Palette: static white, breach-static green, translucent code-blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim — the SAME dissolving composition, the other half of the same old net-legend. Center: Rache Bartmoss rendered as a ragged, half-corporeal netrunner silhouette, a physical body reduced to a single cryo-fridge glimpsed faintly in the static behind him while his mind sprawls vast and formless through the net he himself tore open. Border: a continuous circuit-trace ring carved in bronze relief, its own lines fading into bare metal at the top, no roundel glyph. NO lettering anywhere.
 ```
 
 **Rache Bartmoss (alt, colored)** → `assets/weekday/cyberpunk/power/colored/alt/AltCunningham.png`
@@ -700,6 +705,17 @@ briefs in this file.
 
 ## Status
 
+- **PRIMARY BRIEFS CORRECTED 2026-07-22:** the first generation pass
+  across the gaming + corporation wave produced near-duplicate
+  primary/colored pairs — a color palette (gang/faction neon) had
+  leaked into the primary-register briefs, contradicting the project's
+  monochrome aged-bronze-relief law (`greek_prompts.md`). Every
+  primary brief in this sheet has been rewritten to the aged-bronze
+  convention; composition/scene/pose text is untouched. The COLORED
+  outputs already generated are VALID, no regeneration needed. Any
+  PRIMARY output generated before this fix (confirmed at least for WoW
+  Alliance: Anduin, Khadgar, Muradin) must be REGENERATED from the
+  corrected briefs above.
 - New sheet (R10 GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
   2026-07-22). Theme not yet registered in `config/defaults.py` — that
   wiring, AND the `rotating_art_file` wiring the rotation seats above

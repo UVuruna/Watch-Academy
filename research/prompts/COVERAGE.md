@@ -318,27 +318,32 @@ tracked here the moment they're written, per this file's own charter.
   documented graceful-absent `title_entry["images"]` slot every weekday
   theme (and two sibling topics, Intelligences and Slavic Months)
   already carries in `app.encyclopedia._weekday_topic` — 24 briefs plus
-  2 cross-referenced entries (Greek Monsters' and Chinese Mythology's
-  own title plates, written in their own sheets above, not duplicated
-  here). NEW canonical sourceless root, `assets/titles/<key>.png` — the
-  SAME "NOT art-sourced, one shared file per name" precedent
-  `assets/months/` and `assets/subdial/` already set, chosen over
-  per-theme folders because a title plate has exactly ONE consumer
-  regardless of the theme's own cast register (see the sheet's own
-  "canonical drop path" section for the full reasoning). Continents is
-  deliberately EXCLUDED — it already has a real, wired title image
+  2 more (Greek Monsters' Typhon & Echidna, Chinese Mythology's The
+  Peach Banquet) NAMED by their own theme sheets but written IN FULL
+  here, the canonical root every title plate lives in. **Gap closed
+  2026-07-22:** those 2 were cross-referenced since R8c but carried no
+  fenced generatable prompt body anywhere until this round (the R10
+  report caught it live) — both are now written in full in this sheet.
+  NEW canonical sourceless root, `assets/titles/<key>.png` — the SAME
+  "NOT art-sourced, one shared file per name" precedent `assets/
+  months/` and `assets/subdial/` already set, chosen over per-theme
+  folders because a title plate has exactly ONE consumer regardless of
+  the theme's own cast register (see the sheet's own "canonical drop
+  path" section for the full reasoning). Continents is deliberately
+  EXCLUDED — it already has a real, wired title image
   (`assets/earth/world.png`, `defaults.CONTINENTS_TITLE_IMAGE`), the
-  owner's own SKIP instruction. **Art: 0/24** in this sheet (2 more
-  tracked in the two theme sheets above, 26 total). This is also the
-  ONE documented exception to the project's house "no lettering" rule —
-  each plate carries a single wordmark (the theme's English display
-  name) in a script matching that theme's own culture (owner item 7),
-  the typographic direction named explicitly per theme in the sheet's
-  own table.
+  owner's own SKIP instruction. **Art: 0/26** in this sheet now (24
+  original + the 2 gap-closed entries). This is also the ONE documented
+  exception to the
+  project's house "no lettering" rule — each plate carries a single
+  wordmark (the theme's English display name) in a script matching
+  that theme's own culture (owner item 7), the typographic direction
+  named explicitly per theme in the sheet's own table.
 - All three sheets are dry-run-verified clean (`python main.py
   "<sheet>" --dry-run` from `Gadgets/PromptPainter/`: 18/18, 18/18 and
-  24/24 entries load, 0 problems). The Theme Title Plates' 26 paths
-  (24 in-sheet + 2 cross-referenced) are NOT under any existing
+  26/26 entries load, 0 problems — re-verified 2026-07-22 after the gap
+  closed). The Theme Title Plates' 26 paths (all now written IN this
+  one file, none cross-referenced any more) are NOT under any existing
   data-driven root and nothing reads `assets/titles/**` yet — all 26
   needed explicit `tests/test_prompt_paths.py` whitelist entries, added
   this round with a shared comment block explaining the new family.
@@ -355,15 +360,32 @@ to THREE parallel casts riding the same nine seats (Corporation is the
 one exception — a single roster, same shape as Greek Monsters/Chinese
 Mythology).
 
+**PRIMARY REGISTER CORRECTED 2026-07-22:** the first generation pass
+(WoW Alliance: Anduin, Khadgar, Muradin at least) surfaced near-
+duplicate primary/colored pairs across all four sheets below — each
+sheet's own `primary` briefs had drifted into prescribing the SAME
+color palette as `colored` (WoW's own border table below, the
+"blue-gold lion / red-black wolf / saronite-ice fang" line, describes
+what was actually a PRIMARY-register bug). Every primary brief in all
+four sheets has been rewritten to the project's monochrome
+aged-bronze-relief law (`greek_prompts.md`'s own planetary bronze
+plates) — one metal, no other colors, the per-figure identity carried
+by the carved MOTIF alone (lions/fangs/saronite-spikes/circuit-traces/
+aurebesh-flavor/org-chart-lines). `colored` was already correct and
+needed no changes. The register lines below are updated to describe
+the CORRECTED split, not the original bug.
+
 - **WoW** — [WoW Prompts](wow/wow_prompts.md). THREE blocks (Alliance /
   Horde / Evil), each a full nine-seat roster (six weekday heroes, a
   Throne/Mirror dual, an Unfound Ninth): Alliance (Anduin … Malfurion,
   Varian Wrynn/Genn Greymane/Turalyon), Horde (Baine … Cairne, Thrall/
   Garrosh/Rexxar), Evil (Kel'Thuzad … Deathwing, Arthas the Lich King
-  seated on the Frozen Throne/Illidan/Medivh). Carved runestone/
-  faction-crest register, a distinct border family per block (blue-gold
-  lion / red-black wolf / saronite-ice fang). No rotation seats. Drop
-  root `assets/weekday/wow/<block>/{primary,colored}/<Stem>.png`.
+  seated on the Frozen Throne/Illidan/Medivh). `primary` is aged-bronze
+  relief (the recolor master), the carved border MOTIF (rampant-lion /
+  wolf-fang totem / saronite-and-ice fang) the only per-block
+  identifier; `colored` keeps each block's own paint (blue-gold /
+  red-black / saronite-ice). No rotation seats. Drop root
+  `assets/weekday/wow/<block>/{primary,colored}/<Stem>.png`.
   **Art: 0/54** (27 figures × 2 registers; 3 title plates tracked in
   `titles/theme_title_prompts.md`). Dry-run: 54/54, 0 problems.
 - **Cyberpunk 2077** — [Cyberpunk Prompts](cyberpunk/cyberpunk_prompts.md).
@@ -381,12 +403,13 @@ Mythology).
   just every pole owning exactly 2 candidates so `_pick_rotation`'s
   shared date-ordinal-modulo naturally lands all three on the same
   index, the identical mechanism `scale_variant_file` already uses to
-  keep Judas/Lucifer in step. Neon-chrome holo-medallion register, a
-  circuit-trace border constant across blocks, gang-canonical neon
-  colors per figure. Drop root `assets/weekday/cyberpunk/<block>/
-  {primary,colored}/<Stem>.png`. **Art: 0/78** (Gangs 28 + Street 26 +
-  Power 24; 3 title plates tracked separately). Dry-run: 78/78, 0
-  problems.
+  keep Judas/Lucifer in step. `primary` is aged-bronze relief, the
+  circuit-trace (PCB) border motif carved into the same bronze,
+  constant across blocks; `colored` is the full-saturated neon-noir
+  poster, gang-canonical neon colors per figure. Drop root
+  `assets/weekday/cyberpunk/<block>/{primary,colored}/<Stem>.png`.
+  **Art: 0/78** (Gangs 28 + Street 26 + Power 24; 3 title plates
+  tracked separately). Dry-run: 78/78, 0 problems.
 - **Star Wars** — [Star Wars Prompts](starwars/starwars_prompts.md).
   Sealed as a mid-round addendum. THREE sets: Svetla/light (Obi-Wan …
   Chewbacca, Young Luke/The Father-Vader/Yoda — the Mirror brief
@@ -400,14 +423,15 @@ Mythology).
   Anakin/Vader, Leia and Han each appear TWICE across sets (different
   ages/roles — Svetla's Leia the general vs. Nova's "Old Leia" the
   master, etc.) — six of the sheet's 60 briefs are these legitimate
-  repeats, never a duplicate scene. Aurebesh-flavored holo-crest
-  register (letterform-flavor only, same documented compromise as
-  `egypt`/`norse`'s title-plate scripts — never a genuine readable
-  alphabet, and not even that flavor on regular cast plates, which
-  carry zero lettering). Drop root `assets/weekday/starwars/<set>/
-  {primary,colored}/<Stem>.png`. **Art: 0/60** (30 figures × 2
-  registers; 3 title plates tracked separately). Dry-run: 60/60, 0
-  problems.
+  repeats, never a duplicate scene. `primary` is aged-bronze relief,
+  the aurebesh-flavored tick ornament (letterform-flavor only, same
+  documented compromise as `egypt`/`norse`'s title-plate scripts —
+  never a genuine readable alphabet, and not even that flavor on
+  regular cast plates, which carry zero lettering) carved into the
+  same bronze; `colored` is the full-color paint version. Drop root
+  `assets/weekday/starwars/<set>/{primary,colored}/<Stem>.png`.
+  **Art: 0/60** (30 figures × 2 registers; 3 title plates tracked
+  separately). Dry-run: 60/60, 0 problems.
 - **The Corporation** — [Corporate Prompts](corporate/corporate_prompts.md).
   Single roster, same closed-set shape as Greek Monsters/Chinese
   Mythology: six executive seats (CHRO … CTO), a Throne/Mirror dual
@@ -416,8 +440,10 @@ Mythology).
   explicit ARCHETYPE — "FACELESS OR STYLIZED... no likeness of any real
   person" is written into all 18 individual prompts, not just the
   sheet header, since these are corporate ROLES rather than named
-  individuals. Brushed-steel-and-glass corporate seal register, an
-  org-chart line-and-node border. No rotation seats. Drop root
+  individuals. `primary` is aged-bronze relief, the org-chart
+  line-and-node border motif carved into the same bronze; `colored`
+  is the clean annual-report paint version (steel and gold accents).
+  No rotation seats. Drop root
   `assets/weekday/corporate/{primary,colored}/<Stem>.png`. **Art:
   0/18** (9 figures × 2 registers; 1 title plate tracked separately).
   Dry-run: 18/18, 0 problems.
@@ -432,12 +458,12 @@ Mythology).
   Unfound), `starwars_nova` (The Dyad — two hands reaching across a
   broken lightsaber, the owner's own suggested image) and `corporate`
   (The Boardroom Table — eight marked chairs, one conspicuously bare).
-  Unlike the monsters/chinese cross-referenced pair, all ten are
-  written with FULL prompt bodies directly in
+  Same as the monsters/chinese pair (gap closed 2026-07-22, see
+  above), all ten are written with FULL prompt bodies directly in
   `titles/theme_title_prompts.md` itself (its own stated intent for
   the family), so each new theme sheet carries only a short pointer,
   never a duplicate. **Art: 0/10.** Dry-run (whole title-plates file):
-  34/34, 0 problems.
+  36/36, 0 problems.
 - All four theme sheets are data-driven (`assets/weekday/**`), so every
   path they declare — including every `alt/`- and `_v*`-suffixed
   rotation sibling — passes `tests/test_prompt_paths.py` with ZERO
@@ -492,8 +518,8 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    Devil_Prosecutor), plus the ART-INFRA round's two NEW sheets —
    Slavic Months (12) and Badge 1:1 round one (38) — plus the PROMPT
    SHEETS round's three NEW sheets: Greek Monsters (18), Chinese
-   Mythology (18) and Theme Title Plates (24 + the 2 cross-referenced
-   in the two theme sheets, 26 total) — plus the GAMING + CORPORATION
+   Mythology (18) and Theme Title Plates (26, all written directly in
+   the one sheet as of the 2026-07-22 gap closure) — plus the GAMING + CORPORATION
    SHEET WAVE's (R10) four NEW sheets: WoW (54), Cyberpunk (78), Star
    Wars (60) and The Corporation (18), plus their own 10 new title
    plates (written directly in `titles/theme_title_prompts.md`, see

@@ -19,27 +19,39 @@ distinct briefs, never a duplicate. Leia and Han each sit twice
 likewise (Svetla's own era, Nova's "old" era) — every appearance below
 is its own irreducible scene.
 
-**Register — aurebesh-flavored holo-crest medallions, its own family:**
-every plate is a ROUND medallion, a holo-crest projection with a fine
-geometric AUREBESH-FLAVORED tick-pattern worked into the frame — small
-angular glyph-shapes styled after the in-universe script, ornamental
-and non-legible (the same documented compromise `theme_title_prompts
-.md` already uses for runic/glagolitic/hieroglyphic scripts: letterform
-FLAVOR, never a genuine readable alphabet — and on the regular cast
-plates below, not even Latin lettering, per house rule; only the THREE
-title plates carry an actual wordmark, in Aurebesh-flavored capitals).
-Each SET wears its own frame material:
+**Register — TWO deliberately different objects, the project-wide
+law (corrected 2026-07-22):** `primary` is a MONOCHROME AGED-BRONZE
+CARVED RELIEF — a sculpture in ONE metal (warm bronze patina, darker
+recesses, polished highlights; no other colors, no enamel, no
+durasteel/chrome paint), every emblem carved as relief in the same
+bronze — this is the recolor master the metal-shade pipeline strikes
+gold/silver from, the same law `greek_prompts.md`'s planetary bronze
+plates set. `colored` is the vivid full-saturated poster version — a
+fresh full-color repaint, never a recolor of the bronze art. The two
+MUST read as different objects — a sculpture, not a painting — never
+near-duplicates of each other. Each SET keeps its own frame MOTIF —
+the shape carved into the bronze, never a separate color/material
+family — a fine geometric AUREBESH-FLAVORED tick-pattern worked into
+every frame throughout (small angular glyph-shapes styled after the
+in-universe script, ornamental and non-legible — the same documented
+compromise `theme_title_prompts.md` already uses for runic/glagolitic/
+hieroglyphic scripts: letterform FLAVOR, never a genuine readable
+alphabet — and on the regular cast plates below, not even Latin
+lettering, per house rule; only the THREE title plates carry an actual
+wordmark, in Aurebesh-flavored capitals):
 
-| Set | Frame |
+| Set | Frame motif (carved in bronze on `primary`; recut in its own material on `colored`) |
 |---|---|
-| Svetla (light) | Jedi bronze-and-blue temple frame — carved sandstone temple-pillar segments in warm bronze, blue kyber-crystal insets at each joint |
-| Tamna (dark) | Imperial black-and-red cog frame — interlocking black durasteel gear-teeth segments, red accent lighting in the teeth |
-| Nova (mixed) | a fused frame alternating bronze-pillar and black-cog segments around the same ring — the dyad made literal in the border itself |
+| Svetla (light) | Jedi temple-pillar frame — segmented temple-pillar shapes |
+| Tamna (dark) | Imperial cog frame — interlocking gear-teeth segments |
+| Nova (mixed) | a fused frame alternating temple-pillar and gear-tooth segments around the same ring — the dyad made literal in the border's own shape |
 
-Every plate carries a `primary/` holo-crest version and a `colored/`
-full-saturated poster version — the same two-register convention every
-other weekday theme ships. Each border also carries the day's own
-ruling-planet glyph in four small roundels, same house convention.
+Every plate carries a `primary/` aged-bronze-relief version and a
+`colored/` full-saturated poster version — the same two-register
+convention every other weekday theme ships. Each border also carries
+the day's own ruling-planet glyph in four small roundels, same house
+convention — the per-figure IDENTITY survives entirely through the
+carved motif and the scene itself, never through paint.
 
 **Derivation check (Rule #19):** every plate is an irreducible scene —
 a different figure (or age/role of a repeated figure), a different
@@ -104,7 +116,7 @@ name.*
 
 **Obi-Wan (Ben) Kenobi** → `assets/weekday/starwars/svetla/primary/ObiWan.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Deep dusk-blue holo-light throughout, calm and watchful. Center: an aged Obi-Wan Kenobi in a hooded desert robe, standing at the edge of a twin-sunset dune, one hand resting on a lightsaber hilt at his belt rather than igniting it, his gaze fixed on a distant homestead far below — a guardian keeping watch over a hope he cannot yet name. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament at each joint, broken by four small roundels bearing the Moon crescent glyph in bronze relief. Palette: dusk blue, sandstone bronze, twin-sun amber. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, calm and watchful. Center: an aged Obi-Wan Kenobi in a hooded desert robe, standing at the edge of a twin-sunset dune, one hand resting on a lightsaber hilt at his belt rather than igniting it, his gaze fixed on a distant homestead far below — a guardian keeping watch over a hope he cannot yet name. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament at each joint, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Obi-Wan (Ben) Kenobi (colored)** → `assets/weekday/starwars/svetla/colored/ObiWan.png`
@@ -119,7 +131,7 @@ Resistance's own general.*
 
 **Leia, General Organa** → `assets/weekday/starwars/svetla/primary/Leia.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange holo-light throughout, disciplined and resolute. Center: General Leia Organa in a field commander's coat over her iconic braided crown of hair, one hand steady on a tactical hologram table, her posture unbowed despite the weight of command, a rebel starbird insignia small at her collar. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. Palette: ember orange, command-coat grey, hologram blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, disciplined and resolute. Center: General Leia Organa in a field commander's coat over her iconic braided crown of hair, one hand steady on a tactical hologram table, her posture unbowed despite the weight of command, a rebel starbird insignia small at her collar. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Leia, General Organa (colored)** → `assets/weekday/starwars/svetla/colored/Leia.png`
@@ -134,7 +146,7 @@ profit in the end.*
 
 **Han Solo** → `assets/weekday/starwars/svetla/primary/Han.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Deep violet holo-light throughout, sly and calculating. Center: Han Solo leaning easy against the Millennium Falcon's open hatch, a blaster holstered rather than drawn, one hand counting a small stack of credits while his eyes are already on the ship's own controls, a scoundrel's grin that has not yet decided which way this deal will go. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. Palette: violet, ship-hull grey, credit-copper. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, sly and calculating. Center: Han Solo leaning easy against the Millennium Falcon's open hatch, a blaster holstered rather than drawn, one hand counting a small stack of credits while his eyes are already on the ship's own controls, a scoundrel's grin that has not yet decided which way this deal will go. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Han Solo (colored)** → `assets/weekday/starwars/svetla/colored/Han.png`
@@ -149,7 +161,7 @@ to do what was right.*
 
 **Qui-Gon Jinn** → `assets/weekday/starwars/svetla/primary/QuiGon.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Rich amber-gold holo-light throughout, warm and unconventional. Center: Qui-Gon Jinn kneeling to a small child's eye level in a dusty marketplace, his long braided hair falling forward, one hand extended in an offer of freedom rather than a lightsaber, a Council seal visible but deliberately set aside on the ground beside him. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. Palette: amber gold, dusty marketplace tan, kyber-blue accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and unconventional. Center: Qui-Gon Jinn kneeling to a small child's eye level in a dusty marketplace, his long braided hair falling forward, one hand extended in an offer of freedom rather than a lightsaber, a Council seal visible but deliberately set aside on the ground beside him. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Qui-Gon Jinn (colored)** → `assets/weekday/starwars/svetla/colored/QuiGon.png`
@@ -164,7 +176,7 @@ from it, though the love came first.*
 
 **Padmé** → `assets/weekday/starwars/svetla/primary/Padme.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Deep rose-red holo-light throughout, tender and aching. Center: Padmé Amidala in flowing senatorial robes on a private balcony overlooking Naboo's lake-country, one hand pressed to her own heart, the other holding a small secret ring half-hidden in her palm, her gaze soft and unguarded — a love that began before the galaxy needed her to be anyone but herself. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. Palette: rose red, Naboo lake-blue, warm ivory gown. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, tender and aching. Center: Padmé Amidala in flowing senatorial robes on a private balcony overlooking Naboo's lake-country, one hand pressed to her own heart, the other holding a small secret ring half-hidden in her palm, her gaze soft and unguarded — a love that began before the galaxy needed her to be anyone but herself. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Padmé (colored)** → `assets/weekday/starwars/svetla/colored/Padme.png`
@@ -178,7 +190,7 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 **Chewbacca** → `assets/weekday/starwars/svetla/primary/Chewbacca.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Deep jade-green holo-light throughout, patient and steady. Center: Chewbacca seated calmly at the Falcon's own workbench, a bowcaster laid at rest across his lap rather than raised, one massive hand carefully fitting a small mechanical part into place, unhurried after two centuries of exactly this kind of quiet loyalty. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. Palette: jade green, wookiee-fur brown, workbench-copper. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and steady. Center: Chewbacca seated calmly at the Falcon's own workbench, a bowcaster laid at rest across his lap rather than raised, one massive hand carefully fitting a small mechanical part into place, unhurried after two centuries of exactly this kind of quiet loyalty. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Chewbacca (colored)** → `assets/weekday/starwars/svetla/colored/Chewbacca.png`
@@ -193,7 +205,7 @@ boy's own hand-me-down cloak.*
 
 **Young Luke** → `assets/weekday/starwars/svetla/primary/Luke.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Radiant white-gold holo-light throughout, the brightest window of the set. Center: young Luke Skywalker standing tall in simple robes, his father's blue lightsaber held upright rather than swung, a small twin-sun emblem glowing softly on the horizon behind him — a hero's own untested, unbowed certainty, pride in the sense of moral conviction rather than vanity. Border: Jedi bronze-and-blue temple-pillar frame with kyber-blue insets, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Sun glyph in bright-bronze relief. Palette: radiant white-gold, kyber-blue blade, twin-sun amber. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the set. Center: young Luke Skywalker standing tall in simple robes, his father's blue lightsaber held upright rather than swung, a small twin-sun emblem glowing softly on the horizon behind him — a hero's own untested, unbowed certainty, pride in the sense of moral conviction rather than vanity. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Young Luke (colored)** → `assets/weekday/starwars/svetla/colored/Luke.png`
@@ -208,7 +220,7 @@ Luke's own face — one body, two truths finally meeting.*
 
 **The Father (Vader)** → `assets/weekday/starwars/svetla/primary/Vader.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the set — the SAME upright standing silhouette as the Throne's own seat, deliberately. Center: Luke's own young face filling the near half of the disc, and across its other half, Vader's black mask emerges as a half-reflection in the same frame — not a separate figure beside him but literally overlapping his features, as if a dark mirror had been laid directly across his face at the exact moment of the reveal — one body, two truths finally meeting. Border: Jedi bronze-and-blue temple-pillar frame, broken by four roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, one warm skin-tone accent where Luke's face still shows. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the set — the SAME upright standing silhouette as the Throne's own seat, deliberately. Center: Luke's own young face filling the near half of the disc, and across its other half, Vader's black mask emerges as a half-reflection in the same frame — not a separate figure beside him but literally overlapping his features, as if a dark mirror had been laid directly across his face at the exact moment of the reveal — one body, two truths finally meeting. Border: Jedi temple-pillar frame carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **The Father (Vader) (colored)** → `assets/weekday/starwars/svetla/colored/Vader.png`
@@ -223,7 +235,7 @@ Excluded kind (CANON.md "The Ninth").*
 
 **Yoda** → `assets/weekday/starwars/svetla/primary/Yoda.png`
 ```
-ROUND holo-crest medallion, Jedi bronze-and-blue temple frame, photorealistic render, isolated background, the circular shape IS the frame. Deep swamp-green stone shading to unplaced fog at the rim, hidden from every star chart. Center: Yoda alone in a small hut sunk deep in Dagobah's own tangled swamp, seated in quiet meditation, one gnarled hand resting on a walking stick, no visitor, no signal, no map marking this place on any Rebel chart — nine hundred years of exile worn as simple, patient stillness. Border: Jedi bronze-and-blue temple-pillar frame, its pillars breaking open into bare swamp-vine at the top where the stone fades to unplaced fog, no roundel glyph — Yoda answers to no single day. Palette: swamp green, unplaced fog, small warm hut-light. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, hidden from every star chart. Center: Yoda alone in a small hut sunk deep in Dagobah's own tangled swamp, seated in quiet meditation, one gnarled hand resting on a walking stick, no visitor, no signal, no map marking this place on any Rebel chart — nine hundred years of exile worn as simple, patient stillness. Border: Jedi temple-pillar frame carved in bronze relief, its pillars breaking open into bare swamp-vine at the top where the bronze fades to bare metal, no roundel glyph — Yoda answers to no single day. NO lettering anywhere.
 ```
 
 **Yoda (colored)** → `assets/weekday/starwars/svetla/colored/Yoda.png`
@@ -255,7 +267,7 @@ outright.*
 
 **Tarkin** → `assets/weekday/starwars/tamna/primary/Tarkin.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep indigo-black holo-light throughout, cold and calculating. Center: Grand Moff Tarkin standing rigid at a viewport overlooking the Death Star's own curved horizon, hands clasped behind his back, his thin face lit only by the pale glow of the station's own targeting readout — "fear will keep the local systems in line" worn as a governing philosophy rather than a threat. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments in red-lit durasteel, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Moon crescent glyph in dull-iron relief. Palette: indigo black, readout pale-blue, Imperial grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, cold and calculating. Center: Grand Moff Tarkin standing rigid at a viewport overlooking the Death Star's own curved horizon, hands clasped behind his back, his thin face lit only by the pale glow of the station's own targeting readout — "fear will keep the local systems in line" worn as a governing philosophy rather than a threat. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Tarkin (colored)** → `assets/weekday/starwars/tamna/colored/Tarkin.png`
@@ -270,7 +282,7 @@ inverted into mechanical bloodlust.*
 
 **General Grievous** → `assets/weekday/starwars/tamna/primary/Grievous.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange holo-light throughout, relentless and mechanical. Center: General Grievous mid-stride on four clawed limbs, two extra arms unfolding from beneath his cape, a row of captured lightsaber hilts clipped like trophies across his chest-plate, his four eyes narrowed with a predator's own patience for the hunt itself. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in dull-iron relief. Palette: ember orange, gunmetal-grey plating, trophy-hilt silver. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, relentless and mechanical. Center: General Grievous mid-stride on four clawed limbs, two extra arms unfolding from beneath his cape, a row of captured lightsaber hilts clipped like trophies across his chest-plate, his four eyes narrowed with a predator's own patience for the hunt itself. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **General Grievous (colored)** → `assets/weekday/starwars/tamna/colored/Grievous.png`
@@ -285,7 +297,7 @@ lazy confidence.*
 
 **Jabba the Hutt** → `assets/weekday/starwars/tamna/primary/Jabba.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep violet holo-light throughout, heavy and glittering. Center: Jabba the Hutt sprawled across his own dais, a thick chain of stolen wealth draped across his coiled bulk, one small clawed hand resting possessively on a pile of coin and contraband, his half-lidded eyes missing nothing despite the appearance of laziness. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in dull-iron relief. Palette: violet, sickly olive-green hide, coin-gold. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, heavy and glittering. Center: Jabba the Hutt sprawled across his own dais, a thick chain of stolen wealth draped across his coiled bulk, one small clawed hand resting possessively on a pile of coin and contraband, his half-lidded eyes missing nothing despite the appearance of laziness. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Jabba the Hutt (colored)** → `assets/weekday/starwars/tamna/colored/Jabba.png`
@@ -300,7 +312,7 @@ were never free.*
 
 **Count Dooku** → `assets/weekday/starwars/tamna/primary/Dooku.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Rich amber-gold holo-light throughout, refined and seductive. Center: Count Dooku in an elegant dark cape, a curved-hilt lightsaber held loosely as if offering it rather than threatening with it, one hand extended toward an unseen former pupil in a gesture that reads as generous only until the fine print is understood — a teacher's own gift with the cost hidden inside it. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in dull-iron relief. Palette: amber gold, cape-black, curved-hilt silver. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, refined and seductive. Center: Count Dooku in an elegant dark cape, a curved-hilt lightsaber held loosely as if offering it rather than threatening with it, one hand extended toward an unseen former pupil in a gesture that reads as generous only until the fine print is understood — a teacher's own gift with the cost hidden inside it. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Count Dooku (colored)** → `assets/weekday/starwars/tamna/colored/Dooku.png`
@@ -315,7 +327,7 @@ it was given in.*
 
 **Maul** → `assets/weekday/starwars/tamna/primary/Maul.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep rose-red-and-black holo-light throughout, bitter and undying. Center: Maul crouched low on mismatched cybernetic legs, twin-bladed lightsaber spinning at rest, his horned red-and-black face fixed on a small, faded holo-image of Obi-Wan flickering in his own outstretched palm — decades of jealous obsession that survived every wound that should have ended it. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Venus glyph in dull-iron relief. Palette: rose red, horn-black, holo-flicker blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, bitter and undying. Center: Maul crouched low on mismatched cybernetic legs, twin-bladed lightsaber spinning at rest, his horned red-and-black face fixed on a small, faded holo-image of Obi-Wan flickering in his own outstretched palm — decades of jealous obsession that survived every wound that should have ended it. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Maul (colored)** → `assets/weekday/starwars/tamna/colored/Maul.png`
@@ -330,7 +342,7 @@ ever mattered to the job.*
 
 **Boba Fett** → `assets/weekday/starwars/tamna/primary/BobaFett.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep jade-green holo-light throughout, patient and unreadable. Center: Boba Fett standing motionless in scarred Mandalorian armor, a tracking fob held level and unblinking in one hand, his visored helm giving away nothing, content to wait exactly as long as the job requires before ever moving. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in dull-iron relief. Palette: jade green, scarred-armor green-grey, tracking-fob amber. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and unreadable. Center: Boba Fett standing motionless in scarred Mandalorian armor, a tracking fob held level and unblinking in one hand, his visored helm giving away nothing, content to wait exactly as long as the job requires before ever moving. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Boba Fett (colored)** → `assets/weekday/starwars/tamna/colored/BobaFett.png`
@@ -345,7 +357,7 @@ felt.*
 
 **Palpatine** → `assets/weekday/starwars/tamna/primary/Palpatine.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Radiant blood-gold holo-light throughout, the brightest window of the set. Center: Emperor Palpatine enthroned within his own iconic cylindrical red throne room, hooded robes pooling around the high-backed seat, both hands resting on the armrests with total stillness, a ring of guards implied only as dark silhouettes far below the elevated dais — an authority that no longer needs to gesture to be obeyed. Border: Imperial black-and-red cog frame, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Sun glyph in dull bright-iron relief. Palette: blood-gold, throne-room crimson, hooded-robe black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the set. Center: Emperor Palpatine enthroned within his own iconic cylindrical red throne room, hooded robes pooling around the high-backed seat, both hands resting on the armrests with total stillness, a ring of guards implied only as dark silhouettes far below the elevated dais — an authority that no longer needs to gesture to be obeyed. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Palpatine (colored)** → `assets/weekday/starwars/tamna/colored/Palpatine.png`
@@ -360,7 +372,7 @@ SAME throne silhouette as Palpatine's own seat, deliberately.*
 
 **Anakin** → `assets/weekday/starwars/tamna/primary/Anakin.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the set — the SAME throne silhouette as Palpatine's own seat, deliberately, though the figure seated in it is still becoming what fills it. Center: a young Anakin's Jedi-robed silhouette on one side of the disc, dissolving mid-frame into Vader's black armored bulk on the other, both halves kneeling in the identical submissive posture before an unseen shadow looming just off-frame — grooming shown as a single continuous motion rather than two separate men. Border: Imperial black-and-red cog frame, broken by four roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, one warm skin-tone fading into iron. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the set — the SAME throne silhouette as Palpatine's own seat, deliberately, though the figure seated in it is still becoming what fills it. Center: a young Anakin's Jedi-robed silhouette on one side of the disc, dissolving mid-frame into Vader's black armored bulk on the other, both halves kneeling in the identical submissive posture before an unseen shadow looming just off-frame — grooming shown as a single continuous motion rather than two separate men. Border: Imperial cog frame carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **Anakin (colored)** → `assets/weekday/starwars/tamna/colored/Anakin.png`
@@ -376,7 +388,7 @@ story being told, not a direct portrait.*
 
 **Darth Plagueis** → `assets/weekday/starwars/tamna/primary/Plagueis.png`
 ```
-ROUND holo-crest medallion, Imperial black-and-red cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep otherworldly violet-black stone shading to unplaced smoke at the rim, a figure that exists only as a story. Center: an opera-house box glimpsed in silhouette, a young apprentice's own listening profile in the foreground catching the only clear light, and behind him, half-formed within curling smoke and shadow, the barely-suggested shape of Darth Plagueis himself — never fully resolved, a legend heard rather than seen, present only because the telling makes him so. Border: Imperial black-and-red cog frame, its gear-teeth dissolving into loose smoke at the top where the stone fades to unplaced dark, no roundel glyph — Plagueis answers to no single day. Palette: violet-black, curling smoke-grey, one warm listening-light accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a figure that exists only as a story. Center: an opera-house box glimpsed in silhouette, a young apprentice's own listening profile in the foreground catching the only clear light, and behind him, half-formed within curling smoke and shadow, the barely-suggested shape of Darth Plagueis himself — never fully resolved, a legend heard rather than seen, present only because the telling makes him so. Border: Imperial cog frame carved in bronze relief, its gear-teeth dissolving into loose smoke at the top where the bronze fades to bare metal, no roundel glyph — Plagueis answers to no single day. NO lettering anywhere.
 ```
 
 **Darth Plagueis (colored)** → `assets/weekday/starwars/tamna/colored/Plagueis.png`
@@ -413,7 +425,7 @@ rather than the absence of fear.*
 
 **Rose Tico** → `assets/weekday/starwars/nova/primary/Rose.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep dusk-blue holo-light throughout, warm and grounded. Center: Rose Tico kneeling beside a damaged transport engine, tools spread with careful order around her, one hand resting gently on the machine's own housing as if comforting it, a small locket photograph of her sister tucked visible at her collar. Border: fused bronze-pillar-and-cog frame, alternating temple and gear-tooth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Moon crescent glyph in mixed bronze-and-iron relief. Palette: dusk blue, engine-copper, warm mechanic-tan. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and grounded. Center: Rose Tico kneeling beside a damaged transport engine, tools spread with careful order around her, one hand resting gently on the machine's own housing as if comforting it, a small locket photograph of her sister tucked visible at her collar. Border: fused temple-pillar-and-cog frame carved in bronze relief, alternating temple and gear-tooth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Rose Tico (colored)** → `assets/weekday/starwars/nova/colored/Rose.png`
@@ -428,7 +440,7 @@ stayed.*
 
 **Finn** → `assets/weekday/starwars/nova/primary/Finn.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange holo-light throughout, breaking free and unpolished. Center: Finn mid-stride, half in stormtrooper white and half already stripped down to a stolen jacket, a blaster held with more determination than training, a smear of another trooper's blood not yet washed from the pauldron he has not yet discarded — courage as the exact moment of walking away. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in mixed relief. Palette: ember orange, stormtrooper white, stolen-jacket brown. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, breaking free and unpolished. Center: Finn mid-stride, half in stormtrooper white and half already stripped down to a stolen jacket, a blaster held with more determination than training, a smear of another trooper's blood not yet washed from the pauldron he has not yet discarded — courage as the exact moment of walking away. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Finn (colored)** → `assets/weekday/starwars/nova/colored/Finn.png`
@@ -438,7 +450,7 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-durasteel, p
 
 **Phasma (alt)** → `assets/weekday/starwars/nova/primary/alt/Finn.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange holo-light throughout, polished and unbending. Center: Captain Phasma standing immaculate in chrome-plated command armor, a long silver cape settled still around her shoulders, one gloved hand resting on a baton rather than drawing it, her posture the same trooper's discipline as Finn's own — the same armor, the opposite choice, never once breaking rank. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in mixed relief. Palette: ember orange, chrome-plate silver, cape-grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, polished and unbending. Center: Captain Phasma standing immaculate in chrome-plated command armor, a long silver cape settled still around her shoulders, one gloved hand resting on a baton rather than drawing it, her posture the same trooper's discipline as Finn's own — the same armor, the opposite choice, never once breaking rank. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Phasma (alt, colored)** → `assets/weekday/starwars/nova/colored/alt/Finn.png`
@@ -453,7 +465,7 @@ the same seat, two very different prices.*
 
 **Maz Kanata** → `assets/weekday/starwars/nova/primary/Maz.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep violet holo-light throughout, ancient and knowing. Center: Maz Kanata perched behind her own cluttered castle bar, oversized goggled eyes fixed with a thousand years of accumulated understanding, one small wrinkled hand resting atop a shelf crowded with relics from every era, a single lightsaber's hilt half-hidden among them rather than displayed. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in mixed relief. Palette: violet, cluttered-relic bronze, goggle-amber. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, ancient and knowing. Center: Maz Kanata perched behind her own cluttered castle bar, oversized goggled eyes fixed with a thousand years of accumulated understanding, one small wrinkled hand resting atop a shelf crowded with relics from every era, a single lightsaber's hilt half-hidden among them rather than displayed. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Maz Kanata (colored)** → `assets/weekday/starwars/nova/colored/Maz.png`
@@ -463,7 +475,7 @@ Ornate circular badge, vivid full-color paint over fused bronze-and-durasteel, p
 
 **DJ (alt)** → `assets/weekday/starwars/nova/primary/alt/Maz.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep violet holo-light throughout, shifty and self-interested. Center: DJ the codebreaker lounging in a mismatched patchwork coat inside a cramped starship hold, a stolen datapad balanced on one knee already halfway sold to a second buyer, his sly half-smile pricing everyone in the room including himself. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in mixed relief. Palette: violet, patchwork-coat multicolor, datapad-blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, shifty and self-interested. Center: DJ the codebreaker lounging in a mismatched patchwork coat inside a cramped starship hold, a stolen datapad balanced on one knee already halfway sold to a second buyer, his sly half-smile pricing everyone in the room including himself. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **DJ (alt, colored)** → `assets/weekday/starwars/nova/colored/alt/Maz.png`
@@ -478,7 +490,7 @@ teaching, the same seat as her younger self, a different generosity.*
 
 **Old Leia** → `assets/weekday/starwars/nova/primary/Leia.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Rich amber-gold holo-light throughout, weathered and giving. Center: an older Leia, silver-streaked hair still bound in her own braided style, standing with one hand extended in guidance toward an unseen student, a faint Force-glow gathering at her fingertips she never let the galaxy see her use, decades of command settled into something closer to teaching. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in mixed relief. Palette: amber gold, silver-streaked hair, faint Force-glow white. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, weathered and giving. Center: an older Leia, silver-streaked hair still bound in her own braided style, standing with one hand extended in guidance toward an unseen student, a faint Force-glow gathering at her fingertips she never let the galaxy see her use, decades of command settled into something closer to teaching. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Old Leia (colored)** → `assets/weekday/starwars/nova/colored/Leia.png`
@@ -493,7 +505,7 @@ love, reaching for a son already half-lost.*
 
 **Old Han** → `assets/weekday/starwars/nova/primary/Han.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep rose-red holo-light throughout, aching and resolute. Center: an older Han Solo walking alone out onto a narrow exposed bridge, both hands open and empty rather than reaching for a blaster, his gaze fixed on a masked figure waiting at the far end — a father closing the distance to his own son knowing exactly how it might end, and choosing to close it anyway. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Venus glyph in mixed relief. Palette: rose red, bridge-industrial grey, distant-figure black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, aching and resolute. Center: an older Han Solo walking alone out onto a narrow exposed bridge, both hands open and empty rather than reaching for a blaster, his gaze fixed on a masked figure waiting at the far end — a father closing the distance to his own son knowing exactly how it might end, and choosing to close it anyway. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **Old Han (colored)** → `assets/weekday/starwars/nova/colored/Han.png`
@@ -508,7 +520,7 @@ his own chance.*
 
 **General Hux** → `assets/weekday/starwars/nova/primary/Hux.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep jade-green holo-light throughout, seething and controlled. Center: General Hux standing stiffly at attention on a First Order bridge, his own reflection faintly doubled in a viewport beside a smaller, resentful glance he cannot quite hide toward an unseen superior's empty command chair, one gloved hand curled tight at his side rather than raised in salute. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in mixed relief. Palette: jade green, First-Order grey, viewport-void black. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, seething and controlled. Center: General Hux standing stiffly at attention on a First Order bridge, his own reflection faintly doubled in a viewport beside a smaller, resentful glance he cannot quite hide toward an unseen superior's empty command chair, one gloved hand curled tight at his side rather than raised in salute. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **General Hux (colored)** → `assets/weekday/starwars/nova/colored/Hux.png`
@@ -523,7 +535,7 @@ become someone.*
 
 **Rey** → `assets/weekday/starwars/nova/primary/Rey.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Radiant white-gold holo-light throughout, the brightest window of the set. Center: Rey standing tall with a golden-hilted lightsaber held upright, twin suns of a desert horizon glowing behind her in unmistakable echo, her plain scavenger's wraps still visible beneath a hard-won composure — pride earned rather than inherited, a name chosen rather than given. Border: fused bronze-pillar-and-cog frame, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Sun glyph in bright mixed relief. Palette: radiant white-gold, desert-horizon amber, scavenger-wrap tan. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the set. Center: Rey standing tall with a golden-hilted lightsaber held upright, twin suns of a desert horizon glowing behind her in unmistakable echo, her plain scavenger's wraps still visible beneath a hard-won composure — pride earned rather than inherited, a name chosen rather than given. Border: fused temple-pillar-and-cog frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **Rey (colored)** → `assets/weekday/starwars/nova/colored/Rey.png`
@@ -538,7 +550,7 @@ silhouette as Rey's own seat, deliberately.*
 
 **Kylo Ren** → `assets/weekday/starwars/nova/primary/Kylo.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Near-black holo-light with a thin cold-silver edge, the darkest window of the set — the SAME upright standing silhouette as Rey's own seat, deliberately, down to the raised blade. Center: Kylo Ren standing in the identical composition, his unstable crossguard lightsaber crackling and spitting rather than a clean blade, a fine crack visible across a chrome-black helm held in his other hand rather than worn — the same posture, the same conviction, aimed at the opposite pole of the same bond. Border: fused bronze-pillar-and-cog frame, broken by four roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, one crackling red-blade accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the set — the SAME upright standing silhouette as Rey's own seat, deliberately, down to the raised blade. Center: Kylo Ren standing in the identical composition, his unstable crossguard lightsaber crackling and spitting rather than a clean blade, a fine crack visible across a chrome-black helm held in his other hand rather than worn — the same posture, the same conviction, aimed at the opposite pole of the same bond. Border: fused temple-pillar-and-cog frame carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **Kylo Ren (colored)** → `assets/weekday/starwars/nova/colored/Kylo.png`
@@ -554,7 +566,7 @@ precedent (`core/continents.md`), not a person.*
 
 **The Ghosts** → `assets/weekday/starwars/nova/primary/Ghosts.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep star-scattered midnight-blue holo-light shading into pale spectral-blue at the rim, a light belonging to no living world. Center: a loose ring of translucent Force-spirit silhouettes standing shoulder to shoulder against a field of stars, an older Luke Skywalker's own outline unmistakable among the others though none is rendered in identifying detail, all facing inward toward an empty point at the disc's own center as if reaching gently toward it. Border: fused bronze-pillar-and-cog frame, its links breaking open at the top into pure starlight, no roundel glyph — the Ghosts answer to no single day. Palette: midnight blue, spectral pale-blue, starlight white. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief shading toward bare bright metal at the rim, a light belonging to no living world. Center: a loose ring of translucent Force-spirit silhouettes standing shoulder to shoulder against a field of stars, an older Luke Skywalker's own outline unmistakable among the others though none is rendered in identifying detail, all facing inward toward an empty point at the disc's own center as if reaching gently toward it. Border: fused temple-pillar-and-cog frame carved in bronze relief, its links breaking open at the top into bare bright metal, no roundel glyph — the Ghosts answer to no single day. NO lettering anywhere.
 ```
 
 **The Ghosts (colored)** → `assets/weekday/starwars/nova/colored/Ghosts.png`
@@ -564,7 +576,7 @@ Ornate circular badge, vivid full-color paint over pale fading bronze, photoreal
 
 **Exegol (alt)** → `assets/weekday/starwars/nova/primary/alt/Ghosts.png`
 ```
-ROUND holo-crest medallion, fused bronze-and-cog frame, photorealistic render, isolated background, the circular shape IS the frame. Deep blood-red holo-light shading into starless black at the rim, a light belonging to a world no chart admits exists. Center: Exegol's own hidden chasm seen from above, a dying red sun glowing dim through a permanent cloud cover, a vast fleet of Star Destroyers rising in silent ranks from cracks in the planet's own crust like a buried army finally waking, every hull identical, none of them named. Border: fused bronze-pillar-and-cog frame, its links breaking apart at the top into jagged starless cracks, no roundel glyph — Exegol answers to no single day. Palette: blood red, starless black, rising-fleet grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened toward a near-black patina at the rim, a light belonging to a world no chart admits exists. Center: Exegol's own hidden chasm seen from above, a dying red sun glowing dim through a permanent cloud cover, a vast fleet of Star Destroyers rising in silent ranks from cracks in the planet's own crust like a buried army finally waking, every hull identical, none of them named. Border: fused temple-pillar-and-cog frame carved in bronze relief, its links breaking apart at the top into a near-black oxidized patina, no roundel glyph — Exegol answers to no single day. NO lettering anywhere.
 ```
 
 **Exegol (alt, colored)** → `assets/weekday/starwars/nova/colored/alt/Ghosts.png`
@@ -604,6 +616,17 @@ briefs in this file.
 
 ## Status
 
+- **PRIMARY BRIEFS CORRECTED 2026-07-22:** the first generation pass
+  across the gaming + corporation wave produced near-duplicate
+  primary/colored pairs — a color palette had leaked into the
+  primary-register briefs, contradicting the project's monochrome
+  aged-bronze-relief law (`greek_prompts.md`). Every primary brief in
+  this sheet has been rewritten to the aged-bronze convention;
+  composition/scene/pose text is untouched. The COLORED outputs
+  already generated are VALID, no regeneration needed. Any PRIMARY
+  output generated before this fix (confirmed at least for WoW
+  Alliance: Anduin, Khadgar, Muradin) must be REGENERATED from the
+  corrected briefs above.
 - New sheet (R10 GAMING + CORPORATION SHEET WAVE, owner-sealed
   addendum mid-round, 2026-07-22). Theme not yet registered in
   `config/defaults.py` — that wiring, AND the `rotating_art_file`/

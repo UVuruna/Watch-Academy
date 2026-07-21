@@ -9,20 +9,26 @@ person** — the owner's own instruction, carried into every single
 prompt below as an explicit, non-negotiable render constraint (see
 House rules).
 
-**Register — brushed-steel-and-glass corporate seal, its own family:**
-every plate is a ROUND medallion, an engraved relief seal like a
-lobby's own lanyard-badge or building plaque — brushed steel and cool
-glass, never the carved stone the game-fiction sheets wear, never the
-painted enamel the myth sheets wear. Every plate carries a `primary/`
-engraved-relief version and a `colored/` full-color version — the same
-two-register convention every other weekday theme ships, though here
-the "colored" register stays closer to a clean annual-report render
-than a painterly enamel (steel and gold accents, not tinted glass) —
-consistent with the corporate material itself. The border is a thin
-brushed-steel ring engraved with a continuous, subtle ORG-CHART
-line-and-node motif running the full circumference, broken by four
-small roundels bearing the day's own ruling-planet glyph, same house
-convention every weekday sheet's roundels use.
+**Register — TWO deliberately different objects, the project-wide
+law (corrected 2026-07-22):** `primary` is a MONOCHROME AGED-BRONZE
+CARVED RELIEF — a sculpture in ONE metal (warm bronze patina, darker
+recesses, polished highlights; no other colors, no enamel, no
+steel-and-glass paint), every emblem carved as relief in the same
+bronze — this is the recolor master the metal-shade pipeline strikes
+gold/silver from, the same law `greek_prompts.md`'s planetary bronze
+plates set. `colored` is the vivid full-color paint version — a clean
+annual-report render (steel and gold accents, not tinted glass, a look
+consistent with the corporate material itself), a fresh full-color
+repaint, never a recolor of the bronze art. The two MUST read as
+different objects — a sculpture, not a painting — never
+near-duplicates of each other. Every plate carries a `primary/`
+aged-bronze-relief version and a `colored/` full-color version — the
+same two-register convention every other weekday theme ships. The
+border is a thin bronze ring carved with a continuous, subtle
+ORG-CHART line-and-node motif running the full circumference, broken
+by four small roundels bearing the day's own ruling-planet glyph —
+the per-figure IDENTITY survives entirely through this carved motif
+and the scene itself, never through paint.
 
 **Derivation check (Rule #19):** every plate is an irreducible scene —
 a different role, a different composition (a listening posture, a
@@ -69,7 +75,7 @@ walked through the door.*
 
 **CHRO** → `assets/weekday/corporate/primary/CHRO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Deep dusk-blue glass throughout, calm and reassuring. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in a soft-tailored blazer, no likeness of any real person — seated across a low table from an unseen employee, both hands open in a listening posture, a small tissue box and an open notepad the only objects between them. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Moon crescent glyph in engraved-steel relief. Palette: dusk blue, brushed steel, warm listening-light amber. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, calm and reassuring. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in a soft-tailored blazer, no likeness of any real person — seated across a low table from an unseen employee, both hands open in a listening posture, a small tissue box and an open notepad the only objects between them. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
 **CHRO (colored)** → `assets/weekday/corporate/colored/CHRO.png`
@@ -86,7 +92,7 @@ a good day and scorches on a bad one.*
 
 **COO** → `assets/weekday/corporate/primary/COO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Ember-orange glass throughout, driven and decisive. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in rolled shirtsleeves, no likeness of any real person — standing before a glowing wall of live operations metrics, one hand jabbed toward a red-flagged chart demanding it be fixed now. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Mars glyph in engraved-steel relief. Palette: ember orange, brushed steel, metrics-screen blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, driven and decisive. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in rolled shirtsleeves, no likeness of any real person — standing before a glowing wall of live operations metrics, one hand jabbed toward a red-flagged chart demanding it be fixed now. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
 **COO (colored)** → `assets/weekday/corporate/colored/COO.png`
@@ -103,7 +109,7 @@ description.*
 
 **CFO** → `assets/weekday/corporate/primary/CFO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Deep violet glass throughout, precise and covetous. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an immaculate dark suit, no likeness of any real person — seated behind a glass desk stacked with two mirrored ledgers, one column glowing generous green, the other locked tight and hoarding gold, both hands resting equally on each. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Mercury glyph in engraved-steel relief. Palette: deep violet, brushed steel, ledger gold. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, precise and covetous. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an immaculate dark suit, no likeness of any real person — seated behind a glass desk stacked with two mirrored ledgers, one column glowing generous green, the other locked tight and hoarding gold, both hands resting equally on each. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
 **CFO (colored)** → `assets/weekday/corporate/colored/CFO.png`
@@ -120,7 +126,7 @@ of message sold at excess volume.*
 
 **CMO** → `assets/weekday/corporate/primary/CMO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Rich amber-gold glass throughout, radiant and evangelizing. Center: a FACELESS stylized executive figure — a smooth featureless silhouette robed in a sharp blazer cut like a preacher's own vestment, no likeness of any real person — standing at a lit podium before a rising congregation of small silhouetted figures, both arms raised as if delivering a sermon, a glowing brand-logo halo suspended above the podium in place of any religious icon. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Jupiter glyph in engraved-steel relief. Palette: amber gold, brushed steel, congregation-silhouette grey. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, radiant and evangelizing. Center: a FACELESS stylized executive figure — a smooth featureless silhouette robed in a sharp blazer cut like a preacher's own vestment, no likeness of any real person — standing at a lit podium before a rising congregation of small silhouetted figures, both arms raised as if delivering a sermon, a glowing brand-logo halo suspended above the podium in place of any religious icon. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
 **CMO (colored)** → `assets/weekday/corporate/colored/CMO.png`
@@ -136,7 +142,7 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 
 **CDO** → `assets/weekday/corporate/primary/CDO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Deep rose-red glass throughout, passionate and possessive. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an artfully asymmetric jacket, no likeness of any real person — standing before a wall of pinned mood-boards and color swatches, one hand protectively shielding a single sketch from an unseen critic's reach. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Venus glyph in engraved-steel relief. Palette: rose red, brushed steel, mood-board pastel. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, passionate and possessive. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an artfully asymmetric jacket, no likeness of any real person — standing before a wall of pinned mood-boards and color swatches, one hand protectively shielding a single sketch from an unseen critic's reach. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
 **CDO (colored)** → `assets/weekday/corporate/colored/CDO.png`
@@ -153,7 +159,7 @@ a decade invisible to anyone who only sees the finished product.*
 
 **CTO** → `assets/weekday/corporate/primary/CTO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Deep jade-green glass throughout, patient and rooted. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in rolled-up shirtsleeves, no likeness of any real person — kneeling before a great glowing root-and-server structure half server-rack, half tree-root, planting one more glowing node with quiet unhurried care. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Saturn glyph in engraved-steel relief. Palette: jade green, brushed steel, server-node blue-white. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and rooted. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in rolled-up shirtsleeves, no likeness of any real person — kneeling before a great glowing root-and-server structure half server-rack, half tree-root, planting one more glowing node with quiet unhurried care. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
 **CTO (colored)** → `assets/weekday/corporate/colored/CTO.png`
@@ -170,7 +176,7 @@ needs to be shown, only sat in.*
 
 **CEO** → `assets/weekday/corporate/primary/CEO.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Radiant white-gold glass throughout, the brightest window of the set. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an impeccable dark suit, no likeness of any real person — seated at the head of a long glass boardroom table, both hands folded with quiet authority, a company crest etched faintly into the glass tabletop beneath the folded hands like a throne's own seal. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Sun glyph in bright engraved-gold relief. Palette: radiant white-gold, brushed steel, glass-table blue. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the set. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an impeccable dark suit, no likeness of any real person — seated at the head of a long glass boardroom table, both hands folded with quiet authority, a company crest etched faintly into the glass tabletop beneath the folded hands like a throne's own seal. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
 **CEO (colored)** → `assets/weekday/corporate/colored/CEO.png`
@@ -187,7 +193,7 @@ The SAME seated silhouette as the Throne's own seat, deliberately.*
 
 **Chairman of the Board** → `assets/weekday/corporate/primary/Chairman.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Near-black glass with a thin cold-silver edge, the darkest window of the set — the SAME seated silhouette as the Throne's own seat, deliberately, an authority that watches rather than presides. Center: a FACELESS stylized executive figure seated in the identical composition at the FAR end of a long dim boardroom table rather than its head, no likeness of any real person, a single reading lamp pooling light only on a stack of quarterly reports before them — the power that watches over the throne, rules while the CEO sleeps. Border: a thin brushed-steel ring, broken by four small roundels bearing the Sun glyph in dull ember-silver relief — the same glyph the Throne wears, the shadow face of the same crown. Palette: near-black, cold silver, one warm lamp-light accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the set — the SAME seated silhouette as the Throne's own seat, deliberately, an authority that watches rather than presides. Center: a FACELESS stylized executive figure seated in the identical composition at the FAR end of a long dim boardroom table rather than its head, no likeness of any real person, a single reading lamp pooling light only on a stack of quarterly reports before them — the power that watches over the throne, rules while the CEO sleeps. Border: a thin bronze ring, its patina darkened to match, broken by four small roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
 **Chairman of the Board (colored)** → `assets/weekday/corporate/colored/Chairman.png`
@@ -204,7 +210,7 @@ company has. The Excluded kind (CANON.md "The Ninth").*
 
 **The Founder** → `assets/weekday/corporate/primary/Founder.png`
 ```
-ROUND medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, isolated background, the circular shape IS the frame. Deep sepia-toned glass shading to unplaced fog at the rim, a light belonging to the company's own memory rather than its present. Center: a FACELESS stylized figure in simple rolled-up work clothes rather than any suit, no likeness of any real person, standing in a bare early garage-office lit by one bare bulb, sketching a first logo on a torn scrap of paper. Border: a thin brushed-steel ring, its own line-and-node motif thinning out and fading at the top where the glass turns to unplaced fog, no roundel glyph — the Founder answers to no single day. Palette: sepia, unplaced fog, one bare-bulb warm accent. NO lettering anywhere.
+ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a look belonging to the company's own memory rather than its present. Center: a FACELESS stylized figure in simple rolled-up work clothes rather than any suit, no likeness of any real person, standing in a bare early garage-office lit by one bare bulb, sketching a first logo on a torn scrap of paper. Border: a thin bronze ring, its own line-and-node motif thinning out and fading at the top where the bronze turns to bare metal, no roundel glyph — the Founder answers to no single day. NO lettering anywhere.
 ```
 
 **The Founder (colored)** → `assets/weekday/corporate/colored/Founder.png`
@@ -235,6 +241,17 @@ duplicate the brief in this file.
 
 ## Status
 
+- **PRIMARY BRIEFS CORRECTED 2026-07-22:** the first generation pass
+  across the gaming + corporation wave produced near-duplicate
+  primary/colored pairs — a color palette had leaked into the
+  primary-register briefs, contradicting the project's monochrome
+  aged-bronze-relief law (`greek_prompts.md`). Every primary brief in
+  this sheet has been rewritten to the aged-bronze convention;
+  composition/scene/pose text is untouched. The COLORED outputs
+  already generated are VALID, no regeneration needed. Any PRIMARY
+  output generated before this fix (confirmed at least for WoW
+  Alliance: Anduin, Khadgar, Muradin) must be REGENERATED from the
+  corrected briefs below.
 - New sheet (R10 GAMING + CORPORATION SHEET WAVE, owner-sealed roster
   2026-07-22). Theme not yet registered in `config/defaults.py` — that
   wiring is a FUTURE app-code round, out of this sheet-writing round's
