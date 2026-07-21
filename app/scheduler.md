@@ -1,4 +1,4 @@
-# Minute Scheduler
+﻿# Minute Scheduler
 
 **Script:** [Minute Scheduler (script)](scheduler.py)
 
@@ -14,7 +14,7 @@ late fire after sleep/resume self-corrects on the next tick.
   `CLOCK_JUMP_THRESHOLD_S`
 
 ### Used by
-- [App Controller](controller.md)
+- [Watch Controller](controller.md)
 
 ## Classes
 

@@ -1,4 +1,4 @@
-# Legend Popup
+﻿# Legend Popup
 
 **Script:** [Legend Popup (script)](legend_popup.py)
 
@@ -18,7 +18,7 @@ the article.
 
 ### Used by
 - [Clock Widget](widget.md) — mouse-move/leave hover driving
-- [App Controller](controller.md) — owns the instance; the click-through
+- [Watch Controller](controller.md) — owns the instance; the click-through
   cursor poller drives it the same way
 
 ## Classes

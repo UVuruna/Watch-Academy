@@ -4,11 +4,66 @@ tolerance (hand-edited files), diameter validation."""
 import pytest
 
 from app.settings_store import Settings, SettingsCorruptError, SettingsStore, replace
+from config import paths
 
 
 @pytest.fixture
 def store(tmp_path):
     return SettingsStore(tmp_path / "settings.json")
+
+
+# --- multi-watch settings file scheme (ADD WATCH round, owner INSTRUCTION.txt
+# item 2, sealed 2026-07-21) --------------------------------------------------
+
+
+def test_settings_path_scheme_for_multiple_watches(tmp_path, monkeypatch):
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    # Watch 1 keeps the pre-multi-watch filename — existing installs'
+    # settings.json is picked up untouched, with no index argument at all.
+    assert paths.settings_path() == paths.settings_path(1)
+    assert paths.settings_path(1).name == "settings.json"
+    assert paths.settings_path(2).name == "settings.2.json"
+    assert paths.settings_path(7).name == "settings.7.json"
+    # Every watch's file lives in the SAME per-user directory.
+    assert paths.settings_path(1).parent == paths.settings_path(2).parent
+
+
+def test_multi_watch_settings_round_trip_independently(tmp_path, monkeypatch):
+    """Each watch's own settings file is a fully independent
+    SettingsStore — writing watch 2's file must never touch watch 1's."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    store1 = SettingsStore(paths.settings_path(1))
+    store2 = SettingsStore(paths.settings_path(2))
+    store1.save(replace(Settings(), city_name="Belgrade", diameter=360))
+    store2.save(replace(Settings(), city_name="Tromso", diameter=480))
+    assert store1.load().city_name == "Belgrade"
+    assert store1.load().diameter == 360
+    assert store2.load().city_name == "Tromso"
+    assert store2.load().diameter == 480
+
+
+def test_discover_watch_indices_finds_every_numbered_file(tmp_path, monkeypatch):
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    paths.user_dir().mkdir(parents=True)
+    SettingsStore(paths.settings_path(1)).save(Settings())
+    SettingsStore(paths.settings_path(3)).save(Settings())
+    assert paths.discover_watch_indices() == [1, 3]
+
+
+def test_discover_watch_indices_ignores_temp_and_backup_files(tmp_path, monkeypatch):
+    """A quarantined `.bak` and an in-flight atomic-write `.tmp` must
+    never be mistaken for a real watch."""
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    paths.user_dir().mkdir(parents=True)
+    SettingsStore(paths.settings_path(1)).save(Settings())
+    (paths.user_dir() / "settings.json.bak").write_text("{}", encoding="utf-8")
+    (paths.user_dir() / "settings.2.json.tmp").write_text("{}", encoding="utf-8")
+    assert paths.discover_watch_indices() == [1]
+
+
+def test_discover_watch_indices_empty_dir_yields_just_the_anchor(tmp_path, monkeypatch):
+    monkeypatch.setenv("APPDATA", str(tmp_path))
+    assert paths.discover_watch_indices() == [1]
 
 
 def test_missing_file_yields_defaults(store):

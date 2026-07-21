@@ -1,4 +1,4 @@
-# Translations
+﻿# Translations
 
 **Script:** [Translations (script)](translations.py)
 
@@ -28,7 +28,7 @@ the target is `sr-Latn` and no bundle covers an entry.
 - [Symbolism Repository](symbolism.md) — the corpus source
 
 ### Used by
-- [App Controller](../app/controller.md) — background translation on
+- [Watch Controller](../app/controller.md) — background translation on
   language change; the overlay feeds the repository and the Guide
 
 ## Functions

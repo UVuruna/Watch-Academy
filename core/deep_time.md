@@ -1,4 +1,4 @@
-# Deep Time
+﻿# Deep Time
 
 **Script:** [Deep Time (script)](deep_time.py)
 
@@ -119,7 +119,7 @@ including "olympiad", which needs only the year).
 ### Used by
 - [Moon](moon.md) — `julian_day` + `delta_t_seconds` for the analytic
   illumination
-- [App Controller](../app/controller.md) — proxy canonicalization for
+- [Watch Controller](../app/controller.md) — proxy canonicalization for
   deep travel, quick-jump unit arithmetic
 - [Time Travel](../app/time_travel.md) — era combos, the dual-year
   header, coverage/tier lines

@@ -1,4 +1,4 @@
-# Moon Phases
+﻿# Moon Phases
 
 **Script:** [Moon Phases (script)](moon_phases.py)
 
@@ -17,7 +17,7 @@ years) from `moonPhases_utc.json`, once per year.
 - `_io.load_json_checked`
 
 ### Used by
-- [App Controller](../app/controller.md) (M3),
+- [Watch Controller](../app/controller.md) (M3),
   [Core (folder)](../core/___core.md) CLI,
   [Tests (folder)](../tests/___tests.md)
 

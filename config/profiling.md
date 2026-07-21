@@ -1,4 +1,4 @@
-# Profiling
+﻿# Profiling
 
 **Script:** [Profiling (script)](profiling.py)
 
@@ -23,7 +23,7 @@ instead).
 - [Config (folder)](___config.md) — the store path beside settings.json
 
 ### Used by
-- [App Controller](../app/controller.md) — tick/skin instrumentation,
+- [Watch Controller](../app/controller.md) — tick/skin instrumentation,
   the minute flush, quit flush
 - [Compositor](../render/compositor.md) — paint, composite rebuild,
   hit test and hover instrumentation

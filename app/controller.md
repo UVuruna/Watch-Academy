@@ -1,13 +1,25 @@
-# App Controller
+# Watch Controller
 
-**Script:** [App Controller (script)](controller.py)
+**Script:** [Watch Controller (script)](controller.py)
 
 ## Purpose
-Composition root — the only object that knows everyone. Owns the settings
-store, the clock widget, the tray, the shared menu, the data repositories,
-the compositor and the minute scheduler. Tick flow: read the wall clock
-fresh → rebuild the day context when `(local date, UTC offset)` changed
-(or after a clock jump) → build the tick state → repaint.
+Composition root for ONE WATCH — the only object that knows everyone ELSE
+inside it. Owns the settings store, the clock widget, the tray, the shared
+menu, the data repositories, the compositor and the minute scheduler. Tick
+flow: read the wall clock fresh → rebuild the day context when `(local
+date, UTC offset)` changed (or after a clock jump) → build the tick state
+→ repaint.
+
+**ADD WATCH round (owner INSTRUCTION.txt item 2, sealed 2026-07-21):** a
+process can hold SEVERAL `WatchController` instances, one per watch, each
+fully self-contained (its own settings file, widget, tray icon, menu,
+skin, compositor, scheduler, dialogs). [Watch Manager](watch_manager.md)
+(`app/watch_manager.py`) is the thin process-wide owner that builds and
+tears down the roster; a `WatchController` reaches it only through the
+constructor callbacks below — it still knows nothing about its siblings.
+See [Watch Manager](watch_manager.md) for the roster-level mechanics
+(seeding, settings-file numbering, title refresh) and this doc's own
+"ADD WATCH additions" section below for what changed INSIDE one watch.
 
 ## Connections
 
@@ -15,9 +27,14 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 - [Clock Widget](widget.md) — creates and positions the window; fires
   `shortcut_triggered` (R5 MENU REWORK) for `_on_shortcut`
 - [Tray Controller](tray.md) — shows the tray icon; `set_tooltip` carries
-  the full `watch_title`
-- [Settings Store](settings_store.md) — load/recover/save
-- [Minute Scheduler](scheduler.md) — tick source
+  the full `watch_title`; `logo_icon(watch_index)` picks this watch's own
+  golden/rose-gold/wheel-tinted identity (ADD WATCH round)
+- [Settings Store](settings_store.md) — load/recover/save, from THIS
+  watch's own `settings_path` (`config.paths.settings_path(watch_index)`
+  by default)
+- [Minute Scheduler](scheduler.md) — tick source, one per watch (kept
+  per-watch rather than shared — see [Watch Manager](watch_manager.md)'s
+  `quit_all` docstring for the reasoning)
 - [Clock State](../core/clock_state.md) — day/tick builds
 - [Seasons](../data/seasons.md), [Moon Phases](../data/moon_phases.md) — anchors and windows
 - [Compositor](../render/compositor.md), [Assets](../render/assets.md) — rendering
@@ -29,11 +46,31 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
   SHORTCUTS) and paths
 
 ### Used by
-- `main.py`
+- [Watch Manager](watch_manager.md) (`app/watch_manager.py`) — builds and
+  tears down the roster; `main.py` itself now goes through the manager,
+  never this class directly
 
 ## Classes
 
-### AppController
+### WatchController
+
+#### Constructor (ADD WATCH round)
+`__init__(app, watch_index=1, settings_path=None, watch_count=lambda: 1,
+on_add_watch=lambda: None, on_remove_watch=lambda watch: None,
+on_exit=None)` — every new parameter DEFAULTS to reproducing the
+pre-ADD-WATCH single-watch behavior exactly (watch 1, its own
+`settings.json`, a title that never goes full, Add Watch a no-op, Exit
+quits just this instance), so a bare `WatchController(app)` still
+constructs and behaves precisely as before the round — every test in
+this suite predating it needed no changes beyond the class rename.
+[Watch Manager](watch_manager.md) supplies real callbacks for all six.
+
+#### Properties (ADD WATCH round)
+- `watch_index`: this watch's own 1-based slot number — fixed for its
+  whole lifetime, drives its tray color/settings-file name and whether
+  it is the un-removable anchor (1)
+- `settings_path`: this watch's own settings file (`self._store.path`)
+  — the manager deletes it on Remove Watch
 
 #### Methods
 - `run()`: delivers the first tick BEFORE `show()` (the compositor must
@@ -107,9 +144,26 @@ pattern) rather than guessed:
 - `_on_tick(clock_jumped)`: day-context rebuild on cache-key change or
   clock jump; unreadable/out-of-coverage astronomical data dies VISIBLY
   (dialog, then exit) — never a silently wrong dial
-- `quit()`: disarms the watchdog, saves the final position (a save failure
-  shows a blocking stay-on-top dialog), hides tray, quits — the app always
-  exits even when the save fails
+- `quit()`: `_prepare_quit()` then `app.quit()` — standalone Exit (no
+  manager attached; every test predating ADD WATCH, and the default
+  `on_exit` a bare `WatchController` falls back to)
+- `_prepare_quit()` (ADD WATCH round, split out of the old `quit()`):
+  disarms the watchdog, saves the final position (a save failure shows a
+  blocking stay-on-top dialog), flushes profiling — everything Exit needs
+  from THIS watch except the final shared `app.quit()`, so
+  [Watch Manager](watch_manager.md)`.quit_all()` can run it for every
+  watch before quitting the process exactly once
+- `_teardown_windows()` (ADD WATCH round): closes every open dialog, stops
+  the scheduler and the debounced save timer, hides the tray — the shared
+  first half of `_prepare_quit()` (Exit: also saves) and `discard()`
+  (Remove Watch: never saves, the file is about to be deleted)
+- `discard()` (ADD WATCH round): Remove Watch's own teardown —
+  `_teardown_windows()` without a save, called by the manager right
+  before it deletes this watch's settings file
+- `refresh_title()` (ADD WATCH round): public hook for the manager —
+  re-renders the TITLE row and tray tooltip after the roster changes
+  (`watch_count()` just moved for every SURVIVING watch, not only the one
+  that was added/removed)
 - `_load_settings_or_recover()`: corrupt settings → visible dialog offering
   reset-with-backup or abort; unreadable file (locked/permissions) →
   visible dialog offering session defaults (file untouched) or abort —
@@ -126,9 +180,20 @@ pattern) rather than guessed:
   stack one over another in a screen corner" complaint,
   `UV/DESIGN/Meni One over Another.png`):** the menu is FLAT now.
   Top-to-bottom: the TITLE row (a `QWidgetAction`-hosted `QLabel`,
-  `watch_title(settings, full=False)` — a single watch shows just its
-  location; the FULL multi-attribute name backs the tray hover tooltip
-  via `_refresh_watch_title`, called from `_install_skin`); 👁️ Show
+  `watch_title(settings, full=self._watch_count() >= 2)` — a single
+  watch shows just its location; 2+ watches (ADD WATCH round) switch it
+  to the FULL multi-attribute form too, matching the tray hover tooltip,
+  which stays full always; both refresh via `_refresh_watch_title` /
+  the public `refresh_title()`, called from `_install_skin` and by the
+  manager after the roster changes); ➕ Add Watch (ADD WATCH round, owner
+  INSTRUCTION.txt item 2 — "na vrhu... ispod TITLE info", on EVERY
+  watch, `self._on_add_watch()` — a no-op default for standalone/test
+  use, reassigned by [Watch Manager](watch_manager.md) right after
+  construction) and, on watches 2+ only, ➖ Remove this Watch
+  (`_confirm_remove_watch()` — one Yes/No box, then the manager's
+  `remove_watch(self)`; watch 1 is the anchor and never builds this
+  action at all — no gating needed, the entry simply does not exist for
+  it); 👁️ Show
   (owner 2026-07-18, ROADMAP 15h, Session 21-C — visible only in
   `z_mode == "normal"`, TRAY-ONLY per Session 21-D, see below); 🎨
   Design…, ✨ Pointer Theme…, 🥇 Slot Theme… — ONE flat entry each,
@@ -142,7 +207,11 @@ pattern) rather than guessed:
   mechanic beyond the rename); 📜 Legend, 🔆 Solar rotation, 🎭
   Archetype, 🖱️ Click-through; ⚙️ Settings…, 🏛️ Encyclopedia…, 🔭
   Observatory…, 📖 Guide…, 🕰️ Time Travel… (now GROWN DOWN with its
-  own Quick Jump rows — see below); 📊 Report (hidden), 🚪 Exit. The
+  own Quick Jump rows — see below); 📊 Report (hidden), 🚪 Exit — wired
+  to `self._on_exit` (ADD WATCH round: defaults to this watch's own
+  `quit()` standalone; the manager passes its OWN `quit_all()` instead,
+  so Exit on ANY watch closes the WHOLE process — Remove Watch above is
+  the one-watch-only teardown, Exit is deliberately process-wide). The
   QUICK JUMP submenu (the OTHER half of the "4-5 levels" complaint) is
   GONE — absorbed into the Time Travel dialog itself (item 3A).
   **TRAY-ONLY Show (owner correction, Session 21-D — "ako smo kliknuli
@@ -158,14 +227,17 @@ pattern) rather than guessed:
   after; the tray's popup never runs this code, so it always sees the
   `_refresh_menu_gating`-controlled state undisturbed.
 - `watch_title(settings, full=False)` (module-level, R5 MENU REWORK
-  item 2A): the watch's own display NAME — `full=False` (the menu
-  TITLE row) is just `settings.city_name`; `full=True` (the tray hover
-  tooltip, `_refresh_watch_title`) is
+  item 2A): the watch's own display NAME — `full=False` is just
+  `settings.city_name`; `full=True` is
   f"{location}-{ring_finish} {ring}-{palette label} {pointer}", e.g.
   "Belgrade-Gold DOMY-Family Trinity" — UNTRANSLATED on purpose (a
   NAME, not chrome, the same treatment `POINTER_DISPLAY_NAMES` and a
-  ring preset's own name already get). Kept as ONE function so ADD
-  WATCH (the next round, multi-watch names) only has to loop it.
+  ring preset's own name already get). The CALLER decides `full`: the
+  tray hover tooltip always passes `True`; the menu TITLE row passes
+  `self._watch_count() >= 2` (ADD WATCH round — a single watch keeps
+  the short form, 2+ switch it to full too, owner: "Title ne treba pun
+  naziv ako nema potrebe"). Kept as ONE function so that round only had
+  to loop it, never reinvent it.
 - `_on_shortcut(action_id)` (R5 MENU REWORK item 2, `defaults.
   SHORTCUTS`): dispatches one keyboard shortcut, fired by the focused
   [Clock Widget](widget.md)'s `keyPressEvent` →

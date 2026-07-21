@@ -1,4 +1,4 @@
-# Ring Presets
+﻿# Ring Presets
 
 **Script:** [Ring Presets (script)](rings.py)
 
@@ -130,7 +130,7 @@ build_skin`:
 - Shared JSON loading ([Data (folder)](___data.md))
 
 ### Used by
-- [App Controller](../app/controller.md) — `build_skin` resolves the
+- [Watch Controller](../app/controller.md) — `build_skin` resolves the
   active preset (and, TASK 3, its own metal-split choice via
   `_ring_two_metals`/`constants.RING_TWO_METALS_DEFAULT`); the Design ▸
   Ring menu lists every loaded name and carries the per-preset "Two

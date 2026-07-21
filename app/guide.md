@@ -1,4 +1,4 @@
-# Guide
+﻿# Guide
 
 **Script:** [Guide (script)](guide.py)
 
@@ -17,7 +17,7 @@ over slides the owner prepares. Slides live in `assets/guide/` as
 - [Theme](theme.md) — the dark dialog surface
 
 ### Used by
-- [App Controller](controller.md) — `_open_guide()` opens (or raises)
+- [Watch Controller](controller.md) — `_open_guide()` opens (or raises)
   the ONE live instance
 
 ## Classes

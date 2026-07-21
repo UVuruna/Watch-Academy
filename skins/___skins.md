@@ -1,10 +1,10 @@
-# skins/
+﻿# skins/
 
 The typed RENDER CONFIGURATION — Qt-free so it is pytest-testable. All
 rendering is driven by one `SkinDefinition` instance: `DEFAULT_SKIN` in
 [Config (folder)](../config/___config.md), onto which the controller
 overlays the chosen RING PRESET and the user's display choices at build
-time (`build_skin` in [App Controller](../app/controller.md)).
+time (`build_skin` in [Watch Controller](../app/controller.md)).
 
 **DOMY and MORPH are ring preset names — nothing more** (owner
 decision): a ring face in `assets/ring/` plus its Greek-ordinal letter
@@ -44,4 +44,4 @@ pointer, the trio included, centers its Aura wedges on the arm tips
 ### Used by
 - [Config (folder)](../config/___config.md) — `DEFAULT_SKIN` + `RING_PRESETS`
 - [Render (folder)](../render/___render.md) — layers read the specs
-- [App Controller](../app/controller.md) — `build_skin` + display overlays
+- [Watch Controller](../app/controller.md) — `build_skin` + display overlays

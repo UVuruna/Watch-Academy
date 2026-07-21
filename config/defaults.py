@@ -233,6 +233,22 @@ LOGO_SETUP_ASSET = paths.assets_dir() / "logo-setup.svg"
 # the documented EXE-icon ladder (root CLAUDE.md Build Pipeline).
 WINDOW_ICON_SIZES_PX = (16, 24, 32, 48, 64, 128, 256)
 
+# TRAY ICON COLOR WHEEL (ADD WATCH round, owner INSTRUCTION.txt item 2B,
+# sealed 2026-07-21): watch 1 keeps the gold master untouched, watch 2
+# wears the pre-existing rose-gold master (LOGO_SETUP_ASSET, a second
+# master — not a recolor); watch 3+ tint the GOLD master (the same
+# tritone recipe `render.assets.tinted_pixmap` already uses for ring/
+# hand recolors, Rule #5) cycling this wheel forever. The 12 hues are
+# the CALENDAR pointer's own MONTH wheel (`UV/Color Wheels.png`,
+# January..December) read starting at January — the owner's own worked
+# example, PURPLE #8000FF (R:G:B 1:0:2) then BLUE #0000FF (R:G:B 0:0:1),
+# identifies the wheel and the starting point at once (Rule #19 —
+# computed from the one wheel already in the codebase, no new palette).
+TRAY_COLOR_WHEEL = (
+    "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80", "#00FF00",
+    "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080", "#FF00FF",
+)
+
 # --- UI icon chrome (TASK 4, MASON/ICONS round, owner icon list
 # 2026-07-19 approvals) -------------------------------------------------
 # Reusable UI GLYPHS — menu rows, hover badges — copied from the owner's

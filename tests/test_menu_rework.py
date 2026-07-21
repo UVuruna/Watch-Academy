@@ -19,7 +19,7 @@ from PySide6.QtCore import QEvent, Qt
 from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QApplication
 
-from app.controller import AppController, watch_title
+from app.controller import WatchController, watch_title
 from app.design_window import DesignDialog
 from app.pointer_theme import PointerThemeDialog
 from app.slot_theme import SlotThemeDialog
@@ -36,7 +36,7 @@ def app():
 @pytest.fixture
 def controller(app, tmp_path, monkeypatch):
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    made = AppController(app)
+    made = WatchController(app)
     yield made
     for dialog in (
         made._encyclopedia, made._observatory, made._guide,

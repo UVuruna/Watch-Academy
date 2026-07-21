@@ -1,4 +1,4 @@
-# Hand Packs
+﻿# Hand Packs
 
 **Script:** [Hand Packs (script)](hands.py)
 
@@ -30,7 +30,7 @@ follow the pack's own hours/minutes ratio
 - [Config (folder)](../config/___config.md) — bundled/user directories
 
 ### Used by
-- [App Controller](../app/controller.md) — `build_skin` resolves the
+- [Watch Controller](../app/controller.md) — `build_skin` resolves the
   chosen pack into `HandsSpec` (image sizes read there, Qt side); the
   Design ▸ Hands menu lists every loaded name
 - [Settings Dialog](../app/settings_dialog.md) — the Custom hands

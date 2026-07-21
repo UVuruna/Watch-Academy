@@ -85,8 +85,12 @@ dial position, unchanged since Rule #19's first enforcement).
 
 ### Used by
 - [Layers](layers.md) — hands, hexagram, weekday bodies, year marker
-- [App Controller](../app/controller.md) — owns the instance, flushed via
+- [Watch Controller](../app/controller.md) — owns the instance, flushed via
   the compositor on screen change
+- [Tray Controller](../app/tray.md) — `tinted_pixmap()` only (ADD WATCH
+  round, owner INSTRUCTION.txt item 2B): the SAME tritone recolor a
+  per-watch tray icon needs, reached without pulling in the whole
+  render pipeline
 
 ## Classes
 
@@ -99,3 +103,10 @@ dial position, unchanged since Rule #19's first enforcement).
   `tint` — 1.0 is a no-op, the default for every caller except
   `RingLayer` (the plate and its letter overlay)
 - `flush()`: drop everything (screen/DPI or skin change)
+
+## Functions
+
+- `tinted_pixmap(source, tint)` (ADD WATCH round): the public door to
+  `AssetCache._tinted`'s own tritone recipe — module-level so a caller
+  outside render/ (`app.tray.logo_icon`) can reach it without touching
+  a private method on a class it does not otherwise use.

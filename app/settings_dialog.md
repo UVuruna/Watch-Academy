@@ -1,4 +1,4 @@
-# Settings Dialog
+﻿# Settings Dialog
 
 **Script:** [Settings Dialog (script)](settings_dialog.py)
 
@@ -197,7 +197,7 @@ controller passes the active overlay.
 - [Config (folder)](../config/___config.md) — palette presets, ranges
 
 ### Used by
-- [App Controller](controller.md) — opens it from the menu; applies the
+- [Watch Controller](controller.md) — opens it from the menu; applies the
   result (new observer/timezone → day-context rebuild, display
   overrides → skin reinstall)
 

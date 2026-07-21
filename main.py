@@ -79,7 +79,7 @@ def main() -> int:
     # without this, closing any dialog would quit the whole app.
     app.setQuitOnLastWindowClosed(False)
 
-    from app.controller import AppController
+    from app.watch_manager import AppController
 
     if not native.acquire_single_instance(constants.SINGLE_INSTANCE_MUTEX):
         from PySide6.QtWidgets import QMessageBox

@@ -1604,7 +1604,7 @@ def test_every_pointer_wheel_pair_differs(app):
     pointer carries TWO DISTINCT wheels — the Seasons gained the Elements
     wheel, so the cross no longer collapses. The `_add_choice_group`
     primitive still honors an explicit `disabled` set (its contract)."""
-    from app.controller import AppController
+    from app.controller import WatchController
     from PySide6.QtWidgets import QMenu
 
     for pointer in ("trio", "cross", "hexa", "octa", "aurora", "calendar"):
@@ -1615,7 +1615,7 @@ def test_every_pointer_wheel_pair_differs(app):
     # The primitive still grays when asked (used nowhere for the palette
     # pair now, but the contract stands).
     menu, submenu = QMenu(), QMenu()
-    actions = AppController._add_choice_group(
+    actions = WatchController._add_choice_group(
         None, menu, submenu,
         [(style, style) for style in constants.PALETTE_STYLES],
         constants.PALETTE_STYLES[0], lambda value: None,

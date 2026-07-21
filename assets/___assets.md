@@ -1,4 +1,4 @@
-# assets/
+﻿# assets/
 
 Bundled visual content — ALL of it shared app content (there are no
 skin folders: DOMY and MORPH are ring preset names, nothing more).
@@ -164,4 +164,4 @@ rasterized once by the asset cache).
 ### Used by
 - [Config (folder)](../config/___config.md) — DEFAULT_SKIN + RING_PRESETS paths
 - [Render (folder)](../render/___render.md) — asset cache
-- [App Controller](../app/controller.md) — weekday theme + zodiac art paths
+- [Watch Controller](../app/controller.md) — weekday theme + zodiac art paths

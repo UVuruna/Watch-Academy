@@ -1,4 +1,4 @@
-# Clock Widget
+﻿# Clock Widget
 
 **Script:** [Clock Widget (script)](widget.py)
 
@@ -14,7 +14,7 @@ knows nothing about the dial itself.
 - [Compositor](../render/compositor.md) — injected via `set_renderer()`
 
 ### Used by
-- [App Controller](controller.md) — creates it, positions it, feeds ticks,
+- [Watch Controller](controller.md) — creates it, positions it, feeds ticks,
   listens to `moved`
 
 ## Classes

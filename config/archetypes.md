@@ -1,4 +1,4 @@
-# Archetypes
+﻿# Archetypes
 
 **Script:** [Archetypes (script)](archetypes.py)
 
@@ -152,7 +152,7 @@ there and the menu grays the toggle.
   `ArchetypeCenterLayer`, the lit-index math, the art-readiness check
 - [Compositor](../render/compositor.md) — arm/center hovers, the
   two-row articles, the encyclopedia targets
-- [App Controller](../app/controller.md) — the menu toggle gating
+- [Watch Controller](../app/controller.md) — the menu toggle gating
   (`has_archetype`)
 
 ## Functions

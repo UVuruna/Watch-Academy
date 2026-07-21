@@ -48,8 +48,31 @@ def user_dir() -> Path:
     return Path(os.environ["APPDATA"]) / constants.APP_NAME
 
 
-def settings_path() -> Path:
-    return user_dir() / "settings.json"
+def settings_path(watch_index: int = 1) -> Path:
+    """Watch 1 keeps the pre-multi-watch filename (existing installs
+    keep working untouched); watch N (2+, ADD WATCH round, owner
+    INSTRUCTION.txt item 2, sealed 2026-07-21) gets its OWN numbered
+    file — see settings_store.md for the scheme."""
+    if watch_index == 1:
+        return user_dir() / "settings.json"
+    return user_dir() / f"settings.{watch_index}.json"
+
+
+def discover_watch_indices() -> list[int]:
+    """Every watch whose settings file already exists on disk, sorted
+    (ADD WATCH round): watch 1's plain `settings.json` (if present)
+    plus every `settings.<N>.json`. A brand-new install (no user dir
+    yet, or an empty one) yields `[1]` so the caller always has an
+    anchor watch to build. Filesystem-scan cost is startup-only, never
+    a hot path."""
+    directory = user_dir()
+    found = {1} if (directory / "settings.json").exists() else set()
+    if directory.exists():
+        for candidate in directory.glob("settings.*.json"):
+            stem_parts = candidate.stem.split(".")   # "settings", "<N>"
+            if len(stem_parts) == 2 and stem_parts[1].isdigit():
+                found.add(int(stem_parts[1]))
+    return sorted(found) or [1]
 
 
 # The active artwork source (owner 2026-07-14: Gemini vs ChatGPT) —

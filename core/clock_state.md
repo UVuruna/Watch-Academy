@@ -1,4 +1,4 @@
-# Clock State
+﻿# Clock State
 
 **Script:** [Clock State (script)](clock_state.py)
 
@@ -13,7 +13,7 @@ per-day bundle and a tiny per-minute tick.
   [Moon](moon.md)
 
 ### Used by
-- [App Controller](../app/controller.md) (M3) — rebuild/tick flow
+- [Watch Controller](../app/controller.md) (M3) — rebuild/tick flow
 - [Core (folder)](___core.md) CLI selftest
 
 ## Classes

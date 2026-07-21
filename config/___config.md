@@ -197,7 +197,13 @@ under `assets/<root>/<source>/`): `set_art_source(source)` switches the
 active source and `art_file(path)` maps a canonical source-less path
 into it, falling back to the other source where the file is missing —
 every disk boundary (asset cache, hover images, Encyclopedia, manifest
-validation) resolves through it.
+validation) resolves through it. `settings_path(watch_index=1)` /
+`discover_watch_indices()` (ADD WATCH round, owner INSTRUCTION.txt item
+2, sealed 2026-07-21): the per-watch settings-file scheme — watch 1's
+plain `settings.json`, watch N (2+) its own `settings.<N>.json`, and a
+startup scan finding every one that already exists on disk (see
+[Settings Store](../app/settings_store.md) for the full rule and
+[Watch Manager](../app/watch_manager.md) for the roster it rebuilds).
 
 ## Connections
 

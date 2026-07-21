@@ -4,23 +4,28 @@ Keeps strong Python references to the icon and menu — Qt does not own
 them and the GC would otherwise destroy the menu mid-use.
 """
 
+from pathlib import Path
+
 from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QIcon, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
 from config import constants, defaults
+from render.assets import tinted_pixmap
 
 
-def _rasterize_logo(size: int) -> QPixmap:
-    """The owner's gold watch (assets/logo.svg) rasterized to `size` px,
-    aspect kept and centered — the shared rasterizer behind both the
-    fixed-size tray icon and the multi-resolution window icon. A
-    missing/broken logo must be visible — callers propagate the
-    ValueError instead of showing an empty/generic icon."""
-    renderer = QSvgRenderer(str(defaults.LOGO_ASSET))
+def _rasterize_logo(size: int, asset: Path = defaults.LOGO_ASSET) -> QPixmap:
+    """`asset` rasterized to `size` px, aspect kept and centered — the
+    shared rasterizer behind the tray icon and the multi-resolution
+    window icon. `asset` defaults to the owner's gold watch
+    (assets/logo.svg); ADD WATCH round's `logo_icon(watch_index)`
+    passes the rose-gold master for watch 2. A missing/broken logo
+    must be visible — callers propagate the ValueError instead of
+    showing an empty/generic icon."""
+    renderer = QSvgRenderer(str(asset))
     if not renderer.isValid():
-        raise ValueError(f"cannot load the app logo: {defaults.LOGO_ASSET}")
+        raise ValueError(f"cannot load the app logo: {asset}")
     pixmap = QPixmap(size, size)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
@@ -35,9 +40,35 @@ def _rasterize_logo(size: int) -> QPixmap:
     return pixmap
 
 
-def logo_icon() -> QIcon:
-    """The tray icon — ONE fixed size, the tray never asks for another."""
-    return QIcon(_rasterize_logo(defaults.TRAY_ICON_SIZE))
+def _logo_asset(watch_index: int) -> Path:
+    """The MASTER a watch's tray icon rasterizes from (ADD WATCH round,
+    owner INSTRUCTION.txt item 2B): watch 2 is the pre-existing
+    rose-gold master (`logo-setup.svg`, a second master — not a
+    recolor); every other watch (1, and 3+ before their wheel tint
+    below) rasterizes the plain gold master."""
+    return defaults.LOGO_SETUP_ASSET if watch_index == 2 else defaults.LOGO_ASSET
+
+
+def _tray_tint(watch_index: int) -> str | None:
+    """The RECOLOR hex for a watch's tray icon, by its own ORDER (owner
+    INSTRUCTION.txt item 2B): `None` for watch 1 (gold as-is) and watch
+    2 (its own rose-gold MASTER, not a recolor — see `_logo_asset`);
+    watch 3+ cycle `defaults.TRAY_COLOR_WHEEL` forever (Rule #19 —
+    computed, never a new generated icon)."""
+    if watch_index <= 2:
+        return None
+    wheel = defaults.TRAY_COLOR_WHEEL
+    return wheel[(watch_index - 3) % len(wheel)]
+
+
+def logo_icon(watch_index: int = 1) -> QIcon:
+    """The TRAY icon for `watch_index` (1-based, default watch 1) — ONE
+    fixed size, the tray never asks for another. See `_logo_asset`/
+    `_tray_tint`'s own docstrings for the ADD WATCH round's per-watch
+    identity rule (golden, rose-gold, then the color wheel)."""
+    pixmap = _rasterize_logo(defaults.TRAY_ICON_SIZE, _logo_asset(watch_index))
+    tint = _tray_tint(watch_index)
+    return QIcon(pixmap if tint is None else tinted_pixmap(pixmap, tint))
 
 
 def window_icon() -> QIcon:

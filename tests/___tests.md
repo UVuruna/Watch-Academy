@@ -107,7 +107,34 @@ with the catalog-edge clamp.
 Round-trip, atomic-write cleanup, BOM tolerance, corruption and
 diameter-range errors, quarantine-to-.bak; the Session 16 keys
 (era_notation/show_era_suffix/third_era/jump_cities) round-trip and
-validate loudly.
+validate loudly. ADD WATCH round (owner INSTRUCTION.txt item 2, sealed
+2026-07-21): `config.paths.settings_path(watch_index)`'s naming scheme
+(`settings.json` for watch 1, `settings.<N>.json` for 2+, sharing one
+user dir), independent round-trips per watch file, and
+`discover_watch_indices()`'s startup scan (finds every numbered file,
+ignores a quarantined `.bak`/an in-flight `.tmp`, `[1]` on an empty dir).
+
+### `test_tray.py`
+ADD WATCH round (owner INSTRUCTION.txt item 2B): the per-watch tray
+icon rule — watch 1 the gold master untouched, watch 2 the pre-existing
+rose-gold master (not a recolor), watch 3+ tinted along the CALENDAR
+MONTH color wheel starting PURPLE `#8000FF` (R:G:B 1:0:2, the owner's
+own worked example) then BLUE `#0000FF` (R:G:B 0:0:1) and onward,
+wrapping forever past December; every `logo_icon(watch_index)` call
+returns a non-null `QIcon`.
+
+### `test_watch_manager.py`
+ADD WATCH round: `app.watch_manager.AppController` builds one anchor
+watch (index 1) at startup and rediscovers every watch on disk across a
+restart; `add_watch()` seeds a new watch's settings from the CURRENT
+watch (position cleared so it re-centers instead of overlapping);
+`remove_watch()` refuses the anchor, confirms via a Yes/No box before
+tearing a watch down, and deletes its settings file — a removed watch's
+own index is never reused while a higher one survives; the menu TITLE
+row (and ONLY the title row — the tray hover stays full always) switches
+short/full as the roster crosses two watches; Exit is wired to the
+manager's `quit_all()` (process-wide) on every watch, Remove Watch stays
+per-watch.
 
 ### `test_profiling.py`
 The `@timed` statistics store (owner 2026-07-15): cumulative
@@ -132,7 +159,8 @@ to the three R5 mini windows too (Design/Pointer Theme/Slot Theme).
 Opening sizes: A4 portrait at 80% screen height (Encyclopedia
 respecting its own gallery min-width law, Observatory), square at 50%
 (Guide, Settings respecting its own content-width floor) — built
-against a REAL `AppController`, exactly like `main.py` minus the
+against a REAL `WatchController` (standalone construction, unchanged
+by the ADD WATCH round's `app.watch_manager.AppController`), minus the
 single-instance mutex and `run()`'s tray/scheduler/background-thread
 side effects.
 
@@ -148,7 +176,7 @@ carrying a modifier so it can never feed the hidden-mode secret
 buffer, `shortcut_display`'s "Ctrl+R" rendering), a bare
 `ClockWidget.keyPressEvent` → `shortcut_triggered` mapping for every
 table entry (isolated from a real controller so it cannot open a
-blocking modal), `AppController._on_shortcut`'s full dispatch table,
+blocking modal), `WatchController._on_shortcut`'s full dispatch table,
 `_cycle_ring`/`_cycle_slots`'s legal-state walks; the Elements→Visible
 rename (menu text, no stale `_element_*` identifiers); the Time
 Travel window's own Quick Jump rows (item 3A — arrow clicks edit the

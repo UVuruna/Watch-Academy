@@ -1,4 +1,4 @@
-# Compositor
+﻿# Compositor
 
 **Script:** [Compositor (script)](compositor.py)
 
@@ -39,7 +39,7 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
 
 ### Used by
 - [Clock Widget](../app/widget.md) — `paintEvent` delegate
-- [App Controller](../app/controller.md) — `set_day()` / `invalidate()`
+- [Watch Controller](../app/controller.md) — `set_day()` / `invalidate()`
 - [Tests (folder)](../tests/___tests.md) — `render_offscreen()`
 
 ## Classes

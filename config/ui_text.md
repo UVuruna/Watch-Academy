@@ -1,4 +1,4 @@
-# UI Text Catalog
+﻿# UI Text Catalog
 
 **Script:** [UI Text Catalog (script)](ui_text.py)
 
@@ -29,7 +29,7 @@ Gold / Silver as finish names inside composed labels.
 ### Used by
 - [Translations](../data/translations.md) — `collect_corpus()` folds
   `UI_STRINGS` into the corpus as `ui/<text>` entries
-- [App Controller](../app/controller.md) — menu labels, tooltips,
+- [Watch Controller](../app/controller.md) — menu labels, tooltips,
   tray balloons, error boxes
 - [Settings Dialog](../app/settings_dialog.md),
   [Time Travel](../app/time_travel.md), [Guide](../app/guide.md),

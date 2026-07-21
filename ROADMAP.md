@@ -46,7 +46,7 @@ lives in [The DOMY Canon](CANON.md).
   named hover reason when not actually visible from here); the TOTAL
   lunar disc darkens to a copper tint instead of neutral gray. See
   [Clock State](core/clock_state.md), [Layers](render/layers.md),
-  [Compositor](render/compositor.md) and [App Controller](app/controller.md)
+  [Compositor](render/compositor.md) and [Watch Controller](app/controller.md)
   for the details.
 - **Fix round F — THE ECLIPSES ENCYCLOPEDIA (owner order 2026-07-19,
   "posebno za mesec i sunce") — DONE:** a whole encyclopedia theme on
@@ -209,7 +209,7 @@ lives in [The DOMY Canon](CANON.md).
   when a file is absent) and wire onto the Sun/Moon submenus' own
   eclipse entries only — UI CHROME, not ART, so the one-image-one-place
   law does not apply to them. See [Motto](core/motto.md), [Ring
-  Presets](data/rings.md), [App Controller](app/controller.md) and
+  Presets](data/rings.md), [Watch Controller](app/controller.md) and
   [Config (folder)](config/___config.md). 6 new tests, 521 green.
 
 <a id="owner-queue"></a>
@@ -857,7 +857,7 @@ lives in [The DOMY Canon](CANON.md).
       (a) 🔆/🌑 violated the owner's standing "no sun/moon emojis" law —
       replaced with the neutral interim ⚪/⚫ pair; (b) the light/dark
       glyph now follows the DISPLAYED moment
-      (`AppController._effective_travel_date`) — the Time Travel
+      (`WatchController._effective_travel_date`) — the Time Travel
       traveled date while a simulation runs, else today — REVOKING round
       A's "never the simulation moment" choice; the Location submenu's
       `aboutToShow` refreshes the two rows lazily since the menu itself

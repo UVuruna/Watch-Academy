@@ -1,4 +1,4 @@
-# Deep Time Repository
+﻿# Deep Time Repository
 
 **Script:** [Deep Time Repository (script)](deep_time.py)
 
@@ -87,7 +87,7 @@ catalog reader).
 ### Used by
 - [Seasons](seasons.md), [Moon Phases](moon_phases.md) — the chain
   target beyond the bundled coverage
-- [App Controller](../app/controller.md) — detection at startup, the
+- [Watch Controller](../app/controller.md) — detection at startup, the
   eclipse Quick Jumps, the widened Time Travel coverage
 - [Tests (folder)](../tests/___tests.md) — against a small fixture pack
   (`tests/deep_fixture.py`), never the full build

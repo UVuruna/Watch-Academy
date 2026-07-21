@@ -1,4 +1,4 @@
-# Report
+﻿# Report
 
 **Script:** [Report (script)](report.py)
 
@@ -17,7 +17,7 @@ with call counts and execution-time statistics.
 - [Config (folder)](../config/___config.md) — colors, sizes, ui text
 
 ### Used by
-- [App Controller](../app/controller.md) — the hidden menu entry
+- [Watch Controller](../app/controller.md) — the hidden menu entry
 
 ## Classes
 

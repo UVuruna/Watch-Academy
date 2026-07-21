@@ -1,4 +1,4 @@
-# Observatory
+﻿# Observatory
 
 **Script:** [Observatory (script)](observatory.py)
 
@@ -41,7 +41,7 @@ interactive charts over the long ephemeris data. FIVE charts:
 **ITEM 1 — NON-MODAL.** The controller `.show()`s `ObservatoryDialog`
 instead of `.exec()`ing it — the dial stays interactive while it is
 open; a second open request raises the ONE live instance instead of
-opening a duplicate ([App Controller](controller.md)). The dialog
+opening a duplicate ([Watch Controller](controller.md)). The dialog
 itself gained `WA_DeleteOnClose` (safe here — unlike `_EnlargeDialog`,
 this outer dialog never has a REAL child reparented INTO it from
 somewhere else; it only ever LENDS a panel out). The Enlarge flow
@@ -321,7 +321,7 @@ year — day length is identical across the 400-year proxy cycle).
   palette + geometry tokens
 
 ### Used by
-- [App Controller](controller.md) — opens it from the menu with the
+- [Watch Controller](controller.md) — opens it from the menu with the
   effective moment/observer and the optional Deep Time pack
 
 ## Classes

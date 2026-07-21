@@ -12,8 +12,11 @@ the screen and both still respecting any existing per-dialog width
 floor (the Encyclopedia's 4-gallery-tile law, Settings' own content
 minimum).
 
-Headless (QT_QPA_PLATFORM=offscreen) — builds a REAL AppController
-exactly like main.py does, minus the single-instance mutex and
+Headless (QT_QPA_PLATFORM=offscreen) — builds a REAL WatchController
+(standalone, as every test predating the ADD WATCH round did — main.py
+itself now goes through app.watch_manager.AppController, the thin
+multi-watch owner, but a bare WatchController still constructs and
+behaves exactly as before), minus the single-instance mutex and
 `run()`'s tray-show/scheduler-start/background-warm-thread side
 effects (this module never calls `run()`, only the dialog-opening
 methods, which need nothing `run()` sets up)."""
@@ -26,7 +29,7 @@ import pytest
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QApplication
 
-from app.controller import AppController
+from app.controller import WatchController
 from app.encyclopedia import EncyclopediaDialog
 from app.guide import GuideDialog
 from app.observatory import ObservatoryDialog
@@ -42,7 +45,7 @@ def app():
 
 @pytest.fixture
 def controller(app):
-    made = AppController(app)
+    made = WatchController(app)
     yield made
     # Every non-modal dialog this file opens is closed here even when a
     # test fails partway through — a stray offscreen QDialog left alive

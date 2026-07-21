@@ -1,4 +1,4 @@
-# app/
+﻿# app/
 
 The Qt application shell: window, input, tray, timing and persistence.
 Knows nothing about astronomy (`core/`) or skin internals (`skins/`) — it
@@ -10,10 +10,17 @@ consumes their outputs through the render compositor.
 The frameless, per-pixel-transparent, always-at-bottom dial window;
 painting is delegated to the compositor. See [Clock Widget](widget.md).
 
-### `controller.py` — App Controller
-Composition root: owns settings, window, tray, menu, repositories,
-compositor, scheduler and the tick/quit flows.
-See [App Controller](controller.md).
+### `watch_manager.py` — Watch Manager
+ADD WATCH round (owner INSTRUCTION.txt item 2, sealed 2026-07-21): the
+process-wide composition root — builds and tears down the roster of
+`WatchController` instances, one per watch, from whatever settings files
+already exist on disk. See [Watch Manager](watch_manager.md).
+
+### `controller.py` — Watch Controller
+Composition root for ONE watch: owns its own settings, window, tray,
+menu, repositories, compositor, scheduler and the tick/quit flows —
+several can coexist in one process under [Watch Manager](watch_manager.md).
+See [Watch Controller](controller.md).
 
 ### `settings_store.py` — Settings Store
 Atomic JSON persistence of user runtime state in `%APPDATA%/DOMY Watch/`.
@@ -114,7 +121,8 @@ Deferred: optional WorkerW "glue to wallpaper" mode (fragile on Win11
 - [Config (folder)](../config/___config.md) — constants, defaults, paths
 
 ### Used by
-- `main.py` — creates the controller and runs the Qt event loop
+- `main.py` — creates the [Watch Manager](watch_manager.md) and runs the
+  Qt event loop
 
 ## Design Decisions
 - **Crash forensics (owner 15h item 3C, Session 21):** `main.py`

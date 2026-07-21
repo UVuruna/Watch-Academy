@@ -1,4 +1,4 @@
-# Moon
+﻿# Moon
 
 **Script:** [Moon (script)](moon.py)
 
@@ -22,7 +22,7 @@ cosine, which was up to ~3 p.p. off mid-phase (ours 10.3% vs the true
 ### Used by
 - [Moon Phases Repository](../data/moon_phases.md) — constructs `MoonWindow`
 - [Clock State](clock_state.md), the year-marker layer in moon mode (M3)
-- [App Controller](../app/controller.md) — `chinese_name_of_year` for
+- [Watch Controller](../app/controller.md) — `chinese_name_of_year` for
   the deep-travel correction
 
 ## Classes

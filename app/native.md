@@ -1,4 +1,4 @@
-# Native
+﻿# Native
 
 **Script:** [Native (script)](native.py)
 
@@ -18,7 +18,7 @@ that delivers Spacebar to the UNFOCUSED dial (Session 21).
 - `main.py` — single-instance gate, AppUserModelID (called BEFORE
   `QApplication` exists — the very first thing `main()` does)
 - [Clock Widget](widget.md) — WM_NCHITTEST circular pass-through
-- [App Controller](controller.md) — click-through toggle, wake filter
+- [Watch Controller](controller.md) — click-through toggle, wake filter
 
 ## Functions
 

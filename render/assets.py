@@ -876,3 +876,14 @@ class AssetCache:
             )
         pixmap.setDevicePixelRatio(dpr)
         return pixmap
+
+
+def tinted_pixmap(source: QPixmap, tint: str) -> QPixmap:
+    """Public entry to `AssetCache._tinted`'s TRITONE gradient-map
+    recolor (black -> tint -> white; see its own docstring for the
+    recipe) — the render pipeline's ring/hand recolors call the private
+    method directly (same class, same cache), but ADD WATCH round's
+    `app.tray.logo_icon` needs the SAME algorithm for a per-watch tray
+    icon tint and lives outside render/ entirely (Rule #5 — one
+    algorithm, a clean non-private door for the second caller)."""
+    return AssetCache._tinted(source, tint)

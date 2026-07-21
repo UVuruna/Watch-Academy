@@ -1,4 +1,4 @@
-# Time Travel
+﻿# Time Travel
 
 **Script:** [Time Travel (script)](time_travel.py)
 
@@ -31,7 +31,7 @@ menu used to hold (Rule #6, no both-paths).
   Settings/Guide already use)
 
 ### Used by
-- [App Controller](controller.md) — `_open_time_travel()` passes the
+- [Watch Controller](controller.md) — `_open_time_travel()` passes the
   ACTIVE coverage (bundled ∩, widened by the pack), the bundled core
   coverage (the tier line), the year-line settings and the pack flag,
   plus (R5) `jump_callback=self._dialog_jump` and
@@ -84,7 +84,7 @@ owner's own shape:
   Eclipse (`eclipse_moon`, grayed without the pack), Day/Month/Year
   (📅), Century/Millennium (🏛). `kind` is the JUMP STEM — the arrow
   click calls `_on_jump(f"prev_{kind}")`/`f"next_{kind}"`, matching
-  `AppController._UNIT_JUMPS`/`_ECLIPSE_JUMPS`/the sun-moon literals
+  `WatchController._UNIT_JUMPS`/`_ECLIPSE_JUMPS`/the sun-moon literals
   exactly (Rule #5, no separate naming scheme).
 - **Place rows** (`_place_button`) — single-click, no arrows: North
   Pole and South Pole (icons `north_pole`/`south_pole`, text follows
@@ -98,7 +98,7 @@ owner's own shape:
 - `_on_jump(kind, city=None)`: calls the constructor's
   `jump_callback(moment(), cycles(), latitude(), longitude(), kind,
   city)` — a pure function owned by the controller
-  (`AppController._dialog_jump`/`_compute_jump`) that chains from
+  (`WatchController._dialog_jump`/`_compute_jump`) that chains from
   THIS dialog's own current fields, never a live simulation; `None`
   (an edge clamp) is a no-op, otherwise `_apply_moment`/the lat-lon
   spinboxes update in place. OK still applies the final choice

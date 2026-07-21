@@ -1105,9 +1105,9 @@ def test_menu_gating(app, tmp_path, monkeypatch):
     into their own window, see tests/test_menu_rework.py for its own
     gating coverage). The full controller wiring, TEMP home."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+    from app.controller import WatchController
 
-    controller = AppController(app)
+    controller = WatchController(app)
     try:
         assert controller._archetype_action.isEnabled()      # hexa default
         controller._set_display_choice("pointer", "aurora")
@@ -1139,9 +1139,9 @@ def test_archetype_names_is_its_own_settings_switch(app, tmp_path, monkeypatch):
     `archetype_names`, entirely separate from the weekday bodies'
     `show_weekday_names`."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+    from app.controller import WatchController
 
-    c = AppController(app)
+    c = WatchController(app)
     try:
         assert not hasattr(c, "_archetype_names_action")
         assert c._settings.archetype_names is True     # default: names on
@@ -1194,9 +1194,9 @@ def test_visible_top_level_toggles_all_on_off(app, tmp_path, monkeypatch):
     all-on turns them all off, otherwise turns them all on; turning ONE
     off unchecks the ordinal. TEMP home."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+    from app.controller import WatchController
 
-    c = AppController(app)
+    c = WatchController(app)
     try:
         keys = [k for _, k in c._visible_toggles]
         # Defaults: every entry on → the ordinal is checked.
@@ -1229,11 +1229,12 @@ def test_show_action_visible_only_in_normal_z_mode(app, tmp_path, monkeypatch):
     meaningless in "bottom" (never above anything) and "top" (already
     always above)."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+    from app.controller import WatchController
 
-    c = AppController(app)
+    c = WatchController(app)
     try:
-        assert c._menu.actions()[2] is c._show_action   # TITLE, separator, Show
+        # TITLE, separator, Add Watch (watch 1: no Remove entry), separator, Show
+        assert c._menu.actions()[4] is c._show_action
         assert c._settings.z_mode == "bottom"           # default
         assert not c._show_action.isVisible()
         c._settings = dataclasses.replace(c._settings, z_mode="normal")
@@ -1254,9 +1255,9 @@ def test_show_action_and_tray_double_click_raise_only_in_normal_mode(
     while z_mode == "normal" — a no-op in "bottom"/"top" (defense in
     depth beyond the menu's own visibility gate)."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+    from app.controller import WatchController
 
-    c = AppController(app)
+    c = WatchController(app)
     try:
         calls = []
         monkeypatch.setattr(c._widget, "raise_and_focus", lambda: calls.append(1))
@@ -1288,9 +1289,9 @@ def test_show_action_hidden_only_in_the_dial_context_menu(
     from PySide6.QtGui import QContextMenuEvent
 
     monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
+    from app.controller import WatchController
 
-    c = AppController(app)
+    c = WatchController(app)
     try:
         c._settings = dataclasses.replace(c._settings, z_mode="normal")
         c._refresh_menu_gating()

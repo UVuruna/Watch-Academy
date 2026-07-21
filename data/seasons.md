@@ -1,4 +1,4 @@
-# Seasons
+﻿# Seasons
 
 **Script:** [Seasons (script)](seasons.py)
 
@@ -16,7 +16,7 @@ from `seasons_utc.json`, once per year, discarding the parsed file.
 - `_io.load_json_checked`
 
 ### Used by
-- [App Controller](../app/controller.md) (M3) on year change,
+- [Watch Controller](../app/controller.md) (M3) on year change,
   [Core (folder)](../core/___core.md) CLI,
   [Tests (folder)](../tests/___tests.md)
 

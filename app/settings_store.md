@@ -1,20 +1,40 @@
-# Settings Store
+﻿# Settings Store
 
 **Script:** [Settings Store (script)](settings_store.py)
 
 ## Purpose
-The only module that reads or writes user runtime state:
-`%APPDATA%/DOMY Watch/settings.json` (plain JSON — inspectable, diffable,
-survives reinstall). Schema v1 holds the window position and diameter
-plus the additive keys; the city picker arrives with M6.
+The only module that reads or writes user runtime state: one PLAIN JSON
+file per watch (inspectable, diffable, survives reinstall). Schema v1
+holds the window position and diameter plus the additive keys; the city
+picker arrives with M6. `SettingsStore` itself is watch-agnostic — it
+just persists whatever `Path` it is given; ONE watch's numbering scheme
+lives in `config.paths` (below), not here.
+
+**Per-watch file scheme (ADD WATCH round, owner INSTRUCTION.txt item 2,
+sealed 2026-07-21):** watch 1 keeps the pre-multi-watch
+`%APPDATA%/DOMY Watch/settings.json` (existing installs keep working
+untouched, no migration needed); watch N (2+) gets its own
+`%APPDATA%/DOMY Watch/settings.<N>.json` — `config.paths.
+settings_path(watch_index)` resolves either form, and `config.paths.
+discover_watch_indices()` scans the user dir at startup for every file
+that exists (ignoring a quarantined `.bak` or an in-flight atomic-write
+`.tmp`) so [Watch Manager](watch_manager.md) rebuilds the FULL roster
+across a restart, not just the anchor. A removed watch's own number is
+never reused while a higher one survives (`AppController._next_index`),
+so a watch's identity (including its tray color) never drifts onto a
+different watch later in the session.
 
 ## Connections
 
 ### Uses
-- [Config (folder)](../config/___config.md) — schema version, diameter limits
+- [Config (folder)](../config/___config.md) — schema version, diameter
+  limits, `settings_path`/`discover_watch_indices` (ADD WATCH round)
 
 ### Used by
-- [App Controller](controller.md)
+- [Watch Controller](controller.md) — one `SettingsStore` per watch,
+  pointed at that watch's own `settings_path`
+- [Watch Manager](watch_manager.md) — seeds a NEW watch's file directly
+  (`SettingsStore(path).save(seed)`) before constructing it
 
 ## Classes
 

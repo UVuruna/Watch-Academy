@@ -1,9 +1,18 @@
-"""Composition root — the only object that knows everyone.
+"""Composition root for ONE watch — the only object that knows
+everyone ELSE inside it.
 
 Owns settings, the clock window, the tray, the repositories, the
 compositor and the minute scheduler. Tick flow: read the wall clock
 fresh -> rebuild the day context when (local date, UTC offset) changed
 -> build the tick state -> repaint.
+
+ADD WATCH round (owner INSTRUCTION.txt item 2, sealed 2026-07-21): a
+process can hold SEVERAL of these, one per watch, each fully
+self-contained — [app.watch_manager.AppController](watch_manager.md)
+is the thin process-wide owner that builds the roster, and reaches
+each `WatchController` only through the three callbacks its
+constructor takes (`watch_count`, `on_add_watch`, `on_remove_watch`) —
+a `WatchController` itself still knows nothing about its siblings.
 """
 
 import dataclasses
@@ -11,7 +20,9 @@ import sys
 import random
 import threading
 from datetime import date, datetime, timedelta, timezone
+from pathlib import Path
 from time import monotonic
+from typing import Callable
 from zoneinfo import ZoneInfo
 
 import astral
@@ -120,10 +131,12 @@ def watch_title(settings: Settings, full: bool = False) -> str:
     the right-click/tray menus (`full=False`, the default); the FULL
     multi-attribute form backs the tray hover TOOLTIP always —
     f"{location}-{ring_finish} {ring}-{palette label} {pointer}", e.g.
-    "Belgrade-Gold DOMY-Family Trinity" — and will back every entry
-    once ADD WATCH (the NEXT round) lets several watches coexist; kept
-    here as ONE function so that round only needs to loop it, never
-    reinvent it.
+    "Belgrade-Gold DOMY-Family Trinity". With 2+ watches (ADD WATCH
+    round) the menu TITLE row and tray-menu title switch to the full
+    form too — `WatchController` decides `full` from its own
+    `watch_count()` callback at every call site; this function stays
+    the ONE place that KNOWS the format, so that round only had to
+    loop it, never reinvent it.
 
     Deliberately UNTRANSLATED (no `tr`): a NAME is an identifier, not
     UI chrome — the same treatment the ring preset name and the
@@ -647,11 +660,34 @@ def apply_display_settings(skin, settings: Settings):
     )
 
 
-class AppController(QObject):
-    def __init__(self, app: QApplication):
+class WatchController(QObject):
+    def __init__(
+        self,
+        app: QApplication,
+        watch_index: int = 1,
+        settings_path: Path | None = None,
+        watch_count: Callable[[], int] = lambda: 1,
+        on_add_watch: Callable[[], None] = lambda: None,
+        on_remove_watch: Callable[["WatchController"], None] = lambda watch: None,
+        on_exit: Callable[[], None] | None = None,
+    ):
+        """`watch_index`/`settings_path`/`watch_count`/`on_add_watch`/
+        `on_remove_watch`/`on_exit` are the ADD WATCH round's seams to
+        [the manager](watch_manager.md) — every default reproduces the
+        pre-ADD-WATCH single-watch behavior exactly (watch 1, its own
+        `settings.json`, a title that never goes full, Add Watch a
+        no-op, Exit quits just this instance), so standalone
+        construction (every test in this suite before this round, and
+        any test that does not care about multi-watch specifics) needs
+        no changes beyond the class rename."""
         super().__init__()
         self._app = app
-        self._store = SettingsStore(paths.settings_path())
+        self._watch_index = watch_index
+        self._watch_count = watch_count
+        self._on_add_watch = on_add_watch
+        self._on_remove_watch = on_remove_watch
+        self._on_exit = on_exit if on_exit is not None else self.quit
+        self._store = SettingsStore(settings_path or paths.settings_path(watch_index))
         self._settings = self._load_settings_or_recover()
         self._save_failed = False
 
@@ -692,7 +728,7 @@ class AppController(QObject):
             self._settings.diameter, self._menu, self._legend, self._show_action
         )
         try:
-            self._tray = TrayController(self._menu, logo_icon())
+            self._tray = TrayController(self._menu, logo_icon(self._watch_index))
             # The FULL name form backs the tray hover tooltip from the
             # very first frame (owner INSTRUCTION.txt item 2A) —
             # `_title_label` already exists (set inside the `_build_menu`
@@ -836,6 +872,45 @@ class AppController(QObject):
         # warming is replaced.
         self._hover_warm_generation = 0
 
+    # --- ADD WATCH identity (owner INSTRUCTION.txt item 2, sealed 2026-07-21) ---
+
+    @property
+    def watch_index(self) -> int:
+        """This watch's own 1-based slot number — the anchor (1) can
+        never be removed, and every tray-color/settings-file rule
+        (`app.tray.logo_icon`, `config.paths.settings_path`) reads it."""
+        return self._watch_index
+
+    @property
+    def settings_path(self) -> Path:
+        """This watch's own settings file — the manager deletes it on
+        Remove Watch (`discard()` tears down the LIVE watch first)."""
+        return self._store.path
+
+    def refresh_title(self) -> None:
+        """Public hook for the manager: re-render the TITLE row and the
+        tray tooltip after the watch ROSTER changes (Add/Remove Watch)
+        — the short/full split depends on `watch_count()`, which just
+        moved for every surviving watch, not only this one."""
+        self._refresh_watch_title()
+
+    def _confirm_remove_watch(self) -> None:
+        """The Remove/Close entry's own click handler (watches 2+ only
+        — `_build_menu` never builds the action on watch 1): one plain
+        Yes/No confirm, no further dialogs (owner spec) — a Yes calls
+        the manager's `remove_watch(self)`, which tears this watch down
+        and deletes its settings file; `self._on_remove_watch` defaults
+        to a no-op for standalone/test use (no manager attached)."""
+        box = QMessageBox(
+            QMessageBox.Icon.Question, constants.APP_NAME,
+            self._ui("Remove this watch? Its settings file will be deleted."),
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+        )
+        box.setDefaultButton(QMessageBox.StandardButton.No)
+        box.setWindowFlag(Qt.WindowType.WindowStaysOnTopHint, True)
+        if box.exec() == QMessageBox.StandardButton.Yes:
+            self._on_remove_watch(self)
+
     # --- Lifecycle --------------------------------------------------------------
 
     def run(self) -> None:
@@ -896,13 +971,18 @@ class AppController(QObject):
             progress=print,
         )
 
-    def quit(self) -> None:
+    def _teardown_windows(self) -> None:
+        """Close every open dialog, stop the scheduler and the
+        debounced save timer, hide the tray — the shared first half of
+        `_prepare_quit()` (Exit: also saves) and `discard()` (Remove
+        Watch, ADD WATCH round: never saves — the settings file is
+        about to be deleted). The non-modal sextet (ITEM 1, R4 + the
+        three R5 mini windows) can now be open at teardown time; close
+        them explicitly instead of leaving them to the process
+        teardown, so their own `finished` handlers (and
+        WA_DeleteOnClose) run the ordinary way rather than being cut
+        off mid-flight."""
         self._widget.mark_closing()
-        # The non-modal sextet (ITEM 1, R4 + the three R5 mini windows)
-        # can now be open at Exit time — close them explicitly instead
-        # of leaving them to the process teardown, so their own
-        # `finished` handlers (and WA_DeleteOnClose) run in the
-        # ordinary way rather than being cut off mid-flight.
         for dialog in (
             self._encyclopedia, self._observatory, self._guide,
             self._design, self._pointer_theme, self._slot_theme,
@@ -912,6 +992,23 @@ class AppController(QObject):
         self._scheduler.stop()
         if self._save_timer.isActive():
             self._save_timer.stop()
+        self._tray.hide()
+
+    def discard(self) -> None:
+        """Remove Watch's own teardown (ADD WATCH round, owner
+        INSTRUCTION.txt item 2, sealed 2026-07-21): identical window/
+        scheduler/tray teardown as Exit but deliberately skips the
+        save — [the manager](watch_manager.md) deletes this watch's
+        settings file right after this call returns, so writing it
+        first would just recreate what is about to be removed."""
+        self._teardown_windows()
+
+    def _prepare_quit(self) -> None:
+        """Everything Exit needs from THIS watch except the final
+        shared `app.quit()` — split out (ADD WATCH round) so the
+        manager's `quit_all()` can run it for every watch before
+        quitting the process exactly once."""
+        self._teardown_windows()
         self._capture_position()
         try:
             self._store.save(self._settings)
@@ -924,7 +1021,13 @@ class AppController(QObject):
                 QMessageBox.StandardButton.Ok,
             )
         profiling.flush()
-        self._tray.hide()
+
+    def quit(self) -> None:
+        """Standalone Exit (no manager attached — every test in this
+        suite predating ADD WATCH, and the default `on_exit` a bare
+        `WatchController` falls back to): this watch's own teardown,
+        then quit the process."""
+        self._prepare_quit()
         self._app.quit()
 
     # --- Clock ------------------------------------------------------------------
@@ -1250,8 +1353,12 @@ class AppController(QObject):
         underneath it. A fresh `_build_menu()` (Settings OK, language
         switch) replaces `_title_label` wholesale and calls this again
         via the `_install_skin` it always runs first — either path ends
-        with a correct label."""
-        self._title_label.setText(watch_title(self._settings, full=False))
+        with a correct label. Public entry point: `refresh_title()`
+        (ADD WATCH round — the manager calls it on every SURVIVING
+        watch after the roster changes)."""
+        self._title_label.setText(
+            watch_title(self._settings, full=self._watch_count() >= 2)
+        )
         self._tray.set_tooltip(watch_title(self._settings, full=True))
 
     def _refresh_open_mini_windows(self) -> None:
@@ -1683,12 +1790,14 @@ class AppController(QObject):
         # clickable/checkable (Rule #8 alternative: a disabled QAction
         # still hover-highlights on some platforms; a QWidgetAction
         # hosting a QLabel reads unambiguously as a header, the SAME
-        # pattern the Size slider row below already uses). `full=False`
-        # — a single watch shows just its location; the full
-        # multi-attribute name is reserved for the tray HOVER tooltip
-        # (`_refresh_watch_title`) until ADD WATCH (next round) needs to
-        # tell several watches apart here too.
-        title_label = QLabel(watch_title(settings, full=False))
+        # pattern the Size slider row below already uses). A single
+        # watch shows just its location (`full=False`); ADD WATCH round
+        # (owner: "Title ne treba pun naziv ako nema potrebe"): with 2+
+        # watches alive (`self._watch_count()`, the manager's live
+        # roster size) this row switches to the full multi-attribute
+        # form too — the tray HOVER tooltip below stays full regardless
+        # of count, always has.
+        title_label = QLabel(watch_title(settings, full=self._watch_count() >= 2))
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet(
             "font-weight: 700; font-size: 13px; padding: 6px 12px;"
@@ -1698,6 +1807,26 @@ class AppController(QObject):
         title_action.setDefaultWidget(title_label)
         menu.addAction(title_action)
         self._title_label = title_label
+        menu.addSeparator()
+        # ADD WATCH (owner INSTRUCTION.txt item 2, sealed 2026-07-21):
+        # "na vrhu... ispod TITLE info" — directly below the title row,
+        # on EVERY watch. Seeds a new watch from THIS watch's current
+        # settings ([the manager](watch_manager.md)'s `add_watch`);
+        # `self._on_add_watch` defaults to a no-op for standalone/test
+        # use (no manager attached) and is reassigned by the manager
+        # right after construction — the lambda below re-reads it
+        # fresh on every click, never binding a stale target.
+        add_watch_action = QAction(f"➕ {tr('Add Watch')}", menu)
+        add_watch_action.triggered.connect(lambda: self._on_add_watch())
+        menu.addAction(add_watch_action)
+        # REMOVE THIS WATCH (same round, architecture guidance): watch 1
+        # is the anchor and never offers it — only watches 2+ do. One
+        # plain Yes/No confirm (`_confirm_remove_watch`), no further
+        # dialogs (owner spec).
+        if self._watch_index != 1:
+            remove_watch_action = QAction(f"➖ {tr('Remove this Watch')}", menu)
+            remove_watch_action.triggered.connect(self._confirm_remove_watch)
+            menu.addAction(remove_watch_action)
         menu.addSeparator()
         # SHOW (owner 2026-07-18, ROADMAP 15h, Session 21-C): in
         # "normal" z-mode the dial rides above other windows ONLY while
@@ -1878,7 +2007,11 @@ class AppController(QObject):
         self._report_action.triggered.connect(self._open_report)
         menu.addAction(self._report_action)
         exit_action = QAction(f"🚪 {tr('Exit')}", menu)
-        exit_action.triggered.connect(self.quit)
+        # Exit is PROCESS-WIDE (ADD WATCH round: unlike the per-watch
+        # Remove entry above, it closes every watch, not just this
+        # one) — `self._on_exit` defaults to `self.quit` (standalone
+        # use); the manager passes its own `quit_all` instead.
+        exit_action.triggered.connect(self._on_exit)
         menu.addAction(exit_action)
         # Normalize every gated state from the CURRENT settings — the
         # one gating implementation serves the fresh build and the

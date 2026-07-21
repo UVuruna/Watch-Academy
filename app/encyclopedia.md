@@ -1,4 +1,4 @@
-# Encyclopedia
+﻿# Encyclopedia
 
 **Script:** [Encyclopedia (script)](encyclopedia.py)
 
@@ -386,7 +386,7 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   need the SAME per-theme preview art for their picker grids, Rule #5)
 
 ### Used by
-- [App Controller](../app/controller.md) — opens it from the menu
+- [Watch Controller](../app/controller.md) — opens it from the menu
   with the translation overlay
 
 ## Classes

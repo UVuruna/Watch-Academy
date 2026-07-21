@@ -26,6 +26,10 @@ UI_STRINGS: tuple[str, ...] = (
     "Size", "Elements", "Visible", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
+    # ADD WATCH round (owner INSTRUCTION.txt item 2, sealed 2026-07-21):
+    # the watch-roster entries at the top of the menu.
+    "Add Watch", "Remove this Watch",
+    "Remove this watch? Its settings file will be deleted.",
     # R5 MENU REWORK (owner spec): the three mini windows replacing the
     # deep Design/Slot/Weekday submenu chains, and the shared "Slot"
     # picker labels.
