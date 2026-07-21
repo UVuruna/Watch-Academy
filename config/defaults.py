@@ -2479,49 +2479,34 @@ def weekday_theme_body_art(
 # progression at ANY hue; BRONZE_LETTER_TINT (below) supplies bronze's
 # own hue so the SAME five-step shape reads as bronze instead of gold
 # (one formula, two hues — never two hand-invented palettes).
-GOLD_RAMP_HUE_DEG = 44.9
-GOLD_RAMP_SAT_VAL_STEPS = (
-    (1.000, 0.651), (0.749, 0.749), (1.000, 1.000),
-    (0.749, 1.000), (0.549, 1.000),
-)
-# THE ADAPTIVE STRETCH (owner: "računamo početno stanje" — measure the
-# SOURCE's own luminance distribution over the recolored region BEFORE
-# mapping it onto the ramp above, so an over-bright or an over-dark
-# source both land on the SAME output ramp instead of two different
-# looks): the low/high PERCENTILE of the masked region's lightness that
-# anchor the per-image contrast stretch to [0, 1].
-ADAPTIVE_METAL_PERCENTILES = (5.0, 95.0)
-ADAPTIVE_METAL_RECOLOR_VERSION = 1   # cache tag — bump on ramp/curve changes
+# NOTE (owner verdict 2026-07-21 night): the ART-INFRA round's ADAPTIVE
+# ramp constants that lived here were REVERTED with the algorithm the
+# same day — the percentile stretch flattened every relief into a
+# detail-free wash. The pre-adaptive recipes below are back verbatim.
+# The NEXT attempt is specced by the owner: several selectable SHADE
+# presets per metal (gold from `UV/DESIGN/gold pallete.png`, bronze and
+# silver ramps to be designed), a Settings option choosing the shade,
+# the mask still touching ONLY the metal-colored pixels, and the
+# source's CONTRAST and overall lightness carried over, never crushed.
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
 # the medallions mix bronze details with GRAY stone and engravings —
 # only the warm bronze pixels may change, the gray stays). Detection =
 # a warm-hue window with soft edges + a saturation ramp; per-target
-# hue/saturation/value mapping (SILVER only — GOLD reads the ADAPTIVE
-# ramp above). Bronze = the art as drawn (no swap).
+# hue/saturation/value mapping. Bronze = the art as drawn (no swap).
 METAL_SWAP_HUE_WINDOW = (10.0, 60.0)   # degrees, warm bronze range
 METAL_SWAP_HUE_SOFT = 8.0              # soft edge width outside the window
 METAL_SWAP_SAT_RAMP = (0.10, 0.28)     # smoothstep: below gray, above bronze
 METAL_SWAP_TARGETS = {
-    # GOLD (owner COLORS verdict 2026-07-20/21 — "BADGE GOLD" read
-    # muddy/olive: a flat hue/sat/val multiply cannot land on a fixed
-    # target look across every source exposure). Replaced by the
-    # ADAPTIVE ramp lookup (`render.assets._adaptive_metal_recolor`) —
-    # "hue" stays only as the ramp's own hue, sat_mul/val_mul are gone
-    # (the ramp's OWN 5 steps carry the saturation/value progression).
-    "gold": {"hue": GOLD_RAMP_HUE_DEG},
+    "gold": {"hue": 48.0, "sat_mul": 1.25, "val_mul": 1.25},
     "silver": {"hue": 220.0, "sat_mul": 0.06, "val_mul": 1.22},
 }
-# Bronze ring LETTERS are derived AT LOAD from the silver ones (owner
-# 2026-07-19, `render.assets.letter_metal_file` — retired the
-# pre-rendered files); ALSO ADAPTIVE now (owner COLORS verdict
-# 2026-07-20/21 — "LETTER BRONZE" was the other weak spot, the old
-# straight multiply with BRONZE_LETTER_TINT read grayish at some
-# exposures, never landing on a consistent bronze). The hue alone
-# survives from the retired recipe — `_adaptive_metal_recolor` reads it
-# via QColor(BRONZE_LETTER_TINT).hueF() to build the bronze ramp at
-# GOLD_RAMP_SAT_VAL_STEPS' own shape (Rule #19: ONE ramp-lookup
-# formula, two hues, not two independently invented palettes).
+# Bronze ring LETTERS are derived AT LOAD from the silver ones
+# (owner 2026-07-19, `render.assets.letter_metal_file` — retired the
+# pre-rendered files). Final recipe = a STRAIGHT multiply with classic
+# bronze, no brightness/contrast change (owner verdict revised on the
+# live dial 2026-07-12: the darkened candidates sat darker than the
+# ring plate itself).
 BRONZE_LETTER_TINT = "#CD7F32"
 
 # ECLIPSE DISPLAY (owner 2026-07-18, ROADMAP 15h item 11 — refines the
