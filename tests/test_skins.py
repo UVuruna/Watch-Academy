@@ -495,6 +495,62 @@ def test_bronze_finish_and_theme_metals():
     assert gray_out == QColor("#808080")             # gray untouched
 
 
+def test_badge_gold_recolor_adapts_to_source_exposure():
+    """THE OWNER'S CORE ASK, badge/metal-swap side (COLORS section,
+    DESIGN INSTRUCTIONS.txt — "BADGE GOLD" was the weak spot, read
+    muddy/olive under the retired flat hue/sat/val multiply): two
+    synthetic warm-bronze plates share the same relief but sit at two
+    different exposures — one crushed dark, one blown bright — and
+    both must land on a comparable GOLD look after `_metal_swapped`,
+    the same adaptive property `_bronzed` (letters) now shares."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    import numpy as np
+    from PySide6.QtGui import QImage
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+
+    def warm_image(values: np.ndarray) -> QImage:
+        # A warm bronze hue (~35deg, inside METAL_SWAP_HUE_WINDOW) at
+        # VALUE `values`, full saturation — the swap's own selection
+        # window (hue + a saturation floor) must see every pixel as
+        # "bronze" regardless of exposure.
+        size = values.shape[0]
+        rgba = np.zeros((size, size, 4), dtype=np.uint8)
+        v = np.clip(values, 0.05, 1.0)
+        rgba[..., 0] = (v * 255).round().astype(np.uint8)          # R
+        rgba[..., 1] = (v * 0.55 * 255).round().astype(np.uint8)   # G
+        rgba[..., 2] = 0                                            # B
+        rgba[..., 3] = 255
+        return QImage(
+            rgba.tobytes(), size, size, size * 4,
+            QImage.Format.Format_RGBA8888,
+        ).copy()
+
+    relief = np.tile(np.linspace(0.0, 1.0, 64), (64, 1))
+    dark_source = warm_image(relief * 0.35)
+    bright_source = warm_image(0.65 + relief * 0.35)
+
+    dark_out = AssetCache._metal_swapped(dark_source, "gold")
+    bright_out = AssetCache._metal_swapped(bright_source, "gold")
+    for x in (8, 24, 40, 56):
+        dark_px = dark_out.pixelColor(x, 32)
+        bright_px = bright_out.pixelColor(x, 32)
+        assert abs(dark_px.red() - bright_px.red()) <= 40
+        assert abs(dark_px.green() - bright_px.green()) <= 40
+        assert abs(dark_px.blue() - bright_px.blue()) <= 40
+    # And a genuinely gold hue throughout — never the muddy/olive read
+    # the owner flagged.
+    gold_hue = defaults.GOLD_RAMP_HUE_DEG
+    for x in (8, 24, 40, 56):
+        px = dark_out.pixelColor(x, 32)
+        assert min(abs(px.hueF() * 360.0 - gold_hue), 8.0) <= 8.0
+
+
 def test_planets_art_body_renders_differently_by_metal():
     """Render-chain confirmation (owner 2026-07-18): the real
     planets/art/sun.png plate — a bronze medallion like the pantheon
@@ -567,16 +623,14 @@ def test_live_derived_silver_letters_are_grayscale():
     assert omega.pixelColor(0, 0).alpha() == 0
 
 
-def test_live_derived_bronze_matches_the_retired_recipe():
-    """Regression pin (owner 2026-07-19 live-render round): the live
-    `letter_metal_file(gold, "bronze")` must read like the RETIRED
-    pre-rendered recipe (setup/make_bronze_letters.py) — a straight
-    multiply of the grayscale silver with BRONZE_LETTER_TINT
-    (#CD7F32): opaque pixels carry that hue and are strictly darker
-    than pure white (never a translucent wash), matching the owner's
-    sealed channel statistics rather than pixel-exact PIL output
-    (Qt's Multiply-mode float blending vs. PIL's integer floor
-    division round slightly differently)."""
+def test_live_derived_bronze_reads_bronze_hued_and_alpha_preserving():
+    """Pin for the ADAPTIVE bronze recipe (owner COLORS verdict
+    2026-07-20/21, ART-INFRA round — "LETTER BRONZE" was the weak spot,
+    superseding the flat per-channel multiply this test used to pin):
+    `letter_metal_file(gold, "bronze")` carries the source's OWN alpha
+    unchanged, and every opaque pixel reads a genuinely bronze hue at
+    real saturation — never a washed-out gray, the exact complaint the
+    old recipe drew."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -591,7 +645,7 @@ def test_live_derived_bronze_matches_the_retired_recipe():
     silver = QImage(str(letter_metal_file(gold, "silver")))
     bronze = QImage(str(letter_metal_file(gold, "bronze")))
     assert bronze.size() == silver.size()
-    tint = QColor(defaults.BRONZE_LETTER_TINT)
+    tint_hue = QColor(defaults.BRONZE_LETTER_TINT).hueF() * 360.0
     seen_opaque = False
     for x in range(0, bronze.width(), 10):
         for y in range(0, bronze.height(), 10):
@@ -601,31 +655,77 @@ def test_live_derived_bronze_matches_the_retired_recipe():
             seen_opaque = True
             bronze_px = bronze.pixelColor(x, y)
             assert bronze_px.alpha() == silver_px.alpha()
-            # A straight multiply can only darken (or match at 0) —
-            # never brighten a channel above the tint's own ceiling.
-            assert bronze_px.red() <= tint.red() + 1
-            assert bronze_px.green() <= tint.green() + 1
-            assert bronze_px.blue() <= tint.blue() + 1
-            # Where the silver source is bright, the bronze result
-            # reads the tint hue itself (a warm, low-saturation-blue
-            # copper, not gray) — checked at the brightest sampled
-            # pixel below.
+            # Every opaque pixel rides the SAME bronze hue (the ramp
+            # is built once, at the tint's own hue) and stays visibly
+            # saturated — the ramp's palest step (S=0.549) is the
+            # floor, never a gray wash.
+            assert min(abs(bronze_px.hueF() * 360.0 - tint_hue), 8.0) <= 8.0
+            assert bronze_px.saturationF() >= 0.45
     assert seen_opaque
-    # The letter's brightest silver pixel (near-white, the glyph
-    # core) must bronze to something close to the tint color itself.
-    brightest = max(
-        (
-            (silver.pixelColor(x, y).lightness(), x, y)
-            for x in range(0, silver.width(), 4)
-            for y in range(0, silver.height(), 4)
-            if silver.pixelColor(x, y).alpha() > 200
-        ),
+
+
+def test_bronze_recolor_adapts_to_source_exposure():
+    """THE OWNER'S CORE ASK (COLORS section, DESIGN INSTRUCTIONS.txt):
+    "ako je pocetno stanje slike previše osvjetljeno drugačije je
+    apliciramo... nego ako je pocetno stanje previše zamračeno" — an
+    over-BRIGHT and an over-DARK render of the SAME relief must both
+    land on a comparable bronze look, not two different ones. Two
+    synthetic grayscale sources share the exact same left-to-right
+    relief (a linear ramp) compressed into two disjoint exposure bands
+    — one crushed dark, one blown bright — the way two different AI
+    generations of the same letter might actually come out."""
+    import os
+
+    os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    import numpy as np
+    from PySide6.QtGui import QImage, QPixmap
+    from PySide6.QtWidgets import QApplication
+
+    from render.assets import AssetCache
+
+    QApplication.instance() or QApplication([])
+
+    def gray_pixmap(levels: np.ndarray) -> QPixmap:
+        size = levels.shape[0]
+        rgba = np.zeros((size, size, 4), dtype=np.uint8)
+        level = (np.clip(levels, 0.0, 1.0) * 255).round().astype(np.uint8)
+        rgba[..., 0] = rgba[..., 1] = rgba[..., 2] = level
+        rgba[..., 3] = 255
+        image = QImage(
+            rgba.tobytes(), size, size, size * 4,
+            QImage.Format.Format_RGBA8888,
+        ).copy()
+        return QPixmap.fromImage(image)
+
+    relief = np.tile(np.linspace(0.0, 1.0, 64), (64, 1))
+    dark_source = gray_pixmap(relief * 0.35)          # crushed into [0, .35]
+    bright_source = gray_pixmap(0.65 + relief * 0.35)  # blown into [.65, 1]
+
+    dark_out = AssetCache._bronzed(dark_source, defaults.BRONZE_LETTER_TINT)
+    bright_out = AssetCache._bronzed(
+        bright_source, defaults.BRONZE_LETTER_TINT
     )
-    _, bx, by = brightest
-    core = bronze.pixelColor(bx, by)
-    assert abs(core.red() - tint.red()) <= 12
-    assert abs(core.green() - tint.green()) <= 12
-    assert abs(core.blue() - tint.blue()) <= 12
+    dark_image = dark_out.toImage()
+    bright_image = bright_out.toImage()
+    # Sampled at the SAME relative position (the relief is identical,
+    # only the absolute exposure differs), the two outputs must be
+    # close — the percentile stretch neutralizes the exposure gap
+    # instead of the old flat multiply, which would have left the dark
+    # source's whole ramp crushed near-black and the bright source's
+    # whole ramp crushed near the tint ceiling (two unrecognizable
+    # looks for the SAME underlying letter).
+    for x in (8, 24, 40, 56):
+        dark_px = dark_image.pixelColor(x, 32)
+        bright_px = bright_image.pixelColor(x, 32)
+        assert abs(dark_px.red() - bright_px.red()) <= 30
+        assert abs(dark_px.green() - bright_px.green()) <= 30
+        assert abs(dark_px.blue() - bright_px.blue()) <= 30
+    # And the ramp is still monotonic in LIGHTNESS along the relief —
+    # the source's own light/dark relief survives the adaptation.
+    lightnesses = [
+        dark_image.pixelColor(x, 32).lightness() for x in (4, 20, 36, 52, 60)
+    ]
+    assert lightnesses == sorted(lightnesses)
 
 
 def test_full_dial_renders_distinctly_per_letter_finish():

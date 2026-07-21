@@ -37,7 +37,12 @@ from core.year_wheel import (
     meteorological_span,
     zodiac_span,
 )
-from render.assets import AssetCache, metal_variant_file, scaled_variant_file
+from render.assets import (
+    AssetCache,
+    eclipse_solar_type_icon,
+    metal_variant_file,
+    scaled_variant_file,
+)
 from render.layers import (
     ArchetypeCenterLayer,
     ArchetypeLayer,
@@ -1306,6 +1311,13 @@ class Compositor:
         theme = theme or self._skin.weekday_theme
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
         article_body = body
+        # THE UNIVERSAL ROTATION CONVENTION (weekday ALT ROTATION round
+        # 2026-07-20/21): `self._day` is None before the first tick
+        # (this method is unit-tested directly, `self._day` unset —
+        # `test_seated_slot_wears_its_own_roster`) — the SAME graceful-
+        # absent guard `_center_pangea` already uses for the identical
+        # hazard.
+        on_date = self._day.local_date if self._day is not None else None
         # The weekday-set shortcut holds only while the ROSTER matches
         # too (owner 2026-07-15: slot 1 Greek Planetary beside slot 2
         # Greek Pantheon — same theme, two casts); a caller that names
@@ -1329,9 +1341,8 @@ class Compositor:
             metal = self._skin.weekday_set.metal
         elif theme == "planets":
             display_name = defaults.DEFAULT_SKIN.weekday_set.body_names[body]
-            image = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "primary"
-                / f"{body}.png"
+            image = defaults.weekday_theme_body_art(
+                "planets", body, on_date=on_date,
             )
             metal = None
         else:
@@ -1354,21 +1365,27 @@ class Compositor:
             )
             if seat is not None:
                 image, display_name, (article_set, article_body) = seat
+                if on_date is not None:
+                    image = defaults.rotating_art_file(image, on_date) or image
             else:
                 display_name = defaults.WEEKDAY_THEME_NAMES[theme][body]
-                theme_dir = (
-                    defaults.WEEKDAY_ART_DIR
-                    / defaults.WEEKDAY_THEME_DIRS[theme]
+                # THE ONE weekday-body resolver (Rule #5 — shared with
+                # `app.controller` and `render.layers._draw_weekday_slot`;
+                # `on_date` wires THE UNIVERSAL ROTATION CONVENTION so
+                # the legend never shows a different day's pick than the
+                # slot it describes).
+                image = defaults.weekday_theme_body_art(
+                    theme, body, on_date=on_date,
+                    colored=(
+                        slot_metal == "colored"
+                        and theme in constants.METAL_THEMES
+                    ),
                 )
-                if (
-                    slot_metal == "colored"
-                    and theme in constants.METAL_THEMES
-                ):
-                    theme_dir = theme_dir.parent / "colored"
-                image = (
-                    theme_dir
-                    / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
-                )
+        if same_unit and image is not None and on_date is not None:
+            # `spec.bodies` is BAKED at settings-apply time (never per
+            # day) — re-resolve the live rotation on top of it, exactly
+            # like `render.layers.draw_weekday_body`'s own override.
+            image = defaults.rotating_art_file(image, on_date) or image
         image = metal_variant_file(image, metal)
         if body == "sun":
             # The dual center's TWO plates in one legend (owner
@@ -1663,16 +1680,18 @@ class Compositor:
         columns = []
         for face in faces:
             if face == "ninth":
-                name, asset = theme_ninth(theme, self._center_pangea())
+                name, asset = theme_ninth(
+                    theme, self._center_pangea(), on_date=self._day.local_date
+                )
                 text = self._encyclopedia.entry("ninths", name)["base"]
                 accents = ()
             else:
                 ruler = face == "ruler"
                 name = dual_names[0 if ruler else 1]
-                asset = metal_variant_file(
-                    spec.bodies.get("sun") if ruler else spec.dual_asset,
-                    spec.metal,
-                )
+                raw = spec.bodies.get("sun") if ruler else spec.dual_asset
+                if raw is not None:
+                    raw = defaults.rotating_art_file(raw, self._day.local_date) or raw
+                asset = metal_variant_file(raw, spec.metal)
                 node = self._symbolism.article(article_set, "sun")
                 text = node.get("faces", {}).get(face) or node["base"]
                 if ruler:
@@ -1723,7 +1742,9 @@ class Compositor:
         if not active:
             return self._sun_face_tooltip("ruler", active=False)
         theme = self._skin.weekday_theme
-        ninth = theme_ninth(theme, self._center_pangea())
+        ninth = theme_ninth(
+            theme, self._center_pangea(), on_date=self._day.local_date
+        )
         if ninth is None:
             return self._dual_face_columns(theme, ("ruler", "servant"))
         face = center_face(self._day, self._last_tick, has_ninth=True)
@@ -2505,6 +2526,26 @@ class Compositor:
         is_wet = starts_in_march != self._day.southern_hemisphere
         return start, end, is_wet
 
+    def _eclipse_type_icon_tag(self, eclipse) -> str:
+        """The small per-TYPE eclipse icon (ECLIPSE ICON WIRING round,
+        owner 2026-07-20/21) riding inline before the hover-card's
+        eclipse line's own title — distinct from the big category
+        EMBLEM plate (`_eclipse_emblem`, untouched): LUNAR reads the
+        owner-approved red/gold/blue set, SOLAR the proposed shape-
+        matched set (`defaults.eclipse_lunar_type_icon` /
+        `render.assets.eclipse_solar_type_icon`). Empty string — never
+        a broken `<img>` — when the icon has not landed (Rule #1)."""
+        icon = (
+            defaults.eclipse_lunar_type_icon(eclipse.type)
+            if eclipse.kind == "lunar"
+            else eclipse_solar_type_icon(eclipse.type)
+        )
+        if icon is None:
+            return ""
+        px = defaults.ECLIPSE_TYPE_ICON_PX
+        small = scaled_variant_file(icon, 2 * px)
+        return f"<img src='{small.as_uri()}' width='{px}' align='middle'/> "
+
     def _eclipse_hover_line(self, eclipse) -> str:
         """The eclipse hover line (ROADMAP 15h item 11, owner spec:
         NAME the eclipse): type + magnitude + local instant, plain
@@ -2525,7 +2566,8 @@ class Compositor:
         mag_label = html.escape(self._tr("mag."))
         mag = f"{eclipse.magnitude:.2f}" if eclipse.magnitude is not None else "?"
         line = (
-            f"{title} ({kind}, {mag_label} {mag}) — "
+            f"{self._eclipse_type_icon_tag(eclipse)}{title} "
+            f"({kind}, {mag_label} {mag}) — "
             f"{self._ord(instant.day)} {html.escape(self._month(instant))} "
             f"{instant:%H:%M}"
         )

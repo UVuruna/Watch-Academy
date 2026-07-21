@@ -862,6 +862,123 @@ def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeyp
     assert tmp_path.joinpath("Lunar_Total.png").as_uri() in moon
 
 
+# --- THE PER-TYPE ECLIPSE ICONS (ART-INFRA round, owner 2026-07-20/21) --------
+#
+# Distinct from the category EMBLEM above (the big rose-window plate,
+# unchanged this round): a SMALL icon rides inline before the hover
+# line's own title, red/gold/blue for LUNAR (owner-approved), a shape-
+# matched proposal for SOLAR.
+
+
+def test_eclipse_lunar_type_icon_mapping():
+    """The owner-approved mapping: red=TOTAL, gold=PARTIAL,
+    blue=PENUMBRAL; an unknown type is graceful-absent (None)."""
+    assert defaults.eclipse_lunar_type_icon("total").name == "moon_eclipse_red.png"
+    assert defaults.eclipse_lunar_type_icon("partial").name == "moon_eclipse_gold.png"
+    assert (
+        defaults.eclipse_lunar_type_icon("penumbral").name
+        == "moon_eclipse_blue.png"
+    )
+    assert defaults.eclipse_lunar_type_icon("bogus") is None
+
+
+def test_eclipse_solar_type_icon_total_and_partial_are_as_drawn():
+    """Total/partial ride their source file UNCHANGED — only annular
+    gets the computed tint (below)."""
+    from render.assets import eclipse_solar_type_icon
+
+    assert (
+        eclipse_solar_type_icon("total")
+        == defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE["total"]
+    )
+    assert (
+        eclipse_solar_type_icon("partial")
+        == defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE["partial"]
+    )
+    assert eclipse_solar_type_icon("bogus") is None
+
+
+def test_eclipse_solar_annular_icon_is_tinted_toward_the_ring_of_fire_color(app):
+    """The PROPOSED solar recolor (owner: "consider recoloring one for
+    more noticeable distinction"): annular's icon is TRITONE-tinted
+    toward GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR — a DIFFERENT file than the
+    plain source, and its bright (non-black) pixels read that hue."""
+    from PySide6.QtGui import QColor, QImage
+
+    from render.assets import eclipse_solar_type_icon
+
+    tinted_path = eclipse_solar_type_icon("annular")
+    source_path = defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE["annular"]
+    assert tinted_path != source_path
+    assert tinted_path.exists()
+    image = QImage(str(tinted_path))
+    target_hue = QColor(defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR).hueF() * 360.0
+    seen_bright = False
+    for x in range(0, image.width(), 15):
+        for y in range(0, image.height(), 15):
+            px = image.pixelColor(x, y)
+            if px.alpha() < 200 or px.lightness() < 40:
+                continue     # transparent or the near-black eclipsed disc
+            seen_bright = True
+            assert min(abs(px.hueF() * 360.0 - target_hue), 12.0) <= 12.0
+    assert seen_bright
+
+
+def test_eclipse_hover_line_carries_the_lunar_type_icon(app):
+    """Wiring: the Moon hover card's eclipse line embeds the type
+    icon's own URI inline, ahead of the "Lunar Eclipse" title."""
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 3, 3, 12, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    for type_, stem in (
+        ("total", "moon_eclipse_red.png"),
+        ("partial", "moon_eclipse_gold.png"),
+        ("penumbral", "moon_eclipse_blue.png"),
+    ):
+        tick = dataclasses.replace(
+            build_tick_state(now, day),
+            eclipse_event=EclipseEvent(
+                kind="lunar", instant=now.astimezone(timezone.utc),
+                type=type_, magnitude=1.0,
+            ),
+        )
+        comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+        comp.render_offscreen(360.0, 1.0, day, tick)
+        moon = comp._moon_text()
+        assert stem in moon, (type_, moon)
+        # It rides BEFORE the "Lunar Eclipse" title, not after.
+        assert moon.index(stem) < moon.index("Lunar Eclipse")
+
+
+def test_eclipse_hover_line_carries_the_solar_type_icon(app):
+    """Same wiring, Earth/solar side — annular resolves through the
+    tinted cache file, still embedded inline."""
+    from render.assets import eclipse_solar_type_icon
+
+    tz = ZoneInfo("Europe/Belgrade")
+    now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)
+    day = _belgrade_day(now)
+    for type_ in ("total", "annular", "partial"):
+        tick = dataclasses.replace(
+            build_tick_state(now, day),
+            eclipse_event=EclipseEvent(
+                kind="solar",
+                instant=datetime(2026, 8, 12, 17, 45, 59, tzinfo=timezone.utc),
+                type=type_, magnitude=1.0,
+            ),
+        )
+        comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+        comp.render_offscreen(360.0, 1.0, day, tick)
+        earth = comp._earth_text()
+        expected = eclipse_solar_type_icon(type_)
+        # `scaled_variant_file` may downscale to a differently-STAMPED
+        # cache file, but its name always ends in the source's own
+        # `{stem}.png` (`_scaled_cache_path`'s own naming law) — a
+        # trailing-substring check is robust either way.
+        assert expected.name in earth, (type_, earth)
+        assert earth.index("Solar Eclipse") > 0
+
+
 # --- THE SUPERSCRIPT LEAK, KILLED FOR GOOD (owner, angry, Session 21-D) -------
 #
 # `_eclipse_hover_line` used to `html.escape()` the WHOLE composed line

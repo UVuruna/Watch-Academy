@@ -338,6 +338,21 @@ FAST_TRAVEL_FLASH_RADIUS_PX = 10
 FAST_TRAVEL_FLASH_BG = "rgba(20, 20, 26, 220)"
 FAST_TRAVEL_FLASH_TEXT_COLOR = "#F0F0F0"
 
+# THE CALENDAR WHEEL ICON (ECLIPSE ICON WIRING round, owner 2026-07-20/
+# 21 — "ADD a computed calendar icon... so the 📅 fallback dies"): the
+# Calendar Fast Travel theme is the one FAST_TRAVEL_THEMES entry with
+# no dedicated art file (Sun/Moon keep their eclipse glyphs, untouched
+# this round) — Rule #19, COMPUTE rather than commission a 12th art
+# file for a plain wheel mark. `render.assets.calendar_wheel_icon_file`
+# draws it: 12 alternating wedges in the app's own gold ramp (the SAME
+# two sampled steps the ADAPTIVE GOLD/BRONZE round reads off
+# `UV/DESIGN/gold pallete.png` — Rule #5, one palette, reused) with a
+# thin dark ring for contrast against the flash's own dark background.
+CALENDAR_ICON_WEDGE_COUNT = 12
+CALENDAR_ICON_WEDGE_COLORS = ("#A67C00", "#FFBF00")
+CALENDAR_ICON_RING_COLOR = "#1A1A1A"
+CALENDAR_ICON_RING_WIDTH_FRACTION = 0.06   # of the icon radius
+
 
 # Time Travel (scenario tester in the menu): the dial renders the entered
 # moment/position for this long, then returns to the present by itself.
@@ -2422,40 +2437,92 @@ WEEKDAY_DUAL_FILES = {
 }
 
 
-def weekday_theme_body_art(theme: str, body: str) -> Path:
+def weekday_theme_body_art(
+    theme: str, body: str, on_date: date | None = None, colored: bool = False,
+) -> Path:
     """One theme's plate for one weekday body (bronze / canon file) —
     moved here from `app.encyclopedia._theme_body_art` (R5 MENU REWORK,
     Rule #5): the Encyclopedia gallery AND the new Pointer/Slot Theme
     picker windows both need a representative preview per theme, so the
-    resolution lives ONCE in config and both readers import it."""
+    resolution lives ONCE in config and both readers import it. THE
+    SAME expression used to be re-typed at every render call site
+    (`render.layers._draw_weekday_slot`, `render.compositor`'s hover
+    legend, `app.controller._themed_weekday_set`'s baked bodies dict) —
+    consolidated here (weekday ALT ROTATION round, owner 2026-07-20/21)
+    so the universal rotation convention has exactly ONE weekday-body
+    chokepoint instead of four copies drifting apart. `colored`
+    redirects to the metal theme's `colored/` sibling folder, exactly
+    like `app.encyclopedia._theme_dual_art`'s own flag. `on_date` opts
+    into THE UNIVERSAL ROTATION CONVENTION (`rotating_art_file`): None
+    (every caller before this round) returns the plain canonical file;
+    a date resolves the day's pick among the canonical file's `_v2`/
+    `alt/` siblings, falling back to canonical when none exist."""
     if theme == "planets":
-        return WEEKDAY_ART_DIR / "planets" / "primary" / f"{body}.png"
-    return (
-        WEEKDAY_ART_DIR / WEEKDAY_THEME_DIRS[theme]
-        / f"{WEEKDAY_THEME_FILES[theme][body]}.png"
-    )
+        canonical = WEEKDAY_ART_DIR / "planets" / "primary" / f"{body}.png"
+    else:
+        theme_dir = WEEKDAY_ART_DIR / WEEKDAY_THEME_DIRS[theme]
+        if colored:
+            theme_dir = theme_dir.parent / "colored"
+        canonical = theme_dir / f"{WEEKDAY_THEME_FILES[theme][body]}.png"
+    if on_date is None:
+        return canonical
+    return rotating_art_file(canonical, on_date) or canonical
+
+# THE ADAPTIVE GOLD/BRONZE RAMPS (owner COLORS verdict 2026-07-20/21,
+# ART-INFRA round — "SILVER JE SOLIDAN u oba" / "algoritam primenjujemo
+# drugačije na različita početna stanja"): GOLD_RAMP_HUE_DEG and
+# GOLD_RAMP_SAT_VAL_STEPS are sampled DIRECTLY off the owner's reference
+# swatch (`UV/DESIGN/gold pallete.png`, 5 bands — QColor.getHsvF() read
+# at each band's own center pixel): the hue is flat across all five
+# bands (~45deg, true gold/amber) — only saturation/value step from
+# dark-amber to pale. `render.assets._metal_ramp_rgb` walks this (S, V)
+# progression at ANY hue; BRONZE_LETTER_TINT (below) supplies bronze's
+# own hue so the SAME five-step shape reads as bronze instead of gold
+# (one formula, two hues — never two hand-invented palettes).
+GOLD_RAMP_HUE_DEG = 44.9
+GOLD_RAMP_SAT_VAL_STEPS = (
+    (1.000, 0.651), (0.749, 0.749), (1.000, 1.000),
+    (0.749, 1.000), (0.549, 1.000),
+)
+# THE ADAPTIVE STRETCH (owner: "računamo početno stanje" — measure the
+# SOURCE's own luminance distribution over the recolored region BEFORE
+# mapping it onto the ramp above, so an over-bright or an over-dark
+# source both land on the SAME output ramp instead of two different
+# looks): the low/high PERCENTILE of the masked region's lightness that
+# anchor the per-image contrast stretch to [0, 1].
+ADAPTIVE_METAL_PERCENTILES = (5.0, 95.0)
+ADAPTIVE_METAL_RECOLOR_VERSION = 1   # cache tag — bump on ramp/curve changes
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
 # the medallions mix bronze details with GRAY stone and engravings —
 # only the warm bronze pixels may change, the gray stays). Detection =
 # a warm-hue window with soft edges + a saturation ramp; per-target
-# hue/saturation/value mapping. Bronze = the art as drawn (no swap).
+# hue/saturation/value mapping (SILVER only — GOLD reads the ADAPTIVE
+# ramp above). Bronze = the art as drawn (no swap).
 METAL_SWAP_HUE_WINDOW = (10.0, 60.0)   # degrees, warm bronze range
 METAL_SWAP_HUE_SOFT = 8.0              # soft edge width outside the window
 METAL_SWAP_SAT_RAMP = (0.10, 0.28)     # smoothstep: below gray, above bronze
 METAL_SWAP_TARGETS = {
-    "gold": {"hue": 48.0, "sat_mul": 1.25, "val_mul": 1.25},
+    # GOLD (owner COLORS verdict 2026-07-20/21 — "BADGE GOLD" read
+    # muddy/olive: a flat hue/sat/val multiply cannot land on a fixed
+    # target look across every source exposure). Replaced by the
+    # ADAPTIVE ramp lookup (`render.assets._adaptive_metal_recolor`) —
+    # "hue" stays only as the ramp's own hue, sat_mul/val_mul are gone
+    # (the ramp's OWN 5 steps carry the saturation/value progression).
+    "gold": {"hue": GOLD_RAMP_HUE_DEG},
     "silver": {"hue": 220.0, "sat_mul": 0.06, "val_mul": 1.22},
 }
-# Bronze ring LETTERS are derived AT LOAD from the silver ones
-# (owner 2026-07-19, `render.assets.letter_metal_file` — retired the
-# pre-rendered files). Final recipe = a STRAIGHT multiply with classic
-# bronze, no brightness/contrast change (owner verdict revised on the
-# live dial 2026-07-12: the darkened candidates sat darker than the
-# bronze medallions — candidate C matches).
+# Bronze ring LETTERS are derived AT LOAD from the silver ones (owner
+# 2026-07-19, `render.assets.letter_metal_file` — retired the
+# pre-rendered files); ALSO ADAPTIVE now (owner COLORS verdict
+# 2026-07-20/21 — "LETTER BRONZE" was the other weak spot, the old
+# straight multiply with BRONZE_LETTER_TINT read grayish at some
+# exposures, never landing on a consistent bronze). The hue alone
+# survives from the retired recipe — `_adaptive_metal_recolor` reads it
+# via QColor(BRONZE_LETTER_TINT).hueF() to build the bronze ramp at
+# GOLD_RAMP_SAT_VAL_STEPS' own shape (Rule #19: ONE ramp-lookup
+# formula, two hues, not two independently invented palettes).
 BRONZE_LETTER_TINT = "#CD7F32"
-BRONZE_LETTER_BRIGHTNESS = 1.0
-BRONZE_LETTER_CONTRAST = 1.0
 
 # ECLIPSE DISPLAY (owner 2026-07-18, ROADMAP 15h item 11 — refines the
 # sealed glow-metal triad; the Deep Time pack's eclipse catalog is the
@@ -2596,6 +2663,47 @@ ECLIPSE_TYPE_EMBLEM = {
     ("lunar", "partial"): "Lunar_Partial",
     ("lunar", "penumbral"): "Lunar_Penumbral",
 }
+
+# THE PER-TYPE ECLIPSE ICONS (ART-INFRA round, owner 2026-07-20/21) —
+# small dial-chrome badges distinct from the big category EMBLEM plate
+# above (ECLIPSE_ART_DIR, untouched — these ride the hover-card's own
+# eclipse LINE, `render.compositor._eclipse_hover_line`). LUNAR is the
+# owner-APPROVED mapping: red=TOTAL, gold=PARTIAL, blue=PENUMBRAL —
+# `assets/icons/moon_eclipse_{red,gold,blue}.png`.
+ECLIPSE_LUNAR_TYPE_ICON = {
+    "total": ICON_DIR / "moon_eclipse_red.png",
+    "partial": ICON_DIR / "moon_eclipse_gold.png",
+    "penumbral": ICON_DIR / "moon_eclipse_blue.png",
+}
+
+
+def eclipse_lunar_type_icon(type_: str) -> Path | None:
+    """The small LUNAR eclipse type icon, or None for an unknown type
+    or a file that has not landed — the SAME graceful-absent contract
+    `icon_path` already guarantees (Rule #1)."""
+    path = ECLIPSE_LUNAR_TYPE_ICON.get(type_)
+    return path if path is not None and path.exists() else None
+
+
+# SOLAR is a PROPOSED mapping (NOT owner-confirmed like lunar's red/
+# gold/blue — flagged for his eye, COLORS section of DESIGN
+# INSTRUCTIONS.txt: "razmotriti... da li treba drugu boju za
+# distinktivnost"): the owner's three sun_eclipse variants read almost
+# identically at icon size, so the pick follows each file's OWN shape —
+# `sun_eclipse1.png` alone shows a bright ring hugging the black disc
+# (the real "ring of fire" signature) so it wins ANNULAR; the canonical
+# `sun_eclipse.png` (plain corona rays) wins TOTAL; `sun_eclipse2.png`
+# (a broader, softer halo) wins PARTIAL. `render.assets.
+# eclipse_solar_type_icon` computationally TINTS the annular pick
+# toward GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR (#FF7A1A, the SAME "ring of
+# fire" color the dial's own annular glow already uses — Rule #5) for a
+# clearer at-a-glance read; total/partial stay as drawn.
+ECLIPSE_SOLAR_TYPE_ICON_SOURCE = {
+    "total": ICON_DIR / "sun_eclipse.png",
+    "annular": ICON_DIR / "sun_eclipse1.png",
+    "partial": ICON_DIR / "sun_eclipse2.png",
+}
+ECLIPSE_TYPE_ICON_PX = 22   # the hover-line's small inline badge
 
 # ONE menu/encyclopedia/settings title per theme (English; translated
 # through the ui/ overlay at display) — every theme list iterates this.

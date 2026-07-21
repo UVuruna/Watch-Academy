@@ -33,6 +33,7 @@ one-sided gap), and test the pixel size.
 - [Era Terms (incl. the Eras-of-the-World calendars)](#era-terms)
 - [Eclipse Category Images](#eclipse)
 - [Subdial Plates](#subdial-masters)
+- [Slavic Months & Badge 1:1 (ART-INFRA round)](#art-infra-round)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -46,8 +47,9 @@ families (astrology + Chinese), and the flat badge/emblem groups
 (trinity, season, scale, virtue, sin, mood, intelligence) — this
 document does not repeat that table. It covers everything Roster does
 NOT walk: the `archetype/` tree, `era/`, `eclipse/`, the subdial
-masters, and the owner's own hand-built collections (ring letters,
-icons, guide).
+masters, the Calendar-pointer 12-set (`months/`), the BADGE SISTEM
+1:1 circles (`badge/circle/`), and the owner's own hand-built
+collections (ring letters, icons, guide).
 
 <a id="purge-log"></a>
 
@@ -218,6 +220,48 @@ bronze still algorithmic) — see
 story and the derivation-check paragraph Rule #19 requires. This row
 is CLOSED, not a gap.
 
+<a id="art-infra-round"></a>
+
+## Slavic Months & Badge 1:1 (ART-INFRA round, owner 2026-07-20/21)
+
+Two NEW sheets this round, both **0 generated, sheet complete** —
+tracked here the moment they're written, per this file's own charter
+("read it before writing a sheet, not after").
+
+- **Slavic Months** — [Months Prompts](months/months_prompts.md).
+  Twelve ROUND rose-window medallions, `assets/months/<stem>.png`
+  (the SAME sourceless-root precedent as the subdial sets — see
+  `assets/___assets.md`), registered in `config.defaults.
+  SLAVIC_MONTHS` (R7b, 2026-07-21) and the `months` Encyclopedia topic
+  since BEFORE this round; this round supplied the missing ARTWORK
+  sheet. **Art: 0/12.** The render of the mounted marks on the
+  Calendar pointer is a separate, future round (unchanged scope note,
+  carried from `config/defaults.py`'s own SLAVIC_MONTHS comment).
+- **Badge 1:1, round one** —
+  [Badge 1:1 Prompts](badge/badge_1to1_prompts.md). 38 ROUND circular
+  companions for every 2:1 LANCET figure across the seven archetype
+  families (Trinity, Family, Temperaments, Persons, One Soul, Walks,
+  Life-Tree — the five CENTER rosettes and the already-round
+  Tetramorph/Evangelist rondels correctly excluded, they need no
+  companion). Drop root `assets/badge/circle/<family>/<Stem>.png`, a
+  NEW staging area deliberately outside `assets/archetype/` since the
+  hover-card left-column WIRING is undecided (owner call — DO NOT
+  invent it). **Art: 0/38.** The Animals register's own 8 Life badges
+  (compass_light's non-default alternate) are explicitly scoped OUT of
+  round one — a straightforward round-two follow-up if the owner
+  activates that register.
+- Both sheets pass `tests/test_prompt_paths.py`'s lint: Months via the
+  `_DATA_DRIVEN_ROOTS` list (its per-name paths are enumerated in
+  `SLAVIC_MONTHS` but built through an f-string inside `app.
+  encyclopedia._topics`, invisible to the lint's static scan, exactly
+  like weekday/zodiac already are); Badge 1:1 needed exactly ONE
+  explicit whitelist entry (`badge/circle/life/tree/Unborn.png`,
+  standing for the whole Life-Tree octet) — the other 30 paths are
+  already accepted by the lint's own basename-suffix leniency, since
+  their filenames coincide with the SOURCE lancets' literal
+  `"Stem.png"` strings in `config/archetypes.py` (documented in the
+  whitelist's own comment, not a gap).
+
 <a id="other"></a>
 
 ## Ring Letters, Icons, Guide — out of the AI-prompt pipeline
@@ -228,10 +272,16 @@ Unchanged, re-confirmed 2026-07-19:
   `domy.png`, `hexagram.png`, `morph.png` at the ring root) — the
   owner's own hand-built glyph library, not AI-prompted; no sheet
   needed, none found, not a gap.
-- **Icons** (`assets/icons/` — not yet on disk, expected) — its own
-  self-contained, owner-facing sheet already exists:
-  `icons/ICONS_SPISAK.md` (14 SVG icons, Serbian by explicit owner
-  exception). Not a missing-prompt gap.
+- **Icons** (`assets/icons/` — ON DISK now, 14 files: light.png,
+  dark.svg, eclipse_sun.svg, eclipse_moon.png, compass.png,
+  north_pole.png, south_pole.png, plus the ART-INFRA round's per-type
+  eclipse set — moon_eclipse_red/gold/blue.png and sun_eclipse.png/
+  1.png/2.png) — its own self-contained, owner-facing sheet already
+  exists: `icons/ICONS_SPISAK.md` (Serbian by explicit owner
+  exception). Not a missing-prompt gap; the per-type mapping/wiring
+  itself is `config/___config.md`'s ECLIPSE TYPE ICONS note, not an
+  AI-prompt gap either (no new icon files needed — the mapping picks
+  among files already on disk, one computationally tinted).
 - **Guide** (`assets/guide/*.png` — 91 files, confirmed on disk) — the
   owner's own screenshots; no sheet applicable.
 
@@ -248,11 +298,15 @@ scope needs a NEW prompt written. The outstanding work is entirely:
 1. **Art generation** against sheets that already exist — era (13),
    eclipse (7), the archetype gaps in the table above (Throne, Seal,
    Lucifer_Pride, Judas_Fear, the 8 evangelist files, the 1 one-sided
-   Devil_Prosecutor). Subdial is CLOSED (RULE-19 round, 2026-07-20) —
-   see the superseded note above, no more generation needed there.
-2. **Two wiring decisions**, not art gaps — the row2 rondels (Trinity/
-   Family/Walks, 40 files sitting painted and unread) and Anno Lucis
-   (1 file, once generated, has nowhere to draw yet).
+   Devil_Prosecutor), plus the ART-INFRA round's two NEW sheets —
+   Slavic Months (12) and Badge 1:1 round one (38). Subdial is CLOSED
+   (RULE-19 round, 2026-07-20) — see the superseded note above, no
+   more generation needed there.
+2. **Three wiring decisions**, not art gaps — the row2 rondels
+   (Trinity/Family/Walks, 40 files sitting painted and unread), Anno
+   Lucis (1 file, once generated, has nowhere to draw yet), and the
+   Badge 1:1 hover-card left-column layout (38 files, once generated —
+   owner call, DO NOT invent it).
 3. **Roster's own shortage list** (196 ChatGPT + 24 Gemini, weekday/
    zodiac territory) — tracked in [Roster](../../ROSTER.md), sheets
    already exist per theme, not repeated here.

@@ -16,7 +16,15 @@ from pathlib import Path
 
 import numpy as np
 from PySide6.QtCore import Qt, QPointF, QRectF
-from PySide6.QtGui import QColor, QImage, QImageReader, QPainter, QPainterPath, QPixmap
+from PySide6.QtGui import (
+    QColor,
+    QImage,
+    QImageReader,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QPixmap,
+)
 from PySide6.QtSvg import QSvgRenderer
 
 from config import defaults, paths, profiling
@@ -190,23 +198,24 @@ def letter_metal_file(path: Path, metal: str) -> Path:
     the GOLD master (owner decree 2026-07-19: "bolje crtati na licu
     mesta nego 15MB fajlova" — retiring the 76 pre-rendered
     `_silver.png`/`_bronze.png` files and setup/make_silver_letters.py
-    / make_bronze_letters.py). The sealed recipes, reproduced exactly:
-    silver is a straight grayscale desaturation with the source alpha
-    kept (`AssetCache._desaturated`); bronze is a straight per-channel
-    multiply with `defaults.BRONZE_LETTER_TINT` off the SILVER result
-    (`AssetCache._bronzed`) — brightness/contrast sit at 1.0 (an
-    identity step), the owner's verdict that darkened candidates read
-    darker than the bronze medallions. `metal="gold"` is a no-op
-    passthrough (the gold master IS the art). Disk-cached like every
-    other derived asset (`metal_variant_file`'s pattern) — paid once
-    per (file, metal), never per paint."""
+    / make_bronze_letters.py). Silver is a straight grayscale
+    desaturation with the source alpha kept (`AssetCache._desaturated`,
+    unchanged); bronze is the ADAPTIVE ramp recolor off the SILVER
+    result (`AssetCache._bronzed` — owner COLORS verdict 2026-07-20/21,
+    replacing the retired flat per-channel multiply). `metal="gold"` is
+    a no-op passthrough (the gold master IS the art). Disk-cached like
+    every other derived asset (`metal_variant_file`'s pattern) — paid
+    once per (file, metal), never per paint; the cache key carries
+    `ADAPTIVE_METAL_RECOLOR_VERSION` so a bronze-recolor-math change
+    rebuilds stale entries instead of serving the old recipe's PNGs."""
     path = art_file(path)
     if metal == "gold" or path is None:
         return path
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_letter_{metal}.png"
+        / f"{stamp}_{int(path.stat().st_mtime)}"
+        f"_letter{defaults.ADAPTIVE_METAL_RECOLOR_VERSION}_{metal}.png"
     )
     if not cache.exists():
         source = QPixmap(str(path))
@@ -381,14 +390,18 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
     (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed
     the BRONZE file even under the gold/silver look — QToolTip embeds
     files, not pixmaps). Cached in the raster cache keyed by the file's
-    mtime; None or a non-swap metal returns the original path."""
+    mtime AND `ADAPTIVE_METAL_RECOLOR_VERSION` (owner COLORS verdict
+    2026-07-20/21 — GOLD's swap math changed, the salt rebuilds any
+    stale gold PNG under the old recipe instead of serving it forever);
+    None or a non-swap metal returns the original path."""
     path = art_file(path)
     if path is None or metal not in defaults.METAL_SWAP_TARGETS:
         return path
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
     cache = (
         paths.settings_path().parent / "raster_cache"
-        / f"{stamp}_{int(path.stat().st_mtime)}_{metal}.png"
+        / f"{stamp}_{int(path.stat().st_mtime)}"
+        f"_swap{defaults.ADAPTIVE_METAL_RECOLOR_VERSION}_{metal}.png"
     )
     if not cache.exists():
         # QImage end to end — this runs on the background hover-warm
@@ -500,6 +513,67 @@ def scaled_variant_file(path: Path | None, width: int) -> Path | None:
     return cache
 
 
+# --- THE ADAPTIVE GOLD/BRONZE RECOLOR (owner COLORS verdict 2026-07-20/
+# 21, ART-INFRA round): "SILVER JE SOLIDAN u oba [letter i badge]" —
+# only gold's badge swap (`AssetCache._metal_swapped`) and bronze's
+# letter recolor (`AssetCache._bronzed`) get this treatment; silver's
+# own flat desaturate/hue-swap recipes are untouched. The owner's own
+# framing — "algoritam primenjujemo drugačije na različita početna
+# stanja" (apply the algorithm differently to different starting
+# states) — is `_percentile_stretch`: a per-image contrast stretch
+# measured off the SOURCE's own masked-region percentiles BEFORE the
+# ramp lookup, so an over-bright and an over-dark source both land on
+# the SAME target ramp instead of two different looks.
+def _metal_ramp_rgb(hue_deg: float) -> np.ndarray:
+    """The 5-step ADAPTIVE metal ramp at `hue_deg` — `defaults.
+    GOLD_RAMP_SAT_VAL_STEPS`'s own (saturation, value) progression,
+    sampled from the owner's `UV/DESIGN/gold pallete.png` reference,
+    rotated onto ANY hue (gold reads it at GOLD_RAMP_HUE_DEG, bronze at
+    BRONZE_LETTER_TINT's own hue — Rule #19, one formula, two hues, not
+    two independently invented palettes). An (N, 3) float array in
+    [0, 1], the control-color table `_ramp_lookup` interpolates across."""
+    colors = []
+    for sat, val in defaults.GOLD_RAMP_SAT_VAL_STEPS:
+        color = QColor()
+        color.setHsvF((hue_deg % 360.0) / 360.0, sat, val)
+        colors.append((color.redF(), color.greenF(), color.blueF()))
+    return np.array(colors)
+
+
+def _percentile_stretch(
+    values: np.ndarray, mask: np.ndarray, low_pct: float, high_pct: float,
+) -> np.ndarray:
+    """`values` contrast-stretched so the MASKED region's [low_pct,
+    high_pct] percentiles land on [0, 1] — measuring the source's OWN
+    initial state before the ramp lookup below, per the owner's spec,
+    so an over-bright or an over-dark source both normalize to the
+    same range instead of reading two different final looks. An empty
+    mask or a near-flat masked region (nothing to stretch — high-low
+    under 5%) skips the stretch and only clips, never risking a
+    near-zero-denominator blowup."""
+    selected = values[mask]
+    if selected.size == 0:
+        return np.clip(values, 0.0, 1.0)
+    low, high = np.percentile(selected, [low_pct, high_pct])
+    if high - low < 0.05:
+        return np.clip(values, 0.0, 1.0)
+    return np.clip((values - low) / (high - low), 0.0, 1.0)
+
+
+def _ramp_lookup(stretched: np.ndarray, ramp: np.ndarray) -> np.ndarray:
+    """`stretched` (any shape, values in [0, 1]) piecewise-linearly
+    interpolated across `ramp`'s control colors — the shared engine
+    behind the ADAPTIVE gold/bronze recolor: the source's OWN
+    (stretched) lightness walks the ramp instead of a flat per-channel
+    multiply, so the source's shadow/mid/highlight relief survives as
+    dark-amber/vivid/pale instead of collapsing to one flat hue."""
+    steps = ramp.shape[0] - 1
+    scaled = np.clip(stretched, 0.0, 1.0) * steps
+    idx0 = np.minimum(scaled.astype(np.int64), steps - 1)
+    frac = (scaled - idx0)[..., None]
+    return ramp[idx0] * (1.0 - frac) + ramp[idx0 + 1] * frac
+
+
 class AssetCache:
     # SVG MASTERS survive across instances AND flush() (owner bug
     # 2026-07-12: traced letter SVGs parse in 1.3-1.6 s EACH — the
@@ -571,11 +645,17 @@ class AssetCache:
         """The hue-SELECTIVE metal swap (owner insight 2026-07-12): the
         bronze-plate art mixes warm bronze details with GRAY stone and
         engravings — a soft warm-hue window with a saturation ramp
-        selects only the bronze pixels, which take the target metal's
-        hue/saturation/value; everything else stays as drawn. numpy
-        vectorized (per-pixel Python is banned in the render path).
-        QImage in, QImage out (R1b threading find, 2026-07-20): the
-        background hover-warm sweep reaches this through
+        selects only the bronze pixels. SILVER takes a flat hue/
+        saturation/value remap (unchanged, owner: "SILVER JE SOLIDAN");
+        GOLD takes the ADAPTIVE ramp lookup instead (owner COLORS
+        verdict 2026-07-20/21 — the retired flat multiply read muddy/
+        olive: `_percentile_stretch` measures the SELECTED pixels' own
+        5th-95th percentile VALUE, then `_ramp_lookup` walks
+        `_metal_ramp_rgb`'s 5-step gold ramp with it, so an over-bright
+        or an over-dark medallion both land on the SAME target look).
+        numpy vectorized (per-pixel Python is banned in the render
+        path). QImage in, QImage out (R1b threading find, 2026-07-20):
+        the background hover-warm sweep reaches this through
         `metal_variant_file`, and QPixmap must never be touched off the
         GUI thread — GUI-thread callers wrap with QPixmap.fromImage."""
         target = defaults.METAL_SWAP_TARGETS[metal]
@@ -617,19 +697,29 @@ class AssetCache:
             * smoothstep((sat - sat_lo) / (sat_hi - sat_lo))
         )[..., None]
 
-        new_sat = np.clip(sat * target["sat_mul"], 0.0, 1.0)
-        new_val = np.clip(maxc * target["val_mul"], 0.0, 1.0)
-        sector = (target["hue"] % 360.0) / 60.0
-        index = int(sector) % 6
-        fraction = sector - int(sector)
-        p = new_val * (1.0 - new_sat)
-        q = new_val * (1.0 - new_sat * fraction)
-        t = new_val * (1.0 - new_sat * (1.0 - fraction))
-        order = [
-            (new_val, t, p), (q, new_val, p), (p, new_val, t),
-            (p, q, new_val), (t, p, new_val), (new_val, p, q),
-        ][index]
-        swapped = np.stack(order, axis=-1)
+        if metal == "gold":
+            # THE ADAPTIVE ramp (owner COLORS verdict 2026-07-20/21):
+            # measured over the SELECTED (weight > 0.5) pixels only —
+            # the untouched gray stone must never skew the stretch.
+            low_pct, high_pct = defaults.ADAPTIVE_METAL_PERCENTILES
+            stretched = _percentile_stretch(
+                maxc, weight[..., 0] > 0.5, low_pct, high_pct
+            )
+            swapped = _ramp_lookup(stretched, _metal_ramp_rgb(target["hue"]))
+        else:
+            new_sat = np.clip(sat * target["sat_mul"], 0.0, 1.0)
+            new_val = np.clip(maxc * target["val_mul"], 0.0, 1.0)
+            sector = (target["hue"] % 360.0) / 60.0
+            index = int(sector) % 6
+            fraction = sector - int(sector)
+            p = new_val * (1.0 - new_sat)
+            q = new_val * (1.0 - new_sat * fraction)
+            t = new_val * (1.0 - new_sat * (1.0 - fraction))
+            order = [
+                (new_val, t, p), (q, new_val, p), (p, new_val, t),
+                (p, q, new_val), (t, p, new_val), (new_val, p, q),
+            ][index]
+            swapped = np.stack(order, axis=-1)
 
         rgba[..., :3] = rgb * (1.0 - weight) + swapped * weight
         out_bytes = np.ascontiguousarray(
@@ -665,13 +755,19 @@ class AssetCache:
     @staticmethod
     def _bronzed(source: QPixmap, tint: str) -> QPixmap:
         """The ring-letter BRONZE recipe (owner decision 2026-07-12,
-        retired setup/make_bronze_letters.py — live-derived now):
-        `source` is a GRAYSCALE (silver-desaturated) pixmap, R=G=B on
-        every opaque pixel; a brightness/contrast LUT (identity at the
-        sealed 1.0/1.0 values — darkened candidates read darker than
-        the bronze medallions, owner verdict) then a straight
-        per-channel multiply with `tint`. Alpha carried through
-        unchanged."""
+        retired setup/make_bronze_letters.py — live-derived now) — made
+        ADAPTIVE (owner COLORS verdict 2026-07-20/21: the retired
+        straight per-channel multiply read grayish/muddy at some
+        letters' exposure, never a consistent bronze). `source` is a
+        GRAYSCALE (silver-desaturated) pixmap, R=G=B on every opaque
+        pixel: the OPAQUE SILHOUETTE's own 5th-95th percentile
+        lightness is stretched to [0, 1] (`_percentile_stretch` — an
+        over- or under-exposed letter both land on the SAME range,
+        the owner's "computed initial state" ask) then looked up
+        through the 5-step ramp at `tint`'s own hue (`_ramp_lookup` /
+        `_metal_ramp_rgb`) — dark strokes read dark-amber, the glyph's
+        bright core reads a vivid, saturated bronze instead of a flat
+        wash. Alpha carried through unchanged."""
         dpr = source.devicePixelRatio()
         image = source.toImage().convertToFormat(
             QImage.Format.Format_RGBA8888
@@ -684,12 +780,11 @@ class AssetCache:
             .astype(np.float64) / 255.0
         )
         gray = rgba[..., 0]      # grayscale source: R == G == B
-        brightness = defaults.BRONZE_LETTER_BRIGHTNESS
-        contrast = defaults.BRONZE_LETTER_CONTRAST
-        gray = np.clip((gray * brightness - 0.5) * contrast + 0.5, 0.0, 1.0)
-        color = QColor(tint)
-        tint_rgb = np.array([color.redF(), color.greenF(), color.blueF()])
-        rgba[..., :3] = gray[..., None] * tint_rgb[None, None, :]
+        mask = rgba[..., 3] > 0.0
+        low_pct, high_pct = defaults.ADAPTIVE_METAL_PERCENTILES
+        stretched = _percentile_stretch(gray, mask, low_pct, high_pct)
+        ramp = _metal_ramp_rgb(QColor(tint).hueF() * 360.0)
+        rgba[..., :3] = _ramp_lookup(stretched, ramp)
         out_bytes = np.ascontiguousarray(
             (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
         )
@@ -887,3 +982,97 @@ def tinted_pixmap(source: QPixmap, tint: str) -> QPixmap:
     icon tint and lives outside render/ entirely (Rule #5 — one
     algorithm, a clean non-private door for the second caller)."""
     return AssetCache._tinted(source, tint)
+
+
+def eclipse_solar_type_icon(type_: str) -> Path | None:
+    """The small per-type SOLAR eclipse icon (ECLIPSE ICON WIRING round,
+    owner 2026-07-20/21 — the solar pick is PROPOSED, not yet owner-
+    confirmed the way lunar's red/gold/blue set is; see
+    `defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE`'s docstring for the shape-
+    matched mapping). Total and partial ride their source file AS
+    DRAWN; annular is TRITONE-tinted toward
+    `defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR` (the SAME "ring of
+    fire" color the dial's own annular glow already uses — Rule #5, one
+    color, two places) via `tinted_pixmap`, disk-cached like every
+    other derived asset. None for an unknown type or a source that has
+    not landed (Rule #1, graceful-absent)."""
+    source = defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE.get(type_)
+    if source is None or not source.exists():
+        return None
+    if type_ != "annular":
+        return source
+    stamp = hashlib.sha1(str(source).encode("utf-8")).hexdigest()[:16]
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"{stamp}_{int(source.stat().st_mtime)}_eclipse_annular_tint.png"
+    )
+    if not cache.exists():
+        pixmap = QPixmap(str(source))
+        if pixmap.isNull():
+            raise ValueError(f"cannot load image asset: {source}")
+        tinted = tinted_pixmap(
+            pixmap, defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
+        )
+        try:
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            if not tinted.save(str(cache)):
+                raise OSError(f"QPixmap.save returned False for {cache}")
+        except OSError as error:
+            # A cold cache is only slower, never wrong — but say so.
+            print(
+                f"eclipse annular icon cache write failed: {error}",
+                file=sys.stderr,
+            )
+            return source
+    return cache
+
+
+def calendar_wheel_icon_file(size: int) -> Path:
+    """A COMPUTED 12-wedge wheel glyph at `size` px (Rule #19 — no new
+    art file) for the Fast Travel Flash's Calendar theme, replacing the
+    plain 📅 emoji fallback (owner ask, ECLIPSE ICON WIRING round
+    2026-07-20/21): 12 alternating wedges in `defaults.
+    CALENDAR_ICON_WEDGE_COLORS` (the app's own gold ramp) with a thin
+    dark ring for contrast against the flash's dark background. Disk-
+    cached by SIZE alone — the drawing has no other input, so a given
+    size paints exactly once per install. There is no source master to
+    fall back to on a write failure (unlike every other cache function
+    here), so a failed save raises rather than silently returning an
+    uncached path (Rule #1)."""
+    cache = (
+        paths.settings_path().parent / "raster_cache"
+        / f"calendar_wheel_icon_{size}.png"
+    )
+    if cache.exists():
+        return cache
+    image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    ring_width = max(1.0, size * defaults.CALENDAR_ICON_RING_WIDTH_FRACTION)
+    radius = size / 2.0 - ring_width
+    rect = QRectF(
+        size / 2.0 - radius, size / 2.0 - radius, 2.0 * radius, 2.0 * radius
+    )
+    wedges = defaults.CALENDAR_ICON_WEDGE_COUNT
+    colors = [QColor(c) for c in defaults.CALENDAR_ICON_WEDGE_COLORS]
+    span_deg = 360.0 / wedges
+    painter.setPen(Qt.PenStyle.NoPen)
+    for index in range(wedges):
+        painter.setBrush(colors[index % len(colors)])
+        # QPainter angles are in 1/16ths of a degree, counterclockwise
+        # from 3 o'clock — the exact sweep direction/units are cosmetic
+        # here (a symmetric wheel reads identically either way).
+        painter.drawPie(rect, round(index * span_deg * 16), round(span_deg * 16))
+    painter.setPen(QPen(QColor(defaults.CALENDAR_ICON_RING_COLOR), ring_width))
+    painter.setBrush(Qt.BrushStyle.NoBrush)
+    painter.drawEllipse(rect)
+    painter.end()
+    try:
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        if not image.save(str(cache)):
+            raise OSError(f"QImage.save returned False for {cache}")
+    except OSError as error:
+        print(f"calendar wheel icon cache write failed: {error}", file=sys.stderr)
+        raise
+    return cache

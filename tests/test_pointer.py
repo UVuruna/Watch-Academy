@@ -2609,6 +2609,80 @@ def test_ui_icon_table_and_pole_icon_name(tmp_path, monkeypatch):
     assert defaults.icon_path("light") is None
 
 
+def test_calendar_wheel_icon_is_computed_not_shipped(app):
+    """ECLIPSE ICON WIRING round (owner 2026-07-20/21): the Fast Travel
+    Calendar theme's icon is COMPUTED (Rule #19 — a 12-wedge wheel, no
+    new art file), killing the plain 📅 fallback. A valid, disk-cached,
+    non-uniform (the alternating wedges actually differ) image at the
+    requested size; the SAME size resolves to the SAME cached file on a
+    second call (paint once, reuse forever)."""
+    from PySide6.QtGui import QImage
+
+    from render.assets import calendar_wheel_icon_file
+
+    size = 28
+    first = calendar_wheel_icon_file(size)
+    second = calendar_wheel_icon_file(size)
+    assert first == second
+    assert first.exists()
+    image = QImage(str(first))
+    assert image.width() == size and image.height() == size
+    center = image.pixelColor(size // 2, size // 2)
+    assert center.alpha() > 0                    # the disc covers the center
+    corner = image.pixelColor(0, 0)
+    assert corner.alpha() == 0                    # outside the disc stays clear
+    # At least two distinct wedge colors show up along a ring inside
+    # the disc (the alternation is real, not a flat fill).
+    radius = size / 2.0
+    seen = set()
+    for step in range(defaults.CALENDAR_ICON_WEDGE_COUNT * 2):
+        angle = math.radians(step * 360.0 / (defaults.CALENDAR_ICON_WEDGE_COUNT * 2))
+        x = round(radius + (radius * 0.6) * math.cos(angle))
+        y = round(radius + (radius * 0.6) * math.sin(angle))
+        seen.add(image.pixelColor(x, y).name())
+    assert len(seen) >= 2
+
+
+def test_calendar_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypatch):
+    """Wiring: `_flash_fast_travel` resolves a REAL icon path for the
+    Calendar theme now — the emoji is still passed through as the
+    documented fallback text (`FastTravelFlash.flash`'s own contract)
+    but `icon_path` itself must never be None for Calendar."""
+    from render.assets import calendar_wheel_icon_file
+
+    captured = {}
+
+    class _FakeFlash:
+        def flash(self, widget, icon_path, emoji, text):
+            captured["icon_path"] = icon_path
+            captured["emoji"] = emoji
+
+    class _Fake:
+        _fast_travel_flash = _FakeFlash()
+        _widget = None
+        _fast_travel_theme_index = 0
+        _fast_travel_option_indices = {}
+
+        def _fast_travel_theme(self):
+            return next(
+                t for t in defaults.FAST_TRAVEL_THEMES if t["id"] == "calendar"
+            )
+
+        def _fast_travel_option_index(self, theme_id):
+            return 0
+
+        def _ui(self, text):
+            return text
+
+    from app.controller import WatchController
+
+    WatchController._flash_fast_travel(_Fake())
+    assert captured["icon_path"] == calendar_wheel_icon_file(
+        defaults.FAST_TRAVEL_FLASH_ICON_PX
+    )
+    assert captured["emoji"] == "📅"
+
+
 def test_widget_z_mode_swaps_the_window_flags(app):
     """Owner 2026-07-17 (ROADMAP 15d): set_z_mode swaps the always-on-
     bottom / always-on-top hint in place, keeping the frameless-tool base;

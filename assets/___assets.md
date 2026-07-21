@@ -58,7 +58,31 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
   📁 badge/                ← <source>/season/ (+ turning_point/,
                              meteorological/), <source>/trinity/,
                              <source>/scale/ (the two triangles + Union,
-                             ROTATING — see below)
+                             ROTATING — see below), <source>/circle/
+                             (BADGE SISTEM round one, owner 2026-07-20/
+                             21 — 1:1 circular companions for the
+                             archetype/ lancets, organized by family
+                             subfolder matching the lancet's own home;
+                             GRACEFUL-ABSENT, a future prompt sheet —
+                             research/prompts/badge/badge_1to1_prompts.md
+                             — and its wiring is undecided, owner call)
+  📁 icons/                ← NOT art-sourced — one small owner-curated
+                             set of UI CHROME glyphs (menu rows, hover
+                             badges), never the dial's own ART (the
+                             one-image-one-place law does not apply
+                             here). Pole state (light.png/dark.svg),
+                             compass.png, north_pole.png/south_pole.png,
+                             the generic eclipse_sun.svg/eclipse_moon.png
+                             Quick Jump icons, PLUS (ART-INFRA round,
+                             owner 2026-07-20/21) the per-TYPE eclipse
+                             icons: moon_eclipse_{red,gold,blue}.png
+                             (owner-approved total/partial/penumbral
+                             mapping) and sun_eclipse.png/1.png/2.png
+                             (three raw variants — render.assets.
+                             eclipse_solar_type_icon maps them to solar
+                             total/annular/partial by SHAPE and
+                             computationally tints the annular pick;
+                             see config/___config.md).
   📁 subdial/              ← NOT art-sourced (owner decree 2026-07-21,
                              Rsub round — deliberately OUTSIDE
                              ART_SOURCED_ROOTS: the plate is its OWN
@@ -83,10 +107,14 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              Slavic month (Sijecanj..Prosinac, ASCII
                              stems from `defaults.SLAVIC_MONTHS`), the
                              twelve marks the DESIGN ZODIAC law mounts on
-                             the Calendar pointer. GRACEFUL-ABSENT — a
-                             FUTURE prompt sheet; nothing ships here yet,
-                             so the folder does not exist on disk and
-                             every consumer hides the mark until it lands.
+                             the Calendar pointer. GRACEFUL-ABSENT —
+                             prompt sheet WRITTEN (ART-INFRA round,
+                             research/prompts/months/months_prompts.md,
+                             a round rose-window medallion per month
+                             sharing a "Wheel of Labour" spoked cart-
+                             wheel border) but nothing generated yet, so
+                             the folder does not exist on disk and every
+                             consumer hides the mark until it lands.
   📁 era/                  ← <source>/<Name>.png — the Age/Starry-Season
                              rose windows (ROTATING — see below) +
                              <source>/calendar/ (the "Eras of the
@@ -146,6 +174,18 @@ wired onto the hot `art_file` path itself. Current adopters:
   — `render.layers.ArchetypeLayer` resolves each `rotates=True` figure
   fresh every paint (the layer already paints LIVE, never cached, so a
   day change re-resolves with no extra invalidation).
+- **The weekday tree** (WEEKDAY ALT ROTATION round, owner 2026-07-20/
+  21) — the first drop, `assets/weekday/{gemini,chatgpt}/bible/dark/
+  alt/` (11 files, one per canonical bible_dark file, including the
+  Sunday dual `judas.png` and the Ninth `ninth_circle.png`), proved the
+  convention reaches ANY weekday register, not just the families it
+  launched from: `config.defaults.weekday_theme_body_art` (the ONE
+  weekday-body resolver, [Config (folder)](../config/___config.md))
+  and `render.layers.theme_ninth` both grew an `on_date` parameter, and
+  every render-adjacent call site that resolves a weekday body/dual/
+  Ninth Path now wraps it in `rotating_art_file` before drawing/
+  hovering it — a no-op for every body/dual/Ninth with no `alt/`
+  siblings (the vast majority today).
 
 **Dropping new art:** ChatGPT generations go into the untracked
 `chatGPT/` inbox at the project root (informal folder names are fine —

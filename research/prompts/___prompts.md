@@ -82,6 +82,17 @@ item count means the sheet is safe to queue.
   (owner masters 2026-07-15) with the rose-window UNION
 - `season_trinity_prompts.md` — Trinity, Seasons, Turning Points,
   Meteorological twins
+- `badge_1to1_prompts.md` — BADGE SISTEM round one (ART-INFRA round,
+  owner 2026-07-20/21): 38 round 1:1 circular companions for every
+  2:1 archetype lancet across all seven families, feeding a FUTURE
+  hover-card left-column layout (wiring undecided, owner call)
+
+### `months/`
+- `months_prompts.md` — the Slavic Months Calendar-pointer 12-set
+  (R7b, owner-sealed 2026-07-21): twelve round rose-window medallions,
+  one per Croatian month, sharing a "Wheel of Labour" spoked
+  cart-wheel border; the render of the mounted marks is a separate
+  future round
 
 ### `era/`
 - `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):

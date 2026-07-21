@@ -23,6 +23,31 @@ startup (idempotent, progress-logged), and `pixmap_by_height` routes
 any request that fits under the ceiling through the copy — oversized
 requests keep the original, small sources stay untouched.
 
+**ADAPTIVE gold/bronze recolor (owner COLORS verdict 2026-07-20/21,
+ART-INFRA round — "SILVER JE SOLIDAN u oba [letter i badge], LETTER
+BRONZE i BADGE GOLD" needed a rethink):** the retired flat recipes —
+letter bronze's straight per-channel multiply, badge gold's flat
+hue/sat/val remap — both read muddy/grayish depending on how bright or
+dark the SOURCE art happened to render. Replaced by a shared engine,
+module-level (not private to `AssetCache`, both `_bronzed` and
+`_metal_swapped` call it): `_metal_ramp_rgb(hue_deg)` builds a 5-step
+(saturation, value) ramp at any hue from `defaults.
+GOLD_RAMP_SAT_VAL_STEPS` (sampled off the owner's own
+`UV/DESIGN/gold pallete.png` reference); `_percentile_stretch(values,
+mask, low_pct, high_pct)` contrast-stretches the SOURCE's own masked-
+region lightness so its 5th-95th percentile lands on [0, 1] — the
+owner's "računamo početno stanje" ask, an over-bright and an over-dark
+source both normalize to the same range; `_ramp_lookup(stretched,
+ramp)` walks the stretched value through the ramp. `AssetCache.
+_bronzed` (letters) and the "gold" branch of `AssetCache.
+_metal_swapped` (badges) both run stretch-then-lookup now; SILVER is
+UNTOUCHED in both (`_desaturated` and `_metal_swapped`'s "silver"
+branch keep their original flat recipes verbatim — the owner's "SILVER
+JE SOLIDAN"). Every cache key carrying either recipe's output
+(`letter_metal_file`, `metal_variant_file`) folds in
+`defaults.ADAPTIVE_METAL_RECOLOR_VERSION` so a future curve change
+invalidates stale PNGs instead of serving the old recipe forever.
+
 Module helpers beyond the cache: `ring_face_color()` (the ring art's
 median-luminance face sample, the procedural subdial fill),
 `metal_variant_file()` / `scaled_variant_file()` (disk-cached derived
@@ -30,11 +55,23 @@ images), `letter_metal_file(path, metal)` (owner decree 2026-07-19,
 "bolje crtati na licu mesta nego 15MB fajlova" — retired the ~15 MB of
 pre-rendered `<Stem>_silver.png`/`<Stem>_bronze.png` ring-letter files
 and their two generator scripts: silver is a straight grayscale
-desaturation of the gold master, `AssetCache._desaturated`; bronze a
-straight per-channel multiply with `defaults.BRONZE_LETTER_TINT` off
-the silver result, `AssetCache._bronzed` — the sealed recipes,
-reproduced exactly, disk-cached like every other derived asset;
-`metal="gold"` is a no-op passthrough), `moon_lit_region(fraction,
+desaturation of the gold master, `AssetCache._desaturated`; bronze the
+ADAPTIVE ramp recolor off the silver result, `AssetCache._bronzed`
+(see above — this WAS a straight per-channel multiply, superseded the
+same round the ADAPTIVE engine landed), disk-cached like every other
+derived asset; `metal="gold"` is a no-op passthrough),
+`eclipse_solar_type_icon(type_)` (ECLIPSE ICON WIRING round — the
+small per-type solar icon: total/partial ride their
+`assets/icons/sun_eclipse{,'2'}.png` source as drawn, annular is
+TRITONE-tinted toward `defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR` via
+`tinted_pixmap`, disk-cached; a PROPOSED mapping, not owner-confirmed
+the way lunar's red/gold/blue set is — see `defaults.
+ECLIPSE_SOLAR_TYPE_ICON_SOURCE`'s own docstring),
+`calendar_wheel_icon_file(size)` (Rule #19 — a COMPUTED 12-wedge wheel
+glyph, no new art file, replacing the Fast Travel Flash's plain 📅
+fallback for the Calendar theme; disk-cached by size alone, no source
+master to fall back to on a write failure so a failed save raises),
+`moon_lit_region(fraction,
 radius)` / `moon_phase_image(fraction, size, master=None)` /
 `moon_phase_file(fraction, name, size=800)` (the SAME retirement for
 the Encyclopedia's eight Moon-phase plates: `moon_lit_region` is the

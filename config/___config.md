@@ -166,6 +166,37 @@ every version actually on disk for the active source, in both
 `_v2`/`_v3` suffixes, and rotates by the date's proleptic ordinal.
 Sole consumer: the [Encyclopedia](../app/encyclopedia.md)'s "The Two
 Triangles" duality topic.
+**ADAPTIVE GOLD/BRONZE RAMP (owner COLORS verdict 2026-07-20/21,
+ART-INFRA round):** `GOLD_RAMP_HUE_DEG` / `GOLD_RAMP_SAT_VAL_STEPS` —
+the 5-step (hue, then per-step saturation/value) ramp sampled straight
+off `UV/DESIGN/gold pallete.png`; `ADAPTIVE_METAL_PERCENTILES` — the
+5th/95th percentile window `render.assets._percentile_stretch`
+contrast-stretches the SOURCE's own masked-region lightness to before
+the ramp lookup (the owner's "računamo početno stanje" ask);
+`ADAPTIVE_METAL_RECOLOR_VERSION` — the cache-key salt both
+`letter_metal_file` and `metal_variant_file` fold in so a curve change
+invalidates stale PNGs. `BRONZE_LETTER_TINT` now supplies ONLY the
+bronze ramp's hue (its own brightness/contrast knobs, sealed at 1.0
+identity, are RETIRED along with the flat-multiply recipe they tuned).
+Full recipe: [Assets](../render/assets.md).
+**ECLIPSE TYPE ICONS (same round):** `ECLIPSE_LUNAR_TYPE_ICON` +
+`eclipse_lunar_type_icon(type_)` — the owner-APPROVED red/gold/blue
+mapping (total/partial/penumbral) riding
+`assets/icons/moon_eclipse_{red,gold,blue}.png`; `
+ECLIPSE_SOLAR_TYPE_ICON_SOURCE` + `render.assets.
+eclipse_solar_type_icon(type_)` — a PROPOSED (not owner-confirmed)
+shape-matched mapping over the owner's three `sun_eclipse{,1,2}.png`
+variants, annular computationally tinted toward
+`GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR`; `ECLIPSE_TYPE_ICON_PX` — the small
+inline badge size `render.compositor._eclipse_type_icon_tag` embeds
+before the hover-card's eclipse line title, distinct from the big
+category EMBLEM plate (`ECLIPSE_TYPE_EMBLEM`, untouched this round).
+**THE CALENDAR WHEEL ICON (same round):** `CALENDAR_ICON_WEDGE_COUNT`/
+`_WEDGE_COLORS`/`_RING_COLOR`/`_RING_WIDTH_FRACTION` feed `render.
+assets.calendar_wheel_icon_file(size)` — a Rule #19 COMPUTED 12-wedge
+glyph replacing the Fast Travel Flash's plain 📅 fallback for the
+Calendar theme (`app.controller._flash_fast_travel`'s one special
+case — Sun/Moon keep their existing eclipse-glyph icon_keys).
 **R5 MENU REWORK (owner "OSMISLITI ŠTA SVE" — design the full
 shortcut map; EXTENDED by the R5b FINAL MAP round, owner spec sealed
 2026-07-21):** `SHORTCUTS` — the ONE keyboard-shortcut table
@@ -197,10 +228,36 @@ icons (R5b's Fast Travel flash reuses the EXISTING `eclipse_sun`/
 `eclipse_moon` entries instead of adding new ones — UI chrome may
 answer more than one spot), `TIME_TRAVEL_ROW_ICON_PX`/
 `TIME_TRAVEL_ARROW_BUTTON_PX` (the row icon/arrow-button pixel sizes),
-and `weekday_theme_body_art(theme, body)` — one theme's representative
-plate (moved here FROM `app.encyclopedia._theme_body_art`, Rule #5,
-since [Pointer Theme](../app/pointer_theme.md)/[Slot Theme](../app/slot_theme.md)
-need the SAME resolution for their picker-grid previews).
+and `weekday_theme_body_art(theme, body, on_date=None, colored=False)`
+— one theme's representative plate (moved here FROM `app.encyclopedia.
+_theme_body_art`, Rule #5, since [Pointer Theme](../app/pointer_theme.md)/[Slot Theme](../app/slot_theme.md)
+need the SAME resolution for their picker-grid previews; `colored`
+folded in the SAME round, replacing the `theme_dir`/colored-folder
+expression three render call sites used to re-type — see the WEEKDAY
+ALT ROTATION note below). `on_date` (default None, every caller before
+this round) opts the resolved plate into THE UNIVERSAL ROTATION
+CONVENTION.
+
+**WEEKDAY ALT ROTATION (owner 2026-07-20/21):** the universal rotation
+convention (`rotating_art_file`, [Assets (folder)](../assets/___assets.md))
+reaches the weekday tree — `assets/weekday/{gemini,chatgpt}/bible/
+dark/alt/` (11 files each) is the first weekday register to ship
+`alt/` siblings. `weekday_theme_body_art` is now the ONE weekday-body
+resolver (Rule #5): `render.layers._draw_weekday_slot`, `render.
+compositor`'s hover legend and `app.controller._themed_weekday_set`'s
+baked bodies dict all used to re-type the SAME `theme_dir /
+f"{WEEKDAY_THEME_FILES[theme][body]}.png"` expression inline —
+consolidated into this one function. Rotation itself applies at THREE
+render-adjacent points via the raw `rotating_art_file` utility
+(mirroring exactly how the era badges and the Tetramorph figures
+already opt in): `render.layers.draw_weekday_body` (the main slot +
+center pass, overriding whatever `spec.bodies[body]` was BAKED to at
+settings-apply time — baking never carries a date, since the skin can
+outlive midnight), `_draw_weekday_slot` (the 2nd/3rd slot, resolved
+fresh every paint already), and the hover legend/dual/Ninth plate in
+`render.compositor` (`theme_ninth` also grew an `on_date` parameter,
+same law). `render/assets.md`'s Assets doc covers the sourced-vs-
+sourceless distinction this rides on top of.
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package

@@ -99,6 +99,18 @@ _DATA_DRIVEN_ROOTS = (
     "emblem/mood",
     "emblem/intelligence",
     "guide",
+    # THE SLAVIC MONTHS (R7b round, owner-sealed 2026-07-21): every
+    # per-month filename is enumerated in `config.defaults.
+    # SLAVIC_MONTHS`, a real Python table — but built into a Path
+    # INSIDE `app.encyclopedia._topics`'s dict comprehension
+    # (`defaults.MONTHS_ART_DIR / f"{stem}.png"`), an f-string never
+    # bound to a module-level name and never a bare quoted literal —
+    # invisible to both this lint's namespace walk AND its text scan,
+    # the exact same blind spot weekday/zodiac already carry. The
+    # FAMILY root (`MONTHS_ART_DIR` itself) IS a real module-level
+    # Path, confirming the family is genuinely wired; only the
+    # per-name completeness escapes static scanning.
+    "months",
 )
 
 # Documented exceptions: art generated (or sheeted) with NO consuming
@@ -167,6 +179,36 @@ _WHITELIST: dict[str, str] = {
     # (`app.encyclopedia._topics`: `defaults.INSTRUMENT_ART_DIR /
     # f"{key}.png"` for `key in _INSTRUMENT_KEYS`) — same pattern.
     "instrument/paint_light.png": "read via the Instrument topic loop, built at runtime",
+    # BADGE SISTEM round one (owner 2026-07-20/21, DESIGN
+    # INSTRUCTIONS.txt): 1:1 circular companions for the 2:1 archetype
+    # lancets, feeding a FUTURE hover-card left-column layout — the
+    # wiring is undecided (owner call), so no code reads
+    # `assets/badge/circle/**` yet. Most of the 38 round-one paths
+    # need NO whitelist entry at all: the lint's own basename-suffix
+    # leniency (its docstring's own (a), "a whole-segment SUFFIX match"
+    # — deliberately pragmatic, not full Python semantics) already
+    # treats a badge path as "referenced" purely because its FILENAME
+    # matches the source LANCET's own literal `"Stem.png"` string in
+    # `config/archetypes.py`'s `_fig(...)` calls — a real, accepted
+    # false-negative in the lint's own design (see its docstring), not
+    # a gap. Only the Life-Tree register's 8 paths genuinely escape
+    # BOTH lint mechanisms: `_LIFE_DIR / register / f"{stem}.png"` is
+    # built from an f-string (no literal `"Stem.png"` text to scan,
+    # unlike every other family's `_fig()` call) AND its own
+    # module-namespace value is an ABSOLUTE Path whose string form
+    # `_normalize` cannot reduce (no leading `assets/` segment to
+    # strip from an absolute string) — so these 8 need the same
+    # explicit whitelist treatment as the row2 rondels above.
+    # `badge_1to1_prompts.md`'s own Status section tracks the whole
+    # round-one set, wired or not.
+    "badge/circle/life/tree/Unborn.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/Birth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/Childhood.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/Youth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/Maturity.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "badge/circle/life/tree/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
 }
 
 

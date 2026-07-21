@@ -81,7 +81,7 @@ from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
 from data.translations import TranslationStore, collect_corpus, translate_texts
-from render.assets import AssetCache, warm_working_set
+from render.assets import AssetCache, calendar_wheel_icon_file, warm_working_set
 from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
@@ -485,29 +485,34 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
     the sibling variant; owner restructure 2026-07-14)."""
     weekday = base
     if theme != "planets":
-        theme_dir = (
-            defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
-        )
-        if metal == "colored":
-            theme_dir = theme_dir.parent / "colored"
         names = defaults.WEEKDAY_THEME_NAMES[theme]
-        files = defaults.WEEKDAY_THEME_FILES[theme]
         weekday = dataclasses.replace(
             weekday,
             # PENDING art (documented): a seat whose plate the owner
             # has not generated yet (the Ancient set's Eleusis today)
             # maps to None — the manifest contract draws the
             # procedural colored disc with the name label instead of
-            # crashing on a missing file.
+            # crashing on a missing file. The candidate path itself
+            # comes from the ONE shared resolver (Rule #5 — this used
+            # to re-type the theme_dir/colored-folder expression);
+            # no `on_date` here — this dict is BAKED once at settings-
+            # apply time, so a daily rotation pick would go stale
+            # across a multi-day run. `render.layers.draw_weekday_body`
+            # re-resolves the LIVE rotation on top of whichever
+            # canonical file lands here (same law as its own CONTINENTS
+            # live override, right below it).
             bodies={
                 body: (
-                    theme_dir / f"{files[body]}.png"
-                    if paths.art_file(
-                        theme_dir / f"{files[body]}.png"
-                    ).exists()
+                    candidate
+                    if paths.art_file(candidate).exists()
                     else None
                 )
                 for body in names
+                for candidate in (
+                    defaults.weekday_theme_body_art(
+                        theme, body, colored=(metal == "colored")
+                    ),
+                )
             },
             body_names=dict(names),
         )
@@ -1468,11 +1473,19 @@ class WatchController(QObject):
         THIS watch's own dial (owner spec: "per-watch — the focused
         watch flashes its own" — trivially true here since a shortcut
         only ever reaches the FOCUSED widget's `_on_shortcut` to begin
-        with)."""
+        with). Calendar carries no `icon_key` (Sun/Moon keep their
+        eclipse glyphs, untouched this round) — its icon is COMPUTED
+        instead (`render.assets.calendar_wheel_icon_file`, Rule #19),
+        killing the plain 📅 fallback the owner asked to retire."""
         theme = self._fast_travel_theme()
         option = theme["options"][self._fast_travel_option_index(theme["id"])]
-        icon_key = theme["icon_key"]
-        icon_path = defaults.icon_path(icon_key) if icon_key is not None else None
+        if theme["id"] == "calendar":
+            icon_path = calendar_wheel_icon_file(defaults.FAST_TRAVEL_FLASH_ICON_PX)
+        else:
+            icon_key = theme["icon_key"]
+            icon_path = (
+                defaults.icon_path(icon_key) if icon_key is not None else None
+            )
         self._fast_travel_flash.flash(
             self._widget, icon_path, theme["emoji"], self._ui(option["title"])
         )

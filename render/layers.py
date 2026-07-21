@@ -9,6 +9,7 @@ inside the pie/position helpers here.
 import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from datetime import date
 from enum import Enum
 from pathlib import Path
 
@@ -834,7 +835,9 @@ def center_dual_face(skin: SkinDefinition) -> bool:
     return skin.pointer in ("hexa", "trio")
 
 
-def theme_ninth(theme: str, pangea: bool = False) -> tuple[str, Path] | None:
+def theme_ninth(
+    theme: str, pangea: bool = False, on_date: date | None = None,
+) -> tuple[str, Path] | None:
     """(display name, resolved asset path) of `theme`'s Ninth plate, or
     None when the theme names no Ninth (`constants.WEEKDAY_THEME_NINTHS`)
     or its plate has not landed on disk yet — the ONE existence-gated
@@ -845,7 +848,12 @@ def theme_ninth(theme: str, pangea: bool = False) -> tuple[str, Path] | None:
     `pangea` is the Continents theme's easter-egg switch (owner-sealed
     matrix 2026-07-21): when the traveled day is a Pangea day
     (`core.continents.ninth_is_pangea_*`) the seat shows PANGEA in place
-    of ZEALANDIA — same graceful-absent gate, its own alt plate."""
+    of ZEALANDIA — same graceful-absent gate, its own alt plate.
+
+    `on_date` opts the resolved plate into THE UNIVERSAL ROTATION
+    CONVENTION (weekday ALT ROTATION round 2026-07-20/21 — bible_dark's
+    Ninth Circle is the first Ninth to ship `alt/` siblings); None
+    (every caller before this round) keeps the plain canonical file."""
     entry = None
     if pangea:
         entry = constants.WEEKDAY_THEME_NINTH_EASTER_EGG.get(theme)
@@ -857,6 +865,8 @@ def theme_ninth(theme: str, pangea: bool = False) -> tuple[str, Path] | None:
     asset = defaults.WEEKDAY_ART_DIR / rel
     if not paths.art_file(asset).exists():
         return None
+    if on_date is not None:
+        asset = defaults.rotating_art_file(asset, on_date) or asset
     return name, asset
 
 
@@ -1513,6 +1523,14 @@ def draw_weekday_body(
         if paths.art_file(live).exists():
             asset = live
     if asset is not None:
+        # THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20,
+        # weekday ALT ROTATION round 2026-07-20/21): whichever canonical
+        # file `spec.bodies`/the continents live override landed above
+        # rotates daily among its OWN `_v2`/`alt/` siblings if it has
+        # any — a no-op for every body that has none (the vast
+        # majority today).
+        asset = defaults.rotating_art_file(asset, ctx.day.local_date) or asset
+    if asset is not None:
         # The theme's metal (owner 2026-07-12): the hue-selective swap
         # turns only the bronze details gold/silver; None = as drawn.
         draw_pixmap_centered(
@@ -1611,6 +1629,13 @@ class WeekdayLayer(Layer):
                 )
                 if paths.art_file(live).exists():
                     servant_asset = live
+            # THE UNIVERSAL ROTATION CONVENTION (weekday ALT ROTATION
+            # round 2026-07-20/21): the dual's own `_v2`/`alt/` siblings
+            # (e.g. bible_dark's Judas) rotate daily like the Ruler face.
+            servant_asset = (
+                defaults.rotating_art_file(servant_asset, ctx.day.local_date)
+                or servant_asset
+            )
             painter.save()
             painter.setOpacity(
                 1.0 if today == "sun" or ctx.reveal_active else spec.ghost_opacity
@@ -1774,24 +1799,23 @@ class SlotLayer(Layer):
             # the shared safety law: no plate on disk means the
             # planetary bundle below stays whole.
             asset = seat[0]
-        elif theme == "planets":
-            asset = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "primary"
-                / f"{today}.png"
-            )
         else:
-            theme_dir = (
-                defaults.WEEKDAY_ART_DIR
-                / defaults.WEEKDAY_THEME_DIRS[theme]
+            # THE ONE weekday-body resolver (Rule #5 — this used to
+            # re-type the theme_dir/colored-folder/planets-branch
+            # expression inline; now shared with `app.controller` and
+            # `render.compositor`'s hover legend). colored is the
+            # variant SIBLING (owner restructure 2026-07-14:
+            # <family>/colored).
+            asset = defaults.weekday_theme_body_art(
+                theme, today,
+                colored=(metal == "colored" and theme in constants.METAL_THEMES),
             )
-            if metal == "colored" and theme in constants.METAL_THEMES:
-                # colored is the variant SIBLING (owner restructure
-                # 2026-07-14: <family>/colored).
-                theme_dir = theme_dir.parent / "colored"
-            asset = (
-                theme_dir
-                / f"{defaults.WEEKDAY_THEME_FILES[theme][today]}.png"
-            )
+        # THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20,
+        # weekday ALT ROTATION round 2026-07-20/21): resolved fresh
+        # every paint already (this slot is never baked at settings
+        # time), so the day's own `_v2`/`alt/` pick applies directly —
+        # a no-op for every body/seat with no siblings.
+        asset = defaults.rotating_art_file(asset, ctx.day.local_date) or asset
         if paths.art_file(asset).exists():
             draw_pixmap_centered(
                 painter, ctx, asset, pos, size,
@@ -1884,7 +1908,9 @@ class CenterBodyLayer(Layer):
                     ctx.tick.eclipse_event is not None,
                 )
             )
-            ninth = theme_ninth(ctx.skin.weekday_theme, pangea)
+            ninth = theme_ninth(
+                ctx.skin.weekday_theme, pangea, on_date=ctx.day.local_date
+            )
             face = center_face(ctx.day, ctx.tick, ninth is not None)
             if face != "ruler":
                 if face == "servant":
@@ -1897,6 +1923,12 @@ class CenterBodyLayer(Layer):
                         )
                         if paths.art_file(live).exists():
                             asset = live
+                    # THE UNIVERSAL ROTATION CONVENTION (weekday ALT
+                    # ROTATION round 2026-07-20/21).
+                    asset = (
+                        defaults.rotating_art_file(asset, ctx.day.local_date)
+                        or asset
+                    )
                     name = (
                         spec.dual_names
                         or defaults.WEEKDAY_DUAL_NAMES[ctx.skin.weekday_theme]
