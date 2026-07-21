@@ -175,7 +175,12 @@ _TOPIC_GROUPS = (
       # marker read as the week: built from the instrument's day/night
       # faces, poles and season/moon machinery, its Ninth switching by
       # the very sky the Engine computes.
-      "continents")),
+      "continents",
+      # THE SLAVIC MONTHS (owner-sealed R7b 2026-07-21): the year's own
+      # wheel of labour — a Calendar-pointer 12-set. Rides the Engine
+      # because it IS the year's wheel (the same wheel the Almanac reads),
+      # not a myth or a craft.
+      "months")),
     ("The Divine",
      ("greek", "norse", "egypt", "slavic",
       "wider_greek", "wider_norse", "wider_egypt", "wider_slavic",
@@ -1034,8 +1039,20 @@ def _topics(travel_date: date | None = None) -> dict:
         "article": ("emblem", "moods", "The Ninth Mood"),
         "accents": (),
     })
-    # THE NINE INTELLIGENCES (owner GO 2026-07-13): the academy cameos
-    # — 9 = the six Prism arms + the three Trinity arms.
+    # THE NINE INTELLIGENCES (owner GO 2026-07-13; canon-web REWRITE +
+    # WEEKDAY-LAW reseat, owner-sealed R7b 2026-07-21): Gardner's nine
+    # move onto the seats the clock already keeps — SIX on the weekday
+    # arms (Mon Interpersonal, Tue Bodily-Kinesthetic, Wed Linguistic,
+    # Thu Logical-Mathematical, Fri Musical, Sat Naturalist), THREE on
+    # the Sun's own faces (RULER = Visual-Spatial, the all-seeing king;
+    # SERVANT = Intrapersonal, the self-mirror at solar midnight; NINTH
+    # = Existential, The Unfound, the question itself at the noon
+    # window). The page order follows the weekday law like every
+    # restructured theme: title -> Mon..Sat -> Ruler -> Servant ->
+    # Ninth (no separate trio-title page — the title page's own "The
+    # Sun's Three Faces" subhead introduces the trio; the flat emblem
+    # machinery wants none). The badge art stems are unchanged — only
+    # the DIAL SEAT of each intelligence moved, not the plate.
     intel = defaults.EMBLEM_ART_DIRS["intelligence"]
     topics["intelligences"] = {
         "title": "The Nine Intelligences",
@@ -1053,16 +1070,46 @@ def _topics(travel_date: date | None = None) -> dict:
                 "accents": (),
             }
             for name, stem in (
-                ("Bodily-Kinesthetic", "bodily_kinesthetic"),
-                ("Interpersonal", "interpersonal"),
-                ("Linguistic", "linguistic"),
-                ("Naturalist", "naturalist"),
-                ("Logical-Mathematical", "logical_mathematical"),
-                ("Musical", "musical"),
-                ("Existential", "existential"),
-                ("Intrapersonal", "intrapersonal"),
-                ("Spatial", "spatial"),
+                ("Interpersonal", "interpersonal"),               # Monday
+                ("Bodily-Kinesthetic", "bodily_kinesthetic"),     # Tuesday
+                ("Linguistic", "linguistic"),                     # Wednesday
+                ("Logical-Mathematical", "logical_mathematical"), # Thursday
+                ("Musical", "musical"),                           # Friday
+                ("Naturalist", "naturalist"),                     # Saturday
+                ("Spatial", "spatial"),                           # Sun · Ruler
+                ("Intrapersonal", "intrapersonal"),               # Sun · Servant
+                ("Existential", "existential"),                   # Ninth
             )
+        ],
+    }
+    # THE SLAVIC MONTHS (owner-sealed R7b 2026-07-21): the Croatian
+    # months as a Calendar-pointer 12-set + its own topic — the year's
+    # own wheel of labour (etymology, the pan-Slavic siblings, the mark's
+    # place on the Calendar pointer wedge). Built from
+    # `defaults.SLAVIC_MONTHS` (Rule #4/#5 — one config table drives the
+    # display name, the article key and the plate stem). Plates are a
+    # FUTURE prompt sheet under the canonical sourceless `months/` root
+    # (defaults.MONTHS_ART_DIR, graceful-absent). Rides The Celestial
+    # Engine hall (the year's own wheel — see _TOPIC_GROUPS).
+    topics["months"] = {
+        "title": "The Slavic Months",
+        # The Linden Month (June, the wheel's crown) fronts the gallery
+        # card — graceful-absent like every month plate until the art
+        # lands, so the card shows its name until then.
+        "icon": defaults.MONTHS_ART_DIR / "Lipanj.png",
+        "entries": [{
+            "images": (),
+            "name": "The Slavic Months",
+            "article": ("emblem", "months", "The Slavic Months"),
+            "accents": (),
+        }] + [
+            {
+                "images": (defaults.MONTHS_ART_DIR / f"{stem}.png",),
+                "name": f"{croatian} ({gloss})",
+                "article": ("emblem", "months", croatian),
+                "accents": (),
+            }
+            for croatian, gloss, stem, _month in defaults.SLAVIC_MONTHS
         ],
     }
     # THE NINTHS close their topics (owner 8+1 doctrine 2026-07-14):

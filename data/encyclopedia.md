@@ -49,8 +49,10 @@ Serbian and any machine-translated language apply automatically.
   categories (solar total/annular/partial/hybrid, lunar total/partial/
   penumbral), all in the `eclipse` section
 - `entry(family, name)`: `{base}` of one virtues/sins/moods/duality/
-  ninths/intelligence/wider article (the WIDER family holds the
-  seatless A-list pantheon figures — WORKPLAN Session 8)
+  ninths/intelligence/wider/months article (the WIDER family holds the
+  seatless A-list pantheon figures — WORKPLAN Session 8; the MONTHS
+  family holds the Slavic-months Calendar-pointer set — owner-sealed
+  R7b 2026-07-21)
 - `theme_title(theme)` / `week_duality(theme)`: `{title, base}` of a
   weekday theme's OWN opening page / its WEEK-DUALITY title page
   (round R3 ARTICLE ORDER restructure — `theme_title`/`week_duality`

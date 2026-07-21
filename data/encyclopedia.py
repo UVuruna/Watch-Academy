@@ -99,8 +99,9 @@ class EncyclopediaRepository:
         """{base} of one emblem-family article — family is "virtues" |
         "sins" | "moods" | "duality" (the Judas–Lucifer scale, owner
         2026-07-13) | "ninths" | "intelligence" | "wider" (the seatless
-        A-list pantheon figures, WORKPLAN Session 8), name the entry
-        ("Justice", "Lucifer", "Hestia")."""
+        A-list pantheon figures, WORKPLAN Session 8) | "months" (the
+        Slavic-months Calendar-pointer set, owner-sealed R7b 2026-07-21),
+        name the entry ("Justice", "Lucifer", "Hestia", "Lipanj")."""
         return self._localized(
             f"encyclopedia/{family}/{name}", self._load()[family][name]
         )

@@ -938,6 +938,42 @@ CALENDAR_ARROW_LENGTH_FRACTION = 0.06  # tip-to-base length, of the dial radius
 CALENDAR_ARROW_HALF_DEG = 2.4        # half-width of the base, in dial degrees
 CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring letters/ticks
 
+# --- Calendar-pointer 12-sets: the Slavic Months (owner-sealed R7b 2026-07-21) -
+# The DESIGN ZODIAC law (UV/DESIGN/DESIGN INSTRUCTIONS.txt): "Zodiac i
+# sve što ima 12 TREBA da bude moguće da se AKTIVIRA na CALENDAR POINTER
+# (TO MU JE DEFAULT)" — any twelve-fold set may MOUNT on the Calendar
+# pointer as twelve marks, one per two-hour wedge, at 60-70% of the dial
+# radius (so they clear the Earth/Moon at the rim and the subdials at the
+# centre). This table REGISTERS the first such set beyond the zodiac
+# signs and Chinese animals the pointer already reads: the twelve
+# Croatian months as PROPER NOUNS with the English gloss, one per
+# Gregorian month (`gregorian`, 1..12 — the Almanac wheel already maps
+# month->wedge via core.year_wheel.almanac_month_index). `stem` is the
+# ASCII plate stem under MONTHS_ART_DIR (assets/months/<stem>.png,
+# graceful-absent). NOTE — the RENDER of the mounted marks (drawing the
+# twelve plates at CALENDAR_MOUNT_RADIUS_FRACTION, and a Settings
+# selector for WHICH 12-set mounts) is a FUTURE round; this table + the
+# Encyclopedia topic are the minimal registration (see config/___config.md
+# and app/encyclopedia.md for what remains).
+SLAVIC_MONTHS = (
+    # (croatian proper noun, english gloss, ascii stem, gregorian month)
+    ("Siječanj", "the Month of Felling", "Sijecanj", 1),
+    ("Veljača", "the Turning Month", "Veljaca", 2),
+    ("Ožujak", "the Lying Month", "Ozujak", 3),
+    ("Travanj", "the Grass Month", "Travanj", 4),
+    ("Svibanj", "the Dogwood Month", "Svibanj", 5),
+    ("Lipanj", "the Linden Month", "Lipanj", 6),
+    ("Srpanj", "the Sickle Month", "Srpanj", 7),
+    ("Kolovoz", "the Cartage Month", "Kolovoz", 8),
+    ("Rujan", "the Reddening Month", "Rujan", 9),
+    ("Listopad", "the Leaf-fall Month", "Listopad", 10),
+    ("Studeni", "the Cold Month", "Studeni", 11),
+    ("Prosinac", "the Month of Shining-Through", "Prosinac", 12),
+)
+# The mid-radius the DESIGN ZODIAC law fixes for a mounted 12-set's marks
+# (60-70% of the dial radius). The RENDER that consumes it is queued.
+CALENDAR_MOUNT_RADIUS_FRACTION = 0.65
+
 # Octa bottom-arm text (time/date/...): sized to span this fraction of
 # the slot width (owner: big font, must not overflow the slot).
 TIME_TEXT_WIDTH_FRACTION = 0.95
@@ -1861,6 +1897,14 @@ SEASON_ART_DIR = paths.assets_dir() / "badge" / "season"
 # — the "Eras of the World" comparative article carries no plate of
 # its own. Prompt sheet: research/prompts/era/era_prompts.md.
 ERA_ART_DIR = paths.assets_dir() / "era"
+# The SLAVIC MONTHS 12-set marks (owner-sealed R7b 2026-07-21). A
+# CANONICAL SOURCELESS root — deliberately OUTSIDE
+# constants.ART_SOURCED_ROOTS, the subdial precedent (see
+# assets/___assets.md): a Calendar-pointer mount set is its OWN shared
+# thing, not a Gemini/ChatGPT split. assets/months/<stem>.png,
+# graceful-absent until the owner's prompt sheet lands — every consumer
+# hides a missing plate, exactly like every other wired-ahead art.
+MONTHS_ART_DIR = paths.assets_dir() / "months"
 # Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128

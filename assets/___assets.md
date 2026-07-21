@@ -75,6 +75,18 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              in Settings (`Settings.subdial_set`); the
                              letter FINISH (ring_finish) still picks
                              the color within it.
+  📁 months/               ← NOT art-sourced (owner-sealed R7b 2026-07-21,
+                             the SAME subdial precedent — deliberately
+                             OUTSIDE ART_SOURCED_ROOTS: a Calendar-pointer
+                             mount SET is its own shared thing, not a
+                             Gemini/ChatGPT split). <stem>.png, one per
+                             Slavic month (Sijecanj..Prosinac, ASCII
+                             stems from `defaults.SLAVIC_MONTHS`), the
+                             twelve marks the DESIGN ZODIAC law mounts on
+                             the Calendar pointer. GRACEFUL-ABSENT — a
+                             FUTURE prompt sheet; nothing ships here yet,
+                             so the folder does not exist on disk and
+                             every consumer hides the mark until it lands.
   📁 era/                  ← <source>/<Name>.png — the Age/Starry-Season
                              rose windows (ROTATING — see below) +
                              <source>/calendar/ (the "Eras of the

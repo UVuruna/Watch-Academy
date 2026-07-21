@@ -252,6 +252,61 @@ screens —
   (Chinese "The Cat", Astrology "Ophiuchus" — no weekday Sunday
   duality) stay local to `_topics()`, since render never needs them.
 
+**ROUND R7b — THE INTELLIGENCES REWRITE + THE SLAVIC MONTHS
+(owner-sealed 2026-07-21):**
+
+- **THE NINE INTELLIGENCES, rewritten and reseated by the WEEKDAY LAW**
+  (`Database/encyclopedia.json` `intelligence` section, `topics
+  ["intelligences"]`): the old articles were plain Gardner with zero
+  canon web; they now speak the day web (The Figure / On the Dial with
+  the day's colour-hour-mood-column / the virtue-vice DERIVATION / the
+  profession as mirror), and the six weekday intelligences move onto the
+  arm whose whole bundle already fit them — **Monday Interpersonal, Tue
+  Bodily-Kinesthetic, Wed Linguistic, Thu Logical-Mathematical, Fri
+  Musical, Sat Naturalist** — each inheriting its arm's virtue as gift
+  and vice as shadow (the mood web is read STRAIGHT from `symbolism.json`
+  `arms`, so Wednesday is Sorrow and Thursday is Joy, never the shuffled
+  transcript). The last three are the **Sun's three faces**: RULER =
+  Visual-Spatial (the all-seeing king, the Great Seal's Eye; its shadow
+  the eye that believes it IS all, Lucifer's pride), SERVANT =
+  Intrapersonal (the self-mirror at solar midnight, Judas' side, where
+  the proud extreme cannot look), NINTH = Existential (The Unfound, the
+  only intelligence with no trade — the wish for meaning asked in the
+  NOON window). The topic PAGE ORDER now follows the weekday law like
+  every restructured theme: title -> Mon..Sat -> Ruler -> Servant ->
+  Ninth (no separate trio-title page — the title page's own "The Sun's
+  Three Faces" subhead introduces the trio; the flat emblem machinery
+  wants none). The badge art stems are UNCHANGED — only each
+  intelligence's dial SEAT moved. A tiny same-round MOOD MICRO-PASS on
+  the continents (`symbolism.json` `articles.continents`) aligns Asia to
+  Wednesday's Sorrow and Africa to Thursday's Joy (North America already
+  carried Saturday's Renewal). Pinned by `tests/test_intelligences.py`.
+
+- **THE SLAVIC MONTHS — a new Calendar-pointer 12-set + topic**
+  (`topics["months"]`, `Database/encyclopedia.json` new top-level
+  `months` section, `_TOPIC_GROUPS` "The Celestial Engine"): the twelve
+  Croatian months as PROPER NOUNS with the English gloss ("Lipanj (the
+  Linden Month)", never the Gregorian name in the title), title page +
+  twelve articles — etymology, the labour/nature of the month with its
+  Gregorian equivalent in prose, the pan-Slavic Czech/Polish/Ukrainian
+  sibling names (the richer stories: the sickle that cuts a month later
+  north, the leaf-fall that means October in Zagreb and November in
+  Warsaw), and the mark's place on the Calendar-pointer wedge. Built
+  from `defaults.SLAVIC_MONTHS` (one config table drives the display
+  name, the article key and the plate stem, Rule #4/#5). The topic rides
+  **The Celestial Engine** because it IS the year's own wheel (the same
+  wheel the Almanac reads), not a myth or a craft. Art is a FUTURE
+  prompt sheet under the canonical **sourceless** `months/` root
+  (`defaults.MONTHS_ART_DIR`, OUTSIDE `ART_SOURCED_ROOTS` — the subdial
+  precedent, see [Assets (folder)](../assets/___assets.md)),
+  graceful-absent until it lands. **WHAT REMAINS for the pointer
+  mount** (out of this round's scope, a FUTURE render round): the DESIGN
+  ZODIAC law wants the twelve marks DRAWN on the Calendar pointer at
+  `defaults.CALENDAR_MOUNT_RADIUS_FRACTION` (60-70% radius) with a
+  Settings selector for WHICH 12-set mounts (zodiac signs / months /…);
+  this round delivers only the registration table + the Encyclopedia
+  topic. Pinned by `tests/test_months.py`.
+
 **The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
 Seasons topic became THREE — **Moon** (the lunations), **Seasons** (the
 quarters, the tropics' halves and the meteorological block — the hidden
