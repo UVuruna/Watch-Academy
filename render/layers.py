@@ -971,12 +971,10 @@ def center_seat_body_key(skin: SkinDefinition, today: str) -> str | None:
     Prism/Trinity hexa/trio layouts (the ONLY body ever drawn there —
     `WeekdayLayer` seats every other body on an arm), `today` for the
     center_only showcase (its one and only seat, no arms at all). Both
-    `CenterBodyLayer` and the compositor's hover gate the Blue Moon
-    Law's 13th on this SAME physical seat (Rule #5) — independent of
-    whether the theme carries a Ruler/Servant duality at all
-    (`center_dual_face` additionally requires a `dual_asset`, which the
-    13th does not need: it needs only the seat, never the theme's own
-    duality)."""
+    `CenterBodyLayer` and the compositor's hover read this to resolve
+    the ordinary Sunday dual/Ninth face — independent of whether the
+    theme carries a Ruler/Servant duality at all (`center_dual_face`
+    additionally requires a `dual_asset`, which this key does not)."""
     if weekday_classic_slot(skin) is None:
         return None
     if skin.weekday_set.display_mode == "center_only":
@@ -1005,6 +1003,45 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
         resolved = paths.art_file(defaults.MONTHS_ART_DIR / f"{name}.png")
         art = resolved if resolved.exists() else None
     return name, art
+
+
+def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
+    """THE BLUE MOON LAW's CORRECTED resolution (owner overrule,
+    retiring R12's global "any pointer, any theme" law — its own
+    screenshot caught Ophiuchus on the hexa pointer with the Greek
+    theme). A 13th ever claims the dial CENTER ONLY on the Calendar
+    pointer (`skin.pointer == "calendar"`), in the ONE mode that owns
+    it; every other pointer's ordinary center laws (the Sunday dual/
+    Ninth windows) reign untouched, unconditionally — this function
+    returns None before even looking at `day`.
+
+    `day.thirteenth_candidates` (`core.blue_moon.thirteenth_candidates`,
+    computed once a day) is an unordered FACT SET — resolving it to the
+    Calendar pointer's OWN showing member reads the ACTIVE settings
+    shape, never a date-only "which is more real" tiebreak (that R12
+    notion is retired with the precedence machinery itself):
+
+    - `calendar_mount` "chinese"/"months" OWN a 13th (The Cat/Modrenik)
+      and OUTRANK the wheel whenever both are active at once — a mount
+      is a more deliberate SECOND choice layered on top of the wheel
+      (owner-documented tiebreak, ground-truthed against the settings
+      model: `calendar_mount` is fully independent of `palette_style`,
+      so both CAN be active together, e.g. the zodiac wheel with the
+      chinese mount).
+    - Any other mount ("off", or "zodiac" — which names no 13th of its
+      own, since Ophiuchus already belongs to the WHEEL, not the mount)
+      falls through to the WHEEL (`calendar_wheel`, palette_style-
+      picked): the zodiac wheel claims Ophiuchus, the almanac wheel
+      claims Sol."""
+    if skin.pointer != "calendar":
+        return None
+    candidates = day.thirteenth_candidates
+    if skin.calendar_mount == "chinese":
+        return "chinese" if "chinese" in candidates else None
+    if skin.calendar_mount == "months":
+        return "modrenik" if "modrenik" in candidates else None
+    key = "ophiuchus" if calendar_wheel(skin) == "zodiac" else "sol"
+    return key if key in candidates else None
 
 
 def theme_ninth(
@@ -2019,25 +2056,30 @@ class CenterBodyLayer(Layer):
     — so the hands sweep behind it (owner spec; the slot images never
     move up here). During the reveal-week window (owner 2026-07-16) the
     ghost center Sun also rises here, opaque, on every day of the week —
-    that IS the z-order lift the reveal promises."""
+    that IS the z-order lift the reveal promises.
+
+    **THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X)
+    — checked FIRST, independent of everything below:** `active_
+    thirteenth(skin, day)` names the 13th (if any) the Calendar
+    pointer's OWN mode is showing today — gated to `skin.pointer ==
+    "calendar"` alone, so it can NEVER fire on hexa/trio/center_only
+    (R12's global law is retired; see [Blue Moon](../core/blue_moon.md)).
+    The Calendar pointer never carries a classic weekday seat at all
+    (its slot layout is always "pinned" — `render.layers.slot_layout`),
+    so its own dial center is otherwise EMPTY; a showing 13th draws
+    there, at the same (0, 0) origin every other center face uses."""
 
     cadence = Cadence.MINUTE
 
     def paint(self, painter: QPainter, ctx: RenderContext) -> None:
         spec = self._skin.weekday_set
         today = constants.WEEKDAY_BODIES[ctx.day.weekday_index]
+        thirteenth = active_thirteenth(ctx.skin, ctx.day)
+        if thirteenth is not None:
+            self._draw_thirteenth(painter, ctx, thirteenth)
+            return
         if weekday_classic_slot(ctx.skin) is None:
             return          # every slot sits in a seat
-        center_key = center_seat_body_key(ctx.skin, today)
-        if center_key is not None and ctx.day.active_thirteenth is not None:
-            # THE BLUE MOON LAW (owner-sealed 2026-07-22): the 13th
-            # OUTRANKS the theme's ordinary center face for as long as
-            # its trigger+window holds — checked BEFORE the Sunday
-            # dual/Ninth law below, on ANY day of the week (its window
-            # is a calendar fact, never tied to Sunday or to whether
-            # this theme even carries a duality).
-            self._draw_thirteenth(painter, ctx, ctx.day.active_thirteenth, center_key)
-            return
         ghost_reveal = (
             ctx.reveal_active
             and spec.display_mode != "center_only"
@@ -2139,12 +2181,18 @@ class CenterBodyLayer(Layer):
         )
 
     def _draw_thirteenth(
-        self, painter: QPainter, ctx: RenderContext, key: str, center_key: str,
+        self, painter: QPainter, ctx: RenderContext, key: str,
     ) -> None:
-        """THE BLUE MOON LAW's 13th (owner-sealed 2026-07-22) — drawn
-        exactly where the ordinary center face would sit, opaque, ABOVE
-        the hands. Graceful-absent like the calendar mount's own months
-        (a NAME-ONLY fallback, never a hidden feature) — UNLIKE
+        """THE BLUE MOON LAW's 13th (owner-sealed 2026-07-22, CORRECTED
+        2026-07-2X) — drawn at the dial's literal (0, 0) center, opaque,
+        ABOVE the hands (`active_thirteenth` already gates this to
+        `skin.pointer == "calendar"`, whose own center is otherwise
+        empty — see the class docstring). Its own hover element is
+        "thirteenth" (`render.compositor._element_at`), never a
+        `center_seat_body_key` piggyback (that key names a DIFFERENT
+        seat — the classic weekday unit's — which the Calendar pointer
+        never carries). Graceful-absent like the calendar mount's own
+        months (a NAME-ONLY fallback, never a hidden feature) — UNLIKE
         `theme_ninth`, whose missing plate makes a theme act as if it
         carried no Ninth at all: the 13th's whole point is its
         trigger+window, which must read provably even before Sol/
@@ -2156,7 +2204,7 @@ class CenterBodyLayer(Layer):
             if spec.display_mode == "center_only"
             else weekday_body_size(ctx.skin, ctx.radius)
         )
-        center_size *= hover_factor(ctx, f"body:{center_key}")
+        center_size *= hover_factor(ctx, "thirteenth")
         painter.save()
         painter.setOpacity(1.0)
         if asset is not None:

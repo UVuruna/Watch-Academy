@@ -107,14 +107,19 @@ class DayContext:
     # instant) — always empty without the optional pack. build_tick_state
     # picks the one (if any) whose ±3h window covers "now".
     eclipses: tuple[EclipseEvent, ...] = ()
-    # THE BLUE MOON LAW (owner-sealed 2026-07-22): which 13th (if any,
-    # one of config.constants.THIRTEENTHS' keys) owns the dial CENTER
-    # today — computed ONCE here (core.blue_moon.active_thirteenth),
-    # never on the MINUTE-cadence paint pass. `chinese_leap_month_number`
-    # is the doubled lunar month (1-12) ONLY while The Cat holds the
-    # center (None otherwise) — the Chinese-mount's own dimming law
-    # reads it directly, no astronomy recomputed there either.
-    active_thirteenth: str | None = None
+    # THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X):
+    # every 13th (config.constants.THIRTEENTHS' keys) whose OWN
+    # trigger+window holds TODAY — a fact set, no precedence, no render
+    # mode read here (computed ONCE via core.blue_moon.
+    # thirteenth_candidates, never on the MINUTE-cadence paint pass);
+    # resolving it to the ONE member a given skin's pointer/wheel/mount
+    # may show is render.layers.active_thirteenth's job.
+    # `chinese_leap_month_number` is the doubled lunar month (1-12) ONLY
+    # while today falls inside that leap window ("chinese" in
+    # `thirteenth_candidates`, None otherwise) — the Chinese-mount's own
+    # dimming law reads it directly, no astronomy recomputed there
+    # either.
+    thirteenth_candidates: frozenset[str] = frozenset()
     chinese_leap_month_number: int | None = None
     # Deep Time (Session 16): every datetime above lives in the 400-year
     # PROXY frame, shifted by deep_cycles Gregorian cycles (0 in normal
@@ -169,10 +174,12 @@ def build_day_context(
     event_names = constants.ZONE_SEASON_EVENT_NAMES[zone]
     sign_name, sign_symbol, sign_start, sign_end = zodiac_sign(now_local, year_anchors)
     chinese_name, chinese_start, chinese_end = chinese_zodiac(now_local, moon_window)
-    # THE BLUE MOON LAW (owner-sealed 2026-07-22): computed once here,
-    # like every other DAILY fact on this context — see core.blue_moon.
+    # THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X):
+    # computed once here, like every other DAILY fact on this context —
+    # see core.blue_moon. `candidates` is a plain fact set; the render
+    # layer resolves it against the active skin.
     leap_month = blue_moon.chinese_leap_month(year_anchors, moon_window)
-    thirteenth = blue_moon.active_thirteenth(
+    candidates = blue_moon.thirteenth_candidates(
         now_local.date(), moon_window, year_anchors, leap_month
     )
     return DayContext(
@@ -217,9 +224,9 @@ def build_day_context(
         latitude=observer.latitude,
         longitude=observer.longitude,
         eclipses=eclipses,
-        active_thirteenth=thirteenth,
+        thirteenth_candidates=candidates,
         chinese_leap_month_number=(
-            leap_month.number if thirteenth == "chinese" else None
+            leap_month.number if "chinese" in candidates else None
         ),
     )
 

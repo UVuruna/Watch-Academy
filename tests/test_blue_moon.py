@@ -1,11 +1,14 @@
-"""THE BLUE MOON LAW (owner-sealed 2026-07-22, R12): the 13th member of
-every 12-set. Pins `thirteen_moon_year` against published full-moon
-counts, each 13th's own window (boundary days both sides), The Cat's
-REAL lunisolar leap month against two independently verified years, the
-center precedence (13th over a dual-less theme, over the Ninth, on any
-weekday), the graceful-absent contract for Sol/Modrenik, and the
-DayContext wiring. Purity (no Qt, no wall clock) is covered generically
-by tests/test_purity.py's core/*.py glob — not re-pinned here.
+"""THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X): the
+13th member of every 12-set. Pins `thirteen_moon_year` against published
+full-moon counts, each 13th's own window (boundary days both sides), The
+Cat's REAL lunisolar leap month against two independently verified
+years, the DayContext wiring (a plain fact set, no precedence), the
+graceful-absent contract for Sol/Modrenik, and — the owner's correction —
+`render.layers.active_thirteenth`'s FOUR INDEPENDENT MODE gate: a 13th
+shows ONLY on the Calendar pointer, in the ONE mode that owns it, NEVER
+on any other pointer. Purity (no Qt, no wall clock) is covered
+generically by tests/test_purity.py's core/*.py glob — not re-pinned
+here.
 """
 
 import os
@@ -25,19 +28,19 @@ from app.settings_store import Settings, replace
 from config import constants, defaults, paths
 from core.blue_moon import (
     ChineseLeapMonth,
-    active_thirteenth,
     chinese_leap_month,
     modrenik_window,
     ophiuchus_window,
     sol_window,
     thirteen_moon_year,
+    thirteenth_candidates,
 )
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
-from render.layers import center_seat_body_key, thirteenth_plate
+from render.layers import active_thirteenth, center_seat_body_key, thirteenth_plate
 
 
 @pytest.fixture(scope="module")
@@ -56,6 +59,10 @@ def _day_tick(when: datetime):
         MoonPhaseRepository().moon_window(now.year),
     )
     return day, build_tick_state(now, day)
+
+
+def _calendar_skin(**kw):
+    return dataclasses.replace(defaults.DEFAULT_SKIN, pointer="calendar", **kw)
 
 
 # --- 1. thirteen_moon_year: the shared trigger --------------------------------
@@ -114,7 +121,7 @@ def test_modrenik_window_is_computed_from_the_real_solstice_not_a_fixed_date():
     assert (hi - lo).days + 1 == 29
 
 
-# --- 3. active_thirteenth: boundary days, both sides --------------------------
+# --- 3. thirteenth_candidates: boundary days, both sides -----------------------
 
 
 @pytest.mark.parametrize(
@@ -127,18 +134,18 @@ def test_fixed_window_boundaries_are_inclusive(window_fn, key):
     window, anchors = mr.moon_window(2026), sr.year_anchors(2026)
     leap = chinese_leap_month(anchors, window)
     lo, hi = window_fn(2026)
-    assert active_thirteenth(lo - timedelta(days=1), window, anchors, leap) != key
-    assert active_thirteenth(lo, window, anchors, leap) == key
-    assert active_thirteenth(hi, window, anchors, leap) == key
-    assert active_thirteenth(hi + timedelta(days=1), window, anchors, leap) != key
+    assert key not in thirteenth_candidates(lo - timedelta(days=1), window, anchors, leap)
+    assert key in thirteenth_candidates(lo, window, anchors, leap)
+    assert key in thirteenth_candidates(hi, window, anchors, leap)
+    assert key not in thirteenth_candidates(hi + timedelta(days=1), window, anchors, leap)
 
 
 def test_modrenik_window_boundaries_are_inclusive_and_cross_new_year():
     """Modrenik's window crosses the New Year in a blue-moon December
     (2026's solstice window runs into Jan 2027) — checked on its
-    UNAMBIGUOUS tail, past Ophiuchus's own Dec 17 close, so no
-    precedence tiebreak is in play here (the overlapping HEAD is
-    covered by test_ophiuchus_outranks_modrenik_in_their_overlap_band)."""
+    UNAMBIGUOUS tail, past Ophiuchus's own Dec 17 close, so no other
+    candidate is in play here (the overlapping HEAD is covered by
+    test_ophiuchus_and_modrenik_windows_can_both_be_true_facts)."""
     mr, sr = MoonPhaseRepository(), SeasonsRepository()
     window26, anchors26 = mr.moon_window(2026), sr.year_anchors(2026)
     leap26 = chinese_leap_month(anchors26, window26)
@@ -146,14 +153,16 @@ def test_modrenik_window_boundaries_are_inclusive_and_cross_new_year():
     assert lo.year == 2026 and hi.year == 2027            # crosses the New Year
     unambiguous = date(2026, 12, 19)                      # past Ophiuchus's Dec 17
     assert lo <= unambiguous <= hi
-    assert active_thirteenth(unambiguous, window26, anchors26, leap26) == "modrenik"
+    assert "modrenik" in thirteenth_candidates(unambiguous, window26, anchors26, leap26)
     # `hi` falls in 2027 — read through 2027's own YearAnchors/MoonWindow
     # (instants[0] is the SAME December solstice; MoonPhaseRepository
     # always brackets year-1, so 2026's Full Moons are still present).
     window27, anchors27 = mr.moon_window(2027), sr.year_anchors(2027)
     leap27 = chinese_leap_month(anchors27, window27)
-    assert active_thirteenth(hi, window27, anchors27, leap27) == "modrenik"
-    assert active_thirteenth(hi + timedelta(days=1), window27, anchors27, leap27) != "modrenik"
+    assert "modrenik" in thirteenth_candidates(hi, window27, anchors27, leap27)
+    assert "modrenik" not in thirteenth_candidates(
+        hi + timedelta(days=1), window27, anchors27, leap27
+    )
 
 
 def test_window_alone_is_not_enough_without_the_trigger():
@@ -168,14 +177,33 @@ def test_window_alone_is_not_enough_without_the_trigger():
     assert leap is not None and leap.number == 6          # 2025 IS a Cat year
     # Jul 1 sits inside Sol's Jun18-Jul15 span and safely before the
     # Cat's own Jul25-Aug22 leap window.
-    assert active_thirteenth(date(2025, 7, 1), window, anchors, leap) is None
+    assert thirteenth_candidates(date(2025, 7, 1), window, anchors, leap) == frozenset()
 
 
-def test_no_thirteenth_on_an_ordinary_date():
+def test_no_thirteenth_candidate_on_an_ordinary_date():
     mr, sr = MoonPhaseRepository(), SeasonsRepository()
     window, anchors = mr.moon_window(2026), sr.year_anchors(2026)
     leap = chinese_leap_month(anchors, window)
-    assert active_thirteenth(date(2026, 3, 15), window, anchors, leap) is None
+    assert thirteenth_candidates(date(2026, 3, 15), window, anchors, leap) == frozenset()
+
+
+def test_ophiuchus_and_modrenik_windows_can_both_be_true_facts():
+    """The one genuine window overlap (owner-documented): both ride
+    `thirteen_moon_year` and share the Dec 7-17 band of a blue-moon
+    December. UNLIKE R12, core.blue_moon picks no winner here — both are
+    reported as true FACTS; resolving to ONE mode-owned member is
+    render.layers.active_thirteenth's job, from the ACTIVE skin, never a
+    date-only tiebreak (see test_mount_outranks_the_wheel_when_both_claim
+    below)."""
+    mr, sr = MoonPhaseRepository(), SeasonsRepository()
+    window, anchors = mr.moon_window(2026), sr.year_anchors(2026)
+    leap = chinese_leap_month(anchors, window)
+    assert thirteen_moon_year(2026, window)
+    o_lo, o_hi = ophiuchus_window(2026)
+    m_lo, m_hi = modrenik_window(anchors.instants[4])
+    assert m_lo <= o_hi < m_hi                             # the windows truly overlap
+    candidates = thirteenth_candidates(date(2026, 12, 13), window, anchors, leap)
+    assert candidates == frozenset({"ophiuchus", "modrenik"})
 
 
 # --- 4. THE CAT: the real lunisolar leap month --------------------------------
@@ -205,51 +233,32 @@ def test_cat_boundary_days_are_inclusive():
     sr, mr = SeasonsRepository(), MoonPhaseRepository()
     anchors, window = sr.year_anchors(2025), mr.moon_window(2025)
     leap = chinese_leap_month(anchors, window)
-    assert active_thirteenth(leap.start - timedelta(days=1), window, anchors, leap) != "chinese"
-    assert active_thirteenth(leap.start, window, anchors, leap) == "chinese"
-    assert active_thirteenth(leap.end, window, anchors, leap) == "chinese"
-    assert active_thirteenth(leap.end + timedelta(days=1), window, anchors, leap) != "chinese"
+    before = thirteenth_candidates(leap.start - timedelta(days=1), window, anchors, leap)
+    assert "chinese" not in before
+    assert "chinese" in thirteenth_candidates(leap.start, window, anchors, leap)
+    assert "chinese" in thirteenth_candidates(leap.end, window, anchors, leap)
+    after = thirteenth_candidates(leap.end + timedelta(days=1), window, anchors, leap)
+    assert "chinese" not in after
 
 
-# --- 5. Precedence -------------------------------------------------------------
+# --- 5. DayContext wiring (computed once a day, never per-minute) -------------
 
 
-def test_ophiuchus_outranks_modrenik_in_their_overlap_band():
-    """The one genuine overlap (owner-documented tiebreak, R12): both
-    ride the SAME thirteen_moon_year trigger, and their windows share
-    the Dec 7-17 band of a blue-moon December — Ophiuchus (the real
-    transit) wins there; Modrenik only takes over once Ophiuchus's own
-    window closes."""
-    mr, sr = MoonPhaseRepository(), SeasonsRepository()
-    window, anchors = mr.moon_window(2026), sr.year_anchors(2026)
-    leap = chinese_leap_month(anchors, window)
-    assert thirteen_moon_year(2026, window)
-    o_lo, o_hi = ophiuchus_window(2026)
-    m_lo, m_hi = modrenik_window(anchors.instants[4])
-    assert m_lo <= o_hi < m_hi                             # the windows truly overlap
-    for probe in (m_lo, o_hi):
-        assert active_thirteenth(probe, window, anchors, leap) == "ophiuchus"
-    assert active_thirteenth(o_hi + timedelta(days=1), window, anchors, leap) == "modrenik"
-
-
-# --- 6. DayContext wiring (computed once a day, never per-minute) -------------
-
-
-def test_day_context_carries_the_resolved_thirteenth():
+def test_day_context_carries_the_candidate_fact_set():
     sol_day, _tick = _day_tick(datetime(2026, 7, 8, 12, 0))   # inside Sol's window
-    assert sol_day.active_thirteenth == "sol"
+    assert sol_day.thirteenth_candidates == frozenset({"sol"})
     assert sol_day.chinese_leap_month_number is None
 
     cat_day, _tick = _day_tick(datetime(2025, 8, 1, 12, 0))   # inside the Cat's window
-    assert cat_day.active_thirteenth == "chinese"
+    assert cat_day.thirteenth_candidates == frozenset({"chinese"})
     assert cat_day.chinese_leap_month_number == 6
 
     plain_day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
-    assert plain_day.active_thirteenth is None
+    assert plain_day.thirteenth_candidates == frozenset()
     assert plain_day.chinese_leap_month_number is None
 
 
-# --- 7. The registry + graceful-absent art ------------------------------------
+# --- 6. The registry + graceful-absent art ------------------------------------
 
 
 def test_thirteenths_registry_is_exhaustive():
@@ -283,31 +292,16 @@ def test_sol_and_modrenik_are_graceful_absent():
         assert not plate.exists()
 
 
-# --- 8. The dial CENTER: outranks the ordinary face, on ANY weekday ----------
+# --- 7. THE CORRECTED LAW: a 13th shows ONLY on the Calendar pointer ----------
 
 
-def test_thirteenth_outranks_a_dual_less_theme_on_any_weekday(app):
-    """DEFAULT_SKIN's "planets" theme carries NO Ruler/Servant duality
-    at all — the 13th must still claim the center: its trigger is a
-    calendar fact, never gated on whether the theme even has a
-    duality (unlike `center_dual_face`, which core_seat_body_key does
-    NOT require)."""
-    assert defaults.DEFAULT_SKIN.weekday_set.dual_asset is None
-    day, tick = _day_tick(datetime(2026, 7, 8, 12, 0))     # a Wednesday, Sol's window
-    today = constants.WEEKDAY_BODIES[day.weekday_index]
-    assert today != "sun"
-    assert center_seat_body_key(defaults.DEFAULT_SKIN, today) == "sun"
-    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
-    comp.render_offscreen(360.0, 1.0, day, tick)
-    hover = comp.tooltip_at(180.0, 180.0, 360.0)
-    assert hover is not None and "Sol" in hover
-
-
-def test_thirteenth_outranks_the_ninth_on_the_real_sunday(app):
-    """A Sunday inside Ophiuchus's window, on a Greek-themed hexa dial
-    that would otherwise show Gaia (the Ninth) near solar noon — item
-    7's precedence: the 13th still wins, and the hover names what
-    stepped aside."""
+def test_no_thirteenth_ever_off_the_calendar_pointer(app):
+    """THE OWNER'S CORRECTION (sealed): R12 wrongly showed the 13th on
+    ANY pointer carrying a classic/center weekday seat — its OWN
+    screenshot caught Ophiuchus on the hexa pointer with the Greek
+    theme. A 13th now NEVER shows off the Calendar pointer: the ordinary
+    Sunday dual/Ninth law reigns untouched, even deep inside Ophiuchus's
+    own window, on the exact reproduction of that bug."""
     skin = apply_display_settings(
         defaults.DEFAULT_SKIN,
         replace(
@@ -315,21 +309,21 @@ def test_thirteenth_outranks_the_ninth_on_the_real_sunday(app):
             solar_rotation=False,
         ),
     )
-    day, tick = _day_tick(datetime(2026, 12, 13, 12, 0))   # a Sunday, Ophiuchus window
+    day, tick = _day_tick(datetime(2026, 12, 13, 12, 0))   # Sunday, Ophiuchus's window
     assert constants.WEEKDAY_BODIES[day.weekday_index] == "sun"
-    assert day.active_thirteenth == "ophiuchus"
+    assert "ophiuchus" in day.thirteenth_candidates        # the date fact still holds
+    assert active_thirteenth(skin, day) is None             # but hexa never shows it
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
     hover = comp.tooltip_at(180.0, 180.0, 360.0)
     assert hover is not None
-    assert "Ophiuchus" in hover and "Gaia" not in hover
-    assert "steps aside" in hover
+    assert "Ophiuchus" not in hover and "steps aside" not in hover
+    assert "Gaia" in hover        # the Ninth claims solar noon as usual, undisplaced
 
 
-def test_center_only_mode_also_shows_the_thirteenth(app):
-    """The center_only showcase is the OTHER seat the law reuses (item
-    7: "the Sunday-seat mechanic Prism/Trinity use") — confirmed on a
-    non-hexa/trio pointer too."""
+def test_center_only_mode_shows_no_thirteenth_off_the_calendar_pointer(app):
+    """The center_only showcase was the OTHER seat R12 wrongly used —
+    confirmed dead on a non-Calendar pointer even with an active window."""
     skin = dataclasses.replace(
         defaults.DEFAULT_SKIN,
         weekday_set=dataclasses.replace(
@@ -337,17 +331,134 @@ def test_center_only_mode_also_shows_the_thirteenth(app):
         ),
         pointer="octa",
     )
-    day, tick = _day_tick(datetime(2026, 7, 8, 12, 0))
-    today = constants.WEEKDAY_BODIES[day.weekday_index]
-    assert center_seat_body_key(skin, today) == today
+    day, tick = _day_tick(datetime(2026, 7, 8, 12, 0))     # inside Sol's window
+    assert "sol" in day.thirteenth_candidates
+    assert center_seat_body_key(skin, constants.WEEKDAY_BODIES[day.weekday_index]) is not None
+    assert active_thirteenth(skin, day) is None
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
-    assert comp.tooltip_at(180.0, 180.0, 360.0) is not None
+    hover = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert hover is not None and "Sol" not in hover
 
 
 def test_no_center_seat_means_no_thirteenth_forced():
     """Cross/octa WITHOUT center_only mode have no center seat at all —
-    the law only reuses an existing seat, it never invents one."""
+    the ordinary weekday law never invents one, and the Blue Moon Law
+    stays gated on the pointer regardless."""
     skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa")
     assert center_seat_body_key(skin, "sun") is None
     assert center_seat_body_key(skin, "mars") is None
+
+
+# --- 8. THE CALENDAR POINTER'S FOUR INDEPENDENT MODES --------------------------
+
+
+def test_zodiac_wheel_claims_ophiuchus():
+    skin = _calendar_skin(palette_style="paint", calendar_mount="off")
+    day, _tick = _day_tick(datetime(2026, 12, 5, 12, 0))
+    assert "ophiuchus" in day.thirteenth_candidates
+    assert active_thirteenth(skin, day) == "ophiuchus"
+
+
+def test_almanac_wheel_claims_sol():
+    skin = _calendar_skin(palette_style="light", calendar_mount="off")
+    day, _tick = _day_tick(datetime(2026, 7, 8, 12, 0))
+    assert "sol" in day.thirteenth_candidates
+    assert active_thirteenth(skin, day) == "sol"
+
+
+def test_months_mount_claims_modrenik():
+    skin = _calendar_skin(palette_style="paint", calendar_mount="months")
+    day, _tick = _day_tick(datetime(2026, 12, 19, 12, 0))   # past Ophiuchus's close
+    assert "modrenik" in day.thirteenth_candidates
+    assert active_thirteenth(skin, day) == "modrenik"
+
+
+def test_chinese_mount_claims_the_cat():
+    skin = _calendar_skin(palette_style="light", calendar_mount="chinese")
+    day, _tick = _day_tick(datetime(2025, 8, 1, 12, 0))
+    assert "chinese" in day.thirteenth_candidates
+    assert active_thirteenth(skin, day) == "chinese"
+
+
+def test_zodiac_mount_names_no_thirteenth_of_its_own():
+    """calendar_mount == "zodiac" names no 13th (Ophiuchus already
+    belongs to the WHEEL, not the mount) — resolution falls through to
+    the wheel exactly like "off"."""
+    skin = _calendar_skin(palette_style="paint", calendar_mount="zodiac")
+    day, _tick = _day_tick(datetime(2026, 12, 5, 12, 0))
+    assert active_thirteenth(skin, day) == "ophiuchus"
+
+
+def test_mount_outranks_the_wheel_when_both_claim():
+    """THE OWNER'S TIEBREAK, ground-truthed from the settings model:
+    `calendar_mount` is fully independent of `palette_style`, so BOTH
+    can be active at once. Dec 13 2026 sits inside BOTH Ophiuchus's and
+    Modrenik's windows (test_ophiuchus_and_modrenik_windows_can_both_be_
+    true_facts above) — the zodiac WHEEL alone claims Ophiuchus, but the
+    "months" MOUNT on top of that same wheel claims Modrenik instead:
+    the mount is the more deliberate second choice, so it wins."""
+    day, _tick = _day_tick(datetime(2026, 12, 13, 12, 0))
+    assert {"ophiuchus", "modrenik"} <= day.thirteenth_candidates
+    zodiac_only = _calendar_skin(palette_style="paint", calendar_mount="off")
+    assert active_thirteenth(zodiac_only, day) == "ophiuchus"
+    with_months_mount = _calendar_skin(palette_style="paint", calendar_mount="months")
+    assert active_thirteenth(with_months_mount, day) == "modrenik"
+
+
+def test_no_thirteenth_on_the_calendar_pointer_off_its_own_window():
+    """The Calendar pointer alone is not enough — the date must still
+    fall inside the claiming member's own trigger+window."""
+    skin = _calendar_skin(palette_style="paint", calendar_mount="off")
+    day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
+    assert day.thirteenth_candidates == frozenset()
+    assert active_thirteenth(skin, day) is None
+
+
+# --- 9. Hover + Spacebar on the Calendar pointer's own dial center ------------
+
+
+def test_ophiuchus_hover_and_encyclopedia_target(app):
+    skin = _calendar_skin(palette_style="paint", calendar_mount="off")
+    day, tick = _day_tick(datetime(2026, 12, 5, 12, 0))
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    hover = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert hover is not None and "Ophiuchus" in hover
+    # "astrology" topic: 12 zodiac signs (0-11) then Ophiuchus at 12
+    # (app.encyclopedia._topics' own ninth-append order).
+    assert comp.encyclopedia_target(180.0, 180.0, 360.0) == ("astrology", 12)
+
+
+def test_sol_hover_and_encyclopedia_target(app):
+    skin = _calendar_skin(palette_style="light", calendar_mount="off")
+    day, tick = _day_tick(datetime(2026, 7, 8, 12, 0))
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    hover = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert hover is not None and "Sol" in hover
+    # "months" topic: the Overview (0) + twelve Slavic months (1-12),
+    # then Sol at 13, Modrenik at 14.
+    assert comp.encyclopedia_target(180.0, 180.0, 360.0) == ("months", 13)
+
+
+def test_modrenik_hover_and_encyclopedia_target(app):
+    skin = _calendar_skin(palette_style="paint", calendar_mount="months")
+    day, tick = _day_tick(datetime(2026, 12, 19, 12, 0))
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    hover = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert hover is not None and "Modrenik" in hover
+    assert comp.encyclopedia_target(180.0, 180.0, 360.0) == ("months", 14)
+
+
+def test_cat_hover_and_encyclopedia_target(app):
+    skin = _calendar_skin(palette_style="light", calendar_mount="chinese")
+    day, tick = _day_tick(datetime(2025, 8, 1, 12, 0))
+    comp = Compositor(skin, AssetCache())
+    comp.render_offscreen(360.0, 1.0, day, tick)
+    hover = comp.tooltip_at(180.0, 180.0, 360.0)
+    assert hover is not None and "Cat" in hover
+    # "chinese" topic: 12 animals (0-11) + 5 elements (12-16), then The
+    # Cat at 17 (app.encyclopedia._topics' own ninth-append order).
+    assert comp.encyclopedia_target(180.0, 180.0, 360.0) == ("chinese", 17)

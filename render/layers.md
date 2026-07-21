@@ -563,21 +563,36 @@ alike (owner 2026-07-18); center_only keeps its own `center_scale`
 showcase, and the compositor's center hit disc mirrors both drawn
 sizes exactly.
 
-**THE BLUE MOON LAW (owner-sealed 2026-07-22, R12) — checked FIRST,
-before everything below:** `center_seat_body_key(skin, today)` names
-the body key occupying this SAME physical seat ("sun" for hexa/trio,
-`today` for center_only) — independent of whether the theme carries a
-duality at all (unlike `center_dual_face`, which additionally requires
-a `dual_asset`). Whenever `DayContext.active_thirteenth` is not None
-(`core.blue_moon.active_thirteenth`, resolved once per day), `_draw_
-thirteenth` draws that 13th here instead — OUTRANKING the ordinary
-face, the Servant, and even the Ninth, on ANY day of the week (the
-13th's window is a calendar fact, never tied to Sunday). Graceful-absent
-like the calendar mount's own months (`thirteenth_plate(key)` — a
-NAME-ONLY fallback, never a hidden feature, unlike `theme_ninth` below,
-whose missing plate silently withdraws the Ninth face entirely). See
-[Blue Moon](../core/blue_moon.md) for the trigger/window/precedence law
-itself.
+**THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-2X) —
+checked FIRST, independent of everything below:** `active_thirteenth
+(skin, day)` names the 13th (if any) the Calendar pointer's OWN mode is
+showing today — gated to `skin.pointer == "calendar"` ALONE, so it can
+NEVER fire on hexa/trio/center_only or any other pointer (R12's global
+"any pointer, any theme" law, and its cross-13th precedence machinery,
+are both retired — R12's own screenshot caught Ophiuchus wrongly showing
+on the hexa pointer with the Greek theme). The Calendar pointer never
+carries a classic weekday seat at all (its `slot_layout` is always
+"pinned"), so its own dial center is otherwise EMPTY; `_draw_thirteenth`
+draws a showing 13th there, at the SAME (0, 0) origin every other center
+face uses, sized like `weekday_body_size()`/`center_scale` would size an
+ordinary center face there. Resolution reads `DayContext.
+thirteenth_candidates` (`core.blue_moon.thirteenth_candidates`, an
+unordered per-day FACT set) against the skin's own WHEEL
+(`calendar_wheel`, `palette_style`-picked: zodiac → Ophiuchus, almanac →
+Sol) or MOUNT (`calendar_mount`: "chinese" → The Cat, "months" →
+Modrenik) — a mount that owns a 13th outranks the wheel whenever both
+are active settings at once (ground-truthed against the settings model:
+`calendar_mount` is fully independent of `palette_style`, so both CAN be
+selected together); `calendar_mount == "zodiac"` names no 13th of its
+own and falls through to the wheel, like "off". Graceful-absent like the
+calendar mount's own months (`thirteenth_plate(key)` — a NAME-ONLY
+fallback, never a hidden feature, unlike `theme_ninth` below, whose
+missing plate silently withdraws the Ninth face entirely). Its own hover
+element is `"thirteenth"` (`render.compositor._element_at`), a hit disc
+at the dial center — never piggybacking on any `body:` weekday-seat key,
+since the Calendar pointer carries no such seat. See
+[Blue Moon](../core/blue_moon.md) for the trigger/window/candidate facts
+themselves.
 
 **THE DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
 amendment, round R3b item 3):** on a real Sunday, when the classic

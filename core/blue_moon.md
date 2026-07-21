@@ -1,16 +1,16 @@
-# Blue Moon — the Thirteenth Member
+﻿# Blue Moon — the Thirteenth Member
 
 **Script:** [Blue Moon (script)](blue_moon.py)
 
 ## Purpose
 
-Owner-sealed 2026-07-22: every 12-set on the dial gains a hidden 13th
-member — **Ophiuchus** (the zodiac's 13th sign), **Sol** (the Sun's 13th
-month, International Fixed Calendar), **Modrenik** (the Moon's 13th
-month, an invented Slavic sibling), and **The Cat** (the Chinese
-zodiac's 13th animal). Each exists ONLY under its own trigger and ONLY
-inside its own short date window; outside trigger+window it does not
-exist anywhere, dial or Encyclopedia.
+Owner-sealed 2026-07-22, CORRECTED 2026-07-22: every 12-set on the dial
+gains a hidden 13th member — **Ophiuchus** (the zodiac's 13th sign),
+**Sol** (the Sun's 13th month, International Fixed Calendar),
+**Modrenik** (the Moon's 13th month, an invented Slavic sibling), and
+**The Cat** (the Chinese zodiac's 13th animal). Each exists ONLY under
+its own trigger and ONLY inside its own short date window; outside
+trigger+window it does not exist anywhere, dial or Encyclopedia.
 
 Two trigger families:
 
@@ -31,10 +31,19 @@ Two trigger families:
   2023 leap 2nd (Mar 22 - Apr 19), 2025 leap 6th (Jul 25 - Aug 22) — both
   reproduced exactly against the bundled ephemeris.
 
-`active_thirteenth` resolves which one (if any) owns the dial CENTER on
-a given date, with a documented precedence for the one genuine window
-overlap (Ophiuchus/Modrenik can both trigger in the Dec 7-17 band of a
-blue-moon December).
+`thirteenth_candidates` names every member (0, 1 or occasionally 2)
+whose OWN trigger+window holds on a given date — an unordered FACT SET,
+no precedence between members. Ophiuchus's and Modrenik's windows do
+genuinely overlap in the Dec 7-17 band of a blue-moon December, so both
+can be candidates at once — this module no longer picks a winner there.
+**THE OWNER'S CORRECTION (retiring R12's global law):** the four members
+actually live in FOUR INDEPENDENT RENDER MODES on the Calendar pointer
+alone and never meet on the dial — Ophiuchus/Sol on its zodiac/almanac
+WHEEL (`SkinDefinition.palette_style`), Modrenik/The Cat on its
+"months"/"chinese" MOUNT (`SkinDefinition.calendar_mount`) — so
+resolving a date's candidates to the ONE member a given skin may show is
+[Layers](../render/layers.md)' `active_thirteenth(skin, day)`, never a
+date-only tiebreak here.
 
 Pure module — no Qt, no wall clock (purity-gated by
 [Purity test](../tests/test_purity.py)). Every function takes
@@ -54,18 +63,21 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
 
 ### Used by
 - [Clock State (script)](clock_state.py) — `build_day_context` computes
-  `chinese_leap_month` and `active_thirteenth` ONCE per day (DAILY
+  `chinese_leap_month` and `thirteenth_candidates` ONCE per day (DAILY
   cadence, matching every other `DayContext` field) and stores them as
-  `DayContext.active_thirteenth` / `DayContext.chinese_leap_month_number`
+  `DayContext.thirteenth_candidates` / `DayContext.chinese_leap_month_number`
   — never recomputed on the MINUTE-cadence paint pass.
-- [Layers (folder)](../render/___render.md) — `CenterBodyLayer` reads
-  `DayContext.active_thirteenth` first, outranking the theme's ordinary
-  center face while it holds; `_draw_calendar_mount`'s "chinese" mount
-  dims the doubled month's own animal from
+- [Layers (folder)](../render/___render.md) — `active_thirteenth(skin,
+  day)` resolves `DayContext.thirteenth_candidates` against the skin's
+  own pointer/wheel/mount to the ONE member (if any) the Calendar
+  pointer's dial center may show — `CenterBodyLayer` draws it there,
+  gated to `skin.pointer == "calendar"` alone (every other pointer's
+  ordinary center laws reign untouched); `_draw_calendar_mount`'s
+  "chinese" mount dims the doubled month's own animal from
   `DayContext.chinese_leap_month_number`.
-- [Compositor (script)](../render/compositor.md) — the center hover
-  speaks the active 13th's own article first, noting that the theme's
-  ordinary center steps aside.
+- [Compositor (script)](../render/compositor.md) — the Calendar
+  pointer's own center hover/Spacebar speak the active 13th's own
+  article.
 
 ## Functions
 
@@ -76,9 +88,9 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
 - `chinese_leap_month(anchors, window)` — the doubled lunar month
   (number + its own China-time span) of the sui `anchors` brackets, or
   `None`.
-- `active_thirteenth(on_date, moon_window, anchors, leap)` — the
-  precedence resolver: one of `config.constants.THIRTEENTHS`' keys, or
-  `None`.
+- `thirteenth_candidates(on_date, moon_window, anchors, leap)` — every
+  trigger+window active on `on_date`, a `frozenset` of
+  `config.constants.THIRTEENTHS`' keys (0, 1 or occasionally 2 members).
 
 ## Design Decisions
 
@@ -86,14 +98,19 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
   13-Full-Moon year and a 13-lunar-month Chinese sui are different
   astronomical facts that usually (not always) coincide — the task is
   explicit that The Cat rides the real lunisolar mechanic, not the
-  shared solar trigger, so its window is computed independently and
-  checked FIRST in `active_thirteenth`.
-- **Precedence favors the more astronomically real trigger.** The only
-  genuine overlap is Ophiuchus vs Modrenik (both share `thirteen_moon_year`
-  and their windows touch in December); Ophiuchus wins because it names
-  a real transit, Modrenik an invented sibling. The Cat outranks both
-  because a real lunisolar absence is rarer and more literally computed
-  than either. Sol and Modrenik never collide with each other.
+  shared solar trigger, so its window is computed and checked
+  independently in `thirteenth_candidates`.
+- **No precedence lives here (owner correction, retiring R12).** The
+  only genuine window overlap is Ophiuchus vs Modrenik (both share
+  `thirteen_moon_year` and their windows touch in December) — R12 picked
+  a winner by "astronomical realness"; the owner's correction found the
+  real rule instead: the four members live in four INDEPENDENT RENDER
+  MODES (the Calendar pointer's wheel vs its mount) that never compete
+  for the same seat, so `thirteenth_candidates` reports BOTH as true
+  facts and leaves the mode-resolution entirely to
+  `render.layers.active_thirteenth`, which reads the ACTIVE skin
+  settings (a mount that owns a 13th outranks the wheel when both are
+  active at once — see its own docstring).
 - **Computed once per day, not per minute.** `chinese_leap_month`
   involves ~13 solar-longitude evaluations — cheap, but its inputs
   (`YearAnchors`, `MoonWindow`) only change once a day, so

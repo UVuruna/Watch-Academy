@@ -66,18 +66,22 @@ above the horizon AND the haversine distance to `(lat, lon)` is within
 eclipse's own INSTANT, never the day's rise/set edges — the ±3h glow
 window is short enough that only the instant matters.
 
-**`active_thirteenth`/`chinese_leap_month_number` (owner-sealed
-2026-07-22, R12 Blue Moon Law):** `active_thirteenth` is one of
-`config.constants.THIRTEENTHS`' keys ("ophiuchus"/"sol"/"modrenik"/
-"chinese") or `None` — computed ONCE here via
-`core.blue_moon.active_thirteenth` (fed `core.blue_moon.
-chinese_leap_month(year_anchors, moon_window)`, also computed once),
-never recomputed on the MINUTE-cadence paint pass
-(`render.layers.CenterBodyLayer`) or the hover. `chinese_leap_month_number`
-is the doubled lunar month (1-12) ONLY while `active_thirteenth ==
-"chinese"` (`None` otherwise) — the Chinese calendar-mount's own
-dimming law (`render.layers.chinese_mount_dimmed_index`) reads it
-directly.
+**`thirteenth_candidates`/`chinese_leap_month_number` (owner-sealed
+2026-07-22, CORRECTED 2026-07-2X, Blue Moon Law):**
+`thirteenth_candidates` is a `frozenset` of `config.constants.
+THIRTEENTHS`' keys ("ophiuchus"/"sol"/"modrenik"/"chinese") — every
+trigger+window active TODAY, a plain fact set with NO precedence and NO
+render-mode read here — computed ONCE via `core.blue_moon.
+thirteenth_candidates` (fed `core.blue_moon.chinese_leap_month
+(year_anchors, moon_window)`, also computed once), never recomputed on
+the MINUTE-cadence paint pass. Resolving it to the ONE member a skin's
+own pointer/wheel/mount may show is `render.layers.active_thirteenth`'s
+job (`render.layers.CenterBodyLayer` and the compositor's hover both
+call it fresh — cheap set-membership checks, no need to cache the
+resolved key). `chinese_leap_month_number` is the doubled lunar month
+(1-12) ONLY while `"chinese" in thirteenth_candidates` (`None`
+otherwise) — the Chinese calendar-mount's own dimming law
+(`render.layers.chinese_mount_dimmed_index`) reads it directly.
 
 **`deep_cycles` (Session 16, owner 2026-07-17):** every datetime in the
 context lives in the 400-year PROXY frame shifted by this many

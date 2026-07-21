@@ -60,9 +60,9 @@ from render.layers import (
     archetype_figure_size,
     archetype_key,
     archetype_lit_index,
+    active_thirteenth,
     center_dual_face,
     center_face,
-    center_seat_body_key,
     chinese_mount_dimmed_index,
     dial_point,
     earth_region,
@@ -391,6 +391,27 @@ _ENC_TRIO_ORDER = ("Faith", "Hope", "Love")
 _ENC_ECLIPSE_SOLAR_ORDER = ("Overview", "Total", "Annular", "Partial", "Hybrid")
 _ENC_ECLIPSE_LUNAR_ORDER = ("Overview", "Total", "Partial", "Penumbral")
 
+# THE BLUE MOON LAW's four members' own Spacebar page (owner overrule,
+# CORRECTED 2026-07-2X): `app.encyclopedia._topics`' ONE FIXED append
+# order, mirrored here exactly like every other `_ENC_*_ORDER` constant
+# above. Ophiuchus/The Cat close the "astrology"/"chinese" GALLERY
+# topics (their shared ninth-append loop's LAST entries — their
+# ARTICLE TEXT family is "ninths", `constants.THIRTEENTHS`, but the
+# gallery page that opens lives in their own zodiac topic, never a
+# literal "ninths" topic, which does not exist); Sol/Modrenik close
+# "months" (the Overview entry, the twelve Slavic months, THEN the
+# pair, `app.encyclopedia._topics`'s own append order).
+_ENC_OPHIUCHUS_INDEX = len(_ENC_ZODIAC_ORDER)
+_ENC_CAT_INDEX = len(constants.CHINESE_ANIMALS) + len(constants.CHINESE_ELEMENTS)
+_ENC_SOL_INDEX = len(defaults.SLAVIC_MONTHS) + 1
+_ENC_MODRENIK_INDEX = _ENC_SOL_INDEX + 1
+_ENC_THIRTEENTH_TARGET = {
+    "ophiuchus": ("astrology", _ENC_OPHIUCHUS_INDEX),
+    "chinese": ("chinese", _ENC_CAT_INDEX),
+    "sol": ("months", _ENC_SOL_INDEX),
+    "modrenik": ("months", _ENC_MODRENIK_INDEX),
+}
+
 _MONTHS = (
     "January", "February", "March", "April", "May", "June", "July",
     "August", "September", "October", "November", "December",
@@ -667,6 +688,13 @@ class Compositor:
 
         element = self._element_at(point, radius, rotation, today)
         if element is not None:
+            if element == "thirteenth":
+                # THE BLUE MOON LAW (owner overrule, CORRECTED
+                # 2026-07-2X): the Calendar pointer's OWN dial center,
+                # otherwise empty — its own element, never piggybacking
+                # on a weekday body key (no other pointer carries this
+                # seat at all now).
+                return self._thirteenth_tooltip(self._active_thirteenth())
             if element.startswith("slot:"):
                 # A SEATED slot (owner matrix 2026-07-14) speaks its
                 # own content: the sign, the rising sign, the Chinese
@@ -709,14 +737,6 @@ class Compositor:
                 # Weekday hover rework (owner spec): the ACTIVE body
                 # leads with the date, ghosts show their article alone.
                 body = element[len("body:"):]
-                if body == center_seat_body_key(self._skin, today):
-                    # THE BLUE MOON LAW (owner-sealed 2026-07-22): the
-                    # 13th OUTRANKS every other center-seat hover below
-                    # — checked on ANY day, independent of Sunday or of
-                    # whether this theme even carries a duality.
-                    thirteenth = self._active_thirteenth()
-                    if thirteenth is not None:
-                        return self._thirteenth_tooltip(thirteenth)
                 if body == "sun" and sunday_dual_face(self._skin):
                     # The north face on the Compass/Seasons speaks the
                     # RULER face alone (owner 2026-07-13) — the 24h
@@ -883,6 +903,16 @@ class Compositor:
         Seated weekday slots and the pinned classic bodies resolve the
         slot's OWN theme/roster; the Moon opens at its current phase, the
         Earth at its current season."""
+        if element == "thirteenth":
+            # THE BLUE MOON LAW (owner overrule, CORRECTED 2026-07-2X):
+            # each of the four members opens ITS OWN gallery page —
+            # `_ENC_THIRTEENTH_TARGET` mirrors app.encyclopedia._topics'
+            # fixed append order, exactly like every other _ENC_*_ORDER
+            # lookup in this module. None only if hovered without a live
+            # `_active_thirteenth` (should not happen — the hit-test
+            # itself is already gated on it), never a crash.
+            key = self._active_thirteenth()
+            return _ENC_THIRTEENTH_TARGET.get(key) if key is not None else None
         if element == "moon":
             # During a LUNAR eclipse window the Moon marker's Spacebar
             # jump opens the active category's chapter instead of the
@@ -1127,6 +1157,20 @@ class Compositor:
             return dx * dx + dy * dy <= hit_radius * hit_radius
 
         weekday = self._skin.weekday_set
+        # THE BLUE MOON LAW (owner overrule, CORRECTED 2026-07-2X): the
+        # Calendar pointer's own dial center — otherwise EMPTY, since
+        # its slot layout is always "pinned" (never "classic"/"center",
+        # see render.layers.slot_layout) — is its OWN hit target,
+        # checked first; a showing 13th's hit disc mirrors the DRAWN
+        # size exactly (`CenterBodyLayer._draw_thirteenth`).
+        thirteenth = active_thirteenth(self._skin, self._day)
+        if thirteenth is not None and hit(
+            QPointF(0.0, 0.0),
+            radius * weekday.center_scale
+            if weekday.display_mode == "center_only"
+            else weekday_body_size(self._skin, radius) / 2,
+        ):
+            return "thirteenth"
         classic = None
         for index, seat in slot_layout(self._skin).items():
             if seat == "classic":
@@ -1726,30 +1770,30 @@ class Compositor:
         )
 
     def _active_thirteenth(self) -> str | None:
-        """THE BLUE MOON LAW's resolved 13th for today (owner-sealed
-        2026-07-22) — reads the SAME pre-computed `DayContext` field
-        the paint pass uses (`core.blue_moon.active_thirteenth`,
-        computed once per day, never recomputed here); None before the
-        first day build (mirrors `_center_pangea`'s own graceful
-        guard)."""
-        return self._day.active_thirteenth if self._day is not None else None
+        """THE BLUE MOON LAW's resolved 13th for today+mode (owner
+        overrule, CORRECTED 2026-07-2X) — calls the SAME pure resolver
+        the paint pass calls (`render.layers.active_thirteenth`, fed
+        the pre-computed `DayContext.thirteenth_candidates` fact set);
+        None before the first day build (mirrors `_center_pangea`'s own
+        graceful guard)."""
+        if self._day is None:
+            return None
+        return active_thirteenth(self._skin, self._day)
 
     def _thirteenth_tooltip(self, key: str) -> str:
-        """THE BLUE MOON LAW's 13th (owner-sealed 2026-07-22, item 7):
-        its own article and badge lead, OUTRANKING the theme's
-        ordinary center face for as long as its window holds — the
-        closing paragraph names what stepped aside, so the hover
-        "says both" (owner spec: "Ophiuchus — the thirteenth;
-        [theme center] steps aside")."""
+        """THE BLUE MOON LAW's 13th (owner overrule, CORRECTED
+        2026-07-2X): its own article and badge lead, drawn at the
+        Calendar pointer's OWN dial center — empty every other day
+        (`render.layers.active_thirteenth` gates this to
+        `skin.pointer == "calendar"` alone, so no OTHER theme's center
+        face is ever displaced; the old "steps aside" closing line is
+        retired with R12's global law)."""
         name, asset = thirteenth_plate(key)
         _display, family, article_name = constants.THIRTEENTHS[key]
         text = self._encyclopedia.entry(family, article_name)["base"]
-        theme_title = defaults.WEEKDAY_THEME_TITLES.get(
-            self._skin.weekday_theme, self._skin.weekday_theme
-        )
         text += (
-            "\n\n[[The Thirteenth]] A blue-moon guest: for as long as "
-            f"it holds this seat, {theme_title}'s own center steps aside."
+            "\n\n[[The Thirteenth]] A blue-moon guest: the Calendar "
+            "pointer's own dial center, empty every other day."
         )
         title = (
             f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"

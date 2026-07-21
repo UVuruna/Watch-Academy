@@ -1,9 +1,7 @@
-"""THE BLUE MOON LAW (owner-sealed 2026-07-22): every 12-set on this dial
-gains a hidden 13th member. It exists ONLY under its own trigger, and
-appears ONLY in the dial CENTER (the Prism/Trinity hexa/trio seat, or the
-center_only showcase's single seat — render.layers.center_seat_body_key)
-during its own short date window; outside trigger+window it does not
-exist anywhere, dial or Encyclopedia.
+﻿"""THE BLUE MOON LAW (owner-sealed 2026-07-22, CORRECTED 2026-07-22):
+every 12-set on this dial gains a hidden 13th member. It exists ONLY
+under its own trigger, during its own short date window; outside
+trigger+window it does not exist anywhere, dial or Encyclopedia.
 
 Four members, three triggers:
 
@@ -20,9 +18,21 @@ Four members, three triggers:
   the lunar month that carries no zhongqi (major solar term) between two
   December solstices.
 
-`active_thirteenth` resolves which one (if any) owns the center on a
-given date, with a documented precedence for the one genuine overlap
-(Ophiuchus/Modrenik, in the Dec 7-17 band of a blue-moon December).
+`thirteenth_candidates` names every member (0, 1 or occasionally 2) whose
+OWN trigger+window holds on a given date — an unordered FACT SET, no
+precedence between members: the owner's correction retired R12's global
+"any pointer, any theme" law AND its cross-13th precedence tiebreak
+(Cat > Ophiuchus > Sol/Modrenik) together, since neither survives the
+real rule — **the four members live in FOUR INDEPENDENT MODES on the
+Calendar pointer alone and never meet on the dial** (Ophiuchus/Sol on its
+zodiac/almanac WHEEL, Modrenik/The Cat on its "months"/"chinese" MOUNT).
+More than one candidate being true here is normal, not a collision — e.g.
+Ophiuchus's and Modrenik's windows genuinely overlap in the Dec 7-17 band
+of a blue-moon December — because a "collision" only exists once a
+RENDER MODE tries to show two members at once, which the mode gate
+itself makes impossible. Resolving a date's candidates to the ONE member
+a given skin may show is `render.layers.active_thirteenth`'s job, read
+from the skin's own pointer/wheel/mount, never astronomical "realness".
 
 Pure module (no Qt, no wall clock) — purity-gated by tests/test_purity;
 every function takes already-built data (MoonWindow, YearAnchors), never
@@ -199,39 +209,35 @@ def chinese_leap_month(
     raise ValueError("13 lunar months found but no zhongqi-less month located")
 
 
-# --- Precedence: which 13th (if any) owns the center today --------------------
+# --- Which 13ths are candidates today (fact only, no mode/precedence) ---------
 
 
-def active_thirteenth(
+def thirteenth_candidates(
     on_date: date,
     moon_window: MoonWindow,
     anchors: YearAnchors,
     leap: ChineseLeapMonth | None,
-) -> str | None:
-    """Which 13th (if any) claims the dial CENTER on `on_date` — one of
-    the config.constants.THIRTEENTHS keys, or None. `leap` is the
-    caller's own `chinese_leap_month(anchors, moon_window)` result
-    (computed once per DayContext rebuild, DAILY cadence — never
-    recomputed here, matching core.continents' "thin wrapper" law).
-
-    PRECEDENCE when two windows genuinely overlap (owner-documented
-    tiebreak, R12 — the only real collision: Ophiuchus's Nov 29-Dec 17
-    and Modrenik's ~Dec 7-Jan 4 share the Dec 7-17 band of a blue-moon
-    December): the MORE astronomically real trigger wins — the Cat's
-    true lunisolar leap month first (rarest, and a real astronomical
-    absence, not a date range), then Ophiuchus (the Sun's real transit),
-    then Sol/Modrenik (adapted calendar constructs, which never overlap
-    each other). This mirrors the app's own accuracy-first priority."""
+) -> frozenset[str]:
+    """Every 13th (0, 1 or occasionally 2 of `config.constants.
+    THIRTEENTHS`' keys) whose OWN trigger+window holds on `on_date` — an
+    unordered FACT SET, no precedence between members (see the module
+    docstring: the four members live in four independent RENDER MODES
+    that never meet, so more than one true candidate here is normal, not
+    a collision to resolve). `leap` is the caller's own `chinese_leap_
+    month(anchors, moon_window)` result (computed once per DayContext
+    rebuild, DAILY cadence — never recomputed here, matching
+    core.continents' "thin wrapper" law)."""
+    found: set[str] = set()
     if leap is not None and leap.start <= on_date <= leap.end:
-        return "chinese"
+        found.add("chinese")
     year = on_date.year
     if thirteen_moon_year(year, moon_window):
         lo, hi = ophiuchus_window(year)
         if lo <= on_date <= hi:
-            return "ophiuchus"
+            found.add("ophiuchus")
         lo, hi = sol_window(year)
         if lo <= on_date <= hi:
-            return "sol"
+            found.add("sol")
     # Modrenik can cross the New Year, so both December solstices this
     # year's own YearAnchors already carries are checked — `instants[4]`
     # (this year's) and `instants[0]` (last year's, relevant to early-
@@ -241,5 +247,5 @@ def active_thirteenth(
     ):
         lo, hi = modrenik_window(solstice)
         if lo <= on_date <= hi and thirteen_moon_year(solstice_year, moon_window):
-            return "modrenik"
-    return None
+            found.add("modrenik")
+    return frozenset(found)

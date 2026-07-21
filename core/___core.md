@@ -72,13 +72,17 @@ dial's pre-built event lists, the Encyclopedia's date + repositories) so
 astronomy is never recomputed. See [Continents](continents.md).
 
 ### `blue_moon.py` — the Thirteenth Member
-Owner-sealed 2026-07-22: the Blue Moon Law — Ophiuchus/Sol/Modrenik gated
-by `thirteen_moon_year` (13 Full Moons in the calendar year, ~37%),
-The Cat gated by the REAL lunisolar leap-month mechanic (`chinese_leap_month`,
-a Meeus solar-longitude zhongqi search, golden-tested against the 2023
-leap 2nd and 2025 leap 6th months). `active_thirteenth` resolves which
-one (if any) owns the dial center, with a documented precedence for the
-one genuine window overlap. See [Blue Moon](blue_moon.md).
+Owner-sealed 2026-07-22, CORRECTED 2026-07-2X: the Blue Moon Law —
+Ophiuchus/Sol/Modrenik gated by `thirteen_moon_year` (13 Full Moons in
+the calendar year, ~37%), The Cat gated by the REAL lunisolar leap-month
+mechanic (`chinese_leap_month`, a Meeus solar-longitude zhongqi search,
+golden-tested against the 2023 leap 2nd and 2025 leap 6th months).
+`thirteenth_candidates` names every member active on a date as a plain
+fact set, no precedence — the four members live in four INDEPENDENT
+RENDER MODES on the Calendar pointer alone (never any other pointer) and
+never compete for the same seat; `render.layers.active_thirteenth`
+resolves a date's candidates against the skin's own wheel/mount. See
+[Blue Moon](blue_moon.md).
 
 ### `__main__.py` — CLI Selftest
 `python -m core --city NAME [--at ISO]` (or `--lat --lng --tz`) prints

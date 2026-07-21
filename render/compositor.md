@@ -228,16 +228,29 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   casts); a pantheon seat otherwise resolves identity, plate and
   article through `defaults.pantheon_seat`, planetary-whole on
   missing art, the Sunday dual pair falling back together.
-  **THE BLUE MOON LAW (owner-sealed 2026-07-22, R12) — checked BEFORE
-  the dual/Ninth windows below:** whenever the hovered body key equals
-  `render.layers.center_seat_body_key(skin, today)` (the physical center
-  seat, regardless of duality), `_active_thirteenth()` reads the SAME
-  pre-computed `DayContext.active_thirteenth` the paint pass uses; if
-  set, `_thirteenth_tooltip(key)` answers instead — the 13th's OWN
-  article (`self._encyclopedia.entry(family, name)`, `constants.
-  THIRTEENTHS`) leads, a closing `[[The Thirteenth]]` paragraph naming
-  the theme that "steps aside" while it holds the seat (item 7: "the
-  hover says both"). See [Blue Moon](../core/blue_moon.md).
+  **THE BLUE MOON LAW (owner overrule, CORRECTED 2026-07-2X) — its own
+  `"thirteenth"` element, entirely separate from the `body:` dispatch
+  below:** `_element_at` hit-tests the Calendar pointer's own dial
+  center (otherwise EMPTY — no other pointer ever carries this seat now,
+  R12's global law and its precedence tiebreak are both retired) against
+  `render.layers.active_thirteenth(skin, day)`; on a hit, `_tooltip_at`
+  returns `_thirteenth_tooltip(self._active_thirteenth())` before even
+  reaching the `body:`/`slot:` branches. `_active_thirteenth()` calls the
+  SAME pure resolver the paint pass calls, fed the pre-computed
+  `DayContext.thirteenth_candidates` fact set — never a per-mode
+  recomputation, never a date-only tiebreak (that lives in
+  `render.layers.active_thirteenth`'s own docstring: a `calendar_mount`
+  that owns a 13th outranks the WHEEL `palette_style` picks). The 13th's
+  OWN article (`self._encyclopedia.entry(family, name)`, `constants.
+  THIRTEENTHS`) leads, with a closing `[[The Thirteenth]]` paragraph
+  naming it "the Calendar pointer's own dial center, empty every other
+  day" (the old "theme steps aside" wording is retired — no OTHER
+  theme's center face is ever displaced now). The Spacebar jump mirrors
+  it: `_element_encyclopedia_target` maps `"thirteenth"` through
+  `_ENC_THIRTEENTH_TARGET` to each member's own gallery page (Ophiuchus →
+  "astrology", The Cat → "chinese", Sol/Modrenik → "months", each at its
+  topic's own fixed append-order index). See
+  [Blue Moon](../core/blue_moon.md).
   **THE CENTER SEAT'S DUAL/NINTH SOLAR WINDOWS (owner INSTRUCTION #5 +
   solar amendment, round R3b items 3/4):** while `render.layers.
   center_dual_face(skin)` holds (hexa/trio, or ANY pointer in
