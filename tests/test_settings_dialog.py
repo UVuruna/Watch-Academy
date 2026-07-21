@@ -745,7 +745,7 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     assert "align='justify'" in top                      # article prose
     # The colored plate rides as the SCALED cache copy (performance
     # round 2026-07-13) — pin the exact resolved uri.
-    from render.assets import scaled_variant_file
+    from render.asset_variants import scaled_variant_file
 
     gemini_uri = scaled_variant_file(
         defaults.ZODIAC_ART_DIR / "astrology" / "colored" / "Gemini.png",

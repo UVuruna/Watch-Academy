@@ -567,7 +567,7 @@ EARTH_STYLES = ("clean", "atmo")
 # and the rest in silver, the SILVER finish is the exact inverse; on
 # the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
 # and bronze letters are derived from the gold master AT LOAD (owner
-# 2026-07-19, render.assets.letter_metal_file).
+# 2026-07-19, render.asset_recolor.letter_metal_file).
 RING_FINISHES = ("gold", "silver", "bronze")
 
 # THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the retry
@@ -660,7 +660,7 @@ RING_TWO_METALS_DEFAULT = {"Mason": True}
 # The full letter library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,
-# render.assets.letter_metal_file — no more pre-rendered files). The
+# render.asset_recolor.letter_metal_file — no more pre-rendered files). The
 # library is GROUPED (owner spec 2026-07-11):
 # the builder shows Latin / Greek / Numbers / Symbols sections. Numbers
 # exist ONLY for the six ring positions they belong to (owner decision:

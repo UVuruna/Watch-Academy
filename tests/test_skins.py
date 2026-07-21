@@ -59,7 +59,7 @@ def test_mason_preset_loads_and_splits_metal():
     # letter_art is ALWAYS the gold master now (owner 2026-07-19
     # live-render round); letter_metal carries the active finish per
     # hour — silver/bronze are derived from the gold master at paint
-    # time (render.assets.letter_metal_file), never separate files.
+    # time (render.asset_recolor.letter_metal_file), never separate files.
     gold_ring = build_skin(replace(Settings(), ring="Mason")).ring
     assert gold_ring.letter_art[12] == art_dir / "G.png"
     assert gold_ring.letter_art[20] == art_dir / "M.png"
@@ -390,7 +390,7 @@ def test_bronze_finish_and_theme_metals():
     assert bronze_ring.letter_metal[0] == "silver"     # accent stays silver
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
     from config import constants as c
-    from render.assets import letter_metal_file
+    from render.asset_recolor import letter_metal_file
 
     for filename in c.RING_LETTER_FILES.values():
         derived = letter_metal_file(art_dir / filename, "bronze")
@@ -666,7 +666,7 @@ def test_planets_art_body_renders_differently_by_metal():
 
 def test_live_derived_silver_letters_are_grayscale():
     """The LIVE-derived silver letters (owner 2026-07-19 live-render
-    round — `render.assets.letter_metal_file`, replacing the retired
+    round — `render.asset_recolor.letter_metal_file`, replacing the retired
     pre-rendered `_silver.png` files) read R=G=B on opaque pixels and
     keep their surroundings transparent, for every active letter."""
     import os
@@ -676,7 +676,7 @@ def test_live_derived_silver_letters_are_grayscale():
     from PySide6.QtWidgets import QApplication
 
     from config import constants
-    from render.assets import letter_metal_file
+    from render.asset_recolor import letter_metal_file
 
     QApplication.instance() or QApplication([])
     for filename in constants.RING_LETTER_FILES.values():
@@ -717,7 +717,7 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
     from PySide6.QtGui import QImage
 
     from config import constants
-    from render.assets import letter_metal_file
+    from render.asset_recolor import letter_metal_file
 
     QApplication.instance() or QApplication([])
     gold_path = defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["M"]
@@ -894,7 +894,7 @@ def test_working_set_downscales_oversized_dial_art():
     from pathlib import Path
 
     from config import paths
-    from render.assets import (
+    from render.asset_variants import (
         scaled_variant_file,
         warm_working_set,
         working_ceiling,

@@ -295,7 +295,7 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
     `config.paths.subdial_set()`, mirroring the art-source switch)
     returns the exact matching file, no recolor, no cache entry."""
     from config import paths as _paths
-    from render.assets import subdial_plate_file
+    from render.asset_variants import subdial_plate_file
 
     try:
         for set_name in ("set1", "set2", "set3", "set4"):
@@ -321,10 +321,10 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
 def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
     """The SOLO set ships ONE hand-drawn file (silver) — gold/bronze
     are disk-cached live recolors of it, the SAME recipe the retired
-    one-master model always used (`render.assets._recolored_plate`,
+    one-master model always used (`render.asset_recolor._recolored_plate`,
     Rule #5 shared with the ring letters)."""
     from config import paths as _paths
-    from render.assets import subdial_plate_file
+    from render.asset_variants import subdial_plate_file
 
     try:
         _paths.set_subdial_set("solo")
@@ -504,7 +504,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         assert north is not None and "Eclipsed Sun" not in north, pointer
         # The hover embeds the SCALED cache copy of the servant plate
         # (performance round 2026-07-13) — pin the exact resolved uri.
-        from render.assets import scaled_variant_file
+        from render.asset_variants import scaled_variant_file
 
         eclipse_uri = scaled_variant_file(
             defaults.WEEKDAY_ART_DIR
@@ -2618,7 +2618,7 @@ def test_calendar_wheel_icon_is_computed_not_shipped(app):
     second call (paint once, reuse forever)."""
     from PySide6.QtGui import QImage
 
-    from render.assets import calendar_wheel_icon_file
+    from render.asset_variants import calendar_wheel_icon_file
 
     size = 28
     first = calendar_wheel_icon_file(size)
@@ -2648,7 +2648,7 @@ def test_calendar_fast_travel_flash_never_falls_back_to_the_emoji(app, monkeypat
     Calendar theme now — the emoji is still passed through as the
     documented fallback text (`FastTravelFlash.flash`'s own contract)
     but `icon_path` itself must never be None for Calendar."""
-    from render.assets import calendar_wheel_icon_file
+    from render.asset_variants import calendar_wheel_icon_file
 
     captured = {}
 

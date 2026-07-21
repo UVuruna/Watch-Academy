@@ -12,7 +12,7 @@ from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
 from config import constants, defaults
-from render.assets import tinted_pixmap
+from render.asset_recolor import tinted_pixmap
 
 
 def _rasterize_logo(size: int, asset: Path = defaults.LOGO_ASSET) -> QPixmap:

@@ -14,7 +14,7 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              fajlova": the pre-rendered <Stem>_silver.png/
                              <Stem>_bronze.png files and their two generators are
                              retired — silver/bronze are now derived from the gold
-                             master AT LOAD, render.assets.letter_metal_file, disk-
+                             master AT LOAD, render.asset_recolor.letter_metal_file, disk-
                              cached). Active per preset (RING_LETTER_FILES): domy
                              M/D/Y+Omega, morph M/Pi/H+Omega. Overlaid by
                              calculation so the ring TINT never touches them; each
@@ -78,7 +78,7 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              icons: moon_eclipse_{red,gold,blue}.png
                              (owner-approved total/partial/penumbral
                              mapping) and sun_eclipse.png/1.png/2.png
-                             (three raw variants — render.assets.
+                             (three raw variants — render.asset_variants.
                              eclipse_solar_type_icon maps them to solar
                              total/annular/partial by SHAPE and
                              computationally tints the annular pick;
@@ -91,7 +91,7 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              hand-picked sets: set1/, set2/, set3/,
                              set4/ each hold THREE hand-drawn finishes
                              (gold.png, silver.png, bronze.png — no
-                             recolor, `render.assets.subdial_plate_file`
+                             recolor, `render.asset_variants.subdial_plate_file`
                              returns them as drawn); solo/ holds ONLY
                              silver.png, gold/bronze derived live
                              (`_recolored_plate`, the same recipe the

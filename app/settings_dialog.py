@@ -1394,7 +1394,7 @@ class SettingsDialog(QDialog):
         round — retires the Rule #19 one-master-per-source model):
         five hand-picked plates — four full hand-drawn looks plus a
         fifth (Solo) whose silver is hand-drawn and gold/bronze are
-        the algorithmic recolor (`render.assets.subdial_plate_file`).
+        the algorithmic recolor (`render.asset_variants.subdial_plate_file`).
         The active letter finish (ring_finish, picked in the tray
         Design menu) still decides WHICH color draws within the
         chosen set — this combo only picks the set."""

@@ -94,7 +94,7 @@ def art_source() -> str:
 
 
 # The active SUBDIAL PLATE SET (owner decree 2026-07-21, Rsub round) —
-# mirrors the art-source switch above exactly. `render.assets.
+# mirrors the art-source switch above exactly. `render.asset_variants.
 # subdial_plate_file` is the ONE reader, so a module global here avoids
 # threading a new parameter through `render.layers.draw_slot_roundel`'s
 # existing call site (the seat/finish/tint signature stays untouched).
@@ -117,7 +117,7 @@ def subdial_set() -> str:
 # night) — mirrors the art-source/subdial-set switches above: ONE
 # global per metal (never threaded as a parameter) because it is a
 # single user preference reached from many call sites (`render.assets.
-# AssetCache._metal_swapped` for badges, `render.assets.
+# AssetCache._metal_swapped` for badges, `render.asset_recolor.
 # letter_metal_file` for ring letters) exactly like `subdial_set`'s own
 # docstring explains for its one reader.
 _metal_shades: dict[str, str] = dict(constants.METAL_SHADE_DEFAULT)

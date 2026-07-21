@@ -22,11 +22,12 @@ is ignored), and asserts each is either:
     config: era, scale, the archetype figure/center tables,
     trinity/season/sun turning points, eclipse emblems), PLUS the same
     walk over `app/encyclopedia.py`, `render/compositor.py`, `render.
-    layers.py` and `render/assets.py` (the modules that actually
-    consume these tables and occasionally hold their own), PLUS a
-    plain TEXT scan of those same files for quoted `"....png"`/
-    `"....svg"` literals (catches a filename built inside a function
-    body, e.g. the "moon.png" default in `render.assets.
+    layers.py`, `render/assets.py`, `render/asset_recolor.py` and
+    `render/asset_variants.py` (the modules that actually consume
+    these tables and occasionally hold their own), PLUS a plain TEXT
+    scan of those same files for quoted `"....png"`/`"....svg"`
+    literals (catches a filename built inside a function body, e.g.
+    the "moon.png" default in `render.asset_variants.
     moon_phase_image`, that a namespace walk can never see since it is
     never bound to a module-level name).
     Matched on the canonical path AFTER stripping both a leading
@@ -68,10 +69,15 @@ _SCAN_PY_FILES = tuple(sorted((_ROOT / "config").glob("*.py"))) + (
     _ROOT / "render" / "compositor.py",
     _ROOT / "render" / "layers.py",
     _ROOT / "render" / "assets.py",
+    _ROOT / "render" / "asset_recolor.py",
+    _ROOT / "render" / "asset_variants.py",
 )
 _SCAN_MODULES = (
     tuple(f"config.{p.stem}" for p in (_ROOT / "config").glob("*.py") if p.stem != "__init__")
-    + ("app.encyclopedia", "render.compositor", "render.layers", "render.assets")
+    + (
+        "app.encyclopedia", "render.compositor", "render.layers",
+        "render.assets", "render.asset_recolor", "render.asset_variants",
+    )
 )
 
 # A backticked path starting with "assets/" and ending in a real image
@@ -82,8 +88,8 @@ _PATH_PATTERN = re.compile(r"`(assets/[^`<*]+\.(?:png|svg))`")
 
 # A quoted filename literal anywhere in scanned source TEXT — the
 # fallback for names built inside a function body (e.g. the "moon.png"
-# default in `render.assets.moon_phase_image`), invisible to namespace
-# introspection.
+# default in `render.asset_variants.moon_phase_image`), invisible to
+# namespace introspection.
 _LITERAL_FILENAME = re.compile(r"[\"']([\w .\-]+\.(?:png|svg))[\"']")
 
 # Family roots whose individual filenames are DATA-DRIVEN (owner's

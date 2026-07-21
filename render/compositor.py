@@ -37,12 +37,9 @@ from core.year_wheel import (
     meteorological_span,
     zodiac_span,
 )
-from render.assets import (
-    AssetCache,
-    eclipse_solar_type_icon,
-    metal_variant_file,
-    scaled_variant_file,
-)
+from render.assets import AssetCache
+from render.asset_recolor import metal_variant_file
+from render.asset_variants import eclipse_solar_type_icon, scaled_variant_file
 from render.layers import (
     ArchetypeCenterLayer,
     ArchetypeLayer,
@@ -2539,7 +2536,7 @@ class Compositor:
         EMBLEM plate (`_eclipse_emblem`, untouched): LUNAR reads the
         owner-approved red/gold/blue set, SOLAR the proposed shape-
         matched set (`defaults.eclipse_lunar_type_icon` /
-        `render.assets.eclipse_solar_type_icon`). Empty string — never
+        `render.asset_variants.eclipse_solar_type_icon`). Empty string — never
         a broken `<img>` — when the icon has not landed (Rule #1)."""
         icon = (
             defaults.eclipse_lunar_type_icon(eclipse.type)

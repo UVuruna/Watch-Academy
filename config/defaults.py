@@ -343,7 +343,7 @@ FAST_TRAVEL_FLASH_TEXT_COLOR = "#F0F0F0"
 # Calendar Fast Travel theme is the one FAST_TRAVEL_THEMES entry with
 # no dedicated art file (Sun/Moon keep their eclipse glyphs, untouched
 # this round) — Rule #19, COMPUTE rather than commission a 12th art
-# file for a plain wheel mark. `render.assets.calendar_wheel_icon_file`
+# file for a plain wheel mark. `render.asset_variants.calendar_wheel_icon_file`
 # draws it: 12 alternating wedges in the app's own gold ramp (the SAME
 # two sampled steps the ADAPTIVE GOLD/BRONZE round reads off
 # `UV/DESIGN/gold pallete.png` — Rule #5, one palette, reused) with a
@@ -425,7 +425,7 @@ WINDOW_ICON_SIZES_PX = (16, 24, 32, 48, 64, 128, 256)
 # sealed 2026-07-21): watch 1 keeps the gold master untouched, watch 2
 # wears the pre-existing rose-gold master (LOGO_SETUP_ASSET, a second
 # master — not a recolor); watch 3+ tint the GOLD master (the same
-# tritone recipe `render.assets.tinted_pixmap` already uses for ring/
+# tritone recipe `render.asset_recolor.tinted_pixmap` already uses for ring/
 # hand recolors, Rule #5) cycling this wheel forever. The 12 hues are
 # the CALENDAR pointer's own MONTH wheel (`UV/Color Wheels.png`,
 # January..December) read starting at January — the owner's own worked
@@ -1442,7 +1442,7 @@ TIME_TRAVEL_ARROW_BUTTON_PX = 34
 # source. Five hand-picked sets live under assets/subdial/ (see
 # assets/___assets.md for why that root sits OUTSIDE
 # ART_SOURCED_ROOTS): "set1".."set4" are each three hand-drawn
-# finishes (`render.assets.subdial_plate_file` returns the matching
+# finishes (`render.asset_variants.subdial_plate_file` returns the matching
 # file directly, no recolor); "solo" ships ONE hand-drawn file
 # (SUBDIAL_SOLO_FINISH) and the algorithm derives the other two live,
 # same recipe as before. The user picks the SET in Settings
@@ -2579,7 +2579,7 @@ METAL_SWAP_HUE_SOFT = 8.0              # soft edge width outside the window
 METAL_SWAP_SAT_RAMP = (0.10, 0.28)     # smoothstep: below gray, above bronze
 METAL_SWAP_TARGETS = ("gold", "silver")
 # Bronze ring LETTERS are derived AT LOAD from the gold master (owner
-# 2026-07-19, `render.assets.letter_metal_file` — retired the
+# 2026-07-19, `render.asset_recolor.letter_metal_file` — retired the
 # pre-rendered files); BRONZE_LETTER_TINT anchors the "bronze" shade's
 # hue/saturation above and still supplies the eclipse glow color below —
 # it is a COLOR CONSTANT, not a recipe (the recipe itself is METAL_SHADES).
@@ -2754,7 +2754,7 @@ def eclipse_lunar_type_icon(type_: str) -> Path | None:
 # `sun_eclipse1.png` alone shows a bright ring hugging the black disc
 # (the real "ring of fire" signature) so it wins ANNULAR; the canonical
 # `sun_eclipse.png` (plain corona rays) wins TOTAL; `sun_eclipse2.png`
-# (a broader, softer halo) wins PARTIAL. `render.assets.
+# (a broader, softer halo) wins PARTIAL. `render.asset_variants.
 # eclipse_solar_type_icon` computationally TINTS the annular pick
 # toward GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR (#FF7A1A, the SAME "ring of
 # fire" color the dial's own annular glow already uses — Rule #5) for a

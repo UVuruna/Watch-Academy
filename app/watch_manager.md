@@ -106,7 +106,7 @@ compacting the roster after every removal.
   flagged for the owner to confirm or override.
 - **`art_source`/`subdial_set` stay PER-PROCESS globals — a documented
   limit, not solved this round.** `config.paths` holds both as module
-  globals (`render.assets.subdial_plate_file`'s only reader for the
+  globals (`render.asset_variants.subdial_plate_file`'s only reader for the
   second one), set by `app.controller.apply_display_settings` on every
   skin install. With several watches this means whichever watch last
   touched Settings/Design wins the ART SOURCE and SUBDIAL SET for every

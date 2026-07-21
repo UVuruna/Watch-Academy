@@ -20,7 +20,7 @@ index) never jumps onto a DIFFERENT watch later in the session.
 
 Deliberately SEPARATE watch-level singletons (documented limit, not
 solved this round): `config.paths`' `art_source`/`subdial_set` are
-PER-PROCESS module globals (`render.assets.subdial_plate_file`'s only
+PER-PROCESS module globals (`render.asset_variants.subdial_plate_file`'s only
 reader), set by `app.controller.apply_display_settings` on every skin
 install. With several watches this means the ART SOURCE and SUBDIAL
 SET are effectively SHARED — whichever watch last touched Settings/

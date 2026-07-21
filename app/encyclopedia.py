@@ -52,7 +52,8 @@ from data.encyclopedia import EncyclopediaRepository
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
-from render.assets import metal_variant_file, moon_phase_file
+from render.asset_recolor import metal_variant_file
+from render.asset_variants import moon_phase_file
 from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
 
 

@@ -11,13 +11,13 @@ whole (Rule #6, no leftovers), their output now computed at load/on
 demand instead of shipped as pre-rendered files:
 - `make_silver_letters.py` / `make_bronze_letters.py` (ring letters):
   the ~15 MB of `<Stem>_silver.png`/`<Stem>_bronze.png` in
-  `assets/ring/letters/` are deleted; `render.assets.letter_metal_file`
+  `assets/ring/letters/` are deleted; `render.asset_recolor.letter_metal_file`
   derives both from the gold master at load (silver = grayscale
   desaturation, bronze = a straight multiply with `BRONZE_LETTER_TINT`
   off the silver result), disk-cached like every other derived asset.
 - `make_moon_phases.py` (Encyclopedia Moon pages): the ~7 MB of
   `assets/moon/<source>/<phase>.png` plates are deleted;
-  `render.assets.moon_phase_image` (the shared terminator geometry
+  `render.asset_variants.moon_phase_image` (the shared terminator geometry
   extracted out of `render.layers._draw_moon` as `moon_lit_region`,
   fixing an exact-quarter degeneracy the plates shipped with) plus
   `moon_phase_file` (disk-cached path wrapper) render each phase live.

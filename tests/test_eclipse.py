@@ -885,7 +885,7 @@ def test_eclipse_lunar_type_icon_mapping():
 def test_eclipse_solar_type_icon_total_and_partial_are_as_drawn():
     """Total/partial ride their source file UNCHANGED — only annular
     gets the computed tint (below)."""
-    from render.assets import eclipse_solar_type_icon
+    from render.asset_variants import eclipse_solar_type_icon
 
     assert (
         eclipse_solar_type_icon("total")
@@ -905,7 +905,7 @@ def test_eclipse_solar_annular_icon_is_tinted_toward_the_ring_of_fire_color(app)
     plain source, and its bright (non-black) pixels read that hue."""
     from PySide6.QtGui import QColor, QImage
 
-    from render.assets import eclipse_solar_type_icon
+    from render.asset_variants import eclipse_solar_type_icon
 
     tinted_path = eclipse_solar_type_icon("annular")
     source_path = defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE["annular"]
@@ -953,7 +953,7 @@ def test_eclipse_hover_line_carries_the_lunar_type_icon(app):
 def test_eclipse_hover_line_carries_the_solar_type_icon(app):
     """Same wiring, Earth/solar side — annular resolves through the
     tinted cache file, still embedded inline."""
-    from render.assets import eclipse_solar_type_icon
+    from render.asset_variants import eclipse_solar_type_icon
 
     tz = ZoneInfo("Europe/Belgrade")
     now = datetime(2026, 8, 12, 12, 0, tzinfo=tz)

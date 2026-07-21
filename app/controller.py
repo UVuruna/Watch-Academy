@@ -81,7 +81,8 @@ from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
 from data.translations import TranslationStore, collect_corpus, translate_texts
-from render.assets import AssetCache, calendar_wheel_icon_file, warm_working_set
+from render.assets import AssetCache
+from render.asset_variants import calendar_wheel_icon_file, warm_working_set
 from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
@@ -382,7 +383,7 @@ def build_skin(settings: Settings):
         letters[hour] = glyph
         # The letter art is ALWAYS the gold master — silver/bronze are
         # derived from it AT LOAD (owner 2026-07-19,
-        # render.assets.letter_metal_file), never pre-rendered files.
+        # render.asset_recolor.letter_metal_file), never pre-rendered files.
         letter_art[hour] = (
             defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[glyph]
         )
@@ -1482,7 +1483,7 @@ class WatchController(QObject):
         only ever reaches the FOCUSED widget's `_on_shortcut` to begin
         with). Calendar carries no `icon_key` (Sun/Moon keep their
         eclipse glyphs, untouched this round) — its icon is COMPUTED
-        instead (`render.assets.calendar_wheel_icon_file`, Rule #19),
+        instead (`render.asset_variants.calendar_wheel_icon_file`, Rule #19),
         killing the plain 📅 fallback the owner asked to retire."""
         theme = self._fast_travel_theme()
         option = theme["options"][self._fast_travel_option_index(theme["id"])]

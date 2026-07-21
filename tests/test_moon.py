@@ -1,7 +1,7 @@
 """Moon-phase golden values against the LIVE moon phases database, plus
 (below) the RENDER geometry pins for the live-render round (owner
 decree 2026-07-19: "bolje crtati na licu mesta nego 15MB fajlova") —
-the shared terminator geometry `render.assets.moon_lit_region` and its
+the shared terminator geometry `render.asset_variants.moon_lit_region` and its
 callers `moon_phase_image` (the Encyclopedia's live Moon pages,
 replacing the retired pre-baked plates) and the dial's own
 `YearMarkerLayer._draw_moon`."""
@@ -217,7 +217,7 @@ def test_moon_lit_region_quarter_is_exact_half_disc():
     resolve to the exact half-disc instead."""
     from PySide6.QtCore import QPointF
 
-    from render.assets import moon_lit_region
+    from render.asset_variants import moon_lit_region
 
     radius = 100.0
     # fraction < 0.5 -> lit on the right (+x); >= 0.5 -> lit on the left.
@@ -251,7 +251,7 @@ def test_moon_phase_image_new_and_full_are_dark_and_lit():
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
 
-    from render.assets import moon_phase_image
+    from render.asset_variants import moon_phase_image
 
     QApplication.instance() or QApplication([])
     size = 200
@@ -271,7 +271,7 @@ def test_moon_phase_image_quarter_is_half_lit_not_fully_dark():
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
 
-    from render.assets import moon_phase_image
+    from render.asset_variants import moon_phase_image
 
     QApplication.instance() or QApplication([])
     size = 200

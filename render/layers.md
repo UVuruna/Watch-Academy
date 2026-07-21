@@ -360,7 +360,7 @@ sits on the watch-face plate drawn by `draw_slot_roundel()`: a LIVE
 outward shadow first (`_draw_subdial_shadow` — offset away from the
 dial center where the sun lives, keyed off THIS seat's own dial
 position, symmetric on the center seat), then the owner's ONE master
-plate resolved by [Assets](assets.md)`.subdial_plate_file()` (Rule #19,
+plate resolved by [Asset Variants](asset_variants.md)`.subdial_plate_file()` (Rule #19,
 owner decree 2026-07-20 — the old twelve-plate seat×finish sheet is
 retired; the seat never reaches the file, only the shadow above;
 recolored live to any letter finish that isn't the master's own); with
@@ -434,7 +434,7 @@ bronze are no longer pre-rendered files (owner decree 2026-07-19:
 "bolje crtati na licu mesta nego 15MB fajlova", retiring
 setup/make_silver_letters.py / make_bronze_letters.py and their ~15 MB
 of `<Stem>_silver.png`/`<Stem>_bronze.png`) — `_draw_letter_art`
-resolves the finish through `render.assets.letter_metal_file(gold_asset,
+resolves the finish through `render.asset_recolor.letter_metal_file(gold_asset,
 metal)` at paint time, disk-cached like every other derived asset; the
 shadow silhouette always reads the gold file directly (the alpha mask
 is identical on every finish).
@@ -608,10 +608,10 @@ backgrounds) and the Moon (`show_moon`: rides its own cycle via
 `moon_cycle_angle`, new at top, full at bottom, clockwise; the moon image
 gets the unlit part shadowed by the terminator mask — half-disc ∪/−
 ellipse with a = R·|cos 2πf| — and flips 180° for southern-hemisphere
-cities. This geometry is `render.assets.moon_lit_region(fraction,
+cities. This geometry is `render.asset_variants.moon_lit_region(fraction,
 radius)` (extracted 2026-07-19 out of `_draw_moon` so the
 Encyclopedia's live-rendered Moon pages,
-`render.assets.moon_phase_image`, share the EXACT same shape and never
+`render.asset_variants.moon_phase_image`, share the EXACT same shape and never
 drift apart — replacing the eight pre-baked plates, owner decree
 "bolje crtati na licu mesta nego 15MB fajlova"); the extraction fixed a
 real bug — AT THE EXACT QUARTERS (fraction 0.25/0.75) the terminator

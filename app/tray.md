@@ -17,9 +17,9 @@ generic window icon.
 - [Config (folder)](../config/___config.md) — icon sizes, `LOGO_ASSET`/
   `LOGO_SETUP_ASSET`, `TRAY_COLOR_WHEEL` (ADD WATCH round)
 - [Assets (folder)](../assets/___assets.md) — logo.svg, logo-setup.svg
-- [Assets](../render/assets.md) — `tinted_pixmap()` (ADD WATCH round): the
-  SAME tritone recolor ring/hand tints use, reached here without pulling
-  in the render pipeline
+- [Asset Recolor](../render/asset_recolor.md) — `tinted_pixmap()` (ADD
+  WATCH round): the SAME tritone recolor ring/hand tints use, reached
+  here without pulling in the render pipeline
 
 ### Used by
 - [Watch Controller](controller.md) — creates its own tray with

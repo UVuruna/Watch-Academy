@@ -44,7 +44,23 @@ future settings preview. See [Compositor](compositor.md).
 
 ### `assets.py` — Asset Cache
 Rasterizes PNG/SVG once per (path, pixel height); flushed on screen/skin
-change; missing assets raise loudly. See [Assets](assets.md).
+change; missing assets raise loudly. Holds ONLY `AssetCache` — the
+metal/tint recolor family and the moon-phase/subdial/working-set/icon
+helpers that used to live alongside it are surgical siblings (below).
+See [Assets](assets.md).
+
+### `asset_recolor.py` — Asset Recolor
+Disk-cached recolors derived from a single master file: ring letter and
+badge metal finishes (`letter_metal_file`, `metal_variant_file`), the
+subdial plate's bezel/field recolor (`_recolored_plate`), and the public
+door to `AssetCache`'s TRITONE tint (`tinted_pixmap`). See
+[Asset Recolor](asset_recolor.md).
+
+### `asset_variants.py` — Asset Variants
+Disk-cached derived images that are not metal recolors: the ring face
+color sample, the moon-phase live render, the subdial plate resolver,
+the working-set downscale family, and the two computed icons (calendar
+wheel, solar eclipse type). See [Asset Variants](asset_variants.md).
 
 ## Connections
 

@@ -213,7 +213,7 @@ validation needs. Full recipe: [Assets](../render/assets.md).
 `eclipse_lunar_type_icon(type_)` — the owner-APPROVED red/gold/blue
 mapping (total/partial/penumbral) riding
 `assets/icons/moon_eclipse_{red,gold,blue}.png`; `
-ECLIPSE_SOLAR_TYPE_ICON_SOURCE` + `render.assets.
+ECLIPSE_SOLAR_TYPE_ICON_SOURCE` + `render.asset_variants.
 eclipse_solar_type_icon(type_)` — a PROPOSED (not owner-confirmed)
 shape-matched mapping over the owner's three `sun_eclipse{,1,2}.png`
 variants, annular computationally tinted toward
@@ -223,7 +223,7 @@ before the hover-card's eclipse line title, distinct from the big
 category EMBLEM plate (`ECLIPSE_TYPE_EMBLEM`, untouched this round).
 **THE CALENDAR WHEEL ICON (same round):** `CALENDAR_ICON_WEDGE_COUNT`/
 `_WEDGE_COLORS`/`_RING_COLOR`/`_RING_WIDTH_FRACTION` feed `render.
-assets.calendar_wheel_icon_file(size)` — a Rule #19 COMPUTED 12-wedge
+asset_variants.calendar_wheel_icon_file(size)` — a Rule #19 COMPUTED 12-wedge
 glyph replacing the Fast Travel Flash's plain 📅 fallback for the
 Calendar theme (`app.controller._flash_fast_travel`'s one special
 case — Sun/Moon keep their existing eclipse-glyph icon_keys).
@@ -337,7 +337,7 @@ metal (`set_metal_shade(metal, shade)`/`metal_shade(metal)`) — the
 SAME module-global pattern as the art source: ONE global per metal
 because it is a single user preference reached from many render call
 sites (`render.assets.AssetCache._metal_swapped` for badges,
-`render.assets.letter_metal_file` for ring letters), never threaded as
+`render.asset_recolor.letter_metal_file` for ring letters), never threaded as
 a parameter.
 
 ## Connections

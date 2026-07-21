@@ -34,13 +34,9 @@ from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
 from core.sun import DaylightRegime, SunDay
 from core.year_wheel import almanac_marker_angle, almanac_month_index
-from render.assets import (
-    AssetCache,
-    letter_metal_file,
-    moon_lit_region,
-    ring_face_color,
-    subdial_plate_file,
-)
+from render.assets import AssetCache
+from render.asset_recolor import letter_metal_file
+from render.asset_variants import moon_lit_region, ring_face_color, subdial_plate_file
 from skins.manifest import HandSpec, SkinDefinition
 
 
@@ -1425,7 +1421,7 @@ class RingLayer(Layer):
         stamp (Rule #5) behind BOTH the ring's own six MASON-G letters
         (`_draw_letter_art`) and the outer motto arc (`_draw_motto`,
         TASK 1, owner "može radi" 2026-07-19): the metal finish (derived
-        from the gold master, `render.assets.letter_metal_file`), a
+        from the gold master, `render.asset_recolor.letter_metal_file`), a
         tight dark halo (owner spec: a gradient border, lit from above)
         and a tangential ROTATION that flips 180° through the lower half
         so text never reads upside down (Ω stands upright at the

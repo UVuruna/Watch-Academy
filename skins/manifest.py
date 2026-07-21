@@ -61,7 +61,7 @@ class RingSpec:
     # hour -> the active FINISH ("gold"/"silver"/"bronze", the preset's
     # accent letter wearing the opposite metal) — silver/bronze are
     # derived from the gold master AT LOAD (owner 2026-07-19,
-    # `render.assets.letter_metal_file`; retired the ~15 MB of
+    # `render.asset_recolor.letter_metal_file`; retired the ~15 MB of
     # pre-rendered `_silver.png`/`_bronze.png` files).
     letter_metal: dict[int, str] = field(default_factory=dict)
     # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
