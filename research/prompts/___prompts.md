@@ -94,6 +94,36 @@ item count means the sheet is safe to queue.
   cart-wheel border; the render of the mounted marks is a separate
   future round
 
+### `monsters/` (PROMPT SHEETS round, owner-approved 2026-07-21 night)
+- `greek_monsters_prompts.md` — the Greek Monsters weekday theme (a
+  NEW theme, single roster): six bestiary seats, the Nemean Lion /
+  Cerberus dual (literal brothers, children of Typhon and Echidna),
+  the Excluded Ninth Pegasus. Night-window register wearing the
+  Olympian family's own Greek-key border in a darker bestiary cut; its
+  title plate (Typhon & Echidna) is cross-referenced into
+  `titles/theme_title_prompts.md`, not written twice
+
+### `chinese/` (PROMPT SHEETS round, owner-approved 2026-07-21 night)
+- `chinese_myth_prompts.md` — the Chinese Mythology weekday theme (a
+  NEW theme, single roster; NOT the `chinese` zodiac-animal theme under
+  `zodiac/`): six immortal seats, the Buddha / Yanluo Wang dual, the
+  Excluded Ninth Sun Wukong. Night-window register wearing its own
+  cloud-scroll (xiangyun) border, jade-and-lacquer palette; its title
+  plate (The Peach Banquet) is cross-referenced into
+  `titles/theme_title_prompts.md`, not written twice
+
+### `titles/` (PROMPT SHEETS round, owner item 7, 2026-07-21)
+- `theme_title_prompts.md` — fills every weekday theme's (plus
+  Intelligences' and Slavic Months') documented graceful-absent
+  title-page plate slot, 24 briefs + 2 cross-referenced (Greek
+  Monsters, Chinese Mythology). NEW sourceless root,
+  `assets/titles/<key>.png`, the same precedent `months/` and
+  `subdial/` already set. The ONE sheet in the whole project that
+  intentionally carries lettering — each plate's own wordmark, in a
+  script matching that theme's culture (owner item 7). Continents is
+  excluded — it already has a real, wired title image
+  (`assets/earth/world.png`)
+
 ### `era/`
 - `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):
   the Age of Light and Age of Darkness, plus the four Starry Seasons
@@ -159,4 +189,6 @@ One theme = one file, because the owner generates in order and hunted
 across files before (the colored Skoll case). Prompts are copied
 byte-identical when they move; border identities are per-theme
 constants (meander / knotwork / cartouche / kolovrat…) so a series
-stays recognizable; images never carry lettering.
+stays recognizable; images never carry lettering — the ONE documented
+exception in the whole project is `titles/theme_title_prompts.md`,
+where the wordmark IS the point of the plate (owner item 7).

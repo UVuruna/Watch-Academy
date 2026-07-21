@@ -209,6 +209,47 @@ _WHITELIST: dict[str, str] = {
     "badge/circle/life/tree/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     "badge/circle/life/tree/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     "badge/circle/life/tree/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    # THE THEME TITLE PLATES (R8c PROMPT SHEETS round, owner item 7,
+    # 2026-07-21): a NEW sourceless root, `assets/titles/<key>.png`,
+    # fills every weekday theme's (and two sibling topics') documented
+    # graceful-absent title_entry slot (`app.encyclopedia.
+    # _weekday_topic`'s `title_entry`, `"images": ()`  — "a future theme
+    # plate's slot"). No code reads `assets/titles/**` yet; wiring
+    # `title_entry["images"]` to `(defaults.TITLE_ART_DIR /
+    # f"{theme}.png",)`, mirroring the one title plate that already IS
+    # wired (`defaults.CONTINENTS_TITLE_IMAGE`, `assets/earth/world.png`
+    # — Continents is deliberately excluded from this family, per the
+    # owner's own instruction), is a future app-code round. Full briefs:
+    # `research/prompts/titles/theme_title_prompts.md` (24 entries) plus
+    # two cross-referenced entries written in their own new-theme sheets
+    # (`research/prompts/monsters/greek_monsters_prompts.md`,
+    # `research/prompts/chinese/chinese_myth_prompts.md`).
+    "titles/planets.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/planet_signs.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/greek.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/norse.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/egypt.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/slavic.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/alchemy.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/japan.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/religion.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/religion_alt.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/profession.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/wolf.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/bee.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/elephant.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/bible.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/bible2.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/bible_dark.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/cosmos.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/planets_art.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/virtues.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/sins.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/moods.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/intelligences.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/months.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/monsters.png": "theme title plate, not yet wired (greek_monsters_prompts.md cross-ref)",
+    "titles/chinese_myth.png": "theme title plate, not yet wired (chinese_myth_prompts.md cross-ref)",
 }
 
 

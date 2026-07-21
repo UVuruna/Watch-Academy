@@ -34,6 +34,7 @@ one-sided gap), and test the pixel size.
 - [Eclipse Category Images](#eclipse)
 - [Subdial Plates](#subdial-masters)
 - [Slavic Months & Badge 1:1 (ART-INFRA round)](#art-infra-round)
+- [Greek Monsters, Chinese Mythology & Theme Title Plates (PROMPT SHEETS round)](#prompt-sheets-round)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -262,6 +263,73 @@ tracked here the moment they're written, per this file's own charter
   `"Stem.png"` strings in `config/archetypes.py` (documented in the
   whitelist's own comment, not a gap).
 
+<a id="prompt-sheets-round"></a>
+
+## Greek Monsters, Chinese Mythology & Theme Title Plates (PROMPT SHEETS round, owner 2026-07-21)
+
+Three NEW sheets this round, all **0 generated, sheets complete** —
+tracked here the moment they're written, per this file's own charter.
+
+- **Greek Monsters** —
+  [Greek Monsters Prompts](monsters/greek_monsters_prompts.md). A NEW
+  weekday theme (single roster, no Pantheon split): six weekday
+  bestiary seats, a Sunday dual (Nemean Lion / Cerberus — literal
+  brothers, children of Typhon and Echidna), an Excluded Ninth
+  (Pegasus), and a title plate (Typhon & Echidna, tracked in the titles
+  sheet below). Night-window stained-glass register wearing the
+  Olympian family's own Greek-key border, recut as dark leadwork
+  instead of bronze relief — "the greek-key border family the god
+  medallions already wear but in a darker bestiary register" (owner).
+  Drop root `assets/weekday/monsters/{primary,colored}/<Stem>.png`.
+  **Art: 0/18** (9 figures × 2 registers). Theme NOT yet registered in
+  `config/defaults.py` — sheet-writing only, per this round's own
+  scope ("Sheets ONLY... NO app code"); `assets/weekday/**` is a
+  data-driven lint root so every path here already passes
+  `tests/test_prompt_paths.py` with zero whitelist entries needed.
+- **Chinese Mythology** —
+  [Chinese Myth Prompts](chinese/chinese_myth_prompts.md). A NEW
+  weekday theme, same single-roster shape, NOT to be confused with the
+  existing `chinese` zodiac-animal theme
+  (`zodiac/chinese_zodiac_prompts.md`). Six weekday immortal seats, a
+  Sunday dual (Buddha / Yanluo Wang), an Excluded Ninth (Sun Wukong),
+  and a title plate (The Peach Banquet — the sheet's own justified pick
+  over "the celestial court panorama," doubling as the Ninth's own
+  origin myth). Night-window register wearing its OWN cloud-scroll
+  (xiangyun) border in a jade-and-lacquer palette — deliberately NOT
+  the Greek key, per the owner's own instruction. Drop root
+  `assets/weekday/chinese_myth/{primary,colored}/<Stem>.png`. **Art:
+  0/18.** Same data-driven-root, zero-whitelist-needed status as
+  Greek Monsters.
+- **Theme Title Plates** —
+  [Theme Title Prompts](titles/theme_title_prompts.md). Fills the
+  documented graceful-absent `title_entry["images"]` slot every weekday
+  theme (and two sibling topics, Intelligences and Slavic Months)
+  already carries in `app.encyclopedia._weekday_topic` — 24 briefs plus
+  2 cross-referenced entries (Greek Monsters' and Chinese Mythology's
+  own title plates, written in their own sheets above, not duplicated
+  here). NEW canonical sourceless root, `assets/titles/<key>.png` — the
+  SAME "NOT art-sourced, one shared file per name" precedent
+  `assets/months/` and `assets/subdial/` already set, chosen over
+  per-theme folders because a title plate has exactly ONE consumer
+  regardless of the theme's own cast register (see the sheet's own
+  "canonical drop path" section for the full reasoning). Continents is
+  deliberately EXCLUDED — it already has a real, wired title image
+  (`assets/earth/world.png`, `defaults.CONTINENTS_TITLE_IMAGE`), the
+  owner's own SKIP instruction. **Art: 0/24** in this sheet (2 more
+  tracked in the two theme sheets above, 26 total). This is also the
+  ONE documented exception to the project's house "no lettering" rule —
+  each plate carries a single wordmark (the theme's English display
+  name) in a script matching that theme's own culture (owner item 7),
+  the typographic direction named explicitly per theme in the sheet's
+  own table.
+- All three sheets are dry-run-verified clean (`python main.py
+  "<sheet>" --dry-run` from `Gadgets/PromptPainter/`: 18/18, 18/18 and
+  24/24 entries load, 0 problems). The Theme Title Plates' 26 paths
+  (24 in-sheet + 2 cross-referenced) are NOT under any existing
+  data-driven root and nothing reads `assets/titles/**` yet — all 26
+  needed explicit `tests/test_prompt_paths.py` whitelist entries, added
+  this round with a shared comment block explaining the new family.
+
 <a id="other"></a>
 
 ## Ring Letters, Icons, Guide — out of the AI-prompt pipeline
@@ -299,9 +367,18 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    eclipse (7), the archetype gaps in the table above (Throne, Seal,
    Lucifer_Pride, Judas_Fear, the 8 evangelist files, the 1 one-sided
    Devil_Prosecutor), plus the ART-INFRA round's two NEW sheets —
-   Slavic Months (12) and Badge 1:1 round one (38). Subdial is CLOSED
-   (RULE-19 round, 2026-07-20) — see the superseded note above, no
-   more generation needed there.
+   Slavic Months (12) and Badge 1:1 round one (38) — plus the PROMPT
+   SHEETS round's three NEW sheets: Greek Monsters (18), Chinese
+   Mythology (18) and Theme Title Plates (24 + the 2 cross-referenced
+   in the two theme sheets, 26 total). Subdial is CLOSED (RULE-19
+   round, 2026-07-20) — see the superseded note above, no more
+   generation needed there.
+1a. **Two wiring rounds** the PROMPT SHEETS round explicitly left for
+   later (out of THIS round's "sheets only, no app code" scope):
+   registering `monsters`/`chinese_myth` in `config/defaults.py`'s
+   weekday-theme tables, and filling every theme's
+   `title_entry["images"]` tuple with its new `assets/titles/<key>.png`
+   plate, mirroring `defaults.CONTINENTS_TITLE_IMAGE`.
 2. **Three wiring decisions**, not art gaps — the row2 rondels
    (Trinity/Family/Walks, 40 files sitting painted and unread), Anno
    Lucis (1 file, once generated, has nowhere to draw yet), and the
