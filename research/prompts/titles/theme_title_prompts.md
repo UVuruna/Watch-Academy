@@ -24,6 +24,18 @@ establishes below, both plates' brief and drop path are written HERE
 (see the two entries at the very end) so every title plate in the
 project lives in exactly one place. Cross-referenced, not duplicated.
 
+**The GAMING + CORPORATION SHEET WAVE (R10, 2026-07-22) follows the
+same root, ten more title plates.** WoW, Cyberpunk and Star Wars each
+carry THREE blocks/sets, so each gets three title plates (one per
+block); The Corporation carries one. All ten are written in FULL here
+(see "The GAMING + CORPORATION SHEET WAVE title plates" section below)
+— their own theme sheets (`research/prompts/wow/wow_prompts.md`,
+`research/prompts/cyberpunk/cyberpunk_prompts.md`,
+`research/prompts/starwars/starwars_prompts.md`,
+`research/prompts/corporate/corporate_prompts.md`) each carry only a
+short pointer in their own "Cross-reference" section, never a
+duplicate body.
+
 ## The lettering exception (read before generating anything)
 
 **Every other sheet in this entire project forbids lettering.** This
@@ -125,6 +137,16 @@ shape invented here.
 | `months` | The Slavic Months | Carved folk woodblock capitals — rustic incised wood-carving letterforms |
 | `monsters` | *(Greek Monsters — sheet's own file)* | Weathered bestiary lapidary capitals — the Attic family, pitted and claw-scratched |
 | `chinese_myth` | *(Chinese Mythology — sheet's own file)* | Seal-script flavored capitals (owner example) — blocky zhuanshu strokes cut into red lacquer |
+| `wow_alliance` | *(WoW: Alliance — sheet's own file)* | Gold-inlaid Alliance heraldic capitals — carved rampant-lion serifs, the block's own runestone letterforms |
+| `wow_horde` | *(WoW: Horde — sheet's own file)* | Iron-cut Horde tribal capitals — jagged wolf-fang serifs hammered into red-lacquered wood |
+| `wow_evil` | *(WoW: Evil — sheet's own file)* | Frost-cracked saronite capitals — jagged rime-rimmed blackletter, corruption-green veins threading the strokes |
+| `cyberpunk_gangs` | *(Cyberpunk: Gangs — sheet's own file)* | Spray-tag street capitals — glitch-torn stencil letterforms, gang-neon drip |
+| `cyberpunk_street` | *(Cyberpunk: Street — sheet's own file)* | Chrome neon-sign cursive — a bar-marquee script, flickering tube-light strokes |
+| `cyberpunk_power` | *(Cyberpunk: Power — sheet's own file)* | Corrupted terminal capitals — monospace code-glyphs dissolving into static at the edges |
+| `starwars_svetla` | *(Star Wars: Svetla — sheet's own file)* | Aurebesh-flavored temple capitals — angular geometric letterforms cut in warm bronze (the same documented letterform-flavor compromise as `egypt`/`norse`, never a genuine readable alphabet) |
+| `starwars_tamna` | *(Star Wars: Tamna — sheet's own file)* | Aurebesh-flavored Imperial capitals — the same angular geometric letterforms, cut into black durasteel instead |
+| `starwars_nova` | *(Star Wars: Nova — sheet's own file)* | Aurebesh-flavored fused capitals — each letterform split down the middle, half bronze, half durasteel |
+| `corporate` | *(The Corporation — sheet's own file)* | Engraved lanyard-badge sans — clean brushed-steel capitals, laser-etched |
 
 Two rows carry a caveat, not a doubt about the brief itself: `planets_art`
 carries **no menu title on purpose** (`WEEKDAY_THEME_TITLES`'s own
@@ -403,6 +425,118 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ---
 
+## The GAMING + CORPORATION SHEET WAVE title plates (R10, 2026-07-22)
+
+Ten plates for the four new sheets this round adds
+(`wow_prompts.md`, `cyberpunk_prompts.md`, `starwars_prompts.md`,
+`corporate_prompts.md`). WoW/Cyberpunk/Star Wars each carry three
+blocks/sets, so each names three title plates (one per block); The
+Corporation carries one. Every plate follows the SAME "every seat's
+own emblem at once" or "parent, not seat-holder" devices the rest of
+this file already uses — no new composition class invented.
+
+### `wow_alliance` — WoW: The Alliance (`assets/titles/wow_alliance.png`)
+
+*The founding covenant — many kingdoms becoming one Alliance, the same
+"every seat's own emblem" device `greek`/`cosmos` already use.*
+
+```
+Ornate circular medallion, carved rune-scarred stone banded with blue-and-gold metal, photorealistic render, perfectly centered, isolated on white background. Center: Stormwind Keep's own gate rising behind six banners planted shoulder to shoulder in the stone — human, dwarf, night elf, gnome, draenei and worgen sigils in a half-ring — a human and a dwarven hand clasped in the foreground over an open founding charter. Along the base, a carved gold plinth bears "THE ALLIANCE" in gold-inlaid Alliance heraldic capitals, carved rampant-lion serifs — the ONE piece of text anywhere in the image. Border: the block's own blue-and-gold rampant-lion frame. Palette: dawn-blue stone, bright gold, six banner colors.
+```
+
+### `wow_horde` — WoW: The Horde (`assets/titles/wow_horde.png`)
+
+*The Horde united — many clans becoming one Horde, mirroring the
+Alliance's own device.*
+
+```
+Ornate circular medallion, carved rune-scarred stone banded with red-and-black metal, photorealistic render, perfectly centered, isolated on white background. Center: Orgrimmar's own iron gate rising behind five totems planted shoulder to shoulder in the stone — orc, tauren, troll, Forsaken and Blood Elf sigils in a half-ring — an orc and a tauren hand clasped in the foreground over a shared war-drum. Along the base, a carved iron plinth bears "THE HORDE" in iron-cut Horde tribal capitals, jagged wolf-fang serifs — the ONE piece of text anywhere in the image. Border: the block's own red-and-black wolf-fang totem frame. Palette: dusk-red stone, iron black, five totem colors.
+```
+
+### `wow_evil` — WoW: The Burning Legion (`assets/titles/wow_evil.png`)
+
+*Sargeras, the Fallen Titan — the PARENT of this block's own
+corruption (Mannoroth, Gul'dan and Kil'jaeden all serve him directly),
+standing outside the seated nine the same way Typhon & Echidna stand
+outside the Greek Monsters roster.*
+
+```
+Ornate circular medallion, carved rune-scarred black saronite banded with corrupted ice, photorealistic render, perfectly centered, isolated on white background. Center: Sargeras, the Fallen Titan, a colossal armored figure glimpsed only from the waist up, his own burning sword still lodged hilt-deep in a cracked and burning landmass beneath him, his molten eyes the single source of light in an otherwise starless sky. Along the base, a cracked black plinth bears "THE BURNING LEGION" in frost-cracked saronite capitals, jagged rime-rimmed blackletter veined in corruption-green — the ONE piece of text anywhere in the image. Border: the block's own saronite-and-ice fang frame. Palette: molten-eye orange, saronite black, corruption green, ice-white cracks.
+```
+
+### `cyberpunk_gangs` — Cyberpunk: Gangs of Night City (`assets/titles/cyberpunk_gangs.png`)
+
+*Night City's own district map as a glowing neon mosaic, one tile per
+resident gang's canonical color — the owner's own suggestion.*
+
+```
+ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, perfectly centered, isolated on white background. Center: Night City's own district map rendered as a glowing holographic mosaic seen from above, each district tile lit in its own resident gang's canonical neon color — teal Pacifica, hot-pink Westbrook, purple-and-tan Heywood, burnt-orange Santo Domingo, dust-orange Badlands — the fault-lines between tiles glowing like live circuitry. Along the base, a spray-tag banner bears "GANGS OF NIGHT CITY" in spray-tag street capitals, glitch-torn stencil letterforms dripping gang-neon — the ONE piece of text anywhere in the image. Border: the block's own circuit-trace ring. Palette: the full district neon spread, circuit-white fault-lines.
+```
+
+### `cyberpunk_street` — Cyberpunk: The Afterlife (`assets/titles/cyberpunk_street.png`)
+
+*The Afterlife's own bar interior — the whole circle implied by empty
+stools and one untouched glass, the owner's own suggestion.*
+
+```
+ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, perfectly centered, isolated on white background. Center: the Afterlife's own bar interior, a Militech cooling-unit repurposed as a trophy wall of mercenary relics behind the counter, a row of empty stools each catching a different colored neon glow, one glass left half-full and untouched at the bar's far end. Along the base, a flickering marquee bears "THE AFTERLIFE" in chrome neon-sign cursive, a bar-marquee script of flickering tube-light strokes — the ONE piece of text anywhere in the image. Border: the block's own circuit-trace ring. Palette: warm bar-amber, mixed stool-neon, chrome trophy-wall.
+```
+
+### `cyberpunk_power` — Cyberpunk: Soulkiller (`assets/titles/cyberpunk_power.png`)
+
+*NOT a person, the FORCE — the program that makes a man neither alive
+nor dead, the parent of this block's own ghosts (Alt Cunningham and
+Rache Bartmoss both live and die by exactly this program).*
+
+```
+ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, perfectly centered, isolated on white background. Center: a human silhouette suspended mid-dissolve between pure code and solid form, one half rendered in warm living flesh-tone, the other already scattering into cold blue static particles, a heart-rate line and a flat-line both running simultaneously across the frame behind it and never resolving into either. Along the base, a corrupted terminal plaque bears "SOULKILLER" in corrupted terminal capitals, monospace code-glyphs dissolving into static at the edges — the ONE piece of text anywhere in the image. Border: the block's own circuit-trace ring, its lines fraying into static on all four sides rather than breaking cleanly at one point. Palette: living flesh-warm, dissolve-static blue, flat-line grey, code-green undertone.
+```
+
+### `starwars_svetla` — Star Wars: The Council of Lights (`assets/titles/starwars_svetla.png`)
+
+*A ring of igniting lightsabers, one per seated figure's own blade
+color — the "every seat's own emblem at once" device again.*
+
+```
+Ornate circular medallion, Jedi bronze-and-blue temple relief, photorealistic render, perfectly centered, isolated on white background. Center: a circle of igniting lightsaber blades rising point-up from a stone floor like a small Jedi Council convening, each blade its own seated figure's color — blue, blue, green, blue-white — arranged in a perfect ring around an empty central seat, twin suns glowing faint through a high temple window behind them. Along the base, a carved bronze plinth bears "THE COUNCIL OF LIGHTS" in Aurebesh-flavored temple capitals, angular geometric letterforms cut in warm bronze — the ONE piece of text anywhere in the image. Border: the set's own bronze-and-blue temple-pillar frame. Palette: kyber-blue, temple bronze, twin-sun amber.
+```
+
+### `starwars_tamna` — Star Wars: The Rule of Two (`assets/titles/starwars_tamna.png`)
+
+*Darth Bane — the DOCTRINAL parent of this set's whole lineage
+(Plagueis → Sidious → Vader is a direct chain of the rule Bane himself
+instituted); chosen over reusing Plagueis, already this set's own
+Unfound, to avoid depicting one seat twice.*
+
+```
+Ornate circular medallion, Imperial black-and-red cog relief, photorealistic render, perfectly centered, isolated on white background. Center: Darth Bane, a hooded ancient Sith Lord, holding a dark angular holocron open in both hands, its glowing red interior projecting two small silhouettes standing apart from each other — one master, one apprentice, forever only two — the doctrine that shaped every seat in this set glowing in his own palms. Along the base, a cracked iron plinth bears "THE RULE OF TWO" in Aurebesh-flavored Imperial capitals, angular geometric letterforms cut into black durasteel — the ONE piece of text anywhere in the image. Border: the set's own black-and-red cog frame. Palette: holocron red, durasteel black, hooded-robe charcoal.
+```
+
+### `starwars_nova` — Star Wars: The Dyad (`assets/titles/starwars_nova.png`)
+
+*Two hands reaching toward each other across a broken, sparking
+lightsaber blade — the owner's own suggested image. Justified in one
+line: "Dyad in the Force" is the films' own literal term for Rey/
+Kylo's bond, and the broken-and-reforged blade is their bond's own
+canonical emblem, so the plate depicts the theme's real name as
+directly as the source material already does.*
+
+```
+Ornate circular medallion, fused bronze-and-durasteel relief, photorealistic render, perfectly centered, isolated on white background. Center: two bare hands reaching toward each other across a shattered lightsaber blade suspended mid-air between them, the blade's break-point sparking white-hot where the two halves almost touch, one hand lit warm and golden, the other lit cold and silver-blue, neither hand quite closing the last inch of distance. Along the base, a fused plinth bears "THE DYAD" in Aurebesh-flavored fused capitals, each letterform split down the middle, half bronze half durasteel — the ONE piece of text anywhere in the image. Border: the set's own fused bronze-and-cog frame. Palette: warm gold, cold silver-blue, spark-white, blade-steel.
+```
+
+### `corporate` — The Corporation: The Boardroom Table (`assets/titles/corporate.png`)
+
+*An empty boardroom, nine chairs, eight marked by a small emblem for
+their own seat, the ninth left conspicuously bare — the "every seat's
+own emblem" device fused with the Founder's own "ghost seat" language.*
+
+```
+Ornate circular medallion, brushed-steel-and-glass corporate seal, engraved relief, photorealistic render, perfectly centered, isolated on white background. Center: an empty boardroom seen from directly above, a long glass-and-steel table ringed by nine chairs, eight of them marked by a small engraved emblem laid on the table before each seat — a heart, a gear, a coin-and-scale, a megaphone-halo, a compass-and-pencil, a chip-and-root-network, a crown at the head — and the ninth chair, at the table's far foot, left conspicuously bare: no emblem, a faint dust-pale outline where a nameplate used to sit. Along the base, a brushed-steel plaque bears "THE CORPORATION" in engraved lanyard-badge sans, clean laser-etched capitals — the ONE piece of text anywhere in the image. Border: a thin brushed-steel ring engraved with a continuous subtle org-chart line-and-node motif. Palette: brushed steel, glass-table blue-grey, warm engraved-gold emblems, one pale dust-grey empty seat.
+```
+
+---
+
 ## Cross-referenced (written in their own theme sheets, not here)
 
 - **`monsters` — Greek Monsters** → `assets/titles/monsters.png`. Brief:
@@ -419,12 +553,23 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ## Status
 
 - New sheet (R8c PROMPT SHEETS round, owner item 7, 2026-07-21).
-  **Art: 0/24** in this file; the 2 cross-referenced plates are tracked
-  in their own sheets' Status sections. `assets/titles/**` is NOT a
-  data-driven root and no code reads it yet (the wiring is a future
-  round) — every one of the 26 paths this family declares (24 here + 2
-  cross-referenced) needs an explicit `tests/test_prompt_paths.py`
-  whitelist entry, added this round.
+  **Art: 0/24** in the original 24 entries; the 2 cross-referenced
+  monsters/chinese plates are tracked in their own sheets' Status
+  sections. `assets/titles/**` is NOT a data-driven root and no code
+  reads it yet (the wiring is a future round) — every one of the 26
+  paths this family declared (24 here + 2 cross-referenced) needed an
+  explicit `tests/test_prompt_paths.py` whitelist entry, added that
+  round.
+- **R10 GAMING + CORPORATION SHEET WAVE (2026-07-22) added TEN more,
+  written in full here** (see "The GAMING + CORPORATION SHEET WAVE
+  title plates" section above) — `wow_alliance`, `wow_horde`,
+  `wow_evil`, `cyberpunk_gangs`, `cyberpunk_street`, `cyberpunk_power`,
+  `starwars_svetla`, `starwars_tamna`, `starwars_nova`, `corporate`.
+  **Art: 0/10** for this batch. Family total across this file: **0/34**
+  (24 + 10), plus the 2 still cross-referenced in monsters/chinese = 36
+  title plates project-wide. All ten new paths needed their own
+  explicit `tests/test_prompt_paths.py` whitelist entries, added this
+  round alongside the nine existing ones.
 - `continents` is deliberately ABSENT from this sheet — it already has
   a real, wired title image (`assets/earth/world.png`,
   `defaults.CONTINENTS_TITLE_IMAGE`) — see the owner's own SKIP

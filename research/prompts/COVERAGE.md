@@ -35,6 +35,7 @@ one-sided gap), and test the pixel size.
 - [Subdial Plates](#subdial-masters)
 - [Slavic Months & Badge 1:1 (ART-INFRA round)](#art-infra-round)
 - [Greek Monsters, Chinese Mythology & Theme Title Plates (PROMPT SHEETS round)](#prompt-sheets-round)
+- [WoW, Cyberpunk, Star Wars & The Corporation (GAMING + CORPORATION SHEET WAVE, R10)](#gaming-corp-wave)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -342,6 +343,116 @@ tracked here the moment they're written, per this file's own charter.
   needed explicit `tests/test_prompt_paths.py` whitelist entries, added
   this round with a shared comment block explaining the new family.
 
+<a id="gaming-corp-wave"></a>
+
+## WoW, Cyberpunk, Star Wars & The Corporation (GAMING + CORPORATION SHEET WAVE, R10, owner-sealed rosters 2026-07-22)
+
+Four NEW sheets this round (Star Wars sealed as a mid-round addendum),
+all **0 generated, sheets complete** — tracked here the moment they're
+written, per this file's own charter. All four generalize the existing
+Planetary/Pantheon "Two Rosters" doctrine (`CANON.md`) from two casts
+to THREE parallel casts riding the same nine seats (Corporation is the
+one exception — a single roster, same shape as Greek Monsters/Chinese
+Mythology).
+
+- **WoW** — [WoW Prompts](wow/wow_prompts.md). THREE blocks (Alliance /
+  Horde / Evil), each a full nine-seat roster (six weekday heroes, a
+  Throne/Mirror dual, an Unfound Ninth): Alliance (Anduin … Malfurion,
+  Varian Wrynn/Genn Greymane/Turalyon), Horde (Baine … Cairne, Thrall/
+  Garrosh/Rexxar), Evil (Kel'Thuzad … Deathwing, Arthas the Lich King
+  seated on the Frozen Throne/Illidan/Medivh). Carved runestone/
+  faction-crest register, a distinct border family per block (blue-gold
+  lion / red-black wolf / saronite-ice fang). No rotation seats. Drop
+  root `assets/weekday/wow/<block>/{primary,colored}/<Stem>.png`.
+  **Art: 0/54** (27 figures × 2 registers; 3 title plates tracked in
+  `titles/theme_title_prompts.md`). Dry-run: 54/54, 0 problems.
+- **Cyberpunk 2077** — [Cyberpunk Prompts](cyberpunk/cyberpunk_prompts.md).
+  THREE blocks (Gangs / Street / Power), same nine-seat shape. Gangs
+  and Street carry ROTATION SEATS — more than one named faction/figure
+  sharing a day, via a NEW file convention this round establishes: the
+  alt/alt2 sibling's file is named after the SEAT's own canonical stem
+  (never the alt figure's own name), pooled by `config.defaults.
+  rotating_art_file`'s existing `<Stem>`/`<Stem>_v*` search across the
+  canonical directory UNION its `alt/` subfolder — a 3-way rotation
+  (Tuesday Gangs: Maelstrom canonical, Barghest in `alt/`, Wraiths as
+  `Maelstrom_v2.png`) uses both legal forms at once. Power's trio
+  (Saburo Arasaka/Rosalind Myers, Yorinobu/Kurt Hansen, Alt Cunningham/
+  Rache Bartmoss) carries a SYNCHRONIZED PAIR ROTATION — not new code,
+  just every pole owning exactly 2 candidates so `_pick_rotation`'s
+  shared date-ordinal-modulo naturally lands all three on the same
+  index, the identical mechanism `scale_variant_file` already uses to
+  keep Judas/Lucifer in step. Neon-chrome holo-medallion register, a
+  circuit-trace border constant across blocks, gang-canonical neon
+  colors per figure. Drop root `assets/weekday/cyberpunk/<block>/
+  {primary,colored}/<Stem>.png`. **Art: 0/78** (Gangs 28 + Street 26 +
+  Power 24; 3 title plates tracked separately). Dry-run: 78/78, 0
+  problems.
+- **Star Wars** — [Star Wars Prompts](starwars/starwars_prompts.md).
+  Sealed as a mid-round addendum. THREE sets: Svetla/light (Obi-Wan …
+  Chewbacca, Young Luke/The Father-Vader/Yoda — the Mirror brief
+  literally overlays Vader's mask across Luke's own face, the reveal
+  moment), Tamna/dark (Tarkin … Boba Fett, Palpatine/Anakin-as-servant/
+  Darth Plagueis), Nova/the dyad — the ONLY mixed set, because its own
+  Ninth is dual: The Ghosts (default) vs. Exegol (rarer face), a PLACE-
+  vs-PLACE rotation modeled explicitly on `core/continents.md`'s own
+  Zealandia/Pangea precedent (default continent vs. the rarer
+  eclipse/turning-point face) rather than a person-vs-person swap.
+  Anakin/Vader, Leia and Han each appear TWICE across sets (different
+  ages/roles — Svetla's Leia the general vs. Nova's "Old Leia" the
+  master, etc.) — six of the sheet's 60 briefs are these legitimate
+  repeats, never a duplicate scene. Aurebesh-flavored holo-crest
+  register (letterform-flavor only, same documented compromise as
+  `egypt`/`norse`'s title-plate scripts — never a genuine readable
+  alphabet, and not even that flavor on regular cast plates, which
+  carry zero lettering). Drop root `assets/weekday/starwars/<set>/
+  {primary,colored}/<Stem>.png`. **Art: 0/60** (30 figures × 2
+  registers; 3 title plates tracked separately). Dry-run: 60/60, 0
+  problems.
+- **The Corporation** — [Corporate Prompts](corporate/corporate_prompts.md).
+  Single roster, same closed-set shape as Greek Monsters/Chinese
+  Mythology: six executive seats (CHRO … CTO), a Throne/Mirror dual
+  (CEO / Chairman of the Board), an Unfound Ninth (The Founder — "the
+  ghost seat every company has"). Every one of the 9 figures is an
+  explicit ARCHETYPE — "FACELESS OR STYLIZED... no likeness of any real
+  person" is written into all 18 individual prompts, not just the
+  sheet header, since these are corporate ROLES rather than named
+  individuals. Brushed-steel-and-glass corporate seal register, an
+  org-chart line-and-node border. No rotation seats. Drop root
+  `assets/weekday/corporate/{primary,colored}/<Stem>.png`. **Art:
+  0/18** (9 figures × 2 registers; 1 title plate tracked separately).
+  Dry-run: 18/18, 0 problems.
+- **Ten new title plates** — filed into the existing
+  [Theme Title Prompts](titles/theme_title_prompts.md) family (three
+  per block/set theme, one for Corporation): `wow_alliance`,
+  `wow_horde`, `wow_evil`, `cyberpunk_gangs`, `cyberpunk_street`,
+  `cyberpunk_power` (Soulkiller — the FORCE, not a person, the same
+  "parent, not seat-holder" device as `wow_evil`'s Sargeras), `
+  starwars_svetla`, `starwars_tamna` (Darth Bane, the Rule of Two's own
+  doctrinal parent — deliberately NOT Plagueis, already this set's own
+  Unfound), `starwars_nova` (The Dyad — two hands reaching across a
+  broken lightsaber, the owner's own suggested image) and `corporate`
+  (The Boardroom Table — eight marked chairs, one conspicuously bare).
+  Unlike the monsters/chinese cross-referenced pair, all ten are
+  written with FULL prompt bodies directly in
+  `titles/theme_title_prompts.md` itself (its own stated intent for
+  the family), so each new theme sheet carries only a short pointer,
+  never a duplicate. **Art: 0/10.** Dry-run (whole title-plates file):
+  34/34, 0 problems.
+- All four theme sheets are data-driven (`assets/weekday/**`), so every
+  path they declare — including every `alt/`- and `_v*`-suffixed
+  rotation sibling — passes `tests/test_prompt_paths.py` with ZERO
+  whitelist entries needed. The ten new title-plate paths are NOT
+  data-driven (same as the existing 26) and each needed its own
+  explicit whitelist entry, added this round in the same comment block
+  as the PROMPT SHEETS round's nine.
+- None of the four themes are registered in `config/defaults.py` yet
+  (`WEEKDAY_THEME_NAMES` etc.) — sheet-writing only, per this round's
+  own scope ("Sheets ONLY... NO app code"). The Cyberpunk rotation
+  seats and the Star Wars place-dual Ninth additionally need
+  `rotating_art_file` (or, for Ghosts/Exegol, possibly a reuse of
+  `core.continents`'s own trigger logic) wired to their seats — also
+  future work, documented in each sheet's own Status section.
+
 <a id="other"></a>
 
 ## Ring Letters, Icons, Guide — out of the AI-prompt pipeline
@@ -382,15 +493,29 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    Slavic Months (12) and Badge 1:1 round one (38) — plus the PROMPT
    SHEETS round's three NEW sheets: Greek Monsters (18), Chinese
    Mythology (18) and Theme Title Plates (24 + the 2 cross-referenced
-   in the two theme sheets, 26 total). Subdial is CLOSED (RULE-19
-   round, 2026-07-20) — see the superseded note above, no more
-   generation needed there.
+   in the two theme sheets, 26 total) — plus the GAMING + CORPORATION
+   SHEET WAVE's (R10) four NEW sheets: WoW (54), Cyberpunk (78), Star
+   Wars (60) and The Corporation (18), plus their own 10 new title
+   plates (written directly in `titles/theme_title_prompts.md`, see
+   above). Subdial is CLOSED (RULE-19 round, 2026-07-20) — see the
+   superseded note above, no more generation needed there.
 1a. **Two wiring rounds** the PROMPT SHEETS round explicitly left for
    later (out of THIS round's "sheets only, no app code" scope):
    registering `monsters`/`chinese_myth` in `config/defaults.py`'s
    weekday-theme tables, and filling every theme's
    `title_entry["images"]` tuple with its new `assets/titles/<key>.png`
    plate, mirroring `defaults.CONTINENTS_TITLE_IMAGE`.
+1b. **The same two wiring rounds, generalized to the four R10 themes**:
+   registering `wow`/`cyberpunk`/`starwars`/`corporate` in
+   `config/defaults.py`'s weekday-theme tables (same tables as 1a), and
+   filling their own `title_entry["images"]` tuples once their title
+   plates land. PLUS two rotation-specific wiring items unique to this
+   round: calling `rotating_art_file` on the Cyberpunk Gangs/Street
+   rotation seats and the Star Wars Nova Ghosts/Exegol seat (the latter
+   possibly reusing `core.continents`'s own Zealandia/Pangea trigger
+   logic rather than a plain date-rotation — owner call, documented in
+   `starwars_prompts.md`'s own "rotation convention" section, not
+   assumed here).
 2. **Three wiring decisions**, not art gaps — the row2 rondels
    (Trinity/Family/Walks, 40 files sitting painted and unread), Anno
    Lucis (1 file, once generated, has nowhere to draw yet), and the

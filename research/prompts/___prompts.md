@@ -117,17 +117,65 @@ SEALED v2 roster, owner 2026-07-21, "Bravo, sve mi se sviđa")
   is cross-referenced into `titles/theme_title_prompts.md`, not written
   twice
 
-### `titles/` (PROMPT SHEETS round, owner item 7, 2026-07-21)
+### `titles/` (PROMPT SHEETS round, owner item 7, 2026-07-21; +10 more
+in the GAMING + CORPORATION SHEET WAVE, R10, 2026-07-22)
 - `theme_title_prompts.md` — fills every weekday theme's (plus
   Intelligences' and Slavic Months') documented graceful-absent
-  title-page plate slot, 24 briefs + 2 cross-referenced (Greek
-  Monsters, Chinese Mythology). NEW sourceless root,
-  `assets/titles/<key>.png`, the same precedent `months/` and
-  `subdial/` already set. The ONE sheet in the whole project that
-  intentionally carries lettering — each plate's own wordmark, in a
-  script matching that theme's culture (owner item 7). Continents is
-  excluded — it already has a real, wired title image
-  (`assets/earth/world.png`)
+  title-page plate slot, 34 briefs (24 original + 10 from R10) + 2
+  cross-referenced (Greek Monsters, Chinese Mythology — WoW/Cyberpunk/
+  Star Wars/Corporate's own 10 are written in FULL here instead, not
+  cross-referenced). NEW sourceless root, `assets/titles/<key>.png`,
+  the same precedent `months/` and `subdial/` already set. The ONE
+  sheet in the whole project that intentionally carries lettering —
+  each plate's own wordmark, in a script matching that theme's culture
+  (owner item 7). Continents is excluded — it already has a real,
+  wired title image (`assets/earth/world.png`)
+
+### `wow/` (GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
+2026-07-22)
+- `wow_prompts.md` — the World of Warcraft weekday theme (a NEW theme,
+  THREE parallel casts — Alliance, Horde, Evil — riding the same nine
+  seats, generalizing the Planetary/Pantheon "Two Rosters" doctrine
+  from two to three). Carved runestone/faction-crest register, a
+  distinct border family per block; its three title plates are
+  cross-referenced into `titles/theme_title_prompts.md`, not written
+  twice
+
+### `cyberpunk/` (GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
+2026-07-22)
+- `cyberpunk_prompts.md` — the Cyberpunk 2077 weekday theme (THREE
+  casts — Gangs, Street, Power). Introduces the sheet family's first
+  ROTATION SEATS (more than one named figure/faction sharing a day),
+  via a documented `alt/`/`_v*`-stem convention built directly on
+  `config.defaults.rotating_art_file`'s existing search; Power's trio
+  carries a SYNCHRONIZED PAIR ROTATION (every pole holding exactly 2
+  candidates, same mechanism that already keeps the Scale badges'
+  Judas/Lucifer in step). Neon-chrome holo-medallion register; its
+  three title plates are cross-referenced into
+  `titles/theme_title_prompts.md`
+
+### `starwars/` (GAMING + CORPORATION SHEET WAVE, owner-sealed
+addendum mid-round, 2026-07-22)
+- `starwars_prompts.md` — the Star Wars weekday theme (THREE casts —
+  Svetla/light, Tamna/dark, Nova/the dyad). Nova's own Unfound seat is
+  a PLACE-vs-PLACE dual rotation (The Ghosts / Exegol), modeled on
+  `core/continents.md`'s own Zealandia/Pangea precedent rather than a
+  plain person-vs-person swap. Anakin/Vader, Leia and Han each appear
+  in two sets at different ages/roles — legitimate repeats, not
+  duplicates. Aurebesh-flavored holo-crest register (letterform-flavor
+  only, never a genuine alphabet); its three title plates are
+  cross-referenced into `titles/theme_title_prompts.md`
+
+### `corporate/` (GAMING + CORPORATION SHEET WAVE, owner-sealed roster
+2026-07-22)
+- `corporate_prompts.md` — THE CORPORATION weekday theme (a NEW theme,
+  single roster, same closed-set shape as Greek Monsters/Chinese
+  Mythology): six executive seats, the CEO/Chairman of the Board dual,
+  the Founder ninth ("the ghost seat every company has"). Every figure
+  is an explicit ARCHETYPE — "no likeness of any real person" written
+  into all 18 prompts. Brushed-steel-and-glass corporate seal register;
+  its one title plate is cross-referenced into
+  `titles/theme_title_prompts.md`
 
 ### `era/`
 - `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):

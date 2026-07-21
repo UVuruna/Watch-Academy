@@ -250,6 +250,27 @@ _WHITELIST: dict[str, str] = {
     "titles/months.png": "theme title plate, not yet wired (theme_title_prompts.md)",
     "titles/monsters.png": "theme title plate, not yet wired (greek_monsters_prompts.md cross-ref)",
     "titles/chinese_myth.png": "theme title plate, not yet wired (chinese_myth_prompts.md cross-ref)",
+    # THE GAMING + CORPORATION SHEET WAVE (R10, owner-sealed rosters
+    # 2026-07-22): ten more theme title plates, same sourceless
+    # `assets/titles/<key>.png` family as the block above — WoW,
+    # Cyberpunk and Star Wars each carry three blocks/sets so each
+    # names three title plates, The Corporation carries one. Written in
+    # full in `titles/theme_title_prompts.md`'s own "GAMING +
+    # CORPORATION SHEET WAVE title plates" section; each new theme
+    # sheet (`wow_prompts.md`, `cyberpunk_prompts.md`,
+    # `starwars_prompts.md`, `corporate_prompts.md`) carries only a
+    # pointer, never a duplicate body. No code reads `assets/titles/**`
+    # yet (same future wiring round as the block above).
+    "titles/wow_alliance.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/wow_horde.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/wow_evil.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/cyberpunk_gangs.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/cyberpunk_street.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/cyberpunk_power.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/starwars_svetla.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/starwars_tamna.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/starwars_nova.png": "theme title plate, not yet wired (theme_title_prompts.md)",
+    "titles/corporate.png": "theme title plate, not yet wired (theme_title_prompts.md)",
 }
 
 
