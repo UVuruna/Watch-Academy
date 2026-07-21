@@ -19,6 +19,23 @@ _HOVER_BYPASS = getattr(
     Qt.KeyboardModifier, defaults.HOVER_BYPASS_MODIFIER
 )
 
+# The keyboard SHORTCUT map (R5 MENU REWORK), resolved ONCE from
+# `defaults.SHORTCUTS` into real Qt.Key/Qt.KeyboardModifier values —
+# the same config-stays-Qt-free convention `_HOVER_BYPASS` above uses.
+# A single-modifier tuple reduces to that one flag (every entry today
+# carries exactly one — ControlModifier).
+def _resolved_modifiers(names: tuple[str, ...]) -> Qt.KeyboardModifier:
+    combined = Qt.KeyboardModifier.NoModifier
+    for name in names:
+        combined |= getattr(Qt.KeyboardModifier, name)
+    return combined
+
+
+_SHORTCUTS = tuple(
+    (action_id, getattr(Qt.Key, key_name), _resolved_modifiers(modifier_names))
+    for action_id, key_name, modifier_names, _description in defaults.SHORTCUTS
+)
+
 
 class ClockWidget(QWidget):
     """Frameless, per-pixel-transparent, always-at-bottom dial window."""
@@ -28,6 +45,9 @@ class ClockWidget(QWidget):
                                         # the hidden-mode code listener
     open_encyclopedia = Signal(str, int)  # (topic key, entry index) —
                                         # Spacebar over a themed target
+    shortcut_triggered = Signal(str)    # action_id — a keyboard shortcut
+                                        # fired while focused (`defaults.
+                                        # SHORTCUTS`, R5 MENU REWORK)
     _space_pressed = Signal()           # the native LL hook's queued hop
                                         # to the GUI thread (SPACE, no focus)
 
@@ -285,6 +305,15 @@ class ClockWidget(QWidget):
         if event.key() == Qt.Key.Key_Space:
             self._trigger_space_jump()
             return
+        # KEYBOARD SHORTCUTS (R5 MENU REWORK, `defaults.SHORTCUTS`) —
+        # checked BEFORE the typed/secret-buffer path (though every
+        # entry carries a modifier, so `event.text()` would already be
+        # non-printable and fall to `super()` below on its own; this
+        # ordering just keeps the intent obvious).
+        for action_id, key, modifiers in _SHORTCUTS:
+            if event.key() == key and event.modifiers() == modifiers:
+                self.shortcut_triggered.emit(action_id)
+                return
         text = event.text()
         if text and text.isprintable():
             self.typed.emit(text)

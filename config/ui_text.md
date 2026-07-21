@@ -32,8 +32,11 @@ Gold / Silver as finish names inside composed labels.
 - [App Controller](../app/controller.md) — menu labels, tooltips,
   tray balloons, error boxes
 - [Settings Dialog](../app/settings_dialog.md),
-  [Time Travel](../app/time_travel.md), [Guide](../app/guide.md) —
-  dialog chrome
+  [Time Travel](../app/time_travel.md), [Guide](../app/guide.md),
+  [Design Window](../app/design_window.md),
+  [Pointer Theme](../app/pointer_theme.md),
+  [Slot Theme](../app/slot_theme.md),
+  [Weekday Theme Grid](../app/weekday_theme_grid.md) — dialog chrome
 - [Compositor](../render/compositor.md) — hover legend labels and
   name tables (via the Symbolism Repository's shared overlay)
 

@@ -30,10 +30,12 @@ from PySide6.QtWidgets import (
 )
 
 from app import native
+from app.design_window import DesignDialog
 from app.encyclopedia import EncyclopediaDialog
 from app.observatory import ObservatoryDialog
 from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
+from app.pointer_theme import PointerThemeDialog
 from app.report import ReportDialog
 from app.scheduler import MinuteScheduler
 from app.settings_dialog import SettingsDialog
@@ -44,6 +46,7 @@ from app.settings_store import (
     replace,
     rotation_themes,
 )
+from app.slot_theme import SlotDescriptor, SlotThemeDialog
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
@@ -111,6 +114,37 @@ def _ring_two_metals(settings: Settings, card: dict) -> bool:
     )
 
 
+def watch_title(settings: Settings, full: bool = False) -> str:
+    """The watch's own display NAME (owner INSTRUCTION.txt item 2A,
+    R5 MENU REWORK round). A single watch shows just its LOCATION in
+    the right-click/tray menus (`full=False`, the default); the FULL
+    multi-attribute form backs the tray hover TOOLTIP always —
+    f"{location}-{ring_finish} {ring}-{palette label} {pointer}", e.g.
+    "Belgrade-Gold DOMY-Family Trinity" — and will back every entry
+    once ADD WATCH (the NEXT round) lets several watches coexist; kept
+    here as ONE function so that round only needs to loop it, never
+    reinvent it.
+
+    Deliberately UNTRANSLATED (no `tr`): a NAME is an identifier, not
+    UI chrome — the same treatment the ring preset name and the
+    pointer's own `POINTER_DISPLAY_NAMES` already get (protected proper
+    nouns, invariant across languages). The palette label is the
+    pointer's own wheel-pair (`constants.POINTER_PALETTE_LABELS`), read
+    by the ACTIVE `palette_style` — the SAME table the Design menu's
+    pair labels translate from (Rule #5, one source)."""
+    if not full:
+        return settings.city_name
+    pair = constants.POINTER_PALETTE_LABELS.get(
+        settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
+    )
+    palette_label = pair[0 if settings.palette_style == "paint" else 1]
+    pointer_name = constants.POINTER_DISPLAY_NAMES[settings.pointer]
+    return (
+        f"{settings.city_name}-{settings.ring_finish.capitalize()} "
+        f"{settings.ring}-{palette_label} {pointer_name}"
+    )
+
+
 def _guard_exclusive_choice(action: QAction, apply) -> None:
     """Wire one member of an EXCLUSIVE QActionGroup so a click on the
     ALREADY-CHECKED member is a no-op (ROADMAP 15h item 8's surviving
@@ -131,17 +165,6 @@ def _guard_exclusive_choice(action: QAction, apply) -> None:
             return
         apply()
     action.triggered.connect(_on_triggered)
-
-
-def _ui_icon(path) -> QIcon | None:
-    """One reusable UI CHROME icon (TASK 4, MASON/ICONS round) from a
-    `defaults.icon_path(name)` result — None in, None out (graceful-
-    absent, Rule #1), so every caller keeps its own documented emoji
-    fallback instead of a blank/broken icon. Distinct from the dial's
-    own ART: the one-image-one-place law (owner 2026-07-19) applies to
-    ART, never to UI chrome — the same icon file may legitimately
-    answer in more than one menu spot at once."""
-    return None if path is None else QIcon(str(path))
 
 
 def _theme_metal(settings: Settings, theme: str) -> str:
@@ -332,7 +355,7 @@ def build_skin(settings: Settings):
 
 def _slot_seconds(settings: Settings) -> bool:
     """Whether any ENABLED slot runs the small-seconds complication
-    (owner 2026-07-14) — the big hand yields and its Elements toggle
+    (owner 2026-07-14) — the big hand yields and its Visible toggle
     grays out."""
     if settings.show_weekday and settings.weekday_slot == "seconds":
         return True
@@ -655,6 +678,14 @@ class AppController(QObject):
         # `self._simulation`. No simulation can be running yet at
         # startup, but the attribute must EXIST for that check.
         self._simulation: tuple[datetime, astral.Observer] | None = None
+        # THE THREE MINI WINDOWS (R5 MENU REWORK item 3) also live
+        # BEFORE the menu build now: `_refresh_menu_gating` (called at
+        # the end of `_build_menu`) pushes a live gate into whichever
+        # of these is currently open, so the attribute must EXIST
+        # (None — nothing can be open yet at startup).
+        self._design: DesignDialog | None = None
+        self._pointer_theme: PointerThemeDialog | None = None
+        self._slot_theme: SlotThemeDialog | None = None
         self._menu = self._build_menu()
         self._legend = LegendPopup()
         self._widget = ClockWidget(
@@ -662,6 +693,11 @@ class AppController(QObject):
         )
         try:
             self._tray = TrayController(self._menu, logo_icon())
+            # The FULL name form backs the tray hover tooltip from the
+            # very first frame (owner INSTRUCTION.txt item 2A) —
+            # `_title_label` already exists (set inside the `_build_menu`
+            # call above).
+            self._tray.set_tooltip(watch_title(self._settings, full=True))
             # Every dialog title bar (Settings, Time Travel, Guide,
             # Encyclopedia, Observatory) inherits this MULTI-RESOLUTION
             # icon instead of the generic Windows icon (owner report
@@ -762,6 +798,10 @@ class AppController(QObject):
         # Spacebar over a themed hover target opens the Encyclopedia on
         # that topic's page (owner 2026-07-16, ROADMAP queue #8).
         self._widget.open_encyclopedia.connect(self._open_encyclopedia_at)
+        # KEYBOARD SHORTCUTS (R5 MENU REWORK, `defaults.SHORTCUTS`) —
+        # fired by the focused `ClockWidget.keyPressEvent`; dispatched
+        # by action_id in `_on_shortcut`.
+        self._widget.shortcut_triggered.connect(self._on_shortcut)
         # NON-MODAL Encyclopedia/Guide/Observatory (ITEM 1, R4 owner
         # instruction batch 2026-07-20): these three now `.show()`
         # instead of `.exec()` — the dial stays fully interactive
@@ -778,6 +818,12 @@ class AppController(QObject):
         self._encyclopedia: EncyclopediaDialog | None = None
         self._observatory: ObservatoryDialog | None = None
         self._guide: GuideDialog | None = None
+        # THE THREE MINI WINDOWS (R5 MENU REWORK item 3) — the SAME
+        # non-modal, one-live-instance lifecycle as the trio above, see
+        # design_window.md/pointer_theme.md/slot_theme.md for why they
+        # are LIVE-APPLY rather than transactional — are initialized
+        # EARLIER, before the first `_build_menu()` call (its gating
+        # pass reads them).
 
         # In click-through mode the window receives no mouse input, so the
         # hover tooltips are driven by polling the global cursor instead.
@@ -852,11 +898,15 @@ class AppController(QObject):
 
     def quit(self) -> None:
         self._widget.mark_closing()
-        # The non-modal trio (ITEM 1, R4) can now be open at Exit time —
-        # close them explicitly instead of leaving them to the process
-        # teardown, so their own `finished` handlers (and WA_DeleteOnClose)
-        # run in the ordinary way rather than being cut off mid-flight.
-        for dialog in (self._encyclopedia, self._observatory, self._guide):
+        # The non-modal sextet (ITEM 1, R4 + the three R5 mini windows)
+        # can now be open at Exit time — close them explicitly instead
+        # of leaving them to the process teardown, so their own
+        # `finished` handlers (and WA_DeleteOnClose) run in the
+        # ordinary way rather than being cut off mid-flight.
+        for dialog in (
+            self._encyclopedia, self._observatory, self._guide,
+            self._design, self._pointer_theme, self._slot_theme,
+        ):
             if dialog is not None:
                 dialog.close()
         self._scheduler.stop()
@@ -1041,6 +1091,100 @@ class AppController(QObject):
             critical=False,
         )
 
+    # --- Keyboard shortcuts (R5 MENU REWORK, `defaults.SHORTCUTS`) -------------
+
+    #: Ordered exactly like the Weekday submenu (owner menu rework
+    #: 2026-07-13): Planets first and flat, then the kinship groups.
+    _WEEKDAY_THEME_ORDER = defaults.WEEKDAY_MENU_TOP + tuple(
+        key for _title, keys in defaults.WEEKDAY_MENU_GROUPS for key in keys
+    )
+
+    def _on_shortcut(self, action_id: str) -> None:
+        """Dispatch one `defaults.SHORTCUTS` entry (owner "OSMISLITI ŠTA
+        SVE" — the full map is designed and pinned by
+        `tests/test_shortcuts.py`). Every shortcut needs the dial to
+        hold keyboard focus (`ClockWidget.keyPressEvent` is the only
+        source of this signal)."""
+        handlers = {
+            "cycle_ring": self._cycle_ring,
+            "cycle_weekday_theme": self._cycle_weekday_theme,
+            "cycle_slots": self._cycle_slots,
+            "open_encyclopedia": lambda: self._open_encyclopedia_at(None, 0),
+            "open_guide": self._open_guide,
+            "open_settings": self._open_settings,
+            "open_observatory": self._open_observatory,
+            "open_time_travel": self._open_time_travel,
+            "return_to_now": self._end_simulation,
+            "toggle_archetype": self._toggle_archetype_shortcut,
+        }
+        handlers[action_id]()
+
+    def _cycle_ring(self) -> None:
+        """Ctrl+R: the next Ring preset, alphabetically — the SAME
+        order the Design window's Ring tab lists them in. `_set_ring`
+        runs `_install_skin`, which refreshes any open mini window in
+        place (`_refresh_open_mini_windows`) — no separate call needed
+        here."""
+        names = sorted(ring_presets(self._settings.custom_rings))
+        current = names.index(self._settings.ring)
+        self._set_ring(names[(current + 1) % len(names)])
+
+    def _cycle_weekday_theme(self) -> None:
+        """Ctrl+W: the next Weekday theme (the 1st Slot's own —
+        `_WEEKDAY_THEME_ORDER`, the Weekday grid's own order); the
+        roster/metal the theme is already wearing stays untouched, like
+        clicking the plain theme tile. `_set_weekday_theme` runs
+        `_install_skin`, which refreshes the Pointer Theme / Slot Theme
+        windows in place when either happens to be open."""
+        order = self._WEEKDAY_THEME_ORDER
+        current = order.index(self._settings.weekday_theme)
+        self._set_weekday_theme(order[(current + 1) % len(order)])
+
+    def _cycle_slots(self) -> None:
+        """Ctrl+N: the number of visible Slots, 0 → 1 → 2 → 3 → 0 (the
+        SAME 1 → 2 → 3 chain the menu's own ordinals enforce — cycling
+        can only ever pass through legal states). `_install_skin`
+        refreshes the Slot Theme window in place when it happens to be
+        open."""
+        settings = self._settings
+        count = (
+            int(settings.show_weekday)
+            + int(settings.show_weekday and settings.show_octa_slot)
+            + int(
+                settings.show_weekday and settings.show_octa_slot
+                and settings.show_third_slot
+            )
+        )
+        target = (count + 1) % 4
+        self._settings = replace(
+            self._settings,
+            show_weekday=target >= 1,
+            show_octa_slot=target >= 2,
+            show_third_slot=target >= 3,
+        )
+        self._install_skin(build_skin(self._settings))
+        self._refresh_menu_gating()
+        self._flush_position()
+
+    def _toggle_archetype_shortcut(self) -> None:
+        """Ctrl+A: the SAME toggle as the menu's own Archetype entry — a
+        no-op where it is unavailable (Aurora/Calendar, or the Pointer
+        element hidden), never a silent state change."""
+        settings = self._settings
+        available = settings.show_pointer and archetypes.has_archetype(
+            settings.pointer
+        )
+        if not available:
+            return
+        self._set_display_choice("archetype_mode", not settings.archetype_mode)
+        # The menu's OWN checkable Archetype action is a SEPARATE view
+        # of the same state (the shortcut bypasses its `toggled` signal
+        # entirely) — mirror it without re-entering the handler: block
+        # signals, set, unblock.
+        self._archetype_action.blockSignals(True)
+        self._archetype_action.setChecked(self._settings.archetype_mode)
+        self._archetype_action.blockSignals(False)
+
     def _capture_position(self) -> None:
         self._settings = replace(
             self._settings,
@@ -1096,9 +1240,41 @@ class AppController(QObject):
         the user's machine translates once and caches)."""
         return SymbolismRepository(overlay=self._translation_overlay or None)
 
+    def _refresh_watch_title(self) -> None:
+        """Keep the menu's TITLE header and the tray hover tooltip in
+        sync with the live settings (owner INSTRUCTION.txt item 2A) —
+        called from `_install_skin`, the ONE choke point every
+        ring/pointer/palette/location change already runs through
+        (Rule #5), rather than a full menu rebuild: a stay-open menu
+        must never close just because its own header text changed
+        underneath it. A fresh `_build_menu()` (Settings OK, language
+        switch) replaces `_title_label` wholesale and calls this again
+        via the `_install_skin` it always runs first — either path ends
+        with a correct label."""
+        self._title_label.setText(watch_title(self._settings, full=False))
+        self._tray.set_tooltip(watch_title(self._settings, full=True))
+
+    def _refresh_open_mini_windows(self) -> None:
+        """Keep any OPEN Design/Pointer Theme/Slot Theme window in step
+        with the live settings — called from `_install_skin` (the SAME
+        choke point `_refresh_watch_title` uses) so a change made
+        through ANY path (a keyboard shortcut, Settings, a pick inside
+        a DIFFERENT one of the three windows) never leaves an already-
+        open window showing a stale pick. Each window's own `refresh()`
+        already runs after a pick made THROUGH it (Rule #5 — this is
+        the belt to that suspender for every OTHER path)."""
+        if self._design is not None:
+            self._design.refresh(self._settings, self._design_setters())
+        if self._pointer_theme is not None:
+            self._pointer_theme.refresh(self._settings.weekday_theme)
+        if self._slot_theme is not None:
+            self._slot_theme.refresh(self._slot_descriptors())
+
     def _install_skin(self, skin) -> None:
         """Swap the rendered skin: fresh compositor, current day kept."""
         self._skin = skin
+        self._refresh_watch_title()
+        self._refresh_open_mini_windows()
         # Re-reserve the transparent window margin from the LIVE settings
         # (owner slike 1–3, 2026-07-17): earth/moon scale, hover-enlarge
         # and letter scale all feed it, so the window re-sizes to fit
@@ -1303,79 +1479,47 @@ class AppController(QObject):
     def _set_earth_label(self, mode: str, checked: bool) -> None:
         """FOUR mutually exclusive Earth label options (owner 2026-07-18,
         ROADMAP 15h: Date / Weekday / Date & Weekday / Full Date, stored
-        as the single `earth_label` enum): checking one selects it
-        outright (Qt's exclusive group unchecks the others), unchecking
-        the active one turns the label off entirely. One skin install
-        for the whole change."""
+        as the single `earth_label` enum): `checked=True` selects `mode`
+        outright, `checked=False` (clicking the ALREADY active pill
+        again) turns the label off entirely. One skin install for the
+        whole change; the Design window's own `refresh()` re-reads the
+        result fresh (R5 MENU REWORK — no controller-held toggle
+        widgets to mirror any more)."""
         new_mode = mode if checked else "off"
         if self._settings.earth_label != new_mode:
             self._settings = replace(self._settings, earth_label=new_mode)
             self._install_skin(build_skin(self._settings))
-        self._sync_earth_label_toggles()
-
-    def _sync_earth_label_toggles(self) -> None:
-        """Mirror the four checkboxes onto the stored enum without
-        re-entering the handler."""
-        for toggle, mode in (
-            (self._earth_date_toggle, "date"),
-            (self._earth_weekday_toggle, "weekday"),
-            (self._earth_date_weekday_toggle, "date_weekday"),
-            (self._earth_full_toggle, "full"),
-        ):
-            toggle.blockSignals(True)
-            toggle.setChecked(self._settings.earth_label == mode)
-            toggle.blockSignals(False)
         self._flush_position()
 
-    def _slot_chain_allows(self, enable_key: str) -> bool:
-        """Whether the 1 → 2 → 3 slot enable chain permits ENABLING
-        `enable_key` right now (owner 2026-07-14): the 2nd needs the 1st,
-        the 3rd needs both."""
-        settings = self._settings
-        if enable_key == "show_octa_slot":
-            return settings.show_weekday
-        if enable_key == "show_third_slot":
-            return settings.show_weekday and settings.show_octa_slot
-        return True                       # show_weekday — the root
-
-    def _toggle_slot_ordinal(self, enable_key: str, checked: bool) -> None:
-        """A top-level slot ordinal click (owner 2026-07-17, slika 3) —
-        the same effect as the slot's dropdown Enable, gated by the same
-        chain. Enabling against the chain is a no-op and the check restores;
-        disabling is always allowed."""
-        if checked and not self._slot_chain_allows(enable_key):
-            self._refresh_menu_gating()   # forbidden — restore the check
-            return
-        self._set_display_choice(enable_key, checked)
-
-    def _set_element(self, key: str, checked: bool) -> None:
-        """One element toggle (owner 2026-07-17): the shared display
-        setter, then the top-level Elements check follows (it shows only
-        while every element is on)."""
+    def _set_visible(self, key: str, checked: bool) -> None:
+        """One Visible toggle (owner 2026-07-17; renamed from Elements,
+        R5 MENU REWORK item E): the shared display setter, then the
+        top-level Visible check follows (it shows only while every
+        entry is on)."""
         self._set_display_choice(key, checked)
-        self._refresh_elements_check()
+        self._refresh_visible_check()
 
-    def _refresh_elements_check(self) -> None:
-        """The Elements ordinal is checked ONLY when every element in the
+    def _refresh_visible_check(self) -> None:
+        """The Visible ordinal is checked ONLY when every entry in the
         dropdown is on (owner 2026-07-17, ROADMAP 15e)."""
-        self._elements_menu_action.setChecked(
-            all(getattr(self._settings, key) for _, key in self._element_toggles)
+        self._visible_menu_action.setChecked(
+            all(getattr(self._settings, key) for _, key in self._visible_toggles)
         )
 
-    def _toggle_all_elements(self) -> None:
-        """Clicking the Elements top-level entry (owner 2026-07-17): all
+    def _toggle_all_visible(self) -> None:
+        """Clicking the Visible top-level entry (owner 2026-07-17): all
         on → all off, otherwise → all on. One skin install for the whole
         batch; the child checkboxes and the gating follow."""
-        keys = [key for _, key in self._element_toggles]
+        keys = [key for _, key in self._visible_toggles]
         target = not all(getattr(self._settings, key) for key in keys)
         changes = {
             key: target for key in keys if getattr(self._settings, key) != target
         }
         if not changes:
-            self._refresh_elements_check()
+            self._refresh_visible_check()
             return
         self._settings = replace(self._settings, **changes)
-        for action, key in self._element_toggles:
+        for action, key in self._visible_toggles:
             # Mirror the children without re-entering their handlers.
             action.blockSignals(True)
             action.setChecked(target)
@@ -1383,24 +1527,22 @@ class AppController(QObject):
         self._install_skin(build_skin(self._settings))
         # Toggling the Pointer/Seconds elements moves the gating matrix.
         self._refresh_menu_gating()
-        self._refresh_elements_check()
+        self._refresh_visible_check()
         self._flush_position()
 
-    def _palette_labels(self, pointer: str) -> tuple:
-        """The wheel-pair labels for a pointer (owner 2026-07-17): its
-        own pair, or the default Paint/Light (Prism, Aurora)."""
-        return self._palette_style_labels.get(
-            pointer, self._palette_style_labels["default"]
-        )
-
     def _refresh_menu_gating(self) -> None:
-        """Recompute every gated menu entry from the CURRENT settings
-        without rebuilding (the stay-open menu keeps its window; only
-        the gray states move). The slot matrix (owner 2026-07-14)
-        seats every mode under every pointer — what remains gated:
-        the Seasons' three-slot 1st-slot lock, the 1 → 2 → 3 enable
-        order, and the big seconds hand while a slot runs the
-        small-seconds complication."""
+        """Recompute every gated FLAT menu entry from the CURRENT
+        settings without rebuilding (the stay-open menu keeps its
+        window; only the gray states move). R5 MENU REWORK shrank this
+        considerably: everything that used to gate a WIDGET INSIDE the
+        old Design/Slot submenu chains (the palette-style label swap,
+        the Calendar-lighting visibility, the Two-metals toggle, the
+        1 → 2 → 3 slot-enable chain, the Seasons three-slot lock) now
+        lives INSIDE the three mini windows themselves, recomputed
+        fresh on every `_build()`/`refresh()` call there instead of
+        gated in place here — what remains gated at the FLAT top level
+        is the Show/Archetype/Solar-rotation toggles, the big seconds
+        hand, and the three window-opening entries' own availability."""
         settings = self._settings
         # SHOW (owner 2026-07-18): meaningless outside "normal" z-mode —
         # HIDDEN there, not grayed.
@@ -1408,99 +1550,77 @@ class AppController(QObject):
         # THE ARCHETYPE MODE gating (owner sealed package 2026-07-16):
         # the toggle grays where no archetype exists — Aurora and the
         # Calendar — and with the Pointer element off (no diamonds, no
-        # figures). (The Earth-weekday toggle is a general Earth option
-        # now, gated only by the dial size — owner 2026-07-17.)
+        # figures).
         archetype_available = (
             settings.show_pointer
             and archetypes.has_archetype(settings.pointer)
         )
         archetype_on = archetype_available and settings.archetype_mode
         self._archetype_action.setEnabled(archetype_available)
-        locked = (
-            settings.pointer == "cross"
-            and settings.show_pointer
-            and settings.show_octa_slot
-            and settings.show_third_slot
-        )
-        for item in self._menu_gates["first_lock"]:
-            item.setEnabled(not locked)
-        self._menu_gates["enable2"].setEnabled(
-            settings.show_weekday and not archetype_on
-        )
-        self._menu_gates["enable3"].setEnabled(
-            settings.show_weekday and settings.show_octa_slot
-            and not archetype_on
-        )
         # A seated small-seconds slot cannot silence the big hand
         # while the archetype mode overrides the slots.
-        self._menu_gates["seconds"].setEnabled(
+        self._seconds_gate_action.setEnabled(
             not (_slot_seconds(settings) and not archetype_on)
         )
-        # The check mark beside the slot ordinal (owner 2026-07-15)
-        # follows the EFFECTIVE enable — the 1 → 2 → 3 chain, not the
-        # raw setting (owner bug 2026-07-16: slot 1 off left the 2nd
-        # and 3rd ordinals checked while their enables grayed).
-        effective = {
-            "show_weekday": settings.show_weekday,
-            "show_octa_slot": settings.show_weekday
-            and settings.show_octa_slot,
-            "show_third_slot": settings.show_weekday
-            and settings.show_octa_slot
-            and settings.show_third_slot,
-        }
-        for action, key in self._slot_menu_checks:
-            action.setChecked(effective[key])
-            # The whole slot submenu grays IN PLACE while the mode
-            # overrides the slots (owner 2026-07-16) — the settings
-            # underneath stay untouched for the toggle-back. The 1 → 2 → 3
-            # chain does NOT gray the ordinal (it stays openable): the
-            # ordinal CLICK handler enforces the chain instead (slika 3).
-            action.setEnabled(not archetype_on)
-        # FIX ROUND A (owner verdict 2026-07-19, screenshots — clicking
-        # a slot's ordinal to DISABLE it left the dropdown's own Enable
-        # checkbox stuck checked): the dropdown Enable action is the
-        # SAME state as the ordinal check mark — both mirror `effective`
-        # here, the ONE place both views resync (the pattern
-        # `_sync_earth_label_toggles` uses: block signals, set, unblock,
-        # so the mirrored setChecked never re-enters this handler).
-        for action, key in self._slot_enable_actions:
-            action.blockSignals(True)
-            action.setChecked(effective[key])
-            action.blockSignals(False)
         self._solar_rotation_action.setEnabled(
             settings.pointer != "aurora"
         )
-        # The wheel-pair labels swap per pointer (owner 2026-07-17,
-        # ROADMAP 11) and the pair is never grayed now — every pointer
-        # carries two distinct wheels (the Seasons gained the Elements).
-        for action, label in zip(
-            self._menu_gates["palette_style"],
-            self._palette_labels(settings.pointer),
-        ):
-            action.setEnabled(True)
-            action.setText(label)
-        # The Calendar lighting entries are visible only on the Calendar
-        # (owner 2026-07-17, slika 11): non-visible elsewhere, inline
-        # while active — never grayed-visible.
-        calendar_on = settings.pointer == "calendar"
-        self._calendar_lighting_separator.setVisible(calendar_on)
-        for action in self._menu_gates["calendar_lighting"]:
-            action.setVisible(calendar_on)
-        # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round): visible
-        # only for the ACTIVE preset's own eligibility (a `triangle`
-        # override, Mason/Omega/Templar today) — its checked state
-        # follows the resolved choice (stored, else the per-preset
-        # default), blocked so a settings-driven resync never re-enters
-        # `_set_ring_two_metals` (the pattern above, `_slot_enable_actions`).
-        active_card = ring_presets(settings.custom_rings)[settings.ring]
-        two_metals_eligible = active_card["triangle"] is not None
-        self._ring_two_metals_separator.setVisible(two_metals_eligible)
-        self._ring_two_metals_action.setVisible(two_metals_eligible)
-        self._ring_two_metals_action.blockSignals(True)
-        self._ring_two_metals_action.setChecked(
-            _ring_two_metals(settings, active_card)
+        self._refresh_pointer_theme_gate()
+        self._refresh_slot_theme_gate()
+
+    def _refresh_pointer_theme_gate(self) -> None:
+        """The Pointer Theme entry/window's own availability (item 3B,
+        agent interpretation — see pointer_theme.md): grayed while
+        Archetype mode overrides the diamonds, while the Pointer
+        element itself is hidden in Visible, or while the 1st Slot
+        (the layer this window themes) is off."""
+        settings = self._settings
+        archetype_on = (
+            settings.show_pointer
+            and archetypes.has_archetype(settings.pointer)
+            and settings.archetype_mode
         )
-        self._ring_two_metals_action.blockSignals(False)
+        if archetype_on:
+            reason = self._ui(
+                "The Archetype mode is on — the diamonds carry its own figures."
+            )
+        elif not settings.show_pointer:
+            reason = self._ui("The Pointer is hidden in Visible.")
+        elif not settings.show_weekday:
+            reason = self._ui("The 1st Slot is off — nothing wears this theme.")
+        else:
+            reason = ""
+        available = not reason
+        self._pointer_theme_action.setEnabled(available)
+        self._pointer_theme_action.setToolTip(reason)
+        if self._pointer_theme is not None:
+            self._pointer_theme.set_gate(available, reason)
+
+    def _refresh_slot_theme_gate(self) -> None:
+        """The Slot Theme entry/window's own availability (item 3C,
+        owner spec: "moze da bude GRAY ako nisu vidljivi slotovi") —
+        grayed when NO slot is visible at all (the 1 → 2 → 3 chain
+        means the 1st is the bootstrap: `Ctrl+N`, `_cycle_slots`, turns
+        it back on) or while Archetype mode overrides every slot."""
+        settings = self._settings
+        archetype_on = (
+            settings.show_pointer
+            and archetypes.has_archetype(settings.pointer)
+            and settings.archetype_mode
+        )
+        if archetype_on:
+            reason = self._ui(
+                "The Archetype mode is on — the diamonds carry its own figures."
+            )
+        elif not settings.show_weekday:
+            reason = self._ui("No Slot is visible.")
+        else:
+            reason = ""
+        available = not reason
+        self._slot_theme_action.setEnabled(available)
+        self._slot_theme_action.setToolTip(reason)
+        if self._slot_theme is not None:
+            self._slot_theme.set_gate(available, reason)
 
     def _add_choice_group(
         self, menu: QMenu, submenu: QMenu, options, current, setter, disabled=()
@@ -1557,6 +1677,28 @@ class AppController(QObject):
         menu = _StayOpenMenu()
         settings = self._settings
         tr = self._ui
+        # TITLE ROW (owner INSTRUCTION.txt item 2A, R5 MENU REWORK): the
+        # watch's own name heads BOTH the right-click and the tray menu
+        # (they share this ONE QMenu) — a passive styled header, never
+        # clickable/checkable (Rule #8 alternative: a disabled QAction
+        # still hover-highlights on some platforms; a QWidgetAction
+        # hosting a QLabel reads unambiguously as a header, the SAME
+        # pattern the Size slider row below already uses). `full=False`
+        # — a single watch shows just its location; the full
+        # multi-attribute name is reserved for the tray HOVER tooltip
+        # (`_refresh_watch_title`) until ADD WATCH (next round) needs to
+        # tell several watches apart here too.
+        title_label = QLabel(watch_title(settings, full=False))
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        title_label.setStyleSheet(
+            "font-weight: 700; font-size: 13px; padding: 6px 12px;"
+            f"color: {defaults.THEME_COLORS['accent']};"
+        )
+        title_action = QWidgetAction(menu)
+        title_action.setDefaultWidget(title_label)
+        menu.addAction(title_action)
+        self._title_label = title_label
+        menu.addSeparator()
         # SHOW (owner 2026-07-18, ROADMAP 15h, Session 21-C): in
         # "normal" z-mode the dial rides above other windows ONLY while
         # focused — the owner loses it under other windows otherwise.
@@ -1575,616 +1717,35 @@ class AppController(QObject):
         # three switches, the four windows, Exit — and checkable picks
         # keep the menu OPEN. DESIGN = how the instrument looks
         # (Pointer, Ring, Umbra | Hands, Earth | Size).
-        design_menu = self._submenu(menu, f"🎨 {tr('Design')}")
-        # Pointer variant and palette style share ONE dropdown (owner
-        # spec), two exclusive groups like the Umbra submenu.
-        pointer_menu = self._add_choice_submenu(
-            design_menu, tr("Pointer"),
-            [
-                # Owner-chosen display names (FINAL.txt #8): Trinity,
-                # Seasons, Prism, Compass — protected brand terms, the
-                # same in every language. Aurora has no arms — no count
-                # after its name, and it sits LAST, below the Compass
-                # (owner spec 2026-07-12).
-                (
-                    variant,
-                    constants.POINTER_DISPLAY_NAMES[variant]
-                    if variant in ("aurora", "calendar")
-                    else f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})",
-                )
-                # Aurora and Calendar have no arms — no count after the
-                # name, and both sit LAST, below the armed pointers.
-                for variant, arms in sorted(
-                    constants.POINTER_POINTS.items(),
-                    key=lambda item: (
-                        item[0] in ("aurora", "calendar"), item[1]
-                    ),
-                )
-            ],
-            settings.pointer,
-            lambda value: self._set_display_choice("pointer", value),
+        # DESIGN / POINTER THEME / SLOT THEME (R5 MENU REWORK item 3,
+        # owner spec — the exact "4-5 branching levels stack one over
+        # another in a screen corner" complaint that opened this round,
+        # `UV/DESIGN/Meni One over Another.png`): each ONE flat entry
+        # now opens its own mini WINDOW (`app.design_window`,
+        # `app.pointer_theme`, `app.slot_theme`) instead of the deep
+        # nested chains this used to be (Rule #6 — no both-paths; the
+        # windows are LIVE-APPLY, exactly like the chains they replace,
+        # see each module's own docstring for the modal-vs-non-modal
+        # justification). Gating lives in `_refresh_menu_gating` /
+        # `_refresh_pointer_theme_gate` / `_refresh_slot_theme_gate`.
+        design_action = QAction(f"🎨 {tr('Design…')}", menu)
+        design_action.triggered.connect(self._open_design)
+        menu.addAction(design_action)
+        self._pointer_theme_action = QAction(
+            f"✨ {tr('Pointer Theme…')}", menu
         )
-        pointer_menu.addSeparator()
-        # The wheel-pair is NEVER grayed now (owner 2026-07-17, slika 11):
-        # every pointer carries TWO distinct wheels — the Seasons gained
-        # the Elements wheel, so the cross no longer grays the pair either.
-        palette_style_actions = self._add_choice_group(
-            design_menu, pointer_menu,
-            [
-                (style, tr(f"{style.capitalize()} palette"))
-                for style in constants.PALETTE_STYLES
-            ],
-            settings.palette_style,
-            lambda value: self._set_display_choice("palette_style", value),
-        )
-        # The wheel-pair LABELS follow the pointer (owner 2026-07-17,
-        # ROADMAP 11): Trinity = Court/Family, Seasons = Seasons/Elements,
-        # Compass = Walks/Ages, Calendar = Zodiac/Almanac; Prism and
-        # Aurora keep Paint/Light. The labels swap IN PLACE with the
-        # pointer, no rebuild of the stay-open menu.
-        # Naming refinements (owner 2026-07-17, ROADMAP 15e): the Seasons
-        # pair is Temperaments/Elements (killing the Seasons-inside-Seasons
-        # duplicate) and Aurora gets its OWN pair — Warm/Cool — instead of
-        # a second Paint/Light (its paint leans warm orange, its light
-        # cyan-cool). Prism alone keeps the bare Paint/Light labels.
-        self._palette_style_labels = {
-            "trio": (tr("Court"), tr("Family")),
-            "cross": (tr("Temperaments"), tr("Elements")),
-            # The FULL idiom (owner pick 2026-07-19: "Walks of Life", ne
-            # kasta — the paths one walks, open to all, against the
-            # closed hereditary caste reading).
-            "octa": (tr("Walks of Life"), tr("Ages")),
-            "aurora": (tr("Warm"), tr("Cool")),
-            "calendar": (tr("Zodiac"), tr("Almanac")),
-            "default": (tr("Paint palette"), tr("Light palette")),
-        }
-        for action, label in zip(
-            palette_style_actions, self._palette_labels(settings.pointer)
-        ):
-            action.setText(label)
-        # The Calendar lighting mode (owner 2026-07-16): which wedge
-        # lights — the shichen under the hour hand, or the current
-        # month/sign. NON-VISIBLE off the Calendar pointer (owner
-        # 2026-07-17, slika 11: never grayed-visible); INLINE while the
-        # Calendar is active (where paint/light PICK THE WHEEL —
-        # Zodiac/Almanac).
-        self._calendar_lighting_separator = pointer_menu.addSeparator()
-        calendar_lighting_actions = self._add_choice_group(
-            design_menu, pointer_menu,
-            [
-                ("hour", tr("Light the hour (shichen)")),
-                ("year", tr("Light the month/sign")),
-            ],
-            settings.calendar_lighting,
-            lambda value: self._set_display_choice("calendar_lighting", value),
-        )
-        calendar_on = settings.pointer == "calendar"
-        self._calendar_lighting_separator.setVisible(calendar_on)
-        for action in calendar_lighting_actions:
-            action.setVisible(calendar_on)
-        ring_menu = self._add_choice_submenu(
-            design_menu, tr("Ring"),
-            [
-                (name, name)
-                for name in sorted(ring_presets(settings.custom_rings))
-            ],
-            settings.ring, self._set_ring,
-        )
-        ring_menu.addSeparator()
-        # The letter FINISH (owner rules): gold = the triangle letters
-        # gold + the remaining one silver; silver = the exact inverse;
-        # the Seal wears one metal. The tint itself lives in Settings.
-        self._add_choice_group(
-            design_menu, ring_menu,
-            [(finish, tr(f"{finish.capitalize()} letters"))
-             for finish in constants.RING_FINISHES],
-            settings.ring_finish,
-            lambda value: self._set_display_choice("ring_finish", value),
-        )
-        # THE METAL-SPLIT OPTION (TASK 3, MASON/ICONS round, owner
-        # verdicts 2026-07-19, third batch): visible only for a preset
-        # that carries its own `triangle` override (Mason/Omega/Templar
-        # today) — `_refresh_menu_gating` keeps both the visibility and
-        # the checked state synced to the ACTIVE ring on every change.
-        active_card = ring_presets(settings.custom_rings)[settings.ring]
-        self._ring_two_metals_separator = ring_menu.addSeparator()
-        self._ring_two_metals_action = self._add_toggle(
-            ring_menu, tr("Two metals"),
-            _ring_two_metals(settings, active_card),
-            self._set_ring_two_metals,
-            tr(
-                "Split the six letters into two metals (this preset's "
-                "own Trinity/Union triangle) instead of one finish on "
-                "all six."
-            ),
-        )
-        two_metals_eligible = active_card["triangle"] is not None
-        self._ring_two_metals_separator.setVisible(two_metals_eligible)
-        self._ring_two_metals_action.setVisible(two_metals_eligible)
-        umbra_menu = self._add_choice_submenu(
-            design_menu, tr("Umbra"),
-            [
-                ("fine", tr("Fine (16 shades)")),
-                ("coarse", tr("Coarse (13 shades)")),
-                ("gradient", tr("Gradient")),
-            ],
-            settings.umbra_form,
-            lambda value: self._set_display_choice("umbra_form", value),
-        )
-        umbra_menu.addSeparator()
-        self._add_choice_group(
-            design_menu, umbra_menu,
-            [
-                (variant, tr(f"{variant.capitalize()} contrast"))
-                for variant in constants.UMBRA_CONTRAST_VARIANTS
-            ],
-            settings.umbra_contrast,
-            lambda value: self._set_display_choice("umbra_contrast", value),
-        )
-        # The complication PLATE style (owner A/B spec 2026-07-15):
-        # "theme" wears the clock tint on the tapisserie field and
-        # finish-metal ticks; "black" keeps the standard dark AP field
-        # with white ticks.
-        self._add_choice_submenu(
-            design_menu, tr("Complications"),
-            [
-                ("theme", tr("Theme background")),
-                ("black", tr("Classic black")),
-            ],
-            settings.subdial_style,
-            lambda value: self._set_display_choice("subdial_style", value),
-        )
-        design_menu.addSeparator()
-        # The HAND PACKS (owner spec 2026-07-12): bundled CLASSIC and
-        # STEEL plus whatever the user added via Settings.
-        self._add_choice_submenu(
-            design_menu, tr("Hands"),
-            [(name, name) for name in sorted(hand_packs())],
-            settings.hands, self._set_hands,
-        )
-        # EARTH lives inside Design now (owner menu rework 2026-07-13).
-        earth_menu = self._add_choice_submenu(
-            design_menu, tr("Earth"),
-            [("clean", tr("Clean")), ("atmo", tr("Atmosphere"))],
-            settings.earth_style,
-            lambda value: self._set_display_choice("earth_style", value),
-        )
-        earth_menu.addSeparator()
-        # The Earth label — FOUR exclusive modes (owner 2026-07-18,
-        # ROADMAP 15h): Date / Weekday / Date & Weekday / Full Date, all
-        # stored as the single `earth_label` enum; every entry is grayed
-        # out below the size that can draw a label at all.
-        self._earth_date_toggle = self._add_toggle(
-            earth_menu, tr("Date"),
-            settings.earth_label == "date",
-            lambda checked: self._set_earth_label("date", checked),
-            tr(
-                "The date written on the Earth marker (shown from "
-                "{size} px up)."
-            ).format(size=defaults.FULL_TEXT_MIN_DIAMETER),
-        )
-        self._earth_date_toggle.setEnabled(
-            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
-        )
-        # The abbreviated weekday alone (owner 2026-07-17, slika 10): a
-        # GENERAL Earth option, working in BOTH normal and archetype
-        # mode. Same size gate as the Date.
-        self._earth_weekday_toggle = self._add_toggle(
-            earth_menu, tr("Weekday"),
-            settings.earth_label == "weekday",
-            lambda checked: self._set_earth_label("weekday", checked),
-            tr(
-                "The abbreviated day (TUE, THU…) on the Earth marker."
-            ),
-        )
-        self._earth_weekday_toggle.setEnabled(
-            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
-        )
-        # DATE & WEEKDAY (owner 2026-07-18): the date with the
-        # abbreviated weekday beneath it — this is the OLD "Full Date"
-        # meaning, renamed now that a true Full Date exists below.
-        self._earth_date_weekday_toggle = self._add_toggle(
-            earth_menu, tr("Date & Weekday"),
-            settings.earth_label == "date_weekday",
-            lambda checked: self._set_earth_label("date_weekday", checked),
-            tr(
-                "The date with the abbreviated day beneath it."
-            ),
-        )
-        self._earth_date_weekday_toggle.setEnabled(
-            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
-        )
-        # FULL DATE (owner 2026-07-18, the true Full Date): the date
-        # with the YEAR beneath it — the same two-row shape the
-        # deep-travel year row already uses on this marker.
-        self._earth_full_toggle = self._add_toggle(
-            earth_menu, tr("Full Date"),
-            settings.earth_label == "full",
-            lambda checked: self._set_earth_label("full", checked),
-            tr(
-                "The date with the year beneath it."
-            ),
-        )
-        self._earth_full_toggle.setEnabled(
-            settings.diameter >= defaults.FULL_TEXT_MIN_DIAMETER
-        )
-        design_menu.addSeparator()
-        size_menu = self._add_choice_submenu(
-            design_menu, tr("Size"),
-            [(preset, f"{preset} px") for preset in defaults.SIZE_PRESETS],
-            settings.diameter, self._set_diameter,
-        )
-        # THE COMPACT SIZE SLIDER (owner ROADMAP 15h item 12,
-        # 2026-07-18): coarse tuning right in the menu — fine tuning
-        # stays in Settings, so a wide step and a narrow width are
-        # deliberate. Applies ONLY on release, NEVER mid-drag (owner:
-        # "da ne radim render na svakih ms") — a QWidgetAction hosting a
-        # plain QSlider, since a checkable choice entry cannot host a
-        # continuous value.
-        size_menu.addSeparator()
-        self._size_slider = QSlider(Qt.Orientation.Horizontal)
-        self._size_slider.setRange(defaults.SIZE_PRESETS[0], defaults.SIZE_PRESETS[-1])
-        self._size_slider.setSingleStep(defaults.MENU_SIZE_SLIDER_STEP)
-        self._size_slider.setPageStep(defaults.MENU_SIZE_SLIDER_STEP * 5)
-        self._size_slider.setFixedWidth(defaults.MENU_SIZE_SLIDER_WIDTH_PX)
-        self._size_slider.setValue(settings.diameter)
-        size_slider_label = QLabel(f"{settings.diameter} px")
-        self._size_slider.valueChanged.connect(
-            lambda value, lab=size_slider_label: lab.setText(f"{value} px")
-        )
-        self._size_slider.sliderReleased.connect(
-            lambda: self._set_diameter(self._size_slider.value())
-        )
-        size_slider_row = QWidget()
-        size_slider_layout = QHBoxLayout(size_slider_row)
-        size_slider_layout.setContentsMargins(12, 2, 12, 2)
-        size_slider_layout.addWidget(self._size_slider)
-        size_slider_layout.addWidget(size_slider_label)
-        size_slider_action = QWidgetAction(size_menu)
-        size_slider_action.setDefaultWidget(size_slider_row)
-        size_menu.addAction(size_slider_action)
-        # The THREE SLOTS at the TOP level (owner 2026-07-14: the
-        # 1st/2nd/3rd Slot system, superscripts in the labels). Every
-        # slot has the same shape — the Weekday themes, the
-        # COMPLICATIONS dropdown (Digital Time / Date / Day length /
-        # Seconds), the astrology families — and its own ENABLE below
-        # the separator; they enable strictly 1 → 2 → 3.
-        day_slot_menu = self._submenu(menu, f"🥇 {tr('1ˢᵗ Slot')}")
-        info_slot_menu = self._submenu(menu, f"🥈 {tr('2ⁿᵈ Slot')}")
-        third_slot_menu = self._submenu(menu, f"🥉 {tr('3ʳᵈ Slot')}")
-
-        # Gating buckets (owner 2026-07-13: pointer/element switches
-        # must NOT close the menu — no rebuild; _refresh_menu_gating
-        # re-grays these lists in place).
-        self._menu_gates = {
-            "first_lock": [],
-            "palette_style": palette_style_actions,
-            "calendar_lighting": calendar_lighting_actions,
-        }
-
-        def slot_action(
-            parent: QMenu, group: QActionGroup, label: str,
-            checked: bool, handler, enabled: bool = True,
-        ) -> QAction:
-            action = QAction(label, menu)
-            action.setCheckable(True)
-            action.setChecked(checked)
-            action.setEnabled(enabled)
-            # Every slot-menu exclusive group (the weekday themes, the
-            # roster pairs, Complications, the astrology families) shares
-            # the SAME "one must always hold" guard as _add_choice_group —
-            # ROADMAP 15h item 8's bug lived here too.
-            _guard_exclusive_choice(action, lambda: handler(True))
-            group.addAction(action)
-            parent.addAction(action)
-            return action
-
-        def add_weekday_submenu(
-            parent: QMenu, group: QActionGroup,
-            active: bool, current_theme: str, on_theme, names_key: str,
-            current_roster: str = "planetary",
-            roster_field: str = "weekday_roster",
-        ) -> QAction:
-            """The IDENTICAL Weekday submenu of both slots: Planets sits
-            FIRST and flat (owner 2026-07-18, `WEEKDAY_MENU_TOP`) —
-            nesting Image/Sign plain plus the metal-capable Art look —
-            above the KINSHIP GROUPS below it (owner menu rework
-            2026-07-13: Ancient Gods / Society / Scripture / Animals /
-            The Inner Wheel / Arcana, `WEEKDAY_MENU_GROUPS`): the
-            bronze-plate themes open their metal dropdown in place —
-            plus the slot's OWN Names switch. Picking a theme also
-            picks the slot's weekday mode."""
-            sub = self._submenu(parent, tr("Weekday"))
-
-            def add_theme_entry(container: QMenu, key: str) -> None:
-                title = defaults.WEEKDAY_THEME_TITLES[key]
-                if key == "planets":
-                    # Image/Sign plain, Art nests its OWN metal dropdown
-                    # (owner 2026-07-18: the art/ plates are bronze
-                    # medallions like the pantheon sets, but the source
-                    # carries no colored/ folder — gold/bronze/silver
-                    # only; planet_signs stays flat glyph art, plain,
-                    # never tinted).
-                    planet_menu = self._submenu(container, tr(title))
-                    for pkey, plabel in (
-                        ("planets", tr("Image")),
-                        ("planet_signs", tr("Sign")),
-                    ):
-                        slot_action(
-                            planet_menu, group, plabel,
-                            active and current_theme == pkey,
-                            lambda checked, t=pkey: on_theme(t),
-                        )
-                    art_menu = self._submenu(planet_menu, tr("Art"))
-                    for metal in constants.theme_metals("planets_art"):
-                        slot_action(
-                            art_menu, group, tr(metal.capitalize()),
-                            active and current_theme == "planets_art"
-                            and _theme_metal(settings, "planets_art") == metal,
-                            lambda checked, m=metal: on_theme("planets_art", m),
-                        )
-                elif key in constants.METAL_THEMES:
-                    metal_menu = self._submenu(container, tr(title))
-                    has_roster = key in defaults.WEEKDAY_PANTHEON
-                    # ROADMAP 15h item 8's surviving bug (owner
-                    # screenshot: Planetary/Pantheon BOTH unchecked):
-                    # ROOT CAUSE — the roster pair's checked state is
-                    # computed once at BUILD time from whichever theme
-                    # was active THEN. A metal pick (Gold/Bronze/…)
-                    # alone can make THIS pantheon theme the active one
-                    # (on_theme sets the theme unconditionally) without
-                    # ever touching the roster — nothing else resyncs
-                    # the pair afterward, so it keeps showing neither
-                    # option checked even though a real roster IS now in
-                    # effect. `metal_pick` closes that gap: a metal
-                    # click also re-checks the roster action matching
-                    # `current_roster` (valid here — nothing but a
-                    # roster click itself, handled separately below,
-                    # could have changed it since the menu was built).
-                    roster_actions: dict[str, QAction] = {}
-
-                    def resync_roster(actions=roster_actions) -> None:
-                        # LIVE settings, not the BUILD-time `current_roster`
-                        # snapshot — a roster click earlier in this same
-                        # open-menu session (handled by its own slot_action
-                        # below) already moved the real value; re-reading
-                        # it here keeps a LATER metal click from reverting
-                        # the display to the stale build-time roster.
-                        live = getattr(self._settings, roster_field)
-                        for value, roster_action in actions.items():
-                            roster_action.setChecked(value == live)
-
-                    def metal_pick(t: str, m: str) -> None:
-                        on_theme(t, m)
-                        if has_roster:
-                            resync_roster()
-
-                    for metal in constants.theme_metals(key):
-                        slot_action(
-                            metal_menu, group, tr(metal.capitalize()),
-                            active and current_theme == key
-                            and _theme_metal(settings, key) == metal,
-                            lambda checked, t=key, m=metal: metal_pick(t, m),
-                        )
-                    if has_roster:
-                        # The roster pair sits BELOW the metals in the
-                        # same dropdown (owner 2026-07-15: like the
-                        # Pointer picking variant AND color) — per slot,
-                        # so slot 1 can wear Planetary while slot 2
-                        # wears the Pantheon. Its OWN exclusive group:
-                        # metal and roster checks must coexist.
-                        metal_menu.addSeparator()
-                        roster_group = QActionGroup(menu)
-                        roster_group.setExclusive(True)
-                        for roster in constants.FIGURE_ROSTERS:
-                            roster_actions[roster] = slot_action(
-                                metal_menu, roster_group,
-                                tr(roster.capitalize()),
-                                active and current_theme == key
-                                and current_roster == roster,
-                                lambda checked, t=key, r=roster:
-                                on_theme(t, None, r),
-                            )
-                elif key in defaults.WEEKDAY_PANTHEON:
-                    # Non-metal pantheon themes (Egyptian, Slavic) have
-                    # no other variant, so the dropdown IS the roster
-                    # pair; either pick also picks the theme.
-                    roster_menu = self._submenu(container, tr(title))
-                    roster_group = QActionGroup(menu)
-                    roster_group.setExclusive(True)
-                    for roster in constants.FIGURE_ROSTERS:
-                        slot_action(
-                            roster_menu, roster_group,
-                            tr(roster.capitalize()),
-                            active and current_theme == key
-                            and current_roster == roster,
-                            lambda checked, t=key, r=roster:
-                            on_theme(t, None, r),
-                        )
-                else:
-                    slot_action(
-                        container, group, tr(title),
-                        active and current_theme == key,
-                        lambda checked, t=key: on_theme(t),
-                    )
-
-            for key in defaults.WEEKDAY_MENU_TOP:
-                add_theme_entry(sub, key)
-            for group_title, keys in defaults.WEEKDAY_MENU_GROUPS:
-                group_menu = self._submenu(sub, tr(group_title))
-                for key in keys:
-                    add_theme_entry(group_menu, key)
-            sub.addSeparator()
-            return self._add_toggle(
-                sub, tr("Names"), getattr(settings, names_key),
-                lambda checked, key=names_key: self._set_display_choice(
-                    key, checked
-                ),
-                tr("The day name written on the weekday bodies."),
-            )
-
-        zodiac_styles = (
-            ("sign", tr("Sign")),
-            ("logo", tr("Logo")),
-            ("constellation", tr("Constellation")),
-            ("colored", tr("Colored")),
-        )
-
-        def build_slot_menu(
-            slot_menu, index: int, mode_value: str, style_value: str,
-            theme_value: str, names_key: str, enabled_value: bool,
-            enable_key: str, set_mode, set_style_mode, set_theme,
-            roster_value: str = "planetary",
-            roster_field: str = "weekday_roster",
-        ):
-            """One slot submenu (owner 2026-07-14: all three share the
-            shape): Weekday themes, the COMPLICATIONS dropdown, the
-            astrology families — and the slot's own ENABLE below the
-            separator. Returns (enable action, the 1st-slot lockable
-            entries, the slot's own Weekday > Names action)."""
-            group = QActionGroup(menu)
-            group.setExclusive(True)
-            lockable = []
-            names_action = add_weekday_submenu(
-                slot_menu, group,
-                mode_value == "weekday", theme_value, set_theme, names_key,
-                current_roster=roster_value, roster_field=roster_field,
-            )
-            comps = self._submenu(slot_menu, tr("Complications"))
-            lockable.append(comps.menuAction())
-            for mode, label in (
-                ("time", tr("Digital Time")),
-                ("date", tr("Date")),
-                ("day_length", tr("Day length")),
-                ("seconds", tr("Seconds")),
-            ):
-                slot_action(
-                    comps, group, label, mode_value == mode,
-                    lambda checked, chosen=mode: set_mode(chosen),
-                )
-            for family, family_title in (
-                ("zodiac", tr("Astrology")),
-                # The ASCENDANT (owner request 2026-07-12): the sign
-                # rising on the eastern horizon right now.
-                ("ascendant", tr("Ascendant")),
-            ):
-                family_menu = self._submenu(slot_menu, family_title)
-                lockable.append(family_menu.menuAction())
-                for style, label in (
-                    *zodiac_styles,
-                    ("text", tr("Text")),
-                ):
-                    slot_action(
-                        family_menu, group, label,
-                        mode_value == family and style_value == style,
-                        lambda checked, m=family, s=style:
-                        set_style_mode(m, s),
-                    )
-            chinese_menu = self._submenu(slot_menu, tr("Chinese zodiac"))
-            lockable.append(chinese_menu.menuAction())
-            for style, label in (
-                ("colored", tr("Colored")),
-                ("gold", tr("Gold")),
-                ("silver", tr("Silver")),
-                ("bronze", tr("Bronze")),
-                ("text", tr("Text")),
-            ):
-                slot_action(
-                    chinese_menu, group, label,
-                    mode_value == "chinese" and style_value == style,
-                    lambda checked, s=style: set_style_mode("chinese", s),
-                )
-            slot_menu.addSeparator()
-            enable = self._add_toggle(
-                slot_menu, tr("Enable"), enabled_value,
-                lambda checked, key=enable_key: self._set_display_choice(
-                    key, checked
-                ),
-                tr("The slots enable in order — 1st, then 2nd, then 3rd."),
-            )
-            return enable, lockable, names_action
-
-        enable1, first_lockable, self._weekday_names_action = build_slot_menu(
-            day_slot_menu, 1,
-            settings.weekday_slot, settings.day_slot_style,
-            settings.weekday_theme, "show_weekday_names",
-            settings.show_weekday, "show_weekday",
-            lambda mode: self._set_display_choice("weekday_slot", mode),
-            self._set_weekday_badge,
-            self._set_weekday_theme,
-            roster_value=settings.weekday_roster,
-            roster_field="weekday_roster",
-        )
-        # The Seasons with all three slots LOCK the 1st on the weekday
-        # unit (owner 2026-07-14) — everything but Weekday grays.
-        self._menu_gates["first_lock"] = first_lockable
-        enable2, _, _ = build_slot_menu(
-            info_slot_menu, 2,
-            settings.octa_slot, settings.info_slot_style,
-            settings.info_slot_theme, "show_info_slot_names",
-            settings.show_octa_slot, "show_octa_slot",
-            self._set_south_slot,
-            lambda mode, style: self._set_south_slot(mode, style=style),
-            lambda theme, metal=None, roster=None: self._set_south_slot(
-                "weekday", theme=theme, metal=metal, roster=roster
-            ),
-            roster_value=settings.info_slot_roster,
-            roster_field="info_slot_roster",
-        )
-        enable3, _, _ = build_slot_menu(
-            third_slot_menu, 3,
-            settings.third_slot, settings.third_slot_style,
-            settings.third_slot_theme, "show_info_slot_names",
-            settings.show_third_slot, "show_third_slot",
-            self._set_third_slot,
-            lambda mode, style: self._set_third_slot(mode, style=style),
-            lambda theme, metal=None, roster=None: self._set_third_slot(
-                "weekday", theme=theme, metal=metal, roster=roster
-            ),
-            roster_value=settings.third_slot_roster,
-            roster_field="third_slot_roster",
-        )
-        self._menu_gates["enable2"] = enable2
-        self._menu_gates["enable3"] = enable3
-        enable2.setEnabled(settings.show_weekday)
-        enable3.setEnabled(settings.show_weekday and settings.show_octa_slot)
-        # FIX ROUND A (owner verdict 2026-07-19): the dropdown Enable
-        # action and the top-level ordinal check mark are TWO VIEWS of
-        # the same enable state — resynced together in
-        # `_refresh_menu_gating` (the `_sync_earth_label_toggles`
-        # pattern), so clicking either one updates both.
-        self._slot_enable_actions = (
-            (enable1, "show_weekday"),
-            (enable2, "show_octa_slot"),
-            (enable3, "show_third_slot"),
-        )
-        # A check mark LEFT of the slot ordinals while the slot is
-        # active (owner 2026-07-15: the state at a glance, without
-        # opening the submenu) — refreshed in place on every enable
-        # change.
-        self._slot_menu_checks = (
-            (day_slot_menu.menuAction(), "show_weekday"),
-            (info_slot_menu.menuAction(), "show_octa_slot"),
-            (third_slot_menu.menuAction(), "show_third_slot"),
-        )
-        for action, key in self._slot_menu_checks:
-            action.setCheckable(True)
-            action.setChecked(getattr(settings, key))
-            # Clicking the top-level ordinal does EXACTLY what the slot's
-            # own Enable does (owner 2026-07-17, slika 3): the SAME enable
-            # key with the SAME 1 → 2 → 3 chain gating. The ordinal is NOT
-            # grayed by the chain (it must stay openable as a submenu), so
-            # the handler enforces the chain — a forbidden enable is a no-op
-            # and the check restores. The submenu still opens on hover/arrow.
-            action.triggered.connect(
-                lambda checked, key=key: self._toggle_slot_ordinal(key, checked)
-            )
-        # Elements (owner spec): plain on/off switches — the slots
-        # enable INSIDE their own submenus now (owner 2026-07-14), so
-        # only the star, its colors, the two markers and the seconds
-        # hand remain.
-        elements_menu = self._submenu(menu, f"🧩 {tr('Elements')}")
-        self._element_toggles: list = []
+        self._pointer_theme_action.triggered.connect(self._open_pointer_theme)
+        menu.addAction(self._pointer_theme_action)
+        self._slot_theme_action = QAction(f"🥇 {tr('Slot Theme…')}", menu)
+        self._slot_theme_action.triggered.connect(self._open_slot_theme)
+        menu.addAction(self._slot_theme_action)
+        # Visible (owner spec; renamed from Elements, R5 MENU REWORK
+        # item E — Rule #6, every reference below renamed with it):
+        # plain on/off switches — the slots enable INSIDE their own
+        # submenus now (owner 2026-07-14), so only the star, its
+        # colors, the two markers and the seconds hand remain.
+        visible_menu = self._submenu(menu, f"🧩 {tr('Visible')}")
+        self._visible_toggles: list = []
         for key, label, tip in (
             (
                 "show_pointer", tr("Pointer"),
@@ -2212,26 +1773,26 @@ class AppController(QObject):
             ),
         ):
             action = self._add_toggle(
-                elements_menu, label, getattr(settings, key),
-                lambda checked, key=key: self._set_element(key, checked),
+                visible_menu, label, getattr(settings, key),
+                lambda checked, key=key: self._set_visible(key, checked),
                 tip,
             )
-            self._element_toggles.append((action, key))
+            self._visible_toggles.append((action, key))
             if key == "show_seconds":
                 # The big hand yields while a slot runs the
                 # small-seconds complication (owner 2026-07-14).
-                self._menu_gates["seconds"] = action
+                self._seconds_gate_action = action
                 action.setEnabled(not _slot_seconds(settings))
-        # Clicking the top-level Elements entry flips ALL of them at once
+        # Clicking the top-level Visible entry flips ALL of them at once
         # (owner 2026-07-17, ROADMAP 15e): the check shows ONLY when every
-        # element is on; a click while all-on turns them all off, otherwise
+        # entry is on; a click while all-on turns them all off, otherwise
         # it turns them all on. The submenu still opens on hover/arrow.
-        self._elements_menu_action = elements_menu.menuAction()
-        self._elements_menu_action.setCheckable(True)
-        self._elements_menu_action.triggered.connect(
-            lambda checked=False: self._toggle_all_elements()
+        self._visible_menu_action = visible_menu.menuAction()
+        self._visible_menu_action.setCheckable(True)
+        self._visible_menu_action.triggered.connect(
+            lambda checked=False: self._toggle_all_visible()
         )
-        self._refresh_elements_check()
+        self._refresh_visible_check()
         menu.addSeparator()
         self._add_toggle(
             menu, f"📜 {tr('Legend')}", settings.legend,
@@ -2299,151 +1860,15 @@ class AppController(QObject):
         time_travel = QAction(f"🕰️ {tr('Time Travel…')}", menu)
         time_travel.triggered.connect(self._open_time_travel)
         menu.addAction(time_travel)
-        # QUICK JUMP (owner 2026-07-14; Session 16 rework per slika 12):
-        # one-click Time Travel presets right below the dialog entry —
-        # same minute-then-back rules. Short arrow labels (owner rounds
-        # 2026-07-14/15): the TEXT always in the middle, the ARROW
-        # always on its own side and the logo on the opposite end —
-        # forward = logo-text-arrow, backward = arrow-text-logo. Both
-        # arrows are the SAME heavy monochrome pair (U+1F844/U+1F846 —
-        # the emoji ⬅ renders as a blue badge in Windows menus, owner
-        # veto); repeated clicks CHAIN through the years and the menu
-        # STAYS OPEN for exactly that. NOW ends the simulation — back
-        # to the present in one click. The eclipse jumps (🌑 solar /
-        # 🌘 lunar — stand-ins until the owner draws the two icons)
-        # need the Deep Time pack and gray out without it.
-        jumps = self._submenu(menu, f"⚡ {tr('Quick Jump')}")
-        now_action = QAction(tr("Now"), jumps)
-        now_action.setProperty("stay_open", True)
-        now_action.triggered.connect(
-            lambda checked=False: self._end_simulation()
-        )
-        jumps.addAction(now_action)
-        jumps.addSeparator()
-
-        def jump_action(parent, kind: str, label: str, city: dict | None = None):
-            action = QAction(label, parent)
-            action.setProperty("stay_open", True)
-            action.triggered.connect(
-                lambda checked=False, kind=kind, city=city:
-                self._quick_jump(kind, city)
-            )
-            parent.addAction(action)
-            return action
-
-        forward, backward = "\U0001F846", "\U0001F844"
-        sun_menu = self._submenu(jumps, f"🌞 {tr('Sun')}")
-        sun_menu.setToolTipsVisible(True)
-        jump_action(sun_menu, "next_sun", f"☀️ {tr('Sun')} {forward}")
-        jump_action(sun_menu, "prev_sun", f"{backward} {tr('Sun')} ☀️")
-        sun_menu.addSeparator()
-        eclipse_entries = [
-            jump_action(
-                sun_menu, "next_solar_eclipse", f"🌑 {tr('Eclipse')} {forward}"
-            ),
-            jump_action(
-                sun_menu, "prev_solar_eclipse", f"{backward} {tr('Eclipse')} 🌑"
-            ),
-        ]
-        moon_menu = self._submenu(jumps, f"🌙 {tr('Moon')}")
-        moon_menu.setToolTipsVisible(True)
-        jump_action(moon_menu, "next_moon", f"🌙 {tr('Moon')} {forward}")
-        jump_action(moon_menu, "prev_moon", f"{backward} {tr('Moon')} 🌙")
-        moon_menu.addSeparator()
-        eclipse_entries += [
-            jump_action(
-                moon_menu, "next_lunar_eclipse", f"🌘 {tr('Eclipse')} {forward}"
-            ),
-            jump_action(
-                moon_menu, "prev_lunar_eclipse", f"{backward} {tr('Eclipse')} 🌘"
-            ),
-        ]
-        # THE ECLIPSE ICONS (TASK 4, MASON/ICONS round, owner icon list
-        # 2026-07-19 approvals): wired onto the eclipse entries ONLY —
-        # the plain Sun/Moon jump entries above keep their own ☀️/🌙
-        # emoji, untouched. Graceful-absent (Rule #1): no icon at all
-        # when the file has not landed, the row's own 🌑/🌘 emoji then
-        # carries the whole distinction alone, exactly as before. The
-        # one-image-one-place law (owner 2026-07-19) applies to ART, not
-        # UI chrome — the SAME icon may legitimately answer here AND on
-        # a future eclipse-related spot.
-        solar_icon = _ui_icon(defaults.icon_path("eclipse_sun"))
-        lunar_icon = _ui_icon(defaults.icon_path("eclipse_moon"))
-        for action, icon in zip(
-            eclipse_entries, (solar_icon, solar_icon, lunar_icon, lunar_icon)
-        ):
-            # Static per build: the pack cannot appear mid-run.
-            action.setEnabled(self._deep is not None)
-            if icon is not None:
-                action.setIcon(icon)
-            if self._deep is None:
-                action.setToolTip(
-                    tr("Needs the Deep Time data pack (full installation).")
-                )
-        ymd_menu = self._submenu(
-            jumps, f"📅 {tr('Year')} · {tr('Month')} · {tr('Day')}"
-        )
-        for kind, label in (
-            ("next_year", f"📅 {tr('Year')} {forward}"),
-            ("prev_year", f"{backward} {tr('Year')} 📅"),
-            ("next_month", f"📅 {tr('Month')} {forward}"),
-            ("prev_month", f"{backward} {tr('Month')} 📅"),
-            ("next_day", f"📅 {tr('Day')} {forward}"),
-            ("prev_day", f"{backward} {tr('Day')} 📅"),
-        ):
-            jump_action(ymd_menu, kind, label)
-        # 🏛 over ⏳ (the agent's call, licensed by the owner's "🏛 or
-        # ⏳" — it matches his own listing of the submenu).
-        era_menu = self._submenu(
-            jumps, f"🏛 {tr('Century')} · {tr('Millennium')}"
-        )
-        for kind, label in (
-            ("next_century", f"🏛 {tr('Century')} {forward}"),
-            ("prev_century", f"{backward} {tr('Century')} 🏛"),
-            ("next_millennium", f"🏛 {tr('Millennium')} {forward}"),
-            ("prev_millennium", f"{backward} {tr('Millennium')} 🏛"),
-        ):
-            jump_action(era_menu, kind, label)
-        location_menu = self._submenu(jumps, f"📍 {tr('Location')}")
-        # POLE + GREENWICH ICONS (ROADMAP 15h item 10, owner reminder
-        # 2026-07-19; REVOKED and REWORKED fix round E, 2026-07-19,
-        # slika 6; ICONS WIRED, TASK 4, MASON/ICONS round, owner icon
-        # list 2026-07-19 approvals): ❄ marks both poles on the LEFT;
-        # the RIGHT side used to carry a neutral interim ⚪/⚫ pair
-        # (🔆/🌑 violated the owner's "no sun/moon emojis" law) — now
-        # his approved light/dark icons (`defaults.ICON_FILES`) replace
-        # it outright, by the DISPLAYED moment's date
-        # (`defaults.pole_icon_name`, the SAME light/dark split
-        # `pole_emoji` used) — `_effective_travel_date` follows the
-        # Time Travel traveled date while a simulation runs. The ⚪/⚫
-        # emoji stays the documented Rule #1 FALLBACK for a partial
-        # install still missing the icon files (`_pole_row_text_and_
-        # icon` picks one or the other, never both). Greenwich carries
-        # 🌐 (sealed owner pick, untouched — no eclipse/light-dark
-        # state to iconify there). Because this submenu is built only a
-        # few times a session but the traveled date can change many
-        # times via chained Quick Jumps, `_refresh_pole_rows`
-        # recomputes both rows lazily right before Location opens
-        # (`aboutToShow`) — the menu-rebuild cadence alone is too
-        # coarse now.
-        today = self._effective_travel_date()
-        self._north_pole_action = jump_action(location_menu, "north_pole", "")
-        self._south_pole_action = jump_action(location_menu, "south_pole", "")
-        self._apply_pole_row(self._north_pole_action, "north", today)
-        self._apply_pole_row(self._south_pole_action, "south", today)
-        location_menu.aboutToShow.connect(self._refresh_pole_rows)
-        jump_action(
-            location_menu, "greenwich",
-            f"{defaults.GREENWICH_EMOJI} {tr('Greenwich')}",
-        )
-        # The user's own places (owner slika 12): picked in Settings,
-        # each jump moves the OBSERVER there — the moment stays.
-        if self._settings.jump_cities:
-            location_menu.addSeparator()
-            for city in self._settings.jump_cities:
-                jump_action(
-                    location_menu, "city", f"📍 {city['name']}", dict(city)
-                )
+        # QUICK JUMP DIED HERE (owner rounds 2026-07-14/15; Session 16
+        # rework, slika 12; RETIRED R5 MENU REWORK item 4 — Rule #6, no
+        # both-paths): the deep 4-5-level submenu chain this used to be
+        # (`UV/DESIGN/RIGHT CLICK MENU.txt`, `Meni One over Another.png`
+        # — the exact complaint that opened this round) is GONE — every
+        # motion it held now lives as a ROW inside the Time Travel
+        # window itself (item 3A, `app.time_travel._build_jump_section`,
+        # wired through `_dialog_jump`/`_compute_jump`), which the entry
+        # above already opens.
         menu.addSeparator()
         # The hidden REPORT (owner 2026-07-15): function efficiency
         # statistics, visible only after the session unlock — above
@@ -2486,6 +1911,201 @@ class AppController(QObject):
 
     def _on_guide_closed(self, _result: int = 0) -> None:
         self._guide = None
+
+    # --- The three mini windows (R5 MENU REWORK item 3) -------------------------
+
+    def _open_design(self) -> None:
+        """Open (or raise) the [Design Window](design_window.md) —
+        NON-MODAL, LIVE-APPLY (see its own docstring): a second open
+        request raises the ONE live instance."""
+        if self._design is not None:
+            self._design.raise_()
+            self._design.activateWindow()
+            return
+        dialog = DesignDialog(
+            self._settings, self._design_setters(),
+            overlay=self._translation_overlay,
+            stay_on_top=self._settings.z_mode == "top",
+        )
+        dialog.finished.connect(self._on_design_closed)
+        self._design = dialog
+        dialog.show()
+
+    def _on_design_closed(self, _result: int = 0) -> None:
+        self._design = None
+
+    def _design_setters(self) -> dict:
+        """One setter per Design tab, each wrapped so a pick BOTH
+        applies (through the SAME `_set_*` methods the old menu chain
+        used, Rule #5) AND refreshes the open window with the new
+        live state — the window itself is stateless between picks."""
+        def wrap(setter):
+            def wrapped(*args, **kwargs):
+                setter(*args, **kwargs)
+                if self._design is not None:
+                    self._design.refresh(self._settings, self._design_setters())
+            return wrapped
+
+        return {
+            "pointer": wrap(lambda v: self._set_display_choice("pointer", v)),
+            "palette_style": wrap(
+                lambda v: self._set_display_choice("palette_style", v)
+            ),
+            "calendar_lighting": wrap(
+                lambda v: self._set_display_choice("calendar_lighting", v)
+            ),
+            "ring": wrap(self._set_ring),
+            "ring_finish": wrap(
+                lambda v: self._set_display_choice("ring_finish", v)
+            ),
+            "ring_two_metals": wrap(self._set_ring_two_metals),
+            "umbra_form": wrap(
+                lambda v: self._set_display_choice("umbra_form", v)
+            ),
+            "umbra_contrast": wrap(
+                lambda v: self._set_display_choice("umbra_contrast", v)
+            ),
+            "subdial_style": wrap(
+                lambda v: self._set_display_choice("subdial_style", v)
+            ),
+            "hands": wrap(self._set_hands),
+            "earth_style": wrap(
+                lambda v: self._set_display_choice("earth_style", v)
+            ),
+            "earth_label": wrap(self._set_earth_label),
+            "diameter": wrap(self._set_diameter),
+        }
+
+    def _open_pointer_theme(self) -> None:
+        """Open (or raise) the [Pointer Theme](pointer_theme.md) window
+        — NON-MODAL, LIVE-APPLY: a second open request raises the ONE
+        live instance."""
+        if self._pointer_theme is not None:
+            self._pointer_theme.raise_()
+            self._pointer_theme.activateWindow()
+            return
+        dialog = PointerThemeDialog(
+            self._settings.weekday_theme, self._pick_pointer_theme,
+            overlay=self._translation_overlay,
+            stay_on_top=self._settings.z_mode == "top",
+        )
+        dialog.finished.connect(self._on_pointer_theme_closed)
+        self._pointer_theme = dialog
+        self._refresh_pointer_theme_gate()
+        dialog.show()
+
+    def _on_pointer_theme_closed(self, _result: int = 0) -> None:
+        self._pointer_theme = None
+
+    def _pick_pointer_theme(self, theme: str) -> None:
+        self._set_weekday_theme(theme)
+        if self._pointer_theme is not None:
+            self._pointer_theme.refresh(theme)
+
+    def _open_slot_theme(self) -> None:
+        """Open (or raise) the [Slot Theme](slot_theme.md) window —
+        NON-MODAL, LIVE-APPLY: a second open request raises the ONE
+        live instance."""
+        if self._slot_theme is not None:
+            self._slot_theme.raise_()
+            self._slot_theme.activateWindow()
+            return
+        dialog = SlotThemeDialog(
+            self._slot_descriptors(),
+            overlay=self._translation_overlay,
+            stay_on_top=self._settings.z_mode == "top",
+        )
+        dialog.finished.connect(self._on_slot_theme_closed)
+        self._slot_theme = dialog
+        self._refresh_slot_theme_gate()
+        dialog.show()
+
+    def _on_slot_theme_closed(self, _result: int = 0) -> None:
+        self._slot_theme = None
+
+    def _slot_descriptors(self) -> tuple:
+        """One `SlotDescriptor` per slot, built fresh from the LIVE
+        settings — each carries its OWN setter, wrapped so a pick
+        BOTH applies (through the SAME `_set_weekday_theme`/
+        `_set_south_slot`/`_set_third_slot`/`_set_display_choice`
+        methods the old menu chain used, Rule #5) AND re-supplies the
+        window with a fresh triple."""
+        settings = self._settings
+
+        def wrap(setter):
+            def wrapped(*args, **kwargs):
+                setter(*args, **kwargs)
+                if self._slot_theme is not None:
+                    self._slot_theme.refresh(self._slot_descriptors())
+            return wrapped
+
+        return (
+            SlotDescriptor(
+                index=1, title="1st Slot",
+                mode_value=settings.weekday_slot,
+                style_value=settings.day_slot_style,
+                theme_value=settings.weekday_theme,
+                roster_value=settings.weekday_roster,
+                names_value=settings.show_weekday_names,
+                enabled_value=settings.show_weekday,
+                set_mode=wrap(
+                    lambda mode: self._set_display_choice("weekday_slot", mode)
+                ),
+                set_style_mode=wrap(self._set_weekday_badge),
+                set_weekday=wrap(self._set_weekday_theme),
+                set_names=wrap(
+                    lambda checked: self._set_display_choice(
+                        "show_weekday_names", checked
+                    )
+                ),
+            ),
+            SlotDescriptor(
+                index=2, title="2nd Slot",
+                mode_value=settings.octa_slot,
+                style_value=settings.info_slot_style,
+                theme_value=settings.info_slot_theme,
+                roster_value=settings.info_slot_roster,
+                names_value=settings.show_info_slot_names,
+                enabled_value=settings.show_octa_slot,
+                set_mode=wrap(self._set_south_slot),
+                set_style_mode=wrap(
+                    lambda mode, style: self._set_south_slot(mode, style=style)
+                ),
+                set_weekday=wrap(
+                    lambda theme, metal=None, roster=None: self._set_south_slot(
+                        "weekday", theme=theme, metal=metal, roster=roster
+                    )
+                ),
+                set_names=wrap(
+                    lambda checked: self._set_display_choice(
+                        "show_info_slot_names", checked
+                    )
+                ),
+            ),
+            SlotDescriptor(
+                index=3, title="3rd Slot",
+                mode_value=settings.third_slot,
+                style_value=settings.third_slot_style,
+                theme_value=settings.third_slot_theme,
+                roster_value=settings.third_slot_roster,
+                names_value=settings.show_info_slot_names,
+                enabled_value=settings.show_third_slot,
+                set_mode=wrap(self._set_third_slot),
+                set_style_mode=wrap(
+                    lambda mode, style: self._set_third_slot(mode, style=style)
+                ),
+                set_weekday=wrap(
+                    lambda theme, metal=None, roster=None: self._set_third_slot(
+                        "weekday", theme=theme, metal=metal, roster=roster
+                    )
+                ),
+                set_names=wrap(
+                    lambda checked: self._set_display_choice(
+                        "show_info_slot_names", checked
+                    )
+                ),
+            ),
+        )
 
     def _open_observatory(self) -> None:
         """Open (or raise) the [Observatory](observatory.md) with the
@@ -2656,6 +2276,10 @@ class AppController(QObject):
             show_era_suffix=self._settings.show_era_suffix,
             third_era=self._settings.third_era,
             deep_pack=self._deep is not None,
+            # ITEM 3A (R5 MENU REWORK): the dialog's own Quick Jump
+            # rows — the old deep submenu chain's replacement.
+            jump_callback=self._dialog_jump,
+            jump_cities=self._settings.jump_cities,
         )
         result = dialog.exec()
         if result == TimeTravelDialog.RETURN_TO_NOW:
@@ -2678,51 +2302,6 @@ class AppController(QObject):
             moment, _observer = self._simulation
             return moment.date()
         return date.today()
-
-    def _pole_row_text_and_icon(self, pole: str, today: date) -> tuple[str, QIcon | None]:
-        """One pole row's own text + icon (TASK 4, MASON/ICONS round):
-        the owner's light/dark icon (`defaults.ICON_FILES`) replaces the
-        interim ⚪/⚫ emoji (`defaults.pole_emoji`) INSTEAD, when the icon
-        file exists; the emoji stays the documented Rule #1 fallback for
-        a partial install still missing the icon file."""
-        tr = self._ui
-        name = tr("North Pole" if pole == "north" else "South Pole")
-        icon = _ui_icon(defaults.icon_path(defaults.pole_icon_name(pole, today)))
-        if icon is not None:
-            return f"{defaults.POLE_COLD_EMOJI} {name}", icon
-        return (
-            f"{defaults.POLE_COLD_EMOJI} {name} {defaults.pole_emoji(pole, today)}",
-            None,
-        )
-
-    def _apply_pole_row(self, action: QAction, pole: str, today: date) -> None:
-        """Applies `_pole_row_text_and_icon` to one pole's QAction —
-        shared by the initial menu build and `_refresh_pole_rows`'s
-        lazy resync (Rule #5)."""
-        text, icon = self._pole_row_text_and_icon(pole, today)
-        action.setText(text)
-        action.setIcon(icon or QIcon())
-        # A plain custom property (the SAME pattern `stay_open` already
-        # uses on other QActions) so tests can confirm which icon is
-        # actually wired without depending on QIcon equality, which Qt
-        # does not define meaningfully between two separately
-        # constructed instances of the same file.
-        action.setProperty(
-            "icon_name",
-            defaults.pole_icon_name(pole, today) if icon is not None else None,
-        )
-
-    def _refresh_pole_rows(self) -> None:
-        """Lazy refresh (owner fix round E, 2026-07-19): the Quick Jump
-        menu is only rebuilt wholesale a few times a session (skin
-        install, settings apply), but the traveled date can change many
-        times in between through chained Quick Jumps — recompute both
-        pole rows right before the Location submenu opens
-        (`aboutToShow`) so the text/icon always match what the dial
-        currently shows."""
-        today = self._effective_travel_date()
-        self._apply_pole_row(self._north_pole_action, "north", today)
-        self._apply_pole_row(self._south_pole_action, "south", today)
 
     def _end_simulation(self) -> None:
         """NOW (owner 2026-07-15): back to the present immediately —
@@ -2774,28 +2353,28 @@ class AppController(QObject):
         "next_lunar_eclipse": ("lunar", 1), "prev_lunar_eclipse": ("lunar", -1),
     }
 
-    def _quick_jump(self, kind: str, city: dict | None = None) -> None:
-        """One-click Time Travel presets (owner rounds 2026-07-14;
-        Session 16 rework, owner slika 12). The jumps CHAIN: while a
-        simulation runs, the next jump starts from the SIMULATED
-        situation — a time jump keeps the simulated PLACE, a place jump
-        keeps the simulated MOMENT — so repeated "→ Sun" walks the
-        turning points year after year, and a place pick stays under
-        you while you travel. Places are REAL coordinates with their
-        REAL clocks: Greenwich and the user's Quick Jump cities in
-        their own timezones, the poles on UTC. Deep travel runs in the
-        400-year proxy frame — event instants are REBASED into the
-        simulation's frame before comparing, and _start_simulation
-        re-canonicalizes the landing. Every jump clamps to the active
-        coverage (an edge step is a no-op, never a crash) and restarts
-        the standard minute-then-back."""
-        if self._simulation is not None:
-            base_moment, base_observer = self._simulation
-            base_cycles = self._sim_cycles
-        else:
-            base_moment = datetime.now(self._tz)
-            base_observer = self._observer
-            base_cycles = 0
+    def _compute_jump(
+        self, base_moment: datetime, base_observer, base_cycles: int,
+        kind: str, city: dict | None = None,
+    ) -> tuple[datetime, "astral.Observer", int] | None:
+        """The PURE computation behind every jump preset (owner rounds
+        2026-07-14; Session 16 rework, owner slika 12; EXTRACTED from
+        the old immediate-jump `_quick_jump`, R5 MENU REWORK — the
+        Quick Jump submenu itself died with the deep-nesting complaint,
+        `UV/DESIGN/Meni One over Another.png`, Rule #6). Returns the
+        LANDED (moment, observer, cycles) or None when the jump clamps
+        at the active coverage edge (a no-op, never a crash) — the
+        caller decides what to DO with the result: `_dialog_jump`
+        applies it to the Time Travel window's own fields (chaining
+        from ITS current state, never the live simulation), nothing
+        else calls this anymore now that the immediate-apply menu path
+        is gone. Places are REAL coordinates with their REAL clocks:
+        Greenwich and the user's Quick Jump cities in their own
+        timezones, the poles on UTC. Deep travel runs in the 400-year
+        proxy frame — event instants are REBASED into the caller's
+        frame before comparing, and the caller re-canonicalizes the
+        landing (`_start_simulation` for a live jump; `_dialog_jump`
+        for a dialog-local one)."""
         moment, observer, cycles = base_moment, base_observer, base_cycles
         first, last = self._travel_coverage()
         astro_base = real_year(base_moment.year, base_cycles)
@@ -2851,13 +2430,13 @@ class AppController(QObject):
                     moment = landing
                     break
             else:
-                return                  # clamp: already at the coverage edge
+                return None             # clamp: already at the coverage edge
         elif kind in self._ECLIPSE_JUMPS:
             # The eclipse navigation (owner 2026-07-16, ROADMAP 12/14a)
-            # — fed by the Deep Time pack; the menu entries are grayed
+            # — fed by the Deep Time pack; the caller grays its entry
             # without it, this guard is the belt to that suspender.
             if self._deep is None:
-                return
+                return None
             eclipse_kind, direction = self._ECLIPSE_JUMPS[kind]
             jd = julian_day_of(base_moment, base_cycles)
             if direction > 0:
@@ -2867,7 +2446,7 @@ class AppController(QObject):
             else:
                 event = self._deep.eclipse_before(jd, eclipse_kind)
             if event is None or not first <= event.year <= last:
-                return                  # clamp: catalog edge
+                return None             # clamp: catalog edge
             proxy, cycles = canonical_proxy(
                 event.year, event.month, event.day,
                 event.second_of_day // 3600,
@@ -2893,7 +2472,7 @@ class AppController(QObject):
                     months=sign if unit == "month" else 0,
                 )
             if not first <= y <= last:
-                return                  # clamp: coverage edge, stay put
+                return None             # clamp: coverage edge, stay put
             proxy, cycles = canonical_proxy(
                 y, m, d, base_moment.hour, base_moment.minute
             )
@@ -2918,8 +2497,32 @@ class AppController(QObject):
             moment = base_moment.astimezone(
                 ZoneInfo(defaults.GREENWICH_TIMEZONE)
             )
-        self._start_simulation(
-            moment.replace(second=0, microsecond=0), observer, cycles
+        return moment.replace(second=0, microsecond=0), observer, cycles
+
+    def _dialog_jump(
+        self, moment: datetime, cycles: int, latitude: float, longitude: float,
+        kind: str, city: dict | None,
+    ) -> tuple[datetime, int, float, float] | None:
+        """The Time Travel window's OWN Quick Jump rows (item 3A, R5
+        MENU REWORK — the rows the old deep Quick Jump submenu chain
+        used to hold, `UV/DESIGN/RIGHT CLICK MENU.txt`): chains from
+        the DIALOG'S own current fields, never the live simulation —
+        `_compute_jump` is the SAME pure computation the menu's old
+        immediate jumps used (Rule #5), just handed back to the dialog
+        instead of `_start_simulation`, so OK still applies the final
+        choice transactionally. `moment` is naive (the dialog's own
+        editor, interpreted in the configured timezone, same convention
+        `_open_time_travel` already uses); returns naive too."""
+        observer = astral.Observer(latitude=latitude, longitude=longitude)
+        result = self._compute_jump(
+            moment.replace(tzinfo=self._tz), observer, cycles, kind, city,
+        )
+        if result is None:
+            return None
+        new_moment, new_observer, new_cycles = result
+        return (
+            new_moment.astimezone(self._tz).replace(tzinfo=None), new_cycles,
+            new_observer.latitude, new_observer.longitude,
         )
 
     # --- Translation (owner spec: translate once, cache, display) -----------------
@@ -3066,18 +2669,10 @@ class AppController(QObject):
         if diameter == self._settings.diameter:
             return
         self._settings = replace(self._settings, diameter=diameter)
-        # The four Earth label switches only apply where the label can
-        # draw (owner 2026-07-17/18: the whole trio-now-quartet joined
-        # the Earth menu, gated by the same size threshold).
-        for toggle in (
-            self._earth_date_toggle, self._earth_weekday_toggle,
-            self._earth_date_weekday_toggle, self._earth_full_toggle,
-        ):
-            toggle.setEnabled(diameter >= defaults.FULL_TEXT_MIN_DIAMETER)
-        # Keep the compact menu slider in step with a PRESET pick (owner
-        # ROADMAP 15h item 12) — setValue alone never fires
-        # sliderReleased, so this cannot re-enter _set_diameter.
-        self._size_slider.setValue(diameter)
+        # The four Earth label pills and the compact slider live inside
+        # the Design window now (R5 MENU REWORK) — its own `refresh()`
+        # re-reads `settings.diameter`/`earth_label` fresh, so nothing
+        # here needs mirroring into a controller-held widget any more.
         self._widget.set_dial_diameter(diameter)
         self._compositor.invalidate()
         self._widget.update()

@@ -20,6 +20,12 @@ gray line. `app/ui_style.py`'s vivid gradient buttons (Encyclopedia /
 Guide) are UNCHANGED — this stylesheet governs the surfaces and form
 controls those dialogs don't already own an opinion on, and the
 Settings dialog's own buttons (OK/Cancel, "Default", "Skin default").
+**R5 MENU REWORK addition:** `QTabWidget`/`QTabBar` pill styling (the
+same rounded-selection-pill language `QListWidget::item:selected`
+already uses) — Qt's default tab bar is a flat gray row; the three new
+mini windows' multi-section layouts ([Slot Theme](slot_theme.md),
+[Design Window](design_window.md)) needed a tabbed control that reads
+as a real choice.
 
 ## Connections
 
@@ -34,6 +40,9 @@ Settings dialog's own buttons (OK/Cancel, "Default", "Skin default").
   base surface + (Time Travel only) its QComboBox/QSpinBox controls;
   their own `ui_style.style_button` gradients and per-label accents
   are untouched.
+- [Design Window](design_window.md), [Pointer Theme](pointer_theme.md),
+  [Slot Theme](slot_theme.md) — the three R5 mini windows; Slot Theme
+  and Design also use the new `QTabWidget` pill styling.
 
 ## Functions
 

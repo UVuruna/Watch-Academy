@@ -378,6 +378,26 @@ POINTER_DISPLAY_NAMES = {
     "calendar": "Calendar",  # no arms — the year/day in twelve wedges
 }
 
+# The wheel-pair LABELS per pointer (owner 2026-07-17, ROADMAP 11; naming
+# refinements 2026-07-17/19) — RAW English, the ONE table both the Design
+# menu's palette-style pair (`app.controller._build_menu`, `tr()`-wrapped
+# at build time) and the watch TITLE row (`app.controller.watch_title`,
+# untranslated — a name, not chrome) read (Rule #5: one source, two
+# readers). Index 0 = "paint" style, index 1 = "light" style
+# (`Settings.palette_style`). Every pointer carries two distinct wheels
+# now (the Seasons gained the Elements wheel) — never grayed.
+POINTER_PALETTE_LABELS = {
+    "trio": ("Court", "Family"),
+    "cross": ("Temperaments", "Elements"),
+    # The FULL idiom (owner pick 2026-07-19: "Walks of Life", not caste —
+    # the paths one walks, open to all, against the closed hereditary
+    # caste reading).
+    "octa": ("Walks of Life", "Ages"),
+    "aurora": ("Warm", "Cool"),
+    "calendar": ("Zodiac", "Almanac"),
+    "default": ("Paint palette", "Light palette"),
+}
+
 # What each palette circle COLORS (owner spec 2026-07-11: hovering a
 # palette swatch in Settings names its arm position). Order matches
 # PALETTE_PRESETS — clockwise from the top arm; the Compass speaks in
@@ -483,6 +503,17 @@ WEEKDAY_SLOT_MODES = (
     "weekday", "time", "date", "day_length", "seconds", "zodiac",
     "ascendant", "chinese",
 )
+# Display titles for the four COMPLICATION modes (owner spec) — the ONE
+# table both the (retired) menu's Complications dropdown and the new
+# Slot Theme window's own tab read (Rule #5). "weekday"/"zodiac"/
+# "ascendant"/"chinese" are not complications — they get their own
+# picker (the Weekday grid / the zodiac-style / Chinese-style groups).
+SLOT_COMPLICATION_TITLES = {
+    "time": "Digital Time",
+    "date": "Date",
+    "day_length": "Day length",
+    "seconds": "Seconds",
+}
 # SLOT SEATS (owner matrix 2026-07-14): the fixed dial angles the
 # multi-slot layouts use — the top (12h), the 20h/4h arm pair (the
 # Trinity/Prism red and blue arms) and the 21h/3h between-arms pair;

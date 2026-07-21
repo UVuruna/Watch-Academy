@@ -62,7 +62,12 @@ seconds hand returns), the hour-space lighting boundaries per pointer
 reveal hiding the hands, the graceful two-row article path and the
 pending line, the Walks→Professions encyclopedia mapping, the Earth
 day-label option, and the menu gating (full controller against a TEMP
-settings home).
+settings home) — R5 MENU REWORK shrank the gating test to the
+Archetype toggle + the Pointer Theme/Slot Theme entries (the Design/
+slot-submenu-specific tests moved to `test_menu_rework.py`, which now
+owns the whole R5 round; several tests tied to the retired Quick
+Jump/Design/Slot submenus and the Elements→Visible rename were
+removed here as their subject moved).
 
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 121
@@ -80,7 +85,10 @@ beyond the pack names the Laskar tier), the live precision-tier and
 coverage lines, the dual-calendar header (Anno Lucis always paired;
 third calendar joins), era labels per notation, proleptic Feb-29
 clamping (year 0 IS leap), the inclusive bounds — and the proof the
-guard blocks the die-visibly SystemExit path.
+guard blocks the die-visibly SystemExit path. The R5 Quick Jump ROWS
+(item 3A) goldens live in `test_menu_rework.py` instead (arrow clicks
+edit the dialog's own fields without touching a live simulation,
+eclipse-row graying, pole/Greenwich/city rows).
 
 ### `deep_fixture.py` + `test_deep_time.py`
 Session 16: the SMALL fixture pack builder (same schema as the
@@ -119,12 +127,38 @@ way while the dial keeps processing events; a second open request
 RAISES the live instance (identity-checked) instead of stacking a
 duplicate; a themed second SPACE jump NAVIGATES the live Encyclopedia
 window (`navigate_to`); closing a dialog clears the controller's own
-reference; `quit()` closes every still-open one. Opening sizes: A4
-portrait at 80% screen height (Encyclopedia respecting its own
-gallery min-width law, Observatory), square at 50% (Guide, Settings
-respecting its own content-width floor) — built against a REAL
-`AppController`, exactly like `main.py` minus the single-instance
-mutex and `run()`'s tray/scheduler/background-thread side effects.
+reference; `quit()` closes every still-open one — widened this round
+to the three R5 mini windows too (Design/Pointer Theme/Slot Theme).
+Opening sizes: A4 portrait at 80% screen height (Encyclopedia
+respecting its own gallery min-width law, Observatory), square at 50%
+(Guide, Settings respecting its own content-width floor) — built
+against a REAL `AppController`, exactly like `main.py` minus the
+single-instance mutex and `run()`'s tray/scheduler/background-thread
+side effects.
+
+### `test_menu_rework.py`
+R5 MENU REWORK round (owner spec 2026-07-20,
+`UV/DESIGN/RIGHT CLICK MENU.txt` + `UV/INSTRUCTION.txt` item 2A):
+`watch_title` both forms (short = location, full = the owner's own
+"Belgrade-Gold DOMY-Family Trinity" worked example, untranslated by
+signature); the TITLE row heading the menu + the tray tooltip staying
+live through `_install_skin` without a rebuild; the keyboard
+`SHORTCUTS` table (the ten owner-named action ids, every entry
+carrying a modifier so it can never feed the hidden-mode secret
+buffer, `shortcut_display`'s "Ctrl+R" rendering), a bare
+`ClockWidget.keyPressEvent` → `shortcut_triggered` mapping for every
+table entry (isolated from a real controller so it cannot open a
+blocking modal), `AppController._on_shortcut`'s full dispatch table,
+`_cycle_ring`/`_cycle_slots`'s legal-state walks; the Elements→Visible
+rename (menu text, no stale `_element_*` identifiers); the Time
+Travel window's own Quick Jump rows (item 3A — arrow clicks edit the
+dialog's own fields without touching the live simulation, an edge
+clamp is a no-op, eclipse rows gray without the Deep Time pack, pole/
+Greenwich/city rows); and the three mini windows (Pointer Theme, Slot
+Theme, Design, item 3B/3C/3D) — non-modal + raises-on-second-open,
+their own gating (Archetype-on, Pointer hidden, no Slot visible), live
+regray while already open, and picks applying through the SAME
+`_set_*` methods the old menu chains used.
 
 ## Connections
 

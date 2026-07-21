@@ -83,6 +83,89 @@ CLICK_THROUGH_HOVER_POLL_MS = 200
 # Qt-free); the widget resolves it.
 HOVER_BYPASS_MODIFIER = "ControlModifier"
 
+# --- Keyboard shortcuts (R5 MENU REWORK, owner "OSMISLITI ŠTA SVE" —
+# design the whole map) -------------------------------------------------------
+# ONE table, pinned by tests/test_shortcuts.py, rendered into each menu
+# entry's shortcut column too (`app.controller._build_menu`). Every
+# shortcut needs the dial to hold KEYBOARD FOCUS — wired through the
+# EXISTING focused `ClockWidget.keyPressEvent` path (owner constraint:
+# no new global OS-level hook this round beyond the existing SPACE
+# hook; a click on the dial already gives it focus, `ClickFocus`).
+# Every combo carries a MODIFIER on purpose: a bare letter would
+# collide with the HIDDEN_MODE_SECRET typed-sequence buffer, which
+# only ever sees PRINTABLE NO-MODIFIER text — a held modifier routes
+# the key event around that buffer entirely by construction (see
+# `app.widget.ClockWidget.keyPressEvent`), so no combo here can ever
+# feed it. `key` is a `Qt.Key` enum NAME and `modifiers` a tuple of
+# `Qt.KeyboardModifier` enum NAMES (config stays Qt-free — the SAME
+# convention `HOVER_BYPASS_MODIFIER` above already uses); `app.widget`
+# resolves both once at import time.
+#
+# Chosen mnemonics: R=Ring, W=Weekday, N=Number of slots, E=Encyclopedia,
+# G=Guide, comma=Settings (the Chrome/VS Code "preferences" convention),
+# O=Observatory, T=Time Travel, A=Archetype; Ctrl+Home ("go home") ends
+# a running Time Travel simulation. A z-mode shortcut was CONSIDERED and
+# DROPPED (Ctrl+Z carries a strong pre-existing "Undo" expectation this
+# app has no Undo to honor — better no binding than a confusing one).
+SHORTCUTS = (
+    # (action_id, key name, modifier names, description)
+    (
+        "cycle_ring", "Key_R", ("ControlModifier",),
+        "Cycle to the next Ring preset",
+    ),
+    (
+        "cycle_weekday_theme", "Key_W", ("ControlModifier",),
+        "Cycle to the next Weekday theme",
+    ),
+    (
+        "cycle_slots", "Key_N", ("ControlModifier",),
+        "Cycle the number of visible Slots (0→1→2→3→0)",
+    ),
+    (
+        "open_encyclopedia", "Key_E", ("ControlModifier",),
+        "Open the Encyclopedia",
+    ),
+    ("open_guide", "Key_G", ("ControlModifier",), "Open the Guide"),
+    ("open_settings", "Key_Comma", ("ControlModifier",), "Open Settings"),
+    (
+        "open_observatory", "Key_O", ("ControlModifier",),
+        "Open the Observatory",
+    ),
+    (
+        "open_time_travel", "Key_T", ("ControlModifier",),
+        "Open Time Travel",
+    ),
+    (
+        "return_to_now", "Key_Home", ("ControlModifier",),
+        "End the running simulation, return to now",
+    ),
+    (
+        "toggle_archetype", "Key_A", ("ControlModifier",),
+        "Toggle Archetype mode",
+    ),
+)
+_SHORTCUT_MODIFIER_DISPLAY = {"ControlModifier": "Ctrl"}
+# Symbol/special keys whose Qt enum NAME does not read as its own
+# display glyph (everything else strips the "Key_" prefix verbatim —
+# "Key_R" -> "R").
+_SHORTCUT_KEY_DISPLAY_OVERRIDES = {"Key_Comma": ",", "Key_Home": "Home"}
+
+
+def shortcut_display(action_id: str) -> str:
+    """The combo's human-readable label ("Ctrl+R") for the menu's
+    shortcut column — Qt-free, resolved from `SHORTCUTS` alone."""
+    for entry_id, key, modifiers, _description in SHORTCUTS:
+        if entry_id == action_id:
+            key_label = _SHORTCUT_KEY_DISPLAY_OVERRIDES.get(
+                key, key.removeprefix("Key_")
+            )
+            mod_label = "+".join(
+                _SHORTCUT_MODIFIER_DISPLAY[modifier] for modifier in modifiers
+            )
+            return f"{mod_label}+{key_label}"
+    raise KeyError(action_id)
+
+
 # Time Travel (scenario tester in the menu): the dial renders the entered
 # moment/position for this long, then returns to the present by itself.
 TIME_TRAVEL_DURATION_S = 60
@@ -167,6 +250,16 @@ ICON_FILES = {
     "dark": ICON_DIR / "dark.svg",              # Quick Jump pole row: polar NIGHT
     "eclipse_sun": ICON_DIR / "eclipse_sun.svg",    # Quick Jump Sun's own eclipse entries
     "eclipse_moon": ICON_DIR / "eclipse_moon.png",  # Quick Jump Moon's own eclipse entries
+    # R5 MENU REWORK (Time Travel mini-window rows, item 3A): the
+    # owner's dedicated per-row icons — a tinted compass rose per pole
+    # (navy = North, red = South) and a plain one for Greenwich (the
+    # Prime Meridian, a compass reference point rather than a pole or
+    # a sun/moon event). Same graceful-absent contract as the pair
+    # above: `icon_path` returns None until the file lands, and every
+    # row keeps its documented emoji fallback (❄/🌐) either way.
+    "north_pole": ICON_DIR / "north_pole.png",
+    "south_pole": ICON_DIR / "south_pole.png",
+    "compass": ICON_DIR / "compass.png",
 }
 
 
@@ -1013,6 +1106,13 @@ QUICK_JUMP_POLE_LATITUDE = 89.99     # exact 90 divides astral by zero
 GREENWICH_LATITUDE = 51.4779
 GREENWICH_LONGITUDE = 0.0
 GREENWICH_TIMEZONE = "Europe/London"
+
+# Time Travel MINI WINDOW rows (item 3A, R5 MENU REWORK — the deep
+# Quick Jump submenu chain, `UV/DESIGN/Meni One over Another.png`,
+# grows DOWN into the dialog itself instead): the row icon/arrow-button
+# pixel sizes, TUNABLE (Rule #4 — no bare numbers in the row builder).
+TIME_TRAVEL_ROW_ICON_PX = 26
+TIME_TRAVEL_ARROW_BUTTON_PX = 34
 
 # The slot ROUNDEL (owner 2026-07-14, watch-subdial inspiration):
 # every TEXT display and the flat astrology art (sign / logo /
@@ -1987,6 +2087,20 @@ WEEKDAY_DUAL_FILES = {
     "sins": "../emblem/sin/Servility",
     "moods": "../emblem/mood/Awe",
 }
+
+
+def weekday_theme_body_art(theme: str, body: str) -> Path:
+    """One theme's plate for one weekday body (bronze / canon file) —
+    moved here from `app.encyclopedia._theme_body_art` (R5 MENU REWORK,
+    Rule #5): the Encyclopedia gallery AND the new Pointer/Slot Theme
+    picker windows both need a representative preview per theme, so the
+    resolution lives ONCE in config and both readers import it."""
+    if theme == "planets":
+        return WEEKDAY_ART_DIR / "planets" / "primary" / f"{body}.png"
+    return (
+        WEEKDAY_ART_DIR / WEEKDAY_THEME_DIRS[theme]
+        / f"{WEEKDAY_THEME_FILES[theme][body]}.png"
+    )
 
 # The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
 # the medallions mix bronze details with GRAY stone and engravings —

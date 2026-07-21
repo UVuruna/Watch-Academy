@@ -73,8 +73,16 @@ to fit exactly.
   queue #8) — it calls `_trigger_space_jump()`; because " " is printable
   this MUST precede the typed path (otherwise Space would feed the
   hidden-mode code buffer). This is the FOCUSED fallback; the UNFOCUSED
-  case comes through the native keyboard hook (see below). Every other
-  printable key still emits `typed`
+  case comes through the native keyboard hook (see below). Next, the
+  KEYBOARD SHORTCUTS table (R5 MENU REWORK, `defaults.SHORTCUTS`,
+  resolved once at import time into `_SHORTCUTS` — the SAME config-
+  stays-Qt-free convention `_HOVER_BYPASS` already uses): a matching
+  `(key, modifiers)` pair emits `shortcut_triggered(action_id)` and
+  returns. Every shortcut carries a MODIFIER by construction, so it can
+  never reach the typed path below it — this ordering is belt-and-
+  suspenders, not load-bearing (a held-modifier key event already
+  produces non-printable `event.text()`). Every OTHER printable key
+  still emits `typed`
 - `_trigger_space_jump()`: the ONE SPACE handler, shared by
   `keyPressEvent` and the queued native-hook delivery — over a themed
   hover target (weekday body, astrology/ascendant/Chinese slot, hexa sign
@@ -98,6 +106,9 @@ to fit exactly.
   on-target position can never answer SPACE after the cursor has left
 - `open_encyclopedia`: Signal(topic key, entry index) — the controller
   opens the Encyclopedia on that page
+- `shortcut_triggered`: Signal(action_id) (R5 MENU REWORK) — the
+  controller's `_on_shortcut` dispatches it; see `keyPressEvent()`
+  above
 - `set_renderer(compositor)` / `set_tick(tick)`: painting inputs; each new
   tick schedules a repaint
 - `paintEvent()`: delegates to `compositor.paint(painter, size, dpr, tick)`

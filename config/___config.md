@@ -60,7 +60,15 @@ and [Compositor](../render/compositor.md) can read the SAME table for
 the CENTER seat's solar-window face law (Rule #5) — and
 `CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
 `CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH`, the tunable hour-widths of
-those windows around solar noon/midnight.
+those windows around solar noon/midnight. **R5 MENU REWORK**:
+`POINTER_PALETTE_LABELS` — the RAW English wheel-pair label per
+pointer (Court/Family, Temperaments/Elements, Walks of Life/Ages,
+Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback),
+extracted so `app.controller._build_menu`'s translated copy and
+`app.controller.watch_title`'s UNTRANSLATED name reading both draw
+from the ONE table (Rule #5); `SLOT_COMPLICATION_TITLES` — the four
+Complication mode display titles (Digital Time/Date/Day length/
+Seconds), read by [Slot Theme](../app/slot_theme.md)'s own tab.
 
 ### `defaults.py` — Developer Tunables
 Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
@@ -137,6 +145,22 @@ every version actually on disk for the active source, in both
 `_v2`/`_v3` suffixes, and rotates by the date's proleptic ordinal.
 Sole consumer: the [Encyclopedia](../app/encyclopedia.md)'s "The Two
 Triangles" duality topic.
+**R5 MENU REWORK (owner "OSMISLITI ŠTA SVE" — design the full
+shortcut map):** `SHORTCUTS` — the ONE keyboard-shortcut table
+(action_id, `Qt.Key` NAME, `Qt.KeyboardModifier` NAME tuple,
+description; config stays Qt-free, [Clock Widget](../app/widget.md)
+resolves it once at import time like `HOVER_BYPASS_MODIFIER` already
+does) and `shortcut_display(action_id)` (the "Ctrl+R" menu-column
+label, pure/Qt-free). Every entry carries a modifier by construction
+so it can never feed `HIDDEN_MODE_SECRET`'s printable-no-modifier
+buffer. Three new `ICON_FILES` entries (`north_pole`/`south_pole`/
+`compass`) for the [Time Travel](../app/time_travel.md) Quick Jump
+rows' pole/Greenwich icons, `TIME_TRAVEL_ROW_ICON_PX`/
+`TIME_TRAVEL_ARROW_BUTTON_PX` (the row icon/arrow-button pixel sizes),
+and `weekday_theme_body_art(theme, body)` — one theme's representative
+plate (moved here FROM `app.encyclopedia._theme_body_art`, Rule #5,
+since [Pointer Theme](../app/pointer_theme.md)/[Slot Theme](../app/slot_theme.md)
+need the SAME resolution for their picker-grid previews).
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package

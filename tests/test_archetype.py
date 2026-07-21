@@ -1099,43 +1099,33 @@ def test_earth_label_four_modes_render_distinctly(app):
 
 def test_menu_gating(app, tmp_path, monkeypatch):
     """The Archetype toggle grays on the archetype-less Aurora/Calendar
-    (and with the Pointer element off); while the mode is ON the three
-    slot submenus gray IN PLACE. The Earth-weekday toggle is a general
-    Earth option now (owner 2026-07-17) — enabled at the default 720 px
-    regardless of the mode. The full controller wiring, TEMP home."""
+    (and with the Pointer element off). R5 MENU REWORK shrank the rest
+    of this to the two window-opening entries: Pointer Theme / Slot
+    Theme gray while the mode is ON (the Design/Earth controls moved
+    into their own window, see tests/test_menu_rework.py for its own
+    gating coverage). The full controller wiring, TEMP home."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from app.controller import AppController
 
     controller = AppController(app)
     try:
         assert controller._archetype_action.isEnabled()      # hexa default
-        # The Earth-weekday toggle lives in Design ▸ Earth now, gated by
-        # the dial size (720 default), NOT the archetype mode.
-        assert controller._earth_weekday_toggle.isEnabled()
         controller._set_display_choice("pointer", "aurora")
         assert not controller._archetype_action.isEnabled()
         controller._set_display_choice("pointer", "calendar")
         assert not controller._archetype_action.isEnabled()
         controller._set_display_choice("pointer", "trio")
         assert controller._archetype_action.isEnabled()
-        assert all(
-            action.isEnabled()
-            for action, _ in controller._slot_menu_checks
-        )
+        assert controller._pointer_theme_action.isEnabled()
+        assert controller._slot_theme_action.isEnabled()
         controller._set_display_choice("archetype_mode", True)
-        # Still enabled in the mode (general option, not gated by it).
-        assert controller._earth_weekday_toggle.isEnabled()
-        assert not any(
-            action.isEnabled()
-            for action, _ in controller._slot_menu_checks
-        )
+        assert not controller._pointer_theme_action.isEnabled()
+        assert not controller._slot_theme_action.isEnabled()
         # The settings underneath stay the user's own.
         assert controller._settings.show_weekday
         controller._set_display_choice("archetype_mode", False)
-        assert all(
-            action.isEnabled()
-            for action, _ in controller._slot_menu_checks
-        )
+        assert controller._pointer_theme_action.isEnabled()
+        assert controller._slot_theme_action.isEnabled()
     finally:
         controller._profiling_timer.stop()
         controller._tray.hide()
@@ -1197,457 +1187,33 @@ def test_archetype_names_gates_the_render(app, monkeypatch):
     assert calls != []                # names ON — the lit figure speaks
 
 
-# --- The compact SIZE slider in the menu (ROADMAP 15h item 12a) -------------------
-
-
-def test_menu_size_slider_applies_only_on_release(app, tmp_path, monkeypatch):
-    """The Design ▸ Size submenu gains a compact slider (owner
-    2026-07-18): dragging it (valueChanged) must NOT re-render — only
-    sliderReleased applies, exactly like a preset pick."""
+def test_visible_top_level_toggles_all_on_off(app, tmp_path, monkeypatch):
+    """Visible top-level CLICK = all on / all off (owner 2026-07-17,
+    ROADMAP 15e; renamed from Elements, R5 MENU REWORK item E): the
+    ordinal check shows ONLY when every entry is on; clicking while
+    all-on turns them all off, otherwise turns them all on; turning ONE
+    off unchecks the ordinal. TEMP home."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from app.controller import AppController
 
     c = AppController(app)
     try:
-        assert c._settings.diameter == 720
-        assert c._size_slider.minimum() == defaults.SIZE_PRESETS[0]
-        assert c._size_slider.maximum() == defaults.SIZE_PRESETS[-1]
-        assert c._size_slider.singleStep() == defaults.MENU_SIZE_SLIDER_STEP
-        assert c._size_slider.value() == 720
-        # Dragging (valueChanged only) must not touch settings.
-        c._size_slider.setValue(900)
-        assert c._settings.diameter == 720
-        # sliderReleased.emit() simulates the mouse-up — NOW it applies.
-        c._size_slider.sliderReleased.emit()
-        assert c._settings.diameter == 900
-        # A preset pick from the dropdown keeps the compact slider synced.
-        c._set_diameter(360)
-        assert c._size_slider.value() == 360
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-# --- The both-unchecked bug (ROADMAP 15h item 8's surviving bug) ------------------
-
-
-def test_quick_jump_location_carries_the_pole_icons_and_greenwich_emoji(
-    app, tmp_path, monkeypatch
-):
-    """ROADMAP 15h item 10, owner reminder 2026-07-19; ICONS WIRED, TASK
-    4, MASON/ICONS round, owner icon list 2026-07-19 approvals: the
-    Quick Jump ▸ Location rows carry ❄ + the pole's own light/dark icon
-    (`assets/icons/light.png`/`dark.svg`, both shipped, so the ⚪/⚫
-    emoji fallback never triggers here), 🌐 on Greenwich. Today's actual
-    pole state is asserted via the same helpers the menu build uses
-    (Rule #5, no duplicated date math), so the test stays correct on
-    every run date."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from datetime import date
-
-    from app.controller import AppController
-    from config import defaults
-
-    c = AppController(app)
-    try:
-        jumps = next(
-            a for a in c._menu.actions() if "Quick Jump" in a.text()
-        ).menu()
-        location_menu = next(
-            a for a in jumps.actions() if "Location" in a.text()
-        ).menu()
-        by_text = {a.text(): a for a in location_menu.actions() if a.text()}
-        today = date.today()
-        assert f"{defaults.POLE_COLD_EMOJI} North Pole" in by_text
-        assert f"{defaults.POLE_COLD_EMOJI} South Pole" in by_text
-        north_action = by_text[f"{defaults.POLE_COLD_EMOJI} North Pole"]
-        south_action = by_text[f"{defaults.POLE_COLD_EMOJI} South Pole"]
-        assert not north_action.icon().isNull()
-        assert not south_action.icon().isNull()
-        assert north_action.property("icon_name") == defaults.pole_icon_name(
-            "north", today
-        )
-        assert south_action.property("icon_name") == defaults.pole_icon_name(
-            "south", today
-        )
-        greenwich_expected = f"{defaults.GREENWICH_EMOJI} Greenwich"
-        assert greenwich_expected in by_text
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_pole_icon_follows_the_traveled_date_not_today(app, tmp_path, monkeypatch):
-    """Fix round E (owner verdict 2026-07-19, slika 6 — REVOKES round
-    A's "never the simulation moment" choice); ICONS WIRED (TASK 4,
-    MASON/ICONS round): while Time Travel is running, the poles' icon
-    must follow the TRAVELED date, not the wall clock. 19 October at
-    the North Pole is past its light window (Mar 3 - Oct 9) — the
-    traveled date reads DARK (the "dark" icon) even if today's real
-    calendar date is inside it."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from datetime import datetime
-
-    import astral
-
-    from app.controller import AppController
-
-    c = AppController(app)
-    try:
-        traveled = datetime(2026, 10, 19, 12, 0, tzinfo=c._tz)
-        c._start_simulation(
-            traveled, astral.Observer(latitude=89.99, longitude=0.0)
-        )
-        jumps = next(
-            a for a in c._menu.actions() if "Quick Jump" in a.text()
-        ).menu()
-        location_menu = next(
-            a for a in jumps.actions() if "Location" in a.text()
-        ).menu()
-        location_menu.aboutToShow.emit()
-        assert c._north_pole_action.property("icon_name") == "dark"
-        assert not c._north_pole_action.icon().isNull()
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_quick_jump_eclipse_entries_wear_their_icon(app, tmp_path, monkeypatch):
-    """TASK 4 (MASON/ICONS round, owner icon list 2026-07-19 approvals):
-    the Quick Jump Sun/Moon submenus' ECLIPSE entries only — not the
-    plain sun/moon jump entries above them — carry the owner's eclipse
-    icon (`assets/icons/eclipse_sun.svg`/`eclipse_moon.png`, both
-    shipped)."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    c = AppController(app)
-    try:
-        jumps = next(
-            a for a in c._menu.actions() if "Quick Jump" in a.text()
-        ).menu()
-        sun_menu = next(
-            a for a in jumps.actions() if "Sun" in a.text()
-        ).menu()
-        moon_menu = next(
-            a for a in jumps.actions() if "Moon" in a.text()
-        ).menu()
-        sun_actions = {a.text(): a for a in sun_menu.actions() if a.text()}
-        moon_actions = {a.text(): a for a in moon_menu.actions() if a.text()}
-        eclipse_actions = [
-            a for text, a in sun_actions.items() if "Eclipse" in text
-        ] + [a for text, a in moon_actions.items() if "Eclipse" in text]
-        assert len(eclipse_actions) == 4
-        assert all(not a.icon().isNull() for a in eclipse_actions)
-        # The plain sun/moon jump entries keep NO icon — the wiring is
-        # scoped to the eclipse entries alone.
-        plain_actions = [
-            a for text, a in sun_actions.items()
-            if "Eclipse" not in text and "Sun" in text
-        ] + [
-            a for text, a in moon_actions.items()
-            if "Eclipse" not in text and "Moon" in text
-        ]
-        assert plain_actions
-        assert all(a.icon().isNull() for a in plain_actions)
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_exclusive_choice_group_click_on_checked_stays_checked(app, tmp_path, monkeypatch):
-    """The general `_add_choice_group` guard: clicking the ALREADY
-    checked member of an exclusive group (e.g. Umbra's contrast picks)
-    is a no-op that stays checked — Qt's own exclusive QActionGroup does
-    not by itself keep this promise for a user re-clicking the active
-    member."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    def action(menu, text):
-        return next(a for a in menu.actions() if a.text() == text)
-
-    c = AppController(app)
-    try:
-        design_menu = next(
-            a for a in c._menu.actions() if "Design" in a.text()
-        ).menu()
-        umbra_menu = action(design_menu, "Umbra").menu()
-        current = next(
-            a for a in umbra_menu.actions()
-            if a.text() == f"{c._settings.umbra_contrast.capitalize()} contrast"
-        )
-        assert current.isChecked()            # the default
-        current.trigger()                     # click the checked member
-        assert current.isChecked()            # stays checked — never empty
-        assert c._settings.umbra_contrast == "dark"
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_roster_pair_always_keeps_one_checked(app, tmp_path, monkeypatch):
-    """The exact owner complaint (ROADMAP 15h item 8, slika 2): the
-    Planetary/Pantheon roster pair could end up with BOTH unchecked.
-    ROOT CAUSE (reproduced before the fix): the pair's checked state is
-    computed once at menu-BUILD time from whichever theme was active
-    then — picking a metal (Gold/Bronze/…) for a pantheon-capable theme
-    activates it WITHOUT ever touching the roster, and nothing resynced
-    the pair afterward, so it kept showing neither option checked even
-    though a real roster IS in effect. Also pins: a later roster click,
-    then ANOTHER metal click, must not revert the display to a stale
-    build-time roster; and clicking the checked roster option again is
-    a no-op."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    def action(menu, text):
-        return next(a for a in menu.actions() if a.text() == text)
-
-    c = AppController(app)
-    try:
-        slot_menu = next(
-            a for a in c._menu.actions() if "1ˢᵗ Slot" in a.text()
-        ).menu()
-        weekday_menu = action(slot_menu, "Weekday").menu()
-        ancient = action(weekday_menu, "Ancient Gods").menu()
-        greek = action(ancient, "Greek gods").menu()
-        planetary = next(a for a in greek.actions() if a.text() == "Planetary")
-        pantheon = next(a for a in greek.actions() if a.text() == "Pantheon")
-        gold = next(a for a in greek.actions() if a.text() == "Gold")
-        silver = next(a for a in greek.actions() if a.text() == "Silver")
-        bronze = next(a for a in greek.actions() if a.text() == "Bronze")
-
-        # Greek starts INACTIVE (Planets is the default theme) — neither
-        # roster option is checked, which is correct (no theme is active
-        # to hold a roster yet).
-        assert not planetary.isChecked() and not pantheon.isChecked()
-
-        # A METAL pick alone activates Greek — the roster pair must show
-        # EXACTLY ONE checked (the default, planetary), never zero.
-        gold.trigger()
-        assert c._settings.weekday_theme == "greek"
-        assert planetary.isChecked() and not pantheon.isChecked()
-
-        # Switching metal again (still no roster touch) keeps it in sync.
-        silver.trigger()
-        assert planetary.isChecked() and not pantheon.isChecked()
-
-        # Picking Pantheon explicitly flips the pair the normal way.
-        pantheon.trigger()
-        assert pantheon.isChecked() and not planetary.isChecked()
-        assert c._settings.weekday_roster == "pantheon"
-
-        # Clicking the now-checked Pantheon again is a no-op (item 8).
-        pantheon.trigger()
-        assert pantheon.isChecked() and not planetary.isChecked()
-
-        # A METAL click AFTER the roster was changed must reflect the
-        # LIVE roster (pantheon), not the stale build-time snapshot
-        # (planetary) — this is the regression the first fix attempt hit.
-        bronze.trigger()
-        assert pantheon.isChecked() and not planetary.isChecked()
-        assert c._settings.weekday_roster == "pantheon"
-
-        # Switching back to Planetary works and stays a real toggle.
-        planetary.trigger()
-        assert planetary.isChecked() and not pantheon.isChecked()
-        planetary.trigger()               # no-op on the checked member
-        assert planetary.isChecked() and not pantheon.isChecked()
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_weekday_menu_planets_first_with_art_metals(app, tmp_path, monkeypatch):
-    """Planets menu placement + Art metals (owner 2026-07-18): the
-    Weekday submenu shows Planets FIRST, flat, above the kinship groups
-    — Arcana no longer carries it, so Planets appears exactly once —
-    and its Art option nests its OWN Gold/Bronze/Silver dropdown (no
-    Colored: the planets/art/ plates have no colored/ folder), wired
-    through the same on_theme(theme, metal) path as the METAL_THEMES
-    entries. Image and Sign stay plain options. TEMP home."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    def action(menu, text):
-        return next(a for a in menu.actions() if a.text() == text)
-
-    c = AppController(app)
-    try:
-        slot_menu = next(
-            a for a in c._menu.actions() if "1ˢᵗ Slot" in a.text()
-        ).menu()
-        weekday_menu = action(slot_menu, "Weekday").menu()
-        entries = [a.text() for a in weekday_menu.actions() if a.text()]
-        # Planets leads, flat — the kinship groups (and Names) follow.
-        assert entries[0] == "Planets"
-        assert entries.index("Arcana") > entries.index("Planets")
-        assert entries.count("Planets") == 1     # never inside Arcana too
-
-        planets_menu = action(weekday_menu, "Planets").menu()
-        assert [a.text() for a in planets_menu.actions()] == [
-            "Image", "Sign", "Art",
-        ]
-        art_menu = action(planets_menu, "Art").menu()
-        assert [a.text() for a in art_menu.actions()] == [
-            "Gold", "Bronze", "Silver",
-        ]
-
-        arcana_menu = action(weekday_menu, "Arcana").menu()
-        assert "Planets" not in [a.text() for a in arcana_menu.actions()]
-        assert [a.text() for a in arcana_menu.actions()] == [
-            "Alchemy", "Japanese week", "Cosmos",
-        ]
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_per_pointer_palette_labels_and_calendar_visibility(app, tmp_path, monkeypatch):
-    """The wheel-pair labels follow the pointer (owner 2026-07-17,
-    ROADMAP 11) and the pair is NEVER grayed — every pointer has two
-    distinct wheels (the Seasons gained the Elements). The Calendar
-    lighting entries are NON-VISIBLE off the Calendar, INLINE on it."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    controller = AppController(app)
-    try:
-        def labels():
-            return [a.text() for a in controller._menu_gates["palette_style"]]
-
-        def all_live():
-            return all(
-                a.isEnabled() for a in controller._menu_gates["palette_style"]
-            )
-
-        def lighting_visible():
-            return any(
-                a.isVisible()
-                for a in controller._menu_gates["calendar_lighting"]
-            )
-
-        controller._set_display_choice("pointer", "trio")
-        assert labels() == ["Court", "Family"] and all_live()
-        assert not lighting_visible()
-        # Naming refinements (owner 2026-07-17, ROADMAP 15e): the Seasons
-        # pair is Temperaments/Elements now, and Aurora has its OWN pair
-        # (Warm/Cool) instead of a second Paint/Light.
-        controller._set_display_choice("pointer", "cross")
-        assert labels() == ["Temperaments", "Elements"] and all_live()
-        controller._set_display_choice("pointer", "octa")
-        assert labels() == ["Walks of Life", "Ages"] and all_live()
-        controller._set_display_choice("pointer", "aurora")
-        assert labels() == ["Warm", "Cool"] and all_live()
-        controller._set_display_choice("pointer", "hexa")
-        assert labels() == ["Paint palette", "Light palette"] and all_live()
-        controller._set_display_choice("pointer", "calendar")
-        assert labels() == ["Zodiac", "Almanac"] and all_live()
-        assert lighting_visible()        # inline only on the Calendar
-    finally:
-        controller._profiling_timer.stop()
-        controller._tray.hide()
-
-
-def test_slot_ordinal_click_follows_the_enable_chain(app, tmp_path, monkeypatch):
-    """Top-level slot ordinal CLICK = its dropdown Enable (owner
-    2026-07-17, slika 3): clicking enables/disables the slot through the
-    same key, gated by the same 1 → 2 → 3 chain — a forbidden enable is a
-    no-op and the check restores. TEMP home."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    c = AppController(app)
-    try:
-        info_action = next(
-            a for a, k in c._slot_menu_checks if k == "show_octa_slot"
-        )
-        # Defaults: 1st on, 2nd & 3rd off.
-        assert c._settings.show_weekday
-        assert not c._settings.show_octa_slot
-        # The chain ALLOWS enabling the 2nd (1st is on), then the 3rd.
-        c._toggle_slot_ordinal("show_octa_slot", True)
-        assert c._settings.show_octa_slot and info_action.isChecked()
-        c._toggle_slot_ordinal("show_third_slot", True)
-        assert c._settings.show_third_slot
-        # Disabling the 1st is always allowed; the 2nd's ordinal check then
-        # restores to unchecked (its EFFECTIVE state is off).
-        c._toggle_slot_ordinal("show_weekday", False)
-        assert not c._settings.show_weekday
-        assert not info_action.isChecked()
-        # A FORBIDDEN enable is a no-op: with the 1st off, re-enabling the
-        # 2nd does nothing (same gate as its grayed dropdown Enable).
-        c._toggle_slot_ordinal("show_octa_slot", False)
-        assert not c._settings.show_octa_slot
-        c._toggle_slot_ordinal("show_octa_slot", True)
-        assert not c._settings.show_octa_slot          # forbidden — unchanged
-        assert not info_action.isChecked()
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_slot_ordinal_and_dropdown_enable_stay_in_sync(app, tmp_path, monkeypatch):
-    """Fix round A (owner verdict 2026-07-19, screenshots 2/3, repeat
-    complaint): clicking the ordinal to DISABLE a slot must update the
-    checkmark on the dropdown's own Enable action too, and vice versa —
-    the two are the SAME state (`_slot_enable_actions` mirrors
-    `_slot_menu_checks`, both resynced in `_refresh_menu_gating`)."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    c = AppController(app)
-    try:
-        ordinal_action = next(
-            a for a, k in c._slot_menu_checks if k == "show_weekday"
-        )
-        dropdown_action = next(
-            a for a, k in c._slot_enable_actions if k == "show_weekday"
-        )
-        assert ordinal_action.isChecked() and dropdown_action.isChecked()
-
-        # Ordinal click OFF -> dropdown Enable check goes false too.
-        c._toggle_slot_ordinal("show_weekday", False)
-        assert not ordinal_action.isChecked()
-        assert not dropdown_action.isChecked()
-
-        # Dropdown Enable click ON -> ordinal check goes true too.
-        dropdown_action.trigger()
-        assert c._settings.show_weekday
-        assert ordinal_action.isChecked()
-        assert dropdown_action.isChecked()
-    finally:
-        c._profiling_timer.stop()
-        c._tray.hide()
-
-
-def test_elements_top_level_toggles_all_on_off(app, tmp_path, monkeypatch):
-    """Elements top-level CLICK = all on / all off (owner 2026-07-17,
-    ROADMAP 15e): the ordinal check shows ONLY when every element is on;
-    clicking while all-on turns them all off, otherwise turns them all on;
-    turning ONE off unchecks the ordinal. TEMP home."""
-    monkeypatch.setenv("APPDATA", str(tmp_path))
-    from app.controller import AppController
-
-    c = AppController(app)
-    try:
-        keys = [k for _, k in c._element_toggles]
-        # Defaults: every element on → the ordinal is checked.
+        keys = [k for _, k in c._visible_toggles]
+        # Defaults: every entry on → the ordinal is checked.
         assert all(getattr(c._settings, k) for k in keys)
-        assert c._elements_menu_action.isChecked()
-        # Click Elements → all off, ordinal unchecks, children mirror off.
-        c._toggle_all_elements()
+        assert c._visible_menu_action.isChecked()
+        # Click Visible → all off, ordinal unchecks, children mirror off.
+        c._toggle_all_visible()
         assert not any(getattr(c._settings, k) for k in keys)
-        assert not c._elements_menu_action.isChecked()
-        assert all(not a.isChecked() for a, _ in c._element_toggles)
+        assert not c._visible_menu_action.isChecked()
+        assert all(not a.isChecked() for a, _ in c._visible_toggles)
         # Click again → all on.
-        c._toggle_all_elements()
+        c._toggle_all_visible()
         assert all(getattr(c._settings, k) for k in keys)
-        assert c._elements_menu_action.isChecked()
-        # Turning a SINGLE element off unchecks the ordinal.
-        c._set_element(keys[0], False)
-        assert not c._elements_menu_action.isChecked()
+        assert c._visible_menu_action.isChecked()
+        # Turning a SINGLE entry off unchecks the ordinal.
+        c._set_visible(keys[0], False)
+        assert not c._visible_menu_action.isChecked()
     finally:
         c._profiling_timer.stop()
         c._tray.hide()
@@ -1657,15 +1223,17 @@ def test_elements_top_level_toggles_all_on_off(app, tmp_path, monkeypatch):
 
 
 def test_show_action_visible_only_in_normal_z_mode(app, tmp_path, monkeypatch):
-    """The Show entry sits at the very top of the menu, HIDDEN (not
-    grayed) outside "normal" z-mode — meaningless in "bottom" (never
-    above anything) and "top" (already always above)."""
+    """The Show entry sits right below the TITLE row (owner
+    INSTRUCTION.txt item 2A, R5 MENU REWORK — the title heads the whole
+    menu now), HIDDEN (not grayed) outside "normal" z-mode —
+    meaningless in "bottom" (never above anything) and "top" (already
+    always above)."""
     monkeypatch.setenv("APPDATA", str(tmp_path))
     from app.controller import AppController
 
     c = AppController(app)
     try:
-        assert c._menu.actions()[0] is c._show_action   # the very top
+        assert c._menu.actions()[2] is c._show_action   # TITLE, separator, Show
         assert c._settings.z_mode == "bottom"           # default
         assert not c._show_action.isVisible()
         c._settings = dataclasses.replace(c._settings, z_mode="normal")

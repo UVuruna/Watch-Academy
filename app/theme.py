@@ -110,6 +110,33 @@ QComboBox QAbstractItemView {{
     outline: none;
 }}
 
+/* --- Tabs (the Slot Theme / Design mini windows, R5 MENU REWORK) ---
+   Qt's default tab bar is a flat gray row — replaced with rounded
+   pill tabs matching the QListWidget selection pill above, so a tab
+   switch reads as a real choice, not a filing-cabinet divider. --- */
+QTabWidget::pane {{
+    border: 1px solid {_C['border']};
+    border-radius: {_RADIUS_CARD}px;
+    background: {_C['surface_1']};
+    top: -1px;
+}}
+QTabBar::tab {{
+    background: {_C['surface_2']};
+    color: {_C['text_secondary']};
+    padding: 6px 14px;
+    margin: 2px;
+    border-radius: {_RADIUS_PILL}px;
+}}
+QTabBar::tab:hover {{
+    background: {_C['surface_3']};
+    color: {_C['text_primary']};
+}}
+QTabBar::tab:selected {{
+    background: {_C['accent']};
+    color: {_C['surface_0']};
+    font-weight: 600;
+}}
+
 /* --- Checkboxes --- */
 QCheckBox {{
     spacing: 8px;

@@ -67,6 +67,13 @@ class TrayController:
         self._menu = menu
         self._icon.setContextMenu(menu)
 
+    def set_tooltip(self, text: str) -> None:
+        """The tray icon HOVER tooltip (owner INSTRUCTION.txt item 2A,
+        R5 MENU REWORK): carries the watch's FULL name form — unlike
+        the menu's own TITLE row, which stays short (just the location)
+        until more than one watch exists."""
+        self._icon.setToolTip(text)
+
     def on_double_click(self, callback) -> None:
         """Wire `callback()` to a tray icon DOUBLE-CLICK (owner
         2026-07-18, ROADMAP 15h — the "Show" affordance's second

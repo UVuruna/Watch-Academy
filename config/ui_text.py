@@ -23,9 +23,23 @@ UI_STRINGS: tuple[str, ...] = (
     # Menu rework (owner 2026-07-13): the two slots at the top level,
     # the Weekday kinship groups.
     "Ancient Gods", "Society", "Arcana", "Image",
-    "Size", "Elements", "Legend", "Solar rotation",
+    "Size", "Elements", "Visible", "Legend", "Solar rotation",
     "Settings…", "Time Travel…", "Encyclopedia…", "Guide…",
     "Click-through", "Exit",
+    # R5 MENU REWORK (owner spec): the three mini windows replacing the
+    # deep Design/Slot/Weekday submenu chains, and the shared "Slot"
+    # picker labels.
+    "Design…", "Pointer Theme", "Pointer Theme…", "Slot Theme",
+    "Slot Theme…", "1st Slot", "2nd Slot", "3rd Slot",
+    "The Archetype mode is on — the diamonds carry its own figures.",
+    "The Pointer is hidden in Visible.",
+    "The 1st Slot is off — nothing wears this theme.",
+    "No Slot is visible.",
+    "This Slot is off — Ctrl+N cycles the visible Slots.",
+    # "Two metals" (TASK 3, MASON/ICONS round) never joined the corpus
+    # when the menu toggle was added — closed here alongside the Design
+    # window's own copy of it (R5 MENU REWORK, Rule #5, one table).
+    "Two metals",
     "Encyclopedia", "Astrology", "Chinese zodiac", "← Back",
     "Gods", "Zodiac", "Themes", "Creeds & Mysteries",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",

@@ -36,7 +36,31 @@ then auto-reset (prefilled with the configured location). Since
 Session 16 (owner 2026-07-17) the moment editor spans the whole Deep
 Time coverage INCLUDING BCE (spinbox + era combo over the 400-year
 proxy frame), with the dual-calendar header and the in-app precision
-tier lines. See [Time Travel](time_travel.md).
+tier lines. R5 MENU REWORK (item 3A): grows DOWN with its own Quick
+Jump rows, absorbing the old right-click menu's deep Quick Jump
+submenu chain whole. See [Time Travel](time_travel.md).
+
+### `weekday_theme_grid.py` — Weekday Theme Grid
+A reusable image+name gallery of the weekday body themes (Planets
+flat, then the kinship groups), shared by Pointer Theme and Slot
+Theme. See [Weekday Theme Grid](weekday_theme_grid.md).
+
+### `pointer_theme.py` — Pointer Theme
+R5 MENU REWORK mini window: picks the 1st Slot's own weekday-body
+theme — the old deeply-nested Weekday submenu, now an image+name
+gallery. See [Pointer Theme](pointer_theme.md).
+
+### `slot_theme.py` — Slot Theme
+R5 MENU REWORK mini window: three medal icons pick which of the
+1st/2nd/3rd Slots is being edited; tabs hold that slot's full option
+set (Weekday / Complications / Astrology / Ascendant / Chinese
+Zodiac). See [Slot Theme](slot_theme.md).
+
+### `design_window.py` — Design Window
+R5 MENU REWORK mini window: the old Design submenu's whole chain
+(Pointer, Ring, Umbra, Complications, Hands, Earth, Size) as one
+tabbed window, images where real preview art exists. See
+[Design Window](design_window.md).
 
 ### `settings_dialog.py` — Settings Dialog
 The M6 window: cascading location picker over the bundled city

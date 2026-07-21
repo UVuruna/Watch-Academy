@@ -19,20 +19,25 @@ calendar) via the ONE formatter.
 
 from datetime import datetime
 
-from PySide6.QtCore import Qt, QTime
+from PySide6.QtCore import Qt, QSize, QTime
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QComboBox,
     QDialog,
     QDoubleSpinBox,
     QFormLayout,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QScrollArea,
     QSpinBox,
     QTimeEdit,
+    QVBoxLayout,
+    QWidget,
 )
 
-from app.theme import apply_theme
+from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
 from config import constants, defaults
 from config.ui_text import ui
@@ -45,6 +50,11 @@ from core.deep_time import (
     format_year_line,
     month_length,
 )
+
+# The heavy monochrome arrow pair (owner rounds 2026-07-14/15, the SAME
+# glyphs the old Quick Jump submenu used — U+1F846/U+1F844; the emoji
+# arrows render as a blue badge in Windows menus, owner veto).
+_FORWARD, _BACKWARD = "\U0001F846", "\U0001F844"
 
 _MONTHS_SHORT = (
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -68,10 +78,24 @@ class TimeTravelDialog(QDialog):
         show_era_suffix: bool = False,
         third_era: str = "none",
         deep_pack: bool = False,
+        jump_callback=None,
+        jump_cities: tuple = (),
     ):
+        """`jump_callback(moment, cycles, latitude, longitude, kind,
+        city) -> (moment, cycles, latitude, longitude) | None` (item 3A,
+        R5 MENU REWORK): the pure computation behind every Quick Jump
+        row below — owned by the controller (it alone holds the season/
+        moon/deep-time repositories), called with THIS dialog's own
+        current fields and never the live simulation, so a chain of
+        jumps only ever edits the draft; OK still applies the final
+        choice transactionally. None (the default) hides the whole
+        Quick Jump section — every production caller supplies it; tests
+        that only exercise the moment editor may omit it."""
         super().__init__(parent)
         tr = lambda text: ui(overlay or {}, text)  # noqa: E731 — dialog chrome
         self._tr = tr
+        self._jump_callback = jump_callback
+        self._jump_cities = jump_cities
         # The ACTIVE year span (astronomical years): the bundled seasons
         # ∩ moon intersection, widened to the Deep Time pack span when
         # the pack is present. A target outside it is refused BEFORE
@@ -171,6 +195,14 @@ class TimeTravelDialog(QDialog):
         )
         self._coverage_warning.hide()
         layout.addRow(self._coverage_warning)
+        # TIME TRAVEL GROWS DOWN (item 3A, R5 MENU REWORK): every motion
+        # the old Quick Jump submenu chain held, now as ROWS right here
+        # — clicking a row/arrow edits THIS dialog's own moment/
+        # coordinates fields (never the live simulation), so OK still
+        # applies the final choice transactionally. None (tests that
+        # only exercise the moment editor) hides the section outright.
+        if self._jump_callback is not None:
+            layout.addRow(self._build_jump_section())
         # The shared vivid buttons (owner 2026-07-15: the stylized ones
         # we use), NOW standing on the LEFT — back to the present, the
         # simulation ends immediately.
@@ -199,6 +231,14 @@ class TimeTravelDialog(QDialog):
         self._era.currentIndexChanged.connect(self._on_era)
         apply_theme(self)
         self._refresh()
+        if self._jump_callback is not None:
+            self._refresh_pole_buttons()
+        # DESIGN #1 (root CLAUDE.md, R4 owner instruction batch
+        # 2026-07-20): the dialog grew a whole Quick Jump section below
+        # its original form fields — square (1:1) at 50% of the screen,
+        # the SAME opening size Settings/Guide use, keeps it a normal
+        # resizable window past this first paint.
+        size_to_screen(self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION)
 
     # --- The astronomical target ---------------------------------------------
 
@@ -341,3 +381,180 @@ class TimeTravelDialog(QDialog):
                 )
             self._tier_line.setText(tier)
         self._coverage_warning.hide()
+
+    # --- Quick Jump rows (item 3A, R5 MENU REWORK) ------------------------------
+
+    def _icon_or_emoji_label(self, icon_key: str | None, fallback_emoji: str) -> QLabel:
+        """The row's CENTER icon — the owner's file when it has landed,
+        the documented emoji fallback otherwise (Rule #1)."""
+        label = QLabel()
+        path = defaults.icon_path(icon_key) if icon_key is not None else None
+        if path is not None:
+            pixmap = QIcon(str(path)).pixmap(
+                QSize(defaults.TIME_TRAVEL_ROW_ICON_PX, defaults.TIME_TRAVEL_ROW_ICON_PX)
+            )
+            label.setPixmap(pixmap)
+        else:
+            label.setText(fallback_emoji)
+            label.setStyleSheet(f"font-size: {defaults.TIME_TRAVEL_ROW_ICON_PX}px;")
+        return label
+
+    def _turning_point_row(
+        self, kind: str, icon_key: str | None, fallback_emoji: str,
+        label_text: str, enabled: bool = True, disabled_tip: str = "",
+    ) -> QWidget:
+        """One "← [icon TEXT] →" row (owner spec, item 3A): the arrows
+        alone are clickable — right = the next turning point, left =
+        the previous — the center is a passive icon+label like the
+        pole/Greenwich rows' own text. `kind` is the JUMP STEM;
+        `_compute_jump` takes "next_"/"prev_" + it (`_UNIT_JUMPS`/
+        sun-moon/`_ECLIPSE_JUMPS` all already follow this shape)."""
+        row = QWidget()
+        row_layout = QHBoxLayout(row)
+        row_layout.setContentsMargins(4, 2, 4, 2)
+        left = QPushButton(_BACKWARD)
+        style_button(left, "neutral", small=True)
+        left.setFixedWidth(defaults.TIME_TRAVEL_ARROW_BUTTON_PX)
+        left.clicked.connect(lambda: self._on_jump(f"prev_{kind}"))
+        center = QHBoxLayout()
+        center.addWidget(self._icon_or_emoji_label(icon_key, fallback_emoji))
+        center.addWidget(QLabel(self._tr(label_text)))
+        right = QPushButton(_FORWARD)
+        style_button(right, "neutral", small=True)
+        right.setFixedWidth(defaults.TIME_TRAVEL_ARROW_BUTTON_PX)
+        right.clicked.connect(lambda: self._on_jump(f"next_{kind}"))
+        row_layout.addWidget(left)
+        row_layout.addStretch(1)
+        row_layout.addLayout(center)
+        row_layout.addStretch(1)
+        row_layout.addWidget(right)
+        if not enabled:
+            left.setEnabled(False)
+            right.setEnabled(False)
+            row.setToolTip(disabled_tip)
+        return row
+
+    def _place_button(
+        self, kind: str, icon_key: str | None, fallback_emoji: str,
+        label_text: str, city: dict | None = None,
+    ) -> QPushButton:
+        """One single-click place row (owner spec, item 3A): North/
+        South Pole, Greenwich, and every user-defined Quick Jump city —
+        these are not a next/previous PAIR, one click jumps there."""
+        button = QPushButton(f"  {label_text}")
+        path = defaults.icon_path(icon_key) if icon_key is not None else None
+        if path is not None:
+            button.setIcon(QIcon(str(path)))
+            button.setIconSize(
+                QSize(defaults.TIME_TRAVEL_ROW_ICON_PX, defaults.TIME_TRAVEL_ROW_ICON_PX)
+            )
+        else:
+            button.setText(f"{fallback_emoji}  {label_text}")
+        style_button(button, "neutral", small=True)
+        button.clicked.connect(lambda checked=False: self._on_jump(kind, city))
+        return button
+
+    def _build_jump_section(self) -> QGroupBox:
+        box = QGroupBox(self._tr("Quick Jump"))
+        box_layout = QVBoxLayout(box)
+        tip = self._tr("Needs the Deep Time data pack (full installation).")
+        box_layout.addWidget(
+            self._turning_point_row("sun", None, "☀️", "Sun")
+        )
+        box_layout.addWidget(self._turning_point_row(
+            "solar_eclipse", "eclipse_sun", "🌑",
+            f"{self._tr('Solar')} {self._tr('Eclipse')}",
+            enabled=self._deep_pack, disabled_tip=tip,
+        ))
+        box_layout.addWidget(
+            self._turning_point_row("moon", None, "🌙", "Moon")
+        )
+        box_layout.addWidget(self._turning_point_row(
+            "lunar_eclipse", "eclipse_moon", "🌘",
+            f"{self._tr('Lunar')} {self._tr('Eclipse')}",
+            enabled=self._deep_pack, disabled_tip=tip,
+        ))
+        for kind, emoji, label in (
+            ("day", "📅", "Day"), ("month", "📅", "Month"),
+            ("year", "📅", "Year"), ("century", "🏛", "Century"),
+            ("millennium", "🏛", "Millennium"),
+        ):
+            box_layout.addWidget(self._turning_point_row(kind, None, emoji, label))
+        self._north_pole_button = self._place_button(
+            "north_pole", "north_pole", defaults.POLE_COLD_EMOJI, ""
+        )
+        self._south_pole_button = self._place_button(
+            "south_pole", "south_pole", defaults.POLE_COLD_EMOJI, ""
+        )
+        box_layout.addWidget(self._north_pole_button)
+        box_layout.addWidget(self._south_pole_button)
+        box_layout.addWidget(self._place_button(
+            "greenwich", "compass", defaults.GREENWICH_EMOJI,
+            self._tr("Greenwich"),
+        ))
+        for city in self._jump_cities:
+            box_layout.addWidget(self._place_button(
+                "city", None, "📍", city["name"], city=dict(city),
+            ))
+        box_layout.addStretch(1)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(box)
+        return scroll
+
+    def _refresh_pole_buttons(self) -> None:
+        """The pole rows' text follows the DIALOG'S OWN displayed date
+        (never the live app) — the same light/dark seasonal split the
+        old Quick Jump submenu's `_refresh_pole_rows` kept lazily
+        current; here it just runs after every `_apply_moment` instead
+        of a menu's `aboutToShow`."""
+        today = self.moment().date()
+        for pole, button in (
+            ("north", self._north_pole_button),
+            ("south", self._south_pole_button),
+        ):
+            name = self._tr("North Pole" if pole == "north" else "South Pole")
+            suffix = defaults.pole_emoji(pole, today)
+            button.setText(f"  {defaults.POLE_COLD_EMOJI} {name} {suffix}")
+
+    def _on_jump(self, kind: str, city: dict | None = None) -> None:
+        """One Quick Jump row/arrow click (item 3A): chains from THIS
+        dialog's own current fields — `_jump_callback` returns None on
+        an edge clamp (a no-op, never a crash), matching the old menu's
+        own "already at the coverage edge" behavior."""
+        result = self._jump_callback(
+            self.moment(), self.cycles(), self.latitude(), self.longitude(),
+            kind, city,
+        )
+        if result is None:
+            return
+        moment, cycles, latitude, longitude = result
+        self._apply_moment(moment, cycles)
+        self._latitude.setValue(latitude)
+        self._longitude.setValue(longitude)
+
+    def _apply_moment(self, moment: datetime, cycles: int) -> None:
+        """Load `moment`/`cycles` into the moment-editor widgets —
+        every Quick Jump row's own landing point. Signals are blocked
+        while individual fields are set so a single row click repaints
+        the header/coverage lines exactly ONCE (`_refresh` below), not
+        once per widget touched."""
+        astro_year = moment.year - cycles * constants.GREGORIAN_CYCLE_YEARS
+        display_year, era_index = display_from_astro(astro_year)
+        self._era.blockSignals(True)
+        self._era.setCurrentIndex(era_index)
+        self._era.blockSignals(False)
+        self._configure_year_range(era_index)
+        self._year.blockSignals(True)
+        self._year.setValue(display_year)
+        self._year.blockSignals(False)
+        self._month.blockSignals(True)
+        self._month.setCurrentIndex(moment.month - 1)
+        self._month.blockSignals(False)
+        self._day.setMaximum(month_length(astro_year, moment.month))
+        self._day.blockSignals(True)
+        self._day.setValue(moment.day)
+        self._day.blockSignals(False)
+        self._time.setTime(QTime(moment.hour, moment.minute))
+        self._refresh()
+        self._refresh_pole_buttons()

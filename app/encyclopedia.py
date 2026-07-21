@@ -433,17 +433,10 @@ def _ninth_looks(theme: str, plate: Path) -> tuple | None:
     )
 
 
-def _theme_body_art(theme: str, body: str) -> Path:
-    """One theme's plate for one body (bronze / canon file)."""
-    if theme == "planets":
-        return (
-            defaults.WEEKDAY_ART_DIR / "planets" / "primary"
-            / f"{body}.png"
-        )
-    return (
-        defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
-        / f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
-    )
+# One theme's plate for one body (bronze / canon file) — the
+# resolution itself lives in config (Rule #5: `app.pointer_theme` and
+# `app.slot_theme` need the SAME preview art for their picker grids).
+_theme_body_art = defaults.weekday_theme_body_art
 
 
 def _theme_dual_art(theme: str, colored: bool = False) -> Path:

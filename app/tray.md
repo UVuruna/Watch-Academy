@@ -43,6 +43,11 @@ menu (Qt does not own them; the GC would destroy the menu mid-use).
 
 #### Methods
 - `show()` / `hide()`
+- `set_menu(menu)`: swaps the context menu (rebuilt after Settings)
+- `set_tooltip(text)` (R5 MENU REWORK, owner INSTRUCTION.txt item
+  2A): the hover tooltip — `app.controller.watch_title(settings,
+  full=True)`, the FULL multi-attribute name, unlike the menu's own
+  TITLE row which stays short until more than one watch exists
 - `notify(title, message)`: non-blocking critical balloon (mid-run
   settings-save failures)
 - `on_double_click(callback)` (owner 2026-07-18, ROADMAP 15h, Session

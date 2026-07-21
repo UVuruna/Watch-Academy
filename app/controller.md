@@ -12,14 +12,21 @@ fresh → rebuild the day context when `(local date, UTC offset)` changed
 ## Connections
 
 ### Uses
-- [Clock Widget](widget.md) — creates and positions the window
-- [Tray Controller](tray.md) — shows the tray icon
+- [Clock Widget](widget.md) — creates and positions the window; fires
+  `shortcut_triggered` (R5 MENU REWORK) for `_on_shortcut`
+- [Tray Controller](tray.md) — shows the tray icon; `set_tooltip` carries
+  the full `watch_title`
 - [Settings Store](settings_store.md) — load/recover/save
 - [Minute Scheduler](scheduler.md) — tick source
 - [Clock State](../core/clock_state.md) — day/tick builds
 - [Seasons](../data/seasons.md), [Moon Phases](../data/moon_phases.md) — anchors and windows
 - [Compositor](../render/compositor.md), [Assets](../render/assets.md) — rendering
-- [Config (folder)](../config/___config.md) — defaults (DEFAULT_CITY, DEFAULT_SKIN) and paths
+- [Design Window](design_window.md), [Pointer Theme](pointer_theme.md),
+  [Slot Theme](slot_theme.md) — the three R5 mini windows
+- [Time Travel](time_travel.md) — now hosts its own Quick Jump rows
+  (item 3A), fed by `_dialog_jump`/`_compute_jump`
+- [Config (folder)](../config/___config.md) — defaults (DEFAULT_CITY, DEFAULT_SKIN,
+  SHORTCUTS) and paths
 
 ### Used by
 - `main.py`
@@ -110,206 +117,90 @@ pattern) rather than guessed:
 - `_on_widget_moved()` / `_flush_position()`: debounced position
   persistence; a mid-run save failure surfaces as a tray error balloon
   (once per failure streak) instead of dying silently
-- `_build_menu()`: the shared tray/right-click menu (owner rework
-  2026-07-13), every level a `_StayOpenMenu` — CHECKABLE picks keep
-  the menu open for several settings in one visit; plain actions
-  close as usual (a rebuild while open closes and RETAINS the old
-  menu so Qt never deletes a visible popup). AT THE VERY TOP (owner
-  2026-07-18, ROADMAP 15h, Session 21-C): `self._show_action` — "👁️
-  Show", raising the dial on demand (`raise_and_focus`, via
-  `_show_if_normal_z_mode`), VISIBLE only while `z_mode == "normal"`
-  (hidden, not grayed, in "bottom"/"top" where it means nothing) —
-  `_refresh_menu_gating` keeps its visibility in sync with the live
-  z_mode. **TRAY-ONLY (owner correction, Session 21-D — "ako smo
-  kliknuli znači da ga vidim"):** the SAME shared `QMenu` pops from TWO
-  call sites — the tray's native popup
-  (`TrayController`/`QSystemTrayIcon.setContextMenu`) and the dial's own
-  right-click ([Clock Widget](widget.md)'s `contextMenuEvent`) — but
-  Show is meaningless on the second: you already see the dial, that is
-  how you right-clicked it. `ClockWidget` owns the visibility split
-  now: it holds the live `_show_action` reference (constructor param,
-  kept current via `set_show_action()` on every menu rebuild — the
-  controller calls it beside every `set_menu()`), and
-  `contextMenuEvent` hides the action right before its OWN `exec()`
-  call and restores it to the widget's own tracked `_z_mode` right
-  after (`exec()` blocks until the popup closes, so the hide/restore
-  wraps it exactly) — the tray's popup never runs this code at all, so
-  it always sees the `_refresh_menu_gating`-controlled state
-  undisturbed. Then the emoji-fronted top level:
-  🎨 Design (Pointer, Ring, Umbra, Complications — the subdial plate
-  style, Theme background / Classic black (owner A/B spec 2026-07-15)
-  — | Hands, Earth — with the label QUARTET Date / Weekday / Date &
-  Weekday / Full Date (owner 2026-07-18, ROADMAP 15h: four exclusive
-  toggles over the single `earth_label` enum via
-  `_set_earth_label`/`_sync_earth_label_toggles` — "Date & Weekday" is
-  the OLD combined "Full Date" meaning, renamed now that a true Full
-  Date exists — date over the YEAR; all four may be off) — | Size),
-  🥇 1ˢᵗ Slot,
-  🥈 2ⁿᵈ Slot, 🥉 3ʳᵈ Slot, 🧩 Elements |
-  📜 Legend, 🔆 Solar rotation, 🎭 Archetype,
-  🖱️ Click-through | ⚙️ Settings…,
-  🏛️ Encyclopedia…, 🔭 Observatory…, 📖 Guide…, 🕰️ Time Travel… | 🚪
-  Exit. The three
-  slot submenus are THE SAME SHAPE (`build_slot_menu` builds each):
-  a Weekday submenu that leads with Planets FIRST, flat (owner
-  2026-07-18, `WEEKDAY_MENU_TOP` — the default theme no longer hides
-  inside a group), nesting Image and Sign as plain options plus an Art
-  option that opens its OWN Gold/Bronze/Silver dropdown (`planets_art`
-  joined `METAL_THEMES`, but its per-theme override in
-  `constants.theme_metals()` drops Colored — the medallion source has
-  no colored/ folder; Sign stays plain, its glyph art is not
-  bronze-styled); below it the KINSHIP GROUPS (`WEEKDAY_MENU_GROUPS`:
-  Ancient Gods / Society — Professions, Creeds, Mysteries — /
-  Scripture / Animals / The Inner Wheel / Arcana — alchemy, japan,
-  cosmos now that Planets moved out). The metal-capable themes each
-  open a dropdown built from `constants.theme_metals(theme)` (Gold/
-  Bronze/Silver/Colored for the rest, Gold/Bronze/Silver only for
-  planets_art) whose pick activates theme AND metal, releasing
-  follow-the-ring; the pantheon themes carry a Planetary/Pantheon
-  roster pair in the same dropdown — below the metals on Greek/Norse,
-  the whole dropdown on Egyptian/Slavic — writing that slot's OWN
-  `*_roster` key, owner 2026-07-15: slot 1 Greek Planetary can sit
-  beside slot 2 Greek Pantheon). THE BOTH-UNCHECKED BUG (ROADMAP 15h
-  item 8's surviving bug, owner slika 2 2026-07-18 — "one must ALWAYS
-  hold"): its ROOT CAUSE was NOT Qt's own exclusive `QActionGroup`
-  (verified safe — clicking the sole checked member of a plain exclusive
-  group is already a no-op) but a STALE BUILD-TIME SNAPSHOT — a
-  metal-capable pantheon theme's Gold/Bronze/Silver/Colored picks
-  activate the theme WITHOUT ever touching the roster, and nothing
-  resynced the roster pair's checkmarks afterward, so a theme could
-  become active while its roster radios still showed the "not yet
-  active" both-unchecked state computed when the menu was built. FIX
-  (`add_theme_entry`'s `metal_pick`/`resync_roster` closures, per
-  pantheon-capable `METAL_THEMES` entry): a metal click also re-checks
-  the roster action matching the LIVE `getattr(self._settings,
-  roster_field)` (`roster_field` threaded from `build_slot_menu` down —
-  `weekday_roster`/`info_slot_roster`/`third_slot_roster` per slot), so
-  a later metal pick after an explicit roster change never reverts the
-  display to a stale roster either. DEFENSE IN DEPTH, applied
-  CENTRALLY: `_guard_exclusive_choice(action, apply)` wraps EVERY
-  exclusive-group action's `triggered` connection — in `_add_choice_group`
-  (Pointer/Ring/Umbra/Complications-style groups) AND in `slot_action`
-  (the weekday themes, the roster pairs, Complications, the astrology
-  families — every exclusive `QActionGroup` in the app menu routes
-  through one of these two) — so a click on the ALREADY-checked member
-  of any exclusive group is a guaranteed no-op (`action.setChecked(True)`,
-  `apply()` skipped) instead of relying on Qt's own behavior. Together:
-  the roster pair (and every other exclusive group) always keeps
-  exactly one member checked. Plus the
-  slot's OWN Names switch — the COMPLICATIONS submenu (Digital time /
-  Date / Day length / Seconds — the seated small seconds silences the
-  big hand and its Elements toggle), and the Astrology / Ascendant /
-  Chinese-zodiac families with their own STYLE dropdowns. Below a
-  separator each slot carries its ENABLE switch: slots enable
-  strictly 1 → 2 → 3 (`enable2`/`enable3` gates gray the jumps); the
-  Seasons three-slot case locks the 1st on the classic weekday unit
-  (`first_lock`). Each slot's top-level entry carries a CHECK MARK
-  beside its ordinal while the slot is enabled (owner 2026-07-15),
-  refreshed in place with the gating. CLICKING an ordinal now does
-  EXACTLY what its dropdown Enable does (owner 2026-07-17, slika 3,
-  `_toggle_slot_ordinal`): the same enable key gated by the same 1 → 2 → 3
-  chain — a forbidden enable is a no-op and the check restores; the
-  submenu still opens on hover/arrow (the ordinal is never grayed by the
-  chain, only by the Archetype override). **The two check marks stay in
-  sync (fix round A, owner verdict 2026-07-19):** the ordinal's own
-  check mark and its dropdown Enable action are TWO VIEWS of the same
-  enable state — `self._slot_enable_actions` (built alongside
-  `_slot_menu_checks`) resyncs the Enable checkbox in
-  `_refresh_menu_gating`, the SAME spot that already resyncs the
-  ordinal, both reading the effective enable-chain state (the
-  `_sync_earth_label_toggles` pattern: block signals, `setChecked`,
-  unblock, so the mirror never re-enters `_set_display_choice`) — a
-  click on either surface now updates both. Since the ROUNDEL round (owner
-  2026-07-14) TEXT is
-  real under EVERY pointer — text and the flat astrology art draw on
-  the watch-face subdial. Pointer, show_weekday and show_pointer
-  changes re-gray the gated entries IN PLACE (`_refresh_menu_gating`
-  over the `_menu_gates` buckets — owner 2026-07-13: those switches
-  must not close the open menu; no rebuild). The classic weekday unit
-  wears the theme AND roster of the slot that DRIVES it
-  (`_classic_slot_theme` + `_themed_weekday_set` /
-  `_pantheon_weekday_set`, owner 2026-07-15): on the Seasons/Compass
-  with two slots where only the 2nd is weekday, that slot rides the
-  rotation in ITS OWN theme. The pantheon set resolves every seat
-  through `defaults.pantheon_seat` — the safety law: the first
-  EXISTING candidate plate wins with the pantheon identity (name +
-  article), a seat whose art has not landed keeps the PLANETARY
-  bundle whole, and a missing pantheon dual pulls the WHOLE Sunday
-  pair (plate, names, face texts) back to planetary. Theme ROTATION
-  cycles inside a kinship group picked in Settings
-  (`rotation_themes`).
-  Then Ring (DOMY/Morph/Omega/Templar/Mason presets, renamed from
-  MORPH/NUMBERS/MASON G (TASK 2, MASON/ICONS round, owner verdicts
-  2026-07-19, third batch) + the Gold/Silver/Bronze letter-finish
-  group + a "Two metals" toggle visible only for the three presets
-  eligible for the 3-3 split — Mason/Omega/Templar, any card carrying
-  its own `triangle` override (TASK 3), `_ring_two_metals`; the tint
-  color picker lives in Settings), Pointer
-  (three groups: Trinity/Seasons/Prism/Compass/Aurora/Calendar variant —
-  the owner's display names for trio/cross/hexa/octa/aurora/calendar;
-  Aurora and Calendar have no arm count, and Aurora forces solar
-  rotation (its toggle grays out) — the Paint/Light palette group, and
-  the Calendar lighting group (Hour/Year)) and Umbra
-  (two groups: Fine/Coarse/Gradient form + Full/Half/Light/Dark
-  contrast); the Paint/Light group is GRAYED in place only while the
-  SEASONS drive the pointer now (owner 2026-07-16, revised the same
-  day with the CANON Family wheel: the Trinity carries TWO wheels —
-  Court paint / Family light, `PALETTE_PRESETS[("trio", "light")]` —
-  so the pair is LIVE there; `_menu_gates["palette_style"]`,
-  `_add_choice_group` returns its actions so `_refresh_menu_gating`
-  re-grays them in place). On the
-  Calendar pointer Paint/Light instead PICK THE WHEEL — paint = Zodiac,
-  light = Almanac (the labels stay, the equivalence is documented) — so
-  the group stays live there; the Calendar lighting group is grayed off
-  the Calendar pointer (`_menu_gates["calendar_lighting"]`). Then
-  Size — the preset list (360…1440) PLUS a COMPACT SLIDER (owner
-  ROADMAP 15h item 12a, 2026-07-18): a `QWidgetAction` hosting a plain
-  `QSlider` (`self._size_slider`, range 360–1440, `singleStep`
-  `defaults.MENU_SIZE_SLIDER_STEP`, width
-  `defaults.MENU_SIZE_SLIDER_WIDTH_PX` — coarse and narrow on purpose,
-  fine tuning stays in Settings) that applies ONLY on `sliderReleased`,
-  never mid-drag ("da ne radim render na svakih ms") — dragging
-  (`valueChanged`) only updates its own live label. `_set_diameter()`
-  keeps the slider synced when a PRESET is picked instead, so the two
-  controls never show conflicting values.
-  Elements (the FINAL.txt #5 on/off switches, via the shared
-  `_add_toggle()` helper: Pointer, Colorful — off draws the day/twilight
-  arcs as plain white transparency — Earth, Moon and Seconds, which also
-  switches the tick cadence through `MinuteScheduler.set_per_second`).
-  CLICKING the Elements top-level entry flips them ALL at once (owner
-  2026-07-17, ROADMAP 15e, `_toggle_all_elements`): the ordinal check
-  shows ONLY when every element is on; a click while all-on turns them all
-  off, otherwise all on (`_refresh_elements_check` keeps the ordinal in
-  sync as single elements toggle via `_set_element`). Then the Legend
-  toggle (off = no
-  hovers at all; with click-through the dial has zero interaction),
-  the Solar rotation toggle (off = upright Star/Aura/Umbra), the
-  ARCHETYPE toggle (owner sealed package 2026-07-16): 🎭
-  Archetype — the stay-open checkable that turns the mode on (the
-  render-level override; the slot settings stay untouched). The
-  "Archetype names" menu twin that 21-B added here (writing the shared
-  `show_weekday_names` key) is GONE (owner 2026-07-18, Session 21-C:
-  "nemoj ispod nego u Settings — ON/OFF") — the figures' names are now
-  `archetype_names`, an INDEPENDENT setting with its own Settings ▸
-  Display checkbox; `show_weekday_names` dropped out of `_set_display_
-  choice`'s re-gating list along with the twin (nothing else needed
-  resyncing against it). The Earth
-  label QUARTET (Date / Weekday / Date & Weekday / Full Date) lives in
-  Design ▸ Earth as a GENERAL, four-way EXCLUSIVE option (the single
-  `earth_label` enum, owner 2026-07-17 slika 10 + 2026-07-18 ROADMAP
-  15h — works in either mode, gated by the dial size;
-  `_set_earth_label`/`_sync_earth_label_toggles` keep exactly one
-  member checked, or none).
-  `_refresh_menu_gating`
-  grays the Archetype toggle
-  where no archetype exists (Aurora, Calendar, Pointer element off)
-  and, WHILE THE MODE IS ON, grays the three slot submenus and their
-  enables IN PLACE and releases the big-seconds gate (a seated
-  small-seconds slot cannot silence the hidden big hand); the
-  gating call now also closes `_build_menu` itself, so a fresh menu
-  and an in-place refresh share the ONE implementation. Then Time
-  Travel…, Click-through toggle (turn back off via the TRAY — the
-  dial itself no longer takes clicks), Exit
+- `_build_menu()`: the shared tray/right-click menu, every level a
+  `_StayOpenMenu` — CHECKABLE picks keep the menu open for several
+  settings in one visit; plain actions close as usual (a rebuild while
+  open closes and RETAINS the old menu so Qt never deletes a visible
+  popup). **R5 MENU REWORK (owner spec 2026-07-20,
+  `UV/DESIGN/RIGHT CLICK MENU.txt` — the exact "4-5 branching levels
+  stack one over another in a screen corner" complaint,
+  `UV/DESIGN/Meni One over Another.png`):** the menu is FLAT now.
+  Top-to-bottom: the TITLE row (a `QWidgetAction`-hosted `QLabel`,
+  `watch_title(settings, full=False)` — a single watch shows just its
+  location; the FULL multi-attribute name backs the tray hover tooltip
+  via `_refresh_watch_title`, called from `_install_skin`); 👁️ Show
+  (owner 2026-07-18, ROADMAP 15h, Session 21-C — visible only in
+  `z_mode == "normal"`, TRAY-ONLY per Session 21-D, see below); 🎨
+  Design…, ✨ Pointer Theme…, 🥇 Slot Theme… — ONE flat entry each,
+  opening its own mini WINDOW instead of the old deep submenu chains
+  (Rule #6, no both-paths) — see [Design Window](design_window.md),
+  [Pointer Theme](pointer_theme.md), [Slot Theme](slot_theme.md) for
+  what each absorbed and why each is non-modal + LIVE-APPLY; 🧩
+  Visible (renamed from Elements, item 3E — STAYS a dropdown: Pointer,
+  Colorful, Earth, Moon, Seconds, `_set_visible`/`_toggle_all_visible`/
+  `_refresh_visible_check`, unchanged in shape from the old Elements
+  mechanic beyond the rename); 📜 Legend, 🔆 Solar rotation, 🎭
+  Archetype, 🖱️ Click-through; ⚙️ Settings…, 🏛️ Encyclopedia…, 🔭
+  Observatory…, 📖 Guide…, 🕰️ Time Travel… (now GROWN DOWN with its
+  own Quick Jump rows — see below); 📊 Report (hidden), 🚪 Exit. The
+  QUICK JUMP submenu (the OTHER half of the "4-5 levels" complaint) is
+  GONE — absorbed into the Time Travel dialog itself (item 3A).
+  **TRAY-ONLY Show (owner correction, Session 21-D — "ako smo kliknuli
+  znači da ga vidim"):** the SAME shared `QMenu` pops from TWO call
+  sites — the tray's native popup
+  (`TrayController`/`QSystemTrayIcon.setContextMenu`) and the dial's
+  own right-click ([Clock Widget](widget.md)'s `contextMenuEvent`) —
+  but Show is meaningless on the second: you already see the dial,
+  that is how you right-clicked it. `ClockWidget` owns the visibility
+  split (constructor param `_show_action`, kept current via
+  `set_show_action()` on every menu rebuild), and `contextMenuEvent`
+  hides the action right before its OWN `exec()` and restores it
+  after; the tray's popup never runs this code, so it always sees the
+  `_refresh_menu_gating`-controlled state undisturbed.
+- `watch_title(settings, full=False)` (module-level, R5 MENU REWORK
+  item 2A): the watch's own display NAME — `full=False` (the menu
+  TITLE row) is just `settings.city_name`; `full=True` (the tray hover
+  tooltip, `_refresh_watch_title`) is
+  f"{location}-{ring_finish} {ring}-{palette label} {pointer}", e.g.
+  "Belgrade-Gold DOMY-Family Trinity" — UNTRANSLATED on purpose (a
+  NAME, not chrome, the same treatment `POINTER_DISPLAY_NAMES` and a
+  ring preset's own name already get). Kept as ONE function so ADD
+  WATCH (the next round, multi-watch names) only has to loop it.
+- `_on_shortcut(action_id)` (R5 MENU REWORK item 2, `defaults.
+  SHORTCUTS`): dispatches one keyboard shortcut, fired by the focused
+  [Clock Widget](widget.md)'s `keyPressEvent` →
+  `shortcut_triggered` signal (every combo needs the dial to hold
+  keyboard focus — no new global hook this round beyond the existing
+  SPACE hook). `_cycle_ring`/`_cycle_weekday_theme` (Ctrl+R/Ctrl+W)
+  walk `sorted(ring_presets(...))`/`_WEEKDAY_THEME_ORDER` and delegate
+  to `_set_ring`/`_set_weekday_theme`, which already refresh any open
+  mini window through `_install_skin`. `_cycle_slots` (Ctrl+N) walks
+  the 1 → 2 → 3 chain directly, 0→1→2→3→0 — the SAME chain the Slot
+  Theme window's medals respect, and the bootstrap out of "no slot
+  visible" (Slot Theme's own gray condition). `_toggle_archetype_
+  shortcut` (Ctrl+A) mirrors the menu's own Archetype toggle
+  (including its checked-state QAction, bypassed by the shortcut
+  path) — a no-op where the mode is unavailable. The five dialog-
+  opener actions (Ctrl+E/G/,/O/T) and `return_to_now` (Ctrl+Home) call
+  the existing `_open_*`/`_end_simulation` methods directly. A z-mode
+  shortcut was considered and DROPPED (Ctrl+Z's pre-existing "Undo"
+  expectation, which this app has nothing to honor).
+- `_open_design()` / `_open_pointer_theme()` / `_open_slot_theme()`:
+  open (or raise the live) [Design Window](design_window.md) /
+  [Pointer Theme](pointer_theme.md) / [Slot Theme](slot_theme.md) — the
+  SAME non-modal, one-live-instance shape ITEM 1's trio uses, but
+  LIVE-APPLY (see each module's own docstring for why — every option
+  they absorbed already applied on click in the old menu chain).
+  `_design_setters()`/`_slot_descriptors()` build the callable bundles
+  each window's picks call THROUGH (Rule #5 — the SAME `_set_*`
+  methods the old menu chains used), each wrapped so a pick both
+  applies and re-supplies the open window with fresh state.
+  `_refresh_pointer_theme_gate()`/`_refresh_slot_theme_gate()` (called
+  from `_refresh_menu_gating`) gray the top-level entry AND push a
+  live gate into an already-open window: Pointer Theme grays on
+  Archetype-on, the Pointer element hidden, or the 1st Slot off
+  (agent interpretation, flagged in pointer_theme.md); Slot Theme
+  grays on Archetype-on or no Slot visible at all.
 - `_set_ring()` / `_set_ring_two_metals()` / `_set_display_choice(key,
   value)`: rebuild via the module-level `build_skin(settings)` —
   DEFAULT_SKIN + the chosen RING PRESET (DOMY/Morph/Omega/Templar/Mason
@@ -345,11 +236,22 @@ pattern) rather than guessed:
   `stay_on_top=(z_mode == "top")` so only THIS z-mode flips the flag —
   no `native.assert_topmost` call needed, `WindowStaysOnTopHint` alone
   is what already clears the dial for the other three dialogs. The
-  wheel-pair labels are per pointer
-  (`_palette_labels`, owner 2026-07-17 ROADMAP 15e: Court/Family,
-  Temperaments/Elements, Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac,
-  else Paint/Light) and the pair is never grayed; the Calendar lighting
-  entries are non-visible off the Calendar
+  wheel-pair labels are per pointer (`constants.POINTER_PALETTE_LABELS`,
+  owner 2026-07-17 ROADMAP 15e: Court/Family, Temperaments/Elements,
+  Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac, else Paint/Light —
+  R5 MENU REWORK moved the picker itself into the
+  [Design Window](design_window.md)'s Pointer tab, which reads this
+  SAME raw-English table directly, translated at build time; `watch_
+  title` reads it too, UNTRANSLATED — Rule #5, one source) and the
+  pair is never grayed; the Calendar lighting row is visible only on
+  the Calendar pointer.
+  `_install_skin()` ALSO refreshes the TITLE row/tray tooltip
+  (`_refresh_watch_title`) and any OPEN Design/Pointer Theme/Slot Theme
+  window in place (`_refresh_open_mini_windows`, R5 MENU REWORK) — the
+  ONE choke point every ring/pointer/palette/diameter change already
+  runs through, so a change made through ANY path (a shortcut, a pick
+  inside a DIFFERENT mini window) never leaves another open window
+  stale.
 - `_open_settings()`: the M6 dialog — location (new observer/timezone →
   full day-context rebuild), opacity and palette results applied by
   reinstalling the PRISTINE pack (so cleared overrides really clear)
@@ -361,65 +263,39 @@ pattern) rather than guessed:
   by asking the compositor about the cursor position a few times a second
 - `_on_wake()`: resume-from-sleep / clock change → immediate full refresh
   (wired to the native PowerEventFilter)
-- `_open_time_travel()` / `_quick_jump()` / `_end_simulation()`:
-  frozen (moment, observer) rendered instead of the present for
+- `_open_time_travel()` / `_end_simulation()`: frozen (moment,
+  observer) rendered instead of the present for
   `TIME_TRAVEL_DURATION_S`, then the tick flow snaps back. Deep travel
   (Session 16) carries the moment in the 400-year PROXY frame with
   `_sim_cycles` beside it; `_on_tick` asks the repositories for the
   REAL astronomical year, stamps `deep_cycles` on the built context
   and renames the Chinese year from the real year (a 400-year shift
-  moves the sexagenary cycle by 40). The QUICK JUMP submenu (owner
-  2026-07-14; Session 16 rework per slika 12) leads with NOW, then:
-  **🌞 Sun** (next/prev turning point + next/prev SOLAR eclipse — 🌑
-  stand-in icon), **🌙 Moon** (next/prev phase + next/prev LUNAR
-  eclipse — 🌘), **📅 Year · Month · Day** (six unit jumps), **🏛
-  Century · Millennium** (four — 🏛 the agent's pick from the owner's
-  "🏛 or ⏳"), **📍 Location** (poles, Greenwich + the user's
-  `jump_cities` from Settings — a place jump moves the OBSERVER, the
-  moment stays). **The pole/Greenwich rows** (ROADMAP 15h item 10,
-  owner reminder 2026-07-19; REVOKED and REWORKED fix round E,
-  2026-07-19, slika 6; ICONS WIRED, TASK 4, MASON/ICONS round, owner
-  icon list 2026-07-19 approvals): ❄ on the LEFT of both poles, then
-  EITHER an icon or an emoji on the RIGHT — the owner's own light/dark
-  icons (`assets/icons/light.png`/`dark.svg`, `defaults.ICON_FILES`)
-  now REPLACE the interim ⚪/⚫ pair outright (the earlier 🔆/🌑 had
-  violated the owner's standing "no sun/moon emojis" law); the ⚪/⚫
-  emoji stays the documented Rule #1 FALLBACK for a partial install
-  still missing an icon file (`_pole_row_text_and_icon` picks text-only
-  or icon-only, never both; `_apply_pole_row` applies either to the
-  QAction and stamps a plain `icon_name` property so tests can confirm
-  which without depending on QIcon equality). Light/dark is a simple
-  date-window check (`defaults.pole_icon_name`/`pole_emoji`/
-  `POLE_LIGHT_WINDOW`, the ±6°
-  declination approximation: north Mar 3 – Oct 9, south Sep 7 – Apr 5
-  wrapping the year boundary), never an astronomy call. **The date
-  itself is now the DISPLAYED moment** (`_effective_travel_date`): the
-  Time Travel traveled date while a simulation runs, else today's wall
-  clock — round A's "never the simulation moment" choice is REVOKED
-  (owner: a pole's glyph must follow what the dial actually shows).
-  Greenwich carries 🌐 (sealed owner pick, `defaults.GREENWICH_EMOJI`,
-  untouched — no light/dark or eclipse state to iconify there).
-  Because the Quick Jump menu is only rebuilt wholesale a few times a
-  session but the traveled date can change many times via chained Quick
-  Jumps, the Location submenu's `aboutToShow` calls
-  `_refresh_pole_rows` to recompute both rows lazily
-  right before it opens — the menu-rebuild cadence alone is too coarse
-  for a value that can now change mid-session. **The Sun/Moon
-  submenus' own eclipse entries** (TASK 4) wear the owner's eclipse
-  icons (`assets/icons/eclipse_sun.svg`/`eclipse_moon.png`) — wired onto
-  those four entries ONLY, never the plain sun/moon jump entries above
-  them (`_ui_icon`, graceful-absent). Eclipse entries need the pack and GRAY without it
-  (tooltip names the full installation, independent of their own icon,
-  which shows either way); eclipse picks land on the
-  catalog instant via `julian_day_of` next/prev queries; unit jumps
-  are calendar arithmetic on the real astronomical date
-  (`shift_calendar` — Feb 29 clamps, era edges are plain arithmetic);
-  event instants from differently-canonicalized years are REBASED into
-  the sim frame before comparing (whole Gregorian cycles — exact).
-  Jumps CHAIN off the running simulation, every jump entry keeps the
-  menu OPEN (`stay_open`), all jumps clamp to the active coverage (an
-  edge step is a no-op), and the dialog seeds from the simulation; the
-  dialog's blue Now button ends the simulation through `RETURN_TO_NOW`
+  moves the sexagenary cycle by 40). **R5 MENU REWORK item 3A
+  RETIRED the old Quick Jump SUBMENU** (owner 2026-07-14; Session 16
+  rework per slika 12; the 4-5-level chain
+  `UV/DESIGN/Meni One over Another.png` complained about) — every
+  motion it held (Sun/Moon turning points + their eclipses, Day/Month/
+  Year/Century/Millennium, North/South Pole, Greenwich, the user's
+  `jump_cities`) is now a ROW inside the Time Travel dialog itself, see
+  [Time Travel](time_travel.md#quick-jump-rows-item-3a) for the row
+  shapes and icons.
+- `_compute_jump(base_moment, base_observer, base_cycles, kind, city)`:
+  the PURE computation EXTRACTED from the old immediate-jump
+  `_quick_jump` (R5 MENU REWORK) — returns the landed `(moment,
+  observer, cycles)` or `None` on an edge clamp; every rule from the
+  old submenu survives verbatim (places are REAL coordinates with
+  their REAL clocks, deep-travel event instants are REBASED into the
+  caller's frame via `julian_day_of` before comparing, unit jumps are
+  calendar arithmetic via `shift_calendar`). Nothing calls it to
+  START a live simulation any more — `_dialog_jump` is its only
+  caller now.
+- `_dialog_jump(moment, cycles, latitude, longitude, kind, city)`: the
+  Time Travel window's own Quick Jump row callback (item 3A) — wraps
+  `_compute_jump` around the DIALOG'S current fields (never the live
+  simulation) and hands the landed state back for the dialog to apply
+  to ITS OWN widgets; OK still applies the final choice
+  transactionally. Wired into `TimeTravelDialog(jump_callback=...)` in
+  `_open_time_travel`.
 - `_bundled_coverage()` / `_travel_coverage()`: the minute-exact core
   tier (the INTERSECTION of the two bundled databases' `coverage()`)
   and the ACTIVE span — the core widened to the Deep Time pack's own

@@ -380,7 +380,10 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   [UI Style](ui_style.md)'s own gradient pills; the round R3 finish
   switcher uses that module's `style_finish_frame` border-only frames)
 - [Config (folder)](../config/___config.md) — art directories, accent
-  tables
+  tables; `defaults.weekday_theme_body_art` (R5 MENU REWORK — moved
+  here FROM this module's own `_theme_body_art`, which is now a plain
+  alias, since [Pointer Theme](pointer_theme.md)/[Slot Theme](slot_theme.md)
+  need the SAME per-theme preview art for their picker grids, Rule #5)
 
 ### Used by
 - [App Controller](../app/controller.md) — opens it from the menu
