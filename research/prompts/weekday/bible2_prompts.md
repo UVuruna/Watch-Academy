@@ -42,7 +42,7 @@ tracery/oculus, the same way the base set cross-references
 | Jacob (Wednesday) | `assets/weeks/faith/bible/secondary/jacob.png` |
 | Noah (Thursday) | `assets/weeks/faith/bible/secondary/noah.png` |
 | Ruth (Friday, primary) | `assets/weeks/faith/bible/secondary/ruth.png` |
-| Esther (Friday, alternative) | `assets/weeks/faith/bible/secondary/esther_alt.png` |
+| Esther (Friday, alternative) | `assets/weeks/faith/bible/secondary/esther.png` |
 | Job (Saturday) | `assets/weeks/faith/bible/secondary/job.png` |
 
 ### Sunday, ruler face — Abraham (`assets/weeks/faith/bible/secondary/abraham.png`)
@@ -143,7 +143,7 @@ owner awareness only; roster left unchanged.
 Circular stained-glass rose-window medallion, backlit by warm crimson-rose golden-hour light through hand-blown glass, lead-came outlines, jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same trefoil tracery ring and Eye-of-Providence oculus as abraham.png. Center: Ruth gleaning barley at the edge of Boaz's harvest field, an armful of golden wheat gathered against her, her gaze warm and steady, Naomi's small distant silhouette visible at the field's far edge — "where you go I will go" rendered as quiet devotion rather than romance, the field bathed in low rose-gold evening light. Border: dark lead-came trefoil tracery, four small jewel-roundels bearing a wheat-sheaf-and-sandal emblem (Ruth 4:7's kinsman-redeemer token), and the golden Eye-of-Providence oculus at the top, identical in placement to the rest of the set. Colors: deep rose-gold dominant, warm wheat-amber, soft harvest green, pearl-white accents.
 ```
 
-### Friday, alternative — Esther (`assets/weeks/faith/bible/secondary/esther_alt.png`)
+### Friday, alternative — Esther (`assets/weeks/faith/bible/secondary/esther.png`)
 
 The queen before the throne, scepter extended — a courage/intercession
 reading rather than a romance reading. **Note:** this alternative also
@@ -206,7 +206,7 @@ Per `ROSTER.md` (last generated 2026-07-15):
 
 - **Seated seven + Sunday dual** — all exist (✔ Gemini): `assets/weeks/faith/bible/secondary/abraham.png`,
   `assets/weeks/faith/bible/secondary/jonah.png`, `assets/weeks/faith/bible/secondary/samson.png`, `assets/weeks/faith/bible/secondary/jacob.png`, `assets/weeks/faith/bible/secondary/noah.png`, `assets/weeks/faith/bible/secondary/ruth.png`,
-  `assets/weeks/faith/bible/secondary/job.png`, `assets/weeks/faith/bible/secondary/isaac.png`. (`assets/weeks/faith/bible/secondary/esther_alt.png` is the recorded
+  `assets/weeks/faith/bible/secondary/job.png`, `assets/weeks/faith/bible/secondary/isaac.png`. (`assets/weeks/faith/bible/secondary/esther.png` is the recorded
   Friday alternative, not the seated pick — out of scope here.)
 - **Ninth — Melchizedek:** relocated here from the base Bible theme;
   never generated anywhere, before or after the move (— Gemini, —
