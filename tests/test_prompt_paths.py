@@ -104,6 +104,32 @@ _DATA_DRIVEN_ROOTS = (
     "weeks",
     "calendars/zodiac",
     "calendars/chinese",
+    # RESTRUCTURE Phase 3 (owner-sealed 2026-07-22): the four NEW
+    # Dozens of the Calendars category — Emotions (System B), the
+    # Virtue Wheel's two registers (Virtues light + Vices paint,
+    # System B), Olympians and Apostles (System A, six pairs each).
+    # Their per-figure filenames will be enumerated in a
+    # `config/taxonomy.py` roster (the RESTRUCTURE taxonomy module),
+    # exactly like the existing `calendars/zodiac`/`chinese`/
+    # `slavic_months` families above — none wired yet (Phase 3 is
+    # content-only), so only the FAMILY root is checkable here; per-name
+    # completeness is the roster's/COVERAGE.md's job. Full sheets:
+    # `research/prompts/calendars/{emotions,virtue_wheel,olympians,
+    # apostles}_prompts.md`.
+    "calendars/emotions",
+    "calendars/virtues",
+    "calendars/vices",
+    "calendars/olympians",
+    "calendars/apostles",
+    # RESTRUCTURE Phase 3: the ABSTRACT trinity/duality art — the Trio's
+    # stacked readings (Time, Callings, Theological, Dialectic) and the
+    # two great dualities (Good/Evil, Self/Others), each concept a
+    # lancet + a 1:1 circle companion. New archetype art whose figure
+    # tables land in config with the taxonomy round; unwired in Phase 3,
+    # so checked only to the family root like the Dozens above. Full
+    # sheets: `research/prompts/archetype/{triads,dualities}_prompts.md`.
+    "archetypes/triads",
+    "archetypes/dualities",
     "instrument/guide",
     # THE SLAVIC MONTHS (R7b round, owner-sealed 2026-07-21): every
     # per-month filename is enumerated in `config.defaults.
