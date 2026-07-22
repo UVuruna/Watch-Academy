@@ -177,6 +177,27 @@ addendum mid-round, 2026-07-22)
   its one title plate is cross-referenced into
   `titles/theme_title_prompts.md`
 
+### `calendars/` (RESTRUCTURE Phase 3, owner-sealed 2026-07-22)
+The four NEW Dozens that ride the Calendar pointer (the two Dozen
+systems sealed in [The DOMY Canon](../../CANON.md), §The Two Dozen
+Systems). Round calendar-mount medallions, the same night-window glass
+as `months/`; NOT wired in config yet (content-only). Full ledger:
+[Prompt Coverage](COVERAGE.md), §The Four Dozens.
+- `emotions_prompts.md` — the Dozen of the Heart (System B): twelve
+  emotions on their sealed hours (Love crown, Hatred root), the six
+  prism-seat emotions keeping their prism hues, six opposition-axis
+  cures; shared Wheel-of-the-Heart border
+- `virtue_wheel_prompts.md` — Aristotle's twelve in TWO registers of
+  one wheel (System B, paint/light): 12 virtues (light) + 12 vices
+  (paint); the Mean balance-beam border; crown/root layout PENDING
+  owner approval (Courage crown / Cowardice root proposed)
+- `olympians_prompts.md` — the Twelve Olympians in six pairs (System
+  A): Zeus+Hera crown, Poseidon+Demeter root, Apollo/Artemis flanks;
+  Greek-key border
+- `apostles_prompts.md` — the Twelve Apostles sent two by two (System
+  A, Mark 6:7): Peter+Andrew crown, Simon+Judas root (Judas beside
+  midnight mirrors Prism Hatred); fisherman's-Net border
+
 ### `era/`
 - `era_prompts.md` — the ERA TERMS Encyclopedia set (ROADMAP 15a3):
   the Age of Light and Age of Darkness, plus the four Starry Seasons
@@ -226,6 +247,13 @@ addendum mid-round, 2026-07-22)
 - `calendar_prompts.md` — the Calendar pointer: twelve month
   medallions (wedges stay flat color; zodiac art and the Chinese
   animal medallions REUSE)
+- `triads_prompts.md` — the abstract trios (RESTRUCTURE Phase 3): Time,
+  Callings, Theological, Dialectic — each concept a lancet + a 1:1
+  circle companion, on the Trinity arm geometry (concepts, not the
+  seated persons)
+- `dualities_prompts.md` — the two great dualities (RESTRUCTURE Phase
+  3): Good/Evil and Self/Others (the two halves of One_Love's
+  clear-heart summit), each pole a lancet + a 1:1 circle companion
 
 ## Connections
 

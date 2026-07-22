@@ -36,6 +36,7 @@ one-sided gap), and test the pixel size.
 - [Slavic Months & Badge 1:1 (ART-INFRA round)](#art-infra-round)
 - [Greek Monsters, Chinese Mythology & Theme Title Plates (PROMPT SHEETS round)](#prompt-sheets-round)
 - [WoW, Cyberpunk, Star Wars & The Corporation (GAMING + CORPORATION SHEET WAVE, R10)](#gaming-corp-wave)
+- [The Four Dozens & the Abstract Triads/Dualities (RESTRUCTURE Phase 3)](#phase3-content)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -478,6 +479,47 @@ the CORRECTED split, not the original bug.
   `core.continents`'s own trigger logic) wired to their seats — also
   future work, documented in each sheet's own Status section.
 
+<a id="phase3-content"></a>
+
+## The Four Dozens & the Abstract Triads/Dualities (RESTRUCTURE Phase 3, owner-sealed 2026-07-22)
+
+Six NEW sheets this round, all **0 generated, sheets complete** —
+tracked the moment they're written, per this file's own charter. The
+four new Dozens ride the Calendar pointer (the two Dozen systems sealed
+in `CANON.md` §The Two Dozen Systems); the two abstract sets give the
+Trio's stacked readings and the two great dualities their own art
+(`CANON.md` §The abstract triads & dualities art doctrine). NONE are
+wired in `config` yet — Phase 3 is content-only; roster, articles and
+mounted-render wiring are the taxonomy round's job.
+
+| Sheet | Category / system | Expected files | Verdict |
+|---|---|---|---|
+| **Emotions** — [Emotions Prompts](calendars/emotions_prompts.md) | calendars / System B | 12 round calendar-mount medallions (`calendars/emotions/<Figure>.png`) | ART GAP — 0/12 |
+| **Virtue Wheel** — [Virtue Wheel Prompts](calendars/virtue_wheel_prompts.md) | calendars / System B, two registers of one wheel | 24 — 12 virtues (`calendars/virtues/<Figure>.png`, LIGHT) + 12 vices (`calendars/vices/<Figure>.png`, PAINT) | ART GAP — 0/24; **crown/root layout PENDING OWNER APPROVAL** (Courage crown / Cowardice root proposed) |
+| **Olympians** — [Olympians Prompts](calendars/olympians_prompts.md) | calendars / System A, six pairs | 12 (`calendars/olympians/<Figure>.png`) | ART GAP — 0/12 |
+| **Apostles** — [Apostles Prompts](calendars/apostles_prompts.md) | calendars / System A, six pairs | 12 (`calendars/apostles/<Figure>.png`) — Judas root mirrors Prism Hatred | ART GAP — 0/12 |
+| **Triads** — [Triads Prompts](archetype/triads_prompts.md) | archetypes / abstract trios | 24 — 12 lancets + 12 circle companions (`archetypes/triads/<trio>/<Figure>.png` + `.../circle/`) | ART GAP — 0/24 |
+| **Dualities** — [Dualities Prompts](archetype/dualities_prompts.md) | archetypes / abstract dualities | 8 — 4 lancets + 4 circles (`archetypes/dualities/<pair>/<Figure>.png` + `.../circle/`) | ART GAP — 0/8 |
+
+**Total new: 92 files, all ART GAP** (0 generated on either source).
+
+- **Lint status:** every path passes `tests/test_prompt_paths.py` with
+  ZERO whitelist entries. Seven NEW data-driven family roots were added
+  to `_DATA_DRIVEN_ROOTS` this round (documented in the test):
+  `calendars/emotions`, `calendars/virtues`, `calendars/vices`,
+  `calendars/olympians`, `calendars/apostles`, `archetypes/triads`,
+  `archetypes/dualities` — the same treatment the existing
+  `calendars/zodiac`/`chinese`/`slavic_months` and `weeks` roster
+  families already carry, since each new Dozen's/abstract-set's
+  per-figure filenames will be enumerated in the RESTRUCTURE
+  `config/taxonomy.py` roster (unwired in Phase 3, so only the family
+  root is checkable here; per-name completeness is the roster's job).
+- The six prism-seat Emotions (Love/Courage/Pride/Hatred/Fear/Humility)
+  RETAIN their exact Prism-paint hues (color-fidelity's cleanest case);
+  the Virtue Wheel's paint register is the light register's shadow (each
+  vice opposite its virtue, the proposed Courage/Cowardice vertical);
+  Self/Others is tied to the `One_Love` clear-heart razor's edge.
+
 <a id="other"></a>
 
 ## Ring Letters, Icons, Guide — out of the AI-prompt pipeline
@@ -522,7 +564,11 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    SHEET WAVE's (R10) four NEW sheets: WoW (54), Cyberpunk (78), Star
    Wars (60) and The Corporation (18), plus their own 10 new title
    plates (written directly in `titles/theme_title_prompts.md`, see
-   above). Subdial is CLOSED (RULE-19 round, 2026-07-20) — see the
+   above), plus the RESTRUCTURE Phase 3 content wave's six NEW sheets —
+   the four Dozens (Emotions 12, Virtue Wheel 24, Olympians 12, Apostles
+   12) and the two abstract sets (Triads 24, Dualities 8), 92 files in
+   all (see §The Four Dozens & the Abstract Triads/Dualities above).
+   Subdial is CLOSED (RULE-19 round, 2026-07-20) — see the
    superseded note above, no more generation needed there.
 1a. **Two wiring rounds** the PROMPT SHEETS round explicitly left for
    later (out of THIS round's "sheets only, no app code" scope):
