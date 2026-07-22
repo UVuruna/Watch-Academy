@@ -3,6 +3,36 @@
 Bundled visual content — ALL of it shared app content (there are no
 skin folders: DOMY and MORPH are ring preset names, nothing more).
 
+> **RESTRUCTURED 2026-07-22 (RESTRUCTURE.md — the one hierarchy).** The
+> tree below the banner still describes the pre-restructure layout and is
+> pending a full rewrite (a Phase-2/docs follow-up). The CURRENT layout
+> is **five category roots mirroring `config/taxonomy.py`**, and the
+> Gemini/ChatGPT split now lives on the FILENAME as a terminal suffix
+> (`<Figure>[_vN]_gem.png` / `_gpt.png`, source last — `paths.art_file`
+> resolves it), NOT as a `gemini/`/`chatgpt/` folder:
+>
+> ```
+> 📁 assets/
+>   📁 weeks/        ← every weekday theme, grouped: celestial_bodies /
+>                      myth / faith / crafts / societies / inner_wheel /
+>                      gaming / films (weeks/<group>/<theme>/<register>/…)
+>   📁 calendars/    ← the Dozens: zodiac/astrology, chinese, almanac,
+>                      slavic_months
+>   📁 celestial/    ← sky mechanics: earth, era, eclipse, seasons/badges
+>   📁 archetypes/   ← pointer-archetype lancets + their circle/ companions,
+>                      scale/, trinity/badges, tetramorph, evangelist, …
+>   📁 instrument/   ← dial furniture: hands, ring, subdial, icons, guide,
+>                      logo/paint_light (the logo/paint_light ARE suffixed;
+>                      the furniture is owner hand-made, suffix-less)
+>   📁 _state/       ← PromptPainter per-source run ledger (meta)
+>   🖼️ logo.svg, logo-setup.svg   ← build-pipeline contract (unchanged)
+> ```
+>
+> The `alt/` convention is abolished (versions are `_vN` siblings in the
+> same source-free folder; the old seat-named alt files were renamed
+> figure-first). The structural law is pinned by
+> `tests/test_assets_structure.py` (the taxonomy mirror).
+
 ```
 📁 assets/
   🖼️ logo.svg              ← project logo (M7; also copied to monorepo logos/)

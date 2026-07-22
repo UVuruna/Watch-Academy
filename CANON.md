@@ -185,7 +185,7 @@ principle — the rows per archetype:
 | Archetype | Row 1 | Row 2 |
 |---|---|---|
 | Trinity paint | the person (God / the Devil / Jesus) | the calling (Judge / Prosecutor / Advocate) |
-| Trinity light | the member (Father / Mother / Child) | the hearth-role: **the Shield / the Heart / the Dawn** (APPROVED 2026-07-16) |
+| Trinity light | the member (Father / Mother / Child) | the hearth-role: **the Shield / the Heart / the Anchor** (Child's role reworked Dawn→Anchor, RESTRUCTURE 2026-07-22 — see the amendment below) |
 | Seasons | the temperament | the age of man (the tetramorph creature stands as the reserve second row) |
 | Prism paint | the person | the quality (Michael / Courage) |
 | Prism light | the pillar | its SHADOW — the virtue and the vice of the same thing (owner: the theme began as this duality) |
@@ -270,6 +270,18 @@ as the hierarchy of power, once as the hierarchy of care. Center
 union (APPROVED 2026-07-16, mirroring the Eye): **the Hearth** —
 the court's union is the Eye that watches; the family's is the fire
 that warms.
+
+**AMENDMENT — the Child, the Anchor (RESTRUCTURE 2026-07-22).** The
+child's hearth-role becomes **the Anchor** (replacing the Dawn AS THE
+ROLE; the Dawn survives as the stacked time-reading — the child as the
+new day, the future, per the Triads convention). The meaning is DUAL:
+the anchor HOLDS the family gathered (the bond), AND it sits at the
+BOTTOM — the bottom of the hierarchy. That bottom seat is itself part
+of the family's love mechanics: the mother's love for the child includes
+having someone to whom she can be dominant and principal, someone who
+sees in her hierarchical superiority. (Owner text — full expansion is a
+Phase-3 CANON round; the figure key and art are renamed
+`Child_Dawn`→`Child_Anchor` now.)
 
 Six arms, two interlocked triangles, and ONE mechanic: love can turn
 flaws into virtues, and hatred can turn the same virtues into flaws.
