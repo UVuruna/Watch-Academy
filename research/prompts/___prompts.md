@@ -129,7 +129,7 @@ in the GAMING + CORPORATION SHEET WAVE, R10, 2026-07-22)
   sheet in the whole project that intentionally carries lettering —
   each plate's own wordmark, in a script matching that theme's culture
   (owner item 7). Continents is excluded — it already has a real,
-  wired title image (`assets/earth/world.png`)
+  wired title image (`assets/celestial/earth/world.png`)
 
 ### `wow/` (GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
 2026-07-22)

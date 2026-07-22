@@ -95,14 +95,14 @@ border motif rather than a caption.
 ## The two Ages
 
 **Age of Light** (4079 BCE → 6423 CE, the reigning era — 10,501
-unbroken years) → `assets/era/Age_of_Light.png`
+unbroken years) → `assets/celestial/era/Age_of_Light.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The great rose window caught as THE WHOLE DAY: the entire glass ablaze in radiant gold-white daylight, no shadow and no dark sliver anywhere on the disc, every pane lit at once. A CROWNED sun sits enthroned at the top center, a fine radiant crown resting on the sun disc itself — the one mark its own Starry Summer noon still lacks. Border: the shared twelve-ray sundial leadwork rim, brightest and most even all the way round. Palette: radiant gold-white dominant throughout, warm bright-gold lead. NO lettering anywhere.
 ```
 
 **Age of Darkness** (6423 CE → 16429 CE, the coming era) →
-`assets/era/Age_of_Darkness.png`
+`assets/celestial/era/Age_of_Darkness.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught as THE WHOLE NIGHT: the entire glass deep blue-black, a full star field scattered edge to edge across the disc, no gold anywhere. A BLACK sun sits at the top center where the crowned sun stood before — a dark disc rimmed only by a thin cold corona of starlight. Border: the shared twelve-ray sundial leadwork rim, tarnished dark all the way round. Palette: deep blue-black dominant throughout, cold starlight accents, black-iron lead. NO lettering anywhere.
@@ -113,28 +113,28 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ## The four Starry Seasons
 
 **Starry Spring** (4079 BCE → 1000 CE, the Age of Light's rising
-half) → `assets/era/Starry_Spring.png`
+half) → `assets/celestial/era/Starry_Spring.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The great rose window caught at DAWN: golden-white light pours from the horizon UPWARD at the disc's base, slanted rays climbing the glass in a widening fan, the gold conquering the lower half of the window and still visibly winning ground toward the crown; the upper reaches still hold the last dark blue-violet glass of the retreating night, thinning as the light climbs. The sun itself just cresting the rim at the base, small and low — light winning, and still GROWING. Border: the shared twelve-ray sundial leadwork rim, brightest along its lower arc where the dawn ray meets it. Palette: rising gold-white and rose against fading indigo-violet, warm dawn-gold lead. NO lettering anywhere.
 ```
 
 **Starry Summer** (1000 CE → 6423 CE, the Age of Light's falling half
-— WE LIVE HERE) → `assets/era/Starry_Summer.png`
+— WE LIVE HERE) → `assets/celestial/era/Starry_Summer.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught NOON JUST PAST: radiant gold-white light floods the glass from directly overhead, the sun disc sitting a touch past the window's own zenith, the whole rosette awash in high unbroken daylight glass; along a single edge, ONE first thin shadow creeps upward, a slender cool-violet sliver barely climbing from the rim — the only sign the light has begun, ever so slightly, to lean past its own peak. The long afternoon we live in. Border: the shared twelve-ray sundial leadwork rim, warm and evenly lit but for that one shadowed tick. Palette: deep unhurried overhead gold-white, one thin cool-violet shadow, warm dark-gold lead. NO lettering anywhere.
 ```
 
 **Starry Autumn** (6423 CE → 10990 CE, the Age of Darkness' rising
-half) → `assets/era/Starry_Autumn.png`
+half) → `assets/celestial/era/Starry_Autumn.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught at DUSK: deep indigo-violet night glass now holds the majority of the disc, only embers of amber-gold light still SINKING along the bottom edge, rays slanting DOWNWARD toward the horizon as the sun itself dips below the rim; the last light glows warm and low, visibly losing ground to the climbing dark above it. Border: the shared twelve-ray sundial leadwork rim, dimming along its lower arc where the last ember sinks. Palette: fading amber-gold embers against advancing indigo-violet night, dimming dark-gold lead. NO lettering anywhere.
 ```
 
 **Starry Winter** (10990 CE → 16429 CE, the Age of Darkness' falling
-half) → `assets/era/Starry_Winter.png`
+half) → `assets/celestial/era/Starry_Winter.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The same great rose window caught at MIDNIGHT: deep indigo-black star-glass fills the whole disc, no sun anywhere in the window, a full field of small bright star-tesserae scattered across the dark glass; at the very rim of the horizon, along the base, the THINNEST hint of foredawn glows — one faint pale-gold seam where the dark has already, almost imperceptibly, begun to recede. Border: the shared twelve-ray sundial leadwork rim, nearly dark but for that one faint tick at the base. Palette: deepest indigo-black and starlight, one thin pale-gold foredawn seam, near-black lead. NO lettering anywhere.
@@ -146,7 +146,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 **Anno Lucis** (owner fix-round B, 2026-07-19, TASK 3 — "treba da
 napraviš promptove"; redrawn on the sealed GREAT DAY design, owner
-"kreni prozori" fix round, 2026-07-19) → `assets/era/Anno_Lucis.png`.
+"kreni prozori" fix round, 2026-07-19) → `assets/celestial/era/Anno_Lucis.png`.
 Same round rose-window family as the six above, but the SUBJECT is
 the dawn itself rather than the reign it opens: where every other
 plate reads the sun's position across a whole day, this one plate
@@ -174,75 +174,75 @@ window itself keeps; these are living traditions, drawn with the same
 care the dial gives its own measured era, never a caricature.
 Drop path: `assets/era/calendar/`. The set also carries ONE rotation
 ALT (the owner's own idea, ERA-TRIO round): a second Byzantine take
-living at `assets/era/calendar/alt/Byzantine.png`, discovered by
+living at `assets/celestial/era/calendar/Byzantine_v2.png`, discovered by
 `rotating_art_file` beside the canonical `Byzantine.png` — see its own
 entry below.
 
 **AUC — Ab Urbe Condita** (Rome, 753 BCE) →
-`assets/era/calendar/AUC.png`
+`assets/celestial/era/calendar/AUC.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. The Capitoline she-wolf suckling the twin founders fills the disc's lower field in warm bronze-and-amber glass, a laurel wreath arcing above her, seven small hill-shaped tesserae set in a low arc behind her marking Rome's seven hills. Palette: warm bronze, amber and deep laurel green, aged-gold lead. Border: a simple laurel-and-tick leadwork rim. NO lettering anywhere, no human figures beyond the twin infants already fixed in the founding motif itself.
 ```
 
 **Byzantine Anno Mundi** (1 September 5509 BCE) →
-`assets/era/calendar/Byzantine.png`
+`assets/celestial/era/calendar/Byzantine.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A great golden mosaic dome fills the disc's upper field in radiant Byzantine gold-glass tesserae, its curve echoing Hagia Sophia's own; below it a triple interlocking ring motif (the 19-year lunar, 28-year solar and 15-year indiction cycles the era was tuned to close together) sits in deep imperial purple and gold. Palette: radiant Byzantine gold, imperial purple, aged-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim, dressed in a fine mosaic-tessera texture. NO lettering anywhere, no figures.
 ```
 
 **Hebrew Anno Mundi** (Tishri, 3761 BCE) →
-`assets/era/calendar/Hebrew.png`
+`assets/celestial/era/calendar/Hebrew.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A seven-branched menorah in warm gold glass rises from the disc's base, its central flame the brightest point in the whole medallion; behind it a soft autumn-toned sky (Tishri's own season) fades from amber near the flame to deep blue at the rim. Palette: warm menorah gold, deep autumn amber, twilight blue, aged-gold lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
 ```
 
 **Anno Hegirae** (the Hijra, 622 CE) →
-`assets/era/calendar/Hegirae.png`
+`assets/celestial/era/calendar/Hegirae.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A slender crescent moon and a single bright star sit high in a deep midnight-blue glass sky filling the disc's upper field; below them a small caravan of tents and a winding desert path in warm sand-and-amber glass trace a journey toward the rim — the emigration itself, never a face among the tents. Palette: deep midnight blue, silver crescent, warm sand and amber, dark-iron lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere (no calligraphy of any kind — this is the one house rule that matters most here), no figures.
 ```
 
 **Buddhist Era** (the Parinirvana, 543 BCE) →
-`assets/era/calendar/Buddhist.png`
+`assets/celestial/era/calendar/Buddhist.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A Bodhi leaf-shaped canopy of glass fills the disc's upper field in deep jade and gold, sheltering an empty stone seat below it (the aniconic Buddhist convention — presence marked by absence); a single lotus in soft pink-white glass floats at the base, fully open. Palette: deep jade, warm gold, soft lotus pink-white, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures — the empty seat and the footprint-free lotus carry the whole doctrine.
 ```
 
 **Huangdi / Chinese** (the Yellow Emperor, conventionally 2697 BCE) →
-`assets/era/calendar/Huangdi.png`
+`assets/celestial/era/calendar/Huangdi.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. An Imperial-yellow jade disc (a bi, the ancient symbol of heaven) sits at the medallion's center, ringed by a single sinuous dragon in deep jade-green and gold tracing the disc's own circular window edge — the dragon never fully closing the circle, echoing the flicker motif's own broken row in spirit though not in literal form. Palette: imperial yellow-gold, deep jade green, dark lacquer-red accents, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
 ```
 
 **Maya Long Count** (the GMT correlation epoch, 11 August 3114 BCE) →
-`assets/era/calendar/Maya.png` (MAYA round, owner 2026-07-20)
+`assets/celestial/era/calendar/Maya.png` (MAYA round, owner 2026-07-20)
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A stepped pyramid in the silhouette of El Castillo rises from the disc's base in warm limestone-and-shadow glass, its narrow staircase climbing dead center toward the summit; the sun's disc sits low and bright, just cresting the pyramid's own summit stair, a single warm ray spilling down the steps. Above the pyramid a deep indigo-black sky fills the rest of the window, scattered with a full field of small bright star-tesserae — day just breaking over a night still holding the upper glass, the count's own turning point caught mid-dawn. Palette: warm limestone gold-gray, deep indigo-black sky, bright starlight, dark-stone lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere (no glyphs of any kind — Maya script is writing, not permitted in this house, exactly like the Hegirae plate's calligraphy ban), no figures.
 ```
 
 **Kali Yuga** (the fourth age, epoch 3102 BCE) →
-`assets/era/calendar/KaliYuga.png` (ERA-TRIO round, owner 2026-07-20)
+`assets/celestial/era/calendar/KaliYuga.png` (ERA-TRIO round, owner 2026-07-20)
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A powerful bull rendered in warm ochre-and-umber stained glass stands at the disc's center, but only ONE leg reaches the ground — the other three drawn raised and folded beneath the body, unbroken but plainly not bearing weight — the bull balanced and steady on that single standing leg, never toppling (the classical dharma-bull image: four legs lost to three, to two, to this one). Behind it a darkening star field spreads across the upper glass, a few last embers of gold-white light still clinging low at the horizon while indigo night presses down from above. Palette: warm ochre-and-umber bull against advancing indigo-black star-glass, dark-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim, dimming toward its upper arc. NO lettering anywhere, no figures — the bull alone carries the whole doctrine.
 ```
 
 **Olympiad** (the ancient Games, first recorded 776 BCE) →
-`assets/era/calendar/Olympiad.png` (ERA-TRIO round, owner 2026-07-20)
+`assets/celestial/era/calendar/Olympiad.png` (ERA-TRIO round, owner 2026-07-20)
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A woven laurel wreath in deep glass-green circles the disc just inside its own leadwork rim; at the medallion's center a single torch burns upright, its flame rendered in bright warm-gold and amber glass, the one source of light in the whole window. Palette: deep laurel green ring, bright gold-amber flame at center, warm-bronze lead. Border: the shared candle-flicker-and-tick leadwork rim. NO lettering anywhere, no figures.
 ```
 
 **Unix Epoch** (1970-01-01 00:00 UTC, computing's own zero) →
-`assets/era/calendar/Unix.png` (ERA-TRIO round, owner 2026-07-20)
+`assets/celestial/era/calendar/Unix.png` (ERA-TRIO round, owner 2026-07-20)
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. A sun built entirely from fine glowing circuit-trace lines — its disc and rays rendered as branching copper-gold pathways on dark glass rather than a solid orb — rises from a circuit-board horizon at the disc's base, the board's own traces running like a skyline of low geometric towers along the bottom edge. Above it a deep near-black glass sky holds a scatter of small square pixel-like points of light standing in for stars. Palette: glowing copper-gold circuit traces, dark circuit-green horizon, near-black sky, dark-metal lead. Border: the shared candle-flicker-and-tick leadwork rim, traced with the same fine circuit-line texture. NO lettering anywhere (no digits, no cursor blocks, no glyphs of any kind), no figures.
@@ -250,7 +250,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 **Byzantine Anno Mundi — v2** (the rotation ALT, the owner's own idea
 — the Palaiologos inheritance) →
-`assets/era/calendar/alt/Byzantine.png` (ERA-TRIO round, owner
+`assets/celestial/era/calendar/Byzantine_v2.png` (ERA-TRIO round, owner
 2026-07-20)
 
 A second, genuinely different take on the Byzantine emblem — not a

@@ -21,11 +21,11 @@ consistent.
 Suggested drop locations (flat PNGs, PascalCase stems matching the
 existing emblem-family convention):
 
-- `assets/emblem/intelligence/BodilyKinesthetic.png`, `Interpersonal.png`,
+- `assets/weeks/inner_wheel/intelligence/BodilyKinesthetic.png`, `Interpersonal.png`,
   `Linguistic.png`, `Naturalist.png`, `LogicalMathematical.png`,
   `Musical.png`, `Existential.png`, `Intrapersonal.png`, `Spatial.png`
-- `assets/emblem/mood/Wheel_of_Moods.png`, optionally
-  `assets/emblem/mood/Wheel_of_Moods_dark.png`
+- `assets/weeks/inner_wheel/mood/Wheel_of_Moods.png`, optionally
+  `assets/weeks/inner_wheel/mood/Wheel_of_Moods_dark.png`
 
 ---
 
@@ -70,7 +70,7 @@ full badge visible with margin, no text/watermark.
 
 ### 1. Bodily-Kinesthetic — "Body Smart" (Prism Zeal arm, orange)
 
-**Bodily-Kinesthetic — "Body Smart"** → `assets/emblem/intelligence/BodilyKinesthetic.png`
+**Bodily-Kinesthetic — "Body Smart"** → `assets/weeks/inner_wheel/intelligence/BodilyKinesthetic.png`
 
 Zeal is Mars' working-day ember, the soldier's afternoon; the Body
 Smart's whole domain is muscle and motion, so it inherits the action
@@ -82,7 +82,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 2. Interpersonal — "People Smart" (Prism Passion arm, red)
 
-**Interpersonal — "People Smart"** → `assets/emblem/intelligence/Interpersonal.png`
+**Interpersonal — "People Smart"** → `assets/weeks/inner_wheel/intelligence/Interpersonal.png`
 
 Passion is Venus's own arm, the evening of relationship; reading and
 connecting with other people is Venus's proper domain.
@@ -93,7 +93,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 3. Linguistic — "Word Smart" (Prism Sorrow arm, purple)
 
-**Linguistic — "Word Smart"** → `assets/emblem/intelligence/Linguistic.png`
+**Linguistic — "Word Smart"** → `assets/weeks/inner_wheel/intelligence/Linguistic.png`
 
 Sorrow is "Odin's hour, wisdom bought by sacrifice in the dark" —
 Mercury/Odin is the canon's own god of language and writing, so Word
@@ -105,7 +105,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 4. Naturalist — "Nature Smart" (Prism Calm arm, blue)
 
-**Naturalist — "Nature Smart"** → `assets/emblem/intelligence/Naturalist.png`
+**Naturalist — "Nature Smart"** → `assets/weeks/inner_wheel/intelligence/Naturalist.png`
 
 Calm is "the still, moonlit hour" of the Moon's pre-dawn watch — the
 patient quiet in which nature is actually observed.
@@ -116,7 +116,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 5. Logical-Mathematical — "Number Smart" (Prism Renewal arm, green)
 
-**Logical-Mathematical — "Number Smart"** → `assets/emblem/intelligence/LogicalMathematical.png`
+**Logical-Mathematical — "Number Smart"** → `assets/weeks/inner_wheel/intelligence/LogicalMathematical.png`
 
 Renewal is Saturn's own patient order, and Saturn is astrology's
 planet of structure, time and measurement — the Number Smart's natural
@@ -128,7 +128,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 6. Musical — "Sound Smart" (Prism Joy arm, yellow)
 
-**Musical — "Sound Smart"** → `assets/emblem/intelligence/Musical.png`
+**Musical — "Sound Smart"** → `assets/weeks/inner_wheel/intelligence/Musical.png`
 
 Joy is Jupiter's noon bell, "the day's peak" — Jupiter/Zeus is
 classically music and celebration's own patron.
@@ -139,7 +139,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 7. Existential — "Life Smart" (Trinity Faith arm, yellow-gold)
 
-**Existential — "Life Smart"** → `assets/emblem/intelligence/Existential.png`
+**Existential — "Life Smart"** → `assets/weeks/inner_wheel/intelligence/Existential.png`
 
 Faith is the Trio's vertical axis, "the question aimed at noon" — the
 unanswerable question pointed straight up is existential thought's own
@@ -151,7 +151,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 8. Intrapersonal — "Self Smart" (Trinity Hope arm, blue)
 
-**Intrapersonal — "Self Smart"** → `assets/emblem/intelligence/Intrapersonal.png`
+**Intrapersonal — "Self Smart"** → `assets/weeks/inner_wheel/intelligence/Intrapersonal.png`
 
 Hope is "the inward lamp before dawn" — the dawn arm turned inward,
 looking at the self before the world wakes.
@@ -162,7 +162,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 9. Spatial — "Picture Smart" (Trinity Love arm, red)
 
-**Spatial — "Picture Smart"** → `assets/emblem/intelligence/Spatial.png`
+**Spatial — "Picture Smart"** → `assets/weeks/inner_wheel/intelligence/Spatial.png`
 
 Love's arm is already read as "the seeing heart of the evening" — an
 astrolabe is a visual-spatial instrument that maps the whole sky by
@@ -179,7 +179,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 A single medallion, not a per-day badge, for the Moods article's
 three-way comparison (the Greek humors, Plutchik's wheel of emotions,
 and the dial's own wheel). Same silver-sundial family as the existing
-per-day Mood badges (`assets/emblem/mood/Joy.png` etc. — see the "Moods —
+per-day Mood badges (`assets/weeks/inner_wheel/mood/Joy.png` etc. — see the "Moods —
 silver sundial cameo" family description in
 [Mood Prompts](mood_prompts.md)): polished
 silver cameo, sundial hour-tick motif, the hour's own light.
@@ -201,7 +201,7 @@ Two moods sit outside the six-color wheel, exactly as in the Mood
 badge set's Sunday-dual row: **Glory** (the Ruler face, the sum of all
 six colors — white light) becomes the medallion's own radiant white
 center boss; **Awe** — the servant's mood, currently named Eclipse in
-`assets/emblem/mood/Eclipse.png` and under owner review for a rename (see
+`assets/weeks/inner_wheel/mood/Eclipse.png` and under owner review for a rename (see
 `prompt.txt`) — becomes the small pale-silver crescent set into the
 outer ring at the very bottom, "watching from below" rather than
 claiming a wedge of its own. Hex values are listed above only to
@@ -211,7 +211,7 @@ literal characters to render.
 
 ### Wheel of Moods (default)
 
-**Wheel of Moods** → `assets/emblem/mood/Wheel_of_Moods.png`
+**Wheel of Moods** → `assets/weeks/inner_wheel/mood/Wheel_of_Moods.png`
 
 ```
 Circular medallion, vivid allegorical enamel in polished silver cameo, photorealistic render, perfectly centered, isolated on white background. The face divides into six equal enamel wedges arranged clockwise from the top like a sundial's hour marks: bright golden-yellow at 12 o'clock, deep amber-orange at 2 o'clock, blood red at 4 o'clock, dark violet-purple at 6 o'clock, vivid royal blue at 8 o'clock, forest green at 10 o'clock — each wedge a glossy enamel slice with a fine engraved sundial hour-tick along its outer edge. Center: a small radiant WHITE boss standing proud above the six wedges, blazing pure white light as though all six enamel colors were gathered back into one source. Rim: a thin dark oxidized-silver outer ring running the full circumference, broken only at the very bottom beneath the violet-purple wedge by one small pale-silver crescent moon inlaid into the ring like a quiet watching eye. Colors: golden yellow, amber orange, blood red, violet purple, royal blue and forest green enamel wedges, a blazing white center boss, one pale-silver crescent accent.
@@ -219,7 +219,7 @@ Circular medallion, vivid allegorical enamel in polished silver cameo, photoreal
 
 ### Wheel of Moods — dark variant (optional)
 
-**Wheel of Moods — dark variant** → `assets/emblem/mood/Wheel_of_Moods_dark.png`
+**Wheel of Moods — dark variant** → `assets/weeks/inner_wheel/mood/Wheel_of_Moods_dark.png`
 
 Same composition, cast in a darker frame so the plate reads cleanly
 against the app's dark theme; still delivered white-background per the
@@ -237,6 +237,6 @@ Same pipeline as the rest of the project's generated art: Gemini's PNG
 output drops to the project root, then goes through white-background
 removal + circle crop + resize to 800×800 RGBA, same as every other
 weekday/badge asset delivered so far. Section A's nine badges land at
-`assets/emblem/intelligence/{PascalCaseStem}.png`; Section B's medallion(s)
-land at `assets/emblem/mood/Wheel_of_Moods.png` (and the optional
+`assets/weeks/inner_wheel/intelligence/{PascalCaseStem}.png`; Section B's medallion(s)
+land at `assets/weeks/inner_wheel/mood/Wheel_of_Moods.png` (and the optional
 `Wheel_of_Moods_dark.png`), alongside the existing per-day Mood badges.

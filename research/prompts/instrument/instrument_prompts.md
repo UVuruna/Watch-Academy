@@ -168,15 +168,15 @@ bronze as the ambient plate finish everything else is struck in — is
 already sitting in the asset tree, generated for the weekday alchemy
 set and needing no rework:
 
-- **Gold:** `assets/weekday/alchemy/primary/gold.png` — crucible pouring molten
+- **Gold:** `assets/weeks/crafts/alchemy/primary/gold.png` — crucible pouring molten
   gold beside a polished sun-face disc, exactly "gold to the Sun."
-- **Silver:** `assets/weekday/alchemy/primary/silver.png` — half-polished,
+- **Silver:** `assets/weeks/crafts/alchemy/primary/silver.png` — half-polished,
   half-tarnished mirror-disc and chalice, exactly "silver to the Moon."
 - **Bronze:** no dedicated medallion exists (or is needed) — bronze is
   the default, ambient finish of dozens of existing plates project-wide
   (every weekday god, every profession, every ring letter). If the
   article wants one concrete bronze image anyway, reuse
-  `assets/guide/63_ring_domy_bronze.png` — an actual in-app screenshot
+  `assets/instrument/guide/63_ring_domy_bronze.png` — an actual in-app screenshot
   of the DOMY ring struck in plain bronze, already owner-captured and
   processed for the Guide.
 
@@ -191,14 +191,14 @@ M=12h, Y=20h, Ω=24h, each at its Greek alphabetical hour) — a screenshot
 of the ring already proves it, and one already exists from the Guide's
 "Rings/Letters/Metals" chapter:
 
-- **Primary:** `assets/guide/22_ring_domy_gold.png` — whole dial, DOMY
+- **Primary:** `assets/instrument/guide/22_ring_domy_gold.png` — whole dial, DOMY
   ring in gold, all four letters (D, M, Y, Ω) legible at their hours.
-- **Alternative / complement:** `assets/guide/64_ring_numbers_seal.png`
+- **Alternative / complement:** `assets/instrument/guide/64_ring_numbers_seal.png`
   — the plain-number ring (12/16/20/4 + Ω) that the article's closing
   paragraph calls "the plain confession of the trick"; pairing the two
   images (letters, then numbers) would directly illustrate that line.
-- Also on file if a wider view is wanted: `assets/guide/19_rings.png`
-  (overview grid) and `assets/guide/36_ring_morph_silver.png` (the
+- Also on file if a wider view is wanted: `assets/instrument/guide/19_rings.png`
+  (overview grid) and `assets/instrument/guide/36_ring_morph_silver.png` (the
   MORPH sister ring: M/Π/H/Ω, same alphabetical-hour rule).
 
 No new Gemini generation and no new screenshot needed for this article

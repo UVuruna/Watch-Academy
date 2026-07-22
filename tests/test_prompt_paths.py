@@ -98,13 +98,13 @@ _LITERAL_FILENAME = re.compile(r"[\"']([\w .\-]+\.(?:png|svg))[\"']")
 # modules — a sheet path under one of these is checked only down to
 # the FAMILY root.
 _DATA_DRIVEN_ROOTS = (
-    "weekday",
-    "zodiac",
-    "emblem/virtue",
-    "emblem/sin",
-    "emblem/mood",
-    "emblem/intelligence",
-    "guide",
+    # RESTRUCTURE 2026-07-22: the weekday themes now live under weeks/
+    # (their Inner-Wheel emblems too, at weeks/inner_wheel/*); the two
+    # zodiacs under calendars/; the guide under instrument/.
+    "weeks",
+    "calendars/zodiac",
+    "calendars/chinese",
+    "instrument/guide",
     # THE SLAVIC MONTHS (R7b round, owner-sealed 2026-07-21): every
     # per-month filename is enumerated in `config.defaults.
     # SLAVIC_MONTHS`, a real Python table — but built into a Path
@@ -116,7 +116,7 @@ _DATA_DRIVEN_ROOTS = (
     # FAMILY root (`MONTHS_ART_DIR` itself) IS a real module-level
     # Path, confirming the family is genuinely wired; only the
     # per-name completeness escapes static scanning.
-    "months",
+    "calendars/slavic_months",
 )
 
 # Documented exceptions: art generated (or sheeted) with NO consuming
@@ -130,57 +130,57 @@ _WHITELIST: dict[str, str] = {
     # today the two rows share one lancet). COVERAGE.md §Compass
     # Objects: "WIRING GAP — fully painted, zero code reads any
     # rondel_* path outside the evangelist set."
-    "archetype/trinity/rondel_Advocate.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/trinity/rondel_Prosecutor.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/trinity/rondel_Judge.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/family/rondel_Shield.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/family/rondel_Heart.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/family/rondel_Dawn.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Crown.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Bell.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Book.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Coin.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Mask.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Plough.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Staff.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetype/walks/rondel_Sword.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/rondel_Advocate.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/rondel_Prosecutor.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/rondel_Judge.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/rondel_Shield.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/rondel_Heart.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/rondel_Dawn.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Crown.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Bell.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Book.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Coin.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Mask.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Plough.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Staff.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/rondel_Sword.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
     # The twelve Almanac month medallions: generated for the Encyclopedia
     # gallery's planned "Almanac" topic, which does not exist yet
     # (COVERAGE.md tracks this as "OK" — art landed ahead of the topic).
-    "archetype/calendar/January.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/February.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/March.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/April.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/May.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/June.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/July.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/August.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/September.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/October.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/November.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "archetype/calendar/December.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/January.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/February.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/March.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/April.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/May.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/June.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/July.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/August.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/September.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/October.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/November.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/December.png": "Almanac month medallion, Encyclopedia topic not built yet",
     # The dial's own Anno Lucis year is TEXT-ONLY today
     # (`core.deep_time.format_anno_lucis`) — COVERAGE.md: "ART GAP +
     # WIRING GAP — no code references assets/era/Anno_Lucis.png at all
     # today ... generating the art alone would not yet make it appear
     # anywhere." Art has since landed; the wiring gap stands.
-    "era/Anno_Lucis.png": "generated, no draw site yet (COVERAGE.md)",
+    "celestial/era/Anno_Lucis.png": "generated, no draw site yet (COVERAGE.md)",
     # "The Ninth" — the union's child, explicitly "stands outside the
     # six" pillars (`one_soul_prompts.md` §The Ninth) — a deliberate
     # standalone concept, not one of the seated `prism_light` figures
     # COVERAGE.md tracks; no grid seat exists for it yet.
-    "archetype/one_soul/Child.png": "the standalone Ninth, no grid seat wired yet",
+    "archetypes/one_soul/Child.png": "the standalone Ninth, no grid seat wired yet",
     # The Union's SECOND, figurative glass window ("what if they had
     # met") — genuinely new content this round (scale_badge_prompts.md
     # §The two Unions), not yet added to `topics["duality"]`'s images.
-    "badge/scale/glass/Union_Meeting.png": "figurative Union variant, not yet wired",
+    "archetypes/scale/glass/Union_Meeting.png": "figurative Union variant, not yet wired",
     # The Trinity badges ARE genuinely read (`app.encyclopedia._topics`:
     # `defaults.TRINITY_ART_DIR / f"{virtue}.png"` for `virtue in
     # ("Faith", "Hope", "Love")`) but `virtue` is a loop variable —
     # "Faith.png" happens to also appear as the topic's own literal
     # icon path (caught by the text scan), Hope/Love do not.
-    "badge/trinity/Hope.png": "read via the Trinity topic loop, built at runtime",
-    "badge/trinity/Love.png": "read via the Trinity topic loop, built at runtime",
+    "archetypes/trinity/badges/Hope.png": "read via the Trinity topic loop, built at runtime",
+    "archetypes/trinity/badges/Love.png": "read via the Trinity topic loop, built at runtime",
     # The Instrument section's own article images
     # (`app.encyclopedia._topics`: `defaults.INSTRUMENT_ART_DIR /
     # f"{key}.png"` for `key in _INSTRUMENT_KEYS`) — same pattern.
@@ -207,14 +207,14 @@ _WHITELIST: dict[str, str] = {
     # explicit whitelist treatment as the row2 rondels above.
     # `badge_1to1_prompts.md`'s own Status section tracks the whole
     # round-one set, wired or not.
-    "badge/circle/life/tree/Unborn.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/Birth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/Childhood.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/Youth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/Maturity.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "badge/circle/life/tree/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Unborn.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Birth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Childhood.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Youth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Maturity.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/tree/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     # THE THEME TITLE PLATES (R8c PROMPT SHEETS round, owner item 7,
     # 2026-07-21): a NEW sourceless root, `assets/titles/<key>.png`,
     # fills every weekday theme's (and two sibling topics') documented

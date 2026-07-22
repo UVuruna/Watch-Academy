@@ -7,7 +7,7 @@ graceful-absent slot for its OWN title-page plate —
 code comment reads it outright: *"graceful-absent — a future theme
 plate's slot"*. This sheet fills that slot for every theme that has
 one and does not already have art (Continents is the ONE theme that
-already carries a real title image, `assets/earth/world.png` — SKIPPED
+already carries a real title image, `assets/celestial/earth/world.png` — SKIPPED
 here per the owner's own instruction). It also covers two sibling
 topics that carry the identical empty-slot pattern outside the weekday
 family: **The Nine Intelligences** and **The Slavic Months** (the
@@ -606,7 +606,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   + 2) — the whole title-plate family, project-wide, in one place, as
   the canonical root always intended.
 - `continents` is deliberately ABSENT from this sheet — it already has
-  a real, wired title image (`assets/earth/world.png`,
+  a real, wired title image (`assets/celestial/earth/world.png`,
   `defaults.CONTINENTS_TITLE_IMAGE`) — see the owner's own SKIP
   instruction.
 - Verify with `python main.py "research/prompts/titles/theme_title_prompts.md" --dry-run`

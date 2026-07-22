@@ -180,7 +180,7 @@ discoverable once both files land.
 | Collection | Expected by code | On disk | Sheet entry | Verdict |
 |---|---|---|---|---|
 | `era/*` — 2 Ages + 4 Starry Seasons | Age_of_Light, Age_of_Darkness, Starry_{Spring,Summer,Autumn,Winter} | 0/6 | `era_prompts.md` ✔ | ART GAP — full generation pending, wired + graceful-absent on the Encyclopedia's ERA topic |
-| `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `assets/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
+| `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `assets/celestial/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
 | `era/calendar/*` — 10 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya, Kali Yuga, Olympiad, Unix | 0/10 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent, NOW ALSO ROTATING (ERA-TRIO round) |
 | `era/calendar/alt/Byzantine.png` — the Byzantine v2 rotation ALT | 1 file | 0/1 | `era_prompts.md` ✔ (§The Eras of the World's own calendars, "Byzantine Anno Mundi — v2") | ART GAP — a genuinely new design (tetragrammatic cross, four firesteels), not a regeneration of the canonical prompt; discovered automatically by `rotating_art_file` once both this file AND the canonical `Byzantine.png` exist, no separate code entry needed (THE UNIVERSAL ROTATION CONVENTION) |
 
@@ -281,7 +281,7 @@ tracked here the moment they're written, per this file's own charter.
   Olympian family's own Greek-key border, recut as dark leadwork
   instead of bronze relief — "the greek-key border family the god
   medallions already wear but in a darker bestiary register" (owner).
-  Drop root `assets/weekday/monsters/{primary,colored}/<Stem>.png`.
+  Drop root `assets/weeks/myth/age_of_heroes/{primary,colored}/<Stem>.png`.
   **Art: 0/18** (9 figures × 2 registers). Theme NOT yet registered in
   `config/defaults.py` — sheet-writing only, per this round's own
   scope ("Sheets ONLY... NO app code"); `assets/weekday/**` is a
@@ -309,7 +309,7 @@ tracked here the moment they're written, per this file's own charter.
   self-taken title). Night-window register wearing its OWN cloud-scroll
   (xiangyun) border in a jade-and-lacquer palette — deliberately NOT
   the Greek key, per the owner's own instruction. Drop root
-  `assets/weekday/chinese_myth/{primary,colored}/<Stem>.png`. **Art:
+  `assets/weeks/myth/celestial_court/{primary,colored}/<Stem>.png`. **Art:
   0/18** (slot count unchanged by the v2 reseat — one figure traded per
   seat, none added). Same data-driven-root, zero-whitelist-needed
   status as Greek Monsters.
@@ -331,7 +331,7 @@ tracked here the moment they're written, per this file's own charter.
   the theme's own cast register (see the sheet's own "canonical drop
   path" section for the full reasoning). Continents is deliberately
   EXCLUDED — it already has a real, wired title image
-  (`assets/earth/world.png`, `defaults.CONTINENTS_TITLE_IMAGE`), the
+  (`assets/celestial/earth/world.png`, `defaults.CONTINENTS_TITLE_IMAGE`), the
   owner's own SKIP instruction. **Art: 0/26** in this sheet now (24
   original + the 2 gap-closed entries). This is also the ONE documented
   exception to the
@@ -385,7 +385,7 @@ the CORRECTED split, not the original bug.
   wolf-fang totem / saronite-and-ice fang) the only per-block
   identifier; `colored` keeps each block's own paint (blue-gold /
   red-black / saronite-ice). No rotation seats. Drop root
-  `assets/weekday/wow/<block>/{primary,colored}/<Stem>.png`.
+  `assets/weeks/gaming/wow_<block>/{primary,colored}/<Stem>.png`.
   **Art: 0/54** (27 figures × 2 registers; 3 title plates tracked in
   `titles/theme_title_prompts.md`). Dry-run: 54/54, 0 problems.
 - **Cyberpunk 2077** — [Cyberpunk Prompts](cyberpunk/cyberpunk_prompts.md).
@@ -407,7 +407,7 @@ the CORRECTED split, not the original bug.
   circuit-trace (PCB) border motif carved into the same bronze,
   constant across blocks; `colored` is the full-saturated neon-noir
   poster, gang-canonical neon colors per figure. Drop root
-  `assets/weekday/cyberpunk/<block>/{primary,colored}/<Stem>.png`.
+  `assets/weeks/gaming/cp_<block>/{primary,colored}/<Stem>.png`.
   **Art: 0/78** (Gangs 28 + Street 26 + Power 24; 3 title plates
   tracked separately). Dry-run: 78/78, 0 problems.
 - **Star Wars** — [Star Wars Prompts](starwars/starwars_prompts.md).
@@ -429,7 +429,7 @@ the CORRECTED split, not the original bug.
   never a genuine readable alphabet, and not even that flavor on
   regular cast plates, which carry zero lettering) carved into the
   same bronze; `colored` is the full-color paint version. Drop root
-  `assets/weekday/starwars/<set>/{primary,colored}/<Stem>.png`.
+  `assets/weeks/films/sw_<set>/{primary,colored}/<Stem>.png`.
   **Art: 0/60** (30 figures × 2 registers; 3 title plates tracked
   separately). Dry-run: 60/60, 0 problems.
 - **The Corporation** — [Corporate Prompts](corporate/corporate_prompts.md).
@@ -444,7 +444,7 @@ the CORRECTED split, not the original bug.
   line-and-node border motif carved into the same bronze; `colored`
   is the clean annual-report paint version (steel and gold accents).
   No rotation seats. Drop root
-  `assets/weekday/corporate/{primary,colored}/<Stem>.png`. **Art:
+  `assets/weeks/crafts/corporate/{primary,colored}/<Stem>.png`. **Art:
   0/18** (9 figures × 2 registers; 1 title plate tracked separately).
   Dry-run: 18/18, 0 problems.
 - **Ten new title plates** — filed into the existing
