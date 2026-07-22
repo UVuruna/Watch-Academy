@@ -48,7 +48,7 @@ rationale, per the brief.
 | Goliath (Tuesday) | `assets/weeks/faith/bible/dark/goliath.png` | David |
 | the Serpent (Wednesday) | `assets/weeks/faith/bible/dark/serpent.png` | Moses |
 | Herod (Thursday, primary) | `assets/weeks/faith/bible/dark/herod.png` | Solomon |
-| Nebuchadnezzar (Thursday, alternative) | `assets/weeks/faith/bible/dark/nebuchadnezzar_alt.png` | Solomon |
+| Nebuchadnezzar (Thursday, alternative) | `assets/weeks/faith/bible/dark/nebuchadnezzar.png` | Solomon |
 | Delilah (Friday) | `assets/weeks/faith/bible/dark/delilah.png` | Ruth / Samson |
 | Cain (Saturday) | `assets/weeks/faith/bible/dark/cain.png` | Joseph |
 
@@ -131,7 +131,7 @@ depicted, purely implied through silhouette and the king's own fear.
 Circular stained-glass rose-window medallion, backlit by sickly amber-yellow torchlight through hand-blown glass, lead-came outlines (heavier, near-black), jewel-tone light, photorealistic render, perfectly centered, isolated on transparent background — same tracery and smoked oculus as lucifer.png; mirrors solomon.png's Thursday slot — the judge-king's wisdom curdled into a paranoid king's fear. Center: Herod alone on his throne, both hands clutched tight around his own crown as though it might be pulled from his head, his face turned toward a half-open doorway where only the long dark shadows of soldiers pass by outside, unseen and undepicted beyond their silhouettes; the throne room otherwise empty and dim. Border: dark, heavier lead-came trefoil tracery in near-black iron, four small jewel-roundels bearing a clutched-crown emblem, and the Eye-of-Providence oculus at the top in smoked amber-red glass, thin reluctant rays, same placement as lucifer.png. Colors: sickly amber-yellow dominant, deep shadow black, one cold sliver of doorway-gray light, no bright color.
 ```
 
-### Thursday, alternative — Nebuchadnezzar (`assets/weeks/faith/bible/dark/nebuchadnezzar_alt.png`)
+### Thursday, alternative — Nebuchadnezzar (`assets/weeks/faith/bible/dark/nebuchadnezzar.png`)
 
 Mirrors Solomon via a different failure mode: wisdom traded for an
 idol's worship (Daniel 3 / Daniel 4's madness). **Minor concern:** the
@@ -239,7 +239,7 @@ Per `ROSTER.md` (last generated 2026-07-15):
 **Bible Dark (`bible_dark`):**
 - Seated seven + Sunday dual — all exist (✔ Gemini): `assets/weeks/faith/bible/dark/lucifer.png`,
   `assets/weeks/faith/bible/dark/lilith.png`, `assets/weeks/faith/bible/dark/goliath.png`, `assets/weeks/faith/bible/dark/serpent.png`, `assets/weeks/faith/bible/dark/herod.png`,
-  `assets/weeks/faith/bible/dark/delilah.png`, `assets/weeks/faith/bible/dark/cain.png`, `assets/weeks/faith/bible/dark/judas.png`. (`assets/weeks/faith/bible/dark/nebuchadnezzar_alt.png`
+  `assets/weeks/faith/bible/dark/delilah.png`, `assets/weeks/faith/bible/dark/cain.png`, `assets/weeks/faith/bible/dark/judas.png`. (`assets/weeks/faith/bible/dark/nebuchadnezzar.png`
   is the recorded Thursday alternative, not the seated pick.)
 - **Ninth — Legion:** never generated (— Gemini, — ChatGPT) — good,
   nothing to discard. SUPERSEDED, do not generate.

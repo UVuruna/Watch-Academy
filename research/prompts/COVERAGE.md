@@ -182,7 +182,7 @@ discoverable once both files land.
 | `era/*` — 2 Ages + 4 Starry Seasons | Age_of_Light, Age_of_Darkness, Starry_{Spring,Summer,Autumn,Winter} | 0/6 | `era_prompts.md` ✔ | ART GAP — full generation pending, wired + graceful-absent on the Encyclopedia's ERA topic |
 | `era/Anno_Lucis.png` | 1 file | 0/1 | `era_prompts.md` ✔ (§Anno Lucis) | ART GAP + WIRING GAP — no code references `assets/celestial/era/Anno_Lucis.png` at all today; the Anno Lucis year is TEXT-ONLY in the hover legend (`core.deep_time.format_anno_lucis`) — generating the art alone would not yet make it appear anywhere |
 | `era/calendar/*` — 10 calendar-system emblems | AUC, Byzantine, Hebrew, Hegirae, Buddhist, Huangdi, Maya, Kali Yuga, Olympiad, Unix | 0/10 | `era_prompts.md` ✔ (§The Eras of the World's own calendars) | ART GAP — wired (`app/encyclopedia.py` `_ERA_CALENDAR_ART`, strings as the "Eras of the World" essay's image strip), graceful-absent, NOW ALSO ROTATING (ERA-TRIO round) |
-| `era/calendar/alt/Byzantine.png` — the Byzantine v2 rotation ALT | 1 file | 0/1 | `era_prompts.md` ✔ (§The Eras of the World's own calendars, "Byzantine Anno Mundi — v2") | ART GAP — a genuinely new design (tetragrammatic cross, four firesteels), not a regeneration of the canonical prompt; discovered automatically by `rotating_art_file` once both this file AND the canonical `Byzantine.png` exist, no separate code entry needed (THE UNIVERSAL ROTATION CONVENTION) |
+| `celestial/era/calendar/Byzantine_v2.png` — the Byzantine v2 rotation variant | 1 file | 0/1 | `era_prompts.md` ✔ (§The Eras of the World's own calendars, "Byzantine Anno Mundi — v2") | ART GAP — a genuinely new design (tetragrammatic cross, four firesteels), not a regeneration of the canonical prompt; discovered automatically by `rotating_art_file` once both this file AND the canonical `Byzantine.png` exist, no separate code entry needed (THE UNIVERSAL ROTATION CONVENTION) |
 
 <a id="eclipse"></a>
 
@@ -389,15 +389,14 @@ the CORRECTED split, not the original bug.
   **Art: 0/54** (27 figures × 2 registers; 3 title plates tracked in
   `titles/theme_title_prompts.md`). Dry-run: 54/54, 0 problems.
 - **Cyberpunk 2077** — [Cyberpunk Prompts](cyberpunk/cyberpunk_prompts.md).
-  THREE blocks (Gangs / Street / Power), same nine-seat shape. Gangs
+  THREE blocks (Gangs / Street / Corpo), same nine-seat shape. Gangs
   and Street carry ROTATION SEATS — more than one named faction/figure
-  sharing a day, via a NEW file convention this round establishes: the
-  alt/alt2 sibling's file is named after the SEAT's own canonical stem
-  (never the alt figure's own name), pooled by `config.defaults.
-  rotating_art_file`'s existing `<Stem>`/`<Stem>_v*` search across the
-  canonical directory UNION its `alt/` subfolder — a 3-way rotation
-  (Tuesday Gangs: Maelstrom canonical, Barghest in `alt/`, Wraiths as
-  `Maelstrom_v2.png`) uses both legal forms at once. Power's trio
+  sharing a day, via FIGURE-FIRST ROSTERS (RESTRUCTURE 2026-07-22):
+  every file is named after the FIGURE it depicts, never the seat's
+  canonical stem; the seat's membership lives in a `config/taxonomy.py`
+  roster (wiring round pending) — a 3-way rotation (Tuesday Gangs:
+  `Maelstrom.png`, `Barghest.png`, `Wraiths.png`) is three
+  figure-named files plus one roster entry. Corpo's trio
   (Saburo Arasaka/Rosalind Myers, Yorinobu/Kurt Hansen, Alt Cunningham/
   Rache Bartmoss) carries a SYNCHRONIZED PAIR ROTATION — not new code,
   just every pole owning exactly 2 candidates so `_pick_rotation`'s

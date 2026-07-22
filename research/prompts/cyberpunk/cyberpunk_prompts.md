@@ -50,64 +50,56 @@ cross-reference at the bottom).
 
 **Drop paths:** `assets/weeks/gaming/cp_<block>/primary/<Stem>.png`
 and `assets/weeks/gaming/cp_<block>/colored/<Stem>.png` — `<block>`
-is `gangs`, `street` or `power`, both flat, no `dual/` subfolder (DUAL
+is `gangs`, `street` or `corpo`, both flat, no `dual/` subfolder (DUAL
 FLATTEN convention).
 
-## The rotation convention — canonical vs. alt vs. alt2
+## The rotation convention — figure-first rosters
 
 Several Gangs and Street seats hold MORE THAN ONE named faction/figure,
-rotating on the same seat. This is a genuinely new pattern for this
-sheet family (every prior weekday theme seats exactly one figure per
-day) — implemented here the same way the era calendar's Byzantine v2
-already proved out (`era_prompts.md`, `COVERAGE.md` §Era Terms):
-`config.defaults.rotating_art_file` pools a seat's candidates from its
-canonical file's OWN STEM (`<Stem>.png` / `<Stem>_v*.png`) in the
-canonical directory UNION the same stems one level down in `alt/`, then
-picks by the date's ordinal — so **the alt/alt2 sibling's file is named
-after the SEAT's canonical stem, never the alt figure's own name.**
-Concretely, for the Tuesday Gangs seat (Maelstrom canonical / Barghest
-alt / Wraiths alt2):
+rotating on the same seat. **RESTRUCTURE doctrine (owner-sealed
+2026-07-22): every file is named after the FIGURE IT DEPICTS — never
+after the seat.** A seat's rotating membership is declared in a config
+ROSTER (`config/taxonomy.py`, wiring round pending), and the daily pick
+selects a FIGURE — art, display name and story together — so the image
+and its text can never disagree. `_vN` suffixes mean a SECOND ARTWORK
+of the SAME figure, nothing else. Concretely, for the Tuesday Gangs
+seat:
 
 | Slot | Figure | File |
 |---|---|---|
 | canonical | Maelstrom | `primary/Maelstrom.png` |
-| alt | Barghest | `primary/alt/Maelstrom.png` |
-| alt2 | Wraiths | `primary/Maelstrom_v2.png` |
+| roster 2nd | Barghest | `primary/Barghest.png` |
+| roster 3rd | Wraiths | `primary/Wraiths.png` |
 
-Three candidates, one shared stem ("Maelstrom"), exactly the pooling
-`_rotation_candidates` already performs — no code change needed beyond
-calling `rotating_art_file` on this seat once wiring lands (future
-round, out of this sheet's scope). Every rotation seat below is written
-out fully — a complete, independent brief per named figure/faction, not
-a placeholder — per the round brief's "briefs for ALL" instruction.
+Every rotation seat below is written out fully — a complete,
+independent brief per named figure/faction, not a placeholder — per
+the round brief's "briefs for ALL" instruction.
 
-**Power's trio carries a SYNCHRONIZED PAIR ROTATION**, not an
+**Corpo's trio carries a SYNCHRONIZED PAIR ROTATION**, not an
 independent one: Throne, Mirror and Unfound each hold exactly TWO
-candidates (canonical + one `alt/` sibling), so `_pick_rotation`'s
-shared `on_date.toordinal() % len(candidates)` naturally lands on the
-SAME index for all three seats on any given date — the identical
-mechanism that already keeps Judas and Lucifer "IN STEP" across the
-Scale badges (`defaults.scale_variant_file`'s own docstring: "one index
-driving two independent counts"). No special-case code is needed; the
-lockstep is a consequence of every pole owning the same candidate
-count, not a separate synchronization flag.
+roster members, so the shared `on_date.toordinal() % len(roster)`
+naturally lands on the SAME index for all three seats on any given
+date — the identical mechanism that already keeps Judas and Lucifer
+"IN STEP" across the Scale badges ("one index driving two independent
+counts"). No special-case code is needed; the lockstep is a
+consequence of every pole owning the same roster length, not a
+separate synchronization flag.
 
 ---
 
 ## Gangs
 
-The territory-holders. Rotation pairs share a seat via the `alt/`
-convention above; every canonical AND every alt/alt2 sibling gets its
-own full brief.
+The territory-holders. Rotation seats share their membership via the
+config roster above; every roster member gets its own full brief.
 
 | Day | Arm color · vice/virtue | Figure(s) | Rotation |
 |---|---|---|---|
-| Monday | blue · Fear/Serenity | **Aldecaldos** / Mox (alt) | 2-way |
-| Tuesday | orange · Wrath/Courage | **Maelstrom** / Barghest (alt) / Wraiths (alt2) | 3-way |
-| Wednesday | purple · Greed/Wisdom | **Voodoo Boys** / 6th Street (alt) | 2-way |
+| Monday | blue · Fear/Serenity | **Aldecaldos** / Mox (roster) | 2-way |
+| Tuesday | orange · Wrath/Courage | **Maelstrom** / Barghest / Wraiths (roster) | 3-way |
+| Wednesday | purple · Greed/Wisdom | **Voodoo Boys** / 6th Street (roster) | 2-way |
 | Thursday | yellow · Excess/Generosity | **Tyger Claws** | none |
 | Friday | red · Jealousy/Love | **Valentinos** | none |
-| Saturday | green · Envy/Patience | **Animals** / Scavengers (alt) | 2-way |
+| Saturday | green · Envy/Patience | **Animals** / Scavengers (roster) | 2-way |
 | Sunday (Throne) | white-gold · Pride/Justice | **Arasaka** | none |
 | Sunday (Mirror, dual) | black-silver · Servility/Humility | **Militech** | none |
 | Ninth (Unfound) | — | **Netwatch** | none |
@@ -128,12 +120,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: the Aldecaldos convoy in full color, sun-bleached orange and rust-tan car hoods circled around a low campfire under a deep-blue Badlands night, a scout's silhouette on watch at the ring's edge. Border: the circuit-trace ring recut in warm chrome, four glitch-glyph roundels, one flickering a pale-blue Moon crescent. Colors: convoy orange, desert tan, deep dusk blue, firelight amber.
 ```
 
-**Mox (alt)** → `assets/weeks/gaming/cp_gangs/primary/Mox.png`
+**Mox (roster)** → `assets/weeks/gaming/cp_gangs/primary/Mox.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Mox sentinel in hot-pink-and-lavender leathers standing watch at Lizzie's Bar's own neon-lit doorway, one hand resting easy near a holstered pistol, her stance relaxed but her eyes scanning the street beyond the threshold. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Mox (alt, colored)** → `assets/weeks/gaming/cp_gangs/colored/Mox.png`
+**Mox (roster, colored)** → `assets/weeks/gaming/cp_gangs/colored/Mox.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a Mox sentinel in full color, hot-pink-and-lavender leather at Lizzie's Bar's glowing neon doorway, one hand near a holstered pistol, eyes on the street. Border: the circuit-trace ring recut in warm chrome, four glitch-glyph roundels, one flickering a pale-blue Moon crescent. Colors: hot pink, lavender neon, deep-blue night, chrome doorway.
 ```
@@ -153,22 +145,22 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a Maelstrom enforcer in full color, raw chrome overgrowth and exposed wiring, heavy weapon-arms raised, acid-green optic implants glowing, a barricade of welded scrap behind him. Border: the circuit-trace ring recut in scorched chrome, four glitch-glyph roundels, one flickering an orange Mars glyph. Colors: acid green, ember orange, raw chrome, scorched black.
 ```
 
-**Barghest (alt)** → `assets/weeks/gaming/cp_gangs/primary/Barghest.png`
+**Barghest (roster)** → `assets/weeks/gaming/cp_gangs/primary/Barghest.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Barghest operator in disciplined ex-Militech tactical gear, rifle held low-ready rather than swinging wild, a squad's hand-signal frozen mid-order — precision replacing chaos as this Wrath's own shape. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Barghest (alt, colored)** → `assets/weeks/gaming/cp_gangs/colored/Barghest.png`
+**Barghest (roster, colored)** → `assets/weeks/gaming/cp_gangs/colored/Barghest.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a Barghest operator in full color, navy-and-olive tactical armor, rifle held low-ready, a squad hand-signal frozen mid-order. Border: the circuit-trace ring recut in gunmetal chrome, four glitch-glyph roundels, one flickering an orange Mars glyph. Colors: navy blue, olive drab, gunmetal grey, tactical black.
 ```
 
-**Wraiths (alt2)** → `assets/weeks/gaming/cp_gangs/primary/Maelstrom_v2.png`
+**Wraiths (roster)** → `assets/weeks/gaming/cp_gangs/primary/Wraiths.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Wraith raider in white-and-grey Badlands wraps, a cryo-frost weapon exhaling a thin white vapor, standing atop a frozen, snow-dusted wreck in the open waste — wrath frozen down to something patient and lethal instead of hot. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Wraiths (alt2, colored)** → `assets/weeks/gaming/cp_gangs/colored/Maelstrom_v2.png`
+**Wraiths (roster, colored)** → `assets/weeks/gaming/cp_gangs/colored/Wraiths.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a Wraith raider in full color, white-and-grey wraps, a cryo weapon venting white vapor, standing on a frost-dusted wreck. Border: the circuit-trace ring recut in frost-pale chrome, four glitch-glyph roundels, one flickering an orange Mars glyph. Colors: ice white, frost blue, wasteland grey, vapor-white glow.
 ```
@@ -188,12 +180,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a Voodoo Boys netrunner in full color, dark skin lit by glowing teal veve sigils, hands raised into cascading green code, the storming Blackwall glimpsed faint behind him. Border: the circuit-trace ring recut in dark chrome, four glitch-glyph roundels, one flickering a purple Mercury glyph. Colors: teal, code green, deep black, Blackwall violet-grey.
 ```
 
-**6th Street (alt)** → `assets/weeks/gaming/cp_gangs/primary/6thStreet.png`
+**6th Street (roster)** → `assets/weeks/gaming/cp_gangs/primary/6thStreet.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a 6th Street patriot in faded stars-and-stripes gear, standing sentry over a checkpoint of stacked tires and painted oil drums, one hand raised to wave a car through, his gaze equal parts protective and proprietary over the block he's claimed. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**6th Street (alt, colored)** → `assets/weeks/gaming/cp_gangs/colored/6thStreet.png`
+**6th Street (roster, colored)** → `assets/weeks/gaming/cp_gangs/colored/6thStreet.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a 6th Street sentry in full color, faded red-white-and-blue gear, standing at a tire-and-drum checkpoint, waving a car through. Border: the circuit-trace ring recut in weathered chrome, four glitch-glyph roundels, one flickering a purple Mercury glyph. Colors: desert tan, faded star-red, checkpoint grey, old-flag blue.
 ```
@@ -243,12 +235,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: an Animals bodybuilder in full color, oiled muscle-and-chrome physique mid-lift in a scrapyard gym, a chalk-marked tally wall behind him. Border: the circuit-trace ring recut in oiled chrome, four glitch-glyph roundels, one flickering a green Saturn glyph. Colors: burnt orange, oiled tan, scrapyard black, chalk white.
 ```
 
-**Scavengers (alt)** → `assets/weeks/gaming/cp_gangs/primary/Scavengers.png`
+**Scavengers (roster)** → `assets/weeks/gaming/cp_gangs/primary/Scavengers.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout. Center: a Scavenger surgeon in a stained apron over an improvised operating table, one hand steady on a chrome bone-saw, rows of harvested organs preserved in glowing green cold-storage jars lining the wall behind — the same iron patience as the Animals' own discipline, turned toward a far darker harvest, taken instead of grown. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Scavengers (alt, colored)** → `assets/weeks/gaming/cp_gangs/colored/Scavengers.png`
+**Scavengers (roster, colored)** → `assets/weeks/gaming/cp_gangs/colored/Scavengers.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: a Scavenger surgeon in full color, a blood-rust apron, a chrome bone-saw in hand, glowing green cold-storage jars of harvested organs lining the wall. Border: the circuit-trace ring recut in surgical chrome, four glitch-glyph roundels, one flickering a green Saturn glyph. Colors: rust red, surgical green, cold-storage glass-blue, chrome steel.
 ```
@@ -307,10 +299,10 @@ V's own circle. Same rotation convention as Gangs.
 | Day | Arm color · vice/virtue | Figure(s) | Rotation |
 |---|---|---|---|
 | Monday | blue · Fear/Serenity | **Viktor Vektor** | none |
-| Tuesday | orange · Wrath/Courage | **Jackie** / Panam (alt) / River (alt2) | 3-way |
-| Wednesday | purple · Greed/Wisdom | **Wakako** / Padre (alt) | 2-way |
+| Tuesday | orange · Wrath/Courage | **Jackie** / Panam / River (roster) | 3-way |
+| Wednesday | purple · Greed/Wisdom | **Wakako** / Padre (roster) | 2-way |
 | Thursday | yellow · Excess/Generosity | **Misty** | none |
-| Friday | red · Jealousy/Love | **Kerry** / Lizzy Wizzy (alt) | 2-way |
+| Friday | red · Jealousy/Love | **Kerry** / Lizzy Wizzy (roster) | 2-way |
 | Saturday | green · Envy/Patience | **Judy** | none |
 | Sunday (Throne) | white-gold · Pride/Justice | **Johnny Silverhand** | none |
 | Sunday (Mirror, dual) | black-silver · Servility/Humility | **Rogue** | none |
@@ -347,22 +339,22 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: Jackie in full color, a broad grinning face and thick mustache, chrome-plated arm raised mid-charge, a lucha mask at his belt. Border: the circuit-trace ring recut in warm chrome, four glitch-glyph roundels, one flickering an orange Mars glyph. Colors: ember orange, chrome silver, warm brown skin, mask red.
 ```
 
-**Panam (alt)** → `assets/weeks/gaming/cp_street/primary/Panam.png`
+**Panam (roster)** → `assets/weeks/gaming/cp_street/primary/Panam.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, hot and steady. Center: Panam Palmer braced atop a Basilisk's open hatch, rifle raised toward the Badlands horizon, goggles pushed up into wind-blown hair. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Panam (alt, colored)** → `assets/weeks/gaming/cp_street/colored/Panam.png`
+**Panam (roster, colored)** → `assets/weeks/gaming/cp_street/colored/Panam.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: Panam in full color, sun-bronzed skin and wind-blown dark hair, braced atop a Basilisk's hatch with a raised rifle, goggles pushed up. Border: the circuit-trace ring recut in dust-tan chrome, four glitch-glyph roundels, one flickering an orange Mars glyph. Colors: desert orange, dust tan, gunmetal grey, sun-bronzed skin.
 ```
 
-**River (alt2)** → `assets/weeks/gaming/cp_street/primary/Jackie_v2.png`
+**River (roster)** → `assets/weeks/gaming/cp_street/primary/River.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, steady and righteous. Center: River Ward, ex-NCPD detective, standing his ground in a modest jacket rather than armor, a worn badge held up in one hand though it no longer means what it used to, his gaze fixed forward against a system he no longer trusts. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**River (alt2, colored)** → `assets/weeks/gaming/cp_street/colored/Jackie_v2.png`
+**River (roster, colored)** → `assets/weeks/gaming/cp_street/colored/River.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: River in full color, warm brown skin, a modest jacket, a worn badge held up in one hand, his gaze steady and forward. Border: the circuit-trace ring recut in badge-blue chrome, four glitch-glyph roundels, one flickering an orange Mars glyph. Colors: badge blue, ember orange, worn denim, warm brown skin.
 ```
@@ -382,12 +374,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: Wakako in full color, an elegant older woman in a jade kimono-inspired coat, holding a glowing data-shard over an untouched tea setting. Border: the circuit-trace ring recut in jade-toned chrome, four glitch-glyph roundels, one flickering a purple Mercury glyph. Colors: jade green, deep violet, tea gold, chrome silver.
 ```
 
-**Padre (alt)** → `assets/weeks/gaming/cp_street/primary/Padre.png`
+**Padre (roster)** → `assets/weeks/gaming/cp_street/primary/Padre.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and knowing. Center: Padre in a threadbare clerical collar behind a fixer's makeshift desk inside a converted chapel, a rosary wound once around one wrist beside a stack of eddie-chits, his half-smile equally at home hearing a confession or closing a deal. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Padre (alt, colored)** → `assets/weeks/gaming/cp_street/colored/Padre.png`
+**Padre (roster, colored)** → `assets/weeks/gaming/cp_street/colored/Padre.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: Padre in full color, a threadbare clerical collar, a rosary at one wrist beside a stack of chits on a chapel desk, candlelight warm on his face. Border: the circuit-trace ring recut in candle-gold chrome, four glitch-glyph roundels, one flickering a purple Mercury glyph. Colors: candle gold, deep violet, worn wood-brown, chrome silver.
 ```
@@ -422,12 +414,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: Kerry in full color, silver hair and a worn leather jacket, mid-riff on an electric guitar under warm spotlight, a faded backstage pass at his collar. Border: the circuit-trace ring recut in rose-gold chrome, four glitch-glyph roundels, one flickering a red Venus glyph. Colors: rose red, spotlight gold, silver hair, worn leather black.
 ```
 
-**Lizzy Wizzy (alt)** → `assets/weeks/gaming/cp_street/primary/LizzyWizzy.png`
+**Lizzy Wizzy (roster)** → `assets/weeks/gaming/cp_street/primary/LizzyWizzy.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, dazzling and restless. Center: Lizzy Wizzy mid-performance, twin chrome-bladed cyberarms flashing under stage light, a crowd's worth of adoration implied in the glow around her but her own eyes fixed somewhere just past the camera. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Lizzy Wizzy (alt, colored)** → `assets/weeks/gaming/cp_street/colored/LizzyWizzy.png`
+**Lizzy Wizzy (roster, colored)** → `assets/weeks/gaming/cp_street/colored/LizzyWizzy.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over brushed chrome, photorealistic render, perfectly centered, isolated on white background. Center: Lizzy Wizzy in full color, platinum hair and a glittering stage outfit, twin chrome-bladed cyberarms flashing under hot-pink stage light. Border: the circuit-trace ring recut in hot-pink chrome, four glitch-glyph roundels, one flickering a red Venus glyph. Colors: hot pink, chrome-blade silver, stage-light white, platinum hair.
 ```
@@ -508,9 +500,9 @@ sibling turns in lockstep with the other two, same date, same index).
 | Thursday | yellow · Excess/Generosity | **Solomon Reed** | none |
 | Friday | red · Jealousy/Love | **Evelyn Parker** | none |
 | Saturday | green · Envy/Patience | **Takemura** | none |
-| Sunday (Throne) | white-gold · Pride/Justice | **Saburo Arasaka** / Rosalind Myers (alt) | 2-way, synced |
-| Sunday (Mirror, dual) | black-silver · Servility/Humility | **Yorinobu** / Kurt Hansen (alt) | 2-way, synced |
-| Ninth (Unfound) | — | **Alt Cunningham** / Rache Bartmoss (alt) | 2-way, synced |
+| Sunday (Throne) | white-gold · Pride/Justice | **Saburo Arasaka** / Rosalind Myers (roster) | 2-way, synced |
+| Sunday (Mirror, dual) | black-silver · Servility/Humility | **Yorinobu** / Kurt Hansen (roster) | 2-way, synced |
+| Ninth (Unfound) | — | **Alt Cunningham** / Rache Bartmoss (roster) | 2-way, synced |
 | Title plate | — | **Soulkiller** | — |
 
 ### Monday — Songbird (So Mi)
@@ -618,12 +610,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over polished bright gold-and-chrome, photorealistic render, perfectly centered, isolated on white background. Center: Saburo in full color, silver-grey hair and a formal dark suit, seated with folded hands over the glowing gold Arasaka crest inlaid beneath him. Border: the circuit-trace ring recut in polished gold chrome, four glitch-glyph roundels, one flickering a white-gold Sun glyph. Colors: crimson red, imperial gold, formal black, silver hair.
 ```
 
-**Rosalind Myers (alt)** → `assets/weeks/gaming/cp_corpo/primary/RosalindMyers.png`
+**Rosalind Myers (roster)** → `assets/weeks/gaming/cp_corpo/primary/RosalindMyers.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block — the SAME enthroned composition, an authority that answers to no visible tower at all. Center: Rosalind Myers seated in the identical formal stillness inside a windowless FIA office, a wall of sealed case-files standing in for the Arasaka crest behind her, her folded hands carrying the same unshowy certainty — a different empire, the same seat. Border: a continuous circuit-trace ring carved in bronze relief, broken by four small roundels, one bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
-**Rosalind Myers (alt, colored)** → `assets/weeks/gaming/cp_corpo/colored/RosalindMyers.png`
+**Rosalind Myers (roster, colored)** → `assets/weeks/gaming/cp_corpo/colored/RosalindMyers.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over polished bright gold-and-chrome, photorealistic render, perfectly centered, isolated on white background — the identical seated composition to Saburo's own colored plate. Center: Rosalind in full color, silver-streaked dark hair and a severe formal suit, seated with folded hands before a wall of sealed case-files. Border: the circuit-trace ring recut in polished gold chrome, four glitch-glyph roundels, one flickering a white-gold Sun glyph. Colors: crimson red, muted federal gold, formal black, silver-streaked hair.
 ```
@@ -643,12 +635,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical seated composition to the Throne's own colored plate, palette inverted to night. Center: Yorinobu in full color, dark tousled hair and an open black jacket, seated over a cracked gold crest, his father's translucent blue engram-figure flickering faintly behind his shoulder. Border: the circuit-trace ring recut in dark iron and cold silver, four roundels bearing a dull ember Sun glyph. Colors: iron black, cold silver, engram blue, cracked-gold accent.
 ```
 
-**Kurt Hansen (alt)** → `assets/weeks/gaming/cp_corpo/primary/KurtHansen.png`
+**Kurt Hansen (roster)** → `assets/weeks/gaming/cp_corpo/primary/KurtHansen.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME throne silhouette, a different kind of usurped seat. Center: Colonel Kurt Hansen seated in the identical composition inside a fortified compound of his own making, a hand-painted militia insignia standing in for any corporate crest, a wall of surveillance screens flickering behind him like a throne room built entirely from stolen watchfulness. Border: a continuous circuit-trace ring carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief. NO lettering anywhere.
 ```
 
-**Kurt Hansen (alt, colored)** → `assets/weeks/gaming/cp_corpo/colored/KurtHansen.png`
+**Kurt Hansen (roster, colored)** → `assets/weeks/gaming/cp_corpo/colored/KurtHansen.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical seated composition to the Throne's own colored plate. Center: Kurt Hansen in full color, a grizzled militia uniform, seated before a wall of flickering surveillance screens standing in for a crest. Border: the circuit-trace ring recut in dark iron and cold silver, four roundels bearing a dull ember Sun glyph. Colors: iron black, cold silver, screen blue, militia-olive accent.
 ```
@@ -668,12 +660,12 @@ ROUND medallion, aged bronze relief, photorealistic render, isolated background,
 Ornate circular badge, vivid saturated neon-noir paint over pale static-chrome, photorealistic render, perfectly centered, isolated on white background. Center: Alt in full color, a translucent glowing code-blue figure with no solid body, standing within the storming grey architecture of the Blackwall. Border: the circuit-trace ring dissolving into static at the top, no day-glyph roundel. Colors: static white, storm grey, translucent code-blue, faint human-outline silver.
 ```
 
-**Rache Bartmoss (alt)** → `assets/weeks/gaming/cp_corpo/primary/RacheBartmoss.png`
+**Rache Bartmoss (roster)** → `assets/weeks/gaming/cp_corpo/primary/RacheBartmoss.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim — the SAME dissolving composition, the other half of the same old net-legend. Center: Rache Bartmoss rendered as a ragged, half-corporeal netrunner silhouette, a physical body reduced to a single cryo-fridge glimpsed faintly in the static behind him while his mind sprawls vast and formless through the net he himself tore open. Border: a continuous circuit-trace ring carved in bronze relief, its own lines fading into bare metal at the top, no roundel glyph. NO lettering anywhere.
 ```
 
-**Rache Bartmoss (alt, colored)** → `assets/weeks/gaming/cp_corpo/colored/RacheBartmoss.png`
+**Rache Bartmoss (roster, colored)** → `assets/weeks/gaming/cp_corpo/colored/RacheBartmoss.png`
 ```
 Ornate circular badge, vivid saturated neon-noir paint over pale static-chrome, photorealistic render, perfectly centered, isolated on white background — the identical dissolving composition to Alt's own colored plate. Center: Rache in full color, a ragged half-transparent figure fraying into green breach-static, a small glimpse of a cryo-fridge visible faintly behind him. Border: the circuit-trace ring dissolving into static at the top, no day-glyph roundel. Colors: static white, breach-static green, translucent code-blue, fridge-frost pale.
 ```
