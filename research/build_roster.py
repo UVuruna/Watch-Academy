@@ -317,7 +317,7 @@ def main() -> None:
             "season": [
                 f"celestial/seasons/badges/{s}" for s in (
                     "Spring", "Summer", "Autumn", "Winter",
-                    "WetSeason", "DrySeason",
+                    "Wet_Season", "Dry_Season",
                 )
             ],
             "turning point": [

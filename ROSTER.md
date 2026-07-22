@@ -423,8 +423,8 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | season | `Summer` | ✔ | ✔ |
 | season | `Autumn` | ✔ | ✔ |
 | season | `Winter` | ✔ | ✔ |
-| season | `WetSeason` | ✔ | ✔ |
-| season | `DrySeason` | ✔ | ✔ |
+| season | `Wet_Season` | ✔ | ✔ |
+| season | `Dry_Season` | ✔ | ✔ |
 | turning point | `SummerSolstice` | ✔ | ✔ |
 | turning point | `WinterSolstice` | ✔ | ✔ |
 | turning point | `Equinox` | ✔ | ✔ |
