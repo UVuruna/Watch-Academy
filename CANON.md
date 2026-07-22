@@ -16,6 +16,7 @@ rules by which any new member, theme or figure gets placed.
 - [The Ninth — Outside the Circle](#the-ninth)
 - [Pointer Archetypes](#pointer-archetypes)
 - [The Calendar — the Twelve-Wedge Pointer](#the-dozen)
+- [The Two Dozen Systems and the Four Dozens](#the-dozen-systems)
 - [The Triads — the Trio's Stacked Readings](#the-triads)
 - [The Banknote — In God We Trust](#the-banknote)
 - [Working Rules for Agents](#working-rules)
@@ -279,9 +280,44 @@ the anchor HOLDS the family gathered (the bond), AND it sits at the
 BOTTOM — the bottom of the hierarchy. That bottom seat is itself part
 of the family's love mechanics: the mother's love for the child includes
 having someone to whom she can be dominant and principal, someone who
-sees in her hierarchical superiority. (Owner text — full expansion is a
-Phase-3 CANON round; the figure key and art are renamed
-`Child_Dawn`→`Child_Anchor` now.)
+sees in her hierarchical superiority. (Owner text — the figure key and
+art are renamed `Child_Dawn`→`Child_Anchor`; the full reading follows.)
+
+**THE CHILD — THE ANCHOR, full reading (owner seal 2026-07-22, the
+Phase-3 CANON round).** The anchor is the family's TRUEST dual, and the
+name was chosen for holding both meanings at once:
+
+- **The anchor HOLDS.** The child is what keeps the family gathered —
+  the reason the husband and wife stay bound, the shared work that
+  outlasts every quarrel, the weight that steadies the whole boat
+  against the current. In the Family light triangle the child stands
+  green at the crown and the two below STRIVE FOR him (the love circuit
+  runs husband→wife→child→father); the anchor is that striving given
+  its object. Remove the anchor and the boat drifts; the household holds
+  because there is a child to hold it TO.
+- **The anchor sits at the BOTTOM.** An anchor's whole nature is to sink
+  to the lowest point and grip there — and the child IS the bottom of
+  the family's hierarchy, the one below the parents, the one who obeys
+  (the Thesis of the dialectic teaching: the child OBEYS, the youth
+  REBELS, the adult understands). This is not a diminishment; it is the
+  second half of the love mechanic. **The mother's love for the child
+  includes having someone to whom she can be dominant and principal** —
+  someone who looks UP, someone in whose eyes her own hierarchical
+  superiority is real and welcome. The high seat of the house is hers
+  (the Family circuit's own gift, mother→child: *Leadership — the high
+  seat of the house*, the small Crown of the hearth); the child's low
+  seat is what makes that high seat MEAN something. A queen needs a
+  realm; the anchor at the bottom is the ground her crown stands on.
+- **The two meanings are ONE.** The anchor holds the family together
+  BECAUSE it sits at the bottom — the lowest, most-loved, most-needed
+  seat, the one everyone pours into and the one that grips the boat
+  fast. Holding and being-held-lowest are the same act. This is why the
+  Dawn had to yield the ROLE (a dawn only rises; it cannot also sink and
+  grip) while KEEPING its reading: on the stacked Triads the child is
+  still the Dawn — the new day, the future, the one the parents pour
+  forward into (the Family circuit flows against the clock, love running
+  toward tomorrow). Role: the Anchor. Time-reading: the Dawn. Both true,
+  the way every seat on this dial carries more than one canon at once.
 
 Six arms, two interlocked triangles, and ONE mechanic: love can turn
 flaws into virtues, and hatred can turn the same virtues into flaws.
@@ -717,6 +753,85 @@ as the Zodiac Dozen lights the current sign.)
 `calendar`); the two wheels are **Zodiac** (left) and **Almanac**
 (right), offered where the other pointers offer Paint/Light.
 
+<a id="the-dozen-systems"></a>
+
+## The Two Dozen Systems and the Four Dozens (owner seal 2026-07-22)
+
+The Calendar pointer's twelve wedges can be cut two ways, and the cut
+decides what KIND of dozen can ride them. Both were sealed with the
+owner 2026-07-22 (RESTRUCTURE §New Content); every future twelve-fold
+theme is built on one or the other.
+
+**System A — the zodiac-aligned wheel.** The wedge BOUNDARIES sit ON
+the cardinal points (12h–14h, 14h–16h, …), exactly as the Zodiac Dozen
+already does (Cancer opens at the summer solstice, the dial's own top).
+Because the boundaries land on the cardinals, the twelve fall naturally
+into **SIX PAIRS** — two flanking the top, two the bottom, two each
+side. System A carries the dozens that come IN PAIRS: a king and his
+queen, twin lights, lovers, brother-and-sister missions.
+
+**System B — the month-aligned wheel.** The wedges are the same twelve
+2-hour watches but SHIFTED 15° so their CENTERS sit on the cardinals
+(11h–13h, 13h–15h, …), exactly as the Almanac Month Dozen does (June
+centered on noon, the Chinese Horse hour 11:00–13:00). A centered wheel
+has **ONE CROWN** (the top wedge, 12h), **ONE ROOT** (the bottom wedge,
+24h), **two flanks**, and **SIX OPPOSITION AXES** — every wedge faces
+its exact opposite across the center. System B carries the dozens
+defined by OPPOSITES: an emotion and its cure, a virtue and its failing.
+
+**The four Dozens (owner-approved, Phase 3):**
+
+| Dozen | System | Shape | Crown / Root | Sheet |
+|---|---|---|---|---|
+| **Emotions** | B | crown, root, six opposition axes | Love 12h / Hatred 24h | `calendars/emotions_prompts.md` |
+| **Virtue Wheel** (Virtues + Vices, two registers of one wheel) | B | crown, root, six axes; paint/light | Courage 12h / Cowardice 24h (proposed, pending) | `calendars/virtue_wheel_prompts.md` |
+| **Olympians** | A | six pairs | Zeus+Hera / Poseidon+Demeter | `calendars/olympians_prompts.md` |
+| **Apostles** | A | six pairs | Peter+Andrew / Simon+Judas | `calendars/apostles_prompts.md` |
+
+- **Emotions (System B).** The six Prism-paint hexagram emotions sit at
+  their own prism hours — **Love 12h, Courage 16h, Pride 20h, Hatred
+  24h, Fear 04h, Humility 08h**, KEEPING their prism hues (the
+  color-fidelity law's cleanest case: retention, not a move) — and six
+  new intermediates complete the Dozen: **Hope 14h, Ambition 18h, Envy
+  22h, Despair 02h, Doubt 06h, Gratitude 10h**. The six opposition axes
+  are cures: Love↔Hatred, Hope↔Despair, Courage↔Fear, Ambition↔Doubt,
+  Pride↔Humility, Envy↔Gratitude.
+- **Virtue Wheel (System B, two registers of one wheel).** Aristotle's
+  twelve virtues (the LIGHT register — additive, luminous) and their
+  twelve vices (the PAINT register — subtractive, heavy pigment) on ONE
+  wheel of twelve seats: Courage/Cowardice, Temperance/Gluttony,
+  Generosity/Greed, Magnificence/Vulgarity, Magnanimity/Vanity,
+  Patience/Wrath, Truthfulness/Boastfulness, Wit/Buffoonery,
+  Friendliness/Flattery, Modesty/Shamelessness, Right Ambition/
+  Over-ambition, Just Indignation/Envy. The crown/root seating is
+  PROPOSED (Courage crowns the light; by the paint-is-light-inverted
+  reading its vice Cowardice roots the paint directly beneath) and
+  awaits the owner's verdict — see the sheet's own PENDING section.
+- **Olympians (System A, six pairs).** Zeus+Hera crown the top; Apollo
+  (sun/morning) LEFT and Artemis (moon/evening) RIGHT are the twin-light
+  flanks; Ares+Aphrodite, Hephaestus+Athena, Hermes+Dionysus fill the
+  middle; Poseidon+Demeter root the bottom (sea and grain, the elder
+  powers the wheel rests on).
+- **Apostles (System A, six pairs, sent two by two, Mark 6:7).**
+  Peter+Andrew crown (the rock and the first-called); James+John,
+  Philip+Bartholomew, Thomas+Matthew, James-of-Alphaeus+Thaddaeus fill
+  the middle; **Simon the Zealot + Judas Iscariot root the bottom — and
+  Judas beside midnight MIRRORS the Prism paint's Hatred at 24h** (the
+  same purple, the same collapse of love), the resonance repeated in the
+  Emotions Dozen's own Hatred root: the bottom of every wheel is where
+  love breaks, spoken across three Dozens at once.
+
+**Display carries the Calendar's own doctrine.** These Dozens mount as
+round medallions on the Calendar pointer at
+`CALENDAR_MOUNT_RADIUS_FRACTION` (the DESIGN ZODIAC law — anything with
+twelve can be activated on the Calendar), beside the zodiac signs, the
+Chinese animals and the Slavic months already there; the wedges
+themselves stay flat color (§The Calendar). Each Dozen wears the
+calendar-mount rondel register (night-window stained glass) with its own
+shared border device — the Wheel of the Heart for Emotions, the Mean's
+balance-beam for the Virtue Wheel, the Greek key for the Olympians, the
+fisherman's Net for the Apostles.
+
 <a id="the-triads"></a>
 
 ## The Triads — the Trio's Stacked Readings (owner 2026-07-17, time FLIPPED same day)
@@ -820,6 +935,42 @@ and logo spec for each leg):**
 
 Each leg gets its story (text), an example and its logo — queued
 with the Family articles.
+
+### The abstract triads & dualities art doctrine (owner seal 2026-07-22)
+
+Until now the Trio's stacked readings lived ONLY in the two-row
+articles (the concern the owner resolved 2026-07-17: textual layers, not
+new visual modes). Phase 3 adds a parallel ART track, sealed 2026-07-22:
+**every stacked reading gets its own image.** The rule and its bounds:
+
+- **The persons already have their lancets** — God/the Devil/Jesus
+  (`trinity_prompts.md`), the Father/Mother/Child (`family_prompts.md`).
+  The new art is for the ABSTRACT readings that had none: the concepts,
+  not the faces.
+- **The four abstract trios** ride the Trinity arm geometry (yellow 12h,
+  red 20h, blue 04h) and get a lancet + a 1:1 circle companion each:
+  **Time** (Present 12h / Future 20h / Past 04h), **Callings** (Judge /
+  Prosecutor / Advocate), **Theological** (Faith / Love / Hope),
+  **Dialectic** (Synthesis 12h / Antithesis 20h / Thesis 04h). Each is
+  drawn as its ABSTRACTION — a lit threshold for the Present, an empty
+  judgment seat for the Judge, an anchor for Hope, a keystone marrying
+  two streams for Synthesis — never a person. Sheet:
+  `research/prompts/archetype/triads_prompts.md`.
+- **The two dualities** get the same lancet + circle treatment:
+  **Good/Evil** (light rising and giving vs darkness sinking and
+  devouring) and **Self/Others** — love-for-self and love-for-others,
+  the two halves of the Prism summit `One_Love` pulled apart, each
+  keeping the CLEAR-HEART motif (the razor's edge where the two loves
+  meet without tipping into sin — Self in Pride's warm red held before
+  the sin, Others in Hope's cool blue held before self-erasure; neither
+  pole is a vice, the sin is only the tip past the clear heart). Sheet:
+  `research/prompts/archetype/dualities_prompts.md`.
+- **Register and wiring.** All of it is the house night-window
+  stained-glass family (the same glass as the Trinity lancets and the
+  Prism persons); the circle companions follow the badge-1:1 system.
+  WHICH stacked reading draws WHICH image, and where the two-row article
+  shows it, is a future wiring round — the art is prepared ahead of the
+  wiring, exactly as the badge-1:1 circles are.
 
 <a id="the-banknote"></a>
 
