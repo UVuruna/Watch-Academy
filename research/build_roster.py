@@ -51,9 +51,9 @@ NINTHS = {
     "slavic": ("Crnobog", "slavic/primary/crnobog"),
     "alchemy": ("The Philosopher's Stone", "alchemy/primary/stone"),
     "profession": ("The Jester", "profession/primary/Jester"),
-    "religion": ("The Unknown God", "religion/primary/unknown_god"),
-    "religion_alt": ("The Lost Mystery", "religion/secondary/lost_mystery"),
-    "bible": ("Melchizedek", "bible/primary/melchizedek"),
+    "religion": ("The Unknown God", "creeds/secondary/unknown_god"),
+    "religion_alt": ("The Lost Mystery", "creeds/secondary/lost_mystery"),
+    "bible": ("Melchizedek", "bible/secondary/melchizedek"),
     "bible_dark": ("Legion", "bible/dark/legion"),
 }
 THEME_ORDER = (
@@ -66,19 +66,21 @@ THEME_ORDER = (
 missing: list[str] = []
 
 
+SOURCE_SUFFIX = {"gemini": "_gem", "chatgpt": "_gpt"}
+
+
 def mark(source: str, rel: str) -> str:
     """✔ / — per source-resolved file; a miss joins the shortage list.
-    `rel` is canonical under weekday/ — the ../emblem step-ups the
-    theme tables use resolve to their real root before the SOURCE
-    segment lands (mirroring config.paths.art_file)."""
-    import posixpath
-
-    canonical = posixpath.normpath(f"weekday/{rel}")
-    root, _, rest = canonical.partition("/")
-    path = ROOT / "assets" / root / source / f"{rest}.png"
-    if path.exists():
+    `rel` is theme-relative — `defaults.weekday_art` resolves it into
+    the one-hierarchy tree (weeks/<group>/... plus the ../emblem and
+    ../earth step-ups), then the SOURCE lands as the terminal filename
+    suffix (RESTRUCTURE 2026-07-22, mirroring config.paths.art_file);
+    an owner hand-made suffix-less file satisfies either source."""
+    base = defaults.weekday_art(f"{rel}.png")
+    suffixed = base.with_name(f"{base.stem}{SOURCE_SUFFIX[source]}{base.suffix}")
+    if suffixed.exists() or base.exists():
         return "✔"
-    missing.append(f"{source}: {root} {rest}.png")
+    missing.append(f"{source}: {base.relative_to(ROOT / 'assets').as_posix()}")
     return "—"
 
 
@@ -209,12 +211,22 @@ def pantheon_sections() -> list[str]:
     return out
 
 
-def zodiac_mark(source: str, rel: str) -> str:
-    path = ROOT / "assets" / "zodiac" / source / f"{rel}.png"
-    if path.exists():
+def suffix_mark(source: str, rel: str) -> str:
+    """✔ / — for a sourceless path relative to assets/ — the source is
+    the terminal filename suffix (RESTRUCTURE 2026-07-22); an owner
+    hand-made suffix-less file satisfies either source."""
+    base = ROOT / "assets" / f"{rel}.png"
+    suffixed = base.with_name(
+        f"{base.stem}{SOURCE_SUFFIX[source]}{base.suffix}"
+    )
+    if suffixed.exists() or base.exists():
         return "✔"
-    missing.append(f"{source}: zodiac {rel}.png")
+    missing.append(f"{source}: {rel}.png")
     return "—"
+
+
+def zodiac_mark(source: str, rel: str) -> str:
+    return suffix_mark(source, f"calendars/{rel}")
 
 
 def zodiac_sections() -> list[str]:
@@ -247,11 +259,7 @@ def zodiac_sections() -> list[str]:
 
 
 def flat_mark(root: str, source: str, rel: str) -> str:
-    path = ROOT / "assets" / root / source / f"{rel}.png"
-    if path.exists():
-        return "✔"
-    missing.append(f"{source}: {root} {rel}.png")
-    return "—"
+    return suffix_mark(source, f"{root}/{rel}" if root else rel)
 
 
 def flat_section(title: str, root: str, groups: dict[str, list[str]]):
@@ -299,43 +307,47 @@ def main() -> None:
     lines += pantheon_sections()
     lines += zodiac_sections()
     lines += flat_section(
-        "Badges", "badge",
+        "Badges", "",
         {
-            "trinity": ["trinity/Faith", "trinity/Hope", "trinity/Love"],
+            "trinity": [
+                "archetypes/trinity/badges/Faith",
+                "archetypes/trinity/badges/Hope",
+                "archetypes/trinity/badges/Love",
+            ],
             "season": [
-                f"season/{s}" for s in (
+                f"celestial/seasons/badges/{s}" for s in (
                     "Spring", "Summer", "Autumn", "Winter",
                     "WetSeason", "DrySeason",
                 )
             ],
             "turning point": [
-                f"season/turning_point/{s}" for s in (
+                f"celestial/seasons/badges/turning_point/{s}" for s in (
                     "SummerSolstice", "WinterSolstice", "Equinox",
                 )
             ],
             "meteorological": [
-                f"season/meteorological/{s}" for s in (
+                f"celestial/seasons/badges/meteorological/{s}" for s in (
                     "Spring", "Summer", "Autumn", "Winter",
                 )
             ],
             "scale": [
-                "scale/Lucifer_Triangle", "scale/Judas_Triangle",
-                "scale/Union",
+                "archetypes/scale/Lucifer", "archetypes/scale/Judas",
+                "archetypes/scale/Union",
             ],
             "scale glass": [
-                f"scale/glass/{s}" for s in (
-                    "Judas_Triangle", "Lucifer_Triangle",
-                    "Judas_Triangle_v2", "Lucifer_Triangle_v2",
-                    "Union_Meeting", "Union",
+                f"archetypes/scale/glass/{s}" for s in (
+                    "Judas", "Lucifer",
+                    "Judas_v2", "Lucifer_v2",
+                    "Union", "Union_v2",
                 )
             ],
             # Only the silver master is REQUIRED art — gold and bronze
             # recolor from it at runtime (0.14.238 radial bezel mask).
-            "subdial (silver master)": ["subdial/silver/center"],
+            "subdial (silver master)": ["instrument/subdial/silver/center"],
         },
     )
     lines += flat_section(
-        "Emblems", "emblem",
+        "Emblems", "weeks/inner_wheel",
         {
             "virtue": [
                 f"virtue/{v}" for v in (

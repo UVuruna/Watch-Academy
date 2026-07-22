@@ -2,7 +2,7 @@
 
 **GENERATED — do not edit by hand.** Regenerate with `python research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
 
-_Last generated: 2026-07-20_
+_Last generated: 2026-07-22_
 
 ## The Position System — seat archetypes
 
@@ -154,7 +154,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Sikhism | `sikhism` | ✔ | ✔ |
 | saturn | Saturday | Judaism | `judaism` | ✔ | ✔ |
 | dual | Sunday | Christianity / Satanism | `satanism` | ✔ | ✔ |
-| ninth | — | The Unknown God | `unknown_god` | — | — |
+| ninth | — | The Unknown God | `unknown_god` | ✔ | ✔ |
 
 ### Ancient religions (`religion_alt`)
 
@@ -238,7 +238,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Adam & Eve | `adam_and_eve` | ✔ | ✔ |
 | saturn | Saturday | Joseph | `joseph` | ✔ | ✔ |
 | dual | Sunday | Ancient of Days / Son | `son_servant` | ✔ | ✔ |
-| ninth | — | Melchizedek | `melchizedek` | — | — |
+| ninth | — | Melchizedek | `melchizedek` | ✔ | ✔ |
 
 ### Bible II (`bible2`)
 
@@ -432,16 +432,16 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 | meteorological | `Summer` | ✔ | ✔ |
 | meteorological | `Autumn` | ✔ | ✔ |
 | meteorological | `Winter` | ✔ | ✔ |
-| scale | `Lucifer_Triangle` | ✔ | ✔ |
-| scale | `Judas_Triangle` | ✔ | ✔ |
+| scale | `Lucifer` | ✔ | ✔ |
+| scale | `Judas` | ✔ | ✔ |
 | scale | `Union` | ✔ | ✔ |
-| scale glass | `Judas_Triangle` | ✔ | ✔ |
-| scale glass | `Lucifer_Triangle` | ✔ | ✔ |
-| scale glass | `Judas_Triangle_v2` | ✔ | ✔ |
-| scale glass | `Lucifer_Triangle_v2` | ✔ | ✔ |
-| scale glass | `Union_Meeting` | ✔ | ✔ |
+| scale glass | `Judas` | ✔ | ✔ |
+| scale glass | `Lucifer` | ✔ | ✔ |
+| scale glass | `Judas_v2` | ✔ | ✔ |
+| scale glass | `Lucifer_v2` | ✔ | ✔ |
 | scale glass | `Union` | ✔ | ✔ |
-| subdial (silver master) | `center` | ✔ | — |
+| scale glass | `Union_v2` | ✔ | ✔ |
+| subdial (silver master) | `center` | — | — |
 
 ## Emblems
 
@@ -484,85 +484,82 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 ## Shortage List — everything the tables marked —
 
-**chatgpt** (58):
+**chatgpt** (56):
 
-- weekday planets/primary/sun.png
-- weekday planets/primary/moon.png
-- weekday planets/primary/mars.png
-- weekday planets/primary/mercury.png
-- weekday planets/primary/jupiter.png
-- weekday planets/primary/venus.png
-- weekday planets/primary/saturn.png
-- weekday planets/colored/sun.png
-- weekday planets/colored/moon.png
-- weekday planets/colored/mars.png
-- weekday planets/colored/mercury.png
-- weekday planets/colored/jupiter.png
-- weekday planets/colored/venus.png
-- weekday planets/colored/saturn.png
-- weekday greek/primary/hades.png
-- weekday greek/colored/hades.png
-- weekday norse/primary/baldur.png
-- weekday norse/colored/baldur.png
-- weekday egypt/primary/set.png
-- weekday slavic/primary/crnobog.png
-- weekday religion/primary/unknown_god.png
-- weekday religion/secondary/lost_mystery.png
-- weekday profession/colored/Ruler.png
-- weekday profession/colored/Physician.png
-- weekday profession/colored/Soldier.png
-- weekday profession/colored/Merchant.png
-- weekday profession/colored/Priest.png
-- weekday profession/colored/Artist.png
-- weekday profession/colored/Farmer.png
-- weekday profession/colored/Servant_dual.png
-- weekday profession/primary/Jester.png
-- weekday bible/primary/melchizedek.png
-- weekday greek/pantheon/zeus.png
-- zodiac chinese/primary/Rat.png
-- zodiac chinese/colored/Rat.png
-- zodiac chinese/primary/Ox.png
-- zodiac chinese/colored/Ox.png
-- zodiac chinese/primary/Tiger.png
-- zodiac chinese/colored/Tiger.png
-- zodiac chinese/primary/Rabbit.png
-- zodiac chinese/colored/Rabbit.png
-- zodiac chinese/primary/Dragon.png
-- zodiac chinese/colored/Dragon.png
-- zodiac chinese/primary/Snake.png
-- zodiac chinese/colored/Snake.png
-- zodiac chinese/primary/Horse.png
-- zodiac chinese/colored/Horse.png
-- zodiac chinese/primary/Goat.png
-- zodiac chinese/colored/Goat.png
-- zodiac chinese/primary/Monkey.png
-- zodiac chinese/colored/Monkey.png
-- zodiac chinese/primary/Rooster.png
-- zodiac chinese/colored/Rooster.png
-- zodiac chinese/primary/Dog.png
-- zodiac chinese/colored/Dog.png
-- zodiac chinese/primary/Pig.png
-- zodiac chinese/colored/Pig.png
-- badge subdial/silver/center.png
+- weeks/celestial_bodies/planets/primary/sun.png
+- weeks/celestial_bodies/planets/primary/moon.png
+- weeks/celestial_bodies/planets/primary/mars.png
+- weeks/celestial_bodies/planets/primary/mercury.png
+- weeks/celestial_bodies/planets/primary/jupiter.png
+- weeks/celestial_bodies/planets/primary/venus.png
+- weeks/celestial_bodies/planets/primary/saturn.png
+- weeks/celestial_bodies/planets/colored/sun.png
+- weeks/celestial_bodies/planets/colored/moon.png
+- weeks/celestial_bodies/planets/colored/mars.png
+- weeks/celestial_bodies/planets/colored/mercury.png
+- weeks/celestial_bodies/planets/colored/jupiter.png
+- weeks/celestial_bodies/planets/colored/venus.png
+- weeks/celestial_bodies/planets/colored/saturn.png
+- weeks/myth/greek/primary/hades.png
+- weeks/myth/greek/colored/hades.png
+- weeks/myth/norse/primary/baldur.png
+- weeks/myth/norse/colored/baldur.png
+- weeks/myth/egypt/primary/set.png
+- weeks/myth/slavic/primary/crnobog.png
+- weeks/faith/creeds/secondary/lost_mystery.png
+- weeks/crafts/profession/colored/Ruler.png
+- weeks/crafts/profession/colored/Physician.png
+- weeks/crafts/profession/colored/Soldier.png
+- weeks/crafts/profession/colored/Merchant.png
+- weeks/crafts/profession/colored/Priest.png
+- weeks/crafts/profession/colored/Artist.png
+- weeks/crafts/profession/colored/Farmer.png
+- weeks/crafts/profession/colored/Servant_dual.png
+- weeks/crafts/profession/primary/Jester.png
+- weeks/myth/greek/pantheon/zeus.png
+- calendars/chinese/primary/Rat.png
+- calendars/chinese/colored/Rat.png
+- calendars/chinese/primary/Ox.png
+- calendars/chinese/colored/Ox.png
+- calendars/chinese/primary/Tiger.png
+- calendars/chinese/colored/Tiger.png
+- calendars/chinese/primary/Rabbit.png
+- calendars/chinese/colored/Rabbit.png
+- calendars/chinese/primary/Dragon.png
+- calendars/chinese/colored/Dragon.png
+- calendars/chinese/primary/Snake.png
+- calendars/chinese/colored/Snake.png
+- calendars/chinese/primary/Horse.png
+- calendars/chinese/colored/Horse.png
+- calendars/chinese/primary/Goat.png
+- calendars/chinese/colored/Goat.png
+- calendars/chinese/primary/Monkey.png
+- calendars/chinese/colored/Monkey.png
+- calendars/chinese/primary/Rooster.png
+- calendars/chinese/colored/Rooster.png
+- calendars/chinese/primary/Dog.png
+- calendars/chinese/colored/Dog.png
+- calendars/chinese/primary/Pig.png
+- calendars/chinese/colored/Pig.png
+- instrument/subdial/silver/center.png
 
-**gemini** (18):
+**gemini** (17):
 
-- weekday planets/colored/sun.png
-- weekday planets/colored/moon.png
-- weekday planets/colored/mars.png
-- weekday planets/colored/mercury.png
-- weekday planets/colored/jupiter.png
-- weekday planets/colored/venus.png
-- weekday planets/colored/saturn.png
-- weekday greek/primary/hades.png
-- weekday greek/colored/hades.png
-- weekday norse/primary/baldur.png
-- weekday norse/colored/baldur.png
-- weekday egypt/primary/set.png
-- weekday slavic/primary/crnobog.png
-- weekday religion/primary/unknown_god.png
-- weekday religion/secondary/lost_mystery.png
-- weekday profession/primary/Jester.png
-- weekday bible/primary/melchizedek.png
-- weekday greek/pantheon/zeus.png
+- weeks/celestial_bodies/planets/colored/sun.png
+- weeks/celestial_bodies/planets/colored/moon.png
+- weeks/celestial_bodies/planets/colored/mars.png
+- weeks/celestial_bodies/planets/colored/mercury.png
+- weeks/celestial_bodies/planets/colored/jupiter.png
+- weeks/celestial_bodies/planets/colored/venus.png
+- weeks/celestial_bodies/planets/colored/saturn.png
+- weeks/myth/greek/primary/hades.png
+- weeks/myth/greek/colored/hades.png
+- weeks/myth/norse/primary/baldur.png
+- weeks/myth/norse/colored/baldur.png
+- weeks/myth/egypt/primary/set.png
+- weeks/myth/slavic/primary/crnobog.png
+- weeks/faith/creeds/secondary/lost_mystery.png
+- weeks/crafts/profession/primary/Jester.png
+- weeks/myth/greek/pantheon/zeus.png
+- instrument/subdial/silver/center.png
 

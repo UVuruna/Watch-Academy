@@ -1,7 +1,7 @@
 # Scale Prompts (Gemini) — the Judas–Lucifer Scale, both registers
 
 The ONE sheet for the Scale tematika: the **metal cameo medallions**
-(the original set — the art exists at `assets/badge/gemini/scale/`)
+(the original set — the art exists at `assets/archetypes/scale/`)
 AND the **stained-glass windows** (the owner's 2026-07-15 discovery:
 title-only generations produced night-window triangles he approved —
 "judas1" and the Lucifer window are ADOPTED as masters). Behind the
@@ -12,17 +12,19 @@ Same house rules as every sheet: photorealistic render, perfectly
 centered, isolated background, **NO lettering anywhere in the
 image**. Generate a whole register in one chat session.
 
-Drop locations:
+Drop locations (figure-first stems, RESTRUCTURE 2026-07-22 — the old
+`_Triangle`/lowercase naming zoo is dead; every file is
+`<Figure>[_vN]_<src>.png`):
 
-- Metal cameo: `assets/badge/<source>/scale/Lucifer_Triangle.png`,
-  `…/Judas_Triangle.png`, `…/Union.png`
-- Stained glass: `assets/badge/<source>/scale/glass/` —
-  `assets/archetypes/scale/Lucifer_Triangle.png`, `assets/archetypes/scale/Judas_Triangle.png` (the adopted masters),
-  `Lucifer_Triangle_v2.png`, `Judas_Triangle_v2.png` (GPT's own
-  variants, kept beside), `Union_Meeting.png` (the figurative Union)
-  and `assets/archetypes/scale/Union.png` (the symbolic rose window); the unused hanged-Judas
-  renders may live as `Judas_Triangle_alt*.png` or be discarded —
-  owner's call
+- Metal cameo: `assets/archetypes/scale/Lucifer.png`,
+  `assets/archetypes/scale/Judas.png`, `assets/archetypes/scale/Union.png`
+  (the owner's later refresh batches live beside as `_vN` versions of
+  the SAME figures — all pooled into one daily rotation)
+- Stained glass: `assets/archetypes/scale/glass/` —
+  `Lucifer.png`, `Judas.png` (the adopted masters),
+  `Lucifer_v2.png`, `Judas_v2.png` (GPT's own variants, kept beside),
+  `Union_v2.png` (the figurative Meeting) and `Union.png` (the
+  symbolic rose window)
 
 ---
 
@@ -53,13 +55,13 @@ balancing at null).
 
 ## The three badges
 
-**Lucifer Triangle** → `assets/archetypes/scale/Lucifer_Triangle.png`
+**Lucifer Triangle** → `assets/archetypes/scale/Lucifer.png`
 
 ```
 Circular metal badge, photorealistic render, perfectly centered, isolated on white background. A near-black aged iron disc rimmed by a plain polished bronze ring. Center: a large UPWARD-pointing triangle of warm polished copper-bronze, beveled like a jewel setting, with a single living orange flame burning inside its opening; the flame's glow warms the triangle's inner edges. Engraved flat into the dark field around it: a small falling star with a long trail at the upper left, a second smaller falling star near the bottom, and a small toppled five-point crown at the right. Palette: warm copper, ember orange, near-black iron. NO lettering anywhere.
 ```
 
-**Judas Triangle** → `assets/archetypes/scale/Judas_Triangle.png`
+**Judas Triangle** → `assets/archetypes/scale/Judas.png`
 
 ```
 Circular metal badge, photorealistic render, perfectly centered, isolated on white background. A dark scratched gunmetal disc rimmed by a plain brushed steel ring. Center: a large DOWNWARD-pointing triangle of cold brushed steel, beveled like a jewel setting, its opening deliberately EMPTY — bare dark metal shows through. At the top of the field, a knotted rope tied into a small hangman's noose lies in relief against the metal; at the bottom, a loose pile of small silver coins — thirty pieces — pools along the rim's inner edge. Palette: cold steel, graphite, tarnished silver; no warm hues anywhere. NO lettering anywhere.
@@ -81,7 +83,7 @@ glass/ paths above; regenerate from these prompts only for the
 ChatGPT parallel or a damaged file). GPT then produced SECOND
 VARIANTS on its own — described below as the v2 prompts so they can
 be regenerated too (the owner keeps whichever he prefers per slot;
-the unused ones live beside as `_v2`/`_alt`). The windows are SHAPED
+the unused ones live beside as `_vN` versions). The windows are SHAPED
 as the triangles themselves; the scale completes with TWO UNIONS
 (owner doctrine, this round): one **figurative** — the imaginary
 MEETING of the two extremes, each tempering the other's madness —
@@ -89,21 +91,21 @@ and one **symbolic** — the clear-hearted rose window. Hell is what
 happened because they never met; the Meeting is what would have
 happened if they had.
 
-**Judas Triangle — glass** → `assets/archetypes/scale/glass/Judas_Triangle.png`
+**Judas Triangle — glass** → `assets/archetypes/scale/glass/Judas.png`
 *(the adopted master: the owner's "judas1")*
 
 ```
 DOWNWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep midnight-blue glass throughout, no warm tones. Center: Judas half-turned from a cold white rose of light, clutching the money bag to his chest, coins slipping from it into the dark; upper left panel the Last Supper at table, upper right panel Gethsemane — a figure weeping under the olive tree by moonlight; below the bag, a small arched gate where a hooded figure walks down night steps out of the city. Border: thorned-vine leadwork in blue-black; three rim roundels — a knotted noose at the apex-top, a water drop at one corner, a chalice at the other; a small money-bag roundel at the descending point. Palette: midnight blue, silver-white light, blue-black lead. NO lettering anywhere.
 ```
 
-**Lucifer Triangle — glass** → `assets/archetypes/scale/glass/Lucifer_Triangle.png`
+**Lucifer Triangle — glass** → `assets/archetypes/scale/glass/Lucifer.png`
 *(the adopted master: the owner's Lucifer window)*
 
 ```
 UPWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Ember-red and gold glass throughout, no cold tones. Center: the beautiful winged rebel mid-rise on a black crag, one arm flung up toward a golden radiance pouring from the apex, dark-red feathered wings spread, red drapery streaming; below him the crag falls into rolling ember-red cloudglass. Border: darkened gothic leadwork; the all-seeing eye in a roundel at the apex under the golden light; two eight-point star roundels at the base corners. Palette: ember red, molten gold, black-iron lead. NO lettering anywhere.
 ```
 
-**Judas Triangle — glass v2** → `assets/archetypes/scale/glass/Judas_Triangle_v2.png`
+**Judas Triangle — glass v2** → `assets/archetypes/scale/glass/Judas_v2.png`
 *(GPT's own unprompted variant, described here for regeneration —
 the darker nocturne of the same composition)*
 
@@ -111,7 +113,7 @@ the darker nocturne of the same composition)*
 DOWNWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep navy and blue-black glass, darker than midnight, no warm tones. Center: Judas bowed over the money bag clutched in both hands, coins slipping from it one by one down toward the descending point, his halo a cold white glass rose behind a lowered head; upper left panel the Last Supper crowded at table under a blue arch, the bright figure at its center; upper right panel Gethsemane under a full moon — a mourner weeping on the rocks above a night city of small lit windows; beneath the coins, an arched stone gate where a hooded figure descends night steps out of the city. Border: braided thorn-vine leadwork in near-black iron; a water-drop roundel at one top corner, a chalice roundel at the other, a money-bag roundel at the descending point. Palette: deep navy, blue-black, one cold white glow, iron lead. NO lettering anywhere.
 ```
 
-**Lucifer Triangle — glass v2** → `assets/archetypes/scale/glass/Lucifer_Triangle_v2.png`
+**Lucifer Triangle — glass v2** → `assets/archetypes/scale/glass/Lucifer_v2.png`
 *(GPT's own unprompted variant — the bat-winged fall with the figure
 in the light he is losing)*
 
@@ -123,7 +125,7 @@ UPWARD-pointing triangular stained-glass window, night-window register, photorea
 
 ## The two Unions
 
-**The Union I — the Meeting (figurative)** → `assets/archetypes/scale/glass/Union_Meeting.png`
+**The Union I — the Meeting (figurative)** → `assets/archetypes/scale/glass/Union_v2.png`
 *(the owner's brief, this round: the IMAGINARY union — what would
 have happened had the two extremes FOUND each other and each tempered
 the other's madness. Neither was useless: Lucifer's cup overflowed

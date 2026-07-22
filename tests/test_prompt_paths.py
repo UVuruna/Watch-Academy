@@ -196,10 +196,9 @@ _WHITELIST: dict[str, str] = {
     # standalone concept, not one of the seated `prism_light` figures
     # COVERAGE.md tracks; no grid seat exists for it yet.
     "archetypes/one_soul/Child.png": "the standalone Ninth, no grid seat wired yet",
-    # The Union's SECOND, figurative glass window ("what if they had
-    # met") — genuinely new content this round (scale_badge_prompts.md
-    # §The two Unions), not yet added to `topics["duality"]`'s images.
-    "archetypes/scale/glass/Union_Meeting.png": "figurative Union variant, not yet wired",
+    # (The figurative Union window, Union_Meeting→Union_v2 in the
+    # figure-first sweep 2026-07-22, needs no entry anymore — the scale
+    # family is a data-driven rotation root, discovered automatically.)
     # The Trinity badges ARE genuinely read (`app.encyclopedia._topics`:
     # `defaults.TRINITY_ART_DIR / f"{virtue}.png"` for `virtue in
     # ("Faith", "Hope", "Love")`) but `virtue` is a loop variable —

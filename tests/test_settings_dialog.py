@@ -1327,11 +1327,11 @@ def test_duality_topic_rotates_lucifer_and_judas_by_travel_date():
 
     expected_lucifer = (
         defaults.scale_variant_file("Lucifer", day)
-        or defaults.SCALE_ART_DIR / "Lucifer_Triangle.png"
+        or defaults.SCALE_ART_DIR / "Lucifer.png"
     )
     expected_judas = (
         defaults.scale_variant_file("Judas", day)
-        or defaults.SCALE_ART_DIR / "Judas_Triangle.png"
+        or defaults.SCALE_ART_DIR / "Judas.png"
     )
     assert lucifer_entry["images"] == (expected_lucifer,)
     assert judas_entry["images"] == (expected_judas,)

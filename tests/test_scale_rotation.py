@@ -109,33 +109,26 @@ def test_rotating_art_file_missing_canonical_is_none(tmp_path):
 # --- The Scale badge (the family the convention was generalized from) -----------
 
 
-def test_scale_candidates_tolerate_the_naming_zoo(tmp_path):
-    """The owner's batches landed under more than one stem (the
-    canonical `_Triangle` master beside a later lowercase refresh) and
-    more than one suffix spelling (a bare `_v` instead of a proper
-    `_v2`) — `_rotation_candidates_in` must find every real version and
-    reject anything that merely starts with the stem."""
+def test_scale_candidates_figure_first_stem_matching(tmp_path):
+    """The naming zoo died in the RESTRUCTURE figure-first sweep
+    (2026-07-22): one plain figure stem per file, versions as `_vN` —
+    `_rotation_candidates_in` must find every real version and reject
+    anything that merely starts with the stem."""
     names = [
-        "Judas_Triangle.png", "Judas_Triangle_v2.png",
-        "judas.png", "judas_v.png", "judas_v1.png",
-        "judas_v2.png", "judas_v3.png",
-        "judas_alt.png",       # NOT a version suffix — must be rejected
-        "judasx.png",          # NOT a version suffix — must be rejected
-        "lucifer.png",         # a different figure entirely
+        "Judas.png", "Judas_v.png", "Judas_v2.png", "Judas_v3.png",
+        "Judas_alt.png",       # NOT a version suffix — must be rejected
+        "Judasx.png",          # NOT a version suffix — must be rejected
+        "Lucifer.png",         # a different figure entirely
         "readme.txt",          # wrong extension
     ]
     for name in names:
         (tmp_path / name).write_bytes(b"")
     found = {
         path.name
-        for path in defaults._rotation_candidates_in(
-            tmp_path, ("Judas_Triangle", "judas")
-        )
+        for path in defaults._rotation_candidates_in(tmp_path, ("Judas",))
     }
     assert found == {
-        "Judas_Triangle.png", "Judas_Triangle_v2.png",
-        "judas.png", "judas_v.png", "judas_v1.png",
-        "judas_v2.png", "judas_v3.png",
+        "Judas.png", "Judas_v.png", "Judas_v2.png", "Judas_v3.png",
     }
 
 
@@ -143,14 +136,12 @@ def test_scale_candidates_search_the_glass_register_too(tmp_path):
     """The metal-cameo root and the stained-glass `glass/` subfolder
     are two parallel batches of the SAME two figures — both count
     toward one rotation."""
-    (tmp_path / "Judas_Triangle.png").write_bytes(b"")
+    (tmp_path / "Judas.png").write_bytes(b"")
     glass = tmp_path / "glass"
     glass.mkdir()
-    (glass / "Judas_Triangle.png").write_bytes(b"")
-    (glass / "Judas_Triangle_v2.png").write_bytes(b"")
-    found = defaults._rotation_candidates(
-        (tmp_path, glass), ("Judas_Triangle", "judas")
-    )
+    (glass / "Judas.png").write_bytes(b"")
+    (glass / "Judas_v2.png").write_bytes(b"")
+    found = defaults._rotation_candidates((tmp_path, glass), ("Judas",))
     assert len(found) == 3
     assert {p.parent.name for p in found} == {tmp_path.name, "glass"}
 
@@ -161,7 +152,7 @@ def test_scale_variant_file_is_deterministic(tmp_path, monkeypatch):
     no rotation at all."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
     for suffix in ("", "_v1", "_v2"):
-        (tmp_path / f"judas{suffix}.png").write_bytes(b"")
+        (tmp_path / f"Judas{suffix}.png").write_bytes(b"")
     day = date(2026, 7, 20)
     first = defaults.scale_variant_file("Judas", day)
     second = defaults.scale_variant_file("Judas", day)
@@ -174,7 +165,7 @@ def test_scale_variant_file_advances_on_consecutive_dates(tmp_path, monkeypatch)
     a different file — otherwise there is no rotation to speak of."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
     for suffix in ("", "_v1", "_v2"):
-        (tmp_path / f"judas{suffix}.png").write_bytes(b"")
+        (tmp_path / f"Judas{suffix}.png").write_bytes(b"")
     picks = {
         defaults.scale_variant_file("Judas", date(2026, 7, 20 + offset)).name
         for offset in range(3)
@@ -190,15 +181,15 @@ def test_scale_variant_file_keeps_judas_and_lucifer_in_step(tmp_path, monkeypatc
     must be picked for both on any given day, so the pair always
     advances together."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
-    for stem in ("judas", "lucifer"):
+    for stem in ("Judas", "Lucifer"):
         for suffix in ("", "_v1", "_v2"):
             (tmp_path / f"{stem}{suffix}.png").write_bytes(b"")
     for offset in range(5):
         day = date(2026, 7, 20 + offset)
         judas = defaults.scale_variant_file("Judas", day)
         lucifer = defaults.scale_variant_file("Lucifer", day)
-        judas_suffix = judas.stem[len("judas"):]
-        lucifer_suffix = lucifer.stem[len("lucifer"):]
+        judas_suffix = judas.stem[len("Judas"):]
+        lucifer_suffix = lucifer.stem[len("Lucifer"):]
         assert judas_suffix == lucifer_suffix
 
 
@@ -208,7 +199,7 @@ def test_scale_variant_file_graceful_with_one_or_zero_files(tmp_path, monkeypatc
     the same file shows every day."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
     assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) is None
-    only = tmp_path / "judas.png"
+    only = tmp_path / "Judas.png"
     only.write_bytes(b"")
     assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) == only
     assert defaults.scale_variant_file("Judas", date(2026, 7, 21)) == only

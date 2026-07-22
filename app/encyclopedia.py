@@ -1392,7 +1392,7 @@ def _topics(travel_date: date | None = None) -> dict:
             {
                 "images": (
                     defaults.scale_variant_file("Lucifer", travel_date)
-                    or defaults.SCALE_ART_DIR / "Lucifer_Triangle.png",
+                    or defaults.SCALE_ART_DIR / "Lucifer.png",
                 ),
                 "name": "Lucifer",
                 "article": ("emblem", "duality", "Lucifer"),
@@ -1401,7 +1401,7 @@ def _topics(travel_date: date | None = None) -> dict:
             {
                 "images": (
                     defaults.scale_variant_file("Judas", travel_date)
-                    or defaults.SCALE_ART_DIR / "Judas_Triangle.png",
+                    or defaults.SCALE_ART_DIR / "Judas.png",
                 ),
                 "name": "Judas",
                 "article": ("emblem", "duality", "Judas"),

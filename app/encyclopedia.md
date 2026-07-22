@@ -725,7 +725,7 @@ DISCOVERS every version actually on disk for the active art source
 stained-glass register, tolerant of the owner's naming zoo — a bare
 stem file, `_v`, `_v1`, `_v2`, `_v3` all count) and picks one by
 `travel_date`'s proleptic ordinal modulo the count found, falling back
-to the original `Judas_Triangle.png`/`Lucifer_Triangle.png` path
+to the original `Judas.png`/`Lucifer.png` path
 (`or ...`) when nothing is discovered. The Union entry stays FIXED —
 only the two poles rotate, called with the SAME date so they advance
 in step (independent counts, one shared index driver). `__init__`

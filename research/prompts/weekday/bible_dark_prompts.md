@@ -247,7 +247,7 @@ Per `ROSTER.md` (last generated 2026-07-15):
   `assets/weeks/faith/bible/dark/ninth_circle.png` generated.
 
 **Section C (Two Triangles scale badges):** unaffected by this round —
-`Lucifer_Triangle.png` and `Judas_Triangle.png` both exist (✔ Gemini)
+`Lucifer.png` and `Judas.png` both exist (✔ Gemini)
 and both already ship.
 
 **Net new generation work from this round:** `assets/weeks/faith/bible/dark/ninth_circle.png`.
@@ -276,7 +276,7 @@ second face sitting FLAT alongside the rest, no `dual/` subfolder —
 the same flat convention now used across the weekday theme sheets
 (e.g. `greek_prompts.md`, `profession_prompts.md`). The two scale badges use
 the PascalCase names the owner specified directly
-(`Judas_Triangle.png`, `Lucifer_Triangle.png`) rather than the weekday
+(`Judas.png`, `Lucifer.png`) rather than the weekday
 snake_case convention — kept as given since `assets/badge/scale/` is a
 badge family, not a weekday theme, and the owner named these two files
 explicitly.

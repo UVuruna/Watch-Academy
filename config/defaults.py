@@ -1167,20 +1167,13 @@ SCALE_ART_DIR = paths.assets_dir() / "archetypes" / "scale"
 # theme, every being living between excessive self-criticism and
 # excessive self-love, so BOTH poles keep MULTIPLE generated versions
 # instead of freezing on one master — the FIRST family the universal
-# rotation convention above was generalized FROM (2026-07-20); it keeps
-# its own naming-zoo tolerance (more than one valid STEM per figure,
-# `glass/` instead of `alt/` — an established second STYLE register,
-# not a generic version pool) rather than becoming a plain
-# `rotating_art_file` caller.
-# Known filename STEMS per figure, inside SCALE_ART_DIR for the active
-# source — the owner's batches landed under more than one stem (the
-# canonical "_Triangle" master beside a later lowercase refresh);
-# scale_variant_file globs "<stem>.png" and "<stem>_v*.png" for EVERY
-# stem below and merges the matches into one rotation.
-SCALE_ART_STEMS = {
-    "Judas": ("Judas_Triangle", "judas"),
-    "Lucifer": ("Lucifer_Triangle", "lucifer"),
-}
+# rotation convention above was generalized FROM (2026-07-20).
+# The old naming-zoo tolerance ("_Triangle" masters beside a lowercase
+# refresh batch) died in the RESTRUCTURE figure-first sweep
+# (2026-07-22): every file now carries the plain figure stem
+# (`Judas[_vN]_<src>`, `Lucifer[_vN]_<src>`), so the pool is the one
+# universal `<stem>` / `<stem>_v*` search. `glass/` stays a second
+# STYLE register (a parallel batch of the same two figures), pooled in.
 
 
 def scale_variant_file(figure: str, on_date: date) -> Path | None:
@@ -1189,19 +1182,15 @@ def scale_variant_file(figure: str, on_date: date) -> Path | None:
     art source at call time (`_rotation_candidates` against
     SCALE_ART_DIR AND its `glass/` register — the metal cameo and the
     stained-glass windows are two parallel batches of the SAME two
-    figures, tolerant of the owner's naming zoo: more than one valid
-    STEM per figure, "_v", "_v1", "_v2", "_v3" all count as versions),
-    picked by the SHARED `_pick_rotation` — the SAME date always
-    yields the SAME file, consecutive dates advance through the set,
-    and Lucifer/Judas called with the SAME date stay IN STEP (one
+    figures), picked by the SHARED `_pick_rotation` — the SAME date
+    always yields the SAME file, consecutive dates advance through the
+    set, and Lucifer/Judas called with the SAME date stay IN STEP (one
     index driving two independent counts, since both figures' counts
     move together as art lands). Deep travel: the caller passes the
     TRAVELED date, consistent with the poles' light/dark glyph law
     (`controller._effective_travel_date`)."""
     root = paths.art_file(SCALE_ART_DIR)
-    candidates = _rotation_candidates(
-        (root, root / "glass"), SCALE_ART_STEMS[figure]
-    )
+    candidates = _rotation_candidates((root, root / "glass"), (figure,))
     return _pick_rotation(candidates, on_date)
 
 
