@@ -448,7 +448,7 @@ TRAY_COLOR_WHEEL = (
 # file has not landed (a partial install) — the documented fallback is
 # the spot's own PRE-EXISTING emoji, never a broken/blank icon
 # (Rule #1).
-ICON_DIR = paths.assets_dir() / "icons"
+ICON_DIR = paths.assets_dir() / "instrument" / "icons"
 ICON_FILES = {
     "light": ICON_DIR / "light.png",           # Quick Jump pole row: polar DAY
     "dark": ICON_DIR / "dark.svg",              # Quick Jump pole row: polar NIGHT
@@ -480,7 +480,7 @@ def icon_path(name: str) -> Path | None:
 # custom cards in settings, loaded by data/rings.py — owner spec): a
 # card is {name, positions, letters}; its positions signature picks the
 # LAYOUT (constants.RING_LAYOUTS) whose FACE file lives here.
-RING_FACE_DIR = paths.assets_dir() / "ring"
+RING_FACE_DIR = paths.assets_dir() / "instrument" / "ring"
 
 # --- Ring tint (owner spec, FINAL.txt #6) ------------------------------------------
 # One hue recolors the WHOLE clock body: the ring art, the hands and
@@ -566,7 +566,7 @@ TICK_HOVER_OUTER_FRACTION = 0.945
 # The owner's GOLD letter art (a full latin/greek library for future
 # ring presets), overlaid on the ring by calculation so the tint never
 # touches them; the silver look is derived by desaturation at load.
-RING_LETTER_ART_DIR = paths.assets_dir() / "ring" / "letters"
+RING_LETTER_ART_DIR = paths.assets_dir() / "instrument" / "ring" / "letters"
 RING_LETTER_RADIUS_FRACTION = 0.943  # letter center = the middle of the OUTER
                                      # hour band alone (owner spec; measured
                                      # 0.888–0.998 on both ring faces — the
@@ -734,7 +734,7 @@ def pantheon_seat(theme: str, body: str):
     if table is None:
         return None
     for rel in table["files"][body]:
-        path = WEEKDAY_ART_DIR / f"{rel}.png"
+        path = weekday_art(f"{rel}.png")
         if _paths.art_file(path).exists():
             return (
                 path,
@@ -765,7 +765,7 @@ EARTH_POLE_LATITUDE = 75.0
 # Ruler pole; the Servant pole is the dual, below). Column assignments
 # straight from the sealed matrix: Moon/Oceania, Mars/Europe, Mercury/
 # Asia, Jupiter/Africa, Venus/South America, Saturn/North America.
-EARTH_ART_DIR = paths.assets_dir() / "earth"
+EARTH_ART_DIR = paths.assets_dir() / "celestial" / "earth"
 CONTINENTS_REGIONS = {
     "moon": "oceania",
     "mars": "europe",
@@ -826,10 +826,11 @@ def continents_dual_art(earth_style: str, is_daylight: bool) -> Path:
 # bodies; the slot seats with their 150% pointer factor ≈ 1200 px).
 # Sources at or under the ceiling stay as they are.
 WORKING_SET_CEILINGS = {
-    "earth": 800,
-    "weekday": 800,
-    "zodiac": 1200,
-    "badge": 1200,
+    "celestial/earth": 800,
+    "weeks": 800,
+    "calendars": 1200,
+    "archetypes": 1200,
+    "celestial/seasons": 1200,
 }
 
 # Star + Aura palettes, (pointer, style) -> hues clockwise from the top
@@ -1056,14 +1057,27 @@ ROTATION_DAYS = 1
 _VERSION_SUFFIX = re.compile(r"^_v\d*$", re.IGNORECASE)
 
 
+def _sourceless_core(name_stem: str) -> str:
+    """A filename stem with its terminal source suffix stripped
+    (`Lion_v2_gem` -> `Lion_v2`): the RESTRUCTURE moved the source off the
+    folder tree and onto the filename, so version discovery matches the
+    base/_vN AFTER dropping `_gem`/`_gpt`."""
+    low = name_stem.lower()
+    for suffix in ("_gem", "_gpt"):
+        if low.endswith(suffix):
+            return name_stem[: -len(suffix)]
+    return name_stem
+
+
 def _rotation_candidates_in(
     directory: Path, stems: tuple[str, ...]
 ) -> list[Path]:
-    """Every file DIRECTLY inside `directory` matching a bare stem or a
-    `stem_v*` sibling, for any stem in `stems` — the single-folder glob
-    behind `_rotation_candidates`, factored out so a synthetic tmp tree
-    can exercise the naming tolerance directly (no dependency on the
-    real bundled assets)."""
+    """Every version FILE directly inside `directory` for any base stem
+    in `stems` — SUFFIX-AWARE: a trailing `_gem`/`_gpt` is stripped
+    before the bare-stem / `stem_v*` match, so both sources' files are
+    recognised (the active-source pick happens in `_rotation_candidates`).
+    A synthetic tmp tree with suffix-less names exercises the naming
+    tolerance directly (no dependency on the real bundled assets)."""
     if not directory.is_dir():
         return []
     candidates: list[Path] = []
@@ -1073,11 +1087,11 @@ def _rotation_candidates_in(
         for entry in directory.iterdir():
             if entry.name in seen_names or entry.suffix.lower() != ".png":
                 continue
-            name_stem = entry.stem
-            if not name_stem.lower().startswith(stem_lower):
+            core = _sourceless_core(entry.stem)
+            if not core.lower().startswith(stem_lower):
                 continue
-            suffix = name_stem[len(stem):]
-            if suffix == "" or _VERSION_SUFFIX.match(suffix):
+            tail = core[len(stem):]
+            if tail == "" or _VERSION_SUFFIX.match(tail):
                 candidates.append(entry)
                 seen_names.add(entry.name)
     return candidates
@@ -1086,19 +1100,28 @@ def _rotation_candidates_in(
 def _rotation_candidates(
     directories: tuple[Path, ...], stems: tuple[str, ...]
 ) -> list[Path]:
-    """Every version found across `directories` (each searched
-    independently, non-recursively — a second register, e.g. an
-    `alt/` subfolder, counts exactly like the canonical directory,
-    they simply live in different folders), sorted by (filename, full
-    path) for a rotation order that is deterministic even when two
-    registers share a basename."""
-    candidates = [
-        entry
-        for directory in directories
-        for entry in _rotation_candidates_in(directory, stems)
-    ]
-    candidates.sort(key=lambda p: (p.name, str(p)))
-    return candidates
+    """The daily-rotation pool across `directories`: every distinct
+    SOURCELESS version core (base, base_v2, …; both sources fold to one
+    core) resolved through `paths.art_file` to the ACTIVE source's file
+    (cross-source / suffix-less fallback), so a two-source directory
+    never doubles the pool. Sorted by (filename, full path) for a
+    deterministic order even when two registers share a basename."""
+    resolved: list[Path] = []
+    seen_files: set[Path] = set()
+    seen_cores: set[tuple] = set()
+    for directory in directories:
+        for entry in _rotation_candidates_in(directory, stems):
+            core = _sourceless_core(entry.stem)
+            key = (directory, core)
+            if key in seen_cores:
+                continue
+            seen_cores.add(key)
+            picked = paths.art_file(directory / f"{core}.png")
+            if picked is not None and picked.exists() and picked not in seen_files:
+                resolved.append(picked)
+                seen_files.add(picked)
+    resolved.sort(key=lambda p: (p.name, str(p)))
+    return resolved
 
 
 def _pick_rotation(candidates: list[Path], on_date: date) -> Path | None:
@@ -1116,22 +1139,21 @@ def _pick_rotation(candidates: list[Path], on_date: date) -> Path | None:
 
 
 def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
-    """ONE asset from a rotating family, THE UNIVERSAL CONVENTION above
-    applied generically: `canonical_path` (a sourceless `<dir>/<Name>
-    .png`, exactly like every other config path table entry) resolves
-    through the active art SOURCE first (`paths.art_file`), then the
-    candidate pool is the resolved directory's own `<Name>` /
-    `<Name>_v*` siblings UNION the same search one level down in
-    `alt/`. Opt-in per consumer (scale duality, the era emblems,
-    tetramorph figures) — never called from the hot `art_file` path
-    itself. None when the canonical path itself does not resolve to an
-    existing file (nothing to rotate at all, not even a master)."""
+    """ONE asset from a rotating family, THE UNIVERSAL CONVENTION applied
+    generically: `canonical_path` is a SOURCELESS `<dir>/<Name>.png`
+    (exactly like every config path-table entry). The pool is the
+    directory's own `<Name>` / `<Name>_v*` version siblings, resolved to
+    the active art source by `paths.art_file` (RESTRUCTURE 2026-07-22
+    retired the `alt/` subfolder — versions are `_v2`-style siblings in
+    the SAME source-free folder now). Opt-in per consumer (scale
+    duality, era emblems, tetramorph figures) — never on the hot
+    `art_file` path. None when the canonical path resolves to nothing on
+    disk (not even a master)."""
     resolved = paths.art_file(canonical_path)
     if resolved is None or not resolved.exists():
         return None
-    directory = resolved.parent
     candidates = _rotation_candidates(
-        (directory, directory / "alt"), (resolved.stem,)
+        (canonical_path.parent,), (canonical_path.stem,)
     )
     return _pick_rotation(candidates, on_date)
 
@@ -1139,7 +1161,7 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
 # The Judas–Lucifer scale badges (owner 2026-07-13): the two triangle
 # medallions illustrating "The Two Triangles" — wired before the art
 # lands; the Encyclopedia hides missing files.
-SCALE_ART_DIR = paths.assets_dir() / "badge" / "scale"
+SCALE_ART_DIR = paths.assets_dir() / "archetypes" / "scale"
 # SCALE ROTATION (owner decree 2026-07-19, CANON.md one-image-one-place
 # amendment — "koje cemo koristiti na smenu"): Judas-Lucifer is a MAIN
 # theme, every being living between excessive self-criticism and
@@ -1457,7 +1479,7 @@ TIME_TRAVEL_ARROW_BUTTON_PX = 34
 # touches the file at all, only the LIVE shadow
 # (`render.layers._draw_subdial_shadow`) — unchanged since Rule #19's
 # first enforcement.
-SUBDIAL_ROOT_DIR = paths.assets_dir() / "subdial"
+SUBDIAL_ROOT_DIR = paths.assets_dir() / "instrument" / "subdial"
 SUBDIAL_SOLO_FINISH = "silver"      # the solo set's one hand-drawn file
 SLOT_ROUNDEL_BORDER_FRACTION = 0.045     # rim width, of the diameter
 SLOT_ROUNDEL_CONTENT_FRACTION = 0.78     # content size inside the rim
@@ -1774,7 +1796,7 @@ DIALOG_SQUARE_HEIGHT_FRACTION = 0.5
 # group related images (pages.json), captions.json holds per-image
 # Title\ntext; images open at 540 px (75% of the 720 originals) and
 # scale live with the window.
-GUIDE_DIR = paths.assets_dir() / "guide"
+GUIDE_DIR = paths.assets_dir() / "instrument" / "guide"
 GUIDE_INITIAL_IMAGE_PX = 540
 GUIDE_TITLE_PX = 22
 GUIDE_SUBTITLE_PX = 17
@@ -1915,27 +1937,56 @@ def dial_window_margin_fraction(skin) -> float:
 # Skeleton folders with 1x1 placeholders ship in the repo; the owner
 # pastes his vector renders OVER them (same names). A missing file
 # still falls back to the text form (documented).
-ZODIAC_ART_DIR = paths.assets_dir() / "zodiac"
-WEEKDAY_ART_DIR = paths.assets_dir() / "weekday"
-# The cross-cure emblem logos (owner Gemini art 2026-07-12): one PNG
-# per virtue/sin/mood, Capitalized stems, 8 per family (Sunday twice).
+# The calendar category root (RESTRUCTURE 2026-07-22): the zodiac's own
+# astrology art lives at calendars/zodiac/astrology/..., the Chinese
+# badges at calendars/chinese/... — ONE base (calendars) with the
+# family in the folder path (ZODIAC_STYLE_ART_DIRS carry the "zodiac/"
+# prefix, CHINESE_STYLE_ART_DIRS the "chinese/" one). Name kept for
+# consumer stability.
+ZODIAC_ART_DIR = paths.assets_dir() / "calendars"
+
+
+def weekday_art(rel) -> Path:
+    """Absolute path for a weekday theme-relative art path. The first
+    segment names the theme FOLDER; `config.taxonomy` fixes its group,
+    so 'greek/primary/Helios.png' -> assets/weeks/myth/greek/primary/...
+    The Inner-Wheel and Continents step-ups ('../emblem/...',
+    '../earth/...') resolve to their own relocated roots (RESTRUCTURE
+    2026-07-22). The suffix-less path is returned; `paths.art_file`
+    appends the active source suffix at the disk boundary."""
+    from config import taxonomy
+
+    parts = Path(rel).parts
+    if parts and parts[0] == "..":
+        family = parts[1]
+        if family == "emblem":
+            return taxonomy.inner_wheel_dir().joinpath(*parts[2:])
+        if family == "earth":
+            return EARTH_ART_DIR.joinpath(*parts[2:])
+    return taxonomy.weeks_dir(parts[0]).joinpath(*parts[1:])
+
+
+# The Inner Wheel emblem logos (owner Gemini art 2026-07-12): one PNG
+# per virtue/sin/mood/intelligence — now under weeks/inner_wheel/
+# (RESTRUCTURE 2026-07-22). The FAMILY folders keep their singular names.
+_INNER_WHEEL = paths.assets_dir() / "weeks" / "inner_wheel"
 EMBLEM_ART_DIRS = {
-    "virtues": paths.assets_dir() / "emblem" / "virtue",
-    "sins": paths.assets_dir() / "emblem" / "sin",
-    "moods": paths.assets_dir() / "emblem" / "mood",
-    "intelligence": paths.assets_dir() / "emblem" / "intelligence",
+    "virtues": _INNER_WHEEL / "virtue",
+    "sins": _INNER_WHEEL / "sin",
+    "moods": _INNER_WHEEL / "mood",
+    "intelligence": _INNER_WHEEL / "intelligence",
 }
 # The trinity and season badge families (owner Gemini art 2026-07-13):
 # Faith/Hope/Love triskelions; the Goethe-axis seasons with the
 # tropics' Wet_Season/Dry_Season, plus turning_point/ (the solstices
 # and the one Equinox) and meteorological/ (the measured twins).
-TRINITY_ART_DIR = paths.assets_dir() / "badge" / "trinity"
-SEASON_ART_DIR = paths.assets_dir() / "badge" / "season"
+TRINITY_ART_DIR = paths.assets_dir() / "archetypes" / "trinity" / "badges"
+SEASON_ART_DIR = paths.assets_dir() / "celestial" / "seasons" / "badges"
 # The ERA TERMS emblems (ROADMAP 15a3, owner 2026-07-17): one per Age
 # (Light/Darkness) and per Starry Season (Spring/Summer/Autumn/Winter)
 # — the "Eras of the World" comparative article carries no plate of
 # its own. Prompt sheet: research/prompts/era/era_prompts.md.
-ERA_ART_DIR = paths.assets_dir() / "era"
+ERA_ART_DIR = paths.assets_dir() / "celestial" / "era"
 # The SLAVIC MONTHS 12-set marks (owner-sealed R7b 2026-07-21). A
 # CANONICAL SOURCELESS root — deliberately OUTSIDE
 # constants.ART_SOURCED_ROOTS, the subdial precedent (see
@@ -1943,7 +1994,7 @@ ERA_ART_DIR = paths.assets_dir() / "era"
 # thing, not a Gemini/ChatGPT split. assets/months/<stem>.png,
 # graceful-absent until the owner's prompt sheet lands — every consumer
 # hides a missing plate, exactly like every other wired-ahead art.
-MONTHS_ART_DIR = paths.assets_dir() / "months"
+MONTHS_ART_DIR = paths.assets_dir() / "calendars" / "slavic_months"
 # Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128
@@ -2250,8 +2301,8 @@ WEEKDAY_THEME_DIRS = {
     "slavic": "slavic/primary",
     "alchemy": "alchemy/primary",
     "japan": "japan/primary",
-    "religion": "religion/primary",
-    "religion_alt": "religion/secondary",
+    "religion": "creeds/primary",
+    "religion_alt": "creeds/secondary",
     "profession": "profession/primary",
     "wolf": "wolf/primary",
     "bee": "bee/primary",
@@ -2430,8 +2481,8 @@ WEEKDAY_DUAL_FILES = {
     "slavic": "slavic/primary/dazbog_old",
     "alchemy": "alchemy/primary/ore",
     "japan": "japan/primary/ama_no_iwato",
-    "religion": "religion/primary/satanism",
-    "religion_alt": "religion/secondary/corax",
+    "religion": "creeds/primary/satanism",
+    "religion_alt": "creeds/secondary/corax",
     # profession's flat "Servant" stem collides with an already-flat,
     # unreferenced orphan file the owner has separately at
     # profession/primary/Servant.png (different art, different hash —
@@ -2482,9 +2533,9 @@ def weekday_theme_body_art(
     a date resolves the day's pick among the canonical file's `_v2`/
     `alt/` siblings, falling back to canonical when none exist."""
     if theme == "planets":
-        canonical = WEEKDAY_ART_DIR / "planets" / "primary" / f"{body}.png"
+        canonical = weekday_art(f"planets/primary/{body}.png")
     else:
-        theme_dir = WEEKDAY_ART_DIR / WEEKDAY_THEME_DIRS[theme]
+        theme_dir = weekday_art(WEEKDAY_THEME_DIRS[theme])
         if colored:
             theme_dir = theme_dir.parent / "colored"
         canonical = theme_dir / f"{WEEKDAY_THEME_FILES[theme][body]}.png"
@@ -2617,7 +2668,7 @@ GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
 GLOW_ECLIPSE_INVISIBLE_COLOR = "#8A9096"       # desaturated silver-gray
 ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5
 ECLIPSE_SOLAR_ART = (
-    WEEKDAY_ART_DIR / "planets" / "primary" / "sun_eclipse.png"
+    weekday_art("planets/primary/sun_eclipse.png")
 )                                            # source-mapped by paths.art_file
 # LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
 # bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —
@@ -2715,7 +2766,7 @@ ECLIPSE_STATE_FRINGE = {
 # PromptPainter generates them (research/prompts/eclipse/eclipse_prompts.md).
 # The SAME emblem backs the chapter page (app.encyclopedia) AND the
 # eclipse-window hover badge on the Earth/Moon card (render.compositor).
-ECLIPSE_ART_DIR = paths.assets_dir() / "eclipse"
+ECLIPSE_ART_DIR = paths.assets_dir() / "celestial" / "eclipse"
 # (kind, type) -> category emblem stem. `hybrid` keeps its OWN chapter
 # and emblem here even though the RENDER state table folds it into
 # solar_total — the reader still gets the distinct hybrid page; an
@@ -2876,7 +2927,7 @@ DEFAULT_SKIN = SkinDefinition(
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={name: WEEKDAY_ART_DIR / "planets" / "primary" / f"{name}.png" for name in (
+        bodies={name: weekday_art(f"planets/primary/{name}.png") for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
         body_names={
@@ -2910,7 +2961,7 @@ DEFAULT_SKIN = SkinDefinition(
     year_marker=YearMarkerSpec(
         # Both styles bundled; the earth_style display choice picks one.
         variants={
-            f"{style}_{continent}_{phase}": paths.assets_dir() / "earth"
+            f"{style}_{continent}_{phase}": EARTH_ART_DIR
             / f"earth_{style}_{continent}_{phase}.png"
             for style in ("clean", "atmo")
             for continent in _CONTINENTS
@@ -2924,7 +2975,7 @@ DEFAULT_SKIN = SkinDefinition(
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
-        moon_asset=WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png",
+        moon_asset=weekday_art("planets/primary/moon.png"),
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,
@@ -2937,15 +2988,15 @@ DEFAULT_SKIN = SkinDefinition(
         # HandsSpec; these are the CLASSIC pack's values (the owner's
         # PNG exports, every pivot 17 px above the bottom).
         hour=HandSpec(
-            asset=paths.assets_dir() / "hands" / "classic" / "hours.png",
+            asset=paths.assets_dir() / "instrument" / "hands" / "classic" / "hours.png",
             natural_height=246, pivot_y=17,
         ),
         minute=HandSpec(
-            asset=paths.assets_dir() / "hands" / "classic" / "minutes.png",
+            asset=paths.assets_dir() / "instrument" / "hands" / "classic" / "minutes.png",
             natural_height=295, pivot_y=17,
         ),
         second=HandSpec(
-            asset=paths.assets_dir() / "hands" / "classic" / "seconds.png",
+            asset=paths.assets_dir() / "instrument" / "hands" / "classic" / "seconds.png",
             natural_height=306, pivot_y=17,
         ),
         minute_reach_fraction=HAND_MINUTE_REACH_FRACTION,

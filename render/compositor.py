@@ -1458,12 +1458,10 @@ class Compositor:
                     # (the classic unit's Sunday law).
                     candidate = defaults.WEEKDAY_PANTHEON[theme]["dual"][0]
                     if paths.art_file(
-                        defaults.WEEKDAY_ART_DIR / f"{candidate}.png"
+                        defaults.weekday_art(f"{candidate}.png")
                     ).exists():
                         dual_rel = candidate
-                dual_image = (
-                    defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
-                )
+                dual_image = defaults.weekday_art(f"{dual_rel}.png")
             image = (image, metal_variant_file(dual_image, metal))
         node = self._symbolism.article(article_set, article_body)
         text = node["base"]

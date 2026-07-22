@@ -1,151 +1,155 @@
-"""The assets/ tree's own structural law (owner decree 2026-07-19, DUAL
-FLATTEN round — "hocu broj 1 tu istu strukturu SVUDA"): a weekday theme's
-art lives FLAT inside its register folder — no `dual/` subfolder
-anywhere, no matter how deeply nested. WHO a file is (the Sunday dual, a
-pantheon seat, a servant face) is written ONLY in config tables
-(`WEEKDAY_DUAL_FILES`, `WEEKDAY_PANTHEON`) — never encoded as a folder
-segment. These tests walk the real disk tree so the chaos the owner
-flagged (`research/ASSETS_AUDIT.md`) can never regrow unnoticed."""
+"""The assets/ tree's structural law — the TAXONOMY MIRROR (RESTRUCTURE
+2026-07-22). One hierarchy: the `assets/` folder tree mirrors
+`config.taxonomy`. These tests walk the real disk so the source-folder
+chaos (gemini/chatgpt subtrees, seat-named `alt/` files, per-root
+naming zoos) the RESTRUCTURE abolished can never quietly regrow.
+
+The invariants:
+  1. Top-level roots are exactly the five categories (+ the meta `_state`
+     ledger and the two build-pipeline logos).
+  2. No source FOLDER (`gemini`/`chatgpt`) survives anywhere — the source
+     is a terminal filename SUFFIX now (`_gem`/`_gpt`).
+  3. No `alt/` folder survives — figure versions are `_vN` siblings in
+     the same source-free folder.
+  4. `assets/weeks/<group>/<theme>` mirrors `taxonomy.WEEK_GROUPS`: every
+     group folder is a known group, every theme folder belongs to it.
+  5. Every PNG under a sourced category (weeks / calendars / archetypes /
+     celestial's era, eclipse, seasons) carries a `_gem`/`_gpt` suffix;
+     the instrument furniture and the Earth faces are owner hand-made and
+     carry none.
+"""
 
 from pathlib import Path
 
-from config import paths
+from config import paths, taxonomy
 
-# The REAL post-flatten variant-folder vocabulary (owner DUAL FLATTEN
-# 2026-07-19), confirmed by a full walk of both art sources — every
-# folder one level or more below a theme family is one of these, never
-# anything else:
-#   primary   — the base/bronze register every theme has
-#   colored   — the full-color sibling register (metal themes + a few
-#                more); may itself hold a colored/pantheon/... nested
-#                bronze-mirroring folder (pantheon/colored)
-#   pantheon  — the four mythologies with a documented Pantheon roster
-#                (greek/norse/egypt/slavic); nests its own colored/
-#   secondary — the second variant of a two-variant family (bible,
-#                religion)
-#   dark      — bible's third (night-window) variant
-#   signs     — planets' zodiac-glyph variant
-#   art       — planets' bronze-medallion variant
-WEEKDAY_VARIANT_WHITELIST = frozenset(
-    {"primary", "colored", "pantheon", "secondary", "dark", "signs", "art",
-     # The universal rotation convention (owner decree 2026-07-20): an
-     # `alt/` folder mirrors its parent's filenames and rotates daily by
-     # the traveled date. The owner's first weekday drop is
-     # bible/dark/alt/ (both sources, 2026-07-20 night) — the weekday
-     # consumers still need the rotating_art_file wiring (queued), but
-     # the FOLDER is legal everywhere the convention reaches.
-     "alt"}
-)
+# Top-level entries allowed directly under assets/.
+_ALLOWED_ROOTS = set(taxonomy.CATEGORIES) | {
+    "_state",              # the PromptPainter per-source run ledger (meta)
+    "logo.svg", "logo-setup.svg",   # build-pipeline contract (unchanged)
+    "___assets.md",
+}
 
-# The GAMING multi-block themes (owner-sealed rosters 2026-07-22, sheets
-# 0.14.392): wow/cyberpunk/starwars nest ONE block level between the
-# theme and its registers — weekday/<source>/wow/<block>/{primary,
-# colored}/ — the block names are the sheets' own sealed vocabulary.
-# A SEPARATE set from the variant whitelist because blocks arrive with
-# the owner's generation over time — the no-unused-members law applies
-# only to the variant names, never to blocks still awaiting their art
-# (the owner's first drop, wow/alliance, landed 2026-07-22).
-WEEKDAY_BLOCK_WHITELIST = frozenset(
-    {"alliance", "horde", "evil",          # wow
-     "gangs", "street", "power",           # cyberpunk
-     "svetla", "tamna", "nova"}            # starwars
+# Categories whose art shipped from an AI source — every PNG under them
+# must carry the source suffix. The instrument furniture and the Earth
+# marker faces are owner hand-made (no suffix).
+_SUFFIXED_AREAS = (
+    "weeks", "calendars", "archetypes",
+    "celestial/era", "celestial/eclipse", "celestial/seasons",
 )
 
 
-def _all_dir_names(root: Path) -> list[str]:
-    return [p.name for p in root.rglob("*") if p.is_dir()]
+def _iter_png(root: Path):
+    return (p for p in root.rglob("*.png") if p.is_file())
 
 
-def test_no_dual_folder_survives_anywhere_in_assets():
-    """The LAW, root form: a folder literally named `dual` (any case)
-    must not exist anywhere under assets/ — not nested under `primary/`,
-    not under `colored/`, not under `pantheon/`, not bare. 60 files (plus
-    8 more found on a fresh disk walk, some misfiled two levels deep
-    under `primary/dual/colored/`) moved up one level this round; this
-    test is the tripwire so the pattern can never quietly regrow."""
-    assets_root = paths.assets_dir()
+def test_top_level_roots_are_the_five_categories():
+    assets = paths.assets_dir()
     offenders = [
-        str(p.relative_to(assets_root))
-        for p in assets_root.rglob("*")
-        if p.is_dir() and p.name.lower() == "dual"
+        p.name for p in assets.iterdir() if p.name not in _ALLOWED_ROOTS
     ]
-    assert offenders == []
+    assert offenders == [], offenders
 
 
-def test_weekday_theme_subfolders_are_all_whitelisted():
-    """Every folder under assets/weekday/<source>/<theme>/ (any depth)
-    must be one of the documented variant names — no stray `dual/`, no
-    ad hoc `ninth/`, `alt/` or similar creeping back in unannounced. A
-    NEW legitimate variant is welcome, but it must be added to
-    WEEKDAY_VARIANT_WHITELIST deliberately, in the same commit as the
-    asset drop, not discovered by accident."""
-    weekday_root = paths.assets_dir() / "weekday"
-    sources = [p for p in weekday_root.iterdir() if p.is_dir()]
-    assert sources, "expected at least one art source under assets/weekday/"
-    offenders = []
-    for source_dir in sources:
-        for theme_dir in source_dir.iterdir():
-            if not theme_dir.is_dir():
-                continue
-            for name in _all_dir_names(theme_dir):
-                if name not in (
-                    WEEKDAY_VARIANT_WHITELIST | WEEKDAY_BLOCK_WHITELIST
-                ):
-                    offenders.append(
-                        f"{source_dir.name}/{theme_dir.name}/.../{name}"
-                    )
-    assert offenders == []
+def test_no_source_folder_survives_anywhere():
+    """The source moved onto the filename — no `gemini`/`chatgpt` folder
+    may exist under assets/ (the `_state` ledger keeps its own per-source
+    subdirs and is exempt)."""
+    assets = paths.assets_dir()
+    offenders = [
+        str(p.relative_to(assets))
+        for p in assets.rglob("*")
+        if p.is_dir()
+        and p.name in ("gemini", "chatgpt")
+        and "_state" not in p.relative_to(assets).parts
+    ]
+    assert offenders == [], offenders
 
 
-def test_weekday_variant_whitelist_has_no_unused_members():
-    """The flip side of the whitelist test: every documented variant name
-    must actually appear at least once on disk — an entry nobody uses is
-    either stale documentation or a typo hiding a real mismatch."""
-    weekday_root = paths.assets_dir() / "weekday"
-    seen: set[str] = set()
-    for source_dir in weekday_root.iterdir():
-        if not source_dir.is_dir():
+def test_no_alt_folder_survives_anywhere():
+    """`alt/` is abolished — figure versions are `_vN` siblings now."""
+    assets = paths.assets_dir()
+    offenders = [
+        str(p.relative_to(assets))
+        for p in assets.rglob("*")
+        if p.is_dir() and p.name.lower() == "alt"
+    ]
+    assert offenders == [], offenders
+
+
+def test_weeks_tree_mirrors_the_taxonomy():
+    """Every folder under assets/weeks/ is a known group, and every theme
+    folder inside it belongs to that group (taxonomy.WEEK_GROUPS)."""
+    weeks = paths.assets_dir() / "weeks"
+    assert weeks.is_dir()
+    group_offenders = []
+    theme_offenders = []
+    for group_dir in weeks.iterdir():
+        if not group_dir.is_dir():
             continue
-        for theme_dir in source_dir.iterdir():
-            if theme_dir.is_dir():
-                seen.update(_all_dir_names(theme_dir))
-    assert WEEKDAY_VARIANT_WHITELIST <= seen
-
-
-def test_alt_folders_mirror_their_parent_names():
-    """THE UNIVERSAL ROTATION CONVENTION (owner decree 2026-07-20):
-    `alt/` is a legal subfolder ANYWHERE under assets/ — it opts a
-    family into daily rotation (`config.defaults.rotating_art_file`)
-    beside the `<Name>_v2.png`-style suffix siblings — so this test does
-    NOT whitelist where an `alt/` folder may appear. It only pins the
-    one real invariant: `alt/` mirrors its parent's names, one level
-    up, file for file. An `alt/<Name>.png` with no `<Name>.png` sibling
-    in the parent is an ORPHAN — nothing computes a rotation pool for a
-    stem the canonical directory doesn't also carry."""
-    assets_root = paths.assets_dir()
-    offenders = []
-    for alt_dir in assets_root.rglob("alt"):
-        if not alt_dir.is_dir():
+        if group_dir.name not in taxonomy.WEEK_GROUPS:
+            group_offenders.append(group_dir.name)
             continue
-        parent = alt_dir.parent
-        for entry in alt_dir.iterdir():
-            if entry.is_file() and not (parent / entry.name).exists():
-                offenders.append(str(entry.relative_to(assets_root)))
-    assert offenders == []
+        allowed_themes = set(taxonomy.WEEK_GROUPS[group_dir.name][1])
+        for theme_dir in group_dir.iterdir():
+            if theme_dir.is_dir() and theme_dir.name not in allowed_themes:
+                theme_offenders.append(f"{group_dir.name}/{theme_dir.name}")
+    assert group_offenders == [], group_offenders
+    assert theme_offenders == [], theme_offenders
 
 
-def test_subdial_sets_are_shared_not_per_art_source():
-    """Rsub round (owner decree 2026-07-21): the subdial plate is its
-    OWN shared thing, not a Gemini/ChatGPT split — `assets/subdial/`
-    is deliberately OUTSIDE `constants.ART_SOURCED_ROOTS` (see
-    `assets/___assets.md`). Pins the five hand-picked sets are exactly
-    what is on disk: sets 1-4 carry all THREE hand-drawn finishes,
-    "solo" carries ONLY silver (gold/bronze are algorithmic, never
-    shipped as files)."""
-    from config import constants
+def test_theme_to_group_reverse_map_is_consistent():
+    """The derived THEME_TO_GROUP is an exact reverse of WEEK_GROUPS (no
+    theme claimed by two groups, none dropped)."""
+    flat = [
+        theme
+        for _group, (_display, themes) in taxonomy.WEEK_GROUPS.items()
+        for theme in themes
+    ]
+    assert len(flat) == len(set(flat)), "a theme is listed in two groups"
+    assert set(flat) == set(taxonomy.THEME_TO_GROUP)
 
-    assert "subdial" not in constants.ART_SOURCED_ROOTS
-    root = paths.assets_dir() / "subdial"
+
+def test_sourced_areas_carry_the_source_suffix():
+    """Every PNG under a sourced category is `<stem>_gem.png`/`_gpt.png`.
+    Owner hand-made art (instrument furniture, Earth faces) is exempt by
+    living OUTSIDE these areas."""
+    assets = paths.assets_dir()
+    offenders = []
+    for area in _SUFFIXED_AREAS:
+        root = assets / area
+        if not root.exists():
+            continue
+        for png in _iter_png(root):
+            if not png.stem.endswith(("_gem", "_gpt")):
+                offenders.append(str(png.relative_to(assets)))
+    assert offenders == [], offenders[:20]
+
+
+def test_instrument_furniture_and_earth_are_suffixless_owner_art():
+    """The complement of the rule above: the instrument FURNITURE
+    (hands, ring, subdial, icons, guide) and the Earth marker faces are
+    owner hand-made and carry NO source suffix. (The instrument LOGO and
+    paint/light legend DID ship from a source and keep their suffix —
+    they live at instrument/ top level, outside these furniture dirs.)"""
+    assets = paths.assets_dir()
+    suffixless_areas = (
+        "instrument/hands", "instrument/ring", "instrument/subdial",
+        "instrument/icons", "instrument/guide", "celestial/earth",
+    )
+    offenders = []
+    for area in suffixless_areas:
+        for png in _iter_png(assets / area):
+            if png.stem.endswith(("_gem", "_gpt")):
+                offenders.append(str(png.relative_to(assets)))
+    assert offenders == [], offenders[:20]
+
+
+def test_subdial_sets_are_shared_not_per_source():
+    """Rsub round (owner decree 2026-07-21): the subdial plate is its OWN
+    shared thing — sets 1-4 carry all three hand-drawn finishes, "solo"
+    only silver (gold/bronze are algorithmic). Now under instrument/."""
+    root = paths.assets_dir() / "instrument" / "subdial"
     for set_name in ("set1", "set2", "set3", "set4"):
         for finish in ("gold", "silver", "bronze"):
             assert (root / set_name / f"{finish}.png").is_file(), (
@@ -153,34 +157,3 @@ def test_subdial_sets_are_shared_not_per_art_source():
             )
     solo_files = sorted(p.name for p in (root / "solo").iterdir())
     assert solo_files == ["silver.png"]
-
-
-def test_every_sourced_root_is_registered():
-    """The silent-absence tripwire (GUIDE shoot find, 2026-07-20): a
-    top-level assets/<root> whose art ships in gemini/ or chatgpt/
-    subtrees MUST be listed in constants.ART_SOURCED_ROOTS, or
-    `paths.art_file` passes the sourceless canonical path straight
-    through and every consumer quietly draws nothing. "era" (fixed in
-    the Rule #19 round) and "eclipse" (found by the GUIDE screenshot
-    session — chapter plates and hover badges absent) both died of
-    exactly this; this walk ends the class."""
-    from config import constants
-
-    assets_root = paths.assets_dir()
-    sourced_on_disk = sorted(
-        child.name
-        for child in assets_root.iterdir()
-        if child.is_dir()
-        # _-prefixed roots are meta, not art (assets/_state holds the
-        # PromptPainter per-source run reports)
-        and not child.name.startswith("_")
-        and any((child / source).is_dir() for source in constants.ART_SOURCES)
-    )
-    missing = [
-        name for name in sourced_on_disk
-        if name not in constants.ART_SOURCED_ROOTS
-    ]
-    assert not missing, (
-        f"assets roots with per-source subtrees not in ART_SOURCED_ROOTS: "
-        f"{missing} — their art resolves to nonexistent sourceless paths"
-    )

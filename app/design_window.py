@@ -282,7 +282,7 @@ class DesignDialog(QDialog):
         style_row = QHBoxLayout()
         for style, title in (("clean", "Clean"), ("atmo", "Atmosphere")):
             icon = paths.art_file(
-                paths.assets_dir() / "earth" / f"earth_{style}_europe_day.png"
+                defaults.EARTH_ART_DIR / f"earth_{style}_europe_day.png"
             )
             style_row.addWidget(self._tile(
                 self._tr(title), icon, settings.earth_style == style,

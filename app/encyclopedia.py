@@ -576,7 +576,7 @@ def _theme_dual_art(theme: str, colored: bool = False) -> Path:
     rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if colored:
         rel = rel.replace("/primary/", "/colored/")
-    return defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+    return defaults.weekday_art(f"{rel}.png")
 
 
 def _weekday_topic(theme: str):
@@ -617,9 +617,8 @@ def _weekday_topic(theme: str):
         page; `evil_looks_for` below is EVIL's own sibling)."""
         base = _theme_body_art(theme, body)
         if metal:
-            colored = (
-                defaults.WEEKDAY_ART_DIR
-                / defaults.WEEKDAY_THEME_DIRS[theme]
+            colored = defaults.weekday_art(
+                defaults.WEEKDAY_THEME_DIRS[theme]
             ).parent / "colored" / (
                 f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
             )
@@ -630,8 +629,8 @@ def _weekday_topic(theme: str):
         if theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
             # glyphs and the bronze medallions ride the arrows.
-            sign = defaults.WEEKDAY_ART_DIR / "planets" / "signs" / f"{body}.png"
-            art = defaults.WEEKDAY_ART_DIR / "planets" / "art" / f"{body}.png"
+            sign = defaults.weekday_art(f"planets/signs/{body}.png")
+            art = defaults.weekday_art(f"planets/art/{body}.png")
             return (
                 ("Planets", rows(base, None)),
                 ("Signs", rows(sign, None)),
@@ -654,12 +653,8 @@ def _weekday_topic(theme: str):
                 for label, path in _metal_looks(servant, colored)
             )
         if theme == "planets":
-            sign_dual = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "signs" / "sun_eclipse.png"
-            )
-            art_dual = (
-                defaults.WEEKDAY_ART_DIR / "planets" / "art" / "sun_eclipse.png"
-            )
+            sign_dual = defaults.weekday_art("planets/signs/sun_eclipse.png")
+            art_dual = defaults.weekday_art("planets/art/sun_eclipse.png")
             return (
                 ("Planets", rows(servant, None)),
                 ("Signs", rows(sign_dual, None)),
@@ -821,7 +816,7 @@ def _pantheon_topic(theme: str) -> list[dict]:
         }
 
     sun_path, _sun_name, _sun_set, _sun_body = seated("sun")
-    dual_path = defaults.WEEKDAY_ART_DIR / f"{table['dual'][0]}.png"
+    dual_path = defaults.weekday_art(f"{table['dual'][0]}.png")
     if paths.art_file(dual_path).exists():
         ruler_name, servant_name = table["dual_names"]
         face_article_set = table["articles"]
@@ -896,8 +891,7 @@ def _wider_topic(theme: str) -> list[dict]:
     figure_entries = [
         {
             "images": (
-                defaults.WEEKDAY_ART_DIR / theme / "wider"
-                / f"{figure.lower()}.png",
+                defaults.weekday_art(f"{theme}/wider/{figure.lower()}.png"),
             ),
             "name": figure,
             "article": ("emblem", "wider", figure),
@@ -992,7 +986,7 @@ def _continents_topic(travel_date: date) -> dict:
         else constants.WEEKDAY_THEME_NINTHS["continents"]
     )
     ninth_entry = {
-        "images": (defaults.WEEKDAY_ART_DIR / ninth_rel,),
+        "images": (defaults.weekday_art(ninth_rel),),
         "name": ninth_name,
         "article": ("emblem", "ninths", ninth_name),
         "accents": (),
@@ -1031,24 +1025,24 @@ def _topics(travel_date: date | None = None) -> dict:
     topics["continents"] = _continents_topic(travel_date)
     topics["astrology"] = {
         "title": "Astrology",
-        "icon": defaults.ZODIAC_ART_DIR / "astrology" / "sign" / "Leo.png",
+        "icon": defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "sign" / "Leo.png",
         "entries": [
             {
                 # Owner defaults 2026-07-13: the logo+constellation pair
                 # leads; the arrows reach the colored logo and the sign.
                 "looks": (
                     ("Logo & Constellation", ((
-                        defaults.ZODIAC_ART_DIR / "astrology" / "primary"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary"
                         / f"{sign}.png",
-                        defaults.ZODIAC_ART_DIR / "astrology"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology"
                         / "constellation" / f"{sign}.png",
                     ),)),
                     ("Colored", ((
-                        defaults.ZODIAC_ART_DIR / "astrology" / "colored"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "colored"
                         / f"{sign}.png",
                     ),)),
                     ("Sign", ((
-                        defaults.ZODIAC_ART_DIR / "astrology" / "sign"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "sign"
                         / f"{sign}.png",
                     ),)),
                 ),
@@ -1149,7 +1143,7 @@ def _topics(travel_date: date | None = None) -> dict:
 
     topics["week"] = {
         "title": "The Week",
-        "icon": defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "sun.png",
+        "icon": defaults.weekday_art("planets/primary/sun.png"),
         "entries": [
             {
                 "looks": (
@@ -1328,7 +1322,6 @@ def _topics(travel_date: date | None = None) -> dict:
     # wired ahead of the art (missing files stay hidden). Their shared
     # philosophical NAME is NINTH_SEAT_PHILOSOPHICAL_NAME (module level,
     # above) — see there for the discussed alternatives.
-    _w = defaults.WEEKDAY_ART_DIR
     _z = defaults.ZODIAC_ART_DIR
     # Round-four/five verdicts (owner 2026-07-15): the Union ninths —
     # Gaia/Yggdrasil/Triglav/the Pharaoh/the Polymath/the Holy Trinity/
@@ -1342,7 +1335,7 @@ def _topics(travel_date: date | None = None) -> dict:
     # local, since render never needs them.
     for topic_key, name, plate in (
         *(
-            (theme, name, _w / rel)
+            (theme, name, defaults.weekday_art(rel))
             for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
             # THE CONTINENTS builds its own LIVING Ninth inside
             # `_continents_topic` (Zealandia/Pangea by the traveled day),
@@ -1351,7 +1344,8 @@ def _topics(travel_date: date | None = None) -> dict:
             if theme != "continents"
         ),
         ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
-        ("astrology", "Ophiuchus", _z / "astrology/sign/Ophiuchus.png"),
+        ("astrology", "Ophiuchus",
+         _z / "zodiac/astrology/sign/Ophiuchus.png"),
     ):
         ninth_entry = {
             "images": (plate,),
@@ -1448,7 +1442,7 @@ def _topics(travel_date: date | None = None) -> dict:
     # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
     # mesta nego 15MB fajlova") from the full-moon master with the
     # dial's own terminator geometry — moon_phase_file, disk-cached.
-    moon_plate = defaults.WEEKDAY_ART_DIR / "planets" / "primary" / "moon.png"
+    moon_plate = defaults.weekday_art("planets/primary/moon.png")
     topics["moon"] = {
         "title": "Moon",
         "icon": moon_plate,

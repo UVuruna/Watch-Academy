@@ -332,7 +332,10 @@ def test_months_mount_entries_are_graceful_absent_and_wedge_aligned():
     assert entries[0][0] == "Lipanj"                 # June leads
     assert entries[almanac_month_index(1)][0] == "Siječanj"   # January
     assert all(name for name, _art in entries)       # every wedge named
-    assert all(art is None for _name, art in entries)         # no plates yet
+    # The owner's ChatGPT drop landed some month plates (RESTRUCTURE
+    # 2026-07-22 relocated them to calendars/slavic_months/); each wedge
+    # either resolves to a real suffixed plate or stays graceful-absent.
+    assert all(art is None or art.exists() for _name, art in entries)
 
 
 def test_mount_current_index_matches_todays_sign_and_month_no_hemisphere_flip(app):

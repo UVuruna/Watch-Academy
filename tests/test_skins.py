@@ -443,8 +443,8 @@ def test_bronze_finish_and_theme_metals():
             # dangle on a missing asset, so it is excluded up front.
             continue
         # colored is the variant SIBLING (owner restructure 2026-07-14).
-        folder = (
-            defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
+        folder = defaults.weekday_art(
+            defaults.WEEKDAY_THEME_DIRS[theme]
         ).parent / "colored"
         for body in c.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
@@ -471,7 +471,8 @@ def test_bronze_finish_and_theme_metals():
         ).exists(), animal
     for sign, _ in c.ZODIAC_SIGNS:
         assert _paths.art_file(
-            defaults.ZODIAC_ART_DIR / "astrology" / "colored" / f"{sign}.png"
+            defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "colored"
+            / f"{sign}.png"
         ).exists(), sign
     # The hue-SELECTIVE swap (owner insight 2026-07-12): warm bronze
     # pixels take the target metal, gray pixels stay untouched.
@@ -641,8 +642,8 @@ def test_planets_art_body_renders_differently_by_metal():
 
     QApplication.instance() or QApplication([])
     sun = (
-        defaults.WEEKDAY_ART_DIR
-        / defaults.WEEKDAY_THEME_DIRS["planets_art"] / "sun.png"
+        defaults.weekday_art(defaults.WEEKDAY_THEME_DIRS["planets_art"])
+        / "sun.png"
     )
     assert _paths.art_file(sun).exists()
     cache = AssetCache()
@@ -902,16 +903,16 @@ def test_working_set_downscales_oversized_dial_art():
 
     assets = paths.assets_dir()
     assert working_ceiling(
-        assets / "earth" / "earth_clean_europe_day.png"
+        assets / "celestial" / "earth" / "earth_clean_europe_day.png"
     ) == 800
-    assert working_ceiling(assets / "weekday" / "x.png") == 800
-    assert working_ceiling(assets / "zodiac" / "x.png") == 1200
-    assert working_ceiling(assets / "guide" / "x.png") is None
+    assert working_ceiling(assets / "weeks" / "x.png") == 800
+    assert working_ceiling(assets / "calendars" / "x.png") == 1200
+    assert working_ceiling(assets / "instrument" / "guide" / "x.png") is None
     assert working_ceiling(Path("C:/elsewhere/x.png")) is None
     warm_working_set()
     # Warm: the earth originals (1992 px) wear 800-wide copies…
     copy = scaled_variant_file(
-        assets / "earth" / "earth_clean_north_pole_day.png", 800
+        assets / "celestial" / "earth" / "earth_clean_north_pole_day.png", 800
     )
     assert copy is not None and copy.exists()
     assert copy.name.endswith("_earth_clean_north_pole_day.png")

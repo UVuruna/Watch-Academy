@@ -491,7 +491,7 @@ def test_every_theme_skeleton_is_complete():
     for theme in constants.WEEKDAY_THEMES:
         if theme == "planets":
             continue
-        folder = defaults.WEEKDAY_ART_DIR / defaults.WEEKDAY_THEME_DIRS[theme]
+        folder = defaults.weekday_art(defaults.WEEKDAY_THEME_DIRS[theme])
         for body in constants.WEEKDAY_BODIES:
             stem = defaults.WEEKDAY_THEME_FILES[theme][body]
             if not _paths.art_file(folder / f"{stem}.png").exists():
@@ -619,40 +619,40 @@ def test_encyclopedia_opens_at_the_spacebar_target(app):
 
 
 def test_art_source_resolves_with_fallback(tmp_path, monkeypatch):
-    """Owner 2026-07-14: the Gemini and ChatGPT generations coexist
-    under assets/<root>/<source>/ — canonical paths resolve into the
-    active source, FALL BACK to the other where a file is missing,
-    the emblem step-up lands under the REAL root, and settings
-    validate the stored value. Pinned on a SYNTHETIC assets tree with
-    controlled coverage (the real tree's gaps close file by file as
-    the owner's generations land — 2026-07-18 they broke the old
-    'no ChatGPT Greek yet' premise)."""
+    """RESTRUCTURE 2026-07-22: the Gemini/ChatGPT split lives on the
+    FILENAME now (`<stem>_gem.png` / `_gpt.png`, source last). A
+    sourceless canonical path resolves to the active source's suffixed
+    file, FALLS BACK to the other source where it is missing, then to the
+    suffix-less owner file; a step-up across roots still resolves. Pinned
+    on a SYNTHETIC assets tree with controlled coverage."""
     from config import constants, paths
 
     assets = tmp_path / "assets"
     for rel in (
-        "weekday/gemini/greek/primary/Zeus.png",       # gemini-only
-        "weekday/chatgpt/wolf/primary/alpha.png",      # chatgpt-only
-        "emblem/gemini/virtue/Justice.png",            # step-up target
+        "weeks/myth/greek/primary/Zeus_gem.png",           # gemini-only
+        "weeks/societies/wolf/primary/alpha_gpt.png",      # chatgpt-only
+        "weeks/inner_wheel/virtue/Justice_gem.png",        # step-up target
     ):
         target = assets.joinpath(*rel.split("/"))
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(b"png")
     monkeypatch.setattr(paths, "assets_dir", lambda: assets)
 
-    weekday = assets / "weekday"
-    canonical = weekday / "greek/primary/Zeus.png"
-    resolved = paths.art_file(canonical)
-    assert "gemini" in resolved.parts and resolved.exists()
-    stepup = paths.art_file(weekday / "../emblem/virtue/Justice.png")
-    assert stepup.parts[-4:-2] == ("emblem", "gemini")
-    assert stepup.exists()
+    greek = assets / "weeks" / "myth" / "greek" / "primary"
+    resolved = paths.art_file(greek / "Zeus.png")
+    assert resolved.name == "Zeus_gem.png" and resolved.exists()
+    stepup = paths.art_file(
+        greek / "../../../inner_wheel/virtue/Justice.png"
+    )
+    assert stepup.name == "Justice_gem.png" and stepup.exists()
     try:
         paths.set_art_source("chatgpt")
-        wolf = paths.art_file(weekday / "wolf/primary/alpha.png")
-        assert "chatgpt" in wolf.parts and wolf.exists()
-        fallback = paths.art_file(canonical)   # no ChatGPT copy in the tree
-        assert "gemini" in fallback.parts and fallback.exists()
+        wolf = paths.art_file(
+            assets / "weeks/societies/wolf/primary/alpha.png"
+        )
+        assert wolf.name == "alpha_gpt.png" and wolf.exists()
+        fallback = paths.art_file(greek / "Zeus.png")  # no ChatGPT copy
+        assert fallback.name == "Zeus_gem.png" and fallback.exists()
     finally:
         paths.set_art_source(constants.ART_SOURCE_DEFAULT)
     assert Settings().art_source == constants.ART_SOURCE_DEFAULT
@@ -748,7 +748,8 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     from render.asset_variants import scaled_variant_file
 
     gemini_uri = scaled_variant_file(
-        defaults.ZODIAC_ART_DIR / "astrology" / "colored" / "Gemini.png",
+        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "colored"
+        / "Gemini.png",
         2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
     ).as_uri()
     assert gemini_uri in top
@@ -2059,7 +2060,7 @@ def test_image_hover_names_the_plate():
         "Byzantine"
     )
     assert _image_tooltip(
-        _defaults.WEEKDAY_ART_DIR / "wolf" / "primary" / "sigma.png"
+        _defaults.weekday_art("wolf/primary/sigma.png")
     ) == "Sigma"
     assert _image_tooltip(
         _defaults.ECLIPSE_ART_DIR / "Solar_Total.png"

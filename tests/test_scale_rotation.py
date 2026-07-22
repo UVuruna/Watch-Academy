@@ -25,21 +25,22 @@ from config import defaults
 # --- The generic resolver (era, tetramorph, and any future family) --------------
 
 
-def test_rotating_art_file_pool_is_base_plus_suffix_plus_alt(tmp_path):
-    """THE CONVENTION itself: the canonical file, its `_v2`-style
-    siblings, AND the same-named file inside `alt/` all feed ONE pool."""
+def test_rotating_art_file_pool_is_base_plus_version_siblings(tmp_path):
+    """THE CONVENTION (RESTRUCTURE 2026-07-22 — `alt/` retired): the
+    canonical file and its `_v2`/`_v3`-style siblings in the SAME
+    source-free folder all feed ONE pool."""
     canonical = tmp_path / "Age_of_Light.png"
     canonical.write_bytes(b"")
     (tmp_path / "Age_of_Light_v2.png").write_bytes(b"")
-    alt = tmp_path / "alt"
-    alt.mkdir()
-    (alt / "Age_of_Light.png").write_bytes(b"")
+    (tmp_path / "Age_of_Light_v3.png").write_bytes(b"")
     picks = {
         defaults.rotating_art_file(canonical, date(2026, 7, 20 + offset))
         for offset in range(6)
     }
     assert picks == {
-        canonical, tmp_path / "Age_of_Light_v2.png", alt / "Age_of_Light.png",
+        canonical,
+        tmp_path / "Age_of_Light_v2.png",
+        tmp_path / "Age_of_Light_v3.png",
     }
 
 
@@ -61,31 +62,30 @@ def test_rotating_art_file_is_deterministic_and_advances(tmp_path):
     assert len(picks) == 3
 
 
-def test_rotating_art_file_alt_alone_is_enough_to_rotate(tmp_path):
-    """A family with no `_v2` siblings, only an `alt/` file sharing the
-    canonical's OWN name, still rotates between exactly two candidates
-    — the pool is never suffix-only."""
-    canonical = tmp_path / "Starry_Summer.png"
-    canonical.write_bytes(b"")
-    alt = tmp_path / "alt"
-    alt.mkdir()
-    (alt / "Starry_Summer.png").write_bytes(b"")
+def test_rotating_art_file_suffixed_source_versions_rotate(tmp_path):
+    """The RESTRUCTURE naming: version siblings carry the source suffix
+    AFTER the `_vN` (`Lion_v2_gem.png`). A sourceless canonical still
+    finds them and rotates between the active-source files."""
+    from config import paths
+
+    paths.set_art_source("gemini")
+    (tmp_path / "Lion_gem.png").write_bytes(b"")
+    (tmp_path / "Lion_v2_gem.png").write_bytes(b"")
+    (tmp_path / "Lion_gpt.png").write_bytes(b"")   # other source — not doubled
+    canonical = tmp_path / "Lion.png"
     picks = {
         defaults.rotating_art_file(canonical, date(2026, 7, 20 + o))
         for o in range(4)
     }
-    assert picks == {canonical, alt / "Starry_Summer.png"}
+    assert picks == {tmp_path / "Lion_gem.png", tmp_path / "Lion_v2_gem.png"}
 
 
-def test_rotating_art_file_alt_ignores_unrelated_names(tmp_path):
-    """`alt/` is scoped to the SAME stem — a different figure's alt
-    file sitting beside it never joins this pool (the mirroring rule
-    `test_alt_folders_mirror_their_parent_names` also pins on disk)."""
+def test_rotating_art_file_ignores_unrelated_names(tmp_path):
+    """The pool is scoped to the SAME base stem — a different figure's
+    file sitting beside it never joins."""
     canonical = tmp_path / "Eagle.png"
     canonical.write_bytes(b"")
-    alt = tmp_path / "alt"
-    alt.mkdir()
-    (alt / "Lion.png").write_bytes(b"")
+    (tmp_path / "Lion.png").write_bytes(b"")
     assert defaults.rotating_art_file(canonical, date(2026, 7, 20)) == canonical
 
 

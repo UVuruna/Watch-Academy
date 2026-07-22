@@ -57,7 +57,7 @@ def _load_pack(directory: Path) -> tuple[str, dict]:
 def hand_packs() -> dict[str, dict]:
     """name → pack for every bundled + user pack (duplicates are loud)."""
     packs: dict[str, dict] = {}
-    roots = [paths.assets_dir() / "hands", user_hands_dir()]
+    roots = [paths.assets_dir() / "instrument" / "hands", user_hands_dir()]
     for root in roots:
         if not root.exists():
             continue

@@ -346,7 +346,7 @@ def _resolve_hands(settings: Settings):
             pivot_y=y,
             pivot_x_fraction=None if x is None else x / size.width(),
         )
-    bundled = pack["dir"].parent == paths.assets_dir() / "hands"
+    bundled = pack["dir"].parent == paths.assets_dir() / "instrument" / "hands"
     return HandsSpec(
         hour=specs["hours"],
         minute=specs["minutes"],
@@ -522,7 +522,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
     dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if metal == "colored" and theme in constants.METAL_THEMES:
         dual_rel = dual_rel.replace("/primary/", "/colored/")
-    dual = defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+    dual = defaults.weekday_art(f"{dual_rel}.png")
     if not paths.art_file(dual).exists():
         # PENDING art (documented): a rework can point the dual at a
         # plate the owner has not generated yet (the Creeds' Satanism
@@ -556,7 +556,7 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
                 constants.WEEKDAY_THEME_ARTICLES[theme], body
             )
     dual_rel = table["dual"][0]
-    dual = defaults.WEEKDAY_ART_DIR / f"{dual_rel}.png"
+    dual = defaults.weekday_art(f"{dual_rel}.png")
     if paths.art_file(dual).exists():
         dual_names = table["dual_names"]
         faces_set = table["articles"]

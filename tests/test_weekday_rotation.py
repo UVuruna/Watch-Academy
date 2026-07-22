@@ -62,7 +62,7 @@ def test_bible_dark_dual_judas_rotates():
     same `judas.png` reused as a weekday BODY too) rotates through the
     generic resolver exactly like every other draw-adjacent call site —
     pinned directly here since it has no dedicated per-body wrapper."""
-    canonical = defaults.WEEKDAY_ART_DIR / f"{defaults.WEEKDAY_DUAL_FILES['bible_dark']}.png"
+    canonical = defaults.weekday_art(f"{defaults.WEEKDAY_DUAL_FILES['bible_dark']}.png")
     first = defaults.rotating_art_file(canonical, DAY_A)
     second = defaults.rotating_art_file(canonical, DAY_B)
     assert first != second

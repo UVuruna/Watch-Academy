@@ -35,7 +35,7 @@ def test_continents_body_and_dual_plates_exist_on_disk():
         plate = defaults.weekday_theme_body_art("continents", body)
         assert paths.art_file(plate).exists(), body
     rel = defaults.WEEKDAY_DUAL_FILES["continents"]
-    dual = defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+    dual = defaults.weekday_art(f"{rel}.png")
     assert paths.art_file(dual).exists()
 
 

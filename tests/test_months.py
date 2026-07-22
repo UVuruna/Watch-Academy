@@ -47,22 +47,25 @@ def test_mount_radius_is_in_the_design_law_band():
 # --- 2. The canonical sourceless root (subdial precedent) -------------------
 
 
-def test_months_root_is_outside_art_sourced_roots():
-    """A mount-set plate is its OWN shared thing, not a Gemini/ChatGPT
-    split — so `months/` stays out of ART_SOURCED_ROOTS, exactly like
-    `subdial/`."""
-    assert defaults.MONTHS_ART_DIR.name == "months"
-    assert "months" not in constants.ART_SOURCED_ROOTS
+def test_months_root_is_the_slavic_months_calendar_dir():
+    """The Slavic months are a Calendar-category mount set (RESTRUCTURE
+    2026-07-22): assets/calendars/slavic_months/."""
+    assert defaults.MONTHS_ART_DIR.name == "slavic_months"
+    assert defaults.MONTHS_ART_DIR.parent.name == "calendars"
 
 
-def test_month_plates_are_sourceless_and_graceful_absent():
-    """`paths.art_file` passes a `months/` path straight through (never
-    source-qualified) and it does not exist yet — the FUTURE prompt sheet
-    — so every consumer hides it, the wired-ahead contract."""
+def test_month_plates_resolve_by_suffix_or_stay_absent():
+    """`paths.art_file` resolves a `slavic_months/` plate to its source
+    suffix when the art exists (the owner's partial ChatGPT drop), else
+    returns the canonical path unchanged so every consumer hides it — the
+    wired-ahead graceful-absent contract."""
     for _cro, _gloss, stem, _m in defaults.SLAVIC_MONTHS:
         plate = defaults.MONTHS_ART_DIR / f"{stem}.png"
-        assert paths.art_file(plate) == plate            # no source segment
-        assert not plate.exists()                        # art is a future work
+        resolved = paths.art_file(plate)
+        if resolved.exists():
+            assert resolved.stem.endswith(("_gem", "_gpt"))
+        else:
+            assert resolved == plate
 
 
 # --- 3. The Encyclopedia topic ----------------------------------------------

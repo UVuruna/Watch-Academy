@@ -459,7 +459,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     for theme in constants.WEEKDAY_THEMES:
         rel = defaults.WEEKDAY_DUAL_FILES[theme]
         if not _paths.art_file(
-            defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+            defaults.weekday_art(f"{rel}.png")
         ).exists():
             # ONLY the reworked Creeds may run dual-less: its Satanism
             # plate is pending owner art (2026-07-15) — the theme runs
@@ -479,7 +479,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
             "/primary/", "/colored/"
         )
         assert _paths.art_file(
-            defaults.WEEKDAY_ART_DIR / f"{rel}.png"
+            defaults.weekday_art(f"{rel}.png")
         ).exists(), theme
     # ...and so are the SPLIT FACE TEXTS (owner: no identical text on
     # the two faces) — every article set's sun carries distinct
@@ -534,8 +534,9 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
         from render.asset_variants import scaled_variant_file
 
         eclipse_uri = scaled_variant_file(
-            defaults.WEEKDAY_ART_DIR
-            / f"{defaults.WEEKDAY_DUAL_FILES['planets']}.png",
+            defaults.weekday_art(
+                f"{defaults.WEEKDAY_DUAL_FILES['planets']}.png"
+            ),
             2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
         ).as_uri()
         assert eclipse_uri in south and eclipse_uri not in north
@@ -901,7 +902,7 @@ def test_slot_modes_are_real_everywhere():
     assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "chinese/primary"
     assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "chinese/colored"
     assert "gold" in defaults.METAL_SWAP_TARGETS
-    assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "astrology/colored"
+    assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "zodiac/astrology/colored"
 
 
 def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):

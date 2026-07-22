@@ -10,9 +10,10 @@ tunables. Documentation: config/archetypes.md.
 
 from config import paths
 
-# Canonical (source-less) art root — config.paths.art_file inserts the
-# active source (assets/archetype/<source>/...) at every disk boundary.
-ARCHETYPE_ART_DIR = paths.assets_dir() / "archetype"
+# Canonical (source-less) art root — config.paths.art_file appends the
+# active source SUFFIX (assets/archetypes/<family>/<Figure>_<src>.png) at
+# every disk boundary (RESTRUCTURE 2026-07-22).
+ARCHETYPE_ART_DIR = paths.assets_dir() / "archetypes"
 # (The Scale-glass reuse for the two Prism poles was REVOKED by the
 # owner's one-image-one-place law, 2026-07-19 — the triangles belong to
 # the Scale badge alone, in four rotating versions; the prism seats get
@@ -197,8 +198,8 @@ ARCHETYPES = {
     "trinity_light": {
         "articles": "archetype_trinity_light",
         "figures": (
-            _fig(0.0, _FAMILY_DIR / "Child_Dawn.png",
-                 "The Child", "The Dawn", "child"),
+            _fig(0.0, _FAMILY_DIR / "Child_Anchor.png",
+                 "The Child", "The Anchor", "child"),
             _fig(120.0, _FAMILY_DIR / "Mother_Heart.png",
                  "The Mother", "The Heart", "mother"),
             _fig(240.0, _FAMILY_DIR / "Father_Shield.png",

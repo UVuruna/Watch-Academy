@@ -996,7 +996,7 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     absent until the owner's prompt sheet lands)."""
     name, _family, _article = constants.THIRTEENTHS[key]
     if key == "ophiuchus":
-        art = octa_slot_art("astrology/sign", name)
+        art = octa_slot_art("zodiac/astrology/sign", name)
     elif key == "chinese":
         art = octa_slot_art("chinese/primary", "Cat")
     else:
@@ -1071,7 +1071,7 @@ def theme_ninth(
     if entry is None:
         return None
     name, rel = entry
-    asset = defaults.WEEKDAY_ART_DIR / rel
+    asset = defaults.weekday_art(rel)
     if not paths.art_file(asset).exists():
         return None
     if on_date is not None:

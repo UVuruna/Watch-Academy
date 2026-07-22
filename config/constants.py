@@ -52,34 +52,17 @@ YEAR_ANCHOR_ANGLES = (180.0, 270.0, 360.0, 450.0, 540.0, 630.0)
 HIDDEN_MODE_SECRET = "36m36u36v"
 
 # --- Artwork sources -----------------------------------------------------------
-# The Gemini and ChatGPT generations COEXIST (owner 2026-07-14); every
-# sourced asset root holds one subtree per source —
-# assets/<root>/<source>/<family>/... — the user picks in Settings and
-# a file missing in the chosen source falls back to the other. Code
-# keeps building CANONICAL source-less paths; config.paths.art_file
-# resolves them at every disk boundary.
+# The Gemini and ChatGPT generations COEXIST (owner 2026-07-14). Since
+# the RESTRUCTURE (2026-07-22) the source is NO LONGER a folder segment
+# — it is a terminal filename SUFFIX (`<Figure>[_vN]_<src>.png`, source
+# last: `_gem`/`_gpt`). The user picks the active source in Settings;
+# `config.paths.art_file` resolves the suffix at every disk boundary,
+# falling back to the other source and then the suffix-less name (owner
+# hand-made art). There is no longer a per-root registry — every PNG is
+# resolved uniformly by filename suffix.
 ART_SOURCES = ("gemini", "chatgpt")
 ART_SOURCE_DEFAULT = "gemini"
 ART_SOURCE_TITLES = {"gemini": "Gemini", "chatgpt": "ChatGPT"}
-ART_SOURCED_ROOTS = (
-    "weekday", "zodiac", "emblem", "badge", "instrument",
-    # The archetype stained glass (owner sealed package 2026-07-16):
-    # assets/archetype/<source>/<archetype>/<file>.png.
-    "archetype",
-    # The era/age rose windows (owner fix, 2026-07-20 — the generated
-    # files always shipped as assets/era/<source>/<Name>.png, one
-    # subtree per source like every other family; this root was simply
-    # never added, so `art_file` passed the sourceless canonical path
-    # straight through and every era badge silently failed its own
-    # existence check).
-    "era",
-    # The eclipse category emblems (GUIDE shoot find, 2026-07-20 —
-    # the same silent-absence class as "era" above: the ChatGPT batch
-    # landed as assets/eclipse/chatgpt/<Kind>_<Type>.png, but with the
-    # root missing here the encyclopedia chapter plates and the
-    # hover-card badges resolved the sourceless path and drew nothing).
-    "eclipse",
-)
 
 # --- Moon ----------------------------------------------------------------------
 SYNODIC_MONTH_DAYS = 29.53           # mean lunar cycle length
@@ -544,10 +527,10 @@ SLOT_STYLE_VALUES = tuple(dict.fromkeys(
 # Family/variant tree (owner restructure 2026-07-14): astrology's
 # plain logo is its PRIMARY variant.
 ZODIAC_STYLE_ART_DIRS = {
-    "sign": "astrology/sign",
-    "logo": "astrology/primary",
-    "constellation": "astrology/constellation",
-    "colored": "astrology/colored",
+    "sign": "zodiac/astrology/sign",
+    "logo": "zodiac/astrology/primary",
+    "constellation": "zodiac/astrology/constellation",
+    "colored": "zodiac/astrology/colored",
 }
 CHINESE_STYLE_ART_DIRS = {
     "colored": "chinese/colored",
@@ -849,9 +832,9 @@ WEEKDAY_THEME_NINTHS = {
     "slavic": ("Triglav", "slavic/pantheon/triglav.png"),
     "alchemy": ("The Philosopher's Stone", "alchemy/primary/stone.png"),
     "profession": ("The Polymath", "profession/primary/Polymath.png"),
-    "religion": ("Freemasonry", "religion/primary/freemasonry.png"),
+    "religion": ("Freemasonry", "creeds/primary/freemasonry.png"),
     "religion_alt": (
-        "The Unknown God", "religion/secondary/unknown_god.png",
+        "The Unknown God", "creeds/secondary/unknown_god.png",
     ),
     "bible": ("The Holy Trinity", "bible/primary/holy_trinity.png"),
     "bible2": ("Melchizedek", "bible/secondary/melchizedek.png"),

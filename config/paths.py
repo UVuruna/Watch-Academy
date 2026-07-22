@@ -137,33 +137,40 @@ def metal_shade(metal: str) -> str:
     return _metal_shades.get(metal, constants.METAL_SHADE_DEFAULT[metal])
 
 
+# The terminal filename suffix per art source (RESTRUCTURE Naming
+# Convention, 2026-07-22): the Gemini/ChatGPT split moved OFF the folder
+# tree and ONTO the filename — `<Figure>[_vN]_<src>.png`, source last.
+ART_SUFFIX = {"gemini": "gem", "chatgpt": "gpt"}
+
+
 def art_file(path: Path | None) -> Path | None:
-    """Map a CANONICAL (source-less) asset path into the active source
-    subtree — assets/<root>/<source>/<rest> — falling back to the OTHER
-    source where the file is missing (the ChatGPT coverage is partial;
-    owner 2026-07-14). Paths outside the sourced roots, and already
-    source-qualified paths, pass through untouched."""
+    """Resolve a CANONICAL (suffix-less) art path to the file that
+    actually exists, trying the source SUFFIX on the FILENAME (the folder
+    tree is now source-free): the active source first, the other source
+    as cross-source fallback (partial ChatGPT coverage; owner 2026-07-14),
+    then the suffix-less name (owner hand-made art carries no suffix).
+    A path already carrying a `_gem`/`_gpt` suffix, and any non-PNG
+    (SVG logos, JSON), pass through untouched. When nothing is on disk
+    the canonical path returns unchanged — the caller keeps its own
+    missing-art fallback (documented, Rule #1: never a silent lie)."""
     if path is None:
         return None
-    # Lexical normalization first: the Inner Wheel themes reach the
-    # emblem art via a "../emblem/..." step-up — the source segment
-    # must land under the REAL root (emblem/), not the literal one.
+    # Lexical normalization first: a few call sites still reach across
+    # roots with a "../" step-up (the continents Servant reaches the
+    # earth family) — collapse it before touching the filename.
     path = Path(os.path.normpath(path))
-    assets = assets_dir()
-    try:
-        rel = path.relative_to(assets)
-    except ValueError:
+    if path.suffix.lower() != ".png":
         return path
-    parts = rel.parts
-    if len(parts) < 2 or parts[0] not in constants.ART_SOURCED_ROOTS:
+    stem = path.stem
+    if stem.endswith(("_gem", "_gpt")):
         return path
-    if parts[1] in constants.ART_SOURCES:
-        return path
-    ordered = (_art_source,) + tuple(
-        source for source in constants.ART_SOURCES if source != _art_source
-    )
-    for source in ordered:
-        candidate = assets.joinpath(parts[0], source, *parts[1:])
+    parent, ext = path.parent, path.suffix
+    active = ART_SUFFIX[_art_source]
+    ordered = [active] + [s for s in ART_SUFFIX.values() if s != active]
+    for suffix in ordered:
+        candidate = parent / f"{stem}_{suffix}{ext}"
         if candidate.exists():
             return candidate
-    return assets.joinpath(parts[0], ordered[0], *parts[1:])
+    if path.exists():
+        return path
+    return path
