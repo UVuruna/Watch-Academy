@@ -44,6 +44,7 @@ from PySide6.QtWidgets import (
 from app import native
 from app.design_window import DesignDialog
 from app.encyclopedia import EncyclopediaDialog
+from app.encyclopedia_warm import warm_encyclopedia
 from app.fast_travel_flash import FastTravelFlash
 from app.observatory import ObservatoryDialog
 from app.guide import GuideDialog
@@ -1032,6 +1033,14 @@ class WatchController(QObject):
     def _warm_caches(self) -> None:
         warm_working_set(progress=print)
         self._warm_hover_articles()
+        # The Encyclopedia's own inventory LAST (owner order 2026-07-26:
+        # the dial's needs first, then everything the Encyclopedia can
+        # show — metal variants, Moon plates, decode downscales — so an
+        # open finds it all pre-built; QImage end to end, a no-op once
+        # warm). Even before this finishes, an open never blocks: the
+        # topic table is paths-only and a page materializes only its
+        # own few images on first display.
+        warm_encyclopedia(progress=print)
 
     def _start_hover_warm(self) -> None:
         """Obsolete any running sweep and start a fresh one — called on

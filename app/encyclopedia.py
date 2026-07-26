@@ -25,7 +25,7 @@ from datetime import date
 from pathlib import Path
 
 from PySide6.QtCore import QByteArray, QEvent, QRectF, QSize, Qt
-from PySide6.QtGui import QFont, QIcon, QPainter, QPixmap
+from PySide6.QtGui import QFont, QIcon, QImage, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import (
     QDialog,
@@ -52,8 +52,10 @@ from data.encyclopedia import EncyclopediaRepository
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
-from render.asset_recolor import metal_variant_file
-from render.asset_variants import moon_phase_file
+from render.asset_recolor import (
+    ensure_variant, metal_variant_path, variant_pending,
+)
+from render.asset_variants import moon_phase_file, scaled_variant_file
 from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
 
 
@@ -494,14 +496,18 @@ _GOD_TOPIC_GALLERY_TITLES = {
 def _metal_looks(base: Path, colored: Path | None) -> tuple:
     """The four LOOKS of a bronze-plate image (owner 2026-07-13),
     COLORED FIRST — the owner's default — then Bronze as drawn and
-    the two selective-swap disk-cache variants."""
+    the two selective-swap disk-cache variants. PATHS ONLY (owner
+    order 2026-07-26: opening the Encyclopedia must never block —
+    `metal_variant_path` names the cache file without building it;
+    the pixels build in the background warm or on first display
+    through `ensure_variant`)."""
     looks = []
     if colored is not None and paths.art_file(colored).exists():
         looks.append(("Colored", colored))
     looks += [
         ("Bronze", base),
-        ("Gold", metal_variant_file(base, "gold")),
-        ("Silver", metal_variant_file(base, "silver")),
+        ("Gold", metal_variant_path(base, "gold")),
+        ("Silver", metal_variant_path(base, "silver")),
     ]
     return tuple(looks)
 
@@ -551,8 +557,8 @@ def _ninth_looks(theme: str, plate: Path) -> tuple | None:
             (label, ((path,),))
             for label, path in (
                 ("Bronze", plate),
-                ("Gold", metal_variant_file(plate, "gold")),
-                ("Silver", metal_variant_file(plate, "silver")),
+                ("Gold", metal_variant_path(plate, "gold")),
+                ("Silver", metal_variant_path(plate, "silver")),
                 ("Colored", _colored_sibling(plate)),
             )
         )
@@ -1073,9 +1079,9 @@ def _topics(travel_date: date | None = None) -> dict:
                     (label, ((path,),))
                     for label, path in (
                         ("Bronze", chinese_primary / f"{animal}.png"),
-                        ("Gold", metal_variant_file(
+                        ("Gold", metal_variant_path(
                             chinese_primary / f"{animal}.png", "gold")),
-                        ("Silver", metal_variant_file(
+                        ("Silver", metal_variant_path(
                             chinese_primary / f"{animal}.png", "silver")),
                         ("Colored",
                          defaults.ZODIAC_ART_DIR / "chinese" / "colored"
@@ -1903,9 +1909,19 @@ class EncyclopediaDialog(QDialog):
         )
         icon = paths.art_file(topic["icon"])
         if icon is not None and icon.exists():
-            # The FULL-RES art backs the icon — QIcon renders whatever
-            # size _rescale_topics asks for.
-            card.setIcon(QIcon(str(icon)))
+            # The PRE-WARMED downscale backs the icon when it exists
+            # (owner order 2026-07-26: ~44 full-res first-paint decodes
+            # made the gallery itself a multi-second stall) — QIcon
+            # still renders whatever size _rescale_topics asks for, and
+            # a card never shows more than ICON_MAX_PX anyway. Until
+            # the background warm has built the copy, the full-res
+            # original backs it exactly as before (`build=False`:
+            # never a cold downscale on the GUI thread).
+            ready = scaled_variant_file(
+                icon, defaults.ENCYCLOPEDIA_CARD_ICON_DECODE_PX,
+                build=False,
+            )
+            card.setIcon(QIcon(str(ready)))
         card.clicked.connect(
             lambda checked=False, chosen=key: self._show_topic(chosen)
         )
@@ -2103,8 +2119,10 @@ class EncyclopediaDialog(QDialog):
             images = [path for row in rows for path in row]
             for index, path in enumerate(images, start=1):
                 suffix = f"_{index}" if len(images) > 1 else ""
+                # A pending metal variant materializes before the copy
+                # (lazy looks, owner order 2026-07-26).
                 shutil.copyfile(
-                    path, Path(target) / f"{safe}{suffix}.png"
+                    ensure_variant(path), Path(target) / f"{safe}{suffix}.png"
                 )
 
     def _topic_display_title(self) -> str:
@@ -2176,6 +2194,11 @@ class EncyclopediaDialog(QDialog):
         # Resolve through the active ART SOURCE here (owner 2026-07-14:
         # Gemini vs ChatGPT with per-file fallback) — the grid, the
         # pixmap cache and Download all consume the resolved paths.
+        # A `variant_pending` path counts as PRESENT (owner order
+        # 2026-07-26): its source is on disk and `_pixmap` builds the
+        # pixels on first display — dropping it here would silently
+        # hide the Gold/Silver looks whenever the user outruns the
+        # background warm.
         look_rows = [
             [
                 [
@@ -2184,7 +2207,7 @@ class EncyclopediaDialog(QDialog):
                         paths.art_file(path) for path in row
                         if path is not None
                     )
-                    if resolved.exists()
+                    if resolved.exists() or variant_pending(resolved)
                 ]
                 for row in rows
             ]
@@ -2417,11 +2440,29 @@ class EncyclopediaDialog(QDialog):
         """The decoded-image cache behind the lazy looks (owner
         2026-07-13: The Week opened far too slowly): a look decodes
         on FIRST display, then the cache answers — paths were already
-        filtered for existence."""
+        filtered for existence-or-pending. Three laws here (owner
+        order 2026-07-26, "entering the Encyclopedia must never block
+        or crash"): a still-missing metal variant MATERIALIZES now
+        (`ensure_variant` — at most the few images of the open page,
+        and only until the background warm catches up); the pre-warmed
+        downscale is read when it exists (`build=False` — never a cold
+        downscale on the GUI thread); and whatever is decoded is
+        BOUNDED to the reader's decode ceiling, so a full-res source
+        can neither stall the paint nor pile up RAM in this cache (the
+        old unbounded full-res QPixmaps are the prime suspect for the
+        historical enter-the-Encyclopedia crashes)."""
         key = str(path)
         pixmap = self._pixmap_cache.get(key)
         if pixmap is None:
-            pixmap = QPixmap(key)
+            ceiling = defaults.ENCYCLOPEDIA_READER_DECODE_CEILING_PX
+            source = ensure_variant(path)
+            ready = scaled_variant_file(source, ceiling, build=False)
+            image = QImage(str(ready))
+            if image.width() > ceiling:
+                image = image.scaledToWidth(
+                    ceiling, Qt.TransformationMode.SmoothTransformation
+                )
+            pixmap = QPixmap.fromImage(image)
             self._pixmap_cache[key] = pixmap
         return pixmap
 
