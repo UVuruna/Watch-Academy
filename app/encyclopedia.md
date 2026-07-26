@@ -612,6 +612,39 @@ only RE-FIT the pixmaps in place (`_resize_cell`) — tearing the grid
 down per resize left ghost labels and stale container heights that
 CLIPPED the art (owner bug 2026-07-14: the full-size crop).
 
+**THE NEVER-BLOCK LAW (owner order 2026-07-26: "entering the
+Encyclopedia must never block or crash — solve it once and for all"):**
+opening this dialog performs ZERO derived-image generation. The root
+cause of the historical minutes-long stalls (and the rename-wave open
+crashes) was `_topics()` calling the EAGER `metal_variant_file` for
+every gold/silver look while the dialog was being BUILT — a couple
+hundred numpy recolors on the GUI thread whenever an art wave / shade
+change / `METAL_SWAP_VERSION` bump invalidated the mtime-keyed raster
+cache. The build now records paths only:
+
+```
+BUILD (this dialog's __init__):
+    every metal look records metal_variant_path(...)   ← pure, no pixels
+READER filter (_show_entry):
+    a path counts as present when it EXISTS or is PENDING (recorded)
+FIRST DISPLAY (_pixmap):
+    ensure_variant(path)      ← builds AT MOST the open page's images
+    read the pre-warmed downscale if present (build=False — never a
+        cold downscale on the GUI thread)
+    decode BOUNDED to ENCYCLOPEDIA_READER_DECODE_CEILING_PX
+BACKGROUND ([Encyclopedia Warm](encyclopedia_warm.md), app start):
+    pre-builds every variant, Moon plate and downscale → all of the
+        above become cache hits
+```
+
+The decode BOUND doubles as the crash guard: the old unbounded
+full-res QPixmaps (sources can be several thousand px) piled up RAM
+per page and are the prime suspect for the historical
+enter-the-Encyclopedia aborts. Gallery cards read their own pre-warmed
+`ENCYCLOPEDIA_CARD_ICON_DECODE_PX` copies the same `build=False` way
+(a first-ever open before the warm finishes falls back to the full-res
+originals — exactly the old behavior, never worse).
+
 **Reserving the image rectangle (owner REPEAT complaint 2026-07-16,
 ROADMAP queue #9):** `_resize_cell` now fixes each image LABEL to its
 scaled pixmap (`setFixedSize`). This makes the whole image grid's
@@ -660,9 +693,18 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   Ctrl+wheel zoom bounds, the same RANGE-constant pattern
   `ELEMENT_SCALE_RANGE` already uses)
 
+- [Asset Recolor](../render/asset_recolor.md) — `metal_variant_path`
+  (paths only at build), `ensure_variant` (first display / Download),
+  `variant_pending` (the reader's exists-or-pending filter)
+- [Asset Variants](../render/asset_variants.md) — `moon_phase_file`
+  (the Moon topic), `scaled_variant_file` with `build=False` (gallery
+  cards / reader pages read pre-warmed downscales)
+
 ### Used by
 - [Watch Controller](../app/controller.md) — opens it from the menu
   with the translation overlay
+- [Encyclopedia Warm](encyclopedia_warm.md) — walks `_topics()` as the
+  single warm inventory (Rule #5)
 
 ## Classes
 
@@ -705,7 +747,10 @@ metal on the dial itself, see [Ring Presets](../data/rings.md).
   fix, round R3); `self._zoom` (round R8b item 5b) scales fonts,
   images and gallery tiles together, capped so it can never force an
   overflow (see ROUND R8b below)
-- `_pixmap(path)`: the decoded-image cache behind the lazy looks
+- `_pixmap(path)`: the decoded-image cache behind the lazy looks —
+  materializes a pending metal variant (`ensure_variant`), reads the
+  pre-warmed downscale when present and BOUNDS the decode to the
+  reader ceiling (THE NEVER-BLOCK LAW above)
 - `eventFilter(obj, event)` / `wheelEvent(event)` (round R8b item 5b):
   Ctrl+MouseWheel zooms — the SAME guard installed both on the scroll
   area's own viewport (an event filter, since Qt delivers wheel events

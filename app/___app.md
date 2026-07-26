@@ -93,6 +93,13 @@ The article browser: a grouped topic gallery, then a SLIDER paging one
 entry at a time with Home / Download and the look arrows.
 See [Encyclopedia Dialog](encyclopedia.md).
 
+### `encyclopedia_warm.py` — Encyclopedia Warm
+Background pre-materialization of everything the Encyclopedia can show
+(owner order 2026-07-26: opening it must never block the main thread)
+— metal variants, Moon plates and decode-ceiling downscales, chained
+onto the controller's existing warm thread.
+See [Encyclopedia Warm](encyclopedia_warm.md).
+
 ### `guide.py` — Guide Dialog
 The paged, resizable help book over `assets/guide/` pages and
 captions. See [Guide Dialog](guide.md).

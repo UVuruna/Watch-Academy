@@ -2,7 +2,7 @@
 
 Project-specific guidance for Claude Code. **Inherits ALL rules from the
 monorepo root [CLAUDE.md](../../CLAUDE.md)** (mandatory workflow, Rules
-#1–#14, markdown guidelines, version/commit system, build pipeline,
+#1–#25, markdown guidelines, version/commit system, build pipeline,
 py-spy profiling) — read that first; only deltas and project facts live
 here.
 

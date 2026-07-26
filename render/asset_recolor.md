@@ -25,13 +25,49 @@ here — same reasoning as `subdial_plate_file`'s active set). Disk-
 cached like every other derived asset, keyed by shade and `defaults.
 METAL_SWAP_VERSION`.
 
+**The metal-variant family is LAZY since the 2026-07-26 owner order**
+("the Encyclopedia BLOCKED the main thread for minutes"): naming a
+variant and building its pixels are two separate steps.
+
+`metal_variant_path(path, metal)` — PURE: computes the cache path
+(keyed by the file's mtime, the active SHADE and `defaults.
+METAL_SWAP_VERSION`) and records the (source, metal) recipe in a
+module ledger; no pixel work. `None` or a non-swap metal returns the
+original path; a source MISSING from disk returns the canonical path
+unchanged (graceful-absent — the old eager code crashed on the
+unguarded `stat()`, which is exactly what an art rename wave did to
+the Encyclopedia's open).
+
+`ensure_variant(path)` — the ONE place the pixel work happens:
+materializes a recorded, still-missing variant on first actual use
+(any thread — QImage end to end, the R1b law; per-path locks make a
+GUI-thread first display and the background warm meeting on the SAME
+file build it once). Unrecorded paths pass through untouched.
+
+`variant_pending(path)` — True for a recorded, not-yet-built variant;
+the Encyclopedia's exists() filter counts such a path as present.
+
 `metal_variant_file(path, metal)` (owner bug 2026-07-13: the legend/
 Encyclopedia `<img>` always showed the BRONZE file even under the gold/
-silver look — QToolTip embeds files, not pixmaps): a DISK copy of
-`path` with the hue-selective metal swap applied (`AssetCache.
-_metal_swapped`). Cached by the file's mtime, the active SHADE and
-`defaults.METAL_SWAP_VERSION`; `None` or a non-swap metal returns the
-original path.
+silver look — QToolTip embeds files, not pixmaps): the EAGER door —
+`ensure_variant(metal_variant_path(...))` in one call — for callers
+that embed the file path immediately (the compositor's tooltip `<img>`
+tags, the hover warm sweep).
+
+Pseudocode of the split (Rule #21):
+
+```
+metal_variant_path(source, metal):
+    IF metal is not a swap target OR source missing → return source as-is
+    cache = raster_cache / hash(source) + mtime + metal + shade + version
+    ledger[cache] = (source, metal)      ← recipe recorded, no pixels
+    return cache
+
+ensure_variant(path):
+    IF path not in ledger OR already on disk → return path
+    LOCK path → recolor source with the metal kernel → save to path
+    return path (source on a failed write — slower, never wrong)
+```
 
 `_recolored_plate(master, finish, tint=None)` — the subdial plate's
 own recolor, called only by [Asset Variants](asset_variants.md)`.
@@ -77,9 +113,13 @@ also reaches it, for the annular solar icon's "ring of fire" tint.
   (`eclipse_solar_type_icon`'s annular tint) — the necessary reverse
   edge the split created; see that module's own docstring
 - [Compositor](compositor.md) — `metal_variant_file` (hover-card/
-  legend `<img>` tags, which embed files, not pixmaps)
-- [Encyclopedia](../app/encyclopedia.md) — `metal_variant_file` (the
-  Bronze/Gold/Silver look-arrow cycle on gallery images)
+  legend `<img>` tags, which embed files, not pixmaps — the eager door)
+- [Encyclopedia](../app/encyclopedia.md) — `metal_variant_path` (the
+  Bronze/Gold/Silver look-arrow cycle records paths only),
+  `ensure_variant` (first display / Download), `variant_pending` (the
+  reader's exists-or-pending filter)
+- [Encyclopedia Warm](../app/encyclopedia_warm.md) — `ensure_variant` /
+  `variant_pending` (the background pre-materialization walk)
 - [Watch Controller](../app/controller.md) — `letter_metal_file`
   (skin assembly, gold-master metal resolution)
 - [Tray Controller](../app/tray.md) — `tinted_pixmap` only (ADD WATCH
@@ -91,8 +131,14 @@ also reaches it, for the annular solar icon's "ring of fire" tint.
 
 - `letter_metal_file(path, metal)`: disk-cached ring letter finish,
   derived from the gold master
-- `metal_variant_file(path, metal)`: disk-cached hue-selective metal
-  swap of any asset (badge medallions, legend `<img>` tags)
+- `metal_variant_path(path, metal)`: PURE cache-path computation +
+  recipe ledger entry — no pixel work
+- `ensure_variant(path)`: materialize a recorded variant on first use
+  (any thread; per-path locks)
+- `variant_pending(path)`: recorded-but-not-yet-built test for
+  exists() filters
+- `metal_variant_file(path, metal)`: the eager door — path + ensure in
+  one call (tooltip `<img>` embedders)
 - `_recolored_plate(master, finish, tint=None)`: the subdial plate's
   bezel/field recolor, `subdial_plate_file`'s private helper
 - `tinted_pixmap(source, tint)`: the public door to the TRITONE

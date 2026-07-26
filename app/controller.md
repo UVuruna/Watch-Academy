@@ -82,10 +82,16 @@ this suite predating it needed no changes beyond the class rename.
   position is kept if ANY attached screen shows part of the dial
   (multi-monitor safe); otherwise — first run or monitors rearranged —
   the widget centers on the primary screen. One background thread
-  (`_warm_caches`) then chains the working-set warmup and the HOVER
+  (`_warm_caches`) then chains the working-set warmup, the HOVER
   ARTICLE sweep (owner 2026-07-18, asked twice: the user never hovers
   in the first seconds — pre-build every article the dial can speak
-  today, so the FIRST hover is instant)
+  today, so the FIRST hover is instant) and the ENCYCLOPEDIA warm
+  ([Encyclopedia Warm](encyclopedia_warm.md), owner order 2026-07-26:
+  every metal variant, Moon plate and decode downscale the
+  Encyclopedia can show pre-builds here, so an open finds it all
+  ready — and even before this finishes, an open never blocks, since
+  the topic table is paths-only and a page materializes only its own
+  few images on first display)
 - `_start_hover_warm()` / `_warm_hover_articles()`: re-run the sweep
   (`compositor.warm_hover_articles`) on skin install and day change —
   the generation counter (`_hover_warm_generation`) obsoletes a sweep

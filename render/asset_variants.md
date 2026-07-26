@@ -27,7 +27,13 @@ Encyclopedia's hover tooltips call directly for their own downscale
 plate; callers pass 2x the display width so the tooltip still
 downsamples for crispness). `_scaled_cache_path()` names where a given
 (path, width) downscale lives on disk — the source STEM rides the name
-so a derived file is human-readable.
+so a derived file is human-readable. `scaled_variant_file`'s
+`build=False` mode (owner order 2026-07-26) never pays a cold
+decode+encode — it returns the ORIGINAL path when the cache copy does
+not exist yet: the Encyclopedia's gallery cards and reader pages read
+pre-warmed copies this way on the GUI thread, and the background warm
+([Encyclopedia Warm](../app/encyclopedia_warm.md)) builds them with
+`build=True`.
 
 **The reverse edge to `assets.py`:** `AssetCache.pixmap_by_height`
 reads `working_ceiling`/`scaled_variant_file` back from THIS module —
@@ -61,7 +67,9 @@ instead of exactly half-lit; `moon_phase_image` is the pure QImage
 render (mirrors `_draw_moon`'s two branches exactly, including the
 graceful fallback when the master asset is missing); `moon_phase_file`
 is its disk-cached path wrapper for the Encyclopedia's path-based image
-tuples.
+tuples. QImage END TO END (the R1b threading law, owner order
+2026-07-26): the background Encyclopedia warm renders the eight phase
+plates off the GUI thread, where QPixmap is forbidden.
 
 `subdial_plate_file(finish, tint=None)` — reworked in the Rsub round
 (owner decree 2026-07-21), which RETIRES Rule #19's first enforcement
@@ -125,7 +133,10 @@ raises rather than silently returning an uncached path (Rule #1).
 - [Compositor](compositor.md) — `eclipse_solar_type_icon`,
   `scaled_variant_file` (hover-card image URIs)
 - [Encyclopedia](../app/encyclopedia.md) — `moon_phase_file` (the Moon
-  topic's live-rendered pages)
+  topic's live-rendered pages), `scaled_variant_file` with
+  `build=False` (gallery cards / reader decode ceilings)
+- [Encyclopedia Warm](../app/encyclopedia_warm.md) —
+  `scaled_variant_file` (pre-building the decode-ceiling copies)
 - [Watch Controller](../app/controller.md) — `warm_working_set`,
   `calendar_wheel_icon_file` (Calendar Fast Travel icon)
 - [Tests (folder)](../tests/___tests.md) — `scaled_variant_file` (hover
@@ -147,7 +158,9 @@ raises rather than silently returning an uncached path (Rule #1).
   subtree
 - `warm_working_set(progress=None)`: background-thread working-set
   warmup
-- `scaled_variant_file(path, width)`: a disk-cached downscaled copy
+- `scaled_variant_file(path, width, build=True)`: a disk-cached
+  downscaled copy; `build=False` returns the original instead of
+  paying a cold build (GUI-thread readers)
 - `eclipse_solar_type_icon(type_)`: the small per-type solar eclipse
   icon
 - `calendar_wheel_icon_file(size)`: the computed 12-wedge calendar icon
