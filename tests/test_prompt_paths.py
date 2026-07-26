@@ -156,35 +156,35 @@ _WHITELIST: dict[str, str] = {
     # today the two rows share one lancet). COVERAGE.md §Compass
     # Objects: "WIRING GAP — fully painted, zero code reads any
     # rondel_* path outside the evangelist set."
-    "archetypes/trinity/rondel_Advocate.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/trinity/rondel_Prosecutor.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/trinity/rondel_Judge.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/family/rondel_Shield.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/family/rondel_Heart.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/family/rondel_Dawn.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Crown.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Bell.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Book.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Coin.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Mask.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Plough.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Staff.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/rondel_Sword.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/primary/colored/rondel_Advocate.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/primary/colored/rondel_Prosecutor.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/primary/colored/rondel_Judge.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/primary/colored/rondel_Shield.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/primary/colored/rondel_Heart.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/primary/colored/rondel_Dawn.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Crown.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Bell.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Book.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Coin.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Mask.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Plough.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Staff.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/rondel_Sword.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
     # The twelve Almanac month medallions: generated for the Encyclopedia
     # gallery's planned "Almanac" topic, which does not exist yet
     # (COVERAGE.md tracks this as "OK" — art landed ahead of the topic).
-    "calendars/almanac/January.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/February.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/March.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/April.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/May.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/June.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/July.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/August.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/September.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/October.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/November.png": "Almanac month medallion, Encyclopedia topic not built yet",
-    "calendars/almanac/December.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/January.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/February.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/March.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/April.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/May.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/June.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/July.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/August.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/September.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/October.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/November.png": "Almanac month medallion, Encyclopedia topic not built yet",
+    "calendars/almanac/primary/colored/December.png": "Almanac month medallion, Encyclopedia topic not built yet",
     # The dial's own Anno Lucis year is TEXT-ONLY today
     # (`core.deep_time.format_anno_lucis`) — COVERAGE.md: "ART GAP +
     # WIRING GAP — no code references assets/era/Anno_Lucis.png at all
@@ -195,7 +195,7 @@ _WHITELIST: dict[str, str] = {
     # six" pillars (`one_soul_prompts.md` §The Ninth) — a deliberate
     # standalone concept, not one of the seated `prism_light` figures
     # COVERAGE.md tracks; no grid seat exists for it yet.
-    "archetypes/one_soul/Child.png": "the standalone Ninth, no grid seat wired yet",
+    "archetypes/one_soul/primary/colored/Child.png": "the standalone Ninth, no grid seat wired yet",
     # (The figurative Union window, Union_Meeting→Union_v2 in the
     # figure-first sweep 2026-07-22, needs no entry anymore — the scale
     # family is a data-driven rotation root, discovered automatically.)
@@ -204,8 +204,8 @@ _WHITELIST: dict[str, str] = {
     # ("Faith", "Hope", "Love")`) but `virtue` is a loop variable —
     # "Faith.png" happens to also appear as the topic's own literal
     # icon path (caught by the text scan), Hope/Love do not.
-    "archetypes/trinity/badges/Hope.png": "read via the Trinity topic loop, built at runtime",
-    "archetypes/trinity/badges/Love.png": "read via the Trinity topic loop, built at runtime",
+    "archetypes/trinity/primary/colored/badges/colored/Hope.png": "read via the Trinity topic loop, built at runtime",
+    "archetypes/trinity/primary/colored/badges/colored/Love.png": "read via the Trinity topic loop, built at runtime",
     # The Instrument section's own article images
     # (`app.encyclopedia._topics`: `defaults.INSTRUMENT_ART_DIR /
     # f"{key}.png"` for `key in _INSTRUMENT_KEYS`) — same pattern.
@@ -232,76 +232,41 @@ _WHITELIST: dict[str, str] = {
     # explicit whitelist treatment as the row2 rondels above.
     # `badge_1to1_prompts.md`'s own Status section tracks the whole
     # round-one set, wired or not.
-    "archetypes/life/circle/tree/Unborn.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/Birth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/Childhood.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/Youth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/Maturity.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/tree/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Unborn.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Birth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Childhood.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Youth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Maturity.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     # THE THEME TITLE PLATES (R8c PROMPT SHEETS round, owner item 7,
-    # 2026-07-21): a NEW sourceless root, `assets/titles/<key>.png`,
+    # 2026-07-21): a NEW sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png`,
     # fills every weekday theme's (and two sibling topics') documented
     # graceful-absent title_entry slot (`app.encyclopedia.
     # _weekday_topic`'s `title_entry`, `"images": ()`  — "a future theme
-    # plate's slot"). No code reads `assets/titles/**` yet; wiring
+    # plate's slot"). No code reads `assets/weeks/societies/wolf/primary/colored/**` yet; wiring
     # `title_entry["images"]` to `(defaults.TITLE_ART_DIR /
     # f"{theme}.png",)`, mirroring the one title plate that already IS
     # wired (`defaults.CONTINENTS_TITLE_IMAGE`, `assets/earth/world.png`
     # — Continents is deliberately excluded from this family, per the
     # owner's own instruction), is a future app-code round. Full briefs:
-    # `research/prompts/titles/theme_title_prompts.md` (24 entries) plus
-    # two cross-referenced entries written in their own new-theme sheets
-    # (`research/prompts/monsters/greek_monsters_prompts.md`,
-    # `research/prompts/chinese/chinese_myth_prompts.md`).
-    "titles/planets.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/planet_signs.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/greek.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/norse.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/egypt.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/slavic.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/alchemy.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/japan.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/religion.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/religion_alt.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/profession.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/wolf.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/bee.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/elephant.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/bible.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/bible2.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/bible_dark.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/cosmos.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/planets_art.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/virtues.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/sins.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/moods.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/intelligences.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/months.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/monsters.png": "theme title plate, not yet wired (greek_monsters_prompts.md cross-ref)",
-    "titles/chinese_myth.png": "theme title plate, not yet wired (chinese_myth_prompts.md cross-ref)",
+    # The theme-title plates need no whitelist entries any more: since
+    # the tree law (2026-07-26) every `Title` plate lives INSIDE its
+    # theme's own family root, which the data-driven roots above
+    # already cover down to the family — the 36 old `titles/…` entries
+    # died with the `assets/titles/` root itself.
     # THE GAMING + CORPORATION SHEET WAVE (R10, owner-sealed rosters
     # 2026-07-22): ten more theme title plates, same sourceless
-    # `assets/titles/<key>.png` family as the block above — WoW,
+    # `assets/weeks/societies/wolf/primary/colored/<key>.png` family as the block above — WoW,
     # Cyberpunk and Star Wars each carry three blocks/sets so each
     # names three title plates, The Corporation carries one. Written in
     # full in `titles/theme_title_prompts.md`'s own "GAMING +
     # CORPORATION SHEET WAVE title plates" section; each new theme
     # sheet (`wow_prompts.md`, `cyberpunk_prompts.md`,
     # `starwars_prompts.md`, `corporate_prompts.md`) carries only a
-    # pointer, never a duplicate body. No code reads `assets/titles/**`
+    # pointer, never a duplicate body. No code reads `assets/weeks/societies/wolf/primary/colored/**`
     # yet (same future wiring round as the block above).
-    "titles/wow_alliance.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/wow_horde.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/wow_evil.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/cyberpunk_gangs.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/cyberpunk_street.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/cyberpunk_power.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/starwars_svetla.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/starwars_tamna.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/starwars_nova.png": "theme title plate, not yet wired (theme_title_prompts.md)",
-    "titles/corporate.png": "theme title plate, not yet wired (theme_title_prompts.md)",
 }
 
 

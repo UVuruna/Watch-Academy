@@ -133,7 +133,7 @@ def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> 
     marker = defaults.DEFAULT_SKIN.year_marker
     resolved = art_file(
         master if master is not None
-        else defaults.weekday_art("planets/primary/moon.png")
+        else defaults.weekday_art("planets/primary/photo/moon.png")
     )
     image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
     image.fill(Qt.GlobalColor.transparent)
@@ -174,7 +174,7 @@ def moon_phase_file(fraction: float, name: str, size: int = 800) -> Path:
     retired; this is the live-render replacement, the cost paid once
     per (phase, size) through the raster cache instead of shipping
     ~7 MB of PNGs)."""
-    master = art_file(defaults.weekday_art("planets/primary/moon.png"))
+    master = art_file(defaults.weekday_art("planets/primary/photo/moon.png"))
     stamp = hashlib.sha1(str(master).encode("utf-8")).hexdigest()[:16]
     mtime = int(master.stat().st_mtime) if master.exists() else 0
     cache = (

@@ -132,14 +132,20 @@ def _fig(angle, file, name, row2, entity, enc=None, rotates=False):
     }
 
 
-_TRINITY_DIR = ARCHETYPE_ART_DIR / "trinity"
-_FAMILY_DIR = ARCHETYPE_ART_DIR / "family"
-_TEMPERAMENTS_DIR = ARCHETYPE_ART_DIR / "temperaments"
-_TETRAMORPH_DIR = ARCHETYPE_ART_DIR / "tetramorph"
-_EVANGELIST_DIR = ARCHETYPE_ART_DIR / "evangelist"
-_PERSONS_DIR = ARCHETYPE_ART_DIR / "persons"
-_ONE_SOUL_DIR = ARCHETYPE_ART_DIR / "one_soul"
-_WALKS_DIR = ARCHETYPE_ART_DIR / "walks"
+# Tree law 2026-07-26: every family's lancet art lives at its
+# primary register's colored look (`<family>/primary/colored/`);
+# the 1:1 circle badges live BESIDE it at `<family>/circle/colored/`
+# and Life's registers (tree/animals) carry their own colored/ child.
+_TRINITY_DIR = ARCHETYPE_ART_DIR / "trinity" / "primary" / "colored"
+_FAMILY_DIR = ARCHETYPE_ART_DIR / "family" / "primary" / "colored"
+_TEMPERAMENTS_DIR = (
+    ARCHETYPE_ART_DIR / "temperaments" / "primary" / "colored"
+)
+_TETRAMORPH_DIR = ARCHETYPE_ART_DIR / "tetramorph" / "primary" / "colored"
+_EVANGELIST_DIR = ARCHETYPE_ART_DIR / "evangelist" / "primary" / "colored"
+_PERSONS_DIR = ARCHETYPE_ART_DIR / "persons" / "primary" / "colored"
+_ONE_SOUL_DIR = ARCHETYPE_ART_DIR / "one_soul" / "primary" / "colored"
+_WALKS_DIR = ARCHETYPE_ART_DIR / "walks" / "primary" / "colored"
 _LIFE_DIR = ARCHETYPE_ART_DIR / "life"
 
 # The Eight Ages, shared by both registers: (angle, age name, row-2
@@ -167,7 +173,7 @@ _LIFE_AGES = (
 
 def _life_figures(register: str) -> tuple:
     return tuple(
-        _fig(angle, _LIFE_DIR / register / f"{stem}.png", name,
+        _fig(angle, _LIFE_DIR / register / "colored" / f"{stem}.png", name,
              beings[register], entity)
         for angle, name, beings, entity, stem in _LIFE_AGES
     )

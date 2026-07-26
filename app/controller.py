@@ -522,7 +522,7 @@ def _themed_weekday_set(base, theme: str, metal: str | None):
         weekday = dataclasses.replace(weekday, metal=metal)
     dual_rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if metal == "colored" and theme in constants.METAL_THEMES:
-        dual_rel = dual_rel.replace("/primary/", "/colored/")
+        dual_rel = defaults.colored_variant_rel(dual_rel)
     dual = defaults.weekday_art(f"{dual_rel}.png")
     if not paths.art_file(dual).exists():
         # PENDING art (documented): a rework can point the dual at a

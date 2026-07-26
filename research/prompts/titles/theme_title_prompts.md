@@ -58,7 +58,7 @@ rather than a genuine foreign alphabet, exactly the same compromise
 
 ## The canonical drop path
 
-**`assets/titles/<key>.png`** — ONE new, sourceless root (no
+**`assets/weeks/societies/wolf/primary/colored/<key>.png`** — ONE new, sourceless root (no
 `<source>` split, deliberately outside `config.constants.
 ART_SOURCED_ROOTS`), flat, ASCII theme-key stems taken straight from
 `config.defaults.WEEKDAY_THEME_ARTICLES`'s own keys (`planet_signs`,
@@ -159,7 +159,7 @@ anything visible is a future call, not assumed here.
 
 ---
 
-## `planets` — Planets (`assets/titles/planets.png`)
+## `planets` — Planets (`assets/weeks/celestial_bodies/planets/primary/photo/Title.png`)
 
 *"Shows them AS THEMSELVES, before any myth is laid over them" — the
 neutral roster every other theme borrows its shape from.*
@@ -170,7 +170,7 @@ An antique brass orrery plate, engraved line-art photorealistic render, perfectl
 
 ---
 
-## `planet_signs` — Planet signs (`assets/titles/planet_signs.png`)
+## `planet_signs` — Planet signs (`assets/weeks/celestial_bodies/planets/primary/sign/Title.png`)
 
 *The Planets topic's own glyph face — the same seven bodies read
 through their zodiac-ruling glyphs instead of a photograph.*
@@ -181,7 +181,7 @@ An illuminated astrological manuscript page, painted photorealistic render, perf
 
 ---
 
-## `greek` — Greek gods (`assets/titles/greek.png`)
+## `greek` — Greek gods (`assets/weeks/myth/greek/primary/colored/Title.png`)
 
 *Olympus supplies a body for every classical planet — the title plate
 gathers all seven emblems the roster's own figures carry, the same
@@ -193,7 +193,7 @@ Ornate circular medallion, aged bronze relief, photorealistic render, perfectly 
 
 ---
 
-## `norse` — Norse gods (`assets/titles/norse.png`)
+## `norse` — Norse gods (`assets/weeks/myth/norse/primary/colored/Title.png`)
 
 *The Æsir take the seven seats by the same law — Yggdrasil is the
 frame every one of them stands inside.*
@@ -204,7 +204,7 @@ Ornate circular medallion, aged bronze relief, photorealistic render, perfectly 
 
 ---
 
-## `egypt` — Egyptian gods (`assets/titles/egypt.png`)
+## `egypt` — Egyptian gods (`assets/weeks/myth/egypt/primary/colored/Title.png`)
 
 *Ra crosses the sky by day and Khonsu walks it by night — the barge
 itself, not any one god, is the theme's own emblem.*
@@ -215,7 +215,7 @@ Ornate circular medallion, tomb-fresco painted relief, photorealistic render, pe
 
 ---
 
-## `slavic` — Slavic gods (`assets/titles/slavic.png`)
+## `slavic` — Slavic gods (`assets/weeks/myth/slavic/primary/colored/Title.png`)
 
 *Dažbog the giving sun opens the week, Morana closes it on the arm of
 renewal — the kolovrat wheel already ties the whole roster together.*
@@ -226,7 +226,7 @@ Ornate circular medallion, folk-icon painted relief, photorealistic render, perf
 
 ---
 
-## `alchemy` — Alchemy (`assets/titles/alchemy.png`)
+## `alchemy` — Alchemy (`assets/weeks/crafts/alchemy/primary/colored/Title.png`)
 
 *The classical planet-metal correspondence — one still life of every
 metal the week wears, all seven at once on the alchemist's own bench.*
@@ -237,7 +237,7 @@ Ornate circular medallion, weathered bronze relief on dark stone, photorealistic
 
 ---
 
-## `japan` — Japanese week (`assets/titles/japan.png`)
+## `japan` — Japanese week (`assets/weeks/crafts/japan/primary/colored/Title.png`)
 
 *The yōbi week under a second cosmology — Fuji, the torii and the
 rising sun in one frame.*
@@ -248,7 +248,7 @@ Ornate circular medallion, gold relief against a crimson sun-orb, photorealistic
 
 ---
 
-## `religion` — Creeds (`assets/titles/religion.png`)
+## `religion` — Creeds (`assets/weeks/faith/creeds/primary/colored/Title.png`)
 
 *Seven living creeds, seven arguments — the title plate borrows one
 small emblem from each faith's own canonical border, arranged as
@@ -260,7 +260,7 @@ Ornate circular medallion, silver sculptural relief on black marble, photorealis
 
 ---
 
-## `religion_alt` — Ancient religions (`assets/titles/religion_alt.png`)
+## `religion_alt` — Ancient religions (`assets/weeks/faith/creeds/secondary/colored/Title.png`)
 
 *A second, older set — Mithraism's sun, Druidism's oak, Zoroastrianism's
 fire, Babylon's own invented week.*
@@ -271,7 +271,7 @@ Ornate circular medallion, weathered stone temple relief, photorealistic render,
 
 ---
 
-## `profession` — Professions (`assets/titles/profession.png`)
+## `profession` — Professions (`assets/weeks/crafts/profession/primary/colored/Title.png`)
 
 *A medieval-to-modern career per day — the world's work laid across
 the week, one tool per estate.*
@@ -282,7 +282,7 @@ Ornate circular medallion, aged bronze relief, photorealistic render, perfectly 
 
 ---
 
-## `wolf` — Wolf Pack (`assets/titles/wolf.png`)
+## `wolf` — Wolf Pack (`assets/weeks/societies/wolf/primary/colored/Title.png`)
 
 *A real wolf pack's ranks fill the week — the whole pack together,
 not one wolf alone.*
@@ -293,7 +293,7 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 
 ---
 
-## `bee` — Bee Hive (`assets/titles/bee.png`)
+## `bee` — Bee Hive (`assets/weeks/societies/bee/primary/colored/Title.png`)
 
 *A worker bee's whole career IS a clock — the title plate shows the
 whole hive at once, every rank in its own cell.*
@@ -304,7 +304,7 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 
 ---
 
-## `elephant` — Elephant Herd (`assets/titles/elephant.png`)
+## `elephant` — Elephant Herd (`assets/weeks/societies/elephant/primary/colored/Title.png`)
 
 *A matriarchal herd across the week — an intelligence built on what
 the herd carries forward.*
@@ -315,7 +315,7 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 
 ---
 
-## `bible` — Bible (`assets/titles/bible.png`)
+## `bible` — Bible (`assets/weeks/faith/bible/primary/colored/Title.png`)
 
 *Old and New Testament read across the same seven-armed dial — the
 Ancient of Days, seen once, whole.*
@@ -326,7 +326,7 @@ ROUND rose-window stained-glass medallion, radiant register, photorealistic rend
 
 ---
 
-## `bible2` — Bible II (`assets/titles/bible2.png`)
+## `bible2` — Bible II (`assets/weeks/faith/bible/secondary/colored/Title.png`)
 
 *A second seven from the same scriptures — figures whose stories TEST
 faith; the ram caught in the thicket is the second set's own hinge.*
@@ -337,7 +337,7 @@ ROUND rose-window stained-glass medallion, warm parchment-toned register, photor
 
 ---
 
-## `bible_dark` — Bible Dark (`assets/titles/bible_dark.png`)
+## `bible_dark` — Bible Dark (`assets/weeks/faith/bible/dark/colored/Title.png`)
 
 *Every figure here fell, tempted or was cast out — Lucifer's own fall
 opens the set.*
@@ -348,7 +348,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ---
 
-## `cosmos` — Cosmos (`assets/titles/cosmos.png`)
+## `cosmos` — Cosmos (`assets/weeks/celestial_bodies/cosmos/primary/colored/Title.png`)
 
 *The sky's own objects standing in for the myths every other theme
 tells — the whole star-chart at once.*
@@ -359,7 +359,7 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 
 ---
 
-## `planets_art` — *(no menu title — the "Art" look)* (`assets/titles/planets_art.png`)
+## `planets_art` — *(no menu title — the "Art" look)* (`assets/weeks/celestial_bodies/planets/primary/art/Title.png`)
 
 *The Planets ART medallion look — same seven bodies as `planets`,
 rendered here as sculpted bronze relief instead of engraved brass, so
@@ -371,7 +371,7 @@ Ornate circular medallion, weathered bronze sculptural relief, photorealistic re
 
 ---
 
-## `virtues` — The Virtues (`assets/titles/virtues.png`)
+## `virtues` — The Virtues (`assets/weeks/inner_wheel/virtue/primary/colored/Title.png`)
 
 *The dial's own inner wheel — eight emblems radiating from one
 sunburst, Justice and Humility both at the crown.*
@@ -382,7 +382,7 @@ Ornate circular medallion, engraved sunburst-gold relief, photorealistic render,
 
 ---
 
-## `sins` — The Sins (`assets/titles/sins.png`)
+## `sins` — The Sins (`assets/weeks/inner_wheel/sin/primary/colored/Title.png`)
 
 *The virtues' own shadow wheel — the same eight emblems, corrupted.*
 
@@ -392,7 +392,7 @@ Ornate circular medallion, fissured obsidian relief, photorealistic render, perf
 
 ---
 
-## `moods` — The Moods (`assets/titles/moods.png`)
+## `moods` — The Moods (`assets/weeks/inner_wheel/mood/primary/colored/Title.png`)
 
 *The dial's own eight-hour wheel of moods, plus the Ninth Mood's
 eclipse — one sky-disc cycling through all of them at once.*
@@ -403,7 +403,7 @@ Ornate circular medallion, gradient sky-disc relief, photorealistic render, perf
 
 ---
 
-## `intelligences` — The Nine Intelligences (`assets/titles/intelligences.png`)
+## `intelligences` — The Nine Intelligences (`assets/weeks/inner_wheel/intelligence/primary/colored/Title.png`)
 
 *Gardner's nine, moved onto the dial's own nine seats — a mind seen
 from the instrument-maker's own angle.*
@@ -414,7 +414,7 @@ Ornate circular medallion, engraved technical-diagram field, silver-inlaid bronz
 
 ---
 
-## `months` — The Slavic Months (`assets/titles/months.png`)
+## `months` — The Slavic Months (`assets/calendars/slavic_months/primary/colored/Title.png`)
 
 *The Wheel of Labour, whole — all twelve months' own seasons visible
 on one great turning cart-wheel at once, not any single spoke alone.*
@@ -435,7 +435,7 @@ Corporation carries one. Every plate follows the SAME "every seat's
 own emblem at once" or "parent, not seat-holder" devices the rest of
 this file already uses — no new composition class invented.
 
-### `wow_alliance` — WoW: The Alliance (`assets/titles/wow_alliance.png`)
+### `wow_alliance` — WoW: The Alliance (`assets/weeks/gaming/wow_alliance/primary/colored/Title.png`)
 
 *The founding covenant — many kingdoms becoming one Alliance, the same
 "every seat's own emblem" device `greek`/`cosmos` already use.*
@@ -444,7 +444,7 @@ this file already uses — no new composition class invented.
 Ornate circular medallion, carved rune-scarred stone banded with blue-and-gold metal, photorealistic render, perfectly centered, isolated on white background. Center: Stormwind Keep's own gate rising behind six banners planted shoulder to shoulder in the stone — human, dwarf, night elf, gnome, draenei and worgen sigils in a half-ring — a human and a dwarven hand clasped in the foreground over an open founding charter. Along the base, a carved gold plinth bears "THE ALLIANCE" in gold-inlaid Alliance heraldic capitals, carved rampant-lion serifs — the ONE piece of text anywhere in the image. Border: the block's own blue-and-gold rampant-lion frame. Palette: dawn-blue stone, bright gold, six banner colors.
 ```
 
-### `wow_horde` — WoW: The Horde (`assets/titles/wow_horde.png`)
+### `wow_horde` — WoW: The Horde (`assets/weeks/gaming/wow_horde/primary/colored/Title.png`)
 
 *The Horde united — many clans becoming one Horde, mirroring the
 Alliance's own device.*
@@ -453,7 +453,7 @@ Alliance's own device.*
 Ornate circular medallion, carved rune-scarred stone banded with red-and-black metal, photorealistic render, perfectly centered, isolated on white background. Center: Orgrimmar's own iron gate rising behind five totems planted shoulder to shoulder in the stone — orc, tauren, troll, Forsaken and Blood Elf sigils in a half-ring — an orc and a tauren hand clasped in the foreground over a shared war-drum. Along the base, a carved iron plinth bears "THE HORDE" in iron-cut Horde tribal capitals, jagged wolf-fang serifs — the ONE piece of text anywhere in the image. Border: the block's own red-and-black wolf-fang totem frame. Palette: dusk-red stone, iron black, five totem colors.
 ```
 
-### `wow_evil` — WoW: The Burning Legion (`assets/titles/wow_evil.png`)
+### `wow_evil` — WoW: The Burning Legion (`assets/weeks/gaming/wow_evil/primary/colored/Title.png`)
 
 *Sargeras, the Fallen Titan — the PARENT of this block's own
 corruption (Mannoroth, Gul'dan and Kil'jaeden all serve him directly),
@@ -464,7 +464,7 @@ outside the Greek Monsters roster.*
 Ornate circular medallion, carved rune-scarred black saronite banded with corrupted ice, photorealistic render, perfectly centered, isolated on white background. Center: Sargeras, the Fallen Titan, a colossal armored figure glimpsed only from the waist up, his own burning sword still lodged hilt-deep in a cracked and burning landmass beneath him, his molten eyes the single source of light in an otherwise starless sky. Along the base, a cracked black plinth bears "THE BURNING LEGION" in frost-cracked saronite capitals, jagged rime-rimmed blackletter veined in corruption-green — the ONE piece of text anywhere in the image. Border: the block's own saronite-and-ice fang frame. Palette: molten-eye orange, saronite black, corruption green, ice-white cracks.
 ```
 
-### `cyberpunk_gangs` — Cyberpunk: Gangs of Night City (`assets/titles/cyberpunk_gangs.png`)
+### `cyberpunk_gangs` — Cyberpunk: Gangs of Night City (`assets/weeks/gaming/cp_gangs/primary/colored/Title.png`)
 
 *Night City's own district map as a glowing neon mosaic, one tile per
 resident gang's canonical color — the owner's own suggestion.*
@@ -473,7 +473,7 @@ resident gang's canonical color — the owner's own suggestion.*
 ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, perfectly centered, isolated on white background. Center: Night City's own district map rendered as a glowing holographic mosaic seen from above, each district tile lit in its own resident gang's canonical neon color — teal Pacifica, hot-pink Westbrook, purple-and-tan Heywood, burnt-orange Santo Domingo, dust-orange Badlands — the fault-lines between tiles glowing like live circuitry. Along the base, a spray-tag banner bears "GANGS OF NIGHT CITY" in spray-tag street capitals, glitch-torn stencil letterforms dripping gang-neon — the ONE piece of text anywhere in the image. Border: the block's own circuit-trace ring. Palette: the full district neon spread, circuit-white fault-lines.
 ```
 
-### `cyberpunk_street` — Cyberpunk: The Afterlife (`assets/titles/cyberpunk_street.png`)
+### `cyberpunk_street` — Cyberpunk: The Afterlife (`assets/weeks/gaming/cp_street/primary/colored/Title.png`)
 
 *The Afterlife's own bar interior — the whole circle implied by empty
 stools and one untouched glass, the owner's own suggestion.*
@@ -482,7 +482,7 @@ stools and one untouched glass, the owner's own suggestion.*
 ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, perfectly centered, isolated on white background. Center: the Afterlife's own bar interior, a Militech cooling-unit repurposed as a trophy wall of mercenary relics behind the counter, a row of empty stools each catching a different colored neon glow, one glass left half-full and untouched at the bar's far end. Along the base, a flickering marquee bears "THE AFTERLIFE" in chrome neon-sign cursive, a bar-marquee script of flickering tube-light strokes — the ONE piece of text anywhere in the image. Border: the block's own circuit-trace ring. Palette: warm bar-amber, mixed stool-neon, chrome trophy-wall.
 ```
 
-### `cyberpunk_power` — Cyberpunk: Soulkiller (`assets/titles/cyberpunk_power.png`)
+### `cyberpunk_power` — Cyberpunk: Soulkiller (`assets/weeks/gaming/cp_corpo/primary/colored/Title.png`)
 
 *NOT a person, the FORCE — the program that makes a man neither alive
 nor dead, the parent of this block's own ghosts (Alt Cunningham and
@@ -492,7 +492,7 @@ Rache Bartmoss both live and die by exactly this program).*
 ROUND chrome-bezel holo-medallion, brushed chrome ring, photorealistic render, perfectly centered, isolated on white background. Center: a human silhouette suspended mid-dissolve between pure code and solid form, one half rendered in warm living flesh-tone, the other already scattering into cold blue static particles, a heart-rate line and a flat-line both running simultaneously across the frame behind it and never resolving into either. Along the base, a corrupted terminal plaque bears "SOULKILLER" in corrupted terminal capitals, monospace code-glyphs dissolving into static at the edges — the ONE piece of text anywhere in the image. Border: the block's own circuit-trace ring, its lines fraying into static on all four sides rather than breaking cleanly at one point. Palette: living flesh-warm, dissolve-static blue, flat-line grey, code-green undertone.
 ```
 
-### `starwars_svetla` — Star Wars: The Council of Lights (`assets/titles/starwars_svetla.png`)
+### `starwars_svetla` — Star Wars: The Council of Lights (`assets/weeks/films/sw_jedi/primary/colored/Title.png`)
 
 *A ring of igniting lightsabers, one per seated figure's own blade
 color — the "every seat's own emblem at once" device again.*
@@ -501,7 +501,7 @@ color — the "every seat's own emblem at once" device again.*
 Ornate circular medallion, Jedi bronze-and-blue temple relief, photorealistic render, perfectly centered, isolated on white background. Center: a circle of igniting lightsaber blades rising point-up from a stone floor like a small Jedi Council convening, each blade its own seated figure's color — blue, blue, green, blue-white — arranged in a perfect ring around an empty central seat, twin suns glowing faint through a high temple window behind them. Along the base, a carved bronze plinth bears "THE COUNCIL OF LIGHTS" in Aurebesh-flavored temple capitals, angular geometric letterforms cut in warm bronze — the ONE piece of text anywhere in the image. Border: the set's own bronze-and-blue temple-pillar frame. Palette: kyber-blue, temple bronze, twin-sun amber.
 ```
 
-### `starwars_tamna` — Star Wars: The Rule of Two (`assets/titles/starwars_tamna.png`)
+### `starwars_tamna` — Star Wars: The Rule of Two (`assets/weeks/films/sw_sith/primary/colored/Title.png`)
 
 *Darth Bane — the DOCTRINAL parent of this set's whole lineage
 (Plagueis → Sidious → Vader is a direct chain of the rule Bane himself
@@ -512,7 +512,7 @@ Unfound, to avoid depicting one seat twice.*
 Ornate circular medallion, Imperial black-and-red cog relief, photorealistic render, perfectly centered, isolated on white background. Center: Darth Bane, a hooded ancient Sith Lord, holding a dark angular holocron open in both hands, its glowing red interior projecting two small silhouettes standing apart from each other — one master, one apprentice, forever only two — the doctrine that shaped every seat in this set glowing in his own palms. Along the base, a cracked iron plinth bears "THE RULE OF TWO" in Aurebesh-flavored Imperial capitals, angular geometric letterforms cut into black durasteel — the ONE piece of text anywhere in the image. Border: the set's own black-and-red cog frame. Palette: holocron red, durasteel black, hooded-robe charcoal.
 ```
 
-### `starwars_nova` — Star Wars: The Dyad (`assets/titles/starwars_nova.png`)
+### `starwars_nova` — Star Wars: The Dyad (`assets/weeks/films/sw_dyad/primary/colored/Title.png`)
 
 *Two hands reaching toward each other across a broken, sparking
 lightsaber blade — the owner's own suggested image. Justified in one
@@ -525,7 +525,7 @@ directly as the source material already does.*
 Ornate circular medallion, fused bronze-and-durasteel relief, photorealistic render, perfectly centered, isolated on white background. Center: two bare hands reaching toward each other across a shattered lightsaber blade suspended mid-air between them, the blade's break-point sparking white-hot where the two halves almost touch, one hand lit warm and golden, the other lit cold and silver-blue, neither hand quite closing the last inch of distance. Along the base, a fused plinth bears "THE DYAD" in Aurebesh-flavored fused capitals, each letterform split down the middle, half bronze half durasteel — the ONE piece of text anywhere in the image. Border: the set's own fused bronze-and-cog frame. Palette: warm gold, cold silver-blue, spark-white, blade-steel.
 ```
 
-### `corporate` — The Corporation: The Boardroom Table (`assets/titles/corporate.png`)
+### `corporate` — The Corporation: The Boardroom Table (`assets/weeks/crafts/corporate/primary/colored/Title.png`)
 
 *An empty boardroom, nine chairs, eight marked by a small emblem for
 their own seat, the ninth left conspicuously bare — the "every seat's
@@ -546,7 +546,7 @@ exact class of gap this whole canonical-root convention exists to
 prevent). Written here, matching every sibling entry's own convention;
 each theme sheet keeps its short pointer, never a duplicate.
 
-### `monsters` — Greek Monsters (`assets/titles/monsters.png`)
+### `monsters` — Greek Monsters (`assets/weeks/myth/age_of_heroes/primary/colored/Title.png`)
 
 *Typhon & Echidna, the parents of the roster — father and mother of
 monsters whose children now hold the week (Nemean Lion and Cerberus
@@ -561,7 +561,7 @@ wears one file over.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep primordial black-and-ember glass, older and darker than any single seat's own window. Center: Typhon and Echidna together at the roster's own root, filling the disc shoulder to shoulder — Typhon a mountain-tall storm-titan with a hundred serpent heads hissing from his shoulders in place of arms, Echidna coiled beside him, a woman above the waist and a great serpent below — both turned protectively inward around a small nest of newly-hatched shapes at their feet: a many-necked serpent-head still small, a lion cub with an already-unmarked golden pelt, a three-headed pup barely able to lift its middle head — the roster's own cast, glimpsed here as children before any of them held a day of the week. Border: leadwork rim carved as a continuous Greek key (meander) band, the same family the seated roster's own borders wear, broken by no single roundel glyph — the parents who begot them all answer to no one day. Along the base, a cracked leadwork plaque bears "GREEK MONSTERS" in weathered bestiary lapidary capitals, the Attic family pitted and claw-scratched — the ONE piece of text anywhere in the image. Palette: primordial black, ember orange, cold serpent-green, one small nest-gold accent.
 ```
 
-### `chinese_myth` — Chinese Mythology (`assets/titles/chinese_myth.png`)
+### `chinese_myth` — Chinese Mythology (`assets/weeks/myth/celestial_court/primary/colored/Title.png`)
 
 *The Peach Banquet — the myth-beat that MADE the roster's own Ruler
 his Pride: Sun Wukong crashes the gods' own banquet and eats the
@@ -582,7 +582,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ## Status
 
 - New sheet (R8c PROMPT SHEETS round, owner item 7, 2026-07-21).
-  **Art: 0/24** in the original 24 entries. `assets/titles/**` is NOT a
+  **Art: 0/24** in the original 24 entries. `assets/weeks/societies/wolf/primary/colored/**` is NOT a
   data-driven root and no code reads it yet (the wiring is a future
   round) — every one of the 26 paths this family declared (24 here + 2
   named from the monsters/chinese sheets) needed an explicit

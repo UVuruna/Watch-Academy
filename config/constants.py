@@ -527,16 +527,16 @@ SLOT_STYLE_VALUES = tuple(dict.fromkeys(
 # Family/variant tree (owner restructure 2026-07-14): astrology's
 # plain logo is its PRIMARY variant.
 ZODIAC_STYLE_ART_DIRS = {
-    "sign": "zodiac/astrology/sign",
-    "logo": "zodiac/astrology/primary",
-    "constellation": "zodiac/astrology/constellation",
-    "colored": "zodiac/astrology/colored",
+    "sign": "zodiac/astrology/primary/sign",
+    "logo": "zodiac/astrology/primary/logo",
+    "constellation": "zodiac/astrology/primary/constellation",
+    "colored": "zodiac/astrology/primary/colored",
 }
 CHINESE_STYLE_ART_DIRS = {
-    "colored": "chinese/colored",
-    "gold": "chinese/primary",
-    "silver": "chinese/primary",
-    "bronze": "chinese/primary",
+    "colored": "chinese/primary/colored",
+    "gold": "chinese/primary/bronze",
+    "silver": "chinese/primary/bronze",
+    "bronze": "chinese/primary/bronze",
 }
 
 # Earth marker style: the owner ships every continent in a clean and an
@@ -822,23 +822,23 @@ WEEKDAY_THEME_ARTICLES = {
 # "Ophiuchus") stay OUT of this table on purpose — they carry no
 # weekday Sunday duality, so the render side never needs them.
 WEEKDAY_THEME_NINTHS = {
-    "wolf": ("Sigma", "wolf/primary/sigma.png"),
-    "bee": ("The Swarm", "bee/primary/swarm.png"),
-    "elephant": ("The Graveyard", "elephant/primary/graveyard.png"),
-    "cosmos": ("The Big Bang", "cosmos/primary/big_bang.png"),
-    "greek": ("Gaia", "greek/pantheon/gaia.png"),
-    "norse": ("Yggdrasil", "norse/pantheon/Yggdrasil.png"),
-    "egypt": ("The Pharaoh", "egypt/pantheon/pharaoh.png"),
-    "slavic": ("Triglav", "slavic/pantheon/triglav.png"),
-    "alchemy": ("The Philosopher's Stone", "alchemy/primary/stone.png"),
-    "profession": ("The Polymath", "profession/primary/Polymath.png"),
-    "religion": ("Freemasonry", "creeds/primary/freemasonry.png"),
+    "wolf": ("Sigma", "wolf/primary/bronze/sigma.png"),
+    "bee": ("The Swarm", "bee/primary/bronze/swarm.png"),
+    "elephant": ("The Graveyard", "elephant/primary/bronze/graveyard.png"),
+    "cosmos": ("The Big Bang", "cosmos/primary/bronze/big_bang.png"),
+    "greek": ("Gaia", "greek/pantheon/bronze/gaia.png"),
+    "norse": ("Yggdrasil", "norse/pantheon/bronze/Yggdrasil.png"),
+    "egypt": ("The Pharaoh", "egypt/pantheon/bronze/pharaoh.png"),
+    "slavic": ("Triglav", "slavic/pantheon/bronze/triglav.png"),
+    "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/stone.png"),
+    "profession": ("The Polymath", "profession/primary/bronze/Polymath.png"),
+    "religion": ("Freemasonry", "creeds/primary/colored/freemasonry.png"),
     "religion_alt": (
-        "The Unknown God", "creeds/secondary/unknown_god.png",
+        "The Unknown God", "creeds/secondary/colored/unknown_god.png",
     ),
-    "bible": ("The Holy Trinity", "bible/primary/holy_trinity.png"),
-    "bible2": ("Melchizedek", "bible/secondary/melchizedek.png"),
-    "bible_dark": ("The Ninth Circle", "bible/dark/ninth_circle.png"),
+    "bible": ("The Holy Trinity", "bible/primary/colored/holy_trinity.png"),
+    "bible2": ("Melchizedek", "bible/secondary/colored/melchizedek.png"),
+    "bible_dark": ("The Ninth Circle", "bible/dark/colored/ninth_circle.png"),
     # THE CONTINENTS' NINTH (owner-sealed matrix 2026-07-21): ZEALANDIA,
     # the literal Unfound — a true continent 94% drowned, unrecognized
     # until 2017. Its plate is wired ahead of the owner's art (relative

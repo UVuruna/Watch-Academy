@@ -325,7 +325,7 @@ tracked here the moment they're written, per this file's own charter.
   2026-07-22:** those 2 were cross-referenced since R8c but carried no
   fenced generatable prompt body anywhere until this round (the R10
   report caught it live) — both are now written in full in this sheet.
-  NEW canonical sourceless root, `assets/titles/<key>.png` — the SAME
+  NEW canonical sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png` — the SAME
   "NOT art-sourced, one shared file per name" precedent `assets/
   months/` and `assets/subdial/` already set, chosen over per-theme
   folders because a title plate has exactly ONE consumer regardless of
@@ -345,7 +345,7 @@ tracked here the moment they're written, per this file's own charter.
   26/26 entries load, 0 problems — re-verified 2026-07-22 after the gap
   closed). The Theme Title Plates' 26 paths (all now written IN this
   one file, none cross-referenced any more) are NOT under any existing
-  data-driven root and nothing reads `assets/titles/**` yet — all 26
+  data-driven root and nothing reads `assets/weeks/societies/wolf/primary/colored/**` yet — all 26
   needed explicit `tests/test_prompt_paths.py` whitelist entries, added
   this round with a shared comment block explaining the new family.
 
@@ -574,7 +574,7 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    later (out of THIS round's "sheets only, no app code" scope):
    registering `monsters`/`chinese_myth` in `config/defaults.py`'s
    weekday-theme tables, and filling every theme's
-   `title_entry["images"]` tuple with its new `assets/titles/<key>.png`
+   `title_entry["images"]` tuple with its new `assets/weeks/societies/wolf/primary/colored/<key>.png`
    plate, mirroring `defaults.CONTINENTS_TITLE_IMAGE`.
 1b. **The same two wiring rounds, generalized to the four R10 themes**:
    registering `wow`/`cyberpunk`/`starwars`/`corporate` in

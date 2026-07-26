@@ -635,19 +635,20 @@ HAND_MINUTE_REACH_FRACTION = 0.849
 # assets/weekday/, first existing wins) — a seat with NO existing
 # candidate falls back to the PLANETARY bundle (file + name + article
 # together) so a half-generated pantheon never shows a wrong
-# (figure, article) pair. Colored variants live under
-# <theme>/pantheon/colored/ mirroring the bronze stems.
+# (figure, article) pair. Colored variants live under the register's
+# own <register>/colored/ child mirroring the bronze stems (tree law
+# 2026-07-26 — identical for pantheon and primary alike).
 WEEKDAY_PANTHEON = {
     "greek": {
         "articles": "greek_pantheon",
         "files": {
-            "sun": ("greek/pantheon/zeus", "greek/primary/Zeus"),
-            "moon": ("greek/pantheon/poseidon",),
-            "mars": ("greek/pantheon/artemis",),
-            "mercury": ("greek/pantheon/athena",),
-            "jupiter": ("greek/pantheon/apollo",),
-            "venus": ("greek/pantheon/hera",),
-            "saturn": ("greek/pantheon/demeter",),
+            "sun": ("greek/pantheon/bronze/zeus", "greek/primary/bronze/Zeus"),
+            "moon": ("greek/pantheon/bronze/poseidon",),
+            "mars": ("greek/pantheon/bronze/artemis",),
+            "mercury": ("greek/pantheon/bronze/athena",),
+            "jupiter": ("greek/pantheon/bronze/apollo",),
+            "venus": ("greek/pantheon/bronze/hera",),
+            "saturn": ("greek/pantheon/bronze/demeter",),
         },
         "names": {
             "sun": "Zeus (\u0396\u03b5\u03cd\u03c2)",
@@ -658,19 +659,19 @@ WEEKDAY_PANTHEON = {
             "venus": "Hera (\u1f2d\u03c1\u03b1)",
             "saturn": "Demeter (\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1)",
         },
-        "dual": ("greek/pantheon/hades",),
+        "dual": ("greek/pantheon/bronze/hades",),
         "dual_names": ("Zeus", "Hades"),
     },
     "norse": {
         "articles": "norse_pantheon",
         "files": {
-            "sun": ("norse/pantheon/Odin",),
-            "moon": ("norse/pantheon/Hel",),
-            "mars": ("norse/primary/Thor",),
-            "mercury": ("norse/primary/Loki",),
-            "jupiter": ("norse/primary/Tyr",),
-            "venus": ("norse/pantheon/Frigg",),
-            "saturn": ("norse/pantheon/Freyr",),
+            "sun": ("norse/pantheon/bronze/Odin",),
+            "moon": ("norse/pantheon/bronze/Hel",),
+            "mars": ("norse/primary/bronze/Thor",),
+            "mercury": ("norse/primary/bronze/Loki",),
+            "jupiter": ("norse/primary/bronze/Tyr",),
+            "venus": ("norse/pantheon/bronze/Frigg",),
+            "saturn": ("norse/pantheon/bronze/Freyr",),
         },
         "names": {
             "sun": "Odin (\u00d3\u00f0inn)", "moon": "Hel",
@@ -678,45 +679,45 @@ WEEKDAY_PANTHEON = {
             "jupiter": "Tyr (T\u00fdr)", "venus": "Frigg",
             "saturn": "Freyr",
         },
-        "dual": ("norse/primary/Odin",),
+        "dual": ("norse/primary/bronze/Odin",),
         "dual_names": ("Odin", "The Wanderer"),
     },
     "egypt": {
         "articles": "egypt_pantheon",
         "files": {
-            "sun": ("egypt/primary/ra",),
-            "moon": ("egypt/pantheon/isis",),
-            "mars": ("egypt/pantheon/horus",),
-            "mercury": ("egypt/primary/thoth",),
-            "jupiter": ("egypt/pantheon/anubis",),
-            "venus": ("egypt/pantheon/bastet",),
-            "saturn": ("egypt/primary/osiris",),
+            "sun": ("egypt/primary/bronze/ra",),
+            "moon": ("egypt/pantheon/bronze/isis",),
+            "mars": ("egypt/pantheon/bronze/horus",),
+            "mercury": ("egypt/primary/bronze/thoth",),
+            "jupiter": ("egypt/pantheon/bronze/anubis",),
+            "venus": ("egypt/pantheon/bronze/bastet",),
+            "saturn": ("egypt/primary/bronze/osiris",),
         },
         "names": {
             "sun": "Ra", "moon": "Isis", "mars": "Horus",
             "mercury": "Thoth", "jupiter": "Anubis",
             "venus": "Bastet", "saturn": "Osiris",
         },
-        "dual": ("egypt/primary/afu_ra",),
+        "dual": ("egypt/primary/bronze/afu_ra",),
         "dual_names": ("Ra", "Afu-Ra"),
     },
     "slavic": {
         "articles": "slavic_pantheon",
         "files": {
-            "sun": ("slavic/primary/perun",),
-            "moon": ("slavic/primary/mokos",),
-            "mars": ("slavic/primary/svetovid",),
-            "mercury": ("slavic/pantheon/svarog",),
-            "jupiter": ("slavic/primary/dazbog",),
-            "venus": ("slavic/pantheon/lada",),
-            "saturn": ("slavic/primary/morana",),
+            "sun": ("slavic/primary/bronze/perun",),
+            "moon": ("slavic/primary/bronze/mokos",),
+            "mars": ("slavic/primary/bronze/svetovid",),
+            "mercury": ("slavic/pantheon/bronze/svarog",),
+            "jupiter": ("slavic/primary/bronze/dazbog",),
+            "venus": ("slavic/pantheon/bronze/lada",),
+            "saturn": ("slavic/primary/bronze/morana",),
         },
         "names": {
             "sun": "Perun", "moon": "Moko\u0161", "mars": "Svetovid",
             "mercury": "Svarog", "jupiter": "Da\u017ebog",
             "venus": "Lada", "saturn": "Morana",
         },
-        "dual": ("slavic/primary/veles",),
+        "dual": ("slavic/primary/bronze/veles",),
         "dual_names": ("Perun", "Veles"),
     },
 }
@@ -1190,7 +1191,13 @@ def scale_variant_file(figure: str, on_date: date) -> Path | None:
     TRAVELED date, consistent with the poles' light/dark glyph law
     (`controller._effective_travel_date`)."""
     root = paths.art_file(SCALE_ART_DIR)
-    candidates = _rotation_candidates((root, root / "glass"), (figure,))
+    # Tree law 2026-07-26: the cameo batch lives at primary/colored/,
+    # the stained-glass batch at glass/colored/ — the two look homes of
+    # the same two figures.
+    candidates = _rotation_candidates(
+        (root / "primary" / "colored", root / "glass" / "colored"),
+        (figure,),
+    )
     return _pick_rotation(candidates, on_date)
 
 
@@ -1972,16 +1979,18 @@ def weekday_art(rel) -> Path:
 # (RESTRUCTURE 2026-07-22). The FAMILY folders keep their singular names.
 _INNER_WHEEL = paths.assets_dir() / "weeks" / "inner_wheel"
 EMBLEM_ART_DIRS = {
-    "virtues": _INNER_WHEEL / "virtue",
-    "sins": _INNER_WHEEL / "sin",
-    "moods": _INNER_WHEEL / "mood",
-    "intelligence": _INNER_WHEEL / "intelligence",
+    "virtues": _INNER_WHEEL / "virtue" / "primary" / "colored",
+    "sins": _INNER_WHEEL / "sin" / "primary" / "colored",
+    "moods": _INNER_WHEEL / "mood" / "primary" / "colored",
+    "intelligence": _INNER_WHEEL / "intelligence" / "primary" / "colored",
 }
 # The trinity and season badge families (owner Gemini art 2026-07-13):
 # Faith/Hope/Love triskelions; the Goethe-axis seasons with the
 # tropics' Wet_Season/Dry_Season, plus turning_point/ (the solstices
 # and the one Equinox) and meteorological/ (the measured twins).
-TRINITY_ART_DIR = paths.assets_dir() / "archetypes" / "trinity" / "badges"
+TRINITY_ART_DIR = (
+    paths.assets_dir() / "archetypes" / "trinity" / "badges" / "colored"
+)
 SEASON_ART_DIR = paths.assets_dir() / "celestial" / "seasons" / "badges"
 # The ERA TERMS emblems (ROADMAP 15a3, owner 2026-07-17): one per Age
 # (Light/Darkness) and per Starry Season (Spring/Summer/Autumn/Winter)
@@ -1995,7 +2004,9 @@ ERA_ART_DIR = paths.assets_dir() / "celestial" / "era"
 # thing, not a Gemini/ChatGPT split. assets/months/<stem>.png,
 # graceful-absent until the owner's prompt sheet lands — every consumer
 # hides a missing plate, exactly like every other wired-ahead art.
-MONTHS_ART_DIR = paths.assets_dir() / "calendars" / "slavic_months"
+MONTHS_ART_DIR = (
+    paths.assets_dir() / "calendars" / "slavic_months" / "primary" / "colored"
+)
 # Arm-hover badge width (the trio/cardinal/diagonal tooltips carry
 # their emblem above the text — smaller than the article plates).
 HOVER_BADGE_WIDTH_PX = 128
@@ -2284,40 +2295,43 @@ _LOWERCASE_THEMES = (
     "religion", "religion_alt", "planet_signs", "egypt", "slavic", "alchemy",
     "wolf",                        # the owner's wolf art uses lowercase stems
 )
-# Theme -> art folder under assets/weekday/: both religion sets share
-# the ONE religion/ folder (all fourteen owner medallions together).
-# FAMILY/VARIANT tree (owner restructure 2026-07-14): every theme dir
-# is <family>/<variant> — related themes share a family (religion =
-# primary Creeds + secondary Mysteries; planets = primary photos +
-# signs glyphs + art medallions; bible = primary/secondary/dark), and
-# a variant's colored arc is its SIBLING <family>/colored (owner DUAL
-# FLATTEN 2026-07-19: every file, dual included, sits FLAT inside its
-# variant — no dual/ subfolder anywhere; WHO a file is lives only in
-# WEEKDAY_DUAL_FILES/WEEKDAY_PANTHEON, never in a folder name).
+# Theme -> art folder under assets/weeks/<group>/: THE TREE LAW
+# (owner-approved 2026-07-26) — every theme dir is
+# <theme>/<register>/<look>: related themes share a theme folder via
+# registers (creeds = primary Creeds + secondary Mysteries; bible =
+# primary/secondary/dark; planets = ONE primary register whose looks
+# are photo/sign/art), and a register's colored arc is its own CHILD
+# <register>/colored — identical at every level, pantheon and primary
+# alike (the owner's decree; the old sibling-<family>/colored shape is
+# dead). The DUAL FLATTEN law (owner 2026-07-19) still holds: every
+# file, dual included, sits FLAT inside its look — WHO a file is lives
+# only in WEEKDAY_DUAL_FILES/WEEKDAY_PANTHEON, never in a folder name.
+# Cameo-master sets carry bronze/ (gold/silver derive by algorithm);
+# as-drawn full-color sets carry colored/ as their single look.
 WEEKDAY_THEME_DIRS = {
-    "planet_signs": "planets/signs",
-    "greek": "greek/primary",
-    "norse": "norse/primary",
-    "egypt": "egypt/primary",
-    "slavic": "slavic/primary",
-    "alchemy": "alchemy/primary",
-    "japan": "japan/primary",
-    "religion": "creeds/primary",
-    "religion_alt": "creeds/secondary",
-    "profession": "profession/primary",
-    "wolf": "wolf/primary",
-    "bee": "bee/primary",
-    "elephant": "elephant/primary",
-    "bible": "bible/primary",
-    "bible2": "bible/secondary",
-    "bible_dark": "bible/dark",
-    "cosmos": "cosmos/primary",
-    "planets_art": "planets/art",
+    "planet_signs": "planets/primary/sign",
+    "greek": "greek/primary/bronze",
+    "norse": "norse/primary/bronze",
+    "egypt": "egypt/primary/bronze",
+    "slavic": "slavic/primary/bronze",
+    "alchemy": "alchemy/primary/colored",
+    "japan": "japan/primary/colored",
+    "religion": "creeds/primary/colored",
+    "religion_alt": "creeds/secondary/colored",
+    "profession": "profession/primary/bronze",
+    "wolf": "wolf/primary/bronze",
+    "bee": "bee/primary/bronze",
+    "elephant": "elephant/primary/bronze",
+    "bible": "bible/primary/colored",
+    "bible2": "bible/secondary/colored",
+    "bible_dark": "bible/dark/colored",
+    "cosmos": "cosmos/primary/bronze",
+    "planets_art": "planets/primary/art",
     # The emblem families live OUTSIDE assets/weekday/ — the relative
     # step-up reaches assets/emblem/ (owner 2026-07-14).
-    "virtues": "../emblem/virtue",
-    "sins": "../emblem/sin",
-    "moods": "../emblem/mood",
+    "virtues": "../emblem/virtue/primary/colored",
+    "sins": "../emblem/sin/primary/colored",
+    "moods": "../emblem/mood/primary/colored",
     # THE CONTINENTS reuse the dial's OWN Earth faces (assets/earth/,
     # owner exception 2026-07-21) — the relative step-up reaches them,
     # exactly like the emblem families reach assets/emblem/. The stems
@@ -2466,24 +2480,25 @@ WEEKDAY_DUAL_NAMES = {
     # planetary.
     "continents": ("Antarctica", "Arctic"),
 }
-# Dual paths live FLAT inside the theme's variant dir (owner DUAL
+# Dual paths live FLAT inside the theme's look dir (owner DUAL
 # FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
 # runtime — the config table already IS the identity, so the folder
 # only added a navigation step); the colored dual is the same path
-# with the variant segment swapped to colored/ (owner restructure
-# 2026-07-14, unaffected by the flatten — the swap only ever touched
-# the "primary"/"colored" segment).
+# with the LOOK segment (the last folder) swapped to colored/ —
+# `colored_variant_rel` below is the ONE implementation of that swap
+# (tree law 2026-07-26; the old "/primary/" string replace died with
+# the sibling-colored shape).
 WEEKDAY_DUAL_FILES = {
-    "planets": "planets/primary/sun_eclipse",
-    "planet_signs": "planets/signs/sun_eclipse",
-    "greek": "greek/primary/Phaethon",
-    "norse": "norse/primary/Skoll",
-    "egypt": "egypt/primary/afu_ra",
-    "slavic": "slavic/primary/dazbog_old",
-    "alchemy": "alchemy/primary/ore",
-    "japan": "japan/primary/ama_no_iwato",
-    "religion": "creeds/primary/satanism",
-    "religion_alt": "creeds/secondary/corax",
+    "planets": "planets/primary/photo/sun_eclipse",
+    "planet_signs": "planets/primary/sign/sun_eclipse",
+    "greek": "greek/primary/bronze/Phaethon",
+    "norse": "norse/primary/bronze/Skoll",
+    "egypt": "egypt/primary/bronze/afu_ra",
+    "slavic": "slavic/primary/bronze/dazbog_old",
+    "alchemy": "alchemy/primary/colored/ore",
+    "japan": "japan/primary/colored/ama_no_iwato",
+    "religion": "creeds/primary/colored/satanism",
+    "religion_alt": "creeds/secondary/colored/corax",
     # profession's flat "Servant" stem collides with an already-flat,
     # unreferenced orphan file the owner has separately at
     # profession/primary/Servant.png (different art, different hash —
@@ -2491,18 +2506,18 @@ WEEKDAY_DUAL_FILES = {
     # rename to "Servant_dual" resolves it without touching the
     # unrelated orphan (Rule #3: never delete without the owner's own
     # look).
-    "profession": "profession/primary/Servant_dual",
-    "wolf": "wolf/primary/omega",
-    "bee": "bee/primary/Cleaner",
-    "elephant": "elephant/primary/Memory",
-    "bible": "bible/primary/son_servant",
-    "bible2": "bible/secondary/isaac",
-    "bible_dark": "bible/dark/judas",
-    "cosmos": "cosmos/primary/black_hole",
-    "planets_art": "planets/art/sun_eclipse",
-    "virtues": "../emblem/virtue/Humility",
-    "sins": "../emblem/sin/Servility",
-    "moods": "../emblem/mood/Awe",
+    "profession": "profession/primary/bronze/Servant_dual",
+    "wolf": "wolf/primary/bronze/omega",
+    "bee": "bee/primary/bronze/Cleaner",
+    "elephant": "elephant/primary/bronze/Memory",
+    "bible": "bible/primary/colored/son_servant",
+    "bible2": "bible/secondary/colored/isaac",
+    "bible_dark": "bible/dark/colored/judas",
+    "cosmos": "cosmos/primary/bronze/black_hole",
+    "planets_art": "planets/primary/art/sun_eclipse",
+    "virtues": "../emblem/virtue/primary/colored/Humility",
+    "sins": "../emblem/sin/primary/colored/Servility",
+    "moods": "../emblem/mood/primary/colored/Awe",
     # THE ARCTIC SERVANT (owner exception 2026-07-21): the north_pole
     # Earth face, the Antarctic Ruler's antiphase mirror — the atmo-day
     # still frame is the baked stem (the live dial overrides style/phase
@@ -2511,6 +2526,20 @@ WEEKDAY_DUAL_FILES = {
     "continents":
         f"../earth/earth_{CONTINENTS_PREVIEW_STYLE}_{CONTINENTS_DUAL_REGION}_day",
 }
+
+
+def colored_variant_rel(rel: str) -> str:
+    """`rel`'s colored twin — the LOOK segment (the last folder of a
+    `<theme>/<register>/<look>/<stem>` relative path) swapped to
+    `colored` (tree law 2026-07-26: colored is a CHILD of its register
+    at every level). THE ONE implementation — the old
+    `.replace("/primary/", "/colored/")` string swap lived in five
+    places (encyclopedia, controller, build_roster ×2, and implicitly
+    the sibling-dir arithmetic) and silently broke the moment the look
+    level appeared."""
+    head, _, stem = rel.rpartition("/")
+    register, _, _look = head.rpartition("/")
+    return f"{register}/colored/{stem}"
 
 
 def weekday_theme_body_art(
@@ -2534,7 +2563,7 @@ def weekday_theme_body_art(
     a date resolves the day's pick among the canonical file's `_v2`/
     `alt/` siblings, falling back to canonical when none exist."""
     if theme == "planets":
-        canonical = weekday_art(f"planets/primary/{body}.png")
+        canonical = weekday_art(f"planets/primary/photo/{body}.png")
     else:
         theme_dir = weekday_art(WEEKDAY_THEME_DIRS[theme])
         if colored:
@@ -2669,7 +2698,7 @@ GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
 GLOW_ECLIPSE_INVISIBLE_COLOR = "#8A9096"       # desaturated silver-gray
 ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5
 ECLIPSE_SOLAR_ART = (
-    weekday_art("planets/primary/sun_eclipse.png")
+    weekday_art("planets/primary/photo/sun_eclipse.png")
 )                                            # source-mapped by paths.art_file
 # LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
 # bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —
@@ -2928,7 +2957,7 @@ DEFAULT_SKIN = SkinDefinition(
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={name: weekday_art(f"planets/primary/{name}.png") for name in (
+        bodies={name: weekday_art(f"planets/primary/photo/{name}.png") for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
         body_names={
@@ -2976,7 +3005,7 @@ DEFAULT_SKIN = SkinDefinition(
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
-        moon_asset=weekday_art("planets/primary/moon.png"),
+        moon_asset=weekday_art("planets/primary/photo/moon.png"),
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,

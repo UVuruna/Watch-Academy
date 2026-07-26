@@ -49,9 +49,13 @@ def test_mount_radius_is_in_the_design_law_band():
 
 def test_months_root_is_the_slavic_months_calendar_dir():
     """The Slavic months are a Calendar-category mount set (RESTRUCTURE
-    2026-07-22): assets/calendars/slavic_months/."""
-    assert defaults.MONTHS_ART_DIR.name == "slavic_months"
-    assert defaults.MONTHS_ART_DIR.parent.name == "calendars"
+    2026-07-22), living at their primary register's colored look since
+    the tree law (2026-07-26):
+    assets/calendars/slavic_months/primary/colored/."""
+    assert defaults.MONTHS_ART_DIR.name == "colored"
+    assert defaults.MONTHS_ART_DIR.parent.name == "primary"
+    assert defaults.MONTHS_ART_DIR.parent.parent.name == "slavic_months"
+    assert defaults.MONTHS_ART_DIR.parent.parent.parent.name == "calendars"
 
 
 def test_month_plates_resolve_by_suffix_or_stay_absent():

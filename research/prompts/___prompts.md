@@ -124,7 +124,7 @@ in the GAMING + CORPORATION SHEET WAVE, R10, 2026-07-22)
   title-page plate slot, 34 briefs (24 original + 10 from R10) + 2
   cross-referenced (Greek Monsters, Chinese Mythology — WoW/Cyberpunk/
   Star Wars/Corporate's own 10 are written in FULL here instead, not
-  cross-referenced). NEW sourceless root, `assets/titles/<key>.png`,
+  cross-referenced). NEW sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png`,
   the same precedent `months/` and `subdial/` already set. The ONE
   sheet in the whole project that intentionally carries lettering —
   each plate's own wordmark, in a script matching that theme's culture

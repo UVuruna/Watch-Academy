@@ -467,12 +467,13 @@ def test_bronze_finish_and_theme_metals():
     assert "colored" not in c.theme_metals("planets_art")
     for animal in c.CHINESE_ANIMALS:
         assert _paths.art_file(
-            defaults.ZODIAC_ART_DIR / "chinese" / "colored" / f"{animal}.png"
+            defaults.ZODIAC_ART_DIR / "chinese" / "primary" / "colored"
+            / f"{animal}.png"
         ).exists(), animal
     for sign, _ in c.ZODIAC_SIGNS:
         assert _paths.art_file(
-            defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "colored"
-            / f"{sign}.png"
+            defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary"
+            / "colored" / f"{sign}.png"
         ).exists(), sign
     # The hue-SELECTIVE swap (owner insight 2026-07-12): warm bronze
     # pixels take the target metal, gray pixels stay untouched.

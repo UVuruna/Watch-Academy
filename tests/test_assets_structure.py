@@ -17,6 +17,13 @@ The invariants:
      celestial's era, eclipse, seasons) carries a `_gem`/`_gpt` suffix;
      the instrument furniture and the Earth faces are owner hand-made and
      carry none.
+  6. THE TREE LAW (owner-approved 2026-07-26): every figure-tree image
+     lives at exactly `<theme>/<register>/<look>/<Figure>[_vN]_<src>.png`
+     — never loose in a theme or register folder, colored always a CHILD
+     of its register (identical for pantheon and primary). The guard
+     names each offender so a stray drop fails the suite immediately,
+     with the destination rule in the message — the owner never has to
+     report the same naming chaos twice.
 """
 
 from pathlib import Path
@@ -41,6 +48,45 @@ _SUFFIXED_AREAS = (
 
 def _iter_png(root: Path):
     return (p for p in root.rglob("*.png") if p.is_file())
+
+
+# THE TREE LAW's vocabulary (owner-approved 2026-07-26). A LOOK folder
+# is the only legal direct parent of a figure image; its own parent
+# must be a REGISTER. New look/register names are added HERE, in one
+# sealed vocabulary — never invented ad hoc in a drop.
+_FIGURE_LAW_AREAS = ("weeks", "calendars", "archetypes")
+_LAW_LOOKS = {
+    "bronze", "colored", "logo", "photo", "sign", "art", "constellation",
+}
+_LAW_REGISTERS = {
+    "primary", "pantheon", "secondary", "dark", "glass", "circle",
+    "badges", "animals", "tree", "wider",
+}
+
+
+def test_figure_trees_obey_the_tree_law():
+    """Invariant 6 — the law itself, not a hand-pinned folder list:
+    `assets/<category>/<group>/<theme>/<register>/<look>/<file>` for
+    every image in the three figure categories. `Title` plates are the
+    one reserved stem and obey the same seat (a look folder inside the
+    register they introduce). Planets' looks (photo/sign/art) hold
+    their own Title directly — a look folder is always a legal image
+    home."""
+    offenders = []
+    for area in _FIGURE_LAW_AREAS:
+        for file in _iter_png(paths.assets_dir() / area):
+            look = file.parent.name
+            register = file.parent.parent.name
+            if look not in _LAW_LOOKS or register not in _LAW_REGISTERS:
+                offenders.append(
+                    file.relative_to(paths.assets_dir()).as_posix()
+                )
+    assert offenders == [], (
+        "files off the TREE LAW — every image belongs at "
+        "<theme>/<register>/<look>/<Figure>[_vN]_<src>.png "
+        "(see research/migrate_tree_law.py): "
+        + ", ".join(offenders[:20])
+    )
 
 
 def test_top_level_roots_are_the_five_categories():

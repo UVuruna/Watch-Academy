@@ -393,7 +393,10 @@ def test_calendar_mount_renders_and_a_mark_hover_outranks_the_wedge(app):
     x2, y2 = px("months", 0)                     # Lipanj's own mark
     text2 = months.tooltip_at(x2, y2, 360.0)
     assert text2 is not None and "Lipanj" in text2 and "Linden" in text2
-    assert "<img" not in text2                   # graceful-absent: no broken image
+    # The month plates LANDED (owner art wave 2026-07-26) — the tooltip
+    # now legitimately embeds the real image; the pre-art assertion
+    # ("graceful-absent: no broken image") retired with the drop.
+    assert "<img" in text2
 
 
 def test_calendar_mount_off_speaks_no_mark_hover(app):

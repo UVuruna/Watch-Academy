@@ -62,7 +62,7 @@ two remaining seats REUSE the Scale glass at
 
 ## The four new persons
 
-**The One — Love (yellow arm, 12h)** → `assets/archetypes/persons/One_Love.png`
+**The One — Love (yellow arm, 12h)** → `assets/archetypes/persons/primary/colored/One_Love.png`
 
 *(Color-fidelity note: The One also holds the yellow/gold summit in
 the Trinity paint set — but there he is argued as the VEILED JUDGE
@@ -77,13 +77,13 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 ```
 
 **Michael the Archangel — Courage (orange arm, 16h)** →
-`assets/archetypes/persons/Michael_Courage.png`
+`assets/archetypes/persons/primary/colored/Michael_Courage.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Warm orange, molten gold and bronze glass throughout, no cold tones. Center: the armored archangel of Revelation standing in mid-victory — great feathered wings spread wide and haloed in orange radiance, burnished breastplate catching the light, a long spear driven straight DOWN with both hands into the coils of a great dark dragon pinned and writhing beneath his feet at the lancet's base; his face calm and unafraid, lifted toward the light above, not down at the beast. Upper left panel: the war in heaven — small winged figures driving darker shapes downward through storm-glass; upper right panel: a set of scales held steady in one gauntleted hand. Border: banded gothic leadwork in dark bronze; three rim roundels — an upright sword at the apex, a shield at one side, a trumpet at the other. Palette: warm orange, molten gold, bronze, black-iron lead. NO lettering anywhere.
 ```
 
-**the Devil — Hatred (purple arm, 24h)** → `assets/archetypes/persons/Devil_Hatred.png`
+**the Devil — Hatred (purple arm, 24h)** → `assets/archetypes/persons/primary/colored/Devil_Hatred.png`
 
 *(Color-fidelity note: the Devil wears RED in the Trinity paint set,
 where he is argued as the PROSECUTOR who enjoys punishing —
@@ -98,7 +98,7 @@ hatred turned outward that turns Courage into wrath and overreach
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Deep violet, amethyst-purple and blue-black glass throughout, cold and starless, no warm tones. Center: a gaunt horned figure standing at the dead midnight of the window, arms thrown out in TWO opposite directions — one hand pressing DOWNWARD, dragging a small cowering figure down into a black pit at the lancet's base (the hatred turned inward), the other hand flung UPWARD hurling a second small figure outward off a broken height into the storm (the hatred turned outward); his own face twisted with cold loathing, no fire in him, only violet shadow; from his heart two dark veins of purple lead split and run to the two victims. Upper left panel: a mouth curled in a soundless snarl; upper right panel: a mirror shattered into black shards. Border: knotted thorn leadwork in blue-black; three rim roundels — a broken heart at the apex, a downward-pulling chain at one side, an outward-breaking crack at the other. Palette: deep violet, amethyst, blue-black, iron lead, no warm hue anywhere. NO lettering anywhere.
 ```
 
-**Jesus — Humility (green arm, 08h)** → `assets/archetypes/persons/Jesus_Humility.png`
+**Jesus — Humility (green arm, 08h)** → `assets/archetypes/persons/primary/colored/Jesus_Humility.png`
 
 *(Color-fidelity note: Jesus wears BLUE in the Trinity paint set,
 where he is the ADVOCATE who steps between the accused and the dark.
@@ -123,13 +123,13 @@ being lives somewhere between excessive self-criticism and excessive
 self-love). The prism seats get their own TALL LANCETS in the set's
 register, same scenes retold in the window language.
 
-**Lucifer — Pride (red arm, 20h)** → `assets/archetypes/persons/Lucifer_Pride.png`
+**Lucifer — Pride (red arm, 20h)** → `assets/archetypes/persons/primary/colored/Lucifer_Pride.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Ember-red, molten gold and black glass throughout, hot and ascending. Center: Lucifer mid-RISE — a winged figure of terrible beauty climbing a stair of light that thins beneath him, chin lifted ABOVE the light he reaches for, one hand grasping past a crown that already slips; morning-star radiance breaks around his head while the stair's lower steps burn away behind him; the love of self grown past all measure. Upper left panel: a throne set above cloud and star; upper right panel: the same throne falling, trailing fire. Border: flame-and-falling-feather leadwork in ember red; three rim roundels — the morning star at the apex, an upturned crown at one side, a single scorched feather at the other. Palette: ember red, molten gold, black glass, dark-gold lead. NO lettering anywhere.
 ```
 
-**Judas — Weakness / Fear (blue arm, 04h)** → `assets/archetypes/persons/Judas_Fear.png`
+**Judas — Weakness / Fear (blue arm, 04h)** → `assets/archetypes/persons/primary/colored/Judas_Fear.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Midnight-blue, cold silver and iron-gray glass throughout, heavy and turned inward. Center: Judas half-turned FROM the light — a hunched figure at the edge of a lamplit doorway he cannot make himself enter, face in shadow, one hand pressed to his chest and the other letting coins slip through his fingers into the dark; the light inside the doorway stays warm and open, the refusal is his own; the criticism of self grown past all mercy. Upper left panel: a rope coiled on bare ground under a leafless tree; upper right panel: thirty scattered coins on temple stones. Border: thorn-and-coin leadwork in cold blue; three rim roundels — a closed door at the apex, a broken purse at one side, a bowed head at the other. Palette: midnight blue, cold silver, iron gray, black-blue lead. NO lettering anywhere.
@@ -143,7 +143,7 @@ The sealed center of the six persons (owner 2026-07-16: Eye — Hearth —
 Seal — Union — Throne; this is the Prism paint seat). It was missing
 from every sheet until 2026-07-18 (owner catch).
 
-**the Seal** → `assets/archetypes/persons/Seal.png`
+**the Seal** → `assets/archetypes/persons/primary/colored/Seal.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background. A great wax-seal read in glass: a six-pointed star of interlaced ribbons at the center — six strands of colored light (gold, white, ember-red, midnight-blue, green, violet) braided into ONE knot that cannot be untied — pressed into a disc of deep amber glass like a signet into wax. Around the knot the six ribbons run outward to the rim, each keeping its own color, all bound at the center. A quiet white-gold glow sits behind the knot. Border: a ring of rope-and-signet leadwork, six small bosses on the rim where the ribbons meet it. Palette: signet amber, the six arm hues, deep umber lead. NO lettering anywhere.

@@ -473,10 +473,10 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
             # colored/ subfolder — the metal-capable set is not 1:1
             # with the colored-capable set any more.
             continue
-        # The colored dual is the SIBLING variant (owner restructure
-        # 2026-07-14): the variant segment swaps to colored/.
-        rel = defaults.WEEKDAY_DUAL_FILES[theme].replace(
-            "/primary/", "/colored/"
+        # The colored dual lives in the register's own colored/ look
+        # (tree law 2026-07-26) — colored_variant_rel is the ONE swap.
+        rel = defaults.colored_variant_rel(
+            defaults.WEEKDAY_DUAL_FILES[theme]
         )
         assert _paths.art_file(
             defaults.weekday_art(f"{rel}.png")
@@ -899,10 +899,10 @@ def test_slot_modes_are_real_everywhere():
     assert locked.weekday_slot == "weekday"          # the Seasons lock
     # The Chinese styles resolve art folders + swap metals (Rule #5:
     # one mapping shared by every slot).
-    assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "chinese/primary"
-    assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "chinese/colored"
+    assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "chinese/primary/bronze"
+    assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "chinese/primary/colored"
     assert "gold" in defaults.METAL_SWAP_TARGETS
-    assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "zodiac/astrology/colored"
+    assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "zodiac/astrology/primary/colored"
 
 
 def test_ring_tick_hover_reads_all_three_wheels(july_wednesday):

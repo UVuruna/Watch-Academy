@@ -2158,7 +2158,7 @@ class Compositor:
             + "\n\n"
             + self._symbolism.chinese_element(element)["base"]
         )
-        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese/primary")
+        folder = constants.CHINESE_STYLE_ART_DIRS.get(style, "chinese/primary/bronze")
         image = metal_variant_file(
             octa_slot_art(folder, animal),
             style if style in defaults.METAL_SWAP_TARGETS else None,
@@ -2887,7 +2887,7 @@ class Compositor:
 
         gregorian = (index + 5) % 12 + 1
         animal = constants.CHINESE_MONTH_BRANCH_ANIMALS[gregorian]
-        art = octa_slot_art("chinese/colored", animal)
+        art = octa_slot_art("chinese/primary/colored", animal)
         lines = [
             f"<b>{html.escape(self._tr(animal))}</b>",
             html.escape(self._tr(_MONTHS[gregorian - 1])),

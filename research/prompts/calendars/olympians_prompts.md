@@ -36,7 +36,7 @@ gold-and-bronze glass-leadwork so the Twelve read as one pantheon. Each
 window's field is dominated by that god's own attribute palette (Zeus's
 storm-gold, Aphrodite's foam-rose, Poseidon's sea-green, and so on).
 
-**Drop paths:** `assets/calendars/olympians/<Figure>.png` — a
+**Drop paths:** `assets/calendars/olympians/primary/colored/<Figure>.png` — a
 sourceless calendar-mount root (PromptPainter appends `_gem`/`_gpt`).
 Twelve files: `Zeus.png`, `Hera.png`, `Apollo.png`, `Artemis.png`,
 `Ares.png`, `Aphrodite.png`, `Hephaestus.png`, `Athena.png`,
@@ -50,13 +50,13 @@ circular window shape IS the frame, NO lettering anywhere in any image.
 
 ## The crown pair — Zeus & Hera (top, 12h)
 
-**Zeus — the king** → `assets/calendars/olympians/Zeus.png`
+**Zeus — the king** → `assets/calendars/olympians/primary/colored/Zeus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant storm-gold and white glass, the brightest of the twelve, lit like a sky at the height of noon. Center: an enthroned bearded king of the gods, a crackling thunderbolt gripped in one raised hand throwing white light across the disc, a great eagle at his shoulder, an oak-leaf crown on his brow — sovereignty over sky and Olympus. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: storm gold, white lightning, sky blue, dark-bronze lead. NO lettering anywhere.
 ```
 
-**Hera — the queen** → `assets/calendars/olympians/Hera.png`
+**Hera — the queen** → `assets/calendars/olympians/primary/colored/Hera.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep peacock-blue, royal gold and jewel-green glass. Center: a crowned, veiled queen enthroned in equal state beside the king's, a tall lotus-tipped sceptre in one hand, a peacock with its full jeweled tail fanned behind her, a marriage-diadem on her brow — queen of the gods, keeper of marriage and the sky's own throne. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: peacock blue, royal gold, jewel green, dark-bronze lead. NO lettering anywhere.
@@ -64,13 +64,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The flank pair — Apollo & Artemis (the twin lights)
 
-**Apollo — the morning light (left)** → `assets/calendars/olympians/Apollo.png`
+**Apollo — the morning light (left)** → `assets/calendars/olympians/primary/colored/Apollo.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm sun-gold, laurel-green and dawn-amber glass, a morning light. Center: a radiant youthful god crowned with laurel, a golden lyre held in one arm and a sun-disc blazing behind his head, a bow slung at his back, the rays of first light fanning out — music, prophecy and the sun rising in the east. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: sun gold, laurel green, dawn amber, dark-bronze lead. NO lettering anywhere.
 ```
 
-**Artemis — the evening moon (right)** → `assets/calendars/olympians/Artemis.png`
+**Artemis — the evening moon (right)** → `assets/calendars/olympians/primary/colored/Artemis.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Cool silver-blue, moon-white and forest-green glass, an evening light. Center: a lithe huntress-goddess with a silver crescent moon at her brow, a drawn silver bow in hand and an arrow nocked, a hound and a stag at her side, the crescent moon rising behind her over dark pines — the wild, the hunt, and the moon rising in the east as her brother's sun sets. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: silver-blue, moon white, forest green, dark-bronze lead. NO lettering anywhere.
@@ -78,13 +78,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The flank pair — Ares & Aphrodite (war and love)
 
-**Ares — war** → `assets/calendars/olympians/Ares.png`
+**Ares — war** → `assets/calendars/olympians/primary/colored/Ares.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Iron-grey and blood-crimson glass, hard and hot. Center: a helmed war-god in full bronze armour, a bloodied spear in one fist and a round shield on the other arm, a vulture and a spear-forest of battle behind him, the red glare of carnage across the disc — the raw fury of war, the lust for the fight itself. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: iron grey, blood crimson, war-bronze, dark-bronze lead. NO lettering anywhere.
 ```
 
-**Aphrodite — love** → `assets/calendars/olympians/Aphrodite.png`
+**Aphrodite — love** → `assets/calendars/olympians/primary/colored/Aphrodite.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm rose, sea-foam and gold glass, soft and luminous. Center: the goddess of love rising from a great scallop-shell on a foam-crested wave, doves circling, a girdle of gold at her waist, roses opening around her feet, a warm rose light suffusing the disc — beauty and desire born from the sea, the force that even Ares cannot resist. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: rose pink, sea-foam white, warm gold, dark-bronze lead. NO lettering anywhere.
@@ -92,13 +92,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The flank pair — Hephaestus & Athena (the two makers)
 
-**Hephaestus — the forge** → `assets/calendars/olympians/Hephaestus.png`
+**Hephaestus — the forge** → `assets/calendars/olympians/primary/colored/Hephaestus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Forge-bronze, molten ember-orange and iron glass, hot and worked. Center: the smith-god at his anvil, one leg braced, a great hammer mid-swing over a glowing bronze masterwork, sparks flying up and a volcano's fire-glow behind the forge — the divine craftsman, the maker of the gods' own arms and wonders, lame but unmatched at the craft. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: forge bronze, molten ember, iron grey, dark-bronze lead. NO lettering anywhere.
 ```
 
-**Athena — the mind's craft** → `assets/calendars/olympians/Athena.png`
+**Athena — the mind's craft** → `assets/calendars/olympians/primary/colored/Athena.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Grey-olive, clear silver and gold glass, cool and clear. Center: the grey-eyed goddess in a crested helm, a tall spear and the aegis-shield with its small Gorgon boss at her side, an owl on her shoulder and an olive branch in her hand — wisdom, strategy and the crafts of the mind, the war-goddess who wins by counsel rather than fury. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: grey-olive, clear silver, gold, dark-bronze lead. NO lettering anywhere.
@@ -106,13 +106,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The flank pair — Hermes & Dionysus (the boundary-crossers)
 
-**Hermes — the messenger** → `assets/calendars/olympians/Hermes.png`
+**Hermes — the messenger** → `assets/calendars/olympians/primary/colored/Hermes.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Quicksilver-grey, bright sky-blue and gold glass, light and swift. Center: a swift young god in a winged cap and winged sandals mid-stride, the caduceus (twin-serpent staff) in one hand, a traveller's purse at his belt, thin cloud-streaks of speed behind him — messenger of the gods, guide of souls, patron of travellers, traders and the crossing of every threshold. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: quicksilver grey, sky blue, gold, dark-bronze lead. NO lettering anywhere.
 ```
 
-**Dionysus — the dissolver** → `assets/calendars/olympians/Dionysus.png`
+**Dionysus — the dissolver** → `assets/calendars/olympians/primary/colored/Dionysus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Wine-purple, vine-green and warm gold glass, rich and loosening. Center: a wreathed god crowned with grape-vine and ivy, a brimming wine-cup (kantharos) raised in one hand and a pine-tipped thyrsus staff in the other, a leopard at his feet and vines heavy with fruit spilling round the rim — wine, ecstasy and the theatre, the god who dissolves the boundaries of the self. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: wine purple, vine green, warm gold, dark-bronze lead. NO lettering anywhere.
@@ -120,13 +120,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The root pair — Poseidon & Demeter (bottom, 24h)
 
-**Poseidon — the sea** → `assets/calendars/olympians/Poseidon.png`
+**Poseidon — the sea** → `assets/calendars/olympians/primary/colored/Poseidon.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep sea-green, storm-teal and dark foam-grey glass, the darkest-toned of the twelve, fitting the root. Center: the bearded sea-god rising from a heaving swell, a three-pronged trident raised to break a wave, a rearing white sea-horse (hippocamp) beside him, the deep water churning across the whole disc — lord of the sea, earthquakes and storms, an elder brother of the king. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: deep sea green, storm teal, foam grey, dark-bronze lead. NO lettering anywhere.
 ```
 
-**Demeter — the grain** → `assets/calendars/olympians/Demeter.png`
+**Demeter — the grain** → `assets/calendars/olympians/primary/colored/Demeter.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Wheat-gold, deep earth-brown and harvest-green glass, warm and grounded. Center: a crowned mother-goddess enthroned low, a great sheaf of ripe golden wheat gathered in her arms, a lit torch in one hand (her search for lost Persephone) and a poppy at her side, the fields growing up around her — goddess of the harvest, grain and the earth's own bounty, the ground the whole wheel rests on. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: wheat gold, earth brown, harvest green, dark-bronze lead. NO lettering anywhere.

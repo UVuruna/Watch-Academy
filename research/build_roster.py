@@ -41,20 +41,22 @@ ARCHETYPES = (
 # The Ninths (owner 8+1 doctrine) — keep in sync with the topic table
 # in app/encyclopedia.py.
 NINTHS = {
-    "wolf": ("Sigma", "wolf/primary/sigma"),
-    "bee": ("The Swarm", "bee/primary/swarm"),
-    "elephant": ("The Graveyard", "elephant/primary/graveyard"),
-    "cosmos": ("The Big Bang", "cosmos/primary/big_bang"),
-    "greek": ("Hades", "greek/primary/hades"),
-    "norse": ("Baldur", "norse/primary/baldur"),
-    "egypt": ("Set", "egypt/primary/set"),
-    "slavic": ("Crnobog", "slavic/primary/crnobog"),
-    "alchemy": ("The Philosopher's Stone", "alchemy/primary/stone"),
-    "profession": ("The Jester", "profession/primary/Jester"),
-    "religion": ("The Unknown God", "creeds/secondary/unknown_god"),
-    "religion_alt": ("The Lost Mystery", "creeds/secondary/lost_mystery"),
-    "bible": ("Melchizedek", "bible/secondary/melchizedek"),
-    "bible_dark": ("Legion", "bible/dark/legion"),
+    "wolf": ("Sigma", "wolf/primary/bronze/sigma"),
+    "bee": ("The Swarm", "bee/primary/bronze/swarm"),
+    "elephant": ("The Graveyard", "elephant/primary/bronze/graveyard"),
+    "cosmos": ("The Big Bang", "cosmos/primary/bronze/big_bang"),
+    "greek": ("Hades", "greek/primary/bronze/hades"),
+    "norse": ("Baldur", "norse/primary/bronze/baldur"),
+    "egypt": ("Set", "egypt/primary/bronze/set"),
+    "slavic": ("Crnobog", "slavic/primary/bronze/crnobog"),
+    "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/stone"),
+    "profession": ("The Jester", "profession/primary/bronze/Jester"),
+    "religion": ("The Unknown God", "creeds/secondary/colored/unknown_god"),
+    "religion_alt": (
+        "The Lost Mystery", "creeds/secondary/colored/lost_mystery",
+    ),
+    "bible": ("Melchizedek", "bible/secondary/colored/melchizedek"),
+    "bible_dark": ("Legion", "bible/dark/colored/legion"),
 }
 THEME_ORDER = (
     "planets", "planet_signs", "planets_art", "greek", "norse", "egypt",
@@ -86,7 +88,7 @@ def mark(source: str, rel: str) -> str:
 
 def theme_dir(theme: str) -> str:
     if theme == "planets":
-        return "planets/primary"
+        return "planets/primary/photo"
     return defaults.WEEKDAY_THEME_DIRS[theme]
 
 
@@ -142,7 +144,7 @@ def weekday_sections() -> list[str]:
                 f"| {mark('gemini', dual)} | {mark('chatgpt', dual)} |"
             )
             if colored:
-                cdual = dual.replace("/primary/", "/colored/")
+                cdual = defaults.colored_variant_rel(dual)
                 if cdual != dual:
                     row += (
                         f" {mark('gemini', cdual)} "
@@ -159,7 +161,7 @@ def weekday_sections() -> list[str]:
                 f"| {mark('gemini', rel)} | {mark('chatgpt', rel)} |"
             )
             if colored:
-                crel = rel.replace("/primary/", "/colored/")
+                crel = defaults.colored_variant_rel(rel)
                 row += (
                     f" {mark('gemini', crel)} | {mark('chatgpt', crel)} |"
                 )
@@ -245,7 +247,10 @@ def zodiac_sections() -> list[str]:
             cells.append(zodiac_mark("chatgpt", f"{folder}/{sign}"))
         out.append(f"| {sign} | " + " | ".join(cells) + " |")
     out.append("\n## Zodiac — Chinese (12 animals + the Cat)\n")
-    dirs = {"primary": "chinese/primary", "colored": "chinese/colored"}
+    dirs = {
+        "primary": "chinese/primary/bronze",
+        "colored": "chinese/primary/colored",
+    }
     out.append("| Animal | primary G | primary C | colored G | colored C |")
     out.append("|---|---|---|---|---|")
     for animal in list(constants.CHINESE_ANIMALS) + ["Cat"]:
@@ -310,9 +315,9 @@ def main() -> None:
         "Badges", "",
         {
             "trinity": [
-                "archetypes/trinity/badges/Faith",
-                "archetypes/trinity/badges/Hope",
-                "archetypes/trinity/badges/Love",
+                "archetypes/trinity/badges/colored/Faith",
+                "archetypes/trinity/badges/colored/Hope",
+                "archetypes/trinity/badges/colored/Love",
             ],
             "season": [
                 f"celestial/seasons/badges/{s}" for s in (
@@ -331,11 +336,12 @@ def main() -> None:
                 )
             ],
             "scale": [
-                "archetypes/scale/Lucifer", "archetypes/scale/Judas",
-                "archetypes/scale/Union",
+                "archetypes/scale/primary/colored/Lucifer",
+                "archetypes/scale/primary/colored/Judas",
+                "archetypes/scale/primary/colored/Union",
             ],
             "scale glass": [
-                f"archetypes/scale/glass/{s}" for s in (
+                f"archetypes/scale/glass/colored/{s}" for s in (
                     "Judas", "Lucifer",
                     "Judas_v2", "Lucifer_v2",
                     "Union", "Union_v2",
@@ -350,25 +356,25 @@ def main() -> None:
         "Emblems", "weeks/inner_wheel",
         {
             "virtue": [
-                f"virtue/{v}" for v in (
+                f"virtue/primary/colored/{v}" for v in (
                     "Justice", "Serenity", "Courage", "Wisdom",
                     "Generosity", "Love", "Patience", "Humility",
                 )
             ],
             "sin": [
-                f"sin/{s}" for s in (
+                f"sin/primary/colored/{s}" for s in (
                     "Pride", "Fear", "Wrath", "Greed", "Excess",
                     "Jealousy", "Envy", "Servility",
                 )
             ],
             "mood": [
-                f"mood/{m}" for m in (
+                f"mood/primary/colored/{m}" for m in (
                     "Glory", "Calm", "Zeal", "Sorrow", "Joy",
                     "Passion", "Renewal", "Awe", "Eclipse",
                 )
             ],
             "intelligence": [
-                f"intelligence/{i}" for i in (
+                f"intelligence/primary/colored/{i}" for i in (
                     "bodily_kinesthetic", "interpersonal", "linguistic",
                     "naturalist", "logical_mathematical", "musical",
                     "existential", "intrapersonal", "spatial",

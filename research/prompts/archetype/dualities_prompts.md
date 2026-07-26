@@ -51,25 +51,25 @@ anywhere in any image.
 
 ## Good / Evil
 
-**Good** → `assets/archetypes/dualities/good_evil/Good.png`
+**Good** → `assets/archetypes/dualities/good_evil/primary/colored/Good.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Radiant white-gold, warm amber and clear glass throughout, luminous, made of light passing through. Center: a single open GIVING hand lifting light UPWARD and outward — a small warm sun cupped in the palm and released to rise, its rays fanning to fill the whole window, a green shoot springing where the light falls at the base — the good that builds, gives and lifts, drawn as light spending itself outward. Everything rises. Upper left panel: hands raising a fallen figure; upper right panel: a lit lamp shared. Border: radiant-ray leadwork in bright gold, the matched bright half of the pair's own device; three rim roundels — a rising sun at the apex, a lifting hand at one side, a first shoot at the other. Palette: white-gold, warm amber, clear light, bright-gold lead. NO lettering anywhere.
 ```
 
-**Good — circle** → `assets/archetypes/dualities/good_evil/circle/Good.png`
+**Good — circle** → `assets/archetypes/dualities/good_evil/primary/colored/circle/colored/Good.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white-gold, amber and clear glass, luminous. Center: an open giving hand lifting a small warm sun upward, its rays fanning out, a green shoot at the base — the good that builds and gives, filling the round frame. Border: radiant-ray leadwork in bright gold, a small rising-sun roundel at the top. Palette: white-gold, warm amber, clear light, bright-gold lead. NO lettering anywhere.
 ```
 
-**Evil** → `assets/archetypes/dualities/good_evil/Evil.png`
+**Evil** → `assets/archetypes/dualities/good_evil/primary/colored/Evil.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Starless black-violet, deep amethyst and cold iron glass throughout, heavy pigment that swallows the light, no warm tone anywhere. Center: a single grasping CLAWED hand dragging light DOWN and inward — closing over a small flame to smother it, pulling a fallen figure deeper into a black pit at the base, a withered shoot broken beside it — the evil that takes, devours and unmakes, drawn as darkness pulling everything down into itself. Everything sinks. Upper left panel: hands pushing a figure down; upper right panel: a snuffed, smoking lamp. Border: thorn-and-void leadwork in blue-black, the matched dark half of the pair's own device; three rim roundels — a black sun at the apex, a dragging claw at one side, a broken shoot at the other. Palette: black-violet, deep amethyst, cold iron, blue-black lead, no warm hue anywhere. NO lettering anywhere.
 ```
 
-**Evil — circle** → `assets/archetypes/dualities/good_evil/circle/Evil.png`
+**Evil — circle** → `assets/archetypes/dualities/good_evil/primary/colored/circle/colored/Evil.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Starless black-violet, deep amethyst and cold iron glass, no warm tone. Center: a grasping clawed hand smothering a small flame and dragging a fallen figure into a black pit, a withered shoot beside it — the evil that takes and unmakes, filling the round frame. Border: thorn-and-void leadwork in blue-black, a small black-sun roundel at the top. Palette: black-violet, deep amethyst, cold iron, blue-black lead. NO lettering anywhere.
@@ -79,25 +79,25 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 ## Self / Others — the two loves of One_Love
 
-**Self — love turned inward** → `assets/archetypes/dualities/self_others/Self.png`
+**Self — love turned inward** → `assets/archetypes/dualities/self_others/primary/colored/Self.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Warm rose-red, ember-gold and white glass throughout, warm and inward-drawn. Center: a figure with one hand drawn to its OWN breast, cupping and guarding a heart of PERFECTLY CLEAR uncolored glass held close — love turned toward the self, the right self-regard the summit needs, held BEFORE it tips into Pride; the clear heart the brightest point, plain white light through it, kept just this side of the razor's edge. Warm red light gathers inward toward the held heart. Upper left panel: a hand shielding a small flame at the chest; upper right panel: a figure standing whole and rooted alone. Border: inward-curling leadwork in warm rose-gold; three rim roundels — a clear heart at the apex, a hand-to-breast at one side, a single standing figure at the other; the clear heart the only uncolored glass. Palette: rose-red, ember-gold, white light, the clear heart the only uncolored glass, dark-rose lead. NO lettering anywhere.
 ```
 
-**Self — circle** → `assets/archetypes/dualities/self_others/circle/Self.png`
+**Self — circle** → `assets/archetypes/dualities/self_others/primary/colored/circle/colored/Self.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm rose-red, ember-gold and white glass. Center: a figure with a hand drawn to its own breast, cupping a heart of perfectly clear uncolored glass held close, warm red light gathering inward — filling the round frame, the clear heart the brightest point. Border: inward-curling leadwork in warm rose-gold, a small clear-heart roundel at the top. Palette: rose-red, ember-gold, white light, the clear heart the only uncolored glass, dark-rose lead. NO lettering anywhere.
 ```
 
-**Others — love turned outward** → `assets/archetypes/dualities/self_others/Others.png`
+**Others — love turned outward** → `assets/archetypes/dualities/self_others/primary/colored/Others.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet, aspect 1:2. Cool sky-blue, clear silver and white glass throughout, cool and outward-reaching. Center: a figure with both arms opening OUTWARD to the world, offering a heart of PERFECTLY CLEAR uncolored glass held in open palms toward others (small shadowed figures at the window's edges reaching back) — love turned toward others, the gift held BEFORE it tips into self-erasure and weakness; the clear heart the brightest point, plain white light through it, kept just this side of the razor's edge. Cool blue light spreads outward from the offered heart. Upper left panel: hands passing a flame to another; upper right panel: a cloak laid over cold shoulders. Border: outward-fanning leadwork in cool silver-blue; three rim roundels — a clear heart at the apex, an offering open palm at one side, a shielding cloak at the other; the clear heart the only uncolored glass. Palette: sky-blue, clear silver, white light, the clear heart the only uncolored glass, blue-silver lead. NO lettering anywhere.
 ```
 
-**Others — circle** → `assets/archetypes/dualities/self_others/circle/Others.png`
+**Others — circle** → `assets/archetypes/dualities/self_others/primary/colored/circle/colored/Others.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Cool sky-blue, clear silver and white glass. Center: a figure with both arms opening outward, offering a heart of perfectly clear uncolored glass in open palms toward small shadowed figures reaching back, cool blue light spreading outward — filling the round frame, the clear heart the brightest point. Border: outward-fanning leadwork in cool silver-blue, a small clear-heart roundel at the top. Palette: sky-blue, clear silver, white light, the clear heart the only uncolored glass, blue-silver lead. NO lettering anywhere.

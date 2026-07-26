@@ -513,30 +513,13 @@ def _metal_looks(base: Path, colored: Path | None) -> tuple:
 
 
 def _colored_sibling(path: Path) -> Path:
-    """The COLORED twin of a bronze-plate FILE (owner round R8b item 3:
-    "Panteon bogovi nemaju Colored verzije u switchu" — the Pantheon
-    pages lack Colored even though the art landed). The asset tree
-    nests `colored/` at TWO different depths depending on where the
-    bronze file itself lives: an ordinary plate under `<theme>/primary/
-    <File>.png` has its colored twin as a SIBLING of `primary/` itself
-    (`<theme>/colored/<File>.png`, two parents up); a SEATED Pantheon
-    plate under `<theme>/pantheon/<file>.png` nests its colored twin
-    ONE level in, directly inside `pantheon/`
-    (`<theme>/pantheon/colored/<file>.png`) — the shape the owner's art
-    pipeline actually shipped (ground-truthed against
-    assets/weekday/*/greek/pantheon/colored/ and .../norse/pantheon/
-    colored/). The old call sites each hardcoded ONE of these two
-    depths: `_pantheon_topic.looks_for` assumed the shallow pantheon
-    nesting (right for a genuine Pantheon-only figure like Poseidon,
-    silently missing for a seat that FALLS BACK to the planetary
-    primary plate, like Zeus/Thor/Loki/Tyr, since none of those four
-    Norse/Greek pantheon seats grew their own dedicated art); the
-    Ninth's `_ninth_looks` assumed the deep primary-sibling shape
-    unconditionally, missing Gaia/Yggdrasil (both pantheon-rooted
-    plates). One function, one rule, checked against the folder name
-    itself rather than guessed from the call site (Rule #5/#6)."""
-    if path.parent.name == "pantheon":
-        return path.parent / "colored" / path.name
+    """The COLORED twin of a bronze-plate FILE. ONE rule since the
+    tree law landed (owner-approved 2026-07-26): every plate lives at
+    `<register>/<look>/<File>.png` and its colored twin at the SAME
+    register's own `colored/` child — pantheon and primary identically.
+    The old two-depth branch (pantheon nested, primary sibling — the
+    round R8b item 3 zoo) died with the migration; this is now the
+    path twin of `defaults.colored_variant_rel` for resolved Paths."""
     return path.parent.parent / "colored" / path.name
 
 
@@ -578,10 +561,11 @@ _theme_body_art = defaults.weekday_theme_body_art
 
 def _theme_dual_art(theme: str, colored: bool = False) -> Path:
     """The theme's Sunday SERVANT plate — the colored dual lives in
-    the SIBLING variant (owner restructure 2026-07-14)."""
+    the register's own colored/ look (tree law 2026-07-26;
+    `colored_variant_rel` is the ONE swap implementation)."""
     rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if colored:
-        rel = rel.replace("/primary/", "/colored/")
+        rel = defaults.colored_variant_rel(rel)
     return defaults.weekday_art(f"{rel}.png")
 
 
@@ -635,8 +619,8 @@ def _weekday_topic(theme: str):
         if theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
             # glyphs and the bronze medallions ride the arrows.
-            sign = defaults.weekday_art(f"planets/signs/{body}.png")
-            art = defaults.weekday_art(f"planets/art/{body}.png")
+            sign = defaults.weekday_art(f"planets/primary/sign/{body}.png")
+            art = defaults.weekday_art(f"planets/primary/art/{body}.png")
             return (
                 ("Planets", rows(base, None)),
                 ("Signs", rows(sign, None)),
@@ -659,8 +643,8 @@ def _weekday_topic(theme: str):
                 for label, path in _metal_looks(servant, colored)
             )
         if theme == "planets":
-            sign_dual = defaults.weekday_art("planets/signs/sun_eclipse.png")
-            art_dual = defaults.weekday_art("planets/art/sun_eclipse.png")
+            sign_dual = defaults.weekday_art("planets/primary/sign/sun_eclipse.png")
+            art_dual = defaults.weekday_art("planets/primary/art/sun_eclipse.png")
             return (
                 ("Planets", rows(servant, None)),
                 ("Signs", rows(sign_dual, None)),
@@ -897,7 +881,7 @@ def _wider_topic(theme: str) -> list[dict]:
     figure_entries = [
         {
             "images": (
-                defaults.weekday_art(f"{theme}/wider/{figure.lower()}.png"),
+                defaults.weekday_art(f"{theme}/wider/bronze/{figure.lower()}.png"),
             ),
             "name": figure,
             "article": ("emblem", "wider", figure),
@@ -1031,24 +1015,24 @@ def _topics(travel_date: date | None = None) -> dict:
     topics["continents"] = _continents_topic(travel_date)
     topics["astrology"] = {
         "title": "Astrology",
-        "icon": defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "sign" / "Leo.png",
+        "icon": defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary" / "sign" / "Leo.png",
         "entries": [
             {
                 # Owner defaults 2026-07-13: the logo+constellation pair
                 # leads; the arrows reach the colored logo and the sign.
                 "looks": (
                     ("Logo & Constellation", ((
-                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary" / "logo"
                         / f"{sign}.png",
                         defaults.ZODIAC_ART_DIR / "zodiac" / "astrology"
-                        / "constellation" / f"{sign}.png",
+                        / "primary" / "constellation" / f"{sign}.png",
                     ),)),
                     ("Colored", ((
-                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "colored"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary" / "colored"
                         / f"{sign}.png",
                     ),)),
                     ("Sign", ((
-                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "sign"
+                        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary" / "sign"
                         / f"{sign}.png",
                     ),)),
                 ),
@@ -1063,7 +1047,7 @@ def _topics(travel_date: date | None = None) -> dict:
             )
         ],
     }
-    chinese_primary = defaults.ZODIAC_ART_DIR / "chinese" / "primary"
+    chinese_primary = defaults.ZODIAC_ART_DIR / "chinese" / "primary" / "bronze"
     topics["chinese"] = {
         "title": "Chinese zodiac",
         "icon": chinese_primary / "Dragon.png",
@@ -1084,7 +1068,7 @@ def _topics(travel_date: date | None = None) -> dict:
                         ("Silver", metal_variant_path(
                             chinese_primary / f"{animal}.png", "silver")),
                         ("Colored",
-                         defaults.ZODIAC_ART_DIR / "chinese" / "colored"
+                         defaults.ZODIAC_ART_DIR / "chinese" / "primary" / "colored"
                          / f"{animal}.png"),
                     )
                 ),
@@ -1149,7 +1133,7 @@ def _topics(travel_date: date | None = None) -> dict:
 
     topics["week"] = {
         "title": "The Week",
-        "icon": defaults.weekday_art("planets/primary/sun.png"),
+        "icon": defaults.weekday_art("planets/primary/photo/sun.png"),
         "entries": [
             {
                 "looks": (
@@ -1349,9 +1333,9 @@ def _topics(travel_date: date | None = None) -> dict:
             # matrix 2026-07-21).
             if theme != "continents"
         ),
-        ("chinese", "The Cat", _z / "chinese/primary/Cat.png"),
+        ("chinese", "The Cat", _z / "chinese/primary/bronze/Cat.png"),
         ("astrology", "Ophiuchus",
-         _z / "zodiac/astrology/sign/Ophiuchus.png"),
+         _z / "zodiac/astrology/primary/sign/Ophiuchus.png"),
     ):
         ninth_entry = {
             "images": (plate,),
@@ -1393,12 +1377,12 @@ def _topics(travel_date: date | None = None) -> dict:
     # two poles rotate — the Union stays fixed.
     topics["duality"] = {
         "title": "The Two Triangles",
-        "icon": defaults.SCALE_ART_DIR / "Union.png",
+        "icon": defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",
         "entries": [
             {
                 "images": (
                     defaults.scale_variant_file("Lucifer", travel_date)
-                    or defaults.SCALE_ART_DIR / "Lucifer.png",
+                    or defaults.SCALE_ART_DIR / "primary" / "colored" / "Lucifer.png",
                 ),
                 "name": "Lucifer",
                 "article": ("emblem", "duality", "Lucifer"),
@@ -1407,7 +1391,7 @@ def _topics(travel_date: date | None = None) -> dict:
             {
                 "images": (
                     defaults.scale_variant_file("Judas", travel_date)
-                    or defaults.SCALE_ART_DIR / "Judas.png",
+                    or defaults.SCALE_ART_DIR / "primary" / "colored" / "Judas.png",
                 ),
                 "name": "Judas",
                 "article": ("emblem", "duality", "Judas"),
@@ -1416,7 +1400,7 @@ def _topics(travel_date: date | None = None) -> dict:
             {
                 # The owner's hexagram badge (2026-07-13): the two
                 # triangles interlocked, the white circle at the cross.
-                "images": (defaults.SCALE_ART_DIR / "Union.png",),
+                "images": (defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",),
                 "name": "The Union",
                 "article": ("emblem", "duality", "The Union"),
                 "accents": ("red", "blue"),
@@ -1448,7 +1432,7 @@ def _topics(travel_date: date | None = None) -> dict:
     # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
     # mesta nego 15MB fajlova") from the full-moon master with the
     # dial's own terminator geometry — moon_phase_file, disk-cached.
-    moon_plate = defaults.weekday_art("planets/primary/moon.png")
+    moon_plate = defaults.weekday_art("planets/primary/photo/moon.png")
     topics["moon"] = {
         "title": "Moon",
         "icon": moon_plate,
@@ -1625,7 +1609,7 @@ class EncyclopediaDialog(QDialog):
             )
             data = verses["trinity"]
             self._topics["trinity"]["entries"].append({
-                "images": (defaults.SCALE_ART_DIR / "Union.png",),
+                "images": (defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",),
                 "name": data["title"],
                 "article": ("verses", data),
                 "accents": (),

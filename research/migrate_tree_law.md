@@ -40,6 +40,18 @@ EXECUTE (--execute):
     final inventory: recount and compare against the dry-run plan
 ```
 
+## Companion
+
+[Rewrite Look Paths (script)](rewrite_look_paths.py) is the TEXT side
+of the same migration: it derives the exact directory map from the
+executed migration commit's own rename records (`git show -M
+--name-status`) and rewrites every literal `assets/...` path in the
+prompt sheets, COVERAGE and the sheet-path lint whitelist — exact by
+construction. Its one blind spot, found and fixed the same day: a
+SOURCE dir that fans out to MANY destinations (the `assets/titles/`
+distribution) collapses to one map entry; the titles were re-repaired
+from the commit's FILE-level records instead.
+
 ## Connections
 
 ### Uses

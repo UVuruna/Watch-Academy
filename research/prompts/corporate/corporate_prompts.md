@@ -47,8 +47,8 @@ written into every single prompt below**, not just this header, since
 these are corporate ROLES (CEO, CFO, …) rather than named individuals
 and must never resolve toward any specific real executive.
 
-**Drop paths:** `assets/weeks/crafts/corporate/primary/<Stem>.png` and
-`assets/weeks/crafts/corporate/colored/<Stem>.png`, both flat, no `dual/`
+**Drop paths:** `assets/weeks/crafts/corporate/primary/bronze/<Stem>.png` and
+`assets/weeks/crafts/corporate/primary/colored/<Stem>.png`, both flat, no `dual/`
 subfolder (DUAL FLATTEN convention).
 
 ## The roster
@@ -73,12 +73,12 @@ subfolder (DUAL FLATTEN convention).
 *The carer of people — calm competence standing in for whatever fear
 walked through the door.*
 
-**CHRO** → `assets/weeks/crafts/corporate/primary/CHRO.png`
+**CHRO** → `assets/weeks/crafts/corporate/primary/bronze/CHRO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, calm and reassuring. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in a soft-tailored blazer, no likeness of any real person — seated across a low table from an unseen employee, both hands open in a listening posture, a small tissue box and an open notepad the only objects between them. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**CHRO (colored)** → `assets/weeks/crafts/corporate/colored/CHRO.png`
+**CHRO (colored)** → `assets/weeks/crafts/corporate/primary/colored/CHRO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished steel-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive silhouette in full color, a soft blue-grey blazer, seated in a listening posture across a low table with an open notepad — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished blue-steel, four enamel roundels bearing a silver Moon crescent. Colors: dusk blue, brushed steel, warm amber, notepad cream.
 ```
@@ -90,12 +90,12 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 *The general of operations — the same fire that executes flawlessly on
 a good day and scorches on a bad one.*
 
-**COO** → `assets/weeks/crafts/corporate/primary/COO.png`
+**COO** → `assets/weeks/crafts/corporate/primary/bronze/COO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, driven and decisive. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in rolled shirtsleeves, no likeness of any real person — standing before a glowing wall of live operations metrics, one hand jabbed toward a red-flagged chart demanding it be fixed now. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
 
-**COO (colored)** → `assets/weeks/crafts/corporate/colored/COO.png`
+**COO (colored)** → `assets/weeks/crafts/corporate/primary/colored/COO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished steel-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive in full color, rolled white shirtsleeves, standing before a glowing metrics wall, one hand jabbed toward a red-flagged chart — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished orange-steel, four enamel roundels bearing an orange Mars glyph. Colors: ember orange, brushed steel, metrics blue, shirt white.
 ```
@@ -107,12 +107,12 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 *The money itself — Wisdom and Greed both written into the same job
 description.*
 
-**CFO** → `assets/weeks/crafts/corporate/primary/CFO.png`
+**CFO** → `assets/weeks/crafts/corporate/primary/bronze/CFO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, precise and covetous. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an immaculate dark suit, no likeness of any real person — seated behind a glass desk stacked with two mirrored ledgers, one column glowing generous green, the other locked tight and hoarding gold, both hands resting equally on each. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
 
-**CFO (colored)** → `assets/weeks/crafts/corporate/colored/CFO.png`
+**CFO (colored)** → `assets/weeks/crafts/corporate/primary/colored/CFO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished steel-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive in full color, an immaculate dark-violet suit, seated behind a glass desk with two mirrored ledgers, one glowing green, one locked gold — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished violet-steel, four enamel roundels bearing a purple Mercury glyph. Colors: deep violet, brushed steel, ledger gold, glass-desk blue.
 ```
@@ -124,12 +124,12 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 *Marketing as PRIESTHOOD — the brand evangelist preaching, generosity
 of message sold at excess volume.*
 
-**CMO** → `assets/weeks/crafts/corporate/primary/CMO.png`
+**CMO** → `assets/weeks/crafts/corporate/primary/bronze/CMO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, radiant and evangelizing. Center: a FACELESS stylized executive figure — a smooth featureless silhouette robed in a sharp blazer cut like a preacher's own vestment, no likeness of any real person — standing at a lit podium before a rising congregation of small silhouetted figures, both arms raised as if delivering a sermon, a glowing brand-logo halo suspended above the podium in place of any religious icon. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**CMO (colored)** → `assets/weeks/crafts/corporate/colored/CMO.png`
+**CMO (colored)** → `assets/weeks/crafts/corporate/primary/colored/CMO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished steel-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive in full color, a sharp gold-trimmed blazer cut like a vestment, both arms raised at a lit podium, a glowing brand-logo halo suspended above it, a congregation of silhouettes rising before them — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished gold-steel, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, brushed steel, halo-glow white, congregation grey.
 ```
@@ -140,12 +140,12 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 
 *The creative eye — love of the work worn as fiercely as any jealousy.*
 
-**CDO** → `assets/weeks/crafts/corporate/primary/CDO.png`
+**CDO** → `assets/weeks/crafts/corporate/primary/bronze/CDO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, passionate and possessive. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an artfully asymmetric jacket, no likeness of any real person — standing before a wall of pinned mood-boards and color swatches, one hand protectively shielding a single sketch from an unseen critic's reach. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
 
-**CDO (colored)** → `assets/weeks/crafts/corporate/colored/CDO.png`
+**CDO (colored)** → `assets/weeks/crafts/corporate/primary/colored/CDO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished steel-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive in full color, an artfully asymmetric rose-toned jacket, standing before a wall of mood-boards, one hand protectively shielding a sketch — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished rose-steel, four enamel roundels bearing a red Venus glyph. Colors: rose red, brushed steel, mood-board pastel, sketch-paper cream.
 ```
@@ -157,12 +157,12 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 *Patiently planting infrastructure that grows for years — the fruit of
 a decade invisible to anyone who only sees the finished product.*
 
-**CTO** → `assets/weeks/crafts/corporate/primary/CTO.png`
+**CTO** → `assets/weeks/crafts/corporate/primary/bronze/CTO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and rooted. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in rolled-up shirtsleeves, no likeness of any real person — kneeling before a great glowing root-and-server structure half server-rack, half tree-root, planting one more glowing node with quiet unhurried care. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
-**CTO (colored)** → `assets/weeks/crafts/corporate/colored/CTO.png`
+**CTO (colored)** → `assets/weeks/crafts/corporate/primary/colored/CTO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished steel-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive in full color, rolled shirtsleeves, kneeling before a glowing root-and-server structure, planting one more glowing node with quiet care — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished green-steel, four enamel roundels bearing a green Saturn glyph. Colors: jade green, brushed steel, node blue-white, root brown.
 ```
@@ -174,12 +174,12 @@ Ornate circular badge, vivid full-color paint over polished steel-and-glass, pho
 *The head of the table — an authority worn so completely it no longer
 needs to be shown, only sat in.*
 
-**CEO** → `assets/weeks/crafts/corporate/primary/CEO.png`
+**CEO** → `assets/weeks/crafts/corporate/primary/bronze/CEO.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the set. Center: a FACELESS stylized executive figure — a smooth featureless silhouette in an impeccable dark suit, no likeness of any real person — seated at the head of a long glass boardroom table, both hands folded with quiet authority, a company crest etched faintly into the glass tabletop beneath the folded hands like a throne's own seal. Border: a thin bronze ring carved with a continuous subtle org-chart line-and-node motif, broken by four small roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
 
-**CEO (colored)** → `assets/weeks/crafts/corporate/colored/CEO.png`
+**CEO (colored)** → `assets/weeks/crafts/corporate/primary/colored/CEO.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bright gold-and-glass, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized executive in full color, an impeccable dark suit, seated at the head of a long glass table with folded hands, a faint gold crest etched beneath them — no likeness of any real person. Border: the org-chart line-and-node ring recut in polished gold, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, brushed steel, glass-table blue, suit charcoal.
 ```
@@ -191,12 +191,12 @@ Ornate circular badge, vivid full-color paint over polished bright gold-and-glas
 *The power that watches over the throne — rules while the CEO sleeps.
 The SAME seated silhouette as the Throne's own seat, deliberately.*
 
-**Chairman of the Board** → `assets/weeks/crafts/corporate/primary/Chairman.png`
+**Chairman of the Board** → `assets/weeks/crafts/corporate/primary/bronze/Chairman.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the set — the SAME seated silhouette as the Throne's own seat, deliberately, an authority that watches rather than presides. Center: a FACELESS stylized executive figure seated in the identical composition at the FAR end of a long dim boardroom table rather than its head, no likeness of any real person, a single reading lamp pooling light only on a stack of quarterly reports before them — the power that watches over the throne, rules while the CEO sleeps. Border: a thin bronze ring, its patina darkened to match, broken by four small roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
 
-**Chairman of the Board (colored)** → `assets/weeks/crafts/corporate/colored/Chairman.png`
+**Chairman of the Board (colored)** → `assets/weeks/crafts/corporate/primary/colored/Chairman.png`
 ```
 Ornate circular badge, vivid full-color paint over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical seated composition to the Throne's own colored plate, palette inverted to night. Center: the SAME faceless stylized executive in full color, a dark suit, seated at the table's far end under a single warm reading lamp, a stack of reports before them — no likeness of any real person. Border: the org-chart line-and-node ring recut in dark iron and cold silver, four roundels bearing a dull ember Sun glyph. Colors: iron black, cold silver, warm lamp amber, report-paper cream.
 ```
@@ -208,12 +208,12 @@ Ornate circular badge, vivid full-color paint over dark iron and cold silver, ph
 *The origin the org-chart no longer names — the ghost seat every
 company has. The Excluded kind (CANON.md "The Ninth").*
 
-**The Founder** → `assets/weeks/crafts/corporate/primary/Founder.png`
+**The Founder** → `assets/weeks/crafts/corporate/primary/bronze/Founder.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a look belonging to the company's own memory rather than its present. Center: a FACELESS stylized figure in simple rolled-up work clothes rather than any suit, no likeness of any real person, standing in a bare early garage-office lit by one bare bulb, sketching a first logo on a torn scrap of paper. Border: a thin bronze ring, its own line-and-node motif thinning out and fading at the top where the bronze turns to bare metal, no roundel glyph — the Founder answers to no single day. NO lettering anywhere.
 ```
 
-**The Founder (colored)** → `assets/weeks/crafts/corporate/colored/Founder.png`
+**The Founder (colored)** → `assets/weeks/crafts/corporate/primary/colored/Founder.png`
 ```
 Ornate circular badge, vivid full-color paint over pale fading bronze, photorealistic render, perfectly centered, isolated on white background. Center: the SAME faceless stylized figure in full color, simple rolled-up work clothes, standing in a bare garage-office under one warm bulb, sketching a first logo on a torn scrap of paper — no likeness of any real person. Border: the line-and-node ring recut in pale fading bronze, thinning out at the top, no day-glyph roundel. Colors: sepia, fog grey, bare-bulb warm gold, torn-paper cream.
 ```
@@ -228,7 +228,7 @@ path live in [Theme Title Prompts](../titles/theme_title_prompts.md),
 NOT here — see that sheet's own "Cross-referenced" section. Do not
 duplicate the brief in this file.
 
-- **The Corporation** → `assets/titles/corporate.png`. Brief: an empty
+- **The Corporation** → `assets/weeks/societies/wolf/primary/colored/corporate.png`. Brief: an empty
   boardroom seen from above, nine chairs around a long glass table,
   eight marked with a small emblem for their own seat (a heart, a gear,
   a coin-and-scale, a megaphone-halo, a compass-and-pencil, a

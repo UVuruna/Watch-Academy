@@ -748,7 +748,7 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
     from render.asset_variants import scaled_variant_file
 
     gemini_uri = scaled_variant_file(
-        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "colored"
+        defaults.ZODIAC_ART_DIR / "zodiac" / "astrology" / "primary" / "colored"
         / "Gemini.png",
         2 * defaults.ARTICLE_IMAGE_WIDTH_PX,
     ).as_uri()
@@ -1327,16 +1327,18 @@ def test_duality_topic_rotates_lucifer_and_judas_by_travel_date():
 
     expected_lucifer = (
         defaults.scale_variant_file("Lucifer", day)
-        or defaults.SCALE_ART_DIR / "Lucifer.png"
+        or defaults.SCALE_ART_DIR / "primary" / "colored" / "Lucifer.png"
     )
     expected_judas = (
         defaults.scale_variant_file("Judas", day)
-        or defaults.SCALE_ART_DIR / "Judas.png"
+        or defaults.SCALE_ART_DIR / "primary" / "colored" / "Judas.png"
     )
     assert lucifer_entry["images"] == (expected_lucifer,)
     assert judas_entry["images"] == (expected_judas,)
     # The Union never rotates — always the fixed hexagram badge.
-    assert union_entry["images"] == (defaults.SCALE_ART_DIR / "Union.png",)
+    assert union_entry["images"] == (
+        defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",
+    )
 
     # A different travel date is free to pick a different file (real
     # art currently gives both poles more than one version) — but the

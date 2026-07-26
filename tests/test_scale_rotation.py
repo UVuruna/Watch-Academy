@@ -151,8 +151,10 @@ def test_scale_variant_file_is_deterministic(tmp_path, monkeypatch):
     that flickered between versions within one day would be worse than
     no rotation at all."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
+    badge.mkdir(parents=True)
     for suffix in ("", "_v1", "_v2"):
-        (tmp_path / f"Judas{suffix}.png").write_bytes(b"")
+        (badge / f"Judas{suffix}.png").write_bytes(b"")
     day = date(2026, 7, 20)
     first = defaults.scale_variant_file("Judas", day)
     second = defaults.scale_variant_file("Judas", day)
@@ -164,8 +166,10 @@ def test_scale_variant_file_advances_on_consecutive_dates(tmp_path, monkeypatch)
     """With more than one version on disk, consecutive days must show
     a different file — otherwise there is no rotation to speak of."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
+    badge.mkdir(parents=True)
     for suffix in ("", "_v1", "_v2"):
-        (tmp_path / f"Judas{suffix}.png").write_bytes(b"")
+        (badge / f"Judas{suffix}.png").write_bytes(b"")
     picks = {
         defaults.scale_variant_file("Judas", date(2026, 7, 20 + offset)).name
         for offset in range(3)
@@ -181,9 +185,11 @@ def test_scale_variant_file_keeps_judas_and_lucifer_in_step(tmp_path, monkeypatc
     must be picked for both on any given day, so the pair always
     advances together."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
+    badge.mkdir(parents=True)
     for stem in ("Judas", "Lucifer"):
         for suffix in ("", "_v1", "_v2"):
-            (tmp_path / f"{stem}{suffix}.png").write_bytes(b"")
+            (badge / f"{stem}{suffix}.png").write_bytes(b"")
     for offset in range(5):
         day = date(2026, 7, 20 + offset)
         judas = defaults.scale_variant_file("Judas", day)
@@ -199,7 +205,9 @@ def test_scale_variant_file_graceful_with_one_or_zero_files(tmp_path, monkeypatc
     the same file shows every day."""
     monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
     assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) is None
-    only = tmp_path / "Judas.png"
+    badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
+    badge.mkdir(parents=True)
+    only = badge / "Judas.png"
     only.write_bytes(b"")
     assert defaults.scale_variant_file("Judas", date(2026, 7, 20)) == only
     assert defaults.scale_variant_file("Judas", date(2026, 7, 21)) == only

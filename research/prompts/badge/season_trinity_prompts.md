@@ -14,9 +14,9 @@ one prompt at a time; generate a whole family in one chat session so
 the set stays visually consistent.
 
 Suggested drop locations (flat PNGs, matching the existing
-`assets/weeks/inner_wheel/virtue/`, `assets/zodiac/astrology/sign/` conventions):
+`assets/weeks/inner_wheel/virtue/primary/colored/`, `assets/zodiac/astrology/sign/` conventions):
 
-- `assets/archetypes/trinity/badges/Faith.png`, `Hope.png`, `Love.png`
+- `assets/archetypes/trinity/primary/colored/badges/colored/Faith.png`, `Hope.png`, `Love.png`
 - `assets/celestial/seasons/badges/Spring.png`, `Summer.png`, `Autumn.png`, `Winter.png`,
   `Wet_Season.png`, `Dry_Season.png` (owner correction, RULE-19 round
   2026-07-20 — the code reads the UNDERSCORED stems,
@@ -69,17 +69,17 @@ Hues from `config/defaults.py` `TRIO_ACCENT_HUES`: Faith yellow, Hope
 blue, Love red — exactly the arm colors the Trio pointer already
 paints at 12h/4h/20h.
 
-**Faith (yellow — the center's own axis, vertical, toward God)** → `assets/archetypes/trinity/badges/Faith.png`
+**Faith (yellow — the center's own axis, vertical, toward God)** → `assets/archetypes/trinity/primary/colored/badges/colored/Faith.png`
 ```
 Ornate circular badge, vivid allegorical enamel in brushed bronze cameo, engraved triskelion field, photorealistic render, perfectly centered, isolated on white background. Center: a lone robed figure kneeling atop a bare stone pillar, both arms lifted into a single shaft of golden light breaking straight down through parting storm clouds directly above, eyes closed, no ground visible below but the light itself; glossy triskelion field of three golden rays sweeping outward from the zenith like sunlight given a spinning shape. Border: brushed bronze ring with a triquetra motif, three small yellow-gold enamel roundels at the 12h/20h/4h angles bearing a tiny descending ray. Colors: bronze dominant, radiant yellow-gold, storm-cloud gray.
 ```
 
-**Hope (blue — the dawn arm, the horizon, toward what comes)** → `assets/archetypes/trinity/badges/Hope.png`
+**Hope (blue — the dawn arm, the horizon, toward what comes)** → `assets/archetypes/trinity/primary/colored/badges/colored/Hope.png`
 ```
 Ornate circular badge, vivid allegorical enamel in brushed bronze cameo, engraved triskelion field, photorealistic render, perfectly centered, isolated on white background. Center: a ship's anchor standing upright on a bare dawn shoreline, its stock catching the day's first blue-gold light, a single fading star still visible above a paling horizon where the sun has not yet risen; glossy triskelion field of three pale rays sweeping outward, dawn cyan-blue deepening toward horizon gold at the rim. Border: brushed bronze ring with a triquetra motif, three small blue-enamel roundels at the 12h/20h/4h angles bearing a tiny anchor. Colors: bronze dominant, dawn blue, horizon gold.
 ```
 
-**Love (red — Venus' arm, among people)** → `assets/archetypes/trinity/badges/Love.png`
+**Love (red — Venus' arm, among people)** → `assets/archetypes/trinity/primary/colored/badges/colored/Love.png`
 ```
 Ornate circular badge, vivid allegorical enamel in brushed bronze cameo, engraved triskelion field, photorealistic render, perfectly centered, isolated on white background. Center: a small burning heart cradled gently between two open upturned hands, one slender flame rising from its crown, warmed by the last deep-red light of a Friday sunset behind; glossy triskelion field of three rays sweeping outward tinted passionate sunset red. Border: brushed bronze ring with a triquetra motif, three small red-enamel roundels at the 12h/20h/4h angles bearing a tiny flame. Colors: bronze dominant, sunset red, warm rose-bronze.
 ```
