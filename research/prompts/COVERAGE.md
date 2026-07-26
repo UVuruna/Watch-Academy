@@ -37,6 +37,7 @@ one-sided gap), and test the pixel size.
 - [Greek Monsters, Chinese Mythology & Theme Title Plates (PROMPT SHEETS round)](#prompt-sheets-round)
 - [WoW, Cyberpunk, Star Wars & The Corporation (GAMING + CORPORATION SHEET WAVE, R10)](#gaming-corp-wave)
 - [The Four Dozens & the Abstract Triads/Dualities (RESTRUCTURE Phase 3)](#phase3-content)
+- [The Cube Wave — Genesis, Council, Character, the Two Crosses](#cube-wave)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -520,6 +521,56 @@ mounted-render wiring are the taxonomy round's job.
   vice opposite its virtue, the proposed Courage/Cowardice vertical);
   Self/Others is tied to the `One_Love` clear-heart razor's edge.
 
+<a id="cube-wave"></a>
+
+## The Cube Wave — Genesis, Council, Character, the Two Crosses (WORKPLAN Session 19, CUBE.md sealed 2026-07-26)
+
+Four NEW sheets this round, all **0 generated, sheets complete** —
+tracked the moment they're written, per this file's own charter. Three
+are the THIRD WHEELS the Cube Canon adds to the existing pointers
+(Court/Family/**Genesis**, Paint/Light/**Council**,
+Walks/Ages/**Character**); the fourth is the Two Crosses' Encyclopedia
+and legend plates, which take no wheel slot at all. NONE are wired in
+`config` yet — WORKPLAN Session 20 builds the wheels engine, Session 21
+writes the Encyclopedia.
+
+| Sheet | Category / role | Expected files | Verdict |
+|---|---|---|---|
+| **Genesis** — [Genesis Prompts](archetype/genesis_prompts.md) | archetypes / Trinity third wheel, the creation trio drawn inverted (24h/16h/08h) | 7 — 3 lancets + 3 circles + 1 centre (`archetypes/genesis/primary/colored/` + `.../circle/colored/`) | ART GAP — 0/7; **centre NAME pending owner** (*The Beginning* proposed), **24h display name pending owner** (CUBE's "God" vs the Court's "The One") |
+| **Council** — [Council Prompts](archetype/council_prompts.md) | archetypes / Prism third wheel, all six Double-Trinity offices at once | Route A 13 (6 lancets + 6 circles + the Sabbath centre) / Route B 1 (the centre only) | ART GAP — 0/13; **ROUTE PENDING OWNER** — six offices that already stand on the Court and Genesis wheels: new "in session" tellings (one-image-one-place law) versus REUSE. Route A's whole section carries a standalone DO NOT GENERATE marker, so its 12 entries load unticked |
+| **Character** — [Character Prompts](archetype/character_prompts.md) | archetypes / Compass third wheel, the Cube at depth zero | 16 — 8 direction lancets (virtue above, fall below, one window) + 8 circles (`archetypes/character/…`) | ART GAP — 0/16; no centre by law (both Compass archetypes are `"center": None`); **six OPEN figure slots** left OPEN exactly as CUBE.md marks them |
+| **Two Crosses** — [Crosses Prompts](archetype/crosses_prompts.md) | archetypes / Encyclopedia + legend plates, no wheel slot | 20 — 2 path emblems + 2 centres (TRUST/DISTRUST) + 8 station lancets + 8 station circles (`archetypes/crosses/…`) | ART GAP — 0/20; **one REUSE candidate PENDING OWNER** (the Faith station vs `archetypes/triads/theological/…/Faith.png` — both its entries load unticked); Hope and Love are NOT reuse candidates, this path stations them on green 08h / orange 16h against the Triads' blue 04h / red 20h |
+
+**Total new: 56 files on Route A (44 on Route B), all ART GAP** (0
+generated on either source).
+
+- **THE ROSE OF THE TWENTY-FOUR IS NOT IN THIS TABLE AND NEVER WILL BE.**
+  Three identical octa stars offset 15° (−1h/0h/+1h), 24 rays in 8
+  palette colours — computed geometry shipped as a RING PRESET, the
+  Mason ring's sibling. Every sheet of this wave repeats the point in its
+  own written Rule #19 derivation check so no later round mistakes it for
+  a generation queue. Likewise computed and never generated: the Genesis
+  wheel's INVERSION (arm placement), the Diamond/Cube look toggle (the
+  same files mounted into corner-view rhombi), the Character wheel's four
+  blend hues (palette maths, not plates), the crosses' on-dial figures
+  (four arms at fixed angles), and the FALL/STAR/DOMY/SAFE ciphers plus
+  the Latin/Greek rows (legend TEXT — the sheets are letterless by house
+  rule, with an inscribed variant offered as a pathless PENDING OWNER
+  option).
+- **Deferred, not a gap:** the 84 Cube figure PORTRAITS (36 poles + 48
+  vertices) that CUBE.md §The Eight Vertices calls for as a major
+  Encyclopedia section "with the figures' images". Blocked on the six
+  OPEN combo figures (Session 21 proposes, the owner seals); it gets its
+  own sheet when opened, and `character_prompts.md` records the argument.
+- **Lint status:** every path passes `tests/test_prompt_paths.py` with
+  ZERO whitelist entries. Four NEW data-driven family roots were added to
+  `_DATA_DRIVEN_ROOTS` this round (documented in the test):
+  `archetypes/genesis`, `archetypes/council`, `archetypes/character`,
+  `archetypes/crosses` — the same treatment the Phase 3 families above
+  already carry, since each wheel's per-figure filenames land in
+  `config.archetypes` with Session 20 (the crosses never do — they are
+  Encyclopedia plates), so only the family root is checkable here.
+
 <a id="other"></a>
 
 ## Ring Letters, Icons, Guide — out of the AI-prompt pipeline
@@ -567,7 +618,10 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    above), plus the RESTRUCTURE Phase 3 content wave's six NEW sheets —
    the four Dozens (Emotions 12, Virtue Wheel 24, Olympians 12, Apostles
    12) and the two abstract sets (Triads 24, Dualities 8), 92 files in
-   all (see §The Four Dozens & the Abstract Triads/Dualities above).
+   all (see §The Four Dozens & the Abstract Triads/Dualities above),
+   plus the CUBE WAVE's four NEW sheets — Genesis (7), Council (13 on
+   Route A, 1 on Route B), Character (16) and the Two Crosses (20), 56
+   files in all (see §The Cube Wave above).
    Subdial is CLOSED (RULE-19 round, 2026-07-20) — see the
    superseded note above, no more generation needed there.
 1a. **Two wiring rounds** the PROMPT SHEETS round explicitly left for

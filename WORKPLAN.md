@@ -260,17 +260,25 @@ through `LegendPopup.on_link` → the widget's captured-target jump
 (`test_hover_teaser_law_truncates_to_the_thesis`,
 `test_learn_more_footer_names_both_roads`). 894 tests green.
 
-### Session 19 — Cube prompt sheets → **Opus** (run EARLY — owner generates art in parallel)
+### Session 19 — Cube prompt sheets → **Opus** — DONE (2026-07-26, 0.14.433)
 **Say:** "Radi Sesiju 19 iz WORKPLAN.md — prompt sheetovi za Cube
 kanon."
 **Reads:** CUBE.md IN FULL; CANON.md §The Cube Canon;
 `research/prompts/archetype/trinity_prompts.md` as template.
-**Delivers:** sheets for the Genesis wheel (creation offices), the
-Council (six offices united), the Character wheel (poles + combos,
-three sets), the Two Crosses (station art + the cross emblems with
-FALL/STAR/DOMY/SAFE inscriptions) — every sheet passing the Rule 19
-derivation check in writing (the Rose is COMPUTED geometry, never
-generated; recolors and blends are derived).
+**Delivered:** four sheets — Genesis (7 files), Council (13 on Route A,
+1 on Route B), Character (16) and the Two Crosses (20) — each opening
+with a WRITTEN Rule 19 derivation check (the Rose is COMPUTED geometry
+and gets no sheet at all; the inversion, the Diamond/Cube toggle, the
+blend hues, tints and the ciphers are all derived or text). Every sheet
+dry-run clean in PromptPainter; the four new family roots recorded in
+`tests/test_prompt_paths.py`; the ledger's §The Cube Wave added to
+[Prompt Coverage](research/prompts/COVERAGE.md). The crosses are
+LETTERLESS by house rule — FALL/STAR/DOMY/SAFE and the Latin/Greek rows
+live in the articles, with an inscribed variant offered as a pathless
+PENDING OWNER option. Open for the owner: the Council's route (new
+tellings vs reuse), the Genesis centre's name and its 24h display name
+(CUBE's "God" vs the Court's "The One"), the crosses' one Faith reuse
+candidate, and the six OPEN Character combo figures (Session 21).
 
 ### Session 20 — the Cube wheels engine → **Fable**
 **Say:** "Radi Sesiju 20 iz WORKPLAN.md — treći točkovi i Ruža."

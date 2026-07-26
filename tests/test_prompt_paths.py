@@ -130,6 +130,23 @@ _DATA_DRIVEN_ROOTS = (
     # sheets: `research/prompts/archetype/{triads,dualities}_prompts.md`.
     "archetypes/triads",
     "archetypes/dualities",
+    # THE CUBE PROMPT-SHEET WAVE (WORKPLAN Session 19, CUBE.md sealed
+    # 2026-07-26): the three NEW third wheels — Genesis (the Trinity's
+    # creation trio, drawn inverted), Council (the Prism's six offices in
+    # session) and Character (the Compass's Cube-at-depth-zero) — plus
+    # the Two Crosses' Encyclopedia plates (the Paths of Light and
+    # Darkness, their stations and the TRUST/DISTRUST centres). Their
+    # figure tables land in `config.archetypes` with WORKPLAN Session 20
+    # (the crosses are Encyclopedia/legend plates and take no wheel slot
+    # at all); content-only in this round, exactly like the Phase 3
+    # families above, so only the FAMILY root is checkable here. Full
+    # sheets: `research/prompts/archetype/{genesis,council,character,
+    # crosses}_prompts.md`. Ledger: `research/prompts/COVERAGE.md`,
+    # §The Cube Wave.
+    "archetypes/genesis",
+    "archetypes/council",
+    "archetypes/character",
+    "archetypes/crosses",
     "instrument/guide",
     # THE SLAVIC MONTHS (R7b round, owner-sealed 2026-07-21): every
     # per-month filename is enumerated in `config.defaults.

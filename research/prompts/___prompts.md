@@ -254,6 +254,34 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
 - `dualities_prompts.md` — the two great dualities (RESTRUCTURE Phase
   3): Good/Evil and Self/Others (the two halves of One_Love's
   clear-heart summit), each pole a lancet + a 1:1 circle companion
+- `genesis_prompts.md` — the CUBE WAVE's Trinity third wheel (Session
+  19, [The Cube Canon](../../CUBE.md) §The Double Trinity): the creation
+  trio drawn INVERTED — God the Creator (moon-gray purple 24h), Jesus the
+  Preserver (green 08h), the Devil the Destroyer (orange 16h), each a
+  lancet + a 1:1 circle, plus the centre rosette (name PENDING OWNER)
+- `council_prompts.md` — the CUBE WAVE's Prism third wheel: the UNION,
+  all six Double-Trinity offices on the six arms at once, with the
+  Sabbath centre. Carries the wave's one open REUSE question — six
+  offices that already stand on the Court and Genesis wheels: Route A
+  (new "in session" tellings, written in full under a DO NOT GENERATE
+  marker) versus Route B (reuse), PENDING OWNER
+- `character_prompts.md` — the CUBE WAVE's Compass third wheel: the Cube
+  with the depth axis at zero — eight directions (4 poles + 4 blends),
+  each ONE window carrying its virtue above and its fall below, plus its
+  circle; the Rose's own palette law is stated here, and the three-set
+  figure roster is tabled with CUBE.md's six OPEN slots left OPEN
+- `crosses_prompts.md` — the CUBE WAVE's Two Crosses (Encyclopedia/legend
+  plates, no wheel slot): the upward Path of Light and downward Path of
+  Darkness emblems, the TRUST / DISTRUST centres and the eight stations
+  (Hope·Faith·Love·Salvation, Fear·Anger·Hate·Suffering). Letterless by
+  house rule — FALL/STAR/DOMY/SAFE and the Latin/Greek rows stay in the
+  articles
+
+**The Rose of the Twenty-Four has NO sheet and never will** (CUBE.md
+§The Rose): three identical octa stars offset 15°, 24 rays in 8 palette
+colours — a RING PRESET of computed geometry, the Mason ring's sibling,
+not art. Every sheet of the Cube wave repeats this in its own Rule #19
+derivation check so no future round opens a queue for it.
 
 ## Connections
 
