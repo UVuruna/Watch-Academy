@@ -16,3 +16,51 @@ Images: 1  |  average generation (AI): 5s/image  |  average our time (save+bgfix
 Total AI + our time: 7s  (wall clock: 9s)
 Run finished: 2026-07-20 01:58:17  (all pending items done)
 
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-23 17:38:40  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:38:40  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-25 11:46:02  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:02  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+The Instrument — Prompt & Shot Sheet (Gemini + Screenshots)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/2 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

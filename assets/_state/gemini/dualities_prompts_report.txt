@@ -1,0 +1,81 @@
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-22 16:29:30  (8/8 pending)
+--------------------------------------------------------------------
+2026-07-22 16:30:04  assets/archetypes/dualities/good_evil/Good.png gen   13.4s  ours   15.5s    506x1024 -> 416x945    705 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:30:47  assets/archetypes/dualities/good_evil/circle/Good.png gen    7.8s  ours   31.0s   1024x1024 -> 796x794    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:31:27  assets/archetypes/dualities/good_evil/Evil.png gen   11.8s  ours   23.7s    506x1024 -> 405x936    545 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:31:48  assets/archetypes/dualities/good_evil/circle/Evil.png gen    7.2s  ours    9.0s   1024x1024 -> 814x804    811 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:32:27  assets/archetypes/dualities/self_others/Self.png gen    8.7s  ours   26.1s    506x1024 -> 446x950    767 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:33:15  assets/archetypes/dualities/self_others/circle/Self.png gen    8.8s  ours   34.1s   1024x1024 -> 854x868    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:33:35  assets/archetypes/dualities/self_others/Others.png gen    8.7s  ours    8.1s    506x1024 -> 417x924    719 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:33:49  assets/archetypes/dualities/self_others/circle/Others.png gen    8.8s  ours    0.9s   1024x1024 -> 786x776    989 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 8  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 3m 44s  (wall clock: 4m 18s)
+Run finished: 2026-07-22 16:33:49  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-22 19:26:03  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:03  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-22 20:33:26  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:26  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-23 17:01:25  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:01:25  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-25 11:46:00  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:00  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

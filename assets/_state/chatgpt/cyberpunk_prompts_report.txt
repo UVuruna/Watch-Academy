@@ -1,0 +1,165 @@
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-21 23:55:27  (78/78 pending)
+--------------------------------------------------------------------
+2026-07-21 23:56:17  assets/weekday/cyberpunk/gangs/primary/Aldecaldos.png gen   40.5s  ours    5.8s   1024x1024 -> 931x910    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:57:24  assets/weekday/cyberpunk/gangs/colored/Aldecaldos.png gen   56.5s  ours    6.8s   1024x1024 -> 925x911    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:58:27  assets/weekday/cyberpunk/gangs/primary/alt/Aldecaldos.png gen   50.3s  ours    7.8s   1024x1024 -> 924x905    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:59:31  assets/weekday/cyberpunk/gangs/colored/alt/Aldecaldos.png gen   52.9s  ours    7.4s   1024x1024 -> 925x911    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:01:10  assets/weekday/cyberpunk/gangs/primary/Maelstrom.png gen   88.1s  ours    6.3s   1024x1024 -> 922x908    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:02:28  assets/weekday/cyberpunk/gangs/colored/Maelstrom.png gen   62.6s  ours   11.3s   1024x1024 -> 925x911    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:03:41  assets/weekday/cyberpunk/gangs/primary/alt/Maelstrom.png gen   64.2s  ours    5.8s   1024x1024 -> 923x907    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:04:31  assets/weekday/cyberpunk/gangs/colored/alt/Maelstrom.png gen   33.1s  ours   13.4s  1254x1254 -> 1163x1144    2.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:05:49  assets/weekday/cyberpunk/gangs/primary/Maelstrom_v2.png gen   68.3s  ours    6.8s   1024x1024 -> 924x907    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:07:26  assets/weekday/cyberpunk/gangs/colored/Maelstrom_v2.png gen   82.1s  ours   10.8s   1024x1024 -> 926x908    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:08:35  assets/weekday/cyberpunk/gangs/primary/VoodooBoys.png gen   59.0s  ours    6.8s   1024x1024 -> 924x907    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:09:42  assets/weekday/cyberpunk/gangs/colored/VoodooBoys.png gen   59.0s  ours    3.8s   1024x1024 -> 924x908    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:10:55  assets/weekday/cyberpunk/gangs/primary/alt/VoodooBoys.png gen   63.7s  ours    4.8s   1024x1024 -> 926x908    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:12:13  assets/weekday/cyberpunk/gangs/colored/alt/VoodooBoys.png gen   67.0s  ours    7.7s  1254x1254 -> 1235x1228    3.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:13:26  assets/weekday/cyberpunk/gangs/primary/TygerClaws.png gen   64.7s  ours    4.4s   1024x1024 -> 926x908    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:14:37  assets/weekday/cyberpunk/gangs/colored/TygerClaws.png gen   63.1s  ours    4.9s   1024x1024 -> 926x908    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:15:56  assets/weekday/cyberpunk/gangs/primary/Valentinos.png gen   69.9s  ours    4.5s   1024x1024 -> 926x908    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:17:08  assets/weekday/cyberpunk/gangs/colored/Valentinos.png gen   55.5s  ours   13.5s   1024x1024 -> 926x908    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:18:18  assets/weekday/cyberpunk/gangs/primary/Animals.png gen   54.1s  ours   11.5s  1254x1254 -> 1231x1233    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:19:53  assets/weekday/cyberpunk/gangs/colored/Animals.png gen   81.9s  ours    9.0s  1024x1024 -> 1024x981    2.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:22:07  assets/weekday/cyberpunk/gangs/primary/alt/Animals.png gen   65.1s  ours    5.5s   1024x1024 -> 974x975    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:23:25  assets/weekday/cyberpunk/gangs/colored/alt/Animals.png gen   48.6s  ours   15.0s  1254x1254 -> 1228x1226    3.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:24:30  assets/weekday/cyberpunk/gangs/primary/Arasaka.png gen   50.1s  ours   11.6s  1254x1254 -> 1246x1230    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:25:31  assets/weekday/cyberpunk/gangs/colored/Arasaka.png gen   49.6s  ours    7.9s   1024x1024 -> 944x916    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:27:02  assets/weekday/cyberpunk/gangs/primary/Militech.png gen   78.8s  ours    7.2s  1024x1536 -> 956x1536    2.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:28:09  assets/weekday/cyberpunk/gangs/colored/Militech.png gen   50.7s  ours   12.3s  1254x1254 -> 1254x1253    3.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:29:37  assets/weekday/cyberpunk/gangs/primary/Netwatch.png gen   69.4s  ours   13.3s   1024x1024 -> 928x924    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:30:41  assets/weekday/cyberpunk/gangs/colored/Netwatch.png gen   56.7s  ours    3.8s   1024x1024 -> 925x914    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:31:40  assets/weekday/cyberpunk/street/primary/Viktor.png gen   44.7s  ours   12.3s  1254x1254 -> 1237x1228    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:32:49  assets/weekday/cyberpunk/street/colored/Viktor.png gen   59.2s  ours    5.4s   1024x1024 -> 927x919    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:33:58  assets/weekday/cyberpunk/street/primary/Jackie.png gen   55.3s  ours   11.4s   1024x1024 -> 930x923    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:34:50  assets/weekday/cyberpunk/street/colored/Jackie.png gen   34.2s  ours   13.9s  1254x1254 -> 1254x1239    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:36:05  assets/weekday/cyberpunk/street/primary/alt/Jackie.png gen   58.7s  ours   12.6s              1254x1254    3.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-22 00:37:26  assets/weekday/cyberpunk/street/colored/alt/Jackie.png gen   66.7s  ours   10.9s   1024x1024 -> 937x930    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:38:21  assets/weekday/cyberpunk/street/primary/Jackie_v2.png gen   41.3s  ours   10.1s  1254x1254 -> 1242x1244    2.9 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:39:29  assets/weekday/cyberpunk/street/colored/Jackie_v2.png gen   53.6s  ours    8.4s   1024x1024 -> 937x929    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:40:28  assets/weekday/cyberpunk/street/primary/Wakako.png gen   51.3s  ours    3.9s   1024x1024 -> 936x930    1.9 MB  [REMOVE BG: nothing, CROP: done]
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-22 00:45:16  (40/78 pending)
+--------------------------------------------------------------------
+2026-07-22 00:46:26  assets/weekday/cyberpunk/street/primary/alt/Wakako.png gen   51.7s  ours   12.2s   1024x1024 -> 936x931    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:48:07  assets/weekday/cyberpunk/street/colored/alt/Wakako.png gen   80.9s  ours   16.9s  1254x1254 -> 1216x1234    3.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:49:16  assets/weekday/cyberpunk/street/primary/Misty.png gen   55.1s  ours    8.5s   1024x1024 -> 936x930    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:50:21  assets/weekday/cyberpunk/street/colored/Misty.png gen   53.6s  ours    9.0s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:51:24  assets/weekday/cyberpunk/street/primary/Kerry.png gen   55.4s  ours    4.0s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:52:36  assets/weekday/cyberpunk/street/colored/Kerry.png gen   60.2s  ours    8.1s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:53:51  assets/weekday/cyberpunk/street/primary/alt/Kerry.png gen   58.3s  ours   12.0s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:55:00  assets/weekday/cyberpunk/street/colored/alt/Kerry.png gen   59.3s  ours    5.5s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:56:23  assets/weekday/cyberpunk/street/primary/Judy.png gen   67.1s  ours   12.1s   1024x1024 -> 936x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:57:29  assets/weekday/cyberpunk/street/colored/Judy.png gen   49.7s  ours   11.5s  1254x1254 -> 1191x1187    2.8 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 00:58:29  assets/weekday/cyberpunk/street/primary/Johnny.png gen   52.0s  ours    4.5s   1024x1024 -> 936x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 00:59:36  assets/weekday/cyberpunk/street/colored/Johnny.png gen   55.9s  ours    6.5s   1024x1024 -> 936x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:00:37  assets/weekday/cyberpunk/street/primary/Rogue.png gen   50.1s  ours    7.5s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:01:42  assets/weekday/cyberpunk/street/colored/Rogue.png gen   50.0s  ours   10.5s   1024x1024 -> 936x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:02:40  assets/weekday/cyberpunk/street/primary/V.png gen   48.0s  ours    6.2s   1024x1024 -> 936x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:03:46  assets/weekday/cyberpunk/street/colored/V.png gen   56.2s  ours    6.1s   1024x1024 -> 937x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:04:59  assets/weekday/cyberpunk/power/primary/Songbird.png gen   60.7s  ours    8.0s   1024x1024 -> 937x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:06:05  assets/weekday/cyberpunk/power/colored/Songbird.png gen   53.2s  ours    8.6s   1024x1024 -> 962x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:07:03  assets/weekday/cyberpunk/power/primary/AdamSmasher.png gen   44.2s  ours    9.4s  1254x1254 -> 1227x1219    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:07:57  assets/weekday/cyberpunk/power/colored/AdamSmasher.png gen   37.9s  ours   12.1s  1254x1254 -> 1251x1247    2.9 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:09:11  assets/weekday/cyberpunk/power/primary/Dexter.png gen   57.2s  ours   13.0s   1024x1024 -> 937x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:10:17  assets/weekday/cyberpunk/power/colored/Dexter.png gen   53.3s  ours    9.1s   1024x1024 -> 955x933    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:11:27  assets/weekday/cyberpunk/power/primary/Solomon.png gen   58.1s  ours    7.4s   1024x1024 -> 938x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:12:59  assets/weekday/cyberpunk/power/colored/Solomon.png gen   72.7s  ours   15.5s  1254x1254 -> 1254x1226    2.9 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:14:03  assets/weekday/cyberpunk/power/primary/Evelyn.png gen   52.2s  ours    6.1s   1024x1024 -> 937x934    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:15:11  assets/weekday/cyberpunk/power/colored/Evelyn.png gen   49.7s  ours   14.8s  1254x1254 -> 1254x1252    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:16:25  assets/weekday/cyberpunk/power/primary/Takemura.png gen   54.7s  ours   14.5s  1254x1254 -> 1172x1178    2.8 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:17:30  assets/weekday/cyberpunk/power/colored/Takemura.png gen   51.5s  ours    7.3s              1254x1254    2.9 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-22 01:18:29  assets/weekday/cyberpunk/power/primary/SaburoArasaka.png gen   44.9s  ours   10.3s  1254x1254 -> 1252x1251    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:19:30  assets/weekday/cyberpunk/power/colored/SaburoArasaka.png gen   51.8s  ours    6.4s              1254x1254    3.0 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-22 01:20:37  assets/weekday/cyberpunk/power/primary/alt/SaburoArasaka.png gen   54.1s  ours    7.7s              1254x1254    3.2 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-22 01:21:56  assets/weekday/cyberpunk/power/colored/alt/SaburoArasaka.png gen   66.2s  ours    8.5s  1024x1024 -> 1004x994    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:23:13  assets/weekday/cyberpunk/power/primary/Yorinobu.png gen   61.7s  ours   11.7s              1254x1254    3.2 MB  [REMOVE BG: unclear, CROP: nothing]
+2026-07-22 01:26:35  assets/weekday/cyberpunk/power/colored/Yorinobu.png gen   81.2s  ours   14.6s              1254x1254    2.9 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-22 01:27:48  assets/weekday/cyberpunk/power/primary/alt/Yorinobu.png gen   63.4s  ours    5.1s  1024x1024 -> 1024x1018    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:30:38  assets/weekday/cyberpunk/power/colored/alt/Yorinobu.png gen   60.0s  ours    8.2s              1254x1254    3.0 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-22 01:33:48  assets/weekday/cyberpunk/power/primary/AltCunningham.png gen   80.0s  ours    7.6s  1254x1254 -> 1251x1249    3.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 01:34:56  assets/weekday/cyberpunk/power/colored/AltCunningham.png gen   58.5s  ours    5.9s  1024x1024 -> 1024x1010    2.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:36:17  assets/weekday/cyberpunk/power/primary/alt/AltCunningham.png gen   67.1s  ours   10.5s  1024x1024 -> 1024x1012    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:37:17  assets/weekday/cyberpunk/power/colored/alt/AltCunningham.png REFUSED — ChatGPT: image generation failed (matched 'image generation failed'): You're giving feedback on a new version of ChatGPT
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 39  |  average generation (AI): 57s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 43m 21s  (wall clock: 52m 01s)
+Run finished: 2026-07-22 01:37:17  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-23 21:36:05  (1/78 pending)
+--------------------------------------------------------------------
+2026-07-23 21:37:07  assets/weeks/gaming/cp_corpo/colored/RacheBartmoss.png gen   53.4s  ours    0.3s   1024x1024 -> 858x854    1.6 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 53s/image  |  average our time (save+bgfix+pause): 0s/image
+Total AI + our time: 54s  (wall clock: 1m 01s)
+Run finished: 2026-07-23 21:37:07  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:17:53  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:53  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

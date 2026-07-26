@@ -1,0 +1,61 @@
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-23 17:38:40  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-23 17:38:58  assets/calendars/slavic_months/Sijecanj.png  gen    5.6s  ours    6.9s    1024x559 -> 485x486    394 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:39:19  assets/calendars/slavic_months/Veljaca.png   gen    7.6s  ours    9.0s    1024x559 -> 518x521    421 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:39:55  assets/calendars/slavic_months/Ozujak.png    gen    7.1s  ours   24.2s    1024x559 -> 558x555    371 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:40:33  assets/calendars/slavic_months/Travanj.png   gen    7.2s  ours   25.8s    1024x559 -> 488x494    455 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:40:58  assets/calendars/slavic_months/Svibanj.png   gen    7.2s  ours   13.9s    1024x559 -> 523x530    576 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:41:24  assets/calendars/slavic_months/Lipanj.png    gen    7.7s  ours   14.3s    1024x559 -> 498x505    521 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:41:47  assets/calendars/slavic_months/Srpanj.png    gen    7.7s  ours   11.4s    1024x559 -> 498x503    504 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:42:23  assets/calendars/slavic_months/Kolovoz.png   gen    7.7s  ours   23.9s    1024x559 -> 525x529    509 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:42:49  assets/calendars/slavic_months/Rujan.png     gen    7.7s  ours   13.0s    1024x559 -> 504x506    455 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:43:16  assets/calendars/slavic_months/Listopad.png  gen    8.2s  ours   13.1s    1024x559 -> 509x511    417 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:43:50  assets/calendars/slavic_months/Studeni.png   gen    7.7s  ours   20.5s    1024x559 -> 548x545    457 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:44:03  assets/calendars/slavic_months/Prosinac.png  gen    8.2s  ours    0.6s    1024x559 -> 528x535    282 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 12  |  average generation (AI): 7s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 4m 27s  (wall clock: 5m 23s)
+Run finished: 2026-07-23 17:44:03  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-25 11:46:02  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:02  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

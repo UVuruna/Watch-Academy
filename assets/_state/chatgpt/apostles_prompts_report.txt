@@ -1,0 +1,93 @@
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-23 18:05:23  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-23 18:07:10  assets/calendars/apostles/Peter.png          gen   89.7s  ours   10.9s   1024x1024 -> 913x883    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:09:15  assets/calendars/apostles/Andrew.png         gen  112.7s  ours    7.3s   1024x1024 -> 903x887    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:10:43  assets/calendars/apostles/James.png          gen   71.5s  ours    9.4s   1024x1024 -> 903x888    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:12:03  assets/calendars/apostles/John.png           gen   68.0s  ours    5.3s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:14:38  assets/calendars/apostles/Philip.png         gen  142.2s  ours    7.8s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:16:00  assets/calendars/apostles/Bartholomew.png    gen   67.1s  ours    9.4s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:17:22  assets/calendars/apostles/Thomas.png         gen   67.5s  ours    8.8s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:18:48  assets/calendars/apostles/Matthew.png        gen   67.0s  ours   13.4s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:20:23  assets/calendars/apostles/JamesAlphaeus.png  gen   81.9s  ours    5.9s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:21:53  assets/calendars/apostles/Thaddaeus.png      gen   75.7s  ours    7.3s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:23:28  assets/calendars/apostles/Simon.png          gen   75.6s  ours   13.4s   1024x1024 -> 903x888    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:26:07  assets/calendars/apostles/Judas.png          gen   65.5s  ours    0.4s   1024x1024 -> 903x888    1.6 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 12  |  average generation (AI): 1m 22s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 18m 04s  (wall clock: 20m 44s)
+Run finished: 2026-07-23 18:26:07  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:06  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

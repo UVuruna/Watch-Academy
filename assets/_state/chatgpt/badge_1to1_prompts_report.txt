@@ -1,0 +1,143 @@
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-21 19:10:08  (38/38 pending)
+--------------------------------------------------------------------
+2026-07-21 19:11:36  assets/badge/circle/trinity/One_Judge.png    gen   73.5s  ours   11.6s              1254x1254    3.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:13:41  assets/badge/circle/trinity/Devil_Prosecutor.png gen  110.6s  ours   11.6s              1254x1254    2.8 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:14:49  assets/badge/circle/trinity/Jesus_Advocate.png gen   52.3s  ours   10.9s              1254x1254    3.1 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:16:10  assets/badge/circle/family/Child_Dawn.png    gen   63.7s  ours   13.0s              1254x1254    3.5 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:17:48  assets/badge/circle/family/Mother_Heart.png  gen   84.0s  ours   10.6s              1254x1254    3.4 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:19:06  assets/badge/circle/family/Father_Shield.png gen   60.9s  ours   14.2s              1254x1254    3.6 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:20:29  assets/badge/circle/temperaments/Sanguine.png gen   67.2s  ours   13.0s              1254x1254    3.6 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:21:35  assets/badge/circle/temperaments/Choleric.png gen   53.4s  ours    8.9s              1254x1254    3.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:22:41  assets/badge/circle/temperaments/Melancholic.png gen   54.4s  ours    7.7s              1254x1254    2.9 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:24:53  assets/badge/circle/temperaments/Phlegmatic.png gen  119.8s  ours    8.9s              1254x1254    3.8 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:26:53  assets/badge/circle/persons/One_Love.png     gen  108.5s  ours    9.5s  1024x1536 -> 706x1535    2.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:28:57  assets/badge/circle/persons/Michael_Courage.png gen  108.0s  ours   11.5s              1254x1254    3.4 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:30:19  assets/badge/circle/persons/Lucifer_Pride.png gen   72.9s  ours    5.0s  1024x1024 -> 1021x1024    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:31:57  assets/badge/circle/persons/Devil_Hatred.png gen   89.8s  ours    4.6s              1024x1024    2.5 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-07-21 19:33:50  assets/badge/circle/persons/Judas_Fear.png   gen   95.7s  ours   13.3s              1254x1254    3.1 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:35:27  assets/badge/circle/persons/Jesus_Humility.png gen   83.5s  ours   10.0s  1024x1024 -> 1021x1024    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:37:09  assets/badge/circle/one_soul/Gratitude.png   gen   84.4s  ours   13.5s  1024x1024 -> 1017x1024    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:40:06  assets/badge/circle/one_soul/Support.png     gen   64.7s  ours    6.2s              1254x1254    3.2 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:41:46  assets/badge/circle/one_soul/Passion.png     gen   86.7s  ours    9.5s  1024x1024 -> 1021x1017    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:42:56  assets/badge/circle/one_soul/Tolerance.png   gen   57.9s  ours    7.0s              1254x1254    3.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:44:04  assets/badge/circle/one_soul/Trust.png       gen   54.6s  ours    9.2s              1254x1254    3.1 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:46:06  assets/badge/circle/one_soul/Respect.png     gen  105.5s  ours   11.2s  1024x1536 -> 919x1518    3.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:47:58  assets/badge/circle/walks/King.png           gen  100.7s  ours    7.5s  1024x1024 -> 1017x1024    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:49:15  assets/badge/circle/walks/Merchant.png       gen   64.6s  ours    9.2s              1254x1254    3.3 MB  [REMOVE BG: unclear, CROP: nothing]
+2026-07-21 19:50:30  assets/badge/circle/walks/Soldier.png        gen   60.1s  ours    9.9s              1254x1254    3.0 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:51:47  assets/badge/circle/walks/Artist.png         gen   59.0s  ours   14.2s              1254x1254    3.2 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:53:16  assets/badge/circle/walks/Wanderer.png       gen   68.0s  ours   15.4s              1254x1254    2.9 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:54:49  assets/badge/circle/walks/Scholar.png        gen   83.3s  ours    6.1s  1024x1024 -> 1021x1017    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 19:56:03  assets/badge/circle/walks/Farmer.png         gen   61.2s  ours    7.9s              1254x1254    3.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:57:49  assets/badge/circle/walks/Priest.png         gen   89.2s  ours   12.2s              1254x1254    3.4 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 19:59:27  assets/badge/circle/life/tree/Unborn.png     gen   82.0s  ours   12.4s              1254x1254    3.1 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 20:01:06  assets/badge/circle/life/tree/Birth.png      gen   82.4s  ours   11.5s  1024x1024 -> 1016x1020    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 20:02:21  assets/badge/circle/life/tree/Childhood.png  gen   60.4s  ours   10.9s              1254x1254    3.2 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 20:03:38  assets/badge/circle/life/tree/Youth.png      gen   62.1s  ours   11.8s              1254x1254    3.5 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 20:05:23  assets/badge/circle/life/tree/Maturity.png   gen   89.5s  ours   10.1s              1024x1024    2.6 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-07-21 20:08:54  assets/badge/circle/life/tree/Elder.png      gen   94.1s  ours   13.1s              1024x1024    2.7 MB  [REMOVE BG: nothing, CROP: nothing]
+2026-07-21 20:10:12  assets/badge/circle/life/tree/OldAge.png     gen   59.0s  ours   14.6s              1254x1254    3.4 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 20:11:32  assets/badge/circle/life/tree/Death.png      gen   76.8s  ours    0.1s              1024x1024    2.8 MB  [REMOVE BG: nothing, CROP: nothing]
+--------------------------------------------------------------------
+Images: 38  |  average generation (AI): 1m 17s/image  |  average our time (save+bgfix+pause): 10s/image
+Total AI + our time: 55m 32s  (wall clock: 61m 25s)
+Run finished: 2026-07-21 20:11:32  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-21 23:12:25  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-21 23:12:25  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-22 00:45:16  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 00:45:16  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-23 18:05:23  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 18:05:23  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:06  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/38 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

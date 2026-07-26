@@ -1,0 +1,105 @@
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-23 17:16:05  (24/24 pending)
+--------------------------------------------------------------------
+2026-07-23 17:17:32  assets/archetypes/triads/time/Present.png    gen   68.9s  ours   13.3s  1024x1536 -> 588x1374    1.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:19:26  assets/archetypes/triads/time/circle/Present.png gen   98.1s  ours    9.0s   1024x1536 -> 870x936    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:21:28  assets/archetypes/triads/time/Future.png     gen  106.7s  ours    9.0s  1024x1536 -> 586x1361    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:23:40  assets/archetypes/triads/time/circle/Future.png gen  114.0s  ours   11.5s  1024x1536 -> 871x1086    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:25:43  assets/archetypes/triads/time/Past.png       gen  110.3s  ours    5.9s  1024x1536 -> 604x1284    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:27:43  assets/archetypes/triads/time/circle/Past.png gen  103.6s  ours   10.5s  1024x1536 -> 913x1002    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:29:44  assets/archetypes/triads/callings/Judge.png  gen  105.7s  ours    7.9s  1024x1536 -> 587x1275    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:31:49  assets/archetypes/triads/callings/circle/Judge.png gen  105.8s  ours   13.0s  1024x1536 -> 918x1072    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:33:47  assets/archetypes/triads/callings/Prosecutor.png gen  106.4s  ours    6.5s  1024x1536 -> 661x1277    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:36:07  assets/archetypes/triads/callings/circle/Prosecutor.png gen  124.8s  ours    9.5s  1024x1536 -> 920x1084    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:38:39  assets/archetypes/triads/callings/Advocate.png gen  135.8s  ours    7.9s  1024x1536 -> 668x1279    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:40:38  assets/archetypes/triads/callings/circle/Advocate.png gen  105.3s  ours    6.0s  1024x1536 -> 918x1089    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:42:41  assets/archetypes/triads/theological/Faith.png gen  107.7s  ours    8.4s  1024x1536 -> 653x1282    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:44:39  assets/archetypes/triads/theological/circle/Faith.png gen  100.9s  ours   12.5s  1024x1536 -> 913x1040    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:46:46  assets/archetypes/triads/theological/Love.png gen  108.9s  ours   11.5s  1024x1536 -> 652x1244    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:48:46  assets/archetypes/triads/theological/circle/Love.png gen  106.1s  ours    7.0s  1024x1536 -> 920x1071    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:50:44  assets/archetypes/triads/theological/Hope.png gen  104.1s  ours    6.9s  1024x1536 -> 670x1256    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:53:02  assets/archetypes/triads/theological/circle/Hope.png gen  125.9s  ours    5.0s  1024x1536 -> 915x1099    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:55:14  assets/archetypes/triads/dialectic/Synthesis.png gen  118.9s  ours    6.9s  1024x1536 -> 689x1286    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:57:10  assets/archetypes/triads/dialectic/circle/Synthesis.png gen  103.5s  ours    4.6s  1024x1536 -> 924x1211    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:59:22  assets/archetypes/triads/dialectic/Antithesis.png gen  114.7s  ours   10.5s  1024x1536 -> 701x1312    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:01:30  assets/archetypes/triads/dialectic/circle/Antithesis.png gen  109.4s  ours   13.5s  1024x1536 -> 914x1146    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:03:30  assets/archetypes/triads/dialectic/Thesis.png gen  106.6s  ours    6.5s  1024x1536 -> 669x1290    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:05:21  assets/archetypes/triads/dialectic/circle/Thesis.png gen  103.2s  ours    0.5s  1024x1536 -> 923x1130    2.0 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 24  |  average generation (AI): 1m 48s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 46m 39s  (wall clock: 49m 17s)
+Run finished: 2026-07-23 18:05:21  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:06  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

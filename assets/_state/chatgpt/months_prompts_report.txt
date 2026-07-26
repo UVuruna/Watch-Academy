@@ -1,0 +1,94 @@
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-22 01:41:46  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-22 01:42:35  assets/months/Sijecanj.png                   gen   37.4s  ours    8.3s   1024x1024 -> 922x908    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:43:30  assets/months/Veljaca.png                    gen   45.5s  ours    5.3s   1024x1024 -> 910x904    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:44:33  assets/months/Ozujak.png                     gen   45.6s  ours   12.3s   1024x1024 -> 896x888    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:45:33  assets/months/Travanj.png                    gen   48.5s  ours    7.8s   1024x1024 -> 884x872    1.8 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 4  |  average generation (AI): 44s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 3m 31s  (wall clock: 3m 57s)
+Run finished: 2026-07-22 01:45:43  (quota / rate limit — stopped (reset in ~1260m 00s))
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-23 21:37:09  (8/12 pending)
+--------------------------------------------------------------------
+2026-07-23 21:38:13  assets/calendars/slavic_months/Svibanj.png   gen   49.5s  ours    7.9s   1024x1024 -> 909x900    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:39:36  assets/calendars/slavic_months/Lipanj.png    gen   68.4s  ours    9.8s   1024x1024 -> 909x903    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:41:07  assets/calendars/slavic_months/Srpanj.png    gen   75.7s  ours    9.8s   1024x1024 -> 909x898    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:42:32  assets/calendars/slavic_months/Kolovoz.png   gen   70.6s  ours    7.4s   1024x1024 -> 908x890    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:44:33  assets/calendars/slavic_months/Rujan.png     gen  102.5s  ours   12.9s   1024x1024 -> 905x892    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:46:06  assets/calendars/slavic_months/Listopad.png  gen   76.7s  ours   10.9s   1024x1024 -> 909x893    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:47:49  assets/calendars/slavic_months/Studeni.png   gen   89.9s  ours    5.8s   1024x1024 -> 908x893    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:49:11  assets/calendars/slavic_months/Prosinac.png  gen   75.9s  ours    0.5s   1024x1024 -> 909x894    1.7 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 8  |  average generation (AI): 1m 16s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 11m 14s  (wall clock: 12m 02s)
+Run finished: 2026-07-23 21:49:11  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 12:17:53  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:53  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Slavic Months Prompts (Gemini) — the Wheel of Labour  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

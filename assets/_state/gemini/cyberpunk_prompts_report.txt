@@ -1,0 +1,179 @@
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-21 23:41:53  (78/78 pending)
+--------------------------------------------------------------------
+2026-07-21 23:42:21  assets/weekday/cyberpunk/gangs/primary/Aldecaldos.png gen    9.9s  ours   15.1s   1024x1024 -> 831x831    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:43:03  assets/weekday/cyberpunk/gangs/colored/Aldecaldos.png gen    9.4s  ours   29.3s   1024x1024 -> 830x846    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:43:35  assets/weekday/cyberpunk/gangs/primary/alt/Aldecaldos.png gen    9.1s  ours   20.6s   1024x1024 -> 862x864    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:44:09  assets/weekday/cyberpunk/gangs/colored/alt/Aldecaldos.png gen    9.5s  ours   21.7s   1024x1024 -> 862x863    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:44:43  assets/weekday/cyberpunk/gangs/primary/Maelstrom.png gen   13.5s  ours   17.3s   1024x1024 -> 912x911    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:45:20  assets/weekday/cyberpunk/gangs/colored/Maelstrom.png gen   10.0s  ours   24.7s   1024x1024 -> 912x911    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:45:47  assets/weekday/cyberpunk/gangs/primary/alt/Maelstrom.png gen   10.6s  ours   13.6s   1024x1024 -> 914x912    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:46:20  assets/weekday/cyberpunk/gangs/colored/alt/Maelstrom.png gen   12.1s  ours   18.3s   1024x1024 -> 911x911    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:47:03  assets/weekday/cyberpunk/gangs/primary/Maelstrom_v2.png gen    9.0s  ours   31.7s   1024x1024 -> 912x912    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:47:53  assets/weekday/cyberpunk/gangs/colored/Maelstrom_v2.png gen    9.5s  ours   37.0s   1024x1024 -> 911x911    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:48:18  assets/weekday/cyberpunk/gangs/primary/VoodooBoys.png gen    9.5s  ours   13.2s   1024x1024 -> 913x913    1.4 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 11  |  average generation (AI): 10s/image  |  average our time (save+bgfix+pause): 22s/image
+Total AI + our time: 5m 55s  (wall clock: 6m 31s)
+Run finished: 2026-07-21 23:48:24  (quota / rate limit — stopped)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 00:35:11  (67/78 pending)
+SKIPPED by the sheet (L121): Aldecaldos — already saved on disk
+SKIPPED by the sheet (L126): Aldecaldos (colored) — already saved on disk
+SKIPPED by the sheet (L131): Mox (alt) — already saved on disk
+SKIPPED by the sheet (L136): Mox (alt, colored) — already saved on disk
+SKIPPED by the sheet (L146): Maelstrom — already saved on disk
+SKIPPED by the sheet (L151): Maelstrom (colored) — already saved on disk
+SKIPPED by the sheet (L156): Barghest (alt) — already saved on disk
+SKIPPED by the sheet (L161): Barghest (alt, colored) — already saved on disk
+SKIPPED by the sheet (L166): Wraiths (alt2) — already saved on disk
+SKIPPED by the sheet (L171): Wraiths (alt2, colored) — already saved on disk
+SKIPPED by the sheet (L181): Voodoo Boys — already saved on disk
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 00:35:16  (quota / rate limit — stopped)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 17:26:32  (67/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 17:26:40  (quota / rate limit — stopped)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 19:26:03  (67/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:10  (quota / rate limit — stopped)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 20:33:26  (67/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:33  (quota / rate limit — stopped)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 17:01:27  (67/78 pending)
+--------------------------------------------------------------------
+2026-07-23 17:01:52  assets/weeks/gaming/cp_gangs/colored/VoodooBoys.png gen    6.3s  ours   12.6s    1024x559 -> 508x507    484 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:02:22  assets/weeks/gaming/cp_gangs/primary/6thStreet.png gen    7.2s  ours   18.4s    1024x559 -> 527x525    473 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:02:42  assets/weeks/gaming/cp_gangs/colored/6thStreet.png gen    7.7s  ours    6.8s    1024x559 -> 482x482    440 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:03:15  assets/weeks/gaming/cp_gangs/primary/TygerClaws.png gen    8.3s  ours   19.8s   1024x1024 -> 763x760    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:03:44  assets/weeks/gaming/cp_gangs/colored/TygerClaws.png gen    8.3s  ours   15.9s    1024x559 -> 492x491    459 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:04:10  assets/weeks/gaming/cp_gangs/primary/Valentinos.png gen    8.7s  ours   13.5s    1024x559 -> 516x523    504 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:04:47  assets/weeks/gaming/cp_gangs/colored/Valentinos.png gen    9.2s  ours   22.9s    1024x559 -> 531x531    527 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:05:16  assets/weeks/gaming/cp_gangs/primary/Animals.png gen    8.8s  ours   15.4s    1024x559 -> 528x528    528 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:05:43  assets/weeks/gaming/cp_gangs/colored/Animals.png gen   11.2s  ours   11.3s    1024x559 -> 493x492    454 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:06:24  assets/weeks/gaming/cp_gangs/primary/Scavengers.png gen    8.7s  ours   26.9s    1024x559 -> 513x523    494 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:06:52  assets/weeks/gaming/cp_gangs/colored/Scavengers.png gen    8.8s  ours   15.5s    1024x559 -> 537x535    544 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:07:19  assets/weeks/gaming/cp_gangs/primary/Arasaka.png gen    8.8s  ours   13.6s    1024x559 -> 531x535    437 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:07:39  assets/weeks/gaming/cp_gangs/colored/Arasaka.png gen    9.3s  ours    5.5s    1024x559 -> 529x524    516 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:08:27  assets/weeks/gaming/cp_gangs/primary/Militech.png gen    9.8s  ours   15.2s    1024x559 -> 532x535    374 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:09:06  assets/weeks/gaming/cp_gangs/colored/Militech.png gen   12.3s  ours   22.5s    1024x559 -> 482x483    402 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:09:28  assets/weeks/gaming/cp_gangs/primary/Netwatch.png gen    8.8s  ours    7.5s    1024x559 -> 531x532    501 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:10:07  assets/weeks/gaming/cp_gangs/colored/Netwatch.png gen    9.8s  ours   23.9s    1024x559 -> 461x462    418 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:10:42  assets/weeks/gaming/cp_street/primary/Viktor.png gen   10.3s  ours   20.4s    1024x559 -> 524x526    498 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:11:04  assets/weeks/gaming/cp_street/colored/Viktor.png gen   11.8s  ours    5.4s    1024x559 -> 460x460    418 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:11:28  assets/weeks/gaming/cp_street/primary/Jackie.png gen   13.3s  ours    6.0s    1024x559 -> 539x545    521 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:11:56  assets/weeks/gaming/cp_street/colored/Jackie.png gen   12.3s  ours   11.4s    1024x559 -> 540x545    536 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:12:27  assets/weeks/gaming/cp_street/primary/Panam.png gen    9.4s  ours   15.9s    1024x559 -> 523x524    481 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:12:54  assets/weeks/gaming/cp_street/colored/Panam.png gen   11.8s  ours   10.4s    1024x559 -> 523x524    472 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:13:18  assets/weeks/gaming/cp_street/primary/River.png gen    9.7s  ours   11.0s    1024x559 -> 488x488    405 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:13:57  assets/weeks/gaming/cp_street/colored/River.png gen    9.3s  ours   24.5s    1024x559 -> 488x488    403 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:14:34  assets/weeks/gaming/cp_street/primary/Wakako.png gen    9.3s  ours   23.4s    1024x559 -> 527x525    504 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:15:16  assets/weeks/gaming/cp_street/colored/Wakako.png gen    9.8s  ours   27.0s    1024x559 -> 527x525    497 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:15:41  assets/weeks/gaming/cp_street/primary/Padre.png gen    9.3s  ours   11.4s    1024x559 -> 556x555    567 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:16:09  assets/weeks/gaming/cp_street/colored/Padre.png gen    9.8s  ours   13.9s    1024x559 -> 556x555    560 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:16:36  assets/weeks/gaming/cp_street/primary/Misty.png gen    9.2s  ours   12.4s    1024x559 -> 527x534    507 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:17:16  assets/weeks/gaming/cp_street/colored/Misty.png gen   10.3s  ours   24.4s    1024x559 -> 527x534    521 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:17:50  assets/weeks/gaming/cp_street/primary/Kerry.png gen    9.4s  ours   20.5s    1024x559 -> 523x521    467 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:18:10  assets/weeks/gaming/cp_street/colored/Kerry.png gen    9.3s  ours    5.0s    1024x559 -> 523x521    474 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:18:31  assets/weeks/gaming/cp_street/primary/LizzyWizzy.png gen   11.3s  ours    5.0s    1024x559 -> 528x527    490 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:19:01  assets/weeks/gaming/cp_street/colored/LizzyWizzy.png gen   10.3s  ours   15.0s    1024x559 -> 528x527    480 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:19:44  assets/weeks/gaming/cp_street/primary/Judy.png gen   10.5s  ours   27.5s    1024x559 -> 542x546    522 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:20:11  assets/weeks/gaming/cp_street/colored/Judy.png gen    9.9s  ours   12.0s    1024x559 -> 542x546    542 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:20:46  assets/weeks/gaming/cp_street/primary/Johnny.png gen    9.9s  ours   20.4s    1024x559 -> 533x544    551 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:21:24  assets/weeks/gaming/cp_street/colored/Johnny.png gen    9.8s  ours   22.5s    1024x559 -> 533x544    554 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:21:46  assets/weeks/gaming/cp_street/primary/Rogue.png gen   10.3s  ours    6.6s    1024x559 -> 533x544    463 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:22:26  assets/weeks/gaming/cp_street/colored/Rogue.png gen   10.3s  ours   25.6s    1024x559 -> 533x543    463 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:22:55  assets/weeks/gaming/cp_street/primary/V.png  gen    9.3s  ours   14.5s    1024x559 -> 528x529    464 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:23:36  assets/weeks/gaming/cp_street/colored/V.png  gen   10.3s  ours   25.6s    1024x559 -> 528x529    381 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:24:24  assets/weeks/gaming/cp_corpo/primary/Songbird.png gen   19.1s  ours   24.9s    1024x559 -> 530x532    481 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:25:11  assets/weeks/gaming/cp_corpo/colored/Songbird.png gen   31.1s  ours   11.4s    1024x559 -> 530x532    505 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:25:57  assets/weeks/gaming/cp_corpo/primary/AdamSmasher.png gen   13.5s  ours   27.0s    1024x559 -> 528x530    516 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:26:37  assets/weeks/gaming/cp_corpo/colored/AdamSmasher.png gen   11.4s  ours   23.5s    1024x559 -> 528x530    427 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:27:16  assets/weeks/gaming/cp_corpo/primary/Dexter.png gen   10.8s  ours   23.6s    1024x559 -> 534x533    446 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:27:42  assets/weeks/gaming/cp_corpo/colored/Dexter.png gen   10.4s  ours   10.1s    1024x559 -> 533x532    438 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:28:11  assets/weeks/gaming/cp_corpo/primary/Solomon.png gen   11.5s  ours   13.9s    1024x559 -> 540x540    525 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:28:38  assets/weeks/gaming/cp_corpo/colored/Solomon.png gen   11.9s  ours   10.4s    1024x559 -> 539x541    550 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:29:13  assets/weeks/gaming/cp_corpo/primary/Evelyn.png gen   10.4s  ours   20.4s    1024x559 -> 505x506    462 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:29:38  assets/weeks/gaming/cp_corpo/colored/Evelyn.png gen   13.4s  ours    7.5s    1024x559 -> 505x506    471 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:30:16  assets/weeks/gaming/cp_corpo/primary/Takemura.png gen    9.4s  ours   23.0s    1024x559 -> 552x546    508 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:30:50  assets/weeks/gaming/cp_corpo/colored/Takemura.png gen    9.9s  ours   19.1s    1024x559 -> 552x546    463 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:31:32  assets/weeks/gaming/cp_corpo/primary/SaburoArasaka.png gen    9.3s  ours   27.5s    1024x559 -> 525x524    460 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:31:56  assets/weeks/gaming/cp_corpo/colored/SaburoArasaka.png gen   10.4s  ours    8.5s    1024x559 -> 524x524    440 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:32:25  assets/weeks/gaming/cp_corpo/primary/RosalindMyers.png gen    9.9s  ours   13.5s    1024x559 -> 524x524    466 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:32:55  assets/weeks/gaming/cp_corpo/colored/RosalindMyers.png gen    9.4s  ours   16.6s    1024x559 -> 524x524    450 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:33:21  assets/weeks/gaming/cp_corpo/primary/Yorinobu.png gen    9.8s  ours   11.6s    1024x559 -> 524x524    381 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:33:55  assets/weeks/gaming/cp_corpo/colored/Yorinobu.png gen    9.9s  ours   19.6s    1024x559 -> 524x523    398 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:34:33  assets/weeks/gaming/cp_corpo/primary/KurtHansen.png gen   10.0s  ours   22.6s    1024x559 -> 524x524    408 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:34:57  assets/weeks/gaming/cp_corpo/colored/KurtHansen.png gen   10.5s  ours    7.5s    1024x559 -> 524x522    466 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:35:33  assets/weeks/gaming/cp_corpo/primary/AltCunningham.png gen    9.9s  ours   21.9s    1024x559 -> 524x524    497 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:35:56  assets/weeks/gaming/cp_corpo/colored/AltCunningham.png gen    9.9s  ours    8.0s    1024x559 -> 524x523    478 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:36:16  assets/weeks/gaming/cp_corpo/primary/RacheBartmoss.png gen    9.9s  ours    5.4s    1024x559 -> 524x524    514 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:36:31  assets/weeks/gaming/cp_corpo/colored/RacheBartmoss.png gen   10.0s  ours    0.5s    1024x559 -> 523x517    473 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 67  |  average generation (AI): 10s/image  |  average our time (save+bgfix+pause): 16s/image
+Total AI + our time: 29m 23s  (wall clock: 34m 46s)
+Run finished: 2026-07-23 17:36:31  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:46:01  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:01  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Cyberpunk 2077 — the Three-Circle Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/78 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

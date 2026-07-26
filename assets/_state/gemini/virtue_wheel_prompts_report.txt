@@ -1,0 +1,97 @@
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-22 17:12:20  (24/24 pending)
+--------------------------------------------------------------------
+2026-07-22 17:13:07  assets/calendars/virtues/Courage.png         gen    6.3s  ours   35.8s   1024x1024 -> 889x891    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:13:56  assets/calendars/virtues/Temperance.png      gen    7.7s  ours   36.9s   1024x1024 -> 820x822    635 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:14:28  assets/calendars/virtues/Generosity.png      gen   11.8s  ours   15.6s   1024x1024 -> 918x918    933 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:14:54  assets/calendars/virtues/Magnificence.png    gen    8.8s  ours   13.3s   1024x1024 -> 818x818    934 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:15:15  assets/calendars/virtues/Magnanimity.png     gen    8.2s  ours    8.1s    687x1024 -> 639x654    531 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:15:38  assets/calendars/virtues/Patience.png        gen    7.7s  ours   10.4s   1024x1024 -> 822x822    848 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:16:26  assets/calendars/virtues/Truthfulness.png    gen    7.7s  ours   34.4s   1024x1024 -> 819x820    383 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:17:06  assets/calendars/virtues/Wit.png             gen    8.7s  ours   26.7s   1024x1024 -> 880x880    856 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:17:41  assets/calendars/virtues/Friendliness.png    gen    9.3s  ours   21.7s   1024x1024 -> 918x919    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:18:03  assets/calendars/virtues/Modesty.png         gen    8.7s  ours    8.8s   1024x1024 -> 824x826    711 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:18:37  assets/calendars/virtues/RightAmbition.png   gen    8.3s  ours   21.1s   1024x1024 -> 854x856    936 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:19:16  assets/calendars/virtues/JustIndignation.png gen    8.8s  ours   25.7s   1024x1024 -> 786x785    783 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:19:45  assets/calendars/vices/Boastfulness.png      gen    9.9s  ours   14.8s   1024x1024 -> 978x976    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:20:19  assets/calendars/vices/Buffoonery.png        gen    8.9s  ours   19.9s   1024x1024 -> 951x951    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:21:10  assets/calendars/vices/Flattery.png          gen    9.8s  ours   36.5s   1024x1024 -> 773x769    953 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:21:39  assets/calendars/vices/Shamelessness.png     gen   10.0s  ours   14.0s   1024x1024 -> 862x862    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:22:18  assets/calendars/vices/OverAmbition.png      gen   10.8s  ours   24.3s   1024x1024 -> 850x848    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:23:06  assets/calendars/vices/Envy.png              gen   10.1s  ours   32.6s   1024x1024 -> 954x952    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:23:42  assets/calendars/vices/Cowardice.png         gen    9.3s  ours   22.6s   1024x1024 -> 890x891    894 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:24:09  assets/calendars/vices/Gluttony.png          gen   10.3s  ours   11.5s   1024x1024 -> 884x898   1020 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:24:44  assets/calendars/vices/Greed.png             gen   10.9s  ours   20.1s   1024x1024 -> 920x920    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:25:18  assets/calendars/vices/Vulgarity.png         gen   10.4s  ours   18.5s   1024x1024 -> 978x976    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:26:12  assets/calendars/vices/Vanity.png            gen   11.4s  ours   37.7s   1024x1024 -> 980x978    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:26:30  assets/calendars/vices/Wrath.png             gen   10.9s  ours    2.0s   1024x1024 -> 949x948    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 24  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 21s/image
+Total AI + our time: 12m 17s  (wall clock: 14m 10s)
+Run finished: 2026-07-22 17:26:30  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-22 19:26:03  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:03  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-22 20:33:26  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:26  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-23 17:01:27  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:01:27  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-25 11:46:01  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:01  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

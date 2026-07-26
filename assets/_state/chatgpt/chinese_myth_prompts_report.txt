@@ -1,0 +1,116 @@
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-21 20:11:42  (18/18 pending)
+--------------------------------------------------------------------
+2026-07-21 20:13:19  assets/weekday/chinese_myth/primary/ChangE.png gen   88.8s  ours    3.9s  1024x1024 -> 1024x1023    2.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 20:14:54  assets/weekday/chinese_myth/colored/ChangE.png gen   82.9s  ours    6.8s   1024x1024 -> 981x953    2.2 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 1m 26s/image  |  average our time (save+bgfix+pause): 5s/image
+Total AI + our time: 3m 02s  (wall clock: 10m 15s)
+Run finished: 2026-07-21 20:21:57  (generation timed out)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-21 23:12:25  (16/18 pending)
+--------------------------------------------------------------------
+2026-07-21 23:13:34  assets/weekday/chinese_myth/primary/ErlangShen.png gen   55.2s  ours    9.4s   1024x1024 -> 926x894    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:14:46  assets/weekday/chinese_myth/colored/ErlangShen.png gen   54.9s  ours   12.4s   1024x1024 -> 928x910    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:16:04  assets/weekday/chinese_myth/primary/GuanYu.png gen   62.1s  ours   11.4s   1024x1024 -> 912x894    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:17:11  assets/weekday/chinese_myth/colored/GuanYu.png gen   56.5s  ours    7.9s   1024x1024 -> 909x894    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:19:17  assets/weekday/chinese_myth/primary/ZhuBajie.png gen  107.3s  ours   14.5s  1254x1254 -> 1179x1171    2.9 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:20:16  assets/weekday/chinese_myth/colored/ZhuBajie.png gen   40.3s  ours   14.4s  1254x1254 -> 1243x1236    3.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:21:35  assets/weekday/chinese_myth/primary/Zhinu.png gen   65.2s  ours    8.9s   1024x1024 -> 924x900    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:22:48  assets/weekday/chinese_myth/colored/Zhinu.png gen   59.2s  ours    9.9s   1024x1024 -> 920x904    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:23:57  assets/weekday/chinese_myth/primary/Shennong.png gen   54.6s  ours   10.1s              1254x1254    3.0 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-21 23:25:20  assets/weekday/chinese_myth/colored/Shennong.png gen   74.1s  ours    5.9s   1024x1024 -> 919x912    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:26:43  assets/weekday/chinese_myth/primary/SunWukong.png gen   68.3s  ours   10.4s   1024x1024 -> 920x905    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:27:54  assets/weekday/chinese_myth/colored/SunWukong.png gen   60.3s  ours    6.4s   1024x1024 -> 921x908    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:29:11  assets/weekday/chinese_myth/primary/SixEaredMacaque.png gen   62.1s  ours   10.5s   1024x1024 -> 927x908    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:30:44  assets/weekday/chinese_myth/colored/SixEaredMacaque.png gen   79.5s  ours   10.6s   1024x1024 -> 927x910    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:32:01  assets/weekday/chinese_myth/primary/Buddha.png gen   67.8s  ours    5.4s   1024x1024 -> 929x911    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:33:03  assets/weekday/chinese_myth/colored/Buddha.png gen   59.0s  ours    0.4s   1024x1024 -> 929x910    1.8 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 16  |  average generation (AI): 1m 04s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 19m 35s  (wall clock: 20m 38s)
+Run finished: 2026-07-21 23:33:03  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-22 00:45:16  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 00:45:16  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-23 21:36:05  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:36:05  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

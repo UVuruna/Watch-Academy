@@ -1,0 +1,85 @@
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-22 16:49:38  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-22 16:50:24  assets/calendars/apostles/Peter.png          gen    6.8s  ours   35.3s   1024x1024 -> 948x943    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:51:04  assets/calendars/apostles/Andrew.png         gen    7.3s  ours   28.3s   1024x1024 -> 912x914    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:51:36  assets/calendars/apostles/James.png          gen    8.7s  ours   18.2s    687x1024 -> 678x676    829 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:52:03  assets/calendars/apostles/John.png           gen    8.2s  ours   15.0s   1024x1024 -> 852x850    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:52:35  assets/calendars/apostles/Philip.png         gen    7.7s  ours   20.1s    687x1024 -> 642x657    802 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:52:56  assets/calendars/apostles/Bartholomew.png    gen    7.7s  ours    8.1s   1024x1024 -> 662x662    574 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:53:30  assets/calendars/apostles/Thomas.png         gen    8.2s  ours   20.8s   1024x1024 -> 828x828   1019 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:54:18  assets/calendars/apostles/Matthew.png        gen    8.8s  ours   34.2s   1024x1024 -> 858x857    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:54:46  assets/calendars/apostles/JamesAlphaeus.png  gen    8.8s  ours   13.4s   1024x1024 -> 886x885    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:55:25  assets/calendars/apostles/Thaddaeus.png      gen    9.4s  ours   25.3s   1024x1024 -> 864x873    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:56:15  assets/calendars/apostles/Simon.png          gen    9.4s  ours   37.6s   1024x1024 -> 860x876   1002 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:56:30  assets/calendars/apostles/Judas.png          gen    8.8s  ours    1.6s   1024x1024 -> 874x878    988 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 12  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 21s/image
+Total AI + our time: 5m 58s  (wall clock: 6m 52s)
+Run finished: 2026-07-22 16:56:30  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-22 19:26:03  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:03  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-22 20:33:26  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:26  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-23 17:01:27  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:01:27  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-25 11:46:01  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:01  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Apostles Prompts — the Twelve, Sent Two by Two (System A)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

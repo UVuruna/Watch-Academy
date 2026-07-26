@@ -1,0 +1,107 @@
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-21 23:33:05  (18/18 pending)
+--------------------------------------------------------------------
+2026-07-21 23:34:04  assets/weekday/corporate/primary/CHRO.png    gen   47.1s  ours    7.8s   1024x1024 -> 923x905    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:35:23  assets/weekday/corporate/colored/CHRO.png    gen   68.6s  ours    7.9s   1024x1024 -> 913x901    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:36:36  assets/weekday/corporate/primary/COO.png     gen   63.1s  ours    5.3s   1024x1024 -> 914x898    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:37:58  assets/weekday/corporate/colored/COO.png     gen   67.2s  ours   10.4s   1024x1024 -> 922x902    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:39:02  assets/weekday/corporate/primary/CFO.png     gen   55.5s  ours    4.8s   1024x1024 -> 920x898    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:40:19  assets/weekday/corporate/colored/CFO.png     gen   65.7s  ours    8.4s   1024x1024 -> 919x902    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:42:04  assets/weekday/corporate/primary/CMO.png     gen   78.0s  ours   11.8s   1024x1024 -> 920x898    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:43:22  assets/weekday/corporate/colored/CMO.png     gen   63.7s  ours   10.4s   1024x1024 -> 919x903    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:44:13  assets/weekday/corporate/primary/CDO.png     gen   37.2s  ours   10.3s  1254x1254 -> 1137x1123    2.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:45:16  assets/weekday/corporate/colored/CDO.png     gen   44.5s  ours   14.0s  1254x1254 -> 1206x1212    3.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:46:34  assets/weekday/corporate/primary/CTO.png     gen   61.2s  ours   12.8s   1024x1024 -> 922x903    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:47:50  assets/weekday/corporate/colored/CTO.png     gen   66.3s  ours    4.9s   1024x1024 -> 925x909    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:49:07  assets/weekday/corporate/primary/CEO.png     gen   66.3s  ours    7.9s   1024x1024 -> 928x909    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:50:45  assets/weekday/corporate/colored/CEO.png     gen   78.7s  ours   17.4s  1254x1254 -> 1254x1252    2.8 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:51:56  assets/weekday/corporate/primary/Chairman.png gen   58.5s  ours    7.1s   1024x1024 -> 928x914    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:53:11  assets/weekday/corporate/colored/Chairman.png gen   66.2s  ours    4.7s   1024x1024 -> 931x921    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:54:24  assets/weekday/corporate/primary/Founder.png gen   62.3s  ours    6.5s   1024x1024 -> 932x927    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-21 23:55:26  assets/weekday/corporate/colored/Founder.png gen   57.0s  ours    0.6s   1024x1024 -> 935x927    1.7 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 18  |  average generation (AI): 1m 02s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 21m 00s  (wall clock: 22m 21s)
+Run finished: 2026-07-21 23:55:26  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-22 00:45:16  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 00:45:16  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-23 21:36:05  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:36:05  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:17:53  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:53  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+The Corporation — the Boardroom Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

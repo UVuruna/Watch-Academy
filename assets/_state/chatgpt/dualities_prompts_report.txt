@@ -1,0 +1,105 @@
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-22 16:29:29  (8/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 16:29:41  (quota / rate limit — stopped (reset in ~360m 00s))
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-22 20:33:23  (8/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:36  (quota / rate limit — stopped (reset in ~120m 00s))
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-23 17:01:17  (8/8 pending)
+--------------------------------------------------------------------
+2026-07-23 17:02:38  assets/archetypes/dualities/good_evil/Good.png gen   66.3s  ours    8.6s  1024x1536 -> 567x1346    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:04:20  assets/archetypes/dualities/good_evil/circle/Good.png gen   87.4s  ours    7.9s   1024x1536 -> 863x894    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:06:19  assets/archetypes/dualities/good_evil/Evil.png gen  102.3s  ours   12.4s  1024x1536 -> 572x1318    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:08:23  assets/archetypes/dualities/good_evil/circle/Evil.png gen   93.5s  ours    6.7s   1024x1536 -> 871x895    1.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:10:20  assets/archetypes/dualities/self_others/Self.png gen  104.5s  ours    6.6s  1024x1536 -> 572x1315    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:12:11  assets/archetypes/dualities/self_others/circle/Self.png gen   95.1s  ours    9.5s   1024x1536 -> 900x958    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:14:01  assets/archetypes/dualities/self_others/Others.png gen   99.2s  ours    4.3s  1024x1536 -> 583x1250    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 17:16:02  assets/archetypes/dualities/self_others/circle/Others.png gen  115.4s  ours    0.3s   1024x1536 -> 868x895    1.7 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 8  |  average generation (AI): 1m 35s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 13m 40s  (wall clock: 14m 27s)
+Run finished: 2026-07-23 17:16:02  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:06  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Dualities Prompts — the Two Great Oppositions Given Their Own Images  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/8 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

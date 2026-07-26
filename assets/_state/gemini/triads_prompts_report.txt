@@ -1,0 +1,97 @@
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-22 16:33:51  (24/24 pending)
+--------------------------------------------------------------------
+2026-07-22 16:34:22  assets/archetypes/triads/time/Present.png    gen    6.2s  ours   20.2s    687x1024 -> 366x872    548 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:34:54  assets/archetypes/triads/time/circle/Present.png gen    7.7s  ours   19.4s   1024x1024 -> 817x808    900 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:35:43  assets/archetypes/triads/time/Future.png     gen    8.2s  ours   35.4s    687x1024 -> 418x963    744 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:36:25  assets/archetypes/triads/time/circle/Future.png gen    8.8s  ours   29.5s   1024x1024 -> 914x912    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:37:10  assets/archetypes/triads/time/Past.png       gen    8.2s  ours   31.3s    687x1024 -> 439x940    679 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:37:53  assets/archetypes/triads/time/circle/Past.png gen    8.2s  ours   29.7s   1024x1024 -> 792x792    902 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:38:25  assets/archetypes/triads/callings/Judge.png  gen    7.7s  ours   19.4s    687x1024 -> 391x883    572 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:39:04  assets/archetypes/triads/callings/circle/Judge.png gen    8.3s  ours   25.6s   1024x1024 -> 755x755    985 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:39:55  assets/archetypes/triads/callings/Prosecutor.png gen   11.3s  ours   34.3s    687x1024 -> 447x918    744 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:40:36  assets/archetypes/triads/callings/circle/Prosecutor.png gen    9.3s  ours   26.1s   1024x1024 -> 827x831    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:41:25  assets/archetypes/triads/callings/Advocate.png gen    8.8s  ours   36.0s    687x1024 -> 492x922    757 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:42:17  assets/archetypes/triads/callings/circle/Advocate.png gen    9.3s  ours   37.2s   1024x1024 -> 886x887    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:42:42  assets/archetypes/triads/theological/Faith.png gen   10.3s  ours    9.6s    687x1024 -> 454x942    707 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:43:07  assets/archetypes/triads/theological/circle/Faith.png gen    9.8s  ours   10.9s   1024x1024 -> 822x820    917 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:43:51  assets/archetypes/triads/theological/Love.png gen    9.8s  ours   30.5s    687x1024 -> 411x911    622 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:44:31  assets/archetypes/triads/theological/circle/Love.png gen   10.8s  ours   24.1s   1024x1024 -> 768x767    968 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:45:01  assets/archetypes/triads/theological/Hope.png gen   10.3s  ours   17.1s    687x1024 -> 469x949    732 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:45:48  assets/archetypes/triads/theological/circle/Hope.png gen   10.3s  ours   31.2s   1024x1024 -> 786x784    953 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:46:40  assets/archetypes/triads/dialectic/Synthesis.png gen    9.8s  ours   37.2s    687x1024 -> 450x934    646 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:47:32  assets/archetypes/triads/dialectic/circle/Synthesis.png gen   10.8s  ours   36.9s   1024x1024 -> 648x812    739 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:48:01  assets/archetypes/triads/dialectic/Antithesis.png gen   11.8s  ours   13.4s    687x1024 -> 516x924    859 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:48:36  assets/archetypes/triads/dialectic/circle/Antithesis.png gen    9.4s  ours   20.9s   1024x1024 -> 884x885    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:49:20  assets/archetypes/triads/dialectic/Thesis.png gen    9.3s  ours   29.0s    687x1024 -> 511x936    758 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 16:49:36  assets/archetypes/triads/dialectic/circle/Thesis.png gen    9.9s  ours    1.3s   1024x1024 -> 836x854    974 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 24  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 25s/image
+Total AI + our time: 13m 51s  (wall clock: 15m 45s)
+Run finished: 2026-07-22 16:49:36  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-22 19:26:03  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:03  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-22 20:33:26  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:26  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-23 17:01:26  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:01:26  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-25 11:46:01  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:01  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

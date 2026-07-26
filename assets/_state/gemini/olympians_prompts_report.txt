@@ -1,0 +1,85 @@
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-22 17:03:33  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-22 17:04:17  assets/calendars/olympians/Zeus.png          gen    7.2s  ours   31.8s   1024x1024 -> 820x820    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:05:06  assets/calendars/olympians/Hera.png          gen    8.2s  ours   36.0s    687x1024 -> 629x654    834 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:07:32  assets/calendars/olympians/Apollo.png        gen   10.3s  ours   28.1s              1024x1024    2.1 MB  [REMOVE BG: unclear, CROP: nothing]
+2026-07-22 17:08:02  assets/calendars/olympians/Artemis.png       gen    8.3s  ours   17.2s   1024x1024 -> 756x757    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:08:35  assets/calendars/olympians/Ares.png          gen    8.8s  ours   19.7s   1024x1024 -> 894x894    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:09:08  assets/calendars/olympians/Aphrodite.png     gen    8.4s  ours   20.8s   1024x1024 -> 855x852    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:09:48  assets/calendars/olympians/Hephaestus.png    gen    8.8s  ours   26.1s   1024x1024 -> 864x871    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:10:24  assets/calendars/olympians/Athena.png        gen    9.3s  ours   21.5s    687x1024 -> 621x636    809 KB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:10:53  assets/calendars/olympians/Hermes.png        gen    8.8s  ours   14.4s   1024x1024 -> 870x879    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:11:39  assets/calendars/olympians/Dionysus.png      gen    9.3s  ours   32.4s   1024x1024 -> 860x861    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:12:03  assets/calendars/olympians/Poseidon.png      gen    8.8s  ours    9.9s   1024x1024 -> 822x822    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-22 17:12:18  assets/calendars/olympians/Demeter.png       gen    9.4s  ours    0.8s   1024x1024 -> 820x819    1.3 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 12  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 22s/image
+Total AI + our time: 6m 04s  (wall clock: 8m 45s)
+Run finished: 2026-07-22 17:12:18  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-22 19:26:03  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:03  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-22 20:33:26  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:26  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-23 17:01:27  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:01:27  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-25 11:46:01  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:01  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

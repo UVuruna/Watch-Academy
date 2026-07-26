@@ -1,0 +1,93 @@
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-23 18:26:09  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-23 18:27:14  assets/calendars/emotions/Love.png           gen   47.5s  ours    9.5s   1024x1024 -> 879x851    1.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:28:53  assets/calendars/emotions/Hope.png           gen   87.7s  ours    6.4s   1024x1024 -> 878x854    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:30:28  assets/calendars/emotions/Courage.png        gen   83.1s  ours    5.9s   1024x1024 -> 878x854    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:32:00  assets/calendars/emotions/Ambition.png       gen   72.1s  ours   12.9s   1024x1024 -> 878x855    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:33:23  assets/calendars/emotions/Pride.png          gen   64.0s  ours   11.9s   1024x1024 -> 878x854    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:34:57  assets/calendars/emotions/Envy.png           gen   74.0s  ours   13.4s   1024x1024 -> 879x855    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:36:29  assets/calendars/emotions/Hatred.png         gen   73.5s  ours   13.4s   1024x1024 -> 879x855    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:38:10  assets/calendars/emotions/Despair.png        gen   84.7s  ours   11.5s   1024x1024 -> 879x856    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:39:38  assets/calendars/emotions/Fear.png           gen   71.5s  ours   11.0s   1024x1024 -> 879x856    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:41:14  assets/calendars/emotions/Doubt.png          gen   78.6s  ours   11.5s   1024x1024 -> 879x855    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:42:54  assets/calendars/emotions/Humility.png       gen   85.3s  ours    7.9s   1024x1024 -> 879x855    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:44:28  assets/calendars/emotions/Gratitude.png      gen   87.8s  ours    0.3s   1024x1024 -> 878x855    1.6 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 12  |  average generation (AI): 1m 16s/image  |  average our time (save+bgfix+pause): 10s/image
+Total AI + our time: 17m 06s  (wall clock: 18m 19s)
+Run finished: 2026-07-23 18:44:28  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:06  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Emotions Prompts — the Dozen of the Heart (System B)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

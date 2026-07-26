@@ -63,3 +63,89 @@ Images: 7  |  average generation (AI): 50s/image  |  average our time (save+bgfi
 Total AI + our time: 8m 10s  (wall clock: 8m 29s)
 Run finished: 2026-07-20 01:43:31  (all pending items done)
 
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-22 01:37:18  (5/18 pending)
+--------------------------------------------------------------------
+2026-07-22 01:38:03  assets/era/calendar/Maya.png                 gen   34.3s  ours    6.3s   1024x1024 -> 842x819    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:38:54  assets/era/calendar/KaliYuga.png             gen   42.4s  ours    3.8s   1024x1024 -> 833x813    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:39:48  assets/era/calendar/Olympiad.png             gen   43.0s  ours    6.8s   1024x1024 -> 833x813    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:40:50  assets/era/calendar/Unix.png                 gen   49.0s  ours    9.8s   1024x1024 -> 832x817    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-22 01:41:45  assets/era/calendar/alt/Byzantine.png        gen   50.8s  ours    0.3s   1024x1024 -> 832x817    1.4 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 44s/image  |  average our time (save+bgfix+pause): 5s/image
+Total AI + our time: 4m 07s  (wall clock: 4m 27s)
+Run finished: 2026-07-22 01:41:45  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-23 21:37:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:37:09  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 12:17:53  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:53  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Era Terms Prompts (Gemini) — the Ages and the Starry Seasons  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

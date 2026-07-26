@@ -1,0 +1,56 @@
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:53:04  (36/36 pending)
+--------------------------------------------------------------------
+2026-07-25 11:58:46  assets/titles/planets.png                    gen  312.9s  ours   24.0s    1024x559 -> 503x510    480 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 11:59:58  assets/titles/planet_signs.png               gen   47.3s  ours   19.9s    1024x559 -> 434x504    443 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:00:31  assets/titles/greek.png                      gen   21.3s  ours    5.8s    1024x559 -> 504x515    528 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:01:40  assets/titles/norse.png                      gen   44.1s  ours   19.9s    1024x559 -> 556x558    638 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:02:22  assets/titles/egypt.png                      gen   23.4s  ours   12.9s    1024x559 -> 539x545    574 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:03:11  assets/titles/slavic.png                     gen   25.7s  ours   19.4s    1024x559 -> 512x533    533 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:03:48  assets/titles/alchemy.png                    gen   20.8s  ours   10.9s    1024x559 -> 526x538    473 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:04:23  assets/titles/japan.png                      gen   22.5s  ours    7.8s   1024x1024 -> 904x906    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:05:03  assets/titles/religion.png                   gen   25.9s  ours   11.5s    1024x559 -> 480x537    481 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:06:34  assets/titles/religion_alt.png               gen   76.1s  ours    8.9s    1024x559 -> 554x554    614 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:07:14  assets/titles/profession.png                 gen   27.0s  ours    8.4s    1024x559 -> 527x534    582 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:08:04  assets/titles/wolf.png                       gen   23.9s  ours   21.9s    1024x559 -> 634x559    713 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:08:54  assets/titles/bee.png                        gen   24.7s  ours   21.5s   1024x1024 -> 926x924    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:09:29  assets/titles/elephant.png                   gen   25.5s  ours    5.4s    1024x559 -> 560x559    612 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:10:11  assets/titles/bible.png                      gen   27.5s  ours    8.9s    1024x559 -> 532x535    600 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:11:05  assets/titles/bible2.png                     gen   27.2s  ours   21.3s  1024x1024 -> 1011x1012    1.8 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:12:36  assets/titles/bible_dark.png                 gen   62.0s  ours   24.0s    1024x559 -> 542x532    440 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:14:10  assets/titles/cosmos.png                     gen   72.6s  ours   17.6s    1024x559 -> 770x553    764 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:14:54  assets/titles/planets_art.png                gen   28.3s  ours    9.4s    1024x559 -> 547x550    613 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:15:58  assets/titles/virtues.png                    gen   36.2s  ours   24.3s   1024x1024 -> 784x847    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:16:58  assets/titles/sins.png                       gen   26.6s  ours    6.5s    1024x559 -> 517x546    358 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:17:55  assets/titles/moods.png                      gen   31.5s  ours   18.4s    1024x559 -> 496x503    479 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:18:42  assets/titles/intelligences.png              gen   25.6s  ours   15.4s    1024x559 -> 527x537    554 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:19:46  assets/titles/months.png                     gen   31.0s  ours   26.9s    1024x559 -> 522x523    516 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:20:46  assets/titles/wow_alliance.png               gen   28.1s  ours   26.9s    1024x559 -> 559x559    636 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:21:40  assets/titles/wow_horde.png                  gen   25.1s  ours   22.4s    1024x559 -> 541x542    570 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:24:26  assets/titles/wow_evil.png                   gen   25.0s  ours   10.0s    1024x559 -> 531x517    494 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:25:29  assets/titles/cyberpunk_gangs.png            gen   38.7s  ours   19.6s    1024x559 -> 591x541    494 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:26:19  assets/titles/cyberpunk_street.png           gen   27.5s  ours   17.9s    1024x559 -> 513x536    457 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:26:59  assets/titles/cyberpunk_power.png            gen   28.5s  ours    5.0s    1024x559 -> 511x518    395 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:27:57  assets/titles/starwars_svetla.png            gen   25.5s  ours   26.5s    1024x559 -> 552x558    534 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 31  |  average generation (AI): 42s/image  |  average our time (save+bgfix+pause): 16s/image
+Total AI + our time: 29m 47s  (wall clock: 35m 03s)
+Run finished: 2026-07-25 12:28:07  (quota / rate limit — stopped)
+
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 12:37:52  (5/36 pending)
+SKIPPED by the sheet (L485): `cyberpunk_power` — Cyberpunk: Soulkiller — already saved on disk
+SKIPPED by the sheet (L495): `starwars_svetla` — Star Wars: The Council of Lights — already saved on disk
+--------------------------------------------------------------------
+2026-07-25 12:38:17  assets/titles/starwars_tamna.png             gen    6.2s  ours   14.5s    1024x559 -> 546x550    405 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:38:46  assets/titles/starwars_nova.png              gen    7.2s  ours   16.9s    1024x559 -> 550x548    510 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:39:16  assets/titles/corporate.png                  gen    8.7s  ours   16.6s    1024x559 -> 534x533    354 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:39:33  assets/titles/monsters.png                   gen    7.7s  ours    5.5s    1024x559 -> 552x546    430 KB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:39:47  assets/titles/chinese_myth.png               gen    8.3s  ours    0.4s    1024x559 -> 530x539    519 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 8s/image  |  average our time (save+bgfix+pause): 11s/image
+Total AI + our time: 1m 32s  (wall clock: 1m 55s)
+Run finished: 2026-07-25 12:39:47  (all pending items done)
+

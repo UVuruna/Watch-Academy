@@ -1,0 +1,131 @@
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 17:44:06  (60/60 pending)
+--------------------------------------------------------------------
+2026-07-23 17:44:26  assets/weeks/films/sw_jedi/primary/ObiWan.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:45:23  assets/weeks/films/sw_jedi/colored/ObiWan.png gen    6.2s  ours   26.5s    1024x559 -> 546x547    512 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:45:47  assets/weeks/films/sw_jedi/primary/Leia.png  gen    7.7s  ours   10.5s    1024x559 -> 527x533    461 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:46:35  assets/weeks/films/sw_jedi/colored/Leia.png  gen    7.7s  ours   23.9s    1024x559 -> 508x509    479 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:47:00  assets/weeks/films/sw_jedi/primary/Han.png   REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:47:51  assets/weeks/films/sw_jedi/colored/Han.png   gen    7.7s  ours    6.9s    1024x559 -> 524x525    505 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:48:42  assets/weeks/films/sw_jedi/primary/QuiGon.png gen   10.2s  ours   22.9s    1024x559 -> 532x533    516 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:49:34  assets/weeks/films/sw_jedi/colored/QuiGon.png gen    9.3s  ours   23.9s    1024x559 -> 532x529    540 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:50:02  assets/weeks/films/sw_jedi/primary/Padme.png gen    8.2s  ours   16.5s    1024x559 -> 532x539    492 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:50:42  assets/weeks/films/sw_jedi/colored/Padme.png gen    9.2s  ours   12.5s    1024x559 -> 544x543    538 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:51:10  assets/weeks/films/sw_jedi/primary/Chewbacca.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:51:53  assets/weeks/films/sw_jedi/colored/Chewbacca.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:52:23  assets/weeks/films/sw_jedi/primary/Luke.png  REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:52:57  assets/weeks/films/sw_jedi/colored/Luke.png  REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:53:45  assets/weeks/films/sw_jedi/primary/Vader.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:54:24  assets/weeks/films/sw_jedi/colored/Vader.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:55:08  assets/weeks/films/sw_jedi/primary/Yoda.png  REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:55:49  assets/weeks/films/sw_jedi/colored/Yoda.png  REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:56:47  assets/weeks/films/sw_sith/primary/Tarkin.png gen    8.2s  ours   20.6s    1024x559 -> 539x545    479 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:57:15  assets/weeks/films/sw_sith/colored/Tarkin.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:57:43  assets/weeks/films/sw_sith/primary/Grievous.png gen    9.3s  ours    8.5s    1024x559 -> 538x536    459 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 17:58:07  assets/weeks/films/sw_sith/colored/Grievous.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 17:58:56  assets/weeks/films/sw_sith/primary/Jabba.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:00:05  assets/weeks/films/sw_sith/colored/Jabba.png gen    7.8s  ours    6.0s    1024x559 -> 529x530    471 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:00:40  assets/weeks/films/sw_sith/primary/Dooku.png gen    9.4s  ours   20.6s    1024x559 -> 529x530    422 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:01:33  assets/weeks/films/sw_sith/colored/Dooku.png gen    9.9s  ours   24.0s    1024x559 -> 516x513    434 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:02:03  assets/weeks/films/sw_sith/primary/Maul.png  REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:02:56  assets/weeks/films/sw_sith/colored/Maul.png  gen    8.8s  ours   19.5s    1024x559 -> 556x552    485 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:03:24  assets/weeks/films/sw_sith/primary/BobaFett.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:04:15  assets/weeks/films/sw_sith/colored/BobaFett.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:04:57  assets/weeks/films/sw_sith/primary/Palpatine.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:05:58  assets/weeks/films/sw_sith/colored/Palpatine.png gen    8.3s  ours   18.5s    1024x559 -> 524x525    446 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:06:26  assets/weeks/films/sw_sith/primary/Anakin.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:07:09  assets/weeks/films/sw_sith/colored/Anakin.png REFUSED — Gemini: prompt refused (matched 'can't generate'): Gemini said
+
+I can't generate the image you requested right now due t
+2026-07-23 18:08:01  assets/weeks/films/sw_sith/primary/Plagueis.png gen    8.8s  ours   18.0s    1024x559 -> 509x510    386 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:08:33  assets/weeks/films/sw_sith/colored/Plagueis.png gen   12.9s  ours   14.9s    1024x559 -> 462x505    360 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:09:13  assets/weeks/films/sw_dyad/primary/Rose.png  gen   10.3s  ours   24.9s    1024x559 -> 534x535    538 KB  [REMOVE BG: done, CROP: done]
+2026-07-23 18:09:40  assets/weeks/films/sw_dyad/colored/Rose.png  gen    9.9s  ours   11.9s    1024x559 -> 492x492    459 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Refused: 19 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 19  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 17s/image
+Total AI + our time: 8m 21s  (wall clock: 25m 41s)
+Run finished: 2026-07-23 18:09:47  (quota / rate limit — stopped)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 21:25:13  (41/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:21  (quota / rate limit — stopped)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:46:02  (41/60 pending)
+--------------------------------------------------------------------
+2026-07-25 11:48:48  assets/weeks/films/sw_jedi/primary/ObiWan.png gen   17.5s  ours   21.1s               1024x559    1.5 MB  [REMOVE BG: unclear, CROP: nothing]
+2026-07-25 11:51:19  assets/weeks/films/sw_jedi/primary/Han.png   gen   28.1s  ours    0.0s               1024x434    1.1 MB  [REMOVE BG: unclear, CROP: nothing]
+--------------------------------------------------------------------
+Images: 2  |  average generation (AI): 23s/image  |  average our time (save+bgfix+pause): 11s/image
+Total AI + our time: 1m 07s  (wall clock: 5m 18s)
+Run finished: 2026-07-25 11:51:19  (stopped on request)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 15:49:14  (39/60 pending)
+--------------------------------------------------------------------
+2026-07-25 15:51:53  assets/weeks/films/sw_jedi/primary/Chewbacca.png gen   18.4s  ours    7.7s               1024x559    1.5 MB  [REMOVE BG: unclear, CROP: nothing]
+--------------------------------------------------------------------
+Images: 1  |  average generation (AI): 18s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 26s  (wall clock: 3m 26s)
+Run finished: 2026-07-25 15:52:40  (aborted: TargetClosedError)
+

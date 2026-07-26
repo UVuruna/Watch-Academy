@@ -1,0 +1,93 @@
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-23 18:44:30  (12/12 pending)
+--------------------------------------------------------------------
+2026-07-23 18:45:41  assets/calendars/olympians/Zeus.png          gen   51.6s  ours   13.4s   1024x1024 -> 964x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:47:02  assets/calendars/olympians/Hera.png          gen   65.4s  ours    8.5s   1024x1024 -> 964x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:48:33  assets/calendars/olympians/Apollo.png        gen   72.6s  ours   12.9s   1024x1024 -> 964x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:49:58  assets/calendars/olympians/Artemis.png       gen   71.6s  ours    7.9s   1024x1024 -> 964x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:51:22  assets/calendars/olympians/Ares.png          gen   70.7s  ours    7.0s   1024x1024 -> 964x933    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:52:47  assets/calendars/olympians/Aphrodite.png     gen   73.1s  ours    5.8s   1024x1024 -> 964x932    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:54:36  assets/calendars/olympians/Hephaestus.png    gen   88.5s  ours   13.4s   1024x1024 -> 964x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:56:06  assets/calendars/olympians/Athena.png        gen   80.2s  ours    5.4s   1024x1024 -> 964x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:57:39  assets/calendars/olympians/Hermes.png        gen   79.2s  ours    8.4s   1024x1024 -> 964x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 18:59:02  assets/calendars/olympians/Dionysus.png      gen   69.1s  ours    6.9s   1024x1024 -> 964x933    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:00:37  assets/calendars/olympians/Poseidon.png      gen   78.2s  ours   10.4s   1024x1024 -> 964x933    2.0 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:02:10  assets/calendars/olympians/Demeter.png       gen   86.0s  ours    0.4s   1024x1024 -> 964x933    2.0 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 12  |  average generation (AI): 1m 14s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 16m 27s  (wall clock: 17m 41s)
+Run finished: 2026-07-23 19:02:10  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:06  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Olympians Prompts — the Twelve, in Six Pairs (System A)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

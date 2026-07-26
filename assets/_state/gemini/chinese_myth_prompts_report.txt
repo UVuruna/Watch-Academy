@@ -1,0 +1,125 @@
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-21 23:21:26  (18/18 pending)
+--------------------------------------------------------------------
+2026-07-21 23:21:57  assets/weekday/chinese_myth/primary/ChangE.png gen    9.3s  ours   19.0s   1024x1024 -> 908x905    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:22:25  assets/weekday/chinese_myth/colored/ChangE.png gen   10.3s  ours   14.7s   1024x1024 -> 798x797    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:22:55  assets/weekday/chinese_myth/primary/ErlangShen.png gen    9.9s  ours   18.2s   1024x1024 -> 856x858    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:23:29  assets/weekday/chinese_myth/colored/ErlangShen.png gen    9.3s  ours   21.8s   1024x1024 -> 767x764    890 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:24:17  assets/weekday/chinese_myth/primary/GuanYu.png gen    9.5s  ours   35.9s   1024x1024 -> 864x863    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:24:42  assets/weekday/chinese_myth/colored/GuanYu.png gen    9.9s  ours   12.2s   1024x1024 -> 794x793    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:25:44  assets/weekday/chinese_myth/primary/ZhuBajie.png gen    9.9s  ours   35.2s   1024x1024 -> 925x925    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:26:19  assets/weekday/chinese_myth/colored/ZhuBajie.png gen    8.8s  ours   22.2s   1024x1024 -> 822x820    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:26:39  assets/weekday/chinese_myth/primary/Zhinu.png gen    9.3s  ours    8.4s   1024x1024 -> 754x760    960 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:27:02  assets/weekday/chinese_myth/colored/Zhinu.png gen    9.3s  ours   10.5s   1024x1024 -> 700x699    826 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:27:47  assets/weekday/chinese_myth/primary/Shennong.png gen    8.8s  ours   33.3s   1024x1024 -> 921x922    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:28:14  assets/weekday/chinese_myth/colored/Shennong.png gen    9.3s  ours   15.6s   1024x1024 -> 824x823    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:28:52  assets/weekday/chinese_myth/primary/SunWukong.png gen    8.8s  ours   27.1s   1024x1024 -> 914x915    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:29:25  assets/weekday/chinese_myth/colored/SunWukong.png gen    8.4s  ours   21.5s   1024x1024 -> 800x799    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:29:54  assets/weekday/chinese_myth/primary/SixEaredMacaque.png gen    9.8s  ours   16.1s   1024x1024 -> 914x915   1016 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:30:21  assets/weekday/chinese_myth/colored/SixEaredMacaque.png gen    9.8s  ours   14.6s   1024x1024 -> 798x796    793 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:30:57  assets/weekday/chinese_myth/primary/Buddha.png gen    9.4s  ours   23.3s   1024x1024 -> 898x896    959 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 23:31:09  assets/weekday/chinese_myth/colored/Buddha.png gen    8.8s  ours    1.1s   1024x1024 -> 753x758    786 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 18  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 8m 39s  (wall clock: 9m 44s)
+Run finished: 2026-07-21 23:31:09  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 00:35:11  (0/18 pending)
+SKIPPED by the sheet (L83): Monday — Chang'e — already saved on disk
+SKIPPED by the sheet (L92): Chang'e (colored) — already saved on disk
+SKIPPED by the sheet (L99): Tuesday — Erlang Shen — already saved on disk
+SKIPPED by the sheet (L109): Erlang Shen (colored) — already saved on disk
+SKIPPED by the sheet (L116): Wednesday — Guan Yu — already saved on disk
+SKIPPED by the sheet (L128): Guan Yu (colored) — already saved on disk
+SKIPPED by the sheet (L135): Thursday — Zhu Bajie — already saved on disk
+SKIPPED by the sheet (L145): Zhu Bajie (colored) — already saved on disk
+SKIPPED by the sheet (L152): Friday — Zhinü — already saved on disk
+SKIPPED by the sheet (L161): Zhinü (colored) — already saved on disk
+SKIPPED by the sheet (L168): Saturday — Shennong — already saved on disk
+SKIPPED by the sheet (L177): Shennong (colored) — already saved on disk
+SKIPPED by the sheet (L184): Sunday — Sun Wukong — already saved on disk
+SKIPPED by the sheet (L194): Sun Wukong (colored) — already saved on disk
+SKIPPED by the sheet (L201): Sunday — the Six-Eared Macaque — already saved on disk
+SKIPPED by the sheet (L212): The Six-Eared Macaque (colored) — already saved on disk
+SKIPPED by the sheet (L219): The Ninth (Excluded) — Buddha — already saved on disk
+SKIPPED by the sheet (L232): Buddha (colored) — already saved on disk
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 00:35:11  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 17:26:32  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 17:26:32  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 19:26:03  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 19:26:03  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-22 20:33:26  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-22 20:33:26  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 17:01:27  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:01:27  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:46:01  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:01  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Chinese Mythology — the Immortals Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+

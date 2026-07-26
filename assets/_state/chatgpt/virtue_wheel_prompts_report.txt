@@ -1,0 +1,106 @@
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-23 19:02:13  (24/24 pending)
+--------------------------------------------------------------------
+2026-07-23 19:03:18  assets/calendars/virtues/Courage.png         gen   44.4s  ours   13.4s   1024x1024 -> 864x842    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:05:19  assets/calendars/virtues/Temperance.png      gen  102.0s  ours   13.3s   1024x1024 -> 864x848    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:06:41  assets/calendars/virtues/Generosity.png      gen   70.5s  ours    6.8s   1024x1024 -> 865x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:08:07  assets/calendars/virtues/Magnificence.png    gen   76.1s  ours    3.8s   1024x1024 -> 864x849    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:10:10  assets/calendars/virtues/Magnanimity.png     gen  102.5s  ours   13.4s   1024x1024 -> 864x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:11:36  assets/calendars/virtues/Patience.png        gen   67.1s  ours   12.8s   1024x1024 -> 864x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:13:13  assets/calendars/virtues/Truthfulness.png    gen   77.2s  ours   12.9s   1024x1024 -> 864x849    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:14:50  assets/calendars/virtues/Wit.png             gen   78.8s  ours   11.3s   1024x1024 -> 865x844    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:16:05  assets/calendars/virtues/Friendliness.png    gen   57.3s  ours   11.8s   1024x1024 -> 864x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:17:28  assets/calendars/virtues/Modesty.png         gen   66.4s  ours   11.8s   1024x1024 -> 864x846    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:19:07  assets/calendars/virtues/RightAmbition.png   gen   82.5s  ours    8.8s   1024x1024 -> 864x850    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:22:16  assets/calendars/virtues/JustIndignation.png gen   64.1s  ours   11.4s   1024x1024 -> 864x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:23:54  assets/calendars/vices/Boastfulness.png      gen   83.5s  ours    7.3s   1024x1024 -> 866x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:25:32  assets/calendars/vices/Buffoonery.png        gen   87.4s  ours    5.3s   1024x1024 -> 874x847    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 19:29:44  assets/calendars/vices/Flattery.png          gen   89.8s  ours   14.3s  1254x1254 -> 1254x1251    3.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-23 19:32:44  assets/calendars/vices/Shamelessness.png     gen   88.0s  ours    8.8s   1024x1024 -> 869x848    1.6 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 16  |  average generation (AI): 1m 17s/image  |  average our time (save+bgfix+pause): 10s/image
+Total AI + our time: 23m 25s  (wall clock: 32m 49s)
+Run finished: 2026-07-23 19:35:02  (no image — DOM state unknown)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-23 21:25:06  (8/24 pending)
+--------------------------------------------------------------------
+2026-07-23 21:26:17  assets/calendars/vices/OverAmbition.png      gen   52.3s  ours    7.9s   1024x1024 -> 966x954    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:27:46  assets/calendars/vices/Envy.png              gen   76.8s  ours    5.3s   1024x1024 -> 965x952    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:29:05  assets/calendars/vices/Cowardice.png         gen   62.6s  ours    9.9s   1024x1024 -> 964x954    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:30:34  assets/calendars/vices/Gluttony.png          gen   72.7s  ours    9.8s   1024x1024 -> 964x955    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:31:57  assets/calendars/vices/Greed.png             gen   65.2s  ours   10.9s   1024x1024 -> 965x954    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:33:20  assets/calendars/vices/Vulgarity.png         gen   65.8s  ours   10.3s   1024x1024 -> 965x953    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:34:35  assets/calendars/vices/Vanity.png            gen   62.6s  ours    6.3s   1024x1024 -> 965x953    2.2 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:36:04  assets/calendars/vices/Wrath.png             gen   81.3s  ours    0.5s   1024x1024 -> 965x954    2.1 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 8  |  average generation (AI): 1m 07s/image  |  average our time (save+bgfix+pause): 8s/image
+Total AI + our time: 10m 00s  (wall clock: 10m 57s)
+Run finished: 2026-07-23 21:36:04  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 12:17:52  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:17:52  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Virtue Wheel Prompts — Aristotle's Twelve, in Two Registers (System B)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:09  (all pending items done)
+

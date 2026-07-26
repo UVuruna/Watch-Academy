@@ -1,0 +1,114 @@
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-23 21:49:13  (60/60 pending)
+--------------------------------------------------------------------
+2026-07-23 21:50:11  assets/weeks/films/sw_jedi/primary/ObiWan.png gen   47.0s  ours    4.4s   1024x1024 -> 977x934    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:51:38  assets/weeks/films/sw_jedi/colored/ObiWan.png gen   67.5s  ours   13.3s   1024x1024 -> 969x929    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:53:35  assets/weeks/films/sw_jedi/primary/Leia.png  gen   98.3s  ours   11.8s   1024x1024 -> 967x921    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:56:49  assets/weeks/films/sw_jedi/colored/Leia.png  gen   77.1s  ours   12.3s   1024x1024 -> 957x953    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 21:59:49  assets/weeks/films/sw_jedi/primary/Han.png   gen   83.1s  ours    9.8s   1024x1024 -> 955x957    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:02:40  assets/weeks/films/sw_jedi/colored/Han.png   gen   74.7s  ours   11.8s   1024x1024 -> 955x971    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:04:18  assets/weeks/films/sw_jedi/primary/QuiGon.png gen   80.0s  ours   11.8s   1024x1024 -> 971x901    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:05:41  assets/weeks/films/sw_jedi/colored/QuiGon.png gen   74.2s  ours    4.8s   1024x1024 -> 959x904    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:07:19  assets/weeks/films/sw_jedi/primary/Padme.png gen   80.4s  ours    9.8s   1024x1024 -> 961x913    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:08:56  assets/weeks/films/sw_jedi/colored/Padme.png gen   77.7s  ours   12.3s   1024x1024 -> 958x905    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:11:29  assets/weeks/films/sw_jedi/primary/Chewbacca.png REFUSED — ChatGPT: prompt refused (matched 'may violate'): Image generation failed
+Try again
+
+We’re so sorry, but the image we cre
+2026-07-23 22:14:23  assets/weeks/films/sw_jedi/colored/Chewbacca.png REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:16:41  assets/weeks/films/sw_jedi/primary/Luke.png  REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:19:10  assets/weeks/films/sw_jedi/colored/Luke.png  REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:21:15  assets/weeks/films/sw_jedi/primary/Vader.png REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:22:56  assets/weeks/films/sw_jedi/colored/Vader.png REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:24:52  assets/weeks/films/sw_jedi/primary/Yoda.png  REFUSED — ChatGPT: prompt refused (matched 'may violate'): Image generation failed
+Try again
+
+We’re so sorry, but the image we cre
+2026-07-23 22:26:46  assets/weeks/films/sw_jedi/colored/Yoda.png  REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:27:57  assets/weeks/films/sw_sith/primary/Tarkin.png gen   48.7s  ours    5.4s   1024x1024 -> 940x915    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:29:10  assets/weeks/films/sw_sith/colored/Tarkin.png gen   54.7s  ours   12.5s   1024x1024 -> 939x906    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:31:09  assets/weeks/films/sw_sith/primary/Grievous.png gen   56.0s  ours   11.8s   1024x1024 -> 936x906    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:32:43  assets/weeks/films/sw_sith/colored/Grievous.png gen   74.9s  ours   12.0s   1024x1024 -> 937x901    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:35:28  assets/weeks/films/sw_sith/primary/Jabba.png REFUSED — ChatGPT: prompt refused (matched 'may violate'): We’re so sorry, but the image we created may violate our guardrails con
+2026-07-23 22:36:40  assets/weeks/films/sw_sith/colored/Jabba.png gen   57.4s  ours    4.4s   1024x1024 -> 937x901    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:38:59  assets/weeks/films/sw_sith/primary/Dooku.png gen   69.0s  ours    3.8s   1024x1024 -> 939x907    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:40:13  assets/weeks/films/sw_sith/colored/Dooku.png gen   56.3s  ours   12.0s   1024x1024 -> 937x901    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-23 22:42:37  assets/weeks/films/sw_sith/primary/Maul.png  gen   61.0s  ours    4.3s   1024x1024 -> 938x907    1.8 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Refused: 9 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 18  |  average generation (AI): 1m 09s/image  |  average our time (save+bgfix+pause): 9s/image
+Total AI + our time: 23m 27s  (wall clock: 53m 40s)
+Run finished: 2026-07-23 22:42:53  (quota / rate limit — stopped (reset in ~1080m 00s))
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:17:53  (42/60 pending)
+--------------------------------------------------------------------
+2026-07-25 12:19:54  assets/weeks/films/sw_jedi/primary/Chewbacca.png REFUSED — ChatGPT: prompt refused [copyright] (matched 'third-party content'): We’re so sorry, but the image we created may violat
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-07-25 12:28:09  (generation timed out)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:32:45  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:23:36  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:35:46  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:37:01  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:10:47  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 15:49:09  (42/60 pending)
+--------------------------------------------------------------------
+2026-07-25 15:51:06  assets/weeks/films/sw_jedi/primary/Chewbacca.png REFUSED — ChatGPT: prompt refused [copyright] (matched 'third-party content'): Image generation failed
+Try again
+
+We’re so sorry, 
+--------------------------------------------------------------------
+Refused: 1 image(s) — rework those prompts in the sheet (or intervene manually) and rerun
+Images: 0
+Run finished: 2026-07-25 15:52:53  (aborted: TargetClosedError)
+

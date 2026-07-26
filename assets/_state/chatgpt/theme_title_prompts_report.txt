@@ -1,0 +1,82 @@
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 12:32:45  (36/36 pending)
+--------------------------------------------------------------------
+2026-07-25 12:33:50  assets/titles/planets.png                    gen   48.6s  ours    9.7s   1024x1024 -> 855x812    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:35:00  assets/titles/planet_signs.png               gen   48.7s  ours   12.2s   1024x1024 -> 781x781    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:36:07  assets/titles/greek.png                      gen   53.1s  ours    3.7s   1024x1024 -> 827x843    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:37:32  assets/titles/norse.png                      gen   69.7s  ours    9.8s   1024x1024 -> 833x900    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:38:49  assets/titles/egypt.png                      gen   56.1s  ours   13.2s   1024x1024 -> 828x851    1.7 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:40:21  assets/titles/slavic.png                     gen   75.9s  ours   10.2s              1254x1254    3.6 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-25 12:41:56  assets/titles/alchemy.png                    gen   72.9s  ours   14.8s              1254x1254    3.4 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-25 12:43:14  assets/titles/japan.png                      gen   67.9s  ours    4.3s   1024x1024 -> 909x926    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:44:13  assets/titles/religion.png                   gen   41.6s  ours   11.1s  1254x1254 -> 1058x1217    2.8 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:45:14  assets/titles/religion_alt.png               gen   47.3s  ours    7.2s  1254x1254 -> 1126x1234    3.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:48:59  assets/titles/profession.png                 gen   75.0s  ours   13.7s  1254x1254 -> 1211x1229    3.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:50:33  assets/titles/wolf.png                       gen   76.5s  ours    9.6s              1254x1254    3.5 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-25 12:51:52  assets/titles/bee.png                        gen   60.2s  ours   11.9s  1254x1254 -> 1214x1233    3.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:53:01  assets/titles/elephant.png                   gen   49.9s  ours   13.8s  1254x1254 -> 1245x1241    3.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:54:44  assets/titles/bible.png                      gen   84.1s  ours   12.8s  1254x1254 -> 1253x1252    3.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 12:57:35  assets/titles/bible2.png                     gen   70.0s  ours   11.3s  1024x1024 -> 1024x995    2.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 12:58:43  assets/titles/bible_dark.png                 gen   49.0s  ours   12.7s              1254x1254    3.2 MB  [REMOVE BG: unclear, CROP: nothing]
+2026-07-25 13:00:07  assets/titles/cosmos.png                     gen   62.4s  ours   15.2s  1254x1254 -> 1242x1229    3.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:01:15  assets/titles/planets_art.png                gen   49.6s  ours   11.8s  1254x1254 -> 1243x1235    3.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:02:21  assets/titles/virtues.png                    gen   49.5s  ours   10.2s  1254x1254 -> 1233x1219    3.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:04:00  assets/titles/sins.png                       gen   84.7s  ours    7.6s  1254x1254 -> 1242x1243    3.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:05:26  assets/titles/moods.png                      gen   67.6s  ours   12.3s  1254x1254 -> 1239x1251    3.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:07:07  assets/titles/intelligences.png              gen   80.3s  ours   12.8s  1254x1254 -> 1239x1250    3.7 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:08:29  assets/titles/months.png                     gen   64.9s  ours   10.9s  1024x1024 -> 1008x974    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 13:09:52  assets/titles/wow_alliance.png               gen   69.3s  ours    6.4s  1024x1024 -> 1018x992    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 13:11:11  assets/titles/wow_horde.png                  gen   57.9s  ours   14.4s              1254x1254    3.1 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-25 13:12:37  assets/titles/wow_evil.png                   gen   70.8s  ours    9.0s              1254x1254    3.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-25 13:14:03  assets/titles/cyberpunk_gangs.png            gen   73.3s  ours    7.4s  1024x1024 -> 997x1015    2.3 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 13:15:44  assets/titles/cyberpunk_street.png           gen   81.3s  ours   13.9s  1254x1254 -> 1253x1254    3.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-25 13:16:52  assets/titles/cyberpunk_power.png            gen   49.5s  ours   11.4s  1254x1254 -> 1241x1249    3.0 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 30  |  average generation (AI): 1m 04s/image  |  average our time (save+bgfix+pause): 11s/image
+Total AI + our time: 37m 13s  (wall clock: 47m 01s)
+Run finished: 2026-07-25 13:19:45  (aborted: ItemRefused)
+
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:23:36  (3/36 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:27:10  (no image — DOM state unknown)
+
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:35:46  (3/36 pending)
+--------------------------------------------------------------------
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 13:37:01  (3/36 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 13:42:11  (aborted: TargetClosedError)
+
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:10:47  (3/36 pending)
+--------------------------------------------------------------------
+2026-07-25 14:12:04  assets/titles/corporate.png                  gen   59.1s  ours   11.6s   1024x1024 -> 893x895    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 14:12:20  assets/titles/monsters.png                   gen    1.2s  ours    8.0s   1024x1024 -> 893x895    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-25 14:13:21  assets/titles/chinese_myth.png               gen   55.5s  ours    0.4s   1024x1024 -> 976x954    1.9 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 3  |  average generation (AI): 39s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 2m 16s  (wall clock: 2m 34s)
+Run finished: 2026-07-25 14:13:21  (all pending items done)
+
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [ChatGPT]
+Run started:  2026-07-25 14:27:09  (0/36 pending)
+SKIPPED by the sheet (L528): `corporate` — The Corporation: The Boardroom Table — already saved on disk
+SKIPPED by the sheet (L549): `monsters` — Greek Monsters — already saved on disk
+SKIPPED by the sheet (L564): `chinese_myth` — Chinese Mythology — already saved on disk
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 14:27:09  (all pending items done)
+

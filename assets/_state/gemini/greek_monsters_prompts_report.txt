@@ -8,3 +8,95 @@ Run started:  2026-07-21 18:39:08  (18/18 pending)
 2026-07-21 18:41:38  assets/weekday/monsters/colored/Minotaur.png gen    9.4s  ours   27.3s   1024x1024 -> 949x951    1.3 MB  [REMOVE BG: done, CROP: done]
 2026-07-21 18:41:59  assets/weekday/monsters/primary/Sphinx.png   gen    7.9s  ours    9.6s   1024x1024 -> 884x882    1.1 MB  [REMOVE BG: done, CROP: done]
 2026-07-21 18:42:46  assets/weekday/monsters/colored/Sphinx.png   gen    8.4s  ours   36.0s   1024x1024 -> 884x882    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:43:11  assets/weekday/monsters/primary/ErymanthianBoar.png gen    9.4s  ours   12.6s   1024x1024 -> 918x919    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:43:45  assets/weekday/monsters/colored/ErymanthianBoar.png gen    9.5s  ours   23.1s   1024x1024 -> 919x919    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:44:23  assets/weekday/monsters/primary/Sirens.png   gen    8.3s  ours   25.8s   1024x1024 -> 888x917    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:44:51  assets/weekday/monsters/colored/Sirens.png   gen   12.5s  ours   12.6s   1024x1024 -> 889x917    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:45:11  assets/weekday/monsters/primary/Hydra.png    gen    8.3s  ours    9.4s   1024x1024 -> 893x908    991 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:45:33  assets/weekday/monsters/colored/Hydra.png    gen    9.3s  ours    9.4s   1024x1024 -> 894x907    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:45:59  assets/weekday/monsters/primary/NemeanLion.png gen    9.9s  ours   13.3s   1024x1024 -> 817x829    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:46:37  assets/weekday/monsters/colored/NemeanLion.png gen    9.9s  ours   24.9s   1024x1024 -> 818x830    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:47:18  assets/weekday/monsters/primary/Cerberus.png gen   10.8s  ours   27.2s   1024x1024 -> 892x897    765 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:47:51  assets/weekday/monsters/colored/Cerberus.png gen    9.4s  ours   21.0s   1024x1024 -> 672x672    649 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:48:15  assets/weekday/monsters/primary/Pegasus.png  gen   11.0s  ours   10.1s   1024x1024 -> 894x898   1004 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:48:31  assets/weekday/monsters/colored/Pegasus.png  gen   11.5s  ours    1.7s   1024x1024 -> 894x895    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 18  |  average generation (AI): 9s/image  |  average our time (save+bgfix+pause): 19s/image
+Total AI + our time: 8m 32s  (wall clock: 9m 23s)
+Run finished: 2026-07-21 18:48:31  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-21 18:51:55  (18/18 pending)
+--------------------------------------------------------------------
+2026-07-21 18:52:23  assets/weekday/monsters/primary/Medusa.png   gen    7.4s  ours   17.5s   1024x1024 -> 890x895    954 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:52:49  assets/weekday/monsters/colored/Medusa.png   gen    7.9s  ours   16.0s   1024x1024 -> 890x894    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:53:25  assets/weekday/monsters/primary/Minotaur.png gen   25.1s  ours    8.4s   1024x1024 -> 804x797    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:53:54  assets/weekday/monsters/colored/Minotaur.png gen    7.8s  ours   18.0s   1024x1024 -> 806x797   1024 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:54:19  assets/weekday/monsters/primary/Sphinx.png   gen    8.0s  ours   14.2s   1024x1024 -> 898x901    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:54:42  assets/weekday/monsters/colored/Sphinx.png   gen    7.9s  ours   11.5s   1024x1024 -> 899x902    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:55:45  assets/weekday/monsters/primary/ErymanthianBoar.png gen   26.1s  ours   34.6s   1024x1024 -> 820x827    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:56:22  assets/weekday/monsters/colored/ErymanthianBoar.png gen    9.4s  ours   24.6s   1024x1024 -> 820x827    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:57:05  assets/weekday/monsters/primary/Sirens.png   gen    8.8s  ours   32.0s   1024x1024 -> 901x903    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:57:39  assets/weekday/monsters/colored/Sirens.png   gen    9.4s  ours   20.5s   1024x1024 -> 902x904    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:58:26  assets/weekday/monsters/primary/Hydra.png    gen    9.3s  ours   35.0s   1024x1024 -> 864x876    894 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:58:56  assets/weekday/monsters/colored/Hydra.png    gen    9.5s  ours   17.7s   1024x1024 -> 864x876   1002 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 18:59:29  assets/weekday/monsters/primary/NemeanLion.png gen    9.9s  ours   20.4s   1024x1024 -> 929x934    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 19:00:13  assets/weekday/monsters/colored/NemeanLion.png gen    9.9s  ours   31.0s   1024x1024 -> 932x937    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-21 19:00:52  assets/weekday/monsters/primary/Cerberus.png gen   10.3s  ours   26.5s   1024x1024 -> 854x855    700 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 19:01:40  assets/weekday/monsters/colored/Cerberus.png gen    9.8s  ours   35.1s   1024x1024 -> 854x856    669 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 19:02:21  assets/weekday/monsters/primary/Pegasus.png  gen   10.9s  ours   27.2s   1024x1024 -> 828x828    971 KB  [REMOVE BG: done, CROP: done]
+2026-07-21 19:02:36  assets/weekday/monsters/colored/Pegasus.png  gen    9.8s  ours    1.7s   1024x1024 -> 827x828    920 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 18  |  average generation (AI): 11s/image  |  average our time (save+bgfix+pause): 22s/image
+Total AI + our time: 9m 49s  (wall clock: 10m 40s)
+Run finished: 2026-07-21 19:02:36  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 17:38:40  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 17:38:40  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-23 21:25:13  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-23 21:25:13  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:46:02  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:46:02  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 11:53:04  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 11:53:04  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 12:37:52  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 12:37:52  (all pending items done)
+
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-25 15:49:14  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-25 15:49:14  (all pending items done)
+
