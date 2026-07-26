@@ -154,7 +154,7 @@ Ornate circular badge, vivid full-color painted wilderness over aged bronze, pho
 
 ---
 
-## The Ninth — Sigma (`assets/weeks/societies/wolf/primary/bronze/sigma.png`)
+## The Ninth — Sigma (`assets/weeks/societies/wolf/primary/bronze/Sigma.png`)
 
 Owner clarification (2026-07-14, the Ninth-as-regular-member
 correction): Sigma is a REGULAR NINTH member of the Wolf Pack set,
@@ -170,7 +170,7 @@ duality is forced onto it here.
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf silhouette walking away into rolling mist, deliberately HALF-CARVED — the head and shoulders in finished bronze relief, the hindquarters dissolving into raw uncut stone as if the sculptor abandoned the work, no pack anywhere, an empty rock outcrop faint in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints running clockwise with small pine sprigs — but the trail BREAKS and fades to smooth uncarved stone along the bottom quarter, and the four roundels are blank polished discs bearing no glyph at all. Palette: aged bronze dominant, raw gray stone where the carving dissolves, no gilded metal anywhere.
 ```
 
-**Sigma (colored)** → `assets/weeks/societies/wolf/primary/colored/sigma.png`
+**Sigma (colored)** → `assets/weeks/societies/wolf/primary/colored/Sigma.png`
 ```
 Ornate circular badge, vivid full-color painted wilderness over bronze, photorealistic render, perfectly centered, isolated on white background. Center: a lone wolf walking away into rolling mist, deliberately HALF-PAINTED — the head and shoulders rendered in rich full color, silver-gray coat catching warm amber eye-light, the hindquarters dissolving into bare unpainted canvas with visible pencil underdrawing and a few dry brush strokes, no pack anywhere, an empty rock outcrop faint and unfinished in the background where an alpha should stand. Border: bronze ring carved as a circling trail of wolf paw-prints interlaced with pine sprigs, but the trail fades to blank canvas along the bottom quarter, four roundels left as bare pale discs with no glyph painted in. Colors: rich silver-gray and amber where finished, fading to raw canvas white and pencil gray where the painting stops.
 ```

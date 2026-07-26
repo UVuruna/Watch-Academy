@@ -39,24 +39,24 @@ without ever attempting text.
 Files land in `assets/weekday/japan/primary/`. Stems below are the exact
 lowercase romaji stems from `WEEKDAY_THEME_FILES["japan"]` (macrons and
 the apostrophe already folded — `kinyobi`, not `kin'yōbi`); the Sunday
-dual sits flat at `assets/weeks/crafts/japan/primary/colored/ama_no_iwato.png` per
+dual sits flat at `assets/weeks/crafts/japan/primary/colored/Ama_No_Iwato.png` per
 `WEEKDAY_DUAL_FILES["japan"]`.
 
 | Day | Body | Yōbi figure | File |
 |---|---|---|---|
-| Sunday | sun | Amaterasu (dual: Ama-no-Iwato) | `assets/weeks/crafts/japan/primary/colored/nichiyobi.png` / `assets/weeks/crafts/japan/primary/colored/ama_no_iwato.png` |
-| Monday | moon | Tsukuyomi's moon rabbit | `assets/weeks/crafts/japan/primary/colored/getsuyobi.png` |
-| Tuesday | mars | Kagutsuchi / samurai kabuto | `assets/weeks/crafts/japan/primary/colored/kayobi.png` |
-| Wednesday | mercury | Ryujin | `assets/weeks/crafts/japan/primary/colored/suiyobi.png` |
-| Thursday | jupiter | the sacred pine (shinboku) | `assets/weeks/crafts/japan/primary/colored/mokuyobi.png` |
-| Friday | venus | Yata no Kagami (the sacred mirror) | `assets/weeks/crafts/japan/primary/colored/kinyobi.png` |
-| Saturday | saturn | Fuji and the rice terraces | `assets/weeks/crafts/japan/primary/colored/doyobi.png` |
+| Sunday | sun | Amaterasu (dual: Ama-no-Iwato) | `assets/weeks/crafts/japan/primary/colored/Nichiyobi.png` / `assets/weeks/crafts/japan/primary/colored/Ama_No_Iwato.png` |
+| Monday | moon | Tsukuyomi's moon rabbit | `assets/weeks/crafts/japan/primary/colored/Getsuyobi.png` |
+| Tuesday | mars | Kagutsuchi / samurai kabuto | `assets/weeks/crafts/japan/primary/colored/Kayobi.png` |
+| Wednesday | mercury | Ryujin | `assets/weeks/crafts/japan/primary/colored/Suiyobi.png` |
+| Thursday | jupiter | the sacred pine (shinboku) | `assets/weeks/crafts/japan/primary/colored/Mokuyobi.png` |
+| Friday | venus | Yata no Kagami (the sacred mirror) | `assets/weeks/crafts/japan/primary/colored/Kinyobi.png` |
+| Saturday | saturn | Fuji and the rice terraces | `assets/weeks/crafts/japan/primary/colored/Doyobi.png` |
 
 ---
 
 ## Wa-motif plates
 
-**Sunday — Amaterasu (Nichiyobi)** → `assets/weeks/crafts/japan/primary/colored/nichiyobi.png`
+**Sunday — Amaterasu (Nichiyobi)** → `assets/weeks/crafts/japan/primary/colored/Nichiyobi.png`
 
 *The rising-sun fan with Yatagarasu across the disc and the torii
 below it, per the article's opening image.*
@@ -65,7 +65,7 @@ below it, per the article's opening image.*
 Ornate circular medallion, gold relief against a crimson sun-orb, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a blaze of gold — a rising-sun fan of cream-and-amber rays spreading behind a glossy crimson sun-orb, a black three-legged crow standing across the orb with wings flung wide, a vermilion torii gate marking the threshold beneath the disc. Border: a thin seigaiha wave band framing the rim, chrysanthemum crests alternating with plain kiku roundels. Palette: gold relief dominant against the crimson sun-orb; the torii's vermilion the only cool-toned accent. No kanji, no text, no watermark.
 ```
 
-**Sunday (dual) — Ama-no-Iwato** → `assets/weeks/crafts/japan/primary/colored/ama_no_iwato.png`
+**Sunday (dual) — Ama-no-Iwato** → `assets/weeks/crafts/japan/primary/colored/Ama_No_Iwato.png`
 
 *The sealed cave with one sliver of gold light leaking through, per
 the article's own Servant-face paragraph.*
@@ -74,7 +74,7 @@ the article's own Servant-face paragraph.*
 Ornate circular medallion, near-black relief, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a sealed boulder filling the frame in near-total darkness, the gold sunburst rays behind it snuffed to cold gray-black, a round mirror propped against the rock catching one last thin glint of light, a sprig of sakaki hung with jewels beside it, one sliver of warm gold light just beginning to leak from where the boulder has not quite sealed. Border: the same seigaiha wave band and kiku roundels, darkened. Palette: near-black relief dominant; the single sliver of gold light the only bright accent. No kanji, no text, no watermark.
 ```
 
-**Monday — Tsukuyomi's moon rabbit (Getsuyobi)** → `assets/weeks/crafts/japan/primary/colored/getsuyobi.png`
+**Monday — Tsukuyomi's moon rabbit (Getsuyobi)** → `assets/weeks/crafts/japan/primary/colored/Getsuyobi.png`
 
 *The rabbit mid-pound at the mortar beneath the full moon, per the
 article's opening image.*
@@ -83,7 +83,7 @@ article's opening image.*
 Ornate circular medallion, silver relief on a deep navy field, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: worked in silver over a deep navy field strewn with stars — a bright lunar orb carrying a rabbit in silhouette, mallet raised above a mortar, caught mid-pound, silver cloud-scrolls drifting past. Border: a thin seigaiha wave band, the outer rim cycling the moon through its phases (waxing crescent, half, full, waning) alternating with small kiku roundels. Palette: silver relief on deep navy dominant; the lunar orb the brightest accent. No kanji, no text, no watermark.
 ```
 
-**Tuesday — Kagutsuchi / samurai kabuto (Kayobi)** → `assets/weeks/crafts/japan/primary/colored/kayobi.png`
+**Tuesday — Kagutsuchi / samurai kabuto (Kayobi)** → `assets/weeks/crafts/japan/primary/colored/Kayobi.png`
 
 *The horned kabuto over crossed katana wreathed in flame, per the
 article's opening image.*
@@ -92,7 +92,7 @@ article's opening image.*
 Ornate circular medallion, dark bronze relief against a black-and-crimson field, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: forged in dark bronze under a red glow — a samurai kabuto helmet, wide crescent horns curving up, set over two crossed katana, orange flames wreathing the whole arrangement. Border: a thin seigaiha wave band, tomoe (comma-shaped swirl) motifs alternating with small kiku roundels, tongues of flame set between them. Palette: dark bronze relief dominant; the flame-glow the only warm bright accent. No kanji, no text, no watermark.
 ```
 
-**Wednesday — Ryujin (Suiyobi)** → `assets/weeks/crafts/japan/primary/colored/suiyobi.png`
+**Wednesday — Ryujin (Suiyobi)** → `assets/weeks/crafts/japan/primary/colored/Suiyobi.png`
 
 *The Great Wave with the tide-jewel dragon rising from its curl, per
 the article's opening image.*
@@ -101,7 +101,7 @@ the article's opening image.*
 Ornate circular medallion, silver-and-teal relief, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: worked in silver and blue-green — a great wave rearing and breaking, a coiled dragon rising from its curl lifting a glowing white tide-jewel in its claws. Border: a seigaiha wave band (the water-day's own wave-pattern, doubled as the family rim), koi swimming between small kiku roundels. Palette: silver-and-teal relief dominant; the tide-jewel's glow the only bright accent. No kanji, no text, no watermark.
 ```
 
-**Thursday — the sacred pine (Mokuyobi)** → `assets/weeks/crafts/japan/primary/colored/mokuyobi.png`
+**Thursday — the sacred pine (Mokuyobi)** → `assets/weeks/crafts/japan/primary/colored/Mokuyobi.png`
 
 *The wind-bent shinboku pine girdled with shimenawa rope, per the
 article's opening image.*
@@ -110,7 +110,7 @@ article's opening image.*
 Ornate circular medallion, green-patina bronze relief, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: green patina over bronze — an ancient wind-bent pine gripping a mossy rock, a shimenawa rope hung with white zigzag shide streamers wound around its trunk. Border: a thin seigaiha wave band, bamboo stalks, maple leaves and pine-sprays alternating with small kiku roundels. Palette: green-patina bronze relief dominant; the white shide streamers the only pale accent. No kanji, no text, no watermark.
 ```
 
-**Friday — Yata no Kagami (Kinyobi)** → `assets/weeks/crafts/japan/primary/colored/kinyobi.png`
+**Friday — Yata no Kagami (Kinyobi)** → `assets/weeks/crafts/japan/primary/colored/Kinyobi.png`
 
 *The polished mirror on its lotus pedestal with falling ginkgo leaves,
 per the article's opening image.*
@@ -119,7 +119,7 @@ per the article's opening image.*
 Ornate circular medallion, warm gold relief, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: warm gold throughout — a round polished mirror standing upright on a lotus-blossom pedestal, golden ginkgo leaves drifting down around it. Border: a thin seigaiha wave band, ginkgo scrollwork alternating with koban-coin shapes and small kiku roundels. Palette: warm gold relief dominant; the mirror's polished glint the only bright accent. No kanji, no text, no watermark.
 ```
 
-**Saturday — Fuji and the rice terraces (Doyobi)** → `assets/weeks/crafts/japan/primary/colored/doyobi.png`
+**Saturday — Fuji and the rice terraces (Doyobi)** → `assets/weeks/crafts/japan/primary/colored/Doyobi.png`
 
 *Mount Fuji behind the stone-walled paddies and the weathered stone
 lantern, per the article's opening image.*

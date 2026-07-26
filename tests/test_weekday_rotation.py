@@ -40,7 +40,7 @@ def test_bible_dark_body_without_on_date_stays_canonical():
     the Encyclopedia gallery, the theme picker grids) is UNCHANGED: the
     plain canonical file, no rotation applied."""
     canonical = defaults.weekday_theme_body_art("bible_dark", "saturn")
-    assert canonical.name == "cain.png"
+    assert canonical.name == "Cain.png"
     assert canonical == defaults.weekday_theme_body_art("bible_dark", "saturn")
 
 

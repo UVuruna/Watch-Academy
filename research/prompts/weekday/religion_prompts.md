@@ -90,13 +90,13 @@ Stems below are exact and lowercase, matching
 
 | Day | Body | Creed | File |
 |---|---|---|---|
-| Sunday | sun | Christianity (dual: Satanism) | `assets/weeks/faith/creeds/primary/colored/christianity.png` / `assets/weeks/faith/creeds/primary/colored/satanism.png` |
-| Monday | moon | Islam | `assets/weeks/faith/creeds/primary/colored/islam.png` |
-| Tuesday | mars | Buddhism | `assets/weeks/faith/creeds/primary/colored/buddhism.png` |
-| Wednesday | mercury | Taoism | `assets/weeks/faith/creeds/primary/colored/taoism.png` |
-| Thursday | jupiter | Hinduism | `assets/weeks/faith/creeds/primary/colored/hinduism.png` |
-| Friday | venus | Sikhism | `assets/weeks/faith/creeds/primary/colored/sikhism.png` |
-| Saturday | saturn | Judaism | `assets/weeks/faith/creeds/primary/colored/judaism.png` |
+| Sunday | sun | Christianity (dual: Satanism) | `assets/weeks/faith/creeds/primary/colored/Christianity.png` / `assets/weeks/faith/creeds/primary/colored/Satanism.png` |
+| Monday | moon | Islam | `assets/weeks/faith/creeds/primary/colored/Islam.png` |
+| Tuesday | mars | Buddhism | `assets/weeks/faith/creeds/primary/colored/Buddhism.png` |
+| Wednesday | mercury | Taoism | `assets/weeks/faith/creeds/primary/colored/Taoism.png` |
+| Thursday | jupiter | Hinduism | `assets/weeks/faith/creeds/primary/colored/Hinduism.png` |
+| Friday | venus | Sikhism | `assets/weeks/faith/creeds/primary/colored/Sikhism.png` |
+| Saturday | saturn | Judaism | `assets/weeks/faith/creeds/primary/colored/Judaism.png` |
 
 Freemasonry no longer occupies a weekday seat at all — it moves to
 The Ninth, below.
@@ -105,7 +105,7 @@ The Ninth, below.
 
 ## The roster — seven plates
 
-**Sunday — Christianity** → `assets/weeks/faith/creeds/primary/colored/christianity.png`
+**Sunday — Christianity** → `assets/weeks/faith/creeds/primary/colored/Christianity.png`
 
 *REUSE, moved from Friday (venus → sun) — file and prompt untouched.
 The glowing white cross with the Chi-Rho at the crossing and the crown
@@ -115,7 +115,7 @@ of thorns at its foot, per the article.*
 Ornate circular medallion, silver sculptural relief on black stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a glowing white cross, a simple Chi-Rho monogram at the crossing point, a crown of thorns resting quietly at the cross's foot. Border: silver rim weaving grapevines with tiny fish shapes threaded between the leaves. Palette: black stone and silver relief dominant; the cross's soft white glow the only bright accent. No text, no watermark.
 ```
 
-**Monday — Islam** → `assets/weeks/faith/creeds/primary/colored/islam.png`
+**Monday — Islam** → `assets/weeks/faith/creeds/primary/colored/Islam.png`
 
 *KEEP verbatim. The golden crescent filled with arabesque vinework, no
 image of the divine, only pattern — the article's own rule.*
@@ -124,7 +124,7 @@ image of the divine, only pattern — the article's own rule.*
 Ornate circular medallion, silver sculptural relief on deep lapis-blue stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden crescent moon filled with intricate arabesque vinework, a five-pointed star nested in its embrace like a rosette — pattern and geometry only, nothing figural, no calligraphy, no depiction of any person. Border: silver rim tiled with small repeating eight-point geometric star medallions (girih strapwork). Palette: silver relief and deep lapis-blue stone dominant; the crescent and star the only warm gold accent. No text, no calligraphy, no watermark.
 ```
 
-**Tuesday — Buddhism** → `assets/weeks/faith/creeds/primary/colored/buddhism.png`
+**Tuesday — Buddhism** → `assets/weeks/faith/creeds/primary/colored/Buddhism.png`
 
 *KEEP verbatim. The eight-spoked Dharma wheel with the seated Buddha at
 its hub, per the article's opening image.*
@@ -133,7 +133,7 @@ its hub, per the article's opening image.*
 Ornate circular medallion, silver sculptural relief on lapis-blue stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden eight-spoked Dharma wheel, a serene silver Buddha seated cross-legged in meditation at its hub, hands resting in his lap, eyes closed, utterly still. Border: a rim of silver lotus blossoms rising in low relief, clean petals lifting as if straight out of unseen mud. Palette: silver relief and lapis-blue stone dominant; the golden wheel the only warm accent. No text, no watermark.
 ```
 
-**Wednesday — Taoism** → `assets/weeks/faith/creeds/primary/colored/taoism.png`
+**Wednesday — Taoism** → `assets/weeks/faith/creeds/primary/colored/Taoism.png`
 
 *KEEP verbatim. The taijitu cut in gold and dark metal, clouds against
 mountains and waves — the article's own image.*
@@ -142,7 +142,7 @@ mountains and waves — the article's own image.*
 Ornate circular medallion, silver-and-gold sculptural relief on near-black marble, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a taijitu cut in gold and dark silver-toned metal, the bright half engraved with scrolling clouds, the dark half with mountains and waves — heaven turning inside earth. Border: silver rim alternating eight bagua trigram marks with small yin-yang roundels. Palette: silver-and-black relief dominant; the taijitu's gold half the only warm accent. No text, no watermark.
 ```
 
-**Thursday — Hinduism** → `assets/weeks/faith/creeds/primary/colored/hinduism.png`
+**Thursday — Hinduism** → `assets/weeks/faith/creeds/primary/colored/Hinduism.png`
 
 *KEEP verbatim. The golden Om with the crescent and bindu floating
 above it like the sound's last trace, per the article.*
@@ -151,7 +151,7 @@ above it like the sound's last trace, per the article.*
 Ornate circular medallion, silver sculptural relief on amber-toned stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Om symbol raised in fine filigree, a crescent and dot floating above its curve like the sound's last trace. Border: silver rim stringing flower rosettes with small Om-shaped roundels set at the four quarters. Palette: silver relief and amber stone dominant; the golden Om the only warm accent. No text, no watermark.
 ```
 
-**Friday — Sikhism** → `assets/weeks/faith/creeds/primary/colored/sikhism.png`
+**Friday — Sikhism** → `assets/weeks/faith/creeds/primary/colored/Sikhism.png`
 
 *REUSE, moved in from Ancient Religions (jupiter → venus, a real
 cross-tree file move — see the header) — file and prompt untouched,
@@ -163,7 +163,7 @@ crossed kirpans, per the article's opening image.*
 Ornate circular medallion, gold-and-silver relief on a starry midnight field, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a golden Khanda — a double-edged sword upright inside a circular chakkar ring, two curved kirpans crossed behind it — set against a starry midnight field. Border: silver rim alternating lotus flowers with small khanda-shaped roundels. Palette: gold-and-silver relief on starry midnight stone dominant; the Khanda the brightest accent. No text, no watermark.
 ```
 
-**Saturday — Judaism** → `assets/weeks/faith/creeds/primary/colored/judaism.png`
+**Saturday — Judaism** → `assets/weeks/faith/creeds/primary/colored/Judaism.png`
 
 *KEEP verbatim. The Star of David woven from two interlocked triangles,
 per the article — bands left plain rather than lettered.*
@@ -174,7 +174,7 @@ Ornate circular medallion, silver sculptural relief on dark slate, photorealisti
 
 ---
 
-## Dual — Christianity / Satanism (`assets/weeks/faith/creeds/primary/colored/satanism.png`)
+## Dual — Christianity / Satanism (`assets/weeks/faith/creeds/primary/colored/Satanism.png`)
 
 **NEW plate (this rework)** — the faith's adversary as its shadow face:
 the red horned Devil rendered as a dignified, logo-like emblem, not a
@@ -192,7 +192,7 @@ Ornate circular medallion, dark-red sculptural relief on black stone, photoreali
 ```
 
 **SUPERSEDED — The Rough Ashlar** (Freemasonry's old Servant face, now
-flat at `assets/weeks/faith/creeds/primary/colored/rough_ashlar.png`): no longer
+flat at `assets/weeks/faith/creeds/primary/colored/Rough_Ashlar.png`): no longer
 wired into the theme now that Freemasonry has left Sunday for the
 Ninth. The plate stays on disk as historical art — nothing to delete,
 nothing to regenerate. Prompt kept here for the record only:
@@ -238,7 +238,7 @@ documented above under "Dual — Christianity / Satanism" as SUPERSEDED
 — not repeated here to avoid two copies of the same plate.
 
 **Washbasin — Christianity's retired dual** (now flat at
-`assets/weeks/faith/creeds/primary/colored/washbasin.png`):
+`assets/weeks/faith/creeds/primary/colored/Washbasin.png`):
 before this rework, Christianity's Sunday dual was the washbasin-and-
 towel pairing ("the king who washes feet, the God who empties
 himself... the king of kings who kneels to wash feet is the
@@ -250,7 +250,7 @@ Circular medallion, polished silver relief on black marble stone, photorealistic
 ```
 
 **Perfect Ashlar — optional bright counterpart to the Rough Ashlar**
-(now flat at `assets/weeks/faith/creeds/primary/colored/perfect_ashlar.png`, only
+(now flat at `assets/weeks/faith/creeds/primary/colored/Perfect_Ashlar.png`, only
 if the owner wants the pair as TWO new images instead of reusing
 `freemasonry.png`):
 
@@ -270,9 +270,9 @@ Circular medallion, polished silver sculptural relief on black marble, photoreal
 ## Generation-order checklist
 
 1. **Generate NEW art — one plate:** the Satanism dual
-   (`assets/weeks/faith/creeds/primary/colored/satanism.png`). Everything else in this theme already exists.
+   (`assets/weeks/faith/creeds/primary/colored/Satanism.png`). Everything else in this theme already exists.
 2. **Move — sikhism.png**: copy `assets/weeks/faith/creeds/secondary/colored/sikhism.png`
-   → `assets/weeks/faith/creeds/primary/colored/sikhism.png` (implementation
+   → `assets/weeks/faith/creeds/primary/colored/Sikhism.png` (implementation
    work, no regeneration).
 3. **Reassign — christianity.png**: file stays put; only the venus→sun
    seat mapping in code changes.
@@ -280,7 +280,7 @@ Circular medallion, polished silver sculptural relief on black marble, photoreal
    changes from the Sunday seat to the Ninth-topic plate.
 5. **Move out — unknown_god.png**: relocates to Ancient Religions
    (documented in full over there).
-6. **Leave on disk, unused — `assets/weeks/faith/creeds/primary/colored/rough_ashlar.png`**: the superseded
+6. **Leave on disk, unused — `assets/weeks/faith/creeds/primary/colored/Rough_Ashlar.png`**: the superseded
    Freemasonry dual, now flat; historical art, not wired into the theme anymore.
 7. Islam, Buddhism, Taoism, Hinduism, Judaism: unchanged, no action
    needed.

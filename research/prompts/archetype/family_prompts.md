@@ -95,19 +95,19 @@ The archetype articles run in TWO ROWS (member + hearth-role). The rows
 can share the lancet; generate these three small rondels ONLY if the
 owner wants the hearth-role row to carry its own image:
 
-**the Shield rondel** → `assets/archetypes/family/primary/colored/rondel_Shield.png`
+**the Shield rondel** → `assets/archetypes/family/primary/colored/Rondel_Shield.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A large kite shield planted upright with a steady lantern beside it, light-blue and clear silver glass, oak-and-rivet leadwork rim. NO lettering anywhere.
 ```
 
-**the Heart rondel** → `assets/archetypes/family/primary/colored/rondel_Heart.png`
+**the Heart rondel** → `assets/archetypes/family/primary/colored/Rondel_Heart.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A softly glowing heart cradling a loaf of bread, warm light-red and coral glass, braided rose-vine leadwork rim. NO lettering anywhere.
 ```
 
-**the Dawn rondel** → `assets/archetypes/family/primary/colored/rondel_Dawn.png`
+**the Dawn rondel** → `assets/archetypes/family/primary/colored/Rondel_Dawn.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A sun rising over a green hill above a single sprouting seedling, spring-green and pale-gold glass, young-vine-and-bud leadwork rim. NO lettering anywhere.

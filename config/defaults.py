@@ -642,13 +642,13 @@ WEEKDAY_PANTHEON = {
     "greek": {
         "articles": "greek_pantheon",
         "files": {
-            "sun": ("greek/pantheon/bronze/zeus", "greek/primary/bronze/Zeus"),
-            "moon": ("greek/pantheon/bronze/poseidon",),
-            "mars": ("greek/pantheon/bronze/artemis",),
-            "mercury": ("greek/pantheon/bronze/athena",),
-            "jupiter": ("greek/pantheon/bronze/apollo",),
-            "venus": ("greek/pantheon/bronze/hera",),
-            "saturn": ("greek/pantheon/bronze/demeter",),
+            "sun": ("greek/pantheon/bronze/Zeus", "greek/primary/bronze/Zeus"),
+            "moon": ("greek/pantheon/bronze/Poseidon",),
+            "mars": ("greek/pantheon/bronze/Artemis",),
+            "mercury": ("greek/pantheon/bronze/Athena",),
+            "jupiter": ("greek/pantheon/bronze/Apollo",),
+            "venus": ("greek/pantheon/bronze/Hera",),
+            "saturn": ("greek/pantheon/bronze/Demeter",),
         },
         "names": {
             "sun": "Zeus (\u0396\u03b5\u03cd\u03c2)",
@@ -659,7 +659,7 @@ WEEKDAY_PANTHEON = {
             "venus": "Hera (\u1f2d\u03c1\u03b1)",
             "saturn": "Demeter (\u0394\u03b7\u03bc\u03ae\u03c4\u03b7\u03c1)",
         },
-        "dual": ("greek/pantheon/bronze/hades",),
+        "dual": ("greek/pantheon/bronze/Hades",),
         "dual_names": ("Zeus", "Hades"),
     },
     "norse": {
@@ -685,39 +685,39 @@ WEEKDAY_PANTHEON = {
     "egypt": {
         "articles": "egypt_pantheon",
         "files": {
-            "sun": ("egypt/primary/bronze/ra",),
-            "moon": ("egypt/pantheon/bronze/isis",),
-            "mars": ("egypt/pantheon/bronze/horus",),
-            "mercury": ("egypt/primary/bronze/thoth",),
-            "jupiter": ("egypt/pantheon/bronze/anubis",),
-            "venus": ("egypt/pantheon/bronze/bastet",),
-            "saturn": ("egypt/primary/bronze/osiris",),
+            "sun": ("egypt/primary/bronze/Ra",),
+            "moon": ("egypt/pantheon/bronze/Isis",),
+            "mars": ("egypt/pantheon/bronze/Horus",),
+            "mercury": ("egypt/primary/bronze/Thoth",),
+            "jupiter": ("egypt/pantheon/bronze/Anubis",),
+            "venus": ("egypt/pantheon/bronze/Bastet",),
+            "saturn": ("egypt/primary/bronze/Osiris",),
         },
         "names": {
             "sun": "Ra", "moon": "Isis", "mars": "Horus",
             "mercury": "Thoth", "jupiter": "Anubis",
             "venus": "Bastet", "saturn": "Osiris",
         },
-        "dual": ("egypt/primary/bronze/afu_ra",),
+        "dual": ("egypt/primary/bronze/Afu_Ra",),
         "dual_names": ("Ra", "Afu-Ra"),
     },
     "slavic": {
         "articles": "slavic_pantheon",
         "files": {
-            "sun": ("slavic/primary/bronze/perun",),
-            "moon": ("slavic/primary/bronze/mokos",),
-            "mars": ("slavic/primary/bronze/svetovid",),
-            "mercury": ("slavic/pantheon/bronze/svarog",),
-            "jupiter": ("slavic/primary/bronze/dazbog",),
-            "venus": ("slavic/pantheon/bronze/lada",),
-            "saturn": ("slavic/primary/bronze/morana",),
+            "sun": ("slavic/primary/bronze/Perun",),
+            "moon": ("slavic/primary/bronze/Mokos",),
+            "mars": ("slavic/primary/bronze/Svetovid",),
+            "mercury": ("slavic/pantheon/bronze/Svarog",),
+            "jupiter": ("slavic/primary/bronze/Dazbog",),
+            "venus": ("slavic/pantheon/bronze/Lada",),
+            "saturn": ("slavic/primary/bronze/Morana",),
         },
         "names": {
             "sun": "Perun", "moon": "Moko\u0161", "mars": "Svetovid",
             "mercury": "Svarog", "jupiter": "Da\u017ebog",
             "venus": "Lada", "saturn": "Morana",
         },
-        "dual": ("slavic/primary/bronze/veles",),
+        "dual": ("slavic/primary/bronze/Veles",),
         "dual_names": ("Perun", "Veles"),
     },
 }
@@ -2288,13 +2288,28 @@ WEEKDAY_THEME_NAMES["continents"] = {
 }
 
 # File stems on disk: the display names folded to ASCII (Sól -> Sol,
-# Dažbog -> dazbog); the owner's religion, planet-sign, egypt, slavic
-# and alchemy art uses lowercase file names.
+# Dažbog -> Dazbog) and PASCAL-CASED per token (tree law rule 5, the
+# case half, owner-approved 2026-07-26: every stem reads as a NAME —
+# Afu_Ra, Big_Bang — never a lowercase file token). The themes below
+# historically shipped lowercase stems; their names are NORMALIZED
+# (lowered, then Pascal-cased) so display-name capitals like "McX"
+# can never drift the stem from what the disk rename produced.
 _ASCII_FOLD = str.maketrans("óážš", "oazs")
 _LOWERCASE_THEMES = (
     "religion", "religion_alt", "planet_signs", "egypt", "slavic", "alchemy",
-    "wolf",                        # the owner's wolf art uses lowercase stems
+    "wolf",
 )
+
+
+def _pascal_stem(stem: str) -> str:
+    """Tree-law stem casing: capitalize each underscore token unless it
+    already carries a capital of its own (Yggdrasil, KaliYuga stay as
+    drawn) — the SAME rule research/pascalcase_stems.py renamed the
+    disk with, so config and files can never disagree."""
+    return "_".join(
+        t if any(c.isupper() for c in t) else (t[:1].upper() + t[1:])
+        for t in stem.split("_")
+    )
 # Theme -> art folder under assets/weeks/<group>/: THE TREE LAW
 # (owner-approved 2026-07-26) — every theme dir is
 # <theme>/<register>/<look>: related themes share a theme folder via
@@ -2340,7 +2355,7 @@ WEEKDAY_THEME_DIRS = {
 }
 WEEKDAY_THEME_FILES = {
     theme: {
-        body: (
+        body: _pascal_stem(
             name.translate(_ASCII_FOLD).lower()
             if theme in _LOWERCASE_THEMES
             else name.translate(_ASCII_FOLD)
@@ -2352,15 +2367,15 @@ WEEKDAY_THEME_FILES = {
 # The dual center shows both faces in the hover title, but the owner's
 # medallion file keeps the single name.
 WEEKDAY_THEME_FILES["profession"]["sun"] = "Ruler"
-WEEKDAY_THEME_FILES["wolf"]["sun"] = "alpha"
+WEEKDAY_THEME_FILES["wolf"]["sun"] = "Alpha"
 WEEKDAY_THEME_FILES["bee"]["sun"] = "Queen"
 WEEKDAY_THEME_FILES["elephant"]["sun"] = "Matriarch"
 # The metal reads Quicksilver, the owner's file keeps the element name.
-WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "mercury"
+WEEKDAY_THEME_FILES["alchemy"]["mercury"] = "Mercury"
 # The reworked Creeds and the wolf rank parentheticals keep plain stems.
-WEEKDAY_THEME_FILES["religion_alt"]["jupiter"] = "eleusis"
-WEEKDAY_THEME_FILES["wolf"]["mars"] = "hunter"
-WEEKDAY_THEME_FILES["wolf"]["mercury"] = "scout"
+WEEKDAY_THEME_FILES["religion_alt"]["jupiter"] = "Eleusis"
+WEEKDAY_THEME_FILES["wolf"]["mars"] = "Hunter"
+WEEKDAY_THEME_FILES["wolf"]["mercury"] = "Scout"
 # The Greek and Norse display names carry native-script parentheticals
 # now — the files stay on the plain ASCII stems.
 WEEKDAY_THEME_FILES["greek"] = {
@@ -2376,40 +2391,41 @@ WEEKDAY_THEME_FILES["norse"] = {
 # The Japanese display names carry kanji — the files are the romaji
 # day names folded to plain ASCII (macrons and the apostrophe dropped).
 WEEKDAY_THEME_FILES["japan"] = {
-    "sun": "nichiyobi",
-    "moon": "getsuyobi",
-    "mars": "kayobi",
-    "mercury": "suiyobi",
-    "jupiter": "mokuyobi",
-    "venus": "kinyobi",
-    "saturn": "doyobi",
+    "sun": "Nichiyobi",
+    "moon": "Getsuyobi",
+    "mars": "Kayobi",
+    "mercury": "Suiyobi",
+    "jupiter": "Mokuyobi",
+    "venus": "Kinyobi",
+    "saturn": "Doyobi",
 }
-# The text-wave themes (owner 2026-07-14): explicit lowercase stems —
-# the display names carry duals ("·") and compounds ("Adam & Eve").
+# The text-wave themes (owner 2026-07-14): explicit stems — the
+# display names carry duals ("·") and compounds ("Adam & Eve");
+# PascalCase per the tree law's stem casing (rule 5, 2026-07-26).
 WEEKDAY_THEME_FILES["bible"] = {
-    "sun": "ancient_of_days", "moon": "mary", "mars": "david",
-    "mercury": "moses", "jupiter": "solomon", "venus": "adam_and_eve",
-    "saturn": "joseph",
+    "sun": "Ancient_Of_Days", "moon": "Mary", "mars": "David",
+    "mercury": "Moses", "jupiter": "Solomon", "venus": "Adam_And_Eve",
+    "saturn": "Joseph",
 }
 WEEKDAY_THEME_FILES["bible2"] = {
-    "sun": "abraham", "moon": "jonah", "mars": "samson",
-    "mercury": "jacob", "jupiter": "noah", "venus": "ruth",
-    "saturn": "job",
+    "sun": "Abraham", "moon": "Jonah", "mars": "Samson",
+    "mercury": "Jacob", "jupiter": "Noah", "venus": "Ruth",
+    "saturn": "Job",
 }
 WEEKDAY_THEME_FILES["bible_dark"] = {
-    "sun": "lucifer", "moon": "lilith", "mars": "goliath",
-    "mercury": "serpent", "jupiter": "herod", "venus": "delilah",
-    "saturn": "cain",
+    "sun": "Lucifer", "moon": "Lilith", "mars": "Goliath",
+    "mercury": "Serpent", "jupiter": "Herod", "venus": "Delilah",
+    "saturn": "Cain",
 }
 WEEKDAY_THEME_FILES["cosmos"] = {
-    "sun": "sun", "moon": "nebula", "mars": "supernova",
-    "mercury": "pulsar", "jupiter": "galaxy", "venus": "binary_stars",
-    "saturn": "comet",
+    "sun": "Sun", "moon": "Nebula", "mars": "Supernova",
+    "mercury": "Pulsar", "jupiter": "Galaxy", "venus": "Binary_Stars",
+    "saturn": "Comet",
 }
 WEEKDAY_THEME_FILES["planets_art"] = {
-    "sun": "sun", "moon": "moon", "mars": "mars",
-    "mercury": "mercury", "jupiter": "jupiter", "venus": "venus",
-    "saturn": "saturn",
+    "sun": "Sun", "moon": "Moon", "mars": "Mars",
+    "mercury": "Mercury", "jupiter": "Jupiter", "venus": "Venus",
+    "saturn": "Saturn",
 }
 # The emblem stems ARE the single names (Capitalized) — only the dual
 # sun display titles need the override.
@@ -2489,16 +2505,16 @@ WEEKDAY_DUAL_NAMES = {
 # (tree law 2026-07-26; the old "/primary/" string replace died with
 # the sibling-colored shape).
 WEEKDAY_DUAL_FILES = {
-    "planets": "planets/primary/photo/sun_eclipse",
-    "planet_signs": "planets/primary/sign/sun_eclipse",
+    "planets": "planets/primary/photo/Sun_Eclipse",
+    "planet_signs": "planets/primary/sign/Sun_Eclipse",
     "greek": "greek/primary/bronze/Phaethon",
     "norse": "norse/primary/bronze/Skoll",
-    "egypt": "egypt/primary/bronze/afu_ra",
-    "slavic": "slavic/primary/bronze/dazbog_old",
-    "alchemy": "alchemy/primary/colored/ore",
-    "japan": "japan/primary/colored/ama_no_iwato",
-    "religion": "creeds/primary/colored/satanism",
-    "religion_alt": "creeds/secondary/colored/corax",
+    "egypt": "egypt/primary/bronze/Afu_Ra",
+    "slavic": "slavic/primary/bronze/Dazbog_Old",
+    "alchemy": "alchemy/primary/colored/Ore",
+    "japan": "japan/primary/colored/Ama_No_Iwato",
+    "religion": "creeds/primary/colored/Satanism",
+    "religion_alt": "creeds/secondary/colored/Corax",
     # profession's flat "Servant" stem collides with an already-flat,
     # unreferenced orphan file the owner has separately at
     # profession/primary/Servant.png (different art, different hash —
@@ -2506,15 +2522,15 @@ WEEKDAY_DUAL_FILES = {
     # rename to "Servant_dual" resolves it without touching the
     # unrelated orphan (Rule #3: never delete without the owner's own
     # look).
-    "profession": "profession/primary/bronze/Servant_dual",
-    "wolf": "wolf/primary/bronze/omega",
+    "profession": "profession/primary/bronze/Servant_Dual",
+    "wolf": "wolf/primary/bronze/Omega",
     "bee": "bee/primary/bronze/Cleaner",
     "elephant": "elephant/primary/bronze/Memory",
-    "bible": "bible/primary/colored/son_servant",
-    "bible2": "bible/secondary/colored/isaac",
-    "bible_dark": "bible/dark/colored/judas",
-    "cosmos": "cosmos/primary/bronze/black_hole",
-    "planets_art": "planets/primary/art/sun_eclipse",
+    "bible": "bible/primary/colored/Son_Servant",
+    "bible2": "bible/secondary/colored/Isaac",
+    "bible_dark": "bible/dark/colored/Judas",
+    "cosmos": "cosmos/primary/bronze/Black_Hole",
+    "planets_art": "planets/primary/art/Sun_Eclipse",
     "virtues": "../emblem/virtue/primary/colored/Humility",
     "sins": "../emblem/sin/primary/colored/Servility",
     "moods": "../emblem/mood/primary/colored/Awe",
@@ -2563,7 +2579,7 @@ def weekday_theme_body_art(
     a date resolves the day's pick among the canonical file's `_v2`/
     `alt/` siblings, falling back to canonical when none exist."""
     if theme == "planets":
-        canonical = weekday_art(f"planets/primary/photo/{body}.png")
+        canonical = weekday_art(f"planets/primary/photo/{body.capitalize()}.png")
     else:
         theme_dir = weekday_art(WEEKDAY_THEME_DIRS[theme])
         if colored:
@@ -2698,7 +2714,7 @@ GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
 GLOW_ECLIPSE_INVISIBLE_COLOR = "#8A9096"       # desaturated silver-gray
 ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5
 ECLIPSE_SOLAR_ART = (
-    weekday_art("planets/primary/photo/sun_eclipse.png")
+    weekday_art("planets/primary/photo/Sun_Eclipse.png")
 )                                            # source-mapped by paths.art_file
 # LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
 # bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —
@@ -2957,7 +2973,7 @@ DEFAULT_SKIN = SkinDefinition(
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
     weekday_set=WeekdaySpec(
-        bodies={name: weekday_art(f"planets/primary/photo/{name}.png") for name in (
+        bodies={name: weekday_art(f"planets/primary/photo/{name.capitalize()}.png") for name in (
             "sun", "moon", "mars", "mercury", "jupiter", "venus", "saturn"
         )},
         body_names={
@@ -3005,7 +3021,7 @@ DEFAULT_SKIN = SkinDefinition(
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
-        moon_asset=weekday_art("planets/primary/photo/moon.png"),
+        moon_asset=weekday_art("planets/primary/photo/Moon.png"),
         moon_lit_color="#E8E4D8",
         moon_dark_color="#2A2D36",
         moon_shadow_alpha=0.82,

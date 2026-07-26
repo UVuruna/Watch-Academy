@@ -619,8 +619,8 @@ def _weekday_topic(theme: str):
         if theme == "planets":
             # Owner defaults 2026-07-13: the photos lead, the sign
             # glyphs and the bronze medallions ride the arrows.
-            sign = defaults.weekday_art(f"planets/primary/sign/{body}.png")
-            art = defaults.weekday_art(f"planets/primary/art/{body}.png")
+            sign = defaults.weekday_art(f"planets/primary/sign/{body.capitalize()}.png")
+            art = defaults.weekday_art(f"planets/primary/art/{body.capitalize()}.png")
             return (
                 ("Planets", rows(base, None)),
                 ("Signs", rows(sign, None)),
@@ -643,8 +643,8 @@ def _weekday_topic(theme: str):
                 for label, path in _metal_looks(servant, colored)
             )
         if theme == "planets":
-            sign_dual = defaults.weekday_art("planets/primary/sign/sun_eclipse.png")
-            art_dual = defaults.weekday_art("planets/primary/art/sun_eclipse.png")
+            sign_dual = defaults.weekday_art("planets/primary/sign/Sun_Eclipse.png")
+            art_dual = defaults.weekday_art("planets/primary/art/Sun_Eclipse.png")
             return (
                 ("Planets", rows(servant, None)),
                 ("Signs", rows(sign_dual, None)),
@@ -1133,7 +1133,7 @@ def _topics(travel_date: date | None = None) -> dict:
 
     topics["week"] = {
         "title": "The Week",
-        "icon": defaults.weekday_art("planets/primary/photo/sun.png"),
+        "icon": defaults.weekday_art("planets/primary/photo/Sun.png"),
         "entries": [
             {
                 "looks": (
@@ -1233,7 +1233,7 @@ def _topics(travel_date: date | None = None) -> dict:
     intel = defaults.EMBLEM_ART_DIRS["intelligence"]
     topics["intelligences"] = {
         "title": "The Nine Intelligences",
-        "icon": intel / "existential.png",
+        "icon": intel / "Existential.png",
         "entries": [{
             "images": (),
             "name": "The Nine Intelligences",
@@ -1247,15 +1247,15 @@ def _topics(travel_date: date | None = None) -> dict:
                 "accents": (),
             }
             for name, stem in (
-                ("Interpersonal", "interpersonal"),               # Monday
-                ("Bodily-Kinesthetic", "bodily_kinesthetic"),     # Tuesday
-                ("Linguistic", "linguistic"),                     # Wednesday
-                ("Logical-Mathematical", "logical_mathematical"), # Thursday
-                ("Musical", "musical"),                           # Friday
-                ("Naturalist", "naturalist"),                     # Saturday
-                ("Spatial", "spatial"),                           # Sun · Ruler
-                ("Intrapersonal", "intrapersonal"),               # Sun · Servant
-                ("Existential", "existential"),                   # Ninth
+                ("Interpersonal", "Interpersonal"),               # Monday
+                ("Bodily-Kinesthetic", "Bodily_Kinesthetic"),     # Tuesday
+                ("Linguistic", "Linguistic"),                     # Wednesday
+                ("Logical-Mathematical", "Logical_Mathematical"), # Thursday
+                ("Musical", "Musical"),                           # Friday
+                ("Naturalist", "Naturalist"),                     # Saturday
+                ("Spatial", "Spatial"),                           # Sun · Ruler
+                ("Intrapersonal", "Intrapersonal"),               # Sun · Servant
+                ("Existential", "Existential"),                   # Ninth
             )
         ],
     }
@@ -1432,7 +1432,7 @@ def _topics(travel_date: date | None = None) -> dict:
     # rendered LIVE (owner decree 2026-07-19: "bolje crtati na licu
     # mesta nego 15MB fajlova") from the full-moon master with the
     # dial's own terminator geometry — moon_phase_file, disk-cached.
-    moon_plate = defaults.weekday_art("planets/primary/photo/moon.png")
+    moon_plate = defaults.weekday_art("planets/primary/photo/Moon.png")
     topics["moon"] = {
         "title": "Moon",
         "icon": moon_plate,

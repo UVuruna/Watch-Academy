@@ -7,7 +7,7 @@ the owner's iron rule.
 ## Planets Medallion Look — turning the real-photo bodies to bronze
 
 The owner's real-photo Planets theme already ships seven bodies at
-`assets/weekday/planets/primary/` (`assets/weeks/celestial_bodies/planets/primary/art/sun.png` … `assets/weeks/celestial_bodies/planets/primary/art/saturn.png`, real renders —
+`assets/weekday/planets/primary/` (`assets/weeks/celestial_bodies/planets/primary/art/Sun.png` … `assets/weeks/celestial_bodies/planets/primary/art/Saturn.png`, real renders —
 `assets/___assets.md`, `design/___design.md`). This section is the
 SAME bronze medallion register applied to those same seven bodies
 plus the eclipse dual, so Planets and Cosmos read as one visual
@@ -22,54 +22,54 @@ two Sun prompts do not duplicate each other.
 `assets/weekday/planets/primary/` and the two must not collide; the owner may
 prefer a different name (`planets_bronze/`, `planets_medal/`, …).
 
-- `assets/weekday/planets/art/` — `assets/weeks/celestial_bodies/planets/primary/art/sun.png`, `assets/weeks/celestial_bodies/planets/primary/art/moon.png`, `assets/weeks/celestial_bodies/planets/primary/art/mars.png`,
-  `assets/weeks/celestial_bodies/planets/primary/art/mercury.png`, `assets/weeks/celestial_bodies/planets/primary/art/jupiter.png`, `assets/weeks/celestial_bodies/planets/primary/art/venus.png`, `assets/weeks/celestial_bodies/planets/primary/art/saturn.png`
-- `assets/weeks/celestial_bodies/planets/primary/art/sun_eclipse.png`
+- `assets/weekday/planets/art/` — `assets/weeks/celestial_bodies/planets/primary/art/Sun.png`, `assets/weeks/celestial_bodies/planets/primary/art/Moon.png`, `assets/weeks/celestial_bodies/planets/primary/art/Mars.png`,
+  `assets/weeks/celestial_bodies/planets/primary/art/Mercury.png`, `assets/weeks/celestial_bodies/planets/primary/art/Jupiter.png`, `assets/weeks/celestial_bodies/planets/primary/art/Venus.png`, `assets/weeks/celestial_bodies/planets/primary/art/Saturn.png`
+- `assets/weeks/celestial_bodies/planets/primary/art/Sun_Eclipse.png`
 - Bronze only, no `colored/` arc requested for this section.
 
-### Sun (`assets/weeks/celestial_bodies/planets/primary/art/sun.png`)
+### Sun (`assets/weeks/celestial_bodies/planets/primary/art/Sun.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the Sun's disc cast in full bronze relief, granulation cells and looping solar prominences worked in fine sculptural detail across its face, a slim corona breaking free of the rim in a thin ring of light. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Sun glyph. Palette: aged bronze dominant; the corona ring is the one element meant to hue-swap WITH the metal, exactly like the Cosmos Ruler plate.
 ```
 
-### Moon (`assets/weeks/celestial_bodies/planets/primary/art/moon.png`)
+### Moon (`assets/weeks/celestial_bodies/planets/primary/art/Moon.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: the Moon's near side cast in full bronze relief, every mare and crater rendered in careful low relief exactly as photographed, a sharp terminator line dividing the lit half from the shadowed half. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Moon crescent glyph. Palette: aged bronze dominant; the only bright accent a cool silver sheen along the lit hemisphere.
 ```
 
-### Mars (`assets/weeks/celestial_bodies/planets/primary/art/mars.png`)
+### Mars (`assets/weeks/celestial_bodies/planets/primary/art/Mars.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: Mars cast in full bronze relief, Olympus Mons rising as a raised boss and Valles Marineris cut as a long carved scar across the disc, a pale polar cap picked out at the upper rim. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Mars glyph. Palette: aged bronze dominant; the only bright accent a deep ember-red patina worked into the surface.
 ```
 
-### Mercury (`assets/weeks/celestial_bodies/planets/primary/art/mercury.png`)
+### Mercury (`assets/weeks/celestial_bodies/planets/primary/art/Mercury.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: Mercury cast in full bronze relief, its face pitted densely with craters like an old hammered coin, one long scarp cliff cutting a low ridge clean across the disc. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Mercury glyph. Palette: aged bronze dominant; the only bright accent a thin quicksilver gleam along the scarp's edge.
 ```
 
-### Jupiter (`assets/weeks/celestial_bodies/planets/primary/art/jupiter.png`)
+### Jupiter (`assets/weeks/celestial_bodies/planets/primary/art/Jupiter.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: Jupiter cast in full bronze relief, its banded clouds carved as sweeping parallel grooves circling the disc, the Great Red Spot raised as a single oval boss riding one band. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Jupiter glyph. Palette: aged bronze dominant; the only bright accent a warm amber gleam in the Great Red Spot.
 ```
 
-### Venus (`assets/weeks/celestial_bodies/planets/primary/art/venus.png`)
+### Venus (`assets/weeks/celestial_bodies/planets/primary/art/Venus.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: Venus cast in full bronze relief, its dense cloud-veil worked as smooth unbroken swirling relief waves across the whole disc, no surface visible beneath the shroud. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Venus glyph. Palette: aged bronze dominant; the only bright accent a faint rose-copper warmth in the cloud swirls.
 ```
 
-### Saturn (`assets/weeks/celestial_bodies/planets/primary/art/saturn.png`)
+### Saturn (`assets/weeks/celestial_bodies/planets/primary/art/Saturn.png`)
 
 ```
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background. Center: Saturn cast in full bronze relief, its rings worked as a set of fine concentric bronze wires standing proud of the disc's surface, banded clouds carved in low relief beneath them. Border: bronze ring carved as a fine engraved star-chart — thin constellation lines linking tiny six-point stars — with four small roundels bearing the Saturn glyph. Palette: darkened aged bronze dominant; the only bright accent the pale glint along the ring wires.
 ```
 
-### Sun eclipse (dual) (`assets/weeks/celestial_bodies/planets/primary/art/sun_eclipse.png`)
+### Sun eclipse (dual) (`assets/weeks/celestial_bodies/planets/primary/art/Sun_Eclipse.png`)
 
 The eclipse as a medallion: black disc, corona ring — the family
 mirror of the Cosmos black hole plate, but the Sun hidden, not

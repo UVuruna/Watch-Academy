@@ -106,49 +106,49 @@ if the owner wants the object row to carry its own image. Each rondel
 holds the estate's OBJECT in its estate's material glass, matching
 the window's border identity.
 
-**The Crown rondel** → `assets/archetypes/walks/primary/colored/rondel_Crown.png`
+**The Crown rondel** → `assets/archetypes/walks/primary/colored/Rondel_Crown.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A jewelled royal crown, royal gold and warm amber glass, crown-and-fleur leadwork rim. NO lettering anywhere.
 ```
 
-**The Coin rondel** → `assets/archetypes/walks/primary/colored/rondel_Coin.png`
+**The Coin rondel** → `assets/archetypes/walks/primary/colored/Rondel_Coin.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A stack of struck coins beside a small two-pan hand-scale, copper and bronze glass, coin-and-knot leadwork rim. NO lettering anywhere.
 ```
 
-**The Sword rondel** → `assets/archetypes/walks/primary/colored/rondel_Sword.png`
+**The Sword rondel** → `assets/archetypes/walks/primary/colored/Rondel_Sword.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A sword crossed over a round shield, iron-grey and blood-crimson glass, rivet-and-chain leadwork rim. NO lettering anywhere.
 ```
 
-**The Mask rondel** → `assets/archetypes/walks/primary/colored/rondel_Mask.png`
+**The Mask rondel** → `assets/archetypes/walks/primary/colored/Rondel_Mask.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A theatrical mask beside a small lyre, stage-velvet violet and purple glass, vine-and-lyre leadwork rim. NO lettering anywhere.
 ```
 
-**The Staff rondel** → `assets/archetypes/walks/primary/colored/rondel_Staff.png`
+**The Staff rondel** → `assets/archetypes/walks/primary/colored/Rondel_Staff.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A pilgrim's staff leaning across a lit lantern, road-dust indigo and charcoal glass, knot-and-thorn leadwork rim. NO lettering anywhere.
 ```
 
-**The Book rondel** → `assets/archetypes/walks/primary/colored/rondel_Book.png`
+**The Book rondel** → `assets/archetypes/walks/primary/colored/Rondel_Book.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. An open book before a burning oil lamp, ink-blue and midnight-blue glass, quill-and-scroll leadwork rim. NO lettering anywhere.
 ```
 
-**The Plough rondel** → `assets/archetypes/walks/primary/colored/rondel_Plough.png`
+**The Plough rondel** → `assets/archetypes/walks/primary/colored/Rondel_Plough.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A plough beside a bound sheaf of wheat, field-green and earth-brown glass, wheat-and-vine leadwork rim. NO lettering anywhere.
 ```
 
-**The Bell rondel** → `assets/archetypes/walks/primary/colored/rondel_Bell.png`
+**The Bell rondel** → `assets/archetypes/walks/primary/colored/Rondel_Bell.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A hand-bell beside an open sacred book, alb-ivory and cream glass, cross-and-lily leadwork rim. NO lettering anywhere.

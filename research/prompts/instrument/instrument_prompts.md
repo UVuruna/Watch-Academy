@@ -168,9 +168,9 @@ bronze as the ambient plate finish everything else is struck in — is
 already sitting in the asset tree, generated for the weekday alchemy
 set and needing no rework:
 
-- **Gold:** `assets/weeks/crafts/alchemy/primary/colored/gold.png` — crucible pouring molten
+- **Gold:** `assets/weeks/crafts/alchemy/primary/colored/Gold.png` — crucible pouring molten
   gold beside a polished sun-face disc, exactly "gold to the Sun."
-- **Silver:** `assets/weeks/crafts/alchemy/primary/colored/silver.png` — half-polished,
+- **Silver:** `assets/weeks/crafts/alchemy/primary/colored/Silver.png` — half-polished,
   half-tarnished mirror-disc and chalice, exactly "silver to the Moon."
 - **Bronze:** no dedicated medallion exists (or is needed) — bronze is
   the default, ambient finish of dozens of existing plates project-wide

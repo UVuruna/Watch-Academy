@@ -24,8 +24,8 @@ existing emblem-family convention):
 - `assets/weeks/inner_wheel/intelligence/primary/colored/BodilyKinesthetic.png`, `Interpersonal.png`,
   `Linguistic.png`, `Naturalist.png`, `LogicalMathematical.png`,
   `Musical.png`, `Existential.png`, `Intrapersonal.png`, `Spatial.png`
-- `assets/weeks/inner_wheel/mood/primary/colored/Wheel_of_Moods.png`, optionally
-  `assets/weeks/inner_wheel/mood/primary/colored/Wheel_of_Moods_dark.png`
+- `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods.png`, optionally
+  `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods_Dark.png`
 
 ---
 
@@ -211,7 +211,7 @@ literal characters to render.
 
 ### Wheel of Moods (default)
 
-**Wheel of Moods** → `assets/weeks/inner_wheel/mood/primary/colored/Wheel_of_Moods.png`
+**Wheel of Moods** → `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods.png`
 
 ```
 Circular medallion, vivid allegorical enamel in polished silver cameo, photorealistic render, perfectly centered, isolated on white background. The face divides into six equal enamel wedges arranged clockwise from the top like a sundial's hour marks: bright golden-yellow at 12 o'clock, deep amber-orange at 2 o'clock, blood red at 4 o'clock, dark violet-purple at 6 o'clock, vivid royal blue at 8 o'clock, forest green at 10 o'clock — each wedge a glossy enamel slice with a fine engraved sundial hour-tick along its outer edge. Center: a small radiant WHITE boss standing proud above the six wedges, blazing pure white light as though all six enamel colors were gathered back into one source. Rim: a thin dark oxidized-silver outer ring running the full circumference, broken only at the very bottom beneath the violet-purple wedge by one small pale-silver crescent moon inlaid into the ring like a quiet watching eye. Colors: golden yellow, amber orange, blood red, violet purple, royal blue and forest green enamel wedges, a blazing white center boss, one pale-silver crescent accent.
@@ -219,7 +219,7 @@ Circular medallion, vivid allegorical enamel in polished silver cameo, photoreal
 
 ### Wheel of Moods — dark variant (optional)
 
-**Wheel of Moods — dark variant** → `assets/weeks/inner_wheel/mood/primary/colored/Wheel_of_Moods_dark.png`
+**Wheel of Moods — dark variant** → `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods_Dark.png`
 
 Same composition, cast in a darker frame so the plate reads cleanly
 against the app's dark theme; still delivered white-background per the
@@ -238,5 +238,5 @@ output drops to the project root, then goes through white-background
 removal + circle crop + resize to 800×800 RGBA, same as every other
 weekday/badge asset delivered so far. Section A's nine badges land at
 `assets/weeks/inner_wheel/intelligence/primary/colored/{PascalCaseStem}.png`; Section B's medallion(s)
-land at `assets/weeks/inner_wheel/mood/primary/colored/Wheel_of_Moods.png` (and the optional
+land at `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods.png` (and the optional
 `Wheel_of_Moods_dark.png`), alongside the existing per-day Mood badges.

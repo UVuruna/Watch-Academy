@@ -41,7 +41,7 @@ drop the dual plate as `Servant_dual.png` and do not overwrite it.
 
 | Day | Body | Calling | File |
 |---|---|---|---|
-| Sunday | sun | Ruler (dual: Servant) | `assets/weeks/crafts/profession/primary/bronze/Ruler.png` / `assets/weeks/crafts/profession/primary/bronze/Servant_dual.png` |
+| Sunday | sun | Ruler (dual: Servant) | `assets/weeks/crafts/profession/primary/bronze/Ruler.png` / `assets/weeks/crafts/profession/primary/bronze/Servant_Dual.png` |
 | Monday | moon | Physician | `assets/weeks/crafts/profession/primary/bronze/Physician.png` |
 | Tuesday | mars | Soldier | `assets/weeks/crafts/profession/primary/bronze/Soldier.png` |
 | Wednesday | mercury | Merchant | `assets/weeks/crafts/profession/primary/bronze/Merchant.png` |
@@ -62,7 +62,7 @@ his side — the article's opening image.*
 Ornate circular medallion, weathered bronze sculptural relief on dark cracked stone, photorealistic render, perfectly centered, isolated on white background, square 1:1 aspect ratio. Center: a crowned, bearded king enthroned, a tall scepter upright in his right hand, a small cross-topped orb resting open in his left palm, an eagle-blazoned shield leaning at the throne's side, imperial eagles engraved into the stone behind him. Border: bronze ring of small eagle-crest roundels alternating with laurel sprigs. Palette: aged bronze dominant; the crown and orb the only brighter gilt accent. No text, no watermark.
 ```
 
-**Sunday (dual) — Servant** → `assets/weeks/crafts/profession/primary/bronze/Servant_dual.png`
+**Sunday (dual) — Servant** → `assets/weeks/crafts/profession/primary/bronze/Servant_Dual.png`
 
 *The king before his own empty throne, crown lifted from his head —
 the article's own Servant-face paragraph.*
@@ -177,7 +177,7 @@ Ornate circular badge, vivid full-color guild-crest style, photorealistic render
 ```
 
 **Servant (dual, colored)** — matches `colored/Ruler.png`; drop at
-`assets/weeks/crafts/profession/primary/colored/Servant_dual.png` (sitting directly
+`assets/weeks/crafts/profession/primary/colored/Servant_Dual.png` (sitting directly
 in the folder, same convention as the bronze Servant above — the
 `_dual` suffix again avoids the unrelated `Servant.png` already there)
 

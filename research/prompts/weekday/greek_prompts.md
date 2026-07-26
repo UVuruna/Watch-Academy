@@ -50,7 +50,7 @@ Pantheon Greek dual is **Zeus / Hades** — the throne above and the
 throne below — and the Pantheon ninth is **Gaia**, the Union of both
 lines. **Do not generate a ninth Hades plate, bronze or colored.**
 Hades's art is the Pantheon DUAL plate below instead
-(`assets/weeks/myth/greek/pantheon/bronze/hades.png` and `assets/weeks/myth/greek/pantheon/bronze/colored/hades.png`).
+(`assets/weeks/myth/greek/pantheon/bronze/Hades.png` and `assets/weeks/myth/greek/pantheon/bronze/colored/hades.png`).
 
 ---
 
@@ -206,7 +206,7 @@ thunderbolt, same throne, no regeneration. (The reused file's border
 still carries the Jupiter glyph baked into the original Thursday art
 — an accepted trade-off of "no new art," not an error.)
 
-**Poseidon — moon seat** → `assets/weeks/myth/greek/pantheon/bronze/poseidon.png` *(not yet
+**Poseidon — moon seat** → `assets/weeks/myth/greek/pantheon/bronze/Poseidon.png` *(not yet
 generated)*
 
 *The blue seat is the SEA's: Serenity is calm water, Fear is what the
@@ -216,7 +216,7 @@ sea becomes, and the Moon literally drags his tides.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Poseidon rising chest-deep from a calm sea gone suddenly to storm around him, a great trident gripped in one fist, his beard and mane running with seawater, a full moon riding low behind him with a visible tide-line dragged taut between the disc and the swell, dolphins circling in the calm nearside water while breakers crash on the far side, a wrecked hull's ribs showing where the storm has already passed. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Moon crescent glyph in relief. No text, no watermark.
 ```
 
-**Artemis — mars seat** → `assets/weeks/myth/greek/pantheon/bronze/artemis.png` *(not yet generated)*
+**Artemis — mars seat** → `assets/weeks/myth/greek/pantheon/bronze/Artemis.png` *(not yet generated)*
 
 *The hunt is a soldier's craft — the stalk, the drawn bow, the strike
 is Tuesday's Zeal; her punishments (Actaeon, Niobe) carry the seat's
@@ -226,7 +226,7 @@ Wrath.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Artemis mid-stride through dense forest, bow drawn to full draw and an arrow already loosed toward the edge of the frame, a quiver of arrows on her back and hunting boots laced to the knee, a stag frozen mid-leap just ahead of the arrow's path, hounds coursing at her side, antlers and a hunter's net hung as trophies on a tree behind her. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Mars glyph in relief. No text, no watermark.
 ```
 
-**Athena — mercury seat** → `assets/weeks/myth/greek/pantheon/bronze/athena.png` *(not yet
+**Athena — mercury seat** → `assets/weeks/myth/greek/pantheon/bronze/Athena.png` *(not yet
 generated)*
 
 *Wisdom is literally the seat's own word — the goddess of the seat's
@@ -237,7 +237,7 @@ night-mind.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Athena standing in calm, unhurried command, a crested helmet pushed back off her brow, the Aegis with the gorgon's face worn across one shoulder, a spear held upright rather than raised, a small owl perched on her outstretched forearm turning its head toward the viewer, a coiled scroll and a stack of tactical relief-maps at her feet beneath an olive branch. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Mercury glyph in relief. No text, no watermark.
 ```
 
-**Apollo — jupiter seat** → `assets/weeks/myth/greek/pantheon/bronze/apollo.png` *(not yet
+**Apollo — jupiter seat** → `assets/weeks/myth/greek/pantheon/bronze/Apollo.png` *(not yet
 generated)*
 
 *Delphi makes him the Priest estate incarnate — prophecy and music
@@ -248,7 +248,7 @@ what Thursday's yellow looks like in Excess.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Apollo standing radiant beside the Delphic tripod, its cauldron trailing a thin coil of prophetic smoke, a laurel crown pressing his temples, a golden lyre held loosely in one hand and offered outward rather than played, his other hand open in a gesture of giving, a quiver of arrows leaning unused against the tripod's leg as a reminder of the god's harder side, sun-rays fanning behind his head like a second, gentler halo to Zeus's throne. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Jupiter glyph in relief. No text, no watermark.
 ```
 
-**Hera — venus seat** → `assets/weeks/myth/greek/pantheon/bronze/hera.png` *(not yet generated)*
+**Hera — venus seat** → `assets/weeks/myth/greek/pantheon/bronze/Hera.png` *(not yet generated)*
 
 *Love as institution rather than passion; the seat's vice writes
 itself — JEALOUSY is Hera's own signature myth, told a hundred ways.*
@@ -257,7 +257,7 @@ itself — JEALOUSY is Hera's own signature myth, told a hundred ways.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Hera enthroned in full queenly composure, a tall diadem crown catching the light, a wedding veil draped formally over one shoulder rather than worn, a scepter topped with a small cuckoo held upright as the marriage-oath emblem, a peacock with its tail fanned wide standing sentinel beside the throne, its many eyes subtly echoing a watchfulness that reads as devotion from the front and suspicion from the side. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Venus glyph in relief. No text, no watermark.
 ```
 
-**Demeter — saturn seat** → `assets/weeks/myth/greek/pantheon/bronze/demeter.png` *(not yet
+**Demeter — saturn seat** → `assets/weeks/myth/greek/pantheon/bronze/Demeter.png` *(not yet
 generated)*
 
 *Green, grain, the Patience of the harvest; Renewal is Persephone's
@@ -267,7 +267,7 @@ own return, the seat's whole bundle in one myth.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Demeter seated with a sheaf of ripe wheat cradled in one arm and a lit torch raised in the other hand — the torch she carried searching the world without rest — a young woman's hand (Persephone's) just visible clasping hers at the frame's edge as if newly returned, a bare wintered field on one side of the throne and the same field green and sprouting on the other, poppies growing at her feet. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Saturn glyph in relief. No text, no watermark.
 ```
 
-**Hades — Pantheon dual** → `assets/weeks/myth/greek/pantheon/bronze/hades.png` *(not yet
+**Hades — Pantheon dual** → `assets/weeks/myth/greek/pantheon/bronze/Hades.png` *(not yet
 generated — this REPLACES the retired ninth-Hades plate)*
 
 *The throne below, not evil — the shadow face of the same kingship
@@ -278,7 +278,7 @@ chooses not to wear.*
 Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Hades enthroned on a dark iron seat inside a lightless cavern, wearing the same royal bearing as his brother's bright throne above — no ranting devil, a king in his own right — the horned helm of invisibility held loosely in one hand rather than worn, his other hand resting on Cerberus's middle head with the two flanking heads turned watchfully outward, the key of the underworld's gate hanging heavy at his belt, a thin river (the Styx) cut in low relief winding away into total dark behind the throne. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four laurel-wreath roundels, each bearing the Sun glyph in relief — the same glyph Zeus's own throne wears, the shadow face of the same Sunday crown. No text, no watermark.
 ```
 
-**Gaia — Pantheon ninth** → `assets/weeks/myth/greek/pantheon/bronze/gaia.png` *(not yet generated
+**Gaia — Pantheon ninth** → `assets/weeks/myth/greek/pantheon/bronze/Gaia.png` *(not yet generated
 — this REPLACES the retired ninth-Hades plate)*
 
 *The primordial mother, the Union of the week's two poles: the earth

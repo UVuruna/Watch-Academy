@@ -156,20 +156,20 @@ _WHITELIST: dict[str, str] = {
     # today the two rows share one lancet). COVERAGE.md §Compass
     # Objects: "WIRING GAP — fully painted, zero code reads any
     # rondel_* path outside the evangelist set."
-    "archetypes/trinity/primary/colored/rondel_Advocate.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/trinity/primary/colored/rondel_Prosecutor.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/trinity/primary/colored/rondel_Judge.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/family/primary/colored/rondel_Shield.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/family/primary/colored/rondel_Heart.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/family/primary/colored/rondel_Dawn.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Crown.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Bell.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Book.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Coin.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Mask.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Plough.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Staff.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
-    "archetypes/walks/primary/colored/rondel_Sword.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/primary/colored/Rondel_Advocate.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/primary/colored/Rondel_Prosecutor.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/trinity/primary/colored/Rondel_Judge.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/primary/colored/Rondel_Shield.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/primary/colored/Rondel_Heart.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/family/primary/colored/Rondel_Dawn.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Crown.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Bell.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Book.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Coin.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Mask.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Plough.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Staff.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
+    "archetypes/walks/primary/colored/Rondel_Sword.png": "optional row2 rondel, not yet wired (COVERAGE.md)",
     # The twelve Almanac month medallions: generated for the Encyclopedia
     # gallery's planned "Almanac" topic, which does not exist yet
     # (COVERAGE.md tracks this as "OK" — art landed ahead of the topic).

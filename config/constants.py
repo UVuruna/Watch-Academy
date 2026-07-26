@@ -822,23 +822,23 @@ WEEKDAY_THEME_ARTICLES = {
 # "Ophiuchus") stay OUT of this table on purpose — they carry no
 # weekday Sunday duality, so the render side never needs them.
 WEEKDAY_THEME_NINTHS = {
-    "wolf": ("Sigma", "wolf/primary/bronze/sigma.png"),
-    "bee": ("The Swarm", "bee/primary/bronze/swarm.png"),
-    "elephant": ("The Graveyard", "elephant/primary/bronze/graveyard.png"),
-    "cosmos": ("The Big Bang", "cosmos/primary/bronze/big_bang.png"),
-    "greek": ("Gaia", "greek/pantheon/bronze/gaia.png"),
+    "wolf": ("Sigma", "wolf/primary/bronze/Sigma.png"),
+    "bee": ("The Swarm", "bee/primary/bronze/Swarm.png"),
+    "elephant": ("The Graveyard", "elephant/primary/bronze/Graveyard.png"),
+    "cosmos": ("The Big Bang", "cosmos/primary/bronze/Big_Bang.png"),
+    "greek": ("Gaia", "greek/pantheon/bronze/Gaia.png"),
     "norse": ("Yggdrasil", "norse/pantheon/bronze/Yggdrasil.png"),
-    "egypt": ("The Pharaoh", "egypt/pantheon/bronze/pharaoh.png"),
-    "slavic": ("Triglav", "slavic/pantheon/bronze/triglav.png"),
-    "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/stone.png"),
+    "egypt": ("The Pharaoh", "egypt/pantheon/bronze/Pharaoh.png"),
+    "slavic": ("Triglav", "slavic/pantheon/bronze/Triglav.png"),
+    "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/Stone.png"),
     "profession": ("The Polymath", "profession/primary/bronze/Polymath.png"),
-    "religion": ("Freemasonry", "creeds/primary/colored/freemasonry.png"),
+    "religion": ("Freemasonry", "creeds/primary/colored/Freemasonry.png"),
     "religion_alt": (
-        "The Unknown God", "creeds/secondary/colored/unknown_god.png",
+        "The Unknown God", "creeds/secondary/colored/Unknown_God.png",
     ),
-    "bible": ("The Holy Trinity", "bible/primary/colored/holy_trinity.png"),
-    "bible2": ("Melchizedek", "bible/secondary/colored/melchizedek.png"),
-    "bible_dark": ("The Ninth Circle", "bible/dark/colored/ninth_circle.png"),
+    "bible": ("The Holy Trinity", "bible/primary/colored/Holy_Trinity.png"),
+    "bible2": ("Melchizedek", "bible/secondary/colored/Melchizedek.png"),
+    "bible_dark": ("The Ninth Circle", "bible/dark/colored/Ninth_Circle.png"),
     # THE CONTINENTS' NINTH (owner-sealed matrix 2026-07-21): ZEALANDIA,
     # the literal Unfound — a true continent 94% drowned, unrecognized
     # until 2017. Its plate is wired ahead of the owner's art (relative

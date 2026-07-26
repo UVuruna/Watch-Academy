@@ -83,19 +83,19 @@ The archetype articles run in TWO ROWS (person + calling). The rows
 can share the lancet; generate these three small rondels ONLY if the
 owner wants the calling row to carry its own image:
 
-**The Advocate rondel** → `assets/archetypes/trinity/primary/colored/rondel_Advocate.png`
+**The Advocate rondel** → `assets/archetypes/trinity/primary/colored/Rondel_Advocate.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A shield leaning against an open upturned palm, midnight-blue and silver glass, thorned-vine leadwork rim. NO lettering anywhere.
 ```
 
-**The Prosecutor rondel** → `assets/archetypes/trinity/primary/colored/rondel_Prosecutor.png`
+**The Prosecutor rondel** → `assets/archetypes/trinity/primary/colored/Rondel_Prosecutor.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A flaming sword crossed over a hard-tipped two-pan scale, ember-red and gold glass, thorn-and-rope leadwork rim. NO lettering anywhere.
 ```
 
-**The Judge rondel** → `assets/archetypes/trinity/primary/colored/rondel_Judge.png`
+**The Judge rondel** → `assets/archetypes/trinity/primary/colored/Rondel_Judge.png`
 
 ```
 SMALL round stained-glass rondel, night-window register, photorealistic render, isolated background. A two-pan balance at perfect rest beneath a plumb line hanging exactly true, radiant gold and white glass, gothic leadwork rim. NO lettering anywhere.

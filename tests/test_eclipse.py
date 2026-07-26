@@ -374,7 +374,7 @@ def test_solar_eclipse_swaps_the_earth_art(app):
     x = round(radius + orbit * math.sin(theta))
     y = round(radius - orbit * math.cos(theta))
     assert before.pixelColor(x, y) != after.pixelColor(x, y)
-    assert defaults.ECLIPSE_SOLAR_ART.name == "sun_eclipse.png"
+    assert defaults.ECLIPSE_SOLAR_ART.name == "Sun_Eclipse.png"
 
 
 def test_solar_eclipse_hit_test_rides_the_relocated_marker(app):
