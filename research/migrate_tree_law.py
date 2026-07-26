@@ -71,6 +71,7 @@ TITLES_MAP = {
     "bible": "weeks/faith/bible/primary",
     "bible2": "weeks/faith/bible/secondary",
     "bible_dark": "weeks/faith/bible/dark",
+    "chinese_myth": "weeks/myth/celestial_court/primary",
     "corporate": "weeks/crafts/corporate/primary",
     "cosmos": "weeks/celestial_bodies/cosmos/primary",
     "cyberpunk_gangs": "weeks/gaming/cp_gangs/primary",
@@ -81,6 +82,7 @@ TITLES_MAP = {
     "greek": "weeks/myth/greek/primary",
     "intelligences": "weeks/inner_wheel/intelligence/primary",
     "japan": "weeks/crafts/japan/primary",
+    "monsters": "weeks/myth/age_of_heroes/primary",
     "months": "calendars/slavic_months/primary",
     "moods": "weeks/inner_wheel/mood/primary",
     "norse": "weeks/myth/norse/primary",
@@ -101,7 +103,9 @@ TITLES_MAP = {
     "wow_evil": "weeks/gaming/wow_evil/primary",
     "wow_horde": "weeks/gaming/wow_horde/primary",
 }
-TITLES_PENDING = {"chinese_myth", "monsters"}   # sheets exist, tree homes do not — owner/sheet decides
+# (chinese_myth -> celestial_court and monsters -> age_of_heroes were
+# resolved from their own sheets' drop paths — no PENDING keys remain.)
+TITLES_PENDING: set[str] = set()
 
 FIGURE_ROOTS = ("weeks", "calendars", "archetypes")
 
