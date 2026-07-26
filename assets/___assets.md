@@ -28,6 +28,33 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
 >   🖼️ logo.svg, logo-setup.svg   ← build-pipeline contract (unchanged)
 > ```
 >
+> **THE TREE LAW (owner-approved 2026-07-26, executed the same day —
+> `research/migrate_tree_law.py` moved 1,787 files with zero losses):**
+> every image in the three FIGURE categories (weeks / calendars /
+> archetypes) lives at exactly
+>
+> ```
+> assets/<category>/<group>/<theme>/<register>/<look>/<Figura>[_vN]_<src>.png
+> ```
+>
+> - **Registers** (official blocks): `primary`, `pantheon`, `secondary`,
+>   `dark`, `glass`, `circle`, `badges`, `animals`, `tree`, `wider`.
+> - **Looks** (one folder per artwork style, files ONLY here): `bronze`
+>   (cameo master — gold/silver derive by algorithm, never as files),
+>   `colored`, and the theme-specific `logo`/`photo`/`sign`/`art`/
+>   `constellation`. `colored/` is ALWAYS a child of its register —
+>   identical for pantheon and primary (the owner's decree).
+> - **`Title`** is the one reserved stem — a theme's title plate sits in
+>   the register (or look) it introduces.
+> - **`_vN`** = another artwork of the SAME figure (rotation food);
+>   a DIFFERENT figure on the same seat keeps its own name and is
+>   registered in config (the roster tables), never in a folder name.
+> - Enforced by `tests/test_assets_structure.py::
+>   test_figure_trees_obey_the_tree_law` — a stray drop fails the suite
+>   with the offender and its lawful destination named.
+> - `celestial/` and `instrument/` are INSTRUMENT trees (no figure
+>   rosters) and keep their own documented shapes.
+>
 > The `alt/` convention is abolished (versions are `_vN` siblings in the
 > same source-free folder; the old seat-named alt files were renamed
 > figure-first). The structural law is pinned by
