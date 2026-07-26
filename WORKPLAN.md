@@ -240,6 +240,64 @@ eclipse timeline (nearest past/next from any traveled moment), the
 current location's day-length curve over the year; series data
 ships as compact bundled JSON (decimated where needed).
 
+### Session 18 — Legend & hover laws → **Sonnet** (small, runs FIRST of the Cube wave)
+**Say:** "Radi Sesiju 18 iz WORKPLAN.md — zakoni legende i hovera iz
+CUBE.md."
+**Reads:** CUBE.md §Display and Legend Laws; `render/compositor.md`
+(hover paths, `_hover_title`); `app/controller.md` (the Spacebar
+jump).
+**Delivers:** (1) THE WEEKDAY-TITLE LAW — every weekday-bound badge
+hover shows the weekday beside its title, everywhere; (2) legend
+bold-only rework — rainbow coloring retired, bold ONLY on
+virtue/vice/emotion/weekday; (3) hover teaser — thesis 1–2 sentences
+plus an underlined clickable LEARN MORE (same action as SPACE) and
+the SPACE hint. Tests + GUI probe.
+
+### Session 19 — Cube prompt sheets → **Opus** (run EARLY — owner generates art in parallel)
+**Say:** "Radi Sesiju 19 iz WORKPLAN.md — prompt sheetovi za Cube
+kanon."
+**Reads:** CUBE.md IN FULL; CANON.md §The Cube Canon;
+`research/prompts/archetype/trinity_prompts.md` as template.
+**Delivers:** sheets for the Genesis wheel (creation offices), the
+Council (six offices united), the Character wheel (poles + combos,
+three sets), the Two Crosses (station art + the cross emblems with
+FALL/STAR/DOMY/SAFE inscriptions) — every sheet passing the Rule 19
+derivation check in writing (the Rose is COMPUTED geometry, never
+generated; recolors and blends are derived).
+
+### Session 20 — the Cube wheels engine → **Fable**
+**Say:** "Radi Sesiju 20 iz WORKPLAN.md — treći točkovi i Ruža."
+**Reads:** CUBE.md IN FULL; the archetype engine docs
+(`render/compositor.md`, `app/controller.md`, `data/` docs,
+`Database/ring_presets.json` for the Rose).
+**Delivers:** the third-wheel menu slot (Court/Family/**Genesis**,
+Paint/Light/**Council**, Walks/Ages/**Character**); the Genesis
+wheel drawn as the INVERTED trio (24/16/08); the Diamond/Cube
+display toggle in settings; the Rose ring preset (three octa stars
+at −1h/0h/+1h — Historical/Modern/Archetypal, the +1h star on top).
+Cross-system: render + menu + data + encyclopedia wiring.
+
+### Session 21 — the Cube Encyclopedia wave → **Opus** (writers)
+**Say:** "Radi Sesiju 21 iz WORKPLAN.md — Cube enciklopedija."
+**Reads:** CUBE.md IN FULL (the Article Charter BINDS this session);
+CANON.md quote rules.
+**Delivers:** the Cube section (three axes, six poles, eight
+vertices, all three sets, coordinate doctrine), the Double Trinity
+with the 24-field union table, the Two Crosses (stations, chiasm,
+TRUST/DISTRUST, Latin/Greek rows, FALL/STAR, DOMY/SAFE), the
+Banknote-axes seal — all in the Charter's scientific voice, ENGLISH
+ONLY. Also closes the Character wheel's OPEN combo figures (roster
+proposals to the owner first).
+
+### Session 22 — the Renaming → **Sonnet**
+**Say:** "Radi Sesiju 22 iz WORKPLAN.md — WATCH ACADEMY svuda."
+**Reads:** CUBE.md §The Name; root CLAUDE.md Rules 22–23.
+**Delivers:** WATCH ACADEMY applied everywhere — About, README
+opening + `gh repo edit --description` sync, installer metadata
+(`setup/app_info.json`), the Rule 23 update-feed repo field; DOMY
+stays the dial's name; the disk folder stays. The tagline and
+VIGILATE seal placed where the name is explained.
+
 ## Running in Parallel (no agent needed)
 
 - **Owner art generation** from the sheets: pantheon plates,
@@ -261,3 +319,7 @@ ships as compact bundled JSON (decimated where needed).
   **Zodiac/Almanac** in the Paint/Light slot; no wedge medallions,
   pinned 1/2/3 slots, opacity lighting, both lighting modes
   user-selectable.
+- The Academy tagline wording (CUBE.md §The Name — *"Watch the
+  hours. Watch and learn. Keep the watch."* is PROPOSED).
+- The Character wheel's OPEN combo figures (CUBE.md — modern set
+  mostly unfilled; Session 21 proposes, the owner seals).

@@ -183,8 +183,8 @@ queued (ROADMAP 11):
 **THE THIRD WHEELS (owner seal 2026-07-26):** three pointers gain a
 THIRD wheel from the Cube canon — Trinity **Genesis** (the inverted
 creation triangle), Prism **Council** (the six offices united),
-Compass **Character** (the Cube's two visible axes) — wheel names
-PROPOSED; the full doctrine, figures and display laws live in
+Compass **Character** (the Cube's two visible axes) — names SEALED
+2026-07-26; the full doctrine, figures and display laws live in
 [The Cube Canon](CUBE.md).
 
 **The two-row canon** (owner 2026-07-16): every archetype position

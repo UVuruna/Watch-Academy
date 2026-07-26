@@ -120,13 +120,10 @@ Woman (mod. Vigor), Captain America (mod. Integrity), Severus Snape
   law's "many faces" clause, exercised deliberately.
 - **The Devil wears two colors too (owner):** red as Prosecutor,
   orange as Destroyer (see the Double Trinity below).
-- **Oblomov vs Hamlet (PENDING owner's final word).** Hamlet is far
-  more famous worldwide — confirmed — but he is already seated as
-  the Paralyzed Purist vertex, where he is uniquely exact.
-  Recommendation: keep **Oblomov** on the pole (Oblomovism is
-  literally the name of the condition, and the word is at home in
-  the Slavic world) and let Hamlet keep his vertex; the owner may
-  flip them.
+- **Oblomov stays (SEALED, owner 2026-07-26):** Hamlet is the more
+  famous name but keeps his Paralyzed Purist vertex, where he is
+  uniquely exact; Oblomovism is literally the name of the condition
+  the blue fall describes.
 
 <a id="eight-vertices"></a>
 
@@ -171,7 +168,7 @@ is a MAJOR Encyclopedia section, each axis described in detail.
 
 <a id="double-trinity"></a>
 
-## The Double Trinity — Judgment and Creation (SEALED; wheel names PROPOSED)
+## The Double Trinity — Judgment and Creation (SEALED, wheel names SEALED 2026-07-26)
 
 The oldest construction of the correspondence, and it IS the
 hexagram: the same three persons hold six offices, three judicial
@@ -201,13 +198,13 @@ and three creative — **the two corners of one cube**.
 **Where it shows (SEALED):** a major Encyclopedia section, and THREE
 wheels on the watch — two on the Trinity pointer, one on the Prism:
 
-- **Trinity third wheel — "Genesis" (name PROPOSED):** the creation
+- **Trinity third wheel — "Genesis" (name SEALED):** the creation
   triangle, drawn INVERTED (arms 24h/16h/08h — the owner: "trougao
   ka dole"); God—Creator, Jesus—Preserver, Devil—Destroyer, in
   purple/green/orange. Menu: Court / Family / Genesis. (Name
   argument: Court is the courtroom's own word, Genesis is
   creation's; Genesis 1 anchors the articles.)
-- **Prism third wheel — "Council" (name PROPOSED):** the UNION — all
+- **Prism third wheel — "Council" (name SEALED):** the UNION — all
   six offices on the six arms at once, the two triangles interlocked
   into the star. Menu: Paint / Light / Council. Anchor: Psalm 82:1 —
   *"God standeth in the congregation of the mighty; he judgeth among
@@ -232,7 +229,7 @@ Reinvention; "The God" → God.)
 
 <a id="character-wheel"></a>
 
-## The Character Wheel — the Compass's Third Wheel (structure SEALED, terms/figures PROPOSED)
+## The Character Wheel — the Compass's Third Wheel (SEALED; combo figures partly OPEN)
 
 The owner's law: the octa wheel is **the Cube with the depth axis at
 zero** — we see left-right and up-down, depth we only imagine, so
@@ -246,13 +243,31 @@ the direct heir of the owner's original Eightfold Moral Compass
 | Arm | Color | Direction | Positive | Fallen |
 |---|---|---|---|---|
 | 12h | yellow | Y+ pole | Loyalty | Tribalism |
-| 15h | amber-orange blend | Y+Z+ combo | **Patronage** (P) | **Favoritism** (P) |
+| 15h | orange (yellow+red blend) | Y+Z+ combo | **Patronage** | **Favoritism** |
 | 18h | red | Z+ pole | Dignity | Self-Worship |
-| 21h | pink blend | Y−Z+ combo | **Conviction** (P) | **Dogmatism** (P) |
-| 24h | purple-gray | Y− pole | Integrity | Legalism |
-| 03h | teal-cyan blend | Y−Z− combo | **Renunciation** (P) | **Mortification** (P) |
-| 06h | green | Z− pole | Humility | Self-Annihilation |
-| 09h | spring-green blend | Y+Z− combo | **Devotion** (P) | **Martyrdom** (P) |
+| 21h | pink (red thinned by moonlight) | Y−Z+ combo | **Conviction** | **Dogmatism** |
+| 24h | moon-purple | Y− pole | Integrity | Legalism |
+| 03h | cyan (blue thinned by moonlight) | Y−Z− combo | **Renunciation** | **Mortification** |
+| 06h | blue | Z− pole | Humility | Self-Annihilation |
+| 09h | green (blue+yellow blend) | Y+Z− combo | **Devotion** | **Martyrdom** |
+
+**The color law (SEALED — owner: the palette stays exactly as the
+Rose is drawn, kept for the beauty of the arrangement).** The four
+poles are yellow, red, moon-purple and BLUE — the horizontal axis
+wears **the Scale's own colors**: Judas's midnight blue against
+Lucifer's ember red, the Judas–Lucifer axis as the Scale glass has
+always painted it. The four blends follow NATURE, not the cube's Z
+dress: green IS the child of blue and yellow (as on the Prism),
+orange of yellow and red; pink and cyan are red and blue thinned by
+the moonlight of the neighboring pole. And the same duality law
+that lets each great figure wear two colors closes the circle here:
+Judas holds blue (his night) with green at his shoulder (his fall
+of humility), Lucifer holds red (his pride) with orange at his
+shoulder (his Destroyer face) — a color may serve two wheels
+exactly as a figure serves two offices. The cube's green/red
+Self-Regard dress binds the CUBE and its Encyclopedia section, not
+this wheel (owner seal 2026-07-26). This palette rules BOTH the
+Character wheel and the Rose.
 
 Combo figures — the owner's four RETURN here (SEALED), the rest
 PROPOSED/OPEN for the roster round:
@@ -264,24 +279,13 @@ PROPOSED/OPEN for the roster round:
 | Conviction / Dogmatism | Elijah (P) / **Creon** | Martin Luther (P — *"Here I stand"*) / **Joseph Stalin** | OPEN / Dolores Umbridge (P) |
 | Renunciation / Mortification | **John the Baptist** (*"He must increase, I must decrease"*) / OPEN | Thomas More (P) / Simone Weil (P) | Obi-Wan Kenobi (P) / OPEN |
 
-Menu: Walks / Ages / **Character** (wheel name PROPOSED — the pointer
-is already named Compass; its third wheel is the compass of
-character, while the full 3D Cube lives in the Encyclopedia). The
-narrative gift of the missing axis: the flat dial cannot show DEPTH —
-how much a person actually ACTS is the one dimension only life
-itself reveals; the Encyclopedia's Cube completes what the wheel
-must leave out.
-
-**PENDING (the one structural question left):** the Rose as drawn
-still wears the OLD compass palette — blue at 06h, green at 09h —
-because it predates the axis recoloring. Under the sealed Cube the
-06h pole is GREEN (Humility/Self-Annihilation) and 09h is the
-Devotion blend. Recommendation: recolor the two ray-families (06h
-blue→green, 09h green→spring blend); blue then leaves this wheel
-entirely — fitting, since blue belongs to the IGNORED axis.
-Alternative: keep the drawing untouched and let 06h blue carry the
-old register's Self-Annihilation. Owner's brush, owner's verdict
-(owner assets are authoritative).
+Menu: Walks / Ages / **Character** (name SEALED — the pointer is
+already named Compass; its third wheel is the compass of character,
+while the full 3D Cube lives in the Encyclopedia). The narrative
+gift of the missing axis: the flat dial cannot show DEPTH — how much
+a person actually ACTS is the one dimension only life itself
+reveals; the Encyclopedia's Cube completes what the wheel must
+leave out.
 
 <a id="the-rose"></a>
 
@@ -297,11 +301,13 @@ SCALE wearing the Character wheel's colors, and it lives as a
   at +15° (topmost) — the fully visible star is the one whose rays
   sit ON 1h and 13h: **THE ONE and the 13** — the first hour of the
   day and the first hour after noon.
-- **The three stars carry the three figure sets** of the Character
-  wheel (8 × 3 = 24). PROPOSED assignment: **Archetypal on the
-  visible +1h star** (the prototypes crown — The One's own offset),
-  **Historical on the 0h star** (real history sits on the true
-  hours), **Modern on the −1h star** (the newest echo, behind).
+- **The three stars carry the three figure sets** (8 × 3 = 24),
+  SEALED as a reading of TIME itself (owner 2026-07-26):
+  **Historical on the −1h star** — the past, behind the hour;
+  **Modern on the 0h star** — the present, standing on the true
+  hours; **Archetypal on the visible +1h star** — the myths hold in
+  the future too, always valid, and their star is the one touching
+  1h and 13h: THE ONE, and the first hour after noon.
 - The legend explains each ray by its direction and its set's
   figure; every ray answers with its Character-wheel article.
 
@@ -372,7 +378,7 @@ with trust, even adversity ripens into hope."**
   (Fear-Anger-Loathing-Lament) and **STAR** (Spark-Trust-Affection-
   Redemption) — the legend MUST explain them: the dark path falls to
   the bottom, the light path rises to the stars.
-- **The DOMY cipher (PROPOSED, replacing nothing — a new layer):**
+- **The DOMY cipher (SEALED 2026-07-26 — a new layer):**
   the app's own name assembles the dark cross, MASON-style (by
   assembly, not walking order): **D**OLOR (Suffering) — **O**DIUM
   (Hate) — **M**ETUS (Fear; Latin's second fear-word beside Timor) —
@@ -381,8 +387,8 @@ with trust, even adversity ripens into hope."**
   the **littera Pythagorica** — Pythagoras's letter, the fork in the
   road where the two paths part. The watchman bears the night's four
   names because naming the danger IS the watch.
-- **The SAFE cipher (PROPOSED, replacing the owner's placeholder
-  MOPH/MORPH):** the light cross read from the summit back down the
+- **The SAFE cipher (SEALED 2026-07-26, replacing the owner's
+  placeholder MOPH/MORPH):** the light cross read from the summit back down the
   path — **S**ALUS (Salvation) — **A**GAPE (Love) — **F**IDES
   (Faith) — **E**LPIS (Hope): the saved one looks back down the road
   and the word under his feet spells SAFE. Latin+Greek mixed,
@@ -417,7 +423,7 @@ watchful color is the failure to keep watch — and answering Matthew
 
 <a id="the-name"></a>
 
-## The Name — the Watch That Keeps Watch (rename SEALED, wording PENDING)
+## The Name — the Watch That Keeps Watch (SEALED: WATCH ACADEMY)
 
 The owner decreed a symbolic renaming, applied EVERYWHERE when
 final — git, installer, About, docs (the disk folder may stay, to
@@ -429,20 +435,24 @@ where the name is explained (owner: "navedi negde"): **Mark 13:37 —
 90:4 (*"a thousand years… as a watch in the night"*), Matthew 26:40
 (the failed watch — the counter-motto).
 
-- **PENDING the owner's final word: WATCH ENCYCLOPEDIA vs WATCH
-  ACADEMY.** The owner's course argument is recorded: the topics ARE
-  courses — religious, psychological, philosophical, astronomical —
-  with locked/unlockable content planned. Agent recommendation:
-  **WATCH ACADEMY** as the application (an academy can CONTAIN
-  courses AND its reference organ), with the in-app organ keeping
-  its proper name **Encyclopedia** — no "encyclopedia inside the
-  Encyclopedia" redundancy.
-- **DOMY survives** as the dial's own name and as the dark-cross
-  cipher (see the Two Crosses) — the watchman's proper name inside
-  the Academy.
-- The rename is NOT executed until the wording is sealed; scope
-  when executed: repo description/name, installer metadata, About,
-  README opening (Rule #22 sync), update feed (Rule #23 repo field).
+- **SEALED (owner 2026-07-26): the application is WATCH ACADEMY.**
+  The topics ARE courses — religious, psychological, philosophical,
+  astronomical — some locked, to be unlocked in time; the in-app
+  reference organ keeps its proper name **Encyclopedia** (an academy
+  contains both its courses and its library).
+- **The triple-watch tagline (PROPOSED wording, owner asked for the
+  play):** *"Watch the hours. Watch and learn. Keep the watch."* —
+  the timepiece, the looking-and-learning, the vigil, in three
+  imperatives; the Academy lives inside the second (watch and
+  LEARN). Long form for About/README: *"the academy that tells the
+  hours, the academy you watch, the watch you keep."* Latin seal for
+  inscriptions: **VIGILATE** — the Vulgate's own word for Mark 13:37
+  (*"quod autem vobis dico, omnibus dico: vigilate"*).
+- **DOMY survives** as the dial's own name — the watchman of the
+  Academy — and as the dark-cross cipher (see the Two Crosses).
+- Rename scope (executes in its own session): repo description/
+  name, installer metadata, About, README opening (Rule #22 sync),
+  update feed (Rule #23 repo field); the disk folder may stay.
 
 <a id="article-charter"></a>
 
@@ -499,8 +509,8 @@ lacking the experiment).
 4. Prism **Council** wheel (six offices).
 5. Compass **Character** wheel (4 poles + 4 combos; roster round for
    the OPEN combo figures first).
-6. The **Rose** ring preset (3 offset stars; palette per the PENDING
-   recolor verdict).
+6. The **Rose** ring preset (3 offset stars; palette as drawn —
+   sealed).
 7. Diamond/Cube display toggle.
 8. Encyclopedia: the Cube section (axes, poles, vertices, three
    sets), the Double Trinity's 24-field table, the Two Crosses with
