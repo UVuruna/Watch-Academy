@@ -240,18 +240,25 @@ eclipse timeline (nearest past/next from any traveled moment), the
 current location's day-length curve over the year; series data
 ships as compact bundled JSON (decimated where needed).
 
-### Session 18 — Legend & hover laws → **Sonnet** (small, runs FIRST of the Cube wave)
+### Session 18 — Legend & hover laws → DONE (2026-07-26, 0.14.432)
 **Say:** "Radi Sesiju 18 iz WORKPLAN.md — zakoni legende i hovera iz
 CUBE.md."
 **Reads:** CUBE.md §Display and Legend Laws; `render/compositor.md`
 (hover paths, `_hover_title`); `app/controller.md` (the Spacebar
 jump).
-**Delivers:** (1) THE WEEKDAY-TITLE LAW — every weekday-bound badge
-hover shows the weekday beside its title, everywhere; (2) legend
-bold-only rework — rainbow coloring retired, bold ONLY on
-virtue/vice/emotion/weekday; (3) hover teaser — thesis 1–2 sentences
-plus an underlined clickable LEARN MORE (same action as SPACE) and
-the SPACE hint. Tests + GUI probe.
+**Delivered (same session that wrote CUBE.md):** (1) THE
+WEEKDAY-TITLE LAW — ghost bodies, Sunday faces and dual-card columns
+all name their day beside the title (`test_weekday_title_law_names_
+the_day_on_ghost_bodies`); (2) THE LEGEND BOLD LAW — the accents
+rainbow machinery deleted end to end (compositor, encyclopedia,
+defaults), plain bold on virtue/vice/mood/WEEKDAY only
+(`test_legend_highlighting_bolds_the_spine_only`); (3) THE HOVER
+TEASER LAW — `_teaser` thesis truncation on every article hover
+(instrument cards, ring-letter legends and the Greetings exempt) and
+the `_learn_more_footer` on every page-owning hover, clickable
+through `LegendPopup.on_link` → the widget's captured-target jump
+(`test_hover_teaser_law_truncates_to_the_thesis`,
+`test_learn_more_footer_names_both_roads`). 894 tests green.
 
 ### Session 19 — Cube prompt sheets → **Opus** (run EARLY — owner generates art in parallel)
 **Say:** "Radi Sesiju 19 iz WORKPLAN.md — prompt sheetovi za Cube

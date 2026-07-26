@@ -1222,9 +1222,11 @@ ARTICLE_TITLE_PX = 17                # the entity NAME above the article (owner
 # matched case-insensitively (owner report 2026-07-12: a lowercase
 # "gordost" must burn red too); Serbian fragments cover the case
 # endings including the -šću instrumentals.
-LEGEND_VIRTUE_COLOR = "#6FA8FF"
-LEGEND_VICE_COLOR = "#FF6B6B"
-LEGEND_MOOD_COLOR = "#FFD34D"
+# THE LEGEND BOLD LAW (owner 2026-07-26, CUBE.md §Display and Legend
+# Laws — supersedes the 2026-07-12 rainbow): emphasis in article prose
+# is BOLD ONLY, and ONLY on the web's spine — the virtue, the vice, the
+# emotion/mood and the WEEKDAY. Everything else (color words, figure
+# names) reads plain.
 LEGEND_TERM_PATTERNS = {
     "virtue": (
         "Humility", "Justice", "Generosity", "Wisdom", "Courage",
@@ -1255,61 +1257,21 @@ LEGEND_TERM_PATTERNS = {
         "Pomračenj[eau]", "Pomračenjem",
         "Čežnj[aeiou]", "Čežnjom",
     ),
-}
-# Color WORDS wear their own hue — but ONLY the hue(s) of the entity's
-# own diamond (owner correction 2026-07-12: in the Soldier's article
-# only "orange" colors, in the Merchant's only "purple"; "the red
-# planet" or gold-as-money stay plain). Keyed patterns; the accent
-# tables below say which keys an article may light up.
-LEGEND_COLOR_PATTERNS = {
-    "yellow": ((r"yellow\w*", r"žut\w*"), "#F8E600"),
-    "gold": ((r"golden|gold\w*", r"zlat\w*"), "#E8C24A"),
-    "amber": ((r"amber", r"ćilibar\w*"), "#ECB800"),
-    "orange": ((r"orange\w*", r"narandžast\w*"), "#E88A20"),
-    "red": ((r"red(?:s|der|dish|dens)?", r"crimson", r"crven\w*"), "#F04040"),
-    "purple": ((r"purple\w*", r"violet\w*", r"purpur\w*", r"ljubičast\w*"),
-               "#A968E0"),
-    "magenta": ((r"magenta", r"magent\w*"), "#E858E8"),
-    "blue": ((r"blue\w*", r"plav\w*"), "#5C86FF"),
-    "azure": ((r"azure", r"azur\w*"), "#4AA8FF"),
-    "green": ((r"green\w*", r"zelen\w*"), "#3ECC3E"),
-    "cyan": ((r"cyan", r"cijan\w*"), "#00DCDC"),
-    "white": ((r"white\w*", r"bel(?:o|a|e|i|u|im|om|og|oj)\b"), "#FFFFFF"),
-    "silver": ((r"silver\w*", r"srebrn\w*"), "#C9CDD3"),
-}
-# Which color keys each weekday BODY may light up: the union of its
-# arm's hues across the palettes (hexa/octa, paint/light) — never a
-# color that merely appears in the prose.
-BODY_ACCENT_HUES = {
-    "sun": ("white", "gold", "yellow", "green"),
-    "moon": ("blue",),
-    "mars": ("orange", "amber", "yellow"),
-    "mercury": ("purple", "magenta", "red"),
-    "jupiter": ("yellow", "green", "cyan"),
-    "venus": ("red", "orange"),
-    "saturn": ("green", "cyan", "azure"),
-}
-# Zodiac signs inherit their hexa arm's (paint, light) pair; the trio
-# virtues their own hue.
-SIGN_ACCENT_HUES = {
-    "Gemini": ("yellow", "green"), "Cancer": ("yellow", "green"),
-    "Leo": ("orange", "yellow"), "Virgo": ("orange", "yellow"),
-    "Libra": ("red",), "Scorpio": ("red",),
-    "Sagittarius": ("purple", "magenta"), "Capricorn": ("purple", "magenta"),
-    "Aquarius": ("blue",), "Pisces": ("blue",),
-    "Aries": ("green", "cyan"), "Taurus": ("green", "cyan"),
-}
-TRIO_ACCENT_HUES = {"Faith": ("yellow",), "Love": ("red",), "Hope": ("blue",)}
-# South of the equator the mirrored year wheel seats every sign on the
-# OPPOSITE arm (owner spec 2026-07-12) — its accents follow that arm.
-_SIGN_OPPOSITE = {
-    "Gemini": "Sagittarius", "Cancer": "Capricorn",
-    "Leo": "Aquarius", "Virgo": "Pisces",
-    "Libra": "Aries", "Scorpio": "Taurus",
-}
-_SIGN_OPPOSITE.update({south: north for north, south in _SIGN_OPPOSITE.items()})
-SIGN_ACCENT_HUES_SOUTH = {
-    sign: SIGN_ACCENT_HUES[_SIGN_OPPOSITE[sign]] for sign in SIGN_ACCENT_HUES
+    # THE WEEKDAY-TITLE LAW's prose half (owner 2026-07-26): weekday
+    # names are part of the spine and pop bold wherever they appear.
+    # (Serbian "nedelja" also means "week" — an accepted over-match;
+    # the shipped originals rarely use it outside the day sense.)
+    "weekday": (
+        "Monday", "Tuesday", "Wednesday", "Thursday",
+        "Friday", "Saturday", "Sunday",
+        "Ponedeljak", "Ponedeljk(?:a|u|om)",
+        "Utorak", "Utork(?:a|u|om)",
+        "Sred[aeiou]", "Sredom",
+        "Četvrtak", "Četvrtk(?:a|u|om)",
+        "Petak", "Petk(?:a|u|om)",
+        "Subot[aeiou]", "Subotom",
+        "Nedelj[aeiou]", "Nedeljom",
+    ),
 }
 
 # The Legend popup (replaces QToolTip, owner decision): capped to these
@@ -1322,6 +1284,13 @@ LEGEND_PADDING_PX = 8
 LEGEND_BG = "#2B2B2B"
 LEGEND_BORDER = "#6E6E6E"
 LEGEND_TEXT = "#FFFFFF"
+# THE HOVER TEASER LAW (owner 2026-07-26, CUBE.md §Display and Legend
+# Laws): an article hover speaks only its THESIS — this many sentences
+# of the first paragraph — and closes with the LEARN MORE / SPACE
+# footer; the full article lives in the Encyclopedia.
+LEGEND_TEASER_SENTENCES = 2
+LEGEND_MORE_LINK_COLOR = "#8FB8FF"
+LEGEND_MORE_HINT_COLOR = "#9A9A9A"
 
 # The Encyclopedia article view (owner UX rounds 2026-07-12/13): the
 # text BLOCK hugs the LEFT edge and spans this fraction of the window

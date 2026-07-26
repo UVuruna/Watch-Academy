@@ -81,6 +81,14 @@ class ClockWidget(QWidget):
         self._show_action = show_action
         self._z_mode = "bottom"          # the current Z hint (set below)
         self._legend = legend           # the shared LegendPopup
+        # THE HOVER TEASER LAW's footer link (owner 2026-07-26): a click
+        # on LEARN MORE makes the same jump SPACE makes — but the popup
+        # may be entered (leaveEvent clears the stale hover), so the
+        # page target is CAPTURED at popup-show time and used from here.
+        # (Headless tests construct the widget without a popup.)
+        if self._legend is not None:
+            self._legend.on_link = self._learn_more_clicked
+        self._popup_target = None
         self._renderer = None
         self._tick = None
         self._click_through = False
@@ -384,14 +392,30 @@ class ClockWidget(QWidget):
                 # A tooltip is a NECESSARY condition for an encyclopedia
                 # page (every page-bearing element also speaks a hover),
                 # so the target is only worth computing when there IS a
-                # tip — install the SPACE hook when it has a page.
-                self._update_space_hook(
-                    self._renderer.encyclopedia_target(x, y, size)
-                )
+                # tip — install the SPACE hook when it has a page, and
+                # CAPTURE it for the popup's LEARN MORE click (the
+                # cursor may leave the dial for the popup, clearing the
+                # live hover, before the click lands).
+                target = self._renderer.encyclopedia_target(x, y, size)
+                self._popup_target = target
+                self._update_space_hook(target)
             else:
                 self._legend.dismiss()
+                self._popup_target = None
                 self._update_space_hook(None)
         super().mouseMoveEvent(event)
+
+    def _learn_more_clicked(self) -> None:
+        """The popup footer's LEARN MORE anchor — the same jump SPACE
+        makes (owner 2026-07-26), from the target captured when the
+        popup was shown; the popup steps aside so the Encyclopedia
+        lands in front."""
+        if self._popup_target is None:
+            return
+        self._legend.dismiss()
+        self.open_encyclopedia.emit(
+            self._popup_target[0], self._popup_target[1]
+        )
 
     def _update_space_hook(self, target) -> None:
         """Arm the native SPACE hook while the cursor sits on an

@@ -1002,45 +1002,93 @@ def test_svg_masters_survive_flush():
     assert first.height() == 60 and again.height() == 120
 
 
-def test_legend_highlighting_colors_canon_terms():
-    """Owner spec 2026-07-12: virtues pop bold blue, vices bold red,
-    moods bold yellow — always; a COLOR word lights up only when it is
-    the entity's own diamond hue (accents), so the Soldier's "red
-    planet" and the Merchant's gold coins stay plain; hex notes never
+def test_legend_highlighting_bolds_the_spine_only():
+    """THE LEGEND BOLD LAW (owner 2026-07-26, CUBE.md — supersedes the
+    2026-07-12 rainbow): the web's spine — virtue, vice, mood and
+    WEEKDAY — pops in plain bold; color words and everything else read
+    plain, and no colored span survives anywhere; hex notes never
     display."""
     from render.compositor import _article_body_html
 
     out = _article_body_html(
         "Patience heals Jealousy in green (#007E00), the mood called "
-        "Renewal — the red planet pays in gold.",
-        accents=("green", "cyan"),
+        "Renewal — the red planet pays in gold on Tuesday."
     )
     assert "#007E00" not in out
-    assert f'<b style="color:{defaults.LEGEND_VIRTUE_COLOR}">Patience</b>' in out
-    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">Jealousy</b>' in out
-    assert f'<b style="color:{defaults.LEGEND_MOOD_COLOR}">Renewal</b>' in out
-    assert 'style="color:#3ECC3E">green</b>' in out
-    assert ">red</b>" not in out                    # not this arm's hue
+    assert "<b>Patience</b>" in out
+    assert "<b>Jealousy</b>" in out
+    assert "<b>Renewal</b>" in out
+    assert "<b>Tuesday</b>" in out                  # the weekday spine
+    assert 'style="color:' not in out               # the rainbow is dead
+    assert ">green</b>" not in out
+    assert ">red</b>" not in out
     assert ">gold</b>" not in out
-    sr = _article_body_html(
-        "Strpljenje leči Ljubomoru, a zeleno je Obnova.",
-        accents=defaults.BODY_ACCENT_HUES["saturn"],
-    )
-    assert f'<b style="color:{defaults.LEGEND_VIRTUE_COLOR}">Strpljenje</b>' in sr
-    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">Ljubomoru</b>' in sr
-    assert f'<b style="color:{defaults.LEGEND_MOOD_COLOR}">Obnova</b>' in sr
-    assert 'style="color:#3ECC3E">zeleno</b>' in sr
+    sr = _article_body_html("Strpljenje leči Ljubomoru, a zeleno je Obnova.")
+    assert "<b>Strpljenje</b>" in sr
+    assert "<b>Ljubomoru</b>" in sr
+    assert "<b>Obnova</b>" in sr
+    assert ">zeleno</b>" not in sr
     # LOWERCASE canon mentions burn too (owner report 2026-07-12), the
     # -šću instrumentals included.
     lower = _article_body_html(
         "njegov porok je gordost, a vrlina poniznost — gordošću pada"
     )
-    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">gordost</b>' in lower
-    assert f'<b style="color:{defaults.LEGEND_VIRTUE_COLOR}">poniznost</b>' in lower
-    assert f'<b style="color:{defaults.LEGEND_VICE_COLOR}">gordošću</b>' in lower
-    # No accents (e.g. the Chinese article): color words stay plain.
-    plain = _article_body_html("A green field under a red sky.")
+    assert "<b>gordost</b>" in lower
+    assert "<b>poniznost</b>" in lower
+    assert "<b>gordošću</b>" in lower
+    # No spine terms at all: nothing bolds.
+    plain = _article_body_html("A quiet field under an open sky.")
     assert "</b>" not in plain
+
+
+def test_hover_teaser_law_truncates_to_the_thesis():
+    """THE HOVER TEASER LAW (owner 2026-07-26, CUBE.md): an article
+    hover speaks only the first LEGEND_TEASER_SENTENCES of the first
+    paragraph, closed with an ellipsis; a short single-paragraph text
+    passes whole; a leading [[Subhead]] marker is dropped."""
+    from render.compositor import _teaser
+
+    long = (
+        "First sentence. Second sentence! Third sentence?"
+        "\n\nSecond paragraph never shows."
+    )
+    out = _teaser(long)
+    assert out == "First sentence. Second sentence! …"
+    assert "Third" not in out and "Second paragraph" not in out
+    # A short, single-paragraph article passes untouched — no ellipsis.
+    assert _teaser("One line only.") == "One line only."
+    # More paragraphs behind a short first one still earn the ellipsis.
+    assert _teaser("One line.\n\nMore.").endswith("…")
+    # Subhead markers never leak into a teaser.
+    assert _teaser("[[The Figure]] Odin rules. And more. And more.\n\nX") \
+        .startswith("Odin rules.")
+
+
+def test_weekday_title_law_names_the_day_on_ghost_bodies():
+    """THE WEEKDAY-TITLE LAW (owner, repeated many times — CUBE.md):
+    EVERY weekday-bound badge hover names ITS weekday beside the
+    title — ghosts included, any theme, any roster."""
+    from render.assets import AssetCache
+    from render.compositor import Compositor
+
+    comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
+    for body, day_name in (
+        ("mars", "Tuesday"), ("venus", "Friday"), ("sun", "Sunday"),
+    ):
+        tip = comp._weekday_tooltip(body, active=False)
+        assert day_name in tip, body
+
+
+def test_learn_more_footer_names_both_roads():
+    """THE HOVER TEASER LAW's footer (owner 2026-07-26): the clickable
+    LEARN MORE anchor and the SPACE hint, on the domy:encyclopedia
+    href the popup routes to the Spacebar jump."""
+    from render.compositor import _learn_more_footer
+
+    out = _learn_more_footer(lambda s: s)
+    assert "domy:encyclopedia" in out
+    assert "<u>Learn more</u>" in out
+    assert "press SPACE" in out
 
 
 def test_subhead_markers_render_as_translated_headings():
@@ -1055,7 +1103,8 @@ def test_subhead_markers_render_as_translated_headings():
     )
     assert "<b>Lik</b>" in sr
     assert "[[" not in sr and "The Figure" not in sr
-    assert "Odin rules Wednesday." in sr
+    # The weekday pops bold per THE LEGEND BOLD LAW (2026-07-26).
+    assert "Odin rules <b>Wednesday</b>." in sr
     # Round two (owner 2026-07-14): CENTERED, hugging its paragraph —
     # the gap above beats the gap below.
     assert "align='center'" in sr

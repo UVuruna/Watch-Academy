@@ -2339,7 +2339,10 @@ def test_moon_marker_hover_outranks_the_ring_tick_during_glow(app):
     )
     assert element == "moon"          # not None (which would fall to the tick)
     tooltip = comp.tooltip_at(moon_x, moon_y, 540.0)
-    assert tooltip == comp._moon_text()
+    # The Moon card leads; the LEARN MORE / SPACE footer (owner
+    # 2026-07-26) rides after it — the marker owns a Moon-topic page.
+    assert tooltip.startswith(comp._moon_text())
+    assert "domy:encyclopedia" in tooltip
 
 
 def test_season_glow_relocates_to_ring_band_and_is_golden(app):

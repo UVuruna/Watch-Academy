@@ -120,46 +120,30 @@ def _ordinal(n: int) -> str:
     return f"{n}<sup>{suffix}</sup>"
 
 
-# Canon terms POP in the article prose (owner spec 2026-07-12):
-# virtues bold blue, vices bold red, moods bold yellow — always; color
-# words ONLY when they are the entity's OWN diamond hue (owner
-# correction: the Soldier lights up "orange", never "the red planet";
-# `accents` names the allowed color keys). Hex notes like " (#F8E600)"
+# THE LEGEND BOLD LAW (owner 2026-07-26, CUBE.md §Display and Legend
+# Laws — supersedes the 2026-07-12 rainbow): the web's SPINE pops in the
+# article prose in plain BOLD, nothing else — the virtues, the vices,
+# the emotions/moods and the WEEKDAYS, the terms that bind the abstract
+# figures together. Color words read plain. Hex notes like " (#F8E600)"
 # never display. Rules are owner-tunable in defaults; matching runs
 # over the shipped ORIGINALS (English + Serbian) — machine-translated
 # languages read plain.
 _HEX_NOTE = re.compile(r"\s*\(#[0-9A-Fa-f]{6}\)")
 _TERM_RULES = [
-    (
-        re.compile(
-            rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b",
-            re.IGNORECASE,
-        ),
-        hue,
+    re.compile(
+        rf"\b(?:{'|'.join(defaults.LEGEND_TERM_PATTERNS[category])})\b",
+        re.IGNORECASE,
     )
-    for category, hue in (
-        ("virtue", defaults.LEGEND_VIRTUE_COLOR),
-        ("vice", defaults.LEGEND_VICE_COLOR),
-        ("mood", defaults.LEGEND_MOOD_COLOR),
-    )
+    for category in ("virtue", "vice", "mood", "weekday")
 ]
-_COLOR_RULES = {
-    key: (re.compile(rf"\b(?:{'|'.join(patterns)})\b", re.IGNORECASE), hue)
-    for key, (patterns, hue) in defaults.LEGEND_COLOR_PATTERNS.items()
-}
 
 
-def _highlight_terms(escaped: str, accents: tuple[str, ...] = ()) -> str:
-    """Wrap every canon term of an ESCAPED prose line in its colored
-    bold span (the markup the rules insert never re-matches a rule);
-    color words light up only for the `accents` keys."""
-    rules = _TERM_RULES + [_COLOR_RULES[key] for key in accents]
-    for pattern, hue in rules:
+def _highlight_terms(escaped: str) -> str:
+    """Wrap every spine term of an ESCAPED prose line in plain bold
+    (the markup the rules insert never re-matches a rule)."""
+    for pattern in _TERM_RULES:
         escaped = pattern.sub(
-            lambda match, hue=hue: (
-                f"<b style=\"color:{hue}\">{match.group(0)}</b>"
-            ),
-            escaped,
+            lambda match: f"<b>{match.group(0)}</b>", escaped
         )
     return escaped
 
@@ -179,12 +163,42 @@ def _greetings() -> dict:
     )["trinity"]
 
 
-def _article_paragraphs(
-    text: str, accents: tuple[str, ...] = (), tr=None,
-) -> str:
+def _teaser(text: str) -> str:
+    """THE HOVER TEASER LAW (owner 2026-07-26, CUBE.md §Display and
+    Legend Laws): an article hover speaks only its THESIS — the first
+    `LEGEND_TEASER_SENTENCES` of the first paragraph — never the whole
+    article; the full text lives in the Encyclopedia (the LEARN MORE /
+    SPACE footer rides in `tooltip_at`). A leading [[Subhead]] marker
+    is dropped with the rest of the body."""
+    first = text.split("\n\n", 1)[0]
+    first = _SUBHEAD.sub("", first).strip()
+    sentences = re.split(r"(?<=[.!?])\s+", first)
+    keep = defaults.LEGEND_TEASER_SENTENCES
+    if len(sentences) <= keep and first == text.strip():
+        return first
+    return " ".join(sentences[:keep]).rstrip() + " …"
+
+
+def _learn_more_footer(tr) -> str:
+    """THE HOVER TEASER LAW's footer (owner 2026-07-26 + the clickable
+    amendment): every hover that owns an Encyclopedia page closes with
+    a separated, underlined LEARN MORE link — the popup routes its
+    click to the SAME jump SPACE makes — plus the SPACE hint for those
+    who know it."""
+    return (
+        "<hr/><div align='center'>"
+        f"<a href='domy:encyclopedia' "
+        f"style='color:{defaults.LEGEND_MORE_LINK_COLOR}'>"
+        f"<u>{html.escape(tr('Learn more'))}</u></a>"
+        f"&nbsp;&nbsp;<span style='color:{defaults.LEGEND_MORE_HINT_COLOR}'>"
+        f"{html.escape(tr('press SPACE'))}</span></div>"
+    )
+
+
+def _article_paragraphs(text: str, tr=None) -> str:
     """The bare JUSTIFIED paragraphs of an article (owner 2026-07-13
-    round two — clean edges on both sides, like a book column): canon
-    terms highlighted (color words only per `accents`), hex notes
+    round two — clean edges on both sides, like a book column): the
+    spine terms bolded (THE LEGEND BOLD LAW above), hex notes
     stripped, [[Subhead]] markers drawn as bold headings (owner
     2026-07-14; `tr` localizes the label). The caller provides the
     width-constrained cell."""
@@ -212,20 +226,18 @@ def _article_paragraphs(
             )
         parts.append(
             f"<p align='justify'{body_style}>"
-            f"{_highlight_terms(html.escape(p), accents)}</p>"
+            f"{_highlight_terms(html.escape(p))}</p>"
         )
     return "".join(parts)
 
 
-def _article_body_html(
-    text: str, accents: tuple[str, ...] = (), tr=None,
-) -> str:
+def _article_body_html(text: str, tr=None) -> str:
     """One article as a single fixed-width column: the paragraphs
     reflow inside the declared table cell (the legend popup measures
     the document and honors this width)."""
     return (
         f"<table><tr><td width='{defaults.ARTICLE_TEXT_WIDTH_PX}'>"
-        f"{_article_paragraphs(text, accents, tr)}</td></tr></table>"
+        f"{_article_paragraphs(text, tr)}</td></tr></table>"
     )
 
 
@@ -241,15 +253,13 @@ def _hover_title(text_html: str) -> str:
 
 
 def _article_html(
-    image, title_html: str | None, text: str,
-    accents: tuple[str, ...] = (), tr=None,
+    image, title_html: str | None, text: str, tr=None,
 ) -> str:
-    """One full article hover: the entity's art on top (larger and
+    """One ARTICLE hover: the entity's art on top (larger and
     clearer than on the dial — owner EXTRAS; a TUPLE draws the images
     side by side — the dual Sunday's two plates, owner 2026-07-13), an
-    optional centered title line, then the left-aligned prose (color
-    words light up only per `accents` — the entity's own diamond
-    hues)."""
+    optional centered title line, then the article's TEASER (THE HOVER
+    TEASER LAW — never the whole text; the Encyclopedia holds it)."""
     parts = []
     images = image if isinstance(image, tuple) else (image,)
     tags = "".join(
@@ -263,7 +273,7 @@ def _article_html(
         parts.append(f"<div align='center'>{tags}</div>")
     if title_html is not None:
         parts.append(f"<div align='center'>{title_html}</div><br/>")
-    parts.append(_article_body_html(text, accents, tr))
+    parts.append(_article_body_html(_teaser(text), tr))
     return "".join(parts)
 
 
@@ -671,8 +681,16 @@ class Compositor:
         octa zodiac slot and the twilight bands. The timed shell over
         `_tooltip_at` — the background warm sweep calls the impl
         directly so the owner's Hover text profile keeps measuring
-        REAL hovers only."""
-        return self._tooltip_at(x, y, size)
+        REAL hovers only. THE HOVER TEASER LAW's footer rides HERE:
+        every hover that owns an Encyclopedia page closes with the
+        clickable LEARN MORE link and the SPACE hint (the warm sweep,
+        calling the impl, never builds footers)."""
+        tip = self._tooltip_at(x, y, size)
+        if tip is None:
+            return None
+        if self.encyclopedia_target(x, y, size) is not None:
+            tip += _learn_more_footer(self._tr)
+        return tip
 
     def _tooltip_at(self, x: float, y: float, size: float) -> str | None:
         if self._day is None or self._last_tick is None:
@@ -1480,10 +1498,16 @@ class Compositor:
                 f"{self._ord(date.day)} {html.escape(self._month(date))} "
                 f"{self._year(date)}"
             )
-        return _article_html(
-            image, title, text,
-            accents=defaults.BODY_ACCENT_HUES[body], tr=self._tr,
-        )
+        else:
+            # THE WEEKDAY-TITLE LAW (owner, repeated many times —
+            # CUBE.md §Display and Legend Laws): every weekday-bound
+            # badge names ITS day beside the title; the active body's
+            # full date line above already carries it.
+            title += (
+                f"<br/>"
+                f"{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES[body]))}"
+            )
+        return _article_html(image, title, text, tr=self._tr)
 
     def _archetype_arm_index(self, arm_angle: float) -> int:
         """The figures-tuple index of an unrotated arm angle — the same
@@ -1527,7 +1551,7 @@ class Compositor:
         # Column 1 — the age name and its text (or the pending line).
         text_col = _hover_title(html.escape(self._tr(tree_fig["name"])))
         if rows:
-            text_col += _article_paragraphs(rows[0], tr=self._tr)
+            text_col += _article_paragraphs(_teaser(rows[0]), tr=self._tr)
         else:
             text_col += _centered_html(
                 "",
@@ -1589,7 +1613,7 @@ class Compositor:
                 f"width='{defaults.ARTICLE_THREE_IMAGE_PX}'/></div>"
             )
         if rows:
-            creature_col += _article_paragraphs(rows[0], tr=self._tr)
+            creature_col += _article_paragraphs(_teaser(rows[0]), tr=self._tr)
         else:
             creature_col += _centered_html(
                 "", html.escape(self._tr(archetypes.ARCHETYPE_PENDING_LINE))
@@ -1610,7 +1634,7 @@ class Compositor:
             f"<b>{html.escape(self._tr(fig['row2']))}</b>"
         )
         if len(rows) > 1:
-            evangelist_col += _article_paragraphs(rows[1], tr=self._tr)
+            evangelist_col += _article_paragraphs(_teaser(rows[1]), tr=self._tr)
         # Column 3 — the Element: the name in its active wheel hue, then
         # its humoral article (rows[2] when written).
         hue = palette_for(self._skin)[index]
@@ -1621,7 +1645,7 @@ class Compositor:
             f"{html.escape(self._tr(archetypes.tetramorph_element(index)))}</b>"
         )
         if len(rows) > 2:
-            element_col += _article_paragraphs(rows[2], tr=self._tr)
+            element_col += _article_paragraphs(_teaser(rows[2]), tr=self._tr)
         width = defaults.ARTICLE_THREE_COLUMN_WIDTH_PX
         return (
             "<table cellspacing='10'><tr>"
@@ -1656,14 +1680,17 @@ class Compositor:
         title = _hover_title(html.escape(self._tr(name)))
         rows = (node or {}).get("rows") or ()
         if rows:
-            parts = [badge, title, _article_body_html(rows[0], tr=self._tr)]
+            parts = [
+                badge, title,
+                _article_body_html(_teaser(rows[0]), tr=self._tr),
+            ]
             if row2 is not None and len(rows) > 1:
                 # The second row, split off by a rule — the same shape
                 # as the cross arms' two data sets (owner pattern).
                 parts += [
                     "<hr/>",
                     _hover_title(html.escape(self._tr(row2))),
-                    _article_body_html(rows[1], tr=self._tr),
+                    _article_body_html(_teaser(rows[1]), tr=self._tr),
                 ]
             return "".join(parts)
         subtitle = (
@@ -1717,10 +1744,13 @@ class Compositor:
                 f"{self._ord(date.day)} {html.escape(self._month(date))} "
                 f"{self._year(date)}"
             )
-        return _article_html(
-            image, title, text, accents=defaults.BODY_ACCENT_HUES["sun"],
-            tr=self._tr,
-        )
+        else:
+            # THE WEEKDAY-TITLE LAW: the Sunday faces are Sunday-bound.
+            title += (
+                f"<br/>"
+                f"{html.escape(self._tr(constants.WEEKDAY_FULL_NAMES['sun']))}"
+            )
+        return _article_html(image, title, text, tr=self._tr)
 
     def _dual_face_columns(self, theme: str, faces: tuple[str, str]) -> str:
         """The CENTER seat's TWO-FACE hover CARD (owner verdict B, round
@@ -1734,13 +1764,15 @@ class Compositor:
         dual_names = spec.dual_names or defaults.WEEKDAY_DUAL_NAMES[theme]
         article_set = spec.article_set or constants.WEEKDAY_THEME_ARTICLES[theme]
         columns = []
+        sunday = html.escape(self._tr(constants.WEEKDAY_FULL_NAMES["sun"]))
         for face in faces:
             if face == "ninth":
                 name, asset = theme_ninth(
                     theme, self._center_pangea(), on_date=self._day.local_date
                 )
                 text = self._encyclopedia.entry("ninths", name)["base"]
-                accents = ()
+                # The Ninth stands OUTSIDE the circle — no weekday line.
+                day_line = ""
             else:
                 ruler = face == "ruler"
                 name = dual_names[0 if ruler else 1]
@@ -1754,11 +1786,14 @@ class Compositor:
                     variant = node["variants"].get(self._combo_key())
                     if variant:
                         text += "\n\n" + variant
-                accents = defaults.BODY_ACCENT_HUES["sun"]
+                # THE WEEKDAY-TITLE LAW: both throne faces are Sunday's.
+                day_line = f"<br/>{sunday}"
             columns.append(
                 _hover_badge(asset)
-                + _hover_title(f"<b>{html.escape(self._tr(name))}</b>")
-                + _article_paragraphs(text, accents=accents, tr=self._tr)
+                + _hover_title(
+                    f"<b>{html.escape(self._tr(name))}</b>{day_line}"
+                )
+                + _article_paragraphs(_teaser(text), tr=self._tr)
             )
         return (
             "<table cellspacing='12'><tr>"
@@ -1911,14 +1946,10 @@ class Compositor:
                 ) or article["variants"].get(style)
                 if variant:
                     text += "\n\n" + variant
-                accents = (
-                    defaults.SIGN_ACCENT_HUES_SOUTH
-                    if south else defaults.SIGN_ACCENT_HUES
-                )[name]
                 columns.append(
                     _hover_title(header)
                     + plate
-                    + _article_paragraphs(text, accents=accents, tr=self._tr)
+                    + _article_paragraphs(_teaser(text), tr=self._tr)
                 )
             # ONE flat table, both columns width-declared (nested
             # tables measured wrong — the popup honors these cells).
@@ -1954,11 +1985,7 @@ class Compositor:
             return (
                 _hover_badge(defaults.TRINITY_ART_DIR / f"{theme}.png")
                 + header + "<br/>"
-                + _article_body_html(
-                    article["base"],
-                    accents=defaults.TRIO_ACCENT_HUES[theme],
-                    tr=self._tr,
-                )
+                + _article_body_html(_teaser(article["base"]), tr=self._tr)
             )
         if arm_angle % 90.0 == 0.0:
             # Cardinal arms (cross and octa) point at the season events:
@@ -2226,11 +2253,7 @@ class Compositor:
         return (
             header
             + self._zodiac_image_trio(style, day.zodiac_name)
-            + _article_body_html(
-                article["base"],
-                accents=defaults.SIGN_ACCENT_HUES[day.zodiac_name],
-                tr=self._tr,
-            )
+            + _article_body_html(_teaser(article["base"]), tr=self._tr)
         )
 
     def _lunation_ordinal(self, next_cycle: bool = False) -> str:
@@ -2462,10 +2485,7 @@ class Compositor:
         return (
             header
             + self._zodiac_image_trio(style, sign)
-            + _article_body_html(
-                article["base"], accents=defaults.SIGN_ACCENT_HUES[sign],
-                tr=self._tr,
-            )
+            + _article_body_html(_teaser(article["base"]), tr=self._tr)
         )
 
     def _greetings_tooltip(self) -> str:

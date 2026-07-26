@@ -33,6 +33,16 @@ class LegendPopup(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
         self._label = QLabel()
         self._label.setTextFormat(Qt.TextFormat.RichText)
+        # THE HOVER TEASER LAW's clickable footer (owner 2026-07-26):
+        # the LEARN MORE anchor must be mouse-reachable — links only,
+        # no text selection — and its click is routed to whatever the
+        # owner of the popup installs on `on_link` (the widget wires
+        # the same Encyclopedia jump SPACE makes).
+        self._label.setTextInteractionFlags(
+            Qt.TextInteractionFlag.LinksAccessibleByMouse
+        )
+        self._label.linkActivated.connect(self._link_activated)
+        self.on_link = None
         # Justified prose must WRAP inside its declared column (owner
         # regression 2026-07-13: without word wrap the label sized to
         # the unwrapped document — kilometer-wide paragraphs). The
@@ -116,6 +126,12 @@ class LegendPopup(QWidget):
         # focus theft) to place the freshly shown popup ABOVE it (owner
         # 15h item 3A). Harmless in the other z-modes.
         native.assert_topmost(int(self.winId()))
+
+    def _link_activated(self, _href: str) -> None:
+        """A footer anchor was clicked — hand it to the installed
+        handler (the widget's Encyclopedia jump); no handler, no-op."""
+        if self.on_link is not None:
+            self.on_link()
 
     def hide_unless_hovered(self) -> None:
         """Hide — unless the cursor sits INSIDE the popup (crossing from

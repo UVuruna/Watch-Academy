@@ -59,13 +59,13 @@ from render.asset_variants import moon_phase_file, scaled_variant_file
 from render.compositor import _HEX_NOTE, _SUBHEAD, _highlight_terms
 
 
-def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
+def _flow_html(text: str, tr=None) -> str:
     """Article prose that REFLOWS with the window (owner 2026-07-13:
     the paragraphs span the block and re-wrap live) — no fixed
-    character wrap; QLabel's word wrap fills the width. Canon terms
-    highlighted, hex notes stripped, JUSTIFIED like the legend, and
-    [[Subhead]] markers drawn as bold headings (owner 2026-07-14;
-    `tr` localizes the label)."""
+    character wrap; QLabel's word wrap fills the width. The spine
+    terms bolded (THE LEGEND BOLD LAW, owner 2026-07-26), hex notes
+    stripped, JUSTIFIED like the legend, and [[Subhead]] markers drawn
+    as bold headings (owner 2026-07-14; `tr` localizes the label)."""
     text = _HEX_NOTE.sub("", text)
     parts = []
     for paragraph in text.split("\n\n"):
@@ -90,7 +90,7 @@ def _flow_html(text: str, accents: tuple = (), tr=None) -> str:
             )
         parts.append(
             f"<p align='justify'{body_style}>"
-            + _highlight_terms(_html.escape(paragraph), accents)
+            + _highlight_terms(_html.escape(paragraph))
             + "</p>"
         )
     return "<div>" + "".join(parts) + "</div>"
@@ -657,7 +657,6 @@ def _weekday_topic(theme: str):
             "looks": looks_for(body),
             "name": names[body],
             "article": ("article", article_set, body),
-            "accents": defaults.BODY_ACCENT_HUES[body],
             # TITLES CARRY THE DAY (owner round R8b item 8): read by
             # `_entry_name`, the ONE build point that appends it.
             "weekday": constants.WEEKDAY_FULL_NAMES[body],
@@ -672,7 +671,6 @@ def _weekday_topic(theme: str):
             "looks": looks_for("sun"),
             "name": ruler_name,
             "article": ("article_face", article_set, "sun", "ruler"),
-            "accents": defaults.BODY_ACCENT_HUES["sun"],
             "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
         }
 
@@ -684,7 +682,6 @@ def _weekday_topic(theme: str):
             "looks": evil_looks_for(),
             "name": servant_name,
             "article": ("article_face", article_set, "sun", "servant"),
-            "accents": defaults.BODY_ACCENT_HUES["sun"],
             "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
         }
 
@@ -692,13 +689,11 @@ def _weekday_topic(theme: str):
         "images": (),      # graceful-absent — a future theme plate's slot
         "name": ("theme_title", theme),
         "article": ("theme_title", theme),
-        "accents": (),
     }
     duality_title_entry = {
         "images": (),
         "name": ("week_duality_title", theme),
         "article": ("week_duality", theme),
-        "accents": (),
     }
     entries = (
         [title_entry]
@@ -801,7 +796,6 @@ def _pantheon_topic(theme: str) -> list[dict]:
             "looks": looks_for(path),
             "name": name,
             "article": ("article", article_set, article_body),
-            "accents": defaults.BODY_ACCENT_HUES[body],
             "weekday": constants.WEEKDAY_FULL_NAMES[body],
         }
 
@@ -825,26 +819,22 @@ def _pantheon_topic(theme: str) -> list[dict]:
         "images": (),
         "name": ("theme_title", title_key),
         "article": ("theme_title", title_key),
-        "accents": (),
     }
     duality_title_entry = {
         "images": (),
         "name": ("week_duality_title", title_key),
         "article": ("week_duality", title_key),
-        "accents": (),
     }
     good_entry = {
         "looks": looks_for(sun_path),
         "name": ruler_name,
         "article": ("article_face", face_article_set, "sun", "ruler"),
-        "accents": defaults.BODY_ACCENT_HUES["sun"],
         "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     evil_entry = {
         "looks": looks_for(dual_path),
         "name": servant_name,
         "article": ("article_face", face_article_set, "sun", "servant"),
-        "accents": defaults.BODY_ACCENT_HUES["sun"],
         "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     return (
@@ -876,7 +866,6 @@ def _wider_topic(theme: str) -> list[dict]:
         "images": (),
         "name": ("theme_title", title_key),
         "article": ("theme_title", title_key),
-        "accents": (),
     }
     figure_entries = [
         {
@@ -885,7 +874,6 @@ def _wider_topic(theme: str) -> list[dict]:
             ),
             "name": figure,
             "article": ("emblem", "wider", figure),
-            "accents": (),
         }
         for figure in _WIDER_FIGURES[theme]
     ]
@@ -932,7 +920,6 @@ def _continents_topic(travel_date: date) -> dict:
             "looks": region_looks(defaults.CONTINENTS_REGIONS[body]),
             "name": defaults.WEEKDAY_THEME_NAMES["continents"][body],
             "article": ("article", "continents", body),
-            "accents": defaults.BODY_ACCENT_HUES[body],
             "weekday": constants.WEEKDAY_FULL_NAMES[body],
         }
 
@@ -941,7 +928,6 @@ def _continents_topic(travel_date: date) -> dict:
         "images": (defaults.CONTINENTS_TITLE_IMAGE,),
         "name": ("theme_title", "continents"),
         "article": ("theme_title", "continents"),
-        "accents": (),
     }
     duality_title_entry = {
         # The two poles in eternal antiphase, side by side.
@@ -951,20 +937,17 @@ def _continents_topic(travel_date: date) -> dict:
         ),
         "name": ("week_duality_title", "continents"),
         "article": ("week_duality", "continents"),
-        "accents": (),
     }
     good_entry = {
         "looks": region_looks("south_pole"),
         "name": ruler_name,
         "article": ("article_face", "continents", "sun", "ruler"),
-        "accents": defaults.BODY_ACCENT_HUES["sun"],
         "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     evil_entry = {
         "looks": region_looks("north_pole"),
         "name": servant_name,
         "article": ("article_face", "continents", "sun", "servant"),
-        "accents": defaults.BODY_ACCENT_HUES["sun"],
         "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
     }
     pangea = continents.ninth_is_pangea_from_repos(
@@ -979,7 +962,6 @@ def _continents_topic(travel_date: date) -> dict:
         "images": (defaults.weekday_art(ninth_rel),),
         "name": ninth_name,
         "article": ("emblem", "ninths", ninth_name),
-        "accents": (),
     }
     entries = (
         [title_entry]
@@ -1038,7 +1020,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": sign,
                 "article": ("zodiac", sign),
-                "accents": defaults.SIGN_ACCENT_HUES[sign],
             }
             for sign in (
                 "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
@@ -1055,7 +1036,6 @@ def _topics(travel_date: date | None = None) -> dict:
             {
                 "name": animal,
                 "article": ("chinese", animal),
-                "accents": (),
                 # The animals wear the four looks too — BRONZE first
                 # (owner default 2026-07-13), the swaps and the
                 # colored art on the arrows.
@@ -1079,7 +1059,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 "images": (),
                 "name": element,
                 "article": ("element", element),
-                "accents": (),
             }
             for element in constants.CHINESE_ELEMENTS
         ],
@@ -1153,7 +1132,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": ("week_title", body),
                 "article": ("week", body),
-                "accents": defaults.BODY_ACCENT_HUES[body],
             }
             for body in _WEEK_ORDER
         ],
@@ -1170,7 +1148,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": ("instrument_title", key),
                 "article": ("instrument", key),
-                "accents": (),
             }
             for key in _INSTRUMENT_KEYS
         ],
@@ -1191,7 +1168,6 @@ def _topics(travel_date: date | None = None) -> dict:
                     ),
                     "name": name,
                     "article": ("emblem", family, name),
-                    "accents": (),
                 }
                 for name in _VSM_DAYS[family]
             ],
@@ -1205,7 +1181,6 @@ def _topics(travel_date: date | None = None) -> dict:
         ),
         "name": "The Wheel of Moods",
         "article": ("emblem", "moods", "The Wheel of Moods"),
-        "accents": (),
     })
     # THE NINTH MOOD closes it (owner 8+1 structure, 2026-07-14):
     # Eclipse keeps its plate as the EVENT mood outside the eight
@@ -1214,7 +1189,6 @@ def _topics(travel_date: date | None = None) -> dict:
         "images": (defaults.EMBLEM_ART_DIRS["moods"] / "Eclipse.png",),
         "name": "The Ninth Mood",
         "article": ("emblem", "moods", "The Ninth Mood"),
-        "accents": (),
     })
     # THE NINE INTELLIGENCES (owner GO 2026-07-13; canon-web REWRITE +
     # WEEKDAY-LAW reseat, owner-sealed R7b 2026-07-21): Gardner's nine
@@ -1238,13 +1212,11 @@ def _topics(travel_date: date | None = None) -> dict:
             "images": (),
             "name": "The Nine Intelligences",
             "article": ("emblem", "intelligence", "The Nine Intelligences"),
-            "accents": (),
         }] + [
             {
                 "images": (intel / f"{stem}.png",),
                 "name": name,
                 "article": ("emblem", "intelligence", name),
-                "accents": (),
             }
             for name, stem in (
                 ("Interpersonal", "Interpersonal"),               # Monday
@@ -1278,13 +1250,11 @@ def _topics(travel_date: date | None = None) -> dict:
             "images": (),
             "name": "The Slavic Months",
             "article": ("emblem", "months", "The Slavic Months"),
-            "accents": (),
         }] + [
             {
                 "images": (defaults.MONTHS_ART_DIR / f"{stem}.png",),
                 "name": f"{croatian} ({gloss})",
                 "article": ("emblem", "months", croatian),
-                "accents": (),
             }
             for croatian, gloss, stem, _month in defaults.SLAVIC_MONTHS
         ] + [
@@ -1299,7 +1269,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 "images": (defaults.MONTHS_ART_DIR / f"{key}.png",),
                 "name": name,
                 "article": ("emblem", "months", key),
-                "accents": (),
             }
             for key, name in (
                 ("Sol", "Sol (the Sun's Month)"),
@@ -1341,7 +1310,6 @@ def _topics(travel_date: date | None = None) -> dict:
             "images": (plate,),
             "name": name,
             "article": ("emblem", "ninths", name),
-            "accents": (),
         }
         # THE NINTH'S OWN FINISH SWITCHER (owner bug, Gaia screenshot —
         # round R3): every metal-plate theme's Ninth gets the SAME
@@ -1386,7 +1354,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": "Lucifer",
                 "article": ("emblem", "duality", "Lucifer"),
-                "accents": ("red",),
             },
             {
                 "images": (
@@ -1395,7 +1362,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": "Judas",
                 "article": ("emblem", "duality", "Judas"),
-                "accents": ("blue",),
             },
             {
                 # The owner's hexagram badge (2026-07-13): the two
@@ -1403,7 +1369,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 "images": (defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",),
                 "name": "The Union",
                 "article": ("emblem", "duality", "The Union"),
-                "accents": ("red", "blue"),
             },
         ],
     }
@@ -1417,7 +1382,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 "images": (defaults.TRINITY_ART_DIR / f"{virtue}.png",),
                 "name": virtue,
                 "article": ("trio", virtue),
-                "accents": defaults.TRIO_ACCENT_HUES[virtue],
             }
             for virtue in ("Faith", "Hope", "Love")
         ],
@@ -1446,7 +1410,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": ("moon_title", phase),
                 "article": ("moon", phase),
-                "accents": (),
             }
             for index, phase in enumerate(constants.MOON_PHASE_NAMES)
         ],
@@ -1468,7 +1431,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": ("season_title", key),
                 "article": ("season", key),
-                "accents": (),
             }
             for key, art in _SEASON_ENTRIES
         ],
@@ -1484,7 +1446,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 "images": (defaults.SEASON_ART_DIR / art,),
                 "name": ("sun_title", key),
                 "article": ("sun", key),
-                "accents": (),
             }
             for key, art in _SUN_ENTRIES
         ],
@@ -1522,7 +1483,6 @@ def _topics(travel_date: date | None = None) -> dict:
                 ),
                 "name": ("era_title", key),
                 "article": ("era", key),
-                "accents": (),
             }
             for key, art in _ERA_ENTRIES
         ],
@@ -1545,7 +1505,6 @@ def _topics(travel_date: date | None = None) -> dict:
                     ),
                     "name": ("eclipse_title", key),
                     "article": ("eclipse", key),
-                    "accents": (),
                 }
                 for key, art in entry_specs
             ],
@@ -1612,7 +1571,6 @@ class EncyclopediaDialog(QDialog):
                 "images": (defaults.SCALE_ART_DIR / "primary" / "colored" / "Union.png",),
                 "name": data["title"],
                 "article": ("verses", data),
-                "accents": (),
                 "poem": True,
             })
             # The poem's CANONICAL home (ROADMAP queue #6, owner
@@ -1626,7 +1584,6 @@ class EncyclopediaDialog(QDialog):
                 "images": (defaults.SEASON_ART_DIR / "Poem.png",),
                 "name": season_data["title"],
                 "article": ("verses", season_data),
-                "accents": (),
                 "poem": True,
             })
         self._cells: list[dict] = []
@@ -2265,7 +2222,6 @@ class EncyclopediaDialog(QDialog):
             text = QLabel(
                 _flow_html(
                     self._article_text(entry["article"]),
-                    accents=entry["accents"],
                     tr=self._tr,
                 )
             )

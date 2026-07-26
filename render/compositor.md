@@ -211,14 +211,31 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
   BODIES (every visible body within its image region: the entity's
   NAME as a bigger bold title — Odin, Farmer, Islam… (owner spec
   2026-07-11, `defaults.ARTICLE_TITLE_PX`) — the active day adds
-  "Thursday, 9th July 2026" beneath it, then the JUSTIFIED
+  "Thursday, 9th July 2026" beneath it, and **THE WEEKDAY-TITLE LAW
+  (owner 2026-07-26, repeated many times — CUBE.md §Display and
+  Legend Laws): every GHOST body names ITS weekday beneath the title
+  too** (the Sunday faces and the dual-card columns say Sunday; the
+  Ninth, outside the circle, carries no day), then the JUSTIFIED
   article (owner 2026-07-13: clean book-column edges, reflowing in a
-  `defaults.ARTICLE_TEXT_WIDTH_PX` cell) — base + the active
-  pointer/palette combination paragraph,
-  the entity art on top). In every article the canon terms POP
-  (owner spec 2026-07-12, `_highlight_terms`): virtues bold blue,
-  vices bold red, moods bold yellow, color words in their own hue
-  (`defaults.LEGEND_*` rules, English + Serbian originals), and hex
+  `defaults.ARTICLE_TEXT_WIDTH_PX` cell). **THE HOVER TEASER LAW
+  (owner 2026-07-26):** an article hover speaks only its THESIS —
+  the first `LEGEND_TEASER_SENTENCES` of the first paragraph,
+  ellipsis-closed (`_teaser`) — never the whole text; the whole text
+  lives in the Encyclopedia, and `tooltip_at` (the shell, never the
+  warm sweep's direct `_tooltip_at`) closes every hover that owns an
+  encyclopedia page with `_learn_more_footer`: the clickable
+  underlined LEARN MORE anchor (`domy:encyclopedia` — the popup
+  routes it to the SAME jump SPACE makes) plus the SPACE hint. The
+  instrument cards (Moon/Earth/tick band/twilight) keep their full
+  data readouts — they are readings, not articles — and gain only
+  the footer where they own a page; the ring LETTER legends and the
+  Four Greetings keep their full canon text (documentation and the
+  Easter egg, exempt from the teaser). **THE LEGEND BOLD LAW (owner
+  2026-07-26, superseding the 2026-07-12 rainbow):** `_highlight_
+  terms` bolds ONLY the web's spine — virtue, vice, mood and WEEKDAY
+  (`defaults.LEGEND_TERM_PATTERNS`, English + Serbian originals) —
+  in plain `<b>`; color words and figure names read plain, no
+  colored spans anywhere, and hex
   notes like "(#F8E600)" are stripped from display; when the CLASSIC
   unit is driven by the 2nd slot (Seasons/Compass two-slot case) the
   body hover speaks that slot's own theme, metal AND roster. A hover

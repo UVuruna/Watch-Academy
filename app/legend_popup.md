@@ -49,6 +49,12 @@ focused). `WA_ShowWithoutActivating` keeps it from ever stealing focus.
 - `hide_unless_hovered()`: hides unless the cursor is inside the popup
   (crossing from the dial INTO the popup must not close it)
 - `leaveEvent`: hides when the cursor leaves the popup itself
+- **THE LEARN MORE anchor (owner 2026-07-26, CUBE.md §Display and
+  Legend Laws):** the label allows `LinksAccessibleByMouse` and its
+  `linkActivated` routes to the `on_link` callable the popup's owner
+  installs (the widget wires the same Encyclopedia jump SPACE makes —
+  the footer itself is built by the compositor's
+  `_learn_more_footer`); no handler installed, no-op
 
 ## Design note (proposed, not implemented) — Sunday dual portraits
 
@@ -85,10 +91,9 @@ reads as one duality rather than two unrelated pictures:
   in the Ruler article ("the dial's own yin-yang") — a small ☯ or a
   vertical hairline rule both read fine in Qt rich text; ☯ is more
   legible at hover size.
-- Caption color continues the existing `accents=defaults.BODY_ACCENT_HUES[body]`
-  mechanism: "Ruler" in warm gold, "Servant" in cool silver/gray — no
-  new plumbing, just two `<span style='color:...'>` labels next to
-  captions that don't exist for any other body today.
+- ~~Caption color via the accents mechanism~~ — the accents machinery
+  is RETIRED (THE LEGEND BOLD LAW, owner 2026-07-26): captions would
+  read plain or bold like everything else.
 - The shared title stays exactly what it already is —
   `defaults.WEEKDAY_THEME_NAMES[...]["sun"]` already resolves to
   "Ruler · Servant" — so no new string is needed there.

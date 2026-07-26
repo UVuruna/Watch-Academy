@@ -523,7 +523,11 @@ def test_arm_hover_speaks_the_two_row_article(app):
     assert tooltip is not None
     assert "The One" in tooltip and "Judge" in tooltip
     assert archetypes.ARCHETYPE_PENDING_LINE not in tooltip
-    assert "Alpha and the Omega" in tooltip     # row-1 prose landed
+    # THE HOVER TEASER LAW (owner 2026-07-26): the hover speaks the
+    # thesis only — real prose landed, truncated with the ellipsis;
+    # the deep row-1 prose stays in the Encyclopedia.
+    assert "…" in tooltip
+    assert "Alpha and the Omega" not in tooltip
     # The hexa two-sign columns are REPLACED by the archetype reading.
     soul = Compositor(_archetype_skin("hexa", "light"), AssetCache())
     soul.render_offscreen(360.0, 1.0, day, tick)

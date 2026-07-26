@@ -130,7 +130,17 @@ to fit exactly.
   hovers while the cursor travels (owner 2026-07-16: near the screen
   edge a large neighbour legend covered the smaller weekday body —
   hold, glide past, release inside the wanted element); the
-  controller's click-through poller obeys the same key
+  controller's click-through poller obeys the same key. The
+  encyclopedia target of the shown popup is CAPTURED
+  (`_popup_target`) for the footer's LEARN MORE click — the cursor
+  may leave the dial for the popup (clearing the live hover) before
+  the click lands
+- `_learn_more_clicked()` (owner 2026-07-26, CUBE.md §Display and
+  Legend Laws): the popup footer's LEARN MORE anchor — installed on
+  `LegendPopup.on_link` at construction (headless tests pass no
+  popup) — dismisses the popup and emits `open_encyclopedia` with the
+  captured target: the SAME jump SPACE makes, for users who never
+  learned the shortcut
 - `contextMenuEvent()`: opens the shared menu — Show is HIDDEN here on
   purpose (owner 2026-07-18, Session 21-D: "if we already clicked it,
   we can see it") — the widget holds the live `_show_action` reference
