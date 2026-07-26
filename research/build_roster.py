@@ -38,25 +38,18 @@ ARCHETYPES = (
     ("saturn", "Saturday", "green", "Patience", "Envy", "Renewal",
      "Farmer"),
 )
-# The Ninths (owner 8+1 doctrine) — keep in sync with the topic table
-# in app/encyclopedia.py.
+# The Ninths — read from the ONE live table (Rule #5). This script's
+# own parallel copy had silently drifted back to the RETIRED exile
+# ninths (Hades/Baldur/Set/Crnobog/The Jester/Legion...) that the
+# round-four/five UNION verdicts superseded on 2026-07-15 — exactly
+# the drift `constants.WEEKDAY_THEME_NINTHS`'s docstring warns a
+# parallel copy would suffer. Continents' LIVING ninth (Zealandia/
+# Pangea, ../earth) stays out: it is celestial owner art, no
+# per-source coverage row to draw.
 NINTHS = {
-    "wolf": ("Sigma", "wolf/primary/bronze/sigma"),
-    "bee": ("The Swarm", "bee/primary/bronze/swarm"),
-    "elephant": ("The Graveyard", "elephant/primary/bronze/graveyard"),
-    "cosmos": ("The Big Bang", "cosmos/primary/bronze/big_bang"),
-    "greek": ("Hades", "greek/primary/bronze/hades"),
-    "norse": ("Baldur", "norse/primary/bronze/baldur"),
-    "egypt": ("Set", "egypt/primary/bronze/set"),
-    "slavic": ("Crnobog", "slavic/primary/bronze/crnobog"),
-    "alchemy": ("The Philosopher's Stone", "alchemy/primary/colored/stone"),
-    "profession": ("The Jester", "profession/primary/bronze/Jester"),
-    "religion": ("The Unknown God", "creeds/secondary/colored/unknown_god"),
-    "religion_alt": (
-        "The Lost Mystery", "creeds/secondary/colored/lost_mystery",
-    ),
-    "bible": ("Melchizedek", "bible/secondary/colored/melchizedek"),
-    "bible_dark": ("Legion", "bible/dark/colored/legion"),
+    theme: (name, rel[: -len(".png")])
+    for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
+    if theme != "continents"
 }
 THEME_ORDER = (
     "planets", "planet_signs", "planets_art", "greek", "norse", "egypt",

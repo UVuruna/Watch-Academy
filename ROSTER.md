@@ -2,7 +2,7 @@
 
 **GENERATED — do not edit by hand.** Regenerate with `python research/build_roster.py` after any theme-table change or art drop. Every theme, every figure, its seat in the position system, and per-source asset coverage — the one place to check what is missing.
 
-_Last generated: 2026-07-22_
+_Last generated: 2026-07-26_
 
 ## The Position System — seat archetypes
 
@@ -57,7 +57,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | jupiter | Thursday | Jupiter | `jupiter` | ✔ | ✔ | — | — |
 | venus | Friday | Venus | `venus` | ✔ | ✔ | — | — |
 | saturn | Saturday | Saturn | `saturn` | ✔ | ✔ | — | — |
-| dual | Sunday | Sun / Eclipsed Sun | `sun_eclipse` | ✔ | ✔ | n/a | n/a |
+| dual | Sunday | Sun / Eclipsed Sun | `sun_eclipse` | ✔ | ✔ | — | — |
 
 ### Greek gods (`greek`)
 
@@ -71,7 +71,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Aphrodite (Ἀφροδίτη) | `Aphrodite` | ✔ | ✔ | ✔ | ✔ |
 | saturn | Saturday | Cronus (Κρόνος) | `Cronus` | ✔ | ✔ | ✔ | ✔ |
 | dual | Sunday | Helios / Phaethon | `Phaethon` | ✔ | ✔ | ✔ | ✔ |
-| ninth | — | Hades | `hades` | — | — | — | — |
+| ninth | — | Gaia | `gaia` | ✔ | ✔ | ✔ | ✔ |
 
 ### Norse gods (`norse`)
 
@@ -85,7 +85,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Freya (Freyja) | `Freya` | ✔ | ✔ | ✔ | ✔ |
 | saturn | Saturday | Loki | `Loki` | ✔ | ✔ | ✔ | ✔ |
 | dual | Sunday | Sól / Skoll | `Skoll` | ✔ | ✔ | ✔ | ✔ |
-| ninth | — | Baldur | `baldur` | — | — | — | — |
+| ninth | — | Yggdrasil | `Yggdrasil` | ✔ | ✔ | ✔ | ✔ |
 
 ### Egyptian gods (`egypt`)
 
@@ -99,7 +99,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Hathor | `hathor` | ✔ | ✔ |
 | saturn | Saturday | Osiris | `osiris` | ✔ | ✔ |
 | dual | Sunday | Ra / Afu-Ra | `afu_ra` | ✔ | ✔ |
-| ninth | — | Set | `set` | — | — |
+| ninth | — | The Pharaoh | `pharaoh` | ✔ | ✔ |
 
 ### Slavic gods (`slavic`)
 
@@ -113,7 +113,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Mokoš | `mokos` | ✔ | ✔ |
 | saturn | Saturday | Morana | `morana` | ✔ | ✔ |
 | dual | Sunday | Young Dažbog / Old Dažbog | `dazbog_old` | ✔ | ✔ |
-| ninth | — | Crnobog | `crnobog` | — | — |
+| ninth | — | Triglav | `triglav` | — | — |
 
 ### Alchemy (`alchemy`)
 
@@ -154,7 +154,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Sikhism | `sikhism` | ✔ | ✔ |
 | saturn | Saturday | Judaism | `judaism` | ✔ | ✔ |
 | dual | Sunday | Christianity / Satanism | `satanism` | ✔ | ✔ |
-| ninth | — | The Unknown God | `unknown_god` | ✔ | ✔ |
+| ninth | — | Freemasonry | `freemasonry` | ✔ | — |
 
 ### Ancient religions (`religion_alt`)
 
@@ -168,7 +168,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Babylon | `babylon` | ✔ | ✔ |
 | saturn | Saturday | Voodoo | `voodoo` | ✔ | ✔ |
 | dual | Sunday | Mithraism / Corax | `corax` | ✔ | ✔ |
-| ninth | — | The Lost Mystery | `lost_mystery` | — | — |
+| ninth | — | The Unknown God | `unknown_god` | ✔ | ✔ |
 
 ### Professions (`profession`)
 
@@ -182,7 +182,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Artist | `Artist` | ✔ | ✔ | ✔ | — |
 | saturn | Saturday | Farmer | `Farmer` | ✔ | ✔ | ✔ | — |
 | dual | Sunday | Ruler / Servant | `Servant_dual` | ✔ | ✔ | ✔ | — |
-| ninth | — | The Jester | `Jester` | — | — | ✔ | ✔ |
+| ninth | — | The Polymath | `Polymath` | ✔ | ✔ | ✔ | ✔ |
 
 ### Wolf Pack (`wolf`)
 
@@ -238,7 +238,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Adam & Eve | `adam_and_eve` | ✔ | ✔ |
 | saturn | Saturday | Joseph | `joseph` | ✔ | ✔ |
 | dual | Sunday | Ancient of Days / Son | `son_servant` | ✔ | ✔ |
-| ninth | — | Melchizedek | `melchizedek` | ✔ | ✔ |
+| ninth | — | The Holy Trinity | `holy_trinity` | ✔ | ✔ |
 
 ### Bible II (`bible2`)
 
@@ -252,6 +252,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Ruth | `ruth` | ✔ | ✔ |
 | saturn | Saturday | Job | `job` | ✔ | ✔ |
 | dual | Sunday | Abraham / Isaac | `isaac` | ✔ | ✔ |
+| ninth | — | Melchizedek | `melchizedek` | ✔ | ✔ |
 
 ### Bible Dark (`bible_dark`)
 
@@ -265,7 +266,7 @@ Every weekday theme seats SEVEN figures on these archetypes plus the Sunday DUAL
 | venus | Friday | Delilah | `delilah` | ✔ | ✔ |
 | saturn | Saturday | Cain | `cain` | ✔ | ✔ |
 | dual | Sunday | Lucifer / Judas | `judas` | ✔ | ✔ |
-| ninth | — | Legion | `legion` | ✔ | ✔ |
+| ninth | — | The Ninth Circle | `ninth_circle` | ✔ | ✔ |
 
 ### Cosmos (`cosmos`)
 
@@ -484,82 +485,71 @@ Per pantheon theme, the seated Pantheon name against the Planetary fallback, wit
 
 ## Shortage List — everything the tables marked —
 
-**chatgpt** (56):
+**chatgpt** (51):
 
-- weeks/celestial_bodies/planets/primary/sun.png
-- weeks/celestial_bodies/planets/primary/moon.png
-- weeks/celestial_bodies/planets/primary/mars.png
-- weeks/celestial_bodies/planets/primary/mercury.png
-- weeks/celestial_bodies/planets/primary/jupiter.png
-- weeks/celestial_bodies/planets/primary/venus.png
-- weeks/celestial_bodies/planets/primary/saturn.png
-- weeks/celestial_bodies/planets/colored/sun.png
-- weeks/celestial_bodies/planets/colored/moon.png
-- weeks/celestial_bodies/planets/colored/mars.png
-- weeks/celestial_bodies/planets/colored/mercury.png
-- weeks/celestial_bodies/planets/colored/jupiter.png
-- weeks/celestial_bodies/planets/colored/venus.png
-- weeks/celestial_bodies/planets/colored/saturn.png
-- weeks/myth/greek/primary/hades.png
-- weeks/myth/greek/colored/hades.png
-- weeks/myth/norse/primary/baldur.png
-- weeks/myth/norse/colored/baldur.png
-- weeks/myth/egypt/primary/set.png
-- weeks/myth/slavic/primary/crnobog.png
-- weeks/faith/creeds/secondary/lost_mystery.png
-- weeks/crafts/profession/colored/Ruler.png
-- weeks/crafts/profession/colored/Physician.png
-- weeks/crafts/profession/colored/Soldier.png
-- weeks/crafts/profession/colored/Merchant.png
-- weeks/crafts/profession/colored/Priest.png
-- weeks/crafts/profession/colored/Artist.png
-- weeks/crafts/profession/colored/Farmer.png
-- weeks/crafts/profession/colored/Servant_dual.png
-- weeks/crafts/profession/primary/Jester.png
-- weeks/myth/greek/pantheon/zeus.png
-- calendars/chinese/primary/Rat.png
-- calendars/chinese/colored/Rat.png
-- calendars/chinese/primary/Ox.png
-- calendars/chinese/colored/Ox.png
-- calendars/chinese/primary/Tiger.png
-- calendars/chinese/colored/Tiger.png
-- calendars/chinese/primary/Rabbit.png
-- calendars/chinese/colored/Rabbit.png
-- calendars/chinese/primary/Dragon.png
-- calendars/chinese/colored/Dragon.png
-- calendars/chinese/primary/Snake.png
-- calendars/chinese/colored/Snake.png
-- calendars/chinese/primary/Horse.png
-- calendars/chinese/colored/Horse.png
-- calendars/chinese/primary/Goat.png
-- calendars/chinese/colored/Goat.png
-- calendars/chinese/primary/Monkey.png
-- calendars/chinese/colored/Monkey.png
-- calendars/chinese/primary/Rooster.png
-- calendars/chinese/colored/Rooster.png
-- calendars/chinese/primary/Dog.png
-- calendars/chinese/colored/Dog.png
-- calendars/chinese/primary/Pig.png
-- calendars/chinese/colored/Pig.png
+- weeks/celestial_bodies/planets/primary/photo/sun.png
+- weeks/celestial_bodies/planets/primary/photo/moon.png
+- weeks/celestial_bodies/planets/primary/photo/mars.png
+- weeks/celestial_bodies/planets/primary/photo/mercury.png
+- weeks/celestial_bodies/planets/primary/photo/jupiter.png
+- weeks/celestial_bodies/planets/primary/photo/venus.png
+- weeks/celestial_bodies/planets/primary/photo/saturn.png
+- weeks/celestial_bodies/planets/primary/colored/sun.png
+- weeks/celestial_bodies/planets/primary/colored/moon.png
+- weeks/celestial_bodies/planets/primary/colored/mars.png
+- weeks/celestial_bodies/planets/primary/colored/mercury.png
+- weeks/celestial_bodies/planets/primary/colored/jupiter.png
+- weeks/celestial_bodies/planets/primary/colored/venus.png
+- weeks/celestial_bodies/planets/primary/colored/saturn.png
+- weeks/celestial_bodies/planets/primary/colored/sun_eclipse.png
+- weeks/myth/slavic/pantheon/bronze/triglav.png
+- weeks/faith/creeds/primary/colored/freemasonry.png
+- weeks/crafts/profession/primary/colored/Ruler.png
+- weeks/crafts/profession/primary/colored/Physician.png
+- weeks/crafts/profession/primary/colored/Soldier.png
+- weeks/crafts/profession/primary/colored/Merchant.png
+- weeks/crafts/profession/primary/colored/Priest.png
+- weeks/crafts/profession/primary/colored/Artist.png
+- weeks/crafts/profession/primary/colored/Farmer.png
+- weeks/crafts/profession/primary/colored/Servant_dual.png
+- weeks/myth/greek/pantheon/bronze/zeus.png
+- calendars/chinese/primary/bronze/Rat.png
+- calendars/chinese/primary/colored/Rat.png
+- calendars/chinese/primary/bronze/Ox.png
+- calendars/chinese/primary/colored/Ox.png
+- calendars/chinese/primary/bronze/Tiger.png
+- calendars/chinese/primary/colored/Tiger.png
+- calendars/chinese/primary/bronze/Rabbit.png
+- calendars/chinese/primary/colored/Rabbit.png
+- calendars/chinese/primary/bronze/Dragon.png
+- calendars/chinese/primary/colored/Dragon.png
+- calendars/chinese/primary/bronze/Snake.png
+- calendars/chinese/primary/colored/Snake.png
+- calendars/chinese/primary/bronze/Horse.png
+- calendars/chinese/primary/colored/Horse.png
+- calendars/chinese/primary/bronze/Goat.png
+- calendars/chinese/primary/colored/Goat.png
+- calendars/chinese/primary/bronze/Monkey.png
+- calendars/chinese/primary/colored/Monkey.png
+- calendars/chinese/primary/bronze/Rooster.png
+- calendars/chinese/primary/colored/Rooster.png
+- calendars/chinese/primary/bronze/Dog.png
+- calendars/chinese/primary/colored/Dog.png
+- calendars/chinese/primary/bronze/Pig.png
+- calendars/chinese/primary/colored/Pig.png
 - instrument/subdial/silver/center.png
 
-**gemini** (17):
+**gemini** (11):
 
-- weeks/celestial_bodies/planets/colored/sun.png
-- weeks/celestial_bodies/planets/colored/moon.png
-- weeks/celestial_bodies/planets/colored/mars.png
-- weeks/celestial_bodies/planets/colored/mercury.png
-- weeks/celestial_bodies/planets/colored/jupiter.png
-- weeks/celestial_bodies/planets/colored/venus.png
-- weeks/celestial_bodies/planets/colored/saturn.png
-- weeks/myth/greek/primary/hades.png
-- weeks/myth/greek/colored/hades.png
-- weeks/myth/norse/primary/baldur.png
-- weeks/myth/norse/colored/baldur.png
-- weeks/myth/egypt/primary/set.png
-- weeks/myth/slavic/primary/crnobog.png
-- weeks/faith/creeds/secondary/lost_mystery.png
-- weeks/crafts/profession/primary/Jester.png
-- weeks/myth/greek/pantheon/zeus.png
+- weeks/celestial_bodies/planets/primary/colored/sun.png
+- weeks/celestial_bodies/planets/primary/colored/moon.png
+- weeks/celestial_bodies/planets/primary/colored/mars.png
+- weeks/celestial_bodies/planets/primary/colored/mercury.png
+- weeks/celestial_bodies/planets/primary/colored/jupiter.png
+- weeks/celestial_bodies/planets/primary/colored/venus.png
+- weeks/celestial_bodies/planets/primary/colored/saturn.png
+- weeks/celestial_bodies/planets/primary/colored/sun_eclipse.png
+- weeks/myth/slavic/pantheon/bronze/triglav.png
+- weeks/myth/greek/pantheon/bronze/zeus.png
 - instrument/subdial/silver/center.png
 
