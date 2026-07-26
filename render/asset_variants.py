@@ -126,7 +126,10 @@ def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> 
     a master (the shipped default) only the UNLIT half darkens under
     the shadow color/alpha; without one (a missing/placeholder asset)
     a plain dark disc gets the LIT half painted bright instead — the
-    same graceful fallback the dial itself falls back to."""
+    same graceful fallback the dial itself falls back to. QImage end
+    to end (the R1b threading law) — the background Encyclopedia warm
+    renders the eight phase plates off the GUI thread, where QPixmap
+    is forbidden."""
     marker = defaults.DEFAULT_SKIN.year_marker
     resolved = art_file(
         master if master is not None
@@ -145,13 +148,13 @@ def moon_phase_image(fraction: float, size: int, master: Path | None = None) -> 
     disc.addEllipse(QRectF(-radius, -radius, size, size))
     has_asset = resolved is not None and resolved.exists()
     if has_asset:
-        pixmap = QPixmap(str(resolved)).scaled(
+        art = QImage(str(resolved)).scaled(
             size, size,
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
-        painter.drawPixmap(
-            QPointF(-pixmap.width() / 2.0, -pixmap.height() / 2.0), pixmap
+        painter.drawImage(
+            QPointF(-art.width() / 2.0, -art.height() / 2.0), art
         )
         shadow = QColor(marker.moon_dark_color)
         shadow.setAlphaF(marker.moon_shadow_alpha)
@@ -301,14 +304,21 @@ def warm_working_set(progress=None) -> int:
     return built
 
 
-def scaled_variant_file(path: Path | None, width: int) -> Path | None:
+def scaled_variant_file(
+    path: Path | None, width: int, build: bool = True
+) -> Path | None:
     """A DISK copy of `path` downscaled to `width` px — the hover
     performance fix (owner 2026-07-13: every first hover decoded the
     full 800×800 plate synchronously inside the tooltip's rich text
     while the popup shows at most a quarter of that; callers pass 2×
     the display width so the tooltip still downsamples for
     crispness). Cached by mtime; sources already small enough return
-    the original (the header read costs no pixel decode)."""
+    the original (the header read costs no pixel decode).
+    `build=False` never pays the decode+encode on a cold cache —
+    it returns the ORIGINAL path instead, for GUI-thread callers that
+    would rather show full-res once than stall (the Encyclopedia's
+    gallery cards / reader pages; the background warm builds these
+    with `build=True` and the next display is cheap)."""
     path = art_file(path)
     if path is None or not path.exists():
         return path
@@ -316,6 +326,8 @@ def scaled_variant_file(path: Path | None, width: int) -> Path | None:
     if not source.isValid() or source.width() <= width:
         return path
     cache = _scaled_cache_path(path, width)
+    if not build and not cache.exists():
+        return path
     if not cache.exists():
         # QImage, not QPixmap — the working-set warmup calls this off
         # the GUI thread (QPixmap is main-thread-only).

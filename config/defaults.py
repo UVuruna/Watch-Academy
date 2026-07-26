@@ -1331,6 +1331,18 @@ ENCYCLOPEDIA_MAX_FONT_PX = 21
 # two bounds; below the minimum the scrollbar takes over).
 ENCYCLOPEDIA_TOPIC_ICON_MIN_PX = 72
 ENCYCLOPEDIA_TOPIC_ICON_MAX_PX = 200
+# DECODE CEILINGS (owner order 2026-07-26: entering the Encyclopedia
+# must never block or crash — full-res sources decoded straight into
+# QPixmaps both stalled the first paint and piled up RAM). A gallery
+# card never SHOWS more than ICON_MAX_PX, a reader image never more
+# than the viewport at max zoom — decoding past 2× those sizes buys
+# nothing. The background warm (`app.encyclopedia_warm`) pre-builds
+# disk-cached downscales at these widths; the dialog reads them when
+# present and falls back to the original (full-res, but only until the
+# warm catches up) rather than paying a cold downscale on the GUI
+# thread.
+ENCYCLOPEDIA_CARD_ICON_DECODE_PX = 400    # 2× ENCYCLOPEDIA_TOPIC_ICON_MAX_PX
+ENCYCLOPEDIA_READER_DECODE_CEILING_PX = 1600   # ~viewport height × max zoom
 # LAYOUT fix round R3 (owner: "788px width, tiles clipping" — that class
 # dies here); the WIDTH ARITHMETIC corrected round R8b item 5a (the
 # original formula silently dropped the inter-card spacing and the

@@ -11,6 +11,7 @@ recipe.
 
 import hashlib
 import sys
+import threading
 from pathlib import Path
 
 import numpy as np
@@ -169,16 +170,49 @@ def _recolored_plate(
     return cache
 
 
-def metal_variant_file(path: Path, metal: str | None) -> Path:
-    """A DISK copy of `path` with the hue-selective metal swap applied
-    (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed
-    the BRONZE file even under the gold/silver look — QToolTip embeds
-    files, not pixmaps). Cached in the raster cache keyed by the file's
-    mtime, the active SHADE and `defaults.METAL_SWAP_VERSION` (R8a redo,
-    2026-07-21 night); None or a non-swap metal returns the original
-    path."""
+# THE LAZY VARIANT LEDGER (owner order 2026-07-26: "the Encyclopedia
+# BLOCKED the main thread for minutes" — root cause: `metal_variant_file`
+# used to GENERATE every cold recolor at PATH-RESOLUTION time, and
+# `app.encyclopedia._topics()` resolves a couple HUNDRED gold/silver
+# paths while the dialog is being BUILT, on the GUI thread. The cache
+# key includes the source file's mtime, the active shade and
+# METAL_SWAP_VERSION — so every art rename wave, shade change or version
+# bump invalidated the whole cache and the NEXT open paid minutes of
+# numpy recolors again. Naming a variant and building its pixels are now
+# two separate steps): `metal_variant_path` is PURE — it names the cache
+# file and records the (source, metal) recipe here; `ensure_variant`
+# materializes a recorded path on first actual use — any thread, QImage
+# end to end (the R1b law) — or in the background warm
+# (`app.encyclopedia_warm`). Per-path locks make a GUI-thread first
+# display and the warm thread meeting on the SAME file build it once.
+_PENDING_VARIANTS: dict[str, tuple[Path, str]] = {}
+_VARIANT_LOCKS: dict[str, threading.Lock] = {}
+_VARIANT_LOCKS_GUARD = threading.Lock()
+
+
+def _variant_lock(key: str) -> threading.Lock:
+    with _VARIANT_LOCKS_GUARD:
+        lock = _VARIANT_LOCKS.get(key)
+        if lock is None:
+            lock = _VARIANT_LOCKS[key] = threading.Lock()
+        return lock
+
+
+def metal_variant_path(path: Path, metal: str | None) -> Path:
+    """WHERE `path`'s hue-selective metal swap lives on disk — a pure
+    path computation, NO pixel work (the Encyclopedia resolves hundreds
+    of these while building its topic table; generation is deferred to
+    `ensure_variant`). Cache key: the file's mtime, the active SHADE and
+    `defaults.METAL_SWAP_VERSION` (R8a redo, 2026-07-21 night). None or
+    a non-swap metal returns the original path; a source missing from
+    disk returns the CANONICAL path unchanged (graceful-absent — the
+    caller's own exists() filter hides the look; the old eager code
+    crashed on `stat()` here, which is exactly what a rename wave did to
+    the Encyclopedia's open)."""
     path = art_file(path)
     if path is None or metal not in defaults.METAL_SWAP_TARGETS:
+        return path
+    if not path.exists():
         return path
     shade = paths.metal_shade(metal)
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
@@ -187,20 +221,61 @@ def metal_variant_file(path: Path, metal: str | None) -> Path:
         / f"{stamp}_{int(path.stat().st_mtime)}_{metal}_{shade}"
         f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
-    if not cache.exists():
-        # QImage end to end — this runs on the background hover-warm
-        # thread too, where QPixmap is forbidden (R1b find, 2026-07-20:
-        # the one off-GUI-thread QPixmap in the codebase, the prime
-        # suspect for the untraced whole-app aborts).
-        swapped = AssetCache._metal_swapped(QImage(str(path)), metal)
-        try:
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            swapped.save(str(cache))
-        except OSError as error:
-            # A cold cache is only slower, never wrong — but say so.
-            print(f"metal variant cache write failed: {error}", file=sys.stderr)
-            return path
+    _PENDING_VARIANTS.setdefault(str(cache), (path, metal))
     return cache
+
+
+def variant_pending(path: Path | None) -> bool:
+    """True when `path` is a RECORDED, not-yet-built metal variant —
+    the Encyclopedia's exists() filter counts such a path as present
+    (its source is on disk; the pixels build on first display or in
+    the background warm)."""
+    return (
+        path is not None
+        and str(path) in _PENDING_VARIANTS
+        and not path.exists()
+    )
+
+
+def ensure_variant(path: Path | None) -> Path | None:
+    """Materialize a `metal_variant_path`-recorded recolor whose file is
+    still missing — the ONE place the pixel work happens (first display
+    on the GUI thread, or the background warm; QImage end to end, R1b
+    law: QPixmap must never be touched off the GUI thread). Paths this
+    module never recorded pass through untouched. Returns the SOURCE
+    file when the cache write fails (a cold cache is only slower, never
+    wrong — but say so, Rule #1)."""
+    if path is None:
+        return None
+    key = str(path)
+    recipe = _PENDING_VARIANTS.get(key)
+    if recipe is None or path.exists():
+        return path
+    with _variant_lock(key):
+        if path.exists():
+            return path
+        source, metal = recipe
+        swapped = AssetCache._metal_swapped(QImage(str(source)), metal)
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if not swapped.save(str(path)):
+                raise OSError(f"QImage.save returned False for {path}")
+        except OSError as error:
+            print(f"metal variant cache write failed: {error}", file=sys.stderr)
+            return source
+    return path
+
+
+def metal_variant_file(path: Path, metal: str | None) -> Path:
+    """A DISK copy of `path` with the hue-selective metal swap applied
+    (owner bug 2026-07-13: the legend/Encyclopedia <img> always showed
+    the BRONZE file even under the gold/silver look — QToolTip embeds
+    files, not pixmaps). The EAGER door — resolve AND materialize in one
+    call — for callers that embed the file path immediately (the
+    compositor's tooltip <img> tags, the hover warm sweep). Callers that
+    only TABLE paths for later display (the Encyclopedia) use
+    `metal_variant_path` + `ensure_variant` instead."""
+    return ensure_variant(metal_variant_path(path, metal))
 
 
 def tinted_pixmap(source: QPixmap, tint: str) -> QPixmap:
