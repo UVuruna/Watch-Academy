@@ -18,6 +18,7 @@ rules by which any new member, theme or figure gets placed.
 - [The Calendar — the Twelve-Wedge Pointer](#the-dozen)
 - [The Two Dozen Systems and the Four Dozens](#the-dozen-systems)
 - [The Triads — the Trio's Stacked Readings](#the-triads)
+- [The Cube Canon — the Three Axes of Character](#the-cube)
 - [The Banknote — In God We Trust](#the-banknote)
 - [Working Rules for Agents](#working-rules)
 
@@ -178,6 +179,13 @@ queued (ROADMAP 11):
 | Seasons | **Seasons** | **Elements** |
 | Compass | **Walks** | **Ages** |
 | Calendar | **Zodiac** (SEALED) | **Almanac** (SEALED) |
+
+**THE THIRD WHEELS (owner seal 2026-07-26):** three pointers gain a
+THIRD wheel from the Cube canon — Trinity **Genesis** (the inverted
+creation triangle), Prism **Council** (the six offices united),
+Compass **Character** (the Cube's two visible axes) — wheel names
+PROPOSED; the full doctrine, figures and display laws live in
+[The Cube Canon](CUBE.md).
 
 **The two-row canon** (owner 2026-07-16): every archetype position
 speaks TWO ARTICLES in its legend, on the hexa-zodiac-diamond
@@ -972,9 +980,27 @@ new visual modes). Phase 3 adds a parallel ART track, sealed 2026-07-22:
   shows it, is a future wiring round — the art is prepared ahead of the
   wiring, exactly as the badge-1:1 circles are.
 
-<a id="the-banknote"></a>
+<a id="the-cube"></a>
 
-## The Banknote — In God We Trust (the owner's early work)
+## The Cube Canon — the Three Axes of Character (owner seal 2026-07-26)
+
+The philosophical core defined from the `UV/simbolika/`
+correspondence lives in its own canon file: **[The Cube
+Canon](CUBE.md)** — the three character axes on the hexagram's
+diagonals (Activation blue↔orange, Judgment yellow↔purple-gray,
+Self-Regard green↔red, each pole a healthy expression AND a fallen
+extreme), the six poles and eight vertices with figures in three
+sets (archetypal / historical / modern — 84 in all), the **Double
+Trinity** (Judgment and Creation — the two cube corners that ARE the
+hexagram, God holding the 12–24 axis as Judge and Creator), the
+**Character wheel** (the Cube at depth zero), the **Rose of the
+Twenty-Four** ring preset, the **Two Crosses** (the Paths of Light
+and Darkness with the TRUST/DISTRUST centers and the DOMY/SAFE
+ciphers), the **Banknote-axes seal** (MASON's three letter-
+oppositions are the three axes), the naming decree (the Watch that
+keeps watch — Mark 13:37), the Article Charter and the display/
+legend laws. Read it BEFORE any character, path or naming work,
+alongside this file.
 
 Long before this application, the owner built
 `InGodWeTrust_UVS_BIG.png` (root): the back of the ONE-dollar bill,
@@ -1087,3 +1113,13 @@ as the pointer, so both seats of a pair read the identical clause.
   specs in `prompt.txt`/`INSTRUCTION.txt` are product decisions;
   fold them into docs and config, and leave the owner's scratchpad
   files untouched.
+- **THE WEEKDAY-TITLE LAW (owner, repeated many times):** every
+  badge bound to a weekday shows THAT WEEKDAY beside its hover
+  title — no exceptions, any register, any pointer. Full display
+  and legend laws (hover teaser + LEARN MORE, legend bold-only on
+  virtue/vice/emotion/weekday): [The Cube Canon](CUBE.md).
+- **The Article Charter** binds every legend and Encyclopedia
+  article: thesis → argument → correspondences → quote; scientific-
+  philosophical tone, no belles-lettres; verse and metaphor only as
+  separated *italic quoted* epigraphs. Full text:
+  [The Cube Canon](CUBE.md).

@@ -41,7 +41,10 @@ here.
 - **Canon:** the seating doctrine — the color–virtue–vice–mood web,
   the two rosters, duals, ninths, pointer archetypes — is
   [The DOMY Canon](CANON.md); read it BEFORE any theme, roster or
-  article work.
+  article work. The philosophical core (the three-axis Character
+  Cube, the Double Trinity, the Two Crosses, the Rose, naming and
+  the writing laws) is [The Cube Canon](CUBE.md) — read it BEFORE
+  any character, path, archetype-wheel or naming work.
 
 ## Project Deltas to the Root Rules
 
