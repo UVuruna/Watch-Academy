@@ -60,6 +60,7 @@ class DesignDialog(QDialog):
         self._layout = QVBoxLayout(self)
         self._host = QVBoxLayout()
         self._layout.addLayout(self._host)
+        self._tabs: QTabWidget | None = None
         apply_theme(self)
         self._build()
         size_to_screen(self, 1, 1, defaults.DIALOG_SQUARE_HEIGHT_FRACTION)
@@ -73,6 +74,13 @@ class DesignDialog(QDialog):
         self._build()
 
     def _build(self) -> None:
+        # KEEP THE OPEN TAB across live-pick rebuilds (owner fix
+        # 2026-07-26: changing a value on any tab other than Pointer
+        # bounced the window back to the FIRST tab — every pick routes
+        # through the controller's refresh(), which rebuilds this
+        # QTabWidget from scratch, and a fresh QTabWidget always opens
+        # at index 0).
+        previous = self._tabs.currentIndex() if self._tabs is not None else 0
         _clear(self._host)
         tabs = QTabWidget()
         tabs.addTab(self._pointer_tab(), self._tr("Pointer"))
@@ -82,7 +90,9 @@ class DesignDialog(QDialog):
         tabs.addTab(self._hands_tab(), self._tr("Hands"))
         tabs.addTab(self._earth_tab(), self._tr("Earth"))
         tabs.addTab(self._size_tab(), self._tr("Size"))
+        tabs.setCurrentIndex(max(0, min(previous, tabs.count() - 1)))
         self._host.addWidget(tabs)
+        self._tabs = tabs
 
     # --- Shared tile/pill builders -----------------------------------------
 
