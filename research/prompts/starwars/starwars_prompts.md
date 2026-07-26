@@ -66,9 +66,12 @@ the frame, NO lettering anywhere on cast plates (title plates are the
 one documented exception — see the cross-reference at the bottom).
 
 **Drop paths:**
-`assets/weeks/films/sw_<set>/primary/<Stem>.png` and
-`assets/weeks/films/sw_<set>/colored/<Stem>.png` — `<set>` is
-`svetla`, `tamna` or `nova`, both flat, no `dual/` subfolder.
+`assets/weeks/films/sw_<set>/primary/bronze/<Stem>.png` and
+`assets/weeks/films/sw_<set>/primary/colored/<Stem>.png` — `<set>` is
+the FOLDER name `jedi` (Svetla), `sith` (Tamna) or `dyad` (Nova), both
+looks flat inside the one `primary` register, no `dual/` subfolder.
+(Tree law, `assets/___assets.md`: `colored/` is a CHILD of the
+register, never its sibling.)
 
 ## The rotation convention
 
