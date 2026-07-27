@@ -256,13 +256,13 @@ first, or alongside these five.
 **Sunday — Ra** → REUSE `../colored/ra.png` — no new render (pending
 the Planetary colored generation above).
 
-**Monday — Isis** → `assets/weeks/myth/egypt/pantheon/bronze/colored/isis.png`
+**Monday — Isis** → `assets/weeks/myth/egypt/pantheon/colored/isis.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Isis in warm gold and sky-blue, the golden throne sign rising from her brow, feathered wings dyed azure and gold spread wide as she gathers the sun-dappled form of Osiris back into wholeness, a turquoise tyet knot crossed with a gold ankh at her waist, a deep indigo night sky glowing behind her. Border: azure-and-gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a gold scarab, each framing the Moon crescent glyph. Colors: sky blue, radiant gold, turquoise, indigo night.
 ```
 
-**Tuesday — Horus** → `assets/weeks/myth/egypt/pantheon/bronze/colored/horus.png`
+**Tuesday — Horus** → `assets/weeks/myth/egypt/pantheon/colored/horus.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Horus in gleaming bronze-gold plumage, fierce amber eyes rimmed in black kohl, the red-and-white double crown glowing warm against a fiery orange sky, the Wedjat eye rendered in lapis blue and gold at his chest, a bronze harpoon raised over a coiled emerald serpent pinned beneath his talons. Border: bronze-gold hieroglyph cartouche band, broken by four painted roundels alternating a crimson ankh and a bronze scarab, each framing the Mars glyph. Colors: bronze gold, crimson, lapis blue, ember orange.
@@ -271,13 +271,13 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 **Wednesday — Thoth** → REUSE `../colored/thoth.png` — no new render
 (pending the Planetary colored generation above).
 
-**Thursday — Anubis** → `assets/weeks/myth/egypt/pantheon/bronze/colored/anubis.png`
+**Thursday — Anubis** → `assets/weeks/myth/egypt/pantheon/colored/anubis.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Anubis in glossy obsidian black, robed in gold-trimmed priestly white, presiding in calm dignity over the weighing of the heart, a gold scale balanced between a crimson heart and the pale feather of Ma'at, an ankh in lapis blue held at his side against a deep violet dusk. Border: gold hieroglyph cartouche band, broken by four painted roundels alternating a violet ankh and a gold scarab, each framing the Jupiter glyph. Colors: obsidian black, gold, crimson, deep violet.
 ```
 
-**Friday — Bastet** → `assets/weeks/myth/egypt/pantheon/bronze/colored/bastet.png`
+**Friday — Bastet** → `assets/weeks/myth/egypt/pantheon/colored/bastet.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Bastet in warm gold and amber fur, a turquoise-and-carnelian aegis collar draped over her chest, a gold sistrum raised high in one hand, a basket of pale cream kittens cradled in the other against a rose-warm sunset sky, her tail curling content around rose-gold anklets. Border: rose-gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a carnelian scarab, each framing the Venus glyph. Colors: warm amber, turquoise, carnelian red, rose gold.
@@ -290,7 +290,7 @@ Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-go
 Planetary, no new render (pending the Planetary colored generation
 above).
 
-**Ninth (both modes) — The Pharaoh** → `assets/weeks/myth/egypt/pantheon/bronze/colored/pharaoh.png`
+**Ninth (both modes) — The Pharaoh** → `assets/weeks/myth/egypt/pantheon/colored/pharaoh.png`
 
 ```
 Ornate circular badge, vivid full-color Egyptian tomb-fresco style, lapis-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: the Pharaoh in the full gleam of Tutankhamun's golden mask, the nemes headcloth striped lapis blue and gold, the cobra and vulture reared in turquoise and gold at his brow, a gold crook and a lapis-blue flail crossed at his chest against a deep royal-purple dusk — the living Horus becoming the eternal Osiris in one radiant face. Border: radiant gold hieroglyph cartouche band, broken by four painted roundels alternating a turquoise ankh and a lapis scarab, each doubled with the crook and flail in miniature — the fullest, most unbroken ring in the set. Colors: radiant gold, lapis blue, turquoise, royal purple.
@@ -328,7 +328,7 @@ center.
 
 The bronze prompt is listed under "Pantheon — bronze plates" above
 (`assets/weeks/myth/egypt/pantheon/bronze/Pharaoh.png`); the colored prompt under "Pantheon —
-colored plates" above (`assets/weeks/myth/egypt/pantheon/bronze/colored/pharaoh.png`). Both are
+colored plates" above (`assets/weeks/myth/egypt/pantheon/colored/pharaoh.png`). Both are
 listed exactly once each in this sheet — not reproduced here to keep
 one prompt block per plate.
 

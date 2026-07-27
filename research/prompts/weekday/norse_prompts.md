@@ -300,12 +300,12 @@ the same "painted North, aurora accents" register as the Planetary
 colored set. The four REUSE seats point at their existing colored
 files — no new generation.
 
-**Sunday — Odin the Allfather** → `assets/weeks/myth/norse/pantheon/bronze/colored/Odin.png` — **NEW**
+**Sunday — Odin the Allfather** → `assets/weeks/myth/norse/pantheon/colored/Odin.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Odin the Allfather enthroned upon Hlidskjalf in deep gold and midnight blue, the bare socket of his traded eye left unhidden beneath a low crown, the spear Gungnir held upright as a scepter with faintly glowing runes, his ravens Huginn and Muninn perched on the throne's armrests, the wolves Geri and Freki lying watchful at his feet; glossy midnight-blue field with pale gold aurora streaks crowning the throne. Border: carved knotwork ring painted gold and deep blue with small roundels bearing golden sun wheels. Colors: royal gold, midnight blue, raven black, aurora pale-green.
 ```
 
-**Monday — Hel** → `assets/weeks/myth/norse/pantheon/bronze/colored/Hel.png` — **NEW**
+**Monday — Hel** → `assets/weeks/myth/norse/pantheon/colored/Hel.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Hel enthroned at the edge of Helheim, her body split exactly down the middle — one side a fair queen in pale living skin, the other a rotted blue-black corpse to the bone — both halves seated in the same unmoving calm, her hall Eljudnir rising in cold mist behind her, the hound Garm chained faint at the gate; glossy ice-blue field fading to graveyard black on her dead side. Border: carved knotwork ring painted half silver, half corpse-blue with small roundels bearing silver crescents. Colors: pale living skin, corpse blue-black, ice blue, bone white.
 ```
@@ -323,12 +323,12 @@ Ornate circular badge, vivid full-color Nordic painted style, photorealistic ren
 
 *No new plate.* Point at `assets/weeks/myth/norse/primary/colored/Tyr.png`.
 
-**Friday — Frigg** → `assets/weeks/myth/norse/pantheon/bronze/colored/Frigg.png` — **NEW**
+**Friday — Frigg** → `assets/weeks/myth/norse/pantheon/colored/Frigg.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Frigg composed and regal in deep blue-violet robes, a ring of golden household keys at her belt, a distaff spinning pale cloud-thread in one raised hand, her other hand pressed over her heart, a small sprig of mistletoe resting apart in the lower field, her empty seat Hlidskjalf glimpsed faintly behind her; glossy dusk-violet field streaked with soft cloud-white. Border: carved knotwork ring painted violet and gold with small roundels bearing golden keys. Colors: dusk violet, cloud white, warm gold, quiet gray grief.
 ```
 
-**Saturday — Freyr** → `assets/weeks/myth/norse/pantheon/bronze/colored/Freyr.png` — **NEW**
+**Saturday — Freyr** → `assets/weeks/myth/norse/pantheon/colored/Freyr.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Freyr standing in a ripened golden field, the boar Gullinbursti gleaming beside him like struck sunlight, a great sheaf of wheat cradled in one arm, a stag's antler raised in the other hand in place of the sword he traded for love, his folded ship Skidbladnir bright and small at his feet; glossy harvest-gold field with warm green undertones. Border: carved knotwork ring painted green and gold with small roundels bearing wheat sheaves. Colors: harvest gold, leaf green, boar-bristle amber, warm earth brown.
 ```
@@ -338,7 +338,7 @@ Ornate circular badge, vivid full-color Nordic painted style, photorealistic ren
 *No new plate.* Point at `assets/weeks/myth/norse/primary/colored/Odin.png` (the
 Planetary Wednesday colored plate, unchanged).
 
-**Ninth (both rosters) — Yggdrasil** → `assets/weeks/myth/norse/pantheon/bronze/colored/Yggdrasil.png` — **NEW**
+**Ninth (both rosters) — Yggdrasil** → `assets/weeks/myth/norse/pantheon/colored/Yggdrasil.png` — **NEW**
 ```
 Ornate circular badge, vivid full-color Nordic painted style, photorealistic render, perfectly centered, isolated on white background. Center: Yggdrasil the world-tree filling the whole disc in deep greens and gold, three great roots plunging into three glowing wells, nine worlds glowing faintly among the branches and roots — golden Asgard's hall crowning the highest branch, Hel's cold blue-lit realm glowing in the deepest root, Midgard's green ring at the trunk's waist — an eagle at the crown, the serpent Nidhogg coiled at the root, the squirrel Ratatoskr racing the bark between them; glossy deep-green field with aurora curtains rising behind the crown. Border: carved knotwork ring painted gold and forest green, all seven planetary glyphs woven root to crown in a continuous rune frieze — no single day claims the tree. Colors: deep forest green, aurora green and violet, root-well blue, crown gold.
 ```

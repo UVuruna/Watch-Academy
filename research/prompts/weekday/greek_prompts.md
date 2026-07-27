@@ -50,7 +50,7 @@ Pantheon Greek dual is **Zeus / Hades** — the throne above and the
 throne below — and the Pantheon ninth is **Gaia**, the Union of both
 lines. **Do not generate a ninth Hades plate, bronze or colored.**
 Hades's art is the Pantheon DUAL plate below instead
-(`assets/weeks/myth/greek/pantheon/bronze/Hades.png` and `assets/weeks/myth/greek/pantheon/bronze/colored/hades.png`).
+(`assets/weeks/myth/greek/pantheon/bronze/Hades.png` and `assets/weeks/myth/greek/pantheon/colored/hades.png`).
 
 ---
 
@@ -299,54 +299,54 @@ figure above. None are on disk yet except the reused Zeus.
 
 **Zeus — sun seat (Pantheon, colored)** → REUSE, no new art. Drop
 the existing `assets/weeks/myth/greek/primary/colored/Zeus.png` straight into
-`assets/weeks/myth/greek/pantheon/bronze/colored/zeus.png` — same colored
+`assets/weeks/myth/greek/pantheon/colored/zeus.png` — same colored
 enthroned-king badge already generated for the Planetary Thursday
 seat, no regeneration.
 
-**Poseidon (colored)** → `assets/weeks/myth/greek/pantheon/bronze/colored/poseidon.png` *(not yet
+**Poseidon (colored)** → `assets/weeks/myth/greek/pantheon/colored/poseidon.png` *(not yet
 generated)*
 ```
 Ornate circular badge, vivid full-color enamel over sea-green gold, photorealistic render, perfectly centered, isolated on white background. Center: Poseidon rising from a turquoise sea, trident raised and crackling with white sea-foam energy, a wind-whipped beard and mane, dolphins leaping in the calm foreground water while a dark storm-wall churns behind him, a pale full moon glowing low at the horizon with a visible silver tide-line pulling the water toward it. Border: polished sea-green-gold Greek key pattern with small deep-blue roundels bearing silver crescent moons. Colors: turquoise sea, storm-slate gray, silver moonlight, sea-green gold.
 ```
 
-**Artemis (colored)** → `assets/weeks/myth/greek/pantheon/bronze/colored/artemis.png` *(not yet
+**Artemis (colored)** → `assets/weeks/myth/greek/pantheon/colored/artemis.png` *(not yet
 generated)*
 ```
 Ornate circular badge, vivid full-color enamel over dark gold, photorealistic render, perfectly centered, isolated on white background. Center: Artemis in a short forest-green hunting tunic, bow drawn taut with a glowing amber arrow nocked, a silver crescent diadem in her hair, a white stag bounding beside her rather than fleeing, hounds racing at her heels through sunlit woodland; glossy forest-green field with dappled amber light. Border: darkened gold Greek key pattern with small forest-green roundels bearing silver crescent bows. Colors: forest green, amber gold, hunting silver, dawn orange.
 ```
 
-**Athena (colored)** → `assets/weeks/myth/greek/pantheon/bronze/colored/athena.png` *(not yet
+**Athena (colored)** → `assets/weeks/myth/greek/pantheon/colored/athena.png` *(not yet
 generated)*
 ```
 Ornate circular badge, vivid full-color enamel over gold, photorealistic render, perfectly centered, isolated on white background. Center: Athena in gleaming bronze-and-white armor, the Aegis with its small gorgon medallion worn across one shoulder, a tall-crested silver helmet pushed back off her calm brow, a small gray owl perched on her raised hand, an olive branch in the other, a scroll unrolled at her feet; glossy deep royal-purple twilight field with faint silver stars. Border: polished gold Greek key pattern with small purple roundels bearing silver owls. Colors: royal purple, polished gold, owl gray, olive green.
 ```
 
-**Apollo (colored)** → `assets/weeks/myth/greek/pantheon/bronze/colored/apollo.png` *(not yet
+**Apollo (colored)** → `assets/weeks/myth/greek/pantheon/colored/apollo.png` *(not yet
 generated)*
 ```
 Ornate circular badge, vivid full-color enamel over radiant gold, photorealistic render, perfectly centered, isolated on white background. Center: Apollo golden-haired and laurel-crowned beside the smoking Delphic tripod, a golden lyre held out in offering, sunbeams fanning behind him in bands of yellow and white, a quiver of arrows resting unused at the tripod's foot; glossy warm sun-yellow field with soft golden haze. Border: polished gold Greek key pattern with small yellow roundels bearing golden lyres. Colors: sun yellow, radiant gold, laurel green, warm white.
 ```
 
-**Hera (colored)** → `assets/weeks/myth/greek/pantheon/bronze/colored/hera.png` *(not yet
+**Hera (colored)** → `assets/weeks/myth/greek/pantheon/colored/hera.png` *(not yet
 generated)*
 ```
 Ornate circular badge, vivid full-color enamel over rose gold, photorealistic render, perfectly centered, isolated on white background. Center: Hera enthroned in regal white and gold robes, a tall bejeweled diadem crowning her dark hair, a scepter topped with a small golden cuckoo held upright, a peacock with a brilliant fanned tail of blue-green eyes standing beside the throne; glossy deep red-rose field. Border: polished rose-gold Greek key pattern with small red roundels bearing peacock feathers. Colors: rose red, regal gold, peacock teal, pearl white.
 ```
 
-**Demeter (colored)** → `assets/weeks/myth/greek/pantheon/bronze/colored/demeter.png` *(not yet
+**Demeter (colored)** → `assets/weeks/myth/greek/pantheon/colored/demeter.png` *(not yet
 generated)*
 ```
 Ornate circular badge, vivid full-color enamel over aged gold, photorealistic render, perfectly centered, isolated on white background. Center: Demeter in a flowing wheat-gold gown, a sheaf of ripe golden wheat cradled in one arm, a lit torch raised in the other hand, poppies blooming at her feet, one side of the field behind her bare winter brown and the other lush spring green where Persephone's hand reaches to meet hers; glossy deep harvest-green field. Border: aged-gold Greek key pattern with small green roundels bearing golden wheat sheaves. Colors: harvest green, wheat gold, poppy red, earth brown.
 ```
 
-**Hades — Pantheon dual, colored** → `assets/weeks/myth/greek/pantheon/bronze/colored/hades.png`
+**Hades — Pantheon dual, colored** → `assets/weeks/myth/greek/pantheon/colored/hades.png`
 *(not yet generated — this REPLACES the retired colored ninth-Hades
 plate)*
 ```
 Ornate circular badge, vivid full-color enamel over dark iron, photorealistic render, perfectly centered, isolated on white background — same finish and Greek-key border family as the other Pantheon colored badges. Center: Hades enthroned in a lightless cavern, black-and-silver robes worn with the same unbothered majesty as his brother's gold, the helm of invisibility held loose in one hand rather than worn, Cerberus's three heads resting watchful at his side, the key of the underworld gate glinting cold at his belt; glossy pitch-black field with faint deep-violet cave light, no sun anywhere except the one small ember-gold glyph on the border. Border: dark iron Greek key (meander) pattern with four small roundels bearing a Sun glyph in dull ember gold — the one warm color permitted, the shadow face of the same Sunday crown Zeus wears. Colors: iron black, cold silver, deep violet, one ember-gold accent only.
 ```
 
-**Gaia — Pantheon ninth, colored** → `assets/weeks/myth/greek/pantheon/bronze/colored/gaia.png`
+**Gaia — Pantheon ninth, colored** → `assets/weeks/myth/greek/pantheon/colored/gaia.png`
 *(not yet generated — this REPLACES the retired colored ninth-Hades
 plate)*
 ```

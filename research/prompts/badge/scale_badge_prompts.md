@@ -20,7 +20,7 @@ Drop locations (figure-first stems, RESTRUCTURE 2026-07-22 — the old
   `assets/archetypes/scale/primary/colored/Judas.png`, `assets/archetypes/scale/primary/colored/Union.png`
   (the owner's later refresh batches live beside as `_vN` versions of
   the SAME figures — all pooled into one daily rotation)
-- Stained glass: `assets/archetypes/scale/primary/colored/glass/colored/` —
+- Stained glass: `assets/archetypes/scale/glass/colored/` —
   `Lucifer.png`, `Judas.png` (the adopted masters),
   `Lucifer_v2.png`, `Judas_v2.png` (GPT's own variants, kept beside),
   `Union_v2.png` (the figurative Meeting) and `Union.png` (the
@@ -91,21 +91,21 @@ and one **symbolic** — the clear-hearted rose window. Hell is what
 happened because they never met; the Meeting is what would have
 happened if they had.
 
-**Judas Triangle — glass** → `assets/archetypes/scale/primary/colored/glass/colored/Judas.png`
+**Judas Triangle — glass** → `assets/archetypes/scale/glass/colored/Judas.png`
 *(the adopted master: the owner's "judas1")*
 
 ```
 DOWNWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep midnight-blue glass throughout, no warm tones. Center: Judas half-turned from a cold white rose of light, clutching the money bag to his chest, coins slipping from it into the dark; upper left panel the Last Supper at table, upper right panel Gethsemane — a figure weeping under the olive tree by moonlight; below the bag, a small arched gate where a hooded figure walks down night steps out of the city. Border: thorned-vine leadwork in blue-black; three rim roundels — a knotted noose at the apex-top, a water drop at one corner, a chalice at the other; a small money-bag roundel at the descending point. Palette: midnight blue, silver-white light, blue-black lead. NO lettering anywhere.
 ```
 
-**Lucifer Triangle — glass** → `assets/archetypes/scale/primary/colored/glass/colored/Lucifer.png`
+**Lucifer Triangle — glass** → `assets/archetypes/scale/glass/colored/Lucifer.png`
 *(the adopted master: the owner's Lucifer window)*
 
 ```
 UPWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Ember-red and gold glass throughout, no cold tones. Center: the beautiful winged rebel mid-rise on a black crag, one arm flung up toward a golden radiance pouring from the apex, dark-red feathered wings spread, red drapery streaming; below him the crag falls into rolling ember-red cloudglass. Border: darkened gothic leadwork; the all-seeing eye in a roundel at the apex under the golden light; two eight-point star roundels at the base corners. Palette: ember red, molten gold, black-iron lead. NO lettering anywhere.
 ```
 
-**Judas Triangle — glass v2** → `assets/archetypes/scale/primary/colored/glass/colored/Judas_v2.png`
+**Judas Triangle — glass v2** → `assets/archetypes/scale/glass/colored/Judas_v2.png`
 *(GPT's own unprompted variant, described here for regeneration —
 the darker nocturne of the same composition)*
 
@@ -113,7 +113,7 @@ the darker nocturne of the same composition)*
 DOWNWARD-pointing triangular stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the triangle. Deep navy and blue-black glass, darker than midnight, no warm tones. Center: Judas bowed over the money bag clutched in both hands, coins slipping from it one by one down toward the descending point, his halo a cold white glass rose behind a lowered head; upper left panel the Last Supper crowded at table under a blue arch, the bright figure at its center; upper right panel Gethsemane under a full moon — a mourner weeping on the rocks above a night city of small lit windows; beneath the coins, an arched stone gate where a hooded figure descends night steps out of the city. Border: braided thorn-vine leadwork in near-black iron; a water-drop roundel at one top corner, a chalice roundel at the other, a money-bag roundel at the descending point. Palette: deep navy, blue-black, one cold white glow, iron lead. NO lettering anywhere.
 ```
 
-**Lucifer Triangle — glass v2** → `assets/archetypes/scale/primary/colored/glass/colored/Lucifer_v2.png`
+**Lucifer Triangle — glass v2** → `assets/archetypes/scale/glass/colored/Lucifer_v2.png`
 *(GPT's own unprompted variant — the bat-winged fall with the figure
 in the light he is losing)*
 
@@ -125,7 +125,7 @@ UPWARD-pointing triangular stained-glass window, night-window register, photorea
 
 ## The two Unions
 
-**The Union I — the Meeting (figurative)** → `assets/archetypes/scale/primary/colored/glass/colored/Union_v2.png`
+**The Union I — the Meeting (figurative)** → `assets/archetypes/scale/glass/colored/Union_v2.png`
 *(the owner's brief, this round: the IMAGINARY union — what would
 have happened had the two extremes FOUND each other and each tempered
 the other's madness. Neither was useless: Lucifer's cup overflowed
@@ -138,7 +138,7 @@ AS PERSONS.)*
 ROUND stained-glass window, night-window register, photorealistic render, isolated background. The field split down the middle: the LEFT half ember-red and gold glass (a dimmed crag world, the fire calmed to warm hearth-gold), the RIGHT half midnight-blue and silver glass (a lightening night world, the dark easing toward blue dawn). At the center seam, TWO FIGURES meet: the winged rebel has STEPPED DOWN from his rock — wings folded low, his once-upflung arm now lowered — gripping the forearm of Judas and lifting him from his knees at the pit's edge; Judas's bowed head is RAISED, meeting his eyes, his free hand open and empty. At their clasped forearms the glass turns PERFECTLY CLEAR and uncolored — plain white daylight through the exact point where they hold each other, the brightest light in the window. Quiet signs of the two madnesses laid down: a golden crown sitting STEADY and straight on the rebel's head, an EMPTY noose lying slack on the ground beside untouched silver coins at Judas's feet. Above the pair, high in the tracery, a two-pan balance at perfect rest. Border: half thorn-and-rope, half thorned-vine leadwork joining seamlessly at top and bottom; a sun-disc roundel at the apex. Palette: warm hearth-gold and red left, dawn-blue and silver right, the clear clasp the only uncolored glass. NO lettering anywhere.
 ```
 
-**The Union II — the Seal (symbolic)** → `assets/archetypes/scale/primary/colored/glass/colored/Union.png`
+**The Union II — the Seal (symbolic)** → `assets/archetypes/scale/glass/colored/Union.png`
 *(the approved rose window: the held balance BEFORE either pole tips
 the pendulum — stained glass colors light; objectivity is the one
 pane that does not.)*

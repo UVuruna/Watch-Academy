@@ -290,7 +290,7 @@ REUSE — no new render. Pantheon Monday reseats `slavic/colored/mokos.png` verb
 REUSE — no new render. Pantheon Tuesday reuses `slavic/colored/svetovid.png` verbatim — same seat, both rosters.
 ```
 
-**Wednesday — Svarog** → `assets/weeks/myth/slavic/pantheon/bronze/colored/svarog.png`
+**Wednesday — Svarog** → `assets/weeks/myth/slavic/pantheon/colored/svarog.png`
 
 ```
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Svarog at his celestial forge in glowing amber and iron-gray, a solar-fire hammer blazing white-gold as it strikes the anvil, sparks scattering upward and becoming painted stars against a deep twilight-purple sky, a half-formed sun-disc gripped white-hot in his tongs. Border: iron-gray rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in ember gold, each framing the Mercury glyph. Colors: ember gold, iron gray, twilight purple, forge-white sparks.
@@ -302,7 +302,7 @@ Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-g
 REUSE — no new render. Pantheon Thursday reseats `slavic/colored/dazbog.png` verbatim (Planetary Sunday's colored plate).
 ```
 
-**Friday — Lada** → `assets/weeks/myth/slavic/pantheon/bronze/colored/lada.png`
+**Friday — Lada** → `assets/weeks/myth/slavic/pantheon/colored/lada.png`
 
 ```
 Ornate circular badge, vivid full-color Slavic folk-icon style, warm earth-and-gold palette, photorealistic render, perfectly centered, isolated on white background. Center: Lada crowned with a wreath of pink and gold spring flowers, a wedding garland of red-and-white blossoms draped across her arms, her robe painted with red-and-white folk embroidery bands, two white doves settled on her shoulders, ripe red berries and a trailing bridal ribbon at her feet against a warm rose-gold field. Border: rose-gold rodovik solar-wheel carving, broken by four painted wheat-sheaf roundels in blossom pink, each framing the Venus glyph. Colors: rose gold, blossom pink, red-and-white embroidery, spring green.
@@ -369,8 +369,8 @@ register so each series stays consistent:**
 - [ ] `assets/weeks/myth/slavic/pantheon/bronze/Lada.png` — bronze, NEW
 - [ ] `assets/weeks/myth/slavic/primary/bronze/Triglav.png` — bronze, NEW (supersedes `crnobog.png` — do NOT
       generate `crnobog.png`)
-- [ ] `assets/weeks/myth/slavic/pantheon/bronze/colored/svarog.png` — colored, NEW
-- [ ] `assets/weeks/myth/slavic/pantheon/bronze/colored/lada.png` — colored, NEW
+- [ ] `assets/weeks/myth/slavic/pantheon/colored/svarog.png` — colored, NEW
+- [ ] `assets/weeks/myth/slavic/pantheon/colored/lada.png` — colored, NEW
 - [ ] `assets/weeks/myth/slavic/primary/colored/Triglav.png` — colored, NEW
 
 **REUSE only — no art to generate, `figure_roster: pantheon` just

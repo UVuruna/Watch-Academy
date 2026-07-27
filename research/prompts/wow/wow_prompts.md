@@ -89,7 +89,7 @@ restructured theme).
 *Crowned too young, the Light his only steady hand against a fear he
 never lets his people see.*
 
-**Anduin** → `assets/weeks/gaming/wow_alliance/primary/colored/Anduin.png`
+**Anduin** → `assets/weeks/gaming/wow_alliance/primary/bronze/Anduin.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, cool and watchful. Center: Anduin Wrynn in simple priest-king vestments over a young king's slight frame, a plain circlet rather than a heavy crown, both hands lowered and open with soft golden Light pooling from his palms over an unseen wounded soldier just beyond the frame's lower edge, his face composed and calm though the stone at his brow is carved faintly tighter than the rest — serenity chosen, not given. Border: Alliance heraldic rampant-lion frame carved in bronze relief, lions alternating with fleur-quatrefoils in continuous relief, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
@@ -104,7 +104,7 @@ Ornate circular badge, vivid full-color paint over polished blue-and-gold stone,
 *The old master-at-arms — wrath long since forged into discipline;
 every recruit's first and hardest teacher.*
 
-**Muradin Bronzebeard** → `assets/weeks/gaming/wow_alliance/primary/colored/Muradin.png`
+**Muradin Bronzebeard** → `assets/weeks/gaming/wow_alliance/primary/bronze/Muradin.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, scarred and weathered. Center: Muradin Bronzebeard, a grizzled dwarf in dented plate armor, a great runic hammer planted head-down in the stone at his feet, both hands resting on its haft, standing before a row of young recruits' shields propped in the dirt behind him, his stance patient rather than raging, one ember-bright eye narrowed in old, banked fire. Border: Alliance rampant-lion frame carved in continuous bronze relief, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
@@ -119,7 +119,7 @@ Ornate circular badge, vivid full-color paint over polished blue-and-gold stone,
 *The archmage — a hunger for forbidden knowledge that aged him young,
 now bent toward guarding it instead of taking more.*
 
-**Khadgar** → `assets/weeks/gaming/wow_alliance/primary/colored/Khadgar.png`
+**Khadgar** → `assets/weeks/gaming/wow_alliance/primary/bronze/Khadgar.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, dense with old knowledge. Center: Khadgar the archmage, prematurely grey-bearded, a tall gnarled staff crowned with a small captured spark of arcane light, standing before a half-open spellbook whose pages glow faintly. Border: Alliance rampant-lion frame carved in continuous bronze relief, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
@@ -134,7 +134,7 @@ Ornate circular badge, vivid full-color paint over polished blue-and-gold stone,
 *THE paladin teacher — the Light given away absolute, and just as
 absolutely unbending.*
 
-**Uther the Lightbringer** → `assets/weeks/gaming/wow_alliance/primary/colored/Uther.png`
+**Uther the Lightbringer** → `assets/weeks/gaming/wow_alliance/primary/bronze/Uther.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, dense and unbending. Center: Uther the Lightbringer in full paladin plate, a great warhammer resting head-up against his shoulder like a shepherd's staff, one gauntleted hand raised in blessing over a kneeling line of new-anointed knights of the Silver Hand, his stern face lit from within by the Light he founded an order to teach. Border: Alliance rampant-lion frame carved in continuous bronze relief, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
@@ -149,7 +149,7 @@ Ornate circular badge, vivid full-color paint over polished blue-and-gold stone,
 *Love and loss — Theramore's own ghost carved into the stone behind
 her, hardened into the very power she wields.*
 
-**Jaina** → `assets/weeks/gaming/wow_alliance/primary/colored/Jaina.png`
+**Jaina** → `assets/weeks/gaming/wow_alliance/primary/bronze/Jaina.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, aching and warm. Center: Jaina Proudmoore, a frost-pale sorceress in flowing robes, one hand raised with a small controlled flame of arcane fire, the other pressed flat over her own heart, standing before the faint carved silhouette of a ruined tower half-hidden in the stone behind her. Border: Alliance rampant-lion frame carved in continuous bronze relief, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
@@ -164,7 +164,7 @@ Ornate circular badge, vivid full-color paint over polished blue-and-gold stone,
 *Druid of growth — ten thousand years of patience made visible in one
 still frame.*
 
-**Malfurion** → `assets/weeks/gaming/wow_alliance/primary/colored/Malfurion.png`
+**Malfurion** → `assets/weeks/gaming/wow_alliance/primary/bronze/Malfurion.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and ancient. Center: Malfurion Stormrage, antlered and moss-bearded, seated cross-legged in deep meditation as slow roots and new green shoots grow visibly from the stone around him, one open hand cupping a single unhurried sprout. Border: Alliance rampant-lion frame carved in continuous bronze relief, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
@@ -179,7 +179,7 @@ Ornate circular badge, vivid full-color paint over polished blue-and-gold stone,
 *The High King — a king who never stopped being a soldier, pride and
 duty fused into one seated figure.*
 
-**Varian Wrynn** → `assets/weeks/gaming/wow_alliance/primary/colored/Varian.png`
+**Varian Wrynn** → `assets/weeks/gaming/wow_alliance/primary/bronze/Varian.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block. Center: Varian Wrynn enthroned in battle-worn plate rather than court robes, Shalamayne resting bare across his knees, the Alliance's own lion crest blazing on the wall behind him like a crown of light. Border: Alliance rampant-lion frame carved in continuous bronze relief, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
@@ -194,7 +194,7 @@ Ornate circular badge, vivid full-color paint over polished bright gold, photore
 *The worgen king — man by day, the wolf within: one body, both faces.
 The SAME throne silhouette as Varian's own seat, deliberately.*
 
-**Genn Greymane** → `assets/weeks/gaming/wow_alliance/primary/colored/Genn.png`
+**Genn Greymane** → `assets/weeks/gaming/wow_alliance/primary/bronze/Genn.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the same throne silhouette as the Throne's own seat, deliberately, a king's proud bearing held even here. Center: Genn Greymane seated in a king's pose, human from the waist up in a torn royal coat, but his shadow cast on the stone behind him is fully wolf, four-legged and hackled, half-turned as if caught mid-transformation between the two — one body, both faces, the curse and the crown sharing a single seat. Border: Alliance rampant-lion frame carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
@@ -209,7 +209,7 @@ Ornate circular badge, vivid full-color paint over dark iron and cold silver, ph
 *Lost beyond the Dark Portal a thousand years — the Excluded kind
 (CANON.md "The Ninth"): belongs to the story, not to the circle.*
 
-**Turalyon** → `assets/weeks/gaming/wow_alliance/primary/colored/Turalyon.png`
+**Turalyon** → `assets/weeks/gaming/wow_alliance/primary/bronze/Turalyon.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, a look that belongs to no known sky. Center: Turalyon in gold-and-white paladin plate scarred by a thousand unrecorded years, standing before a closing, star-flecked portal-scar in the stone, alone on an alien battlefield's edge, his stance still unmistakably a soldier of the Alliance though no banner of home flies anywhere near him. Border: Alliance rampant-lion frame carved in bronze relief, its links breaking open at the top where the bronze fades to bare metal, no roundel glyph — Turalyon answers to no single day. NO lettering anywhere.
 ```
@@ -242,7 +242,7 @@ Ornate circular badge, vivid full-color paint over pale fading gold, photorealis
 stillness, the fear of a mantle inherited too soon never shown on his
 face.*
 
-**Baine** → `assets/weeks/gaming/wow_horde/primary/colored/Baine.png`
+**Baine** → `assets/weeks/gaming/wow_horde/primary/bronze/Baine.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, calm beneath old weight. Center: Baine Bloodhoof, a great tauren chieftain with a broken-and-mended horn, kneeling to press one broad hand flat against the stone floor of Thunder Bluff as if listening to it, his war totem planted quiet at his side rather than raised. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
@@ -257,7 +257,7 @@ Ornate circular badge, vivid full-color paint over red-and-black lacquered wood,
 *Warsong wrath — the exact moment wrath chooses to become courage
 instead, the bottle of demon blood broken rather than raised.*
 
-**Grommash Hellscream** → `assets/weeks/gaming/wow_horde/primary/colored/Grommash.png`
+**Grommash Hellscream** → `assets/weeks/gaming/wow_horde/primary/bronze/Grommash.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, raw and unbanked. Center: Grommash Hellscream mid-roar, a broken bottle of demon blood shattered at his feet rather than raised to his lips, his great axe Gorehowl driven point-down into the stone, veins still faintly lit with a fading corrupted red beneath skin fighting to stay green. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
@@ -272,7 +272,7 @@ Ornate circular badge, vivid full-color paint over red-and-black lacquered wood,
 *Trade-prince greed — worn as openly as a crown, the shrewd wisdom of
 the deal never quite hidden beneath it.*
 
-**Gallywix** → `assets/weeks/gaming/wow_horde/primary/colored/Gallywix.png`
+**Gallywix** → `assets/weeks/gaming/wow_horde/primary/bronze/Gallywix.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, glittering with buried wealth. Center: Trade Prince Gallywix, a squat goblin in a gaudy gold-buttoned coat, perched atop a small mountain of coin and scrip, one hand counting a stack of gold while the other waves a signed contract, his grin all appetite. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
@@ -287,7 +287,7 @@ Ornate circular badge, vivid full-color paint over red-and-black lacquered wood,
 *Priest of the Loa — generosity poured out past the point of counting
 the cost, the loa's excess given freely rather than hoarded.*
 
-**Vol'jin** → `assets/weeks/gaming/wow_horde/primary/colored/Voljin.png`
+**Vol'jin** → `assets/weeks/gaming/wow_horde/primary/bronze/Voljin.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, dense with spirit-smoke. Center: Vol'jin, a lean troll priest in ceremonial feathers and bone, kneeling before a ring of loa totems each glowing its own faint color, both hands open and overflowing with more spirit-light than his own two hands can hold. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
@@ -302,7 +302,7 @@ Ornate circular badge, vivid full-color paint over red-and-black lacquered wood,
 *The Frostwolf love — armed and ready to defend itself, jealous only
 of the danger that circles her clan.*
 
-**Draka** → `assets/weeks/gaming/wow_horde/primary/colored/Draka.png`
+**Draka** → `assets/weeks/gaming/wow_horde/primary/bronze/Draka.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, fierce and tender at once. Center: Draka of the Frostwolf clan, a battle-worn orc mother in furs, cradling an infant against her chest with one arm while her other hand rests white-knuckled on a spear planted beside her. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
@@ -317,7 +317,7 @@ Ornate circular badge, vivid full-color paint over red-and-black lacquered wood,
 *Plains patience — the older bull content to let the young ones run
 ahead, gaze on the horizon rather than any threat close at hand.*
 
-**Cairne** → `assets/weeks/gaming/wow_horde/primary/colored/Cairne.png`
+**Cairne** → `assets/weeks/gaming/wow_horde/primary/bronze/Cairne.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, old and unhurried. Center: Cairne Bloodhoof, elder chieftain, leaning easy on a tall runed totem staff planted in open plains grass carved into the stone, his weathered face turned toward a distant horizon rather than any threat close at hand. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
@@ -332,7 +332,7 @@ Ornate circular badge, vivid full-color paint over red-and-black lacquered wood,
 *The Warchief who built the new Horde — a warchief who built rather
 than conquered.*
 
-**Thrall** → `assets/weeks/gaming/wow_horde/primary/colored/Thrall.png`
+**Thrall** → `assets/weeks/gaming/wow_horde/primary/bronze/Thrall.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block. Center: Thrall enthroned in simple, unornamented plate, Doomhammer resting head-up across his knees rather than a scepter, a new Horde banner — orc, tauren, troll and Forsaken emblems worked together — raised on the wall behind him. Border: Horde wolf-fang totem frame carved in continuous bronze relief, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
@@ -347,7 +347,7 @@ Ornate circular badge, vivid full-color paint over polished bright gold, photore
 *Thrall's own chosen mistake — the Horde inverted. The SAME throne
 silhouette as Thrall's own seat, deliberately.*
 
-**Garrosh** → `assets/weeks/gaming/wow_horde/primary/colored/Garrosh.png`
+**Garrosh** → `assets/weeks/gaming/wow_horde/primary/bronze/Garrosh.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME throne silhouette as Thrall's own seat, deliberately, down to a hammer resting across the knees, only the weapon here is a corrupted mockery forged of raw mag'har iron and something fel-green beneath the plating. Center: Garrosh seated in the identical proud pose, the same banner behind him now scorched and singular rather than united, his eyes lit with a faint sickly green — the same throne, the same posture, the mistake Thrall himself chose and could not unmake. Border: Horde wolf-fang totem frame carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
@@ -362,7 +362,7 @@ Ornate circular badge, vivid full-color paint over dark iron and cold silver, ph
 *Half-orc half-ogre, belonging to no clan, alone in the wild — strength
 that answers to no banner.*
 
-**Rexxar** → `assets/weeks/gaming/wow_horde/primary/colored/Rexxar.png`
+**Rexxar** → `assets/weeks/gaming/wow_horde/primary/bronze/Rexxar.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim, belonging to no hall. Center: Rexxar, half-orc half-ogre, built too large for any single people's armor, standing in open wilderness with his loyal beasts at his flanks and no clan sigil anywhere on him, his axe resting easy across his shoulders. Border: Horde wolf-fang totem frame carved in bronze relief, its links breaking open at the top where the bronze fades to bare metal, no roundel glyph — Rexxar answers to no single day. NO lettering anywhere.
 ```
@@ -394,7 +394,7 @@ Ornate circular badge, vivid full-color paint over pale fading gold, photorealis
 *The plague "healer" inverted — healing's own shape worn by something
 that has none left to give.*
 
-**Kel'Thuzad** → `assets/weeks/gaming/wow_evil/primary/colored/KelThuzad.png`
+**Kel'Thuzad** → `assets/weeks/gaming/wow_evil/primary/bronze/KelThuzad.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, cold beyond any grave. Center: Kel'Thuzad, a skeletal lich in tattered necromancer robes, hovering rather than standing over a ring of Scourge plague-cauldrons, one bony hand extended in a gesture of false benediction over kneeling, hollow-eyed cultists. Border: Evil saronite-and-ice fang frame carved in bronze relief, jagged shards alternating with cracked ice, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
@@ -409,7 +409,7 @@ Ornate circular badge, vivid full-color paint over black saronite and ice, photo
 *The blood that cursed the orcs — wrath given as a gift, the exact
 moment courage was traded away for it.*
 
-**Mannoroth** → `assets/weeks/gaming/wow_evil/primary/colored/Mannoroth.png`
+**Mannoroth** → `assets/weeks/gaming/wow_evil/primary/bronze/Mannoroth.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, boiling with unbanked rage. Center: Mannoroth the Destructor, a towering pit lord wreathed in flame, one clawed hand closed around a chalice of his own black demon blood tipped toward an unseen row of orc silhouettes kneeling to drink. Border: Evil saronite-and-ice fang frame carved in bronze relief, broken by four roundels bearing the Mars glyph in bronze relief. NO lettering anywhere.
 ```
@@ -424,7 +424,7 @@ Ornate circular badge, vivid full-color paint over black saronite and ice, photo
 *Sold his people — power bought with exactly the clan he was meant to
 lead, wisdom's own hunger turned entirely to appetite.*
 
-**Gul'dan** → `assets/weeks/gaming/wow_evil/primary/colored/Guldan.png`
+**Gul'dan** → `assets/weeks/gaming/wow_evil/primary/bronze/Guldan.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, hungry and cunning. Center: Gul'dan, a hunched orc warlock with one eye replaced by a fel-green socket, both hands raised over an open ancient tome as chains of fel energy bind small silhouettes of his own clan-folk behind him. Border: Evil saronite-and-ice fang frame carved in bronze relief, broken by four roundels bearing the Mercury glyph in bronze relief. NO lettering anywhere.
 ```
@@ -439,7 +439,7 @@ Ornate circular badge, vivid full-color paint over black saronite and ice, photo
 *The dark teacher — a gift with a hook already sunk in it, an excess
 of promises with none of them free.*
 
-**Kil'jaeden the Deceiver** → `assets/weeks/gaming/wow_evil/primary/colored/Kiljaeden.png`
+**Kil'jaeden the Deceiver** → `assets/weeks/gaming/wow_evil/primary/bronze/Kiljaeden.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, dense and seductive. Center: Kil'jaeden the Deceiver, a radiant many-winged demon lord wreathed in false golden light, one hand extended offering a gleaming crown to a small kneeling silhouette far below. Border: Evil saronite-and-ice fang frame carved in bronze relief, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
@@ -454,7 +454,7 @@ Ornate circular badge, vivid full-color paint over black saronite and ice, photo
 *Banshee jealousy of the living — jealousy of the life she can no
 longer have.*
 
-**Sylvanas** → `assets/weeks/gaming/wow_evil/primary/colored/Sylvanas.png`
+**Sylvanas** → `assets/weeks/gaming/wow_evil/primary/bronze/Sylvanas.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, bitter and cold beneath the warmth. Center: Sylvanas Windrunner, a banshee queen in tattered ranger's leathers, glowing red eyes fixed not on any enemy but on a faint, translucent memory-image of her own living elven self carved ghostlike into the stone beside her, a bow held loose rather than drawn. Border: Evil saronite-and-ice fang frame carved in bronze relief, broken by four roundels bearing the Venus glyph in bronze relief. NO lettering anywhere.
 ```
@@ -469,7 +469,7 @@ Ornate circular badge, vivid full-color paint over black saronite and ice, photo
 *The Earth-Warder corrupted — the world's own farmer turned to burning
 it, patience curdled into envy of every green thing still whole.*
 
-**Deathwing** → `assets/weeks/gaming/wow_evil/primary/colored/Deathwing.png`
+**Deathwing** → `assets/weeks/gaming/wow_evil/primary/bronze/Deathwing.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, cracked and scorched at its edges. Center: Deathwing the Destroyer, a colossal black dragon whose molten-cracked hide leaks fire through iron plating bolted into his own flesh, wings spread over a carved landscape half green farmland and half smoking ruin. Border: Evil saronite-and-ice fang frame carved in bronze relief, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
@@ -484,7 +484,7 @@ Ornate circular badge, vivid full-color paint over black saronite and ice, photo
 *Seated on the FROZEN THRONE itself — pride that once meant saving his
 people, worn now as a throne of ice at the top of the world.*
 
-**Arthas, the Lich King** → `assets/weeks/gaming/wow_evil/primary/colored/Arthas.png`
+**Arthas, the Lich King** → `assets/weeks/gaming/wow_evil/primary/bronze/Arthas.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Brightly polished bronze relief throughout, the brightest plate of the block, and the coldest in spirit. Center: Arthas Menethil, the Lich King, seated directly upon the Frozen Throne itself, its jagged ice spires rising behind him like a crown the glacier grew on its own, Frostmourne resting bare across his knees, his helm's eyes burning a pale corrupted blue where warm gold light should be. Border: Evil saronite-and-ice fang frame carved in bronze relief, broken by four roundels bearing the Sun glyph in brightly polished bronze relief. NO lettering anywhere.
 ```
@@ -499,7 +499,7 @@ Ornate circular badge, vivid full-color paint over corrupted pale gold and ice, 
 *The hunter become the prey — his own mirror. The SAME throne
 silhouette the Frozen Throne wears, deliberately.*
 
-**Illidan** → `assets/weeks/gaming/wow_evil/primary/colored/Illidan.png`
+**Illidan** → `assets/weeks/gaming/wow_evil/primary/bronze/Illidan.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief darkened to a near-black patina, the darkest plate of the block — the SAME throne silhouette as the Frozen Throne, deliberately, an ice-spired seat behind him too, though his own is a shattered ledge above the Black Temple rather than a glacier's peak. Center: Illidan Stormrage seated in the identical proud pose, blindfolded yet somehow watchful, great demonic wings mantled behind him, twin blades crossed across his knees where Frostmourne lay on the true Throne — the hunter of demons who became the very thing he spent his life hunting. Border: Evil saronite-and-ice fang frame carved in bronze relief, its patina darkened to match, broken by four roundels bearing the Sun glyph in oxidized dark-bronze relief — the same glyph the Throne wears, the shadow face of the same crown. NO lettering anywhere.
 ```
@@ -514,7 +514,7 @@ Ornate circular badge, vivid full-color paint over dark iron and cold silver, ph
 *The possessed Guardian, the prophet no one recognized — a second
 shadow looming just behind his own.*
 
-**Medivh** → `assets/weeks/gaming/wow_evil/primary/colored/Medivh.png`
+**Medivh** → `assets/weeks/gaming/wow_evil/primary/bronze/Medivh.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Aged bronze relief fading to bare unpatinated metal at the rim. Center: Medivh, the last Guardian, standing at a tower window in Karazhan with a faint second shadow — Sargeras's own — looming just behind his own on the stone wall, one hand resting on a raven-topped staff, his eyes carrying two colors at once. Border: Evil saronite-and-ice fang frame carved in bronze relief, its links breaking open at the top where the bronze fades to bare metal, no roundel glyph — Medivh answers to no single day. NO lettering anywhere.
 ```
