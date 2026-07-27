@@ -121,14 +121,30 @@ So the circuit is not arbitrary: safety flows backward to its
 source, care flows forward to its future, and the strongest bends
 toward the one who holds everyone else.
 
-## Name Options (owner 2026-07-16: keep the variants, ★ marks the agent's pick, final choice made along the way)
+## The Name — SEALED 2026-07-27
 
-Candidates after the owner's *"two bodies, one soul"*:
+**The owner's verdict: the theme KEEPS ALL THREE NAMES.** None of the
+three candidates was dropped; they are layered, exactly as the
+many-names doctrine layers God and The One ([The Cube
+Canon](../CUBE.md)).
 
-- ★ **One Soul (Jedna duša)** — the agent's pick: the owner's own
-  phrase inverted into a name, and the quote anchor already exists:
-  asked what a friend is, Aristotle answered *"one soul dwelling in
-  two bodies"* (Diogenes Laertius V.20).
+- Wherever the theme is **TITLED IN FULL** — the Encyclopedia heading
+  — it shows the triple: **One Soul — The Vow — The Bond**
+  (`constants.PRISM_LIGHT_THEME_TITLE`).
+- Wherever **ONE name has to stand alone** — the Design window's wheel
+  row, the menus, the watch title, any label — it is **One Soul**
+  (`constants.PRISM_LIGHT_THEME_NAME`). The Design window's hexa wheel
+  row therefore reads Paint palette / **One Soul** / Council.
+
+One declaration, both readers (Rule #5); the seal is pinned by
+`tests/test_cube_encyclopedia.py`.
+
+The candidates as they stood (kept for the record):
+
+- **One Soul (Jedna duša)** — the owner's own *"two bodies, one soul"*
+  inverted into a name; the quote anchor already existed: asked what a
+  friend is, Aristotle answered *"one soul dwelling in two bodies"*
+  (Diogenes Laertius V.20). This is the single-name form.
 - **The Vow (Zavet)** — the stronger word he flagged.
 - **The Bond (Savez)** — the safe default.
 - (*One Flesh* / Genesis 2:24 remains the center's quote either
@@ -149,7 +165,8 @@ Candidates after the owner's *"two bodies, one soul"*:
 
 ## Open Questions for the Owner
 
-1. Theme name — picked along the way from the ★-marked list above.
+1. ~~Theme name~~ — **SEALED 2026-07-27: all three kept** (see The Name
+   above).
 2. Does **Odanost** satisfy him as the day face, or does he want it
    on a planet seat (it would contest Saturn with Respect)?
 3. ~~The hearth-roles~~ — **the Shield / the Heart / the Dawn

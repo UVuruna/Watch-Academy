@@ -158,7 +158,7 @@ human life, the year's seasons beside creation's own elements.
 |---|---|---|
 | Trinity | **The One** — the courtroom | **The Family** (owner 2026-07-16) |
 | Seasons | **the Four Temperaments** | **the Four Elements — the Tetramorph** (APPROVED 2026-07-16) |
-| Prism | **The Persons** | **One Soul, the Bond** (APPROVED 2026-07-16) |
+| Prism | **The Persons** | **One Soul — The Vow — The Bond** (APPROVED 2026-07-16; the name SEALED 2026-07-27 — all three kept, "One Soul" alone wherever one name must stand) |
 | Compass | **the Eight Walks of Life** (approved) | **the Eight Ages** (APPROVED 2026-07-16) |
 
 With the standalone instruments — **Aurora (two palettes) and the
@@ -382,7 +382,14 @@ UNIVERSAL ROTATION CONVENTION's shared cadence, generalized 2026-07-20
 — currently every day); deep travel drives the shown face by the
 TRAVELED date, same law as the poles' glyphs.
 
-### Prism light — One Soul, the Bond (APPROVED 2026-07-16)
+### Prism light — One Soul — The Vow — The Bond (APPROVED 2026-07-16; name SEALED 2026-07-27)
+
+**The name (owner seal 2026-07-27).** The theme keeps ALL THREE
+candidate names, layered rather than chosen between. Titled in full it
+is **One Soul — The Vow — The Bond**
+(`constants.PRISM_LIGHT_THEME_TITLE`); wherever one name must stand
+alone — the Design window's wheel row, the menus, the watch title, any
+label — it is **One Soul** (`constants.PRISM_LIGHT_THEME_NAME`).
 
 The relationship-pillars theme IS prism-shaped, and the pattern
 seats it here: paint carries heaven's six persons, light carries
@@ -416,8 +423,8 @@ Score-keeping, Tolerance cures Taking-for-granted; Passion burns
 away Contempt, Respect calms Jealousy. Master quote: 1 Corinthians
 13:4–7 (*"keepeth no record of wrongs… beareth all things,
 believeth all things, hopeth all things, endureth all things"*).
-The full working draft with the candidate triage and name options
-(★ One Soul / The Vow / The Bond): `research/bond_theme.md`. The light-register hues (owner confirmed
+The full working draft with the candidate triage and the sealed name:
+`research/bond_theme.md`. The light-register hues (owner confirmed
 2026-07-16 — the pillars keep their planet seats and WEAR the light
 palette): **Gratitude green** (12h — the highest love shown as
 GROWTH), **Support yellow** (16h — the daylight shoulder: being

@@ -312,21 +312,36 @@ COMPUTED 24-entry per-ray hover legend riding the standing
 letter-legend machinery. 24 new goldens in `tests/test_cube_wheels.py`;
 922 tests green.
 
-### Session 21 — the Cube Encyclopedia wave → **Opus** (writers)
+### Session 21 — the Cube Encyclopedia wave → **Opus** (writers) — DONE (2026-07-27, 0.14.460–0.14.464)
 **Say:** "Radi Sesiju 21 iz WORKPLAN.md — Cube enciklopedija."
 **Reads:** CUBE.md IN FULL (the Article Charter BINDS this session);
 CANON.md quote rules.
-**Delivers:** the Cube section (three axes, six poles, eight
-vertices, all three sets, coordinate doctrine), the Double Trinity
-with the 24-field union table, the Two Crosses (stations, chiasm,
-TRUST/DISTRUST, Latin/Greek rows, FALL/STAR, DOMY/SAFE), the
-Banknote-axes seal — all in the Charter's scientific voice, ENGLISH
-ONLY. Also closes the Character wheel's OPEN combo figures (roster
-proposals to the owner first). **AND the Charter REWORK pass (owner
-2026-07-26):** sweep the EXISTING articles for prose that describes
-the depicted scene (Charter rule 4 — no scene description) and for
-belles-lettres tone; rewrite to the thesis→argument→correspondences
-→quote structure. Report the count of reworked articles.
+**Delivered:** (1) THE ARCHETYPES HALL, empty since round R3, now
+holds the Cube canon's three topics — **The Cube** (20 pages: the
+three axes, the six poles, the eight vertices, the three figure sets,
+the coordinate doctrine and the Banknote-axes seal), **The Double
+Trinity** (5: Court, Genesis, Council and the 24-field union table,
+whose twelve office/process pairs are assigned four to each person)
+and **The Two Crosses** (14: both paths, all eight stations,
+TRUST/DISTRUST, the Latin and Greek rows, FALL/STAR and DOMY/SAFE) —
+39 pages in the new `cube`/`double_trinity`/`crosses` families of
+`encyclopedia.json`, every one written in the Charter's four movements
+(`[[Thesis]]`/`[[Argument]]`/`[[Correspondences]]`/`[[Quote]]`);
+(2) THE THREE WHEELS' ARTICLE SETS — `archetype_trinity_genesis` (4),
+`archetype_prism_council` (7) and `archetype_compass_character` (8) —
+so the coverage law in `test_archetype.py` lost its exemption and now
+checks 67 seats instead of 48, and no wheel speaks the pending line;
+(3) THE SPACEBAR CONTRACT — each Cube wheel arm jumps to the page it
+argues (every Character arm onto its own pole or vertex); (4) THE SIX
+OPEN COMBO FIGURES SEALED under the owner's delegation ("ti pečatiš"):
+Alfred Pennyworth / Severus Snape (Devotion), Charles Xavier
+(Patronage), Steve Rogers (Conviction), Father Ferapont and Silas
+(Mortification); (5) THE THEME NAME sealed — all three kept, "One
+Soul" alone wherever one name must stand
+(`constants.PRISM_LIGHT_THEME_NAME/_TITLE`); (6) THE CHARTER REWORK
+PASS — **21 articles** rewritten off scene description, art-asset talk
+and belles-lettres onto thesis→argument→correspondences→quote. 22 new
+pins in `tests/test_cube_encyclopedia.py`; 977 tests green.
 
 ### Session 22 — the Renaming → **Sonnet**
 **Say:** "Radi Sesiju 22 iz WORKPLAN.md — WATCH ACADEMY svuda."
@@ -347,8 +362,11 @@ VIGILATE seal placed where the name is explained.
 
 ## Open Owner Decisions (any session may receive the verdict)
 
-- Theme name: ★ One Soul / The Vow / The Bond
-  (`research/bond_theme.md`).
+- ~~Theme name~~ — SEALED 2026-07-27: the theme keeps **all three**
+  names. Titled in full it is **One Soul — The Vow — The Bond**;
+  wherever one name must stand alone (Design wheel row, menus, labels,
+  watch title) it is **One Soul**. `constants.PRISM_LIGHT_THEME_TITLE`
+  / `PRISM_LIGHT_THEME_NAME`; record in `research/bond_theme.md`.
 - Compass light image layer: ★ the Tree / the Menagerie (CANON).
 - Seasons tetramorph persons layer: yes/no (CANON).
 - Seven archetypes stay seven (the standing recommendation) or grow
@@ -360,5 +378,8 @@ VIGILATE seal placed where the name is explained.
   user-selectable.
 - The Academy tagline wording (CUBE.md §The Name — *"Watch the
   hours. Watch and learn. Keep the watch."* is PROPOSED).
-- The Character wheel's OPEN combo figures (CUBE.md — modern set
-  mostly unfilled; Session 21 proposes, the owner seals).
+- ~~The Character wheel's OPEN combo figures~~ — SEALED 2026-07-27 by
+  Session 21 under the owner's delegation ("ti pečatiš"): Alfred
+  Pennyworth / Severus Snape (Devotion), Charles Xavier (Patronage),
+  Steve Rogers (Conviction), Father Ferapont and Silas (Mortification).
+  The whole combo table in CUBE.md is sealed; no (P) marks remain.

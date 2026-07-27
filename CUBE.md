@@ -242,7 +242,7 @@ Reinvention; "The God" → God.)
 
 <a id="character-wheel"></a>
 
-## The Character Wheel — the Compass's Third Wheel (SEALED; combo figures partly OPEN)
+## The Character Wheel — the Compass's Third Wheel (SEALED; combo figures SEALED 2026-07-27)
 
 The owner's law: the octa wheel is **the Cube with the depth axis at
 zero** — we see left-right and up-down, depth we only imagine, so
@@ -282,15 +282,47 @@ Self-Regard dress binds the CUBE and its Encyclopedia section, not
 this wheel (owner seal 2026-07-26). This palette rules BOTH the
 Character wheel and the Rose.
 
-Combo figures — the owner's four RETURN here (SEALED), the rest
-PROPOSED/OPEN for the roster round:
+Combo figures — the owner's four RETURN here, and the whole table is
+**SEALED 2026-07-27**: the owner delegated the seal of the six OPEN
+slots to WORKPLAN Session 21 ("ti pečatiš"), which filled them and
+confirmed the standing proposals in the same act. No (P) marks remain.
 
 | Combo | Archetypal +/− | Historical +/− | Modern +/− |
 |---|---|---|---|
-| Devotion / Martyrdom | Moses / Samson (P) | Janusz Korczak (P) / **Marcus Antonius** | OPEN |
-| Patronage / Favoritism | Boaz (P) / **King Lear** | Lorenzo de' Medici (P) / **Nicolae Ceaușescu** | OPEN / Denethor II (P) |
-| Conviction / Dogmatism | Elijah (P) / **Creon** | Martin Luther (P — *"Here I stand"*) / **Joseph Stalin** | OPEN / Dolores Umbridge (P) |
-| Renunciation / Mortification | **John the Baptist** (*"He must increase, I must decrease"*) / OPEN | Thomas More (P) / Simone Weil (P) | Obi-Wan Kenobi (P) / OPEN |
+| Devotion / Martyrdom | Moses / Samson | Janusz Korczak / **Marcus Antonius** | **Alfred Pennyworth** / **Severus Snape** |
+| Patronage / Favoritism | Boaz / **King Lear** | Lorenzo de' Medici / **Nicolae Ceaușescu** | **Charles Xavier** / Denethor II |
+| Conviction / Dogmatism | Elijah / **Creon** | Martin Luther (*"Here I stand"*) / **Joseph Stalin** | **Steve Rogers** / Dolores Umbridge |
+| Renunciation / Mortification | **John the Baptist** (*"He must increase, I must decrease"*) / **Father Ferapont** | Thomas More / Simone Weil | Obi-Wan Kenobi / **Silas** |
+
+The six seals argued (Session 21, 2026-07-27):
+
+- **Alfred Pennyworth — Devotion, modern +.** Loyalty served from
+  below: a lifetime inside one household that never once asks for the
+  name on the door. Samwise, the obvious candidate, already holds the
+  yellow Loyalty POLE; the combo needs the humility half, and Alfred
+  supplies it in a way Sam (a companion, not a servant) does not.
+- **Severus Snape — Martyrdom, modern −.** Devotion past its measure:
+  a whole life administered as penance for one attachment. He was a
+  recorded ALTERNATE for the green pole's Self-Annihilation; the combo
+  is his exact seat, because his self-destruction is bound to a person
+  rather than to a verdict on his own worth.
+- **Charles Xavier — Patronage, modern +.** Loyalty plus Dignity: a
+  man of standing who spends it sheltering and raising his own kind,
+  which is precisely what the seat asks of a patron. Its fall was
+  already held by Denethor II.
+- **Steve Rogers — Conviction, modern +.** Integrity plus Dignity: the
+  principle exists before the stand, and his refusals are addressed to
+  his OWN side, which is the seat's discriminator against mere
+  defiance. He was a recorded alternate for the purple Integrity pole,
+  which Batman holds; the combo frees him without a collision.
+- **Father Ferapont — Mortification, archetypal −.** Renunciation past
+  its measure, and the archetypal set's most exact case: Dostoevsky
+  builds him as the fasting ascetic whose mortification IS the pride
+  it claims to kill, set deliberately against Zosima's humility — the
+  literary control the seat needed.
+- **Silas — Mortification, modern −.** Obedience measured in wounds:
+  the modern set's single most recognizable image of discipline that
+  has become its own object, and the seat's clearest current telling.
 
 Menu: Walks / Ages / **Character** (name SEALED — the pointer is
 already named Compass; its third wheel is the compass of character,
@@ -493,9 +525,18 @@ lacking the experiment).
    pose, the window, the composition. The picture stands beside the
    text; describing it is waste and belles-lettres in one. The
    article argues ONLY the symbolism: why this seat, why this color,
-   why this virtue and vice, how it binds into the web. (A REWORK
-   pass over the EXISTING articles that violate this is queued —
-   WORKPLAN Session 21.)
+   why this virtue and vice, how it binds into the web. (The REWORK
+   pass over the EXISTING articles that violated this ran in Session
+   21, 2026-07-27: **21 articles rewritten** — the Court's Eye and the
+   Prism's Seal, the Family's Heart, all four Temperaments, all four
+   evangelist rows of the Tetramorph, Lucifer and Judas on the Prism,
+   seven of the eight Walks and the Ages' Birth. What went out: art-
+   asset talk ("his Scale window", "no new glass is cut", "his rondel
+   keeps"), composition narration ("its iris", "the Heart in open
+   hands", "the overlapping heart") and staged little scenes ("with
+   the plough in hand", "the student at the lamp", "owning nothing but
+   the road"). `tests/test_cube_encyclopedia.py` pins the exact
+   phrases so they cannot return.)
 
 <a id="display-laws"></a>
 
@@ -542,12 +583,18 @@ lacking the experiment).
 7. ~~Diamond/Cube display toggle~~ — DONE (Session 20):
    `Settings.cube_look`, the corner-view face rhombi on the
    Court/Genesis/Council wheels.
-8. Encyclopedia: the Cube section (axes, poles, vertices, three
+8. ~~Encyclopedia: the Cube section (axes, poles, vertices, three
    sets), the Double Trinity's 24-field table, the Two Crosses with
    ciphers, the Banknote-axes seal — AND the three Cube wheels'
-   article sets (`archetype_trinity_genesis`, `archetype_prism_
-   council`, `archetype_compass_character`; the wheels speak the
-   pending line until then).
+   article sets~~ — DONE (Session 21, 0.14.460+): The Archetypes hall
+   holds three topics — **The Cube** (20 pages), **The Double
+   Trinity** (5) and **The Two Crosses** (14) — in the
+   `cube`/`double_trinity`/`crosses` families of
+   `Database/encyclopedia.json`, and the three wheels' article sets
+   (`archetype_trinity_genesis`, `archetype_prism_council`,
+   `archetype_compass_character`) are written, so no Cube wheel speaks
+   the pending line any more. The wheels' Spacebar jumps land on the
+   matching page (each Character arm on its own pole or vertex).
 9. Character-coordinate badges per figure (later round).
 10. The renaming, once the wording is sealed.
 

@@ -380,6 +380,19 @@ POINTER_DISPLAY_NAMES = {
 # read (Rule #5: one source, two readers). Index 0 = "paint", index 1 =
 # "light", index 2 (where present) = "cube" — the Cube canon's third
 # wheel (`palette_styles_for` below tells which pointers carry it).
+
+# THE PRISM-LIGHT THEME NAME (owner seal 2026-07-27, closing the last
+# open naming decision of `research/bond_theme.md`): the theme KEEPS ALL
+# THREE candidate names. Wherever the theme is titled it shows the
+# triple — `PRISM_LIGHT_THEME_TITLE`, the Encyclopedia heading — and
+# wherever ONE name has to stand alone (the Design window's wheel row,
+# the menus, the watch title, any label) it is `PRISM_LIGHT_THEME_NAME`,
+# "One Soul". One declaration, both readers (Rule #5); the Aristotle
+# anchor behind the pick — "one soul dwelling in two bodies" (Diogenes
+# Laertius V.20) — lives in the theme's own article.
+PRISM_LIGHT_THEME_NAME = "One Soul"
+PRISM_LIGHT_THEME_TITLE = "One Soul — The Vow — The Bond"
+
 POINTER_PALETTE_LABELS = {
     "trio": ("Court", "Family", "Genesis"),
     "cross": ("Temperaments", "Elements"),
@@ -387,7 +400,11 @@ POINTER_PALETTE_LABELS = {
     # the paths one walks, open to all, against the closed hereditary
     # caste reading).
     "octa": ("Walks of Life", "Ages", "Character"),
-    "hexa": ("Paint palette", "Light palette", "Council"),
+    # The hexa LIGHT slot speaks the theme's sealed single name (owner
+    # 2026-07-27); its PAINT slot still says "Paint palette" — the
+    # Persons wheel's own label is a separate naming question, not this
+    # seal's.
+    "hexa": ("Paint palette", PRISM_LIGHT_THEME_NAME, "Council"),
     "aurora": ("Warm", "Cool"),
     "calendar": ("Zodiac", "Almanac"),
     "default": ("Paint palette", "Light palette"),
