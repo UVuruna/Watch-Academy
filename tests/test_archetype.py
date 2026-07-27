@@ -1036,8 +1036,11 @@ def test_every_archetype_set_position_and_center_is_written(app):
             checked += 1
     # 48 from the original eight sets (6 two-row + 2 three-side wheels)
     # plus the Cube wave's 19: Genesis 3+centre, Council 6+centre,
-    # Character 8 (centreless — the rose IS the wheel).
-    assert checked == 67
+    # Character 8 (centreless — the rose IS the wheel) — plus the
+    # ROSE's 8 vertex seats (owner seal 2026-07-27; its Legacy wheel
+    # adds none, because it READS the Character set rather than owning
+    # one, which is the whole point of pointing both at one table).
+    assert checked == 75
 
 
 def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
