@@ -75,6 +75,16 @@ shadow stamp, hover legend.
 Extra OPTIONAL card fields, wired through `validate_preset` and
 `app.controller.build_skin`:
 
+- **`thematic`** (CUSTOM-THEMATIC widening, owner 2026-07-27) — the
+  card's OWN color under the Thematic ring finish: any transformer
+  ramp name (`constants.METAL_SHADE_NAMES["thematic"]` — the five
+  ring theme colors AND every metal ramp: copper, brass, rose gold,
+  steel, pewter, iron, …; owner: "iron, copper... sve"). Bundled
+  presets never carry it (`constants.RING_THEMATIC_SHADES` decides
+  for them); a custom card without one falls back to the moon indigo.
+  Picked in the Settings custom-ring builder's "Thematic color"
+  combo; an unknown name fails validation loudly (Rule #1).
+
 - **`triangle`** — a 3-position override of the seal layout's own
   (empty) metal triangle, so a 6-letter preset can split into two
   3-letter metal groups instead of the seal's own plain one-finish-on-

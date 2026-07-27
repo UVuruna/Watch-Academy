@@ -277,6 +277,18 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
   (Hope·Faith·Love·Salvation, Fear·Anger·Hate·Suffering). Letterless by
   house rule — FALL/STAR/DOMY/SAFE and the Latin/Greek rows stay in the
   articles
+- `cross_words_prompts.md` — the CROSS-WORDS round (owner UV inbox
+  2026-07-27): the eight classical WORDS the DOMY/PILOT ring letters
+  borrow for their stations (Ysteria·Orge·Detestatio·Miseria,
+  Tharsos·Latria·Pothos·Opheleia) as 1:1 medallions in the crosses
+  family's `secondary` register — words, not stations; no file shared
+  with `crosses_prompts.md`
+- `banknote_offices_prompts.md` — the same round's Dollar legend: the
+  five Double-Trinity OFFICES (Malignant Accuser, Anointed Aegis,
+  Satanic Scourge, Omnific Originator, Nazarene Advocate) as engraved
+  intaglio BANKNOTE plates, a new `archetypes/banknote` family in the
+  note's own craft; the Eye of Providence seat reuses the ring letter
+  library's own masters and gets no entry
 
 **The Rose of the Twenty-Four has NO sheet and never will** (CUBE.md
 §The Rose): three identical octa stars offset 15°, 24 rays in 8 palette

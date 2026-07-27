@@ -22,7 +22,12 @@ composed onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   round, owner decree 2026-07-27: "any of the four" — ChatGPT/Gemini,
   each with/without rays, source and shine baked into the chosen
   glyph); the Dollar's own ADAPTIVE eye glyph is deliberately NOT
-  offered here. Add validates the card
+  offered here. A "Thematic color" combo (CUSTOM-THEMATIC widening,
+  owner 2026-07-27) picks what the card's letters wear under the
+  Thematic ring finish — ANY transformer ramp, the five theme colors
+  and every metal (copper, iron, …), stored on the card as the
+  optional `thematic` field; "Auto" leaves it absent (moon indigo
+  fallback). Add validates the card
   (`data.rings.validate_preset`) and OK persists it (it appears under
   Theme ▸ Ring).
 - **Custom hands** (owner spec 2026-07-12) — the hand-pack builder:

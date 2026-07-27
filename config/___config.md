@@ -77,8 +77,11 @@ THE THEMATIC FINISH (ENLARGE/THEMATIC round, owner 2026-07-27):
 `RING_FINISHES` grows a 4th value "thematic" — the letters wear the
 ACTIVE preset's own theme color through the recolor transformer
 (`RING_THEMATIC_SHADES`: DOMY cross red, PILOT cross blue, Dollar
-green, The One moon indigo, Templar black; custom rings fall back to
-the moon indigo); the colors are colored RAMPS beside the metal ramps
+green, The One moon indigo, Templar black; a CUSTOM ring picks its
+OWN color on its card — any transformer ramp, metals included
+(copper, brass, rose gold, steel, pewter, iron, …; owner: "iron,
+copper... sve") — else the moon indigo); the colors are colored RAMPS
+beside the metal ramps
 (`recolor/presets/metals.json`, `defaults.METAL_SHADES["thematic"]`,
 `METAL_SHADE_NAMES["thematic"]` — never offered in the Settings shade
 pickers, the ring choice IS the choice), and outside the ring band
