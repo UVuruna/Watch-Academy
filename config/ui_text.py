@@ -56,6 +56,10 @@ UI_STRINGS: tuple[str, ...] = (
     # with the owner's "Walks of Life" pick (the full idiom, never caste).
     "Temperaments", "Warm", "Cool",
     "Court", "Family", "Walks of Life", "Ages",
+    # The hexa PAINT wheel's own name (owner "ok.", 2026-07-27): the
+    # Prism paint wheel is the PERSONS (CANON.md), no longer labelled
+    # with the generic "Paint palette" default.
+    "Persons",
     # The Calendar pointer (owner 2026-07-16): the wheel pair riding
     # the Paint/Light slot, and its two lighting modes.
     "Calendar", "Almanac",

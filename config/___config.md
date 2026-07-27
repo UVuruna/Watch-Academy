@@ -91,7 +91,10 @@ The trigger/window/precedence law itself lives in
 **R5 MENU REWORK**:
 `POINTER_PALETTE_LABELS` — the RAW English wheel-pair label per
 pointer (Court/Family, Temperaments/Elements, Walks of Life/Ages,
-Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback),
+**Persons**/One Soul for the Prism — its paint slot renamed from the
+generic default 2026-07-27, owner "ok." —
+Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback for a
+pointer whose wheels have no names of their own),
 extracted so `app.controller._build_menu`'s translated copy and
 `app.controller.watch_title`'s UNTRANSLATED name reading both draw
 from the ONE table (Rule #5); `SLOT_COMPLICATION_TITLES` — the four

@@ -381,7 +381,8 @@ pattern) rather than guessed:
   is what already clears the dial for the other three dialogs. The
   wheel-pair labels are per pointer (`constants.POINTER_PALETTE_LABELS`,
   owner 2026-07-17 ROADMAP 15e: Court/Family, Temperaments/Elements,
-  Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac, else Paint/Light —
+  Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac, Persons/One Soul
+  for the Prism (its paint slot renamed 2026-07-27), else Paint/Light —
   R5 MENU REWORK moved the picker itself into the
   [Design Window](design_window.md)'s Pointer tab, which reads this
   SAME raw-English table directly, translated at build time; `watch_
@@ -390,7 +391,7 @@ pattern) rather than guessed:
   the Calendar pointer. **THE CUBE THIRD WHEELS (owner seal
   2026-07-26, CUBE.md; WORKPLAN Session 20):** the three Cube pointers
   carry a THIRD label — Court/Family/**Genesis**,
-  Paint/Light/**Council**, Walks/Ages/**Character** — and the Design
+  **Persons**/One Soul/**Council**, Walks/Ages/**Character** — and the Design
   window's wheel row zips the labels with
   `constants.palette_styles_for(pointer)`, so two-wheel pointers keep
   two pills. `apply_display_settings` normalizes a stored `"cube"`

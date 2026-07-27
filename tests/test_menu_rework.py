@@ -80,14 +80,17 @@ def test_watch_title_full_form_reads_the_paint_style_too():
 
 
 def test_watch_title_falls_back_to_the_default_pair_off_the_table():
-    # hexa/octa/calendar/aurora... only "default" is missing from the
-    # table on purpose (hexa's own Paint/Light IS the default pair).
+    # hexa/octa/calendar/aurora... every pointer with named wheels reads
+    # its OWN row; only "default" carries the generic Paint/Light pair,
+    # for a pointer whose wheels have no names of their own. The hexa
+    # PAINT slot is "Persons" since the owner's "ok." of 2026-07-27
+    # (CANON.md §Prism paint — the Persons).
     settings = dataclasses.replace(
         Settings(),
         city_name="Oslo", ring="DOMY", ring_finish="bronze",
         pointer="hexa", palette_style="paint",
     )
-    assert watch_title(settings, full=True) == "Oslo-Bronze DOMY-Paint palette Prism"
+    assert watch_title(settings, full=True) == "Oslo-Bronze DOMY-Persons Prism"
 
 
 def test_watch_title_is_untranslated_never_touches_tr():

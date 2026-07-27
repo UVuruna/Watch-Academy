@@ -26,8 +26,10 @@ computed geometry with no face art (CUBE.md §The Rose).
 Session 20):** the Pointer tab's wheel row zips
 `constants.palette_styles_for(pointer)` with the pointer's
 `POINTER_PALETTE_LABELS` — the three Cube pointers show THREE pills
-(Court/Family/**Genesis**, Paint/Light/**Council**,
-Walks/Ages/**Character**), everything else keeps its two.
+(Court/Family/**Genesis**, **Persons**/One Soul/**Council**,
+Walks/Ages/**Character**), everything else keeps its two. The Prism's
+paint pill reads **Persons** since 2026-07-27 (owner "ok.") — the wheel
+has its own canon name and no longer wears the generic default label.
 
 ## Connections
 

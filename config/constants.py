@@ -401,10 +401,13 @@ POINTER_PALETTE_LABELS = {
     # caste reading).
     "octa": ("Walks of Life", "Ages", "Character"),
     # The hexa LIGHT slot speaks the theme's sealed single name (owner
-    # 2026-07-27); its PAINT slot still says "Paint palette" — the
-    # Persons wheel's own label is a separate naming question, not this
-    # seal's.
-    "hexa": ("Paint palette", PRISM_LIGHT_THEME_NAME, "Council"),
+    # 2026-07-27); its PAINT slot says PERSONS since the same day (owner
+    # "ok."), because the paint wheel IS the Persons — CANON.md names it
+    # so, and "Paint palette" was the generic default label sitting on a
+    # wheel that has had its own name all along. The generic pair
+    # survives untouched under "default", for every pointer with no
+    # named wheels of its own.
+    "hexa": ("Persons", PRISM_LIGHT_THEME_NAME, "Council"),
     "aurora": ("Warm", "Cool"),
     "calendar": ("Zodiac", "Almanac"),
     "default": ("Paint palette", "Light palette"),

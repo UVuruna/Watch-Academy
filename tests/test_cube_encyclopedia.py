@@ -225,10 +225,14 @@ def test_the_prism_light_theme_keeps_all_three_names():
     assert constants.PRISM_LIGHT_THEME_TITLE == "One Soul — The Vow — The Bond"
     assert constants.PRISM_LIGHT_THEME_NAME in constants.PRISM_LIGHT_THEME_TITLE
     # The hexa wheel row — the Design window's palette-style labels and
-    # the watch TITLE row read this one table (Rule #5).
+    # the watch TITLE row read this one table (Rule #5). The PAINT slot
+    # says Persons since the owner's "ok." of 2026-07-27 (CANON.md names
+    # the prism paint wheel The Persons); the generic "Paint palette"
+    # default survives only under the "default" key.
     labels = constants.POINTER_PALETTE_LABELS["hexa"]
     assert labels[1] == constants.PRISM_LIGHT_THEME_NAME
-    assert labels == ("Paint palette", "One Soul", "Council")
+    assert labels == ("Persons", "One Soul", "Council")
+    assert constants.POINTER_PALETTE_LABELS["default"][0] == "Paint palette"
 
 
 def test_the_reworked_articles_no_longer_describe_their_picture():
