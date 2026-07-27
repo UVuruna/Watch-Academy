@@ -343,14 +343,32 @@ PASS — **21 articles** rewritten off scene description, art-asset talk
 and belles-lettres onto thesis→argument→correspondences→quote. 22 new
 pins in `tests/test_cube_encyclopedia.py`; 977 tests green.
 
-### Session 22 — the Renaming → **Sonnet**
+### Session 22 — the Renaming → **Sonnet** — DONE (2026-07-27, 0.14.465–0.14.467)
 **Say:** "Radi Sesiju 22 iz WORKPLAN.md — WATCH ACADEMY svuda."
 **Reads:** CUBE.md §The Name; root CLAUDE.md Rules 22–23.
-**Delivers:** WATCH ACADEMY applied everywhere — About, README
-opening + `gh repo edit --description` sync, installer metadata
-(`setup/app_info.json`), the Rule 23 update-feed repo field; DOMY
-stays the dial's name; the disk folder stays. The tagline and
-VIGILATE seal placed where the name is explained.
+**Delivered:** WATCH ACADEMY applied at every naming surface that
+actually exists today: the README opening paragraph (now Rule #22's
+About text, synced via `gh repo edit --description`) plus a new "The
+Name" section carrying the proposed tagline and the VIGILATE seal;
+the Guide window's `dial_default` slide (the app's closest thing to
+an About screen — no dedicated About dialog exists) now introduces
+Watch Academy and echoes the tagline in English prose. `constants.
+APP_NAME` ("DOMY Watch"), the tray tooltip, every window title, the
+mutex, the AppUserModelID and the `%APPDATA%` folder are UNCHANGED —
+DOMY remains the dial's own name and the app's technical identity,
+exactly as scoped. **CANNOT do yet (infrastructure absent, not a
+renaming-session job):** an actual About dialog (none exists — Guide
+was chosen over it, see `app/guide.md`) and the Rule 23 self-update
+module (no `updates.py`/version source in this project yet) — both
+would be new M6/M7 features, not a rename. Seeded the decision
+instead so neither has to be re-derived later: `setup/app_info.json`
+(new, pre-M7) carries `name`/`description` = Watch Academy while
+`exe_name`/`installer_name` stay DOMY-based, pinned by the new
+`tests/test_app_info.py`; ROADMAP.md's M7 section records that
+`update.repo` stays `"UVuruna/DOMY-Watch"` (repo NOT renamed) when
+self-update eventually lands. The GitHub repo rename itself was
+**not** executed (owner decree: `gh repo rename` never runs
+automatically) — flagged as an open question below. 978 tests green.
 
 ## Running in Parallel (no agent needed)
 
@@ -378,6 +396,14 @@ VIGILATE seal placed where the name is explained.
   user-selectable.
 - The Academy tagline wording (CUBE.md §The Name — *"Watch the
   hours. Watch and learn. Keep the watch."* is PROPOSED).
+- **GitHub repo rename?** (raised by Session 22, the Renaming): the
+  repo is still `UVuruna/DOMY-Watch` and the disk folder is still
+  "DOMY Watch" — CUBE.md's scope note allows the disk folder to stay
+  regardless, but the repo name is a separate owner call. Session 22
+  did NOT rename it (root CLAUDE.md forbids self-granted destructive/
+  outward-facing repo actions without an explicit ask); a rename to
+  something Watch-Academy-shaped is a live option if the owner wants
+  the GitHub identity to match the sealed application name.
 - ~~The Character wheel's OPEN combo figures~~ — SEALED 2026-07-27 by
   Session 21 under the owner's delegation ("ti pečatiš"): Alfred
   Pennyworth / Severus Snape (Devotion), Charles Xavier (Patronage),
