@@ -582,6 +582,35 @@ def test_center_hover_and_targets(app):
     assert center_tip is None or "The Seal" not in center_tip
 
 
+def test_one_soul_arms_and_center_jump_to_their_own_pages(app):
+    """THE ONE SOUL ROUND (owner verdict 2026-07-27): the prism-LIGHT
+    wheel now has an Encyclopedia topic, so every arm jumps to its own
+    pillar page — and the CENTRE jumps too, the first archetype centre
+    with a page to land on (`center["enc"]`, read by
+    `encyclopedia_target`). Verified through the real hover geometry,
+    not the config table alone."""
+    from app.encyclopedia import _topics
+
+    day, tick = _dt(datetime(2026, 7, 16, 14, 30))
+    soul = Compositor(_archetype_skin("hexa", "light"), AssetCache())
+    soul.render_offscreen(360.0, 1.0, day, tick)
+    names = [e["name"] for e in _topics()["one_soul"]["entries"]]
+    for index, figure in enumerate(archetypes.figures("prism_light")):
+        target = soul.encyclopedia_target(
+            *_arm_px(180.0, figure["angle"]), 360.0
+        )
+        assert target is not None, figure["name"]
+        assert target[0] == "one_soul"
+        assert names[target[1]] == figure["name"], index
+    # The centre — the Union.
+    assert soul.encyclopedia_target(180.0, 180.0, 360.0) == ("one_soul", 7)
+    assert names[7] == "The Union"
+    # Every OTHER centre still answers None (nothing else declares one).
+    persons = Compositor(_archetype_skin("hexa", "paint"), AssetCache())
+    persons.render_offscreen(360.0, 1.0, day, tick)
+    assert persons.encyclopedia_target(180.0, 180.0, 360.0) is None
+
+
 def test_archetype_figure_size_circle_and_portrait_types(app, tmp_path):
     """Owner decree 2026-07-18, round two (screenshots): the archetype
     art divides into TWO TYPES by its OWN aspect ratio — no per-art

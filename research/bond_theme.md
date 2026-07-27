@@ -134,7 +134,10 @@ Canon](../CUBE.md)).
 - Wherever **ONE name has to stand alone** — the Design window's wheel
   row, the menus, the watch title, any label — it is **One Soul**
   (`constants.PRISM_LIGHT_THEME_NAME`). The Design window's hexa wheel
-  row therefore reads Paint palette / **One Soul** / Council.
+  row therefore reads **Persons** / **One Soul** / Council (the paint
+  slot renamed from the generic "Paint palette" the same day, owner
+  "ok." — the prism paint wheel IS the Persons, [The DOMY
+  Canon](../CANON.md)).
 
 One declaration, both readers (Rule #5); the seal is pinned by
 `tests/test_cube_encyclopedia.py`.
@@ -163,6 +166,20 @@ The candidates as they stood (kept for the record):
 - **Ecclesiastes 4:9–12** — *"two are better than one… a threefold
   cord"* (the union, and the Child-ninth).
 
+## Where It Lives — BUILT 2026-07-27
+
+The owner's verdict on this draft: *"napravi naravno — jedna od
+važnijih ljubavnih tematika; ide kao zaseban arhetip ako treba, tj.
+zaseban pointer."* It needed no separate pointer: the theme already
+owns the hexa · light wheel, so a new archetype would have duplicated
+one (Rule #5). What it lacked was a place to be READ, and that is what
+was built — the `one_soul` topic in the Encyclopedia's **The
+Archetypes** hall, nine pages: the title page (the conjugation law, the
+three names, the three axes of love), the six pillars in the wheel's
+own arm order, the Union and the Child. The dial's per-arm hover
+articles were left untouched; the topic argues the doctrine instead of
+restating them. See [Encyclopedia](../app/encyclopedia.md).
+
 ## Open Questions for the Owner
 
 1. ~~Theme name~~ — **SEALED 2026-07-27: all three kept** (see The Name
@@ -170,4 +187,7 @@ The candidates as they stood (kept for the record):
 2. Does **Odanost** satisfy him as the day face, or does he want it
    on a planet seat (it would contest Saturn with Respect)?
 3. ~~The hearth-roles~~ — **the Shield / the Heart / the Dawn
-   APPROVED 2026-07-16.**
+   APPROVED 2026-07-16**, and AMENDED by [The DOMY Canon](../CANON.md)
+   on 2026-07-22: the child's ROLE is the **Anchor**, the Dawn
+   surviving as his time-reading. The Encyclopedia's Child page follows
+   the canon, not this older line.

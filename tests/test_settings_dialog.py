@@ -1681,8 +1681,11 @@ def test_gallery_five_sections():
     assert len(every_card) == len(set(every_card)), "no topic in two groups"
     # The Archetypes section (owner: "do not scatter them") stood empty
     # until WORKPLAN Session 21 (2026-07-27) filled it with the Cube
-    # canon's three topics, in this order.
-    assert groups["The Archetypes"] == ("cube", "double_trinity", "crosses")
+    # canon's three topics, in this order; the One Soul theme joined the
+    # same day (owner "napravi naravno") as the hall's fourth card.
+    assert groups["The Archetypes"] == (
+        "cube", "double_trinity", "crosses", "one_soul",
+    )
     # Every card key actually resolves in _topics() — a stale name in a
     # group would KeyError the gallery build.
     topics = _topics()

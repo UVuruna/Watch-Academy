@@ -151,7 +151,10 @@ _TEMPERAMENTS_DIR = (
 _TETRAMORPH_DIR = ARCHETYPE_ART_DIR / "tetramorph" / "primary" / "colored"
 _EVANGELIST_DIR = ARCHETYPE_ART_DIR / "evangelist" / "primary" / "colored"
 _PERSONS_DIR = ARCHETYPE_ART_DIR / "persons" / "primary" / "colored"
-_ONE_SOUL_DIR = ARCHETYPE_ART_DIR / "one_soul" / "primary" / "colored"
+# PUBLIC since the One Soul round (2026-07-27): the Encyclopedia's own
+# One Soul topic pages the SAME eight plates the wheel wears (Rule #5 —
+# one declaration, two readers), exactly like the Cube roots below.
+ONE_SOUL_ART_DIR = ARCHETYPE_ART_DIR / "one_soul" / "primary" / "colored"
 _WALKS_DIR = ARCHETYPE_ART_DIR / "walks" / "primary" / "colored"
 _LIFE_DIR = ARCHETYPE_ART_DIR / "life"
 # The Cube wave families (Session 19 sheets; owner seal 2026-07-26) —
@@ -322,25 +325,38 @@ ARCHETYPES = {
         },
     },
     # Prism light — One Soul, the Bond (CANON): pillar + its SHADOW.
+    # THE ENCYCLOPEDIA TARGETS (owner verdict 2026-07-27, "napravi
+    # naravno"): every arm — and, uniquely so far, the CENTRE — jumps to
+    # its own page in the `one_soul` topic of The Archetypes hall. The
+    # index order IS the entry order of `app.encyclopedia`'s
+    # `_ONE_SOUL_ENTRIES` (0 = the theme's title page), pinned at both
+    # ends by `tests/test_one_soul_theme.py`.
     "prism_light": {
         "articles": "archetype_prism_light",
         "figures": (
-            _fig(0.0, _ONE_SOUL_DIR / "Gratitude.png",
-                 "Gratitude", "Taking for Granted", "gratitude"),
-            _fig(60.0, _ONE_SOUL_DIR / "Support.png",
-                 "Support", "The Fight", "support"),
-            _fig(120.0, _ONE_SOUL_DIR / "Passion.png",
-                 "Passion", "Jealousy", "passion"),
-            _fig(180.0, _ONE_SOUL_DIR / "Tolerance.png",
-                 "Tolerance", "Score-keeping", "tolerance"),
-            _fig(240.0, _ONE_SOUL_DIR / "Trust.png",
-                 "Trust", "Suspicion", "trust"),
-            _fig(300.0, _ONE_SOUL_DIR / "Respect.png",
-                 "Respect", "Contempt", "respect"),
+            _fig(0.0, ONE_SOUL_ART_DIR / "Gratitude.png",
+                 "Gratitude", "Taking for Granted", "gratitude",
+                 enc=("one_soul", 1)),
+            _fig(60.0, ONE_SOUL_ART_DIR / "Support.png",
+                 "Support", "The Fight", "support",
+                 enc=("one_soul", 2)),
+            _fig(120.0, ONE_SOUL_ART_DIR / "Passion.png",
+                 "Passion", "Jealousy", "passion",
+                 enc=("one_soul", 3)),
+            _fig(180.0, ONE_SOUL_ART_DIR / "Tolerance.png",
+                 "Tolerance", "Score-keeping", "tolerance",
+                 enc=("one_soul", 4)),
+            _fig(240.0, ONE_SOUL_ART_DIR / "Trust.png",
+                 "Trust", "Suspicion", "trust",
+                 enc=("one_soul", 5)),
+            _fig(300.0, ONE_SOUL_ART_DIR / "Respect.png",
+                 "Respect", "Contempt", "respect",
+                 enc=("one_soul", 6)),
         ),
         "center": {
-            "file": _ONE_SOUL_DIR / "Union.png",
+            "file": ONE_SOUL_ART_DIR / "Union.png",
             "name": "The Union", "entity": "center",
+            "enc": ("one_soul", 7),
         },
     },
     # Compass paint — the Eight Walks of Life (CANON): estate + its

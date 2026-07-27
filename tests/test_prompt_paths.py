@@ -208,11 +208,10 @@ _WHITELIST: dict[str, str] = {
     # today ... generating the art alone would not yet make it appear
     # anywhere." Art has since landed; the wiring gap stands.
     "celestial/era/Anno_Lucis.png": "generated, no draw site yet (COVERAGE.md)",
-    # "The Ninth" — the union's child, explicitly "stands outside the
-    # six" pillars (`one_soul_prompts.md` §The Ninth) — a deliberate
-    # standalone concept, not one of the seated `prism_light` figures
-    # COVERAGE.md tracks; no grid seat exists for it yet.
-    "archetypes/one_soul/primary/colored/Child.png": "the standalone Ninth, no grid seat wired yet",
+    # ("The Ninth" — the union's Child — left this whitelist on
+    # 2026-07-27: it has no WHEEL seat, since it "stands outside the six"
+    # pillars, but the One Soul Encyclopedia topic now pages it like
+    # every other seat, so the plate is genuinely referenced.)
     # (The figurative Union window, Union_Meeting→Union_v2 in the
     # figure-first sweep 2026-07-22, needs no entry anymore — the scale
     # family is a data-driven rotation root, discovered automatically.)

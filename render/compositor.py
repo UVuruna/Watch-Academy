@@ -952,7 +952,13 @@ class Compositor:
                 return self._eclipse_encyclopedia_target(eclipse)
             return "seasons", self._season_topic_index()
         if element == "archetype:center":
-            return None      # the centers have no pages yet (Session 6/8)
+            # THE CENTRE'S OWN TARGET (One Soul round 2026-07-27): a
+            # center table may declare an `enc` exactly like an arm
+            # figure does — the One Soul wheel's Union is the first that
+            # has a page to land on. Every other centre simply carries no
+            # `enc` and answers None, unchanged.
+            center = archetypes.center(archetype_key(self._skin))
+            return None if center is None else center.get("enc")
         if element.startswith("archetype:"):
             # An archetype ARM figure (owner slika 8): its OWN target —
             # today only the Walks map onto the Professions pages; the

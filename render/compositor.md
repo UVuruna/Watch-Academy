@@ -163,9 +163,14 @@ tooltip` — the Rose card carries a computed 24-entry legend, see
   a KeyError, and the rondel path is 1×1-placeholder-free (text alone
   until the art lands). The center answers via
   `_archetype_center_tooltip`; `encyclopedia_target` follows each
-  FIGURE's own (topic, entry) — today only the Walks map onto the
-  Professions pages, everything else answers None gracefully
-  (Sessions 6/8 add the topics)
+  FIGURE's own (topic, entry) — the Walks map onto the Professions
+  pages, the three Cube wheels onto The Archetypes hall (Session 21),
+  and the prism-LIGHT wheel onto the **One Soul** topic since
+  2026-07-27; everything else answers None gracefully. **The CENTER can
+  answer too** (One Soul round): `archetype:center` now reads the
+  center table's own optional `"enc"` key instead of returning a flat
+  None — today only the Union declares one (`("one_soul", 7)`), which
+  is simply the only center with a page to land on
 - `_year(when)`: every hover YEAR renders through this one method
   (Session 16, owner amendment 2026-07-17) —
   `core.deep_time.format_year_line`: the official year with the Anno

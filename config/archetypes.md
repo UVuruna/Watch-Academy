@@ -176,10 +176,21 @@ name-falls-back until the owner's glass lands):**
   four Cube-wave art roots are PUBLIC here (`GENESIS_ART_DIR`,
   `COUNCIL_ART_DIR`, `CHARACTER_ART_DIR`, `CROSSES_ART_DIR`) because
   the Encyclopedia reads the same declarations for its gallery icons.
+  **`prism_light` joined them on 2026-07-27** (owner: "napravi
+  naravno"): its six pillars aim at `("one_soul", 1..6)` — the pillar's
+  own page in the theme's Encyclopedia topic — and `ONE_SOUL_ART_DIR`
+  became public for the same reason the Cube roots did.
   Otherwise targets are mostly None;
-  the persons, temperaments, pillars, family and ages have no topics
+  the persons, temperaments, family and ages have no topics
   yet (Sessions 6/8 add them) — a None target makes the Spacebar
   jump do nothing, gracefully.
+- **A CENTER may declare a target too** (One Soul round, 2026-07-27).
+  The center table takes the SAME optional `"enc"` key an arm figure
+  carries, and `render.compositor.encyclopedia_target` reads it for the
+  `archetype:center` hover instead of the old flat `None`. Today
+  exactly one center uses it — `prism_light`'s **Union**, at
+  `("one_soul", 7)` — because it is the only center with a page; every
+  other center simply omits the key and answers None as before.
 - **The CENTER window** (owner seal 2026-07-18, `ARCHETYPE_CENTER_WINDOW_DEG`
   = 15.0, i.e. ±1h): `ArchetypeCenterLayer` (see
   [Layers](../render/layers.md)) burns the center figure FULL only

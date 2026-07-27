@@ -173,7 +173,7 @@ queued (ROADMAP 11):
 
 | Pointer | instead of Paint | instead of Light |
 |---|---|---|
-| Prism | **Paint** (keep — the terms' birthplace: subtractive primaries) | **Light** (additive) |
+| Prism | **Persons** (SEALED 2026-07-27, owner "ok." — the wheel IS the Persons; the generic "Paint palette" label was only ever the default standing in for a wheel with no name of its own) | **One Soul** |
 | Aurora | **Paint** (keep — an abstract light instrument) | **Light** |
 | Trinity | **Court** | **Family** |
 | Seasons | **Seasons** | **Elements** |
@@ -390,6 +390,24 @@ is **One Soul — The Vow — The Bond**
 (`constants.PRISM_LIGHT_THEME_TITLE`); wherever one name must stand
 alone — the Design window's wheel row, the menus, the watch title, any
 label — it is **One Soul** (`constants.PRISM_LIGHT_THEME_NAME`).
+
+**The Encyclopedia home (owner verdict 2026-07-27: "napravi naravno —
+jedna od važnijih ljubavnih tematika").** The theme has its own topic,
+`one_soul`, in **The Archetypes** hall, as its fourth card beside the
+three Cube topics — NOT a separate pointer or archetype, because it
+already owns a wheel (hexa · light) and a second one would only have
+duplicated it. Nine pages: the title page, the six pillars in the
+wheel's own arm order, **the Union** at the centre and **the Child** as
+the Ninth. The pages argue the DOCTRINE the per-arm hovers cannot —
+the conjugation law, the three axes of love with their cross-cures, the
+shadows, the union's kept/felt faces, the family triangle — and never
+restate the hover articles (Rule #5). Where the reader sees the theme
+TITLED (the topic header on every page, and the title page's own
+caption) it is the triple; the gallery card, being a label, says One
+Soul. Every prism-light arm's Spacebar jump lands on its pillar page,
+and the Union's centre jump lands on the Union — the first archetype
+CENTRE on this dial with a page to open. Documentation:
+[Encyclopedia](app/encyclopedia.md).
 
 The relationship-pillars theme IS prism-shaped, and the pattern
 seats it here: paint carries heaven's six persons, light carries

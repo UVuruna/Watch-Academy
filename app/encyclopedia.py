@@ -210,8 +210,13 @@ _TOPIC_GROUPS = (
     # union table) and the Two Crosses (the eight stations, the chiasm,
     # TRUST/DISTRUST and the FALL/STAR, DOMY/SAFE ciphers). The dial's
     # own archetype WHEELS still speak through `config/archetypes.py`
-    # figure rows; the Cube wheels' Spacebar jumps now land here.
-    ("The Archetypes", ("cube", "double_trinity", "crosses")),
+    # figure rows; the Cube wheels' Spacebar jumps now land here. ONE
+    # SOUL joined the hall 2026-07-27 (owner: "napravi naravno — jedna od
+    # važnijih ljubavnih tematika") — the prism-LIGHT wheel's own
+    # doctrine, and the hall's fourth card, which fills its row exactly.
+    # It needed no separate pointer: the theme ALREADY owns a wheel
+    # (hexa/light), so a new archetype would have duplicated one.
+    ("The Archetypes", ("cube", "double_trinity", "crosses", "one_soul")),
 )
 
 # THE GALLERY SUBGROUPS (owner round R8b item 5c, GALLERY LAYOUT REWORK
@@ -454,16 +459,54 @@ _CROSSES_ENTRIES = (
     ("FALL and STAR", None),
     ("DOMY and SAFE", None),
 )
-_CUBE_TOPICS = (
-    ("cube", "The Cube",
+# THE ONE SOUL THEME (owner verdict 2026-07-27: "napravi naravno — jedna
+# od važnijih ljubavnih tematika"). The prism-LIGHT wheel's own doctrine
+# at last gets an Encyclopedia home: the theme's title page, the six
+# pillars in the wheel's own arm order (12h, 16h, 20h, 24h, 04h, 08h),
+# the Union at the centre and the Child as the Ninth — CANON.md §Prism
+# light, `research/bond_theme.md`. The dial's per-arm HOVER articles
+# (`symbolism.json` `archetype_prism_light`) are untouched: they read one
+# seat, these pages argue the DOCTRINE (the conjugation law, the axes of
+# love, the shadows, the union) — Rule #5, no text is duplicated.
+#
+# THE ORDER IS A CONTRACT here too: `config/archetypes.py`'s prism_light
+# figures address these pages by INDEX (`enc=("one_soul", 1)` ...), the
+# centre included — `tests/test_one_soul_theme.py` pins both ends.
+#
+# The eight seat pages all carry the wheel's OWN art (the one_soul
+# family is fully drawn); only the title page has no plate, exactly like
+# every other overview page in this hall.
+_ONE_SOUL_ENTRIES = (
+    (constants.PRISM_LIGHT_THEME_TITLE, None),
+    ("Gratitude", archetypes.ONE_SOUL_ART_DIR / "Gratitude.png"),
+    ("Support", archetypes.ONE_SOUL_ART_DIR / "Support.png"),
+    ("Passion", archetypes.ONE_SOUL_ART_DIR / "Passion.png"),
+    ("Tolerance", archetypes.ONE_SOUL_ART_DIR / "Tolerance.png"),
+    ("Trust", archetypes.ONE_SOUL_ART_DIR / "Trust.png"),
+    ("Respect", archetypes.ONE_SOUL_ART_DIR / "Respect.png"),
+    ("The Union", archetypes.ONE_SOUL_ART_DIR / "Union.png"),
+    ("The Child", archetypes.ONE_SOUL_ART_DIR / "Child.png"),
+)
+# (topic key, reader/gallery TITLE, TILE title or None, gallery icon,
+# `encyclopedia.json` family, entries). The tile title exists for ONE
+# reason (owner seal 2026-07-27, CANON §Prism light): the One Soul theme
+# is TITLED IN FULL with the triple — which is what the reader's own top
+# header shows — while a LABEL that must stand alone says "One Soul", and
+# a fixed-size gallery card is such a label.
+_ARCHETYPE_TOPICS = (
+    ("cube", "The Cube", None,
      archetypes.CHARACTER_ART_DIR / "Integrity.png", "cube",
      _CUBE_ENTRIES),
-    ("double_trinity", "The Double Trinity",
+    ("double_trinity", "The Double Trinity", None,
      archetypes.center("prism_council")["file"], "double_trinity",
      _DOUBLE_TRINITY_ENTRIES),
-    ("crosses", "The Two Crosses",
+    ("crosses", "The Two Crosses", None,
      archetypes.CROSSES_ART_DIR / "Path_of_Light.png", "crosses",
      _CROSSES_ENTRIES),
+    ("one_soul", constants.PRISM_LIGHT_THEME_TITLE,
+     constants.PRISM_LIGHT_THEME_NAME,
+     archetypes.center("prism_light")["file"], "one_soul",
+     _ONE_SOUL_ENTRIES),
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -1578,13 +1621,15 @@ def _topics(travel_date: date | None = None) -> dict:
                 for key, art in entry_specs
             ],
         }
-    # THE CUBE CANON (WORKPLAN Session 21, owner seal 2026-07-26 —
-    # CUBE.md): the three topics of The Archetypes hall. Their entry
-    # ORDER is contractual — `config/archetypes.py` addresses these
-    # pages by INDEX in its Cube wheels' `enc` targets (the Spacebar
-    # jump), exactly as the Walks address the Professions, and
-    # `tests/test_cube_encyclopedia.py` pins both ends.
-    for topic_key, title, icon, family, entry_specs in _CUBE_TOPICS:
+    # THE ARCHETYPES HALL (the Cube canon — WORKPLAN Session 21, owner
+    # seal 2026-07-26, CUBE.md — plus One Soul, owner verdict
+    # 2026-07-27). Every entry ORDER here is contractual:
+    # `config/archetypes.py` addresses these pages by INDEX in the Cube
+    # wheels' and the prism-light wheel's `enc` targets (the Spacebar
+    # jump), exactly as the Walks address the Professions;
+    # `tests/test_cube_encyclopedia.py` and `tests/test_one_soul_theme.py`
+    # pin both ends.
+    for topic_key, title, tile, icon, family, entry_specs in _ARCHETYPE_TOPICS:
         topics[topic_key] = {
             "title": title,
             "icon": icon,
@@ -1597,6 +1642,8 @@ def _topics(travel_date: date | None = None) -> dict:
                 for name, art in entry_specs
             ],
         }
+        if tile is not None:
+            topics[topic_key]["tile_title"] = tile
     return topics
 
 
@@ -1933,9 +1980,14 @@ class EncyclopediaDialog(QDialog):
         topic = self._topics[key]
         card = QToolButton()
         card.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-        card.setText(
-            self._tr(_GOD_TOPIC_GALLERY_TITLES.get(key, topic["title"]))
-        )
+        # A topic may carry its own TILE title (One Soul round
+        # 2026-07-27): the theme is TITLED IN FULL with its triple name
+        # in the reader's header, while a fixed-size card is a LABEL and
+        # a label shows the single name (CANON §Prism light).
+        card.setText(self._tr(
+            topic.get("tile_title")
+            or _GOD_TOPIC_GALLERY_TITLES.get(key, topic["title"])
+        ))
         icon = paths.art_file(topic["icon"])
         if icon is not None and icon.exists():
             # The PRE-WARMED downscale backs the icon when it exists

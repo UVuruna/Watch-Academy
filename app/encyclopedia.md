@@ -27,9 +27,12 @@ screens —
    figure sets, the coordinate doctrine, the Banknote-axes seal), **The
    Double Trinity** (5 — Court, Genesis, Council, the 24-field union
    table) and **The Two Crosses** (14 — both paths, their eight
-   stations, TRUST/DISTRUST, FALL/STAR, DOMY/SAFE); their entry ORDER
-   is a CONTRACT, since `config/archetypes.py` aims the three Cube
-   wheels' Spacebar targets at these pages by index —
+   stations, TRUST/DISTRUST, FALL/STAR, DOMY/SAFE), joined the same day
+   by **One Soul — The Vow — The Bond** (9 — see THE ONE SOUL THEME
+   below); their entry ORDER
+   is a CONTRACT, since `config/archetypes.py` aims the Cube
+   wheels' AND the prism-light wheel's Spacebar targets at these pages
+   by index —
    EVERYTHING centered (owner 2026-07-13: headers and card rows alike)
    and the cards RESPONSIVE: `_rescale_topics` grows/shrinks the icons
    with the window between `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`, then
@@ -504,6 +507,57 @@ screens —
   kept) confirms the gallery gains no fifth "Wider Court" tile and no
   `wider_greek`/etc. topic keys return — the fold-in is PAGES inside an
   existing topic, never a new gallery card.
+
+**THE ONE SOUL THEME (owner verdict 2026-07-27 — "napravi naravno —
+jedna od važnijih ljubavnih tematika; ide kao zaseban arhetip ako treba,
+tj. zaseban pointer"):** the prism-LIGHT wheel's doctrine gets its own
+Encyclopedia topic, `one_soul`, as The Archetypes hall's FOURTH card
+(the hall's row is exactly four wide, so it fills it). Nine pages, built
+by the shared `_ARCHETYPE_TOPICS` loop from the `one_soul` family of
+`Database/encyclopedia.json`:
+
+```
+0  One Soul — The Vow — The Bond   the theme's title page (no plate)
+1  Gratitude   12h green    5  Trust      04h blue
+2  Support     16h yellow   6  Respect    08h cyan
+3  Passion     20h red      7  The Union  the centre
+4  Tolerance   24h magenta  8  The Child  the Ninth
+```
+
+- **No separate pointer was needed** (the owner's own "ako treba"): the
+  theme ALREADY owns a wheel — hexa · light, `prism_light` in
+  [Archetypes](../config/archetypes.md) — so a new archetype would have
+  duplicated an existing one (Rule #5). What was missing was the READING
+  side, and that is what this topic is.
+- **The pillar order IS the wheel's arm order** (12h → 08h), which is
+  what lets `config/archetypes.py` aim `enc=("one_soul", 1..6)` at the
+  pages by INDEX; the Union takes index 7 from the CENTER table's own new
+  `"enc"` key (the first archetype centre with a page — see
+  [Compositor](../render/compositor.md)). `tests/test_one_soul_theme.py`
+  and `tests/test_archetype.py` pin the contract at both ends, the
+  latter through the live hover geometry.
+- **THE TRIPLE NAME, and where it shows** (owner seal 2026-07-27, CANON
+  §Prism light — the theme keeps all three names): the topic's `title` is
+  `constants.PRISM_LIGHT_THEME_TITLE`, so the READER'S TOP HEADER
+  (`_topic_display_title`) prints "One Soul — The Vow — The Bond" on
+  every one of the nine pages, and entry 0's own bold caption prints it
+  again as the title page's name. A fixed-size gallery CARD is a LABEL,
+  and the seal says a label shows the single name — so a topic may now
+  carry an optional `"tile_title"`, read at the ONE card-building point
+  (`_topic_card`), and One Soul's card reads "One Soul".
+- **It ARGUES, it does not restate** (Rule #5): the dial's per-arm hover
+  articles (`symbolism.json` `archetype_prism_light`) are untouched and
+  still answer every seat. These pages carry what a hover cannot — the
+  CONJUGATION LAW (honesty is a trait of the individual, trust its
+  counterpart in the relationship; every pillar a seat's virtue
+  conjugated, every shadow that seat's vice), the three axes of love with
+  their cross-cures, the union's day/night faces and the family triangle.
+  A test asserts no hover row appears verbatim in any page.
+- **Art:** all eight seat pages page the wheel's OWN plates
+  (`archetypes.ONE_SOUL_ART_DIR`, public for this reason) — the family is
+  fully drawn, the Child included, so this topic needs no new art at all.
+  Only the title page has no plate, exactly like the hall's other three
+  overview pages.
 
 **The Clock group split (owner 2026-07-16, ROADMAP queue #10):** the one
 Seasons topic became THREE — **Moon** (the lunations), **Seasons** (the

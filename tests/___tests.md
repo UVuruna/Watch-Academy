@@ -97,9 +97,26 @@ on the page it argues (the Spacebar contract); the three wheels'
 article sets speak their own prose instead of the pending line; the
 six combo figures the owner delegated to this session are written;
 the sealed prism-light theme name (all three kept, "One Soul" alone
-where one name must stand); and a REGRESSION PIN on the Charter
+where one name must stand, and the hexa PAINT slot renamed to
+**Persons** on 2026-07-27); and a REGRESSION PIN on the Charter
 rework — the exact scene-describing phrases that were removed can
 never come back.
+
+### `test_one_soul_theme.py`
+The ONE SOUL theme (owner verdict 2026-07-27): the `one_soul`
+encyclopedia family is complete and in the wheel's own arm order
+(title page, six pillars 12h→08h, the Union, the Child) with every
+page obeying the Article Charter; the pages carry the DOCTRINE a
+hover cannot — the conjugation law, all six cross-cures of the three
+axes of love, the union's kept/felt faces, the family triangle and
+its hearth roles; every pillar names its own shadow; the TRIPLE NAME
+is what the reader actually sees (topic title + title page) while the
+gallery card carries the single name, proved on a live offscreen
+dialog that opens on the theme and pages through all nine entries;
+the Spacebar contract for all six arms AND the centre; and a Rule #5
+pin that no dial hover row is duplicated into a page.
+`test_archetype.py` carries the same jump proved through the real
+hover geometry.
 
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 121
