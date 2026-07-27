@@ -6,9 +6,12 @@
 
 The mini WINDOW replacing the old Design submenu's deep chain — Pointer
 (variant + palette style + Calendar lighting + the Calendar's 12-set
-mount), Ring (preset + finish + Two metals + the Eye's Shine, DOLLAR/
-EYE round 2026-07-27 — the Shine checkbox shows only when the active
-card seats the adaptive eye glyph), Umbra (form + contrast),
+mount), Ring (preset + finish — gold/silver/bronze/THEMATIC, the 4th
+pill coloring the letters in the active preset's own theme color,
+ENLARGE/THEMATIC round 2026-07-27 — + Two metals, now offered for the
+4-letter DOMY/PILOT too, + the Eye's Shine, DOLLAR/EYE round
+2026-07-27 — the Shine checkbox shows only when the active card seats
+the adaptive eye glyph), Umbra (form + contrast),
 Complications (plate style), Hands and Earth (style + label mode) and
 Size — as ONE tabbed window with images wherever real preview art
 exists (R5 MENU REWORK item 3D, owner spec: "Isto kao sada samo u

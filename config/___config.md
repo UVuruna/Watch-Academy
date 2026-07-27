@@ -66,10 +66,24 @@ Dollar's adaptive Eye-of-Providence glyph, its glory-of-rays master
 stem and the per-preset "Shine" default (Dollar True), plus the four
 explicit `👁 …` variants in `RING_LETTER_FILES`/`RING_LETTER_GROUPS`
 for the custom builder; `RING_EYE_SHINE_ENLARGE` (CROSS-WORDS/SHINE
-round, owner UV inbox 2026-07-27) — the measured per-source height
-multiplier that keeps the shine master's TRIANGLE the same size as
-the no-light master (the rays pad the frame), stamped into
-`SkinDefinition.ring.letter_zoom` by `app.controller.build_skin`. THE NINTH
+round, owner UV inbox 2026-07-27; REMEASURED same day on the
+triangle's real apex/base rows after the alpha-channel measure proved
+blind to the opaque glow — gpt 2.11, gem 1.67, and the shine masters
+are center-padded on disk) — the per-source height multiplier that
+keeps the shine master's TRIANGLE the same size as the no-light
+master (the rays pad the frame), stamped into
+`SkinDefinition.ring.letter_zoom` by `app.controller.build_skin`.
+THE THEMATIC FINISH (ENLARGE/THEMATIC round, owner 2026-07-27):
+`RING_FINISHES` grows a 4th value "thematic" — the letters wear the
+ACTIVE preset's own theme color through the recolor transformer
+(`RING_THEMATIC_SHADES`: DOMY cross red, PILOT cross blue, Dollar
+green, The One moon indigo, Templar black; custom rings fall back to
+the moon indigo); the colors are colored RAMPS beside the metal ramps
+(`recolor/presets/metals.json`, `defaults.METAL_SHADES["thematic"]`,
+`METAL_SHADE_NAMES["thematic"]` — never offered in the Settings shade
+pickers, the ring choice IS the choice), and outside the ring band
+the thematic finish reads as gold (containment,
+`app.controller.apply_display_settings`). THE NINTH
 TABLE AND ITS SOLAR WINDOWS (round R3b item 3): `WEEKDAY_THEME_NINTHS`
 — the (display name, plate path) per weekday theme, extracted out of
 `app.encyclopedia`'s own ninths loop so [Layers](../render/layers.md)

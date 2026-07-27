@@ -67,7 +67,12 @@ low-contrast source from being stretched into a poster.
 Dataclasses for the whole algorithm plus the per-metal entries, loaded
 from `presets/metals.json`. NOTHING in this package hardcodes a number
 (Rule #4); the JSON is the single source of truth and is data, not code,
-so new metals need no new lines.
+so new metals need no new lines. Exercised beyond metals since the
+ENLARGE/THEMATIC round (owner 2026-07-27): the ring's THEMATIC finish
+colors — `cross_red`, `cross_blue`, `dollar_green`, `moon_indigo`,
+`templar_black` — are ordinary colored ramps in the same file, one
+entry each, zero code (see [Config (folder)](../config/___config.md),
+`RING_THEMATIC_SHADES`).
 
 ### `space.py` — Color Space Math
 sRGB <-> linear light, linear RGB <-> Oklab, hex parsing. Pure numpy,

@@ -49,12 +49,15 @@ decrees 2026-07-27: an older file's "MASON G"/"Mason"/"NUMBERS"/
 "PILOT" via `_fold_ring_name`), `ring_tint`
 (None or #RRGGBB — the whole-body
 recolor), `ring_finish` ("gold" | "silver" | "bronze" letter art),
-`ring_two_metals` (dict, TASK 3, MASON/ICONS round: per-preset choice
-between the 3-3 two-metal split and one finish on all six, for every
-preset carrying its own `triangle` override — Dollar/The One/Templar
-today; `_fold_ring_name` resolves/migrates its keys too, dropping a
-non-bool value or a name that resolves to nothing loaded, the SAME
-lenient policy `theme_metals` uses), `ring_eye_shine` (dict,
+`ring_two_metals` (dict, TASK 3, MASON/ICONS round; WIDENED in the
+ENLARGE/THEMATIC round, owner 2026-07-27: per-preset choice between
+the metal split and one finish on all letters — every preset with its
+own `triangle` override (Dollar/The One/Templar) AND every
+flame/chalice preset (DOMY/PILOT, whose 3+1 split used to be
+unconditional; their default is ON); `_fold_ring_name`
+resolves/migrates its keys too, dropping a non-bool value or a name
+that resolves to nothing loaded, the SAME lenient policy
+`theme_metals` uses), `ring_eye_shine` (dict,
 DOLLAR/EYE round: per-preset choice between the Eye of Providence
 with and without the glory of rays, for every preset seating the
 adaptive eye glyph — the Dollar today, default ON via

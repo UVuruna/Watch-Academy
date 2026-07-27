@@ -91,10 +91,13 @@ the ring preset and the user's display choices onto it at build time.
   draws the no-light size; `motto`/`motto_metal` (TASK 1, owner "može
   radi" 2026-07-19)
   the outer arc text — a tuple of {"text", "glyphs":
-  (asset, angle) pairs} built by build_skin from the preset's own
-  `motto` card field: the Dollar's two pinned Great Seal mottos, and
-  DOMY's/PILOT's four centered cross-station words (CROSS-WORDS
-  round); empty for The One/Templar and custom rings; see
+  (asset, angle) pairs, "words": per-word hover geometry (center,
+  half-span, seat — WORD-HOVER round, owner 2026-07-27; the
+  compositor answers a word hover with its seat's legend)} built by
+  build_skin from the preset's own `motto` card field: the Dollar's
+  two pinned Great Seal mottos, and DOMY's/PILOT's four centered
+  cross-station words (CROSS-WORDS round); empty for The One/Templar
+  and custom rings; see
   [Ring Presets](../data/rings.md) and [Layers](../render/layers.md)
 - `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit,

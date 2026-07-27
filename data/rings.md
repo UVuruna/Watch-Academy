@@ -85,13 +85,17 @@ Extra OPTIONAL card fields, wired through `validate_preset` and
   already applies to DOMY/Morph's 4-letter triangle, now on a 3+3
   split. Only valid on the seal layout; raises otherwise. **TASK 3
   (MASON/ICONS round):** The One and Templar now carry the SAME
-  `triangle` field too — but on all three (Dollar/The One/Templar) the
-  override only actually APPLIES when the owner's per-preset "Two
-  metals" toggle (`Settings.ring_two_metals`,
-  `app.controller._ring_two_metals`) is on for that preset; off, the
-  card reads exactly like one with no `triangle` at all (one finish on
-  all six). Default matching the pre-Task-3 look: Dollar on, The
-  One/Templar off (`constants.RING_TWO_METALS_DEFAULT`).
+  `triangle` field too — but the override only actually APPLIES when
+  the owner's per-preset "Two metals" toggle
+  (`Settings.ring_two_metals`, `app.controller._ring_two_metals`) is
+  on for that preset; off, the card reads exactly like one with no
+  `triangle` at all (one finish on all six). **ENLARGE/THEMATIC round
+  (owner 2026-07-27):** the toggle now covers the 4-LETTER layouts too
+  — DOMY/PILOT (and custom flame/chalice rings) can switch their
+  once-unconditional 3+1 split OFF and dress every letter in the one
+  finish. Defaults keep today's look: Dollar on
+  (`constants.RING_TWO_METALS_DEFAULT`), other seal presets off,
+  flame/chalice presets on (the layout's own nature).
 - **`legend`** — position -> `{name, reading}`, the per-letter HOVER
   LEGEND text (what that letter stands for), quoted verbatim from
   CANON's Banknote table. Flows into `SkinDefinition.ring.
@@ -163,8 +167,15 @@ Extra OPTIONAL card fields, wired through `validate_preset` and
   ANGER@24h ccw, HATE@4h ccw) and PILOT its light-cross stations
   (HOPE@8h cw, FAITH@12h cw, LOVE@16h cw, SALVATION@24h ccw) — the
   chiasm of the Two Crosses drawn as typography (CANON.md §The
-  Banknote, The Cross Rings). The Dollar keeps the pinned Great Seal
-  form:
+  Banknote, The Cross Rings). Every resolved entry also carries
+  `words` — per-word spans plus the SEAT each word answers for
+  (WORD-HOVER round, owner 2026-07-27: a centered word its own
+  station; a pinned motto word the seat of its one pinned letter —
+  ANNUIT→A/8h, COEPTIS→S/16h, NOVUS→N/4h, ORDO→Ω/24h, SECLORUM→M/20h,
+  the five words spelling the five letters); `build_skin` turns those
+  into angular hover geometry and
+  `render.compositor._ring_word_legend_tooltip` answers the hover with
+  the seat's legend. The Dollar keeps the pinned Great Seal form:
 
   | Motto | Pins (letter, occurrence, seat) | Direction | Own arc |
   |---|---|---|---|

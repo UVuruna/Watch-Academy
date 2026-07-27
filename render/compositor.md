@@ -492,13 +492,28 @@ CANON reading as the body — the exact same title/body shape as
 mode unlock (it is documentation, not an Easter egg) and it is checked
 in the SAME letter band (`in_letter_band`, shared with the Greetings
 check) right before the plain tick-band day/year/moon reading takes
-over — a preset without a `legend` (DOMY, Morph, The One, any custom
-ring) returns `None` and the tick band answers as before. The Dollar
-(ROADMAP 15b) is the first and, today, only preset that carries one:
-its six letters answer 👁/S/M/Ω/N/A per CANON.md §The Banknote. **TASK
-2 (owner "može" 2026-07-19):** each `reading` is now TWO `_article_
-body_html` paragraphs (the existing `\n\n` split already handled this
-— no code change here) — the letter's own identity, then a second
-"Across the wheel: …" paragraph naming its AXIS OPPOSITION across the
-center (N↔S, A↔M, 👁↔Ω — CANON.md §The Banknote's own dated addendum
-and the DOLLAR/EYE round's superseding vertical line).
+over — a preset without a `legend` (The One, Templar, any custom
+ring) returns `None` and the tick band answers as before. THREE
+presets carry one today (CROSS-WORDS round, 2026-07-27): the Dollar
+(👁/S/M/Ω/N/A — office + Cube term per letter, CANON.md §The
+Banknote), DOMY (the dark-cross stations) and PILOT (the light-cross
+stations). **TASK 2 (owner "može" 2026-07-19):** each `reading` is now
+TWO `_article_body_html` paragraphs (the existing `\n\n` split already
+handled this — no code change here) — the letter's own identity, then
+a second "Across the wheel: …" paragraph naming its AXIS OPPOSITION
+across the center (N↔S, A↔M, 👁↔Ω — CANON.md §The Banknote's own dated
+addendum and the DOLLAR/EYE round's superseding vertical line).
+
+**The per-WORD hover on the arc text (WORD-HOVER round, owner
+2026-07-27, "HOVER tekst osim na slova treba i na reči"):**
+`_ring_word_legend_tooltip` answers in the band just outside the ring
+(`RING_MOTTO_RADIUS_FRACTION` ± `RING_MOTTO_HOVER_HALF_FRACTION`)
+where the station words and Great Seal mottos draw — a hovered word
+answers with the legend of ITS OWN seat (a station word its station;
+each Dollar motto word the seat of its one pinned letter: ANNUIT→A,
+COEPTIS→S, NOVUS→N, ORDO→Ω, SECLORUM→M — the five words spell the
+five letters), titled "WORD · letter name". Geometry (per-word
+angular center/half-span/seat) is pre-solved by
+`app.controller.build_skin` into `ring.motto[…]["words"]`; between
+words, and for a word without a seat or a legend, the band stays
+silent.
