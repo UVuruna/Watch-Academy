@@ -239,13 +239,33 @@ def test_the_reworked_articles_no_longer_describe_their_picture():
     """CHARTER RULE 4 (owner 2026-07-26): an article never narrates the
     frame, the pose or the glass, and never talks about the art asset.
     The twenty-one articles Session 21 reworked are pinned clean; the
-    phrases below are the exact ones that were removed."""
+    phrases below are the exact ones that were removed.
+
+    SESSION 22 WIDENED THIS (2026-07-27). Session 21 read rule 4 as "do
+    not mention the art asset" and left the STAGING of the figure intact
+    — the owner then found "On the blue pre-dawn arm of Calm stands
+    Jesus…" and "At the apex, in spring green, stands The Child…" alive
+    on the live pages. The staging phrases are pinned here beside the
+    Session 21 ones, and the scan now covers EVERY archetype row rather
+    than only the sets that session touched. The corpus-wide lint that
+    keeps the rest of both databases honest lives in
+    `tests/test_article_charter.py`.
+    """
     repo = SymbolismRepository()
     banned = re.compile(
+        # Session 21 — the art asset named.
         r"rondel keeps|Scale window|no new glass is cut|reused here"
         r"|in open hands|its iris is|center of the reveal"
         r"|overlapping heart|with the plough in hand"
-        r"|the student at the lamp|owning nothing but the road",
+        r"|the student at the lamp|owning nothing but the road"
+        # Session 22 — the figure staged (the owner's own two proofs
+        # first, then the rest of the archetype wheels' inversions).
+        r"|stands Jesus|stands The Child|in spring green, stands"
+        r"|stands The One|stands The Mother|stands The Father"
+        r"|stands Michael|stands the Lion|stands the Ox"
+        r"|stands the Eagle|stands the Man|stands the King"
+        r"|stands the Throne|sits The Devil|glows the Hearth"
+        r"|At the top of the trio|God stands at midnight",
         re.IGNORECASE,
     )
     data = repo._load()["articles"]
