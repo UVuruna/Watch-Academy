@@ -7,7 +7,12 @@ The right-click "Guide" window (name chosen over "About" — it is a
 help/instructions carousel, not a version box): left/right navigation
 over slides the owner prepares. Slides live in `assets/guide/` as
 `NN_name.png` with an optional `captions.json` (`{"NN_name": "text"}`)
-— the window shows a friendly placeholder until they land.
+— the window shows a friendly placeholder until they land. The first
+slide (`dial_default`, page "One Dial, One Whole Day") is the closest
+thing this app has to an About screen — WORKPLAN Session 22 (the
+Renaming, 2026-07-27) folded the **Watch Academy** name and its
+tagline echo ("Watch the hours, watch and learn, keep the watch")
+into that caption's text; DOMY stays named as the dial itself.
 
 ## Connections
 

@@ -1,13 +1,31 @@
 # DOMY Watch
 
-A transparent 24-hour analog clock widget for the Windows desktop. Only the
-dial is visible — no frame, no taskbar entry — like a phone home-screen widget.
+Watch Academy is a transparent 24-hour analog clock widget for the Windows desktop, built around a single dial named DOMY. Only the dial is visible on screen — no frame, no taskbar entry — like a phone home-screen widget.
 
 **Status:** in development — the core is feature-complete (M1 shell,
 M2 computation core, M3 living dial, plus the theme/metal/roster skin
 system, Settings with the city picker, Encyclopedia, Guide, Time
 Travel, translations). What remains to release is listed taxatively
 in [Roadmap](ROADMAP.md).
+
+<a id="the-name"></a>
+
+## The Name
+
+The application is **Watch Academy** — its topics are courses (religious,
+psychological, philosophical, astronomical), some locked and unlocked over
+time; the in-app reference organ keeps its own name, **Encyclopedia** (an
+academy holds both its courses and its library). **DOMY** survives as the
+name of the dial itself — the watchman of the Academy, and the dark-cross
+cipher read in [The DOMY Canon](CANON.md).
+
+English *watch* carries all three meanings this project needs at once: the
+timepiece, the act of watching, and the vigil. Proposed tagline (wording
+still open to the owner): *"Watch the hours. Watch and learn. Keep the
+watch."* Latin seal for inscriptions: **VIGILATE** — the Vulgate's own word
+for Mark 13:37, *"quod autem vobis dico, omnibus dico: vigilate"* ("What I
+say unto you I say unto all, Watch"). Full doctrine: [The Cube
+Canon](CUBE.md#the-name).
 
 ## The dial
 
