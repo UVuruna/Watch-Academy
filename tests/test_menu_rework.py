@@ -73,10 +73,10 @@ def test_watch_title_full_form_matches_the_owner_example():
 def test_watch_title_full_form_reads_the_paint_style_too():
     settings = dataclasses.replace(
         Settings(),
-        city_name="Tromso", ring="Mason", ring_finish="silver",
+        city_name="Tromso", ring="Dollar", ring_finish="silver",
         pointer="cross", palette_style="paint",
     )
-    assert watch_title(settings, full=True) == "Tromso-Silver Mason-Temperaments Seasons"
+    assert watch_title(settings, full=True) == "Tromso-Silver Dollar-Temperaments Seasons"
 
 
 def test_watch_title_falls_back_to_the_default_pair_off_the_table():

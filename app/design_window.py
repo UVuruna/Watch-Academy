@@ -197,13 +197,8 @@ class DesignDialog(QDialog):
         presets = ring_presets(settings.custom_rings)
         for index, name in enumerate(sorted(presets)):
             card = presets[name]
-            if card.get("rose"):
-                # The Rose is computed geometry with no face art
-                # (CUBE.md §The Rose) — its tile stands text-only.
-                icon = None
-            else:
-                face = constants.RING_LAYOUTS[card["layout"]]["face"]
-                icon = paths.art_file(defaults.RING_FACE_DIR / face)
+            face = constants.RING_LAYOUTS[card["layout"]]["face"]
+            icon = paths.art_file(defaults.RING_FACE_DIR / face)
             row, col = divmod(index, 4)
             grid.addWidget(
                 self._tile(
@@ -235,6 +230,20 @@ class DesignDialog(QDialog):
             checkbox.setChecked(two_metals)
             checkbox.toggled.connect(self._setters["ring_two_metals"])
             layout.addWidget(checkbox)
+        if constants.RING_EYE_GLYPH in active_card["letters"]:
+            # The Eye's rays (DOLLAR/EYE round, owner decree 2026-07-27)
+            # — same per-preset resolution as "Two metals" above
+            # (`app.controller._ring_eye_shine`); only presets seating
+            # the ADAPTIVE eye glyph show the toggle, a custom ring's
+            # explicit eye variant has its rays baked in.
+            shine = settings.ring_eye_shine.get(
+                settings.ring,
+                constants.RING_EYE_SHINE_DEFAULT.get(settings.ring, False),
+            )
+            shine_box = QCheckBox(self._tr("Shine"))
+            shine_box.setChecked(shine)
+            shine_box.toggled.connect(self._setters["ring_eye_shine"])
+            layout.addWidget(shine_box)
         widget = QWidget()
         widget.setLayout(layout)
         return widget

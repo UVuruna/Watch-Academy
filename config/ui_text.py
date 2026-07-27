@@ -44,7 +44,9 @@ UI_STRINGS: tuple[str, ...] = (
     # "Two metals" (TASK 3, MASON/ICONS round) never joined the corpus
     # when the menu toggle was added — closed here alongside the Design
     # window's own copy of it (R5 MENU REWORK, Rule #5, one table).
-    "Two metals",
+    # "Shine" (DOLLAR/EYE round, owner decree 2026-07-27): the Eye of
+    # Providence's per-preset rays toggle on the Design ▸ Ring tab.
+    "Two metals", "Shine",
     "Encyclopedia", "Astrology", "Chinese zodiac", "← Back",
     "Gods", "Zodiac", "Themes", "Creeds & Mysteries",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",

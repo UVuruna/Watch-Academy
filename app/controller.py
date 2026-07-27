@@ -129,6 +129,24 @@ def _ring_two_metals(settings: Settings, card: dict) -> bool:
     )
 
 
+def _ring_eye_shine(settings: Settings, card: dict) -> bool:
+    """Whether the ACTIVE preset's Eye of Providence wears the glory
+    of rays (DOLLAR/EYE round, owner decree 2026-07-27) — only presets
+    seating the ADAPTIVE eye glyph (`constants.RING_EYE_GLYPH`, the
+    Dollar today) are eligible; a custom ring with one of the four
+    EXPLICIT eye variants has its rays baked into the chosen glyph and
+    always reads False here. Same resolution shape as
+    `_ring_two_metals`: the user's stored per-preset choice
+    (`Settings.ring_eye_shine`) wins; absent, the owner's documented
+    per-preset default (`constants.RING_EYE_SHINE_DEFAULT`, Dollar
+    True — the banknote's own eye radiates)."""
+    if constants.RING_EYE_GLYPH not in card["letters"]:
+        return False
+    return settings.ring_eye_shine.get(
+        card["name"], constants.RING_EYE_SHINE_DEFAULT.get(card["name"], False)
+    )
+
+
 def watch_title(settings: Settings, full: bool = False) -> str:
     """The watch's own display NAME (owner INSTRUCTION.txt item 2A,
     R5 MENU REWORK round). A single watch shows just its LOCATION in
@@ -371,28 +389,6 @@ def build_skin(settings: Settings):
     layout/face), the letter art of the chosen finish, the chosen HAND
     PACK and the user's display choices overlaid."""
     card = ring_presets(settings.custom_rings)[settings.ring]
-    if card.get("rose"):
-        # THE ROSE (owner seal 2026-07-26, CUBE.md §The Rose): computed
-        # geometry end to end — the PROCEDURAL plain hour scale (no
-        # face art, no letters, no motto) with the 24 diamond rays
-        # drawn by RingLayer and the computed per-ray hover legend.
-        skin = dataclasses.replace(
-            defaults.DEFAULT_SKIN,
-            ring=dataclasses.replace(
-                defaults.DEFAULT_SKIN.ring,
-                asset=None,
-                rose=True,
-                # No letters at all — DEFAULT_SKIN's own DOMY letter set
-                # must not bleed through onto the plain hour scale.
-                letters={},
-                letter_art={},
-                letter_metal={},
-                letter_legend=card["legend"],
-                motto=(),
-            ),
-            hands=_resolve_hands(settings),
-        )
-        return apply_display_settings(skin, settings)
     layout = constants.RING_LAYOUTS[card["layout"]]
     # A preset may override the seal layout's own (empty) triangle —
     # ROADMAP 15b, Mason's Trinity/Union metal split — but only when the
@@ -401,6 +397,10 @@ def build_skin(settings: Settings):
     # docstrings.
     triangle_override = card["triangle"] if _ring_two_metals(settings, card) else None
     metal_layout = {"triangle": triangle_override or layout["triangle"]}
+    # The Eye's SHINE (DOLLAR/EYE round, owner decree 2026-07-27): the
+    # adaptive eye glyph swaps its whole stem for the glory-of-rays
+    # master when the per-preset toggle is on — see `_ring_eye_shine`.
+    eye_shine = _ring_eye_shine(settings, card)
     letters = {}
     letter_art = {}
     letter_metal = {}
@@ -411,9 +411,10 @@ def build_skin(settings: Settings):
         # The letter art is ALWAYS the gold master — silver/bronze are
         # derived from it AT LOAD (owner 2026-07-19,
         # render.asset_recolor.letter_metal_file), never pre-rendered files.
-        letter_art[hour] = (
-            defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[glyph]
-        )
+        filename = constants.RING_LETTER_FILES[glyph]
+        if eye_shine and glyph == constants.RING_EYE_GLYPH:
+            filename = constants.RING_EYE_SHINE_FILE
+        letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
         letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
             letter_legend[hour] = card["legend"][position]
@@ -753,6 +754,7 @@ def apply_display_settings(skin, settings: Settings):
         archetype_mode=settings.archetype_mode,
         archetype_names=settings.archetype_names,
         cube_look=settings.cube_look,
+        daylight=settings.daylight,
         earth_label=settings.earth_label,
         show_octa_slot=settings.show_octa_slot,
         show_weekday_names=settings.show_weekday_names,
@@ -1775,6 +1777,17 @@ class WatchController(QObject):
         self._install_skin(build_skin(self._settings))
         self._flush_position()
 
+    def _set_ring_eye_shine(self, checked: bool) -> None:
+        """DOLLAR/EYE round (owner decree 2026-07-27): the active
+        preset's own Eye-of-Providence rays choice, stored keyed by
+        preset name (`Settings.ring_eye_shine`, exactly like
+        `ring_two_metals` above)."""
+        shine = dict(self._settings.ring_eye_shine)
+        shine[self._settings.ring] = checked
+        self._settings = replace(self._settings, ring_eye_shine=shine)
+        self._install_skin(build_skin(self._settings))
+        self._flush_position()
+
     def _set_hands(self, hands: str) -> None:
         if hands == self._settings.hands:
             return
@@ -2468,6 +2481,7 @@ class WatchController(QObject):
                 lambda v: self._set_display_choice("ring_finish", v)
             ),
             "ring_two_metals": wrap(self._set_ring_two_metals),
+            "ring_eye_shine": wrap(self._set_ring_eye_shine),
             "umbra_form": wrap(
                 lambda v: self._set_display_choice("umbra_form", v)
             ),

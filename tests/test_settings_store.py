@@ -209,7 +209,8 @@ def test_display_choices_round_trip(store):
         show_octa_slot=False,
         language="sr-Latn",
         ring="Morph",
-        ring_two_metals={"Mason": False, "Omega": True},
+        ring_two_metals={"Dollar": False, "The One": True},
+        ring_eye_shine={"Dollar": False},
         theme_metals={"greek": "gold", "norse": "silver"},
         theme_metal_follow_ring=True,
     )
@@ -253,24 +254,38 @@ def test_display_choices_round_trip(store):
 
 def test_ring_renames_migrate_stored_settings(store):
     """TASK 2 (MASON/ICONS round, owner verdicts 2026-07-19, third
-    batch): the bundled ring presets renamed "MASON G" -> "Mason" and
-    "NUMBERS" -> "Omega" (external user data, not an API shim, Rule
-    #6) — an older settings file naming either old value loads onto
-    the new one instead of raising SettingsCorruptError. "MORPH" ->
-    "Morph" is a pure CASE change, already bridged by the pre-existing
-    case-insensitive fold (no dedicated migration entry needed)."""
+    batch) + DOLLAR/EYE round (owner decree 2026-07-27): the bundled
+    ring presets renamed "MASON G" -> "Mason" -> "Dollar" and
+    "NUMBERS" -> "Omega" -> "The One" (external user data, not an API
+    shim, Rule #6) — an older settings file naming ANY generation's
+    old value loads onto the current one instead of raising
+    SettingsCorruptError. "MORPH" -> "Morph" is a pure CASE change,
+    already bridged by the pre-existing case-insensitive fold (no
+    dedicated migration entry needed)."""
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "MASON G"}',
         encoding="utf-8",
     )
-    assert store.load().ring == "Mason"
+    assert store.load().ring == "Dollar"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "Mason"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "Dollar"
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "NUMBERS"}',
         encoding="utf-8",
     )
-    assert store.load().ring == "Omega"
+    assert store.load().ring == "The One"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "Omega"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "The One"
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "MORPH"}',
@@ -293,20 +308,20 @@ def test_ring_two_metals_round_trips_and_drops_stale_entries(store):
     lenient policy `theme_metals` already uses, rather than corrupting
     the whole file over one stale entry."""
     saved = replace(
-        Settings(), ring_two_metals={"Mason": False, "Omega": True},
+        Settings(), ring_two_metals={"Dollar": False, "The One": True},
     )
     store.save(saved)
     assert store.load() == saved
     raw = store.path.read_text(encoding="utf-8").replace(
-        '"Mason": false', '"Mason": false, "MASON G": true, "Ghost": true'
-    ).replace('"Omega": true', '"Omega": "yes"')
+        '"Dollar": false', '"Dollar": false, "MASON G": true, "Ghost": true'
+    ).replace('"The One": true', '"The One": "yes"')
     store.path.write_text(raw, encoding="utf-8")
     lenient = store.load()
-    # "MASON G" folds onto "Mason" (rename migration) but "Mason" was
+    # "MASON G" folds onto "Dollar" (rename migration) but "Dollar" was
     # already written first, so the raw dict's OWN later key wins —
     # both resolve to the same True; the unknown "Ghost" name and the
     # non-bool "yes" value are both dropped.
-    assert lenient.ring_two_metals == {"Mason": True}
+    assert lenient.ring_two_metals == {"Dollar": True}
 
 
 def test_earth_label_migrates_from_the_old_bool_pair(store):

@@ -230,7 +230,14 @@ SHORTCUTS = (
         "Travel to the South Pole",
     ),
     (
-        "location_greenwich", "Key_Space", ("ControlModifier",),
+        # MOVED off Ctrl+Space 2026-07-27 (CUBE.md §Display laws, THE
+        # ARTICLE-DEPTH LAW): Space and its modifiers now belong wholly
+        # to the article jump — SPACE primary, Shift+SPACE secondary,
+        # Ctrl+SPACE tertiary. Greenwich takes the ZERO meridian's own
+        # digit (Ctrl+G was already the Guide — caught by
+        # `test_no_two_shortcuts_share_a_chord`, which exists BECAUSE
+        # this move first collided there).
+        "location_greenwich", "Key_0", ("ControlModifier",),
         "Travel to Greenwich",
     ),
     (
@@ -587,7 +594,7 @@ RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
 # OUTSIDE the ring band, reusing the SAME letter-art library/finish/
 # shadow stamp as the ring's own six letters
 # (`render.layers.RingLayer._draw_ring_glyph`), just smaller and
-# further out — decorative inscription, not the primary MASON G seats.
+# further out — decorative inscription, not the primary Dollar seats.
 # ONE SHARED RADIUS (MOTO-FIX round): the first round's design had both
 # mottos' pinned letters land on the SAME angle (O at noon, S at 16h),
 # needing two concentric radii to coexist; the corrected layout puts
@@ -597,7 +604,7 @@ RING_LETTER_SHADOW_SAMPLES = 8       # offsets around the circle
 RING_MOTTO_SIZE = 0.0375             # motto letter height, of the dial
                                      # diameter — half RING_LETTER_ART_SCALE
                                      # (decorative, smaller than the six
-                                     # primary MASON-G letters)
+                                     # primary banknote letters)
 RING_MOTTO_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
                                      # the primary letters' own max reach
                                      # (~1.0255 with shadow at scale 1.0)
@@ -896,21 +903,25 @@ _COUNCIL = (
 # Lucifer axis), the four blends follow nature — green of blue+yellow,
 # orange of yellow+red, pink and cyan are red and blue thinned by the
 # neighboring pole's moonlight. Clockwise from the 12h arm. This ONE
-# tuple rules BOTH the Character wheel and the Rose ring preset
-# (CUBE.md §The Rose — Rule #5, one source).
+# tuple rules BOTH the Character wheel and the ROSE POINTER's three
+# stars (CUBE.md §The Rose — Rule #5, one source). Clockwise from 12h
+# it is also the year: cardinals = the turning points (summer solstice
+# yellow, autumn equinox red, winter solstice purple, spring equinox
+# blue), diagonals = the season centres (orange, rose, cyan, green) —
+# exactly where `core.year_wheel` puts them.
 ROSE_PALETTE = (
     "#FCEE21", "#F7931E", "#F03232", "#FF7BAC",
     MOON_GRAY_VIOLET, "#29ABE2", "#0078DC", "#39B54A",
 )
-# The Rose RING PRESET's ray geometry (CUBE.md §The Rose — computed,
-# never art): each of the 24 rays is a diamond in the ring band, tip at
-# the outer edge, base at the band's inner edge, widest at the band
-# middle. The angular half-width exceeds half the 15° ray pitch on
-# purpose — neighboring rays OVERLAP exactly as the owner's drawing
-# overlaps them, and the three-star z-order (−1h under 0h under +1h)
-# decides who shows whole. The border is the drawing's own dark lead.
-ROSE_RAY_HALF_DEG = 11.25
-ROSE_RAY_BORDER = "#1A1A1A"
+# The ROSE's arm OUTLINE — the dark lead of the owner's own drawing.
+# The Rose is the ONE pointer that needs it: three stars share eight
+# hues, so without a line between them a color group merges into a
+# single mass and the z-order — which star stands on the hour, which
+# is the past, which the future — becomes invisible. Every other
+# pointer's arms already differ in hue from their neighbors and stay
+# outline-free.
+ROSE_ARM_OUTLINE = "#1A1A1A"
+ROSE_ARM_OUTLINE_WIDTH = 0.0035          # of the dial radius
 PALETTE_PRESETS = {
     ("hexa", "paint"): (
         "#F8E600", "#DC9600", "#B60000",
@@ -946,6 +957,14 @@ PALETTE_PRESETS = {
     ("trio", "cube"): _GENESIS,
     ("hexa", "cube"): _COUNCIL,
     ("octa", "cube"): ROSE_PALETTE,
+    # THE ROSE (owner seal 2026-07-27, CUBE.md §The Rose): both wheels
+    # wear the SAME eight hues — Legacy and Prophecy turn the star
+    # GEOMETRY and the figure sets, never the colors (the Seasons
+    # pointer already serves one palette under both styles). The tuple
+    # is ROSE_PALETTE itself, shared with the Character wheel above:
+    # one source, three readers (Rule #5).
+    ("rose", "paint"): ROSE_PALETTE,
+    ("rose", "light"): ROSE_PALETTE,
     # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
     # paint = azure/green/yellow/orange/red, light = azure/cyan/green/
     # yellow/red; twilight left (dawn) blue, right (dusk) brown.
@@ -1560,12 +1579,13 @@ SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION = 0.06          # of the font pixel size
 # (the between-arm 3h/21h seats stay put).
 SLOT_SIZE_BY_POINTER = {
     "trio": 1.50, "hexa": 1.50, "aurora": 1.50,
-    "cross": 1.25, "octa": 1.25,
+    # The Rose is three OCTA stars — the octa's own slim-arm sizing.
+    "cross": 1.25, "octa": 1.25, "rose": 1.25,
     # Calendar rides the PINNED layout (no arms) — the big-slot size.
     "calendar": 1.50,
 }
 SLOT_SIZE_PINNED = 1.50
-SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12}
+SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12, "rose": 1.12}
 
 # The weekday-by-colors unit rides the ROMB CENTER of its diamond (owner
 # 2026-07-15): the star tip sits at star.radius_fraction and a diamond's
@@ -1947,10 +1967,10 @@ def dial_window_margin_fraction(skin) -> float:
     carry the user's earth/moon multiplier (apply_display_settings).
 
     TASK 1 (owner "može radi" 2026-07-19): a preset with a `motto` arc
-    (MASON G today) reaches further out than the plain ring letters —
+    (the Dollar today) reaches further out than the plain ring letters —
     `motto_extent` is 0.0 (a no-op term in the max()) for every OTHER
     preset, exactly the graceful-absence pattern `triangle`/`legend`
-    already use, so this never grows the margin for DOMY/MORPH/NUMBERS
+    already use, so this never grows the margin for DOMY/Morph/The One
     or a custom ring. MOTO-FIX round (owner correction 2026-07-19): both
     mottos now share ONE radius (the two arcs are angularly disjoint),
     so this measures from `RING_MOTTO_RADIUS_FRACTION` alone —

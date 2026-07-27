@@ -57,6 +57,14 @@ class Settings:
     # preset absent here falls back to `constants.RING_TWO_METALS_DEFAULT`
     # (`app.controller._ring_two_metals` resolves both).
     ring_two_metals: dict = field(default_factory=dict)
+    # THE EYE'S SHINE (DOLLAR/EYE round, owner decree 2026-07-27):
+    # per-preset choice between the Eye of Providence with the glory
+    # of rays and the plain eye, for every preset seating the adaptive
+    # eye glyph (the Dollar today) — keyed by preset name, exactly
+    # like `ring_two_metals` above; absent presets fall back to
+    # `constants.RING_EYE_SHINE_DEFAULT`
+    # (`app.controller._ring_eye_shine` resolves both).
+    ring_eye_shine: dict = field(default_factory=dict)
     # Install defaults per the owner's 2026-07-12 list: hexa paint,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
     pointer: str = "hexa"
@@ -87,6 +95,11 @@ class Settings:
     # as the corner-view CUBE (wide face rhombi) instead of the Diamond
     # medallion form. Inert on every other wheel.
     cube_look: bool = False
+    # THE DAYLIGHT SWITCH (owner 2026-07-27, CUBE.md §The Rose): the
+    # Calendar and the Rose may stand in flat full color instead of the
+    # day/night law. Inert on every other pointer — never rewritten, so
+    # the choice survives a pointer switch.
+    daylight: bool = True
     # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — the
     # Design ▸ Earth submenu's FOUR exclusive toggles: Date / Weekday /
     # Date & Weekday / Full Date, `constants.EARTH_LABEL_MODES`).
@@ -284,6 +297,15 @@ class SettingsStore:
                 resolved = _fold_ring_name(str(raw_name), by_fold)
                 if resolved is not None:
                     ring_two_metals[resolved] = value
+            # THE EYE'S SHINE (DOLLAR/EYE round): same per-preset dict,
+            # same lenient policy as `ring_two_metals` just above.
+            ring_eye_shine = {}
+            for raw_name, value in dict(raw.get("ring_eye_shine", {})).items():
+                if not isinstance(value, bool):
+                    continue
+                resolved = _fold_ring_name(str(raw_name), by_fold)
+                if resolved is not None:
+                    ring_eye_shine[resolved] = value
             # One-time migration (2026-07-12): the South slot became a
             # MODE + per-family STYLE pair — the six old combined
             # values map onto it (external user data, not an API shim).
@@ -384,6 +406,7 @@ class SettingsStore:
                 archetype_mode=_load_bool(raw, "archetype_mode", False),
                 archetype_names=_load_bool(raw, "archetype_names", True),
                 cube_look=_load_bool(raw, "cube_look", False),
+                daylight=_load_bool(raw, "daylight", True),
                 earth_label=_load_earth_label(raw),
                 solar_rotation=_load_bool(raw, "solar_rotation", True),
                 legend=_load_bool(raw, "legend", True),
@@ -444,6 +467,7 @@ class SettingsStore:
                 ring=ring,
                 custom_rings=custom_rings,
                 ring_two_metals=ring_two_metals,
+                ring_eye_shine=ring_eye_shine,
                 jump_cities=jump_cities,
                 ring_tint=ring_tint,
                 earth_scale=_load_scale(raw, "earth_scale", *constants.ELEMENT_SCALE_RANGE, 1.0),
@@ -501,6 +525,7 @@ class SettingsStore:
             "ring_finish": settings.ring_finish,
             "custom_rings": [dict(card) for card in settings.custom_rings],
             "ring_two_metals": dict(settings.ring_two_metals),
+            "ring_eye_shine": dict(settings.ring_eye_shine),
             "pointer": settings.pointer,
             "umbra_form": settings.umbra_form,
             "umbra_contrast": settings.umbra_contrast,
@@ -510,6 +535,7 @@ class SettingsStore:
             "archetype_mode": settings.archetype_mode,
             "archetype_names": settings.archetype_names,
             "cube_look": settings.cube_look,
+            "daylight": settings.daylight,
             "earth_label": settings.earth_label,
             "z_mode": settings.z_mode,
             "solar_rotation": settings.solar_rotation,
@@ -590,12 +616,20 @@ class SettingsStore:
 
 
 # RING PRESET RENAMES (TASK 2, MASON/ICONS round, owner verdicts
-# 2026-07-19, third batch): a stored settings file's OLD bundled preset
-# name migrates onto its new one (external user data, not an API shim,
-# Rule #6) — a bare case-insensitive fold alone cannot bridge these
-# (unlike "MORPH" -> "Morph", a pure case change the existing fold
-# already handles for free).
-_LEGACY_RING_NAMES = {"mason g": "Mason", "numbers": "Omega"}
+# 2026-07-19, third batch; DOLLAR/EYE round, owner decree 2026-07-27):
+# a stored settings file's OLD bundled preset name migrates onto its
+# new one (external user data, not an API shim, Rule #6) — a bare
+# case-insensitive fold alone cannot bridge these (unlike "MORPH" ->
+# "Morph", a pure case change the existing fold already handles for
+# free). The first-generation names chain straight to the CURRENT
+# ones: "MASON G" -> "Mason" -> "Dollar", "NUMBERS" -> "Omega" ->
+# "The One".
+_LEGACY_RING_NAMES = {
+    "mason g": "Dollar",
+    "mason": "Dollar",
+    "numbers": "The One",
+    "omega": "The One",
+}
 
 
 def _fold_ring_name(raw_name: str, by_fold: dict) -> str | None:

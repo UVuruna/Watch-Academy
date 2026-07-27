@@ -193,6 +193,53 @@ def arm_offset_deg(skin: SkinDefinition) -> float:
     return 0.0
 
 
+def rose_star_offsets(skin: SkinDefinition) -> tuple:
+    """THE ROSE'S THREE STARS in DRAW ORDER (owner seal 2026-07-27,
+    CUBE.md §The Rose) — bottom of the z-stack first, topmost last.
+    Legacy leans wholly behind the hour (−30°, −15°, 0°); Prophecy is
+    symmetric and rides the FUTURE over the PAST (−15°, +15°, 0°). The
+    0° star is last on both, so the fully visible arm always points at
+    true 12h. `()` on every other pointer — a one-star pointer draws
+    its single star through the same loop with no offset."""
+    if skin.pointer != "rose":
+        return ()
+    return constants.ROSE_STAR_OFFSETS[
+        defaults.effective_palette_style(skin.pointer, skin.palette_style)
+    ]
+
+
+def rose_star_set(offset: float) -> str:
+    """Which figure set the Rose star at `offset` carries (CUBE.md §The
+    Rose): "modern" on the true hours, "historical" one ray back, and
+    "myth" wherever its wheel sent it — −30° on Legacy (the myth we
+    inherited), +15° on Prophecy (the myth that comes)."""
+    return constants.ROSE_STAR_SETS[offset]
+
+
+def servant_seat_angle(skin: SkinDefinition) -> float:
+    """The angle the SERVANT face of Sunday occupies (Rule #5 — the ONE
+    reader of `constants.SERVANT_SEAT_ANGLE`). 24h on the Compass and
+    the Seasons, where the dual Sunday has always sat; the ROSE seats
+    him on the BLUE 06h arm and gives 18h's red to the Ruler, because
+    blue is the servant's hue and red the master's (CUBE.md §The
+    Rose)."""
+    return constants.SERVANT_SEAT_ANGLE.get(
+        skin.pointer, constants.SOUTH_SLOT_ANGLE
+    )
+
+
+def daylight_active(skin: SkinDefinition) -> bool:
+    """Whether the day/night law paints this dial (owner 2026-07-27).
+    Every pointer but the Calendar and the Rose ALWAYS runs day/night;
+    those two carry the reader's own switch, because their wheels are
+    read as a wheel first and a clock second. The stored setting is
+    ignored — never rewritten — on the other five, so it survives a
+    pointer switch untouched (the `effective_palette_style` pattern)."""
+    if skin.pointer not in constants.DAYLIGHT_SWITCH_POINTERS:
+        return True
+    return skin.daylight
+
+
 def cube_look_active(skin: SkinDefinition) -> bool:
     """Whether the CUBE look dresses the drawn wheel (owner seal
     2026-07-26, CUBE.md §Display laws): the settings toggle is on AND
@@ -969,16 +1016,18 @@ def slot_view(skin: SkinDefinition, index: int) -> tuple:
 
 
 def sunday_dual_face(skin: SkinDefinition) -> bool:
-    """True while the SERVANT face holds the 24h seat on the Compass or
-    the Seasons (owner correction 2026-07-13: NOT Sunday-only — it
-    stands there all week like every other body, ghosted, and turns
-    opaque on Sunday: "two persons, a union"). The Trinity and the
-    Prism keep one image ("two persons in one body") and speak the
-    second face in the hover. Needs the CLASSIC unit up and the
-    theme's dual art on disk (documented: no art, no second face)."""
+    """True while the SERVANT face holds its own seat on the Compass,
+    the Seasons or the ROSE (owner correction 2026-07-13: NOT
+    Sunday-only — it stands there all week like every other body,
+    ghosted, and turns opaque on Sunday: "two persons, a union"). The
+    seat itself is `servant_seat_angle` — 24h on the first two, the
+    blue 06h arm on the Rose. The Trinity and the Prism keep one image
+    ("two persons in one body") and speak the second face in the hover.
+    Needs the CLASSIC unit up and the theme's dual art on disk
+    (documented: no art, no second face)."""
     spec = skin.weekday_set
     return (
-        skin.pointer in ("octa", "cross")
+        skin.pointer in ("octa", "cross", "rose")
         and weekday_classic_slot(skin) is not None
         and spec.display_mode != "center_only"
         and spec.dual_asset is not None
@@ -987,17 +1036,18 @@ def sunday_dual_face(skin: SkinDefinition) -> bool:
 
 
 def servant_holds_the_seat(skin: SkinDefinition, today: str) -> bool:
-    """Whether the Servant face WINS the 24h seat today: on the Compass
-    the seat is his alone; on the Seasons he shares it with Mercury's
-    slot and the standard shared-slot priority decides (the Servant
-    counts as an eighth body whose day is Sunday)."""
+    """Whether the Servant face WINS his seat today (`servant_seat_angle`
+    — 24h on the Compass/Seasons, the blue 06h arm on the Rose): on the
+    Compass and the Rose the seat is his alone; on the Seasons he shares
+    it with Mercury's slot and the standard shared-slot priority decides
+    (the Servant counts as an eighth body whose day is Sunday)."""
     if not sunday_dual_face(skin):
         return False
     seat = next(
         (
             occupants
             for angle, occupants in weekday_slots(skin)
-            if angle == constants.SOUTH_SLOT_ANGLE
+            if angle == servant_seat_angle(skin)
         ),
         (),
     )
@@ -1467,7 +1517,17 @@ class StarLayer(Layer):
         self._draw_diamonds(painter, ctx, fill=False)
         painter.restore()
 
-        # ...while the FILLS appear only where the sun is up.
+        # ...while the FILLS appear only where the sun is up — UNLESS
+        # the reader switched the daylight law off (owner 2026-07-27:
+        # the Calendar and the Rose carry that switch), in which case
+        # the whole wheel stands in flat full color.
+        if not daylight_active(ctx.skin):
+            painter.save()
+            painter.setOpacity(spec.day_alpha)
+            painter.rotate(ctx.rotation)
+            self._draw_diamonds(painter, ctx, fill=True)
+            painter.restore()
+            return
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(ctx.radius, start, end))
@@ -1477,6 +1537,16 @@ class StarLayer(Layer):
             painter.restore()
 
     def _draw_diamonds(self, painter: QPainter, ctx: RenderContext, fill: bool) -> None:
+        # THE ROSE (CUBE.md §The Rose): three identical octa stars, 15°
+        # apart, painted bottom-of-the-z-stack first — the same star
+        # drawn three times, never 24 independent arms (Rule #19).
+        for star_offset in rose_star_offsets(ctx.skin) or (0.0,):
+            self._draw_star(painter, ctx, fill, star_offset)
+
+    def _draw_star(
+        self, painter: QPainter, ctx: RenderContext, fill: bool,
+        star_offset: float,
+    ) -> None:
         spec = self._skin.star
         colors = palette_for(ctx.skin)
         count = len(colors)
@@ -1486,7 +1556,7 @@ class StarLayer(Layer):
         # (CUBE.md §Display laws). The Genesis offset (`arm_offset_deg`)
         # swings the trio's cube wheel onto 24h/16h/08h.
         half = arm_half_deg(ctx.skin)
-        offset = arm_offset_deg(ctx.skin)
+        offset = arm_offset_deg(ctx.skin) + star_offset
         tip = ctx.radius * spec.radius_fraction
         # Inner vertices at tip / (2 cos(half)) — the regular-star value
         # (1/sqrt(3) of the tip for the hexagram); the cross reuses the
@@ -1506,7 +1576,24 @@ class StarLayer(Layer):
                 ]
             )
             if fill:
-                painter.setPen(Qt.PenStyle.NoPen)
+                # THE ROSE'S LEAD (CUBE.md §The Rose — the owner's own
+                # drawing outlines every lancet): three stars share
+                # eight hues, so without a line between them a color
+                # group merges into one mass and the z-order goes
+                # invisible. Each arm is stroked AS IT IS FILLED, in
+                # draw order, so every star reads over the one beneath.
+                if ctx.skin.pointer == "rose":
+                    painter.setPen(
+                        QPen(
+                            QColor(defaults.ROSE_ARM_OUTLINE),
+                            max(
+                                1.0,
+                                ctx.radius * defaults.ROSE_ARM_OUTLINE_WIDTH,
+                            ),
+                        )
+                    )
+                else:
+                    painter.setPen(Qt.PenStyle.NoPen)
                 painter.setBrush(QColor(color))
                 painter.drawPolygon(diamond)
             else:
@@ -1559,12 +1646,6 @@ class RingLayer(Layer):
         painter.setPen(Qt.PenStyle.NoPen)
         painter.fillPath(ring, QColor(spec.fill))
 
-        if spec.rose:
-            # THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26,
-            # CUBE.md §The Rose) — drawn under the ticks and numerals,
-            # so the plain hour scale stays readable over its colors.
-            self._draw_rose(painter, ctx, outer, inner)
-
         # Explicit QPen — copying painter.pen() would inherit the NoPen
         # STYLE set for the donut fill and the ticks would never render.
         painter.setPen(
@@ -1615,49 +1696,12 @@ class RingLayer(Layer):
             rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
 
-    def _draw_rose(
-        self, painter: QPainter, ctx: RenderContext, outer: float,
-        inner: float,
-    ) -> None:
-        """THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md
-        §The Rose — computed geometry, never art): 24 diamond rays in
-        the ring band, one per hour — three identical octa stars offset
-        15°, drawn in the owner's z-order (−1h star lowest, 0h star,
-        +1h star topmost — the fully visible star's rays sit ON 1h and
-        13h: THE ONE, and the first hour after noon). Ray colors run
-        {arm, arm+1, arm+2} per Character-wheel arm, hues from
-        `defaults.ROSE_PALETTE` (the Character wheel's own palette —
-        one source, Rule #5); neighbors overlap on purpose
-        (`ROSE_RAY_HALF_DEG` exceeds half the 15° pitch), exactly as
-        the owner's drawing overlaps them. The ring is FIXED — the
-        rays never ride the solar rotation, like the numerals."""
-        mid = (outer + inner) / 2.0
-        half = defaults.ROSE_RAY_HALF_DEG
-        pen = QPen(
-            QColor(defaults.ROSE_RAY_BORDER),
-            max(1.0, ctx.radius * defaults.RING_TICK_WIDTH),
-        )
-        painter.setPen(pen)
-        for star_remainder in (2, 0, 1):        # −1h, 0h, +1h (topmost)
-            for hour in range(constants.HOURS_PER_REVOLUTION):
-                if hour % 3 != star_remainder:
-                    continue
-                theta = angles.ring_position_angle(hour)
-                color = defaults.ROSE_PALETTE[((hour - 12) % 24) // 3]
-                painter.setBrush(QColor(color))
-                painter.drawPolygon(QPolygonF([
-                    dial_point(theta, inner),
-                    dial_point(theta - half, mid),
-                    dial_point(theta, outer),
-                    dial_point(theta + half, mid),
-                ]))
-
     def _draw_ring_glyph(
         self, painter: QPainter, ctx: RenderContext, gold_asset: Path,
         metal: str, theta: float, radius_fraction: float, height: float,
     ) -> None:
         """One letter-art glyph stamped on the ring circle — the shared
-        stamp (Rule #5) behind BOTH the ring's own six MASON-G letters
+        stamp (Rule #5) behind BOTH the ring's own six banknote letters
         (`_draw_letter_art`) and the outer motto arc (`_draw_motto`,
         TASK 1, owner "može radi" 2026-07-19): the metal finish (derived
         from the gold master, `render.asset_recolor.letter_metal_file`), a
@@ -1783,7 +1827,7 @@ def weekday_label_set_px(ctx: RenderContext) -> int:
     servant = servant_holds_the_seat(ctx.skin, today)
     bodies = set()
     for slot_angle, occupants in weekday_slots(ctx.skin):
-        if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:
+        if servant and slot_angle == servant_seat_angle(ctx.skin):
             continue
         bodies.add(visible_occupant(occupants, today))
     if ctx.skin.pointer in ("hexa", "trio"):
@@ -1925,8 +1969,8 @@ class WeekdayLayer(Layer):
         slot_size = weekday_body_size(ctx.skin, ctx.radius)
         servant = servant_holds_the_seat(ctx.skin, today)
         for slot_angle, occupants in weekday_slots(ctx.skin):
-            if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:
-                continue     # the Servant won the 24h seat today
+            if servant and slot_angle == servant_seat_angle(ctx.skin):
+                continue     # the Servant won that seat today
             body = visible_occupant(occupants, today)
             if not self._gate(ctx, f"body:{body}"):
                 continue
@@ -1968,7 +2012,7 @@ class WeekdayLayer(Layer):
             draw_pixmap_centered(
                 painter, ctx, servant_asset,
                 dial_point(
-                    constants.SOUTH_SLOT_ANGLE + ctx.rotation, orbit
+                    servant_seat_angle(ctx.skin) + ctx.rotation, orbit
                 ),
                 slot_size * hover_factor(ctx, "sun_servant"),
                 metal=spec.metal,

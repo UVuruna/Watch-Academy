@@ -337,9 +337,15 @@ WEEKDAY_FULL_NAMES = {
 # ride the Paint/Light slot: paint = the Zodiac Dozen, light = the
 # Almanac (Month) Dozen. It has NO arm HALF-ANGLE (armless, like
 # Aurora): the star geometry and the arm hovers skip it explicitly.
+# "rose" (owner spec 2026-07-27, CUBE.md §The Rose) is the SEVENTH
+# pointer: THREE octa stars 15° apart — 8 hues, one star's worth, worn
+# by all three (`ROSE_STAR_OFFSETS` places them, `ROSE_STAR_SETS` says
+# which figure set each carries). Its palette size is 8 like the octa's
+# — the three stars are the same star drawn three times, never 24
+# independent hues (Rule #19: one rule, not 24 entries).
 POINTER_POINTS = {
     "hexa": 6, "cross": 4, "octa": 8, "trio": 3, "aurora": 7,
-    "calendar": 12,
+    "calendar": 12, "rose": 8,
 }
 CALENDAR_WEDGES = 12
 CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
@@ -369,6 +375,7 @@ POINTER_DISPLAY_NAMES = {
     "octa": "Compass",
     "aurora": "Aurora",     # no arms — the day itself painted in bands
     "calendar": "Calendar",  # no arms — the year/day in twelve wedges
+    "rose": "Rose",         # three octa stars, 15° apart (CUBE.md)
 }
 
 # The wheel LABELS per pointer (owner 2026-07-17, ROADMAP 11; naming
@@ -410,6 +417,15 @@ POINTER_PALETTE_LABELS = {
     "hexa": ("Persons", PRISM_LIGHT_THEME_NAME, "Council"),
     "aurora": ("Warm", "Cool"),
     "calendar": ("Zodiac", "Almanac"),
+    # THE ROSE'S TWO WHEELS (owner seal 2026-07-27, CUBE.md §The Rose).
+    # Both seat the SAME three sets on the same two anchors — Modern on
+    # the 0° star, Historical on the −15° star — and the wheel is named
+    # for where the MYTH star goes: LEGACY puts it at −30° (the deepest
+    # past, everything behind the hour), PROPHECY at +15° (ahead of the
+    # hour, symmetric). The hues are identical on both (the wheel turns
+    # geometry and figures, not colors — the Seasons pointer already
+    # serves one palette under both styles).
+    "rose": ("Legacy", "Prophecy"),
     "default": ("Paint palette", "Light palette"),
 }
 
@@ -438,6 +454,14 @@ POINTER_ARM_LABELS = {
         "Dawn", "Morning", "Forenoon", "Noon", "Afternoon", "Evening",
         "Dusk",
     ),
+    # The ROSE speaks the YEAR (CUBE.md §The Rose — the Sabbath axis):
+    # its four cardinals are the sun's turning points and its four
+    # diagonals the season centres, landing exactly where
+    # `core.year_wheel` puts them. Clockwise from 12h.
+    "rose": (
+        "Summer Solstice", "Summer", "Autumn Equinox", "Autumn",
+        "Winter Solstice", "Winter", "Spring Equinox", "Spring",
+    ),
     # Calendar wedges, clockwise from the TOP wedge. The two wheels
     # differ (paint = signs from the top boundary, light = months from
     # the top center), so the palette-editor labels stay NEUTRAL — the
@@ -454,7 +478,52 @@ POINTER_ARM_LABELS = {
 # likewise "half of hexa" (owner spec, FINAL.txt #7): three hexa-shaped
 # arms at 12h/4h/20h — where the ring letters M, D, Y point — with
 # gaps; its three hues center on the arms (thirds 8-16 / 16-24 / 0-8).
-POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5, "trio": 30.0}
+POINTER_ARM_HALF_ANGLE_DEG = {
+    "hexa": 30.0, "cross": 22.5, "octa": 22.5, "trio": 30.0,
+    # The ROSE is three OCTA stars — the same arm shape, so its rays sit
+    # 15° apart while each is 45° wide and neighbors OVERLAP, exactly as
+    # the owner draws them (CUBE.md §The Rose).
+    "rose": 22.5,
+}
+
+# THE ROSE'S THREE STARS (owner seal 2026-07-27, CUBE.md §The Rose) —
+# star angles in DRAW ORDER, first painted (bottom of the z-stack) to
+# last painted (topmost). The 0° star is ALWAYS last on both wheels, so
+# the dominant fully-visible arm points at true 12h and the dial keeps
+# its own axis: solstices vertical, equinoxes horizontal.
+#   LEGACY  (paint): −30° · −15° · 0° — everything behind the hour; the
+#           deepest past lies lowest.
+#   PROPHECY (light): −15° · +15° · 0° — the PAST lies deepest, the
+#           FUTURE rides over it (owner: the middle z-layer is the
+#           future star), the present covers both.
+ROSE_STAR_OFFSETS = {
+    "paint": (-30.0, -15.0, 0.0),
+    "light": (-15.0, 15.0, 0.0),
+}
+
+# Which figure SET each Rose star carries, keyed by its offset (CUBE.md
+# §The Rose — the two wheels share both anchors and move only the myth):
+# Modern rides the true hours, Historical one ray back, the Myth set on
+# whichever ray its wheel sends it to.
+ROSE_STAR_SETS = {
+    0.0: "modern",
+    -15.0: "historical",
+    -30.0: "myth",          # Legacy — the myth we inherited
+    15.0: "myth",           # Prophecy — the myth that comes
+}
+
+# The Rose's arm CHARACTER system per wheel (CUBE.md §The Rose): Legacy
+# reads the 2D Character wheel (four poles and their four blends),
+# Prophecy the 3D Cube (its eight vertices, all three axes at once).
+ROSE_ARM_SYSTEMS = {"paint": "character_2d", "light": "vertices_3d"}
+
+# THE DAYLIGHT SWITCH (owner 2026-07-27): these two pointers let the
+# reader turn the day/night law OFF and stand in flat full color — the
+# Calendar's twelve wedges and the Rose's three stars are read as a
+# WHEEL first and a clock second. Every other pointer always runs
+# day/night (`render.layers.lit_regions`); `Settings.daylight` is
+# ignored on them so the stored choice survives a pointer switch.
+DAYLIGHT_SWITCH_POINTERS = ("calendar", "rose")
 
 # The trio's theological themes per arm angle (SYMBOLISM.md trio canon:
 # Faith vertical toward God, Hope on the dawn side, Love with Venus).
@@ -715,7 +784,22 @@ RING_LAYOUTS = {
 # matching today's look"). A preset absent here (or one with no
 # `triangle` at all) simply defaults to False — ineligible presets
 # never read this table.
-RING_TWO_METALS_DEFAULT = {"Mason": True}
+RING_TWO_METALS_DEFAULT = {"Dollar": True}
+# THE EYE AT THE APEX (DOLLAR/EYE round, owner decree 2026-07-27): the
+# Dollar preset's 12h seat wears the EYE OF PROVIDENCE instead of the
+# letter G (CANON.md §The Banknote, CUBE.md §The Banknote Seal). "👁"
+# is the ADAPTIVE glyph — its canonical Eye.png resolves to
+# Eye_gem/Eye_gpt per the Settings art source (config.paths.art_file),
+# and the per-preset "Shine" toggle (Settings.ring_eye_shine,
+# app.controller._ring_eye_shine — same resolution shape as the
+# two-metals toggle above) swaps the whole stem for the glory-of-rays
+# master Eye_shine.png. The four EXPLICIT variants in the letter
+# library below are the CUSTOM ring builder's own picks (owner: "any
+# of the four") — source and rays baked into the chosen glyph,
+# ignoring both switches.
+RING_EYE_GLYPH = "👁"
+RING_EYE_SHINE_FILE = "Eye_shine.png"
+RING_EYE_SHINE_DEFAULT = {"Dollar": True}
 # The full letter library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,
@@ -731,7 +815,10 @@ RING_LETTER_GROUPS = {
     "Latin": tuple(_LATIN_LETTERS),
     "Greek": ("Ω", "Π", "Φ", "Ψ", "Σ", "Θ"),
     "Numbers": _RING_NUMBERS,
-    "Symbols": ("✠",),
+    "Symbols": (
+        "✠",
+        "👁 ChatGPT", "👁 ChatGPT ☀", "👁 Gemini", "👁 Gemini ☀",
+    ),
 }
 RING_LETTER_FILES = {
     # The WHOLE library is PNG at 512 px height (owner decision
@@ -747,6 +834,14 @@ RING_LETTER_FILES = {
     **{number: f"{number}.png" for number in _RING_NUMBERS},
     # Symbols (the owner is growing this set for custom rings):
     "✠": "templar.png",
+    # The Eye of Providence (DOLLAR/EYE round, 2026-07-27): the
+    # adaptive glyph (the Dollar's own — source and shine resolved by
+    # the switches) plus the four explicit custom-builder variants.
+    "👁": "Eye.png",
+    "👁 ChatGPT": "Eye_gpt.png",
+    "👁 ChatGPT ☀": "Eye_shine_gpt.png",
+    "👁 Gemini": "Eye_gem.png",
+    "👁 Gemini ☀": "Eye_shine_gem.png",
 }
 
 # Weekday body themes (SYMBOLISM.md canon): "planets" uses the skin's
@@ -1212,6 +1307,29 @@ POINTER_WEEKDAY_SLOTS = {
         (180.0, ("sun", "moon", "mars", "mercury", "jupiter", "venus",
                  "saturn")),
     ),
+    # THE ROSE'S COLOR LAW (owner seal 2026-07-27, CUBE.md §The Rose).
+    # The seat is the HUE, not the position: it is the Prism paint canon
+    # with the two Sabbath hues lightened, because Sunday needs blue and
+    # red for its own two faces. Bodies ride their BADGES as always —
+    # never painted into the diamonds.
+    #   12h yellow THU · 15h orange TUE · 18h red SUN (Ruler)
+    #   21h rose  FRI · 24h purple WED · 03h cyan  MON
+    #   06h blue  SUN (Servant, `servant_seat_angle`) · 09h green SAT
+    # Six weekdays plus the dual Sunday fill all EIGHT arms, so no arm
+    # is reserved for anything else and Thursday and Wednesday keep
+    # their canonical color seats. The 06h SERVANT seat is absent from
+    # this table on purpose — exactly as 24h is absent from the octa's:
+    # the seat is the Servant face's alone and
+    # `render.layers.servant_holds_the_seat` hands it to him.
+    "rose": (
+        (0.0, ("jupiter",)),        # 12h yellow — Thursday
+        (45.0, ("mars",)),          # 15h orange — Tuesday
+        (90.0, ("sun",)),           # 18h red    — Sunday, the Ruler
+        (135.0, ("venus",)),        # 21h rose   — Friday
+        (180.0, ("mercury",)),      # 24h purple — Wednesday
+        (225.0, ("moon",)),         # 03h cyan   — Monday
+        (315.0, ("saturn",)),       # 09h green  — Saturday
+    ),
 }
 
 # The Calendar lighting modes (owner 2026-07-16, both user-selectable):
@@ -1220,10 +1338,27 @@ POINTER_WEEKDAY_SLOTS = {
 # MONTH's wedge lights on the Almanac, the current SIGN's on the
 # Zodiac.
 CALENDAR_LIGHTING_MODES = ("hour", "year")
-# The SOUTH SLOT home angle (the Compass reserves this bottom arm for
-# it) and the Aurora DUAL layout (owner spec 2026-07-12): with BOTH the
-# weekday body and the slot on, they flank the bottom ±45° — the
-# weekday at 3h on the left, the slot at 21h on the right.
+# The SOUTH SLOT home angle and the Aurora DUAL layout (owner spec
+# 2026-07-12): with BOTH the weekday body and the slot on, they flank
+# the bottom ±45° — the weekday at 3h on the left, the slot at 21h on
+# the right.
+#
+# STALE-COMMENT CORRECTION (owner 2026-07-27): this comment used to
+# claim "the Compass reserves this bottom arm for it". It has not been
+# true since the dual-Sunday round — the Compass shows all EIGHT arms,
+# and its 24h seat belongs to the SERVANT face of Sunday
+# (`render.layers.servant_holds_the_seat`), which is exactly why
+# `POINTER_WEEKDAY_SLOTS["octa"]` has no 180° entry. A later change
+# moved the truth and left the old sentence standing, and a session
+# read it and believed it. When behavior moves, the sentence that
+# described the old behavior DIES WITH IT.
 SOUTH_SLOT_ANGLE = 180.0
+# The SERVANT face's own seat per pointer (owner 2026-07-27): 24h
+# everywhere the dual Sunday has always sat, but the ROSE seats him on
+# the BLUE arm at 06h — blue is Judas's hue and the servant's, red is
+# Lucifer's and the master's, and 6 + 6 + 6 lands the pair on 06h and
+# 18h (CUBE.md §The Rose). `render.layers.servant_seat_angle` is the
+# ONE reader (Rule #5); absent = SOUTH_SLOT_ANGLE.
+SERVANT_SEAT_ANGLE = {"rose": 270.0}
 AURORA_DUAL_WEEKDAY_ANGLE = 225.0    # 3h — bottom left
 AURORA_DUAL_SLOT_ANGLE = 135.0       # 21h — bottom right

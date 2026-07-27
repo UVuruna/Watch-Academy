@@ -1403,18 +1403,19 @@ def test_greetings_ride_the_top_ring_letter_only_when_unlocked(july_wednesday):
 
 def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     """The per-letter HOVER LEGEND (ROADMAP 15b, "malo legende oko tih
-    naših odabira"): every Mason ring letter answers what it stands
+    naših odabira"): every Dollar ring letter answers what it stands
     for, quoted from CANON.md's Banknote table — independent of the
     hidden-mode unlock (unlike the Four Greetings), and a preset without
     a legend (the DEFAULT_SKIN's DOMY ring) stays silent in the same
     spot. TASK 2 (owner "može" 2026-07-19): each letter's legend also
     carries the AXIS-OPPOSITION line — the three diameters across the
-    center (N↔S, A↔M, G↔Ω) — as a second paragraph."""
+    center (N↔S, A↔M, 👁↔Ω since the DOLLAR/EYE round) — as a second
+    paragraph."""
     from app.controller import build_skin
     from app.settings_store import Settings, replace as settings_replace
 
     day, tick = july_wednesday
-    mason_skin = build_skin(settings_replace(Settings(), ring="Mason"))
+    mason_skin = build_skin(settings_replace(Settings(), ring="Dollar"))
     compositor = Compositor(mason_skin, AssetCache())
     compositor.render_offscreen(360.0, 1.0, day, tick)
     letters = (
@@ -1427,10 +1428,12 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
         theta = math.radians((hour - 12) * 15.0)
         return QPointF(radius * letters * math.sin(theta), -radius * letters * math.cos(theta))
 
+    # DOLLAR/EYE round (owner decree 2026-07-27): the apex answers as
+    # the Eye of Providence, the Judge who watches.
     g_hover = compositor._tick_tooltip(point_at(12), radius)
-    assert "God" in g_hover
-    assert "GEOMETRY" in g_hover
-    assert "Across the wheel" in g_hover and "End" in g_hover
+    assert "Eye of Providence" in g_hover
+    assert "eyes of the LORD" in g_hover
+    assert "Across the wheel" in g_hover and "Creator" in g_hover
     s_hover = compositor._tick_tooltip(point_at(16), radius)
     assert "Sigma" in s_hover and "Courage" in s_hover
     assert "Satan" in s_hover and "Nazarene" in s_hover
@@ -1439,7 +1442,7 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     assert "Angel" in m_hover
     omega_hover = compositor._tick_tooltip(point_at(24), radius)
     assert "Omega" in omega_hover
-    assert "Across the wheel" in omega_hover and "God" in omega_hover
+    assert "Across the wheel" in omega_hover and "Judge" in omega_hover
     n_hover = compositor._tick_tooltip(point_at(4), radius)
     assert "Nazarene" in n_hover and "Hope" in n_hover
     assert "Satan" in n_hover
@@ -1454,8 +1457,8 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     assert "Satan against the Nazarene" in s_hover
     assert "Angel against the Master" in a_hover
     assert "Master against the Angel" in m_hover
-    assert "God against the End" in g_hover
-    assert "End against God" in omega_hover
+    assert "Eye against the Omega" in g_hover
+    assert "Omega against the Eye" in omega_hover
 
     # A preset with no legend (the default DOMY ring) stays silent at
     # the same radius/angle — the mechanism never invents an answer.
@@ -1494,7 +1497,7 @@ def test_mason_motto_arc_paints_outside_the_ring(july_wednesday):
     dial_radius_px = dial_diameter / 2.0
     motto_radius_px = dial_radius_px * defaults.RING_MOTTO_RADIUS_FRACTION
 
-    mason_skin = build_skin(settings_replace(Settings(), ring="Mason"))
+    mason_skin = build_skin(settings_replace(Settings(), ring="Dollar"))
     mason_image, _, mason_margin = _render_window_frame(
         Compositor(mason_skin, AssetCache()), day, tick, dial_diameter
     )

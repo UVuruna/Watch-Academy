@@ -1,11 +1,13 @@
 """The outer Great Seal motto arc — pure per-glyph angle math.
 
 TASK 1 (owner "može radi" 2026-07-19, CANON.md §The Banknote): while
-the Mason ring preset is active (renamed from "MASON G", TASK 2,
-MASON/ICONS round), the two Great Seal mottos render as curved text
-OUTSIDE the ring band, laid out so specific KEY LETTERS land exactly on
-the ring's own six hexagram seats — MASON outside, G inside, the
-dollar-bill mechanic on our dial. Given a motto string and
+the Dollar ring preset is active (born "MASON G", then "Mason" —
+TASK 2 and the DOLLAR/EYE round renames), the two Great Seal mottos
+render as curved text OUTSIDE the ring band, laid out so specific KEY
+LETTERS land exactly on the ring's own six hexagram seats — MASON
+outside, the Eye of Providence inside at the crown (the seat the G
+held before the 2026-07-27 decree), the dollar-bill mechanic on our
+dial. Given a motto string and
 its PINNED letter -> ring-position constraints, `motto_glyph_angles`
 solves every character's dial angle: pinned characters land exactly on
 their seat, and the run of characters between two consecutive pins is

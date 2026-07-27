@@ -46,7 +46,7 @@ def test_star_rotation_sign_convention():
 
 
 def test_ring_position_angle_matches_the_six_hexagram_seats():
-    # The MASON G ring's own six positions (CANON.md §The Banknote).
+    # The Dollar ring's own six positions (CANON.md §The Banknote).
     assert angles.ring_position_angle(12) == pytest.approx(0.0)     # top
     assert angles.ring_position_angle(16) == pytest.approx(60.0)
     assert angles.ring_position_angle(20) == pytest.approx(120.0)

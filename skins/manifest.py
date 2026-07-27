@@ -65,9 +65,10 @@ class RingSpec:
     # pre-rendered `_silver.png`/`_bronze.png` files).
     letter_metal: dict[int, str] = field(default_factory=dict)
     # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
-    # hour -> {name, reading} for a preset that carries one (MASON G
-    # today; empty {} for DOMY/MORPH/NUMBERS and any custom ring) — see
-    # data.rings.validate_preset and render.compositor's ring-band hover.
+    # hour -> {name, reading} for a preset that carries one (the Dollar
+    # today; empty {} for DOMY/Morph/The One/Templar and any custom
+    # ring) — see data.rings.validate_preset and render.compositor's
+    # ring-band hover.
     letter_legend: dict[int, dict] = field(default_factory=dict)
     # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
     # 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX round,
@@ -76,13 +77,14 @@ class RingSpec:
     # own `motto` card field (data.rings.validate_preset ->
     # core.motto.motto_glyph_angles) — curved text just outside the
     # ring band, its pinned letters landing on the SAME six hexagram
-    # seats the ring's own MASON-G letters occupy (MASON outside, G
-    # inside). Each entry: {"text": the motto string (spaces included,
+    # seats the ring's own banknote letters occupy (MASON outside, the
+    # Eye inside at the crown — the G's seat before the DOLLAR/EYE
+    # round). Each entry: {"text": the motto string (spaces included,
     # for reference), "glyphs": a tuple of (gold_asset_path, dial_angle)
     # pairs, ONE per non-space character, ready for render.layers.
     # RingLayer to draw — spaces are already filtered out here, so the
     # render loop never checks for them. Empty for every preset but
-    # MASON G today; both entries now draw at the SAME
+    # the Dollar today; both entries now draw at the SAME
     # RING_MOTTO_RADIUS_FRACTION — the two arcs are angularly disjoint
     # (ANNUIT COEPTIS over the top, NOVUS ORDO SECLORUM under the
     # bottom) so they never collide; the old two-radius-by-list-order
@@ -94,13 +96,6 @@ class RingSpec:
     # build_skin. Unlike `letter_metal` this is NOT per-hour: the motto
     # is read as ONE continuous inscription, not a seat-by-seat split.
     motto_metal: str = "gold"
-    # THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md §The
-    # Rose): the Rose ring preset — COMPUTED geometry, never art. True
-    # only on the "Rose" card: RingLayer draws the procedural ring with
-    # 24 colored diamond rays in the band (three octa stars offset 15°,
-    # z-ordered −1h / 0h / +1h, the +1h star on top), hues from
-    # defaults.ROSE_PALETTE (the Character wheel's own — one source).
-    rose: bool = False
 
 
 @dataclass(frozen=True)
@@ -235,6 +230,12 @@ class SkinDefinition:
     # (render.layers.cube_look_active / arm_half_deg). False = Diamond,
     # the slim-arm medallion form. Inert on every other wheel.
     cube_look: bool = False
+    # THE DAYLIGHT SWITCH (owner 2026-07-27): the Calendar and the Rose
+    # let the reader turn the day/night law off and stand in flat full
+    # color — their wheels are read as a wheel first and a clock second.
+    # Inert on every other pointer, which always runs day/night
+    # (render.layers.daylight_active).
+    daylight: bool = True
     # Whether the archetype FIGURES carry their display name (owner
     # 2026-07-18, ROADMAP 15h, Session 21-C) — an INDEPENDENT switch,
     # its own Settings ▸ Display checkbox, no longer sharing

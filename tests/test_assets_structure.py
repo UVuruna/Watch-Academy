@@ -177,7 +177,13 @@ def test_instrument_furniture_and_earth_are_suffixless_owner_art():
     (hands, ring, subdial, icons, guide) and the Earth marker faces are
     owner hand-made and carry NO source suffix. (The instrument LOGO and
     paint/light legend DID ship from a source and keep their suffix —
-    they live at instrument/ top level, outside these furniture dirs.)"""
+    they live at instrument/ top level, outside these furniture dirs.)
+    ONE documented exception (DOLLAR/EYE round, owner decree
+    2026-07-27): the ring letter library's Eye of Providence pieces
+    (`Eye[_shine]_gem/_gpt.png`) ARE sourced — the owner shipped a
+    ChatGPT and a Gemini eye, each with and without rays, and placed
+    them with the letters; their canonical `Eye[_shine].png` stems
+    resolve through `config.paths.art_file` like every sourced area."""
     assets = paths.assets_dir()
     suffixless_areas = (
         "instrument/hands", "instrument/ring", "instrument/subdial",
@@ -186,7 +192,9 @@ def test_instrument_furniture_and_earth_are_suffixless_owner_art():
     offenders = []
     for area in suffixless_areas:
         for png in _iter_png(assets / area):
-            if png.stem.endswith(("_gem", "_gpt")):
+            if png.stem.endswith(("_gem", "_gpt")) and not (
+                png.parent.name == "letters" and png.stem.startswith("Eye")
+            ):
                 offenders.append(str(png.relative_to(assets)))
     assert offenders == [], offenders[:20]
 
