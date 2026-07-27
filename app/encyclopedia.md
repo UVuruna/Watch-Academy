@@ -21,8 +21,15 @@ screens —
    TRIANGLES — the Judas–Lucifer scale of self, owner 2026-07-13; its
    Lucifer/Judas badges ROTATE by date, see Scale Rotation below),
    **The Living World** (Wolf/Bee/Elephant/Alchemy/Japanese week) and
-   **The Archetypes** (its OWN section, empty until a future session
-   gives the archetypes their own topics — see round R3 below) —
+   **The Archetypes** (its OWN section — EMPTY until WORKPLAN Session
+   21, 2026-07-27, filled it with the Cube canon's three topics: **The
+   Cube** (20 pages — three axes, six poles, eight vertices, the three
+   figure sets, the coordinate doctrine, the Banknote-axes seal), **The
+   Double Trinity** (5 — Court, Genesis, Council, the 24-field union
+   table) and **The Two Crosses** (14 — both paths, their eight
+   stations, TRUST/DISTRUST, FALL/STAR, DOMY/SAFE); their entry ORDER
+   is a CONTRACT, since `config/archetypes.py` aims the three Cube
+   wheels' Spacebar targets at these pages by index —
    EVERYTHING centered (owner 2026-07-13: headers and card rows alike)
    and the cards RESPONSIVE: `_rescale_topics` grows/shrinks the icons
    with the window between `ENCYCLOPEDIA_TOPIC_ICON_MIN/MAX_PX`, then

@@ -156,10 +156,16 @@ _WALKS_DIR = ARCHETYPE_ART_DIR / "walks" / "primary" / "colored"
 _LIFE_DIR = ARCHETYPE_ART_DIR / "life"
 # The Cube wave families (Session 19 sheets; owner seal 2026-07-26) —
 # no art generated yet: every figure falls back to its NAME until the
-# owner's glass lands (the standing graceful-absent path).
-_GENESIS_DIR = ARCHETYPE_ART_DIR / "genesis" / "primary" / "colored"
-_COUNCIL_DIR = ARCHETYPE_ART_DIR / "council" / "primary" / "colored"
-_CHARACTER_DIR = ARCHETYPE_ART_DIR / "character" / "primary" / "colored"
+# owner's glass lands (the standing graceful-absent path). PUBLIC since
+# Session 21, because the Encyclopedia's own Cube topics read the same
+# four roots for their gallery icons (Rule #5: one declaration, two
+# readers). CROSSES has no wheel — the Two Crosses are an Encyclopedia
+# subject only — but its art family is a Cube-wave sibling and its root
+# belongs beside the other three.
+GENESIS_ART_DIR = ARCHETYPE_ART_DIR / "genesis" / "primary" / "colored"
+COUNCIL_ART_DIR = ARCHETYPE_ART_DIR / "council" / "primary" / "colored"
+CHARACTER_ART_DIR = ARCHETYPE_ART_DIR / "character" / "primary" / "colored"
+CROSSES_ART_DIR = ARCHETYPE_ART_DIR / "crosses" / "primary" / "colored"
 
 # The Eight Ages, shared by both registers: (angle, age name, row-2
 # being per register, entity, file stem) — ordered by arm position so
@@ -386,17 +392,20 @@ ARCHETYPES = {
     "trinity_genesis": {
         "articles": "archetype_trinity_genesis",
         "figures": (
-            _fig(180.0, _GENESIS_DIR / "God_Creator.png",
-                 "God", "Creator", "god"),
-            _fig(300.0, _GENESIS_DIR / "Jesus_Preserver.png",
-                 "Jesus", "Preserver", "jesus"),
-            _fig(60.0, _GENESIS_DIR / "Devil_Destroyer.png",
-                 "The Devil", "Destroyer", "devil"),
+            _fig(180.0, GENESIS_ART_DIR / "God_Creator.png",
+                 "God", "Creator", "god",
+                 enc=("double_trinity", 2)),
+            _fig(300.0, GENESIS_ART_DIR / "Jesus_Preserver.png",
+                 "Jesus", "Preserver", "jesus",
+                 enc=("double_trinity", 2)),
+            _fig(60.0, GENESIS_ART_DIR / "Devil_Destroyer.png",
+                 "The Devil", "Destroyer", "devil",
+                 enc=("double_trinity", 2)),
         ),
         # The Beginning (name SEALED 2026-07-26) — the Eye's rosette
         # inverted: the first light over the deep.
         "center": {
-            "file": _GENESIS_DIR / "Beginning.png",
+            "file": GENESIS_ART_DIR / "Beginning.png",
             "name": "The Beginning", "entity": "center",
         },
     },
@@ -408,23 +417,29 @@ ARCHETYPES = {
     "prism_council": {
         "articles": "archetype_prism_council",
         "figures": (
-            _fig(0.0, _COUNCIL_DIR / "God_Judge.png",
-                 "God", "Judge", "god_judge"),
-            _fig(60.0, _COUNCIL_DIR / "Devil_Destroyer.png",
-                 "The Devil", "Destroyer", "devil_destroyer"),
-            _fig(120.0, _COUNCIL_DIR / "Devil_Prosecutor.png",
-                 "The Devil", "Prosecutor", "devil_prosecutor"),
-            _fig(180.0, _COUNCIL_DIR / "God_Creator.png",
-                 "God", "Creator", "god_creator"),
-            _fig(240.0, _COUNCIL_DIR / "Jesus_Advocate.png",
-                 "Jesus", "Advocate", "jesus_advocate"),
-            _fig(300.0, _COUNCIL_DIR / "Jesus_Preserver.png",
-                 "Jesus", "Preserver", "jesus_preserver"),
+            _fig(0.0, COUNCIL_ART_DIR / "God_Judge.png",
+                 "God", "Judge", "god_judge",
+                 enc=("double_trinity", 3)),
+            _fig(60.0, COUNCIL_ART_DIR / "Devil_Destroyer.png",
+                 "The Devil", "Destroyer", "devil_destroyer",
+                 enc=("double_trinity", 3)),
+            _fig(120.0, COUNCIL_ART_DIR / "Devil_Prosecutor.png",
+                 "The Devil", "Prosecutor", "devil_prosecutor",
+                 enc=("double_trinity", 3)),
+            _fig(180.0, COUNCIL_ART_DIR / "God_Creator.png",
+                 "God", "Creator", "god_creator",
+                 enc=("double_trinity", 3)),
+            _fig(240.0, COUNCIL_ART_DIR / "Jesus_Advocate.png",
+                 "Jesus", "Advocate", "jesus_advocate",
+                 enc=("double_trinity", 3)),
+            _fig(300.0, COUNCIL_ART_DIR / "Jesus_Preserver.png",
+                 "Jesus", "Preserver", "jesus_preserver",
+                 enc=("double_trinity", 3)),
         ),
         # The seventh seat: six offices as the six days of work, the
         # center as the Sabbath rest.
         "center": {
-            "file": _COUNCIL_DIR / "Sabbath.png",
+            "file": COUNCIL_ART_DIR / "Sabbath.png",
             "name": "The Sabbath", "entity": "center",
         },
     },
@@ -437,22 +452,30 @@ ARCHETYPES = {
     "compass_character": {
         "articles": "archetype_compass_character",
         "figures": (
-            _fig(0.0, _CHARACTER_DIR / "Loyalty.png",
-                 "Loyalty", "Tribalism", "loyalty"),
-            _fig(45.0, _CHARACTER_DIR / "Patronage.png",
-                 "Patronage", "Favoritism", "patronage"),
-            _fig(90.0, _CHARACTER_DIR / "Dignity.png",
-                 "Dignity", "Self-Worship", "dignity"),
-            _fig(135.0, _CHARACTER_DIR / "Conviction.png",
-                 "Conviction", "Dogmatism", "conviction"),
-            _fig(180.0, _CHARACTER_DIR / "Integrity.png",
-                 "Integrity", "Legalism", "integrity"),
-            _fig(225.0, _CHARACTER_DIR / "Renunciation.png",
-                 "Renunciation", "Mortification", "renunciation"),
-            _fig(270.0, _CHARACTER_DIR / "Humility.png",
-                 "Humility", "Self-Annihilation", "humility"),
-            _fig(315.0, _CHARACTER_DIR / "Devotion.png",
-                 "Devotion", "Martyrdom", "devotion"),
+            _fig(0.0, CHARACTER_ART_DIR / "Loyalty.png",
+                 "Loyalty", "Tribalism", "loyalty",
+                 enc=("cube", 7)),
+            _fig(45.0, CHARACTER_ART_DIR / "Patronage.png",
+                 "Patronage", "Favoritism", "patronage",
+                 enc=("cube", 12)),
+            _fig(90.0, CHARACTER_ART_DIR / "Dignity.png",
+                 "Dignity", "Self-Worship", "dignity",
+                 enc=("cube", 10)),
+            _fig(135.0, CHARACTER_ART_DIR / "Conviction.png",
+                 "Conviction", "Dogmatism", "conviction",
+                 enc=("cube", 14)),
+            _fig(180.0, CHARACTER_ART_DIR / "Integrity.png",
+                 "Integrity", "Legalism", "integrity",
+                 enc=("cube", 8)),
+            _fig(225.0, CHARACTER_ART_DIR / "Renunciation.png",
+                 "Renunciation", "Mortification", "renunciation",
+                 enc=("cube", 13)),
+            _fig(270.0, CHARACTER_ART_DIR / "Humility.png",
+                 "Humility", "Self-Annihilation", "humility",
+                 enc=("cube", 9)),
+            _fig(315.0, CHARACTER_ART_DIR / "Devotion.png",
+                 "Devotion", "Martyrdom", "devotion",
+                 enc=("cube", 11)),
         ),
         "center": None,       # both Compass archetypes: the rose is
                               # the wheel itself (owner; sheet "No

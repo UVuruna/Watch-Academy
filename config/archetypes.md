@@ -59,7 +59,7 @@ pointers gained a THIRD, "cube" wheel — WORKPLAN Session 20):
 | `seasons_paint` | cross · paint | the Four Temperaments | `archetype/temperaments/` | the Throne |
 | `seasons_light` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
 | `prism_paint` | hexa · paint | the Persons (six on the paint wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
-| `prism_light` | hexa · light | One Soul, the Bond (six pillars) | `archetype/one_soul/` | the Union |
+| `prism_light` | hexa · light | One Soul — The Vow — The Bond (six pillars; name SEALED 2026-07-27, all three kept — "One Soul" alone wherever one name must stand) | `archetype/one_soul/` | the Union |
 | `prism_council` | hexa · cube | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Sabbath |
 | `compass_paint` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
 | `compass_light` | octa · light | the Eight Ages | `archetype/life/<register>/` | — |
@@ -151,18 +151,32 @@ name-falls-back until the owner's glass lands):**
   choice.
 - **Article sets are named by GRID SEAT** (`archetype_trinity_paint`,
   `archetype_seasons_paint`, `archetype_seasons_light`, …) so a future
-  theme rename (One Soul → The Vow) never orphans texts. The Seasons
-  rename (`archetype_seasons` → `_paint`, 2026-07-17) stayed consistent
-  because `symbolism.json` carries no archetype nodes yet — Session 6
-  writes, per entity, a
-  `{"rows": [row1, row2]}` node into
-  `Database/symbolism.json → articles.<set>`; until then
-  `SymbolismRepository.archetype_article()` returns None and the
-  hover shows the figure's name plus `ARCHETYPE_PENDING_LINE` —
-  never a KeyError. Centers use the entity key `"center"` in the
-  same set.
-- **Encyclopedia targets are per figure, and mostly None.** Only the
-  Walks map today (six estates onto the Professions topic's pages);
+  theme rename never orphans texts (the prism-light theme's own name
+  was sealed only on 2026-07-27, long after its set existed — exactly
+  the case this convention was built for). The Seasons rename
+  (`archetype_seasons` → `_paint`, 2026-07-17) stayed consistent for
+  the same reason. Each entity carries a `{"rows": [row1, row2]}` node
+  in `Database/symbolism.json → articles.<set>`; where a set is not
+  written `SymbolismRepository.archetype_article()` returns None and
+  the hover shows the figure's name plus `ARCHETYPE_PENDING_LINE` —
+  never a KeyError. Centers use the entity key `"center"` in the same
+  set. **Since Session 21 (2026-07-27) ALL ELEVEN sets are written**
+  (the Cube wave's Genesis / Council / Character closed the last
+  three), so the pending line is a safety net rather than a live path.
+- **Encyclopedia targets are per figure.** The Walks map six estates
+  onto the Professions topic's pages, and since Session 21 the three
+  Cube wheels map too: Genesis' trio onto **The Double Trinity →
+  Genesis**, the Council's six onto **The Double Trinity → The
+  Council**, and each Character arm onto its OWN Cube page (the four
+  poles onto Loyalty / Dignity / Integrity / Humility, the four combos
+  onto the Steady Guardian / Wise Statesman / Contemplative Sage /
+  Quiet Devotee vertices). The targets address pages by INDEX, so the
+  entry order in `app/encyclopedia.py`'s `_CUBE_ENTRIES` and friends is
+  a contract — `tests/test_cube_encyclopedia.py` pins both ends. The
+  four Cube-wave art roots are PUBLIC here (`GENESIS_ART_DIR`,
+  `COUNCIL_ART_DIR`, `CHARACTER_ART_DIR`, `CROSSES_ART_DIR`) because
+  the Encyclopedia reads the same declarations for its gallery icons.
+  Otherwise targets are mostly None;
   the persons, temperaments, pillars, family and ages have no topics
   yet (Sessions 6/8 add them) — a None target makes the Spacebar
   jump do nothing, gracefully.

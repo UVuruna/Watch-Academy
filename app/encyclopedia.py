@@ -45,7 +45,7 @@ import html as _html
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button, style_look_chip
-from config import constants, defaults, paths
+from config import archetypes, constants, defaults, paths
 from config.ui_text import ui
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
@@ -201,17 +201,17 @@ _TOPIC_GROUPS = (
      ("virtues", "sins", "moods", "intelligences", "profession",
       "trinity", "duality")),
     ("The Living World", ("wolf", "bee", "elephant", "alchemy", "japan")),
-    # THE ARCHETYPES (owner: "its OWN section — do not scatter them"):
-    # its own group exists NOW so future archetype topics land here
-    # rather than being folded into The Divine/The Human Wheel later.
-    # Empty on purpose — `config/archetypes.py` names the figures and
-    # `render.compositor` already resolves SOME of their Spacebar
-    # targets onto OTHER topics (the Walks onto Professions), but no
-    # archetype has its OWN encyclopedia topic yet (Sessions 6/8, per
-    # the existing ARCHETYPE_PENDING_LINE convention) — that is new
-    # content, out of THIS round's scope (encyclopedia.py structure +
-    # Database/encyclopedia.json, not a new article-writing pass).
-    ("The Archetypes", ()),
+    # THE ARCHETYPES (owner: "its OWN section — do not scatter them").
+    # The hall stood EMPTY until WORKPLAN Session 21 (the Cube
+    # Encyclopedia wave, 2026-07-27) filled it with the three Cube
+    # canon topics — the Cube itself (axes, poles, vertices, the three
+    # figure sets, the coordinate doctrine and the Banknote-axes seal),
+    # the Double Trinity (Court, Genesis, Council and the 24-field
+    # union table) and the Two Crosses (the eight stations, the chiasm,
+    # TRUST/DISTRUST and the FALL/STAR, DOMY/SAFE ciphers). The dial's
+    # own archetype WHEELS still speak through `config/archetypes.py`
+    # figure rows; the Cube wheels' Spacebar jumps now land here.
+    ("The Archetypes", ("cube", "double_trinity", "crosses")),
 )
 
 # THE GALLERY SUBGROUPS (owner round R8b item 5c, GALLERY LAYOUT REWORK
@@ -395,6 +395,75 @@ _ECLIPSE_TOPICS = (
      _ECLIPSE_SOLAR_ENTRIES),
     ("eclipse_lunar", "Lunar Eclipses", "Lunar_Total.png",
      _ECLIPSE_LUNAR_ENTRIES),
+)
+
+# THE CUBE CANON TOPICS (WORKPLAN Session 21, 2026-07-27 — CUBE.md).
+# (name, art) per entry; `None` art means the page has no plate of its
+# own, exactly like the era essays — the Cube's axes, poles and
+# vertices have no prompt sheet yet, while the Two Crosses' twelve
+# stations and centres were declared by the Session 19 sheet and light
+# up the moment the owner's glass lands (graceful-absent throughout).
+#
+# THE ORDER IS A CONTRACT: `config/archetypes.py` addresses these pages
+# by index from its three Cube wheels (`enc=("cube", 7)` and friends),
+# so an inserted entry must be added at the END or the wheels re-aimed
+# in the same commit — `tests/test_cube_encyclopedia.py` pins the pairs.
+_CUBE_ENTRIES = (
+    ("The Cube", None),
+    ("The Activation Axis", None),
+    ("The Judgment Axis", None),
+    ("The Self-Regard Axis", None),
+    ("The Three Sets", None),
+    ("Composure", None),
+    ("Vigor", None),
+    ("Loyalty", None),
+    ("Integrity", None),
+    ("Humility", None),
+    ("Dignity", None),
+    ("The Quiet Devotee", None),
+    ("The Steady Guardian", None),
+    ("The Contemplative Sage", None),
+    ("The Wise Statesman", None),
+    ("The Sacrificial Protector", None),
+    ("The Charismatic Champion", None),
+    ("The Principled Reformer", None),
+    ("The Visionary Founder", None),
+    ("The Banknote Axes", None),
+)
+_DOUBLE_TRINITY_ENTRIES = (
+    ("The Double Trinity", None),
+    ("The Court", archetypes.center("trinity_paint")["file"]),
+    ("Genesis", archetypes.center("trinity_genesis")["file"]),
+    ("The Council", archetypes.center("prism_council")["file"]),
+    ("The Twenty-Four Fields", None),
+)
+_CROSSES_ENTRIES = (
+    ("The Two Crosses", None),
+    ("The Path of Light", archetypes.CROSSES_ART_DIR / "Path_of_Light.png"),
+    ("Hope", archetypes.CROSSES_ART_DIR / "Hope.png"),
+    ("Faith", archetypes.CROSSES_ART_DIR / "Faith.png"),
+    ("Love", archetypes.CROSSES_ART_DIR / "Love.png"),
+    ("Salvation", archetypes.CROSSES_ART_DIR / "Salvation.png"),
+    ("The Path of Darkness",
+     archetypes.CROSSES_ART_DIR / "Path_of_Darkness.png"),
+    ("Fear", archetypes.CROSSES_ART_DIR / "Fear.png"),
+    ("Anger", archetypes.CROSSES_ART_DIR / "Anger.png"),
+    ("Hate", archetypes.CROSSES_ART_DIR / "Hate.png"),
+    ("Suffering", archetypes.CROSSES_ART_DIR / "Suffering.png"),
+    ("Trust and Distrust", archetypes.CROSSES_ART_DIR / "Trust.png"),
+    ("FALL and STAR", None),
+    ("DOMY and SAFE", None),
+)
+_CUBE_TOPICS = (
+    ("cube", "The Cube",
+     archetypes.CHARACTER_ART_DIR / "Integrity.png", "cube",
+     _CUBE_ENTRIES),
+    ("double_trinity", "The Double Trinity",
+     archetypes.center("prism_council")["file"], "double_trinity",
+     _DOUBLE_TRINITY_ENTRIES),
+    ("crosses", "The Two Crosses",
+     archetypes.CROSSES_ART_DIR / "Path_of_Light.png", "crosses",
+     _CROSSES_ENTRIES),
 )
 
 # The WEEK page image strip (owner spec: each day gathers everything it
@@ -1507,6 +1576,25 @@ def _topics(travel_date: date | None = None) -> dict:
                     "article": ("eclipse", key),
                 }
                 for key, art in entry_specs
+            ],
+        }
+    # THE CUBE CANON (WORKPLAN Session 21, owner seal 2026-07-26 —
+    # CUBE.md): the three topics of The Archetypes hall. Their entry
+    # ORDER is contractual — `config/archetypes.py` addresses these
+    # pages by INDEX in its Cube wheels' `enc` targets (the Spacebar
+    # jump), exactly as the Walks address the Professions, and
+    # `tests/test_cube_encyclopedia.py` pins both ends.
+    for topic_key, title, icon, family, entry_specs in _CUBE_TOPICS:
+        topics[topic_key] = {
+            "title": title,
+            "icon": icon,
+            "entries": [
+                {
+                    "images": () if art is None else (art,),
+                    "name": name,
+                    "article": ("emblem", family, name),
+                }
+                for name, art in entry_specs
             ],
         }
     return topics
