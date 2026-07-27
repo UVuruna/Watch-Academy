@@ -89,8 +89,10 @@ def collect_corpus() -> dict:
                        "ninths", "wider", "intelligence", "months",
                        # The Cube canon families (WORKPLAN Session 21,
                        # 2026-07-27): the Cube's axes/poles/vertices,
-                       # the Double Trinity and the Two Crosses.
-                       "cube", "double_trinity", "crosses"):
+                       # the Double Trinity and the Two Crosses. ONE
+                       # SOUL joined the same hall 2026-07-27 — the
+                       # prism-light theme's own nine pages.
+                       "cube", "double_trinity", "crosses", "one_soul"):
             for name, node in data[family].items():
                 corpus[f"encyclopedia/{family}/{name}/base"] = node["base"]
     captions = defaults.GUIDE_DIR / "captions.json"

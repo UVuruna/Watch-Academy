@@ -58,7 +58,9 @@ Serbian and any machine-translated language apply automatically.
   figure sets, the coordinate doctrine, the Banknote-axes seal),
   `double_trinity` (Court, Genesis, Council, the 24-field union table)
   and `crosses` (both paths, their eight stations, TRUST/DISTRUST and
-  the FALL/STAR and DOMY/SAFE ciphers)
+  the FALL/STAR and DOMY/SAFE ciphers) — joined on 2026-07-27 by
+  `one_soul`, the prism-light theme's own nine pages (the conjugation
+  law, the six pillars with their shadows, the Union and the Child)
 - `theme_title(theme)` / `week_duality(theme)`: `{title, base}` of a
   weekday theme's OWN opening page / its WEEK-DUALITY title page
   (round R3 ARTICLE ORDER restructure — `theme_title`/`week_duality`
