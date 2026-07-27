@@ -220,6 +220,13 @@ their own gating (Archetype-on, Pointer hidden, no Slot visible), live
 regray while already open, and picks applying through the SAME
 `_set_*` methods the old menu chains used.
 
+### `test_app_info.py`
+WORKPLAN Session 22 (the Renaming, 2026-07-27): pins the pre-M7
+`setup/app_info.json` seed — `name`/`description` say **Watch Academy**
+(the sealed application name, CUBE.md §The Name) while `exe_name`/
+`installer_name` stay DOMY-based, since DOMY remains the dial's own
+name and the on-disk/binary identity.
+
 ## Connections
 
 ### Uses

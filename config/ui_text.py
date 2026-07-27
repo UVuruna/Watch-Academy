@@ -5,8 +5,9 @@ labels, tray balloons, hover-legend labels and the name tables. The
 ENGLISH string itself is the key — the corpus entry is `ui/<text>`
 (data/translations.py) and `ui(overlay, text)` returns the active
 language's version, English being the shipped source. Protected brand
-terms (DOMY, Trinity/Seasons/Prism/Compass, Paint/Light, Umbra, Aura,
-Flame/Chalice/Seal…) stay English inside translated sentences.
+terms (Watch Academy, DOMY, Trinity/Seasons/Prism/Compass, Paint/Light,
+Umbra, Aura, Flame/Chalice/Seal…) stay English inside translated
+sentences.
 """
 
 
