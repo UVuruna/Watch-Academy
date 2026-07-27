@@ -124,6 +124,37 @@ def _tight_two_pin_angles(
     return tuple(angles)
 
 
+def centered_word_angles(
+    text: str,
+    position: int,
+    clockwise: bool = True,
+) -> tuple[float, ...]:
+    """One dial angle per character of `text`, the whole word CENTERED
+    on ring seat `position` — the CROSS-WORDS round (owner UV inbox,
+    2026-07-27): the DOMY dark-cross stations (FEAR ANGER HATE
+    SUFFERING) and the PILOT light-cross stations (HOPE FAITH LOVE
+    SALVATION) ring the dial one word per station seat, drawn by the
+    same outside-the-band stamp as the Dollar's Great Seal mottos.
+    Letters advance at the mottos' own fixed
+    `defaults.RING_MOTTO_LETTER_STEP_DEG` step and the word's midpoint
+    lands exactly on the seat angle. `clockwise` picks the reading
+    direction exactly as in `motto_glyph_angles` below: True for a
+    top-half seat, False for a bottom-half seat — either way the word
+    reads left-to-right to a viewer (dial-x runs opposite ways across
+    the two halves; see `motto_glyph_angles`'s own docstring). One
+    word only: a space belongs to the pinned-motto shape, not to a
+    station word (Rule #7 — fails loudly, never draws a half-gap)."""
+    if not text or " " in text:
+        raise ValueError(
+            f"centered word {text!r} must be one non-empty word"
+        )
+    step = defaults.RING_MOTTO_LETTER_STEP_DEG
+    if not clockwise:
+        step = -step
+    start = ring_position_angle(position) - step * (len(text) - 1) / 2.0
+    return tuple(start + step * k for k in range(len(text)))
+
+
 def motto_glyph_angles(
     text: str,
     pins: tuple[tuple[str, int, int], ...],

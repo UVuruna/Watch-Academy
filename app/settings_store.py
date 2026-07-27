@@ -629,6 +629,10 @@ _LEGACY_RING_NAMES = {
     "mason": "Dollar",
     "numbers": "The One",
     "omega": "The One",
+    # CROSS-WORDS round (owner UV inbox + PILOT pick 2026-07-27): the
+    # chalice card "MORPH"/"Morph" becomes "PILOT" (Π-I-L-Ω-Θ — the
+    # guide who carries the traveler home).
+    "morph": "PILOT",
 }
 
 

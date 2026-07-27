@@ -2390,13 +2390,14 @@ class Compositor:
             return self._greetings_tooltip()
         # The per-letter HOVER LEGEND (owner ROADMAP 15b, "malo legende
         # oko tih naših odabira"): a ring preset may carry a `legend`
-        # per position (Database/ring_presets.json — the Dollar today) —
-        # what that letter stands for, quoted verbatim from CANON.md's
-        # Banknote table. Checked on every letter the active preset
-        # seats, independent of the hidden-mode unlock (unlike the Four
+        # per position (Database/ring_presets.json — the Dollar, DOMY
+        # and PILOT today, CROSS-WORDS round 2026-07-27) — what that
+        # letter stands for, quoted verbatim from CANON.md's Banknote
+        # table. Checked on every letter the active preset seats,
+        # independent of the hidden-mode unlock (unlike the Four
         # Greetings, this is not an Easter egg); a preset without a
-        # legend (DOMY/Morph/The One/Templar, every custom ring) falls
-        # through unchanged.
+        # legend (The One/Templar, every custom ring) falls through
+        # unchanged.
         if in_letter_band:
             legend = self._ring_letter_legend_tooltip(theta, half)
             if legend is not None:
@@ -2487,8 +2488,8 @@ class Compositor:
         """The per-letter HOVER LEGEND (ROADMAP 15b): `skin.ring.
         letter_legend` is hour -> {name, reading}, built by
         `app.controller.build_skin` from the active ring preset's
-        optional `legend` card (`data.rings.validate_preset`) — empty
-        for every preset but the Dollar today. Finds the legend entry
+        optional `legend` card (`data.rings.validate_preset`) — the
+        Dollar, DOMY and PILOT today (CROSS-WORDS round). Finds the legend entry
         whose OWN letter position is within `half` degrees of the
         hovered angle (the same half-width the 12h Four Greetings
         trigger uses — every ring letter occupies the same angular

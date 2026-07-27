@@ -7,7 +7,7 @@ loud (Rule #1): a broken card must name itself, never render blank.
 """
 
 from config import constants, paths
-from core.motto import motto_glyph_angles
+from core.motto import centered_word_angles, motto_glyph_angles
 from data._io import load_json_checked
 
 _SIGNATURES = {
@@ -36,8 +36,9 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
     broken pin config (a typo'd occurrence, an out-of-order pin) fails
     loudly at startup, never mid-paint. Returns a tuple of
     `{"text": str, "angles": tuple[float, ...]}`, empty for every
-    preset without a `motto` field (DOMY, Morph, The One, Templar,
-    every custom ring)."""
+    preset without a `motto` field (The One, Templar, every custom
+    ring; DOMY and PILOT carry the CENTERED cross-word form, the
+    Dollar the pinned Great Seal form)."""
     resolved = []
     for motto_entry in raw:
         text = str(motto_entry.get("text", ""))
@@ -52,6 +53,32 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
                 f"ring preset {name!r}: motto {text!r} uses unknown letters "
                 f"{sorted(unknown)}"
             )
+        clockwise = bool(motto_entry.get("clockwise", True))
+        # The CROSS-WORDS form (owner UV inbox 2026-07-27): a single
+        # station word CENTERED on one of the preset's own seats —
+        # `{"text", "center", "clockwise"}`, the DOMY/PILOT cross
+        # stations. Mutually exclusive with the pinned Great Seal form.
+        center = motto_entry.get("center")
+        if center is not None:
+            if motto_entry.get("pins"):
+                raise ValueError(
+                    f"ring preset {name!r}: motto {text!r} cannot carry "
+                    f"both `center` and `pins`"
+                )
+            center = int(center)
+            if center not in positions:
+                raise ValueError(
+                    f"ring preset {name!r}: motto center {center} is not "
+                    f"one of its own positions {positions}"
+                )
+            try:
+                angles = centered_word_angles(text, center, clockwise=clockwise)
+            except ValueError as error:
+                raise ValueError(
+                    f"ring preset {name!r}: motto {text!r}: {error}"
+                ) from error
+            resolved.append({"text": text, "angles": angles})
+            continue
         pins = []
         for letter, occurrence, position in motto_entry.get("pins", ()):
             if position not in positions:
@@ -60,7 +87,6 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
                     f"is not one of its own positions {positions}"
                 )
             pins.append((str(letter), int(occurrence), int(position)))
-        clockwise = bool(motto_entry.get("clockwise", True))
         try:
             angles = motto_glyph_angles(text, tuple(pins), clockwise=clockwise)
         except ValueError as error:

@@ -101,7 +101,7 @@ def _letter_metal(position: int, layout: dict, finish: str) -> str:
     per-preset "Two metals" toggle is on (TASK 3, MASON/ICONS round,
     `_ring_two_metals`), so the Trinity vertices wear the finish metal
     and the Union vertices the accent, the same rule as the 4-letter
-    layouts applied to a 3+3 split; DOMY/MORPH's own triangle-less seal
+    layouts applied to a 3+3 split; DOMY/PILOT's own triangle-less seal
     presets, and any eligible preset with the toggle off, keep the plain
     one-metal reading)."""
     if not layout["triangle"] or position in layout["triangle"]:
@@ -115,7 +115,7 @@ def _ring_two_metals(settings: Settings, card: dict) -> bool:
     owner verdicts 2026-07-19, third batch) — only presets that carry
     their OWN `triangle` override are eligible at all (Mason/Omega/
     Templar today, `data.rings.validate_preset`'s optional card field);
-    every other preset (DOMY/MORPH's own 4-letter triangle already
+    every other preset (DOMY/PILOT's own 4-letter triangle already
     always applies through the LAYOUT, not this switch; a custom seal
     with no override) is untouched by this toggle and always reads
     False here. The user's stored per-preset choice
@@ -405,6 +405,7 @@ def build_skin(settings: Settings):
     letter_art = {}
     letter_metal = {}
     letter_legend = {}
+    letter_zoom = {}
     for position, glyph in zip(card["positions"], card["letters"]):
         hour = position % 24                     # cards say 24, hours say 0
         letters[hour] = glyph
@@ -414,6 +415,19 @@ def build_skin(settings: Settings):
         filename = constants.RING_LETTER_FILES[glyph]
         if eye_shine and glyph == constants.RING_EYE_GLYPH:
             filename = constants.RING_EYE_SHINE_FILE
+        stem = filename[:-len(".png")]
+        if stem.startswith("Eye_shine"):
+            # THE SHINE ENLARGE (owner UV inbox 2026-07-27): the rays
+            # pad the triangle, so the shine master draws bigger and
+            # the TRIANGLE stays the no-light size. Explicit custom
+            # variants carry their source in the stem; the adaptive
+            # glyph reads the Settings art source directly.
+            source = (
+                stem.rsplit("_", 1)[-1]
+                if stem.endswith(("_gem", "_gpt"))
+                else paths.ART_SUFFIX[settings.art_source]
+            )
+            letter_zoom[hour] = constants.RING_EYE_SHINE_ENLARGE[source]
         letter_art[hour] = defaults.RING_LETTER_ART_DIR / filename
         letter_metal[hour] = _letter_metal(position, metal_layout, settings.ring_finish)
         if position in card["legend"]:
@@ -447,6 +461,7 @@ def build_skin(settings: Settings):
             letter_art=letter_art,
             letter_metal=letter_metal,
             letter_legend=letter_legend,
+            letter_zoom=letter_zoom,
             motto=motto,
             motto_metal=settings.ring_finish,
         ),

@@ -1,5 +1,5 @@
 {
-  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs. Optional 'triangle' (seal layout only, ROADMAP 15b): overrides the layout's own metal triangle so a 6-letter preset can split into two 3-letter metal groups instead of the seal's own plain single finish on all six; on Mason/Omega/Templar this override only actually APPLIES when the owner's per-preset 'Two metals' toggle is on (TASK 3, MASON/ICONS round, settings.ring_two_metals / app.controller._ring_two_metals) — off, the preset falls back to one finish on all six exactly like a card with no triangle at all. Optional 'legend': hour(as the position int) -> {name, reading} — the per-letter HOVER LEGEND (owner: what a letter stands for), quoted verbatim from CANON.md's Banknote table; each reading may carry a second '\\n\\n'-separated paragraph, the axis-opposition line (TASK 2, owner 'moze'). Optional 'motto' (TASK 1, owner 'moze radi'; corrected MOTO-FIX round, owner correction 2026-07-19, the dollar's Great Seal reference image; corrected ANNUIT WORD-GAP round, owner correction 2026-07-19, third batch): a list of Great Seal motto entries {text, pins, clockwise}, pins = [letter, occurrence, position] triples; optional per-entry 'clockwise' (default true) picks the arc's reading direction — true sweeps increasing angle (the TOP arc), false sweeps decreasing (the BOTTOM arc) — the outer curved-text arc outside the ring band, validated and angle-solved by data.rings.validate_preset/core.motto. RENAMES (TASK 2, MASON/ICONS round, owner verdicts 2026-07-19, third batch): 'MORPH' -> 'Morph', 'MASON G' -> 'Mason', 'NUMBERS' -> 'Omega'; RENAMES again (DOLLAR/EYE round, owner decree 2026-07-27): 'Mason' -> 'Dollar', 'Omega' -> 'The One' — the note and its denomination (CANON.md's Banknote section: 'the denomination is THE ONE'); app.settings_store migrates a stored settings file's old name (either generation) onto the new one. THE EYE AT THE APEX (same decree): the Dollar's 12h seat wears the Eye of Providence glyph (letter '👁') instead of G — the canonical Eye.png resolves per the Settings art source (_gem/_gpt), and the per-preset 'Shine' toggle (settings.ring_eye_shine, constants.RING_EYE_SHINE_DEFAULT — Dollar default ON) swaps in Eye_shine.png, the glory-of-rays master; see CUBE.md's Banknote Seal for the Eye's PROPOSED reading. New bundled preset 'Templar': the seal layout, all six positions wearing the templar-cross glyph, no motto, no legend. DELETED 2026-07-27 (owner correction): the 'Rose' card. The Rose was never a ring - CUBE.md had mis-transcribed the owner's POINTER spec as a ring preset and stamped it SEALED; the card, its computed ray band and its per-ray legend are gone whole, and the Rose lives as the seventh POINTER (CUBE.md - The Rose of the Twenty-Four).",
+  "note": "Ring presets (owner spec): one entry = one dial styling. positions are dial hours (24 = the bottom Omega slot in DOMY); letters pair with positions by index and come from the letter library (RING_LETTER_FILES). The positions signature picks the LAYOUT: flame (12,20,24,4 - the gold triangle points up), chalice (12,16,24,8 - points down), seal (all six). Adding an entry here (or a custom one in Settings) is all a new styling needs. Optional 'triangle' (seal layout only, ROADMAP 15b): overrides the layout's own metal triangle so a 6-letter preset can split into two 3-letter metal groups instead of the seal's own plain single finish on all six; on Mason/Omega/Templar this override only actually APPLIES when the owner's per-preset 'Two metals' toggle is on (TASK 3, MASON/ICONS round, settings.ring_two_metals / app.controller._ring_two_metals) — off, the preset falls back to one finish on all six exactly like a card with no triangle at all. Optional 'legend': hour(as the position int) -> {name, reading} — the per-letter HOVER LEGEND (owner: what a letter stands for), quoted verbatim from CANON.md's Banknote table; each reading may carry a second '\\n\\n'-separated paragraph, the axis-opposition line (TASK 2, owner 'moze'). Optional 'motto' (TASK 1, owner 'moze radi'; corrected MOTO-FIX round, owner correction 2026-07-19, the dollar's Great Seal reference image; corrected ANNUIT WORD-GAP round, owner correction 2026-07-19, third batch): a list of Great Seal motto entries {text, pins, clockwise}, pins = [letter, occurrence, position] triples; optional per-entry 'clockwise' (default true) picks the arc's reading direction — true sweeps increasing angle (the TOP arc), false sweeps decreasing (the BOTTOM arc) — the outer curved-text arc outside the ring band, validated and angle-solved by data.rings.validate_preset/core.motto. RENAMES (TASK 2, MASON/ICONS round, owner verdicts 2026-07-19, third batch): 'MORPH' -> 'Morph', 'MASON G' -> 'Mason', 'NUMBERS' -> 'Omega'; RENAMES again (DOLLAR/EYE round, owner decree 2026-07-27): 'Mason' -> 'Dollar', 'Omega' -> 'The One' — the note and its denomination (CANON.md's Banknote section: 'the denomination is THE ONE'); and (CROSS-WORDS round, owner UV inbox + PILOT pick 2026-07-27) 'Morph' -> 'PILOT' with NEW letters L/Π/Ω/Θ (Π-I-L-Ω-Θ spells the guide who carries the traveler home; the four light stations Hope/Faith/Love/Salvation now initial their own seats: Θ Tharsos, L Latria, Π Pothos, Ω Opheleia — CANON.md §The Banknote, The Cross Rings). app.settings_store migrates a stored settings file's old name (any generation) onto the new one. THE CROSS WORDS (same round): DOMY and PILOT wear their cross's four station words as outside-the-band arc text like the Dollar's mottos — the new '{text, center, clockwise}' motto entry form, one word CENTERED per station seat (core.motto.centered_word_angles); DOMY carries FEAR/ANGER/HATE/SUFFERING, PILOT carries HOPE/FAITH/LOVE/SALVATION, and both now carry a per-letter hover 'legend' quoting the Two Crosses stations (CUBE.md) and the owner's letter symbolism (Ysteria/Orge/Detest/Misery; Tharsos/Latria/Pothos/Opheleia). THE DOLLAR'S TWO SYMBOLIKE (same round, replacing the retired Sigma/Alpha/Master readings): every Dollar letter reads BOTH as a Double-Trinity office (Malignant Accuser, Anointed Aegis, Satanic Scourge, Omnific Originator, Nazarene Advocate, the Eye as Judge) AND as a Cube term (Megalomania, Abnegation, Storm, Obligation, Numbness). THE EYE AT THE APEX (same decree): the Dollar's 12h seat wears the Eye of Providence glyph (letter '👁') instead of G — the canonical Eye.png resolves per the Settings art source (_gem/_gpt), and the per-preset 'Shine' toggle (settings.ring_eye_shine, constants.RING_EYE_SHINE_DEFAULT — Dollar default ON) swaps in Eye_shine.png, the glory-of-rays master; see CUBE.md's Banknote Seal for the Eye's PROPOSED reading. New bundled preset 'Templar': the seal layout, all six positions wearing the templar-cross glyph, no motto, no legend. DELETED 2026-07-27 (owner correction): the 'Rose' card. The Rose was never a ring - CUBE.md had mis-transcribed the owner's POINTER spec as a ring preset and stamped it SEALED; the card, its computed ray band and its per-ray legend are gone whole, and the Rose lives as the seventh POINTER (CUBE.md - The Rose of the Twenty-Four).",
   "presets": [
     {
       "name": "DOMY",
@@ -14,10 +14,34 @@
         "Y",
         "Ω",
         "D"
+      ],
+      "legend": {
+        "12": {
+          "name": "M — Misery",
+          "reading": "Suffering — the dark path's last station: M for Miseria, Latin for wretchedness. At noon what fermented in the dark stands naked in full light — \"nothing is secret, that shall not be made manifest\" (Luke 8:17); and the Passion itself darkened noon: \"from the sixth hour there was darkness over all the land\" (Matthew 27:45).\n\nDown the spine: Ω — Suffering against Anger; the dark path ends EXPOSED before the Judge at noon (the chiasm of the Two Crosses)."
+        },
+        "20": {
+          "name": "Y — Ysteria",
+          "reading": "Fear — the dark path's first station, at dusk on the future's red arm: Y for Ysteria (Greek ὑστέρα — the panic that seizes and unmans) and for the Yips, the fear that blocks the hand at the decisive moment. \"The thing which I greatly feared is come upon me\" (Job 3:25).\n\nAcross the crossbar: D — Fear against Hate, the panic of dusk facing the cold decision of the hour before dawn."
+        },
+        "24": {
+          "name": "Ω — Orge",
+          "reading": "Anger — the midnight station: Ω for Orgē (ὀργή — wrath, the anger that keeps), at the LIVID hour — lividus is Latin for bruise-purple and for rage. Ephesians 4:26 broken: the sun went down upon the wrath, and midnight found it awake.\n\nUp the spine: M — Anger against Suffering: what midnight wrath ferments, noon will expose (Luke 8:17)."
+        },
+        "4": {
+          "name": "D — Detest",
+          "reading": "Hate — the station before dawn: D for Detestatio, the Latin curse of loathing — anger cooled into cold, decided hate on the past's blue arm; Judas's own hour, the kiss by night. \"He that hateth his brother… walketh in darkness\" (1 John 2:11).\n\nAcross the crossbar: Y — Hate against Fear, the frozen grudge facing the panic that first bred it."
+        }
+      },
+      "motto": [
+        { "text": "SUFFERING", "center": 12, "clockwise": true },
+        { "text": "FEAR", "center": 20, "clockwise": false },
+        { "text": "ANGER", "center": 24, "clockwise": false },
+        { "text": "HATE", "center": 4, "clockwise": false }
       ]
     },
     {
-      "name": "Morph",
+      "name": "PILOT",
       "positions": [
         12,
         16,
@@ -25,10 +49,34 @@
         8
       ],
       "letters": [
-        "M",
+        "L",
         "Π",
         "Ω",
-        "H"
+        "Θ"
+      ],
+      "legend": {
+        "12": {
+          "name": "L — Latria",
+          "reading": "Faith — the noon station: L for Loyalty, the faithfulness that holds under trial, and for Latria (λατρεία), the whole service of worship — not believing THAT, but serving WHOM. \"Faith is the substance of things hoped for\" (Hebrews 11:1).\n\nDown the spine: Ω — Faith against Salvation: what is served in daylight is delivered at midnight (the chiasm of the Two Crosses)."
+        },
+        "16": {
+          "name": "Π — Pothos",
+          "reading": "Love — the vigor arm's station: Π for Pothos (πόθος — the longing that moves), love as DEED and courage: the vow made, the table set at evening. \"Greater love hath no man than this\" (John 15:13).\n\nAcross the crossbar: Θ — Love against Hope, the deed at evening facing the seed at morning."
+        },
+        "24": {
+          "name": "Ω — Opheleia",
+          "reading": "Salvation — the light's ending in the dark's own hour: Ω for Ōpheleia (ὠφέλεια — the help that delivers) and for Omega itself, completion. \"At midnight Paul and Silas prayed… and all the doors were opened\" (Acts 16:25–26).\n\nUp the spine: L — Salvation against Faith; the light path ends REMADE in the Creator's hands at midnight (2 Corinthians 5:17)."
+        },
+        "8": {
+          "name": "Θ — Tharsos",
+          "reading": "Hope — the light path's first station, on Renewal's green: Θ for Tharsos (θάρσος — courage, the good heart), the confidence that dares the morning; hope rises humbly, the seed and the sprout. \"Be of good cheer\" — θαρσεῖτε (John 16:33).\n\nAcross the crossbar: Π — Hope against Love, the seed at morning facing the deed at evening."
+        }
+      },
+      "motto": [
+        { "text": "FAITH", "center": 12, "clockwise": true },
+        { "text": "LOVE", "center": 16, "clockwise": true },
+        { "text": "SALVATION", "center": 24, "clockwise": false },
+        { "text": "HOPE", "center": 8, "clockwise": true }
       ]
     },
     {
@@ -92,28 +140,28 @@
       "triangle": [12, 20, 4],
       "legend": {
         "12": {
-          "name": "The Eye",
-          "reading": "the Eye of Providence — the Judge who watches, seated where the G that crowned it stood: \"the eyes of the LORD run to and fro through the whole earth\" (2 Chronicles 16:9).\n\nAcross the wheel: Ω — the Eye against the Omega, the Judge who watches from noon facing the Creator who begins at midnight (Revelation 1:8; Genesis 1:1)."
+          "name": "👁 — The Eye of Providence",
+          "reading": "God as JUDGE — the Eye of Providence over the crown, the office that watches and weighs: \"the eyes of the LORD run to and fro through the whole earth\" (2 Chronicles 16:9). On the Cube this is the high seat of the judgment hinge: judgment by BOND — Loyalty in measure, Tribalism past it.\n\nAcross the wheel: Ω — the Judge against the Creator, the weighing above facing the making below (Revelation 1:8; Genesis 1:1)."
         },
         "16": {
-          "name": "S",
-          "reading": "Sigma — the union's letter on Courage's arm.\n\nAcross the wheel: N — Satan against the Nazarene, the Accuser facing the Advocate (Revelation 12:10; 1 John 2:1)."
+          "name": "S — Satanic Scourge",
+          "reading": "the Devil as DESTROYER — the Satanic Scourge, the force that wastes what it cannot own, on the vigor arm: where the Accuser is judicial evil, the Scourge is destructive evil. On the Cube: STORM — Vigor that has lost direction, the fall of Frenzy.\n\nAcross the wheel: N — the Scourge against the Advocate, the unmaking hand facing the defending word (the Double Trinity's Advocate ↔ Destroyer diagonal)."
         },
         "20": {
-          "name": "M",
-          "reading": "the Master — the Devil's face of mastery, on Pride's arm.\n\nAcross the wheel: A — the Master against the Angel, Pride's boss-syndrome facing the ministering spirit sent to serve (Hebrews 1:14)."
+          "name": "M — Malignant Accuser",
+          "reading": "the Devil as PROSECUTOR — the Malignant Accuser who indicts the soul: \"the accuser of our brethren\" (Revelation 12:10); diabolos itself means the slanderer. On the Cube: MEGALOMANIA — Dignity enthroned as divinity, Lucifer's own fall: \"I will ascend into heaven\" (Isaiah 14:13).\n\nAcross the wheel: A — the Accuser against the Aegis, the charge brought facing the shield raised (Prosecutor ↔ Preserver)."
         },
         "24": {
-          "name": "Ω",
-          "reading": "Omega — and the dial's ring already seats Ω at 24h.\n\nAcross the wheel: 👁 — the Omega against the Eye, the Creator who begins at midnight facing the Judge who watches from noon (Revelation 1:8; Genesis 1:1)."
+          "name": "Ω — Omnific Originator",
+          "reading": "God as CREATOR — the Omnific Originator, the all-creating: he does not guard, defend, accuse or destroy what exists; he gives existence to existence itself (Ho On, \"the One Who Is\"; Revelation 1:8). On the Cube Ω is the judgment hinge entire: OBLIGATION — to whom or to what am I bound? Loyalty ↔ Integrity in measure, Tribalism ↔ Legalism past it.\n\nAcross the wheel: 👁 — the Creator against the Judge, the making below facing the weighing above (Revelation 1:8; Genesis 1:1)."
         },
         "4": {
-          "name": "N",
-          "reading": "the Nazarene — Jesus on Hope's arm.\n\nAcross the wheel: S — the Nazarene against Satan, the Advocate facing the Accuser (1 John 2:1; Revelation 12:10)."
+          "name": "N — Nazarene Advocate",
+          "reading": "Jesus as ADVOCATE — the Nazarene Advocate who answers the charge: \"we have an advocate with the Father\" (1 John 2:1); he does not deny the sin, he stands beside the sinner. On the Cube: NUMBNESS — Composure emptied of life, the fall of Lethargy, the sleeping watch (Matthew 26:40).\n\nAcross the wheel: S — the Advocate against the Scourge, the defending word facing the unmaking hand (the Double Trinity's Advocate ↔ Destroyer diagonal)."
         },
         "8": {
-          "name": "A",
-          "reading": "Alpha — the beginning, on Renewal's green.\n\nAcross the wheel: M — the Angel against the Master, the ministering spirit sent to serve (Hebrews 1:14) facing the one who would only be served."
+          "name": "A — Anointed Aegis",
+          "reading": "Jesus as GUARDIAN — the Anointed Aegis, the shield that takes the blow: the Guardian protects from attack as the Advocate defends from accusation; the Preserver's own green arm (Hebrews 1:14). On the Cube: ABNEGATION — Humility turned against the self, the fall of Self-Annihilation, Judas's green fall.\n\nAcross the wheel: M — the Aegis against the Accuser, the shield raised facing the charge brought (Prosecutor ↔ Preserver)."
         }
       },
       "motto": [

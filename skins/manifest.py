@@ -2,7 +2,7 @@
 
 Pure dataclasses, importable from config (which builds DEFAULT_SKIN) and
 from render (which consumes the built config). The controller overlays
-the RING PRESET (DOMY/MORPH are ring preset names — nothing more) and
+the RING PRESET (DOMY/PILOT are ring preset names — nothing more) and
 the user's display choices onto DEFAULT_SKIN at build time. Asset fields
 hold absolute paths; a None asset means "draw procedurally".
 """
@@ -64,11 +64,19 @@ class RingSpec:
     # `render.asset_recolor.letter_metal_file`; retired the ~15 MB of
     # pre-rendered `_silver.png`/`_bronze.png` files).
     letter_metal: dict[int, str] = field(default_factory=dict)
+    # hour -> a HEIGHT multiplier for that seat's letter art (CROSS-
+    # WORDS/SHINE round, owner UV inbox 2026-07-27): the Eye's shine
+    # masters pad the triangle with the glory of rays, so build_skin
+    # stamps `constants.RING_EYE_SHINE_ENLARGE[source]` here and the
+    # triangle draws the SAME size as the no-light master — only the
+    # rays extend beyond it. Absent hour = 1.0 (every plain letter).
+    letter_zoom: dict[int, float] = field(default_factory=dict)
     # The per-letter HOVER LEGEND (ROADMAP 15b, owner "malo legende"):
-    # hour -> {name, reading} for a preset that carries one (the Dollar
-    # today; empty {} for DOMY/Morph/The One/Templar and any custom
-    # ring) — see data.rings.validate_preset and render.compositor's
-    # ring-band hover.
+    # hour -> {name, reading} for a preset that carries one (the
+    # Dollar, DOMY and PILOT today — CROSS-WORDS round 2026-07-27;
+    # empty {} for The One/Templar and any custom ring) — see
+    # data.rings.validate_preset and render.compositor's ring-band
+    # hover.
     letter_legend: dict[int, dict] = field(default_factory=dict)
     # The outer GREAT SEAL MOTTO ARC (TASK 1, owner "može radi"
     # 2026-07-19, CANON.md §The Banknote; corrected MOTO-FIX round,

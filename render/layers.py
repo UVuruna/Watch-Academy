@@ -1758,9 +1758,14 @@ class RingLayer(Layer):
         for hour, gold_asset in self._skin.ring.letter_art.items():
             theta = angles.ring_position_angle(hour)
             metal = self._skin.ring.letter_metal.get(hour, "gold")
+            # The Eye's SHINE ENLARGE (owner UV inbox 2026-07-27):
+            # build_skin stamps a per-hour height multiplier for the
+            # shine masters so the triangle stays the no-light size and
+            # only the rays extend beyond it (1.0 for plain letters).
             self._draw_ring_glyph(
                 painter, ctx, gold_asset, metal, theta,
-                defaults.RING_LETTER_RADIUS_FRACTION, height,
+                defaults.RING_LETTER_RADIUS_FRACTION,
+                height * self._skin.ring.letter_zoom.get(hour, 1.0),
             )
 
     def _draw_motto(self, painter: QPainter, ctx: RenderContext) -> None:
