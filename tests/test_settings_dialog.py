@@ -1606,8 +1606,18 @@ def test_legend_popup_caps_and_scrolls(app):
 
 
 def test_chinese_articles_and_elements_cover_the_cycle():
-    """12 animal articles (image-aware, two paragraphs) and one Wu Xing
-    paragraph per element — together the sexagenary 60 (owner spec)."""
+    """12 animal articles and one Wu Xing paragraph per element —
+    together the sexagenary 60 (owner spec).
+
+    The articles used to be "image-aware": a second `[[The Plate]]`
+    paragraph inventoried the animal's medallion, which is why this test
+    once demanded a paragraph break. Session 22 (2026-07-27) retired that
+    movement across the whole corpus under the Article Charter's rule 4
+    (NO SCENE DESCRIPTION), folding each Plate's one doctrinal claim —
+    the twelve animals against the five elements, so a year returns only
+    once in sixty — into `[[The Figure]]`. The length floor stays; the
+    paragraph break was an artefact of the rule being broken.
+    """
     import json
 
     from config import constants, paths
@@ -1618,7 +1628,7 @@ def test_chinese_articles_and_elements_cover_the_cycle():
     assert set(data["chinese_articles"]) == set(constants.CHINESE_ANIMALS)
     for animal, article in data["chinese_articles"].items():
         assert len(article["base"]) > 250, animal
-        assert "\n\n" in article["base"], animal
+        assert "sixty" in article["base"], animal      # the folded claim
     assert set(data["chinese_elements"]) == set(constants.CHINESE_ELEMENTS)
     for element, article in data["chinese_elements"].items():
         assert len(article["base"]) > 150, element
