@@ -32,7 +32,11 @@ class); composed onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   style) preset (owner spec 2026-07-11: Paint-style swatches);
   hovering a circle names the arm position it colors (Top / Bottom
   Left — the Compass speaks compass: North-East…, from
-  `constants.POINTER_ARM_LABELS`); clicking opens `QColorDialog`.
+  `defaults.pointer_arm_labels` over `constants.POINTER_ARM_LABELS`;
+  the Genesis wheel — trio + the "cube" style, Session 20 — speaks its
+  inverted seats Bottom/Left/Right, and the dialog shell normalizes a
+  stray stored "cube" style through `defaults.effective_palette_style`
+  before any preset lookup); clicking opens `QColorDialog`.
   Edited palettes are saved as the user's custom preset for that
   combination ("Reset" returns to the owner preset).
 - **Clock tint** (labeled "Clock tint — dial, hands and Umbra (letters

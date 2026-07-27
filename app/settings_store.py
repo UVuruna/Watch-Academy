@@ -82,6 +82,11 @@ class Settings:
     # while the weekday Names switches (`show_weekday_names`,
     # `show_info_slot_names`) stay untouched for the weekday bodies.
     archetype_names: bool = True
+    # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
+    # Double-Trinity family wheels — Court / Genesis / Council — render
+    # as the corner-view CUBE (wide face rhombi) instead of the Diamond
+    # medallion form. Inert on every other wheel.
+    cube_look: bool = False
     # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — the
     # Design ▸ Earth submenu's FOUR exclusive toggles: Date / Weekday /
     # Date & Weekday / Full Date, `constants.EARTH_LABEL_MODES`).
@@ -378,6 +383,7 @@ class SettingsStore:
                 show_era_suffix=_load_bool(raw, "show_era_suffix", False),
                 archetype_mode=_load_bool(raw, "archetype_mode", False),
                 archetype_names=_load_bool(raw, "archetype_names", True),
+                cube_look=_load_bool(raw, "cube_look", False),
                 earth_label=_load_earth_label(raw),
                 solar_rotation=_load_bool(raw, "solar_rotation", True),
                 legend=_load_bool(raw, "legend", True),
@@ -503,6 +509,7 @@ class SettingsStore:
             "calendar_mount": settings.calendar_mount,
             "archetype_mode": settings.archetype_mode,
             "archetype_names": settings.archetype_names,
+            "cube_look": settings.cube_look,
             "earth_label": settings.earth_label,
             "z_mode": settings.z_mode,
             "solar_rotation": settings.solar_rotation,

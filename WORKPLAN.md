@@ -280,17 +280,37 @@ tellings vs reuse), the Genesis centre's name and its 24h display name
 (CUBE's "God" vs the Court's "The One"), the crosses' one Faith reuse
 candidate, and the six OPEN Character combo figures (Session 21).
 
-### Session 20 — the Cube wheels engine → **Fable**
+### Session 20 — the Cube wheels engine → **Fable** — DONE (2026-07-27, 0.14.436)
 **Say:** "Radi Sesiju 20 iz WORKPLAN.md — treći točkovi i Ruža."
 **Reads:** CUBE.md IN FULL; the archetype engine docs
 (`render/compositor.md`, `app/controller.md`, `data/` docs,
 `Database/ring_presets.json` for the Rose).
-**Delivers:** the third-wheel menu slot (Court/Family/**Genesis**,
-Paint/Light/**Council**, Walks/Ages/**Character**); the Genesis
-wheel drawn as the INVERTED trio (24/16/08); the Diamond/Cube
-display toggle in settings; the Rose ring preset (three octa stars
-at −1h/0h/+1h — Historical/Modern/Archetypal, the +1h star on top).
-Cross-system: render + menu + data + encyclopedia wiring.
+**Delivered:** (1) the THIRD-WHEEL slot — `palette_style` grew "cube"
+on trio/hexa/octa only (`constants.palette_styles_for`; a stored
+"cube" normalizes to "paint" on other pointers at ONE choke point,
+`defaults.effective_palette_style`, and survives the switch back) —
+the Design window's wheel row shows Court/Family/**Genesis**,
+Paint/Light/**Council**, Walks/Ages/**Character**, and the archetype
+grid seats `trinity_genesis`/`prism_council`/`compass_character`
+(figures name-fall-back until the owner's glass and Session 21's
+articles land); (2) the GENESIS INVERSION — one 180° offset
+(`render.layers.arm_offset_deg`) feeds the star diamonds, Aura
+wedges, weekday slots, lit-index math and arm hit-test together, and
+the plain arm hover speaks its creation office (God—Creator 24h,
+Jesus—Preserver 08h, the Devil—Destroyer 16h) with the pending line;
+(3) the DIAMOND/CUBE toggle — `Settings.cube_look` (Settings ▸
+Display ▸ Archetype): on the Court/Genesis/Council the arm halves
+widen to 180/N and the standing star formula tiles the hexagon into
+the corner-view cube faces (verified by offscreen render); (4) the
+ROSE ring preset — a `{"name": "Rose", "rose": true}` card, pure
+computed geometry (Rule 19): the procedural plain hour scale + 24
+diamond rays in the band, three octa stars z-ordered −1h
+(Historical) / 0h (Modern) / +1h (Archetypal, on top — its rays ON 1h
+and 13h), hues `defaults.ROSE_PALETTE` sampled from the owner's
+drawing and SHARED with the Character wheel (one tuple), and a
+COMPUTED 24-entry per-ray hover legend riding the standing
+letter-legend machinery. 24 new goldens in `tests/test_cube_wheels.py`;
+922 tests green.
 
 ### Session 21 — the Cube Encyclopedia wave → **Opus** (writers)
 **Say:** "Radi Sesiju 21 iz WORKPLAN.md — Cube enciklopedija."

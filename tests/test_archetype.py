@@ -77,16 +77,23 @@ def _hour_angle(hours: int, minutes: int) -> float:
 # --- The grid and the tables ---------------------------------------------------
 
 
-def test_grid_covers_the_eight_archetypes():
-    """CANON (owner 2026-07-17): EIGHT archetypes — the Seasons split
-    into PAINT (the Four Temperaments) and LIGHT (the Tetramorph); Aurora
-    and the Calendar have none."""
+def test_grid_covers_the_eleven_archetypes():
+    """CANON (owner 2026-07-17) + the Cube wave (owner seal 2026-07-26,
+    CUBE.md): ELEVEN archetypes — the Seasons split into PAINT (the
+    Four Temperaments) and LIGHT (the Tetramorph), and the three Cube
+    pointers each carry a THIRD wheel (Genesis / Council / Character);
+    Aurora and the Calendar have none."""
     assert set(archetypes.ARCHETYPE_GRID.values()) == {
         "trinity_paint", "trinity_light", "seasons_paint", "seasons_light",
         "prism_paint", "prism_light", "compass_paint", "compass_light",
+        "trinity_genesis", "prism_council", "compass_character",
     }
     assert archetypes.grid_key("cross", "paint") == "seasons_paint"
     assert archetypes.grid_key("cross", "light") == "seasons_light"
+    assert archetypes.grid_key("trio", "cube") == "trinity_genesis"
+    assert archetypes.grid_key("hexa", "cube") == "prism_council"
+    assert archetypes.grid_key("octa", "cube") == "compass_character"
+    assert archetypes.grid_key("cross", "cube") is None
     assert archetypes.grid_key("aurora", "paint") is None
     assert archetypes.grid_key("calendar", "light") is None
     for pointer in ("trio", "cross", "hexa", "octa"):
@@ -97,16 +104,22 @@ def test_grid_covers_the_eight_archetypes():
 
 def test_figure_order_matches_the_hour_spaces():
     """The figures tuple index IS the hour-space index: angles run
-    k·(360/N) in order, and the entity keys are unique per set."""
-    pointer_of = {key: pointer for (pointer, _), key
-                  in archetypes.ARCHETYPE_GRID.items()}
+    offset + k·(360/N) in order (the offset is 0 everywhere except the
+    Genesis wheel's 180° inversion — CUBE.md), and the entity keys are
+    unique per set."""
+    seat_of = {key: seat for seat, key in archetypes.ARCHETYPE_GRID.items()}
     for key in set(archetypes.ARCHETYPE_GRID.values()):
+        pointer, style = seat_of[key]
         figs = archetypes.figures(key)
-        arms = constants.POINTER_POINTS[pointer_of[key]]
+        arms = constants.POINTER_POINTS[pointer]
         assert len(figs) == arms
         step = 360.0 / arms
+        offset = (
+            constants.GENESIS_ARM_OFFSET_DEG
+            if (pointer, style) == ("trio", "cube") else 0.0
+        )
         assert [fig["angle"] for fig in figs] == [
-            k * step for k in range(arms)
+            (offset + k * step) % 360.0 for k in range(arms)
         ]
         entities = [fig["entity"] for fig in figs]
         assert len(set(entities)) == len(entities)
@@ -124,6 +137,13 @@ def test_center_table_is_the_sealed_one():
     assert archetypes.center("seasons_light")["file"].name == "Throne.png"
     assert archetypes.center("compass_paint") is None
     assert archetypes.center("compass_light") is None
+    # The Cube wave (owner seal 2026-07-26): the Beginning (Genesis),
+    # the Sabbath (Council); the Character wheel keeps the Compass law —
+    # the rose is the wheel itself.
+    assert archetypes.center("trinity_genesis")["file"].name == "Beginning.png"
+    assert archetypes.center("trinity_genesis")["name"] == "The Beginning"
+    assert archetypes.center("prism_council")["file"].name == "Sabbath.png"
+    assert archetypes.center("compass_character") is None
 
 
 def test_prism_poles_wear_their_own_lancets(app, tmp_path):
@@ -912,8 +932,18 @@ def test_every_archetype_set_position_and_center_is_written(app):
 
     repo = SymbolismRepository()
     checked = 0
+    # The Cube wave's three sets (Genesis / Council / Character, owner
+    # seal 2026-07-26) are WORKPLAN Session 21's writers' work — until
+    # that session lands they speak the documented pending line, and
+    # this coverage law scopes to the original eight sets.
+    pending_sets = {
+        "archetype_trinity_genesis", "archetype_prism_council",
+        "archetype_compass_character",
+    }
     for key, spec in archetypes.ARCHETYPES.items():
         set_name = spec["articles"]
+        if set_name in pending_sets:
+            continue
         figs = []
         if "registers" in spec:
             for register in spec["registers"].values():

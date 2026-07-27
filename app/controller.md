@@ -387,7 +387,24 @@ pattern) rather than guessed:
   SAME raw-English table directly, translated at build time; `watch_
   title` reads it too, UNTRANSLATED — Rule #5, one source) and the
   pair is never grayed; the Calendar lighting row is visible only on
-  the Calendar pointer.
+  the Calendar pointer. **THE CUBE THIRD WHEELS (owner seal
+  2026-07-26, CUBE.md; WORKPLAN Session 20):** the three Cube pointers
+  carry a THIRD label — Court/Family/**Genesis**,
+  Paint/Light/**Council**, Walks/Ages/**Character** — and the Design
+  window's wheel row zips the labels with
+  `constants.palette_styles_for(pointer)`, so two-wheel pointers keep
+  two pills. `apply_display_settings` normalizes a stored `"cube"`
+  style through `defaults.effective_palette_style` at its ONE choke
+  point — a pointer switch to the Seasons/Aurora/Calendar renders
+  "paint" while the stored setting survives untouched (switching back
+  restores the Cube wheel); `cube_look` (the Diamond/Cube display
+  toggle, Settings ▸ Display ▸ Archetype group) flows onto the skin
+  there too. `build_skin` grew the ROSE branch: the "Rose" ring card
+  (`rose: true`, [Ring Presets](../data/rings.md)) maps onto the
+  PROCEDURAL ring — no face asset, no letters, no motto, `RingSpec.
+  rose=True` and the card's computed 24-entry ray legend — so
+  `render.layers.RingLayer._draw_rose` paints the three offset octa
+  stars (CUBE.md §The Rose).
   `_install_skin()` ALSO refreshes the TITLE row/tray tooltip
   (`_refresh_watch_title`) and any OPEN Design/Pointer Theme/Slot Theme
   window in place (`_refresh_open_mini_windows`, R5 MENU REWORK) — the

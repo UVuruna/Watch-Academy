@@ -76,9 +76,11 @@ from render.layers import (
     sunday_dual_face,
     theme_ninth,
     thirteenth_plate,
+    arm_half_deg,
+    arm_offset_deg,
     weekday_body_orbit,
     weekday_body_size,
-    today_slot_theta,
+    weekday_slots,
     visible_occupant,
     weekday_classic_slot,
 )
@@ -1064,10 +1066,16 @@ class Compositor:
         theta = math.degrees(math.atan2(point.x(), -point.y())) % 360.0
         arms = constants.POINTER_POINTS[self._skin.pointer]
         arm_step = 360.0 / arms
+        # The DRAWN geometry (Rule #5 with StarLayer): the Genesis
+        # offset swings the trio cube wheel's arms; the Cube look
+        # widens the family wheels' halves to the full face rhombi.
+        offset = arm_offset_deg(self._skin)
         arm_angle = (
-            round(((theta - rotation) % 360.0) / arm_step) * arm_step
+            offset
+            + round(((theta - rotation - offset) % 360.0) / arm_step)
+            * arm_step
         ) % 360.0
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG[self._skin.pointer]
+        half = arm_half_deg(self._skin)
         inner = star_tip / (2.0 * math.cos(math.radians(half)))
         drawn = arm_angle + rotation
         diamond = QPolygonF([
@@ -1108,6 +1116,12 @@ class Compositor:
                 ),
             )
         if pointer == "trio":
+            if self._skin.palette_style == "cube":
+                # The Genesis offices have no Encyclopedia pages yet
+                # (Session 21 writes the Cube section) — the Spacebar
+                # jump does nothing here, gracefully, exactly like the
+                # figure targets of every unwritten archetype.
+                return None
             theme = constants.TRIO_ARM_THEMES[arm_angle]
             return "trinity", _ENC_TRIO_ORDER.index(theme)
         if arm_angle % 90.0 == 0.0:
@@ -1356,7 +1370,7 @@ class Compositor:
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
         dual = servant_holds_the_seat(self._skin, today)
-        for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[self._skin.pointer]:
+        for angle, occupants in weekday_slots(self._skin):
             if dual and angle == constants.SOUTH_SLOT_ANGLE:
                 continue     # the Servant won the 24h seat today
             body = visible_occupant(occupants, today)
@@ -1965,17 +1979,35 @@ class Compositor:
             # Trio arm (owner spec): its theological theme, the day
             # third it CENTERS (the arm tip is the middle of its hue),
             # the weekday pair it carries — and the virtue's ARTICLE.
-            theme = constants.TRIO_ARM_THEMES[arm_angle]
             start_hour = int((((arm_angle + 180.0) % 360.0) // 15 - 4) % 24)
             end_hour = int((start_hour + 8) % 24)
             bodies = next(
                 occupants
-                for angle, occupants in constants.POINTER_WEEKDAY_SLOTS["trio"]
+                for angle, occupants in weekday_slots(self._skin)
                 if angle == arm_angle
             )
             days = " · ".join(
                 self._tr(constants.WEEKDAY_FULL_NAMES[body]) for body in bodies
             )
+            if self._skin.palette_style == "cube":
+                # The GENESIS wheel (CUBE.md §Double Trinity): the arm
+                # speaks its creation office — person, office, hours,
+                # days. The office articles are Session 21's writers'
+                # work; until they land the hover carries the canon
+                # pending line, never a KeyError (the same graceful
+                # path every unwritten archetype article walks).
+                person, office = constants.GENESIS_ARM_OFFICES[arm_angle]
+                header = _centered_html(
+                    f"<b>{html.escape(self._tr(office))}</b>"
+                    f"{html.escape(star)}",
+                    html.escape(self._tr(person)),
+                    f"{start_hour:02d}:00 - {end_hour:02d}:00",
+                    html.escape(days),
+                )
+                return header + "<br/>" + _article_body_html(
+                    archetypes.ARCHETYPE_PENDING_LINE, tr=self._tr
+                )
+            theme = constants.TRIO_ARM_THEMES[arm_angle]
             header = _centered_html(
                 f"<b>{html.escape(self._tr(theme))}</b>{html.escape(star)}",
                 f"{start_hour:02d}:00 - {end_hour:02d}:00",
@@ -3087,7 +3119,8 @@ class Compositor:
         if not archetype_active(self._skin):
             return None
         return archetype_lit_index(
-            self._skin.pointer, tick.hour_angle, self._rotation()
+            self._skin.pointer, tick.hour_angle, self._rotation(),
+            arm_offset_deg(self._skin),
         )
 
     def _render_group(

@@ -6,14 +6,33 @@
 Loads the ring preset "cards" (owner spec): bundled ones from
 `Database/ring_presets.json` — DOMY (flame), Morph (chalice), Omega
 (seal: every hour number on its own position, Ω at the bottom), Templar
-(seal: the templar-cross glyph on all six) and Mason (seal: the
-banknote's G/S/M/Ω/N/A, ROADMAP 15b, see below) — plus the user's
+(seal: the templar-cross glyph on all six), Mason (seal: the
+banknote's G/S/M/Ω/N/A, ROADMAP 15b, see below) and the Rose (the
+COMPUTED 24-ray preset, Session 20, see below) — plus the user's
 CUSTOM rings from the settings, each `{name, positions, letters}`. The
 positions signature resolves the LAYOUT (`RING_LAYOUTS`: flame /
 chalice / seal — the ring face with matching gaps and the metal
 triangle). Validation is loud: an unknown position set, an unknown
 glyph, a count mismatch or a duplicate name raises with the offending
 entry named.
+
+**The Rose (owner seal 2026-07-26, [The Cube Canon](../CUBE.md) §The
+Rose; WORKPLAN Session 20):** the card is `{"name": "Rose", "rose":
+true}` and NOTHING else — a rose card with positions or letters raises
+(the rays are computed, Rule #19). `validate_preset` short-circuits it
+to `{layout: "rose", rose: True, positions: (), letters: (), legend:
+<computed>, motto: ()}`. The 24-entry hover legend is COMPUTED in
+`_rose_legend()` from one rule: each hour's ray names its
+Character-wheel direction (the color group runs `{arm, arm+1, arm+2}`,
+read from `config.archetypes`' own `compass_character` figure table —
+one source) and the figure SET its star carries (`_ROSE_SETS`:
+Historical on the −1h star, Modern on the 0h star, Archetypal on the
++1h star — the topmost, fully visible one, its rays ON 1h and 13h).
+`app.controller.build_skin` maps the card onto the PROCEDURAL ring
+(`RingSpec.rose = True`, no face asset, no letters) and
+`render.layers.RingLayer._draw_rose` draws the three offset octa
+stars; the full articles behind each ray are Session 21's writers'
+work.
 
 **RENAMES (TASK 2, MASON/ICONS round, owner verdicts 2026-07-19, third
 batch):** the bundled cards were "MORPH", "NUMBERS" and "MASON G" —
@@ -144,7 +163,11 @@ build_skin`:
 - `ring_presets(custom=())`: name → `{positions, letters, layout}` for
   every bundled + custom preset
 - `validate_preset(entry)`: the shared card validator (also used for
-  the Settings custom-ring builder input)
+  the Settings custom-ring builder input); a `rose` card
+  short-circuits to the computed Rose shape
+- `_rose_legend()`: the Rose's 24-entry per-ray hover legend, computed
+  from the Character wheel's figure table and the three-set star law
+  (Rule #19 — one rule, nothing enumerated)
 - `_validate_motto(name, raw, positions)`: the optional `motto` field's
   own validator — unknown letters, out-of-range pin positions and a
   broken angle solve all raise with the preset named (Rule #1)

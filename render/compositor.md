@@ -42,6 +42,24 @@ LIVE (`set_hover()` / `trigger_reveal_week()` no longer drop any cache).
 - [Watch Controller](../app/controller.md) — `set_day()` / `invalidate()`
 - [Tests (folder)](../tests/___tests.md) — `render_offscreen()`
 
+**THE CUBE WHEELS (owner seal 2026-07-26, CUBE.md; WORKPLAN Session
+20):** every arm-geometry consumer here reads the DRAWN geometry
+through `render.layers.arm_offset_deg` / `arm_half_deg` (Rule #5 with
+`StarLayer`): `_arm_angle_at` snaps to the Genesis wheel's inverted
+arms (trio + "cube" → 24h/16h/08h) and widens its hit diamond to the
+Cube-look face rhombi when the toggle dresses a family wheel;
+`_archetype_lit` feeds the same offset into `archetype_lit_index`, so
+the Genesis hour-spaces count from the Creator's 24h arm. The plain
+(non-archetype) Genesis arm hover speaks its creation office —
+person, office, hours, weekday pair (`constants.GENESIS_ARM_OFFICES`)
+— with the `ARCHETYPE_PENDING_LINE` until Session 21's articles land;
+the weekday-body geometry reads `render.layers.weekday_slots`, the
+offset-aware reader of `POINTER_WEEKDAY_SLOTS`. The ROSE ring preset
+needs nothing new here: its 24 computed rays answer through the
+standing per-letter HOVER LEGEND machinery (`_ring_letter_legend_
+tooltip` — the Rose card carries a computed 24-entry legend, see
+[Ring Presets](../data/rings.md)).
+
 ## Classes
 
 ### Compositor
@@ -413,7 +431,10 @@ a short note that it is lending its month to The Cat this year.
     diamond) — hexa diamonds → the zodiac sign; cross/octa CARDINAL arms
     → the Sun topic's solstice/equinox (`_sun_topic_index`); octa
     DIAGONAL arms → the Seasons topic's season or tropical half; trio
-    arms → the Trinity virtue.
+    arms → the Trinity virtue — EXCEPT the GENESIS wheel (trio + the
+    "cube" style, Session 20): its creation offices have no
+    Encyclopedia pages until Session 21 writes the Cube section, so
+    the jump answers None there, gracefully.
   - **Moon marker** → the Moon topic at the CURRENT phase's page
     (`phase_name` indexed into `constants.MOON_PHASE_NAMES`, the topic's
     eight-page order — ROADMAP queue #8b) — UNLESS a LUNAR eclipse

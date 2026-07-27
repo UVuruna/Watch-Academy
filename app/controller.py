@@ -151,10 +151,14 @@ def watch_title(settings: Settings, full: bool = False) -> str:
     pair labels translate from (Rule #5, one source)."""
     if not full:
         return settings.city_name
-    pair = constants.POINTER_PALETTE_LABELS.get(
+    labels = constants.POINTER_PALETTE_LABELS.get(
         settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
     )
-    palette_label = pair[0 if settings.palette_style == "paint" else 1]
+    styles = constants.palette_styles_for(settings.pointer)
+    style = defaults.effective_palette_style(
+        settings.pointer, settings.palette_style
+    )
+    palette_label = labels[styles.index(style)]
     pointer_name = constants.POINTER_DISPLAY_NAMES[settings.pointer]
     return (
         f"{settings.city_name}-{settings.ring_finish.capitalize()} "
@@ -367,6 +371,28 @@ def build_skin(settings: Settings):
     layout/face), the letter art of the chosen finish, the chosen HAND
     PACK and the user's display choices overlaid."""
     card = ring_presets(settings.custom_rings)[settings.ring]
+    if card.get("rose"):
+        # THE ROSE (owner seal 2026-07-26, CUBE.md §The Rose): computed
+        # geometry end to end — the PROCEDURAL plain hour scale (no
+        # face art, no letters, no motto) with the 24 diamond rays
+        # drawn by RingLayer and the computed per-ray hover legend.
+        skin = dataclasses.replace(
+            defaults.DEFAULT_SKIN,
+            ring=dataclasses.replace(
+                defaults.DEFAULT_SKIN.ring,
+                asset=None,
+                rose=True,
+                # No letters at all — DEFAULT_SKIN's own DOMY letter set
+                # must not bleed through onto the plain hour scale.
+                letters={},
+                letter_art={},
+                letter_metal={},
+                letter_legend=card["legend"],
+                motto=(),
+            ),
+            hands=_resolve_hands(settings),
+        )
+        return apply_display_settings(skin, settings)
     layout = constants.RING_LAYOUTS[card["layout"]]
     # A preset may override the seal layout's own (empty) triangle —
     # ROADMAP 15b, Mason's Trinity/Union metal split — but only when the
@@ -665,6 +691,15 @@ def apply_display_settings(skin, settings: Settings):
         # (owner bug 2026-07-12: it was pinned to Europe).
         default_variant=_earth_continent(settings),
     )
+    # A stored "cube" wheel only holds where the pointer serves one
+    # (trio/hexa/octa — CUBE.md); everywhere else it normalizes to
+    # "paint" HERE, the one choke point, so no render consumer ever
+    # indexes PALETTE_PRESETS/ARCHETYPE_GRID with a pair that does not
+    # exist. The stored setting itself stays untouched — switching back
+    # to a Cube pointer restores its Cube wheel.
+    palette_style = defaults.effective_palette_style(
+        settings.pointer, settings.palette_style
+    )
     return dataclasses.replace(
         skin,
         star=star,
@@ -674,7 +709,7 @@ def apply_display_settings(skin, settings: Settings):
         pointer=settings.pointer,
         umbra_form=settings.umbra_form,
         umbra_contrast=settings.umbra_contrast,
-        palette_style=settings.palette_style,
+        palette_style=palette_style,
         calendar_lighting=settings.calendar_lighting,
         calendar_mount=settings.calendar_mount,
         # Aurora is ALWAYS solar-rotated (owner spec 2026-07-12): its
@@ -717,6 +752,7 @@ def apply_display_settings(skin, settings: Settings):
         and not (_slot_seconds(settings) and not archetype_on),
         archetype_mode=settings.archetype_mode,
         archetype_names=settings.archetype_names,
+        cube_look=settings.cube_look,
         earth_label=settings.earth_label,
         show_octa_slot=settings.show_octa_slot,
         show_weekday_names=settings.show_weekday_names,
@@ -727,7 +763,7 @@ def apply_display_settings(skin, settings: Settings):
         ring_letter_scale=settings.ring_letter_scale,
         hover_enlarge=settings.hover_enlarge,
         palette_override=settings.palettes.get(
-            f"{settings.pointer}_{settings.palette_style}"
+            f"{settings.pointer}_{palette_style}"
         ),
         pointer_saturation=settings.pointer_saturation,
         ring_saturation=settings.ring_saturation,

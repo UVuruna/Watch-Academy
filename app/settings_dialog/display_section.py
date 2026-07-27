@@ -109,6 +109,16 @@ class _DisplaySectionMixin:
         self._archetype_names_check = QCheckBox(tr("Archetype names"))
         self._archetype_names_check.setChecked(self._settings.archetype_names)
         form.addRow(self._archetype_names_check)
+        # THE DIAMOND/CUBE LOOK (owner seal 2026-07-26, CUBE.md
+        # §Display laws): the Double-Trinity family wheels — Court,
+        # Genesis, Council — render as the corner-view cube (wide face
+        # rhombi) instead of the slim Diamond arms. Inert elsewhere,
+        # so the checkbox is always enabled, like Archetype names.
+        self._cube_look_check = QCheckBox(
+            tr("Cube look (Court / Genesis / Council)")
+        )
+        self._cube_look_check.setChecked(self._settings.cube_look)
+        form.addRow(self._cube_look_check)
         return group
 
     def _build_sizes_group(self) -> QGroupBox:

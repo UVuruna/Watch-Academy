@@ -78,9 +78,15 @@ class SettingsDialog(
         # (owner 2026-07-12: the box popped huge on every open although
         # the location is picked once) — armed after construction.
         self._suggestions_armed = False
-        self._palette_key = f"{settings.pointer}_{settings.palette_style}"
+        # The style normalized for THIS pointer (a stored "cube" left
+        # behind by a pointer switch reads as "paint" — the same
+        # normalization apply_display_settings runs, Rule #5).
+        self._palette_style = defaults.effective_palette_style(
+            settings.pointer, settings.palette_style
+        )
+        self._palette_key = f"{settings.pointer}_{self._palette_style}"
         self._preset = defaults.PALETTE_PRESETS[
-            (settings.pointer, settings.palette_style)
+            (settings.pointer, self._palette_style)
         ]
         self._hues = list(
             settings.palettes.get(self._palette_key, self._preset)
@@ -259,6 +265,7 @@ class SettingsDialog(
             z_mode=self._z_mode_combo.currentData(),
             diameter=self._diameter_slider.value(),
             archetype_names=self._archetype_names_check.isChecked(),
+            cube_look=self._cube_look_check.isChecked(),
             pointer_saturation=self._pointer_saturation_slider.value() / 100,
             ring_saturation=self._ring_saturation_slider.value() / 100,
             **{

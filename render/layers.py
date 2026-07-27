@@ -182,6 +182,58 @@ def _saturate_hue(hue: str, factor: float) -> str:
     return color.name()
 
 
+def arm_offset_deg(skin: SkinDefinition) -> float:
+    """THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md): the
+    trio's CUBE wheel seats its three arms on the OPPOSITE hours —
+    24h/16h/08h — one 180° offset every arm consumer reads through here
+    (Rule #5): the star diamonds, the Aura wedges, the weekday slots,
+    the lit-index math and the arm hit-test. 0 on every other wheel."""
+    if (skin.pointer, skin.palette_style) == ("trio", "cube"):
+        return constants.GENESIS_ARM_OFFSET_DEG
+    return 0.0
+
+
+def cube_look_active(skin: SkinDefinition) -> bool:
+    """Whether the CUBE look dresses the drawn wheel (owner seal
+    2026-07-26, CUBE.md §Display laws): the settings toggle is on AND
+    the active wheel belongs to the Double-Trinity family — the Court
+    (trio paint), Genesis (trio cube) or the Council (hexa cube)."""
+    return (
+        skin.cube_look
+        and skin.show_pointer
+        and (skin.pointer, skin.palette_style) in constants.CUBE_LOOK_WHEELS
+    )
+
+
+def arm_half_deg(skin: SkinDefinition) -> float:
+    """The drawn arm half-angle: the pointer's slim-diamond value —
+    EXCEPT under the CUBE look, where the half widens to the regular
+    180/N so the three (trio) or six (hexa) rhombi tile the hexagon
+    exactly: the corner-view cube's visible faces (CUBE.md — the Court
+    corner yellow/blue/red, the Genesis corner purple/green/orange, the
+    Council both corners interlocked). The star geometry formula
+    (inner = tip / 2cos(half)) already lands the side vertices on the
+    hexagon rim at these values — the look is pure angle math."""
+    if cube_look_active(skin):
+        return 180.0 / constants.POINTER_POINTS[skin.pointer]
+    return constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
+
+
+def weekday_slots(skin: SkinDefinition) -> tuple:
+    """The pointer's weekday slots with the Genesis offset applied —
+    the slots ride the DRAWN arms (pure geometry: each occupant pair
+    stays glued to its arm as the trio's cube wheel swings it 180°; no
+    re-pairing doctrine is invented here). Every consumer of
+    `constants.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5)."""
+    slots = constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+    offset = arm_offset_deg(skin)
+    if offset == 0.0:
+        return slots
+    return tuple(
+        ((angle + offset) % 360.0, occupants) for angle, occupants in slots
+    )
+
+
 def calendar_wheel(skin: SkinDefinition) -> str:
     """Which of the Calendar's two wheels is active (owner 2026-07-16):
     the palette_style CARRIES the wheel — paint = the Zodiac Dozen,
@@ -514,11 +566,12 @@ def visible_occupant(occupants: tuple[str, ...], today: str) -> str:
     )
 
 
-def today_slot_theta(pointer: str, today: str) -> float | None:
+def today_slot_theta(skin: SkinDefinition, today: str) -> float | None:
     """Unrotated dial angle of the slot showing today's body, or None
     when today lives in the center (the hexa pointer keeps the Sun
-    there)."""
-    for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[pointer]:
+    there). Reads the DRAWN slots (`weekday_slots` — the Genesis
+    inversion moves the trio's slots with its arms)."""
+    for angle, occupants in weekday_slots(skin):
         if today in occupants:
             return angle
     return None
@@ -542,17 +595,22 @@ def archetype_active(skin: SkinDefinition) -> bool:
 
 
 def archetype_lit_index(
-    pointer: str, hour_angle: float, rotation: float = 0.0
+    pointer: str, hour_angle: float, rotation: float = 0.0,
+    offset: float = 0.0,
 ) -> int:
     """The figure whose HOUR-SPACE contains the hour hand (owner
     2026-07-16): the circle divides by arms — trio 3×8h, cross 4×6h,
     hexa 6×4h, octa 8×3h — each space CENTERED on its arm (the arm tip
     is the center of its hue, the standing convention). The spaces
     ride the drawn arms, so the solar rotation shifts them exactly as
-    it shifts the diamonds; index = the figures-tuple position."""
+    it shifts the diamonds; index = the figures-tuple position.
+    `offset` is the Genesis inversion (`arm_offset_deg`) — the trio's
+    cube wheel counts its spaces from the 24h arm."""
     arms = constants.POINTER_POINTS[pointer]
     step = 360.0 / arms
-    return int(round(((hour_angle - rotation) % 360.0) / step)) % arms
+    return int(
+        round(((hour_angle - rotation - offset) % 360.0) / step)
+    ) % arms
 
 
 def archetype_center_lit(hour_angle: float, noon_angle: float) -> bool:
@@ -644,8 +702,9 @@ def archetype_figure_size(
     ):
         return weekday_body_size(skin, radius)
     tip = radius * skin.star.radius_fraction
-    half = constants.POINTER_ARM_HALF_ANGLE_DEG[skin.pointer]
-    tan_half = math.tan(math.radians(half))
+    # The DRAWN half-angle (the Cube look widens the family wheels'
+    # arms to full rhombi — a lancet inscribes the fatter face).
+    tan_half = math.tan(math.radians(arm_half_deg(skin)))
     return archetype_portrait_height(tip, tan_half)
 
 
@@ -937,7 +996,7 @@ def servant_holds_the_seat(skin: SkinDefinition, today: str) -> bool:
     seat = next(
         (
             occupants
-            for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+            for angle, occupants in weekday_slots(skin)
             if angle == constants.SOUTH_SLOT_ANGLE
         ),
         (),
@@ -1334,6 +1393,9 @@ class BackgroundLayer(Layer):
             else (defaults.COLORFUL_OFF_COLOR,)
         )
         span = 360.0 / len(palette)
+        # The hues center on the DRAWN arms — the Genesis offset swings
+        # the trio cube wheel's wedges with its inverted diamonds.
+        offset = arm_offset_deg(ctx.skin)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(aura_radius, start, end))
@@ -1341,8 +1403,9 @@ class BackgroundLayer(Layer):
             painter.rotate(ctx.rotation)
             for i, color in enumerate(palette):
                 painter.setBrush(QColor(color))
+                center = offset + i * span
                 draw_pie(
-                    painter, aura_radius, i * span - span / 2, i * span + span / 2
+                    painter, aura_radius, center - span / 2, center + span / 2
                 )
             painter.restore()
 
@@ -1417,15 +1480,23 @@ class StarLayer(Layer):
         spec = self._skin.star
         colors = palette_for(ctx.skin)
         count = len(colors)
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
+        # The DRAWN half-angle (`arm_half_deg`): the pointer's slim
+        # diamonds — or, under the CUBE look, the regular 180/N halves
+        # whose rhombi tile the hexagon into the corner-view cube faces
+        # (CUBE.md §Display laws). The Genesis offset (`arm_offset_deg`)
+        # swings the trio's cube wheel onto 24h/16h/08h.
+        half = arm_half_deg(ctx.skin)
+        offset = arm_offset_deg(ctx.skin)
         tip = ctx.radius * spec.radius_fraction
         # Inner vertices at tip / (2 cos(half)) — the regular-star value
         # (1/sqrt(3) of the tip for the hexagram); the cross reuses the
-        # octa arm shape, so its arms don't touch (owner spec).
+        # octa arm shape, so its arms don't touch (owner spec). Under
+        # the Cube look the same formula lands the side vertices ON the
+        # hexagon rim (trio: tip itself; hexa: tip/√3) — exact tiling.
         inner = tip / (2.0 * math.cos(math.radians(half)))
         border_width = max(1.0, ctx.radius * spec.border_width_fraction)
         for k, color in enumerate(colors):
-            theta = k * 360.0 / count
+            theta = offset + k * 360.0 / count
             diamond = QPolygonF(
                 [
                     QPointF(0.0, 0.0),
@@ -1488,6 +1559,12 @@ class RingLayer(Layer):
         painter.setPen(Qt.PenStyle.NoPen)
         painter.fillPath(ring, QColor(spec.fill))
 
+        if spec.rose:
+            # THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26,
+            # CUBE.md §The Rose) — drawn under the ticks and numerals,
+            # so the plain hour scale stays readable over its colors.
+            self._draw_rose(painter, ctx, outer, inner)
+
         # Explicit QPen — copying painter.pen() would inherit the NoPen
         # STYLE set for the donut fill and the ticks would never render.
         painter.setPen(
@@ -1537,6 +1614,43 @@ class RingLayer(Layer):
             center = dial_point(minute * 6.0, minute_radius)
             rect = QRectF(center.x() - box / 2, center.y() - box / 2, box, box)
             painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, str(minute))
+
+    def _draw_rose(
+        self, painter: QPainter, ctx: RenderContext, outer: float,
+        inner: float,
+    ) -> None:
+        """THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md
+        §The Rose — computed geometry, never art): 24 diamond rays in
+        the ring band, one per hour — three identical octa stars offset
+        15°, drawn in the owner's z-order (−1h star lowest, 0h star,
+        +1h star topmost — the fully visible star's rays sit ON 1h and
+        13h: THE ONE, and the first hour after noon). Ray colors run
+        {arm, arm+1, arm+2} per Character-wheel arm, hues from
+        `defaults.ROSE_PALETTE` (the Character wheel's own palette —
+        one source, Rule #5); neighbors overlap on purpose
+        (`ROSE_RAY_HALF_DEG` exceeds half the 15° pitch), exactly as
+        the owner's drawing overlaps them. The ring is FIXED — the
+        rays never ride the solar rotation, like the numerals."""
+        mid = (outer + inner) / 2.0
+        half = defaults.ROSE_RAY_HALF_DEG
+        pen = QPen(
+            QColor(defaults.ROSE_RAY_BORDER),
+            max(1.0, ctx.radius * defaults.RING_TICK_WIDTH),
+        )
+        painter.setPen(pen)
+        for star_remainder in (2, 0, 1):        # −1h, 0h, +1h (topmost)
+            for hour in range(constants.HOURS_PER_REVOLUTION):
+                if hour % 3 != star_remainder:
+                    continue
+                theta = angles.ring_position_angle(hour)
+                color = defaults.ROSE_PALETTE[((hour - 12) % 24) // 3]
+                painter.setBrush(QColor(color))
+                painter.drawPolygon(QPolygonF([
+                    dial_point(theta, inner),
+                    dial_point(theta - half, mid),
+                    dial_point(theta, outer),
+                    dial_point(theta + half, mid),
+                ]))
 
     def _draw_ring_glyph(
         self, painter: QPainter, ctx: RenderContext, gold_asset: Path,
@@ -1668,7 +1782,7 @@ def weekday_label_set_px(ctx: RenderContext) -> int:
     target_width = slot_size * defaults.NAME_LABEL_WIDTH_FRACTION
     servant = servant_holds_the_seat(ctx.skin, today)
     bodies = set()
-    for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
+    for slot_angle, occupants in weekday_slots(ctx.skin):
         if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:
             continue
         bodies.add(visible_occupant(occupants, today))
@@ -1810,7 +1924,7 @@ class WeekdayLayer(Layer):
         orbit = ctx.radius * weekday_body_orbit(ctx.skin)
         slot_size = weekday_body_size(ctx.skin, ctx.radius)
         servant = servant_holds_the_seat(ctx.skin, today)
-        for slot_angle, occupants in constants.POINTER_WEEKDAY_SLOTS[ctx.skin.pointer]:
+        for slot_angle, occupants in weekday_slots(ctx.skin):
             if servant and slot_angle == constants.SOUTH_SLOT_ANGLE:
                 continue     # the Servant won the 24h seat today
             body = visible_occupant(occupants, today)
@@ -2269,7 +2383,7 @@ class ArchetypeLayer(Layer):
             return
         orbit = ctx.radius * weekday_body_orbit(ctx.skin)
         tip = ctx.radius * ctx.skin.star.radius_fraction
-        half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
+        half = arm_half_deg(ctx.skin)         # Cube look widens the arms
         arm_width = tip * math.tan(math.radians(half))   # diamond's widest
         # The archetype names switch is now its OWN Settings on/off
         # (owner 2026-07-18, ROADMAP 15h — replaces the buried menu twin
@@ -2366,7 +2480,7 @@ class ArchetypeCenterLayer(Layer):
             # shares the arms' set), agreeing on one size across the
             # two separate paint passes without shared state.
             tip = ctx.radius * ctx.skin.star.radius_fraction
-            half = constants.POINTER_ARM_HALF_ANGLE_DEG[ctx.skin.pointer]
+            half = arm_half_deg(ctx.skin)
             arm_width = tip * math.tan(math.radians(half))
             label_px = (
                 archetype_label_set_px(ctx, key, arm_width)

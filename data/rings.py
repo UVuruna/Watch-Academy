@@ -6,7 +6,7 @@ the ring face with matching gaps and the metal rules. Validation is
 loud (Rule #1): a broken card must name itself, never render blank.
 """
 
-from config import constants, paths
+from config import archetypes, constants, paths
 from core.motto import motto_glyph_angles
 from data._io import load_json_checked
 
@@ -14,6 +14,52 @@ _SIGNATURES = {
     frozenset(layout["positions"]): name
     for name, layout in constants.RING_LAYOUTS.items()
 }
+
+# THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md §The
+# Rose): the three-set reading of TIME itself — Historical on the −1h
+# star (the past, behind the hour), Modern on the 0h star (the present,
+# standing on the true hours), Archetypal on the +1h star (the myths
+# hold in the future too; the topmost, fully visible star — its rays
+# sit ON 1h and 13h: THE ONE, and the first hour after noon). Keyed by
+# `hour % 3`, the star a ray belongs to.
+_ROSE_SETS = {
+    0: ("the 0h star", "the Modern set — the present, standing on the "
+        "true hours"),
+    1: ("the +1h star", "the Archetypal set — the myths hold in the "
+        "future too; the fully visible star, its rays on 1h and 13h: "
+        "THE ONE, and the first hour after noon"),
+    2: ("the −1h star", "the Historical set — the past, one hour "
+        "behind"),
+}
+
+
+def _rose_legend() -> dict:
+    """The Rose's COMPUTED per-ray legend (Rule #19 — one rule covers
+    all 24 rays, nothing enumerated by hand): hour -> {name, reading}.
+    Each ray names its Character-wheel direction (the color group runs
+    {arm, arm+1, arm+2} — exactly as the Rose is drawn) and the figure
+    SET its star carries. The directions come from the Character
+    wheel's own figure table (`config.archetypes` — one source); the
+    full articles are Session 21's writers' work."""
+    figures = archetypes.ARCHETYPES["compass_character"]["figures"]
+    legend = {}
+    for hour in range(24):
+        direction = figures[((hour - 12) % 24) // 3]
+        display = hour if hour != 0 else 24
+        star_name, star_reading = _ROSE_SETS[hour % 3]
+        arm = hour - ((hour - 12) % 3)
+        arm_display = ((arm - 1) % 24) + 1
+        legend[hour] = {
+            "name": f"{display}h · {direction['name']}",
+            "reading": (
+                f"One of the three rays wearing {direction['name']}'s "
+                f"color (its fall: {direction['row2']}), the group led "
+                f"by the {arm_display}h arm of the Character wheel."
+                "\n\n"
+                f"This ray stands on {star_name} — {star_reading}."
+            ),
+        }
+    return legend
 
 
 def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
@@ -86,6 +132,27 @@ def validate_preset(entry: dict) -> dict:
     name = str(entry.get("name", "")).strip()
     if not name:
         raise ValueError(f"ring preset without a name: {entry!r}")
+    if entry.get("rose"):
+        # THE ROSE (owner seal 2026-07-26, CUBE.md §The Rose): pure
+        # computed geometry — no positions, no letters, no face art.
+        # RingLayer draws the procedural ring with the 24 diamond rays
+        # (three octa stars offset 15°, +1h on top); the per-ray hover
+        # legend is computed here from one rule (Rule #19).
+        if entry.get("positions") or entry.get("letters"):
+            raise ValueError(
+                f"ring preset {name!r}: a rose card carries no "
+                "positions or letters — the rays are computed"
+            )
+        return {
+            "name": name,
+            "positions": (),
+            "letters": (),
+            "layout": "rose",
+            "rose": True,
+            "triangle": None,
+            "legend": _rose_legend(),
+            "motto": (),
+        }
     positions = tuple(int(p) for p in entry.get("positions", ()))
     layout = _SIGNATURES.get(frozenset(positions))
     if layout is None:
@@ -148,6 +215,7 @@ def validate_preset(entry: dict) -> dict:
         "positions": positions,
         "letters": letters,
         "layout": layout,
+        "rose": False,
         "triangle": triangle,
         "legend": legend,
         "motto": motto,

@@ -143,11 +143,16 @@ class DesignDialog(QDialog):
                 row, col,
             )
         layout.addLayout(grid)
-        pair = constants.POINTER_PALETTE_LABELS.get(
+        labels = constants.POINTER_PALETTE_LABELS.get(
             settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
         )
+        # The wheel row (owner seal 2026-07-26, CUBE.md): the Cube
+        # pointers carry a THIRD pill — Genesis / Council / Character —
+        # `palette_styles_for` names which styles this pointer serves.
         style_row = QHBoxLayout()
-        for style, label in zip(("paint", "light"), pair):
+        for style, label in zip(
+            constants.palette_styles_for(settings.pointer), labels
+        ):
             style_row.addWidget(self._pill(
                 self._tr(label), settings.palette_style == style,
                 lambda s=style: self._setters["palette_style"](s),
@@ -192,8 +197,13 @@ class DesignDialog(QDialog):
         presets = ring_presets(settings.custom_rings)
         for index, name in enumerate(sorted(presets)):
             card = presets[name]
-            face = constants.RING_LAYOUTS[card["layout"]]["face"]
-            icon = paths.art_file(defaults.RING_FACE_DIR / face)
+            if card.get("rose"):
+                # The Rose is computed geometry with no face art
+                # (CUBE.md §The Rose) — its tile stands text-only.
+                icon = None
+            else:
+                face = constants.RING_LAYOUTS[card["layout"]]["face"]
+                icon = paths.art_file(defaults.RING_FACE_DIR / face)
             row, col = divmod(index, 4)
             grid.addWidget(
                 self._tile(

@@ -64,8 +64,15 @@ element size multipliers `earth_scale` / `moon_scale` / `slot_scale`
 `hover_enlarge` (1.2, range 1.0–2.0 — the element under the cursor
 grows by it; 1.0 disables the effect) (a bad value would otherwise KeyError inside a paint pass, where Qt
 swallows exceptions): `pointer` ("hexa"), `umbra_form` ("fine"),
-`umbra_contrast` ("full"), `palette_style` ("paint" — on the Calendar
-pointer paint = Zodiac wheel, light = Almanac wheel),
+`umbra_contrast` ("full"), `palette_style` ("paint" — now one of
+paint/light/CUBE, the third being the Cube canon's wheel on
+trio/hexa/octa only, owner seal 2026-07-26 CUBE.md; the stored value
+survives pointer switches and `app.controller.apply_display_settings`
+normalizes it per pointer at render time — on the Calendar
+pointer paint = Zodiac wheel, light = Almanac wheel), `cube_look`
+(False — the Diamond/Cube display toggle, CUBE.md §Display laws: the
+Double-Trinity family wheels render as the corner-view cube when on; a
+Settings ▸ Display ▸ Archetype checkbox),
 `calendar_lighting` ("hour" | "year", owner 2026-07-16),
 `archetype_mode` (False — THE ARCHETYPE MODE, owner sealed package
 2026-07-16: the diamonds carry the active wheel's archetype figures

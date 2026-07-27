@@ -36,6 +36,13 @@ ARCHETYPE_GRID = {
     ("hexa", "light"): "prism_light",
     ("octa", "paint"): "compass_paint",
     ("octa", "light"): "compass_light",
+    # THE CUBE THIRD WHEELS (owner seal 2026-07-26, CUBE.md): Genesis —
+    # the creation trio on the INVERTED triangle; Council — all six
+    # Double-Trinity offices in session; Character — the Cube with the
+    # depth axis at zero (4 poles + 4 combos).
+    ("trio", "cube"): "trinity_genesis",
+    ("hexa", "cube"): "prism_council",
+    ("octa", "cube"): "compass_character",
 }
 
 # The Eight Ages ship TWO image registers (owner "oba", CANON §Compass
@@ -147,6 +154,12 @@ _PERSONS_DIR = ARCHETYPE_ART_DIR / "persons" / "primary" / "colored"
 _ONE_SOUL_DIR = ARCHETYPE_ART_DIR / "one_soul" / "primary" / "colored"
 _WALKS_DIR = ARCHETYPE_ART_DIR / "walks" / "primary" / "colored"
 _LIFE_DIR = ARCHETYPE_ART_DIR / "life"
+# The Cube wave families (Session 19 sheets; owner seal 2026-07-26) —
+# no art generated yet: every figure falls back to its NAME until the
+# owner's glass lands (the standing graceful-absent path).
+_GENESIS_DIR = ARCHETYPE_ART_DIR / "genesis" / "primary" / "colored"
+_COUNCIL_DIR = ARCHETYPE_ART_DIR / "council" / "primary" / "colored"
+_CHARACTER_DIR = ARCHETYPE_ART_DIR / "character" / "primary" / "colored"
 
 # The Eight Ages, shared by both registers: (angle, age name, row-2
 # being per register, entity, file stem) — ordered by arm position so
@@ -359,6 +372,92 @@ ARCHETYPES = {
             for register in ARCHETYPE_LIFE_REGISTERS
         },
         "center": None,
+    },
+    # Trinity GENESIS — the creation trio on the INVERTED triangle
+    # (owner seal 2026-07-26, CUBE.md §Double Trinity; sheet
+    # research/prompts/archetype/genesis_prompts.md): the same three
+    # persons who judge on the Court create on the opposite arms —
+    # God—Creator at 24h, Jesus—Preserver at 08h, the Devil—Destroyer
+    # at 16h. THE MANY-NAMES DOCTRINE: this wheel says God where the
+    # Court says The One — the names are layered, never reconciled.
+    # Figure order = drawn-arm order under the 180° Genesis offset
+    # (render.layers.arm_offset_deg), so the tuple index stays the
+    # hour-space index exactly like every other wheel.
+    "trinity_genesis": {
+        "articles": "archetype_trinity_genesis",
+        "figures": (
+            _fig(180.0, _GENESIS_DIR / "God_Creator.png",
+                 "God", "Creator", "god"),
+            _fig(300.0, _GENESIS_DIR / "Jesus_Preserver.png",
+                 "Jesus", "Preserver", "jesus"),
+            _fig(60.0, _GENESIS_DIR / "Devil_Destroyer.png",
+                 "The Devil", "Destroyer", "devil"),
+        ),
+        # The Beginning (name SEALED 2026-07-26) — the Eye's rosette
+        # inverted: the first light over the deep.
+        "center": {
+            "file": _GENESIS_DIR / "Beginning.png",
+            "name": "The Beginning", "entity": "center",
+        },
+    },
+    # Prism COUNCIL — the UNION (owner seal 2026-07-26, CUBE.md; sheet
+    # council_prompts.md, Route A sealed): all six Double-Trinity
+    # offices on the six arms at once, Psalm 82:1. God holds the
+    # vertical (Judge noon, Creator midnight); the diagonals cross the
+    # persons (Advocate ↔ Destroyer, Prosecutor ↔ Preserver).
+    "prism_council": {
+        "articles": "archetype_prism_council",
+        "figures": (
+            _fig(0.0, _COUNCIL_DIR / "God_Judge.png",
+                 "God", "Judge", "god_judge"),
+            _fig(60.0, _COUNCIL_DIR / "Devil_Destroyer.png",
+                 "The Devil", "Destroyer", "devil_destroyer"),
+            _fig(120.0, _COUNCIL_DIR / "Devil_Prosecutor.png",
+                 "The Devil", "Prosecutor", "devil_prosecutor"),
+            _fig(180.0, _COUNCIL_DIR / "God_Creator.png",
+                 "God", "Creator", "god_creator"),
+            _fig(240.0, _COUNCIL_DIR / "Jesus_Advocate.png",
+                 "Jesus", "Advocate", "jesus_advocate"),
+            _fig(300.0, _COUNCIL_DIR / "Jesus_Preserver.png",
+                 "Jesus", "Preserver", "jesus_preserver"),
+        ),
+        # The seventh seat: six offices as the six days of work, the
+        # center as the Sabbath rest.
+        "center": {
+            "file": _COUNCIL_DIR / "Sabbath.png",
+            "name": "The Sabbath", "entity": "center",
+        },
+    },
+    # Compass CHARACTER — the Cube with the depth axis at zero (owner
+    # seal 2026-07-26, CUBE.md §Character Wheel; sheet
+    # character_prompts.md): Judgment (vertical) × Self-Regard
+    # (horizontal), four poles and their four combinations. Row 2 is
+    # the direction's FALL — the same virtue walked past its measure.
+    # The palette is the Rose's own (defaults.ROSE_PALETTE, sealed).
+    "compass_character": {
+        "articles": "archetype_compass_character",
+        "figures": (
+            _fig(0.0, _CHARACTER_DIR / "Loyalty.png",
+                 "Loyalty", "Tribalism", "loyalty"),
+            _fig(45.0, _CHARACTER_DIR / "Patronage.png",
+                 "Patronage", "Favoritism", "patronage"),
+            _fig(90.0, _CHARACTER_DIR / "Dignity.png",
+                 "Dignity", "Self-Worship", "dignity"),
+            _fig(135.0, _CHARACTER_DIR / "Conviction.png",
+                 "Conviction", "Dogmatism", "conviction"),
+            _fig(180.0, _CHARACTER_DIR / "Integrity.png",
+                 "Integrity", "Legalism", "integrity"),
+            _fig(225.0, _CHARACTER_DIR / "Renunciation.png",
+                 "Renunciation", "Mortification", "renunciation"),
+            _fig(270.0, _CHARACTER_DIR / "Humility.png",
+                 "Humility", "Self-Annihilation", "humility"),
+            _fig(315.0, _CHARACTER_DIR / "Devotion.png",
+                 "Devotion", "Martyrdom", "devotion"),
+        ),
+        "center": None,       # both Compass archetypes: the rose is
+                              # the wheel itself (owner; sheet "No
+                              # centre" — nothing generated for the
+                              # middle)
     },
 }
 

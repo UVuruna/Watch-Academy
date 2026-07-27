@@ -77,7 +77,7 @@ class _ColorsSectionMixin:
         spec 2026-07-11) — hovering one names the arm position it colors
         (Top / Bottom Left / North-East…); clicking opens the picker."""
         pointer = self._settings.pointer
-        style = self._settings.palette_style
+        style = self._palette_style       # normalized in the dialog shell
         group = QGroupBox(
             self._tr("Palette — {pointer} {style}").format(
                 pointer=constants.POINTER_DISPLAY_NAMES[pointer],
@@ -86,7 +86,9 @@ class _ColorsSectionMixin:
         )
         column = QVBoxLayout(group)
         chips_row = QHBoxLayout()
-        self._arm_labels = constants.POINTER_ARM_LABELS[pointer]
+        # The Genesis wheel's inverted arms speak their own seats
+        # (Bottom / Left / Right) — defaults.pointer_arm_labels.
+        self._arm_labels = defaults.pointer_arm_labels(pointer, style)
         self._chips: list[QPushButton] = []
         for index, hue in enumerate(self._hues):
             chip = QPushButton()

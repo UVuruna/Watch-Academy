@@ -24,8 +24,14 @@ the ring preset and the user's display choices onto it at build time.
   `pointer` ("hexa" | "cross" | "octa" | "trio" | "aurora" |
   "calendar"), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
-  `palette_style` ("paint" | "light" — on the Calendar pointer it PICKS
-  THE WHEEL: paint = Zodiac, light = Almanac, owner 2026-07-16),
+  `palette_style` ("paint" | "light" | "cube" — the third is the Cube
+  canon's wheel, Genesis/Council/Character on trio/hexa/octa ONLY
+  (owner seal 2026-07-26, CUBE.md; `defaults.effective_palette_style`
+  normalizes it away elsewhere); on the Calendar pointer the style
+  PICKS THE WHEEL: paint = Zodiac, light = Almanac, owner 2026-07-16),
+  `cube_look` (the Diamond/Cube display toggle, CUBE.md §Display laws
+  — the Double-Trinity family wheels render as the corner-view cube
+  when True; `render.layers.cube_look_active`/`arm_half_deg`),
   `calendar_lighting` ("hour" the shichen | "year" the month/sign wedge),
   `archetype_mode` (owner sealed package 2026-07-16 — the active
   (pointer, palette_style) shows ITS archetype: figures in the
@@ -74,7 +80,12 @@ the ring preset and the user's display choices onto it at build time.
   build_skin for the active finish) is overlaid on the art so the ring
   TINT never touches the letters; `letter_legend` (hour → {name,
   reading}) the per-letter hover legend text (empty for every preset but
-  Mason); `motto`/`motto_metal` (TASK 1, owner "može radi" 2026-07-19)
+  Mason — and the Rose, whose 24 computed ray entries ride this same
+  field); `rose` (owner seal 2026-07-26, CUBE.md §The Rose — True only
+  on the "Rose" preset: the procedural plain hour scale plus
+  RingLayer's 24 computed diamond rays, three octa stars offset 15°,
+  the +1h star on top); `motto`/`motto_metal` (TASK 1, owner "može
+  radi" 2026-07-19)
   the outer Great Seal motto arc — a tuple of {"text", "glyphs":
   (asset, angle) pairs} built by build_skin from the preset's own
   `motto` card field, empty for every preset but Mason today; see

@@ -9,7 +9,7 @@ import re
 from datetime import date
 from pathlib import Path
 
-from config import paths
+from config import constants, paths
 from skins.manifest import (
     BackgroundSpec,
     HandSpec,
@@ -872,6 +872,45 @@ _CROSS_ELEMENTS = ("#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0")
 # (the Court/Family pair) — only the Seasons keep one palette.
 _TRINITY = ("#F8E600", "#B60000", "#002FFF")
 _FAMILY = ("#00DC00", "#FF8080", "#7FB2FF")
+# THE CUBE WHEELS (owner seal 2026-07-26, CUBE.md). The moon-gray
+# violet is the Purple-Gray hue law's ONE purple (~#666699 — the Moon,
+# midnight, the Winter Solstice; NEVER royal purple).
+MOON_GRAY_VIOLET = "#666699"
+# GENESIS (trio cube) — the creation trio on the INVERTED triangle,
+# tuple order following the drawn arms (offset 180°): 24h Creator in
+# the moon-gray violet, 08h Preserver in the dial's green, 16h
+# Destroyer in the dial's orange (the hexa paint hues, as the Court's
+# own derivation).
+_GENESIS = (MOON_GRAY_VIOLET, "#007E00", "#DC9600")
+# COUNCIL (hexa cube) — all six Double-Trinity offices at once: the
+# hexa paint wheel with the 24h arm re-dressed per the Purple-Gray hue
+# law (the Creator's arm is the Rose's violet, never royal).
+_COUNCIL = (
+    "#F8E600", "#DC9600", "#B60000",
+    MOON_GRAY_VIOLET, "#002FFF", "#007E00",
+)
+# CHARACTER / THE ROSE (octa cube) — the palette EXACTLY as the Rose is
+# drawn (owner seal: "kept for the beauty of the arrangement"; values
+# sampled from UV/simbolika/slike/24 ROSE (3 x octa).png): the four
+# poles wear yellow / red / moon-purple / BLUE (the Scale's own Judas-
+# Lucifer axis), the four blends follow nature — green of blue+yellow,
+# orange of yellow+red, pink and cyan are red and blue thinned by the
+# neighboring pole's moonlight. Clockwise from the 12h arm. This ONE
+# tuple rules BOTH the Character wheel and the Rose ring preset
+# (CUBE.md §The Rose — Rule #5, one source).
+ROSE_PALETTE = (
+    "#FCEE21", "#F7931E", "#F03232", "#FF7BAC",
+    MOON_GRAY_VIOLET, "#29ABE2", "#0078DC", "#39B54A",
+)
+# The Rose RING PRESET's ray geometry (CUBE.md §The Rose — computed,
+# never art): each of the 24 rays is a diamond in the ring band, tip at
+# the outer edge, base at the band's inner edge, widest at the band
+# middle. The angular half-width exceeds half the 15° ray pitch on
+# purpose — neighboring rays OVERLAP exactly as the owner's drawing
+# overlaps them, and the three-star z-order (−1h under 0h under +1h)
+# decides who shows whole. The border is the drawing's own dark lead.
+ROSE_RAY_HALF_DEG = 11.25
+ROSE_RAY_BORDER = "#1A1A1A"
 PALETTE_PRESETS = {
     ("hexa", "paint"): (
         "#F8E600", "#DC9600", "#B60000",
@@ -903,6 +942,10 @@ PALETTE_PRESETS = {
     ("cross", "light"): _CROSS_ELEMENTS,
     ("trio", "paint"): _TRINITY,
     ("trio", "light"): _FAMILY,
+    # The Cube third wheels (owner seal 2026-07-26, CUBE.md).
+    ("trio", "cube"): _GENESIS,
+    ("hexa", "cube"): _COUNCIL,
+    ("octa", "cube"): ROSE_PALETTE,
     # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
     # paint = azure/green/yellow/orange/red, light = azure/cyan/green/
     # yellow/red; twilight left (dawn) blue, right (dusk) brown.
@@ -932,6 +975,29 @@ PALETTE_PRESETS = {
         "#FF00FF", "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80",
     ),
 }
+
+def effective_palette_style(pointer: str, palette_style: str) -> str:
+    """The palette style AS RENDERED for this pointer: "cube" holds
+    only where the pointer actually serves a Cube wheel
+    (`constants.palette_styles_for`); everywhere else — a stored "cube"
+    left behind by a pointer switch — it normalizes to "paint". The ONE
+    normalization point (Rule #5): `app.controller.
+    apply_display_settings`, the settings dialog's palette group and
+    `watch_title` all read the style through here, so no consumer ever
+    indexes PALETTE_PRESETS with a pair that does not exist."""
+    if palette_style in constants.palette_styles_for(pointer):
+        return palette_style
+    return "paint"
+
+
+def pointer_arm_labels(pointer: str, palette_style: str) -> tuple:
+    """The palette-editor arm labels for the ACTIVE wheel — the
+    Genesis wheel (trio + cube) speaks its inverted seats
+    ("trio_cube"), every other wheel its pointer's own row."""
+    if (pointer, palette_style) == ("trio", "cube"):
+        return constants.POINTER_ARM_LABELS["trio_cube"]
+    return constants.POINTER_ARM_LABELS[pointer]
+
 
 # Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and
 # twilight arcs are still indicated, but as plain white transparency

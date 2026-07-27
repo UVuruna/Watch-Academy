@@ -18,7 +18,16 @@ lepsem meniju u Window sa slikama kao i kod ostalih").
 Pointer variants, Umbra and Complications have no dedicated preview art
 (they are procedural/abstract), so those tabs use styled pill buttons
 instead of inventing art that does not exist (`Owner Assets Are
-Authoritative` — never code around an asset gap silently).
+Authoritative` — never code around an asset gap silently). The ROSE
+ring preset's tile is text-only for the same reason: the Rose is
+computed geometry with no face art (CUBE.md §The Rose).
+
+**THE CUBE THIRD WHEELS (owner seal 2026-07-26, CUBE.md; WORKPLAN
+Session 20):** the Pointer tab's wheel row zips
+`constants.palette_styles_for(pointer)` with the pointer's
+`POINTER_PALETTE_LABELS` — the three Cube pointers show THREE pills
+(Court/Family/**Genesis**, Paint/Light/**Council**,
+Walks/Ages/**Character**), everything else keeps its two.
 
 ## Connections
 

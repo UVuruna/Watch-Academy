@@ -794,12 +794,15 @@ def test_today_always_wins_its_shared_slot():
 
 
 def test_today_slot_positions():
-    assert today_slot_theta("hexa", "sun") is None       # center, not an arm
-    assert today_slot_theta("hexa", "mercury") == 180.0
-    assert today_slot_theta("cross", "sun") == 0.0       # shares the top arm
-    assert today_slot_theta("cross", "mercury") == 180.0  # Wednesday alone at the bottom
-    assert today_slot_theta("octa", "sun") == 0.0
-    assert today_slot_theta("octa", "mercury") == 135.0
+    def skin(pointer):
+        return dataclasses.replace(defaults.DEFAULT_SKIN, pointer=pointer)
+
+    assert today_slot_theta(skin("hexa"), "sun") is None  # center, not an arm
+    assert today_slot_theta(skin("hexa"), "mercury") == 180.0
+    assert today_slot_theta(skin("cross"), "sun") == 0.0  # shares the top arm
+    assert today_slot_theta(skin("cross"), "mercury") == 180.0  # Wednesday alone at the bottom
+    assert today_slot_theta(skin("octa"), "sun") == 0.0
+    assert today_slot_theta(skin("octa"), "mercury") == 135.0
 
 
 # --- Star geometry -----------------------------------------------------------------
@@ -818,10 +821,17 @@ def test_cross_arms_borrow_the_octa_shape():
 
 
 def test_palette_presets_cover_every_pointer_and_style():
+    """Every pointer covers exactly the styles it SERVES
+    (`palette_styles_for` — the Cube pointers carry the third wheel,
+    the rest stay two-wheel; a preset must exist for each)."""
     for pointer, arms in constants.POINTER_POINTS.items():
-        for style in constants.PALETTE_STYLES:
+        for style in constants.palette_styles_for(pointer):
             palette = defaults.PALETTE_PRESETS[(pointer, style)]
             assert len(palette) == arms, (pointer, style)
+        # And no orphan preset beyond the served styles.
+        assert ("cross", "cube") not in defaults.PALETTE_PRESETS
+        assert ("aurora", "cube") not in defaults.PALETTE_PRESETS
+        assert ("calendar", "cube") not in defaults.PALETTE_PRESETS
 
 
 def test_cross_wheels_are_seasons_paint_and_elements_light():
@@ -1011,8 +1021,9 @@ def test_aurora_bands_spread_the_day_hues_evenly():
         assert abs(day_bands[0][0] - rise) < 1e-9
         assert all(alpha == 0.55 for _, _, _, alpha in day_bands)
     # The weekday slot never rotates: pinned at the bottom, above Omega.
+    aurora_skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="aurora")
     for body in constants.WEEKDAY_BODIES:
-        assert today_slot_theta("aurora", body) == 180.0
+        assert today_slot_theta(aurora_skin, body) == 180.0
     # Aurora is ALWAYS solar-rotated, whatever the toggle says.
     skin = apply_display_settings(
         defaults.DEFAULT_SKIN,
@@ -1219,7 +1230,8 @@ def test_trio_centers_the_sun_and_pairs_the_week():
     = Venus+Mars, Hope 4h = Moon+Mercury; Sunday's Sun in the center."""
     from render.layers import today_slot_theta
 
-    assert today_slot_theta("trio", "sun") is None
+    trio_skin = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="trio")
+    assert today_slot_theta(trio_skin, "sun") is None
     slots = dict(constants.POINTER_WEEKDAY_SLOTS["trio"])
     assert slots[0.0] == ("jupiter", "saturn")
     assert slots[120.0] == ("venus", "mars")

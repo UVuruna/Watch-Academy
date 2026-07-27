@@ -46,22 +46,57 @@ Missing/placeholder art reads CIRCLE-sized (there is no art to
 classify). The center follows its OWN art's type exactly like an arm
 figure.
 
-The EIGHT archetypes and their grid seats (owner 2026-07-17: the
-Seasons split into two — PAINT the Temperaments, LIGHT the Tetramorph):
+The ELEVEN archetypes and their grid seats (owner 2026-07-17: the
+Seasons split into two — PAINT the Temperaments, LIGHT the Tetramorph;
+owner seal 2026-07-26, [The Cube Canon](../CUBE.md): the three Cube
+pointers gained a THIRD, "cube" wheel — WORKPLAN Session 20):
 
 | Grid key | (pointer, style) | Archetype | Art dir | Center |
 |---|---|---|---|---|
 | `trinity_paint` | trio · paint | the Courtroom (God / the Devil / Jesus) | `archetype/trinity/` | the Eye |
 | `trinity_light` | trio · light | the Family (Child / Mother / Father) | `archetype/family/` | the Hearth |
+| `trinity_genesis` | trio · cube | GENESIS — the creation trio, INVERTED (Creator 24h / Preserver 08h / Destroyer 16h) | `archetypes/genesis/` | the Beginning |
 | `seasons_paint` | cross · paint | the Four Temperaments | `archetype/temperaments/` | the Throne |
 | `seasons_light` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
 | `prism_paint` | hexa · paint | the Persons (six on the paint wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
 | `prism_light` | hexa · light | One Soul, the Bond (six pillars) | `archetype/one_soul/` | the Union |
+| `prism_council` | hexa · cube | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Sabbath |
 | `compass_paint` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
 | `compass_light` | octa · light | the Eight Ages | `archetype/life/<register>/` | — |
+| `compass_character` | octa · cube | CHARACTER — the Cube at depth zero (4 poles + 4 combos) | `archetypes/character/` | — |
 
 Aurora and the Calendar have NO archetype — `grid_key()` returns None
-there and the menu grays the toggle.
+there and the menu grays the toggle. The Seasons stay two-wheel: the
+"cube" style itself exists only on trio/hexa/octa
+(`constants.palette_styles_for`).
+
+**The Cube wave seats (owner seal 2026-07-26, CUBE.md; sheets under
+`research/prompts/archetype/` — no art generated yet, every figure
+name-falls-back until the owner's glass lands):**
+
+- **Genesis** figures sit on the INVERTED arms — their `angle` values
+  are `180/300/60` (the 180° Genesis offset,
+  `render.layers.arm_offset_deg`), and the tuple index stays the
+  hour-space index under that offset (pinned by test). THE MANY-NAMES
+  DOCTRINE: this wheel says **God** (`God_Creator`) where the Court
+  says The One — the names are layered, never reconciled. Centre:
+  **The Beginning** (`Beginning.png`, name SEALED 2026-07-26).
+- **Council** seats three persons in six offices (Judge 12h /
+  Destroyer 16h / Prosecutor 20h / Creator 24h / Advocate 04h /
+  Preserver 08h); its entity keys are `person_office` pairs
+  (`god_judge`, `devil_destroyer`, …) because the same person holds
+  two seats. Centre: **The Sabbath** — six offices as the six days of
+  work, the center the seventh.
+- **Character** carries the eight directions (Loyalty / Patronage /
+  Dignity / Conviction / Integrity / Renunciation / Humility /
+  Devotion), each `row2` its own FALL (Tribalism, Favoritism, …) —
+  one window, two storeys. `center: None` — both Compass laws hold:
+  the rose is the wheel itself. Its palette is `defaults.ROSE_PALETTE`
+  (the Rose's own, sealed).
+- The three article sets (`archetype_trinity_genesis`,
+  `archetype_prism_council`, `archetype_compass_character`) are
+  WORKPLAN Session 21's writers' work — until then every hover speaks
+  `ARCHETYPE_PENDING_LINE`, never a KeyError.
 
 ## Design Decisions
 

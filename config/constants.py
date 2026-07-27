@@ -371,21 +371,23 @@ POINTER_DISPLAY_NAMES = {
     "calendar": "Calendar",  # no arms — the year/day in twelve wedges
 }
 
-# The wheel-pair LABELS per pointer (owner 2026-07-17, ROADMAP 11; naming
-# refinements 2026-07-17/19) — RAW English, the ONE table both the Design
-# menu's palette-style pair (`app.controller._build_menu`, `tr()`-wrapped
-# at build time) and the watch TITLE row (`app.controller.watch_title`,
-# untranslated — a name, not chrome) read (Rule #5: one source, two
-# readers). Index 0 = "paint" style, index 1 = "light" style
-# (`Settings.palette_style`). Every pointer carries two distinct wheels
-# now (the Seasons gained the Elements wheel) — never grayed.
+# The wheel LABELS per pointer (owner 2026-07-17, ROADMAP 11; naming
+# refinements 2026-07-17/19; the CUBE third wheels sealed 2026-07-26,
+# CUBE.md §Double Trinity/§Character Wheel) — RAW English, the ONE table
+# both the Design window's palette-style row (`app.design_window`,
+# `tr()`-wrapped at build time) and the watch TITLE row
+# (`app.controller.watch_title`, untranslated — a name, not chrome)
+# read (Rule #5: one source, two readers). Index 0 = "paint", index 1 =
+# "light", index 2 (where present) = "cube" — the Cube canon's third
+# wheel (`palette_styles_for` below tells which pointers carry it).
 POINTER_PALETTE_LABELS = {
-    "trio": ("Court", "Family"),
+    "trio": ("Court", "Family", "Genesis"),
     "cross": ("Temperaments", "Elements"),
     # The FULL idiom (owner pick 2026-07-19: "Walks of Life", not caste —
     # the paths one walks, open to all, against the closed hereditary
     # caste reading).
-    "octa": ("Walks of Life", "Ages"),
+    "octa": ("Walks of Life", "Ages", "Character"),
+    "hexa": ("Paint palette", "Light palette", "Council"),
     "aurora": ("Warm", "Cool"),
     "calendar": ("Zodiac", "Almanac"),
     "default": ("Paint palette", "Light palette"),
@@ -397,6 +399,10 @@ POINTER_PALETTE_LABELS = {
 # cardinal directions, the others in dial positions.
 POINTER_ARM_LABELS = {
     "trio": ("Top", "Right", "Left"),
+    # The Genesis wheel's inverted arms (trio + "cube" style — the
+    # settings palette editor reads this via `defaults.
+    # pointer_arm_labels`): 24h bottom, 08h upper-left, 16h upper-right.
+    "trio_cube": ("Bottom", "Left", "Right"),
     "cross": ("Top", "Right", "Bottom", "Left"),
     "hexa": (
         "Top", "Top Right", "Bottom Right",
@@ -437,6 +443,17 @@ POINTER_ARM_HALF_ANGLE_DEG = {"hexa": 30.0, "cross": 22.5, "octa": 22.5, "trio":
 # Hope blue 0h-8h.
 TRIO_ARM_THEMES = {0.0: "Faith", 120.0: "Love", 240.0: "Hope"}
 
+# The GENESIS wheel's offices per arm angle (CUBE.md §Double Trinity,
+# SEALED 2026-07-26): the same three persons who judge on the Court
+# create on the inverted triangle — God the Creator at 24h, Jesus the
+# Preserver at 08h, the Devil the Destroyer at 16h. The arm hover
+# speaks (person, office); the articles are Session 21's.
+GENESIS_ARM_OFFICES = {
+    180.0: ("God", "Creator"),
+    300.0: ("Jesus", "Preserver"),
+    60.0: ("the Devil", "Destroyer"),
+}
+
 # The UMBRA (gray brightness wheel) ships in three user-selectable
 # forms (owner spec). Sectioned forms follow one structure: the LIGHTEST
 # and DARKEST sections are single, CENTERED on the star's top tip (true
@@ -458,8 +475,45 @@ UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 # Star + Aura palette styles (owner: "paint" = subtractive primaries —
 # blue/red/yellow mix toward black; "light" = additive primaries —
 # blue/red/green mix toward white). The cross pointer has a single
-# seasons palette served under both styles.
-PALETTE_STYLES = ("paint", "light")
+# seasons palette served under both styles. "cube" (owner seal
+# 2026-07-26, CUBE.md) is the THIRD wheel of the Cube canon — it exists
+# ONLY on the pointers `palette_styles_for` names (Trinity Genesis,
+# Prism Council, Compass Character); everywhere else the style
+# normalizes back to "paint" (`defaults.effective_palette_style`).
+PALETTE_STYLES = ("paint", "light", "cube")
+# The pointers whose wheel row carries the Cube third wheel (CUBE.md):
+# trio — Genesis (the creation trio, drawn INVERTED); hexa — Council
+# (all six Double-Trinity offices); octa — Character (the Cube at depth
+# zero). Aurora/Calendar/Seasons stay two-wheel.
+CUBE_WHEEL_POINTERS = ("trio", "hexa", "octa")
+
+
+def palette_styles_for(pointer: str) -> tuple[str, ...]:
+    """The wheel styles THIS pointer actually serves — ("paint",
+    "light") everywhere, plus "cube" on the Cube-canon pointers. The
+    ONE gate the Design window's wheel row, the settings normalization
+    and the tests all read (Rule #5)."""
+    if pointer in CUBE_WHEEL_POINTERS:
+        return PALETTE_STYLES
+    return PALETTE_STYLES[:2]
+
+
+# THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md §Double
+# Trinity): the trio's CUBE wheel draws its three arms on the OPPOSITE
+# seats — 24h/16h/08h instead of 12h/20h/04h — one arm-angle offset fed
+# through render.layers.arm_offset_deg into the star diamonds, the Aura
+# wedges, the weekday slots, the lit-index math and the arm hit-test.
+GENESIS_ARM_OFFSET_DEG = 180.0
+
+# THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
+# Double-Trinity FAMILY wheels — the Court (trio paint), Genesis (trio
+# cube) and the Council (hexa cube) — render in TWO looks: "Diamond"
+# (the slim arm diamonds, the current form) and "Cube" (the owner's
+# corner-view: the arm diamonds widen to 180/N half-angles, so the
+# three/six rhombi tile the hexagon exactly — three visible cube faces
+# on the trio wheels, the two interlocked corners on the Council).
+# `Settings.cube_look` toggles it; render.layers.cube_look_active gates.
+CUBE_LOOK_WHEELS = (("trio", "paint"), ("trio", "cube"), ("hexa", "cube"))
 
 # The SOUTH SLOT (menu name; the internal octa_* keys stay for settings
 # and code stability, like the pointer keys): user-selected info near

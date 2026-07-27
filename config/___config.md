@@ -129,8 +129,15 @@ M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
 marker borders), `PALETTE_PRESETS` (the Star+Aura/wedge palettes
 measured from the owner's art: hexa/octa paint+light, cross/trio
-single, aurora bands, and the Calendar's two twelve-hue wheels —
-paint = Zodiac, light = Almanac, owner 2026-07-16), the Calendar wedge
+single, aurora bands, the Calendar's two twelve-hue wheels —
+paint = Zodiac, light = Almanac, owner 2026-07-16 — and the three CUBE
+wheels, owner seal 2026-07-26 CUBE.md: Genesis' inverted trio in the
+Purple-Gray hue law's `MOON_GRAY_VIOLET`, the Council's re-dressed
+hexa wheel, and `ROSE_PALETTE` — the Character wheel's eight hues
+EXACTLY as the Rose is drawn, one tuple shared with the Rose ring
+preset's rays; `effective_palette_style`/`pointer_arm_labels` are the
+per-pointer style normalizer and the arm-label picker, and
+`ROSE_RAY_HALF_DEG`/`ROSE_RAY_BORDER` the Rose ray geometry), the Calendar wedge
 opacity + lit delta and the Almanac day-arrow geometry
 (`CALENDAR_WEDGE_ALPHA`, `CALENDAR_WEDGE_LIT_DELTA`, `CALENDAR_ARROW_*`),
 the Calendar-pointer 12-SET MOUNT (owner-sealed R7b 2026-07-21
@@ -308,12 +315,16 @@ sourceless distinction this rides on top of.
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package
-2026-07-16): the (pointer, palette_style) → archetype grid — seven
-archetypes over four pointers, none on Aurora/Calendar — the
+2026-07-16): the (pointer, palette_style) → archetype grid — ELEVEN
+archetypes over four pointers since the Cube wave (owner seal
+2026-07-26, CUBE.md: Genesis / Council / Character on the "cube"
+wheels), none on Aurora/Calendar — the
 per-archetype figure tables (arm angle, stained-glass drop path, the
 two-row names, article entity, encyclopedia target), the center table
-(Eye / Hearth / Seal / Union / Throne — Compass none), the article-set
-names Session 6 fills, the Ages' two image registers and the render
+(Eye / Hearth / Seal / Union / Throne / Beginning / Sabbath — Compass
+none, both wheels), the article-set
+names Session 6 fills (the three Cube sets are Session 21's), the
+Ages' two image registers and the render
 tunables (figure heights, name sizing, the 1×1-placeholder threshold,
 the Earth day-label geometry, the pending line). See
 [Archetypes](archetypes.md).

@@ -69,6 +69,22 @@ owns the whole R5 round; several tests tied to the retired Quick
 Jump/Design/Slot submenus and the Elements→Visible rename were
 removed here as their subject moved).
 
+### `test_cube_wheels.py`
+The Cube wheels engine goldens (WORKPLAN Session 20; owner seal
+2026-07-26, CUBE.md): the third-wheel slot (the "cube" style exists
+only on trio/hexa/octa; sealed menu labels; `effective_palette_style`
+normalization at `apply_display_settings` and in the watch title), the
+sealed cube palettes (Genesis' moon-gray inverted trio, the Council's
+re-dressed hexa wheel, Character = `ROSE_PALETTE` exactly as the Rose
+is drawn), the Genesis inversion end to end (offset only on trio·cube;
+figures/lit-index/weekday-slots on the 24h/16h/08h arms; the arm
+hover speaking its creation office with the pending line and a silent
+Spacebar jump), the Council/Character figure tables, the Diamond/Cube
+display toggle (family gating; 180/N face-rhombus halves), the
+settings round-trip, and the Rose ring preset (the computed card,
+the procedural skin, an offscreen render carrying all eight ray hues,
+and the per-ray hover legend).
+
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 121
 mixed-depth, 45,649 cities (post-curation shape); the audited

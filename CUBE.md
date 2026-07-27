@@ -524,18 +524,30 @@ lacking the experiment).
 
 ## Implementation Queue (for the next work sessions)
 
-1. Legend bold-only rework + the weekday-title law (immediate, small).
-2. Hover teaser + LEARN MORE link (immediate, small).
-3. Trinity **Genesis** wheel (inverted trio) + menu third slot.
-4. Prism **Council** wheel (six offices).
-5. Compass **Character** wheel (4 poles + 4 combos; roster round for
-   the OPEN combo figures first).
-6. The **Rose** ring preset (3 offset stars; palette as drawn —
-   sealed).
-7. Diamond/Cube display toggle.
+1. ~~Legend bold-only rework + the weekday-title law~~ — DONE
+   (Session 18, 0.14.432).
+2. ~~Hover teaser + LEARN MORE link~~ — DONE (Session 18, 0.14.432).
+3. ~~Trinity **Genesis** wheel (inverted trio) + menu third slot~~ —
+   DONE (Session 20): the "cube" palette style, the 180° arm offset
+   through the whole render/hover/hit-test chain, the Court/Family/
+   Genesis wheel row.
+4. ~~Prism **Council** wheel (six offices)~~ — DONE (Session 20):
+   Paint/Light/Council; articles await Session 21.
+5. ~~Compass **Character** wheel (4 poles + 4 combos)~~ — DONE
+   (Session 20) as the wheel + sealed palette; the roster round for
+   the OPEN combo figures stays Session 21's.
+6. ~~The **Rose** ring preset (3 offset stars; palette as drawn —
+   sealed)~~ — DONE (Session 20): computed rays + computed per-ray
+   legend, `ROSE_PALETTE` shared with the Character wheel.
+7. ~~Diamond/Cube display toggle~~ — DONE (Session 20):
+   `Settings.cube_look`, the corner-view face rhombi on the
+   Court/Genesis/Council wheels.
 8. Encyclopedia: the Cube section (axes, poles, vertices, three
    sets), the Double Trinity's 24-field table, the Two Crosses with
-   ciphers, the Banknote-axes seal.
+   ciphers, the Banknote-axes seal — AND the three Cube wheels'
+   article sets (`archetype_trinity_genesis`, `archetype_prism_
+   council`, `archetype_compass_character`; the wheels speak the
+   pending line until then).
 9. Character-coordinate badges per figure (later round).
 10. The renaming, once the wording is sealed.
 

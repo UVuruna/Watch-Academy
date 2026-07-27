@@ -94,6 +94,13 @@ class RingSpec:
     # build_skin. Unlike `letter_metal` this is NOT per-hour: the motto
     # is read as ONE continuous inscription, not a seat-by-seat split.
     motto_metal: str = "gold"
+    # THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md §The
+    # Rose): the Rose ring preset — COMPUTED geometry, never art. True
+    # only on the "Rose" card: RingLayer draws the procedural ring with
+    # 24 colored diamond rays in the band (three octa stars offset 15°,
+    # z-ordered −1h / 0h / +1h, the +1h star on top), hues from
+    # defaults.ROSE_PALETTE (the Character wheel's own — one source).
+    rose: bool = False
 
 
 @dataclass(frozen=True)
@@ -196,8 +203,13 @@ class SkinDefinition:
                                        # AND period-hue count (owner spec)
     umbra_form: str = "fine"           # "fine" (30) | "coarse" (24) | "gradient"
     umbra_contrast: str = "full"       # "full" | "half" — Umbra shade span
-    palette_style: str = "paint"       # "paint" | "light" — Star+Aura hues;
-                                       # on the Calendar pointer it PICKS THE
+    palette_style: str = "paint"       # "paint" | "light" | "cube" —
+                                       # Star+Aura hues; "cube" is the Cube
+                                       # canon's third wheel (Genesis/Council/
+                                       # Character, trio/hexa/octa ONLY —
+                                       # defaults.effective_palette_style
+                                       # normalizes it away elsewhere); on the
+                                       # Calendar pointer the style PICKS THE
                                        # WHEEL: paint = Zodiac, light = Almanac
     calendar_lighting: str = "hour"    # "hour" (the shichen under the hand) |
                                        # "year" (the current month/sign wedge)
@@ -215,6 +227,14 @@ class SkinDefinition:
     # restores everything. Aurora/Calendar have no archetype: the mode
     # is inert there.
     archetype_mode: bool = False
+    # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
+    # Double-Trinity family wheels — Court (trio paint), Genesis (trio
+    # cube), Council (hexa cube) — render as the corner-view CUBE when
+    # True: the arm diamonds widen to the regular 180/N halves and tile
+    # the hexagon into the visible cube faces
+    # (render.layers.cube_look_active / arm_half_deg). False = Diamond,
+    # the slim-arm medallion form. Inert on every other wheel.
+    cube_look: bool = False
     # Whether the archetype FIGURES carry their display name (owner
     # 2026-07-18, ROADMAP 15h, Session 21-C) — an INDEPENDENT switch,
     # its own Settings ▸ Display checkbox, no longer sharing

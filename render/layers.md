@@ -17,7 +17,12 @@ perfectly raw regardless of the slider; the storage key is unchanged,
 only the scope and the label moved. RING has its OWN independent
 Saturation slider, `ring_saturation`, applied at `RingLayer` instead —
 see its note below), `visible_occupant()` (shared-slot priority),
-`today_slot_theta()` (today's slot angle, None for the hexa center Sun),
+`today_slot_theta()` (today's slot angle, None for the hexa center Sun —
+takes the SKIN now, since the Genesis inversion moves the trio's
+slots), `weekday_slots()` (the ONE reader of
+`POINTER_WEEKDAY_SLOTS`, the Genesis offset applied — Session 20),
+the CUBE-WHEEL trio `arm_offset_deg()` / `cube_look_active()` /
+`arm_half_deg()` (see [The Cube Wheels](#the-cube-wheels)),
 `draw_event_glow()` (the season/moon event halo), the SLOT system:
 `slot_layout()`, `slot_view()`, `weekday_classic_slot()` and the seat
 geometry trio `slot_seat_rotation()` / `slot_seat_scale()` /
@@ -63,7 +68,50 @@ weekday comes NEXT from today — today itself always wins
 "paint" and "light" versions (subtractive vs additive primaries,
 measured from the owner's art), the cross a single seasons palette
 (summer yellow top, autumn red right, winter blue bottom, spring green
-left).
+left) — and the three Cube pointers (trio/hexa/octa) a THIRD, "cube"
+wheel each (owner seal 2026-07-26,
+[The Cube Canon](../CUBE.md)) — see The Cube Wheels below.
+
+<a id="the-cube-wheels"></a>
+
+## The Cube Wheels (owner seal 2026-07-26, CUBE.md; WORKPLAN Session 20)
+
+The `"cube"` palette style is the Cube canon's third wheel — Genesis
+(trio), the Council (hexa), Character (octa); `defaults.
+effective_palette_style` normalizes it to "paint" on every other
+pointer before any consumer here sees it. Three pure helpers carry the
+whole geometry (Rule #5 — StarLayer, the Aura wedges, the weekday
+slots, the lit-index math and the compositor's arm hit-test all read
+through them):
+
+- **`arm_offset_deg(skin)`** — THE GENESIS INVERSION (owner: *"trougao
+  ka dole"*): 180° on the trio's cube wheel, 0 everywhere else. The
+  trio's arms, Aura hues, weekday slots and hour-spaces all swing onto
+  24h/16h/08h together; `archetype_lit_index` grew a matching
+  `offset` parameter. `weekday_slots(skin)` applies it to
+  `POINTER_WEEKDAY_SLOTS` — pure geometry, each occupant pair stays
+  glued to its arm as it swings (no re-pairing doctrine invented).
+- **`cube_look_active(skin)`** — the Diamond/Cube display toggle
+  (`Settings.cube_look`, CUBE.md §Display laws) gates on the
+  Double-Trinity FAMILY wheels only: the Court (trio paint), Genesis
+  (trio cube), the Council (hexa cube) — `constants.CUBE_LOOK_WHEELS`.
+- **`arm_half_deg(skin)`** — the DRAWN half-angle: the pointer's slim
+  owner value, EXCEPT under the active Cube look where it widens to
+  the regular `180/N` — and the standing star formula
+  (`inner = tip / 2cos(half)`) then lands the side vertices exactly ON
+  the hexagon rim, so the three (trio) or six (hexa) rhombi tile the
+  hexagon into the corner-view CUBE faces: the Court corner
+  yellow/blue/red, the Genesis corner purple/green/orange, the Council
+  both corners interlocked. Pure angle math — no new geometry code,
+  no art.
+
+The cube palettes live in `defaults.PALETTE_PRESETS`: Genesis
+`(#666699, #007E00, #DC9600)` (the Purple-Gray hue law's moon-gray
+violet — NEVER royal purple), the Council the hexa paint wheel with
+the 24h arm re-dressed to that same violet, and Character =
+`defaults.ROSE_PALETTE` — the palette EXACTLY as the Rose is drawn
+(sealed; one tuple rules both the Character wheel and the Rose ring
+preset).
 
 <a id="the-calendar-pointer"></a>
 
@@ -458,6 +506,23 @@ resolves the finish through `render.asset_recolor.letter_metal_file(gold_asset,
 metal)` at paint time, disk-cached like every other derived asset; the
 shadow silhouette always reads the gold file directly (the alpha mask
 is identical on every finish).
+
+**THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md §The
+Rose; WORKPLAN Session 20):** with `RingSpec.rose` (the "Rose" ring
+preset, [Ring Presets](../data/rings.md)) the layer takes the
+PROCEDURAL path (no face asset — the plain hour scale) and
+`_draw_rose` paints 24 computed diamond rays in the band, one per
+hour, UNDER the ticks and numerals: three identical octa stars offset
+15°, drawn in the owner's z-order — the −1h star (Historical) lowest,
+the 0h star (Modern), the +1h star (Archetypal) topmost, its rays
+sitting ON 1h and 13h (THE ONE, and the first hour after noon). Ray
+colors run `{arm, arm+1, arm+2}` per Character-wheel arm from
+`defaults.ROSE_PALETTE` (one source with the Character wheel);
+neighbors overlap on purpose (`ROSE_RAY_HALF_DEG` = 11.25° exceeds
+half the 15° pitch), exactly as the owner's reference drawing overlaps
+them. The ring is FIXED — the rays never ride the solar rotation. Not
+one pixel of it is art (Rule #19); the per-ray hover legend is
+computed in `data.rings._rose_legend`.
 
 **RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
 Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`

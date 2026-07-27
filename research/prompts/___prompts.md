@@ -258,13 +258,14 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
   19, [The Cube Canon](../../CUBE.md) §The Double Trinity): the creation
   trio drawn INVERTED — God the Creator (moon-gray purple 24h), Jesus the
   Preserver (green 08h), the Devil the Destroyer (orange 16h), each a
-  lancet + a 1:1 circle, plus the centre rosette (name PENDING OWNER)
+  lancet + a 1:1 circle, plus the centre rosette **The Beginning**
+  (name SEALED 2026-07-26)
 - `council_prompts.md` — the CUBE WAVE's Prism third wheel: the UNION,
   all six Double-Trinity offices on the six arms at once, with the
-  Sabbath centre. Carries the wave's one open REUSE question — six
-  offices that already stand on the Court and Genesis wheels: Route A
-  (new "in session" tellings, written in full under a DO NOT GENERATE
-  marker) versus Route B (reuse), PENDING OWNER
+  Sabbath centre. The wave's one REUSE question is SEALED (owner
+  2026-07-26, "može novo"): Route A — six NEW "in session" tellings,
+  all entries load ticked; Route B kept in the sheet as the road not
+  taken
 - `character_prompts.md` — the CUBE WAVE's Compass third wheel: the Cube
   with the depth axis at zero — eight directions (4 poles + 4 blends),
   each ONE window carrying its virtue above and its fall below, plus its

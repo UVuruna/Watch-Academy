@@ -31,12 +31,15 @@ composed onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   here moved OUT (owner verdict, Session 21-D) into [Colors Section]
   (colors_section.md).
 - **Archetype** (owner 2026-07-18, Session 21-C — "nemoj ispod nego u
-  Settings — ON/OFF, spreman sam za predloge") — one checkbox,
+  Settings — ON/OFF, spreman sam za predloge") — two checkboxes now:
   "Archetype names": its OWN independent switch (`archetype_names`) for
   the archetype figures' display names, separate from the weekday
   bodies' own Names option; `render.layers.ArchetypeLayer` reads it
-  directly. The whole control for now — the owner is open to a richer
-  dropdown here later.
+  directly. And "Cube look (Court / Genesis / Council)"
+  (`cube_look`, owner seal 2026-07-26, CUBE.md §Display laws —
+  WORKPLAN Session 20): the Diamond/Cube display toggle for the
+  Double-Trinity family wheels; inert on every other wheel, so it
+  stays always enabled exactly like Archetype names.
 
 `_slider_row()` is the shared percent-slider-with-reset-button builder
 used only by `_build_opacity_group` (Colors' saturation sliders build
