@@ -86,7 +86,11 @@ def collect_corpus() -> dict:
                 corpus[f"encyclopedia/{section}/{key}/title"] = node["title"]
                 corpus[f"encyclopedia/{section}/{key}/base"] = node["base"]
         for family in ("virtues", "sins", "moods", "duality",
-                       "ninths", "wider", "intelligence", "months"):
+                       "ninths", "wider", "intelligence", "months",
+                       # The Cube canon families (WORKPLAN Session 21,
+                       # 2026-07-27): the Cube's axes/poles/vertices,
+                       # the Double Trinity and the Two Crosses.
+                       "cube", "double_trinity", "crosses"):
             for name, node in data[family].items():
                 corpus[f"encyclopedia/{family}/{name}/base"] = node["base"]
     captions = defaults.GUIDE_DIR / "captions.json"

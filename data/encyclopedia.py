@@ -100,8 +100,15 @@ class EncyclopediaRepository:
         "sins" | "moods" | "duality" (the Judas–Lucifer scale, owner
         2026-07-13) | "ninths" | "intelligence" | "wider" (the seatless
         A-list pantheon figures, WORKPLAN Session 8) | "months" (the
-        Slavic-months Calendar-pointer set, owner-sealed R7b 2026-07-21),
-        name the entry ("Justice", "Lucifer", "Hestia", "Lipanj")."""
+        Slavic-months Calendar-pointer set, owner-sealed R7b 2026-07-21)
+        | "cube" / "double_trinity" / "crosses" (THE CUBE CANON, WORKPLAN
+        Session 21 2026-07-27 — the three axes with their six poles and
+        eight vertices, the coordinate doctrine and the Banknote-axes
+        seal; the Court/Genesis/Council triangles and the 24-field union
+        table; the two four-station paths with the chiasm, TRUST/DISTRUST
+        and the FALL/STAR and DOMY/SAFE ciphers), name the entry
+        ("Justice", "Lucifer", "Hestia", "Lipanj", "The Cube",
+        "Suffering")."""
         return self._localized(
             f"encyclopedia/{family}/{name}", self._load()[family][name]
         )

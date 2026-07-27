@@ -52,7 +52,13 @@ Serbian and any machine-translated language apply automatically.
   ninths/intelligence/wider/months article (the WIDER family holds the
   seatless A-list pantheon figures — WORKPLAN Session 8; the MONTHS
   family holds the Slavic-months Calendar-pointer set — owner-sealed
-  R7b 2026-07-21)
+  R7b 2026-07-21) — and, since WORKPLAN Session 21 (2026-07-27), the
+  three CUBE CANON families that fill the Encyclopedia's Archetypes
+  hall: `cube` (the three axes, six poles, eight vertices, the three
+  figure sets, the coordinate doctrine, the Banknote-axes seal),
+  `double_trinity` (Court, Genesis, Council, the 24-field union table)
+  and `crosses` (both paths, their eight stations, TRUST/DISTRUST and
+  the FALL/STAR and DOMY/SAFE ciphers)
 - `theme_title(theme)` / `week_duality(theme)`: `{title, base}` of a
   weekday theme's OWN opening page / its WEEK-DUALITY title page
   (round R3 ARTICLE ORDER restructure — `theme_title`/`week_duality`

@@ -62,9 +62,15 @@ variant kept for analysis only, not bundled.
 Machine-readable blurbs AND the full encyclopedic `articles` of the
 dial's symbolic cosmology (per theme × body with pointer/palette
 variant paragraphs, plus zodiac, Chinese, element and trio articles).
-The narrative canon lives in [DOMY Symbolism](../SYMBOLISM.md); the
-weekday and slot hovers read it via the
-[Symbolism Repository](../data/symbolism.md).
+It also holds the ELEVEN archetype article sets (`archetype_*`) the
+dial's pointer wheels speak — Session 21 (2026-07-27) completed the
+last three, the Cube wheels' `archetype_trinity_genesis`,
+`archetype_prism_council` and `archetype_compass_character`, so no
+wheel falls back to the pending line any more, and reworked 21 older
+articles onto the Article Charter (no article describes its own
+picture). The narrative canon lives in
+[DOMY Symbolism](../SYMBOLISM.md); the weekday and slot hovers read it
+via the [Symbolism Repository](../data/symbolism.md).
 
 ### `encyclopedia.json`
 The Encyclopedia's OWN content (owner expansion 2026-07-13), separate
@@ -76,7 +82,17 @@ families and the WIDER pantheon (WORKPLAN Session 8): 15 seatless
 A-list figures, one topic per culture — Greek (Dionysus, Hephaestus,
 Hestia), Norse (Baldur, Heimdall, Njord), Egyptian (Set, Nut, Geb,
 Ptah, Sekhmet), Slavic (Crnobog, Stribog, Jarilo, Rod), the retired
-ninths (Set, Baldur, Crnobog) folded in. Read by the
+ninths (Set, Baldur, Crnobog) folded in. **The CUBE CANON families
+(WORKPLAN Session 21, 2026-07-27)** are the newest additions and fill
+the Encyclopedia's Archetypes hall: `cube` (20 pages — the three axes,
+the six poles, the eight vertices, the three figure sets, the
+coordinate doctrine and the Banknote-axes seal), `double_trinity` (5 —
+the Court, Genesis, the Council and the 24-field union table) and
+`crosses` (14 — both paths, their eight stations, TRUST/DISTRUST and
+the FALL/STAR and DOMY/SAFE ciphers). Every one of those 39 pages is
+written to the Article Charter's four movements —
+`[[Thesis]]`/`[[Argument]]`/`[[Correspondences]]`/`[[Quote]]` — pinned
+by `tests/test_cube_encyclopedia.py`. Read by the
 [Encyclopedia Repository](../data/encyclopedia.md); translated through
 `encyclopedia/<section>/<key>/...` overlay keys.
 

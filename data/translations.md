@@ -33,7 +33,12 @@ the target is `sr-Latn` and no bundle covers an entry.
 
 ## Functions
 
-- `collect_corpus()`: key → English text for everything translatable
+- `collect_corpus()`: key → English text for everything translatable —
+  the article sets, the zodiac/chinese/element/trio articles, and every
+  Encyclopedia section and emblem family, the Cube canon's `cube` /
+  `double_trinity` / `crosses` included (WORKPLAN Session 21,
+  2026-07-27), so the Session 15 translation wave finds them without
+  hunting
 - `translate_texts(texts, target, progress?)`: translated dict; raises
   on network failure (the caller shows it — Rule #1)
 - `transliterate_sr(text)`: Serbian Cyrillic → Latin
