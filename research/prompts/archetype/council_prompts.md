@@ -97,9 +97,10 @@ COMPOSITION of the same person and office — the class of thing this
 project does generate. Both routes are written out below; the owner picks
 ONE.
 
-- **Route A (written in full, default if the owner says nothing):** six
-  NEW "in session" lancets + six circles, 12 files, drop paths as stated.
-- **Route B — REUSE, PENDING OWNER:** generate NOTHING but the centre;
+- **Route A — SEALED (owner 2026-07-26, "može novo"):** six NEW
+  "in session" lancets + six circles, 12 files, drop paths as stated.
+- **Route B — RETIRED (the road not taken, kept for the record):**
+  generate NOTHING but the centre;
   `config.archetypes["prism_council"]` points its six figures at the
   existing files —
   `archetypes/trinity/primary/colored/{One_Judge,Devil_Prosecutor,Jesus_Advocate}.png`
@@ -109,10 +110,9 @@ ONE.
   same one. The Council then differs from Court + Genesis only in showing
   all six at once, which is arguably the entire point of a UNION wheel.
 
-**Route A totals 13 files; Route B totals 1.** Route A's whole section carries a
-standalone skip marker, so PromptPainter loads all twelve entries
-UNTICKED (its rule 5) — the owner ticks them only after sealing the
-route.
+**Route A totals 13 files — the sealed source.** The route was sealed
+2026-07-26; the old skip marker is lifted and all twelve entries load
+ticked like any other queue.
 
 ---
 
@@ -126,12 +126,7 @@ ROUND rose window — a circular stained-glass rosette, night-window register, p
 
 ---
 
-## Route A — the six offices in session (PENDING OWNER, DO NOT GENERATE)
-
-**DO NOT GENERATE — PENDING OWNER; the route is not sealed.** (A
-standalone skip marker: PromptPainter's rule 5 advises every entry below
-it until the next heading, so all twelve load UNTICKED and the owner
-ticks them only once Route A is chosen.)
+## Route A — the six offices in session (SEALED 2026-07-26 — generate)
 
 Each window shows its office AT THE COUNCIL TABLE: a ring of six carved
 thrones is visible behind and to the sides, five of them occupied by dim
@@ -140,84 +135,84 @@ office lit and acting toward the shared centre. That ring is the visual
 signature that separates a Council window from its Court or Genesis
 sibling, and every prompt below states it.
 
-**PENDING OWNER — God the Judge, in session (yellow arm, 12h)** →
+**God the Judge, in session (yellow arm, 12h)** →
 `assets/archetypes/council/primary/colored/God_Judge.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Radiant gold, warm amber and white glass throughout. Center: the enthroned JUDGE whose face is VEILED in pure white radiance, never shown, seated highest in a RING OF SIX CARVED THRONES that curves away behind him into the window's depth — the other five thrones hold dim unreadable silhouettes glazed in five other colours (orange, red, moon-gray violet, midnight blue, green), all turned inward toward a shared bright centre low in the window. He is not pronouncing; one hand is raised in a calm gesture calling the council to order, the other rests on a two-pan balance standing at perfect rest. Upper panel: the sun at noon in clear glass over the ring. Border: gothic leadwork in dark gold; three rim roundels — a balance at rest at the apex, a raised calling hand at one side, a ring of six seats at the other. Palette: radiant gold, amber, white light, the five council colours as dim accents, dark-gold lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — God the Judge, circle** →
+**God the Judge, circle** →
 `assets/archetypes/council/circle/colored/God_Judge.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Radiant gold, amber and white glass. Center: a veiled radiant judge on the highest of six curved thrones, hand raised calling the council to order, a balance at rest beside him, five dim coloured silhouettes on the other seats — filling the round frame. Border: gothic leadwork in dark gold, a small balance-at-rest roundel at the top. Palette: radiant gold, amber, white light, dark-gold lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — the Devil the Destroyer, in session (orange arm, 16h)** →
+**the Devil the Destroyer, in session (orange arm, 16h)** →
 `assets/archetypes/council/primary/colored/Devil_Destroyer.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Burning orange, molten amber and charcoal-black glass throughout. Center: the horned UNMAKER standing at his own place in a RING OF SIX CARVED THRONES that curves away behind him — the other five seats hold dim unreadable silhouettes glazed in yellow, red, moon-gray violet, midnight blue and green, all turned toward a shared bright centre. He does not strike; he LAYS a drawn keystone down on the council table in front of the ring, a small handful of gray ash still falling from it, presenting the unmaking for the council's assent, calm and workmanlike. Upper left panel: a keystone lying on a table; upper right panel: a burned field cleared to bare soil. Border: ember-and-ash leadwork in dark bronze-orange; three rim roundels — a laid keystone at the apex, a low torch at one side, a ring of six seats at the other. Palette: burning orange, molten amber, charcoal black, gray ash, dark bronze lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — the Devil the Destroyer, circle** →
+**the Devil the Destroyer, circle** →
 `assets/archetypes/council/circle/colored/Devil_Destroyer.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Burning orange, molten amber and charcoal-black glass. Center: a horned figure laying a drawn keystone on a council table before a curve of six thrones, gray ash still falling from it — filling the round frame. Border: ember-and-ash leadwork in dark bronze-orange, a small laid-keystone roundel at the top. Palette: burning orange, molten amber, charcoal black, gray ash, dark bronze lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — the Devil the Prosecutor, in session (red arm, 20h)** →
+**the Devil the Prosecutor, in session (red arm, 20h)** →
 `assets/archetypes/council/primary/colored/Devil_Prosecutor.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Ember-red, molten gold and black glass throughout. Center: the beautiful horned ACCUSER on his feet at his own seat in a RING OF SIX CARVED THRONES curving away behind him — the other five hold dim unreadable silhouettes glazed in yellow, orange, moon-gray violet, midnight blue and green. He addresses the RING, not a victim: an open dark ledger held high in one hand with red wax seals swinging from it, the other hand turned palm-up toward the empty centre of the council in a gesture of formal accusation; a cruel half-smile; his shadow thrown tall across the seats behind him by ember light from below. The accused is only a small chained shape at the very base, outside the ring, not yet looked at. Upper left panel: a two-pan scale tipped hard by a single talon; upper right panel: a ring of empty seats seen from above. Border: thorn-and-rope leadwork in dark bronze-red; three rim roundels — a raised ledger at the apex, a pointing finger at one side, a tipped scale at the other. Palette: ember red, molten gold, black-iron lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — the Devil the Prosecutor, circle** →
+**the Devil the Prosecutor, circle** →
 `assets/archetypes/council/circle/colored/Devil_Prosecutor.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Ember-red, molten gold and black glass. Center: a horned accuser on his feet holding an open sealed ledger high toward a curve of six thrones, palm turned to the council's empty centre — filling the round frame. Border: thorn-and-rope leadwork in dark bronze-red, a small raised-ledger roundel at the top. Palette: ember red, molten gold, black-iron lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — God the Creator, in session (moon-gray purple arm, 24h)** →
+**God the Creator, in session (moon-gray purple arm, 24h)** →
 `assets/archetypes/council/primary/colored/God_Creator.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. MUTED MOON-GRAY VIOLET glass throughout — a cold dusty gray-violet like moonlight on stone, NEVER royal or magenta purple — with tarnished silver and midnight blue-black. Center: the CREATOR whose face is VEILED in pale radiance, never shown, seated at the lowest seat of a RING OF SIX CARVED THRONES that curves away above and behind him — the other five hold dim unreadable silhouettes glazed in yellow, orange, red, midnight blue and green. He does not sweep the deep here; he SETS a small newly made sphere down on the council table at the ring's centre, both hands still cupped around it, a pair of open dividers laid beside it — the making offered to the council. One clean seam of pure white first light runs from the sphere up the middle of the window. Upper left panel: a pair of dividers resting on a table; upper right panel: dark water just beginning to take light. Border: gothic leadwork in tarnished silver-violet; three rim roundels — a set-down sphere at the apex, open dividers at one side, a first spark at the other. Palette: moon-gray violet, tarnished silver, midnight blue-black, one seam of white first light. NO lettering anywhere.
 ```
 
-**PENDING OWNER — God the Creator, circle** →
+**God the Creator, circle** →
 `assets/archetypes/council/circle/colored/God_Creator.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Muted moon-gray violet, tarnished silver and midnight glass — a cold dusty gray-violet, never royal purple. Center: veiled cupped hands setting a small newly made sphere down on a council table, open dividers beside it, a seam of white first light rising — filling the round frame. Border: gothic leadwork in tarnished silver-violet, a small set-down-sphere roundel at the top. Palette: moon-gray violet, tarnished silver, midnight blue-black, white first light. NO lettering anywhere.
 ```
 
-**PENDING OWNER — Jesus the Advocate, in session (blue arm, 04h)** →
+**Jesus the Advocate, in session (blue arm, 04h)** →
 `assets/archetypes/council/primary/colored/Jesus_Advocate.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Deep midnight-blue, cold silver and clear white glass throughout, no warm tones. Center: Jesus standing at his own seat in a RING OF SIX CARVED THRONES curving away behind him — the other five hold dim unreadable silhouettes glazed in yellow, orange, red, moon-gray violet and green. He speaks TO THE RING: one hand open and raised in plea toward the light above the council, the other reaching back and down to keep a kneeling accused figure behind his own body, shielded from the seats; a cold white rose of light behind his head. Upper left panel: an open shielding palm turned toward a row of seats; upper right panel: a shepherd carrying a lamb through night hills. Border: thorned-vine leadwork in blue-black; three rim roundels — an open plea-hand at the apex, a small shield at one side, a lamb at the other. Palette: midnight blue, cold silver, clear white light, blue-black lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — Jesus the Advocate, circle** →
+**Jesus the Advocate, circle** →
 `assets/archetypes/council/circle/colored/Jesus_Advocate.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Deep midnight-blue and silver glass. Center: a defender standing before a curve of six thrones, one hand raised open in plea, the other keeping a kneeling accused behind his body — filling the round frame. Border: thorned-vine leadwork in blue-black, a small open-palm roundel at the top. Palette: midnight blue, silver-white light, blue-black lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — Jesus the Preserver, in session (green arm, 08h)** →
+**Jesus the Preserver, in session (green arm, 08h)** →
 `assets/archetypes/council/primary/colored/Jesus_Preserver.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Living green, warm gold-green and clear white glass throughout. Center: Jesus as the KEEPER standing at his seat in a RING OF SIX CARVED THRONES curving away behind him — the other five hold dim unreadable silhouettes glazed in yellow, orange, red, moon-gray violet and midnight blue. He holds a small living world, a green sphere veined with rivers and roots, OUT OVER the council table with both hands and does not let go of it, keeping it whole while the ring deliberates; a vine grows up behind him and rests its branches unbroken on his shoulders. Upper left panel: a hand shielding a small flame from a slanting wind; upper right panel: a vine holding its heavy branches. Border: vine-and-leaf leadwork in deep green; three rim roundels — a held living sphere at the apex, a sheltered flame at one side, a root gripping stone at the other. Palette: living green, warm gold-green, clear white light, green-black lead. NO lettering anywhere.
 ```
 
-**PENDING OWNER — Jesus the Preserver, circle** →
+**Jesus the Preserver, circle** →
 `assets/archetypes/council/circle/colored/Jesus_Preserver.png`
 
 ```
@@ -230,22 +225,19 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 - New sheet (WORKPLAN Session 19, the Cube prompt-sheet wave, CUBE.md
   §The Double Trinity — wheel name **Council** SEALED 2026-07-26).
-  **Art: 0/13** on Route A, **0/1** on Route B; nothing generated on
-  either source.
-- **PENDING OWNER — the ROUTE.** A = six new "in session" lancets + six
-  circles (written in full above, under a standalone DO NOT GENERATE
-  marker so the tool loads them unticked); B = reuse the Court's and
-  Genesis's six files and generate only the Sabbath. The centre is
-  generated either way.
-- **PENDING OWNER — the centre's name.** *The Sabbath* is taken straight
-  from CUBE.md's own reserved article layer (six offices as the six days,
-  the centre as the seventh); it is a reading the canon already states,
-  not an invention, but the owner has never spoken the file name.
-- **Naming note carried from [Genesis Prompts](genesis_prompts.md):**
-  CUBE.md's table writes **God**, the Court wheel calls the same person
-  **The One** (`One_Judge`). This sheet follows CUBE.md (`God_Judge`,
-  `God_Creator`); under Route B the Judge seat would point at the Court's
-  existing `One_Judge.png` regardless of what the display name becomes.
+  **Art: 0/13** — Route A SEALED (owner 2026-07-26), all thirteen
+  queued.
+- **The ROUTE — SEALED: A** (owner 2026-07-26, "može novo"): six new
+  "in session" lancets + six circles + the Sabbath centre. Route B kept
+  above only as the record of the road not taken.
+- **The centre's name — the Sabbath stands** (the owner's blanket
+  go-ahead of 2026-07-26 covers it; the reading is CUBE.md's own
+  six-days layer, not an invention).
+- **Naming — SEALED, THE MANY-NAMES DOCTRINE (owner 2026-07-26):**
+  God and The One are the SAME person under different names, and the
+  difference is deliberately KEPT — the plurality of names presents him
+  as more than a single personality. `One_Judge` (Court) and
+  `God_Judge`/`God_Creator` (here and Genesis) need no reconciliation.
 - Drop root `archetypes/council` is a NEW data-driven family root in
   `tests/test_prompt_paths.py`; the wheel lands in `config.archetypes`
   with WORKPLAN Session 20.

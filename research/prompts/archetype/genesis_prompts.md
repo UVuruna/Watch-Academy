@@ -141,20 +141,14 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 ---
 
-## The centre — the Beginning (name PROPOSED, PENDING OWNER)
+## The centre — the Beginning (name SEALED 2026-07-26)
 
 The archetype engine gives every Trinity-family wheel a CENTRE
 (`config.archetypes.ARCHETYPES[...]["center"]`): the Court has the Eye of
-Providence, the Family has the Hearth. CUBE.md seals the Genesis wheel
-but does not name its centre, so the NAME below is a proposal awaiting
-the owner's word — the art itself is unambiguous, since it is simply the
+Providence, the Family has the Hearth. The name is SEALED (owner
+2026-07-26, "može"): **The Beginning** (`Beginning.png`), anchored on
+Genesis 1:1, the verse CUBE.md already gives this wheel — the art is the
 Eye's own composition INVERTED, the same way the wheel is.
-
-**PENDING OWNER — the name.** Proposed: **The Beginning**
-(`Beginning.png`), anchored on Genesis 1:1, the verse CUBE.md already
-gives this wheel. Alternatives the owner may prefer: *The Work*, *The
-Deep*, *The First Day*. The file stem changes with the verdict; the
-prompt does not.
 
 **The Beginning** →
 `assets/archetypes/genesis/primary/colored/Beginning.png`
@@ -176,15 +170,12 @@ whole doctrine of the Double Trinity in one pair of windows.)*
   §The Double Trinity — wheel name **Genesis** SEALED 2026-07-26).
   **Art: 0/7** (3 lancets + 3 circles + 1 centre), none generated on
   either source.
-- **PENDING OWNER — the centre's NAME** (*The Beginning* proposed; the
-  prompt stands whatever the verdict).
-- **PENDING OWNER — the 24h person's DISPLAY NAME.** CUBE.md's Double
-  Trinity table writes **God**; the Court wheel calls the identical
-  person **The One** (owner pick 2026-07-16,
-  `config.archetypes` stem `One_Judge`). This sheet follows CUBE.md and
-  ships the stem `God_Creator`; if the owner prefers one name on both
-  wheels, the stem becomes `One_Creator` before generation. Flagged, not
-  resolved here.
+- **The centre's NAME — SEALED: The Beginning** (owner 2026-07-26).
+- **The 24h person's name — SEALED, THE MANY-NAMES DOCTRINE (owner
+  2026-07-26):** God and The One are the same person under different
+  names, and the difference is deliberately KEPT — the plurality of
+  names presents him as more than a single personality. The stem stays
+  `God_Creator` beside the Court's `One_Judge`; nothing reconciles.
 - The three offices REAPPEAR on the Prism's Council wheel (all six
   offices at once) — see [Council Prompts](council_prompts.md), whose own
   Status section carries the reuse-versus-new-telling decision for these

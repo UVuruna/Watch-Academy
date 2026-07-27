@@ -203,14 +203,27 @@ wheels on the watch — two on the Trinity pointer, one on the Prism:
   ka dole"); God—Creator, Jesus—Preserver, Devil—Destroyer, in
   purple/green/orange. Menu: Court / Family / Genesis. (Name
   argument: Court is the courtroom's own word, Genesis is
-  creation's; Genesis 1 anchors the articles.)
+  creation's; Genesis 1 anchors the articles.) Centre: **The
+  Beginning** (SEALED 2026-07-26) — the Eye's rosette inverted, the
+  first light over the deep where the Court's eye watches.
+- **THE MANY-NAMES DOCTRINE (owner seal 2026-07-26):** God and The
+  One are the SAME person under different names, and the difference
+  is deliberately KEPT — the Court wheel says The One (`One_Judge`),
+  this canon and the Genesis/Council sheets say God (`God_Judge`,
+  `God_Creator`). The plurality of names presents him as MORE than a
+  single personality; sheets, wheels and articles never reconcile
+  the names, they layer them.
 - **Prism third wheel — "Council" (name SEALED):** the UNION — all
   six offices on the six arms at once, the two triangles interlocked
   into the star. Menu: Paint / Light / Council. Anchor: Psalm 82:1 —
   *"God standeth in the congregation of the mighty; he judgeth among
   the gods"* — the divine council in session. Article layer in
   reserve: six offices as the six days of work, the center as the
-  seventh — the Sabbath rest.
+  seventh — the Sabbath rest. Art route SEALED (owner 2026-07-26,
+  "može novo"): six NEW "in session" tellings + circles + the
+  **Sabbath** centre — no file sharing with Court/Genesis (the
+  one-image-one-place law holds; the crosses' Faith station got the
+  same verdict: its own window).
 - **The cube display option (SEALED, settings):** every wheel of
   this family renders in TWO looks — **Diamond** (the current
   medallion form) and **Cube** (the owner's corner-view: three
@@ -475,6 +488,14 @@ lacking the experiment).
 3. **Verse, metaphor, prayer:** allowed ONLY set apart — *italic,
    under quotation marks*, as an epigraph or closing citation —
    never woven into the argumentative text.
+4. **NO SCENE DESCRIPTION (owner 2026-07-26):** an article NEVER
+   describes what its image shows — no narrating the frame, the
+   pose, the window, the composition. The picture stands beside the
+   text; describing it is waste and belles-lettres in one. The
+   article argues ONLY the symbolism: why this seat, why this color,
+   why this virtue and vice, how it binds into the web. (A REWORK
+   pass over the EXISTING articles that violate this is queued —
+   WORKPLAN Session 21.)
 
 <a id="display-laws"></a>
 

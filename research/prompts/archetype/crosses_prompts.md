@@ -135,10 +135,10 @@ sheeted, 0 generated). Checked one by one against the arms:
   YELLOW 12h, and the argument is nearly the same window (standing
   upright under the full light). This ONE could genuinely share a file
   with `archetypes/triads/theological/primary/colored/Faith.png`.
-  Against it stands the one-image-one-place law (owner 2026-07-19). The
-  entry below is therefore written in full AND marked **REUSE** so
-  PromptPainter loads it unticked — **PENDING OWNER**: generate it, or
-  point the station at the Triads' Faith and drop this one file.
+  Against it stands the one-image-one-place law (owner 2026-07-19) —
+  and the law WON: **SEALED 2026-07-26 ("pravi nove slobodno") — the
+  station gets its OWN new window**; the REUSE marker is lifted and the
+  two Faith entries load ticked like the rest.
 
 That the Theological triad and the bright path disagree about Hope's and
 Love's arms is not an error in either canon — a seat is what an arm IS, a
@@ -199,18 +199,14 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image. Living green, cool morning gold and clear white glass. Center: a single two-leaf green sprout breaking dark ground under a low first sun — filling the round frame. Border: vine-and-furrow leadwork in deep green, a small split-seed roundel at the top. Palette: living green, cool morning gold, white light, green-black lead. NO lettering anywhere.
 ```
 
-**REUSE — Faith — station 2 (yellow, 12h)** →
+**Faith — station 2 (yellow, 12h)** →
 `assets/archetypes/crosses/primary/colored/Faith.png`
-
-*(Marked REUSE so the tool loads it unticked: this one station could
-share the Triads' Faith window instead — see the derivation check.
-PENDING OWNER.)*
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Radiant yellow, warm amber and white glass throughout, full noon light. Center: a single figure standing UPRIGHT at the exact middle of the window in the full flood of noon, feet planted, nothing held, nothing shielding the eyes — standing in the light rather than looking for it; the ground beneath the feet is a narrow bridge of solid light crossing a gulf whose bottom is not shown and does not need to be. Above, the sun at noon in clear glass. Upper left panel: a mustard seed glowing; upper right panel: a bridge of light over an unseen gulf. Border: gothic leadwork in dark gold; three rim roundels — a noon sun at the apex, a planted foot at one side, a mustard seed at the other. Palette: radiant yellow, warm amber, white noon light, dark-gold lead. NO lettering anywhere.
 ```
 
-**REUSE — Faith — circle** →
+**Faith — circle** →
 `assets/archetypes/crosses/circle/colored/Faith.png`
 
 ```
@@ -313,11 +309,11 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
   the Latin and Greek rows and the TRUST formula are legend and article
   duty. The inscribed variant is a PENDING OWNER option with no path and
   no prompt, deliberately.
-- **PENDING OWNER — the one REUSE candidate:** the Faith station (yellow,
-  12h) versus `archetypes/triads/theological/primary/colored/Faith.png`.
-  Its two entries carry the REUSE marker and load unticked. Hope and Love
-  are NOT reuse candidates — this path stations them on green 08h and
-  orange 16h against the Triads' blue 04h and red 20h.
+- **The Faith REUSE question — SEALED: NEW art** (owner 2026-07-26,
+  "pravi nove slobodno"); the one-image-one-place law holds and both
+  Faith entries load ticked. Hope and Love were never reuse candidates —
+  this path stations them on green 08h and orange 16h against the
+  Triads' blue 04h and red 20h.
 - Station ≠ seat: the dark path's Fear (20h) and Hate (04h) deliberately
   do not sit on the Prism's Fear (04h) and Hatred (24h) seats. Recorded
   so nobody "fixes" it later.
@@ -326,5 +322,4 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
   a pointer archetype — they take no `config.archetypes` wheel slot; the
   Cube Encyclopedia wave (WORKPLAN Session 21) is where they land.
 - Verify with `python main.py "research/prompts/archetype/crosses_prompts.md" --dry-run`
-  from `Gadgets/PromptPainter/` (20 images expected; the 2 Faith entries
-  load UNTICKED by the REUSE marker).
+  from `Gadgets/PromptPainter/` (20 images expected, all ticked).

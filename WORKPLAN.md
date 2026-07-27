@@ -302,7 +302,11 @@ with the 24-field union table, the Two Crosses (stations, chiasm,
 TRUST/DISTRUST, Latin/Greek rows, FALL/STAR, DOMY/SAFE), the
 Banknote-axes seal — all in the Charter's scientific voice, ENGLISH
 ONLY. Also closes the Character wheel's OPEN combo figures (roster
-proposals to the owner first).
+proposals to the owner first). **AND the Charter REWORK pass (owner
+2026-07-26):** sweep the EXISTING articles for prose that describes
+the depicted scene (Charter rule 4 — no scene description) and for
+belles-lettres tone; rewrite to the thesis→argument→correspondences
+→quote structure. Report the count of reworked articles.
 
 ### Session 22 — the Renaming → **Sonnet**
 **Say:** "Radi Sesiju 22 iz WORKPLAN.md — WATCH ACADEMY svuda."
