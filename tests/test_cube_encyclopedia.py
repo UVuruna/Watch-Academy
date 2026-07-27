@@ -1,0 +1,265 @@
+"""WORKPLAN Session 21 — the Cube Encyclopedia wave (2026-07-27).
+
+Pins what the owner sealed in this session, so nothing here can be
+undone by accident:
+
+1. THE CUBE SECTION — the `cube` / `double_trinity` / `crosses`
+   families of `Database/encyclopedia.json` exist, are complete, and
+   every page obeys the ARTICLE CHARTER's four movements (thesis →
+   argument → correspondences → quote, CUBE.md).
+2. THE ARCHETYPES HALL — the three topics are gallery cards, in the
+   contractual order the Cube wheels' Spacebar targets address by
+   INDEX.
+3. THE THREE WHEELS' ARTICLE SETS — Genesis, Council and Character
+   speak their own prose (the coverage law in `test_archetype.py`
+   proves the totals; here we pin the seats' own content).
+4. THE SEALED COMBO FIGURES — the six slots the owner delegated to
+   this session ("ti pečatiš") are named in the Character wheel's
+   articles.
+5. THE THEME NAME — "One Soul / The Vow / The Bond" keeps all three
+   names: the triple where a title is written in full, "One Soul"
+   alone wherever one name must stand.
+6. THE CHARTER REWORK — the twenty-one reworked articles no longer
+   describe their own picture or talk about the art asset.
+"""
+
+import json
+import re
+
+import pytest
+
+from config import archetypes, constants, paths
+from data.encyclopedia import EncyclopediaRepository
+from data.symbolism import SymbolismRepository
+from data.translations import collect_corpus
+
+_CHARTER_HEADS = ("[[Thesis]]", "[[Argument]]",
+                  "[[Correspondences]]", "[[Quote]]")
+_CUBE_FAMILIES = ("cube", "double_trinity", "crosses")
+
+
+def _encyclopedia() -> dict:
+    return json.loads(
+        (paths.database_dir() / "encyclopedia.json").read_text(
+            encoding="utf-8"
+        )
+    )
+
+
+def test_the_cube_families_are_complete():
+    """The Cube section, the Double Trinity and the Two Crosses: 20 + 5
+    + 14 pages, with the canon's own required subjects present by
+    name."""
+    data = _encyclopedia()
+    cube, dt, crosses = (data[f] for f in _CUBE_FAMILIES)
+    assert (len(cube), len(dt), len(crosses)) == (20, 5, 14)
+    # The three axes, the six poles, the eight vertices, the sets, the
+    # coordinate doctrine's own page and the Banknote seal.
+    for name in ("The Cube", "The Activation Axis", "The Judgment Axis",
+                 "The Self-Regard Axis", "The Three Sets",
+                 "The Banknote Axes"):
+        assert name in cube, name
+    for pole in ("Composure", "Vigor", "Loyalty", "Integrity",
+                 "Humility", "Dignity"):
+        assert pole in cube, pole
+    for vertex in ("The Quiet Devotee", "The Steady Guardian",
+                   "The Contemplative Sage", "The Wise Statesman",
+                   "The Sacrificial Protector", "The Charismatic Champion",
+                   "The Principled Reformer", "The Visionary Founder"):
+        assert vertex in cube, vertex
+    # The Double Trinity's three triangles plus the 24-field table.
+    for page in ("The Double Trinity", "The Court", "Genesis",
+                 "The Council", "The Twenty-Four Fields"):
+        assert page in dt, page
+    # The two crosses: both paths, all eight stations, the centres and
+    # both cipher pages.
+    for page in ("The Two Crosses", "The Path of Light",
+                 "The Path of Darkness", "Hope", "Faith", "Love",
+                 "Salvation", "Fear", "Anger", "Hate", "Suffering",
+                 "Trust and Distrust", "FALL and STAR", "DOMY and SAFE"):
+        assert page in crosses, page
+
+
+def test_every_cube_page_obeys_the_article_charter():
+    """CUBE.md's Article Charter: every page argues in four movements —
+    thesis, argument, correspondences, quote — in that order, and no
+    page is a stub."""
+    data = _encyclopedia()
+    for family in _CUBE_FAMILIES:
+        for name, node in data[family].items():
+            base = node["base"]
+            positions = []
+            for head in _CHARTER_HEADS:
+                assert head in base, f"{family}/{name} misses {head}"
+                positions.append(base.index(head))
+            assert positions == sorted(positions), f"{family}/{name} order"
+            assert len(base) > 600, f"{family}/{name} is a stub"
+
+
+def test_the_twenty_four_fields_name_all_twelve_office_process_pairs():
+    """The Double Trinity's full machinery: twelve offices, twelve
+    processes, four of each per person."""
+    base = EncyclopediaRepository().entry(
+        "double_trinity", "The Twenty-Four Fields"
+    )["base"]
+    for office in ("Judge", "Avenger", "Destroyer", "Tempter",
+                   "Prosecutor", "Catalyst", "Creator", "Redeemer",
+                   "Advocate", "Shepherd", "Preserver", "Lawgiver"):
+        assert office in base, office
+    for process in ("Justice", "Retribution", "Punishment", "Ruin",
+                    "Guilt", "Critique", "Reinvention", "Renewal",
+                    "Salvation", "Mercy", "Stewardship", "Reform"):
+        assert process in base, process
+
+
+def test_the_crosses_carry_the_rows_the_ciphers_and_the_chiasm():
+    """The Latin and Greek rows, the FALL/STAR mnemonics, the DOMY and
+    SAFE ciphers and the chiasm all have a written home (CUBE.md §The
+    Two Crosses — the legend MUST explain the mnemonics)."""
+    repo = EncyclopediaRepository()
+    overview = repo.entry("crosses", "The Two Crosses")["base"]
+    for word in ("TIMOR", "IRA", "ODIUM", "DOLOR",
+                 "SPES", "FIDES", "CARITAS", "SALUS",
+                 "PHOBOS", "ORGE", "MISOS", "PATHOS",
+                 "ELPIS", "PISTIS", "AGAPE", "SOTERIA"):
+        assert word in overview, word
+    assert "CHIASM" in overview.upper()
+    mnemonics = repo.entry("crosses", "FALL and STAR")["base"]
+    assert "FALL" in mnemonics and "STAR" in mnemonics
+    for term in ("Loathing", "Lament", "Spark", "Redemption"):
+        assert term in mnemonics, term
+    ciphers = repo.entry("crosses", "DOMY and SAFE")["base"]
+    for term in ("DOLOR", "ODIUM", "METUS", "HYBRIS",
+                 "SALUS", "AGAPE", "FIDES", "ELPIS",
+                 "littera Pythagorica"):
+        assert term in ciphers, term
+    centres = repo.entry("crosses", "Trust and Distrust")["base"]
+    assert "Without trust, even love decays into fear" in centres
+
+
+def test_the_archetypes_hall_addresses_its_pages_by_index():
+    """THE SPACEBAR CONTRACT: every Cube wheel figure's `enc` target
+    (topic key, entry index) lands on the page it argues — the
+    Character arms on their own pole or vertex, the Genesis and Council
+    arms on their triangle."""
+    from app.encyclopedia import _topics
+
+    topics = _topics()
+    for key in ("cube", "double_trinity", "crosses"):
+        assert key in topics
+    names = {
+        key: [entry["name"] for entry in topics[key]["entries"]]
+        for key in ("cube", "double_trinity", "crosses")
+    }
+    expect = {
+        "trinity_genesis": {"god": ("double_trinity", "Genesis"),
+                            "jesus": ("double_trinity", "Genesis"),
+                            "devil": ("double_trinity", "Genesis")},
+        "prism_council": {
+            entity: ("double_trinity", "The Council")
+            for entity in ("god_judge", "devil_destroyer",
+                           "devil_prosecutor", "god_creator",
+                           "jesus_advocate", "jesus_preserver")
+        },
+        "compass_character": {
+            "loyalty": ("cube", "Loyalty"),
+            "patronage": ("cube", "The Steady Guardian"),
+            "dignity": ("cube", "Dignity"),
+            "conviction": ("cube", "The Wise Statesman"),
+            "integrity": ("cube", "Integrity"),
+            "renunciation": ("cube", "The Contemplative Sage"),
+            "humility": ("cube", "Humility"),
+            "devotion": ("cube", "The Quiet Devotee"),
+        },
+    }
+    for wheel, per_entity in expect.items():
+        for figure in archetypes.figures(wheel):
+            topic, index = figure["enc"]
+            wanted_topic, wanted_page = per_entity[figure["entity"]]
+            assert topic == wanted_topic, figure["entity"]
+            assert names[topic][index] == wanted_page, figure["entity"]
+
+
+@pytest.mark.parametrize("set_name,entity,needle", (
+    # Genesis: the inverted trio and its centre.
+    ("archetype_trinity_genesis", "god", "Creator"),
+    ("archetype_trinity_genesis", "jesus", "Preserver"),
+    ("archetype_trinity_genesis", "devil", "Destroyer"),
+    ("archetype_trinity_genesis", "center", "Genesis 1:3"),
+    # Council: six offices in session, the Sabbath at the centre.
+    ("archetype_prism_council", "god_judge", "Psalm 82:1"),
+    ("archetype_prism_council", "devil_prosecutor", "Revelation 12:10"),
+    ("archetype_prism_council", "jesus_advocate", "1 John 2:1"),
+    ("archetype_prism_council", "center", "Genesis 2:2"),
+))
+def test_the_cube_wheels_speak_their_own_prose(set_name, entity, needle):
+    """No Cube wheel falls back to ARCHETYPE_PENDING_LINE any more."""
+    node = SymbolismRepository().archetype_article(set_name, entity)
+    joined = " ".join(node["rows"])
+    assert needle in joined
+    assert archetypes.ARCHETYPE_PENDING_LINE not in joined
+
+
+@pytest.mark.parametrize("entity,figure", (
+    ("devotion", "Alfred Pennyworth"),      # Devotion, modern +
+    ("devotion", "Severus Snape"),          # Martyrdom, modern −
+    ("patronage", "Charles Xavier"),        # Patronage, modern +
+    ("conviction", "Steve Rogers"),         # Conviction, modern +
+    ("renunciation", "Father Ferapont"),    # Mortification, archetypal −
+    ("renunciation", "Silas"),              # Mortification, modern −
+))
+def test_the_sealed_combo_figures_are_written(entity, figure):
+    """The six OPEN Character combos the owner delegated to this
+    session (CUBE.md §The Character Wheel, SEALED 2026-07-27) each have
+    a seat AND an argument in the wheel's own articles."""
+    node = SymbolismRepository().archetype_article(
+        "archetype_compass_character", entity
+    )
+    assert figure in " ".join(node["rows"])
+
+
+def test_the_prism_light_theme_keeps_all_three_names():
+    """Owner seal 2026-07-27: the theme is titled with the triple and
+    labelled with the single name — one declaration, both readers."""
+    assert constants.PRISM_LIGHT_THEME_NAME == "One Soul"
+    assert constants.PRISM_LIGHT_THEME_TITLE == "One Soul — The Vow — The Bond"
+    assert constants.PRISM_LIGHT_THEME_NAME in constants.PRISM_LIGHT_THEME_TITLE
+    # The hexa wheel row — the Design window's palette-style labels and
+    # the watch TITLE row read this one table (Rule #5).
+    labels = constants.POINTER_PALETTE_LABELS["hexa"]
+    assert labels[1] == constants.PRISM_LIGHT_THEME_NAME
+    assert labels == ("Paint palette", "One Soul", "Council")
+
+
+def test_the_reworked_articles_no_longer_describe_their_picture():
+    """CHARTER RULE 4 (owner 2026-07-26): an article never narrates the
+    frame, the pose or the glass, and never talks about the art asset.
+    The twenty-one articles Session 21 reworked are pinned clean; the
+    phrases below are the exact ones that were removed."""
+    repo = SymbolismRepository()
+    banned = re.compile(
+        r"rondel keeps|Scale window|no new glass is cut|reused here"
+        r"|in open hands|its iris is|center of the reveal"
+        r"|overlapping heart|with the plough in hand"
+        r"|the student at the lamp|owning nothing but the road",
+        re.IGNORECASE,
+    )
+    data = repo._load()["articles"]
+    offenders = []
+    for set_name, entities in data.items():
+        if not set_name.startswith("archetype_"):
+            continue
+        for entity, node in entities.items():
+            for index, row in enumerate(node["rows"]):
+                if banned.search(row):
+                    offenders.append(f"{set_name}.{entity}[{index}]")
+    assert offenders == []
+
+
+def test_the_cube_families_ride_the_translation_corpus():
+    """Every new page is translatable — the Session 15 wave must not
+    have to hunt for them."""
+    corpus = collect_corpus()
+    for family in _CUBE_FAMILIES:
+        for name in _encyclopedia()[family]:
+            assert f"encyclopedia/{family}/{name}/base" in corpus

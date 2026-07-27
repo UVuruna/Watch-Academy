@@ -1679,9 +1679,10 @@ def test_gallery_five_sections():
     every_card = [key for keys in groups.values() for key in keys]
     assert "planet_signs" not in every_card
     assert len(every_card) == len(set(every_card)), "no topic in two groups"
-    # The Archetypes section exists (owner: "do not scatter them") but
-    # carries no cards yet — that content is a future session.
-    assert groups["The Archetypes"] == ()
+    # The Archetypes section (owner: "do not scatter them") stood empty
+    # until WORKPLAN Session 21 (2026-07-27) filled it with the Cube
+    # canon's three topics, in this order.
+    assert groups["The Archetypes"] == ("cube", "double_trinity", "crosses")
     # Every card key actually resolves in _topics() — a stale name in a
     # group would KeyError the gallery build.
     topics = _topics()

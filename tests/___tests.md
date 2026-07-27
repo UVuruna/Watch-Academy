@@ -85,6 +85,22 @@ settings round-trip, and the Rose ring preset (the computed card,
 the procedural skin, an offscreen render carrying all eight ray hues,
 and the per-ray hover legend).
 
+### `test_cube_encyclopedia.py`
+The Cube ENCYCLOPEDIA wave (WORKPLAN Session 21, 2026-07-27): the
+three new `encyclopedia.json` families are complete (20 + 5 + 14
+pages) and every one of them obeys the Article Charter's four
+movements in order; the 24-field union table names all twelve
+office/process pairs; the Two Crosses carry the Latin and Greek rows,
+the chiasm, TRUST/DISTRUST and both ciphers; the Archetypes hall's
+three topics resolve and every Cube wheel figure's `enc` index lands
+on the page it argues (the Spacebar contract); the three wheels'
+article sets speak their own prose instead of the pending line; the
+six combo figures the owner delegated to this session are written;
+the sealed prism-light theme name (all three kept, "One Soul" alone
+where one name must stand); and a REGRESSION PIN on the Charter
+rework — the exact scene-describing phrases that were removed can
+never come back.
+
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 121
 mixed-depth, 45,649 cities (post-curation shape); the audited

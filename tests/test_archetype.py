@@ -875,7 +875,10 @@ def test_tetramorph_arm_shows_the_three_side_layout(app):
     assert "The Element" in tip and "Fire" in tip           # the element
     # The evangelist and element columns now carry their OWN prose
     # (Tetramorph completion round 2026-07-18), not just the names.
-    assert "crying in the wilderness" in tip                # Mark's article
+    # (Session 21's Charter rework re-argued the evangelist row — the
+    # scripture citation moved to the article's closing quote, out of
+    # the hover TEASER, so the pin now names the argument's own words.)
+    assert "voice in the wilderness" in tip                  # Mark's article
     assert "yellow bile" in tip                             # Fire's article
     # The bottom arm creature is the Eagle → John → Water.
     bottom = tetra.tooltip_at(*_arm_px(180.0, 180.0), 360.0)
@@ -933,17 +936,12 @@ def test_every_archetype_set_position_and_center_is_written(app):
     repo = SymbolismRepository()
     checked = 0
     # The Cube wave's three sets (Genesis / Council / Character, owner
-    # seal 2026-07-26) are WORKPLAN Session 21's writers' work — until
-    # that session lands they speak the documented pending line, and
-    # this coverage law scopes to the original eight sets.
-    pending_sets = {
-        "archetype_trinity_genesis", "archetype_prism_council",
-        "archetype_compass_character",
-    }
+    # seal 2026-07-26) carried a temporary EXEMPTION here while they
+    # spoke the pending line; WORKPLAN Session 21 (2026-07-27) wrote
+    # them, so the exemption is GONE and the coverage law is total —
+    # every archetype in the grid, no exceptions.
     for key, spec in archetypes.ARCHETYPES.items():
         set_name = spec["articles"]
-        if set_name in pending_sets:
-            continue
         figs = []
         if "registers" in spec:
             for register in spec["registers"].values():
@@ -961,7 +959,10 @@ def test_every_archetype_set_position_and_center_is_written(app):
                 isinstance(r, str) and r.strip() for r in rows
             ), f"{set_name}.{entity} has empty rows"
             checked += 1
-    assert checked == 48        # 6 two-row sets + 2 three-side wheels
+    # 48 from the original eight sets (6 two-row + 2 three-side wheels)
+    # plus the Cube wave's 19: Genesis 3+centre, Council 6+centre,
+    # Character 8 (centreless — the rose IS the wheel).
+    assert checked == 67
 
 
 def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):

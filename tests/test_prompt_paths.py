@@ -216,13 +216,14 @@ _WHITELIST: dict[str, str] = {
     # (The figurative Union window, Union_Meeting→Union_v2 in the
     # figure-first sweep 2026-07-22, needs no entry anymore — the scale
     # family is a data-driven rotation root, discovered automatically.)
-    # The Trinity badges ARE genuinely read (`app.encyclopedia._topics`:
-    # `defaults.TRINITY_ART_DIR / f"{virtue}.png"` for `virtue in
-    # ("Faith", "Hope", "Love")`) but `virtue` is a loop variable —
-    # "Faith.png" happens to also appear as the topic's own literal
-    # icon path (caught by the text scan), Hope/Love do not.
-    "archetypes/trinity/primary/colored/badges/colored/Hope.png": "read via the Trinity topic loop, built at runtime",
-    "archetypes/trinity/primary/colored/badges/colored/Love.png": "read via the Trinity topic loop, built at runtime",
+    # (The Trinity badges' Hope/Love entries are GONE since Session 21:
+    # they were whitelisted because `app.encyclopedia._topics` builds
+    # them from a loop variable and only "Faith.png" also appeared as a
+    # literal icon path. The Two Crosses topic now declares literal
+    # `crosses/primary/colored/Hope.png` and `Love.png`, and the lint's
+    # basename-tail match covers the Trinity badges through them — so
+    # the exception is no longer needed, and keeping it would be stale
+    # bookkeeping by this file's own rule.)
     # The Instrument section's own article images
     # (`app.encyclopedia._topics`: `defaults.INSTRUMENT_ART_DIR /
     # f"{key}.png"` for `key in _INSTRUMENT_KEYS`) — same pattern.
