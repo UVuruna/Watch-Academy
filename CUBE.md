@@ -162,6 +162,44 @@ true seat is the Messianic Tyrant (Self-Worship + Legalism +
 Frenzy) — the man who crowns himself, writes the code, and never
 stops; Dalí keeps the pure Self-Worship pole.
 
+### Seating the eight on the Rose's Prophecy wheel (SEALED 2026-07-27)
+
+A cube has no natural eight-fold projection — an octagon of vertices
+is a CHOICE, so it was made on a principle: **adjacency on the dial
+must mean kinship on the cube.** Neighboring arms differ in exactly
+ONE axis, which makes the ring a Hamiltonian cycle of the cube: one
+step around the wheel changes exactly one thing about a character.
+
+Such a cycle always splits 4+2+2 (a parity fact — an odd split is
+impossible, and 4+4+0 would confine the walk to one face), so one
+axis must move twice as often as the others. That axis is **X,
+Activation** — the very axis the Character wheel already drops as the
+one a flat dial cannot show. Every OTHER step around the Prophecy
+wheel is therefore only "act more / act less"; the deeper turns —
+whom you judge by, how you hold your own worth — come every four.
+
+| Arm | Hue | Vertex | Fallen | Next step flips |
+|---|---|---|---|---|
+| 12h | yellow | Quiet Devotee | Submissive Enabler | X |
+| 15h | orange | Sacrificial Protector | Fanatical Martyr | Z |
+| 18h | red | Charismatic Champion | Tribal Warlord | X |
+| 21h | rose | Steady Guardian | Complacent Nepotist | Y |
+| 24h | purple | Wise Statesman | Cold Elitist | X |
+| 03h | cyan | Visionary Founder | Messianic Tyrant | Z |
+| 06h | blue | Principled Reformer | Puritanical Zealot | X |
+| 09h | green | Contemplative Sage | Paralyzed Purist | Y |
+
+**The one honest miss.** A second wish was that each arm's own hue be
+one of the three poles its vertex carries. Six arms can be asked this
+(the Sabbath's blue and red are not cube axes at all), and an
+exhaustive search over every Hamiltonian cycle proves **5 of 6 is the
+maximum** — three seatings tie at it, and in ALL THREE the single miss
+falls on the X axis. This one misses at 03h, where cyan asks for
+Composure and the Visionary Founder brings Vigor. The miss is left
+standing rather than hidden: it is the least-visible axis, and a
+seating that lied about kinship to save one hue would be the worse
+trade.
+
 **Encyclopedia seat (SEALED):** the whole Cube — axes, poles,
 vertices, all three sets, with the figures' images and stories —
 is a MAJOR Encyclopedia section, each axis described in detail.
@@ -672,7 +710,31 @@ lacking the experiment).
    - Practical consequence: a roster table with figures in three sets
      is a queue of `seats × sets` images, and a sheet that writes the
      texts without queueing the pictures is INCOMPLETE, not "staged".
-6. **THE COPYRIGHT ROUTE (owner 2026-07-27).** Modern figures — film,
+6. **THE DEED DOCTRINE — we seat an ACT, never a person (owner
+   decree 2026-07-27; the single most-missed law in this canon, missed
+   by the session that BUILT the rosters).** A figure on a seat is not
+   a verdict on a life. It is **one deed**, lifted out and held up as
+   the symbol of that seat. The article argues THAT DEED and
+   deliberately forgets the rest of the man.
+   - The owner's own example: to seat Stalin on steadfastness you
+     write ONLY the refusal to trade his captured son for a field
+     marshal — *"I will not trade a lieutenant for a general"* — and
+     nothing else about Stalin exists on that seat. The seat does not
+     say Stalin was steadfast; it says THIS ACT was.
+   - Therefore the article's subject is the act: what was done, under
+     what pressure, at what cost, and why that shape IS this seat.
+     The person's name is the label on the deed, not the thesis.
+   - **The test a seat must pass:** *is there ONE nameable, checkable
+     deed of this person that IS this seat?* If yes — write it, and
+     write only it. **If no — the seat is wrong and needs a different
+     figure.** "He generally seems like a loyal sort" is not a deed
+     and never seats anyone.
+   - This dissolves three objections at once: it stops the canon from
+     pronouncing on whole lives, it lets a monster hold a virtue and a
+     saint hold a fall (which is the truth about people), and it tells
+     the IMAGE what to depict — the ACT, not a portrait, which is also
+     the cleanest way past rule 7's copyright wall.
+7. **THE COPYRIGHT ROUTE (owner 2026-07-27).** Modern figures — film,
    comics, novels still in copyright — get REFUSED by the generators
    when named. Three routes exist and the sheet must say which each
    entry takes (the Star Wars wave proved all three):

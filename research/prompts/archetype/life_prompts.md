@@ -40,7 +40,7 @@ LANCET window in that age's light hue.
 `assets/archetype/<source>/life/tree/` (Register I) and
 `assets/archetype/<source>/life/animals/` (Register II) — both
 named by age: `Unborn.png`, `Birth.png`, `Childhood.png`,
-`Youth.png`, `Maturity.png`, `Elder.png`, `OldAge.png`, `Death.png`.
+`Youth.png`, `Maturity.png`, `Elder.png`, `Old_Age.png`, `Death.png`.
 
 ---
 
@@ -94,7 +94,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 ```
 
 **Old age — the leaf-fall (dusk violet, 21h)** →
-`assets/archetypes/life/tree/colored/OldAge.png`
+`assets/archetypes/life/tree/colored/Old_Age.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Dusk-violet and faded purple glass throughout, soft fading evening light. Center: an old oak SHEDDING its leaves — the crown thinning, dry brown-and-gold leaves drifting down and gathering at the roots, bare branches beginning to show against a violet dusk sky; the last soft light of evening on a tree letting go. Quiet, thinning, at rest. Border: falling-leaf leadwork in dark violet; three small rim roundels — a drifting leaf at the apex, a bare branch-tip at one side, a dusk crescent at the other. Palette: dusk violet, faded purple, dry gold-brown, dark-violet lead. NO lettering anywhere.
@@ -158,7 +158,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 ```
 
 **Old age — the owl (dusk violet, 21h — wisdom in the dark)** →
-`assets/archetypes/life/animals/colored/OldAge.png`
+`assets/archetypes/life/animals/colored/Old_Age.png`
 
 ```
 TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. Dusk-violet and faded purple glass throughout, soft fading evening light. Center: an owl perched still on a bare branch at dusk, wide knowing eyes open, wings folded, the quiet wisdom that comes only in the dark hours; the last violet light of evening around it, the first star behind. Stillness, knowledge, the settled calm of age. Border: feather-and-branch leadwork in dark violet; three small rim roundels — an owl's face at the apex, a folded wing at one side, an evening star at the other. Palette: dusk violet, faded purple, soft grey, dark-violet lead. NO lettering anywhere.

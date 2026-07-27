@@ -53,6 +53,17 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
 >   identical for pantheon and primary (the owner's decree).
 > - **`Title`** is the one reserved stem — a theme's title plate sits in
 >   the register (or look) it introduces.
+> - **THE WORD-SEPARATOR RULE (owner "sredi" 2026-07-27).** A stem's
+>   words are separated by UNDERSCORES, never run together:
+>   `Obi_Wan`, `Sun_Wukong`, `Adam_Smasher` — never `ObiWan`,
+>   `SunWukong`, `AdamSmasher`. This rule was MISSING: the 0.14.427
+>   normalizer only capitalises tokens that are already split, so it
+>   passed a run-together stem unchanged and two conventions grew side
+>   by side (27 stems, 98 files, and two figures that existed under
+>   BOTH spellings at once). Enforced now by
+>   `tests/test_assets_structure.py::test_figure_stems_separate_their_words`.
+>   One documented exception: `ChangE` — Chang'e, where the interior
+>   capital stands for a dropped apostrophe, not a word boundary.
 > - **`_vN`** = another artwork of the SAME figure (rotation food);
 >   a DIFFERENT figure on the same seat keeps its own name and is
 >   registered in config (the roster tables), never in a folder name.

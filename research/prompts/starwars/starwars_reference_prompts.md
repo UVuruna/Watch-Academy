@@ -47,10 +47,10 @@ types the fenced text, never a heading.
 
 | Set | Seat | Figure | Attach file | Note |
 |---|---|---|---|---|
-| Svetla | Monday | Obi-Wan | `ObiWan.png` | |
+| Svetla | Monday | Obi-Wan | `Obi_Wan.png` | |
 | Svetla | Tuesday | Leia | `Leia.png` | shared with Nova's Old Leia (different era brief) |
 | Svetla | Wednesday | Han | `Han.png` | shared with Nova's Old Han |
-| Svetla | Thursday | Qui-Gon | `QuiGon.png` | |
+| Svetla | Thursday | Qui-Gon | `Qui_Gon.png` | |
 | Svetla | Friday | Padmé | `Padme.png` | smallest reference in the set (332×520) |
 | Svetla | Saturday | Chewbacca | `Chewbacca.png` | |
 | Svetla | Throne | Young Luke | `Luke.png` | |
@@ -99,14 +99,14 @@ generation route (composited likeness), not a tint or recolor pass of
 
 ### Monday — Obi-Wan (Ben) Kenobi
 
-**Attach:** `UV/sw_reference/ObiWan.png`
+**Attach:** `UV/sw_reference/Obi_Wan.png`
 
-**Obi-Wan — reference** → `assets/weeks/films/sw_jedi/primary/bronze/ObiWan_v3.png`
+**Obi-Wan — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Obi_Wan_v3.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep the face, build and costume of the attached figure faithfully, and re-render the whole figure as warm aged-bronze sculpted relief (monochrome bronze patina, darker recesses, polished highlights; no paint, no enamel). Pose and staging: the attached figure standing at the edge of a wind-carved dune beneath twin setting suns, one weathered hand resting on the slim hilt of a blade at the belt rather than igniting it, gaze fixed on a distant homestead far below — calm, watchful, guarding a hope not yet named. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament at each joint, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Obi-Wan — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/ObiWan_v3.png`
+**Obi-Wan — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Obi_Wan_v3.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep its face, build and costume faithfully, rendered in full saturated color as a fresh painting (never a tinted copy of a bronze relief). Pose and staging: the attached figure at a twin-sunset dune, one hand resting on the slim hilt at the belt, watching a distant homestead. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a silver Moon crescent. Colors: dusk blue, sandstone bronze, twin-sun amber, desert-robe tan.
 ```
@@ -141,14 +141,14 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Thursday — Qui-Gon Jinn
 
-**Attach:** `UV/sw_reference/QuiGon.png`
+**Attach:** `UV/sw_reference/Qui_Gon.png`
 
-**Qui-Gon — reference** → `assets/weeks/films/sw_jedi/primary/bronze/QuiGon_v3.png`
+**Qui-Gon — reference** → `assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v3.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Use the ATTACHED IMAGE as the exact likeness of the central figure — keep the face, long hair and robed build faithfully, re-rendered as warm aged-bronze sculpted relief. Pose and staging: the attached figure kneeling down to a small child's eye level in a dusty marketplace, long hair falling forward, one hand extended in an offer of freedom rather than toward a weapon, an order's seal deliberately set aside on the ground beside him — warm, unconventional generosity that breaks a rule to do what is right. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Qui-Gon — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/QuiGon_v3.png`
+**Qui-Gon — reference (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Qui_Gon_v3.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Use the ATTACHED IMAGE as the exact likeness of the central figure, in full saturated color as a fresh painting. Pose and staging: the attached figure kneeling to a child's eye level in a dusty marketplace, one hand extended, a small seal set aside on the ground. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, dusty tan, glowing blue, warm brown robe.
 ```

@@ -255,7 +255,7 @@ _WHITELIST: dict[str, str] = {
     "archetypes/life/circle/colored/Youth.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     "archetypes/life/circle/colored/Maturity.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     "archetypes/life/circle/colored/Elder.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
-    "archetypes/life/circle/colored/OldAge.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
+    "archetypes/life/circle/colored/Old_Age.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     "archetypes/life/circle/colored/Death.png": "BADGE SISTEM round-one circle, not yet wired (owner call)",
     # THE THEME TITLE PLATES (R8c PROMPT SHEETS round, owner item 7,
     # 2026-07-21): a NEW sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png`,

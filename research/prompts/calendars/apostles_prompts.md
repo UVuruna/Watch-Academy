@@ -40,7 +40,7 @@ midnight visibly sinks toward the purple of Hatred's own arm.
 **Drop paths:** `assets/calendars/apostles/primary/colored/<Figure>.png` — a sourceless
 calendar-mount root (PromptPainter appends `_gem`/`_gpt`). Twelve files:
 `Peter.png`, `Andrew.png`, `James.png`, `John.png`, `Philip.png`,
-`Bartholomew.png`, `Thomas.png`, `Matthew.png`, `JamesAlphaeus.png`,
+`Bartholomew.png`, `Thomas.png`, `Matthew.png`, `James_Alphaeus.png`,
 `Thaddaeus.png`, `Simon.png`, `Judas.png`.
 
 **House rules carried from every other sheet:** photorealistic render,
@@ -107,7 +107,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The pair — James of Alphaeus & Thaddaeus
 
-**James of Alphaeus — the lesser** → `assets/calendars/apostles/primary/colored/JamesAlphaeus.png`
+**James of Alphaeus — the lesser** → `assets/calendars/apostles/primary/colored/James_Alphaeus.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Quiet sage-green, grey and soft gold glass, plain and humble. Center: a modest bearded apostle with a gold halo holding a FULLER'S CLUB (the instrument of his martyrdom) resting against his shoulder, hands folded in quiet — James the Less, the quieter of the two Jameses, the unassuming faithful mission. Border: the shared knotted-Net leadwork rim in dark gold. Palette: sage green, soft grey, muted gold, dark-gold lead. NO lettering anywhere.

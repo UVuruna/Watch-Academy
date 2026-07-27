@@ -1967,11 +1967,12 @@ def dial_window_margin_fraction(skin) -> float:
     carry the user's earth/moon multiplier (apply_display_settings).
 
     TASK 1 (owner "može radi" 2026-07-19): a preset with a `motto` arc
-    (the Dollar today) reaches further out than the plain ring letters —
-    `motto_extent` is 0.0 (a no-op term in the max()) for every OTHER
-    preset, exactly the graceful-absence pattern `triangle`/`legend`
-    already use, so this never grows the margin for DOMY/Morph/The One
-    or a custom ring. MOTO-FIX round (owner correction 2026-07-19): both
+    (the Dollar's Great Seal mottos; DOMY's and PILOT's cross-station
+    words since the CROSS-WORDS round, 2026-07-27) reaches further out
+    than the plain ring letters — `motto_extent` is 0.0 (a no-op term
+    in the max()) for every OTHER preset, exactly the graceful-absence
+    pattern `triangle`/`legend` already use, so this never grows the
+    margin for The One/Templar or a custom ring. MOTO-FIX round (owner correction 2026-07-19): both
     mottos now share ONE radius (the two arcs are angularly disjoint),
     so this measures from `RING_MOTTO_RADIUS_FRACTION` alone —
     `RING_MOTTO_RADIUS_STEP` is gone."""

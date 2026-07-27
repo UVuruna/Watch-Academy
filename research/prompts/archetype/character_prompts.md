@@ -86,35 +86,49 @@ would be enumerating what a single composition already says.
 
 **COMPUTED — never generated:**
 
-- **THE ROSE GETS NO SHEET.** `24 ROSE (3 x octa).png` is three IDENTICAL
-  octa stars offset 15° (−1h / 0h / +1h), 24 rays in 8 colours, one ray
-  per hour. That is one geometry drawn three times at three rotations
-  with a palette lookup — a RING PRESET, the Mason ring's sibling. Not
-  one pixel of it is art, and no future round may open a generation queue
-  for it.
+- **THE ROSE'S GEOMETRY** — three IDENTICAL octa stars 15° apart, 24
+  rays in 8 colours — is one star drawn three times at three rotations
+  with a palette lookup. Not one pixel of the GEOMETRY is art.
+
+  > **CORRECTION OF RECORD (owner 2026-07-27).** This bullet used to
+  > read "THE ROSE GETS NO SHEET… a RING PRESET, the Mason ring's
+  > sibling… no future round may open a generation queue for it." Every
+  > clause of that was wrong, and it was wrong because CUBE.md had
+  > mis-transcribed the owner's POINTER spec as a ring and stamped it
+  > SEALED — so this sheet inherited the error and hardened it into a
+  > prohibition. **The Rose is the seventh POINTER** (CUBE.md §The Rose
+  > of the Twenty-Four); the ring preset was deleted whole in 0.14.482.
+  > The geometry is still computed — that part was always true — but the
+  > FIGURES that ride it are art, and their round is open.
 - **The eight wedge COLOURS**, including the four blends, are palette
   values computed in config (yellow+red → orange, blue+yellow → green,
   red/blue thinned toward moon-purple → pink/cyan). The wheel's coloured
   wedges are drawn, never painted plates.
-- **The three SETS** (Historical −1h star, Modern 0h star, Archetypal
-  +1h star) are a legend/roster READING of the same geometry — three
-  rotations, not three art sets.
+- ~~**The three SETS** are a legend/roster READING of the same
+  geometry — three rotations, not three art sets.~~ **REVERSED by
+  Charter rule 5 (owner decree 2026-07-27).** Three sets on one seat
+  are three DIFFERENT PEOPLE holding one office, never one character
+  read three ways — so they ARE three art sets, and each figure is its
+  own queued image. The star offsets stay computed; the people do not.
+  (The old star mapping printed here was also only ever true of the
+  PROPHECY wheel — LEGACY seats its myth star at −30°.)
 - **The missing depth axis** costs nothing to draw: Activation is absent
   by design, and absence is not an asset.
 - **Rotation, lit/ghost opacity, metal tints, the Diamond/Cube toggle** —
   transform and palette maths on the same files, as everywhere else.
 
-**DEFERRED — the per-figure portraits, PENDING OWNER.** CUBE.md §The
-Eight Vertices seals the whole Cube as a MAJOR Encyclopedia section
-"with the figures' images and stories" — 36 pole figures + 48 vertex
-figures = **84 portraits**, a wave of its own. It is NOT opened here, for
-two reasons worth writing down: (a) six of this wheel's own combo slots
-are still OPEN (tabled below exactly as CUBE.md marks them — this sheet
-invents no figure to fill a hole), and WORKPLAN Session 21 is the round
-that proposes them for the owner's seal; (b) the wheel itself needs zero
-portraits to render — it draws directions, and the figures are what its
-articles and the Rose's legend NAME. When the owner opens that round it
-gets its own sheet.
+**THE PER-FIGURE ROUND IS OPEN (owner 2026-07-27).** It was deferred
+here, and the count written down was wrong twice over: "36 pole figures
++ 48 vertex figures = 84 portraits" omits this wheel's OWN four combos
+entirely (4 combos × 3 sets × 2 polarities = 24 more). The true corpus
+is **108 cells, 104 unique files** once the four cross-wheel duplicates
+are counted once. Both of the reasons given for deferring have expired:
+the six OPEN combo slots were SEALED on 2026-07-27 (Charles Xavier,
+Steve Rogers, Father Ferapont, Silas, Alfred Pennyworth, Severus Snape
+— the table below is stale, CUBE.md is authoritative), and "the wheel
+needs zero portraits to render" stopped being a reason the moment the
+Rose put three figure sets on one dial. The figures live in their own
+sheets under `research/rose_round/`.
 
 ---
 
@@ -256,15 +270,21 @@ derivation check above.
 
 | Arm | Direction | Archetypal +/− | Historical +/− | Modern +/− |
 |---|---|---|---|---|
-| 15h | Patronage / Favoritism | Boaz / King Lear | Lorenzo de' Medici / Nicolae Ceaușescu | **OPEN** / Denethor II |
-| 21h | Conviction / Dogmatism | Elijah / Creon | Martin Luther / Joseph Stalin | **OPEN** / Dolores Umbridge |
-| 03h | Renunciation / Mortification | John the Baptist / **OPEN** | Thomas More / Simone Weil | Obi-Wan Kenobi / **OPEN** |
-| 09h | Devotion / Martyrdom | Moses / Samson | Janusz Korczak / Marcus Antonius | **OPEN** / **OPEN** |
+| 15h | Patronage / Favoritism | Boaz / King Lear | Lorenzo de' Medici / Nicolae Ceaușescu | Charles Xavier / Denethor II |
+| 21h | Conviction / Dogmatism | Elijah / Creon | Martin Luther / Joseph Stalin | Steve Rogers / Dolores Umbridge |
+| 03h | Renunciation / Mortification | John the Baptist / Father Ferapont | Thomas More / Simone Weil | Obi-Wan Kenobi / Silas |
+| 09h | Devotion / Martyrdom | Moses / Samson | Janusz Korczak / Marcus Antonius | Alfred Pennyworth / Severus Snape |
 
-**Six OPEN slots** — Patronage modern positive, Conviction modern
-positive, Mortification archetypal, Mortification modern, and BOTH
-Devotion/Martyrdom modern. WORKPLAN Session 21 proposes them; the owner
-seals them; only then can a portrait round quote them.
+**All six formerly OPEN slots were SEALED on 2026-07-27** (CUBE.md §The
+Character Wheel is authoritative; this table is a copy and may drift —
+read the canon).
+
+**EVERY row above is subject to THE DEED DOCTRINE** (Charter rule 6,
+owner decree 2026-07-27): a name here does not claim the person WAS
+this direction. It claims ONE nameable deed of theirs IS it, and the
+article writes that deed and forgets the rest of the life. A row whose
+figure has no such deed is a defect in the roster, not a hard article
+to write — the figure gets replaced.
 
 ---
 

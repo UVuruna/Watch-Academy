@@ -77,29 +77,75 @@ def _hour_angle(hours: int, minutes: int) -> float:
 # --- The grid and the tables ---------------------------------------------------
 
 
-def test_grid_covers_the_eleven_archetypes():
+def test_grid_covers_the_twelve_archetypes():
     """CANON (owner 2026-07-17) + the Cube wave (owner seal 2026-07-26,
-    CUBE.md): ELEVEN archetypes — the Seasons split into PAINT (the
-    Four Temperaments) and LIGHT (the Tetramorph), and the three Cube
-    pointers each carry a THIRD wheel (Genesis / Council / Character);
-    Aurora and the Calendar have none."""
+    CUBE.md) + the Rose (owner seal 2026-07-27): TWELVE archetype SETS
+    across thirteen wheels — the Seasons split into PAINT (the Four
+    Temperaments) and LIGHT (the Tetramorph), the three Cube pointers
+    each carry a THIRD wheel (Genesis / Council / Character), and the
+    Rose carries two: LEGACY reads the 2D system and therefore points
+    at the Character set itself (Rule #5 — one table, two readers),
+    PROPHECY reads the 3D system, the Cube's eight vertices. Aurora
+    and the Calendar have none."""
     assert set(archetypes.ARCHETYPE_GRID.values()) == {
         "trinity_paint", "trinity_light", "seasons_paint", "seasons_light",
         "prism_paint", "prism_light", "compass_paint", "compass_light",
         "trinity_genesis", "prism_council", "compass_character",
+        "rose_vertices",
     }
     assert archetypes.grid_key("cross", "paint") == "seasons_paint"
     assert archetypes.grid_key("cross", "light") == "seasons_light"
     assert archetypes.grid_key("trio", "cube") == "trinity_genesis"
     assert archetypes.grid_key("hexa", "cube") == "prism_council"
     assert archetypes.grid_key("octa", "cube") == "compass_character"
+    # THE ROSE's two wheels — Legacy shares the Character set, Prophecy
+    # owns the vertices; the Rose has no third wheel.
+    assert archetypes.grid_key("rose", "paint") == "compass_character"
+    assert archetypes.grid_key("rose", "light") == "rose_vertices"
+    assert archetypes.grid_key("rose", "cube") is None
     assert archetypes.grid_key("cross", "cube") is None
     assert archetypes.grid_key("aurora", "paint") is None
     assert archetypes.grid_key("calendar", "light") is None
-    for pointer in ("trio", "cross", "hexa", "octa"):
+    for pointer in ("trio", "cross", "hexa", "octa", "rose"):
         assert archetypes.has_archetype(pointer)
     for pointer in ("aurora", "calendar"):
         assert not archetypes.has_archetype(pointer)
+
+
+def test_the_prophecy_seating_is_a_hamiltonian_cycle_of_the_cube():
+    """CUBE.md §Seating the eight on the Rose's Prophecy wheel (owner
+    approved 2026-07-27): adjacency on the dial MUST mean kinship on
+    the cube — neighbouring arms differ in exactly ONE axis — and the
+    axis that moves twice as often is X, Activation, the one a flat
+    dial cannot show. This pins the geometry, not the prose."""
+    # (X, Y, Z) coordinates of each vertex, from CUBE.md's own naming:
+    # X- Blue / X+ Orange, Y+ Yellow / Y- Purple, Z- Green / Z+ Red.
+    coords = {
+        "Quiet Devotee": (-1, +1, -1),
+        "Steady Guardian": (-1, +1, +1),
+        "Contemplative Sage": (-1, -1, -1),
+        "Wise Statesman": (-1, -1, +1),
+        "Sacrificial Protector": (+1, +1, -1),
+        "Charismatic Champion": (+1, +1, +1),
+        "Principled Reformer": (+1, -1, -1),
+        "Visionary Founder": (+1, -1, +1),
+    }
+    figures = archetypes.ARCHETYPES["rose_vertices"]["figures"]
+    assert [f["angle"] for f in figures] == [0, 45, 90, 135, 180, 225, 270, 315]
+    ring = [coords[f["name"]] for f in figures]
+    assert len(set(ring)) == 8              # every vertex seated once
+    flips = []
+    for index, here in enumerate(ring):
+        there = ring[(index + 1) % 8]
+        changed = [axis for axis in range(3) if here[axis] != there[axis]]
+        assert len(changed) == 1, (
+            f"{figures[index]['name']} -> "
+            f"{figures[(index + 1) % 8]['name']} changes {len(changed)} axes"
+        )
+        flips.append(changed[0])
+    # The 4+2+2 split is a parity fact; X must be the fast one.
+    assert flips.count(0) == 4, "X (Activation) must be the fast axis"
+    assert flips.count(1) == 2 and flips.count(2) == 2
 
 
 def test_figure_order_matches_the_hour_spaces():

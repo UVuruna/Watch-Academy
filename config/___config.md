@@ -65,7 +65,11 @@ AT THE APEX (DOLLAR/EYE round, owner decree 2026-07-27):
 Dollar's adaptive Eye-of-Providence glyph, its glory-of-rays master
 stem and the per-preset "Shine" default (Dollar True), plus the four
 explicit `👁 …` variants in `RING_LETTER_FILES`/`RING_LETTER_GROUPS`
-for the custom builder. THE NINTH
+for the custom builder; `RING_EYE_SHINE_ENLARGE` (CROSS-WORDS/SHINE
+round, owner UV inbox 2026-07-27) — the measured per-source height
+multiplier that keeps the shine master's TRIANGLE the same size as
+the no-light master (the rays pad the frame), stamped into
+`SkinDefinition.ring.letter_zoom` by `app.controller.build_skin`. THE NINTH
 TABLE AND ITS SOLAR WINDOWS (round R3b item 3): `WEEKDAY_THEME_NINTHS`
 — the (display name, plate path) per weekday theme, extracted out of
 `app.encyclopedia`'s own ninths loop so [Layers](../render/layers.md)

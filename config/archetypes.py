@@ -43,6 +43,14 @@ ARCHETYPE_GRID = {
     ("trio", "cube"): "trinity_genesis",
     ("hexa", "cube"): "prism_council",
     ("octa", "cube"): "compass_character",
+    # THE ROSE (owner seal 2026-07-27, CUBE.md §The Rose): its two
+    # wheels carry the two character systems. LEGACY (paint) reads the
+    # 2D system — it IS the Character wheel's eight directions, so it
+    # points at that same set (Rule #5: one table, two readers, and a
+    # figure seated once is seated everywhere). PROPHECY (light) reads
+    # the 3D system, the Cube's eight vertices.
+    ("rose", "paint"): "compass_character",
+    ("rose", "light"): "rose_vertices",
 }
 
 # The Eight Ages ship TWO image registers (owner "oba", CANON §Compass
@@ -168,6 +176,16 @@ _LIFE_DIR = ARCHETYPE_ART_DIR / "life"
 GENESIS_ART_DIR = ARCHETYPE_ART_DIR / "genesis" / "primary" / "colored"
 COUNCIL_ART_DIR = ARCHETYPE_ART_DIR / "council" / "primary" / "colored"
 CHARACTER_ART_DIR = ARCHETYPE_ART_DIR / "character" / "primary" / "colored"
+# THE EIGHT VERTICES — the Rose's PROPHECY wheel (owner seal 2026-07-27,
+# CUBE.md §Seating the eight on the Rose's Prophecy wheel). Its own
+# group beside `character`, same register/look shape.
+VERTICES_ART_DIR = ARCHETYPE_ART_DIR / "vertices" / "primary" / "colored"
+
+# The three FIGURE SETS every Rose seat carries (Charter rule 5: three
+# DIFFERENT PEOPLE holding one office, never one character read three
+# ways). They are REGISTERS on disk — `<group>/<set>/colored/<Stem>.png`
+# — exactly as the Ages wheel's tree/animals pair already is.
+ROSE_FIGURE_SETS = ("archetypal", "historical", "modern")
 CROSSES_ART_DIR = ARCHETYPE_ART_DIR / "crosses" / "primary" / "colored"
 
 # The Eight Ages, shared by both registers: (angle, age name, row-2
@@ -181,7 +199,7 @@ _LIFE_AGES = (
     (90.0, "The Elder", {"tree": "The Fruited Crown",
                          "animals": "The Elephant"}, "elder", "Elder"),
     (135.0, "Old Age", {"tree": "The Leaf-fall", "animals": "The Owl"},
-     "old_age", "OldAge"),
+     "old_age", "Old_Age"),
     (180.0, "Death", {"tree": "The Bare Tree", "animals": "The Swan"},
      "death", "Death"),
     (225.0, "The Unborn", {"tree": "The Seed", "animals": "The Phoenix"},
@@ -497,6 +515,45 @@ ARCHETYPES = {
                               # the wheel itself (owner; sheet "No
                               # centre" — nothing generated for the
                               # middle)
+    },
+    # THE EIGHT VERTICES — the Rose's PROPHECY wheel (owner seal
+    # 2026-07-27, CUBE.md §Seating the eight on the Rose's Prophecy
+    # wheel). Each vertex combines one pole from each of the three
+    # axes, and the SEATING is a Hamiltonian cycle of the cube:
+    # neighboring arms differ in exactly ONE axis, so adjacency on the
+    # dial means kinship on the cube. Such a cycle always splits 4+2+2,
+    # and the axis that moves twice as often is X (Activation) — the
+    # one a flat dial cannot show anyway. Row 2 is the vertex's FALL.
+    "rose_vertices": {
+        "articles": "archetype_rose_vertices",
+        "figures": (
+            _fig(0.0, VERTICES_ART_DIR / "Quiet_Devotee.png",
+                 "Quiet Devotee", "Submissive Enabler", "quiet_devotee",
+                 enc=("cube", 11)),
+            _fig(45.0, VERTICES_ART_DIR / "Sacrificial_Protector.png",
+                 "Sacrificial Protector", "Fanatical Martyr",
+                 "sacrificial_protector", enc=("cube", 15)),
+            _fig(90.0, VERTICES_ART_DIR / "Charismatic_Champion.png",
+                 "Charismatic Champion", "Tribal Warlord",
+                 "charismatic_champion", enc=("cube", 16)),
+            _fig(135.0, VERTICES_ART_DIR / "Steady_Guardian.png",
+                 "Steady Guardian", "Complacent Nepotist",
+                 "steady_guardian", enc=("cube", 12)),
+            _fig(180.0, VERTICES_ART_DIR / "Wise_Statesman.png",
+                 "Wise Statesman", "Cold Elitist", "wise_statesman",
+                 enc=("cube", 14)),
+            _fig(225.0, VERTICES_ART_DIR / "Visionary_Founder.png",
+                 "Visionary Founder", "Messianic Tyrant",
+                 "visionary_founder", enc=("cube", 18)),
+            _fig(270.0, VERTICES_ART_DIR / "Principled_Reformer.png",
+                 "Principled Reformer", "Puritanical Zealot",
+                 "principled_reformer", enc=("cube", 17)),
+            _fig(315.0, VERTICES_ART_DIR / "Contemplative_Sage.png",
+                 "Contemplative Sage", "Paralyzed Purist",
+                 "contemplative_sage", enc=("cube", 13)),
+        ),
+        "center": None,       # the Rose is the wheel itself, like both
+                              # Compass archetypes
     },
 }
 

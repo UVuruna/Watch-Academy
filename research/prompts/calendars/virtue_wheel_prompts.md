@@ -106,13 +106,13 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Soft dove-violet and pale silver glass, quiet and gentle. Center: a figure with eyes lowered and a faint honest flush, a hand drawn modestly to the breast, a soft veil of pale light — the right measure of shame, the healthy modesty that feels disgrace fittingly, between shyness and shamelessness. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: dove violet, pale silver, soft rose light, bright lead. NO lettering anywhere.
 ```
 
-**Right Ambition** → `assets/calendars/virtues/primary/colored/RightAmbition.png`
+**Right Ambition** → `assets/calendars/virtues/primary/colored/Right_Ambition.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Warm amber and copper-gold glass, measured and driving. Center: a steady hand setting a lamp on the next rung of a firm ladder, climbing at the right pace toward a fitting height (not the far crown, not the ground) — the right measure of desire for honour, reaching for what is due. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: warm amber, copper gold, measured light, bright lead. NO lettering anywhere.
 ```
 
-**Just Indignation** → `assets/calendars/virtues/primary/colored/JustIndignation.png`
+**Just Indignation** → `assets/calendars/virtues/primary/colored/Just_Indignation.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Clean righteous crimson and clear gold glass, warm and upright. Center: a level set of scales tipping justly against a small dark unearned crown on the high pan, a clean gold light behind — pain rightly felt at UNDESERVED good fortune, the mean between spite and envy: grieving the wrong reward, not the rewarded person. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: clean crimson, clear gold, upright light, bright lead. NO lettering anywhere.
@@ -146,7 +146,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Lurid exposed hot-red and brazen orange glass, hard and unblushing. Center: a brazen figure caught in a plain wrong and feeling NOTHING, chin up, a torn-away veil discarded at its feet, no flush, no lowered eye — the deficiency of Modesty, the one who cannot be shamed. Border: the shared Mean leadwork rim, the beam TILTED to deficiency, tarnished lead. Palette: lurid red, brazen orange, hard exposed light, tarnished lead. NO lettering anywhere.
 ```
 
-**Over-ambition** → `assets/calendars/vices/primary/colored/OverAmbition.png`
+**Over-ambition** → `assets/calendars/vices/primary/colored/Over_Ambition.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Burnt over-reached black-red and scorched gold glass, straining and cracked. Center: a figure clawing far past the top rung of a ladder that snaps beneath it, grasping at a crown it can never reach, the whole structure burning as it climbs — the excess of Right Ambition, the reach that ruins itself. Border: the shared Mean leadwork rim, the beam TILTED hard to excess, tarnished lead. Palette: burnt black-red, scorched gold, straining shadow, tarnished lead. NO lettering anywhere.

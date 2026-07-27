@@ -96,7 +96,7 @@ Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photo
 
 ---
 
-## Tuesday — Erlang Shen (`assets/weeks/myth/celestial_court/primary/bronze/ErlangShen.png`)
+## Tuesday — Erlang Shen (`assets/weeks/myth/celestial_court/primary/bronze/Erlang_Shen.png`)
 
 *Heaven's greatest warrior — the third eye on his brow, the general who
 fought Sun Wukong to a standstill in the duel of transformations; the
@@ -106,14 +106,14 @@ three-pointed double-edged lance, the celestial hound at his heel.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep ember-orange and iron-grey glass, tensed and watchful. Center: Erlang Shen standing in full battle stance, a vertical third eye set in the center of his brow beside his two ordinary eyes, both hands gripping a three-pointed double-edged lance planted haft-down before him, a lean celestial hound crouched alert at his heel, his gaze fixed as if still mid-duel with a shapeshifting rival. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Mars glyph in dark leadwork relief. Palette: ember orange, iron grey, one pale violet-white accent at the third eye. NO lettering anywhere.
 ```
 
-**Erlang Shen (colored)** → `assets/weeks/myth/celestial_court/primary/colored/ErlangShen.png`
+**Erlang Shen (colored)** → `assets/weeks/myth/celestial_court/primary/colored/Erlang_Shen.png`
 ```
 Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Erlang Shen in full color, ceremonial silver-grey armor over a warrior's build, a luminous third eye glowing faint violet-white on his brow, a three-pointed double-edged lance held upright in both hands, a lean white celestial hound sitting alert at his heel. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing an orange Mars glyph. Colors: iron-silver armor, ember orange, third-eye violet-white, hound white.
 ```
 
 ---
 
-## Wednesday — Guan Yu (`assets/weeks/myth/celestial_court/primary/bronze/GuanYu.png`)
+## Wednesday — Guan Yu (`assets/weeks/myth/celestial_court/primary/bronze/Guan_Yu.png`)
 
 *The merchant's own patron — his shrine stands in every Chinese shop
 and restaurant to this day; green robe, the guandao, the
@@ -125,14 +125,14 @@ own seat.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep jade-green and lacquer-purple glass, watchful and grave. Center: Guan Yu standing before a small shopkeeper's shrine, his flowing green robe and famous crimson face unmistakable, one hand resting on an open ledger book rather than his blade, his crescent-bladed guandao leaning at rest against the shrine wall; on the shrine's low altar behind him, a scatter of small gold ingots and strung coins sits as a guest offering — Caishen's own emblem, borrowed into the loyal god's own house. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Mercury glyph in dark leadwork relief. Palette: jade green, lacquer purple, ledger-page cream, one small gold-ingot accent. NO lettering anywhere.
 ```
 
-**Guan Yu (colored)** → `assets/weeks/myth/celestial_court/primary/colored/GuanYu.png`
+**Guan Yu (colored)** → `assets/weeks/myth/celestial_court/primary/colored/Guan_Yu.png`
 ```
 Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Guan Yu in full color, a flowing emerald-green robe over lacquer-red armor, his signature crimson face steady beneath a long black beard bound in gold thread, one hand resting on an open cream ledger, the crescent guandao leaning at rest against a small shrine altar behind him scattered with gold ingots and strung coins — Caishen's own emblem, a guest in the loyal god's house. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing a purple Mercury glyph. Colors: emerald green, lacquer red, ledger cream, gold-ingot accent.
 ```
 
 ---
 
-## Thursday — Zhu Bajie (`assets/weeks/myth/celestial_court/primary/bronze/ZhuBajie.png`)
+## Thursday — Zhu Bajie (`assets/weeks/myth/celestial_court/primary/bronze/Zhu_Bajie.png`)
 
 *The fallen marshal in pig flesh — appetite unbound; the deliberate
 cross-theme rhyme with the Greek Erymanthian Boar, excess wearing two
@@ -142,7 +142,7 @@ different mythologies.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm amber-gold and heavy umber glass, dense and overfull. Center: Zhu Bajie, a heavyset pig-headed immortal in a torn marshal's sash, seated before a wildly overloaded feast table, one clawed hand already reaching for more even as his other arm cradles a nine-tooth rake across his lap — the same excess the week's Greek boar wears, told through appetite instead of tusks. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Jupiter glyph in dark leadwork relief. Palette: amber gold, heavy umber, faded marshal-sash red, dull iron rake-tines. NO lettering anywhere.
 ```
 
-**Zhu Bajie (colored)** → `assets/weeks/myth/celestial_court/primary/colored/ZhuBajie.png`
+**Zhu Bajie (colored)** → `assets/weeks/myth/celestial_court/primary/colored/Zhu_Bajie.png`
 ```
 Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photorealistic render, perfectly centered, isolated on white background. Center: Zhu Bajie in full color, pink-grey pig-snouted face, a torn crimson marshal's sash over a round straining belly, seated before a golden overloaded feast table, one hand reaching for more food, the nine-tooth rake resting across his lap. Border: the cloud-scroll band recut in jade-green and lacquer-gold, four enamel roundels bearing a yellow Jupiter glyph. Colors: pig-flesh pink-grey, feast gold, faded crimson sash, iron rake.
 ```
@@ -181,7 +181,7 @@ Ornate circular badge, vivid full-color enamel over jade and lacquer-gold, photo
 
 ---
 
-## Sunday — Sun Wukong (Ruler face, dual, `assets/weeks/myth/celestial_court/primary/bronze/SunWukong.png`)
+## Sunday — Sun Wukong (Ruler face, dual, `assets/weeks/myth/celestial_court/primary/bronze/Sun_Wukong.png`)
 
 *The Monkey King crowned — Great Sage Equal to Heaven, the self-taken
 title, PRIDE itself; golden fillet, the staff, the sun-crowned
@@ -191,14 +191,14 @@ trickster.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white-gold glass, the brightest window of the whole set. Center: Sun Wukong seated on a self-claimed throne, a golden fillet crown pressing his brow, his iron-banded staff held upright like a scepter across his knees, a plain banner planted beside the throne — its field left blank, claimed before any court dared grant him one — a blazing sun-disc halo rising behind his head, his grin equal parts triumph and challenge. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Sun glyph in bright gold leadwork relief. Palette: radiant white-gold, tawny fur-gold, sun-disc brilliance. NO lettering anywhere.
 ```
 
-**Sun Wukong (colored)** → `assets/weeks/myth/celestial_court/primary/colored/SunWukong.png`
+**Sun Wukong (colored)** → `assets/weeks/myth/celestial_court/primary/colored/Sun_Wukong.png`
 ```
 Ornate circular badge, vivid full-color enamel over bright gold, photorealistic render, perfectly centered, isolated on white background. Center: Sun Wukong in full color, tawny-gold fur, a golden fillet crown catching the light, seated on a self-claimed throne with his iron-banded staff held upright across his knees, a blazing white-gold sun disc behind his head, his grin equal parts triumph and challenge. Border: the cloud-scroll band recut in polished gold, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, tawny fur, sun-white highlight.
 ```
 
 ---
 
-## Sunday — the Six-Eared Macaque (Servant face, dual, `assets/weeks/myth/celestial_court/primary/bronze/SixEaredMacaque.png`)
+## Sunday — the Six-Eared Macaque (Servant face, dual, `assets/weeks/myth/celestial_court/primary/bronze/Six_Eared_Macaque.png`)
 
 *Wukong's PERFECT FALSE DOUBLE — the dark second face (the canonical
 Journey to the West episode where all of Heaven failed to tell them
@@ -209,7 +209,7 @@ inverted to night, six subtle ears, the wrongness in the eyes.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Near-black glass with a thin cold-silver edge, the darkest window of the set — the EXACT same silhouette as the Ruler's own throne-seat, deliberately, down to the same golden fillet and the same iron-banded staff held across the knees. Center: the Six-Eared Macaque seated in the identical pose, identical crown, identical staff — only the palette inverted to night and, on close look, six faint additional ear-shapes traced along his skull where there should be two, and something almost imperceptibly wrong behind his eyes, a stillness the real Sage never holds. Border: leadwork rim carved as a continuous cloud-scroll (xiangyun) band, broken by four small roundels bearing the Sun glyph in dull ember-gold leadwork relief — the same glyph the Ruler's own seat wears, the shadow face of the same Sunday crown. Palette: near-black, cold silver edge, one dull ember-gold accent only. NO lettering anywhere.
 ```
 
-**The Six-Eared Macaque (colored)** → `assets/weeks/myth/celestial_court/primary/colored/SixEaredMacaque.png`
+**The Six-Eared Macaque (colored)** → `assets/weeks/myth/celestial_court/primary/colored/Six_Eared_Macaque.png`
 ```
 Ornate circular badge, vivid full-color enamel over dark iron and cold silver, photorealistic render, perfectly centered, isolated on white background — the identical composition to the Ruler's own colored plate, palette inverted to night. Center: the Six-Eared Macaque in full color, ash-grey fur where the Ruler's is tawny gold, the same golden fillet crown, the same iron-banded staff across his knees, six faint ear-shapes traced in shadow along his skull, his eyes a flat unreadable black. Border: the cloud-scroll band recut in dark iron and cold silver, four small roundels bearing a dull ember-gold Sun glyph. Colors: ash grey, iron black, cold silver, one ember-gold accent only.
 ```

@@ -1428,37 +1428,37 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
         theta = math.radians((hour - 12) * 15.0)
         return QPointF(radius * letters * math.sin(theta), -radius * letters * math.cos(theta))
 
-    # DOLLAR/EYE round (owner decree 2026-07-27): the apex answers as
-    # the Eye of Providence, the Judge who watches.
+    # CROSS-WORDS round (owner UV inbox 2026-07-27): every Dollar seat
+    # answers with BOTH symbolics — the Double-Trinity OFFICE and the
+    # Cube term (the retired Sigma/Alpha/Master readings are gone).
     g_hover = compositor._tick_tooltip(point_at(12), radius)
-    assert "Eye of Providence" in g_hover
+    assert "Eye of Providence" in g_hover and "JUDGE" in g_hover
     assert "eyes of the LORD" in g_hover
     assert "Across the wheel" in g_hover and "Creator" in g_hover
     s_hover = compositor._tick_tooltip(point_at(16), radius)
-    assert "Sigma" in s_hover and "Courage" in s_hover
-    assert "Satan" in s_hover and "Nazarene" in s_hover
+    assert "Satanic Scourge" in s_hover and "DESTROYER" in s_hover
+    assert "STORM" in s_hover and "Frenzy" in s_hover
     m_hover = compositor._tick_tooltip(point_at(20), radius)
-    assert "Master" in m_hover and "Pride" in m_hover
-    assert "Angel" in m_hover
+    assert "Malignant Accuser" in m_hover and "PROSECUTOR" in m_hover
+    assert "MEGALOMANIA" in m_hover and "Isaiah 14:13" in m_hover
     omega_hover = compositor._tick_tooltip(point_at(24), radius)
-    assert "Omega" in omega_hover
-    assert "Across the wheel" in omega_hover and "Judge" in omega_hover
+    assert "Omnific Originator" in omega_hover and "CREATOR" in omega_hover
+    assert "OBLIGATION" in omega_hover
     n_hover = compositor._tick_tooltip(point_at(4), radius)
-    assert "Nazarene" in n_hover and "Hope" in n_hover
-    assert "Satan" in n_hover
+    assert "Nazarene Advocate" in n_hover and "1 John 2:1" in n_hover
+    assert "NUMBNESS" in n_hover and "Lethargy" in n_hover
     a_hover = compositor._tick_tooltip(point_at(8), radius)
-    assert "Alpha" in a_hover and "Renewal" in a_hover
-    assert "Angel" in a_hover and "Master" in a_hover
+    assert "Anointed Aegis" in a_hover and "GUARDIAN" in a_hover
+    assert "ABNEGATION" in a_hover and "Self-Annihilation" in a_hover
 
     # Each axis reads the SAME opposition from both its own seats —
-    # N's "Nazarene against Satan" and S's own line quote the identical
-    # pairing, just naming the OTHER letter as the pointer.
-    assert "Nazarene against Satan" in n_hover
-    assert "Satan against the Nazarene" in s_hover
-    assert "Angel against the Master" in a_hover
-    assert "Master against the Angel" in m_hover
-    assert "Eye against the Omega" in g_hover
-    assert "Omega against the Eye" in omega_hover
+    # each line names the OTHER letter as the pointer.
+    assert "Advocate against the Scourge" in n_hover
+    assert "Scourge against the Advocate" in s_hover
+    assert "Aegis against the Accuser" in a_hover
+    assert "Accuser against the Aegis" in m_hover
+    assert "Judge against the Creator" in g_hover
+    assert "Creator against the Judge" in omega_hover
 
     # A preset with no legend (the default DOMY ring) stays silent at
     # the same radius/angle — the mechanism never invents an answer.

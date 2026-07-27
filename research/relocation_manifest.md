@@ -93,8 +93,8 @@ archetype/chatgpt/life/animals/Elder.png
     -> archetypes/life/animals/Elder_gpt.png
 archetype/chatgpt/life/animals/Maturity.png
     -> archetypes/life/animals/Maturity_gpt.png
-archetype/chatgpt/life/animals/OldAge.png
-    -> archetypes/life/animals/OldAge_gpt.png
+archetype/chatgpt/life/animals/Old_Age.png
+    -> archetypes/life/animals/Old_Age_gpt.png
 archetype/chatgpt/life/animals/Unborn.png
     -> archetypes/life/animals/Unborn_gpt.png
 archetype/chatgpt/life/animals/Youth.png
@@ -109,8 +109,8 @@ archetype/chatgpt/life/tree/Elder.png
     -> archetypes/life/tree/Elder_gpt.png
 archetype/chatgpt/life/tree/Maturity.png
     -> archetypes/life/tree/Maturity_gpt.png
-archetype/chatgpt/life/tree/OldAge.png
-    -> archetypes/life/tree/OldAge_gpt.png
+archetype/chatgpt/life/tree/Old_Age.png
+    -> archetypes/life/tree/Old_Age_gpt.png
 archetype/chatgpt/life/tree/Unborn.png
     -> archetypes/life/tree/Unborn_gpt.png
 archetype/chatgpt/life/tree/Youth.png
@@ -273,8 +273,8 @@ archetype/gemini/life/animals/Elder.png
     -> archetypes/life/animals/Elder_gem.png
 archetype/gemini/life/animals/Maturity.png
     -> archetypes/life/animals/Maturity_gem.png
-archetype/gemini/life/animals/OldAge.png
-    -> archetypes/life/animals/OldAge_gem.png
+archetype/gemini/life/animals/Old_Age.png
+    -> archetypes/life/animals/Old_Age_gem.png
 archetype/gemini/life/animals/Unborn.png
     -> archetypes/life/animals/Unborn_gem.png
 archetype/gemini/life/animals/Youth.png
@@ -289,8 +289,8 @@ archetype/gemini/life/tree/Elder.png
     -> archetypes/life/tree/Elder_gem.png
 archetype/gemini/life/tree/Maturity.png
     -> archetypes/life/tree/Maturity_gem.png
-archetype/gemini/life/tree/OldAge.png
-    -> archetypes/life/tree/OldAge_gem.png
+archetype/gemini/life/tree/Old_Age.png
+    -> archetypes/life/tree/Old_Age_gem.png
 archetype/gemini/life/tree/Unborn.png
     -> archetypes/life/tree/Unborn_gem.png
 archetype/gemini/life/tree/Youth.png
@@ -413,8 +413,8 @@ badge/chatgpt/circle/life/tree/Elder.png
     -> archetypes/life/circle/tree/Elder_gpt.png
 badge/chatgpt/circle/life/tree/Maturity.png
     -> archetypes/life/circle/tree/Maturity_gpt.png
-badge/chatgpt/circle/life/tree/OldAge.png
-    -> archetypes/life/circle/tree/OldAge_gpt.png
+badge/chatgpt/circle/life/tree/Old_Age.png
+    -> archetypes/life/circle/tree/Old_Age_gpt.png
 badge/chatgpt/circle/life/tree/Unborn.png
     -> archetypes/life/circle/tree/Unborn_gpt.png
 badge/chatgpt/circle/life/tree/Youth.png
@@ -567,8 +567,8 @@ badge/gemini/circle/life/tree/Elder.png
     -> archetypes/life/circle/tree/Elder_gem.png
 badge/gemini/circle/life/tree/Maturity.png
     -> archetypes/life/circle/tree/Maturity_gem.png
-badge/gemini/circle/life/tree/OldAge.png
-    -> archetypes/life/circle/tree/OldAge_gem.png
+badge/gemini/circle/life/tree/Old_Age.png
+    -> archetypes/life/circle/tree/Old_Age_gem.png
 badge/gemini/circle/life/tree/Unborn.png
     -> archetypes/life/circle/tree/Unborn_gem.png
 badge/gemini/circle/life/tree/Youth.png
@@ -789,8 +789,8 @@ eclipse/gemini/Solar_Total.png
     -> celestial/eclipse/Solar_Total_gem.png
 emblem/chatgpt/intelligence/bodily_kinesthetic.png
     -> weeks/inner_wheel/intelligence/bodily_kinesthetic_gpt.png
-emblem/chatgpt/intelligence/BodilyKinesthetic.png
-    -> weeks/inner_wheel/intelligence/BodilyKinesthetic_gpt.png
+emblem/chatgpt/intelligence/Bodily_Kinesthetic.png
+    -> weeks/inner_wheel/intelligence/Bodily_Kinesthetic_gpt.png
 emblem/chatgpt/intelligence/existential.png
     -> weeks/inner_wheel/intelligence/existential_gpt.png
 emblem/chatgpt/intelligence/interpersonal.png
@@ -801,8 +801,8 @@ emblem/chatgpt/intelligence/linguistic.png
     -> weeks/inner_wheel/intelligence/linguistic_gpt.png
 emblem/chatgpt/intelligence/logical_mathematical.png
     -> weeks/inner_wheel/intelligence/logical_mathematical_gpt.png
-emblem/chatgpt/intelligence/LogicalMathematical.png
-    -> weeks/inner_wheel/intelligence/LogicalMathematical_gpt.png
+emblem/chatgpt/intelligence/Logical_Mathematical.png
+    -> weeks/inner_wheel/intelligence/Logical_Mathematical_gpt.png
 emblem/chatgpt/intelligence/musical.png
     -> weeks/inner_wheel/intelligence/musical_gpt.png
 emblem/chatgpt/intelligence/naturalist.png
@@ -865,8 +865,8 @@ emblem/chatgpt/virtue/Wisdom.png
     -> weeks/inner_wheel/virtue/Wisdom_gpt.png
 emblem/gemini/intelligence/bodily_kinesthetic.png
     -> weeks/inner_wheel/intelligence/bodily_kinesthetic_gem.png
-emblem/gemini/intelligence/BodilyKinesthetic.png
-    -> weeks/inner_wheel/intelligence/BodilyKinesthetic_gem.png
+emblem/gemini/intelligence/Bodily_Kinesthetic.png
+    -> weeks/inner_wheel/intelligence/Bodily_Kinesthetic_gem.png
 emblem/gemini/intelligence/existential.png
     -> weeks/inner_wheel/intelligence/existential_gem.png
 emblem/gemini/intelligence/interpersonal.png
@@ -877,8 +877,8 @@ emblem/gemini/intelligence/linguistic.png
     -> weeks/inner_wheel/intelligence/linguistic_gem.png
 emblem/gemini/intelligence/logical_mathematical.png
     -> weeks/inner_wheel/intelligence/logical_mathematical_gem.png
-emblem/gemini/intelligence/LogicalMathematical.png
-    -> weeks/inner_wheel/intelligence/LogicalMathematical_gem.png
+emblem/gemini/intelligence/Logical_Mathematical.png
+    -> weeks/inner_wheel/intelligence/Logical_Mathematical_gem.png
 emblem/gemini/intelligence/musical.png
     -> weeks/inner_wheel/intelligence/musical_gem.png
 emblem/gemini/intelligence/naturalist.png
@@ -1389,38 +1389,38 @@ weekday/chatgpt/chinese_myth/colored/Buddha.png
     -> weeks/myth/celestial_court/colored/Buddha_gpt.png
 weekday/chatgpt/chinese_myth/colored/ChangE.png
     -> weeks/myth/celestial_court/colored/ChangE_gpt.png
-weekday/chatgpt/chinese_myth/colored/ErlangShen.png
-    -> weeks/myth/celestial_court/colored/ErlangShen_gpt.png
-weekday/chatgpt/chinese_myth/colored/GuanYu.png
-    -> weeks/myth/celestial_court/colored/GuanYu_gpt.png
+weekday/chatgpt/chinese_myth/colored/Erlang_Shen.png
+    -> weeks/myth/celestial_court/colored/Erlang_Shen_gpt.png
+weekday/chatgpt/chinese_myth/colored/Guan_Yu.png
+    -> weeks/myth/celestial_court/colored/Guan_Yu_gpt.png
 weekday/chatgpt/chinese_myth/colored/Shennong.png
     -> weeks/myth/celestial_court/colored/Shennong_gpt.png
-weekday/chatgpt/chinese_myth/colored/SixEaredMacaque.png
-    -> weeks/myth/celestial_court/colored/SixEaredMacaque_gpt.png
-weekday/chatgpt/chinese_myth/colored/SunWukong.png
-    -> weeks/myth/celestial_court/colored/SunWukong_gpt.png
+weekday/chatgpt/chinese_myth/colored/Six_Eared_Macaque.png
+    -> weeks/myth/celestial_court/colored/Six_Eared_Macaque_gpt.png
+weekday/chatgpt/chinese_myth/colored/Sun_Wukong.png
+    -> weeks/myth/celestial_court/colored/Sun_Wukong_gpt.png
 weekday/chatgpt/chinese_myth/colored/Zhinu.png
     -> weeks/myth/celestial_court/colored/Zhinu_gpt.png
-weekday/chatgpt/chinese_myth/colored/ZhuBajie.png
-    -> weeks/myth/celestial_court/colored/ZhuBajie_gpt.png
+weekday/chatgpt/chinese_myth/colored/Zhu_Bajie.png
+    -> weeks/myth/celestial_court/colored/Zhu_Bajie_gpt.png
 weekday/chatgpt/chinese_myth/primary/Buddha.png
     -> weeks/myth/celestial_court/primary/Buddha_gpt.png
 weekday/chatgpt/chinese_myth/primary/ChangE.png
     -> weeks/myth/celestial_court/primary/ChangE_gpt.png
-weekday/chatgpt/chinese_myth/primary/ErlangShen.png
-    -> weeks/myth/celestial_court/primary/ErlangShen_gpt.png
-weekday/chatgpt/chinese_myth/primary/GuanYu.png
-    -> weeks/myth/celestial_court/primary/GuanYu_gpt.png
+weekday/chatgpt/chinese_myth/primary/Erlang_Shen.png
+    -> weeks/myth/celestial_court/primary/Erlang_Shen_gpt.png
+weekday/chatgpt/chinese_myth/primary/Guan_Yu.png
+    -> weeks/myth/celestial_court/primary/Guan_Yu_gpt.png
 weekday/chatgpt/chinese_myth/primary/Shennong.png
     -> weeks/myth/celestial_court/primary/Shennong_gpt.png
-weekday/chatgpt/chinese_myth/primary/SixEaredMacaque.png
-    -> weeks/myth/celestial_court/primary/SixEaredMacaque_gpt.png
-weekday/chatgpt/chinese_myth/primary/SunWukong.png
-    -> weeks/myth/celestial_court/primary/SunWukong_gpt.png
+weekday/chatgpt/chinese_myth/primary/Six_Eared_Macaque.png
+    -> weeks/myth/celestial_court/primary/Six_Eared_Macaque_gpt.png
+weekday/chatgpt/chinese_myth/primary/Sun_Wukong.png
+    -> weeks/myth/celestial_court/primary/Sun_Wukong_gpt.png
 weekday/chatgpt/chinese_myth/primary/Zhinu.png
     -> weeks/myth/celestial_court/primary/Zhinu_gpt.png
-weekday/chatgpt/chinese_myth/primary/ZhuBajie.png
-    -> weeks/myth/celestial_court/primary/ZhuBajie_gpt.png
+weekday/chatgpt/chinese_myth/primary/Zhu_Bajie.png
+    -> weeks/myth/celestial_court/primary/Zhu_Bajie_gpt.png
 weekday/chatgpt/corporate/colored/CDO.png
     -> weeks/crafts/corporate/colored/CDO_gpt.png
 weekday/chatgpt/corporate/colored/CEO.png
@@ -1501,8 +1501,8 @@ weekday/chatgpt/cyberpunk/gangs/colored/alt/Animals.png
     -> weeks/gaming/cp_gangs/colored/Scavengers_gpt.png
 weekday/chatgpt/cyberpunk/gangs/colored/alt/Maelstrom.png
     -> weeks/gaming/cp_gangs/colored/Barghest_gpt.png
-weekday/chatgpt/cyberpunk/gangs/colored/alt/VoodooBoys.png
-    -> weeks/gaming/cp_gangs/colored/6thStreet_gpt.png
+weekday/chatgpt/cyberpunk/gangs/colored/alt/Voodoo_Boys.png
+    -> weeks/gaming/cp_gangs/colored/6th_Street_gpt.png
 weekday/chatgpt/cyberpunk/gangs/colored/Animals.png
     -> weeks/gaming/cp_gangs/colored/Animals_gpt.png
 weekday/chatgpt/cyberpunk/gangs/colored/Arasaka.png
@@ -1515,12 +1515,12 @@ weekday/chatgpt/cyberpunk/gangs/colored/Militech.png
     -> weeks/gaming/cp_gangs/colored/Militech_gpt.png
 weekday/chatgpt/cyberpunk/gangs/colored/Netwatch.png
     -> weeks/gaming/cp_gangs/colored/Netwatch_gpt.png
-weekday/chatgpt/cyberpunk/gangs/colored/TygerClaws.png
-    -> weeks/gaming/cp_gangs/colored/TygerClaws_gpt.png
+weekday/chatgpt/cyberpunk/gangs/colored/Tyger_Claws.png
+    -> weeks/gaming/cp_gangs/colored/Tyger_Claws_gpt.png
 weekday/chatgpt/cyberpunk/gangs/colored/Valentinos.png
     -> weeks/gaming/cp_gangs/colored/Valentinos_gpt.png
-weekday/chatgpt/cyberpunk/gangs/colored/VoodooBoys.png
-    -> weeks/gaming/cp_gangs/colored/VoodooBoys_gpt.png
+weekday/chatgpt/cyberpunk/gangs/colored/Voodoo_Boys.png
+    -> weeks/gaming/cp_gangs/colored/Voodoo_Boys_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/Aldecaldos.png
     -> weeks/gaming/cp_gangs/primary/Aldecaldos_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/alt/Aldecaldos.png
@@ -1529,8 +1529,8 @@ weekday/chatgpt/cyberpunk/gangs/primary/alt/Animals.png
     -> weeks/gaming/cp_gangs/primary/Scavengers_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/alt/Maelstrom.png
     -> weeks/gaming/cp_gangs/primary/Barghest_gpt.png
-weekday/chatgpt/cyberpunk/gangs/primary/alt/VoodooBoys.png
-    -> weeks/gaming/cp_gangs/primary/6thStreet_gpt.png
+weekday/chatgpt/cyberpunk/gangs/primary/alt/Voodoo_Boys.png
+    -> weeks/gaming/cp_gangs/primary/6th_Street_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/Animals.png
     -> weeks/gaming/cp_gangs/primary/Animals_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/Arasaka.png
@@ -1543,26 +1543,26 @@ weekday/chatgpt/cyberpunk/gangs/primary/Militech.png
     -> weeks/gaming/cp_gangs/primary/Militech_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/Netwatch.png
     -> weeks/gaming/cp_gangs/primary/Netwatch_gpt.png
-weekday/chatgpt/cyberpunk/gangs/primary/TygerClaws.png
-    -> weeks/gaming/cp_gangs/primary/TygerClaws_gpt.png
+weekday/chatgpt/cyberpunk/gangs/primary/Tyger_Claws.png
+    -> weeks/gaming/cp_gangs/primary/Tyger_Claws_gpt.png
 weekday/chatgpt/cyberpunk/gangs/primary/Valentinos.png
     -> weeks/gaming/cp_gangs/primary/Valentinos_gpt.png
-weekday/chatgpt/cyberpunk/gangs/primary/VoodooBoys.png
-    -> weeks/gaming/cp_gangs/primary/VoodooBoys_gpt.png
-weekday/chatgpt/cyberpunk/power/colored/AdamSmasher.png
-    -> weeks/gaming/cp_corpo/colored/AdamSmasher_gpt.png
-weekday/chatgpt/cyberpunk/power/colored/alt/SaburoArasaka.png
-    -> weeks/gaming/cp_corpo/colored/RosalindMyers_gpt.png
+weekday/chatgpt/cyberpunk/gangs/primary/Voodoo_Boys.png
+    -> weeks/gaming/cp_gangs/primary/Voodoo_Boys_gpt.png
+weekday/chatgpt/cyberpunk/power/colored/Adam_Smasher.png
+    -> weeks/gaming/cp_corpo/colored/Adam_Smasher_gpt.png
+weekday/chatgpt/cyberpunk/power/colored/alt/Saburo_Arasaka.png
+    -> weeks/gaming/cp_corpo/colored/Rosalind_Myers_gpt.png
 weekday/chatgpt/cyberpunk/power/colored/alt/Yorinobu.png
-    -> weeks/gaming/cp_corpo/colored/KurtHansen_gpt.png
-weekday/chatgpt/cyberpunk/power/colored/AltCunningham.png
-    -> weeks/gaming/cp_corpo/colored/AltCunningham_gpt.png
+    -> weeks/gaming/cp_corpo/colored/Kurt_Hansen_gpt.png
+weekday/chatgpt/cyberpunk/power/colored/Alt_Cunningham.png
+    -> weeks/gaming/cp_corpo/colored/Alt_Cunningham_gpt.png
 weekday/chatgpt/cyberpunk/power/colored/Dexter.png
     -> weeks/gaming/cp_corpo/colored/Dexter_gpt.png
 weekday/chatgpt/cyberpunk/power/colored/Evelyn.png
     -> weeks/gaming/cp_corpo/colored/Evelyn_gpt.png
-weekday/chatgpt/cyberpunk/power/colored/SaburoArasaka.png
-    -> weeks/gaming/cp_corpo/colored/SaburoArasaka_gpt.png
+weekday/chatgpt/cyberpunk/power/colored/Saburo_Arasaka.png
+    -> weeks/gaming/cp_corpo/colored/Saburo_Arasaka_gpt.png
 weekday/chatgpt/cyberpunk/power/colored/Solomon.png
     -> weeks/gaming/cp_corpo/colored/Solomon_gpt.png
 weekday/chatgpt/cyberpunk/power/colored/Songbird.png
@@ -1571,22 +1571,22 @@ weekday/chatgpt/cyberpunk/power/colored/Takemura.png
     -> weeks/gaming/cp_corpo/colored/Takemura_gpt.png
 weekday/chatgpt/cyberpunk/power/colored/Yorinobu.png
     -> weeks/gaming/cp_corpo/colored/Yorinobu_gpt.png
-weekday/chatgpt/cyberpunk/power/primary/AdamSmasher.png
-    -> weeks/gaming/cp_corpo/primary/AdamSmasher_gpt.png
-weekday/chatgpt/cyberpunk/power/primary/alt/AltCunningham.png
-    -> weeks/gaming/cp_corpo/primary/RacheBartmoss_gpt.png
-weekday/chatgpt/cyberpunk/power/primary/alt/SaburoArasaka.png
-    -> weeks/gaming/cp_corpo/primary/RosalindMyers_gpt.png
+weekday/chatgpt/cyberpunk/power/primary/Adam_Smasher.png
+    -> weeks/gaming/cp_corpo/primary/Adam_Smasher_gpt.png
+weekday/chatgpt/cyberpunk/power/primary/alt/Alt_Cunningham.png
+    -> weeks/gaming/cp_corpo/primary/Rache_Bartmoss_gpt.png
+weekday/chatgpt/cyberpunk/power/primary/alt/Saburo_Arasaka.png
+    -> weeks/gaming/cp_corpo/primary/Rosalind_Myers_gpt.png
 weekday/chatgpt/cyberpunk/power/primary/alt/Yorinobu.png
-    -> weeks/gaming/cp_corpo/primary/KurtHansen_gpt.png
-weekday/chatgpt/cyberpunk/power/primary/AltCunningham.png
-    -> weeks/gaming/cp_corpo/primary/AltCunningham_gpt.png
+    -> weeks/gaming/cp_corpo/primary/Kurt_Hansen_gpt.png
+weekday/chatgpt/cyberpunk/power/primary/Alt_Cunningham.png
+    -> weeks/gaming/cp_corpo/primary/Alt_Cunningham_gpt.png
 weekday/chatgpt/cyberpunk/power/primary/Dexter.png
     -> weeks/gaming/cp_corpo/primary/Dexter_gpt.png
 weekday/chatgpt/cyberpunk/power/primary/Evelyn.png
     -> weeks/gaming/cp_corpo/primary/Evelyn_gpt.png
-weekday/chatgpt/cyberpunk/power/primary/SaburoArasaka.png
-    -> weeks/gaming/cp_corpo/primary/SaburoArasaka_gpt.png
+weekday/chatgpt/cyberpunk/power/primary/Saburo_Arasaka.png
+    -> weeks/gaming/cp_corpo/primary/Saburo_Arasaka_gpt.png
 weekday/chatgpt/cyberpunk/power/primary/Solomon.png
     -> weeks/gaming/cp_corpo/primary/Solomon_gpt.png
 weekday/chatgpt/cyberpunk/power/primary/Songbird.png
@@ -1598,7 +1598,7 @@ weekday/chatgpt/cyberpunk/power/primary/Yorinobu.png
 weekday/chatgpt/cyberpunk/street/colored/alt/Jackie.png
     -> weeks/gaming/cp_street/colored/Panam_gpt.png
 weekday/chatgpt/cyberpunk/street/colored/alt/Kerry.png
-    -> weeks/gaming/cp_street/colored/LizzyWizzy_gpt.png
+    -> weeks/gaming/cp_street/colored/Lizzy_Wizzy_gpt.png
 weekday/chatgpt/cyberpunk/street/colored/alt/Wakako.png
     -> weeks/gaming/cp_street/colored/Padre_gpt.png
 weekday/chatgpt/cyberpunk/street/colored/Jackie.png
@@ -1624,7 +1624,7 @@ weekday/chatgpt/cyberpunk/street/colored/Wakako.png
 weekday/chatgpt/cyberpunk/street/primary/alt/Jackie.png
     -> weeks/gaming/cp_street/primary/Panam_gpt.png
 weekday/chatgpt/cyberpunk/street/primary/alt/Kerry.png
-    -> weeks/gaming/cp_street/primary/LizzyWizzy_gpt.png
+    -> weeks/gaming/cp_street/primary/Lizzy_Wizzy_gpt.png
 weekday/chatgpt/cyberpunk/street/primary/alt/Wakako.png
     -> weeks/gaming/cp_street/primary/Padre_gpt.png
 weekday/chatgpt/cyberpunk/street/primary/Jackie.png
@@ -1819,16 +1819,16 @@ weekday/chatgpt/japan/primary/suiyobi.png
     -> weeks/crafts/japan/primary/suiyobi_gpt.png
 weekday/chatgpt/monsters/colored/Cerberus.png
     -> weeks/myth/age_of_heroes/colored/Cerberus_gpt.png
-weekday/chatgpt/monsters/colored/ErymanthianBoar.png
-    -> weeks/myth/age_of_heroes/colored/ErymanthianBoar_gpt.png
+weekday/chatgpt/monsters/colored/Erymanthian_Boar.png
+    -> weeks/myth/age_of_heroes/colored/Erymanthian_Boar_gpt.png
 weekday/chatgpt/monsters/colored/Hydra.png
     -> weeks/myth/age_of_heroes/colored/Hydra_gpt.png
 weekday/chatgpt/monsters/colored/Medusa.png
     -> weeks/myth/age_of_heroes/colored/Medusa_gpt.png
 weekday/chatgpt/monsters/colored/Minotaur.png
     -> weeks/myth/age_of_heroes/colored/Minotaur_gpt.png
-weekday/chatgpt/monsters/colored/NemeanLion.png
-    -> weeks/myth/age_of_heroes/colored/NemeanLion_gpt.png
+weekday/chatgpt/monsters/colored/Nemean_Lion.png
+    -> weeks/myth/age_of_heroes/colored/Nemean_Lion_gpt.png
 weekday/chatgpt/monsters/colored/Pegasus.png
     -> weeks/myth/age_of_heroes/colored/Pegasus_gpt.png
 weekday/chatgpt/monsters/colored/Sirens.png
@@ -1837,16 +1837,16 @@ weekday/chatgpt/monsters/colored/Sphinx.png
     -> weeks/myth/age_of_heroes/colored/Sphinx_gpt.png
 weekday/chatgpt/monsters/primary/Cerberus.png
     -> weeks/myth/age_of_heroes/primary/Cerberus_gpt.png
-weekday/chatgpt/monsters/primary/ErymanthianBoar.png
-    -> weeks/myth/age_of_heroes/primary/ErymanthianBoar_gpt.png
+weekday/chatgpt/monsters/primary/Erymanthian_Boar.png
+    -> weeks/myth/age_of_heroes/primary/Erymanthian_Boar_gpt.png
 weekday/chatgpt/monsters/primary/Hydra.png
     -> weeks/myth/age_of_heroes/primary/Hydra_gpt.png
 weekday/chatgpt/monsters/primary/Medusa.png
     -> weeks/myth/age_of_heroes/primary/Medusa_gpt.png
 weekday/chatgpt/monsters/primary/Minotaur.png
     -> weeks/myth/age_of_heroes/primary/Minotaur_gpt.png
-weekday/chatgpt/monsters/primary/NemeanLion.png
-    -> weeks/myth/age_of_heroes/primary/NemeanLion_gpt.png
+weekday/chatgpt/monsters/primary/Nemean_Lion.png
+    -> weeks/myth/age_of_heroes/primary/Nemean_Lion_gpt.png
 weekday/chatgpt/monsters/primary/Pegasus.png
     -> weeks/myth/age_of_heroes/primary/Pegasus_gpt.png
 weekday/chatgpt/monsters/primary/Sirens.png
@@ -2231,38 +2231,38 @@ weekday/gemini/chinese_myth/colored/Buddha.png
     -> weeks/myth/celestial_court/colored/Buddha_gem.png
 weekday/gemini/chinese_myth/colored/ChangE.png
     -> weeks/myth/celestial_court/colored/ChangE_gem.png
-weekday/gemini/chinese_myth/colored/ErlangShen.png
-    -> weeks/myth/celestial_court/colored/ErlangShen_gem.png
-weekday/gemini/chinese_myth/colored/GuanYu.png
-    -> weeks/myth/celestial_court/colored/GuanYu_gem.png
+weekday/gemini/chinese_myth/colored/Erlang_Shen.png
+    -> weeks/myth/celestial_court/colored/Erlang_Shen_gem.png
+weekday/gemini/chinese_myth/colored/Guan_Yu.png
+    -> weeks/myth/celestial_court/colored/Guan_Yu_gem.png
 weekday/gemini/chinese_myth/colored/Shennong.png
     -> weeks/myth/celestial_court/colored/Shennong_gem.png
-weekday/gemini/chinese_myth/colored/SixEaredMacaque.png
-    -> weeks/myth/celestial_court/colored/SixEaredMacaque_gem.png
-weekday/gemini/chinese_myth/colored/SunWukong.png
-    -> weeks/myth/celestial_court/colored/SunWukong_gem.png
+weekday/gemini/chinese_myth/colored/Six_Eared_Macaque.png
+    -> weeks/myth/celestial_court/colored/Six_Eared_Macaque_gem.png
+weekday/gemini/chinese_myth/colored/Sun_Wukong.png
+    -> weeks/myth/celestial_court/colored/Sun_Wukong_gem.png
 weekday/gemini/chinese_myth/colored/Zhinu.png
     -> weeks/myth/celestial_court/colored/Zhinu_gem.png
-weekday/gemini/chinese_myth/colored/ZhuBajie.png
-    -> weeks/myth/celestial_court/colored/ZhuBajie_gem.png
+weekday/gemini/chinese_myth/colored/Zhu_Bajie.png
+    -> weeks/myth/celestial_court/colored/Zhu_Bajie_gem.png
 weekday/gemini/chinese_myth/primary/Buddha.png
     -> weeks/myth/celestial_court/primary/Buddha_gem.png
 weekday/gemini/chinese_myth/primary/ChangE.png
     -> weeks/myth/celestial_court/primary/ChangE_gem.png
-weekday/gemini/chinese_myth/primary/ErlangShen.png
-    -> weeks/myth/celestial_court/primary/ErlangShen_gem.png
-weekday/gemini/chinese_myth/primary/GuanYu.png
-    -> weeks/myth/celestial_court/primary/GuanYu_gem.png
+weekday/gemini/chinese_myth/primary/Erlang_Shen.png
+    -> weeks/myth/celestial_court/primary/Erlang_Shen_gem.png
+weekday/gemini/chinese_myth/primary/Guan_Yu.png
+    -> weeks/myth/celestial_court/primary/Guan_Yu_gem.png
 weekday/gemini/chinese_myth/primary/Shennong.png
     -> weeks/myth/celestial_court/primary/Shennong_gem.png
-weekday/gemini/chinese_myth/primary/SixEaredMacaque.png
-    -> weeks/myth/celestial_court/primary/SixEaredMacaque_gem.png
-weekday/gemini/chinese_myth/primary/SunWukong.png
-    -> weeks/myth/celestial_court/primary/SunWukong_gem.png
+weekday/gemini/chinese_myth/primary/Six_Eared_Macaque.png
+    -> weeks/myth/celestial_court/primary/Six_Eared_Macaque_gem.png
+weekday/gemini/chinese_myth/primary/Sun_Wukong.png
+    -> weeks/myth/celestial_court/primary/Sun_Wukong_gem.png
 weekday/gemini/chinese_myth/primary/Zhinu.png
     -> weeks/myth/celestial_court/primary/Zhinu_gem.png
-weekday/gemini/chinese_myth/primary/ZhuBajie.png
-    -> weeks/myth/celestial_court/primary/ZhuBajie_gem.png
+weekday/gemini/chinese_myth/primary/Zhu_Bajie.png
+    -> weeks/myth/celestial_court/primary/Zhu_Bajie_gem.png
 weekday/gemini/corporate/colored/CDO.png
     -> weeks/crafts/corporate/colored/CDO_gem.png
 weekday/gemini/corporate/colored/CEO.png
@@ -2357,8 +2357,8 @@ weekday/gemini/cyberpunk/gangs/primary/Maelstrom.png
     -> weeks/gaming/cp_gangs/primary/Maelstrom_gem.png
 weekday/gemini/cyberpunk/gangs/primary/Maelstrom_v2.png
     -> weeks/gaming/cp_gangs/primary/Maelstrom_v2_gem.png
-weekday/gemini/cyberpunk/gangs/primary/VoodooBoys.png
-    -> weeks/gaming/cp_gangs/primary/VoodooBoys_gem.png
+weekday/gemini/cyberpunk/gangs/primary/Voodoo_Boys.png
+    -> weeks/gaming/cp_gangs/primary/Voodoo_Boys_gem.png
 weekday/gemini/egypt/colored/afu_ra.png
     -> weeks/myth/egypt/colored/afu_ra_gem.png
 weekday/gemini/egypt/colored/amun.png
@@ -2531,16 +2531,16 @@ weekday/gemini/japan/primary/suiyobi.png
     -> weeks/crafts/japan/primary/suiyobi_gem.png
 weekday/gemini/monsters/colored/Cerberus.png
     -> weeks/myth/age_of_heroes/colored/Cerberus_gem.png
-weekday/gemini/monsters/colored/ErymanthianBoar.png
-    -> weeks/myth/age_of_heroes/colored/ErymanthianBoar_gem.png
+weekday/gemini/monsters/colored/Erymanthian_Boar.png
+    -> weeks/myth/age_of_heroes/colored/Erymanthian_Boar_gem.png
 weekday/gemini/monsters/colored/Hydra.png
     -> weeks/myth/age_of_heroes/colored/Hydra_gem.png
 weekday/gemini/monsters/colored/Medusa.png
     -> weeks/myth/age_of_heroes/colored/Medusa_gem.png
 weekday/gemini/monsters/colored/Minotaur.png
     -> weeks/myth/age_of_heroes/colored/Minotaur_gem.png
-weekday/gemini/monsters/colored/NemeanLion.png
-    -> weeks/myth/age_of_heroes/colored/NemeanLion_gem.png
+weekday/gemini/monsters/colored/Nemean_Lion.png
+    -> weeks/myth/age_of_heroes/colored/Nemean_Lion_gem.png
 weekday/gemini/monsters/colored/Pegasus.png
     -> weeks/myth/age_of_heroes/colored/Pegasus_gem.png
 weekday/gemini/monsters/colored/Sirens.png
@@ -2549,16 +2549,16 @@ weekday/gemini/monsters/colored/Sphinx.png
     -> weeks/myth/age_of_heroes/colored/Sphinx_gem.png
 weekday/gemini/monsters/primary/Cerberus.png
     -> weeks/myth/age_of_heroes/primary/Cerberus_gem.png
-weekday/gemini/monsters/primary/ErymanthianBoar.png
-    -> weeks/myth/age_of_heroes/primary/ErymanthianBoar_gem.png
+weekday/gemini/monsters/primary/Erymanthian_Boar.png
+    -> weeks/myth/age_of_heroes/primary/Erymanthian_Boar_gem.png
 weekday/gemini/monsters/primary/Hydra.png
     -> weeks/myth/age_of_heroes/primary/Hydra_gem.png
 weekday/gemini/monsters/primary/Medusa.png
     -> weeks/myth/age_of_heroes/primary/Medusa_gem.png
 weekday/gemini/monsters/primary/Minotaur.png
     -> weeks/myth/age_of_heroes/primary/Minotaur_gem.png
-weekday/gemini/monsters/primary/NemeanLion.png
-    -> weeks/myth/age_of_heroes/primary/NemeanLion_gem.png
+weekday/gemini/monsters/primary/Nemean_Lion.png
+    -> weeks/myth/age_of_heroes/primary/Nemean_Lion_gem.png
 weekday/gemini/monsters/primary/Pegasus.png
     -> weeks/myth/age_of_heroes/primary/Pegasus_gem.png
 weekday/gemini/monsters/primary/Sirens.png

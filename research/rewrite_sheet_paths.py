@@ -33,10 +33,10 @@ WOW_BLOCK = {"alliance": "wow_alliance", "horde": "wow_horde", "evil": "wow_evil
 CP_BLOCK = {"gangs": "cp_gangs", "street": "cp_street", "power": "cp_corpo"}
 SW_BLOCK = {"svetla": "sw_jedi", "tamna": "sw_sith", "nova": "sw_dyad"}
 ALT_FIGURE = {
-    "Aldecaldos": "Mox", "Maelstrom": "Barghest", "VoodooBoys": "6thStreet",
+    "Aldecaldos": "Mox", "Maelstrom": "Barghest", "Voodoo_Boys": "6th_Street",
     "Animals": "Scavengers", "Jackie": "Panam", "Wakako": "Padre",
-    "Kerry": "LizzyWizzy", "SaburoArasaka": "RosalindMyers",
-    "Yorinobu": "KurtHansen", "AltCunningham": "RacheBartmoss",
+    "Kerry": "Lizzy_Wizzy", "Saburo_Arasaka": "Rosalind_Myers",
+    "Yorinobu": "Kurt_Hansen", "Alt_Cunningham": "Rache_Bartmoss",
     "Finn": "Phasma", "Maz": "DJ", "Ghosts": "Exegol",
 }
 

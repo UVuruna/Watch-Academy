@@ -92,10 +92,10 @@ def test_add_watch_creates_a_second_watch_with_its_own_settings_file(manager):
 
 def test_added_watch_seeds_from_the_current_watch_settings(manager):
     first = manager._watches[0]
-    first._settings = dataclasses.replace(first._settings, ring="Morph", diameter=480)
+    first._settings = dataclasses.replace(first._settings, ring="PILOT", diameter=480)
     manager.add_watch(first)
     second = manager._watches[1]
-    assert second._settings.ring == "Morph"
+    assert second._settings.ring == "PILOT"
     assert second._settings.diameter == 480
 
 

@@ -394,12 +394,12 @@ Ornate circular badge, vivid full-color paint over pale fading gold, photorealis
 *The plague "healer" inverted — healing's own shape worn by something
 that has none left to give.*
 
-**Kel'Thuzad** → `assets/weeks/gaming/wow_evil/primary/bronze/KelThuzad.png`
+**Kel'Thuzad** → `assets/weeks/gaming/wow_evil/primary/bronze/Kel_Thuzad.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, cold beyond any grave. Center: Kel'Thuzad, a skeletal lich in tattered necromancer robes, hovering rather than standing over a ring of Scourge plague-cauldrons, one bony hand extended in a gesture of false benediction over kneeling, hollow-eyed cultists. Border: Evil saronite-and-ice fang frame carved in bronze relief, jagged shards alternating with cracked ice, broken by four roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Kel'Thuzad (colored)** → `assets/weeks/gaming/wow_evil/primary/colored/KelThuzad.png`
+**Kel'Thuzad (colored)** → `assets/weeks/gaming/wow_evil/primary/colored/Kel_Thuzad.png`
 ```
 Ornate circular badge, vivid full-color paint over black saronite and ice, photorealistic render, perfectly centered, isolated on white background. Center: Kel'Thuzad in full color, a bleached skeletal face beneath a tattered dark-blue hood, plague-green necrotic light glowing between his ribs, one hand raised in false blessing over hollow-eyed cultists at a bubbling plague cauldron. Border: the saronite-and-ice fang frame recut in black iron and frost-blue crystal, four enamel roundels bearing a pale Moon crescent. Colors: bone white, plague green, saronite black, ice blue.
 ```

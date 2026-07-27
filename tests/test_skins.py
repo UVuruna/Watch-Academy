@@ -1,5 +1,5 @@
 """Ring presets and the built render config (the skin-pack system is
-gone — DOMY and MORPH are ring preset names, nothing more)."""
+gone — DOMY and PILOT are ring preset names, nothing more)."""
 
 import pytest
 
@@ -21,7 +21,11 @@ def test_ring_preset_cards_load_and_validate():
     presets = ring_presets()
     assert presets["DOMY"]["layout"] == "flame"
     assert presets["DOMY"]["letters"] == ("M", "Y", "Ω", "D")
-    assert presets["Morph"]["layout"] == "chalice"
+    # The chalice card is PILOT since the CROSS-WORDS round (owner UV
+    # inbox + PILOT pick 2026-07-27): Π-I-L-Ω-Θ, the guide who carries
+    # the traveler home; its four letters initial the light stations.
+    assert presets["PILOT"]["layout"] == "chalice"
+    assert presets["PILOT"]["letters"] == ("L", "Π", "Ω", "Θ")
     # The third bundled styling (owner spec 2026-07-11): every hour
     # number on its OWN position, Omega on the bottom — a seal, so one
     # metal dresses all six. Named "The One" since the DOLLAR/EYE round
@@ -237,6 +241,65 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
     )).ring
     assert custom_ring.letter_art[12] == art_dir / "Eye_shine_gem.png"
 
+    # THE SHINE ENLARGE (owner UV inbox 2026-07-27): the shine master
+    # draws bigger by the measured per-source factor so the TRIANGLE
+    # stays the no-light size — stamped as ring.letter_zoom, absent
+    # (1.0) for the plain eye and for every ordinary letter.
+    assert shine_on.letter_zoom == {
+        12: constants.RING_EYE_SHINE_ENLARGE["gem"]
+    }
+    assert shine_off.letter_zoom == {}
+    assert custom_ring.letter_zoom == {
+        12: constants.RING_EYE_SHINE_ENLARGE["gem"]
+    }
+    gpt_shine = build_skin(replace(
+        Settings(), ring="Dollar", art_source="chatgpt",
+    )).ring
+    assert gpt_shine.letter_zoom == {
+        12: constants.RING_EYE_SHINE_ENLARGE["gpt"]
+    }
+
+
+def test_cross_words_ring_the_dial():
+    """CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY wears its
+    dark-cross station words (FEAR ANGER HATE SUFFERING) and PILOT its
+    light-cross station words (HOPE FAITH LOVE SALVATION) as
+    outside-the-band arc text — one word CENTERED on its station seat
+    (`core.motto.centered_word_angles`, the mottos' own letter step),
+    clockwise over the top half and counterclockwise under the bottom
+    so every word reads left-to-right to a viewer; and both presets
+    answer the per-letter hover legend on every seat, like the Dollar."""
+    from core.angles import ring_position_angle
+    from data.rings import ring_presets
+
+    step = defaults.RING_MOTTO_LETTER_STEP_DEG
+    expectations = {
+        "DOMY": {"SUFFERING": (12, True), "FEAR": (20, False),
+                 "ANGER": (24, False), "HATE": (4, False)},
+        "PILOT": {"HOPE": (8, True), "FAITH": (12, True),
+                  "LOVE": (16, True), "SALVATION": (24, False)},
+    }
+    presets = ring_presets()
+    for ring, words in expectations.items():
+        card = presets[ring]
+        assert {m["text"] for m in card["motto"]} == set(words)
+        for entry in card["motto"]:
+            seat, clockwise = words[entry["text"]]
+            angles = entry["angles"]
+            mid = (angles[0] + angles[-1]) / 2.0
+            assert mid % 360.0 == pytest.approx(
+                ring_position_angle(seat) % 360.0
+            ), (ring, entry["text"])
+            expected_step = step if clockwise else -step
+            assert angles[1] - angles[0] == pytest.approx(expected_step)
+        # The hover legend answers on every seat of both cross rings.
+        assert sorted(card["legend"]) == sorted(card["positions"])
+    # build_skin resolves every word glyph onto a real letter asset.
+    for ring in ("DOMY", "PILOT"):
+        skin = build_skin(replace(Settings(), ring=ring))
+        assert len(skin.ring.motto) == 4
+        assert missing_assets(skin) == []
+
 
 def test_mason_motto_arc_loads_and_pins_its_key_letters():
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
@@ -259,10 +322,11 @@ def test_mason_motto_arc_loads_and_pins_its_key_letters():
     assert novus["angles"][9] % 360.0 == pytest.approx(180.0)     # O -> 24h (bottom)
     assert novus["angles"][18] % 360.0 == pytest.approx(120.0)    # M -> 20h
 
-    # Every OTHER bundled preset stays motto-free (graceful absence).
-    assert presets["DOMY"]["motto"] == ()
-    assert presets["Morph"]["motto"] == ()
+    # The motto-free bundled presets stay motto-free (graceful
+    # absence); DOMY and PILOT carry their own cross words now
+    # (CROSS-WORDS round — see test_cross_words_ring_the_dial).
     assert presets["The One"]["motto"] == ()
+    assert presets["Templar"]["motto"] == ()
 
     # build_skin resolves the motto onto real assets, one glyph per
     # NON-SPACE character (spaces are dropped — RingLayer's draw loop
@@ -317,16 +381,21 @@ def test_motto_validation_rejects_bad_cards():
 def test_dial_window_margin_grows_only_for_a_motto_preset():
     """TASK 1's margin interaction: `dial_window_margin_fraction` must
     reserve enough for the outer motto arc's own reach when the active
-    preset carries one (Dollar), and stay UNCHANGED for every preset
-    that does not (DOMY) — the graceful-absence pattern `triangle`/
-    `legend` already use. MOTO-FIX round (owner correction 2026-07-19):
-    both mottos now share ONE radius, so the expected extent drops the
-    old `RING_MOTTO_RADIUS_STEP` term (deleted, Rule #6)."""
-    domy = build_skin(Settings())
+    preset carries one, and stay UNCHANGED for every preset that does
+    not — the graceful-absence pattern `triangle`/`legend` already use.
+    CROSS-WORDS round (owner UV inbox 2026-07-27): DOMY and PILOT now
+    carry their station words as arc text too, so the motto-free
+    baseline is Templar/The One. MOTO-FIX round (owner correction
+    2026-07-19): both mottos share ONE radius, so the expected extent
+    drops the old `RING_MOTTO_RADIUS_STEP` term (deleted, Rule #6)."""
+    templar = build_skin(replace(Settings(), ring="Templar"))
     mason = build_skin(replace(Settings(), ring="Dollar"))
-    domy_margin = defaults.dial_window_margin_fraction(domy)
+    domy = build_skin(Settings())
+    templar_margin = defaults.dial_window_margin_fraction(templar)
     mason_margin = defaults.dial_window_margin_fraction(mason)
-    assert mason_margin > domy_margin
+    assert mason_margin > templar_margin
+    # The cross-word presets reserve the SAME motto reach as the Dollar.
+    assert defaults.dial_window_margin_fraction(domy) == mason_margin
     # The motto arc's own outer reach is the binding term for the Dollar.
     expected_motto_extent = (
         defaults.RING_MOTTO_RADIUS_FRACTION
@@ -341,10 +410,10 @@ def test_dial_window_margin_grows_only_for_a_motto_preset():
 
 def test_build_skin_swaps_only_the_ring():
     domy = build_skin(Settings())
-    morph = build_skin(replace(Settings(), ring="Morph"))
+    morph = build_skin(replace(Settings(), ring="PILOT"))
     assert domy.ring.asset.name == "domy.png"
     assert morph.ring.asset.name == "morph.png"
-    assert morph.ring.letters == {12: "M", 16: "Π", 8: "H", 0: "Ω"}
+    assert morph.ring.letters == {12: "L", 16: "Π", 8: "Θ", 0: "Ω"}
     # Everything else is identical — the ring preset IS the difference.
     assert morph.hands == domy.hands
     assert morph.background == domy.background
@@ -381,7 +450,7 @@ def test_default_config_assets_all_exist():
     """Every asset the built config references ships in the repo (a miss
     would otherwise surface inside paintEvent, where Qt swallows it)."""
     assert missing_assets(build_skin(Settings())) == []
-    assert missing_assets(build_skin(replace(Settings(), ring="Morph"))) == []
+    assert missing_assets(build_skin(replace(Settings(), ring="PILOT"))) == []
     assert missing_assets(
         build_skin(replace(Settings(), weekday_theme="norse", earth_style="atmo"))
     ) == []
@@ -403,13 +472,13 @@ def test_letter_art_follows_the_finish():
     assert silver.letter_metal[12] == "silver"          # the triangle inverts
     assert silver.letter_metal[20] == "silver"
     assert silver.letter_metal[0] == "gold"             # Omega back to gold
-    morph = build_skin(replace(Settings(), ring="Morph")).ring
+    morph = build_skin(replace(Settings(), ring="PILOT")).ring
     assert morph.letter_art[16] == art_dir / "Pi.png"   # triangle 8/16/24 gold
     assert morph.letter_metal[16] == "gold"
     assert morph.letter_metal[0] == "gold"
     assert morph.letter_metal[12] == "silver"
     morph_silver = build_skin(
-        replace(Settings(), ring="Morph", ring_finish="silver")
+        replace(Settings(), ring="PILOT", ring_finish="silver")
     ).ring
     assert morph_silver.letter_metal[12] == "gold"
     assert morph_silver.letter_metal[0] == "silver"

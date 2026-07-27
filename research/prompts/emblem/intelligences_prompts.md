@@ -21,8 +21,8 @@ consistent.
 Suggested drop locations (flat PNGs, PascalCase stems matching the
 existing emblem-family convention):
 
-- `assets/weeks/inner_wheel/intelligence/primary/colored/BodilyKinesthetic.png`, `Interpersonal.png`,
-  `Linguistic.png`, `Naturalist.png`, `LogicalMathematical.png`,
+- `assets/weeks/inner_wheel/intelligence/primary/colored/Bodily_Kinesthetic.png`, `Interpersonal.png`,
+  `Linguistic.png`, `Naturalist.png`, `Logical_Mathematical.png`,
   `Musical.png`, `Existential.png`, `Intrapersonal.png`, `Spatial.png`
 - `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods.png`, optionally
   `assets/weeks/inner_wheel/mood/primary/colored/Wheel_Of_Moods_Dark.png`
@@ -70,7 +70,7 @@ full badge visible with margin, no text/watermark.
 
 ### 1. Bodily-Kinesthetic — "Body Smart" (Prism Zeal arm, orange)
 
-**Bodily-Kinesthetic — "Body Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/BodilyKinesthetic.png`
+**Bodily-Kinesthetic — "Body Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/Bodily_Kinesthetic.png`
 
 Zeal is Mars' working-day ember, the soldier's afternoon; the Body
 Smart's whole domain is muscle and motion, so it inherits the action
@@ -116,7 +116,7 @@ Ornate circular badge, vivid allegorical enamel in polished silver-inlaid bronze
 
 ### 5. Logical-Mathematical — "Number Smart" (Prism Renewal arm, green)
 
-**Logical-Mathematical — "Number Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/LogicalMathematical.png`
+**Logical-Mathematical — "Number Smart"** → `assets/weeks/inner_wheel/intelligence/primary/colored/Logical_Mathematical.png`
 
 Renewal is Saturn's own patient order, and Saturn is astrology's
 planet of structure, time and measurement — the Number Smart's natural

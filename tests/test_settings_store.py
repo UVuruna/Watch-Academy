@@ -208,7 +208,7 @@ def test_display_choices_round_trip(store):
         show_seconds=False,
         show_octa_slot=False,
         language="sr-Latn",
-        ring="Morph",
+        ring="PILOT",
         ring_two_metals={"Dollar": False, "The One": True},
         ring_eye_shine={"Dollar": False},
         theme_metals={"greek": "gold", "norse": "silver"},
@@ -259,9 +259,9 @@ def test_ring_renames_migrate_stored_settings(store):
     "NUMBERS" -> "Omega" -> "The One" (external user data, not an API
     shim, Rule #6) — an older settings file naming ANY generation's
     old value loads onto the current one instead of raising
-    SettingsCorruptError. "MORPH" -> "Morph" is a pure CASE change,
-    already bridged by the pre-existing case-insensitive fold (no
-    dedicated migration entry needed)."""
+    SettingsCorruptError. "MORPH"/"Morph" -> "PILOT" (CROSS-WORDS
+    round, owner UV inbox + PILOT pick 2026-07-27) needs its own entry
+    — the fold alone bridged only the old pure-case rename."""
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "MASON G"}',
@@ -291,7 +291,13 @@ def test_ring_renames_migrate_stored_settings(store):
         ' "ring": "MORPH"}',
         encoding="utf-8",
     )
-    assert store.load().ring == "Morph"
+    assert store.load().ring == "PILOT"
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
+        ' "ring": "Morph"}',
+        encoding="utf-8",
+    )
+    assert store.load().ring == "PILOT"
     store.path.write_text(
         '{"schema_version": 1, "window": {"x": 1, "y": 2, "diameter": 360},'
         ' "ring": "no such preset"}',

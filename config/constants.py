@@ -800,6 +800,18 @@ RING_TWO_METALS_DEFAULT = {"Dollar": True}
 RING_EYE_GLYPH = "👁"
 RING_EYE_SHINE_FILE = "Eye_shine.png"
 RING_EYE_SHINE_DEFAULT = {"Dollar": True}
+# THE SHINE ENLARGE FACTOR (owner UV inbox 2026-07-27, "slika 2 kada
+# ima SHINE mora da bude veca... coef * 1.2 ili tako nesto"): in the
+# shine masters the TRIANGLE occupies a smaller fraction of the image
+# than in the no-light masters (the glory of rays pads it), so drawing
+# both at the same letter height shrinks the shine triangle. Measured
+# ONCE per source (solid-core bounding box against the full trimmed
+# frame — alpha>=250 core and dark-pixel core agree within a few
+# percent): ChatGPT plain ~0.99 vs shine ~0.83 -> 1.18; Gemini plain
+# ~0.99 vs shine ~0.87 -> 1.15. `app.controller.build_skin` stamps the
+# factor into `SkinDefinition.ring.letter_zoom` for the shine stems so
+# the triangle draws the SAME size and only the rays extend beyond it.
+RING_EYE_SHINE_ENLARGE = {"gem": 1.15, "gpt": 1.18}
 # The full letter library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,

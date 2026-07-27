@@ -117,7 +117,7 @@ Ornate circular badge, vivid full-color enamel over dark antique bronze, photore
 
 ---
 
-## Thursday — Erymanthian Boar (`assets/weeks/myth/age_of_heroes/primary/bronze/ErymanthianBoar.png`)
+## Thursday — Erymanthian Boar (`assets/weeks/myth/age_of_heroes/primary/bronze/Erymanthian_Boar.png`)
 
 *Excess made flesh — the ravager of fields, taken alive only when
 Heracles drove it into deep mountain snow.*
@@ -126,7 +126,7 @@ Heracles drove it into deep mountain snow.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Rich amber-gold and heavy umber glass, dense with weight. Center: a monstrous tusked boar filling the disc chest-on, curved ivory tusks gouging up ruined vine-rows and trampled sheaves behind it, its bristled hide dusted white with driven mountain snow at the shoulders — the field's own abundance both devoured and buried. A coiled hunting net lies half-tangled around one foreleg, Heracles' own trap closing. Border: leadwork rim carved as a continuous Greek key (meander) band, broken by four small roundels bearing the Jupiter glyph in dark leadwork relief. Palette: amber-gold, heavy umber, driven-snow white, dull ivory tusk. NO lettering anywhere.
 ```
 
-**Erymanthian Boar (colored)** → `assets/weeks/myth/age_of_heroes/primary/colored/ErymanthianBoar.png`
+**Erymanthian Boar (colored)** → `assets/weeks/myth/age_of_heroes/primary/colored/Erymanthian_Boar.png`
 ```
 Ornate circular badge, vivid full-color enamel over dark antique bronze, photorealistic render, perfectly centered, isolated on white background. Center: the boar in full color, coarse dark-umber bristles dusted with bright snow at the shoulders, curved ivory tusks tearing through a ruined golden vineyard, a coiled rope net snagged around one foreleg. Border: the same Greek-key meander recut in dark bronze, four enamel roundels bearing a yellow Jupiter glyph. Colors: umber bristle-brown, harvest gold, driven-snow white, ivory tusk.
 ```
@@ -165,7 +165,7 @@ Ornate circular badge, vivid full-color enamel over dark antique bronze, photore
 
 ---
 
-## Sunday — Nemean Lion (Ruler face, `assets/weeks/myth/age_of_heroes/primary/bronze/NemeanLion.png`)
+## Sunday — Nemean Lion (Ruler face, `assets/weeks/myth/age_of_heroes/primary/bronze/Nemean_Lion.png`)
 
 *The golden invincible pelt, the first labor, the solar-royal beast —
 brother to Cerberus below, one guarding the sun's own labor.*
@@ -174,7 +174,7 @@ brother to Cerberus below, one guarding the sun's own labor.*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white-gold glass, the brightest window of the whole set. Center: the Nemean Lion enthroned rather than crouched, its impenetrable golden pelt catching light no blade has ever cut, a full solar disc blazing directly behind its mane like a crown, its posture regal rather than feral — the first labor's own trophy worn as sovereignty, not death. Border: leadwork rim carved as a continuous Greek key (meander) band, broken by four small roundels bearing the Sun glyph in bright gold leadwork relief. Palette: radiant white-gold, warm amber mane, sun-disc brilliance. NO lettering anywhere.
 ```
 
-**Nemean Lion (colored)** → `assets/weeks/myth/age_of_heroes/primary/colored/NemeanLion.png`
+**Nemean Lion (colored)** → `assets/weeks/myth/age_of_heroes/primary/colored/Nemean_Lion.png`
 ```
 Ornate circular badge, vivid full-color enamel over bright gold, photorealistic render, perfectly centered, isolated on white background. Center: the Nemean Lion in full color, a mane and pelt of impossible unbroken gold catching every light, seated in regal repose before a blazing white-gold sun disc. Border: the Greek-key meander recut in polished gold, four enamel roundels bearing a white-gold Sun glyph. Colors: radiant gold, warm amber, sun-white highlight.
 ```

@@ -117,12 +117,12 @@ scope. File convention: `Ghosts.png` (canonical) / `alt/Ghosts.png`
 *The calm guardian of the desert — watching over a hope he cannot yet
 name.*
 
-**Obi-Wan (Ben) Kenobi** → `assets/weeks/films/sw_jedi/primary/bronze/ObiWan.png`
+**Obi-Wan (Ben) Kenobi** → `assets/weeks/films/sw_jedi/primary/bronze/Obi_Wan.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, calm and watchful. Center: an aged Obi-Wan Kenobi in a hooded desert robe, standing at the edge of a twin-sunset dune, one hand resting on a lightsaber hilt at his belt rather than igniting it, his gaze fixed on a distant homestead far below — a guardian keeping watch over a hope he cannot yet name. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament at each joint, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Obi-Wan (Ben) Kenobi (colored)** → `assets/weeks/films/sw_jedi/primary/colored/ObiWan.png`
+**Obi-Wan (Ben) Kenobi (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Obi_Wan.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Center: Obi-Wan in full color, a weathered desert robe over aged features, standing at a twin-sunset dune, one hand resting on his lightsaber hilt, watching a distant homestead. Border: the temple-pillar frame recut in polished bronze with glowing kyber-blue insets, four enamel roundels bearing a silver Moon crescent. Colors: dusk blue, sandstone bronze, twin-sun amber, desert-robe tan.
 ```
@@ -162,12 +162,12 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 *The maverick master — generosity that broke the Council's own rules
 to do what was right.*
 
-**Qui-Gon Jinn** → `assets/weeks/films/sw_jedi/primary/bronze/QuiGon.png`
+**Qui-Gon Jinn** → `assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and unconventional. Center: Qui-Gon Jinn kneeling to a small child's eye level in a dusty marketplace, his long braided hair falling forward, one hand extended in an offer of freedom rather than a lightsaber, a Council seal visible but deliberately set aside on the ground beside him. Border: Jedi temple-pillar frame carved in bronze relief, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Qui-Gon Jinn (colored)** → `assets/weeks/films/sw_jedi/primary/colored/QuiGon.png`
+**Qui-Gon Jinn (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Qui_Gon.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Center: Qui-Gon in full color, long brown braided hair and simple Jedi robes, kneeling to a child's eye level in a dusty marketplace, one hand extended, a small Council seal set aside on the ground. Border: the temple-pillar frame recut in polished bronze with kyber-blue insets, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, dusty tan, kyber blue, warm brown robe.
 ```

@@ -26,6 +26,7 @@ The invariants:
      report the same naming chaos twice.
 """
 
+import re
 from pathlib import Path
 
 from config import paths, taxonomy
@@ -71,6 +72,54 @@ _LAW_REGISTERS = {
     # "animals" registers (archetypes.ARCHETYPE_LIFE_REGISTERS).
     "archetypal", "historical", "modern",
 }
+
+
+# THE WORD-SEPARATOR RULE (owner "sredi" 2026-07-27). Interior capitals
+# that stand for a dropped APOSTROPHE, not a word boundary — the one
+# documented exception set.
+_RUN_TOGETHER_EXCEPTIONS = {"ChangE"}          # Chang'e
+_SOURCE_SUFFIXES = {"gem", "gpt", "api", "src"}
+_VERSION_TOKEN = re.compile(r"v\d+")
+
+
+def _figure_token(stem: str) -> str:
+    """The FIGURE part of a stem — its `_vN` rotation marker and `_src`
+    suffix stripped, exactly as `research/pascalcase_stems.py` peels
+    them (Rule #5: one peeling rule, two readers)."""
+    tokens = stem.split("_")
+    if tokens and tokens[-1] in _SOURCE_SUFFIXES:
+        tokens.pop()
+    if tokens and _VERSION_TOKEN.fullmatch(tokens[-1]):
+        tokens.pop()
+    return "_".join(tokens)
+
+
+def test_figure_stems_separate_their_words():
+    """THE WORD-SEPARATOR RULE (assets/___assets.md). A stem's words are
+    joined by UNDERSCORES, never run together: Obi_Wan, not ObiWan.
+
+    This guard exists because the rule was MISSING for months. The
+    0.14.427 PascalCase normalizer only capitalises tokens that are
+    ALREADY split on underscores, so a run-together stem passed through
+    it untouched and looked lawful — two conventions grew side by side
+    across 27 stems and 98 files, and two figures ended up existing
+    under BOTH spellings at once (one pair byte-identical, one pair two
+    different artworks). Nothing caught it because nothing was checking
+    the rule; the rule was never written. It is written now, and this
+    checks the LAW rather than a pinned list of names."""
+    offenders = []
+    for area in _FIGURE_LAW_AREAS:
+        for file in _iter_png(paths.assets_dir() / area):
+            figure = _figure_token(file.stem)
+            if figure in _RUN_TOGETHER_EXCEPTIONS:
+                continue
+            if re.search(r"[a-z0-9][A-Z]", figure):
+                lawful = re.sub(r"(?<=[a-z0-9])(?=[A-Z])", "_", figure)
+                offenders.append(f"{file.name} -> {lawful}")
+    assert not offenders, (
+        "stems run their words together; separate them with underscores: "
+        + ", ".join(sorted(offenders))
+    )
 
 
 def test_figure_trees_obey_the_tree_law():

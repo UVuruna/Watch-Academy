@@ -8,7 +8,38 @@ import pytest
 
 from config.defaults import RING_MOTTO_LETTER_STEP_DEG
 from core.angles import readable_rotation_deg
-from core.motto import _occurrence_index, motto_glyph_angles
+from core.motto import (
+    _occurrence_index,
+    centered_word_angles,
+    motto_glyph_angles,
+)
+
+
+def test_centered_word_sits_symmetrically_on_its_seat():
+    """CROSS-WORDS round (owner UV inbox 2026-07-27): a station word is
+    CENTERED on its seat at the mottos' own fixed letter step —
+    clockwise for a top-half seat, counterclockwise for a bottom-half
+    one, so both read left-to-right to a viewer."""
+    step = RING_MOTTO_LETTER_STEP_DEG
+    # SUFFERING over the crown: 9 letters, midpoint exactly at 0 deg.
+    top = centered_word_angles("SUFFERING", 12, clockwise=True)
+    assert len(top) == 9
+    assert (top[0] + top[-1]) / 2.0 % 360.0 == pytest.approx(0.0)
+    assert top[1] - top[0] == pytest.approx(step)
+    # ANGER under the bottom: midpoint at 180, decreasing angle.
+    bottom = centered_word_angles("ANGER", 24, clockwise=False)
+    assert (bottom[0] + bottom[-1]) / 2.0 == pytest.approx(180.0)
+    assert bottom[1] - bottom[0] == pytest.approx(-step)
+    # An even-length word still centers exactly (half-step offsets).
+    hate = centered_word_angles("HATE", 4, clockwise=False)
+    assert (hate[0] + hate[-1]) / 2.0 == pytest.approx(240.0)
+
+
+def test_centered_word_rejects_spaces_and_empty():
+    with pytest.raises(ValueError):
+        centered_word_angles("", 12)
+    with pytest.raises(ValueError):
+        centered_word_angles("TWO WORDS", 12)
 
 
 def test_occurrence_index_finds_the_nth_appearance():

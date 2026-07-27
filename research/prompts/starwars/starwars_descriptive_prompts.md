@@ -14,7 +14,7 @@ or trademarked terms. The goal is a generator-accepted prompt that still
 draws a recognizable likeness through description alone.
 
 **If the owner approves:** generated results land as `_v2` versions of
-the same figure stems (`ObiWan_v2.png` beside `ObiWan.png`, etc.), in
+the same figure stems (`Obi_Wan_v2.png` beside `Obi_Wan.png`, etc.), in
 the same `primary/`/`colored/` folders as the parent sheet, and either
 rotate with or replace the image-reference variants once the verdict is
 in. Nothing here changes the parent sheet — it is untouched.
@@ -56,12 +56,12 @@ in it depends on reading the parent sheet or this table.
 
 ### Monday — Obi-Wan (Ben) Kenobi → descriptive
 
-**Obi-Wan (Ben) Kenobi — descriptive** → `assets/weeks/films/sw_jedi/primary/bronze/ObiWan_v2.png`
+**Obi-Wan (Ben) Kenobi — descriptive** → `assets/weeks/films/sw_jedi/primary/bronze/Obi_Wan_v2.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, calm and watchful. Center: an old, silver-bearded desert hermit in a rough hooded robe of earth-tone cloth, standing at the edge of a wind-carved dune beneath twin setting suns, one weathered hand resting on the slim hilt of a blade at his belt rather than igniting it, his gaze fixed on a distant homestead far below — a lone guardian keeping watch over a hope he cannot yet name. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament at each joint, broken by four small roundels bearing the Moon crescent glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Obi-Wan (Ben) Kenobi — descriptive (colored)** → `assets/weeks/films/sw_jedi/primary/colored/ObiWan_v2.png`
+**Obi-Wan (Ben) Kenobi — descriptive (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Obi_Wan_v2.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Center: the old hermit in full color, a weathered tan-and-cream desert robe over aged features, standing at a twin-sunset dune, one hand resting on his blade's slim hilt, watching a distant homestead. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a silver Moon crescent. Colors: dusk blue, sandstone bronze, twin-sun amber, desert-robe tan.
 ```
@@ -92,12 +92,12 @@ Ornate circular badge, vivid full-color paint over polished bronze-and-blue, pho
 
 ### Thursday — Qui-Gon Jinn → descriptive
 
-**Qui-Gon Jinn — descriptive** → `assets/weeks/films/sw_jedi/primary/bronze/QuiGon_v2.png`
+**Qui-Gon Jinn — descriptive** → `assets/weeks/films/sw_jedi/primary/bronze/Qui_Gon_v2.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, warm and unconventional. Center: a tall, long-haired bearded warrior-sage kneeling to a small child's eye level in a dusty marketplace, his long braided hair falling forward, one hand extended in an offer of freedom rather than his blade hilt, an order's own seal-medallion visible but deliberately set aside on the ground beside him. Border: a monastic temple-pillar frame carved in bronze relief, fine invented-glyph tick ornament, broken by four roundels bearing the Jupiter glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Qui-Gon Jinn — descriptive (colored)** → `assets/weeks/films/sw_jedi/primary/colored/QuiGon_v2.png`
+**Qui-Gon Jinn — descriptive (colored)** → `assets/weeks/films/sw_jedi/primary/colored/Qui_Gon_v2.png`
 ```
 Ornate circular badge, vivid full-color paint over polished bronze-and-blue, photorealistic render, perfectly centered, isolated on white background. Center: the warrior-sage in full color, long brown braided hair and simple earth-toned robes, kneeling to a child's eye level in a dusty marketplace, one hand extended, a small seal-medallion set aside on the ground. Border: the temple-pillar frame recut in polished bronze with glowing blue insets, four enamel roundels bearing a yellow Jupiter glyph. Colors: amber gold, dusty tan, sky blue, warm brown robe.
 ```

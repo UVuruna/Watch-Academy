@@ -23,7 +23,7 @@ excluded). Seven families, 38 figures:
 | Persons (prism paint) | [Persons Prompts](../archetype/persons_prompts.md) | One_Love, Michael_Courage, Lucifer_Pride, Devil_Hatred, Judas_Fear, Jesus_Humility |
 | One Soul (prism light) | [One Soul Prompts](../archetype/one_soul_prompts.md) | Gratitude, Support, Passion, Tolerance, Trust, Respect |
 | Walks (compass paint) | [Walks Prompts](../archetype/walks_prompts.md) | King, Merchant, Soldier, Artist, Wanderer, Scholar, Farmer, Priest |
-| Life — Tree register (compass light) | [Life Prompts](../archetype/life_prompts.md) | Unborn, Birth, Childhood, Youth, Maturity, Elder, OldAge, Death |
+| Life — Tree register (compass light) | [Life Prompts](../archetype/life_prompts.md) | Unborn, Birth, Childhood, Youth, Maturity, Elder, Old_Age, Death |
 
 **Round-one scoping (documented, not a gap):** the compass_light
 archetype ships a SECOND image register, Animals (`config.archetypes.
@@ -294,7 +294,7 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep ember-orange and russet glass, the harvest light of a life. Center: a broad old oak heavy with ripe acorns among its first turning leaves, branches bowed with the weight of what it has borne, filling the circle at the harvest of its own crown. Border: acorn-and-leaf leadwork in dark ember, a small hanging-acorn-cluster roundel at the top. Palette: ember orange, russet, ripe-acorn brown, dark-ember lead. NO lettering anywhere.
 ```
 
-**Old age — the leaf-fall** (dusk violet `#9C6BD4`, 21h) → `assets/archetypes/life/circle/colored/OldAge.png`
+**Old age — the leaf-fall** (dusk violet `#9C6BD4`, 21h) → `assets/archetypes/life/circle/colored/Old_Age.png`
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Dusk violet and soft grey-lavender glass, the evening of the year. Center: an aged oak, its crown thinned and half-bare, a slow scatter of its last violet-gold leaves falling around a gnarled, still-standing trunk that fills the round frame with quiet dignity. Border: bare-branch leadwork in dusk violet, a small falling-leaf roundel at the top. Palette: dusk violet, grey-lavender, fading gold, dark-violet lead. NO lettering anywhere.
