@@ -2402,6 +2402,12 @@ class Compositor:
             legend = self._ring_letter_legend_tooltip(theta, half)
             if legend is not None:
                 return legend
+        # The arc WORDS answer too (WORD-HOVER round, owner 2026-07-27:
+        # "HOVER tekst osim na slova treba i na reči") — the band just
+        # outside the ring where the motto/station words draw.
+        word_legend = self._ring_word_legend_tooltip(theta, distance, radius)
+        if word_legend is not None:
+            return word_legend
         if not (
             radius * defaults.TICK_HOVER_INNER_FRACTION
             <= distance
@@ -2508,6 +2514,52 @@ class Compositor:
                 return _hover_title(
                     html.escape(entry["name"])
                 ) + _article_body_html(entry["reading"])
+        return None
+
+    def _ring_word_legend_tooltip(
+        self, theta: float, distance: float, radius: float
+    ) -> str | None:
+        """The per-WORD hover on the outer arc text (WORD-HOVER round,
+        owner 2026-07-27): hovering a station word (DOMY/PILOT) or a
+        Great Seal motto word (the Dollar) answers with the legend of
+        the SEAT that word belongs to — the station words sit ON their
+        station's seat, and the Dollar's five words each carry exactly
+        one pinned letter (ANNUIT→A, COEPTIS→S, NOVUS→N, ORDO→Ω,
+        SECLORUM→M: the five words spell the five letters). Geometry is
+        pre-solved by `app.controller.build_skin` into
+        `ring.motto[…]["words"]` (angular center + half-span per word);
+        here only the band/angle test and the legend lookup run. A word
+        with no seat, or a seat without a legend entry, stays silent —
+        the graceful-absence pattern the letter legend already uses."""
+        motto = self._skin.ring.motto
+        if not motto:
+            return None
+        band = defaults.RING_MOTTO_RADIUS_FRACTION
+        half_band = defaults.RING_MOTTO_HOVER_HALF_FRACTION
+        if not (
+            radius * (band - half_band)
+            <= distance
+            <= radius * (band + half_band)
+        ):
+            return None
+        legend = self._skin.ring.letter_legend
+        for entry in motto:
+            for word in entry.get("words", ()):
+                if word["seat"] is None:
+                    continue
+                delta = min(
+                    (theta - word["center"]) % 360.0,
+                    (word["center"] - theta) % 360.0,
+                )
+                if delta > word["half"]:
+                    continue
+                seat_entry = legend.get(word["seat"] % 24)
+                if seat_entry is None:
+                    return None
+                title = f'{word["text"]} · {seat_entry["name"]}'
+                return _hover_title(
+                    html.escape(title)
+                ) + _article_body_html(seat_entry["reading"])
         return None
 
     def _ascendant_text(self, style: str | None = None) -> str:

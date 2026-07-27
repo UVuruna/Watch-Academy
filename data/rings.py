@@ -7,7 +7,11 @@ loud (Rule #1): a broken card must name itself, never render blank.
 """
 
 from config import constants, paths
-from core.motto import centered_word_angles, motto_glyph_angles
+from core.motto import (
+    _occurrence_index,
+    centered_word_angles,
+    motto_glyph_angles,
+)
 from data._io import load_json_checked
 
 _SIGNATURES = {
@@ -39,6 +43,33 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
     preset without a `motto` field (The One, Templar, every custom
     ring; DOMY and PILOT carry the CENTERED cross-word form, the
     Dollar the pinned Great Seal form)."""
+    def _words(text: str, pins: tuple, center: int | None) -> tuple:
+        """Per-WORD spans + the seat each word answers for (WORD-HOVER
+        round, owner 2026-07-27: "HOVER tekst osim na slova treba i na
+        reči"): a centered entry is one word on its own seat; a pinned
+        entry maps each word to the seat of the ONE pin falling inside
+        it — the Dollar's five words carry exactly one pin each
+        (ANNUIT→A/8h, COEPTIS→S/16h, NOVUS→N/4h, ORDO→Ω/24h,
+        SECLORUM→M/20h — the five words spell the five letters). A word
+        with zero or several pins gets no seat and stays silent."""
+        words = []
+        i = 0
+        for word in text.split(" "):
+            start, end = i, i + len(word) - 1
+            if center is not None:
+                seat = center
+            else:
+                inside = [
+                    position for index, position in pins
+                    if start <= index <= end
+                ]
+                seat = inside[0] if len(inside) == 1 else None
+            words.append(
+                {"text": word, "start": start, "end": end, "seat": seat}
+            )
+            i = end + 2
+        return tuple(words)
+
     resolved = []
     for motto_entry in raw:
         text = str(motto_entry.get("text", ""))
@@ -77,7 +108,10 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
                 raise ValueError(
                     f"ring preset {name!r}: motto {text!r}: {error}"
                 ) from error
-            resolved.append({"text": text, "angles": angles})
+            resolved.append({
+                "text": text, "angles": angles,
+                "words": _words(text, (), center),
+            })
             continue
         pins = []
         for letter, occurrence, position in motto_entry.get("pins", ()):
@@ -93,7 +127,14 @@ def _validate_motto(name: str, raw: list, positions: tuple) -> tuple:
             raise ValueError(
                 f"ring preset {name!r}: motto {text!r}: {error}"
             ) from error
-        resolved.append({"text": text, "angles": angles})
+        pin_indices = tuple(
+            (_occurrence_index(text, letter, occurrence), position)
+            for letter, occurrence, position in pins
+        )
+        resolved.append({
+            "text": text, "angles": angles,
+            "words": _words(text, pin_indices, None),
+        })
     return tuple(resolved)
 
 

@@ -605,6 +605,12 @@ RING_MOTTO_SIZE = 0.0375             # motto letter height, of the dial
                                      # diameter — half RING_LETTER_ART_SCALE
                                      # (decorative, smaller than the six
                                      # primary banknote letters)
+# The WORD-HOVER band (owner 2026-07-27, "HOVER tekst osim na slova
+# treba i na reči"): how far above/below the motto radius (fraction of
+# the dial RADIUS) a hover still answers as an arc WORD — the motto
+# letter height is 2*RING_MOTTO_SIZE of the radius (0.075), so ±0.05
+# covers the glyphs with a little air.
+RING_MOTTO_HOVER_HALF_FRACTION = 0.05
 RING_MOTTO_RADIUS_FRACTION = 1.13    # BOTH arcs (MOTO-FIX round) — clears
                                      # the primary letters' own max reach
                                      # (~1.0255 with shadow at scale 1.0)
@@ -2690,6 +2696,17 @@ METAL_SHADES = {
         "gunmetal": "gunmetal",
         "silver":   "silver",             # DEFAULT
         "platinum": "platinum",
+    },
+    # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
+    # 2026-07-27): the ring's per-preset theme colors, each an
+    # identity-mapped colored RAMP in recolor/presets/metals.json —
+    # exactly the "one entry, zero code" door the transformer promises.
+    "thematic": {
+        "cross_red": "cross_red",
+        "cross_blue": "cross_blue",
+        "dollar_green": "dollar_green",
+        "moon_indigo": "moon_indigo",     # DEFAULT / custom fallback
+        "templar_black": "templar_black",
     },
 }
 # WHICH METAL THE ART WAS DRAWN IN — the transformer is source-agnostic

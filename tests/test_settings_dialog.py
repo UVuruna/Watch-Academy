@@ -222,6 +222,11 @@ def test_dialog_metal_shade_combos_round_trip(app):
     combos = dialog._metal_shade_combos
     assert set(combos) == {"gold", "bronze", "silver"}
     for metal, names in constants.METAL_SHADE_NAMES.items():
+        if metal == "thematic":
+            # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
+            # 2026-07-27) has NO picker — its shade follows the active
+            # ring preset (`constants.RING_THEMATIC_SHADES`).
+            continue
         values = [
             combos[metal].itemData(i) for i in range(combos[metal].count())
         ]

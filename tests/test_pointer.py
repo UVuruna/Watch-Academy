@@ -1467,6 +1467,52 @@ def test_mason_ring_letters_answer_their_own_hover_legend(july_wednesday):
     assert domy._tick_tooltip(point_at(16), radius) is None
 
 
+def test_ring_arc_words_answer_their_seat_legend(july_wednesday):
+    """WORD-HOVER round (owner 2026-07-27, "HOVER tekst osim na slova
+    treba i na reči"): hovering an arc WORD in the outside-the-band
+    motto band answers with the legend of the word's own seat — a
+    station word (DOMY/PILOT) its station, a Dollar motto word its
+    pinned letter (ANNUIT→A, ORDO→Ω, …). Between the words the band
+    stays silent."""
+    from app.controller import build_skin
+    from app.settings_store import Settings, replace as settings_replace
+
+    day, tick = july_wednesday
+    radius = 180.0
+    band = defaults.RING_MOTTO_RADIUS_FRACTION
+
+    def point_at(theta_deg: float) -> QPointF:
+        theta = math.radians(theta_deg)
+        return QPointF(
+            radius * band * math.sin(theta),
+            -radius * band * math.cos(theta),
+        )
+
+    domy = Compositor(build_skin(Settings()), AssetCache())
+    domy.render_offscreen(360.0, 1.0, day, tick)
+    fear = domy._tick_tooltip(point_at(120.0), radius)
+    assert fear is not None and "FEAR" in fear and "Ysteria" in fear
+    suffering = domy._tick_tooltip(point_at(0.0), radius)
+    assert "SUFFERING" in suffering and "Miseria" in suffering
+    assert domy._tick_tooltip(point_at(90.0), radius) is None  # between words
+
+    pilot = Compositor(
+        build_skin(settings_replace(Settings(), ring="PILOT")), AssetCache()
+    )
+    pilot.render_offscreen(360.0, 1.0, day, tick)
+    salvation = pilot._tick_tooltip(point_at(180.0), radius)
+    assert "SALVATION" in salvation and "Opheleia" in salvation
+
+    dollar = Compositor(
+        build_skin(settings_replace(Settings(), ring="Dollar")), AssetCache()
+    )
+    dollar.render_offscreen(360.0, 1.0, day, tick)
+    annuit = dollar._tick_tooltip(point_at(316.7), radius)
+    assert "ANNUIT" in annuit and "Anointed Aegis" in annuit
+    ordo = dollar._tick_tooltip(point_at(186.0), radius)
+    assert "ORDO" in ordo and "Omnific Originator" in ordo
+
+
 def _max_alpha_in_box(image, cx, cy, half):
     """The largest alpha over a small (2*half+1) square centered at
     (cx, cy) — robust to sampling the hollow middle of a ring-shaped

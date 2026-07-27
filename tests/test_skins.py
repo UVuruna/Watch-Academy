@@ -301,6 +301,85 @@ def test_cross_words_ring_the_dial():
         assert missing_assets(skin) == []
 
 
+def test_motto_words_map_to_their_seats():
+    """WORD-HOVER round (owner 2026-07-27): every arc word knows the
+    SEAT whose legend it answers with — a station word its own station,
+    and each Dollar motto word the seat of its ONE pinned letter (the
+    five words spell the five letters: ANNUIT→A, COEPTIS→S, NOVUS→N,
+    ORDO→Ω, SECLORUM→M)."""
+    from data.rings import ring_presets
+
+    presets = ring_presets()
+    dollar_words = {
+        w["text"]: w["seat"]
+        for e in presets["Dollar"]["motto"] for w in e["words"]
+    }
+    assert dollar_words == {
+        "ANNUIT": 8, "COEPTIS": 16, "NOVUS": 4, "ORDO": 24, "SECLORUM": 20,
+    }
+    domy_words = {
+        w["text"]: w["seat"]
+        for e in presets["DOMY"]["motto"] for w in e["words"]
+    }
+    assert domy_words == {"SUFFERING": 12, "FEAR": 20, "ANGER": 24, "HATE": 4}
+    # build_skin carries the solved hover geometry per word.
+    skin = build_skin(replace(Settings(), ring="Dollar"))
+    words = [w for e in skin.ring.motto for w in e["words"]]
+    assert all(
+        w["seat"] is not None and w["half"] > 0.0 for w in words
+    )
+
+
+def test_two_metals_toggle_now_covers_the_cross_rings():
+    """ENLARGE/THEMATIC round (owner 2026-07-27, "hoću da Two Metals
+    opcija bude i za DOMY tj PILOT"): the flame/chalice presets are
+    eligible too — default ON (today's 3+1 look), stored OFF dresses
+    every letter in the ONE finish."""
+    domy_off = build_skin(replace(
+        Settings(), ring_two_metals={"DOMY": False},
+    )).ring
+    assert all(m == "gold" for m in domy_off.letter_metal.values())
+    pilot_off = build_skin(replace(
+        Settings(), ring="PILOT", ring_finish="silver",
+        ring_two_metals={"PILOT": False},
+    )).ring
+    assert all(m == "silver" for m in pilot_off.letter_metal.values())
+    # Default stays the split look.
+    domy_on = build_skin(Settings()).ring
+    assert domy_on.letter_metal[12] == "gold"
+    assert domy_on.letter_metal[0] == "silver"
+
+
+def test_thematic_finish_wears_the_preset_color():
+    """ENLARGE/THEMATIC round (owner 2026-07-27): the 4th ring finish —
+    the letters wear the ACTIVE preset's own theme color through the
+    recolor transformer (DOMY cross red, PILOT cross blue, Dollar
+    green, The One moon indigo, Templar black); outside the ring band
+    the skin reads gold (documented containment)."""
+    from config import constants, paths
+
+    thematic = build_skin(replace(Settings(), ring_finish="thematic"))
+    assert thematic.ring.letter_metal[12] == "thematic"   # the triangle
+    assert thematic.ring.letter_metal[0] == "silver"      # the accent
+    assert thematic.ring.motto_metal == "thematic"
+    assert thematic.ring_finish == "gold"                 # containment
+    assert paths.metal_shade("thematic") == "cross_red"   # DOMY's shade
+    build_skin(replace(Settings(), ring="Dollar", ring_finish="thematic"))
+    assert paths.metal_shade("thematic") == "dollar_green"
+    build_skin(replace(Settings(), ring="PILOT", ring_finish="thematic"))
+    assert paths.metal_shade("thematic") == "cross_blue"
+    # Two metals OFF + thematic = every letter in the theme color.
+    flat = build_skin(replace(
+        Settings(), ring_finish="thematic", ring_two_metals={"DOMY": False},
+    )).ring
+    assert all(m == "thematic" for m in flat.letter_metal.values())
+    # The full preset->shade table is pinned.
+    assert constants.RING_THEMATIC_SHADES == {
+        "DOMY": "cross_red", "PILOT": "cross_blue", "Dollar": "dollar_green",
+        "The One": "moon_indigo", "Templar": "templar_black",
+    }
+
+
 def test_mason_motto_arc_loads_and_pins_its_key_letters():
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
     reference image): ANNUIT COEPTIS pins its own A at 8h and S at 16h

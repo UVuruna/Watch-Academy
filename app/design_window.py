@@ -217,14 +217,20 @@ class DesignDialog(QDialog):
             ))
         layout.addLayout(finish_row)
         active_card = presets[settings.ring]
-        if active_card["triangle"] is not None:
+        card_layout = constants.RING_LAYOUTS[active_card["layout"]]
+        if active_card["triangle"] is not None or card_layout["triangle"]:
             # The SAME resolution `app.controller._ring_two_metals` uses
             # (Rule #5's intent honored without a controller->window
             # import, which would create a cycle) — the stored per-preset
-            # choice, else the owner's documented per-preset default.
+            # choice, else the owner's documented per-preset default,
+            # else the layout's own nature (ENLARGE/THEMATIC round,
+            # owner 2026-07-27: flame/chalice presets — DOMY/PILOT —
+            # are eligible too now, default ON).
             two_metals = settings.ring_two_metals.get(
                 settings.ring,
-                constants.RING_TWO_METALS_DEFAULT.get(settings.ring, False),
+                constants.RING_TWO_METALS_DEFAULT.get(
+                    settings.ring, bool(card_layout["triangle"])
+                ),
             )
             checkbox = QCheckBox(self._tr("Two metals"))
             checkbox.setChecked(two_metals)

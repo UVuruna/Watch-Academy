@@ -21,6 +21,76 @@
   },
 
   "metals": {
+    "cross_red": {
+      "_comment": "THEMATIC ring ramp (owner 2026-07-27): DOMY - the suffering cross's blood red.",
+      "stops": [
+        [0.00, "#1A0505"],
+        [0.25, "#5C0E0E"],
+        [0.55, "#B22222"],
+        [0.82, "#E0605A"],
+        [1.00, "#FFEDE8"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.48 }
+    },
+    "cross_blue": {
+      "_comment": "THEMATIC ring ramp (owner 2026-07-27): PILOT - the salvation cross's deep blue.",
+      "stops": [
+        [0.00, "#050A1A"],
+        [0.25, "#122B66"],
+        [0.55, "#2B5CC4"],
+        [0.82, "#6FA0E8"],
+        [1.00, "#EAF2FF"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.48 }
+    },
+    "dollar_green": {
+      "_comment": "THEMATIC ring ramp (owner 2026-07-27): Dollar - the banknote's ink green.",
+      "stops": [
+        [0.00, "#08140C"],
+        [0.25, "#1E4A2E"],
+        [0.55, "#4E8A5E"],
+        [0.82, "#8CC08F"],
+        [1.00, "#EFFAEF"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.46 }
+    },
+    "moon_indigo": {
+      "_comment": "THEMATIC ring ramp (owner 2026-07-27): The One - the moon-gray violet of the winter solstice (~#666699), also the generic fallback.",
+      "stops": [
+        [0.00, "#0C0C1A"],
+        [0.25, "#333366"],
+        [0.55, "#666699"],
+        [0.82, "#9C9CC8"],
+        [1.00, "#F0F0FA"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.30,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.50 }
+    },
+    "templar_black": {
+      "_comment": "THEMATIC ring ramp (owner 2026-07-27): Templar - the Beauceant's black, steel highlight.",
+      "stops": [
+        [0.00, "#000000"],
+        [0.25, "#17171A"],
+        [0.55, "#3A3A3E"],
+        [0.82, "#6E6E74"],
+        [1.00, "#E8E8EC"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.34,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.87, "strength": 0.44 }
+    },
     "gold": {
       "stops": [
         [0.00, "#1A1005"],

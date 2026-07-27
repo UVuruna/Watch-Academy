@@ -66,7 +66,7 @@ UI_STRINGS: tuple[str, ...] = (
     # the Paint/Light slot, and its two lighting modes.
     "Calendar", "Almanac",
     "Light the hour (shichen)", "Light the month/sign",
-    "Gold letters", "Silver letters",
+    "Gold letters", "Silver letters", "Thematic letters",
     "Clean", "Atmosphere", "Date", "Names",
     "The day name written on the weekday bodies.",
     "Moon — below horizon",

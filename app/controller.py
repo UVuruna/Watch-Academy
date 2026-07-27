@@ -110,23 +110,27 @@ def _letter_metal(position: int, layout: dict, finish: str) -> str:
 
 
 def _ring_two_metals(settings: Settings, card: dict) -> bool:
-    """Whether the ACTIVE preset splits into its own 3-3 two-metal
-    triangle or wears one finish on all six (TASK 3, MASON/ICONS round,
-    owner verdicts 2026-07-19, third batch) — only presets that carry
-    their OWN `triangle` override are eligible at all (Mason/Omega/
-    Templar today, `data.rings.validate_preset`'s optional card field);
-    every other preset (DOMY/PILOT's own 4-letter triangle already
-    always applies through the LAYOUT, not this switch; a custom seal
-    with no override) is untouched by this toggle and always reads
-    False here. The user's stored per-preset choice
-    (`Settings.ring_two_metals`) wins; absent, the owner's documented
-    per-preset default (`constants.RING_TWO_METALS_DEFAULT`, Mason
-    True, everything else False)."""
-    if card["triangle"] is None:
+    """Whether the ACTIVE preset splits its letters into two metal
+    groups or wears one finish on all of them (TASK 3, MASON/ICONS
+    round; WIDENED in the ENLARGE/THEMATIC round, owner 2026-07-27:
+    "hoću da Two Metals opcija bude i za DOMY tj PILOT"). Eligible now:
+    every preset with its OWN `triangle` override (Dollar/The One/
+    Templar) AND every preset whose LAYOUT carries a triangle (the
+    4-letter flame/chalice — DOMY, PILOT, custom 4-letter rings), whose
+    3+1 split used to be unconditional. Only a triangle-less seal
+    custom card stays ineligible (always False — nothing to split).
+    The user's stored per-preset choice (`Settings.ring_two_metals`)
+    wins; absent, the owner's documented per-preset default
+    (`constants.RING_TWO_METALS_DEFAULT` — Dollar True), else the
+    layout's own nature: flame/chalice default ON (today's look), seal
+    default OFF."""
+    layout = constants.RING_LAYOUTS[card["layout"]]
+    if card["triangle"] is None and not layout["triangle"]:
         return False
-    return settings.ring_two_metals.get(
-        card["name"], constants.RING_TWO_METALS_DEFAULT.get(card["name"], False)
+    default = constants.RING_TWO_METALS_DEFAULT.get(
+        card["name"], bool(layout["triangle"])
     )
+    return settings.ring_two_metals.get(card["name"], default)
 
 
 def _ring_eye_shine(settings: Settings, card: dict) -> bool:
@@ -213,6 +217,11 @@ def _theme_metal(settings: Settings, theme: str) -> str:
     if theme not in constants.METAL_THEMES:
         return "bronze"
     if settings.theme_metal_follow_ring:
+        # The THEMATIC finish reads as gold outside the ring band
+        # (ENLARGE/THEMATIC round containment — the theme plates have
+        # no colored-ramp path of their own).
+        if settings.ring_finish == "thematic":
+            return "gold"
         return settings.ring_finish
     return settings.theme_metals.get(theme, "bronze")
 
@@ -395,8 +404,10 @@ def build_skin(settings: Settings):
     # owner's per-preset "Two metals" toggle is actually on (TASK 3,
     # MASON/ICONS round) — see `_letter_metal`'s and `_ring_two_metals`'s
     # docstrings.
-    triangle_override = card["triangle"] if _ring_two_metals(settings, card) else None
-    metal_layout = {"triangle": triangle_override or layout["triangle"]}
+    two_metals = _ring_two_metals(settings, card)
+    metal_layout = {
+        "triangle": (card["triangle"] or layout["triangle"]) if two_metals else ()
+    }
     # The Eye's SHINE (DOLLAR/EYE round, owner decree 2026-07-27): the
     # adaptive eye glyph swaps its whole stem for the glory-of-rays
     # master when the per-preset toggle is on — see `_ring_eye_shine`.
@@ -448,6 +459,26 @@ def build_skin(settings: Settings):
                 (defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES[char], angle)
                 for char, angle in zip(entry["text"], entry["angles"])
                 if char != " "
+            ),
+            # Per-WORD hover geometry (WORD-HOVER round, owner
+            # 2026-07-27): each word's angular center/half-span plus
+            # the seat whose legend it answers with — solved once here,
+            # read by render.compositor._ring_word_legend_tooltip.
+            "words": tuple(
+                {
+                    "text": word["text"],
+                    "seat": word["seat"],
+                    "center": (
+                        (entry["angles"][word["start"]]
+                         + entry["angles"][word["end"]]) / 2.0
+                    ) % 360.0,
+                    "half": (
+                        abs(entry["angles"][word["end"]]
+                            - entry["angles"][word["start"]]) / 2.0
+                        + defaults.RING_MOTTO_LETTER_STEP_DEG / 2.0
+                    ),
+                }
+                for word in entry["words"]
             ),
         }
         for entry in card["motto"]
@@ -640,6 +671,17 @@ def apply_display_settings(skin, settings: Settings):
     paths.set_metal_shade("gold", settings.metal_shade_gold)
     paths.set_metal_shade("bronze", settings.metal_shade_bronze)
     paths.set_metal_shade("silver", settings.metal_shade_silver)
+    # THE THEMATIC pseudo-metal's shade follows the ACTIVE ring preset
+    # (ENLARGE/THEMATIC round, owner 2026-07-27): DOMY cross red, PILOT
+    # cross blue, Dollar green, The One moon indigo, Templar black —
+    # a custom/unknown ring falls back to the moon indigo. Not a user
+    # setting: the ring choice IS the choice.
+    paths.set_metal_shade(
+        "thematic",
+        constants.RING_THEMATIC_SHADES.get(
+            settings.ring, constants.METAL_SHADE_DEFAULT["thematic"]
+        ),
+    )
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
     # while the drawn pointer carries an archetype. The overriding
     # itself happens at the RENDER level (render.layers.enabled_slots
@@ -775,7 +817,17 @@ def apply_display_settings(skin, settings: Settings):
         show_weekday_names=settings.show_weekday_names,
         show_info_slot_names=settings.show_info_slot_names,
         ring_tint=settings.ring_tint,
-        ring_finish=settings.ring_finish,
+        # THE THEMATIC CONTAINMENT (ENLARGE/THEMATIC round, owner
+        # 2026-07-27): `skin.ring_finish` feeds the METAL surfaces
+        # outside the ring band (subdial borders/plates, hands, slot
+        # roundels) — under the thematic finish those read as GOLD; the
+        # theme color itself travels only through `ring.letter_metal`/
+        # `ring.motto_metal` ("thematic"), which the letter recolor
+        # pipeline resolves to the active preset's ramp.
+        ring_finish=(
+            "gold" if settings.ring_finish == "thematic"
+            else settings.ring_finish
+        ),
         subdial_style=settings.subdial_style,
         ring_letter_scale=settings.ring_letter_scale,
         hover_enlarge=settings.hover_enlarge,

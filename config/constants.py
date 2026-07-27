@@ -696,7 +696,26 @@ EARTH_STYLES = ("clean", "atmo")
 # the hexagram BOTH metals form triangles (12/20/4 vs 24/8/16). Silver
 # and bronze letters are derived from the gold master AT LOAD (owner
 # 2026-07-19, render.asset_recolor.letter_metal_file).
-RING_FINISHES = ("gold", "silver", "bronze")
+RING_FINISHES = ("gold", "silver", "bronze", "thematic")
+# THE THEMATIC FINISH (ENLARGE/THEMATIC round, owner 2026-07-27,
+# "četvrta opcija za ring THEMATIC ... bojiti PREKO NOVOG PROGRAMA"):
+# the 4th ring letter finish — instead of a metal, the letters wear the
+# ACTIVE PRESET's own theme color, drawn by the SAME recolor
+# transformer (a colored RAMP beside the metal ramps in
+# recolor/presets/metals.json — "adding a metal costs one entry and
+# zero code"). Per-preset shade (the ramp names double as shade names,
+# METAL_SHADE_NAMES["thematic"]); a custom/unknown ring falls back to
+# the moon indigo (the app's own signature hue). Outside the ring band
+# (subdial borders, hands, follow-the-ring theme metals) the thematic
+# finish reads as GOLD — the color belongs to the letters and the
+# words, not to every metal surface (documented containment).
+RING_THEMATIC_SHADES = {
+    "DOMY": "cross_red",        # the suffering cross
+    "PILOT": "cross_blue",      # the salvation cross
+    "Dollar": "dollar_green",   # the banknote's ink
+    "The One": "moon_indigo",   # the winter-solstice violet
+    "Templar": "templar_black", # the Beauceant
+}
 
 # THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the retry
 # after the adaptive-percentile attempt was reverted for flattening
@@ -713,13 +732,27 @@ METAL_SHADE_NAMES = {
     "gold": ("dark_amber", "amber", "classic", "pale", "champagne"),
     "bronze": ("dark_bronze", "bronze", "light_bronze"),
     "silver": ("gunmetal", "silver", "platinum"),
+    # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
+    # 2026-07-27): its "shades" are the per-preset ring theme colors
+    # (`RING_THEMATIC_SHADES`), resolved automatically from the active
+    # ring — never offered in the Settings shade pickers.
+    "thematic": (
+        "cross_red", "cross_blue", "dollar_green",
+        "moon_indigo", "templar_black",
+    ),
 }
-METAL_SHADE_DEFAULT = {"gold": "classic", "bronze": "bronze", "silver": "silver"}
+METAL_SHADE_DEFAULT = {
+    "gold": "classic", "bronze": "bronze", "silver": "silver",
+    "thematic": "moon_indigo",
+}
 METAL_SHADE_TITLES = {
     "dark_amber": "Dark amber", "amber": "Amber", "classic": "Classic gold",
     "pale": "Pale gold", "champagne": "Champagne",
     "dark_bronze": "Dark bronze", "bronze": "Bronze", "light_bronze": "Light bronze",
     "gunmetal": "Gunmetal", "silver": "Silver", "platinum": "Platinum",
+    "cross_red": "Cross red", "cross_blue": "Cross blue",
+    "dollar_green": "Dollar green", "moon_indigo": "Moon indigo",
+    "templar_black": "Templar black",
 }
 
 # The subdial PLATE styles (owner 2026-07-15, his A/B spec): "theme" —
@@ -801,17 +834,19 @@ RING_EYE_GLYPH = "👁"
 RING_EYE_SHINE_FILE = "Eye_shine.png"
 RING_EYE_SHINE_DEFAULT = {"Dollar": True}
 # THE SHINE ENLARGE FACTOR (owner UV inbox 2026-07-27, "slika 2 kada
-# ima SHINE mora da bude veca... coef * 1.2 ili tako nesto"): in the
-# shine masters the TRIANGLE occupies a smaller fraction of the image
-# than in the no-light masters (the glory of rays pads it), so drawing
-# both at the same letter height shrinks the shine triangle. Measured
-# ONCE per source (solid-core bounding box against the full trimmed
-# frame — alpha>=250 core and dark-pixel core agree within a few
-# percent): ChatGPT plain ~0.99 vs shine ~0.83 -> 1.18; Gemini plain
-# ~0.99 vs shine ~0.87 -> 1.15. `app.controller.build_skin` stamps the
+# ima SHINE mora da bude veca"; corrected same day — the first
+# measurement trusted the alpha channel, but the glory of rays is
+# ITSELF opaque, so it read the whole glow as "triangle" and landed on
+# a uselessly small ~1.16): the factor is the ratio of the TRIANGLE's
+# frame fraction between the no-light and shine masters, measured on
+# the triangle's actual apex/base rows. The shine masters are also
+# PADDED on disk so the triangle sits at the exact frame center
+# (originally it rode high, which would have drawn the zoomed triangle
+# off-seat). ChatGPT: plain 0.97 vs shine 0.46 of frame -> 2.11;
+# Gemini: 0.98 vs 0.59 -> 1.67. `app.controller.build_skin` stamps the
 # factor into `SkinDefinition.ring.letter_zoom` for the shine stems so
 # the triangle draws the SAME size and only the rays extend beyond it.
-RING_EYE_SHINE_ENLARGE = {"gem": 1.15, "gpt": 1.18}
+RING_EYE_SHINE_ENLARGE = {"gem": 1.67, "gpt": 2.11}
 # The full letter library (glyph -> art file) — presets and the custom
 # ring builder choose from these, GOLD masters only; silver and bronze
 # are derived from the gold master at load (owner 2026-07-19,

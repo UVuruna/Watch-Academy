@@ -7,6 +7,8 @@ tab other than Pointer bounced the window back to the first tab.
 `_build` now carries the open tab across rebuilds.
 """
 
+from collections import defaultdict
+
 import pytest
 from PySide6.QtWidgets import QApplication, QTabWidget
 
@@ -19,15 +21,23 @@ def app():
     return QApplication.instance() or QApplication([])
 
 
+def _setters() -> dict:
+    """A stub for the controller's setter table — every key answers a
+    no-op (the real dialog wires live setters; since the DOMY default
+    ring grew its own Two-metals checkbox in the ENLARGE/THEMATIC
+    round, an empty dict would KeyError at build)."""
+    return defaultdict(lambda: (lambda *_args: None))
+
+
 def _dialog() -> DesignDialog:
-    return DesignDialog(Settings(), {})
+    return DesignDialog(Settings(), _setters())
 
 
 def test_refresh_keeps_the_open_tab(app):
     dialog = _dialog()
     assert dialog._tabs.currentIndex() == 0  # first build opens on Pointer
     dialog._tabs.setCurrentIndex(4)          # the owner browses Hands
-    dialog.refresh(Settings(), {})
+    dialog.refresh(Settings(), _setters())
     rebuilt = dialog._tabs                   # the REBUILT widget, not the corpse
     assert isinstance(rebuilt, QTabWidget)
     assert rebuilt.currentIndex() == 4       # the pick no longer bounces
@@ -40,7 +50,7 @@ def test_refresh_clamps_a_stale_tab_index(app):
     Qt silently ignoring the set."""
     dialog = _dialog()
     dialog._tabs.setCurrentIndex(dialog._tabs.count() - 1)
-    dialog.refresh(Settings(), {})
+    dialog.refresh(Settings(), _setters())
     rebuilt = dialog._tabs
     assert rebuilt.currentIndex() == rebuilt.count() - 1
     dialog.deleteLater()
