@@ -61,6 +61,15 @@ _LAW_LOOKS = {
 _LAW_REGISTERS = {
     "primary", "pantheon", "secondary", "dark", "glass", "circle",
     "badges", "animals", "tree", "wider",
+    # THE THREE FIGURE SETS (owner 2026-07-27, CUBE.md §The Rose +
+    # Article Charter rule 5): a seat's three sets are three DIFFERENT
+    # PEOPLE holding one office — archetypal (biblical, mythological,
+    # classical-literary), historical (real persons), modern (fantasy,
+    # film, comics) — so each set is a parallel READING of the same
+    # seat, which is exactly what a register is. Precedent: the Ages
+    # wheel already carries its two readings as the "tree" and
+    # "animals" registers (archetypes.ARCHETYPE_LIFE_REGISTERS).
+    "archetypal", "historical", "modern",
 }
 
 

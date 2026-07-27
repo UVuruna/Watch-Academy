@@ -38,7 +38,14 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
 > ```
 >
 > - **Registers** (official blocks): `primary`, `pantheon`, `secondary`,
->   `dark`, `glass`, `circle`, `badges`, `animals`, `tree`, `wider`.
+>   `dark`, `glass`, `circle`, `badges`, `animals`, `tree`, `wider`,
+>   and the THREE FIGURE SETS `archetypal`, `historical`, `modern`
+>   (owner 2026-07-27, the Rose round): a seat's three sets are three
+>   DIFFERENT PEOPLE holding one office, so each set is a parallel
+>   READING of the same seat — exactly what a register is. The Ages
+>   wheel's `tree`/`animals` pair is the standing precedent. The
+>   vocabulary is extended in `tests/test_assets_structure.py`
+>   (`_LAW_REGISTERS`) and nowhere else — never invented in a drop.
 > - **Looks** (one folder per artwork style, files ONLY here): `bronze`
 >   (cameo master — gold/silver derive by algorithm, never as files),
 >   `colored`, and the theme-specific `logo`/`photo`/`sign`/`art`/
