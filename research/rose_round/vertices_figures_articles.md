@@ -555,7 +555,7 @@ two grounds of judgment, opposite and equally unpurchasable.
 ## wise_statesman_historical
 
 The deed is the resignation of the commission at Annapolis on 23
-December 1783, before a Congress that had no power to compel it. Three
+December 1783, before a Congress that had no power to compel it. Nine
 months earlier the Newburgh officers had offered him the alternative and
 he had refused it to their faces; the resignation makes that refusal
 irreversible by returning the instrument itself, in public, where the
@@ -741,11 +741,12 @@ chariot pursuit is the single nameable deed that says the same thing.*
 ## messianic_tyrant_historical
 
 Napoleon is seated by 2 December 1804 at Notre-Dame: with Pius VII
-present and the crown in the Pope's hands, he takes it and sets it on
-his own head, then crowns Josephine — in public, precisely so the
-meaning cannot be missed. It is the cleanest deed in the roster: a
-single gesture, universally attested, whose entire content is that no
-authority above the founder is admitted. The vision survives it intact —
+present, he lifts the crown from the altar himself and sets it on his
+own head, then crowns Josephine — in public, precisely so the
+meaning cannot be missed. The self-coronation had been agreed
+with the Pope in advance, which sharpens rather than softens it: the
+gesture was not a snatch but a staging, arranged so that everyone in the
+nave would see that no authority above the founder is admitted. The vision survives it intact —
 the Code, the prefects, the lycées all outlive the man — and what dies
 is the sanction, the acknowledgement that a founding is answerable to
 something it did not itself establish. Vigor and Integrity of a kind
@@ -931,7 +932,7 @@ her to — the same species of act at the opposite end of a life.
 
 Gandalf is seated by the FINDING of Isildur's scroll in the archives of
 Minas Tirith — the account of the fading letters, located and read, by
-which a sixty-year-old suspicion about a quiet country's heirloom became
+which a suspicion three quarters of a century old about a quiet country's heirloom became
 a fact. The act is the finding and not the waiting: he checked where
 assuming would have been easier, cheaper and entirely defensible, on an
 errand nobody witnessed and nobody afterwards credits, and every event
