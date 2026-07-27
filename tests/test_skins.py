@@ -380,6 +380,68 @@ def test_thematic_finish_wears_the_preset_color():
     }
 
 
+def test_thematic_choices_mirror_the_recolor_presets():
+    """CUSTOM-THEMATIC widening (owner 2026-07-27, "iron, copper...
+    sve"): constants.py is a pure-literals file (its own docstring
+    law), so the thematic choice roster cannot READ metals.json — THIS
+    test is the sync: every transformer ramp is choosable, in the
+    preset file's own order, and nothing is choosable that no ramp
+    draws; defaults identity-maps the full roster and every choice has
+    a display title for the custom builder's combo."""
+    import json
+    from pathlib import Path
+
+    from config import constants
+
+    presets = json.loads(
+        (Path(__file__).resolve().parents[1]
+         / "recolor" / "presets" / "metals.json").read_text(encoding="utf-8")
+    )
+    assert constants.METAL_SHADE_NAMES["thematic"] == tuple(
+        presets["metals"].keys()
+    )
+    assert defaults.METAL_SHADES["thematic"] == {
+        name: name for name in constants.METAL_SHADE_NAMES["thematic"]
+    }
+    for shade in constants.METAL_SHADE_NAMES["thematic"]:
+        assert shade in constants.METAL_SHADE_TITLES, shade
+
+
+def test_custom_ring_picks_its_own_thematic_color():
+    """CUSTOM-THEMATIC widening (owner 2026-07-27): a custom card's own
+    `thematic` field wins under the Thematic finish — any transformer
+    ramp, metals included; absent, the moon indigo fallback; an unknown
+    name fails loudly at validation (Rule #1)."""
+    import pytest as _pytest
+
+    from config import constants, paths
+    from data.rings import validate_preset
+
+    custom = (
+        {"name": "IRONRING", "positions": [12, 20, 24, 4],
+         "letters": ["I", "R", "O", "N"], "thematic": "copper"},
+    )
+    build_skin(replace(
+        Settings(), ring="IRONRING", custom_rings=custom,
+        ring_finish="thematic",
+    ))
+    assert paths.metal_shade("thematic") == "copper"
+    plain = (
+        {"name": "PLAINRING", "positions": [12, 20, 24, 4],
+         "letters": ["A", "B", "C", "D"]},
+    )
+    build_skin(replace(
+        Settings(), ring="PLAINRING", custom_rings=plain,
+        ring_finish="thematic",
+    ))
+    assert paths.metal_shade("thematic") == "moon_indigo"
+    with _pytest.raises(ValueError):
+        validate_preset({
+            "name": "X", "positions": [12, 20, 24, 4],
+            "letters": ["A", "B", "C", "D"], "thematic": "neon",
+        })
+
+
 def test_mason_motto_arc_loads_and_pins_its_key_letters():
     """MOTO-FIX round (owner correction 2026-07-19, the Great Seal
     reference image): ANNUIT COEPTIS pins its own A at 8h and S at 16h

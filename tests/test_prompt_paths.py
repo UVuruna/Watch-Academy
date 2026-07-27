@@ -147,6 +147,17 @@ _DATA_DRIVEN_ROOTS = (
     "archetypes/council",
     "archetypes/character",
     "archetypes/crosses",
+    # THE CROSS-WORDS ROUND (owner UV inbox 2026-07-27): the Dollar
+    # ring legend's five Double-Trinity OFFICES as banknote-engraving
+    # plates — a NEW family in the note's own craft (intaglio, dollar
+    # green), never sharing files with the Court/Genesis/Council glass
+    # (one-image-one-place). Content-only like the wave above; wiring
+    # (hover-card/Encyclopedia images for the ring legend) is a future
+    # round, so only the FAMILY root is checkable here. Full sheet:
+    # `research/prompts/archetype/banknote_offices_prompts.md`; its
+    # sibling `cross_words_prompts.md` rides the existing
+    # `archetypes/crosses` root in the `secondary` register.
+    "archetypes/banknote",
     "instrument/guide",
     # THE SLAVIC MONTHS (R7b round, owner-sealed 2026-07-21): every
     # per-month filename is enumerated in `config.defaults.

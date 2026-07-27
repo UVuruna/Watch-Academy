@@ -56,6 +56,22 @@ class _CustomArtSectionMixin:
         add.clicked.connect(self._add_custom_ring)
         top.addWidget(add)
         column.addLayout(top)
+        # The card's own THEMATIC color (ENLARGE/THEMATIC round, owner
+        # 2026-07-27, widened for custom rings): what the ring's
+        # letters wear under the Thematic finish — any transformer
+        # ramp, the five theme colors AND every metal (copper, iron,
+        # …); "auto" falls back to the moon indigo.
+        thematic_row = QHBoxLayout()
+        thematic_row.addWidget(QLabel(tr("Thematic color")))
+        self._ring_thematic_combo = QComboBox()
+        self._ring_thematic_combo.addItem(tr("Auto (moon indigo)"), None)
+        for shade in constants.METAL_SHADE_NAMES["thematic"]:
+            title = constants.METAL_SHADE_TITLES.get(
+                shade, shade.replace("_", " ").title()
+            )
+            self._ring_thematic_combo.addItem(title, shade)
+        thematic_row.addWidget(self._ring_thematic_combo, stretch=1)
+        column.addLayout(thematic_row)
         self._ring_slot_row = QHBoxLayout()
         column.addLayout(self._ring_slot_row)
         self._ring_slot_combos: dict[int, QComboBox] = {}
@@ -120,19 +136,23 @@ class _CustomArtSectionMixin:
                 for combo in self._ring_slot_combos.values()
             ],
         }
+        thematic = self._ring_thematic_combo.currentData()
+        if thematic is not None:
+            entry["thematic"] = thematic
         try:
             card = validate_preset(entry)
             ring_presets(tuple(self._custom_rings) + (entry,))  # name clash?
         except ValueError as error:
             self._custom_ring_status.setText(str(error))
             return
-        self._custom_rings.append(
-            {
-                "name": card["name"],
-                "positions": list(card["positions"]),
-                "letters": list(card["letters"]),
-            }
-        )
+        stored = {
+            "name": card["name"],
+            "positions": list(card["positions"]),
+            "letters": list(card["letters"]),
+        }
+        if card["thematic"] is not None:
+            stored["thematic"] = card["thematic"]
+        self._custom_rings.append(stored)
         self._custom_ring_status.setText(
             self._tr(
                 "Added '{name}' — OK saves it; find it under Design ▸ Ring"

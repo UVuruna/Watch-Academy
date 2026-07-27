@@ -650,13 +650,18 @@ def _fold_ring_name(raw_name: str, by_fold: dict) -> str | None:
 
 def _normalized_ring_card(entry: dict) -> dict:
     """One custom ring card, validated by the shared card validator and
-    stored in its JSON-serializable shape."""
+    stored in its JSON-serializable shape. The optional `thematic`
+    color pick (ENLARGE/THEMATIC round, owner 2026-07-27) rides along
+    only when set — older cards stay byte-identical."""
     card = validate_preset(entry)
-    return {
+    normalized = {
         "name": card["name"],
         "positions": list(card["positions"]),
         "letters": list(card["letters"]),
     }
+    if card["thematic"] is not None:
+        normalized["thematic"] = card["thematic"]
+    return normalized
 
 
 def _normalized_jump_city(entry: dict) -> dict:

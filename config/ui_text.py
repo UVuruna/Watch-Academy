@@ -131,6 +131,9 @@ UI_STRINGS: tuple[str, ...] = (
     "Ring letters", "Hover enlarge",
     "Reset to preset", "Custom…", "Gray (default)", "the untouched art",
     "Unique name", "Add ring", "{n} custom ring(s) saved",
+    # The custom card's Thematic color pick (ENLARGE/THEMATIC round,
+    # widened for custom rings, owner 2026-07-27).
+    "Thematic color", "Auto (moon indigo)",
     "Added '{name}' — OK saves it; find it under Design ▸ Ring",
     "Flame — Masculine ({n} letters)", "Chalice — Feminine ({n} letters)",
     "Seal — Union ({n} letters)",

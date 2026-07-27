@@ -330,6 +330,22 @@ def test_ring_two_metals_round_trips_and_drops_stale_entries(store):
     assert lenient.ring_two_metals == {"Dollar": True}
 
 
+def test_custom_ring_thematic_pick_round_trips(store):
+    """CUSTOM-THEMATIC widening (owner 2026-07-27): a custom card's own
+    `thematic` color pick persists through save/load; a card without
+    one stays byte-identical (no key invented)."""
+    saved = replace(Settings(), custom_rings=(
+        {"name": "IRONRING", "positions": [12, 20, 24, 4],
+         "letters": ["I", "R", "O", "N"], "thematic": "iron"},
+        {"name": "PLAINRING", "positions": [12, 20, 24, 4],
+         "letters": ["A", "B", "C", "D"]},
+    ))
+    store.save(saved)
+    loaded = store.load()
+    assert loaded.custom_rings[0]["thematic"] == "iron"
+    assert "thematic" not in loaded.custom_rings[1]
+
+
 def test_earth_label_migrates_from_the_old_bool_pair(store):
     """Session 21-E (owner 2026-07-18, ROADMAP 15h): the old
     show_earth_date/earth_weekday bool pair migrates onto the new

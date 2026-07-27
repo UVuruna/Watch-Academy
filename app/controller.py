@@ -673,15 +673,18 @@ def apply_display_settings(skin, settings: Settings):
     paths.set_metal_shade("silver", settings.metal_shade_silver)
     # THE THEMATIC pseudo-metal's shade follows the ACTIVE ring preset
     # (ENLARGE/THEMATIC round, owner 2026-07-27): DOMY cross red, PILOT
-    # cross blue, Dollar green, The One moon indigo, Templar black —
-    # a custom/unknown ring falls back to the moon indigo. Not a user
-    # setting: the ring choice IS the choice.
-    paths.set_metal_shade(
-        "thematic",
-        constants.RING_THEMATIC_SHADES.get(
-            settings.ring, constants.METAL_SHADE_DEFAULT["thematic"]
-        ),
-    )
+    # cross blue, Dollar green, The One moon indigo, Templar black. A
+    # CUSTOM ring may carry its OWN pick on its card — any transformer
+    # ramp, metals included (owner: "iron, copper... sve") — else the
+    # moon indigo. Not a Settings entry: the ring choice IS the choice.
+    thematic_shade = constants.RING_THEMATIC_SHADES.get(settings.ring)
+    if thematic_shade is None:
+        card = ring_presets(settings.custom_rings).get(settings.ring)
+        thematic_shade = (
+            (card or {}).get("thematic")
+            or constants.METAL_SHADE_DEFAULT["thematic"]
+        )
+    paths.set_metal_shade("thematic", thematic_shade)
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
     # while the drawn pointer carries an archetype. The overriding
     # itself happens at the RENDER level (render.layers.enabled_slots

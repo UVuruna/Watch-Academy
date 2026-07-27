@@ -2698,15 +2698,14 @@ METAL_SHADES = {
         "platinum": "platinum",
     },
     # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
-    # 2026-07-27): the ring's per-preset theme colors, each an
-    # identity-mapped colored RAMP in recolor/presets/metals.json —
-    # exactly the "one entry, zero code" door the transformer promises.
+    # 2026-07-27; widened for CUSTOM rings same day): every thematic
+    # choice IS a ramp name — identity-mapped over the whole roster
+    # (the five ring theme colors plus every metal ramp, owner: "iron,
+    # copper... sve"), exactly the "one entry, zero code" door the
+    # transformer promises. moon_indigo stays the DEFAULT / custom
+    # fallback (constants.METAL_SHADE_DEFAULT).
     "thematic": {
-        "cross_red": "cross_red",
-        "cross_blue": "cross_blue",
-        "dollar_green": "dollar_green",
-        "moon_indigo": "moon_indigo",     # DEFAULT / custom fallback
-        "templar_black": "templar_black",
+        name: name for name in constants.METAL_SHADE_NAMES["thematic"]
     },
 }
 # WHICH METAL THE ART WAS DRAWN IN — the transformer is source-agnostic

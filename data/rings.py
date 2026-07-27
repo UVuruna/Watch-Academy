@@ -210,6 +210,22 @@ def validate_preset(entry: dict) -> dict:
             )
         legend[position] = {"name": letter_name, "reading": reading}
     motto = _validate_motto(name, entry.get("motto") or [], positions)
+    # The optional THEMATIC color pick (ENLARGE/THEMATIC round, widened
+    # for CUSTOM rings, owner 2026-07-27): a card may name ANY of the
+    # transformer's ramps (the five ring theme colors plus every metal
+    # ramp — copper, iron, …) as its own Thematic-finish color;
+    # absent, `app.controller.apply_display_settings` falls back to
+    # `constants.RING_THEMATIC_SHADES` (bundled) or the moon indigo.
+    thematic_raw = entry.get("thematic")
+    thematic = None
+    if thematic_raw is not None:
+        thematic = str(thematic_raw)
+        if thematic not in constants.METAL_SHADE_NAMES["thematic"]:
+            raise ValueError(
+                f"ring preset {name!r}: unknown thematic color "
+                f"{thematic!r} (known: "
+                f"{sorted(constants.METAL_SHADE_NAMES['thematic'])})"
+            )
     return {
         "name": name,
         "positions": positions,
@@ -218,6 +234,7 @@ def validate_preset(entry: dict) -> dict:
         "triangle": triangle,
         "legend": legend,
         "motto": motto,
+        "thematic": thematic,
     }
 
 

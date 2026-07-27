@@ -733,12 +733,25 @@ METAL_SHADE_NAMES = {
     "bronze": ("dark_bronze", "bronze", "light_bronze"),
     "silver": ("gunmetal", "silver", "platinum"),
     # The THEMATIC pseudo-metal (ENLARGE/THEMATIC round, owner
-    # 2026-07-27): its "shades" are the per-preset ring theme colors
-    # (`RING_THEMATIC_SHADES`), resolved automatically from the active
-    # ring — never offered in the Settings shade pickers.
+    # 2026-07-27; widened for CUSTOM rings same day): its "shades" are
+    # ALL the transformer's ramps — the five ring theme colors
+    # (`RING_THEMATIC_SHADES`) PLUS every metal ramp (owner: "iron,
+    # copper... sve") — so a custom card's own `thematic` pick can name
+    # any of them. Bundled presets resolve automatically from
+    # `RING_THEMATIC_SHADES`; never offered in the Settings shade
+    # pickers. This tuple mirrors `recolor/presets/metals.json` and is
+    # guarded against drift by `tests/test_skins.py`
+    # (test_thematic_choices_mirror_the_recolor_presets) — constants.py
+    # stays a pure-literals file (its own docstring law), the test is
+    # the sync.
     "thematic": (
         "cross_red", "cross_blue", "dollar_green",
         "moon_indigo", "templar_black",
+        "gold", "gold_dark_amber", "gold_amber", "gold_pale",
+        "gold_champagne",
+        "silver", "bronze", "bronze_dark", "bronze_light",
+        "copper", "brass", "rose_gold", "steel", "gunmetal",
+        "platinum", "pewter", "iron",
     ),
 }
 METAL_SHADE_DEFAULT = {
@@ -753,6 +766,14 @@ METAL_SHADE_TITLES = {
     "cross_red": "Cross red", "cross_blue": "Cross blue",
     "dollar_green": "Dollar green", "moon_indigo": "Moon indigo",
     "templar_black": "Templar black",
+    # The remaining transformer ramps, pickable by a CUSTOM ring's own
+    # thematic choice (ENLARGE/THEMATIC round, widened same day):
+    "gold": "Gold", "gold_dark_amber": "Gold dark amber",
+    "gold_amber": "Gold amber", "gold_pale": "Gold pale",
+    "gold_champagne": "Gold champagne",
+    "bronze_dark": "Dark bronze (ramp)", "bronze_light": "Light bronze (ramp)",
+    "copper": "Copper", "brass": "Brass", "rose_gold": "Rose gold",
+    "steel": "Steel", "pewter": "Pewter", "iron": "Iron",
 }
 
 # The subdial PLATE styles (owner 2026-07-15, his A/B spec): "theme" —
