@@ -1139,7 +1139,17 @@ Follow the monorepo build conventions (root CLAUDE.md):
 1. `setup/svg_to_ico.py` — multi-res ICO from `assets/logo.svg`
    (+ `logo-setup.svg` for the wizard icon).
 2. `setup/app_info.json` — name, version, exe/installer names;
-   company data comes from the root `company.json`.
+   company data comes from the root `company.json`. **Naming
+   (Session 22, the Renaming):** `name`/`description` read **Watch
+   Academy** — the sealed application name (CUBE.md §The Name);
+   `exe_name`/`installer_name` stay DOMY-based (`DOMYWatch.exe`,
+   `DOMYWatch_Setup.exe`) since DOMY remains the dial's own name and
+   the on-disk/binary identity. A seed file with these values already
+   exists so `build.py` only has to fill in the version at build
+   time; verify it still matches this note before wiring `build.py`.
+   The Rule 23 self-update module does not exist yet — when it lands,
+   `update.repo` stays `"UVuruna/DOMY-Watch"` (the GitHub repo is not
+   renamed) while any user-facing update text says Watch Academy.
 3. `setup/build.py` — version-info generation, PyInstaller
    `--onedir --windowed` (no UAC; exclude unused modules), signing.
 4. `setup/create_cert.py` — one-time self-signed cert

@@ -5,6 +5,18 @@ build.py, installer.nsi, svg_to_ico.py, certificates — lands here).
 
 ## Files
 
+### `app_info.json` — Installer Metadata Seed
+Seeded ahead of the M7 build pipeline (Session 22, the Renaming,
+2026-07-27) so the naming decision does not have to be re-derived when
+`build.py` lands: `name`/`description` carry **Watch Academy** — the
+sealed application name (CUBE.md §The Name) — while `exe_name`/
+`installer_name` stay DOMY-based (`DOMYWatch.exe`/`DOMYWatch_Setup.exe`),
+matching the folder/mutex/AppUserModelID identity that never changed.
+`version` is a static seed (not wired to any runtime code yet — this
+project has no single version source per Rule #23); whoever writes
+`build.py` bumps it to the real release version before packaging.
+Pinned by `tests/test_app_info.py`.
+
 **LIVE-RENDER CLEANUP (owner decree 2026-07-19: "bolje crtati na licu
 mesta nego 15MB fajlova")** — three one-time generators are RETIRED
 whole (Rule #6, no leftovers), their output now computed at load/on
