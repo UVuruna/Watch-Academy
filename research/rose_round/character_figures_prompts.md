@@ -27,18 +27,6 @@ THAT ACT was.
 
 Three consequences govern every prompt below:
 
-1. **The image is the ACT, never a portrait.** No figure is drawn seated
-   for a likeness; each is drawn mid-deed. A monster may hold a virtue
-   and a saint may hold a fall — that is the doctrine working.
-2. **The act is also the copyright answer.** We are not drawing a
-   protected character; we are drawing a moment. That is what drops most
-   of the modern set from a reference route to a plain descriptive one.
-3. **A seat with no nameable, checkable deed is a WRONG SEAT.** Where the
-   deed audit returned *weak* or *replace*, the entry is still written for
-   the figure the canon currently seats, and an *italic note* states the
-   audit's concern and its proposed replacement. **The owner decides; the
-   sheet does not decide for him.**
-
 ## The register — one badge, one act
 
 Every plate is a **ROUND 1:1 stained-glass badge medallion** in its
@@ -96,16 +84,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **Pope Alexander VI — the meridian drawn across an unseen ocean (historical · fallen)** →
 `assets/archetypes/character/historical/colored/Pope_Alexander_VI.png`
 
-*Audit verdict: **WEAK**. The seat is arguable only on the bull* Inter
-caetera *(4 May 1493) — and even that is a chancery act drafted at Spanish
-request, following Nicholas V's* Romanus Pontifex*. The deed the roster
-actually leans on (Cesare made cardinal at eighteen; the Romagna turned
-into a family patrimony) is NEPOTISM — the wheel's own neighbouring seat
-at 15h, where Ceaușescu already holds that exact shape. **Audit's proposed
-replacement: Pope Urban II**, the sermon at Clermont, 27 November 1095 —
-remission of sins promised to men who went east to kill, and the crowd
-answering* Deus vult*: the covenant closed, with a date and a place.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. The yellow here has gone brassy, hard and airless, with iron shadow — the same colour as the lit seats, close and without air. Center: Pope Alexander VI at a chancery table in full papal vesture, pressing a lead seal onto a bull, one hand laid flat across a great chart of an ocean nobody has crossed, on which a single ruled line runs from pole to pole; on the far side of the line a crowd of small unnamed peoples kneels in shadow, assigned — one law inside the line, another beyond it — filling the round frame. A single candle at the table gives a soft contained glow; every other light is dim and matte. Border: gothic leadwork in dark gold, a small sealed-bull roundel at the top. Palette: brassy dim yellow, iron shadow, dull gold, dark-gold lead. NO lettering anywhere.
 ```
@@ -140,35 +118,12 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **Charles Xavier — the ancestral house opened to a hunted child (modern · positive)** →
 `assets/archetypes/character/modern/colored/Charles_Xavier.png`
 
-*Audit verdict: **WEAK**. The seat survives here only by describing a
-PREMISE — "he founded a school" is a standing condition, not an act under
-pressure at a cost, and the founding is told differently in every
-continuity, so no single checkable deed exists. The Patronage shape is
-genuinely his; no one act carries it. **Audit's proposed replacement:
-Uncle Iroh** — a crown prince and general, first in line, boarding a
-banished boy's ship on the day of the banishment and following him into
-exile, spending his own rank at once and completely on a nephew who does
-not want him there.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. Warm harvest amber-orange glass — a true yellow-and-red blend — with gold and bronze, clear and lit. Center: a calm bald man in a wheelchair holding open the heavy front door of his own great ancestral country house, welcoming in a thin frightened boy with a battered suitcase who keeps glancing back down the drive at the black car of the handler who was running him; a warm hall waits behind them and a rank of empty child-sized beds is visible through an inner doorway — an inherited house converted into shelter for children the state would have locked away — filling the round frame. The lit hall gives a single soft contained glow; every other light is dim and matte. Border: sheaf-and-cord leadwork in dark bronze-amber, a small open-door roundel at the top. Palette: harvest amber-orange, warm gold, bronze, dark bronze lead. NO lettering anywhere.
 ```
 
 **King Lear — the kingdom divided by a love-test (archetypal · fallen)** →
 `assets/archetypes/character/archetypal/colored/King_Lear.png`
-
-*Audit verdict: **WEAK — collision, not quality.** The deed is perfect for
-the seat and fails a different law: this exact figure on this exact deed
-is already SEALED on the PROPHECY wheel, where the Complacent Nepotist
-article reads "Lear's seat is the map." One deed cannot be two seats —
-under the deed doctrine that is not a shared figure, it is the same
-picture twice, and Charter rule 5 forbids it. Legacy's Favoritism must
-find another Lear act (there is none of this weight) or take another
-figure. **Audit's proposed replacement: Jacob (Israel)** — the coat of many
-colours made for Joseph because he loved him more than all his other sons
-(Genesis 37:3–4): partiality manufactured as a visible garment, worn daily
-in front of the brothers it excludes. No collision — Joseph's own seat is
-on the other wheel and is a different person.*
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. The harvest orange here has gone airless brown-orange, hard and hoarded, with iron shadow. Center: King Lear, old and crowned, seated before a great map of his kingdom unrolled and weighted on the floor, cutting it with the edge of his hand into portions while two daughters kneel with their hands over their hearts, praising — and the third stands apart, silent, already being waved out of the frame by his other hand; the map's third share is being pushed toward the two who bid — filling the round frame. A single guttering hall torch gives a soft contained glow; every other light is dim and matte. Border: sheaf-and-cord leadwork in dark bronze-amber, a small divided-map roundel at the top. Palette: airless brown-orange, dull bronze, iron shadow, dark bronze lead. NO lettering anywhere.
@@ -206,19 +161,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **King Arthur — the knights mourned above the queen (archetypal · positive)** →
 `assets/archetypes/character/archetypal/colored/King_Arthur.png`
 
-*Audit verdict: **WEAK**. The seat asks for worth held without apology
-under pressure, and Arthur's three canonical acts are the wrong shapes:
-the sword in the stone is election (something done TO him), the Round
-Table is an institution rather than an act, and Camlann is ruin. What is
-left is the lament of Malory XX — "much more I am sorrier for my good
-knights' loss than for the loss of my fair queen" — a sentence, not a deed
-at cost. The seat currently survives by assembling the legend, which is
-exactly the failure the doctrine names. **Audit's proposed replacement:
-Queen Vashti** — ordered by a drunk king on the seventh day of the feast to
-come and be displayed before his princes, she refuses (Esther 1:10–12) and
-is deposed by decree: one act, total cost, no explanation offered and none
-asked for.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. Ember-red, deep crimson and molten gold glass, clear and lit. Center: King Arthur, crowned and grey, standing alone at a great round table that has no head, one hand laid on the back of an empty seat and his face turned not to the queen's abandoned chair but to the ranked shields of his broken fellowship on the wall — the order mourned above the marriage — filling the round frame. His sword lies flat and sheathed on the table, unclaimed. A single shaft of light on the empty seat gives a soft contained glow; every other light is dim and matte. Border: laurel-and-blade leadwork in dark red, a small headless-round-table roundel at the top. Palette: ember red, deep crimson, molten gold, dark-red lead. NO lettering anywhere.
 ```
@@ -237,17 +179,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 **T'Challa — the concealment of his own house ended (modern · positive)** →
 `assets/archetypes/character/modern/colored/TChalla.png`
-
-*Audit verdict: **WEAK**. The shape is right — worth that does not need a
-pretence to survive — but no ONE act carries it: the ritual challenge is
-law-compliance, the sparing of a rival is mercy, the stand-down is
-composure, and every candidate needs a second scene beside it to become
-dignity. A seat that needs two scenes is a description of the man.
-**Audit's proposed replacement: Maximus Decimus Meridius** — in the arena,
-having just won and been asked his name by the emperor who had his family
-killed, he removes his helmet, turns and states it in full: the slave's
-anonymity discarded and the worth declared without apology, at the maximum
-possible price.*
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. Ember-red, deep crimson and molten gold glass, clear and lit. Center: a young African king in ceremonial robes and a plain neck-ring standing at the podium of a great circular world assembly hall, hands open and empty on the lectern, telling a chamber of foreign delegates what his nation truly is — ending generations of concealment his own house maintained; the delegates lean forward in tiers of dim matte seats around him — filling the round frame. Nothing on the lectern, no plaques, no signs, no emblems, no crest. A single overhead light on the podium gives a soft contained glow; every other light is dim and matte. Border: laurel-and-blade leadwork in dark red, a small opened-hand roundel at the top. Palette: ember red, deep crimson, molten gold, dark-red lead. NO lettering anywhere.
@@ -412,17 +343,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **Silas — the ledger kept in wounds (modern · fallen)** →
 `assets/archetypes/character/modern/colored/Silas.png`
 
-*Two flags for the owner. **(1) Deed class:** this is a repeated practice
-rather than one dated act — the weakest kind of deed on the wheel, though
-the Prophecy wheel has already accepted that class. If a single-act modern
-alternative is wanted, **Nina Sayers** finishing the performance with the
-glass shard in her side — "it was perfect" — is the same seat in one
-scene. **(2) Identity:** read beside Father Ferapont and Simone Weil this
-is the modern novel's albino ascetic (protected 2003 material), so the
-prompt is routed `_v2` and name-free. If the owner instead means Silas of
-Acts, the seat drops to `_v1` and the plate is simply re-run named — a
-name-free deed plate is valid either way.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. The moonlit cyan here has gone drained grey-blue and airless, with black. Center: a pale albino ascetic kneeling alone on the bare stone floor of an unfurnished room, stripped to the waist, drawing a barbed metal band one notch tighter around his own bare thigh with a knotted corded scourge laid ready beside him and the healed and unhealed marks of previous nights across his back — obedience measured in wounds, the discipline stopped pointing at anything outside itself and become the transaction — filling the round frame. A single small window of grey dawn gives a soft contained glow; every other light is dim and matte. Border: reed-and-water leadwork in pale silver-blue, a small knotted-cord roundel at the top. Palette: drained grey-blue, black, cold silver, silver-blue lead. NO lettering anywhere.
 ```
@@ -490,21 +410,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **Marcus Antonius — the fleet abandoned for one ship (historical · fallen)** →
 `assets/archetypes/character/historical/colored/Marcus_Antonius.png`
 
-*Audit verdict: **REPLACE — the only outright failure in the 48.** Neither
-Antonian deed is this seat. Actium (2 September 31 BC) is an EMPIRE spent
-on a bond, not a SELF spent on it — that is Favoritism at 15h, and the
-existing article says so in its own words. The Alexandria suicide was
-despair on a false report, so it proves nothing and was meant to prove
-nothing. This wheel's Martyrdom is strict: not death suffered for a truth,
-but destruction sought as the PROOF of an attachment. **Audit's proposed
-replacement: Héloïse d'Argenteuil** — at Abelard's order and before he took
-his own vows she went to the altar at Argenteuil and took the veil with no
-vocation of her own, aged twenty, reciting Cornelia's lines from Lucan as
-she went, and then ran a convent for thirty years on a life given to God
-as payment to a man. One dated act, documented in the* Historia
-Calamitatum *and her own letters. The prompt below draws the Actium deed
-the canon currently seats — generate it only if the owner keeps Antonius.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. The green here has gone choked black-green and airless, with dust. Center: Marcus Antonius in a Roman general's cuirass alone in the stern of a small fast galley, back turned on his own great battle line — rank upon rank of his warships still locked and burning in the strait behind him, nineteen legions waiting on the shore — rowing after a single purple-sailed ship pulling away south; a command abandoned mid-battle for one attachment — filling the round frame. A single low sun on the water gives a soft contained glow; every other light is dim and matte. Border: vine-and-leaf leadwork in deep green, a small turned-stern roundel at the top. Palette: choked black-green, dust, dull bronze, green-black lead. NO lettering anywhere.
 ```
@@ -524,24 +429,6 @@ rows — see the [reuse table](#reuse-table).*
 <a id="reuse-table"></a>
 
 ## The eight REUSE seats — nothing silently dropped
-
-The sweep found existing plates for these eight of the forty-eight seats.
-**No entry is written for them and no image is queued**; the wheel's
-legend points at the path below. Where the deed audit also questioned the
-seat, its concern and proposed replacement are recorded here — if the
-owner takes a replacement, that seat leaves this table and needs a new
-plate.
-
-| Arm · set · polarity | Figure | Reuses | Audit |
-|---|---|---|---|
-| 12h · archetypal · fallen | David | `assets/weeks/faith/bible/primary/colored/David.png` | holds — the recall of Absalom and the kiss: one law for his own blood, twice, in the same house |
-| 18h · archetypal · fallen | Lucifer | `assets/archetypes/scale/primary/colored/Lucifer.png` | holds — the five first-person resolutions of Isaiah 14:13–14, the only fall on the dial recorded as a first-person deed |
-| 24h · archetypal · positive | Abraham | `assets/weeks/faith/bible/secondary/colored/Abraham.png` | holds — every item of Sodom's offered spoil refused, "from a thread even to a shoelatchet" |
-| 03h · modern · positive | Obi-Wan Kenobi | `assets/weeks/films/sw_jedi/primary/colored/Obi_Wan.png` | holds — nineteen years as an anonymous desert hermit guarding a child, the service at full strength and every trace of the servant withdrawn |
-| 06h · archetypal · positive | Jesus Christ | `assets/archetypes/persons/primary/colored/Jesus_Humility.png` | holds — the towel and the basin, the betrayer's feet included |
-| 06h · archetypal · fallen | Judas Iscariot | `assets/archetypes/scale/primary/colored/Judas.png` | holds — the money thrown down in the temple by a man who has already set his own worth at zero |
-| 09h · archetypal · positive | Moses | `assets/weeks/faith/bible/primary/colored/Moses.png` | **WEAK** — the deed that actually carries him here (Exodus 32:32) is already SEALED on the Prophecy wheel; the two wheels run one deed twice. Proposed replacement: **Ruth**, the refusal of the release on the road out of Moab, seated directly opposite Boaz's Patronage at 15h |
-| 09h · archetypal · fallen | Samson | `assets/weeks/faith/bible/secondary/colored/Samson.png` | **WEAK** — Gaza is already SEALED on the Prophecy wheel. Honest rescue: the Delilah disclosure on the fourth asking. Proposed replacement: **Dido**, the pyre raised inside her own house and his own sword chosen as the instrument |
 
 *Note on the sweep's other hits: the `John`, `Thomas`, `Peter`, `Leo`,
 `King` and `Queen` files it matched are different persons entirely
@@ -583,13 +470,15 @@ run name-free, so no seat is lost.
 
 - **40 entries queued** — the 48 Legacy cells minus the 8 reuse seats.
 - Route split: 25 `_v1` named, 15 `_v2` descriptive, 0 `_v3`.
-- **6 seats carry an audit flag inside this sheet** — Pope Alexander VI
-  (weak → Urban II), Charles Xavier (weak → Uncle Iroh), King Lear (weak,
-  cross-wheel collision → Jacob), King Arthur (weak → Queen Vashti),
-  T'Challa (weak → Maximus Decimus Meridius), Marcus Antonius (replace →
-  Héloïse d'Argenteuil) — plus 2 more in the reuse table (Moses → Ruth,
-  Samson → Dido). **All eight await the owner's word; none is decided
-  here.**
+- **No seat is up for replacement.** An earlier pass of this sheet
+  carried eight "audit flags" proposing swaps — Queen Vashti for King
+  Arthur, Uncle Iroh for Charles Xavier, and so on. Every one of them
+  was VOID and is deleted: they came from an inverted reading of
+  Charter rule 6, which RELAXES the criterion rather than tightening
+  it. The owner's order is FAME FIRST, THEN THE HOOK — the most widely
+  known figure the seat can carry, and then whatever in them we can
+  hold onto. A thin hook is written thin; it never costs a famous
+  figure its seat.
 - The 16 direction plates (8 lancets + 8 circles) are NOT in this sheet —
   they live in [Character Archetypes](../prompts/archetype/character_prompts.md)
   and were not reopened.

@@ -710,30 +710,45 @@ lacking the experiment).
    - Practical consequence: a roster table with figures in three sets
      is a queue of `seats × sets` images, and a sheet that writes the
      texts without queueing the pictures is INCOMPLETE, not "staged".
-6. **THE DEED DOCTRINE — we seat an ACT, never a person (owner
-   decree 2026-07-27; the single most-missed law in this canon, missed
-   by the session that BUILT the rosters).** A figure on a seat is not
-   a verdict on a life. It is **one deed**, lifted out and held up as
-   the symbol of that seat. The article argues THAT DEED and
-   deliberately forgets the rest of the man.
-   - The owner's own example: to seat Stalin on steadfastness you
-     write ONLY the refusal to trade his captured son for a field
-     marshal — *"I will not trade a lieutenant for a general"* — and
-     nothing else about Stalin exists on that seat. The seat does not
-     say Stalin was steadfast; it says THIS ACT was.
-   - Therefore the article's subject is the act: what was done, under
-     what pressure, at what cost, and why that shape IS this seat.
-     The person's name is the label on the deed, not the thesis.
-   - **The test a seat must pass:** *is there ONE nameable, checkable
-     deed of this person that IS this seat?* If yes — write it, and
-     write only it. **If no — the seat is wrong and needs a different
-     figure.** "He generally seems like a loyal sort" is not a deed
-     and never seats anyone.
-   - This dissolves three objections at once: it stops the canon from
-     pronouncing on whole lives, it lets a monster hold a virtue and a
-     saint hold a fall (which is the truth about people), and it tells
-     the IMAGE what to depict — the ACT, not a portrait, which is also
-     the cleanest way past rule 7's copyright wall.
+6. **FAME FIRST, THEN THE HOOK (owner decree 2026-07-27).** The
+   seating order is **FAMOUS & SYMBOLISM**, in that order: take the
+   most widely known figure the seat can carry, and THEN find
+   something in them — a deed, an episode, a trait, a moment — to
+   hold onto and describe. One paragraph saying why we link them is
+   the whole requirement.
+   > **CORRECTION OF RECORD.** This rule was first written down
+   > INVERTED, as a test that disqualified figures, and a whole
+   > agent round then went hunting for replacements — offering
+   > Queen Vashti for King Arthur, Uncle Iroh for Charles Xavier,
+   > Héloïse d'Argenteuil for Marcus Antonius. That is the opposite
+   > of the decree. The owner's words: *"cilj je da nađemo što
+   > poznatiju ličnost i da izvučemo nešto za šta možemo da se
+   > uhvatimo"* — and *"po tebi ispada da sve poznate ličnosti
+   > izbacimo i sve neke za koje niko nikad nije čuo ubacimo"*.
+   > **Every such replacement is void.** The rule RELAXES the
+   > criterion; it never tightens it.
+   - **The person does NOT have to embody the seat.** That was the
+     whole point of stating this rule: an article never had to argue
+     that the whole life IS this direction. It only has to name the
+     part we hold onto.
+   - The owner's own example: Stalin can sit on steadfastness on the
+     strength of the refusal to trade his captured son for a field
+     marshal. Nothing else about Stalin is being claimed, and nothing
+     else needs to be — one paragraph carries the link.
+   - **A seat is never vacated for want of a perfect deed.** Obscure
+     and exact LOSES to famous and adequate. If the hook is thin, the
+     paragraph says what it holds onto and moves on; it does not
+     surrender the seat.
+   - What the rule DOES buy: the canon stops pronouncing on whole
+     lives, a monster may hold a virtue and a saint a fall, and the
+     IMAGE gains something concrete to depict — a moment rather than
+     a portrait, which is also the cleanest way past rule 7's
+     copyright wall.
+   - The one thing that IS strict, and it is about accuracy, not
+     worthiness: whatever we hold onto must be **real**. A deed
+     invented by a film adaptation, an apocryphal quotation or a
+     misremembered sequence is a factual defect and gets corrected —
+     the FIGURE stays, the detail is fixed.
 7. **THE COPYRIGHT ROUTE (owner 2026-07-27).** Modern figures — film,
    comics, novels still in copyright — get REFUSED by the generators
    when named. Three routes exist and the sheet must say which each

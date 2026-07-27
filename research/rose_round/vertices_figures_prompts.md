@@ -230,17 +230,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **Kylo Ren — the killing on the bridge (modern, fallen)** →
 `assets/archetypes/vertices/modern/colored/Kylo_Ren.png`
 
-*Route `_v2` descriptive — Lucasfilm, protected. Canon's seat, drawn as
-canon calls for it. **AUDIT CONCERN (verdict "weak"):** the self-cost is
-real, but the person destroyed is SOMEONE ELSE, which makes this a
-betrayal-deed dressed as sacrifice; the seat then survives largely on
-reading his general arc, and it drifts toward the Messianic Tyrant's
-apprenticeship. **Proposed replacement: Nux** — on the road he sprays his
-mouth chrome, shouts "I live, I die, I live again", and launches himself
-at the war rig to die witnessed for his warlord: a boy for whom the
-glorious death IS the whole object and nothing is protected by it, with
-the audience built into the deed.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. Glass carries the vertex blend of harvest amber-orange, warm yellow and living leaf-green, burnt down to a hard hot dimness — sacrifice in love with its own price. Center, filling the round frame: a tall young warrior in a black hooded robe, a cracked chrome-and-black helm carried under one arm, standing at the middle of a narrow unrailed catwalk that spans a bottomless machine shaft; an older grey-haired man in a worn flight jacket has both hands laid on the young man's face, and the young man has run a broad blade of unstable red energy, vented short to either side of its hilt, straight through him. One soft contained glow: the red blade. The vast shaft around them is dim and matte. Border: sheaf-and-cord leadwork in dark bronze-amber, a small narrow-bridge roundel at the top. Palette: burnt orange, brassy yellow, choked gray-green, dark bronze lead. NO lettering anywhere.
 ```
@@ -376,22 +365,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 **Louis XV — the disgrace of Maurepas (historical, fallen)** →
 `assets/archetypes/vertices/historical/colored/Louis_XV.png`
-
-*Route `_v1` named — died 1774. **The canonized deed MUST NOT be used:**
-"après moi, le déluge" is apocryphal and is usually attributed to
-Pompadour ("après nous"). The real, dated act of exactly this fall is 24
-April 1749 — he dismissed and exiled his naval and household minister
-Maurepas, one of the few competent men in his government, over satirical
-verses touching Madame de Pompadour, handing the direction of ministerial
-appointments to a favourite. **AUDIT CONCERN (verdict "weak"):** the
-Maurepas disgrace is obscure enough that an article risks leaning on Louis
-XV's general reputation as the do-nothing king, which is reputation-reading
-rather than a deed. **Proposed replacement: Marcus Aurelius** — in 177 he
-raised his son Commodus to co-Augustus, breaking the adoptive succession
-that had produced every good emperor of the century and installing his own
-blood over the office. The doctrine at full strength, a saint holding a
-fall; note the deliberate double-seating this creates with the Six Poles
-table — the owner's call.*
 
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. Glass carries the vertex blend of deep midnight-blue, warm amber-yellow and ember-red, moonlit into a pale silvered rose and then dulled — the post kept as a chair with a reward attached. Center, filling the round frame: Louis XV in a mirrored gilt Versailles cabinet, holding out a sealed exile order to a bowing grey-haired minister whom two guards are already escorting toward the door — and the king is not looking at the minister at all, but at a favourite in court silk seated at his elbow, a folded sheet of satirical verses in her lap. Through the open doors an ante-room of officials waits with papers nobody will take. One soft contained glow: a single candelabrum on the console. The mirrors, the gilding and the ante-room are dim and matte. Border: rod-and-thorn leadwork in cold silver-rose, a small sealed-order roundel at the top. Palette: dulled midnight blue, tarnished amber, dimmed silvered rose, silver-rose lead. NO lettering anywhere.
@@ -719,23 +692,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 **Mace Windu — the rank withheld (modern, fallen)** →
 `assets/archetypes/vertices/modern/colored/Mace_Windu.png`
 
-*Route `_v2` descriptive — Lucasfilm, protected. Canon's seat, drawn as
-canon calls for it: "You are on this Council, but we do not grant you the
-rank of Master" — a technically correct application of the code,
-delivered personally, which manufactures precisely the resentment that
-destroys the order. **AUDIT CONCERN (verdict "weak"):** the deed argues
-COLD ELITISM (a correct rule applied to a person treated as a case), not
-paralysis; and this figure's defining trait across his canon is
-DECISIVENESS — he is the one who finally moves. The seat survives only by
-reading an institution's general blindness onto one member. **Proposed
-replacement: Eddard Stark** — holding proof that the queen's children are
-not the king's, he goes to her in the godswood and TELLS HER, warning the
-woman who murdered his predecessor to take her children and flee, out of a
-scruple about children who are not guilty. A refinement, correct on its own
-terms, taken at the one hour when acting was still possible; it costs him
-his head and starts a war. Hamlet's chapel scene in the modern set, deed
-for deed.*
-
 ```
 ROUND stained-glass badge medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. ASPECT RATIO exactly 1:1 — a perfect square image; the whole image is one round medallion. Glass carries the vertex blend of deep midnight-blue, muted moon-gray violet (cold dusty gray-violet, never royal purple) and living leaf-green, cooled to something correct and lifeless. Center, filling the round frame: a stern bald dark-skinned warrior-monk in brown and cream layered robes, standing in a circular high-tower chamber ringed with seated robed elders, delivering a flat and perfectly correct refusal to a young man who stands alone in the middle of the open floor — the elder's hand open in courteous explanation, the young man's jaw set, humiliated in front of the whole ring. Every face composed; no anger anywhere. All light dim and matte through a wall of tall windows; no glow source anywhere. Border: vine-and-leaf leadwork in green-black, a small empty-floor-circle roundel at the top. Palette: cold midnight blue, moon-gray violet, drained leaf green, green-black lead. NO lettering anywhere.
 ```
@@ -745,14 +701,6 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 ## REUSE — five seats already in the tree (do NOT generate)
 
 **REUSE — the five entries below carry no prompt; nothing is queued.**
-
-| Seat | Register / polarity | Figure | Existing file | Audit note |
-|---|---|---|---|---|
-| 12h Quiet Devotee | archetypal, positive | Virgin Mary | `assets/weeks/faith/bible/primary/colored/Mary.png` | Deed holds: the fiat at the Annunciation — no motion, a bond accepted whole, not one condition attached. |
-| 24h Wise Statesman | archetypal, positive | Joseph son of Jacob | `assets/weeks/faith/bible/primary/colored/Joseph.png` | Deed holds: Genesis 45/50 — absolute power over the brothers who sold him, and the standard applied instead of the injury. |
-| 03h Messianic Tyrant | archetypal, fallen | Pharaoh of the Exodus | `assets/weeks/myth/egypt/pantheon/colored/Pharaoh.png` | **CORRECTION:** the article's deed ("the hardening after each plague") is a pattern, not an act. The deed is Exodus 14 — the chariot pursuit down between the standing walls of water, after total evidence. |
-| 03h Visionary Founder | modern, positive | Leia Organa | `assets/weeks/films/sw_jedi/primary/colored/Leia.png` | **AUDIT (weak):** the founding deed happens off-screen in a novel; an article would reconstruct an act most readers cannot check. **Proposed replacement: Jean-Luc Picard** — he built the evacuation armada for a rival empire's civilians and resigned rather than administer its abandonment; the canon already records him as this seat's alternate. |
-| 09h Contemplative Sage | archetypal, positive | Job | `assets/weeks/faith/bible/secondary/colored/Job.png` | Deed holds: the double refusal on the ash-heap — neither the exit nor the false comfort. |
 
 *A caveat the owner should weigh: these five existing files are BADGES OF
 A PERSON, made before the deed doctrine. Under Charter rule 6 a vertex
@@ -766,13 +714,6 @@ one-line decision the owner can make at any time.*
 **DO NOT GENERATE — one image, one place (Charter rule 5).** These four
 people hold seats on BOTH wheels. The single file is queued in the LEGACY
 sheet; the Prophecy seat points at that same path.
-
-| Seat | Register / polarity | Figure | Canonical file | Audit note |
-|---|---|---|---|---|
-| 15h Sacrificial Protector | archetypal, positive | Moses | `assets/archetypes/character/archetypal/colored/Moses.png` | Deed holds here (Exodus 32:32, "blot me out"). The LEGACY Devotion seat was running the SAME deed — the audit rescues Legacy by moving it to Ruth, so this seat keeps the act and the picture. |
-| 15h Fanatical Martyr | archetypal, fallen | Samson | `assets/archetypes/character/archetypal/colored/Samson.png` | Deed holds here (Gaza, "let me die with the Philistines"). The LEGACY Martyrdom seat paraphrased the same act; the audit moves Legacy to Dido, leaving Gaza to this wheel. |
-| 21h Complacent Nepotist | archetypal, fallen | King Lear | `assets/archetypes/character/archetypal/colored/King_Lear.png` | Deed holds here (I.i, the map and the love-test). The LEGACY Favoritism seat has NO other Lear act of this weight; the audit moves Legacy to Jacob, so the deed and the picture stay here. |
-| 21h Complacent Nepotist | modern, fallen | Denethor II | `assets/archetypes/character/modern/colored/Denethor_II.png` | **AUDIT (replace):** the canonized deed — "the refusal to light the beacons" — DOES NOT EXIST in Tolkien; it is the film's invention, and his real deeds are pride and despair, not slackness. A vigilant madman is not a complacent one. **Proposed replacement: Robert Baratheon** — told the crown is millions in debt, he orders the tourney anyway and leaves the governing to whoever will do it; the canon already records him as this seat's alternate. If the owner takes the replacement, this seat leaves the cross-reference table and needs its own plate. |
 
 ## Reference-still inventory (route `_v3`)
 

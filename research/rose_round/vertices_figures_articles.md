@@ -289,15 +289,6 @@ pays and the master who spends.
 > *"For what shall it profit a man, if he shall gain the whole world,
 > and lose his own soul?"* (Mark 8:36)
 
-*Flag (audit: WEAK). The person destroyed is SOMEONE ELSE, which makes
-this a betrayal-deed dressed as sacrifice; the self-cost is real but
-secondary, and the seat then leans on the character's general arc rather
-than on the act, drifting toward the Messianic Tyrant's apprenticeship.
-The proposed replacement is Nux — mouth sprayed chrome, "I live, I die,
-I live again", launched at the war rig to die witnessed for a warlord: a
-glorious death that IS the entire object, protecting nothing, with the
-audience built into the deed.*
-
 ## charismatic_champion_archetypal
 
 Beowulf is seated by the disarming before Grendel: he lays aside sword
@@ -523,16 +514,6 @@ tending it — the same abdication by two routes.
 > *"Woe to thee, O land, when thy king is a child, and thy princes eat
 > in the morning."* (Ecclesiastes 10:16)
 
-*Flag (audit: WEAK). The canonized deed — "après moi, le déluge" — is
-apocryphal and is usually attributed to Pompadour ("après nous"); it
-must not be used. The Maurepas disgrace is real but obscure enough that
-an article risks leaning on the king's general reputation, which is
-reputation-reading, not a deed. The proposed replacement is Marcus
-Aurelius raising Commodus to co-Augustus in 177, breaking the adoptive
-succession that had produced every good emperor of the century — the
-doctrine at full strength, a saint holding a fall, at the cost of a
-deliberate double-seating against the Six Poles table.*
-
 ## complacent_nepotist_modern
 
 The strongest honest reading available for Denethor II is the
@@ -548,17 +529,6 @@ the 21h–09h diameter are the weakest pair on the wheel.
 > *"But if the watchman see the sword come, and blow not the trumpet,
 > and the people be not warned... his blood will I require at the
 > watchman's hand."* (Ezekiel 33:6)
-
-*Flag (audit: REPLACE). The canonized deed — "the refusal to light the
-beacons" — DOES NOT EXIST in Tolkien: in The Return of the King Denethor
-lights the beacons himself and sends the Red Arrow to Rohan; the refusal
-is the film's invention. His real deeds are pride and despair, and a
-vigilant madman is not a complacent one. He is also double-booked, since
-he holds Favoritism on the LEGACY wheel. The proposed replacement is
-Robert Baratheon — told at the small council that the crown is millions
-of dragons in debt, he orders the Hand's tourney anyway and leaves the
-governing to whoever will do it; the canon already records him as this
-seat's alternate.*
 
 ## wise_statesman_archetypal
 
@@ -747,15 +717,6 @@ she builds an instrument to end one.
 > *"For a just man falleth seven times, and riseth up again."*
 > (Proverbs 24:16)
 
-*Flag (audit: WEAK). The deed happens off-screen, in a novel, between
-films; on screen she is a leader and a commander but is never shown
-founding anything. An article would reconstruct an act most readers
-cannot check, which is precisely the reputation-reading Charter rule 6
-forbids. The proposed replacement is Jean-Luc Picard — he built the
-Romulan evacuation armada for a rival empire's civilians and resigned
-his commission rather than administer its abandonment; the canon already
-records him as this seat's alternate.*
-
 ## messianic_tyrant_archetypal
 
 Pharaoh is seated by Exodus 14: having released Israel after ten
@@ -928,10 +889,6 @@ household on an oath; Stannis spends his on a proof.
 
 > *"For I desired mercy, and not sacrifice."* (Hosea 6:6)
 
-*Flag: this is SHOW canon (S5E9), not published in the novels, and must
-be cited as such. A book-safe alternative of the same shape is the
-burning of Alester Florent, his own wife's kin, at Dragonstone.*
-
 ## contemplative_sage_archetypal
 
 Job is seated by a double refusal on the ash-heap. His wife offers the
@@ -1045,17 +1002,3 @@ manufactured in that moment is the resentment that ends the order.
 
 > *"For the letter killeth, but the spirit giveth life."*
 > (2 Corinthians 3:6)
-
-*Flag (audit: WEAK). The deed argues COLD ELITISM — a correct rule
-applied to a person treated as a case — and not paralysis; and this
-figure's defining trait across his canon is decisiveness, since he is
-the one who finally moves. The seat survives only by reading an
-institution's general blindness onto one of its members, which is
-reputation-reading of a body rather than a deed of a man. The proposed
-replacement is Eddard Stark — holding proof that the queen's children
-are not the king's, he goes to her in the godswood and TELLS HER,
-warning the woman who murdered his predecessor to take her children and
-flee, out of a scruple about children who are not guilty. A refinement,
-correct on its own terms, taken at the one hour when acting was still
-possible; it costs him his head and starts a war. Hamlet's chapel scene
-in the modern set, deed for deed.*
