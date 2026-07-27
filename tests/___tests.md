@@ -69,6 +69,25 @@ owns the whole R5 round; several tests tied to the retired Quick
 Jump/Design/Slot submenus and the Elements→Visible rename were
 removed here as their subject moved).
 
+### `test_rose_pointer.py`
+THE ROSE — the seventh pointer (owner seal 2026-07-27, [The Cube
+Canon](../CUBE.md) §The Rose). Pins the three-star geometry and its
+z-order on both wheels (`ROSE_STAR_OFFSETS` in DRAW order; the 0° star
+topmost on BOTH, so the dominant arm always points at true 12h;
+Prophecy rides the FUTURE star in the middle z-layer), the one
+`ROSE_PALETTE` shared by both wheels and the Character wheel, the
+weekday COLOR LAW with its dual Sunday (Ruler red 18h, Servant blue
+06h, Thursday and Wednesday keeping their canonical seats) and the
+DAYLIGHT switch (only the Calendar and the Rose honor it; the stored
+setting survives a pointer switch on the other five). Two of its pins
+are guards rather than goldens: the four cardinal hues are checked
+against `core.year_wheel`'s OWN computed turning-point angles — proof
+the palette and the year agree — and
+`test_the_rose_ring_preset_is_gone_for_good` fails the moment any
+trace of Session 20's mis-built RING preset reappears (Rule #25 — the
+recurrence pin, since that build came from a canon mis-transcription
+and was deleted whole).
+
 ### `test_cube_wheels.py`
 The Cube wheels engine goldens (WORKPLAN Session 20; owner seal
 2026-07-26, CUBE.md): the third-wheel slot (the "cube" style exists

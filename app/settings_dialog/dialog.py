@@ -266,6 +266,7 @@ class SettingsDialog(
             diameter=self._diameter_slider.value(),
             archetype_names=self._archetype_names_check.isChecked(),
             cube_look=self._cube_look_check.isChecked(),
+            daylight=self._daylight_check.isChecked(),
             pointer_saturation=self._pointer_saturation_slider.value() / 100,
             ring_saturation=self._ring_saturation_slider.value() / 100,
             **{

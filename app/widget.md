@@ -71,7 +71,8 @@ to fit exactly.
   falls through to Qt's default handling
 - `keyPressEvent()`: BARE SPACE is handled FIRST (owner 2026-07-16,
   ROADMAP queue #8; NO-MODIFIER guard added R5b FINAL MAP round — Ctrl+
-  Space is now `location_greenwich`, so the branch must let a HELD
+  Space and its modifiers belong to the ARTICLE-DEPTH LAW (CUBE.md;
+  Greenwich moved to Ctrl+0 on 2026-07-27), so the branch must let a HELD
   modifier fall through instead of eating every Space unconditionally)
   — it calls `_trigger_space_jump()`; because " " is printable this
   MUST precede the typed path (otherwise Space would feed the

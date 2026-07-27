@@ -119,6 +119,15 @@ class _DisplaySectionMixin:
         )
         self._cube_look_check.setChecked(self._settings.cube_look)
         form.addRow(self._cube_look_check)
+        # THE DAYLIGHT SWITCH (owner 2026-07-27, CUBE.md §The Rose): the
+        # Calendar and the Rose may stand in flat full color instead of
+        # the day/night law — their wheels are read as a wheel first and
+        # a clock second. Inert on the other five (which always run
+        # day/night), so like the two above the checkbox stays enabled
+        # and the stored choice survives a pointer switch.
+        self._daylight_check = QCheckBox(tr("Daylight (Calendar / Rose)"))
+        self._daylight_check.setChecked(self._settings.daylight)
+        form.addRow(self._daylight_check)
         return group
 
     def _build_sizes_group(self) -> QGroupBox:

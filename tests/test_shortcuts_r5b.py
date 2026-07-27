@@ -74,7 +74,7 @@ _OWNER_SEALED_COMBOS = {
     ("fast_travel_future", "Key_Plus", ("ControlModifier",)),
     ("location_north_pole", "Key_Up", ("ControlModifier",)),
     ("location_south_pole", "Key_Down", ("ControlModifier",)),
-    ("location_greenwich", "Key_Space", ("ControlModifier",)),
+    ("location_greenwich", "Key_0", ("ControlModifier",)),
     ("location_prev_city", "Key_Left", ("ControlModifier",)),
     ("location_next_city", "Key_Right", ("ControlModifier",)),
 }
@@ -644,15 +644,45 @@ def test_bare_space_still_triggers_the_encyclopedia_jump(app, monkeypatch):
     assert calls == [1]
 
 
-def test_ctrl_space_reaches_the_shortcut_table_not_the_encyclopedia_jump(app, monkeypatch):
+def test_a_held_modifier_never_fires_the_bare_space_jump(app, monkeypatch):
+    """THE ARTICLE-DEPTH LAW (owner 2026-07-27, CUBE.md §Display laws):
+    Space and its modifiers belong wholly to the article jump, so a
+    HELD modifier must fall through to the shortcut table instead of
+    firing the bare (primary-article) jump. Greenwich moved off
+    Ctrl+Space onto Ctrl+G to free the chord."""
     widget = _bare_widget(app)
     space_calls = []
     monkeypatch.setattr(widget, "_trigger_space_jump", lambda: space_calls.append(1))
     seen = []
     widget.shortcut_triggered.connect(seen.append)
-    _press(widget, Qt.Key.Key_Space, Qt.KeyboardModifier.ControlModifier)
+    for modifier in (
+        Qt.KeyboardModifier.ControlModifier,
+        Qt.KeyboardModifier.ShiftModifier,
+    ):
+        _press(widget, Qt.Key.Key_Space, modifier)
     assert space_calls == []
+    assert seen == []                       # nothing else claims them
+    _press(widget, Qt.Key.Key_0, Qt.KeyboardModifier.ControlModifier)
     assert seen == ["location_greenwich"]
+
+
+def test_no_two_shortcuts_share_a_chord():
+    """REGRESSION PIN (2026-07-27): moving Greenwich off Ctrl+Space
+    first parked it on Ctrl+G, which the Guide already owned — a silent
+    double-bind that only showed because a test pressed the key. The
+    table is now checked as a whole: one chord, one action (the two
+    fast_travel_future rows are the documented exception — Equal and
+    numpad Plus are two KEYS for one action, not one key twice)."""
+    from config import defaults
+
+    seen = {}
+    for action, key, modifiers, _description in defaults.SHORTCUTS:
+        chord = (key, frozenset(modifiers))
+        assert chord not in seen, (
+            f"{key} + {sorted(modifiers)} is bound twice: "
+            f"{seen[chord]} and {action}"
+        )
+        seen[chord] = action
 
 
 def test_ctrl_numpad_plus_still_matches_fast_travel_future(app):

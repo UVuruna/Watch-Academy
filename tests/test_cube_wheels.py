@@ -1,7 +1,12 @@
 """The Cube wheels engine (WORKPLAN Session 20; owner seal 2026-07-26,
 CUBE.md): the third-wheel slot (Genesis / Council / Character), the
-Genesis inversion, the Diamond/Cube display toggle and the Rose ring
-preset — every sealed behavior pinned golden.
+Genesis inversion and the Diamond/Cube display toggle — every sealed
+behavior pinned golden.
+
+The Rose's goldens left this file on 2026-07-27: they pinned a RING
+preset that should never have been built (CUBE.md had mis-transcribed
+the owner's POINTER spec). The Rose pointer has its own suite,
+`tests/test_rose_pointer.py`.
 """
 
 import os
@@ -315,75 +320,3 @@ def test_settings_store_round_trips_the_cube_choices(tmp_path):
     assert loaded.palette_style == "cube"
     assert loaded.cube_look is True
 
-
-# --- The Rose ring preset ----------------------------------------------------------
-
-
-def test_rose_card_is_computed_geometry():
-    """CUBE.md §The Rose: the card is {name, rose} and NOTHING else —
-    no positions, no letters, no face art; the 24-ray legend is
-    computed from one rule (Rule #19)."""
-    rose = ring_presets()["Rose"]
-    assert rose["rose"] is True
-    assert rose["positions"] == () and rose["letters"] == ()
-    assert rose["layout"] == "rose"
-    assert rose["motto"] == () and rose["triangle"] is None
-    assert len(rose["legend"]) == 24
-    # The sealed reading of TIME: −1h Historical, 0h Modern, +1h
-    # Archetypal — and the visible star's rays sit ON 1h and 13h.
-    assert rose["legend"][13]["name"] == "13h · Loyalty"
-    assert "Archetypal" in rose["legend"][13]["reading"]
-    assert "1h and 13h" in rose["legend"][13]["reading"]
-    assert rose["legend"][0]["name"] == "24h · Integrity"
-    assert "Modern" in rose["legend"][0]["reading"]
-    assert "Historical" in rose["legend"][14]["reading"]
-    # The color groups run {arm, arm+1, arm+2}, exactly as drawn.
-    assert rose["legend"][11]["name"] == "11h · Devotion"
-    assert rose["legend"][14]["name"] == "14h · Loyalty"
-
-
-def test_rose_card_refuses_positions():
-    from data.rings import validate_preset
-
-    with pytest.raises(ValueError):
-        validate_preset({"name": "Bad", "rose": True, "positions": [12]})
-
-
-def test_rose_skin_is_procedural_with_the_ray_legend(app):
-    settings = dataclasses.replace(Settings(), ring="Rose")
-    skin = build_skin(settings)
-    assert skin.ring.rose is True
-    assert skin.ring.asset is None            # the plain hour scale
-    assert skin.ring.letters == {} and skin.ring.letter_art == {}
-    assert skin.ring.motto == ()
-    assert len(skin.ring.letter_legend) == 24
-
-
-def test_rose_rays_paint_the_band_in_the_sealed_palette(app):
-    """Offscreen pin: with the Rose ring active the band carries every
-    one of the eight palette hues (the 24 computed rays), and hovering
-    the 13h ray answers its computed legend."""
-    day, tick = _dt(datetime(2026, 7, 16, 12, 0))
-    settings = dataclasses.replace(Settings(), ring="Rose")
-    skin = build_skin(settings)
-    comp = Compositor(skin, AssetCache())
-    image = comp.render_offscreen(720.0, 1.0, day, tick)
-    found = set()
-    for x in range(image.width()):
-        for y in range(image.height()):
-            color = image.pixelColor(x, y)
-            if color.alpha() > 200:
-                found.add(color.name().upper())
-    for hue in defaults.ROSE_PALETTE:
-        assert hue in found, f"ray hue {hue} not painted"
-    # The per-ray hover legend answers in the letter band.
-    from render.layers import dial_point
-
-    radius = 360.0
-    band = radius * (
-        defaults.TICK_HOVER_OUTER_FRACTION
-        + defaults.GREETINGS_LETTER_OUTER_FRACTION
-    ) / 2.0
-    pos = dial_point((13 * 15.0 + 180.0) % 360.0, band)
-    tooltip = comp.tooltip_at(radius + pos.x(), radius + pos.y(), 2 * radius)
-    assert tooltip is not None and "Loyalty" in tooltip

@@ -36,6 +36,10 @@ composed onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   the archetype figures' display names, separate from the weekday
   bodies' own Names option; `render.layers.ArchetypeLayer` reads it
   directly. And "Cube look (Court / Genesis / Council)"
+  **Daylight (Calendar / Rose)** (`daylight`, owner 2026-07-27,
+  CUBE.md §The Rose) — off, those two wheels stand in flat full
+  colour instead of the day/night law; inert elsewhere, so like the
+  two beside it the checkbox is always enabled.
   (`cube_look`, owner seal 2026-07-26, CUBE.md §Display laws —
   WORKPLAN Session 20): the Diamond/Cube display toggle for the
   Double-Trinity family wheels; inert on every other wheel, so it

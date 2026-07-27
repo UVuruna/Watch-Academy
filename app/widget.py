@@ -319,10 +319,13 @@ class ClockWidget(QWidget):
         # hidden-mode code buffer. This is the FOCUSED fallback; the
         # unfocused case (owner law 2026-07-18) comes through the native
         # hook, which consumes SPACE so this path never double-fires.
-        # BARE Space only (R5b FINAL MAP round): Ctrl+Space is now
-        # `location_greenwich` in `defaults.SHORTCUTS` — without this
-        # guard a held Ctrl would still match `Key_Space` here FIRST and
-        # the shortcut table below would never be reached.
+        # BARE Space only. The guard used to exist because Ctrl+Space
+        # was `location_greenwich`; since 2026-07-27 it exists for the
+        # ARTICLE-DEPTH LAW (CUBE.md §Display laws) — Space and its
+        # modifiers belong wholly to the article jump (SPACE primary,
+        # Shift+SPACE secondary, Ctrl+SPACE tertiary), and Greenwich
+        # moved to Ctrl+G. Either way a held modifier must fall through
+        # to the shortcut table instead of firing the bare jump.
         if (
             event.key() == Qt.Key.Key_Space
             and event.modifiers() == Qt.KeyboardModifier.NoModifier
