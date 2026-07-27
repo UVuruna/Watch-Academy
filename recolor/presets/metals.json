@@ -1,0 +1,171 @@
+{
+  "_comment": "THE METAL TRANSFORMER PRESETS. A metal is a TONAL RAMP with varying chroma, never a flat color: dark and slightly desaturated in shadow, most chromatic in the body, rolling off to near-white at the specular. Every entry serves both roles - as a SOURCE its body color (the ramp sampled at tuning.body_position) centers the mask and is divided out by the de-tint, as a TARGET its ramp and curve shape the result. Adding a metal costs ONE entry and zero code.",
+
+  "tuning": {
+    "hue_half_width_deg": 34.0,
+    "hue_soft_deg": 26.0,
+    "saturation_ramp": [0.020, 0.050],
+    "body_position": 0.55,
+
+    "detint_strength": 1.0,
+
+    "detail_radius_fraction": 0.010,
+    "detail_radius_min": 2,
+    "detail_epsilon": 0.0025,
+    "detail_headroom": 0.10,
+
+    "anchor_percentiles": [1.0, 99.0],
+    "anchor_scale_range": [0.85, 2.20],
+
+    "chroma_detail_gain": 0.35
+  },
+
+  "metals": {
+    "gold": {
+      "stops": [
+        [0.00, "#1A1005"],
+        [0.25, "#6B4711"],
+        [0.55, "#C9922A"],
+        [0.82, "#F0D060"],
+        [1.00, "#FFFBE8"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.30,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.50 }
+    },
+    "silver": {
+      "stops": [
+        [0.00, "#0D1015"],
+        [0.25, "#3C434E"],
+        [0.55, "#9AA2AD"],
+        [0.82, "#DFE4EA"],
+        [1.00, "#FFFFFF"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.45,
+      "detail_gain": 1.15,
+      "specular": { "start": 0.82, "strength": 0.70 }
+    },
+    "bronze": {
+      "stops": [
+        [0.00, "#170D08"],
+        [0.25, "#593720"],
+        [0.55, "#A9702F"],
+        [0.82, "#E0A869"],
+        [1.00, "#FDEACB"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.35,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.88, "strength": 0.45 }
+    },
+    "copper": {
+      "stops": [
+        [0.00, "#1A0A06"],
+        [0.25, "#5E2A18"],
+        [0.55, "#B4633A"],
+        [0.82, "#EAA37A"],
+        [1.00, "#FFE3D0"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.35,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.87, "strength": 0.48 }
+    },
+    "brass": {
+      "stops": [
+        [0.00, "#17120A"],
+        [0.25, "#5C4A1E"],
+        [0.55, "#B79A3E"],
+        [0.82, "#E6D07A"],
+        [1.00, "#FFF6D8"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.50 }
+    },
+    "rose_gold": {
+      "stops": [
+        [0.00, "#1C0F0C"],
+        [0.25, "#6B3B33"],
+        [0.55, "#C98878"],
+        [0.82, "#F0BCAA"],
+        [1.00, "#FFEDE4"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.52 }
+    },
+    "steel": {
+      "stops": [
+        [0.00, "#0C0F12"],
+        [0.25, "#363E47"],
+        [0.55, "#8E99A5"],
+        [0.82, "#D2DAE2"],
+        [1.00, "#FBFDFF"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.48,
+      "detail_gain": 1.15,
+      "specular": { "start": 0.80, "strength": 0.72 }
+    },
+    "gunmetal": {
+      "stops": [
+        [0.00, "#08090B"],
+        [0.25, "#262A30"],
+        [0.55, "#5E6670"],
+        [0.82, "#A2ABB5"],
+        [1.00, "#E4E9EE"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.50,
+      "detail_gain": 1.20,
+      "specular": { "start": 0.82, "strength": 0.60 }
+    },
+    "platinum": {
+      "stops": [
+        [0.00, "#101215"],
+        [0.25, "#454B52"],
+        [0.55, "#A8ADB3"],
+        [0.82, "#E4E7EA"],
+        [1.00, "#FFFFFF"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.42,
+      "detail_gain": 1.10,
+      "specular": { "start": 0.83, "strength": 0.68 }
+    },
+    "pewter": {
+      "stops": [
+        [0.00, "#101113"],
+        [0.25, "#3E4145"],
+        [0.55, "#8C8F93"],
+        [0.82, "#CFD2D5"],
+        [1.00, "#F7F8F9"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.40,
+      "detail_gain": 1.10,
+      "specular": { "start": 0.85, "strength": 0.55 }
+    },
+    "iron": {
+      "stops": [
+        [0.00, "#060708"],
+        [0.25, "#1E2124"],
+        [0.55, "#4A4F55"],
+        [0.82, "#868D95"],
+        [1.00, "#C9D0D8"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.52,
+      "detail_gain": 1.20,
+      "specular": { "start": 0.84, "strength": 0.50 }
+    }
+  },
+
+  "_overrides_comment": "BACKUP ONLY (owner 2026-07-27). The goal is that the tuning block above serves EVERY image with no per-file work. An entry here is an admission that the shared formula failed for that file - keyed by the source file stem, holding any subset of the tuning fields.",
+  "overrides": {}
+}

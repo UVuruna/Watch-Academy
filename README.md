@@ -57,6 +57,8 @@ in [Roadmap](ROADMAP.md).
 - [Config (folder)](config/___config.md)
 - [Core (folder)](core/___core.md)
 - [Data (folder)](data/___data.md)
+- [Recolor (folder)](recolor/___recolor.md) — the metal transformer: one
+  drawn master becomes any metal, live, from rules
 - [Skins (folder)](skins/___skins.md)
 - [Render (folder)](render/___render.md)
 - [App (folder)](app/___app.md)

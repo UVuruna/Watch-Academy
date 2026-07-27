@@ -36,10 +36,16 @@ def _wall_clock_calls(source: Path) -> list[str]:
     return hits
 
 
+# `recolor` joins the pure layers for a second reason on top of
+# testability: it is the seed of the Colorize SVG port, so anything Qt
+# in it would have to be unwritten there (see recolor/___recolor.md).
+PURE_PACKAGES = ("core", "data", "recolor")
+
+
 def test_core_and_data_do_not_touch_qt():
     offenders = [
         str(source.relative_to(PROJECT_ROOT))
-        for package in ("core", "data")
+        for package in PURE_PACKAGES
         for source in _sources(package)
         if "PySide6" in source.read_text(encoding="utf-8")
     ]
@@ -49,7 +55,7 @@ def test_core_and_data_do_not_touch_qt():
 def test_core_and_data_do_not_read_the_wall_clock():
     offenders = [
         f"{source.relative_to(PROJECT_ROOT)} ({hit})"
-        for package in ("core", "data")
+        for package in PURE_PACKAGES
         for source in _sources(package)
         if source.name != "__main__.py"
         for hit in _wall_clock_calls(source)
