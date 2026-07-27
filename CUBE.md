@@ -653,6 +653,35 @@ lacking the experiment).
    the plough in hand", "the student at the lamp", "owning nothing but
    the road"). `tests/test_cube_encyclopedia.py` pins the exact
    phrases so they cannot return.)
+5. **EVERY DISTINCT THING GETS ITS OWN PICTURE (owner decree
+   2026-07-27, said "toliko puta" before it was finally written
+   down — and the reason it is written down is that repeating a law
+   out loud has never once made the corpus complete).** If a text
+   describes a DIFFERENT phenomenon — a different figure, a different
+   seat, a different reading — it MUST have its own image. Not a
+   shared one, not "the arm's plate will do", not "the three sets are
+   the same character seen three ways". **They are not.** Three sets
+   on one seat are three DIFFERENT PEOPLE holding one office, and the
+   article's whole job is to argue *which deeds of THIS person* put
+   him in THIS group. Different person, different argument, different
+   picture.
+   - The counter-force is root Rule #19, and it cuts the other way
+     only for DERIVABLE variants: a recolor, a rotation, a metal, a
+     phase, a mirrored pose. Those are computed and never drawn twice.
+     A new person is not a variant of another person.
+   - Practical consequence: a roster table with figures in three sets
+     is a queue of `seats × sets` images, and a sheet that writes the
+     texts without queueing the pictures is INCOMPLETE, not "staged".
+6. **THE COPYRIGHT ROUTE (owner 2026-07-27).** Modern figures — film,
+   comics, novels still in copyright — get REFUSED by the generators
+   when named. Three routes exist and the sheet must say which each
+   entry takes (the Star Wars wave proved all three):
+   `_v1` named (public-domain, historical, biblical, mythological
+   figures only); `_v2` descriptive (the figure painted in words, no
+   name, no franchise term); `_v3` reference (the prompt describes the
+   whole badge and the likeness arrives as an ATTACHED image — the
+   PromptPainter `←` line). A protected name inside a fenced prompt is
+   a defect, not a style choice.
 
 <a id="display-laws"></a>
 
