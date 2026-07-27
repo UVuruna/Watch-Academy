@@ -4,10 +4,11 @@
 
 ## Purpose
 Loads the ring preset "cards" (owner spec): bundled ones from
-`Database/ring_presets.json` — DOMY (flame), Morph (chalice), The One
-(seal: every hour number on its own position, Ω at the bottom), Templar
-(seal: the templar-cross glyph on all six), Dollar (seal: the
-banknote's 👁/S/M/Ω/N/A, ROADMAP 15b, see below) — plus the user's
+`Database/ring_presets.json` — DOMY (flame, the dark cross), PILOT
+(chalice, the light cross — born MORPH), The One (seal: every hour
+number on its own position, Ω at the bottom), Templar (seal: the
+templar-cross glyph on all six), Dollar (seal: the banknote's
+👁/S/M/Ω/N/A, ROADMAP 15b, see below) — plus the user's
 CUSTOM rings from the settings, each `{name, positions, letters}`. The
 positions signature resolves the LAYOUT (`RING_LAYOUTS`: flame /
 chalice / seal — the ring face with matching gaps and the metal
@@ -28,16 +29,18 @@ POINTER; see [The Cube Canon](../CUBE.md) §The Rose of the
 Twenty-Four.
 
 **RENAMES (TASK 2, MASON/ICONS round, owner verdicts 2026-07-19, third
-batch; DOLLAR/EYE round, owner decree 2026-07-27):** the bundled cards
-were "MORPH", "NUMBERS" and "MASON G" — first renamed to "Morph",
-"Omega" and "Mason", then (DOLLAR/EYE round) "Mason" → **"Dollar"**
-and "Omega" → **"The One"**, both back onto the banknote itself (the
-note and its denomination — CANON.md §The Banknote: "the denomination
-is THE ONE"; DOMY stays DOMY). `app.settings_store` migrates an older
-settings file's stored name from EITHER generation onto the current
-one ("MORPH" -> "Morph" is a pure case change the store's existing
-case-insensitive fold already bridges for free, no dedicated migration
-entry needed). New bundled preset **Templar**: the seal layout, all
+batch; DOLLAR/EYE round, owner decree 2026-07-27; CROSS-WORDS round,
+owner UV inbox + PILOT pick 2026-07-27):** the bundled cards were
+"MORPH", "NUMBERS" and "MASON G" — first renamed to "Morph", "Omega"
+and "Mason"; then (DOLLAR/EYE round) "Mason" → **"Dollar"** and
+"Omega" → **"The One"**, both back onto the banknote itself (the note
+and its denomination — CANON.md §The Banknote: "the denomination is
+THE ONE"); then (CROSS-WORDS round) "Morph" → **"PILOT"** with NEW
+letters **L/Π/Ω/Θ** — Π-I-L-Ω-Θ spells the guide who carries the
+traveler home, and each letter initials its own light station (DOMY
+stays DOMY). `app.settings_store` migrates an older settings file's
+stored name from ANY generation onto the current one via
+`_LEGACY_RING_NAMES`. New bundled preset **Templar**: the seal layout, all
 six positions wearing the templar-cross glyph (`✠`,
 `constants.RING_LETTER_FILES`), no motto, no legend — its own
 `triangle` override (see below) is the SAME `[12, 20, 4]`
@@ -93,20 +96,25 @@ Extra OPTIONAL card fields, wired through `validate_preset` and
   LEGEND text (what that letter stands for), quoted verbatim from
   CANON's Banknote table. Flows into `SkinDefinition.ring.
   letter_legend` (hour -> entry) and answers in
-  [Compositor](../render/compositor.md)'s ring-band hover — every
-  bundled preset without a `legend` (DOMY, Morph, The One, Templar)
-  and every custom ring stays silent there, unchanged. **TASK 2 (owner
-  "može" 2026-07-19):** each `reading` may carry a SECOND
-  `\n\n`-separated paragraph — the AXIS-OPPOSITION line, "Across the
-  wheel: {letter} — {phrase}." The Dollar hexagram's six seats form
-  THREE diameters (opposite = +12h/180°): **N(4h)↔S(16h)** the
-  Nazarene against Satan (the Advocate against the Accuser, 1 John
-  2:1 / Revelation 12:10), **A(8h)↔M(20h)** the Angel against the
-  Master (Hebrews 1:14's ministering spirit against Pride's
-  boss-syndrome), **👁(12h)↔Ω(24h)** the Eye against the Omega — the
-  Judge who watches from noon facing the Creator who begins at
-  midnight (DOLLAR/EYE round; Revelation 1:8, Genesis 1:1). Both
-  seats of one axis quote the SAME clause, each naming the OTHER
+  [Compositor](../render/compositor.md)'s ring-band hover — THREE
+  bundled presets carry one now (CROSS-WORDS round, owner UV inbox
+  2026-07-27): the **Dollar** (dual symbolism per letter — the
+  Double-Trinity OFFICE and the Cube term: Malignant Accuser /
+  Megalomania, Anointed Aegis / Abnegation, Satanic Scourge / Storm,
+  Omnific Originator / Obligation, Nazarene Advocate / Numbness, the
+  Eye as Judge — replacing the retired Sigma/Alpha/Master readings),
+  **DOMY** (the dark-cross stations with initial-matched symbolism:
+  Y Ysteria/Fear, Ω Orgē/Anger, D Detestatio/Hate, M Miseria/
+  Suffering) and **PILOT** (the light-cross stations: Θ Tharsos/Hope,
+  L Latria/Faith, Π Pothos/Love, Ω Ōpheleia/Salvation); The One,
+  Templar and every custom ring stay silent there, unchanged. **TASK
+  2 (owner "može" 2026-07-19):** each `reading` may carry a SECOND
+  `\n\n`-separated paragraph — the AXIS-OPPOSITION line. The Dollar's
+  three diameters read office against office: **N(4h)↔S(16h)** the
+  Advocate against the Scourge, **A(8h)↔M(20h)** the Aegis against
+  the Accuser, **👁(12h)↔Ω(24h)** the Judge against the Creator; the
+  cross rings read their spine (12h↔24h) and crossbar instead. Both
+  seats of one pair quote the SAME clause, each naming the OTHER
   letter as the pointer — see [The DOMY Canon](../CANON.md)'s §The
   Banknote for the sealed wording.
 
@@ -141,7 +149,22 @@ Extra OPTIONAL card fields, wired through `validate_preset` and
   `app.controller.build_skin` then pairs every NON-space character with
   its gold-master asset path into `SkinDefinition.ring.motto`, which
   `RingLayer._draw_motto` draws outside the ring band (see
-  [Layers](../render/layers.md)). Only the Dollar carries one today:
+  [Layers](../render/layers.md)).
+
+  **THE CROSS-WORDS FORM (owner UV inbox 2026-07-27):** an entry may
+  instead carry `{text, center, clockwise}` — ONE station word
+  CENTERED on one of the preset's own seats (`center`), letters at
+  the mottos' fixed step ([Motto](../core/motto.md)'s
+  `centered_word_angles`), `clockwise` picking the reading direction
+  by the seat's half (top = true, bottom = false — both read
+  left-to-right to a viewer). `center` and `pins` are mutually
+  exclusive; a spaced text under `center` fails loudly. DOMY wears
+  its dark-cross stations this way (SUFFERING↑12h cw, FEAR@20h ccw,
+  ANGER@24h ccw, HATE@4h ccw) and PILOT its light-cross stations
+  (HOPE@8h cw, FAITH@12h cw, LOVE@16h cw, SALVATION@24h ccw) — the
+  chiasm of the Two Crosses drawn as typography (CANON.md §The
+  Banknote, The Cross Rings). The Dollar keeps the pinned Great Seal
+  form:
 
   | Motto | Pins (letter, occurrence, seat) | Direction | Own arc |
   |---|---|---|---|
@@ -166,8 +189,9 @@ Extra OPTIONAL card fields, wired through `validate_preset` and
 ### Uses
 - [Config (folder)](../config/___config.md) — `RING_LAYOUTS`,
   `RING_LETTER_FILES`, database path
-- [Motto](../core/motto.md) — `motto_glyph_angles`, the per-glyph angle
-  solve for the optional `motto` card field
+- [Motto](../core/motto.md) — `motto_glyph_angles` and
+  `centered_word_angles`, the per-glyph angle solves for the optional
+  `motto` card field's pinned and centered entry forms
 - Shared JSON loading ([Data (folder)](___data.md))
 
 ### Used by

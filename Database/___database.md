@@ -97,12 +97,15 @@ by `tests/test_cube_encyclopedia.py`. Read by the
 `encyclopedia/<section>/<key>/...` overlay keys.
 
 ### `ring_presets.json`
-The bundled ring styling cards — DOMY, Morph, The One, Templar and
+The bundled ring styling cards — DOMY, PILOT, The One, Templar and
 Dollar (renamed from MORPH/NUMBERS/MASON G in the MASON/ICONS round,
-then Mason → Dollar and Omega → The One in the DOLLAR/EYE round,
-owner decree 2026-07-27) — loaded by [Ring Presets](../data/rings.md)
-together with the user's custom cards. The Dollar's apex seats the
-Eye of Providence (adaptive glyph, art source + Shine toggle).
+then Mason → Dollar and Omega → The One in the DOLLAR/EYE round, then
+Morph → PILOT in the CROSS-WORDS round, owner decrees 2026-07-27) —
+loaded by [Ring Presets](../data/rings.md) together with the user's
+custom cards. The Dollar's apex seats the Eye of Providence (adaptive
+glyph, art source + Shine toggle) and its legend reads each letter as
+office + Cube term; DOMY and PILOT carry the Two Crosses' station
+words and legends (CANON.md §The Banknote).
 
 ### `translations/`
 BUNDLED ORIGINAL translations (owner decision 2026-07-11): English is

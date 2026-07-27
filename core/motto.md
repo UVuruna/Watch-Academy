@@ -29,6 +29,15 @@ advances at the fixed `config.defaults.RING_MOTTO_LETTER_STEP_DEG` step
 and the leftover angular slack lands as ONE BIG WORD GAP at the motto's
 own single interior space — see Design Decisions below.
 
+CROSS-WORDS round (owner UV inbox 2026-07-27): a SECOND entry shape —
+`centered_word_angles(text, position, clockwise)` — solves a single
+station word CENTERED on a ring seat at the same fixed letter step:
+the DOMY dark-cross words (FEAR ANGER HATE SUFFERING) and the PILOT
+light-cross words (HOPE FAITH LOVE SALVATION), one word per station
+seat, `clockwise` by the seat's dial half (top true / bottom false)
+so every word reads left-to-right to a viewer. No pins, no spaces —
+a spaced text under this form fails loudly (Rule #7).
+
 ## Connections
 
 ### Uses
@@ -51,6 +60,11 @@ own single interior space — see Design Decisions below.
 
 ## Functions
 
+- `centered_word_angles(text, position, clockwise=True)`: one angle
+  per character of a single word, the word's midpoint landing exactly
+  on `position`'s seat angle, letters at the fixed
+  `RING_MOTTO_LETTER_STEP_DEG` step (CROSS-WORDS round — the
+  DOMY/PILOT station words)
 - `motto_glyph_angles(text, pins, clockwise=True)`: one angle per
   character of `text` (spaces included, so word gaps get their own
   slot); `pins` is `(letter, occurrence, ring_position)` triples —

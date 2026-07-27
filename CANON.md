@@ -1098,6 +1098,68 @@ _gpt.png`).
   10:10), the respect of persons (James 2:9): the eye that sees only
   its own tribe — Tribalism as an act of seeing.
 
+**THE FIVEFOLD OFFICES AND THE MASON CHARACTER CODE (owner decree
+2026-07-27, UV inbox — SUPERSEDES the Sigma/Alpha/Master letter
+readings, which are retired from the ring's legend).** The Dollar's
+five letters read on TWO levels at once, and both spell the old folk
+word — *MASON, the builder: the fivefold code by which character is
+built and judged.* Level one is the Double Trinity's own offices;
+level two is the Cube. Per letter (the ring's hover legend quotes
+these):
+
+| Letter | Seat | Office (Double Trinity) | Character code (the Cube) |
+|---|---|---|---|
+| **👁** | 12h yellow | **God as JUDGE** — the Eye of Providence, the office that watches and weighs (2 Chronicles 16:9) | the judgment hinge's high seat: judgment by BOND — Loyalty, fallen Tribalism |
+| **M** | 20h red | **Malignant Accuser** — the Devil as Prosecutor: *"the accuser of our brethren"* (Revelation 12:10); *diabolos* means the slanderer | **Megalomania** — Dignity enthroned as divinity; Lucifer's fall (Isaiah 14:13) |
+| **A** | 08h green | **Anointed Aegis** — Jesus as Guardian, the shield that takes the blow; the Preserver's arm (Hebrews 1:14) | **Abnegation** — Humility turned against the self; Judas's green fall |
+| **S** | 16h orange | **Satanic Scourge** — the Devil as Destroyer: destructive evil against the Accuser's judicial evil | **Storm** — Vigor that has lost direction, the fall of Frenzy |
+| **Ω** | 24h purple-gray | **Omnific Originator** — God as Creator, the all-creating: *Ho On*, "the One Who Is" (Revelation 1:8) | **Obligation** — the judgment hinge entire: to whom or to what am I bound? Loyalty ↔ Integrity, fallen Tribalism ↔ Legalism |
+| **N** | 04h blue | **Nazarene Advocate** — Jesus as Advocate: *"we have an advocate with the Father"* (1 John 2:1) | **Numbness** — Composure emptied of life, the fall of Lethargy; the sleeping watch (Matthew 26:40) |
+
+The compressed formula (sealed with the decree): *the Accuser
+condemns, the Aegis protects, the Scourge destroys, the Originator
+creates, the Advocate defends — and the Judge watches.* The three
+diameters now read office against office: **N ↔ S** the Advocate
+against the Scourge (the Double Trinity's own Advocate ↔ Destroyer
+diagonal; Numbness against Storm), **A ↔ M** the Aegis against the
+Accuser (Prosecutor ↔ Preserver; Abnegation against Megalomania),
+**👁 ↔ Ω** the Judge against the Creator (the weighing above facing
+the making below; the two ends of Obligation).
+
+**THE CROSS RINGS — DOMY AND PILOT (owner decree 2026-07-27, UV
+inbox; PILOT pick confirmed by the owner over PLOT).** The two
+four-letter rings are the TWO CROSSES worn as jewelry (CUBE.md §The
+Two Crosses):
+
+- **DOMY** is the dark cross: its four seats host the four dark
+  stations, and each letter INITIALS its own station — **Y**(20h)
+  *Ysteria* (ὑστέρα — the panic that seizes) for **Fear**, **Ω**(24h)
+  *Orgē* (ὀργή — wrath) for **Anger**, **D**(04h) *Detestatio* (the
+  Latin curse of loathing) for **Hate**, **M**(12h) *Miseria*
+  (wretchedness) for **Suffering**. A second cipher layer beside the
+  sealed DOLOR–ODIUM–METUS–ΥΒΡΙΣ assembly: the same four letters,
+  read seat by seat.
+- **PILOT** (born MORPH) is the light cross: new letters **Θ L Π Ω**,
+  each initialing its light station — **Θ**(08h) *Tharsos* (θάρσος —
+  courage, the good heart) for **Hope**, **L**(12h) *Latria*
+  (λατρεία — the whole service of worship) and *Loyalty* for
+  **Faith**, **Π**(16h) *Pothos* (πόθος — the longing that moves) for
+  **Love**, **Ω**(24h) *Ōpheleia* (ὠφέλεια — the help that delivers)
+  for **Salvation**. Rearranged with one added I the letters spell
+  **PILOT** — Π-I-L-Ω-Θ, the guide who carries the traveler through
+  danger to the destination: the four light phases are the forces
+  that pilot a life. (The letter L breaks MORPH's alphabetical-hour
+  cipher — Λ is the 11th letter, not the 12th — a deliberate trade:
+  the station initials outrank the old cipher on this card; Θ, Π and
+  Ω still sit on their alphabet hours.)
+- **The station words ring the dial** exactly like the Dollar's Great
+  Seal mottos: one word per station seat, centered on it, outside the
+  ring band — FEAR/ANGER/HATE arc under the bottom half and SUFFERING
+  stands exposed over the crown (the dark path ends before the Judge
+  at noon); HOPE/FAITH/LOVE ride the top half and SALVATION arcs
+  through the bottom (the light path ends in the Creator's hands at
+  midnight) — the Two Crosses' chiasm drawn as typography.
+
 **THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
 dollar's Great Seal reference image — the first round's layout was
 "katastrofa"):** while the Dollar ring preset is active, ANNUIT

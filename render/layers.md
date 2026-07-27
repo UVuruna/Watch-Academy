@@ -578,8 +578,12 @@ untouched by this slider even though they share `ring_tint`.
 dollar's Great Seal reference image — the first round's layout was
 "katastrofa", both mottos sweeping the same overlapping top-heavy
 arc):** while the active preset carries a `motto`
-(`data.rings.validate_preset`, the Dollar today), `_draw_motto` draws
-the two Great Seal mottos as curved text just OUTSIDE the ring band,
+(`data.rings.validate_preset` — the Dollar's two pinned Great Seal
+mottos, and since the CROSS-WORDS round, owner UV inbox 2026-07-27,
+DOMY's and PILOT's four centered cross-station words; the ring
+letters themselves may also draw ZOOMED per hour via
+`ring.letter_zoom`, the Eye's shine-enlarge factor), `_draw_motto`
+draws the arc text as curved letters just OUTSIDE the ring band,
 EXACTLY like the real seal: ANNUIT COEPTIS arcs over the TOP (its own A
 pinned at 8h, S at 16h, reading CLOCKWISE the short way through noon —
 no motto letter pins noon anymore, the arc simply passes over the

@@ -43,11 +43,10 @@ Frozen dataclass: `schema_version`, `window_x`/`window_y` (`None` = first
 run), `diameter`, plus the additive keys (still schema 1 — absent in
 older files they take their defaults): `click_through` (False), `ring`
 ("DOMY" — the ring preset name, case-insensitive fold on load; TASK 2,
-MASON/ICONS round + DOLLAR/EYE round, owner decree 2026-07-27: an
-older file's "MASON G"/"Mason"/"NUMBERS"/"Omega" migrates onto the
-current "Dollar"/"The One" via `_fold_ring_name`, "MORPH" → "Morph"
-needing no dedicated entry — a pure case change the existing fold
-bridges for free), `ring_tint`
+MASON/ICONS round + DOLLAR/EYE round + CROSS-WORDS round, owner
+decrees 2026-07-27: an older file's "MASON G"/"Mason"/"NUMBERS"/
+"Omega"/"MORPH"/"Morph" migrates onto the current "Dollar"/"The One"/
+"PILOT" via `_fold_ring_name`), `ring_tint`
 (None or #RRGGBB — the whole-body
 recolor), `ring_finish` ("gold" | "silver" | "bronze" letter art),
 `ring_two_metals` (dict, TASK 3, MASON/ICONS round: per-preset choice
