@@ -43,18 +43,24 @@ Frozen dataclass: `schema_version`, `window_x`/`window_y` (`None` = first
 run), `diameter`, plus the additive keys (still schema 1 — absent in
 older files they take their defaults): `click_through` (False), `ring`
 ("DOMY" — the ring preset name, case-insensitive fold on load; TASK 2,
-MASON/ICONS round, owner verdicts 2026-07-19, third batch: an older
-file's "MASON G"/"NUMBERS" migrates onto the renamed "Mason"/"Omega"
-via `_fold_ring_name`, "MORPH" → "Morph" needing no dedicated entry —
-a pure case change the existing fold bridges for free), `ring_tint`
+MASON/ICONS round + DOLLAR/EYE round, owner decree 2026-07-27: an
+older file's "MASON G"/"Mason"/"NUMBERS"/"Omega" migrates onto the
+current "Dollar"/"The One" via `_fold_ring_name`, "MORPH" → "Morph"
+needing no dedicated entry — a pure case change the existing fold
+bridges for free), `ring_tint`
 (None or #RRGGBB — the whole-body
 recolor), `ring_finish` ("gold" | "silver" | "bronze" letter art),
 `ring_two_metals` (dict, TASK 3, MASON/ICONS round: per-preset choice
 between the 3-3 two-metal split and one finish on all six, for every
-preset carrying its own `triangle` override — Mason/Omega/Templar
+preset carrying its own `triangle` override — Dollar/The One/Templar
 today; `_fold_ring_name` resolves/migrates its keys too, dropping a
 non-bool value or a name that resolves to nothing loaded, the SAME
-lenient policy `theme_metals` uses), and
+lenient policy `theme_metals` uses), `ring_eye_shine` (dict,
+DOLLAR/EYE round: per-preset choice between the Eye of Providence
+with and without the glory of rays, for every preset seating the
+adaptive eye glyph — the Dollar today, default ON via
+`constants.RING_EYE_SHINE_DEFAULT`; same shape, fold and lenient
+policy as `ring_two_metals`), and
 the display choices, each validated against its closed
 set, `language` ("en" = the shipped originals; any
 `TRANSLATION_LANGUAGES` code triggers the translate-once cache), the
@@ -69,7 +75,10 @@ paint/light/CUBE, the third being the Cube canon's wheel on
 trio/hexa/octa only, owner seal 2026-07-26 CUBE.md; the stored value
 survives pointer switches and `app.controller.apply_display_settings`
 normalizes it per pointer at render time — on the Calendar
-pointer paint = Zodiac wheel, light = Almanac wheel), `cube_look`
+pointer paint = Zodiac wheel, light = Almanac wheel), `daylight`
+(owner 2026-07-27 — the Calendar's and the Rose's own day/night
+switch; ignored, never rewritten, on the other five pointers, so
+the choice survives a pointer switch), `cube_look`
 (False — the Diamond/Cube display toggle, CUBE.md §Display laws: the
 Double-Trinity family wheels render as the corner-view cube when on; a
 Settings ▸ Display ▸ Archetype checkbox),

@@ -4,11 +4,10 @@
 
 ## Purpose
 Loads the ring preset "cards" (owner spec): bundled ones from
-`Database/ring_presets.json` — DOMY (flame), Morph (chalice), Omega
+`Database/ring_presets.json` — DOMY (flame), Morph (chalice), The One
 (seal: every hour number on its own position, Ω at the bottom), Templar
-(seal: the templar-cross glyph on all six), Mason (seal: the
-banknote's G/S/M/Ω/N/A, ROADMAP 15b, see below) and the Rose (the
-COMPUTED 24-ray preset, Session 20, see below) — plus the user's
+(seal: the templar-cross glyph on all six), Dollar (seal: the
+banknote's 👁/S/M/Ω/N/A, ROADMAP 15b, see below) — plus the user's
 CUSTOM rings from the settings, each `{name, positions, letters}`. The
 positions signature resolves the LAYOUT (`RING_LAYOUTS`: flame /
 chalice / seal — the ring face with matching gaps and the metal
@@ -16,74 +15,97 @@ triangle). Validation is loud: an unknown position set, an unknown
 glyph, a count mismatch or a duplicate name raises with the offending
 entry named.
 
-**The Rose (owner seal 2026-07-26, [The Cube Canon](../CUBE.md) §The
-Rose; WORKPLAN Session 20):** the card is `{"name": "Rose", "rose":
-true}` and NOTHING else — a rose card with positions or letters raises
-(the rays are computed, Rule #19). `validate_preset` short-circuits it
-to `{layout: "rose", rose: True, positions: (), letters: (), legend:
-<computed>, motto: ()}`. The 24-entry hover legend is COMPUTED in
-`_rose_legend()` from one rule: each hour's ray names its
-Character-wheel direction (the color group runs `{arm, arm+1, arm+2}`,
-read from `config.archetypes`' own `compass_character` figure table —
-one source) and the figure SET its star carries (`_ROSE_SETS`:
-Historical on the −1h star, Modern on the 0h star, Archetypal on the
-+1h star — the topmost, fully visible one, its rays ON 1h and 13h).
-`app.controller.build_skin` maps the card onto the PROCEDURAL ring
-(`RingSpec.rose = True`, no face asset, no letters) and
-`render.layers.RingLayer._draw_rose` draws the three offset octa
-stars; the full articles behind each ray are Session 21's writers'
-work.
+**THE ROSE IS NOT A RING (owner correction 2026-07-27).** Session 20
+shipped a `{"name": "Rose", "rose": true}` card here that painted 24
+computed rays into the ring band. It should never have existed: the
+owner had specified a POINTER, and [The Cube Canon](../CUBE.md) had
+mis-transcribed that as a ring preset and stamped it SEALED, so the
+implementing session built the wrong thing faithfully. The card, the
+`rose` branch in `validate_preset`, the `RingSpec.rose` flag, the
+computed per-ray legend and `RingLayer._draw_rose` are all DELETED —
+no compatibility shim (Rule #6). The Rose lives as the seventh
+POINTER; see [The Cube Canon](../CUBE.md) §The Rose of the
+Twenty-Four.
 
 **RENAMES (TASK 2, MASON/ICONS round, owner verdicts 2026-07-19, third
-batch):** the bundled cards were "MORPH", "NUMBERS" and "MASON G" —
-renamed to "Morph", "Omega" and "Mason" to match the rest (DOMY stays
-DOMY). `app.settings_store` migrates an older settings file's stored
-"MASON G"/"NUMBERS" onto the new names ("MORPH" -> "Morph" is a pure
-case change the store's existing case-insensitive fold already bridges
-for free, no dedicated migration entry needed). New bundled preset
-**Templar**: the seal layout, all six positions wearing the templar-
-cross glyph (`✠`, `constants.RING_LETTER_FILES`), no motto, no legend —
-its own `triangle` override (see below) is the SAME `[12, 20, 4]`
-Trinity/Union split Mason and Omega now both carry too.
+batch; DOLLAR/EYE round, owner decree 2026-07-27):** the bundled cards
+were "MORPH", "NUMBERS" and "MASON G" — first renamed to "Morph",
+"Omega" and "Mason", then (DOLLAR/EYE round) "Mason" → **"Dollar"**
+and "Omega" → **"The One"**, both back onto the banknote itself (the
+note and its denomination — CANON.md §The Banknote: "the denomination
+is THE ONE"; DOMY stays DOMY). `app.settings_store` migrates an older
+settings file's stored name from EITHER generation onto the current
+one ("MORPH" -> "Morph" is a pure case change the store's existing
+case-insensitive fold already bridges for free, no dedicated migration
+entry needed). New bundled preset **Templar**: the seal layout, all
+six positions wearing the templar-cross glyph (`✠`,
+`constants.RING_LETTER_FILES`), no motto, no legend — its own
+`triangle` override (see below) is the SAME `[12, 20, 4]`
+Trinity/Union split Dollar and The One now both carry too.
 
-**Mason (ROADMAP 15b, CANON.md §The Banknote):** the owner's earlier
+**Dollar (ROADMAP 15b, CANON.md §The Banknote):** the owner's earlier
 `InGodWeTrust_UVS_BIG.png` hexagram, upgraded onto the seal layout —
-positions `12 16 20 24 4 8` wear letters `G S M Ω N A`. Extra OPTIONAL
-card fields, wired through `validate_preset` and `app.controller.
-build_skin`:
+positions `12 16 20 24 4 8` wear letters `👁 S M Ω N A`.
+
+**THE EYE AT THE APEX (DOLLAR/EYE round, owner decree 2026-07-27):**
+the 12h seat wears the EYE OF PROVIDENCE instead of the letter G. The
+adaptive glyph `👁` (`constants.RING_EYE_GLYPH`) maps to the canonical
+`Eye.png` stem, which `config.paths.art_file` resolves to the active
+art source's `Eye_gem.png`/`Eye_gpt.png` on disk (the same `_gem`/
+`_gpt` convention every sourced area uses — the four masters live
+beside the letters, a documented exception to the "furniture is
+suffixless" rule, `tests/test_assets_structure.py`). The per-preset
+**Shine** toggle (`Settings.ring_eye_shine`,
+`constants.RING_EYE_SHINE_DEFAULT` — Dollar default ON, the banknote's
+own eye radiates) swaps the whole stem for the glory-of-rays master
+`Eye_shine.png` in `app.controller.build_skin`
+(`_ring_eye_shine`, the same resolution shape as the Two-metals
+toggle); the checkbox sits on the Design ▸ Ring tab beside Two metals
+and only shows when the active card seats the adaptive glyph. The
+CUSTOM builder instead offers the four EXPLICIT variants in its
+Symbols group (owner: "any of the four") — `👁 ChatGPT`,
+`👁 ChatGPT ☀`, `👁 Gemini`, `👁 Gemini ☀` — with source and rays
+baked into the chosen glyph, untouched by either switch. The Eye runs
+the ordinary letter pipeline otherwise: gold master, metal recolor,
+shadow stamp, hover legend.
+
+Extra OPTIONAL card fields, wired through `validate_preset` and
+`app.controller.build_skin`:
 
 - **`triangle`** — a 3-position override of the seal layout's own
   (empty) metal triangle, so a 6-letter preset can split into two
   3-letter metal groups instead of the seal's own plain one-finish-on-
   all-six. CANON reads the hexagram as TWO triangles — the Trinity
-  (12/20/4 = G, M, N — God, the Master, the Nazarene) and the Union
-  (16/24/8 = S, Ω, A — Sigma, Omega, Alpha) — so Mason's card sets
-  `"triangle": [12, 20, 4]`, the same rule `_letter_metal` already
-  applies to DOMY/Morph's 4-letter triangle, now on a 3+3 split. Only
-  valid on the seal layout; raises otherwise. **TASK 3 (MASON/ICONS
-  round):** Omega and Templar now carry the SAME `triangle` field too
-  — but on all three (Mason/Omega/Templar) the override only actually
-  APPLIES when the owner's per-preset "Two metals" toggle
-  (`Settings.ring_two_metals`, `app.controller._ring_two_metals`) is
-  on for that preset; off, the card reads exactly like one with no
-  `triangle` at all (one finish on all six). Default matching the
-  pre-Task-3 look: Mason on, Omega/Templar off
-  (`constants.RING_TWO_METALS_DEFAULT`).
+  (12/20/4 = 👁, M, N — the Eye, the Master, the Nazarene) and the
+  Union (16/24/8 = S, Ω, A — Sigma, Omega, Alpha) — so the Dollar's
+  card sets `"triangle": [12, 20, 4]`, the same rule `_letter_metal`
+  already applies to DOMY/Morph's 4-letter triangle, now on a 3+3
+  split. Only valid on the seal layout; raises otherwise. **TASK 3
+  (MASON/ICONS round):** The One and Templar now carry the SAME
+  `triangle` field too — but on all three (Dollar/The One/Templar) the
+  override only actually APPLIES when the owner's per-preset "Two
+  metals" toggle (`Settings.ring_two_metals`,
+  `app.controller._ring_two_metals`) is on for that preset; off, the
+  card reads exactly like one with no `triangle` at all (one finish on
+  all six). Default matching the pre-Task-3 look: Dollar on, The
+  One/Templar off (`constants.RING_TWO_METALS_DEFAULT`).
 - **`legend`** — position -> `{name, reading}`, the per-letter HOVER
   LEGEND text (what that letter stands for), quoted verbatim from
   CANON's Banknote table. Flows into `SkinDefinition.ring.
   letter_legend` (hour -> entry) and answers in
   [Compositor](../render/compositor.md)'s ring-band hover — every
-  bundled preset without a `legend` (DOMY, Morph, Omega, Templar) and
-  every custom ring stays silent there, unchanged. **TASK 2 (owner
+  bundled preset without a `legend` (DOMY, Morph, The One, Templar)
+  and every custom ring stays silent there, unchanged. **TASK 2 (owner
   "može" 2026-07-19):** each `reading` may carry a SECOND
   `\n\n`-separated paragraph — the AXIS-OPPOSITION line, "Across the
-  wheel: {letter} — {phrase}." The Mason hexagram's six seats form THREE diameters
-  (opposite = +12h/180°): **N(4h)↔S(16h)** the Nazarene against Satan
-  (the Advocate against the Accuser, 1 John 2:1 / Revelation 12:10),
-  **A(8h)↔M(20h)** the Angel against the Master (Hebrews 1:14's
-  ministering spirit against Pride's boss-syndrome), **G(12h)↔Ω(24h)**
-  God against the End (Revelation 1:8's Alpha facing the Omega). Both
+  wheel: {letter} — {phrase}." The Dollar hexagram's six seats form
+  THREE diameters (opposite = +12h/180°): **N(4h)↔S(16h)** the
+  Nazarene against Satan (the Advocate against the Accuser, 1 John
+  2:1 / Revelation 12:10), **A(8h)↔M(20h)** the Angel against the
+  Master (Hebrews 1:14's ministering spirit against Pride's
+  boss-syndrome), **👁(12h)↔Ω(24h)** the Eye against the Omega — the
+  Judge who watches from noon facing the Creator who begins at
+  midnight (DOLLAR/EYE round; Revelation 1:8, Genesis 1:1). Both
   seats of one axis quote the SAME clause, each naming the OTHER
   letter as the pointer — see [The DOMY Canon](../CANON.md)'s §The
   Banknote for the sealed wording.
@@ -119,7 +141,7 @@ build_skin`:
   `app.controller.build_skin` then pairs every NON-space character with
   its gold-master asset path into `SkinDefinition.ring.motto`, which
   `RingLayer._draw_motto` draws outside the ring band (see
-  [Layers](../render/layers.md)). Only Mason carries one today:
+  [Layers](../render/layers.md)). Only the Dollar carries one today:
 
   | Motto | Pins (letter, occurrence, seat) | Direction | Own arc |
   |---|---|---|---|
@@ -150,24 +172,23 @@ build_skin`:
 
 ### Used by
 - [Watch Controller](../app/controller.md) — `build_skin` resolves the
-  active preset (and, TASK 3, its own metal-split choice via
-  `_ring_two_metals`/`constants.RING_TWO_METALS_DEFAULT`); the Design ▸
-  Ring menu lists every loaded name and carries the per-preset "Two
-  metals" toggle
+  active preset (TASK 3: its own metal-split choice via
+  `_ring_two_metals`/`constants.RING_TWO_METALS_DEFAULT`; DOLLAR/EYE
+  round: the Eye's shine via `_ring_eye_shine`/`constants.
+  RING_EYE_SHINE_DEFAULT`); the Design ▸ Ring tab lists every loaded
+  name and carries the per-preset "Two metals" and "Shine" toggles
 - [Settings Store](../app/settings_store.md) — validates the chosen
   ring name against the loaded set (migrating a stored old bundled
-  name, TASK 2) and the per-preset `ring_two_metals` dict (TASK 3)
+  name of either rename generation, TASK 2 + DOLLAR/EYE) and the
+  per-preset `ring_two_metals` (TASK 3) / `ring_eye_shine`
+  (DOLLAR/EYE) dicts
 
 ## Functions
 
 - `ring_presets(custom=())`: name → `{positions, letters, layout}` for
   every bundled + custom preset
 - `validate_preset(entry)`: the shared card validator (also used for
-  the Settings custom-ring builder input); a `rose` card
-  short-circuits to the computed Rose shape
-- `_rose_legend()`: the Rose's 24-entry per-ray hover legend, computed
-  from the Character wheel's figure table and the three-set star law
-  (Rule #19 — one rule, nothing enumerated)
+  the Settings custom-ring builder input)
 - `_validate_motto(name, raw, positions)`: the optional `motto` field's
   own validator — unknown letters, out-of-range pin positions and a
   broken angle solve all raise with the preset named (Rule #1)

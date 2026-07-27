@@ -1021,9 +1021,9 @@ hexagram, God holding the 12–24 axis as Judge and Creator), the
 **Character wheel** (the Cube at depth zero), the **Rose of the
 Twenty-Four** ring preset, the **Two Crosses** (the Paths of Light
 and Darkness with the TRUST/DISTRUST centers and the DOMY/SAFE
-ciphers), the **Banknote-axes seal** (MASON's three letter-
-oppositions are the three axes), the naming decree (the Watch that
-keeps watch — Mark 13:37), the Article Charter and the display/
+ciphers), the **Banknote-axes seal** (the Dollar ring's three
+letter-oppositions are the three axes), the naming decree (the Watch
+that keeps watch — Mark 13:37), the Article Charter and the display/
 legend laws. Read it BEFORE any character, path or naming work,
 alongside this file.
 
@@ -1070,9 +1070,37 @@ seats):
   (E Pluribus Unum → The One, Annuit Coeptis → the Eye, Novus Ordo
   Seclorum → the prophecy of the returning One).
 
+**THE DOLLAR RENAME AND THE EYE AT THE APEX (owner decree
+2026-07-27).** Two bundled cards renamed, both back onto the banknote
+itself: **Mason → Dollar** (the note the hexagram was drawn on) and
+**Omega → The One** (the denomination — this section already read "the
+denomination is THE ONE"; the Many-Names doctrine welcomes a second
+organ carrying the name). And the apex changes occupant: **the 12h
+seat no longer wears the letter G — it wears the EYE OF PROVIDENCE
+itself.** The G "crowned the Eye"; now the crown seat belongs to the
+Eye it crowned — ANNUIT COEPTIS' own emblem, the seat its arc already
+passes over. The Eye ships in FOUR images (ChatGPT / Gemini, each
+with and without the glory of rays): on the Dollar card the SOURCE
+follows the Settings art-source switch and the RAYS follow the ring's
+own per-preset **Shine** toggle; a custom ring may seat any of the
+four explicitly (`assets/instrument/ring/letters/Eye[_shine]_gem/
+_gpt.png`).
+
+**The Eye's own reading (PROPOSED, awaiting the owner's word):**
+
+- **The seal:** **Providence** — the Judge who watches, God-as-JUDGE
+  of the Double Trinity's noon seat: *"the eyes of the LORD run to
+  and fro through the whole earth"* (2 Chronicles 16:9); *"behold,
+  the eye of the LORD is upon them that fear him"* (Psalm 33:18).
+  IN GOD WE TRUST is trust in being SEEN — loyalty, the yellow arm's
+  own virtue, is covenant kept under a watching eye.
+- **The shadow:** **Partiality** — the eye that winks (Proverbs
+  10:10), the respect of persons (James 2:9): the eye that sees only
+  its own tribe — Tribalism as an act of seeing.
+
 **THE OUTER MOTTO ARC (MOTO-FIX round, owner correction 2026-07-19, the
 dollar's Great Seal reference image — the first round's layout was
-"katastrofa"):** while the Mason ring preset is active, ANNUIT
+"katastrofa"):** while the Dollar ring preset is active, ANNUIT
 COEPTIS and NOVUS ORDO SECLORUM themselves now ring the dial as curved
 text OUTSIDE the ring band — the same two Great Seal mottos the
 hexagram's own G/S/M/Ω/N/A were picked FROM, drawn back onto the wheel
@@ -1114,7 +1142,13 @@ seat's true opposite sits exactly 12h/180° away:
   begins facing the Omega who completes and sums the whole
   (Revelation 1:8) — the SAME vertical axis this section already
   singled out ("G opposite O... Revelation 1:8 drawn as geometry"), now
-  given its own line.
+  given its own line. **Superseded on the Dollar card (owner decree
+  2026-07-27, wording PROPOSED):** with the Eye at the apex the
+  vertical axis reads **👁(12h) ↔ Ω(24h)** — the Eye against the
+  Omega: the JUDGE who watches from noon facing the CREATOR who
+  begins at midnight (the Double Trinity's own two offices of God on
+  this same diameter; Revelation 1:8, Genesis 1:1) — bias against
+  principle, the watched covenant above, the impartial law below.
 
 These three lines are the ring's per-letter HOVER LEGEND's own second
 paragraph (`render.compositor._ring_letter_legend_tooltip`,

@@ -54,11 +54,12 @@ rotation off (upright mode — better for reading exact positions).
 - [Compositor](compositor.md)
 
 ## Pointer Variants
-A skin renders with one of six pointer layouts
+A skin renders with one of SEVEN pointer layouts
 (`SkinDefinition.pointer`, user-overridable): **trio** (Trinity, 3
 hexa-shaped arms), **cross** (Seasons, 4 × 90°), **hexa** (Prism, 6 ×
-60°), **octa** (Compass, 8 × 45°), **aurora** (no arms — day-hue wedges
-only) and **calendar** (no arms — twelve calendar wedges). The arm
+60°), **octa** (Compass, 8 × 45°), **rose** (the Rose — THREE octa
+stars 15° apart, owner 2026-07-27), **aurora** (no arms — day-hue
+wedges only) and **calendar** (no arms — twelve calendar wedges). The arm
 count drives the star geometry, the Aura wedge count and the weekday
 slot layout (`POINTER_WEEKDAY_SLOTS`). Shared slots (cross pairs two
 bodies on three arms) show only the priority winner: the occupant whose
@@ -110,8 +111,8 @@ The cube palettes live in `defaults.PALETTE_PRESETS`: Genesis
 violet — NEVER royal purple), the Council the hexa paint wheel with
 the 24h arm re-dressed to that same violet, and Character =
 `defaults.ROSE_PALETTE` — the palette EXACTLY as the Rose is drawn
-(sealed; one tuple rules both the Character wheel and the Rose ring
-preset).
+(sealed; ONE tuple rules the Character wheel and BOTH wheels of the
+Rose POINTER — never a ring, see The Rose below).
 
 <a id="the-calendar-pointer"></a>
 
@@ -507,22 +508,48 @@ metal)` at paint time, disk-cached like every other derived asset; the
 shadow silhouette always reads the gold file directly (the alpha mask
 is identical on every finish).
 
-**THE ROSE OF THE TWENTY-FOUR (owner seal 2026-07-26, CUBE.md §The
-Rose; WORKPLAN Session 20):** with `RingSpec.rose` (the "Rose" ring
-preset, [Ring Presets](../data/rings.md)) the layer takes the
-PROCEDURAL path (no face asset — the plain hour scale) and
-`_draw_rose` paints 24 computed diamond rays in the band, one per
-hour, UNDER the ticks and numerals: three identical octa stars offset
-15°, drawn in the owner's z-order — the −1h star (Historical) lowest,
-the 0h star (Modern), the +1h star (Archetypal) topmost, its rays
-sitting ON 1h and 13h (THE ONE, and the first hour after noon). Ray
-colors run `{arm, arm+1, arm+2}` per Character-wheel arm from
-`defaults.ROSE_PALETTE` (one source with the Character wheel);
-neighbors overlap on purpose (`ROSE_RAY_HALF_DEG` = 11.25° exceeds
-half the 15° pitch), exactly as the owner's reference drawing overlaps
-them. The ring is FIXED — the rays never ride the solar rotation. Not
-one pixel of it is art (Rule #19); the per-ray hover legend is
-computed in `data.rings._rose_legend`.
+**THE ROSE LEFT THE RING (owner correction 2026-07-27).** `RingLayer`
+briefly carried a `_draw_rose` that painted 24 computed rays into the
+ring band, because CUBE.md had written the owner's POINTER spec down
+as a ring preset. It is DELETED whole — `RingSpec.rose`, the card and
+the computed legend with it. The Rose is a POINTER and its three stars
+are drawn by `StarLayer`; see [The Cube Canon](../CUBE.md) §The Rose
+of the Twenty-Four.
+
+**THE ROSE — three stars in one star's loop (owner seal 2026-07-27,
+[The Cube Canon](../CUBE.md) §The Rose).** `StarLayer` grew no second
+drawing path: `_draw_diamonds` now loops `rose_star_offsets(skin)`
+(`(0.0,)` on every other pointer) and hands each offset to
+`_draw_star`, which is the old body with the star offset added to the
+Genesis one. Painting therefore happens in the tuple's own order, so
+the z-stack IS the table — bottom first, the 0° star last.
+
+Pseudocode:
+
+```
+FOR EACH star_offset IN rose_star_offsets(skin) OR (0,):
+    FOR EACH arm k, colour IN palette:
+        theta = genesis_offset + star_offset + k * 360/N
+        draw the diamond at theta
+        IF pointer is rose → stroke it in the drawing's dark lead
+```
+
+The lead outline exists for the Rose alone: three stars share eight
+hues, so without a line between them a colour group merges into one
+mass and the z-order — which star stands on the hour, which is the
+past, which the future — becomes invisible. Every other pointer's
+arms already differ in hue from their neighbours.
+
+Three small readers carry the rest (Rule #5 — one source each):
+`rose_star_offsets(skin)` / `rose_star_set(offset)` for the geometry
+and its figure sets; `servant_seat_angle(skin)` for the Servant face's
+own seat (24h on the Compass and the Seasons, the blue 06h arm on the
+Rose) — the four places that used to hardcode `SOUTH_SLOT_ANGLE` for
+the Servant read it now; and `daylight_active(skin)`, which gates the
+whole `lit_regions` pass. With it False the star paints ONCE at full
+day alpha and the night half stands in flat colour; it can only be
+False on the Calendar and the Rose, so the stored setting survives a
+pointer switch untouched (the `effective_palette_style` pattern).
 
 **RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
 Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`
@@ -551,19 +578,20 @@ untouched by this slider even though they share `ring_tint`.
 dollar's Great Seal reference image — the first round's layout was
 "katastrofa", both mottos sweeping the same overlapping top-heavy
 arc):** while the active preset carries a `motto`
-(`data.rings.validate_preset`, Mason today), `_draw_motto` draws the
-two Great Seal mottos as curved text just OUTSIDE the ring band,
+(`data.rings.validate_preset`, the Dollar today), `_draw_motto` draws
+the two Great Seal mottos as curved text just OUTSIDE the ring band,
 EXACTLY like the real seal: ANNUIT COEPTIS arcs over the TOP (its own A
 pinned at 8h, S at 16h, reading CLOCKWISE the short way through noon —
-no motto letter pins noon anymore, the arc simply passes over the G)
+no motto letter pins noon anymore, the arc simply passes over the
+crown seat, the Eye of Providence since the DOLLAR/EYE round)
 and NOVUS ORDO SECLORUM arcs under the BOTTOM (its own N pinned at 4h,
 ORDO's own final O at the bottom/24h, M at 20h, reading
 COUNTERCLOCKWISE — `core.motto.motto_glyph_angles`'s new `clockwise`
 flag, False for this one — left to right THROUGH the bottom, the
 classic coin lower-banner direction). The two arcs are now angularly
 DISJOINT (top 300-360-60 deg, bottom 120-180-240 deg, each a 120 deg
-span) — "MASON outside, G inside" reads ONCE around the outside now,
-not twice. The per-glyph angles are pre-solved at LOAD time by
+span) — "MASON outside" reads ONCE around the outside now, not twice,
+with the Eye (the G's old seat) inside at the crown. The per-glyph angles are pre-solved at LOAD time by
 [Motto](../core/motto.md)'s `motto_glyph_angles` (never recomputed at
 paint time); `RingLayer` only draws. The stamp itself — metal finish,
 dark halo, tangential rotation that flips 180° through the lower half

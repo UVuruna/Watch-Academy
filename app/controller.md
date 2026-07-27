@@ -315,7 +315,9 @@ pattern) rather than guessed:
     `_start_simulation`). `_flash_fast_travel` fires ONLY from the
     theme/option pickers (owner spec scopes the flash to Ctrl+[/Ctrl+]
     — a step carries no flash) — see [Fast Travel Flash](fast_travel_flash.md).
-  - **LOCATIONS** (Ctrl+Up/Down poles, Ctrl+Space Greenwich,
+  - **LOCATIONS** (Ctrl+Up/Down poles, Ctrl+0 Greenwich — the zero
+    meridian's own digit, moved off Ctrl+Space 2026-07-27 for the
+    ARTICLE-DEPTH LAW,
     Ctrl+Left/Right custom cities): `_jump_to_place(kind)` and
     `_cycle_jump_city(direction)` both chain from
     `_active_simulation_or_now()` through the SAME `_apply_jump` tail —
@@ -344,10 +346,11 @@ pattern) rather than guessed:
   Archetype-on, the Pointer element hidden, or the 1st Slot off
   (agent interpretation, flagged in pointer_theme.md); Slot Theme
   grays on Archetype-on or no Slot visible at all.
-- `_set_ring()` / `_set_ring_two_metals()` / `_set_display_choice(key,
-  value)`: rebuild via the module-level `build_skin(settings)` —
-  DEFAULT_SKIN + the chosen RING PRESET (DOMY/Morph/Omega/Templar/Mason
-  are ring preset names, nothing more) — or a targeted
+- `_set_ring()` / `_set_ring_two_metals()` / `_set_ring_eye_shine()` /
+  `_set_display_choice(key, value)`: rebuild via the module-level
+  `build_skin(settings)` — DEFAULT_SKIN + the chosen RING PRESET
+  (DOMY/Morph/The One/Templar/Dollar are ring preset names, nothing
+  more) — or a targeted
   `dataclasses.replace`, install through the shared
   `_install_skin()` (fresh compositor, day context kept) and persist;
   `apply_display_settings(skin, settings)` (pure, testable) overlays
@@ -400,12 +403,9 @@ pattern) rather than guessed:
   "paint" while the stored setting survives untouched (switching back
   restores the Cube wheel); `cube_look` (the Diamond/Cube display
   toggle, Settings ▸ Display ▸ Archetype group) flows onto the skin
-  there too. `build_skin` grew the ROSE branch: the "Rose" ring card
-  (`rose: true`, [Ring Presets](../data/rings.md)) maps onto the
-  PROCEDURAL ring — no face asset, no letters, no motto, `RingSpec.
-  rose=True` and the card's computed 24-entry ray legend — so
-  `render.layers.RingLayer._draw_rose` paints the three offset octa
-  stars (CUBE.md §The Rose).
+  there too. (`build_skin`'s ROSE branch is GONE — owner correction
+  2026-07-27: the Rose was never a ring card, see
+  [Ring Presets](../data/rings.md).)
   `_install_skin()` ALSO refreshes the TITLE row/tray tooltip
   (`_refresh_watch_title`) and any OPEN Design/Pointer Theme/Slot Theme
   window in place (`_refresh_open_mini_windows`, R5 MENU REWORK) — the

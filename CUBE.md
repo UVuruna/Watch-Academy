@@ -20,7 +20,7 @@ yet drafted).
 - [The Character Wheel — the Compass's Third Wheel](#character-wheel)
 - [The Rose of the Twenty-Four](#the-rose)
 - [The Two Crosses — the Paths](#two-crosses)
-- [The Banknote Seal — MASON on the Axes](#mason-axes)
+- [The Banknote Seal — the DOLLAR on the Axes](#mason-axes)
 - [The Name — the Watch That Keeps Watch](#the-name)
 - [The Article Charter](#article-charter)
 - [Display and Legend Laws](#display-laws)
@@ -334,27 +334,126 @@ leave out.
 
 <a id="the-rose"></a>
 
-## The Rose of the Twenty-Four (SEALED; set order PROPOSED)
+## The Rose of the Twenty-Four (SEALED — the SEVENTH POINTER)
 
-`UV/simbolika/slike/24 ROSE (3 x octa).png` — **three identical
-octa stars offset 15°**, 24 rays in 8 colors, one ray per hour:
-yellow crowns 12h, the muted purple roots 24h. It is the PLAIN HOUR
-SCALE wearing the Character wheel's colors, and it lives as a
-**RING PRESET** (SEALED — the Mason ring's sibling).
+`UV/Rose Pointer/` — **three identical octa stars, 15° apart**, 24
+rays in 8 colors: yellow crowns 12h, the muted purple roots 24h.
 
-- **Z-order (owner):** star 1 at −15° (lowest), star 2 at 0°, star 3
-  at +15° (topmost) — the fully visible star is the one whose rays
-  sit ON 1h and 13h: **THE ONE and the 13** — the first hour of the
-  day and the first hour after noon.
-- **The three stars carry the three figure sets** (8 × 3 = 24),
-  SEALED as a reading of TIME itself (owner 2026-07-26):
-  **Historical on the −1h star** — the past, behind the hour;
-  **Modern on the 0h star** — the present, standing on the true
-  hours; **Archetypal on the visible +1h star** — the myths hold in
-  the future too, always valid, and their star is the one touching
-  1h and 13h: THE ONE, and the first hour after noon.
-- The legend explains each ray by its direction and its set's
-  figure; every ray answers with its Character-wheel article.
+> **CORRECTION OF RECORD (owner 2026-07-27).** This canon first wrote
+> the Rose down as a RING PRESET and stamped it SEALED. That was a
+> mis-transcription of the owner's spec, not his decision — he had
+> described a NEW POINTER, and the file name says so itself
+> (`3 x octa` — `octa` is a POINTER key in this project). The wrong
+> word was executed faithfully in 0.14.436 and had to be deleted
+> whole. **The Rose is a pointer. It has never been a ring.** The
+> lesson stands beside it: a session may not stamp `SEALED` on
+> anything the owner did not seal in his own words.
+
+### Geometry (SEALED)
+
+- **One star = the octa star**: 8 diamond arms, half-angle 22.5°, tip
+  at the star radius, inner vertices at `tip / 2cos(half)`. Three of
+  them at 15° spacing give the 24 rays; neighbors OVERLAP on purpose
+  (45° of arm on a 15° pitch) — exactly as the owner draws it.
+- **Every star wears the same 8 hues in the same order**, rotated
+  with the star: `defaults.ROSE_PALETTE`, clockwise from 12h —
+  yellow, orange, red, rose, purple-gray, cyan, blue, green.
+- **The 0° star is ALWAYS topmost, on both wheels.** The dominant,
+  fully visible arm therefore points at true 12h and the dial keeps
+  its own axis — solstices on the vertical, equinoxes on the
+  horizontal. (The earlier "+15° on top / THE ONE and the 13"
+  arrangement is RETIRED, owner 2026-07-27: *"prvobitni offset u
+  krupnom kadru otpada — idemo na simetriju"*.)
+
+### The two wheels (SEALED)
+
+Both wheels seat the SAME three sets on the same two anchors —
+**Modern on the 0° star, Historical on the −15° star**. Only the
+MYTH star moves, and the wheel is named for where it goes.
+
+| Wheel | Slot | Star angles (draw order: bottom → top) | Reading | Myth sits |
+|---|---|---|---|---|
+| **Legacy** | paint | −30° · −15° · **0°** | NOW ← PAST ← LONG PAST | −30°, the deepest past |
+| **Prophecy** | light | −15° · +15° · **0°** | PAST · NOW · FUTURE | +15°, ahead of the hour |
+
+- **Legacy** leans entirely behind the hour: the present stands on
+  the true hours, and behind it the past and the long past. Myth is
+  what we INHERITED.
+- **Prophecy** is symmetric: the present on the hour, the past one
+  ray back, the future one ray on. Myth is what COMES and always
+  holds. **Its middle z-layer is the FUTURE star** (owner: the past
+  lies deepest, the future rides over it, the present covers both).
+- **The arms carry the character sets:** Legacy the **2D** system
+  (the four poles and their four blends — the Character wheel at
+  depth zero); Prophecy the **3D** system (the Cube's eight
+  vertices, all three axes combined).
+
+### The Sabbath axis (SEALED — why blue and red are not seasons)
+
+The four CARDINALS are the year's turning points, the four DIAGONALS
+its season centres — and they land exactly where `core.year_wheel`
+already puts them (summer solstice 0°, autumn equinox 90°, winter
+solstice 180°, spring equinox 270°):
+
+| 12h yellow | 15h orange | 18h **red** | 21h rose | 24h purple | 03h cyan | 06h **blue** | 09h green |
+|---|---|---|---|---|---|---|---|
+| Summer Solstice | Summer | **Autumn Equinox** | Autumn | Winter Solstice | Winter | **Spring Equinox** | Spring |
+
+**Six colors = six working days. Two colors = Sunday.** Work has a
+color; rest has balance. Blue and red are the only two hues that are
+not a season — they are the two moments the year stands even, and
+they are the year's own dawn and dusk (06h sunrise, 18h sunset): blue
+is the last of the night going out, red the last of the fire going
+down. They are Judas's and Lucifer's own hues, and Sunday's two faces
+sit on them.
+
+**Consequence for the Cube (SEALED):** the three axes keep their
+exact pole PARTNERS on the Rose; two poles simply wear their lighter
+shade, the SAME shift the weekday law makes — blue → cyan, red →
+rose. Y is untouched.
+
+| Axis | Cube canon | On the Rose |
+|---|---|---|
+| Y — Basis of Judgment | Yellow ↔ Purple-Gray | unchanged |
+| X — Activation | **Blue** ↔ Orange | **Cyan** ↔ Orange |
+| Z — Self-Regard | Green ↔ **Red** | Green ↔ **Rose** |
+
+The octa's four diagonals split three-and-one: three are the Cube's
+axes, the fourth is the Sabbath's.
+
+### The weekday law (SEALED)
+
+The weekday bodies ride their **badges, as always** — never painted
+into the diamonds. Their seats follow the color law, which is the
+Prism paint canon with the two Sabbath hues lightened:
+
+| THU yellow 12h | TUE orange 15h | **SUN Ruler red 18h** | FRI rose 21h | WED purple 24h | MON cyan 03h | **SUN Servant blue 06h** | SAT green 09h |
+|---|---|---|---|---|---|---|---|
+
+Sunday holds two seats — the Ruler on red, the Servant on blue —
+and 6 + 6 + 6 lands them on 06h and 18h. Six weekdays plus the dual
+Sunday fill all eight arms, so **no arm is reserved for anything
+else** and Thursday and Wednesday keep their canonical color seats.
+
+### Two standing notes
+
+- **The year, as a note only.** Two rays ≈ one month and the ray
+  centres fall on the sun's turning points — close, never exact, and
+  wrong outright once solar rotation is on. It is a sentence in the
+  article, never a computed figure and never an indicator; the dial
+  already has ONE exact year mechanism and will not grow a second.
+- **Daylight.** The Rose obeys the standard `lit_regions` law like
+  every other pointer — no private dimming was invented and none is
+  allowed. The Rose and the Calendar carry a **DAYLIGHT on/off
+  switch**; the other five pointers always run day/night. A reader
+  who wants it quieter has colorless, opacity and saturation already.
+
+### OPEN
+
+The three figure rosters (myth / modern / historical) for the eight
+2D characters and the eight 3D vertices — 48 seats. The engine ships
+with honest name fallbacks and the pending line until they are
+written, exactly as the Cube wheels did.
 
 <a id="two-crosses"></a>
 
@@ -443,7 +542,7 @@ with trust, even adversity ripens into hope."**
 
 <a id="mason-axes"></a>
 
-## The Banknote Seal — MASON on the Axes (SEALED find, owner ask answered)
+## The Banknote Seal — the DOLLAR on the Axes (SEALED find; Eye row PROPOSED)
 
 The owner's mapping: G yellow (Y+), O purple (Y−), A green (Z−), M
 red (Z+), N blue (X−), S orange (X+). The nailing he asked for:
@@ -451,11 +550,28 @@ red (Z+), N blue (X−), S orange (X+). The nailing he asked for:
 axes** — the Canon already read A↔M as Humility against Pride
 (exactly Z), N↔S as the Nazarene against Satan (now also stillness
 against storm — exactly X), G↔Ω as beginning against end (now also
-covenant against law — exactly Y). Per letter:
+covenant against law — exactly Y).
+
+**The Dollar decree (owner 2026-07-27):** the ring cards renamed
+Mason → **Dollar** and Omega → **The One** (the note and its
+denomination — CANON's Banknote section already read "the
+denomination is THE ONE"), and the apex seat swapped its occupant:
+**12h wears the EYE OF PROVIDENCE instead of the letter G** — the G
+that "crowned the Eye" yields the crown seat to the Eye itself. The
+axis geometry is untouched and stays SEALED: the vertical diameter
+(👁 12h ↔ Ω 24h) is **Y** — God-as-JUDGE above against
+God-as-CREATOR below (the Double Trinity's own two offices of God
+on this same diameter), bias against principle (Loyalty/Tribalism ↔
+Integrity/Legalism); **N(4h) ↔ S(16h) is X** — Activation, the
+Nazarene's stillness against Legion's storm, Composure/Lethargy ↔
+Vigor/Frenzy; **A(8h) ↔ M(20h) is Z** — Self-Regard, the Angel
+against the Master, the Judas–Lucifer diagonal,
+Humility/Self-Annihilation ↔ Dignity/Self-Worship. Per letter:
 
 | Letter | Pole | The seal | Its shadow |
 |---|---|---|---|
-| **G** (God) | Yellow — Loyalty | God of the COVENANT — *"I will be your God, and ye shall be my people"*; loyalty is covenant kept | Tribalism — the covenant closed to outsiders: one law for us, another for them |
+| **👁** (the Eye, PROPOSED) | Yellow — Loyalty | **Providence** — the Judge who watches: *"the eyes of the LORD run to and fro through the whole earth"* (2 Chronicles 16:9); IN GOD WE TRUST is trust in being SEEN | **Partiality** — the eye that winks (Proverbs 10:10), the respect of persons (James 2:9): the eye that sees only its own tribe |
+| **G** (God — retired from the Dollar apex, reading kept for the record) | Yellow — Loyalty | God of the COVENANT — *"I will be your God, and ye shall be my people"*; loyalty is covenant kept | Tribalism — the covenant closed to outsiders: one law for us, another for them |
 | **Ω / O** (Omega) | Purple-Gray — Integrity | the letter of the END — the law that holds to the last: *"one jot or one tittle shall in no wise pass from the law"* (Matthew 5:18) | Legalism — *"the letter killeth, but the spirit giveth life"* (2 Corinthians 3:6) |
 | **A** (Alpha, the Angel) | Green — Humility | the beginning, the seed that falls into the ground (John 12:24); the ministering spirit (Hebrews 1:14) — service is humility | Self-Annihilation — the grain that dies WITHOUT bringing forth fruit |
 | **M** (the Master) | Red — Dignity | mastery rightly worn — *"well done, good and faithful servant… ruler over many things"* (Matthew 25:21) | Self-Worship — the master who crowns himself: *"I will ascend"* (Isaiah 14:13) |
@@ -558,8 +674,15 @@ lacking the experiment).
 - **The cube display option:** settings toggle for the Double
   Trinity family — Diamond look (current) vs Cube look (corner-view
   rhombi). The Genesis wheel draws the trio INVERTED (24/16/08).
-- **The Rose** is a ring preset (the Mason ring's sibling), with its
-  legend explaining rays, sets, FALL/STAR and the ciphers.
+- **The Rose** is the seventh POINTER (§The Rose), never a ring.
+- **THE ARTICLE-DEPTH LAW (owner 2026-07-27).** Where a hovered thing
+  owns more than one article, the jump keys are POSITIONAL, never
+  typed by content: **SPACE = primary, Shift+SPACE = secondary,
+  Ctrl+SPACE = tertiary**. The same rule holds anywhere else a seat
+  carries parallel readings (the Ages' human life / tree / animal
+  columns). The hover names the live combinations, the way it already
+  says "press SPACE"; `H` lists them. (`Ctrl+Space` was Greenwich
+  until this law — Greenwich moved to `Ctrl+G`.)
 
 <a id="implementation-queue"></a>
 
@@ -577,9 +700,11 @@ lacking the experiment).
 5. ~~Compass **Character** wheel (4 poles + 4 combos)~~ — DONE
    (Session 20) as the wheel + sealed palette; the roster round for
    the OPEN combo figures stays Session 21's.
-6. ~~The **Rose** ring preset (3 offset stars; palette as drawn —
-   sealed)~~ — DONE (Session 20): computed rays + computed per-ray
-   legend, `ROSE_PALETTE` shared with the Character wheel.
+6. The **Rose** — REOPENED 2026-07-27. Session 20's ring preset was
+   built on this canon's own mis-transcription and is DELETED whole;
+   the Rose is rebuilt as the seventh POINTER with the Legacy and
+   Prophecy wheels (§The Rose). `ROSE_PALETTE` survives unchanged —
+   it was right all along and still rules the Character wheel too.
 7. ~~Diamond/Cube display toggle~~ — DONE (Session 20):
    `Settings.cube_look`, the corner-view face rhombi on the
    Court/Genesis/Council wheels.

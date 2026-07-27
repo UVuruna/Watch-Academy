@@ -6,7 +6,9 @@
 
 The mini WINDOW replacing the old Design submenu's deep chain — Pointer
 (variant + palette style + Calendar lighting + the Calendar's 12-set
-mount), Ring (preset + finish + Two metals), Umbra (form + contrast),
+mount), Ring (preset + finish + Two metals + the Eye's Shine, DOLLAR/
+EYE round 2026-07-27 — the Shine checkbox shows only when the active
+card seats the adaptive eye glyph), Umbra (form + contrast),
 Complications (plate style), Hands and Earth (style + label mode) and
 Size — as ONE tabbed window with images wherever real preview art
 exists (R5 MENU REWORK item 3D, owner spec: "Isto kao sada samo u
@@ -18,9 +20,7 @@ lepsem meniju u Window sa slikama kao i kod ostalih").
 Pointer variants, Umbra and Complications have no dedicated preview art
 (they are procedural/abstract), so those tabs use styled pill buttons
 instead of inventing art that does not exist (`Owner Assets Are
-Authoritative` — never code around an asset gap silently). The ROSE
-ring preset's tile is text-only for the same reason: the Rose is
-computed geometry with no face art (CUBE.md §The Rose).
+Authoritative` — never code around an asset gap silently).
 
 **THE CUBE THIRD WHEELS (owner seal 2026-07-26, CUBE.md; WORKPLAN
 Session 20):** the Pointer tab's wheel row zips

@@ -76,7 +76,13 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
                              M/D/Y+Omega, morph M/Pi/H+Omega. Overlaid by
                              calculation so the ring TINT never touches them; each
                              preset's ACCENT letter wears the opposite metal (domy
-                             inverts its Omega, morph inverts its M)
+                             inverts its Omega, morph inverts its M). ONE sourced
+                             exception (DOLLAR/EYE round, owner decree 2026-07-27):
+                             the Eye of Providence masters Eye[_shine]_gem/_gpt.png
+                             — the Dollar's apex glyph, ChatGPT and Gemini eyes
+                             each with/without rays; canonical Eye[_shine].png
+                             resolves per the Settings art source
+                             (config.paths.art_file)
   📁 hands/                ← hour/minute/second.svg (owner canvases 240/290/300,
                              hub 15 design units above the bottom)
   📁 earth/                ← earth_{clean|atmo}_{continent|pole}_{day|night}.png

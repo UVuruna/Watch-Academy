@@ -11,8 +11,9 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 Values that define what DOMY Watch is and never change: app identity, the
 24h dial convention (noon at top, clockwise, 180° offset), time constants,
 the weekday → celestial body mapping, the pointer variants (hexa 6 /
-cross 4 / octa 8 / trio 3 arms, aurora and calendar armless; display
-names Prism / Seasons / Compass / Trinity / Aurora / Calendar; the
+cross 4 / octa 8 / trio 3 / rose 8 arms, aurora and calendar armless;
+display names Prism / Seasons / Compass / Trinity / Rose / Aurora /
+Calendar; the
 Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`,
 its `CALENDAR_LIGHTING_MODES` (hour/year, owner 2026-07-16) and its
 `CALENDAR_MOUNT_MODES` (off/zodiac/months/chinese, the DESIGN ZODIAC
@@ -20,8 +21,11 @@ law's 12-set mount, R9a round 2026-07-21, "chinese" added owner R12)
 with
 their weekday slot layouts (slots rotate
 WITH the star; shared slots resolve by the next-upcoming-day rule
-over `SUNDAY_FIRST_INDEX`; the octa bottom arm is reserved for the info
-slot with its `OCTA_SLOT_MODES`; the trio pairs Faith 12h =
+over `SUNDAY_FIRST_INDEX`; the octa's bottom arm holds the SERVANT face
+of Sunday, not the info slot — a stale sentence claiming otherwise
+misled a session on 2026-07-27 and died with the behavior it used to
+describe, see `SOUTH_SLOT_ANGLE`'s own comment; the info slot's modes
+are `OCTA_SLOT_MODES`; the trio pairs Faith 12h =
 Jupiter+Saturn, Love 20h = Venus+Mars, Hope 4h = Moon+Mercury with the
 Sun centered — each arm tip is the CENTER of its hue, thirds
 8-16 / 16-24 / 0-8), the star arm half-angles (the cross
@@ -53,9 +57,15 @@ the astronomical axis, the AH label, the epoch tooltip notes) and the
 (`GREGORIAN_CYCLE_YEARS`, `PROXY_WINDOW_FIRST`). THE METAL-SPLIT OPTION
 (TASK 3, MASON/ICONS round, owner verdicts 2026-07-19, third batch):
 `RING_TWO_METALS_DEFAULT` — the per-preset default for the Design ▸
-Ring ▸ "Two metals" toggle (Mason True, every other eligible preset
+Ring ▸ "Two metals" toggle (Dollar True, every other eligible preset
 False, `app.controller._ring_two_metals` resolves it against the
-user's own stored `Settings.ring_two_metals` choice first). THE NINTH
+user's own stored `Settings.ring_two_metals` choice first). THE EYE
+AT THE APEX (DOLLAR/EYE round, owner decree 2026-07-27):
+`RING_EYE_GLYPH`/`RING_EYE_SHINE_FILE`/`RING_EYE_SHINE_DEFAULT` — the
+Dollar's adaptive Eye-of-Providence glyph, its glory-of-rays master
+stem and the per-preset "Shine" default (Dollar True), plus the four
+explicit `👁 …` variants in `RING_LETTER_FILES`/`RING_LETTER_GROUPS`
+for the custom builder. THE NINTH
 TABLE AND ITS SOLAR WINDOWS (round R3b item 3): `WEEKDAY_THEME_NINTHS`
 — the (display name, plate path) per weekday theme, extracted out of
 `app.encyclopedia`'s own ninths loop so [Layers](../render/layers.md)
@@ -277,7 +287,9 @@ _compute_jump`'s SUN/MOON branch grew an optional phase-filter suffix
 this round to answer the narrower Solstice/Equinox/New/Full/Quarter
 `jump_stem`s, the Calendar and Moon-Eclipse options reuse EXISTING
 `_UNIT_JUMPS`/`_ECLIPSE_JUMPS` kinds verbatim); LOCATIONS (Ctrl+Up/Down
-poles, Ctrl+Space Greenwich, Ctrl+Left/Right the user's custom Quick
+poles, Ctrl+0 Greenwich (the zero meridian; moved off Ctrl+Space
+2026-07-27 — CUBE.md's ARTICLE-DEPTH LAW took Space and its
+modifiers), Ctrl+Left/Right the user's custom Quick
 Jump cities). `FAST_TRAVEL_FLASH_*` — geometry/timing constants for
 [Fast Travel Flash](../app/fast_travel_flash.md), the small transient
 overlay the theme/option pickers flash above the dial. Three new
@@ -372,6 +384,34 @@ because it is a single user preference reached from many render call
 sites (`render.assets.AssetCache._recolored` for badges,
 `render.asset_recolor.letter_metal_file` for ring letters), never threaded as
 a parameter.
+
+**THE ROSE — the seventh pointer (owner seal 2026-07-27, [The Cube
+Canon](../CUBE.md) §The Rose).** Its tables live beside every other
+pointer's, so registering it registered it everywhere (settings
+validation, the Design window, the palette editor):
+`POINTER_POINTS["rose"] = 8` — EIGHT hues, not 24: the Rose is one
+octa star drawn three times, never 24 independent arms (Rule #19);
+`POINTER_ARM_HALF_ANGLE_DEG["rose"] = 22.5` (the octa arm shape, so
+45°-wide rays on a 15° pitch OVERLAP exactly as the owner draws them);
+`POINTER_PALETTE_LABELS["rose"] = ("Legacy", "Prophecy")` — two wheels
+that turn the star GEOMETRY and the figure sets, never the colors;
+`POINTER_ARM_LABELS["rose"]` speaks the YEAR (four turning points on
+the cardinals, four season centres on the diagonals — exactly where
+`core.year_wheel` puts them). `ROSE_STAR_OFFSETS` places the three
+stars in DRAW order, bottom of the z-stack first — Legacy
+(−30°, −15°, 0°) leans wholly behind the hour, Prophecy
+(−15°, +15°, 0°) rides the FUTURE over the PAST; the 0° star is last
+on both, so the dominant fully-visible arm always points at true 12h.
+`ROSE_STAR_SETS` says which figure set each star carries and
+`ROSE_ARM_SYSTEMS` which character system its arms read (Legacy the 2D
+Character wheel, Prophecy the 3D Cube vertices).
+`POINTER_WEEKDAY_SLOTS["rose"]` is the COLOR LAW — the seat is the hue,
+the Prism paint canon with the two Sabbath hues lightened (MON cyan,
+FRI rose) because Sunday needs blue and red for its own two faces;
+`SERVANT_SEAT_ANGLE` gives the Servant the blue 06h arm there (24h
+everywhere else) and the Ruler keeps red at 18h.
+`DAYLIGHT_SWITCH_POINTERS` names the two pointers — Calendar and Rose
+— whose reader may turn the day/night law off.
 
 ## Connections
 

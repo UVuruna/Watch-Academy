@@ -21,8 +21,9 @@ the ring preset and the user's display choices onto it at build time.
 
 - `SkinDefinition` — `z_order`, one spec per unit, plus the
   user-overridable display scalars (the tray choice always wins):
-  `pointer` ("hexa" | "cross" | "octa" | "trio" | "aurora" |
-  "calendar"), `umbra_form` ("fine" |
+  `pointer` ("hexa" | "cross" | "octa" | "trio" | "rose" | "aurora" |
+  "calendar" — "rose" is the seventh, three octa stars 15° apart, owner
+  2026-07-27, CUBE.md §The Rose), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
   `palette_style` ("paint" | "light" | "cube" — the third is the Cube
   canon's wheel, Genesis/Council/Character on trio/hexa/octa ONLY
@@ -32,6 +33,9 @@ the ring preset and the user's display choices onto it at build time.
   `cube_look` (the Diamond/Cube display toggle, CUBE.md §Display laws
   — the Double-Trinity family wheels render as the corner-view cube
   when True; `render.layers.cube_look_active`/`arm_half_deg`),
+  `daylight` (owner 2026-07-27, CUBE.md §The Rose — the Calendar and
+  the Rose may stand in flat full colour instead of the day/night
+  law; inert on the other five, `render.layers.daylight_active`),
   `calendar_lighting` ("hour" the shichen | "year" the month/sign wedge),
   `archetype_mode` (owner sealed package 2026-07-16 — the active
   (pointer, palette_style) shows ITS archetype: figures in the
@@ -80,15 +84,11 @@ the ring preset and the user's display choices onto it at build time.
   build_skin for the active finish) is overlaid on the art so the ring
   TINT never touches the letters; `letter_legend` (hour → {name,
   reading}) the per-letter hover legend text (empty for every preset but
-  Mason — and the Rose, whose 24 computed ray entries ride this same
-  field); `rose` (owner seal 2026-07-26, CUBE.md §The Rose — True only
-  on the "Rose" preset: the procedural plain hour scale plus
-  RingLayer's 24 computed diamond rays, three octa stars offset 15°,
-  the +1h star on top); `motto`/`motto_metal` (TASK 1, owner "može
+  the Dollar); `motto`/`motto_metal` (TASK 1, owner "može
   radi" 2026-07-19)
   the outer Great Seal motto arc — a tuple of {"text", "glyphs":
   (asset, angle) pairs} built by build_skin from the preset's own
-  `motto` card field, empty for every preset but Mason today; see
+  `motto` card field, empty for every preset but the Dollar today; see
   [Ring Presets](../data/rings.md) and [Layers](../render/layers.md)
 - `WeekdaySpec` — body images/colors, white weekday label on top,
   display mode (ghost / center_only), ghost opacity, sizes, orbit,

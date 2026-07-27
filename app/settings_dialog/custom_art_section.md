@@ -17,7 +17,12 @@ composed onto [Settings Dialog](dialog.md)'s `QDialog` shell.
   Symbols sections with unselectable headers
   (`constants.RING_LETTER_GROUPS`) — a NUMBER only fits its own hour
   (owner rule 2026-07-12), so the Numbers section offers at most the
-  position's own number. Add validates the card
+  position's own number. The Symbols section carries the templar
+  cross and the FOUR explicit Eye-of-Providence variants (DOLLAR/EYE
+  round, owner decree 2026-07-27: "any of the four" — ChatGPT/Gemini,
+  each with/without rays, source and shine baked into the chosen
+  glyph); the Dollar's own ADAPTIVE eye glyph is deliberately NOT
+  offered here. Add validates the card
   (`data.rings.validate_preset`) and OK persists it (it appears under
   Theme ▸ Ring).
 - **Custom hands** (owner spec 2026-07-12) — the hand-pack builder:
