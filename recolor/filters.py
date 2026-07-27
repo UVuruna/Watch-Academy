@@ -56,10 +56,12 @@ def box_mean(source: np.ndarray, radius: int) -> np.ndarray:
 
 def clamp_radius(shape: tuple[int, int], radius: int) -> int:
     """The largest usable radius for `shape` — `_box_sum`'s slicing needs
-    at least 2r+2 rows and columns. Art is never that small in practice;
-    this keeps the primitive honest for thumbnails and unit tests."""
+    at least 2r+2 rows and columns. Returns 0 when the image is too small
+    for ANY window (a 2x1 color probe, a 1px icon): such an image has no
+    frequencies to separate, and 0 tells `guided_split` to say so rather
+    than to slice past the end of an array."""
     limit = (min(shape) - 2) // 2
-    return max(1, min(radius, limit))
+    return max(0, min(radius, limit))
 
 
 def guided_split(
@@ -77,8 +79,15 @@ def guided_split(
     counts as texture rather than as an edge.
 
     Returns `(base, channel - base)`; adding them back is exact.
+
+    An image too small to hold a single window (a 2x1 color probe, a 1px
+    icon) has no frequencies to separate: it is ALL form, and the detail
+    layer is zero. That is the honest answer, not a special case — the
+    caller's arithmetic downstream is identical either way.
     """
     radius = clamp_radius(channel.shape, radius)
+    if radius == 0:
+        return channel, np.zeros_like(channel)
     mean = box_mean(channel, radius)
     mean_square = box_mean(channel * channel, radius)
     variance = np.maximum(mean_square - mean * mean, 0.0)

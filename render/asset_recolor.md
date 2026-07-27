@@ -15,8 +15,8 @@ pre-rendered `<Stem>_silver.png`/`<Stem>_bronze.png` ring-letter files
 and their two generator scripts): the ring letter's GOLD, SILVER or
 BRONZE finish, derived AT LOAD from the GOLD master. SHADE-aware (R8a
 redo, owner spec 2026-07-21 night): every metal, including gold, runs
-through `AssetCache._recolor_to_shade` (the SAME kernel `AssetCache.
-_metal_swapped` uses for badge medallions, Rule #5) with the WHOLE
+through `AssetCache._recolored` (the SAME door badge medallions use,
+Rule #5 — see [Assets](assets.md)) with the WHOLE
 opaque glyph as the mask — a ring letter mixes no gray stone the way a
 medallion does, so unlike the badge's hue-window detection every
 alpha>0 pixel simply IS a metal pixel. The active SHADE per metal comes
@@ -97,8 +97,8 @@ also reaches it, for the annular solar icon's "ring of fire" tint.
 ## Connections
 
 ### Uses
-- [Assets](assets.md) — `AssetCache._letter_recolored`, `AssetCache.
-  _metal_swapped`, `AssetCache._tinted` (the metal/tint recolor kernels
+- [Assets](assets.md) — `AssetCache._recolored`, `AssetCache._tinted`
+  (the metal/tint recolor doors
   stay on the class; these module functions are their disk-cached,
   path-in/path-out doors)
 - `config.paths` (`art_file`, `metal_shade`, `settings_path`),

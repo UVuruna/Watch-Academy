@@ -30,11 +30,13 @@ def letter_metal_file(path: Path, metal: str) -> Path:
     owner spec 2026-07-21 night, replacing both the retired straight-
     multiply bronze recipe the owner called "weak" AND the gold
     passthrough): every metal, including gold, runs through
-    `AssetCache._recolor_to_shade` (the SAME kernel `_metal_swapped`
-    uses for badge medallions, Rule #5) with the WHOLE opaque glyph as
-    the mask — a ring letter mixes no gray stone the way a medallion
-    does, so unlike the badge's hue-window detection every alpha>0
-    pixel simply IS a metal pixel. The active SHADE per metal comes
+    `AssetCache._recolored` (the SAME door badge medallions use, Rule
+    #5) in `alpha` mask mode — a ring letter mixes no gray stone the way
+    a medallion does, so unlike the badge's chroma-window detection
+    every alpha>0 pixel simply IS a metal pixel. The source metal is
+    GOLD here (the master these are drawn on) against the badges'
+    bronze; the transform is source-agnostic and is simply told which.
+    The active SHADE per metal comes
     from `config.paths.metal_shade` (a Settings choice, not a
     parameter here — same reasoning as `subdial_plate_file`'s active
     set). Disk-cached like every other derived asset, keyed by shade
@@ -51,10 +53,13 @@ def letter_metal_file(path: Path, metal: str) -> Path:
         f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
     if not cache.exists():
-        # QImage end to end (the same R1b threading law _metal_swapped
+        # QImage end to end (the same R1b threading law `_recolored`
         # documents) — a future background warmup of letter glyphs must
         # never trip the QPixmap-off-GUI-thread crash class.
-        result = AssetCache._letter_recolored(QImage(str(path)), metal, shade)
+        result = AssetCache._recolored(
+            QImage(str(path)), metal,
+            defaults.METAL_SOURCE_LETTER, defaults.METAL_MASK_LETTER,
+        )
         try:
             cache.parent.mkdir(parents=True, exist_ok=True)
             if not result.save(str(cache)):
@@ -255,7 +260,10 @@ def ensure_variant(path: Path | None) -> Path | None:
         if path.exists():
             return path
         source, metal = recipe
-        swapped = AssetCache._metal_swapped(QImage(str(source)), metal)
+        swapped = AssetCache._recolored(
+            QImage(str(source)), metal,
+            defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
+        )
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
             if not swapped.save(str(path)):

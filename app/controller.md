@@ -123,8 +123,8 @@ pattern) rather than guessed:
     alone (0.39 ms/call) — nowhere near anything a human would call
     "lag".
   - **The owner's GIL doubt, answered empirically:** running the two
-    heaviest documented background operations (`_metal_swapped`'s
-    numpy hue-swap, `scaled_variant_file`'s PNG decode/scale/save) in
+    heaviest documented background operations (`_recolored`'s numpy
+    metal transform, `scaled_variant_file`'s PNG decode/scale/save) in
     an UNTHROTTLED loop on a second thread while the SAME 300-probe
     GUI-thread test ran concurrently cost 150 ms instead of 117 ms — a
     1.28× slowdown, not the "still only 1 CPU active" full

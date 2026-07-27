@@ -37,6 +37,8 @@ from PySide6.QtSvg import QSvgRenderer
 
 from config import defaults, paths
 from config.paths import art_file
+from recolor import recolor
+from recolor.recipe import load as recolor_recipe
 
 
 class AssetCache:
@@ -103,7 +105,10 @@ class AssetCache:
             pixmap = self._rasterize(source, px_height, dpr)
             if metal is not None:
                 pixmap = QPixmap.fromImage(
-                    self._metal_swapped(pixmap.toImage(), metal)
+                    self._recolored(
+                        pixmap.toImage(), metal,
+                        defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
+                    )
                 )
             if desaturate:
                 pixmap = self._desaturated(pixmap)
@@ -115,131 +120,32 @@ class AssetCache:
         return self._pixmaps[key]
 
     @staticmethod
-    def _recolor_to_shade(
-        rgb: np.ndarray, weight: np.ndarray, value: np.ndarray,
-        hue_deg: float, sat_target: float, ref_value: float,
-    ) -> np.ndarray:
-        """THE metal recolor kernel (R8a redo, owner spec 2026-07-21
-        night — replaces the reverted percentile-stretch attempt, see
-        the NOTE above `config.defaults.METAL_SHADES`): hue and
-        saturation are REPLACED outright by the chosen shade's fixed
-        target; VALUE is `value` UNCHANGED per pixel save for one
-        bounded GLOBAL gain — a single scalar for the whole masked
-        region, computed from ITS OWN mean so the shade lands near its
-        reference brightness regardless of how dark/bright the source
-        art happens to be, clamped to `defaults.
-        METAL_RECOLOR_GAIN_RANGE` so highlights never blow past white
-        and shadows never crush to black. A straight multiply preserves
-        every relative light/dark relationship in the source exactly —
-        the relief survives because nothing here remaps by RANK
-        (percentile) the way the reverted attempt did.
+    def _recolored(
+        source: QImage, metal: str, source_metal: str, mask_mode: str
+    ) -> QImage:
+        """THE metal recolor door — a thin Qt adapter over the `recolor`
+        package, which owns the algorithm (see
+        [Recolor (folder)](../recolor/___recolor.md)).
 
-        `_metal_swapped` (badge medallions, hue-window mask) and
-        `letter_metal_file`'s `_letter_recolored` (ring letters, whole-
-        glyph mask) both call this ONE function (Rule #5/#19) — they
-        differ only in how `weight`/`value` are computed, never in the
-        recolor math. Pure numpy, no per-pixel Python (the render-path
-        rule the metal swap has followed since 2026-07-12)."""
-        gain_lo, gain_hi = defaults.METAL_RECOLOR_GAIN_RANGE
-        masked = weight > 0.05
-        gain = (
-            np.clip(ref_value / max(value[masked].mean(), 1e-6), gain_lo, gain_hi)
-            if masked.any() else 1.0
-        )
-        new_val = np.clip(value * gain, 0.0, 1.0)
-        sector = (hue_deg % 360.0) / 60.0
-        index = int(sector) % 6
-        fraction = sector - int(sector)
-        p = new_val * (1.0 - sat_target)
-        q = new_val * (1.0 - sat_target * fraction)
-        t = new_val * (1.0 - sat_target * (1.0 - fraction))
-        order = [
-            (new_val, t, p), (q, new_val, p), (p, new_val, t),
-            (p, q, new_val), (t, p, new_val), (new_val, p, q),
-        ][index]
-        swapped = np.stack(order, axis=-1)
-        return rgb * (1.0 - weight[..., None]) + swapped * weight[..., None]
+        `metal` is the user-facing family (gold/silver/bronze); its
+        active SHADE comes from `config.paths.metal_shade` and resolves
+        through `defaults.METAL_SHADES` to a named RAMP in
+        `recolor/presets/metals.json`. `source_metal` is the metal the
+        art was DRAWN in — badges in bronze, ring letters on the gold
+        master — because the transform is source-agnostic and must be
+        told where it starts. `mask_mode` is `"chroma"` for art that
+        mixes metal with gray stone and `"alpha"` for glyphs, which is
+        the ONLY difference between the badge and letter paths (Rule #5
+        — the retired code carried two near-copies of the whole recolor
+        for exactly this one parameter).
 
-    @staticmethod
-    def _metal_swapped(source: QImage, metal: str) -> QImage:
-        """The hue-SELECTIVE metal swap (owner insight 2026-07-12): the
-        bronze-plate art mixes warm bronze details with GRAY stone and
-        engravings — a soft warm-hue window with a saturation ramp
-        selects only the bronze pixels (UNCHANGED by the R8a shade
-        redo — "the mask stays"), which take the active SHADE's
-        hue/saturation while their OWN value survives through
-        `_recolor_to_shade`; everything else stays as drawn. numpy
-        vectorized (per-pixel Python is banned in the render path).
         QImage in, QImage out (R1b threading find, 2026-07-20): the
         background hover-warm sweep reaches this through
         `metal_variant_file`, and QPixmap must never be touched off the
-        GUI thread — GUI-thread callers wrap with QPixmap.fromImage."""
+        GUI thread — GUI-thread callers wrap with QPixmap.fromImage.
+        """
         shade = paths.metal_shade(metal)
-        hue_deg, sat_target, ref_value = defaults.METAL_SHADES[metal][shade]
-        dpr = source.devicePixelRatio()
-        image = source.convertToFormat(
-            QImage.Format.Format_RGBA8888
-        )
-        width, height = image.width(), image.height()
-        stride = image.bytesPerLine() // 4
-        buffer = np.frombuffer(image.constBits(), dtype=np.uint8)
-        rgba = (
-            buffer.reshape(height, stride, 4)[:, :width, :]
-            .astype(np.float64) / 255.0
-        )
-        rgb = rgba[..., :3]
-        maxc = rgb.max(axis=-1)
-        minc = rgb.min(axis=-1)
-        span = maxc - minc
-        sat = np.where(maxc > 0, span / np.maximum(maxc, 1e-6), 0.0)
-        rc = (maxc - rgb[..., 0]) / np.maximum(span, 1e-6)
-        gc = (maxc - rgb[..., 1]) / np.maximum(span, 1e-6)
-        bc = (maxc - rgb[..., 2]) / np.maximum(span, 1e-6)
-        hue = np.where(
-            maxc == rgb[..., 0], bc - gc,
-            np.where(maxc == rgb[..., 1], 2.0 + rc - bc, 4.0 + gc - rc),
-        )
-        hue = np.where(span > 0, (hue / 6.0) % 1.0, 0.0) * 360.0
-
-        def smoothstep(x):
-            x = np.clip(x, 0.0, 1.0)
-            return x * x * (3.0 - 2.0 * x)
-
-        low, high = defaults.METAL_SWAP_HUE_WINDOW
-        soft = defaults.METAL_SWAP_HUE_SOFT
-        sat_lo, sat_hi = defaults.METAL_SWAP_SAT_RAMP
-        weight = (
-            smoothstep((hue - (low - soft)) / soft)
-            * (1.0 - smoothstep((hue - high) / soft))
-            * smoothstep((sat - sat_lo) / (sat_hi - sat_lo))
-        )
-
-        rgba[..., :3] = AssetCache._recolor_to_shade(
-            rgb, weight, maxc, hue_deg, sat_target, ref_value
-        )
-        out_bytes = np.ascontiguousarray(
-            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
-        )
-        out = QImage(
-            out_bytes.tobytes(), width, height, width * 4,
-            QImage.Format.Format_RGBA8888,
-        ).copy()
-        out.setDevicePixelRatio(dpr)
-        return out
-
-    @staticmethod
-    def _letter_recolored(source: QImage, metal: str, shade: str) -> QImage:
-        """A ring letter glyph recolored to `metal`'s `shade` — the
-        SAME `_recolor_to_shade` kernel `_metal_swapped` uses, but with
-        the WHOLE opaque glyph as the mask (weight 1 wherever alpha >
-        0): a letter mixes no gray stone the way a medallion does, so
-        there is nothing to detect — every drawn pixel already IS the
-        metal (R8a redo, owner spec 2026-07-21 night, replacing both
-        the retired straight-multiply bronze recipe ("weak," owner
-        verdict) and the old gold no-op passthrough — gold is now just
-        another shade like the rest, so cache keys stay honest about
-        what actually produced each file)."""
-        hue_deg, sat_target, ref_value = defaults.METAL_SHADES[metal][shade]
+        ramp = defaults.METAL_SHADES[metal][shade]
         dpr = source.devicePixelRatio()
         image = source.convertToFormat(QImage.Format.Format_RGBA8888)
         width, height = image.width(), image.height()
@@ -249,14 +155,14 @@ class AssetCache:
             buffer.reshape(height, stride, 4)[:, :width, :]
             .astype(np.float64) / 255.0
         )
-        rgb = rgba[..., :3]
-        value = rgb.max(axis=-1)
-        weight = np.where(rgba[..., 3] > 0.0, 1.0, 0.0)
-        rgba[..., :3] = AssetCache._recolor_to_shade(
-            rgb, weight, value, hue_deg, sat_target, ref_value
+
+        result = recolor(
+            rgba, source_metal, ramp, recolor_recipe(),
+            mask_mode=mask_mode,
         )
+
         out_bytes = np.ascontiguousarray(
-            (np.clip(rgba, 0.0, 1.0) * 255.0).round().astype(np.uint8)
+            (np.clip(result, 0.0, 1.0) * 255.0).round().astype(np.uint8)
         )
         out = QImage(
             out_bytes.tobytes(), width, height, width * 4,

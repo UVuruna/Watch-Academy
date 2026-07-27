@@ -14,6 +14,7 @@ admission that the shared formula failed for that file and must say so.
 
 import json
 from dataclasses import dataclass, replace
+from functools import lru_cache
 from pathlib import Path
 
 PRESETS = Path(__file__).parent / "presets" / "metals.json"
@@ -124,10 +125,16 @@ def _metal(name: str, raw: dict) -> Metal:
     )
 
 
+@lru_cache(maxsize=4)
 def load(path: Path = PRESETS) -> Recipe:
     """Read `presets/metals.json`. A malformed preset raises — a silent
     fallback to built-in numbers would hide exactly the kind of typo
-    that makes every plate look subtly wrong (Rule #1)."""
+    that makes every plate look subtly wrong (Rule #1).
+
+    Cached: the render path resolves a recolor per (file, metal, shade)
+    and re-parsing the presets for each would be pure waste. Everything
+    the recipe holds is frozen, so the shared instance cannot be
+    mutated by a caller. A process reads the file once."""
     raw = json.loads(path.read_text(encoding="utf-8"))
     tuning = raw["tuning"]
     return Recipe(

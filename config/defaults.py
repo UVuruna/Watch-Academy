@@ -2624,97 +2624,72 @@ def weekday_theme_body_art(
         return canonical
     return rotating_art_file(canonical, on_date) or canonical
 
-# THE METAL SHADES (R8a round, owner spec 2026-07-21 night — the retry
-# after the FIRST attempt (ART-INFRA round, 013b5ca) was reverted the
-# SAME day the owner saw it: an adaptive PERCENTILE STRETCH remapped
-# each pixel's brightness by its own rank in the source's histogram —
-# a nonlinear per-pixel remap that flattened every relief (engraving
-# lines, drapery folds, background texture) into a detail-free yellow
-# wash ("nemamo kontrast, sve je svetlo, izgubili smo sve moguće
-# detalje" — see git show 013b5ca for the corpse). THE LAW THIS ROUND
-# FOLLOWS INSTEAD: hue and saturation are REPLACED outright by the
-# chosen shade's fixed target — never scaled from the source's own
-# (unreliable, art-to-art varying) hue/saturation — while VALUE is the
-# SOURCE PIXEL'S OWN, multiplied by ONE bounded GLOBAL scalar gain (a
-# single number for the whole masked region, computed from ITS OWN mean
-# value so differently-lit source plates land near the same shade
-# brightness) — never a per-pixel remap, so every relative light/dark
-# relationship in the relief survives EXACTLY (a straight multiply
-# preserves ratios; a percentile stretch does not — that was the whole
-# bug). This is precisely why the SILVER recipe already worked before
-# this round: it always scaled the source's own value by a near-
-# identity multiplier instead of replacing it. `render.assets.
-# AssetCache._recolor_to_shade` is the ONE function implementing this
-# (Rule #5/#19) — `_metal_swapped` (badge medallions) and
-# `letter_metal_file` (ring letters) both call it, differing only in
-# how their MASK (which pixels are "metal") is computed.
+# THE METAL SHADES (rewritten 2026-07-27, owner verdict "prihvaceno" on
+# the new transformer): the numeric recolor recipe is GONE from this file
+# — every shade is now a named RAMP in `recolor/presets/metals.json`, and
+# the algorithm that paints it is the `recolor` package (see
+# [Recolor (folder)](../recolor/___recolor.md)). What lives here is only
+# the MAPPING from a user-selectable shade to the ramp that draws it.
 #
-# GOLD's five bands are sampled DIRECTLY off the owner's reference
-# swatch (`UV/DESIGN/gold pallete.png`, 5 bands — QColor.getHsvF() read
-# at each band's own center pixel): hue is flat ~44.9deg across all
-# five — only saturation/value step from dark-amber to pale. BRONZE is
-# a 3-step ramp around BRONZE_LETTER_TINT's own hue/saturation (the
-# sealed #CD7F32 family). SILVER is a 3-step ramp at zero saturation —
-# hue is irrelevant there, matching the achromatic recipe that already
-# read as "solidan u oba" (solid in both) before this round.
+# WHAT WAS RETIRED AND WHY (measured on the owner's physician plate):
+# the old recipe replaced each masked pixel's hue and saturation with a
+# flat constant and scaled its value by one bounded global gain. Gold
+# `classic` was HSV(44.9, S=1.000, V), which expands to (V, 0.748V, 0) —
+# the BLUE CHANNEL IDENTICALLY ZERO on 52.59% of the plate, and a white
+# highlight arithmetically impossible at flat S=1.0 ("drecavo, napadno,
+# bez detalja"). Silver was HSV(220, S=0, V) = max(R,G,B), which on warm
+# bronze art is the RED channel alone (mean R 0.3721 vs mean V 0.3740).
+# The gain hit its 1.90 ceiling on dark medallion art and clipped 11.87%
+# (gold) / 8.17% (silver) to one flat maximum — the book page on the
+# plate came out with NO information in its top 5% ("kao da joj je neko
+# polio krec"). `METAL_RECOLOR_GAIN_RANGE`, `METAL_SWAP_HUE_WINDOW`,
+# `METAL_SWAP_HUE_SOFT` and `METAL_SWAP_SAT_RAMP` all belonged to that
+# kernel and went with it; the mask's window now lives in the presets'
+# `tuning` block, in Oklab.
 #
-# Each entry: (hue_deg, saturation, reference_value) — reference_value
-# is the level the masked region's MEAN value is nudged toward (see
-# METAL_RECOLOR_GAIN_RANGE for the bound). Picked in Settings
-# (`Settings.metal_shade_gold/_bronze/_silver`, names validated against
-# `config.constants.METAL_SHADE_NAMES`), read at render time through
-# `config.paths.metal_shade`.
-#
-# The bright three gold bands (classic/pale/champagne) share
-# reference_value 0.85, NOT the palette swatch's own flat-color V=1.00:
-# a flat swatch has no relief to protect, but a real ring LETTER is
-# already bright (masked mean ~0.88) — chasing V=1.00 there forces a
-# gain that clips a big share of the glyph to solid white, shrinking
-# its own highlight relief for no visual gain (measured on real art
-# during this round's verification, see render/assets.md). Badge
-# medallions are far darker (masked mean ~0.40) and hit the SAME gain
-# ceiling either way, so this is a strict win: less letter clipping,
-# zero change to badges. amber/dark_amber sit low enough to be
-# unaffected by this concern.
+# The SHADE NAMES themselves are unchanged and still validated against
+# `config.constants.METAL_SHADE_NAMES` — the user's Settings choice keeps
+# working exactly as before. Silver's three shades map to ramps that
+# already existed as metals in their own right; gold's and bronze's are
+# named `gold_*` / `bronze_*`.
 METAL_SHADES = {
     "gold": {
-        "dark_amber": (44.9, 1.000, 0.65),
-        "amber":      (44.9, 0.749, 0.75),
-        "classic":    (44.9, 1.000, 0.85),    # DEFAULT — today's look
-        "pale":       (44.9, 0.749, 0.85),
-        "champagne":  (44.9, 0.549, 0.85),
+        "dark_amber": "gold_dark_amber",
+        "amber":      "gold_amber",
+        "classic":    "gold",             # DEFAULT
+        "pale":       "gold_pale",
+        "champagne":  "gold_champagne",
     },
     "bronze": {
-        "dark_bronze":  (29.8, 0.85, 0.45),
-        "bronze":       (29.8, 0.756, 0.55),  # DEFAULT — BRONZE_LETTER_TINT family
-        "light_bronze": (29.8, 0.60, 0.70),
+        "dark_bronze":  "bronze_dark",
+        "bronze":       "bronze",         # DEFAULT
+        "light_bronze": "bronze_light",
     },
     "silver": {
-        "gunmetal": (220.0, 0.0, 0.55),
-        "silver":   (220.0, 0.0, 0.75),       # DEFAULT — the sealed recipe
-        "platinum": (220.0, 0.0, 0.95),
+        "gunmetal": "gunmetal",
+        "silver":   "silver",             # DEFAULT
+        "platinum": "platinum",
     },
 }
-# The bounded GLOBAL gain (never a per-pixel stretch — see the NOTE
-# above): clamps how far ONE scalar may push a masked region's mean
-# value toward its shade's reference_value, so a very dark source (a
-# dim bronze medallion) cannot get blown to a flat white, and a very
-# bright one (a ring letter) cannot get crushed to black. Tuned by eye
-# against real badges (mean value ~0.40) and real ring letters (~0.88) —
-# see render/assets.md for the swatch-sheet verification this round.
-METAL_RECOLOR_GAIN_RANGE = (0.70, 1.90)
-METAL_SWAP_VERSION = 5      # cache tag — bump on recolor math changes
+# WHICH METAL THE ART WAS DRAWN IN — the transformer is source-agnostic
+# (it measures and divides out whatever cast the source carries), so
+# every call must say where it starts from. Badge medallions are drawn
+# in bronze mixed with gray stone; ring letters and numerals are drawn on
+# the GOLD master (owner 2026-07-19, `render.asset_recolor.
+# letter_metal_file` — the pre-rendered silver/bronze files were retired
+# then).
+METAL_SOURCE_BADGE = "bronze"
+METAL_SOURCE_LETTER = "gold"
+# The mask mode each art family needs (`recolor.mask`): a medallion
+# mixes metal with neutral stone and must be detected; a glyph is metal
+# wherever it is opaque.
+METAL_MASK_BADGE = "chroma"
+METAL_MASK_LETTER = "alpha"
 
-# The metal SWAP for the bronze-plate art (owner insight 2026-07-12:
-# the medallions mix bronze details with GRAY stone and engravings —
-# only the warm bronze pixels may change, the gray stays). Detection =
-# a warm-hue window with soft edges + a saturation ramp — UNCHANGED by
-# the R8a redo ("the mask stays"). Membership only (badges never
-# bronze-swap — bronze is the art as drawn, out of this round's scope;
-# the per-metal recolor recipe itself now lives in METAL_SHADES above).
-METAL_SWAP_HUE_WINDOW = (10.0, 60.0)   # degrees, warm bronze range
-METAL_SWAP_HUE_SOFT = 8.0              # soft edge width outside the window
-METAL_SWAP_SAT_RAMP = (0.10, 0.28)     # smoothstep: below gray, above bronze
+METAL_SWAP_VERSION = 6      # cache tag — bump on recolor math changes
+
+# Badges never bronze-swap: bronze IS the art as drawn (membership only;
+# the recolor recipe itself lives in the presets).
 METAL_SWAP_TARGETS = ("gold", "silver")
 # Bronze ring LETTERS are derived AT LOAD from the gold master (owner
 # 2026-07-19, `render.asset_recolor.letter_metal_file` — retired the

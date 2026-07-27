@@ -56,7 +56,7 @@ def _bronze_source(tmp_path: Path) -> Path:
 def _forbid_recolor(monkeypatch, message: str) -> None:
     def boom(*_args, **_kwargs):
         raise AssertionError(message)
-    monkeypatch.setattr(AssetCache, "_metal_swapped", staticmethod(boom))
+    monkeypatch.setattr(AssetCache, "_recolored", staticmethod(boom))
 
 
 def test_topic_table_build_runs_no_metal_recolor(

@@ -618,9 +618,9 @@ def apply_display_settings(skin, settings: Settings):
     # mirrors the art-source switch above; render.assets.
     # subdial_plate_file reads it directly (its only reader).
     paths.set_subdial_set(settings.subdial_set)
-    # THE METAL SHADES (R8a round, owner spec 2026-07-21 night) — same
-    # module-global pattern: render.assets._metal_swapped and
-    # letter_metal_file read paths.metal_shade(metal) directly.
+    # THE METAL SHADES — same module-global pattern:
+    # render.assets.AssetCache._recolored and letter_metal_file read
+    # paths.metal_shade(metal) directly.
     paths.set_metal_shade("gold", settings.metal_shade_gold)
     paths.set_metal_shade("bronze", settings.metal_shade_bronze)
     paths.set_metal_shade("silver", settings.metal_shade_silver)

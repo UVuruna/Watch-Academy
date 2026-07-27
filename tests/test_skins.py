@@ -490,7 +490,10 @@ def test_bronze_finish_and_theme_metals():
     probe.fill(QColor("#B08050"))                    # warm bronze
     image = probe.toImage()
     image.setPixelColor(1, 0, QColor("#808080"))     # neutral gray
-    swapped = AssetCache._metal_swapped(image, "silver")
+    swapped = AssetCache._recolored(
+        image, "silver",
+        defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
+    )
     bronze_out = swapped.pixelColor(0, 0)
     gray_out = swapped.pixelColor(1, 0)
     assert bronze_out.saturationF() < 0.15           # bronze went silver
@@ -498,41 +501,32 @@ def test_bronze_finish_and_theme_metals():
 
 
 def test_metal_shade_table_pinned():
-    """Pin the shade recipe (R8a round, owner spec 2026-07-21 night —
-    the redo after the adaptive-percentile attempt was reverted):
-    names match `config.constants.METAL_SHADE_NAMES` exactly; gold's
-    five hues sit flat at the palette strip's sampled ~44.9deg (only
-    S/V step band to band — `UV/DESIGN/gold pallete.png`, QColor.
-    getHsvF() read at each band center); bronze's default anchors on
-    BRONZE_LETTER_TINT's own hue/saturation; silver is achromatic
-    (saturation exactly 0.0) at every shade — the property that makes
-    `_letter_recolored`'s R==G==B guarantee exact, not approximate."""
-    from PySide6.QtGui import QColor
-
+    """Pin the shade table AFTER the 2026-07-27 transformer rewrite: the
+    numeric (hue, saturation, reference value) recipe is gone — a shade
+    now NAMES a ramp in `recolor/presets/metals.json`, and the ramp is
+    what draws it. What must still hold: the user-facing shade names
+    match `config.constants.METAL_SHADE_NAMES` exactly (Settings
+    validates against them), every default is one of its own metal's
+    names, and every shade resolves to a ramp that actually exists —
+    a typo here would surface as a KeyError mid-render on a user's
+    machine, which is the failure this pin exists to prevent."""
     from config import constants
+    from recolor import recipe as recolor_recipe
 
+    presets = recolor_recipe.load()
     for metal, names in constants.METAL_SHADE_NAMES.items():
         assert tuple(defaults.METAL_SHADES[metal].keys()) == names, metal
         assert constants.METAL_SHADE_DEFAULT[metal] in names, metal
-        for shade, (hue, sat, ref) in defaults.METAL_SHADES[metal].items():
-            assert 0.0 <= hue < 360.0, (metal, shade)
-            assert 0.0 <= sat <= 1.0, (metal, shade)
-            assert 0.0 < ref <= 1.0, (metal, shade)
+        for shade, ramp_name in defaults.METAL_SHADES[metal].items():
+            assert ramp_name in presets.metals, (metal, shade, ramp_name)
+        assert constants.METAL_SHADE_TITLES.keys() >= set(names), metal
 
-    for shade, (hue, sat, ref) in defaults.METAL_SHADES["gold"].items():
-        assert abs(hue - 44.9) < 0.2, shade         # flat across all five bands
-        assert sat > 0.0, shade                     # gold always reads colored
-
-    tint = QColor(defaults.BRONZE_LETTER_TINT)
-    bronze_hue, bronze_sat, _ = defaults.METAL_SHADES["bronze"]["bronze"]
-    assert abs(bronze_hue - tint.hsvHueF() * 360.0) < 1.0
-    assert abs(bronze_sat - tint.hsvSaturationF()) < 0.01
-
-    for shade, (_, sat, _) in defaults.METAL_SHADES["silver"].items():
-        assert sat == 0.0, shade                    # exact — R==G==B guarantee
-
-    gain_lo, gain_hi = defaults.METAL_RECOLOR_GAIN_RANGE
-    assert 0.0 < gain_lo < 1.0 < gain_hi             # a real bound, not a no-op
+    # The art's own metals must be describable too — the transform is
+    # source-agnostic and asks the presets for its SOURCE as well.
+    assert defaults.METAL_SOURCE_BADGE in presets.metals
+    assert defaults.METAL_SOURCE_LETTER in presets.metals
+    assert defaults.METAL_MASK_BADGE == "chroma"
+    assert defaults.METAL_MASK_LETTER == "alpha"
 
 
 def test_metal_mask_stays_untouched_across_every_shade():
@@ -561,7 +555,10 @@ def test_metal_mask_stays_untouched_across_every_shade():
             ("silver", "gunmetal"), ("silver", "platinum"),
         ):
             _paths.set_metal_shade(metal, shade)
-            swapped = AssetCache._metal_swapped(image, metal)
+            swapped = AssetCache._recolored(
+                image, metal,
+                defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
+            )
             assert swapped.pixelColor(1, 0) == QColor("#808080"), (metal, shade)
             assert swapped.pixelColor(0, 0) != QColor("#B08050"), (metal, shade)
     finally:
@@ -569,17 +566,20 @@ def test_metal_mask_stays_untouched_across_every_shade():
         _paths.set_metal_shade("silver", "silver")
 
 
-def test_metal_recolor_luminance_spread_survives_gain():
-    """THE NUMERIC GATE (owner spec 2026-07-21 night): the masked
-    region's own relief — its luminance SPREAD — must survive the
-    recolor up to the ONE bounded global GAIN, and no further. A
-    straight multiply scales standard deviation by exactly `gain`; the
-    reverted percentile-stretch attempt (git show 013b5ca) did NOT
-    preserve this proportional relationship — it remapped each pixel by
-    its own rank instead, which is exactly the bug this test would have
-    caught. A synthetic warm-bronze gradient stands in for a real
-    medallion's relief so the expected gain is computable independently
-    of any specific art file."""
+def test_metal_recolor_relief_order_survives_the_ramp():
+    """THE RELIEF GATE, rewritten for the 2026-07-27 transformer
+    (replaces the retired gain-multiply pin, whose arithmetic died with
+    `METAL_RECOLOR_GAIN_RANGE`): a monotone brightness ramp in must come
+    out monotone, so no light/dark relationship anywhere in a medallion
+    is ever inverted or flattened. That is the property the reverted
+    percentile-RANK attempt (git show 013b5ca) destroyed — it remapped
+    each pixel by its rank and turned every relief into a wash.
+
+    A synthetic warm-bronze gradient stands in for a real medallion so
+    the expectation is computable independently of any art file. The
+    affine-ness of the anchor itself is pinned at the unit level by
+    `tests/test_recolor.py::test_anchor_is_monotone_not_a_rank_remap`;
+    this is the same law through the real Qt render path."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
@@ -591,41 +591,40 @@ def test_metal_recolor_luminance_spread_survives_gain():
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
-    width = 64
-    # A LOW, NARROW value band (0.15-0.35): "dark_amber"'s reference
-    # value (0.65) needs a large gain to reach it, but the resulting
-    # peak (0.35 * the clamped 1.90 ceiling = 0.665) stays well under
-    # 1.0 — no pixel clips at the physical value ceiling, so the
-    # expected std below is an EXACT linear prediction, not one
-    # muddied by incidental highlight clipping (a separate, harmless
-    # effect from the bounded-gain clip this test targets).
-    values = np.linspace(0.15, 0.35, width)
+    width, height = 64, 8
+    values = np.linspace(0.15, 0.85, width)
     hue, sat = 35.0, 0.5     # squarely inside the warm-bronze mask window
-    image = QImage(width, 2, QImage.Format.Format_ARGB32)
+    image = QImage(width, height, QImage.Format.Format_ARGB32)
     for x, v in enumerate(values):
         color = QColor.fromHsvF(hue / 360.0, sat, float(v))
-        image.setPixelColor(x, 0, color)
-        image.setPixelColor(x, 1, color)
+        for y in range(height):
+            image.setPixelColor(x, y, color)
+
     _paths.set_metal_shade("gold", "dark_amber")
     try:
-        swapped = AssetCache._metal_swapped(image, "gold")
+        swapped = AssetCache._recolored(
+            image, "gold",
+            defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
+        )
     finally:
         _paths.set_metal_shade("gold", "classic")
-    hue_deg, sat_target, ref_value = defaults.METAL_SHADES["gold"]["dark_amber"]
-    gain_lo, gain_hi = defaults.METAL_RECOLOR_GAIN_RANGE
-    readback = np.array([image.pixelColor(x, 0).valueF() for x in range(width)])
-    expected_gain = min(max(ref_value / readback.mean(), gain_lo), gain_hi)
-    assert expected_gain == gain_hi                 # the bound actually engages
-    src_std = float(np.std(readback))
-    out_values = np.array([swapped.pixelColor(x, 0).valueF() for x in range(width)])
-    out_std = float(np.std(out_values))
-    expected_std = src_std * expected_gain
-    assert expected_std > 0.0
-    assert abs(out_std - expected_std) / expected_std < 0.15
-    # The hue/saturation actually moved to the shade (proves the recolor
-    # ran, not a no-op that would trivially "preserve" spread).
-    sampled = swapped.pixelColor(width // 2, 0)
-    assert abs(sampled.hsvHueF() * 360.0 - hue_deg) < 6.0
+
+    row = height // 2
+    out = np.array([
+        swapped.pixelColor(x, row).lightnessF() for x in range(width)
+    ])
+    # (1) The order survives end to end — never inverted, never flat.
+    assert np.diff(out).min() > -1e-9
+    assert out[-1] - out[0] > 0.25
+    # (2) Nothing is crushed or blown: the failure the old bounded gain
+    #     produced on real art was 11.87% of a plate at one flat maximum.
+    assert out.max() < 1.0 - 1e-6
+    assert out.min() > 0.0 + 1e-6
+    # (3) The recolor actually ran — the midpoint wears the gold family's
+    #     warm hue, not the source's own.
+    sampled = swapped.pixelColor(width // 2, row)
+    assert 20.0 < sampled.hsvHueF() * 360.0 < 60.0
+    assert sampled.hsvSaturationF() > 0.2
 
 
 def test_planets_art_body_renders_differently_by_metal():
@@ -666,34 +665,64 @@ def test_planets_art_body_renders_differently_by_metal():
     assert differing_silver > 0
 
 
-def test_live_derived_silver_letters_are_grayscale():
-    """The LIVE-derived silver letters (owner 2026-07-19 live-render
-    round — `render.asset_recolor.letter_metal_file`, replacing the retired
-    pre-rendered `_silver.png` files) read R=G=B on opaque pixels and
-    keep their surroundings transparent, for every active letter."""
+def test_live_derived_silver_letters_read_as_cool_silver():
+    """The LIVE-derived silver letters (`render.asset_recolor.
+    letter_metal_file` — the pre-rendered `_silver.png` files were
+    retired 2026-07-19).
+
+    THE LAW CHANGED on 2026-07-27, with the owner's acceptance of the new
+    transformer: silver used to be asserted R==G==B EXACTLY, because the
+    retired kernel produced it as `HSV(220, S=0, V)` — i.e. a straight
+    `max(R,G,B)` grayscale. That is precisely why the owner rejected it
+    ("kao da joj je neko polio krec"): a flat achromatic lift reads as
+    whitewashed plaster, not as metal. Real silver carries a COOL cast in
+    the shadows and a near-white specular, so the new ramp is
+    deliberately not neutral. What must hold now: nearly neutral (a
+    silver letter must never look tinted), never WARM, and never flat."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtGui import QImage
     from PySide6.QtWidgets import QApplication
 
+    import numpy as np
+
     from config import constants
+    from recolor import space as recolor_space
     from render.asset_recolor import letter_metal_file
 
     QApplication.instance() or QApplication([])
+    # Neutrality is measured as OKLAB CHROMA, not HSV saturation: HSV
+    # saturation is a ratio over a vanishing maximum, so a deep shadow
+    # pixel reads "saturated" at a chroma the eye cannot see. The silver
+    # ramp's own peak chroma is ~0.021; gold's is ~0.135.
     for filename in constants.RING_LETTER_FILES.values():
         gold = defaults.RING_LETTER_ART_DIR / filename
         derived = letter_metal_file(gold, "silver")
         assert derived.exists() and derived != gold, filename
         image = QImage(str(derived))
         seen_opaque = False
+        levels = []
         for x in range(0, image.width(), 25):
             for y in range(0, image.height(), 25):
                 color = image.pixelColor(x, y)
                 if color.alpha() > 200:
                     seen_opaque = True
-                    assert color.red() == color.green() == color.blue(), filename
+                    levels.append(color.lightness())
+                    lab = recolor_space.linear_to_oklab(
+                        recolor_space.srgb_to_linear(
+                            np.array(color.getRgbF()[:3])
+                        )
+                    )
+                    chroma = recolor_space.oklab_chroma_hue(lab)[0]
+                    # Nearly neutral — a silver letter must never read tinted.
+                    assert chroma < 0.05, (filename, x, y, color.getRgb())
+                    # ...and never WARM: silver is cool or neutral, so the
+                    # blue channel may not sit below the red one.
+                    assert color.blue() >= color.red() - 2, (filename, x, y)
         assert seen_opaque, filename
+        # Never flat: the glyph keeps a real light-to-dark range.
+        assert max(levels) - min(levels) > 20, filename
     omega = QImage(str(letter_metal_file(
         defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["Ω"], "silver"
     )))
@@ -701,24 +730,25 @@ def test_live_derived_silver_letters_are_grayscale():
 
 
 def test_live_derived_bronze_preserves_relief_and_reads_bronze():
-    """R8a redo regression pin (owner spec 2026-07-21 night — REPLACES
-    the retired straight-multiply pin: that recipe capped every
-    channel at the tint's own ceiling, reading "weak" on bright glyph
-    cores, the exact bug this round fixes). The live `letter_metal_file
-    (gold, "bronze")` must (1) carry the bronze shade's hue/saturation
-    on every opaque pixel — a real copper color, never gray, never the
-    gold source hue — and (2) PRESERVE THE RELIEF: the gold master's
-    brightest and darkest sampled points must bronze in the SAME
-    relative order (a straight gain multiply preserves order; the
-    reverted percentile-stretch attempt did not, see config.defaults's
-    NOTE above METAL_SHADES)."""
+    """Regression pin for the live gold -> bronze letter derivation,
+    rewritten for the 2026-07-27 transformer (the retired assertions
+    read the old `(hue, saturation, reference value)` tuple, which no
+    longer exists — a shade now names a RAMP).
+
+    The law is unchanged in substance: (1) the glyph must read as a real
+    copper-warm bronze on every opaque pixel — never gray, never still
+    the gold source hue — and (2) THE RELIEF MUST SURVIVE: the gold
+    master's brightest and darkest sampled points must bronze in the
+    SAME relative order. Point (2) is what the reverted percentile-RANK
+    attempt (git show 013b5ca) destroyed."""
     import os
 
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
-    from PySide6.QtGui import QImage
+    from PySide6.QtGui import QColor, QImage
 
     from config import constants
+    from recolor import ramp as recolor_ramp, recipe as recolor_recipe
     from render.asset_recolor import letter_metal_file
 
     QApplication.instance() or QApplication([])
@@ -726,7 +756,18 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
     gold = QImage(str(gold_path))
     bronze = QImage(str(letter_metal_file(gold_path, "bronze")))
     assert bronze.size() == gold.size()
-    hue_deg, sat_target, _ = defaults.METAL_SHADES["bronze"]["bronze"]
+
+    # The expected hue comes from the ramp the shade names — one source
+    # of truth, so retuning the preset can never leave this pin stale.
+    presets = recolor_recipe.load()
+    ramp_name = defaults.METAL_SHADES["bronze"]["bronze"]
+    body = recolor_ramp.body_color(
+        presets.metal(ramp_name), presets.tuning.body_position
+    )
+    from recolor import space as recolor_space
+    body_srgb = recolor_space.linear_to_srgb(body)
+    hue_deg = QColor.fromRgbF(*body_srgb).hsvHueF() * 360.0
+
     darkest = brightest = None
     seen_opaque = False
     for x in range(0, gold.width(), 4):
@@ -737,13 +778,16 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
             seen_opaque = True
             bronze_px = bronze.pixelColor(x, y)
             assert bronze_px.alpha() == gold_px.alpha()
-            if bronze_px.value() >= 8:      # skip near-black quantization noise
+            # Skip the two ends of the ramp, where a metal DESATURATES by
+            # design (deep shadow and the near-white specular) and a hue
+            # reading stops being meaningful.
+            if 40 <= bronze_px.value() <= 235:
                 hue_diff = min(
                     abs(bronze_px.hsvHueF() * 360.0 - hue_deg),
                     360.0 - abs(bronze_px.hsvHueF() * 360.0 - hue_deg),
                 )
-                assert hue_diff < 6.0, (x, y, bronze_px.getRgb())
-                assert abs(bronze_px.hsvSaturationF() - sat_target) < 0.08
+                assert hue_diff < 20.0, (x, y, bronze_px.getRgb())
+                assert bronze_px.hsvSaturationF() > 0.20, (x, y, bronze_px.getRgb())
             level = gold_px.lightness()
             if darkest is None or level < darkest[0]:
                 darkest = (level, x, y)

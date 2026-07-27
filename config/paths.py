@@ -117,7 +117,7 @@ def subdial_set() -> str:
 # night) — mirrors the art-source/subdial-set switches above: ONE
 # global per metal (never threaded as a parameter) because it is a
 # single user preference reached from many call sites (`render.assets.
-# AssetCache._metal_swapped` for badges, `render.asset_recolor.
+# AssetCache._recolored` for badges, `render.asset_recolor.
 # letter_metal_file` for ring letters) exactly like `subdial_set`'s own
 # docstring explains for its one reader.
 _metal_shades: dict[str, str] = dict(constants.METAL_SHADE_DEFAULT)

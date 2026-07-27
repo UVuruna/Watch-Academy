@@ -46,10 +46,12 @@ shell.
   Subdial plate. The picked shade recolors ring letters everywhere
   ([Asset Recolor](../../render/asset_recolor.md)`.letter_metal_file`)
   and badge medallions wherever gold/silver is chosen
-  (`AssetCache._metal_swapped`) — bronze medallions stay the art as
-  drawn regardless of the bronze shade pick (out of this round's
-  scope; the owner's two complaints were badge GOLD and letter
-  BRONZE, never badge bronze).
+  (`AssetCache._recolored`) — bronze medallions stay the art as drawn
+  regardless of the bronze shade pick (`defaults.METAL_SWAP_TARGETS` is
+  gold/silver only; a bronze badge IS its own source art). Since the
+  2026-07-27 transformer rewrite a shade NAMES a ramp in
+  `recolor/presets/metals.json` rather than carrying numbers of its own
+  — see [Recolor (folder)](../../recolor/___recolor.md).
 
 ## Connections
 

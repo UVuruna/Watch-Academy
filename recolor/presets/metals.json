@@ -34,6 +34,58 @@
       "detail_gain": 1.00,
       "specular": { "start": 0.86, "strength": 0.50 }
     },
+    "gold_dark_amber": {
+      "stops": [
+        [0.00, "#140B02"],
+        [0.25, "#543405"],
+        [0.55, "#A66E10"],
+        [0.82, "#D9A62F"],
+        [1.00, "#FAECC6"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.34,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.88, "strength": 0.42 }
+    },
+    "gold_amber": {
+      "stops": [
+        [0.00, "#180D03"],
+        [0.25, "#613C0A"],
+        [0.55, "#BC7F1C"],
+        [0.82, "#E9C24C"],
+        [1.00, "#FEF3D4"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.87, "strength": 0.46 }
+    },
+    "gold_pale": {
+      "stops": [
+        [0.00, "#1F1608"],
+        [0.25, "#78591F"],
+        [0.55, "#D6AC55"],
+        [0.82, "#F5E09B"],
+        [1.00, "#FFFDF2"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.28,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.85, "strength": 0.54 }
+    },
+    "gold_champagne": {
+      "stops": [
+        [0.00, "#201A0D"],
+        [0.25, "#7A6631"],
+        [0.55, "#D2BA7E"],
+        [0.82, "#F2E7C4"],
+        [1.00, "#FFFDF7"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.28,
+      "detail_gain": 1.05,
+      "specular": { "start": 0.84, "strength": 0.58 }
+    },
     "silver": {
       "stops": [
         [0.00, "#0D1015"],
@@ -59,6 +111,32 @@
       "contrast": 0.35,
       "detail_gain": 1.00,
       "specular": { "start": 0.88, "strength": 0.45 }
+    },
+    "bronze_dark": {
+      "stops": [
+        [0.00, "#110904"],
+        [0.25, "#452715"],
+        [0.55, "#855224"],
+        [0.82, "#B98550"],
+        [1.00, "#F2E2C8"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.38,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.89, "strength": 0.40 }
+    },
+    "bronze_light": {
+      "stops": [
+        [0.00, "#1D1209"],
+        [0.25, "#6B452A"],
+        [0.55, "#C2884A"],
+        [0.82, "#EDBE87"],
+        [1.00, "#FFF3DE"]
+      ],
+      "gamma": 1.00,
+      "contrast": 0.32,
+      "detail_gain": 1.00,
+      "specular": { "start": 0.86, "strength": 0.50 }
     },
     "copper": {
       "stops": [
