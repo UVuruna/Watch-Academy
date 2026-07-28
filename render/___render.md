@@ -51,10 +51,20 @@ See [Assets](assets.md).
 
 ### `asset_recolor.py` — Asset Recolor
 Disk-cached recolors derived from a single master file: ring letter and
-badge metal finishes (`letter_metal_file`, `metal_variant_file`), the
-subdial plate's bezel/field recolor (`_recolored_plate`), and the public
-door to `AssetCache`'s TRITONE tint (`tinted_pixmap`). See
+badge metal finishes, the subdial plate's bezel/field recolor
+(`_recolored_plate`), and the public door to `AssetCache`'s TRITONE tint
+(`tinted_pixmap`). Each metal family has a LAZY door that names the file
+and records the recipe (`letter_metal_path`, `metal_variant_path`) and an
+EAGER one that also builds the pixels (`letter_metal_variant`,
+`metal_variant_file`); the DIAL uses `letter_metal_file`, which stands
+the gold master in until the background has built the real metal. See
 [Asset Recolor](asset_recolor.md).
+
+### `art_warm.py` — Art Warm
+The background drain of that ledger (owner decree 2026-07-28: "FIRST
+DEFAULT - recolor u pozadini. Kad završi prikaže") — it took the cold
+first paint from 14.78 s to 1.46 s across three watches by moving every
+recolor off the GUI thread. See [Art Warm](art_warm.md).
 
 ### `asset_variants.py` — Asset Variants
 Disk-cached derived images that are not metal recolors: the ring face

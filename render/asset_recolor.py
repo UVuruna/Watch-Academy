@@ -22,28 +22,27 @@ from config.paths import art_file
 from render.assets import AssetCache
 
 
-def letter_metal_file(path: Path, metal: str) -> Path:
-    """The ring letter's GOLD, SILVER or BRONZE finish, derived AT LOAD
-    from the GOLD master (owner decree 2026-07-19: "bolje crtati na
-    licu mesta nego 15MB fajlova" — retiring the 76 pre-rendered
-    `_silver.png`/`_bronze.png` files) — now SHADE-aware (R8a redo,
-    owner spec 2026-07-21 night, replacing both the retired straight-
-    multiply bronze recipe the owner called "weak" AND the gold
-    passthrough): every metal, including gold, runs through
-    `AssetCache._recolored` (the SAME door badge medallions use, Rule
-    #5) in `alpha` mask mode — a ring letter mixes no gray stone the way
-    a medallion does, so unlike the badge's chroma-window detection
-    every alpha>0 pixel simply IS a metal pixel. The source metal is
-    GOLD here (the master these are drawn on) against the badges'
-    bronze; the transform is source-agnostic and is simply told which.
-    The active SHADE per metal comes
-    from `config.paths.metal_shade` (a Settings choice, not a
-    parameter here — same reasoning as `subdial_plate_file`'s active
-    set). Disk-cached like every other derived asset, keyed by shade
-    and `defaults.METAL_SWAP_VERSION` — paid once per (file, metal,
-    shade), never per paint."""
+def letter_metal_path(path: Path, metal: str) -> Path:
+    """WHERE the ring letter's GOLD, SILVER, BRONZE or THEMATIC finish
+    lives on disk — a PURE path computation that also RECORDS the recipe
+    in the lazy ledger. NO pixel work (the twin of `metal_variant_path`,
+    Rule #5 — one ledger, two families).
+
+    The finish is derived AT LOAD from the GOLD master (owner decree
+    2026-07-19: "bolje crtati na licu mesta nego 15MB fajlova" — retiring
+    the 76 pre-rendered `_silver.png`/`_bronze.png` files) and is
+    SHADE-aware (R8a redo, owner spec 2026-07-21 night): every metal,
+    gold included, runs through `AssetCache._recolored` (the SAME door
+    badge medallions use) in `alpha` mask mode — a ring letter mixes no
+    gray stone the way a medallion does, so unlike the badge's
+    chroma-window detection every alpha>0 pixel simply IS a metal pixel.
+    The source metal is GOLD here (the master these are drawn on)
+    against the badges' bronze; the transform is source-agnostic and is
+    simply told which. The active SHADE comes from the watch's display
+    context (`config.paths.metal_shade`). Cache key: the master's mtime,
+    the metal, the shade and `defaults.METAL_SWAP_VERSION`."""
     path = art_file(path)
-    if path is None:
+    if path is None or not path.exists():
         return path
     shade = paths.metal_shade(metal)
     stamp = hashlib.sha1(str(path).encode("utf-8")).hexdigest()[:16]
@@ -52,23 +51,37 @@ def letter_metal_file(path: Path, metal: str) -> Path:
         / f"{stamp}_{int(path.stat().st_mtime)}_letter_{metal}_{shade}"
         f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
-    if not cache.exists():
-        # QImage end to end (the same R1b threading law `_recolored`
-        # documents) — a future background warmup of letter glyphs must
-        # never trip the QPixmap-off-GUI-thread crash class.
-        result = AssetCache._recolored(
-            QImage(str(path)), metal,
-            defaults.METAL_SOURCE_LETTER, defaults.METAL_MASK_LETTER,
-        )
-        try:
-            cache.parent.mkdir(parents=True, exist_ok=True)
-            if not result.save(str(cache)):
-                raise OSError(f"QImage.save returned False for {cache}")
-        except OSError as error:
-            # A cold cache is only slower, never wrong — but say so.
-            print(f"letter metal cache write failed: {error}", file=sys.stderr)
-            return path
+    _PENDING_VARIANTS.setdefault(
+        str(cache),
+        (path, metal, defaults.METAL_SOURCE_LETTER,
+         defaults.METAL_MASK_LETTER, shade),
+    )
     return cache
+
+
+def letter_metal_file(path: Path, metal: str) -> Path:
+    """The file the DIAL should draw RIGHT NOW: the derived finish when
+    it is already on disk, otherwise the GOLD MASTER.
+
+    Owner decree 2026-07-28 ("FIRST DEFAULT — recolor u pozadini. Kad
+    završi prikaže."). This used to recolor synchronously on a cache
+    miss, and it was the WHOLE of the slow start: measured on a cold
+    raster cache, a watch's first paint ran 15 of these — 3.6 s of numpy
+    (oklab, guided box filter, specular ramp) on the GUI thread, times
+    one per open watch, before any dial appeared at all. The pixels are
+    identical either way; only WHERE they are paid moved. The master is
+    the honest stand-in: gold is the metal the letters are actually
+    drawn in, so a not-yet-recolored dial is a GOLD dial, never a blank
+    one (Rule #1 — a documented, visible fallback, not a silent one).
+
+    `render.art_warm.warm_pending_art` drains the ledger on the
+    background thread and the controller repaints; a caller that needs
+    the real pixels NOW (an export) uses `ensure_variant` on
+    `letter_metal_path`."""
+    derived = letter_metal_path(path, metal)
+    if derived is None or derived.exists():
+        return derived
+    return _PENDING_VARIANTS[str(derived)][0]
 
 
 @profiling.timed("Subdial recolor")
@@ -190,7 +203,16 @@ def _recolored_plate(
 # end to end (the R1b law) — or in the background warm
 # (`app.encyclopedia_warm`). Per-path locks make a GUI-thread first
 # display and the warm thread meeting on the SAME file build it once.
-_PENDING_VARIANTS: dict[str, tuple[Path, str]] = {}
+# key -> (source file, target metal, source metal, mask mode, shade).
+# The source metal and mask mode used to be hardcoded to the BADGE pair
+# inside `ensure_variant`; they became part of the recipe when ring
+# LETTERS joined the ledger (owner decree 2026-07-28), because a letter
+# is drawn on a GOLD master and masked by ALPHA where a badge is bronze
+# and masked by CHROMA. The SHADE rides along for the same round: a
+# recipe is recorded under ONE watch's display context and built later on
+# a background thread that has none, so the shade cannot be re-read at
+# build time — it must be remembered.
+_PENDING_VARIANTS: dict[str, tuple[Path, str, str, str, str]] = {}
 _VARIANT_LOCKS: dict[str, threading.Lock] = {}
 _VARIANT_LOCKS_GUARD = threading.Lock()
 
@@ -226,8 +248,25 @@ def metal_variant_path(path: Path, metal: str | None) -> Path:
         / f"{stamp}_{int(path.stat().st_mtime)}_{metal}_{shade}"
         f"_v{defaults.METAL_SWAP_VERSION}.png"
     )
-    _PENDING_VARIANTS.setdefault(str(cache), (path, metal))
+    _PENDING_VARIANTS.setdefault(
+        str(cache),
+        (path, metal, defaults.METAL_SOURCE_BADGE,
+         defaults.METAL_MASK_BADGE, shade),
+    )
     return cache
+
+
+def pending_art() -> list[Path]:
+    """Every recorded recipe whose file is still missing — the DIAL's
+    own not-yet-recolored letters first in practice, because a watch's
+    first paint is what records them (owner decree 2026-07-28). The
+    background drain (`render.art_warm.warm_pending_art`) walks THIS
+    list; a snapshot is taken because the GUI thread keeps recording new
+    recipes while the drain runs (the next pass picks those up)."""
+    return [
+        Path(key) for key in list(_PENDING_VARIANTS)
+        if not Path(key).exists()
+    ]
 
 
 def variant_pending(path: Path | None) -> bool:
@@ -259,10 +298,9 @@ def ensure_variant(path: Path | None) -> Path | None:
     with _variant_lock(key):
         if path.exists():
             return path
-        source, metal = recipe
+        source, metal, source_metal, mask_mode, shade = recipe
         swapped = AssetCache._recolored(
-            QImage(str(source)), metal,
-            defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
+            QImage(str(source)), metal, source_metal, mask_mode, shade,
         )
         try:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -272,6 +310,18 @@ def ensure_variant(path: Path | None) -> Path | None:
             print(f"metal variant cache write failed: {error}", file=sys.stderr)
             return source
     return path
+
+
+def letter_metal_variant(path: Path, metal: str | None) -> Path:
+    """The ring letter's derived finish with its PIXELS GUARANTEED — the
+    eager door, for callers that cannot accept the gold master standing
+    in (an export, a test measuring the actual metal). Exactly
+    `metal_variant_file`'s twin for the letter family (Rule #5).
+
+    The DIAL never uses this: it draws through `letter_metal_file`, which
+    returns the master on a cache miss and lets the background warm catch
+    up (owner decree 2026-07-28)."""
+    return ensure_variant(letter_metal_path(path, metal))
 
 
 def metal_variant_file(path: Path, metal: str | None) -> Path:

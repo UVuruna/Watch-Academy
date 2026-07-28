@@ -363,11 +363,19 @@ def test_thematic_finish_wears_the_preset_color():
     assert thematic.ring.letter_metal[0] == "silver"      # the accent
     assert thematic.ring.motto_metal == "thematic"
     assert thematic.ring_finish == "gold"                 # containment
-    assert paths.metal_shade("thematic") == "cross_red"   # DOMY's shade
-    build_skin(replace(Settings(), ring="Dollar", ring_finish="thematic"))
-    assert paths.metal_shade("thematic") == "dollar_green"
-    build_skin(replace(Settings(), ring="PILOT", ring_finish="thematic"))
-    assert paths.metal_shade("thematic") == "cross_blue"
+    # The shade rides THIS skin (owner bug 2026-07-28) — never a process
+    # global, so building another watch's skin cannot repaint this one.
+    assert thematic.display.shade("thematic") == "cross_red"   # DOMY's
+    dollar = build_skin(replace(Settings(), ring="Dollar", ring_finish="thematic"))
+    assert dollar.display.shade("thematic") == "dollar_green"
+    pilot = build_skin(replace(Settings(), ring="PILOT", ring_finish="thematic"))
+    assert pilot.display.shade("thematic") == "cross_blue"
+    # ...and the earlier skins are UNMOVED by the later builds.
+    assert thematic.display.shade("thematic") == "cross_red"
+    assert dollar.display.shade("thematic") == "dollar_green"
+    assert paths.metal_shade("thematic") == paths.DEFAULT_DISPLAY.shade(
+        "thematic"
+    )                                    # nothing leaked to the process
     # Two metals OFF + thematic = every letter in the theme color.
     flat = build_skin(replace(
         Settings(), ring_finish="thematic", ring_two_metals={"DOMY": False},
@@ -407,6 +415,48 @@ def test_thematic_choices_mirror_the_recolor_presets():
         assert shade in constants.METAL_SHADE_TITLES, shade
 
 
+def test_two_watches_keep_their_own_thematic_color():
+    """THE MULTI-WATCH COLOUR LEAK (owner bug 2026-07-28) — the
+    regression pin.
+
+    Reported: "Boji oba isto (kao poslednji ucitani sat — imamo DOMY i
+    PILOT tematic i oba su crvena)". Root cause: the art source, subdial
+    set and metal shades were PROCESS-WIDE module globals that
+    `apply_display_settings` overwrote on every skin build.
+    `AppController.__init__` builds EVERY watch before the first one
+    paints, so by paint time all of them read the LAST-BUILT watch's
+    shade — DOMY's `cross_red`.
+
+    This test reproduces that exact order: build all the skins FIRST,
+    resolve the art AFTERWARDS. Each watch must still resolve its own
+    letter file. If the display state ever becomes process-wide again,
+    the two paths collapse into one and this fails."""
+    from pathlib import Path
+
+    from config import paths
+    from render.asset_recolor import letter_metal_path
+
+    # Real order: every watch's skin is built before any of them paints.
+    pilot = build_skin(replace(Settings(), ring="PILOT", ring_finish="thematic"))
+    domy = build_skin(replace(Settings(), ring="DOMY", ring_finish="thematic"))
+    assert pilot.display.shade("thematic") == "cross_blue"
+    assert domy.display.shade("thematic") == "cross_red"
+
+    # The SAME master letter, resolved by each watch in turn — so the only
+    # thing that can make the two answers differ is the watch's own shade.
+    master = Path(domy.ring.letter_art[12])
+    derived = {}
+    for name, skin in (("PILOT", pilot), ("DOMY", domy)):
+        # Exactly what the compositor does: install THIS watch's context,
+        # then resolve. (`paths.in_display` wraps every real entry point.)
+        with paths.display(skin.display):
+            derived[name] = letter_metal_path(master, "thematic")
+
+    assert derived["PILOT"] != derived["DOMY"], derived
+    assert "cross_blue" in derived["PILOT"].name
+    assert "cross_red" in derived["DOMY"].name
+
+
 def test_custom_ring_picks_its_own_thematic_color():
     """CUSTOM-THEMATIC widening (owner 2026-07-27): a custom card's own
     `thematic` field wins under the Thematic finish — any transformer
@@ -421,20 +471,20 @@ def test_custom_ring_picks_its_own_thematic_color():
         {"name": "IRONRING", "positions": [12, 20, 24, 4],
          "letters": ["I", "R", "O", "N"], "thematic": "copper"},
     )
-    build_skin(replace(
+    iron = build_skin(replace(
         Settings(), ring="IRONRING", custom_rings=custom,
         ring_finish="thematic",
     ))
-    assert paths.metal_shade("thematic") == "copper"
+    assert iron.display.shade("thematic") == "copper"
     plain = (
         {"name": "PLAINRING", "positions": [12, 20, 24, 4],
          "letters": ["A", "B", "C", "D"]},
     )
-    build_skin(replace(
+    bare = build_skin(replace(
         Settings(), ring="PLAINRING", custom_rings=plain,
         ring_finish="thematic",
     ))
-    assert paths.metal_shade("thematic") == "moon_indigo"
+    assert bare.display.shade("thematic") == "moon_indigo"
     with _pytest.raises(ValueError):
         validate_preset({
             "name": "X", "positions": [12, 20, 24, 4],
@@ -647,10 +697,14 @@ def test_bronze_finish_and_theme_metals():
     assert bronze_ring.letter_metal[0] == "silver"     # accent stays silver
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
     from config import constants as c
-    from render.asset_recolor import letter_metal_file
+    # The EAGER door: the dial itself now draws the gold master until the
+    # background warm catches up (owner 2026-07-28), so a test that wants
+    # to see the real bronze pixels must ask for them (`letter_metal_
+    # variant` = name + materialize).
+    from render.asset_recolor import letter_metal_variant
 
     for filename in c.RING_LETTER_FILES.values():
-        derived = letter_metal_file(art_dir / filename, "bronze")
+        derived = letter_metal_variant(art_dir / filename, "bronze")
         assert derived.exists(), filename
         assert derived != art_dir / filename
     seal = {
@@ -806,21 +860,19 @@ def test_metal_mask_stays_untouched_across_every_shade():
     probe.fill(QColor("#B08050"))                    # warm bronze
     image = probe.toImage()
     image.setPixelColor(1, 0, QColor("#808080"))     # neutral gray
-    try:
-        for metal, shade in (
-            ("gold", "dark_amber"), ("gold", "champagne"),
-            ("silver", "gunmetal"), ("silver", "platinum"),
+    for metal, shade in (
+        ("gold", "dark_amber"), ("gold", "champagne"),
+        ("silver", "gunmetal"), ("silver", "platinum"),
+    ):
+        with _paths.display(
+            _paths.display_context(metal_shades={metal: shade})
         ):
-            _paths.set_metal_shade(metal, shade)
             swapped = AssetCache._recolored(
                 image, metal,
                 defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
             )
-            assert swapped.pixelColor(1, 0) == QColor("#808080"), (metal, shade)
-            assert swapped.pixelColor(0, 0) != QColor("#B08050"), (metal, shade)
-    finally:
-        _paths.set_metal_shade("gold", "classic")
-        _paths.set_metal_shade("silver", "silver")
+        assert swapped.pixelColor(1, 0) == QColor("#808080"), (metal, shade)
+        assert swapped.pixelColor(0, 0) != QColor("#B08050"), (metal, shade)
 
 
 def test_metal_recolor_relief_order_survives_the_ramp():
@@ -857,14 +909,13 @@ def test_metal_recolor_relief_order_survives_the_ramp():
         for y in range(height):
             image.setPixelColor(x, y, color)
 
-    _paths.set_metal_shade("gold", "dark_amber")
-    try:
+    with _paths.display(
+        _paths.display_context(metal_shades={"gold": "dark_amber"})
+    ):
         swapped = AssetCache._recolored(
             image, "gold",
             defaults.METAL_SOURCE_BADGE, defaults.METAL_MASK_BADGE,
         )
-    finally:
-        _paths.set_metal_shade("gold", "classic")
 
     row = height // 2
     out = np.array([
@@ -946,7 +997,7 @@ def test_live_derived_silver_letters_read_as_cool_silver():
 
     from config import constants
     from recolor import space as recolor_space
-    from render.asset_recolor import letter_metal_file
+    from render.asset_recolor import letter_metal_variant
 
     QApplication.instance() or QApplication([])
     # Neutrality is measured as OKLAB CHROMA, not HSV saturation: HSV
@@ -955,7 +1006,7 @@ def test_live_derived_silver_letters_read_as_cool_silver():
     # ramp's own peak chroma is ~0.021; gold's is ~0.135.
     for filename in constants.RING_LETTER_FILES.values():
         gold = defaults.RING_LETTER_ART_DIR / filename
-        derived = letter_metal_file(gold, "silver")
+        derived = letter_metal_variant(gold, "silver")
         assert derived.exists() and derived != gold, filename
         image = QImage(str(derived))
         seen_opaque = False
@@ -980,7 +1031,7 @@ def test_live_derived_silver_letters_read_as_cool_silver():
         assert seen_opaque, filename
         # Never flat: the glyph keeps a real light-to-dark range.
         assert max(levels) - min(levels) > 20, filename
-    omega = QImage(str(letter_metal_file(
+    omega = QImage(str(letter_metal_variant(
         defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["Ω"], "silver"
     )))
     assert omega.pixelColor(0, 0).alpha() == 0
@@ -1006,12 +1057,12 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
 
     from config import constants
     from recolor import ramp as recolor_ramp, recipe as recolor_recipe
-    from render.asset_recolor import letter_metal_file
+    from render.asset_recolor import letter_metal_variant
 
     QApplication.instance() or QApplication([])
     gold_path = defaults.RING_LETTER_ART_DIR / constants.RING_LETTER_FILES["M"]
     gold = QImage(str(gold_path))
-    bronze = QImage(str(letter_metal_file(gold_path, "bronze")))
+    bronze = QImage(str(letter_metal_variant(gold_path, "bronze")))
     assert bronze.size() == gold.size()
 
     # The expected hue comes from the ramp the shade names — one source
@@ -1074,6 +1125,7 @@ def test_full_dial_renders_distinctly_per_letter_finish():
     from core.clock_state import build_day_context, build_tick_state
     from data.moon_phases import MoonPhaseRepository
     from data.seasons import SeasonsRepository
+    from render.art_warm import warm_pending_art
     from render.assets import AssetCache
     from render.compositor import Compositor
 
@@ -1090,9 +1142,16 @@ def test_full_dial_renders_distinctly_per_letter_finish():
     images = {}
     for finish in ("gold", "silver", "bronze"):
         skin = build_skin(replace(Settings(), ring_finish=finish))
-        image = Compositor(skin, AssetCache()).render_offscreen(
-            360.0, 1.0, day, tick
-        )
+        compositor = Compositor(skin, AssetCache())
+        # Render TWICE with the background drain in between — exactly the
+        # production sequence since 2026-07-28: the first frame stands the
+        # gold master in for every not-yet-derived letter (which is why a
+        # single cold render would make all three finishes identical), the
+        # warm builds the real metals, the repaint shows them.
+        compositor.render_offscreen(360.0, 1.0, day, tick)
+        warm_pending_art()
+        compositor.invalidate()
+        image = compositor.render_offscreen(360.0, 1.0, day, tick)
         assert not image.isNull()
         images[finish] = image
     finishes = list(images)
