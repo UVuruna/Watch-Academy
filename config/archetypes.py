@@ -8,7 +8,7 @@ table, the article-set names Session 6 fills, and the render
 tunables. Documentation: config/archetypes.md.
 """
 
-from config import paths
+from config import cube, paths
 
 # Canonical (source-less) art root — config.paths.art_file appends the
 # active source SUFFIX (assets/archetypes/<family>/<Figure>_<src>.png) at
@@ -132,18 +132,22 @@ ARCHETYPE_PENDING_LINE = (
 )
 
 
-def _fig(angle, file, name, row2, entity, enc=None, rotates=False):
+def _fig(angle, file, name, row2, entity, enc=None, rotates=False, cell=None):
     """One figure row: unrotated arm angle (dial degrees from the
     top), canonical art path, the TWO-ROW names (row 1 the figure,
     row 2 its calling/role/quality/shadow/object/being), the article
-    entity key, the encyclopedia (topic, entry) or None, and `rotates`
+    entity key, the encyclopedia (topic, entry) or None, `rotates`
     — THE UNIVERSAL ROTATION CONVENTION opt-in (owner decree
     2026-07-20): False for every figure except where declared,
     `ArchetypeLayer` resolves `file` through `rotating_art_file` at
-    paint time only when this is True."""
+    paint time only when this is True — and `cell`, the CUBE CELL this
+    arm seats (Session 24). Only the two Cube character wheels carry
+    it; through it an arm resolves its three registers' PEOPLE from
+    `config.cube.ROSTER` (`roster_names`), so the canon is transcribed
+    once and read by every wheel that shows the same seat."""
     return {
         "angle": angle, "file": file, "name": name, "row2": row2,
-        "entity": entity, "enc": enc, "rotates": rotates,
+        "entity": entity, "enc": enc, "rotates": rotates, "cell": cell,
     }
 
 
@@ -181,11 +185,11 @@ CHARACTER_ART_DIR = ARCHETYPE_ART_DIR / "character" / "primary" / "colored"
 # group beside `character`, same register/look shape.
 VERTICES_ART_DIR = ARCHETYPE_ART_DIR / "vertices" / "primary" / "colored"
 
-# The three FIGURE SETS every Rose seat carries (Charter rule 5: three
-# DIFFERENT PEOPLE holding one office, never one character read three
-# ways). They are REGISTERS on disk — `<group>/<set>/colored/<Stem>.png`
-# — exactly as the Ages wheel's tree/animals pair already is.
-ROSE_FIGURE_SETS = ("archetypal", "historical", "modern")
+# The three FIGURE SETS every Rose seat carries are REGISTERS on disk —
+# `<group>/<set>/colored/<Stem>.png`, exactly as the Ages wheel's
+# tree/animals pair already is. The tuple itself is CANON and lives once,
+# at `config.cube.FIGURE_SETS` (Session 24) — the roster, the disk
+# registers and the Rose's three stars all read that one declaration.
 CROSSES_ART_DIR = ARCHETYPE_ART_DIR / "crosses" / "primary" / "colored"
 
 # The Eight Ages, shared by both registers: (angle, age name, row-2
@@ -488,28 +492,28 @@ ARCHETYPES = {
         "figures": (
             _fig(0.0, CHARACTER_ART_DIR / "Loyalty.png",
                  "Loyalty", "Tribalism", "loyalty",
-                 enc=("cube", 7)),
+                 enc=("cube", 7), cell=(0, 1, 0)),
             _fig(45.0, CHARACTER_ART_DIR / "Patronage.png",
                  "Patronage", "Favoritism", "patronage",
-                 enc=("cube", 12)),
+                 enc=("cube", 12), cell=(0, 1, 1)),
             _fig(90.0, CHARACTER_ART_DIR / "Dignity.png",
                  "Dignity", "Self-Worship", "dignity",
-                 enc=("cube", 10)),
+                 enc=("cube", 10), cell=(0, 0, 1)),
             _fig(135.0, CHARACTER_ART_DIR / "Conviction.png",
                  "Conviction", "Dogmatism", "conviction",
-                 enc=("cube", 14)),
+                 enc=("cube", 14), cell=(0, -1, 1)),
             _fig(180.0, CHARACTER_ART_DIR / "Integrity.png",
                  "Integrity", "Legalism", "integrity",
-                 enc=("cube", 8)),
+                 enc=("cube", 8), cell=(0, -1, 0)),
             _fig(225.0, CHARACTER_ART_DIR / "Renunciation.png",
                  "Renunciation", "Mortification", "renunciation",
-                 enc=("cube", 13)),
+                 enc=("cube", 13), cell=(0, -1, -1)),
             _fig(270.0, CHARACTER_ART_DIR / "Humility.png",
                  "Humility", "Self-Annihilation", "humility",
-                 enc=("cube", 9)),
+                 enc=("cube", 9), cell=(0, 0, -1)),
             _fig(315.0, CHARACTER_ART_DIR / "Devotion.png",
                  "Devotion", "Martyrdom", "devotion",
-                 enc=("cube", 11)),
+                 enc=("cube", 11), cell=(0, 1, -1)),
         ),
         "center": None,       # both Compass archetypes: the rose is
                               # the wheel itself (owner; sheet "No
@@ -529,28 +533,28 @@ ARCHETYPES = {
         "figures": (
             _fig(0.0, VERTICES_ART_DIR / "Quiet_Devotee.png",
                  "Quiet Devotee", "Submissive Enabler", "quiet_devotee",
-                 enc=("cube", 11)),
+                 enc=("cube", 11), cell=(-1, 1, -1)),
             _fig(45.0, VERTICES_ART_DIR / "Sacrificial_Protector.png",
                  "Sacrificial Protector", "Fanatical Martyr",
-                 "sacrificial_protector", enc=("cube", 15)),
+                 "sacrificial_protector", enc=("cube", 15), cell=(1, 1, -1)),
             _fig(90.0, VERTICES_ART_DIR / "Charismatic_Champion.png",
                  "Charismatic Champion", "Tribal Warlord",
-                 "charismatic_champion", enc=("cube", 16)),
+                 "charismatic_champion", enc=("cube", 16), cell=(1, 1, 1)),
             _fig(135.0, VERTICES_ART_DIR / "Steady_Guardian.png",
                  "Steady Guardian", "Complacent Nepotist",
-                 "steady_guardian", enc=("cube", 12)),
+                 "steady_guardian", enc=("cube", 12), cell=(-1, 1, 1)),
             _fig(180.0, VERTICES_ART_DIR / "Wise_Statesman.png",
                  "Wise Statesman", "Cold Elitist", "wise_statesman",
-                 enc=("cube", 14)),
+                 enc=("cube", 14), cell=(-1, -1, 1)),
             _fig(225.0, VERTICES_ART_DIR / "Visionary_Founder.png",
                  "Visionary Founder", "Messianic Tyrant",
-                 "visionary_founder", enc=("cube", 18)),
+                 "visionary_founder", enc=("cube", 18), cell=(1, -1, 1)),
             _fig(270.0, VERTICES_ART_DIR / "Principled_Reformer.png",
                  "Principled Reformer", "Puritanical Zealot",
-                 "principled_reformer", enc=("cube", 17)),
+                 "principled_reformer", enc=("cube", 17), cell=(1, -1, -1)),
             _fig(315.0, VERTICES_ART_DIR / "Contemplative_Sage.png",
                  "Contemplative Sage", "Paralyzed Purist",
-                 "contemplative_sage", enc=("cube", 13)),
+                 "contemplative_sage", enc=("cube", 13), cell=(-1, -1, -1)),
         ),
         "center": None,       # the Rose is the wheel itself, like both
                               # Compass archetypes
@@ -612,6 +616,21 @@ def figures(key: str) -> tuple:
     if "registers" in spec:
         return spec["registers"][ARCHETYPE_LIFE_REGISTER]
     return spec["figures"]
+
+
+def roster_names(key: str, index: int, register: str) -> tuple[str, str]:
+    """THE NAME FALLBACK'S PEOPLE (Session 24, CUBE.md §The Rosters): the
+    two figures one archetype arm seats in one figure set — `(the
+    luminous reading's person, the fallen reading's person)`. Only the
+    two CUBE CHARACTER wheels answer: the Character wheel (the cube at
+    depth zero) and the vertices wheel carry a `cell`, so both resolve
+    through the ONE roster table instead of repeating it. Every other
+    archetype raises — its arms are not cube seats, and a seat-less
+    guess would be a lie (Rule #1)."""
+    cell = figures(key)[index]["cell"]
+    if cell is None:
+        raise KeyError(f"{key}[{index}] seats no cube cell")
+    return cube.roster(cell, register)
 
 
 def center(key: str) -> dict | None:

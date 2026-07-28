@@ -211,8 +211,10 @@ def rose_star_offsets(skin: SkinDefinition) -> tuple:
 def rose_star_set(offset: float) -> str:
     """Which figure set the Rose star at `offset` carries (CUBE.md §The
     Rose): "modern" on the true hours, "historical" one ray back, and
-    "myth" wherever its wheel sent it — −30° on Legacy (the myth we
-    inherited), +15° on Prophecy (the myth that comes)."""
+    "archetypal" wherever its wheel sent the myth star — −30° on Legacy
+    (the myth we inherited), +15° on Prophecy (the myth that comes). The
+    three words are `cube.FIGURE_SETS`, so the star names the very set
+    the roster and the disk register name (Session 24)."""
     return constants.ROSE_STAR_SETS[offset]
 
 

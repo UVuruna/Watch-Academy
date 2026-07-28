@@ -112,6 +112,198 @@ AXES: tuple[CubeAxis, ...] = (
 # warm corner. The Rose seats all three at the axle — the Being view
 # projects the whole axis onto the single centre point.
 SACRED_TRIO_NAMES = ("Jesus Christ", "God — The One", "The Devil")
+# The centre's own name, kept once (Rule #5): the seat that answers no
+# figure in any register.
+THE_ONE_SEAT = SACRED_TRIO_NAMES[1]
+
+# --- the rosters (CUBE.md §The Rosters, Session 24) -----------------------------
+# THE THREE FIGURE SETS every seat carries (Charter rule 5: three
+# DIFFERENT PEOPLE holding one office, never one character read three
+# ways) — archetypal (biblical, mythological, classical-literary),
+# historical (real persons), modern (fantasy, film, comics). They are
+# also the REGISTERS on disk (`<group>/<set>/colored/<Stem>.png`) and the
+# three Rose stars' own sets (`constants.ROSE_STAR_SETS`): ONE tuple, all
+# three readers.
+FIGURE_SETS = ("archetypal", "historical", "modern")
+
+# Every human cell of the cube → the two people who hold it in each set,
+# `(luminous, fallen)`. The 108 seats of the poles, the vertices and the
+# four carried edges are TRANSCRIBED from the sealed canon tables (§The
+# Six Poles, §The Eight Vertices, §The Character Wheel); the 48 seats of
+# the eight new edges are Session 24's round under FAME FIRST and its
+# ranking addendum. The cells are the same coordinates `AXES` uses, so a
+# seat's roster, hue, family, kin and antipode all answer from one key.
+ROSTER: dict[tuple[int, int, int], dict[str, tuple[str, str]]] = {
+    # --- the six poles ---------------------------------------------------------
+    (-1, 0, 0): {                                   # Composure / Lethargy
+        "archetypal": ("Siddhartha Gautama", "Ilya Ilyich Oblomov"),
+        "historical": ("Marcus Aurelius", "Louis XVI"),
+        "modern": ("Yoda", "Jabba the Hutt"),
+    },
+    (1, 0, 0): {                                    # Vigor / Frenzy
+        "archetypal": ("Heracles", "Achilles"),
+        "historical": ("Theodore Roosevelt", "Adolf Hitler"),
+        "modern": ("Conan the Barbarian", "Hulk"),
+    },
+    (0, 1, 0): {                                    # Loyalty / Tribalism
+        "archetypal": ("Penelope", "David"),
+        "historical": ("Ernest Shackleton", "Pope Alexander VI"),
+        "modern": ("Samwise Gamgee", "Bellatrix Lestrange"),
+    },
+    (0, -1, 0): {                                   # Integrity / Legalism
+        "archetypal": ("Abraham", "Inspector Javert"),
+        "historical": ("Socrates", "Maximilien Robespierre"),
+        "modern": ("Batman", "Judge Dredd"),
+    },
+    (0, 0, -1): {                                   # Humility / Self-Annihilation
+        "archetypal": ("Jesus Christ", "Judas Iscariot"),
+        "historical": ("Mahatma Gandhi", "Franz Kafka"),
+        "modern": ("Superman", "Darth Vader"),
+    },
+    (0, 0, 1): {                                    # Dignity / Self-Worship
+        "archetypal": ("King Arthur", "Lucifer"),
+        "historical": ("Nelson Mandela", "Salvador Dalí"),
+        "modern": ("T'Challa", "Lord Voldemort"),
+    },
+    # --- the eight vertices ----------------------------------------------------
+    (-1, 1, -1): {                          # Quiet Devotee / Submissive Enabler
+        "archetypal": ("Virgin Mary", "Ophelia"),
+        "historical": ("Florence Nightingale", "Eva Braun"),
+        "modern": ("Faramir", "Peter Pettigrew"),
+    },
+    (-1, 1, 1): {                           # Steady Guardian / Complacent Nepotist
+        "archetypal": ("Hector", "King Lear"),
+        "historical": ("Queen Elizabeth II", "Louis XV"),
+        "modern": ("Aragorn", "Denethor II"),
+    },
+    (-1, -1, -1): {                         # Contemplative Sage / Paralyzed Purist
+        "archetypal": ("Job", "Hamlet"),
+        "historical": ("Leo Tolstoy", "Nicholas II"),
+        "modern": ("Gandalf", "Mace Windu"),
+    },
+    (-1, -1, 1): {                          # Wise Statesman / Cold Elitist
+        "archetypal": ("Joseph son of Jacob", "The Grand Inquisitor"),
+        "historical": ("George Washington", "Klemens von Metternich"),
+        "modern": ("Albus Dumbledore", "Saruman"),
+    },
+    (1, 1, -1): {                           # Sacrificial Protector / Fanatical Martyr
+        "archetypal": ("Moses", "Samson"),
+        "historical": ("Harriet Tubman", "Yukio Mishima"),
+        "modern": ("Harry Potter", "Kylo Ren"),
+    },
+    (1, 1, 1): {                            # Charismatic Champion / Tribal Warlord
+        "archetypal": ("Beowulf", "Agamemnon"),
+        "historical": ("Winston Churchill", "Benito Mussolini"),
+        "modern": ("Wonder Woman", "Khal Drogo"),
+    },
+    (1, -1, -1): {                          # Principled Reformer / Puritanical Zealot
+        "archetypal": ("Antigone", "Judge Claude Frollo"),
+        "historical": ("Martin Luther King Jr.", "Girolamo Savonarola"),
+        "modern": ("Luke Skywalker", "Stannis Baratheon"),
+    },
+    (1, -1, 1): {                           # Visionary Founder / Messianic Tyrant
+        "archetypal": ("Aeneas", "Pharaoh of the Exodus"),
+        "historical": ("Mustafa Kemal Atatürk", "Napoleon Bonaparte"),
+        "modern": ("Leia Organa", "Paul Atreides"),
+    },
+    # --- the four CARRIED edges (the Character wheel's own combos) --------------
+    (0, 1, -1): {                                   # Devotion / Martyrdom
+        "archetypal": ("Moses", "Samson"),
+        "historical": ("Janusz Korczak", "Marcus Antonius"),
+        "modern": ("Alfred Pennyworth", "Severus Snape"),
+    },
+    (0, 1, 1): {                                    # Patronage / Favoritism
+        "archetypal": ("Boaz", "King Lear"),
+        "historical": ("Lorenzo de' Medici", "Nicolae Ceaușescu"),
+        "modern": ("Charles Xavier", "Denethor II"),
+    },
+    (0, -1, 1): {                                   # Conviction / Dogmatism
+        "archetypal": ("Elijah", "Creon"),
+        "historical": ("Martin Luther", "Joseph Stalin"),
+        "modern": ("Steve Rogers", "Dolores Umbridge"),
+    },
+    (0, -1, -1): {                                  # Renunciation / Mortification
+        "archetypal": ("John the Baptist", "Father Ferapont"),
+        "historical": ("Thomas More", "Simone Weil"),
+        "modern": ("Obi-Wan Kenobi", "Silas"),
+    },
+    # --- the eight NEW edges (Session 24) --------------------------------------
+    (-1, -1, 0): {                                  # Prudence / Indifference
+        "archetypal": ("Solomon", "Pontius Pilate"),
+        "historical": ("Elizabeth I", "Adolf Eichmann"),
+        "modern": ("Spock", "Dr. Manhattan"),
+    },
+    (1, 1, 0): {                                    # Ardor / Vendetta
+        "archetypal": ("Romeo", "Medea"),
+        "historical": ("Joan of Arc", "Genghis Khan"),
+        "modern": ("Katniss Everdeen", "Inigo Montoya"),
+    },
+    (-1, 1, 0): {                                   # Steadfastness / Machination
+        "archetypal": ("Ruth", "Iago"),
+        "historical": ("Rosa Parks", "Cardinal Richelieu"),
+        "modern": ("Brienne of Tarth", "Petyr Baelish"),
+    },
+    (1, -1, 0): {                                   # Reform / Zealotry
+        "archetypal": ("Nehemiah", "Saul of Tarsus"),
+        "historical": ("Abraham Lincoln", "Oliver Cromwell"),
+        "modern": ("Hermione Granger", "Rorschach"),
+    },
+    (-1, 0, -1): {                                  # Meekness / Despair
+        "archetypal": ("Isaac", "Cain"),
+        "historical": ("Francis of Assisi", "Vincent van Gogh"),
+        "modern": ("Frodo Baggins", "Théoden"),
+    },
+    (1, 0, 1): {                                    # Aspiration / Megalomania
+        "archetypal": ("Daedalus", "Icarus"),
+        "historical": ("Muhammad Ali", "Alexander the Great"),
+        "modern": ("Rocky Balboa", "Tony Stark"),
+    },
+    (-1, 0, 1): {                                   # Self-Mastery / Disdain
+        "archetypal": ("Odysseus", "Coriolanus"),
+        "historical": ("Bruce Lee", "Diogenes"),
+        "modern": ("Uncle Iroh", "Tywin Lannister"),
+    },
+    (1, 0, -1): {                                   # Diligence / Servility
+        "archetypal": ("Martha of Bethany", "Uriah Heep"),
+        "historical": ("Mother Teresa", "Vidkun Quisling"),
+        "modern": ("Andy Dufresne", "Dobby"),
+    },
+}
+
+# THE TWO SACRED CORNERS (CUBE.md §The Rosters): the mythic principals
+# are the persons themselves — the other two registers carry ECHOES,
+# never rivals. The CENTRE is deliberately absent: The One contains all
+# six powers without being ruled by any, and every human exemplar is
+# ruled by something, so `sacred_figure()` answers None for him BY
+# DOCTRINE (the documented-fallback exception to Rule #1, not a miss).
+SACRED_FIGURES = {
+    "Jesus Christ": {
+        "archetypal": "Jesus Christ",
+        "historical": "Maximilian Kolbe",
+        "modern": "Aslan",
+    },
+    "The Devil": {
+        "archetypal": "The Devil",
+        "historical": "Nero",
+        "modern": "Sauron",
+    },
+}
+
+
+def roster(cell: tuple[int, int, int], register: str) -> tuple[str, str]:
+    """The two people who hold one human cell in one figure set —
+    `(the luminous reading's figure, the fallen reading's figure)`. An
+    unknown cell or register raises: the grid is complete by
+    construction, and a silent miss would be a lie (Rule #1)."""
+    return ROSTER[cell][register]
+
+
+def sacred_figure(seat: str, register: str) -> str | None:
+    """One sacred seat's figure in one set. `None` for the centre alone,
+    which takes no figure in any register (owner verdict 2026-07-28)."""
+    if seat == THE_ONE_SEAT:
+        return None
+    return SACRED_FIGURES[seat][register]
 
 # THE SIX POLES' SEALED ROSE HUES (CUBE.md §The Sunday axis, the
 # "Consequence for the Cube" table) as indices into

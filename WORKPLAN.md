@@ -408,7 +408,41 @@ and the creeds orientation; 1049 tests green (one pre-existing,
 unrelated failure: an untracked `assets/zodiac/` folder from the
 owner's own parallel art generation, outside this session's scope).
 
-### Session 24 — the Sacred rosters → **Opus** (writers) — UNBLOCKED (blanket seal 2026-07-28)
+### Session 24 — the Sacred rosters → **Opus** (writers) — DONE (2026-07-28, 0.14.520–0.14.521)
+**Delivered:** (1) NOTHING TO FOLD — the blanket seal stood, no term
+flipped. (2) THE ROSTER ROUND, under FAME FIRST and the ranking
+addendum: the **16 new edge readings × 3 sets = 48 seats** peopled
+(Prudence/Indifference · Ardor/Vendetta · Steadfastness/Machination ·
+Reform/Zealotry · Meekness/Despair · Aspiration/Megalomania ·
+Self-Mastery/Disdain · Diligence/Servility), each figure carrying one
+named deed, plus the **two sacred corners' echoes** — Jesus and the
+Devil themselves in the mythic set, **Maximilian Kolbe / Aslan** and
+**Nero / Sauron** in the historical and modern ones; **the centre takes
+no figure in any register** (owner verdict — every human exemplar is
+ruled by something, The One by nothing). CUBE.md §[The
+Rosters](CUBE.md#the-rosters) records the tables, the hooks, the
+alternates and the three set-asides (Odysseus for Machination, Marie
+Antoinette on the apocryphal line, Machiavelli). (3) THE ROSE §OPEN 48
+were ALREADY WRITTEN, as suspected — the 2D eight are the poles' and
+combos' sealed figures, the 3D eight the vertex roster — so the round
+WIRED them instead of reinventing: `config.cube.ROSTER` now holds all
+**26 human cells × 3 registers × 2 readings** (the sealed 108
+transcribed, the 48 new added), `cube.FIGURE_SETS` is the one place the
+three set words live (the star map's private "myth" retired — the star,
+the roster and the disk register finally speak one vocabulary), the two
+Cube wheels' rows carry their cube `cell`, and `archetypes.roster_names`
+is the name-fallback reader. A structural law fell out and is pinned:
+**a figure repeats only between a vertex and its own flat shadow** (the
+Character wheel is the Cube at depth zero) — proved from coordinates,
+not from a list. 15 new pins in `tests/test_cube_roster.py`, the first
+of which fails the moment a name in the engine cannot be found in
+CUBE.md; 1089 tests green. **NOT done, and named so no session assumes
+it:** the Rose's three stars still DRAW one set of seat names —
+`ArchetypeLayer` paints one star's worth of figures, so per-register
+figures on the dial (with their hover and hit-test) are a RENDER round,
+not a roster one.
+
+### Session 24 — as originally written
 **Say:** "Radi Sesiju 24 iz WORKPLAN.md — novi rosteri."
 **Reads:** CUBE.md §The Thirteen Axes IN FULL (grid, naming laws,
 alternates, rejected list); CANON.md quote rules.

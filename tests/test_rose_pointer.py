@@ -126,7 +126,7 @@ def test_prophecy_rides_the_future_over_the_past(app):
     rides over it, the present covers both."""
     bottom, middle, top = rose_star_offsets(_skin("light"))
     assert rose_star_set(bottom) == "historical"
-    assert rose_star_set(middle) == "myth"       # +15° — the future
+    assert rose_star_set(middle) == "archetypal"   # +15° — the future
     assert rose_star_set(top) == "modern"
     assert middle == 15.0
 
@@ -135,7 +135,7 @@ def test_legacy_leans_wholly_behind_the_hour(app):
     """Legacy's myth is the DEEPEST past and lies lowest."""
     bottom, middle, top = rose_star_offsets(_skin("paint"))
     assert (bottom, middle, top) == (-30.0, -15.0, 0.0)
-    assert rose_star_set(bottom) == "myth"
+    assert rose_star_set(bottom) == "archetypal"
     assert rose_star_set(middle) == "historical"
     assert rose_star_set(top) == "modern"
 

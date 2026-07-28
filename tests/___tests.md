@@ -103,6 +103,22 @@ structure; the Calendar's three families at exactly 120°/120°/60° plus
 the inverted version; the radial law; and the two negative results on
 rotation↔hour (no element of order 24; the half-turn is the inversion).
 
+### `test_cube_roster.py`
+The ROSTERS (WORKPLAN Session 24, CUBE.md §The Rosters) — who holds each
+of the twenty-six human cells in each of the three figure sets, and who
+echoes the two sacred corners. The pins run canon → engine: every name
+the engine speaks must stand in `CUBE.md` (a typo or a quiet swap fails
+at once), the sealed 108 seats are spot-pinned unchanged and the 48 new
+edge seats are pinned whole. Structural pins: each seat's three sets are
+three DIFFERENT people (Charter rule 5); a figure repeats ONLY between a
+vertex and its own flat shadow — proved from the coordinates, not from a
+hand-written list of exceptions; the 52 people this round added are each
+new and each seated once; the centre answers `None` in every register (by
+doctrine); an unknown cell, seat or register RAISES; both Rose wheels
+resolve their 48 seat-readings through the one table; each Cube wheel arm
+seats the cell its own two names claim; and the star map, the roster and
+the disk registers now speak ONE vocabulary.
+
 ### `test_cube_wheels.py`
 The Cube wheels engine goldens (WORKPLAN Session 20; owner seal
 2026-07-26, CUBE.md): the third-wheel slot (the "cube" style exists

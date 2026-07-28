@@ -432,7 +432,9 @@ stars in DRAW order, bottom of the z-stack first — Legacy
 (−30°, −15°, 0°) leans wholly behind the hour, Prophecy
 (−15°, +15°, 0°) rides the FUTURE over the PAST; the 0° star is last
 on both, so the dominant fully-visible arm always points at true 12h.
-`ROSE_STAR_SETS` says which figure set each star carries and
+`ROSE_STAR_SETS` says which figure set each star carries — in the canon's
+own three words (`cube.FIGURE_SETS`: archetypal, historical, modern), so
+the star, the roster and the disk register name the same thing — and
 `ROSE_ARM_SYSTEMS` which character system its arms read (Legacy the 2D
 Character wheel, Prophecy the 3D Cube vertices).
 `POINTER_WEEKDAY_SLOTS["rose"]` is the COLOR LAW — the seat is the hue,

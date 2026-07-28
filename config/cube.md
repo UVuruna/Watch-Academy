@@ -53,6 +53,16 @@ One of the thirteen lines through the centre.
 ### Tables
 - `AXES` — all thirteen, the Sacred Axis first
 - `THE_ONE` — the centre cell `(0, 0, 0)`
+- `FIGURE_SETS` — the three registers every seat carries (archetypal,
+  historical, modern), declared ONCE here: the roster, the disk registers
+  (`<group>/<set>/colored/`) and the Rose's three stars
+  (`constants.ROSE_STAR_SETS`) all read this tuple
+- `ROSTER` — every human cell → its three sets → `(luminous person,
+  fallen person)`; the sealed 108 transcribed from the canon tables, the
+  48 new edge seats added by Session 24
+- `SACRED_FIGURES` — the two sacred corners' three registers (the
+  principals themselves in the archetypal set, echoes in the other two);
+  the centre is deliberately absent
 - `ROSE_POLE_HUE` — the six poles' sealed Rose hue INDEX into
   `defaults.ROSE_PALETTE` (CUBE.md §The Sunday axis: X wears cyan ↔
   orange, Y yellow ↔ purple, Z green ↔ rose)
@@ -62,11 +72,36 @@ One of the thirteen lines through the centre.
 - `CALENDAR_AXIS_ORDER` — which axis of a family takes which of its own
   arms; the SECOND criterion, argued month by month in CUBE.md
 
+## Functions
+
+PSEUDOCODE — the two readers of the roster (root Rule 21: algorithms are
+described language-neutrally):
+
+```
+roster(cell, register):
+    RETURN the pair (luminous person, fallen person) seated on that cell
+    UNKNOWN cell OR register → RAISE (the grid is complete; a silent miss
+    would be a lie)
+
+sacred_figure(seat, register):
+    IF seat is THE CENTRE → RETURN nothing
+        (doctrine: The One contains all six powers without being ruled by
+         any, and every human exemplar is ruled by something)
+    ELSE → RETURN that corner's figure in that register
+```
+
 ## Design Decisions
 
 - **Coordinates, not colour names.** Every cell is stored as a coordinate
   triple, so kinship, antipodes, family and index are all derivable; the
   hue is a lookup, never a stored attribute of a seat.
+- **The canon file is the source, this file the transcription.** No
+  figure is invented here; `tests/test_cube_roster.py` fails the moment a
+  name in this table cannot be found in [The Cube Canon](../CUBE.md).
+- **One seat per person, one exception SHAPE.** A figure may hold two
+  cells only when they differ in X alone — the same seat with the depth
+  axis dropped, which is what the Character wheel is. The test proves it
+  from the coordinates instead of listing the exceptions.
 - **The seatings are results, not taste.** `ROSE_24_SEATING` is the
   single survivor of an exhaustive search under five laws, and the tests
   re-run that search rather than trusting the constant. The Calendar-12

@@ -149,6 +149,14 @@ name-falls-back until the owner's glass lands):**
   `ARCHETYPE_LIFE_REGISTER` picks the rendered one (default `tree`,
   the ★-marked recommendation) until the owner wires a user-facing
   choice.
+- **The two Cube wheels carry their CUBE CELL** (Session 24): each row of
+  `compass_character` and `rose_vertices` records the `(x, y, z)` seat its
+  two names hold, so the arm resolves its three registers' PEOPLE from the
+  canon's single roster table instead of repeating any name here. The
+  three set words themselves live once, in
+  [Character Cube](cube.md) — the Rose's stars, the disk registers and
+  the roster all read that one tuple. Every other archetype leaves `cell`
+  at None: its arms are not cube seats.
 - **Article sets are named by GRID SEAT** (`archetype_trinity_paint`,
   `archetype_seasons_paint`, `archetype_seasons_light`, …) so a future
   theme rename never orphans texts (the prism-light theme's own name
@@ -206,6 +214,8 @@ name-falls-back until the owner's glass lands):**
 
 ### Uses
 - [Config (folder)](___config.md) — `paths.assets_dir()`, constants
+- [Character Cube](cube.md) — `FIGURE_SETS` and `ROSTER`: the three
+  registers and the people who hold each cube seat (`roster_names`)
 
 ### Used by
 - [Layers](../render/layers.md) — `ArchetypeLayer` /
@@ -223,6 +233,13 @@ name-falls-back until the owner's glass lands):**
   an archetype — the menu-toggle gate
 - `figures(key)`: the ordered figure tuple (resolving the Ages
   register)
+- `roster_names(key, index, register)`: THE NAME FALLBACK'S PEOPLE
+  (Session 24) — the two figures one arm seats in one figure set,
+  `(the luminous reading's person, the fallen reading's person)`. Only
+  the two Cube character wheels answer: their rows carry a `cell`, the
+  cube seat the arm holds, and the people come from
+  [Character Cube](cube.md)'s one roster table. Every other archetype
+  RAISES — its arms are not cube seats, and a guess would be a lie.
 - `center(key)`: the center dict or None
 - `tetramorph_element(index)` + `TETRAMORPH_ELEMENTS` (owner 2026-07-17,
   ROADMAP 15e): the element name (Fire/Earth/Water/Air) each Tetramorph

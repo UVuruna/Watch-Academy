@@ -505,11 +505,14 @@ ROSE_STAR_OFFSETS = {
 # §The Rose — the two wheels share both anchors and move only the myth):
 # Modern rides the true hours, Historical one ray back, the Myth set on
 # whichever ray its wheel sends it to.
+# The three words are `cube.FIGURE_SETS` itself (Session 24): the star,
+# the roster and the disk register now speak ONE vocabulary — the myth
+# star carries the ARCHETYPAL set, which is what it always held.
 ROSE_STAR_SETS = {
     0.0: "modern",
     -15.0: "historical",
-    -30.0: "myth",          # Legacy — the myth we inherited
-    15.0: "myth",           # Prophecy — the myth that comes
+    -30.0: "archetypal",    # Legacy — the myth we inherited
+    15.0: "archetypal",     # Prophecy — the myth that comes
 }
 
 # The Rose's arm CHARACTER system per wheel (CUBE.md §The Rose): Legacy
