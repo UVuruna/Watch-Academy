@@ -197,7 +197,7 @@ whom you judge by, how you hold your own worth — come every four.
 
 **The one honest miss.** A second wish was that each arm's own hue be
 one of the three poles its vertex carries. Six arms can be asked this
-(the Sabbath's blue and red are not cube axes at all), and an
+(Sunday's blue and red are not cube axes at all), and an
 exhaustive search over every Hamiltonian cycle proves **5 of 6 is the
 maximum** — three seatings tie at it, and in ALL THREE the single miss
 falls on the X axis. This one misses at 03h, where cyan asks for
@@ -518,94 +518,86 @@ Sacred Axis."*
 Two ways to show the same twenty-four. **The Calendar shows the twelve
 AXES** — one arm per axis, both its ends on that arm, the pairing never
 chosen because it IS the axes. **The Rose shows the twenty-four SEATS** —
-one ray each, opposites across the dial. Neither is a matter of taste:
-each was settled by exhaustive search under laws stated first, and every
-seat is pinned by a golden test that re-runs that search
-(`tests/test_cube_seating.py`). Nothing below is stamped SEALED — the
-geometry is forced, the two argued choices are marked as such, and the
-whole stands for the owner's word.
+one ray each, opposites across the dial.
 
-### The one-grade law (the kinship both wheels use)
+### THE FIRST LAW — symmetry (owner decree 2026-07-28)
 
-Two cells are KIN when they differ in exactly one coordinate, by exactly
-one grade. One step around a wheel therefore changes exactly ONE axis by
-ONE grade — the direct generalisation of the Prophecy wheel's
-"neighbouring arms differ in exactly one axis", now that the seats are
-not only corners but poles, edges and corners together.
+> *"Primarna je simetrija, sekundarna je simbolika."*
 
-### The parity theorem — why the human circle can close at all
+**Symmetry decides which KIND of axis stands where; symbolism only
+decides which axis of that kind.** A first attempt at these seatings
+argued every arm from meaning alone and let the three primary axes fall
+on three neighbouring months — the owner threw it out on sight, and was
+right: a wheel whose skeleton is invisible has no skeleton.
 
-Every kinship step changes a cell's count of committed axes by one, so
-the kinship graph is bipartite: **faces and vertices on one side (14),
-edges on the other (12)**. A closed ring must alternate, and alternating
-needs the two sides EQUAL — so **no ring can ever seat all twenty-six
-cells.** Remove two of the odd side and it balances at 12 + 12; canon had
-already removed exactly two, the Sacred vertices, for reasons that had
-nothing to do with graph theory. Geometry does not choose WHICH two — it
-only says that without such a removal there is no human circle at all.
-*Jesus and the Devil leaving the hours is what lets the hours close.*
+The cube's own arithmetic makes the demand answerable. The twelve human
+axes count **3 face axes, 6 edge axes, 3 human vertex axes**, and on a
+twelve-fold dial that admits exactly ONE fully regular figure:
 
-Its visible consequence: **every second ray is an edge-person** — twelve
-of the twenty-four, six axes' worth. Six is man's number, and the Rose
-counts it out.
+- the 3 face axes on an **equilateral triangle** (120° apart),
+- the 3 vertex axes on the **opposite triangle**,
+- the 6 edge axes on the **regular hexagon** between them.
+
+Two opposed triangles with a hexagon between them **is the hexagram** —
+this dial's own emblem, and precisely the figure §The Hexagram Projection
+says the cube shows when viewed along its Sacred Axis. The owner asked
+for symmetry and the cube answered with the star it was already hiding.
 
 ### Calendar-12 — one axis per month
 
-The twelve human axes fall, by their coordinates alone, into **four
-families of three**, and the year into four seasons of three months. The
-Almanac wheel already divides that way (June's wedge centred on the top,
-so wedge ÷ 3 is the season and wedge mod 3 the month within it), and the
-two divisions lock together:
+The Almanac wheel's twelve wedges (June centred on the top, wedge *w* at
+hour 12 + 2*w*) carry the figure on the palette's own colour classes:
 
-| Family | What it is | Season |
-|---|---|---|
-| **Tertiary** — the 3 human vertex axes | committed on all three axes at once: the great corners | **Summer** — the year at full power |
-| **Discord** — the 3 edge axes joining opposite-signed poles | each end mixes a cold pole with a warm one | **Autumn** — the season of the two-natured |
-| **Primary** — the 3 face axes | the bare axes, one thing at a time | **Winter** — the tree shows its skeleton |
-| **Concord** — the 3 edge axes joining like-signed poles | each end doubles down | **Spring** — the sap agrees with itself |
+| Family | Arms | Hours | The arms' hues |
+|---|---|---|---|
+| **3 face axes** | June · October · February | 12h · 20h · 4h | the PURE primaries — green, red, blue |
+| **3 vertex axes** | August · December · April | 16h · 24h · 8h | the mixed primaries — yellow, magenta, cyan |
+| **6 edge axes** | Jul · Sep · Nov · Jan · Mar · May | 14h · 18h · 22h · 2h · 6h · 10h | the six in-between hues |
 
-Opposite months then carry DUAL families at the same index, which is the
-antipodal law seen on the calendar: **face against vertex is the cube's
-own duality**, concord against discord the edges' own opposition. The
-maximum contrast (face ↔ vertex) lands on the solstices, the subtler one
-(concord ↔ discord) on the equinoxes.
+**The inverted version** (the owner's second) swaps the two triangles:
+the poles move onto the yellow/magenta/cyan arms and the corners take the
+pure ones. Both ship; neither is derived from the other by taste.
 
-Within a season the three axes are ordered by the coordinate that names
-them (the axis's own for a face, the silent one for an edge, the
-odd-signed one for a corner): **y first, then x, then z**. That order is
-ARGUED, on hooks the year itself supplies:
+WHICH axis of a family takes which of its own arms is the SECOND
+criterion — symbolism — and it is argued arm by arm:
 
-- **March = Lion ↔ Lamb.** The spring equinox is the Lamb's own feast —
-  the computus defines Easter from it. *(One disarming sentence still
-  owed wherever the axis is taught: Scripture gives Christ both titles.)*
-- **September = Servant ↔ Sovereign.** The autumn equinox is the Sabbath
-  hour, and this is the one axis whose two ends are named like Sunday's
-  two seats — the Ruler and the Servant. The same axis lands on the
-  equinox in BOTH seatings, which is the strongest cross-check the two
-  plans give each other.
-- **December = Moral Scope**, whose two poles ARE the solstice colours
-  (yellow summer, purple winter).
-- **July = Preservation ↔ Revolution** (the month of Bastille Day and the
-  Fourth), **August = Crown ↔ Shield** (Augustus's own month),
-  **October = Person ↔ Cause** (Luther's month — and Luther is already
-  the sealed exemplar of Conviction), **November = Pragmatism ↔
-  Idealism** (Guy Fawkes: Machination, foiled and burned every 5th),
-  **May = Reason ↔ Emotion** (the merry month: Ardor).
-
-| Month | Wedge | Axis | Inner (at the axle) | Outer (at the rim) |
+| Month | Hour | Axis | Inner (at the axle) | Outer (at the rim) |
 |---|---|---|---|---|
-| June | 0 | Vow ↔ Vision | Quiet Devotee / Submissive Enabler | Visionary Founder / Messianic Tyrant |
-| July | 1 | Preservation ↔ Revolution | Steady Guardian / Complacent Nepotist | Principled Reformer / Puritanical Zealot |
-| August | 2 | Crown ↔ Shield | Wise Statesman / Cold Elitist | Sacrificial Protector / Fanatical Martyr |
-| September | 3 | Servant ↔ Sovereign | Self-Mastery / Disdain | Diligence / Servility |
-| October | 4 | Person ↔ Cause | Devotion / Martyrdom | Conviction / Dogmatism |
-| November | 5 | Pragmatism ↔ Idealism | Steadfastness / Machination | Reform / Zealotry |
-| December | 6 | Moral Scope | Integrity / Legalism | Loyalty / Tribalism |
-| January | 7 | Activation | Composure / Lethargy | Vigor / Frenzy |
-| February | 8 | Self-Regard | Humility / Self-Annihilation | Dignity / Self-Worship |
-| March | 9 | Lion ↔ Lamb | Meekness / Despair | Aspiration / Megalomania |
-| April | 10 | Hearth ↔ Desert | Renunciation / Mortification | Patronage / Favoritism |
-| May | 11 | Reason ↔ Emotion | Prudence / Indifference | Ardor / Vendetta |
+| June | 12h | **Moral Scope** | Integrity / Legalism | Loyalty / Tribalism |
+| July | 14h | Person ↔ Cause | Devotion / Martyrdom | Conviction / Dogmatism |
+| August | 16h | **Crown ↔ Shield** | Wise Statesman / Cold Elitist | Sacrificial Protector / Fanatical Martyr |
+| September | 18h | Servant ↔ Sovereign | Self-Mastery / Disdain | Diligence / Servility |
+| October | 20h | **Self-Regard** | Humility / Self-Annihilation | Dignity / Self-Worship |
+| November | 22h | Pragmatism ↔ Idealism | Steadfastness / Machination | Reform / Zealotry |
+| December | 24h | **Vow ↔ Vision** | Quiet Devotee / Submissive Enabler | Visionary Founder / Messianic Tyrant |
+| January | 2h | Hearth ↔ Desert | Renunciation / Mortification | Patronage / Favoritism |
+| February | 4h | **Activation** | Composure / Lethargy | Vigor / Frenzy |
+| March | 6h | Lion ↔ Lamb | Meekness / Despair | Aspiration / Megalomania |
+| April | 8h | **Preservation ↔ Revolution** | Steady Guardian / Complacent Nepotist | Principled Reformer / Puritanical Zealot |
+| May | 10h | Reason ↔ Emotion | Prudence / Indifference | Ardor / Vendetta |
+
+The arguments, each on a hook the year or the palette supplies:
+
+- **February blue = Activation**, because blue IS Composure's own colour;
+  **October red = Self-Regard**, because red IS Dignity's. Two of the
+  three pure arms name one of their own poles outright.
+- **June = Moral Scope**, the year's crown taking God's own vertical —
+  the same axis the Rose independently seats at 12h and 24h.
+- **August = Crown ↔ Shield** — Augustus's own month.
+- **December = Vow ↔ Vision** — the winter solstice, the vow kept and the
+  vision begun.
+- **April = Preservation ↔ Revolution** — Easter's month, the great
+  overturning.
+- **March = Lion ↔ Lamb** (the spring equinox is the Lamb's feast — the
+  computus defines Easter from it), **September = Servant ↔ Sovereign**
+  (the autumn equinox, and 18h is the Ruler's own hour), **November =
+  Pragmatism ↔ Idealism** (Guy Fawkes: Machination, foiled every 5th),
+  **January = Hearth ↔ Desert** (deep winter is the hearth's month),
+  **May = Reason ↔ Emotion** (the merry month: Ardor), **July = Person ↔
+  Cause** (the month of the Bastille and the Fourth).
+
+*One disarming sentence is owed wherever Lion ↔ Lamb is taught: Scripture
+gives Christ BOTH titles.*
 
 **The radial law.** An arm has a length, and the length is not decoration:
 **Activation becomes the radius.** The axis the flat dial cannot show —
@@ -614,92 +606,101 @@ radius can carry: Restraint at the axle, Mobilization at the rim. Where X
 is silent, Z decides (Self-Effacement in, Self-Exaltation out), then Y.
 The inner ring reads as the KEEPING and the outer as the GOING: vow in /
 vision out, preservation in / revolution out, crown in / shield out, the
-Lamb in / the Lion out, self-mastery in / service out. The centre
-medallion is a single slot and holds **The One** alone.
+Lamb in / the Lion out. The centre medallion is a single slot and holds
+**The One** alone.
 
 ### Rose-24 — one seat per ray
 
-Five laws, applied in order of authority. The first two are hard; the
-third is a sealed table; the last two are argued.
+The same figure at twice the resolution. The owner named the three
+primary pairs himself — **12h–24h, 4h–16h, 20h–8h**, the hexagram
+positions — and the rest follows:
 
-1. **The one-grade law**, all the way round the ring.
-2. **The antipodal law** — ray *k* and ray *k+12* end one axis. The
-   dial's axle IS The One, so opposites on the cube become opposites
-   across the dial.
-3. **The colour law** — each primary axis holds its own sealed hue
-   diagonal (CUBE.md §The Sabbath axis: X cyan ↔ orange, Y yellow ↔
-   purple, Z green ↔ rose), which leaves the Sabbath's red and blue to a
-   non-primary axis, exactly as that section requires.
-4. **The Sunday law** *(argued)* — the Sabbath diagonal takes **Servant ↔
-   Sovereign**, the Sovereign on the Ruler's red 18h and the Servant on
-   the Servant's blue 06h. Of the nine axes the search allows there, this
-   is the only one whose two ends are named like the two seats.
-5. **The cross doctrine** *(argued)* — the vertical takes **Pragmatism ↔
-   Idealism**: *Reform* at 24h purple, the arm where the light path ends
-   "remade by the Creator", and *Machination* — the fall of Steadfastness
-   — at 12h yellow, the arm where the dark path ends "exposed before the
-   Judge". Canon's own two words, on canon's own two arms.
+- **ray % 4 == 0 → a POLE** (the six hexagram rays: 12h, 16h, 20h, 24h,
+  4h, 8h),
+- **ray % 4 == 2 → a CORNER** (the opposite hexagram: 14h, 18h, 22h, 2h,
+  6h, 10h),
+- **every odd ray → an EDGE** (twelve of them, one every 30°).
 
-The funnel: **1056 ray assignments** obey the two hard laws (22 distinct
-cycles × 24 rotations × 2 directions) → **28** hold all three colour
-diagonals → **14** reach the maximum pole orientation → **2** obey the
-Sunday law → **1** obeys the cross doctrine.
+Symmetry costs the geometry nothing: of the 1056 rings that obey the two
+hard laws below, **48 obey the symmetry law as well.** And it pays at
+once — the six pole rays are exactly the six cube-coloured rays, so every
+primary axis lands on its own colour diagonal without being asked.
 
-| Ray | Hour | Star | Hue | Seat — luminous / fallen | Axis |
+**The hard laws, unchanged.** (1) THE ONE-GRADE LAW: neighbouring rays
+differ in exactly one coordinate by exactly one grade, so one step around
+the wheel changes exactly ONE axis by ONE grade — the Prophecy wheel's
+rule generalised from corners to the whole cube. (2) THE ANTIPODAL LAW:
+ray *k* and ray *k+12* end one axis, because the dial's axle IS The One
+and opposites face each other through God.
+
+**The parity theorem — why the human circle can close at all.** Every
+kinship step changes a cell's count of committed axes by one, so the
+kinship graph is bipartite: faces and corners on one side (14), edges on
+the other (12). A closed ring must alternate, and alternating needs the
+sides EQUAL — so **no ring can ever seat all twenty-six cells.** Remove
+two of the odd side and it balances at 12 + 12; canon had already removed
+exactly two, the Sacred corners, for reasons that had nothing to do with
+graph theory. *Jesus and the Devil leaving the hours is what lets the
+hours close.* And the symmetry law is only that alternation made
+visible — every second ray an edge-person, six being man's number.
+
+The funnel: **1056** rings obey the two hard laws → **48** obey the
+symmetry law → **8** hold all three colour diagonals → **4** reach the
+proven ceiling of four poles on their own hue → **2** put the crown on
+Sunday's Ruler → **1** remains.
+
+| Ray | Hour | Kind | Hue | Seat — luminous / fallen | Axis |
 |---|---|---|---|---|---|
-| 0 | 12h | 0° | yellow | Steadfastness / Machination | Pragmatism ↔ Idealism |
-| 1 | 13h | +15° | yellow | Quiet Devotee / Submissive Enabler | Vow ↔ Vision |
-| 2 | 14h | −15° | orange | Meekness / Despair | Lion ↔ Lamb |
-| 3 | 15h | 0° | orange | Composure / Lethargy | Activation |
-| 4 | 16h | +15° | orange | Prudence / Indifference | Reason ↔ Emotion |
-| 5 | 17h | −15° | red | Wise Statesman / Cold Elitist | Crown ↔ Shield |
-| 6 | 18h | 0° | red | Self-Mastery / Disdain | Servant ↔ Sovereign |
-| 7 | 19h | +15° | red | Steady Guardian / Complacent Nepotist | Preservation ↔ Revolution |
-| 8 | 20h | −15° | rose | Patronage / Favoritism | Hearth ↔ Desert |
-| 9 | 21h | 0° | rose | Dignity / Self-Worship | Self-Regard |
-| 10 | 22h | +15° | rose | Conviction / Dogmatism | Person ↔ Cause |
-| 11 | 23h | −15° | purple | Integrity / Legalism | Moral Scope |
-| 12 | 00h | 0° | purple | Reform / Zealotry | Pragmatism ↔ Idealism |
-| 13 | 01h | +15° | purple | Visionary Founder / Messianic Tyrant | Vow ↔ Vision |
-| 14 | 02h | −15° | cyan | Aspiration / Megalomania | Lion ↔ Lamb |
-| 15 | 03h | 0° | cyan | Vigor / Frenzy | Activation |
-| 16 | 04h | +15° | cyan | Ardor / Vendetta | Reason ↔ Emotion |
-| 17 | 05h | −15° | blue | Sacrificial Protector / Fanatical Martyr | Crown ↔ Shield |
-| 18 | 06h | 0° | blue | Diligence / Servility | Servant ↔ Sovereign |
-| 19 | 07h | +15° | blue | Principled Reformer / Puritanical Zealot | Preservation ↔ Revolution |
-| 20 | 08h | −15° | green | Renunciation / Mortification | Hearth ↔ Desert |
-| 21 | 09h | 0° | green | Humility / Self-Annihilation | Self-Regard |
-| 22 | 10h | +15° | green | Devotion / Martyrdom | Person ↔ Cause |
-| 23 | 11h | −15° | yellow | Loyalty / Tribalism | Moral Scope |
+| 0 | 12h | **POLE** | yellow | Loyalty / Tribalism | Moral Scope |
+| 1 | 13h | edge | yellow | Patronage / Favoritism | Hearth ↔ Desert |
+| 2 | 14h | corner | orange | Steady Guardian / Complacent Nepotist | Preservation ↔ Revolution |
+| 3 | 15h | edge | orange | Steadfastness / Machination | Pragmatism ↔ Idealism |
+| 4 | 16h | **POLE** | orange | Composure / Lethargy | Activation |
+| 5 | 17h | edge | red | Prudence / Indifference | Reason ↔ Emotion |
+| 6 | 18h | corner | red | Wise Statesman / Cold Elitist | Crown ↔ Shield |
+| 7 | 19h | edge | red | Self-Mastery / Disdain | Servant ↔ Sovereign |
+| 8 | 20h | **POLE** | rose | Dignity / Self-Worship | Self-Regard |
+| 9 | 21h | edge | rose | Aspiration / Megalomania | Lion ↔ Lamb |
+| 10 | 22h | corner | rose | Visionary Founder / Messianic Tyrant | Vow ↔ Vision |
+| 11 | 23h | edge | purple | Conviction / Dogmatism | Person ↔ Cause |
+| 12 | 00h | **POLE** | purple | Integrity / Legalism | Moral Scope |
+| 13 | 01h | edge | purple | Renunciation / Mortification | Hearth ↔ Desert |
+| 14 | 02h | corner | cyan | Principled Reformer / Puritanical Zealot | Preservation ↔ Revolution |
+| 15 | 03h | edge | cyan | Reform / Zealotry | Pragmatism ↔ Idealism |
+| 16 | 04h | **POLE** | cyan | Vigor / Frenzy | Activation |
+| 17 | 05h | edge | blue | Ardor / Vendetta | Reason ↔ Emotion |
+| 18 | 06h | corner | blue | Sacrificial Protector / Fanatical Martyr | Crown ↔ Shield |
+| 19 | 07h | edge | blue | Diligence / Servility | Servant ↔ Sovereign |
+| 20 | 08h | **POLE** | green | Humility / Self-Annihilation | Self-Regard |
+| 21 | 09h | edge | green | Meekness / Despair | Lion ↔ Lamb |
+| 22 | 10h | corner | green | Quiet Devotee / Submissive Enabler | Vow ↔ Vision |
+| 23 | 11h | edge | yellow | Devotion / Martyrdom | Person ↔ Cause |
 
 The three sacred seats stand at the axle — the Being view's own picture,
 where the whole Sacred Axis projects onto the single centre point.
 
-**The pencil theorem (a find, not a wish).** Each hue owns three
-neighbouring rays, and the seating hands every triple three cells that
-share ONE coordinate: the six cube hues each hold **their own pole with
-its two neighbours**, and the Sabbath's red and blue each hold **an edge
-with its two corners**. The wheel is not a list of twenty-four seats; it
-is eight little families of three, and each family is a pole and its
-household.
+**What the symmetry gave for free.** *Loyalty crowns 12h in yellow and
+Integrity roots 24h in purple* — §The Rose's own sentence about its two
+ends, which no law here asked for and every surviving ring obeys. The two
+symbolism choices left are short: **the crown on Sunday's Ruler** (the
+corner axis symmetry puts on red 18h and blue 06h is Crown ↔ Shield, so
+the Wise Statesman takes the Ruler's seat and the Sacrificial Protector
+the Servant's), and **the doubling on the invisible axis** (of the last
+two rings, the one where red and blue hold Activation's two households as
+their second home — so the overflow falls on the axis that already
+carries the honest miss instead of muddying a second one).
+
+**The pencil theorem.** Each hue owns three neighbouring rays, and the
+seating hands every triple three cells that share ONE coordinate — a pole
+and its household. The wheel is not a list of twenty-four seats; it is
+eight little families of three.
 
 **The one honest miss.** The six poles cannot all wear their own hue —
-**four of six is the proven ceiling**, and the two that miss are always
-one axis's own pair. Here the whole **Activation pencil is mirrored**:
-the Restraint household sits on orange, the Mobilization household on
-cyan. It is not a scattered lie but one clean reversal, and it falls
-where the Prophecy wheel's single miss already fell — on X, the axis a
-flat dial cannot show anyway.
-
-**What was refused, and why (recorded so no session re-opens it).** Six
-rings make EVERY ray sing its own hue — perfect colour — and every one
-of them pays by dragging a primary axis onto the Sabbath diagonal
-(usually Dignity onto red, Humility onto blue, which is the Character
-wheel's palette, not the Rose's). §The Sabbath axis forbids exactly that:
-on the Rose, blue and red are not cube axes. A sealed table outranks a
-wish, and kinship outranks both — the Prophecy wheel's own verdict.
-The runner-up under all five laws seats Devotion at 12h and Conviction at
-00h; it loses only on the cross doctrine, and is kept on record.
+**four of six is the proven ceiling** — and here the whole **Activation
+pencil is mirrored**: the Restraint household sits on orange, the
+Mobilization household on cyan. One clean reversal, not a scattered lie,
+and it falls where the Prophecy wheel's single miss already fell — on X,
+the axis a flat dial cannot show anyway.
 
 ### The rotation ↔ hour rule — IMPOSSIBLE as posed, and why
 
@@ -713,11 +714,10 @@ the INVERSION, not by any rotation** — twelve hours across the dial is
 not a turning of the cube but a passage THROUGH its centre. Which is the
 doctrine already: opposites face each other through God.
 
-What does survive is a frame: the rotations split into **4 cosets of 6**
-by where they send the Sacred Axis — the day's four watches of six hours.
+What survives is a frame: the rotations split into **4 cosets of 6** by
+where they send the Sacred Axis — the day's four watches of six hours.
 Ordering the six inside a watch is a free choice no canon fact fixes, so
-the rule stays **OPEN**, and it is now open with its impossible half
-removed.
+the rule stays **OPEN**, now with its impossible half removed.
 
 ### Where it lives
 
@@ -738,6 +738,7 @@ which is yellow's. The two readings disagree. Every other axis's gloss
 runs in column order, so the likeliest fix is that this one row is
 reversed — but it sits inside a SEALED table, and no session may quietly
 turn a sealed word around. Left for the owner's deeper pass.
+
 
 <a id="double-trinity"></a>
 
@@ -961,7 +962,7 @@ MYTH star moves, and the wheel is named for where it goes.
   depth zero); Prophecy the **3D** system (the Cube's eight
   vertices, all three axes combined).
 
-### The Sabbath axis (SEALED — why blue and red are not seasons)
+### The Sunday axis (SEALED — why blue and red are not seasons)
 
 The four CARDINALS are the year's turning points, the four DIAGONALS
 its season centres — and they land exactly where `core.year_wheel`
@@ -992,13 +993,13 @@ rose. Y is untouched.
 | Z — Self-Regard | Green ↔ **Red** | Green ↔ **Rose** |
 
 The octa's four diagonals split three-and-one: three are the Cube's
-axes, the fourth is the Sabbath's.
+axes, the fourth is Sunday's.
 
 ### The weekday law (SEALED)
 
 The weekday bodies ride their **badges, as always** — never painted
 into the diamonds. Their seats follow the color law, which is the
-Prism paint canon with the two Sabbath hues lightened:
+Prism paint canon with the two Sunday hues lightened:
 
 | THU yellow 12h | TUE orange 15h | **SUN Ruler red 18h** | FRI rose 21h | WED purple 24h | MON cyan 03h | **SUN Servant blue 06h** | SAT green 09h |
 |---|---|---|---|---|---|---|---|

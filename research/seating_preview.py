@@ -165,8 +165,9 @@ def draw_calendar() -> QImage:
     centre = QPointF(SIZE / 2, SIZE / 2 + 20)
     reach = SIZE * 0.40
     palette = defaults.PALETTE_PRESETS[("calendar", "light")]
-    seasons = ("Summer · the corners", "Autumn · the mixed ends",
-               "Winter · the bare axes", "Spring · the like ends")
+    legend = ("3 face axes on the pure-colour arms — an equilateral triangle",
+              "3 corner axes on the mixed-primary arms — the opposite triangle",
+              "6 edge axes on the hexagon between")
 
     for arm in seating.calendar_seating():
         hue = QColor(palette[arm.wedge])
@@ -186,7 +187,7 @@ def draw_calendar() -> QImage:
                        (arm.outer.fallen, MUTED, 11)])
         _radial_label(painter, centre, arm.angle_deg, reach * 0.655,
                       [(arm.axis.name, INK, 13),
-                       (f"{month}  ·  {arm.family}  ·  {arm.index}",
+                       (f"{month}  ·  {arm.hour:02d}h  ·  {arm.family}",
                         QColor("#6E7688"), 10)])
         _radial_label(painter, centre, arm.angle_deg, reach * 0.43,
                       [(arm.inner.luminous, hue, 13),
@@ -200,7 +201,7 @@ def draw_calendar() -> QImage:
 
     _label(painter, QPointF(SIZE / 2, 44), [
         ("THE CALENDAR OF THE TWELVE — one axis per month", INK, 22),
-        ("   ·   ".join(seasons), MUTED, 12),
+        ("   ·   ".join(legend), MUTED, 12),
         ("the axis the flat dial cannot show becomes the RADIUS: "
          "Restraint at the axle, Mobilization at the rim", MUTED, 12),
     ], width=SIZE - 40)

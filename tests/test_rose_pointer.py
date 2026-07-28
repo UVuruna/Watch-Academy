@@ -169,7 +169,7 @@ def test_both_wheels_wear_the_one_rose_palette(app, wheel):
 
 
 def test_the_cardinals_are_the_turning_points_the_year_wheel_computes():
-    """CUBE.md §The Sabbath axis: the Rose's four cardinals land
+    """CUBE.md §The Sunday axis: the Rose's four cardinals land
     exactly where `core.year_wheel` puts the sun's turning points —
     summer solstice yellow up, autumn equinox red right, winter
     solstice purple down, spring equinox blue left."""
@@ -194,7 +194,7 @@ def test_the_sabbath_axis_keeps_the_cube_pole_partners():
     """Blue and red are the only hues that are not a season — they are
     Sunday's. On the Rose the Cube's axes keep their exact pole
     PARTNERS; blue simply wears cyan and red wears rose, the SAME shift
-    the weekday law makes (CUBE.md §The Sabbath axis)."""
+    the weekday law makes (CUBE.md §The Sunday axis)."""
     yellow, orange, red, rose, purple, cyan, blue, green = defaults.ROSE_PALETTE
     # Y is untouched: yellow ↔ purple-gray, still opposite (12h ↔ 24h).
     assert purple == defaults.MOON_GRAY_VIOLET
@@ -210,7 +210,7 @@ def test_the_sabbath_axis_keeps_the_cube_pole_partners():
 
 def test_the_weekday_seats_follow_the_colour_law(app):
     """CUBE.md §The weekday law: the seat is the HUE. Prism paint's
-    canon with the two Sabbath hues lightened, because Sunday needs
+    canon with the two Sunday hues lightened, because Sunday needs
     blue and red for its own two faces."""
     hues = defaults.ROSE_PALETTE
     expected = {
@@ -261,7 +261,7 @@ def test_the_rose_carries_the_dual_sunday_face(app):
 
 def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
     """REGRESSION (owner screenshot 2026-07-28): the two Sunday faces
-    DRAW on the Sabbath axis (Servant blue 06h/270°, Ruler red 18h/90°),
+    DRAW on the Sunday axis (Servant blue 06h/270°, Ruler red 18h/90°),
     but `Compositor._element_at`/`_weekday_body_at` used to hardcode
     `constants.SOUTH_SLOT_ANGLE` (24h/180°, the Compass/Seasons seat)
     for the Servant hit-test instead of calling `servant_seat_angle` —
@@ -283,7 +283,7 @@ def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
         legacy_point, radius, 0.0, "sun"
     ) == "body:mercury"
 
-    # The Rose's OWN seat — the blue 06h/270° Sabbath arm — must answer.
+    # The Rose's OWN seat — the blue 06h/270° Sunday arm — must answer.
     sabbath_point = dial_point(servant_seat_angle(skin), orbit)
     assert compositor._element_at(
         sabbath_point, radius, 0.0, "sun"

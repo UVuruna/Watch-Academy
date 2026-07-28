@@ -569,7 +569,7 @@ entry so far is the Sacred Axis proof case, `"religion"`: Christianity
 of the blind default's red/18h; Satanism (the Servant) takes red/18h
 instead of blue/06h. The Compass/Seasons' vertical Ruler-at-top
 default never flips — the config is horizontal-only (the Rose's
-Sabbath axis), by owner decree.
+Sunday axis), by owner decree.
 
 **RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
 Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`

@@ -115,7 +115,7 @@ tooltip` — the Rose card carries a computed 24-entry legend, see
   same drift the marker fix above had already happened once for a
   DIFFERENT geometry. Root cause: on the Rose the Servant sits at the
   blue 06h/270° arm, not 24h, so the two Sunday faces DREW on the
-  Sabbath axis (see [Layers](layers.md)'s WeekdayLayer/StarLayer, which
+  Sunday axis (see [Layers](layers.md)'s WeekdayLayer/StarLayer, which
   read `servant_seat_angle` correctly) but HOVERED at the legacy bottom
   seat — a dead zone on the Rose (nothing draws there on Sunday) that
   also silently ate Wednesday's own 24h/purple hover every Sunday, since

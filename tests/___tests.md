@@ -92,16 +92,16 @@ and was deleted whole).
 The Seating geometry goldens (WORKPLAN Session 26, CUBE.md §The
 Seatings). It does NOT merely compare against the sealed constants — it
 RE-RUNS the exhaustive search, law by law, so the Rose-24 ring can never
-drift away from the argument that produced it: the 65-term table, the
-parity theorem (14 vs 12 for all 26 cells, 12 vs 12 once the Sacred pair
-leaves), the funnel 1056 → 28 → 14 → 2 → 1, the proven 4-of-6 ceiling on
-pole hues, the hue-pencil structure, the mirrored Activation pencil, the
-Calendar's four families over four seasons with dual families across the
-dial, the radial law, and the two negative results on rotation↔hour (no
-element of order 24; the half-turn is the inversion). Also pins, as a
-recurrence guard, that the six perfect-singing rings all break the sealed
-Sabbath table — so no later session "improves" the colour by re-opening
-what was refused.
+drift away from the argument that produced it. Pinned: the 65-term table;
+the 3 + 6 + 3 family counts that make the symmetry law possible at all;
+THE SYMMETRY LAW itself (the owner's own hexagram pairs 12h-24h, 4h-16h,
+20h-8h, and what it costs — 48 of the 1056 rings obey it); the parity
+theorem (14 vs 12 over all 26 cells, 12 vs 12 once the Sacred pair
+leaves); the funnel 1056 → 48 → 8 → 4 → 2 → 1; the proven 4-of-6 ceiling
+on pole hues and the mirrored Activation pencil; the hue-pencil
+structure; the Calendar's three families at exactly 120°/120°/60° plus
+the inverted version; the radial law; and the two negative results on
+rotation↔hour (no element of order 24; the half-turn is the inversion).
 
 ### `test_cube_wheels.py`
 The Cube wheels engine goldens (WORKPLAN Session 20; owner seal

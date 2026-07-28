@@ -436,7 +436,7 @@ on both, so the dominant fully-visible arm always points at true 12h.
 `ROSE_ARM_SYSTEMS` which character system its arms read (Legacy the 2D
 Character wheel, Prophecy the 3D Cube vertices).
 `POINTER_WEEKDAY_SLOTS["rose"]` is the COLOR LAW — the seat is the hue,
-the Prism paint canon with the two Sabbath hues lightened (MON cyan,
+the Prism paint canon with the two Sunday hues lightened (MON cyan,
 FRI rose) because Sunday needs blue and red for its own two faces;
 `SERVANT_SEAT_ANGLE` gives the Servant the blue 06h arm there (24h
 everywhere else) and the Ruler keeps red at 18h.
@@ -450,7 +450,7 @@ duality reverses the Rose's blind default (Ruler warm/red-18h, Servant
 cold/blue-06h) — root Rule #4, no per-theme values hardcoded into the
 render layer itself. The Compass/Seasons' vertical Ruler-at-top default
 never flips (owner decree: unconditional there); only the Rose's
-horizontal Sabbath axis is per-theme. The one entry, `"religion"`, is
+horizontal Sunday axis is per-theme. The one entry, `"religion"`, is
 the Sacred Axis proof case: Christianity (the Ruler) is the LUMINOUS
 COLD member and must pull to blue, Satanism (the Servant) the FALLEN
 WARM one and must pull to red — the reverse of what the blind default

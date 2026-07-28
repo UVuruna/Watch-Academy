@@ -376,10 +376,10 @@ repository moved. Please use the new location:
 below is RESOLVED; `update.repo`/the disk folder name are their own,
 separate, still-open follow-ups (see below).
 
-### Session 23 — Rose Sabbath hover fix + the Duality-Axes config → **Sonnet** — DONE (2026-07-28, 0.14.504–0.14.505)
+### Session 23 — Rose Sunday hover fix + the Duality-Axes config → **Sonnet** — DONE (2026-07-28, 0.14.504–0.14.505)
 **Say:** "Radi Sesiju 23 iz WORKPLAN.md — Rose hover bug i duality
 config."
-**Reads:** CUBE.md §The Rose (Sabbath axis, weekday law) and §The
+**Reads:** CUBE.md §The Rose (Sunday axis, weekday law) and §The
 Thirteen Axes (Colour Law, Sacred Axis, the Duality-Axes decree);
 `render/compositor.md` (hover paths, hit-tests); `config/___config.md`;
 the creeds duality's data seat.
@@ -388,7 +388,7 @@ the creeds duality's data seat.
 hardcoded `constants.SOUTH_SLOT_ANGLE` (24h) for the Servant's own
 seat instead of calling `render.layers.servant_seat_angle` like every
 draw/label site already did — on the Rose the Servant sits at 06h/
-270° instead, so the two Sunday faces drew on the Sabbath axis but
+270° instead, so the two Sunday faces drew on the Sunday axis but
 hovered at the legacy bottom seat (also silently eating Wednesday's
 real 24h hover on Sundays); both sites fixed, pinned by
 `test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_
@@ -400,7 +400,7 @@ Servant cold/blue-06h); the proof case, **religion: Christianity
 (Ruler) pulls to blue/cold, Satanism (Servant) to red/warm** — the
 Sacred Axis reversing what the blind default drew. The Compass/
 Seasons' vertical Ruler-at-top default never flips (owner decree) —
-only the Rose's horizontal Sabbath axis is per-theme.
+only the Rose's horizontal Sunday axis is per-theme.
 `render.layers.ruler_seat_angle`/`servant_seat_angle`/`weekday_slots`
 are the three readers; the flip swaps which arm each face rides,
 never its name, plate or article. Four new tests pin the config path
@@ -441,16 +441,21 @@ queued for every article with text (the coverage law), each sheet
 opening with the Rule 19 derivation check (most cube geometry is
 computed, never drawn).
 
-### Session 26 — the Seating geometry → **Opus** — DONE (2026-07-28, 0.14.510–0.14.513)
+### Session 26 — the Seating geometry → **Opus** — DONE (2026-07-28, 0.14.510–0.14.515)
 **Delivered:** CUBE.md §The Seatings — both wheels solved by exhaustive
-search under stated laws (`core/cube_seating.py`, `config/cube.py`),
-every seat pinned by `tests/test_cube_seating.py` (which re-runs the
-search rather than trusting the constants), both wheels drawn to
-`research/seating/*.png`. The rotation↔hour rule is CLOSED as posed —
-proved impossible (no rotation of order 24; the dial's half-turn is the
-inversion, not a turn) — and survives only as the four-watches frame.
-Ahead: wiring either seating to a live pointer, and the owner's word on
-the two argued choices (the Sunday law and the cross doctrine).
+search (`core/cube_seating.py`, `config/cube.py`), every seat pinned by
+`tests/test_cube_seating.py` (which re-runs the search rather than
+trusting the constants), both wheels drawn to `research/seating/*.png`.
+**Re-solved the same day** under the owner's FIRST LAW — *"primarna je
+simetrija, sekundarna je simbolika"*: the first pass argued every arm
+from meaning and let the three primary axes fall on three neighbouring
+months; the owner threw it out. The figure is now the hexagram (3 face
+axes on a triangle, 3 corner axes on the opposite one, 6 edge axes on the
+hexagon between), on the owner's own arms — Calendar 12h/20h/4h with an
+inverted version, Rose 12h-24h / 4h-16h / 20h-8h. The rotation↔hour rule
+is CLOSED as posed (no rotation of order 24; the dial's half-turn is the
+inversion, not a turn) and survives only as the four-watches frame.
+Ahead: wiring either seating to a live pointer.
 **Say:** "Radi Sesiju 26 iz WORKPLAN.md — geometrija rasporeda."
 **Reads:** CUBE.md §The Thirteen Axes (Display Plans, the
 24-orientations note) and §The Rose; `render/layers.md`; the

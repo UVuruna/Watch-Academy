@@ -454,7 +454,7 @@ POINTER_ARM_LABELS = {
         "Dawn", "Morning", "Forenoon", "Noon", "Afternoon", "Evening",
         "Dusk",
     ),
-    # The ROSE speaks the YEAR (CUBE.md §The Rose — the Sabbath axis):
+    # The ROSE speaks the YEAR (CUBE.md §The Rose — the Sunday axis):
     # its four cardinals are the sun's turning points and its four
     # diagonals the season centres, landing exactly where
     # `core.year_wheel` puts them. Clockwise from 12h.
@@ -1377,7 +1377,7 @@ POINTER_WEEKDAY_SLOTS = {
     ),
     # THE ROSE'S COLOR LAW (owner seal 2026-07-27, CUBE.md §The Rose).
     # The seat is the HUE, not the position: it is the Prism paint canon
-    # with the two Sabbath hues lightened, because Sunday needs blue and
+    # with the two Sunday hues lightened, because Sunday needs blue and
     # red for its own two faces. Bodies ride their BADGES as always —
     # never painted into the diamonds.
     #   12h yellow THU · 15h orange TUE · 18h red SUN (Ruler)
@@ -1435,7 +1435,7 @@ AURORA_DUAL_SLOT_ANGLE = 135.0       # 21h — bottom right
 # Thirteen Axes — Display Plans). Every weekday theme's Sunday duality
 # rides an axis whose two ends are Cube poles: VERTICAL (yellow-top/
 # 12h <-> purple-bottom/24h) on the Compass and the Seasons, HORIZONTAL
-# (blue-06h <-> red-18h, the Sabbath axis) on the Rose instead. The
+# (blue-06h <-> red-18h, the Sunday axis) on the Rose instead. The
 # default law is unconditional on the vertical axis — the Ruler
 # (`WEEKDAY_DUAL_NAMES[theme][0]`) always pulls to the warm pole
 # (yellow/top) there, no per-theme override exists or is needed. Only
