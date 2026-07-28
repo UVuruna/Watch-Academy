@@ -364,9 +364,11 @@ would be new M6/M7 features, not a rename. Seeded the decision
 instead so neither has to be re-derived later: `setup/app_info.json`
 (new, pre-M7) carries `name`/`description` = Watch Academy while
 `exe_name`/`installer_name` stay DOMY-based, pinned by the new
-`tests/test_app_info.py`; ROADMAP.md's M7 section records that
-`update.repo` stays `"UVuruna/DOMY-Watch"` (repo NOT renamed) when
-self-update eventually lands. The GitHub repo rename itself was
+`tests/test_app_info.py`; ROADMAP.md's M7 section records the
+`update.repo` value for when self-update eventually lands (that value
+was `"UVuruna/DOMY-Watch"` while the repo still bore that name —
+CORRECTED to `"UVuruna/Watch-Academy"` on 2026-07-28). The GitHub
+repo rename itself was
 **not** executed (owner decree: `gh repo rename` never runs
 automatically) — flagged as an open question below. 978 tests green.
 **UPDATE (found 2026-07-28, Session 23's push):** the owner renamed
@@ -569,13 +571,19 @@ gadget's M2 (the four models + Switcher) exists.
   still accepts the old URL, but the canonical one is the new name).
   Session 22 correctly did NOT execute this itself (root CLAUDE.md
   forbids self-granted outward-facing repo actions) — the owner made
-  the call independently. Still open, as separate follow-ups: the
-  local `origin` remote URL (cosmetic — the redirect works either
-  way), `ROADMAP.md`'s M7 `update.repo` value and `setup/app_info.json`
-  (both still record `"UVuruna/DOMY-Watch"`, WORKPLAN.md's own
-  Session 22 entry above included), and the disk folder name (CUBE.md's
-  scope note allows "DOMY Watch" to stay regardless — a separate call
-  from the GitHub identity).
+  the call independently. **The follow-ups are CLOSED (owner order
+  2026-07-28, Session 24):** the local `origin` now points at
+  `https://github.com/UVuruna/Watch-Academy.git` (verified with
+  `git ls-remote`, so the push no longer travels through GitHub's
+  redirect), and `ROADMAP.md`'s M7 `update.repo` reads
+  `"UVuruna/Watch-Academy"`. `setup/app_info.json` never carried a
+  repo field at all — the seed holds name/description/exe/installer
+  only — so nothing was wrong there to fix; the `update` section is
+  created by the module that reads it, at M7. The one deliberately
+  UNCHANGED item is the disk folder name: "DOMY Watch" stays (CUBE.md's
+  scope note allows it — a separate call from the GitHub identity). No
+  LIVE address carries the old name any more — it survives only in
+  these historical notes, which say so explicitly.
 - ~~The Character wheel's OPEN combo figures~~ — SEALED 2026-07-27 by
   Session 21 under the owner's delegation ("ti pečatiš"): Alfred
   Pennyworth / Severus Snape (Devotion), Charles Xavier (Patronage),

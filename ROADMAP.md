@@ -1148,8 +1148,14 @@ Follow the monorepo build conventions (root CLAUDE.md):
    exists so `build.py` only has to fill in the version at build
    time; verify it still matches this note before wiring `build.py`.
    The Rule 23 self-update module does not exist yet — when it lands,
-   `update.repo` stays `"UVuruna/DOMY-Watch"` (the GitHub repo is not
-   renamed) while any user-facing update text says Watch Academy.
+   `update.repo` is **`"UVuruna/Watch-Academy"`** (CORRECTED
+   2026-07-28: the owner renamed the GitHub repo himself, and the
+   local `origin` was repointed at the canonical URL the same day —
+   the old `UVuruna/DOMY-Watch` address survives only as GitHub's
+   redirect and must never be written into a config again). The seed
+   file carries no `update` section yet; the module that reads it
+   creates one, with `check: true` beside the repo. User-facing update
+   text says Watch Academy.
 3. `setup/build.py` — version-info generation, PyInstaller
    `--onedir --windowed` (no UAC; exclude unused modules), signing.
 4. `setup/create_cert.py` — one-time self-signed cert
