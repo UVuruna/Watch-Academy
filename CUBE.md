@@ -488,6 +488,16 @@ Sacred Axis."*
   hexagram hours); the kinship seating (dial adjacency = cube
   kinship) is the same open geometry problem as the rotation↔hour
   rule.
+- **The Duality-Axes config (owner decree 2026-07-28, root Rule 4):**
+  every DUAL theme declares in config where its two members sit on
+  the vertical (yellow top ↔ purple bottom) and horizontal (blue ↔
+  red) axes; the default law says the PRIMARY member pulls to the
+  top, but the horizontal is per-theme — no blind rule survives the
+  proof case: **creeds today wears Satanism blue and Christianity
+  red, and the Sacred Axis rules the flip — Christianity BLUE
+  (christic, cold), Satanism RED (diabolic, warm).** Consumed by the
+  Rose, the Octa and Seasons(4) wherever a duality displays.
+  (Session 23.)
 
 <a id="double-trinity"></a>
 
@@ -1020,6 +1030,13 @@ lacking the experiment).
      strength of the refusal to trade his captured son for a field
      marshal. Nothing else about Stalin is being claimed, and nothing
      else needs to be — one paragraph carries the link.
+   - **The ranking addendum (owner 2026-07-28).** Among famous
+     candidates the seat prefers the one FAMOUS FOR its very
+     quality — renown-for-the-trait is the SECOND sort key, right
+     after fame itself: known-BY-this-quality beats
+     equally-famous-with-an-incidental-hook. The floor does not
+     move: famous-with-a-hook still beats obscure-and-exact, and no
+     seat is vacated.
    - **A seat is never vacated for want of a perfect deed.** Obscure
      and exact LOSES to famous and adequate. If the hook is thin, the
      paragraph says what it holds onto and moves on; it does not

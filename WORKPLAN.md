@@ -370,6 +370,85 @@ self-update eventually lands. The GitHub repo rename itself was
 **not** executed (owner decree: `gh repo rename` never runs
 automatically) — flagged as an open question below. 978 tests green.
 
+### Session 23 — Rose Sabbath hover fix + the Duality-Axes config → **Sonnet**
+**Say:** "Radi Sesiju 23 iz WORKPLAN.md — Rose hover bug i duality
+config."
+**Reads:** CUBE.md §The Rose (Sabbath axis, weekday law) and §The
+Thirteen Axes (Colour Law, Sacred Axis, the Duality-Axes decree);
+`render/compositor.md` (hover paths, hit-tests); `config/___config.md`;
+the creeds duality's data seat.
+**Delivers:** (1) THE BUG (owner screenshot 2026-07-28): on the Rose
+the two Sunday faces DRAW on the Sabbath axis (Servant blue 06h,
+Ruler red 18h) but their HOVER still fires at the legacy bottom
+seat — reproduce with the GUI probe first, fix so hover hits the
+drawn seats, pin with a regression test named after the failure
+(root Rule 25). (2) THE DUALITY-AXES CONFIG (owner decree
+2026-07-28, root Rule 4 — no hardcode): a config that, for EVERY
+dual theme, places its two members on the vertical (yellow ↔
+purple) and horizontal (blue ↔ red) axes; default: the PRIMARY
+member pulls to the top; the horizontal is per-theme. First entry
+and the proof case: **creeds flips — Christianity BLUE (christic,
+cold), Satanism RED (diabolic, warm)** — today's assignment is
+reversed. Consumed by the Rose, the Octa and Seasons(4). Tests pin
+the config path and the creeds orientation.
+
+### Session 24 — the 65 verdict + the Sacred rosters → **Opus** (writers) — BLOCKED on the owner's per-term verdict
+**Say:** "Radi Sesiju 24 iz WORKPLAN.md — presuda 65 termina i novi
+rosteri."
+**Reads:** CUBE.md §The Thirteen Axes IN FULL (grid, naming laws,
+alternates, rejected list); the owner's verdict (this session's
+input); CANON.md quote rules.
+**Delivers:** (1) the per-term verdict folded into CUBE.md —
+PROPOSED marks removed or terms replaced, the Sacred Axis alias
+picked (Axis Mundi / Axis of Being), the epigraph sealed; (2) THE
+ROSTER ROUND under FAME FIRST **plus the ranking addendum
+(2026-07-28: fame, then famous-FOR-the-trait)**: the 16 new edge
+readings × 3 sets (48 seats) + the two SACRED seats' historical and
+modern echoes (the mythic principals are Jesus and the Devil
+themselves — owner: "istorijske ličnosti i moderne filmske uz
+ISUS–ĐAVO koji idu u mitsku glavnu tematiku"); check whether the
+Rose §OPEN 48 are already satisfied by the sealed vertex/2D rosters
+and WIRE, don't reinvent; (3) rosters recorded in CUBE.md tables
+and wired into the engine's name fallbacks.
+
+### Session 25 — the Thirteen-Axes texts + sheets → **Opus** (writers)
+**Say:** "Radi Sesiju 25 iz WORKPLAN.md — tekstovi trinaest osa."
+**Reads:** CUBE.md §The Thirteen Axes (the Article Charter BINDS);
+the sealed rosters from Session 24; `research/prompts/COVERAGE.md`
+and a cube-wave sheet as template.
+**Delivers:** the Encyclopedia texts: The One (BOTH descriptions —
+apophatic AND cataphatic, per decree), the Sacred Axis (five
+stations, three readings, the distinguishing sentence from the
+doctrinal Trinity), the 13 axis pages, the 16 new edge readings'
+articles, the hexagram-projection page (Offices and Being views,
+the blindness law); Charter movements throughout; prompt sheets
+queued for every article with text (the coverage law), each sheet
+opening with the Rule 19 derivation check (most cube geometry is
+computed, never drawn).
+
+### Session 26 — the Seating geometry → **Opus**
+**Say:** "Radi Sesiju 26 iz WORKPLAN.md — geometrija rasporeda."
+**Reads:** CUBE.md §The Thirteen Axes (Display Plans, the
+24-orientations note) and §The Rose; `render/layers.md`; the
+Prophecy Hamiltonian precedent (CUBE.md §Seating the eight).
+**Delivers:** the theorem-guided seatings — **Calendar-12** (owner
+2026-07-28): each of the twelve arms carries ONE human axis, its
+two ends the arm's two personalities, the centre medallion the ONE
+central sacred slot; which axis on which month argued from seasonal
+kinship; **Rose-24**: the 24 human seats on the 24 rays (dial
+adjacency = cube kinship, exhaustive search like the Prophecy
+wheel) with the THREE central sacred seats; the rotation↔hour rule
+if it falls out (24 orientations = the permutations of the four
+diagonals). Golden tests pin every seating; offscreen renders for
+the owner's eyes. (Opus: geometry — accuracy > speed.)
+
+### Session 27 — the Encyclopedia rework (celine) → **owner + another agent**
+The owner drives this one himself with a separate agent: the Cube
+canon now claims a large share of the Encyclopedia, so the whole
+Encyclopedia UI splits into a few top-level WHOLES (celine) with
+their themes inside. Recorded here so no session collides with it —
+this plan only reserves the seat and defers the spec to the owner.
+
 ## Running in Parallel (no agent needed)
 
 - **Owner art generation** from the sheets: pantheon plates,
@@ -379,6 +458,12 @@ automatically) — flagged as an open question below. 978 tests green.
   every drop simply lights up.
 
 ## Open Owner Decisions (any session may receive the verdict)
+
+- **The 27 PROPOSED terms of the 65-grid** (CUBE.md §The 65 Terms):
+  per-term verdict — plus the Sacred Axis alias (Axis Mundi vs Axis
+  of Being) and the epigraph wording. **Sessions 24–25 are BLOCKED
+  on this.** Alternates on record: Discernment / Contemplation /
+  Entitlement / Service.
 
 - ~~Theme name~~ — SEALED 2026-07-27: the theme keeps **all three**
   names. Titled in full it is **One Soul — The Vow — The Bond**;
