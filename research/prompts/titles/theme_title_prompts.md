@@ -64,7 +64,7 @@ ART_SOURCED_ROOTS`), flat, ASCII theme-key stems taken straight from
 `config.defaults.WEEKDAY_THEME_ARTICLES`'s own keys (`planet_signs`,
 `religion_alt`, `bible_dark`, `planets_art`, …) plus `intelligences`
 and `months` for the two sibling topics. This is the SAME precedent
-`assets/months/` and `assets/subdial/` already set (`assets/
+`assets/calendars/slavic_months/primary/colored/` and `assets/instrument/subdial/` already set (`assets/
 ___assets.md`'s "NOT art-sourced" family): a title plate is a SHARED
 thing, one per theme, not a Gemini/ChatGPT split, and — unlike the
 weekday cast root — never a primary/colored pair either (`assets/

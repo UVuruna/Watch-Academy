@@ -100,3 +100,11 @@ Run started:  2026-07-25 15:49:14  (0/18 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:14  (all pending items done)
 
+====================================================================
+Greek Monsters — the Bestiary Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-27 15:19:51  (0/18 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 15:19:51  (all pending items done)
+

@@ -37,7 +37,7 @@ accordingly.
 
 **File stems (must match exactly — regenerations drop over these):**
 `assets/weeks/celestial_bodies/planets/primary/sign/Sun.png`, `assets/weeks/celestial_bodies/planets/primary/sign/Moon.png`, `assets/weeks/celestial_bodies/planets/primary/sign/Mars.png`, `assets/weeks/celestial_bodies/planets/primary/sign/Mercury.png`, `assets/weeks/celestial_bodies/planets/primary/sign/Jupiter.png`,
-`assets/weeks/celestial_bodies/planets/primary/sign/Venus.png`, `assets/weeks/celestial_bodies/planets/primary/sign/Saturn.png` in `assets/weekday/planets/signs/`, plus
+`assets/weeks/celestial_bodies/planets/primary/sign/Venus.png`, `assets/weeks/celestial_bodies/planets/primary/sign/Saturn.png` in `assets/weeks/celestial_bodies/planets/primary/sign/`, plus
 `assets/weeks/celestial_bodies/planets/primary/sign/Sun_Eclipse.png`.
 
 Shared skeleton: *Ornate circular sigil, polished metal relief,

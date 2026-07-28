@@ -1,7 +1,7 @@
 # Planets — the Real-Photo Weekday Theme
 
 The Planets theme's seven weekday bodies (`sun.png` … `saturn.png` at
-`assets/weekday/planets/primary/`) are the OWNER'S OWN REAL
+`assets/weeks/celestial_bodies/planets/primary/`) are the OWNER'S OWN REAL
 PHOTOGRAPHS — not generated art. No prompts exist for them, and none
 are needed; this file exists only to give the theme its own complete
 sheet per the owner's iron rule (one theme, one file) and to hold the

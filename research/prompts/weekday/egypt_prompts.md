@@ -308,7 +308,7 @@ break the Encyclopedia's honesty, per the doctrine). This
 **SUPERSEDES the former Set ninth** recorded below for history — do
 **NOT** generate `set.png`, in `pantheon/` or anywhere else. Set was
 never actually rendered (confirmed absent from
-`assets/weekday/gemini/egypt/primary/`; it was carried only as an
+`assets/weeks/myth/egypt/primary/`; it was carried only as an
 open line in `ROSTER.md`'s shortage list) — nothing to delete on
 disk, only the spec is retired. Set's murder-of-Osiris story survives
 regardless, inside the Osiris and Horus articles; Set himself retires
@@ -347,7 +347,7 @@ article.)*
 
 ## Generation-order checklist
 
-Verified against `assets/weekday/gemini/egypt/` on disk and
+Verified against `assets/weeks/myth/egypt/` on disk and
 `ROSTER.md`'s shortage list (2026-07-15).
 
 | Register | Plates | Status |

@@ -1,0 +1,29 @@
+====================================================================
+Two Crosses Prompts — the Path of Light and the Path of Darkness  [Gemini]
+Run started:  2026-07-27 14:32:58  (20/20 pending)
+--------------------------------------------------------------------
+2026-07-27 14:33:53  assets/archetypes/crosses/primary/colored/Path_of_Light.png gen   24.9s  ours   25.6s   1024x1024 -> 996x995    901 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:34:46  assets/archetypes/crosses/primary/colored/Path_of_Darkness.png gen   23.5s  ours   24.3s   1024x1024 -> 972x971    881 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:35:33  assets/archetypes/crosses/primary/colored/Trust.png gen   24.5s  ours   19.2s   1024x1024 -> 990x987    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:36:04  assets/archetypes/crosses/primary/colored/Distrust.png gen   10.4s  ours   16.1s   1024x1024 -> 990x987    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:36:49  assets/archetypes/crosses/primary/colored/Hope.png gen   23.9s  ours   16.7s   506x1024 -> 424x1011    464 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:37:34  assets/archetypes/crosses/circle/colored/Hope.png gen   25.5s  ours   14.8s   1024x1024 -> 880x907    975 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:38:23  assets/archetypes/crosses/primary/colored/Faith.png gen   24.9s  ours   19.1s    506x1024 -> 366x983    545 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:39:07  assets/archetypes/crosses/circle/colored/Faith.png gen   32.1s  ours    7.3s   1024x1024 -> 893x891    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:39:45  assets/archetypes/crosses/primary/colored/Love.png gen   21.4s  ours   12.9s    506x1024 -> 430x932    643 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:40:37  assets/archetypes/crosses/circle/colored/Love.png gen   25.1s  ours   22.2s   1024x1024 -> 977x976    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:41:18  assets/archetypes/crosses/primary/colored/Salvation.png gen   22.9s  ours   13.6s    506x1024 -> 318x986    322 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:42:13  assets/archetypes/crosses/circle/colored/Salvation.png gen   31.6s  ours   18.4s              1024x1024    1.3 MB  [REMOVE BG: done, CROP: nothing]
+2026-07-27 14:42:55  assets/archetypes/crosses/primary/colored/Fear.png gen   20.5s  ours   17.1s    506x1024 -> 430x945    525 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:43:46  assets/archetypes/crosses/circle/colored/Fear.png gen   38.7s  ours    8.0s   1024x1024 -> 922x920    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:44:43  assets/archetypes/crosses/primary/colored/Anger.png gen   27.0s  ours   24.3s    506x1024 -> 476x996    773 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:45:33  assets/archetypes/crosses/circle/colored/Anger.png gen   30.5s  ours   14.5s   1024x1024 -> 880x879    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:46:13  assets/archetypes/crosses/primary/colored/Hate.png gen   29.5s  ours    5.7s    506x1024 -> 388x944    648 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:47:09  assets/archetypes/crosses/circle/colored/Hate.png gen   30.7s  ours   21.0s   1024x1024 -> 931x931    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:48:02  assets/archetypes/crosses/primary/colored/Suffering.png gen   31.1s  ours   16.9s    506x1024 -> 382x990    760 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:48:39  assets/archetypes/crosses/circle/colored/Suffering.png gen   30.6s  ours    1.7s  1024x1024 -> 1014x1012    1.5 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 20  |  average generation (AI): 26s/image  |  average our time (save+bgfix+pause): 16s/image
+Total AI + our time: 14m 09s  (wall clock: 15m 40s)
+Run finished: 2026-07-27 14:48:39  (all pending items done)
+

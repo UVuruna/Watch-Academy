@@ -2009,7 +2009,7 @@ def dial_window_margin_fraction(skin) -> float:
 # still falls back to the text form (documented).
 # The calendar category root (RESTRUCTURE 2026-07-22): the zodiac's own
 # astrology art lives at calendars/zodiac/astrology/..., the Chinese
-# badges at calendars/chinese/... — ONE base (calendars) with the
+# badges at calendars/zodiac/chinese/... — ONE base (calendars) with the
 # family in the folder path (ZODIAC_STYLE_ART_DIRS carry the "zodiac/"
 # prefix, CHINESE_STYLE_ART_DIRS the "chinese/" one). Name kept for
 # consumer stability.

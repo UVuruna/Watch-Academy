@@ -37,8 +37,8 @@ them in parallel. Both keep the stained-glass night-window family
 LANCET window in that age's light hue.
 
 **Drop paths:**
-`assets/archetype/<source>/life/tree/` (Register I) and
-`assets/archetype/<source>/life/animals/` (Register II) — both
+`assets/archetypes/<source>/life/tree/` (Register I) and
+`assets/archetypes/<source>/life/animals/` (Register II) — both
 named by age: `Unborn.png`, `Birth.png`, `Childhood.png`,
 `Youth.png`, `Maturity.png`, `Elder.png`, `Old_Age.png`, `Death.png`.
 

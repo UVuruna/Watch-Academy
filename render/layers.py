@@ -445,7 +445,7 @@ def calendar_mount_entries(mount: str) -> tuple[tuple[str, Path | None], ...]:
         entries: list[tuple[str, Path | None]] = [("", None)] * 12
         for gregorian, animal in constants.CHINESE_MONTH_BRANCH_ANIMALS.items():
             entries[almanac_month_index(gregorian)] = (
-                animal, octa_slot_art("chinese/primary/colored", animal),
+                animal, octa_slot_art("zodiac/chinese/primary/colored", animal),
             )
         return tuple(entries)
     entries: list[tuple[str, Path | None]] = [("", None)] * 12
@@ -1164,7 +1164,7 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     if key == "ophiuchus":
         art = octa_slot_art("zodiac/astrology/primary/sign", name)
     elif key == "chinese":
-        art = octa_slot_art("chinese/primary/bronze", "Cat")
+        art = octa_slot_art("zodiac/chinese/primary/bronze", "Cat")
     else:
         resolved = paths.art_file(defaults.MONTHS_ART_DIR / f"{name}.png")
         art = resolved if resolved.exists() else None
@@ -2600,8 +2600,8 @@ def octa_slot_art(folder: str, name: str) -> Path | None:
     """The PNG for an image slot style — `folder` is a subdirectory of
     assets/calendars/ (the RESTRUCTURE 2026-07-22 home; the old
     assets/zodiac/ root is abolished): "zodiac/astrology/primary/sign",
-    ".../logo", ".../constellation", "chinese/primary/bronze",
-    "chinese/primary/colored" — the family/variant tree. `name` is the
+    ".../logo", ".../constellation", "zodiac/chinese/primary/bronze",
+    "zodiac/chinese/primary/colored" — the family/variant tree. `name` is the
     entity ("Cancer" / "Horse") — or None while the owner's art folder
     does not have it yet."""
     path = paths.art_file(defaults.ZODIAC_ART_DIR / folder / f"{name}.png")

@@ -7,7 +7,7 @@ the owner's iron rule.
 ## Planets Medallion Look — turning the real-photo bodies to bronze
 
 The owner's real-photo Planets theme already ships seven bodies at
-`assets/weekday/planets/primary/` (`assets/weeks/celestial_bodies/planets/primary/art/Sun.png` … `assets/weeks/celestial_bodies/planets/primary/art/Saturn.png`, real renders —
+`assets/weeks/celestial_bodies/planets/primary/` (`assets/weeks/celestial_bodies/planets/primary/art/Sun.png` … `assets/weeks/celestial_bodies/planets/primary/art/Saturn.png`, real renders —
 `assets/___assets.md`, `design/___design.md`). This section is the
 SAME bronze medallion register applied to those same seven bodies
 plus the eclipse dual, so Planets and Cosmos read as one visual
@@ -18,11 +18,11 @@ body's real, photographed likeness translated into relief — so the
 two Sun prompts do not duplicate each other.
 
 **Drop dir — flag for the owner:** proposing
-`assets/weekday/planets/art/` since the real-photo set already owns
-`assets/weekday/planets/primary/` and the two must not collide; the owner may
+`assets/weeks/celestial_bodies/planets/primary/art/` since the real-photo set already owns
+`assets/weeks/celestial_bodies/planets/primary/` and the two must not collide; the owner may
 prefer a different name (`planets_bronze/`, `planets_medal/`, …).
 
-- `assets/weekday/planets/art/` — `assets/weeks/celestial_bodies/planets/primary/art/Sun.png`, `assets/weeks/celestial_bodies/planets/primary/art/Moon.png`, `assets/weeks/celestial_bodies/planets/primary/art/Mars.png`,
+- `assets/weeks/celestial_bodies/planets/primary/art/` — `assets/weeks/celestial_bodies/planets/primary/art/Sun.png`, `assets/weeks/celestial_bodies/planets/primary/art/Moon.png`, `assets/weeks/celestial_bodies/planets/primary/art/Mars.png`,
   `assets/weeks/celestial_bodies/planets/primary/art/Mercury.png`, `assets/weeks/celestial_bodies/planets/primary/art/Jupiter.png`, `assets/weeks/celestial_bodies/planets/primary/art/Venus.png`, `assets/weeks/celestial_bodies/planets/primary/art/Saturn.png`
 - `assets/weeks/celestial_bodies/planets/primary/art/Sun_Eclipse.png`
 - Bronze only, no `colored/` arc requested for this section.

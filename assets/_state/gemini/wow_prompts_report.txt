@@ -61,3 +61,11 @@ Images: 54  |  average generation (AI): 11s/image  |  average our time (save+bgf
 Total AI + our time: 23m 42s  (wall clock: 28m 04s)
 Run finished: 2026-07-25 13:07:53  (all pending items done)
 
+====================================================================
+World of Warcraft — the Three-Faction Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-27 15:19:51  (0/54 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 15:19:51  (all pending items done)
+

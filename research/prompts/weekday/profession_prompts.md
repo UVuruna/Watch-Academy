@@ -29,7 +29,7 @@ consolidated into its own section further down (moved verbatim from
 theme's sheet should carry everything it needs, no hunting across
 files for a theme's colored plates).
 
-Files land in `assets/weekday/profession/primary/`. Stems below are the exact
+Files land in `assets/weeks/crafts/profession/primary/`. Stems below are the exact
 Capitalized names from `WEEKDAY_THEME_FILES["profession"]` — the
 Sunday dual sits FLAT in the same folder, named `Servant_dual.png`
 (owner DUAL FLATTEN 2026-07-19: no `dual/` subfolder anywhere), per
@@ -136,7 +136,7 @@ here from now on). Professions deliberately wear their DIAL ARM COLORS
 as the dominant hue (Ruler white-gold, Physician blue, Soldier orange,
 Merchant purple, Priest yellow, Artist red, Farmer green) — the badge
 then matches the arm the day lives on. Drop under
-`assets/weekday/profession/colored/` (same stems as the bronze set
+`assets/weeks/crafts/profession/primary/colored/` (same stems as the bronze set
 above). The colored Servant (dual) companion is included below, moved
 verbatim from the retired `sunday_duality.md` — this closes the last
 gap in the theme's own colored set.

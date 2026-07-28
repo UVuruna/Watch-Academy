@@ -110,3 +110,11 @@ Run started:  2026-07-25 15:49:14  (0/7 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:14  (all pending items done)
 
+====================================================================
+Family Archetype Prompts (Gemini) — the Household Triangle and the Hearth  [Gemini]
+Run started:  2026-07-27 14:48:41  (0/7 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 14:48:41  (all pending items done)
+

@@ -95,3 +95,11 @@ Run started:  2026-07-25 15:49:14  (0/24 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:14  (all pending items done)
 
+====================================================================
+Triads Prompts — the Trio's Stacked Readings Given Their Own Images  [Gemini]
+Run started:  2026-07-27 14:54:30  (0/24 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 14:54:30  (all pending items done)
+

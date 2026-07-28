@@ -24,7 +24,7 @@ inline as a **Note**, and left the roster untouched.
 
 ---
 
-## Bible Dark (`assets/weekday/bible/dark/`)
+## Bible Dark (`assets/weeks/faith/bible/dark/`)
 
 Same rose-window medallion craft as the base Bible set and Bible II —
 trefoil-lancet lead-came tracery, four cardinal jewel-roundels, the
@@ -271,12 +271,12 @@ in `bible_theme_prompts.md`: lowercase snake_case, named after the
 story/figure rather than always the literal character name
 (`ancient_of_days.png`, `song_of_songs.png` in the base set), each
 figure dropped directly in the theme's weekday folder
-(`assets/weekday/bible/dark/<stem>.png`), with the Sunday duality's
+(`assets/weeks/faith/bible/dark/<stem>.png`), with the Sunday duality's
 second face sitting FLAT alongside the rest, no `dual/` subfolder —
 the same flat convention now used across the weekday theme sheets
 (e.g. `greek_prompts.md`, `profession_prompts.md`). The two scale badges use
 the PascalCase names the owner specified directly
 (`Judas.png`, `Lucifer.png`) rather than the weekday
-snake_case convention — kept as given since `assets/badge/scale/` is a
+snake_case convention — kept as given since `assets/archetypes/scale/` is a
 badge family, not a weekday theme, and the owner named these two files
 explicitly.

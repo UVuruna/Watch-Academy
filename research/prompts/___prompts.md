@@ -209,7 +209,7 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
 - `eclipse_prompts.md` — the ECLIPSES Encyclopedia set (fix round F,
   owner order 2026-07-19): one night-window rose-window emblem per
   category the dial distinguishes — SOLAR total/annular/partial/hybrid
-  and LUNAR total/partial/penumbral (7 images, `assets/eclipse/<Name>.png`),
+  and LUNAR total/partial/penumbral (7 images, `assets/celestial/eclipse/<Name>.png`),
   each doctrine-true to the sealed state table (pearl corona, ring of
   fire, copper blood moon, turquoise fringe, penumbral veil). Backs both
   the Encyclopedia chapters and the on-dial eclipse hover badge

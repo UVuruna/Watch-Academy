@@ -37,6 +37,16 @@ skin folders: DOMY and MORPH are ring preset names, nothing more).
 > assets/<category>/<group>/<theme>/<register>/<look>/<Figura>[_vN]_<src>.png
 > ```
 >
+> The GROUP and THEME levels collapse into one folder whenever a group
+> holds a single theme (`calendars/almanac/primary/…`), and stay apart
+> when it holds more than one — `calendars/zodiac/` carries BOTH zodiac
+> traditions, `astrology/` and `chinese/` (owner 2026-07-28: the Chinese
+> zodiac is a zodiac, and belongs beside the western one, not as a group
+> of its own beside the apostles).
+>
+> ```
+> ```
+>
 > - **Registers** (official blocks): `primary`, `pantheon`, `secondary`,
 >   `dark`, `glass`, `circle`, `badges`, `animals`, `tree`, `wider`,
 >   and the THREE FIGURE SETS `archetypal`, `historical`, `modern`

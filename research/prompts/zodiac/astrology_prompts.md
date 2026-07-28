@@ -2,7 +2,7 @@
 
 > ## ⚠ DROP PATHS AND VERSIONS — READ BEFORE GENERATING
 >
-> **The `assets/zodiac/` root is ABOLISHED** (RESTRUCTURE 2026-07-22 —
+> **The old top-level zodiac root is ABOLISHED** (RESTRUCTURE 2026-07-22 —
 > five categories only). Every path in this sheet now points at the
 > lawful home, `assets/calendars/zodiac/astrology/primary/<look>/`.
 >

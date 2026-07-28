@@ -22,11 +22,11 @@ apart at a glance: the four SOLAR emblems ring a jet-black Sun-disc with
 its category's own crown of light; the three LUNAR emblems hold a Full
 Moon disc darkened by Earth's round shadow to its category's own depth.
 
-**Drop paths:** `assets/eclipse/` — `Solar_Total.png`,
+**Drop paths:** `assets/celestial/eclipse/` — `Solar_Total.png`,
 `Solar_Annular.png`, `Solar_Partial.png`, `Solar_Hybrid.png`,
 `Lunar_Total.png`, `Lunar_Partial.png`, `Lunar_Penumbral.png`. No
 `<source>` split (a single generation batch, like the emblem/badge/era
-families) — the app reads `assets/eclipse/<Name>.png` directly
+families) — the app reads `assets/celestial/eclipse/<Name>.png` directly
 (`config/defaults.py` `ECLIPSE_ART_DIR`).
 
 **House rules carried from every other sheet:** photorealistic render,
@@ -102,7 +102,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 - New sheet (fix round F, owner order 2026-07-19); the seven category
   emblems NOT yet generated.
-- Wiring is LIVE and graceful-absent: `assets/eclipse/<Name>.png` backs
+- Wiring is LIVE and graceful-absent: `assets/celestial/eclipse/<Name>.png` backs
   both the Encyclopedia chapter pages (`app/encyclopedia.py`) and the
   eclipse-window Earth/Moon hover badge (`render/compositor.py`); until
   the art lands the chapters read text-only and the hover shows no

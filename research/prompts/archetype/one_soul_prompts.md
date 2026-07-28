@@ -45,7 +45,7 @@ register as the Scale glass and the Trinity/Persons lancets (see
 window in its light hue, the Union a ROUND rosette, the Child a small
 rondel.
 
-**Drop paths:** `assets/archetype/<source>/one_soul/` —
+**Drop paths:** `assets/archetypes/<source>/one_soul/` —
 `Gratitude.png`, `Support.png`, `Passion.png`, `Tolerance.png`,
 `Trust.png`, `Respect.png`, `Union.png`, `Child.png`.
 

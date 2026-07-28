@@ -18,7 +18,7 @@ i instrukcije za GUIDE screenshotove.
 - **ViewBox 24×24**, stroke ~1.5–2 px, zaobljeni krajevi — da se
   slaže sa modernom temom dijaloga.
 - **Bez teksta i brojeva u ikonici.**
-- Spusti u: `assets/icons/<ime>.svg` (tačna imena iz tabele).
+- Spusti u: `assets/instrument/icons/<ime>.svg` (tačna imena iz tabele).
 - Aplikacija degradira elegantno: dok ikonice nema, stoji privremeni
   emoji/znak — svaka koju spustiš samo „legne".
 

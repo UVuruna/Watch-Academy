@@ -41,14 +41,14 @@ prompts are needed here.
 - Isolated on a plain white background.
 - No text, no watermark, no lettering of any kind anywhere — runes and glyphs are carved symbols, never alphabetic characters.
 
-**Drop dirs** (`assets/weekday/norse/…`; the dual sits FLAT inside
+**Drop dirs** (`assets/weeks/myth/norse/…`; the dual sits FLAT inside
 each variant's own folder, no `dual/` subfolder, matching the code's
 authoritative convention in `config/defaults.py` `WEEKDAY_DUAL_FILES`
 — the colored dual swaps only the `primary` → `colored` segment, e.g.
 `primary/Skoll.png` → `assets/weeks/myth/norse/primary/colored/Skoll.png`):
 
 ```
-📁 assets/weekday/norse/
+📁 assets/weeks/myth/norse/
   📁 primary/            Planetary bronze — 7 gods + dual Skoll
   📁 colored/            Planetary colored — 7 gods + Skoll
   📁 pantheon/           Pantheon bronze — new figures + dual the Wanderer (REUSE, points at primary/Odin.png); REUSE figures point at primary/

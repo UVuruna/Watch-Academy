@@ -224,7 +224,7 @@ literal architecture — sunlight, through glass, telling scripture.
 
 ## 3. The Prompts
 
-Suggested drop location: `assets/weekday/bible/primary/`, with the Sunday
+Suggested drop location: `assets/weeks/faith/bible/primary/`, with the Sunday
 second face sitting flat at `assets/weeks/faith/bible/primary/colored/Son_Servant.png`
 (matching the flat Sunday-dual convention already used for Greek/Norse/
 Egypt/Japan/Slavic/Alchemy/Religion — see any of those themes' own

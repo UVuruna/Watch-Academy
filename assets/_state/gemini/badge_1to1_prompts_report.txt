@@ -160,3 +160,42 @@ Run started:  2026-07-25 15:49:14  (0/38 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:14  (all pending items done)
 
+====================================================================
+Badge 1:1 Prompts (Gemini) — round-one circular companions for the lancet vitraži  [Gemini]
+Run started:  2026-07-27 14:54:30  (30/38 pending)
+--------------------------------------------------------------------
+2026-07-27 14:55:00  assets/archetypes/trinity/primary/colored/circle/colored/One_Judge.png gen   20.4s  ours    4.9s    1024x559 -> 514x524    567 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:56:10  assets/archetypes/trinity/primary/colored/circle/colored/Devil_Prosecutor.png gen   50.8s  ours   14.0s    1024x559 -> 514x531    448 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:57:00  assets/archetypes/trinity/primary/colored/circle/colored/Jesus_Advocate.png gen   21.8s  ours   23.0s    1024x559 -> 533x542    562 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:57:35  assets/archetypes/family/primary/colored/circle/colored/Child_Anchor.png gen   22.4s  ours    7.5s   1024x1024 -> 922x921    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:58:27  assets/archetypes/family/primary/colored/circle/colored/Mother_Heart.png gen   24.0s  ours   22.5s   1024x1024 -> 924x921    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:59:09  assets/archetypes/family/primary/colored/circle/colored/Father_Shield.png gen   27.9s  ours   10.4s    1024x559 -> 542x549    593 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:59:57  assets/archetypes/temperaments/primary/colored/circle/colored/Sanguine.png gen   24.5s  ours   18.4s    1024x559 -> 520x532    573 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:00:53  assets/archetypes/temperaments/primary/colored/circle/colored/Choleric.png gen   29.0s  ours   21.9s    1024x559 -> 548x555    629 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:01:27  assets/archetypes/temperaments/primary/colored/circle/colored/Melancholic.png gen   22.9s  ours    5.9s   1024x1024 -> 946x944    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:02:17  assets/archetypes/temperaments/primary/colored/circle/colored/Phlegmatic.png gen   26.5s  ours   18.4s    1024x559 -> 500x503    533 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:03:06  assets/archetypes/persons/primary/colored/circle/colored/One_Love.png gen   27.1s  ours   18.2s   1024x1024 -> 910x905    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:03:44  assets/archetypes/persons/primary/colored/circle/colored/Michael_Courage.png gen   26.5s  ours    6.4s    1024x559 -> 560x557    690 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:04:38  assets/archetypes/persons/primary/colored/circle/colored/Lucifer_Pride.png gen   30.0s  ours   18.9s   1024x1024 -> 988x986    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:05:26  assets/archetypes/persons/primary/colored/circle/colored/Devil_Hatred.png gen   28.5s  ours   14.9s    1024x559 -> 554x558    573 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:06:21  assets/archetypes/persons/primary/colored/circle/colored/Judas_Fear.png gen   39.3s  ours    9.5s   1024x1024 -> 938x938    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:07:24  assets/archetypes/persons/primary/colored/circle/colored/Jesus_Humility.png gen   33.6s  ours   23.9s    1024x559 -> 499x503    476 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:08:20  assets/archetypes/one_soul/primary/colored/circle/colored/Gratitude.png gen   29.0s  ours   21.4s    1024x559 -> 536x540    590 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:08:55  assets/archetypes/one_soul/primary/colored/circle/colored/Support.png gen   25.0s  ours    6.4s    1024x559 -> 524x529    566 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:09:40  assets/archetypes/one_soul/primary/colored/circle/colored/Passion.png gen   29.1s  ours   10.4s    1024x559 -> 532x548    563 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:10:29  assets/archetypes/one_soul/primary/colored/circle/colored/Tolerance.png gen   38.2s  ours    6.4s    1024x559 -> 530x530    488 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:11:28  assets/archetypes/one_soul/primary/colored/circle/colored/Trust.png gen   29.0s  ours   25.1s    1024x559 -> 550x551    463 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:12:52  assets/archetypes/one_soul/primary/colored/circle/colored/Respect.png gen   67.8s  ours   12.0s   1024x1024 -> 950x945    881 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:13:47  assets/archetypes/walks/primary/colored/circle/colored/King.png gen   33.2s  ours   16.9s    1024x559 -> 548x547    648 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:14:41  assets/archetypes/walks/primary/colored/circle/colored/Merchant.png gen   31.1s  ours   16.9s    1024x559 -> 546x548    605 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:15:58  assets/archetypes/walks/primary/colored/circle/colored/Soldier.png gen   58.0s  ours   13.4s    1024x559 -> 546x548    605 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:16:39  assets/archetypes/walks/primary/colored/circle/colored/Artist.png gen   30.8s  ours    6.4s    1024x559 -> 548x550    570 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:17:21  assets/archetypes/walks/primary/colored/circle/colored/Wanderer.png gen   24.1s  ours   13.0s   1024x1024 -> 980x979    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:18:23  assets/archetypes/walks/primary/colored/circle/colored/Scholar.png gen   33.2s  ours   24.8s   1024x1024 -> 850x849    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:19:12  assets/archetypes/walks/primary/colored/circle/colored/Farmer.png gen   32.3s  ours   11.9s  1024x1024 -> 1002x996    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 15:19:49  assets/archetypes/walks/primary/colored/circle/colored/Priest.png gen   31.2s  ours    0.6s    1024x559 -> 542x543    478 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 30  |  average generation (AI): 32s/image  |  average our time (save+bgfix+pause): 14s/image
+Total AI + our time: 22m 51s  (wall clock: 25m 18s)
+Run finished: 2026-07-27 15:19:49  (all pending items done)
+

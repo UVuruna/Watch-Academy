@@ -1,0 +1,25 @@
+====================================================================
+Character Archetype Prompts — the Compass of Character, Eight Directions  [Gemini]
+Run started:  2026-07-27 14:04:25  (16/16 pending)
+--------------------------------------------------------------------
+2026-07-27 14:05:17  assets/archetypes/character/primary/colored/Loyalty.png gen   31.6s  ours   15.9s    506x1024 -> 428x986    804 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:06:11  assets/archetypes/character/circle/colored/Loyalty.png gen   27.6s  ours   23.3s   1024x1024 -> 919x924    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:06:48  assets/archetypes/character/primary/colored/Patronage.png gen   27.0s  ours    5.2s    506x1024 -> 473x997    952 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:07:27  assets/archetypes/character/circle/colored/Patronage.png gen   25.5s  ours    9.7s   1024x1024 -> 822x836    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:08:30  assets/archetypes/character/primary/colored/Dignity.png gen   41.1s  ours   16.8s   506x1024 -> 426x1003    811 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:09:21  assets/archetypes/character/circle/colored/Dignity.png gen   26.1s  ours   19.6s   1024x1024 -> 944x944    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:10:11  assets/archetypes/character/primary/colored/Conviction.png gen   29.0s  ours   15.4s    506x1024 -> 408x965    630 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:10:50  assets/archetypes/character/circle/colored/Conviction.png gen   27.1s  ours    6.7s   1024x1024 -> 878x882    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:11:38  assets/archetypes/character/primary/colored/Integrity.png gen   22.4s  ours   20.6s   506x1024 -> 490x1015    829 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:12:22  assets/archetypes/character/circle/colored/Integrity.png gen   28.6s  ours   11.5s    506x1024 -> 506x522    466 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:13:00  assets/archetypes/character/primary/colored/Renunciation.png gen   26.0s  ours    7.8s    506x1024 -> 374x986    674 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:13:49  assets/archetypes/character/circle/colored/Renunciation.png gen   27.6s  ours   16.3s   1024x1024 -> 917x915    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:14:55  assets/archetypes/character/primary/colored/Humility.png gen   32.6s  ours   27.9s   506x1024 -> 406x1019    708 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:15:54  assets/archetypes/character/circle/colored/Humility.png gen   30.7s  ours   24.5s   1024x1024 -> 963x960    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:16:40  assets/archetypes/character/primary/colored/Devotion.png gen   29.6s  ours   11.2s    506x1024 -> 440x973    817 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:17:17  assets/archetypes/character/circle/colored/Devotion.png gen   30.2s  ours    1.4s   1024x1024 -> 854x853    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 16  |  average generation (AI): 29s/image  |  average our time (save+bgfix+pause): 15s/image
+Total AI + our time: 11m 36s  (wall clock: 12m 51s)
+Run finished: 2026-07-27 14:17:17  (all pending items done)
+

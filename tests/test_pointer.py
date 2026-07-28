@@ -909,8 +909,8 @@ def test_slot_modes_are_real_everywhere():
     assert locked.weekday_slot == "weekday"          # the Seasons lock
     # The Chinese styles resolve art folders + swap metals (Rule #5:
     # one mapping shared by every slot).
-    assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "chinese/primary/bronze"
-    assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "chinese/primary/colored"
+    assert constants.CHINESE_STYLE_ART_DIRS["gold"] == "zodiac/chinese/primary/bronze"
+    assert constants.CHINESE_STYLE_ART_DIRS["colored"] == "zodiac/chinese/primary/colored"
     assert "gold" in defaults.METAL_SWAP_TARGETS
     assert constants.ZODIAC_STYLE_ART_DIRS["colored"] == "zodiac/astrology/primary/colored"
 

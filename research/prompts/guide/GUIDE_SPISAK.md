@@ -16,7 +16,7 @@ na 720 px dial-u osim gde piše drugačije.
 
 - PNG, ceo relevantan region (sat + margina; za dijaloge ceo prozor).
 - Bez dev okruženja u kadru (VSCode, terminali) — čista pozadina.
-- Imena fajlova tačno iz tabele; spusti u `assets/guide/` (ravno).
+- Imena fajlova tačno iz tabele; spusti u `assets/instrument/guide/` (ravno).
 - Gde piše „hover" — uhvati i TOOLTIP u kadru.
 - Guide slaže 1–2 slike po strani sa naslovom i pasusom; tekstove
   pišem ja kad slike legnu — ti samo snimaš.

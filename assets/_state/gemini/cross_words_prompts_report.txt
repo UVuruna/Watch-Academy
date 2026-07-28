@@ -1,0 +1,17 @@
+====================================================================
+Cross Words Prompts — the Eight Words Behind the Station Letters  [Gemini]
+Run started:  2026-07-27 14:26:32  (8/8 pending)
+--------------------------------------------------------------------
+2026-07-27 14:27:33  assets/archetypes/crosses/secondary/colored/Ysteria.png gen   37.6s  ours   19.7s   1024x1024 -> 828x826    1.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:28:26  assets/archetypes/crosses/secondary/colored/Orge.png gen   38.7s  ours    9.3s   1024x1024 -> 935x932    1.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:29:10  assets/archetypes/crosses/secondary/colored/Detestatio.png gen   24.0s  ours   14.9s   1024x1024 -> 931x933    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:29:50  assets/archetypes/crosses/secondary/colored/Miseria.png gen   26.6s  ours    8.8s   1024x1024 -> 990x992    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:30:49  assets/archetypes/crosses/secondary/colored/Tharsos.png gen   27.6s  ours   26.8s   1024x1024 -> 994x996    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:31:32  assets/archetypes/crosses/secondary/colored/Latria.png gen   26.5s  ours   11.9s   1024x1024 -> 866x875    1.4 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:32:24  assets/archetypes/crosses/secondary/colored/Pothos.png gen   25.5s  ours   22.2s   1024x1024 -> 964x963    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:32:56  assets/archetypes/crosses/secondary/colored/Opheleia.png gen   26.0s  ours    1.6s   1024x1024 -> 908x908    953 KB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 8  |  average generation (AI): 29s/image  |  average our time (save+bgfix+pause): 14s/image
+Total AI + our time: 5m 48s  (wall clock: 6m 24s)
+Run finished: 2026-07-27 14:32:56  (all pending items done)
+

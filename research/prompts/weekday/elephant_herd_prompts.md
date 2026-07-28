@@ -66,10 +66,10 @@ clear noon at the full river (Jupiter), green wet-season reunion
 tested by drought; the colored Saturday shows the test.
 
 **Drop (wiring follows once the art lands):**
-- `assets/weekday/elephant/primary/` — `Matriarch.png`, `Allomother.png`,
+- `assets/weeks/societies/elephant/primary/` — `Matriarch.png`, `Allomother.png`,
   `Musth.png`, `Caller.png`, `Mentor.png`, `Reunion.png`, `Elder.png`
 - `assets/weeks/societies/elephant/primary/bronze/Memory.png`
-- `assets/weekday/elephant/colored/` — same seven stems
+- `assets/weeks/societies/elephant/primary/colored/` — same seven stems
 - `assets/weeks/societies/elephant/primary/colored/Memory.png`
 
 ---

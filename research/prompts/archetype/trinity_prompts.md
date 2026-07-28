@@ -32,7 +32,7 @@ already carries an all-seeing-eye roundel at its apex — this set
 makes that eye a window of its own. A metal-cameo register can be
 added later if the owner wants a second look.
 
-**Drop paths:** `assets/archetype/<source>/trinity/` —
+**Drop paths:** `assets/archetypes/<source>/trinity/` —
 `Jesus_Advocate.png`, `Devil_Prosecutor.png`, `One_Judge.png`,
 `Providence_Eye.png` (+ the optional calling rondels below).
 

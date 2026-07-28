@@ -52,7 +52,7 @@ LANCET window in its arm's color (yellow 12h / orange 16h / purple
 metal-cameo register can be added later if the owner wants a second
 look.
 
-**Drop paths:** `assets/archetype/<source>/persons/` —
+**Drop paths:** `assets/archetypes/<source>/persons/` —
 `One_Love.png`, `Michael_Courage.png`, `Devil_Hatred.png`,
 `Jesus_Humility.png` + the center `Seal.png` (its section below). The
 two remaining seats REUSE the Scale glass at

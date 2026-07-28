@@ -724,7 +724,7 @@ def test_bronze_finish_and_theme_metals():
     assert "colored" not in c.theme_metals("planets_art")
     for animal in c.CHINESE_ANIMALS:
         assert _paths.art_file(
-            defaults.ZODIAC_ART_DIR / "chinese" / "primary" / "colored"
+            defaults.ZODIAC_ART_DIR / "zodiac" / "chinese" / "primary" / "colored"
             / f"{animal}.png"
         ).exists(), animal
     for sign, _ in c.ZODIAC_SIGNS:

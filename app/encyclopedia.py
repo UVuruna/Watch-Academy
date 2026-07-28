@@ -1140,7 +1140,7 @@ def _topics(travel_date: date | None = None) -> dict:
             )
         ],
     }
-    chinese_primary = defaults.ZODIAC_ART_DIR / "chinese" / "primary" / "bronze"
+    chinese_primary = defaults.ZODIAC_ART_DIR / "zodiac" / "chinese" / "primary" / "bronze"
     topics["chinese"] = {
         "title": "Chinese zodiac",
         "icon": chinese_primary / "Dragon.png",
@@ -1160,7 +1160,7 @@ def _topics(travel_date: date | None = None) -> dict:
                         ("Silver", metal_variant_path(
                             chinese_primary / f"{animal}.png", "silver")),
                         ("Colored",
-                         defaults.ZODIAC_ART_DIR / "chinese" / "primary" / "colored"
+                         defaults.ZODIAC_ART_DIR / "zodiac" / "chinese" / "primary" / "colored"
                          / f"{animal}.png"),
                     )
                 ),
@@ -1414,7 +1414,7 @@ def _topics(travel_date: date | None = None) -> dict:
             # matrix 2026-07-21).
             if theme != "continents"
         ),
-        ("chinese", "The Cat", _z / "chinese/primary/bronze/Cat.png"),
+        ("chinese", "The Cat", _z / "zodiac/chinese/primary/bronze/Cat.png"),
         ("astrology", "Ophiuchus",
          _z / "zodiac/astrology/primary/sign/Ophiuchus.png"),
     ):

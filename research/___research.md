@@ -212,7 +212,7 @@ white Glory center and the Awe crescent below (assets/emblem/mood/).
 The bronze Chinese-zodiac redesign (owner 2026-07-13): the Greek
 key border replaced by a huiwen meander with Wu Xing element
 roundels on the pentagram points — 12 Gemini prompts, drop dir
-assets/calendars/chinese/primary/bronze/.
+assets/calendars/zodiac/chinese/primary/bronze/.
 
 ### `prompts/instrument/instrument_prompts.md` — Instrument Prompt & Shot Sheet
 Images for the Encyclopedia's "The Instrument" articles (owner

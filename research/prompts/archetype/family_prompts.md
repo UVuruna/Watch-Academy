@@ -41,7 +41,7 @@ Union — but where the Eye WATCHES with a clear iris, the Hearth WARMS
 with a living fire. A metal-cameo register can be added later if the
 owner wants a second look.
 
-**Drop paths:** `assets/archetype/<source>/family/` —
+**Drop paths:** `assets/archetypes/<source>/family/` —
 `Father_Shield.png`, `Mother_Heart.png`, `Child_Dawn.png`,
 `Hearth.png` (+ the optional hearth-role rondels below).
 

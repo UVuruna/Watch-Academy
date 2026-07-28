@@ -32,7 +32,7 @@ February `#0000FF`, March `#0080FF`, April `#00FFFF`, May `#00FF80`,
 June `#00FF00`, July `#80FF00`, August `#FFFF00`, September `#FFBF00`,
 October `#FF0000`, November `#FF0080`, December `#FF00FF`.
 
-**Drop paths:** `assets/archetype/<source>/calendar/` —
+**Drop paths:** `assets/archetypes/<source>/calendar/` —
 `January.png` … `December.png`.
 
 ---

@@ -69,10 +69,10 @@ comb's growing edge, Guard on the threshold, Scout and Drone and
 Forager under open sky. The week opens like the hive does.
 
 **Drop (wiring follows once the art lands):**
-- `assets/weekday/bee/primary/` — `Queen.png`, `Nurse.png`, `Guard.png`,
+- `assets/weeks/societies/bee/primary/` — `Queen.png`, `Nurse.png`, `Guard.png`,
   `Scout.png`, `Builder.png`, `Drone.png`, `Forager.png`
 - `assets/weeks/societies/bee/primary/bronze/Cleaner.png`
-- `assets/weekday/bee/colored/` — same seven stems
+- `assets/weeks/societies/bee/primary/colored/` — same seven stems
 - `assets/weeks/societies/bee/primary/colored/Cleaner.png`
 
 ---

@@ -44,14 +44,14 @@ share the ONE window (the two-row article carries the split); a
 metal-cameo register can be added later if the owner wants a second
 look.
 
-**Drop paths:** `assets/archetype/<source>/temperaments/` —
+**Drop paths:** `assets/archetypes/<source>/temperaments/` —
 `Sanguine.png`, `Choleric.png`, `Melancholic.png`, `Phlegmatic.png`;
-the tetramorph set drops into `assets/archetype/<source>/tetramorph/` —
+the tetramorph set drops into `assets/archetypes/<source>/tetramorph/` —
 `Man.png`, `Lion.png`, `Ox.png`, `Eagle.png` (SEALED — the Seasons
 LIGHT wheel's own figures; the old `temperaments/tetramorph_*.png`
 paths in earlier copies of this sheet were WRONG — the app reads
 `tetramorph/<Creature>.png`); the shared center drops as
-`assets/archetype/<source>/temperaments/Throne.png` (BOTH Seasons
+`assets/archetypes/<source>/temperaments/Throne.png` (BOTH Seasons
 wheels use the one Throne).
 
 ---
@@ -147,7 +147,7 @@ the evangelist's NAME alone until his rondel lands (a
 1×1-placeholder-free graceful path — `archetype_art_ready`), exactly
 like every other archetype art.
 
-**Drop paths:** `assets/archetype/<source>/evangelist/` — `Mark.png`,
+**Drop paths:** `assets/archetypes/<source>/evangelist/` — `Mark.png`,
 `Luke.png`, `John.png`, `Matthew.png` (the app reads
 `evangelist/<Name>.png`; ordered Lion→Mark, Ox→Luke, Eagle→John,
 Man→Matthew, matching the seasons_light figure order).
@@ -211,7 +211,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   blue `#0A70D8`.
 - The tetramorph is SEALED (owner 2026-07-17) as the Seasons LIGHT
   wheel's figure set; the first (canonical) batch landed 2026-07-18
-  under `assets/archetype/<source>/tetramorph/`. **A second, newer
+  under `assets/archetypes/<source>/tetramorph/`. **A second, newer
   generation landed on the stale pre-correction path (RULE-19 round,
   owner decree 2026-07-20)** — `temperaments/tetramorph_<Creature>
   .png` — moved to `tetramorph/alt/<Creature>.png` instead of
@@ -220,7 +220,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   takes in daily rotation, `config.archetypes._fig(..., rotates=True)`
   / `render.layers.ArchetypeLayer`.
 - The four EVANGELIST rondels are SEALED (owner 2026-07-18) as the
-  three-side's SECOND column — `assets/archetype/<source>/evangelist/`
+  three-side's SECOND column — `assets/archetypes/<source>/evangelist/`
   (`Mark.png`, `Luke.png`, `John.png`, `Matthew.png`); each evangelist
   at his desk with his creature, in his season's palette. Not yet
   generated — the three-side shows the evangelist's name alone until

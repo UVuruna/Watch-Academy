@@ -1,0 +1,47 @@
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [ChatGPT]
+Run started:  2026-07-27 15:03:26  (13/13 pending)
+--------------------------------------------------------------------
+2026-07-27 15:04:36  assets/archetypes/council/primary/colored/Sabbath.png gen   60.9s  ours    4.0s   1024x1024 -> 938x920    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:04:52  assets/archetypes/council/primary/colored/God_Judge.png gen    1.7s  ours    9.0s   1024x1024 -> 938x920    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:06:16  assets/archetypes/council/circle/colored/God_Judge.png gen   74.0s  ours    4.6s   1024x1024 -> 958x964    1.6 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 3  |  average generation (AI): 46s/image  |  average our time (save+bgfix+pause): 6s/image
+Total AI + our time: 2m 34s  (wall clock: 9m 57s)
+Run finished: 2026-07-27 15:13:23  (generation timed out)
+
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [ChatGPT]
+Run started:  2026-07-27 15:16:19  (10/13 pending)
+--------------------------------------------------------------------
+2026-07-27 15:18:29  assets/archetypes/council/primary/colored/Devil_Destroyer.png gen    4.3s  ours    5.6s  1024x1536 -> 533x1318    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:24:26  assets/archetypes/council/circle/colored/Devil_Destroyer.png gen  341.2s  ours    9.6s   1024x1536 -> 887x896    1.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:26:07  assets/archetypes/council/primary/colored/Devil_Prosecutor.png gen   88.4s  ours    8.3s  1024x1536 -> 582x1390    1.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:27:25  assets/archetypes/council/circle/colored/Devil_Prosecutor.png gen   64.1s  ours    7.7s   1024x1024 -> 953x945    1.6 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:29:03  assets/archetypes/council/primary/colored/God_Creator.png gen   86.8s  ours    5.6s  1024x1536 -> 636x1456    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:31:34  assets/archetypes/council/circle/colored/God_Creator.png gen  133.6s  ours   10.5s  1024x1536 -> 956x1009    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:33:58  assets/archetypes/council/primary/colored/Jesus_Advocate.png gen  132.6s  ours    5.4s  1024x1536 -> 639x1247    1.8 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:36:14  assets/archetypes/council/circle/colored/Jesus_Advocate.png gen  120.7s  ours    8.5s  1024x1536 -> 943x1044    2.1 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:38:55  assets/archetypes/council/primary/colored/Jesus_Preserver.png gen  141.0s  ours   13.4s  1024x1536 -> 624x1266    1.9 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 15:41:07  assets/archetypes/council/circle/colored/Jesus_Preserver.png gen  125.2s  ours    0.4s  1024x1536 -> 969x1034    2.2 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 10  |  average generation (AI): 2m 04s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 21m 53s  (wall clock: 24m 48s)
+Run finished: 2026-07-27 15:41:07  (all pending items done)
+
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [ChatGPT]
+Run started:  2026-07-27 16:42:55  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 16:42:55  (all pending items done)
+
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [ChatGPT]
+Run started:  2026-07-27 16:48:58  (0/13 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 16:48:58  (all pending items done)
+

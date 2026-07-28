@@ -1,0 +1,52 @@
+====================================================================
+Banknote Offices Prompts — the Fivefold Code of the Dollar Ring  [ChatGPT]
+Run started:  2026-07-27 13:58:04  (5/5 pending)
+--------------------------------------------------------------------
+2026-07-27 13:59:21  assets/archetypes/banknote/primary/colored/Malignant_Accuser.png gen   61.2s  ours    8.8s   1024x1024 -> 938x896    2.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 14:00:42  assets/archetypes/banknote/primary/colored/Anointed_Aegis.png gen   67.6s  ours    7.8s   1024x1024 -> 951x910    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 14:01:00  assets/archetypes/banknote/primary/colored/Satanic_Scourge.png gen    1.3s  ours   10.8s   1024x1024 -> 951x910    2.4 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 14:02:08  assets/archetypes/banknote/primary/colored/Omnific_Originator.png gen   58.1s  ours    3.8s   1024x1024 -> 979x979    2.5 MB  [REMOVE BG: nothing, CROP: done]
+2026-07-27 14:02:15  assets/archetypes/banknote/primary/colored/Nazarene_Advocate.png gen    1.3s  ours    0.3s   1024x1024 -> 979x979    2.5 MB  [REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 38s/image  |  average our time (save+bgfix+pause): 6s/image
+Total AI + our time: 3m 41s  (wall clock: 4m 10s)
+Run finished: 2026-07-27 14:02:15  (all pending items done)
+
+====================================================================
+Banknote Offices Prompts — the Fivefold Code of the Dollar Ring  [ChatGPT]
+Run started:  2026-07-27 14:18:26  (5/5 pending)
+--------------------------------------------------------------------
+2026-07-27 14:22:01  assets/archetypes/banknote/primary/colored/Malignant_Accuser.png gen   81.1s  ours   11.9s   1024x1024 -> 925x923    2.3 MB  [NEW VERSION: Malignant_Accuser_v2_gpt.png, REMOVE BG: nothing, CROP: done]
+2026-07-27 14:23:12  assets/archetypes/banknote/primary/colored/Anointed_Aegis.png gen   60.7s  ours    4.6s              1024x1024    3.1 MB  [NEW VERSION: Anointed_Aegis_v2_gpt.png, REMOVE BG: unclear, CROP: nothing]
+2026-07-27 14:24:32  assets/archetypes/banknote/primary/colored/Satanic_Scourge.png gen   62.4s  ours   10.4s   1024x1024 -> 960x959    2.6 MB  [NEW VERSION: Satanic_Scourge_v2_gpt.png, REMOVE BG: nothing, CROP: done]
+2026-07-27 14:26:49  assets/archetypes/banknote/primary/colored/Omnific_Originator.png gen  124.2s  ours    7.8s   1024x1024 -> 974x950    2.7 MB  [NEW VERSION: Omnific_Originator_v2_gpt.png, REMOVE BG: nothing, CROP: done]
+2026-07-27 14:28:47  assets/archetypes/banknote/primary/colored/Nazarene_Advocate.png gen  111.3s  ours    0.3s   1024x1024 -> 974x950    2.8 MB  [NEW VERSION: Nazarene_Advocate_v2_gpt.png, REMOVE BG: nothing, CROP: done]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 1m 28s/image  |  average our time (save+bgfix+pause): 7s/image
+Total AI + our time: 7m 55s  (wall clock: 10m 21s)
+Run finished: 2026-07-27 14:28:47  (all pending items done)
+
+====================================================================
+Banknote Offices Prompts — the Fivefold Code of the Dollar Ring  [ChatGPT]
+Run started:  2026-07-27 15:16:19  (0/5 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 15:16:19  (all pending items done)
+
+====================================================================
+Banknote Offices Prompts — the Fivefold Code of the Dollar Ring  [ChatGPT]
+Run started:  2026-07-27 16:42:55  (0/5 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 16:42:55  (all pending items done)
+
+====================================================================
+Banknote Offices Prompts — the Fivefold Code of the Dollar Ring  [ChatGPT]
+Run started:  2026-07-27 16:48:58  (0/5 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 16:48:58  (all pending items done)
+

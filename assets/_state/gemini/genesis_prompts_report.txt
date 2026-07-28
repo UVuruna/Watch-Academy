@@ -1,0 +1,16 @@
+====================================================================
+Genesis Archetype Prompts — the Creation Trio, the Triangle Turned Down  [Gemini]
+Run started:  2026-07-27 14:48:41  (7/7 pending)
+--------------------------------------------------------------------
+2026-07-27 14:49:30  assets/archetypes/genesis/primary/colored/God_Creator.png gen   20.5s  ours   22.9s    506x1024 -> 444x967    639 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:50:17  assets/archetypes/genesis/circle/colored/God_Creator.png gen   22.0s  ours   21.1s  1024x1024 -> 1021x1018    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:51:09  assets/archetypes/genesis/primary/colored/Jesus_Preserver.png gen   29.0s  ours   18.2s    506x1024 -> 342x995    700 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:52:06  assets/archetypes/genesis/circle/colored/Jesus_Preserver.png gen   26.6s  ours   26.4s   1024x1024 -> 982x982    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:52:57  assets/archetypes/genesis/primary/colored/Devil_Destroyer.png gen   25.0s  ours   21.1s    506x1024 -> 400x981    780 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:54:00  assets/archetypes/genesis/circle/colored/Devil_Destroyer.png gen   50.3s  ours    8.9s   1024x1024 -> 913x911    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:54:28  assets/archetypes/genesis/primary/colored/Beginning.png gen   22.0s  ours    1.7s   1024x1024 -> 986x987    1.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 7  |  average generation (AI): 28s/image  |  average our time (save+bgfix+pause): 17s/image
+Total AI + our time: 5m 15s  (wall clock: 5m 46s)
+Run finished: 2026-07-27 14:54:28  (all pending items done)
+

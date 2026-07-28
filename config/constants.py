@@ -676,10 +676,10 @@ ZODIAC_STYLE_ART_DIRS = {
     "colored": "zodiac/astrology/primary/colored",
 }
 CHINESE_STYLE_ART_DIRS = {
-    "colored": "chinese/primary/colored",
-    "gold": "chinese/primary/bronze",
-    "silver": "chinese/primary/bronze",
-    "bronze": "chinese/primary/bronze",
+    "colored": "zodiac/chinese/primary/colored",
+    "gold": "zodiac/chinese/primary/bronze",
+    "silver": "zodiac/chinese/primary/bronze",
+    "bronze": "zodiac/chinese/primary/bronze",
 }
 
 # Earth marker style: the owner ships every continent in a clean and an

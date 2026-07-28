@@ -1,0 +1,14 @@
+====================================================================
+Banknote Offices Prompts — the Fivefold Code of the Dollar Ring  [Gemini]
+Run started:  2026-07-27 13:58:06  (5/5 pending)
+--------------------------------------------------------------------
+2026-07-27 13:59:09  assets/archetypes/banknote/primary/colored/Malignant_Accuser.png gen   34.5s  ours   23.8s   1024x1024 -> 965x970    2.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:00:01  assets/archetypes/banknote/primary/colored/Anointed_Aegis.png gen   40.7s  ours    7.3s   1024x1024 -> 930x926    2.1 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:00:53  assets/archetypes/banknote/primary/colored/Satanic_Scourge.png gen   23.7s  ours   24.0s   1024x1024 -> 900x900    2.2 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:01:38  assets/archetypes/banknote/primary/colored/Omnific_Originator.png gen   31.1s  ours    9.2s   1024x1024 -> 954x956    2.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:04:23  assets/archetypes/banknote/primary/colored/Nazarene_Advocate.png gen  158.1s  ours    1.5s   1024x1024 -> 980x980    2.2 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 5  |  average generation (AI): 58s/image  |  average our time (save+bgfix+pause): 13s/image
+Total AI + our time: 5m 54s  (wall clock: 6m 16s)
+Run finished: 2026-07-27 14:04:23  (all pending items done)
+

@@ -18,7 +18,7 @@ inline as a **Note**, and left the roster untouched.
 
 ---
 
-## Bible II (`assets/weekday/bible/secondary/`)
+## Bible II (`assets/weeks/faith/bible/secondary/`)
 
 Same stained-glass rose-window craft as the base Bible set
 ([Bible Theme Prompts](bible_theme_prompts.md)): trefoil-lancet
@@ -229,7 +229,7 @@ RGBA, same as every other weekday/badge asset delivered so far.
 story/figure rather than always the literal character name
 (`ancient_of_days.png`, `song_of_songs.png` in the base set), each
 figure dropped directly in the theme's weekday folder
-(`assets/weekday/bible/secondary/<stem>.png`), with the Sunday
+(`assets/weeks/faith/bible/secondary/<stem>.png`), with the Sunday
 duality's second face sitting FLAT alongside the rest, no `dual/`
 subfolder — the same flat convention now used across the weekday
 theme sheets (e.g. `greek_prompts.md`, `profession_prompts.md`).

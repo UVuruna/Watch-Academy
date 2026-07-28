@@ -110,3 +110,11 @@ Run started:  2026-07-25 15:49:14  (0/12 pending)
 Images: 0
 Run finished: 2026-07-25 15:49:14  (all pending items done)
 
+====================================================================
+Calendar Art Prompts (Gemini) — the Almanac's Twelve Month Medallions  [Gemini]
+Run started:  2026-07-27 14:04:25  (0/12 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 14:04:25  (all pending items done)
+

@@ -63,7 +63,7 @@ dignified-shadow-face rule — a logo-like emblem, not gore: the horned
 head and a faint inverted pentagram only, no ritual violence, no other
 imagery.
 
-Files land in `assets/weekday/religion/primary/` — the `religion` theme's
+Files land in `assets/weeks/faith/creeds/primary/` — the `religion` theme's
 OWN directory (`WEEKDAY_THEME_DIRS["religion"] = "religion/primary"`).
 `religion_alt` (Ancient Religions) has its own sibling directory,
 `religion/secondary/` — the two do NOT share one folder; they sit side

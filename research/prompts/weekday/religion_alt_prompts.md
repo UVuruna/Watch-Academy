@@ -58,7 +58,7 @@ best"), never as a mockery prop. The Unknown God's altar (below) keeps
 its face completely blank/worn — **strictly no lettering**, since the
 whole point of the seat is a god no cult has ever named.
 
-Files land in `assets/weekday/religion/secondary/` — the `religion_alt`
+Files land in `assets/weeks/faith/creeds/secondary/` — the `religion_alt`
 theme's OWN directory (`WEEKDAY_THEME_DIRS["religion_alt"] =
 "religion/secondary"`), a sibling of Creeds' `religion/primary/`, not
 the same folder. This rework moves two files, and both moves are

@@ -129,3 +129,11 @@ Images: 1  |  average generation (AI): 18s/image  |  average our time (save+bgfi
 Total AI + our time: 26s  (wall clock: 3m 26s)
 Run finished: 2026-07-25 15:52:40  (aborted: TargetClosedError)
 
+====================================================================
+Star Wars — the Three-Set Weekday Theme (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-27 15:19:51  (0/60 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 15:19:51  (all pending items done)
+

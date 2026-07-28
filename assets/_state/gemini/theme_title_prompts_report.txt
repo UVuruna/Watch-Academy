@@ -54,3 +54,11 @@ Images: 5  |  average generation (AI): 8s/image  |  average our time (save+bgfix
 Total AI + our time: 1m 32s  (wall clock: 1m 55s)
 Run finished: 2026-07-25 12:39:47  (all pending items done)
 
+====================================================================
+Theme Title Plates — the Encyclopedia's Own Cover Pages (Gemini/ChatGPT)  [Gemini]
+Run started:  2026-07-27 15:19:51  (0/36 pending)
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Images: 0
+Run finished: 2026-07-27 15:19:51  (all pending items done)
+

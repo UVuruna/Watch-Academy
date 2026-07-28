@@ -103,7 +103,7 @@ _DATA_DRIVEN_ROOTS = (
     # zodiacs under calendars/; the guide under instrument/.
     "weeks",
     "calendars/zodiac",
-    "calendars/chinese",
+    "calendars/zodiac/chinese",
     # RESTRUCTURE Phase 3 (owner-sealed 2026-07-22): the four NEW
     # Dozens of the Calendars category — Emotions (System B), the
     # Virtue Wheel's two registers (Virtues light + Vices paint,
@@ -455,3 +455,75 @@ def test_every_sheet_declares_at_least_one_path_or_is_an_index(sheet):
     if "```" not in text:
         pytest.skip("no fenced prompt body — an index/spec page, not a sheet")
     assert _PATH_PATTERN.search(text) is not None, sheet
+
+
+# --- THE FOLDER-EXISTS LAW (owner decree 2026-07-28) --------------------------
+# "svi promptovi se sredjuju da ne dodjemo da toga da preko prompt
+# paintere pravimo lazne foldere zato sto neki idiot agent nije sredio
+# putanje u promptovima za slike."
+#
+# The lint above asks "does anything READ this path". That is not enough:
+# a sheet can name a folder that does not exist and still pass, because
+# some config entry mentions a similar tail. Generating from such a sheet
+# CREATES the folder — a fake tree is born outside the five category
+# roots, and the art has to be rescued later. It happened three times:
+# the zodiac re-drop twice (4c683ed, 0.14.517) and the badge circles
+# (0.14.519). These two tests close it.
+_CONCRETE_ASSET_PATH = re.compile(r"assets/[A-Za-z0-9_./-]+")
+_TEMPLATE_NEXT = "<[*"          # what follows a truncated placeholder path
+
+
+def _declared(sheet_text: str):
+    """(folder, is_drop_path) for every CONCRETE path a sheet declares.
+    A placeholder (`<family>`, `Eye[_shine]`, a `*` glob) is a template,
+    not a declaration; a `.md` link is a doc reference."""
+    for match in _CONCRETE_ASSET_PATH.finditer(sheet_text):
+        raw = match.group().rstrip(".,)`")
+        tail = sheet_text[match.end():match.end() + 1]
+        if raw.endswith(".md") or tail in _TEMPLATE_NEXT or raw.endswith(("_", "-")):
+            continue
+        path = Path(raw)
+        yield (path.parent if path.suffix else path), bool(path.suffix)
+
+
+def _sheet_folders():
+    for sheet in sorted(_PROMPTS_ROOT.rglob("*.md")):
+        name = sheet.relative_to(_ROOT).as_posix()
+        for folder, is_drop in _declared(sheet.read_text(encoding="utf-8")):
+            yield name, folder.as_posix(), is_drop
+
+
+def test_no_sheet_names_a_folder_the_tree_does_not_have():
+    offenders = sorted({
+        f"{sheet} -> {folder}"
+        for sheet, folder, _ in _sheet_folders()
+        if not (_ROOT / folder).is_dir()
+    })
+    assert offenders == [], (
+        "a prompt sheet declares a folder that does not exist — generating "
+        "from it would CREATE a fake tree (owner decree 2026-07-28). Fix the "
+        "sheet, or create the folder deliberately if the drop is real: "
+        + ", ".join(offenders)
+    )
+
+
+def test_drop_folders_obey_the_tree_law():
+    """A folder can exist and still be the wrong seat. Inside the three
+    FIGURE categories every DROP folder is a LOOK whose parent is a
+    REGISTER — the same law `tests/test_assets_structure.py` enforces on
+    the files themselves."""
+    from tests.test_assets_structure import _LAW_LOOKS, _LAW_REGISTERS
+
+    offenders = sorted({
+        f"{sheet} -> {folder}"
+        for sheet, folder, is_drop in _sheet_folders()
+        if is_drop
+        and folder.split("/")[1:2] in (["weeks"], ["calendars"], ["archetypes"])
+        and not (folder.split("/")[-1] in _LAW_LOOKS
+                 and folder.split("/")[-2] in _LAW_REGISTERS)
+    })
+    assert offenders == [], (
+        "sheet DROP folders off the TREE LAW — a drop folder is a LOOK "
+        "inside a REGISTER (<theme>/<register>/<look>/): "
+        + ", ".join(offenders)
+    )

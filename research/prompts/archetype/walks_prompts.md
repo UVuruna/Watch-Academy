@@ -31,7 +31,7 @@ window in its material color, the eight forming the octa wheel. A
 metal-cameo register can be added later if the owner wants a second
 look.
 
-**Drop paths:** `assets/archetype/<source>/walks/` — `King.png`,
+**Drop paths:** `assets/archetypes/<source>/walks/` — `King.png`,
 `Merchant.png`, `Soldier.png`, `Artist.png`, `Wanderer.png`,
 `Scholar.png`, `Farmer.png`, `Priest.png` (+ the object rondels
 below for the second article row).

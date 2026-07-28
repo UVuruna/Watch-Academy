@@ -96,7 +96,7 @@ in place.
 
 <a id="archetype-set"></a>
 
-## Archetype Set (`assets/archetype/`, `config/archetypes.py`)
+## Archetype Set (`assets/archetypes/`, `config/archetypes.py`)
 
 Every group's prompt sheet is COMPLETE — every path
 `config.archetypes.ARCHETYPES` can reference has a written entry
@@ -154,7 +154,7 @@ here.
 
 <a id="era-terms"></a>
 
-## Era Terms (`assets/era/`, `config.defaults.ERA_ART_DIR`)
+## Era Terms (`assets/celestial/era/`, `config.defaults.ERA_ART_DIR`)
 
 **Prompt sheet: EXISTS and is COMPLETE — 18 entries, not 6.** The
 prior revision of this document only knew about the original 6 (2
@@ -188,7 +188,7 @@ discoverable once both files land.
 
 <a id="eclipse"></a>
 
-## Eclipse Category Images (`assets/eclipse/`, `config.defaults.ECLIPSE_ART_DIR`)
+## Eclipse Category Images (`assets/celestial/eclipse/`, `config.defaults.ECLIPSE_ART_DIR`)
 
 **Prompt sheet: EXISTS and is COMPLETE** — 7 entries
 (`research/prompts/eclipse/eclipse_prompts.md`: solar total/annular/
@@ -201,7 +201,7 @@ graceful-absent.
 
 <a id="subdial-masters"></a>
 
-## Subdial Plates (`assets/subdial/`, formerly `SUBDIAL_ART_DIR`)
+## Subdial Plates (`assets/instrument/subdial/`, formerly `SUBDIAL_ART_DIR`)
 
 **SUPERSEDED TWICE (RULE-19 round 2026-07-20, then Rsub round
 2026-07-21 — owner decree, monorepo root `CLAUDE.md`).** Everything
@@ -216,9 +216,9 @@ run to completion anyway before the owner caught it (12/12 Gemini,
 9/12 ChatGPT) and the resulting 20 extra files were deleted the same
 round. The one-master model itself is NOW ALSO retired (Rsub round,
 2026-07-21): the plate is no longer an art-SOURCE family at all — five
-hand-picked sets live under `assets/subdial/<set>/<finish>.png`
+hand-picked sets live under `assets/instrument/subdial/<set>/<finish>.png`
 (`<set>` = set1..set4, `<finish>` = gold/silver/bronze) plus
-`assets/subdial/solo/<finish>.png` (only silver hand-drawn, gold/
+`assets/instrument/subdial/solo/<finish>.png` (only silver hand-drawn, gold/
 bronze still algorithmic) — see
 [Subdial Prompts](instrument/subdial_circle_prompts.md) for the full
 story and the derivation-check paragraph Rule #19 requires. This row
@@ -233,7 +233,7 @@ tracked here the moment they're written, per this file's own charter
 ("read it before writing a sheet, not after").
 
 - **Slavic Months** — [Months Prompts](months/months_prompts.md).
-  Twelve ROUND rose-window medallions, `assets/months/<stem>.png`
+  Twelve ROUND rose-window medallions, `assets/calendars/slavic_months/primary/colored/<stem>.png`
   (the SAME sourceless-root precedent as the subdial sets — see
   `assets/___assets.md`), registered in `config.defaults.
   SLAVIC_MONTHS` (R7b, 2026-07-21) and the `months` Encyclopedia topic
@@ -248,7 +248,7 @@ tracked here the moment they're written, per this file's own charter
   Life-Tree — the five CENTER rosettes and the already-round
   Tetramorph/Evangelist rondels correctly excluded, they need no
   companion). Drop root `assets/badge/circle/<family>/<Stem>.png`, a
-  NEW staging area deliberately outside `assets/archetype/` since the
+  NEW staging area deliberately outside `assets/archetypes/` since the
   hover-card left-column WIRING is undecided (owner call — DO NOT
   invent it). **Art: 0/38.** The Animals register's own 8 Life badges
   (compass_light's non-default alternate) are explicitly scoped OUT of
@@ -328,7 +328,7 @@ tracked here the moment they're written, per this file's own charter.
   report caught it live) — both are now written in full in this sheet.
   NEW canonical sourceless root, `assets/weeks/societies/wolf/primary/colored/<key>.png` — the SAME
   "NOT art-sourced, one shared file per name" precedent `assets/
-  months/` and `assets/subdial/` already set, chosen over per-theme
+  months/` and `assets/instrument/subdial/` already set, chosen over per-theme
   folders because a title plate has exactly ONE consumer regardless of
   the theme's own cast register (see the sheet's own "canonical drop
   path" section for the full reasoning). Continents is deliberately
@@ -577,11 +577,11 @@ generated on either source).
 
 Unchanged, re-confirmed 2026-07-19:
 
-- **Ring letters** (`assets/ring/letters/*.png` — 38 files — plus
+- **Ring letters** (`assets/instrument/ring/letters/*.png` — 38 files — plus
   `domy.png`, `hexagram.png`, `morph.png` at the ring root) — the
   owner's own hand-built glyph library, not AI-prompted; no sheet
   needed, none found, not a gap.
-- **Icons** (`assets/icons/` — ON DISK now, 14 files: light.png,
+- **Icons** (`assets/instrument/icons/` — ON DISK now, 14 files: light.png,
   dark.svg, eclipse_sun.svg, eclipse_moon.png, compass.png,
   north_pole.png, south_pole.png, plus the ART-INFRA round's per-type
   eclipse set — moon_eclipse_red/gold/blue.png and sun_eclipse.png/
@@ -591,7 +591,7 @@ Unchanged, re-confirmed 2026-07-19:
   itself is `config/___config.md`'s ECLIPSE TYPE ICONS note, not an
   AI-prompt gap either (no new icon files needed — the mapping picks
   among files already on disk, one computationally tinted).
-- **Guide** (`assets/guide/*.png` — 91 files, confirmed on disk) — the
+- **Guide** (`assets/instrument/guide/*.png` — 91 files, confirmed on disk) — the
   owner's own screenshots; no sheet applicable.
 
 <a id="zero-gap"></a>

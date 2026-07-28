@@ -1,0 +1,22 @@
+====================================================================
+Council Archetype Prompts — the Six Offices in Session  [Gemini]
+Run started:  2026-07-27 14:17:18  (13/13 pending)
+--------------------------------------------------------------------
+2026-07-27 14:18:08  assets/archetypes/council/primary/colored/Sabbath.png gen   34.1s  ours   10.8s  1024x1024 -> 1006x1009    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:18:50  assets/archetypes/council/primary/colored/God_Judge.png gen   25.5s  ours   11.8s    506x1024 -> 468x995    945 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:19:29  assets/archetypes/council/circle/colored/God_Judge.png gen   26.0s  ours    7.8s   1024x1024 -> 956x956    1.6 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:20:02  assets/archetypes/council/primary/colored/Devil_Destroyer.png gen   22.4s  ours    5.6s    506x1024 -> 456x970    694 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:20:44  assets/archetypes/council/circle/colored/Devil_Destroyer.png gen   25.5s  ours   12.2s  1024x1024 -> 1013x1012    1.7 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:21:22  assets/archetypes/council/primary/colored/Devil_Prosecutor.png gen   23.9s  ours    9.3s    506x1024 -> 430x987    690 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:22:29  assets/archetypes/council/circle/colored/Devil_Prosecutor.png gen   36.1s  ours   25.5s   1024x1024 -> 860x860    1.0 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:23:03  assets/archetypes/council/primary/colored/God_Creator.png gen   21.9s  ours    6.9s    506x1024 -> 428x962    650 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:23:49  assets/archetypes/council/circle/colored/God_Creator.png gen   28.6s  ours   13.6s   1024x1024 -> 962x961    1.3 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:24:25  assets/archetypes/council/primary/colored/Jesus_Advocate.png gen   24.0s  ours    7.2s   506x1024 -> 506x1001    817 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:25:12  assets/archetypes/council/circle/colored/Jesus_Advocate.png gen   27.1s  ours   15.6s   1024x1024 -> 976x976    1.5 MB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:25:58  assets/archetypes/council/primary/colored/Jesus_Preserver.png gen   25.0s  ours   15.7s    506x1024 -> 416x956    774 KB  [REMOVE BG: done, CROP: done]
+2026-07-27 14:26:30  assets/archetypes/council/circle/colored/Jesus_Preserver.png gen   25.2s  ours    1.6s   1024x1024 -> 985x981    1.5 MB  [REMOVE BG: done, CROP: done]
+--------------------------------------------------------------------
+Images: 13  |  average generation (AI): 27s/image  |  average our time (save+bgfix+pause): 11s/image
+Total AI + our time: 8m 09s  (wall clock: 9m 11s)
+Run finished: 2026-07-27 14:26:30  (all pending items done)
+

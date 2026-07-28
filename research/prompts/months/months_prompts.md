@@ -34,7 +34,7 @@ through green spring, gold summer, russet autumn and back to winter
 blue) so the twelve read as one wheel turning at a glance, the same
 "one set, one story" law the era emblems keep.
 
-**Drop paths:** `assets/months/` — `Sijecanj.png`, `Veljaca.png`,
+**Drop paths:** `assets/calendars/slavic_months/primary/colored/` — `Sijecanj.png`, `Veljaca.png`,
 `Ozujak.png`, `Travanj.png`, `Svibanj.png`, `Lipanj.png`,
 `Srpanj.png`, `Kolovoz.png`, `Rujan.png`, `Listopad.png`,
 `Studeni.png`, `Prosinac.png`. NOTE: `MONTHS_ART_DIR` is a CANONICAL

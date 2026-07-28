@@ -67,10 +67,10 @@ lowercase snake_case — the same convention `bible_theme_prompts.md`
 and `bible_dark_prompts.md` already use for their casts.
 
 **Drop (wiring follows once the art lands):**
-- `assets/weekday/cosmos/primary/` — `assets/weeks/celestial_bodies/cosmos/primary/bronze/Sun.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Nebula.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Supernova.png`,
+- `assets/weeks/celestial_bodies/cosmos/primary/` — `assets/weeks/celestial_bodies/cosmos/primary/bronze/Sun.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Nebula.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Supernova.png`,
   `assets/weeks/celestial_bodies/cosmos/primary/bronze/Pulsar.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Galaxy.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Binary_Stars.png`, `assets/weeks/celestial_bodies/cosmos/primary/bronze/Comet.png`
 - `assets/weeks/celestial_bodies/cosmos/primary/bronze/Black_Hole.png`
-- `assets/weekday/cosmos/colored/` — same seven stems
+- `assets/weeks/celestial_bodies/cosmos/primary/colored/` — same seven stems
 - `assets/weeks/celestial_bodies/cosmos/primary/colored/Black_Hole.png`
 
 ---

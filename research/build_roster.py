@@ -241,8 +241,8 @@ def zodiac_sections() -> list[str]:
         out.append(f"| {sign} | " + " | ".join(cells) + " |")
     out.append("\n## Zodiac — Chinese (12 animals + the Cat)\n")
     dirs = {
-        "primary": "chinese/primary/bronze",
-        "colored": "chinese/primary/colored",
+        "primary": "zodiac/chinese/primary/bronze",
+        "colored": "zodiac/chinese/primary/colored",
     }
     out.append("| Animal | primary G | primary C | colored G | colored C |")
     out.append("|---|---|---|---|---|")

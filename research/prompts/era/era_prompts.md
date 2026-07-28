@@ -25,15 +25,15 @@ doctrine's direction — rising, past its own zenith, sinking, or
 absent — while the light's QUANTITY carries its measure; the
 doctrine is drawn as one day's own arc, never as lettering.
 
-**Drop paths:** `assets/era/<source>/` — `Age_of_Light.png`,
+**Drop paths:** `assets/celestial/era/<source>/` — `Age_of_Light.png`,
 `Age_of_Darkness.png`, `Starry_Spring.png`, `Starry_Summer.png`,
 `Starry_Autumn.png`, `Starry_Winter.png`, plus (owner fix-round B,
 2026-07-19, TASK 3) `Anno_Lucis.png` and, under
-`assets/era/<source>/calendar/`, `AUC.png`, `Byzantine.png`,
+`assets/celestial/era/<source>/calendar/`, `AUC.png`, `Byzantine.png`,
 `Hebrew.png`, `Hegirae.png`, `Buddhist.png`, `Huangdi.png`, `Maya.png`
 (MAYA round, owner 2026-07-20), plus `KaliYuga.png`, `Olympiad.png`,
 `Unix.png` (ERA-TRIO round, owner 2026-07-20, "može sve 3") — and one
-ROTATION sibling, `assets/era/<source>/calendar/alt/Byzantine.png`,
+ROTATION sibling, `assets/celestial/era/<source>/calendar/alt/Byzantine.png`,
 the owner's own idea for a second Byzantine take (the same round).
 **CORRECTED (RULE-19 round, owner decree 2026-07-20):** this sheet
 used to claim "no `<source>` split" —
@@ -41,7 +41,7 @@ WRONG, both sources always generated their own subtree exactly like
 every other sourced family; `"era"` had simply never been added to
 `config.constants.ART_SOURCED_ROOTS`, so every era badge silently
 failed its own existence check despite the art sitting right there.
-Fixed the same round — the app reads `assets/era/<Name>.png` (or
+Fixed the same round — the app reads `assets/celestial/era/<Name>.png` (or
 `.../calendar/<Name>.png`) through `config.paths.art_file`
 (`config/defaults.py` `ERA_ART_DIR`) exactly like the badge/weekday/
 archetype families. The six Age/Starry-Season plates (not Anno Lucis)
@@ -172,7 +172,7 @@ portraiture of any founder or prophet — each speaks its epoch through
 CLASSICAL, RESPECTFUL iconography only, the same restraint a rose
 window itself keeps; these are living traditions, drawn with the same
 care the dial gives its own measured era, never a caricature.
-Drop path: `assets/era/calendar/`. The set also carries ONE rotation
+Drop path: `assets/celestial/era/calendar/`. The set also carries ONE rotation
 ALT (the owner's own idea, ERA-TRIO round): a second Byzantine take
 living at `assets/celestial/era/calendar/Byzantine_v2.png`, discovered by
 `rotating_art_file` beside the canonical `Byzantine.png` — see its own
@@ -296,8 +296,8 @@ wearing the matching emblem beside each option.
   one giant day; sun position carries direction, light quantity carries
   measure). The seven files already generated under the OLD
   wheel-and-seam/flicker device no longer match these prompts. **Owner
-  action required:** delete `assets/era/gemini/*.png` (the seven era7
-  files ONLY — `assets/era/gemini/calendar/` is untouched, its prompts
+  action required:** delete `assets/celestial/era/gemini/*.png` (the seven era7
+  files ONLY — `assets/celestial/era/calendar/` is untouched, its prompts
   unchanged) and rerun PromptPainter on this sheet to regenerate the
   seven. The calendar emblems below need no regeneration.
 - **Extended again (MAYA round, owner 2026-07-20 — "Jel Maje nisu

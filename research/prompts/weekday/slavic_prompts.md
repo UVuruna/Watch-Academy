@@ -28,7 +28,7 @@ planetary counterpart, per the "Slavic — final adjudication" table in
 throne, Veles becomes the dual's shadow face, Svarog and Lada are the
 only genuinely new figures, and the Ninth changes for the WHOLE theme
 — Triglav supersedes Crnobog in both modes. Pantheon art drops under
-`assets/weekday/slavic/pantheon/` (+ `pantheon/colored/`); seats
+`assets/weeks/myth/slavic/pantheon/` (+ `pantheon/colored/`); seats
 REUSED by both rosters cost no new file — code points straight at the
 existing Planetary plate.
 
@@ -174,7 +174,7 @@ Five seats and the dual REUSE the existing Planetary plates unchanged
 — no regeneration, no new file, `figure_roster: pantheon` code just
 points at the same `primary/` asset. Only Wednesday (Svarog) and
 Friday (Lada) are genuinely new figures. Drop the two new bronze
-plates under `assets/weekday/slavic/pantheon/` (`svarog.png`,
+plates under `assets/weeks/myth/slavic/pantheon/` (`svarog.png`,
 `lada.png`); the border identity carries over unchanged — the same
 continuous rodovik solar-wheel (kolovrat) band broken by wheat-sheaf
 roundels as every Planetary plate on this theme.
@@ -270,7 +270,7 @@ needed. Only Svarog and Lada get fresh full-color paintings, in the
 theme's own folk-icon register (warm earth-and-gold palette, matching
 the Planetary colored set above) — generate both in the same chat
 session for consistency. Drop under
-`assets/weekday/slavic/pantheon/colored/` (`svarog.png`, `lada.png`).
+`assets/weeks/myth/slavic/pantheon/colored/` (`svarog.png`, `lada.png`).
 
 **Sunday — Perun** → REUSE `assets/weeks/myth/slavic/primary/colored/Perun.png`
 
