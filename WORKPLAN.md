@@ -370,27 +370,37 @@ self-update eventually lands. The GitHub repo rename itself was
 **not** executed (owner decree: `gh repo rename` never runs
 automatically) — flagged as an open question below. 978 tests green.
 
-### Session 23 — Rose Sabbath hover fix + the Duality-Axes config → **Sonnet**
+### Session 23 — Rose Sabbath hover fix + the Duality-Axes config → **Sonnet** — DONE (2026-07-28, 0.14.504–0.14.505)
 **Say:** "Radi Sesiju 23 iz WORKPLAN.md — Rose hover bug i duality
 config."
 **Reads:** CUBE.md §The Rose (Sabbath axis, weekday law) and §The
 Thirteen Axes (Colour Law, Sacred Axis, the Duality-Axes decree);
 `render/compositor.md` (hover paths, hit-tests); `config/___config.md`;
 the creeds duality's data seat.
-**Delivers:** (1) THE BUG (owner screenshot 2026-07-28): on the Rose
-the two Sunday faces DRAW on the Sabbath axis (Servant blue 06h,
-Ruler red 18h) but their HOVER still fires at the legacy bottom
-seat — reproduce with the GUI probe first, fix so hover hits the
-drawn seats, pin with a regression test named after the failure
-(root Rule 25). (2) THE DUALITY-AXES CONFIG (owner decree
-2026-07-28, root Rule 4 — no hardcode): a config that, for EVERY
-dual theme, places its two members on the vertical (yellow ↔
-purple) and horizontal (blue ↔ red) axes; default: the PRIMARY
-member pulls to the top; the horizontal is per-theme. First entry
-and the proof case: **creeds flips — Christianity BLUE (christic,
-cold), Satanism RED (diabolic, warm)** — today's assignment is
-reversed. Consumed by the Rose, the Octa and Seasons(4). Tests pin
-the config path and the creeds orientation.
+**Delivered:** (1) THE BUG (owner screenshot 2026-07-28): two
+`render.compositor` hit-test sites (`_element_at`, `_weekday_body_at`)
+hardcoded `constants.SOUTH_SLOT_ANGLE` (24h) for the Servant's own
+seat instead of calling `render.layers.servant_seat_angle` like every
+draw/label site already did — on the Rose the Servant sits at 06h/
+270° instead, so the two Sunday faces drew on the Sabbath axis but
+hovered at the legacy bottom seat (also silently eating Wednesday's
+real 24h hover on Sundays); both sites fixed, pinned by
+`test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_
+bottom` (root Rule 25). (2) THE DUALITY-AXES CONFIG (owner decree
+2026-07-28, root Rule 4 — no hardcode): `constants.
+DUALITY_RULER_ON_COLD_POLE` lists dual weekday themes whose Sunday
+Ruler/Servant reverses the Rose's blind default (Ruler warm/red-18h,
+Servant cold/blue-06h); the proof case, **religion: Christianity
+(Ruler) pulls to blue/cold, Satanism (Servant) to red/warm** — the
+Sacred Axis reversing what the blind default drew. The Compass/
+Seasons' vertical Ruler-at-top default never flips (owner decree) —
+only the Rose's horizontal Sabbath axis is per-theme.
+`render.layers.ruler_seat_angle`/`servant_seat_angle`/`weekday_slots`
+are the three readers; the flip swaps which arm each face rides,
+never its name, plate or article. Four new tests pin the config path
+and the creeds orientation; 1049 tests green (one pre-existing,
+unrelated failure: an untracked `assets/zodiac/` folder from the
+owner's own parallel art generation, outside this session's scope).
 
 ### Session 24 — the Sacred rosters → **Opus** (writers) — UNBLOCKED (blanket seal 2026-07-28)
 **Say:** "Radi Sesiju 24 iz WORKPLAN.md — novi rosteri."
