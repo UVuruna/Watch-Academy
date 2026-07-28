@@ -21,7 +21,7 @@ the EARTH roundel deep RED-BROWN (not yellow-ochre) and the accents
 red — both sit below the window, so the swap recolors only the
 bronze, never the enamel. The prompts below already say so.
 
-**Drop:** over the existing stems in `assets/zodiac/chinese/primary/`
+**Drop:** over the existing stems in `assets/calendars/chinese/primary/bronze/`
 (`Rat.png` … `Pig.png` — capitalized). The colored set
 (`chinese_colored/`) is untouched.
 
@@ -108,7 +108,7 @@ the sets that don't have a home of their own; the Chinese zodiac's
 colored plates live here from now on, beside the bronze primaries
 above). These are NOT recolors of the bronze plates — each is a fresh
 full-color badge in vivid cloisonné enamel, festival red and gold.
-Drop under `assets/zodiac/chinese/colored/` (same stems as the bronze
+Drop under `assets/calendars/chinese/primary/colored/` (same stems as the bronze
 set above).
 
 **Rat**

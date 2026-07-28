@@ -35,7 +35,7 @@ mythological:
 | Instrument | engraved **gear-tooth** ring, fine machine-cut teeth | **aged bronze** relief, tick-tooth rim echoing the dial's own 360-mark band | the one family that is a device, not a myth — the encyclopedia explaining its own works |
 
 This also keeps the logo unmistakably apart from the Zodiac section's
-own logo (`assets/zodiac/astrology/primary/`) — the brief below repeats "not a
+own logo (`assets/calendars/zodiac/astrology/primary/logo/`) — the brief below repeats "not a
 zodiac" inside the prompt itself because a bare circular dial with a
 ring of numerals is exactly the kind of image Gemini defaults toward
 astrology art unless told otherwise.

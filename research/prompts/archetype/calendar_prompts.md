@@ -129,7 +129,7 @@ ROUND stained-glass rondel, night-window register, photorealistic render, isolat
 
 - **The Zodiac wheel (left) articles** reuse the EXISTING zodiac art
   — the astrology sign / logo / constellation / colored plates
-  already on disk (`assets/zodiac` trees; see
+  already on disk (`assets/calendars/` zodiac trees; see
   [Astrology Prompts](../zodiac/astrology_prompts.md)). The Zodiac
   Dozen lights the CURRENT sign's wedge; the article shows the
   existing Astrology plate. Generate nothing.

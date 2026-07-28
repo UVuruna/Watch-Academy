@@ -14,7 +14,7 @@ one prompt at a time; generate a whole family in one chat session so
 the set stays visually consistent.
 
 Suggested drop locations (flat PNGs, matching the existing
-`assets/weeks/inner_wheel/virtue/primary/colored/`, `assets/zodiac/astrology/sign/` conventions):
+`assets/weeks/inner_wheel/virtue/primary/colored/`, `assets/calendars/zodiac/astrology/primary/sign/` conventions):
 
 - `assets/archetypes/trinity/badges/colored/Faith.png`, `Hope.png`, `Love.png`
 - `assets/celestial/seasons/badges/Spring.png`, `Summer.png`, `Autumn.png`, `Winter.png`,

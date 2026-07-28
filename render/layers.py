@@ -2598,10 +2598,12 @@ class ArchetypeCenterLayer(Layer):
 
 def octa_slot_art(folder: str, name: str) -> Path | None:
     """The PNG for an image slot style — `folder` is a subdirectory of
-    assets/zodiac/ ("astrology/sign", "astrology/primary",
-    "astrology/constellation", "chinese/primary", "chinese/primary/colored" —
-    the family/variant tree), `name` the entity ("Cancer" / "Horse") — or
-    None while the owner's art folder does not have it yet."""
+    assets/calendars/ (the RESTRUCTURE 2026-07-22 home; the old
+    assets/zodiac/ root is abolished): "zodiac/astrology/primary/sign",
+    ".../logo", ".../constellation", "chinese/primary/bronze",
+    "chinese/primary/colored" — the family/variant tree. `name` is the
+    entity ("Cancer" / "Horse") — or None while the owner's art folder
+    does not have it yet."""
     path = paths.art_file(defaults.ZODIAC_ART_DIR / folder / f"{name}.png")
     return path if path.exists() else None
 

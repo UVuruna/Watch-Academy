@@ -611,7 +611,7 @@ CUBE_LOOK_WHEELS = (("trio", "paint"), ("trio", "cube"), ("hexa", "cube"))
 # diamonds; Aurora always shows it (images only); Prism and Seasons
 # gain it once the Weekday element is off (owner matrix 2026-07-12).
 # The four image modes draw the owner's PNG art
-# (assets/zodiac/<dir>) and fall back to the text form until the art
+# (assets/calendars/<dir>) and fall back to the text form until the art
 # exists (documented fallback).
 # COMPOSITE model (owner 2026-07-12): a top-level MODE plus a per-
 # family STYLE dropdown — Astrology picks sign/logo/constellation/text
@@ -666,7 +666,7 @@ CHINESE_SLOT_STYLES = ("text", "colored", "gold", "silver", "bronze")
 SLOT_STYLE_VALUES = tuple(dict.fromkeys(
     ZODIAC_SLOT_STYLES + CHINESE_SLOT_STYLES
 ))
-# style -> art folder under assets/zodiac/ (text styles draw no art).
+# style -> art folder under assets/calendars/ (text styles draw no art).
 # Family/variant tree (owner restructure 2026-07-14): astrology's
 # plain logo is its PRIMARY variant.
 ZODIAC_STYLE_ART_DIRS = {

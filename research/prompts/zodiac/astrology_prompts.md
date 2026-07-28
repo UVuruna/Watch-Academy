@@ -1,5 +1,35 @@
 # Zodiac Signs — Sign / Logo / Constellation Plates (ChatGPT)
 
+> ## ⚠ DROP PATHS AND VERSIONS — READ BEFORE GENERATING
+>
+> **The `assets/zodiac/` root is ABOLISHED** (RESTRUCTURE 2026-07-22 —
+> five categories only). Every path in this sheet now points at the
+> lawful home, `assets/calendars/zodiac/astrology/primary/<look>/`.
+>
+> This sheet kept the dead root TWICE after the move, and both times a
+> whole generated round landed outside the tree: the first was rescued
+> as `_v2` by commit `4c683ed`, the second — 39 plates — as `_v3` by
+> commit `0.14.517`. Nothing was lost either time, but nothing should
+> have to be rescued at all.
+>
+> **THE VERSION RULE** (`<Figure>[_vN]_<src>.png`): a plate name is
+> never reused. Each look folder already holds `<Sign>_gem.png`,
+> `<Sign>_gpt.png`, `<Sign>_v2_gem.png` and `<Sign>_v3_gem.png`, so a
+> NEW Gemini round drops as **`<Sign>_v4_gem.png`** and a new ChatGPT
+> round as `<Sign>_v2_gpt.png`. Check the folder first; the highest
+> existing `_vN` plus one is the answer. Never overwrite.
+>
+> **The looks and their folders** — note that the LOGO look does NOT
+> live in a folder called `primary`: `primary` is the REGISTER level,
+> and every look sits inside it.
+>
+> | Look | Folder |
+> |---|---|
+> | SIGN | `assets/calendars/zodiac/astrology/primary/sign/` |
+> | LOGO | `assets/calendars/zodiac/astrology/primary/logo/` |
+> | CONSTELLATION | `assets/calendars/zodiac/astrology/primary/constellation/` |
+> | COLORED | `assets/calendars/zodiac/astrology/primary/colored/` |
+
 The owner is regenerating ALL legacy zodiac art from scratch across
 three existing look-folders. These 36 prompts are authored fresh from
 the project's own canon — `Database/symbolism.json` →
@@ -12,15 +42,15 @@ project's own canon below; the fourth — COLORED — moved in from
 `colored_badge_prompts.md` during the 2026-07-15 consolidation, see
 its own section further down):
 
-- **SIGN** (`assets/zodiac/astrology/sign/`) — the full illustrated
+- **SIGN** (`assets/calendars/zodiac/astrology/primary/sign/`) — the full illustrated
   creature/figure medallion, the scene straight off the article,
   wearing the sign's own element color STRICTLY (see below).
-- **LOGO** (`assets/zodiac/astrology/primary/`) — the bare astrological glyph
+- **LOGO** (`assets/calendars/zodiac/astrology/primary/logo/`) — the bare astrological glyph
   only, a minimal mark meant to still read at 64px.
-- **CONSTELLATION** (`assets/zodiac/astrology/constellation/`) — the sign's
+- **CONSTELLATION** (`assets/calendars/zodiac/astrology/primary/constellation/`) — the sign's
   actual star pattern on a night field, its mythic figure only
   faintly ghosted behind, no glyph anywhere.
-- **COLORED** (`assets/zodiac/astrology/colored/`) — vivid celestial
+- **COLORED** (`assets/calendars/zodiac/astrology/primary/colored/`) — vivid celestial
   enamel, full color, the same STRICT element-palette rule as SIGN.
 
 **Element palette rule (locked, per the owner's 2026-07-12 correction;
@@ -56,7 +86,7 @@ watermark.
 
 ---
 
-## 1. SIGN look (`assets/zodiac/astrology/sign/`) — 12 prompts
+## 1. SIGN look (`assets/calendars/zodiac/astrology/primary/sign/`) — 12 prompts
 
 Shared skeleton: *Ornate circular medallion, photorealistic render,
 perfectly centered, isolated on white background, no text or
@@ -129,7 +159,7 @@ Ornate circular medallion, photorealistic render, perfectly centered, isolated o
 
 ---
 
-## 2. LOGO look (`assets/zodiac/astrology/primary/`) — 12 prompts
+## 2. LOGO look (`assets/calendars/zodiac/astrology/primary/logo/`) — 12 prompts
 
 The bare glyph only — no creature, no scene, no element color. Bold
 and legible at small sizes.
@@ -203,7 +233,7 @@ Minimalist emblem, square 1:1, perfectly centered, isolated on white background,
 
 ---
 
-## 3. CONSTELLATION look (`assets/zodiac/astrology/constellation/`) — 12 prompts
+## 3. CONSTELLATION look (`assets/calendars/zodiac/astrology/primary/constellation/`) — 12 prompts
 
 The sign's real star pattern on a night field, its mythic figure only
 faintly ghosted behind, no glyph, no element color-coding (the strict
@@ -280,7 +310,7 @@ Photorealistic astronomical illustration, square 1:1, perfectly centered, isolat
 
 ---
 
-## 4. COLORED look (`assets/zodiac/astrology/colored/`) — 12 prompts
+## 4. COLORED look (`assets/calendars/zodiac/astrology/primary/colored/`) — 12 prompts
 
 Moved verbatim from `colored_badge_prompts.md`'s Astrology section
 (owner consolidation 2026-07-15 — that sheet now only carries the sets
@@ -365,7 +395,7 @@ Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly 
 
 ---
 
-## The Thirteenth — Ophiuchus (`assets/calendars/zodiac/astrology/primary/sign/Ophiuchus.png`, `assets/calendars/zodiac/astrology/primary/logo/Ophiuchus.png`, `assets/calendars/zodiac/astrology/primary/logo/constellation/Ophiuchus.png`, `assets/calendars/zodiac/astrology/primary/logo/colored/Ophiuchus.png`)
+## The Thirteenth — Ophiuchus (`assets/calendars/zodiac/astrology/primary/sign/Ophiuchus.png`, `assets/calendars/zodiac/astrology/primary/logo/Ophiuchus.png`, `assets/calendars/zodiac/astrology/primary/constellation/Ophiuchus.png`, `assets/calendars/zodiac/astrology/primary/colored/Ophiuchus.png`)
 
 **Encyclopedia-only — the excluded thirteenth (the Sun crosses it Nov
 30 – Dec 17; excluded since Babylon to keep twelve).** Per the owner's
@@ -399,13 +429,13 @@ Ornate circular medallion, photorealistic render, perfectly centered, isolated o
 Minimalist emblem, square 1:1, perfectly centered, isolated on white background, no text or watermark. Center: the proposed Ophiuchus glyph — a wide U-shaped cradle stroke with a short serpent-tilde rising from its base, coiling once before straightening — rendered as a single bold solid white/silver mark with a soft metallic sheen, on a deep near-black circular field. Border: a thin silver outline ring framing the field, no other ornament — crisp and instantly legible even at 64px.
 ```
 
-### CONSTELLATION look — Ophiuchus (`assets/calendars/zodiac/astrology/primary/logo/constellation/Ophiuchus.png`)
+### CONSTELLATION look — Ophiuchus (`assets/calendars/zodiac/astrology/primary/constellation/Ophiuchus.png`)
 
 ```
 Photorealistic astronomical illustration, square 1:1, perfectly centered, isolated on white background, no text, no glyph. Center: a deep midnight-blue to black night-sky field scattered with faint background stars; the Ophiuchus constellation traced as bright white star points joined by thin silver lines in a broad house-shaped pentagon, one bright star crowning it like a head, one of the largest patterns in the whole sky yet excluded from the zodiac's twelve; behind the stars, the serpent-bearer's form appears faintly ghosted in translucent smoky outline, a serpent coiling through his arms, barely visible.
 ```
 
-### COLORED look — Ophiuchus (`assets/calendars/zodiac/astrology/primary/logo/colored/Ophiuchus.png`)
+### COLORED look — Ophiuchus (`assets/calendars/zodiac/astrology/primary/colored/Ophiuchus.png`)
 
 ```
 Ornate circular badge, vivid celestial enamel, photorealistic render, perfectly centered, isolated on white background. Serpent-bearer sign - STRICT palette: twilight indigo, deep teal and faint ember-orange only, no other hues anywhere, the one plate allowed to blend fire and water since Ophiuchus stands between both triads. Center: a robed figure gripping a great serpent with both hands, the snake's body coiled once around his waist and trailing beyond the badge's edge on both sides, his bare feet planted on a scorpion crushed underfoot, the Ophiuchus glyph in pale teal above; glossy deep twilight indigo-teal field with faint ember sparks caught in the serpent's coils. Border: bronze-silver ring of coiled-serpent scrollwork with four small roundels bearing the pale-teal Ophiuchus glyph on indigo enamel. Colors: twilight indigo, deep teal, faint ember-orange.
