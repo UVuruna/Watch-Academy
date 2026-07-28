@@ -16,7 +16,7 @@ Sunday counted twice), the DUALITY family (owner 2026-07-13: "The
 Two Triangles" — Lucifer, Judas and The Union, the scale of self
 whose zero no individual reaches) and, since round R3, every weekday
 theme's own THEME_TITLE opening page and WEEK_DUALITY title page (the
-ARTICLE ORDER restructure — see [Encyclopedia Dialog](../app/encyclopedia.md)).
+ARTICLE ORDER restructure — see [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md)).
 
 Every text rides the same translation overlay as the articles
 (`encyclopedia/<section>/<key>/base|title` keys), so the bundled
@@ -29,7 +29,7 @@ Serbian and any machine-translated language apply automatically.
 - [Translations](translations.md) — the corpus walk covers these keys
 
 ### Used by
-- [Encyclopedia Dialog](../app/encyclopedia.md) — the browser UI
+- [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) — the browser UI
 
 ## Classes
 

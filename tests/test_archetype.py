@@ -635,7 +635,7 @@ def test_one_soul_arms_and_center_jump_to_their_own_pages(app):
     with a page to land on (`center["enc"]`, read by
     `encyclopedia_target`). Verified through the real hover geometry,
     not the config table alone."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
     soul = Compositor(_archetype_skin("hexa", "secondary"), AssetCache())

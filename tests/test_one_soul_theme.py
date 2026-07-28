@@ -126,7 +126,7 @@ def test_the_triple_name_is_what_the_reader_sees():
     it is the single name. The topic title (the reader's own top header,
     `_topic_display_title`) and the title page both carry the triple;
     the gallery card carries "One Soul"."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     topic = _topics()["one_soul"]
     assert topic["title"] == constants.ONE_SOUL_THEME_TITLE
@@ -155,7 +155,7 @@ def test_the_one_soul_wheel_jumps_arm_by_arm_and_from_the_centre():
     """THE SPACEBAR CONTRACT: every prism_secondary figure's `enc` lands on
     its own pillar page, and the centre — the first archetype centre
     with a page at all — lands on the Union."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     names = [
         entry["name"] for entry in _topics()["one_soul"]["entries"]

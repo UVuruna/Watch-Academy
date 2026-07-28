@@ -230,7 +230,7 @@ def test_the_archetypes_hall_addresses_its_pages_by_index():
     (topic key, entry index) lands on the page it argues — the
     Character arms on their own pole or vertex, the Genesis and Council
     arms on their triangle."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     topics = _topics()
     for key in ("cube", "double_trinity", "crosses"):

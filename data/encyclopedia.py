@@ -41,6 +41,21 @@ class EncyclopediaRepository:
             f"encyclopedia/{section}/{key}", self._load()[section][key]
         )
 
+    def whole(self, key: str) -> dict:
+        """{title, base} of one of the SIX WHOLES — the home screen's
+        own cards (Session 27 rework, owner-sealed 2026-07-28). The
+        `base` is the card's one-line about; the title itself lives in
+        `config.encyclopedia_tree` beside the membership it names."""
+        return self._section("wholes", key)
+
+    def about(self, topic: str) -> dict:
+        """{base} — one theme card's about line on the theme screen
+        (Session 27). Written per TOPIC key, never derived by cutting a
+        sentence off the theme's own title page: a truncated first
+        sentence reads as a fragment, and this text is the reader's
+        first impression of the theme."""
+        return self._section("about", topic)
+
     def instrument(self, key: str) -> dict:
         """{title, base} of one functionality article ("dial",
         "twilight", "year_wheel"...)."""

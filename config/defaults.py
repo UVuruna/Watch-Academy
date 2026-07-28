@@ -1455,6 +1455,41 @@ ENCYCLOPEDIA_READER_DECODE_CEILING_PX = 1600   # ~viewport height × max zoom
 # (`_rescale_topics`, zoom-clamped).
 ENCYCLOPEDIA_GALLERY_MAX_COLUMNS = 4
 ENCYCLOPEDIA_GALLERY_CARD_PADDING_PX = 40   # matches _rescale_topics' + 40/+44
+
+# --- THE SESSION 27 REWORK (owner-sealed 2026-07-28) -------------------------
+# Three levels — six WHOLES, their THEME cards, then the article slider.
+#
+# THE WINDOW'S OWN MINIMUM IS THE OWNER'S OPENING SCREEN (his spec:
+# "Pocetni ekran 16:9 rezolucija 1280 x 720p", "Prvi ekran nema scroll...
+# min size je minimalni zoom out"). Pinning the minimum AT that
+# resolution is what turns "the home screen never scrolls" from a hope
+# into geometry: the 3x2 grid is measured from the viewport, and the
+# viewport can never be smaller than the layout the owner specified.
+ENCYCLOPEDIA_MIN_WIDTH_PX = 1280
+ENCYCLOPEDIA_MIN_HEIGHT_PX = 720
+ENCYCLOPEDIA_HOME_COLUMNS = 3        # 2 rows x 3 columns = the six wholes
+# The card itself. The edge is the whole's own Rose accent — a hairline
+# at rest (EDGE_ALPHA), lit on hover, with a tinted wash behind it.
+ENCYCLOPEDIA_CARD_GAP_PX = 20
+ENCYCLOPEDIA_CARD_PAD_PX = 12
+ENCYCLOPEDIA_CARD_RADIUS_PX = 14
+ENCYCLOPEDIA_CARD_EDGE_PX = 1
+ENCYCLOPEDIA_CARD_EDGE_ALPHA = 90         # 0-255, the resting hairline
+ENCYCLOPEDIA_CARD_HOVER_WASH_ALPHA = 46   # 0-255, the hover tint
+ENCYCLOPEDIA_CARD_MIN_WIDTH_PX = 180
+ENCYCLOPEDIA_CARD_MIN_HEIGHT_PX = 150
+ENCYCLOPEDIA_CARD_IMAGE_MIN_PX = 60
+ENCYCLOPEDIA_CARD_IMAGE_RATIO = 0.62   # plate height per card width (theme grid)
+ENCYCLOPEDIA_CARD_FONT_RATIO = 0.038   # card font grows with the card's width
+ENCYCLOPEDIA_CARD_TITLE_BUMP = 3       # the title sits this much above the body
+# THE HOME CARD'S PLATE — COMPUTED, not generated (root Rule #19): a
+# whole's tile is a 2x2 mosaic of its OWN theme plates, built live and
+# cached in memory, so the six wholes need no artwork to exist. A hand
+# drawn plate dropped at `<whole key>.png` under this directory WINS —
+# the same graceful-upgrade contract every derived asset here has.
+ENCYCLOPEDIA_WHOLE_ART_DIR = paths.assets_dir() / "instrument" / "wholes"
+ENCYCLOPEDIA_MOSAIC_PX = 512           # the composed tile's own side
+ENCYCLOPEDIA_MOSAIC_GAP_PX = 6
 # THE FINISH SWITCHER (owner fix round R3: moved to the top row, in
 # line with Home/Download; restyled from filled gradient pills to
 # border-only frames in the finish's OWN color — Colored/Bronze/Gold/

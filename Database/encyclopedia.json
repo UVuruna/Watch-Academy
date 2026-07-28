@@ -936,5 +936,150 @@
   "The Child": {
    "base": "[[Thesis]] The Child is this theme's Ninth — outside the six pillars and outside the centre, and never less important for standing outside them.\n\n[[Argument]] The Ninth is this instrument's standing form for what belongs to a set without being a member of it, and the child fits the form exactly. He is not a pillar, because the bond does not rest on him and a bond that does has made a support out of a consequence; he is the union made flesh — what the two of them are, existing separately. With him the theme's second doctrine appears: the FAMILY TRIANGLE. Husband loves wife, wife loves child, child loves father — a circuit rather than a pool. Each member pours into one and is filled by another, so the love circulates: no one is left dry and no one hoards. Unlike the Trinity's triangle this one has NO apex; it is a circle wearing a triangle's shape, and its equality is achieved through flow rather than declared. Theology already owns the word — perichoresis, the circular dance among persons — and the family triangle is its household form. Each arrow names where a member's GIVEN love flows, never the only love he holds. The direction of the circuit is not arbitrary: each gives what he IS to the one who needs precisely that. The child, small and in need of safety, turns to the pillar of the house; the father covers the one who carries everyone else, and in doing so teaches the child what love looks like, since the most important thing a father does for his children is to love their mother; the mother pours where the flame is newest and least able to hold itself. Safety flows backward toward its source, care flows forward toward its future, and the strongest member bends toward the one who holds all the others.\n\n[[Correspondences]] The Ninth seat — outside the week and outside the six, as every Ninth on this dial stands outside its own eight. The three hearth roles are the Shield, the Heart and the Anchor: the father who covers, the mother who carries, and the child who both holds the household gathered and grips at the bottom of it — the anchor holds BECAUSE it sits lowest, and the mother's love includes having someone to whom she is principal. His time-reading stays the Dawn, the day the other two pour forward into: role and reading are both true, as every seat on this dial carries more than one canon at once. The Union is the two-stranded cord this seat makes threefold.\n\n[[Quote]] \"And if one prevail against him, two shall withstand him; and a threefold cord is not quickly broken\" (Ecclesiastes 4:12)."
   }
+ },
+ "wholes": {
+  "instrument": {
+   "title": "The Instrument",
+   "base": "The watch itself and the wheels it turns: the seven days, the parts of the dial, the ages the year is counted in, and the twelve months of labour."
+  },
+  "celestial": {
+   "title": "The Celestial Engine",
+   "base": "The sky the dial computes: the moon's eight phases, the sun's turning points, the seasons, both eclipse families, the planets, the cosmos, the earth and the two zodiacs."
+  },
+  "divine": {
+   "title": "The Divine",
+   "base": "Four pantheons seated on the week, and the faiths that read the same seven days their own way — each culture in three registers."
+  },
+  "human": {
+   "title": "The Human Wheel",
+   "base": "What a person is made of: the eight virtues and their eight sins, the moods that colour a day, the nine intelligences, the trades, and the scale between Judas and Lucifer."
+  },
+  "cube": {
+   "title": "The Character Cube",
+   "base": "The doctrine of the thirteen axes: the sixty-five terms, the eight figures they meet in, the double trinity and the two crosses a life can walk."
+  },
+  "living": {
+   "title": "The Living World",
+   "base": "Societies that keep a week without a clock — the wolf pack, the hive, the herd — beside the alchemist's metals and the Japanese week."
+  }
+ },
+ "about": {
+  "week": {
+   "base": "One page per day, gathering everything that day owns: its planet, its sign, its virtue, its sin and its mood."
+  },
+  "instrument": {
+   "base": "How the dial works — the 24-hour face, the solar rotation, twilight, the year wheel, the lunations, the metals and the ring letters."
+  },
+  "era": {
+   "base": "The Age of Light and the Age of Darkness, the four starry seasons, and the calendars the world has counted its years in."
+  },
+  "months": {
+   "base": "The Slavic year of labour: twelve month-names that say what the month does, plus the thirteenth pair a blue-moon year opens."
+  },
+  "guide": {
+   "base": "The illustrated help book — how to read the dial, the pointers, the wheels and every window of this program."
+  },
+  "moon": {
+   "base": "The eight phases in cycle order, each with its geometry, its myth and the tides it pulls."
+  },
+  "sun": {
+   "base": "The year's four turning points: both solstices and the equinox the two of them share."
+  },
+  "seasons": {
+   "base": "The quarters of the year, the tropics' wet and dry halves, and the meteorological twins measured against them."
+  },
+  "eclipses": {
+   "base": "Both families of eclipse — solar and lunar — with a chapter for every kind the instrument distinguishes."
+  },
+  "planets": {
+   "base": "The seven classical bodies that name the days, in three registers: the planets, their signs and their art."
+  },
+  "cosmos": {
+   "base": "The week read as deep sky: nebula, supernova, pulsar, galaxy, binary stars, comet, and the black hole at Sunday's other face."
+  },
+  "continents": {
+   "base": "The earth as a week — six continents, the two poles as ruler and servant, and a ninth that changes with the sky."
+  },
+  "astrology": {
+   "base": "The twelve western signs, each with its logo, its constellation and the thirteenth the circle leaves out."
+  },
+  "chinese": {
+   "base": "The twelve animals of the eastern zodiac, their five elements, and the cat that missed the race."
+  },
+  "greek": {
+   "base": "Olympus on the week — the planetary seven, the pantheon's own hierarchy, and the wider court beyond both."
+  },
+  "norse": {
+   "base": "The Aesir on the week — the planetary seven, the pantheon's own hierarchy, and the wider court beyond both."
+  },
+  "egypt": {
+   "base": "The Nile's gods on the week — the planetary seven, the pantheon's own hierarchy, and the wider court beyond both."
+  },
+  "slavic": {
+   "base": "The Slavic gods on the week — the planetary seven, the pantheon's own hierarchy, and the wider court beyond both."
+  },
+  "creeds": {
+   "base": "The living faiths on the seven days, and the ancient religions that held those same seats before them."
+  },
+  "bible": {
+   "base": "Scripture read three ways — the first roster, its mirror, and the dark reading of the same week."
+  },
+  "virtues": {
+   "base": "The eight virtues seated on the dial, and the ninth that keeps the balance between them."
+  },
+  "sins": {
+   "base": "The eight sins facing the virtues across the dial, and the wish every one of them grows from."
+  },
+  "moods": {
+   "base": "The wheel of moods — from the humours to Plutchik to the eight this dial keeps, closed by the mood of the eclipse."
+  },
+  "intelligences": {
+   "base": "Gardner's nine intelligences moved onto the seats the clock already keeps: six weekdays, two solar faces, one question."
+  },
+  "profession": {
+   "base": "The trades on the week — king, soldier, scholar, merchant, priest, artist, farmer — and the one who masters none of them."
+  },
+  "trinity": {
+   "base": "Faith, Hope and Love — the three that stand at the centre of the dial."
+  },
+  "duality": {
+   "base": "The scale of self: Judas's servility against Lucifer's pride, and the union no individual reaches."
+  },
+  "cube_doctrine": {
+   "base": "What the Cube is: the thirteen axes, The One at the centre, the Sacred Axis, and the sixty-five terms in three sets."
+  },
+  "cube_axes": {
+   "base": "Every axis in turn — the three primaries with their six poles, and the six edge axes with the cells between them."
+  },
+  "cube_figures": {
+   "base": "The eight figures the vertices meet in, from the Contemplative Sage to the Sacrificial Protector."
+  },
+  "cube_projections": {
+   "base": "What the Cube reveals when it is flattened: the hexagram projection and the axes hidden on the banknote."
+  },
+  "double_trinity": {
+   "base": "The Court, Genesis and the Council — three triangles, and the twenty-four fields their union makes."
+  },
+  "crosses": {
+   "base": "The two paths a life can walk: Hope, Faith, Love, Salvation against Fear, Anger, Hate, Suffering."
+  },
+  "one_soul": {
+   "base": "The doctrine of the bond: six pillars a love stands on, the union at the centre, and the child as the ninth."
+  },
+  "wolf": {
+   "base": "The pack as a week — every rank a day, the alpha pair at Sunday, and the sigma outside the circle."
+  },
+  "bee": {
+   "base": "The hive as a week — every caste a day, the queen at Sunday, and the swarm that leaves."
+  },
+  "elephant": {
+   "base": "The herd as a week — every role a day, the matriarch at Sunday, and the bull who walks alone."
+  },
+  "alchemy": {
+   "base": "The seven metals of the art on the seven days, and the stone the whole work is for."
+  },
+  "japan": {
+   "base": "The Japanese week — the five elements, the moon and the sun, named as the days have been named there for centuries."
+  }
  }
 }
