@@ -178,10 +178,13 @@ TOPIC_ALIASES["planet_signs"] = ("planets", 0)
 #   * the two CIPHERS and the union TABLE — FALL/STAR, DOMY/SAFE and the
 #     twenty-four fields are text figures, not pictures.
 #
-# The owner may overturn any line here (his answer to the coverage
-# question was "all generated"); until he does, the canon's own written
-# exception stands, and the list makes the gap VISIBLE instead of
-# leaving 32 silent holes.
+# OWNER VERDICT (2026-07-29): these twenty-three are DRAWN BY THE
+# PROGRAM — computed diagrams, not generated art and not blank pages.
+# The canon's exemption stands (no scene is generated for a
+# composition) and the pages stop being visually empty, which is the
+# reading root Rule #19 was written for. Until the renderer lands they
+# are listed here, and the coverage test reads this list as the
+# documented gap rather than a silent hole.
 PLATELESS_PAGES = {
     "cube_doctrine": (
         "The Cube", "The Thirteen Axes", "The Sixty-Five Terms",
@@ -199,14 +202,6 @@ PLATELESS_PAGES = {
     "cube_projections": ("The Hexagram Projection", "The Banknote Axes"),
     "double_trinity": ("The Double Trinity", "The Twenty-Four Fields"),
     "crosses": ("The Two Crosses", "FALL and STAR", "DOMY and SAFE"),
-    # Awaiting a home rather than exempt (the owner's verdict pending):
-    # the five Chinese elements are real figures, and these four are
-    # ordinary title pages whose topics sit outside the weekday tree.
-    "chinese": ("Wood", "Fire", "Earth", "Metal", "Water"),
-    "era": ("The_Great_Oscillations",),
-    "months": ("The Slavic Months",),
-    "intelligences": ("The Nine Intelligences",),
-    "one_soul": ("One Soul — The Vow — The Bond",),
 }
 
 

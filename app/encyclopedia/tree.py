@@ -139,7 +139,14 @@ def _build_topics(travel_date: date | None = None) -> dict:
             for animal in constants.CHINESE_ANIMALS
         ] + [
             {
-                "images": (),
+                # THE FIVE ELEMENTS (Session 27 coverage law, owner
+                # 2026-07-28): their own `elements` REGISTER beside the
+                # twelve animals — an element is a parallel reading of
+                # the same zodiac, never a thirteenth animal.
+                "images": (
+                    defaults.ZODIAC_ART_DIR / "zodiac" / "chinese"
+                    / "elements" / "colored" / f"{element}.png",
+                ),
                 "name": element,
                 "article": ("element", element),
             }
@@ -292,7 +299,7 @@ def _build_topics(travel_date: date | None = None) -> dict:
         "title": "The Nine Intelligences",
         "icon": intel / "Existential.png",
         "entries": [{
-            "images": (),
+            "images": (defaults.theme_title_art("intelligences"),),
             "name": "The Nine Intelligences",
             "article": ("emblem", "intelligence", "The Nine Intelligences"),
         }] + [
@@ -330,7 +337,10 @@ def _build_topics(travel_date: date | None = None) -> dict:
         # lands, so the card shows its name until then.
         "icon": defaults.MONTHS_ART_DIR / "Lipanj.png",
         "entries": [{
-            "images": (),
+            "images": (
+                defaults.MONTHS_ART_DIR.parent.parent
+                / "title" / "colored" / "Slavic_Months.png",
+            ),
             "name": "The Slavic Months",
             "article": ("emblem", "months", "The Slavic Months"),
         }] + [

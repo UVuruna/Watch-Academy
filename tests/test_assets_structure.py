@@ -79,6 +79,10 @@ _LAW_REGISTERS = {
     # this a register and not a look: `<theme>/title/colored/<Stem>.png`
     # (`defaults.theme_title_art`, the ONE resolver).
     "title",
+    # THE FIVE ELEMENTS (Session 27): a parallel reading of the Chinese
+    # zodiac beside its twelve animals — an element is not a thirteenth
+    # animal, so it is a register of its own, not a figure in `primary`.
+    "elements",
 }
 
 
