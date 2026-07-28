@@ -164,7 +164,7 @@ def draw_calendar() -> QImage:
     image, painter = _canvas()
     centre = QPointF(SIZE / 2, SIZE / 2 + 20)
     reach = SIZE * 0.40
-    palette = defaults.PALETTE_PRESETS[("calendar", "light")]
+    palette = defaults.PALETTE_PRESETS[("calendar", "secondary")]
     legend = ("3 face axes on the pure-colour arms — an equilateral triangle",
               "3 corner axes on the mixed-primary arms — the opposite triangle",
               "6 edge axes on the hexagon between")

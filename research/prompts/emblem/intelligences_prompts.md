@@ -185,7 +185,7 @@ silver sundial cameo" family description in
 silver cameo, sundial hour-tick motif, the hour's own light.
 
 Hues read directly from `config/defaults.py` `PALETTE_PRESETS[("hexa",
-"paint")]`, clockwise from the top exactly as the dial's own hexagram
+"primary")]`, clockwise from the top exactly as the dial's own hexagram
 paints them:
 
 | Clock position | Mood | Hue | Hex (canon, not for the prompt text) |

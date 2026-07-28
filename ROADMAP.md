@@ -235,16 +235,16 @@ lives in [The DOMY Canon](CANON.md).
    already 100%). Purpose: see the whole theme at once, laid out by
    color.
 3. **Gray out Paint/Light where it does nothing.** Trinity and
-   Seasons have no separate paint/light palette variants — the
+   Seasons have no separate paint/secondary palette variants — the
    palette style option must be GRAYED (unavailable) while they are
    the active pointer.
 4. **Pointer archetypes — SEVEN, one per (pointer, palette)**
    (owner 2026-07-16: seven layouts, rhyming with the week; paint =
    the world's order, light = the home's). The grid, content canon,
-   the Trinity light Family palette (green/blue/red), and the
+   the Trinity secondary Family palette (green/blue/red), and the
    PROPOSED Compass palette rework (paint = the Walks' materials,
    light = the Eight Ages) are in [The DOMY Canon](CANON.md) — read
-   it first. Trinity paint image prompts are READY:
+   it first. Trinity primary image prompts are READY:
    `research/prompts/archetype/trinity_prompts.md` (stained-glass
    register, drop at `assets/archetype/<source>/trinity/`). Also
    queued here: the per-theme CANONICAL POINTER note "under the

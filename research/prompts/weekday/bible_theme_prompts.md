@@ -1,4 +1,4 @@
-﻿# The Bible Theme — Stained-Glass Prompts (Gemini)
+# The Bible Theme — Stained-Glass Prompts (Gemini)
 
 Owner brief (2026-07-12): "is there room for a BIBLE theme, Old and New
 Testament, find the 7-8 figures for the week; Sunday can be God himself

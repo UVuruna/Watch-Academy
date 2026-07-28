@@ -25,7 +25,7 @@ octa arms with gaps), **octa/Compass** (8-point) and **trio/Trinity**
 (3-point — half of hexa, arms at the M/D/Y ring letters 12h/4h/20h).
 The pointer sets the palette size (trio = 3 hues × 120°, cross = 4 ×
 90°, hexa = 6 × 60°, octa = 8 × 45° — the Aura wedges and the Star
-diamonds share ONE palette preset: hexa/octa in "paint" and "light"
+diamonds share ONE palette preset: hexa/octa in "primary" and "secondary"
 styles, cross with its single seasons palette, trio with the single
 trinity palette Faith yellow / Love red / Hope blue) and the weekday
 slot layout: hexa and trio center the Sun (trio pairs Jupiter+Saturn,

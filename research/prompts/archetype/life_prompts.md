@@ -4,7 +4,7 @@ The COMPASS pointer's LIGHT archetype (owner canon 2026-07-16, canon
 in [The DOMY Canon](../../../CANON.md)): where PAINT carries the
 world's estates (see [Walks Prompts](walks_prompts.md)), LIGHT
 carries a single human LIFE — the day as a lifetime, sunrise to
-sunrise, eight ages seated on the light palette's own hues. The
+sunrise, eight ages seated on the secondary palette's own hues. The
 owner's own poem (day, evening, night and morning) belongs to these
 articles; text pending, he delivers it when ready.
 
@@ -16,7 +16,7 @@ be born, and a time to die"* — and Shakespeare's seven ages —
 *"all the world's a stage"* (As You Like It) — to whose stage we
 give the eighth player: the one not yet on it, the Unborn.
 
-The eight ages and their hues (CANON §Compass light):
+The eight ages and their hues (CANON §Compass secondary):
 
 | Hour | Age | Hue |
 |---|---|---|
@@ -182,7 +182,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
   parallel: Register I THE TREE (one oak, eight states) and
   Register II THE MENAGERIE (eight creatures). Same age hues, same
   night-window register.
-- Age hues locked to CANON §Compass light: Unborn `#8FA8C8`, Birth
+- Age hues locked to CANON §Compass secondary: Unborn `#8FA8C8`, Birth
   `#FFD9CC`, Childhood `#7CE577`, Youth `#FFE800`, Maturity
   `#FFB400`, Elder `#FF6A3C`, Old age `#9C6BD4`, Death `#C8D7F0`.
 - The owner's four-greeting POEM belongs to the SEASONS archetype,

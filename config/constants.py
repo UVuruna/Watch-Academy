@@ -334,7 +334,7 @@ WEEKDAY_FULL_NAMES = {
 # "calendar" (owner 2026-07-16, CANON §The Dozen) divides the 24h dial
 # into TWELVE 2-hour wedges and, like Aurora, draws NO star arms — its
 # 12 entries are the PALETTE size (one hue per wedge). Its two wheels
-# ride the Paint/Light slot: paint = the Zodiac Dozen, light = the
+# ride the wheel slot: paint = the Zodiac Dozen, light = the
 # Almanac (Month) Dozen. It has NO arm HALF-ANGLE (armless, like
 # Aurora): the star geometry and the arm hovers skip it explicitly.
 # "rose" (owner spec 2026-07-27, CUBE.md §The Rose) is the SEVENTH
@@ -384,21 +384,23 @@ POINTER_DISPLAY_NAMES = {
 # both the Design window's palette-style row (`app.design_window`,
 # `tr()`-wrapped at build time) and the watch TITLE row
 # (`app.controller.watch_title`, untranslated — a name, not chrome)
-# read (Rule #5: one source, two readers). Index 0 = "paint", index 1 =
-# "light", index 2 (where present) = "cube" — the Cube canon's third
-# wheel (`palette_styles_for` below tells which pointers carry it).
+# read (Rule #5: one source, two readers). Index 0 = "primary", index 1
+# = "secondary", index 2 (where present) = "tertiary" — the slot keys
+# are POSITIONAL (owner decree 2026-07-28); the MEANING of a wheel lives
+# only in the name below (`palette_styles_for` tells which pointers
+# carry a third).
 
 # THE PRISM-LIGHT THEME NAME (owner seal 2026-07-27, closing the last
 # open naming decision of `research/bond_theme.md`): the theme KEEPS ALL
 # THREE candidate names. Wherever the theme is titled it shows the
-# triple — `PRISM_LIGHT_THEME_TITLE`, the Encyclopedia heading — and
+# triple — `ONE_SOUL_THEME_TITLE`, the Encyclopedia heading — and
 # wherever ONE name has to stand alone (the Design window's wheel row,
-# the menus, the watch title, any label) it is `PRISM_LIGHT_THEME_NAME`,
+# the menus, the watch title, any label) it is `ONE_SOUL_THEME_NAME`,
 # "One Soul". One declaration, both readers (Rule #5); the Aristotle
 # anchor behind the pick — "one soul dwelling in two bodies" (Diogenes
 # Laertius V.20) — lives in the theme's own article.
-PRISM_LIGHT_THEME_NAME = "One Soul"
-PRISM_LIGHT_THEME_TITLE = "One Soul — The Vow — The Bond"
+ONE_SOUL_THEME_NAME = "One Soul"
+ONE_SOUL_THEME_TITLE = "One Soul — The Vow — The Bond"
 
 POINTER_PALETTE_LABELS = {
     "trio": ("Court", "Family", "Genesis"),
@@ -407,14 +409,14 @@ POINTER_PALETTE_LABELS = {
     # the paths one walks, open to all, against the closed hereditary
     # caste reading).
     "octa": ("Walks of Life", "Ages", "Character"),
-    # The hexa LIGHT slot speaks the theme's sealed single name (owner
-    # 2026-07-27); its PAINT slot says PERSONS since the same day (owner
-    # "ok."), because the paint wheel IS the Persons — CANON.md names it
-    # so, and "Paint palette" was the generic default label sitting on a
-    # wheel that has had its own name all along. The generic pair
-    # survives untouched under "default", for every pointer with no
-    # named wheels of its own.
-    "hexa": ("Persons", PRISM_LIGHT_THEME_NAME, "Council"),
+    # The hexa SECONDARY slot speaks the theme's sealed single name
+    # (owner 2026-07-27); its PRIMARY slot says PERSONS since the same
+    # day (owner "ok."), because that wheel IS the Persons — CANON.md
+    # names it so. The generic TRIPLE under "default" serves any pointer
+    # with no named wheels of its own; it counts three because the slot
+    # has three positions (owner 2026-07-28 — the old pair was two
+    # labels for a three-state slot).
+    "hexa": ("Persons", ONE_SOUL_THEME_NAME, "Council"),
     "aurora": ("Warm", "Cool"),
     "calendar": ("Zodiac", "Almanac"),
     # THE ROSE'S TWO WHEELS (owner seal 2026-07-27, CUBE.md §The Rose).
@@ -426,7 +428,7 @@ POINTER_PALETTE_LABELS = {
     # geometry and figures, not colors — the Seasons pointer already
     # serves one palette under both styles).
     "rose": ("Legacy", "Prophecy"),
-    "default": ("Paint palette", "Light palette"),
+    "default": ("Primary palette", "Secondary palette", "Tertiary palette"),
 }
 
 # What each palette circle COLORS (owner spec 2026-07-11: hovering a
@@ -435,10 +437,10 @@ POINTER_PALETTE_LABELS = {
 # cardinal directions, the others in dial positions.
 POINTER_ARM_LABELS = {
     "trio": ("Top", "Right", "Left"),
-    # The Genesis wheel's inverted arms (trio + "cube" style — the
+    # The Genesis wheel's inverted arms (trio + "tertiary" style — the
     # settings palette editor reads this via `defaults.
     # pointer_arm_labels`): 24h bottom, 08h upper-left, 16h upper-right.
-    "trio_cube": ("Bottom", "Left", "Right"),
+    "trio_tertiary": ("Bottom", "Left", "Right"),
     "cross": ("Top", "Right", "Bottom", "Left"),
     "hexa": (
         "Top", "Top Right", "Bottom Right",
@@ -463,8 +465,8 @@ POINTER_ARM_LABELS = {
         "Winter Solstice", "Winter", "Spring Equinox", "Spring",
     ),
     # Calendar wedges, clockwise from the TOP wedge. The two wheels
-    # differ (paint = signs from the top boundary, light = months from
-    # the top center), so the palette-editor labels stay NEUTRAL — the
+    # differ (Zodiac = signs from the top boundary, Almanac = months
+    # from the top center), so the palette-editor labels stay NEUTRAL — the
     # ordinal position of each wedge (owner spec: the swatch names its
     # place, the wheel gives the meaning).
     "calendar": tuple(f"Wedge {index + 1}" for index in range(12)),
@@ -491,14 +493,14 @@ POINTER_ARM_HALF_ANGLE_DEG = {
 # last painted (topmost). The 0° star is ALWAYS last on both wheels, so
 # the dominant fully-visible arm points at true 12h and the dial keeps
 # its own axis: solstices vertical, equinoxes horizontal.
-#   LEGACY  (paint): −30° · −15° · 0° — everything behind the hour; the
+#   LEGACY  (primary): −30° · −15° · 0° — everything behind the hour; the
 #           deepest past lies lowest.
-#   PROPHECY (light): −15° · +15° · 0° — the PAST lies deepest, the
+#   PROPHECY (secondary): −15° · +15° · 0° — the PAST lies deepest, the
 #           FUTURE rides over it (owner: the middle z-layer is the
 #           future star), the present covers both.
 ROSE_STAR_OFFSETS = {
-    "paint": (-30.0, -15.0, 0.0),
-    "light": (-15.0, 15.0, 0.0),
+    "primary": (-30.0, -15.0, 0.0),
+    "secondary": (-15.0, 15.0, 0.0),
 }
 
 # Which figure SET each Rose star carries, keyed by its offset (CUBE.md
@@ -518,7 +520,7 @@ ROSE_STAR_SETS = {
 # The Rose's arm CHARACTER system per wheel (CUBE.md §The Rose): Legacy
 # reads the 2D Character wheel (four poles and their four blends),
 # Prophecy the 3D Cube (its eight vertices, all three axes at once).
-ROSE_ARM_SYSTEMS = {"paint": "character_2d", "light": "vertices_3d"}
+ROSE_ARM_SYSTEMS = {"primary": "character_2d", "secondary": "vertices_3d"}
 
 # THE DAYLIGHT SWITCH (owner 2026-07-27): these two pointers let the
 # reader turn the day/night law OFF and stand in flat full color — the
@@ -564,48 +566,52 @@ UMBRA_SECTION_COUNTS = {"fine": 30, "coarse": 24}
 # bright half (128-255), "dark" the dark half (0-127).
 UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 
-# Star + Aura palette styles (owner: "paint" = subtractive primaries —
-# blue/red/yellow mix toward black; "light" = additive primaries —
-# blue/red/green mix toward white). The cross pointer has a single
-# seasons palette served under both styles. "cube" (owner seal
-# 2026-07-26, CUBE.md) is the THIRD wheel of the Cube canon — it exists
-# ONLY on the pointers `palette_styles_for` names (Trinity Genesis,
-# Prism Council, Compass Character); everywhere else the style
-# normalizes back to "paint" (`defaults.effective_palette_style`).
-PALETTE_STYLES = ("paint", "light", "cube")
-# The pointers whose wheel row carries the Cube third wheel (CUBE.md):
-# trio — Genesis (the creation trio, drawn INVERTED); hexa — Council
-# (all six Double-Trinity offices); octa — Character (the Cube at depth
-# zero). Aurora/Calendar/Seasons stay two-wheel.
-CUBE_WHEEL_POINTERS = ("trio", "hexa", "octa")
+# The WHEEL SLOTS a pointer's palette row can hold. The keys are
+# POSITIONAL and carry NO meaning of their own (owner decree
+# 2026-07-28, closing the "paint"/"light" era: those two words named a
+# subtractive-vs-additive distinction that stopped being true the moment
+# the slots started carrying the Zodiac, the Persons, the Walks of Life
+# and the Rose's Legacy). A wheel's MEANING lives in exactly one place —
+# `POINTER_PALETTE_LABELS` above. The third slot exists ONLY on the
+# pointers `palette_styles_for` names; everywhere else a stored
+# "tertiary" normalizes back to "primary"
+# (`defaults.effective_palette_style`).
+PALETTE_STYLES = ("primary", "secondary", "tertiary")
+# The pointers whose wheel row carries a THIRD wheel: trio — Genesis
+# (the creation trio, drawn INVERTED); hexa — Council (all six
+# Double-Trinity offices); octa — Character (the Cube at depth zero),
+# CUBE.md. Aurora/Calendar/Rose/Seasons stay two-wheel.
+THIRD_WHEEL_POINTERS = ("trio", "hexa", "octa")
 
 
 def palette_styles_for(pointer: str) -> tuple[str, ...]:
-    """The wheel styles THIS pointer actually serves — ("paint",
-    "light") everywhere, plus "cube" on the Cube-canon pointers. The
-    ONE gate the Design window's wheel row, the settings normalization
-    and the tests all read (Rule #5)."""
-    if pointer in CUBE_WHEEL_POINTERS:
+    """The wheel slots THIS pointer actually serves — ("primary",
+    "secondary") everywhere, plus "tertiary" on the three-wheel
+    pointers. The ONE gate the Design window's wheel row, the settings
+    normalization and the tests all read (Rule #5)."""
+    if pointer in THIRD_WHEEL_POINTERS:
         return PALETTE_STYLES
     return PALETTE_STYLES[:2]
 
 
 # THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md §Double
-# Trinity): the trio's CUBE wheel draws its three arms on the OPPOSITE
+# Trinity): the trio's TERTIARY wheel draws its three arms on the OPPOSITE
 # seats — 24h/16h/08h instead of 12h/20h/04h — one arm-angle offset fed
 # through render.layers.arm_offset_deg into the star diamonds, the Aura
 # wedges, the weekday slots, the lit-index math and the arm hit-test.
 GENESIS_ARM_OFFSET_DEG = 180.0
 
 # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
-# Double-Trinity FAMILY wheels — the Court (trio paint), Genesis (trio
-# cube) and the Council (hexa cube) — render in TWO looks: "Diamond"
+# Double-Trinity FAMILY wheels — the Court (trio primary), Genesis (trio
+# tertiary) and the Council (hexa tertiary) — render in TWO looks: "Diamond"
 # (the slim arm diamonds, the current form) and "Cube" (the owner's
 # corner-view: the arm diamonds widen to 180/N half-angles, so the
 # three/six rhombi tile the hexagon exactly — three visible cube faces
 # on the trio wheels, the two interlocked corners on the Council).
 # `Settings.cube_look` toggles it; render.layers.cube_look_active gates.
-CUBE_LOOK_WHEELS = (("trio", "paint"), ("trio", "cube"), ("hexa", "cube"))
+CUBE_LOOK_WHEELS = (
+    ("trio", "primary"), ("trio", "tertiary"), ("hexa", "tertiary"),
+)
 
 # The SOUTH SLOT (menu name; the internal octa_* keys stay for settings
 # and code stability, like the pointer keys): user-selected info near
@@ -1379,7 +1385,7 @@ POINTER_WEEKDAY_SLOTS = {
                  "saturn")),
     ),
     # THE ROSE'S COLOR LAW (owner seal 2026-07-27, CUBE.md §The Rose).
-    # The seat is the HUE, not the position: it is the Prism paint canon
+    # The seat is the HUE, not the position: it is the Prism primary canon
     # with the two Sunday hues lightened, because Sunday needs blue and
     # red for its own two faces. Bodies ride their BADGES as always —
     # never painted into the diamonds.

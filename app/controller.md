@@ -385,7 +385,7 @@ pattern) rather than guessed:
   wheel-pair labels are per pointer (`constants.POINTER_PALETTE_LABELS`,
   owner 2026-07-17 ROADMAP 15e: Court/Family, Temperaments/Elements,
   Walks/Ages, Warm/Cool for Aurora, Zodiac/Almanac, Persons/One Soul
-  for the Prism (its paint slot renamed 2026-07-27), else Paint/Light —
+  for the Prism (its primary slot renamed 2026-07-27), else Paint/Light —
   R5 MENU REWORK moved the picker itself into the
   [Design Window](design_window.md)'s Pointer tab, which reads this
   SAME raw-English table directly, translated at build time; `watch_
@@ -400,7 +400,7 @@ pattern) rather than guessed:
   two pills. `apply_display_settings` normalizes a stored `"cube"`
   style through `defaults.effective_palette_style` at its ONE choke
   point — a pointer switch to the Seasons/Aurora/Calendar renders
-  "paint" while the stored setting survives untouched (switching back
+  "primary" while the stored setting survives untouched (switching back
   restores the Cube wheel); `cube_look` (the Diamond/Cube display
   toggle, Settings ▸ Display ▸ Archetype group) flows onto the skin
   there too. (`build_skin`'s ROSE branch is GONE — owner correction

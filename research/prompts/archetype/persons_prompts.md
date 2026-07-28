@@ -2,9 +2,9 @@
 
 The PRISM PAINT pointer's archetype set (owner canon 2026-07-16, canon
 in [The DOMY Canon](../../../CANON.md)): where the Trinity pointer
-carries three persons of a courtroom, the Prism paint hexagram carries
+carries three persons of a courtroom, the Prism primary hexagram carries
 SIX — the same wheel-web spoken as love and its ruin. Paint carries
-the WORLD's order; the six seats are laid on the hexa PAINT hues, each
+the WORLD's order; the six seats are laid on the hexa PRIMARY hues, each
 a person and a quality (the two-row canon: the person, then the
 quality — Michael / Courage). Owner's seating, verbatim intent:
 
@@ -65,7 +65,7 @@ two remaining seats REUSE the Scale glass at
 **The One — Love (yellow arm, 12h)** → `assets/archetypes/persons/primary/colored/One_Love.png`
 
 *(Color-fidelity note: The One also holds the yellow/gold summit in
-the Trinity paint set — but there he is argued as the VEILED JUDGE
+the Trinity primary set — but there he is argued as the VEILED JUDGE
 who weighs. Here the SAME color is argued from a different true facet:
 not judgment but LOVE at its summit — the union of both loves, love of
 others and love of self held at the razor's edge where they would
@@ -85,7 +85,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 
 **the Devil — Hatred (purple arm, 24h)** → `assets/archetypes/persons/primary/colored/Devil_Hatred.png`
 
-*(Color-fidelity note: the Devil wears RED in the Trinity paint set,
+*(Color-fidelity note: the Devil wears RED in the Trinity primary set,
 where he is argued as the PROSECUTOR who enjoys punishing —
 hedonism, the Boss syndrome. Here he is moved to PURPLE and argued
 from a different facet: not enjoyment but HATRED ITSELF at its
@@ -100,7 +100,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 
 **Jesus — Humility (green arm, 08h)** → `assets/archetypes/persons/primary/colored/Jesus_Humility.png`
 
-*(Color-fidelity note: Jesus wears BLUE in the Trinity paint set,
+*(Color-fidelity note: Jesus wears BLUE in the Trinity primary set,
 where he is the ADVOCATE who steps between the accused and the dark.
 Here he is moved to GREEN and argued from a different true facet:
 HUMILITY as renunciation — the one who DESCENDED, who washed feet and
@@ -140,7 +140,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 ## The center — the Seal (Prism PAINT)
 
 The sealed center of the six persons (owner 2026-07-16: Eye — Hearth —
-Seal — Union — Throne; this is the Prism paint seat). It was missing
+Seal — Union — Throne; this is the Prism primary seat). It was missing
 from every sheet until 2026-07-18 (owner catch).
 
 **the Seal** → `assets/archetypes/persons/primary/colored/Seal.png`
@@ -162,7 +162,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   both seats — pinned by `test_prism_poles_wear_their_own_lancets`).
 - The Prism LIGHT archetype — One Soul, the Bond — has its own sheet:
   [One Soul Prompts](one_soul_prompts.md).
-- The all-seeing Eye is the Trinity center; the Prism paint set has
+- The all-seeing Eye is the Trinity center; the Prism primary set has
   no separate center rosette — the six persons balance three-and-three
   on the wheel itself. If the owner later wants a Prism center plate,
   it is undecided — DO NOT invent.

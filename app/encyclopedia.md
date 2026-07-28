@@ -1,4 +1,4 @@
-﻿# Encyclopedia
+# Encyclopedia
 
 **Script:** [Encyclopedia (script)](encyclopedia.py)
 
@@ -35,7 +35,7 @@ screens —
    by **One Soul — The Vow — The Bond** (9 — see THE ONE SOUL THEME
    below); their entry ORDER
    is a CONTRACT, since `config/archetypes.py` aims the Cube
-   wheels' AND the prism-light wheel's Spacebar targets at these pages
+   wheels' AND the prism-secondary wheel's Spacebar targets at these pages
    by index —
    EVERYTHING centered (owner 2026-07-13: headers and card rows alike)
    and the cards RESPONSIVE: `_rescale_topics` grows/shrinks the icons
@@ -514,7 +514,7 @@ screens —
 
 **THE ONE SOUL THEME (owner verdict 2026-07-27 — "napravi naravno —
 jedna od važnijih ljubavnih tematika; ide kao zaseban arhetip ako treba,
-tj. zaseban pointer"):** the prism-LIGHT wheel's doctrine gets its own
+tj. zaseban pointer"):** the prism-SECONDARY wheel's doctrine gets its own
 Encyclopedia topic, `one_soul`, as The Archetypes hall's FOURTH card
 (the hall's row is exactly four wide, so it fills it). Nine pages, built
 by the shared `_ARCHETYPE_TOPICS` loop from the `one_soul` family of
@@ -529,7 +529,7 @@ by the shared `_ARCHETYPE_TOPICS` loop from the `one_soul` family of
 ```
 
 - **No separate pointer was needed** (the owner's own "ako treba"): the
-  theme ALREADY owns a wheel — hexa · light, `prism_light` in
+  theme ALREADY owns a wheel — hexa · light, `prism_secondary` in
   [Archetypes](../config/archetypes.md) — so a new archetype would have
   duplicated an existing one (Rule #5). What was missing was the READING
   side, and that is what this topic is.
@@ -541,8 +541,8 @@ by the shared `_ARCHETYPE_TOPICS` loop from the `one_soul` family of
   and `tests/test_archetype.py` pin the contract at both ends, the
   latter through the live hover geometry.
 - **THE TRIPLE NAME, and where it shows** (owner seal 2026-07-27, CANON
-  §Prism light — the theme keeps all three names): the topic's `title` is
-  `constants.PRISM_LIGHT_THEME_TITLE`, so the READER'S TOP HEADER
+  §Prism secondary — the theme keeps all three names): the topic's `title` is
+  `constants.ONE_SOUL_THEME_TITLE`, so the READER'S TOP HEADER
   (`_topic_display_title`) prints "One Soul — The Vow — The Bond" on
   every one of the nine pages, and entry 0's own bold caption prints it
   again as the title page's name. A fixed-size gallery CARD is a LABEL,
@@ -550,7 +550,7 @@ by the shared `_ARCHETYPE_TOPICS` loop from the `one_soul` family of
   carry an optional `"tile_title"`, read at the ONE card-building point
   (`_topic_card`), and One Soul's card reads "One Soul".
 - **It ARGUES, it does not restate** (Rule #5): the dial's per-arm hover
-  articles (`symbolism.json` `archetype_prism_light`) are untouched and
+  articles (`symbolism.json` `archetype_prism_secondary`) are untouched and
   still answer every seat. These pages carry what a hover cannot — the
   CONJUGATION LAW (honesty is a trait of the individual, trust its
   counterpart in the relationship; every pillar a seat's virtue

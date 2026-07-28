@@ -184,11 +184,11 @@ def _saturate_hue(hue: str, factor: float) -> str:
 
 def arm_offset_deg(skin: SkinDefinition) -> float:
     """THE GENESIS INVERSION (owner: "trougao ka dole", CUBE.md): the
-    trio's CUBE wheel seats its three arms on the OPPOSITE hours —
+    trio's TERTIARY wheel seats its three arms on the OPPOSITE hours —
     24h/16h/08h — one 180° offset every arm consumer reads through here
     (Rule #5): the star diamonds, the Aura wedges, the weekday slots,
     the lit-index math and the arm hit-test. 0 on every other wheel."""
-    if (skin.pointer, skin.palette_style) == ("trio", "cube"):
+    if (skin.pointer, skin.palette_style) == ("trio", "tertiary"):
         return constants.GENESIS_ARM_OFFSET_DEG
     return 0.0
 
@@ -293,7 +293,7 @@ def cube_look_active(skin: SkinDefinition) -> bool:
     """Whether the CUBE look dresses the drawn wheel (owner seal
     2026-07-26, CUBE.md §Display laws): the settings toggle is on AND
     the active wheel belongs to the Double-Trinity family — the Court
-    (trio paint), Genesis (trio cube) or the Council (hexa cube)."""
+    (trio primary), Genesis (trio tertiary) or the Council (hexa tertiary)."""
     return (
         skin.cube_look
         and skin.show_pointer
@@ -318,7 +318,7 @@ def arm_half_deg(skin: SkinDefinition) -> float:
 def weekday_slots(skin: SkinDefinition) -> tuple:
     """The pointer's weekday slots with the Genesis offset applied —
     the slots ride the DRAWN arms (pure geometry: each occupant pair
-    stays glued to its arm as the trio's cube wheel swings it 180°; no
+    stays glued to its arm as the trio's tertiary wheel swings it 180°; no
     re-pairing doctrine is invented here). Every consumer of
     `constants.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5).
     The Duality-Axes config (`_duality_flipped`) additionally moves the
@@ -344,7 +344,7 @@ def calendar_wheel(skin: SkinDefinition) -> str:
     """Which of the Calendar's two wheels is active (owner 2026-07-16):
     the palette_style CARRIES the wheel — paint = the Zodiac Dozen,
     light = the Almanac (Month) Dozen."""
-    return "zodiac" if skin.palette_style == "paint" else "almanac"
+    return "zodiac" if skin.palette_style == "primary" else "almanac"
 
 
 def calendar_wedge_bounds(wheel: str) -> list[tuple[float, float]]:
@@ -711,7 +711,7 @@ def archetype_lit_index(
     ride the drawn arms, so the solar rotation shifts them exactly as
     it shifts the diamonds; index = the figures-tuple position.
     `offset` is the Genesis inversion (`arm_offset_deg`) — the trio's
-    cube wheel counts its spaces from the 24h arm."""
+    tertiary wheel counts its spaces from the 24h arm."""
     arms = constants.POINTER_POINTS[pointer]
     step = 360.0 / arms
     return int(
@@ -1503,7 +1503,7 @@ class BackgroundLayer(Layer):
         )
         span = 360.0 / len(palette)
         # The hues center on the DRAWN arms — the Genesis offset swings
-        # the trio cube wheel's wedges with its inverted diamonds.
+        # the trio tertiary wheel's wedges with its inverted diamonds.
         offset = arm_offset_deg(ctx.skin)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
@@ -1613,7 +1613,7 @@ class StarLayer(Layer):
         # diamonds — or, under the CUBE look, the regular 180/N halves
         # whose rhombi tile the hexagon into the corner-view cube faces
         # (CUBE.md §Display laws). The Genesis offset (`arm_offset_deg`)
-        # swings the trio's cube wheel onto 24h/16h/08h.
+        # swings the trio's tertiary wheel onto 24h/16h/08h.
         half = arm_half_deg(ctx.skin)
         offset = arm_offset_deg(ctx.skin) + star_offset
         tip = ctx.radius * spec.radius_fraction

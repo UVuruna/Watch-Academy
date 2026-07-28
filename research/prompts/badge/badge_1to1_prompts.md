@@ -25,7 +25,7 @@ excluded). Seven families, 38 figures:
 | Walks (compass paint) | [Walks Prompts](../archetype/walks_prompts.md) | King, Merchant, Soldier, Artist, Wanderer, Scholar, Farmer, Priest |
 | Life — Tree register (compass light) | [Life Prompts](../archetype/life_prompts.md) | Unborn, Birth, Childhood, Youth, Maturity, Elder, Old_Age, Death |
 
-**Round-one scoping (documented, not a gap):** the compass_light
+**Round-one scoping (documented, not a gap):** the compass_secondary
 archetype ships a SECOND image register, Animals (`config.archetypes.
 ARCHETYPE_LIFE_REGISTER = "tree"` is the one actually rendered today
 — the owner has not wired a user-facing register picker yet). This
@@ -329,7 +329,7 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
   in `tests/test_prompt_paths.py` the same way the row2 rondels and
   the Almanac month medallions already are — art prepared ahead of the
   wiring decision, not a lint gap.
-- The Animals register's own 8 Life badges (compass_light's alternate,
+- The Animals register's own 8 Life badges (compass_secondary's alternate,
   non-default register) are a round-two follow-up, scoped out of this
   sheet per the note under Scope above.
 - Verify with `python main.py "research/prompts/badge/badge_1to1_prompts.md" --dry-run`

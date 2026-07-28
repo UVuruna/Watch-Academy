@@ -519,7 +519,7 @@ def test_the_owners_two_proofs_are_gone():
 
     repo = SymbolismRepository()
     jesus = " ".join(
-        repo.archetype_article("archetype_trinity_paint", "jesus")["rows"]
+        repo.archetype_article("archetype_trinity_primary", "jesus")["rows"]
     )
     assert "stands Jesus" not in jesus
     assert "blue pre-dawn arm of Calm" in jesus       # the seat survives
@@ -527,7 +527,7 @@ def test_the_owners_two_proofs_are_gone():
     assert "(Matthew 16:24)" in jesus                 # the quote survives
 
     child = " ".join(
-        repo.archetype_article("archetype_trinity_light", "child")["rows"]
+        repo.archetype_article("archetype_trinity_secondary", "child")["rows"]
     )
     assert "At the apex, in spring green, stands" not in child
     assert "spring green" in child                    # the colour survives

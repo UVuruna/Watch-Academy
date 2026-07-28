@@ -857,15 +857,15 @@ WORKING_SET_CEILINGS = {
 # the arm centers), served under both styles.
 _CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
 # The Seasons' SECOND wheel — the FOUR ELEMENTS (owner 2026-07-17,
-# CANON §Seasons light): the cross PAINT stays the seasons temperaments
-# palette, the cross LIGHT becomes the elements, seating the Tetramorph
+# CANON §Seasons secondary): the cross PRIMARY stays the seasons temperaments
+# palette, the cross SECONDARY becomes the elements, seating the Tetramorph
 # (Lion/Ox/Eagle/Man). Hues clockwise from the top arm — the SAME arm
 # order as _CROSS_SEASONS (summer top, autumn right, winter bottom,
 # spring left) — so each element lands on its canonical season arm:
 #   * summer arm (top)    = FIRE  — a hot flame red-orange, hotter than
 #     autumn's blood red so the two cross wheels never read alike;
 #   * autumn arm (right)  = EARTH — an olive green-brown, the soil (a
-#     muddy green, distinct from spring's pure green in the paint wheel);
+#     muddy green, distinct from spring's pure green in the primary wheel);
 #   * winter arm (bottom) = WATER — a deep water blue;
 #   * spring arm (left)   = AIR   — a pale white-yellow, the luminous
 #     lightest of the four (owner: "air spring-arm white-yellow").
@@ -873,11 +873,11 @@ _CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
 # water blue, earth green) laid on the seasons the fixed-cross zodiac
 # already ties them to (Leo/Taurus/Scorpio/Aquarius).
 _CROSS_ELEMENTS = ("#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0")
-# The TRIO's PAINT wheel carries the theological trio (owner spec,
+# The TRIO's PRIMARY wheel carries the theological trio (owner spec,
 # FINAL.txt #7): Faith yellow at 12h, Love red at 20h, Hope blue at
-# 4h — the hexa paint hues at the M, Y, D ring-letter positions. Its
-# LIGHT wheel is the FAMILY triangle (CANON, placement APPROVED
-# 2026-07-16): the same derivation from the hexa LIGHT primaries at
+# 4h — the hexa primary hues at the M, Y, D ring-letter positions. Its
+# SECONDARY wheel is the FAMILY triangle (CANON, placement APPROVED
+# 2026-07-16): the same derivation from the hexa SECONDARY primaries at
 # 12/20/4 — green at the top (the Child) — with the parents' hues
 # LIGHTENED per the owner's member table ("light blue" the Father,
 # "light red" the Mother; hue tuning licensed to the agent,
@@ -889,20 +889,20 @@ _FAMILY = ("#00DC00", "#FF8080", "#7FB2FF")
 # violet is the Purple-Gray hue law's ONE purple (~#666699 — the Moon,
 # midnight, the Winter Solstice; NEVER royal purple).
 MOON_GRAY_VIOLET = "#666699"
-# GENESIS (trio cube) — the creation trio on the INVERTED triangle,
+# GENESIS (trio tertiary) — the creation trio on the INVERTED triangle,
 # tuple order following the drawn arms (offset 180°): 24h Creator in
 # the moon-gray violet, 08h Preserver in the dial's green, 16h
-# Destroyer in the dial's orange (the hexa paint hues, as the Court's
+# Destroyer in the dial's orange (the hexa primary hues, as the Court's
 # own derivation).
 _GENESIS = (MOON_GRAY_VIOLET, "#007E00", "#DC9600")
-# COUNCIL (hexa cube) — all six Double-Trinity offices at once: the
-# hexa paint wheel with the 24h arm re-dressed per the Purple-Gray hue
+# COUNCIL (hexa tertiary) — all six Double-Trinity offices at once: the
+# hexa primary wheel with the 24h arm re-dressed per the Purple-Gray hue
 # law (the Creator's arm is the Rose's violet, never royal).
 _COUNCIL = (
     "#F8E600", "#DC9600", "#B60000",
     MOON_GRAY_VIOLET, "#002FFF", "#007E00",
 )
-# CHARACTER / THE ROSE (octa cube) — the palette EXACTLY as the Rose is
+# CHARACTER / THE ROSE (octa tertiary) — the palette EXACTLY as the Rose is
 # drawn (owner seal: "kept for the beauty of the arrangement"; values
 # sampled from UV/simbolika/slike/24 ROSE (3 x octa).png): the four
 # poles wear yellow / red / moon-purple / BLUE (the Scale's own Judas-
@@ -929,11 +929,11 @@ ROSE_PALETTE = (
 ROSE_ARM_OUTLINE = "#1A1A1A"
 ROSE_ARM_OUTLINE_WIDTH = 0.0035          # of the dial radius
 PALETTE_PRESETS = {
-    ("hexa", "paint"): (
+    ("hexa", "primary"): (
         "#F8E600", "#DC9600", "#B60000",
         "#542E85", "#002FFF", "#007E00",
     ),
-    ("hexa", "light"): (
+    ("hexa", "secondary"): (
         "#00DC00", "#FFFF00", "#FF0000",
         "#BD00BD", "#0040FF", "#00DDDD",
     ),
@@ -947,38 +947,38 @@ PALETTE_PRESETS = {
     # light register death goes INTO the light; the moonlight silver
     # moved to the Unborn at 03h, the predawn mist to Birth at 06h;
     # the dawn rose retired). Both keep the day-arc.
-    ("octa", "paint"): (
+    ("octa", "primary"): (
         "#F0C420", "#C87533", "#A02020", "#7A2E8E",
         "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
     ),
-    ("octa", "light"): (
+    ("octa", "secondary"): (
         "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
         "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     ),
-    ("cross", "paint"): _CROSS_SEASONS,
-    ("cross", "light"): _CROSS_ELEMENTS,
-    ("trio", "paint"): _TRINITY,
-    ("trio", "light"): _FAMILY,
+    ("cross", "primary"): _CROSS_SEASONS,
+    ("cross", "secondary"): _CROSS_ELEMENTS,
+    ("trio", "primary"): _TRINITY,
+    ("trio", "secondary"): _FAMILY,
     # The Cube third wheels (owner seal 2026-07-26, CUBE.md).
-    ("trio", "cube"): _GENESIS,
-    ("hexa", "cube"): _COUNCIL,
-    ("octa", "cube"): ROSE_PALETTE,
+    ("trio", "tertiary"): _GENESIS,
+    ("hexa", "tertiary"): _COUNCIL,
+    ("octa", "tertiary"): ROSE_PALETTE,
     # THE ROSE (owner seal 2026-07-27, CUBE.md §The Rose): both wheels
     # wear the SAME eight hues — Legacy and Prophecy turn the star
     # GEOMETRY and the figure sets, never the colors (the Seasons
     # pointer already serves one palette under both styles). The tuple
     # is ROSE_PALETTE itself, shared with the Character wheel above:
     # one source, three readers (Rule #5).
-    ("rose", "paint"): ROSE_PALETTE,
-    ("rose", "light"): ROSE_PALETTE,
+    ("rose", "primary"): ROSE_PALETTE,
+    ("rose", "secondary"): ROSE_PALETTE,
     # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
     # paint = azure/green/yellow/orange/red, light = azure/cyan/green/
     # yellow/red; twilight left (dawn) blue, right (dusk) brown.
-    ("aurora", "paint"): (
+    ("aurora", "primary"): (
         "#002FFF", "#0080FF", "#007E00", "#F8E600", "#DC9600",
         "#BC0000", "#5D1212",
     ),
-    ("aurora", "light"): (
+    ("aurora", "secondary"): (
         "#0040FF", "#0080FF", "#00DCDC", "#00DC00", "#FFFF00",
         "#FF2828", "#720017",
     ),
@@ -991,36 +991,36 @@ PALETTE_PRESETS = {
     # the ALMANAC (Month) Dozen (wedges CENTERED on the axes; pure
     # primaries allowed): the FIRST hue fills the wedge CENTERED on the
     # top, i.e. June, then July, August … clockwise.
-    ("calendar", "paint"): (
+    ("calendar", "primary"): (
         "#40FF00", "#BFFF00", "#FFBF00", "#FF4000", "#FF0040", "#FF00C0",
         "#BF00FF", "#4000FF", "#0040FF", "#00BFFF", "#00FFBF", "#00FF40",
     ),
-    ("calendar", "light"): (
+    ("calendar", "secondary"): (
         "#00FF00", "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080",
         "#FF00FF", "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80",
     ),
 }
 
 def effective_palette_style(pointer: str, palette_style: str) -> str:
-    """The palette style AS RENDERED for this pointer: "cube" holds
-    only where the pointer actually serves a Cube wheel
-    (`constants.palette_styles_for`); everywhere else — a stored "cube"
-    left behind by a pointer switch — it normalizes to "paint". The ONE
-    normalization point (Rule #5): `app.controller.
+    """The wheel slot AS RENDERED for this pointer: "tertiary" holds
+    only where the pointer actually serves a third wheel
+    (`constants.palette_styles_for`); everywhere else — a stored
+    "tertiary" left behind by a pointer switch — it normalizes to
+    "primary". The ONE normalization point (Rule #5): `app.controller.
     apply_display_settings`, the settings dialog's palette group and
     `watch_title` all read the style through here, so no consumer ever
     indexes PALETTE_PRESETS with a pair that does not exist."""
     if palette_style in constants.palette_styles_for(pointer):
         return palette_style
-    return "paint"
+    return "primary"
 
 
 def pointer_arm_labels(pointer: str, palette_style: str) -> tuple:
     """The palette-editor arm labels for the ACTIVE wheel — the
-    Genesis wheel (trio + cube) speaks its inverted seats
-    ("trio_cube"), every other wheel its pointer's own row."""
-    if (pointer, palette_style) == ("trio", "cube"):
-        return constants.POINTER_ARM_LABELS["trio_cube"]
+    Genesis wheel (trio + tertiary) speaks its inverted seats
+    ("trio_tertiary"), every other wheel its pointer's own row."""
+    if (pointer, palette_style) == ("trio", "tertiary"):
+        return constants.POINTER_ARM_LABELS["trio_tertiary"]
     return constants.POINTER_ARM_LABELS[pointer]
 
 

@@ -62,9 +62,9 @@ golden tests. (Opus: render geometry precision — accuracy > speed.)
 ### Session 3 — Compass palette pair → **Sonnet**
 **Say:** "Radi Sesiju 3 iz WORKPLAN.md — nove octa palete iz
 CANON-a."
-**Reads:** CANON.md (Compass paint materials + Eight Ages hues);
+**Reads:** CANON.md (Compass primary materials + Eight Ages hues);
 `config/___config.md`.
-**Delivers:** `PALETTE_PRESETS` octa paint/light replaced with the
+**Delivers:** `PALETTE_PRESETS` octa primary/light replaced with the
 APPROVED hues, pin test, before/after offscreen renders for the
 owner's eyes.
 
@@ -74,10 +74,10 @@ preostale arhetipe, jedan arhetip = jedan fajl."
 **Reads:** CANON.md IN FULL; `research/prompts/___prompts.md`;
 `research/prompts/archetype/trinity_prompts.md` as the template;
 `research/bond_theme.md`.
-**Delivers:** one sheet each for Trinity light (Family + the
-Hearth), Prism light (One Soul pillars), Seasons (temperaments;
-tetramorph if approved by then), Compass paint (Walks + objects),
-Compass light (Ages + the image layer the owner picks — Tree ★ or
+**Delivers:** one sheet each for Trinity secondary (Family + the
+Hearth), Prism secondary (One Soul pillars), Seasons (temperaments;
+tetramorph if approved by then), Compass primary (Walks + objects),
+Compass secondary (Ages + the image layer the owner picks — Tree ★ or
 Menagerie). House rules: stained-glass register family, NO
 lettering in images, drop paths declared. **Run this EARLY — the
 owner generates art in parallel while later sessions code.**
@@ -108,7 +108,7 @@ estates+objects, ages+beings), with the Bible/philosopher quotes
 woven in — **ENGLISH ONLY (translation policy, owner 2026-07-16:
 no SR during development; the pre-build Translation session covers
 everything at once)**. **MANDATORY in this session:** the ~327
-`octa_paint`/`octa_light` variant paragraphs in
+`octa_primary`/`octa_secondary` variant paragraphs in
 `Database/symbolism.json` still describe the OLD compass hues
 (found in Session 3) — rewrite them to the Walks/Ages wheels.
 
@@ -287,7 +287,7 @@ candidate, and the six OPEN Character combo figures (Session 21).
 `Database/ring_presets.json` for the Rose).
 **Delivered:** (1) the THIRD-WHEEL slot — `palette_style` grew "cube"
 on trio/hexa/octa only (`constants.palette_styles_for`; a stored
-"cube" normalizes to "paint" on other pointers at ONE choke point,
+"tertiary" normalizes to "primary" on other pointers at ONE choke point,
 `defaults.effective_palette_style`, and survives the switch back) —
 the Design window's wheel row shows Court/Family/**Genesis**,
 Paint/Light/**Council**, Walks/Ages/**Character**, and the archetype
@@ -338,7 +338,7 @@ Alfred Pennyworth / Severus Snape (Devotion), Charles Xavier
 (Patronage), Steve Rogers (Conviction), Father Ferapont and Silas
 (Mortification); (5) THE THEME NAME sealed — all three kept, "One
 Soul" alone wherever one name must stand
-(`constants.PRISM_LIGHT_THEME_NAME/_TITLE`); (6) THE CHARTER REWORK
+(`constants.ONE_SOUL_THEME_NAME/_TITLE`); (6) THE CHARTER REWORK
 PASS — **21 articles** rewritten off scene description, art-asset talk
 and belles-lettres onto thesis→argument→correspondences→quote. 22 new
 pins in `tests/test_cube_encyclopedia.py`; 977 tests green.
@@ -587,15 +587,15 @@ gadget's M2 (the four models + Switcher) exists.
 - ~~Theme name~~ — SEALED 2026-07-27: the theme keeps **all three**
   names. Titled in full it is **One Soul — The Vow — The Bond**;
   wherever one name must stand alone (Design wheel row, menus, labels,
-  watch title) it is **One Soul**. `constants.PRISM_LIGHT_THEME_TITLE`
-  / `PRISM_LIGHT_THEME_NAME`; record in `research/bond_theme.md`.
-- Compass light image layer: ★ the Tree / the Menagerie (CANON).
+  watch title) it is **One Soul**. `constants.ONE_SOUL_THEME_TITLE`
+  / `ONE_SOUL_THEME_NAME`; record in `research/bond_theme.md`.
+- Compass secondary image layer: ★ the Tree / the Menagerie (CANON).
 - Seasons tetramorph persons layer: yes/no (CANON).
 - Seven archetypes stay seven (the standing recommendation) or grow
   to thirteen — 13 is the excluded number in this system.
 - Odanost as the center's day face, or on a planet seat.
 - ~~The Calendar naming~~ — SEALED: pointer **Calendar**, wheels
-  **Zodiac/Almanac** in the Paint/Light slot; no wedge medallions,
+  **Zodiac/Almanac** in the wheel slot; no wedge medallions,
   pinned 1/2/3 slots, opacity lighting, both lighting modes
   user-selectable.
 - The Academy tagline wording (CUBE.md §The Name — *"Watch the

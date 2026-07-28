@@ -78,8 +78,8 @@ class SettingsDialog(
         # (owner 2026-07-12: the box popped huge on every open although
         # the location is picked once) — armed after construction.
         self._suggestions_armed = False
-        # The style normalized for THIS pointer (a stored "cube" left
-        # behind by a pointer switch reads as "paint" — the same
+        # The style normalized for THIS pointer (a stored "tertiary" left
+        # behind by a pointer switch reads as "primary" — the same
         # normalization apply_display_settings runs, Rule #5).
         self._palette_style = defaults.effective_palette_style(
             settings.pointer, settings.palette_style

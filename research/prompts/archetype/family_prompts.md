@@ -33,7 +33,7 @@ the ARTICLES and the UI; the house rule stands: images never carry
 lettering.
 
 **Register:** the stained-glass night-window family — the same register
-as the Trinity paint glass and the Scale glass (see
+as the Trinity primary glass and the Scale glass (see
 [Trinity Prompts](trinity_prompts.md)); the three members are LANCET
 windows in their arm's LIGHT color (green top 12h / light blue 04h /
 light red 20h), the Hearth is a ROUND rosette like the Eye and the
@@ -118,7 +118,7 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 ## Status
 
 - Placement APPROVED (owner 2026-07-16): the Family rides the trio's
-  LIGHT palette — **green at the top (the Child), light blue at 04h
+  SECONDARY palette — **green at the top (the Child), light blue at 04h
   (the Father), light red at 20h (the Mother)**; the hearth-roles
   **the Shield / the Heart / the Dawn** APPROVED same day.
 - The love circuit runs COUNTER-CLOCKWISE by doctrine (the home runs

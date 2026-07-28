@@ -50,7 +50,7 @@ def app():
     return QApplication.instance() or QApplication([])
 
 
-def _skin(wheel="paint", **overrides):
+def _skin(wheel="primary", **overrides):
     return build_skin(
         dataclasses.replace(
             Settings(), pointer="rose", palette_style=wheel, **overrides
@@ -95,9 +95,9 @@ def test_the_rose_is_the_seventh_pointer_with_two_wheels():
     assert len(constants.POINTER_POINTS) == 7
     assert constants.POINTER_DISPLAY_NAMES["rose"] == "Rose"
     # Two wheels, not three — the Rose is not a Cube-wheel pointer.
-    assert constants.palette_styles_for("rose") == ("paint", "light")
+    assert constants.palette_styles_for("rose") == ("primary", "secondary")
     assert constants.POINTER_PALETTE_LABELS["rose"] == ("Legacy", "Prophecy")
-    assert "rose" not in constants.CUBE_WHEEL_POINTERS
+    assert "rose" not in constants.THIRD_WHEEL_POINTERS
 
 
 # --- The three stars ----------------------------------------------------------------
@@ -105,7 +105,7 @@ def test_the_rose_is_the_seventh_pointer_with_two_wheels():
 
 @pytest.mark.parametrize(
     "wheel,expected",
-    [("paint", (-30.0, -15.0, 0.0)), ("light", (-15.0, 15.0, 0.0))],
+    [("primary", (-30.0, -15.0, 0.0)), ("secondary", (-15.0, 15.0, 0.0))],
 )
 def test_star_offsets_and_draw_order(app, wheel, expected):
     """CUBE.md §The Rose: three octa stars 15° apart, listed in DRAW
@@ -113,7 +113,7 @@ def test_star_offsets_and_draw_order(app, wheel, expected):
     assert rose_star_offsets(_skin(wheel)) == expected
 
 
-@pytest.mark.parametrize("wheel", ["paint", "light"])
+@pytest.mark.parametrize("wheel", ["primary", "secondary"])
 def test_the_zero_star_is_always_topmost(app, wheel):
     """The dominant, fully visible arm must point at true 12h on BOTH
     wheels — the dial keeps its own axis (owner 2026-07-27: "prvobitni
@@ -124,7 +124,7 @@ def test_the_zero_star_is_always_topmost(app, wheel):
 def test_prophecy_rides_the_future_over_the_past(app):
     """Owner: on the symmetric wheel the PAST lies deepest, the FUTURE
     rides over it, the present covers both."""
-    bottom, middle, top = rose_star_offsets(_skin("light"))
+    bottom, middle, top = rose_star_offsets(_skin("secondary"))
     assert rose_star_set(bottom) == "historical"
     assert rose_star_set(middle) == "archetypal"   # +15° — the future
     assert rose_star_set(top) == "modern"
@@ -133,7 +133,7 @@ def test_prophecy_rides_the_future_over_the_past(app):
 
 def test_legacy_leans_wholly_behind_the_hour(app):
     """Legacy's myth is the DEEPEST past and lies lowest."""
-    bottom, middle, top = rose_star_offsets(_skin("paint"))
+    bottom, middle, top = rose_star_offsets(_skin("primary"))
     assert (bottom, middle, top) == (-30.0, -15.0, 0.0)
     assert rose_star_set(bottom) == "archetypal"
     assert rose_star_set(middle) == "historical"
@@ -143,7 +143,7 @@ def test_legacy_leans_wholly_behind_the_hour(app):
 def test_both_wheels_share_the_two_anchors(app):
     """Only the MYTH star moves between the wheels — Modern stays on
     the true hours, Historical one ray back."""
-    for wheel in ("paint", "light"):
+    for wheel in ("primary", "secondary"):
         offsets = rose_star_offsets(_skin(wheel))
         assert rose_star_set(0.0) == "modern"
         assert -15.0 in offsets and rose_star_set(-15.0) == "historical"
@@ -159,12 +159,12 @@ def test_the_arms_keep_the_octa_shape(app):
 # --- The palette IS the year --------------------------------------------------------
 
 
-@pytest.mark.parametrize("wheel", ["paint", "light"])
+@pytest.mark.parametrize("wheel", ["primary", "secondary"])
 def test_both_wheels_wear_the_one_rose_palette(app, wheel):
     """The wheel turns geometry and figures, never colors (Rule #5 —
     ONE tuple, shared with the Character wheel)."""
     assert palette_for(_skin(wheel)) is defaults.ROSE_PALETTE
-    assert defaults.PALETTE_PRESETS[("octa", "cube")] is defaults.ROSE_PALETTE
+    assert defaults.PALETTE_PRESETS[("octa", "tertiary")] is defaults.ROSE_PALETTE
     assert len(defaults.ROSE_PALETTE) == 8
 
 
@@ -209,7 +209,7 @@ def test_the_sabbath_axis_keeps_the_cube_pole_partners():
 
 
 def test_the_weekday_seats_follow_the_colour_law(app):
-    """CUBE.md §The weekday law: the seat is the HUE. Prism paint's
+    """CUBE.md §The weekday law: the seat is the HUE. Prism primary's
     canon with the two Sunday hues lightened, because Sunday needs
     blue and red for its own two faces."""
     hues = defaults.ROSE_PALETTE
@@ -385,7 +385,7 @@ def test_daylight_off_paints_the_whole_star(app):
 # --- The drawn star -----------------------------------------------------------------
 
 
-@pytest.mark.parametrize("wheel", ["paint", "light"])
+@pytest.mark.parametrize("wheel", ["primary", "secondary"])
 def test_every_hue_of_every_star_reaches_the_dial(app, wheel):
     """Offscreen pin: the three stars really paint — all eight hues
     show, on both wheels, with the daylight law off so the night half

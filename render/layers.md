@@ -66,7 +66,7 @@ bodies on three arms) show only the priority winner: the occupant whose
 weekday comes NEXT from today — today itself always wins
 (`visible_occupant`). Each pointer draws with its palette preset
 (`PALETTE_PRESETS[(pointer, palette_style)]`): hexa and octa ship
-"paint" and "light" versions (subtractive vs additive primaries,
+"primary" and "secondary" versions (subtractive vs additive primaries,
 measured from the owner's art), the cross a single seasons palette
 (summer yellow top, autumn red right, winter blue bottom, spring green
 left) — and the three Cube pointers (trio/hexa/octa) a THIRD, "cube"
@@ -79,14 +79,14 @@ wheel each (owner seal 2026-07-26,
 
 The `"cube"` palette style is the Cube canon's third wheel — Genesis
 (trio), the Council (hexa), Character (octa); `defaults.
-effective_palette_style` normalizes it to "paint" on every other
+effective_palette_style` normalizes it to "primary" on every other
 pointer before any consumer here sees it. Three pure helpers carry the
 whole geometry (Rule #5 — StarLayer, the Aura wedges, the weekday
 slots, the lit-index math and the compositor's arm hit-test all read
 through them):
 
 - **`arm_offset_deg(skin)`** — THE GENESIS INVERSION (owner: *"trougao
-  ka dole"*): 180° on the trio's cube wheel, 0 everywhere else. The
+  ka dole"*): 180° on the trio's tertiary wheel, 0 everywhere else. The
   trio's arms, Aura hues, weekday slots and hour-spaces all swing onto
   24h/16h/08h together; `archetype_lit_index` grew a matching
   `offset` parameter. `weekday_slots(skin)` applies it to
@@ -94,8 +94,8 @@ through them):
   glued to its arm as it swings (no re-pairing doctrine invented).
 - **`cube_look_active(skin)`** — the Diamond/Cube display toggle
   (`Settings.cube_look`, CUBE.md §Display laws) gates on the
-  Double-Trinity FAMILY wheels only: the Court (trio paint), Genesis
-  (trio cube), the Council (hexa cube) — `constants.CUBE_LOOK_WHEELS`.
+  Double-Trinity FAMILY wheels only: the Court (trio primary), Genesis
+  (trio tertiary), the Council (hexa tertiary) — `constants.CUBE_LOOK_WHEELS`.
 - **`arm_half_deg(skin)`** — the DRAWN half-angle: the pointer's slim
   owner value, EXCEPT under the active Cube look where it widens to
   the regular `180/N` — and the standing star formula
@@ -108,7 +108,7 @@ through them):
 
 The cube palettes live in `defaults.PALETTE_PRESETS`: Genesis
 `(#666699, #007E00, #DC9600)` (the Purple-Gray hue law's moon-gray
-violet — NEVER royal purple), the Council the hexa paint wheel with
+violet — NEVER royal purple), the Council the hexa primary wheel with
 the 24h arm re-dressed to that same violet, and Character =
 `defaults.ROSE_PALETTE` — the palette EXACTLY as the Rose is drawn
 (sealed; ONE tuple rules the Character wheel and BOTH wheels of the
@@ -286,7 +286,7 @@ ARCHETYPE CLOCK. The machinery:
   the cached composite, owner 2026-07-17 ROADMAP 15f; at the weekday_set
   z spot): the figures at the romb center (`weekday_body_orbit`), EACH
   sized by its OWN art via `archetype_figure_size` (a layout can mix
-  circle and portrait figures — e.g. Prism paint's reused Scale glass
+  circle and portrait figures — e.g. Prism primary's reused Scale glass
   next to the Person lancets) with the arm color visible around them;
   the lit figure FULL, the rest at the weekday `ghost_opacity`; the
   reveal window turns everything full. With `skin.archetype_names` on

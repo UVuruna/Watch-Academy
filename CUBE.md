@@ -918,7 +918,7 @@ and three creative — **the two corners of one cube**.
 | 16h | orange | **the Devil** | — | **Destroyer** |
 
 - The upward triangle (12·04·20 — yellow, blue, red) is **the
-  Court** — the Trinity paint archetype that already exists.
+  Court** — the Trinity primary archetype that already exists.
 - The downward triangle (24·08·16 — purple, green, orange) is the
   NEW creation wheel: God who makes, Jesus who keeps, the Devil who
   unmakes. **Judgment precedes Transformation** — the Court decides
@@ -1159,7 +1159,7 @@ axes, the fourth is Sunday's.
 
 The weekday bodies ride their **badges, as always** — never painted
 into the diamonds. Their seats follow the color law, which is the
-Prism paint canon with the two Sunday hues lightened:
+Prism primary canon with the two Sunday hues lightened:
 
 | THU yellow 12h | TUE orange 15h | **SUN Ruler red 18h** | FRI rose 21h | WED purple 24h | MON cyan 03h | **SUN Servant blue 06h** | SAT green 09h |
 |---|---|---|---|---|---|---|---|

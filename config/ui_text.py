@@ -5,8 +5,8 @@ labels, tray balloons, hover-legend labels and the name tables. The
 ENGLISH string itself is the key — the corpus entry is `ui/<text>`
 (data/translations.py) and `ui(overlay, text)` returns the active
 language's version, English being the shipped source. Protected brand
-terms (Watch Academy, DOMY, Trinity/Seasons/Prism/Compass, Paint/Light,
-Umbra, Aura, Flame/Chalice/Seal…) stay English inside translated
+terms (Watch Academy, DOMY, Trinity/Seasons/Prism/Compass, the wheel
+names, Umbra, Aura, Flame/Chalice/Seal…) stay English inside translated
 sentences.
 """
 
@@ -51,19 +51,23 @@ UI_STRINGS: tuple[str, ...] = (
     "Gods", "Zodiac", "Themes", "Creeds & Mysteries",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",
     "Full contrast", "Half contrast", "Light contrast", "Dark contrast",
-    "Paint palette", "Light palette",
+    # The GENERIC wheel labels (owner decree 2026-07-28): the slot is
+    # POSITIONAL, so its fallback labels count three — one per position —
+    # instead of the old "Paint palette"/"Light palette" pair, which both
+    # named a color doctrine the wheels stopped obeying and left the third
+    # position without a label at all.
+    "Primary palette", "Secondary palette", "Tertiary palette",
     # Wheel-pair naming refinements (owner 2026-07-17, ROADMAP 15e): the
     # Seasons pair is Temperaments/Elements, Aurora's own pair is Warm/Cool.
     # The full pair set joined the corpus 2026-07-19 (a pre-existing gap)
     # with the owner's "Walks of Life" pick (the full idiom, never caste).
     "Temperaments", "Warm", "Cool",
     "Court", "Family", "Walks of Life", "Ages",
-    # The hexa PAINT wheel's own name (owner "ok.", 2026-07-27): the
-    # Prism paint wheel is the PERSONS (CANON.md), no longer labelled
-    # with the generic "Paint palette" default.
+    # The hexa PRIMARY wheel's own name (owner "ok.", 2026-07-27): the
+    # Prism's first wheel is the PERSONS (CANON.md), never a generic label.
     "Persons",
     # The Calendar pointer (owner 2026-07-16): the wheel pair riding
-    # the Paint/Light slot, and its two lighting modes.
+    # the two slots, and its two lighting modes.
     "Calendar", "Almanac",
     "Light the hour (shichen)", "Light the month/sign",
     "Gold letters", "Silver letters", "Thematic letters",

@@ -82,7 +82,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. Calm deep green and soft gold glass, slow and unhurried. Center: a still figure seated beside a candle that burns steady and unhurried, a slow river passing behind, no strain in the face — good temper, the right measure of anger held long and released rarely. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: calm green, soft gold, steady warm light, bright lead. NO lettering anywhere.
 ```
 
-**Truthfulness — the root of the light wheel** → `assets/calendars/virtues/primary/colored/Truthfulness.png`
+**Truthfulness — the root of the secondary wheel** → `assets/calendars/virtues/primary/colored/Truthfulness.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of LIGHT passing through — luminous, additive. PERFECTLY CLEAR uncolored glass and white light, the truth shown as the only glass that does not color what passes through it. Center: a single pane of flawless clear glass held up to a plain white light, nothing hidden behind it, a level plumb-line hanging dead straight beside it — honesty about oneself, claiming exactly what one is. Border: the shared Mean leadwork rim, the beam LEVEL, bright clear lead. Palette: clear uncolored glass, pure white light, faint silver, bright lead. NO lettering anywhere.
@@ -158,7 +158,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Bilious jaundice green-yellow and sour glass, curdled and cold. Center: a shrunken figure glaring sideways at another's DESERVED good fortune, a green sickness running out from its own chest, a hand half-reaching to spoil what it cannot have — the excess of Just Indignation, grief at good fortune that was in fact earned. Border: the shared Mean leadwork rim, the beam TILTED to excess, tarnished lead. Palette: bilious green-yellow, sour curdled tone, cold shadow, tarnished lead. NO lettering anywhere.
 ```
 
-**Cowardice — the root of the paint wheel** → `assets/calendars/vices/primary/colored/Cowardice.png`
+**Cowardice — the root of the primary wheel** → `assets/calendars/vices/primary/colored/Cowardice.png`
 
 ```
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame, made of heavy PAINT that BLOCKS the light — thick, opaque, subtractive. Cold drained gray-blue glass, colorless and dead, the light choked out. Center: a figure fled and cowering behind a dropped shield at the very base of the disc, back turned to a threat, a spear cast away in the dirt, all courage gone gray — the deficiency of Courage, sunk directly beneath Courage's own crowning light on the far side of the wheel. Border: the shared Mean leadwork rim, the beam TILTED hard to deficiency, tarnished lead. Palette: drained gray-blue, dead pallor, choked shadow, corroded lead. NO lettering anywhere.
@@ -204,7 +204,7 @@ round brief named is **Courage crown / Cowardice root** — and the
 cleanest way to honour it, and the one proposed here, is the
 **paint-is-light-inverted-through-the-center** reading:
 
-> The LIGHT wheel seats the twelve virtues; the PAINT wheel is the SAME
+> The SECONDARY wheel seats the twelve virtues; the PRIMARY wheel is the SAME
 > wheel read as its own shadow, so **every virtue's vice sits
 > diametrically opposite its virtue** — the shadow falling at the far
 > pole. Courage crowns the light at 12h; its vice Cowardice therefore
@@ -232,8 +232,8 @@ Proposed seating (LIGHT register, clockwise from the crown):
 The paint column simply lists, at each hour, the vice of the virtue
 seated OPPOSITE it — so the two registers occupy one wheel, twelve
 seats, read two ways. Two happy consequences fall out for free:
-**Truthfulness roots the light wheel while its own lie, Boastfulness,
-crowns the paint wheel** (the truth at the bottom of the day, the boast
+**Truthfulness roots the secondary wheel while its own lie, Boastfulness,
+crowns the primary wheel** (the truth at the bottom of the day, the boast
 at the top of the shadow); and the crown-root vertical carries
 **Courage over Cowardice** in each register's own reading.
 

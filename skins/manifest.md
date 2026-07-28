@@ -25,7 +25,7 @@ the ring preset and the user's display choices onto it at build time.
   "calendar" — "rose" is the seventh, three octa stars 15° apart, owner
   2026-07-27, CUBE.md §The Rose), `umbra_form` ("fine" |
   "coarse" | "gradient"), `umbra_contrast` ("full" | "half"),
-  `palette_style` ("paint" | "light" | "cube" — the third is the Cube
+  `palette_style` ("primary" | "secondary" | "tertiary" — the third is the Cube
   canon's wheel, Genesis/Council/Character on trio/hexa/octa ONLY
   (owner seal 2026-07-26, CUBE.md; `defaults.effective_palette_style`
   normalizes it away elsewhere); on the Calendar pointer the style

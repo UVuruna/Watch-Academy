@@ -354,28 +354,28 @@ def test_no_center_seat_means_no_thirteenth_forced():
 
 
 def test_zodiac_wheel_claims_ophiuchus():
-    skin = _calendar_skin(palette_style="paint", calendar_mount="off")
+    skin = _calendar_skin(palette_style="primary", calendar_mount="off")
     day, _tick = _day_tick(datetime(2026, 12, 5, 12, 0))
     assert "ophiuchus" in day.thirteenth_candidates
     assert active_thirteenth(skin, day) == "ophiuchus"
 
 
 def test_almanac_wheel_claims_sol():
-    skin = _calendar_skin(palette_style="light", calendar_mount="off")
+    skin = _calendar_skin(palette_style="secondary", calendar_mount="off")
     day, _tick = _day_tick(datetime(2026, 7, 8, 12, 0))
     assert "sol" in day.thirteenth_candidates
     assert active_thirteenth(skin, day) == "sol"
 
 
 def test_months_mount_claims_modrenik():
-    skin = _calendar_skin(palette_style="paint", calendar_mount="months")
+    skin = _calendar_skin(palette_style="primary", calendar_mount="months")
     day, _tick = _day_tick(datetime(2026, 12, 19, 12, 0))   # past Ophiuchus's close
     assert "modrenik" in day.thirteenth_candidates
     assert active_thirteenth(skin, day) == "modrenik"
 
 
 def test_chinese_mount_claims_the_cat():
-    skin = _calendar_skin(palette_style="light", calendar_mount="chinese")
+    skin = _calendar_skin(palette_style="secondary", calendar_mount="chinese")
     day, _tick = _day_tick(datetime(2025, 8, 1, 12, 0))
     assert "chinese" in day.thirteenth_candidates
     assert active_thirteenth(skin, day) == "chinese"
@@ -385,7 +385,7 @@ def test_zodiac_mount_names_no_thirteenth_of_its_own():
     """calendar_mount == "zodiac" names no 13th (Ophiuchus already
     belongs to the WHEEL, not the mount) — resolution falls through to
     the wheel exactly like "off"."""
-    skin = _calendar_skin(palette_style="paint", calendar_mount="zodiac")
+    skin = _calendar_skin(palette_style="primary", calendar_mount="zodiac")
     day, _tick = _day_tick(datetime(2026, 12, 5, 12, 0))
     assert active_thirteenth(skin, day) == "ophiuchus"
 
@@ -400,16 +400,16 @@ def test_mount_outranks_the_wheel_when_both_claim():
     the mount is the more deliberate second choice, so it wins."""
     day, _tick = _day_tick(datetime(2026, 12, 13, 12, 0))
     assert {"ophiuchus", "modrenik"} <= day.thirteenth_candidates
-    zodiac_only = _calendar_skin(palette_style="paint", calendar_mount="off")
+    zodiac_only = _calendar_skin(palette_style="primary", calendar_mount="off")
     assert active_thirteenth(zodiac_only, day) == "ophiuchus"
-    with_months_mount = _calendar_skin(palette_style="paint", calendar_mount="months")
+    with_months_mount = _calendar_skin(palette_style="primary", calendar_mount="months")
     assert active_thirteenth(with_months_mount, day) == "modrenik"
 
 
 def test_no_thirteenth_on_the_calendar_pointer_off_its_own_window():
     """The Calendar pointer alone is not enough — the date must still
     fall inside the claiming member's own trigger+window."""
-    skin = _calendar_skin(palette_style="paint", calendar_mount="off")
+    skin = _calendar_skin(palette_style="primary", calendar_mount="off")
     day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
     assert day.thirteenth_candidates == frozenset()
     assert active_thirteenth(skin, day) is None
@@ -419,7 +419,7 @@ def test_no_thirteenth_on_the_calendar_pointer_off_its_own_window():
 
 
 def test_ophiuchus_hover_and_encyclopedia_target(app):
-    skin = _calendar_skin(palette_style="paint", calendar_mount="off")
+    skin = _calendar_skin(palette_style="primary", calendar_mount="off")
     day, tick = _day_tick(datetime(2026, 12, 5, 12, 0))
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
@@ -431,7 +431,7 @@ def test_ophiuchus_hover_and_encyclopedia_target(app):
 
 
 def test_sol_hover_and_encyclopedia_target(app):
-    skin = _calendar_skin(palette_style="light", calendar_mount="off")
+    skin = _calendar_skin(palette_style="secondary", calendar_mount="off")
     day, tick = _day_tick(datetime(2026, 7, 8, 12, 0))
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
@@ -443,7 +443,7 @@ def test_sol_hover_and_encyclopedia_target(app):
 
 
 def test_modrenik_hover_and_encyclopedia_target(app):
-    skin = _calendar_skin(palette_style="paint", calendar_mount="months")
+    skin = _calendar_skin(palette_style="primary", calendar_mount="months")
     day, tick = _day_tick(datetime(2026, 12, 19, 12, 0))
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)
@@ -453,7 +453,7 @@ def test_modrenik_hover_and_encyclopedia_target(app):
 
 
 def test_cat_hover_and_encyclopedia_target(app):
-    skin = _calendar_skin(palette_style="light", calendar_mount="chinese")
+    skin = _calendar_skin(palette_style="secondary", calendar_mount="chinese")
     day, tick = _day_tick(datetime(2025, 8, 1, 12, 0))
     comp = Compositor(skin, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)

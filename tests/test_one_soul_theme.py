@@ -12,8 +12,8 @@ Pins what this round sealed:
    header) and its title PAGE both read the full "One Soul — The Vow —
    The Bond", while the gallery CARD, being a label, reads "One Soul".
 3. THE HALL — the theme is The Archetypes' fourth card, not a separate
-   pointer: the prism-LIGHT wheel already IS its wheel.
-4. THE SPACEBAR CONTRACT — every prism_light arm AND the centre jump to
+   pointer: the prism-SECONDARY wheel already IS its wheel.
+4. THE SPACEBAR CONTRACT — every prism_secondary arm AND the centre jump to
    their own page, by the index `config/archetypes.py` declares.
 5. NO DUPLICATED PROSE (Rule #5) — the dial's per-arm hover articles are
    untouched; these pages argue the doctrine instead.
@@ -48,11 +48,11 @@ def test_the_one_soul_family_is_complete_and_in_wheel_order():
     the theme's own title page — nine in all."""
     family = _family()
     assert list(family) == [
-        constants.PRISM_LIGHT_THEME_TITLE, *_PILLARS,
+        constants.ONE_SOUL_THEME_TITLE, *_PILLARS,
         "The Union", "The Child",
     ]
-    # The pillar order IS the wheel's figure order (CANON §Prism light).
-    assert [figure["name"] for figure in archetypes.figures("prism_light")] \
+    # The pillar order IS the wheel's figure order (CANON §Prism secondary).
+    assert [figure["name"] for figure in archetypes.figures("prism_secondary")] \
         == list(_PILLARS)
 
 
@@ -74,7 +74,7 @@ def test_the_theme_argues_its_doctrine_not_its_seats():
     conjugation law, the three axes of love with their cross-cures, the
     union's two faces and the family triangle."""
     repo = EncyclopediaRepository()
-    title = repo.entry("one_soul", constants.PRISM_LIGHT_THEME_TITLE)["base"]
+    title = repo.entry("one_soul", constants.ONE_SOUL_THEME_TITLE)["base"]
     # The conjugation law — the theme's whole engine.
     assert "honesty is a trait of the individual" in title
     assert "conjugated" in title
@@ -129,9 +129,9 @@ def test_the_triple_name_is_what_the_reader_sees():
     from app.encyclopedia import _topics
 
     topic = _topics()["one_soul"]
-    assert topic["title"] == constants.PRISM_LIGHT_THEME_TITLE
-    assert topic["entries"][0]["name"] == constants.PRISM_LIGHT_THEME_TITLE
-    assert topic["tile_title"] == constants.PRISM_LIGHT_THEME_NAME
+    assert topic["title"] == constants.ONE_SOUL_THEME_TITLE
+    assert topic["entries"][0]["name"] == constants.ONE_SOUL_THEME_TITLE
+    assert topic["tile_title"] == constants.ONE_SOUL_THEME_NAME
 
 
 def test_the_theme_opens_on_its_triple_title_in_a_live_dialog():
@@ -143,7 +143,7 @@ def test_the_theme_opens_on_its_triple_title_in_a_live_dialog():
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog(initial_topic="one_soul", initial_entry=0)
-    assert dialog._title.text() == constants.PRISM_LIGHT_THEME_TITLE
+    assert dialog._title.text() == constants.ONE_SOUL_THEME_TITLE
     assert dialog._counter.text() == "1 / 9"
     # And every page turns without a crash, plate or no plate.
     for _ in range(9):
@@ -152,7 +152,7 @@ def test_the_theme_opens_on_its_triple_title_in_a_live_dialog():
 
 
 def test_the_one_soul_wheel_jumps_arm_by_arm_and_from_the_centre():
-    """THE SPACEBAR CONTRACT: every prism_light figure's `enc` lands on
+    """THE SPACEBAR CONTRACT: every prism_secondary figure's `enc` lands on
     its own pillar page, and the centre — the first archetype centre
     with a page at all — lands on the Union."""
     from app.encyclopedia import _topics
@@ -160,11 +160,11 @@ def test_the_one_soul_wheel_jumps_arm_by_arm_and_from_the_centre():
     names = [
         entry["name"] for entry in _topics()["one_soul"]["entries"]
     ]
-    for figure in archetypes.figures("prism_light"):
+    for figure in archetypes.figures("prism_secondary"):
         topic, index = figure["enc"]
         assert topic == "one_soul", figure["entity"]
         assert names[index] == figure["name"], figure["entity"]
-    centre = archetypes.center("prism_light")
+    centre = archetypes.center("prism_secondary")
     assert centre["enc"] == ("one_soul", 7)
     assert names[7] == centre["name"]
 
@@ -177,7 +177,7 @@ def test_the_hover_articles_are_untouched_and_never_duplicated():
     hover_rows = set()
     for entity in ("gratitude", "support", "passion", "tolerance",
                    "trust", "respect", "center"):
-        node = symbolism.archetype_article("archetype_prism_light", entity)
+        node = symbolism.archetype_article("archetype_prism_secondary", entity)
         assert node["rows"]
         assert archetypes.ARCHETYPE_PENDING_LINE not in " ".join(node["rows"])
         hover_rows.update(node["rows"])

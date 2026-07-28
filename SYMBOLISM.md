@@ -57,7 +57,7 @@ DOMY's two palette styles are exactly these two worlds:
 - **paint** — the pigment wheel (the world of matter, the ancients);
 - **light** — the RGB+CMY wheel (the world of energy, Newton).
 
-The HEXA PAINT palette is the symbolic canon: everything below binds
+The HEXA PRIMARY palette is the symbolic canon: everything below binds
 to it first. The light palettes and the octa palettes inherit the same
 positional meanings with adapted hues.
 
@@ -415,7 +415,7 @@ shared nuance step.
 
 The light palettes keep every positional meaning (the moods, the axes)
 and translate the hues into the prism's world: RGB + CMY for the hexa.
-The octa's light preset is its own bespoke wheel — the Eight Ages (see
+The octa's secondary preset is its own bespoke wheel — the Eight Ages (see
 above) — rather than a straight RGB translation of the paint hues.
 Paint is how the ancients painted the week; light is how Newton would
 have projected it. Same week, two readings.
@@ -437,7 +437,7 @@ Afternoon, Evening, Dusk).
 
 ## Layer Reference Tables
 
-The full weave, one arm per row (hexa paint canon):
+The full weave, one arm per row (hexa primary canon):
 
 | Day | Body | Greek | Norse | Religion | Color | Hour mood | Virtue | Vice | Profession |
 |---|---|---|---|---|---|---|---|---|---|

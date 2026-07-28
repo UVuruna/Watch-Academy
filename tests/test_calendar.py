@@ -70,22 +70,22 @@ def _calendar_skin(**kw):
 def test_calendar_palettes_pin_the_two_wheels():
     """The twelve hues of each wheel, clockwise from the top wedge —
     Zodiac (paint) opens on Cancer, Almanac (light) on June."""
-    assert defaults.PALETTE_PRESETS[("calendar", "paint")] == (
+    assert defaults.PALETTE_PRESETS[("calendar", "primary")] == (
         "#40FF00", "#BFFF00", "#FFBF00", "#FF4000", "#FF0040", "#FF00C0",
         "#BF00FF", "#4000FF", "#0040FF", "#00BFFF", "#00FFBF", "#00FF40",
     )
-    assert defaults.PALETTE_PRESETS[("calendar", "light")] == (
+    assert defaults.PALETTE_PRESETS[("calendar", "secondary")] == (
         "#00FF00", "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080",
         "#FF00FF", "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80",
     )
     # Both wheels carry exactly twelve hues (the palette-length invariant).
-    for style in ("paint", "light"):
+    for style in ("primary", "secondary"):
         assert len(defaults.PALETTE_PRESETS[("calendar", style)]) == 12
 
 
 def test_calendar_wheel_follows_the_palette_style():
-    assert calendar_wheel(_calendar_skin(palette_style="paint")) == "zodiac"
-    assert calendar_wheel(_calendar_skin(palette_style="light")) == "almanac"
+    assert calendar_wheel(_calendar_skin(palette_style="primary")) == "zodiac"
+    assert calendar_wheel(_calendar_skin(palette_style="secondary")) == "almanac"
 
 
 def test_wedge_bounds_place_the_top_wedge():
@@ -166,11 +166,11 @@ def test_shichen_horse_wedge_lights_at_noon(app):
     Almanac that is the Horse wedge (index 0, the top), on the Zodiac the
     12h-14h wedge the hour hand sits in (index 0)."""
     day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    almanac = _calendar_skin(palette_style="light", calendar_lighting="hour")
+    almanac = _calendar_skin(palette_style="secondary", calendar_lighting="hour")
     assert calendar_lit_index(almanac, "hour", tick.hour_angle, day) == 0
     # Index 0 on the Almanac is the Horse (the noon watch).
     assert constants.CHINESE_ANIMALS[(0 - 6) % 12] == "Horse"
-    zodiac = _calendar_skin(palette_style="paint", calendar_lighting="hour")
+    zodiac = _calendar_skin(palette_style="primary", calendar_lighting="hour")
     assert calendar_lit_index(zodiac, "hour", tick.hour_angle, day) == 0
 
 
@@ -179,9 +179,9 @@ def test_year_lighting_picks_the_month_and_sign(app):
     Zodiac the current SIGN's — July 2026 = wedge 1 (July) / Cancer
     (index 0, sign Cancer runs to ~22 July)."""
     day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    almanac = _calendar_skin(palette_style="light", calendar_lighting="year")
+    almanac = _calendar_skin(palette_style="secondary", calendar_lighting="year")
     assert calendar_lit_index(almanac, "year", tick.hour_angle, day) == 1
-    zodiac = _calendar_skin(palette_style="paint", calendar_lighting="year")
+    zodiac = _calendar_skin(palette_style="primary", calendar_lighting="year")
     index = calendar_lit_index(zodiac, "year", tick.hour_angle, day)
     names = [name for name, _ in constants.ZODIAC_SIGNS]
     assert names[index] == day.zodiac_name
@@ -191,7 +191,7 @@ def test_lighting_mode_switch_changes_the_lit_wedge(app):
     """The two modes really select different wedges away from noon:
     mid-afternoon the hour wedge is not the month wedge."""
     day, tick = _day_tick(app, datetime(2026, 7, 16, 16, 30))
-    skin = _calendar_skin(palette_style="light")
+    skin = _calendar_skin(palette_style="secondary")
     by_hour = calendar_lit_index(skin, "hour", tick.hour_angle, day)
     by_year = calendar_lit_index(skin, "year", tick.hour_angle, day)
     assert by_hour != by_year
@@ -225,7 +225,7 @@ def test_calendar_renders_and_the_hover_reads_the_wheel(app):
     Almanac names the month + double-hour animal, the Zodiac the sign +
     dates."""
     day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
-    for style in ("paint", "light"):
+    for style in ("primary", "secondary"):
         skin = _calendar_skin(palette_style=style)
         comp = Compositor(skin, AssetCache())
         image = comp.render_offscreen(360.0, 1.0, day, tick)
@@ -233,7 +233,7 @@ def test_calendar_renders_and_the_hover_reads_the_wheel(app):
         assert image.pixelColor(180, 120).alpha() > 0        # a wedge painted
     # Almanac wedge hover at the top (June/July border region): probe the
     # top wedge center — the month + animal answer.
-    almanac = Compositor(_calendar_skin(palette_style="light"), AssetCache())
+    almanac = Compositor(_calendar_skin(palette_style="secondary"), AssetCache())
     almanac.render_offscreen(360.0, 1.0, day, tick)
     top = almanac.tooltip_at(180.0, 120.0, 360.0)            # inside the top wedge
     assert top is not None and "June" in top and "Horse" in top
@@ -244,7 +244,7 @@ def test_calendar_renders_and_the_hover_reads_the_wheel(app):
     assert "<img" in top and "raster_cache" in top
     # Zodiac wedge hover at the top: Cancer with its dates + the sign's
     # COLORED LOGO art.
-    zodiac = Compositor(_calendar_skin(palette_style="paint"), AssetCache())
+    zodiac = Compositor(_calendar_skin(palette_style="primary"), AssetCache())
     zodiac.render_offscreen(360.0, 1.0, day, tick)
     top_sign = zodiac.tooltip_at(200.0, 120.0, 360.0)        # top-right wedge
     assert top_sign is not None and (
@@ -261,13 +261,13 @@ def test_spacebar_encyclopedia_target_maps_the_hovered_wheel(app):
     tooltip text)."""
     day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
     almanac = Compositor(
-        _calendar_skin(palette_style="light", legend=False), AssetCache()
+        _calendar_skin(palette_style="secondary", legend=False), AssetCache()
     )
     almanac.render_offscreen(360.0, 1.0, day, tick)
     assert almanac.tooltip_at(180.0, 120.0, 360.0) is None     # legend off
     # The top Almanac wedge is the Horse double-hour → Chinese entry 6.
     assert almanac.encyclopedia_target(180.0, 120.0, 360.0) == ("chinese", 6)
-    zodiac = Compositor(_calendar_skin(palette_style="paint"), AssetCache())
+    zodiac = Compositor(_calendar_skin(palette_style="primary"), AssetCache())
     zodiac.render_offscreen(360.0, 1.0, day, tick)
     topic, index = zodiac.encyclopedia_target(200.0, 120.0, 360.0)
     assert topic == "astrology" and 0 <= index < 12
@@ -377,7 +377,7 @@ def test_calendar_mount_renders_and_a_mark_hover_outranks_the_wedge(app):
         return radius + point.x(), radius + point.y()
 
     zodiac = Compositor(
-        _calendar_skin(palette_style="paint", calendar_mount="zodiac"),
+        _calendar_skin(palette_style="primary", calendar_mount="zodiac"),
         AssetCache(),
     )
     zodiac.render_offscreen(360.0, 1.0, day, tick)
@@ -386,7 +386,7 @@ def test_calendar_mount_renders_and_a_mark_hover_outranks_the_wedge(app):
     assert text is not None and "Cancer" in text and "<img" in text
 
     months = Compositor(
-        _calendar_skin(palette_style="light", calendar_mount="months"),
+        _calendar_skin(palette_style="secondary", calendar_mount="months"),
         AssetCache(),
     )
     months.render_offscreen(360.0, 1.0, day, tick)
@@ -472,7 +472,7 @@ def test_chinese_mount_renders_and_hover_names_the_animal(app):
     day, tick = _day_tick(app, datetime(2026, 7, 16, 12, 15))
     radius = 180.0
     chinese = Compositor(
-        _calendar_skin(palette_style="light", calendar_mount="chinese"),
+        _calendar_skin(palette_style="secondary", calendar_mount="chinese"),
         AssetCache(),
     )
     chinese.render_offscreen(360.0, 1.0, day, tick)

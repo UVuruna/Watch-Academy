@@ -62,7 +62,7 @@ def _dt(when: datetime):
     return day, build_tick_state(now, day)
 
 
-def _archetype_skin(pointer: str, style: str = "paint", **kw):
+def _archetype_skin(pointer: str, style: str = "primary", **kw):
     return dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer=pointer, palette_style=style,
         archetype_mode=True, solar_rotation=False, **kw,
@@ -88,24 +88,24 @@ def test_grid_covers_the_twelve_archetypes():
     PROPHECY reads the 3D system, the Cube's eight vertices. Aurora
     and the Calendar have none."""
     assert set(archetypes.ARCHETYPE_GRID.values()) == {
-        "trinity_paint", "trinity_light", "seasons_paint", "seasons_light",
-        "prism_paint", "prism_light", "compass_paint", "compass_light",
+        "trinity_primary", "trinity_secondary", "seasons_primary", "seasons_secondary",
+        "prism_primary", "prism_secondary", "compass_primary", "compass_secondary",
         "trinity_genesis", "prism_council", "compass_character",
         "rose_vertices",
     }
-    assert archetypes.grid_key("cross", "paint") == "seasons_paint"
-    assert archetypes.grid_key("cross", "light") == "seasons_light"
-    assert archetypes.grid_key("trio", "cube") == "trinity_genesis"
-    assert archetypes.grid_key("hexa", "cube") == "prism_council"
-    assert archetypes.grid_key("octa", "cube") == "compass_character"
+    assert archetypes.grid_key("cross", "primary") == "seasons_primary"
+    assert archetypes.grid_key("cross", "secondary") == "seasons_secondary"
+    assert archetypes.grid_key("trio", "tertiary") == "trinity_genesis"
+    assert archetypes.grid_key("hexa", "tertiary") == "prism_council"
+    assert archetypes.grid_key("octa", "tertiary") == "compass_character"
     # THE ROSE's two wheels — Legacy shares the Character set, Prophecy
     # owns the vertices; the Rose has no third wheel.
-    assert archetypes.grid_key("rose", "paint") == "compass_character"
-    assert archetypes.grid_key("rose", "light") == "rose_vertices"
-    assert archetypes.grid_key("rose", "cube") is None
-    assert archetypes.grid_key("cross", "cube") is None
-    assert archetypes.grid_key("aurora", "paint") is None
-    assert archetypes.grid_key("calendar", "light") is None
+    assert archetypes.grid_key("rose", "primary") == "compass_character"
+    assert archetypes.grid_key("rose", "secondary") == "rose_vertices"
+    assert archetypes.grid_key("rose", "tertiary") is None
+    assert archetypes.grid_key("cross", "tertiary") is None
+    assert archetypes.grid_key("aurora", "primary") is None
+    assert archetypes.grid_key("calendar", "secondary") is None
     for pointer in ("trio", "cross", "hexa", "octa", "rose"):
         assert archetypes.has_archetype(pointer)
     for pointer in ("aurora", "calendar"):
@@ -162,7 +162,7 @@ def test_figure_order_matches_the_hour_spaces():
         step = 360.0 / arms
         offset = (
             constants.GENESIS_ARM_OFFSET_DEG
-            if (pointer, style) == ("trio", "cube") else 0.0
+            if (pointer, style) == ("trio", "tertiary") else 0.0
         )
         assert [fig["angle"] for fig in figs] == [
             (offset + k * step) % 360.0 for k in range(arms)
@@ -172,17 +172,17 @@ def test_figure_order_matches_the_hour_spaces():
 
 
 def test_center_table_is_the_sealed_one():
-    """Owner seal 2026-07-16: Eye (Trinity paint), Hearth (Trinity
-    light), Seal (Prism paint), Union (Prism light), Throne (Seasons,
+    """Owner seal 2026-07-16: Eye (Trinity primary), Hearth (Trinity
+    light), Seal (Prism primary), Union (Prism secondary), Throne (Seasons,
     both wheels), Compass — none."""
-    assert archetypes.center("trinity_paint")["file"].name == "Providence_Eye.png"
-    assert archetypes.center("trinity_light")["file"].name == "Hearth.png"
-    assert archetypes.center("prism_paint")["file"].name == "Seal.png"
-    assert archetypes.center("prism_light")["file"].name == "Union.png"
-    assert archetypes.center("seasons_paint")["file"].name == "Throne.png"
-    assert archetypes.center("seasons_light")["file"].name == "Throne.png"
-    assert archetypes.center("compass_paint") is None
-    assert archetypes.center("compass_light") is None
+    assert archetypes.center("trinity_primary")["file"].name == "Providence_Eye.png"
+    assert archetypes.center("trinity_secondary")["file"].name == "Hearth.png"
+    assert archetypes.center("prism_primary")["file"].name == "Seal.png"
+    assert archetypes.center("prism_secondary")["file"].name == "Union.png"
+    assert archetypes.center("seasons_primary")["file"].name == "Throne.png"
+    assert archetypes.center("seasons_secondary")["file"].name == "Throne.png"
+    assert archetypes.center("compass_primary") is None
+    assert archetypes.center("compass_secondary") is None
     # The Cube wave (owner seal 2026-07-26): the Beginning (Genesis),
     # the Lord's Day (Council); the Character wheel keeps the Compass law —
     # the rose is the wheel itself.
@@ -200,7 +200,7 @@ def test_prism_poles_wear_their_own_lancets(app, tmp_path):
     fallback carries the seats until the art lands). The placeholder
     rejection is pinned on a SYNTHETIC 1×1 so it never depends on which
     real art has arrived."""
-    figs = archetypes.figures("prism_paint")
+    figs = archetypes.figures("prism_primary")
     lucifer, judas = figs[2], figs[4]
     assert lucifer["file"].name == "Lucifer_Pride.png"
     assert judas["file"].name == "Judas_Fear.png"
@@ -216,16 +216,16 @@ def test_family_and_temperament_seatings():
     """CANON seatings: the Family triangle (Child top, Mother 20h,
     Father 4h) and the color-fixed temperaments (Choleric summer
     yellow top, Sanguine spring green left)."""
-    family = archetypes.figures("trinity_light")
+    family = archetypes.figures("trinity_secondary")
     assert [fig["name"] for fig in family] == [
         "The Child", "The Mother", "The Father",
     ]
-    seasons = archetypes.figures("seasons_paint")
+    seasons = archetypes.figures("seasons_primary")
     assert [fig["name"] for fig in seasons] == [
         "Choleric", "Melancholic", "Phlegmatic", "Sanguine",
     ]
-    # The LIGHT wheel seats the Tetramorph on the same season arms.
-    tetramorph = archetypes.figures("seasons_light")
+    # The SECONDARY wheel seats the Tetramorph on the same season arms.
+    tetramorph = archetypes.figures("seasons_secondary")
     assert [fig["name"] for fig in tetramorph] == [
         "The Lion", "The Ox", "The Eagle", "The Man",
     ]
@@ -236,16 +236,16 @@ def test_tetramorph_figures_declare_rotation():
     Tetramorph is the first ArchetypeLayer consumer to opt in — every
     other archetype figure and every center stays a fixed master, so
     `ArchetypeLayer.paint()`'s rotation branch never fires for them."""
-    tetramorph = archetypes.figures("seasons_light")
+    tetramorph = archetypes.figures("seasons_secondary")
     assert all(fig["rotates"] for fig in tetramorph)
     for key in archetypes.ARCHETYPE_GRID.values():
-        if key == "seasons_light":
+        if key == "seasons_secondary":
             continue
         assert not any(fig["rotates"] for fig in archetypes.figures(key)), key
         center = archetypes.center(key)
         if center is not None:
             assert not center.get("rotates")
-    assert not archetypes.center("seasons_light").get("rotates")
+    assert not archetypes.center("seasons_secondary").get("rotates")
 
 
 # --- The render-level override --------------------------------------------------
@@ -595,7 +595,7 @@ def test_arm_hover_speaks_the_two_row_article(app):
     assert "…" in tooltip
     assert "Alpha and the Omega" not in tooltip
     # The hexa two-sign columns are REPLACED by the archetype reading.
-    soul = Compositor(_archetype_skin("hexa", "light"), AssetCache())
+    soul = Compositor(_archetype_skin("hexa", "secondary"), AssetCache())
     soul.render_offscreen(360.0, 1.0, day, tick)
     tooltip = soul.tooltip_at(*_arm_px(180.0, 0.0), 360.0)
     assert "Gratitude" in tooltip and "Taking for Granted" in tooltip
@@ -638,10 +638,10 @@ def test_one_soul_arms_and_center_jump_to_their_own_pages(app):
     from app.encyclopedia import _topics
 
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
-    soul = Compositor(_archetype_skin("hexa", "light"), AssetCache())
+    soul = Compositor(_archetype_skin("hexa", "secondary"), AssetCache())
     soul.render_offscreen(360.0, 1.0, day, tick)
     names = [e["name"] for e in _topics()["one_soul"]["entries"]]
-    for index, figure in enumerate(archetypes.figures("prism_light")):
+    for index, figure in enumerate(archetypes.figures("prism_secondary")):
         target = soul.encyclopedia_target(
             *_arm_px(180.0, figure["angle"]), 360.0
         )
@@ -652,7 +652,7 @@ def test_one_soul_arms_and_center_jump_to_their_own_pages(app):
     assert soul.encyclopedia_target(180.0, 180.0, 360.0) == ("one_soul", 7)
     assert names[7] == "The Union"
     # Every OTHER centre still answers None (nothing else declares one).
-    persons = Compositor(_archetype_skin("hexa", "paint"), AssetCache())
+    persons = Compositor(_archetype_skin("hexa", "primary"), AssetCache())
     persons.render_offscreen(360.0, 1.0, day, tick)
     assert persons.encyclopedia_target(180.0, 180.0, 360.0) is None
 
@@ -920,7 +920,7 @@ def test_ages_arm_shows_the_three_side_layout(app):
     once (the Tree and the Menagerie) — distinct from the two-row form,
     its total width the same as the two-side layout."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
-    ages = Compositor(_archetype_skin("octa", "light"), AssetCache())
+    ages = Compositor(_archetype_skin("octa", "secondary"), AssetCache())
     ages.render_offscreen(360.0, 1.0, day, tick)
     tip = ages.tooltip_at(*_arm_px(180.0, 0.0), 360.0)     # top arm = Youth
     assert tip is not None
@@ -940,7 +940,7 @@ def test_tetramorph_arm_shows_the_three_side_layout(app):
     evangelist it became, and the element its season arm holds — the same
     machinery and total width as the Ages three-side."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
-    tetra = Compositor(_archetype_skin("cross", "light"), AssetCache())
+    tetra = Compositor(_archetype_skin("cross", "secondary"), AssetCache())
     tetra.render_offscreen(360.0, 1.0, day, tick)
     tip = tetra.tooltip_at(*_arm_px(180.0, 0.0), 360.0)     # top arm = the Lion
     assert tip is not None
@@ -968,7 +968,7 @@ def test_tetramorph_three_side_survives_absent_evangelist_art(app):
     evangelist column from text alone — the name and its article, no
     crash, no stretched pixel."""
     day, tick = _dt(datetime(2026, 7, 16, 14, 30))
-    tetra = Compositor(_archetype_skin("cross", "light"), AssetCache())
+    tetra = Compositor(_archetype_skin("cross", "secondary"), AssetCache())
     tetra.render_offscreen(360.0, 1.0, day, tick)
     # The config path table maps each arm index to its evangelist rondel.
     for index, name in enumerate(("Mark", "Luke", "John", "Matthew")):
@@ -991,11 +991,11 @@ def test_archetype_article_resolution_is_graceful(app):
     from data.symbolism import SymbolismRepository
 
     repo = SymbolismRepository()
-    assert repo.archetype_article("archetype_trinity_paint", "nobody") is None
+    assert repo.archetype_article("archetype_trinity_primary", "nobody") is None
     assert repo.archetype_article("no_such_set", "one") is None
     # The two Compass wheels are centerless (the rose is the wheel).
-    assert repo.archetype_article("archetype_compass_paint", "center") is None
-    assert repo.archetype_article("archetype_compass_light", "center") is None
+    assert repo.archetype_article("archetype_compass_primary", "center") is None
+    assert repo.archetype_article("archetype_compass_secondary", "center") is None
     # Every archetype declares its documented set name.
     for key, spec in archetypes.ARCHETYPES.items():
         assert spec["articles"] == f"archetype_{key}"
@@ -1044,7 +1044,7 @@ def test_every_archetype_set_position_and_center_is_written(app):
 
 
 def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
-    """Tetramorph completion round 2026-07-18: each seasons_light
+    """Tetramorph completion round 2026-07-18: each seasons_secondary
     creature node carries THREE non-pending rows — the creature (rows[0]),
     the evangelist it became (rows[1]), the element its arm holds
     (rows[2]) — so all three columns of the three-side speak, never a
@@ -1060,7 +1060,7 @@ def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
         "man": ("Matthew", "blood"),
     }
     for entity, (evangelist, humor) in expect.items():
-        node = repo.archetype_article("archetype_seasons_light", entity)
+        node = repo.archetype_article("archetype_seasons_secondary", entity)
         rows = node["rows"]
         assert len(rows) == 3, f"{entity} needs creature+evangelist+element"
         assert all(isinstance(r, str) and r.strip() for r in rows)
@@ -1069,13 +1069,13 @@ def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
 
 
 def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
-    """Session 6 MANDATORY: the octa_paint/octa_light variant paragraphs
+    """Session 6 MANDATORY: the octa_primary/octa_secondary variant paragraphs
     were rewritten off the OLD compass day-arc onto the sealed Walks
-    (paint) and Eight Ages (light) wheels — each weekday body carries its
+    (primary) and Eight Ages (secondary) wheels — each weekday body carries its
     fixed arm's NEW hue and no foreign arm hue leaks in."""
     from data.symbolism import SymbolismRepository
 
-    # body -> (octa paint hue, octa light hue) at its fixed octa arm.
+    # body -> (octa primary hue, octa secondary hue) at its fixed octa arm.
     hues = {
         "sun": ("#F0C420", "#FFE800"), "mars": ("#C87533", "#FFB400"),
         "venus": ("#A02020", "#FF6A3C"), "mercury": ("#7A2E8E", "#9C6BD4"),
@@ -1089,17 +1089,18 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
     for set_name, entities in data.items():
         for body, node in entities.items():
             variants = node.get("variants", {})
-            if "octa_paint" not in variants:
+            if "octa_primary" not in variants:
                 continue
-            paint, light = variants["octa_paint"], variants["octa_light"]
-            own_paint, own_light = hues[body]
-            assert own_paint.lower() in paint.lower()
-            assert own_light.lower() in light.lower()
+            first = variants["octa_primary"]
+            second = variants["octa_secondary"]
+            own_first, own_second = hues[body]
+            assert own_first.lower() in first.lower()
+            assert own_second.lower() in second.lower()
             for hue in all_hues:
-                if hue != own_paint:
-                    assert hue.lower() not in paint.lower()
-                if hue != own_light:
-                    assert hue.lower() not in light.lower()
+                if hue != own_first:
+                    assert hue.lower() not in first.lower()
+                if hue != own_second:
+                    assert hue.lower() not in second.lower()
             seen += 1
     # 163 through Session 6; +7 for the owner-sealed Continents theme
     # (R7a 2026-07-21), whose seven bodies carry the SAME sealed Walks/

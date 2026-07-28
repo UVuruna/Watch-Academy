@@ -161,7 +161,7 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 - The Walks are the Compass PAINT archetype (approved 2026-07-16);
   the Compass LIGHT archetype is the Eight Ages — see
   [Life Prompts](life_prompts.md).
-- Material hues locked to the palette rework (CANON §Compass paint):
+- Material hues locked to the palette rework (CANON §Compass primary):
   King gold `#F0C420`, Merchant copper `#C87533`, Soldier iron-blood
   `#A02020`, Artist velvet `#7A2E8E`, Wanderer indigo-charcoal
   `#262636`, Scholar ink blue `#1F5FA8`, Farmer field green

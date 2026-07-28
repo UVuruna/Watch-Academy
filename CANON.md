@@ -193,13 +193,13 @@ principle — the rows per archetype:
 
 | Archetype | Row 1 | Row 2 |
 |---|---|---|
-| Trinity paint | the person (God / the Devil / Jesus) | the calling (Judge / Prosecutor / Advocate) |
-| Trinity light | the member (Father / Mother / Child) | the hearth-role: **the Shield / the Heart / the Anchor** (Child's role reworked Dawn→Anchor, RESTRUCTURE 2026-07-22 — see the amendment below) |
+| Trinity primary | the person (God / the Devil / Jesus) | the calling (Judge / Prosecutor / Advocate) |
+| Trinity secondary | the member (Father / Mother / Child) | the hearth-role: **the Shield / the Heart / the Anchor** (Child's role reworked Dawn→Anchor, RESTRUCTURE 2026-07-22 — see the amendment below) |
 | Seasons | the temperament | the age of man (the tetramorph creature stands as the reserve second row) |
-| Prism paint | the person | the quality (Michael / Courage) |
-| Prism light | the pillar | its SHADOW — the virtue and the vice of the same thing (owner: the theme began as this duality) |
-| Compass paint | the estate | its object: **the Crown / the Coin / the Sword / the Mask / the Staff / the Book / the Plough / the Bell** |
-| Compass light | the age | its LIVING BEING — image layer, options below (owner: beings that symbolize the period of a life) |
+| Prism primary | the person | the quality (Michael / Courage) |
+| Prism secondary | the pillar | its SHADOW — the virtue and the vice of the same thing (owner: the theme began as this duality) |
+| Compass primary | the estate | its object: **the Crown / the Coin / the Sword / the Mask / the Staff / the Book / the Plough / the Bell** |
+| Compass secondary | the age | its LIVING BEING — image layer, options below (owner: beings that symbolize the period of a life) |
 
 ### Trinity (trio)
 
@@ -252,14 +252,14 @@ Trinity archetype articles run in TWO ROWS (like the hexa zodiac
 diamonds): the person and the calling. Image prompts:
 `research/prompts/archetype/trinity_prompts.md`.
 
-### Trinity light — The Family (placement APPROVED 2026-07-16)
+### Trinity secondary — The Family (placement APPROVED 2026-07-16)
 
 The FAMILY TRIANGLE (husband loves wife — wife loves child — child
 loves father; defined with the Bond theme) rides the trio's LIGHT
 palette: **green at the top, light blue on the left (04h), light
 red on the right (20h)** — not an arbitrary trio: it is the SAME
-derivation as the paint trio (the hexa light primaries at the
-12/20/4 positions, as paint took the hexa paint ones). Proposed
+derivation as the paint trio (the hexa secondary primaries at the
+12/20/4 positions, as paint took the hexa primary ones). Proposed
 wearing:
 
 | Arm | Color | Member | Why |
@@ -382,14 +382,14 @@ UNIVERSAL ROTATION CONVENTION's shared cadence, generalized 2026-07-20
 — currently every day); deep travel drives the shown face by the
 TRAVELED date, same law as the poles' glyphs.
 
-### Prism light — One Soul — The Vow — The Bond (APPROVED 2026-07-16; name SEALED 2026-07-27)
+### Prism secondary — One Soul — The Vow — The Bond (APPROVED 2026-07-16; name SEALED 2026-07-27)
 
 **The name (owner seal 2026-07-27).** The theme keeps ALL THREE
 candidate names, layered rather than chosen between. Titled in full it
 is **One Soul — The Vow — The Bond**
-(`constants.PRISM_LIGHT_THEME_TITLE`); wherever one name must stand
+(`constants.ONE_SOUL_THEME_TITLE`); wherever one name must stand
 alone — the Design window's wheel row, the menus, the watch title, any
-label — it is **One Soul** (`constants.PRISM_LIGHT_THEME_NAME`).
+label — it is **One Soul** (`constants.ONE_SOUL_THEME_NAME`).
 
 **The Encyclopedia home (owner verdict 2026-07-27: "napravi naravno —
 jedna od važnijih ljubavnih tematika").** The theme has its own topic,
@@ -473,9 +473,9 @@ fire against water, hot-and-dry against cold-and-moist, the only
 pair opposed in BOTH qualities). Each temperament's cure stands
 across the dial, as always.
 
-### Seasons light — the Four Elements, the Tetramorph (APPROVED 2026-07-16)
+### Seasons secondary — the Four Elements, the Tetramorph (APPROVED 2026-07-16)
 
-The Seasons' second wheel: the FOUR ELEMENTS as the light palette
+The Seasons' second wheel: the FOUR ELEMENTS as the secondary palette
 (fire, air, water, earth — hues to be fixed with the palette
 session), and on them the **TETRAMORPH** — the four living
 creatures around the throne. The narrative, in full:
@@ -500,7 +500,7 @@ Ox, Scorpio whose ancient nobler symbol is the Eagle — which means
 they are the FOUR ELEMENTS (air, fire, earth, water), which means
 they are OUR FOUR TEMPERAMENTS:
 
-| Creature | Evangelist | Element | Fixed sign | Temperament (Seasons paint) |
+| Creature | Evangelist | Element | Fixed sign | Temperament (Seasons primary) |
 |---|---|---|---|---|
 | the Man/Angel | Matthew | air | Aquarius | Sanguine — spring |
 | the Lion | Mark | fire | Leo | Choleric — summer |
@@ -579,9 +579,9 @@ its archetype's substance. PAINT — the Walks' materials:
 The day-arc survives (brightest at noon, darkest at midnight), but
 every arm now has its OWN substance instead of a nuance step.
 
-### Compass light — the Eight Ages, the Wheel of a Life (APPROVED 2026-07-16)
+### Compass secondary — the Eight Ages, the Wheel of a Life (APPROVED 2026-07-16)
 
-By the pattern, the Compass light carries a single human LIFE — the
+By the pattern, the Compass secondary carries a single human LIFE — the
 day as a lifetime, sunrise to sunrise. The owner's own poem — the
 one that sings day, evening, night and morning — belongs to these
 articles (text pending; he delivers it when ready):
@@ -678,8 +678,8 @@ glow-window reveal):**
     not a gallery.
   - Day of week: an OPTIONAL abbreviated day (TUE, THU…) on the
     EARTH marker beside its date — default OFF.
-  - Centers: Eye (Trinity paint), Hearth (Trinity light), Seal
-    (Prism paint), Union (Prism light), Throne (Seasons, both
+  - Centers: Eye (Trinity primary), Hearth (Trinity secondary), Seal
+    (Prism primary), Union (Prism secondary), Throne (Seasons, both
     wheels), **Compass — none** (the rose is the wheel itself).
   - Earth and Moon markers STAY (they are the instrument, not
     slots); glow and eclipses work in the mode.
@@ -713,7 +713,7 @@ A new pointer that divides the 24h dial into TWELVE 2-hour wedges
 (`Dozen.png`, the owner's sheet, root). No weekday model rides it —
 its readings are the year and the day. **Naming (owner verdict):
 the pointer is CALENDAR; its two wheels, ZODIAC and ALMANAC, sit in
-the Paint/Light slot of the menu** (one pointer, two variants —
+the wheel slot of the menu** (one pointer, two variants —
 exactly as the other pointers offer Paint/Light).
 
 **Display doctrine (owner 2026-07-16):** the wedges carry NO
@@ -849,7 +849,7 @@ defined by OPPOSITES: an emotion and its cure, a virtue and its failing.
   Peter+Andrew crown (the rock and the first-called); James+John,
   Philip+Bartholomew, Thomas+Matthew, James-of-Alphaeus+Thaddaeus fill
   the middle; **Simon the Zealot + Judas Iscariot root the bottom — and
-  Judas beside midnight MIRRORS the Prism paint's Hatred at 24h** (the
+  Judas beside midnight MIRRORS the Prism primary's Hatred at 24h** (the
   same purple, the same collapse of love), the resonance repeated in the
   Emotions Dozen's own Hatred root: the bottom of every wheel is where
   love breaks, spoken across three Dozens at once.
@@ -1197,7 +1197,7 @@ seat's true opposite sits exactly 12h/180° away:
   reading gains the owner's second face here — the ministering spirit
   "sent forth to minister" (Hebrews 1:14) against Pride's boss-syndrome
   mastery (already this ring's own reading for M). The SAME 08h/20h
-  diameter the Trinity light Persons wheel already reads as
+  diameter the Trinity secondary Persons wheel already reads as
   Humility against Pride (this section, above) — a second wheel
   landing on the identical axis, unprompted.
 - **G(12h) ↔ Ω(24h)** — God against the End, or the Sum: the Alpha who

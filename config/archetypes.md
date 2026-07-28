@@ -1,4 +1,4 @@
-﻿# Archetypes
+# Archetypes
 
 **Script:** [Archetypes (script)](archetypes.py)
 
@@ -53,16 +53,16 @@ pointers gained a THIRD, "cube" wheel — WORKPLAN Session 20):
 
 | Grid key | (pointer, style) | Archetype | Art dir | Center |
 |---|---|---|---|---|
-| `trinity_paint` | trio · paint | the Courtroom (God / the Devil / Jesus) | `archetype/trinity/` | the Eye |
-| `trinity_light` | trio · light | the Family (Child / Mother / Father) | `archetype/family/` | the Hearth |
+| `trinity_primary` | trio · paint | the Courtroom (God / the Devil / Jesus) | `archetype/trinity/` | the Eye |
+| `trinity_secondary` | trio · light | the Family (Child / Mother / Father) | `archetype/family/` | the Hearth |
 | `trinity_genesis` | trio · cube | GENESIS — the creation trio, INVERTED (Creator 24h / Preserver 08h / Destroyer 16h) | `archetypes/genesis/` | the Beginning |
-| `seasons_paint` | cross · paint | the Four Temperaments | `archetype/temperaments/` | the Throne |
-| `seasons_light` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
-| `prism_paint` | hexa · paint | the Persons (six on the paint wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
-| `prism_light` | hexa · light | One Soul — The Vow — The Bond (six pillars; name SEALED 2026-07-27, all three kept — "One Soul" alone wherever one name must stand) | `archetype/one_soul/` | the Union |
+| `seasons_primary` | cross · paint | the Four Temperaments | `archetype/temperaments/` | the Throne |
+| `seasons_secondary` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
+| `prism_primary` | hexa · paint | the Persons (six on the primary wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
+| `prism_secondary` | hexa · light | One Soul — The Vow — The Bond (six pillars; name SEALED 2026-07-27, all three kept — "One Soul" alone wherever one name must stand) | `archetype/one_soul/` | the Union |
 | `prism_council` | hexa · cube | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Lord's Day |
-| `compass_paint` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
-| `compass_light` | octa · light | the Eight Ages | `archetype/life/<register>/` | — |
+| `compass_primary` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
+| `compass_secondary` | octa · light | the Eight Ages | `archetype/life/<register>/` | — |
 | `compass_character` | octa · cube | CHARACTER — the Cube at depth zero (4 poles + 4 combos) | `archetypes/character/` | — |
 
 Aurora and the Calendar have NO archetype — `grid_key()` returns None
@@ -109,7 +109,7 @@ name-falls-back until the owner's glass lands):**
   committed at every path (the WORKPLAN missing-art rule) and the
   renderer falls back to the figure's NAME while a file is missing or
   still a placeholder (`ARCHETYPE_ART_MIN_PX`).
-- **Two REUSED seats.** Prism paint's Lucifer (Pride) and Judas
+- **Two REUSED seats.** Prism primary's Lucifer (Pride) and Judas
   (Weakness/Fear) inherit the owner's Scale glass —
   `assets/badge/<source>/scale/{Lucifer,Judas}_Triangle.png`, the
   files as they exist on disk (owner assets are authoritative; the
@@ -120,7 +120,7 @@ name-falls-back until the owner's glass lands):**
 - **Seasons figures are COLOR-fixed.** The temperaments (paint) sit on
   the palette hues (Choleric = summer yellow top …), not on the season
   instants — the southern hemisphere does NOT flip them, exactly as the
-  palette itself never flips. The LIGHT wheel (owner 2026-07-17) seats
+  palette itself never flips. The SECONDARY wheel (owner 2026-07-17) seats
   the TETRAMORPH — the Lion/Ox/Eagle/Man on the FOUR ELEMENTS wheel
   (`_CROSS_ELEMENTS`), each creature on its canonical fixed-cross season
   arm (fire summer, earth autumn, water winter, air spring); row 2 is
@@ -157,12 +157,12 @@ name-falls-back until the owner's glass lands):**
   [Character Cube](cube.md) — the Rose's stars, the disk registers and
   the roster all read that one tuple. Every other archetype leaves `cell`
   at None: its arms are not cube seats.
-- **Article sets are named by GRID SEAT** (`archetype_trinity_paint`,
-  `archetype_seasons_paint`, `archetype_seasons_light`, …) so a future
+- **Article sets are named by GRID SEAT** (`archetype_trinity_primary`,
+  `archetype_seasons_primary`, `archetype_seasons_secondary`, …) so a future
   theme rename never orphans texts (the prism-light theme's own name
   was sealed only on 2026-07-27, long after its set existed — exactly
   the case this convention was built for). The Seasons rename
-  (`archetype_seasons` → `_paint`, 2026-07-17) stayed consistent for
+  (`archetype_seasons` → `_primary`, 2026-07-17) stayed consistent for
   the same reason. Each entity carries a `{"rows": [row1, row2]}` node
   in `Database/symbolism.json → articles.<set>`; where a set is not
   written `SymbolismRepository.archetype_article()` returns None and
@@ -193,7 +193,7 @@ name-falls-back until the owner's glass lands):**
   `enc=("cube", N)` targets of `compass_character` and `rose_vertices`
   moved in one commit; the index test compares by PAGE NAME, so a
   mis-aimed target fails loudly.
-  **`prism_light` joined them on 2026-07-27** (owner: "napravi
+  **`prism_secondary` joined them on 2026-07-27** (owner: "napravi
   naravno"): its six pillars aim at `("one_soul", 1..6)` — the pillar's
   own page in the theme's Encyclopedia topic — and `ONE_SOUL_ART_DIR`
   became public for the same reason the Cube roots did.
@@ -205,7 +205,7 @@ name-falls-back until the owner's glass lands):**
   The center table takes the SAME optional `"enc"` key an arm figure
   carries, and `render.compositor.encyclopedia_target` reads it for the
   `archetype:center` hover instead of the old flat `None`. Today
-  exactly one center uses it — `prism_light`'s **Union**, at
+  exactly one center uses it — `prism_secondary`'s **Union**, at
   `("one_soul", 7)` — because it is the only center with a page; every
   other center simply omits the key and answers None as before.
 - **The CENTER window** (owner seal 2026-07-18, `ARCHETYPE_CENTER_WINDOW_DEG`
@@ -252,6 +252,6 @@ name-falls-back until the owner's glass lands):**
 - `center(key)`: the center dict or None
 - `tetramorph_element(index)` + `TETRAMORPH_ELEMENTS` (owner 2026-07-17,
   ROADMAP 15e): the element name (Fire/Earth/Water/Air) each Tetramorph
-  creature rides — one ordering shared with the `seasons_light` figures
+  creature rides — one ordering shared with the `seasons_secondary` figures
   and the Four-Elements wheel hues; the THIRD column of the tetramorph
   three-side hover.

@@ -30,14 +30,14 @@ color and mood) below the two zodiac sign lines.
   sealed package 2026-07-16): the ARCHETYPE MODE's two-row article —
   `articles.<set>.<entity>` holding `{"rows": [row1, row2]}`. The set
   names live in [Archetypes](../config/archetypes.md)
-  (`archetype_trinity_paint` … `archetype_compass_light`), the entity
+  (`archetype_trinity_primary` … `archetype_compass_secondary`), the entity
   keys per figure plus `"center"`. **Session 6 WROTE all seven sets
   (2026-07-18): 48 entities in total** — the two-row layouts carry both
   rows (person+calling, member+hearth-role, temperament+age,
   person+quality, pillar+shadow, estate+object), while the two
-  three-side wheels carry more per node. `archetype_compass_light` (the
+  three-side wheels carry more per node. `archetype_compass_secondary` (the
   Ages) carries a SINGLE row (`rows[0]` — the age text; the compositor
-  draws both life-register beings from config). `archetype_seasons_light`
+  draws both life-register beings from config). `archetype_seasons_secondary`
   (the Tetramorph) carries THREE rows per creature (Tetramorph completion
   round 2026-07-18): `rows[0]` the creature, `rows[1]` the evangelist it
   became (Mark/Luke/John/Matthew), `rows[2]` the element its arm holds

@@ -180,7 +180,7 @@ def test_display_choices_round_trip(store):
         pointer="octa",
         umbra_form="gradient",
         umbra_contrast="half",
-        palette_style="light",
+        palette_style="secondary",
         archetype_mode=True,
         archetype_names=False,
         pointer_saturation=0.4,
@@ -597,7 +597,7 @@ def test_location_and_overrides_round_trip(store):
         star_alpha=0.5,
         aura_day_alpha=0.25,
         aura_twilight_alpha=0.6,
-        palettes={"hexa_paint": ("#112233",) * 6},
+        palettes={"hexa_primary": ("#112233",) * 6},
     )
     store.save(saved)
     assert store.load() == saved
@@ -625,8 +625,8 @@ def test_bad_location_raises(store, location):
     "palettes",
     [
         '{"banana_paint": ["#112233"]}',              # unknown key
-        '{"hexa_paint": ["#112233"]}',                # wrong hue count
-        '{"hexa_paint": ["red", "#1", "#2", "#3", "#4", "#5"]}',  # bad colors
+        '{"hexa_primary": ["#112233"]}',                # wrong hue count
+        '{"hexa_primary": ["red", "#1", "#2", "#3", "#4", "#5"]}',  # bad colors
     ],
 )
 def test_bad_palettes_raise(store, palettes):
@@ -637,6 +637,34 @@ def test_bad_palettes_raise(store, palettes):
     )
     with pytest.raises(SettingsCorruptError):
         store.load()
+
+
+def test_retired_slot_names_migrate_instead_of_corrupting_the_file(store):
+    """REGRESSION (owner report 2026-07-28). The paint/light/cube →
+    primary/secondary/tertiary slot rename first shipped WITHOUT a data
+    migration, so every settings file written before it failed to load
+    ("palette_style 'light' unknown") and the app offered a reset that
+    would have wiped all three of the owner's watches. A file carrying
+    the retired words must load, with each word read as its positional
+    successor — never as corruption."""
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "palette_style": "light",'
+        ' "palettes": {"hexa_paint": ["#112233", "#223344", "#334455",'
+        ' "#445566", "#556677", "#667788"]}}',
+        encoding="utf-8",
+    )
+    loaded = store.load()
+    assert loaded.palette_style == "secondary"
+    assert set(loaded.palettes) == {"hexa_primary"}
+    assert loaded.palettes["hexa_primary"][0] == "#112233"
+    # The third slot travels the same road.
+    store.path.write_text(
+        '{"schema_version": 1, "window": {"x": 0, "y": 0, "diameter": 360},'
+        ' "pointer": "trio", "palette_style": "cube"}',
+        encoding="utf-8",
+    )
+    assert store.load().palette_style == "tertiary"
 
 
 def test_alpha_out_of_range_raises(store):

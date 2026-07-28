@@ -122,7 +122,7 @@ The trigger/window/precedence law itself lives in
 **R5 MENU REWORK**:
 `POINTER_PALETTE_LABELS` — the RAW English wheel-pair label per
 pointer (Court/Family, Temperaments/Elements, Walks of Life/Ages,
-**Persons**/One Soul for the Prism — its paint slot renamed from the
+**Persons**/One Soul for the Prism — its primary slot renamed from the
 generic default 2026-07-27, owner "ok." —
 Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback for a
 pointer whose wheels have no names of their own),
@@ -164,7 +164,7 @@ watchdog delay, tick scheduling
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
 marker borders), `PALETTE_PRESETS` (the Star+Aura/wedge palettes
-measured from the owner's art: hexa/octa paint+light, cross/trio
+measured from the owner's art: hexa/octa primary+light, cross/trio
 single, aurora bands, the Calendar's two twelve-hue wheels —
 paint = Zodiac, light = Almanac, owner 2026-07-16 — and the three CUBE
 wheels, owner seal 2026-07-26 CUBE.md: Genesis' inverted trio in the
@@ -438,7 +438,7 @@ the star, the roster and the disk register name the same thing — and
 `ROSE_ARM_SYSTEMS` which character system its arms read (Legacy the 2D
 Character wheel, Prophecy the 3D Cube vertices).
 `POINTER_WEEKDAY_SLOTS["rose"]` is the COLOR LAW — the seat is the hue,
-the Prism paint canon with the two Sunday hues lightened (MON cyan,
+the Prism primary canon with the two Sunday hues lightened (MON cyan,
 FRI rose) because Sunday needs blue and red for its own two faces;
 `SERVANT_SEAT_ANGLE` gives the Servant the blue 06h arm there (24h
 everywhere else) and the Ruler keeps red at 18h.

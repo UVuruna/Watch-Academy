@@ -68,9 +68,9 @@ alone) found exactly **5** — all now `git rm`'d:
 
 | File | Was | Consumer | Effect of the purge |
 |---|---|---|---|
-| `archetype/gemini/persons/Seal.png` | 1×1, 68 B | archetype center (`prism_paint`) | Now correctly reports MISSING on both sources (chatgpt never had one either) — honest, was already falling back to the name label, no render change |
-| `archetype/gemini/temperaments/Throne.png` | 1×1, 68 B | archetype center (`seasons_paint`/`seasons_light`, shared) | Same — MISSING both sources now, honest, no render change |
-| `archetype/gemini/trinity/Devil_Prosecutor.png` | 1×1, 68 B | archetype figure (`trinity_paint`, arm 1) | **Real render fix**: `config.paths.art_file`'s cross-source fallback only triggers on a MISSING file, not a placeholder — with the placeholder gone, the Gemini-active render now correctly resolves to ChatGPT's REAL 694×1388 lancet instead of silently drawing the name label over perfectly good art that already existed one folder over |
+| `archetype/gemini/persons/Seal.png` | 1×1, 68 B | archetype center (`prism_primary`) | Now correctly reports MISSING on both sources (chatgpt never had one either) — honest, was already falling back to the name label, no render change |
+| `archetype/gemini/temperaments/Throne.png` | 1×1, 68 B | archetype center (`seasons_primary`/`seasons_secondary`, shared) | Same — MISSING both sources now, honest, no render change |
+| `archetype/gemini/trinity/Devil_Prosecutor.png` | 1×1, 68 B | archetype figure (`trinity_primary`, arm 1) | **Real render fix**: `config.paths.art_file`'s cross-source fallback only triggers on a MISSING file, not a placeholder — with the placeholder gone, the Gemini-active render now correctly resolves to ChatGPT's REAL 694×1388 lancet instead of silently drawing the name label over perfectly good art that already existed one folder over |
 | `badge/chatgpt/season/Poem.png` | 1×1, 70 B | hidden Encyclopedia "Four Greetings" entry (`app/encyclopedia.py` line ~905) | Now genuinely absent; the entry's `images` tuple resolves through the SAME `resolved.exists()` filter every other Encyclopedia image goes through (`_render_cell`) — title and prose still show, no image, no crash |
 | `badge/gemini/season/Poem.png` | 1×1, 70 B | same entry, the other source | Same |
 
@@ -109,21 +109,21 @@ entries found anywhere in this collection.**
 
 | Collection | Expected by code | On disk (gemini / chatgpt) | Sheet entry | Verdict |
 |---|---|---|---|---|
-| `trinity_paint` — 3 figures | One_Judge, Devil_Prosecutor, Jesus_Advocate | One_Judge & Jesus_Advocate real both; **Devil_Prosecutor real CHATGPT only** (gemini was the purged placeholder) | `trinity_prompts.md` ✔ | ART GAP, one-sided — the cross-source fallback already serves the real ChatGPT lancet on BOTH active sources today (see Purge Log); a gemini-native version would just make the fallback unnecessary |
-| `trinity_paint` — center | Providence_Eye.png | real both | `trinity_prompts.md` ✔ | OK |
-| `trinity_paint`/`family`/`trinity_light` — row2 rondels | rondel_Advocate/Judge/Prosecutor, rondel_Dawn/Heart/Shield | real both, all 6×2=12 files | `trinity_prompts.md` / `family_prompts.md` ✔ | WIRING GAP — fully painted, zero code reads any `rondel_*` path outside the evangelist set (see [Compass Objects](#compass-objects)) |
-| `trinity_light` — 3 figures + center | Child_Dawn, Mother_Heart, Father_Shield, Hearth | real both, all 4 | `family_prompts.md` ✔ | OK |
-| `seasons_paint` — 4 figures | Choleric, Melancholic, Phlegmatic, Sanguine | real both | `temperaments_prompts.md` ✔ | OK |
-| `seasons_paint` / `seasons_light` — center (ONE shared file) | Throne.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `temperaments_prompts.md` ✔ (§The center) | ART GAP — name-fallback active on every render today, honestly so now |
-| `seasons_light` — 4 figures (tetramorph) | Lion, Ox, Eagle, Man | real both | `temperaments_prompts.md` ✔ (§The tetramorph) | OK |
-| `seasons_light` — evangelist row2 | Mark, Luke, John, Matthew | MISSING both, 8 files | `temperaments_prompts.md` ✔ (§The four evangelists) | ART GAP, WIRED — `render.compositor` already calls `tetramorph_evangelist_file`; name-fallback carries the column meanwhile (pinned by `test_tetramorph_three_side_survives_absent_evangelist_art`) |
-| `prism_paint` — 4 seated figures | One_Love, Michael_Courage, Devil_Hatred, Jesus_Humility | real both | `persons_prompts.md` ✔ | OK |
-| `prism_paint` — 2 own-lancet figures | Lucifer_Pride, Judas_Fear | MISSING both, 4 files (never generated on either source — not a purge artifact) | `persons_prompts.md` ✔ (§The two poles) | ART GAP — name-fallback active, pinned by `test_prism_poles_wear_their_own_lancets` |
-| `prism_paint` — center | Seal.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `persons_prompts.md` ✔ (§The center — the Seal) | ART GAP |
-| `prism_light` — 6 figures + center | Gratitude, Support, Passion, Tolerance, Trust, Respect, Union | real both, all 7 | `one_soul_prompts.md` ✔ | OK |
-| `compass_paint` — 8 figures | King … Priest | real both | `walks_prompts.md` ✔ | OK |
-| `compass_paint` — 8 object rondels | rondel_Crown … rondel_Bell | real both, all 16 files | `walks_prompts.md` ✔ (§The object rondels) | WIRING GAP — same as the trinity/family rondels above; see [Compass Objects](#compass-objects) |
-| `compass_light` — 16 figures (2 registers × 8 ages) | tree/{8 stems}, animals/{8 stems} | real both, all 16 | `life_prompts.md` ✔ | OK |
+| `trinity_primary` — 3 figures | One_Judge, Devil_Prosecutor, Jesus_Advocate | One_Judge & Jesus_Advocate real both; **Devil_Prosecutor real CHATGPT only** (gemini was the purged placeholder) | `trinity_prompts.md` ✔ | ART GAP, one-sided — the cross-source fallback already serves the real ChatGPT lancet on BOTH active sources today (see Purge Log); a gemini-native version would just make the fallback unnecessary |
+| `trinity_primary` — center | Providence_Eye.png | real both | `trinity_prompts.md` ✔ | OK |
+| `trinity_primary`/`family`/`trinity_secondary` — row2 rondels | rondel_Advocate/Judge/Prosecutor, rondel_Dawn/Heart/Shield | real both, all 6×2=12 files | `trinity_prompts.md` / `family_prompts.md` ✔ | WIRING GAP — fully painted, zero code reads any `rondel_*` path outside the evangelist set (see [Compass Objects](#compass-objects)) |
+| `trinity_secondary` — 3 figures + center | Child_Dawn, Mother_Heart, Father_Shield, Hearth | real both, all 4 | `family_prompts.md` ✔ | OK |
+| `seasons_primary` — 4 figures | Choleric, Melancholic, Phlegmatic, Sanguine | real both | `temperaments_prompts.md` ✔ | OK |
+| `seasons_primary` / `seasons_secondary` — center (ONE shared file) | Throne.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `temperaments_prompts.md` ✔ (§The center) | ART GAP — name-fallback active on every render today, honestly so now |
+| `seasons_secondary` — 4 figures (tetramorph) | Lion, Ox, Eagle, Man | real both | `temperaments_prompts.md` ✔ (§The tetramorph) | OK |
+| `seasons_secondary` — evangelist row2 | Mark, Luke, John, Matthew | MISSING both, 8 files | `temperaments_prompts.md` ✔ (§The four evangelists) | ART GAP, WIRED — `render.compositor` already calls `tetramorph_evangelist_file`; name-fallback carries the column meanwhile (pinned by `test_tetramorph_three_side_survives_absent_evangelist_art`) |
+| `prism_primary` — 4 seated figures | One_Love, Michael_Courage, Devil_Hatred, Jesus_Humility | real both | `persons_prompts.md` ✔ | OK |
+| `prism_primary` — 2 own-lancet figures | Lucifer_Pride, Judas_Fear | MISSING both, 4 files (never generated on either source — not a purge artifact) | `persons_prompts.md` ✔ (§The two poles) | ART GAP — name-fallback active, pinned by `test_prism_poles_wear_their_own_lancets` |
+| `prism_primary` — center | Seal.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `persons_prompts.md` ✔ (§The center — the Seal) | ART GAP |
+| `prism_secondary` — 6 figures + center | Gratitude, Support, Passion, Tolerance, Trust, Respect, Union | real both, all 7 | `one_soul_prompts.md` ✔ | OK |
+| `compass_primary` — 8 figures | King … Priest | real both | `walks_prompts.md` ✔ | OK |
+| `compass_primary` — 8 object rondels | rondel_Crown … rondel_Bell | real both, all 16 files | `walks_prompts.md` ✔ (§The object rondels) | WIRING GAP — same as the trinity/family rondels above; see [Compass Objects](#compass-objects) |
+| `compass_secondary` — 16 figures (2 registers × 8 ages) | tree/{8 stems}, animals/{8 stems} | real both, all 16 | `life_prompts.md` ✔ | OK |
 | `calendar` — 12 month medallions | January … December | real both | `calendar_prompts.md` ✔ | OK |
 
 **Totals:** 56 figure/center slots checked one by one (script run
@@ -252,7 +252,7 @@ tracked here the moment they're written, per this file's own charter
   NEW staging area deliberately outside `assets/archetypes/` since the
   hover-card left-column WIRING is undecided (owner call — DO NOT
   invent it). **Art: 0/38.** The Animals register's own 8 Life badges
-  (compass_light's non-default alternate) are explicitly scoped OUT of
+  (compass_secondary's non-default alternate) are explicitly scoped OUT of
   round one — a straightforward round-two follow-up if the owner
   activates that register.
 - Both sheets pass `tests/test_prompt_paths.py`'s lint: Months via the

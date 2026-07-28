@@ -65,12 +65,12 @@ class Settings:
     # `constants.RING_EYE_SHINE_DEFAULT`
     # (`app.controller._ring_eye_shine` resolves both).
     ring_eye_shine: dict = field(default_factory=dict)
-    # Install defaults per the owner's 2026-07-12 list: hexa paint,
+    # Install defaults per the owner's 2026-07-12 list: hexa primary,
     # gradient-dark Umbra, atmosphere Earth, STEEL hands, 720 dial.
     pointer: str = "hexa"
     umbra_form: str = "gradient"
     umbra_contrast: str = "dark"
-    palette_style: str = "paint"       # on Calendar: paint = Zodiac wheel,
+    palette_style: str = "primary"       # on Calendar: paint = Zodiac wheel,
                                         # light = Almanac wheel
     calendar_lighting: str = "hour"     # Calendar lit wedge: "hour" (the
                                         # shichen) | "year" (month/sign)
@@ -336,13 +336,30 @@ class SettingsStore:
                 style = family_styles.get(raw.get("weekday_slot"))
                 if style:
                     raw["day_slot_style"] = style
+            # Third migration (2026-07-28): the wheel SLOT keys became
+            # POSITIONAL — paint/light/cube named a color doctrine the
+            # wheels had long stopped obeying. Every settings file
+            # written before that day carries the retired words, both in
+            # `palette_style` and in each custom-palette key
+            # ("hexa_paint"). This one is not cosmetic: an unknown
+            # palettes key RAISES, so without the migration the whole
+            # file reads as corrupt and the owner is offered a reset —
+            # losing every stored watch. External user data, not an API
+            # shim (Rule #6 governs code, not files already on disk).
+            if raw.get("palette_style") in RETIRED_SLOTS:
+                raw["palette_style"] = RETIRED_SLOTS[raw["palette_style"]]
+            if isinstance(raw.get("palettes"), dict):
+                raw["palettes"] = {
+                    _migrate_palette_key(key): hues
+                    for key, hues in raw["palettes"].items()
+                }
             for key, default, allowed in (
                 ("language", "en", tuple(constants.TRANSLATION_LANGUAGES)),
                 ("ring_finish", "gold", constants.RING_FINISHES),
                 ("pointer", "hexa", tuple(constants.POINTER_POINTS)),
                 ("umbra_form", "gradient", constants.UMBRA_FORMS),
                 ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
-                ("palette_style", "paint", constants.PALETTE_STYLES),
+                ("palette_style", "primary", constants.PALETTE_STYLES),
                 ("calendar_lighting", "hour",
                  constants.CALENDAR_LIGHTING_MODES),
                 ("calendar_mount", "zodiac", constants.CALENDAR_MOUNT_MODES),
@@ -777,6 +794,22 @@ def _load_alpha(raw: dict, key: str) -> float | None:
     if not 0.0 <= value <= 1.0:
         raise ValueError(f"{key} {value} outside 0..1")
     return value
+
+
+# The wheel slots as they were named before 2026-07-28, mapped onto
+# their positional successors. Read by the settings migration above —
+# one table, so a stored file and a stored palette key cannot disagree.
+RETIRED_SLOTS = {"paint": "primary", "light": "secondary", "cube": "tertiary"}
+
+
+def _migrate_palette_key(key: str) -> str:
+    """"hexa_paint" -> "hexa_primary"; anything already positional (or
+    unrecognizable) passes through untouched for the validator to
+    judge."""
+    pointer, _, slot = str(key).rpartition("_")
+    if pointer and slot in RETIRED_SLOTS:
+        return f"{pointer}_{RETIRED_SLOTS[slot]}"
+    return key
 
 
 def _load_palettes(raw: dict) -> dict:

@@ -16,12 +16,12 @@ is scriptural: *"he began to send them forth by two and two"* (Mark
 | **Philip + Bartholomew** | flank region | Philip who found Nathanael-Bartholomew and brought him to Christ (John 1:45) |
 | **Thomas + Matthew** | flank region | the doubter and the tax-collector — the one who needed proof, the one who left the counting-table |
 | **James (of Alphaeus) + Thaddaeus** | flank region | the lesser James and Jude Thaddaeus, the quieter mission |
-| **Simon the Zealot + Judas Iscariot** | root (bottom, 24h) | the zealot and the betrayer; **Judas seated beside midnight mirrors the Prism paint's Hatred at 24h** — the same purple root, the love turned wholly to ruin |
+| **Simon the Zealot + Judas Iscariot** | root (bottom, 24h) | the zealot and the betrayer; **Judas seated beside midnight mirrors the Prism primary's Hatred at 24h** — the same purple root, the love turned wholly to ruin |
 
 The crown pair and the root pair are geometry-sealed; the four middle
 pairs fill the flank and diagonal regions (exact wedges pinned in the
 wiring round). **The root resonance is deliberate:** Judas at the dial's
-midnight rhymes across the Dozens with `Devil_Hatred` on the Prism paint
+midnight rhymes across the Dozens with `Devil_Hatred` on the Prism primary
 hexagram (also purple, also 24h) and with the Emotions Dozen's own
 `Hatred` root — the bottom of the wheel is where love collapses, spoken
 three ways.
@@ -129,7 +129,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 **Judas Iscariot — the betrayer at midnight** → `assets/calendars/apostles/primary/colored/Judas.png`
 
-*(Root note: Judas seated beside midnight mirrors the Prism paint's
+*(Root note: Judas seated beside midnight mirrors the Prism primary's
 `Devil_Hatred` at 24h — the same purple, the same collapse of love into
 ruin. This window is the darkest of the twelve, the wheel's own nadir,
 the seat where the mission of the Twelve breaks.)*
@@ -150,7 +150,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   geometry-sealed; the four middle pairs fill the flank and diagonal
   regions, exact wedges pinned in the wiring round.
 - **The root resonance is canon**, not decoration: Judas beside midnight
-  mirrors `Devil_Hatred` (Prism paint, purple, 24h) and the Emotions
+  mirrors `Devil_Hatred` (Prism primary, purple, 24h) and the Emotions
   Dozen's `Hatred` root — the same collapse of love, spoken across three
   Dozens. Recorded in CANON §The Two Dozen Systems.
 - Register is the calendar-mount rondel family; the shared device is the

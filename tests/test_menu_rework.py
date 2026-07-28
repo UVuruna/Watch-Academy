@@ -59,13 +59,13 @@ def test_watch_title_short_form_is_just_the_location():
 
 def test_watch_title_full_form_matches_the_owner_example():
     """The owner's own worked example, INSTRUCTION.txt item 2A:
-    "Belgrade-Gold DOMY-Family Trinity" — light palette style on the
+    "Belgrade-Gold DOMY-Family Trinity" — secondary palette style on the
     Trinity (trio) pointer picks the SECOND of its own (Court, Family)
     wheel-pair label."""
     settings = dataclasses.replace(
         Settings(),
         city_name="Belgrade", ring="DOMY", ring_finish="gold",
-        pointer="trio", palette_style="light",
+        pointer="trio", palette_style="secondary",
     )
     assert watch_title(settings, full=True) == "Belgrade-Gold DOMY-Family Trinity"
 
@@ -74,7 +74,7 @@ def test_watch_title_full_form_reads_the_paint_style_too():
     settings = dataclasses.replace(
         Settings(),
         city_name="Tromso", ring="Dollar", ring_finish="silver",
-        pointer="cross", palette_style="paint",
+        pointer="cross", palette_style="primary",
     )
     assert watch_title(settings, full=True) == "Tromso-Silver Dollar-Temperaments Seasons"
 
@@ -83,12 +83,12 @@ def test_watch_title_falls_back_to_the_default_pair_off_the_table():
     # hexa/octa/calendar/aurora... every pointer with named wheels reads
     # its OWN row; only "default" carries the generic Paint/Light pair,
     # for a pointer whose wheels have no names of their own. The hexa
-    # PAINT slot is "Persons" since the owner's "ok." of 2026-07-27
-    # (CANON.md §Prism paint — the Persons).
+    # PRIMARY slot is "Persons" since the owner's "ok." of 2026-07-27
+    # (CANON.md §Prism primary — the Persons).
     settings = dataclasses.replace(
         Settings(),
         city_name="Oslo", ring="DOMY", ring_finish="bronze",
-        pointer="hexa", palette_style="paint",
+        pointer="hexa", palette_style="primary",
     )
     assert watch_title(settings, full=True) == "Oslo-Bronze DOMY-Persons Prism"
 

@@ -3,7 +3,7 @@
 The CALENDAR pointer's art needs (owner canon 2026-07-16, canon in
 [The DOMY Canon](../../../CANON.md), §The Calendar). The Calendar
 divides the 24h dial into twelve 2-hour wedges and offers two wheels
-in the Paint/Light slot — **Zodiac** (left) and **Almanac** (right).
+in the wheel slot — **Zodiac** (left) and **Almanac** (right).
 
 **The wedges themselves carry NO art — they are FLAT COLOR.** Owner
 display doctrine: the wedges are too small for medallions that would

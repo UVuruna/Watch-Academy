@@ -47,7 +47,7 @@ def app():
     return QApplication.instance() or QApplication([])
 
 
-def _skin(pointer: str, style: str = "cube", **kw):
+def _skin(pointer: str, style: str = "tertiary", **kw):
     return dataclasses.replace(
         defaults.DEFAULT_SKIN, pointer=pointer, palette_style=style,
         solar_rotation=False, **kw,
@@ -74,13 +74,13 @@ def _dt(when: datetime):
 def test_cube_styles_exist_only_on_the_cube_pointers():
     """CUBE.md: Genesis (trio), Council (hexa), Character (octa) — the
     Seasons, Aurora and the Calendar stay two-wheel."""
-    assert constants.PALETTE_STYLES == ("paint", "light", "cube")
+    assert constants.PALETTE_STYLES == ("primary", "secondary", "tertiary")
     for pointer in ("trio", "hexa", "octa"):
         assert constants.palette_styles_for(pointer) == (
-            "paint", "light", "cube"
+            "primary", "secondary", "tertiary"
         )
     for pointer in ("cross", "aurora", "calendar"):
-        assert constants.palette_styles_for(pointer) == ("paint", "light")
+        assert constants.palette_styles_for(pointer) == ("primary", "secondary")
 
 
 def test_third_wheel_labels_are_the_sealed_names():
@@ -91,36 +91,37 @@ def test_third_wheel_labels_are_the_sealed_names():
     assert constants.POINTER_PALETTE_LABELS["octa"][2] == "Character"
 
 
-def test_effective_palette_style_normalizes_cube_off_its_pointers():
-    """A stored "cube" left behind by a pointer switch reads as "paint"
-    on the two-wheel pointers — and survives on the Cube pointers."""
+def test_effective_palette_style_normalizes_the_third_wheel_off_its_pointers():
+    """A stored "tertiary" left behind by a pointer switch reads as
+    "primary" on the two-wheel pointers — and survives on the
+    three-wheel ones."""
     for pointer in ("trio", "hexa", "octa"):
-        assert defaults.effective_palette_style(pointer, "cube") == "cube"
+        assert defaults.effective_palette_style(pointer, "tertiary") == "tertiary"
     for pointer in ("cross", "aurora", "calendar"):
-        assert defaults.effective_palette_style(pointer, "cube") == "paint"
-    assert defaults.effective_palette_style("cross", "light") == "light"
+        assert defaults.effective_palette_style(pointer, "tertiary") == "primary"
+    assert defaults.effective_palette_style("cross", "secondary") == "secondary"
 
 
 def test_apply_display_settings_normalizes_a_stray_cube_style():
     skin = apply_display_settings(
         defaults.DEFAULT_SKIN,
         dataclasses.replace(
-            Settings(), pointer="cross", palette_style="cube"
+            Settings(), pointer="cross", palette_style="tertiary"
         ),
     )
-    assert skin.palette_style == "paint"
+    assert skin.palette_style == "primary"
     skin = apply_display_settings(
         defaults.DEFAULT_SKIN,
         dataclasses.replace(
-            Settings(), pointer="trio", palette_style="cube"
+            Settings(), pointer="trio", palette_style="tertiary"
         ),
     )
-    assert skin.palette_style == "cube"
+    assert skin.palette_style == "tertiary"
 
 
 def test_watch_title_names_the_cube_wheels():
     settings = dataclasses.replace(
-        Settings(), pointer="trio", palette_style="cube", ring="DOMY",
+        Settings(), pointer="trio", palette_style="tertiary", ring="DOMY",
     )
     assert watch_title(settings, full=True) == (
         "Belgrade-Gold DOMY-Genesis Trinity"
@@ -143,15 +144,15 @@ def test_genesis_palette_is_the_inverted_creation_trio():
     """CUBE.md + genesis sheet: 24h the moon-gray violet (the
     Purple-Gray hue law — NEVER royal purple), 08h the dial's green,
     16h the dial's orange; tuple order follows the drawn arms."""
-    assert defaults.PALETTE_PRESETS[("trio", "cube")] == (
+    assert defaults.PALETTE_PRESETS[("trio", "tertiary")] == (
         "#666699", "#007E00", "#DC9600"
     )
 
 
 def test_council_palette_wears_the_moon_gray_creator_arm():
-    """Council sheet: the hexa paint wheel with the 24h arm re-dressed
+    """Council sheet: the hexa primary wheel with the 24h arm re-dressed
     to the Rose's violet (the Purple-Gray hue law, SEALED)."""
-    council = defaults.PALETTE_PRESETS[("hexa", "cube")]
+    council = defaults.PALETTE_PRESETS[("hexa", "tertiary")]
     assert council == (
         "#F8E600", "#DC9600", "#B60000", "#666699", "#002FFF", "#007E00",
     )
@@ -163,7 +164,7 @@ def test_character_palette_is_the_rose_as_drawn():
     Rose is drawn — poles yellow/red/moon-purple/BLUE (the Scale's own
     Judas–Lucifer axis), blends green/orange/pink/cyan — and ONE tuple
     rules both the Character wheel and the Rose (Rule #5)."""
-    assert defaults.PALETTE_PRESETS[("octa", "cube")] is defaults.ROSE_PALETTE
+    assert defaults.PALETTE_PRESETS[("octa", "tertiary")] is defaults.ROSE_PALETTE
     assert defaults.ROSE_PALETTE == (
         "#FCEE21", "#F7931E", "#F03232", "#FF7BAC",
         "#666699", "#29ABE2", "#0078DC", "#39B54A",
@@ -176,8 +177,8 @@ def test_character_palette_is_the_rose_as_drawn():
 
 def test_genesis_offset_holds_only_on_the_trio_cube_wheel():
     assert arm_offset_deg(_skin("trio")) == 180.0
-    assert arm_offset_deg(_skin("trio", "paint")) == 0.0
-    assert arm_offset_deg(_skin("trio", "light")) == 0.0
+    assert arm_offset_deg(_skin("trio", "primary")) == 0.0
+    assert arm_offset_deg(_skin("trio", "secondary")) == 0.0
     assert arm_offset_deg(_skin("hexa")) == 0.0
     assert arm_offset_deg(_skin("octa")) == 0.0
 
@@ -193,7 +194,7 @@ def test_genesis_figures_sit_on_the_inverted_arms():
         (300.0, "Jesus", "Preserver"),
         (60.0, "The Devil", "Destroyer"),
     ]
-    court = archetypes.figures("trinity_paint")
+    court = archetypes.figures("trinity_primary")
     assert court[0]["name"] == "The One"      # the names stay layered
 
 
@@ -218,7 +219,7 @@ def test_genesis_weekday_slots_ride_the_inverted_arms():
         60.0: ("moon", "mercury"),
     }
     # Every other wheel reads the table untouched.
-    assert weekday_slots(_skin("trio", "paint")) == (
+    assert weekday_slots(_skin("trio", "primary")) == (
         constants.POINTER_WEEKDAY_SLOTS["trio"]
     )
     assert today_slot_theta(_skin("trio"), "jupiter") == 180.0
@@ -283,17 +284,17 @@ def test_genesis_renders_offscreen_in_archetype_mode(app):
 def test_cube_look_gates_on_the_double_trinity_family():
     """CUBE.md §Display laws: the toggle dresses the Court, Genesis
     and the Council — and nothing else."""
-    for pointer, style in (("trio", "paint"), ("trio", "cube"),
-                           ("hexa", "cube")):
+    for pointer, style in (("trio", "primary"), ("trio", "tertiary"),
+                           ("hexa", "tertiary")):
         assert cube_look_active(_skin(pointer, style, cube_look=True))
         assert not cube_look_active(_skin(pointer, style))  # toggle off
-    for pointer, style in (("trio", "light"), ("hexa", "paint"),
-                           ("hexa", "light"), ("octa", "cube"),
-                           ("cross", "paint")):
+    for pointer, style in (("trio", "secondary"), ("hexa", "primary"),
+                           ("hexa", "secondary"), ("octa", "tertiary"),
+                           ("cross", "primary")):
         assert not cube_look_active(_skin(pointer, style, cube_look=True))
     # No pointer drawn — no cube to dress.
     assert not cube_look_active(
-        _skin("trio", "paint", cube_look=True, show_pointer=False)
+        _skin("trio", "primary", cube_look=True, show_pointer=False)
     )
 
 
@@ -301,12 +302,12 @@ def test_cube_look_widens_the_arms_to_the_tiling_rhombi():
     """The corner-view faces are the regular 180/N halves — the trio's
     three rhombi and the Council's six tile the hexagon exactly; the
     Diamond look keeps the slim owner values."""
-    assert arm_half_deg(_skin("trio", "paint", cube_look=True)) == 60.0
-    assert arm_half_deg(_skin("trio", "cube", cube_look=True)) == 60.0
-    assert arm_half_deg(_skin("hexa", "cube", cube_look=True)) == 30.0
-    assert arm_half_deg(_skin("trio", "paint")) == 30.0
-    assert arm_half_deg(_skin("octa", "cube", cube_look=True)) == 22.5
-    assert arm_half_deg(_skin("cross", "paint", cube_look=True)) == 22.5
+    assert arm_half_deg(_skin("trio", "primary", cube_look=True)) == 60.0
+    assert arm_half_deg(_skin("trio", "tertiary", cube_look=True)) == 60.0
+    assert arm_half_deg(_skin("hexa", "tertiary", cube_look=True)) == 30.0
+    assert arm_half_deg(_skin("trio", "primary")) == 30.0
+    assert arm_half_deg(_skin("octa", "tertiary", cube_look=True)) == 22.5
+    assert arm_half_deg(_skin("cross", "primary", cube_look=True)) == 22.5
 
 
 def test_settings_store_round_trips_the_cube_choices(tmp_path):
@@ -314,9 +315,9 @@ def test_settings_store_round_trips_the_cube_choices(tmp_path):
 
     store = SettingsStore(tmp_path / "settings.json")
     store.save(dataclasses.replace(
-        Settings(), palette_style="cube", cube_look=True,
+        Settings(), palette_style="tertiary", cube_look=True,
     ))
     loaded = SettingsStore(tmp_path / "settings.json").load()
-    assert loaded.palette_style == "cube"
+    assert loaded.palette_style == "tertiary"
     assert loaded.cube_look is True
 

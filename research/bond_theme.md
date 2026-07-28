@@ -130,13 +130,13 @@ Canon](../CUBE.md)).
 
 - Wherever the theme is **TITLED IN FULL** — the Encyclopedia heading
   — it shows the triple: **One Soul — The Vow — The Bond**
-  (`constants.PRISM_LIGHT_THEME_TITLE`).
+  (`constants.ONE_SOUL_THEME_TITLE`).
 - Wherever **ONE name has to stand alone** — the Design window's wheel
   row, the menus, the watch title, any label — it is **One Soul**
-  (`constants.PRISM_LIGHT_THEME_NAME`). The Design window's hexa wheel
+  (`constants.ONE_SOUL_THEME_NAME`). The Design window's hexa wheel
   row therefore reads **Persons** / **One Soul** / Council (the paint
   slot renamed from the generic "Paint palette" the same day, owner
-  "ok." — the prism paint wheel IS the Persons, [The DOMY
+  "ok." — the prism primary wheel IS the Persons, [The DOMY
   Canon](../CANON.md)).
 
 One declaration, both readers (Rule #5); the seal is pinned by
@@ -171,7 +171,7 @@ The candidates as they stood (kept for the record):
 The owner's verdict on this draft: *"napravi naravno — jedna od
 važnijih ljubavnih tematika; ide kao zaseban arhetip ako treba, tj.
 zaseban pointer."* It needed no separate pointer: the theme already
-owns the hexa · light wheel, so a new archetype would have duplicated
+owns the hexa · secondary wheel, so a new archetype would have duplicated
 one (Rule #5). What it lacked was a place to be READ, and that is what
 was built — the `one_soul` topic in the Encyclopedia's **The
 Archetypes** hall, nine pages: the title page (the conjugation law, the

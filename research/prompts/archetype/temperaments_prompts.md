@@ -1,11 +1,11 @@
-﻿# Seasons Archetype Prompts (Gemini) — the Four Temperaments
+# Seasons Archetype Prompts (Gemini) — the Four Temperaments
 
 The SEASONS pointer's archetype (owner doctrine 2026-07-16, canon in
 [The DOMY Canon](../../../CANON.md)): the oldest four-fold reading of
 man there is — Hippocrates' four humors — laid on the four season arms
 in their classical correspondence, on the seasons palette's OWN colors.
 The Seasons DO split by wheel now (owner seal 2026-07-17, CANON
-§Seasons light): PAINT = these Four Temperaments; LIGHT = the
+§Seasons secondary): PAINT = these Four Temperaments; LIGHT = the
 Tetramorph on the Four Elements wheel (its section below); both share
 the ONE Throne center. Each window personifies one temperament — its
 humor, its element, its person-type (the way the Trinity has its
@@ -48,7 +48,7 @@ look.
 `Sanguine.png`, `Choleric.png`, `Melancholic.png`, `Phlegmatic.png`;
 the tetramorph set drops into `assets/archetypes/<source>/tetramorph/` —
 `Man.png`, `Lion.png`, `Ox.png`, `Eagle.png` (SEALED — the Seasons
-LIGHT wheel's own figures; the old `temperaments/tetramorph_*.png`
+SECONDARY wheel's own figures; the old `temperaments/tetramorph_*.png`
 paths in earlier copies of this sheet were WRONG — the app reads
 `tetramorph/<Creature>.png`); the shared center drops as
 `assets/archetypes/<source>/temperaments/Throne.png` (BOTH Seasons
@@ -88,7 +88,7 @@ TALL pointed-arch lancet stained-glass window, night-window register, photoreali
 
 ---
 
-## The tetramorph — the Seasons LIGHT wheel's figures (SEALED 2026-07-17)
+## The tetramorph — the Seasons SECONDARY wheel's figures (SEALED 2026-07-17)
 
 SEALED as the Seasons split (CANON §Seasons): PAINT carries the Four
 Temperaments above, LIGHT carries the TETRAMORPH on the Four Elements
@@ -135,7 +135,7 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 
 The Tetramorph three-side hover shows THREE columns — the creature, the
 EVANGELIST it became, and the element its season arm holds (CANON
-§Seasons light; the classical Ezekiel/Revelation pairings). The second
+§Seasons secondary; the classical Ezekiel/Revelation pairings). The second
 column carries a SMALL ROUND RONDEL of each evangelist: the man at his
 writing desk WITH his creature beside or above him, each in HIS SEASON'S
 palette so the rondel reads as kin to the creature glass at a glance —
@@ -150,7 +150,7 @@ like every other archetype art.
 **Drop paths:** `assets/archetypes/<source>/evangelist/` — `Mark.png`,
 `Luke.png`, `John.png`, `Matthew.png` (the app reads
 `evangelist/<Name>.png`; ordered Lion→Mark, Ox→Luke, Eagle→John,
-Man→Matthew, matching the seasons_light figure order).
+Man→Matthew, matching the seasons_secondary figure order).
 
 **Mark the Evangelist** (the Lion · summer gold · the wilderness voice)
 → `assets/archetypes/evangelist/primary/colored/Mark.png`
@@ -185,7 +185,7 @@ SMALL round stained-glass rondel, night-window register, photorealistic render, 
 ## The center — the Throne (BOTH Seasons wheels)
 
 The ONE center over the four seasons (owner seal 2026-07-16: Throne
-for Seasons paint AND light — one throne, two readings of the same
+for Seasons primary AND light — one throne, two readings of the same
 wheel; Revelation 4: the throne the four living creatures circle).
 It was missing from every sheet until 2026-07-18 (owner catch).
 
@@ -202,7 +202,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 - Concept APPROVED (owner 2026-07-16); full temperament definition in
   [The DOMY Canon](../../../CANON.md) (humor · element · type · bright
   and dark face · age of man).
-- **SUPERSEDED (owner seal 2026-07-17, CANON §Seasons light):** the
+- **SUPERSEDED (owner seal 2026-07-17, CANON §Seasons secondary):** the
   Seasons DO split by wheel now — PAINT keeps this ONE set of four
   Temperament windows, LIGHT seats the Tetramorph below instead; the
   Throne alone still serves both wheels as the shared center.

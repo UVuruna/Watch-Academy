@@ -90,7 +90,7 @@ class SymbolismRepository:
         """The TWO-ROW archetype article (owner sealed package
         2026-07-16): `articles.<article_set>.<entity>` with
         `{"rows": [row1, row2]}` — the set names live in
-        config/archetypes.py (archetype_trinity_paint …), the entity
+        config/archetypes.py (archetype_trinity_primary …), the entity
         keys per figure plus "center". Session 6 writes the texts;
         until a set/entity exists this returns None and the hover
         shows the figure's name with the pending line — the DOCUMENTED

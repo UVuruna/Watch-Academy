@@ -147,7 +147,7 @@ on the page it argues (the Spacebar contract); the three wheels'
 article sets speak their own prose instead of the pending line; the
 six combo figures the owner delegated to this session are written;
 the sealed prism-light theme name (all three kept, "One Soul" alone
-where one name must stand, and the hexa PAINT slot renamed to
+where one name must stand, and the hexa PRIMARY slot renamed to
 **Persons** on 2026-07-27); and a REGRESSION PIN on the Charter
 rework — the exact scene-describing phrases that were removed can
 never come back.

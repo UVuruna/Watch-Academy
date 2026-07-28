@@ -17,7 +17,7 @@ the razor's edge between them.
 | **Good / Evil** | Good (radiant, giving, rising) vs Evil (starless, devouring, sinking) | the choice — the same act turned to build or to ruin |
 | **Self / Others** | Self (love turned inward) vs Others (love turned outward) | **the CLEAR HEART** where the two loves meet without tipping into sin |
 
-**Self / Others rides the One_Love doctrine.** The Prism paint summit
+**Self / Others rides the One_Love doctrine.** The Prism primary summit
 `One_Love` (see [Persons Prompts](persons_prompts.md)) is defined as
 *"the place where love of self and love of others meet without tipping
 into sin,"* drawn as a heart of PERFECTLY CLEAR uncolored glass. This

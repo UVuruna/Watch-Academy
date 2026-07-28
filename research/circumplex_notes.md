@@ -16,7 +16,7 @@ owner's reading.
   center, in-betweens on the diagonals — the dial's own
   diagonal-opposition canon, drawn by psychology. Articles may say
   so plainly: science draws the same wheel we do.
-- **The four quadrants ARE the four temperaments** (Seasons paint):
+- **The four quadrants ARE the four temperaments** (Seasons primary):
   Activated-Unpleasant = choleric (anger, hate, contempt);
   Activated-Pleasant = sanguine (interest, amusement, joy, pride);
   Calm-Unpleasant = melancholic (sadness, guilt, regret, shame,

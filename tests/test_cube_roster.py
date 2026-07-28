@@ -216,7 +216,7 @@ def test_the_rose_reads_forty_eight_seats_through_the_roster():
     3D vertices in three sets — the 48 seats — resolve through the ONE
     roster table, Legacy and Prophecy alike."""
     seen = set()
-    for wheel in ("paint", "light"):
+    for wheel in ("primary", "secondary"):
         key = archetypes.grid_key("rose", wheel)
         for index in range(len(archetypes.figures(key))):
             for register in cube.FIGURE_SETS:
@@ -244,7 +244,7 @@ def test_only_the_cube_wheels_answer_the_roster():
     """An archetype whose arms are not cube seats raises rather than
     inventing a figure for them."""
     with pytest.raises(KeyError):
-        archetypes.roster_names("trinity_paint", 0, "archetypal")
+        archetypes.roster_names("trinity_primary", 0, "archetypal")
 
 
 def test_the_star_the_roster_and_the_register_speak_one_word():

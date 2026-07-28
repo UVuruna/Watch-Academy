@@ -13,7 +13,7 @@ the same way. So each window carries the TWO-ROW canon VISUALLY: the
 pillar's bright face dominant, its shadow present as a small dark
 panel or corner scene.
 
-The six pillars keep their planet seats and WEAR the light palette
+The six pillars keep their planet seats and WEAR the secondary palette
 (owner confirmed 2026-07-16): **Gratitude green** (12h — the highest
 love shown as GROWTH), **Support yellow** (16h — the daylight
 shoulder), **Passion red** (20h — love embodied), **Tolerance

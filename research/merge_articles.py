@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 VARIANT_KEYS = {
-    "hexa_paint", "hexa_light", "octa_paint", "octa_light",
+    "hexa_primary", "hexa_secondary", "octa_primary", "octa_secondary",
     "cross", "trio",
 }
 STAGING = ROOT / "research" / "articles_staging"

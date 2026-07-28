@@ -6,13 +6,13 @@ the cardinals, a crown, a root, and six opposition axes; see
 [The DOMY Canon](../../../CANON.md), §The Two Dozen Systems): the
 twelve emotions ride the twelve wedges, each sealed to its own hour.
 Love crowns the wheel at noon; Hatred roots it at midnight — the same
-Love–Hatred vertical the Prism paint Persons already argue, now spoken
+Love–Hatred vertical the Prism primary Persons already argue, now spoken
 as the naked emotion rather than the person who embodies it.
 
 **The sealed hours (owner):** Love 12h, Hope 14h, Courage 16h,
 Ambition 18h, Pride 20h, Envy 22h, Hatred 24h, Despair 02h, Fear 04h,
 Doubt 06h, Humility 08h, Gratitude 10h. Six of the twelve — **Love,
-Courage, Pride, Hatred, Fear, Humility** — are the Prism paint hexagram
+Courage, Pride, Hatred, Fear, Humility** — are the Prism primary hexagram
 itself (`One_Love`, `Michael_Courage`, `Lucifer_Pride`, `Devil_Hatred`,
 `Judas_Fear`, `Jesus_Humility`), sitting here at their own prism hours;
 the other six — **Hope, Ambition, Envy, Despair, Doubt, Gratitude** —

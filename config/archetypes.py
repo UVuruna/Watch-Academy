@@ -24,33 +24,33 @@ ARCHETYPE_ART_DIR = paths.assets_dir() / "archetypes"
 # (one palette, one set of four windows, the Throne on both); Aurora
 # and the Calendar have NO archetype at all.
 ARCHETYPE_GRID = {
-    ("trio", "paint"): "trinity_paint",
-    ("trio", "light"): "trinity_light",
+    ("trio", "primary"): "trinity_primary",
+    ("trio", "secondary"): "trinity_secondary",
     # The Seasons carry TWO archetypes now (owner 2026-07-17, CANON
-    # §Seasons light): PAINT = the Four Temperaments on the seasons
+    # §Seasons secondary): PAINT = the Four Temperaments on the seasons
     # palette; LIGHT = the Tetramorph on the Four Elements wheel. Both
     # keep the Throne at the center.
-    ("cross", "paint"): "seasons_paint",
-    ("cross", "light"): "seasons_light",
-    ("hexa", "paint"): "prism_paint",
-    ("hexa", "light"): "prism_light",
-    ("octa", "paint"): "compass_paint",
-    ("octa", "light"): "compass_light",
+    ("cross", "primary"): "seasons_primary",
+    ("cross", "secondary"): "seasons_secondary",
+    ("hexa", "primary"): "prism_primary",
+    ("hexa", "secondary"): "prism_secondary",
+    ("octa", "primary"): "compass_primary",
+    ("octa", "secondary"): "compass_secondary",
     # THE CUBE THIRD WHEELS (owner seal 2026-07-26, CUBE.md): Genesis —
     # the creation trio on the INVERTED triangle; Council — all six
     # Double-Trinity offices in session; Character — the Cube with the
     # depth axis at zero (4 poles + 4 combos).
-    ("trio", "cube"): "trinity_genesis",
-    ("hexa", "cube"): "prism_council",
-    ("octa", "cube"): "compass_character",
+    ("trio", "tertiary"): "trinity_genesis",
+    ("hexa", "tertiary"): "prism_council",
+    ("octa", "tertiary"): "compass_character",
     # THE ROSE (owner seal 2026-07-27, CUBE.md §The Rose): its two
     # wheels carry the two character systems. LEGACY (paint) reads the
     # 2D system — it IS the Character wheel's eight directions, so it
     # points at that same set (Rule #5: one table, two readers, and a
     # figure seated once is seated everywhere). PROPHECY (light) reads
     # the 3D system, the Cube's eight vertices.
-    ("rose", "paint"): "compass_character",
-    ("rose", "light"): "rose_vertices",
+    ("rose", "primary"): "compass_character",
+    ("rose", "secondary"): "rose_vertices",
 }
 
 # The Eight Ages ship TWO image registers (owner "oba", CANON §Compass
@@ -237,9 +237,9 @@ def _life_figures(register: str) -> tuple:
 # below + "center"), the ordered FIGURES (index = hour-space index)
 # and the CENTER (or None — the Compass rose is the wheel itself).
 ARCHETYPES = {
-    # Trinity paint — the heavenly courtroom (CANON §Trinity).
-    "trinity_paint": {
-        "articles": "archetype_trinity_paint",
+    # Trinity primary — the heavenly courtroom (CANON §Trinity).
+    "trinity_primary": {
+        "articles": "archetype_trinity_primary",
         "figures": (
             _fig(0.0, _TRINITY_DIR / "One_Judge.png",
                  "The One", "Judge", "one"),
@@ -253,9 +253,9 @@ ARCHETYPES = {
             "name": "The Eye of Providence", "entity": "center",
         },
     },
-    # Trinity light — the Family triangle (CANON §Trinity light).
-    "trinity_light": {
-        "articles": "archetype_trinity_light",
+    # Trinity secondary — the Family triangle (CANON §Trinity secondary).
+    "trinity_secondary": {
+        "articles": "archetype_trinity_secondary",
         "figures": (
             _fig(0.0, _FAMILY_DIR / "Child_Anchor.png",
                  "The Child", "The Anchor", "child"),
@@ -277,8 +277,8 @@ ARCHETYPES = {
     # article set has no texts yet, so the rename is consistent
     # everywhere: symbolism.json carries no archetype nodes until
     # Session 6, and archetype_article() answers None gracefully.)
-    "seasons_paint": {
-        "articles": "archetype_seasons_paint",
+    "seasons_primary": {
+        "articles": "archetype_seasons_primary",
         "figures": (
             _fig(0.0, _TEMPERAMENTS_DIR / "Choleric.png",
                  "Choleric", "The Prime", "choleric"),
@@ -302,8 +302,8 @@ ARCHETYPES = {
     # creatures WITNESS, circling the Throne (kept as the center). Ordered
     # by arm angle (0/90/180/270 = summer/autumn/winter/spring), matching
     # the _CROSS_ELEMENTS hues (fire/earth/water/air).
-    "seasons_light": {
-        "articles": "archetype_seasons_light",
+    "seasons_secondary": {
+        "articles": "archetype_seasons_secondary",
         # rotates=True (owner decree 2026-07-20): the FIRST ArchetypeLayer
         # consumer to opt into THE UNIVERSAL ROTATION CONVENTION — the
         # newer generations that landed on the stale
@@ -325,11 +325,11 @@ ARCHETYPES = {
             "name": "The Throne", "entity": "center",
         },
     },
-    # Prism paint — the Persons (CANON §Prism light—the Persons).
+    # Prism primary — the Persons (CANON §Prism secondary—the Persons).
     # Lucifer and Judas REUSE their Scale glass (canon: no new art
     # for those two seats).
-    "prism_paint": {
-        "articles": "archetype_prism_paint",
+    "prism_primary": {
+        "articles": "archetype_prism_primary",
         "figures": (
             _fig(0.0, _PERSONS_DIR / "One_Love.png",
                  "The One", "Love", "one"),
@@ -355,15 +355,15 @@ ARCHETYPES = {
             "name": "The Seal", "entity": "center",
         },
     },
-    # Prism light — One Soul, the Bond (CANON): pillar + its SHADOW.
+    # Prism secondary — One Soul, the Bond (CANON): pillar + its SHADOW.
     # THE ENCYCLOPEDIA TARGETS (owner verdict 2026-07-27, "napravi
     # naravno"): every arm — and, uniquely so far, the CENTRE — jumps to
     # its own page in the `one_soul` topic of The Archetypes hall. The
     # index order IS the entry order of `app.encyclopedia`'s
     # `_ONE_SOUL_ENTRIES` (0 = the theme's title page), pinned at both
     # ends by `tests/test_one_soul_theme.py`.
-    "prism_light": {
-        "articles": "archetype_prism_light",
+    "prism_secondary": {
+        "articles": "archetype_prism_secondary",
         "figures": (
             _fig(0.0, ONE_SOUL_ART_DIR / "Gratitude.png",
                  "Gratitude", "Taking for Granted", "gratitude",
@@ -390,12 +390,12 @@ ARCHETYPES = {
             "enc": ("one_soul", 7),
         },
     },
-    # Compass paint — the Eight Walks of Life (CANON): estate + its
+    # Compass primary — the Eight Walks of Life (CANON): estate + its
     # OBJECT. Six estates already have Professions pages — the only
     # archetype→encyclopedia mapping that exists today (the Scholar
     # and the Wanderer wait for their own topics).
-    "compass_paint": {
-        "articles": "archetype_compass_paint",
+    "compass_primary": {
+        "articles": "archetype_compass_primary",
         "figures": (
             _fig(0.0, _WALKS_DIR / "King.png", "The King", "The Crown",
                  "king", enc=("profession", 0)),
@@ -416,10 +416,10 @@ ARCHETYPES = {
         ),
         "center": None,          # the rose is the wheel itself (owner)
     },
-    # Compass light — the Eight Ages (CANON): age + its LIVING BEING;
+    # Compass secondary — the Eight Ages (CANON): age + its LIVING BEING;
     # the figures resolve per ARCHETYPE_LIFE_REGISTER in figures().
-    "compass_light": {
-        "articles": "archetype_compass_light",
+    "compass_secondary": {
+        "articles": "archetype_compass_secondary",
         "registers": {
             register: _life_figures(register)
             for register in ARCHETYPE_LIFE_REGISTERS
@@ -572,15 +572,15 @@ ARCHETYPES = {
 
 
 # The four elements the TETRAMORPH creatures ride (owner 2026-07-17,
-# CANON §Seasons light). Index = the arm/hour-space index, in the SAME
-# order as the seasons_light figures and the _CROSS_ELEMENTS hues: fire
+# CANON §Seasons secondary). Index = the arm/hour-space index, in the SAME
+# order as the seasons_secondary figures and the _CROSS_ELEMENTS hues: fire
 # (summer/Lion), earth (autumn/Ox), water (winter/Eagle), air
 # (spring/Man). The THIRD column of the tetramorph three-side hover.
 TETRAMORPH_ELEMENTS = ("Fire", "Earth", "Water", "Air")
 
 # The four EVANGELIST rondels (owner 2026-07-18) — the SECOND column of
 # the tetramorph three-side hover. Index = the arm/hour-space index, the
-# SAME order as the seasons_light figures (0 Lion/Mark, 1 Ox/Luke, 2
+# SAME order as the seasons_secondary figures (0 Lion/Mark, 1 Ox/Luke, 2
 # Eagle/John, 3 Man/Matthew). Small round stained-glass rondels of each
 # evangelist at his desk with his creature, in his season's palette;
 # they may not exist on disk yet — the three-side falls back to the
