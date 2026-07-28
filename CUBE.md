@@ -43,8 +43,12 @@ strong and provocative — owner decree).
 | Axis | Colors (pole ↔ pole) | Question | Healthy ↔ Healthy | Fallen ↔ Fallen |
 |---|---|---|---|---|
 | **X — Activation** | Blue ↔ Orange | How little or how much do I act? | Composure ↔ Vigor | Lethargy ↔ Frenzy |
-| **Y — Basis of Judgment** | Yellow ↔ Purple-Gray | Do bonds or principles rule my judgment? | Loyalty ↔ Integrity | Tribalism ↔ Legalism |
+| **Y — Moral Scope** | Yellow ↔ Purple-Gray | Do bonds or principles rule my judgment? | Loyalty ↔ Integrity | Tribalism ↔ Legalism |
 | **Z — Self-Regard** | Green ↔ Red | How do I hold my own worth? | Humility ↔ Dignity | Self-Annihilation ↔ Self-Worship |
+
+(Y renamed from *Basis of Judgment* to **Moral Scope** — owner
+approval 2026-07-28; structural reading Particularism ↔
+Universalism. Poles, colours, figures untouched.)
 
 Orientation (the owner's cube views): **Y is vertical** — Yellow the
 top face, Purple-Gray the bottom; the Court corner shows **Yellow
@@ -251,7 +255,7 @@ moral split of temperature: the warm poles' healthy faces (Vigor,
 Loyalty, Dignity — Heracles, Penelope, Arthur) stay noble; the cold
 corner's fallen face (the Paralyzed Purist) stays a human tragedy.
 
-### The Sacred Axis (SEALED; alias OPEN)
+### The Sacred Axis (SEALED; alias SEALED 2026-07-28)
 
 The Trinity completes on the cube's signed main diagonal:
 
@@ -291,9 +295,11 @@ three proofs found in the sealed canon:
 (cold measure ↔ integration ↔ warm excess), Courtroom (Advocate ↔
 Judge ↔ Prosecutor), Creation (Preserver ↔ Creator ↔ Destroyer).
 Articles carry ONE distinguishing sentence: this symbolic triad is
-not the doctrinal Holy Trinity (Father, Son, Spirit). Alias for the
-axis, owner to pick: **Axis Mundi** (Eliade's found term) or **Axis
-of Being**.
+not the doctrinal Holy Trinity (Father, Son, Spirit). Alias:
+**AXIS MUNDI** — sealed 2026-07-28 under the owner's blanket
+delegation, the found-names law deciding (Eliade's own term for the
+world-line through the centre); *Axis of Being* stays on record as
+the alternative for the owner's deeper pass.
 
 **Seats: 3 sacred + 24 human (SEALED).** The two absolute vertices
 leave the 24-seat human circle — outside the hours, outside time.
@@ -374,10 +380,15 @@ themselves:
   which hour is an OPEN problem — a theorem-guided choice for a
   future session, like the Prophecy wheel's Hamiltonian seating.)
 
-### The 65 Terms (38 carried SEALED; 27 PROPOSED 2026-07-28)
+### The 65 Terms (SEALED 2026-07-28)
 
-13 axis terms + 26 luminous + 26 fallen extremities. Three naming
-laws (PROPOSED as standing law):
+13 axis terms + 26 luminous + 26 fallen extremities. **The blanket
+seal (owner, 2026-07-28):** the whole construction — the 27 new
+terms, the Axis Mundi alias and the epigraph — approved as the
+working canon in one act, the owner reserving a deeper pass that
+may still flip individual terms; the alternates below stay on
+record for exactly that pass. Three naming laws (SEALED as standing
+law, same approval):
 
 1. **Found names only** — every term is taken from the moral
    tradition, never manufactured (FAME FIRST, applied to words).
@@ -394,15 +405,15 @@ laws (PROPOSED as standing law):
 | Axis | Structural | − pole: luminous / fallen | + pole: luminous / fallen |
 |---|---|---|---|
 | **Activation** | Restraint ↔ Mobilization | Blue: Composure / Lethargy | Orange: Vigor / Frenzy |
-| **Moral Scope** *(PROPOSED rename of "Basis of Judgment")* | Particularism ↔ Universalism | Purple-Gray: Integrity / Legalism | Yellow: Loyalty / Tribalism |
+| **Moral Scope** *(renamed from "Basis of Judgment")* | Particularism ↔ Universalism | Purple-Gray: Integrity / Legalism | Yellow: Loyalty / Tribalism |
 | **Self-Regard** | Self-Effacement ↔ Self-Exaltation | Green: Humility / Self-Annihilation | Red: Dignity / Self-Worship |
 
 The Y rename touches no pole, colour or figure; the universal
 pole's anchors are spoken by Jesus himself (Matthew 5:18 — already
 purple's seal; Mark 3:33–35 against the tribe's claim).
 
-**Secondary axes (cells: 4 pairs SEALED from the Character wheel, 8
-pairs PROPOSED):**
+**Secondary axes (cells: 4 pairs carried from the Character wheel,
+8 pairs new — all SEALED 2026-07-28):**
 
 | Axis | Cold end: luminous / fallen | Warm end: luminous / fallen |
 |---|---|---|
@@ -413,7 +424,14 @@ pairs PROPOSED):**
 | **Lion ↔ Lamb** | X−Z−: Meekness / Despair | X+Z+: Aspiration / Megalomania |
 | **Servant ↔ Sovereign** | X−Z+: Self-Mastery / Disdain | X+Z−: Diligence / Servility |
 
-**Tertiary axes (all vertex cells SEALED; axis names PROPOSED):**
+*One disarming sentence is owed wherever Lion ↔ Lamb is taught:
+Scripture gives BOTH titles to Christ — the Lion of Judah who is
+the Lamb — so the axis names the human split of what the centre
+unites, and the Lion end's seat on the warm side moralizes nothing
+(the Colour Law holds).*
+
+**Tertiary axes (all vertex cells SEALED; axis names SEALED
+2026-07-28):**
 
 | Axis | Cold end: luminous / fallen | Warm end: luminous / fallen |
 |---|---|---|
@@ -472,7 +490,7 @@ Judge reads both files (2 Chronicles 16:9), and the master verse
 names the mutual blindness: *"and the darkness comprehended it
 not"* (John 1:5).
 
-Epigraph (PROPOSED wording): *"The Cube is the world of character;
+Epigraph (SEALED 2026-07-28): *"The Cube is the world of character;
 the Hexagram is what that world reveals when viewed along the
 Sacred Axis."*
 

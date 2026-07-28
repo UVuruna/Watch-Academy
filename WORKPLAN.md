@@ -392,15 +392,14 @@ cold), Satanism RED (diabolic, warm)** — today's assignment is
 reversed. Consumed by the Rose, the Octa and Seasons(4). Tests pin
 the config path and the creeds orientation.
 
-### Session 24 — the 65 verdict + the Sacred rosters → **Opus** (writers) — BLOCKED on the owner's per-term verdict
-**Say:** "Radi Sesiju 24 iz WORKPLAN.md — presuda 65 termina i novi
-rosteri."
+### Session 24 — the Sacred rosters → **Opus** (writers) — UNBLOCKED (blanket seal 2026-07-28)
+**Say:** "Radi Sesiju 24 iz WORKPLAN.md — novi rosteri."
 **Reads:** CUBE.md §The Thirteen Axes IN FULL (grid, naming laws,
-alternates, rejected list); the owner's verdict (this session's
-input); CANON.md quote rules.
-**Delivers:** (1) the per-term verdict folded into CUBE.md —
-PROPOSED marks removed or terms replaced, the Sacred Axis alias
-picked (Axis Mundi / Axis of Being), the epigraph sealed; (2) THE
+alternates, rejected list); CANON.md quote rules.
+**Delivers:** (1) IF the owner's deeper pass has flipped any term
+by then, fold the flips into CUBE.md first (the blanket seal of
+2026-07-28 already sealed the whole grid, alias and epigraph —
+otherwise nothing to fold); (2) THE
 ROSTER ROUND under FAME FIRST **plus the ranking addendum
 (2026-07-28: fame, then famous-FOR-the-trait)**: the 16 new edge
 readings × 3 sets (48 seats) + the two SACRED seats' historical and
@@ -459,11 +458,12 @@ this plan only reserves the seat and defers the spec to the owner.
 
 ## Open Owner Decisions (any session may receive the verdict)
 
-- **The 27 PROPOSED terms of the 65-grid** (CUBE.md §The 65 Terms):
-  per-term verdict — plus the Sacred Axis alias (Axis Mundi vs Axis
-  of Being) and the epigraph wording. **Sessions 24–25 are BLOCKED
-  on this.** Alternates on record: Discernment / Contemplation /
-  Entitlement / Service.
+- ~~The 27 PROPOSED terms of the 65-grid~~ — **SEALED 2026-07-28 by
+  the owner's blanket approval**: all 27 terms stand, alias **Axis
+  Mundi**, epigraph sealed; the owner reserves a deeper pass that
+  may flip individual terms (alternates stay on record: Discernment
+  / Contemplation / Entitlement / Service). Sessions 24–25
+  UNBLOCKED.
 
 - ~~Theme name~~ — SEALED 2026-07-27: the theme keeps **all three**
   names. Titled in full it is **One Soul — The Vow — The Bond**;
