@@ -23,7 +23,7 @@ the open page.
 ## Connections
 
 ### Uses
-- [Encyclopedia](encyclopedia.md) — `_topics()` is the inventory: every
+- [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md) — `_topics()` is the inventory: every
   topic's card icon and every entry's look/image paths, walked here
   exactly as the dialog would resolve them
 - [Asset Recolor](../render/asset_recolor.md) — `ensure_variant` /

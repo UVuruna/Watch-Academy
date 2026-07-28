@@ -16,18 +16,18 @@ from config import defaults, paths, profiling
 from render.asset_recolor import ensure_variant, variant_pending
 from render.asset_variants import scaled_variant_file
 
-from app import encyclopedia
+from app.encyclopedia import topics as encyclopedia_topics
 
 
 def _jobs() -> list:
     """(path, decode ceiling) for everything the Encyclopedia can show,
     DEDUPLICATED, gallery card icons first (the first screen every open
     shows), then every entry's look/image paths in topic order.
-    `encyclopedia._topics()` is the single inventory (Rule #5) — no
+    `app.encyclopedia.topics()` is the single inventory (Rule #5) — no
     second theme/plate list to drift out of sync. Building it here also
     renders the eight Moon phase plates into the raster cache (QImage
     end to end — safe off the GUI thread)."""
-    topics = encyclopedia._topics()
+    topics = encyclopedia_topics()
     jobs: list = []
     seen: set[str] = set()
 
