@@ -76,6 +76,16 @@ THEME_FOLDER = {
     "bible_dark": "bible",           # bible/dark register
     "planet_signs": "planets",       # planets/signs look
     "planets_art": "planets",        # planets/art look
+    # THE INNER WHEEL's code keys are PLURAL, its folders SINGULAR
+    # (`defaults.EMBLEM_ART_DIRS` has always resolved them by hand).
+    # Naming them here closes the gap this table exists for: any caller
+    # that starts from a code key — the Session 27 title-plate resolver
+    # was the first — now lands on the real folder instead of a
+    # KeyError.
+    "virtues": "virtue",
+    "sins": "sin",
+    "moods": "mood",
+    "intelligences": "intelligence",
 }
 
 

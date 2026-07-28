@@ -157,6 +157,59 @@ TOPIC_ALIASES = {
 TOPIC_ALIASES["planet_signs"] = ("planets", 0)
 
 
+# --- The coverage law --------------------------------------------------------
+# OWNER LAW (Session 27, 2026-07-28): "svaki clanak mora sliku" — every
+# article carries an image. `tests/test_encyclopedia_tree.py` enforces it
+# on the SLOT, not the file: a page must NAME the plate it wants, so a
+# prompt sheet has something to address and the reader lights up the
+# moment the art lands (the graceful-absent contract).
+#
+# These pages are the documented exceptions, and every one of them is a
+# COMPOSITION rather than a scene — the root Rule #19 derivation check
+# the Cube canon already answered in writing (CUBE.md, sealed Session
+# 25: "an axis IS its two ends through the centre — a composition, never
+# a new scene"). They are drawn by the program or by the page around
+# them, never generated:
+#
+#   * the thirteen AXIS pages — each is its own two poles through the
+#     centre, and both poles are on the page beside it;
+#   * the Cube's own DIAGRAMS — the cube, the axes' arithmetic, the term
+#     grid, the three sets, the hexagram projection, the banknote axes;
+#   * the two CIPHERS and the union TABLE — FALL/STAR, DOMY/SAFE and the
+#     twenty-four fields are text figures, not pictures.
+#
+# The owner may overturn any line here (his answer to the coverage
+# question was "all generated"); until he does, the canon's own written
+# exception stands, and the list makes the gap VISIBLE instead of
+# leaving 32 silent holes.
+PLATELESS_PAGES = {
+    "cube_doctrine": (
+        "The Cube", "The Thirteen Axes", "The Sixty-Five Terms",
+        "The Three Sets",
+    ),
+    "cube_axes": (
+        "The Activation Axis", "The Moral Scope Axis",
+        "The Self-Regard Axis", "Reason ↔ Emotion",
+        "Pragmatism ↔ Idealism", "Person ↔ Cause", "Hearth ↔ Desert",
+        "Lion ↔ Lamb", "Servant ↔ Sovereign",
+    ),
+    "cube_figures": (
+        "Vow ↔ Vision", "Preservation ↔ Revolution", "Crown ↔ Shield",
+    ),
+    "cube_projections": ("The Hexagram Projection", "The Banknote Axes"),
+    "double_trinity": ("The Double Trinity", "The Twenty-Four Fields"),
+    "crosses": ("The Two Crosses", "FALL and STAR", "DOMY and SAFE"),
+    # Awaiting a home rather than exempt (the owner's verdict pending):
+    # the five Chinese elements are real figures, and these four are
+    # ordinary title pages whose topics sit outside the weekday tree.
+    "chinese": ("Wood", "Fire", "Earth", "Metal", "Water"),
+    "era": ("The_Great_Oscillations",),
+    "months": ("The Slavic Months",),
+    "intelligences": ("The Nine Intelligences",),
+    "one_soul": ("One Soul — The Vow — The Bond",),
+}
+
+
 def cube_target(flat_index: int) -> tuple[str, int]:
     """(topic key, local page index) for a Spacebar jump that names the
     OLD flat cube index. `config/archetypes.py` aims the Cube wheels'

@@ -2687,6 +2687,57 @@ def colored_variant_rel(rel: str) -> str:
     return f"{register}/colored/{stem}"
 
 
+# THE TITLE PLATE (Session 27 coverage law, owner 2026-07-28: "svaki
+# clanak mora sliku" — every article carries an image). A weekday
+# theme's own opening page and its week-duality title page had NO image
+# slot at all: not a missing file, a missing NAME, so no prompt sheet
+# could even say what to draw. They live in the theme's own folder under
+# a `title` REGISTER (the sealed vocabulary in
+# `tests/test_assets_structure.py` grew this one entry) — the theme read
+# whole, beside the registers that read it seat by seat.
+#
+#   greek        -> weeks/myth/greek/title/colored/Greek.png
+#   greek duality-> weeks/myth/greek/title/colored/Greek_Duality.png
+#   greek_pantheon -> .../title/colored/Greek_Pantheon.png
+#
+# The stem is derived from the key; only where the derived stem would
+# break the word-separator rule (bible2 -> "Bible2") or lose the display
+# name (religion -> "Creeds") does the table below override it.
+THEME_TITLE_STEMS = {
+    "bible2": "Bible_II",
+    "bible_dark": "Bible_Dark",
+    "religion": "Creeds",
+    "religion_alt": "Ancient_Religions",
+    "planet_signs": "Planet_Signs",
+}
+
+
+def theme_title_art(key: str, duality: bool = False) -> "Path":
+    """The plate for one theme-title or week-duality-title page. `key` is
+    the article key the page already carries — "greek", "greek_pantheon",
+    "greek_wider", "bible_dark" — so the three blocks of a merged theme
+    each name their own plate inside the ONE theme folder."""
+    from config import taxonomy
+
+    base = key
+    for suffix in ("_pantheon", "_wider"):
+        if base.endswith(suffix):
+            base = base[: -len(suffix)]
+            break
+    stem = THEME_TITLE_STEMS.get(key) or "_".join(
+        word.capitalize() for word in key.split("_")
+    )
+    if duality:
+        stem = f"{stem}_Duality"
+    # The live CODE keys are still the pre-rename ones (`bible2`,
+    # `religion_alt`) — the rename table takes them to the taxonomy's
+    # own key, and THEME_FOLDER from there to the folder that holds
+    # them. Two hops, both already sealed in `config.taxonomy`.
+    renamed = taxonomy.THEME_KEY_RENAMES.get(base, base)
+    folder = taxonomy.theme_folder(renamed)
+    return weekday_art(f"{folder}/title/colored/{stem}.png")
+
+
 def weekday_theme_body_art(
     theme: str, body: str, on_date: date | None = None, colored: bool = False,
 ) -> Path:

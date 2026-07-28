@@ -227,12 +227,12 @@ def _weekday_topic(theme: str):
         }
 
     title_entry = {
-        "images": (),      # graceful-absent — a future theme plate's slot
+        "images": (defaults.theme_title_art(theme),),
         "name": ("theme_title", theme),
         "article": ("theme_title", theme),
     }
     duality_title_entry = {
-        "images": (),
+        "images": (defaults.theme_title_art(theme, duality=True),),
         "name": ("week_duality_title", theme),
         "article": ("week_duality", theme),
     }
@@ -357,12 +357,12 @@ def _pantheon_topic(theme: str) -> list[dict]:
 
     title_key = f"{theme}_pantheon"
     title_entry = {
-        "images": (),
+        "images": (defaults.theme_title_art(title_key),),
         "name": ("theme_title", title_key),
         "article": ("theme_title", title_key),
     }
     duality_title_entry = {
-        "images": (),
+        "images": (defaults.theme_title_art(title_key, duality=True),),
         "name": ("week_duality_title", title_key),
         "article": ("week_duality", title_key),
     }
@@ -404,7 +404,7 @@ def _wider_topic(theme: str) -> list[dict]:
     old standalone topics did, until the owner's art lands."""
     title_key = f"{theme}_wider"
     title_entry = {
-        "images": (),
+        "images": (defaults.theme_title_art(title_key),),
         "name": ("theme_title", title_key),
         "article": ("theme_title", title_key),
     }

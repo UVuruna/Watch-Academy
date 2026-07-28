@@ -258,3 +258,80 @@ def test_the_guide_is_a_card_built_from_the_help_books_own_json(topics):
         assert entry["article"][0] == "guide"
         assert entry["article"][1].startswith("[[")
     assert tree.THEME_TO_WHOLE["guide"] == "instrument"
+
+
+# --- 5. THE COVERAGE LAW ----------------------------------------------------
+
+def _declared_slots(entry: dict) -> list:
+    """Every image path an entry NAMES, across all its looks."""
+    looks = entry.get("looks") or (("", (tuple(entry.get("images", ())),)),)
+    return [path for _label, rows in looks for row in rows for path in row
+            if path is not None]
+
+
+def _page_name(entry: dict) -> str:
+    """A page's identity for the coverage ledger. A tuple name is
+    (section, KEY) — the key is what distinguishes one era or theme-title
+    page from the next, so the head alone would collapse eight pages
+    into one."""
+    name = entry["name"]
+    return name if isinstance(name, str) else name[1]
+
+
+def test_every_article_names_the_plate_it_wants(topics):
+    """OWNER LAW (Session 27): "svaki clanak mora sliku". Enforced on the
+    SLOT, not the file — a page must NAME its plate, so a prompt sheet
+    has something to address and the reader lights up the moment the art
+    lands. The documented exceptions are the compositions the Cube canon
+    already exempted in writing (`tree.PLATELESS_PAGES`)."""
+    orphans = []
+    for key, topic in topics.items():
+        exempt = set(tree.PLATELESS_PAGES.get(key, ()))
+        for entry in topic["entries"]:
+            if _declared_slots(entry):
+                continue
+            if _page_name(entry) in exempt:
+                continue
+            orphans.append(f"{key}: {_page_name(entry)}")
+    assert not orphans, (
+        "articles with no image slot at all — give them a plate name or "
+        "declare the exception in tree.PLATELESS_PAGES:\n  "
+        + "\n  ".join(orphans)
+    )
+
+
+def test_the_exception_list_has_no_stale_entries(topics):
+    """A page that GAINED a plate must leave the exception list, or the
+    list quietly stops meaning anything (the ledger-goes-stale failure
+    the prompt COVERAGE file already learned once)."""
+    stale = []
+    for key, names in tree.PLATELESS_PAGES.items():
+        assert key in topics, key
+        plated = {
+            _page_name(entry) for entry in topics[key]["entries"]
+            if _declared_slots(entry)
+        }
+        present = {_page_name(entry) for entry in topics[key]["entries"]}
+        for name in names:
+            if name not in present:
+                stale.append(f"{key}: {name} — no such page any more")
+            elif name in plated:
+                stale.append(f"{key}: {name} — has a plate now")
+    assert not stale, "\n  ".join(stale)
+
+
+def test_the_title_plate_resolver_names_one_file_per_block(topics):
+    """The three blocks of a merged theme name three DIFFERENT plates
+    inside the one theme folder — the merge must not make two title
+    pages fight over one filename."""
+    from config import defaults
+
+    seen = {}
+    for key in ("greek", "greek_pantheon", "greek_wider",
+                "bible", "bible2", "bible_dark",
+                "religion", "religion_alt"):
+        for duality in (False, True):
+            path = defaults.theme_title_art(key, duality=duality)
+            assert path not in seen, (key, duality, seen.get(path))
+            seen[path] = (key, duality)
+    assert "title" in str(defaults.theme_title_art("greek"))
