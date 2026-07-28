@@ -460,6 +460,158 @@ it remains the article-level psychological alias of Machination);
 Statecraft (a craft, not a trait); Passion (collides with the
 Passion of Christ in a canon this biblical).
 
+<a id="the-rosters"></a>
+
+### The Rosters — who holds the new seats (Session 24, 2026-07-28)
+
+The grid was named before it was peopled. This round seats the
+**sixteen new edge readings in all three sets** (48 figure-seats) and
+the **two sacred corners' historical and modern echoes** (4), under
+FAME FIRST and its ranking addendum — the most widely known figure
+the seat can carry, and among equally famous candidates the one
+KNOWN BY this very quality. Nothing sealed was touched: the six
+poles, the eight vertices and the four carried edges keep every
+figure they already had, and the 108 seats they hold are transcribed
+into the engine unchanged (§Wiring below).
+
+**The eight new edge cells (SEALED 2026-07-28).**
+
+| Cell | Archetypal +/− | Historical +/− | Modern +/− |
+|---|---|---|---|
+| Prudence / Indifference | Solomon / Pontius Pilate | Elizabeth I / Adolf Eichmann | Spock / Dr. Manhattan |
+| Ardor / Vendetta | Romeo / Medea | Joan of Arc / Genghis Khan | Katniss Everdeen / Inigo Montoya |
+| Steadfastness / Machination | Ruth / Iago | Rosa Parks / Cardinal Richelieu | Brienne of Tarth / Petyr Baelish |
+| Reform / Zealotry | Nehemiah / Saul of Tarsus | Abraham Lincoln / Oliver Cromwell | Hermione Granger / Rorschach |
+| Meekness / Despair | Isaac / Cain | Francis of Assisi / Vincent van Gogh | Frodo Baggins / Théoden |
+| Aspiration / Megalomania | Daedalus / Icarus | Muhammad Ali / Alexander the Great | Rocky Balboa / Tony Stark |
+| Self-Mastery / Disdain | Odysseus / Coriolanus | Bruce Lee / Diogenes | Uncle Iroh / Tywin Lannister |
+| Diligence / Servility | Martha of Bethany / Uriah Heep | Mother Teresa / Vidkun Quisling | Andy Dufresne / Dobby |
+
+**The hooks, cell by cell** (one deed each; the full articles are
+Session 25's, under the Charter):
+
+- **Prudence / Indifference** — Solomon suspends a verdict until a
+  test discloses the mother (1 Kings 3:16–28); Pilate washes his
+  hands (Matthew 27:24), the tradition's own emblem of a judgment
+  withheld. Elizabeth I rules by *video et taceo* and settles
+  religion in 1559 without inquisition into belief; Eichmann
+  administers deportation as a timetable — reason with the care
+  removed, the fall Arendt named at the 1961 trial. Spock is the
+  modern name of reason over feeling; Dr. Manhattan states the seat's
+  fall himself — *"a live body and a dead body contain the same
+  number of particles"* — and leaves for Mars.
+- **Ardor / Vendetta** — Romeo spends the fire on a bond both houses
+  forbid; Medea kills her children to punish Jason. Joan of Arc
+  carries Orléans and the march to Reims in 1429 on a bond to a
+  crown; Genghis Khan answers murdered envoys with the annihilation
+  of Khwarezmia (1219) — the insult to the bond avenged without
+  measure. Katniss volunteers in her sister's place in one second;
+  Inigo Montoya organizes a whole life around one sentence, and his
+  own line when the revenge is over is the seat's verdict.
+- **Steadfastness / Machination** — Ruth is released and stays
+  (*"whither thou goest"*), the recorded Loyalty alternate seated
+  where she is exact; Iago works the handkerchief for months. Rosa
+  Parks does not move on 1 December 1955; Richelieu turns his own
+  dismissal into his rivals' ruin on the Day of the Dupes (November
+  1630). Brienne keeps an oath after the woman who took it is dead;
+  Petyr Baelish murders Jon Arryn and writes the letter that starts
+  the war — *"chaos is a ladder."*
+- **Reform / Zealotry** — Nehemiah finishes the wall in fifty-two
+  days and cancels the debts of his own creditor class (Nehemiah
+  5–6); Saul of Tarsus names his own fall — *"as touching zeal,
+  persecuting the church"* (Philippians 3:6) — before the road.
+  Lincoln signs the Emancipation Proclamation on 1 January 1863;
+  Cromwell reforms by purge, from Drogheda (1649) to the
+  Major-Generals. Hermione founds an abolitionist society against
+  everyone's amusement; Rorschach refuses the bargain and dies for
+  it — *"never compromise, not even in the face of Armageddon."*
+- **Meekness / Despair** — Isaac carries the wood up Moriah and does
+  not resist; Cain speaks the first despair in Scripture, *"my
+  punishment is greater than I can bear"* (Genesis 4:13). Francis of
+  Assisi resigns the leadership of the order he founded (1220) and
+  calls himself the least; Van Gogh is seated on the Auvers letters
+  of July 1890 — and the Colour Law binds hardest here, since a fall
+  is a station and an illness is a tragedy, never a verdict on a man.
+  Frodo carries what the great may not touch; Théoden sits in a hall
+  where a king had stopped acting — and is raised out of it, which is
+  the whole doctrine of a station.
+- **Aspiration / Megalomania** — Daedalus builds wings against a
+  king's ceiling and instructs the MIDDLE course, which is this
+  canon's own law of measure spoken by the maker; Icarus takes the
+  same wings higher. Ali says *"I am the greatest"* before it is
+  true; Alexander accepts proskynesis and the sonship of
+  Zeus-Ammon after Siwa (331 BC). Rocky asks only to go the
+  distance; Tony Stark builds Ultron in secret — one man's ceiling
+  raised over the world.
+- **Self-Mastery / Disdain** — Odysseus binds himself to the mast and
+  stops his crew's ears (*Odyssey* XII), philosophy's own image of a
+  man who governs himself; Coriolanus will not show his wounds to
+  people he despises. Bruce Lee is seated on the training notebooks
+  and the daily regime; Diogenes tells the greatest man alive to
+  stand out of his light and carries a lamp at noon looking for a
+  man. Uncle Iroh walks away from a throne he could have taken;
+  Tywin Lannister measures standing by contempt — *"any man who must
+  say 'I am the king' is no true king."*
+- **Diligence / Servility** — Martha is *"cumbered about much
+  serving"* (Luke 10:40), the work that must be done and the
+  gentlest measure line in the Gospels; Uriah Heep is *"ever so
+  'umble"*, a name that became the byword. Mother Teresa opens
+  Kalighat in 1952; Quisling's own name became the word for ruling
+  at another's pleasure. Andy Dufresne spends nineteen years on a
+  rock hammer and a letter a week until the library exists; Dobby
+  irons his own hands — and ends free, the fall left as a station.
+
+**The two sacred corners (SEALED 2026-07-28).** The mythic principals
+are the persons themselves (owner: *"istorijske ličnosti i moderne
+filmske uz ISUS–ĐAVO koji idu u mitsku glavnu tematiku"*); the other
+two registers carry ECHOES, never rivals.
+
+| Sacred seat | Archetypal (the principal) | Historical echo | Modern echo |
+|---|---|---|---|
+| **Jesus Christ** (−1,−1,−1) | Jesus Christ | Maximilian Kolbe | Aslan |
+| **God — The One** (0,0,0) | — | — | — |
+| **The Devil** (+1,+1,+1) | The Devil | Nero | Sauron |
+
+- **Kolbe** is the substitution performed by a documented man: at
+  Auschwitz in July 1941 he took the place of a stranger condemned to
+  the starvation bunker. **Aslan** is the modern telling of the same
+  pattern on the Stone Table.
+- **Nero** is the echo the tradition itself chose — the first
+  persecutor, and the Neron Caesar the Apocalypse's number was read
+  against. **Sauron** carries the anti-Manichean asymmetry this axis
+  already states: Tolkien's Shadow *"can only mock, it cannot make"*
+  — evil as *privatio boni*, told as a story.
+- **THE CENTRE TAKES NO FIGURE, in any register (owner verdict
+  2026-07-28).** The One contains all six powers without being ruled
+  by any, and every human exemplar is ruled by something; the
+  Exemplar column under `(0,0,0)` therefore stays empty **by
+  doctrine, not for want of a candidate** — the apophatic description
+  is the only portrait the centre gets.
+
+**The repeat law (found, not decreed).** A figure holds ONE seat, with
+exactly one documented exception shape: a person may appear twice when
+the two cells differ **only in X**, because that is the same seat read
+with the depth axis dropped — the Character wheel is the Cube at depth
+zero. All three existing repeats obey it (Moses / Samson on
+Sacrificial Protector and Devotion; King Lear and Denethor II on
+Complacent Nepotist and Favoritism), and none of the 52 new figures
+repeats at all. The engine pins this.
+
+**Alternates on record** (the deeper pass may prefer them): Ozymandias
+(Megalomania, modern — displaced only to keep three Watchmen off one
+grid), Neil Armstrong and Leonardo da Vinci (Aspiration, historical),
+Phinehas (Zealotry, archetypal — the tradition's root of the word,
+outranked on fame alone), Prince Myshkin (Meekness, archetypal),
+Cesare Borgia (Machination, historical), Anna Karenina (Despair,
+archetypal), Louis XIV (Disdain, historical), Wilhelm Keitel
+(Servility, historical), Emperor Palpatine (the Devil's modern echo).
+**Considered and set aside, with the reason:** Odysseus for Machination
+(the Trojan Horse fits, but the mast fits better and a figure takes one
+seat); Marie Antoinette for Indifference (her famous line is
+apocryphal, and the accuracy clause of Charter rule 6 outranks the
+fame); Machiavelli for Machination (he wrote the manual rather than the
+deed — the term already carries his name at article level).
+
 ### The Hexagram Projection (SEALED find)
 
 Viewed along a body diagonal the cube projects as the HEXAGONAL
@@ -1029,12 +1181,20 @@ else** and Thursday and Wednesday keep their canonical color seats.
   switch**; the other five pointers always run day/night. A reader
   who wants it quieter has colorless, opacity and saturation already.
 
-### OPEN
+### ~~OPEN~~ — CLOSED 2026-07-28 (Session 24)
 
-The three figure rosters (myth / modern / historical) for the eight
-2D characters and the eight 3D vertices — 48 seats. The engine ships
-with honest name fallbacks and the pending line until they are
-written, exactly as the Cube wheels did.
+The three figure rosters (archetypal / historical / modern) for the
+eight 2D characters and the eight 3D vertices — 48 seats — were
+**already written**: the 2D eight are the six poles' and four combos'
+sealed figures (§The Six Poles, §The Character Wheel) and the 3D eight
+are the vertex roster (§The Eight Vertices). Nothing was reinvented;
+the round WIRED them — all 26 human cells now resolve
+`(cell, register) → (luminous person, fallen person)` from one table
+(§The Rosters), so a Legacy arm and a Prophecy arm read the same
+canon through the same reader. What still falls back to the SEAT's
+name is the drawing: `ArchetypeLayer` paints one star's worth of
+figures, so the three stars do not yet each speak their own register
+on the dial — a render round, not a roster one.
 
 <a id="two-crosses"></a>
 
@@ -1389,8 +1549,15 @@ lacking the experiment).
     `tests/test_cube_seating.py`, drawn by `research/seating_preview.py`;
     the rotation↔hour rule is proved IMPOSSIBLE as posed (no rotation of
     order 24; the dial's half-turn is the inversion) and stays open only
-    as the 4-watches frame. Still ahead: figures for the 8 new edge cells
-    (48 seats), and WIRING either seating to a live pointer.
+    as the 4-watches frame. Still ahead: WIRING either seating to a live
+    pointer.
+13. ~~Figures for the 8 new edge cells (48 seats) + the two sacred
+    corners' historical and modern echoes~~ — DONE (Session 24):
+    §[The Rosters](#the-rosters), transcribed whole into `config.cube`
+    (all 26 human cells × 3 registers) and pinned by
+    `tests/test_cube_roster.py`. Ahead of it: the Rose's three stars
+    each DRAWING their own register (a render round), and Session 25's
+    articles for the sixteen new readings.
 
 Art follows the one-image-one-place law and the derivation check
 (Rule 19) throughout: poles, vertices, crosses and the Rose are
