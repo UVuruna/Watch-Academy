@@ -43,15 +43,11 @@ def rank(cell: Coords) -> int:
 
 
 def family_of(axis: cube.CubeAxis) -> str:
-    """The four families of three the twelve human axes fall into:
-    PRIMARY (the bare face axes), CONCORD and DISCORD (edge axes joining
-    like-signed and opposite-signed poles), TERTIARY (vertex axes)."""
-    cell = axis.warm.coords
-    if rank(cell) == 1:
-        return "primary"
-    if rank(cell) == 3:
-        return "tertiary"
-    return "concord" if sum(cell) != 0 else "discord"
+    """The three families the twelve human axes fall into, by how many
+    axes each commits: PRIMARY (3 face axes), SECONDARY (6 edge axes),
+    TERTIARY (3 human vertex axes). 3 + 6 + 3 is what makes the symmetry
+    law possible — two opposed triangles with a hexagon between them."""
+    return {1: "primary", 2: "secondary", 3: "tertiary"}[rank(axis.warm.coords)]
 
 
 def index_of(axis: cube.CubeAxis) -> str:
@@ -108,13 +104,31 @@ def pole_hues(cell: Coords) -> set[int]:
             for i, v in enumerate(cell) if v}
 
 
+# --- the symmetry law -----------------------------------------------------------
+# THE OWNER'S FIRST LAW (2026-07-28): symmetry decides which KIND of axis
+# stands where; symbolism only decides which axis of that kind. On the
+# Rose the three face axes take the hexagram rays (12h-24h, 4h-16h,
+# 20h-8h — the owner's own three pairs), the three human vertex axes take
+# the opposite hexagram, and the six edge axes fill the odd rays.
+RANK_BY_RAY = {0: 1, 2: 3}          # ray % 4 -> required rank; else 2, an edge
+
+
+def required_rank(ray: int) -> int:
+    return RANK_BY_RAY.get(ray % 4, 2)
+
+
+def is_symmetric(ring: tuple[Coords, ...]) -> bool:
+    return all(rank(cell) == required_rank(ray) for ray, cell in enumerate(ring))
+
+
 # --- the exhaustive search ------------------------------------------------------
-def antipodal_rings() -> list[tuple[Coords, ...]]:
-    """Every seating of the 24 human cells on the 24 rays that obeys BOTH
-    hard laws: the one-grade law around the whole ring, and the antipodal
-    law (ray k and ray k+12 end one axis). Ray k+12 is forced to be ray
-    k's antipode, so the search only walks rays 0..11 and closes the ring
-    against the first ray's antipode."""
+def antipodal_rings(symmetric: bool = True) -> list[tuple[Coords, ...]]:
+    """Every seating of the 24 human cells on the 24 rays that obeys the
+    hard laws: the one-grade law around the whole ring, the antipodal law
+    (ray k and ray k+12 end one axis) and — unless `symmetric` is off, as
+    the tests do to measure what symmetry costs — the symmetry law. Ray
+    k+12 is forced to be ray k's antipode, so the search only walks rays
+    0..11 and closes the ring against the first ray's antipode."""
     rings: list[tuple[Coords, ...]] = []
     cells = sorted(HUMAN_CELLS)
 
@@ -123,9 +137,12 @@ def antipodal_rings() -> list[tuple[Coords, ...]]:
             if is_kin(path[-1], antipode(path[0])):
                 rings.append(tuple(path) + tuple(antipode(c) for c in path))
             return
+        ray = len(path)
         for cell in cells:
             key = axis_key(cell)
             if key in axes or (path and not is_kin(path[-1], cell)):
+                continue
+            if symmetric and rank(cell) != required_rank(ray):
                 continue
             path.append(cell)
             axes.add(key)
@@ -160,29 +177,39 @@ def poles_oriented(ring: tuple[Coords, ...]) -> int:
 
 def rays_singing(ring: tuple[Coords, ...]) -> int:
     """The Prophecy wheel's second wish, generalised: a ray SINGS when its
-    own hue is one of the poles its seat carries. The six Sabbath rays
-    (red and blue) are not cube hues and can never sing, so 18 is the
-    ceiling."""
+    own hue is one of the poles its seat carries. Red and blue are not
+    cube hues, so only a cell that reaches them by its own poles can make
+    those six rays sing."""
     return sum(1 for ray, cell in enumerate(ring)
                if ray_hue_index(ray) in pole_hues(cell))
 
 
-# The Sunday law and the cross doctrine, as coordinates: the Sovereign
-# (Self-Mastery) on the Ruler's red 18h, and Machination — the plot
-# exposed before the Judge — on the Judge's own noon.
-_SOVEREIGN = (-1, 0, 1)
-_MACHINATION = (-1, 1, 0)
+# The two symbolism choices, as coordinates. THE CROWN ON THE RULER:
+# Sunday's two seats are the Ruler on red 18h and the Servant on blue
+# 06h, and the corner axis the symmetry law puts there is Crown ↔ Shield
+# — so the Wise Statesman (the crown) takes the Ruler and the Sacrificial
+# Protector (the shield) the Servant. THE THRONE AT NOON: Loyalty crowns
+# 12h in yellow and Integrity roots 24h in purple, which is the Rose's own
+# sealed sentence about its two ends.
+_CROWN = (-1, -1, 1)                # Wise Statesman
+_LOYALTY = (0, 1, 0)
 
 
 def solve_rose_seating() -> list[tuple[Coords, ...]]:
-    """The five laws applied in order of authority. Returns every ring
-    that survives all of them — one."""
-    rings = antipodal_rings()
-    best = [r for r in rings if diagonals_held(r) == 3]
+    """The laws in order of authority — symmetry and kinship first, then
+    colour, then symbolism. Returns every ring that survives — one."""
+    rings = antipodal_rings()                               # symmetry + kinship
+    best = [r for r in rings if diagonals_held(r) == 3]     # the colour law
     top = max(poles_oriented(r) for r in best)
     best = [r for r in best if poles_oriented(r) == top]
-    best = [r for r in best if r[6] == _SOVEREIGN]          # the Sunday law
-    return [r for r in best if r[0] == _MACHINATION]        # the cross doctrine
+    best = [r for r in best if r[6] == _CROWN]              # the crown on the Ruler
+    best = [r for r in best if r[0] == _LOYALTY]            # the throne at noon
+    # Of the two that remain, one seats the Activation households on the
+    # two Sunday hues as well as their own — so the doubling falls on the
+    # axis that already carries the honest miss, instead of muddying a
+    # second axis. That one is the seating.
+    return [r for r in best
+            if len({c[0] for ray, c in enumerate(r) if ray_hue_index(ray) == 2}) == 1]
 
 
 # --- the two seatings -----------------------------------------------------------
@@ -212,9 +239,7 @@ class CalendarArm:
 
     month: int
     wedge: int
-    season: int
     family: str
-    index: str
     axis: cube.CubeAxis
     inner: cube.CubeCell
     outer: cube.CubeCell
@@ -223,6 +248,10 @@ class CalendarArm:
     def angle_deg(self) -> float:
         """The Almanac wedge's centre — June's wedge is centred on top."""
         return self.wedge * 30.0
+
+    @property
+    def hour(self) -> int:
+        return (12 + 2 * self.wedge) % 24
 
 
 def rose_seating() -> tuple[RoseSeat, ...]:
@@ -245,19 +274,26 @@ def _outward(axis: cube.CubeAxis) -> cube.CubeCell:
     raise ValueError(f"{axis.name} has no direction")     # only The One
 
 
-def calendar_seating() -> tuple[CalendarArm, ...]:
-    """The Calendar-12, computed from the two laws in config: the family
-    picks the season, the index the month within it."""
+def calendar_seating(inverted: bool = False) -> tuple[CalendarArm, ...]:
+    """The Calendar-12. THE SYMMETRY LAW picks the arms: the three face
+    axes take one equilateral triangle of wedges, the three vertex axes
+    the opposite triangle, the six edge axes the hexagon between them —
+    the hexagram. `inverted` swaps the two triangles (the owner's second
+    version: the poles move off the pure-colour arms onto the mixed
+    ones). Only WHICH axis of a family takes which of its own arms is
+    symbolism, and that order lives in config."""
+    wedges = dict(cube.CALENDAR_WEDGES_BY_FAMILY)
+    if inverted:
+        wedges["primary"], wedges["tertiary"] = (wedges["tertiary"],
+                                                 wedges["primary"])
     arms = []
-    for axis in HUMAN_AXES:
-        family = family_of(axis)
-        index = index_of(axis)
-        season = cube.CALENDAR_SEASON_BY_FAMILY[family]
-        wedge = season * 3 + cube.CALENDAR_POSITION_BY_INDEX[index]
-        outer = _outward(axis)
-        inner = axis.cold if outer is axis.warm else axis.warm
-        arms.append(CalendarArm(
-            month=(wedge + 5) % 12 + 1, wedge=wedge, season=season,
-            family=family, index=index, axis=axis, inner=inner, outer=outer,
-        ))
+    for family, names in cube.CALENDAR_AXIS_ORDER.items():
+        for wedge, name in zip(wedges[family], names):
+            axis = next(a for a in HUMAN_AXES if a.name == name)
+            outer = _outward(axis)
+            inner = axis.cold if outer is axis.warm else axis.warm
+            arms.append(CalendarArm(
+                month=(wedge + 5) % 12 + 1, wedge=wedge, family=family,
+                axis=axis, inner=inner, outer=outer,
+            ))
     return tuple(sorted(arms, key=lambda arm: arm.wedge))

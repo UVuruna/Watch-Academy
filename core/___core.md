@@ -85,12 +85,15 @@ resolves a date's candidates against the skin's own wheel/mount. See
 [Blue Moon](blue_moon.md).
 
 ### `cube_seating.py` — the Character Cube's geometry
-Session 26, CUBE.md §The Seatings: the one-grade kinship law, the
-antipodal law and the parity theorem that says the human circle can only
-close once the two Sacred vertices leave it. Solves both display plans —
-**Calendar-12** (one axis per month, computed outright from the family
-and index laws) and **Rose-24** (one seat per ray, the single survivor of
-an exhaustive search over 1056 rings). Also answers the rotation↔hour
+Session 26, CUBE.md §The Seatings. THE SYMMETRY LAW leads (owner
+2026-07-28, *"primarna je simetrija, sekundarna je simbolika"*): the 3
+face axes take one equilateral triangle of arms, the 3 human vertex axes
+the opposite triangle, the 6 edge axes the hexagon between — the
+hexagram. Under it, the one-grade kinship law, the antipodal law and the
+parity theorem (the human circle can only close once the two Sacred
+vertices leave it) solve both display plans — **Calendar-12** (one axis
+per month, with an inverted second version) and **Rose-24** (one seat per
+ray, the single survivor of the search). Also answers the rotation↔hour
 question in the negative: no rotation has order 24, and the dial's
 half-turn is the inversion, not a turn. See
 [Cube Seating](cube_seating.md).

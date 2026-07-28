@@ -54,11 +54,13 @@ One of the thirteen lines through the centre.
 - `AXES` — all thirteen, the Sacred Axis first
 - `THE_ONE` — the centre cell `(0, 0, 0)`
 - `ROSE_POLE_HUE` — the six poles' sealed Rose hue INDEX into
-  `defaults.ROSE_PALETTE` (CUBE.md §The Sabbath axis: X wears cyan ↔
+  `defaults.ROSE_PALETTE` (CUBE.md §The Sunday axis: X wears cyan ↔
   orange, Y yellow ↔ purple, Z green ↔ rose)
 - `ROSE_24_SEATING` — the 24 human cells in ray order, ray 0 = 12h
-- `CALENDAR_SEASON_BY_FAMILY` / `CALENDAR_POSITION_BY_INDEX` — the two
-  laws from which the whole Calendar-12 seating is computed
+- `CALENDAR_WEDGES_BY_FAMILY` — the symmetry law's three groups of arms
+  (triangle · opposite triangle · hexagon = the hexagram)
+- `CALENDAR_AXIS_ORDER` — which axis of a family takes which of its own
+  arms; the SECOND criterion, argued month by month in CUBE.md
 
 ## Design Decisions
 

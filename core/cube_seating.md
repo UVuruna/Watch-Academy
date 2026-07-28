@@ -25,6 +25,24 @@ a table of words.
 
 ## The laws
 
+### THE FIRST LAW — symmetry (owner decree 2026-07-28)
+*"Primarna je simetrija, sekundarna je simbolika."* Symmetry decides
+which KIND of axis stands where; symbolism only decides which axis of
+that kind. The families count 3 face axes, 6 edge axes and 3 human vertex
+axes, so both wheels wear the same regular figure — two opposed
+equilateral triangles with a hexagon between them, which is the hexagram.
+
+```
+ROSE      ray % 4 == 0 -> a POLE      (12h 16h 20h 24h 4h 8h)
+          ray % 4 == 2 -> a CORNER    (14h 18h 22h  2h 6h 10h)
+          any odd ray  -> an EDGE     (twelve, one every 30 degrees)
+
+CALENDAR  the pure-primary arms  (June 12h, October 20h, February 4h) -> the 3 face axes
+          the mixed-primary arms (August 16h, December 24h, April 8h) -> the 3 vertex axes
+          the six remaining arms                                      -> the 6 edge axes
+          (INVERTED: the two triangles swap)
+```
+
 ### The one-grade law (kinship)
 Two cells are KIN when they differ in exactly one coordinate, by exactly
 one grade. One step around a wheel therefore changes exactly ONE axis by
@@ -50,31 +68,37 @@ without such a removal the human circle cannot close.
 
 ### The colour laws (the Rose)
 1. Each primary axis holds its own sealed hue DIAGONAL (X cyan ↔ orange,
-   Y yellow ↔ purple, Z green ↔ rose).
-2. Each of the six poles sits on its own hue — the maximum is 4 of 6.
-3. The Sabbath diagonal (red 18h / blue 06h) carries Servant ↔ Sovereign,
-   the Sovereign on the Ruler's red and the Servant on the Servant's blue.
+   Y yellow ↔ purple, Z green ↔ rose). Under the symmetry law this comes
+   free — the six pole rays ARE the six cube-coloured rays.
+2. Each of the six poles sits on its own hue — 4 of 6 is the proven
+   ceiling, and the pair that misses is always one axis's own.
+
+### The symbolism (the second criterion, used only to break ties)
+The crown on Sunday's Ruler (Wise Statesman on red 18h, Sacrificial
+Protector on blue 06h), and the doubling on the invisible axis (red and
+blue hold Activation's two households as their second home).
 
 ## Algorithms
 
 ### `antipodal_rings()` — the exhaustive search
 ```
 FOR each path c[0..11] of twelve cells, one from each human axis:
+    require rank(c[k]) == the symmetry law's rank for ray k
     require KIN(c[k], c[k+1]) for every step
     require KIN(c[11], -c[0])            # the ring closes through the antipode
     emit c[0..11] + (-c[0] .. -c[11])    # ray k+12 is ray k's antipode
 ```
-Yields 1056 ray assignments = 22 distinct cycles × 24 rotations × 2
-directions.
+48 ray assignments survive; with the symmetry law switched off (as the
+tests do, to measure what it costs) 1056 do.
 
-### `calendar_seating()` — computed, never stored
+### `calendar_seating(inverted)` — computed, never stored
 ```
-FOR each human axis:
-    family := primary | concord | discord | tertiary   (from the coordinates)
-    index  := x | y | z                                (from the coordinates)
-    wedge  := SEASON_BY_FAMILY[family] * 3 + POSITION_BY_INDEX[index]
-    month  := the Almanac wheel's month at that wedge
-    outward end := the end whose first non-zero of (x, z, y) is +1
+FOR each family in primary, secondary, tertiary:
+    arms := that family's wedges       # the triangle / triangle / hexagon
+    IF inverted -> swap the two triangles
+    FOR each (arm, axis name) zipped in the family's argued order:
+        month := the Almanac wheel's month at that wedge
+        outward end := the end whose first non-zero of (x, z, y) is +1
 ```
 
 ## Classes
@@ -93,8 +117,10 @@ One ray of the Rose-24.
 One arm of the Calendar-12.
 
 #### Attributes
-- `month`, `wedge`: the Gregorian month and its Almanac wedge (0 = June)
-- `season`, `family`, `index`: the three derivations that place it
+- `month`, `wedge`, `hour`: the Gregorian month, its Almanac wedge
+  (0 = June) and the dial hour that wedge is centred on
+- `family`: primary / secondary / tertiary — which of the figure's three
+  groups of arms this one belongs to
 - `axis`, `inner`, `outer`: the axis and its two ends, by radius
 
 ## Design Decisions
