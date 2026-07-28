@@ -471,10 +471,10 @@ ARCHETYPES = {
                  enc=("double_trinity", 3)),
         ),
         # The seventh seat: six offices as the six days of work, the
-        # center as the Sabbath rest.
+        # center as the Lord's Day rest.
         "center": {
-            "file": COUNCIL_ART_DIR / "Sabbath.png",
-            "name": "The Sabbath", "entity": "center",
+            "file": COUNCIL_ART_DIR / "Lords_Day.png",
+            "name": "The Lord's Day", "entity": "center",
         },
     },
     # Compass CHARACTER — the Cube with the depth axis at zero (owner

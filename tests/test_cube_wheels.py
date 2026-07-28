@@ -235,7 +235,7 @@ def test_council_offices_seat_the_double_trinity():
         ("The Devil", "Prosecutor"), ("God", "Creator"),
         ("Jesus", "Advocate"), ("Jesus", "Preserver"),
     ]
-    assert archetypes.center("prism_council")["name"] == "The Sabbath"
+    assert archetypes.center("prism_council")["name"] == "The Lord's Day"
 
 
 def test_character_directions_carry_their_falls():

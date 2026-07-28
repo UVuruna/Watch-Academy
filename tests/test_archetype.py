@@ -184,11 +184,11 @@ def test_center_table_is_the_sealed_one():
     assert archetypes.center("compass_paint") is None
     assert archetypes.center("compass_light") is None
     # The Cube wave (owner seal 2026-07-26): the Beginning (Genesis),
-    # the Sabbath (Council); the Character wheel keeps the Compass law —
+    # the Lord's Day (Council); the Character wheel keeps the Compass law —
     # the rose is the wheel itself.
     assert archetypes.center("trinity_genesis")["file"].name == "Beginning.png"
     assert archetypes.center("trinity_genesis")["name"] == "The Beginning"
-    assert archetypes.center("prism_council")["file"].name == "Sabbath.png"
+    assert archetypes.center("prism_council")["file"].name == "Lords_Day.png"
     assert archetypes.center("compass_character") is None
 
 

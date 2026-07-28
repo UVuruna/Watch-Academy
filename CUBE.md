@@ -793,9 +793,9 @@ wheels on the watch — two on the Trinity pointer, one on the Prism:
   *"God standeth in the congregation of the mighty; he judgeth among
   the gods"* — the divine council in session. Article layer in
   reserve: six offices as the six days of work, the center as the
-  seventh — the Sabbath rest. Art route SEALED (owner 2026-07-26,
+  seventh — the Lord's Day rest. Art route SEALED (owner 2026-07-26,
   "može novo"): six NEW "in session" tellings + circles + the
-  **Sabbath** centre — no file sharing with Court/Genesis (the
+  **Lord's Day** centre — no file sharing with Court/Genesis (the
   one-image-one-place law holds; the crosses' Faith station got the
   same verdict: its own window).
 - **The cube display option (SEALED, settings):** every wheel of

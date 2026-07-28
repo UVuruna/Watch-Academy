@@ -262,7 +262,7 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
   (name SEALED 2026-07-26)
 - `council_prompts.md` — the CUBE WAVE's Prism third wheel: the UNION,
   all six Double-Trinity offices on the six arms at once, with the
-  Sabbath centre. The wave's one REUSE question is SEALED (owner
+  Lord's Day centre. The wave's one REUSE question is SEALED (owner
   2026-07-26, "može novo"): Route A — six NEW "in session" tellings,
   all entries load ticked; Route B kept in the sheet as the road not
   taken

@@ -359,7 +359,7 @@ archetypes over four pointers since the Cube wave (owner seal
 wheels), none on Aurora/Calendar — the
 per-archetype figure tables (arm angle, stained-glass drop path, the
 two-row names, article entity, encyclopedia target), the center table
-(Eye / Hearth / Seal / Union / Throne / Beginning / Sabbath — Compass
+(Eye / Hearth / Seal / Union / Throne / Beginning / Lord's Day — Compass
 none, both wheels), the article-set
 names Session 6 fills (the three Cube sets are Session 21's), the
 Ages' two image registers and the render

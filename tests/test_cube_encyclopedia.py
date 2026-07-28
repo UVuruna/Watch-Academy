@@ -186,7 +186,7 @@ def test_the_archetypes_hall_addresses_its_pages_by_index():
     ("archetype_trinity_genesis", "jesus", "Preserver"),
     ("archetype_trinity_genesis", "devil", "Destroyer"),
     ("archetype_trinity_genesis", "center", "Genesis 1:3"),
-    # Council: six offices in session, the Sabbath at the centre.
+    # Council: six offices in session, the Lord's Day at the centre.
     ("archetype_prism_council", "god_judge", "Psalm 82:1"),
     ("archetype_prism_council", "devil_prosecutor", "Revelation 12:10"),
     ("archetype_prism_council", "jesus_advocate", "1 John 2:1"),

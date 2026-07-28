@@ -60,7 +60,7 @@ pointers gained a THIRD, "cube" wheel — WORKPLAN Session 20):
 | `seasons_light` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
 | `prism_paint` | hexa · paint | the Persons (six on the paint wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
 | `prism_light` | hexa · light | One Soul — The Vow — The Bond (six pillars; name SEALED 2026-07-27, all three kept — "One Soul" alone wherever one name must stand) | `archetype/one_soul/` | the Union |
-| `prism_council` | hexa · cube | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Sabbath |
+| `prism_council` | hexa · cube | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Lord's Day |
 | `compass_paint` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
 | `compass_light` | octa · light | the Eight Ages | `archetype/life/<register>/` | — |
 | `compass_character` | octa · cube | CHARACTER — the Cube at depth zero (4 poles + 4 combos) | `archetypes/character/` | — |
@@ -85,7 +85,7 @@ name-falls-back until the owner's glass lands):**
   Destroyer 16h / Prosecutor 20h / Creator 24h / Advocate 04h /
   Preserver 08h); its entity keys are `person_office` pairs
   (`god_judge`, `devil_destroyer`, …) because the same person holds
-  two seats. Centre: **The Sabbath** — six offices as the six days of
+  two seats. Centre: **The Lord's Day** — six offices as the six days of
   work, the center the seventh.
 - **Character** carries the eight directions (Loyalty / Patronage /
   Dignity / Conviction / Integrity / Renunciation / Humility /

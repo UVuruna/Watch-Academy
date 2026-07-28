@@ -22,7 +22,7 @@ at midnight — the G↔Ω diameter of the Banknote, Revelation 1:8), and the
 diagonals cross the persons — Advocate ↔ Destroyer, Prosecutor ↔
 Preserver. The article layer CUBE.md holds in reserve reads the six
 offices as the SIX DAYS of work and the centre as the seventh, the
-Sabbath rest; the centre below is drawn from that reading.
+Lord's Day rest; the centre below is drawn from that reading.
 
 **The 24h arm is the muted moon-gray violet of the Rose (~`#666699`),
 never royal purple** (CUBE §The Purple-Gray hue law, SEALED).
@@ -46,7 +46,7 @@ terminal `_gem`/`_gpt` suffix.
 `assets/archetypes/council/circle/colored/`. Stems are PascalCase and
 figure-first: `God_Judge`, `Devil_Destroyer`, `Devil_Prosecutor`,
 `God_Creator`, `Jesus_Advocate`, `Jesus_Preserver`, plus the centre
-`Sabbath`.
+`Lords_Day`.
 
 **House rules:** photorealistic render, isolated background, the window
 shape IS the frame, **NO lettering anywhere** — Psalm 82:1 and the office
@@ -75,7 +75,7 @@ Council image a NEW image at all?**
   geometry, a ring preset, never generated.
 
 **IRREDUCIBLE — generated: the CENTRE, unconditionally (1 file).** The
-Sabbath rosette exists on no other wheel; the Court's Eye is the Court's
+Lord's Day rosette exists on no other wheel; the Court's Eye is the Court's
 own union and cannot stand for the seventh day.
 
 **THE SIX OFFICES — a genuine tension, referred to the owner.** Two laws
@@ -116,9 +116,9 @@ ticked like any other queue.
 
 ---
 
-## The centre — the Sabbath (generate either way)
+## The centre — the Lord's Day (generate either way)
 
-**The Sabbath** → `assets/archetypes/council/primary/colored/Sabbath.png`
+**The Lord's Day** → `assets/archetypes/council/primary/colored/Lords_Day.png`
 
 ```
 ROUND rose window — a circular stained-glass rosette, night-window register, photorealistic render, isolated background. ASPECT RATIO exactly 1:1 — a perfect square image. Center: a perfectly still, PLAIN CLEAR uncolored pane of glass at the exact heart of the window, plain white daylight passing through it — the seventh day, the rest, the only uncolored glass in the image. Around it, six radiating spokes of coloured glass reach out to the rim in even 60-degree spacing, each spoke a different colour and each carrying one small worked emblem lying DOWN at rest, tools set aside: radiant yellow with a two-pan balance at rest, burning orange with a low torch quenched, ember red with a closed ledger, muted moon-gray violet with a pair of dividers folded shut (a cold dusty gray-violet, never royal purple), midnight blue with an open empty palm, living green with a lamp burning low and steady. Between the spokes, rings of soft cloudglass; the whole window is quiet, evening-lit and finished, work completed rather than work happening. Rim: gothic stone tracery in dark iron; a plain unbroken circle of clear glass just inside the rim. Palette: white rest-light, yellow, orange, red, moon-gray violet, blue, green, black-iron lead. NO lettering anywhere.
@@ -228,9 +228,9 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
   **Art: 0/13** — Route A SEALED (owner 2026-07-26), all thirteen
   queued.
 - **The ROUTE — SEALED: A** (owner 2026-07-26, "može novo"): six new
-  "in session" lancets + six circles + the Sabbath centre. Route B kept
+  "in session" lancets + six circles + the Lord's Day centre. Route B kept
   above only as the record of the road not taken.
-- **The centre's name — the Sabbath stands** (the owner's blanket
+- **The centre's name — the Lord's Day stands** (the owner's blanket
   go-ahead of 2026-07-26 covers it; the reading is CUBE.md's own
   six-days layer, not an invention).
 - **Naming — SEALED, THE MANY-NAMES DOCTRINE (owner 2026-07-26):**
