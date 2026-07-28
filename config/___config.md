@@ -367,6 +367,15 @@ tunables (figure heights, name sizing, the 1×1-placeholder threshold,
 the Earth day-label geometry, the pending line). See
 [Archetypes](archetypes.md).
 
+### `cube.py` — Character Cube Canon Data
+The Character Cube's table as data (CUBE.md §The Thirteen Axes): thirteen
+axes, twenty-six extremities with their luminous and fallen names, the
+centre — the 65 sealed terms. Also the six poles' sealed Rose hues, the
+Rose-24 ring in ray order, and the two laws from which the whole
+Calendar-12 is computed. Coordinates only: every family, index, kinship
+and antipode is DERIVED in [Cube Seating](../core/cube_seating.md), never
+stored (root Rule 19). See [Character Cube](cube.md).
+
 ### `winapi.py` — Win32 Literals
 The only sanctioned home for Win32 API constants (documented enum-exception
 to Rule #4). Consumed by `app/native.py` from M4 — the click-through /

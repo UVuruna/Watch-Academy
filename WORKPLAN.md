@@ -435,7 +435,16 @@ queued for every article with text (the coverage law), each sheet
 opening with the Rule 19 derivation check (most cube geometry is
 computed, never drawn).
 
-### Session 26 — the Seating geometry → **Opus**
+### Session 26 — the Seating geometry → **Opus** — DONE (2026-07-28, 0.14.510–0.14.513)
+**Delivered:** CUBE.md §The Seatings — both wheels solved by exhaustive
+search under stated laws (`core/cube_seating.py`, `config/cube.py`),
+every seat pinned by `tests/test_cube_seating.py` (which re-runs the
+search rather than trusting the constants), both wheels drawn to
+`research/seating/*.png`. The rotation↔hour rule is CLOSED as posed —
+proved impossible (no rotation of order 24; the dial's half-turn is the
+inversion, not a turn) — and survives only as the four-watches frame.
+Ahead: wiring either seating to a live pointer, and the owner's word on
+the two argued choices (the Sunday law and the cross doctrine).
 **Say:** "Radi Sesiju 26 iz WORKPLAN.md — geometrija rasporeda."
 **Reads:** CUBE.md §The Thirteen Axes (Display Plans, the
 24-orientations note) and §The Rose; `render/layers.md`; the

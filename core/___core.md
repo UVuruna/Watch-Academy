@@ -84,6 +84,17 @@ never compete for the same seat; `render.layers.active_thirteenth`
 resolves a date's candidates against the skin's own wheel/mount. See
 [Blue Moon](blue_moon.md).
 
+### `cube_seating.py` — the Character Cube's geometry
+Session 26, CUBE.md §The Seatings: the one-grade kinship law, the
+antipodal law and the parity theorem that says the human circle can only
+close once the two Sacred vertices leave it. Solves both display plans —
+**Calendar-12** (one axis per month, computed outright from the family
+and index laws) and **Rose-24** (one seat per ray, the single survivor of
+an exhaustive search over 1056 rings). Also answers the rotation↔hour
+question in the negative: no rotation has order 24, and the dial's
+half-turn is the inversion, not a turn. See
+[Cube Seating](cube_seating.md).
+
 ### `__main__.py` — CLI Selftest
 `python -m core --city NAME [--at ISO]` (or `--lat --lng --tz`) prints
 the full computed state — the time-travel flag for eyeballing DST, polar

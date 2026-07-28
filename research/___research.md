@@ -25,6 +25,14 @@ Exploratory plotting of season/year data.
 ### `efficency.py`
 Performance experiments.
 
+### `seating_preview.py` — the two Session-26 seatings, drawn
+Renders CUBE.md §The Seatings to `research/seating/rose_24.png` and
+`calendar_12.png` — the Rose's three octa stars with all 24 human seats,
+and the Calendar's twelve wedges with each axis's two ends by radius.
+Draws only what [Cube Seating](../core/cube_seating.md) computes, so the
+pictures cannot disagree with the goldens. Not part of the app; no
+pointer is wired to either seating yet.
+
 ### `seasons_large.json` (~11 MB)
 Extended variant of `Database/seasons_utc.json` kept for analysis; the app
 bundles only the compact file.

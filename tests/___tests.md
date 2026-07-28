@@ -88,6 +88,21 @@ trace of Session 20's mis-built RING preset reappears (Rule #25 — the
 recurrence pin, since that build came from a canon mis-transcription
 and was deleted whole).
 
+### `test_cube_seating.py`
+The Seating geometry goldens (WORKPLAN Session 26, CUBE.md §The
+Seatings). It does NOT merely compare against the sealed constants — it
+RE-RUNS the exhaustive search, law by law, so the Rose-24 ring can never
+drift away from the argument that produced it: the 65-term table, the
+parity theorem (14 vs 12 for all 26 cells, 12 vs 12 once the Sacred pair
+leaves), the funnel 1056 → 28 → 14 → 2 → 1, the proven 4-of-6 ceiling on
+pole hues, the hue-pencil structure, the mirrored Activation pencil, the
+Calendar's four families over four seasons with dual families across the
+dial, the radial law, and the two negative results on rotation↔hour (no
+element of order 24; the half-turn is the inversion). Also pins, as a
+recurrence guard, that the six perfect-singing rings all break the sealed
+Sabbath table — so no later session "improves" the colour by re-opening
+what was refused.
+
 ### `test_cube_wheels.py`
 The Cube wheels engine goldens (WORKPLAN Session 20; owner seal
 2026-07-26, CUBE.md): the third-wheel slot (the "cube" style exists
