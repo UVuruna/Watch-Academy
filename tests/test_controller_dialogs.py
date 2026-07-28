@@ -31,7 +31,6 @@ from PySide6.QtWidgets import QApplication
 
 from app.controller import WatchController
 from app.encyclopedia import EncyclopediaDialog
-from app.guide import GuideDialog
 from app.observatory import ObservatoryDialog
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings
@@ -52,7 +51,7 @@ def controller(app):
     # cannot leak onto anyone's real screen, but closing it deterministically
     # keeps one test's window from bleeding into the next test's assertions.
     for dialog in (
-        made._encyclopedia, made._observatory, made._guide,
+        made._encyclopedia, made._observatory,
         made._design, made._pointer_theme, made._slot_theme,
     ):
         if dialog is not None:
@@ -89,12 +88,16 @@ def test_observatory_opens_non_modal(controller):
     assert not dialog.isModal()
 
 
-def test_guide_opens_non_modal(controller):
+def test_guide_opens_the_encyclopedia_on_its_card(controller):
+    """SESSION 27 (owner 2026-07-28): the standalone Guide window is
+    retired — the help book is a card in The Instrument, and the menu
+    entry is the shortcut that opens the Encyclopedia straight on it."""
     controller._open_guide()
-    dialog = controller._guide
-    assert isinstance(dialog, GuideDialog)
+    dialog = controller._encyclopedia
+    assert isinstance(dialog, EncyclopediaDialog)
     assert dialog.isVisible()
     assert not dialog.isModal()
+    assert dialog._reader.topic_key == "guide"
 
 
 # --- second open raises, never stacks -------------------------------------------
@@ -110,7 +113,7 @@ def test_encyclopedia_second_menu_open_raises_the_live_window(controller, monkey
 
     assert controller._encyclopedia is first    # no second instance
     assert calls == ["raise", "activate"]
-    assert first._topic_key == "week"           # untouched by a topic=None reopen
+    assert first.topic_key == "week"           # untouched by a topic=None reopen
 
 
 def test_observatory_second_open_raises_the_live_window(controller, monkeypatch):
@@ -126,16 +129,18 @@ def test_observatory_second_open_raises_the_live_window(controller, monkeypatch)
     assert calls == ["raise", "activate"]
 
 
-def test_guide_second_open_raises_the_live_window(controller, monkeypatch):
+def test_guide_second_open_raises_the_live_encyclopedia(controller, monkeypatch):
+    """The Guide entry opens the Encyclopedia (Session 27), so a second
+    press obeys the SAME one-live-window rule as every other opener."""
     controller._open_guide()
-    first = controller._guide
+    first = controller._encyclopedia
     calls = []
     monkeypatch.setattr(first, "raise_", lambda: calls.append("raise"))
     monkeypatch.setattr(first, "activateWindow", lambda: calls.append("activate"))
 
     controller._open_guide()
 
-    assert controller._guide is first
+    assert controller._encyclopedia is first
     assert calls == ["raise", "activate"]
 
 
@@ -147,21 +152,21 @@ def test_second_space_jump_navigates_the_live_encyclopedia(controller):
     open moves the SAME live window instead of being swallowed."""
     controller._open_encyclopedia_at("week", 0)
     dialog = controller._encyclopedia
-    assert dialog._topic_key == "week"
+    assert dialog.topic_key == "week"
 
     controller._open_encyclopedia_at("moon", 2)
 
     assert controller._encyclopedia is dialog   # the SAME instance
-    assert dialog._topic_key == "moon"
-    assert dialog._entry_index == 2
+    assert dialog.topic_key == "moon"
+    assert dialog.entry_index == 2
 
 
 def test_navigate_to_ignores_an_unknown_topic() -> None:
     dialog = EncyclopediaDialog(initial_topic="week", initial_entry=0)
     try:
-        assert dialog._topic_key == "week"
+        assert dialog.topic_key == "week"
         dialog.navigate_to("this_topic_does_not_exist", 0)
-        assert dialog._topic_key == "week"   # untouched
+        assert dialog.topic_key == "week"   # untouched
     finally:
         dialog.close()
 
@@ -184,9 +189,9 @@ def test_closing_the_observatory_clears_the_controller_reference(controller):
 
 def test_closing_the_guide_clears_the_controller_reference(controller):
     controller._open_guide()
-    dialog = controller._guide
+    dialog = controller._encyclopedia
     dialog.close()
-    assert controller._guide is None
+    assert controller._encyclopedia is None
 
 
 def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
@@ -196,7 +201,6 @@ def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
     dialog is closed before teardown."""
     controller._open_encyclopedia_at(None, 0)
     controller._open_observatory()
-    controller._open_guide()
     controller._open_design()
     controller._open_pointer_theme()
     controller._open_slot_theme()
@@ -219,7 +223,6 @@ def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
 
     assert controller._encyclopedia is None
     assert controller._observatory is None
-    assert controller._guide is None
     assert controller._design is None
     assert controller._pointer_theme is None
     assert controller._slot_theme is None
@@ -227,30 +230,20 @@ def test_quit_closes_every_open_non_modal_dialog(controller, monkeypatch):
 
 # --- opening sizes (DESIGN #1) ---------------------------------------------------
 
-def test_encyclopedia_opens_a4_portrait_at_80pct_height_respecting_min_width(controller):
-    from app.encyclopedia import _gallery_content_width
-
+def test_encyclopedia_opens_at_the_owners_own_opening_screen(controller):
+    """SESSION 27 (owner spec 2026-07-28): the Encyclopedia opens — and
+    can never be dragged below — the owner's own 1280x720 opening
+    screen. The old A4-portrait opening size retired with the two-screen
+    browser: the home screen's 3x2 grid is measured from the viewport,
+    so this minimum is what makes "the first screen never scrolls" a
+    geometric fact rather than a hope."""
     controller._open_encyclopedia_at(None, 0)
     dialog = controller._encyclopedia
-    available = _available(dialog)
-    expected_height = min(
-        round(available.height() * defaults.DIALOG_A4_HEIGHT_FRACTION),
-        available.height(),
-    )
-    a4_width = round(
-        expected_height * defaults.DIALOG_A4_ASPECT_W / defaults.DIALOG_A4_ASPECT_H
-    )
-    # MIN WIDTH (owner round R8b item 5a fix): `_gallery_content_width`
-    # replaces the old ad hoc `tile * columns` arithmetic, which
-    # dropped the inter-card spacing and the gallery column's own
-    # margins entirely and reliably let the frame overflow at exactly
-    # this width — see app/encyclopedia.py's own geometry comment.
-    min_width = _gallery_content_width(defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX)
-    expected_width = min(max(a4_width, min_width), available.width())
 
-    assert dialog.height() == expected_height
-    assert dialog.width() == expected_width
-    assert dialog.width() >= min_width   # the R3 gallery law always wins
+    assert dialog.minimumWidth() >= defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
+    assert dialog.minimumHeight() == defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    assert dialog.width() >= dialog.minimumWidth()
+    assert dialog.height() >= dialog.minimumHeight()
 
 
 def test_observatory_opens_a4_portrait_at_80pct_height(controller):
@@ -272,22 +265,15 @@ def test_observatory_opens_a4_portrait_at_80pct_height(controller):
     assert dialog.width() == expected_width
 
 
-def test_guide_opens_square_at_50pct_height(controller):
+def test_guide_opens_the_encyclopedia_at_its_card(controller):
+    """The Guide has no window of its own since Session 27 — it opens
+    the Encyclopedia on the guide card, at the Encyclopedia's own
+    opening size."""
     controller._open_guide()
-    dialog = controller._guide
-    available = _available(dialog)
-    expected_height = min(
-        round(available.height() * defaults.DIALOG_SQUARE_HEIGHT_FRACTION),
-        available.height(),
-    )
-    assert dialog.height() == expected_height
-    # `resize()` REQUESTS the square width, but Qt's own layout system
-    # still enforces its OWN minimum (the Previous/Next/counter row's
-    # natural width) on top of it — on a very short screen (this
-    # offscreen test platform's virtual screen among them) that floor
-    # can exceed the requested square, which is expected Qt behavior,
-    # not a bug: never narrower than the target, may be wider.
-    assert dialog.width() >= expected_height
+    dialog = controller._encyclopedia
+
+    assert dialog.topic_key == "guide"
+    assert dialog.height() >= defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
 
 
 def test_settings_opens_square_at_50pct_height_or_wider(app):

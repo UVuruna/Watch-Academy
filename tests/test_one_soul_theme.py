@@ -124,7 +124,7 @@ def test_every_pillar_names_its_own_shadow(pillar, shadow):
 def test_the_triple_name_is_what_the_reader_sees():
     """Owner seal 2026-07-27: TITLED IN FULL it is the triple, LABELLED
     it is the single name. The topic title (the reader's own top header,
-    `_topic_display_title`) and the title page both carry the triple;
+    the header row) and the title page both carry the triple;
     the gallery card carries "One Soul"."""
     from app.encyclopedia import topics as _topics
 
@@ -144,10 +144,10 @@ def test_the_theme_opens_on_its_triple_title_in_a_live_dialog():
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog(initial_topic="one_soul", initial_entry=0)
     assert dialog._title.text() == constants.ONE_SOUL_THEME_TITLE
-    assert dialog._counter.text() == "1 / 9"
+    assert dialog._reader._counter.text() == "1 / 9"
     # And every page turns without a crash, plate or no plate.
     for _ in range(9):
-        dialog._step(1)
+        dialog._reader.step(1)
     dialog.deleteLater()
 
 

@@ -37,7 +37,7 @@ def controller(app, tmp_path, monkeypatch):
     made = WatchController(app)
     yield made
     for dialog in (
-        made._encyclopedia, made._observatory, made._guide,
+        made._encyclopedia, made._observatory,
         made._design, made._pointer_theme, made._slot_theme,
     ):
         if dialog is not None:

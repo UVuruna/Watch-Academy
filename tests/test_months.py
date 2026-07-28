@@ -76,7 +76,7 @@ def test_month_plates_resolve_by_suffix_or_stay_absent():
 
 
 def test_topic_page_order_title_then_twelve():
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     entries = _topics(date(2026, 7, 7))["months"]["entries"]
     # Title + twelve Slavic months + the Blue Moon Law's Sol/Modrenik
@@ -110,13 +110,19 @@ def test_the_thirteenth_pair_articles_carry_the_duality():
     assert "blue" in modrenik.lower()                 # modar/blue moon etymology
 
 
-def test_topic_rides_the_celestial_engine_once():
-    from app.encyclopedia import _TOPIC_GROUPS, _topics
+def test_topic_rides_the_instrument_once():
+    """SESSION 27 (owner-sealed 2026-07-28): the Slavic Months moved
+    with the split of the old Celestial Engine — the year's own wheel
+    of labour belongs to THE INSTRUMENT, beside the week and the eras
+    (the wheels the watch turns), while the Engine keeps the sky it
+    computes."""
+    from app.encyclopedia import topics as _topics
+    from config.encyclopedia_tree import WHOLES
 
-    groups = dict(_TOPIC_GROUPS)
-    assert "months" in groups["The Celestial Engine"]
-    every = [k for keys in groups.values() for k in keys]
-    assert every.count("months") == 1
+    instrument = {whole.key: whole for whole in WHOLES}["instrument"]
+    assert "months" in instrument.themes
+    every = [theme for whole in WHOLES for theme in whole.themes]
+    assert every.count("months") == 1        # not scattered into two wholes
     assert "months" in _topics()
 
 

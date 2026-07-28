@@ -542,12 +542,12 @@ def test_hidden_mode_unlocks_the_four_greetings(app):
     poem = entries[-1]
     assert poem["name"] == "Četiri pozdrava"
     assert poem["poem"] is True
-    text = unlocked._article_text(poem["article"])
+    text = unlocked._reader._article_text(poem["article"])
     assert "Dobar dan" in text and "ponovi sve ovo" in text
     assert "Krug pozdrava je krug ovog sata" in text
-    unlocked._show_topic("trinity")
-    unlocked._step(-1)                       # wrap onto the poem page
-    assert unlocked._counter.text() == "4 / 4"
+    unlocked.show_topic("trinity")
+    unlocked._reader.step(-1)                       # wrap onto the poem page
+    assert unlocked._reader._counter.text() == "4 / 4"
     unlocked.deleteLater()
     # SESSION-only (owner 2026-07-15): the unlock never persists —
     # the settings know nothing about it.
@@ -583,7 +583,7 @@ def test_hidden_mode_binds_the_poem_to_seasons_too(app):
     poem = entries[-1]
     assert poem["poem"] is True
     assert poem["name"] == "Četiri pozdrava"
-    text = unlocked._article_text(poem["article"])
+    text = unlocked._reader._article_text(poem["article"])
     assert "Dobar dan" in text and "jutro novo" in text
     # The CANON's three-line quote, verbatim — not the richer Trinity
     # reading (verses + Serbian explanation + watchmaker commentary).
@@ -594,9 +594,9 @@ def test_hidden_mode_binds_the_poem_to_seasons_too(app):
     assert "faith in a better tomorrow" in text
     assert "peaceful death" in text
     assert "rebirth" in text
-    unlocked._show_topic("seasons")
-    unlocked._step(-1)                       # wrap onto the poem page
-    assert unlocked._counter.text() == "8 / 8"
+    unlocked.show_topic("seasons")
+    unlocked._reader.step(-1)                       # wrap onto the poem page
+    assert unlocked._reader._counter.text() == "8 / 8"
     unlocked.deleteLater()
 
 
@@ -607,19 +607,19 @@ def test_encyclopedia_opens_at_the_spacebar_target(app):
     from app.encyclopedia import EncyclopediaDialog
 
     jumped = EncyclopediaDialog(initial_topic="chinese", initial_entry=6)
-    assert jumped._topic_key == "chinese" and jumped._entry_index == 6
-    assert jumped._back.isVisible() or True         # on an entry page
-    assert "Horse" in jumped._entry_name(
+    assert jumped.topic_key == "chinese" and jumped.entry_index == 6
+    assert jumped._home_button.isVisible() or True         # on an entry page
+    assert "Horse" in jumped._reader._entry_name(
         jumped._topics["chinese"]["entries"][6]
     )
     jumped.deleteLater()
     # No target (menu open) shows the gallery.
     gallery = EncyclopediaDialog()
-    assert gallery._topic_key is None
+    assert gallery.topic_key is None
     gallery.deleteLater()
     # An unknown topic cannot open a page — it stays on the gallery.
     unknown = EncyclopediaDialog(initial_topic="does_not_exist")
-    assert unknown._topic_key is None
+    assert unknown.topic_key is None
     unknown.deleteLater()
 
 
@@ -811,7 +811,7 @@ def test_encyclopedia_expansion_wiring():
     every new article resolves from Database/encyclopedia.json."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _topics
+    from app.encyclopedia import EncyclopediaDialog, topics as _topics
 
     QApplication.instance() or QApplication([])
     topics = _topics()
@@ -937,35 +937,36 @@ def test_encyclopedia_expansion_wiring():
         "week", "instrument", "moon", "seasons", "sun", "virtues",
         "sins", "moods", "greek", "wolf", "bee", "elephant",
     ):
-        dialog._show_topic(key)
-    assert "Mercury" in dialog._article_text(("week", "mercury"))
-    assert "6°" in dialog._article_text(("instrument", "twilight"))
-    assert dialog._article_text(("emblem", "virtues", "Justice"))
-    assert "Goethe" in dialog._article_text(("season", "Spring"))
+        dialog.show_topic(key)
+    assert "Mercury" in dialog._reader._article_text(("week", "mercury"))
+    assert "6°" in dialog._reader._article_text(("instrument", "twilight"))
+    assert dialog._reader._article_text(("emblem", "virtues", "Justice"))
+    assert "Goethe" in dialog._reader._article_text(("season", "Spring"))
     # The three-way split (owner 2026-07-16): the Sun article speaks the
     # solstice; the eight Moon pages (queue #8b) speak their phase and
     # the tides — spring at the syzygies, neap at the quarters.
-    assert "solstice" in dialog._article_text(("sun", "Summer_Solstice"))
-    assert "29.53" in dialog._article_text(("moon", "New Moon"))
-    assert "SPRING" in dialog._article_text(("moon", "Full Moon"))
-    assert "NEAP" in dialog._article_text(("moon", "First Quarter"))
+    assert "solstice" in dialog._reader._article_text(("sun", "Summer_Solstice"))
+    assert "29.53" in dialog._reader._article_text(("moon", "New Moon"))
+    assert "SPRING" in dialog._reader._article_text(("moon", "Full Moon"))
+    assert "NEAP" in dialog._reader._article_text(("moon", "First Quarter"))
     # The topic SLIDER (owner plan round E, 2026-07-14): one entry per
     # page, ← / → wrap around like the Guide, the pager hides on the
     # gallery and the counter tracks the position. Round R3b item 1:
     # Title + 6 weekdays + duality title + GOOD + EVIL + Sigma = 11
     # pages ("wolf" — not one of the four Pantheon-merged themes, so
     # its count stays the plain post-split shape).
-    dialog._show_topic("wolf")
-    assert dialog._entry_index == 0
-    assert dialog._counter.text() == "1 / 11"
-    assert len(dialog._blocks) == 1
-    dialog._step(-1)                              # wraps to the Ninth
-    assert dialog._entry_index == 10
-    assert dialog._counter.text() == "11 / 11"
-    dialog._step(+1)
-    assert dialog._entry_index == 0
-    dialog._show_topics()
-    assert dialog._back.isHidden() and dialog._next.isHidden()
+    dialog.show_topic("wolf")
+    assert dialog.entry_index == 0
+    assert dialog._reader._counter.text() == "1 / 11"
+    assert len(dialog._reader._blocks) == 1
+    dialog._reader.step(-1)                              # wraps to the Ninth
+    assert dialog.entry_index == 10
+    assert dialog._reader._counter.text() == "11 / 11"
+    dialog._reader.step(+1)
+    assert dialog.entry_index == 0
+    dialog.show_home()
+    assert dialog._home_button.isHidden()
+    assert not dialog._reader.isVisible()      # the reader left the stack
     dialog.deleteLater()
 
 
@@ -979,7 +980,7 @@ def test_ring_letters_article_carries_the_mason_lore():
     keeps its entry count."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _topics
+    from app.encyclopedia import EncyclopediaDialog, topics as _topics
     from data.encyclopedia import EncyclopediaRepository
 
     QApplication.instance() or QApplication([])
@@ -996,8 +997,8 @@ def test_ring_letters_article_carries_the_mason_lore():
     assert "GOD and GEOMETRY" in article
 
     dialog = EncyclopediaDialog()
-    dialog._show_topic("instrument")
-    text = dialog._article_text(("instrument", "ring_letters"))
+    dialog.show_topic("instrument")
+    text = dialog._reader._article_text(("instrument", "ring_letters"))
     assert "inverted cross" in text and "hexagram" in text.lower()
     dialog.deleteLater()
 
@@ -1018,11 +1019,10 @@ def test_wider_pantheon_topics_removed_as_duplicate_tiles():
     from config.encyclopedia_tree import WHOLES
 
     topics = _topics()
-    groups = dict(_TOPIC_GROUPS)
+    seated = [theme for whole in WHOLES for theme in whole.themes]
     for key in ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic"):
         assert key not in topics, key
-        for keys in groups.values():
-            assert key not in keys, key
+        assert key not in seated, key
 
 
 def test_pantheon_planetary_merge():
@@ -1036,11 +1036,11 @@ def test_pantheon_planetary_merge():
     (CANON.md: one Ninth per theme, outside BOTH rosters) — a THIRD
     block, The Wider Court, trails from page 23 (round R8d, see
     `test_wider_court_block` below)."""
-    from app.encyclopedia import (
+    from app.encyclopedia import topics as _topics
+    from app.encyclopedia.builders import (
         _PANTHEON_BLOCK_SIZE,
         _PANTHEON_MERGED_THEMES,
         _WIDER_BLOCK_START,
-        _topics,
     )
     from config import defaults as _defaults
     from data.encyclopedia import EncyclopediaRepository
@@ -1101,11 +1101,11 @@ def test_wider_court_block():
     read from the SAME `encyclopedia.json` "wider" family the deleted
     topics used — every one of the fifteen articles is reachable again,
     pinned here by TITLE."""
-    from app.encyclopedia import (
+    from app.encyclopedia import topics as _topics
+    from app.encyclopedia.builders import (
         _PANTHEON_MERGED_THEMES,
         _WIDER_BLOCK_START,
         _WIDER_FIGURES,
-        _topics,
     )
     from data.encyclopedia import EncyclopediaRepository
 
@@ -1159,14 +1159,13 @@ def test_wider_court_gallery_has_no_extra_tiles():
     from config.encyclopedia_tree import WHOLES
 
     topics = _topics()
-    groups = dict(_TOPIC_GROUPS)
+    seated = [theme for whole in WHOLES for theme in whole.themes]
     for key in ("wider_greek", "wider_norse", "wider_egypt", "wider_slavic"):
         assert key not in topics, key
-        for keys in groups.values():
-            assert key not in keys, key
-    # The Divine hall still names exactly the same four culture cards —
+        assert key not in seated, key
+    # The Divine whole still names exactly the same four culture cards —
     # no fifth "Wider Court" tile of its own.
-    divine = dict(_TOPIC_GROUPS)["The Divine"]
+    divine = {whole.key: whole for whole in WHOLES}["divine"].themes
     assert {"greek", "norse", "egypt", "slavic"} <= set(divine)
     assert not any(k.startswith("wider") for k in divine)
 
@@ -1184,7 +1183,8 @@ def test_pantheon_pages_offer_colored_like_the_planetary_pages():
     `_WIDER_BLOCK_START` (round R8d) — the trailing Wider Court figures
     carry no `looks` at all (no art landed yet), a different, correct
     absence this test is not about."""
-    from app.encyclopedia import _PANTHEON_BLOCK_SIZE, _WIDER_BLOCK_START, _topics
+    from app.encyclopedia import topics as _topics
+    from app.encyclopedia.builders import _PANTHEON_BLOCK_SIZE, _WIDER_BLOCK_START
 
     topics = _topics()
     for theme in ("greek", "norse"):
@@ -1207,105 +1207,93 @@ def test_pantheon_pages_offer_colored_like_the_planetary_pages():
             assert "Colored" not in titles, (theme, entry["name"])
 
 
-def test_pantheon_switch_button():
-    """The LOGO BUTTON between Home and Download (round R3b item 2):
-    hidden outside the four merged themes; on a merged theme its icon
-    names the roster a click would SWITCH TO, and `_switch_roster`
-    jumps to the SAME position (day) in the other 11-page block —
-    Monday stays Monday, the dual title stays the dual title. Round
-    R8d: the button HIDES again once the page enters The Wider Court
-    (page 23 on) — that trailing block has no twin roster to name on
-    the icon, the SAME "hidden outside the merged themes" guard, not a
-    new special case (see `_update_roster_button`'s own docstring)."""
+def test_the_variant_switcher_walks_the_registers():
+    """SESSION 27 (owner-sealed 2026-07-28), replacing the retired
+    Pantheon/Planetary roster button: ONE switcher beside the title
+    walks EVERY theme that carries several registers — the four god
+    cultures (Planetary | Pantheon | Wider Court), the Bible's three,
+    the Creeds' two, both eclipse families — and it keeps the reader's
+    position inside the block, which is the owner's own law ("promena
+    kao do sada pamti poziciju dana"). A single-register theme never
+    shows it."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import (
-        EncyclopediaDialog,
-        _PANTHEON_BLOCK_SIZE,
-        _WIDER_BLOCK_START,
-    )
+    from app.encyclopedia import EncyclopediaDialog
+    from app.encyclopedia.builders import _PANTHEON_BLOCK_SIZE
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
     dialog.show()
-    # A non-merged theme never shows the button.
-    dialog._show_topic("wolf")
-    dialog._entry_index = 1
-    dialog._show_entry()
-    assert not dialog._roster_button.isVisible()
 
-    dialog._show_topic("greek")
-    for index in range(_WIDER_BLOCK_START):
-        dialog._entry_index = index
-        dialog._show_entry()
-        assert dialog._roster_button.isVisible(), index
-        icon = dialog._roster_button.icon()
-        expected = (
-            dialog._planetary_icon if index >= _PANTHEON_BLOCK_SIZE
-            else dialog._pantheon_icon
-        )
-        assert icon.cacheKey() == expected.cacheKey(), index
-    # The Wider Court block (title + 3 Greek figures): hidden throughout.
-    for index in range(_WIDER_BLOCK_START, len(dialog._topics["greek"]["entries"])):
-        dialog._entry_index = index
-        dialog._show_entry()
-        assert not dialog._roster_button.isVisible(), index
+    # A single-register theme hides the switcher entirely.
+    dialog.show_topic("wolf")
+    assert not dialog._variant_back.isVisible()
+    assert not dialog._variant_forward.isVisible()
 
-    # Monday (index 1, Planetary) switches to Monday's Pantheon page
-    # (index 12) and back — the SAME day, the other roster.
-    dialog._entry_index = 1
-    dialog._show_entry()
-    dialog._switch_roster()
-    assert dialog._entry_index == 1 + _PANTHEON_BLOCK_SIZE
-    dialog._switch_roster()
-    assert dialog._entry_index == 1
-    # Paging NEXT across the 11/12 boundary flips the icon too, with
-    # no separate boundary-watch — `_show_entry` recomputes it always.
-    dialog._entry_index = _PANTHEON_BLOCK_SIZE - 1     # the Ninth, page 11
-    dialog._show_entry()
-    assert dialog._roster_button.icon().cacheKey() == (
-        dialog._pantheon_icon.cacheKey()
-    )
-    dialog._step(+1)                                   # crosses into Pantheon
-    assert dialog._entry_index == _PANTHEON_BLOCK_SIZE
-    assert dialog._roster_button.icon().cacheKey() == (
-        dialog._planetary_icon.cacheKey()
-    )
-    # Paging NEXT across the 21/22 boundary hides it (into Wider Court).
-    dialog._entry_index = _WIDER_BLOCK_START - 1        # Pantheon's Ninth, page 22
-    dialog._show_entry()
-    assert dialog._roster_button.isVisible()
-    dialog._step(+1)                                    # crosses into Wider Court
-    assert dialog._entry_index == _WIDER_BLOCK_START
-    assert not dialog._roster_button.isVisible()
+    dialog.show_topic("greek")
+    assert dialog._variant_back.isVisible()
+    assert dialog._title.text() == "Greek gods — Planetary"
+
+    # Monday (page 1 of the Planetary block) steps to Monday's Pantheon
+    # page and back — the SAME day, the other roster.
+    dialog._reader.open_topic("greek", 1)
+    dialog._step_variant(+1)
+    assert dialog.entry_index == 1 + _PANTHEON_BLOCK_SIZE
+    assert dialog._title.text() == "Greek gods — Pantheon"
+    dialog._step_variant(-1)
+    assert dialog.entry_index == 1
+
+    # THE CLAMP: the Wider Court is shorter than the roster blocks, so
+    # a deep position lands on its LAST page instead of overrunning.
+    dialog._reader.open_topic("greek", 9)        # Planetary's Servant
+    dialog._step_variant(-1)                     # wraps back to Wider Court
+    wider_label, wider_start, wider_stop = dialog._reader.topic["variants"][2]
+    assert wider_label == "Wider Court"
+    assert dialog.entry_index == wider_stop - 1
+    assert dialog._title.text() == "Greek gods — Wider Court"
+
+    # The merged registers wear the same switcher (Rule #5, one widget).
+    dialog.show_topic("bible")
+    assert dialog._title.text() == "Bible — Bible"
+    dialog._step_variant(+1)
+    assert dialog._title.text() == "Bible — Bible II"
+    dialog.show_topic("eclipses")
+    assert dialog._title.text() == "Eclipses — Solar"
+    dialog._step_variant(+1)
+    assert dialog._title.text() == "Eclipses — Lunar"
     dialog.deleteLater()
 
 
-def test_topic_display_title_names_all_three_sections():
-    """`_topic_display_title` (owner round R8b item 8) learns the
-    THIRD section (round R8d): "Greek — Planetary" / "Greek —
-    Pantheon" / "Greek — Wider Court", the same header pattern
-    extended rather than a new mechanism."""
+def test_the_header_names_the_whole_and_the_register():
+    """SESSION 27: the header is a PAIR — the breadcrumb names the
+    whole, the title the theme and (when it has more than one) the
+    register being read. The owner's round R8b complaint was a name
+    printed twice on one screen; the pair never repeats itself."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _WIDER_BLOCK_START
+    from app.encyclopedia import EncyclopediaDialog
+    from app.encyclopedia.builders import _WIDER_BLOCK_START
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
     dialog.show()
-    dialog._show_topic("greek")
 
-    dialog._entry_index = 0
-    dialog._show_entry()
-    assert dialog._topic_display_title() == "Greek — Planetary"
+    dialog.show_topic("greek")
+    assert dialog._crumbs.text() == "› The Divine"
+    assert dialog._title.text() == "Greek gods — Planetary"
 
-    dialog._entry_index = 11
-    dialog._show_entry()
-    assert dialog._topic_display_title() == "Greek — Pantheon"
+    dialog._reader.open_topic("greek", 11)
+    dialog._refresh_header()
+    assert dialog._title.text() == "Greek gods — Pantheon"
 
-    dialog._entry_index = _WIDER_BLOCK_START
-    dialog._show_entry()
-    assert dialog._topic_display_title() == "Greek — Wider Court"
+    dialog._reader.open_topic("greek", _WIDER_BLOCK_START)
+    dialog._refresh_header()
+    assert dialog._title.text() == "Greek gods — Wider Court"
+
+    # A single-register theme prints its bare title, no dash.
+    dialog._reader.open_topic("wolf", 0)
+    dialog._refresh_header()
+    assert dialog._title.text() == "Wolf Pack"
     dialog.deleteLater()
 
 
@@ -1320,7 +1308,7 @@ def test_duality_topic_rotates_lucifer_and_judas_by_travel_date():
 
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _topics
+    from app.encyclopedia import EncyclopediaDialog, topics as _topics
     from config import defaults
 
     QApplication.instance() or QApplication([])
@@ -1406,18 +1394,16 @@ def test_era_terms_topic():
     # Eras essay's own text), so its image tuple is empty (fix round F).
     assert era[7]["images"] == ()
 
-    # THE CELESTIAL ENGINE (owner-approved FIVE-section regroup, sealed
-    # 2026-07-20, round R3 — supersedes "The Clock"): the clock topics
-    # keep their relative order, now followed by Zodiac + Cosmos in the
-    # SAME group (Planets/Planet Signs fold into one "planets" card).
-    groups = dict(_TOPIC_GROUPS)
-    assert groups["The Celestial Engine"][:8] == (
-        "week", "instrument", "moon", "seasons", "sun", "era",
-        "eclipse_solar", "eclipse_lunar",
-    )
-    assert "planet_signs" not in groups["The Celestial Engine"]
-    for key in ("astrology", "chinese", "planets", "cosmos"):
-        assert key in groups["The Celestial Engine"]
+    # SESSION 27 (owner-sealed 2026-07-28): the old Celestial Engine
+    # SPLIT — the watch's own wheels (the week, the instrument, the eras
+    # and the months) went to THE INSTRUMENT; the sky it computes stayed
+    # in the Engine. The eras ride the Instrument with the year wheels.
+    instrument = {whole.key: whole for whole in WHOLES}["instrument"]
+    engine = {whole.key: whole for whole in WHOLES}["celestial"]
+    assert instrument.themes == ("week", "instrument", "era", "months", "guide")
+    assert "planet_signs" not in engine.themes
+    for key in ("astrology", "chinese", "planets", "cosmos", "eclipses"):
+        assert key in engine.themes
 
     # Every article resolves and carries its own MEASURED numbers —
     # never invented, always the sealed anno_lucis.json/ROADMAP figures.
@@ -1464,11 +1450,11 @@ def test_era_terms_topic():
     # The dialog opens the topic and each page's title resolves without
     # crashing (era_title dispatch in _entry_name).
     dialog = EncyclopediaDialog()
-    dialog._show_topic("era")
-    assert dialog._counter.text() == "1 / 8"
+    dialog.show_topic("era")
+    assert dialog._reader._counter.text() == "1 / 8"
     for index in range(8):
-        dialog._entry_index = index
-        dialog._show_entry()
+        dialog._reader._entry_index = index
+        dialog._reader._show_entry()
     dialog.deleteLater()
 
 
@@ -1491,33 +1477,38 @@ def test_eclipse_topics():
 
     QApplication.instance() or QApplication([])
     topics = _topics()
-    assert [e["name"][1] for e in topics["eclipse_solar"]["entries"]] == [
+    # SESSION 27 (owner-sealed 2026-07-28): Solar and Lunar merged into
+    # ONE Eclipses card whose switcher walks the two registers; the
+    # pages themselves are untouched, block by block.
+    ((solar_label, solar_start, solar_stop),
+     (lunar_label, lunar_start, lunar_stop)) = topics["eclipses"]["variants"]
+    assert (solar_label, lunar_label) == ("Solar", "Lunar")
+    entries = topics["eclipses"]["entries"]
+    assert [e["name"][1] for e in entries[solar_start:solar_stop]] == [
         "Solar_Overview", "Solar_Total", "Solar_Annular",
         "Solar_Partial", "Solar_Hybrid",
     ]
-    assert [e["name"][1] for e in topics["eclipse_lunar"]["entries"]] == [
+    assert [e["name"][1] for e in entries[lunar_start:lunar_stop]] == [
         "Lunar_Overview", "Lunar_Total", "Lunar_Partial", "Lunar_Penumbral",
     ]
     # The overview strings its body's category emblems (4 solar / 3
     # lunar); each category chapter wires exactly one emblem. All
     # graceful-absent until PromptPainter generates them.
-    assert len(topics["eclipse_solar"]["entries"][0]["images"]) == 4
-    assert len(topics["eclipse_lunar"]["entries"][0]["images"]) == 3
-    for topic_key in ("eclipse_solar", "eclipse_lunar"):
-        for entry in topics[topic_key]["entries"][1:]:
+    assert len(entries[solar_start]["images"]) == 4
+    assert len(entries[lunar_start]["images"]) == 3
+    for block in (entries[solar_start + 1:solar_stop],
+                  entries[lunar_start + 1:lunar_stop]):
+        for entry in block:
             assert len(entry["images"]) == 1
             resolved = _paths.art_file(entry["images"][0])
             assert resolved is None or resolved.suffix == ".png"
 
-    # Both topics ride The Celestial Engine group (owner-approved
-    # FIVE-section regroup, sealed 2026-07-20, round R3), right after
-    # the era topic — Zodiac/Cosmos trail them in the same group.
-    groups = dict(_TOPIC_GROUPS)
-    engine = groups["The Celestial Engine"]
-    era_index = engine.index("era")
-    assert engine[era_index + 1:era_index + 3] == (
-        "eclipse_solar", "eclipse_lunar",
-    )
+    # The merged card rides The Celestial Engine (SESSION 27) — the two
+    # source keys are gone from the tree entirely.
+    engine = {whole.key: whole for whole in WHOLES}["celestial"]
+    assert "eclipses" in engine.themes
+    assert "eclipse_solar" not in engine.themes
+    assert "eclipse_lunar" not in engine.themes
 
     # Every chapter's article resolves and DESCRIBES its exact dial
     # representation (the sealed state table — the reader's page and the
@@ -1543,13 +1534,14 @@ def test_eclipse_topics():
     # The dialog opens each topic and pages through every chapter
     # without crashing (eclipse_title dispatch in _entry_name).
     dialog = EncyclopediaDialog()
-    dialog._show_topic("eclipse_solar")
-    assert dialog._counter.text() == "1 / 5"
-    dialog._show_topic("eclipse_lunar")
-    assert dialog._counter.text() == "1 / 4"
-    for index in range(4):
-        dialog._entry_index = index
-        dialog._show_entry()
+    dialog.show_topic("eclipses")
+    assert dialog._reader._counter.text() == "1 / 9"       # both registers
+    assert dialog._title.text() == "Eclipses — Solar"
+    dialog._step_variant(+1)                               # the Lunar register
+    assert dialog._title.text() == "Eclipses — Lunar"
+    assert dialog.entry_index == lunar_start
+    for index in range(len(entries)):
+        dialog._reader.open_topic("eclipses", index)
     dialog.deleteLater()
 
 
@@ -1680,65 +1672,60 @@ def test_custom_palette_reaches_the_render():
 # --- ROUND R3: LAYOUT + ARTICLE ORDER + FINISH SWITCHER ------------------------
 
 
-def test_gallery_five_sections():
-    """Owner-approved decision, sealed 2026-07-20: the gallery regroups
-    into exactly FIVE sections, the owner's own names. Planets and
-    Planet Signs are ONE topic (the existing Planets/Signs/Art look
-    switcher) — "planet_signs" never appears as a gallery card, but
-    stays wired in `_topics()` so a dial slot dressed in that theme
-    still resolves a Spacebar jump."""
+def test_the_home_screen_shows_the_six_wholes():
+    """SESSION 27 (owner-sealed 2026-07-28), superseding the five-hall
+    gallery: the home screen carries exactly SIX wholes, each with its
+    own Rose accent, and every theme card is seated in exactly one of
+    them. `planet_signs` is not a card at all — it is one of the
+    Planets card's three LOOKS, and the dial's jump for it resolves
+    through `tree.TOPIC_ALIASES`."""
     from app.encyclopedia import topics as _topics
-    from config.encyclopedia_tree import WHOLES
+    from app.encyclopedia.tree import resolve_target
+    from config.encyclopedia_tree import ROSE_ACCENTS_USED, WHOLES
 
-    assert [name for name, _ in _TOPIC_GROUPS] == [
-        "The Celestial Engine", "The Divine", "The Human Wheel",
-        "The Living World", "The Archetypes",
+    assert [whole.title for whole in WHOLES] == [
+        "The Instrument", "The Celestial Engine", "The Divine",
+        "The Human Wheel", "The Character Cube", "The Living World",
     ]
-    groups = dict(_TOPIC_GROUPS)
-    every_card = [key for keys in groups.values() for key in keys]
+    every_card = [theme for whole in WHOLES for theme in whole.themes]
+    assert len(every_card) == len(set(every_card)), "no theme in two wholes"
     assert "planet_signs" not in every_card
-    assert len(every_card) == len(set(every_card)), "no topic in two groups"
-    # The Archetypes section (owner: "do not scatter them") stood empty
-    # until WORKPLAN Session 21 (2026-07-27) filled it with the Cube
-    # canon's three topics, in this order; the One Soul theme joined the
-    # same day (owner "napravi naravno") as the hall's fourth card.
-    assert groups["The Archetypes"] == (
-        "cube", "double_trinity", "crosses", "one_soul",
-    )
-    # Every card key actually resolves in _topics() — a stale name in a
-    # group would KeyError the gallery build.
+    assert len({whole.accent for whole in WHOLES}) == len(WHOLES)
+    assert set(ROSE_ACCENTS_USED) == {whole.accent for whole in WHOLES}
+
+    # The tree and the built table match EXACTLY — no card without a
+    # topic, no topic without a card.
     topics = _topics()
-    for key in every_card:
-        assert key in topics, key
-    # planet_signs itself must still resolve (compositor contract).
-    assert "planet_signs" in topics
+    assert set(topics) == set(every_card)
+    # The Character Cube whole carries the four Cube cards in order.
+    cube = {whole.key: whole for whole in WHOLES}["cube"]
+    assert cube.themes[:4] == (
+        "cube_doctrine", "cube_axes", "cube_figures", "cube_projections",
+    )
+    # planet_signs still resolves a Spacebar jump (compositor contract).
+    assert resolve_target(topics, "planet_signs", 3) == ("planets", 3)
 
 
-def test_gallery_min_width_and_no_horizontal_overflow():
-    """LAYOUT fix round R3 (owner: "788px width, tiles clipping" dies
-    here); MIN WIDTH formula corrected round R8b item 5a
-    (`_gallery_content_width` — the old `tile * columns` arithmetic
-    dropped the inter-card spacing and the gallery column's own
-    margins, reliably undersizing this minimum): no group ever lays
-    out more than ENCYCLOPEDIA_GALLERY_MAX_COLUMNS cards per row — it
-    wraps into further rows instead of spilling sideways."""
+def test_the_window_never_opens_below_the_owners_screen():
+    """SESSION 27 (owner spec: "Prvi ekran nema scroll... min size je
+    minimalni zoom out", "1280 x 720p"): the window's minimum IS the
+    owner's opening screen, and it is never narrower than one full
+    theme row needs — the two laws are checked against each other here,
+    which is what keeps the home grid from ever wanting a scrollbar."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import (
-        EncyclopediaDialog,
-        _TOPIC_GROUPS,
-        _gallery_content_width,
-    )
+    from app.encyclopedia import EncyclopediaDialog
+    from app.encyclopedia.cards import card_width_for, row_content_width
     from config import defaults as _defaults
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
-    assert dialog.minimumWidth() == _gallery_content_width(
-        _defaults.ENCYCLOPEDIA_TOPIC_ICON_MIN_PX
-    )
-    # The Celestial Engine has more than 4 cards — it MUST wrap.
-    groups = dict(_TOPIC_GROUPS)
-    assert len(groups["The Celestial Engine"]) > _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    assert dialog.minimumWidth() >= _defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
+    assert dialog.minimumHeight() == _defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    # A full theme row fits inside the minimum width, by arithmetic.
+    columns = _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    card = card_width_for(dialog.minimumWidth(), columns)
+    assert row_content_width(card, columns) <= dialog.minimumWidth()
     dialog.deleteLater()
 
 
@@ -1762,57 +1749,62 @@ def test_gallery_never_shows_a_horizontal_scrollbar():
     for width in (min_width, min_width + 300, 1400):
         dialog.resize(width, 800)
         app.processEvents()
-        dialog._rescale()
+        dialog._reader._rescale()
         app.processEvents()
-        assert dialog._scroll.horizontalScrollBar().maximum() == 0, width
+        assert dialog._reader._scroll.horizontalScrollBar().maximum() == 0, width
     dialog.close()
     dialog.deleteLater()
 
 
-def test_gallery_subgroups_partition_their_hall_exactly():
-    """Owner round R8b item 5c: `_GALLERY_SUBGROUPS`'s partition of
-    each overloaded hall (The Celestial Engine, The Divine) must be
-    EXHAUSTIVE and NON-OVERLAPPING against that hall's own
-    `_TOPIC_GROUPS` membership — no topic silently dropped from the
-    gallery, none duplicated across two subgroup headings. Every OTHER
-    hall stays un-partitioned (one flat run of rows, item 5)."""
-    from app.encyclopedia import _GALLERY_SUBGROUPS, _TOPIC_GROUPS
+def test_every_whole_is_reachable_and_none_is_empty():
+    """SESSION 27, replacing the retired `_GALLERY_SUBGROUPS` partition
+    (the old overloaded halls needed sub-headings; six wholes do not):
+    every whole holds at least one card and at most what one screen can
+    carry comfortably, and every card key resolves — a stale name would
+    KeyError the theme screen."""
+    from app.encyclopedia import topics as _topics
+    from config.encyclopedia_tree import WHOLES
 
-    groups = dict(_TOPIC_GROUPS)
-    assert set(_GALLERY_SUBGROUPS) == {"The Celestial Engine", "The Divine"}
-    for hall, subgroups in _GALLERY_SUBGROUPS.items():
-        flat = [key for _, keys in subgroups for key in keys]
-        assert len(flat) == len(set(flat)), hall          # no duplicates
-        assert set(flat) == set(groups[hall]), hall        # exhaustive
-    # Item 6: the Gods subgroup is exactly the four merged cultures.
-    gods = dict(_GALLERY_SUBGROUPS["The Divine"])["Gods"]
-    assert gods == ("greek", "norse", "egypt", "slavic")
+    topics = _topics()
+    for whole in WHOLES:
+        assert whole.themes, whole.key
+        assert len(whole.themes) <= 9, whole.key
+        for theme in whole.themes:
+            assert theme in topics, (whole.key, theme)
 
 
-def test_short_gallery_row_is_centered():
-    """Owner round R8b item 5d ("red sa manje od 4 clana... oni su
-    centrirani" — a row with fewer than 4 tiles is centered): every row
-    `_build_gallery_rows` produces is its OWN QHBoxLayout bracketed by
-    a stretch on both sides — checked here on "The Year Wheels" (2
-    tiles, one short row) and confirmed a FULL row gets the identical
-    treatment (no special case, item 5d's own point)."""
+def _blank_plate():
+    """A 1x1 pixmap — the row test is about GEOMETRY, not art."""
+    from PySide6.QtGui import QPixmap
+
+    return QPixmap(1, 1)
+
+
+def test_every_card_row_is_centered():
+    """Owner round R8b item 5d, carried into the Session 27 grid: every
+    row is its OWN QHBoxLayout bracketed by a stretch on both sides —
+    a short trailing row centers exactly like a full one, no special
+    case."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog
+    from app.encyclopedia.cards import CardGrid
 
     QApplication.instance() or QApplication([])
-    dialog = EncyclopediaDialog()
-    short_row = dialog._build_gallery_rows(("era", "months"))
-    assert short_row.count() == 1
-    row = short_row.itemAt(0).layout()
-    assert row.itemAt(0).spacerItem() is not None            # leading stretch
-    assert row.itemAt(row.count() - 1).spacerItem() is not None  # trailing stretch
-    assert row.count() == 2 + 2                               # stretch+2 cards+stretch
-    full_row = dialog._build_gallery_rows(("greek", "norse", "egypt", "slavic"))
-    row = full_row.itemAt(0).layout()
-    assert row.itemAt(0).spacerItem() is not None
-    assert row.itemAt(row.count() - 1).spacerItem() is not None
-    dialog.deleteLater()
+    grid = CardGrid(3)
+    grid.set_cards([
+        {"key": f"k{i}", "title": f"T{i}", "about": "a",
+         "plate": _blank_plate(), "footer": "", "accent": "#FFFFFF"}
+        for i in range(4)                      # 3 + a short row of 1
+    ])
+    column = grid.layout()
+    assert column.count() == 2
+    for index in range(column.count()):
+        row = column.itemAt(index).layout()
+        assert row.itemAt(0).spacerItem() is not None
+        assert row.itemAt(row.count() - 1).spacerItem() is not None
+    assert column.itemAt(0).layout().count() == 3 + 2      # cards + stretches
+    assert column.itemAt(1).layout().count() == 1 + 2
+    grid.deleteLater()
 
 
 def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
@@ -1821,12 +1813,12 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
     survives a Home -> reopen (a NEW dialog instance seeds from the
     module-level `_session_zoom` the previous one left behind — never
     written to settings, resets on app restart)."""
-    import app.encyclopedia as encyclopedia_module
+    import app.encyclopedia.dialog as dialog_module
     from app.encyclopedia import EncyclopediaDialog
     from config import constants as _constants
 
     low, high = _constants.ENCYCLOPEDIA_ZOOM_RANGE
-    original = encyclopedia_module._session_zoom
+    original = dialog_module._session_zoom
     try:
         first = EncyclopediaDialog()
         first._apply_zoom_delta(120 * 1000)          # way past the ceiling
@@ -1841,7 +1833,7 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
         first.deleteLater()
         second.deleteLater()
     finally:
-        encyclopedia_module._session_zoom = original
+        dialog_module._session_zoom = original
 
 
 def test_article_order_restructure():
@@ -1903,7 +1895,7 @@ def test_dual_page_split_into_good_and_evil(app):
     ordinary single-image, single-text page, own name, own logo. Every
     text label spans the FULL block width now (no more columns=2 half-
     width split)."""
-    from app.encyclopedia import EncyclopediaDialog, _topics
+    from app.encyclopedia import EncyclopediaDialog, topics as _topics
     from config import defaults as _defaults
 
     topics = _topics()
@@ -1915,21 +1907,21 @@ def test_dual_page_split_into_good_and_evil(app):
     assert greek_evil["name"] == servant_name == "Phaethon"
 
     dialog = EncyclopediaDialog()
-    dialog._show_topic("greek")
-    dialog._entry_index = 8
-    dialog._show_entry()
-    good_text = dialog._article_text(greek_good["article"])
+    dialog.show_topic("greek")
+    dialog._reader._entry_index = 8
+    dialog._reader._show_entry()
+    good_text = dialog._reader._article_text(greek_good["article"])
     # TITLES CARRY THE DAY (owner round R8b item 8): both Sunday faces
     # append " — Sunday" now, the ONE build point (`_entry_name`).
-    assert dialog._entry_name(greek_good) == "Helios — Sunday"
+    assert dialog._reader._entry_name(greek_good) == "Helios — Sunday"
     # Every label is a PLAIN QLabel now (no (label, columns) tuple —
     # the DUAL page's half-width columns retired with the merge).
-    assert len(dialog._text_labels) == 1
-    dialog._entry_index = 9
-    dialog._show_entry()
-    evil_text = dialog._article_text(greek_evil["article"])
-    assert dialog._entry_name(greek_evil) == "Phaethon — Sunday"
-    assert len(dialog._text_labels) == 1
+    assert len(dialog._reader._text_labels) == 1
+    dialog._reader._entry_index = 9
+    dialog._reader._show_entry()
+    evil_text = dialog._reader._article_text(greek_evil["article"])
+    assert dialog._reader._entry_name(greek_evil) == "Phaethon — Sunday"
+    assert len(dialog._reader._text_labels) == 1
     assert good_text != evil_text
     assert "Helios" in good_text
     assert "Phaethon" in evil_text
@@ -1955,48 +1947,43 @@ def test_titles_carry_the_day_and_the_section():
     dialog = EncyclopediaDialog()
 
     # A weekday figure (Monday, Planetary block) carries its day.
-    dialog._show_topic("greek")
-    dialog._entry_index = 1
-    dialog._show_entry()
+    dialog.show_topic("greek")
+    dialog._reader._entry_index = 1
+    dialog._reader._show_entry()
     entry = dialog._topics["greek"]["entries"][1]
-    assert dialog._entry_name(entry).endswith(" — Monday")
+    assert dialog._reader._entry_name(entry).endswith(" — Monday")
 
     # A non-weekday theme (no "weekday" key on any entry) never grows
     # a day suffix — the machinery is opt-in, never blanket.
-    dialog._show_topic("moon")
+    dialog.show_topic("moon")
     entry = dialog._topics["moon"]["entries"][0]
     assert "weekday" not in entry
-    assert " — " not in dialog._entry_name(entry)
+    assert " — " not in dialog._reader._entry_name(entry)
 
     # The Ninth sits OUTSIDE the weekday (CANON.md) — no day suffix.
     ninth = dialog._topics["greek"]["entries"][10]
     assert ninth["name"] == "Gaia"
     assert "weekday" not in ninth
-    assert dialog._entry_name(ninth) == "Gaia"
+    assert dialog._reader._entry_name(ninth) == "Gaia"
 
     # The TOP header names the SECTION on a merged theme, and reads
     # differently from the entry caption below it (no bare duplicate).
-    dialog._show_topic("greek")
-    dialog._entry_index = 0                 # Planetary title page
-    dialog._show_entry()
-    top = dialog._topic_display_title()
-    caption = dialog._entry_name(dialog._topics["greek"]["entries"][0])
-    assert top == "Greek — Planetary"
+    dialog.show_topic("greek")                  # Planetary title page
+    top = dialog._title.text()
+    caption = dialog._reader._entry_name(dialog._topics["greek"]["entries"][0])
+    assert top == "Greek gods — Planetary"
     assert top != caption
-    dialog._entry_index = 11                # Pantheon title page
-    dialog._show_entry()
-    top_pantheon = dialog._topic_display_title()
-    caption_pantheon = dialog._entry_name(dialog._topics["greek"]["entries"][11])
-    assert top_pantheon == "Greek — Pantheon"
+    dialog._reader.open_topic("greek", 11)      # Pantheon title page
+    dialog._refresh_header()
+    top_pantheon = dialog._title.text()
+    caption_pantheon = dialog._reader._entry_name(dialog._topics["greek"]["entries"][11])
+    assert top_pantheon == "Greek gods — Pantheon"
     assert top_pantheon != caption_pantheon
-    assert top_pantheon != top               # the two sections read apart
+    assert top_pantheon != top               # the two registers read apart
 
-    # A theme with only ONE section carries no section suffix at all.
-    dialog._show_topic("wolf")
-    dialog._entry_index = 0
-    dialog._show_entry()
-    assert " — Planetary" not in dialog._topic_display_title()
-    assert " — Pantheon" not in dialog._topic_display_title()
+    # A theme with only ONE register carries no suffix at all.
+    dialog.show_topic("wolf")
+    assert " — " not in dialog._title.text()
     dialog.deleteLater()
 
 
@@ -2012,23 +1999,23 @@ def test_finish_persistence_across_pages():
     dialog = EncyclopediaDialog()
     # Entry 0 is now the title page (no switcher) — Monday (index 1) is
     # the first page that actually offers the finish cycle.
-    dialog._show_topic("wolf")
-    dialog._entry_index = 1
-    dialog._show_entry()
-    assert dialog._look_state["titles"][dialog._look_state["index"]] == "Colored"
-    dialog._cycle_look(1)                     # -> Bronze
-    assert dialog._preferred_look_label == "Bronze"
-    dialog._step(1)                           # a different entry, same topic
-    assert dialog._look_state["titles"][dialog._look_state["index"]] == "Bronze"
-    dialog._show_topics()
-    dialog._show_topic("bee")                 # a DIFFERENT metal topic
-    dialog._entry_index = 1
-    dialog._show_entry()
-    assert dialog._look_state["titles"][dialog._look_state["index"]] == "Bronze"
+    dialog.show_topic("wolf")
+    dialog._reader._entry_index = 1
+    dialog._reader._show_entry()
+    assert dialog._reader._look_state["titles"][dialog._reader._look_state["index"]] == "Colored"
+    dialog._reader._cycle_look(1)                     # -> Bronze
+    assert dialog._reader._preferred_look_label == "Bronze"
+    dialog._reader.step(1)                           # a different entry, same topic
+    assert dialog._reader._look_state["titles"][dialog._reader._look_state["index"]] == "Bronze"
+    dialog.show_home()
+    dialog.show_topic("bee")                 # a DIFFERENT metal topic
+    dialog._reader._entry_index = 1
+    dialog._reader._show_entry()
+    assert dialog._reader._look_state["titles"][dialog._reader._look_state["index"]] == "Bronze"
     # A topic whose looks do NOT include "Bronze" falls back to ITS OWN
     # default (index 0) without erroring.
-    dialog._show_topic("astrology")
-    assert dialog._look_state["titles"][dialog._look_state["index"]] == (
+    dialog.show_topic("astrology")
+    assert dialog._reader._look_state["titles"][dialog._reader._look_state["index"]] == (
         "Logo & Constellation"
     )
     dialog.deleteLater()
@@ -2038,9 +2025,9 @@ def test_ninth_seat_philosophical_name():
     """Owner decree, round R3: the 9th seat's philosophical name is
     "The Unfound" — documented as a module constant with the discussed
     alternatives in a code comment where it is defined."""
-    from app import encyclopedia
+    from app.encyclopedia import pages as encyclopedia_pages
 
-    assert encyclopedia.NINTH_SEAT_PHILOSOPHICAL_NAME == "The Unfound"
+    assert encyclopedia_pages.NINTH_SEAT_PHILOSOPHICAL_NAME == "The Unfound"
 
 
 def test_ninth_carries_the_finish_switcher():
@@ -2053,7 +2040,8 @@ def test_ninth_carries_the_finish_switcher():
     page 11) — no longer `entries[-1]` since round R8d appended The
     Wider Court's own trailing figures after it (chinese/astrology are
     untouched by that merge, so their Ninth stays the true last entry)."""
-    from app.encyclopedia import _PANTHEON_BLOCK_SIZE, _topics
+    from app.encyclopedia import topics as _topics
+    from app.encyclopedia.builders import _PANTHEON_BLOCK_SIZE
 
     topics = _topics()
     ninth_index = _PANTHEON_BLOCK_SIZE - 1
@@ -2078,7 +2066,7 @@ def test_ninth_carries_the_finish_switcher():
 def test_image_hover_names_the_plate():
     """Owner spec: hovering any article image shows its NAME — critical
     on multi-image pages like the era calendars ("Byzantine")."""
-    from app.encyclopedia import _image_tooltip
+    from app.encyclopedia.text import image_tooltip as _image_tooltip
     from config import defaults as _defaults
 
     assert _image_tooltip(_defaults.ERA_ART_DIR / "calendar" / "Byzantine.png") == (
@@ -2107,23 +2095,23 @@ def test_space_jump_index_remap_survives_the_restructure():
     QApplication.instance() or QApplication([])
     # raw index 0 ("sun") -> the GOOD half (index 8), NOT the title page.
     sun_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=0)
-    assert sun_jump._entry_index == 8
+    assert sun_jump.entry_index == 8
     good_entry = sun_jump._topics["wolf"]["entries"][8]
     assert "dual" not in good_entry
     assert good_entry["name"] == _defaults.WEEKDAY_DUAL_NAMES["wolf"][0]
     sun_jump.deleteLater()
     # raw index 1 ("moon"/Monday) is UNCHANGED — still index 1.
     monday_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=1)
-    assert monday_jump._entry_index == 1
+    assert monday_jump.entry_index == 1
     assert monday_jump._topics["wolf"]["entries"][1]["name"] == "Luna"
     monday_jump.deleteLater()
     # raw index 6 ("saturn"/Saturday) is UNCHANGED — still index 6.
     saturday_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=6)
-    assert saturday_jump._entry_index == 6
+    assert saturday_jump.entry_index == 6
     saturday_jump.deleteLater()
     # A non-restructured topic (moon phases) never remaps.
     moon_jump = EncyclopediaDialog(initial_topic="moon", initial_entry=0)
-    assert moon_jump._entry_index == 0
+    assert moon_jump.entry_index == 0
     moon_jump.deleteLater()
 
 
@@ -2143,38 +2131,35 @@ def test_finish_switcher_lives_in_the_top_row():
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
-    # The trio sits in the SAME QHBoxLayout as Home/Download — the
-    # dialog's own top-level layout's first item.
-    top_row = dialog.layout().itemAt(0).layout()
+    # SESSION 27: the trio rides the READER's own top row, left of
+    # Download — the dialog's chrome above it carries the breadcrumb and
+    # the VARIANT switcher, a different control entirely.
+    top_row = dialog._reader.layout().itemAt(0).layout()
     top_widgets = [
         top_row.itemAt(i).widget() for i in range(top_row.count())
         if top_row.itemAt(i).widget() is not None
     ]
-    assert dialog._back in top_widgets
-    assert dialog._download in top_widgets
-    assert dialog._look_back in top_widgets
-    assert dialog._look_caption in top_widgets
-    assert dialog._look_forward in top_widgets
-    assert top_widgets.index(dialog._look_caption) > top_widgets.index(
-        dialog._back
-    )
-    assert top_widgets.index(dialog._look_caption) < top_widgets.index(
-        dialog._download
+    assert dialog._reader._download in top_widgets
+    assert dialog._reader._look_back in top_widgets
+    assert dialog._reader._look_caption in top_widgets
+    assert dialog._reader._look_forward in top_widgets
+    assert top_widgets.index(dialog._reader._look_caption) < top_widgets.index(
+        dialog._reader._download
     )
     # Filled-pill styling: Bronze is a SOLID hex FILL with dark text;
     # Colored wears the exact gradient sweep as its FILL, white text.
-    dialog._show_topic("wolf")
-    dialog._entry_index = 1                        # Monday — offers the switcher
-    dialog._show_entry()
-    dialog._cycle_look(1)                          # -> Bronze
-    bronze_qss = dialog._look_caption.styleSheet()
+    dialog.show_topic("wolf")
+    dialog._reader._entry_index = 1                        # Monday — offers the switcher
+    dialog._reader._show_entry()
+    dialog._reader._cycle_look(1)                          # -> Bronze
+    bronze_qss = dialog._reader._look_caption.styleSheet()
     assert "background: transparent" not in bronze_qss
     assert f"background: {defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS['Bronze']}" in (
         bronze_qss
     )
     assert defaults.THEME_COLORS["surface_0"] in bronze_qss  # dark text
-    dialog._cycle_look(-1)                         # back to Colored
-    colored_qss = dialog._look_caption.styleSheet()
+    dialog._reader._cycle_look(-1)                         # back to Colored
+    colored_qss = dialog._reader._look_caption.styleSheet()
     assert "qlineargradient" in colored_qss
     assert defaults.THEME_COLORS["text_primary"] in colored_qss  # white text
     for hue in defaults.ENCYCLOPEDIA_FINISH_GRADIENT:

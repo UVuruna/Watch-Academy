@@ -229,43 +229,49 @@ def test_the_archetypes_hall_addresses_its_pages_by_index():
     """THE SPACEBAR CONTRACT: every Cube wheel figure's `enc` target
     (topic key, entry index) lands on the page it argues — the
     Character arms on their own pole or vertex, the Genesis and Council
-    arms on their triangle."""
+    arms on their triangle.
+
+    SESSION 27 (owner-sealed 2026-07-28): the Cube's 42-page run became
+    four cards, so a raw `("cube", 35)` target is re-aimed by
+    `tree.resolve_target` (which is WHY the entry order of
+    `_CUBE_ENTRIES` stays a contract — the wheel table is untouched).
+    The assertion is on the resolved page's NAME, the thing that
+    actually has to be right.
+    """
     from app.encyclopedia import topics as _topics
+    from app.encyclopedia.tree import resolve_target
+    from config import encyclopedia_tree as tree
 
     topics = _topics()
-    for key in ("cube", "double_trinity", "crosses"):
-        assert key in topics
-    names = {
-        key: [entry["name"] for entry in topics[key]["entries"]]
-        for key in ("cube", "double_trinity", "crosses")
-    }
     expect = {
-        "trinity_genesis": {"god": ("double_trinity", "Genesis"),
-                            "jesus": ("double_trinity", "Genesis"),
-                            "devil": ("double_trinity", "Genesis")},
+        "trinity_genesis": {"god": "Genesis", "jesus": "Genesis",
+                            "devil": "Genesis"},
         "prism_council": {
-            entity: ("double_trinity", "The Council")
+            entity: "The Council"
             for entity in ("god_judge", "devil_destroyer",
                            "devil_prosecutor", "god_creator",
                            "jesus_advocate", "jesus_preserver")
         },
         "compass_character": {
-            "loyalty": ("cube", "Loyalty"),
-            "patronage": ("cube", "The Steady Guardian"),
-            "dignity": ("cube", "Dignity"),
-            "conviction": ("cube", "The Wise Statesman"),
-            "integrity": ("cube", "Integrity"),
-            "renunciation": ("cube", "The Contemplative Sage"),
-            "humility": ("cube", "Humility"),
-            "devotion": ("cube", "The Quiet Devotee"),
+            "loyalty": "Loyalty",
+            "patronage": "The Steady Guardian",
+            "dignity": "Dignity",
+            "conviction": "The Wise Statesman",
+            "integrity": "Integrity",
+            "renunciation": "The Contemplative Sage",
+            "humility": "Humility",
+            "devotion": "The Quiet Devotee",
         },
     }
     for wheel, per_entity in expect.items():
         for figure in archetypes.figures(wheel):
-            topic, index = figure["enc"]
-            wanted_topic, wanted_page = per_entity[figure["entity"]]
-            assert topic == wanted_topic, figure["entity"]
-            assert names[topic][index] == wanted_page, figure["entity"]
+            key, page = resolve_target(topics, *figure["enc"])
+            wanted = per_entity[figure["entity"]]
+            assert topics[key]["entries"][page]["name"] == wanted, (
+                figure["entity"], key, page
+            )
+            # and the page it lands on is seated in the Cube's own whole
+            assert tree.whole_of(key).key == "cube", figure["entity"]
 
 
 @pytest.mark.parametrize("set_name,entity,needle", (

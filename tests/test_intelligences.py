@@ -53,7 +53,7 @@ def _base(name):
 
 def test_topic_order_follows_the_weekday_law():
     """title -> Monday..Saturday -> Ruler -> Servant -> Ninth."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     entries = _topics(date(2026, 7, 7))["intelligences"]["entries"]
     assert [e["name"] for e in entries] == [

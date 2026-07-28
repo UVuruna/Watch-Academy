@@ -2,7 +2,7 @@
 Encyclopedia BLOCKED the main thread for minutes — solve it once and
 for all"). Root cause pinned here forever: `metal_variant_file` used to
 GENERATE every cold gold/silver recolor at PATH-RESOLUTION time, and
-`app.encyclopedia._topics()` resolves a couple hundred such paths while
+`app.encyclopedia.topics()` resolves a couple hundred such paths while
 the dialog is being BUILT, on the GUI thread — every art rename wave /
 shade change / METAL_SWAP_VERSION bump invalidated the mtime-keyed
 raster cache and the next open paid minutes of numpy recolors again
@@ -68,7 +68,7 @@ def test_topic_table_build_runs_no_metal_recolor(
     _forbid_recolor(monkeypatch, "metal recolor ran during the topic build")
     from app import encyclopedia
 
-    topics = encyclopedia._topics(date(2026, 7, 26))
+    topics = encyclopedia.topics(date(2026, 7, 26))
     assert "greek" in topics and "chinese" in topics and "wolf" in topics
 
 
@@ -79,7 +79,7 @@ def test_dialog_open_runs_no_metal_recolor(app, isolated_cache, monkeypatch):
     from app.encyclopedia import EncyclopediaDialog
 
     dialog = EncyclopediaDialog()
-    assert dialog._topic_key is None       # the gallery screen is up
+    assert dialog.topic_key is None        # the home screen is up
     dialog.deleteLater()
 
 
@@ -110,7 +110,7 @@ def test_metal_variant_path_missing_source_never_crashes(tmp_path):
 def test_warm_encyclopedia_materializes_recorded_variants(
     app, isolated_cache, tmp_path, monkeypatch
 ):
-    from app import encyclopedia, encyclopedia_warm
+    from app import encyclopedia_warm
 
     source = _bronze_source(tmp_path)
     lazy = metal_variant_path(source, "silver")
@@ -125,10 +125,15 @@ def test_warm_encyclopedia_materializes_recorded_variants(
                 "article": ("emblem", "x", "X"),
                 "accents": (),
             }],
+            "variants": (("", 0, 1),),
         },
     }
+    # The warm walk reads the SAME inventory the dialog does; the fake
+    # stands in for it at the one import site (SESSION 27: the builder
+    # is `app.encyclopedia.tree.topics`, re-exported by the package).
     monkeypatch.setattr(
-        encyclopedia, "_topics", lambda travel_date=None: fake_topics
+        encyclopedia_warm, "encyclopedia_topics",
+        lambda travel_date=None: fake_topics,
     )
     built = encyclopedia_warm.warm_encyclopedia()
     assert lazy.exists()
@@ -142,7 +147,7 @@ def test_pending_looks_survive_into_the_reader(app, isolated_cache):
     from app.encyclopedia import EncyclopediaDialog
 
     dialog = EncyclopediaDialog(initial_topic="wolf", initial_entry=1)
-    state = dialog._look_state
+    state = dialog._reader._look_state
     assert state is not None
     assert "Gold" in state["titles"]
     assert "Silver" in state["titles"]

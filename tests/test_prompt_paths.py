@@ -21,7 +21,7 @@ is ignored), and asserts each is either:
     this alone covers every family that is exhaustively enumerated in
     config: era, scale, the archetype figure/center tables,
     trinity/season/sun turning points, eclipse emblems), PLUS the same
-    walk over `app/encyclopedia.py`, `render/compositor.py`, `render.
+    walk over `app/encyclopedia/*.py`, `render/compositor.py`, `render.
     layers.py`, `render/assets.py`, `render/asset_recolor.py` and
     `render/asset_variants.py` (the modules that actually consume
     these tables and occasionally hold their own), PLUS a plain TEXT
@@ -65,7 +65,7 @@ _PROMPTS_ROOT = _ROOT / "research" / "prompts"
 # plus the handful of consuming modules known to hold their own art
 # tables (the Encyclopedia gallery, the dial layers/compositor).
 _SCAN_PY_FILES = tuple(sorted((_ROOT / "config").glob("*.py"))) + (
-    _ROOT / "app" / "encyclopedia.py",
+    *sorted((_ROOT / "app" / "encyclopedia").glob("*.py")),
     _ROOT / "render" / "compositor.py",
     _ROOT / "render" / "layers.py",
     _ROOT / "render" / "assets.py",
@@ -75,7 +75,13 @@ _SCAN_PY_FILES = tuple(sorted((_ROOT / "config").glob("*.py"))) + (
 _SCAN_MODULES = (
     tuple(f"config.{p.stem}" for p in (_ROOT / "config").glob("*.py") if p.stem != "__init__")
     + (
-        "app.encyclopedia", "render.compositor", "render.layers",
+        # SESSION 27: the Encyclopedia is a PACKAGE — its path tables
+        # live in `pages`/`builders`/`tree`, so the namespace walk has
+        # to name the submodules (the package's `__init__` exports only
+        # the dialog and the topic table).
+        "app.encyclopedia.pages", "app.encyclopedia.builders",
+        "app.encyclopedia.tree",
+        "render.compositor", "render.layers",
         "render.assets", "render.asset_recolor", "render.asset_variants",
     )
 )
@@ -93,8 +99,7 @@ _PATH_PATTERN = re.compile(r"`(assets/[^`<*]+\.(?:png|svg))`")
 _LITERAL_FILENAME = re.compile(r"[\"']([\w .\-]+\.(?:png|svg))[\"']")
 
 # Family roots whose individual filenames are DATA-DRIVEN (owner's
-# roster/symbolism JSON, or — for `guide` — `assets/guide/pages.json`,
-# `app/guide.py`) rather than enumerated anywhere in the scanned
+# roster/symbolism JSON, or — for `guide` — `assets/instrument/guide/pages.json`) rather than enumerated anywhere in the scanned
 # modules — a sheet path under one of these is checked only down to
 # the FAMILY root.
 _DATA_DRIVEN_ROOTS = (

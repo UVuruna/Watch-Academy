@@ -139,7 +139,7 @@ def test_easter_egg_graceful_outside_coverage():
 def test_topic_page_order():
     """The R3b restructured order: title, Monday..Saturday, duality
     title, Antarctic Ruler, Arctic Servant, living Ninth — 11 pages."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     entries = _topics(date(2026, 7, 7))["continents"]["entries"]
     assert len(entries) == 11
@@ -159,7 +159,7 @@ def test_topic_page_order():
 def test_topic_title_image_present():
     """The title page carries the world map (the whole Earth seen at
     once), copied into the earth family as a PNG."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     topic = _topics(date(2026, 7, 7))["continents"]
     assert paths.art_file(topic["icon"]).exists()
@@ -172,7 +172,7 @@ def test_topic_look_switcher_atmosphere_clean_day_night():
     """Every earth-face page (continents + poles) offers the four looks —
     Atmosphere/Clean crossed with Day/Night — each resolving to an
     EXISTING earth face."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     entries = _topics(date(2026, 7, 7))["continents"]["entries"]
     face_pages = entries[1:7] + [entries[8], entries[9]]   # continents + poles
@@ -190,7 +190,7 @@ def test_topic_look_switcher_atmosphere_clean_day_night():
 def test_topic_ninth_is_living():
     """The Ninth page follows the traveled day: Zealandia normally,
     Pangea on a Pangea day (full moon / turning point / eclipse)."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
 
     ordinary = _topics(date(2026, 7, 7))["continents"]["entries"][10]
     assert ordinary["name"] == "Zealandia"
@@ -203,12 +203,12 @@ def test_topic_ninth_is_living():
 def test_topic_rides_the_celestial_engine():
     """Gallery placement (owner: The Celestial Engine — the Earth takes
     its seat among the celestial bodies)."""
-    from app.encyclopedia import _TOPIC_GROUPS
+    from config.encyclopedia_tree import WHOLES
 
-    groups = dict(_TOPIC_GROUPS)
-    assert "continents" in groups["The Celestial Engine"]
-    every = [k for keys in groups.values() for k in keys]
-    assert every.count("continents") == 1        # not scattered into two halls
+    engine = {whole.key: whole for whole in WHOLES}["celestial"]
+    assert "continents" in engine.themes
+    every = [theme for whole in WHOLES for theme in whole.themes]
+    assert every.count("continents") == 1        # not scattered into two wholes        # not scattered into two halls
 
 
 # --- 5. THE LIVE-DIAL BODY ART (earth_style x day/night) ---------------------
