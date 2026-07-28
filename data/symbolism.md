@@ -37,7 +37,7 @@ color and mood) below the two zodiac sign lines.
   person+quality, pillar+shadow, estate+object), while the two
   three-side wheels carry more per node. `archetype_compass_secondary` (the
   Ages) carries a SINGLE row (`rows[0]` — the age text; the compositor
-  draws both life-register beings from config). `archetype_seasons_secondary`
+  draws both life-register beings from config). `archetype_quaternity_secondary`
   (the Tetramorph) carries THREE rows per creature (Tetramorph completion
   round 2026-07-18): `rows[0]` the creature, `rows[1]` the evangelist it
   became (Mark/Luke/John/Matthew), `rows[2]` the element its arm holds

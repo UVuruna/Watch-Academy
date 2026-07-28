@@ -334,7 +334,7 @@ WEEKDAY_FULL_NAMES = {
 # "calendar" (owner 2026-07-16, CANON §The Dozen) divides the 24h dial
 # into TWELVE 2-hour wedges and, like Aurora, draws NO star arms — its
 # 12 entries are the PALETTE size (one hue per wedge). Its two wheels
-# ride the wheel slot: paint = the Zodiac Dozen, light = the
+# ride the wheel slot: primary = the Zodiac Dozen, secondary = the
 # Almanac (Month) Dozen. It has NO arm HALF-ANGLE (armless, like
 # Aurora): the star geometry and the arm hovers skip it explicitly.
 # "rose" (owner spec 2026-07-27, CUBE.md §The Rose) is the SEVENTH
@@ -346,6 +346,20 @@ WEEKDAY_FULL_NAMES = {
 POINTER_POINTS = {
     "hexa": 6, "cross": 4, "octa": 8, "trio": 3, "aurora": 7,
     "calendar": 12, "rose": 8,
+}
+
+# What the READER counts on the dial — which is NOT always the palette
+# size above (owner correction 2026-07-28: "on pokazuje 24, kalendar
+# pokazuje 12"). The Rose draws its one eight-arm star THREE times at
+# 15° pitch, so twenty-four rays stand on the glass while eight hues
+# dress them; `POINTER_POINTS` stays the hue count that
+# `settings_store._load_palettes` validates against, and this table is
+# what the Design window prints and sorts by. Every pointer names its
+# own number — the Calendar's twelve wedges and Aurora's seven bands are
+# as countable as any star's arms.
+POINTER_DIAL_COUNTS = {
+    "trio": 3, "cross": 4, "hexa": 6, "aurora": 7, "octa": 8,
+    "calendar": 12, "rose": 24,
 }
 CALENDAR_WEDGES = 12
 CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
@@ -370,7 +384,13 @@ CALENDAR_MOUNT_MODES = ("off", "zodiac", "months", "chinese")
 # the docs speak these.
 POINTER_DISPLAY_NAMES = {
     "trio": "Trinity",
-    "cross": "Seasons",
+    # QUATERNITY (owner seal 2026-07-28). "Seasons" stepped down to be
+    # one of this pointer's three wheels, so the pointer needed a name
+    # that can hold all three — the Elements, the Temperaments and the
+    # Seasons are one fourfold read three ways, and only a word for
+    # four-in-one holds them without favouring any. It answers Trinity
+    # across the dial: three arms there, four here.
+    "cross": "Quaternity",
     "hexa": "Prism",
     "octa": "Compass",
     "aurora": "Aurora",     # no arms — the day itself painted in bands
@@ -404,11 +424,20 @@ ONE_SOUL_THEME_TITLE = "One Soul — The Vow — The Bond"
 
 POINTER_PALETTE_LABELS = {
     "trio": ("Court", "Family", "Genesis"),
-    "cross": ("Temperaments", "Elements"),
-    # The FULL idiom (owner pick 2026-07-19: "Walks of Life", not caste —
-    # the paths one walks, open to all, against the closed hereditary
-    # caste reading).
-    "octa": ("Walks of Life", "Ages", "Character"),
+    # THE QUATERNITY'S THREE (owner seal 2026-07-28): the same four arms
+    # read as the body's humours, as the world's matter, and as the
+    # year's quarters. Seasons comes LAST because it is the plainest
+    # reading — and because the two older wheels keep the slots they
+    # have always had.
+    "cross": ("Temperaments", "Elements", "Seasons"),
+    # WALKS, not "Walks of Life" (owner 2026-07-28): the tail was added
+    # in 2026-07-19 only to kill the hereditary-caste reading, and the
+    # walking metaphor does that work by itself — a walk is taken, an
+    # estate is inherited. Beside Ages and Character the short form
+    # cannot be misread, and the watch title stops saying "Walks of Life
+    # Compass". CANON's own sealed table already read "Compass | Walks |
+    # Ages".
+    "octa": ("Walks", "Ages", "Character"),
     # The hexa SECONDARY slot speaks the theme's sealed single name
     # (owner 2026-07-27); its PRIMARY slot says PERSONS since the same
     # day (owner "ok."), because that wheel IS the Persons — CANON.md
@@ -578,10 +607,13 @@ UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 # (`defaults.effective_palette_style`).
 PALETTE_STYLES = ("primary", "secondary", "tertiary")
 # The pointers whose wheel row carries a THIRD wheel: trio — Genesis
-# (the creation trio, drawn INVERTED); hexa — Council (all six
-# Double-Trinity offices); octa — Character (the Cube at depth zero),
-# CUBE.md. Aurora/Calendar/Rose/Seasons stay two-wheel.
-THIRD_WHEEL_POINTERS = ("trio", "hexa", "octa")
+# (the creation trio, drawn INVERTED); cross — Seasons (owner seal
+# 2026-07-28, the wheel the pointer used to be named after); hexa —
+# Council (all six Double-Trinity offices); octa — Character (the Cube
+# at depth zero), CUBE.md. The law is the arm count: the pointers that
+# draw 3, 4, 6 or 8 arms carry three wheels; the armless ones and the
+# Rose (7, 12, 24) carry two — eighteen wheels in all.
+THIRD_WHEEL_POINTERS = ("trio", "cross", "hexa", "octa")
 
 
 def palette_styles_for(pointer: str) -> tuple[str, ...]:

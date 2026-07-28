@@ -529,7 +529,7 @@ by the shared `_ARCHETYPE_TOPICS` loop from the `one_soul` family of
 ```
 
 - **No separate pointer was needed** (the owner's own "ako treba"): the
-  theme ALREADY owns a wheel — hexa · light, `prism_secondary` in
+  theme ALREADY owns a wheel — hexa · secondary, `prism_secondary` in
   [Archetypes](../config/archetypes.md) — so a new archetype would have
   duplicated an existing one (Rule #5). What was missing was the READING
   side, and that is what this topic is.

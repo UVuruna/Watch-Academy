@@ -19,19 +19,22 @@ ARCHETYPE_ART_DIR = paths.assets_dir() / "archetypes"
 # the Scale badge alone, in four rotating versions; the prism seats get
 # their own lancets.)
 
-# The grid (CANON, owner 2026-07-16): paint carries the WORLD's order,
-# light the HOME's. The Seasons serve ONE archetype under both wheels
-# (one palette, one set of four windows, the Throne on both); Aurora
-# and the Calendar have NO archetype at all.
+# The grid (CANON, owner 2026-07-16): the FIRST wheel carries the
+# WORLD's order, the SECOND the HOME's. Aurora and the Calendar have NO
+# archetype at all, and a seat absent from this table is not a bug —
+# `grid_key` answers None and the wheel simply seats no figures.
 ARCHETYPE_GRID = {
     ("trio", "primary"): "trinity_primary",
     ("trio", "secondary"): "trinity_secondary",
-    # The Seasons carry TWO archetypes now (owner 2026-07-17, CANON
-    # §Seasons secondary): PAINT = the Four Temperaments on the seasons
-    # palette; LIGHT = the Tetramorph on the Four Elements wheel. Both
-    # keep the Throne at the center.
-    ("cross", "primary"): "seasons_primary",
-    ("cross", "secondary"): "seasons_secondary",
+    # The Quaternity carries TWO archetypes (owner 2026-07-17, CANON):
+    # PRIMARY = the Four Temperaments; SECONDARY = the Tetramorph on the
+    # Four Elements wheel. Both keep the Throne at the center. Its THIRD
+    # wheel — Seasons (owner seal 2026-07-28) — is absent ON PURPOSE:
+    # giving the year's quarters their own four figures is a content
+    # round of its own, and until then the wheel paints its four hues
+    # and seats nobody.
+    ("cross", "primary"): "quaternity_primary",
+    ("cross", "secondary"): "quaternity_secondary",
     ("hexa", "primary"): "prism_primary",
     ("hexa", "secondary"): "prism_secondary",
     ("octa", "primary"): "compass_primary",
@@ -277,8 +280,8 @@ ARCHETYPES = {
     # article set has no texts yet, so the rename is consistent
     # everywhere: symbolism.json carries no archetype nodes until
     # Session 6, and archetype_article() answers None gracefully.)
-    "seasons_primary": {
-        "articles": "archetype_seasons_primary",
+    "quaternity_primary": {
+        "articles": "archetype_quaternity_primary",
         "figures": (
             _fig(0.0, _TEMPERAMENTS_DIR / "Choleric.png",
                  "Choleric", "The Prime", "choleric"),
@@ -302,8 +305,8 @@ ARCHETYPES = {
     # creatures WITNESS, circling the Throne (kept as the center). Ordered
     # by arm angle (0/90/180/270 = summer/autumn/winter/spring), matching
     # the _CROSS_ELEMENTS hues (fire/earth/water/air).
-    "seasons_secondary": {
-        "articles": "archetype_seasons_secondary",
+    "quaternity_secondary": {
+        "articles": "archetype_quaternity_secondary",
         # rotates=True (owner decree 2026-07-20): the FIRST ArchetypeLayer
         # consumer to opt into THE UNIVERSAL ROTATION CONVENTION — the
         # newer generations that landed on the stale
@@ -573,14 +576,14 @@ ARCHETYPES = {
 
 # The four elements the TETRAMORPH creatures ride (owner 2026-07-17,
 # CANON §Seasons secondary). Index = the arm/hour-space index, in the SAME
-# order as the seasons_secondary figures and the _CROSS_ELEMENTS hues: fire
+# order as the quaternity_secondary figures and the _CROSS_ELEMENTS hues: fire
 # (summer/Lion), earth (autumn/Ox), water (winter/Eagle), air
 # (spring/Man). The THIRD column of the tetramorph three-side hover.
 TETRAMORPH_ELEMENTS = ("Fire", "Earth", "Water", "Air")
 
 # The four EVANGELIST rondels (owner 2026-07-18) — the SECOND column of
 # the tetramorph three-side hover. Index = the arm/hour-space index, the
-# SAME order as the seasons_secondary figures (0 Lion/Mark, 1 Ox/Luke, 2
+# SAME order as the quaternity_secondary figures (0 Lion/Mark, 1 Ox/Luke, 2
 # Eagle/John, 3 Man/Matthew). Small round stained-glass rondels of each
 # evangelist at his desk with his creature, in his season's palette;
 # they may not exist on disk yet — the three-side falls back to the

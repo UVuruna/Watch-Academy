@@ -119,7 +119,7 @@ capture at ANY time shows both together.
 The equal-90°-per-season wheel and the true equinox/solstice anchors
 are the app's own Seasons/Compass rendering.
 
-- Pointer = **Seasons** (cross) — shows the year-wheel marker and the
+- Pointer = **Quaternity** (cross) — shows the year-wheel marker and the
   tropical zodiac ring directly.
 - Time Travel to a solstice or equinox date near local noon (e.g. 21
   June for the summer solstice, 23 September for the autumn equinox)

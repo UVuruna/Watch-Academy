@@ -848,24 +848,52 @@ WORKING_SET_CEILINGS = {
 }
 
 # Star + Aura palettes, (pointer, style) -> hues clockwise from the top
-# arm. Measured directly from the owner's reference art
-# (design/background/{hexa,octa}_{paint,light}.png): paint = subtractive
-# primaries (yellow at the top), light = additive primaries (green at
-# the top — owner: that IS the point of the two styles). The cross has
-# ONE seasons palette (owner's own values: summer yellow top, autumn red
-# right, winter blue bottom, spring green left — solstices/equinoxes at
-# the arm centers), served under both styles.
+# arm. The hexa and octa hues were measured directly from the owner's
+# reference art (his own files keep their pre-2026-07-28 names on disk:
+# design/background/{hexa,octa}_{paint,light}.png): the FIRST wheel is
+# subtractive — pigment primaries, yellow at the top — and the SECOND
+# additive — light primaries, green at the top.
+#
+# THE QUATERNITY'S THREE WHEELS (owner seal 2026-07-28). The four arms
+# are read three ways, and each reading now owns its own hues instead of
+# borrowing: TEMPERAMENTS the body's humours, ELEMENTS the world's
+# matter, SEASONS the year's quarters. Every wheel keeps the SAME arm
+# order — summer/fire/choleric top, autumn/earth/melancholic right,
+# winter/water/phlegmatic bottom, spring/air/sanguine left — so a figure
+# never moves seat when the reader turns the wheel.
+#
+# SEASONS — the owner's own sampled values, unchanged. They were always
+# a season palette; until today they merely sat under the Temperaments'
+# label (summer yellow top, autumn red right, winter blue bottom, spring
+# green left — solstices and equinoxes at the arm centres).
 _CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
-# The Seasons' SECOND wheel — the FOUR ELEMENTS (owner 2026-07-17,
-# CANON §Seasons secondary): the cross PRIMARY stays the seasons temperaments
-# palette, the cross SECONDARY becomes the elements, seating the Tetramorph
+# TEMPERAMENTS — the humours name their own colours inside their own
+# words, which is the most literal fidelity available: sanguis = blood =
+# red; cholē = yellow bile; melan-cholē = BLACK bile; phlegm = the pale
+# humour. Yellow, black, white and red are also Apelles' four-colour
+# palette as Pliny records it (NH 35.50) — the four temperaments in the
+# four pigments of antiquity.
+#   * summer arm (top)    = CHOLERIC    — saffron amber, bile's own
+#     gold rather than the season's lemon (hot & dry);
+#   * autumn arm (right)  = MELANCHOLIC — burnt umber, for *atra bilis
+#     adusta* is an adust, earthy black, never printer's black (a pure
+#     black arm is a hole in a transparent widget) (cold & dry);
+#   * winter arm (bottom) = PHLEGMATIC  — white with a cold blue-grey
+#     cast, the pale moist humour (cold & moist);
+#   * spring arm (left)   = SANGUINE    — a true blood crimson, deeper
+#     and bluer than autumn's leaf-red (warm & moist).
+# The diagonals stay opposed in BOTH qualities, as CANON requires: gold
+# against pale, blood against burnt black.
+_CROSS_TEMPERAMENTS = ("#E5A81F", "#3B2C28", "#D9E5EC", "#B21E30")
+# ELEMENTS — the FOUR ELEMENTS (owner 2026-07-17, CANON §the elements
+# wheel), unchanged: the classical assignment, seating the Tetramorph
 # (Lion/Ox/Eagle/Man). Hues clockwise from the top arm — the SAME arm
 # order as _CROSS_SEASONS (summer top, autumn right, winter bottom,
 # spring left) — so each element lands on its canonical season arm:
 #   * summer arm (top)    = FIRE  — a hot flame red-orange, hotter than
-#     autumn's blood red so the two cross wheels never read alike;
+#     autumn's leaf red so no two wheels of the three read alike;
 #   * autumn arm (right)  = EARTH — an olive green-brown, the soil (a
-#     muddy green, distinct from spring's pure green in the primary wheel);
+#     muddy green, distinct from spring's pure green on the Seasons wheel);
 #   * winter arm (bottom) = WATER — a deep water blue;
 #   * spring arm (left)   = AIR   — a pale white-yellow, the luminous
 #     lightest of the four (owner: "air spring-arm white-yellow").
@@ -955,8 +983,12 @@ PALETTE_PRESETS = {
         "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
         "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     ),
-    ("cross", "primary"): _CROSS_SEASONS,
+    # The Quaternity's three (owner seal 2026-07-28): the two older
+    # wheels keep the slots they have always had, and Seasons — the name
+    # this pointer used to wear — takes the third.
+    ("cross", "primary"): _CROSS_TEMPERAMENTS,
     ("cross", "secondary"): _CROSS_ELEMENTS,
+    ("cross", "tertiary"): _CROSS_SEASONS,
     ("trio", "primary"): _TRINITY,
     ("trio", "secondary"): _FAMILY,
     # The Cube third wheels (owner seal 2026-07-26, CUBE.md).

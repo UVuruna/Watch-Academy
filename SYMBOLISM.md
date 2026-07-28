@@ -470,7 +470,7 @@ color theory in the world applied literally. Goethe's *Farbenlehre*
 (1810) builds ALL color on two poles: **yellow is the first color of
 light** (light seen through the thinnest dark) and **blue is the first
 color of darkness** (dark seen through the thinnest light). The
-Seasons pointer holds exactly that axis: the summer solstice arm at
+Quaternity pointer holds exactly that axis: the summer solstice arm at
 the top wears yellow — the Ruler, the year's longest light — and the
 winter solstice arm at the bottom wears blue — the Servant, the
 longest dark. The other two arms complete Goethe's system: **green is

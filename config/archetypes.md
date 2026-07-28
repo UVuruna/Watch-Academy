@@ -53,22 +53,25 @@ pointers gained a THIRD, "cube" wheel — WORKPLAN Session 20):
 
 | Grid key | (pointer, style) | Archetype | Art dir | Center |
 |---|---|---|---|---|
-| `trinity_primary` | trio · paint | the Courtroom (God / the Devil / Jesus) | `archetype/trinity/` | the Eye |
-| `trinity_secondary` | trio · light | the Family (Child / Mother / Father) | `archetype/family/` | the Hearth |
-| `trinity_genesis` | trio · cube | GENESIS — the creation trio, INVERTED (Creator 24h / Preserver 08h / Destroyer 16h) | `archetypes/genesis/` | the Beginning |
-| `seasons_primary` | cross · paint | the Four Temperaments | `archetype/temperaments/` | the Throne |
-| `seasons_secondary` | cross · light | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
-| `prism_primary` | hexa · paint | the Persons (six on the primary wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
-| `prism_secondary` | hexa · light | One Soul — The Vow — The Bond (six pillars; name SEALED 2026-07-27, all three kept — "One Soul" alone wherever one name must stand) | `archetype/one_soul/` | the Union |
-| `prism_council` | hexa · cube | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Lord's Day |
-| `compass_primary` | octa · paint | the Eight Walks of Life | `archetype/walks/` | — |
-| `compass_secondary` | octa · light | the Eight Ages | `archetype/life/<register>/` | — |
-| `compass_character` | octa · cube | CHARACTER — the Cube at depth zero (4 poles + 4 combos) | `archetypes/character/` | — |
+| `trinity_primary` | trio · primary | the Courtroom (God / the Devil / Jesus) | `archetype/trinity/` | the Eye |
+| `trinity_secondary` | trio · secondary | the Family (Child / Mother / Father) | `archetype/family/` | the Hearth |
+| `trinity_genesis` | trio · tertiary | GENESIS — the creation trio, INVERTED (Creator 24h / Preserver 08h / Destroyer 16h) | `archetypes/genesis/` | the Beginning |
+| `quaternity_primary` | cross · primary | the Four Temperaments | `archetype/temperaments/` | the Throne |
+| `quaternity_secondary` | cross · secondary | the Tetramorph (Lion / Ox / Eagle / Man) | `archetype/tetramorph/` | the Throne |
+| — | cross · tertiary | **SEASONS — no archetype yet** (owner seal 2026-07-28 gave the Quaternity its third wheel; the year's four quarters have hues but no figures until a content round seats them) | — | — |
+| `prism_primary` | hexa · primary | the Persons (six on the primary wheel) | `archetype/persons/` (+ two Scale reuses) | the Seal |
+| `prism_secondary` | hexa · secondary | One Soul — The Vow — The Bond (six pillars; name SEALED 2026-07-27, all three kept — "One Soul" alone wherever one name must stand) | `archetype/one_soul/` | the Union |
+| `prism_council` | hexa · tertiary | the COUNCIL — all six Double-Trinity offices in session (Psalm 82:1) | `archetypes/council/` | the Lord's Day |
+| `compass_primary` | octa · primary | the Eight Walks of Life | `archetype/walks/` | — |
+| `compass_secondary` | octa · secondary | the Eight Ages | `archetype/life/<register>/` | — |
+| `compass_character` | octa · tertiary | CHARACTER — the Cube at depth zero (4 poles + 4 combos) | `archetypes/character/` | — |
 
 Aurora and the Calendar have NO archetype — `grid_key()` returns None
-there and the menu grays the toggle. The Seasons stay two-wheel: the
-"cube" style itself exists only on trio/hexa/octa
-(`constants.palette_styles_for`).
+there and the menu grays the toggle. The same None is the documented
+answer for the Quaternity's Seasons wheel: since 2026-07-28 the third
+slot exists on trio/cross/hexa/octa
+(`constants.palette_styles_for`), but only three of those four seat
+figures on it.
 
 **The Cube wave seats (owner seal 2026-07-26, CUBE.md; sheets under
 `research/prompts/archetype/` — no art generated yet, every figure
@@ -158,7 +161,7 @@ name-falls-back until the owner's glass lands):**
   the roster all read that one tuple. Every other archetype leaves `cell`
   at None: its arms are not cube seats.
 - **Article sets are named by GRID SEAT** (`archetype_trinity_primary`,
-  `archetype_seasons_primary`, `archetype_seasons_secondary`, …) so a future
+  `archetype_quaternity_primary`, `archetype_quaternity_secondary`, …) so a future
   theme rename never orphans texts (the prism-light theme's own name
   was sealed only on 2026-07-27, long after its set existed — exactly
   the case this convention was built for). The Seasons rename
@@ -252,6 +255,6 @@ name-falls-back until the owner's glass lands):**
 - `center(key)`: the center dict or None
 - `tetramorph_element(index)` + `TETRAMORPH_ELEMENTS` (owner 2026-07-17,
   ROADMAP 15e): the element name (Fire/Earth/Water/Air) each Tetramorph
-  creature rides — one ordering shared with the `seasons_secondary` figures
+  creature rides — one ordering shared with the `quaternity_secondary` figures
   and the Four-Elements wheel hues; the THIRD column of the tetramorph
   three-side hover.

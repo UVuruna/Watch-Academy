@@ -39,7 +39,7 @@ def controller(app, tmp_path, monkeypatch):
     made = WatchController(app)
     yield made
     for dialog in (
-        made._encyclopedia, made._observatory, made._guide,
+        made._encyclopedia, made._observatory,
         made._design, made._pointer_theme, made._slot_theme,
     ):
         if dialog is not None:
@@ -76,7 +76,9 @@ def test_watch_title_full_form_reads_the_paint_style_too():
         city_name="Tromso", ring="Dollar", ring_finish="silver",
         pointer="cross", palette_style="primary",
     )
-    assert watch_title(settings, full=True) == "Tromso-Silver Dollar-Temperaments Seasons"
+    assert watch_title(settings, full=True) == (
+        "Tromso-Silver Dollar-Temperaments Quaternity"
+    )
 
 
 def test_watch_title_falls_back_to_the_default_pair_off_the_table():

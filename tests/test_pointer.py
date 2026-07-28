@@ -824,28 +824,31 @@ def test_palette_presets_cover_every_pointer_and_style():
         for style in constants.palette_styles_for(pointer):
             palette = defaults.PALETTE_PRESETS[(pointer, style)]
             assert len(palette) == arms, (pointer, style)
-        # And no orphan preset beyond the served styles.
-        assert ("cross", "tertiary") not in defaults.PALETTE_PRESETS
+        # And no orphan preset beyond the served styles — the armless
+        # instruments and the Rose stay two-wheel.
         assert ("aurora", "tertiary") not in defaults.PALETTE_PRESETS
         assert ("calendar", "tertiary") not in defaults.PALETTE_PRESETS
+        assert ("rose", "tertiary") not in defaults.PALETTE_PRESETS
 
 
-def test_cross_wheels_are_seasons_paint_and_elements_light():
-    """Owner 2026-07-17 (CANON §Seasons secondary): the cross PRIMARY stays the
-    seasons temperaments palette; the cross SECONDARY is now the FOUR ELEMENTS
-    wheel, seating the Tetramorph — the two wheels DIFFER, and each hue
-    lands on its canonical season arm (fire summer-top, earth autumn-right,
-    water winter-bottom, air spring-left)."""
-    assert defaults.PALETTE_PRESETS[("cross", "primary")] == (
-        "#D9D900", "#D4330F", "#0A70D8", "#129412",
-    )
-    assert defaults.PALETTE_PRESETS[("cross", "secondary")] == (
-        "#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0",
-    )
-    assert (
-        defaults.PALETTE_PRESETS[("cross", "primary")]
-        != defaults.PALETTE_PRESETS[("cross", "secondary")]
-    )
+def test_the_quaternity_reads_its_four_arms_three_ways():
+    """Owner seal 2026-07-28: the 4-arm pointer carries THREE wheels —
+    Temperaments, Elements, Seasons — and each owns its own hues instead
+    of borrowing. Seasons keeps the owner's own sampled values (it was
+    always a season palette, only ever labelled Temperaments); the
+    Temperaments take the humours' own colours (Apelles' four: saffron
+    bile, burnt-black bile, pale phlegm, blood); the Elements are
+    untouched. Every arm order is identical, so nothing moves seat when
+    the reader turns the wheel."""
+    temperaments = defaults.PALETTE_PRESETS[("cross", "primary")]
+    elements = defaults.PALETTE_PRESETS[("cross", "secondary")]
+    seasons = defaults.PALETTE_PRESETS[("cross", "tertiary")]
+    assert temperaments == ("#E5A81F", "#3B2C28", "#D9E5EC", "#B21E30")
+    assert elements == ("#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0")
+    assert seasons == ("#D9D900", "#D4330F", "#0A70D8", "#129412")
+    # No two of the three read alike on any arm.
+    for arm in range(4):
+        assert len({temperaments[arm], elements[arm], seasons[arm]}) == 3, arm
 
 
 def test_compass_octa_presets_are_the_approved_walks_and_ages():

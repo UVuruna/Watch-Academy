@@ -150,7 +150,7 @@ like every other archetype art.
 **Drop paths:** `assets/archetypes/<source>/evangelist/` — `Mark.png`,
 `Luke.png`, `John.png`, `Matthew.png` (the app reads
 `evangelist/<Name>.png`; ordered Lion→Mark, Ox→Luke, Eagle→John,
-Man→Matthew, matching the seasons_secondary figure order).
+Man→Matthew, matching the quaternity_secondary figure order).
 
 **Mark the Evangelist** (the Lion · summer gold · the wilderness voice)
 → `assets/archetypes/evangelist/primary/colored/Mark.png`

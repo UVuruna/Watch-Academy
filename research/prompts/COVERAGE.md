@@ -69,7 +69,7 @@ alone) found exactly **5** — all now `git rm`'d:
 | File | Was | Consumer | Effect of the purge |
 |---|---|---|---|
 | `archetype/gemini/persons/Seal.png` | 1×1, 68 B | archetype center (`prism_primary`) | Now correctly reports MISSING on both sources (chatgpt never had one either) — honest, was already falling back to the name label, no render change |
-| `archetype/gemini/temperaments/Throne.png` | 1×1, 68 B | archetype center (`seasons_primary`/`seasons_secondary`, shared) | Same — MISSING both sources now, honest, no render change |
+| `archetype/gemini/temperaments/Throne.png` | 1×1, 68 B | archetype center (`quaternity_primary`/`quaternity_secondary`, shared) | Same — MISSING both sources now, honest, no render change |
 | `archetype/gemini/trinity/Devil_Prosecutor.png` | 1×1, 68 B | archetype figure (`trinity_primary`, arm 1) | **Real render fix**: `config.paths.art_file`'s cross-source fallback only triggers on a MISSING file, not a placeholder — with the placeholder gone, the Gemini-active render now correctly resolves to ChatGPT's REAL 694×1388 lancet instead of silently drawing the name label over perfectly good art that already existed one folder over |
 | `badge/chatgpt/season/Poem.png` | 1×1, 70 B | hidden Encyclopedia "Four Greetings" entry (`app/encyclopedia.py` line ~905) | Now genuinely absent; the entry's `images` tuple resolves through the SAME `resolved.exists()` filter every other Encyclopedia image goes through (`_render_cell`) — title and prose still show, no image, no crash |
 | `badge/gemini/season/Poem.png` | 1×1, 70 B | same entry, the other source | Same |
@@ -113,10 +113,10 @@ entries found anywhere in this collection.**
 | `trinity_primary` — center | Providence_Eye.png | real both | `trinity_prompts.md` ✔ | OK |
 | `trinity_primary`/`family`/`trinity_secondary` — row2 rondels | rondel_Advocate/Judge/Prosecutor, rondel_Dawn/Heart/Shield | real both, all 6×2=12 files | `trinity_prompts.md` / `family_prompts.md` ✔ | WIRING GAP — fully painted, zero code reads any `rondel_*` path outside the evangelist set (see [Compass Objects](#compass-objects)) |
 | `trinity_secondary` — 3 figures + center | Child_Dawn, Mother_Heart, Father_Shield, Hearth | real both, all 4 | `family_prompts.md` ✔ | OK |
-| `seasons_primary` — 4 figures | Choleric, Melancholic, Phlegmatic, Sanguine | real both | `temperaments_prompts.md` ✔ | OK |
-| `seasons_primary` / `seasons_secondary` — center (ONE shared file) | Throne.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `temperaments_prompts.md` ✔ (§The center) | ART GAP — name-fallback active on every render today, honestly so now |
-| `seasons_secondary` — 4 figures (tetramorph) | Lion, Ox, Eagle, Man | real both | `temperaments_prompts.md` ✔ (§The tetramorph) | OK |
-| `seasons_secondary` — evangelist row2 | Mark, Luke, John, Matthew | MISSING both, 8 files | `temperaments_prompts.md` ✔ (§The four evangelists) | ART GAP, WIRED — `render.compositor` already calls `tetramorph_evangelist_file`; name-fallback carries the column meanwhile (pinned by `test_tetramorph_three_side_survives_absent_evangelist_art`) |
+| `quaternity_primary` — 4 figures | Choleric, Melancholic, Phlegmatic, Sanguine | real both | `temperaments_prompts.md` ✔ | OK |
+| `quaternity_primary` / `quaternity_secondary` — center (ONE shared file) | Throne.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `temperaments_prompts.md` ✔ (§The center) | ART GAP — name-fallback active on every render today, honestly so now |
+| `quaternity_secondary` — 4 figures (tetramorph) | Lion, Ox, Eagle, Man | real both | `temperaments_prompts.md` ✔ (§The tetramorph) | OK |
+| `quaternity_secondary` — evangelist row2 | Mark, Luke, John, Matthew | MISSING both, 8 files | `temperaments_prompts.md` ✔ (§The four evangelists) | ART GAP, WIRED — `render.compositor` already calls `tetramorph_evangelist_file`; name-fallback carries the column meanwhile (pinned by `test_tetramorph_three_side_survives_absent_evangelist_art`) |
 | `prism_primary` — 4 seated figures | One_Love, Michael_Courage, Devil_Hatred, Jesus_Humility | real both | `persons_prompts.md` ✔ | OK |
 | `prism_primary` — 2 own-lancet figures | Lucifer_Pride, Judas_Fear | MISSING both, 4 files (never generated on either source — not a purge artifact) | `persons_prompts.md` ✔ (§The two poles) | ART GAP — name-fallback active, pinned by `test_prism_poles_wear_their_own_lancets` |
 | `prism_primary` — center | Seal.png | **MISSING both sources** (gemini was the purged placeholder; chatgpt never had one) | `persons_prompts.md` ✔ (§The center — the Seal) | ART GAP |

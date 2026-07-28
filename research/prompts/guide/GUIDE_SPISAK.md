@@ -26,7 +26,7 @@ na 720 px dial-u osim gde piše drugačije.
 | # | Fajl | Šta se vidi | Kako da ga namestiš |
 |---|------|-------------|---------------------|
 | 1 | `dial_default.png` | podrazumevani sat (hexa primary, planete) | čist start, podne |
-| 2 | `pointers_four.png` | 4 pointera uporedo (Trinity/Seasons/Prism/Compass) | 4 snimka pa složi, ili 4 fajla `pointer_<ime>.png` |
+| 2 | `pointers_four.png` | 4 pointera uporedo (Trinity/Quaternity/Prism/Compass) | 4 snimka pa složi, ili 4 fajla `pointer_<ime>.png` |
 | 3 | `aurora_calendar.png` | Aurora i Calendar točkovi | isto — može 2 fajla |
 | 4 | `archetype_prism.png` | Prizma arhetip sa NOVIM lancetima, centar-prozor upaljen | oko podneva, Archetype ON |
 | 5 | `archetype_reveal.png` | Omega double-click — sve figure pune, bez kazaljki | double-click pa snimi u 60s |

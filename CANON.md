@@ -154,10 +154,10 @@ carries the HOME's** — the court of heaven beside the family, the
 six persons beside the marriage, society's estates beside a single
 human life, the year's seasons beside creation's own elements.
 
-| Pointer | Paint (the world) | Light (the home) |
+| Pointer | first wheel (the world) | second wheel (the home) |
 |---|---|---|
 | Trinity | **The One** — the courtroom | **The Family** (owner 2026-07-16) |
-| Seasons | **the Four Temperaments** | **the Four Elements — the Tetramorph** (APPROVED 2026-07-16) |
+| Quaternity | **the Four Temperaments** | **the Four Elements — the Tetramorph** (APPROVED 2026-07-16) |
 | Prism | **The Persons** | **One Soul — The Vow — The Bond** (APPROVED 2026-07-16; the name SEALED 2026-07-27 — all three kept, "One Soul" alone wherever one name must stand) |
 | Compass | **the Eight Walks of Life** (approved) | **the Eight Ages** (APPROVED 2026-07-16) |
 
@@ -171,21 +171,37 @@ pair label follows the pointer's own wheels, via the existing
 in-place label machinery (`_palette_style_labels`) — implementation
 queued (ROADMAP 11):
 
-| Pointer | instead of Paint | instead of Light |
+| Pointer | first wheel | second wheel |
 |---|---|---|
-| Prism | **Persons** (SEALED 2026-07-27, owner "ok." — the wheel IS the Persons; the generic "Paint palette" label was only ever the default standing in for a wheel with no name of its own) | **One Soul** |
-| Aurora | **Paint** (keep — an abstract light instrument) | **Light** |
+| Prism | **Persons** (SEALED 2026-07-27, owner "ok." — the wheel IS the Persons; the generic label was only ever the default standing in for a wheel with no name of its own) | **One Soul** |
+| Aurora | **Warm** | **Cool** |
 | Trinity | **Court** | **Family** |
-| Seasons | **Seasons** | **Elements** |
-| Compass | **Walks** | **Ages** |
+| Quaternity | **Temperaments** | **Elements** |
+| Compass | **Walks** (the tail dropped 2026-07-28 — the walking metaphor already refuses the caste reading) | **Ages** |
 | Calendar | **Zodiac** (SEALED) | **Almanac** (SEALED) |
 
-**THE THIRD WHEELS (owner seal 2026-07-26):** three pointers gain a
-THIRD wheel from the Cube canon — Trinity **Genesis** (the inverted
-creation triangle), Prism **Council** (the six offices united),
-Compass **Character** (the Cube's two visible axes) — names SEALED
-2026-07-26; the full doctrine, figures and display laws live in
-[The Cube Canon](CUBE.md).
+**THE SLOT NAMES ARE POSITIONAL (owner decree 2026-07-28):** the slots
+are `primary` / `secondary` / `tertiary` and carry no meaning of their
+own. "Paint" and "Light" named a subtractive-vs-additive doctrine that
+stopped being true the moment the slots began carrying the Zodiac, the
+Persons, the Walks and the Rose's Legacy. A wheel's meaning lives in
+this table and nowhere else.
+
+**THE THIRD WHEELS (owner seal 2026-07-26; the Quaternity's added
+2026-07-28):** four pointers carry a THIRD wheel — Trinity **Genesis**
+(the inverted creation triangle), Quaternity **Seasons** (the year's
+quarters, the wheel this pointer used to be named after), Prism
+**Council** (the six offices united), Compass **Character** (the Cube's
+two visible axes). The law is the arm count: the pointers that draw 3,
+4, 6 or 8 arms carry three wheels; the armless instruments and the Rose
+(7, 12, 24) carry two — **eighteen wheels in all**. The Cube doctrine,
+figures and display laws live in [The Cube Canon](CUBE.md).
+
+**THE POINTER NAME (owner seal 2026-07-28):** the 4-arm pointer is
+**Quaternity**. "Seasons" stepped down to be one of its three wheels, so
+the pointer needed a name able to hold the Elements, the Temperaments
+AND the Seasons at once — one fourfold read three ways. It answers
+Trinity across the dial: three arms there, four here.
 
 **The two-row canon** (owner 2026-07-16): every archetype position
 speaks TWO ARTICLES in its legend, on the hexa-zodiac-diamond
@@ -195,7 +211,7 @@ principle — the rows per archetype:
 |---|---|---|
 | Trinity primary | the person (God / the Devil / Jesus) | the calling (Judge / Prosecutor / Advocate) |
 | Trinity secondary | the member (Father / Mother / Child) | the hearth-role: **the Shield / the Heart / the Anchor** (Child's role reworked Dawn→Anchor, RESTRUCTURE 2026-07-22 — see the amendment below) |
-| Seasons | the temperament | the age of man (the tetramorph creature stands as the reserve second row) |
+| Quaternity | the temperament | the age of man (the tetramorph creature stands as the reserve second row) |
 | Prism primary | the person | the quality (Michael / Courage) |
 | Prism secondary | the pillar | its SHADOW — the virtue and the vice of the same thing (owner: the theme began as this duality) |
 | Compass primary | the estate | its object: **the Crown / the Coin / the Sword / the Mask / the Staff / the Book / the Plough / the Bell** |
@@ -395,7 +411,7 @@ label — it is **One Soul** (`constants.ONE_SOUL_THEME_NAME`).
 jedna od važnijih ljubavnih tematika").** The theme has its own topic,
 `one_soul`, in **The Archetypes** hall, as its fourth card beside the
 three Cube topics — NOT a separate pointer or archetype, because it
-already owns a wheel (hexa · light) and a second one would only have
+already owns a wheel (hexa · secondary) and a second one would only have
 duplicated it. Nine pages: the title page, the six pillars in the
 wheel's own arm order, **the Union** at the centre and **the Child** as
 the Ninth. The pages argue the DOCTRINE the per-arm hovers cannot —

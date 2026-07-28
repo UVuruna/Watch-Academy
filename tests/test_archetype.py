@@ -88,13 +88,13 @@ def test_grid_covers_the_twelve_archetypes():
     PROPHECY reads the 3D system, the Cube's eight vertices. Aurora
     and the Calendar have none."""
     assert set(archetypes.ARCHETYPE_GRID.values()) == {
-        "trinity_primary", "trinity_secondary", "seasons_primary", "seasons_secondary",
+        "trinity_primary", "trinity_secondary", "quaternity_primary", "quaternity_secondary",
         "prism_primary", "prism_secondary", "compass_primary", "compass_secondary",
         "trinity_genesis", "prism_council", "compass_character",
         "rose_vertices",
     }
-    assert archetypes.grid_key("cross", "primary") == "seasons_primary"
-    assert archetypes.grid_key("cross", "secondary") == "seasons_secondary"
+    assert archetypes.grid_key("cross", "primary") == "quaternity_primary"
+    assert archetypes.grid_key("cross", "secondary") == "quaternity_secondary"
     assert archetypes.grid_key("trio", "tertiary") == "trinity_genesis"
     assert archetypes.grid_key("hexa", "tertiary") == "prism_council"
     assert archetypes.grid_key("octa", "tertiary") == "compass_character"
@@ -179,8 +179,8 @@ def test_center_table_is_the_sealed_one():
     assert archetypes.center("trinity_secondary")["file"].name == "Hearth.png"
     assert archetypes.center("prism_primary")["file"].name == "Seal.png"
     assert archetypes.center("prism_secondary")["file"].name == "Union.png"
-    assert archetypes.center("seasons_primary")["file"].name == "Throne.png"
-    assert archetypes.center("seasons_secondary")["file"].name == "Throne.png"
+    assert archetypes.center("quaternity_primary")["file"].name == "Throne.png"
+    assert archetypes.center("quaternity_secondary")["file"].name == "Throne.png"
     assert archetypes.center("compass_primary") is None
     assert archetypes.center("compass_secondary") is None
     # The Cube wave (owner seal 2026-07-26): the Beginning (Genesis),
@@ -220,12 +220,12 @@ def test_family_and_temperament_seatings():
     assert [fig["name"] for fig in family] == [
         "The Child", "The Mother", "The Father",
     ]
-    seasons = archetypes.figures("seasons_primary")
+    seasons = archetypes.figures("quaternity_primary")
     assert [fig["name"] for fig in seasons] == [
         "Choleric", "Melancholic", "Phlegmatic", "Sanguine",
     ]
     # The SECONDARY wheel seats the Tetramorph on the same season arms.
-    tetramorph = archetypes.figures("seasons_secondary")
+    tetramorph = archetypes.figures("quaternity_secondary")
     assert [fig["name"] for fig in tetramorph] == [
         "The Lion", "The Ox", "The Eagle", "The Man",
     ]
@@ -236,16 +236,16 @@ def test_tetramorph_figures_declare_rotation():
     Tetramorph is the first ArchetypeLayer consumer to opt in — every
     other archetype figure and every center stays a fixed master, so
     `ArchetypeLayer.paint()`'s rotation branch never fires for them."""
-    tetramorph = archetypes.figures("seasons_secondary")
+    tetramorph = archetypes.figures("quaternity_secondary")
     assert all(fig["rotates"] for fig in tetramorph)
     for key in archetypes.ARCHETYPE_GRID.values():
-        if key == "seasons_secondary":
+        if key == "quaternity_secondary":
             continue
         assert not any(fig["rotates"] for fig in archetypes.figures(key)), key
         center = archetypes.center(key)
         if center is not None:
             assert not center.get("rotates")
-    assert not archetypes.center("seasons_secondary").get("rotates")
+    assert not archetypes.center("quaternity_secondary").get("rotates")
 
 
 # --- The render-level override --------------------------------------------------
@@ -1044,7 +1044,7 @@ def test_every_archetype_set_position_and_center_is_written(app):
 
 
 def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
-    """Tetramorph completion round 2026-07-18: each seasons_secondary
+    """Tetramorph completion round 2026-07-18: each quaternity_secondary
     creature node carries THREE non-pending rows — the creature (rows[0]),
     the evangelist it became (rows[1]), the element its arm holds
     (rows[2]) — so all three columns of the three-side speak, never a
@@ -1060,7 +1060,7 @@ def test_tetramorph_columns_carry_creature_evangelist_element_prose(app):
         "man": ("Matthew", "blood"),
     }
     for entity, (evangelist, humor) in expect.items():
-        node = repo.archetype_article("archetype_seasons_secondary", entity)
+        node = repo.archetype_article("archetype_quaternity_secondary", entity)
         rows = node["rows"]
         assert len(rows) == 3, f"{entity} needs creature+evangelist+element"
         assert all(isinstance(r, str) and r.strip() for r in rows)

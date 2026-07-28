@@ -57,12 +57,16 @@ UI_STRINGS: tuple[str, ...] = (
     # named a color doctrine the wheels stopped obeying and left the third
     # position without a label at all.
     "Primary palette", "Secondary palette", "Tertiary palette",
-    # Wheel-pair naming refinements (owner 2026-07-17, ROADMAP 15e): the
-    # Seasons pair is Temperaments/Elements, Aurora's own pair is Warm/Cool.
-    # The full pair set joined the corpus 2026-07-19 (a pre-existing gap)
-    # with the owner's "Walks of Life" pick (the full idiom, never caste).
+    # Wheel naming (owner 2026-07-17, ROADMAP 15e; refined 2026-07-28):
+    # the Quaternity reads Temperaments/Elements/Seasons, Aurora's own
+    # pair is Warm/Cool, and the Compass's first wheel shed its
+    # explanatory tail — "Walks", not "Walks of Life" (the walking
+    # metaphor already refuses the hereditary-caste reading).
     "Temperaments", "Warm", "Cool",
-    "Court", "Family", "Walks of Life", "Ages",
+    "Court", "Family", "Walks", "Ages",
+    # The 4-arm pointer's own name since 2026-07-28, when "Seasons"
+    # stepped down to be one of its three wheels.
+    "Quaternity",
     # The hexa PRIMARY wheel's own name (owner "ok.", 2026-07-27): the
     # Prism's first wheel is the PERSONS (CANON.md), never a generic label.
     "Persons",

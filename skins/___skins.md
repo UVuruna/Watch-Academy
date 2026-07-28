@@ -20,7 +20,7 @@ ring, weekday_set, year_marker, hands) and `missing_assets()`. See
 
 Dial pointer variants (user-selectable from the tray; display names
 per the owner: Prism, Seasons, Compass, Trinity): **hexa/Prism**
-(6-point — the default), **cross/Seasons** (4-point, arms shaped like
+(6-point — the default), **cross/Quaternity** (4-point, arms shaped like
 octa arms with gaps), **octa/Compass** (8-point) and **trio/Trinity**
 (3-point — half of hexa, arms at the M/D/Y ring letters 12h/4h/20h).
 The pointer sets the palette size (trio = 3 hues × 120°, cross = 4 ×

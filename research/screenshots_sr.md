@@ -49,7 +49,7 @@ Greek, Norse, Professions, Wolf Pack, Bee Hive, Elephant Herd, Cosmos.
 
 - [ ] twilight.png — Snimak A: grad = Beograd (ili maketni dan 20.6.2025 — izlazak 04:52 / zalazak 20:27); snimak B: grad = Tromsø, oko 21. juna — Ceo krug oba puta: u snimku A treba da se vide oba pojasa (plavi civilni sumrak oko 06h, braon oko 18h); u snimku B pojas mora biti očigledno mnogo širi od običnog ~9° luka iz snimka A (bele noći/produženi sumrak režim).
 
-- [ ] year_wheel.png — Pointer = Seasons (cross); Time Travel na solsticij ili ekvinocij blizu lokalnog podneva (npr. 21. jun za letnji solsticij ili 23. septembar za jesenji ekvinocij) — Ceo krug u kadru, marker vidljivo tačno na kardinalnoj tački (vrh/dno za solsticije, levi/desni ugao za ekvinocije); uključi hover/legend popup na markeru ako je moguć.
+- [ ] year_wheel.png — Pointer = Quaternity (cross); Time Travel na solsticij ili ekvinocij blizu lokalnog podneva (npr. 21. jun za letnji solsticij ili 23. septembar za jesenji ekvinocij) — Ceo krug u kadru, marker vidljivo tačno na kardinalnoj tački (vrh/dno za solsticije, levi/desni ugao za ekvinocije); uključi hover/legend popup na markeru ako je moguć.
 
 - [ ] moon_lunations.png — Pointer = Seasons; Time Travel na datum blizu punog meseca, ili na zlatni test-datum 2026-07-07 (osvetljenost meseca 0.7400, rastući grbavi mesec) — Ceo krug sa vidljivim sjajem mesečevog markera na točku; po mogućstvu sa hover popup-om (redni broj lunacije + % osvetljenosti + naziv faze + dan ciklusa).
 

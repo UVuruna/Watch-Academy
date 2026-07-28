@@ -11,9 +11,11 @@ the settings file owned by [Settings Store](../app/settings_store.md).
 Values that define what DOMY Watch is and never change: app identity, the
 24h dial convention (noon at top, clockwise, 180° offset), time constants,
 the weekday → celestial body mapping, the pointer variants (hexa 6 /
-cross 4 / octa 8 / trio 3 / rose 8 arms, aurora and calendar armless;
-display names Prism / Seasons / Compass / Trinity / Rose / Aurora /
-Calendar; the
+cross 4 / octa 8 / trio 3 / rose 8 HUES, aurora and calendar armless;
+display names Prism / Quaternity / Compass / Trinity / Rose / Aurora /
+Calendar, each shown with what the READER counts on the glass —
+`POINTER_DIAL_COUNTS`, 3 · 4 · 6 · 7 · 8 · 12 · 24, which is NOT the
+palette size for the Rose, Aurora or the Calendar; the
 Calendar's twelve 2-hour wedges via `CALENDAR_WEDGES`/`CALENDAR_WEDGE_DEG`,
 its `CALENDAR_LIGHTING_MODES` (hour/year, owner 2026-07-16) and its
 `CALENDAR_MOUNT_MODES` (off/zodiac/months/chinese, the DESIGN ZODIAC
@@ -120,12 +122,14 @@ the "chinese" calendar mount, `render.layers.calendar_mount_entries`).
 The trigger/window/precedence law itself lives in
 [Blue Moon](../core/blue_moon.md); pinned by `tests/test_blue_moon.py`.
 **R5 MENU REWORK**:
-`POINTER_PALETTE_LABELS` — the RAW English wheel-pair label per
-pointer (Court/Family, Temperaments/Elements, Walks of Life/Ages,
-**Persons**/One Soul for the Prism — its primary slot renamed from the
-generic default 2026-07-27, owner "ok." —
-Warm/Cool, Zodiac/Almanac, a `"default"` Paint/Light fallback for a
-pointer whose wheels have no names of their own),
+`POINTER_PALETTE_LABELS` — the RAW English wheel label per pointer, and
+the ONLY place a wheel's meaning is written (Court/Family/Genesis,
+Temperaments/Elements/**Seasons** for the Quaternity, **Walks**/Ages/
+Character — the Compass tail dropped 2026-07-28 — **Persons**/One
+Soul/Council for the Prism, Warm/Cool, Zodiac/Almanac,
+Legacy/Prophecy, and a `"default"` **Primary/Secondary/Tertiary**
+fallback — three labels for a three-position slot — for a pointer whose
+wheels have no names of their own),
 extracted so `app.controller._build_menu`'s translated copy and
 `app.controller.watch_title`'s UNTRANSLATED name reading both draw
 from the ONE table (Rule #5); `SLOT_COMPLICATION_TITLES` — the four
@@ -420,7 +424,11 @@ Canon](../CUBE.md) §The Rose).** Its tables live beside every other
 pointer's, so registering it registered it everywhere (settings
 validation, the Design window, the palette editor):
 `POINTER_POINTS["rose"] = 8` — EIGHT hues, not 24: the Rose is one
-octa star drawn three times, never 24 independent arms (Rule #19);
+octa star drawn three times, never 24 independent arms (Rule #19).
+The READER, however, counts 24 rays, and the Design window now says so:
+`POINTER_DIAL_COUNTS["rose"] = 24` (owner correction 2026-07-28 — the
+pill used to read "Rose (8)", the palette size leaking into a place
+that answers a different question);
 `POINTER_ARM_HALF_ANGLE_DEG["rose"] = 22.5` (the octa arm shape, so
 45°-wide rays on a 15° pitch OVERLAP exactly as the owner draws them);
 `POINTER_PALETTE_LABELS["rose"] = ("Legacy", "Prophecy")` — two wheels

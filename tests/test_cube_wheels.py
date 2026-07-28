@@ -71,16 +71,24 @@ def _dt(when: datetime):
 # --- The third-wheel slot ----------------------------------------------------------
 
 
-def test_cube_styles_exist_only_on_the_cube_pointers():
-    """CUBE.md: Genesis (trio), Council (hexa), Character (octa) — the
-    Seasons, Aurora and the Calendar stay two-wheel."""
+def test_the_third_wheel_follows_the_arm_count():
+    """CUBE.md gives a third wheel to Genesis (trio), Council (hexa) and
+    Character (octa); the owner's seal of 2026-07-28 adds Seasons to the
+    Quaternity (cross). The law is the arm count — 3, 4, 6 and 8 carry
+    three wheels, the armless instruments and the Rose (7, 12, 24) carry
+    two: eighteen wheels in all."""
     assert constants.PALETTE_STYLES == ("primary", "secondary", "tertiary")
-    for pointer in ("trio", "hexa", "octa"):
+    for pointer in ("trio", "cross", "hexa", "octa"):
         assert constants.palette_styles_for(pointer) == (
             "primary", "secondary", "tertiary"
         )
-    for pointer in ("cross", "aurora", "calendar"):
+    for pointer in ("aurora", "calendar", "rose"):
         assert constants.palette_styles_for(pointer) == ("primary", "secondary")
+    wheels = sum(
+        len(constants.palette_styles_for(pointer))
+        for pointer in constants.POINTER_POINTS
+    )
+    assert wheels == 18
 
 
 def test_third_wheel_labels_are_the_sealed_names():
@@ -95,18 +103,18 @@ def test_effective_palette_style_normalizes_the_third_wheel_off_its_pointers():
     """A stored "tertiary" left behind by a pointer switch reads as
     "primary" on the two-wheel pointers — and survives on the
     three-wheel ones."""
-    for pointer in ("trio", "hexa", "octa"):
+    for pointer in ("trio", "cross", "hexa", "octa"):
         assert defaults.effective_palette_style(pointer, "tertiary") == "tertiary"
-    for pointer in ("cross", "aurora", "calendar"):
+    for pointer in ("aurora", "calendar", "rose"):
         assert defaults.effective_palette_style(pointer, "tertiary") == "primary"
     assert defaults.effective_palette_style("cross", "secondary") == "secondary"
 
 
-def test_apply_display_settings_normalizes_a_stray_cube_style():
+def test_apply_display_settings_normalizes_a_stray_third_wheel():
     skin = apply_display_settings(
         defaults.DEFAULT_SKIN,
         dataclasses.replace(
-            Settings(), pointer="cross", palette_style="tertiary"
+            Settings(), pointer="calendar", palette_style="tertiary"
         ),
     )
     assert skin.palette_style == "primary"

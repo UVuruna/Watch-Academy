@@ -56,7 +56,7 @@ rotation off (upright mode — better for reading exact positions).
 ## Pointer Variants
 A skin renders with one of SEVEN pointer layouts
 (`SkinDefinition.pointer`, user-overridable): **trio** (Trinity, 3
-hexa-shaped arms), **cross** (Seasons, 4 × 90°), **hexa** (Prism, 6 ×
+hexa-shaped arms), **cross** (Quaternity, 4 × 90°), **hexa** (Prism, 6 ×
 60°), **octa** (Compass, 8 × 45°), **rose** (the Rose — THREE octa
 stars 15° apart, owner 2026-07-27), **aurora** (no arms — day-hue
 wedges only) and **calendar** (no arms — twelve calendar wedges). The arm

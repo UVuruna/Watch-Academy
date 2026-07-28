@@ -124,16 +124,15 @@ class DesignDialog(QDialog):
         settings = self._settings
         layout = QVBoxLayout()
         grid = QGridLayout()
+        # EVERY pointer names its own count, and the count is what the
+        # reader sees on the glass, not the palette size (owner
+        # 2026-07-28: the Rose shows 24, the Calendar 12). One ascending
+        # row, 3 → 24, so the pills read as a scale.
         variants = sorted(
-            constants.POINTER_POINTS.items(),
-            key=lambda item: (item[0] in ("aurora", "calendar"), item[1]),
+            constants.POINTER_DIAL_COUNTS.items(), key=lambda item: item[1]
         )
-        for index, (variant, arms) in enumerate(variants):
-            title = (
-                constants.POINTER_DISPLAY_NAMES[variant]
-                if variant in ("aurora", "calendar")
-                else f"{constants.POINTER_DISPLAY_NAMES[variant]} ({arms})"
-            )
+        for index, (variant, count) in enumerate(variants):
+            title = f"{constants.POINTER_DISPLAY_NAMES[variant]} ({count})"
             row, col = divmod(index, 3)
             grid.addWidget(
                 self._pill(

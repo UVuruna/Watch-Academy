@@ -1569,7 +1569,7 @@ class Compositor:
         key = archetype_key(self._skin)
         if key == "compass_secondary":
             return self._archetype_three_side(index)
-        if key == "seasons_secondary":
+        if key == "quaternity_secondary":
             return self._tetramorph_three_side(index)
         fig = archetypes.figures(key)[index]
         return self._archetype_two_rows(
@@ -1639,7 +1639,7 @@ class Compositor:
         (Session 6 + the Tetramorph completion round); each column
         degrades to its bare title/name when its row (or the evangelist
         rondel) has not landed — never a KeyError."""
-        key = "seasons_secondary"
+        key = "quaternity_secondary"
         fig = archetypes.figures(key)[index]
         set_name = archetypes.ARCHETYPES[key]["articles"]
         node = self._symbolism.archetype_article(set_name, fig["entity"])
