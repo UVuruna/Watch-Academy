@@ -48,8 +48,8 @@ strong and provocative — owner decree).
 | **Z — Self-Regard** | Green ↔ Red | How do I hold my own worth? | Humility ↔ Dignity | Self-Annihilation ↔ Self-Worship |
 
 (Y renamed from *Basis of Judgment* to **Moral Scope** — owner
-approval 2026-07-28; structural reading Particularism ↔
-Universalism. Poles, colours, figures untouched.)
+approval 2026-07-28; structural reading **Universalism ↔
+Particularism**, purple first. Poles, colours, figures untouched.)
 
 Orientation (the owner's cube views): **Y is vertical** — Yellow the
 top face, Purple-Gray the bottom; the Court corner shows **Yellow
@@ -406,7 +406,7 @@ law, same approval):
 | Axis | Structural | − pole: luminous / fallen | + pole: luminous / fallen |
 |---|---|---|---|
 | **Activation** | Restraint ↔ Mobilization | Blue: Composure / Lethargy | Orange: Vigor / Frenzy |
-| **Moral Scope** *(renamed from "Basis of Judgment")* | Particularism ↔ Universalism | Purple-Gray: Integrity / Legalism | Yellow: Loyalty / Tribalism |
+| **Moral Scope** *(renamed from "Basis of Judgment")* | Universalism ↔ Particularism | Purple-Gray: Integrity / Legalism | Yellow: Loyalty / Tribalism |
 | **Self-Regard** | Self-Effacement ↔ Self-Exaltation | Green: Humility / Self-Annihilation | Red: Dignity / Self-Worship |
 
 The Y rename touches no pole, colour or figure; the universal
@@ -728,16 +728,23 @@ the geometry, both seatings and the search are
 both wheels to `research/seating/*.png` for the eye. No pointer is wired
 to either seating yet — that is the queue's later round.
 
-### One inconsistency flagged, not patched
+### One inconsistency found and CORRECTED (owner 2026-07-28)
 
-§The 65 Terms glosses **Moral Scope** as "Particularism ↔ Universalism"
-in − → + column order, which would make purple the particular pole; but
-the same paragraph seals the UNIVERSAL pole with Matthew 5:18, which is
-purple's own verse, and sets Mark 3:33–35 against the tribe's claim,
-which is yellow's. The two readings disagree. Every other axis's gloss
-runs in column order, so the likeliest fix is that this one row is
-reversed — but it sits inside a SEALED table, and no session may quietly
-turn a sealed word around. Left for the owner's deeper pass.
+§The 65 Terms glossed **Moral Scope** as "Particularism ↔ Universalism"
+in − → + column order, which made PURPLE the particular pole. That was
+backwards, and three things said so at once: the poles' own content
+(Loyalty is loyalty to YOUR OWN, and its fall is literally Tribalism;
+Integrity is the principle held regardless of person, and its fall is
+Legalism), the paragraph directly beneath the table (which seals the
+universal pole with Matthew 5:18 — purple's own verse — and sets Mark
+3:33–35 against the tribe's claim, which is yellow's), and the other two
+rows, whose glosses do run in column order and are correct.
+
+The owner's ruling, in his own words: *"žuta je onaj kao favorizuje
+svoje, ljubičaste onaj koji se drži načela"* — **yellow is the one who
+favours his own; purple is the one who holds to the principle.** The
+gloss now reads **Universalism ↔ Particularism**. Two words swapped
+places; no pole, colour, figure, name, seat or line of code moved.
 
 
 <a id="double-trinity"></a>
