@@ -409,30 +409,69 @@ _ECLIPSE_TOPICS = (
 # stations and centres were declared by the Session 19 sheet and light
 # up the moment the owner's glass lands (graceful-absent throughout).
 #
+# SESSION 25 (2026-07-28) grew the section from 20 pages to 42 — the
+# Thirteen Axes wave: the doctrine block (the axes' arithmetic, The One
+# in both descriptions, the Sacred Axis, the 65 terms), the nine new
+# axis pages, the eight new edge cells and the hexagram projection. The
+# READING ORDER is `config.cube.AXES`' own family order — doctrine, the
+# three primaries with their poles, the six edge axes with the eight new
+# cells, the four vertex axes with their corners, then what the cube
+# reveals. The Sacred Axis' two cells open the corner block as its HUMAN
+# ECHOES, because the axis itself stands up front beside The One.
+#
 # THE ORDER IS A CONTRACT: `config/archetypes.py` addresses these pages
-# by index from its three Cube wheels (`enc=("cube", 7)` and friends),
+# by index from its three Cube wheels (`enc=("cube", 11)` and friends),
 # so an inserted entry must be added at the END or the wheels re-aimed
-# in the same commit — `tests/test_cube_encyclopedia.py` pins the pairs.
+# in the same commit — `tests/test_cube_encyclopedia.py` pins the pairs
+# BY NAME, so a mis-aimed index fails loudly rather than silently.
 _CUBE_ENTRIES = (
     ("The Cube", None),
-    ("The Activation Axis", None),
-    ("The Judgment Axis", None),
-    ("The Self-Regard Axis", None),
+    ("The Thirteen Axes", None),
+    ("The One", archetypes.SACRED_ART_DIR / "The_One.png"),
+    ("The Sacred Axis", archetypes.SACRED_ART_DIR / "Sacred_Axis.png"),
+    ("The Sixty-Five Terms", None),
     ("The Three Sets", None),
+    ("The Activation Axis", None),
     ("Composure", None),
     ("Vigor", None),
-    ("Loyalty", None),
+    ("The Moral Scope Axis", None),
     ("Integrity", None),
+    ("Loyalty", None),
+    ("The Self-Regard Axis", None),
     ("Humility", None),
     ("Dignity", None),
-    ("The Quiet Devotee", None),
-    ("The Steady Guardian", None),
+    # The six EDGE axes. An axis page carries no plate of its own by the
+    # Rule #19 derivation check (an axis IS its two ends through the
+    # centre — a composition, never a new scene); the eight new CELLS do,
+    # and light up when `research/prompts/archetype/edges_prompts.md` is
+    # generated.
+    ("Reason ↔ Emotion", None),
+    ("Prudence", archetypes.EDGES_ART_DIR / "Prudence.png"),
+    ("Ardor", archetypes.EDGES_ART_DIR / "Ardor.png"),
+    ("Pragmatism ↔ Idealism", None),
+    ("Steadfastness", archetypes.EDGES_ART_DIR / "Steadfastness.png"),
+    ("Reform", archetypes.EDGES_ART_DIR / "Reform.png"),
+    ("Person ↔ Cause", None),
+    ("Hearth ↔ Desert", None),
+    ("Lion ↔ Lamb", None),
+    ("Meekness", archetypes.EDGES_ART_DIR / "Meekness.png"),
+    ("Aspiration", archetypes.EDGES_ART_DIR / "Aspiration.png"),
+    ("Servant ↔ Sovereign", None),
+    ("Self-Mastery", archetypes.EDGES_ART_DIR / "Self_Mastery.png"),
+    ("Diligence", archetypes.EDGES_ART_DIR / "Diligence.png"),
+    # The four VERTEX axes and their corners.
     ("The Contemplative Sage", None),
+    ("The Charismatic Champion", None),
+    ("Vow ↔ Vision", None),
+    ("The Quiet Devotee", None),
+    ("The Visionary Founder", None),
+    ("Preservation ↔ Revolution", None),
+    ("The Steady Guardian", None),
+    ("The Principled Reformer", None),
+    ("Crown ↔ Shield", None),
     ("The Wise Statesman", None),
     ("The Sacrificial Protector", None),
-    ("The Charismatic Champion", None),
-    ("The Principled Reformer", None),
-    ("The Visionary Founder", None),
+    ("The Hexagram Projection", None),
     ("The Banknote Axes", None),
 )
 _DOUBLE_TRINITY_ENTRIES = (

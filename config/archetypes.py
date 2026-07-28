@@ -184,6 +184,15 @@ CHARACTER_ART_DIR = ARCHETYPE_ART_DIR / "character" / "primary" / "colored"
 # CUBE.md §Seating the eight on the Rose's Prophecy wheel). Its own
 # group beside `character`, same register/look shape.
 VERTICES_ART_DIR = ARCHETYPE_ART_DIR / "vertices" / "primary" / "colored"
+# THE THIRTEEN AXES (WORKPLAN Session 25, 2026-07-28) — two more Cube
+# families, neither of them a wheel: `edges` holds the eight NEW edge
+# cells the Rose seats on its odd rays (sheet
+# `research/prompts/archetype/edges_prompts.md`), `sacred` the two seats
+# that LEFT the human circle plus the centre (sheet
+# `axes_prompts.md`). Their Encyclopedia pages read these roots for
+# their own plates, graceful-absent until the owner's glass lands.
+EDGES_ART_DIR = ARCHETYPE_ART_DIR / "edges" / "primary" / "colored"
+SACRED_ART_DIR = ARCHETYPE_ART_DIR / "sacred" / "primary" / "colored"
 
 # The three FIGURE SETS every Rose seat carries are REGISTERS on disk —
 # `<group>/<set>/colored/<Stem>.png`, exactly as the Ages wheel's
@@ -492,28 +501,28 @@ ARCHETYPES = {
         "figures": (
             _fig(0.0, CHARACTER_ART_DIR / "Loyalty.png",
                  "Loyalty", "Tribalism", "loyalty",
-                 enc=("cube", 7), cell=(0, 1, 0)),
+                 enc=("cube", 11), cell=(0, 1, 0)),
             _fig(45.0, CHARACTER_ART_DIR / "Patronage.png",
                  "Patronage", "Favoritism", "patronage",
-                 enc=("cube", 12), cell=(0, 1, 1)),
+                 enc=("cube", 35), cell=(0, 1, 1)),
             _fig(90.0, CHARACTER_ART_DIR / "Dignity.png",
                  "Dignity", "Self-Worship", "dignity",
-                 enc=("cube", 10), cell=(0, 0, 1)),
+                 enc=("cube", 14), cell=(0, 0, 1)),
             _fig(135.0, CHARACTER_ART_DIR / "Conviction.png",
                  "Conviction", "Dogmatism", "conviction",
-                 enc=("cube", 14), cell=(0, -1, 1)),
+                 enc=("cube", 38), cell=(0, -1, 1)),
             _fig(180.0, CHARACTER_ART_DIR / "Integrity.png",
                  "Integrity", "Legalism", "integrity",
-                 enc=("cube", 8), cell=(0, -1, 0)),
+                 enc=("cube", 10), cell=(0, -1, 0)),
             _fig(225.0, CHARACTER_ART_DIR / "Renunciation.png",
                  "Renunciation", "Mortification", "renunciation",
-                 enc=("cube", 13), cell=(0, -1, -1)),
+                 enc=("cube", 29), cell=(0, -1, -1)),
             _fig(270.0, CHARACTER_ART_DIR / "Humility.png",
                  "Humility", "Self-Annihilation", "humility",
-                 enc=("cube", 9), cell=(0, 0, -1)),
+                 enc=("cube", 13), cell=(0, 0, -1)),
             _fig(315.0, CHARACTER_ART_DIR / "Devotion.png",
                  "Devotion", "Martyrdom", "devotion",
-                 enc=("cube", 11), cell=(0, 1, -1)),
+                 enc=("cube", 32), cell=(0, 1, -1)),
         ),
         "center": None,       # both Compass archetypes: the rose is
                               # the wheel itself (owner; sheet "No
@@ -533,28 +542,28 @@ ARCHETYPES = {
         "figures": (
             _fig(0.0, VERTICES_ART_DIR / "Quiet_Devotee.png",
                  "Quiet Devotee", "Submissive Enabler", "quiet_devotee",
-                 enc=("cube", 11), cell=(-1, 1, -1)),
+                 enc=("cube", 32), cell=(-1, 1, -1)),
             _fig(45.0, VERTICES_ART_DIR / "Sacrificial_Protector.png",
                  "Sacrificial Protector", "Fanatical Martyr",
-                 "sacrificial_protector", enc=("cube", 15), cell=(1, 1, -1)),
+                 "sacrificial_protector", enc=("cube", 39), cell=(1, 1, -1)),
             _fig(90.0, VERTICES_ART_DIR / "Charismatic_Champion.png",
                  "Charismatic Champion", "Tribal Warlord",
-                 "charismatic_champion", enc=("cube", 16), cell=(1, 1, 1)),
+                 "charismatic_champion", enc=("cube", 30), cell=(1, 1, 1)),
             _fig(135.0, VERTICES_ART_DIR / "Steady_Guardian.png",
                  "Steady Guardian", "Complacent Nepotist",
-                 "steady_guardian", enc=("cube", 12), cell=(-1, 1, 1)),
+                 "steady_guardian", enc=("cube", 35), cell=(-1, 1, 1)),
             _fig(180.0, VERTICES_ART_DIR / "Wise_Statesman.png",
                  "Wise Statesman", "Cold Elitist", "wise_statesman",
-                 enc=("cube", 14), cell=(-1, -1, 1)),
+                 enc=("cube", 38), cell=(-1, -1, 1)),
             _fig(225.0, VERTICES_ART_DIR / "Visionary_Founder.png",
                  "Visionary Founder", "Messianic Tyrant",
-                 "visionary_founder", enc=("cube", 18), cell=(1, -1, 1)),
+                 "visionary_founder", enc=("cube", 33), cell=(1, -1, 1)),
             _fig(270.0, VERTICES_ART_DIR / "Principled_Reformer.png",
                  "Principled Reformer", "Puritanical Zealot",
-                 "principled_reformer", enc=("cube", 17), cell=(1, -1, -1)),
+                 "principled_reformer", enc=("cube", 36), cell=(1, -1, -1)),
             _fig(315.0, VERTICES_ART_DIR / "Contemplative_Sage.png",
                  "Contemplative Sage", "Paralyzed Purist",
-                 "contemplative_sage", enc=("cube", 13), cell=(-1, -1, -1)),
+                 "contemplative_sage", enc=("cube", 29), cell=(-1, -1, -1)),
         ),
         "center": None,       # the Rose is the wheel itself, like both
                               # Compass archetypes

@@ -47,18 +47,22 @@ def _encyclopedia() -> dict:
 
 
 def test_the_cube_families_are_complete():
-    """The Cube section, the Double Trinity and the Two Crosses: 20 + 5
+    """The Cube section, the Double Trinity and the Two Crosses: 42 + 5
     + 14 pages, with the canon's own required subjects present by
-    name."""
+    name. (Session 25 grew the Cube section from 20 to 42 — the
+    Thirteen-Axes wave.)"""
     data = _encyclopedia()
     cube, dt, crosses = (data[f] for f in _CUBE_FAMILIES)
-    assert (len(cube), len(dt), len(crosses)) == (20, 5, 14)
+    assert (len(cube), len(dt), len(crosses)) == (42, 5, 14)
     # The three axes, the six poles, the eight vertices, the sets, the
     # coordinate doctrine's own page and the Banknote seal.
-    for name in ("The Cube", "The Activation Axis", "The Judgment Axis",
+    for name in ("The Cube", "The Activation Axis", "The Moral Scope Axis",
                  "The Self-Regard Axis", "The Three Sets",
                  "The Banknote Axes"):
         assert name in cube, name
+    # The Y axis is Moral Scope since the owner's approval of
+    # 2026-07-28; the old short name is gone from the whole corpus.
+    assert "The Judgment Axis" not in cube
     for pole in ("Composure", "Vigor", "Loyalty", "Integrity",
                  "Humility", "Dignity"):
         assert pole in cube, pole
@@ -78,6 +82,90 @@ def test_the_cube_families_are_complete():
                  "Salvation", "Fear", "Anger", "Hate", "Suffering",
                  "Trust and Distrust", "FALL and STAR", "DOMY and SAFE"):
         assert page in crosses, page
+
+
+def test_the_thirteen_axes_each_have_their_page():
+    """WORKPLAN Session 25: every axis `config.cube.AXES` declares owns
+    an Encyclopedia page, under the canon's own name — the three
+    primaries in the section's older "The X Axis" style, the ten others
+    verbatim. The mapping is derived from the canon table, so a renamed
+    axis fails here rather than drifting silently."""
+    from config import cube as cube_canon
+
+    pages = _encyclopedia()["cube"]
+    for axis in cube_canon.AXES:
+        name = axis.name
+        if name in ("Activation", "Moral Scope", "Self-Regard"):
+            name = f"The {name} Axis"
+        assert name in pages, name
+    assert "The Thirteen Axes" in pages          # the arithmetic itself
+    assert "The One" in pages                    # the centre
+    assert "The Sixty-Five Terms" in pages       # the economy law
+    assert "The Hexagram Projection" in pages    # the two X-rays
+
+
+def test_the_one_carries_both_descriptions():
+    """Owner decree: the centre is described BOTH ways, and the empty
+    exemplar column is doctrine rather than a vacancy."""
+    base = EncyclopediaRepository().entry("cube", "The One")["base"]
+    for fall in ("Lethargy", "Frenzy", "Tribalism", "Legalism",
+                 "Self-Annihilation", "Self-Worship"):
+        assert fall in base, fall                       # the apophatic six
+    for power in ("Composure", "Vigor", "Loyalty", "Integrity",
+                  "Humility", "Dignity"):
+        assert power in base, power                     # the cataphatic six
+    assert "takes no exemplar in any register" in base
+    assert "(0,0,0)" in base
+
+
+def test_the_sacred_axis_page_carries_the_five_stations():
+    """The five stations, the three readings, the alias and the ONE
+    distinguishing sentence the Charter requires (CUBE.md §The Sacred
+    Axis)."""
+    base = EncyclopediaRepository().entry("cube", "The Sacred Axis")["base"]
+    for station in ("Paralyzed Purist", "Jesus", "The One",
+                    "Charismatic Champion", "Devil"):
+        assert station in base, station
+    for reading in ("Advocate", "Judge", "Prosecutor",
+                    "Preserver", "Creator", "Destroyer"):
+        assert reading in base, reading
+    assert "AXIS MUNDI" in base
+    assert "NOT the doctrinal Holy Trinity" in base
+    for echo in ("Maximilian Kolbe", "Nero", "Aslan", "Sauron"):
+        assert echo in base, echo
+
+
+def test_the_sixteen_new_edge_readings_are_written():
+    """Session 25's own deliverable: the eight new edge cells each have
+    a page, and BOTH readings of each — sixteen in all — are argued on
+    it, with all six of the seat's figures named."""
+    from config import cube as cube_canon
+
+    repo = EncyclopediaRepository()
+    new_edges = {
+        (-1, -1, 0), (1, 1, 0), (-1, 1, 0), (1, -1, 0),
+        (-1, 0, -1), (1, 0, 1), (-1, 0, 1), (1, 0, -1),
+    }
+    for axis in cube_canon.AXES:
+        for cell in (axis.cold, axis.warm):
+            if cell.coords not in new_edges:
+                continue
+            base = repo.entry("cube", cell.luminous)["base"]
+            assert cell.fallen in base, (cell.luminous, cell.fallen)
+            for register in cube_canon.FIGURE_SETS:
+                for figure in cube_canon.roster(cell.coords, register):
+                    assert figure in base, (cell.luminous, figure)
+
+
+def test_the_hexagram_projection_carries_the_blindness_law():
+    """Both X-rays and the count the law turns on (19 visible, 7
+    hidden, 26 cells)."""
+    base = EncyclopediaRepository().entry(
+        "cube", "The Hexagram Projection"
+    )["base"]
+    assert "Sacred Axis" in base and "Genesis" in base
+    assert "seven cells are hidden" in base
+    assert "twenty-six" in base
 
 
 def test_every_cube_page_obeys_the_article_charter():
