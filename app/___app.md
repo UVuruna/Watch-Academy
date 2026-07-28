@@ -96,9 +96,15 @@ See [Encyclopedia Dialog](encyclopedia.md).
 ### `encyclopedia_warm.py` — Encyclopedia Warm
 Background pre-materialization of everything the Encyclopedia can show
 (owner order 2026-07-26: opening it must never block the main thread)
-— metal variants, Moon plates and decode-ceiling downscales, chained
-onto the controller's existing warm thread.
+— metal variants, Moon plates and decode-ceiling downscales. Phase 3 of
+the shared warm.
 See [Encyclopedia Warm](encyclopedia_warm.md).
+
+### `warm.py` — Warm
+The ONE background warm for the process (owner 2026-07-28: every watch
+used to run its own, doing identical work N times), walked in priority
+order — dial art, working set, Encyclopedia, hover articles last.
+See [Warm](warm.md).
 
 ### `guide.py` — Guide Dialog
 The paged, resizable help book over `assets/guide/` pages and

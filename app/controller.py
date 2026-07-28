@@ -28,7 +28,7 @@ from zoneinfo import ZoneInfo
 
 import astral
 
-from PySide6.QtCore import QObject, QRect, Qt, QTimer
+from PySide6.QtCore import QObject, QRect, Qt, QTimer, Signal
 from PySide6.QtGui import QAction, QActionGroup, QCursor, QGuiApplication, QIcon
 from PySide6.QtWidgets import (
     QApplication,
@@ -44,7 +44,6 @@ from PySide6.QtWidgets import (
 from app import native
 from app.design_window import DesignDialog
 from app.encyclopedia import EncyclopediaDialog
-from app.encyclopedia_warm import warm_encyclopedia
 from app.fast_travel_flash import FastTravelFlash
 from app.observatory import ObservatoryDialog
 from app.guide import GuideDialog
@@ -82,8 +81,8 @@ from data.rings import ring_presets
 from data.seasons import SeasonsRepository
 from data.symbolism import SymbolismRepository
 from data.translations import TranslationStore, collect_corpus, translate_texts
-from render.assets import AssetCache
-from render.asset_variants import calendar_wheel_icon_file, warm_working_set
+from render.assets import shared_cache
+from render.asset_variants import calendar_wheel_icon_file
 from render.compositor import Compositor
 from skins.manifest import HandSpec, HandsSpec, missing_assets
 
@@ -396,7 +395,16 @@ def build_skin(settings: Settings):
     CARD (Database/ring_presets.json + the user's custom cards — owner
     spec: {name, positions, letters}, the positions signature picks the
     layout/face), the letter art of the chosen finish, the chosen HAND
-    PACK and the user's display choices overlaid."""
+    PACK and the user's display choices overlaid.
+
+    The WHOLE build runs inside this watch's own display context (owner
+    bug 2026-07-28): every asset path it resolves goes through the ART
+    SOURCE, so building watch 2's skin must never see watch 1's."""
+    with paths.display(display_for(settings)):
+        return _compose_skin(settings)
+
+
+def _compose_skin(settings: Settings):
     card = ring_presets(settings.custom_rings)[settings.ring]
     layout = constants.RING_LAYOUTS[card["layout"]]
     # A preset may override the seal layout's own (empty) triangle —
@@ -652,31 +660,21 @@ def _pantheon_weekday_set(base, theme: str, metal: str | None):
     )
 
 
-def apply_display_settings(skin, settings: Settings):
-    """The user's choices win over whatever the skin pack declares:
-    the tray display scalars, the opacity overrides (twilight alphas
-    scale proportionally with the day alphas) and the custom palette
-    for the active (pointer, style). Module-level — testable without
-    a controller."""
-    # The ART SOURCE switch (owner 2026-07-14: Gemini vs ChatGPT) —
-    # every disk boundary resolves canonical paths through it.
-    paths.set_art_source(settings.art_source)
-    # THE SUBDIAL SET switch (owner decree 2026-07-21, Rsub round) —
-    # mirrors the art-source switch above; render.assets.
-    # subdial_plate_file reads it directly (its only reader).
-    paths.set_subdial_set(settings.subdial_set)
-    # THE METAL SHADES — same module-global pattern:
-    # render.assets.AssetCache._recolored and letter_metal_file read
-    # paths.metal_shade(metal) directly.
-    paths.set_metal_shade("gold", settings.metal_shade_gold)
-    paths.set_metal_shade("bronze", settings.metal_shade_bronze)
-    paths.set_metal_shade("silver", settings.metal_shade_silver)
-    # THE THEMATIC pseudo-metal's shade follows the ACTIVE ring preset
-    # (ENLARGE/THEMATIC round, owner 2026-07-27): DOMY cross red, PILOT
-    # cross blue, Dollar green, The One moon indigo, Templar black. A
-    # CUSTOM ring may carry its OWN pick on its card — any transformer
-    # ramp, metals included (owner: "iron, copper... sve") — else the
-    # moon indigo. Not a Settings entry: the ring choice IS the choice.
+def display_for(settings: Settings) -> paths.DisplayContext:
+    """THIS WATCH's own art choices as one immutable bundle (owner bug
+    2026-07-28): the art source (owner 2026-07-14: Gemini vs ChatGPT),
+    the subdial plate set (owner decree 2026-07-21) and the metal shades
+    (R8a). All three used to be process-wide globals written on every
+    skin install, which made every open watch render with the LAST-BUILT
+    watch's choices — see `config.paths.DisplayContext` for the full
+    post-mortem.
+
+    THE THEMATIC pseudo-metal's shade follows the ACTIVE ring preset
+    (ENLARGE/THEMATIC round, owner 2026-07-27): DOMY cross red, PILOT
+    cross blue, Dollar green, The One moon indigo, Templar black. A
+    CUSTOM ring may carry its OWN pick on its card — any transformer
+    ramp, metals included (owner: "iron, copper... sve") — else the
+    moon indigo. Not a Settings entry: the ring choice IS the choice."""
     thematic_shade = constants.RING_THEMATIC_SHADES.get(settings.ring)
     if thematic_shade is None:
         card = ring_presets(settings.custom_rings).get(settings.ring)
@@ -684,7 +682,34 @@ def apply_display_settings(skin, settings: Settings):
             (card or {}).get("thematic")
             or constants.METAL_SHADE_DEFAULT["thematic"]
         )
-    paths.set_metal_shade("thematic", thematic_shade)
+    return paths.display_context(
+        art_source=settings.art_source,
+        subdial_set=settings.subdial_set,
+        metal_shades={
+            "gold": settings.metal_shade_gold,
+            "bronze": settings.metal_shade_bronze,
+            "silver": settings.metal_shade_silver,
+            "thematic": thematic_shade,
+        },
+    )
+
+
+def apply_display_settings(skin, settings: Settings):
+    """The user's choices win over whatever the skin pack declares:
+    the tray display scalars, the opacity overrides (twilight alphas
+    scale proportionally with the day alphas) and the custom palette
+    for the active (pointer, style). Module-level — testable without
+    a controller.
+
+    The overlay runs INSIDE this watch's display context: the weekday/
+    slot art it resolves goes through the ART SOURCE, so a watch on
+    Gemini art must not read a sibling's ChatGPT choice."""
+    display = display_for(settings)
+    with paths.display(display):
+        return _overlay_display_settings(skin, settings, display)
+
+
+def _overlay_display_settings(skin, settings: Settings, display):
     # THE ARCHETYPE MODE (owner sealed package 2026-07-16): active
     # while the drawn pointer carries an archetype. The overriding
     # itself happens at the RENDER level (render.layers.enabled_slots
@@ -752,9 +777,9 @@ def apply_display_settings(skin, settings: Settings):
         # (owner bug 2026-07-12: it was pinned to Europe).
         default_variant=_earth_continent(settings),
     )
-    # A stored "cube" wheel only holds where the pointer serves one
+    # A stored "tertiary" wheel only holds where the pointer serves one
     # (trio/hexa/octa — CUBE.md); everywhere else it normalizes to
-    # "paint" HERE, the one choke point, so no render consumer ever
+    # "primary" HERE, the one choke point, so no render consumer ever
     # indexes PALETTE_PRESETS/ARCHETYPE_GRID with a pair that does not
     # exist. The stored setting itself stays untouched — switching back
     # to a Cube pointer restores its Cube wheel.
@@ -839,10 +864,18 @@ def apply_display_settings(skin, settings: Settings):
         ),
         pointer_saturation=settings.pointer_saturation,
         ring_saturation=settings.ring_saturation,
+        display=display,
     )
 
 
 class WatchController(QObject):
+    #: A background recolor landed — emitted FROM the warm thread, so it
+    #: must be a real Qt signal: the connection to `apply_pending_art`
+    #: below crosses threads and Qt queues it onto the GUI thread (owner
+    #: decree 2026-07-28; QTimer.singleShot would silently never fire,
+    #: having no event loop on the worker thread to arm itself in).
+    art_ready = Signal()
+
     def __init__(
         self,
         app: QApplication,
@@ -984,7 +1017,7 @@ class WatchController(QObject):
         if self._settings.language != "en":
             self._apply_language(start_missing=True)
         self._compositor = Compositor(
-            self._skin, AssetCache(), self._symbolism(),
+            self._skin, shared_cache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
         self._day = None
@@ -1017,6 +1050,7 @@ class WatchController(QObject):
         self._profiling_timer.timeout.connect(profiling.flush)
         self._profiling_timer.start()
         self._widget.moved.connect(self._on_widget_moved)
+        self.art_ready.connect(self.apply_pending_art)
         # The hidden-mode code listener (owner 2026-07-14): printable
         # keys typed on the focused dial roll through a buffer.
         self._secret_buffer = ""
@@ -1129,26 +1163,33 @@ class WatchController(QObject):
         if self._settings.click_through:
             self._widget.set_click_through(True)
             self._hover_poller.start()
-        # The WORKING SET warms in the background (owner 2026-07-15:
-        # full-res originals ship, the downscaled dial copies build at
-        # start) — a no-op once every derived file exists. The HOVER
-        # ARTICLE sweep chains right after it on the same thread (owner
-        # 2026-07-18, asked twice): every article the dial can speak
-        # today pre-builds slowly, image by image, so the user's FIRST
-        # hover is instant.
-        threading.Thread(target=self._warm_caches, daemon=True).start()
+        # NO warm thread is started here any more (owner 2026-07-28).
+        # Every watch used to launch its own, duplicating identical work
+        # N times AND competing with its own first frame; the process now
+        # runs exactly ONE warm, started by `app.watch_manager` after
+        # EVERY watch has painted — see [Warm](warm.md) for the order.
 
-    def _warm_caches(self) -> None:
-        warm_working_set(progress=print)
-        self._warm_hover_articles()
-        # The Encyclopedia's own inventory LAST (owner order 2026-07-26:
-        # the dial's needs first, then everything the Encyclopedia can
-        # show — metal variants, Moon plates, decode downscales — so an
-        # open finds it all pre-built; QImage end to end, a no-op once
-        # warm). Even before this finishes, an open never blocks: the
-        # topic table is paths-only and a page materializes only its
-        # own few images on first display.
-        warm_encyclopedia(progress=print)
+    def first_painted(self):
+        """This watch's "my dial is on screen" signal (the widget's own,
+        forwarded) — the manager connects to it and starts the ONE shared
+        warm thread once every watch has fired (owner 2026-07-28)."""
+        return self._widget.first_painted
+
+    def apply_pending_art(self) -> None:
+        """A background recolor finished: drop the composited pixmaps and
+        repaint, so a letter standing in as its GOLD MASTER is replaced
+        by its real metal (owner decree 2026-07-28: "Kad završi prikaže").
+        Runs on the GUI thread — the warm thread reaches it through a
+        queued Qt connection, never by touching a QPixmap itself."""
+        self._compositor.invalidate()
+        self._widget.update()
+
+    def hover_sweep(self):
+        """This watch's hover warm as a callable, for the shared warm
+        thread to run LAST (owner 2026-07-28: "HOVER odloži dok se ne
+        učita"). Bound late — the compositor it sweeps is whichever one
+        is installed when the sweep actually starts."""
+        return self._warm_hover_articles
 
     def _start_hover_warm(self) -> None:
         """Obsolete any running sweep and start a fresh one — called on
@@ -1807,7 +1848,7 @@ class WatchController(QObject):
             defaults.dial_window_margin_fraction(skin),
         )
         self._compositor = Compositor(
-            skin, AssetCache(), self._symbolism(),
+            skin, shared_cache(), self._symbolism(),
             overlay=self._translation_overlay,
         )
         self._compositor.set_hidden_unlocked(self._hidden_unlocked)
@@ -2483,6 +2524,7 @@ class WatchController(QObject):
         # Observatory only).
         ReportDialog(self._translation_overlay).exec()
 
+    @paths.in_display
     def _open_guide(self) -> None:
         """Open (or raise) the [Guide](guide.md) — NON-MODAL (ITEM 1, R4
         owner instruction batch 2026-07-20): `.show()` instead of
@@ -2503,6 +2545,7 @@ class WatchController(QObject):
 
     # --- The three mini windows (R5 MENU REWORK item 3) -------------------------
 
+    @paths.in_display
     def _open_design(self) -> None:
         """Open (or raise) the [Design Window](design_window.md) —
         NON-MODAL, LIVE-APPLY (see its own docstring): a second open
@@ -2569,6 +2612,7 @@ class WatchController(QObject):
             "diameter": wrap(self._set_diameter),
         }
 
+    @paths.in_display
     def _open_pointer_theme(self) -> None:
         """Open (or raise) the [Pointer Theme](pointer_theme.md) window
         — NON-MODAL, LIVE-APPLY: a second open request raises the ONE
@@ -2595,6 +2639,7 @@ class WatchController(QObject):
         if self._pointer_theme is not None:
             self._pointer_theme.refresh(theme)
 
+    @paths.in_display
     def _open_slot_theme(self) -> None:
         """Open (or raise) the [Slot Theme](slot_theme.md) window —
         NON-MODAL, LIVE-APPLY: a second open request raises the ONE
@@ -2700,6 +2745,7 @@ class WatchController(QObject):
             ),
         )
 
+    @paths.in_display
     def _open_observatory(self) -> None:
         """Open (or raise) the [Observatory](observatory.md) with the
         EFFECTIVE moment/observer — the frozen Time Travel tuple when
@@ -2737,6 +2783,7 @@ class WatchController(QObject):
     def _on_observatory_closed(self, _result: int = 0) -> None:
         self._observatory = None
 
+    @paths.in_display
     def _open_encyclopedia_at(
         self, topic: str | None = None, entry: int = 0
     ) -> None:
@@ -2780,6 +2827,7 @@ class WatchController(QObject):
     def _on_encyclopedia_closed(self, _result: int = 0) -> None:
         self._encyclopedia = None
 
+    @paths.in_display
     def _open_settings(self) -> None:
         dialog = SettingsDialog(
             self._settings, self._skin, self._translation_overlay

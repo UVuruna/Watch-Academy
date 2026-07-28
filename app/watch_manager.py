@@ -18,27 +18,34 @@ reused while a higher-numbered watch survives — see `_next_index`'s
 own docstring — so a watch's tray color (derived straight from its
 index) never jumps onto a DIFFERENT watch later in the session.
 
-Deliberately SEPARATE watch-level singletons (documented limit, not
-solved this round): `config.paths`' `art_source`/`subdial_set` are
-PER-PROCESS module globals (`render.asset_variants.subdial_plate_file`'s only
-reader), set by `app.controller.apply_display_settings` on every skin
-install. With several watches this means the ART SOURCE and SUBDIAL
-SET are effectively SHARED — whichever watch last touched Settings/
-Design wins for every watch's next repaint until another watch installs
-its own skin again. Making these genuinely per-watch would mean
-threading a parameter through every asset-cache call site building on
-`art_file`/`subdial_plate_file` (dozens of call sites across render/),
-a MUCH larger change than this round's scope; flagged here rather than
-silently left for someone to rediscover as a bug.
+What is SHARED across watches, deliberately (owner 2026-07-28: *"zašto
+bi se stvari učitavale više puta za svaki sat kada svi dele iste"*):
+
+- **ONE `AssetCache`** (`render.assets.shared_cache`) — the watches read
+  the same asset tree, so they hold ONE decoded copy of each image
+  instead of N.
+- **ONE background warm thread** (`app.warm.run_warm`), armed by
+  `_arm_warm` below only after every dial has painted.
+
+What is strictly PER WATCH, also deliberately: the display context —
+art source, subdial plate set and metal shades
+(`config.paths.DisplayContext`, carried on the skin). Those three USED to
+be process-wide globals written by `apply_display_settings` on every skin
+install, and that was the owner's 2026-07-28 colour bug: with a DOMY and
+a PILOT watch both on the `thematic` finish, both dials wore the
+LAST-BUILT watch's red. Every render/hover/dialog entry point now
+installs its own watch's context (`config.paths.in_display`).
 """
 
 import dataclasses
+import threading
 from typing import Callable
 
 from PySide6.QtWidgets import QApplication
 
 from app.controller import WatchController
 from app.settings_store import SettingsStore
+from app.warm import run_warm
 from config import paths
 
 
@@ -52,6 +59,11 @@ class AppController:
 
     def __init__(self, app: QApplication):
         self._app = app
+        self._quitting = False
+        self._warm_thread: threading.Thread | None = None
+        #: The watches the NEXT warm pass covers — the startup roster, or
+        #: the single watch a mid-session ADD WATCH just created.
+        self._armed: set = set()
         self._watches: list[WatchController] = []
         for index in paths.discover_watch_indices():
             self._watches.append(self._build_watch(index))
@@ -113,6 +125,11 @@ class AppController:
         watch = self._build_watch(index)
         self._watches.append(watch)
         watch.run()
+        # A watch added mid-session brings art the process has never
+        # resolved (its own ring letters at its own shade) — give it the
+        # same "paint first, warm after" treatment, for itself alone.
+        self._armed = {watch}
+        self._arm_warm([watch])
         self._refresh_all_titles()
 
     def remove_watch(self, watch: WatchController) -> None:
@@ -134,6 +151,65 @@ class AppController:
     def run(self) -> None:
         for watch in self._watches:
             watch.run()
+        self._armed = set(self._watches)
+        self._arm_warm(self._watches)
+
+    # --- the ONE background warm -------------------------------------------------
+
+    def _arm_warm(self, watches) -> None:
+        """Start the shared warm thread once EVERY watch's dial is on
+        screen (owner 2026-07-28).
+
+        Two rules the old code broke, both measured:
+
+        - **Once per PROCESS.** Each watch used to start its own thread,
+          so the SAME 795 working-set files, 698 Encyclopedia paths and
+          7,201 hover probes were walked N times — the owner's log showed
+          every progress line printed two and three times. The watches
+          share one asset tree, one raster cache and one `AssetCache`;
+          the work is shared too.
+        - **After the first frame, not before it.** The old thread was
+          started inside `run()`, i.e. before the event loop had
+          delivered a single paint event, so the warm competed with the
+          frame the user was waiting for. Waiting for `first_painted`
+          also means the art ledger is fully populated: a dial's paint is
+          what RECORDS which derived files it wants.
+
+        Called for the STARTUP roster and again for a single watch added
+        mid-session (ADD WATCH): a new dial brings its own ring letters,
+        so it needs its own drain — but only for itself, never a second
+        walk of what the process already warmed."""
+        pending = set(watches)
+        for watch in watches:
+            watch.first_painted().connect(
+                lambda watch=watch: self._watch_painted(watch, pending)
+            )
+
+    def _watch_painted(self, watch, pending: set) -> None:
+        pending.discard(watch)
+        if pending:
+            return
+        warming = [w for w in self._watches if w in self._armed]
+        self._warm_thread = threading.Thread(
+            target=self._run_warm, args=(warming,), daemon=True,
+            name="DOMY warm",
+        )
+        self._warm_thread.start()
+
+    def _run_warm(self, watches) -> None:
+        """The warm thread's body. `art_ready` is a Qt SIGNAL emitted from
+        this thread, never a direct call — Qt queues it onto each watch's
+        own (GUI) thread, where repainting is legal."""
+        def art_ready() -> None:
+            for watch in watches:
+                watch.art_ready.emit()
+
+        run_warm(
+            hover_sweeps=[watch.hover_sweep() for watch in watches],
+            progress=print,
+            on_art_ready=art_ready,
+            should_stop=lambda: self._quitting,
+        )
 
     def quit_all(self) -> None:
         """The Exit menu action on ANY watch closes the WHOLE process
@@ -154,6 +230,10 @@ class AppController:
         shared timer for no measured gain (Priorities: an optimization
         with no measurable gain is a net loss). Flagged for the owner
         to confirm or override."""
+        # Tell the warm thread to stand down BEFORE the windows go: it
+        # is a daemon and would die with the process anyway, but a clean
+        # stop means no half-written cache file on the way out.
+        self._quitting = True
         for watch in self._watches:
             watch._prepare_quit()
         self._app.quit()

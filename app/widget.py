@@ -59,9 +59,16 @@ class ClockWidget(QWidget):
                                         # SHORTCUTS`, R5 MENU REWORK)
     _space_pressed = Signal()           # the native LL hook's queued hop
                                         # to the GUI thread (SPACE, no focus)
+    first_painted = Signal()            # emitted ONCE, after the dial has
+                                        # actually reached the screen — the
+                                        # manager starts the shared warm
+                                        # thread only when EVERY watch has
+                                        # (owner 2026-07-28: nothing may
+                                        # compete with the first frame)
 
     def __init__(self, diameter: int, menu: QMenu, legend, show_action: QAction):
         super().__init__()
+        self._has_painted = False
         self._closing = False
         # Guards the spontaneous-hide watchdog during a deliberate
         # z-mode window-flag swap (owner 2026-07-17): the hide in the
@@ -275,6 +282,14 @@ class ClockWidget(QWidget):
             self.devicePixelRatioF(),
             self._tick,
         )
+        if not self._has_painted:
+            # The dial is ON SCREEN. Only now may background work start
+            # (owner 2026-07-28) — and only now does the art ledger know
+            # which derived files this dial actually wants, because the
+            # paint above is what records them.
+            self._has_painted = True
+            painter.end()
+            self.first_painted.emit()
 
     # --- Input ----------------------------------------------------------------
 

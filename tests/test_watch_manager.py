@@ -30,16 +30,14 @@ def app():
 
 @pytest.fixture(autouse=True)
 def _no_background_warmup(monkeypatch):
-    """`add_watch()` calls the new watch's real `run()` (production
-    needs it — a watch added mid-session must actually show/tray/tick),
-    which spawns a background thread pre-building the disk raster
-    cache. That thread's own cost is legitimately real work (~90s cold,
-    per controller.md's own measurement) that every OTHER test in this
-    suite avoids entirely by never calling `run()` — this file is the
-    first to need `run()` at all, so it neutralizes just that one
-    thread (a no-op stand-in) rather than paying the full warm-up on
-    every fresh `tmp_path` this file's tests hand it."""
-    monkeypatch.setattr(WatchController, "_warm_caches", lambda self: None)
+    """The ONE warm thread (owner 2026-07-28: it moved off the watch and
+    onto `AppController`, and now starts only after every dial has
+    painted) pre-builds the disk raster cache — legitimately real work
+    (~90 s cold, per controller.md's own measurement) that every test in
+    this suite wants none of. Neutralize just that thread; `run()` itself
+    stays real, because a watch added mid-session must genuinely
+    show/tray/tick."""
+    monkeypatch.setattr(AppController, "_run_warm", lambda self: None)
 
 
 @pytest.fixture
