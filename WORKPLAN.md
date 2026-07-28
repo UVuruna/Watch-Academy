@@ -369,6 +369,12 @@ instead so neither has to be re-derived later: `setup/app_info.json`
 self-update eventually lands. The GitHub repo rename itself was
 **not** executed (owner decree: `gh repo rename` never runs
 automatically) — flagged as an open question below. 978 tests green.
+**UPDATE (found 2026-07-28, Session 23's push):** the owner renamed
+the repo himself, outside any session — `git push` now returns "This
+repository moved. Please use the new location:
+`https://github.com/UVuruna/Watch-Academy.git`". The open question
+below is RESOLVED; `update.repo`/the disk folder name are their own,
+separate, still-open follow-ups (see below).
 
 ### Session 23 — Rose Sabbath hover fix + the Duality-Axes config → **Sonnet** — DONE (2026-07-28, 0.14.504–0.14.505)
 **Say:** "Radi Sesiju 23 iz WORKPLAN.md — Rose hover bug i duality
@@ -516,14 +522,21 @@ gadget's M2 (the four models + Switcher) exists.
   user-selectable.
 - The Academy tagline wording (CUBE.md §The Name — *"Watch the
   hours. Watch and learn. Keep the watch."* is PROPOSED).
-- **GitHub repo rename?** (raised by Session 22, the Renaming): the
-  repo is still `UVuruna/DOMY-Watch` and the disk folder is still
-  "DOMY Watch" — CUBE.md's scope note allows the disk folder to stay
-  regardless, but the repo name is a separate owner call. Session 22
-  did NOT rename it (root CLAUDE.md forbids self-granted destructive/
-  outward-facing repo actions without an explicit ask); a rename to
-  something Watch-Academy-shaped is a live option if the owner wants
-  the GitHub identity to match the sealed application name.
+- ~~GitHub repo rename?~~ — RESOLVED: the owner renamed the GitHub
+  repo himself to **`UVuruna/Watch-Academy`** (found 2026-07-28 — a
+  Session 23 `git push` to the old `UVuruna/DOMY-Watch` remote came
+  back "This repository moved. Please use the new location:
+  `https://github.com/UVuruna/Watch-Academy.git`"; GitHub's redirect
+  still accepts the old URL, but the canonical one is the new name).
+  Session 22 correctly did NOT execute this itself (root CLAUDE.md
+  forbids self-granted outward-facing repo actions) — the owner made
+  the call independently. Still open, as separate follow-ups: the
+  local `origin` remote URL (cosmetic — the redirect works either
+  way), `ROADMAP.md`'s M7 `update.repo` value and `setup/app_info.json`
+  (both still record `"UVuruna/DOMY-Watch"`, WORKPLAN.md's own
+  Session 22 entry above included), and the disk folder name (CUBE.md's
+  scope note allows "DOMY Watch" to stay regardless — a separate call
+  from the GitHub identity).
 - ~~The Character wheel's OPEN combo figures~~ — SEALED 2026-07-27 by
   Session 21 under the owner's delegation ("ti pečatiš"): Alfred
   Pennyworth / Severus Snape (Devotion), Charles Xavier (Patronage),
