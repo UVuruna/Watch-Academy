@@ -16,6 +16,7 @@ yet drafted).
 - [The Three Axes](#three-axes)
 - [The Six Poles](#six-poles)
 - [The Eight Vertices](#eight-vertices)
+- [The Thirteen Axes — the Sacred Structure](#thirteen-axes)
 - [The Double Trinity — Judgment and Creation](#double-trinity)
 - [The Character Wheel — the Compass's Third Wheel](#character-wheel)
 - [The Rose of the Twenty-Four](#the-rose)
@@ -203,6 +204,290 @@ trade.
 **Encyclopedia seat (SEALED):** the whole Cube — axes, poles,
 vertices, all three sets, with the figures' images and stories —
 is a MAJOR Encyclopedia section, each axis described in detail.
+
+<a id="thirteen-axes"></a>
+
+## The Thirteen Axes — the Sacred Structure (canon entry 2026-07-28)
+
+Defined with the owner on 2026-07-28 in a four-round debate (this
+session × the owner × his second agent), closed by the owner's word:
+*the axes are strongly defined — write it into the canon.* Statuses
+follow canon convention subsection by subsection; per the Rose
+lesson, nothing below is stamped SEALED beyond the owner's own words.
+
+### The One at the Centre (SEALED)
+
+The 27th cell — `(0,0,0)` — is **GOD, THE ONE**: the one whose name
+is not spoken, present as the centre cubelet of a Rubik's cube is
+present — there, unseen, the only piece no turn ever moves.
+**Perfect Integration**, described BOTH ways by owner decree (the
+Encyclopedia must carry both):
+
+- **Apophatic (via negativa):** no fall touches him — neither
+  Lethargy nor Frenzy, neither Tribalism nor Legalism, neither
+  Self-Annihilation nor Self-Worship. Six negations are his outline.
+- **Cataphatic (via positiva):** he contains all six healthy powers
+  at once — Composure and Vigor, Loyalty and Integrity, Humility
+  and Dignity. *The centre does not lack the six powers; it
+  contains each without being ruled by any.* Zero is not absence;
+  it is that no force rules the whole.
+
+Geometry countersigns: the centre is the unique fixed point of every
+rotation of the cube — the unmoved mover; on the dial, the axle the
+hands turn around. Seal verse: *"and by him all things consist"*
+(Colossians 1:17). The name was on the Banknote all along — the
+denomination is THE ONE; the many-names doctrine layers God / The
+One as ever.
+
+### The Colour Law (SEALED — owner decree)
+
+**No colour is good and no colour is evil. Perfection is a TRAIT,
+never a hue** — every colour carries its own positive and its own
+negative reading, exactly as every direction is a virtue in measure
+and a fall past it. The thermal split below (cold Christ, warm
+Devil) FOLLOWS traditional iconography — hell hot, heaven cool, the
+Devil painted red, Christ robed blue — and must never be read as a
+moral split of temperature: the warm poles' healthy faces (Vigor,
+Loyalty, Dignity — Heracles, Penelope, Arthur) stay noble; the cold
+corner's fallen face (the Paralyzed Purist) stays a human tragedy.
+
+### The Sacred Axis (SEALED; alias OPEN)
+
+The Trinity completes on the cube's signed main diagonal:
+
+| Seat | Coordinates | Colours | Reading |
+|---|---|---|---|
+| **Jesus Christ** | (−1,−1,−1) | Blue + Purple-Gray + Green | the LUMINOUS cold trio: Composure + Integrity + Humility |
+| **God — The One** | (0,0,0) | — | Perfect Integration |
+| **The Devil** | (+1,+1,+1) | Orange + Yellow + Red | the FALLEN warm trio: Frenzy + Tribalism + Self-Worship |
+
+The owner's three reasons — sign purity (all-minus against
+all-plus), three cold against three warm colours, and the sealed
+seasonal arcs (Jesus rides the waxing Purple→Blue→Green half-year
+from his winter-solstice birth; the Devil the waning
+Yellow→Orange→Red half from the hell-hot summer solstice) — plus
+three proofs found in the sealed canon:
+
+- **The borrowed-colour theorem.** Each person's vertex = his two
+  sealed office colours + ONE borrowed pole of God's own Y axis:
+  Jesus (Advocate blue, Preserver green) borrows the CREATOR's
+  midnight purple — the arm of his birth-hour; the Devil (Destroyer
+  orange, Prosecutor red) borrows the JUDGE's noon yellow — the arm
+  of his usurped accusation (Revelation 12:10). And the Two Crosses
+  already terminate on the borrowed colours: the light path ends at
+  24h purple (remade by the Creator), the dark path at 12h yellow
+  (exposed before the Judge).
+- **The solstice architecture is the Church's own:** Christmas at
+  the winter solstice against St John at the summer — and John's
+  sealed sentence IS the solstice formula: *"He must increase, but
+  I must decrease"* (John 3:30; Augustine preached exactly this).
+- **The anti-Manichean asymmetry:** Jesus holds the HEALTHY
+  readings of his three poles, the Devil the FALLEN readings of
+  his. They are not mirror gods; one is a summit of health, the
+  other a pit of falls — evil as corruption, *privatio boni*, in
+  coordinates.
+
+**Three readings of one line** (never three systems): Character
+(cold measure ↔ integration ↔ warm excess), Courtroom (Advocate ↔
+Judge ↔ Prosecutor), Creation (Preserver ↔ Creator ↔ Destroyer).
+Articles carry ONE distinguishing sentence: this symbolic triad is
+not the doctrinal Holy Trinity (Father, Son, Spirit). Alias for the
+axis, owner to pick: **Axis Mundi** (Eliade's found term) or **Axis
+of Being**.
+
+**Seats: 3 sacred + 24 human (SEALED).** The two absolute vertices
+leave the 24-seat human circle — outside the hours, outside time.
+Their sealed archetype names remain as the cells' HUMAN ECHOES
+(Contemplative Sage / Paralyzed Purist under Jesus, Charismatic
+Champion / Tribal Warlord under the Devil; Hamlet's own line — *"the
+time is out of joint"* — is the hourless corner's epigraph). Jesus
+and the Devil take FIGURES in the Archetypal (mythic) register and
+display at the CENTRE as the trio/duality, never on a human hour.
+
+### The Radial Law and the Five Stations (SEALED doctrine)
+
+The sealed axis doctrine — *a direction is a virtue in measure and
+a fall past it* — is geometry, not metaphor (owner seal: the END of
+a direction is its fall; its measure lies NEARER the centre). Every
+axis is therefore FIVE-state — Fallen− · Luminous− · Centre ·
+Luminous+ · Fallen+ — and the full character space is the
+five-cube: **5³ = 125 readings** over 27 geometric seats (the
+owner's own count: 1 + 6·2 + 12·4 + 8·8). The strict triple holds:
+**Seat** (where on the cube) — **Reading** (which components
+healthy, which fallen) — **Exemplar** (the figure representing the
+reading).
+
+On the Sacred Axis the radial law yields **five stations**:
+
+**Paralyzed Purist — JESUS — THE ONE — Charismatic Champion — THE
+DEVIL**
+
+Jesus stands at the point of MEASURE of the cold direction; the
+Devil at the point of EXCESS past the warm one. **The asymmetry is
+accepted (owner):** the Advocate and the Prosecutor are NOT
+equidistant from the Judge, and symbolically that is right — the
+fall stands farther from God than the virtue by construction.
+Overshooting PAST Christ is the Purist — the fall of imitating
+Christ beyond measure (Father Ferapont, already sealed on
+Mortification); overshooting past the Champion's glory is the
+Devil's own grip. Holiness is not extremism: the luminous slot is
+always nearer The One than the fallen.
+
+**The economy law (SEALED, root Rule 19):** only the 65 canonical
+terms below are NAMED; the remaining 72 mixed readings (12 edges ×
+2 mixed + 8 vertices × 6 mixed) are COMPUTED combinations of named
+terms — coordinates for describing real people, never named, never
+rostered. Figure perimeter: 108 figure-seats already sealed (36
+poles + 48 vertices + 24 Y×Z combos); the 8 new edges add 48 (2
+readings × 3 sets) in later rounds.
+
+### The Thirteen Axes (SEALED)
+
+A cube has EXACTLY thirteen axes through its centre — 3 through
+face-pairs, 6 through edge-pairs, 4 through vertex-pairs — so the
+26 extremes are **thirteen antipodal pairs through The One**: every
+extreme faces its exact opposite THROUGH God (Judas–Lucifer, the
+first discovered diagonal, generalized). The numbers seal
+themselves:
+
+- **1 Sacred Axis + 12 Human Axes** — 12 × 2 ends = the 24 human
+  seats: the twelve around the One.
+- **3 / 6 / 4 (the owner's triptych):** the three primaries carry
+  the Double Trinity's six OFFICES (God the whole vertical, Jesus
+  and the Devil holding one end each of X and Z — persons live on
+  the Sacred diagonal, offices on the primaries); SIX is man's
+  number — most people are edge-people, ruled by two extremes while
+  holding one axis in measure; the FOUR vertex axes echo the two
+  four-station crosses — the paths are the dynamics of which these
+  diagonals are the statics (STAR and FALL are the two directions
+  along every one of them).
+- **7 + 6:** the divine seven (3 + 4) and the human six — the
+  week's own arithmetic, on an instrument that tells weeks.
+- **The rotation chiasm:** primary axes turn in FOURS (the cross's
+  number), tertiary in THREES (the Trinity's), secondary in TWOS
+  (the dilemma's) — the crosses' sealed chiasm ("each path ends in
+  the other's hour"), repeated in the symmetry group.
+- **24 orientations:** the cube can stand in exactly 24 ways — as
+  many as the hours; its rotation group is precisely the
+  permutations of the four vertex diagonals: the hours permute the
+  crosses, and only the centre never moves. (Which rotation is
+  which hour is an OPEN problem — a theorem-guided choice for a
+  future session, like the Prophecy wheel's Hamiltonian seating.)
+
+### The 65 Terms (38 carried SEALED; 27 PROPOSED 2026-07-28)
+
+13 axis terms + 26 luminous + 26 fallen extremities. Three naming
+laws (PROPOSED as standing law):
+
+1. **Found names only** — every term is taken from the moral
+   tradition, never manufactured (FAME FIRST, applied to words).
+2. **Different roots within a pair** — a cell's luminous and fallen
+   names never share a root (Composure/Lethargy, never
+   Zeal/Zealotry).
+3. **The family-echo law** — a compound cell may echo the
+   name-family of a cell it CONTAINS (sealed precedent: Tribalism →
+   Tribal Warlord; likewise Zealotry ⊂ Puritanical Zealot,
+   Martyrdom ⊂ Fanatical Martyr), never of a stranger.
+
+**Primary axes (all SEALED; structural glosses new):**
+
+| Axis | Structural | − pole: luminous / fallen | + pole: luminous / fallen |
+|---|---|---|---|
+| **Activation** | Restraint ↔ Mobilization | Blue: Composure / Lethargy | Orange: Vigor / Frenzy |
+| **Moral Scope** *(PROPOSED rename of "Basis of Judgment")* | Particularism ↔ Universalism | Purple-Gray: Integrity / Legalism | Yellow: Loyalty / Tribalism |
+| **Self-Regard** | Self-Effacement ↔ Self-Exaltation | Green: Humility / Self-Annihilation | Red: Dignity / Self-Worship |
+
+The Y rename touches no pole, colour or figure; the universal
+pole's anchors are spoken by Jesus himself (Matthew 5:18 — already
+purple's seal; Mark 3:33–35 against the tribe's claim).
+
+**Secondary axes (cells: 4 pairs SEALED from the Character wheel, 8
+pairs PROPOSED):**
+
+| Axis | Cold end: luminous / fallen | Warm end: luminous / fallen |
+|---|---|---|
+| **Reason ↔ Emotion** | X−Y−: Prudence / Indifference | X+Y+: Ardor / Vendetta |
+| **Pragmatism ↔ Idealism** | X−Y+: Steadfastness / Machination | X+Y−: Reform / Zealotry |
+| **Person ↔ Cause** | Y+Z− *(sealed)*: Devotion / Martyrdom | Y−Z+ *(sealed)*: Conviction / Dogmatism |
+| **Hearth ↔ Desert** | Y+Z+ *(sealed)*: Patronage / Favoritism | Y−Z− *(sealed)*: Renunciation / Mortification |
+| **Lion ↔ Lamb** | X−Z−: Meekness / Despair | X+Z+: Aspiration / Megalomania |
+| **Servant ↔ Sovereign** | X−Z+: Self-Mastery / Disdain | X+Z−: Diligence / Servility |
+
+**Tertiary axes (all vertex cells SEALED; axis names PROPOSED):**
+
+| Axis | Cold end: luminous / fallen | Warm end: luminous / fallen |
+|---|---|---|
+| **The Sacred Axis** | (−,−,−): Contemplative Sage / Paralyzed Purist — under JESUS | (+,+,+): Charismatic Champion / Tribal Warlord — under THE DEVIL |
+| **Vow ↔ Vision** | (−,+,−): Quiet Devotee / Submissive Enabler | (+,−,+): Visionary Founder / Messianic Tyrant |
+| **Preservation ↔ Revolution** *(geometry: the Court ↔ Genesis corners)* | (−,+,+): Steady Guardian / Complacent Nepotist | (+,−,−): Principled Reformer / Puritanical Zealot |
+| **Crown ↔ Shield** | (−,−,+): Wise Statesman / Cold Elitist | (+,+,−): Sacrificial Protector / Fanatical Martyr |
+
+**Genealogy check (the grid's proof):** every vertex reads as the
+family-sum of its three edges — Messianic Tyrant = Zealotry +
+Dogmatism + Megalomania; Visionary Founder = Reform + Conviction +
+Aspiration; Paralyzed Purist = Indifference + Mortification +
+Despair; Sacrificial Protector = Ardor + Devotion + Diligence.
+
+**Alternates on record** (the owner's eye may prefer): Discernment
+(for Prudence), Contemplation (for Meekness), Entitlement (for
+Disdain), Service (for Diligence — would force replacing Servility,
+same root). **Rejected and recorded** so no future session
+re-imports them: three overwrites of sealed terms proposed by the
+second agent (Idolatry for Martyrdom, Nepotism for Favoritism,
+Servile Accomplice for Submissive Enabler); Mass Hysteria (a crowd
+phenomenon, not a personal trait); Dehumanization (an act, not a
+disposition); Machiavellianism (the grid seals no personal names —
+it remains the article-level psychological alias of Machination);
+Statecraft (a craft, not a trait); Passion (collides with the
+Passion of Christ in a canon this biblical).
+
+### The Hexagram Projection (SEALED find)
+
+Viewed along a body diagonal the cube projects as the HEXAGONAL
+FRAMEWORK from which the hexagram is constructed: the silhouette
+gives the hexagon; the six spokes are the two polar corners' own
+edges; **the star's two triangles are the six equatorial
+face-diagonals** (each face contributes exactly one diagonal
+perpendicular to the view axis). Two named X-rays:
+
+- **The Offices view** — along Court ↔ Genesis (the two sealed
+  cube-look corners, which ARE the Preservation↔Revolution vertex
+  pair): upward triangle = the Court trio's diagonals, downward =
+  the Genesis trio's — the dial's own hexagram.
+- **The Being view** — along the Sacred Axis: ALL THREE sacred
+  seats project onto the single centre point — the dial's axle IS
+  the Sacred Axis seen end-on, and the hands rotate around it. The
+  triangles turn pure: **the Christic cold triangle against the
+  Diabolic warm triangle**; the hexagon's six ring-corners are the
+  six HUMAN vertices — God at the axle, mankind on the ring. Two
+  viewing directions exist, Christic and Diabolic — the cube does
+  not change; the viewpoint does.
+
+**The blindness law:** from either absolute corner exactly SEVEN
+cells are hidden — the antipode with its three edges and three
+faces (19 visible + 7 hidden = 26; the cells are literally the
+cube's elements). The Advocate and the Prosecutor are blind to each
+other's inner court; **only the centre sees all twenty-six** — the
+Judge reads both files (2 Chronicles 16:9), and the master verse
+names the mutual blindness: *"and the darkness comprehended it
+not"* (John 1:5).
+
+Epigraph (PROPOSED wording): *"The Cube is the world of character;
+the Hexagram is what that world reveals when viewed along the
+Sacred Axis."*
+
+### Display Plans (PROPOSED)
+
+- **Calendar-12:** each of the twelve arms carries ONE human axis —
+  its two ends are the arm's two personalities (antipodes through
+  God); the centre medallion holds the sacred trio. 12 × 2 = 24;
+  the pairing is never chosen, it IS the axes. Which axis sits on
+  which month is the naming session's question (seasonal kinship).
+- **The Rose of the Twenty-Four:** the 24 human seats are the
+  natural tenants of the 24 rays (the 6 poles already sit on the
+  hexagram hours); the kinship seating (dial adjacency = cube
+  kinship) is the same open geometry problem as the rotation↔hour
+  rule.
 
 <a id="double-trinity"></a>
 
@@ -828,6 +1113,14 @@ lacking the experiment).
    matching page (each Character arm on its own pole or vertex).
 9. Character-coordinate badges per figure (later round).
 10. The renaming, once the wording is sealed.
+11. The Thirteen Axes → Encyclopedia: The One (both descriptions,
+    per decree), the Sacred Axis (five stations, three readings,
+    the distinguishing sentence), the 13-axes and 65-term pages,
+    the two hexagram X-rays folded into the Cube section — AFTER
+    the owner's per-term verdict on the 27 PROPOSED terms.
+12. Later rounds: figures for the 8 new edge cells (48 seats);
+    the Calendar-12 arm=axis wheel; the rotation↔hour↔seat rule
+    (geometry session with checks).
 
 Art follows the one-image-one-place law and the derivation check
 (Rule 19) throughout: poles, vertices, crosses and the Rose are
