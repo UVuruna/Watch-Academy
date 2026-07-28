@@ -158,6 +158,19 @@ _DATA_DRIVEN_ROOTS = (
     # sibling `cross_words_prompts.md` rides the existing
     # `archetypes/crosses` root in the `secondary` register.
     "archetypes/banknote",
+    # THE THIRTEEN-AXES WAVE (WORKPLAN Session 25, 2026-07-28): the
+    # eight NEW edge cells (`edges`) and the two seats that left the
+    # human circle plus the centre (`sacred`). The SEAT plates of both
+    # families ARE enumerated — `app.encyclopedia._CUBE_ENTRIES` reads
+    # `EDGES_ART_DIR`/`SACRED_ART_DIR` for the Cube pages' own art — but
+    # their `circle` companions and their three FIGURE registers
+    # (archetypal/historical/modern, 48 + 6 files) land in a roster the
+    # way every other Rose figure family does, so only the FAMILY root
+    # is checkable here. Full sheets:
+    # `research/prompts/archetype/{edges,axes}_prompts.md` and
+    # `research/rose_round/edge_figures_prompts.md`.
+    "archetypes/edges",
+    "archetypes/sacred",
     "instrument/guide",
     # THE SLAVIC MONTHS (R7b round, owner-sealed 2026-07-21): every
     # per-month filename is enumerated in `config.defaults.
