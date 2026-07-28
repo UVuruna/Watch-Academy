@@ -8,7 +8,13 @@ via sys._MEIPASS).
 
 import os
 import sys
+import threading
+from contextlib import contextmanager
+from functools import wraps
+from dataclasses import dataclass
 from pathlib import Path
+from types import MappingProxyType
+from typing import Mapping
 
 from config import constants
 
@@ -75,66 +81,126 @@ def discover_watch_indices() -> list[int]:
     return sorted(found) or [1]
 
 
-# The active artwork source (owner 2026-07-14: Gemini vs ChatGPT) —
-# set once by apply_display_settings; every disk boundary resolves
-# canonical paths through art_file.
-_art_source = constants.ART_SOURCE_DEFAULT
+# --- THE DISPLAY CONTEXT --------------------------------------------------------
+# The artwork source (owner 2026-07-14: Gemini vs ChatGPT), the subdial
+# plate set (owner decree 2026-07-21) and the metal shades (R8a, owner
+# 2026-07-21 night) are ONE PER-WATCH bundle — not three process-wide
+# switches.
+#
+# They used to be three module globals that `app.controller.
+# apply_display_settings` overwrote on every skin install. With more than
+# one watch open that was last-writer-wins: `AppController.__init__`
+# builds EVERY watch before the first one paints, so all of them then
+# rendered with the LAST watch's choices. The owner's report
+# (2026-07-28): a DOMY watch and a PILOT watch, both on the `thematic`
+# ring finish, came out THE SAME RED — DOMY's shade, because DOMY was
+# built last. The `watch_manager` docstring had already flagged the same
+# hazard for the art source and subdial set; `thematic` inherited it.
+#
+# Now: a watch owns a `DisplayContext`, carried on its SKIN, and every
+# entry point that resolves art installs it for the duration of its work
+# (`with paths.display(context)`). The current context is THREAD-LOCAL, so
+# the background warm thread can build one watch's art while the GUI
+# thread paints another's without either seeing the other's choices.
 
 
-def set_art_source(source: str) -> None:
-    """Switch the active artwork source ("gemini" / "chatgpt")."""
-    global _art_source
-    if source not in constants.ART_SOURCES:
-        raise ValueError(f"unknown art source: {source}")
-    _art_source = source
+@dataclass(frozen=True)
+class DisplayContext:
+    """One watch's art choices. Immutable — a settings change builds a
+    NEW context (via `display_context`, the validating factory) rather
+    than mutating the live one, so a context captured by a background
+    thread never changes underneath it."""
+
+    art_source: str = constants.ART_SOURCE_DEFAULT
+    subdial_set: str = constants.SUBDIAL_SET_DEFAULT
+    metal_shades: Mapping[str, str] = MappingProxyType(
+        dict(constants.METAL_SHADE_DEFAULT)
+    )
+
+    def shade(self, metal: str) -> str:
+        return self.metal_shades.get(metal, constants.METAL_SHADE_DEFAULT[metal])
+
+
+def display_context(
+    art_source: str = constants.ART_SOURCE_DEFAULT,
+    subdial_set: str = constants.SUBDIAL_SET_DEFAULT,
+    metal_shades: Mapping[str, str] | None = None,
+) -> DisplayContext:
+    """Build a validated `DisplayContext` — the ONE door (the retired
+    `set_*` functions each validated their own argument; that check lives
+    here now, so an unknown source/set/shade still fails loudly at the
+    point of choice rather than as missing art at paint time)."""
+    if art_source not in constants.ART_SOURCES:
+        raise ValueError(f"unknown art source: {art_source}")
+    if subdial_set not in constants.SUBDIAL_SETS:
+        raise ValueError(f"unknown subdial set: {subdial_set}")
+    shades = dict(constants.METAL_SHADE_DEFAULT)
+    for metal, shade in (metal_shades or {}).items():
+        if metal not in constants.METAL_SHADE_NAMES:
+            raise ValueError(f"unknown metal: {metal}")
+        if shade not in constants.METAL_SHADE_NAMES[metal]:
+            raise ValueError(f"unknown shade for {metal}: {shade}")
+        shades[metal] = shade
+    return DisplayContext(
+        art_source=art_source,
+        subdial_set=subdial_set,
+        metal_shades=MappingProxyType(shades),
+    )
+
+
+#: What a caller outside any watch's scope sees — the shipped defaults.
+DEFAULT_DISPLAY = DisplayContext()
+
+_active_display = threading.local()
+
+
+def current_display() -> DisplayContext:
+    """The context in force on THIS thread."""
+    context = getattr(_active_display, "context", None)
+    return DEFAULT_DISPLAY if context is None else context
+
+
+@contextmanager
+def display(context: DisplayContext):
+    """Install `context` for the duration of the block — the scope every
+    paint, hover, tooltip and dialog build of ONE watch runs inside.
+    Nests (a dialog opened mid-paint restores the painter's context on
+    exit) and is thread-local (the warm thread never disturbs the GUI)."""
+    previous = getattr(_active_display, "context", None)
+    _active_display.context = context
+    try:
+        yield
+    finally:
+        _active_display.context = previous
+
+
+def in_display(method):
+    """Decorator for the entry points of objects that carry a SKIN —
+    `render.compositor.Compositor` (every dial paint, hover, tooltip and
+    hit test) and `app.controller.WatchController` (every dialog it
+    opens): run the method inside `self._skin.display`, so every art path
+    resolved below the call belongs to THAT watch.
+
+    One definition for both (Rule #5): the two classes name the field
+    identically, and this is exactly one thread-local set and restore per
+    call — cheap enough for the paint path."""
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        with display(self._skin.display):
+            return method(self, *args, **kwargs)
+    return wrapper
 
 
 def art_source() -> str:
-    return _art_source
-
-
-# The active SUBDIAL PLATE SET (owner decree 2026-07-21, Rsub round) —
-# mirrors the art-source switch above exactly. `render.asset_variants.
-# subdial_plate_file` is the ONE reader, so a module global here avoids
-# threading a new parameter through `render.layers.draw_slot_roundel`'s
-# existing call site (the seat/finish/tint signature stays untouched).
-_subdial_set = constants.SUBDIAL_SET_DEFAULT
-
-
-def set_subdial_set(name: str) -> None:
-    """Switch the active subdial plate set ("set1".."set4" or "solo")."""
-    global _subdial_set
-    if name not in constants.SUBDIAL_SETS:
-        raise ValueError(f"unknown subdial set: {name}")
-    _subdial_set = name
+    return current_display().art_source
 
 
 def subdial_set() -> str:
-    return _subdial_set
-
-
-# The active METAL SHADE per metal (R8a round, owner spec 2026-07-21
-# night) — mirrors the art-source/subdial-set switches above: ONE
-# global per metal (never threaded as a parameter) because it is a
-# single user preference reached from many call sites (`render.assets.
-# AssetCache._recolored` for badges, `render.asset_recolor.
-# letter_metal_file` for ring letters) exactly like `subdial_set`'s own
-# docstring explains for its one reader.
-_metal_shades: dict[str, str] = dict(constants.METAL_SHADE_DEFAULT)
-
-
-def set_metal_shade(metal: str, shade: str) -> None:
-    """Switch the active SHADE for `metal` ("gold" / "bronze" /
-    "silver")."""
-    if metal not in constants.METAL_SHADE_NAMES:
-        raise ValueError(f"unknown metal: {metal}")
-    if shade not in constants.METAL_SHADE_NAMES[metal]:
-        raise ValueError(f"unknown shade for {metal}: {shade}")
-    _metal_shades[metal] = shade
+    return current_display().subdial_set
 
 
 def metal_shade(metal: str) -> str:
-    return _metal_shades.get(metal, constants.METAL_SHADE_DEFAULT[metal])
+    return current_display().shade(metal)
 
 
 # The terminal filename suffix per art source (RESTRUCTURE Naming
@@ -165,7 +231,7 @@ def art_file(path: Path | None) -> Path | None:
     if stem.endswith(("_gem", "_gpt")):
         return path
     parent, ext = path.parent, path.suffix
-    active = ART_SUFFIX[_art_source]
+    active = ART_SUFFIX[art_source()]
     ordered = [active] + [s for s in ART_SUFFIX.values() if s != active]
     for suffix in ordered:
         candidate = parent / f"{stem}_{suffix}{ext}"

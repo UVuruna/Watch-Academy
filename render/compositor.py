@@ -524,6 +524,7 @@ class Compositor:
     def set_hidden_unlocked(self, unlocked: bool) -> None:
         self._hidden_unlocked = unlocked
 
+    @paths.in_display
     def hit_omega(self, x: float, y: float, size: float) -> bool:
         """True when (x, y) — widget-local, same coordinates as
         `set_hover`/`tooltip_at` — lands on the Omega (24h) ring seat:
@@ -615,6 +616,7 @@ class Compositor:
         return self._day.star_rotation if self._skin.solar_rotation else 0.0
 
     @profiling.timed("Paint frame")
+    @paths.in_display
     def paint(self, painter: QPainter, size: float, dpr: float, tick: TickState) -> None:
         if self._day is None:
             raise RuntimeError("Compositor.paint() before the first day context")
@@ -676,6 +678,7 @@ class Compositor:
             painter.restore()
 
     @profiling.timed("Hover text")
+    @paths.in_display
     def tooltip_at(self, x: float, y: float, size: float) -> str | None:
         """Hover text under the cursor, at every dial size (owner spec):
         today's body, the Earth marker (day/week ordinals, zodiac sign
@@ -825,6 +828,7 @@ class Compositor:
         return self._period_tooltip(point, radius)
 
     @profiling.timed("Hover warmup")
+    @paths.in_display
     def warm_hover_articles(
         self, size: float, should_stop=None, progress=None
     ) -> int:
@@ -847,6 +851,15 @@ class Compositor:
         from time import sleep
 
         if self._day is None or self._last_tick is None:
+            return 0
+        if not self._skin.legend:
+            # LEGEND OFF speaks no hovers at all (owner spec — see
+            # `_tooltip_at`'s own guard), so every probe below would
+            # return None. Measured on the owner's 2026-07-28 startup
+            # log: three watches, all with the legend off, each walking
+            # 7,201 probes to report "0 articles spoken" — pure Python,
+            # pure GIL, pure waste. Warming what cannot be shown is a
+            # bug; the sweep stands down instead.
             return 0
         spoken = 0
         radius = size / 2
@@ -875,6 +888,7 @@ class Compositor:
             sleep(defaults.HOVER_WARM_RING_PAUSE_S)
         return spoken
 
+    @paths.in_display
     def encyclopedia_target(
         self, x: float, y: float, size: float
     ) -> tuple[str, int] | None:
@@ -1074,7 +1088,7 @@ class Compositor:
         arms = constants.POINTER_POINTS[self._skin.pointer]
         arm_step = 360.0 / arms
         # The DRAWN geometry (Rule #5 with StarLayer): the Genesis
-        # offset swings the trio cube wheel's arms; the Cube look
+        # offset swings the trio tertiary wheel's arms; the Cube look
         # widens the family wheels' halves to the full face rhombi.
         offset = arm_offset_deg(self._skin)
         arm_angle = (
@@ -1123,7 +1137,7 @@ class Compositor:
                 ),
             )
         if pointer == "trio":
-            if self._skin.palette_style == "cube":
+            if self._skin.palette_style == "tertiary":
                 # The Genesis offices have no Encyclopedia pages yet
                 # (Session 21 writes the Cube section) — the Spacebar
                 # jump does nothing here, gracefully, exactly like the
@@ -1312,6 +1326,7 @@ class Compositor:
                 return f"archetype:{self._archetype_arm_index(arm_angle)}"
         return None
 
+    @paths.in_display
     def set_hover(self, x: float, y: float, size: float) -> bool:
         """Track the element under the cursor for the HOVER-ENLARGE
         effect (owner EXTRAS) — returns True when the target changed and
@@ -1339,11 +1354,11 @@ class Compositor:
 
     def _combo_key(self) -> str:
         """The (pointer, palette) combination the WEEKDAY articles vary
-        by — "hexa_paint", "octa_light", "cross", "trio". The trio
-        still collapses although it gained the Family LIGHT wheel
+        by — "hexa_primary", "octa_secondary", "cross", "trio". The trio
+        still collapses although it gained the Family SECONDARY wheel
         (2026-07-16): the shipped article variants carry one "trio"
         paragraph, and the archetype articles vary by their own grid
-        sets instead — a trio_light variant wave is Session 6's call."""
+        sets instead — a trio_secondary variant wave is Session 6's call."""
         pointer = self._skin.pointer
         if pointer in ("cross", "trio"):
             return pointer
@@ -1552,9 +1567,9 @@ class Compositor:
         life registers (the Tree + the Menagerie); the Tetramorph (seasons
         light) show the creature + the evangelist + the element."""
         key = archetype_key(self._skin)
-        if key == "compass_light":
+        if key == "compass_secondary":
             return self._archetype_three_side(index)
-        if key == "seasons_light":
+        if key == "seasons_secondary":
             return self._tetramorph_three_side(index)
         fig = archetypes.figures(key)[index]
         return self._archetype_two_rows(
@@ -1568,7 +1583,7 @@ class Compositor:
         register (image + being). Each register image resolves from its
         own life/<register> path and shows only when REAL art has landed
         (placeholders fall back to the being name, gracefully as before)."""
-        key = "compass_light"
+        key = "compass_secondary"
         registers = archetypes.ARCHETYPES[key]["registers"]
         tree_fig = registers["tree"][index]
         animals_fig = registers["animals"][index]
@@ -1624,7 +1639,7 @@ class Compositor:
         (Session 6 + the Tetramorph completion round); each column
         degrades to its bare title/name when its row (or the evangelist
         rondel) has not landed — never a KeyError."""
-        key = "seasons_light"
+        key = "seasons_secondary"
         fig = archetypes.figures(key)[index]
         set_name = archetypes.ARCHETYPES[key]["articles"]
         node = self._symbolism.archetype_article(set_name, fig["entity"])
@@ -2002,7 +2017,7 @@ class Compositor:
             days = " · ".join(
                 self._tr(constants.WEEKDAY_FULL_NAMES[body]) for body in bodies
             )
-            if self._skin.palette_style == "cube":
+            if self._skin.palette_style == "tertiary":
                 # The GENESIS wheel (CUBE.md §Double Trinity): the arm
                 # speaks its creation office — person, office, hours,
                 # days. The office articles are Session 21's writers'
@@ -3150,6 +3165,7 @@ class Compositor:
             )
         return None
 
+    @paths.in_display
     def render_offscreen(
         self, size: float, dpr: float, day: DayContext, tick: TickState
     ) -> QImage:

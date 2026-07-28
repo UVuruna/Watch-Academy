@@ -320,9 +320,8 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
     from config import paths as _paths
     from render.asset_variants import subdial_plate_file
 
-    try:
-        for set_name in ("set1", "set2", "set3", "set4"):
-            _paths.set_subdial_set(set_name)
+    for set_name in ("set1", "set2", "set3", "set4"):
+        with _paths.display(_paths.display_context(subdial_set=set_name)):
             for finish in ("gold", "silver", "bronze"):
                 expected = (
                     defaults.SUBDIAL_ROOT_DIR / set_name / f"{finish}.png"
@@ -331,14 +330,14 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
                 assert subdial_plate_file(finish) == expected, (
                     set_name, finish,
                 )
-        # Switching sets genuinely changes which file draws.
-        _paths.set_subdial_set("set1")
+    # Switching sets genuinely changes which file draws.
+    with _paths.display(_paths.display_context(subdial_set="set1")):
         set1_gold = subdial_plate_file("gold")
-        _paths.set_subdial_set("set2")
+    with _paths.display(_paths.display_context(subdial_set="set2")):
         set2_gold = subdial_plate_file("gold")
-        assert set1_gold != set2_gold
-    finally:
-        _paths.set_subdial_set(constants.SUBDIAL_SET_DEFAULT)
+    assert set1_gold != set2_gold
+    # ...and the scope RESTORES: outside it the shipped default is back.
+    assert _paths.subdial_set() == constants.SUBDIAL_SET_DEFAULT
 
 
 def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
@@ -349,8 +348,7 @@ def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
     from config import paths as _paths
     from render.asset_variants import subdial_plate_file
 
-    try:
-        _paths.set_subdial_set("solo")
+    with _paths.display(_paths.display_context(subdial_set="solo")):
         master = defaults.SUBDIAL_ROOT_DIR / "solo" / "silver.png"
         assert master.exists()
         assert subdial_plate_file("silver") == master
@@ -386,15 +384,13 @@ def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
 
         plate = subdial_plate_file("gold")
         assert _np.array_equal(interior(plate), interior(master))
-    finally:
-        _paths.set_subdial_set(constants.SUBDIAL_SET_DEFAULT)
 
 
 def test_subdial_set_rejects_unknown_value():
     from config import paths as _paths
 
     with pytest.raises(ValueError):
-        _paths.set_subdial_set("bogus")
+        _paths.display_context(subdial_set="bogus")
 
 
 def test_subdial_shadow_direction_follows_the_seat():
@@ -817,7 +813,7 @@ def test_cross_arms_borrow_the_octa_shape():
         assert half_angles[pointer] == 180.0 / constants.POINTER_POINTS[pointer]
 
 
-# --- Palette presets (owner: 5 — hexa/octa paint+light, cross seasons) -------------
+# --- Palette presets (owner: 5 — hexa/octa primary+light, cross seasons) -------------
 
 
 def test_palette_presets_cover_every_pointer_and_style():
@@ -829,26 +825,26 @@ def test_palette_presets_cover_every_pointer_and_style():
             palette = defaults.PALETTE_PRESETS[(pointer, style)]
             assert len(palette) == arms, (pointer, style)
         # And no orphan preset beyond the served styles.
-        assert ("cross", "cube") not in defaults.PALETTE_PRESETS
-        assert ("aurora", "cube") not in defaults.PALETTE_PRESETS
-        assert ("calendar", "cube") not in defaults.PALETTE_PRESETS
+        assert ("cross", "tertiary") not in defaults.PALETTE_PRESETS
+        assert ("aurora", "tertiary") not in defaults.PALETTE_PRESETS
+        assert ("calendar", "tertiary") not in defaults.PALETTE_PRESETS
 
 
 def test_cross_wheels_are_seasons_paint_and_elements_light():
-    """Owner 2026-07-17 (CANON §Seasons light): the cross PAINT stays the
-    seasons temperaments palette; the cross LIGHT is now the FOUR ELEMENTS
+    """Owner 2026-07-17 (CANON §Seasons secondary): the cross PRIMARY stays the
+    seasons temperaments palette; the cross SECONDARY is now the FOUR ELEMENTS
     wheel, seating the Tetramorph — the two wheels DIFFER, and each hue
     lands on its canonical season arm (fire summer-top, earth autumn-right,
     water winter-bottom, air spring-left)."""
-    assert defaults.PALETTE_PRESETS[("cross", "paint")] == (
+    assert defaults.PALETTE_PRESETS[("cross", "primary")] == (
         "#D9D900", "#D4330F", "#0A70D8", "#129412",
     )
-    assert defaults.PALETTE_PRESETS[("cross", "light")] == (
+    assert defaults.PALETTE_PRESETS[("cross", "secondary")] == (
         "#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0",
     )
     assert (
-        defaults.PALETTE_PRESETS[("cross", "paint")]
-        != defaults.PALETTE_PRESETS[("cross", "light")]
+        defaults.PALETTE_PRESETS[("cross", "primary")]
+        != defaults.PALETTE_PRESETS[("cross", "secondary")]
     )
 
 
@@ -856,28 +852,28 @@ def test_compass_octa_presets_are_the_approved_walks_and_ages():
     """Owner rework 2026-07-16: PAINT wears the Walks' materials, LIGHT
     wears the Eight Ages — the two presets must be the exact approved
     hex tuples (CANON.md) and must no longer be near-identical."""
-    assert defaults.PALETTE_PRESETS[("octa", "paint")] == (
+    assert defaults.PALETTE_PRESETS[("octa", "primary")] == (
         "#F0C420", "#C87533", "#A02020", "#7A2E8E",
         "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
     )
     # Owner shift 2026-07-16: Death at midnight wears pure WHITE (in
     # the light register death goes INTO the light), the moonlight
     # silver moved to the Unborn, the mist to Birth; the rose retired.
-    assert defaults.PALETTE_PRESETS[("octa", "light")] == (
+    assert defaults.PALETTE_PRESETS[("octa", "secondary")] == (
         "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
         "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     )
     assert (
-        defaults.PALETTE_PRESETS[("octa", "paint")]
-        != defaults.PALETTE_PRESETS[("octa", "light")]
+        defaults.PALETTE_PRESETS[("octa", "primary")]
+        != defaults.PALETTE_PRESETS[("octa", "secondary")]
     )
 
 
 def test_palette_for_selects_the_skin_choice():
     paint = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa")
-    light = dataclasses.replace(paint, palette_style="light")
-    assert palette_for(paint) == defaults.PALETTE_PRESETS[("octa", "paint")]
-    assert palette_for(light) == defaults.PALETTE_PRESETS[("octa", "light")]
+    light = dataclasses.replace(paint, palette_style="secondary")
+    assert palette_for(paint) == defaults.PALETTE_PRESETS[("octa", "primary")]
+    assert palette_for(light) == defaults.PALETTE_PRESETS[("octa", "secondary")]
 
 
 # --- Aurora (owner spec 2026-07-12) -------------------------------------------------
@@ -989,7 +985,7 @@ def test_aurora_bands_spread_the_day_hues_evenly():
     from data.seasons import SeasonsRepository
     from render.layers import aurora_bands, today_slot_theta
 
-    palette = defaults.PALETTE_PRESETS[("aurora", "paint")]
+    palette = defaults.PALETTE_PRESETS[("aurora", "primary")]
     tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
     observer = astral.Observer(
         latitude=defaults.DEFAULT_CITY["latitude"],
@@ -1702,8 +1698,8 @@ def test_every_pointer_wheel_pair_differs(app):
 
     for pointer in ("trio", "cross", "hexa", "octa", "aurora", "calendar"):
         assert (
-            defaults.PALETTE_PRESETS[(pointer, "paint")]
-            != defaults.PALETTE_PRESETS[(pointer, "light")]
+            defaults.PALETTE_PRESETS[(pointer, "primary")]
+            != defaults.PALETTE_PRESETS[(pointer, "secondary")]
         )
     # The primitive still grays when asked (used nowhere for the palette
     # pair now, but the contract stands).

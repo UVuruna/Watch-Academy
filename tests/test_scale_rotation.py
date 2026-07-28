@@ -68,15 +68,15 @@ def test_rotating_art_file_suffixed_source_versions_rotate(tmp_path):
     finds them and rotates between the active-source files."""
     from config import paths
 
-    paths.set_art_source("gemini")
     (tmp_path / "Lion_gem.png").write_bytes(b"")
     (tmp_path / "Lion_v2_gem.png").write_bytes(b"")
     (tmp_path / "Lion_gpt.png").write_bytes(b"")   # other source — not doubled
     canonical = tmp_path / "Lion.png"
-    picks = {
-        defaults.rotating_art_file(canonical, date(2026, 7, 20 + o))
-        for o in range(4)
-    }
+    with paths.display(paths.display_context(art_source="gemini")):
+        picks = {
+            defaults.rotating_art_file(canonical, date(2026, 7, 20 + o))
+            for o in range(4)
+        }
     assert picks == {tmp_path / "Lion_gem.png", tmp_path / "Lion_v2_gem.png"}
 
 

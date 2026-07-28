@@ -206,7 +206,7 @@ class SkinDefinition:
                                        # AND period-hue count (owner spec)
     umbra_form: str = "fine"           # "fine" (30) | "coarse" (24) | "gradient"
     umbra_contrast: str = "full"       # "full" | "half" — Umbra shade span
-    palette_style: str = "paint"       # "paint" | "light" | "cube" —
+    palette_style: str = "primary"       # "primary" | "secondary" | "tertiary" —
                                        # Star+Aura hues; "cube" is the Cube
                                        # canon's third wheel (Genesis/Council/
                                        # Character, trio/hexa/octa ONLY —
@@ -231,8 +231,8 @@ class SkinDefinition:
     # is inert there.
     archetype_mode: bool = False
     # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
-    # Double-Trinity family wheels — Court (trio paint), Genesis (trio
-    # cube), Council (hexa cube) — render as the corner-view CUBE when
+    # Double-Trinity family wheels — Court (trio primary), Genesis (trio
+    # cube), Council (hexa tertiary) — render as the corner-view CUBE when
     # True: the arm diamonds widen to the regular 180/N halves and tile
     # the hexagon into the visible cube faces
     # (render.layers.cube_look_active / arm_half_deg). False = Diamond,
@@ -346,6 +346,14 @@ class SkinDefinition:
     # 1.0 unchanged, 0.0 grays it to its own brightness. The Umbra and
     # hands do not read this (see layers.md's RingLayer note).
     ring_saturation: float = 1.0
+    # THE DISPLAY CONTEXT (owner bug 2026-07-28, multi-watch colour
+    # leak): this watch's OWN art source, subdial plate set and metal
+    # shades — see `config.paths.DisplayContext`. It rides the SKIN
+    # because the skin is what a watch hands to its compositor, and it
+    # is what every render/hover/dialog entry point installs
+    # (`with paths.display(skin.display)`) before resolving any art.
+    # Three watches, three contexts, no shared process state.
+    display: paths.DisplayContext = paths.DEFAULT_DISPLAY
 
 
 def missing_assets(skin: SkinDefinition) -> list[Path]:

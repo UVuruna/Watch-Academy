@@ -415,10 +415,10 @@ def test_dialog_palette_edit_and_reset(app):
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     dialog._hues[0] = "#123456"
     edited = dialog.result_settings()
-    assert edited.palettes["hexa_paint"][0] == "#123456"
+    assert edited.palettes["hexa_primary"][0] == "#123456"
     dialog._reset_palette()
     clean = dialog.result_settings()
-    assert "hexa_paint" not in clean.palettes   # back to the owner preset
+    assert "hexa_primary" not in clean.palettes   # back to the owner preset
     dialog.done(0)
 
 
@@ -650,16 +650,15 @@ def test_art_source_resolves_with_fallback(tmp_path, monkeypatch):
         greek / "../../../inner_wheel/virtue/Justice.png"
     )
     assert stepup.name == "Justice_gem.png" and stepup.exists()
-    try:
-        paths.set_art_source("chatgpt")
+    with paths.display(paths.display_context(art_source="chatgpt")):
         wolf = paths.art_file(
             assets / "weeks/societies/wolf/primary/alpha.png"
         )
         assert wolf.name == "alpha_gpt.png" and wolf.exists()
         fallback = paths.art_file(greek / "Zeus.png")  # no ChatGPT copy
         assert fallback.name == "Zeus_gem.png" and fallback.exists()
-    finally:
-        paths.set_art_source(constants.ART_SOURCE_DEFAULT)
+    # The scope RESTORES — outside it the shipped default source is back.
+    assert paths.art_source() == constants.ART_SOURCE_DEFAULT
     assert Settings().art_source == constants.ART_SOURCE_DEFAULT
 
 
@@ -789,7 +788,7 @@ def test_articles_cover_every_theme_and_body():
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
     combos = {
-        "hexa_paint", "hexa_light", "octa_paint", "octa_light", "cross", "trio",
+        "hexa_primary", "hexa_secondary", "octa_primary", "octa_secondary", "cross", "trio",
     }
     for theme in constants.WEEKDAY_THEMES:
         article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
@@ -1015,7 +1014,8 @@ def test_wider_pantheon_topics_removed_as_duplicate_tiles():
     stays out of this deletion) — this only asserts the GALLERY/topic
     surface is gone, so a future round could still re-wire it (e.g. as
     trailing pages of the merged topic) without having lost the prose."""
-    from app.encyclopedia import _TOPIC_GROUPS, _topics
+    from app.encyclopedia import topics as _topics
+    from config.encyclopedia_tree import WHOLES
 
     topics = _topics()
     groups = dict(_TOPIC_GROUPS)
@@ -1155,7 +1155,8 @@ def test_wider_court_gallery_has_no_extra_tiles():
     the only new topic-dict keys this round adds are figure PAGES
     inside the four existing merged topics, never new top-level topic
     keys or gallery cards."""
-    from app.encyclopedia import _TOPIC_GROUPS, _topics
+    from app.encyclopedia import topics as _topics
+    from config.encyclopedia_tree import WHOLES
 
     topics = _topics()
     groups = dict(_TOPIC_GROUPS)
@@ -1367,7 +1368,8 @@ def test_era_terms_topic():
     (not yet generated)."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _TOPIC_GROUPS, _topics
+    from app.encyclopedia import EncyclopediaDialog, topics as _topics
+    from config.encyclopedia_tree import WHOLES
     from config import paths as _paths
     from data.encyclopedia import EncyclopediaRepository
     from data.translations import collect_corpus
@@ -1481,7 +1483,8 @@ def test_eclipse_topics():
     all nine keys × 2."""
     from PySide6.QtWidgets import QApplication
 
-    from app.encyclopedia import EncyclopediaDialog, _TOPIC_GROUPS, _topics
+    from app.encyclopedia import EncyclopediaDialog, topics as _topics
+    from config.encyclopedia_tree import WHOLES
     from config import paths as _paths
     from data.encyclopedia import EncyclopediaRepository
     from data.translations import collect_corpus
@@ -1641,7 +1644,7 @@ def test_chinese_articles_and_elements_cover_the_cycle():
 
 def test_zodiac_articles_cover_every_sign():
     """12 sign articles: a multi-paragraph base tied to the sign's hexa
-    arm canon, plus paint and light palette variants — and, since the
+    arm canon, plus paint and secondary palette variants — and, since the
     southern wheel seats every sign on the OPPOSITE arm (owner spec
     2026-07-12), a *_south pair with the color-borrowed reading."""
     import json
@@ -1657,21 +1660,21 @@ def test_zodiac_articles_cover_every_sign():
         assert len(article["base"]) > 250, sign
         assert "\n\n" in article["base"], sign
         assert set(article["variants"]) == {
-            "paint", "light", "paint_south", "light_south",
+            "primary", "secondary", "primary_south", "secondary_south",
         }, sign
-        assert "South of the equator" in article["variants"]["paint_south"]
+        assert "South of the equator" in article["variants"]["primary_south"]
 
 
 def test_custom_palette_reaches_the_render():
     custom = ("#111111", "#222222", "#333333", "#444444", "#555555", "#666666")
-    settings = replace(Settings(), palettes={"hexa_paint": custom})
+    settings = replace(Settings(), palettes={"hexa_primary": custom})
     skin = apply_display_settings(defaults.DEFAULT_SKIN, settings)
     assert palette_for(skin) == custom
     # A different pointer/style ignores this custom set.
     other = apply_display_settings(
-        defaults.DEFAULT_SKIN, replace(settings, palette_style="light")
+        defaults.DEFAULT_SKIN, replace(settings, palette_style="secondary")
     )
-    assert palette_for(other) == defaults.PALETTE_PRESETS[("hexa", "light")]
+    assert palette_for(other) == defaults.PALETTE_PRESETS[("hexa", "secondary")]
 
 
 # --- ROUND R3: LAYOUT + ARTICLE ORDER + FINISH SWITCHER ------------------------
@@ -1684,7 +1687,8 @@ def test_gallery_five_sections():
     switcher) — "planet_signs" never appears as a gallery card, but
     stays wired in `_topics()` so a dial slot dressed in that theme
     still resolves a Spacebar jump."""
-    from app.encyclopedia import _TOPIC_GROUPS, _topics
+    from app.encyclopedia import topics as _topics
+    from config.encyclopedia_tree import WHOLES
 
     assert [name for name, _ in _TOPIC_GROUPS] == [
         "The Celestial Engine", "The Divine", "The Human Wheel",
@@ -1847,7 +1851,7 @@ def test_article_order_restructure():
     and EVIL halves as their OWN separate pages (round R3b item 1,
     owner verdict A — supersedes the R3 merged dual page), then the
     Ninth where the theme has one."""
-    from app.encyclopedia import _topics
+    from app.encyclopedia import topics as _topics
     from config import defaults as _defaults
 
     topics = _topics()

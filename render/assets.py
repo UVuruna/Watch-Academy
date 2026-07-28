@@ -54,7 +54,7 @@ class AssetCache:
     MASTER_STEP_PX = 512
 
     def __init__(self):
-        self._pixmaps: dict[tuple[str, int, str | None], QPixmap] = {}
+        self._pixmaps: dict[tuple, QPixmap] = {}
 
     def pixmap_by_height(
         self,
@@ -91,7 +91,13 @@ class AssetCache:
 
         path = art_file(path)
         px_height = max(1, round(logical_height * dpr))
-        key = (str(path), px_height, tint, desaturate, metal, saturation)
+        # The SHADE is part of the key, not just the metal family (owner
+        # 2026-07-28): one cache now serves every watch, and two watches
+        # may both ask for "gold" while meaning different ramps.
+        key = (
+            str(path), px_height, tint, desaturate, metal, saturation,
+            paths.metal_shade(metal) if metal is not None else None,
+        )
         if key not in self._pixmaps:
             # The WORKING SET (owner 2026-07-15): a full-res original
             # decodes through its downscaled working copy whenever the
@@ -121,7 +127,8 @@ class AssetCache:
 
     @staticmethod
     def _recolored(
-        source: QImage, metal: str, source_metal: str, mask_mode: str
+        source: QImage, metal: str, source_metal: str, mask_mode: str,
+        shade: str | None = None,
     ) -> QImage:
         """THE metal recolor door — a thin Qt adapter over the `recolor`
         package, which owns the algorithm (see
@@ -144,7 +151,13 @@ class AssetCache:
         `metal_variant_file`, and QPixmap must never be touched off the
         GUI thread — GUI-thread callers wrap with QPixmap.fromImage.
         """
-        shade = paths.metal_shade(metal)
+        # The shade is normally the ACTIVE watch's (its display context),
+        # but the background art warm passes it EXPLICITLY: the ledger
+        # recipe was recorded under one watch's context and is built on a
+        # thread that has none, so reading the ambient value there would
+        # silently recolor to the shipped default (owner bug 2026-07-28 —
+        # the same leak the DisplayContext exists to end).
+        shade = shade or paths.metal_shade(metal)
         ramp = defaults.METAL_SHADES[metal][shade]
         dpr = source.devicePixelRatio()
         image = source.convertToFormat(QImage.Format.Format_RGBA8888)
@@ -367,3 +380,27 @@ class AssetCache:
             )
         pixmap.setDevicePixelRatio(dpr)
         return pixmap
+
+
+_SHARED_CACHE: AssetCache | None = None
+
+
+def shared_cache() -> AssetCache:
+    """THE process-wide rasterized-image cache.
+
+    Owner ruling 2026-07-28: *"čovjek dakle samo 1 treba da se učitava u
+    ram u slike ili god"*. Every watch used to build its OWN `AssetCache`,
+    and built a FRESH one on every skin install — so three watches held
+    three decoded copies of the same ring plate, and changing a setting
+    threw all of them away and re-decoded from scratch. The watches draw
+    from the same asset tree, so they share the same RAM.
+
+    Safe to share because the key already carries everything that can
+    make two requests differ — the resolved path (which encodes the art
+    source), the device pixel height, tint, desaturation, metal AND its
+    shade, and saturation.
+    """
+    global _SHARED_CACHE
+    if _SHARED_CACHE is None:
+        _SHARED_CACHE = AssetCache()
+    return _SHARED_CACHE
