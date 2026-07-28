@@ -487,8 +487,9 @@ into the engine unchanged (§Wiring below).
 | Self-Mastery / Disdain | Odysseus / Coriolanus | Bruce Lee / Diogenes | Uncle Iroh / Tywin Lannister |
 | Diligence / Servility | Martha of Bethany / Uriah Heep | Mother Teresa / Vidkun Quisling | Andy Dufresne / Dobby |
 
-**The hooks, cell by cell** (one deed each; the full articles are
-Session 25's, under the Charter):
+**The hooks, cell by cell** (one deed each; the full articles LANDED in
+Session 25 — one Encyclopedia page per cell, arguing both readings under
+the Charter, and one queued badge per figure):
 
 - **Prudence / Indifference** — Solomon suspends a verdict until a
   test discloses the mother (1 Kings 3:16–28); Pilate washes his
@@ -1538,11 +1539,25 @@ lacking the experiment).
    matching page (each Character arm on its own pole or vertex).
 9. Character-coordinate badges per figure (later round).
 10. The renaming, once the wording is sealed.
-11. The Thirteen Axes → Encyclopedia: The One (both descriptions,
+11. ~~The Thirteen Axes → Encyclopedia: The One (both descriptions,
     per decree), the Sacred Axis (five stations, three readings,
     the distinguishing sentence), the 13-axes and 65-term pages,
-    the two hexagram X-rays folded into the Cube section — AFTER
-    the owner's per-term verdict on the 27 PROPOSED terms.
+    the two hexagram X-rays folded into the Cube section~~ — DONE
+    (Session 25, 0.14.522): the `cube` family grew 20 → **42 pages**.
+    The doctrine block (The Thirteen Axes, The One, The Sacred Axis,
+    The Sixty-Five Terms), the nine axis pages the canon still owed
+    (six edge, three vertex), the eight NEW edge cells arguing all
+    sixteen new readings, and The Hexagram Projection carrying both
+    X-rays and the blindness law. The Y-axis page is renamed **The
+    Moral Scope Axis** and carries the structural gloss. The reading
+    order is now `config.cube.AXES`' own family order, and the
+    sixteen Spacebar targets were re-aimed in the same commit.
+    **Art:** 73 images queued in three sheets
+    (`research/prompts/archetype/{edges,axes}_prompts.md`,
+    `research/rose_round/edge_figures_prompts.md`); the twelve human
+    AXIS pages take no plate by the Rule 19 derivation check — an axis
+    is its two ends through the centre — with a standalone axis-emblem
+    round left PENDING OWNER.
 12. ~~The Calendar-12 and Rose-24 SEATINGS; the rotation↔hour rule~~ —
     DONE (Session 26): §[The Seatings](#the-seatings) — both wheels
     solved by exhaustive search under stated laws, pinned by
@@ -1555,9 +1570,10 @@ lacking the experiment).
     corners' historical and modern echoes~~ — DONE (Session 24):
     §[The Rosters](#the-rosters), transcribed whole into `config.cube`
     (all 26 human cells × 3 registers) and pinned by
-    `tests/test_cube_roster.py`. Ahead of it: the Rose's three stars
-    each DRAWING their own register (a render round), and Session 25's
-    articles for the sixteen new readings.
+    `tests/test_cube_roster.py`. Session 25 then wrote the sixteen new
+    readings' articles (the eight cell pages of the Cube section) and
+    queued their 48 figure badges; what stays ahead is the Rose's three
+    stars each DRAWING their own register — a render round.
 
 Art follows the one-image-one-place law and the derivation check
 (Rule 19) throughout: poles, vertices, crosses and the Rose are

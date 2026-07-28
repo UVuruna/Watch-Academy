@@ -462,7 +462,44 @@ Rose §OPEN 48 are already satisfied by the sealed vertex/2D rosters
 and WIRE, don't reinvent; (3) rosters recorded in CUBE.md tables
 and wired into the engine's name fallbacks.
 
-### Session 25 — the Thirteen-Axes texts + sheets → **Opus** (writers)
+### Session 25 — the Thirteen-Axes texts + sheets → **Opus** (writers) — DONE (2026-07-28, 0.14.522–0.14.525)
+**Delivered:** (1) THE TEXTS — the `cube` family grew **20 → 42 pages**:
+the doctrine block (The Thirteen Axes' arithmetic; The One in BOTH
+descriptions, apophatic and cataphatic, with the empty exemplar column
+written as doctrine; The Sacred Axis with its five stations, three
+readings and the ONE sentence distinguishing it from the doctrinal
+Trinity; The Sixty-Five Terms with the economy and naming laws), the
+**nine axis pages** the canon still owed (six edge axes, three vertex
+axes — the three primaries already had theirs), the **eight new edge
+cells** arguing all sixteen new readings with their six figures each,
+and **The Hexagram Projection** carrying both X-rays and the blindness
+law. Charter movements throughout; the corpus-wide rule-4 lint stayed
+green on first run. (2) TWO CANON CORRECTIONS FOLDED IN: the Y-axis page
+is renamed **The Moral Scope Axis** (owner approval 2026-07-28) and
+carries the structural gloss *Universalism ↔ Particularism, purple
+first*; `research/prompts/___prompts.md`'s stale "the Rose is a RING
+PRESET" paragraph is corrected to the sealed POINTER doctrine. (3) THE
+READING ORDER is now `config.cube.AXES`' own family order — doctrine,
+primaries with their poles, edge axes with the new cells, vertex axes
+with their corners, then what the cube reveals — so the sixteen
+Spacebar targets of the Character and Prophecy wheels were re-aimed in
+the same commit, as the index contract requires. (4) THE SHEETS, under
+the coverage law: **73 images** in three sheets — Edge Cells (16
+lancets + circles, the family's own CLEAR THIRD PANE device for the
+axis held at measure), the Sacred Plates (9 — The One as a figureless
+rosette, the Sacred Axis as five unequal bands, and the six people of
+the two sacred seats) and Edge Figures (48 deed badges, 32 named / 16
+descriptive / 0 reference stills). All three dry-run clean through
+PromptPainter. **What the Rule 19 derivation check REMOVED, in
+writing:** the twelve human axis pages take no plate (an axis IS its two
+ends through the centre, which the Rose already draws) and the hexagram
+projection is the dial's own emblem — both left PENDING OWNER, not
+closed. (5) NAMED, NOT FILLED: the Activation pole's own 12 figure
+badges are the last cells of the Rose with no sheet anywhere
+(COVERAGE.md §The Thirteen-Axes Wave) — out of this session's scope,
+proposed for the next figure round. 1094 tests green.
+
+### Session 25 — as originally written
 **Say:** "Radi Sesiju 25 iz WORKPLAN.md — tekstovi trinaest osa."
 **Reads:** CUBE.md §The Thirteen Axes (the Article Charter BINDS);
 the sealed rosters from Session 24; `research/prompts/COVERAGE.md`

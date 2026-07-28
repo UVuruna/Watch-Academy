@@ -38,6 +38,7 @@ one-sided gap), and test the pixel size.
 - [WoW, Cyberpunk, Star Wars & The Corporation (GAMING + CORPORATION SHEET WAVE, R10)](#gaming-corp-wave)
 - [The Four Dozens & the Abstract Triads/Dualities (RESTRUCTURE Phase 3)](#phase3-content)
 - [The Cube Wave — Genesis, Council, Character, the Two Crosses](#cube-wave)
+- [The Thirteen-Axes Wave — edge seats, sacred plates, figures](#axes-wave)
 - [Ring Letters, Icons, Guide](#other)
 - [Zero-Gap Declaration](#zero-gap)
 
@@ -571,6 +572,62 @@ generated on either source).
   `config.archetypes` with Session 20 (the crosses never do — they are
   Encyclopedia plates), so only the family root is checkable here.
 
+<a id="axes-wave"></a>
+
+## The Thirteen-Axes Wave — the new edge seats, the sacred plates, the figures (WORKPLAN Session 25, 2026-07-28)
+
+Three NEW sheets this round, all **0 generated, sheets complete** —
+tracked the moment they're written, per this file's own charter. The
+wave's TEXTS are 22 new Encyclopedia pages in the `cube` family (the
+section grew 20 → 42); these sheets are the coverage law's answer to
+them — every article with text gets its picture, minus what Rule #19
+computes.
+
+| Sheet | Category / role | Expected files | Verdict |
+|---|---|---|---|
+| **Edge Cells** — [Edge Cell Prompts](archetype/edges_prompts.md) | archetypes / the eight NEW edge seats of the Cube, one lancet + one circle each | 16 (`archetypes/edges/primary/colored/` + `.../circle/colored/`) | ART GAP — 0/16; **WIRED ALREADY** — `app.encyclopedia._CUBE_ENTRIES` reads `config.archetypes.EDGES_ART_DIR` for the eight cell pages, graceful-absent, so no wiring round is owed after generation |
+| **The Sacred Plates** — [Axes Prompts](archetype/axes_prompts.md) | archetypes / the centre, the Sacred Axis, and the two sacred seats' three registers | 9 (`archetypes/sacred/{primary,circle,archetypal,historical,modern}/colored/`) | ART GAP — 0/9; the two SEAT plates are wired (`SACRED_ART_DIR`, The One and The Sacred Axis pages); the 6 figure badges wait on the Rose's per-register render round, like every other Rose figure |
+| **Edge Figures** — [Edge Figure Prompts](../rose_round/edge_figures_prompts.md) | archetypes / 8 seats × 3 registers × 2 polarities | 48 (`archetypes/edges/{archetypal,historical,modern}/colored/`) | ART GAP — 0/48; same standing wait as the Character and Vertex figure sheets (`ArchetypeLayer` paints one star's worth of figures today) |
+
+**Total new: 73 files, all ART GAP** (0 generated on either source).
+
+- **What the Rule #19 derivation check REMOVED from this wave, in
+  writing:** the twelve human AXIS pages take no plate — an axis is
+  exactly its two ends through the centre, which the Rose already draws
+  by seating ray *k* against ray *k+12*, so an axis emblem would be a
+  composition of two existing windows. The HEXAGRAM PROJECTION page
+  likewise takes none: the projection of a cube along its body diagonal
+  is the emblem already on this dial, and the two named X-rays are
+  viewpoints that the Character-Cube model computes (the 3D Preview
+  gadget, WORKPLAN Session 28). Both are marked **PENDING OWNER** in
+  `axes_prompts.md` rather than closed — twelve standalone axis emblems
+  in the manner of the Two Crosses' path plates remain a one-line
+  decision.
+- **The centre takes no figure in any register** (owner verdict
+  2026-07-28), so `archetypes/sacred/<set>/colored/` holds six files and
+  not eight. The empty column is doctrine, not a gap, and
+  `config.cube.sacred_figure()` answers `None` for it by design.
+- **Copyright routing:** 36 × `_v1` named, 18 × `_v2` descriptive,
+  **0 × `_v3`** across all three sheets — every modern deed proved
+  drawable without a likeness, so the owner owes no reference stills.
+  A protected name appears in no fence (checked mechanically).
+- **Lint status:** two NEW data-driven family roots this round,
+  `archetypes/edges` and `archetypes/sacred` (documented in
+  `tests/test_prompt_paths.py`) — the seat plates themselves ARE
+  enumerated in `app.encyclopedia`, but the circle companions and the
+  three figure registers are not. All ten drop folders were created
+  deliberately under the owner's folder-exists decree, so a generation
+  run cannot invent a tree. All three sheets dry-run clean through
+  PromptPainter (16/16, 9/9, 48/48 — 0 problems).
+- **One gap this round NAMES rather than fills:** the Activation pole's
+  own figures (Composure/Lethargy and Vigor/Frenzy, 2 cells × 3
+  registers × 2 polarities = 12 badges) have no sheet anywhere. They are
+  the only cells of the Rose's twenty-four with none — the Character
+  wheel's sheet covers four poles, the Vertex sheet the eight corners,
+  and this wave the eight new edges. Their pages have existed since
+  Session 21, so the coverage law does owe them; they were out of this
+  session's stated scope and are proposed, not assumed.
+
 <a id="other"></a>
 
 ## Ring Letters, Icons, Guide — out of the AI-prompt pipeline
@@ -621,7 +678,10 @@ scope needs a NEW prompt written. The outstanding work is entirely:
    all (see §The Four Dozens & the Abstract Triads/Dualities above),
    plus the CUBE WAVE's four NEW sheets — Genesis (7), Council (13 on
    Route A, 1 on Route B), Character (16) and the Two Crosses (20), 56
-   files in all (see §The Cube Wave above).
+   files in all (see §The Cube Wave above), plus the THIRTEEN-AXES
+   WAVE's three NEW sheets — Edge Cells (16), the Sacred Plates (9)
+   and Edge Figures (48), 73 files in all (see §The Thirteen-Axes
+   Wave above).
    Subdial is CLOSED (RULE-19 round, 2026-07-20) — see the
    superseded note above, no more generation needed there.
 1a. **Two wiring rounds** the PROMPT SHEETS round explicitly left for

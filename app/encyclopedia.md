@@ -23,8 +23,12 @@ screens —
    **The Living World** (Wolf/Bee/Elephant/Alchemy/Japanese week) and
    **The Archetypes** (its OWN section — EMPTY until WORKPLAN Session
    21, 2026-07-27, filled it with the Cube canon's three topics: **The
-   Cube** (20 pages — three axes, six poles, eight vertices, the three
-   figure sets, the coordinate doctrine, the Banknote-axes seal), **The
+   Cube** (**42 pages** since WORKPLAN Session 25, 2026-07-28 — the
+   doctrine block of the Thirteen Axes, The One in both descriptions,
+   the Sacred Axis and the 65 terms; the thirteen axis pages; the six
+   poles, the eight new edge cells and the eight vertices; the three
+   figure sets, the hexagram projection and the Banknote-axes seal, read
+   in `config.cube.AXES`' own family order), **The
    Double Trinity** (5 — Court, Genesis, Council, the 24-field union
    table) and **The Two Crosses** (14 — both paths, their eight
    stations, TRUST/DISTRUST, FALL/STAR, DOMY/SAFE), joined the same day

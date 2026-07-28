@@ -290,11 +290,37 @@ as `months/`; NOT wired in config yet (content-only). Full ledger:
   note's own craft; the Eye of Providence seat reuses the ring letter
   library's own masters and gets no entry
 
-**The Rose of the Twenty-Four has NO sheet and never will** (CUBE.md
-§The Rose): three identical octa stars offset 15°, 24 rays in 8 palette
-colours — a RING PRESET of computed geometry, the Mason ring's sibling,
-not art. Every sheet of the Cube wave repeats this in its own Rule #19
-derivation check so no future round opens a queue for it.
+- `edges_prompts.md` — the THIRTEEN-AXES wave's eight NEW edge seats
+  (WORKPLAN Session 25, [The Cube Canon](../../CUBE.md) §The 65 Terms):
+  Prudence, Ardor, Steadfastness, Reform, Meekness, Aspiration,
+  Self-Mastery and Diligence, each ONE lancet carrying its virtue above
+  and its fall below plus a circle companion, in the Rose's own ray hue.
+  The family's own device is the CLEAR THIRD PANE — an edge commits two
+  axes and holds the third at measure — and the fall is one committed
+  colour swallowing the other, chosen from the seat's written article
+- `axes_prompts.md` — the same wave's SACRED plates: The One as a
+  rosette of six equal petals around a still white point and NO figure
+  (the centre takes no exemplar, by doctrine), the Sacred Axis as five
+  unequal bands with the luminous stations nearer the centre than the
+  fallen ones, its circle, and the six people of the two sacred seats.
+  Its derivation check is the wave's own verdict that **the twelve human
+  axis pages take no plate at all** — an axis IS its two ends through
+  the centre, which the Rose already draws — with a standalone
+  axis-emblem round left PENDING OWNER
+- The wave's 48 FIGURE badges (8 seats × 3 registers × 2 polarities)
+  live beside the other two Rose figure sheets, in
+  `research/rose_round/edge_figures_prompts.md`
+
+**The Rose of the Twenty-Four's GEOMETRY has no sheet** (CUBE.md §The
+Rose): three identical octa stars offset 15°, 24 rays in 8 palette
+colours — computed, drawn, never painted. Every sheet of the Cube wave
+repeats this in its own Rule #19 derivation check so no future round
+opens a queue for it. **CORRECTION OF RECORD (2026-07-28):** this
+paragraph used to call the Rose "a RING PRESET, the Mason ring's
+sibling", which the owner's own spec had already overruled — the Rose is
+the seventh POINTER, and its ring preset was deleted whole in 0.14.482.
+The GEOMETRY is still computed; the FIGURES that ride it are art, and
+their round is open (`research/rose_round/`).
 
 ## Connections
 

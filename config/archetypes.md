@@ -184,6 +184,15 @@ name-falls-back until the owner's glass lands):**
   four Cube-wave art roots are PUBLIC here (`GENESIS_ART_DIR`,
   `COUNCIL_ART_DIR`, `CHARACTER_ART_DIR`, `CROSSES_ART_DIR`) because
   the Encyclopedia reads the same declarations for its gallery icons.
+  **Session 25 (2026-07-28) added two more roots and re-aimed every Cube
+  index.** `EDGES_ART_DIR` and `SACRED_ART_DIR` serve the Thirteen-Axes
+  wave — the eight NEW edge cells and the two seats that left the human
+  circle — and neither is a wheel: they exist because the Encyclopedia's
+  own pages read them (graceful-absent until the glass lands). The same
+  session re-ordered the `cube` topic doctrinally, so all sixteen
+  `enc=("cube", N)` targets of `compass_character` and `rose_vertices`
+  moved in one commit; the index test compares by PAGE NAME, so a
+  mis-aimed target fails loudly.
   **`prism_light` joined them on 2026-07-27** (owner: "napravi
   naravno"): its six pillars aim at `("one_soul", 1..6)` — the pillar's
   own page in the theme's Encyclopedia topic — and `ONE_SOUL_ART_DIR`
