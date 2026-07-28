@@ -34,7 +34,7 @@ here: both callers hand in facts they already hold.
   `ninth_is_pangea_from_events`.
 - [Compositor](../render/compositor.md) — the center hover reads the
   same law for the same swap.
-- [Encyclopedia](../app/encyclopedia.md) — the Continents topic's Ninth
+- [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) — the Continents topic's Ninth
   page follows `ninth_is_pangea_from_repos` against the traveled date
   and the bundled Seasons/Moon repositories.
 

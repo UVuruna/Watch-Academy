@@ -17,6 +17,22 @@ lives in [The DOMY Canon](CANON.md).
 
 ## Where We Stand
 
+- **THE ENCYCLOPEDIA REWORK (WORKPLAN Session 27, owner-sealed
+  2026-07-28/29) — DONE:** the browser reads on THREE levels now — six
+  WHOLES on a home screen that never scrolls (The Instrument · The
+  Celestial Engine · The Divine · The Human Wheel · The Character Cube ·
+  The Living World, each wearing one hue of the Rose), then that whole's
+  theme cards, then the article slider with a **variant switcher** beside
+  the title. Registers of one subject merged into one card (Greek:
+  Planetary | Pantheon | Wider Court; Bible ×3; Creeds ×2; Eclipses ×2)
+  and the switcher keeps the reader's place across a change; the Cube's
+  42-page run became four cards; the Guide became a card and its own
+  window retired. The 2,766-line `app/encyclopedia.py` split into the
+  nine-module [Encyclopedia (subfolder)](app/encyclopedia/___encyclopedia.md)
+  package, and the tree itself lives in ONE table,
+  [Encyclopedia Tree](config/encyclopedia_tree.md). Twenty laws pinned in
+  `tests/test_encyclopedia_tree.py` — the no-X-scroll law among them,
+  which had regressed twice before.
 - **M1 shell ✓ M2 computation core ✓ M3 living dial ✓** — and the
   M4–M6 goals have landed along the way: single-instance mutex,
   spontaneous-hide watchdog, autostart (HKCU Run), the full theme/

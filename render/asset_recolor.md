@@ -114,7 +114,7 @@ also reaches it, for the annular solar icon's "ring of fire" tint.
   edge the split created; see that module's own docstring
 - [Compositor](compositor.md) — `metal_variant_file` (hover-card/
   legend `<img>` tags, which embed files, not pixmaps — the eager door)
-- [Encyclopedia](../app/encyclopedia.md) — `metal_variant_path` (the
+- [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) — `metal_variant_path` (the
   Bronze/Gold/Silver look-arrow cycle records paths only),
   `ensure_variant` (first display / Download), `variant_pending` (the
   reader's exists-or-pending filter)

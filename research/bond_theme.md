@@ -178,7 +178,7 @@ Archetypes** hall, nine pages: the title page (the conjugation law, the
 three names, the three axes of love), the six pillars in the wheel's
 own arm order, the Union and the Child. The dial's per-arm hover
 articles were left untouched; the topic argues the doctrine instead of
-restating them. See [Encyclopedia](../app/encyclopedia.md).
+restating them. See [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md).
 
 ## Open Questions for the Owner
 

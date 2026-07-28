@@ -321,7 +321,7 @@ the body follows the user's `earth_style` and the live sky's day/night
 (`config.defaults.continents_body_art`); the atmo-day face is only the
 baked still frame the Encyclopedia gallery previews with. See
 [Continents (script)](../core/continents.md) for the Ninth easter-egg
-law and [Encyclopedia](../app/encyclopedia.md) for the topic.
+law and [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) for the topic.
 
 ## Connections
 

@@ -198,7 +198,7 @@ Settings-validated) is the mode enum; the render itself
 (`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
 `calendar_mount_angle`, the Design ▸ Pointer tab's mount row) is covered
 in [Layers](../render/layers.md)'s own Calendar Pointer section (see
-[Encyclopedia](../app/encyclopedia.md) for the Slavic Months topic),
+[Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) for the Slavic Months topic),
 the Umbra contrast spans, the octa slot text width fraction, the event glow
 rendering (owner rework 2026-07-16: the ring-band relocation radius, the
 golden Sun / silver Moon colors, the alpha stops, the halo scale and the
@@ -245,7 +245,7 @@ across batches) and `scale_variant_file(figure, on_date)` — DISCOVERS
 every version actually on disk for the active source, in both
 `SCALE_ART_DIR` and its `glass/` register, tolerant of `_v`/`_v1`/
 `_v2`/`_v3` suffixes, and rotates by the date's proleptic ordinal.
-Sole consumer: the [Encyclopedia](../app/encyclopedia.md)'s "The Two
+Sole consumer: the [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md)'s "The Two
 Triangles" duality topic.
 **THE METAL RECOLOR (rewritten 2026-07-27, owner verdict
 "prihvaceno"):** the numeric recipe is GONE from this file. `METAL_SHADES`

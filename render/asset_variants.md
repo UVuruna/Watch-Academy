@@ -132,7 +132,7 @@ raises rather than silently returning an uncached path (Rule #1).
   `subdial_plate_file` (paint-time reads)
 - [Compositor](compositor.md) — `eclipse_solar_type_icon`,
   `scaled_variant_file` (hover-card image URIs)
-- [Encyclopedia](../app/encyclopedia.md) — `moon_phase_file` (the Moon
+- [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) — `moon_phase_file` (the Moon
   topic's live-rendered pages), `scaled_variant_file` with
   `build=False` (gallery cards / reader decode ceilings)
 - [Encyclopedia Warm](../app/encyclopedia_warm.md) —

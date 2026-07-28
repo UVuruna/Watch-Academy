@@ -423,7 +423,7 @@ caption) it is the triple; the gallery card, being a label, says One
 Soul. Every prism-light arm's Spacebar jump lands on its pillar page,
 and the Union's centre jump lands on the Union — the first archetype
 CENTRE on this dial with a page to open. Documentation:
-[Encyclopedia](app/encyclopedia.md).
+[Encyclopedia (subfolder)](app/encyclopedia/___encyclopedia.md).
 
 The relationship-pillars theme IS prism-shaped, and the pattern
 seats it here: paint carries heaven's six persons, light carries

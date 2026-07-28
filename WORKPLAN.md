@@ -544,25 +544,54 @@ if it falls out (24 orientations = the permutations of the four
 diagonals). Golden tests pin every seating; offscreen renders for
 the owner's eyes. (Opus: geometry — accuracy > speed.)
 
-### Session 27 — the Encyclopedia rework (celine) → **owner + another agent**
-The owner drives this one himself with a separate agent: the Cube
-canon now claims a large share of the Encyclopedia, so the whole
-Encyclopedia UI splits into a few top-level WHOLES (celine) with
-their themes inside. Recorded here so no session collides with it —
-this plan only reserves the seat and defers the spec to the owner.
+### Session 27 — the Encyclopedia rework (celine) → **Opus** — DONE (2026-07-28/29)
+**Delivered:** the three-level browser the owner specified live in the
+session (eight decisions sealed 2026-07-28):
+
+1. **SIX WHOLES** on a home screen that never scrolls — The Instrument
+   (the watch's own wheels, the old Celestial Engine split in two), The
+   Celestial Engine (the sky), The Divine, The Human Wheel, The
+   Character Cube (promoted out of the empty "Archetypes" hall) and The
+   Living World. Each wears one hue of the Rose (`config/
+   encyclopedia_tree.py` — the ONE table every screen reads).
+2. **THE VARIANT LAW** — registers of one subject merged into one card
+   whose ◀ ▶ switcher walks them keeping the reader's position (Greek:
+   Planetary | Pantheon | Wider Court; Bible ×3; Creeds ×2; Eclipses
+   ×2). Distinct subjects stayed their own cards. The Pantheon roster
+   button retired into it (Rule #6).
+3. **THE CUBE SPLIT** — the 42-page run became four cards (Doctrine,
+   The Thirteen Axes, The Eight Figures, The Projections); the wheel
+   table's `enc=("cube", N)` targets are re-aimed by `tree.cube_target`,
+   so `config/archetypes.py` was not touched.
+4. **THE GUIDE** became the fifth Instrument card, built from the help
+   book's own JSON; `app/guide.py` retired, the menu entry now a
+   shortcut into the browser.
+5. **THE GOD-FILE SPLIT** — `app/encyclopedia.py` (2,766 lines) became
+   the nine-module `app/encyclopedia/` package (root Rule #20), each
+   with its own `.md`.
+6. **THE SCROLL LAWS** — the window's minimum IS the owner's 1280×720
+   opening screen; the home screen owns no scroll area at all; both
+   scrolling screens have their horizontal bar switched OFF and their
+   geometry cannot produce an overwide row.
+
+**Pinned by** `tests/test_encyclopedia_tree.py` (20 laws) plus the
+rewritten Encyclopedia block in `tests/test_settings_dialog.py`.
+**Ahead:** the coverage wave — 92 pages carry no image SLOT at all and
+130 no image FILE; the owner's verdict was "sve generisano", so every
+one of them is owed a prompt-sheet entry.
 
 ### Session 28 — the 3D Preview integration → **Sonnet** — BLOCKED on the gadget's M2
 **Say:** "Radi Sesiju 28 iz WORKPLAN.md — 3D Preview u
 Enciklopediji."
 **Reads:** `Gadgets/3D Preview/PLAN.md` (the integration contract);
-CUBE.md §The Thirteen Axes; `app/encyclopedia.md`;
+CUBE.md §The Thirteen Axes; `app/encyclopedia/___encyclopedia.md`;
 `Database/encyclopedia.json` cube families.
 **Delivers:** the DOMY-side half of the contract: an EXPORTER that
 computes the Character-Cube model JSON from DOMY's own canon data
 (the 65 terms, colors, registers — one source of truth, root Rule
 19, never copy-pasted into the gadget); the `preview3d` widget
-embedded in an Encyclopedia dialog (seated wherever the owner's
-Session 27 celine puts the Cube whole), hover wired through the
+embedded in an Encyclopedia dialog (seated in the Session 27
+**Character Cube** whole, beside its four Cube cards), hover wired through the
 teaser law, click through the Spacebar-jump contract; tests on the
 exporter's schema and the embed's open path. Runs only after the
 gadget's M2 (the four models + Switcher) exists.

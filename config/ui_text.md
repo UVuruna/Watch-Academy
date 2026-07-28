@@ -33,7 +33,7 @@ labels.
 - [Watch Controller](../app/controller.md) — menu labels, tooltips,
   tray balloons, error boxes
 - [Settings Dialog](../app/settings_dialog/___settings_dialog.md),
-  [Time Travel](../app/time_travel.md), [Guide](../app/guide.md),
+  [Time Travel](../app/time_travel.md),
   [Design Window](../app/design_window.md),
   [Pointer Theme](../app/pointer_theme.md),
   [Slot Theme](../app/slot_theme.md),
