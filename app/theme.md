@@ -35,7 +35,7 @@ as a real choice.
 ### Used by
 - [Settings Dialog](settings_dialog/dialog.md) — nav column, group-box
   cards, every slider/combo/spinbox/checkbox, OK/Cancel/Default buttons.
-- [Encyclopedia Dialog](encyclopedia.md), [Guide Dialog](guide.md),
+- [Encyclopedia Dialog](encyclopedia/dialog.md),
   [Time Travel Dialog](time_travel.md), [Report Dialog](report.md) —
   base surface + (Time Travel only) its QComboBox/QSpinBox controls;
   their own `ui_style.style_button` gradients and per-label accents
@@ -61,10 +61,10 @@ cannot select "the OK button" out of a `QDialogButtonBox` by role.
 ### `size_to_screen(dialog, aspect_w, aspect_h, height_fraction, min_width=0)`
 OPENING SIZE (owner DESIGN #1, R4 instruction batch 2026-07-20): the
 ONE sizing routine behind all four top-level dialogs — [Encyclopedia
-Dialog](encyclopedia.md) and [Observatory](observatory.md) call it with
+Dialog](encyclopedia/dialog.md) and [Observatory](observatory.md) call it with
 the A4-portrait ratio (`defaults.DIALOG_A4_ASPECT_W/H`, 210:297) at
 `defaults.DIALOG_A4_HEIGHT_FRACTION` (80%); [Settings
-Dialog](settings_dialog/dialog.md) and [Guide Dialog](guide.md) call it with a
+Dialog](settings_dialog/dialog.md) calls it with a
 square ratio (1:1) at `defaults.DIALOG_SQUARE_HEIGHT_FRACTION` (50%).
 Resizes+centers `dialog` to that shape at that fraction of the ACTIVE
 screen's available height, clamped so the result never exceeds the

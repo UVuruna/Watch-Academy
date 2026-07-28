@@ -15,7 +15,7 @@ Built once (Rule #5) and shared by BOTH new mini windows that need a
 weekday-theme picker: [Pointer Theme](pointer_theme.md) (the star
 pointer's own weekday-body layer, 1st Slot) and [Slot Theme](slot_theme.md)
 (any of the three slots, one of several option groups per slot). Follows
-the SAME gallery pattern the [Encyclopedia](encyclopedia.md) topic
+the SAME gallery pattern the [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md) topic
 screen already uses — `QToolButton` (`ToolButtonTextUnderIcon`) tiles in
 a wrapped `QGridLayout`, centered, inside a `QScrollArea` — for visual
 consistency and because it is proven not to spill horizontally.

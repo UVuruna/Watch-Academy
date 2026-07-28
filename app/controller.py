@@ -46,7 +46,6 @@ from app.design_window import DesignDialog
 from app.encyclopedia import EncyclopediaDialog
 from app.fast_travel_flash import FastTravelFlash
 from app.observatory import ObservatoryDialog
-from app.guide import GuideDialog
 from app.legend_popup import LegendPopup
 from app.pointer_theme import PointerThemeDialog
 from app.report import ReportDialog
@@ -1077,7 +1076,6 @@ class WatchController(QObject):
         # by a stray close).
         self._encyclopedia: EncyclopediaDialog | None = None
         self._observatory: ObservatoryDialog | None = None
-        self._guide: GuideDialog | None = None
         # THE THREE MINI WINDOWS (R5 MENU REWORK item 3) — the SAME
         # non-modal, one-live-instance lifecycle as the trio above, see
         # design_window.md/pointer_theme.md/slot_theme.md for why they
@@ -1223,7 +1221,7 @@ class WatchController(QObject):
         off mid-flight."""
         self._widget.mark_closing()
         for dialog in (
-            self._encyclopedia, self._observatory, self._guide,
+            self._encyclopedia, self._observatory,
             self._design, self._pointer_theme, self._slot_theme,
         ):
             if dialog is not None:
@@ -2524,24 +2522,15 @@ class WatchController(QObject):
         # Observatory only).
         ReportDialog(self._translation_overlay).exec()
 
-    @paths.in_display
     def _open_guide(self) -> None:
-        """Open (or raise) the [Guide](guide.md) — NON-MODAL (ITEM 1, R4
-        owner instruction batch 2026-07-20): `.show()` instead of
-        `.exec()`, so the dial stays interactive while it is open. A
-        second open request RAISES the ONE live instance instead of
-        stacking a duplicate."""
-        if self._guide is not None:
-            self._guide.raise_()
-            self._guide.activateWindow()
-            return
-        dialog = GuideDialog(self._translation_overlay)
-        dialog.finished.connect(self._on_guide_closed)
-        self._guide = dialog
-        dialog.show()
-
-    def _on_guide_closed(self, _result: int = 0) -> None:
-        self._guide = None
+        """📖 Guide… — the help book is a CARD in the Encyclopedia now
+        (owner decision 2026-07-28, Session 27: "jedno mesto za čitanje
+        svega"). The menu entry survives as the SHORTCUT the owner asked
+        for: it opens the Encyclopedia straight on that card, instead of
+        raising a second reader with its own layout for the same
+        content (Rule #6 — the standalone GuideDialog is retired, not
+        kept alongside)."""
+        self._open_encyclopedia_at("guide", 0)
 
     # --- The three mini windows (R5 MENU REWORK item 3) -------------------------
 

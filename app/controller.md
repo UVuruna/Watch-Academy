@@ -541,7 +541,9 @@ size math) — headless, built exactly like `main.py` minus the mutex.
   — see the Z-ORDER note below). Its own internal Enlarge flow
   (`ObservatoryDialog._open_enlarged`) is non-modal too now, for the
   same ITEM 1 reason — see [Observatory](observatory.md)
-- `_open_guide()`: opens (or raises the live) [Guide](guide.md) — the
+- `_open_guide()`: opens the [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md)
+  straight on its GUIDE card (Session 27, owner 2026-07-28: the help
+  book has no window of its own any more) — the
   menu used to build-and-`.exec()` a fresh `GuideDialog` inline in
   `_build_menu`'s lambda; ITEM 1 gave it the same live-instance-
   tracking shape as the other two, so it earned its own method
@@ -552,7 +554,7 @@ size math) — headless, built exactly like `main.py` minus the mutex.
   translation chunks), flushed once per minute and at quit. Stays
   MODAL — an admin snapshot, outside ITEM 1's non-modal trio
 - `_open_encyclopedia_at(topic, entry)`: opens (or navigates the live)
-  [Encyclopedia](encyclopedia.md) — from the menu (topic None = the
+  [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md) — from the menu (topic None = the
   gallery) or on a Spacebar jump to a hovered topic's entry (the
   widget's `open_encyclopedia` signal). Passes
   `stay_on_top=z_mode == "top"` (fix round A, owner verdict 2026-07-19 —

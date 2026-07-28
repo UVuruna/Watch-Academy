@@ -88,10 +88,13 @@ The small transient overlay (R5b FINAL MAP round, owner spec sealed
 theme/option change — icon + option text, auto-fading. See
 [Fast Travel Flash](fast_travel_flash.md).
 
-### `encyclopedia.py` — Encyclopedia Dialog
-The article browser: a grouped topic gallery, then a SLIDER paging one
-entry at a time with Home / Download and the look arrows.
-See [Encyclopedia Dialog](encyclopedia.md).
+### `encyclopedia/` — The Encyclopedia
+The article browser, on THREE levels since the Session 27 rework
+(owner-sealed 2026-07-28): six wholes on a home screen that never
+scrolls, then one whole's theme cards, then the page slider with its
+variant switcher. Ten cohesive modules where one 2,766-line file used to
+be (root Rule #20).
+See [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md).
 
 ### `encyclopedia_warm.py` — Encyclopedia Warm
 Background pre-materialization of everything the Encyclopedia can show
@@ -105,10 +108,6 @@ The ONE background warm for the process (owner 2026-07-28: every watch
 used to run its own, doing identical work N times), walked in priority
 order — dial art, working set, Encyclopedia, hover articles last.
 See [Warm](warm.md).
-
-### `guide.py` — Guide Dialog
-The paged, resizable help book over `assets/guide/` pages and
-captions. See [Guide Dialog](guide.md).
 
 ### `ui_style.py` — UI Style
 Shared modern gradient-pill button styling for the reader dialogs —

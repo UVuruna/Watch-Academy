@@ -28,10 +28,9 @@ kinship-group switcher all read through this ONE function.
   (the neutral chip and the two text-contrast anchors).
 
 ### Used by
-- [Encyclopedia Dialog](encyclopedia.md) — Home / Download / Previous
+- [Encyclopedia Dialog](encyclopedia/dialog.md) — Home / Download / Previous
   / Next, the look arrows (`style_button`), and the persistent look
   caption (`style_look_chip`).
-- [Guide Dialog](guide.md) — Previous / Next pager.
 
 ## Functions
 
