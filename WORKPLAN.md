@@ -448,6 +448,22 @@ Encyclopedia UI splits into a few top-level WHOLES (celine) with
 their themes inside. Recorded here so no session collides with it —
 this plan only reserves the seat and defers the spec to the owner.
 
+### Session 28 — the 3D Preview integration → **Sonnet** — BLOCKED on the gadget's M2
+**Say:** "Radi Sesiju 28 iz WORKPLAN.md — 3D Preview u
+Enciklopediji."
+**Reads:** `Gadgets/3D Preview/PLAN.md` (the integration contract);
+CUBE.md §The Thirteen Axes; `app/encyclopedia.md`;
+`Database/encyclopedia.json` cube families.
+**Delivers:** the DOMY-side half of the contract: an EXPORTER that
+computes the Character-Cube model JSON from DOMY's own canon data
+(the 65 terms, colors, registers — one source of truth, root Rule
+19, never copy-pasted into the gadget); the `preview3d` widget
+embedded in an Encyclopedia dialog (seated wherever the owner's
+Session 27 celine puts the Cube whole), hover wired through the
+teaser law, click through the Spacebar-jump contract; tests on the
+exporter's schema and the embed's open path. Runs only after the
+gadget's M2 (the four models + Switcher) exists.
+
 ## Running in Parallel (no agent needed)
 
 - **Owner art generation** from the sheets: pantheon plates,
