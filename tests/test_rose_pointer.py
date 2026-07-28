@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 
 import astral
 import pytest
+from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
 from app.controller import build_skin
@@ -32,11 +33,14 @@ from render.compositor import Compositor
 from render.layers import (
     arm_half_deg,
     daylight_active,
+    dial_point,
     palette_for,
     rose_star_offsets,
     rose_star_set,
+    ruler_seat_angle,
     servant_seat_angle,
     sunday_dual_face,
+    weekday_body_orbit,
     weekday_slots,
 )
 
@@ -253,6 +257,90 @@ def test_the_compass_servant_seat_is_untouched(app):
 
 def test_the_rose_carries_the_dual_sunday_face(app):
     assert sunday_dual_face(_skin()) is True
+
+
+def test_rose_sunday_hover_fires_on_the_sabbath_seat_not_the_legacy_bottom(app):
+    """REGRESSION (owner screenshot 2026-07-28): the two Sunday faces
+    DRAW on the Sabbath axis (Servant blue 06h/270°, Ruler red 18h/90°),
+    but `Compositor._element_at`/`_weekday_body_at` used to hardcode
+    `constants.SOUTH_SLOT_ANGLE` (24h/180°, the Compass/Seasons seat)
+    for the Servant hit-test instead of calling `servant_seat_angle` —
+    so the Rose's hover fired at the legacy bottom instead of its own
+    drawn blue arm, and blanked Wednesday's real 24h/purple seat on
+    Sundays in the process."""
+    skin = _skin()
+    compositor = Compositor(skin, AssetCache())
+    radius = 180.0
+    orbit = radius * weekday_body_orbit(skin)
+
+    # The legacy bottom seat (24h/180°) must NOT answer as the Servant —
+    # on the Rose that arm is Wednesday's own purple seat, undisturbed.
+    legacy_point = dial_point(constants.SOUTH_SLOT_ANGLE, orbit)
+    assert compositor._element_at(legacy_point, radius, 0.0, "sun") != (
+        "sun_servant"
+    )
+    assert compositor._element_at(
+        legacy_point, radius, 0.0, "sun"
+    ) == "body:mercury"
+
+    # The Rose's OWN seat — the blue 06h/270° Sabbath arm — must answer.
+    sabbath_point = dial_point(servant_seat_angle(skin), orbit)
+    assert compositor._element_at(
+        sabbath_point, radius, 0.0, "sun"
+    ) == "sun_servant"
+
+
+# --- The Duality-Axes config (owner decree 2026-07-28) ------------------------------
+
+
+def test_the_blind_default_carries_over_for_every_undeclared_theme(app):
+    """`config.constants.DUALITY_RULER_ON_COLD_POLE` lists only the
+    Sacred-Axis proof case — every OTHER dual theme keeps the Rose's
+    plain default: Ruler on red (18h), Servant on blue (06h)."""
+    for theme in ("greek", "norse", "profession", "wolf", "bible_dark"):
+        skin = _skin(weekday_theme=theme)
+        assert ruler_seat_angle(skin) == 90.0
+        assert servant_seat_angle(skin) == 270.0
+
+
+def test_creeds_flips_to_the_sacred_axis_colours(app):
+    """The proof case (CUBE.md §The Thirteen Axes — the Duality-Axes
+    config): Christianity is the Sacred Axis's LUMINOUS COLD member and
+    must pull to blue; Satanism the FALLEN WARM one and must pull to
+    red — the reverse of the blind default, and of what the Rose drew
+    before this config existed."""
+    skin = _skin(weekday_theme="religion")
+    assert "religion" in constants.DUALITY_RULER_ON_COLD_POLE
+    assert ruler_seat_angle(skin) == 270.0     # Christianity — blue, 06h
+    assert servant_seat_angle(skin) == 90.0    # Satanism — red, 18h
+    # The Ruler's own drawn/hovered slot in the weekday table moves
+    # with him — only the Servant's, drawn separately, never lived
+    # there at all.
+    assert dict(weekday_slots(skin))[270.0] == ("sun",)
+    assert 90.0 not in dict(weekday_slots(skin))
+
+
+def test_the_vertical_axis_never_flips(app):
+    """CUBE.md: only the horizontal (Rose) axis is per-theme — the
+    Compass/Seasons' vertical Ruler-at-top default is unconditional,
+    even for creeds (owner decree 2026-07-28)."""
+    for pointer in ("octa", "cross"):
+        skin = build_skin(
+            dataclasses.replace(
+                Settings(), pointer=pointer, weekday_theme="religion",
+            )
+        )
+        assert servant_seat_angle(skin) == constants.SOUTH_SLOT_ANGLE
+
+
+def test_creeds_flip_carries_no_art_or_name_swap(app):
+    """The flip moves ARMS, never identities: Christianity stays the
+    RULER (its own name, plate and hover text), Satanism stays the
+    SERVANT — only which arm each rides changes."""
+    assert defaults.WEEKDAY_DUAL_NAMES["religion"] == (
+        "Christianity", "Satanism",
+    )
+    assert defaults.WEEKDAY_THEME_FILES["religion"]["sun"] == "Christianity"
 
 
 # --- The daylight switch ------------------------------------------------------------

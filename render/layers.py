@@ -216,16 +216,63 @@ def rose_star_set(offset: float) -> str:
     return constants.ROSE_STAR_SETS[offset]
 
 
+def _duality_ruler_default_angle(skin: SkinDefinition) -> float:
+    """The Ruler's (the "sun" occupant's) UNFLIPPED seat — wherever the
+    pointer's own weekday table seats him, before any Duality-Axes
+    override (`_duality_flipped`) swaps it with the Servant's."""
+    return next(
+        angle
+        for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+        if "sun" in occupants
+    )
+
+
+def _duality_servant_default_angle(skin: SkinDefinition) -> float:
+    """The Servant's UNFLIPPED seat (`constants.SERVANT_SEAT_ANGLE`),
+    before any Duality-Axes override."""
+    return constants.SERVANT_SEAT_ANGLE.get(
+        skin.pointer, constants.SOUTH_SLOT_ANGLE
+    )
+
+
+def _duality_flipped(skin: SkinDefinition) -> bool:
+    """Whether this theme's Sunday duality reverses the Rose's default
+    Ruler-red/Servant-blue seating (`constants.DUALITY_RULER_ON_COLD_
+    POLE`, CUBE.md §The Thirteen Axes — the Duality-Axes config): the
+    Sacred Axis's proof case, Christianity pulling to the cold blue
+    pole instead of the blind default's warm red. Only the ROSE's
+    horizontal axis is ever per-theme — the Compass/Seasons' vertical
+    Ruler-at-top default is unconditional (owner decree 2026-07-28)."""
+    return (
+        skin.pointer == "rose"
+        and skin.weekday_theme in constants.DUALITY_RULER_ON_COLD_POLE
+    )
+
+
+def ruler_seat_angle(skin: SkinDefinition) -> float:
+    """The angle the RULER face of Sunday occupies — normally wherever
+    the pointer's own weekday table seats the "sun" occupant, UNLESS
+    the Duality-Axes config flips this theme (`_duality_flipped`), in
+    which case the Ruler takes the Servant's default seat instead —
+    the two faces swap ARMS, never their names or articles."""
+    if _duality_flipped(skin):
+        return _duality_servant_default_angle(skin)
+    return _duality_ruler_default_angle(skin)
+
+
 def servant_seat_angle(skin: SkinDefinition) -> float:
     """The angle the SERVANT face of Sunday occupies (Rule #5 — the ONE
     reader of `constants.SERVANT_SEAT_ANGLE`). 24h on the Compass and
     the Seasons, where the dual Sunday has always sat; the ROSE seats
     him on the BLUE 06h arm and gives 18h's red to the Ruler, because
     blue is the servant's hue and red the master's (CUBE.md §The
-    Rose)."""
-    return constants.SERVANT_SEAT_ANGLE.get(
-        skin.pointer, constants.SOUTH_SLOT_ANGLE
-    )
+    Rose) — UNLESS the Duality-Axes config flips this theme
+    (`_duality_flipped`), in which case the Servant takes the Ruler's
+    default seat instead (the Sacred Axis proof case: Christianity
+    pulls to blue, Satanism to red)."""
+    if _duality_flipped(skin):
+        return _duality_ruler_default_angle(skin)
+    return _duality_servant_default_angle(skin)
 
 
 def daylight_active(skin: SkinDefinition) -> bool:
@@ -271,14 +318,24 @@ def weekday_slots(skin: SkinDefinition) -> tuple:
     the slots ride the DRAWN arms (pure geometry: each occupant pair
     stays glued to its arm as the trio's cube wheel swings it 180°; no
     re-pairing doctrine is invented here). Every consumer of
-    `constants.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5)."""
+    `constants.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5).
+    The Duality-Axes config (`_duality_flipped`) additionally moves the
+    "sun" occupant onto `ruler_seat_angle` — the Servant's own seat is
+    never IN this table (drawn separately), so only the Ruler's entry
+    ever needs relocating."""
     slots = constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
     offset = arm_offset_deg(skin)
-    if offset == 0.0:
-        return slots
-    return tuple(
-        ((angle + offset) % 360.0, occupants) for angle, occupants in slots
-    )
+    if offset != 0.0:
+        slots = tuple(
+            ((angle + offset) % 360.0, occupants) for angle, occupants in slots
+        )
+    if _duality_flipped(skin):
+        ruler_angle = (_duality_servant_default_angle(skin) + offset) % 360.0
+        slots = tuple(
+            (ruler_angle, occupants) if "sun" in occupants else (angle, occupants)
+            for angle, occupants in slots
+        )
+    return slots
 
 
 def calendar_wheel(skin: SkinDefinition) -> str:

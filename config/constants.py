@@ -1430,3 +1430,23 @@ SOUTH_SLOT_ANGLE = 180.0
 SERVANT_SEAT_ANGLE = {"rose": 270.0}
 AURORA_DUAL_WEEKDAY_ANGLE = 225.0    # 3h — bottom left
 AURORA_DUAL_SLOT_ANGLE = 135.0       # 21h — bottom right
+
+# THE DUALITY-AXES CONFIG (owner decree 2026-07-28, CUBE.md §The
+# Thirteen Axes — Display Plans). Every weekday theme's Sunday duality
+# rides an axis whose two ends are Cube poles: VERTICAL (yellow-top/
+# 12h <-> purple-bottom/24h) on the Compass and the Seasons, HORIZONTAL
+# (blue-06h <-> red-18h, the Sabbath axis) on the Rose instead. The
+# default law is unconditional on the vertical axis — the Ruler
+# (`WEEKDAY_DUAL_NAMES[theme][0]`) always pulls to the warm pole
+# (yellow/top) there, no per-theme override exists or is needed. Only
+# the HORIZONTAL axis is per-theme, because a blind carryover of that
+# same default (Ruler -> warm/red) is wrong wherever the Sacred Axis
+# (CUBE.md §The Thirteen Axes) already assigns a member to the COLD
+# trio: Christianity is the LUMINOUS COLD member (blue), Satanism the
+# FALLEN WARM one (red) — the reverse of the blind default, which
+# today seats Satanism blue and Christianity red. Listed themes pull
+# their RULER to the cold pole instead; absent = the default carries
+# over unchanged. `render.layers.ruler_seat_angle`/`servant_seat_angle`
+# are the two readers (Rule #5) — they swap which of the Ruler's/
+# Servant's figures rides which arm, never their names or articles.
+DUALITY_RULER_ON_COLD_POLE = frozenset({"religion"})

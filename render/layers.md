@@ -544,12 +544,32 @@ Three small readers carry the rest (Rule #5 — one source each):
 `rose_star_offsets(skin)` / `rose_star_set(offset)` for the geometry
 and its figure sets; `servant_seat_angle(skin)` for the Servant face's
 own seat (24h on the Compass and the Seasons, the blue 06h arm on the
-Rose) — the four places that used to hardcode `SOUTH_SLOT_ANGLE` for
-the Servant read it now; and `daylight_active(skin)`, which gates the
-whole `lit_regions` pass. With it False the star paints ONCE at full
-day alpha and the night half stands in flat colour; it can only be
-False on the Calendar and the Rose, so the stored setting survives a
-pointer switch untouched (the `effective_palette_style` pattern).
+Rose) — every draw/label site reads it now, AND (Session 23 bug fix,
+owner screenshot 2026-07-28) the two `render.compositor` hover hit-test
+sites that had been missed and still hardcoded `SOUTH_SLOT_ANGLE`, so
+the Rose's Sunday hover used to fire on the legacy bottom seat instead
+of the drawn blue/red arms (regression pin:
+`tests/test_rose_pointer.py::test_rose_sunday_hover_fires_on_the_
+sabbath_seat_not_the_legacy_bottom`); and `daylight_active(skin)`,
+which gates the whole `lit_regions` pass. With it False the star
+paints ONCE at full day alpha and the night half stands in flat
+colour; it can only be False on the Calendar and the Rose, so the
+stored setting survives a pointer switch untouched (the
+`effective_palette_style` pattern).
+
+**THE DUALITY-AXES CONFIG (owner decree 2026-07-28, [The Cube
+Canon](../CUBE.md) §The Thirteen Axes — Display Plans):**
+`servant_seat_angle`/`ruler_seat_angle` and `weekday_slots` all read
+`config.constants.DUALITY_RULER_ON_COLD_POLE` (via the private
+`_duality_flipped`) before returning a seat: for a listed theme on the
+Rose, the two faces swap ARMS — the Ruler takes the Servant's default
+seat and vice versa — never their names, plates or articles. The one
+entry so far is the Sacred Axis proof case, `"religion"`: Christianity
+(the Ruler) is the LUMINOUS COLD member and pulls to blue/06h instead
+of the blind default's red/18h; Satanism (the Servant) takes red/18h
+instead of blue/06h. The Compass/Seasons' vertical Ruler-at-top
+default never flips — the config is horizontal-only (the Rose's
+Sabbath axis), by owner decree.
 
 **RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
 Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`

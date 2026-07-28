@@ -434,6 +434,21 @@ everywhere else) and the Ruler keeps red at 18h.
 `DAYLIGHT_SWITCH_POINTERS` names the two pointers — Calendar and Rose
 — whose reader may turn the day/night law off.
 
+**THE DUALITY-AXES CONFIG (owner decree 2026-07-28, [The Cube
+Canon](../CUBE.md) §The Thirteen Axes — Display Plans, Session 23):**
+`DUALITY_RULER_ON_COLD_POLE` lists the weekday themes whose Sunday
+duality reverses the Rose's blind default (Ruler warm/red-18h, Servant
+cold/blue-06h) — root Rule #4, no per-theme values hardcoded into the
+render layer itself. The Compass/Seasons' vertical Ruler-at-top default
+never flips (owner decree: unconditional there); only the Rose's
+horizontal Sabbath axis is per-theme. The one entry, `"religion"`, is
+the Sacred Axis proof case: Christianity (the Ruler) is the LUMINOUS
+COLD member and must pull to blue, Satanism (the Servant) the FALLEN
+WARM one and must pull to red — the reverse of what the blind default
+drew. `render.layers.ruler_seat_angle`/`servant_seat_angle` are the two
+readers; the flip swaps which arm each face's own plate/name/article
+rides, never the identities themselves.
+
 ## Connections
 
 ### Used by
