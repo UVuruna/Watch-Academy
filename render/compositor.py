@@ -68,6 +68,7 @@ from render.layers import (
     earth_region,
     palette_for,
     servant_holds_the_seat,
+    servant_seat_angle,
     slot_layout,
     slot_seat_orbit,
     slot_seat_rotation,
@@ -1238,13 +1239,18 @@ class Compositor:
                 return f"body:{body}"
             if servant_holds_the_seat(self._skin, today) and hit(
                 dial_point(
-                    constants.SOUTH_SLOT_ANGLE + rotation,
+                    servant_seat_angle(self._skin) + rotation,
                     radius * weekday_body_orbit(self._skin),
                 ),
                 radius * weekday.diamond_scale * slot_seat_scale(self._skin),
             ):
-                # The SERVANT face at 24h — ghosted all week,
-                # opaque on Sunday (owner 2026-07-13).
+                # The SERVANT face at his own seat — 24h on the
+                # Compass/Seasons, the blue 06h/270° arm on the Rose
+                # (`servant_seat_angle`) — ghosted all week, opaque on
+                # Sunday (owner 2026-07-13; Rose bug fix 2026-07-28:
+                # this used to hardcode the 24h Compass seat, so the
+                # Rose's hover fired at the legacy bottom instead of
+                # its own drawn blue arm).
                 return "sun_servant"
         if archetype_active(self._skin):
             # The archetype CENTER (owner decree 2026-07-18, two-type
@@ -1376,9 +1382,10 @@ class Compositor:
         if weekday.display_mode == "center_only":
             return None                  # no slot bodies in this mode
         dual = servant_holds_the_seat(self._skin, today)
+        seat = servant_seat_angle(self._skin)
         for angle, occupants in weekday_slots(self._skin):
-            if dual and angle == constants.SOUTH_SLOT_ANGLE:
-                continue     # the Servant won the 24h seat today
+            if dual and angle == seat:
+                continue     # the Servant won his own seat today
             body = visible_occupant(occupants, today)
             slot = dial_point(
                 angle + rotation, radius * weekday_body_orbit(self._skin)

@@ -107,6 +107,22 @@ tooltip` — the Rose card carries a computed 24-entry legend, see
   position — so the marker answers first wherever it actually sits;
   `encyclopedia_target` inherits the fix for free (it calls
   `_element_at` directly).
+  **THE ROSE SABBATH HOVER FIX (owner screenshot bug, Session 23,
+  2026-07-28):** the Servant hit-test in `_element_at` and the skip
+  check in `_weekday_body_at` both hardcoded `constants.
+  SOUTH_SLOT_ANGLE` (24h, the Compass/Seasons seat) for the Servant's
+  own seat instead of calling `render.layers.servant_seat_angle` — the
+  same drift the marker fix above had already happened once for a
+  DIFFERENT geometry. Root cause: on the Rose the Servant sits at the
+  blue 06h/270° arm, not 24h, so the two Sunday faces DREW on the
+  Sabbath axis (see [Layers](layers.md)'s WeekdayLayer/StarLayer, which
+  read `servant_seat_angle` correctly) but HOVERED at the legacy bottom
+  seat — a dead zone on the Rose (nothing draws there on Sunday) that
+  also silently ate Wednesday's own 24h/purple hover every Sunday, since
+  the skip check matched an angle that happened to hold Mercury's slot
+  instead. FIX: both sites now call `servant_seat_angle(self._skin)`.
+  Regression pin: `tests/test_rose_pointer.py::test_rose_sunday_hover_
+  fires_on_the_sabbath_seat_not_the_legacy_bottom`.
 - `hit_omega(x, y, size) -> bool` / `trigger_reveal_week()` /
   `reveal_active()` (owner 2026-07-16, REPURPOSED by the same-day
   seal): the Omega (24h) double-click hit region — the FULL ROUND AREA
