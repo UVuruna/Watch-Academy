@@ -39,6 +39,14 @@ RATCHET: dict[str, tuple[str, str]] = {
         "the second config god-file; Session 36's map covers defaults.py only",
         "a constants split round after Session 36, same snapshot method",
     ),
+    "config/pantheon.py": (
+        "the weekday theme registry outgrew Session 36's estimate — twelve "
+        "wave casts plus the roster/rotation engine total ~1.55k lines even "
+        "after the continents carve (math in config/pantheon.md); entry "
+        "APPROVED by the owner 2026-07-29 in the coordination session",
+        "a pantheon split round — static tables vs the rotation engine vs "
+        "the cast tables; not yet scheduled",
+    ),
     "app/observatory.py": (
         "the statistics window in one file",
         "the app split round",

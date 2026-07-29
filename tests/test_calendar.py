@@ -610,20 +610,19 @@ def test_new_dozens_rim_members_carry_real_committed_art():
         assert all(art is not None and art.exists() for _n, art in entries), key
 
 
-def test_new_dozens_axle_plate_is_graceful_absent():
-    """The AXLE's own plate has not landed on disk for ANY of the six
-    always-centers — `thirteenth_plate` must resolve `None`, never
-    crash, with the name still speaking (the SAME graceful-absent
-    contract Sol/Modrenik carried before their own art landed). The
-    Sins Dozen's axle also proves the axle STEM rule: a display name
-    with spaces resolves through the underscored filename, the same
+def test_new_dozens_axle_plates_resolve_real_art():
+    """The AXLE's own plate LANDED for ALL six always-centers in the
+    owner's generation batch (2026-07-29) — `thirteenth_plate` resolves
+    each to real on-disk art, with the name still speaking. The Sins
+    Dozen's axle also proves the axle STEM rule: a display name with
+    spaces resolves through the underscored filename, the same
     no-space rule `art_stems` applies to `Just_Indignation`."""
     from render.layers import thirteenth_plate
 
     for key in constants.AXLE_ALWAYS_CENTERS:
         resolved_name, art = thirteenth_plate(key)
         assert resolved_name == constants.THIRTEENTHS[key][0], key
-        assert art is None, key
+        assert art is not None and art.exists(), key
     assert thirteenth_plate("hardness_of_heart")[0] == "Hardness of Heart"
 
 

@@ -60,11 +60,11 @@ PENDING_BODY_COLORED = frozenset({
 PENDING_DUAL = frozenset({"religion", "sw_jedi", "sw_sith", "sw_dyad"})
 
 # --- The NINTH plate (`constants.WEEKDAY_THEME_NINTHS`) ---------------------
-# Themes whose Ninth is wired ahead of its art. `continents` (Zealandia)
-# has been so since the owner-sealed matrix of 2026-07-21; sw_jedi (Yoda)
-# and sw_dyad (The Ghosts) are wave III's. sw_sith is NOT here — Darth
-# Plagueis landed with the sheet.
-PENDING_NINTH = frozenset({"continents", "sw_jedi", "sw_dyad"})
+# Themes whose Ninth is wired ahead of its art. sw_jedi (Yoda) and
+# sw_dyad (The Ghosts) are wave III's. sw_sith is NOT here — Darth
+# Plagueis landed with the sheet. `continents` (Zealandia) left this set
+# 2026-07-29: both earth faces landed in the owner's generation batch.
+PENDING_NINTH = frozenset({"sw_jedi", "sw_dyad"})
 
 # --- SEAT ROSTERS (`pantheon.WEEKDAY_SEAT_ROSTERS`) -------------------------
 # Casts whose rotating seats are wired ahead of their plates, so their

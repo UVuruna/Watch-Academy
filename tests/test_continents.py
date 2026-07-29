@@ -41,15 +41,17 @@ def test_continents_body_and_dual_plates_exist_on_disk():
 
 def test_continents_ninth_wired_zealandia_and_pangea():
     """The Ninth is Zealandia by default with Pangea as the easter-egg
-    face; both plates are wired ahead of the owner's art (graceful-
-    absent, like Triglav) — the render `theme_ninth` returns None until
-    they land, for both faces."""
+    face; BOTH plates LANDED 2026-07-29 (the owner's generation batch,
+    renamed to the earth family's suffixless law) — `theme_ninth` now
+    resolves both faces, and this pin keeps them resolvable forever."""
     from render.layers import theme_ninth
 
     assert constants.WEEKDAY_THEME_NINTHS["continents"][0] == "Zealandia"
     assert constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"][0] == "Pangea"
-    assert theme_ninth("continents") is None            # Zealandia pending
-    assert theme_ninth("continents", active_alt=True) is None  # Pangea pending
+    zealandia = theme_ninth("continents")
+    assert zealandia is not None and zealandia[1].name == "zealandia.png"
+    pangea = theme_ninth("continents", active_alt=True)
+    assert pangea is not None and pangea[1].name == "pangea.png"
 
 
 def test_continent_regions_cover_the_six_columns_and_the_poles():

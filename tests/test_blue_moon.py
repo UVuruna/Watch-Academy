@@ -301,18 +301,15 @@ def test_ophiuchus_and_cat_resolve_real_committed_art():
     assert name == "The Cat" and asset is not None and asset.exists()
 
 
-def test_sol_and_modrenik_are_graceful_absent():
-    """Wired ahead of the owner's prompt sheet (item 3/4 contract): the
-    name resolves, the plate does not exist yet, and the sourceless
-    MONTHS_ART_DIR path passes through paths.art_file untouched —
-    exactly like the twelve real Slavic months (test_months.py)."""
+def test_sol_and_modrenik_resolve_real_art():
+    """Wired ahead of the owner's prompt sheet, and the art LANDED
+    2026-07-29 (the owner's generation batch): the name resolves and
+    the plate is real on-disk art through the calendars family —
+    exactly like Ophiuchus and the Cat above."""
     for key, expected in (("sol", "Sol"), ("modrenik", "Modrenik")):
         name, asset = thirteenth_plate(key)
         assert name == expected
-        assert asset is None
-        plate = defaults.MONTHS_ART_DIR / f"{expected}.png"
-        assert paths.art_file(plate) == plate
-        assert not plate.exists()
+        assert asset is not None and asset.exists()
 
 
 # --- 7. THE CORRECTED LAW: a 13th shows ONLY on the Calendar pointer ----------
