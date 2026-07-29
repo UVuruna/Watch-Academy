@@ -701,8 +701,9 @@ arms already differ in hue from their neighbours.
 Three small readers carry the rest (Rule #5 — one source each):
 `rose_star_offsets(skin)` / `rose_star_set(offset)` for the geometry
 and its figure sets; `servant_seat_angle(skin)` for the Servant face's
-own seat (24h on the Compass and the Seasons, the blue 06h arm on the
-Rose) — every draw/label site reads it now, AND (Session 23 bug fix,
+own seat (the 24h bottom on the vertical wheels, the blue 06h arm on
+every horizontal wheel — the Rose and the Compass's Character
+wheel) — every draw/label site reads it now, AND (Session 23 bug fix,
 owner screenshot 2026-07-28) the two `render.compositor` hover hit-test
 sites that had been missed and still hardcoded `SOUTH_SLOT_ANGLE`, so
 the Rose's Sunday hover used to fire on the legacy bottom seat instead
@@ -715,19 +716,33 @@ colour; it can only be False on the Calendar and the Rose, so the
 stored setting survives a pointer switch untouched (the
 `effective_palette_style` pattern).
 
-**THE DUALITY-AXES CONFIG (owner decree 2026-07-28, [The Cube
-Canon](../CUBE.md) §The Thirteen Axes — Display Plans):**
-`servant_seat_angle`/`ruler_seat_angle` and `weekday_slots` all read
-`config.constants.DUALITY_RULER_ON_COLD_POLE` (via the private
-`_duality_flipped`) before returning a seat: for a listed theme on the
-Rose, the two faces swap ARMS — the Ruler takes the Servant's default
-seat and vice versa — never their names, plates or articles. The one
-entry so far is the Sacred Axis proof case, `"religion"`: Christianity
-(the Ruler) is the LUMINOUS COLD member and pulls to blue/06h instead
-of the blind default's red/18h; Satanism (the Servant) takes red/18h
-instead of blue/06h. The Compass/Seasons' vertical Ruler-at-top
-default never flips — the config is horizontal-only (the Rose's
-Sunday axis), by owner decree.
+**THE DUAL SUNDAY WHEEL MAP (owner seal 2026-07-29, completing the
+2026-07-28 Duality-Axes decree — [The Cube Canon](../CUBE.md) §The
+Thirteen Axes — Display Plans):** the duality is a property of the
+WHEEL. `horizontal_duality(skin)` / `center_duality(skin)` classify it:
+CENTER (one image) on the Trinity, the Prism and the Quaternity's
+Seasons wheel (diagonal arms — its Sun leaves the slots for the hub);
+VERTICAL 12h/24h on Quaternity/Compass primary+secondary; HORIZONTAL
+06h/18h on the Rose (both wheels) and the Compass's Character wheel,
+which takes the Rose's whole hue-seated weekday table
+(`_base_weekday_slots`). `servant_seat_angle`/`ruler_seat_angle` and
+`weekday_slots` read the two flip configs (via the private
+`_duality_flipped`) before returning a seat — the faces swap ARMS,
+never names, plates or articles: `DUALITY_RULER_ON_COLD_POLE`
+("religion" — Christianity to blue/06h, Satanism to red/18h, on every
+horizontal wheel) and `DUALITY_SERVANT_ON_TOP` ("continents" — the
+geographic flip: Arctic/Servant up top 12h, Antarctica/Ruler at 24h,
+on the vertical wheels; on a shared slot only the SUN moves, his
+slot-mates keep the arm). The CENTER face law (`center_face`): daylight
+"ruler", night "servant", and the Ninth in BOTH solar ±30 min windows
+(`constants.CENTER_WINDOW_HOURS`, `ninth_window_anchor`); a two-badge
+Sunday runs the same windows through `dual_seat_ninth` — near solar
+noon the Ninth borrows the Servant's seat (beside the Ruler), near
+solar midnight the Ruler's (beside the Servant). Every seat and window
+above is pinned by `tests/test_dual_sunday_wheels.py` and the
+re-goldened `tests/test_pointer.py::test_center_face_solar_windows_
+golden`; all 23 themes' seatings were polled and sealed one by one the
+same day (only the two flips above deviate from Ruler top+red).
 
 **RING SATURATION (owner 2026-07-18, Session 21-D — its own Settings ▸
 Colors slider, independent of Pointer Saturation):** `skin.ring_saturation`
@@ -869,28 +884,31 @@ since the Calendar pointer carries no such seat. See
 [Blue Moon](../core/blue_moon.md) for the trigger/window/candidate facts
 themselves.
 
-**THE DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
-amendment, round R3b item 3):** on a real Sunday, when the classic
-unit's duality lives in ONE merged center image instead of the
-Compass/Seasons' two separate seats — `center_dual_face(skin)`, the
-COMPLEMENT of `sunday_dual_face` (hexa/trio ALWAYS merge the Sun into
-the center; `center_only` mode merges it for every pointer, since there
-are no seats to hold a second face there) — the SOLAR clock, not the
-wall clock, may swap which face draws: `center_face(day, tick,
-has_ninth)` reads `day.sun.noon` (the SAME anchor the hexagram's own
-rotation reads) through `core.angles.hours_between` and returns
-`"ruler"` (GOOD, the default), `"servant"` (EVIL, near solar midnight)
-or — only for a theme that names one — `"ninth"` (near solar noon).
+**THE DUAL/NINTH TIME WINDOWS (owner seal 2026-07-29, superseding
+INSTRUCTION #5's shape):** on a real Sunday, when the classic unit's
+duality lives in ONE merged center image — `center_dual_face(skin)`,
+the COMPLEMENT of `sunday_dual_face` (hexa/trio and the Quaternity's
+Seasons wheel merge the Sun into the center; `center_only` mode merges
+it for every pointer, since there are no seats to hold a second face
+there) — the SKY decides which face draws: `center_face(day, tick,
+has_ninth)` returns `"ruler"` (GOOD) in DAYLIGHT, `"servant"` (EVIL)
+at NIGHT, and — only for a theme that names one — `"ninth"` inside
+BOTH solar ±30 min windows (solar 11:30–12:30 and 23:30–00:30;
+`ninth_window_anchor` reads `day.sun.noon`, the SAME anchor the
+hexagram's own rotation reads, through `core.angles.hours_between` —
+never the wall clock). A TWO-BADGE Sunday runs the same windows
+through `dual_seat_ninth(day, tick)`: near solar noon the Ninth's
+plate borrows the SERVANT's seat (and stands beside the Ruler), near
+solar midnight the RULER's (beside the Servant) — the hover cards
+follow (`_dual_seat_taken` in the compositor mirrors the paint gate).
 `theme_ninth(theme, pangea=False)` is the ONE existence-gated lookup into
 `constants.WEEKDAY_THEME_NINTHS` both this layer and the compositor's
 hover share (Rule #5) — a theme with no table entry, or whose plate has
-not landed, never offers "ninth"; its midnight window then WIDENS from
-±1h to ±2h (owner: "za one koje nemaju 9tog… 22h i 2h"). The
+not landed, never offers "ninth" and simply ignores the windows. The
 ghost-reveal Sun (`ctx.reveal_active`) always reads plain — the reveal
 promises the ordinary "two persons, a union", never a third face.
-`CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
-`CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH` (`config/constants.py`) are the
-tunable window widths.
+`CENTER_WINDOW_HOURS` (`config/constants.py`) is the one tunable
+window half-width.
 
 **THE CONTINENTS theme (owner-sealed matrix 2026-07-21, round R7a).** Two
 render hooks, both keyed off `ctx.skin.weekday_theme == "continents"`:

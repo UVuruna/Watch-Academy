@@ -94,9 +94,9 @@ TABLE AND ITS SOLAR WINDOWS (round R3b item 3): `WEEKDAY_THEME_NINTHS`
 `app.encyclopedia`'s own ninths loop so [Layers](../render/layers.md)
 and [Compositor](../render/compositor.md) can read the SAME table for
 the CENTER seat's solar-window face law (Rule #5) — and
-`CENTER_NOON_WINDOW_HOURS` / `CENTER_MIDNIGHT_WINDOW_HOURS` /
-`CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH`, the tunable hour-widths of
-those windows around solar noon/midnight. **THE CONTINENTS theme**
+`CENTER_WINDOW_HOURS` (owner seal 2026-07-29: ±30 min around solar
+noon AND solar midnight; the Ninth shows in both, day/night decides
+Ruler/Servant outside them). **THE CONTINENTS theme**
 (owner-sealed matrix 2026-07-21, round R7a): registered across the
 standard weekday tables (`WEEKDAY_THEMES`, `_TITLES`, `_NAMES`, `_DIRS`
 = `"../earth"`, `_FILES`, `_DUAL_NAMES`/`_FILES` = the poles, `_ARTICLES`
@@ -455,8 +455,9 @@ Character wheel, Prophecy the 3D Cube vertices).
 `POINTER_WEEKDAY_SLOTS["rose"]` is the COLOR LAW — the seat is the hue,
 the Prism primary canon with the two Sunday hues lightened (MON cyan,
 FRI rose) because Sunday needs blue and red for its own two faces;
-`SERVANT_SEAT_ANGLE` gives the Servant the blue 06h arm there (24h
-everywhere else) and the Ruler keeps red at 18h.
+`SERVANT_SEAT_ANGLE` gives the Servant the blue 06h arm there and on
+every other horizontal-duality wheel (the Compass's Character wheel;
+24h on the vertical wheels) and the Ruler keeps red at 18h.
 `DAYLIGHT_SWITCH_POINTERS` names the two pointers — Calendar and Rose
 — whose reader may turn the day/night law off.
 
@@ -486,20 +487,29 @@ rotation of the drawn wheel and its Aura wedges, never a re-anchoring
 of which hue sits where. Geometry and consumers:
 [The Pointer Shapes](../render/layers.md#the-pointer-shapes).
 
-**THE DUALITY-AXES CONFIG (owner decree 2026-07-28, [The Cube
-Canon](../CUBE.md) §The Thirteen Axes — Display Plans, Session 23):**
-`DUALITY_RULER_ON_COLD_POLE` lists the weekday themes whose Sunday
-duality reverses the Rose's blind default (Ruler warm/red-18h, Servant
-cold/blue-06h) — root Rule #4, no per-theme values hardcoded into the
-render layer itself. The Compass/Seasons' vertical Ruler-at-top default
-never flips (owner decree: unconditional there); only the Rose's
-horizontal Sunday axis is per-theme. The one entry, `"religion"`, is
-the Sacred Axis proof case: Christianity (the Ruler) is the LUMINOUS
-COLD member and must pull to blue, Satanism (the Servant) the FALLEN
-WARM one and must pull to red — the reverse of what the blind default
-drew. `render.layers.ruler_seat_angle`/`servant_seat_angle` are the two
-readers; the flip swaps which arm each face's own plate/name/article
-rides, never the identities themselves.
+**THE DUAL SUNDAY WHEEL MAP + DUALITY-AXES CONFIG (owner decree
+2026-07-28, SEALED IN FULL 2026-07-29 — [The Cube Canon](../CUBE.md)
+§The Thirteen Axes — Display Plans):** the duality is a property of
+the WHEEL. `CENTER_DUALITY_WHEELS` (cross tertiary — the Seasons'
+diagonal arms leave no 12h/24h seat, its Sunday joins the
+Trinity/Prism center law) and `HORIZONTAL_DUALITY_WHEELS` (octa
+tertiary — the Character wheel wears the Rose's own hues, its Sunday
+rides the blue<->red 06h/18h axis and its bodies take the Rose's hue
+seats) extend the pointer-wide defaults (hexa/trio center, rose
+horizontal, everything else vertical 12h/24h). Two per-theme flip
+sets — root Rule #4, no per-theme values hardcoded into the render
+layer: `DUALITY_RULER_ON_COLD_POLE` ("religion", the Sacred Axis proof
+case on every HORIZONTAL wheel — Christianity, the Ruler, is the
+LUMINOUS COLD member and pulls to blue/06h; Satanism the FALLEN WARM
+one to red/18h) and `DUALITY_SERVANT_ON_TOP` ("continents", the
+geographic flip on the VERTICAL wheels — the Arctic IS the north:
+Arctic/Servant 12h, Antarctica/Ruler 24h). All 23 dual themes were
+polled one by one and sealed 2026-07-29; every other theme is
+STANDARD (Ruler top+red, Servant bottom+blue).
+`render.layers.ruler_seat_angle`/`servant_seat_angle` are the two
+readers; a flip swaps which arm each face's own plate/name/article
+rides, never the identities themselves. Regression pins:
+`tests/test_dual_sunday_wheels.py`.
 
 ## Connections
 

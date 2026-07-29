@@ -653,16 +653,39 @@ Sacred Axis."*
 - **Calendar-12** and **the Rose of the Twenty-Four** — both SOLVED in
   Session 26; the seatings, the laws that produced them and the honest
   misses they cost are §[The Seatings](#the-seatings) below.
-- **The Duality-Axes config (owner decree 2026-07-28, root Rule 4):**
-  every DUAL theme declares in config where its two members sit on
-  the vertical (yellow top ↔ purple bottom) and horizontal (blue ↔
-  red) axes; the default law says the PRIMARY member pulls to the
-  top, but the horizontal is per-theme — no blind rule survives the
-  proof case: **creeds today wears Satanism blue and Christianity
-  red, and the Sacred Axis rules the flip — Christianity BLUE
-  (christic, cold), Satanism RED (diabolic, warm).** Consumed by the
-  Rose, the Octa and Seasons(4) wherever a duality displays.
-  (Session 23.)
+- **The Duality-Axes config (owner decree 2026-07-28, root Rule 4;
+  RE-SEALED in full 2026-07-29):** every DUAL theme declares in config
+  where its two members sit on the vertical (yellow top ↔ purple
+  bottom) and horizontal (blue ↔ red) axes; the default law says the
+  PRIMARY member pulls to the top, but no blind rule survives the
+  proof case: **creeds wears Christianity BLUE (christic, cold) and
+  Satanism RED (diabolic, warm) — the Sacred Axis rules the flip.**
+  Session 23 implemented the flip but MISSED the decree's own reason
+  for existing: the axis is a property of the WHEEL, and the
+  Compass's Character wheel never received it (the owner's words:
+  "zbog COMPASSA trećeg sam i pokrenuo to pravilo"). The 2026-07-29
+  seal closed it in full — the dual-Sunday WHEEL MAP:
+  - **CENTER** (one image; daylight Ruler, night Servant, the Ninth
+    in BOTH solar ±30 min windows 11:30–12:30 / 23:30–00:30) — the
+    Trinity, the Prism, and the **Quaternity's Seasons wheel** (its
+    arms sit on the diagonals; no 12h/24h seat exists).
+  - **VERTICAL 12h/24h** (Ruler top in the light, Servant bottom) —
+    Quaternity and Compass, primary + secondary wheels.
+  - **HORIZONTAL 06h/18h** (Servant blue left, Ruler red right) — the
+    Rose (BOTH wheels) and the **Compass's Character wheel**, which
+    wears the Rose's own hues and takes the Rose's hue seats.
+  - Two-badge Sundays gained the center's window law: near solar noon
+    the NINTH replaces the Servant (beside the Ruler), near solar
+    midnight the Ruler (beside the Servant).
+  - All 23 dual themes were then polled ONE BY ONE and sealed
+    STANDARD (Ruler top+red, Servant bottom+blue) — the only two
+    exceptions: **creeds** (the horizontal Sacred-Axis flip above)
+    and **continents** (the GEOGRAPHIC vertical flip: the Arctic IS
+    the north — Arctic/Servant 12h, Antarctica/Ruler 24h).
+  Config: `constants.CENTER_DUALITY_WHEELS` /
+  `HORIZONTAL_DUALITY_WHEELS` / `DUALITY_RULER_ON_COLD_POLE` /
+  `DUALITY_SERVANT_ON_TOP` / `CENTER_WINDOW_HOURS`; pinned by
+  `tests/test_dual_sunday_wheels.py`. (Sessions 23 + 2026-07-29.)
 
 <a id="the-seatings"></a>
 
