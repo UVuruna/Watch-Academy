@@ -8,14 +8,17 @@ Decides, for one day, whether the Continents weekday theme's Ninth seat
 shows **Zealandia** (the default — the true continent 94% drowned,
 unrecognized until 2017) or **Pangea** (the easter-egg — the deep-time
 supercontinent that was once all land and, by the supercontinent cycle,
-will be again). Owner-sealed matrix, 2026-07-21.
+will be again). Owner-sealed matrix, 2026-07-21; WIDENED to every
+principal moon phase, owner verdict 2026-07-29.
 
 Pangea replaces Zealandia only while the sky is DOING something on the
 traveled day. The rule is one boolean over three triggers:
 
 - an **eclipse** near the traveled moment,
 - a **season turning point** (a solstice/equinox day), or
-- a **full/new moon day** (~1/11 of the year).
+- a **principal moon-phase day** — full, new, or either quarter (owner
+  verdict 2026-07-29, widened from full/new alone) — roughly one day in
+  seven against the bundled 2026 data (was one in about thirteen).
 
 Pure module — no Qt, no wall clock (purity-gated by
 [Purity test](../tests/test_purity.py)). Astronomy is never recomputed
@@ -28,30 +31,32 @@ here: both callers hand in facts they already hold.
   (the New/Full syzygy fractions are read, never hardcoded).
 
 ### Used by
-- [Layers](../render/layers.md) — `theme_ninth(theme, pangea=...)` and
-  the `CenterBodyLayer` feed the DIAL flags (`DayContext.season_events`/
-  `moon_events`, `TickState.eclipse_event`) through
-  `ninth_is_pangea_from_events`.
+- [Layers](../render/layers.md) — `theme_ninth(theme, active_alt=...)`
+  and the `CenterBodyLayer` feed the DIAL flags (`DayContext.
+  season_events`/`moon_events`, `TickState.eclipse_event`) through
+  `ninth_is_pangea_from_events`, dispatched by
+  `constants.NINTH_MECHANISMS["continents"] == "easter_egg"`.
 - [Compositor](../render/compositor.md) — the center hover reads the
-  same law for the same swap.
+  same law for the same swap (`_center_ninth_alt`).
 - [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) — the Continents topic's Ninth
   page follows `ninth_is_pangea_from_repos` against the traveled date
   and the bundled Seasons/Moon repositories.
 
 ## Functions
 
-- `pangea_over_zealandia(has_eclipse, is_turning_point, is_full_or_new_moon)`
+- `pangea_over_zealandia(has_eclipse, is_turning_point, is_principal_phase)`
   — THE LAW: the single OR of the three triggers. Everything else feeds
   it.
 - `date_has_turning_point(on_date, season_events)` /
-  `date_has_full_or_new_moon(on_date, moon_events)` — the DIAL forms,
+  `date_has_principal_phase(on_date, moon_events)` — the DIAL forms,
   reading the day's already-built anchor lists (UTC dates; moon side
-  matches on the principal phase NAME).
+  matches on the principal phase NAME — New/First Quarter/Full/Third
+  Quarter).
 - `turning_point_on(on_date, seasons_repo)` /
-  `full_or_new_moon_on(on_date, moon_repo)` — the ENCYCLOPEDIA forms,
+  `principal_phase_on(on_date, moon_repo)` — the ENCYCLOPEDIA forms,
   deriving the two calendar triggers from the bundled repositories (moon
-  side matches on the fraction 0.0/0.5); a date outside coverage answers
-  False, graceful.
+  side matches on the fraction 0.0/0.25/0.5/0.75); a date outside
+  coverage answers False, graceful.
 - `ninth_is_pangea_from_events(...)` — the DIAL wrapper (live eclipse
   flag threaded in).
 - `ninth_is_pangea_from_repos(...)` — the ENCYCLOPEDIA wrapper

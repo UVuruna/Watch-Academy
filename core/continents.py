@@ -1,5 +1,6 @@
 """The Continents theme's Ninth easter-egg law (owner-sealed matrix
-2026-07-21).
+2026-07-21; WIDENED to every principal moon phase, owner verdict
+2026-07-29 — see `pangea_over_zealandia`).
 
 The Ninth seat of the Continents theme is ZEALANDIA — the literal
 Unfound, a true continent 94% drowned, unrecognized until 2017. On days
@@ -8,8 +9,8 @@ deeper time — the supercontinent that was once ALL, split, and by the
 supercontinent cycle will return.
 
 The LAW is one boolean over three triggers (an eclipse, a season
-turning point, or a full/new moon day). It is fed by TWO thin wrappers
-that never recompute astronomy:
+turning point, or a PRINCIPAL moon-phase day — full, new, or either
+quarter). It is fed by TWO thin wrappers that never recompute astronomy:
 
 - the DIAL reads the flags already on its own `DayContext`
   (`season_events`/`moon_events`, the pre-built anchor lists) and
@@ -25,27 +26,36 @@ from datetime import date, datetime
 
 from config import constants
 
-# New Moon (0.0) and Full Moon (0.5) — the two SYZYGY phases, when the
-# Sun, Earth and Moon line up and the tides run spring. Read from the
-# canon fraction table (Rule #4), never hardcoded here.
-_FULL_OR_NEW_FRACTIONS = frozenset(
-    {
-        constants.MOON_PHASE_FRACTIONS["New Moon"],
-        constants.MOON_PHASE_FRACTIONS["Full Moon"],
-    }
-)
-_FULL_OR_NEW_NAMES = frozenset({"New Moon", "Full Moon"})
+# All FOUR principal phases (owner verdict 2026-07-29, widening the
+# original New/Full-only trigger): New Moon, First Quarter, Full Moon,
+# Third Quarter — the same table `data.moon_phases` normalizes "Last
+# Quarter" onto (module docstring: "'Last Quarter' is normalized to
+# 'Third Quarter' by the repository on load"). Read from the canon
+# fraction table (Rule #4), never hardcoded here.
+_PRINCIPAL_PHASE_FRACTIONS = frozenset(constants.MOON_PHASE_FRACTIONS.values())
+_PRINCIPAL_PHASE_NAMES = frozenset(constants.MOON_PHASE_FRACTIONS)
 
 
 def pangea_over_zealandia(
-    has_eclipse: bool, is_turning_point: bool, is_full_or_new_moon: bool
+    has_eclipse: bool, is_turning_point: bool, is_principal_phase: bool
 ) -> bool:
     """THE LAW: Pangea replaces Zealandia on the Ninth seat while the sky
     is doing something on the traveled day — an eclipse near the moment,
-    a season turning point (solstice/equinox day), or a full/new moon
-    day (~1/11 of the year). Otherwise the Ninth stays Zealandia. One
-    force, three triggers — the single place the easter-egg rule lives."""
-    return has_eclipse or is_turning_point or is_full_or_new_moon
+    a season turning point (solstice/equinox day), or a PRINCIPAL
+    moon-phase day (owner verdict 2026-07-29: every eclipse, the four
+    solar turning points, AND every principal phase — full, new, and
+    the two quarters, not full/new alone). Otherwise the Ninth stays
+    Zealandia. One force, three triggers — the single place the
+    easter-egg rule lives.
+
+    THE WIDER FRACTION (recomputed honestly against the bundled 2026
+    data, `Database/moonPhases_utc.json`): four principal phases a
+    lunation land on 50 distinct calendar days in 2026 (was 25 for
+    full/new alone) — with the four turning points that is 54 trigger
+    days out of 365, roughly ONE DAY IN SEVEN (was ~one in thirteen,
+    the old docstring's "~1/11" ballpark). An eclipse widens it further
+    on any day the optional Deep Time pack's catalog names one."""
+    return has_eclipse or is_turning_point or is_principal_phase
 
 
 def date_has_turning_point(
@@ -58,14 +68,16 @@ def date_has_turning_point(
     return any(instant.date() == on_date for instant, _name in season_events)
 
 
-def date_has_full_or_new_moon(
+def date_has_principal_phase(
     on_date: date, moon_events: tuple[tuple[datetime, str], ...]
 ) -> bool:
-    """A New or Full Moon falls ON `on_date` — the DIAL form, reading the
-    `DayContext.moon_events` principal-instant list (names, not
-    fractions, on this side)."""
+    """A PRINCIPAL moon phase — New, First Quarter, Full, or Third
+    Quarter (owner verdict 2026-07-29, widened from New/Full alone) —
+    falls ON `on_date` — the DIAL form, reading the `DayContext.
+    moon_events` principal-instant list (names, not fractions, on this
+    side)."""
     return any(
-        instant.date() == on_date and name in _FULL_OR_NEW_NAMES
+        instant.date() == on_date and name in _PRINCIPAL_PHASE_NAMES
         for instant, name in moon_events
     )
 
@@ -84,17 +96,19 @@ def turning_point_on(on_date: date, seasons_repo) -> bool:
     return any(instant.date() == on_date for instant in anchors.instants)
 
 
-def full_or_new_moon_on(on_date: date, moon_repo) -> bool:
-    """A New or Full Moon falls ON `on_date` — the ENCYCLOPEDIA form,
-    derived from the bundled Moon repository (`moon_window(N)` carries
-    year N plus its neighbours). Fractions on this side (0.0 New, 0.5
-    Full); a date outside coverage answers False."""
+def principal_phase_on(on_date: date, moon_repo) -> bool:
+    """A PRINCIPAL moon phase — New, First Quarter, Full, or Third
+    Quarter (owner verdict 2026-07-29, widened from New/Full alone) —
+    falls ON `on_date` — the ENCYCLOPEDIA form, derived from the bundled
+    Moon repository (`moon_window(N)` carries year N plus its
+    neighbours). Fractions on this side (0.0/0.25/0.5/0.75); a date
+    outside coverage answers False."""
     try:
         window = moon_repo.moon_window(on_date.year)
     except (ValueError, KeyError):
         return False
     return any(
-        instant.date() == on_date and fraction in _FULL_OR_NEW_FRACTIONS
+        instant.date() == on_date and fraction in _PRINCIPAL_PHASE_FRACTIONS
         for instant, fraction in window.events
     )
 
@@ -112,7 +126,7 @@ def ninth_is_pangea_from_events(
     return pangea_over_zealandia(
         has_eclipse,
         date_has_turning_point(on_date, season_events),
-        date_has_full_or_new_moon(on_date, moon_events),
+        date_has_principal_phase(on_date, moon_events),
     )
 
 
@@ -128,5 +142,5 @@ def ninth_is_pangea_from_repos(
     return pangea_over_zealandia(
         has_eclipse,
         turning_point_on(on_date, seasons_repo),
-        full_or_new_moon_on(on_date, moon_repo),
+        principal_phase_on(on_date, moon_repo),
     )
