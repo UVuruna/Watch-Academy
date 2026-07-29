@@ -187,10 +187,12 @@ watchdog delay, tick scheduling
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
 marker borders), `ROSE_RAY_HALF_DEG`/`ROSE_RAY_BORDER` (the Rose ray
-GEOMETRY — its hues moved out, see [Palette](palette.md)), the Calendar wedge
-opacity and the Almanac day-arrow geometry (`CALENDAR_WEDGE_ALPHA` —
-every wedge, since the lit wedge was deleted 2026-07-29 —
-`CALENDAR_ARROW_*`),
+GEOMETRY — its hues moved out, see [Palette](palette.md)),
+`ARM_OUTLINE_WIDTH` (the LEAD LINE's width, the twin of
+`palette.ARM_OUTLINE` — every drawn arm wears it since the owner's
+correction round 2026-07-29), the Almanac day-arrow geometry
+(`CALENDAR_ARROW_*`; the Calendar's own wedge opacity is GONE — its
+wedges wear the standard Aura alphas now),
 the CALENDAR MOUNT (owner-sealed R7b 2026-07-21 registration, R9a
 2026-07-21 render + picker, GENERALIZED 2026-07-29):
 `SLAVIC_MONTHS` (the twelve Croatian months as (croatian, gloss, ascii
@@ -494,13 +496,23 @@ wheels that seat their arms off the pointer's defaults —
 `GENESIS_ARM_OFFSET_DEG` 180° on trio tertiary, and the new
 `SEASONS_ARM_OFFSET_DEG` 45° on cross tertiary, which puts the Seasons'
 colour BOUNDARIES on 12h/3h/6h/9h (astronomical seasons; the cross's
-other two wheels stay meteorological). `ROSE_RAY_PITCH_DEG` (15°) and
-`ROSE_WHEEL_ASSEMBLY_OFFSET_DEG` ({Legacy 0°, Prophecy +7.5°}) shift
-the Rose's WHOLE assembly half a ray on Prophecy, so every ray centre
-lands on HH:30 and each hue covers its hours from :00 to :59 — a
-rotation of the drawn wheel and its Aura wedges, never a re-anchoring
-of which hue sits where. Geometry and consumers:
+other two wheels stay meteorological). Geometry and consumers:
 [The Pointer Shapes](../render/layers.md#the-pointer-shapes).
+
+**THE CORRECTION ROUND (owner 2026-07-29).** The Prophecy assembly
+shift of the round above was REVOKED on sight of the live watch —
+`ROSE_RAY_PITCH_DEG` and `ROSE_WHEEL_ASSEMBLY_OFFSET_DEG` are DELETED,
+and both Rose wheels keep every ray tip on a FULL hour
+(`ROSE_STAR_OFFSETS`, untouched). The per-wheel law moved into the
+BACKGROUND: `AURA_WEDGE_ANCHOR_DEFAULT` (−½, +½ spans — the wedge
+CENTRED on its hue's lead ray, every one-star pointer) and
+`ROSE_AURA_WEDGE_ANCHOR` ({Legacy (−1, 0) — the wedge TRAILS the lead
+ray, boundaries on the lead-ray hours; Prophecy (−½, +½) — centred}).
+The owner's own golden numbers, for the yellow group: Legacy tips
+10h/11h/12h with the background 9h → 12h, Prophecy tips 11h/12h/13h
+with the background 10:30 → 13:30. Read by
+`render.layers.aura_wedge_anchor` alone — see
+[The Aura wedge anchor](../render/layers.md#the-aura-wedge-anchor).
 
 **THE DUAL SUNDAY WHEEL MAP + DUALITY-AXES CONFIG (owner decree
 2026-07-28, SEALED IN FULL 2026-07-29 — [The Cube Canon](../CUBE.md)

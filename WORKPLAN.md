@@ -608,13 +608,53 @@ two interleaved hexagrams, its polygon a 12-point star; the Rose's
 polygon one 24-ray star. (2) The OFFSET wheels — Seasons +45°
 (astronomical, boundaries on the cardinals), Rose Prophecy +7.5°
 (hours worn :00–:59), and the Rose's Aura finally standing behind its
-own hue groups on both wheels. (3) `hide_night_borders` for all.
+own hue groups on both wheels — the +7.5° shift was REVOKED in the
+correction round below, and both wheels keep every ray on a full hour.
+(3) `hide_night_borders` for all.
 (4) The Calendar normalized — the lit-wedge feature deleted, the mount
 moved into the Pointer Theme window, and the offer registry-driven:
 zodiac / almanac / Slavic months / Chinese animals / emotions, each
 with its own sealed thirteenth-in-the-center rule (`core/blue_moon`
 now table-driven). (5) The three Design-window rows. Tests
 1127 → 1219 passed; regression pins on every sealed angle.
+
+### Session 29b — the Pointers CORRECTION round → DONE (2026-07-29)
+
+The owner looked at the live watch and sealed four corrections, which
+supersede the matching parts of Session 29 above:
+
+1. **The lead line is universal.** The Rose's black outline was "the
+   good example": EVERY drawn arm and polygon face wears it now — trio
+   (cube included), cross, hexa, octa, Calendar (both figures), Rose
+   (both) — in the star and polygon shapes alike, internal colour
+   boundaries included, since each face is stroked as its own path. The
+   armless Aurora is the one exception. `palette.ROSE_ARM_OUTLINE` /
+   `defaults.ROSE_ARM_OUTLINE_WIDTH` became the pointer-neutral
+   `palette.ARM_OUTLINE` / `defaults.ARM_OUTLINE_WIDTH`.
+2. **The Prophecy +7.5° shift is REVOKED** — with it
+   `constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG`, `ROSE_RAY_PITCH_DEG`,
+   `rose_assembly_offset_deg()`, `wheel_offset_deg()` and
+   `aura_group_offset_deg()`. Both Rose wheels keep every ray tip on a
+   FULL hour; the per-wheel difference moved into the BACKGROUND, as
+   the owner's own numbers: Legacy tips 10h/11h/12h with the wedge
+   9h → 12h (it TRAILS its lead ray), Prophecy tips 11h/12h/13h with
+   the wedge 10:30 → 13:30 (CENTERED). One table,
+   `constants.AURA_WEDGE_ANCHOR_DEFAULT` / `ROSE_AURA_WEDGE_ANCHOR`.
+3. **The daylight switch reaches the background.** With it off the
+   Umbra paints FLAT (one circle in the contrast span's lightest shade)
+   and the Aura floods the whole circle at the day alpha; with it on
+   the CALENDAR's twelve wedges now obey `lit_regions` like every other
+   pointer instead of flooding the circle at a fixed alpha
+   (`defaults.CALENDAR_WEDGE_ALPHA` deleted with that path). The figure
+   FACES keep reading the real sun — the switch flattens the disc
+   colouring alone.
+4. **UI.** Settings ▸ Display's checkbox is "Daylight - Night"; the
+   Design window's "Hide night borders" row greys out whenever it
+   cannot act (Calendar/Rose with the daylight switch off).
+
+Tests 1219 → 1251 of this session's own count (suite green); the dead
+half-hour law is pinned dead by
+`test_both_rose_wheels_keep_every_ray_on_a_full_hour`.
 
 
 
@@ -948,10 +988,6 @@ absent. Everything else in the original Session 28 entry stands.
   canon-sealed to ride it; the two-per-wedge law is implemented and
   tested, registering one is a single table row once sealed (Rose-24's
   three-figure center render would be new work).
-- **Rose Prophecy seats** — the +7.5° shift moves stars, polygon and
-  Aura; the weekday/Ruler/Servant seats stay on the eight 45° anchors
-  (every body still inside its own hue group). Should the seats ride
-  along instead?
 - **`render/layers.py` split** — grown to ~3,700 lines (Rule #20): a
   dedicated refactor session (`render/pointer_shapes.py`) proposed.
 - Seven archetypes stay seven (the standing recommendation) or grow

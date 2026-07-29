@@ -29,6 +29,7 @@ from config import constants, defaults, palette, paths
 from config.ui_text import ui
 from data.hands import hand_packs
 from data.rings import ring_presets
+from render.layers import daylight_active
 
 
 def _clear(layout) -> None:
@@ -211,8 +212,16 @@ class DesignDialog(QDialog):
             # HIDE NIGHT BORDERS (owner option 2026-07-29): the arm's
             # outline stroke runs only over the sunlit arcs, so the
             # night keeps its fills without the overlapping-border mesh.
+            # WITHOUT A NIGHT THE ROW IS INERT (owner correction
+            # 2026-07-29): the Calendar and the Rose may switch the
+            # day/night law off entirely, and then there is no night to
+            # hide a border in — the row GREYS OUT rather than lying
+            # about what it does. `daylight_active` reads exactly the two
+            # fields `Settings` carries (pointer + daylight), so the ONE
+            # law answers here as well (Rule #5).
             night_borders = QCheckBox(self._tr("Hide night borders"))
             night_borders.setChecked(settings.hide_night_borders)
+            night_borders.setEnabled(daylight_active(settings))
             night_borders.toggled.connect(
                 self._setters["hide_night_borders"]
             )

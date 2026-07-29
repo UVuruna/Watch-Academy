@@ -198,50 +198,29 @@ def arm_offset_deg(skin: SkinDefinition) -> float:
     )
 
 
-def rose_assembly_offset_deg(skin: SkinDefinition) -> float:
-    """THE PROPHECY SHIFT (owner spec 2026-07-29): +7.5° — half a ray —
-    on the Rose's SECONDARY wheel, carried by the WHOLE assembly (all
-    three stars, or the twenty-four-ray polygon), so every ray CENTER
-    lands on HH:30 and each hue covers its hours from :00 to :59.
-    Legacy keeps the full hours. 0 on every other pointer.
+def aura_wedge_anchor(skin: SkinDefinition) -> tuple[float, float]:
+    """Where a hue's Aura WEDGE stands relative to that hue's LEAD RAY,
+    as (low, high) FRACTIONS of the hue's own share of the circle —
+    `constants.AURA_WEDGE_ANCHOR_DEFAULT` and, on the Rose,
+    `constants.ROSE_AURA_WEDGE_ANCHOR` (owner's correction round
+    2026-07-29, his exact numbers).
 
-    Unlike `arm_offset_deg` this is a rotation of the DRAWN wheel alone
-    — the stars and the Aura wedges behind them. The weekday seats, the
-    Ruler/Servant seats and the arm hit-test keep the Rose's own eight
-    45° anchors, which is where the seated bodies are drawn and hovered
-    (the shift is smaller than a ray's half-width, so every body still
-    stands inside its own hue group)."""
+    The lead ray is the direction the hue wears on the topmost (0°)
+    star, which on a one-star pointer is simply its arm — so the default
+    (−½, +½) is the standing arm-centered wedge. The Rose wears each hue
+    on THREE rays and its two wheels read them differently: LEGACY's
+    wedge TRAILS the lead ray (−1, 0 — the past lies behind the hour, so
+    the boundaries land ON the lead-ray hours), PROPHECY's stands
+    CENTERED on it (−½, +½ — past and future symmetric).
+
+    THE PROPHECY SHIFT IS GONE (owner correction 2026-07-29): the star
+    tips never move, both wheels keep every ray on a full hour, and the
+    per-wheel difference lives HERE, in the background alone."""
     if skin.pointer != "rose":
-        return 0.0
-    return constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG[
+        return constants.AURA_WEDGE_ANCHOR_DEFAULT
+    return constants.ROSE_AURA_WEDGE_ANCHOR[
         palette.effective_palette_style(skin.pointer, skin.palette_style)
     ]
-
-
-def wheel_offset_deg(skin: SkinDefinition) -> float:
-    """The angle the DRAWN wheel — star arms, polygon faces AND the Aura
-    wedges behind them — is turned by: the offset wheels' own rotation
-    plus the Rose's per-wheel assembly shift. ONE reader for both
-    (Rule #5), so a background wedge can never drift off the arms it
-    stands behind."""
-    return arm_offset_deg(skin) + rose_assembly_offset_deg(skin)
-
-
-def aura_group_offset_deg(skin: SkinDefinition) -> float:
-    """Where a hue's Aura WEDGE sits relative to that hue's arm angle:
-    the MEAN of the pointer's star offsets — the CENTER of the hue's ray
-    GROUP (owner's top-priority fix 2026-07-29).
-
-    One star (every pointer but the Rose) means the group is the arm
-    itself and the answer is 0 — the standing behavior. The Rose wears
-    each hue on THREE rays, so the wedge must center on the middle one:
-    −15° on Legacy (rays at −30/−15/0), 0° on Prophecy (−15/0/+15,
-    symmetric). With `wheel_offset_deg` added, Legacy's wedge boundaries
-    land on the HH:30 marks and Prophecy's on the full hours."""
-    offsets = rose_star_offsets(skin)
-    if not offsets:
-        return 0.0
-    return sum(offsets) / len(offsets)
 
 
 def polygon_shape(skin: SkinDefinition) -> bool:
@@ -434,7 +413,15 @@ def daylight_active(skin: SkinDefinition) -> bool:
     those two carry the reader's own switch, because their wheels are
     read as a wheel first and a clock second. The stored setting is
     ignored — never rewritten — on the other five, so it survives a
-    pointer switch untouched (the `effective_palette_style` pattern)."""
+    pointer switch untouched (the `effective_palette_style` pattern).
+
+    With it False NOTHING on the disc reads the sun (owner correction
+    2026-07-29): the star paints once at full day alpha, the Umbra
+    stands at flat noon and the Aura wears full color over the whole
+    circle. The FIGURE faces are untouched — they keep reading the real
+    sky. It answers on the two fields alone (`pointer`, `daylight`), so
+    the Design window can ask it of the raw `Settings` object it holds
+    and the ONE law serves both (Rule #5)."""
     if skin.pointer not in constants.DAYLIGHT_SWITCH_POINTERS:
         return True
     return skin.daylight
@@ -1486,7 +1473,7 @@ def drawn_arms(
     draws every pointer and both shapes (Rule #5):
 
     ```
-    offset = wheel_offset_deg(skin)              # the wheel's own turn
+    offset = arm_offset_deg(skin)                # the wheel's own turn
     IF pointer is CALENDAR:
         centres = centre of each of the twelve wedges of the ACTIVE wheel
         IF shape is polygon → ONE pass: all twelve, hue i on wedge i
@@ -1501,7 +1488,7 @@ def drawn_arms(
         ELSE                → one pass per star, in the table's order
     ```
     """
-    offset = wheel_offset_deg(skin)
+    offset = arm_offset_deg(skin)
     if skin.pointer == "calendar":
         centers = [
             offset + (start + end) / 2.0
@@ -1535,29 +1522,31 @@ def drawn_arms(
 def aura_wedge_bounds(
     skin: SkinDefinition, palette: tuple
 ) -> list[tuple[float, float]]:
-    """THE BACKGROUND FOLLOWS THE STAR (owner's top-priority fix
+    """THE BACKGROUND FOLLOWS THE STAR (owner's correction round
     2026-07-29) — the (start, end) dial angles of every hue's Aura
-    wedge, hue index 0 first. ONE law: a wedge is centered on its own
-    hue's RAY GROUP, so the wedge behind a group of rays covers exactly
-    those rays and the boundaries fall midway between adjacent groups.
+    wedge, hue index 0 first. ONE law: a wedge is anchored on its own
+    hue's LEAD RAY, and how it sits on that ray is the pointer's
+    per-wheel anchor.
 
     ```
-    span   = 360 / number of hues
-    centre = wheel_offset_deg(skin)          # the wheel's own turn
-           + aura_group_offset_deg(skin)     # the group's middle ray
-           + hue index * span
-    wedge  = centre ± span/2
+    span  = 360 / number of hues
+    lead  = arm_offset_deg(skin) + hue index * span   # the hue's own ray
+    low, high = aura_wedge_anchor(skin)               # in spans
+    wedge = (lead + low * span, lead + high * span)
     ```
 
-    On every one-star pointer the group IS the arm and this is the
-    standing behavior. On the ROSE, whose eight hues each wear three
-    rays, the boundaries land on the HH:30 marks (Legacy) and on the
-    full hours (Prophecy) — before this law they cut each group in
-    half, which is the misalignment the owner saw."""
+    On every one-star pointer the lead ray IS the arm and the anchor is
+    (−½, +½) — the standing arm-centered wedge. On the ROSE, whose eight
+    hues each wear three rays, the owner's own numbers apply: LEGACY's
+    wedge trails its lead ray (hue 0: 9h -> 12h, boundaries ON the
+    lead-ray hours), PROPHECY's stands centered on it (hue 0: 10:30 ->
+    13:30). Every wedge still tiles the circle exactly — adjacent wedges
+    share a boundary, none overlaps."""
     span = 360.0 / len(palette)
-    offset = wheel_offset_deg(skin) + aura_group_offset_deg(skin)
+    offset = arm_offset_deg(skin)
+    low, high = aura_wedge_anchor(skin)
     return [
-        (offset + index * span - span / 2.0, offset + index * span + span / 2.0)
+        (offset + index * span + low * span, offset + index * span + high * span)
         for index in range(len(palette))
     ]
 
@@ -1887,7 +1876,24 @@ class Layer(ABC):
 class BackgroundLayer(Layer):
     """The UMBRA (gray brightness wheel) and the AURA (transparent hue
     wedges over the sunlit part of the day); both rotate with the star
-    — or stand upright when solar rotation is off."""
+    — or stand upright when solar rotation is off.
+
+    THE DAYLIGHT SWITCH REACHES HERE (owner correction 2026-07-29): with
+    `daylight_active(skin)` False — only ever the Calendar and the Rose
+    — day and night vanish from the WHOLE dial, not just the star:
+
+    ```
+    IF the daylight law runs:
+        Umbra = the brightness wheel, lightest on solar noon
+        Aura  = the hues inside the lit arcs only, night stays gray
+    ELSE:                                # flat noon everywhere
+        Umbra = ONE full circle in the contrast span's LIGHTEST shade
+        Aura  = full colour over the WHOLE circle at the day alpha
+    ```
+
+    The FIGURE faces (the Sunday Ruler/Servant, the Earth's day/night
+    face, `center_face`) keep reading the real sun — the switch flattens
+    the DISK COLOURING alone (owner seal)."""
 
     cadence = Cadence.DAILY
 
@@ -1932,23 +1938,18 @@ class BackgroundLayer(Layer):
         # CALENDAR (owner 2026-07-16, CANON §The Dozen): TWELVE 2-hour
         # wedges — the Aura carries the wedge colors, no star arms (like
         # Aurora). Calendar-FIXED: the wedges never ride the solar
-        # rotation (owner spec). EVERY wedge paints at the SAME resting
-        # opacity — the lit-wedge feature (the shichen under the hour
-        # hand, the month/sign under the Earth) is DELETED (owner decree
-        # 2026-07-29): the Calendar follows the same visibility law as
-        # every other pointer, nothing more.
+        # rotation (owner spec), so they paint at rotation 0 — otherwise
+        # they are the SAME Aura every other pointer draws (owner
+        # correction 2026-07-29: the Calendar's own always-full-circle
+        # fixed-alpha path is GONE, it follows the day/night law like
+        # everyone else). The lit-wedge feature — the shichen under the
+        # hour hand, the month/sign under the Earth — died with the
+        # earlier decree.
         if ctx.skin.pointer == "calendar":
-            aura_hues = aura_palette_for(ctx.skin)
-            wheel = calendar_wheel(ctx.skin)
-            cal_radius = ctx.radius * (
-                ctx.skin.background.aura_radius_fraction
+            self._paint_aura(
+                painter, ctx, aura_radius, aura_palette_for(ctx.skin),
+                calendar_wedge_bounds(calendar_wheel(ctx.skin)), 0.0,
             )
-            for index, (start, end) in enumerate(calendar_wedge_bounds(wheel)):
-                painter.save()
-                painter.setOpacity(defaults.CALENDAR_WEDGE_ALPHA)
-                painter.setBrush(QColor(aura_hues[index]))
-                draw_pie(painter, cal_radius, start, end)
-                painter.restore()
             if ctx.skin.calendar_mount != "off":
                 _draw_calendar_mount(painter, ctx, ctx.skin.calendar_mount)
             return
@@ -1962,18 +1963,48 @@ class BackgroundLayer(Layer):
             else (palette.COLORFUL_OFF_COLOR,)
         )
         # THE BACKGROUND FOLLOWS THE STAR (`aura_wedge_bounds` — the
-        # owner's top-priority fix 2026-07-29): each hue's wedge covers
-        # its own RAY GROUP, wheel offsets included, so a wedge can
-        # never stand half behind one group and half behind the next.
-        wedges = aura_wedge_bounds(ctx.skin, aura_hues)
+        # owner's fix 2026-07-29): each hue's wedge is anchored on its
+        # own LEAD RAY, wheel offset included, so a wedge can never
+        # stand half behind one hue's rays and half behind the next.
+        self._paint_aura(
+            painter, ctx, aura_radius, aura_hues,
+            aura_wedge_bounds(ctx.skin, aura_hues), ctx.rotation,
+        )
+
+    def _paint_aura(
+        self, painter: QPainter, ctx: RenderContext, radius: float,
+        hues: tuple, wedges: list[tuple[float, float]], rotation: float,
+    ) -> None:
+        """The colored wedges — ONE law for every pointer that has them
+        (Rule #5): the Calendar's twelve calendar-FIXED wedges pass
+        rotation 0, every star pointer passes the solar rotation.
+
+        ```
+        IF the daylight law runs (daylight_active):
+            FOR EACH (start, end, alpha) lit arc of the day:
+                clip to the arc, then draw every wedge at that alpha
+        ELSE:                                  # the switch is off
+            draw every wedge over the WHOLE circle at the day alpha
+        ```
+        """
+        spec = self._skin.background
+        if not daylight_active(ctx.skin):
+            painter.save()
+            painter.setOpacity(spec.day_alpha)
+            painter.rotate(rotation)
+            for color, (wedge_start, wedge_end) in zip(hues, wedges):
+                painter.setBrush(QColor(color))
+                draw_pie(painter, radius, wedge_start, wedge_end)
+            painter.restore()
+            return
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
-            painter.setClipPath(pie_path(aura_radius, start, end))
+            painter.setClipPath(pie_path(radius, start, end))
             painter.setOpacity(alpha)
-            painter.rotate(ctx.rotation)
-            for color, (wedge_start, wedge_end) in zip(aura_hues, wedges):
+            painter.rotate(rotation)
+            for color, (wedge_start, wedge_end) in zip(hues, wedges):
                 painter.setBrush(QColor(color))
-                draw_pie(painter, aura_radius, wedge_start, wedge_end)
+                draw_pie(painter, radius, wedge_start, wedge_end)
             painter.restore()
 
     def _draw_umbra(
@@ -1984,12 +2015,22 @@ class BackgroundLayer(Layer):
         (true midnight), mirrored left/right. Forms (owner spec): fine
         30 / coarse 24 sections — single lightest/darkest sections
         centered on top/bottom, the rest in mirror pairs — or the
-        continuous per-pixel gradient."""
+        continuous per-pixel gradient.
+
+        With the daylight switch OFF (the Calendar and the Rose only,
+        owner correction 2026-07-29) there is no night to shade: the
+        whole disc stands at FLAT NOON — one full circle in the contrast
+        span's LIGHTEST shade, through the same tint map every form
+        uses."""
         contrast = ctx.skin.umbra_contrast
         tint = ctx.skin.ring_tint            # the Umbra follows the ring hue
+        lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
+        lightest = min(255, lightest)            # spans store window BOUNDS
+        if not daylight_active(ctx.skin):
+            painter.setBrush(tinted_gray(lightest, tint))
+            painter.drawEllipse(QRectF(-radius, -radius, 2 * radius, 2 * radius))
+            return
         if ctx.skin.umbra_form == "gradient":
-            lightest, darkest = defaults.UMBRA_CONTRAST_SPANS[contrast]
-            lightest = min(255, lightest)        # spans store window BOUNDS
             # Conical sweep from the top: symmetric stops make the
             # left/right sides exact mirrors, per-pixel smooth.
             gradient = QConicalGradient(QPointF(0.0, 0.0), 90.0)
@@ -2072,30 +2113,24 @@ class StarLayer(Layer):
         spec = self._skin.star
         tip = ctx.radius * spec.radius_fraction
         border_width = max(1.0, ctx.radius * spec.border_width_fraction)
+        lead = QPen(
+            QColor(palette.ARM_OUTLINE),
+            max(1.0, ctx.radius * defaults.ARM_OUTLINE_WIDTH),
+        )
         for arms in drawn_arms(ctx.skin, palette_for(ctx.skin)):
             for theta, color in arms:
                 shape = arm_shape_path(ctx.skin, tip, theta)
                 if fill:
-                    # THE ROSE'S LEAD (CUBE.md §The Rose — the owner's
-                    # own drawing outlines every lancet): three stars
-                    # share eight hues, so without a line between them a
-                    # color group merges into one mass and the z-order
-                    # goes invisible. Each arm is stroked AS IT IS
-                    # FILLED, in draw order, so every star reads over the
-                    # one beneath.
-                    if ctx.skin.pointer == "rose":
-                        painter.setPen(
-                            QPen(
-                                QColor(palette.ROSE_ARM_OUTLINE),
-                                max(
-                                    1.0,
-                                    ctx.radius
-                                    * defaults.ROSE_ARM_OUTLINE_WIDTH,
-                                ),
-                            )
-                        )
-                    else:
-                        painter.setPen(Qt.PenStyle.NoPen)
+                    # THE LEAD LINE (owner's correction round
+                    # 2026-07-29 — the Rose's dark lead was "the good
+                    # example", so every pointer wears it now): each arm
+                    # or polygon face is stroked AS IT IS FILLED, in
+                    # draw order, so the outline follows the z-stack and
+                    # the INTERNAL colour boundaries come free — every
+                    # face is its own path, and stroking the path draws
+                    # the edges it shares with its neighbours. The
+                    # armless Aurora never reaches here at all.
+                    painter.setPen(lead)
                     painter.setBrush(QColor(color))
                     painter.drawPath(shape)
                 else:

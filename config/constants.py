@@ -594,23 +594,28 @@ ROSE_STAR_OFFSETS = {
     "secondary": (-15.0, 15.0, 0.0),
 }
 
-# The pitch of the Rose's rays: three stars 15° apart fill the 45° a
-# single octa arm spans, so twenty-four rays stand on the glass — one
-# per HOUR of the day.
-ROSE_RAY_PITCH_DEG = 15.0
-
-# THE PROPHECY SHIFT (Pointers REWORK phase 1, owner spec 2026-07-29):
-# the Rose's SECONDARY wheel moves its WHOLE assembly — all three stars,
-# and the twenty-four-ray polygon — HALF A RAY clockwise, so every ray
-# CENTER lands on HH:30 and each hue therefore covers its hours from :00
-# to :59. LEGACY keeps its rays on the full hours. The shift is a
-# rotation of the drawn wheel only: which hue sits on which ray is
-# untouched. `render.layers.wheel_offset_deg` feeds it to the stars AND
-# to the Aura wedges behind them, so background and star can never
-# disagree.
-ROSE_WHEEL_ASSEMBLY_OFFSET_DEG = {
-    "primary": 0.0,
-    "secondary": ROSE_RAY_PITCH_DEG / 2.0,
+# THE AURA WEDGE ANCHOR (owner's correction round 2026-07-29, his exact
+# numbers) — where a hue's BACKGROUND wedge stands relative to that
+# hue's LEAD RAY (the direction it wears on the topmost, 0° star), in
+# FRACTIONS of the hue's own share of the circle (360/hues). The star
+# tips themselves NEVER move: both Rose wheels keep every ray on a full
+# hour (`ROSE_STAR_OFFSETS`) — the per-wheel law lives here, in the
+# background alone.
+#
+#   DEFAULT (every one-star pointer): the wedge is CENTERED on the arm,
+#           the standing behavior — one ray, one wedge.
+#   LEGACY  (Rose primary): the wedge TRAILS its lead ray — boundaries
+#           ON the lead-ray hours, because the past lies behind the hour.
+#           Owner's numbers: tips 10h/11h/12h, background 9h -> 12h.
+#   PROPHECY (Rose secondary): the wedge is CENTERED on the lead ray —
+#           past and future symmetric. Owner's numbers: tips 11h/12h/13h,
+#           background 10:30 -> 13:30.
+#
+# `render.layers.aura_wedge_anchor` is the ONE reader (Rule #5).
+AURA_WEDGE_ANCHOR_DEFAULT = (-0.5, 0.5)
+ROSE_AURA_WEDGE_ANCHOR = {
+    "primary": (-1.0, 0.0),
+    "secondary": (-0.5, 0.5),
 }
 
 # Which figure SET each Rose star carries, keyed by its offset (CUBE.md

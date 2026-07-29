@@ -17,7 +17,7 @@ from PySide6.QtGui import (QColor, QFont, QFontDatabase,       # noqa: E402
                            QImage, QPainter, QPen, QPolygonF)
 from PySide6.QtWidgets import QApplication                     # noqa: E402
 
-from config import constants, cube, defaults                   # noqa: E402
+from config import constants, cube, defaults, palette          # noqa: E402
 from core import cube_seating as seating                       # noqa: E402
 
 SIZE = 1400
@@ -113,7 +113,7 @@ def draw_rose() -> QImage:
             hue = QColor(defaults.ROSE_PALETTE[seat.hue_index])
             hue.setAlphaF(0.92 if star == "0" else 0.72)
             painter.setBrush(hue)
-            painter.setPen(QPen(QColor(defaults.ROSE_ARM_OUTLINE), 2.0))
+            painter.setPen(QPen(QColor(palette.ARM_OUTLINE), 2.0))
             painter.drawPolygon(_diamond(centre, seat.angle_deg, tip, half))
 
     # Three rays 15° apart can hang their labels on the same line, so the

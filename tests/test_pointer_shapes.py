@@ -23,7 +23,8 @@ from zoneinfo import ZoneInfo
 
 import astral
 import pytest
-from PySide6.QtGui import QImage, QPainter
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QImage, QPainter
 from PySide6.QtWidgets import QApplication
 
 from app.controller import WatchController, build_skin
@@ -41,12 +42,13 @@ from data.seasons import SeasonsRepository
 from render.assets import AssetCache
 from render.compositor import Compositor
 from render.layers import (
+    BackgroundLayer,
     RenderContext,
     StarLayer,
     arm_half_deg,
     arm_offset_deg,
     arm_shape_path,
-    aura_group_offset_deg,
+    aura_wedge_anchor,
     aura_wedge_bounds,
     border_clips,
     dial_point,
@@ -57,9 +59,8 @@ from render.layers import (
     polygon_boundary_radius,
     polygon_curvature,
     polygon_faces,
-    rose_assembly_offset_deg,
     star_inner_radius,
-    wheel_offset_deg,
+    tinted_gray,
     wheel_rotation,
 )
 
@@ -356,52 +357,56 @@ def test_the_seasons_wheel_puts_its_boundaries_on_the_cardinal_hours(app):
         assert boundaries == [0.0, 90.0, 180.0, 270.0]
 
 
-def test_prophecy_stands_on_the_half_hours_while_legacy_keeps_the_hours(app):
-    """Owner spec 2026-07-29: the Rose's SECONDARY wheel shifts its
-    WHOLE assembly half a ray (+7.5°), so every ray CENTER lands on
-    HH:30 and each hue covers its hours from :00 to :59. Legacy's rays
-    stay on the full hours."""
-    assert constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG["primary"] == 0.0
-    assert constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG["secondary"] == 7.5
-    legacy = _skin("rose", palette_style="primary")
-    prophecy = _skin("rose", palette_style="secondary")
-    assert rose_assembly_offset_deg(legacy) == 0.0
-    assert rose_assembly_offset_deg(prophecy) == 7.5
+def test_both_rose_wheels_keep_every_ray_on_a_full_hour(app):
+    """OWNER CORRECTION 2026-07-29 (Rule #25 pin): the Prophecy +7.5°
+    ASSEMBLY SHIFT of the previous round was WRONG and is deleted whole.
+    Both wheels keep the canonical, unshifted star offsets, so all
+    twenty-four rays of both stand on FULL hours — in the star shape and
+    the twenty-four-ray polygon alike. If a half-hour ray ever comes
+    back, the dead mechanism is being rebuilt."""
+    assert not hasattr(constants, "ROSE_WHEEL_ASSEMBLY_OFFSET_DEG")
+    assert not hasattr(constants, "ROSE_RAY_PITCH_DEG")
+    import render.layers as layers
+
+    assert not hasattr(layers, "rose_assembly_offset_deg")
+    assert not hasattr(layers, "wheel_offset_deg")
+    assert not hasattr(layers, "aura_group_offset_deg")
+    assert constants.ROSE_STAR_OFFSETS["primary"] == (-30.0, -15.0, 0.0)
+    assert constants.ROSE_STAR_OFFSETS["secondary"] == (-15.0, 15.0, 0.0)
 
     def rays(skin):
         return sorted(
             angle for arms in _arm_angles(skin) for angle in arms
         )
 
-    for skin in (legacy, prophecy):
-        assert len(rays(skin)) == 24       # three stars, eight arms each
-    assert rays(legacy) == [k * HOUR_DEG for k in range(24)]
-    assert rays(prophecy) == [(k + 0.5) * HOUR_DEG for k in range(24)]
-    # The twenty-four-ray POLYGON carries the same shift.
-    assert rays(
-        _skin("rose", palette_style="secondary", pointer_shape="polygon")
-    ) == [(k + 0.5) * HOUR_DEG for k in range(24)]
+    hours = [k * HOUR_DEG for k in range(24)]
+    for wheel in ("primary", "secondary"):
+        for shape in ("star", "polygon"):
+            skin = _skin("rose", palette_style=wheel, pointer_shape=shape)
+            assert rays(skin) == hours
 
 
-def test_the_prophecy_shift_moves_no_hue_off_its_own_ray(app):
-    """Owner spec: "do NOT re-anchor which hue sits where — only the
-    +7.5° shift"."""
+def test_the_rose_wheels_move_no_hue_off_its_own_ray(app):
+    """Which hue sits on which ray is the canon's own seating — the
+    correction round changed the BACKGROUND, never the star."""
     wheel_hues = palette.ROSE_PALETTE
-    unshifted = {
-        (angle - 7.5) % 360.0: hue
-        for arms in drawn_arms(
-            _skin("rose", palette_style="secondary"), wheel_hues
-        )
-        for angle, hue in arms
-    }
-    plain = {
-        angle % 360.0: hue
-        for offset in constants.ROSE_STAR_OFFSETS["secondary"]
-        for angle, hue in (
-            (offset + index * 45.0, hue) for index, hue in enumerate(wheel_hues)
-        )
-    }
-    assert unshifted == plain
+    for wheel in ("primary", "secondary"):
+        drawn = {
+            angle % 360.0: hue
+            for arms in drawn_arms(
+                _skin("rose", palette_style=wheel), wheel_hues
+            )
+            for angle, hue in arms
+        }
+        plain = {
+            angle % 360.0: hue
+            for offset in constants.ROSE_STAR_OFFSETS[wheel]
+            for angle, hue in (
+                (offset + index * 45.0, hue)
+                for index, hue in enumerate(wheel_hues)
+            )
+        }
+        assert drawn == plain
 
 
 # --- The Aura wedges follow the star ------------------------------------------------
@@ -412,7 +417,8 @@ def test_the_aura_wedge_of_a_one_star_pointer_is_unchanged(app):
     still centers on the arm itself."""
     for pointer in ("trio", "cross", "hexa", "octa"):
         skin = _skin(pointer)
-        assert aura_group_offset_deg(skin) == 0.0
+        assert aura_wedge_anchor(skin) == constants.AURA_WEDGE_ANCHOR_DEFAULT
+        assert aura_wedge_anchor(skin) == (-0.5, 0.5)
         wheel_hues = palette_for(skin)
         span = 360.0 / len(wheel_hues)
         assert aura_wedge_bounds(skin, wheel_hues) == [
@@ -422,49 +428,79 @@ def test_the_aura_wedge_of_a_one_star_pointer_is_unchanged(app):
 
 
 def test_the_genesis_and_seasons_wedges_ride_their_own_arms(app):
-    """The Aura reads the SAME `wheel_offset_deg` the arms do, so an
+    """The Aura reads the SAME `arm_offset_deg` the arms do, so an
     offset wheel can never leave its background behind."""
     for pointer, offset in (("trio", 180.0), ("cross", 45.0)):
         skin = _skin(pointer, palette_style="tertiary")
         wheel_hues = palette_for(skin)
         span = 360.0 / len(wheel_hues)
-        assert wheel_offset_deg(skin) == offset
+        assert arm_offset_deg(skin) == offset
         assert aura_wedge_bounds(skin, wheel_hues)[0] == pytest.approx(
             (offset - span / 2.0, offset + span / 2.0)
         )
 
 
-def test_the_aura_wedges_cover_the_rose_ray_groups(app):
-    """THE OWNER'S TOP-PRIORITY FIX (2026-07-29): the Rose wears each
-    hue on THREE rays, and the background wedge must span exactly that
-    group. Golden angles for both wheels — Legacy's boundaries on the
-    HH:30 marks, Prophecy's on the full hours."""
+def _hour(clock: float) -> float:
+    """The owner's clock reading as a dial angle: 12h is the top (0°),
+    every hour 15° clockwise from it."""
+    return (clock - 12.0) * HOUR_DEG
+
+
+def test_the_rose_wedges_stand_on_the_owners_own_hours(app):
+    """THE OWNER'S GOLDEN NUMBERS (correction round 2026-07-29), for the
+    yellow group — hue 0, whose lead ray points at true 12h — verbatim:
+
+        LEGACY   star tips  : 10h, 11h, 12h
+        LEGACY   background : 9h  -> 12h
+        PROPHECY star tips  : 11h, 12h, 13h
+        PROPHECY background : 10:30 -> 13:30
+
+    The tips come from the untouched `ROSE_STAR_OFFSETS`; the wedge is
+    the per-wheel ANCHOR — Legacy TRAILS its lead ray, Prophecy stands
+    CENTERED on it."""
     legacy = _skin("rose", palette_style="primary")
     prophecy = _skin("rose", palette_style="secondary")
-    assert aura_group_offset_deg(legacy) == -15.0
-    assert aura_group_offset_deg(prophecy) == 0.0
+    assert aura_wedge_anchor(legacy) == (-1.0, 0.0)
+    assert aura_wedge_anchor(prophecy) == (-0.5, 0.5)
+
+    def yellow_tips(skin):
+        hues = palette_for(skin)
+        return sorted(
+            angle
+            for arms in drawn_arms(skin, hues)
+            for angle, hue in arms
+            if hue == hues[0]
+        )
+
+    assert yellow_tips(legacy) == [_hour(10), _hour(11), _hour(12)]
+    assert yellow_tips(prophecy) == [_hour(11), _hour(12), _hour(13)]
 
     legacy_wedges = aura_wedge_bounds(legacy, palette_for(legacy))
     prophecy_wedges = aura_wedge_bounds(prophecy, palette_for(prophecy))
-    assert legacy_wedges[0] == pytest.approx((-37.5, 7.5))
-    assert prophecy_wedges[0] == pytest.approx((-15.0, 30.0))
-    assert [start for start, _end in legacy_wedges] == pytest.approx(
-        [-37.5 + index * 45.0 for index in range(8)]
-    )
-    assert [start for start, _end in prophecy_wedges] == pytest.approx(
-        [-15.0 + index * 45.0 for index in range(8)]
-    )
-    # Legacy cuts on the half hours, Prophecy on the whole ones.
+    assert legacy_wedges[0] == pytest.approx((_hour(9), _hour(12)))
+    assert prophecy_wedges[0] == pytest.approx((_hour(10.5), _hour(13.5)))
+    # The same law on all eight hues — every wedge 45° wide, the eight
+    # tiling the circle without a gap or an overlap.
+    for wedges, offset in ((legacy_wedges, -45.0), (prophecy_wedges, -22.5)):
+        assert [start for start, _end in wedges] == pytest.approx(
+            [offset + index * 45.0 for index in range(8)]
+        )
+        for (_start, end), (next_start, _next_end) in zip(wedges, wedges[1:]):
+            assert end == pytest.approx(next_start)
+    # Legacy cuts on the full hours; Prophecy on the half hours — the
+    # exact reverse of the deleted +7.5° round, and the star never moved.
     for start, _end in legacy_wedges:
-        assert (start / HOUR_DEG) % 1.0 == pytest.approx(0.5)
-    for start, _end in prophecy_wedges:
         assert (start / HOUR_DEG) % 1.0 == pytest.approx(0.0)
+    for start, _end in prophecy_wedges:
+        assert (start / HOUR_DEG) % 1.0 == pytest.approx(0.5)
 
 
 @pytest.mark.parametrize("wheel", ["primary", "secondary"])
 def test_every_rose_wedge_stands_behind_its_own_hue_group(app, wheel):
     """The law itself: each ray wearing hue k must fall inside the
-    wedge drawn in hue k — on BOTH wheels and in BOTH shapes."""
+    wedge drawn in hue k — on BOTH wheels and in BOTH shapes. Legacy
+    seats its lead ray exactly ON the wedge's trailing boundary (the
+    past lies behind the hour), so the containment is inclusive."""
     for shape in ("star", "polygon"):
         skin = _skin("rose", palette_style=wheel, pointer_shape=shape)
         wheel_hues = palette_for(skin)
@@ -472,7 +508,9 @@ def test_every_rose_wedge_stands_behind_its_own_hue_group(app, wheel):
         for arms in drawn_arms(skin, wheel_hues):
             for angle, hue in arms:
                 start, end = wedges[wheel_hues.index(hue)]
-                assert start < angle < end, f"{hue} ray {angle} outside {wedges}"
+                assert start <= angle <= end, (
+                    f"{hue} ray {angle} outside {wedges}"
+                )
 
 
 # --- The Calendar's two figures -----------------------------------------------------
@@ -667,6 +705,149 @@ def test_hide_night_borders_leaves_the_night_bare(app, pointer):
     assert night_before > 500                # the border mesh IS there
     assert ink(True, want_lit=False) < night_before / 50
     assert ink(True, want_lit=True) == ink(False, want_lit=True)
+
+
+# --- The LEAD LINE: a black outline on every drawn arm ------------------------------
+
+
+def _paint(skin, day, tick, size, draw) -> QImage:
+    """`draw(painter, ctx)` into a transparent square, dial centered,
+    ANTI-ALIASING OFF so a stroked line keeps its exact colour and can
+    be counted byte-for-byte."""
+    image = QImage(size, size, QImage.Format.Format_ARGB32_Premultiplied)
+    image.fill(0)
+    painter = QPainter(image)
+    painter.translate(size / 2.0, size / 2.0)
+    draw(painter, RenderContext(
+        skin=skin, day=day, tick=tick, radius=size / 2.0,
+        cache=AssetCache(), dpr=1.0, rotation=0.0,
+    ))
+    painter.end()
+    return image
+
+
+def _colour_count(image: QImage, name: str) -> int:
+    return sum(
+        1
+        for x in range(image.width())
+        for y in range(image.height())
+        if image.pixelColor(x, y).alpha() > 250
+        and image.pixelColor(x, y).name().upper() == name
+    )
+
+
+@pytest.mark.parametrize("pointer", list(constants.POINTER_POINTS))
+@pytest.mark.parametrize("shape", constants.POINTER_SHAPES)
+def test_every_drawn_arm_wears_the_black_lead_line(app, pointer, shape):
+    """OWNER CORRECTION 2026-07-29: the Rose's dark lead was "the good
+    example" — so EVERY drawn arm and polygon face wears it now, in both
+    shapes: the trio (its cube included), the cross, the hexa, the octa,
+    the Calendar's hexagrams and twelve-point star, and the Rose's three
+    stars. The armless AURORA is the sealed exception — it draws no arms
+    at all, so `StarLayer` paints nothing for it and there is no line."""
+    day, tick = _dt(datetime(2026, 7, 16, 12, 0))
+    skin = _skin(pointer, pointer_shape=shape, solar_rotation=False)
+    image = _paint(
+        skin, day, tick, 300, lambda p, ctx: StarLayer(skin).paint(p, ctx)
+    )
+    lead = QColor(palette.ARM_OUTLINE).name().upper()
+    painted = sum(
+        1
+        for x in range(image.width())
+        for y in range(image.height())
+        if image.pixelColor(x, y).alpha() > 0
+    )
+    if pointer == "aurora":
+        assert painted == 0
+        return
+    assert painted > 0
+    assert _colour_count(image, lead) > 100
+
+
+def test_the_lead_line_constants_are_pointer_neutral():
+    """One shared pair for the whole family (Rule #4/#5) — the Rose's
+    old private names are GONE (Rule #6, no aliases)."""
+    assert palette.ARM_OUTLINE == "#1A1A1A"
+    assert defaults.ARM_OUTLINE_WIDTH == 0.0035
+    assert not hasattr(palette, "ROSE_ARM_OUTLINE")
+    assert not hasattr(defaults, "ROSE_ARM_OUTLINE_WIDTH")
+
+
+# --- The daylight switch reaches the BACKGROUND -------------------------------------
+
+
+NIGHT_DEG = 180.0            # solar midnight with the rotation switched off
+
+
+def _umbra_only(skin, radius_fraction: float = 1.0):
+    """A draw callable painting the Umbra ALONE, under the same NoPen
+    the real `BackgroundLayer.paint` sets before it (otherwise the
+    painter's default black pen outlines the disc)."""
+    def draw(painter, ctx):
+        painter.setPen(Qt.PenStyle.NoPen)
+        BackgroundLayer(skin)._draw_umbra(
+            painter, ctx, ctx.radius * radius_fraction
+        )
+    return draw
+
+
+def test_the_umbra_stands_at_flat_noon_with_the_daylight_switch_off(app):
+    """OWNER CORRECTION 2026-07-29: with the switch off there is no
+    night ANYWHERE — the Umbra loses its brightness wheel and paints ONE
+    full circle in the contrast span's LIGHTEST shade, as if it were
+    noon over the whole dial. With the switch on it keeps its ladder."""
+    day, tick = _dt(datetime(2026, 7, 16, 12, 0))
+
+    def shades(pointer, daylight):
+        skin = _skin(pointer, solar_rotation=False, daylight=daylight)
+        image = _paint(skin, day, tick, 200, _umbra_only(skin, 0.9))
+        return {
+            image.pixelColor(x, y).name().upper()
+            for x in range(image.width())
+            for y in range(image.height())
+            if image.pixelColor(x, y).alpha() > 250
+        }
+
+    for pointer in constants.DAYLIGHT_SWITCH_POINTERS:
+        skin = _skin(pointer, daylight=False)
+        lightest, _darkest = defaults.UMBRA_CONTRAST_SPANS[skin.umbra_contrast]
+        flat = tinted_gray(min(255, lightest), skin.ring_tint).name().upper()
+        assert shades(pointer, False) == {flat}
+        assert len(shades(pointer, True)) > 1
+    # Every OTHER pointer ignores the stored switch and keeps its wheel.
+    assert len(shades("hexa", False)) > 1
+
+
+@pytest.mark.parametrize("pointer", list(constants.DAYLIGHT_SWITCH_POINTERS))
+def test_the_aura_leaves_the_night_gray_and_floods_it_with_the_switch_off(
+    app, pointer
+):
+    """The other half of the same law. With the daylight switch ON the
+    night sector carries NO hue — the background there is the bare
+    Umbra, exactly as on every other pointer (for the CALENDAR this is
+    new: its twelve wedges used to flood the whole circle at a fixed
+    alpha regardless of the sun). With the switch OFF the wedges cover
+    the whole circle at the day alpha, so the same night pixel changes
+    colour."""
+    day, tick = _dt(datetime(2026, 7, 16, 12, 0))
+    size, sample = 300, 60.0
+
+    def night_pixel(draw, skin):
+        image = _paint(skin, day, tick, size, draw)
+        point = dial_point(NIGHT_DEG, sample)
+        return image.pixelColor(
+            int(size / 2.0 + point.x()), int(size / 2.0 + point.y())
+        ).name().upper()
+
+    for daylight, same_as_umbra in ((True, True), (False, False)):
+        skin = _skin(pointer, solar_rotation=False, daylight=daylight)
+        umbra = night_pixel(
+            _umbra_only(skin, skin.background.umbra_radius_fraction), skin
+        )
+        background = night_pixel(
+            lambda p, ctx: BackgroundLayer(skin).paint(p, ctx), skin
+        )
+        assert (background == umbra) is same_as_umbra
 
 
 # --- Settings persistence -----------------------------------------------------------

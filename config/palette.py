@@ -186,14 +186,17 @@ ROSE_PALETTE = (
     MOON_GRAY_VIOLET, "#29ABE2", "#0078DC", "#39B54A",
 )
 
-# The ROSE's arm OUTLINE — the dark lead of the owner's own drawing.
-# The Rose is the ONE pointer that needs it: three stars share eight
-# hues, so without a line between them a color group merges into a
-# single mass and the z-order — which star stands on the hour, which
-# is the past, which the future — becomes invisible. Every other
-# pointer's arms already differ in hue from their neighbors and stay
-# outline-free.
-ROSE_ARM_OUTLINE = "#1A1A1A"
+# THE LEAD LINE — the dark outline of the owner's own drawing, worn by
+# EVERY drawn arm and polygon face (owner's correction round
+# 2026-07-29: the Rose's lead was "the good example", so it becomes the
+# law of the whole pointer family). It separates the trio's cube faces,
+# the cross/hexa/octa arms, the Calendar's two hexagrams and its
+# twelve-point star, and the Rose's three overlapping stars alike — in
+# the star and polygon shapes both, and on the INTERNAL colour
+# boundaries too, since every arm/face is stroked as its own path. The
+# armless Aurora is the one exception: it has no arms to outline, only
+# day bands.
+ARM_OUTLINE = "#1A1A1A"
 
 # Both ROSE wheels wear the SAME eight hues (owner seal 2026-07-27,
 # CUBE.md §The Rose): Legacy and Prophecy turn the star GEOMETRY and

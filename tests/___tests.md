@@ -103,13 +103,23 @@ pinned as a law, not as numbers: 0 = the plain polygon, strictly
 monotone inward, 1.0 landing exactly on the star's inner radius, the
 two edge forms agreeing ONLY at 0 — and inert on the Calendar and the
 Rose. The OFFSET WHEELS: the Seasons' boundaries on 12h/3h/6h/9h in
-both shapes, the Prophecy rays on HH:30 while Legacy keeps the hours,
-with a pin that the shift moves no hue off its own ray. The AURA
-alignment (the owner's top-priority fix): golden wedge angles for both
-Rose wheels plus the general law — every ray falls inside the wedge
-drawn in its own hue. Plus the night-border option (clip law, inert
-while daylight is off, and an offscreen pin that it repaints the night
-and not the day) and the settings round-trip of the four new keys
+both shapes — and, after the owner's CORRECTION round (2026-07-29),
+`test_both_rose_wheels_keep_every_ray_on_a_full_hour`, which pins the
+revoked Prophecy +7.5° shift DEAD (the deleted names must stay absent)
+while both wheels keep all twenty-four rays on full hours, plus a pin
+that no hue left its own ray. The AURA alignment: the owner's own
+golden numbers verbatim (`test_the_rose_wedges_stand_on_the_owners_own_
+hours` — Legacy tips 10h/11h/12h with the wedge 9h → 12h, Prophecy
+tips 11h/12h/13h with 10:30 → 13:30) plus the general law — every ray
+falls inside the wedge drawn in its own hue. The LEAD LINE: every
+pointer × both shapes really strokes `palette.ARM_OUTLINE` on the glass
+(an offscreen colour count, anti-aliasing off), Aurora paints nothing
+at all, and the old Rose-private constant names are gone. The DAYLIGHT
+SWITCH reaching the BACKGROUND: the Umbra flattening to one shade and
+the Aura flooding the night, both measured on rendered pixels. Plus the
+night-border option (clip law, inert while daylight is off, and an
+offscreen pin that it repaints the night and not the day) and the
+settings round-trip of the four new keys
 (defaults for a pre-rework file, `SettingsCorruptError` for a
 hand-edited bad value). `test_the_star_shape_is_untouched_by_the_rework`
 is the regression pin that the default dial did not move. Phase 3
@@ -130,6 +140,10 @@ shape, since their own "polygon" is a touching-arm star that never
 curves), and which widget calls which `_setters[...]` key with which
 value (a `_RecordingSetters` stub — the real wiring, persistence and
 the live skin, is `test_pointer_shapes.py`'s own controller test above).
+The owner's correction round adds
+`test_night_borders_greys_out_when_there_is_no_night`: the row is
+present in every state, and DISABLED exactly when the Calendar or the
+Rose has its daylight switch off (no night, so nothing to hide).
 
 ### `test_cube_seating.py`
 The Seating geometry goldens (WORKPLAN Session 26, CUBE.md §The

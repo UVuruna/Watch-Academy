@@ -92,8 +92,8 @@ Two kinds of value stay in [Config (folder)](___config.md)'s
 - the numeric shaping of a recolor — `SUBDIAL_RECOLOR_VALUE_RAMP` and
   its neighbours (ramps, cutoffs, gains, the cache version tag);
 - every width, alpha fraction and radius that merely happens to sit
-  beside a hue (`ROSE_ARM_OUTLINE_WIDTH`, `CALENDAR_WEDGE_ALPHA`,
-  `RING_TINT_SWATCH_PX`).
+  beside a hue (`ARM_OUTLINE_WIDTH` — the lead line's width, whose
+  colour `ARM_OUTLINE` lives here; `RING_TINT_SWATCH_PX`).
 
 A caller that COMPOSES a colour from a value — `f"rgba({c.red()}, …)"`
 in the Encyclopedia's card hover — is composing, not declaring, and is

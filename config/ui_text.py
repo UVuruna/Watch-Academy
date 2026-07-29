@@ -53,6 +53,11 @@ UI_STRINGS: tuple[str, ...] = (
     # slider label) and is reused verbatim for the shape pill.
     "Polygon", "Curvature", "Smooth concave", "V-notched",
     "Hide night borders",
+    # The Settings ▸ Display daylight switch, renamed by the owner
+    # 2026-07-29 (was "Daylight (Calendar / Rose)", which never joined
+    # the corpus): checked = the day/night cycle runs — on the dial's
+    # star AND its background alike.
+    "Daylight - Night",
     "Encyclopedia", "Astrology", "Chinese zodiac", "← Back",
     "Gods", "Zodiac", "Themes", "Creeds & Mysteries",
     "Fine (16 shades)", "Coarse (13 shades)", "Gradient",

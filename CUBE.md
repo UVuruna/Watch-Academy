@@ -1202,8 +1202,13 @@ else** and Thursday and Wednesday keep their canonical color seats.
 - **Daylight.** The Rose obeys the standard `lit_regions` law like
   every other pointer — no private dimming was invented and none is
   allowed. The Rose and the Calendar carry a **DAYLIGHT on/off
-  switch**; the other five pointers always run day/night. A reader
-  who wants it quieter has colorless, opacity and saturation already.
+  switch**; the other five pointers always run day/night. Switched
+  OFF it removes day and night from the WHOLE disc (owner correction
+  2026-07-29): the star stands in flat colour, the Umbra at flat noon,
+  the Aura over the whole circle — while the figure FACES (the Sunday
+  Ruler/Servant, the Earth's two faces) keep reading the real sky. A
+  reader who wants it quieter has colorless, opacity and saturation
+  already.
 
 ### ~~OPEN~~ — CLOSED 2026-07-28 (Session 24)
 

@@ -203,8 +203,17 @@ exactly on 12h/3h/6h/9h, so it shows the ASTRONOMICAL year (quarters
 turning at the solstice/equinox cardinals), while the Temperaments and
 the Elements keep their arms centered on the cardinals and so read as
 the METEOROLOGICAL quarters. The same boundary-on-12h law gives the
-Rose's Prophecy wheel its half-hour ray centers (each hour worn from
-:00 to :59) and the Calendar's Zodiac wheel its sign-start at the top.
+Calendar's Zodiac wheel its sign-start at the top.
+
+The ROSE reads that law in its BACKGROUND, never in its star (owner
+correction 2026-07-29 — the earlier "Prophecy rides half an hour later"
+reading was wrong and is deleted): **both Rose wheels keep every ray tip
+on a full hour**. What differs per wheel is where a hue's background
+wedge stands on its lead ray — LEGACY's wedge TRAILS it (yellow tips
+10h/11h/12h, background 9h → 12h: the boundaries fall ON the lead-ray
+hours, because the past lies behind the hour), PROPHECY's stands
+CENTERED on it (tips 11h/12h/13h, background 10:30 → 13:30: past and
+future symmetric).
 
 **THE POINTER NAME (owner seal 2026-07-28):** the 4-arm pointer is
 **Quaternity**. "Seasons" stepped down to be one of its three wheels, so

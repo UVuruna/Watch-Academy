@@ -24,7 +24,7 @@ slots), `weekday_slots()` (the ONE reader of
 the CUBE-WHEEL trio `arm_offset_deg()` / `cube_look_active()` /
 `arm_half_deg()` (see [The Cube Wheels](#the-cube-wheels)), the DRAWN
 WHEEL group `polygon_shape()` / `polygon_faces()` / `drawn_arm_count()`
-/ `drawn_arms()` / `arm_shape_path()` / `wheel_offset_deg()` /
+/ `drawn_arms()` / `arm_shape_path()` / `aura_wedge_anchor()` /
 `aura_wedge_bounds()` / `border_clips()` (see
 [The Pointer Shapes](#the-pointer-shapes)),
 `draw_event_glow()` (the season/moon event halo), the SLOT system:
@@ -122,6 +122,68 @@ the tests all read these):
 - **`wheel_rotation(skin, rotation)`** — the solar offset, except on the
   Calendar, whose figure stands on the wedges it colors and is therefore
   calendar-FIXED like them.
+- **`aura_wedge_anchor(skin)`** — where a hue's BACKGROUND wedge stands
+  on that hue's lead ray, as (low, high) fractions of its share of the
+  circle; see [The Aura wedge anchor](#the-aura-wedge-anchor).
+
+<a id="the-lead-line"></a>
+
+### The lead line (owner correction 2026-07-29)
+
+**Every drawn arm and polygon face is stroked in `palette.ARM_OUTLINE`
+at `defaults.ARM_OUTLINE_WIDTH` × the dial radius** — the dark lead of
+the owner's own drawing, which until this round only the Rose wore
+("the good example"). It is one pen, set once per paint in
+`StarLayer._draw_arms` and applied to the FILL pass, so:
+
+- both SHAPES get it (a star diamond and a polygon face are the same
+  `arm_shape_path` call);
+- the INTERNAL colour boundaries come free — each face is its own
+  closed path, and stroking the path draws the edges it shares with its
+  neighbours;
+- the stroke follows the Z-ORDER, because each arm is stroked as it is
+  filled (the Rose's three stars still read as three stars);
+- the armless **Aurora** is the sealed exception — `StarLayer.paint`
+  returns before any arm exists, so it has only day bands, no line.
+
+The `hide_night_borders` clip law is unchanged by this: the fill pass
+(and with it the lead) is already confined to the sunlit arcs whenever
+the daylight law runs, and `border_clips` still governs the coloured
+border pass. Pinned by `test_every_drawn_arm_wears_the_black_lead_line`
+(every pointer × both shapes) and
+`test_the_lead_line_constants_are_pointer_neutral`.
+
+<a id="the-aura-wedge-anchor"></a>
+
+### The Aura wedge anchor (owner's exact numbers, 2026-07-29)
+
+A hue's background wedge is anchored on that hue's **lead ray** — the
+direction it wears on the topmost (0°) star, which on a one-star
+pointer is simply its arm:
+
+```
+span      = 360 / number of hues
+lead      = arm_offset_deg(skin) + hue index * span
+low, high = aura_wedge_anchor(skin)          # in spans
+wedge     = (lead + low * span, lead + high * span)
+```
+
+`aura_wedge_anchor` reads `constants.AURA_WEDGE_ANCHOR_DEFAULT`
+(−½, +½ — the wedge CENTRED on the arm, the standing behaviour) and, on
+the Rose alone, `constants.ROSE_AURA_WEDGE_ANCHOR`:
+
+| Rose wheel | anchor | hue 0 (yellow) tips | hue 0 background |
+|---|---|---|---|
+| **Legacy** (primary) | (−1, 0) — the wedge TRAILS its lead ray | 10h, 11h, 12h | **9h → 12h** |
+| **Prophecy** (secondary) | (−½, +½) — CENTRED on the lead ray | 11h, 12h, 13h | **10:30 → 13:30** |
+
+Legacy's boundaries therefore fall ON the lead-ray hours (the past lies
+behind the hour); Prophecy's stand half a wedge either side (past and
+future symmetric). Either way the eight wedges tile the circle exactly —
+no gap, no overlap — and every ray of a hue lies within its own wedge
+(Legacy's lead ray sits exactly on the trailing boundary). Golden
+angles: `tests/test_pointer_shapes.py::
+test_the_rose_wedges_stand_on_the_owners_own_hours`.
 
 ### The curvature (owner sheet: straight / smooth concave / V-notched)
 
@@ -199,18 +261,20 @@ through them):
   `weekday_slots(skin)` applies it to `POINTER_WEEKDAY_SLOTS` — pure
   geometry, each occupant pair stays glued to its arm as it swings (no
   re-pairing doctrine invented).
-- **`rose_assembly_offset_deg(skin)` / `wheel_offset_deg(skin)`** — the
-  ROSE's own per-wheel shift (owner 2026-07-29): **+7.5°**, half a ray,
-  on PROPHECY, carried by the whole assembly (all three stars, or the
-  24-ray polygon), so every ray CENTRE lands on HH:30 and each hue
-  covers its hours from :00 to :59; LEGACY keeps the full hours. Which
-  hue sits on which ray is untouched — it is a rotation, not a
-  re-anchoring. Unlike the offset wheels this one turns the DRAWN wheel
-  alone (stars + Aura, through `wheel_offset_deg`, which is the sum of
-  the two); the weekday/Ruler/Servant seats and the arm hit-test keep
-  the Rose's eight 45° anchors, and since the shift is smaller than a
-  ray's half-width every seated body still stands inside its own hue
-  group.
+- **THE PROPHECY SHIFT IS DEAD (owner correction 2026-07-29).** The
+  previous round gave the Rose's Prophecy wheel a **+7.5°** assembly
+  rotation so every ray centre landed on HH:30. The owner looked at the
+  glass and revoked it: **both Rose wheels keep every ray tip on a FULL
+  hour**, and the per-wheel difference lives in the BACKGROUND alone
+  (see `aura_wedge_anchor` under
+  [The Pointer Shapes](#the-pointer-shapes)). Deleted with it:
+  `constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG`, `ROSE_RAY_PITCH_DEG`,
+  `rose_assembly_offset_deg()`, `wheel_offset_deg()` (folded back into
+  `arm_offset_deg`, its only remaining term) and
+  `aura_group_offset_deg()`. Pinned dead by
+  `tests/test_pointer_shapes.py::test_both_rose_wheels_keep_every_ray_
+  on_a_full_hour`; if a half-hour ray reappears, the dead mechanism is
+  being rebuilt.
 - **`cube_look_active(skin)`** — the Diamond/Cube display toggle
   (`Settings.cube_look`, CUBE.md §Display laws) gates on the
   Double-Trinity FAMILY wheels only: the Court (trio primary), Genesis
@@ -255,10 +319,12 @@ CALENDAR-FIXED — they never ride the solar rotation.
 
 **THE LIT WEDGE IS DELETED** (owner decree 2026-07-29, Pointers REWORK
 phase 2: *"Osvetljavanje part koji prolazi sat ili zemlja iskljuciti —
-obrisati tu funkcionalnost"*). Every wedge paints at the one
-`CALENDAR_WEDGE_ALPHA`; the Calendar now follows the SAME visibility law
-as every other pointer — the day/night law plus its own entry in
-`DAYLIGHT_SWITCH_POINTERS` — and nothing else. Gone with the feature:
+obrisati tu funkcionalnost"*). The Calendar now follows the SAME
+visibility law as every other pointer — the day/night law plus its own
+entry in `DAYLIGHT_SWITCH_POINTERS` — and nothing else; the correction
+round finished the job by putting its wedges through the shared Aura
+path (and deleting the flat `CALENDAR_WEDGE_ALPHA` with the old one).
+Gone with the feature:
 `Settings.calendar_lighting`, `SkinDefinition.calendar_lighting`,
 `constants.CALENDAR_LIGHTING_MODES`, `defaults.CALENDAR_WEDGE_LIT_DELTA`,
 `calendar_lit_index()`, `RenderContext.calendar_lit` and
@@ -661,29 +727,38 @@ non-MINUTE layers).
 ### BackgroundLayer (DAILY)
 The UMBRA (gray brightness wheel) rotated with the star, then the AURA
 (transparent hue wedges) at the same rotation, clipped to
-`lit_regions()`.
+`lit_regions()`. Where each wedge stands is
+[The Aura wedge anchor](#the-aura-wedge-anchor).
 
-**THE BACKGROUND FOLLOWS THE STAR** (`aura_wedge_bounds()`, the owner's
-top-priority fix 2026-07-29). A hue's wedge is centred on that hue's
-RAY GROUP, never on a bare arm index:
+**THE DAYLIGHT SWITCH REACHES THE BACKGROUND (owner correction
+2026-07-29).** `daylight_active(skin)` — False only ever on the Calendar
+and the Rose — used to gate the STAR alone, so switching day/night off
+left the background still painting a night. It now governs the whole
+disc:
 
 ```
-span   = 360 / number of hues
-centre = wheel_offset_deg(skin)        # the wheel's own turn: Genesis,
-                                       # Seasons, the Prophecy half-ray
-       + aura_group_offset_deg(skin)   # the group's MIDDLE ray
-       + hue index * span
-wedge  = centre ± span/2
+IF the daylight law runs:
+    Umbra = the brightness wheel, lightest on solar noon
+    Aura  = the hues INSIDE the lit arcs only; the night stays bare gray
+ELSE:                                   # flat noon everywhere
+    Umbra = ONE full circle in the contrast span's LIGHTEST shade
+    Aura  = full colour over the WHOLE circle at the day alpha
 ```
 
-`aura_group_offset_deg` is the MEAN of the pointer's star offsets: 0 on
-every one-star pointer (the group IS the arm — the standing behaviour),
-−15° on the Rose's Legacy (rays at −30/−15/0) and 0 on its symmetric
-Prophecy. So the Rose's wedge boundaries fall midway between adjacent
-groups — the **HH:30 marks on Legacy, the full hours on Prophecy** —
-instead of cutting a group in half, which is the misalignment the owner
-reported. Golden angles: `tests/test_pointer_shapes.py::
-test_the_aura_wedges_cover_the_rose_ray_groups`.
+The FIGURE faces — the Sunday Ruler/Servant, the Earth's day/night face,
+`center_face()` — keep reading the real sun (owner seal): the switch
+flattens the DISC COLOURING alone. Pinned by
+`test_the_umbra_stands_at_flat_noon_with_the_daylight_switch_off` and
+`test_the_aura_leaves_the_night_gray_and_floods_it_with_the_switch_off`.
+
+**THE CALENDAR JOINED THE SAME AURA** (same correction). Its twelve
+wedges used to take a private path — a full circle at the fixed
+`CALENDAR_WEDGE_ALPHA`, sun or no sun. They now go through the ONE
+`_paint_aura()` every star pointer uses (Rule #5), differing in exactly
+two arguments: `calendar_wedge_bounds()` instead of
+`aura_wedge_bounds()`, and rotation **0** instead of `ctx.rotation`
+(the wedges stay calendar-FIXED, and the mount still draws after them).
+`defaults.CALENDAR_WEDGE_ALPHA` is deleted with the old path.
 
 The wedges are drawn over the shared per-regime (start, end, alpha) arcs of the
 sunlit day (day alpha between sunrise and sunset, twilight alpha over the
@@ -705,6 +780,9 @@ their half-windows — middle 64..192 (188..68), bright 128..255
 sweeps the same spans continuously. Under a ring tint every gray is
 channel-multiplied by the hue (`tinted_gray`) — the Umbra follows the
 clock body's recolor; the hands do the same through the asset cache.
+With the daylight switch OFF none of the forms runs: the disc is one
+flat circle of `tinted_gray(lightest of the span)`, as if it were noon
+everywhere.
 
 ### StarLayer (DAILY)
 The drawn wheel — a procedural N-diamond STAR or the plain POLYGON of
@@ -764,16 +842,16 @@ Pseudocode:
 ```
 FOR EACH star_offset IN rose_star_offsets(skin) OR (0,):
     FOR EACH arm k, colour IN palette:
-        theta = genesis_offset + star_offset + k * 360/N
-        draw the diamond at theta
-        IF pointer is rose → stroke it in the drawing's dark lead
+        theta = arm_offset + star_offset + k * 360/N
+        draw the arm's shape at theta
+        stroke it in the drawing's dark lead
 ```
 
-The lead outline exists for the Rose alone: three stars share eight
+The lead outline began as the Rose's alone — three stars share eight
 hues, so without a line between them a colour group merges into one
-mass and the z-order — which star stands on the hour, which is the
-past, which the future — becomes invisible. Every other pointer's
-arms already differ in hue from their neighbours.
+mass and the z-order goes invisible — and the owner made it the whole
+family's law in the correction round (see
+[The lead line](#the-lead-line)).
 
 Three small readers carry the rest (Rule #5 — one source each):
 `rose_star_offsets(skin)` / `rose_star_set(offset)` for the geometry
@@ -789,9 +867,13 @@ of the drawn blue/red arms (regression pin:
 sabbath_seat_not_the_legacy_bottom`); and `daylight_active(skin)`,
 which gates the whole `lit_regions` pass. With it False the star
 paints ONCE at full day alpha and the night half stands in flat
-colour; it can only be False on the Calendar and the Rose, so the
-stored setting survives a pointer switch untouched (the
-`effective_palette_style` pattern).
+colour — and, since the correction round, the BACKGROUND flattens with
+it (see [BackgroundLayer](#backgroundlayer-daily)); it can only be
+False on the Calendar and the Rose, so the stored setting survives a
+pointer switch untouched (the `effective_palette_style` pattern).
+It answers on `pointer` + `daylight` alone, which is why the Design
+window can ask it of the raw `Settings` object when deciding whether
+"Hide night borders" can act at all.
 
 **THE DUAL SUNDAY WHEEL MAP (owner seal 2026-07-29, completing the
 2026-07-28 Duality-Axes decree — [The Cube Canon](../CUBE.md) §The

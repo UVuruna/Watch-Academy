@@ -755,7 +755,10 @@ WORKING_SET_CEILINGS = {
     "celestial/seasons": 1200,
 }
 
-ROSE_ARM_OUTLINE_WIDTH = 0.0035          # of the dial radius
+# THE LEAD LINE's width, a fraction of the dial radius — the twin of
+# `palette.ARM_OUTLINE`, worn by every drawn arm and polygon face
+# (owner's correction round 2026-07-29).
+ARM_OUTLINE_WIDTH = 0.0035               # of the dial radius
 
 
 
@@ -763,11 +766,15 @@ ROSE_ARM_OUTLINE_WIDTH = 0.0035          # of the dial radius
 
 
 # --- Calendar pointer (owner 2026-07-16, CANON §The Dozen) ---------------------
-# The twelve wedges ALL paint at this one opacity. Calendar-fixed — the
-# wedges never ride the solar rotation. The old `CALENDAR_WEDGE_LIT_
-# DELTA` (the extra opacity on a "lit" wedge) is DELETED with the
-# lighting feature itself (owner decree 2026-07-29).
-CALENDAR_WEDGE_ALPHA = 0.30          # every wedge's opacity
+# The twelve wedges are Calendar-fixed — they never ride the solar
+# rotation — but otherwise they ARE the standard Aura and wear its
+# opacities (`BackgroundSpec.day_alpha` / `twilight_alpha`) under the
+# day/night law like every other pointer. Both of the Calendar's own
+# opacity constants are therefore gone: `CALENDAR_WEDGE_LIT_DELTA` with
+# the lit-wedge feature (owner decree 2026-07-29) and the flat
+# `CALENDAR_WEDGE_ALPHA` with its always-full-circle path (owner
+# correction 2026-07-29 — the daylight switch must reach the
+# background).
 CALENDAR_WEDGE_RADIUS_FRACTION = 0.90  # wedge reach, of the dial radius
 # The Earth DAY-ARROW on the Almanac wheel (owner 2026-07-16: "one tick
 # ≈ one day"): a small triangle at the marker's exact tick, pointing

@@ -226,3 +226,36 @@ def test_toggling_night_borders_calls_its_setter(app):
     checkbox.setChecked(True)
     assert ("hide_night_borders", (True,)) in setters.calls
     dialog.deleteLater()
+
+
+# --- The correction round (owner 2026-07-29): a row that cannot act ------------------
+
+
+def _night_borders_box(tab):
+    return next(
+        box for box in tab.findChildren(QCheckBox)
+        if box.text() == "Hide night borders"
+    )
+
+
+@pytest.mark.parametrize("pointer", list(constants.POINTER_POINTS))
+@pytest.mark.parametrize("daylight", [True, False])
+def test_night_borders_greys_out_when_there_is_no_night(
+    app, pointer, daylight
+):
+    """OWNER CORRECTION 2026-07-29: with the daylight switch OFF on the
+    Calendar or the Rose the dial has no night at all, so "Hide night
+    borders" can have no effect — the row is DISABLED (greyed, never
+    hidden) there and enabled in every other state. Aurora shows no such
+    row at all, so it is skipped."""
+    if pointer == "aurora":
+        pytest.skip("Aurora carries none of the shape rows")
+    dialog, tab = _pointer_tab_widget(
+        dataclasses.replace(Settings(), pointer=pointer, daylight=daylight)
+    )
+    box = _night_borders_box(tab)                # present in EVERY state
+    no_night = (
+        not daylight and pointer in constants.DAYLIGHT_SWITCH_POINTERS
+    )
+    assert box.isEnabled() is not no_night
+    dialog.deleteLater()

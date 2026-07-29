@@ -61,7 +61,14 @@ every tab from scratch on any pick, see `DesignDialog` below):
   reading are touching-arm STARS (owner spec) that never curve, so
   they never show this pair even in Polygon shape.
 - **Hide night borders** (a `QCheckBox`, `Settings.hide_night_borders`)
-  — every pointer except Aurora, same gate as Shape.
+  — every pointer except Aurora, same gate as Shape. Since the owner's
+  correction round (2026-07-29) it is **DISABLED (greyed, never
+  hidden)** whenever it cannot act: the Calendar and the Rose may switch
+  the day/night law off entirely, and with no night there is no night
+  border to hide. The gate is `render.layers.daylight_active(settings)`
+  — the ONE law, asked of the raw `Settings` object the window already
+  holds (it answers on `pointer` + `daylight` alone), never a second
+  copy of the pointer list (Rule #5). Enabled in every other state.
 
 Every row's pick routes through `_setters["pointer_shape"/
 "polygon_curvature"/"polygon_edge"/"hide_night_borders"]` — plain
@@ -84,6 +91,9 @@ installed skin).
   `UMBRA_FORMS`, `UMBRA_CONTRAST_VARIANTS`, `SIZE_PRESETS`.
 - `data.rings.ring_presets`, `data.hands.hand_packs` — the preset/pack
   catalogs the Ring and Hands tabs list.
+- [Layers](../render/layers.md) — `daylight_active`, the ONE reader of
+  the day/night switch, used to grey out "Hide night borders" when no
+  night exists.
 
 ### Used by
 - [Controller](controller.md) — `_open_design` (non-modal, one live
@@ -99,5 +109,6 @@ Non-modal, LIVE-APPLY (same justification as
 tab's pick calls its setter immediately, matching the menu chain it
 replaces. `refresh(settings, setters)` re-supplies the live state after
 a pick (called by the controller) so every tab's highlighted pick stays
-current without closing the window. No gating — Design has no owner-
-specified gray condition.
+current without closing the window. Exactly ONE greyed row exists (owner
+correction 2026-07-29): "Hide night borders" while the active pointer's
+daylight law is switched off — see the Pointer tab above.
