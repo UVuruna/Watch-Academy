@@ -802,7 +802,7 @@ def test_eclipse_emblem_maps_every_category_and_is_graceful(app):
         # art is absent the badge degrades to EMPTY (graceful), and the
         # moment a source subtree carries the file (the ChatGPT batch,
         # unlocked by registering the "eclipse" root) it must RENDER.
-        from config import dial, encyclopedia_ui, glow, paths as _paths
+        from config import paths as _paths
         if _paths.art_file(path).exists():
             assert _hover_badge(path) != ""
         else:
@@ -822,7 +822,7 @@ def test_eclipse_hover_card_shows_emblem_when_art_present(app, tmp_path, monkeyp
     is wired, not just the graceful-absent path."""
     from PySide6.QtGui import QImage
 
-    monkeypatch.setattr(defaults, "ECLIPSE_ART_DIR", tmp_path)
+    monkeypatch.setattr(glow, "ECLIPSE_ART_DIR", tmp_path)
     swatch = QImage(8, 8, QImage.Format.Format_ARGB32)
     swatch.fill(0xFFCC5522)
     for stem in ("Solar_Total.png", "Lunar_Total.png"):

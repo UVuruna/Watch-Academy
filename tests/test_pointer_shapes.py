@@ -35,7 +35,7 @@ from app.settings_store import (
     replace,
 )
 from config import constants, dial, palette
-from config import defaults, dial
+from config import defaults
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository

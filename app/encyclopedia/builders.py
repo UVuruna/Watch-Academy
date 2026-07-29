@@ -18,7 +18,7 @@ import json
 from datetime import date
 from pathlib import Path
 
-from config import constants, continents, defaults, pantheon, paths
+from config import constants, continents as continents_theme, defaults, pantheon, paths
 from core import continents
 from data.encyclopedia import EncyclopediaRepository
 from data.moon_phases import MoonPhaseRepository
@@ -502,7 +502,7 @@ def _continents_topic(travel_date: date) -> dict:
     does the metal finishes."""
     def region_looks(region: str) -> tuple:
         return tuple(
-            (label, ((continents.earth_face_art(style, region, phase),),))
+            (label, ((continents_theme.earth_face_art(style, region, phase),),))
             for label, style, phase in (
                 ("Atmosphere", "atmo", "day"),
                 ("Atmosphere · Night", "atmo", "night"),
@@ -513,7 +513,7 @@ def _continents_topic(travel_date: date) -> dict:
 
     def body_entry(body: str) -> dict:
         return {
-            "looks": region_looks(continents.CONTINENTS_REGIONS[body]),
+            "looks": region_looks(continents_theme.CONTINENTS_REGIONS[body]),
             "name": pantheon.WEEKDAY_THEME_NAMES["continents"][body],
             "article": ("article", "continents", body),
             "weekday": constants.WEEKDAY_FULL_NAMES[body],
@@ -521,15 +521,15 @@ def _continents_topic(travel_date: date) -> dict:
 
     ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES["continents"]
     title_entry = {
-        "images": (continents.CONTINENTS_TITLE_IMAGE,),
+        "images": (continents_theme.CONTINENTS_TITLE_IMAGE,),
         "name": ("theme_title", "continents"),
         "article": ("theme_title", "continents"),
     }
     duality_title_entry = {
         # The two poles in eternal antiphase, side by side.
         "images": (
-            continents.earth_face_art("atmo", "south_pole", "day"),
-            continents.earth_face_art("atmo", "north_pole", "day"),
+            continents_theme.earth_face_art("atmo", "south_pole", "day"),
+            continents_theme.earth_face_art("atmo", "north_pole", "day"),
         ),
         "name": ("week_duality_title", "continents"),
         "article": ("week_duality", "continents"),
@@ -566,7 +566,7 @@ def _continents_topic(travel_date: date) -> dict:
     )
     return {
         "title": pantheon.WEEKDAY_THEME_TITLES["continents"],
-        "icon": continents.CONTINENTS_TITLE_IMAGE,
+        "icon": continents_theme.CONTINENTS_TITLE_IMAGE,
         "entries": entries,
     }
 

@@ -30,7 +30,7 @@ from app.encyclopedia import EncyclopediaDialog, topics as build_topics
 from app.encyclopedia.cards import card_width_for, row_content_width
 from app.encyclopedia.tree import resolve_target, switch_variant, variant_at
 from config import constants, defaults, encyclopedia_ui, palette, pantheon
-from config import encyclopedia_tree as tree, encyclopedia_ui, pantheon
+from config import encyclopedia_tree as tree
 from tests.test_theme_completeness import _look_only_themes
 
 
@@ -187,7 +187,7 @@ def test_zooming_all_the_way_in_still_grows_no_horizontal_bar(app):
     """Zoom scales cards, fonts and images — never the page's width past
     its viewport (owner round R8b item 5a; the regression that started
     this law was exactly "zoom in on a narrow window")."""
-    from config import constants, encyclopedia_ui, pantheon
+    from config import constants
 
     dialog = EncyclopediaDialog()
     dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())
@@ -490,7 +490,7 @@ def test_the_title_plate_resolver_names_one_file_per_block(topics):
     wider, primary / secondary / dark), which is exactly what a
     register is for, so the reserved `Title` stem repeats across
     folders and never inside one."""
-    from config import defaults, encyclopedia_ui, pantheon
+    from config import defaults
 
     seen = {}
     for key in ("greek", "greek_pantheon", "greek_wider",
@@ -512,7 +512,7 @@ def test_every_dual_page_shares_the_one_generic_plate(topics):
     and a title plate that draws them again is a repeat. The opposite of
     the TITLE plates above, deliberately: a title names its own theme, a
     duality names the shape all of them share."""
-    from config import defaults, encyclopedia_ui, pantheon
+    from config import defaults
 
     for key in ("greek", "greek_pantheon", "bible", "bible_dark",
                 "wolf", "cosmos", "religion_alt"):

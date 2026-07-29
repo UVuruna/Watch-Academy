@@ -317,7 +317,7 @@ def test_subdial_plate_resolves_directly_for_sets_one_through_four(app):
     finishes each — `subdial_plate_file` (reading the active set off
     `config.paths.subdial_set()`, mirroring the art-source switch)
     returns the exact matching file, no recolor, no cache entry."""
-    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
+    from config import paths as _paths
     from render.asset_variants import subdial_plate_file
 
     for set_name in ("set1", "set2", "set3", "set4"):
@@ -345,7 +345,7 @@ def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
     are disk-cached live recolors of it, the SAME recipe the retired
     one-master model always used (`render.asset_recolor._recolored_plate`,
     Rule #5 shared with the ring letters)."""
-    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
+    from config import paths as _paths
     from render.asset_variants import subdial_plate_file
 
     with _paths.display(_paths.display_context(subdial_set="solo")):
@@ -387,7 +387,7 @@ def test_subdial_plate_solo_set_derives_gold_and_bronze(app):
 
 
 def test_subdial_set_rejects_unknown_value():
-    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
+    from config import paths as _paths
 
     with pytest.raises(ValueError):
         _paths.display_context(subdial_set="bogus")
@@ -452,7 +452,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
 
     # The art table is complete: all twelve themes + colored variants.
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
-    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
+    from config import paths as _paths
 
     # A theme whose Mirror plate is pending owner art runs single-faced
     # until it lands; which themes those are is the ART DEBT REGISTRY's
@@ -491,7 +491,7 @@ def test_dual_sunday_two_faces_on_compass_and_seasons(app, july_wednesday):
     # ruler/servant prose.
     import json as _json
 
-    from config import dial, encyclopedia_ui, glow, pantheon, paths, shortcuts
+    from config import paths
     data = _json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
     )
@@ -707,7 +707,7 @@ def test_theme_ninth_matches_the_encyclopedia_table(app):
     `pantheon` copy that was never drawn (Rule #19 — one figure, one
     plate, read by both rosters). A theme absent from the table
     entirely (no weekday Sunday duality) always answers None."""
-    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
+    from config import paths as _paths
     from render.layers import theme_ninth
 
     from tests.art_debt import PENDING_NINTH
@@ -1192,7 +1192,7 @@ def test_seated_slot_wears_its_own_roster():
     slots share the theme."""
     from app.controller import apply_display_settings
     from app.settings_store import Settings, replace
-    from config import dial, encyclopedia_ui, glow, pantheon, paths as _paths, shortcuts
+    from config import paths as _paths
     from render.layers import slot_view
 
     skin = apply_display_settings(
@@ -2932,9 +2932,9 @@ def test_hover_warm_sweep_speaks_through_the_real_dispatch(app, july_wednesday, 
     a second sweep is a warm no-op with the same coverage, and
     `should_stop` aborts the rings immediately."""
     day, tick = july_wednesday
-    monkeypatch.setattr(defaults, "HOVER_WARM_ANGLE_STEPS", 24)
-    monkeypatch.setattr(defaults, "HOVER_WARM_RADIAL_STEPS", 6)
-    monkeypatch.setattr(defaults, "HOVER_WARM_RING_PAUSE_S", 0.0)
+    monkeypatch.setattr(encyclopedia_ui, "HOVER_WARM_ANGLE_STEPS", 24)
+    monkeypatch.setattr(encyclopedia_ui, "HOVER_WARM_RADIAL_STEPS", 6)
+    monkeypatch.setattr(encyclopedia_ui, "HOVER_WARM_RING_PAUSE_S", 0.0)
     comp = Compositor(defaults.DEFAULT_SKIN, AssetCache())
     comp.render_offscreen(360.0, 1.0, day, tick)      # day + tick installed
     spoken = comp.warm_hover_articles(360.0)

@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
 from app.encyclopedia.cards import CardGrid, mosaic_pixmap
 from config import encyclopedia_ui, paths
-from config import encyclopedia_tree as tree, encyclopedia_ui
+from config import encyclopedia_tree as tree
 
 
 class HomeScreen(QWidget):

@@ -20,7 +20,7 @@ from PySide6.QtWidgets import QFrame, QScrollArea, QVBoxLayout, QWidget
 
 from app.encyclopedia.cards import CardGrid, card_pixmap
 from config import encyclopedia_ui
-from config import encyclopedia_tree as tree, encyclopedia_ui
+from config import encyclopedia_tree as tree
 
 
 class ThemeScreen(QWidget):

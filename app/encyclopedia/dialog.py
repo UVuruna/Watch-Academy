@@ -39,7 +39,7 @@ from app.encyclopedia.themes import ThemeScreen
 from app.theme import apply_theme
 from app.ui_style import style_button
 from config import constants, defaults, encyclopedia_ui, palette, pantheon, paths
-from config import encyclopedia_tree as tree, encyclopedia_ui, pantheon
+from config import encyclopedia_tree as tree
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository

@@ -66,7 +66,7 @@ def test_rotating_art_file_suffixed_source_versions_rotate(tmp_path):
     """The RESTRUCTURE naming: version siblings carry the source suffix
     AFTER the `_vN` (`Lion_v2_gem.png`). A sourceless canonical still
     finds them and rotates between the active-source files."""
-    from config import pantheon, paths
+    from config import paths
 
     (tmp_path / "Lion_gem.png").write_bytes(b"")
     (tmp_path / "Lion_v2_gem.png").write_bytes(b"")
@@ -150,7 +150,7 @@ def test_scale_variant_file_is_deterministic(tmp_path, monkeypatch):
     """The SAME date must always yield the SAME file — a live dial
     that flickered between versions within one day would be worse than
     no rotation at all."""
-    monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    monkeypatch.setattr(pantheon, "SCALE_ART_DIR", tmp_path)
     badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
     badge.mkdir(parents=True)
     for suffix in ("", "_v1", "_v2"):
@@ -165,7 +165,7 @@ def test_scale_variant_file_is_deterministic(tmp_path, monkeypatch):
 def test_scale_variant_file_advances_on_consecutive_dates(tmp_path, monkeypatch):
     """With more than one version on disk, consecutive days must show
     a different file — otherwise there is no rotation to speak of."""
-    monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    monkeypatch.setattr(pantheon, "SCALE_ART_DIR", tmp_path)
     badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
     badge.mkdir(parents=True)
     for suffix in ("", "_v1", "_v2"):
@@ -184,7 +184,7 @@ def test_scale_variant_file_keeps_judas_and_lucifer_in_step(tmp_path, monkeypatc
     version counts per figure, the SAME relative slot (base/_v1/_v2)
     must be picked for both on any given day, so the pair always
     advances together."""
-    monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    monkeypatch.setattr(pantheon, "SCALE_ART_DIR", tmp_path)
     badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
     badge.mkdir(parents=True)
     for stem in ("Judas", "Lucifer"):
@@ -203,7 +203,7 @@ def test_scale_variant_file_graceful_with_one_or_zero_files(tmp_path, monkeypatc
     """Missing everything falls back to the caller's own default (None
     here); exactly one file on disk means there is nothing to rotate —
     the same file shows every day."""
-    monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path)
+    monkeypatch.setattr(pantheon, "SCALE_ART_DIR", tmp_path)
     assert pantheon.scale_variant_file("Judas", date(2026, 7, 20)) is None
     badge = tmp_path / "primary" / "colored"     # tree law 2026-07-26
     badge.mkdir(parents=True)
@@ -217,5 +217,5 @@ def test_scale_variant_file_graceful_when_the_directory_is_missing(tmp_path, mon
     """A source with no scale/ folder at all (not expected in practice,
     but the resolver must not raise) reads as zero candidates -> None,
     same as an empty existing folder."""
-    monkeypatch.setattr(defaults, "SCALE_ART_DIR", tmp_path / "does_not_exist")
+    monkeypatch.setattr(pantheon, "SCALE_ART_DIR", tmp_path / "does_not_exist")
     assert pantheon.scale_variant_file("Judas", date(2026, 7, 20)) is None

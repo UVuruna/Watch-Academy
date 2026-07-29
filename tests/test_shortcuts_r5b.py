@@ -673,7 +673,7 @@ def test_no_two_shortcuts_share_a_chord():
     table is now checked as a whole: one chord, one action (the two
     fast_travel_future rows are the documented exception — Equal and
     numpad Plus are two KEYS for one action, not one key twice)."""
-    from config import defaults, shortcuts
+    from config import defaults
 
     seen = {}
     for action, key, modifiers, _description in shortcuts.SHORTCUTS:

@@ -28,7 +28,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import archetypes, calendar_mounts, constants, continents, defaults, dial, glow, palette, pantheon, paths
+from config import archetypes, calendar_mounts, constants, continents as continents_theme, defaults, dial, glow, palette, pantheon, paths
 from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
@@ -2509,14 +2509,14 @@ def draw_weekday_body(
         and ctx.skin.weekday_theme != "planet_signs"
     )
     asset = spec.bodies.get(body)
-    if ctx.skin.weekday_theme == "continents" and body in continents.CONTINENTS_REGIONS:
+    if ctx.skin.weekday_theme == "continents" and body in continents_theme.CONTINENTS_REGIONS:
         # THE CONTINENTS live art (owner-sealed matrix 2026-07-21): the
         # baked skin body is only the atmo-day still frame — on the dial
         # the continent follows the user's earth_style (one setting, whole
         # instrument) and the SKY'S OWN day/night (`ctx.tick.is_daylight`,
         # the same sun-elevation law the Earth marker already computes,
         # never recomputed here). Graceful-absent if the face is missing.
-        live = continents.continents_body_art(
+        live = continents_theme.continents_body_art(
             body, ctx.skin.earth_style, ctx.tick.is_daylight
         )
         if paths.art_file(live).exists():
@@ -2646,7 +2646,7 @@ class WeekdayLayer(Layer):
             if ctx.skin.weekday_theme == "continents":
                 # The Arctic Servant follows earth_style + live sky like
                 # the six arms (owner-sealed matrix 2026-07-21).
-                live = continents.continents_dual_art(
+                live = continents_theme.continents_dual_art(
                     ctx.skin.earth_style, ctx.tick.is_daylight
                 )
                 if paths.art_file(live).exists():
@@ -2952,7 +2952,7 @@ class CenterBodyLayer(Layer):
                     if ctx.skin.weekday_theme == "continents":
                         # The Arctic Servant follows earth_style + live
                         # sky like the Ruler and the six arms.
-                        live = continents.continents_dual_art(
+                        live = continents_theme.continents_dual_art(
                             ctx.skin.earth_style, ctx.tick.is_daylight
                         )
                         if paths.art_file(live).exists():
@@ -3456,9 +3456,9 @@ def earth_region(latitude: float, default: str) -> str:
     POLE (owner 2026-07-15: the Quick Jump flips onto the poles). The
     latitude rides the day context, so a running simulation carries
     its own observer here."""
-    if latitude >= continents.EARTH_POLE_LATITUDE:
+    if latitude >= continents_theme.EARTH_POLE_LATITUDE:
         return "north_pole"
-    if latitude <= -continents.EARTH_POLE_LATITUDE:
+    if latitude <= -continents_theme.EARTH_POLE_LATITUDE:
         return "south_pole"
     return default
 

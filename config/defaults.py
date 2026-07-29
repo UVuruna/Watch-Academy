@@ -496,20 +496,20 @@ def dial_window_margin_fraction(skin) -> float:
     `RING_MOTTO_RADIUS_STEP` is gone."""
     marker = max(skin.year_marker.scale, skin.year_marker.moon_scale)
     glow_extent = (
-        GLOW_RING_RADIUS_FRACTION
-        + marker * GLOW_RADIUS_SCALE * skin.hover_enlarge
+        dial.GLOW_RING_RADIUS_FRACTION
+        + marker * glow.GLOW_RADIUS_SCALE * skin.hover_enlarge
     )
     letter_extent = (
-        RING_LETTER_RADIUS_FRACTION
-        + RING_LETTER_ART_SCALE * skin.ring_letter_scale
-        * (1.0 + 2.0 * RING_LETTER_SHADOW_RADIUS)
+        dial.RING_LETTER_RADIUS_FRACTION
+        + dial.RING_LETTER_ART_SCALE * skin.ring_letter_scale
+        * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
     )
     motto_extent = 0.0
     if skin.ring.motto:
         motto_extent = (
-            RING_MOTTO_RADIUS_FRACTION
-            + RING_MOTTO_SIZE * skin.ring_letter_scale
-            * (1.0 + 2.0 * RING_LETTER_SHADOW_RADIUS)
+            dial.RING_MOTTO_RADIUS_FRACTION
+            + dial.RING_MOTTO_SIZE * skin.ring_letter_scale
+            * (1.0 + 2.0 * dial.RING_LETTER_SHADOW_RADIUS)
         )
     return (
         max(glow_extent, letter_extent, motto_extent) - 1.0

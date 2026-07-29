@@ -15,7 +15,7 @@ def test_ring_preset_cards_load_and_validate():
     card names itself loudly."""
     import pytest
 
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
     from data.rings import ring_presets, validate_preset
 
     presets = ring_presets()
@@ -165,7 +165,7 @@ def test_ring_two_metals_toggle_switches_the_split(monkeypatch):
     owner's per-preset toggle resolves True — the stored choice first,
     else the documented per-preset default (Dollar True, everything
     else False — "default matching today's look")."""
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     # Defaults, no stored choice at all: Dollar splits, the others don't.
     mason = build_skin(replace(Settings(), ring="Dollar")).ring
@@ -206,7 +206,7 @@ def test_dollar_eye_shine_toggle_swaps_the_master():
     the canonical stems resolve to the active art source's _gem/_gpt
     file on disk; a custom ring's EXPLICIT eye variant is untouched by
     the toggle (its rays are baked into the chosen glyph)."""
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     art_dir = dial.RING_LETTER_ART_DIR
     assert constants.RING_EYE_SHINE_DEFAULT == {"Dollar": True}
@@ -356,7 +356,7 @@ def test_thematic_finish_wears_the_preset_color():
     recolor transformer (DOMY cross red, PILOT cross blue, Dollar
     green, The One moon indigo, Templar black); outside the ring band
     the skin reads gold (documented containment)."""
-    from config import constants, continents, dial, encyclopedia_ui, pantheon, paths
+    from config import constants, paths
 
     thematic = build_skin(replace(Settings(), ring_finish="thematic"))
     assert thematic.ring.letter_metal[12] == "thematic"   # the triangle
@@ -399,7 +399,7 @@ def test_thematic_choices_mirror_the_recolor_presets():
     import json
     from pathlib import Path
 
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     presets = json.loads(
         (Path(__file__).resolve().parents[1]
@@ -433,7 +433,7 @@ def test_two_watches_keep_their_own_thematic_color():
     the two paths collapse into one and this fails."""
     from pathlib import Path
 
-    from config import continents, dial, encyclopedia_ui, pantheon, paths
+    from config import paths
     from render.asset_recolor import letter_metal_path
 
     # Real order: every watch's skin is built before any of them paints.
@@ -464,7 +464,7 @@ def test_custom_ring_picks_its_own_thematic_color():
     name fails loudly at validation (Rule #1)."""
     import pytest as _pytest
 
-    from config import constants, continents, dial, encyclopedia_ui, pantheon, paths
+    from config import constants, paths
     from data.rings import validate_preset
 
     custom = (
@@ -498,7 +498,7 @@ def test_mason_motto_arc_loads_and_pins_its_key_letters():
     (the TOP arc); NOVUS ORDO SECLORUM pins its own N at 4h, ORDO's own
     final O at the bottom/24h, and M at 20h (the BOTTOM arc, reading
     counterclockwise)."""
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
     from data.rings import ring_presets
 
     presets = ring_presets()
@@ -696,7 +696,7 @@ def test_bronze_finish_and_theme_metals():
     assert bronze_ring.letter_metal[4] == "bronze"
     assert bronze_ring.letter_metal[0] == "silver"     # accent stays silver
     assert missing_assets(build_skin(replace(Settings(), ring_finish="bronze"))) == []
-    from config import constants as c, continents, dial, encyclopedia_ui, pantheon
+    from config import constants as c
     # The EAGER door: the dial itself now draws the gold master until the
     # background warm catches up (owner 2026-07-28), so a test that wants
     # to see the real bronze pixels must ask for them (`letter_metal_
@@ -741,7 +741,7 @@ def test_bronze_finish_and_theme_metals():
     assert colored.metal is None
     assert "colored" in str(colored.bodies["jupiter"])
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
-    from config import continents, dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
 
     assert all(
         _paths.art_file(path).exists()
@@ -830,7 +830,7 @@ def test_metal_shade_table_pinned():
     names, and every shade resolves to a ramp that actually exists —
     a typo here would surface as a KeyError mid-render on a user's
     machine, which is the failure this pin exists to prevent."""
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
     from recolor import recipe as recolor_recipe
 
     presets = recolor_recipe.load()
@@ -861,7 +861,7 @@ def test_metal_mask_stays_untouched_across_every_shade():
     from PySide6.QtGui import QColor, QPixmap
     from PySide6.QtWidgets import QApplication
 
-    from config import continents, dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
@@ -905,7 +905,7 @@ def test_metal_recolor_relief_order_survives_the_ramp():
     from PySide6.QtGui import QColor, QImage
     from PySide6.QtWidgets import QApplication
 
-    from config import continents, dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
@@ -954,7 +954,7 @@ def test_planets_art_body_renders_differently_by_metal():
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     from PySide6.QtWidgets import QApplication
 
-    from config import continents, dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
     from render.assets import AssetCache
 
     QApplication.instance() or QApplication([])
@@ -1004,7 +1004,7 @@ def test_live_derived_silver_letters_read_as_cool_silver():
 
     import numpy as np
 
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
     from recolor import space as recolor_space
     from render.asset_recolor import letter_metal_variant
 
@@ -1064,7 +1064,7 @@ def test_live_derived_bronze_preserves_relief_and_reads_bronze():
     from PySide6.QtWidgets import QApplication
     from PySide6.QtGui import QColor, QImage
 
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
     from recolor import ramp as recolor_ramp, recipe as recolor_recipe
     from render.asset_recolor import letter_metal_variant
 
@@ -1181,7 +1181,7 @@ def test_letter_groups_cover_the_library_exactly():
     exactly once — and every glyph's gold master must exist (silver/
     bronze are derived at load, owner 2026-07-19 — no separate files
     to check)."""
-    from config import constants, continents, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     grouped = [
         glyph
@@ -1272,7 +1272,7 @@ def test_working_set_downscales_oversized_dial_art():
     draws stay untouched."""
     from pathlib import Path
 
-    from config import continents, dial, encyclopedia_ui, pantheon, paths
+    from config import paths
     from render.asset_variants import (
         scaled_variant_file,
         warm_working_set,

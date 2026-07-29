@@ -27,7 +27,7 @@ Layer: app. Documentation: tree.md.
 from datetime import date
 
 from config import archetypes, calendar_mounts, constants, defaults, glow, pantheon
-from config import calendar_mounts, encyclopedia_tree as tree, glow, pantheon
+from config import encyclopedia_tree as tree
 from render.asset_recolor import metal_variant_path
 from render.asset_variants import moon_phase_file
 from render.instrument_diagrams import INSTRUMENT_FIGURES

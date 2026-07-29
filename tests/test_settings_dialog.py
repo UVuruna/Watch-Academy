@@ -182,7 +182,7 @@ def test_dialog_subdial_set_combo_round_trips(app):
     1/2/3/4/Solo, restores the stored value, and result_settings()
     returns the pick."""
     from app.settings_store import replace
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     dialog = SettingsDialog(replace(Settings(), subdial_set="set3"), defaults.DEFAULT_SKIN)
     assert dialog._subdial_set_combo.currentData() == "set3"
@@ -210,7 +210,7 @@ def test_dialog_metal_shade_combos_round_trip(app):
     config.constants.METAL_SHADE_NAMES order, restores the stored
     picks, and result_settings() returns all three."""
     from app.settings_store import replace
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     dialog = SettingsDialog(
         replace(
@@ -278,7 +278,7 @@ def test_third_era_combo_lists_chinese(app):
     """Owner fix-round B, 2026-07-19: the Huangdi count appears in the
     Third calendar combo (Calendar eras, under Language) and round-trips
     through `result_settings()` exactly like every other option."""
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     values = [
@@ -315,7 +315,7 @@ def test_third_era_combo_lists_kali_olympiad_unix(app):
     exactly like every other option — verified independently for all
     three since they cover three different internal shapes (a uniform
     offset, a year-only formatter, a date-level formatter)."""
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     values = [
@@ -458,7 +458,7 @@ def test_weekday_theme_swaps_bodies_and_names():
     assert greek.weekday_set.bodies["mercury"].name == "Hermes.png"
     assert "greek" in str(greek.weekday_set.bodies["mercury"])
     # Canonical paths resolve through the ART SOURCE (owner 2026-07-14).
-    from config import dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
 
     assert all(
         _paths.art_file(path).exists()
@@ -474,7 +474,7 @@ def test_dialog_open_close_keeps_the_location(app):
     but the settings' name/timezone/coordinates always win (first run
     AND fine-tuned coordinates with a stored path)."""
     from app.settings_dialog.dialog import SettingsDialog
-    from config import defaults as d, dial, encyclopedia_ui, pantheon
+    from config import defaults as d
 
     dialog = SettingsDialog(Settings(), defaults.DEFAULT_SKIN)
     result = dialog.result_settings()
@@ -493,9 +493,9 @@ def test_every_theme_skeleton_is_complete():
     (`tests/art_debt.py`, the single list four guards share) — a NEW gap
     anywhere else (a stem typo, a folder rename, a cast wired against art
     nobody queued) still fails immediately."""
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
 
-    from config import dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
     from tests.art_debt import PENDING_BODY_BRONZE
 
     missing = set()
@@ -557,7 +557,7 @@ def test_hidden_mode_unlocks_the_four_greetings(app):
     # SESSION-only (owner 2026-07-15): the unlock never persists —
     # the settings know nothing about it.
     assert not hasattr(Settings(), "hidden_unlocked")
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
 
     assert len(constants.HIDDEN_MODE_SECRET) >= 3
 
@@ -635,7 +635,7 @@ def test_art_source_resolves_with_fallback(tmp_path, monkeypatch):
     file, FALLS BACK to the other source where it is missing, then to the
     suffix-less owner file; a step-up across roots still resolves. Pinned
     on a SYNTHETIC assets tree with controlled coverage."""
-    from config import constants, dial, encyclopedia_ui, pantheon, paths
+    from config import constants, paths
 
     assets = tmp_path / "assets"
     for rel in (
@@ -768,7 +768,7 @@ def test_hexa_arm_hover_carries_the_sign_articles(app):
 
 
 def test_symbolism_repository_covers_every_body_and_theme():
-    from config import constants, dial, encyclopedia_ui, pantheon
+    from config import constants
     from data.symbolism import SymbolismRepository
 
     repo = SymbolismRepository()
@@ -787,7 +787,7 @@ def test_articles_cover_every_theme_and_body():
     Voodoo Sat) whose entries also carry a display `name`."""
     import json
 
-    from config import constants, dial, encyclopedia_ui, pantheon, paths
+    from config import constants, paths
 
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
@@ -826,7 +826,7 @@ def test_encyclopedia_expansion_wiring():
         assert len(topics[family]["entries"]) == 8
     # Moods leads with the comparative WHEEL article and closes with
     # the 8+1 event mood (owner 2026-07-14).
-    from config import dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
 
     moods = topics["moods"]["entries"]
     assert len(moods) == 10
@@ -919,7 +919,7 @@ def test_encyclopedia_expansion_wiring():
     ]
     # The Moon topic grows to EIGHT phase pages (owner 2026-07-16,
     # ROADMAP queue #8b) — in constants.MOON_PHASE_NAMES cycle order.
-    from config import constants as _constants, dial, encyclopedia_ui, pantheon
+    from config import constants as _constants
     assert [e["name"][1] for e in topics["moon"]["entries"]] == list(
         _constants.MOON_PHASE_NAMES
     )
@@ -1047,10 +1047,10 @@ def test_pantheon_planetary_merge():
         _PANTHEON_MERGED_THEMES,
         _WIDER_BLOCK_START,
     )
-    from config import defaults as _defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults as _defaults, pantheon as pantheon_module
     from data.encyclopedia import EncyclopediaRepository
 
-    assert _PANTHEON_MERGED_THEMES == frozenset(_defaults.WEEKDAY_PANTHEON)
+    assert _PANTHEON_MERGED_THEMES == frozenset(pantheon_module.WEEKDAY_PANTHEON)
     assert _PANTHEON_MERGED_THEMES == {"greek", "norse", "egypt", "slavic"}
     assert _PANTHEON_BLOCK_SIZE == 11
     assert _WIDER_BLOCK_START == 22
@@ -1080,7 +1080,7 @@ def test_pantheon_planetary_merge():
         # Pantheon's GOOD/EVIL (index 8/9 of ITS OWN block) carry the
         # culture's supreme throne pair, never the planetary dual names.
         pantheon_good, pantheon_evil = pantheon[8], pantheon[9]
-        ruler, servant = _defaults.WEEKDAY_PANTHEON[theme]["dual_names"]
+        ruler, servant = pantheon_module.WEEKDAY_PANTHEON[theme]["dual_names"]
         assert pantheon_good["name"] == ruler
         assert pantheon_evil["name"] == servant
         # BOTH blocks close on the IDENTICAL Ninth entry — the SAME
@@ -1314,7 +1314,7 @@ def test_duality_topic_rotates_lucifer_and_judas_by_travel_date():
     from PySide6.QtWidgets import QApplication
 
     from app.encyclopedia import EncyclopediaDialog, topics as _topics
-    from config import defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults
 
     QApplication.instance() or QApplication([])
     day = date(2026, 7, 20)
@@ -1363,7 +1363,7 @@ def test_era_terms_topic():
 
     from app.encyclopedia import EncyclopediaDialog, topics as _topics
     from config.encyclopedia_tree import WHOLES
-    from config import dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
     from data.encyclopedia import EncyclopediaRepository
     from data.translations import collect_corpus
 
@@ -1487,7 +1487,7 @@ def test_eclipse_topics():
 
     from app.encyclopedia import EncyclopediaDialog, topics as _topics
     from config.encyclopedia_tree import WHOLES
-    from config import dial, encyclopedia_ui, pantheon, paths as _paths
+    from config import paths as _paths
     from data.encyclopedia import EncyclopediaRepository
     from data.translations import collect_corpus
 
@@ -1567,7 +1567,7 @@ def test_guide_pages_cover_every_slide_exactly_once():
     has a caption with a title line plus a body (owner content)."""
     import json
 
-    from config import defaults as d, dial, encyclopedia_ui, pantheon
+    from config import defaults as d
 
     slides = {path.stem for path in d.GUIDE_DIR.glob("*.png")}
     captions = json.loads(
@@ -1637,7 +1637,7 @@ def test_chinese_articles_and_elements_cover_the_cycle():
     """
     import json
 
-    from config import constants, dial, encyclopedia_ui, pantheon, paths
+    from config import constants, paths
 
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
@@ -1658,7 +1658,7 @@ def test_zodiac_articles_cover_every_sign():
     2026-07-12), a *_south pair with the color-borrowed reading."""
     import json
 
-    from config import constants, dial, encyclopedia_ui, pantheon, paths
+    from config import constants, paths
 
     data = json.loads(
         (paths.database_dir() / "symbolism.json").read_text(encoding="utf-8")
@@ -1736,14 +1736,14 @@ def test_the_window_never_opens_below_the_owners_screen():
 
     from app.encyclopedia import EncyclopediaDialog
     from app.encyclopedia.cards import card_width_for, row_content_width
-    from config import defaults as _defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults as _defaults
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
-    assert dialog.minimumWidth() >= _defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
-    assert dialog.minimumHeight() == _defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    assert dialog.minimumWidth() >= encyclopedia_ui.ENCYCLOPEDIA_MIN_WIDTH_PX
+    assert dialog.minimumHeight() == encyclopedia_ui.ENCYCLOPEDIA_MIN_HEIGHT_PX
     # A full theme row fits inside the minimum width, by arithmetic.
-    columns = _defaults.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
+    columns = encyclopedia_ui.ENCYCLOPEDIA_GALLERY_MAX_COLUMNS
     card = card_width_for(dialog.minimumWidth(), columns)
     assert row_content_width(card, columns) <= dialog.minimumWidth()
     dialog.deleteLater()
@@ -1842,7 +1842,7 @@ def test_encyclopedia_zoom_bounds_and_persists_for_the_session():
     written to settings, resets on app restart)."""
     import app.encyclopedia.dialog as dialog_module
     from app.encyclopedia import EncyclopediaDialog
-    from config import constants as _constants, dial, encyclopedia_ui, pantheon
+    from config import constants as _constants
 
     low, high = _constants.ENCYCLOPEDIA_ZOOM_RANGE
     original = dialog_module._session_zoom
@@ -1871,7 +1871,7 @@ def test_article_order_restructure():
     owner verdict A — supersedes the R3 merged dual page), then the
     Ninth where the theme has one."""
     from app.encyclopedia import topics as _topics
-    from config import defaults as _defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults as _defaults
 
     topics = _topics()
     # "wolf" HAS a Ninth (Sigma) — 11 pages total (title+6+duality
@@ -1885,7 +1885,7 @@ def test_article_order_restructure():
         "Luna", "Hunter (Gamma)", "Scout (Delta)", "Beta", "Mate", "Elder",
     ]
     assert wolf[7]["name"] == ("week_duality_title", "wolf")
-    alpha, omega = _defaults.WEEKDAY_DUAL_NAMES["wolf"]
+    alpha, omega = pantheon.WEEKDAY_DUAL_NAMES["wolf"]
     assert "dual" not in wolf[8] and wolf[8]["name"] == alpha
     assert "dual" not in wolf[9] and wolf[9]["name"] == omega
     assert wolf[10]["name"] == "Sigma"        # the Ninth, unchanged content
@@ -1893,7 +1893,7 @@ def test_article_order_restructure():
     japan = topics["japan"]["entries"]
     assert len(japan) == 10
     assert "dual" not in japan[8] and "dual" not in japan[9]
-    ama, iwato = _defaults.WEEKDAY_DUAL_NAMES["japan"]
+    ama, iwato = pantheon.WEEKDAY_DUAL_NAMES["japan"]
     assert japan[8]["name"] == ama and japan[9]["name"] == iwato
     # Every restructured theme's title/duality text resolves and is
     # non-trivial (Rule #2 — no capacity lies: written now, not a
@@ -1923,13 +1923,13 @@ def test_dual_page_split_into_good_and_evil(app):
     text label spans the FULL block width now (no more columns=2 half-
     width split)."""
     from app.encyclopedia import EncyclopediaDialog, topics as _topics
-    from config import defaults as _defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults as _defaults
 
     topics = _topics()
     greek_good = topics["greek"]["entries"][8]
     greek_evil = topics["greek"]["entries"][9]
     assert "dual" not in greek_good and "dual" not in greek_evil
-    ruler_name, servant_name = _defaults.WEEKDAY_DUAL_NAMES["greek"]
+    ruler_name, servant_name = pantheon.WEEKDAY_DUAL_NAMES["greek"]
     assert greek_good["name"] == ruler_name == "Helios"
     assert greek_evil["name"] == servant_name == "Phaethon"
 
@@ -2094,16 +2094,16 @@ def test_image_hover_names_the_plate():
     """Owner spec: hovering any article image shows its NAME — critical
     on multi-image pages like the era calendars ("Byzantine")."""
     from app.encyclopedia.text import image_tooltip as _image_tooltip
-    from config import defaults as _defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults as _defaults, glow
 
     assert _image_tooltip(_defaults.ERA_ART_DIR / "calendar" / "Byzantine.png") == (
         "Byzantine"
     )
     assert _image_tooltip(
-        _defaults.weekday_art("wolf/primary/sigma.png")
+        pantheon.weekday_art("wolf/primary/sigma.png")
     ) == "Sigma"
     assert _image_tooltip(
-        _defaults.ECLIPSE_ART_DIR / "Solar_Total.png"
+        glow.ECLIPSE_ART_DIR / "Solar_Total.png"
     ) == "Solar Total"
 
 
@@ -2117,7 +2117,7 @@ def test_space_jump_index_remap_survives_the_restructure():
     from PySide6.QtWidgets import QApplication
 
     from app.encyclopedia import EncyclopediaDialog
-    from config import defaults as _defaults, dial, encyclopedia_ui, pantheon
+    from config import defaults as _defaults
 
     QApplication.instance() or QApplication([])
     # raw index 0 ("sun") -> the GOOD half (index 8), NOT the title page.
@@ -2125,7 +2125,7 @@ def test_space_jump_index_remap_survives_the_restructure():
     assert sun_jump.entry_index == 8
     good_entry = sun_jump._topics["wolf"]["entries"][8]
     assert "dual" not in good_entry
-    assert good_entry["name"] == _defaults.WEEKDAY_DUAL_NAMES["wolf"][0]
+    assert good_entry["name"] == pantheon.WEEKDAY_DUAL_NAMES["wolf"][0]
     sun_jump.deleteLater()
     # raw index 1 ("moon"/Monday) is UNCHANGED — still index 1.
     monday_jump = EncyclopediaDialog(initial_topic="wolf", initial_entry=1)

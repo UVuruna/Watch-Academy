@@ -440,7 +440,6 @@ def test_subdial_set_round_trip_and_default(store):
     """The SUBDIAL PLATE SET (owner decree 2026-07-21, Rsub round): all
     FIVE sets persist, default to "set1" in older files, and reject an
     unknown value."""
-    from config import calendar_mounts, constants
 
     for name in constants.SUBDIAL_SETS:
         store.save(replace(Settings(), subdial_set=name))
@@ -464,7 +463,6 @@ def test_metal_shade_round_trip_and_default(store):
     shade of every metal persists, older files default to
     config.constants.METAL_SHADE_DEFAULT, and an unknown shade name
     raises loudly (Rule #1) rather than silently falling back."""
-    from config import calendar_mounts, constants
 
     for metal, names in constants.METAL_SHADE_NAMES.items():
         if metal == "thematic":
