@@ -271,226 +271,105 @@ if a colour literal appears anywhere else, if `PALETTE_PRESETS` spells
 a hue out instead of naming a wheel, or if a pointer's wheels are ever
 split apart again.
 
-### `defaults.py` — Developer Tunables
-Everything tunable that is NOT a colour (colours live in
-[Palette](palette.md) — including the wheel tables `PALETTE_PRESETS`,
-`RING_TINT_GROUPS`, `THEME_COLORS`, `TRAY_COLOR_WHEEL` and the
-`DEFAULT_SKIN`'s own hues, which the skin now references by name).
+### `dial.py` — Dial Geometry and Window Sizing
+**Documentation:** [Dial](dial.md)
 
-Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
-owner slike 1–3, 2026-07-17 — as the larger of the ring-letter overhang
-(at the letter-scale slider), the event-glow extent (the larger of the
-Earth/Moon markers at their user scale, relocated to the ring band,
-hover-enlarged) and, when the active preset carries one (TASK 1, owner
-"može radi" 2026-07-19), the outer MOTTO ARC's own outer reach
-(`RING_MOTTO_RADIUS_FRACTION`/`_STEP`/`_SIZE` — a no-op term for every
-preset without a `motto`), so neither the letters nor a bottom-of-ring
-halo nor the motto text can be square-cut and any size/hover/letter
-slider re-sizes the window to fit exactly), `RING_MOTTO_LETTER_STEP_DEG`
-(ANNUIT WORD-GAP round, owner correction 2026-07-19, third batch: the
-tight per-character step `core.motto._tight_two_pin_angles` advances a
-2-pin motto at, derived from NOVUS ORDO SECLORUM's own pin geometry —
-60°/9 chars), the Time Travel
-coverage-warning color and the
-Deep Time advertised span (`DEEP_TIME_YEAR_RANGE`), the spontaneous-hide
-watchdog delay, tick scheduling
-(epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
-M6 picker), settings schema version and write debounce, the procedural
-render geometry block (tick/font sizes with legibility floors, pen widths,
-marker borders), `ROSE_RAY_HALF_DEG`/`ROSE_RAY_BORDER` (the Rose ray
-GEOMETRY — its hues moved out, see [Palette](palette.md)),
-`ARM_OUTLINE_WIDTH` (the LEAD LINE's width, the twin of
-`palette.ARM_OUTLINE` — every drawn arm wears it since the owner's
-correction round 2026-07-29), the Almanac day-arrow geometry
-(`CALENDAR_ARROW_*`; the Calendar's own wedge opacity is GONE — its
-wedges wear the standard Aura alphas now),
-the CALENDAR MOUNT (owner-sealed R7b 2026-07-21 registration, R9a
-2026-07-21 render + picker, GENERALIZED 2026-07-29, the four new Dozens
-+ THE AXLE LAW wired the same day):
-`SLAVIC_MONTHS` (the twelve Croatian months as (croatian, gloss, ascii
-stem, gregorian-month) rows), `EMOTIONS_DOZEN` (CANON's own hour-seated
-Dozen), `MONTHS_ART_DIR`
-(the canonical **sourceless** `assets/months/` root, OUTSIDE
-`ART_SOURCED_ROOTS` — the subdial precedent; graceful-absent, a future
-prompt sheet), `CALENDAR_MOUNT_RADIUS_FRACTION` (0.65, the DESIGN
-ZODIAC law's 60-70% mount radius), `CALENDAR_MOUNT_MARK_SCALE` (the
-mark's own drawn height, halved per extra seat per wedge), `CALENDAR_MOUNT_ALPHA`/
-`CALENDAR_MOUNT_LIT_DELTA` (the current-mark emphasis, reaching exactly
-1.0) and `CALENDAR_MOUNT_DIMMED_ALPHA` (0.20, owner R12 — The Cat's
-dimming law, below the resting alpha but never zero) — and above all
-**`CALENDAR_MOUNTS`**, the ONE registry of every roster that may ride
-the twelve wedges (`CalendarMount(title, system, members, art_dir,
-centre, art_stems, follows)`, plus `CALENDAR_MOUNT_SEATS_PER_WEDGE` and
-the `almanac_seat_order()` rotation), from which the Settings-validated
-`CALENDAR_MOUNT_MODES` is DERIVED — ten entries as of 2026-07-29:
-`zodiac`/`almanac`/`months`/`chinese`/`emotions` plus the five Dozens
-CANON sealed the same day, `olympians`/`apostles`/`virtues`/`vices`/
-`sins` (`virtues`/`vices` are TWO ENTRIES of Aristotle's one Virtue
-Wheel, light and paint registers of the identical seat table; `sins` is
-the Christian catalogue of SIN, a different tradition on its own wheel
-— Pride crown, Treachery root, axle Hardness of Heart — and the first
-roster registered with no art on disk at all, every plate
-graceful-absent); the render itself
-(`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
-`calendar_mount_angle`, and the Pointer Theme window's Calendar mount
-tab) is covered
-in [Layers](../render/layers.md)'s own Calendar Pointer section (see
-[Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) for the Slavic Months topic),
-the Umbra contrast spans, the octa slot text width fraction, the event glow
-rendering (owner rework 2026-07-16: the ring-band relocation radius, the
-golden Sun / silver Moon colors, the alpha stops, the halo scale and the
-larger-marker scale that sizes the window margin), tray
-icon geometry, the
-PANTHEON roster tables (`WEEKDAY_PANTHEON`: per theme the candidate
-plate paths, seated names, article set and the Sunday dual) with
-`pantheon_seat(theme, body)` — the shared safety-law resolver (first
-EXISTING candidate plate wins with the pantheon identity; None keeps
-the planetary bundle whole) consumed by the classic unit, the seated
-slots and the hovers alike — and
-`DEFAULT_SKIN` — a fully typed [Manifest](../skins/manifest.md)
-`SkinDefinition` instance that is serialized verbatim to
-`assets/skins/domy/skin.json` (re-serialize after editing it). The
-hidden Report chart tokens (`REPORT_*`) and the OBSERVATORY chart
-tokens (`OBSERVATORY_*`, Session 17: the bundle filenames, the fixed
-per-series canon colors — season cross-wheel hues, light/dark gold vs
-slate — the surface/grid/crosshair palette, the day-length sample step
-and the eclipse-window size) live here too. The POLE emoji windows
-(ROADMAP 15h item 10, owner reminder 2026-07-19; fix round E,
-2026-07-19: the emoji became ⚪/⚫, never 🔆/🌑): `pole_is_light(pole,
-on_date)` / `pole_emoji(pole, on_date)` — a simple CALENDAR date-window
-check (`POLE_LIGHT_WINDOW`, no astronomy call) the Quick Jump ▸
-Location submenu reads for the North/South Pole row's own light/dark
-state; `GREENWICH_EMOJI` is the sealed 🌐 pick for the Greenwich row.
-**UI ICON CHROME** (TASK 4, MASON/ICONS round, owner icon list
-2026-07-19 approvals): `ICON_DIR`/`ICON_FILES`/`icon_path(name)` — the
-four owner-approved reusable menu/hover glyphs (light/dark pole state,
-solar/lunar eclipse), copied from his `UV/icons/` staging into
-`assets/icons/` under canonical names; `icon_path` is graceful-absent
-(None when the file has not landed, Rule #1) so every consumer keeps
-its OWN documented emoji fallback. `pole_icon_name(pole, on_date)`
-mirrors `pole_emoji`'s own light/dark split so the two never disagree.
-These are UI CHROME, not ART — the one-image-one-place law (owner
-2026-07-19) applies to the dial's own ART only; a UI icon may
-legitimately answer in more than one menu spot.
-**SCALE ROTATION** (owner decree 2026-07-19/20, CANON.md
-one-image-one-place amendment — Judas–Lucifer is a MAIN theme, kept
-"na smenu"): `ROTATION_DAYS` (THE UNIVERSAL ROTATION CONVENTION's
-shared cadence — generalized 2026-07-20, see
-[Assets (folder)](../assets/___assets.md)), `SCALE_ART_STEMS` (the
-known filename stems per figure — the owner's naming stayed irregular
-across batches) and `scale_variant_file(figure, on_date)` — DISCOVERS
-every version actually on disk for the active source, in both
-`SCALE_ART_DIR` and its `glass/` register, tolerant of `_v`/`_v1`/
-`_v2`/`_v3` suffixes, and rotates by the date's proleptic ordinal.
-Sole consumer: the [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md)'s "The Two
-Triangles" duality topic.
-**THE METAL RECOLOR (rewritten 2026-07-27, owner verdict
-"prihvaceno"):** the numeric recipe is GONE from this file. `METAL_SHADES`
-is now only a MAPPING — per metal (gold/bronze/silver), a selectable
-shade name → the name of a RAMP in `recolor/presets/metals.json`, where
-the numbers live as DATA (a new metal costs one JSON entry and zero
-code). Silver's three shades map to ramps that exist as metals in their
-own right (gunmetal / silver / platinum); gold's and bronze's are named
-`gold_*` and `bronze_*`. `METAL_SOURCE_BADGE` / `METAL_SOURCE_LETTER`
-name the metal each art family was DRAWN in (bronze and gold
-respectively) — the transform is source-agnostic and must be told where
-it starts; `METAL_MASK_BADGE` / `METAL_MASK_LETTER` pick the mask mode
-(`chroma` for art mixing metal with gray stone, `alpha` for glyphs).
-`METAL_SWAP_VERSION` (bumped to 6 here) — the cache-key salt
-`letter_metal_file` and `metal_variant_file` fold in (alongside the
-active shade name) so a shade switch or a recolor-math change never
-serves a stale PNG. `METAL_SWAP_TARGETS` stays the membership tuple
-`("gold", "silver")` — badges never bronze-swap. RETIRED with the old
-kernel: `METAL_RECOLOR_GAIN_RANGE` (its 1.90 ceiling clipped 11.87% of a
-gold plate to one flat maximum on real art) and `METAL_SWAP_HUE_WINDOW` /
-`_SOFT` / `METAL_SWAP_SAT_RAMP` (the mask's window now lives in the
-presets' `tuning` block, in Oklab, where a hue angle survives the
-shadows). `constants.py` still holds the shade NAME tables
-(`METAL_SHADE_NAMES`, `METAL_SHADE_DEFAULT`, `METAL_SHADE_TITLES`) since
-`defaults.py` is downstream of `paths.py`'s validation needs. Full
-recipe: [Recolor (folder)](../recolor/___recolor.md) and
-[Assets](../render/assets.md).
-**ECLIPSE TYPE ICONS (same round):** `ECLIPSE_LUNAR_TYPE_ICON` +
-`eclipse_lunar_type_icon(type_)` — the owner-APPROVED red/gold/blue
-mapping (total/partial/penumbral) riding
-`assets/icons/moon_eclipse_{red,gold,blue}.png`; `
-ECLIPSE_SOLAR_TYPE_ICON_SOURCE` + `render.asset_variants.
-eclipse_solar_type_icon(type_)` — a PROPOSED (not owner-confirmed)
-shape-matched mapping over the owner's three `sun_eclipse{,1,2}.png`
-variants, annular computationally tinted toward
-`GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR`; `ECLIPSE_TYPE_ICON_PX` — the small
-inline badge size `render.compositor._eclipse_type_icon_tag` embeds
-before the hover-card's eclipse line title, distinct from the big
-category EMBLEM plate (`ECLIPSE_TYPE_EMBLEM`, untouched this round).
-**THE CALENDAR WHEEL ICON (same round):** `CALENDAR_ICON_WEDGE_COUNT`/
-`_WEDGE_COLORS`/`_RING_COLOR`/`_RING_WIDTH_FRACTION` feed `render.
-asset_variants.calendar_wheel_icon_file(size)` — a Rule #19 COMPUTED 12-wedge
-glyph replacing the Fast Travel Flash's plain 📅 fallback for the
-Calendar theme (`app.controller._flash_fast_travel`'s one special
-case — Sun/Moon keep their existing eclipse-glyph icon_keys).
-**R5 MENU REWORK (owner "OSMISLITI ŠTA SVE" — design the full
-shortcut map; EXTENDED by the R5b FINAL MAP round, owner spec sealed
-2026-07-21):** `SHORTCUTS` — the ONE keyboard-shortcut table
-(action_id, `Qt.Key` NAME, `Qt.KeyboardModifier` NAME tuple,
-description; config stays Qt-free, [Clock Widget](../app/widget.md)
-resolves it once at import time like `HOVER_BYPASS_MODIFIER` already
-does) and `shortcut_display(action_id)` (the "Ctrl+R" menu-column
-label, pure/Qt-free). Every entry carries a modifier by construction
-so it can never feed `HIDDEN_MODE_SECRET`'s printable-no-modifier
-buffer; an action_id may appear TWICE (`fast_travel_future`) when two
-physical combos fire the same action. R5b's SEALED map: Settings moved
-off Ctrl+, onto Ctrl+M (Rule #6, no leftover binding); SLOTS
-(Ctrl+1/2/3 Complication, Ctrl+Alt+1/2/3 Weekday theme, per slot); FAST
-TRAVEL (Ctrl+[/Ctrl+] the theme/option pickers, Ctrl+minus/Ctrl+plus —
-bound to BOTH the main-row "=" and the numpad "+" — the past/future
-step), config'd by `FAST_TRAVEL_THEMES` (Sun/Moon/Calendar, each a
-tuple of `{id, title, jump_stem}` options — `app.controller.
-_compute_jump`'s SUN/MOON branch grew an optional phase-filter suffix
-this round to answer the narrower Solstice/Equinox/New/Full/Quarter
-`jump_stem`s, the Calendar and Moon-Eclipse options reuse EXISTING
-`_UNIT_JUMPS`/`_ECLIPSE_JUMPS` kinds verbatim); LOCATIONS (Ctrl+Up/Down
-poles, Ctrl+0 Greenwich (the zero meridian; moved off Ctrl+Space
-2026-07-27 — CUBE.md's ARTICLE-DEPTH LAW took Space and its
-modifiers), Ctrl+Left/Right the user's custom Quick
-Jump cities). `FAST_TRAVEL_FLASH_*` — geometry/timing constants for
-[Fast Travel Flash](../app/fast_travel_flash.md), the small transient
-overlay the theme/option pickers flash above the dial. Three new
-`ICON_FILES` entries (`north_pole`/`south_pole`/`compass`) for the
-[Time Travel](../app/time_travel.md) Quick Jump rows' pole/Greenwich
-icons (R5b's Fast Travel flash reuses the EXISTING `eclipse_sun`/
-`eclipse_moon` entries instead of adding new ones — UI chrome may
-answer more than one spot), `TIME_TRAVEL_ROW_ICON_PX`/
-`TIME_TRAVEL_ARROW_BUTTON_PX` (the row icon/arrow-button pixel sizes),
-and `weekday_theme_body_art(theme, body, on_date=None, colored=False)`
-— one theme's representative plate (moved here FROM `app.encyclopedia.
-_theme_body_art`, Rule #5, since [Pointer Theme](../app/pointer_theme.md)/[Slot Theme](../app/slot_theme.md)
-need the SAME resolution for their picker-grid previews; `colored`
-folded in the SAME round, replacing the `theme_dir`/colored-folder
-expression three render call sites used to re-type — see the WEEKDAY
-ALT ROTATION note below). `on_date` (default None, every caller before
-this round) opts the resolved plate into THE UNIVERSAL ROTATION
-CONVENTION.
+Session 36 (THE CONFIG SPLIT, [Work Plan Structure](../WORKPLAN-STRUCTURE.md))
+carved this module out of `defaults.py`: the window/diameter presets,
+the procedural fallback geometry, the ring band (face, tick, letters,
+motto arc), hand reach, the subdial/slot seating geometry, and
+`OMEGA_HIT_RADIUS_FRACTION`.
 
-**WEEKDAY ALT ROTATION (owner 2026-07-20/21):** the universal rotation
-convention (`rotating_art_file`, [Assets (folder)](../assets/___assets.md))
-reaches the weekday tree — `assets/weekday/{gemini,chatgpt}/bible/
-dark/alt/` (11 files each) is the first weekday register to ship
-`alt/` siblings. `weekday_theme_body_art` is now the ONE weekday-body
-resolver (Rule #5): `render.layers._draw_weekday_slot`, `render.
-compositor`'s hover legend and `app.controller._themed_weekday_set`'s
-baked bodies dict all used to re-type the SAME `theme_dir /
-f"{WEEKDAY_THEME_FILES[theme][body]}.png"` expression inline —
-consolidated into this one function. Rotation itself applies at THREE
-render-adjacent points via the raw `rotating_art_file` utility
-(mirroring exactly how the era badges and the Tetramorph figures
-already opt in): `render.layers.draw_weekday_body` (the main slot +
-center pass, overriding whatever `spec.bodies[body]` was BAKED to at
-settings-apply time — baking never carries a date, since the skin can
-outlive midnight), `_draw_weekday_slot` (the 2nd/3rd slot, resolved
-fresh every paint already), and the hover legend/dual/Ninth plate in
-`render.compositor` (`theme_ninth` also grew an `on_date` parameter,
-same law). `render/assets.md`'s Assets doc covers the sourced-vs-
-sourceless distinction this rides on top of.
+### `shortcuts.py` — Keyboard Input and Fast Travel
+**Documentation:** [Shortcuts](shortcuts.md)
+
+Session 36: `SHORTCUTS`, `shortcut_display()`, `FAST_TRAVEL_THEMES` and
+the Fast Travel Flash overlay's geometry/timing constants.
+
+### `pantheon.py` — The Weekday Theme Registry
+**Documentation:** [Pantheon](pantheon.md)
+
+Session 36: every `WEEKDAY_*` table, `weekday_art()` and its rotation/
+roster siblings, the title-plate resolver. **Over the 1,000-line
+threshold and not yet ratcheted** — see that module's own doc for the
+full arithmetic; this is an open item for the owner, not a silent gap.
+
+### `calendar_mounts.py` — The Calendar's Dozen and Its Mounts
+**Documentation:** [Calendar Mounts](calendar_mounts.md)
+
+Session 36: the Calendar pointer's wedge/arrow geometry, the Slavic
+Months 12-set, and THE CALENDAR MOUNT REGISTRY (`CalendarMount`,
+`CALENDAR_MOUNTS`, `CALENDAR_MOUNT_MODES` and their geometry).
+
+### `encyclopedia_ui.py` — The Reading Surfaces
+**Documentation:** [Encyclopedia UI](encyclopedia_ui.md)
+
+Session 36: legend term highlighting, the computed diagrams
+(`CUBE_DIAGRAM_*`/`CANON_DIAGRAM_*`/`INSTRUMENT_DIAGRAM_*`), the
+Encyclopedia's own card/gallery/reader/article sizing, the shared
+`UI_BUTTON_*`/`THEME_RADIUS_*` chrome, the hover warm-sweep tuning.
+
+### `glow.py` — Event Glow and Eclipse Rendering
+**Documentation:** [Glow](glow.md)
+
+Session 36: the season/moon turning-point glow constants and the whole
+`ECLIPSE_*` family (state machine, art, type emblems).
+
+### `continents.py` — The Continents Theme Family
+**Documentation:** [Continents](continents.md)
+
+Session 36's ONE deterministic fallback when `pantheon.py` still
+exceeded the threshold after its own carves: the region roster, Earth
+art resolution and day/night face resolvers `pantheon.py` imports
+downhill (this module is subordinate to it, not a DAG peer).
+
+### `defaults.py` — Developer Tunables (the Session 36 remnant)
+Everything tunable that fits no single new module's charter, plus a
+handful of COORDINATOR values/functions that legitimately need more
+than one new module's data — the fixed import DAG lets a new module
+import only stdlib + `config.{paths, constants, palette}`, never each
+other and never this file, so a value two new modules both need either
+duplicates (forbidden, Rule #5) or stays here, which may import every
+new module downhill. Landed at 812 lines (from ~3,700) — its
+`tests/test_structure_law.py` ratchet entry was deleted the same
+commit, per that law's own designed shrink.
+
+What stays: `DEFAULT_CITY`, tick scheduling, settings persistence, tray/
+app presentation, UI icon chrome (`ICON_DIR`/`ICON_FILES`/`icon_path`),
+`WORKING_SET_CEILINGS` (the asset-downscaling ceilings — not a colour,
+not weekday, not dial-specific), the Session-27-drift Report/
+Observatory/Guide/Translate/Time-Travel/Quick-Jump constants (none of
+which fit any of the six new modules' charters), the METAL recolor
+mapping (`METAL_SHADES`/`METAL_SOURCE_*`/`METAL_MASK_*`/`METAL_SWAP_*`
+— recolor RECIPES, not colours, the colour law's own boundary),
+`SUBDIAL_RECOLOR_*` (explicit remnant per the split map's pre-answered
+Q&A), `DEFAULT_SKIN` (+ the "Default render config" comment,
+relocated here from the dead banner that used to precede it) — a fully
+typed [Manifest](../skins/manifest.md) `SkinDefinition` serialized
+verbatim to `assets/skins/domy/skin.json`, reaching `dial.RING_FACE_
+DIR`/`dial.HAND_*_REACH_FRACTION` and `pantheon.weekday_art`/
+`continents.EARTH_ART_DIR`/`continents._CONTINENTS` downhill — the Pole
+emoji windows, and three eclipse-icon names (`ECLIPSE_SOLAR_ART`,
+`ECLIPSE_LUNAR_TYPE_ICON` + `eclipse_lunar_type_icon()`, `ECLIPSE_
+SOLAR_TYPE_ICON_SOURCE`) that each need a name from a different new
+module (`pantheon.weekday_art` or the remnant's own `ICON_DIR`) and so
+could not live in `glow.py` beside their `ECLIPSE_*` siblings without
+either module importing another (the fixed DAG forbids it).
+
+**The move was proven value-identical**, the palette move's own method
+repeated: the pre-split `defaults.py` was recovered from git HEAD and
+imported under a private module name; all 351 of its public names
+(values, functions, classes) were compared against their new homes in
+one process — 0 differences.
+
+**Everything that used to be documented here in prose about code that
+MOVED — the PANTHEON roster, the weekday themes' completion waves, the
+R5 menu rework's shortcut/Fast-Travel tables, THE CALENDAR MOUNT
+REGISTRY, THE METAL SHADES, the WEEKDAY ALT ROTATION — now lives beside
+the code it describes**, in the new module whose Files entry names it
+above. (THE DOUBLE NINTH LAW and THE BLUE MOON LAW were never part of
+this section — they document `constants.py` tables, untouched by this
+session, and stay in that file's own entry above.)
 
 ### `archetypes.py` — The Archetype Mode
 THE ARCHETYPE MODE's one configuration home (owner sealed package
@@ -661,7 +540,8 @@ rides, never the identities themselves. Regression pins:
 ## Connections
 
 ### Used by
-- [App (folder)](../app/___app.md) — window/tray/settings read all four files
+- [App (folder)](../app/___app.md) — window/tray/settings read across
+  the whole folder
 - Core, data, skins, render (M2+) — invariants and paths
 
 ## Design Decisions

@@ -370,7 +370,23 @@ entry requires the owner's explicit approval in that same session.
 Eleven debtors were named on the law's first day (defaults.py owed to
 Session 36, layers.py/compositor.py to the render split, controller.py
 and observatory.py to an app round, constants.py to a post-36 round,
-five test files to a test hygiene round).
+five test files to a test hygiene round). Session 36 healed and
+deleted the defaults.py entry the same commit it split the file; it
+could NOT do the same for the new `config/pantheon.py` (the weekday
+theme registry, provably over the threshold at its floor — see
+`config/pantheon.md`), which stays unratcheted and failing on purpose,
+an owner decision this session did not have the authority to make for
+itself.
+
+### `test_config_cohesion.py`
+THE CONFIG SPLIT's own guard (Session 36, WORKPLAN-STRUCTURE.md):
+every `config/*.py` file is at or under the god-file threshold except
+the two ALREADY-ratchet-tracked exceptions (`constants.py`, untouched
+by the split; `pantheon.py`, the split's one open item — both named in
+`test_structure_law.py`'s own ratchet, never duplicated here); and no
+name that moved out of `config/defaults.py` into one of the six new
+modules (or `continents.py`, the pantheon deterministic fallback)
+remains reachable as `defaults.<name>` — Rule #6, no re-export shims.
 
 ### `test_ninth_mechanisms.py`
 THE DOUBLE NINTH LAW (owner decree 2026-07-29): every double ninth found
