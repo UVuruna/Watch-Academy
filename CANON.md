@@ -197,6 +197,15 @@ two visible axes). The law is the arm count: the pointers that draw 3,
 (7, 12, 24) carry two — **eighteen wheels in all**. The Cube doctrine,
 figures and display laws live in [The Cube Canon](CUBE.md).
 
+**THE SEASONS OFFSET (owner seal 2026-07-29, Pointers rework):** the
+Seasons wheel alone stands OFFSET 45° — its color boundaries fall
+exactly on 12h/3h/6h/9h, so it shows the ASTRONOMICAL year (quarters
+turning at the solstice/equinox cardinals), while the Temperaments and
+the Elements keep their arms centered on the cardinals and so read as
+the METEOROLOGICAL quarters. The same boundary-on-12h law gives the
+Rose's Prophecy wheel its half-hour ray centers (each hour worn from
+:00 to :59) and the Calendar's Zodiac wheel its sign-start at the top.
+
 **THE POINTER NAME (owner seal 2026-07-28):** the 4-arm pointer is
 **Quaternity**. "Seasons" stepped down to be one of its three wheels, so
 the pointer needed a name able to hold the Elements, the Temperaments

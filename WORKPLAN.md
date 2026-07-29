@@ -596,7 +596,27 @@ teaser law, click through the Spacebar-jump contract; tests on the
 exporter's schema and the embed's open path. Runs only after the
 gadget's M2 (the four models + Switcher) exists.
 
-## Running in Parallel (no agent needed)
+### Session 29 — the Pointers rework → **Fable** (orchestrator) — DONE (2026-07-29, 0.14.545 / 0.14.555 / 0.14.556)
+
+Owner sheet `UV/Pointers.png`, run as three sequential agents (opus,
+opus, sonnet). Delivered: (1) the SHAPE law — every pointer but Aurora
+picks STAR or POLYGON; the polygon is literally the polygon (square /
+hexagon / octagon, one vertex per arm tip; Trinity alone draws the
+cube), with the curvature slider and its two edge forms (smooth
+concave / V-notched) on the four true polygons; the Calendar's star is
+two interleaved hexagrams, its polygon a 12-point star; the Rose's
+polygon one 24-ray star. (2) The OFFSET wheels — Seasons +45°
+(astronomical, boundaries on the cardinals), Rose Prophecy +7.5°
+(hours worn :00–:59), and the Rose's Aura finally standing behind its
+own hue groups on both wheels. (3) `hide_night_borders` for all.
+(4) The Calendar normalized — the lit-wedge feature deleted, the mount
+moved into the Pointer Theme window, and the offer registry-driven:
+zodiac / almanac / Slavic months / Chinese animals / emotions, each
+with its own sealed thirteenth-in-the-center rule (`core/blue_moon`
+now table-driven). (5) The three Design-window rows. Tests
+1127 → 1219 passed; regression pins on every sealed angle.
+
+
 
 - **Owner art generation** from the sheets: pantheon plates,
   Satanism dual, Eleusis, the scale glass set (incl. the two
@@ -620,6 +640,26 @@ gadget's M2 (the four models + Switcher) exists.
   / `ONE_SOUL_THEME_NAME`; record in `research/bond_theme.md`.
 - Compass secondary image layer: ★ the Tree / the Menagerie (CANON).
 - Seasons tetramorph persons layer: yes/no (CANON).
+- **Slavic 13th month** — the owner said (2026-07-29, Pointers rework)
+  the Slavic calendar mounts NO thirteenth, but the sealed repo law
+  gives it **Modrenik** (±14 d of the Dec solstice). Keep or drop?
+- **Olympians on the Calendar** — 6 of 12 wedge seats (and the crown
+  pair's flanks) still "finalized in the wiring round" (CANON): needs
+  the owner's seat-by-seat verdict before the roster can mount.
+- **Apostles on the Calendar** — 8 of 12 wedge seats unpinned (CANON):
+  same verdict needed.
+- **Virtue Wheel** crown/root seating: PROPOSED in CANON, awaiting the
+  owner's verdict.
+- **A 24-set for the Calendar** — no 24 (+3 center) roster is
+  canon-sealed to ride it; the two-per-wedge law is implemented and
+  tested, registering one is a single table row once sealed (Rose-24's
+  three-figure center render would be new work).
+- **Rose Prophecy seats** — the +7.5° shift moves stars, polygon and
+  Aura; the weekday/Ruler/Servant seats stay on the eight 45° anchors
+  (every body still inside its own hue group). Should the seats ride
+  along instead?
+- **`render/layers.py` split** — grown to ~3,700 lines (Rule #20): a
+  dedicated refactor session (`render/pointer_shapes.py`) proposed.
 - Seven archetypes stay seven (the standing recommendation) or grow
   to thirteen — 13 is the excluded number in this system.
 - Odanost as the center's day face, or on a planet seat.
