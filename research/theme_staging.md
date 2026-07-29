@@ -21,7 +21,7 @@ the two are locked together on purpose, so a future round cannot
 generate art and quietly abandon it (the exact failure that opened this
 ledger, see CLAUDE.md's law for the twelve-cast/429-file story).
 
-## The Six Still Owed
+## The Three Still Owed
 
 **Completion wave I landed 2026-07-29 (Session 31):** `age_of_heroes`,
 `celestial_court` and `corporate` left this ledger with all twenty
@@ -49,13 +49,40 @@ always their code keys. 184 texts in all (~112,000 characters): 3 × 61 —
 7 arm blurbs, the theme title, the week-duality page and the Ninth —
 plus the one card line the shared Encyclopedia card reads. Their rows
 are gone from the table below, which is the only way a cast may ever
-leave it. The Cyberpunk half of the wave still owes its three.
+leave it.
+
+**Completion wave II, Cyberpunk half, landed 2026-07-29 (Session 32):**
+`cp_gangs`, `cp_street` and `cp_corpo` left this ledger with all twenty
+checklist lines done — registered in `constants.WEEKDAY_THEMES` and
+`METAL_THEMES`, seven seat names/dirs/stems apiece, dual, Ninth, title,
+appended to the "Gaming" picker group the WoW half opened, and ONE
+Encyclopedia card carrying a three-way Gangs | Street | Power switcher
+(`config.encyclopedia_tree.VARIANT_SOURCES` — the backlog's structural
+answer 2: one card, never three; it seats in The Human Wheel beside the
+Warcraft card, and the tenth-card overflow is a NAMED carve-out pointing
+at the Session 35 cut, never a loosened cap). None of the three had a
+`taxonomy.THEME_KEY_RENAMES` entry to delete; the folder names were
+always their code keys. 184 texts in all (~118,000 characters): 3 × 61
+— 7 seat articles, 42 per-wheel variants, the 2 Ruler/Servant face
+texts, 7 arm blurbs, the theme title, the week-duality page and the
+Ninth — plus the one card line the shared card reads.
+
+**THE ROTATION SEATS these three owed are wired**, in the one place
+every weekday consumer already calls: `defaults.WEEKDAY_SEAT_ROSTERS`
+declares a seat's figures (canonical first) and `rotating_art_file`
+resolves them, so the dial, the hover legend, the Encyclopedia and the
+pickers all turn together with no app-code change. Ten seats carry a
+roster — four in Gangs, three in Street, and the Power cast's
+synchronized Throne/Mirror/Ninth triad, whose lockstep falls out of the
+shared date modulo and equal roster lengths exactly as its sheet
+predicted. Twelve plates that no table could otherwise have reached are
+now shown; a rotating seat's DISPLAY NAME lists every member of its
+roster and its article argues all of them, so the label can never
+disagree with the plate. Pinned by four regressions in
+`tests/test_weekday_rotation.py`.
 
 | Folder | Group | Files on disk | Prompt sheet | Still owes | Owed by |
 |---|---|---|---|---|---|
-| `cp_gangs` | gaming | 58 | [Cyberpunk Prompts](prompts/cyberpunk/cyberpunk_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS wiring its Tuesday 3-way rotation seat (figure-first filenames, a `config.taxonomy` roster — see the sheet's own RESTRUCTURE note). Joins the "Gaming" picker group the WoW half opened. | Session 32 |
-| `cp_street` | gaming | 54 | [Cyberpunk Prompts](prompts/cyberpunk/cyberpunk_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS its own rotation-seat wiring (see `cp_gangs` row). Joins the "Gaming" picker group the WoW half opened. | Session 32 |
-| `cp_corpo` | gaming | 50 | [Cyberpunk Prompts](prompts/cyberpunk/cyberpunk_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Its synchronized pair rotation needs no new code (`_pick_rotation`'s shared modulo already keeps poles in step) — just the roster entries. Joins the "Gaming" picker group the WoW half opened. | Session 32 |
 | `sw_jedi` | films | 22 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Shares the wave's new `defaults.WEEKDAY_MENU_GROUPS` "Films" entry with the other two film casts. | Session 33 |
 | `sw_sith` | films | 18 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines). Same new "Films" menu group. | Session 33 |
 | `sw_dyad` | films | 3 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | Full PER-CAST CHECKLIST (all 20 lines), PLUS its place-vs-place Ninth rotation (The Ghosts / Exegol) — either `rotating_art_file` or a reuse of `core.continents`'s Zealandia/Pangea trigger (owner call, documented in the sheet's own "rotation convention" section). Same new "Films" menu group. | Session 33 |
@@ -66,9 +93,11 @@ Session 31 (myth & crafts, 3 casts), Session 32 (gaming, 6 casts),
 Session 33 (films, 3 casts). See `WORKPLAN.md` §THE THEME BACKLOG for
 the full PER-CAST CHECKLIST and the reasoning behind the wave split.
 
-**Remaining debt:** 205 files across the 6 casts above — the three
-Cyberpunk casts (Session 32's second half) and the three film casts
-(Session 33).
+**Remaining debt:** 43 files across the 3 casts above — the three
+film casts of Session 33. Sessions 31 and 32 between them cleared nine
+casts and 386 files, and `sw_dyad`'s Ninth rotation is the last open
+wiring question in the whole backlog (the seat-roster mechanism the
+Cyberpunk half built is now one of the two options that entry names).
 
 A row is deleted only in the same commit that finishes its cast's
 checklist — see item 20 of the checklist itself: "the cast passes the

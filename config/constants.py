@@ -1115,6 +1115,16 @@ WEEKDAY_THEMES = (
     "wow_alliance",        # the Grand Alliance's own command
     "wow_horde",           # the new Horde's leadership
     "wow_evil",            # the enemies both were made against
+    # COMPLETION WAVE II, second half (Session 32, 2026-07-29): the
+    # Cyberpunk 2077 franchise, the SAME three-casts-one-week shape as
+    # the Warcraft half above — three THEMES on the dial, ONE card in
+    # the Encyclopedia. These three are the only casts in the registry
+    # whose seats carry a ROSTER: a seat may hold several named
+    # factions/figures and rotate through them daily
+    # (`defaults.WEEKDAY_SEAT_ROSTERS`).
+    "cp_gangs",            # the factions that hold Night City's ground
+    "cp_street",           # the people who live on it
+    "cp_corpo",            # the powers that move behind both
 )
 
 # The bronze-plate themes (owner 2026-07-12): their medallions can wear
@@ -1132,6 +1142,11 @@ METAL_THEMES = (
     # carved relief in primary/bronze with a full-paint colored/ sibling
     # per plate — the same cameo-master shape, so all four looks apply.
     "wow_alliance", "wow_horde", "wow_evil",
+    # Completion wave II, Cyberpunk half (Session 32): aged-bronze
+    # carved relief in primary/bronze with a full-repaint neon-noir
+    # colored/ sibling per plate (the sheet's own two-register law), so
+    # all four looks apply here too.
+    "cp_gangs", "cp_street", "cp_corpo",
 )
 # "colored" (owner 2026-07-12) is the FOURTH look: fresh full-color
 # badges from the theme's colored/ subfolder — separate art, no swap.
@@ -1197,6 +1212,13 @@ WEEKDAY_THEME_BLURBS = {
     "wow_alliance": "wow_alliance",
     "wow_horde": "wow_horde",
     "wow_evil": "wow_evil",
+    # Completion wave II, Cyberpunk half (Session 32): same law again —
+    # one blurb set per CAST. A rotating seat's line names every member
+    # of its roster, so the hover never describes a figure the dial is
+    # not currently able to show.
+    "cp_gangs": "cp_gangs",
+    "cp_street": "cp_street",
+    "cp_corpo": "cp_corpo",
 }
 
 # Theme -> symbolism.json article set (the glyph theme shares the
@@ -1237,6 +1259,13 @@ WEEKDAY_THEME_ARTICLES = {
     "wow_alliance": "wow_alliance",
     "wow_horde": "wow_horde",
     "wow_evil": "wow_evil",
+    # Completion wave II, Cyberpunk half (Session 32): own article set
+    # per cast. Where a seat carries a roster the article argues every
+    # member of it — they are not one faction seen twice, they are two
+    # answers to the question the seat asks.
+    "cp_gangs": "cp_gangs",
+    "cp_street": "cp_street",
+    "cp_corpo": "cp_corpo",
 }
 
 # THE NINTH per weekday theme (CANON.md "The Ninth — Outside the
@@ -1298,6 +1327,19 @@ WEEKDAY_THEME_NINTHS = {
     "wow_alliance": ("Turalyon", "wow_alliance/primary/bronze/Turalyon.png"),
     "wow_horde": ("Rexxar", "wow_horde/primary/bronze/Rexxar.png"),
     "wow_evil": ("Medivh", "wow_evil/primary/bronze/Medivh.png"),
+    # COMPLETION WAVE II, Cyberpunk half (Session 32): three Excluded
+    # ninths, each argued in the sheet's own terms — NetWatch is the
+    # only power in the Gangs cast with no ground at all; V is the one
+    # figure the Street cast is entirely about and the circle has no
+    # chair for; Alt Cunningham has had no body since 2013 and is the
+    # demonstration of what the Power cast is actually fighting over.
+    # The Alt seat ROTATES with Rache Bartmoss in lockstep with the
+    # Throne and the Mirror (`defaults.WEEKDAY_SEAT_ROSTERS`).
+    "cp_gangs": ("NetWatch", "cp_gangs/primary/bronze/Netwatch.png"),
+    "cp_street": ("V", "cp_street/primary/bronze/V.png"),
+    "cp_corpo": (
+        "Alt Cunningham", "cp_corpo/primary/bronze/Alt_Cunningham.png",
+    ),
 }
 
 # THE PANGEA EASTER EGG (owner-sealed matrix 2026-07-21): Pangea shows

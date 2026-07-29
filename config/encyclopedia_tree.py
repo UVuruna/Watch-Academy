@@ -68,6 +68,16 @@ class Whole(NamedTuple):
 # the Corporation until the nine-whole arc moves the whole group into
 # `worlds` (WORKPLAN-STRUCTURE.md §THE NINE WHOLES names the franchise
 # cards there explicitly, and that table supersedes this seat).
+#
+# The same wave's CYBERPUNK half added a second such card — `cyberpunk`,
+# the merge declared beside `wow` in VARIANT_SOURCES — and seats it in
+# the same place for the same reason. That takes `human` to 10, one past
+# the comfort cap, and the carve-out is NAMED in
+# `tests/test_settings_dialog.py` rather than the cap being loosened:
+# WORKPLAN-STRUCTURE.md §THE NINE WHOLES already dissolves this whole
+# into `inner` (the emblem families) and `worlds` (the professions, the
+# Corporation and all three franchise cards), which is exactly where the
+# overflow goes.
 WHOLES = (
     Whole(
         # 12h yellow — the sun at the top of the dial; the instrument's
@@ -97,7 +107,7 @@ WHOLES = (
         # Scale: the human fire, which is what this whole reads.
         "human", "The Human Wheel", palette.ROSE_PALETTE[2],
         ("virtues", "sins", "moods", "intelligences", "profession",
-         "corporate", "wow", "trinity", "duality"),
+         "corporate", "wow", "cyberpunk", "trinity", "duality"),
     ),
     Whole(
         # 06h blue — sunrise, the spring equinox, Judas's hue: the Cube's
@@ -154,6 +164,16 @@ VARIANT_SOURCES = {
     "wow": ("World of Warcraft", (("Alliance", "wow_alliance"),
                                   ("Horde", "wow_horde"),
                                   ("Evil", "wow_evil"))),
+    # The SAME wave's second franchise, on the same argument. Gangs,
+    # Street and Power are Night City read from three heights — the
+    # factions that hold the ground, the people who live on it, and the
+    # powers that move behind both — on one set of nine seats with the
+    # same arm bundles, the same Sunday dual and the same Ninth seat.
+    # Three keys on the dial, ONE card here; the labels are the sheet's
+    # own block names.
+    "cyberpunk": ("Cyberpunk 2077", (("Gangs", "cp_gangs"),
+                                     ("Street", "cp_street"),
+                                     ("Power", "cp_corpo"))),
 }
 
 # The four merged god themes already BUILD as three contiguous blocks

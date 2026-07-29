@@ -1222,6 +1222,85 @@ def _pick_rotation(candidates: list[Path], on_date: date) -> Path | None:
     return candidates[index]
 
 
+# THE SEAT ROSTER (Cyberpunk casts, sheet-sealed 2026-07-22; wired by
+# completion wave II's second half, Session 32, 2026-07-29). The
+# universal rotation above pools ONE figure's own `_v2` versions — a
+# second artwork of the SAME figure, which is all the convention was ever
+# asked to mean. The Cyberpunk sheet needs the other shape: a SEAT that
+# holds several DIFFERENT named figures and turns through them
+# ("figure-first rosters" in the sheet, where every file is named after
+# the figure it depicts and never after the seat). Without this table
+# twelve of that franchise's plates would sit on disk unreachable — the
+# exact failure THE THEME COMPLETION LAW exists to end.
+#
+# theme -> seat label -> the roster's stems, CANONICAL FIRST. The seat
+# label is documentation only (a weekday body, or "dual"/"ninth" for the
+# two seats that live in their own tables); the lookup below keys on the
+# canonical stem, so one mechanism serves the weekday bodies, the Sunday
+# Servant and the Ninth alike.
+#
+# DECLARED ORDER IS THE ROTATION ORDER, and that is load-bearing for the
+# Power cast: its Throne, Mirror and Ninth each hold exactly two members,
+# so the shared date modulo lands on the same index for all three on any
+# given day (the sheet's "SYNCHRONIZED PAIR ROTATION" — no special-case
+# code, a consequence of equal roster lengths). Alphabetical resolution
+# would have paired Saburo with Rache instead of with Alt; declared order
+# keeps the two empires standing together.
+WEEKDAY_SEAT_ROSTERS: dict[str, dict[str, tuple[str, ...]]] = {
+    "cp_gangs": {
+        "moon": ("Aldecaldos", "Mox"),
+        "mars": ("Maelstrom", "Barghest", "Wraiths"),
+        "mercury": ("Voodoo_Boys", "6th_Street"),
+        "saturn": ("Animals", "Scavengers"),
+    },
+    "cp_street": {
+        "mars": ("Jackie", "Panam", "River"),
+        "mercury": ("Wakako", "Padre"),
+        "venus": ("Kerry", "Lizzy_Wizzy"),
+    },
+    "cp_corpo": {
+        "sun": ("Saburo_Arasaka", "Rosalind_Myers"),
+        "dual": ("Yorinobu", "Kurt_Hansen"),
+        "ninth": ("Alt_Cunningham", "Rache_Bartmoss"),
+    },
+}
+# (theme FOLDER, canonical stem) -> the whole roster (derived; the one
+# lookup `rotating_art_file` performs). Keyed on the folder as well as
+# the stem so a roster can never capture a same-named plate in another
+# theme.
+_SEAT_ROSTER_BY_PLATE = {
+    (theme, stems[0]): stems
+    for theme, seats in WEEKDAY_SEAT_ROSTERS.items()
+    for stems in seats.values()
+}
+
+
+def _seat_roster_of(canonical_path: Path) -> tuple[str, ...] | None:
+    """The roster `canonical_path` is the canonical member of, or None
+    for every other asset in the program. Weekday plates live at
+    `<theme>/<register>/<look>/<Stem>.png`, so the theme folder is the
+    third parent — the same shape for bronze and for its colored
+    sibling."""
+    parts = canonical_path.parts
+    if len(parts) < 4:
+        return None
+    return _SEAT_ROSTER_BY_PLATE.get((parts[-4], canonical_path.stem))
+
+
+def _roster_candidates(directory: Path, stems: tuple[str, ...]) -> list[Path]:
+    """A seat roster's plates, in the roster's DECLARED order, resolved
+    to the active art source. A member with nothing on disk is skipped
+    rather than raising — the seat then simply rotates through fewer
+    figures, which is the same graceful-absent contract every other art
+    table here keeps (Rule #1's documented path)."""
+    resolved: list[Path] = []
+    for stem in stems:
+        picked = paths.art_file(directory / f"{stem}.png")
+        if picked is not None and picked.exists():
+            resolved.append(picked)
+    return resolved
+
+
 def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
     """ONE asset from a rotating family, THE UNIVERSAL CONVENTION applied
     generically: `canonical_path` is a SOURCELESS `<dir>/<Name>.png`
@@ -1229,13 +1308,22 @@ def rotating_art_file(canonical_path: Path, on_date: date) -> Path | None:
     directory's own `<Name>` / `<Name>_v*` version siblings, resolved to
     the active art source by `paths.art_file` (RESTRUCTURE 2026-07-22
     retired the `alt/` subfolder — versions are `_v2`-style siblings in
-    the SAME source-free folder now). Opt-in per consumer (scale
-    duality, era emblems, tetramorph figures) — never on the hot
-    `art_file` path. None when the canonical path resolves to nothing on
+    the SAME source-free folder now) — or, when the plate is the
+    canonical member of a SEAT ROSTER above, that roster's own figures in
+    declared order. Opt-in per consumer (scale duality, era emblems,
+    tetramorph figures, every weekday body) — never on the hot
+    `art_file` path. This is the ONE chokepoint every weekday consumer
+    already calls, which is why the roster hooks in here rather than at
+    four call sites. None when the canonical path resolves to nothing on
     disk (not even a master)."""
     resolved = paths.art_file(canonical_path)
     if resolved is None or not resolved.exists():
         return None
+    stems = _seat_roster_of(canonical_path)
+    if stems is not None:
+        return _pick_rotation(
+            _roster_candidates(canonical_path.parent, stems), on_date
+        )
     candidates = _rotation_candidates(
         (canonical_path.parent,), (canonical_path.stem,)
     )
@@ -2316,6 +2404,46 @@ WEEKDAY_THEME_NAMES = {
         "venus": "Sylvanas",
         "saturn": "Deathwing",
     },
+    # COMPLETION WAVE II, second half (Session 32, 2026-07-29). The
+    # three Cyberpunk 2077 casts, rosters owner-sealed 2026-07-22 in
+    # research/prompts/cyberpunk/cyberpunk_prompts.md.
+    #
+    # THE ROSTER SEATS' DISPLAY LAW: where a seat holds several figures
+    # (`WEEKDAY_SEAT_ROSTERS` below) the display name lists them all,
+    # separated by the same "·" the Sunday dual already uses. The art
+    # rotates daily and the label does not, so a per-figure label would
+    # go stale the moment the plate turned; a label naming the WHOLE
+    # roster is true on every day of it, and the seat's article argues
+    # every member. SUNDAY is the one exception and keeps the
+    # Ruler · Servant law every other theme obeys — its rotating
+    # partners are named in the two face texts instead.
+    "cp_gangs": {
+        "sun": "Arasaka · Militech",
+        "moon": "Aldecaldos · Mox",
+        "mars": "Maelstrom · Barghest · Wraiths",
+        "mercury": "Voodoo Boys · 6th Street",
+        "jupiter": "Tyger Claws",
+        "venus": "Valentinos",
+        "saturn": "Animals · Scavengers",
+    },
+    "cp_street": {
+        "sun": "Johnny Silverhand · Rogue",
+        "moon": "Viktor Vektor",
+        "mars": "Jackie · Panam · River",
+        "mercury": "Wakako · Padre",
+        "jupiter": "Misty",
+        "venus": "Kerry · Lizzy Wizzy",
+        "saturn": "Judy",
+    },
+    "cp_corpo": {
+        "sun": "Saburo Arasaka · Yorinobu",
+        "moon": "Songbird",
+        "mars": "Adam Smasher",
+        "mercury": "Dexter DeShawn",
+        "jupiter": "Solomon Reed",
+        "venus": "Evelyn Parker",
+        "saturn": "Takemura",
+    },
 }
 # THE CONTINENTS (owner-sealed matrix 2026-07-21): the six weekday
 # columns are the six continents; Sunday's body is Antarctica, the
@@ -2398,6 +2526,15 @@ WEEKDAY_THEME_DIRS = {
     "wow_alliance": "wow_alliance/primary/bronze",
     "wow_horde": "wow_horde/primary/bronze",
     "wow_evil": "wow_evil/primary/bronze",
+    # Completion wave II, Cyberpunk half (Session 32): the same shape a
+    # third time — one aged-bronze relief master per cast with its
+    # neon-noir colored/ sibling. Every roster member's plate lives FLAT
+    # in the same look dir beside the canonical one (the sheet's own
+    # figure-first naming: a file is named after the figure it depicts,
+    # never after the seat).
+    "cp_gangs": "cp_gangs/primary/bronze",
+    "cp_street": "cp_street/primary/bronze",
+    "cp_corpo": "cp_corpo/primary/bronze",
     # The emblem families live OUTSIDE assets/weekday/ — the relative
     # step-up reaches assets/emblem/ (owner 2026-07-14).
     "virtues": "../emblem/virtue/primary/colored",
@@ -2520,6 +2657,26 @@ WEEKDAY_THEME_FILES["wow_evil"] = {
     "mercury": "Guldan", "jupiter": "Kiljaeden", "venus": "Sylvanas",
     "saturn": "Deathwing",
 }
+# Completion wave II, Cyberpunk half (Session 32): the stems are the
+# CANONICAL member of each seat — the first entry of the seat's roster
+# below, and the only one the auto-build could never have guessed, since
+# a roster seat's display name lists every member. The stems are the
+# sheet's own drop paths.
+WEEKDAY_THEME_FILES["cp_gangs"] = {
+    "sun": "Arasaka", "moon": "Aldecaldos", "mars": "Maelstrom",
+    "mercury": "Voodoo_Boys", "jupiter": "Tyger_Claws",
+    "venus": "Valentinos", "saturn": "Animals",
+}
+WEEKDAY_THEME_FILES["cp_street"] = {
+    "sun": "Johnny", "moon": "Viktor", "mars": "Jackie",
+    "mercury": "Wakako", "jupiter": "Misty", "venus": "Kerry",
+    "saturn": "Judy",
+}
+WEEKDAY_THEME_FILES["cp_corpo"] = {
+    "sun": "Saburo_Arasaka", "moon": "Songbird", "mars": "Adam_Smasher",
+    "mercury": "Dexter", "jupiter": "Solomon", "venus": "Evelyn",
+    "saturn": "Takemura",
+}
 # The emblem stems ARE the single names (Capitalized) — only the dual
 # sun display titles need the override.
 WEEKDAY_THEME_FILES["virtues"] = {
@@ -2603,6 +2760,15 @@ WEEKDAY_DUAL_NAMES = {
     "wow_alliance": ("Varian Wrynn", "Genn Greymane"),
     "wow_horde": ("Thrall", "Garrosh Hellscream"),
     "wow_evil": ("Arthas, the Lich King", "Illidan Stormrage"),
+    # COMPLETION WAVE II, Cyberpunk half (Session 32). Three duals of
+    # one house rather than three oppositions, as the sheet argues them:
+    # the two corporations that fought the Fourth Corporate War and were
+    # left reflecting each other, a legend and the woman who refused the
+    # job that made him one, and a founder against the son who strangled
+    # him and then sat in the chair.
+    "cp_gangs": ("Arasaka", "Militech"),
+    "cp_street": ("Johnny Silverhand", "Rogue"),
+    "cp_corpo": ("Saburo Arasaka", "Yorinobu"),
 }
 # Dual paths live FLAT inside the theme's look dir (owner DUAL
 # FLATTEN 2026-07-19: the dual/ folder carried zero semantic weight at
@@ -2649,6 +2815,13 @@ WEEKDAY_DUAL_FILES = {
     "wow_alliance": "wow_alliance/primary/bronze/Genn",
     "wow_horde": "wow_horde/primary/bronze/Garrosh",
     "wow_evil": "wow_evil/primary/bronze/Illidan",
+    # Completion wave II, Cyberpunk half (Session 32): the servant plate
+    # flat inside the cast's own look dir, colored twin via
+    # colored_variant_rel. The Power cast's Mirror ROTATES (Yorinobu /
+    # Kurt Hansen) in lockstep with its Throne and its Ninth.
+    "cp_gangs": "cp_gangs/primary/bronze/Militech",
+    "cp_street": "cp_street/primary/bronze/Rogue",
+    "cp_corpo": "cp_corpo/primary/bronze/Yorinobu",
     "virtues": "../emblem/virtue/primary/colored/Humility",
     "sins": "../emblem/sin/primary/colored/Servility",
     "moods": "../emblem/mood/primary/colored/Awe",
@@ -3076,6 +3249,15 @@ WEEKDAY_THEME_TITLES = {
     "wow_alliance": "Warcraft Alliance",
     "wow_horde": "Warcraft Horde",
     "wow_evil": "Warcraft Evil",
+    # COMPLETION WAVE II, Cyberpunk half (Session 32). Same rule as the
+    # Warcraft half: each cast is its own dial theme and needs a title
+    # that identifies itself in a FLAT list, so the franchise leads and
+    # the block follows. The Encyclopedia reads "Cyberpunk 2077" once,
+    # with Gangs | Street | Power on the variant switcher
+    # (encyclopedia_tree.VARIANT_SOURCES).
+    "cp_gangs": "Cyberpunk Gangs",
+    "cp_street": "Cyberpunk Street",
+    "cp_corpo": "Cyberpunk Power",
 }
 
 # The Weekday submenu's TOP entries (owner 2026-07-18): rendered FIRST,
@@ -3101,11 +3283,13 @@ WEEKDAY_MENU_GROUPS = (
     # The Scripture family (owner 2026-07-14).
     ("Scripture", ("bible", "bible2", "bible_dark")),
     # GAMING — opened by completion wave II (Session 32), matching
-    # `taxonomy.WEEK_GROUPS["gaming"]` on disk. The three WoW casts are
-    # its first members; the Cyberpunk casts join it in the same wave's
-    # second half, and the group stays ONE picker submenu for both
-    # franchises (the kinship is the medium, not the setting).
-    ("Gaming", ("wow_alliance", "wow_horde", "wow_evil")),
+    # `taxonomy.WEEK_GROUPS["gaming"]` on disk. The three WoW casts were
+    # its first members; the three Cyberpunk casts joined in the same
+    # wave's second half, and the group stays ONE picker submenu for
+    # both franchises (the kinship is the medium, not the setting) —
+    # the same order `taxonomy.WEEK_GROUPS["gaming"]` already lists.
+    ("Gaming", ("wow_alliance", "wow_horde", "wow_evil",
+                "cp_gangs", "cp_street", "cp_corpo")),
     ("Animals", ("wolf", "elephant", "bee")),
     # The emblem families on the dial (owner 2026-07-14).
     ("The Inner Wheel", ("virtues", "sins", "moods")),

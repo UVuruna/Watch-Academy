@@ -1769,19 +1769,28 @@ def test_every_whole_is_reachable_and_none_is_empty():
     carry comfortably, and every card key resolves — a stale name would
     KeyError the theme screen.
 
-    ONE whole is over the comfort cap today, on the record rather than
-    by a raised ceiling: `celestial` gained the Chinese court in
-    completion wave I (Session 31, 2026-07-29) and stands at 10 until
-    the nine-whole arc splits it into `sky` (sun/moon/seasons/eclipses)
-    and `cosmos` (the far sky, where that card's sealed seat actually is
-    — WORKPLAN-STRUCTURE.md §THE NINE WHOLES). The cap stays 9 for every
-    OTHER whole instead of being loosened globally to hide this one, so
-    the carve-out disappears the moment the split lands and cannot
-    quietly cover a second overloaded whole in the meantime."""
+    TWO wholes are over the comfort cap today, each on the record rather
+    than by a raised ceiling:
+
+    - `celestial` gained the Chinese court in completion wave I
+      (Session 31, 2026-07-29) and stands at 10 until the nine-whole arc
+      splits it into `sky` (sun/moon/seasons/eclipses) and `cosmos` (the
+      far sky, where that card's sealed seat actually is).
+    - `human` gained the two FRANCHISE cards in completion wave II
+      (Session 32, same day) — `wow` took it to exactly 9, `cyberpunk`
+      to 10 — and the same arc dissolves it entirely into `inner` (the
+      emblem families) and `worlds` (the professions, the Corporation
+      and all three franchise cards).
+
+    Both destinations are named in WORKPLAN-STRUCTURE.md §THE NINE
+    WHOLES. The cap stays 9 for every OTHER whole instead of being
+    loosened globally to hide these two, so each carve-out disappears the
+    moment its split lands and cannot quietly cover a third overloaded
+    whole in the meantime."""
     from app.encyclopedia import topics as _topics
     from config.encyclopedia_tree import WHOLES
 
-    pending_split = {"celestial": 10}
+    pending_split = {"celestial": 10, "human": 10}
     topics = _topics()
     for whole in WHOLES:
         assert whole.themes, whole.key
