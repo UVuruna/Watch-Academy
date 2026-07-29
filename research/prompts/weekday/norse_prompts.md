@@ -364,3 +364,48 @@ at the top of this file.
 
 Total new art this pass: **11 plates** — 1 (Skoll colored, Planetary)
 + 5 (Pantheon bronze) + 5 (Pantheon colored).
+
+---
+
+## The Wider Court — the seatless circle (generate LAST)
+
+The Encyclopedia's `wider` lane: the Aesir and Vanir this theme could
+not seat, each with a written article already in
+`Database/encyclopedia.json` (§`wider`). Bronze only, one look — a
+figure with no hour has no colored seat-badge to wear.
+
+**The family's own device — THE EMPTY ROUNDEL.** The seated plates'
+roundels hold that day's glyph between the runes; Yggdrasil's hold the
+whole set. Here the rune-stone roundels are carved and left **BLANK**,
+the same knotwork ring with nothing seated in it — the one visible
+difference between a wider plate and a seated one.
+
+**Derivation check (Rule #19):** not derivable — three new figures, one
+master each.
+
+**Baldur (wider, bronze)** → `assets/weeks/myth/norse/wider/bronze/baldur.png`
+
+*The god the dial cannot show doing anything at all — it is his death,
+not any deed, that turns the world.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Baldur laid out full length on a ship-pyre drawn up on the strand, hands folded on his breast, his face calm and unmarked, a light worked into the metal as though the body itself were the brightest thing on the plate; one slender sprig of mistletoe rests across his chest where the dart struck, and at the ship's stern a blind figure stands with an empty throwing hand, turned away. The oath-sworn world crowds the background as small carved shapes — stone, iron, fire, water, beasts — every one of them leaning toward him and stopped short. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels carved BLANK between the runes — no glyph in any of them, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Heimdall (wider, bronze)** → `assets/weeks/myth/norse/wider/bronze/heimdall.png`
+
+*The guard who never sits, because sitting is the one thing a watchman
+may not do.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Heimdall standing at the head of the rainbow bridge Bifrost, upright and wide awake, the Gjallarhorn held ready at his hip but not yet raised to his lips, one hand resting on the sword at his side, his eyes fixed far past the edge of the medallion; the bridge's banded arch runs out of the frame behind him toward a distant carved gate, and at his feet the smallest details of the world are worked into the metal — a single tuft of grass, one sheep's fleece — the things he is said to hear growing. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels carved BLANK between the runes — no glyph in any of them, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Njord (wider, bronze)** → `assets/weeks/myth/norse/wider/bronze/njord.png`
+
+*The kinder water the Norse actually sailed on — the calm and the
+catch, kept beside the darker sea the dial seated.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Njord standing in the shallows of a sheltered harbour, a heavy sea-cloak clasped at the shoulder, one hand open and lowered over flat water that lies unnaturally still around him, the other holding a laden fishing net whose catch spills silver over his forearm; moored ships ride quiet at the stone jetty of Noatun behind him, gulls carved in flight above — and at the far edge of the plate, small and cold, a mountain skyline with a wolf's silhouette on it, the home he could not share. Border: bronze ring carved as an interlaced knotwork band, broken by four rune-stone roundels carved BLANK between the runes — no glyph in any of them, the mark of the wider court that keeps no hour. No text, no watermark.
+```

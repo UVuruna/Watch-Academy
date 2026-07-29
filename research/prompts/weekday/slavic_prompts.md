@@ -386,3 +386,61 @@ points at the existing file:**
 
 **Retired:** `crnobog.png` / `colored/crnobog.png` — superseded by
 Triglav; do not generate, do not keep as a fallback.
+
+---
+
+## The Wider Court — the seatless circle (generate LAST)
+
+The Encyclopedia's `wider` lane: the Slavic powers this theme could not
+seat — including **Crnobog**, who was the ninth until the Round Four
+adjudication gave that place to Triglav (see The Ninth, above). Each has
+a written article already in `Database/encyclopedia.json` (§`wider`).
+Bronze only, one look — a figure with no hour has no colored seat-badge
+to wear.
+
+**The family's own device — THE EMPTY ROUNDEL.** A seated plate's
+wheat-sheaf roundels cradle that day's glyph; Triglav's cradle all seven
+bundled as one sheaf. The wider court's sheaves are carved **EMPTY** —
+bound, and holding nothing. Same kolovrat ring, no harvest in it.
+
+**Derivation check (Rule #19):** not derivable — four new figures, one
+master each. Crnobog is NOT a recolor or a darkened copy of any bright
+plate: his article's own point is that the black-god/white-god pairing
+is a late reconstruction, so he is drawn as his own thin record, not as
+somebody's negative.
+
+**Crnobog (wider, bronze)** → `assets/weeks/myth/slavic/wider/bronze/crnobog.png`
+
+*The black god on a single twelfth-century page — the shadow the set
+casts, and the thinness of the record kept honest.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Crnobog as a rough-hewn wooden idol rather than a living god — a dark, weathered post-figure with one carved face, the grain of the timber still reading through the beard and brow, standing in a clearing where the carving is unmistakably OLD and half-lost: the lower third eaten away, one shoulder split, the features worn shallow. A cold ember-red glow banks low behind the post, throwing no light on the face. Around the base, an open ring of unlit stones — the offering circle, empty. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, its wheels worked shallow and worn, broken by four wheat-sheaf roundels carved EMPTY — bound sheaves holding nothing, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Stribog (wider, bronze)** → `assets/weeks/myth/slavic/wider/bronze/stribog.png`
+
+*The wind that arrives from nowhere and cannot be kept — the scattering
+set against Dazhbog's giving.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Stribog, an old god with a long streaming beard that becomes the wind itself, arms opened wide and low so that everything he holds is leaving him — grain, dust, arrows and dry leaves carried out of both open hands in four distinct streams toward the four quarters of the plate; his cloak blown out behind him into the shape of the gale, the sea's chop worked small at the bottom edge where the winds are said to come from. Nothing in the composition returns to the centre. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels carved EMPTY — bound sheaves holding nothing, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Jarilo (wider, bronze)** → `assets/weeks/myth/slavic/wider/bronze/jarilo.png`
+
+*The green youth the dial's own year-wheel already turns without naming
+him — seated between his father's throne and his bride's.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Jarilo young and barefoot, riding a white horse in from the left edge with an armful of green wheat held against his chest, a wreath of spring flowers on his loose hair; the ground he has crossed is bare and frost-hard behind the horse and green with new growth ahead of it, the two states meeting in one carved seam under the hooves. At the right edge, small and already waiting, a scythe leans against a boundary stone — the same year's other end. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels carved EMPTY — bound sheaves holding nothing, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Rod (wider, bronze)** → `assets/weeks/myth/slavic/wider/bronze/rod.png`
+
+*The source a family of gods can descend from but never sit down beside
+as an equal.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Rod as the root and the tree at once — an immense trunk rising from a spread of roots that fill the lower half of the plate, and worked into the bark, faint and unfinished, the suggestion of one vast bearded face that never fully resolves into a portrait; from the crown of the trunk the branches divide again and again into small carved figures, generation after generation, too many to count. At the foot, two seated women, the Rozhanitsy, spin a single thread between them across a newborn's cradle. Border: bronze ring carved as a continuous rodovik solar-wheel (kolovrat) band, broken by four wheat-sheaf roundels carved EMPTY — bound sheaves holding nothing, the mark of the wider court that keeps no hour. No text, no watermark.
+```

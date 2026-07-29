@@ -379,3 +379,53 @@ Ornate circular badge, vivid full-color enamel over living bronze-green gold, ph
 Total new art this sheet asks for: **14 plates** (7 bronze + 7
 colored) plus **2 reused files** (Zeus bronze + colored, copied into
 the `pantheon/` folder, no new generation).
+
+---
+
+## The Wider Court — the seatless circle (generate LAST)
+
+The Encyclopedia's `wider` lane: the great gods this theme could not
+seat, each with a written article already in
+`Database/encyclopedia.json` (§`wider`). They ride NO day, so the
+Session 27 coverage law owes each one plate — bronze only, one look,
+because a figure with no hour has no colored seat-badge to wear.
+
+**The family's own device — THE EMPTY ROUNDEL.** Every seated plate's
+border roundels cradle that seat's planetary glyph; Triglav's cradle
+all seven at once. The wider court's roundels are **carved and left
+BLANK** — the same ring, the same craft, and no glyph in it, because
+the figure keeps no hour. That one difference is how a reader tells a
+wider plate from a seated one at a glance, and it costs no new border
+family (Rule #5: the Greek key is still the Greek key).
+
+**Derivation check (Rule #19):** not derivable. Each is a NEW figure in
+a scene of its own — no tint, angle, phase or transform of an existing
+master produces Hephaestus at his forge from Zeus on his throne. One
+master each, and the reader scales it live.
+
+**Dionysus (wider, bronze)** → `assets/weeks/myth/greek/wider/bronze/dionysus.png`
+
+*Twice-born, and twice passed over — the god who dissolves the very
+boundaries a dial is made of.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Dionysus young and unbearded, ivy and grape clusters crowning his loose hair, the pine-tipped thyrsus staff resting in the crook of one arm and a wide two-handled kantharos cup tipped in the other so the wine runs out over the rim, a panther pressed against his leg, behind him a theatre mask of grief and a theatre mask of laughter hung on the same vine — the boundary between them dissolved into one continuous branch. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four roundels carved BLANK — no glyph in any of them, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Hephaestus (wider, bronze)** → `assets/weeks/myth/greek/wider/bronze/hephaestus.png`
+
+*The one Olympian who works — the smith who forged the frame the other
+gods' hours hang in, and got no hour himself.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Hephaestus at the anvil, broad-shouldered and bearded, working tunic off one shoulder, both feet turned and braced on a smith's low stool, hammer raised over the great Shield of Achilles — the shield's face hammered with the whole world in miniature rings: earth and sky at the boss, a wedding procession on one band and a besieged city on the next — tongs and bellows behind him, sparks climbing toward the border. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four roundels carved BLANK — no glyph in any of them, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Hestia (wider, bronze)** → `assets/weeks/myth/greek/wider/bronze/hestia.png`
+
+*The seat given away on purpose — the goddess who chose the centre over
+a chair.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Hestia standing veiled and still, mantle drawn over her head, both hands cupped low around a round stone hearth whose flame rises straight and unwavering in the exact middle of the plate, an empty carved throne standing behind her shoulder turned slightly away and unoccupied — the chair she stepped back from, kept in view. No attribute in her hands but the fire. Border: bronze ring carved as a continuous Greek key (meander) band, broken by four roundels carved BLANK — no glyph in any of them, the mark of the wider court that keeps no hour. No text, no watermark.
+```

@@ -368,3 +368,66 @@ the theme's oldest gap and unblocks every Pantheon colored REUSE note;
 ninth. Total new renders once this sheet is fully executed: 8 + 5 + 1
 + 5 + 1 = 20 images (8 Planetary colored, 6 Pantheon bronze, 6
 Pantheon colored); 8 REUSE pointers cost nothing.
+
+---
+
+## The Wider Court — the seatless circle (generate LAST)
+
+The Encyclopedia's `wider` lane: the Egyptian gods this theme could not
+seat — including **Set**, who held the ninth until the doctrine gave
+that place to the Pharaoh. Each has a written article already in
+`Database/encyclopedia.json` (§`wider`). Bronze only, one look — a
+figure with no hour has no colored seat-badge to wear.
+
+**The family's own device — THE EMPTY CARTOUCHE.** A seated plate's
+border roundels alternate ankh and scarab and cradle that day's glyph.
+Here the roundels keep the ankh and the scarab and the glyph seat is
+carved as an **EMPTY CARTOUCHE** — a bound oval with no name in it,
+which is the one thing an Egyptian border can say for "unseated" in its
+own language.
+
+**Derivation check (Rule #19):** not derivable — five new figures, one
+master each.
+
+**Set (wider, bronze)** → `assets/weeks/myth/egypt/wider/bronze/set.png`
+
+*Egypt's necessary violence — the brother the seated peace was won
+against.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Set standing in the desert with the long curved snout and squared ears of the Set-animal, a was-scepter gripped in one fist and the other hand open and empty at his side, a storm boiling behind him out of the red land; at his feet the sand is drifted over the edge of a carved sarcophagus lid, half-buried and unopened. His stance is a soldier's, not a demon's — the plate reads as a brother, not a monster. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling an EMPTY CARTOUCHE — a bound oval with no name in it, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Nut (wider, bronze)** → `assets/weeks/myth/egypt/wider/bronze/nut.png`
+
+*A figure who IS the turning cannot be pinned to one point on the turn.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Nut arched over the whole field of the plate, fingertips at one rim and toes at the other, her long body scattered with stars worked in fine relief; her father Shu kneels beneath her with both arms raised, holding her up off the reclining earth below. At her mouth, the sun disc is being swallowed; at the opposite end of her body it is being born again, so one continuous arc of day runs the length of her from dusk to dawn. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling an EMPTY CARTOUCHE — a bound oval with no name in it, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Geb (wider, bronze)** → `assets/weeks/myth/egypt/wider/bronze/geb.png`
+
+*The floor of the Egyptian world — the ground the seated king is buried
+in.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Geb reclining full length along the bottom of the plate, propped on one elbow with one knee drawn up so his body reads as the landscape itself — the raised knee a mountain, his back the plain, a goose crest on his brow; barley and reeds grow directly out of the relief of his shoulder and thigh, a river winds along the length of his arm, and a fine crack runs the desert beside him where his laughter shook it. Above him the sky is left as plain empty field — the space his wife occupies on her own plate. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling an EMPTY CARTOUCHE — a bound oval with no name in it, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Ptah (wider, bronze)** → `assets/weeks/myth/egypt/wider/bronze/ptah.png`
+
+*Creation as deliberate craft — thought first, then the word, then the
+thing.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Ptah standing mummiform in a close-fitting wrap and skullcap, hands free before him gripping the was-djed-ankh staff upright; his lips are parted mid-word, and from his mouth a fine carved line runs outward and becomes, in three stages across the field, first a drawn outline, then a half-cut block, then a finished figure standing complete — the world thought, spoken and made, read left to right. A sculptor's mallet and chisel rest on the plinth at his feet, unused. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling an EMPTY CARTOUCHE — a bound oval with no name in it, the mark of the wider court that keeps no hour. No text, no watermark.
+```
+
+**Sekhmet (wider, bronze)** → `assets/weeks/myth/egypt/wider/bronze/sekhmet.png`
+
+*Wrath itself, and the cure for wrath in the same body.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. Center: Sekhmet lioness-headed and standing at full height, the sun disc with the rearing cobra above her brow, a was-scepter in one hand and an ankh in the other, her mane worked in sharp radiating relief so the head reads as the sun's own heat; the ground before her is a flooded field, and the flood is carved as liquid catching the light — the beer dyed blood-red that stopped her — with her own reflection in it shown calm, hands lowered, the gentler face she woke as. Border: bronze ring carved as a continuous hieroglyph cartouche band, broken by four roundels alternating an ankh and a scarab, each cradling an EMPTY CARTOUCHE — a bound oval with no name in it, the mark of the wider court that keeps no hour. No text, no watermark.
+```
