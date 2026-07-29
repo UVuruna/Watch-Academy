@@ -353,6 +353,15 @@
   },
   "Pangea": {
    "base": "[[The Deep-Time Ninth]] Pangea is the deep-time face of the Ninth, and it shows in Zealandia's place only when the sky is doing something — an eclipse, a solstice or equinox, a full or new moon, the days the dial itself marks as turning points. It is the supercontinent that was once all: three hundred million years ago every land on this theme's wheel was fused into one, the six weekday continents a single body before the plates tore them apart and set them drifting to their separate weekdays.\n\n[[Was One, Is Many, Will Be One]] The story is Zealandia's, told at the scale of the whole planet: it was once everything; it split and was scattered; and by the supercontinent cycle — the slow gathering that has happened before and will happen again — the wanderers will one day reconvene into a single land. The Unfound at the scale of all things: the world was one, is many, and will be one again."
+  },
+  "Pegasus": {
+   "base": "[[The Ninth]] Eight monsters fill this set and every one of them has a seat, a vice and a day. Pegasus has none of the three, and that is the seat: he is born out of Medusa's death — the blood of the Monday arm — and belongs from that moment to neither line the week is built from. He is not a monster, having harmed no one and been hunted by nobody; he is not a god, having no cult, no domain and no day. The Excluded kind of Ninth, in the canon's own terms: a figure the story cannot do without and the circle cannot seat.\n\n[[The Lesson]] What he does have is the one office none of the eight can hold — carriage. Bellerophon rides him against the Chimera and then tries to ride him to Olympus, and the myth is exact about the outcome: the horse arrives, the rider does not. That is the ninth's whole argument against the eight. Every seated figure on this wheel is defined by what it takes from whoever comes near it; Pegasus is defined by what he carries, and by the fact that the carrying has a limit which is not his fault.\n\nThe canon holds that the Ninth is never less important than the seated eight, and here that is the plainest case in the book: the set's most famous creature is the one with no day, because a week has six arms and a center, while the thing born out of a week's worst hour belongs to the sky between them."
+  },
+  "Buddha": {
+   "base": "[[The Ninth]] Eight figures fill this cast and every one of them holds a day, a virtue and a vice. The Buddha holds none of the three, and the reason is structural rather than modest: he is the only being in the story who can tell the true Monkey King from the false one, which means he cannot sit inside the circle whose two faces he adjudicates. The canon calls this the Excluded kind of Ninth — a figure the story cannot do without and the week cannot seat.\n\n[[The Lesson]] The Ninth seat's own sin, in this book, is WISH: the appetite that has no object left and therefore never closes. Every seated figure here is defined by something wanted — a title, a reunion, a harvest, a meal, a verdict. The Buddha is the one being in the cast defined by having extinguished the wanting rather than by having satisfied it, which is what nirvana literally names: a blowing-out. He holds the Ninth by conquest, then, and not merely by exclusion — the seat outside the eight, held by the one who stopped needing any of them.\n\nThe same episode makes both claims at once. Heaven's instruments failed on the two monkeys because instruments compare properties, and the two had identical properties; the Buddha answered because he was not comparing. The canon holds that the Ninth is never less important than the seated eight, and this cast makes the strongest form of that argument in the book: the week's central dispute is decided from outside the week."
+  },
+  "The Founder": {
+   "base": "[[The Ninth]] Six offices hold the week and a dual holds Sunday, and every one of them exists on the organisation chart. The Founder does not. The seat is the Unfound kind of Ninth in this cast's own vocabulary: the origin the structure no longer names, present in every company that has one and listed in none. Whoever started the thing either left, was removed, sold, died, or is still there under a title that no longer describes what happened.\n\n[[The Lesson]] The eight seated offices are all specialisations — each one a defensible answer to a question the company already knows it has. The Founder is the opposite kind of thing: the person who acted before there was any question, any function, any evidence, or anybody to allocate. That is why the seat cannot be inside the circle. A corporation is an institution for repeating what works, and its origin is by definition the one moment when nothing was yet known to work.\n\nThe canon holds that the Ninth is never less important than the seated eight, and here the claim is almost administrative: all six functions and both faces of Sunday are answers to a question somebody asked first, and the chart that lists them has no column for the asking."
   }
  },
  "wider": {
@@ -576,6 +585,18 @@
   "continents": {
    "title": "Continents",
    "base": "[[The World as the Week]] One world, seen whole. The Continents theme sets the six inhabited lands on the six weekday columns and reads the week as a walk across the planet — Monday's ocean calm, Tuesday's daring, Wednesday's long road, Thursday's cradle, Friday's rhythm, Saturday's patient harvest — with the two poles held as the Sunday throne and the drowned continent kept as the Ninth.\n\n[[The Dial's Own Earth]] The bodies are the dial's own Earth faces: the same globe the year-marker carries, elevated here to a weekday, each land turning with the live sky and wearing the atmosphere or clean style the whole instrument already shows. It is the most literal theme on the dial — not gods or beasts standing for the world but the world itself, its own continents keeping its own week."
+  },
+  "age_of_heroes": {
+   "title": "Greek Monsters",
+   "base": "[[The Bestiary]] The week the Olympians hold elsewhere in this book, held instead by what Olympus fought: Medusa on Monday's Fear, the Minotaur on Tuesday's Wrath, the Sphinx on Wednesday's Greed, the Erymanthian Boar on Thursday's Excess, the Sirens on Friday's Jealousy, the Hydra on Saturday's Envy. Where a pantheon is seated by the virtues of its gods, this cast is seated by the vices those virtues are named against — one to each arm, the same wheel read from the other side.\n\n[[Sunday's Two Faces]] Sunday closes it with two sons of one house: the Nemean Lion, whose hide no blade could cut, and Cerberus, who keeps the door out of the underworld — brothers rather than opposites, Heracles' first labour and his last. Pegasus is the ninth, born out of Medusa's death and belonging from that moment to neither the monsters' line nor the gods'."
+  },
+  "celestial_court": {
+   "title": "Chinese Mythology",
+   "base": "[[The Court]] Gods, immortals and one stone-born rebel, seated by nature rather than by rank: Chang'e on Monday's Fear, Erlang Shen on Tuesday's Courage, Guan Yu on Wednesday's ledger, Zhu Bajie on Thursday's abundance, Zhinü on Friday's long devotion, Shennong on Saturday's patience. The cast is drawn from three traditions at once — folk myth, the Three Kingdoms and Journey to the West — because that is how the Chinese pantheon actually reaches people: as a working assembly rather than a single scripture.\n\n[[Sunday's Two Faces]] Sunday is held by the Monkey King and by his perfect false double, the Six-Eared Macaque — the only dual in the book whose two faces are not opposites but duplicates, separable by nobody in heaven except the Buddha. The Buddha is the ninth, seated outside the week he is the only one able to read.\n\nThis is not the Chinese ZODIAC, which is a different set entirely: twelve animals reading years, rather than seven figures holding a week."
+  },
+  "corporate": {
+   "title": "The Corporation",
+   "base": "[[The Boardroom]] The modern week as an executive committee: the people office on Monday's Fear, operations on Tuesday's Courage, finance on Wednesday's ledger, marketing on Thursday's abundance, design on Friday's Love, technology on Saturday's patience. Every figure here is an OFFICE rather than a person — this cast seats roles the way the animal societies seat ranks, because a corporation is the one institution in this book that is designed rather than inherited.\n\n[[Sunday's Two Faces]] Sunday holds the corporation's own written dual: the chief executive who runs the company, and the chairman of the board who appoints and removes the chief executive. Company law separated the two offices for the same reason this dial gives every throne a shadow. The ninth is the Founder — the name the organisation chart no longer carries, present in every company and seated in none."
   }
  },
  "week_duality": {
@@ -670,6 +691,18 @@
   "continents": {
    "title": "The Two Poles",
    "base": "[[The Axis]] Sunday's throne is the axis itself — the two poles, held as one dual body the way every theme holds its Ruler and its Servant. They are twins that are opposites: Antarctica a true continent of rock beneath its ice, the Arctic only an ocean frozen over, land and the mirror of land.\n\n[[Eternal Antiphase]] And they keep the dial's own law without being told to — polar day on one answered by polar night on the other, the Ruler's solar noon and the Servant's solar midnight written six months deep across the planet. Reality and its reflection, taking turns with the light."
+  },
+  "age_of_heroes": {
+   "title": "The Week's Duality",
+   "base": "[[Lion and Hound]] Sunday's two faces are one family. The Nemean Lion and Cerberus are both children of Typhon and Echidna, which makes this the only dual in the book where the bright face and the dark one are brothers. The Lion is the first of Heracles' labours and the hide he wore afterwards — authority proven and then carried. Cerberus is the twelfth, taken without a weapon, by permission, and given back — authority borrowed and then returned. Ruler and Servant here are not good against evil but one house holding two offices: the crown that is worn, and the door that is kept."
+  },
+  "celestial_court": {
+   "title": "The Week's Duality",
+   "base": "[[The Sage and His Double]] Sunday's two faces are the same face. Sun Wukong takes the title Great Sage Equal to Heaven for himself; the Six-Eared Macaque takes it from him by being indistinguishable — same fur, same crown, same staff, same memories, same conviction. Heaven's mirror fails, Guanyin's incantation fails, and the underworld's register of every soul alive fails, because there is nothing observable to find. Only the Buddha separates them, and what he separates is not a property but a history. That is the whole content of this dual: Ruler and Servant here are not good against evil but an earned title against an identical taken one, and the instrument that can tell them apart does not sit anywhere on the week."
+  },
+  "corporate": {
+   "title": "The Week's Duality",
+   "base": "[[The Chair and the Board]] Sunday's two faces are two offices of one authority, and this is the only dual in the book that a legal code wrote down on its own. The chief executive runs the company; the board's chairman runs the body that appoints and removes the chief executive. Most modern governance codes recommend the two be held by different people, and the reason they give is exactly the canon's: an authority that answers to nothing is not stronger, only unaccountable. The Ruler's failure is Pride, a delegated power taken as owned. The Servant's failure is Servility, a board that ratifies what it was assembled to govern. Each is the other's only cure."
   }
  },
  "months": {
@@ -1080,6 +1113,15 @@
   },
   "japan": {
    "base": "The Japanese week — the five elements, the moon and the sun, named as the days have been named there for centuries."
+  },
+  "age_of_heroes": {
+   "base": "The week held by what Olympus fought — Medusa, the Minotaur, the Sphinx, the Boar, the Sirens, the Hydra, a Sunday of brothers, and the winged ninth born from a death."
+  },
+  "celestial_court": {
+   "base": "Gods, immortals and one stone-born rebel on the week — Chang'e, Erlang Shen, Guan Yu, Zhu Bajie, Zhinü, Shennong, a Sunday of perfect doubles, and the Buddha outside the circle."
+  },
+  "corporate": {
+   "base": "The executive committee as a week — people, operations, finance, message, design and infrastructure, a Sunday of chief executive against chairman, and the founder the chart forgot."
   }
  }
 }
