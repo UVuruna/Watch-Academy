@@ -647,6 +647,37 @@ snap table feature") at gadget commit `a47d655` (0.0.022):
   ternary `coords` + `luminous`/`fallen` names) is already the exact
   DOMY-side data source the exporter would read once that lands.
 
+**UNBLOCKED (2026-07-30, this session's own re-audit).** By the
+owner's order the gadget's own agent landed the missing milestones —
+DOMY sessions never touched that repo:
+
+- **M2 — gadget commits `b5190c1`..`2702d43` (0.0.023–0.0.028).** The
+  direction grammar (`b5190c1`, "Axis directions — one grammar for
+  every direction the cube has") replaces the hardcoded 6-entry table
+  with signed-letter tokens, so the 6 secondary + 4 tertiary axes are
+  now expressible at their true cube angles; the model layer as shared
+  schema data (`768b94c`); the register/reading Switcher, snap views
+  and the 24-orientation table (`94b4d45`); the four owner models wired
+  in both demos (`c39e33c`); angle-exactness/schema/two-language
+  parity tests (`30baa4e`); the model chapter documented and M1+M2
+  marked DONE (`2702d43`).
+- **M3 — gadget commits `13a4bf1`..`5e22626` (0.0.029–0.0.035).**
+  `part.position`/`part.strokeProgress` plus a near-plane guard
+  (`13a4bf1`); the hexagram overlay and the Blindness's hidden-cell
+  geometry (`53586dc`); the Five Stations generator for any of the 13
+  axes (`9ccc73b`); the five cinematic scenes shipped as data
+  (`ff9ed68`); the demo's model-content convention and generalize
+  control (`bb1fbd0`); determinism goldens (`00ddc5c`); SCENES.md
+  rewritten and M3 marked DONE (`5e22626`).
+
+Both audit points from the STOPPED note above are therefore resolved:
+`AXIS_DIRECTIONS` no longer exists as a 6-entry table, and
+`preview3d.model`/`preview3d.cube_model` now carry exactly the
+per-content schema (axes/cells/views, `shared/model_schema.json`) this
+entry said did not exist. This unblocks Session 28's SECOND attempt,
+run in this same session — see the AMENDED entry below for the page
+list, and the session's own report for what it delivered.
+
 ### Session 29 — the Pointers rework → **Fable** (orchestrator) — DONE (2026-07-29, 0.14.545 / 0.14.555 / 0.14.556)
 
 Owner sheet `UV/Pointers.png`, run as three sequential agents (opus,
@@ -985,7 +1016,36 @@ Haiku.
 
 ---
 
-### Session 28 — the 3D Preview integration (AMENDED 2026-07-29)
+### Session 28 — the 3D Preview integration (AMENDED 2026-07-29) — DONE (2026-07-30, 0.14.681–0.14.687)
+
+**Delivered:** the exporter (`data/cube_model_export.py`, pure Python,
+no gadget/Qt import — 13 axes, 27 cells, `REGISTERS = (canon, myth,
+historical, movie)` mapped onto DOMY's own canon term + three
+FIGURE_SETS, colours from the SAME `core.cube_seating.cell_color()` the
+2D drawer now shares with it, Rule #5); the guarded bridge
+(`render/cube_preview3d.py` — imports the sibling gadget, builds and
+validates the model once, caches it, and answers `None` for any
+failure at all, never raising); the drawer swap on exactly the amended
+page list — The Cube (`"cube"` view), The Thirteen Axes (a 3-button
+Primary/Secondary/Tertiary switcher), all 12 human axis pages
+(`axis:<name>` solo views) and Composure/Vigor (`pole:<name>` solo
+views) — every one lazy (built only when `_show_entry()` actually shows
+that page) and silently falling back to the existing computed 2D plate
+when the gadget is absent, fails to import, or its model fails
+validation. Scenes were NOT wired into the Cube page (deliverable 5):
+the gadget's cinematic scenes are written against ITS OWN demo
+vocabulary and generic markers (SCENES.md's Hexagram/Blindness content
+is a bespoke `group`/`{"type":"model","view":"cube"}` spec, not
+DOMY's exported model's own part paths for the sacred-seat markers),
+so wiring them would need either a second exporter shape or scene
+descriptors of DOMY's own — reasonably a follow-up, not a silent
+scope-narrowing. 11 new tests in `tests/test_cube_preview3d.py` (schema
+validation, register coverage, the centre/sacred-seat persona rule,
+every one of the 43 views mounting real content, the fallback law
+proven both standalone and through the real dialog); purity and the
+structure ratchet stay green; the four combined pytest chunks totalled
+1417 passed / 7 skipped (baseline 1404/7 — the 11 new tests plus 2 that
+landed between the audit and this session).
 
 The owner's decree of 2026-07-29 fixes WHICH pages become 3D, and the
 answer is the whole Cube family — *"3 Axis main, 4 Axis diagonal
