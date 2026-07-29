@@ -62,6 +62,12 @@ The Encyclopedia's own content from `Database/encyclopedia.json`
 (instrument articles, week day pages, virtue/sin/mood entries),
 overlay-localized. See [Encyclopedia Repository](encyclopedia.md).
 
+### `cube_model_export.py` — Cube Model Export
+Builds the Character-Cube MODEL (axes, seats, views) the sibling 3D
+Preview gadget's widget shows, from `config.cube`'s own canon — one
+source of truth (root Rule #19), no gadget import, no Qt. See
+[Cube Model Export](cube_model_export.md).
+
 ### `translations.py` — Translations
 Translate-once-then-cache (owner spec: we ship only English): corpus
 collection, the keyless gtx client, the hash-tracked per-language
@@ -96,3 +102,5 @@ never hardcoded (Rule #4) — a Deep Time pack widens the file alone.
 - [App (folder)](../app/___app.md) — controller (M3), location picker (M6)
 - [Core (folder)](../core/___core.md) CLI selftest
 - [Tests (folder)](../tests/___tests.md) — run against the LIVE files
+- [Cube Preview3D Bridge](../render/cube_preview3d.md) — the guarded
+  gadget bridge validates and mounts `cube_model_export.build_model()`
