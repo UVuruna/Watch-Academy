@@ -9,7 +9,7 @@ cohesive unit of responsibility).
 ```mermaid
 %%{init: {'flowchart': {'subGraphTitleMargin': {'top': 0, 'bottom': 35}}}}%%
 flowchart LR
-    A[Home<br/>six wholes] --> B[Themes<br/>one whole's cards]
+    A[Home<br/>nine wholes] --> B[Themes<br/>one whole's cards]
     B --> C[Article<br/>pages + variants]
     C -- ⌂ --> A
     C -- breadcrumb --> B
@@ -24,10 +24,11 @@ one of the three screens. Owns the jump entry point (`navigate_to`) the
 dial's Spacebar and the tray menu both use.
 
 ### `home.py` — Level One
-The six wholes, 2×3, **no scroll area at all** — the strongest form of
+The nine wholes, 3×3, **no scroll area at all** — the strongest form of
 the owner's "prvi ekran nema scroll". Each card wears its whole's Rose
-accent, a computed mosaic of that whole's own theme plates, its about
-line and a live count of what waits inside.
+(or, for the ninth, Moon-silver) accent, a computed mosaic of that
+whole's own theme plates, its about line and a live count of what waits
+inside.
 
 ### `themes.py` — Level Two
 One whole's theme cards, up to four per row, wrapping. Vertical scroll

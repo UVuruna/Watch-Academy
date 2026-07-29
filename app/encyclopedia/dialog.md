@@ -25,7 +25,7 @@ menu both land here).
 ## The header
 
 ```
- Home  > The Divine        <   Creeds - Creeds   >        Download
+ Home  > The Faith        <   Creeds - Creeds   >        Download
 ```
 
 ONE row, three groups (owner 2026-07-29: *"Home, Title sa switcherom i

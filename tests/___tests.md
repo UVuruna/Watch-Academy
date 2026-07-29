@@ -225,6 +225,40 @@ pin that no dial hover row is duplicated into a page.
 `test_archetype.py` carries the same jump proved through the real
 hover geometry.
 
+### `test_encyclopedia_tree.py`
+THE SESSION 27/35 LAWS, pinned: the tree IS the Encyclopedia — NINE
+wholes (Session 35, 2026-07-29, regrouped from six — "može i 9
+grupacija sa ovim novim velikim sekcijama"), every theme seated in
+exactly one, the built table matching the declaration exactly; eight
+accents drawn from `palette.ROSE_PALETTE` and the ninth `palette.
+MOON_SILVER`, all nine distinct; THE REACHABILITY LAW — every dial
+theme (except the documented look-only keys, reused from `test_theme_
+completeness.py`'s own exception set, Rule #5) resolves through
+`THEME_TO_WHOLE` or `TOPIC_ALIASES` to a seated topic, the guard born
+from the owner's exact complaint that twelve fully-registered casts had
+no seat anywhere in the Encyclopedia; the no-horizontal-scroll law at
+minimum size and max zoom on all three levels; the home screen owns no
+scroll area at all, its 3x3 grid measured from the viewport and never
+raising its own minimum on regrow; the variant switcher's offset law
+(Monday stays Monday, a shorter register clamps); the Cube's four-card
+partition of the 42-page run; the coverage law (every article names a
+plate or a drawer, `PLATELESS_PAGES` stays empty and stale-free).
+
+### `test_theme_completeness.py`
+THE THEME COMPLETION LAW (project `CLAUDE.md`, owner decree
+2026-07-29), enforced: `test_no_registered_theme_is_textless` — every
+`constants.WEEKDAY_THEMES` key resolves its article set, blurb set,
+title article and (where it has one) Ninth article, with the two
+documented exceptions (`planets_art`'s look-only status, the emblem
+family's title-page overwrite) both explained and pinned;
+`test_no_art_sits_unseen` — every `assets/weeks/` theme folder is
+either a registered key or an open row in the STAGING LEDGER
+(`research/theme_staging.md`), the guard that would have caught the
+twelve-cast/429-file failure the law itself is named for. `_look_only_
+themes()` — the dial themes with no topic card of their own
+(`planets_art`) — is the ONE source `test_encyclopedia_tree.py`'s
+REACHABILITY LAW reuses (Rule #5).
+
 ### `test_repositories.py`
 Against the LIVE Database files: 5 continents, 241 countries, 121
 mixed-depth, 45,649 cities (post-curation shape); the audited

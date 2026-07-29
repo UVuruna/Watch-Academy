@@ -3,20 +3,22 @@
 **Script:** [Home Screen (script)](home.py)
 
 ## Purpose
-Level one — the SIX WHOLES in a 2x3 grid. The owner's law is absolute
-(*"Prvi ekran nema scroll. uvek sve staje u window"*), so this screen
-owns **no scroll area at all** and measures its cards from the widget's
-own width AND height.
+Level one — the NINE WHOLES (Session 35, 2026-07-29 — regrouped from
+the original six) in a 3x3 grid. The owner's law is absolute (*"Prvi
+ekran nema scroll. uvek sve staje u window"*), so this screen owns **no
+scroll area at all** and measures its cards from the widget's own width
+AND height.
 
-Each card carries its whole's Rose accent, a plate, the whole's about
-line and a live count (`5 themes / 52 pages`).
+Each card carries its whole's Rose (or, for the ninth, Moon-silver)
+accent, a plate, the whole's about line and a live count, properly
+pluralized (`5 themes / 52 pages`, `1 theme / 1 page`).
 
 ## Connections
 
 ### Uses
 - [Card](cards.md) — the shared card and grid, and `mosaic_pixmap`
 - [Encyclopedia Repository](../../data/encyclopedia.md) — `whole(key)`, the about text
-- [Encyclopedia Tree](../../config/encyclopedia_tree.md) — the six wholes
+- [Encyclopedia Tree](../../config/encyclopedia_tree.md) — the nine wholes
 
 ### Used by
 - [Encyclopedia Dialog](dialog.md)

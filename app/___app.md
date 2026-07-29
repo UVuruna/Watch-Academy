@@ -90,10 +90,10 @@ theme/option change — icon + option text, auto-fading. See
 
 ### `encyclopedia/` — The Encyclopedia
 The article browser, on THREE levels since the Session 27 rework
-(owner-sealed 2026-07-28): six wholes on a home screen that never
-scrolls, then one whole's theme cards, then the page slider with its
-variant switcher. Ten cohesive modules where one 2,766-line file used to
-be (root Rule #20).
+(owner-sealed 2026-07-28): nine wholes (regrouped from six by Session
+35, 2026-07-29) on a home screen that never scrolls, then one whole's
+theme cards, then the page slider with its variant switcher. Ten
+cohesive modules where one 2,766-line file used to be (root Rule #20).
 See [Encyclopedia (subfolder)](encyclopedia/___encyclopedia.md).
 
 ### `encyclopedia_warm.py` — Encyclopedia Warm

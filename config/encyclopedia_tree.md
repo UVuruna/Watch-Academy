@@ -4,11 +4,13 @@
 
 ## Purpose
 
-The ONE table of the Encyclopedia's three levels — six wholes, their
+The ONE table of the Encyclopedia's three levels — nine wholes, their
 theme cards, the variant loops and the accent hues. Written for the
 Session 27 rework (owner-sealed 2026-07-28), which replaced the old
 two-screen browser (one gallery of 39 tiles in five halls → article
-slider) with Home → Themes → Article.
+slider) with Home → Themes → Article; regrouped from six wholes to nine
+by Session 35 (2026-07-29, "može i 9 grupacija sa ovim novim velikim
+sekcijama" — WORKPLAN-STRUCTURE.md §THE NINE WHOLES).
 
 Nothing else declares a whole, a membership or an accent: the home
 screen, the theme grid, the breadcrumb, the article header and the
@@ -17,8 +19,9 @@ structure tests all read this module.
 ## Connections
 
 ### Uses
-- [Defaults](defaults.md) — `ROSE_PALETTE`, the sealed eight hues the
-  six accents are drawn from (Rule #5, one palette)
+- [Defaults](defaults.md) — `ROSE_PALETTE`, the sealed eight hues eight
+  of the nine accents are drawn from (Rule #5, one palette); the ninth
+  is `MOON_SILVER`, the Moon's own dial hue
 
 ### Used by
 - [Encyclopedia (subfolder)](../app/encyclopedia/___encyclopedia.md) —
@@ -30,67 +33,63 @@ structure tests all read this module.
 
 ```
 Home  ──►  Themes  ──►  Article
-6 cards    5–11 cards    pages + ◀ variant ▶
+9 cards    4–7 cards    pages + ◀ variant ▶
 no scroll  Y scroll      Y scroll
 ```
 
-## The six wholes
+## The nine wholes
 
 | Whole | Accent (Rose hour) | Cards | Pages |
 |---|---|---|---|
 | The Instrument | yellow, 12h | 5 | 38 + guide |
-| The Celestial Engine | cyan, 03h | 10 | 101 |
-| The Divine | purple, 24h | 7 | 173 |
-| The Human Wheel | red, 18h | 11 | 163 |
+| The Sky | Moon's silver | 4 | 27 |
+| The Cosmos | cyan, 03h | 6 | 74 |
+| The Gods | moon-violet, 24h | 5 | 118 |
+| The Faith | rose, 21h | 4 | 61 |
 | The Character Cube | blue, 06h | 7 | 70 |
+| The Inner Wheel | red, 18h | 4 | 36 |
 | The Living World | green, 09h | 5 | 54 |
+| The Worlds | orange, 15h | 5 | 121 |
 
 The accent is argued by the hour it stands on, never picked by taste:
-noon for the instrument, deep night for the sky, midnight for the
-sacred, sunset's fire for the human wheel, the Cube's own axis blue for
-the Cube, spring green for the living world.
+noon for the instrument, the Moon's own face for the near sky, deep
+night for the far sky, midnight for the sacred, the vesper hour for the
+written faiths, the Cube's own axis blue for the Cube, sunset's fire for
+the inner wheel, spring green for the living world, the working
+afternoon for the worlds people build. All eight Rose hues are spent —
+orange (15h, `worlds`) and rose (21h, `faith`) were the two the six-whole
+table left idle — plus the ninth, the Moon's silver (`sky`).
 
-**Completion wave I (Session 31, 2026-07-29)** added three cards, each
-its own card rather than a switcher member — three distinct subjects,
-not three registers of one subject (the variant law below): Chinese
-Mythology into The Celestial Engine, Greek Monsters into The Divine
-beside the Greek gods, and The Corporation into The Human Wheel beside
-the Professions. The Celestial Engine is one card over the comfort cap
-`tests/test_settings_dialog.py` keeps (9 = three full rows); that whole
-is the one the nine-whole structural arc splits into `sky` and
-`cosmos`, and the guard carries a named, expiring carve-out for it
-rather than a raised ceiling.
+### How the six became nine (Session 35, 2026-07-29)
 
-**Completion wave II, WoW half (Session 32, 2026-07-29)** added ONE
-card, `wow`, into The Human Wheel beside the Corporation — three casts,
-not three cards. Alliance, Horde and Evil hold the SAME nine seats with
-the same arm bundles and differ only in who sits there, which is the
-variant law's own definition of registers of one subject; the card
-carries a three-way switcher and 33 pages. That takes the whole to 9
-cards, exactly the comfort cap and no carve-out needed. The nine-whole
-structural arc moves this card, the Professions and the Corporation
-together into the new `worlds` whole.
+`instrument`, `cube` and `living` never moved — same key, same seat,
+same membership. The other three split:
 
-**Completion wave II, Cyberpunk half (Session 32, same day)** added the
-second franchise card, `cyberpunk`, beside it on the identical
-argument — Gangs, Street and Power are Night City read from three
-heights on one set of nine seats — with its own three-way switcher
-and another 33 pages. This one DOES pass the cap: The Human Wheel now
-stands at 10 cards, and the guard carries a second named, expiring
-carve-out rather than a raised ceiling, pointing at the same arc, which
-dissolves this whole into `inner` and `worlds` and takes both franchise
-cards with it.
+- **`celestial` → `sky` + `cosmos`.** The near sky (Sun, Moon, seasons,
+  eclipses — the two lights and what they do together) stayed close to
+  home; the far sky (planets, the cosmos theme, continents, astrology,
+  the Chinese court) took the deep-night cyan the old whole wore.
+  `celestial` had grown to 10 cards over completion wave I's addition
+  of the Chinese court (Session 31) — the split is also what dissolves
+  that overflow.
+- **`divine` → `gods` + (its Bible/Creeds pair into `faith`).** The four
+  pantheons and the age of heroes keep the sacred midnight hue as
+  `gods`; the two WRITTEN faiths join Trinity and Duality (pulled out of
+  `human`) in the new `faith`, seated on the vesper-hour rose the
+  six-whole table left unspent.
+- **`human` → `inner` + `worlds`.** The four emblem families (virtues,
+  sins, moods, intelligences) alone become `inner`, keeping the sunset
+  red. The trades, the Corporation and all three FRANCHISE cards — `wow`
+  (Session 32), `cyberpunk` (Session 32) and `starwars` (Session 33),
+  each a merged three-register card, never three cards — become
+  `worlds`, seated on the Merchant's copper orange. `human` had reached
+  11 cards carrying two named, expiring carve-outs in
+  `tests/test_settings_dialog.py`; this split is those carve-outs'
+  designed death — DELETED once the new seating passed without them.
 
-**Completion wave III (Session 33, same day)** added the THIRD and last
-franchise card, `starwars`, beside them on the same argument — Jedi,
-Sith and Dyad are one saga read from its two sides and then from the
-generation that inherits both — with its own three-way switcher and
-another 33 pages. The Human Wheel now stands at 11 cards. That does NOT
-open a third carve-out: it widens the existing `human` entry by exactly
-one, with the reason written into the guard's own docstring, because
-WORKPLAN-STRUCTURE.md §THE NINE WHOLES lists "the three FRANCHISE
-cards" together among the members of `worlds` — all three leave this
-whole in the same cut, so one expiring exemption covers them.
+No card lost an article, a variant or its dial wiring in the move —
+`TOPIC_ALIASES`, `VARIANT_SOURCES` and every theme's own build are
+untouched; only the SEAT on Home changed (RESEAT, never re-wire).
 
 ## The variant law
 
@@ -160,3 +159,19 @@ Two kinds of address arrive from the dial and must land on a real page:
 - **The Cube split follows the boundaries the entry table already
   documents** (doctrine / axes with poles and cells / vertex figures /
   projections), not a mechanical quarter-cut.
+- **THE REACHABILITY LAW (Session 35, pinned by
+  `tests/test_encyclopedia_tree.py::test_every_dial_theme_is_
+  reachable_from_home`).** Born from the owner's exact 2026-07-29
+  complaint: twelve casts had been registered on the dial
+  (`constants.WEEKDAY_THEMES`) with full text and art, and still had no
+  seat anywhere in the Encyclopedia. This law closes that gap for good —
+  every registered dial theme, except the documented LOOK-ONLY keys
+  (`tests/test_theme_completeness.py`'s own exception set, reused
+  verbatim, Rule #5 — `planets_art` is the one member today), must
+  resolve through `THEME_TO_WHOLE` or `TOPIC_ALIASES` to a topic seated
+  in a whole. It is deliberately the REACHABILITY half of a pair:
+  `test_theme_completeness.py` owns REGISTRATION (art on disk ↔ a
+  `WEEKDAY_THEMES` key ↔ the staging ledger); this law owns the seat on
+  Home. A theme can be fully registered and worded and still fail this
+  law if nobody added it to a whole's `themes` tuple — which is exactly
+  what happened to the twelve casts before this session.
