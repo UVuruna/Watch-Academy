@@ -68,6 +68,15 @@ item count means the sheet is safe to queue.
   photographs, no prompts needed) + its Eclipsed Sun dual; pointers to
   its ART-medallion sibling, `planet_art_prompts.md`, and to
   `planet_signs_prompts.md`
+- `continents_prompts.md` — the Continents theme's TWO NINTHS only
+  (Zealandia and the deep-time Pangea): photoreal globes joining the
+  owner's own Earth family, no medallion and no border. The six seated
+  continents and the title plate need no prompts — his photography
+  already fills them
+- The four myth sheets (`greek` / `norse` / `slavic` / `egypt`) each
+  close with a **WIDER COURT** section: the seatless gods the
+  Encyclopedia keeps, bronze only, their border roundels carved BLANK
+  because the figure holds no hour
 
 ### `zodiac/`
 - `chinese_zodiac_prompts.md` — bronze + colored (12 animals), the

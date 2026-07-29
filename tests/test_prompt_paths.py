@@ -327,9 +327,17 @@ def _sheet_paths() -> dict[Path, list[str]]:
 
 def _normalize(raw: str) -> str:
     """`raw` relative to assets/, with any art-SOURCE segment removed
-    — the one canonical, comparable form both sides get reduced to."""
+    — the one canonical, comparable form both sides get reduced to.
+
+    A leading `../` step-up is dropped: a few config tables reach across
+    family roots that way (the Continents ninths name
+    `"../earth/zealandia.png"` relative to `WEEKDAY_ART_DIR`, and
+    `config.paths.art_file` collapses the step-up before touching disk),
+    so it is a spelling of the reference, never part of its identity."""
     parts = Path(raw.replace("\\", "/")).parts
     if parts and parts[0] == "assets":
+        parts = parts[1:]
+    while parts and parts[0] == "..":
         parts = parts[1:]
     if len(parts) >= 2 and parts[1] in constants.ART_SOURCES:
         parts = (parts[0],) + parts[2:]

@@ -248,6 +248,50 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 ---
 
+## The two poles this wheel does NOT seat — the Activation axis
+
+The Character wheel is the Cube with the depth axis at zero, so the two
+ends of that axis — **Composure** and **Vigor** — have no arm here.
+They still have their own Encyclopedia articles
+(`Database/encyclopedia.json` §`cube`), and the Session 27 coverage law
+owes each a plate; the Cube's six face poles read this family's
+register, so these two land beside the eight directions rather than in
+a family of their own.
+
+**Read the colour law above before drawing either.** This is exactly
+the trap it warns about, at its sharpest: on the WHEEL blue is Humility
+and red is Dignity, the Scale's own Judas–Lucifer dress. These two
+plates are NOT wheel arms — they wear the CUBE's dress: Composure is
+the 04h blue of the Advocate's seat, Vigor the 16h orange of the
+Destroyer's. Two blues will therefore live in one folder, and they are
+told apart by their subject, never by their hue.
+
+**The axis is their own device.** Where a direction's window is closed
+by a plain leadwork band between its two storeys, these two carry ONE
+continuous lead line running the full height of the glass, edge to
+edge — the axis itself, the line this wheel flattens to nothing. No
+direction window has it; both of these do.
+
+**Derivation check (Rule #19):** not derivable — two new compositions,
+and the fall is drawn INTO the same window on the eight directions'
+own two-storey law rather than as a second file. No circle companion is
+commissioned here: the round register belongs to the wheel's arms, and
+these two hold no arm.
+
+**Composure — and its fall, Lethargy (blue, the Cube's 04h Activation
+pole)** → `assets/archetypes/character/primary/colored/Composure.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. Deep sea-blue, cold indigo and clear white glass. ONE continuous lead line runs the entire height of the window from apex to sill — the axis — and the window still reads in TWO STOREYS, the UPPER two thirds lit, the LOWER third sunk and airless. UPPER: a storm stopped mid-fury over open water — the waves still standing high and every one of them held motionless, the rain hanging in the air unfallen — and in the boat a seated figure with an open hand lowered toward the water, entirely unhurried; beside the boat, resting on the thwart, a plain cup set down as though only just accepted. LOWER: the same figure sunk into a couch that has not been left in years, a dressing gown gone shapeless, dust thick on an unopened letter and on a pair of boots never worn, the same open hand now hanging off the couch's edge over nothing at all — the storm outside the window raging untouched and unanswered. Border: gothic leadwork in dark indigo; three rim roundels — a stilled wave at the apex, a set-down cup at one side, an unopened dusty letter at the other. Palette: deep sea blue, cold indigo, clear white above; dead slate blue and grey dust below; dark-indigo lead. NO lettering anywhere.
+```
+
+**Vigor — and its fall, Frenzy (orange, the Cube's 16h Activation
+pole)** → `assets/archetypes/character/primary/colored/Vigor.png`
+
+```
+TALL pointed-arch lancet stained-glass window, night-window register, photorealistic render, isolated background, the window shape IS the lancet. ASPECT RATIO exactly 1:2 — a tall portrait image, twice as tall as wide; the whole image is one window. EMBER-ORANGE glass — fire-coloured and hot, the Destroyer's own orange, not the harvest amber of the Patronage arm — with molten gold and deep red. ONE continuous lead line runs the entire height of the window from apex to sill — the axis — and the window reads in TWO STOREYS, UPPER lit and open, LOWER hot and blind. UPPER: a figure hauling a fallen boulder clear of a road with a lever and a braced shoulder, the road running open past him toward a village, a small crowd already walking the cleared stretch behind his back; every muscle of the effort is aimed at the stone, and the stone is nearly out. LOWER: the same figure at full sprint dragging a body behind a chariot in a closed circle around a wall, the ground rutted where the same circle has been run many times over, nothing ahead of him and nothing gained; at the window's edge a herd of identical shapes runs the same circle with him. Border: hammer-and-flame leadwork in dark bronze-red; three rim roundels — a lever under a stone at the apex, an opened road at one side, a closed circular rut at the other. Palette: ember orange, molten gold, deep red above; scorched red-black and dull iron below; dark bronze-red lead. NO lettering anywhere.
+```
+
 ## The figure roster — three sets per direction (NO art in this round)
 
 Reproduced from CUBE.md exactly: the four POLES take their figures from

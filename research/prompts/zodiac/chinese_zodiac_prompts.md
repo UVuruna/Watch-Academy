@@ -199,3 +199,67 @@ Ornate circular medallion, weathered bronze sculptural relief on dark cracked st
 ```
 Ornate circular badge, vivid cloisonné enamel in Chinese festival style, photorealistic render, perfectly centered, isolated on white background. Center: a sleek gray-and-white Cat frozen mid-leap at a riverbank, one paw still reaching for a departing raft already too far to catch, the Rat's small silhouette visible riding it away toward the far shore, auspicious clouds swirling undisturbed as if the race had already been decided; glossy crimson-red field. Border: gold ring of cloud scrolls with four small roundels bearing the kanji 貓 in gold. Colors: crimson red, gold, silver gray, amber.
 ```
+
+---
+
+## The Five Elements — full plates (`elements` register, colored)
+
+The Wu Xing are already on every animal plate as the five enamel
+roundels set into the border ring. The Encyclopedia gives each element
+its own ARTICLE too (`Database/symbolism.json` §`chinese_elements`), and
+the Session 27 coverage law owes each article a plate.
+
+**Derivation check (Rule #19).** Not derivable, and deliberately not
+cropped: a border roundel is a 3%-of-the-frame ornament on another
+image, not a master anything can be scaled from. What IS reused is the
+ICONOGRAPHY — each plate paints the same emblem its roundel already
+carries (火 over flames, 土 over a small mountain, 金 over an ingot, 水
+over waves, 木 over a small tree) at full size and in full colour, so
+the ring on the animal plates reads as a miniature of these five and
+never as a different set.
+
+**The glyph is permitted here.** House rule keeps lettering out of the
+project's images, with the titles sheet as the one exception — but this
+family's own borders have carried 火土金水木 since the v2 regeneration,
+where the character is the element's EMBLEM, not a caption. These five
+keep it on the same footing: one glyph, worked as relief or enamel,
+never a label or a title line.
+
+**The generative cycle is the family's device.** Wood feeds Fire, Fire
+leaves ash and ash becomes Earth, Earth bears Metal, Metal collects
+Water, Water feeds Wood. Every plate shows its OWN element in the
+centre and the BIRTH of the next one at a single point on the rim — so
+the five hang together as one turning wheel rather than five posters.
+
+**Drop:** `assets/calendars/zodiac/chinese/elements/colored/` — stems
+`Wood`, `Fire`, `Earth`, `Metal`, `Water`, PascalCase.
+
+**Wood — spring, the east** → `assets/calendars/zodiac/chinese/elements/colored/Wood.png`
+
+```
+Ornate circular medallion, vivid full-color enamel over dark bronze, photorealistic render, perfectly centered, isolated on white background. Center: a young tree grown straight up out of a split boulder, its roots visibly working the stone apart along a fine crack, the trunk banded with growth rings shown at a cut branch, new green leaf breaking at every tip, one slender branch bent right over by wind and not broken. The character 木 stands worked in green enamel low on the trunk as a carved emblem, not a label. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls, the five element roundels set at the five points of a pentagram with the WOOD roundel at the upper left enlarged and lit; at the rim beside it, one leaf has caught and is beginning to burn — Wood feeding Fire. Palette: spring green, sap-pale wood, deep bronze; the one bright accent the first flame at the rim.
+```
+
+**Fire — summer, the south** → `assets/calendars/zodiac/chinese/elements/colored/Fire.png`
+
+```
+Ornate circular medallion, vivid full-color enamel over dark bronze, photorealistic render, perfectly centered, isolated on white background. Center: a single upright flame burning on a low stone hearth, its heart white-hot and its crown climbing into red, a ring of hearth-stones holding it in and a scatter of loose sparks escaping past them — the hearth and the wildfire in one fire, which is the whole question the article asks of it. The character 火 stands worked in red enamel on the hearth stone as a carved emblem, not a label. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls, the five element roundels at the pentagram's points with the FIRE roundel at the very top enlarged and lit; at the rim below, a fall of pale ash is settling into a small mound of ochre ground — Fire becoming Earth. Palette: deep red, white-hot gold, ember orange, deep bronze.
+```
+
+**Earth — the centre, the turning of the seasons** → `assets/calendars/zodiac/chinese/elements/colored/Earth.png`
+
+```
+Ornate circular medallion, vivid full-color enamel over dark bronze, photorealistic render, perfectly centered, isolated on white background. Center: a broad terraced field cut into a low mountain, the harvest gathered and stacked, a house standing finished at the mountain's foot with its door open; the mountain is shown in half-section so the ore veins waiting inside it are visible through the rock. The character 土 stands worked in deep red-brown enamel on the field's retaining wall as a carved emblem, not a label. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls, the five element roundels at the pentagram's points with the EARTH roundel at the upper right enlarged and lit — kept DEEP RED-BROWN, never yellow-ochre, so the app's metal swap cannot touch it; at the rim beside it, one ore vein breaks the surface as bright metal — Earth bearing Metal. Palette: deep red-brown, harvest ochre, terrace green, deep bronze.
+```
+
+**Metal — autumn, the west** → `assets/calendars/zodiac/chinese/elements/colored/Metal.png`
+
+```
+Ornate circular medallion, vivid full-color enamel over dark bronze, photorealistic render, perfectly centered, isolated on white background. Center: a bronze bell hung on a plain frame and a straight blade laid across an anvil beneath it, the blade's edge bright where it has been ground back and the removed steel lying as clean shavings beside it — what is unnecessary cut away, what rings true kept. The character 金 stands worked in pale gold enamel on the bell's shoulder as a carved emblem, not a label. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls, the five element roundels at the pentagram's points with the METAL roundel at the lower right enlarged and lit; at the rim below, dew has gathered along the cold blade and one drop is falling — Metal collecting Water. Palette: pale gold, cold steel white, autumn russet, deep bronze.
+```
+
+**Water — winter, the north** → `assets/calendars/zodiac/chinese/elements/colored/Water.png`
+
+```
+Ornate circular medallion, vivid full-color enamel over dark bronze, photorealistic render, perfectly centered, isolated on white background. Center: a deep still pool fed by a stream that comes in around a standing rock rather than over it, the rock's near face visibly worn hollow by that patient going-around, the water's surface dark and mirror-flat with the depth reading clearly beneath it. The character 水 stands worked in deep blue enamel on the standing rock as a carved emblem, not a label. Border: dark bronze ring carved with the Chinese key-fret (huiwen) thunder pattern and ruyi cloud scrolls, the five element roundels at the pentagram's points with the WATER roundel at the lower left enlarged and lit; at the rim beside it, the pool's overflow runs to the roots of a small green shoot — Water feeding Wood, and the wheel of the five beginning again. Palette: deep blue, black-green depth, silver surface light, deep bronze.
+```

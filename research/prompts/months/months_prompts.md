@@ -137,6 +137,44 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ---
 
+## The two THIRTEENTH months
+
+The twelve above are the year as the Croatian calendar names it. Two
+more months exist in this book and neither belongs to that ring: each
+is a THIRTEENTH month, and each answers a different flaw in the
+reckoning. Both have written articles already
+(`Database/encyclopedia.json` §`months`), and the Session 27 coverage
+law owes each a plate.
+
+**Derivation check (Rule #19):** not derivable — two new compositions.
+They are NOT recolors or rotations of any of the twelve: Sol is an
+English calendar reform, Modrenik an owner-coined Slavic month, and
+neither has a labour of its own on the Wheel of Labour.
+
+**The shared rim answers that.** Both keep the family's spoked
+cart-wheel leadwork rim so they read as months — but the wheel is drawn
+with THIRTEEN spokes instead of twelve, which is the whole of what
+these two are about, and is how a reader tells a thirteenth month from
+the twelve at a glance.
+
+**Sol — the month that carries the solstice** (the thirteenth month of
+Cotsworth's International Fixed Calendar, set between June and July) →
+`assets/calendars/slavic_months/primary/colored/Sol.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. High-summer glass: radiant gold and white at the crown, deep warm blue at the rim. Center: the sun standing at its highest point of the whole year over a level horizon, and beneath it a calendar page ruled into a PERFECT four-week block — four rows of seven, every column square and complete, not one day spilling past the edge — the grid lying flat and true where the twelve months' pages never do. Off to one side, hanging clear of the grid and touching nothing, one single unnumbered day floats free: the Year Day that belongs to no week. Border: the shared spoked cart-wheel leadwork rim drawn with THIRTEEN spokes, every spoke identical in width — the reform's whole claim in one ring. Palette: radiant gold, white light, deep summer blue, warm gold lead. NO lettering anywhere.
+```
+
+**Modrenik — the month of the blue moon** (owner-coined; cut from the
+instant itself, fourteen days either side of the real December
+solstice) → `assets/calendars/slavic_months/primary/colored/Modrenik.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. MODAR glass throughout — the deep bruised blue of dusk, frost and cold iron, never a bright daylight blue — with black-blue shadow and one cold silver light. Center: the longest night as one unbroken field of dark, and in it TWO full moons hanging in the same window: the month's own moon high, and a second full moon low and slightly smaller near the horizon — the rare thirteenth full moon the reckoning has no room for. Below them the ground is frost-locked, and the shadow of a bare tree falls across snow at its longest reach of the year. Border: the shared spoked cart-wheel leadwork rim drawn with THIRTEEN spokes, the thirteenth spoke worked in cold silver while the other twelve stay dark iron. Palette: deep modar blue, black-blue, frost white, cold silver lead. NO lettering anywhere.
+```
+
+---
+
 ## Status
 
 - New sheet (BADGE SISTEM / MONTHS round, owner 2026-07-20/21). All
