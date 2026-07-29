@@ -1111,8 +1111,10 @@ def test_octa_variants_wear_the_sealed_walks_and_ages_hues(app):
     # day) — Alliance, Horde and Evil, which ride those fixed arms three
     # times over with three different casts; +21 again for the same
     # wave's CYBERPUNK half — Gangs, Street and Power, a second
-    # franchise triplet on the identical nine seats.
-    assert seen == 233
+    # franchise triplet on the identical nine seats; +21 for completion
+    # wave III (Session 33, same day) — the Jedi, the Sith and the Dyad,
+    # a third franchise triplet, which closes the twelve-cast backlog.
+    assert seen == 254
 
 
 # --- The Earth day label -----------------------------------------------------------
