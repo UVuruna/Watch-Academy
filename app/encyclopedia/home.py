@@ -18,7 +18,7 @@ Layer: app. Documentation: home.md.
 
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QVBoxLayout, QWidget
+from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QWidget
 
 from app.encyclopedia.cards import CardGrid, mosaic_pixmap
 from config import defaults, paths
@@ -38,6 +38,21 @@ class HomeScreen(QWidget):
         self._zoom = 1.0
         self._grid = CardGrid(defaults.ENCYCLOPEDIA_HOME_COLUMNS)
         self._grid.opened.connect(self.opened)
+        # THE GRID NEVER DICTATES A MINIMUM (owner bug 2026-07-29, the
+        # one-way resize). `fit()` measures the cards FROM the viewport
+        # and pins them with setFixedWidth/Height — which is also Qt's
+        # way of declaring a minimum. So every enlargement raised the
+        # window's own minimum to the new size and the window could
+        # never be dragged back down: growth was a ratchet. The grid's
+        # size hints are meaningless BY DESIGN here (the viewport is the
+        # input, not the output), so they are declared Ignored, and the
+        # only floor left is the dialog's own 1280x720.
+        self._grid.setSizePolicy(
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored
+        )
+        self.setSizePolicy(
+            QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored
+        )
         column = QVBoxLayout(self)
         column.setContentsMargins(0, 0, 0, 0)
         column.addWidget(self._grid)
