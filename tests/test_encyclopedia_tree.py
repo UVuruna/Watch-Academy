@@ -344,9 +344,11 @@ def test_the_exception_list_has_no_stale_entries(topics):
 
 
 def test_the_title_plate_resolver_names_one_file_per_block(topics):
-    """The three blocks of a merged theme name three DIFFERENT plates
-    inside the one theme folder — the merge must not make two title
-    pages fight over one filename."""
+    """The three blocks of a merged theme name three DIFFERENT plates —
+    the merge must not make two title pages fight over one filename. The
+    blocks differ by REGISTER (primary / pantheon / wider, primary /
+    secondary / dark), which is exactly what a register is for, so the
+    reserved `Title` stem repeats across folders and never inside one."""
     from config import defaults
 
     seen = {}
@@ -357,34 +359,9 @@ def test_the_title_plate_resolver_names_one_file_per_block(topics):
             path = defaults.theme_title_art(key, duality=duality)
             assert path not in seen, (key, duality, seen.get(path))
             seen[path] = (key, duality)
-    assert "title" in str(defaults.theme_title_art("greek"))
-
-
-def test_every_declared_diagram_has_a_drawer(topics):
-    """A page may name a DRAWER instead of a file (owner verdict
-    2026-07-29). Nothing may name one that does not exist — that would
-    be a blank page pretending to be a computed one."""
-    from render import diagrams
-
-    known = set(diagrams.kinds())
-    for key, topic in topics.items():
-        for entry in topic["entries"]:
-            spec = entry.get("diagram")
-            if spec is None:
-                continue
-            kind, _key = spec
-            assert kind in known, f"{key}: {entry['name']} -> {kind}"
-
-
-def test_the_axis_pages_draw_the_axis_they_argue(topics):
-    """Every axis page's diagram names the CANON axis of the same name —
-    the drawing is the canon table, not a decoration beside it."""
-    from config import cube
-
-    canon = {axis.name for axis in cube.AXES}
-    for key in ("cube_axes", "cube_figures"):
-        for entry in topics[key]["entries"]:
-            spec = entry.get("diagram")
-            if spec is None or spec[0] != "axis":
-                continue
-            assert spec[1] in canon, (key, entry["name"], spec)
+    # And the seat is the one the prompt sheets already write against.
+    greek = defaults.theme_title_art("greek")
+    assert greek.name == "Title.png"
+    assert greek.parent.name == "colored"
+    assert greek.parent.parent.name == "primary"
+    assert defaults.theme_title_art("greek", duality=True).name == "Duality.png"

@@ -75,7 +75,7 @@ _ERA_ENTRIES = (
     # The Great Oscillations (fix round F, owner "bravo"): the season-
     # length / Milankovitch essay near the Observatory — an ESSAY, no
     # plate of its own (like the comparative Eras article), None -> ().
-    ("The_Great_Oscillations", "title/colored/Great_Oscillations.png"),
+    ("The_Great_Oscillations", "Great_Oscillations.png"),
 )
 
 # THE ECLIPSES ENCYCLOPEDIA (fix round F, owner order 2026-07-19:
@@ -238,8 +238,7 @@ _CROSSES_ENTRIES = (
 # every other overview page in this hall.
 _ONE_SOUL_ENTRIES = (
     (constants.ONE_SOUL_THEME_TITLE,
-     archetypes.ARCHETYPE_ART_DIR / "one_soul" / "title" / "colored"
-     / "One_Soul.png"),
+     archetypes.ONE_SOUL_ART_DIR / "Title.png"),
     ("Gratitude", archetypes.ONE_SOUL_ART_DIR / "Gratitude.png"),
     ("Support", archetypes.ONE_SOUL_ART_DIR / "Support.png"),
     ("Passion", archetypes.ONE_SOUL_ART_DIR / "Passion.png"),

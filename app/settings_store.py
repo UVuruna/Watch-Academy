@@ -100,6 +100,23 @@ class Settings:
     # day/night law. Inert on every other pointer — never rewritten, so
     # the choice survives a pointer switch.
     daylight: bool = True
+    # THE POINTER SHAPE (Pointers REWORK phase 1, owner sheet
+    # UV/Pointers.png 2026-07-29): "star" (the diamond stars) or
+    # "polygon" (the plain polygon of the same arms — the CUBE hexagon
+    # on the Trinity, a touching 12-/24-point star on the Calendar and
+    # the Rose). GLOBAL, one shape per watch; the armless Aurora ignores
+    # it, and the value is never rewritten for it.
+    pointer_shape: str = constants.POINTER_SHAPE_DEFAULT
+    # THE EDGE PULL and its two forms (owner sheet: "Smooth concave" vs
+    # "V-notched") — meaningful ONLY on the true polygons
+    # (trio/cross/hexa/octa), inert on the Calendar's and the Rose's
+    # star-shaped polygons and in the star shape itself.
+    polygon_curvature: float = constants.POLYGON_CURVATURE_DEFAULT
+    polygon_edge: str = constants.POLYGON_EDGE_DEFAULT
+    # HIDE NIGHT BORDERS (owner option 2026-07-29): the arm/polygon
+    # outline strokes are drawn over the sunlit arcs only, so the night
+    # keeps its fills without the overlapping-border mesh. All pointers.
+    hide_night_borders: bool = False
     # The Earth marker's label MODE (owner 2026-07-18, ROADMAP 15h — the
     # Design ▸ Earth submenu's FOUR exclusive toggles: Date / Weekday /
     # Date & Weekday / Full Date, `constants.EARTH_LABEL_MODES`).
@@ -360,6 +377,10 @@ class SettingsStore:
                 ("umbra_form", "gradient", constants.UMBRA_FORMS),
                 ("umbra_contrast", "dark", constants.UMBRA_CONTRAST_VARIANTS),
                 ("palette_style", "primary", constants.PALETTE_STYLES),
+                ("pointer_shape", constants.POINTER_SHAPE_DEFAULT,
+                 constants.POINTER_SHAPES),
+                ("polygon_edge", constants.POLYGON_EDGE_DEFAULT,
+                 constants.POLYGON_EDGE_MODES),
                 ("calendar_lighting", "hour",
                  constants.CALENDAR_LIGHTING_MODES),
                 ("calendar_mount", "zodiac", constants.CALENDAR_MOUNT_MODES),
@@ -424,6 +445,17 @@ class SettingsStore:
                 archetype_names=_load_bool(raw, "archetype_names", True),
                 cube_look=_load_bool(raw, "cube_look", False),
                 daylight=_load_bool(raw, "daylight", True),
+                # Pointers REWORK phase 1 (owner sheet 2026-07-29) —
+                # additive keys: a file written before it simply gets
+                # the star shape, no curvature and today's borders.
+                polygon_curvature=_load_scale(
+                    raw, "polygon_curvature",
+                    *constants.POLYGON_CURVATURE_RANGE,
+                    constants.POLYGON_CURVATURE_DEFAULT,
+                ),
+                hide_night_borders=_load_bool(
+                    raw, "hide_night_borders", False
+                ),
                 earth_label=_load_earth_label(raw),
                 solar_rotation=_load_bool(raw, "solar_rotation", True),
                 legend=_load_bool(raw, "legend", True),
@@ -553,6 +585,10 @@ class SettingsStore:
             "archetype_names": settings.archetype_names,
             "cube_look": settings.cube_look,
             "daylight": settings.daylight,
+            "pointer_shape": settings.pointer_shape,
+            "polygon_curvature": settings.polygon_curvature,
+            "polygon_edge": settings.polygon_edge,
+            "hide_night_borders": settings.hide_night_borders,
             "earth_label": settings.earth_label,
             "z_mode": settings.z_mode,
             "solar_rotation": settings.solar_rotation,

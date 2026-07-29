@@ -337,10 +337,10 @@ def _build_topics(travel_date: date | None = None) -> dict:
         # lands, so the card shows its name until then.
         "icon": defaults.MONTHS_ART_DIR / "Lipanj.png",
         "entries": [{
-            "images": (
-                defaults.MONTHS_ART_DIR.parent.parent
-                / "title" / "colored" / "Slavic_Months.png",
-            ),
+            # The reserved `Title` stem in the months' own register —
+            # the seat `research/prompts/titles/theme_title_prompts.md`
+            # has been writing a brief against since R8c.
+            "images": (defaults.MONTHS_ART_DIR / "Title.png",),
             "name": "The Slavic Months",
             "article": ("emblem", "months", "The Slavic Months"),
         }] + [

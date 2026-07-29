@@ -1396,7 +1396,7 @@ def test_era_terms_topic():
     # NAME — its topic's own `title` register — so the prompt sheet has
     # something to address and the page lights up when the art lands.
     assert len(era[7]["images"]) == 1
-    assert era[7]["images"][0].parent.parent.name == "title"
+    assert era[7]["images"][0].name == "Great_Oscillations.png"
 
     # SESSION 27 (owner-sealed 2026-07-28): the old Celestial Engine
     # SPLIT — the watch's own wheels (the week, the instrument, the eras

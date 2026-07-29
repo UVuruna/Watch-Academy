@@ -517,6 +517,55 @@ POINTER_ARM_HALF_ANGLE_DEG = {
     "rose": 22.5,
 }
 
+# THE POINTER SHAPE (Pointers REWORK phase 1, owner sheet
+# UV/Pointers.png, 2026-07-29) — ONE global choice for the drawn wheel:
+#   "star"    — the standing diamond stars (the shape shipped so far).
+#   "polygon" — the PLAIN polygon of the pointer's own arm count: the
+#               Quaternity a SQUARE, the Prism a HEXAGON, the Compass an
+#               OCTAGON, with one VERTEX per arm tip and each arm's hue
+#               filling its kite from the center out to that vertex
+#               (boundaries run center -> edge midpoint). The TRINITY is
+#               the owner's one exception: instead of a triangle it draws
+#               the CUBE — the hexagon of three rhombi the Cube look
+#               already builds (`CUBE_LOOK_WHEELS`), rhombus tips on the
+#               trio's three arms.
+# The armless AURORA draws no pointer at all and ignores the choice. The
+# CALENDAR and the ROSE read it as "one touching star instead of two /
+# three overlapping ones" — see CALENDAR_STAR_ARMS below and
+# POINTER_DIAL_COUNTS above for the ray counts.
+POINTER_SHAPES = ("star", "polygon")
+POINTER_SHAPE_DEFAULT = "star"
+
+# The pointers whose "polygon" really IS a polygon (3/4/6/8 arms) — the
+# only ones the CURVATURE slider touches. The Calendar's twelve-point
+# and the Rose's twenty-four-point polygons are STARS whose adjacent
+# arms merely touch, and a star never curves (owner spec).
+POLYGON_POINTERS = ("trio", "cross", "hexa", "octa")
+
+# THE EDGE PULL (owner sheet: "Original straight edge / Smooth concave
+# edge / V-notched edge"): 0.0 leaves the plain polygon; toward 1.0 each
+# OUTER edge's midpoint is pulled inward along its own radius, until at
+# 1.0 it sits exactly where the pointer's OWN star seats its inner
+# vertices — so the silhouette lands on the star's concave profile. The
+# color-boundary edges INSIDE the figure never curve.
+POLYGON_CURVATURE_RANGE = (0.0, 1.0)
+POLYGON_CURVATURE_DEFAULT = 0.0
+# How a pulled edge is drawn: "smooth" — one quadratic arc THROUGH the
+# pulled midpoint; "notched" — two straight segments meeting there (the
+# V-notch).
+POLYGON_EDGE_MODES = ("smooth", "notched")
+POLYGON_EDGE_DEFAULT = "smooth"
+
+# THE CALENDAR'S TWO SHAPES (owner sheet 2026-07-29): "star" draws TWO
+# HEXAGRAMS 30° apart — six of the twelve wedge hues on each, the one
+# standing on the EVEN wedge centers painted on top (the Rose's z-stack
+# pattern); "polygon" draws ONE twelve-point star (POINTER_DIAL_COUNTS)
+# whose adjacent arms touch, one hue per 2h wedge, tips on the wedge
+# centers. Both ride the active wheel's own wedge geometry
+# (`render.layers.calendar_wedge_bounds`) and, like the wedges
+# themselves, are calendar-FIXED — they never take the solar rotation.
+CALENDAR_STAR_ARMS = 6
+
 # THE ROSE'S THREE STARS (owner seal 2026-07-27, CUBE.md §The Rose) —
 # star angles in DRAW ORDER, first painted (bottom of the z-stack) to
 # last painted (topmost). The 0° star is ALWAYS last on both wheels, so
@@ -530,6 +579,25 @@ POINTER_ARM_HALF_ANGLE_DEG = {
 ROSE_STAR_OFFSETS = {
     "primary": (-30.0, -15.0, 0.0),
     "secondary": (-15.0, 15.0, 0.0),
+}
+
+# The pitch of the Rose's rays: three stars 15° apart fill the 45° a
+# single octa arm spans, so twenty-four rays stand on the glass — one
+# per HOUR of the day.
+ROSE_RAY_PITCH_DEG = 15.0
+
+# THE PROPHECY SHIFT (Pointers REWORK phase 1, owner spec 2026-07-29):
+# the Rose's SECONDARY wheel moves its WHOLE assembly — all three stars,
+# and the twenty-four-ray polygon — HALF A RAY clockwise, so every ray
+# CENTER lands on HH:30 and each hue therefore covers its hours from :00
+# to :59. LEGACY keeps its rays on the full hours. The shift is a
+# rotation of the drawn wheel only: which hue sits on which ray is
+# untouched. `render.layers.wheel_offset_deg` feeds it to the stars AND
+# to the Aura wedges behind them, so background and star can never
+# disagree.
+ROSE_WHEEL_ASSEMBLY_OFFSET_DEG = {
+    "primary": 0.0,
+    "secondary": ROSE_RAY_PITCH_DEG / 2.0,
 }
 
 # Which figure SET each Rose star carries, keyed by its offset (CUBE.md
@@ -632,6 +700,23 @@ def palette_styles_for(pointer: str) -> tuple[str, ...]:
 # through render.layers.arm_offset_deg into the star diamonds, the Aura
 # wedges, the weekday slots, the lit-index math and the arm hit-test.
 GENESIS_ARM_OFFSET_DEG = 180.0
+
+# THE SEASONS ROTATION (Pointers REWORK phase 1, owner spec 2026-07-29):
+# the cross's TERTIARY wheel — the Seasons — turns its four arms by half
+# a wedge, so the color BOUNDARIES land exactly on 12h/3h/6h/9h and the
+# wheel reads ASTRONOMICAL seasons (a season begins at its turning
+# point) instead of the meteorological quarters the primary
+# (Temperaments) and secondary (Elements) wheels keep.
+SEASONS_ARM_OFFSET_DEG = 45.0
+
+# Every WHEEL that seats its arms off the pointer's own default angles,
+# keyed (pointer, wheel slot) — the ONE table `render.layers.
+# arm_offset_deg` reads, so a new offset wheel is a line here rather
+# than a branch in the renderer (Rule #5).
+WHEEL_ARM_OFFSET_DEG = {
+    ("trio", "tertiary"): GENESIS_ARM_OFFSET_DEG,
+    ("cross", "tertiary"): SEASONS_ARM_OFFSET_DEG,
+}
 
 # THE CUBE LOOK (owner seal 2026-07-26, CUBE.md §Display laws): the
 # Double-Trinity FAMILY wheels — the Court (trio primary), Genesis (trio

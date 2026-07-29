@@ -71,14 +71,6 @@ _LAW_REGISTERS = {
     # wheel already carries its two readings as the "tree" and
     # "animals" registers (archetypes.ARCHETYPE_LIFE_REGISTERS).
     "archetypal", "historical", "modern",
-    # THE TITLE REGISTER (Session 27 coverage law, owner 2026-07-28:
-    # "svaki clanak mora sliku"). A theme's opening page and its
-    # week-duality title page had no image NAME at all — nothing a
-    # prompt sheet could even address. They read the theme WHOLE, where
-    # every other register reads it seat by seat, which is what makes
-    # this a register and not a look: `<theme>/title/colored/<Stem>.png`
-    # (`defaults.theme_title_art`, the ONE resolver).
-    "title",
     # THE FIVE ELEMENTS (Session 27): a parallel reading of the Chinese
     # zodiac beside its twelve animals — an element is not a thirteenth
     # animal, so it is a register of its own, not a figure in `primary`.
