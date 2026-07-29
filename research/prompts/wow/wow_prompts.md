@@ -563,6 +563,17 @@ not duplicate the briefs in this file.
   regeneration needed. Any PRIMARY output generated before this fix
   (confirmed at least for WoW Alliance: Anduin, Khadgar, Muradin) must
   be REGENERATED from the corrected briefs above.
+- **WIRED AND SEATED 2026-07-29 (completion wave II, Session 32).** All
+  three blocks are registered weekday themes — `wow_alliance`,
+  `wow_horde`, `wow_evil` in `constants.WEEKDAY_THEMES` and
+  `METAL_THEMES`, with their seat names, dirs, stems, duals, Ninths
+  (Turalyon / Rexxar / Medivh) and titles in `config/defaults.py`, a new
+  "Gaming" picker group, and ONE Encyclopedia card with an
+  Alliance | Horde | Evil switcher
+  (`config.encyclopedia_tree.VARIANT_SOURCES`). Every seat, dual, Ninth
+  and title article is written. The sentence below is kept for the
+  record of what this sheet-writing round's scope was; it no longer
+  describes the state of the code.
 - New sheet (R10 GAMING + CORPORATION SHEET WAVE, owner-sealed rosters
   2026-07-22). Theme not yet registered in `config/defaults.py`
   (`WEEKDAY_THEME_NAMES`/`WEEKDAY_THEME_ARTICLES`/etc.) — that wiring
@@ -575,8 +586,13 @@ not duplicate the briefs in this file.
 - **No rotation seats in this theme** — unlike Cyberpunk's Gangs/Street
   blocks, every WoW seat seats exactly ONE figure; the `alt/`
   convention is not used anywhere in this file.
-- **Art: 0/54** (27 figures × 2 registers across the three blocks; the
-  3 title plates are tracked separately in
-  [Theme Title Prompts](../titles/theme_title_prompts.md), see above).
+- **Art: 54/54 LANDED** (27 figures × 2 registers across the three
+  blocks), plus all 3 title plates. NOTE for the title-plate root: the
+  three titles did NOT land at the `societies/wolf/` paths written
+  above — that cross-reference predates the title-plate seat law. They
+  sit at `assets/weeks/gaming/wow_<block>/primary/colored/Title.png`,
+  the reserved `Title` stem in each cast's own register, which is what
+  `defaults.theme_title_art` resolves and what the Encyclopedia's
+  opening page reads.
 - Verify with `python main.py "research/prompts/wow/wow_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner.
