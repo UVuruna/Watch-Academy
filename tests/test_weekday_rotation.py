@@ -9,18 +9,35 @@ is the WIRING test: does the weekday resolution chokepoint actually
 call it) against `config.defaults.weekday_theme_body_art` and
 `render.layers.theme_ninth`, the two functions every weekday-body-art
 draw/hover call site now shares (Rule #5 — no more per-call-site
-`theme_dir / f"{...}.png"` duplicates)."""
+`theme_dir / f"{...}.png"` duplicates). Also pins THE WEEKLY MANDATE
+(owner decree 2026-07-29): cp_corpo's own seat rosters (sun/dual/ninth)
+turn by the ISO calendar week's PARITY instead of the daily ordinal
+every other roster still uses — `_probe_days` picks the right cadence
+per theme so the shared cycle-coverage test still proves every roster
+member is reachable."""
 
-from datetime import date
+from datetime import date, timedelta
 
 from config import constants, defaults, paths
-from render.layers import theme_ninth
+from render.layers import ninth_table_for, theme_ninth
 
 # Two ordinally-consecutive dates, chosen arbitrarily — with exactly two
 # candidates (canonical + one alt/ sibling) any consecutive pair must
 # land on different picks (ordinal % 2 alternates).
 DAY_A = date(2026, 7, 20)
 DAY_B = date(2026, 7, 21)
+
+
+def _probe_days(theme: str, count: int) -> list:
+    """The right PROBE DATES to exercise `count` picks of `theme`'s own
+    seat rosters: WEEKLY steps for THE WEEKLY MANDATE (owner decree
+    2026-07-29, cp_corpo — `constants.NINTH_MECHANISMS[theme] ==
+    "term_weekly"`, ISO week parity), ordinary consecutive days for
+    every daily-cadence theme (every other roster). `DAY_A` (2026-07-20,
+    ISO week 30, even) anchors either way."""
+    if constants.NINTH_MECHANISMS.get(theme) == "term_weekly":
+        return [DAY_A + timedelta(weeks=o) for o in range(count)]
+    return [date(2026, 7, 20 + o) for o in range(count)]
 
 
 def test_bible_dark_body_rotates_across_consecutive_ordinals():
@@ -130,8 +147,8 @@ def test_seat_roster_shows_every_member_across_its_cycle():
             if not paths.art_file(canonical).exists():
                 continue                    # art owed, nothing to rotate
             shown = {
-                defaults.rotating_art_file(canonical, date(2026, 7, 20 + o)).stem
-                for o in range(len(stems))
+                defaults.rotating_art_file(canonical, day).stem
+                for day in _probe_days(theme, len(stems))
             }
             for stem in on_disk:
                 resolved = paths.art_file(directory / f"{stem}.png")
@@ -143,37 +160,54 @@ def test_seat_roster_shows_every_member_across_its_cycle():
                 assert defaults.WEEKDAY_THEME_FILES[theme][body] == seats[body][0]
 
 
-def test_sw_dyad_ninth_rotates_through_the_seat_roster():
-    """Completion wave III (Session 33): the Dyad's Ninth is a
-    PLACE-vs-PLACE rotation — The Ghosts against Exegol — and the wave
-    resolved it through `WEEKDAY_SEAT_ROSTERS`/`rotating_art_file`, the
-    mechanism the Cyberpunk half had just built, rather than through a
-    second copy of `core.continents`'s Zealandia/Pangea trigger (Rule #5,
-    one rotation mechanism). The choice is PROVISIONAL — the sheet leaves
-    it to the owner and `research/theme_staging.md` records the open
-    call — so this pins WHICH mechanism is wired, which is exactly what a
-    future flip has to change deliberately rather than by accident.
+def test_sw_dyad_ninth_is_a_daylight_night_switch():
+    """Owner Double-Ninth verdicts (2026-07-29): the Dyad's Ninth is a
+    DAYLIGHT/NIGHT switch, not a date rotation — day shows The Ghosts
+    (the good side), night shows Exegol (the owner's own words: "the
+    duality of that theme pulling the actors to one of two sides").
+    SUPERSEDES Session 33's PROVISIONAL date rotation this test used to
+    pin under the name `test_sw_dyad_ninth_rotates_through_the_seat_
+    roster` — the seat-roster mechanism it proved is now explicitly
+    GONE (see the negative assertions below).
 
-    Art-free on purpose: none of the Dyad's plates exist yet, so the
-    assertion is on the WIRING (the Ninth's own declared plate path
-    resolves to the roster) and not on a rendered file."""
-    name, rel = constants.WEEKDAY_THEME_NINTHS["sw_dyad"]
-    assert name == "The Ghosts"
-    plate = defaults.weekday_art(rel)
-    assert defaults._seat_roster_of(plate) == ("Ghosts", "Exegol")
-    # The alternative mechanism must NOT be half-wired at the same time.
+    Art-free on purpose: neither plate exists yet, so the assertion is
+    on the MECHANISM DISPATCH (`ninth_table_for` — which table
+    `theme_ninth` would consult) rather than on a rendered file."""
+    assert constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"
+    day_name, day_rel = constants.WEEKDAY_THEME_NINTHS["sw_dyad"]
+    night_name, night_rel = constants.WEEKDAY_THEME_NINTH_NIGHT["sw_dyad"]
+    assert (day_name, day_rel) == (
+        "The Ghosts", "sw_dyad/primary/bronze/Ghosts.png",
+    )
+    assert (night_name, night_rel) == (
+        "Exegol", "sw_dyad/primary/bronze/Exegol.png",
+    )
+    # THE DISPATCH: no alt face at all when inactive; the "daynight"
+    # mechanism reaches EXACTLY the night table when active — never the
+    # easter-egg one, never both.
+    assert ninth_table_for("sw_dyad", active_alt=False) is None
+    assert (
+        ninth_table_for("sw_dyad", active_alt=True)
+        is constants.WEEKDAY_THEME_NINTH_NIGHT
+    )
+    # The date-rotation path this ninth used to ride is GONE.
+    assert "ninth" not in defaults.WEEKDAY_SEAT_ROSTERS["sw_dyad"]
+    assert defaults._seat_roster_of(defaults.weekday_art(day_rel)) is None
     assert "sw_dyad" not in constants.WEEKDAY_THEME_NINTH_EASTER_EGG
 
 
 def test_cp_corpo_throne_mirror_and_ninth_turn_in_lockstep():
-    """The sheet's SYNCHRONIZED PAIR ROTATION: the Power cast's Throne,
-    Mirror and Ninth each hold exactly two members, so one date lands on
+    """THE WEEKLY MANDATE (owner decree 2026-07-29) elevates the
+    sheet's SYNCHRONIZED PAIR ROTATION from a daily to a WEEKLY
+    lockstep: the Power cast's Throne, Mirror and Ninth each hold
+    exactly two members, and one ISO calendar week's PARITY lands on
     the same INDEX in all three — Saburo, Yorinobu and Alt Cunningham
-    stand together, Rosalind Myers, Kurt Hansen and Rache Bartmoss stand
-    together. It falls out of `_pick_rotation`'s shared modulo and equal
-    roster lengths, with no synchronisation flag anywhere; what this
-    pins is that the DECLARED order is what rotates, since resolving the
-    pools alphabetically would pair Saburo with Rache instead."""
+    (Arasaka) stand together on EVEN weeks, Rosalind Myers, Kurt Hansen
+    and Rache Bartmoss (NUSA) together on ODD ones. It falls out of
+    `_pick_weekly_mandate`'s shared modulo and equal roster lengths,
+    with no synchronisation flag anywhere; what this pins is that the
+    DECLARED order is what rotates, since resolving the pools
+    alphabetically would pair Saburo with Rache instead."""
     directory = defaults.weekday_art(defaults.WEEKDAY_THEME_DIRS["cp_corpo"])
     pairs = {
         "sun": ("Saburo_Arasaka", "Rosalind_Myers"),
@@ -181,9 +215,12 @@ def test_cp_corpo_throne_mirror_and_ninth_turn_in_lockstep():
         "ninth": ("Alt_Cunningham", "Rache_Bartmoss"),
     }
     assert defaults.WEEKDAY_SEAT_ROSTERS["cp_corpo"] == pairs
+    even_week, odd_week = date(2026, 7, 26), date(2026, 7, 27)  # ISO 30, 31
+    assert even_week.isocalendar()[1] == 30      # Sunday, still week 30
+    assert odd_week.isocalendar()[1] == 31        # the very next day
     seen = set()
-    for day in (DAY_A, DAY_B):
-        index = (day.toordinal() // defaults.ROTATION_DAYS) % 2
+    for day in (even_week, odd_week):
+        index = day.isocalendar()[1] % 2
         seen.add(index)
         for seat, stems in pairs.items():
             picked = defaults.rotating_art_file(
@@ -191,6 +228,36 @@ def test_cp_corpo_throne_mirror_and_ninth_turn_in_lockstep():
             ).stem
             assert picked.startswith(stems[index]), (seat, day, picked, index)
     assert seen == {0, 1}, "the two probe dates must cover both turns"
+
+
+def test_cp_corpo_weekly_mandate_flips_at_the_week_boundary_not_daily():
+    """The cadence is WEEKLY, not daily (owner decree 2026-07-29): every
+    day INSIDE the same ISO week must show the SAME ruling triple — the
+    OLD daily law (`_pick_rotation`) would have flipped Monday vs
+    Tuesday — and only a genuine week-boundary crossing (Sunday week 30
+    -> Monday week 31) actually flips it."""
+    canonical = defaults.weekday_art(
+        "cp_corpo/primary/bronze/Saburo_Arasaka.png"
+    )
+    monday_w30 = date(2026, 7, 20)
+    tuesday_w30 = date(2026, 7, 21)
+    sunday_w30 = date(2026, 7, 26)
+    monday_w31 = date(2026, 7, 27)
+    assert (
+        monday_w30.isocalendar()[1]
+        == tuesday_w30.isocalendar()[1]
+        == sunday_w30.isocalendar()[1]
+        == 30
+    )
+    assert monday_w31.isocalendar()[1] == 31
+    ruling_w30 = {
+        defaults.rotating_art_file(canonical, d).stem
+        for d in (monday_w30, tuesday_w30, sunday_w30)
+    }
+    assert len(ruling_w30) == 1, "every day inside week 30 rules the SAME triple"
+    assert next(iter(ruling_w30)).startswith("Saburo_Arasaka")
+    ruling_w31 = defaults.rotating_art_file(canonical, monday_w31).stem
+    assert ruling_w31.startswith("Rosalind_Myers")
 
 
 def test_seat_roster_never_captures_a_plate_outside_its_own_theme():

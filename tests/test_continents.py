@@ -49,7 +49,7 @@ def test_continents_ninth_wired_zealandia_and_pangea():
     assert constants.WEEKDAY_THEME_NINTHS["continents"][0] == "Zealandia"
     assert constants.WEEKDAY_THEME_NINTH_EASTER_EGG["continents"][0] == "Pangea"
     assert theme_ninth("continents") is None            # Zealandia pending
-    assert theme_ninth("continents", pangea=True) is None  # Pangea pending
+    assert theme_ninth("continents", active_alt=True) is None  # Pangea pending
 
 
 def test_continent_regions_cover_the_six_columns_and_the_poles():
@@ -69,58 +69,82 @@ def test_pangea_over_zealandia_truth_table():
     assert not continents.pangea_over_zealandia(False, False, False)
     assert continents.pangea_over_zealandia(True, False, False)     # eclipse
     assert continents.pangea_over_zealandia(False, True, False)     # turning pt
-    assert continents.pangea_over_zealandia(False, False, True)     # full/new
+    assert continents.pangea_over_zealandia(False, False, True)     # principal phase
 
 
 def test_easter_egg_golden_dates():
     """Owner-sealed golden dates against the BUNDLED season/moon data:
     a 2026 full-moon day and a solstice day show PANGEA; an ordinary day
-    shows ZEALANDIA."""
+    shows ZEALANDIA. Widened 2026-07-29: a First AND a Third Quarter day
+    ALSO show Pangea now — the two dates the OLD full/new-only law would
+    have missed."""
     from data.moon_phases import MoonPhaseRepository
     from data.seasons import SeasonsRepository
 
     sr, mr = SeasonsRepository(), MoonPhaseRepository()
     full_moon = date(2026, 1, 3)          # a 2026 Full Moon (bundled)
+    first_quarter = date(2026, 1, 26)     # a 2026 First Quarter (bundled)
+    third_quarter = date(2026, 1, 10)     # a 2026 Third Quarter (bundled)
     summer_solstice = date(2026, 6, 21)   # a 2026 turning point (bundled)
-    ordinary = date(2026, 7, 7)           # neither — the moon-golden day (0.74)
+    # 2026-07-07 (the old "moon-golden day", fraction 0.74) is ITSELF a
+    # Third Quarter day now that the law covers all four principal
+    # phases — 2026-07-11 sits mid-way to the next event (July 14 New
+    # Moon) and is genuinely ordinary.
+    ordinary = date(2026, 7, 11)          # neither trigger
 
     assert continents.ninth_is_pangea_from_repos(full_moon, sr, mr)
+    assert continents.ninth_is_pangea_from_repos(first_quarter, sr, mr)
+    assert continents.ninth_is_pangea_from_repos(third_quarter, sr, mr)
     assert continents.ninth_is_pangea_from_repos(summer_solstice, sr, mr)
     assert not continents.ninth_is_pangea_from_repos(ordinary, sr, mr)
     # The individual triggers, separately.
-    assert continents.full_or_new_moon_on(full_moon, mr)
+    assert continents.principal_phase_on(full_moon, mr)
+    assert continents.principal_phase_on(first_quarter, mr)
+    assert continents.principal_phase_on(third_quarter, mr)
     assert continents.turning_point_on(summer_solstice, sr)
-    assert not continents.full_or_new_moon_on(ordinary, mr)
+    assert not continents.principal_phase_on(ordinary, mr)
     assert not continents.turning_point_on(ordinary, sr)
 
 
 def test_easter_egg_from_events_matches_repos():
     """The DIAL wrapper (reading pre-built event lists) agrees with the
     ENCYCLOPEDIA wrapper (reading the repos) on the same day, and the
-    live eclipse flag alone forces Pangea."""
+    live eclipse flag alone forces Pangea. `moon_events` is built with
+    the SAME fraction->name mapping `core.clock_state`'s real
+    `DayContext` uses (`constants.MOON_PHASE_FRACTIONS` inverted, all
+    FOUR principal phases) — not a hand-rolled full/new-only ternary."""
     from data.moon_phases import MoonPhaseRepository
     from data.seasons import SeasonsRepository
 
     sr, mr = SeasonsRepository(), MoonPhaseRepository()
     full_moon = date(2026, 1, 3)
+    first_quarter = date(2026, 1, 26)
+    names_by_fraction = {
+        frac: name for name, frac in constants.MOON_PHASE_FRACTIONS.items()
+    }
     # Build the event lists the DayContext would carry, from the repos.
     season_events = tuple(
         (instant, "anchor") for instant in sr.year_anchors(2026).instants
     )
     moon_events = tuple(
-        (instant, "Full Moon" if frac == 0.5 else "New Moon")
+        (instant, names_by_fraction[frac % 1.0])
         for instant, frac in mr.moon_window(2026).events
-        if frac in (0.0, 0.5)
     )
     assert continents.ninth_is_pangea_from_events(
         full_moon, season_events, moon_events, has_eclipse=False
     )
-    # An ordinary day + a live eclipse still forces Pangea.
+    # A quarter day — the WIDENED trigger (owner verdict 2026-07-29) —
+    # forces Pangea exactly like full/new does.
     assert continents.ninth_is_pangea_from_events(
-        date(2026, 7, 7), season_events, moon_events, has_eclipse=True
+        first_quarter, season_events, moon_events, has_eclipse=False
+    )
+    # An ordinary day + a live eclipse still forces Pangea. 2026-07-11
+    # (not 07-07, itself a Third Quarter day under the widened law).
+    assert continents.ninth_is_pangea_from_events(
+        date(2026, 7, 11), season_events, moon_events, has_eclipse=True
     )
     assert not continents.ninth_is_pangea_from_events(
-        date(2026, 7, 7), season_events, moon_events, has_eclipse=False
+        date(2026, 7, 11), season_events, moon_events, has_eclipse=False
     )
 
 
@@ -189,10 +213,14 @@ def test_topic_look_switcher_atmosphere_clean_day_night():
 
 def test_topic_ninth_is_living():
     """The Ninth page follows the traveled day: Zealandia normally,
-    Pangea on a Pangea day (full moon / turning point / eclipse)."""
+    Pangea on a Pangea day (a principal moon phase / turning point /
+    eclipse — widened 2026-07-29 from full/new alone)."""
     from app.encyclopedia import topics as _topics
 
-    ordinary = _topics(date(2026, 7, 7))["continents"]["entries"][10]
+    # 2026-07-11 sits mid-way between the July 7 Third Quarter and the
+    # July 14 New Moon — genuinely ordinary under the WIDENED law
+    # (2026-07-07 itself is a Third Quarter day now, no longer safe).
+    ordinary = _topics(date(2026, 7, 11))["continents"]["entries"][10]
     assert ordinary["name"] == "Zealandia"
     assert ordinary["article"] == ("emblem", "ninths", "Zealandia")
     pangea = _topics(date(2026, 1, 3))["continents"]["entries"][10]   # full moon
