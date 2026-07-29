@@ -1301,15 +1301,31 @@ def thirteenth_plate(key: str) -> tuple[str, Path | None]:
     already uses (the "sign"/"primary" looks, matching the Encyclopedia
     ninth-entry icon exactly); Sol/Modrenik read the sourceless
     MONTHS_ART_DIR, exactly like the twelve Slavic months (graceful-
-    absent until the owner's prompt sheet lands)."""
+    absent until the owner's prompt sheet lands).
+
+    THE AXLE LAW's PERSON-CENTERS (Hestia/Jesus/Prudence/Cunning/Peace,
+    CANON §The Axle) resolve through the SAME `art_dir` as their OWN
+    roster's twelve rim members — every prompt sheet drops the axle's
+    plate in that one folder beside them, so there is no second art-dir
+    table to keep in sync (Rule #19). The ONE registered
+    `defaults.CalendarMount` whose own `centre` names this key supplies
+    it; every art_dir may legitimately be missing that one extra file
+    (art landed for the twelve rim members well ahead of the axle's own
+    plate on every one of the four new Dozens), same graceful-absent
+    contract as everything else here."""
     name, _family, _article = constants.THIRTEENTHS[key]
     if key == "ophiuchus":
         art = octa_slot_art("zodiac/astrology/primary/sign", name)
     elif key == "chinese":
         art = octa_slot_art("zodiac/chinese/primary/bronze", "Cat")
-    else:
+    elif key in ("sol", "modrenik"):
         resolved = paths.art_file(defaults.MONTHS_ART_DIR / f"{name}.png")
         art = resolved if resolved.exists() else None
+    else:
+        mount = next(
+            m for m in defaults.CALENDAR_MOUNTS.values() if m.centre == key
+        )
+        art = octa_slot_art(mount.art_dir, name)
     return name, art
 
 
@@ -1336,16 +1352,22 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
       ground-truthed against the settings model: `calendar_mount` is
       fully independent of `palette_style`, so both CAN be active
       together, e.g. the zodiac wheel with the chinese mount).
-    - A mount that names NONE (the Emotions Dozen — canon gives it a
-      crown, a root and six opposition axes, and no thirteenth) and the
-      "off" case both fall through to the WHEEL (`calendar_wheel`,
-      palette_style-picked): the zodiac wheel claims Ophiuchus, the
-      almanac wheel claims Sol.
+    - A mount that names NONE and the "off" case both fall through to
+      the WHEEL (`calendar_wheel`, palette_style-picked): the zodiac
+      wheel claims Ophiuchus, the almanac wheel claims Sol. Every roster
+      registered today names a centre (the Emotions Dozen's is PEACE,
+      sealed 2026-07-29 — CANON §The Axle), so this branch currently
+      fires only for "off"; it stays live for a future roster that seals
+      no centre (the still-PROPOSED Sins Dozen would, if ever mounted).
 
     Whether the claimed member actually SHOWS is still its own
-    appearance rule's business — `day.thirteenth_candidates` holds only
-    the members whose trigger AND window are true today, so on almost
-    every day of the year this returns None."""
+    appearance rule's business — `day.thirteenth_candidates` holds the
+    calendar-driven members only on their own trigger+window (so on
+    almost every day of the year one of THOSE returns None), but holds
+    the five PERSON-CENTERS (`constants.PERSON_CENTERS`) UNCONDITIONALLY
+    (CANON §The Axle: "PERSON-CENTERS stand ALWAYS") — so a mount whose
+    `centre` is a person (Hestia/Jesus/Prudence/Cunning/Peace) shows it
+    on literally every date, never gated by a window at all."""
     if skin.pointer != "calendar":
         return None
     candidates = day.thirteenth_candidates

@@ -135,15 +135,23 @@ merge. None of the three needed a `THEME_KEY_RENAMES` deletion — their
 folder names were always their code keys. The remaining six casts stay
 listed in
 [Theme Staging Ledger](../research/theme_staging.md). **THE BLUE MOON LAW**
-(owner-sealed 2026-07-22, R12): `THIRTEENTHS` — key ("ophiuchus"/
-"sol"/"modrenik"/"chinese") → (display name, encyclopedia family,
-encyclopedia entry name), the SAME two-level shape `WEEKDAY_THEME_NINTHS`
-uses, read by both the dial (`render.layers.thirteenth_plate`) and its
-hover; `OPHIUCHUS_WINDOW`/`SOL_WINDOW` (year-agnostic (month, day)
+(owner-sealed 2026-07-22, R12; extended by **THE AXLE LAW**, CANON §The
+Axle, owner-sealed 2026-07-29): `THIRTEENTHS` — key → (display name,
+encyclopedia family, encyclopedia entry name), the SAME two-level shape
+`WEEKDAY_THEME_NINTHS` uses, read by both the dial
+(`render.layers.thirteenth_plate`) and its hover — now nine keys: the
+four calendar-driven ("ophiuchus"/"sol"/"modrenik"/"chinese") PLUS the
+five PERSON-CENTERS ("hestia"/"jesus"/"prudence"/"cunning"/"peace",
+`PERSON_CENTERS`, always present per `core.blue_moon.
+thirteenth_candidates`'s own union — no trigger, no window); a
+person-center's family/article are `None` where no Encyclopedia article
+exists yet (Hestia alone reuses her existing "wider" entry) —
+`render.compositor._thirteenth_tooltip` treats `None` as graceful-absent,
+never a crash. `OPHIUCHUS_WINDOW`/`SOL_WINDOW` (year-agnostic (month, day)
 bounds) and `MODRENIK_WINDOW_HALF_DAYS` (14, computed from the REAL
-December solstice instant, never a fixed date) — each 13th's own short
-window; `CHINESE_MONTH_BRANCH_ANIMALS` (Gregorian month → the
-traditional solar-term branch animal — Feb Tiger … Dec Rat, the
+December solstice instant, never a fixed date) — each calendar-driven
+13th's own short window; `CHINESE_MONTH_BRANCH_ANIMALS` (Gregorian month
+→ the traditional solar-term branch animal — Feb Tiger … Dec Rat, the
 December-solstice month — fixing ONE animal per Gregorian month for
 the "chinese" calendar mount, `render.layers.calendar_mount_entries`).
 The trigger/window/precedence law itself lives in
@@ -220,7 +228,8 @@ correction round 2026-07-29), the Almanac day-arrow geometry
 (`CALENDAR_ARROW_*`; the Calendar's own wedge opacity is GONE — its
 wedges wear the standard Aura alphas now),
 the CALENDAR MOUNT (owner-sealed R7b 2026-07-21 registration, R9a
-2026-07-21 render + picker, GENERALIZED 2026-07-29):
+2026-07-21 render + picker, GENERALIZED 2026-07-29, the four new Dozens
++ THE AXLE LAW wired the same day):
 `SLAVIC_MONTHS` (the twelve Croatian months as (croatian, gloss, ascii
 stem, gregorian-month) rows), `EMOTIONS_DOZEN` (CANON's own hour-seated
 Dozen), `MONTHS_ART_DIR`
@@ -236,7 +245,11 @@ dimming law, below the resting alpha but never zero) — and above all
 the twelve wedges (`CalendarMount(title, system, members, art_dir,
 centre, art_stems, follows)`, plus `CALENDAR_MOUNT_SEATS_PER_WEDGE` and
 the `almanac_seat_order()` rotation), from which the Settings-validated
-`CALENDAR_MOUNT_MODES` is DERIVED; the render itself
+`CALENDAR_MOUNT_MODES` is DERIVED — nine entries as of 2026-07-29:
+`zodiac`/`almanac`/`months`/`chinese`/`emotions` plus the four Dozens
+CANON sealed the same day, `olympians`/`apostles`/`virtues`/`vices`
+(the last two are TWO ENTRIES of Aristotle's one Virtue Wheel, light and
+paint registers of the identical seat table); the render itself
 (`render.layers._draw_calendar_mount`/`calendar_mount_entries`/
 `calendar_mount_angle`, and the Pointer Theme window's Calendar mount
 tab) is covered

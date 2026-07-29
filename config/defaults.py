@@ -848,12 +848,16 @@ SLAVIC_MONTHS = (
 # `render.layers.calendar_mount_angle`; nothing is tabulated per seat.
 #
 # THE CENTER (`centre`) is the `constants.THIRTEENTHS` key whose member
-# may take the dial CENTER while this mount rides — and NEVER
-# unconditionally: each thirteenth keeps its own appearance rule
-# (`core.blue_moon`), so the seat is empty on almost every day of the
-# year. `None` means the canon seals no thirteenth for this set and the
-# center simply stays empty (the Emotions Dozen — canon gives it a
-# crown, a root and six opposition axes, and no thirteenth at all).
+# may take the dial CENTER while this mount rides. Two different LAWS
+# govern whether the seat actually shows (CANON §The Axle, owner-sealed
+# 2026-07-29): a CALENDAR-DRIVEN centre (Ophiuchus/Sol/Modrenik/The Cat)
+# keeps its own appearance rule (`core.blue_moon`), empty on almost every
+# day of the year; a PERSON-CENTRE (`constants.PERSON_CENTERS` — Hestia,
+# Jesus, Prudence, Cunning, Peace) is unconditionally present on EVERY
+# date instead — the axle never leaves. `None` means the canon seals no
+# thirteenth for this set and the center simply stays empty (no roster
+# currently registered below leaves this None; the still-PROPOSED Sins
+# Dozen would, were it ever sealed and mounted).
 CALENDAR_MOUNT_SEATS_PER_WEDGE = {12: 1, 24: 2}
 
 
@@ -961,29 +965,107 @@ CALENDAR_MOUNTS = {
         follows="month",
     ),
     # The Emotions Dozen (CANON §The Two Dozen Systems, one of the four
-    # sealed Dozens) — System B, seated by canon's own hours. Canon
-    # names NO thirteenth for it, so its center stays empty.
+    # sealed Dozens) — System B, seated by canon's own hours. Its centre
+    # is PEACE, the still point every emotion runs toward (SEALED
+    # 2026-07-29, CANON §The Emotions Dozen) — a PERSON-CENTER, always
+    # present (`constants.PERSON_CENTERS`), unlike the calendar-driven
+    # thirteenths above.
     "emotions": CalendarMount(
         title="Emotions",
         system="B",
         members=EMOTIONS_DOZEN,
         art_dir="emotions/primary/colored",
+        centre="peace",
     ),
-    # NOT YET MOUNTABLE — canon names three more Dozens but leaves each
-    # one's PER-WEDGE SEATING open, and a seat order is not ours to
-    # invent (CANON is the authority, Rule #4/#8):
-    #   - the OLYMPIANS (System A): "the three remaining pairs fill the
-    #     diagonal regions between them (exact wedge assignment
-    #     finalized in the wiring round)" — six of twelve seats open,
-    #     and even the sealed crown pair does not say which flank of
-    #     the top axis is Zeus's and which Hera's.
-    #   - the APOSTLES (System A): "the four middle pairs fill the flank
-    #     and diagonal regions (exact wedges pinned in the wiring
-    #     round)" — eight of twelve seats open.
-    #   - the VIRTUE WHEEL (System B): "The crown/root seating is
-    #     PROPOSED ... and awaits the owner's verdict."
-    # All three already have their art committed under assets/calendars/;
-    # each becomes one entry above the day its seating is sealed.
+    # THE OLYMPIANS (CANON §The Olympians) — System A, the classical
+    # Dodekatheon seated two by two, every wedge SEALED 2026-07-29: the
+    # crown pair Zeus+Hera flanks the top, Demeter+Poseidon roots the
+    # bottom, and Athena+Hephaestus/Artemis+Ares/Hermes+Dionysus/Apollo+
+    # Aphrodite hold the four remaining arms. Member order below reads
+    # CANON's own table top to bottom (12-14h..10-12h), which — on the
+    # ZODIAC wheel's cardinal-START wedges (System A) — IS seat order
+    # (seat k spans clock hour 12+2k, matching the existing "zodiac"
+    # mount's own Cancer-first convention). Its centre is HESTIA, the
+    # hiding-place axle who gave up her seat to Dionysus and kept the
+    # hearth — always present, a PERSON-CENTER.
+    "olympians": CalendarMount(
+        title="Olympians",
+        system="A",
+        members=(
+            "Zeus", "Athena", "Hephaestus", "Artemis", "Ares", "Demeter",
+            "Poseidon", "Hermes", "Dionysus", "Apollo", "Aphrodite", "Hera",
+        ),
+        art_dir="olympians/primary/colored",
+        centre="hestia",
+    ),
+    # THE APOSTLES (CANON §The Apostles) — System A, the Twelve sent out
+    # two by two (Mark 6:7), every wedge SEALED 2026-07-29: Peter+Andrew
+    # crown the top, Judas Iscariot+Simon the Zealot root the bottom.
+    # Member order reads CANON's own table top to bottom, same seat-order
+    # convention as "olympians" above. `art_stems` covers the four
+    # members whose plate stem is not their full display name (the
+    # sheet's own filenames). Its centre is JESUS, the throne axle —
+    # always present, a PERSON-CENTER.
+    "apostles": CalendarMount(
+        title="Apostles",
+        system="A",
+        members=(
+            "Peter", "James the Greater", "John", "Philip", "Bartholomew",
+            "Judas Iscariot", "Simon the Zealot", "Thomas", "Matthew",
+            "James of Alphaeus", "Thaddaeus", "Andrew",
+        ),
+        art_dir="apostles/primary/colored",
+        centre="jesus",
+        art_stems=(
+            "Peter", "James", "John", "Philip", "Bartholomew", "Judas",
+            "Simon", "Thomas", "Matthew", "James_Alphaeus", "Thaddaeus",
+            "Andrew",
+        ),
+    ),
+    # THE VIRTUE WHEEL (CANON §The Virtue Wheel) — System B, Aristotle's
+    # twelve virtues (LIGHT register) and their twelve vices (PAINT
+    # register) as TWO ENTRIES of one wheel: a virtue and its vice share
+    # ONE seat, re-seated and SEALED 2026-07-29 (Magnanimity·Vanity crown
+    # at 12h, Just Indignation·Envy root at 24h). Member order reads
+    # CANON's own table top to bottom (12h..10h), the same System-B
+    # seat-order convention `EMOTIONS_DOZEN` already uses (seat k = hour
+    # 12+2k). `art_stems` covers the three members whose plate stem
+    # differs from the display name (a space or hyphen the filename
+    # cannot carry). Centres are the axle's two faces, both PERSON-
+    # CENTERS, always present: PRUDENCE (light, the charioteer) and
+    # CUNNING (paint, the dark charioteer) — CANON §The Virtue Wheel.
+    "virtues": CalendarMount(
+        title="Virtues",
+        system="B",
+        members=(
+            "Magnanimity", "Truthfulness", "Courage", "Right Ambition",
+            "Magnificence", "Wit", "Just Indignation", "Temperance",
+            "Patience", "Modesty", "Generosity", "Friendliness",
+        ),
+        art_dir="virtues/primary/colored",
+        centre="prudence",
+        art_stems=(
+            "Magnanimity", "Truthfulness", "Courage", "Right_Ambition",
+            "Magnificence", "Wit", "Just_Indignation", "Temperance",
+            "Patience", "Modesty", "Generosity", "Friendliness",
+        ),
+    ),
+    "vices": CalendarMount(
+        title="Vices",
+        system="B",
+        members=(
+            "Vanity", "Boastfulness", "Cowardice", "Over-ambition",
+            "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
+            "Shamelessness", "Greed", "Flattery",
+        ),
+        art_dir="vices/primary/colored",
+        centre="cunning",
+        art_stems=(
+            "Vanity", "Boastfulness", "Cowardice", "Over_Ambition",
+            "Vulgarity", "Buffoonery", "Envy", "Gluttony", "Wrath",
+            "Shamelessness", "Greed", "Flattery",
+        ),
+    ),
 }
 # The legal `Settings.calendar_mount` values — derived, never hand-kept
 # (adding a roster above adds its setting value automatically).

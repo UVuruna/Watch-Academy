@@ -3,7 +3,16 @@ every 12-set on this dial gains a hidden 13th member. It exists ONLY
 under its own trigger, during its own short date window; outside
 trigger+window it does not exist anywhere, dial or Encyclopedia.
 
-Four members, three triggers:
+THE AXLE LAW (CANON.md §The Axle, owner-sealed 2026-07-29) adds a SECOND
+kind of thirteenth alongside these four: the PERSON-CENTERS (Hestia,
+Jesus, Prudence, Cunning, Peace — `config.constants.PERSON_CENTERS`),
+which carry no trigger and no window at all — they stand on EVERY date,
+because they are persons who chose the centre, not months a twelve-month
+calendar overflows into. `thirteenth_candidates` unions them in
+unconditionally, at the very end, after every calendar-driven fact below
+is computed exactly as it always was.
+
+Four calendar-driven members, three triggers:
 
 - **Ophiuchus** (the zodiac's 13th) and **Sol**/**Modrenik** (the Sun's
   and the Moon's 13th months, opposite ends of the year wheel) share ONE
@@ -218,10 +227,11 @@ def thirteenth_candidates(
     anchors: YearAnchors,
     leap: ChineseLeapMonth | None,
 ) -> frozenset[str]:
-    """Every 13th (0, 1 or occasionally 2 of `config.constants.
-    THIRTEENTHS`' keys) whose OWN trigger+window holds on `on_date` — an
-    unordered FACT SET, no precedence between members (see the module
-    docstring: the four members live in four independent RENDER MODES
+    """Every 13th whose OWN trigger+window holds on `on_date`, PLUS the
+    five PERSON-CENTERS that hold on every date (`config.constants.
+    PERSON_CENTERS` — THE AXLE LAW, CANON §The Axle) — an unordered FACT
+    SET, no precedence between members (see the module docstring: the
+    four calendar-driven members live in four independent RENDER MODES
     that never meet, so more than one true candidate here is normal, not
     a collision to resolve). `leap` is the caller's own `chinese_leap_
     month(anchors, moon_window)` result (computed once per DayContext
@@ -248,4 +258,9 @@ def thirteenth_candidates(
         lo, hi = modrenik_window(solstice)
         if lo <= on_date <= hi and thirteen_moon_year(solstice_year, moon_window):
             found.add("modrenik")
-    return frozenset(found)
+    # THE AXLE LAW's always-present half (CANON §The Axle, owner-sealed
+    # 2026-07-29): a plain table union, no if-chain — the five
+    # PERSON-CENTERS carry no trigger and no window, so they join the
+    # fact set unconditionally on every date, calendar-driven members
+    # above untouched.
+    return frozenset(found) | constants.PERSON_CENTERS

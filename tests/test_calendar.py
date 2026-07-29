@@ -503,6 +503,75 @@ def test_the_new_dozens_are_seated_exactly_where_canon_says():
         assert all(art is not None and art.exists() for _n, art in entries), key
 
 
+def test_the_four_new_dozens_are_seated_exactly_where_canon_says():
+    """Golden seat pins straight from CANON.md §The Two Dozen Systems
+    (all four sealed 2026-07-29): member order lands on the CANON wedge
+    for BOTH dozen systems — System A's boundary-start wedges
+    (Olympians/Apostles, six pairs) and System B's cardinal-centered
+    wedges (the Virtue Wheel's two registers, one crown + one root)."""
+    olympians = defaults.CALENDAR_MOUNTS["olympians"]
+    assert olympians.system == "A" and olympians.centre == "hestia"
+    assert olympians.members[0] == "Zeus"              # 12-14h, opens the crown
+    assert olympians.members[11] == "Hera"             # 10-12h, closes the crown
+    assert olympians.members[6] == "Poseidon"          # 00-02h, the root
+    assert olympians.members[5] == "Demeter"           # 22-24h, the root's mate
+
+    apostles = defaults.CALENDAR_MOUNTS["apostles"]
+    assert apostles.system == "A" and apostles.centre == "jesus"
+    assert apostles.members[0] == "Peter"              # 12-14h, opens the crown
+    assert apostles.members[11] == "Andrew"            # 10-12h, closes the crown
+    assert apostles.members[5] == "Judas Iscariot"     # 22-24h, the root
+    assert apostles.members[6] == "Simon the Zealot"   # 00-02h, the root's mate
+
+    virtues = defaults.CALENDAR_MOUNTS["virtues"]
+    assert virtues.system == "B" and virtues.centre == "prudence"
+    assert virtues.members[0] == "Magnanimity"         # 12h, the crown
+    assert virtues.members[6] == "Just Indignation"    # 24h, the root
+
+    vices = defaults.CALENDAR_MOUNTS["vices"]
+    assert vices.system == "B" and vices.centre == "cunning"
+    assert vices.members[0] == "Vanity"                # 12h, the crown
+    assert vices.members[6] == "Envy"                  # 24h, the root
+
+    # The golden ANGLES themselves (not just tuple order) — proof each
+    # figure's seat lands on its CANON-sealed wedge center.
+    def hour_of(mount: str, index: int) -> float:
+        return (12.0 + calendar_mount_angle(mount, index) / 15.0) % 24.0
+
+    assert hour_of("olympians", 0) == pytest.approx(13.0)    # Zeus, 12-14h
+    assert hour_of("olympians", 11) == pytest.approx(11.0)   # Hera, 10-12h
+    assert hour_of("apostles", 5) == pytest.approx(23.0)     # Judas, 22-24h
+    assert hour_of("virtues", 0) == pytest.approx(12.0)      # Magnanimity, crown
+    assert hour_of("vices", 6) == pytest.approx(0.0)         # Envy, root (24h≡0h)
+
+
+def test_new_dozens_rim_members_carry_real_committed_art():
+    """The twelve RIM members of all four new Dozens landed real art
+    ahead of this wiring round (owner PromptPainter drop under
+    `assets/calendars/{olympians,apostles,virtues,vices}/`) — never the
+    name fallback, exactly like the zodiac/chinese mounts."""
+    for key in ("olympians", "apostles", "virtues", "vices"):
+        entries = calendar_mount_entries(key)
+        assert len(entries) == 12
+        assert all(art is not None and art.exists() for _n, art in entries), key
+
+
+def test_new_dozens_axle_plate_is_graceful_absent():
+    """The AXLE's own plate has not landed on disk for any of the five
+    new person-centers — `thirteenth_plate` must resolve `None`, never
+    crash, with the name still speaking (the SAME graceful-absent
+    contract Sol/Modrenik carried before their own art landed)."""
+    from render.layers import thirteenth_plate
+
+    for key, name in (
+        ("hestia", "Hestia"), ("jesus", "Jesus"), ("prudence", "Prudence"),
+        ("cunning", "Cunning"), ("peace", "Peace"),
+    ):
+        resolved_name, art = thirteenth_plate(key)
+        assert resolved_name == name
+        assert art is None
+
+
 def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
     """THE SEAT LAW (owner decree 2026-07-29). A 12-set sits one per
     wedge, ON the wedge center; a 24-set sits TWO per wedge, a quarter
@@ -548,13 +617,20 @@ def test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two(app):
 
 
 def test_centre_rule_is_per_roster_and_never_unconditional(app):
-    """THE CENTER (owner: "and NOT always"). A roster's `centre` names
-    WHICH thirteenth may take the dial center — the appearance rule
-    itself stays `core.blue_moon`'s, so the seat is empty on almost
-    every day. Golden pair for Ophiuchus: Dec 5 2026 is inside a
-    13-full-moon year AND inside its Nov 29 - Dec 17 window, so it
-    shows; Dec 5 2025 is not a 13-full-moon year, so the very same
-    wheel, mount and calendar day show NOTHING."""
+    """THE CENTER, for a CALENDAR-DRIVEN centre (owner: "and NOT
+    always"). A roster's `centre` names WHICH thirteenth may take the
+    dial center — the appearance rule itself stays `core.blue_moon`'s,
+    so a calendar-driven centre's seat is empty on almost every day.
+    Golden pair for Ophiuchus: Dec 5 2026 is inside a 13-full-moon year
+    AND inside its Nov 29 - Dec 17 window, so it shows; Dec 5 2025 is
+    not a 13-full-moon year, so the very same wheel, mount and calendar
+    day show NOTHING. (A PERSON-CENTER roster's own centre is EXEMPT
+    from this — THE AXLE LAW, owner-sealed 2026-07-29, tested separately
+    below in `test_person_centers_are_unconditionally_present`; every
+    roster registered today names a real centre, so the "names none"
+    branch is exercised here through a SYNTHETIC mount, the same way
+    `test_seat_law_places_twelve_one_per_wedge_and_twentyfour_two`
+    exercises its own synthetic 24-seat entry.)"""
     from render.layers import active_thirteenth
 
     shows, _t = _day_tick(app, datetime(2026, 12, 5, 12, 0))
@@ -562,23 +638,59 @@ def test_centre_rule_is_per_roster_and_never_unconditional(app):
     skin = _calendar_skin(palette_style="primary", calendar_mount="zodiac")
     assert active_thirteenth(skin, shows) == "ophiuchus"
     assert active_thirteenth(skin, hides) is None
-    # A roster canon gives NO thirteenth (the Emotions Dozen) claims
-    # nothing of its own, so resolution falls through to the WHEEL
-    # underneath exactly like "off" — the documented law, unchanged by
-    # the generalization.
-    emotions = _calendar_skin(palette_style="primary", calendar_mount="emotions")
-    assert defaults.CALENDAR_MOUNTS["emotions"].centre is None
-    assert active_thirteenth(emotions, shows) == "ophiuchus"   # the wheel's
-    assert active_thirteenth(emotions, hides) is None
-    # ...and it emphasizes no MARK either — there is no "today's emotion".
+    # A roster canon gives NO thirteenth of its own claims nothing, so
+    # resolution falls through to the WHEEL underneath exactly like
+    # "off" — the documented law, unchanged by the generalization.
+    defaults.CALENDAR_MOUNTS["_test_no_centre"] = defaults.CALENDAR_MOUNTS[
+        "emotions"
+    ]._replace(centre=None)
+    try:
+        no_centre = _calendar_skin(
+            palette_style="primary", calendar_mount="_test_no_centre"
+        )
+        assert active_thirteenth(no_centre, shows) == "ophiuchus"  # the wheel's
+        assert active_thirteenth(no_centre, hides) is None
+    finally:
+        del defaults.CALENDAR_MOUNTS["_test_no_centre"]
+    # ...and the Emotions Dozen itself emphasizes no MARK — there is no
+    # "today's emotion" (`follows` is None, untouched by the Axle seal).
     assert calendar_mount_current_index("emotions", shows) is None
-    # A roster that DOES name one outranks the wheel (the owner's
-    # tiebreak): the same zodiac wheel, same day, the Slavic months
-    # mount on top — Modrenik's own window has not opened on Dec 5, so
-    # the center is empty rather than falling back to Ophiuchus.
+    # A roster that DOES name a CALENDAR-DRIVEN centre outranks the
+    # wheel (the owner's tiebreak): the same zodiac wheel, same day, the
+    # Slavic months mount on top — Modrenik's own window has not opened
+    # on Dec 5, so the center is empty rather than falling back to
+    # Ophiuchus.
     months = _calendar_skin(palette_style="primary", calendar_mount="months")
     assert defaults.CALENDAR_MOUNTS["months"].centre == "modrenik"
     assert active_thirteenth(months, shows) is None
+
+
+def test_person_centers_are_unconditionally_present(app):
+    """THE AXLE LAW's always-present half (CANON §The Axle, owner-sealed
+    2026-07-29): Hestia/Jesus/Prudence/Cunning/Peace carry NO trigger and
+    NO window — unlike Ophiuchus/Sol/Modrenik/The Cat, they show on an
+    ARBITRARY ordinary date, every one of the five at once, while
+    Ophiuchus stays rule-driven on that very same day (the existing
+    golden pair keeps passing: present 2026-12-05, absent 2025-12-05)."""
+    from render.layers import active_thirteenth
+
+    ordinary, _t = _day_tick(app, datetime(2026, 3, 15, 12, 0))
+    assert constants.PERSON_CENTERS <= ordinary.thirteenth_candidates
+    assert "ophiuchus" not in ordinary.thirteenth_candidates    # still rule-driven
+    for mount, centre in (
+        ("olympians", "hestia"), ("apostles", "jesus"),
+        ("virtues", "prudence"), ("vices", "cunning"),
+        ("emotions", "peace"),
+    ):
+        assert defaults.CALENDAR_MOUNTS[mount].centre == centre, mount
+        skin = _calendar_skin(calendar_mount=mount)
+        assert active_thirteenth(skin, ordinary) == centre, mount
+    # The existing Ophiuchus golden pair, unaffected by the Axle seal.
+    shows, _t2 = _day_tick(app, datetime(2026, 12, 5, 12, 0))
+    hides, _t3 = _day_tick(app, datetime(2025, 12, 5, 12, 0))
+    zodiac_skin = _calendar_skin(palette_style="primary", calendar_mount="zodiac")
+    assert active_thirteenth(zodiac_skin, shows) == "ophiuchus"
+    assert active_thirteenth(zodiac_skin, hides) is None
 
 
 # --- The Chinese MONTHLY-animal mount (owner R12, Blue Moon round) --------------

@@ -109,18 +109,21 @@ _DATA_DRIVEN_ROOTS = (
     "weeks",
     "calendars/zodiac",
     "calendars/zodiac/chinese",
-    # RESTRUCTURE Phase 3 (owner-sealed 2026-07-22): the four NEW
-    # Dozens of the Calendars category — Emotions (System B), the
-    # Virtue Wheel's two registers (Virtues light + Vices paint,
-    # System B), Olympians and Apostles (System A, six pairs each).
-    # Their per-figure filenames will be enumerated in a
-    # `config/taxonomy.py` roster (the RESTRUCTURE taxonomy module),
-    # exactly like the existing `calendars/zodiac`/`chinese`/
-    # `slavic_months` families above — none wired yet (Phase 3 is
-    # content-only), so only the FAMILY root is checkable here; per-name
-    # completeness is the roster's/COVERAGE.md's job. Full sheets:
-    # `research/prompts/calendars/{emotions,virtue_wheel,olympians,
-    # apostles}_prompts.md`.
+    # RESTRUCTURE Phase 3 (owner-sealed 2026-07-22, seats SEALED and
+    # WIRED 2026-07-29): the four NEW Dozens of the Calendars category —
+    # Emotions (System B), the Virtue Wheel's two registers (Virtues
+    # light + Vices paint, System B), Olympians and Apostles (System A,
+    # six pairs each). Every per-figure filename is now enumerated in
+    # `config.defaults.CALENDAR_MOUNTS` (a real Python roster, not a
+    # JSON file) — but, exactly like the existing `calendars/zodiac`/
+    # `chinese`/`slavic_months` families above, each MEMBER name is a
+    # bare string with no "/" (never collected by this lint's namespace
+    # walk, which only picks up Path-shaped or "/"-containing values —
+    # `CalendarMount.art_dir` alone is collected), so only the FAMILY
+    # root is checkable here; per-name completeness is the roster's own
+    # job (`tests/test_calendar.py`'s golden seat-pin tests). Full
+    # sheets: `research/prompts/calendars/{emotions,virtue_wheel,
+    # olympians,apostles}_prompts.md`.
     "calendars/emotions",
     "calendars/virtues",
     "calendars/vices",

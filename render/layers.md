@@ -421,8 +421,7 @@ the deleted wedge lighting because it marks a roster member, not paint.
 
 **THE CENTER** (`CalendarMount.centre`) names WHICH of
 `constants.THIRTEENTHS` may take the dial center while this roster
-rides — and never unconditionally. `active_thirteenth(skin, day)`
-resolves it:
+rides. `active_thirteenth(skin, day)` resolves it:
 
 ```
 IF the pointer is not the Calendar        → nobody (every other
@@ -430,6 +429,10 @@ IF the pointer is not the Calendar        → nobody (every other
                                              reign untouched)
 IF the mounted roster names a thirteenth  → that one, IF today is inside
                                              its own trigger + window
+                                             (calendar-driven) OR
+                                             UNCONDITIONALLY (a
+                                             PERSON-CENTER — THE AXLE
+                                             LAW, below)
 ELSE (mount off, or a roster naming none) → the WHEEL's own: Ophiuchus
                                              on the zodiac wheel, Sol on
                                              the almanac wheel — same
@@ -437,9 +440,26 @@ ELSE (mount off, or a roster naming none) → the WHEEL's own: Ophiuchus
 ```
 
 The window test is `core.blue_moon`'s (`DayContext.thirteenth_candidates`
-holds only the members whose trigger AND window are true today), so on
-almost every day of the year the center is empty. A mount that names one
-OUTRANKS the wheel — a mount is the more deliberate second choice.
+holds a CALENDAR-DRIVEN member only when its own trigger AND window are
+true today, so on almost every day of the year one of THOSE returns
+empty). A mount that names one OUTRANKS the wheel — a mount is the more
+deliberate second choice.
+
+**THE AXLE LAW (CANON §The Axle, owner-sealed 2026-07-29)** splits every
+`centre` into one of two kinds, and the split is MECHANICAL, not a
+per-key `if`: `constants.PERSON_CENTERS` (Hestia/Jesus/Prudence/Cunning/
+Peace) are unioned into `thirteenth_candidates` UNCONDITIONALLY
+(`core.blue_moon.thirteenth_candidates`'s own final line), so a mount
+whose centre is one of them shows it on literally EVERY date — the
+persons who chose the centre never leave, unlike Ophiuchus/Sol/
+Modrenik/The Cat, the months a twelve-month calendar overflows into.
+`thirteenth_plate` resolves a person-centre's art through the SAME
+`art_dir` as its own roster's twelve rim members (Rule #19 — no second
+art-dir table); `Compositor._thirteenth_tooltip` skips the Encyclopedia
+lookup for the one whose article is not written yet (`family is None`
+in `constants.THIRTEENTHS` — currently every one but Hestia, who reuses
+her existing "wider" article) rather than crash on an unwritten
+family/article pair.
 
 The HOVER reuses the existing machinery rather than forking
 (`Compositor._calendar_mount_tooltip`, checked BEFORE the broader
@@ -456,24 +476,33 @@ through the generic `_mount_seat_html(mount, index)` (the member's name
 over its plate) — all graceful-absent via the same `_hover_badge`
 empty-string rule every other emblem uses.
 
-**Registered rosters** (each with its canon source and center rule):
+**Registered rosters** (each with its canon source and center rule —
+Center kind: **C** = calendar-driven, windowed almost every day empty;
+**P** = person-center, THE AXLE LAW, always present):
 
 | Key | Roster | System | Seats | Center |
 |---|---|---|---|---|
-| `zodiac` | the Zodiac Dozen | A | 12 | Ophiuchus |
-| `almanac` | the Month Dozen (Gregorian) | B | 12 | Sol |
-| `months` | the Slavic Months | B | 12 | Modrenik |
-| `chinese` | the Chinese month-branch animals | B | 12 | The Cat |
-| `emotions` | the Emotions Dozen | B | 12 | — none in canon |
+| `zodiac` | the Zodiac Dozen | A | 12 | Ophiuchus (C) |
+| `almanac` | the Month Dozen (Gregorian) | B | 12 | Sol (C) |
+| `months` | the Slavic Months | B | 12 | Modrenik (C) |
+| `chinese` | the Chinese month-branch animals | B | 12 | The Cat (C) |
+| `emotions` | the Emotions Dozen | B | 12 | Peace (P) |
+| `olympians` | the Twelve Olympians, six pairs | A | 12 | Hestia (P) |
+| `apostles` | the Twelve Apostles, six pairs | A | 12 | Jesus (P) |
+| `virtues` | the Virtue Wheel, LIGHT register | B | 12 | Prudence (P) |
+| `vices` | the Virtue Wheel, PAINT register | B | 12 | Cunning (P) |
 
-**NOT yet mountable** — canon names three more Dozens (§The Two Dozen
-Systems) whose art is already committed but whose PER-WEDGE SEATING it
-deliberately leaves open, and a seat order is not a session's to invent:
-the **Olympians** and the **Apostles** (canon pins only the crown pair,
-the root pair and the Olympians' two flanks — "the exact wedge
-assignment finalized in the wiring round"), and the **Virtue Wheel**
-("The crown/root seating is PROPOSED … and awaits the owner's verdict").
-Each becomes one `CALENDAR_MOUNTS` entry the day its seating is sealed.
+All nine entries are CANON.md §The Two Dozen Systems — every seat of
+every roster SEALED 2026-07-29 (owner). `olympians`/`apostles`/
+`virtues`/`vices` joined the registry the same round the four
+person-centers did; their twelve RIM members' art landed ahead of this
+wiring round (`assets/calendars/{olympians,apostles,virtues,vices}/`),
+real and committed exactly like `zodiac`/`chinese` — only each roster's
+own AXLE plate is still graceful-absent (`thirteenth_plate` resolves it
+to `None`, the name-only fallback, same contract Sol/Modrenik carried
+before their own art landed). `virtues`/`vices` are TWO ENTRIES of ONE
+wheel (a virtue and its vice share one seat, read light or paint — the
+seat TABLE above is identical between them, only the register differs).
 
 **"chinese" — the MONTHLY animals (owner R12, Blue Moon round):**
 `constants.CHINESE_MONTH_BRANCH_ANIMALS` fixes one branch animal per
@@ -1029,16 +1058,33 @@ thirteenth_candidates` (`core.blue_moon.thirteenth_candidates`, an
 unordered per-day FACT set) against the skin's own MOUNT — the roster's
 `defaults.CalendarMount.centre` since the 2026-07-29 generalization, so
 every roster names its own thirteenth in ONE table instead of an
-`if`-chain here — or, when the mount is "off" or names none (the
-Emotions Dozen), against the WHEEL (`calendar_wheel`,
-`palette_style`-picked: zodiac → Ophiuchus, almanac → Sol). A mount that
-owns a 13th outranks the wheel whenever both are active settings at once
-(ground-truthed against the settings model: `calendar_mount` is fully
-independent of `palette_style`, so both CAN be selected together).
+`if`-chain here — or, when the mount is "off" or names none, against the
+WHEEL (`calendar_wheel`, `palette_style`-picked: zodiac → Ophiuchus,
+almanac → Sol). A mount that owns a 13th outranks the wheel whenever
+both are active settings at once (ground-truthed against the settings
+model: `calendar_mount` is fully independent of `palette_style`, so both
+CAN be selected together).
+
+**THE AXLE LAW (CANON §The Axle, owner-sealed 2026-07-29)** means
+`thirteenth_candidates` is no longer empty on an ordinary date: it
+always carries the five PERSON-CENTERS (`constants.PERSON_CENTERS` —
+Hestia, Jesus, Prudence, Cunning, Peace), unioned in unconditionally by
+`core.blue_moon.thirteenth_candidates`'s own final line, calendar-driven
+members untouched. A mount whose `centre` is one of them (`emotions` →
+Peace, `olympians` → Hestia, `apostles` → Jesus, `virtues` → Prudence,
+`vices` → Cunning) therefore shows its axle at the dial center on
+LITERALLY EVERY DATE — `CenterBodyLayer` draws it through this exact
+same `_draw_thirteenth` path, no special case.
+
 Graceful-absent like the
 calendar mount's own months (`thirteenth_plate(key)` — a NAME-ONLY
 fallback, never a hidden feature, unlike `theme_ninth` below, whose
-missing plate silently withdraws the Ninth face entirely). Its own hover
+missing plate silently withdraws the Ninth face entirely). A
+person-center's own plate resolves through the SAME `art_dir` as its
+roster's twelve rim members (Rule #19), and is itself still
+graceful-absent today (the rim landed, the axle has not) — the ALWAYS
+part of the law is about the SEAT showing, never a guarantee the art
+exists yet. Its own hover
 element is `"thirteenth"` (`render.compositor._element_at`), a hit disc
 at the dial center — never piggybacking on any `body:` weekday-seat key,
 since the Calendar pointer carries no such seat. See

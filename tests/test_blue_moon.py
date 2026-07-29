@@ -169,7 +169,9 @@ def test_window_alone_is_not_enough_without_the_trigger():
     """A date inside Sol's calendar window in a NON-blue-moon year must
     not trigger — 2025 fails thirteen_moon_year even though it is
     itself a Chinese-leap-month year (the two triggers are genuinely
-    independent, core.blue_moon's own design decision)."""
+    independent, core.blue_moon's own design decision). THE AXLE LAW's
+    always-present PERSON_CENTERS (owner-sealed 2026-07-29) are the only
+    members left in the fact set — no calendar-driven candidate at all."""
     mr, sr = MoonPhaseRepository(), SeasonsRepository()
     window, anchors = mr.moon_window(2025), sr.year_anchors(2025)
     assert not thirteen_moon_year(2025, window)
@@ -177,14 +179,21 @@ def test_window_alone_is_not_enough_without_the_trigger():
     assert leap is not None and leap.number == 6          # 2025 IS a Cat year
     # Jul 1 sits inside Sol's Jun18-Jul15 span and safely before the
     # Cat's own Jul25-Aug22 leap window.
-    assert thirteenth_candidates(date(2025, 7, 1), window, anchors, leap) == frozenset()
+    assert thirteenth_candidates(
+        date(2025, 7, 1), window, anchors, leap
+    ) == constants.PERSON_CENTERS
 
 
 def test_no_thirteenth_candidate_on_an_ordinary_date():
+    """No CALENDAR-DRIVEN candidate on an ordinary date — but THE AXLE
+    LAW's five PERSON_CENTERS are unconditional (owner-sealed
+    2026-07-29), so the fact set is never truly empty any more."""
     mr, sr = MoonPhaseRepository(), SeasonsRepository()
     window, anchors = mr.moon_window(2026), sr.year_anchors(2026)
     leap = chinese_leap_month(anchors, window)
-    assert thirteenth_candidates(date(2026, 3, 15), window, anchors, leap) == frozenset()
+    assert thirteenth_candidates(
+        date(2026, 3, 15), window, anchors, leap
+    ) == constants.PERSON_CENTERS
 
 
 def test_ophiuchus_and_modrenik_windows_can_both_be_true_facts():
@@ -203,7 +212,7 @@ def test_ophiuchus_and_modrenik_windows_can_both_be_true_facts():
     m_lo, m_hi = modrenik_window(anchors.instants[4])
     assert m_lo <= o_hi < m_hi                             # the windows truly overlap
     candidates = thirteenth_candidates(date(2026, 12, 13), window, anchors, leap)
-    assert candidates == frozenset({"ophiuchus", "modrenik"})
+    assert candidates == {"ophiuchus", "modrenik"} | constants.PERSON_CENTERS
 
 
 # --- 4. THE CAT: the real lunisolar leap month --------------------------------
@@ -245,16 +254,19 @@ def test_cat_boundary_days_are_inclusive():
 
 
 def test_day_context_carries_the_candidate_fact_set():
+    """THE AXLE LAW's five PERSON_CENTERS (owner-sealed 2026-07-29) ride
+    along on every one of these dates — the calendar-driven candidate is
+    still the ONLY member gated by a trigger+window."""
     sol_day, _tick = _day_tick(datetime(2026, 7, 8, 12, 0))   # inside Sol's window
-    assert sol_day.thirteenth_candidates == frozenset({"sol"})
+    assert sol_day.thirteenth_candidates == {"sol"} | constants.PERSON_CENTERS
     assert sol_day.chinese_leap_month_number is None
 
     cat_day, _tick = _day_tick(datetime(2025, 8, 1, 12, 0))   # inside the Cat's window
-    assert cat_day.thirteenth_candidates == frozenset({"chinese"})
+    assert cat_day.thirteenth_candidates == {"chinese"} | constants.PERSON_CENTERS
     assert cat_day.chinese_leap_month_number == 6
 
     plain_day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
-    assert plain_day.thirteenth_candidates == frozenset()
+    assert plain_day.thirteenth_candidates == constants.PERSON_CENTERS
     assert plain_day.chinese_leap_month_number is None
 
 
@@ -262,10 +274,21 @@ def test_day_context_carries_the_candidate_fact_set():
 
 
 def test_thirteenths_registry_is_exhaustive():
-    assert set(constants.THIRTEENTHS) == {"ophiuchus", "sol", "modrenik", "chinese"}
-    for _name, family, article in constants.THIRTEENTHS.values():
-        assert family in ("ninths", "months")
-        assert article
+    """The four calendar-driven members PLUS THE AXLE LAW's five
+    PERSON_CENTERS (owner-sealed 2026-07-29) — every key names a real
+    display name; `family`/`article` are a pair, both set (an
+    Encyclopedia article exists) or both `None` (graceful-absent — no
+    article written yet, same contract a missing art plate carries)."""
+    assert set(constants.THIRTEENTHS) == {
+        "ophiuchus", "sol", "modrenik", "chinese",
+    } | constants.PERSON_CENTERS
+    for key, (name, family, article) in constants.THIRTEENTHS.items():
+        assert name, key
+        if key in constants.PERSON_CENTERS:
+            assert family is None or family == "wider", key
+        else:
+            assert family in ("ninths", "months"), key
+        assert (family is None) == (article is None), key
 
 
 def test_ophiuchus_and_cat_resolve_real_committed_art():
@@ -408,10 +431,14 @@ def test_mount_outranks_the_wheel_when_both_claim():
 
 def test_no_thirteenth_on_the_calendar_pointer_off_its_own_window():
     """The Calendar pointer alone is not enough — the date must still
-    fall inside the claiming member's own trigger+window."""
+    fall inside the claiming member's own trigger+window. With the mount
+    "off" the wheel falls back to Ophiuchus (zodiac wheel, primary
+    style), which is also not in its window here — None either way, even
+    though THE AXLE LAW's PERSON_CENTERS ARE in the fact set (they are
+    simply not what "off" resolves to on this wheel)."""
     skin = _calendar_skin(palette_style="primary", calendar_mount="off")
     day, _tick = _day_tick(datetime(2026, 3, 15, 12, 0))
-    assert day.thirteenth_candidates == frozenset()
+    assert day.thirteenth_candidates == constants.PERSON_CENTERS
     assert active_thirteenth(skin, day) is None
 
 

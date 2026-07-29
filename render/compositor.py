@@ -1862,18 +1862,39 @@ class Compositor:
     def _thirteenth_tooltip(self, key: str) -> str:
         """THE BLUE MOON LAW's 13th (owner overrule, CORRECTED
         2026-07-2X): its own article and badge lead, drawn at the
-        Calendar pointer's OWN dial center — empty every other day
-        (`render.layers.active_thirteenth` gates this to
-        `skin.pointer == "calendar"` alone, so no OTHER theme's center
-        face is ever displaced; the old "steps aside" closing line is
-        retired with R12's global law)."""
+        Calendar pointer's OWN dial center (`render.layers.
+        active_thirteenth` gates this to `skin.pointer == "calendar"`
+        alone, so no OTHER theme's center face is ever displaced; the
+        old "steps aside" closing line is retired with R12's global
+        law).
+
+        THE AXLE LAW (CANON §The Axle) splits the closing line in two:
+        a calendar-driven 13th is a blue-moon guest, empty every other
+        day; a PERSON-CENTER (`constants.PERSON_CENTERS`) is the axle
+        the twelve turn on, present on literally every date instead. A
+        person-center whose Encyclopedia article is not written yet
+        (`family is None` in `constants.THIRTEENTHS` — the graceful-
+        absent contract, same as a missing art plate) skips the
+        `entry()` lookup entirely rather than crash on an unwritten
+        family/article pair, and the closing line itself becomes the
+        teaser (`_teaser` reads the text BEFORE the first blank line —
+        appending the closing note after an empty base would tease a
+        bare " …", not this line)."""
         name, asset = thirteenth_plate(key)
         _display, family, article_name = constants.THIRTEENTHS[key]
-        text = self._encyclopedia.entry(family, article_name)["base"]
-        text += (
-            "\n\n[[The Thirteenth]] A blue-moon guest: the Calendar "
-            "pointer's own dial center, empty every other day."
+        axle = key in constants.PERSON_CENTERS
+        closing = (
+            "The one who does not turn with the twelve: always present, "
+            "the Calendar pointer's own dial center." if axle else
+            "A blue-moon guest: the Calendar pointer's own dial center, "
+            "empty every other day."
         )
+        if family is not None:
+            marker = "[[The Axle]]" if axle else "[[The Thirteenth]]"
+            text = self._encyclopedia.entry(family, article_name)["base"]
+            text += f"\n\n{marker} {closing}"
+        else:
+            text = closing
         title = (
             f"<span style='font-size: {defaults.ARTICLE_TITLE_PX}px'>"
             f"<b>{html.escape(self._tr(name))}</b></span>"

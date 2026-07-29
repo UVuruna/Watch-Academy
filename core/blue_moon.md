@@ -12,7 +12,21 @@ gains a hidden 13th member — **Ophiuchus** (the zodiac's 13th sign),
 its own trigger and ONLY inside its own short date window; outside
 trigger+window it does not exist anywhere, dial or Encyclopedia.
 
-Two trigger families:
+**THE AXLE LAW (CANON.md §The Axle, owner-sealed 2026-07-29)** adds a
+SECOND kind of thirteenth beside these four: the **PERSON-CENTERS** —
+**Hestia** (Olympians), **Jesus** (Apostles), **Prudence** (Virtue
+Wheel, light register), **Cunning** (Virtue Wheel, paint register) and
+**Peace** (Emotions) — `config.constants.PERSON_CENTERS`. They carry NO
+trigger and NO window: unlike the four calendar-driven months/signs
+above, which are exactly what a twelve-month calendar cannot hold, a
+person-center is a figure who CHOSE the centre, and persons do not come
+and go with the moon. `thirteenth_candidates` unions them in
+unconditionally, at the very end, after every calendar-driven fact below
+is computed exactly as it always was — so the fact set is never truly
+empty any more, though the four calendar-driven members remain gated
+precisely as they were.
+
+Two trigger families for the four CALENDAR-DRIVEN members:
 
 - **`thirteen_moon_year`** gates Ophiuchus/Sol/Modrenik — the calendar
   year holds 13 Full Moons instead of 12 (~37% of years: the 29.53-day
@@ -31,19 +45,27 @@ Two trigger families:
   2023 leap 2nd (Mar 22 - Apr 19), 2025 leap 6th (Jul 25 - Aug 22) — both
   reproduced exactly against the bundled ephemeris.
 
-`thirteenth_candidates` names every member (0, 1 or occasionally 2)
-whose OWN trigger+window holds on a given date — an unordered FACT SET,
-no precedence between members. Ophiuchus's and Modrenik's windows do
+`thirteenth_candidates` names every calendar-driven member (0, 1 or
+occasionally 2) whose OWN trigger+window holds on a given date, PLUS the
+five PERSON-CENTERS unconditionally — an unordered FACT SET, no
+precedence between members. Ophiuchus's and Modrenik's windows do
 genuinely overlap in the Dec 7-17 band of a blue-moon December, so both
 can be candidates at once — this module no longer picks a winner there.
-**THE OWNER'S CORRECTION (retiring R12's global law):** the four members
-actually live in FOUR INDEPENDENT RENDER MODES on the Calendar pointer
-alone and never meet on the dial — Ophiuchus/Sol on its zodiac/almanac
-WHEEL (`SkinDefinition.palette_style`), Modrenik/The Cat on its
-"months"/"chinese" MOUNT (`SkinDefinition.calendar_mount`) — so
-resolving a date's candidates to the ONE member a given skin may show is
-[Layers](../render/layers.md)' `active_thirteenth(skin, day)`, never a
-date-only tiebreak here.
+**THE OWNER'S CORRECTION (retiring R12's global law):** the four
+calendar-driven members actually live in FOUR INDEPENDENT RENDER MODES
+on the Calendar pointer alone and never meet on the dial — Ophiuchus/Sol
+on its zodiac/almanac WHEEL (`SkinDefinition.palette_style`), Modrenik/
+The Cat on its "months"/"chinese" MOUNT (`SkinDefinition.calendar_mount`)
+— so resolving a date's candidates to the ONE member a given skin may
+show is [Layers](../render/layers.md)' `active_thirteenth(skin, day)`,
+never a date-only tiebreak here. The five PERSON-CENTERS need no such
+resolution among THEMSELVES — each rides its own roster's dedicated
+mount (`olympians`/`apostles`/`virtues`/`vices`/`emotions`), so at most
+one is ever the ACTIVE skin's own centre at a time; `active_thirteenth`
+reads the mount's `centre` exactly the same way for a person-center as
+for a calendar-driven one, the ONLY difference being that a
+person-center is always found in the candidate set it checks membership
+against.
 
 Pure module — no Qt, no wall clock (purity-gated by
 [Purity test](../tests/test_purity.py)). Every function takes
@@ -54,8 +76,8 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
 
 ### Uses
 - [Constants (script)](../config/constants.py) — `THIRTEENTHS`,
-  `OPHIUCHUS_WINDOW`, `SOL_WINDOW`, `MODRENIK_WINDOW_HALF_DAYS`,
-  `MOON_PHASE_FRACTIONS`.
+  `PERSON_CENTERS`, `OPHIUCHUS_WINDOW`, `SOL_WINDOW`,
+  `MODRENIK_WINDOW_HALF_DAYS`, `MOON_PHASE_FRACTIONS`.
 - [Deep Time (script)](deep_time.py) — `julian_day`/`delta_t_seconds`,
   the same TT-conversion primitives `core.moon.illumination` uses.
 - [Moon (script)](moon.py) — `MoonWindow`.
@@ -74,13 +96,16 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
   decree 2026-07-29) the mount side of that resolution is a TABLE
   lookup, not an `if`-chain: each roster in `defaults.CALENDAR_MOUNTS`
   declares its own `centre` (a key of `THIRTEENTHS`, or None where canon
-  seals no thirteenth — the Emotions Dozen). The trigger + window test
-  below is unchanged and still decides whether the claimed member
-  actually shows. `CenterBodyLayer` draws it there,
-  gated to `skin.pointer == "calendar"` alone (every other pointer's
-  ordinary center laws reign untouched); `_draw_calendar_mount`'s
-  "chinese" mount dims the doubled month's own animal from
-  `DayContext.chinese_leap_month_number`.
+  seals no thirteenth for it — no roster registered today leaves this
+  None). THE AXLE LAW (owner-sealed 2026-07-29) means the "does it
+  actually show" test below now has two different answers depending on
+  the centre's OWN kind: a calendar-driven centre still needs its
+  trigger+window true today; a PERSON-CENTER (`PERSON_CENTERS`) is
+  simply always in the candidate set, so it always shows. `CenterBodyLayer`
+  draws it there, gated to `skin.pointer == "calendar"` alone (every
+  other pointer's ordinary center laws reign untouched);
+  `_draw_calendar_mount`'s "chinese" mount dims the doubled month's own
+  animal from `DayContext.chinese_leap_month_number`.
 - [Compositor (script)](../render/compositor.md) — the Calendar
   pointer's own center hover/Spacebar speak the active 13th's own
   article.
@@ -95,11 +120,23 @@ repository or the filesystem, matching `core.continents`/`core.moon`.
   (number + its own China-time span) of the sui `anchors` brackets, or
   `None`.
 - `thirteenth_candidates(on_date, moon_window, anchors, leap)` — every
-  trigger+window active on `on_date`, a `frozenset` of
-  `config.constants.THIRTEENTHS`' keys (0, 1 or occasionally 2 members).
+  calendar-driven trigger+window active on `on_date` (0, 1 or
+  occasionally 2 of them), UNIONED with `config.constants.
+  PERSON_CENTERS` (always present, THE AXLE LAW) — a `frozenset` of
+  `config.constants.THIRTEENTHS`' keys, never empty any more.
 
 ## Design Decisions
 
+- **THE AXLE LAW's PERSON-CENTERS are a UNION, not a fifth trigger
+  (owner-sealed 2026-07-29).** Hestia/Jesus/Prudence/Cunning/Peace do
+  not fit the "trigger + window" shape at all — they carry neither — so
+  bolting them onto the same machinery as a fifth `if` branch would
+  misrepresent them as calendar-driven. Instead `thirteenth_candidates`
+  computes the four calendar-driven facts exactly as it always did, then
+  unions in `constants.PERSON_CENTERS` unconditionally as its very last
+  step — one line, no branch, and the four sealed year-rules above stay
+  provably untouched by construction (nothing above the union line
+  changed).
 - **The Cat's trigger is deliberately NOT `thirteen_moon_year`.** A
   13-Full-Moon year and a 13-lunar-month Chinese sui are different
   astronomical facts that usually (not always) coincide — the task is
