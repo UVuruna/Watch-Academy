@@ -132,8 +132,27 @@ nine seats with different people, so `encyclopedia_tree.VARIANT_SOURCES`
 merges them into `wow` with an Alliance | Horde | Evil switcher, and
 `TOPIC_ALIASES` derives each cast's own Spacebar target from that
 merge. None of the three needed a `THEME_KEY_RENAMES` deletion — their
-folder names were always their code keys. The remaining six casts stay
-listed in
+folder names were always their code keys. **COMPLETION WAVE II,
+Cyberpunk half** (Session 32, same day): `cp_gangs`, `cp_street` and
+`cp_corpo` registered across the same tables and `METAL_THEMES`, with
+their own blurb and article sets, their Ninths (NetWatch / V / Alt
+Cunningham), an APPEND to the "Gaming" group rather than a new one, and
+a second merged card, `cyberpunk`, with a Gangs | Street | Power
+switcher. These three are the only casts in the registry whose SEATS
+carry a roster: **`defaults.WEEKDAY_SEAT_ROSTERS`** declares a seat's
+several named figures (canonical first) and `rotating_art_file` — the
+one chokepoint every weekday consumer already calls — turns through
+them by the shared date modulo, so the dial, the hover legend, the
+Encyclopedia and the pickers rotate together with no app-code change of
+any kind. The universal `_v2` convention pools a SECOND ARTWORK OF ONE
+FIGURE; this pools DIFFERENT FIGURES ON ONE SEAT, which is the only way
+twelve of that franchise's plates are reachable at all. Declared order
+is the rotation order, which is what keeps the Power cast's
+Throne/Mirror/Ninth triad in lockstep. A roster seat's display name in
+`WEEKDAY_THEME_NAMES` lists every member, so the label can never
+disagree with the plate; Sunday keeps the Ruler · Servant law and names
+its rotating partners in the two face texts. The remaining three casts
+stay listed in
 [Theme Staging Ledger](../research/theme_staging.md). **THE BLUE MOON LAW**
 (owner-sealed 2026-07-22, R12; extended by **THE AXLE LAW**, CANON §The
 Axle, owner-sealed 2026-07-29): `THIRTEENTHS` — key → (display name,

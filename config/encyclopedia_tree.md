@@ -41,7 +41,7 @@ no scroll  Y scroll      Y scroll
 | The Instrument | yellow, 12h | 5 | 38 + guide |
 | The Celestial Engine | cyan, 03h | 10 | 101 |
 | The Divine | purple, 24h | 7 | 173 |
-| The Human Wheel | red, 18h | 9 | 97 |
+| The Human Wheel | red, 18h | 10 | 130 |
 | The Character Cube | blue, 06h | 7 | 70 |
 | The Living World | green, 09h | 5 | 54 |
 
@@ -71,6 +71,16 @@ cards, exactly the comfort cap and no carve-out needed. The nine-whole
 structural arc moves this card, the Professions and the Corporation
 together into the new `worlds` whole.
 
+**Completion wave II, Cyberpunk half (Session 32, same day)** added the
+second franchise card, `cyberpunk`, beside it on the identical
+argument — Gangs, Street and Power are Night City read from three
+heights on one set of nine seats — with its own three-way switcher
+and another 33 pages. This one DOES pass the cap: The Human Wheel now
+stands at 10 cards, and the guard carries a second named, expiring
+carve-out rather than a raised ceiling, pointing at the same arc, which
+dissolves this whole into `inner` and `worlds` and takes both franchise
+cards with it.
+
 ## The variant law
 
 Owner decision, 2026-07-28: **registers of one subject merge into one
@@ -84,14 +94,16 @@ their own cards.**
 | Creeds | Creeds · Ancient religions |
 | Eclipses | Solar · Lunar |
 | World of Warcraft | Alliance · Horde · Evil |
+| Cyberpunk 2077 | Gangs · Street · Power |
 
 Wolf, Bee and Elephant stay three cards (three animals). Virtues, Sins
 and Moods stay three cards (opposites, not dresses). Astrology and the
 Chinese zodiac stay two cards (two systems). A FRANCHISE with several
 casts is the merged case, not the split one: its blocks are one week
-read several times over, so World of Warcraft is one card — and each
-cast is still a theme of its own on the DIAL, which is what
-`TOPIC_ALIASES` (derived from this table) exists to reconcile.
+read several times over, so World of Warcraft is one card and Cyberpunk
+2077 is one card — and each of their six casts is still a theme of
+its own on the DIAL, which is what `TOPIC_ALIASES` (derived from this
+table) exists to reconcile.
 
 Pseudocode of the switcher:
 
