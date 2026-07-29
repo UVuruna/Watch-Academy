@@ -75,9 +75,9 @@ register, never its sibling.)
 
 ## The rotation convention
 
-Nova carries three rotation seats, same `alt/`-sibling-shares-the-
-canonical-stem convention `cyberpunk_prompts.md` establishes (Tuesday
-Finn/Phasma, Wednesday Maz/DJ — both ordinary 2-way pairs). The THIRD
+Nova carries three rotation seats, same figure-first sibling convention
+`cyberpunk_prompts.md` establishes (Tuesday Finn/Phasma, Wednesday
+Maz/DJ — both ordinary 2-way pairs). The THIRD
 is a new shape: **Nova's own Unfound seat is a DUAL ROTATION between
 two PLACES/CONCEPTS, not two people** — The Ghosts (default) and Exegol
 (the rarer face). This mirrors an existing precedent exactly:
@@ -92,8 +92,15 @@ round can reuse `core.continents`'s own trigger logic verbatim (eclipse
 / turning-point conditions already read as "the dark, hidden thing
 surfacing" thematically) rather than a plain date-rotation; that
 decision is left to the owner at wiring time, out of this sheet's
-scope. File convention: `Ghosts.png` (canonical) / `alt/Ghosts.png`
-(Exegol art, same stem).
+scope. **RESOLVED PROVISIONALLY at wiring time (Session 33,
+2026-07-29): the plain date rotation.** See the Status section for
+which mechanism is live, why, and how the owner flips it.
+
+File convention: each figure keeps its OWN stem in the same flat look
+folder — `Ghosts.png` (canonical) and `Exegol.png` beside it, which is
+what the two briefs below already write. The `alt/` subfolder this
+paragraph originally named died in the RESTRUCTURE of 2026-07-22; the
+figure-first siblings are what the roster mechanism resolves.
 
 ---
 
@@ -343,12 +350,12 @@ Ornate circular badge, vivid full-color paint over black-and-red durasteel, phot
 *The patient hunter — envy worn thin, patience the only trait that
 ever mattered to the job.*
 
-**Boba Fett** → `assets/weeks/films/sw_sith/primary/bronze/BobaFett.png`
+**Boba Fett** → `assets/weeks/films/sw_sith/primary/bronze/Boba_Fett.png`
 ```
 ROUND medallion, aged bronze relief, photorealistic render, isolated background, the circular shape IS the frame. Warm aged-bronze relief throughout, patient and unreadable. Center: Boba Fett standing motionless in scarred Mandalorian armor, a tracking fob held level and unblinking in one hand, his visored helm giving away nothing, content to wait exactly as long as the job requires before ever moving. Border: Imperial cog frame carved in bronze relief, interlocking gear-teeth segments, fine aurebesh-flavored tick ornament, broken by four roundels bearing the Saturn glyph in bronze relief. NO lettering anywhere.
 ```
 
-**Boba Fett (colored)** → `assets/weeks/films/sw_sith/primary/colored/BobaFett.png`
+**Boba Fett (colored)** → `assets/weeks/films/sw_sith/primary/colored/Boba_Fett.png`
 ```
 Ornate circular badge, vivid full-color paint over black-and-red durasteel, photorealistic render, perfectly centered, isolated on white background. Center: Boba Fett in full color, scarred green-and-grey Mandalorian armor, standing motionless with a tracking fob held level, his visored helm unreadable. Border: the cog frame recut in polished black-and-red durasteel, four enamel roundels bearing a green Saturn glyph. Colors: armor green, battle-grey, tracking-fob amber, visor black.
 ```
@@ -596,18 +603,18 @@ Three title plates, one per set. Briefs and drop paths live in
 that sheet's own "Cross-referenced" section. Do not duplicate the
 briefs in this file.
 
-- **Svetla** → `assets/weeks/societies/wolf/primary/colored/starwars_svetla.png`. Brief: The Council
+- **Svetla** → `assets/weeks/films/sw_jedi/primary/colored/Title.png`. Brief: The Council
   of Lights — a ring of igniting lightsabers, one per seated figure's
   own blade color, the "every seat's own emblem at once" device
   (`greek`/`cosmos` precedent).
-- **Tamna** → `assets/weeks/societies/wolf/primary/colored/starwars_tamna.png`. Brief: The Rule of
+- **Tamna** → `assets/weeks/films/sw_sith/primary/colored/Title.png`. Brief: The Rule of
   Two (Darth Bane) — the DOCTRINAL parent of this set's whole lineage
   (Plagueis → Sidious → Vader is a direct chain of the rule Bane
   himself instituted), holding a Sith holocron, the same "parent, not
   seat-holder" device as `wow_evil`'s Sargeras and Cyberpunk Power's
   Soulkiller — chosen over reusing Plagueis (already this set's own
   Unfound) to avoid depicting one seat twice.
-- **Nova** → `assets/weeks/societies/wolf/primary/colored/starwars_nova.png`. Brief: The Dyad — two
+- **Nova** → `assets/weeks/films/sw_dyad/primary/colored/Title.png`. Brief: The Dyad — two
   hands reaching toward each other across a broken, sparking
   lightsaber blade (the owner's own suggested image) — justified in
   one line: "Dyad in the Force" is the films' own literal term for
@@ -630,6 +637,46 @@ briefs in this file.
   output generated before this fix (confirmed at least for WoW
   Alliance: Anduin, Khadgar, Muradin) must be REGENERATED from the
   corrected briefs above.
+- **WIRED AND SEATED 2026-07-29 (completion wave III, Session 33).**
+  All three sets are registered weekday themes — `sw_jedi`, `sw_sith`,
+  `sw_dyad` in `constants.WEEKDAY_THEMES` and `METAL_THEMES`, with
+  their seat names, dirs, stems, duals, Ninths (Yoda / Darth Plagueis /
+  The Ghosts) and titles in `config/defaults.py`, the NEW "Films"
+  picker group, and ONE Encyclopedia card with a Jedi | Sith | Dyad
+  switcher (`config.encyclopedia_tree.VARIANT_SOURCES`). Every seat,
+  dual, Ninth and title article is written — 184 texts. The English
+  titles on the dial and in the Encyclopedia are Star Wars Jedi / Sith
+  / Dyad; the set names Svetla, Tamna and Nova stay in this sheet
+  (root Rule #17: the program's language is English). The sentence
+  below is kept for the record of what this sheet-writing round's scope
+  was; it no longer describes the state of the code.
+- **THE ROTATION SEATS ARE WIRED**, through the same
+  `defaults.WEEKDAY_SEAT_ROSTERS` the Cyberpunk half built: a seat
+  declares its figures canonical-first and `rotating_art_file` — the
+  ONE chokepoint every weekday consumer already goes through — turns
+  through them by the shared date modulo, so the dial, the hover
+  legend, the Encyclopedia and the pickers all turn together with no
+  app-code change. Nova's three seats carry a roster: Tuesday
+  (Finn / Phasma), Wednesday (Maz / DJ) and its Unfound
+  (Ghosts / Exegol), the registry's first PLACE-vs-PLACE Ninth. A
+  rotating seat's DISPLAY NAME lists every member and its article
+  argues all of them, so the label can never disagree with the plate.
+- **THE PLACE-DUAL MECHANISM IS PROVISIONAL (owner call still open).**
+  Of the two options the rotation section above names, Session 33 wired
+  **(a) the plain date rotation**, because Rule #5 asks for one
+  rotation mechanism rather than two and the section argues the
+  PAIRING rather than the trigger. The rejected alternative is **(b)
+  reusing `core.continents`'s Zealandia/Pangea trigger**, and flipping
+  to it is a small, fully named change written out in the
+  `WEEKDAY_SEAT_ROSTERS` comment; `research/theme_staging.md` §Art Owed
+  carries the open call and
+  `tests/test_weekday_rotation.py::test_sw_dyad_ninth_rotates_through_the_seat_roster`
+  pins which of the two is live, so a flip has to be deliberate.
+- **The Boba Fett drop path was corrected** from `BobaFett.png` to
+  `Boba_Fett.png`: a stem's words are joined by underscores and never
+  run together (`assets/___assets.md`, pinned by
+  `tests/test_assets_structure.py::test_figure_stems_separate_their_words`).
+  No art had been generated under the old spelling.
 - New sheet (R10 GAMING + CORPORATION SHEET WAVE, owner-sealed
   addendum mid-round, 2026-07-22). Theme not yet registered in
   `config/defaults.py` — that wiring, AND the `rotating_art_file`/
@@ -649,8 +696,18 @@ briefs in this file.
   (Svetla Wednesday vs. Nova Friday "Old Han") — six of the sheet's 60
   figure-briefs are these three repeats, each independently justified
   above.
-- **Art: 0/60** (30 figures × 2 registers across the three sets; the 3
-  title plates are tracked separately in
-  [Theme Title Prompts](../titles/theme_title_prompts.md), see above).
+- **Art: 25/60** (counted 2026-07-29; 30 figures × 2 registers across
+  the three sets; the 3 title plates are tracked separately in
+  [Theme Title Prompts](../titles/theme_title_prompts.md), see above,
+  and all three of THOSE have landed). By set: Svetla 11 of 18 (the
+  Throne, the Mirror and Yoda are unstarted, and Chewbacca has bronze
+  with no colored twin), Tamna 12 of 18 (Boba Fett and Anakin
+  unstarted; Jabba and Palpatine have the colored poster with no bronze
+  master, so their three metal looks stay dark until it lands), Nova
+  2 of 24 — only Rose Tico, in both registers. The shortfall is an
+  open, named row in [Theme Staging Ledger](../../theme_staging.md)
+  §Art Owed; every missing plate is graceful-absent by contract, so the
+  three casts are pickable and readable today and each plate lights up
+  the day it lands.
 - Verify with `python main.py "research/prompts/starwars/starwars_prompts.md" --dry-run`
   from `Gadgets/PromptPainter/` before handing the sheet to the owner.
