@@ -30,7 +30,7 @@ structure tests all read this module.
 
 ```
 Home  ──►  Themes  ──►  Article
-6 cards    5–9 cards     pages + ◀ variant ▶
+6 cards    5–10 cards    pages + ◀ variant ▶
 no scroll  Y scroll      Y scroll
 ```
 
@@ -39,9 +39,9 @@ no scroll  Y scroll      Y scroll
 | Whole | Accent (Rose hour) | Cards | Pages |
 |---|---|---|---|
 | The Instrument | yellow, 12h | 5 | 38 + guide |
-| The Celestial Engine | cyan, 03h | 9 | 90 |
-| The Divine | purple, 24h | 6 | 162 |
-| The Human Wheel | red, 18h | 7 | 53 |
+| The Celestial Engine | cyan, 03h | 10 | 101 |
+| The Divine | purple, 24h | 7 | 173 |
+| The Human Wheel | red, 18h | 8 | 64 |
 | The Character Cube | blue, 06h | 7 | 70 |
 | The Living World | green, 09h | 5 | 54 |
 
@@ -49,6 +49,17 @@ The accent is argued by the hour it stands on, never picked by taste:
 noon for the instrument, deep night for the sky, midnight for the
 sacred, sunset's fire for the human wheel, the Cube's own axis blue for
 the Cube, spring green for the living world.
+
+**Completion wave I (Session 31, 2026-07-29)** added three cards, each
+its own card rather than a switcher member — three distinct subjects,
+not three registers of one subject (the variant law below): Chinese
+Mythology into The Celestial Engine, Greek Monsters into The Divine
+beside the Greek gods, and The Corporation into The Human Wheel beside
+the Professions. The Celestial Engine is one card over the comfort cap
+`tests/test_settings_dialog.py` keeps (9 = three full rows); that whole
+is the one the nine-whole structural arc splits into `sky` and
+`cosmos`, and the guard carries a named, expiring carve-out for it
+rather than a raised ceiling.
 
 ## The variant law
 

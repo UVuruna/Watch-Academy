@@ -108,7 +108,20 @@ day/night resolvers), `CONTINENTS_TITLE_IMAGE` (the world map), and
 `WEEKDAY_THEME_NINTH_EASTER_EGG` (Pangea, the easter-egg face). Its
 bodies reuse the dial's own `assets/earth/` faces (owner exception to
 one-image-one-place) and its Ninth switches Zealandia/Pangea by
-[Continents](../core/continents.md)'s law. **THE BLUE MOON LAW**
+[Continents](../core/continents.md)'s law. **COMPLETION WAVE I**
+(Session 31, 2026-07-29): three casts whose art had sat on disk
+unregistered — `age_of_heroes` (Greek Monsters), `celestial_court`
+(Chinese Mythology) and `corporate` (The Corporation) — registered
+across the SAME standard weekday tables plus `METAL_THEMES` (all three
+are bronze primaries with a `colored/` sibling), each with its own
+blurb and article set, its own Ninth (Pegasus / Buddha / The Founder),
+an existing picker group (Ancient Gods, Ancient Gods, Society) and a
+card of its own in `encyclopedia_tree`. The same commit DELETED
+`taxonomy.THEME_KEY_RENAMES["monsters"]` and `["chinese_myth"]`: a
+rename table migrates stored user settings, and neither key was ever
+selectable. The law this pays is project [CLAUDE.md](../CLAUDE.md)
+§THE THEME COMPLETION LAW; the remaining nine casts stay listed in
+[Theme Staging Ledger](../research/theme_staging.md). **THE BLUE MOON LAW**
 (owner-sealed 2026-07-22, R12): `THIRTEENTHS` — key ("ophiuchus"/
 "sol"/"modrenik"/"chinese") → (display name, encyclopedia family,
 encyclopedia entry name), the SAME two-level shape `WEEKDAY_THEME_NINTHS`
