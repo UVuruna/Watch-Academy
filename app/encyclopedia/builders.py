@@ -94,23 +94,56 @@ def _ninth_looks(theme: str, plate: Path) -> tuple | None:
     )
 
 
+def _live_ninth_face(
+    theme: str, name: str, plate: Path, is_daylight: bool, travel_date: date,
+) -> tuple[str, Path]:
+    """Which (name, plate) `theme`'s shared ninths-loop entry actually
+    shows — THE DOUBLE NINTH LAW's Encyclopedia side (owner Double-
+    Ninth verdicts, 2026-07-29): the reader shows ONLY the currently
+    active face, never both. "daynight" swaps to the NIGHT face when
+    `is_daylight` is False (`constants.WEEKDAY_THEME_NINTH_NIGHT`);
+    "term_weekly" rotates the SAME canonical plate through its OWN seat
+    roster by the traveled date's ISO week
+    (`defaults.rotating_art_file`'s cadence override — the identical
+    chokepoint the dial reads, Rule #5); every other mechanism (or none)
+    keeps `name`/`plate` untouched, the plain static plate every
+    non-double Ninth has always shown here."""
+    mechanism = constants.NINTH_MECHANISMS.get(theme)
+    if mechanism == "daynight" and not is_daylight:
+        alt_name, alt_rel = constants.WEEKDAY_THEME_NINTH_NIGHT[theme]
+        return alt_name, defaults.weekday_art(alt_rel)
+    if mechanism == "term_weekly":
+        return name, defaults.rotating_art_file(plate, travel_date) or plate
+    return name, plate
+
+
 # One theme's plate for one body (bronze / canon file) — the
 # resolution itself lives in config (Rule #5: `app.pointer_theme` and
 # `app.slot_theme` need the SAME preview art for their picker grids).
 _theme_body_art = defaults.weekday_theme_body_art
 
 
-def _theme_dual_art(theme: str, colored: bool = False) -> Path:
+def _theme_dual_art(
+    theme: str, colored: bool = False, on_date: date | None = None,
+) -> Path:
     """The theme's Sunday SERVANT plate — the colored dual lives in
     the register's own colored/ look (tree law 2026-07-26;
-    `colored_variant_rel` is the ONE swap implementation)."""
+    `colored_variant_rel` is the ONE swap implementation). `on_date`
+    opts into THE UNIVERSAL ROTATION CONVENTION (`defaults.
+    rotating_art_file`), exactly like the live dial's OWN Servant
+    resolution (`render.layers.WeekdayLayer`) — None (every caller
+    before THE WEEKLY MANDATE, owner decree 2026-07-29) keeps the plain
+    canonical file."""
     rel = defaults.WEEKDAY_DUAL_FILES[theme]
     if colored:
         rel = defaults.colored_variant_rel(rel)
-    return defaults.weekday_art(f"{rel}.png")
+    asset = defaults.weekday_art(f"{rel}.png")
+    if on_date is not None:
+        asset = defaults.rotating_art_file(asset, on_date) or asset
+    return asset
 
 
-def _weekday_topic(theme: str):
+def _weekday_topic(theme: str, travel_date: date | None = None):
     """(icon path, entries) for one weekday theme (owner ARTICLE ORDER
     restructure, round R3; SPLIT into two separate GOOD/EVIL pages,
     round R3b item 1 — owner verdict A, supersedes the R3 MERGED dual
@@ -128,31 +161,46 @@ def _weekday_topic(theme: str):
     cycle Colored/Bronze/Gold/Silver on EACH half independently; the
     planets still cycle their photos and the sign glyphs. The Ninth
     (where the theme has one) is appended AFTER this function returns
-    (`_topics`' ninths loop), landing last either way."""
+    (`_topics`' ninths loop), landing last either way.
+
+    `travel_date` feeds THE WEEKLY MANDATE alone (owner decree
+    2026-07-29, `constants.NINTH_MECHANISMS[theme] == "term_weekly"` —
+    today only cp_corpo): the GOOD/EVIL pages then rotate through the
+    seat roster's OWN two halves by the ISO week's parity, exactly like
+    the dial. Every OTHER theme ignores `travel_date` completely — its
+    Monday..Saturday and Sunday pages stay the frozen canonical plate
+    they have always been in the Encyclopedia (Rule #15 — this law
+    touches cp_corpo alone, not every theme's static gallery)."""
     article_set = constants.WEEKDAY_THEME_ARTICLES[theme]
     if theme == "planets":
         names = defaults.DEFAULT_SKIN.weekday_set.body_names
     else:
         names = defaults.WEEKDAY_THEME_NAMES[theme]
     metal = theme in constants.METAL_THEMES
+    mandate_date = (
+        travel_date
+        if constants.NINTH_MECHANISMS.get(theme) == "term_weekly"
+        else None
+    )
 
     def rows(ruler: Path, servant: Path | None) -> tuple:
         if servant is not None and paths.art_file(servant).exists():
             return ((ruler, servant),)
         return ((ruler,),)
 
-    def looks_for(body: str) -> tuple:
+    def looks_for(body: str, on_date: date | None = None) -> tuple:
         """A Monday..Saturday (or GOOD/Ruler) page's own looks — always
         a SINGLE image per look now (round R3b item 1: the old
         `dual=True` two-plate-per-row branch retired with the merged
-        page; `evil_looks_for` below is EVIL's own sibling)."""
-        base = _theme_body_art(theme, body)
+        page; `evil_looks_for` below is EVIL's own sibling). `on_date`
+        (THE WEEKLY MANDATE only — every other caller passes None)
+        threads through `_theme_body_art`'s own `on_date`/`colored`
+        pair so the bronze base and its colored sibling always agree on
+        which roster half is showing (Rule #5 — one resolver, not a
+        hand-rolled second path for the colored look)."""
+        base = _theme_body_art(theme, body, on_date=on_date)
         if metal:
-            colored = defaults.weekday_art(
-                defaults.WEEKDAY_THEME_DIRS[theme]
-            ).parent / "colored" / (
-                f"{defaults.WEEKDAY_THEME_FILES[theme][body]}.png"
-            )
+            colored = _theme_body_art(theme, body, on_date=on_date, colored=True)
             return tuple(
                 (label, rows(path, None))
                 for label, path in _metal_looks(base, colored)
@@ -169,16 +217,17 @@ def _weekday_topic(theme: str):
             )
         return (("", rows(base, None)),)
 
-    def evil_looks_for() -> tuple:
+    def evil_looks_for(on_date: date | None = None) -> tuple:
         """The EVIL half's OWN page (owner verdict A, round R3b item 1
         — the Servant plate ALONE, never paired with the Ruler's any
         more): mirrors `looks_for`'s per-metal/per-planets-look cycle
         exactly, built from `_theme_dual_art` instead of
         `_theme_body_art` (Rule #5 — the same shapes, the Servant's own
-        files)."""
-        servant = _theme_dual_art(theme)
+        files). `on_date` is THE WEEKLY MANDATE's own thread, same as
+        `looks_for`."""
+        servant = _theme_dual_art(theme, on_date=on_date)
         if metal:
-            colored = _theme_dual_art(theme, colored=True)
+            colored = _theme_dual_art(theme, colored=True, on_date=on_date)
             return tuple(
                 (label, rows(path, None))
                 for label, path in _metal_looks(servant, colored)
@@ -206,10 +255,15 @@ def _weekday_topic(theme: str):
     def good_entry() -> dict:
         """The GOOD (Ruler) half of Sunday — its OWN page now (owner
         verdict A, round R3b item 1), an ordinary single-image page
-        exactly shaped like Monday..Saturday's."""
+        exactly shaped like Monday..Saturday's. THE WEEKLY MANDATE
+        (`mandate_date`, cp_corpo only) rotates its plate to the RULING
+        week's half; the display NAME stays the theme's static
+        `WEEKDAY_DUAL_NAMES` (the established convention every rostered
+        Sunday duality already follows — Session 32's own comment: "its
+        rotating partners are named in the two face texts instead")."""
         ruler_name, _servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
         return {
-            "looks": looks_for("sun"),
+            "looks": looks_for("sun", on_date=mandate_date),
             "name": ruler_name,
             "article": ("article_face", article_set, "sun", "ruler"),
             "weekday": constants.WEEKDAY_FULL_NAMES["sun"],
@@ -217,10 +271,11 @@ def _weekday_topic(theme: str):
 
     def evil_entry() -> dict:
         """The EVIL (Servant) half of Sunday — its OWN page, its OWN
-        plate (owner verdict A, round R3b item 1)."""
+        plate (owner verdict A, round R3b item 1). Same `mandate_date`
+        thread as `good_entry`."""
         _ruler_name, servant_name = defaults.WEEKDAY_DUAL_NAMES[theme]
         return {
-            "looks": evil_looks_for(),
+            "looks": evil_looks_for(on_date=mandate_date),
             "name": servant_name,
             "article": ("article_face", article_set, "sun", "servant"),
             "weekday": constants.WEEKDAY_FULL_NAMES["sun"],

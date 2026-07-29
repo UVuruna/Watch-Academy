@@ -62,6 +62,7 @@ class EncyclopediaDialog(QDialog):
         initial_entry: int = 0,
         stay_on_top: bool = False,
         travel_date: date | None = None,
+        is_daylight: bool = True,
     ):
         super().__init__()
         self._overlay = translations or {}
@@ -84,7 +85,11 @@ class EncyclopediaDialog(QDialog):
         self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         self._symbolism = SymbolismRepository(overlay=self._overlay)
         self._encyclopedia = EncyclopediaRepository(overlay=self._overlay)
-        self._topics = topic_tree.topics(travel_date, self._overlay)
+        # `is_daylight` feeds THE DOUBLE NINTH LAW's daynight mechanism
+        # (owner decree 2026-07-29, sw_dyad's Ghosts/Exegol) — the
+        # controller reads it from the SAME live tick the dial paints
+        # with, never a second sunrise/sunset computation here.
+        self._topics = topic_tree.topics(travel_date, self._overlay, is_daylight)
         if hidden_unlocked:
             self._unlock_verses()
         self._zoom = _session_zoom

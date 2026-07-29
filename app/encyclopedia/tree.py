@@ -37,6 +37,7 @@ from app.encyclopedia.builders import (
     _guide_topic,
     _PANTHEON_MERGED_THEMES,
     _continents_topic,
+    _live_ninth_face,
     _ninth_looks,
     _pantheon_topic,
     _theme_body_art,
@@ -59,19 +60,24 @@ from app.encyclopedia.pages import (
     _WEEK_ORDER,
 )
 
-def _build_topics(travel_date: date | None = None) -> dict:
+def _build_topics(
+    travel_date: date | None = None, is_daylight: bool = True,
+) -> dict:
     """topic key -> {title, icon, entries}; article refs resolve lazily
     against the repository so the overlay always applies. Every entry
     carries an `images` TUPLE — Astrology pairs the sign logo with its
     constellation (owner spec: both, side by side). `travel_date`
     drives the Scale rotation (owner decree 2026-07-19/20, "koje cemo
-    koristiti na smenu") — defaults to today when the caller has no
-    Time Travel moment to hand in."""
+    koristiti na smenu") AND cp_corpo's WEEKLY MANDATE (owner decree
+    2026-07-29) — defaults to today when the caller has no Time Travel
+    moment to hand in. `is_daylight` feeds sw_dyad's DAYLIGHT/NIGHT
+    Ninth switch (same verdict) — defaults True (day, The Ghosts) so a
+    caller with no live sky state (the warm cache) still resolves."""
     if travel_date is None:
         travel_date = date.today()
     topics: dict = {}
     for theme, title in defaults.WEEKDAY_THEME_TITLES.items():
-        icon, entries = _weekday_topic(theme)
+        icon, entries = _weekday_topic(theme, travel_date)
         topics[theme] = {"title": title, "icon": icon, "entries": entries}
     # THE CONTINENTS overwrite its generic weekday build with the custom
     # topic (world-map title, look switcher, living Ninth) — same 11-page
@@ -401,7 +407,9 @@ def _build_topics(travel_date: date | None = None) -> dict:
     # local, since render never needs them.
     for topic_key, name, plate in (
         *(
-            (theme, name, defaults.weekday_art(rel))
+            (theme, *_live_ninth_face(
+                theme, name, defaults.weekday_art(rel), is_daylight, travel_date,
+            ))
             for theme, (name, rel) in constants.WEEKDAY_THEME_NINTHS.items()
             # THE CONTINENTS builds its own LIVING Ninth inside
             # `_continents_topic` (Zealandia/Pangea by the traveled day),
@@ -753,7 +761,11 @@ def _seal_variants(topics: dict) -> None:
         topic.setdefault("variants", (("", 0, len(topic["entries"])),))
 
 
-def topics(travel_date: date | None = None, overlay: dict | None = None) -> dict:
+def topics(
+    travel_date: date | None = None,
+    overlay: dict | None = None,
+    is_daylight: bool = True,
+) -> dict:
     """The topic table the three screens read — the built table with the
     Session 27 laws applied, in the order they must run (the Cube split
     first, so the merges and the seal see the four cards).
@@ -761,8 +773,11 @@ def topics(travel_date: date | None = None, overlay: dict | None = None) -> dict
     `overlay` is the active language bundle; only the Guide needs it at
     BUILD time, because its prose lives in the help book's own JSON
     rather than in `encyclopedia.json` (Rule #5 — one copy of the
-    content, read where it already is)."""
-    built = _build_topics(travel_date)
+    content, read where it already is). `is_daylight` is THE DOUBLE
+    NINTH LAW's daynight mechanism (owner decree 2026-07-29, sw_dyad) —
+    defaults True (day) so a caller with no live sky state still
+    resolves; see `_build_topics`."""
+    built = _build_topics(travel_date, is_daylight)
     built["guide"] = _guide_topic(overlay or {})
     _split_cube(built)
     _merge_variants(built)

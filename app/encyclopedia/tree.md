@@ -46,3 +46,12 @@ ON switch(direction d):
 one path: the Cube's old flat index, the weekday dual remap, and a merged
 register's own dial name. An unknown key returns None — the caller is the
 dial, and a stale target must never raise.
+
+## THE DOUBLE NINTH LAW (owner decree 2026-07-29)
+`topics(travel_date=None, overlay=None, is_daylight=True)` — `_build_
+topics` threads `is_daylight` into the shared ninths loop
+(`builders._live_ninth_face`, per-theme dispatch by `constants.
+NINTH_MECHANISMS`) and `travel_date` into `_weekday_topic` (THE WEEKLY
+MANDATE, cp_corpo only). `EncyclopediaDialog` supplies `is_daylight`
+from the controller's OWN live tick — never a second sunrise/sunset
+computation here.

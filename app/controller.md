@@ -588,11 +588,16 @@ size math) — headless, built exactly like `main.py` minus the mutex.
   gallery) or on a Spacebar jump to a hovered topic's entry (the
   widget's `open_encyclopedia` signal). Passes
   `stay_on_top=z_mode == "top"` (fix round A, owner verdict 2026-07-19 —
-  see the Z-ORDER note below) and `travel_date=_effective_travel_date()`
+  see the Z-ORDER note below), `travel_date=_effective_travel_date()`
   (owner decree 2026-07-19/20) so the Scale badge's Judas/Lucifer
   rotation reads the SAME displayed moment as the poles' light/dark
   glyph — the Time Travel traveled date while a simulation runs, else
-  today. The old re-entrancy guard (owner 15h item 3C, Session 21 —
+  today — and `is_daylight=_effective_is_daylight()` (owner decree
+  2026-07-29, THE DOUBLE NINTH LAW's daynight mechanism, sw_dyad's
+  Ghosts/Exegol): `build_tick_state` against the ALREADY-BUILT
+  `self._day.sun`, never a second sunrise/sunset computation, using the
+  simulation's own moment while one runs, else the wall clock. The old
+  re-entrancy guard (owner 15h item 3C, Session 21 —
   back when the dialog was MODAL and a second SPACE jump dispatched
   inside `exec()`'s nested loop would have stacked a second modal on
   the first) is now ITEM 1's live-instance dance: a THEMED second jump

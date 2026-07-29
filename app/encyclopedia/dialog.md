@@ -43,6 +43,13 @@ scroll area — it has none — so a test measures the row's minimum against
 the owner's 1280.
 
 ## Design Decisions
+- **`is_daylight` (owner decree 2026-07-29, THE DOUBLE NINTH LAW).** The
+  constructor takes it as a plain bool (default True) and hands it
+  straight to `topic_tree.topics` — the controller resolves it from its
+  OWN live tick (`WatchController._effective_is_daylight`, `core.
+  clock_state.build_tick_state` against the already-built `DayContext`)
+  and passes it in; the dialog itself never touches a wall clock or
+  recomputes sunrise/sunset.
 - **The window's minimum is the owner's opening screen** (1280x720). The
   home grid is measured from the viewport, so this is what makes "the
   first screen never scrolls" geometric rather than hopeful.

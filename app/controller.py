@@ -2881,6 +2881,10 @@ class WatchController(QObject):
             # the same TRAVELED date as the poles' light/dark glyph
             # law — a running Time Travel simulation, else today.
             travel_date=self._effective_travel_date(),
+            # THE DOUBLE NINTH LAW's daynight mechanism (owner decree
+            # 2026-07-29, sw_dyad's Ghosts/Exegol): the SAME live sky
+            # state the dial's own center seat reads.
+            is_daylight=self._effective_is_daylight(),
         )
         dialog.finished.connect(self._on_encyclopedia_closed)
         self._encyclopedia = dialog
@@ -3024,6 +3028,23 @@ class WatchController(QObject):
             moment, _observer = self._simulation
             return moment.date()
         return date.today()
+
+    def _effective_is_daylight(self) -> bool:
+        """THE DOUBLE NINTH LAW's daynight state (owner decree
+        2026-07-29): the SAME (moment, observer) `_on_tick` already
+        resolves — a running Time Travel simulation, else the wall
+        clock — fed through `build_tick_state`, the identical function
+        every ordinary tick calls; `self._day.sun` is already built, so
+        this reads it rather than recomputing sunrise/sunset. True
+        (day) before the first day build, matching every other
+        graceful-absent default here."""
+        if self._day is None:
+            return True
+        now = (
+            self._simulation[0] if self._simulation is not None
+            else datetime.now(self._tz)
+        )
+        return build_tick_state(now, self._day).is_daylight
 
     def _end_simulation(self) -> None:
         """NOW (owner 2026-07-15): back to the present immediately —
