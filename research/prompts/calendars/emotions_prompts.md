@@ -50,7 +50,7 @@ Calendar pointer already wears (see the
 [Slavic Months Prompts](../months/months_prompts.md), the
 [Calendar Prompts](../archetype/calendar_prompts.md)), so the Dozen of
 the Heart sits beside the months and the signs without a style break.
-ROUND rose-window medallions, one unifying device across all twelve:
+ROUND rose-window medallions, one unifying device across all thirteen:
 **the Wheel of the Heart** — a leadwork rim of twelve small linked
 hearts (one per emotion, the chain unbroken all the way round), the
 family's own device the way the months wear the spoked cart-wheel and
@@ -58,10 +58,11 @@ the Almanac the wheel-and-tick. Each window's field is dominated by its
 own emotion hue.
 
 **Drop paths:** `assets/calendars/emotions/primary/colored/<Figure>.png` — a sourceless
-calendar-mount root (PromptPainter appends `_gem`/`_gpt`). Twelve
-files: `Love.png`, `Hope.png`, `Courage.png`, `Ambition.png`,
-`Pride.png`, `Envy.png`, `Hatred.png`, `Despair.png`, `Fear.png`,
-`Doubt.png`, `Humility.png`, `Gratitude.png`.
+calendar-mount root (PromptPainter appends `_gem`/`_gpt`). Thirteen
+files — the twelve plus the axle: `Love.png`, `Hope.png`,
+`Courage.png`, `Ambition.png`, `Pride.png`, `Envy.png`, `Hatred.png`,
+`Despair.png`, `Fear.png`, `Doubt.png`, `Humility.png`,
+`Gratitude.png`, `Peace.png`.
 
 **House rules carried from every other sheet:** photorealistic render,
 isolated background (no transparency-checkerboard artifact), the
@@ -174,12 +175,35 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ---
 
+## The center — Peace (the axle, always present)
+
+**Peace — the still point** → `assets/calendars/emotions/primary/colored/Peace.png`
+
+*(Axle note, SEALED 2026-07-29: the thirteenth takes no wedge — it
+stands at the CENTER, the one member that does not turn with the twelve
+(CANON §The Axle). Every other emotion on this wheel MOVES a person;
+peace is the one that does not. It is not a thirteenth mood squeezed
+onto the rim but the state a heart stands in when all twelve are
+answered — throne polarity, ALWAYS present, with no moon count and no
+window. Its glass takes no hue of its own: the ring's twelve colours
+are all present in it, at rest.)*
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Soft white, pale dove-grey and clear uncolored glass, the quietest window of the thirteen — no hot tone, no cold one, an even light with nowhere to travel. Center: a perfectly still, unbroken pool of water filling the disc, its surface flat as glass, holding the faint reflected ring of ALL TWELVE emotion hues around its rim at rest — not one ripple crossing it — with a single white dove settled at the center of the surface and one olive leaf laid on the water beside it. The reflected colours are calm and dim; the still surface is the subject. Border: the shared Wheel of the Heart leadwork rim — the twelve linked hearts, here struck in plain soft silver. Palette: soft white, dove grey, clear glass, faint reflected spectrum, pale silver lead. NO lettering anywhere.
+```
+
+---
+
 ## Status
 
 - New sheet, Dozen #1 of four (RESTRUCTURE §New Content, owner-sealed
   2026-07-22). **System B — month-aligned geometry** (crown, root, six
-  opposition axes); the twelve emotions on their sealed hours. **Art:
-  0/12**, none generated on either source.
+  opposition axes); the twelve emotions on their sealed hours, plus the
+  axle. **Art: 0/13**, none generated on either source.
+- **The center is SEALED (owner 2026-07-29): PEACE, always present** —
+  the still point (CANON §The Emotions Dozen). It is a PERSON-center in
+  the Axle law's sense: it never leaves, unlike the calendar-driven
+  thirteenths that appear only when the year overflows.
 - The six prism-seat emotions (Love/Courage/Pride/Hatred/Fear/Humility)
   RETAIN their exact prism hues — the color-fidelity law's cleanest
   case (retention, not a move), stated per-figure in the italic notes.
@@ -193,4 +217,4 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   `calendars/emotions` is a NEW data-driven family root in
   `tests/test_prompt_paths.py`.
 - Verify with `python main.py "research/prompts/calendars/emotions_prompts.md" --dry-run`
-  from `Gadgets/PromptPainter/` (12 images expected).
+  from `Gadgets/PromptPainter/` (13 images expected).

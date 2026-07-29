@@ -7,21 +7,32 @@ the cardinals, so the twelve fall into SIX PAIRS; see
 is scriptural: *"he began to send them forth by two and two"* (Mark
 6:7) — the Twelve Apostles seated as the six missions He sent out.
 
-**The six pairs (RESTRUCTURE, sent two by two):**
+**The twelve wedges — SEALED by the owner 2026-07-29** (CANON §The
+Apostles; nothing waits on a wiring round any more). All six pairs of
+the original round survive the seal unchanged — each holds one arm of
+the dial, two by two:
 
-| Pair | Placement | Argument |
+| Wedge | Apostle | Argument |
 |---|---|---|
-| **Peter + Andrew** | crown (top, 12h) | the first two called, fisher-brothers; Peter the rock on whom the Church is built |
-| **James (the Greater) + John** | flank region | the sons of Zebedee, the "Sons of Thunder" |
-| **Philip + Bartholomew** | flank region | Philip who found Nathanael-Bartholomew and brought him to Christ (John 1:45) |
-| **Thomas + Matthew** | flank region | the doubter and the tax-collector — the one who needed proof, the one who left the counting-table |
-| **James (of Alphaeus) + Thaddaeus** | flank region | the lesser James and Jude Thaddaeus, the quieter mission |
-| **Simon the Zealot + Judas Iscariot** | root (bottom, 24h) | the zealot and the betrayer; **Judas seated beside midnight mirrors the Prism primary's Hatred at 24h** — the same purple root, the love turned wholly to ruin |
+| **12–14h** | **Peter** | the rock on whom the Church is built, opening the circle from noon |
+| 14–16h | James the Greater | a son of thunder, in the afternoon light |
+| 16–18h | John | the other son of thunder, turned toward the sunset |
+| 18–20h | Philip | *"come and see"* (John 1:46) — he brings Nathanael |
+| 20–22h | Bartholomew | Nathanael, who came and saw |
+| **22–24h** | **Judas Iscariot** | his wedge ENDS at midnight: the betrayal completes exactly where love breaks — *"and it was night"* (John 13:30) |
+| **00–02h** | **Simon the Zealot** | the zealot holds the far side of the night |
+| 02–04h | Thomas | the darkest hour — doubt; his feast falls at the winter solstice |
+| 04–06h | Matthew | called from the toll booth toward dawn |
+| 06–08h | James of Alphaeus | the quieter mission, in the plain morning light |
+| 08–10h | Thaddaeus | Jude, patron of hope in hard causes — the last hour before the crown |
+| **10–12h** | **Andrew** | the first-called, closing the circle back into the crown |
 
-The crown pair and the root pair are geometry-sealed; the four middle
-pairs fill the flank and diagonal regions (exact wedges pinned in the
-wiring round). **The root resonance is deliberate:** Judas at the dial's
-midnight rhymes across the Dozens with `Devil_Hatred` on the Prism primary
+**The oppositions the crown creates are the point:** the first-called
+faces the betrayer (Andrew 10–12h ↔ Judas 22–24h) and the rock faces
+the zealot (Peter 12–14h ↔ Simon 00–02h); the beloved disciple faces
+the one who had to touch the wound (John 16–18h ↔ Thomas 02–04h).
+**The root resonance is deliberate:** Judas at the dial's midnight
+rhymes across the Dozens with `Devil_Hatred` on the Prism primary
 hexagram (also purple, also 24h) and with the Emotions Dozen's own
 `Hatred` root — the bottom of the wheel is where love collapses, spoken
 three ways.
@@ -30,18 +41,19 @@ three ways.
 night-window stained-glass rondel every Calendar-pointer 12-set wears
 (see the [Slavic Months Prompts](../months/months_prompts.md), the
 [Calendar Prompts](../archetype/calendar_prompts.md)). ROUND rose-window
-medallions, one unifying device across all twelve: **the Net** — a
+medallions, one unifying device across all thirteen: **the Net** — a
 knotted fisherman's-rope net leadwork rim (fishers of men, Matthew
-4:19), constant across all twelve. Each apostle is a haloed saint-figure
+4:19), constant across all thirteen. Each apostle is a haloed saint-figure
 carrying his traditional attribute; the field runs warm gold at the
 crown, cooling and darkening toward the root, so the pair beside
 midnight visibly sinks toward the purple of Hatred's own arm.
 
 **Drop paths:** `assets/calendars/apostles/primary/colored/<Figure>.png` — a sourceless
-calendar-mount root (PromptPainter appends `_gem`/`_gpt`). Twelve files:
-`Peter.png`, `Andrew.png`, `James.png`, `John.png`, `Philip.png`,
-`Bartholomew.png`, `Thomas.png`, `Matthew.png`, `James_Alphaeus.png`,
-`Thaddaeus.png`, `Simon.png`, `Judas.png`.
+calendar-mount root (PromptPainter appends `_gem`/`_gpt`). Thirteen
+files — the twelve plus the axle: `Peter.png`, `Andrew.png`,
+`James.png`, `John.png`, `Philip.png`, `Bartholomew.png`, `Thomas.png`,
+`Matthew.png`, `James_Alphaeus.png`, `Thaddaeus.png`, `Simon.png`,
+`Judas.png`, `Jesus.png`.
 
 **House rules carried from every other sheet:** photorealistic render,
 isolated background (no transparency-checkerboard artifact), the
@@ -49,7 +61,7 @@ circular window shape IS the frame, NO lettering anywhere in any image.
 
 ---
 
-## The crown pair — Peter & Andrew (top, 12h)
+## The crown pair — Peter (12–14h) & Andrew (10–12h)
 
 **Peter — the rock** → `assets/calendars/apostles/primary/colored/Peter.png`
 
@@ -63,7 +75,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm gold and sea-blue glass, bright and open. Center: a bearded apostle with a gold halo leaning on a great DIAGONAL X-CROSS (the saltire, crux decussata) that fills the disc, a fisherman's net gathered over his other arm — Peter's brother, first of the disciples to follow, the fisher who left his nets. Border: the shared knotted-Net leadwork rim in dark gold. Palette: warm gold, sea blue, white light, dark-gold lead. NO lettering anywhere.
 ```
 
-## The pair — James the Greater & John (the Sons of Thunder)
+## The Sons of Thunder — James the Greater (14–16h) & John (16–18h)
 
 **James the Greater — the pilgrim** → `assets/calendars/apostles/primary/colored/James.png`
 
@@ -77,7 +89,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Clear white, sky-blue and eagle-gold glass, the highest-toned of the middle pairs. Center: a youthful beardless apostle with a gold halo, an EAGLE at his shoulder (his evangelist symbol, the gospel that flies highest) and a chalice with a small serpent rising from it in his hand, an open book on his knee — the beloved disciple, the eagle-eyed theologian, *"in the beginning was the Word."* Border: the shared knotted-Net leadwork rim in dark gold. Palette: clear white, sky blue, eagle gold, dark-gold lead. NO lettering anywhere.
 ```
 
-## The pair — Philip & Bartholomew
+## The pair — Philip (18–20h) & Bartholomew (20–22h)
 
 **Philip — the loaves** → `assets/calendars/apostles/primary/colored/Philip.png`
 
@@ -91,7 +103,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep umber, iron and muted gold glass, sober and grave. Center: a bearded apostle with a gold halo holding a curved FLAYING KNIFE (the sign of his martyrdom) point-down and a folded cloak over his arm, standing steady and unafraid — Nathanael, *"an Israelite in whom is no guile"* (John 1:47), the honest man who paid the hardest price. Border: the shared knotted-Net leadwork rim in dark gold. Palette: deep umber, iron grey, muted gold, dark-gold lead. NO lettering anywhere.
 ```
 
-## The pair — Thomas & Matthew
+## The pair — Thomas (02–04h) & Matthew (04–06h)
 
 **Thomas — the builder who doubted** → `assets/calendars/apostles/primary/colored/Thomas.png`
 
@@ -105,7 +117,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm amber-gold and ink-brown glass. Center: a bearded apostle with a gold halo, an open GOSPEL BOOK on his knee and a quill in hand, a small winged man (his evangelist symbol) at his shoulder, a spilled MONEY-BAG and abandoned tax-table behind him — the publican who rose from the counting-table when called (Matthew 9:9) and wrote the first Gospel. Border: the shared knotted-Net leadwork rim in dark gold. Palette: warm amber, gold, ink brown, dark-gold lead. NO lettering anywhere.
 ```
 
-## The pair — James of Alphaeus & Thaddaeus
+## The pair — James of Alphaeus (06–08h) & Thaddaeus (08–10h)
 
 **James of Alphaeus — the lesser** → `assets/calendars/apostles/primary/colored/James_Alphaeus.png`
 
@@ -119,7 +131,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm ember-gold and hopeful amber glass, a small bright flame the focus. Center: a bearded apostle with a gold halo holding a wooden CLUB in one hand and a small round medallion bearing a faint image of Christ against his chest, a single TONGUE OF FLAME above his head (Pentecost) — Jude Thaddaeus, patron of hope in hard causes, whose short epistle bids the faithful *"keep yourselves in the love of God."* Border: the shared knotted-Net leadwork rim in dark gold. Palette: ember gold, hopeful amber, warm flame, dark-gold lead. NO lettering anywhere.
 ```
 
-## The root pair — Simon the Zealot & Judas Iscariot (bottom, 24h)
+## The root pair — Simon the Zealot (00–02h) & Judas Iscariot (22–24h)
 
 **Simon the Zealot — the fire kept** → `assets/calendars/apostles/primary/colored/Simon.png`
 
@@ -138,6 +150,24 @@ the seat where the mission of the Twelve breaks.)*
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep violet, amethyst-purple and blue-black glass, cold and starless, the darkest window of the twelve — the same purple root as the Prism's Hatred arm. Center: a hunched apostle turned half AWAY from the light, his halo cracked and going dark, THIRTY SILVER COINS slipping from his fingers into shadow and a coiled ROPE on the ground at his feet (Matthew 27:3–5), a betraying-kiss shadow falling across the scene — love turned wholly to ruin at the dial's midnight. Border: the shared knotted-Net leadwork rim, here in blue-black tarnished lead. Palette: deep violet, amethyst, blue-black, cold silver coins, iron lead. NO lettering anywhere.
 ```
 
+## The center — Jesus (the axle, always present)
+
+The thirteenth does not take a wedge: it stands at the CENTER, the one
+member who does not turn with the twelve — **the wheel turns on Him**
+(CANON §The Axle). This is the THRONE polarity made flesh, and it is
+why this roster's center can never be a windowed thirteenth that comes
+and goes with the moons: *"I am with you always, to the end of the
+age"* (Matthew 28:20). Person-centers stand ALWAYS. This window is its
+own image in the calendar-mount rondel register — the Master among the
+Twelve, not the Prism lancet `Jesus_Humility`, which keeps its own
+register and its own green.
+
+**Jesus — the Master among the Twelve** → `assets/calendars/apostles/primary/colored/Jesus.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Radiant white and pure gold glass with deep-red and clear-blue accents — the brightest window of the thirteen, the source the other twelve are lit FROM, warm and unmoving. Center: Christ enthroned in perfect frontal symmetry at the dead center of the disc, a great CRUCIFORM HALO of white gold behind His head, the right hand raised in blessing and the left resting on an open book, twelve small rays of light going out from Him to the rim of the disc in even spacing — the master the Twelve are gathered around, the still point they were sent out from and return to. Everything composed concentrically; no motion anywhere but the outgoing light. Border: the shared knotted-Net leadwork rim in bright gold, here at its brightest. Palette: radiant white, pure gold, deep red, clear blue, bright-gold lead. NO lettering anywhere.
+```
+
 ---
 
 ## Status
@@ -145,10 +175,11 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 - New sheet, Dozen #4 of four (RESTRUCTURE §New Content, owner-sealed
   2026-07-22). **System A — zodiac-aligned geometry** (boundaries on the
   cardinals → six pairs); the Twelve Apostles sent two by two (Mark
-  6:7). **Art: 0/12**, none generated on either source.
-- Crown pair (Peter+Andrew) and root pair (Simon+Judas) are
-  geometry-sealed; the four middle pairs fill the flank and diagonal
-  regions, exact wedges pinned in the wiring round.
+  6:7), plus the axle. **Art: 0/13**, none generated on either source.
+- **All twelve wedges and the center are SEALED (owner 2026-07-29** —
+  see the table above and CANON §The Apostles). The old "exact wedges
+  pinned in the wiring round" note is gone; all six pairs survived the
+  seal unchanged. The center is **Jesus, always present**.
 - **The root resonance is canon**, not decoration: Judas beside midnight
   mirrors `Devil_Hatred` (Prism primary, purple, 24h) and the Emotions
   Dozen's `Hatred` root — the same collapse of love, spoken across three
@@ -159,4 +190,4 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   root `calendars/apostles` is a NEW data-driven family root in
   `tests/test_prompt_paths.py`.
 - Verify with `python main.py "research/prompts/calendars/apostles_prompts.md" --dry-run`
-  from `Gadgets/PromptPainter/` (12 images expected).
+  from `Gadgets/PromptPainter/` (13 images expected).

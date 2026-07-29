@@ -974,16 +974,41 @@ absent. Everything else in the original Session 28 entry stands.
   / `ONE_SOUL_THEME_NAME`; record in `research/bond_theme.md`.
 - Compass secondary image layer: ★ the Tree / the Menagerie (CANON).
 - Seasons tetramorph persons layer: yes/no (CANON).
-- **Slavic 13th month** — the owner said (2026-07-29, Pointers rework)
-  the Slavic calendar mounts NO thirteenth, but the sealed repo law
-  gives it **Modrenik** (±14 d of the Dec solstice). Keep or drop?
-- **Olympians on the Calendar** — 6 of 12 wedge seats (and the crown
-  pair's flanks) still "finalized in the wiring round" (CANON): needs
-  the owner's seat-by-seat verdict before the roster can mount.
-- **Apostles on the Calendar** — 8 of 12 wedge seats unpinned (CANON):
-  same verdict needed.
-- **Virtue Wheel** crown/root seating: PROPOSED in CANON, awaiting the
-  owner's verdict.
+- ~~**Slavic 13th month**~~ — **RESOLVED 2026-07-29: Modrenik STAYS.**
+  The owner's words: *"we went the route of giving everything its
+  twelve"* — so the thirteenth is not an exception to be trimmed but
+  the axle every Dozen is entitled to. The sealed repo law is
+  unchanged (±14 d of the December solstice, in a 13-full-moon year).
+  The doctrine behind it is now written: CANON §The Axle — the
+  Thirteenth in the Center.
+- ~~**Olympians on the Calendar**~~ — **SEALED 2026-07-29: all twelve
+  wedges + the center.** Zeus 12–14h, Athena 14–16h, Hephaestus
+  16–18h, Artemis 18–20h, Ares 20–22h, Demeter 22–24h, Poseidon
+  00–02h, Hermes 02–04h, Dionysus 04–06h, Apollo 06–08h, Aphrodite
+  08–10h, Hera 10–12h; **center HESTIA, always present**. Table and
+  arguments in CANON §The Olympians. The roster can mount.
+- ~~**Apostles on the Calendar**~~ — **SEALED 2026-07-29: all twelve
+  wedges + the center.** Peter 12–14h, James the Greater 14–16h, John
+  16–18h, Philip 18–20h, Bartholomew 20–22h, Judas Iscariot 22–24h
+  (his wedge ENDS at midnight), Simon the Zealot 00–02h, Thomas
+  02–04h, Matthew 04–06h, James of Alphaeus 06–08h, Thaddaeus 08–10h,
+  Andrew 10–12h; **center JESUS, always present**. CANON §The
+  Apostles. The roster can mount.
+- ~~**Virtue Wheel** crown/root seating~~ — **SEALED 2026-07-29,
+  RE-SEATED.** Magnanimity·Vanity crowns at 12h (Aristotle's own
+  *"crown of the virtues"*); Just Indignation·Envy roots at 24h;
+  Courage moved to 16h in cross-resonance with the Emotions Dozen. The
+  old Courage-crown proposal AND the paint-inverted-through-the-center
+  reading are both DEAD — virtue and vice now share ONE seat. Center:
+  **Prudence** (light) · **Cunning** (paint), always present. Full
+  table, the six axes and their meanings in CANON §The Virtue Wheel.
+- **The Sins Dozen** — drafted PROPOSED in CANON §The Sins Dozen (a
+  fifth Dozen, System B, twelve seats + center, each seat anchored).
+  Awaits the owner's PER-SEAT verdict and his pick for the center:
+  **Pride** (Gregory's own structure — he took it off the seven and
+  made it their root) vs **Blasphemy against the Spirit** (the
+  unforgivable, Mark 3:29). NOT mounted, no prompt sheet, none written
+  until the owner rules.
 - **A 24-set for the Calendar** — no 24 (+3 center) roster is
   canon-sealed to ride it; the two-per-wedge law is implemented and
   tested, registering one is a single table row once sealed (Rose-24's

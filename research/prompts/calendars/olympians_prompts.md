@@ -8,28 +8,40 @@ two at the top, two at the bottom, two flanking each side; see
 carries the Dozens that come naturally in pairs, and the Twelve
 Olympians are its first: the classical Dodekatheon, seated two by two.
 
-**The six pairs (RESTRUCTURE pair table):**
+**The twelve wedges — SEALED by the owner 2026-07-29** (CANON §The
+Olympians; nothing waits on a wiring round any more):
 
-| Pair | Placement | Argument |
+| Wedge | God | Argument |
 |---|---|---|
-| **Zeus + Hera** | crown (top, 12h) | king and queen of Olympus — the marriage that rules the sky |
-| **Apollo + Artemis** | the flanks | the twin lights: Apollo sun/morning on the LEFT, Artemis moon/evening on the RIGHT |
-| **Ares + Aphrodite** | flank region | war and love, the famous lovers — the two forces that undo each other |
-| **Hephaestus + Athena** | flank region | the two makers: the forge's craft and the mind's craft |
-| **Hermes + Dionysus** | flank region | the two who cross boundaries: the messenger between worlds, the god who dissolves the self |
-| **Poseidon + Demeter** | root (bottom, 24h) | the two elder powers of the deep and the earth — sea below, grain from the ground |
+| **12–14h** | **Zeus** | the king opens the circle from noon |
+| 14–16h | Athena | born from Zeus's own head — she sits beside her father |
+| 16–18h | Hephaestus | the forge-fire descending to the horizon |
+| 18–20h | Artemis | the moon rises as the sun sets — the RIGHT twin-light flank |
+| 20–22h | Ares | war in the early night, opposite Aphrodite |
+| 22–24h | Demeter | the grain goes into the earth toward midnight |
+| **00–02h** | **Poseidon** | the sea under midnight |
+| 02–04h | Hermes | the night traveller, guide of souls and of dreams |
+| 04–06h | Dionysus | the revel that gutters out at dawn — the god who ascended to the seat Hestia yielded |
+| 06–08h | Apollo | the sun: the LEFT cardinal is sunrise — the left twin-light flank |
+| 08–10h | Aphrodite | Venus as the morning star, opposite Ares |
+| **10–12h** | **Hera** | the queen closes the circle back into the crown |
 
-The crown pair, the flank pair (with Apollo's morning light kept LEFT
-and Artemis's evening moon kept RIGHT, per the owner), and the root pair
-are sealed by the geometry; the three remaining pairs fill the diagonal
-regions between them (exact wedge assignment finalized in the wiring
-round, the same way every Dozen's per-seat placement is).
+The boundaries fall on the six arms, so the twelve stand as six
+flanking pairs: **Hera+Zeus** crown the top, **Demeter+Poseidon** root
+the bottom, and **Athena+Hephaestus** (the two makers),
+**Artemis+Ares**, **Hermes+Dionysus** (the boundary-crossers) and
+**Apollo+Aphrodite** hold the four remaining arms. The twin lights and
+the lovers are no longer NEIGHBOURS — they are OPPOSITIONS, which is
+the stronger reading: **Apollo faces Artemis** across the whole dial
+(sunrise facing sunset, sun facing moon) and **Ares faces Aphrodite**
+(war facing love, the two forces that undo each other). Nothing in the
+briefs below changes: each window is argued by its god's own nature.
 
 **Register:** the round calendar-mount medallion family — the same
 night-window stained-glass rondel every Calendar-pointer 12-set wears
 (see the [Slavic Months Prompts](../months/months_prompts.md), the
 [Calendar Prompts](../archetype/calendar_prompts.md)). ROUND rose-window
-medallions, one unifying device across all twelve: **the Greek key** —
+medallions, one unifying device across all thirteen: **the Greek key** —
 a continuous meander (Greek-key) leadwork rim, the same border family
 the Greek weekday theme's god medallions wear, here cast in bright
 gold-and-bronze glass-leadwork so the Twelve read as one pantheon. Each
@@ -38,9 +50,10 @@ storm-gold, Aphrodite's foam-rose, Poseidon's sea-green, and so on).
 
 **Drop paths:** `assets/calendars/olympians/primary/colored/<Figure>.png` — a
 sourceless calendar-mount root (PromptPainter appends `_gem`/`_gpt`).
-Twelve files: `Zeus.png`, `Hera.png`, `Apollo.png`, `Artemis.png`,
-`Ares.png`, `Aphrodite.png`, `Hephaestus.png`, `Athena.png`,
-`Hermes.png`, `Dionysus.png`, `Poseidon.png`, `Demeter.png`.
+Thirteen files — the twelve plus the axle: `Zeus.png`, `Hera.png`,
+`Apollo.png`, `Artemis.png`, `Ares.png`, `Aphrodite.png`,
+`Hephaestus.png`, `Athena.png`, `Hermes.png`, `Dionysus.png`,
+`Poseidon.png`, `Demeter.png`, `Hestia.png`.
 
 **House rules carried from every other sheet:** photorealistic render,
 isolated background (no transparency-checkerboard artifact), the
@@ -48,7 +61,7 @@ circular window shape IS the frame, NO lettering anywhere in any image.
 
 ---
 
-## The crown pair — Zeus & Hera (top, 12h)
+## The crown pair — Zeus (12–14h) & Hera (10–12h)
 
 **Zeus — the king** → `assets/calendars/olympians/primary/colored/Zeus.png`
 
@@ -62,7 +75,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Deep peacock-blue, royal gold and jewel-green glass. Center: a crowned, veiled queen enthroned in equal state beside the king's, a tall lotus-tipped sceptre in one hand, a peacock with its full jeweled tail fanned behind her, a marriage-diadem on her brow — queen of the gods, keeper of marriage and the sky's own throne. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: peacock blue, royal gold, jewel green, dark-bronze lead. NO lettering anywhere.
 ```
 
-## The flank pair — Apollo & Artemis (the twin lights)
+## The twin lights, now OPPOSITE — Apollo (06–08h) & Artemis (18–20h)
 
 **Apollo — the morning light (left)** → `assets/calendars/olympians/primary/colored/Apollo.png`
 
@@ -76,7 +89,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Cool silver-blue, moon-white and forest-green glass, an evening light. Center: a lithe huntress-goddess with a silver crescent moon at her brow, a drawn silver bow in hand and an arrow nocked, a hound and a stag at her side, the crescent moon rising behind her over dark pines — the wild, the hunt, and the moon rising in the east as her brother's sun sets. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: silver-blue, moon white, forest green, dark-bronze lead. NO lettering anywhere.
 ```
 
-## The flank pair — Ares & Aphrodite (war and love)
+## The lovers, now OPPOSITE — Ares (20–22h) & Aphrodite (08–10h)
 
 **Ares — war** → `assets/calendars/olympians/primary/colored/Ares.png`
 
@@ -90,7 +103,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm rose, sea-foam and gold glass, soft and luminous. Center: the goddess of love rising from a great scallop-shell on a foam-crested wave, doves circling, a girdle of gold at her waist, roses opening around her feet, a warm rose light suffusing the disc — beauty and desire born from the sea, the force that even Ares cannot resist. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: rose pink, sea-foam white, warm gold, dark-bronze lead. NO lettering anywhere.
 ```
 
-## The flank pair — Hephaestus & Athena (the two makers)
+## The pair on the 16h arm — Hephaestus (16–18h) & Athena (14–16h)
 
 **Hephaestus — the forge** → `assets/calendars/olympians/primary/colored/Hephaestus.png`
 
@@ -104,7 +117,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Grey-olive, clear silver and gold glass, cool and clear. Center: the grey-eyed goddess in a crested helm, a tall spear and the aegis-shield with its small Gorgon boss at her side, an owl on her shoulder and an olive branch in her hand — wisdom, strategy and the crafts of the mind, the war-goddess who wins by counsel rather than fury. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: grey-olive, clear silver, gold, dark-bronze lead. NO lettering anywhere.
 ```
 
-## The flank pair — Hermes & Dionysus (the boundary-crossers)
+## The boundary-crossers — Hermes (02–04h) & Dionysus (04–06h)
 
 **Hermes — the messenger** → `assets/calendars/olympians/primary/colored/Hermes.png`
 
@@ -118,7 +131,7 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Wine-purple, vine-green and warm gold glass, rich and loosening. Center: a wreathed god crowned with grape-vine and ivy, a brimming wine-cup (kantharos) raised in one hand and a pine-tipped thyrsus staff in the other, a leopard at his feet and vines heavy with fruit spilling round the rim — wine, ecstasy and the theatre, the god who dissolves the boundaries of the self. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: wine purple, vine green, warm gold, dark-bronze lead. NO lettering anywhere.
 ```
 
-## The root pair — Poseidon & Demeter (bottom, 24h)
+## The root pair — Poseidon (00–02h) & Demeter (22–24h)
 
 **Poseidon — the sea** → `assets/calendars/olympians/primary/colored/Poseidon.png`
 
@@ -132,18 +145,39 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Wheat-gold, deep earth-brown and harvest-green glass, warm and grounded. Center: a crowned mother-goddess enthroned low, a great sheaf of ripe golden wheat gathered in her arms, a lit torch in one hand (her search for lost Persephone) and a poppy at her side, the fields growing up around her — goddess of the harvest, grain and the earth's own bounty, the ground the whole wheel rests on. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: wheat gold, earth brown, harvest green, dark-bronze lead. NO lettering anywhere.
 ```
 
+## The center — Hestia (the axle, always present)
+
+The thirteenth does not take a wedge: it stands at the CENTER, the one
+member who does not turn with the twelve — **the wheel turns on her**
+(CANON §The Axle). Hestia gave her Olympian seat to Dionysus and kept
+the hearth, which is exactly why the Dodekatheon counts twelve at all:
+the hiding-place polarity in its purest form, and yet never absent —
+person-centers stand ALWAYS, with no moon count and no window. *"Hestia
+alone abides at home in the house of the gods"* while the twelve ride
+out (Plato, *Phaedrus* 246e–247a); the Pythagoreans set the same fire
+at the middle of the cosmos and called it the hearth (Philolaus).
+**Olympus itself is NOT a member** — the mountain is where the twelve
+stand, which on this instrument is the dial, not a seat on it.
+
+**Hestia — the hearth that does not turn** → `assets/calendars/olympians/primary/colored/Hestia.png`
+
+```
+ROUND rose-window stained-glass medallion, night-window register, photorealistic render, isolated background, the circular window shape IS the frame. Warm hearth-amber, ember-red and soft gold glass, the steadiest and most inward-lit of the thirteen — a light that does not travel, only holds. Center: a veiled goddess seated dead-center and perfectly still, both hands sheltering a small ROUND HEARTH-FIRE burning steady in a plain stone circle before her, a simple kettle-chain and a plain house-post behind her, the flame the single brightest point and the only motion in the whole disc — the one who stayed home while the twelve rode out, the fire the household turns around. Everything is composed concentrically around that flame. Border: the shared Greek-key meander leadwork rim in bright gold-bronze. Palette: hearth amber, ember red, warm gold, quiet stone grey, dark-bronze lead. NO lettering anywhere.
+```
+
 ---
 
 ## Status
 
 - New sheet, Dozen #3 of four (RESTRUCTURE §New Content, owner-sealed
   2026-07-22). **System A — zodiac-aligned geometry** (boundaries on the
-  cardinals → six pairs); the Twelve Olympians seated two by two.
-  **Art: 0/12**, none generated on either source.
-- Crown pair (Zeus+Hera), flank pair (Apollo left/morning, Artemis
-  right/evening) and root pair (Poseidon+Demeter) are geometry-sealed;
-  the three middle pairs fill the diagonal regions, exact wedges pinned
-  in the wiring round.
+  cardinals → six pairs); the Twelve Olympians seated two by two, plus
+  the axle. **Art: 0/13**, none generated on either source.
+- **All twelve wedges and the center are SEALED (owner 2026-07-29** —
+  see the table above and CANON §The Olympians). The old "exact wedge
+  assignment finalized in the wiring round" note is gone; so is the
+  Apollo+Artemis / Ares+Aphrodite ADJACENCY — both are now oppositions
+  across the dial. The center is **Hestia, always present**.
 - Register is the calendar-mount rondel family; the shared device is the
   Greek-key meander rim (the Greek theme's own border family, recut as
   gold-bronze glass leadwork).
@@ -151,4 +185,4 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
   root `calendars/olympians` is a NEW data-driven family root in
   `tests/test_prompt_paths.py`.
 - Verify with `python main.py "research/prompts/calendars/olympians_prompts.md" --dry-run`
-  from `Gadgets/PromptPainter/` (12 images expected).
+  from `Gadgets/PromptPainter/` (13 images expected).

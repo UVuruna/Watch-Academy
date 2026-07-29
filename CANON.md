@@ -846,47 +846,212 @@ has **ONE CROWN** (the top wedge, 12h), **ONE ROOT** (the bottom wedge,
 its exact opposite across the center. System B carries the dozens
 defined by OPPOSITES: an emotion and its cure, a virtue and its failing.
 
-**The four Dozens (owner-approved, Phase 3):**
+**The four Dozens (owner-approved, Phase 3). EVERY SEAT OF ALL FOUR IS
+SEALED (owner 2026-07-29)** — nothing below waits on a wiring round any
+more, and each Dozen now names its CENTER as well as its rim:
 
-| Dozen | System | Shape | Crown / Root | Sheet |
-|---|---|---|---|---|
-| **Emotions** | B | crown, root, six opposition axes | Love 12h / Hatred 24h | `calendars/emotions_prompts.md` |
-| **Virtue Wheel** (Virtues + Vices, two registers of one wheel) | B | crown, root, six axes; paint/light | Courage 12h / Cowardice 24h (proposed, pending) | `calendars/virtue_wheel_prompts.md` |
-| **Olympians** | A | six pairs | Zeus+Hera / Poseidon+Demeter | `calendars/olympians_prompts.md` |
-| **Apostles** | A | six pairs | Peter+Andrew / Simon+Judas | `calendars/apostles_prompts.md` |
+| Dozen | System | Shape | Crown / Root | Center — the axle | Sheet |
+|---|---|---|---|---|---|
+| **Emotions** | B | crown, root, six opposition axes | Love 12h / Hatred 24h | **Peace** | `calendars/emotions_prompts.md` |
+| **Virtue Wheel** (Virtues + Vices, two registers of one wheel) | B | crown, root, six axes; paint/light | Magnanimity·Vanity 12h / Just Indignation·Envy 24h | **Prudence** (light) · **Cunning** (paint) | `calendars/virtue_wheel_prompts.md` |
+| **Olympians** | A | six pairs | Zeus+Hera / Demeter+Poseidon | **Hestia** | `calendars/olympians_prompts.md` |
+| **Apostles** | A | six pairs | Peter+Andrew / Judas+Simon | **Jesus** | `calendars/apostles_prompts.md` |
 
-- **Emotions (System B).** The six Prism-paint hexagram emotions sit at
-  their own prism hours — **Love 12h, Courage 16h, Pride 20h, Hatred
-  24h, Fear 04h, Humility 08h**, KEEPING their prism hues (the
-  color-fidelity law's cleanest case: retention, not a move) — and six
-  new intermediates complete the Dozen: **Hope 14h, Ambition 18h, Envy
-  22h, Despair 02h, Doubt 06h, Gratitude 10h**. The six opposition axes
-  are cures: Love↔Hatred, Hope↔Despair, Courage↔Fear, Ambition↔Doubt,
-  Pride↔Humility, Envy↔Gratitude.
-- **Virtue Wheel (System B, two registers of one wheel).** Aristotle's
-  twelve virtues (the LIGHT register — additive, luminous) and their
-  twelve vices (the PAINT register — subtractive, heavy pigment) on ONE
-  wheel of twelve seats: Courage/Cowardice, Temperance/Gluttony,
-  Generosity/Greed, Magnificence/Vulgarity, Magnanimity/Vanity,
-  Patience/Wrath, Truthfulness/Boastfulness, Wit/Buffoonery,
-  Friendliness/Flattery, Modesty/Shamelessness, Right Ambition/
-  Over-ambition, Just Indignation/Envy. The crown/root seating is
-  PROPOSED (Courage crowns the light; by the paint-is-light-inverted
-  reading its vice Cowardice roots the paint directly beneath) and
-  awaits the owner's verdict — see the sheet's own PENDING section.
-- **Olympians (System A, six pairs).** Zeus+Hera crown the top; Apollo
-  (sun/morning) LEFT and Artemis (moon/evening) RIGHT are the twin-light
-  flanks; Ares+Aphrodite, Hephaestus+Athena, Hermes+Dionysus fill the
-  middle; Poseidon+Demeter root the bottom (sea and grain, the elder
-  powers the wheel rests on).
-- **Apostles (System A, six pairs, sent two by two, Mark 6:7).**
-  Peter+Andrew crown (the rock and the first-called); James+John,
-  Philip+Bartholomew, Thomas+Matthew, James-of-Alphaeus+Thaddaeus fill
-  the middle; **Simon the Zealot + Judas Iscariot root the bottom — and
-  Judas beside midnight MIRRORS the Prism primary's Hatred at 24h** (the
-  same purple, the same collapse of love), the resonance repeated in the
-  Emotions Dozen's own Hatred root: the bottom of every wheel is where
-  love breaks, spoken across three Dozens at once.
+### The Axle — the Thirteenth in the Center (owner seal 2026-07-29)
+
+**The center is the AXLE: the one member who does not turn with the
+twelve — the wheel turns ON him.** A Dozen's thirteenth never takes a
+wedge and is never a lesser member; it is the Dozens' own form of the
+Ninth outside the eights (§The Ninth) — an OUTSIDE member, not a
+smaller one.
+
+**The frame does not choose between an over-month and a hidden month.
+Each roster's own story gives its axle the polarity:**
+
+- **the THRONE** — the axle is enthroned, and the twelve are gathered
+  around it: **Jesus** above the Twelve; **Sol**, the Sun's own month at
+  the top of the year; **Prudence**, who steers; **Peace**, the still
+  point every emotion runs toward.
+- **the HIDING PLACE** — the axle is the one left out, displaced or
+  hidden: **Ophiuchus**, the sign astronomy knows and astrology omits;
+  **The Cat**, cheated out of the race; **Modrenik**, the dark month of
+  the December solstice; **Hestia**, who gave up her Olympian seat and
+  kept the hearth.
+
+**Mechanically the polarity splits clean along a DIFFERENT seam — and
+this is the law:**
+
+- **CALENDAR-DRIVEN thirteenths appear only when the YEAR OVERFLOWS.**
+  They are exactly what a twelve-month calendar cannot hold, and their
+  sealed year-rules stand untouched: Ophiuchus, Sol and Modrenik show
+  only in a 13-full-moon year (~37% of years) and only inside their own
+  short window; The Cat rides the REAL lunisolar leap month. Most years
+  they are simply not there.
+- **PERSON-CENTERS stand ALWAYS.** The enthroned never leave, and
+  neither do those who chose the hearth: Jesus, Hestia,
+  Prudence/Cunning and Peace are present every day of every year — no
+  moon count, no window. A wheel with no center does not turn; it only
+  spins.
+
+Hestia is the case that proves the two seams are different: a
+hiding-place STORY, yet permanently present, because she is a person
+and not a leftover month. The anchors: **Hestia stays at the hearth
+while the twelve ride out** (Plato, *Phaedrus* 246e–247a — *"Hestia
+alone abides at home in the house of the gods"*) and the Pythagoreans'
+central fire, the **"hearth of the cosmos"** (Philolaus); **Jesus** —
+*"I am with you always, to the end of the age"* (Matthew 28:20).
+
+### The Emotions Dozen (System B)
+
+The six Prism-paint hexagram emotions sit at their own prism hours —
+**Love 12h, Courage 16h, Pride 20h, Hatred 24h, Fear 04h, Humility
+08h**, KEEPING their prism hues (the color-fidelity law's cleanest
+case: retention, not a move) — and six new intermediates complete the
+Dozen: **Hope 14h, Ambition 18h, Envy 22h, Despair 02h, Doubt 06h,
+Gratitude 10h**. The six opposition axes are cures: Love↔Hatred,
+Hope↔Despair, Courage↔Fear, Ambition↔Doubt, Pride↔Humility,
+Envy↔Gratitude.
+
+**The center (SEALED 2026-07-29): PEACE, always present.** Every other
+emotion on this wheel MOVES a person; peace is the one that does not.
+It is not a thirteenth mood squeezed onto the rim but the state a heart
+stands in when all twelve are answered — the still point the twelve
+turn around, throne polarity (§The Axle).
+
+### The Virtue Wheel (System B, two registers of one wheel)
+
+Aristotle's twelve virtues (the LIGHT register — additive, luminous)
+and their twelve vices (the PAINT register — subtractive, heavy
+pigment) on ONE wheel of twelve seats. **RE-SEATED AND SEALED
+2026-07-29**, and two things died with the seal: Courage no longer
+crowns (the owner's ruling), and the old "paint-is-light-inverted-
+through-the-center" proposal — a vice sitting diametrically opposite
+its own virtue — is GONE. **A virtue and its vice share ONE seat**: the
+same hour read two ways, light or paint, perfectly co-located.
+
+| Hour | Virtue (light) | Vice (paint) | Why this seat |
+|---|---|---|---|
+| **12h — crown** | **Magnanimity** | **Vanity** | Aristotle himself calls *megalopsychia* *"a sort of crown of the virtues"* (EN IV.3, 1124a); the owner ruled that Courage does not merit the crown |
+| 14h | Truthfulness | Boastfulness | the magnanimous man *"speaks the truth"* — beside the crown by Aristotle's own words; nothing is hidden in the midday light |
+| 16h | Courage | Cowardice | the orange seat, in exact cross-resonance with the Emotions Dozen's Courage 16h / Fear 04h — same hour, same hue, two wheels |
+| 18h | Right Ambition | Over-ambition | direct resonance: the Emotions' Ambition already stands at 18h |
+| 20h | Magnificence | Vulgarity | great splendour in Pride's warm evening hour |
+| 22h | Wit | Buffoonery | the symposium hour; the jester beside late-night Envy |
+| **24h — root** | **Just Indignation** | **Envy** | envy at midnight continues the sealed root law — *the bottom of every wheel is where love breaks* (Hatred roots the Emotions, Judas the Apostles): envy is another's good curdled into pain |
+| 02h | Temperance | Gluttony | the unguarded appetite feeds at two in the morning, in Despair's hour |
+| 04h | Patience | Wrath | enduring the darkest hour, where the Emotions keep Fear |
+| 06h | Modesty | Shamelessness | the modest light of dawn |
+| 08h | Generosity | Greed | the giving hand is humble — Humility's hour |
+| 10h | Friendliness | Flattery | the morning visit, Gratitude's hour |
+
+**The six axes, each with its meaning:**
+
+| Axis | What it opposes |
+|---|---|
+| 12 ↔ 24 | what **I** deserve ↔ what **OTHERS** deserve — on the paint register, Vanity ↔ Envy: claiming unearned shine ↔ resenting earned shine |
+| 14 ↔ 02 | measure in **WORD** ↔ measure in **APPETITE** — the two self-commands |
+| 16 ↔ 04 | fortitude's two acts — **ATTACK** ↔ **ENDURE** (Aquinas, ST II-II q.123: *aggredi* and *sustinere*) |
+| 18 ↔ 06 | claiming one's due ↔ declining the undue — the two knowledges of one's own measure |
+| 20 ↔ 08 | the **GREAT** gift ↔ the **DAILY** gift (Aristotle's two scales of giving, *megaloprepeia* and *eleutheriotes*) |
+| 22 ↔ 10 | the two graces of company — **PLAY** ↔ **KINDNESS** (with truthfulness, Aristotle's three social virtues) |
+
+**The center, both registers, always present (SEALED 2026-07-29):**
+
+- **PRUDENCE (*phronesis*) on the LIGHT register** — the judgment that
+  FINDS every other virtue's mean. Without it courage turns reckless
+  and generosity wasteful; it is not one virtue among twelve but the
+  one that seats the twelve. The medievals named it *auriga virtutum*,
+  **the charioteer of the virtues** — and a charioteer steers from the
+  center, never rides the rim.
+- **CUNNING (*panourgia*) on the PAINT register** — the same skill
+  driving the opposite way. It is Aristotle's own word for cleverness
+  in the service of base ends (EN VI.12), and Aquinas seats *astutia*
+  as the vice that COUNTERFEITS prudence (ST II-II q.55); *"now the
+  serpent was more cunning than any beast of the field"* (Genesis 3:1).
+  The dark charioteer does not miss the road — **he chooses the
+  cliff.**
+
+(Folly, the mere absence of judgment, was weighed and set aside: the
+axle must STEER. Folly sleeps.)
+
+### The Olympians (System A, six pairs)
+
+The classical Dodekatheon on the zodiac-aligned wheel; the boundaries
+fall on the six arms, so the twelve stand as six flanking pairs.
+**Every wedge SEALED 2026-07-29:**
+
+| Wedge | God | Why this seat |
+|---|---|---|
+| **12–14h** | **Zeus** | the king opens the circle from noon |
+| 14–16h | Athena | born from Zeus's own head — she sits beside her father |
+| 16–18h | Hephaestus | the forge-fire descending to the horizon |
+| 18–20h | Artemis | the moon rises as the sun sets — the RIGHT twin-light flank |
+| 20–22h | Ares | war in the early night, opposite Aphrodite |
+| 22–24h | Demeter | the grain goes into the earth toward midnight |
+| **00–02h** | **Poseidon** | the sea under midnight |
+| 02–04h | Hermes | the night traveller, guide of souls and of dreams |
+| 04–06h | Dionysus | the revel that gutters out at dawn — the god who ascended to the seat Hestia yielded |
+| 06–08h | Apollo | the sun: the LEFT cardinal is sunrise — the left twin-light flank |
+| 08–10h | Aphrodite | Venus as the morning star, opposite Ares |
+| **10–12h** | **Hera** | the queen closes the circle back into the crown |
+
+Zeus and Hera flank the top as the crown pair, Demeter and Poseidon the
+bottom as the root pair; the other four pairs flank the remaining arms
+(Athena+Hephaestus, Artemis+Ares, Hermes+Dionysus, Apollo+Aphrodite).
+**What the seal changed:** four of the sheet's original six pairs stand
+untouched, but the twin lights and the lovers are no longer NEIGHBOURS
+— they are OPPOSITIONS, which is the stronger reading: Apollo 06–08h
+faces Artemis 18–20h across the whole dial (sun facing moon, sunrise
+facing sunset), and Ares 20–22h faces Aphrodite 08–10h (war facing
+love, the two forces that undo each other). The wheel's other
+oppositions fall out for free: Zeus ↔ Poseidon (the brother kings of
+sky and sea), Hera ↔ Demeter (the two great mothers), Athena ↔ Hermes
+(the two cunning intelligences), Hephaestus ↔ Dionysus (the two
+outsider gods of fire and wine).
+
+**The center: HESTIA, always present (SEALED 2026-07-29).** She gave
+her Olympian seat to Dionysus and kept the hearth — the axle story the
+Greeks told themselves, and the reason the Dodekatheon is counted twelve
+at all. She is the hiding-place polarity in its purest form and yet
+never absent (§The Axle). **Olympus itself is NOT a member:** the
+mountain is where the twelve stand — that is the dial, not a seat on it.
+
+### The Apostles (System A, six pairs, sent two by two, Mark 6:7)
+
+The Twelve seated as the six missions He sent out. **Every wedge SEALED
+2026-07-29:**
+
+| Wedge | Apostle | Why this seat |
+|---|---|---|
+| **12–14h** | **Peter** | the rock on whom the Church is built, opening the circle from noon |
+| 14–16h | James the Greater | a son of thunder, in the afternoon light |
+| 16–18h | John | the other son of thunder, turned toward the sunset |
+| 18–20h | Philip | *"come and see"* (John 1:46) — he brings Nathanael |
+| 20–22h | Bartholomew | Nathanael, who came and saw |
+| **22–24h** | **Judas Iscariot** | his wedge ENDS at midnight: the betrayal completes exactly where love breaks — *"and it was night"* (John 13:30) — mirroring Hatred at 24h as this canon already reads |
+| **00–02h** | **Simon the Zealot** | the zealot holds the far side of the night |
+| 02–04h | Thomas | the darkest hour — doubt; his feast falls at the winter solstice |
+| 04–06h | Matthew | called from the toll booth toward dawn |
+| 06–08h | James of Alphaeus | the quieter mission, in the plain morning light |
+| 08–10h | Thaddaeus | Jude, patron of hope in hard causes — the last hour before the crown |
+| **10–12h** | **Andrew** | the first-called, closing the circle back into the crown |
+
+Peter and Andrew flank the top as the crown pair, Judas and Simon the
+bottom as the root pair; all six of the sheet's original pairs survive
+the seal unchanged. **The oppositions the crown creates are the point:
+the first-called faces the betrayer** (Andrew 10–12h ↔ Judas 22–24h)
+**and the rock faces the zealot** (Peter 12–14h ↔ Simon 00–02h); the
+beloved disciple faces the one who had to touch the wound (John 16–18h
+↔ Thomas 02–04h). The root resonance is canon and not decoration: Judas
+beside midnight rhymes with `Devil_Hatred` on the Prism primary
+hexagram (also purple, also 24h) and with the Emotions Dozen's own
+Hatred root — the bottom of every wheel is where love breaks, spoken
+across three Dozens at once.
+
+**The center: JESUS, always present (SEALED 2026-07-29)** — *"I am with
+you always, to the end of the age"* (Matthew 28:20). The master is the
+axle the Twelve turn on: the throne polarity made flesh, and the reason
+this roster's center can never be a windowed thirteenth.
 
 **Display carries the Calendar's own doctrine.** These Dozens mount as
 round medallions on the Calendar pointer at
@@ -898,6 +1063,76 @@ calendar-mount rondel register (night-window stained glass) with its own
 shared border device — the Wheel of the Heart for Emotions, the Mean's
 balance-beam for the Virtue Wheel, the Greek key for the Olympians, the
 fisherman's Net for the Apostles.
+
+**The axle rides the mount's CENTER seat** — the same seat the calendar
+thirteenths already use (`config/defaults.CALENDAR_MOUNTS` carries a
+`centre` per mount). The four person-centers sealed above are canon as
+of 2026-07-29; registering them, and their art, is a wiring round that
+follows the seal — the seating is the thing that was owed, and it is now
+paid.
+
+### The Sins Dozen — a fifth Dozen, PROPOSED (NOT mounted)
+
+**Status: PROPOSED. Awaiting the owner's per-seat verdict and his pick
+for the center.** Nothing here is sealed, no prompt sheet exists, and
+none is written until the owner rules. The owner approved DRAFTING a
+Sins roster beside the Aristotelian vices, and the two are deliberately
+different traditions: the Virtue Wheel's paint register is Aristotle's
+twelve failings of the MEAN, while this Dozen is the Christian
+tradition's catalogue of SIN — Gregory the Great, Evagrius, Dante.
+System B (crown, root, six axes), as befits a wheel of opposites.
+
+**The center, PROPOSED: PRIDE.** The tradition itself pulled Pride out
+of the wheel: Gregory took it OFF the list of seven and made it the
+ROOT of all of them — *"radix quippe cuncti mali superbia est"*, pride
+is the root of all evil (*Moralia* XXXI), the queen from whom the seven
+proceed. A roster whose own author removed a member and set it over the
+rest is describing an AXLE, not a seat: always present, the sin that
+watches all the others, throne polarity. *"Pride goeth before
+destruction"* (Proverbs 16:18).
+
+**The weighed alternative, for the owner to pick against:
+BLASPHEMY AGAINST THE SPIRIT** — the unforgivable sin, *"hath never
+forgiveness"* (Mark 3:29). It argues the center from the other side:
+not the sin that fathers the rest, but the one that cannot turn back —
+the only still point in a wheel of sins that all still admit repentance.
+Pride is proposed because it is the tradition's own structural choice;
+the Unforgivable is proposed because it is the only sin that literally
+cannot move.
+
+| Hour | Sin | The argument, and its resonance |
+|---|---|---|
+| **12h — crown** | **Vainglory** | the rim-face of the axle: exactly the seat Gregory left behind when he lifted Pride out of the seven. The crown of a wheel of sins is the sin that WANTS the crown — and it locks onto the Virtue Wheel's own Vanity at 12h, the same hour, the same hue |
+| 14h | Hypocrisy | the hour of the word about oneself (Truthfulness/Boastfulness on the Virtue Wheel): the settled lie, the *whited sepulchre* (Matthew 23:27) — *hypokrites* is Greek for stage-player, brightest at midday and hollow within |
+| 16h | Violence | Courage's orange arm on two wheels; violence is fortitude's ATTACK-act (the sealed 16↔04 *aggredi*) turned rabid — Dante's seventh circle, violence against neighbour, self and God |
+| 18h | Avarice | the ember hour of Ambition and Right Ambition, the reach for MORE turned into possession without end: *"he that loveth silver shall not be satisfied with silver"* (Ecclesiastes 5:10) |
+| 20h | Lust | the red arm, Pride's own hour and the passion hour of the early night: appetite for the body as pride is appetite for the self (Matthew 5:28) |
+| 22h | Envy | the crimson wound-hour the Emotions Dozen already gives Envy, one step before the root — the bruise on the way to midnight: *"through envy of the devil came death into the world"* (Wisdom 2:24) |
+| **24h — root** | **Treachery** | the root law: *the bottom of every wheel is where love breaks* — and treachery is the only sin that REQUIRES love first, a bond made and then broken. Dante's ninth and deepest circle is the traitors' ice, with Judas in Satan's own mouth (*Inferno* XXXIV), and the Apostles Dozen already seats Judas at 22–24h: the man and his sin end at the same midnight. *"He that eateth bread with me hath lifted up his heel against me"* (John 13:18) |
+| 02h | Despair | the indigo hour the Emotions give Despair — and in the tradition despair is a SIN, the sin against Hope (Aquinas, ST II-II q.20), the refusal of a mercy that was offered: Judas's second sin, which the tradition calls worse than his first (Matthew 27:5) |
+| 04h | Wrath | the darkest hour, where the Virtue Wheel already seats Wrath as Patience's failure — endurance snapped: *"let not the sun go down upon your wrath"* (Ephesians 4:26), and at four in the morning the sun has been down all night |
+| 06h | Idolatry | Doubt's teal hour, the divided step: idolatry is the will choosing the wrong god at the fork — *"how long halt ye between two opinions?"* (1 Kings 18:21), Elijah's challenge as the exact image the Emotions' Doubt window already draws (Exodus 20:3–4) |
+| 08h | Gluttony | the green arm of Humility and renunciation, the hour of the DAILY gift (Generosity/Greed): gluttony is renunciation's flat refusal, the daily bread devoured instead of shared — *"whose God is their belly"* (Philippians 3:19) |
+| 10h | Acedia | Gratitude's chartreuse hour, and its exact refusal: Aquinas defines acedia as *tristitia de bono spirituali*, sorrow at one's OWN good (ST II-II q.35). Its most famous name, the *noonday demon* (Psalm 91:6), is the one thing this seating cannot honour — noon is the crown |
+
+**The six axes that fall out (proposed with the seats):** 12↔24
+vainglory's empty crown ↔ the bond destroyed; 14↔02 the lie told to
+others ↔ the lie believed about oneself; 16↔04 fortitude's two acts
+corrupted — the attack turned rabid ↔ the endurance snapped; 18↔06 the
+two false gods, the thing hoarded ↔ the thing worshipped (*"covetousness,
+which is idolatry"*, Colossians 3:5 — Paul names this axis himself);
+20↔08 the two appetites of the flesh; 22↔10 Aquinas' two sorrows —
+sorrow at ANOTHER's good ↔ sorrow at ONE'S OWN.
+
+**Drafting notes for the verdict.** Gregory's seven already stand
+WITHOUT pride — vainglory, envy, wrath, *tristitia*, avarice, gluttony,
+lust, with pride lifted above them — and Evagrius' acedia makes eight;
+but *tristitia* and acedia are ONE sorrow in the tradition, so they are
+seated once, at 10h, leaving seven. The five that complete the twelve
+come from the broader tradition: hypocrisy, violence, idolatry, despair
+and treachery. **Cruelty was weighed and set aside** — treachery
+contains it and carries the deeper anchor; if the owner wants cruelty as
+its own seat, 16h is where it goes and violence yields.
 
 <a id="the-triads"></a>
 
