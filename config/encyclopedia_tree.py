@@ -160,42 +160,18 @@ TOPIC_ALIASES["planet_signs"] = ("planets", 0)
 # --- The coverage law --------------------------------------------------------
 # OWNER LAW (Session 27, 2026-07-28): "svaki clanak mora sliku" — every
 # article carries an image. `tests/test_encyclopedia_tree.py` enforces it
-# on the SLOT, not the file: a page must NAME the plate it wants, so a
-# prompt sheet has something to address and the reader lights up the
-# moment the art lands (the graceful-absent contract).
+# on the SLOT, not the file: a page must NAME what it wants — a plate a
+# prompt sheet can address, or a DRAWER the program runs — so the reader
+# lights up the moment the art lands and no page is ever blank.
 #
-# These pages are the documented exceptions, and every one of them is a
-# COMPOSITION rather than a scene — the root Rule #19 derivation check
-# the Cube canon already answered in writing (CUBE.md, sealed Session
-# 25: "an axis IS its two ends through the centre — a composition, never
-# a new scene"). They are drawn by the program or by the page around
-# them, never generated:
-#
-#   * the thirteen AXIS pages — each is its own two poles through the
-#     centre, and both poles are on the page beside it;
-#   * the Cube's own DIAGRAMS — the cube, the axes' arithmetic, the term
-#     grid, the three sets, the hexagram projection, the banknote axes;
-#   * the two CIPHERS and the union TABLE — FALL/STAR, DOMY/SAFE and the
-#     twenty-four fields are text figures, not pictures.
-#
-# OWNER VERDICT (2026-07-29): these twenty-three are DRAWN BY THE
-# PROGRAM — computed diagrams, not generated art and not blank pages.
-# The canon's exemption stands (no scene is generated for a
-# composition) and the pages stop being visually empty, which is the
-# reading root Rule #19 was written for. Until the renderer lands they
-# are listed here, and the coverage test reads this list as the
-# documented gap rather than a silent hole.
-PLATELESS_PAGES = {
-    # What the FIRST diagram wave (0.14.540) has not drawn yet: the
-    # tables and the word-figures. `render/cube_diagrams.py` answers
-    # every cube-geometry page already; these seven wait for their own
-    # drawers (the term grid, the three sets, the two triangles, the
-    # union table, the chiasm and the two ciphers) — data-driven
-    # figures, so none of them is a prompt either.
-    "cube_doctrine": ("The Sixty-Five Terms", "The Three Sets"),
-    "double_trinity": ("The Double Trinity", "The Twenty-Four Fields"),
-    "crosses": ("The Two Crosses", "FALL and STAR", "DOMY and SAFE"),
-}
+# The list of exceptions is EMPTY, and that is the point. Twenty-three
+# pages were compositions the canon refused to generate art for (CUBE.md,
+# Session 25, root Rule #19: an axis IS its two poles through the centre,
+# a term grid is a table, a cipher is a word). The owner's verdict
+# (2026-07-29) made them COMPUTED instead of blank: `render/diagrams.py`
+# draws every one from the canon's own tables. Nothing is exempt now
+# because nothing needs to be.
+PLATELESS_PAGES: dict = {}
 
 
 def cube_target(flat_index: int) -> tuple[str, int]:

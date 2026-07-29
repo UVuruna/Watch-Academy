@@ -79,6 +79,17 @@ lines, the hexagram projection, the banknote axes — drawn live from
 `config.cube`'s own coordinates (owner verdict 2026-07-29: computed, not
 generated, and never blank). See [Cube Diagrams](cube_diagrams.md).
 
+### `canon_diagrams.py` — Canon Diagrams
+The doctrine's TABLE and JOURNEY figures — the two four-station crosses
+and their ciphers, the Double Trinity's two triangles, the sixty-five
+terms, the three figure sets and the twenty-four fields. Every one drawn
+from `config.doctrine` / `config.cube` / `config.archetypes`, never from
+prose. See [Canon Diagrams](canon_diagrams.md).
+
+### `diagrams.py` — Diagrams
+The ONE door to both diagram modules: a page declares its `(kind, key)`
+and this facade finds the drawer. See [Diagrams](diagrams.md).
+
 ## Connections
 
 ### Uses

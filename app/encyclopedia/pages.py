@@ -142,8 +142,8 @@ _CUBE_ENTRIES = (
     ("The Thirteen Axes", None, ("axes", "")),
     ("The One", archetypes.SACRED_ART_DIR / "The_One.png"),
     ("The Sacred Axis", archetypes.SACRED_ART_DIR / "Sacred_Axis.png"),
-    ("The Sixty-Five Terms", None),
-    ("The Three Sets", None),
+    ("The Sixty-Five Terms", None, ("terms", "")),
+    ("The Three Sets", None, ("sets", "")),
     ("The Activation Axis", None, ("axis", "Activation")),
     ("Composure", archetypes.CHARACTER_ART_DIR / "Composure.png"),
     ("Vigor", archetypes.CHARACTER_ART_DIR / "Vigor.png"),
@@ -196,14 +196,14 @@ _CUBE_ENTRIES = (
     ("The Banknote Axes", None, ("banknote", "")),
 )
 _DOUBLE_TRINITY_ENTRIES = (
-    ("The Double Trinity", None),
+    ("The Double Trinity", None, ("trinity", "")),
     ("The Court", archetypes.center("trinity_primary")["file"]),
     ("Genesis", archetypes.center("trinity_genesis")["file"]),
     ("The Council", archetypes.center("prism_council")["file"]),
-    ("The Twenty-Four Fields", None),
+    ("The Twenty-Four Fields", None, ("fields", "")),
 )
 _CROSSES_ENTRIES = (
-    ("The Two Crosses", None),
+    ("The Two Crosses", None, ("crosses", "The Two Crosses")),
     ("The Path of Light", archetypes.CROSSES_ART_DIR / "Path_of_Light.png"),
     ("Hope", archetypes.CROSSES_ART_DIR / "Hope.png"),
     ("Faith", archetypes.CROSSES_ART_DIR / "Faith.png"),
@@ -216,8 +216,8 @@ _CROSSES_ENTRIES = (
     ("Hate", archetypes.CROSSES_ART_DIR / "Hate.png"),
     ("Suffering", archetypes.CROSSES_ART_DIR / "Suffering.png"),
     ("Trust and Distrust", archetypes.CROSSES_ART_DIR / "Trust.png"),
-    ("FALL and STAR", None),
-    ("DOMY and SAFE", None),
+    ("FALL and STAR", None, ("crosses", "FALL and STAR")),
+    ("DOMY and SAFE", None, ("crosses", "DOMY and SAFE")),
 )
 # THE ONE SOUL THEME (owner verdict 2026-07-27: "napravi naravno — jedna
 # od važnijih ljubavnih tematika"). The prism-SECONDARY wheel's own doctrine

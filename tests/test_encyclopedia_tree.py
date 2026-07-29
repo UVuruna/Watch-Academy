@@ -300,6 +300,29 @@ def test_every_article_names_the_plate_it_wants(topics):
     )
 
 
+def test_nothing_is_exempt_from_the_coverage_law(topics):
+    """The list of exceptions is EMPTY and must stay so: every page now
+    names a plate or a drawer (owner verdict 2026-07-29 — the twenty
+    three compositions are COMPUTED, not blank). A new entry here would
+    mean a page went dark again."""
+    assert tree.PLATELESS_PAGES == {}
+
+
+def test_every_composition_page_really_draws_something(topics):
+    """A drawer that returns nothing is a blank page wearing a
+    declaration. Every declared diagram is rendered once and must come
+    back with pixels."""
+    from render import diagrams
+
+    for key, topic in topics.items():
+        for entry in topic["entries"]:
+            spec = entry.get("diagram")
+            if spec is None:
+                continue
+            plate = diagrams.plate(spec[0], spec[1], 240)
+            assert not plate.isNull(), f"{key}: {entry['name']} -> {spec}"
+
+
 def test_the_exception_list_has_no_stale_entries(topics):
     """A page that GAINED a plate must leave the exception list, or the
     list quietly stops meaning anything (the ledger-goes-stale failure
@@ -341,9 +364,9 @@ def test_every_declared_diagram_has_a_drawer(topics):
     """A page may name a DRAWER instead of a file (owner verdict
     2026-07-29). Nothing may name one that does not exist — that would
     be a blank page pretending to be a computed one."""
-    from render import cube_diagrams
+    from render import diagrams
 
-    known = set(cube_diagrams.kinds())
+    known = set(diagrams.kinds())
     for key, topic in topics.items():
         for entry in topic["entries"]:
             spec = entry.get("diagram")

@@ -42,7 +42,7 @@ from app.encyclopedia.text import article_text, entry_name, flow_html, image_too
 from app.ui_style import style_button, style_look_chip
 from config import constants, defaults, paths
 from render.asset_recolor import ensure_variant, variant_pending
-from render import cube_diagrams
+from render import diagrams
 from render.asset_variants import scaled_variant_file
 from render.compositor import _HEX_NOTE, _SUBHEAD
 
@@ -389,7 +389,7 @@ class ReaderScreen(QWidget):
                     * defaults.READER_IMAGE_MAX_HEIGHT_FRACTION * self._zoom
                 ),
             ))
-            master = cube_diagrams.plate(
+            master = diagrams.plate(
                 kind, key, defaults.CUBE_DIAGRAM_SIDE_PX,
             )
             if master.isNull():

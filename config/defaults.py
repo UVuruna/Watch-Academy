@@ -1470,6 +1470,12 @@ CUBE_DIAGRAM_FRAME_OPACITY = 0.35   # the cube's twelve edges
 CUBE_DIAGRAM_DIM_OPACITY = 0.30     # the cells an axis page does not light
 CUBE_DIAGRAM_SIDE_PX = 900          # the drawing's own square, then scaled
 CUBE_DIAGRAM_MARGIN_PX = 8          # no label is ever drawn past this edge
+# The second diagram wave — the journeys and the tables
+# (`render/canon_diagrams.py`).
+CANON_DIAGRAM_RING_RATIO = 0.34     # the arms' own radius, per plate side
+CANON_DIAGRAM_LABEL_RATIO = 0.026   # a station's name, per plate side
+CANON_DIAGRAM_TABLE_RATIO = 0.022   # a table cell, per plate side
+CANON_DIAGRAM_TABLE_MARGIN = 0.05   # the table's own inset
 
 # --- THE SESSION 27 REWORK (owner-sealed 2026-07-28) -------------------------
 # Three levels — six WHOLES, their THEME cards, then the article slider.
