@@ -16,7 +16,7 @@ import pytest
 from PySide6.QtCore import QPointF
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults
+from config import constants, defaults, palette
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -837,13 +837,13 @@ def test_palette_presets_cover_every_pointer_and_style():
     the rest stay two-wheel; a preset must exist for each)."""
     for pointer, arms in constants.POINTER_POINTS.items():
         for style in constants.palette_styles_for(pointer):
-            palette = defaults.PALETTE_PRESETS[(pointer, style)]
-            assert len(palette) == arms, (pointer, style)
+            wheel_hues = palette.PALETTE_PRESETS[(pointer, style)]
+            assert len(wheel_hues) == arms, (pointer, style)
         # And no orphan preset beyond the served styles — the armless
         # instruments and the Rose stay two-wheel.
-        assert ("aurora", "tertiary") not in defaults.PALETTE_PRESETS
-        assert ("calendar", "tertiary") not in defaults.PALETTE_PRESETS
-        assert ("rose", "tertiary") not in defaults.PALETTE_PRESETS
+        assert ("aurora", "tertiary") not in palette.PALETTE_PRESETS
+        assert ("calendar", "tertiary") not in palette.PALETTE_PRESETS
+        assert ("rose", "tertiary") not in palette.PALETTE_PRESETS
 
 
 def test_the_quaternity_reads_its_four_arms_three_ways():
@@ -855,9 +855,9 @@ def test_the_quaternity_reads_its_four_arms_three_ways():
     bile, burnt-black bile, pale phlegm, blood); the Elements are
     untouched. Every arm order is identical, so nothing moves seat when
     the reader turns the wheel."""
-    temperaments = defaults.PALETTE_PRESETS[("cross", "primary")]
-    elements = defaults.PALETTE_PRESETS[("cross", "secondary")]
-    seasons = defaults.PALETTE_PRESETS[("cross", "tertiary")]
+    temperaments = palette.PALETTE_PRESETS[("cross", "primary")]
+    elements = palette.PALETTE_PRESETS[("cross", "secondary")]
+    seasons = palette.PALETTE_PRESETS[("cross", "tertiary")]
     assert temperaments == ("#E5A81F", "#3B2C28", "#D9E5EC", "#B21E30")
     assert elements == ("#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0")
     assert seasons == ("#D9D900", "#D4330F", "#0A70D8", "#129412")
@@ -870,28 +870,28 @@ def test_compass_octa_presets_are_the_approved_walks_and_ages():
     """Owner rework 2026-07-16: PAINT wears the Walks' materials, LIGHT
     wears the Eight Ages — the two presets must be the exact approved
     hex tuples (CANON.md) and must no longer be near-identical."""
-    assert defaults.PALETTE_PRESETS[("octa", "primary")] == (
+    assert palette.PALETTE_PRESETS[("octa", "primary")] == (
         "#F0C420", "#C87533", "#A02020", "#7A2E8E",
         "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
     )
     # Owner shift 2026-07-16: Death at midnight wears pure WHITE (in
     # the light register death goes INTO the light), the moonlight
     # silver moved to the Unborn, the mist to Birth; the rose retired.
-    assert defaults.PALETTE_PRESETS[("octa", "secondary")] == (
+    assert palette.PALETTE_PRESETS[("octa", "secondary")] == (
         "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
         "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
     )
     assert (
-        defaults.PALETTE_PRESETS[("octa", "primary")]
-        != defaults.PALETTE_PRESETS[("octa", "secondary")]
+        palette.PALETTE_PRESETS[("octa", "primary")]
+        != palette.PALETTE_PRESETS[("octa", "secondary")]
     )
 
 
 def test_palette_for_selects_the_skin_choice():
     paint = dataclasses.replace(defaults.DEFAULT_SKIN, pointer="octa")
     light = dataclasses.replace(paint, palette_style="secondary")
-    assert palette_for(paint) == defaults.PALETTE_PRESETS[("octa", "primary")]
-    assert palette_for(light) == defaults.PALETTE_PRESETS[("octa", "secondary")]
+    assert palette_for(paint) == palette.PALETTE_PRESETS[("octa", "primary")]
+    assert palette_for(light) == palette.PALETTE_PRESETS[("octa", "secondary")]
 
 
 # --- Aurora (owner spec 2026-07-12) -------------------------------------------------
@@ -1003,7 +1003,7 @@ def test_aurora_bands_spread_the_day_hues_evenly():
     from data.seasons import SeasonsRepository
     from render.layers import aurora_bands, today_slot_theta
 
-    palette = defaults.PALETTE_PRESETS[("aurora", "primary")]
+    wheel_hues = palette.PALETTE_PRESETS[("aurora", "primary")]
     tz = ZoneInfo(defaults.DEFAULT_CITY["timezone"])
     observer = astral.Observer(
         latitude=defaults.DEFAULT_CITY["latitude"],
@@ -1017,16 +1017,16 @@ def test_aurora_bands_spread_the_day_hues_evenly():
             date, observer,
             seasons.year_anchors(date.year), moons.moon_window(date.year),
         )
-        bands, solar_frame = aurora_bands(day.sun, palette, 0.55)
+        bands, solar_frame = aurora_bands(day.sun, wheel_hues, 0.55)
         assert solar_frame is False
         assert len(bands) == 7, date                 # dawn + 5 day + dusk
-        assert bands[0][2] == palette[0]             # dawn blue
-        assert bands[-1][2] == palette[-1]           # dusk brown
+        assert bands[0][2] == wheel_hues[0]             # dawn blue
+        assert bands[-1][2] == wheel_hues[-1]           # dusk brown
         # No separate twilight opacity under Aurora (owner: the color
         # carries the meaning) — the whole arc wears the day alpha.
         assert bands[0][3] == bands[-1][3] == 0.55
         day_bands = bands[1:-1]
-        assert [hue for _, _, hue, _ in day_bands] == list(palette[1:-1])
+        assert [hue for _, _, hue, _ in day_bands] == list(wheel_hues[1:-1])
         rise = angles.time_to_dial_angle(day.sun.sunrise)
         sets = angles.time_to_dial_angle(day.sun.sunset)
         span = (sets - rise) % 360.0
@@ -1716,8 +1716,8 @@ def test_every_pointer_wheel_pair_differs(app):
 
     for pointer in ("trio", "cross", "hexa", "octa", "aurora", "calendar"):
         assert (
-            defaults.PALETTE_PRESETS[(pointer, "primary")]
-            != defaults.PALETTE_PRESETS[(pointer, "secondary")]
+            palette.PALETTE_PRESETS[(pointer, "primary")]
+            != palette.PALETTE_PRESETS[(pointer, "secondary")]
         )
     # The primitive still grays when asked (used nowhere for the palette
     # pair now, but the contract stands).

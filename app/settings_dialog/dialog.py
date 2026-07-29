@@ -44,7 +44,7 @@ from app.settings_dialog.location_section import _LocationSectionMixin
 from app.settings_dialog.themes_section import _ThemesSectionMixin
 from app.settings_store import Settings, replace
 from app.theme import apply_theme, size_to_screen, style_dialog_buttons
-from config import constants, defaults
+from config import constants, defaults, palette
 from config.ui_text import ui
 from data.locations import LocationRepository
 
@@ -81,11 +81,11 @@ class SettingsDialog(
         # The style normalized for THIS pointer (a stored "tertiary" left
         # behind by a pointer switch reads as "primary" — the same
         # normalization apply_display_settings runs, Rule #5).
-        self._palette_style = defaults.effective_palette_style(
+        self._palette_style = palette.effective_palette_style(
             settings.pointer, settings.palette_style
         )
         self._palette_key = f"{settings.pointer}_{self._palette_style}"
-        self._preset = defaults.PALETTE_PRESETS[
+        self._preset = palette.PALETTE_PRESETS[
             (settings.pointer, self._palette_style)
         ]
         self._hues = list(

@@ -22,7 +22,7 @@ from PySide6.QtWidgets import QApplication
 
 from app.controller import build_skin
 from app.settings_store import Settings
-from config import constants, defaults
+from config import constants, defaults, palette
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import year_marker_angle
 from data.moon_phases import MoonPhaseRepository
@@ -163,9 +163,9 @@ def test_the_arms_keep_the_octa_shape(app):
 def test_both_wheels_wear_the_one_rose_palette(app, wheel):
     """The wheel turns geometry and figures, never colors (Rule #5 —
     ONE tuple, shared with the Character wheel)."""
-    assert palette_for(_skin(wheel)) is defaults.ROSE_PALETTE
-    assert defaults.PALETTE_PRESETS[("octa", "tertiary")] is defaults.ROSE_PALETTE
-    assert len(defaults.ROSE_PALETTE) == 8
+    assert palette_for(_skin(wheel)) is palette.ROSE_PALETTE
+    assert palette.PALETTE_PRESETS[("octa", "tertiary")] is palette.ROSE_PALETTE
+    assert len(palette.ROSE_PALETTE) == 8
 
 
 def test_the_cardinals_are_the_turning_points_the_year_wheel_computes():
@@ -195,13 +195,13 @@ def test_the_sabbath_axis_keeps_the_cube_pole_partners():
     Sunday's. On the Rose the Cube's axes keep their exact pole
     PARTNERS; blue simply wears cyan and red wears rose, the SAME shift
     the weekday law makes (CUBE.md §The Sunday axis)."""
-    yellow, orange, red, rose, purple, cyan, blue, green = defaults.ROSE_PALETTE
+    yellow, orange, red, rose, purple, cyan, blue, green = palette.ROSE_PALETTE
     # Y is untouched: yellow ↔ purple-gray, still opposite (12h ↔ 24h).
-    assert purple == defaults.MOON_GRAY_VIOLET
+    assert purple == palette.MOON_GRAY_VIOLET
     # Every axis is a DIAGONAL — opposite arms, 180° apart.
     for a, b in ((yellow, purple), (orange, cyan), (rose, green), (red, blue)):
-        index_a = defaults.ROSE_PALETTE.index(a)
-        index_b = defaults.ROSE_PALETTE.index(b)
+        index_a = palette.ROSE_PALETTE.index(a)
+        index_b = palette.ROSE_PALETTE.index(b)
         assert abs(index_a - index_b) == 4
 
 
@@ -212,7 +212,7 @@ def test_the_weekday_seats_follow_the_colour_law(app):
     """CUBE.md §The weekday law: the seat is the HUE. Prism primary's
     canon with the two Sunday hues lightened, because Sunday needs
     blue and red for its own two faces."""
-    hues = defaults.ROSE_PALETTE
+    hues = palette.ROSE_PALETTE
     expected = {
         0.0: ("jupiter", hues[0]),      # 12h yellow — Thursday
         45.0: ("mars", hues[1]),        # 15h orange — Tuesday
@@ -371,7 +371,7 @@ def test_daylight_off_paints_the_whole_star(app):
         image = Compositor(skin, AssetCache()).render_offscreen(
             600.0, 1.0, day, tick
         )
-        purple = defaults.MOON_GRAY_VIOLET.upper()
+        purple = palette.MOON_GRAY_VIOLET.upper()
         return sum(
             1
             for x in range(image.width())
@@ -399,5 +399,5 @@ def test_every_hue_of_every_star_reaches_the_dial(app, wheel):
         for y in range(image.height())
         if image.pixelColor(x, y).alpha() > 200
     }
-    for hue in defaults.ROSE_PALETTE:
+    for hue in palette.ROSE_PALETTE:
         assert hue.upper() in found, f"{wheel}: {hue} never painted"

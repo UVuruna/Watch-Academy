@@ -14,7 +14,7 @@ from PySide6.QtGui import QCursor, QGuiApplication, QTextDocument
 from PySide6.QtWidgets import QFrame, QLabel, QScrollArea, QVBoxLayout, QWidget
 
 from app import native
-from config import defaults
+from config import defaults, palette
 
 
 class LegendPopup(QWidget):
@@ -52,7 +52,7 @@ class LegendPopup(QWidget):
         # collapse to 533px total).
         self._label.setWordWrap(True)
         self._label.setStyleSheet(
-            f"color: {defaults.LEGEND_TEXT}; "
+            f"color: {palette.LEGEND_TEXT}; "
             f"padding: {defaults.LEGEND_PADDING_PX}px;"
         )
         self._measure = QTextDocument()
@@ -66,8 +66,8 @@ class LegendPopup(QWidget):
         layout.setContentsMargins(1, 1, 1, 1)   # the border
         layout.addWidget(self._scroll)
         self.setStyleSheet(
-            f"LegendPopup {{ background: {defaults.LEGEND_BORDER}; }}"
-            f"QScrollArea, QLabel {{ background: {defaults.LEGEND_BG}; }}"
+            f"LegendPopup {{ background: {palette.LEGEND_BORDER}; }}"
+            f"QScrollArea, QLabel {{ background: {palette.LEGEND_BG}; }}"
         )
         self._html: str | None = None
 

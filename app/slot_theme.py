@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
 from app.weekday_theme_grid import build_weekday_theme_grid
-from config import constants, defaults
+from config import constants, defaults, palette
 from config.ui_text import ui
 
 _MEDALS = {1: "🥇", 2: "🥈", 3: "🥉"}
@@ -84,7 +84,7 @@ class SlotThemeDialog(QDialog):
         self._gate_label = QLabel()
         self._gate_label.setWordWrap(True)
         self._gate_label.setStyleSheet(
-            f"color: {defaults.TIME_TRAVEL_WARNING_COLOR};"
+            f"color: {palette.TIME_TRAVEL_WARNING_COLOR};"
         )
         self._gate_label.hide()
         layout.addWidget(self._gate_label)

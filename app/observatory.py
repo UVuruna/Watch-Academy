@@ -40,7 +40,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
-from config import constants, defaults
+from config import constants, defaults, palette
 from config.ui_text import ui
 from core.deep_time import julian_day_of, real_year
 from core.sun import day_length_curve
@@ -344,12 +344,12 @@ class _ChartBase(QWidget):
     def paintEvent(self, event) -> None:  # noqa: N802 — Qt override
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.fillRect(self.rect(), QColor(defaults.OBSERVATORY_SURFACE_COLOR))
+        painter.fillRect(self.rect(), QColor(palette.OBSERVATORY_SURFACE_COLOR))
         font = painter.font()
         font.setPixelSize(11)
         painter.setFont(font)
         if not self._has_data():
-            painter.setPen(QColor(defaults.OBSERVATORY_MUTED_COLOR))
+            painter.setPen(QColor(palette.OBSERVATORY_MUTED_COLOR))
             painter.drawText(
                 self.rect(), Qt.AlignmentFlag.AlignCenter, self._empty_text
             )
@@ -366,8 +366,8 @@ class _ChartBase(QWidget):
         painter.end()
 
     def _draw_axes(self, painter: QPainter, rect: QRectF) -> None:
-        grid = QColor(defaults.OBSERVATORY_GRID_COLOR)
-        muted = QColor(defaults.OBSERVATORY_MUTED_COLOR)
+        grid = QColor(palette.OBSERVATORY_GRID_COLOR)
+        muted = QColor(palette.OBSERVATORY_MUTED_COLOR)
         painter.setPen(QPen(grid, defaults.OBSERVATORY_GRID_WIDTH_PX))
         painter.drawRect(rect)
         for value in self._y_ticks():
@@ -414,7 +414,7 @@ class _ChartBase(QWidget):
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor(color))
             painter.drawEllipse(int(x), int(y) + 3, 8, 8)
-            painter.setPen(QColor(defaults.OBSERVATORY_INK_COLOR))
+            painter.setPen(QColor(palette.OBSERVATORY_INK_COLOR))
             width = painter.fontMetrics().horizontalAdvance(label)
             painter.drawText(int(x) + 12, int(y), width + 8, 14,
                              Qt.AlignmentFlag.AlignLeft, label)
@@ -425,7 +425,7 @@ class _ChartBase(QWidget):
 
     def _draw_crosshair(self, painter: QPainter, rect: QRectF, probe: tuple) -> None:
         snap_x, marks, lines = probe
-        cross = QColor(defaults.OBSERVATORY_CROSSHAIR_COLOR)
+        cross = QColor(palette.OBSERVATORY_CROSSHAIR_COLOR)
         cross.setAlpha(150)
         painter.setPen(QPen(cross, 1, Qt.PenStyle.DashLine))
         painter.drawLine(int(snap_x), int(rect.top()), int(snap_x), int(rect.bottom()))
@@ -440,12 +440,12 @@ class _ChartBase(QWidget):
         box_h = len(lines) * 15 + 8
         bx = min(snap_x + 12, rect.right() - box_w)
         by = max(rect.top() + 4, min(self._hover[1] - box_h - 6, rect.bottom() - box_h))
-        panel = QColor(defaults.OBSERVATORY_SURFACE_COLOR)
+        panel = QColor(palette.OBSERVATORY_SURFACE_COLOR)
         panel.setAlpha(235)
         painter.setBrush(panel)
-        painter.setPen(QPen(QColor(defaults.OBSERVATORY_GRID_COLOR), 1))
+        painter.setPen(QPen(QColor(palette.OBSERVATORY_GRID_COLOR), 1))
         painter.drawRoundedRect(QRectF(bx, by, box_w, box_h), 6, 6)
-        painter.setPen(QColor(defaults.OBSERVATORY_INK_COLOR))
+        painter.setPen(QColor(palette.OBSERVATORY_INK_COLOR))
         for index, line in enumerate(lines):
             painter.drawText(
                 int(bx) + 7, int(by) + 4 + index * 15, box_w - 14, 15,
@@ -697,8 +697,8 @@ def _kind_color(family: str, kind: str) -> str:
     plain color for any type outside the ground-truthed vocabulary
     (defensive — `kind` is read straight off the Deep Time SQLite
     catalog, external data, Rule #7's documented exception)."""
-    return defaults.OBSERVATORY_ECLIPSE_KIND_COLORS[family].get(
-        kind, defaults.OBSERVATORY_ECLIPSE_COLORS[family]
+    return palette.OBSERVATORY_ECLIPSE_KIND_COLORS[family].get(
+        kind, palette.OBSERVATORY_ECLIPSE_COLORS[family]
     )
 
 
@@ -793,7 +793,7 @@ class _EclipseChart(_ChartBase):
         if not self._deep_mode:
             # The density fallback has no per-kind breakdown to plot —
             # the two family colors are all it can honestly show.
-            colors = defaults.OBSERVATORY_ECLIPSE_COLORS
+            colors = palette.OBSERVATORY_ECLIPSE_COLORS
             return [
                 (self._tr("Solar"), colors["solar"]),
                 (self._tr("Lunar"), colors["lunar"]),
@@ -803,7 +803,7 @@ class _EclipseChart(_ChartBase):
         # every kind actually present in the fetched window (the full
         # scatter, not the current zoom — a legend should read the same
         # regardless of how far the user has zoomed).
-        kind_colors = defaults.OBSERVATORY_ECLIPSE_KIND_COLORS
+        kind_colors = palette.OBSERVATORY_ECLIPSE_KIND_COLORS
         entries: list[tuple[str, str]] = []
         for family, series in (("solar", self._solar), ("lunar", self._lunar)):
             present = {kind for _, magnitude, kind in series if magnitude is not None}
@@ -839,10 +839,10 @@ class _EclipseChart(_ChartBase):
         }
 
     def _draw_data(self, painter: QPainter, rect: QRectF) -> None:
-        colors = defaults.OBSERVATORY_ECLIPSE_COLORS
+        colors = palette.OBSERVATORY_ECLIPSE_COLORS
         if self._now_year is not None and self._xlo <= self._now_year <= self._xhi:
             px = _xmap(rect, self._xlo, self._xhi, self._now_year)
-            painter.setPen(QPen(QColor(defaults.OBSERVATORY_NOW_MARK_COLOR), 1))
+            painter.setPen(QPen(QColor(palette.OBSERVATORY_NOW_MARK_COLOR), 1))
             painter.drawLine(int(px), int(rect.top()), int(px), int(rect.bottom()))
             painter.drawText(
                 int(px) + 3, int(rect.top()) + 2, 90, 14,
@@ -962,7 +962,7 @@ def _build_info_panel(
     da bude obojana svojom bojom")."""
     panel = QWidget()
     panel.setStyleSheet(
-        f"background: {defaults.THEME_COLORS['surface_1']};"
+        f"background: {palette.THEME_COLORS['surface_1']};"
         f"border-radius: {defaults.THEME_RADIUS_CARD_PX}px;"
     )
     layout = QVBoxLayout(panel)
@@ -985,7 +985,7 @@ def _build_info_panel(
         column.addWidget(name)
         description_label = QLabel(description)
         description_label.setWordWrap(True)
-        description_label.setStyleSheet(f"color: {defaults.OBSERVATORY_MUTED_COLOR};")
+        description_label.setStyleSheet(f"color: {palette.OBSERVATORY_MUTED_COLOR};")
         column.addWidget(description_label)
         row.addLayout(column, stretch=1)
         layout.addLayout(row)
@@ -1114,7 +1114,7 @@ class _EnlargeDialog(QDialog):
             value = values.get(label)
             text = QLabel(f"{label}: {value}" if value is not None else label)
             text.setStyleSheet(
-                f"color: {defaults.OBSERVATORY_INK_COLOR}; font-weight: 600;"
+                f"color: {palette.OBSERVATORY_INK_COLOR}; font-weight: 600;"
             )
             self._legend_row.addWidget(text)
             self._legend_row.addSpacing(14)
@@ -1195,7 +1195,7 @@ class ObservatoryDialog(QDialog):
         )
         self._season_chart.set_series([
             {"key": key, "label": self._tr(key.capitalize()),
-             "color": defaults.OBSERVATORY_SERIES_COLORS[key],
+             "color": palette.OBSERVATORY_SERIES_COLORS[key],
              "xs": series["years"], "ys": series[key]}
             for key in ("spring", "summer", "autumn", "winter", "light", "dark")
         ])
@@ -1227,16 +1227,16 @@ class ObservatoryDialog(QDialog):
         )
         envelope.set_series([{
             "key": "envelope", "label": self._tr("light − dark"),
-            "color": defaults.OBSERVATORY_SERIES_COLORS["light"],
+            "color": palette.OBSERVATORY_SERIES_COLORS["light"],
             "xs": series["years"], "ys": light_minus_dark,
         }])
         light_from, light_to = eras["age_of_light"]
         envelope.set_bands([
-            (first, light_from, defaults.OBSERVATORY_ERA_DARK_BAND),
-            (light_from, light_to, defaults.OBSERVATORY_ERA_LIGHT_BAND),
-            (light_to, last, defaults.OBSERVATORY_ERA_DARK_BAND),
+            (first, light_from, palette.OBSERVATORY_ERA_DARK_BAND),
+            (light_from, light_to, palette.OBSERVATORY_ERA_LIGHT_BAND),
+            (light_to, last, palette.OBSERVATORY_ERA_DARK_BAND),
         ])
-        mark = defaults.OBSERVATORY_ERA_MARK_COLOR
+        mark = palette.OBSERVATORY_ERA_MARK_COLOR
         # Task 3: EVERY light/dark peak of the measured record, not just
         # the four sealed era marks — a simple neighbor-comparison over
         # the decimated bundle (data.light_dark_extrema()); each one
@@ -1300,7 +1300,7 @@ class ObservatoryDialog(QDialog):
         )
         day_chart.set_series([{
             "key": "daylength", "label": self._tr("Day length"),
-            "color": defaults.OBSERVATORY_DAYLENGTH_COLOR,
+            "color": palette.OBSERVATORY_DAYLENGTH_COLOR,
             "xs": [day.timetuple().tm_yday for day, _ in curve],
             "ys": [minutes for _, minutes in curve],
         }])
@@ -1325,25 +1325,25 @@ class ObservatoryDialog(QDialog):
         )
         laskar_chart.set_series([
             {"key": "envelope_hi", "label": self._tr("amplitude envelope"),
-             "color": defaults.OBSERVATORY_LASKAR_ENVELOPE_COLOR,
+             "color": palette.OBSERVATORY_LASKAR_ENVELOPE_COLOR,
              "xs": laskar["years"], "ys": laskar["envelope_days"]},
             {"key": "envelope_lo", "label": self._tr("amplitude envelope"),
-             "color": defaults.OBSERVATORY_LASKAR_ENVELOPE_COLOR,
+             "color": palette.OBSERVATORY_LASKAR_ENVELOPE_COLOR,
              "xs": laskar["years"], "ys": [-v for v in laskar["envelope_days"]]},
             {"key": "signed", "label": self._tr("light − dark (signed)"),
-             "color": defaults.OBSERVATORY_LASKAR_SIGNED_COLOR,
+             "color": palette.OBSERVATORY_LASKAR_SIGNED_COLOR,
              "xs": laskar["years"], "ys": laskar["signed_days"]},
         ])
         de441_lo, de441_hi = laskar_meta["de441_window_years"]
         laskar_chart.set_bands([
-            (de441_lo, de441_hi, defaults.OBSERVATORY_LASKAR_DE441_BAND),
+            (de441_lo, de441_hi, palette.OBSERVATORY_LASKAR_DE441_BAND),
         ])
         ecc_min = laskar_meta["extrema"]["coming_ecc_min"]
         laskar_chart.set_vmarks([(
             ecc_min["year"],
             f"{self._tr('eccentricity minimum')} {_year_label(ecc_min['year'])} "
             f"(±{ecc_min['envelope_days']:.1f}d)",
-            defaults.OBSERVATORY_ERA_MARK_COLOR,
+            palette.OBSERVATORY_ERA_MARK_COLOR,
         )])
         self._laskar_chart = laskar_chart
         laskar_caption = self._tr(
@@ -1398,7 +1398,7 @@ class ObservatoryDialog(QDialog):
         label = QLabel(text)
         label.setWordWrap(True)
         label.setStyleSheet(
-            f"color: {defaults.OBSERVATORY_MUTED_COLOR};"
+            f"color: {palette.OBSERVATORY_MUTED_COLOR};"
             f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
         )
         return label
@@ -1537,7 +1537,7 @@ class ObservatoryDialog(QDialog):
             box = QCheckBox(self._tr(key.capitalize()))
             box.setChecked(key in ("light", "dark"))
             box.setStyleSheet(
-                f"color: {defaults.OBSERVATORY_SERIES_COLORS[key]};"
+                f"color: {palette.OBSERVATORY_SERIES_COLORS[key]};"
                 "font-weight: bold;"
             )
             box.toggled.connect(
@@ -1607,7 +1607,7 @@ class ObservatoryDialog(QDialog):
         its bundle's own `counts_by_type` meta already confirms every
         one of them occurs somewhere across the span, just without a
         per-instance breakdown to plot."""
-        kind_colors = defaults.OBSERVATORY_ECLIPSE_KIND_COLORS
+        kind_colors = palette.OBSERVATORY_ECLIPSE_KIND_COLORS
         kind_info = defaults.OBSERVATORY_ECLIPSE_KIND_INFO
         rows: list[tuple[str, str, str]] = []
         for family, series in (("solar", solar), ("lunar", lunar)):

@@ -12,7 +12,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 from PySide6.QtWidgets import QApplication
 
 from app import tray
-from config import defaults
+from config import defaults, palette
 
 
 def app():
@@ -47,14 +47,14 @@ def test_watch_four_is_blue_zero_zero_one():
 
 def test_wheel_walks_all_twelve_months_in_order():
     colors = [tray._tray_tint(index) for index in range(3, 15)]
-    assert colors == list(defaults.TRAY_COLOR_WHEEL)
-    assert len(defaults.TRAY_COLOR_WHEEL) == 12
+    assert colors == list(palette.TRAY_COLOR_WHEEL)
+    assert len(palette.TRAY_COLOR_WHEEL) == 12
 
 
 def test_wheel_wraps_forever_past_december():
-    assert tray._tray_tint(15) == defaults.TRAY_COLOR_WHEEL[0]   # back to purple
-    assert tray._tray_tint(16) == defaults.TRAY_COLOR_WHEEL[1]   # back to blue
-    assert tray._tray_tint(27) == defaults.TRAY_COLOR_WHEEL[0]   # a second lap
+    assert tray._tray_tint(15) == palette.TRAY_COLOR_WHEEL[0]   # back to purple
+    assert tray._tray_tint(16) == palette.TRAY_COLOR_WHEEL[1]   # back to blue
+    assert tray._tray_tint(27) == palette.TRAY_COLOR_WHEEL[0]   # a second lap
 
 
 def test_tray_color_table_for_watches_one_through_eight():

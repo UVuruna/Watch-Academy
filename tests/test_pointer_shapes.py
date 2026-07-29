@@ -33,7 +33,7 @@ from app.settings_store import (
     SettingsStore,
     replace,
 )
-from config import constants
+from config import constants, palette
 from config import defaults
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
@@ -386,11 +386,11 @@ def test_prophecy_stands_on_the_half_hours_while_legacy_keeps_the_hours(app):
 def test_the_prophecy_shift_moves_no_hue_off_its_own_ray(app):
     """Owner spec: "do NOT re-anchor which hue sits where — only the
     +7.5° shift"."""
-    palette = defaults.ROSE_PALETTE
+    wheel_hues = palette.ROSE_PALETTE
     unshifted = {
         (angle - 7.5) % 360.0: hue
         for arms in drawn_arms(
-            _skin("rose", palette_style="secondary"), palette
+            _skin("rose", palette_style="secondary"), wheel_hues
         )
         for angle, hue in arms
     }
@@ -398,7 +398,7 @@ def test_the_prophecy_shift_moves_no_hue_off_its_own_ray(app):
         angle % 360.0: hue
         for offset in constants.ROSE_STAR_OFFSETS["secondary"]
         for angle, hue in (
-            (offset + index * 45.0, hue) for index, hue in enumerate(palette)
+            (offset + index * 45.0, hue) for index, hue in enumerate(wheel_hues)
         )
     }
     assert unshifted == plain
@@ -413,11 +413,11 @@ def test_the_aura_wedge_of_a_one_star_pointer_is_unchanged(app):
     for pointer in ("trio", "cross", "hexa", "octa"):
         skin = _skin(pointer)
         assert aura_group_offset_deg(skin) == 0.0
-        palette = palette_for(skin)
-        span = 360.0 / len(palette)
-        assert aura_wedge_bounds(skin, palette) == [
+        wheel_hues = palette_for(skin)
+        span = 360.0 / len(wheel_hues)
+        assert aura_wedge_bounds(skin, wheel_hues) == [
             (index * span - span / 2.0, index * span + span / 2.0)
-            for index in range(len(palette))
+            for index in range(len(wheel_hues))
         ]
 
 
@@ -426,10 +426,10 @@ def test_the_genesis_and_seasons_wedges_ride_their_own_arms(app):
     offset wheel can never leave its background behind."""
     for pointer, offset in (("trio", 180.0), ("cross", 45.0)):
         skin = _skin(pointer, palette_style="tertiary")
-        palette = palette_for(skin)
-        span = 360.0 / len(palette)
+        wheel_hues = palette_for(skin)
+        span = 360.0 / len(wheel_hues)
         assert wheel_offset_deg(skin) == offset
-        assert aura_wedge_bounds(skin, palette)[0] == pytest.approx(
+        assert aura_wedge_bounds(skin, wheel_hues)[0] == pytest.approx(
             (offset - span / 2.0, offset + span / 2.0)
         )
 
@@ -467,11 +467,11 @@ def test_every_rose_wedge_stands_behind_its_own_hue_group(app, wheel):
     wedge drawn in hue k — on BOTH wheels and in BOTH shapes."""
     for shape in ("star", "polygon"):
         skin = _skin("rose", palette_style=wheel, pointer_shape=shape)
-        palette = palette_for(skin)
-        wedges = aura_wedge_bounds(skin, palette)
-        for arms in drawn_arms(skin, palette):
+        wheel_hues = palette_for(skin)
+        wedges = aura_wedge_bounds(skin, wheel_hues)
+        for arms in drawn_arms(skin, wheel_hues):
             for angle, hue in arms:
-                start, end = wedges[palette.index(hue)]
+                start, end = wedges[wheel_hues.index(hue)]
                 assert start < angle < end, f"{hue} ray {angle} outside {wedges}"
 
 
@@ -492,13 +492,13 @@ def test_the_calendar_star_is_two_hexagrams_the_even_one_on_top(app):
     assert passes[1] == [15.0, 75.0, 135.0, 195.0, 255.0, 315.0]    # even, top
     # Together they wear all twelve hues, one per wedge, on the wedge
     # centers of the ACTIVE wheel.
-    palette = palette_for(skin)
+    wheel_hues = palette_for(skin)
     drawn = {
         angle % 360.0: hue
-        for arms in drawn_arms(skin, palette) for angle, hue in arms
+        for arms in drawn_arms(skin, wheel_hues) for angle, hue in arms
     }
     assert len(drawn) == 12
-    assert set(drawn.values()) == set(palette)
+    assert set(drawn.values()) == set(wheel_hues)
 
 
 def test_the_calendar_polygon_is_one_twelve_point_star(app):

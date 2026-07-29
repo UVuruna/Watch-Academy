@@ -17,7 +17,7 @@ from pathlib import Path
 import numpy as np
 from PySide6.QtGui import QColor, QImage, QPixmap
 
-from config import defaults, paths, profiling
+from config import defaults, palette, paths, profiling
 from config.paths import art_file
 from render.assets import AssetCache
 
@@ -153,7 +153,7 @@ def _recolored_plate(
         # "silver is a straight desaturation" recipe letters use.
         rim = np.repeat(value[..., None], 3, axis=-1)
     else:
-        target = QColor(defaults.SUBDIAL_RECOLOR_COLORS[finish])
+        target = QColor(palette.SUBDIAL_RECOLOR_COLORS[finish])
         finish_rgb = np.array([
             target.redF(), target.greenF(), target.blueF()
         ])

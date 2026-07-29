@@ -26,7 +26,7 @@ config/encyclopedia_tree.md.
 
 from typing import NamedTuple
 
-from config import defaults
+from config import defaults, palette
 
 
 class Whole(NamedTuple):
@@ -44,7 +44,7 @@ class Whole(NamedTuple):
 # and the Cube canon promoted out of the old "The Archetypes" hall into
 # a whole of its own — it now carries 7 of the 35 theme cards.
 #
-# THE ACCENTS are the Rose's own hues (`defaults.ROSE_PALETTE`, sealed —
+# THE ACCENTS are the Rose's own hues (`palette.ROSE_PALETTE`, sealed —
 # Rule #5, one palette): six of the eight, each argued by the hour it
 # stands on. The accent rides the card's edge, the breadcrumb and the
 # article header, so the reader always knows which whole he is inside.
@@ -56,38 +56,38 @@ WHOLES = (
         # is the fifth card — the paged help book folded in from its own
         # retired window, built from the SAME `assets/.../guide/*.json`
         # it always used (Rule #5, no content copied).
-        "instrument", "The Instrument", defaults.ROSE_PALETTE[0],
+        "instrument", "The Instrument", palette.ROSE_PALETTE[0],
         ("week", "instrument", "era", "months", "guide"),
     ),
     Whole(
         # 03h cyan — the deep-night sky, the hours the Engine's own
         # machinery (moon, seasons, eclipses) is read against.
-        "celestial", "The Celestial Engine", defaults.ROSE_PALETTE[5],
+        "celestial", "The Celestial Engine", palette.ROSE_PALETTE[5],
         ("moon", "sun", "seasons", "eclipses", "planets", "cosmos",
          "continents", "astrology", "chinese"),
     ),
     Whole(
         # 24h purple — midnight, the winter solstice, the sacred hour.
-        "divine", "The Divine", defaults.ROSE_PALETTE[4],
+        "divine", "The Divine", palette.ROSE_PALETTE[4],
         ("greek", "norse", "egypt", "slavic", "creeds", "bible"),
     ),
     Whole(
         # 18h red — sunset, the autumn equinox, Lucifer's own hue on the
         # Scale: the human fire, which is what this whole reads.
-        "human", "The Human Wheel", defaults.ROSE_PALETTE[2],
+        "human", "The Human Wheel", palette.ROSE_PALETTE[2],
         ("virtues", "sins", "moods", "intelligences", "profession",
          "trinity", "duality"),
     ),
     Whole(
         # 06h blue — sunrise, the spring equinox, Judas's hue: the Cube's
         # own axis blue (CUBE.md, the color law).
-        "cube", "The Character Cube", defaults.ROSE_PALETTE[6],
+        "cube", "The Character Cube", palette.ROSE_PALETTE[6],
         ("cube_doctrine", "cube_axes", "cube_figures", "cube_projections",
          "double_trinity", "crosses", "one_soul"),
     ),
     Whole(
         # 09h green — spring's own centre, blue and yellow blended: life.
-        "living", "The Living World", defaults.ROSE_PALETTE[7],
+        "living", "The Living World", palette.ROSE_PALETTE[7],
         ("wolf", "bee", "elephant", "alchemy", "japan"),
     ),
 )

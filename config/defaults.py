@@ -10,7 +10,7 @@ from datetime import date
 from pathlib import Path
 from typing import NamedTuple
 
-from config import constants, paths
+from config import constants, palette, paths
 from skins.manifest import (
     BackgroundSpec,
     HandSpec,
@@ -43,10 +43,6 @@ FULL_TEXT_MIN_DIAMETER = 540
 WEEKDAY_FULL_NAME_MIN_DIAMETER = 720
 EARTH_DATE_TEXT_SIZE = 0.30          # fraction of the marker size
 
-# White label text carries a black outline so it stays readable over
-# bright bodies (owner spec — "WED" on Mercury washed out without it).
-LABEL_FILL_RGBA = (255, 255, 255, 240)
-LABEL_OUTLINE_RGBA = (0, 0, 0, 210)
 LABEL_OUTLINE_WIDTH = 0.05           # fraction of the font pixel size
 
 # Watchdog delay for undoing a spontaneous (OS-initiated) hide/minimize.
@@ -343,8 +339,6 @@ FAST_TRAVEL_FLASH_ICON_PX = 28
 FAST_TRAVEL_FLASH_FONT_PX = 15
 FAST_TRAVEL_FLASH_PADDING_PX = 10
 FAST_TRAVEL_FLASH_RADIUS_PX = 10
-FAST_TRAVEL_FLASH_BG = "rgba(20, 20, 26, 220)"
-FAST_TRAVEL_FLASH_TEXT_COLOR = "#F0F0F0"
 
 # THE CALENDAR WHEEL ICON (ECLIPSE ICON WIRING round, owner 2026-07-20/
 # 21 — "ADD a computed calendar icon... so the 📅 fallback dies"): the
@@ -357,19 +351,12 @@ FAST_TRAVEL_FLASH_TEXT_COLOR = "#F0F0F0"
 # `UV/DESIGN/gold pallete.png` — Rule #5, one palette, reused) with a
 # thin dark ring for contrast against the flash's own dark background.
 CALENDAR_ICON_WEDGE_COUNT = 12
-CALENDAR_ICON_WEDGE_COLORS = ("#A67C00", "#FFBF00")
-CALENDAR_ICON_RING_COLOR = "#1A1A1A"
 CALENDAR_ICON_RING_WIDTH_FRACTION = 0.06   # of the icon radius
 
 
 # Time Travel (scenario tester in the menu): the dial renders the entered
 # moment/position for this long, then returns to the present by itself.
 TIME_TRAVEL_DURATION_S = 60
-# A target outside the bundled coverage is refused inline (owner
-# 2026-07-16). The warning names the future Deep Time pack's reach; the
-# actual coverage comes from the databases (SeasonsRepository/
-# MoonPhaseRepository .coverage()), never hardcoded.
-TIME_TRAVEL_WARNING_COLOR = "#C8553D"    # warm red-clay — reads on the dialog
 DEEP_TIME_YEAR_RANGE = (-13000, 17000)   # the coming pack's advertised span
 
 # --- Settings persistence ----------------------------------------------------
@@ -409,7 +396,6 @@ BODY_LABEL_MIN_PX = 6
 NAME_LABEL_MAX_PX = 40
 NAME_LABEL_WIDTH_FRACTION = 0.92     # of the available width (arm/body)
 MARKER_BORDER_WIDTH = 0.05           # fraction of the marker size
-MARKER_BORDER_RGBA = (255, 255, 255, 200)
 
 # --- Moon/Earth rim transit (year marker, "both" mode) -------------------------
 # The smaller Moon passes OVER the Earth at reduced opacity when they meet
@@ -429,21 +415,6 @@ LOGO_SETUP_ASSET = paths.assets_dir() / "logo-setup.svg"
 # the documented EXE-icon ladder (root CLAUDE.md Build Pipeline).
 WINDOW_ICON_SIZES_PX = (16, 24, 32, 48, 64, 128, 256)
 
-# TRAY ICON COLOR WHEEL (ADD WATCH round, owner INSTRUCTION.txt item 2B,
-# sealed 2026-07-21): watch 1 keeps the gold master untouched, watch 2
-# wears the pre-existing rose-gold master (LOGO_SETUP_ASSET, a second
-# master — not a recolor); watch 3+ tint the GOLD master (the same
-# tritone recipe `render.asset_recolor.tinted_pixmap` already uses for ring/
-# hand recolors, Rule #5) cycling this wheel forever. The 12 hues are
-# the CALENDAR pointer's own MONTH wheel (`UV/Color Wheels.png`,
-# January..December) read starting at January — the owner's own worked
-# example, PURPLE #8000FF (R:G:B 1:0:2) then BLUE #0000FF (R:G:B 0:0:1),
-# identifies the wheel and the starting point at once (Rule #19 —
-# computed from the one wheel already in the codebase, no new palette).
-TRAY_COLOR_WHEEL = (
-    "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80", "#00FF00",
-    "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080", "#FF00FF",
-)
 
 # --- UI icon chrome (TASK 4, MASON/ICONS round, owner icon list
 # 2026-07-19 approvals) -------------------------------------------------
@@ -490,70 +461,6 @@ def icon_path(name: str) -> Path | None:
 # LAYOUT (constants.RING_LAYOUTS) whose FACE file lives here.
 RING_FACE_DIR = paths.assets_dir() / "instrument" / "ring"
 
-# --- Ring tint (owner spec, FINAL.txt #6) ------------------------------------------
-# One hue recolors the WHOLE clock body: the ring art, the hands and
-# the Umbra are channel-multiplied by it (gray stays gray under None).
-# The letters are separate art and are never tinted. Preset hues below
-# are STARTING VALUES — the owner tunes them here. Settings shows them
-# as a grid of color circles (Paint style — owner spec 2026-07-11);
-# the name appears in the circle's hover tooltip.
-# The swatches split into TWO groupings (owner 2026-07-15: "podeli na
-# svetlije i tamnije" — the whole palette read too light), each its own
-# labeled grid. The Darker group grew a fashion row (owner: subtle,
-# understated, "gospodske" hues — navy/teget, petrol, graphite and the
-# silver-leaning darks).
-RING_TINT_GROUPS = {
-    "Lighter": {
-        "Gray": None,                   # the untouched owner art
-        # The owner's gold palette (his reference swatches, 2026-07-11).
-        "Naples Yellow": "#FFE169",
-        "Sunglow": "#FFD235",
-        "Mikado Yellow": "#FFC300",
-        "Gold": "#D4AF37",
-        "Satin Gold": "#C9980B",
-        "Copper": "#B87333",
-        "Silver": "#C9CDD3",
-        "Lavender Gray": "#A7A6BA",
-        "Periwinkle": "#9090C0",
-        "Cadet Gray": "#91A3B0",
-        "Stone": "#928E85",
-        "Aluminium": "#888B8D",
-        "Roman Silver": "#808992",
-        "Glaucous": "#6082B6",
-        "Slate Gray": "#708090",
-        "Smoke": "#738276",
-        "Steel": "#71797E",
-    },
-    "Darker": {
-        # Pipetted from the owner's Clock_OuterColors.png (21 ring
-        # variants, 3x7 grid, mode color per hour band — 2026-07-11).
-        "Nevada": "#6C7174",
-        "Dim Gray": "#6B6B6B",
-        "Granite": "#625D5D",
-        "Pewter": "#565B5F",
-        "Ebony": "#545851",
-        "Anthracite": "#494F55",
-        "Iron": "#4C4E52",
-        "Graphite": "#3B3F44",
-        "Gunmetal": "#2A3439",
-        "Charcoal": "#36454F",
-        "Black Coral": "#54626F",
-        # The fashion darks (owner 2026-07-15): muted wardrobe hues.
-        "Ocean": "#4E7A9E",
-        "Petrol": "#2F4550",
-        "Navy": "#1B2A41",
-        "Oxford Blue": "#14213D",
-        "Sage Steel": "#5E716A",
-        "Dark Olive": "#3C3F33",
-        "Deep Pine": "#253529",
-        "Smoky Plum": "#66606D",
-        "Aubergine": "#3D3242",
-        "Bordeaux": "#4E3238",
-        "Purple": "#8E55B9",
-        "Golden Brown": "#926C15",
-        "Espresso": "#342523",
-    },
-}
 RING_TINT_SWATCH_PX = 22             # diameter of one tint circle
 RING_TINT_SWATCHES_PER_ROW = 11
 PALETTE_SWATCH_PX = 34               # pointer palette circles (owner:
@@ -848,219 +755,12 @@ WORKING_SET_CEILINGS = {
     "celestial/seasons": 1200,
 }
 
-# Star + Aura palettes, (pointer, style) -> hues clockwise from the top
-# arm. The hexa and octa hues were measured directly from the owner's
-# reference art (his own files keep their pre-2026-07-28 names on disk:
-# design/background/{hexa,octa}_{paint,light}.png): the FIRST wheel is
-# subtractive — pigment primaries, yellow at the top — and the SECOND
-# additive — light primaries, green at the top.
-#
-# THE QUATERNITY'S THREE WHEELS (owner seal 2026-07-28). The four arms
-# are read three ways, and each reading now owns its own hues instead of
-# borrowing: TEMPERAMENTS the body's humours, ELEMENTS the world's
-# matter, SEASONS the year's quarters. Every wheel keeps the SAME arm
-# order — summer/fire/choleric top, autumn/earth/melancholic right,
-# winter/water/phlegmatic bottom, spring/air/sanguine left — so a figure
-# never moves seat when the reader turns the wheel.
-#
-# SEASONS — the owner's own sampled values, unchanged. They were always
-# a season palette; until today they merely sat under the Temperaments'
-# label (summer yellow top, autumn red right, winter blue bottom, spring
-# green left — solstices and equinoxes at the arm centres).
-_CROSS_SEASONS = ("#D9D900", "#D4330F", "#0A70D8", "#129412")
-# TEMPERAMENTS — the humours name their own colours inside their own
-# words, which is the most literal fidelity available: sanguis = blood =
-# red; cholē = yellow bile; melan-cholē = BLACK bile; phlegm = the pale
-# humour. Yellow, black, white and red are also Apelles' four-colour
-# palette as Pliny records it (NH 35.50) — the four temperaments in the
-# four pigments of antiquity.
-#   * summer arm (top)    = CHOLERIC    — saffron amber, bile's own
-#     gold rather than the season's lemon (hot & dry);
-#   * autumn arm (right)  = MELANCHOLIC — burnt umber, for *atra bilis
-#     adusta* is an adust, earthy black, never printer's black (a pure
-#     black arm is a hole in a transparent widget) (cold & dry);
-#   * winter arm (bottom) = PHLEGMATIC  — white with a cold blue-grey
-#     cast, the pale moist humour (cold & moist);
-#   * spring arm (left)   = SANGUINE    — a true blood crimson, deeper
-#     and bluer than autumn's leaf-red (warm & moist).
-# The diagonals stay opposed in BOTH qualities, as CANON requires: gold
-# against pale, blood against burnt black.
-_CROSS_TEMPERAMENTS = ("#E5A81F", "#3B2C28", "#D9E5EC", "#B21E30")
-# ELEMENTS — the FOUR ELEMENTS (owner 2026-07-17, CANON §the elements
-# wheel), unchanged: the classical assignment, seating the Tetramorph
-# (Lion/Ox/Eagle/Man). Hues clockwise from the top arm — the SAME arm
-# order as _CROSS_SEASONS (summer top, autumn right, winter bottom,
-# spring left) — so each element lands on its canonical season arm:
-#   * summer arm (top)    = FIRE  — a hot flame red-orange, hotter than
-#     autumn's leaf red so no two wheels of the three read alike;
-#   * autumn arm (right)  = EARTH — an olive green-brown, the soil (a
-#     muddy green, distinct from spring's pure green on the Seasons wheel);
-#   * winter arm (bottom) = WATER — a deep water blue;
-#   * spring arm (left)   = AIR   — a pale white-yellow, the luminous
-#     lightest of the four (owner: "air spring-arm white-yellow").
-# The classical Western element colours (fire red, air yellow/white,
-# water blue, earth green) laid on the seasons the fixed-cross zodiac
-# already ties them to (Leo/Taurus/Scorpio/Aquarius).
-_CROSS_ELEMENTS = ("#E8391E", "#6B8E3A", "#1E74D0", "#EFE9B0")
-# The TRIO's PRIMARY wheel carries the theological trio (owner spec,
-# FINAL.txt #7): Faith yellow at 12h, Love red at 20h, Hope blue at
-# 4h — the hexa primary hues at the M, Y, D ring-letter positions. Its
-# SECONDARY wheel is the FAMILY triangle (CANON, placement APPROVED
-# 2026-07-16): the same derivation from the hexa SECONDARY primaries at
-# 12/20/4 — green at the top (the Child) — with the parents' hues
-# LIGHTENED per the owner's member table ("light blue" the Father,
-# "light red" the Mother; hue tuning licensed to the agent,
-# 2026-07-16). Two wheels, so Paint/Light is LIVE on the Trinity now
-# (the Court/Family pair) — only the Seasons keep one palette.
-_TRINITY = ("#F8E600", "#B60000", "#002FFF")
-_FAMILY = ("#00DC00", "#FF8080", "#7FB2FF")
-# THE CUBE WHEELS (owner seal 2026-07-26, CUBE.md). The moon-gray
-# violet is the Purple-Gray hue law's ONE purple (~#666699 — the Moon,
-# midnight, the Winter Solstice; NEVER royal purple).
-MOON_GRAY_VIOLET = "#666699"
-# GENESIS (trio tertiary) — the creation trio on the INVERTED triangle,
-# tuple order following the drawn arms (offset 180°): 24h Creator in
-# the moon-gray violet, 08h Preserver in the dial's green, 16h
-# Destroyer in the dial's orange (the hexa primary hues, as the Court's
-# own derivation).
-_GENESIS = (MOON_GRAY_VIOLET, "#007E00", "#DC9600")
-# COUNCIL (hexa tertiary) — all six Double-Trinity offices at once: the
-# hexa primary wheel with the 24h arm re-dressed per the Purple-Gray hue
-# law (the Creator's arm is the Rose's violet, never royal).
-_COUNCIL = (
-    "#F8E600", "#DC9600", "#B60000",
-    MOON_GRAY_VIOLET, "#002FFF", "#007E00",
-)
-# CHARACTER / THE ROSE (octa tertiary) — the palette EXACTLY as the Rose is
-# drawn (owner seal: "kept for the beauty of the arrangement"; values
-# sampled from UV/simbolika/slike/24 ROSE (3 x octa).png): the four
-# poles wear yellow / red / moon-purple / BLUE (the Scale's own Judas-
-# Lucifer axis), the four blends follow nature — green of blue+yellow,
-# orange of yellow+red, pink and cyan are red and blue thinned by the
-# neighboring pole's moonlight. Clockwise from the 12h arm. This ONE
-# tuple rules BOTH the Character wheel and the ROSE POINTER's three
-# stars (CUBE.md §The Rose — Rule #5, one source). Clockwise from 12h
-# it is also the year: cardinals = the turning points (summer solstice
-# yellow, autumn equinox red, winter solstice purple, spring equinox
-# blue), diagonals = the season centres (orange, rose, cyan, green) —
-# exactly where `core.year_wheel` puts them.
-ROSE_PALETTE = (
-    "#FCEE21", "#F7931E", "#F03232", "#FF7BAC",
-    MOON_GRAY_VIOLET, "#29ABE2", "#0078DC", "#39B54A",
-)
-# The ROSE's arm OUTLINE — the dark lead of the owner's own drawing.
-# The Rose is the ONE pointer that needs it: three stars share eight
-# hues, so without a line between them a color group merges into a
-# single mass and the z-order — which star stands on the hour, which
-# is the past, which the future — becomes invisible. Every other
-# pointer's arms already differ in hue from their neighbors and stay
-# outline-free.
-ROSE_ARM_OUTLINE = "#1A1A1A"
 ROSE_ARM_OUTLINE_WIDTH = 0.0035          # of the dial radius
-PALETTE_PRESETS = {
-    ("hexa", "primary"): (
-        "#F8E600", "#DC9600", "#B60000",
-        "#542E85", "#002FFF", "#007E00",
-    ),
-    ("hexa", "secondary"): (
-        "#00DC00", "#FFFF00", "#FF0000",
-        "#BD00BD", "#0040FF", "#00DDDD",
-    ),
-    # COMPASS palettes (owner rework 2026-07-16): the two octa presets
-    # were essentially one wheel with nuance shifts — each palette now
-    # ties to its archetype's substance. PAINT = the Walks' materials
-    # (King gold, Merchant copper, Soldier iron-blood, Artist velvet,
-    # Wanderer road-dust, Scholar lamp ink, Farmer field green, Priest
-    # alb ivory). LIGHT = the Wheel of a Life, the Eight Ages (owner
-    # shift 2026-07-16: Death at midnight wears pure WHITE — in the
-    # light register death goes INTO the light; the moonlight silver
-    # moved to the Unborn at 03h, the predawn mist to Birth at 06h;
-    # the dawn rose retired). Both keep the day-arc.
-    ("octa", "primary"): (
-        "#F0C420", "#C87533", "#A02020", "#7A2E8E",
-        "#262636", "#1F5FA8", "#3E8914", "#EDEDE0",
-    ),
-    ("octa", "secondary"): (
-        "#FFE800", "#FFB400", "#FF6A3C", "#9C6BD4",
-        "#FFFFFF", "#C8D7F0", "#8FA8C8", "#7CE577",
-    ),
-    # The Quaternity's three (owner seal 2026-07-28): the two older
-    # wheels keep the slots they have always had, and Seasons — the name
-    # this pointer used to wear — takes the third.
-    ("cross", "primary"): _CROSS_TEMPERAMENTS,
-    ("cross", "secondary"): _CROSS_ELEMENTS,
-    ("cross", "tertiary"): _CROSS_SEASONS,
-    ("trio", "primary"): _TRINITY,
-    ("trio", "secondary"): _FAMILY,
-    # The Cube third wheels (owner seal 2026-07-26, CUBE.md).
-    ("trio", "tertiary"): _GENESIS,
-    ("hexa", "tertiary"): _COUNCIL,
-    ("octa", "tertiary"): ROSE_PALETTE,
-    # THE ROSE (owner seal 2026-07-27, CUBE.md §The Rose): both wheels
-    # wear the SAME eight hues — Legacy and Prophecy turn the star
-    # GEOMETRY and the figure sets, never the colors (the Seasons
-    # pointer already serves one palette under both styles). The tuple
-    # is ROSE_PALETTE itself, shared with the Character wheel above:
-    # one source, three readers (Rule #5).
-    ("rose", "primary"): ROSE_PALETTE,
-    ("rose", "secondary"): ROSE_PALETTE,
-    # AURORA (owner spec 2026-07-12): [dawn, five day hues, dusk] —
-    # paint = azure/green/yellow/orange/red, light = azure/cyan/green/
-    # yellow/red; twilight left (dawn) blue, right (dusk) brown.
-    ("aurora", "primary"): (
-        "#002FFF", "#0080FF", "#007E00", "#F8E600", "#DC9600",
-        "#BC0000", "#5D1212",
-    ),
-    ("aurora", "secondary"): (
-        "#0040FF", "#0080FF", "#00DCDC", "#00DC00", "#FFFF00",
-        "#FF2828", "#720017",
-    ),
-    # CALENDAR (owner 2026-07-16, CANON §The Dozen). TWELVE hues,
-    # clockwise from the TOP wedge (the tuple convention for the two
-    # wheels differs — see below). paint = the ZODIAC Dozen (boundaries
-    # ON the cardinal axes; the RGB circle rotated 15° so no pure
-    # primary shows): the FIRST hue fills the wedge that STARTS at the
-    # top (12h line), i.e. Cancer, then Leo, Virgo … clockwise. light =
-    # the ALMANAC (Month) Dozen (wedges CENTERED on the axes; pure
-    # primaries allowed): the FIRST hue fills the wedge CENTERED on the
-    # top, i.e. June, then July, August … clockwise.
-    ("calendar", "primary"): (
-        "#40FF00", "#BFFF00", "#FFBF00", "#FF4000", "#FF0040", "#FF00C0",
-        "#BF00FF", "#4000FF", "#0040FF", "#00BFFF", "#00FFBF", "#00FF40",
-    ),
-    ("calendar", "secondary"): (
-        "#00FF00", "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080",
-        "#FF00FF", "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80",
-    ),
-}
-
-def effective_palette_style(pointer: str, palette_style: str) -> str:
-    """The wheel slot AS RENDERED for this pointer: "tertiary" holds
-    only where the pointer actually serves a third wheel
-    (`constants.palette_styles_for`); everywhere else — a stored
-    "tertiary" left behind by a pointer switch — it normalizes to
-    "primary". The ONE normalization point (Rule #5): `app.controller.
-    apply_display_settings`, the settings dialog's palette group and
-    `watch_title` all read the style through here, so no consumer ever
-    indexes PALETTE_PRESETS with a pair that does not exist."""
-    if palette_style in constants.palette_styles_for(pointer):
-        return palette_style
-    return "primary"
 
 
-def pointer_arm_labels(pointer: str, palette_style: str) -> tuple:
-    """The palette-editor arm labels for the ACTIVE wheel — the
-    Genesis wheel (trio + tertiary) speaks its inverted seats
-    ("trio_tertiary"), every other wheel its pointer's own row."""
-    if (pointer, palette_style) == ("trio", "tertiary"):
-        return constants.POINTER_ARM_LABELS["trio_tertiary"]
-    return constants.POINTER_ARM_LABELS[pointer]
 
 
-# Elements switch "Colorful" OFF (owner spec, FINAL.txt #5): the day and
-# twilight arcs are still indicated, but as plain white transparency
-# instead of the pointer-palette hues.
-COLORFUL_OFF_COLOR = "#FFFFFF"
+
 
 # --- Calendar pointer (owner 2026-07-16, CANON §The Dozen) ---------------------
 # The twelve wedges ALL paint at this one opacity. Calendar-fixed — the
@@ -1077,7 +777,6 @@ CALENDAR_WEDGE_RADIUS_FRACTION = 0.90  # wedge reach, of the dial radius
 CALENDAR_ARROW_TIP_FRACTION = 0.845  # arrow tip radius (just inside the ticks)
 CALENDAR_ARROW_LENGTH_FRACTION = 0.06  # tip-to-base length, of the dial radius
 CALENDAR_ARROW_HALF_DEG = 2.4        # half-width of the base, in dial degrees
-CALENDAR_ARROW_COLOR = "#FFD235"     # gold, matching the ring letters/ticks
 
 # --- Calendar-pointer 12-sets: the Slavic Months (owner-sealed R7b 2026-07-21) -
 # The DESIGN ZODIAC law (UV/DESIGN/DESIGN INSTRUCTIONS.txt): "Zodiac i
@@ -1576,16 +1275,11 @@ LEGEND_MAX_WIDTH_FRACTION = 0.45
 LEGEND_MAX_HEIGHT_FRACTION = 0.85
 LEGEND_CURSOR_OFFSET_PX = 14
 LEGEND_PADDING_PX = 8
-LEGEND_BG = "#2B2B2B"
-LEGEND_BORDER = "#6E6E6E"
-LEGEND_TEXT = "#FFFFFF"
 # THE HOVER TEASER LAW (owner 2026-07-26, CUBE.md §Display and Legend
 # Laws): an article hover speaks only its THESIS — this many sentences
 # of the first paragraph — and closes with the LEARN MORE / SPACE
 # footer; the full article lives in the Encyclopedia.
 LEGEND_TEASER_SENTENCES = 2
-LEGEND_MORE_LINK_COLOR = "#8FB8FF"
-LEGEND_MORE_HINT_COLOR = "#9A9A9A"
 
 # The Encyclopedia article view (owner UX rounds 2026-07-12/13): the
 # text BLOCK hugs the LEFT edge and spans this fraction of the window
@@ -1683,24 +1377,6 @@ ENCYCLOPEDIA_CARD_TITLE_BUMP = 3       # the title sits this much above the body
 ENCYCLOPEDIA_WHOLE_ART_DIR = paths.assets_dir() / "instrument" / "wholes"
 ENCYCLOPEDIA_MOSAIC_PX = 512           # the composed tile's own side
 ENCYCLOPEDIA_MOSAIC_GAP_PX = 6
-# THE FINISH SWITCHER (owner fix round R3: moved to the top row, in
-# line with Home/Download; restyled from filled gradient pills to
-# border-only frames in the finish's OWN color — Colored/Bronze/Gold/
-# Silver read at a glance instead of hiding behind a generic caption).
-# Bronze matches BRONZE_LETTER_TINT (below, out of definition order —
-# copied as a literal rather than forward-referenced) so the switcher
-# border and the ring-letter bronze read as the SAME bronze; gold/
-# silver are the classic heraldic metals, unused as a plain hex
-# anywhere else in the palette tables.
-ENCYCLOPEDIA_FINISH_BORDER_COLORS = {
-    "Bronze": "#CD7F32",         # == BRONZE_LETTER_TINT
-    "Gold": "#D4AF37",
-    "Silver": "#C0C0C0",
-}
-# The COLORED option's border (owner correction 2026-07-21: the full
-# seven-stop spectrum "baš loše ispao" — a plain two-stop sweep reads
-# cleaner): BLUE on the left flowing to RED on the right.
-ENCYCLOPEDIA_FINISH_GRADIENT = ("#3B5FE0", "#D8362A")
 # Modern reader buttons (owner 2026-07-14: "veći, upečatljiviji,
 # življih boja — ne kao app iz 1990-e"): vivid gradient pills shared by
 # the Encyclopedia and the Guide. Each role owns a (top, bottom)
@@ -1710,31 +1386,6 @@ UI_BUTTON_RADIUS_PX = 12
 UI_BUTTON_PADDING_PX = (10, 26)         # vertical, horizontal
 UI_BUTTON_SMALL_FONT_PX = 14            # the per-entry look arrows
 UI_BUTTON_SMALL_PADDING_PX = (5, 12)
-UI_BUTTON_COLORS = {
-    "home": ("#4FACFE", "#1565C0"),         # blue — the way back
-    "previous": ("#FFB75E", "#E65100"),     # orange
-    "next": ("#7EDB7B", "#2E7D32"),         # green
-    "download": ("#CE93D8", "#6A1B9A"),     # violet — save the entry
-    "neutral": ("#B0BEC5", "#546E7A"),      # the look arrows
-}
-# Dialog theme (Rule #16 POLISH round, 2026-07-18): the dark-first
-# palette for the Settings dialog's chrome (nav column, group-box
-# cards, sliders/combos/spinboxes/checkboxes) and the other dialogs'
-# base surface — see monorepo DESIGN.md. Anchored on the dial's own
-# slate identity (`#2A3439` family) with the gold accent the owner's
-# opacity-slider screenshot already wears; `app/theme.py` is the only
-# consumer — every other file reaches colors through THEME_COLORS, no
-# hex literals scattered in widget code (Rule #4).
-THEME_COLORS = {
-    "surface_0": "#1A1F22",     # dialog window background
-    "surface_1": "#20272B",     # group-box cards
-    "surface_2": "#2A3439",     # inputs, nav column (the dial's slate)
-    "surface_3": "#333F45",     # hover / raised elevation
-    "border": "rgba(255, 255, 255, 28)",
-    "text_primary": "#F2F3F4",
-    "text_secondary": "#A6B0B4",
-    "accent": "#E8B23D",        # gold — the dial's own opacity-slider hue
-}
 THEME_RADIUS_CONTROL_PX = 8      # buttons, inputs, combos
 THEME_RADIUS_CARD_PX = 14        # group-box cards
 THEME_RADIUS_PILL_PX = 999       # nav selection pill, checkbox indicator
@@ -1811,12 +1462,6 @@ SUBDIAL_ROOT_DIR = paths.assets_dir() / "instrument" / "subdial"
 SUBDIAL_SOLO_FINISH = "silver"      # the solo set's one hand-drawn file
 SLOT_ROUNDEL_BORDER_FRACTION = 0.045     # rim width, of the diameter
 SLOT_ROUNDEL_CONTENT_FRACTION = 0.78     # content size inside the rim
-SLOT_ROUNDEL_FILL_FALLBACK = "#39434D"   # unreadable/missing ring art
-SLOT_ROUNDEL_BORDER_COLORS = {
-    "gold": "#FFD235",
-    "silver": "#C9CDD3",
-    "bronze": "#CD7F32",
-}
 # The SMALL-SECONDS complication (owner 2026-07-14): eight tick marks
 # just inside the subdial rim — four larger at the cardinals, four
 # smaller between — with a soft shadow, never touching the bezel; the
@@ -1827,15 +1472,9 @@ SLOT_ROUNDEL_BORDER_COLORS = {
 SMALL_SECONDS_TICK_OUTER_FRACTION = 0.80
 SMALL_SECONDS_TICK_MAJOR_FRACTION = 0.18
 SMALL_SECONDS_TICK_MINOR_FRACTION = 0.11
-SMALL_SECONDS_TICK_RGBA = (255, 255, 255, 235)
-SMALL_SECONDS_TICK_SHADOW_RGBA = (0, 0, 0, 140)
 SMALL_SECONDS_HAND_SHADOW_OFFSET_FRACTION = 0.035   # of the subdial radius
 SMALL_SECONDS_HAND_SHADOW_OPACITY = 0.55
 
-# Complication TEXTS on the subdials (owner 2026-07-15): always the
-# letter-finish metal color — never white — over a drop shadow so they
-# read on both plate styles.
-SUBDIAL_TEXT_SHADOW_RGBA = (0, 0, 0, 180)
 SUBDIAL_TEXT_SHADOW_OFFSET_FRACTION = 0.06          # of the font pixel size
 
 # Per-pointer SLOT sizing (owner 2026-07-15): the diamonds differ —
@@ -1861,10 +1500,6 @@ SLOT_SEAT_OUTWARD = {"cross": 1.12, "octa": 1.12, "rose": 1.12}
 # pointer (Trinity/Prism/Seasons/Compass all inherit the same position).
 WEEKDAY_ROMB_CENTER_OF_TIP = 0.5
 
-# The subdial's live SHADOW (owner 2026-07-15: the sun lives at the
-# dial center, the shadow is RENDERED, never baked) — offset outward
-# from the center, none on the center seat.
-SUBDIAL_SHADOW_RGBA = (0, 0, 0, 100)
 SUBDIAL_SHADOW_OFFSET_FRACTION = 0.05    # of the subdial diameter
 SUBDIAL_SHADOW_SPREAD = 1.04             # shadow radius vs the plate's
 
@@ -1887,14 +1522,6 @@ SUBDIAL_RECOLOR_VERSION = 3      # cache tag — bump on recolor math changes
 # the raw luminance (~0.2) would leave the hue barely readable, so the
 # field brightens by this gain before the tint lands (texture intact).
 SUBDIAL_RECOLOR_FIELD_GAIN = 1.9
-# SILVER has no entry here on purpose (2026-07-20 rework): it is the
-# achromatic VALUE alone, the exact letter-metal "straight desaturation"
-# recipe (`letter_metal_file`) — never a stored target color like gold/
-# bronze, so it can never drift toward a hue by accident.
-SUBDIAL_RECOLOR_COLORS = {
-    "gold": "#FFD235",
-    "bronze": "#CD7F32",
-}
 
 # The hidden REPORT window (owner 2026-07-15): function efficiency
 # statistics — table + two QPainter charts in one quiet gold hue
@@ -1903,11 +1530,6 @@ SUBDIAL_RECOLOR_COLORS = {
 REPORT_REFRESH_MS = 1000
 REPORT_BAR_TOP_N = 10
 REPORT_CHART_HEIGHT_PX = 170
-REPORT_MARK_COLOR = "#C9980B"        # satin gold — the one series hue
-REPORT_MARK_DIM_COLOR = "#6E5A18"    # unselected bars
-REPORT_INK_COLOR = "#E8EAED"         # primary text on the chart
-REPORT_MUTED_COLOR = "#9AA0A6"       # secondary text / axis
-REPORT_SURFACE_COLOR = "#202124"     # chart surface
 
 # ─── THE OBSERVATORY (Session 17, owner 2026-07-16) ────────────────────
 # The statistics sibling of the Encyclopedia ("kao enciklopedija, samo
@@ -1923,43 +1545,13 @@ OBSERVATORY_BUNDLE_SEASONS = "observatory_seasons.json"
 OBSERVATORY_BUNDLE_ECLIPSES = "observatory_eclipses.json"
 OBSERVATORY_BUNDLE_ENVELOPE = "observatory_envelope.json"
 OBSERVATORY_CHART_MIN_HEIGHT_PX = 240
-OBSERVATORY_SURFACE_COLOR = THEME_COLORS["surface_0"]      # chart body
-OBSERVATORY_INK_COLOR = THEME_COLORS["text_primary"]       # labels
-OBSERVATORY_MUTED_COLOR = THEME_COLORS["text_secondary"]   # axis / ticks
-OBSERVATORY_GRID_COLOR = "#3A464C"                          # recessive grid
-OBSERVATORY_CROSSHAIR_COLOR = "#E8B23D"                     # hover crosshair
 OBSERVATORY_LINE_WIDTH_PX = 2
 OBSERVATORY_GRID_WIDTH_PX = 1
 OBSERVATORY_MARK_RADIUS_PX = 3
-# The four seasons' canonical cross-wheel hues (Spring=air, Summer=fire,
-# Autumn=earth, Winter=water — the same _CROSS_ELEMENTS the Seasons
-# pointer paints) plus the two half-years (gold light, slate dark).
-OBSERVATORY_SERIES_COLORS = {
-    "spring": _CROSS_ELEMENTS[3],       # air — pale white-yellow
-    "summer": _CROSS_ELEMENTS[0],       # fire — red
-    "autumn": _CROSS_ELEMENTS[1],       # earth — olive green-brown
-    "winter": _CROSS_ELEMENTS[2],       # water — deep blue
-    "light": "#E8B23D",                 # the light half-year — gold
-    "dark": "#6E7B82",                  # the dark half-year — slate
-}
-# The eras painted on the light−dark chart: the Age of Light band gold,
-# the Age of Darkness band slate (low alpha wash), the Anno Lucis /
-# transition verticals in muted ink. (hex, alpha) — alpha applied live.
-OBSERVATORY_ERA_LIGHT_BAND = ("#E8B23D", 26)
-OBSERVATORY_ERA_DARK_BAND = ("#6E7B82", 30)
-OBSERVATORY_ERA_MARK_COLOR = "#C9CDD3"
-# The eclipse timeline: solar gold, lunar the blood-moon copper (the
-# same BRONZE family the on-dial lunar eclipse wears — color fidelity).
-OBSERVATORY_ECLIPSE_COLORS = {"solar": "#E8B23D", "lunar": "#B87333"}
-OBSERVATORY_NOW_MARK_COLOR = "#E8391E"          # the traveled moment line
 # The eclipse timeline's zoom (Deep Time mode): the nearest N eclipses
 # of EACH kind on EACH side of the moment (~2.4 of each kind per year,
 # so 60 ≈ a ±25-year window around the moment).
 OBSERVATORY_ECLIPSE_WINDOW_N = 60
-# The day-length curve at the current location: one gold line over the
-# year; astral is asked once every N days (a smooth curve, cheap open).
-# The step itself is set below (Fix round R1a, Item 5 — 1-day ticks).
-OBSERVATORY_DAYLENGTH_COLOR = "#E8B23D"
 
 # ─── Fix round D (owner verdicts 2026-07-19) ───────────────────────────
 # Task 1 — mouse-wheel zoom, centered on the cursor's x, on every chart;
@@ -1988,13 +1580,6 @@ OBSERVATORY_UNITS_DEFAULT = "days"
 OBSERVATORY_VMARK_MIN_SPACING_PX = 46
 OBSERVATORY_EXTREMA_WINDOW_YEARS = 1000
 
-# Task 4 — the fifth chart: the La2004 Laskar long envelope (amplitude
-# only, charts-only doctrine — ROADMAP 15a2). Colors echo the research
-# plot (research/ephemeris/long_envelope.py): gold amplitude band, muted
-# silver signed oscillation, teal DE441-measured-window wash.
-OBSERVATORY_LASKAR_ENVELOPE_COLOR = "#E8B23D"
-OBSERVATORY_LASKAR_SIGNED_COLOR = "#C7CDD6"
-OBSERVATORY_LASKAR_DE441_BAND = ("#4FB0C6", 30)
 
 # ─── Fix round G (owner verdicts 2026-07-19, slika 8 + addendum) ───────
 # Task 1 — the x/y tick PITCH must adapt to the visible span on every
@@ -2044,24 +1629,6 @@ OBSERVATORY_ENLARGE_HEIGHT_FRACTION = 0.5
 OBSERVATORY_ENLARGE_ASPECT_W = 16
 OBSERVATORY_ENLARGE_ASPECT_H = 9
 
-# Item 2 — the eclipse legend recolor (owner: "lakše razlikuje... mesec
-# PLAVIM a Sunce ZUTIM"): solar kinds walk yellow->orange->red (mildest
-# to most total), lunar kinds walk navy->blue->cyan (faintest penumbral
-# to most total) — the ground-truthed type vocabulary is pinned by
-# tests/test_eclipse.py::test_type_state_mapping_covers_the_ground_truthed_vocabulary.
-OBSERVATORY_ECLIPSE_KIND_COLORS = {
-    "solar": {
-        "partial": "#F4D35E",
-        "annular": "#F2994A",
-        "hybrid": "#EB5E28",
-        "total": "#D62828",
-    },
-    "lunar": {
-        "penumbral": "#2E4A7A",
-        "partial": "#2F6FED",
-        "total": "#4FD5E8",
-    },
-}
 # One honest sentence per kind for the Enlarge info panel's eclipse
 # legend rows (owner: "sa strane tekst o svakoj ukratko opisano šta
 # označava").
@@ -2172,8 +1739,6 @@ UMBRA_CONTRAST_SPANS = {
 # Earth marker at a solstice/equinox) glow GOLDEN, the Moon's phases glow
 # SILVER — starting values the owner tunes here.
 GLOW_RING_RADIUS_FRACTION = RING_LETTER_RADIUS_FRACTION  # ring band centerline
-GLOW_SUN_COLOR = "#FFCC33"           # golden — distinct from the yellow arms
-GLOW_MOON_COLOR = "#E8EBEE"          # silver — bright, reads on the dark ring
 GLOW_CORE_ALPHA = 1.0
 GLOW_MID_ALPHA = 0.85
 GLOW_MID_STOP = 0.75                 # gradient position of the mid alpha
@@ -3083,47 +2648,11 @@ METAL_SWAP_VERSION = 6      # cache tag — bump on recolor math changes
 # Badges never bronze-swap: bronze IS the art as drawn (membership only;
 # the recolor recipe itself lives in the presets).
 METAL_SWAP_TARGETS = ("gold", "silver")
-# Bronze ring LETTERS are derived AT LOAD from the gold master (owner
-# 2026-07-19, `render.asset_recolor.letter_metal_file` — retired the
-# pre-rendered files); BRONZE_LETTER_TINT anchors the "bronze" shade's
-# hue/saturation above and still supplies the eclipse glow color below —
-# it is a COLOR CONSTANT, not a recipe (the recipe itself is METAL_SHADES).
-BRONZE_LETTER_TINT = "#CD7F32"
 
-# ECLIPSE DISPLAY (owner 2026-07-18, ROADMAP 15h item 11 — refines the
-# sealed glow-metal triad; the Deep Time pack's eclipse catalog is the
-# OPTIONAL data source, see data/deep_time.md — absent it, none of this
-# ever draws). A SOLAR eclipse turns the Earth marker's OWN event glow
-# RED (instead of GLOW_SUN_COLOR) and swaps its art to the Planets
-# theme's Eclipsed-Sun dual; a LUNAR eclipse turns the Moon marker's
-# glow the blood-moon COPPER (the bronze metal tint, reused verbatim —
-# physically true, not a new color) and darkens the disc with the same
-# tint. Both ride the EXISTING relocation-to-ring-band mechanic
-# (GLOW_RING_RADIUS_FRACTION) — only the color/art/strength differ.
-GLOW_ECLIPSE_SOLAR_COLOR = "#FF3B30"       # red — the eclipsed Sun's glow
-# The "ring of fire" (owner decree 2026-07-19, fix round C): an ANNULAR
-# solar eclipse keeps the black-sun art but its glow shifts to a hotter
-# orange-red than the plain total/partial red, so the two read distinct.
-GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR = "#FF7A1A"
-GLOW_ECLIPSE_LUNAR_COLOR = BRONZE_LETTER_TINT  # bronze copper — blood moon
-# INVISIBLE-FROM-HERE muting (owner verdict "može", fix round E,
-# 2026-07-19): an eclipse the observer cannot actually see (below the
-# horizon, or — solar only — too far from the ground track) still
-# shows — the event is real — but its glow swaps to a desaturated
-# silver at HALF strength instead of its normal color, and the hover
-# names the reason. The art swap/moon-darkening stay untouched (the
-# type-driven state is a catalog fact, not an observer fact).
-GLOW_ECLIPSE_INVISIBLE_COLOR = "#8A9096"       # desaturated silver-gray
 ECLIPSE_INVISIBLE_STRENGTH_FACTOR = 0.5
 ECLIPSE_SOLAR_ART = (
     weekday_art("planets/primary/photo/Sun_Eclipse.png")
 )                                            # source-mapped by paths.art_file
-# LUNAR ECLIPSE OPTION C (owner sealed 2026-07-18): the blackened moon +
-# bronze glow gains a thin TURQUOISE FRINGE at the glow's OUTER edge —
-# the real ozone-band color at the umbra's rim during totality. A
-# turquoise ring, not a flat teal, so it reads distinctly against the
-# warm bronze on the dark dial.
-ECLIPSE_LUNAR_FRINGE_COLOR = "#40E0D0"
 ECLIPSE_LUNAR_FRINGE_STOP = 0.92              # gradient position (0..1 of halo radius)
 ECLIPSE_LUNAR_FRINGE_HALF_WIDTH = 0.05        # ring thickness either side of the stop
 ECLIPSE_LUNAR_FRINGE_ALPHA = 0.85             # peak alpha before the magnitude scale
@@ -3181,14 +2710,6 @@ ECLIPSE_STATE_MOON_BRIGHTNESS = {
     "lunar_partial": 0.18,
     "lunar_penumbral": 0.60,   # real penumbral eclipses are barely visible
 }
-# BLOOD MOON DISC (owner verdict "može", fix round E, 2026-07-19): the
-# TOTAL state's multiply-darken uses this deep copper-red instead of
-# neutral gray — `render.layers.tinted_gray`'s black->tint->white
-# tritone at `ECLIPSE_STATE_MOON_BRIGHTNESS["lunar_total"]` (~7%) reads
-# dark AND visibly red, the real "blood moon" look; partial/penumbral
-# keep the plain neutral gray (only totality dims the WHOLE face enough
-# for a color cast to read honestly).
-ECLIPSE_TOTAL_MOON_TINT = "#8B2E12"
 # Fixed glow-strength fraction per state (0..1, same scale as
 # `eclipse_glow_strength`'s return). "solar_partial" is intentionally
 # absent — it keeps the magnitude-linear mapping instead.
@@ -3368,9 +2889,9 @@ DEFAULT_SKIN = SkinDefinition(
         # overlays the chosen ring preset card (face + letters + letter
         # art) from Database/ring_presets.json at build time.
         asset=RING_FACE_DIR / "domy.png",
-        fill="#4A4E57",
-        text_color="#F0F0F0",
-        letter_color="#E8B84B",
+        fill=palette.SKIN_RING_FILL,
+        text_color=palette.SKIN_RING_TEXT,
+        letter_color=palette.SKIN_RING_LETTER,
         width_fraction=0.16,
         letters={12: "M", 20: "Y", 0: "Ω", 4: "D"},
     ),
@@ -3387,15 +2908,7 @@ DEFAULT_SKIN = SkinDefinition(
             "venus": "Venus",
             "saturn": "Saturn",
         },
-        body_colors={
-            "sun": "#FFC838",
-            "jupiter": "#E8C25A",
-            "mars": "#C96A3D",
-            "venus": "#E1934B",
-            "mercury": "#9B8F86",
-            "moon": "#C9CDD4",
-            "saturn": "#D4B27A",
-        },
+        body_colors=palette.SKIN_PLANET_BODY_COLORS,
         display_mode="ghost",           # owner default; "center_only" selectable
         ghost_opacity=0.15,
         center_scale=0.132,             # center_only showcase ONLY (owner
@@ -3416,16 +2929,16 @@ DEFAULT_SKIN = SkinDefinition(
             for phase in ("day", "night")
         },
         default_variant="europe",
-        day_color="#4B86C9",
-        night_color="#20344F",
+        day_color=palette.SKIN_EARTH_DAY,
+        night_color=palette.SKIN_EARTH_NIGHT,
         # Owner spec: the Earth's outer edge TOUCHES the ring's inner
         # edge (0.75 + 0.11 = 0.86 = the disc radius), same size as the
         # weekday planets.
         orbit_fraction=0.75,
         scale=0.11,
         moon_asset=weekday_art("planets/primary/photo/Moon.png"),
-        moon_lit_color="#E8E4D8",
-        moon_dark_color="#2A2D36",
+        moon_lit_color=palette.SKIN_MOON_LIT,
+        moon_dark_color=palette.SKIN_MOON_DARK,
         moon_shadow_alpha=0.82,
         moon_orbit_fraction=0.75,       # rides the same rim as the Earth
         moon_scale=0.08,                # ~72% of the Earth marker (owner spec)
@@ -3543,20 +3056,3 @@ INSTRUMENT_TWILIGHT_BANDS = (
     (constants.CIVIL_DEPRESSION, 12.0, "nautical"),
     (12.0, 18.0, "astronomical"),
 )
-INSTRUMENT_TWILIGHT_COLORS = {
-    "day": "#7FA8D9",
-    "civil": "#4A6FA5",
-    "nautical": "#2C4570",
-    "astronomical": "#1A2440",
-    "night": "#0C0F1A",
-    "sun": "#F2C14E",
-}
-INSTRUMENT_MOON_COLORS = {"lit": "#EFEAD8", "dark": "#2A2E38"}
-# The year wheel's quarters read the POINTER palette's own season hues
-# (`("cross", "tertiary")`, summer/autumn/winter/spring clockwise from
-# the top) — one palette, so a re-tuned season colour moves the diagram
-# with the dial.
-INSTRUMENT_SEASON_COLORS = dict(zip(
-    ("summer", "autumn", "winter", "spring"),
-    PALETTE_PRESETS[("cross", "tertiary")],
-))

@@ -38,7 +38,7 @@ from app.encyclopedia.reader import ReaderScreen
 from app.encyclopedia.themes import ThemeScreen
 from app.theme import apply_theme
 from app.ui_style import style_button
-from config import constants, defaults, paths
+from config import constants, defaults, palette, paths
 from config import encyclopedia_tree as tree
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
@@ -95,7 +95,7 @@ class EncyclopediaDialog(QDialog):
         style_button(self._home_button, "home")
         self._crumbs = QLabel()
         self._crumbs.setStyleSheet(
-            f"color: {defaults.THEME_COLORS['text_secondary']};"
+            f"color: {palette.THEME_COLORS['text_secondary']};"
             f"font-size: {defaults.UI_BUTTON_SMALL_FONT_PX}px;"
         )
         self._crumbs.setCursor(Qt.CursorShape.PointingHandCursor)

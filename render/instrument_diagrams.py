@@ -25,7 +25,7 @@ from PySide6.QtGui import (
     QColor, QFont, QFontMetricsF, QPainter, QPen, QPixmap,
 )
 
-from config import constants, defaults, doctrine
+from config import constants, defaults, doctrine, palette
 from core import angles
 
 # The eight figures this module draws, in the order the Instrument topic
@@ -43,9 +43,9 @@ INSTRUMENT_FIGURES = (
     "oscillations",
 )
 
-_INK = defaults.THEME_COLORS["text_primary"]
-_FAINT = defaults.THEME_COLORS["text_secondary"]
-_ACCENT = defaults.THEME_COLORS["accent"]
+_INK = palette.THEME_COLORS["text_primary"]
+_FAINT = palette.THEME_COLORS["text_secondary"]
+_ACCENT = palette.THEME_COLORS["accent"]
 
 
 # --- shared drawing primitives ------------------------------------------------
@@ -231,15 +231,15 @@ def _twilight(_key: str, size: int) -> QPixmap:
     radius = size * defaults.INSTRUMENT_DIAGRAM_RING_RATIO
     bands = tuple(
         (start, end, f"{name}  {start:.0f}–{end:.0f}°",
-         defaults.INSTRUMENT_TWILIGHT_COLORS[name])
+         palette.INSTRUMENT_TWILIGHT_COLORS[name])
         for start, end, name in defaults.INSTRUMENT_TWILIGHT_BANDS
     )
     box = QRectF(center.x() - radius, center.y() - radius, radius * 2, radius * 2)
     painter.setPen(Qt.PenStyle.NoPen)
     # The lit sky above the horizon, the dark world below it...
-    painter.setBrush(QColor(defaults.INSTRUMENT_TWILIGHT_COLORS["day"]))
+    painter.setBrush(QColor(palette.INSTRUMENT_TWILIGHT_COLORS["day"]))
     painter.drawPie(box, 0, 180 * 16)
-    painter.setBrush(QColor(defaults.INSTRUMENT_TWILIGHT_COLORS["night"]))
+    painter.setBrush(QColor(palette.INSTRUMENT_TWILIGHT_COLORS["night"]))
     painter.drawPie(box, 180 * 16, 180 * 16)
     # ...and the three bands as wedges under the WEST horizon, each one
     # exactly as deep as its own definition. Qt measures 1/16° counter-
@@ -255,7 +255,7 @@ def _twilight(_key: str, size: int) -> QPixmap:
     )
     # The sun setting into the bands.
     painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(defaults.INSTRUMENT_TWILIGHT_COLORS["sun"]))
+    painter.setBrush(QColor(palette.INSTRUMENT_TWILIGHT_COLORS["sun"]))
     painter.drawEllipse(
         _on_dial(center, radius, 90.0), size * 0.022, size * 0.022
     )
@@ -304,7 +304,7 @@ def _year_wheel(_key: str, size: int) -> QPixmap:
     box = QRectF(center.x() - radius, center.y() - radius, radius * 2, radius * 2)
     painter.setPen(Qt.PenStyle.NoPen)
     for index, (_anchor, season) in enumerate(seasons):
-        painter.setBrush(QColor(defaults.INSTRUMENT_SEASON_COLORS[season]))
+        painter.setBrush(QColor(palette.INSTRUMENT_SEASON_COLORS[season]))
         # Qt measures counter-clockwise from 3 o'clock; the dial runs
         # clockwise from the top, so a quarter starting at dial angle
         # `index * 90` begins at 90 − that.
@@ -368,11 +368,11 @@ def _draw_phase(painter: QPainter, center: QPointF, radius: float,
     — added when the moon is gaining, cut away when it is losing."""
     theta = 2 * math.pi * fraction
     painter.setPen(_pen(_FAINT, size, 0.002))
-    painter.setBrush(QColor(defaults.INSTRUMENT_MOON_COLORS["dark"]))
+    painter.setBrush(QColor(palette.INSTRUMENT_MOON_COLORS["dark"]))
     painter.drawEllipse(center, radius, radius)
     if abs(fraction - 0.0) < 1e-9:
         return
-    lit = QColor(defaults.INSTRUMENT_MOON_COLORS["lit"])
+    lit = QColor(palette.INSTRUMENT_MOON_COLORS["lit"])
     painter.setPen(Qt.PenStyle.NoPen)
     painter.setBrush(lit)
     box = QRectF(center.x() - radius, center.y() - radius, radius * 2, radius * 2)
@@ -385,7 +385,7 @@ def _draw_phase(painter: QPainter, center: QPointF, radius: float,
     )
     gibbous = 0.25 < fraction < 0.75
     painter.setBrush(lit if gibbous
-                     else QColor(defaults.INSTRUMENT_MOON_COLORS["dark"]))
+                     else QColor(palette.INSTRUMENT_MOON_COLORS["dark"]))
     painter.drawEllipse(ellipse)
 
 
@@ -402,7 +402,7 @@ def _metals(_key: str, size: int) -> QPixmap:
             _on_dial(center, radius, start + step * 120.0) for step in range(3)
         ]
         painter.drawPolygon(points)
-    finishes = defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS
+    finishes = palette.ENCYCLOPEDIA_FINISH_BORDER_COLORS
     painter.setPen(Qt.PenStyle.NoPen)
     for angle, name in ((0.0, "Gold"), (180.0, "Silver")):
         tip = _on_dial(center, radius, angle)
@@ -490,10 +490,10 @@ def _oscillations(_key: str, size: int) -> QPixmap:
     painter.drawLine(QPointF(point(0.0, 0.0).x(), plot.top()),
                      QPointF(point(0.0, 0.0).x(), plot.bottom()))
     for series, color, width in (
-        (signed, defaults.OBSERVATORY_LASKAR_SIGNED_COLOR, 0.0025),
-        (high, defaults.OBSERVATORY_LASKAR_ENVELOPE_COLOR, 0.004),
+        (signed, palette.OBSERVATORY_LASKAR_SIGNED_COLOR, 0.0025),
+        (high, palette.OBSERVATORY_LASKAR_ENVELOPE_COLOR, 0.004),
         ([-value for value in high],
-         defaults.OBSERVATORY_LASKAR_ENVELOPE_COLOR, 0.004),
+         palette.OBSERVATORY_LASKAR_ENVELOPE_COLOR, 0.004),
     ):
         painter.setPen(_pen(color, size, width))
         previous = None

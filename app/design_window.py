@@ -25,7 +25,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
-from config import constants, defaults, paths
+from config import constants, defaults, palette, paths
 from config.ui_text import ui
 from data.hands import hand_packs
 from data.rings import ring_presets
@@ -112,7 +112,7 @@ class DesignDialog(QDialog):
             button.setIcon(QIcon(str(icon_path)))
         if checked:
             button.setStyleSheet(
-                f"border: 2px solid {defaults.THEME_COLORS['accent']};"
+                f"border: 2px solid {palette.THEME_COLORS['accent']};"
                 "border-radius: 8px;"
             )
         button.clicked.connect(lambda checked=False: on_click())

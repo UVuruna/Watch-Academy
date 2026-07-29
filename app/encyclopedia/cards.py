@@ -28,7 +28,7 @@ from PySide6.QtCore import QRect, QSize, Qt, Signal
 from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QFrame, QHBoxLayout, QLabel, QVBoxLayout, QWidget
 
-from config import defaults, paths
+from config import defaults, palette, paths
 from render.asset_variants import scaled_variant_file
 
 
@@ -141,14 +141,14 @@ class Card(QFrame):
         self._title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._title.setWordWrap(True)
         self._title.setStyleSheet(
-            f"color: {defaults.THEME_COLORS['text_primary']};"
+            f"color: {palette.THEME_COLORS['text_primary']};"
             "font-weight: bold; background: transparent; border: none;"
         )
         self._about = QLabel(about)
         self._about.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._about.setWordWrap(True)
         self._about.setStyleSheet(
-            f"color: {defaults.THEME_COLORS['text_secondary']};"
+            f"color: {palette.THEME_COLORS['text_secondary']};"
             "background: transparent; border: none;"
         )
         self._footer = QLabel(footer)
@@ -176,7 +176,7 @@ class Card(QFrame):
         wash = (
             f"rgba({tint.red()}, {tint.green()}, {tint.blue()}, "
             f"{defaults.ENCYCLOPEDIA_CARD_HOVER_WASH_ALPHA})"
-            if hover else defaults.THEME_COLORS["surface_1"]
+            if hover else palette.THEME_COLORS["surface_1"]
         )
         border = (
             self._accent if hover
@@ -186,7 +186,7 @@ class Card(QFrame):
         self.setStyleSheet(
             "QFrame {"
             f"background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
-            f" stop:0 {wash}, stop:1 {defaults.THEME_COLORS['surface_0']});"
+            f" stop:0 {wash}, stop:1 {palette.THEME_COLORS['surface_0']});"
             f"border: {defaults.ENCYCLOPEDIA_CARD_EDGE_PX}px solid {border};"
             f"border-radius: {defaults.ENCYCLOPEDIA_CARD_RADIUS_PX}px; }}"
         )

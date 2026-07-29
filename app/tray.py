@@ -11,7 +11,7 @@ from PySide6.QtGui import QIcon, QPainter, QPixmap
 from PySide6.QtSvg import QSvgRenderer
 from PySide6.QtWidgets import QMenu, QSystemTrayIcon
 
-from config import constants, defaults
+from config import constants, defaults, palette
 from render.asset_recolor import tinted_pixmap
 
 
@@ -53,11 +53,11 @@ def _tray_tint(watch_index: int) -> str | None:
     """The RECOLOR hex for a watch's tray icon, by its own ORDER (owner
     INSTRUCTION.txt item 2B): `None` for watch 1 (gold as-is) and watch
     2 (its own rose-gold MASTER, not a recolor — see `_logo_asset`);
-    watch 3+ cycle `defaults.TRAY_COLOR_WHEEL` forever (Rule #19 —
+    watch 3+ cycle `palette.TRAY_COLOR_WHEEL` forever (Rule #19 —
     computed, never a new generated icon)."""
     if watch_index <= 2:
         return None
-    wheel = defaults.TRAY_COLOR_WHEEL
+    wheel = palette.TRAY_COLOR_WHEEL
     return wheel[(watch_index - 3) % len(wheel)]
 
 

@@ -39,7 +39,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme, size_to_screen
 from app.ui_style import style_button
-from config import constants, defaults
+from config import constants, defaults, palette
 from config.ui_text import ui
 from core.deep_time import (
     astro_from_display,
@@ -200,7 +200,7 @@ class TimeTravelDialog(QDialog):
         self._coverage_warning = QLabel(self)
         self._coverage_warning.setWordWrap(True)
         self._coverage_warning.setStyleSheet(
-            f"color: {defaults.TIME_TRAVEL_WARNING_COLOR};"
+            f"color: {palette.TIME_TRAVEL_WARNING_COLOR};"
         )
         self._coverage_warning.hide()
         layout.addRow(self._coverage_warning)

@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from config import defaults, paths
+from config import defaults, palette, paths
 
 _MAX_COLUMNS = 4
 
@@ -42,7 +42,7 @@ def _tile(label: str, icon_path, selected: bool, on_click) -> QToolButton:
         button.setIcon(QIcon(str(icon_path)))
     if selected:
         button.setStyleSheet(
-            f"border: 2px solid {defaults.THEME_COLORS['accent']};"
+            f"border: 2px solid {palette.THEME_COLORS['accent']};"
             "border-radius: 8px;"
         )
     button.clicked.connect(lambda checked=False: on_click())

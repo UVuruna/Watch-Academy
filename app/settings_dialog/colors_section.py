@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from config import constants, defaults
+from config import constants, defaults, palette
 
 
 class _ColorsSectionMixin:
@@ -87,8 +87,8 @@ class _ColorsSectionMixin:
         column = QVBoxLayout(group)
         chips_row = QHBoxLayout()
         # The Genesis wheel's inverted arms speak their own seats
-        # (Bottom / Left / Right) — defaults.pointer_arm_labels.
-        self._arm_labels = defaults.pointer_arm_labels(pointer, style)
+        # (Bottom / Left / Right) — palette.pointer_arm_labels.
+        self._arm_labels = palette.pointer_arm_labels(pointer, style)
         self._chips: list[QPushButton] = []
         for index, hue in enumerate(self._hues):
             chip = QPushButton()
@@ -138,7 +138,7 @@ class _ColorsSectionMixin:
     def _build_ring_tint_group(self) -> QGroupBox:
         """One hue recolors the whole clock body — ring art, hands and
         Umbra (channel multiply; the letter art stays untouched). The
-        presets (defaults.RING_TINT_GROUPS, owner-tunable) show as TWO
+        presets (palette.RING_TINT_GROUPS, owner-tunable) show as TWO
         labeled Paint-style grids — Lighter and Darker (owner
         2026-07-15: the one flat palette read too light) — the name in
         the tooltip, the active swatch ringed white — plus a free
@@ -148,7 +148,7 @@ class _ColorsSectionMixin:
         column = QVBoxLayout(group)
         self._tint_swatches: list[tuple[QPushButton, str | None]] = []
         per_row = defaults.RING_TINT_SWATCHES_PER_ROW
-        for title, presets in defaults.RING_TINT_GROUPS.items():
+        for title, presets in palette.RING_TINT_GROUPS.items():
             label = QLabel(tr(title))
             label.setStyleSheet("font-weight: bold;")
             column.addWidget(label)
@@ -186,7 +186,8 @@ class _ColorsSectionMixin:
 
     def _pick_ring_tint(self) -> None:
         chosen = QColorDialog.getColor(
-            QColor(self._ring_tint or "#808080"), self, "Pick the ring tint"
+            QColor(self._ring_tint or palette.RING_TINT_PICKER_SEED), self,
+            "Pick the ring tint",
         )
         if not chosen.isValid():
             return
@@ -198,7 +199,7 @@ class _ColorsSectionMixin:
         name = next(
             (
                 preset_name
-                for presets in defaults.RING_TINT_GROUPS.values()
+                for presets in palette.RING_TINT_GROUPS.values()
                 for preset_name, hue in presets.items()
                 if hue == self._ring_tint and hue is not None
             ),
@@ -216,7 +217,7 @@ class _ColorsSectionMixin:
         for chip, hue in self._tint_swatches:
             self._round_swatch(
                 chip,
-                hue or "#9A9A9A",
+                hue or palette.RING_TINT_NONE_SWATCH,
                 defaults.RING_TINT_SWATCH_PX,
                 selected=(hue == self._ring_tint),
             )

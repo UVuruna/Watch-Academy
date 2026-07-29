@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QApplication, QGroupBox
 from app.controller import apply_display_settings
 from app.settings_dialog.dialog import SettingsDialog
 from app.settings_store import Settings, replace
-from config import defaults
+from config import defaults, palette
 from render.layers import palette_for
 
 BELGRADE_PATH = ("Europe", "Southern Europe", "Serbia", "Grad Beograd", "Belgrade")
@@ -1672,7 +1672,7 @@ def test_custom_palette_reaches_the_render():
     other = apply_display_settings(
         defaults.DEFAULT_SKIN, replace(settings, palette_style="secondary")
     )
-    assert palette_for(other) == defaults.PALETTE_PRESETS[("hexa", "secondary")]
+    assert palette_for(other) == palette.PALETTE_PRESETS[("hexa", "secondary")]
 
 
 # --- ROUND R3: LAYOUT + ARTICLE ORDER + FINISH SWITCHER ------------------------
@@ -2158,14 +2158,14 @@ def test_finish_switcher_lives_in_the_top_row():
     dialog._reader._cycle_look(1)                          # -> Bronze
     bronze_qss = dialog._reader._look_caption.styleSheet()
     assert "background: transparent" not in bronze_qss
-    assert f"background: {defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS['Bronze']}" in (
+    assert f"background: {palette.ENCYCLOPEDIA_FINISH_BORDER_COLORS['Bronze']}" in (
         bronze_qss
     )
-    assert defaults.THEME_COLORS["surface_0"] in bronze_qss  # dark text
+    assert palette.THEME_COLORS["surface_0"] in bronze_qss  # dark text
     dialog._reader._cycle_look(-1)                         # back to Colored
     colored_qss = dialog._reader._look_caption.styleSheet()
     assert "qlineargradient" in colored_qss
-    assert defaults.THEME_COLORS["text_primary"] in colored_qss  # white text
-    for hue in defaults.ENCYCLOPEDIA_FINISH_GRADIENT:
+    assert palette.THEME_COLORS["text_primary"] in colored_qss  # white text
+    for hue in palette.ENCYCLOPEDIA_FINISH_GRADIENT:
         assert hue in colored_qss
     dialog.deleteLater()

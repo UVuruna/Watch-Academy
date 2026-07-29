@@ -12,9 +12,9 @@ per-instance color is touched.
 from PySide6.QtGui import QColor, QGuiApplication
 from PySide6.QtWidgets import QDialogButtonBox, QWidget
 
-from config import defaults
+from config import defaults, palette
 
-_C = defaults.THEME_COLORS
+_C = palette.THEME_COLORS
 _RADIUS_CONTROL = defaults.THEME_RADIUS_CONTROL_PX
 _RADIUS_CARD = defaults.THEME_RADIUS_CARD_PX
 _RADIUS_PILL = defaults.THEME_RADIUS_PILL_PX

@@ -8,6 +8,7 @@ Axes: X Activation, Y Moral Scope, Z Self-Regard. -1 is the cold pole,
 """
 
 from dataclasses import dataclass
+from config import palette
 
 
 @dataclass(frozen=True)
@@ -307,7 +308,7 @@ def sacred_figure(seat: str, register: str) -> str | None:
 
 # THE SIX POLES' SEALED ROSE HUES (CUBE.md §The Sunday axis, the
 # "Consequence for the Cube" table) as indices into
-# `defaults.ROSE_PALETTE` — yellow 0, orange 1, red 2, rose 3, purple 4,
+# `palette.ROSE_PALETTE` — yellow 0, orange 1, red 2, rose 3, purple 4,
 # cyan 5, blue 6, green 7. Blue and red are NOT cube hues on the Rose:
 # they are Sunday's two seats (Servant blue 06h, Ruler red 18h).
 ROSE_POLE_HUE = {

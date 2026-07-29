@@ -20,7 +20,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults
+from config import constants, defaults, palette
 from core.clock_state import (
     EclipseEvent,
     build_day_context,
@@ -570,7 +570,7 @@ def test_lunar_total_disc_is_genuinely_near_black(app):
 
 def test_lunar_total_disc_wears_copper_not_neutral_gray(app):
     """Fix round E (owner verdict "može"): the TOTAL lunar disc multiplies
-    with a deep COPPER tone (`defaults.ECLIPSE_TOTAL_MOON_TINT`) instead
+    with a deep COPPER tone (`palette.ECLIPSE_TOTAL_MOON_TINT`) instead
     of neutral gray — dark (same near-black ceiling as the plain
     near-black test) AND red-DOMINANT (red channel clearly ahead of
     green/blue, a neutral gray would tie all three)."""
@@ -912,7 +912,7 @@ def test_eclipse_solar_annular_icon_is_tinted_toward_the_ring_of_fire_color(app)
     assert tinted_path != source_path
     assert tinted_path.exists()
     image = QImage(str(tinted_path))
-    target_hue = QColor(defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR).hueF() * 360.0
+    target_hue = QColor(palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR).hueF() * 360.0
     seen_bright = False
     for x in range(0, image.width(), 15):
         for y in range(0, image.height(), 15):

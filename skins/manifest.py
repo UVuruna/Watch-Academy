@@ -10,7 +10,7 @@ hold absolute paths; a None asset means "draw procedurally".
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from config import constants, paths
+from config import constants, palette, paths
 
 
 @dataclass(frozen=True)
@@ -210,7 +210,7 @@ class SkinDefinition:
                                        # Star+Aura hues; "cube" is the Cube
                                        # canon's third wheel (Genesis/Council/
                                        # Character, trio/hexa/octa ONLY —
-                                       # defaults.effective_palette_style
+                                       # palette.effective_palette_style
                                        # normalizes it away elsewhere); on the
                                        # Calendar pointer the style PICKS THE
                                        # WHEEL: paint = Zodiac, light = Almanac

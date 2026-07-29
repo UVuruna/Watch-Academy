@@ -26,7 +26,7 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
-from config import cube, defaults
+from config import cube, defaults, palette
 
 # THE ISOMETRIC EYE. A cube of 27 cells read on a flat page needs a
 # projection that never lets two different cells land on the same point;
@@ -36,7 +36,7 @@ from config import cube, defaults
 _COS30 = math.cos(math.radians(30.0))
 _SIN30 = math.sin(math.radians(30.0))
 
-_ONE_HUE = defaults.THEME_COLORS["accent"]
+_ONE_HUE = palette.THEME_COLORS["accent"]
 
 
 def _project(coords, unit: float) -> QPointF:
@@ -59,7 +59,7 @@ def _hue(coords) -> QColor:
         return QColor(_ONE_HUE)
     index = cube.ROSE_POLE_HUE.get(coords)
     if index is not None:
-        return QColor(defaults.ROSE_PALETTE[index])
+        return QColor(palette.ROSE_PALETTE[index])
     reds = greens = blues = count = 0
     for axis, value in enumerate(coords):
         if value == 0:
@@ -69,7 +69,7 @@ def _hue(coords) -> QColor:
         pole_index = cube.ROSE_POLE_HUE.get(tuple(pole))
         if pole_index is None:
             continue
-        colour = QColor(defaults.ROSE_PALETTE[pole_index])
+        colour = QColor(palette.ROSE_PALETTE[pole_index])
         reds += colour.red()
         greens += colour.green()
         blues += colour.blue()
@@ -98,7 +98,7 @@ def _label_font(unit: float) -> QFont:
 
 def _draw_frame(painter: QPainter, unit: float) -> None:
     """The cube's twelve edges, faint — the room the axes live in."""
-    pen = QPen(QColor(defaults.THEME_COLORS["text_secondary"]))
+    pen = QPen(QColor(palette.THEME_COLORS["text_secondary"]))
     pen.setWidthF(max(1.0, unit * 0.012))
     painter.setPen(pen)
     painter.setOpacity(defaults.CUBE_DIAGRAM_FRAME_OPACITY)
@@ -161,7 +161,7 @@ def _draw_end_label(painter: QPainter, unit: float, coords, text: str) -> None:
         point.y() + outward.y() / length * push,
     )
     painter.setFont(_label_font(unit))
-    painter.setPen(QPen(QColor(defaults.THEME_COLORS["text_primary"])))
+    painter.setPen(QPen(QColor(palette.THEME_COLORS["text_primary"])))
     metrics = painter.fontMetrics()
     width = metrics.horizontalAdvance(text)
     height = metrics.height()
@@ -288,7 +288,7 @@ def hexagram_projection(size: int) -> QPixmap:
         for index in range(6)
     ]
     for step in (0, 1):
-        pen = QPen(QColor(defaults.ROSE_PALETTE[0 if step == 0 else 6]))
+        pen = QPen(QColor(palette.ROSE_PALETTE[0 if step == 0 else 6]))
         pen.setWidthF(max(1.2, unit * 0.022))
         painter.setPen(pen)
         triangle = [points[step], points[step + 2], points[step + 4]]
@@ -302,7 +302,7 @@ def hexagram_projection(size: int) -> QPixmap:
     painter.setBrush(QColor(_ONE_HUE))
     painter.drawEllipse(QPointF(0, 0), unit * 0.12, unit * 0.12)
     painter.setFont(_label_font(unit))
-    painter.setPen(QPen(QColor(defaults.THEME_COLORS["text_primary"])))
+    painter.setPen(QPen(QColor(palette.THEME_COLORS["text_primary"])))
     for coords, point in zip(ring, points):
         name = next(
             (cell.luminous

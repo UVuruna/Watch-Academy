@@ -3,7 +3,7 @@ upečatljiviji, življih boja — ne kao app iz 1990-e").
 
 One QSS builder for every reader-dialog button: a vivid vertical
 gradient pill with bold white text. The role picks its (top, bottom)
-gradient pair from `defaults.UI_BUTTON_COLORS`; hover lightens and
+gradient pair from `palette.UI_BUTTON_COLORS`; hover lightens and
 pressed darkens the same pair, so a new role needs only two hex
 values.
 
@@ -18,7 +18,7 @@ fill's own luminance.
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 
-from config import defaults
+from config import defaults, palette
 
 
 def _stops(top: str, bottom: str, factor: int = 100) -> str:
@@ -34,7 +34,7 @@ def _stops(top: str, bottom: str, factor: int = 100) -> str:
 
 
 def _qss(role: str, small: bool) -> str:
-    top, bottom = defaults.UI_BUTTON_COLORS[role]
+    top, bottom = palette.UI_BUTTON_COLORS[role]
     font = (
         defaults.UI_BUTTON_SMALL_FONT_PX if small
         else defaults.UI_BUTTON_FONT_PX
@@ -48,7 +48,7 @@ def _qss(role: str, small: bool) -> str:
         f"font-size: {font}px;"
         f"padding: {pad_v}px {pad_h}px;"
         f"border-radius: {defaults.UI_BUTTON_RADIUS_PX}px;"
-        "border: 1px solid rgba(0, 0, 0, 130);"
+        f"border: 1px solid {palette.UI_BUTTON_EDGE_RGBA};"
     )
     return (
         f"QPushButton, QToolButton {{ {base}"
@@ -73,9 +73,9 @@ def style_button(button, role: str, small: bool = False) -> None:
 # `border-color` gradient only ever paints the four corner miters, never
 # a smooth sweep. Every switcher option now wears a FILL instead, same
 # recipe as the reader buttons above. Colored keeps the owner's blue-
-# left/red-right sweep (`defaults.ENCYCLOPEDIA_FINISH_GRADIENT`, reused
+# left/red-right sweep (`palette.ENCYCLOPEDIA_FINISH_GRADIENT`, reused
 # — Rule #5), now filling the whole chip; Bronze/Gold/Silver reuse their
-# own existing border hex (`defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS`)
+# own existing border hex (`palette.ENCYCLOPEDIA_FINISH_BORDER_COLORS`)
 # as a SOLID fill. The continents GLOBE looks are new this round — the
 # owner's own four suggested words ("atmosphere = sky-blue gradient,
 # clean = deep ocean blue, day = warm gold, night = navy") realized as
@@ -86,14 +86,14 @@ def style_button(button, role: str, small: bool = False) -> None:
 # color is NEVER hand-picked (`_readable_text`, YIQ luminance per fill)
 # so a future palette retune can never silently go illegible.
 _LOOK_FILLS: dict[str, str | tuple[str, str]] = {
-    "Bronze": defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Bronze"],
-    "Gold": defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Gold"],
-    "Silver": defaults.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Silver"],
-    "Colored": defaults.ENCYCLOPEDIA_FINISH_GRADIENT,
-    "Atmosphere": ("#4FC3F7", "#FFB74D"),
-    "Atmosphere · Night": ("#0B1F3A", "#3B5FE0"),
-    "Clean": "#0E6B8C",
-    "Clean · Night": "#0B1F3A",
+    "Bronze": palette.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Bronze"],
+    "Gold": palette.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Gold"],
+    "Silver": palette.ENCYCLOPEDIA_FINISH_BORDER_COLORS["Silver"],
+    "Colored": palette.ENCYCLOPEDIA_FINISH_GRADIENT,
+    "Atmosphere": palette.LOOK_FILL_ATMOSPHERE,
+    "Atmosphere · Night": palette.LOOK_FILL_ATMOSPHERE_NIGHT,
+    "Clean": palette.LOOK_FILL_CLEAN,
+    "Clean · Night": palette.LOOK_FILL_CLEAN_NIGHT,
 }
 
 
@@ -112,8 +112,8 @@ def _readable_text(fill) -> str:
     stops = fill if isinstance(fill, tuple) else (fill,)
     dark_fill = all(_yiq(stop) < 128 for stop in stops)
     return (
-        defaults.THEME_COLORS["text_primary"] if dark_fill
-        else defaults.THEME_COLORS["surface_0"]
+        palette.THEME_COLORS["text_primary"] if dark_fill
+        else palette.THEME_COLORS["surface_0"]
     )
 
 
@@ -130,8 +130,8 @@ def style_look_chip(label, look_label: str) -> None:
     readable with light text (Rule #5: no second hand-picked neutral)."""
     fill = _LOOK_FILLS.get(look_label)
     if fill is None:
-        background = defaults.THEME_COLORS["surface_3"]
-        text = defaults.THEME_COLORS["text_primary"]
+        background = palette.THEME_COLORS["surface_3"]
+        text = palette.THEME_COLORS["text_primary"]
     elif isinstance(fill, tuple):
         background = (
             "qlineargradient(x1:0, y1:0, x2:1, y2:0, "
@@ -148,5 +148,5 @@ def style_look_chip(label, look_label: str) -> None:
         f"{defaults.UI_BUTTON_SMALL_PADDING_PX[1]}px;"
         f"border-radius: {defaults.UI_BUTTON_RADIUS_PX}px;"
         f"background: {background};"
-        "border: 1px solid rgba(0, 0, 0, 130);"
+        f"border: 1px solid {palette.UI_BUTTON_EDGE_RGBA};"
     )

@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from app import native
-from config import defaults
+from config import defaults, palette
 
 
 class FastTravelFlash(QWidget):
@@ -36,7 +36,7 @@ class FastTravelFlash(QWidget):
         self._icon_label = QLabel()
         self._text_label = QLabel()
         self._text_label.setStyleSheet(
-            f"color: {defaults.FAST_TRAVEL_FLASH_TEXT_COLOR};"
+            f"color: {palette.FAST_TRAVEL_FLASH_TEXT_COLOR};"
             f"font-weight: 600; font-size: {defaults.FAST_TRAVEL_FLASH_FONT_PX}px;"
         )
         layout = QHBoxLayout(self)
@@ -46,7 +46,7 @@ class FastTravelFlash(QWidget):
         layout.addWidget(self._icon_label)
         layout.addWidget(self._text_label)
         self.setStyleSheet(
-            f"FastTravelFlash {{ background: {defaults.FAST_TRAVEL_FLASH_BG}; "
+            f"FastTravelFlash {{ background: {palette.FAST_TRAVEL_FLASH_BG}; "
             f"border-radius: {defaults.FAST_TRAVEL_FLASH_RADIUS_PX}px; }}"
         )
         self._opacity = QGraphicsOpacityEffect(self)

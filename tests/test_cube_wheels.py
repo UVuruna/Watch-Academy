@@ -21,7 +21,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import archetypes, constants, defaults
+from config import archetypes, constants, defaults, palette
 from app.controller import apply_display_settings, build_skin, watch_title
 from app.settings_store import Settings
 from core.clock_state import build_day_context, build_tick_state
@@ -104,10 +104,10 @@ def test_effective_palette_style_normalizes_the_third_wheel_off_its_pointers():
     "primary" on the two-wheel pointers — and survives on the
     three-wheel ones."""
     for pointer in ("trio", "cross", "hexa", "octa"):
-        assert defaults.effective_palette_style(pointer, "tertiary") == "tertiary"
+        assert palette.effective_palette_style(pointer, "tertiary") == "tertiary"
     for pointer in ("aurora", "calendar", "rose"):
-        assert defaults.effective_palette_style(pointer, "tertiary") == "primary"
-    assert defaults.effective_palette_style("cross", "secondary") == "secondary"
+        assert palette.effective_palette_style(pointer, "tertiary") == "primary"
+    assert palette.effective_palette_style("cross", "secondary") == "secondary"
 
 
 def test_apply_display_settings_normalizes_a_stray_third_wheel():
@@ -152,7 +152,7 @@ def test_genesis_palette_is_the_inverted_creation_trio():
     """CUBE.md + genesis sheet: 24h the moon-gray violet (the
     Purple-Gray hue law — NEVER royal purple), 08h the dial's green,
     16h the dial's orange; tuple order follows the drawn arms."""
-    assert defaults.PALETTE_PRESETS[("trio", "tertiary")] == (
+    assert palette.PALETTE_PRESETS[("trio", "tertiary")] == (
         "#666699", "#007E00", "#DC9600"
     )
 
@@ -160,11 +160,11 @@ def test_genesis_palette_is_the_inverted_creation_trio():
 def test_council_palette_wears_the_moon_gray_creator_arm():
     """Council sheet: the hexa primary wheel with the 24h arm re-dressed
     to the Rose's violet (the Purple-Gray hue law, SEALED)."""
-    council = defaults.PALETTE_PRESETS[("hexa", "tertiary")]
+    council = palette.PALETTE_PRESETS[("hexa", "tertiary")]
     assert council == (
         "#F8E600", "#DC9600", "#B60000", "#666699", "#002FFF", "#007E00",
     )
-    assert council[3] == defaults.MOON_GRAY_VIOLET
+    assert council[3] == palette.MOON_GRAY_VIOLET
 
 
 def test_character_palette_is_the_rose_as_drawn():
@@ -172,12 +172,12 @@ def test_character_palette_is_the_rose_as_drawn():
     Rose is drawn — poles yellow/red/moon-purple/BLUE (the Scale's own
     Judas–Lucifer axis), blends green/orange/pink/cyan — and ONE tuple
     rules both the Character wheel and the Rose (Rule #5)."""
-    assert defaults.PALETTE_PRESETS[("octa", "tertiary")] is defaults.ROSE_PALETTE
-    assert defaults.ROSE_PALETTE == (
+    assert palette.PALETTE_PRESETS[("octa", "tertiary")] is palette.ROSE_PALETTE
+    assert palette.ROSE_PALETTE == (
         "#FCEE21", "#F7931E", "#F03232", "#FF7BAC",
         "#666699", "#29ABE2", "#0078DC", "#39B54A",
     )
-    assert palette_for(_skin("octa")) == defaults.ROSE_PALETTE
+    assert palette_for(_skin("octa")) == palette.ROSE_PALETTE
 
 
 # --- The Genesis inversion ---------------------------------------------------------

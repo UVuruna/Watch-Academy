@@ -18,7 +18,7 @@ from time import monotonic
 from PySide6.QtCore import QPointF, Qt
 from PySide6.QtGui import QImage, QPainter, QPixmap
 
-from config import archetypes, constants, defaults, paths, profiling
+from config import archetypes, constants, defaults, palette, paths, profiling
 from config.ui_text import ui
 from data.encyclopedia import EncyclopediaRepository
 from data.symbolism import SymbolismRepository
@@ -193,9 +193,9 @@ def _learn_more_footer(tr) -> str:
     return (
         "<hr/><div align='center'>"
         f"<a href='domy:encyclopedia' "
-        f"style='color:{defaults.LEGEND_MORE_LINK_COLOR}'>"
+        f"style='color:{palette.LEGEND_MORE_LINK_COLOR}'>"
         f"<u>{html.escape(tr('Learn more'))}</u></a>"
-        f"&nbsp;&nbsp;<span style='color:{defaults.LEGEND_MORE_HINT_COLOR}'>"
+        f"&nbsp;&nbsp;<span style='color:{palette.LEGEND_MORE_HINT_COLOR}'>"
         f"{html.escape(tr('press SPACE'))}</span></div>"
     )
 

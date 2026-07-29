@@ -23,13 +23,13 @@ import math
 from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QPainter, QPen, QPixmap
 
-from config import archetypes, cube, defaults, doctrine
+from config import archetypes, cube, defaults, doctrine, palette
 from core import angles
 
-_INK = defaults.THEME_COLORS["text_primary"]
-_MUTED = defaults.THEME_COLORS["text_secondary"]
-_LIGHT_HUE = defaults.ROSE_PALETTE[0]        # 12h yellow — the bright road
-_DARK_HUE = defaults.ROSE_PALETTE[2]         # 18h red — the dark road
+_INK = palette.THEME_COLORS["text_primary"]
+_MUTED = palette.THEME_COLORS["text_secondary"]
+_LIGHT_HUE = palette.ROSE_PALETTE[0]        # 12h yellow — the bright road
+_DARK_HUE = palette.ROSE_PALETTE[2]         # 18h red — the dark road
 
 
 def _canvas(size: int) -> tuple[QPixmap, QPainter]:
@@ -137,7 +137,7 @@ def crosses(page: str, size: int) -> QPixmap:
     _draw_journey(painter, centre, radius, size, dark, _DARK_HUE, 0.74)
     _draw_journey(painter, centre, radius, size, bright, _LIGHT_HUE, 1.0)
     painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(defaults.THEME_COLORS["accent"]))
+    painter.setBrush(QColor(palette.THEME_COLORS["accent"]))
     painter.drawEllipse(centre, size * 0.010, size * 0.010)
     painter.end()
     return pixmap
@@ -211,7 +211,7 @@ def _draw_table(painter: QPainter, size: int, rows, headers) -> None:
     painter.setFont(_font(size, defaults.CANON_DIAGRAM_TABLE_RATIO))
     metrics = painter.fontMetrics()
     for index, header in enumerate(headers):
-        painter.setPen(QPen(QColor(defaults.THEME_COLORS["accent"])))
+        painter.setPen(QPen(QColor(palette.THEME_COLORS["accent"])))
         painter.drawText(
             QRectF(margin + index * width, margin, width, height),
             Qt.AlignmentFlag.AlignCenter, header,

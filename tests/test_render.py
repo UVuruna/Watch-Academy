@@ -12,7 +12,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import defaults
+from config import defaults, palette
 from core.clock_state import build_day_context, build_tick_state
 from data.moon_phases import MoonPhaseRepository
 from data.seasons import SeasonsRepository
@@ -537,11 +537,11 @@ def test_aura_saturation_grays_only_the_aura_hues_not_the_star(app):
 
     # The star diamonds' own source is untouched by the slider either way.
     assert palette_for(full) == palette_for(gray)
-    assert palette_for(full) == defaults.PALETTE_PRESETS[(full.pointer, full.palette_style)]
+    assert palette_for(full) == palette.PALETTE_PRESETS[(full.pointer, full.palette_style)]
 
     full_hues = aura_palette_for(full)
     gray_hues = aura_palette_for(gray)
-    assert full_hues == defaults.PALETTE_PRESETS[(full.pointer, full.palette_style)]
+    assert full_hues == palette.PALETTE_PRESETS[(full.pointer, full.palette_style)]
     assert len(gray_hues) == len(full_hues)
     for original, grayed in zip(full_hues, gray_hues):
         color = QColor(grayed)

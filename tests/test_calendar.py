@@ -19,7 +19,7 @@ import astral
 import pytest
 from PySide6.QtWidgets import QApplication
 
-from config import constants, defaults
+from config import constants, defaults, palette
 from core.clock_state import build_day_context, build_tick_state
 from core.year_wheel import almanac_marker_angle, almanac_month_index
 from data.moon_phases import MoonPhaseRepository
@@ -73,17 +73,17 @@ def _calendar_skin(**kw):
 def test_calendar_palettes_pin_the_two_wheels():
     """The twelve hues of each wheel, clockwise from the top wedge —
     Zodiac (paint) opens on Cancer, Almanac (light) on June."""
-    assert defaults.PALETTE_PRESETS[("calendar", "primary")] == (
+    assert palette.PALETTE_PRESETS[("calendar", "primary")] == (
         "#40FF00", "#BFFF00", "#FFBF00", "#FF4000", "#FF0040", "#FF00C0",
         "#BF00FF", "#4000FF", "#0040FF", "#00BFFF", "#00FFBF", "#00FF40",
     )
-    assert defaults.PALETTE_PRESETS[("calendar", "secondary")] == (
+    assert palette.PALETTE_PRESETS[("calendar", "secondary")] == (
         "#00FF00", "#80FF00", "#FFFF00", "#FFBF00", "#FF0000", "#FF0080",
         "#FF00FF", "#8000FF", "#0000FF", "#0080FF", "#00FFFF", "#00FF80",
     )
     # Both wheels carry exactly twelve hues (the palette-length invariant).
     for style in ("primary", "secondary"):
-        assert len(defaults.PALETTE_PRESETS[("calendar", style)]) == 12
+        assert len(palette.PALETTE_PRESETS[("calendar", style)]) == 12
 
 
 def test_calendar_wheel_follows_the_palette_style():

@@ -28,7 +28,7 @@ from PySide6.QtGui import (
     QRadialGradient,
 )
 
-from config import archetypes, constants, defaults, paths
+from config import archetypes, constants, defaults, palette, paths
 from core import angles, continents
 from core.clock_state import DayContext, TickState
 from core.deep_time import format_official, real_year
@@ -119,8 +119,8 @@ def draw_outlined_text(
     path = QPainterPath()
     path.addText(baseline, font, text)
     outline_width = max(1.0, font.pixelSize() * defaults.LABEL_OUTLINE_WIDTH)
-    painter.setPen(QPen(QColor(*defaults.LABEL_OUTLINE_RGBA), outline_width))
-    painter.setBrush(QColor(*defaults.LABEL_FILL_RGBA))
+    painter.setPen(QPen(QColor(*palette.LABEL_OUTLINE_RGBA), outline_width))
+    painter.setBrush(QColor(*palette.LABEL_FILL_RGBA))
     painter.drawPath(path)
 
 
@@ -147,7 +147,7 @@ def palette_for(skin: SkinDefinition) -> tuple:
     consumption path reads `aura_palette_for` below instead."""
     return (
         skin.palette_override if skin.palette_override is not None
-        else defaults.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
+        else palette.PALETTE_PRESETS[(skin.pointer, skin.palette_style)]
     )
 
 
@@ -214,7 +214,7 @@ def rose_assembly_offset_deg(skin: SkinDefinition) -> float:
     if skin.pointer != "rose":
         return 0.0
     return constants.ROSE_WHEEL_ASSEMBLY_OFFSET_DEG[
-        defaults.effective_palette_style(skin.pointer, skin.palette_style)
+        palette.effective_palette_style(skin.pointer, skin.palette_style)
     ]
 
 
@@ -309,7 +309,7 @@ def rose_star_offsets(skin: SkinDefinition) -> tuple:
     if skin.pointer != "rose":
         return ()
     return constants.ROSE_STAR_OFFSETS[
-        defaults.effective_palette_style(skin.pointer, skin.palette_style)
+        palette.effective_palette_style(skin.pointer, skin.palette_style)
     ]
 
 
@@ -326,8 +326,8 @@ def rose_star_set(offset: float) -> str:
 def _wheel(skin: SkinDefinition) -> str:
     """The skin's EFFECTIVE wheel slot — the stored palette_style
     normalized to what this pointer actually serves (Rule #5: the same
-    `defaults.effective_palette_style` every other wheel reader uses)."""
-    return defaults.effective_palette_style(skin.pointer, skin.palette_style)
+    `palette.effective_palette_style` every other wheel reader uses)."""
+    return palette.effective_palette_style(skin.pointer, skin.palette_style)
 
 
 def horizontal_duality(skin: SkinDefinition) -> bool:
@@ -1938,7 +1938,7 @@ class BackgroundLayer(Layer):
         # 2026-07-29): the Calendar follows the same visibility law as
         # every other pointer, nothing more.
         if ctx.skin.pointer == "calendar":
-            palette = aura_palette_for(ctx.skin)
+            aura_hues = aura_palette_for(ctx.skin)
             wheel = calendar_wheel(ctx.skin)
             cal_radius = ctx.radius * (
                 ctx.skin.background.aura_radius_fraction
@@ -1946,7 +1946,7 @@ class BackgroundLayer(Layer):
             for index, (start, end) in enumerate(calendar_wedge_bounds(wheel)):
                 painter.save()
                 painter.setOpacity(defaults.CALENDAR_WEDGE_ALPHA)
-                painter.setBrush(QColor(palette[index]))
+                painter.setBrush(QColor(aura_hues[index]))
                 draw_pie(painter, cal_radius, start, end)
                 painter.restore()
             if ctx.skin.calendar_mount != "off":
@@ -1956,22 +1956,22 @@ class BackgroundLayer(Layer):
         # Colorful off (Elements switch): the day/twilight arcs are still
         # indicated, but in plain white — a one-entry palette draws a
         # single full wedge under the same clip and alphas.
-        palette = (
+        aura_hues = (
             aura_palette_for(ctx.skin)
             if ctx.skin.colorful
-            else (defaults.COLORFUL_OFF_COLOR,)
+            else (palette.COLORFUL_OFF_COLOR,)
         )
         # THE BACKGROUND FOLLOWS THE STAR (`aura_wedge_bounds` — the
         # owner's top-priority fix 2026-07-29): each hue's wedge covers
         # its own RAY GROUP, wheel offsets included, so a wedge can
         # never stand half behind one group and half behind the next.
-        wedges = aura_wedge_bounds(ctx.skin, palette)
+        wedges = aura_wedge_bounds(ctx.skin, aura_hues)
         for start, end, alpha in lit_regions(ctx.day.sun, spec):
             painter.save()
             painter.setClipPath(pie_path(aura_radius, start, end))
             painter.setOpacity(alpha)
             painter.rotate(ctx.rotation)
-            for color, (wedge_start, wedge_end) in zip(palette, wedges):
+            for color, (wedge_start, wedge_end) in zip(aura_hues, wedges):
                 painter.setBrush(QColor(color))
                 draw_pie(painter, aura_radius, wedge_start, wedge_end)
             painter.restore()
@@ -2086,7 +2086,7 @@ class StarLayer(Layer):
                     if ctx.skin.pointer == "rose":
                         painter.setPen(
                             QPen(
-                                QColor(defaults.ROSE_ARM_OUTLINE),
+                                QColor(palette.ROSE_ARM_OUTLINE),
                                 max(
                                     1.0,
                                     ctx.radius
@@ -2227,7 +2227,7 @@ class RingLayer(Layer):
             asset, height, ctx.dpr, saturation=ctx.skin.ring_saturation
         )
         shadow = ctx.cache.pixmap_by_height(
-            gold_asset, height, ctx.dpr, tint="#000000"
+            gold_asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT
         )
         logical_w = pixmap.width() / ctx.dpr
         pos = dial_point(theta, ctx.radius * radius_fraction)
@@ -3135,7 +3135,7 @@ def _draw_subdial_shadow(
         shifted = pos
     radius = diameter / 2.0 * defaults.SUBDIAL_SHADOW_SPREAD
     gradient = QRadialGradient(shifted, radius)
-    shade = QColor(*defaults.SUBDIAL_SHADOW_RGBA)
+    shade = QColor(*palette.SUBDIAL_SHADOW_RGBA)
     gradient.setColorAt(0.75, shade)
     fade = QColor(shade)
     fade.setAlpha(0)
@@ -3176,7 +3176,7 @@ def draw_slot_roundel(
         draw_pixmap_centered(painter, ctx, plate, pos, diameter)
         return
     rim = QColor(
-        defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
+        palette.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
     )
     width = max(1.5, diameter * defaults.SLOT_ROUNDEL_BORDER_FRACTION)
     painter.save()
@@ -3192,7 +3192,7 @@ def _finish_color(ctx: RenderContext) -> QColor:
     accent: the mini hand, the theme-style ticks and all complication
     texts (owner 2026-07-15: 'u boji kao i kazaljka')."""
     return QColor(
-        defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
+        palette.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish]
     )
 
 
@@ -3216,7 +3216,7 @@ def draw_shadowed_text(
     )
     painter.save()
     painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(*defaults.SUBDIAL_TEXT_SHADOW_RGBA))
+    painter.setBrush(QColor(*palette.SUBDIAL_TEXT_SHADOW_RGBA))
     painter.drawPath(path.translated(offset, offset))
     painter.setBrush(color)
     painter.drawPath(path)
@@ -3285,7 +3285,7 @@ def draw_small_seconds(
     tick_color = (
         _finish_color(ctx)
         if ctx.skin.subdial_style == "theme"
-        else QColor(*defaults.SMALL_SECONDS_TICK_RGBA)
+        else QColor(*palette.SMALL_SECONDS_TICK_RGBA)
     )
     painter.save()
     painter.translate(pos)
@@ -3303,7 +3303,7 @@ def draw_small_seconds(
         end = QPointF(ux * outer, uy * outer)
         shadow = QPointF(width * 0.35, width * 0.35)
         painter.setPen(QPen(
-            QColor(*defaults.SMALL_SECONDS_TICK_SHADOW_RGBA), width,
+            QColor(*palette.SMALL_SECONDS_TICK_SHADOW_RGBA), width,
             Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap,
         ))
         painter.drawLine(start + shadow, end + shadow)
@@ -3322,11 +3322,11 @@ def draw_small_seconds(
         height = spec.natural_height * (target_tip / tip_units)
         pixmap = ctx.cache.pixmap_by_height(
             spec.asset, height, ctx.dpr,
-            tint=defaults.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish],
+            tint=palette.SLOT_ROUNDEL_BORDER_COLORS[ctx.skin.ring_finish],
             desaturate=ctx.skin.hands.desaturate,
         )
         silhouette = ctx.cache.pixmap_by_height(
-            spec.asset, height, ctx.dpr, tint="#000000",
+            spec.asset, height, ctx.dpr, tint=palette.SHADOW_STAMP_TINT,
             desaturate=ctx.skin.hands.desaturate,
         )
         logical_w = pixmap.width() / ctx.dpr
@@ -3406,9 +3406,9 @@ class YearMarkerLayer(Layer):
             pos = dial_point(moon_angle, ctx.radius * orbit)
             if glowing:
                 color = (
-                    defaults.GLOW_ECLIPSE_LUNAR_COLOR
+                    palette.GLOW_ECLIPSE_LUNAR_COLOR
                     if lunar_state is not None
-                    else defaults.GLOW_MOON_COLOR
+                    else palette.GLOW_MOON_COLOR
                 )
                 strength = (
                     eclipse_state_glow_strength(lunar_state, lunar_eclipse.magnitude)
@@ -3421,7 +3421,7 @@ class YearMarkerLayer(Layer):
                 # observer cannot actually see it — mute the glow to a
                 # desaturated silver at half strength instead.
                 if lunar_state is not None and not lunar_eclipse.visible:
-                    color = defaults.GLOW_ECLIPSE_INVISIBLE_COLOR
+                    color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
                     strength *= defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
                 draw_event_glow(
                     painter,
@@ -3430,7 +3430,7 @@ class YearMarkerLayer(Layer):
                     color,
                     strength,
                     fringe_color=(
-                        defaults.ECLIPSE_LUNAR_FRINGE_COLOR
+                        palette.ECLIPSE_LUNAR_FRINGE_COLOR
                         if lunar_state is not None
                         and defaults.ECLIPSE_STATE_FRINGE[lunar_state]
                         else None
@@ -3483,13 +3483,13 @@ class YearMarkerLayer(Layer):
                 else None
             )
             if solar_state is None:
-                color = defaults.GLOW_SUN_COLOR
+                color = palette.GLOW_SUN_COLOR
                 strength = 1.0
             else:
                 color = (
-                    defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
+                    palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
                     if solar_state == "solar_annular"
-                    else defaults.GLOW_ECLIPSE_SOLAR_COLOR
+                    else palette.GLOW_ECLIPSE_SOLAR_COLOR
                 )
                 strength = eclipse_state_glow_strength(
                     solar_state, solar_eclipse.magnitude
@@ -3497,7 +3497,7 @@ class YearMarkerLayer(Layer):
                 # INVISIBLE-FROM-HERE muting (owner verdict "može", fix
                 # round E, 2026-07-19) — same rule as the lunar marker.
                 if not solar_eclipse.visible:
-                    color = defaults.GLOW_ECLIPSE_INVISIBLE_COLOR
+                    color = palette.GLOW_ECLIPSE_INVISIBLE_COLOR
                     strength *= defaults.ECLIPSE_INVISIBLE_STRENGTH_FACTOR
             draw_event_glow(painter, pos, size / 2, color, strength)
         if almanac:
@@ -3506,7 +3506,7 @@ class YearMarkerLayer(Layer):
             # OUTWARD at the ring, so the ring reads today's date.
             painter.save()
             painter.setPen(Qt.PenStyle.NoPen)
-            painter.setBrush(QColor(defaults.CALENDAR_ARROW_COLOR))
+            painter.setBrush(QColor(palette.CALENDAR_ARROW_COLOR))
             painter.drawPolygon(calendar_day_arrow(year_angle, ctx.radius))
             painter.restore()
         variant = (
@@ -3540,7 +3540,7 @@ class YearMarkerLayer(Layer):
             color = spec.day_color if ctx.tick.is_daylight else spec.night_color
             painter.setPen(
                 QPen(
-                    QColor(*defaults.MARKER_BORDER_RGBA),
+                    QColor(*palette.MARKER_BORDER_RGBA),
                     max(1.0, size * defaults.MARKER_BORDER_WIDTH),
                 )
             )
@@ -3673,7 +3673,7 @@ class YearMarkerLayer(Layer):
             # gray — `tinted_gray`'s tritone at this brightness reads
             # dark AND red-dominant; partial/penumbral stay neutral.
             tint = (
-                defaults.ECLIPSE_TOTAL_MOON_TINT
+                palette.ECLIPSE_TOTAL_MOON_TINT
                 if darken_state == "lunar_total"
                 else None
             )

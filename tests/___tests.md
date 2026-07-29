@@ -288,6 +288,15 @@ aggregates with session-only recents, atomic persistence and reset;
 the Report's readable-unit formatting (ns whole, µs/ms at two
 decimals, s at three).
 
+### `test_palette_law.py`
+THE COLOUR LAW (owner verdict 2026-07-29), pinned in four clauses: no
+colour literal anywhere outside [Palette](../config/palette.md);
+`PALETTE_PRESETS` names its wheels and spells no hue out; every
+pointer's entries form ONE contiguous run (the exact defect the owner
+found — PRISM's Council thirty-six lines from its own primary wheel);
+and the table agrees with the pointer roster. `tests/` itself is exempt
+from clause 1 — a probe pixmap's fill is data, not a design decision.
+
 ### `test_purity.py`
 Asserts nothing under `core/` or `data/` mentions PySide6 — and that
 library code reads no wall clock (`datetime.now`/`.today`/`time.time`;

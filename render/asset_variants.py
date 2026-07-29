@@ -24,7 +24,7 @@ from PySide6.QtGui import (
     QColor, QImage, QImageReader, QPainter, QPainterPath, QPen, QPixmap,
 )
 
-from config import defaults, paths, profiling
+from config import defaults, palette, paths, profiling
 from config.paths import art_file
 from render.asset_recolor import _recolored_plate, tinted_pixmap
 
@@ -40,13 +40,13 @@ def ring_face_color(path: Path | None) -> QColor:
     by luminance, so numerals and ticks (the bright minority) never
     win. Missing/unreadable art falls back to the documented color."""
     if path is None:
-        return QColor(defaults.SLOT_ROUNDEL_FILL_FALLBACK)
+        return QColor(palette.SLOT_ROUNDEL_FILL_FALLBACK)
     key = str(path)
     cached = _ring_face_colors.get(key)
     if cached is not None:
         return cached
     image = QImage(key)
-    color = QColor(defaults.SLOT_ROUNDEL_FILL_FALLBACK)
+    color = QColor(palette.SLOT_ROUNDEL_FILL_FALLBACK)
     if not image.isNull():
         center = image.width() // 2
         top = next(
@@ -353,7 +353,7 @@ def eclipse_solar_type_icon(type_: str) -> Path | None:
     `defaults.ECLIPSE_SOLAR_TYPE_ICON_SOURCE`'s docstring for the shape-
     matched mapping). Total and partial ride their source file AS
     DRAWN; annular is TRITONE-tinted toward
-    `defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR` (the SAME "ring of
+    `palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR` (the SAME "ring of
     fire" color the dial's own annular glow already uses — Rule #5, one
     color, two places) via `tinted_pixmap`, disk-cached like every
     other derived asset. None for an unknown type or a source that has
@@ -373,7 +373,7 @@ def eclipse_solar_type_icon(type_: str) -> Path | None:
         if pixmap.isNull():
             raise ValueError(f"cannot load image asset: {source}")
         tinted = tinted_pixmap(
-            pixmap, defaults.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
+            pixmap, palette.GLOW_ECLIPSE_SOLAR_ANNULAR_COLOR
         )
         try:
             cache.parent.mkdir(parents=True, exist_ok=True)
@@ -417,7 +417,7 @@ def calendar_wheel_icon_file(size: int) -> Path:
         size / 2.0 - radius, size / 2.0 - radius, 2.0 * radius, 2.0 * radius
     )
     wedges = defaults.CALENDAR_ICON_WEDGE_COUNT
-    colors = [QColor(c) for c in defaults.CALENDAR_ICON_WEDGE_COLORS]
+    colors = [QColor(c) for c in palette.CALENDAR_ICON_WEDGE_COLORS]
     span_deg = 360.0 / wedges
     painter.setPen(Qt.PenStyle.NoPen)
     for index in range(wedges):
@@ -426,7 +426,7 @@ def calendar_wheel_icon_file(size: int) -> Path:
         # from 3 o'clock — the exact sweep direction/units are cosmetic
         # here (a symmetric wheel reads identically either way).
         painter.drawPie(rect, round(index * span_deg * 16), round(span_deg * 16))
-    painter.setPen(QPen(QColor(defaults.CALENDAR_ICON_RING_COLOR), ring_width))
+    painter.setPen(QPen(QColor(palette.CALENDAR_ICON_RING_COLOR), ring_width))
     painter.setBrush(Qt.BrushStyle.NoBrush)
     painter.drawEllipse(rect)
     painter.end()

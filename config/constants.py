@@ -1,5 +1,6 @@
 """Product-defining invariants. These values NEVER change at runtime
 and are not user-tunable — they define what DOMY Watch is.
+from config import palette
 
 Tunables (things a developer might reasonably adjust) live in defaults.py.
 Win32 API literals live in winapi.py.
@@ -684,7 +685,7 @@ UMBRA_CONTRAST_VARIANTS = ("full", "half", "light", "dark")
 # `POINTER_PALETTE_LABELS` above. The third slot exists ONLY on the
 # pointers `palette_styles_for` names; everywhere else a stored
 # "tertiary" normalizes back to "primary"
-# (`defaults.effective_palette_style`).
+# (`palette.effective_palette_style`).
 PALETTE_STYLES = ("primary", "secondary", "tertiary")
 # The pointers whose wheel row carries a THIRD wheel: trio — Genesis
 # (the creation trio, drawn INVERTED); cross — Seasons (owner seal

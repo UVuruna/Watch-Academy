@@ -8,7 +8,7 @@ table, the article-set names Session 6 fills, and the render
 tunables. Documentation: config/archetypes.md.
 """
 
-from config import cube, paths
+from config import cube, palette, paths
 
 # Canonical (source-less) art root — config.paths.art_file appends the
 # active source SUFFIX (assets/archetypes/<family>/<Figure>_<src>.png) at
@@ -498,7 +498,7 @@ ARCHETYPES = {
     # character_prompts.md): Judgment (vertical) × Self-Regard
     # (horizontal), four poles and their four combinations. Row 2 is
     # the direction's FALL — the same virtue walked past its measure.
-    # The palette is the Rose's own (defaults.ROSE_PALETTE, sealed).
+    # The palette is the Rose's own (palette.ROSE_PALETTE, sealed).
     "compass_character": {
         "articles": "archetype_compass_character",
         "figures": (

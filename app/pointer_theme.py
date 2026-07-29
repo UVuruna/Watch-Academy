@@ -16,7 +16,7 @@ from app.weekday_theme_grid import (
     build_calendar_mount_grid,
     build_weekday_theme_grid,
 )
-from config import constants, defaults
+from config import constants, defaults, palette
 from config.ui_text import ui
 
 
@@ -50,7 +50,7 @@ class PointerThemeDialog(QDialog):
         self._gate_label = QLabel()
         self._gate_label.setWordWrap(True)
         self._gate_label.setStyleSheet(
-            f"color: {defaults.TIME_TRAVEL_WARNING_COLOR};"
+            f"color: {palette.TIME_TRAVEL_WARNING_COLOR};"
         )
         self._gate_label.hide()
         self._layout.addWidget(self._gate_label)

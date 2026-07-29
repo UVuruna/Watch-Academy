@@ -62,7 +62,7 @@ from app.slot_theme import SlotDescriptor, SlotThemeDialog
 from app.time_travel import TimeTravelDialog
 from app.tray import TrayController, logo_icon, window_icon
 from app.widget import ClockWidget
-from config import archetypes, constants, defaults, paths, profiling
+from config import archetypes, constants, defaults, palette, paths, profiling
 from config.ui_text import ui
 from core.clock_state import build_day_context, build_tick_state
 from core.deep_time import (
@@ -175,7 +175,7 @@ def watch_title(settings: Settings, full: bool = False) -> str:
         settings.pointer, constants.POINTER_PALETTE_LABELS["default"]
     )
     styles = constants.palette_styles_for(settings.pointer)
-    style = defaults.effective_palette_style(
+    style = palette.effective_palette_style(
         settings.pointer, settings.palette_style
     )
     palette_label = labels[styles.index(style)]
@@ -782,7 +782,7 @@ def _overlay_display_settings(skin, settings: Settings, display):
     # indexes PALETTE_PRESETS/ARCHETYPE_GRID with a pair that does not
     # exist. The stored setting itself stays untouched — switching back
     # to a Cube pointer restores its Cube wheel.
-    palette_style = defaults.effective_palette_style(
+    palette_style = palette.effective_palette_style(
         settings.pointer, settings.palette_style
     )
     return dataclasses.replace(
@@ -2316,7 +2316,7 @@ class WatchController(QObject):
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title_label.setStyleSheet(
             "font-weight: 700; font-size: 13px; padding: 6px 12px;"
-            f"color: {defaults.THEME_COLORS['accent']};"
+            f"color: {palette.THEME_COLORS['accent']};"
         )
         title_action = QWidgetAction(menu)
         title_action.setDefaultWidget(title_label)

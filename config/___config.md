@@ -147,7 +147,25 @@ name of a RAMP in `recolor/presets/metals.json` instead of holding a
 numeric recipe (see that file's own entry, and
 [Recolor (folder)](../recolor/___recolor.md) for the full algorithm).
 
+### `palette.py` — The Colour Law
+**Documentation:** [Palette](palette.md)
+
+EVERY colour in the program, and nothing else — one file, nine fixed
+sections, a pointer's three wheels always together. Born 2026-07-29
+from the owner's own audit of `defaults.py`: 77 colour-bearing names
+strewn between line 48 and line 3526 with no rule, PRISM's primary and
+secondary wheels in one place and its Council 36 lines away inside
+another pointer's block. `tests/test_palette_law.py` fails the build
+if a colour literal appears anywhere else, if `PALETTE_PRESETS` spells
+a hue out instead of naming a wheel, or if a pointer's wheels are ever
+split apart again.
+
 ### `defaults.py` — Developer Tunables
+Everything tunable that is NOT a colour (colours live in
+[Palette](palette.md) — including the wheel tables `PALETTE_PRESETS`,
+`RING_TINT_GROUPS`, `THEME_COLORS`, `TRAY_COLOR_WHEEL` and the
+`DEFAULT_SKIN`'s own hues, which the skin now references by name).
+
 Window sizing (`dial_window_margin_fraction(skin)` is COMPUTED LIVE —
 owner slike 1–3, 2026-07-17 — as the larger of the ring-letter overhang
 (at the letter-scale slider), the event-glow extent (the larger of the
@@ -168,17 +186,8 @@ watchdog delay, tick scheduling
 (epsilon, clock-jump threshold), `DEFAULT_CITY` (Belgrade preset until the
 M6 picker), settings schema version and write debounce, the procedural
 render geometry block (tick/font sizes with legibility floors, pen widths,
-marker borders), `PALETTE_PRESETS` (the Star+Aura/wedge palettes
-measured from the owner's art: hexa/octa primary+light, cross/trio
-single, aurora bands, the Calendar's two twelve-hue wheels —
-paint = Zodiac, light = Almanac, owner 2026-07-16 — and the three CUBE
-wheels, owner seal 2026-07-26 CUBE.md: Genesis' inverted trio in the
-Purple-Gray hue law's `MOON_GRAY_VIOLET`, the Council's re-dressed
-hexa wheel, and `ROSE_PALETTE` — the Character wheel's eight hues
-EXACTLY as the Rose is drawn, one tuple shared with the Rose ring
-preset's rays; `effective_palette_style`/`pointer_arm_labels` are the
-per-pointer style normalizer and the arm-label picker, and
-`ROSE_RAY_HALF_DEG`/`ROSE_RAY_BORDER` the Rose ray geometry), the Calendar wedge
+marker borders), `ROSE_RAY_HALF_DEG`/`ROSE_RAY_BORDER` (the Rose ray
+GEOMETRY — its hues moved out, see [Palette](palette.md)), the Calendar wedge
 opacity and the Almanac day-arrow geometry (`CALENDAR_WEDGE_ALPHA` —
 every wedge, since the lit wedge was deleted 2026-07-29 —
 `CALENDAR_ARROW_*`),

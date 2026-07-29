@@ -27,7 +27,7 @@ from PySide6.QtWidgets import (
 
 from app.theme import apply_theme
 from app.ui_style import style_button
-from config import constants, defaults, profiling
+from config import constants, defaults, palette, profiling
 from config.ui_text import ui
 
 
@@ -73,9 +73,9 @@ class _BarChart(QWidget):
     def paintEvent(self, event) -> None:  # noqa: N802 — Qt override
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.fillRect(self.rect(), QColor(defaults.REPORT_SURFACE_COLOR))
+        painter.fillRect(self.rect(), QColor(palette.REPORT_SURFACE_COLOR))
         if not self._rows:
-            painter.setPen(QColor(defaults.REPORT_MUTED_COLOR))
+            painter.setPen(QColor(palette.REPORT_MUTED_COLOR))
             painter.drawText(
                 self.rect(), Qt.AlignmentFlag.AlignCenter,
                 self._empty_text,
@@ -96,7 +96,7 @@ class _BarChart(QWidget):
             y = 4 + index * row_h
             bar_span = self.width() - label_w - value_w - 16
             width = max(3, round(bar_span * total / top))
-            painter.setPen(QColor(defaults.REPORT_INK_COLOR))
+            painter.setPen(QColor(palette.REPORT_INK_COLOR))
             painter.drawText(
                 4, y, label_w, row_h - gap,
                 Qt.AlignmentFlag.AlignVCenter
@@ -104,16 +104,16 @@ class _BarChart(QWidget):
                 name,
             )
             color = (
-                defaults.REPORT_MARK_COLOR
+                palette.REPORT_MARK_COLOR
                 if self._selected in (None, name)
-                else defaults.REPORT_MARK_DIM_COLOR
+                else palette.REPORT_MARK_DIM_COLOR
             )
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor(color))
             painter.drawRoundedRect(
                 label_w + 8, y + 1, width, row_h - gap - 2, 2, 2
             )
-            painter.setPen(QColor(defaults.REPORT_MUTED_COLOR))
+            painter.setPen(QColor(palette.REPORT_MUTED_COLOR))
             painter.drawText(
                 label_w + 12 + width, y, value_w, row_h - gap,
                 Qt.AlignmentFlag.AlignVCenter,
@@ -142,19 +142,19 @@ class _Sparkline(QWidget):
     def paintEvent(self, event) -> None:  # noqa: N802 — Qt override
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.fillRect(self.rect(), QColor(defaults.REPORT_SURFACE_COLOR))
+        painter.fillRect(self.rect(), QColor(palette.REPORT_SURFACE_COLOR))
         font = painter.font()
         font.setPixelSize(11)
         painter.setFont(font)
         if self._name is None or len(self._values) < 2:
-            painter.setPen(QColor(defaults.REPORT_MUTED_COLOR))
+            painter.setPen(QColor(palette.REPORT_MUTED_COLOR))
             painter.drawText(
                 self.rect(), Qt.AlignmentFlag.AlignCenter,
                 self._empty_text,
             )
             painter.end()
             return
-        painter.setPen(QColor(defaults.REPORT_INK_COLOR))
+        painter.setPen(QColor(palette.REPORT_INK_COLOR))
         painter.drawText(
             8, 4, self.width() - 16, 14,
             Qt.AlignmentFlag.AlignLeft, self._name,
@@ -164,7 +164,7 @@ class _Sparkline(QWidget):
         left, right = 8, self.width() - 8
         top, bottom = 22, self.height() - 18
         step = (right - left) / max(1, len(self._values) - 1)
-        pen = QPen(QColor(defaults.REPORT_MARK_COLOR), 2)
+        pen = QPen(QColor(palette.REPORT_MARK_COLOR), 2)
         painter.setPen(pen)
         points = [
             (
@@ -175,7 +175,7 @@ class _Sparkline(QWidget):
         ]
         for (x1, y1), (x2, y2) in zip(points, points[1:]):
             painter.drawLine(round(x1), round(y1), round(x2), round(y2))
-        painter.setPen(QColor(defaults.REPORT_MUTED_COLOR))
+        painter.setPen(QColor(palette.REPORT_MUTED_COLOR))
         painter.drawText(
             8, self.height() - 15, self.width() - 16, 14,
             Qt.AlignmentFlag.AlignLeft,

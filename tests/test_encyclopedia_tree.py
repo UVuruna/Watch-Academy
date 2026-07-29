@@ -25,7 +25,7 @@ from PySide6.QtWidgets import QApplication, QScrollArea
 from app.encyclopedia import EncyclopediaDialog, topics as build_topics
 from app.encyclopedia.cards import card_width_for, row_content_width
 from app.encyclopedia.tree import resolve_target, switch_variant, variant_at
-from config import defaults
+from config import defaults, palette
 from config import encyclopedia_tree as tree
 
 
@@ -66,7 +66,7 @@ def test_every_whole_wears_a_rose_hue():
     """The accents are the Rose's own (Rule #5, one palette) — never a
     hand-picked hex."""
     for whole in tree.WHOLES:
-        assert whole.accent in defaults.ROSE_PALETTE
+        assert whole.accent in palette.ROSE_PALETTE
     assert len(set(tree.ROSE_ACCENTS_USED)) == 6      # no hue used twice
 
 
@@ -83,6 +83,32 @@ def test_a_full_row_never_exceeds_the_minimum_viewport(columns):
     width = defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
     card = card_width_for(width, columns)
     assert row_content_width(card, columns) <= width
+
+
+def test_growing_the_window_never_raises_its_own_minimum(app):
+    """REGRESSION (owner bug 2026-07-29): the window resized ONE WAY —
+    every enlargement stuck, and it could never be dragged back down.
+
+    Root cause: the home grid measures its cards FROM the viewport and
+    pins them with `setFixedWidth`/`setFixedHeight`, which is also how
+    Qt declares a MINIMUM. So the grid's minimum grew with the window
+    and became the new floor — growth was a ratchet. The floor must
+    stay the dialog's own declared minimum, whatever the window has
+    been stretched to."""
+    dialog = EncyclopediaDialog()
+    dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())
+    dialog.show()
+    app.processEvents()
+    dialog.resize(1920, 1200)                 # stretch it wide open
+    app.processEvents()
+    # The floor is asserted on the LAYOUT, not on a later window size:
+    # a real window manager acknowledges a shrink asynchronously, while
+    # the layout minimum is the thing that actually forbade it.
+    assert dialog.home.minimumSizeHint().height() == 0
+    floor = dialog.layout().totalMinimumSize()
+    assert floor.height() <= defaults.ENCYCLOPEDIA_MIN_HEIGHT_PX
+    assert floor.width() <= dialog.minimumWidth()
+    dialog.deleteLater()
 
 
 def test_the_home_screen_owns_no_scroll_area(app, topics):
@@ -417,9 +443,10 @@ def test_the_exception_list_has_no_stale_entries(topics):
 def test_the_title_plate_resolver_names_one_file_per_block(topics):
     """The three blocks of a merged theme name three DIFFERENT TITLE
     plates — the merge must not make two title pages fight over one
-    filename. The blocks differ by REGISTER (primary / pantheon / wider, primary /
-    secondary / dark), which is exactly what a register is for, so the
-    reserved `Title` stem repeats across folders and never inside one."""
+    filename. The blocks differ by REGISTER (primary / pantheon /
+    wider, primary / secondary / dark), which is exactly what a
+    register is for, so the reserved `Title` stem repeats across
+    folders and never inside one."""
     from config import defaults
 
     seen = {}
