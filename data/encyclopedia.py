@@ -42,9 +42,10 @@ class EncyclopediaRepository:
         )
 
     def whole(self, key: str) -> dict:
-        """{title, base} of one of the SIX WHOLES — the home screen's
-        own cards (Session 27 rework, owner-sealed 2026-07-28). The
-        `base` is the card's one-line about; the title itself lives in
+        """{title, base} of one of the NINE WHOLES — the home screen's
+        own cards (Session 27 rework, owner-sealed 2026-07-28; regrouped
+        six -> nine in Session 35, 2026-07-29). The `base` is the card's
+        one-line about; the title itself lives in
         `config.encyclopedia_tree` beside the membership it names."""
         return self._section("wholes", key)
 

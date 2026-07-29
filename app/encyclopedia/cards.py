@@ -1,13 +1,13 @@
 """The Encyclopedia's CARD — one component for both gallery levels.
 
 The Session 27 rework (owner-sealed 2026-07-28) gave the browser two
-gallery screens instead of one: six WHOLES on the home screen, then the
-chosen whole's THEME cards. Both wear the same card — image, title,
-one-line about, and a small footer stat — so there is one recipe, one
-hover, one accent law (Rule #5). The two screens differ only in how the
-grid is measured:
+gallery screens instead of one: NINE WHOLES (Session 35, 2026-07-29) on
+the home screen, then the chosen whole's THEME cards. Both wear the same
+card — image, title, one-line about, and a small footer stat — so there
+is one recipe, one hover, one accent law (Rule #5). The two screens
+differ only in how the grid is measured:
 
-- **Home** — a FIXED 3x2 grid measured from the viewport's own width AND
+- **Home** — a FIXED 3x3 grid measured from the viewport's own width AND
   height, because the home screen may never scroll (owner law). The
   cards shrink with the window; nothing ever spills.
 - **Themes** — up to `ENCYCLOPEDIA_GALLERY_MAX_COLUMNS` per row, wrapping

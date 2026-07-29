@@ -1596,17 +1596,22 @@ CANON_DIAGRAM_TABLE_RATIO = 0.022   # a table cell, per plate side
 CANON_DIAGRAM_TABLE_MARGIN = 0.05   # the table's own inset
 
 # --- THE SESSION 27 REWORK (owner-sealed 2026-07-28) -------------------------
-# Three levels — six WHOLES, their THEME cards, then the article slider.
+# Three levels — nine WHOLES (Session 35, 2026-07-29), their THEME
+# cards, then the article slider.
 #
 # THE WINDOW'S OWN MINIMUM IS THE OWNER'S OPENING SCREEN (his spec:
 # "Pocetni ekran 16:9 rezolucija 1280 x 720p", "Prvi ekran nema scroll...
 # min size je minimalni zoom out"). Pinning the minimum AT that
 # resolution is what turns "the home screen never scrolls" from a hope
-# into geometry: the 3x2 grid is measured from the viewport, and the
+# into geometry: the 3x3 grid is measured from the viewport, and the
 # viewport can never be smaller than the layout the owner specified.
 ENCYCLOPEDIA_MIN_WIDTH_PX = 1280
 ENCYCLOPEDIA_MIN_HEIGHT_PX = 720
-ENCYCLOPEDIA_HOME_COLUMNS = 3        # 2 rows x 3 columns = the six wholes
+# 3 rows x 3 columns = the nine wholes (Session 35, "može i 9 grupacija
+# sa ovim novim velikim sekcijama"). Geometry still holds at the
+# 1280x720 minimum: 3 rows x ENCYCLOPEDIA_CARD_MIN_HEIGHT_PX (150) + 4 x
+# ENCYCLOPEDIA_CARD_GAP_PX (20) gaps = 530px, well under the 720 floor.
+ENCYCLOPEDIA_HOME_COLUMNS = 3
 # The card itself. The edge is the whole's own Rose accent — a hairline
 # at rest (EDGE_ALPHA), lit on hover, with a tinted wash behind it.
 ENCYCLOPEDIA_CARD_GAP_PX = 20
@@ -1623,7 +1628,7 @@ ENCYCLOPEDIA_CARD_FONT_RATIO = 0.038   # card font grows with the card's width
 ENCYCLOPEDIA_CARD_TITLE_BUMP = 3       # the title sits this much above the body
 # THE HOME CARD'S PLATE — COMPUTED, not generated (root Rule #19): a
 # whole's tile is a 2x2 mosaic of its OWN theme plates, built live and
-# cached in memory, so the six wholes need no artwork to exist. A hand
+# cached in memory, so the nine wholes need no artwork to exist. A hand
 # drawn plate dropped at `<whole key>.png` under this directory WINS —
 # the same graceful-upgrade contract every derived asset here has.
 ENCYCLOPEDIA_WHOLE_ART_DIR = paths.assets_dir() / "instrument" / "wholes"

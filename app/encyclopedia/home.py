@@ -1,11 +1,11 @@
-"""The Encyclopedia's HOME screen — level one, the six wholes.
+"""The Encyclopedia's HOME screen — level one, the nine wholes.
 
 Owner law (Session 27, 2026-07-28): **this screen never scrolls.** It
-carries no scroll area at all — a 3x2 grid measured from the widget's
-own width AND height, so the cards shrink with the window instead of
-spilling out of it. The dialog's minimum size is the owner's own
-1280x720 opening screen, which is what makes "never scrolls" a
-geometric fact rather than a hope.
+carries no scroll area at all — a 3x3 grid (nine wholes, Session 35)
+measured from the widget's own width AND height, so the cards shrink
+with the window instead of spilling out of it. The dialog's minimum
+size is the owner's own 1280x720 opening screen, which is what makes
+"never scrolls" a geometric fact rather than a hope.
 
 Each card wears its whole's Rose accent, a COMPUTED 2x2 mosaic of that
 whole's own theme plates (root Rule #19 — never a generated category
@@ -26,7 +26,7 @@ from config import encyclopedia_tree as tree
 
 
 class HomeScreen(QWidget):
-    """The six wholes, 2x3, no scroll ever."""
+    """The nine wholes, 3x3, no scroll ever."""
 
     opened = Signal(str)
 
@@ -78,14 +78,14 @@ class HomeScreen(QWidget):
             for theme in whole.themes if theme in self._topics
         )
         cards = sum(1 for theme in whole.themes if theme in self._topics)
+        theme_word = self._tr("theme" if cards == 1 else "themes")
+        page_word = self._tr("page" if pages == 1 else "pages")
         return {
             "key": whole.key,
             "title": self._tr(whole.title),
             "about": self._encyclopedia.whole(whole.key)["base"],
             "plate": self._plate(whole),
-            "footer": (
-                f"{cards} {self._tr('themes')} · {pages} {self._tr('pages')}"
-            ),
+            "footer": f"{cards} {theme_word} · {pages} {page_word}",
             "accent": whole.accent,
         }
 

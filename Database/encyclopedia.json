@@ -1077,25 +1077,37 @@
    "title": "The Instrument",
    "base": "The watch itself and the wheels it turns: the seven days, the parts of the dial, the ages the year is counted in, and the twelve months of labour."
   },
-  "celestial": {
-   "title": "The Celestial Engine",
-   "base": "The sky the dial computes: the moon's eight phases, the sun's turning points, the seasons, both eclipse families, the planets, the cosmos, the earth and the two zodiacs."
+  "sky": {
+   "title": "The Sky",
+   "base": "The near sky the dial answers to every minute: the Sun's arc, the Moon's faces, the turning seasons, and the moments the two lights cross."
   },
-  "divine": {
-   "title": "The Divine",
-   "base": "Four pantheons seated on the week, and the faiths that read the same seven days their own way — each culture in three registers."
+  "cosmos": {
+   "title": "The Cosmos",
+   "base": "The far sky and its readers: the wandering planets, the deep heavens, the turning Earth, and the zodiacs and courts hung upon them."
   },
-  "human": {
-   "title": "The Human Wheel",
-   "base": "What a person is made of: the eight virtues and their eight sins, the moods that colour a day, the nine intelligences, the trades, and the scale between Judas and Lucifer."
+  "gods": {
+   "title": "The Gods",
+   "base": "The courts that named the week — Greek, Norse, Egyptian, Slavic — and the age of heroes beneath them."
+  },
+  "faith": {
+   "title": "The Faith",
+   "base": "The written faiths: the Bible's cast, the world's creeds, and the trinities and dualities they orbit."
   },
   "cube": {
    "title": "The Character Cube",
    "base": "The doctrine of the thirteen axes: the sixty-five terms, the eight figures they meet in, the double trinity and the two crosses a life can walk."
   },
+  "inner": {
+   "title": "The Inner Wheel",
+   "base": "The wheel inside a person: virtues against sins, the moods of a day, and the ways a mind is strong."
+  },
   "living": {
    "title": "The Living World",
    "base": "Societies that keep a week without a clock — the wolf pack, the hive, the herd — beside the alchemist's metals and the Japanese week."
+  },
+  "worlds": {
+   "title": "The Worlds",
+   "base": "The worlds people build: the trades and their offices, and the invented worlds of games and film."
   }
  },
  "about": {

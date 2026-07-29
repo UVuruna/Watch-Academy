@@ -5,7 +5,7 @@ only what is shared: the breadcrumb, the title row with its VARIANT
 switcher, the Home button, the session zoom, and the stack that shows
 one of the three screens.
 
-    ⌂ Encyclopedia › The Divine › Greek gods
+    ⌂ Encyclopedia › The Gods › Greek gods
               ◀   Pantheon   ▶
 
 The variant switcher sits where the owner put it — beside the title,
