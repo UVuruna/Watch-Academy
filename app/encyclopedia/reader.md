@@ -4,8 +4,10 @@
 
 ## Purpose
 Level three — the article slider: the entry's image row or grid, its
-bold name, the full article, the look/finish switcher, the pager and
-Download.
+bold name, the full article, the look/finish switcher and the pager. The
+⬇ **Download BUTTON** sits in the dialog's header row (owner
+2026-07-29), but the DEED stays here as the public `download_entry()` —
+it saves the open page, and the open page lives on this screen.
 
 Everything that SIZES an article moved here verbatim from the retired
 single module — the block-width formula, the em-like font growth, the

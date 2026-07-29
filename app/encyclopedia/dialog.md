@@ -4,9 +4,9 @@
 
 ## Purpose
 The WINDOW — the shell that holds the three levels and everything shared
-between them: the breadcrumb, the title row with its VARIANT switcher,
-the Home button, the session zoom and the `QStackedWidget` that shows one
-screen at a time.
+between them: the ONE header row (Home, the breadcrumb, the titled
+VARIANT switcher and Download), the session zoom and the
+`QStackedWidget` that shows one screen at a time.
 
 It owns navigation, never layout: `show_home` / `show_whole` /
 `show_topic` and `navigate_to` (the dial's Spacebar jump and the tray
@@ -25,14 +25,22 @@ menu both land here).
 ## The header
 
 ```
- Encyclopedia   > The Divine
-        <   Greek gods - Pantheon   >
+ Home  > The Divine        <   Creeds - Creeds   >        Download
 ```
 
-The breadcrumb names the WHOLE, the title the theme and its register —
-never the same name twice on one screen (the owner's round R8b
-complaint). The switcher shows only when the theme has more than one
-register.
+ONE row, three groups (owner 2026-07-29: *"Home, Title sa switcherom i
+Download treba da budu u istom redu"*). The breadcrumb names the WHOLE,
+the title the theme and its register — never the same name twice on one
+screen (the owner's round R8b complaint). The switcher shows only when
+the theme has more than one register; Download only on the article
+screen, since the galleries have no page to save.
+
+The two flanking groups carry **stretch 1 each and the middle group
+none**, so Qt hands the flanks the same width and the title lands on the
+window's own centre however long the breadcrumb or the Download caption
+grows. This is the one strip the no-X-scroll law cannot delegate to a
+scroll area — it has none — so a test measures the row's minimum against
+the owner's 1280.
 
 ## Design Decisions
 - **The window's minimum is the owner's opening screen** (1280x720). The

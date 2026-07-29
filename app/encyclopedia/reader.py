@@ -102,9 +102,6 @@ class ReaderScreen(QWidget):
         self._look_forward.setText("▶")
         style_button(self._look_forward, "neutral", small=True)
         self._look_forward.clicked.connect(lambda: self._cycle_look(1))
-        self._download = QPushButton("⬇  " + self._tr("Download"))
-        self._download.clicked.connect(self._download_entry)
-        style_button(self._download, "download")
         self._counter = QLabel()
         self._counter.setStyleSheet(
             f"font-size: {defaults.UI_BUTTON_FONT_PX}px; font-weight: bold;"
@@ -116,13 +113,15 @@ class ReaderScreen(QWidget):
         self._next.clicked.connect(lambda: self.step(+1))
         style_button(self._next, "next")
 
+        # The LOOK switcher alone now — ⬇ Download moved up into the
+        # dialog's one header row (owner 2026-07-29), so this row is a
+        # plain centred trio.
         looks = QHBoxLayout()
         looks.addStretch(1)
         looks.addWidget(self._look_back)
         looks.addWidget(self._look_caption)
         looks.addWidget(self._look_forward)
         looks.addStretch(1)
-        looks.addWidget(self._download)
         pager = QHBoxLayout()
         pager.addStretch(1)
         pager.addWidget(self._previous)
@@ -540,10 +539,12 @@ class ReaderScreen(QWidget):
 
     # --- download -----------------------------------------------------------
 
-    def _download_entry(self) -> None:
+    def download_entry(self) -> None:
         """⬇ Download (owner 2026-07-14): save the OPEN entry — the
         current look's image(s) and the article text (headings kept as
-        [Label] lines) — into a folder the user picks."""
+        [Label] lines) — into a folder the user picks. PUBLIC because
+        the button itself sits in the dialog's header row; the deed
+        stays here, where the open page lives."""
         entry = self._topics[self._topic_key]["entries"][self._entry_index]
         target = QFileDialog.getExistingDirectory(self, self._tr("Download"))
         if not target:

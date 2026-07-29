@@ -100,10 +100,10 @@ class EncyclopediaDialog(QDialog):
         )
         self._crumbs.setCursor(Qt.CursorShape.PointingHandCursor)
         self._crumbs.mouseReleaseEvent = self._crumb_clicked
-        crumbs_row = QHBoxLayout()
-        crumbs_row.addWidget(self._home_button)
-        crumbs_row.addWidget(self._crumbs)
-        crumbs_row.addStretch(1)
+        crumbs_group = QHBoxLayout()
+        crumbs_group.addWidget(self._home_button)
+        crumbs_group.addWidget(self._crumbs)
+        crumbs_group.addStretch(1)
 
         self._variant_back = QToolButton()
         self._variant_back.setText("◀")
@@ -119,12 +119,29 @@ class EncyclopediaDialog(QDialog):
             f"font-size: {defaults.GUIDE_TITLE_PX}px; font-weight: bold;"
             f"margin: {defaults.GUIDE_SPACING_PX}px;"
         )
-        title_row = QHBoxLayout()
-        title_row.addStretch(1)
-        title_row.addWidget(self._variant_back)
-        title_row.addWidget(self._title)
-        title_row.addWidget(self._variant_forward)
-        title_row.addStretch(1)
+        title_group = QHBoxLayout()
+        title_group.addWidget(self._variant_back)
+        title_group.addWidget(self._title)
+        title_group.addWidget(self._variant_forward)
+
+        # ⬇ Download rides the HEADER, not the reader (owner 2026-07-29:
+        # "Home, Title sa switcherom i Download treba da budu u istom
+        # redu"). The button acts on the OPEN page, so the reader still
+        # owns the deed — this is only where it is seated.
+        self._download = QPushButton("⬇  " + self._tr("Download"))
+        style_button(self._download, "download")
+        download_group = QHBoxLayout()
+        download_group.addStretch(1)
+        download_group.addWidget(self._download)
+
+        # ONE header row, and the title sits at the WINDOW's centre: both
+        # side groups take stretch 1, so Qt hands them the same width and
+        # the middle group lands exactly in the middle regardless of how
+        # long the breadcrumb or the Download caption grows.
+        header_row = QHBoxLayout()
+        header_row.addLayout(crumbs_group, 1)
+        header_row.addLayout(title_group, 0)
+        header_row.addLayout(download_group, 1)
 
         # --- the three screens ---------------------------------------------
         self._home = HomeScreen(self._topics, self._encyclopedia, self._tr)
@@ -136,13 +153,13 @@ class EncyclopediaDialog(QDialog):
         )
         self._reader.page_changed.connect(self._refresh_header)
         self._reader.zoomed.connect(self._zoom_from_reader)
+        self._download.clicked.connect(self._reader.download_entry)
         self._stack = QStackedWidget()
         for screen in (self._home, self._themes, self._reader):
             self._stack.addWidget(screen)
 
         layout = QVBoxLayout(self)
-        layout.addLayout(crumbs_row)
-        layout.addLayout(title_row)
+        layout.addLayout(header_row)
         layout.addWidget(self._stack, stretch=1)
 
         # THE OPENING SCREEN IS THE MINIMUM (owner spec: "Prvi ekran nema
@@ -279,10 +296,12 @@ class EncyclopediaDialog(QDialog):
         self._reader.switch_variant(delta)
 
     def _refresh_header(self) -> None:
-        """The breadcrumb, the title and the variant switcher for
-        whichever screen is showing."""
+        """The one header row — breadcrumb, title, variant switcher and
+        Download — dressed for whichever screen is showing."""
         screen = self._stack.currentIndex()
         self._home_button.setVisible(screen != _HOME)
+        # Download saves the OPEN page; the two galleries have none.
+        self._download.setVisible(screen == _READER)
         show_variants = False
         if screen == _HOME:
             self._crumbs.setText("")

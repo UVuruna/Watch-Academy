@@ -133,6 +133,40 @@ def test_zooming_all_the_way_in_still_grows_no_horizontal_bar(app):
     dialog.deleteLater()
 
 
+def test_home_title_and_download_share_one_header_row(app):
+    """Owner 2026-07-29: "Home, Title sa switcherom i Download treba da
+    budu u istom redu". One row, and it must still fit the minimum
+    window — the header is the one strip the no-X-scroll law cannot
+    delegate to a scroll area, because it has none."""
+    dialog = EncyclopediaDialog()
+    dialog.resize(dialog.minimumWidth(), dialog.minimumHeight())
+    dialog.show()
+    dialog.show_topic("creeds")               # a themed page with a switcher
+    app.processEvents()
+    row = [dialog._home_button, dialog._crumbs, dialog._variant_back,
+           dialog._title, dialog._variant_forward, dialog._download]
+    assert all(widget.isVisible() for widget in row)
+    tops = {widget.geometry().top() for widget in row}
+    assert max(tops) - min(tops) <= defaults.GUIDE_SPACING_PX
+    # Left to right in the owner's own order, no overlap.
+    edges = [widget.geometry() for widget in row]
+    for left, right in zip(edges, edges[1:]):
+        assert left.right() <= right.left()
+    # The title stays the row's CENTRE — both flanks carry equal stretch.
+    assert abs(dialog._title.geometry().center().x() - dialog.width() // 2) <= (
+        defaults.GUIDE_TITLE_PX
+    )
+    # And the row never widens the window past the owner's 1280.
+    assert dialog.layout().minimumSize().width() <= (
+        defaults.ENCYCLOPEDIA_MIN_WIDTH_PX
+    )
+    # Download saves the OPEN page — the galleries have none to save.
+    dialog.show_home()
+    app.processEvents()
+    assert not dialog._download.isVisible()
+    dialog.deleteLater()
+
+
 # --- 4. THE VARIANT LAW -----------------------------------------------------
 
 def test_registers_of_one_subject_became_one_card(topics):

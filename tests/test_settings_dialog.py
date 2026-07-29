@@ -2135,21 +2135,19 @@ def test_finish_switcher_lives_in_the_top_row():
 
     QApplication.instance() or QApplication([])
     dialog = EncyclopediaDialog()
-    # SESSION 27: the trio rides the READER's own top row, left of
-    # Download — the dialog's chrome above it carries the breadcrumb and
-    # the VARIANT switcher, a different control entirely.
+    # SESSION 27 + the owner's 2026-07-29 header fix: the LOOK trio rides
+    # the reader's own top row (it belongs to the open page's art), while
+    # Home / the titled VARIANT switcher / Download share the dialog's
+    # ONE header row above it.
     top_row = dialog._reader.layout().itemAt(0).layout()
     top_widgets = [
         top_row.itemAt(i).widget() for i in range(top_row.count())
         if top_row.itemAt(i).widget() is not None
     ]
-    assert dialog._reader._download in top_widgets
     assert dialog._reader._look_back in top_widgets
     assert dialog._reader._look_caption in top_widgets
     assert dialog._reader._look_forward in top_widgets
-    assert top_widgets.index(dialog._reader._look_caption) < top_widgets.index(
-        dialog._reader._download
-    )
+    assert dialog._download not in top_widgets
     # Filled-pill styling: Bronze is a SOLID hex FILL with dark text;
     # Colored wears the exact gradient sweep as its FILL, white text.
     dialog.show_topic("wolf")

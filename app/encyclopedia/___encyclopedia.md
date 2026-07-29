@@ -18,10 +18,10 @@ flowchart LR
 ## Files
 
 ### `dialog.py` — The Window
-The shell: the breadcrumb, the title row with its VARIANT switcher, the
-Home button, the session zoom and the stack that shows one of the three
-screens. Owns the jump entry point (`navigate_to`) the dial's Spacebar
-and the tray menu both use.
+The shell: the ONE header row — Home and the breadcrumb, the titled
+VARIANT switcher, Download — the session zoom and the stack that shows
+one of the three screens. Owns the jump entry point (`navigate_to`) the
+dial's Spacebar and the tray menu both use.
 
 ### `home.py` — Level One
 The six wholes, 2×3, **no scroll area at all** — the strongest form of
@@ -35,7 +35,8 @@ allowed, horizontal switched OFF outright.
 
 ### `reader.py` — Level Three
 The page slider: the image row or grid, the bold name, the article, the
-look/finish switcher, the pager and the Download button. Everything that
+look/finish switcher and the pager (the Download BUTTON moved up to the
+header row; `download_entry()` — the deed — stayed). Everything that
 SIZES an article moved here verbatim — the block-width formula, the
 em-like font growth, the image-height ceiling, the lazy decode cache and
 THE INVISIBLE CLIPPER fix all carry ground-truthed owner bug fixes.
