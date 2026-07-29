@@ -483,39 +483,43 @@ the CORRECTED split, not the original bug.
 
 <a id="phase3-content"></a>
 
-## The Four Dozens & the Abstract Triads/Dualities (RESTRUCTURE Phase 3, owner-sealed 2026-07-22)
+## The Five Dozens & the Abstract Triads/Dualities (RESTRUCTURE Phase 3, owner-sealed 2026-07-22; Sins Dozen sealed 2026-07-29)
 
-Six NEW sheets this round, all **0 generated, sheets complete** —
+Seven NEW sheets this round, all **0 generated, sheets complete** —
 tracked the moment they're written, per this file's own charter. The
-four new Dozens ride the Calendar pointer (the two Dozen systems sealed
+five new Dozens ride the Calendar pointer (the two Dozen systems sealed
 in `CANON.md` §The Two Dozen Systems); the two abstract sets give the
 Trio's stacked readings and the two great dualities their own art
-(`CANON.md` §The abstract triads & dualities art doctrine). NONE are
-wired in `config` yet — Phase 3 is content-only; roster, articles and
-mounted-render wiring are the taxonomy round's job.
+(`CANON.md` §The abstract triads & dualities art doctrine). The original
+four Dozens were wired in `config` 0.14.605; the Sins Dozen sealed and
+wired in `config` 0.14.615 (its axle and four existing Dozens' centres
+paired 2026-07-29 by owner decree). The two abstract sets and the five
+Calendar Dozens now carry art declarations; roster, articles and
+mounted-render wiring follow their landing schedule.
 
 | Sheet | Category / system | Expected files | Verdict |
 |---|---|---|---|
-| **Emotions** — [Emotions Prompts](calendars/emotions_prompts.md) | calendars / System B | 12 round calendar-mount medallions (`calendars/emotions/<Figure>.png`) | ART GAP — 0/12 |
-| **Virtue Wheel** — [Virtue Wheel Prompts](calendars/virtue_wheel_prompts.md) | calendars / System B, two registers of one wheel | 24 — 12 virtues (`calendars/virtues/<Figure>.png`, LIGHT) + 12 vices (`calendars/vices/<Figure>.png`, PAINT) | ART GAP — 0/24; **crown/root layout PENDING OWNER APPROVAL** (Courage crown / Cowardice root proposed) |
-| **Olympians** — [Olympians Prompts](calendars/olympians_prompts.md) | calendars / System A, six pairs | 12 (`calendars/olympians/<Figure>.png`) | ART GAP — 0/12 |
-| **Apostles** — [Apostles Prompts](calendars/apostles_prompts.md) | calendars / System A, six pairs | 12 (`calendars/apostles/<Figure>.png`) — Judas root mirrors Prism Hatred | ART GAP — 0/12 |
+| **Emotions** — [Emotions Prompts](calendars/emotions_prompts.md) | calendars / System B | 13 — 12 round calendar-mount medallions + 1 centre `Peace` (`calendars/emotions/<Figure>.png`) | ART GAP — 0/13 |
+| **Virtue Wheel** — [Virtue Wheel Prompts](calendars/virtue_wheel_prompts.md) | calendars / System B, two registers of one wheel | 26 — 12 virtues (`calendars/virtues/<Figure>.png`, LIGHT) + 12 vices (`calendars/vices/<Figure>.png`, PAINT) + 2 centres `Prudence`/`Cunning` | ART GAP — 0/26; **crown/root layout PENDING OWNER APPROVAL** (Courage crown / Cowardice root proposed) |
+| **Olympians** — [Olympians Prompts](calendars/olympians_prompts.md) | calendars / System A, six pairs | 13 — 12 gods + 1 centre `Hestia` (`calendars/olympians/<Figure>.png`) | ART GAP — 0/13 |
+| **Apostles** — [Apostles Prompts](calendars/apostles_prompts.md) | calendars / System A, six pairs | 13 — 12 apostles + 1 centre `Jesus` (`calendars/apostles/<Figure>.png`) — Judas root mirrors Prism Hatred | ART GAP — 0/13 |
+| **Sins** — [Sins Prompts](calendars/sins_prompts.md) | calendars / System B | 13 — 12 sins + 1 centre `Hardness_of_Heart` (`calendars/sins/<Figure>.png`) | ART GAP — 0/13 |
 | **Triads** — [Triads Prompts](archetype/triads_prompts.md) | archetypes / abstract trios | 24 — 12 lancets + 12 circle companions (`archetypes/triads/<trio>/<Figure>.png` + `.../circle/`) | ART GAP — 0/24 |
 | **Dualities** — [Dualities Prompts](archetype/dualities_prompts.md) | archetypes / abstract dualities | 8 — 4 lancets + 4 circles (`archetypes/dualities/<pair>/<Figure>.png` + `.../circle/`) | ART GAP — 0/8 |
 
-**Total new: 92 files, all ART GAP** (0 generated on either source).
+**Total new: 103 files, all ART GAP** (0 generated on either source) — 78 from five Dozens, 24 from Triads, 8 from Dualities.
 
 - **Lint status:** every path passes `tests/test_prompt_paths.py` with
-  ZERO whitelist entries. Seven NEW data-driven family roots were added
-  to `_DATA_DRIVEN_ROOTS` this round (documented in the test):
+  ZERO whitelist entries. Eight NEW data-driven family roots were added
+  to `_DATA_DRIVEN_ROOTS` by Session 34 update (documented in the test):
   `calendars/emotions`, `calendars/virtues`, `calendars/vices`,
-  `calendars/olympians`, `calendars/apostles`, `archetypes/triads`,
-  `archetypes/dualities` — the same treatment the existing
-  `calendars/zodiac`/`chinese`/`slavic_months` and `weeks` roster
-  families already carry, since each new Dozen's/abstract-set's
-  per-figure filenames will be enumerated in the RESTRUCTURE
-  `config/taxonomy.py` roster (unwired in Phase 3, so only the family
-  root is checkable here; per-name completeness is the roster's job).
+  `calendars/olympians`, `calendars/apostles`, `calendars/sins`,
+  `archetypes/triads`, `archetypes/dualities` — the same treatment the
+  existing `calendars/zodiac`/`chinese`/`slavic_months` and `weeks`
+  roster families already carry, since each new Dozen's/abstract-set's
+  per-figure filenames are enumerated in `config/taxonomy.py` rosters
+  (the first four Dozens wired 0.14.605, Sins wired 0.14.615; per-name
+  completeness is the roster's job).
 - The six prism-seat Emotions (Love/Courage/Pride/Hatred/Fear/Humility)
   RETAIN their exact Prism-paint hues (color-fidelity's cleanest case);
   the Virtue Wheel's paint register is the light register's shadow (each

@@ -144,6 +144,12 @@ plate lights up the day it lands with no code change.
 
 | Folder | Group | Files on disk | Prompt sheet | Plates still owed |
 |---|---|---|---|---|
+| `sins` | calendars | 0 | [Sins Prompts](prompts/calendars/sins_prompts.md) | All 13: 12 sins (Pride, Hypocrisy, Violence, Avarice, Lust, Envy, Treachery, Despair, Wrath, Idolatry, Gluttony, Acedia) + 1 centre (Hardness_of_Heart). Wired 0.14.615; PromptPainter passes all 13 briefs. |
+| `apostles` centre | calendars | 0 | [Apostles Prompts](prompts/calendars/apostles_prompts.md) | 1: the centre `Jesus`. 12 apostles wired earlier; NEW centre added 0.14.605. PromptPainter brief complete. |
+| `emotions` centre | calendars | 0 | [Emotions Prompts](prompts/calendars/emotions_prompts.md) | 1: the centre `Peace`. 12 emotions wired earlier; NEW centre added 0.14.605. PromptPainter brief complete. |
+| `olympians` centre | calendars | 0 | [Olympians Prompts](prompts/calendars/olympians_prompts.md) | 1: the centre `Hestia`. 12 gods wired earlier; NEW centre added 0.14.605. PromptPainter brief complete. |
+| `virtues` centre | calendars | 0 | [Virtue Wheel Prompts](prompts/calendars/virtue_wheel_prompts.md) | 1: the LIGHT axle `Prudence`. 12 virtues wired earlier; NEW centre added 0.14.605. PromptPainter brief complete. |
+| `vices` centre | calendars | 0 | [Virtue Wheel Prompts](prompts/calendars/virtue_wheel_prompts.md) | 1: the PAINT axle `Cunning`. 12 vices wired earlier; NEW centre added 0.14.605. PromptPainter brief complete. |
 | `sw_jedi` | films | 22 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 3 seats: the Throne (Luke), the Mirror (Vader) and the Ninth (Yoda). Chewbacca has bronze but no `colored/` twin. |
 | `sw_sith` | films | 18 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 4 seats: Wednesday (Jabba) and the Throne (Palpatine) have `colored/` but no BRONZE master, so the three metal looks are dark on them; Saturday (Boba Fett) and the Mirror (Anakin) have nothing at all. |
 | `sw_dyad` | films | 3 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 11 of its 12 declared figures — everything except Monday (Rose): the Throne (Rey), the Mirror (Kylo), Thursday (Leia), Friday (Han), Saturday (Hux), and all six roster members of the three rotating seats (Finn/Phasma, Maz/DJ, Ghosts/Exegol). |
