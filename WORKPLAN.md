@@ -39,7 +39,10 @@ agent is never burned on an easy job.
 
 ## The Sessions, in Order
 
-### Session 1 — Quick UX batch → **Sonnet**
+### Session 1 — Quick UX batch → **Sonnet** — CLOSED (owner decree 2026-07-29)
+
+Item 1 shipped long ago (0.14.271, re-verified 2026-07-19); items 2–3
+declared superseded/absorbed by the owner — not open debt.
 **Say:** "Radi Sesiju 1 iz WORKPLAN.md — tri mala UX zadatka iz
 ROADMAP-a (Owner's Queued Feature Tasks 1–3)."
 **Reads:** ROADMAP.md queue items 1–3; `app/controller.md`,
@@ -50,7 +53,7 @@ for 60 s (center above the hands, non-active bodies only);
 (3) Paint/Light choice GRAYED on Trinity and Seasons. Tests + GUI
 probe per feature.
 
-### Session 2 — Turning-point glow rework → **Opus**
+### Session 2 — Turning-point glow rework → **Opus** — CLOSED (owner decree 2026-07-29: superseded/absorbed; not open debt)
 **Say:** "Radi Sesiju 2 iz WORKPLAN.md — ROADMAP queue task 5."
 **Reads:** ROADMAP queue task 5; `render/layers.md`,
 `render/compositor.md` (event glow, year marker).
@@ -59,7 +62,7 @@ centerline at its event position; SMALL golden glow for the Sun,
 silver for the Moon, straddling the ring; geometry pinned with
 golden tests. (Opus: render geometry precision — accuracy > speed.)
 
-### Session 3 — Compass palette pair → **Sonnet**
+### Session 3 — Compass palette pair → **Sonnet** — CLOSED (owner decree 2026-07-29: work absorbed by later palette rounds; not open debt)
 **Say:** "Radi Sesiju 3 iz WORKPLAN.md — nove octa palete iz
 CANON-a."
 **Reads:** CANON.md (Compass primary materials + Eight Ages hues);

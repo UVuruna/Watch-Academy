@@ -243,14 +243,17 @@ lives in [The DOMY Canon](CANON.md).
    by `tests/test_pointer.py::
    test_greetings_ride_the_top_ring_letter_only_when_unlocked` (top
    open with the full poem text, Omega/bottom silent).
-2. **Omega double-click = reveal week.** Double-click on Omega (24h)
+2. **Omega double-click = reveal week — CLOSED (owner decree
+   2026-07-29: superseded/absorbed by later functionality; not open
+   debt).** Double-click on Omega (24h)
    raises the opacity of ALL weekday bodies to full — ghosts AND the
    center body where one exists (Trinity, Prism) — with the center
    Z-ORDER above the hands. Lasts 60 s after the LAST double-click.
    Applies only to non-active weekday bodies (everything else is
    already 100%). Purpose: see the whole theme at once, laid out by
    color.
-3. **Gray out Paint/Light where it does nothing.** Trinity and
+3. **Gray out Paint/Light where it does nothing — CLOSED (owner decree
+   2026-07-29: superseded/absorbed; not open debt).** Trinity and
    Seasons have no separate paint/secondary palette variants — the
    palette style option must be GRAYED (unavailable) while they are
    the active pointer.
@@ -278,7 +281,8 @@ lives in [The DOMY Canon](CANON.md).
    - Works with Time Travel in any mode.
    - Seasons and Compass archetypes: owner still deciding — do not
      invent them.
-5. **Turning-point glow rework** (owner 2026-07-16). At a GLOW
+5. **Turning-point glow rework — CLOSED (owner decree 2026-07-29:
+   superseded/absorbed; not open debt)** (owner 2026-07-16). At a GLOW
    event (a moon phase / a sun event) the MARKER relocates to the
    RING BAND CENTERLINE — the radius where the hour numerals and
    letters sit — at its event position (New Moon at 12h). The glow
