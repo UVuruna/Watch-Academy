@@ -1386,8 +1386,36 @@ def active_thirteenth(skin: SkinDefinition, day: DayContext) -> str | None:
     return key if key in candidates else None
 
 
+def ninth_table_for(theme: str, active_alt: bool) -> dict | None:
+    """Which ALT-NINTH TABLE `theme_ninth` consults, or None to keep the
+    canonical `constants.WEEKDAY_THEME_NINTHS` entry — THE MECHANISM
+    DISPATCH itself (owner Double-Ninth verdicts, 2026-07-29), extracted
+    so the WIRING is directly testable without needing a plate to exist
+    on disk (`tests/test_weekday_rotation.py`'s art-free pins). Reads
+    `constants.NINTH_MECHANISMS`:
+
+    - "easter_egg"  -> `constants.WEEKDAY_THEME_NINTH_EASTER_EGG`
+      (continents' Pangea).
+    - "daynight"    -> `constants.WEEKDAY_THEME_NINTH_NIGHT` (sw_dyad's
+      Exegol).
+    - "term_weekly" -> None always: cp_corpo's weekly mandate reads NO
+      alt table — the canonical entry's OWN seat roster already names
+      both halves, and `on_date` alone (via `rotating_art_file`'s cadence
+      override) picks between them (Rule #5, one rotation mechanism).
+    - no mechanism, or `active_alt` False -> None (the plain canonical
+      plate, unconditionally)."""
+    if not active_alt:
+        return None
+    mechanism = constants.NINTH_MECHANISMS.get(theme)
+    if mechanism == "easter_egg":
+        return constants.WEEKDAY_THEME_NINTH_EASTER_EGG
+    if mechanism == "daynight":
+        return constants.WEEKDAY_THEME_NINTH_NIGHT
+    return None
+
+
 def theme_ninth(
-    theme: str, pangea: bool = False, on_date: date | None = None,
+    theme: str, active_alt: bool = False, on_date: date | None = None,
 ) -> tuple[str, Path] | None:
     """(display name, resolved asset path) of `theme`'s Ninth plate, or
     None when the theme names no Ninth (`constants.WEEKDAY_THEME_NINTHS`)
@@ -1396,18 +1424,23 @@ def theme_ninth(
     (Rule #5), matching the graceful-absent law every other Ninth plate
     already follows.
 
-    `pangea` is the Continents theme's easter-egg switch (owner-sealed
-    matrix 2026-07-21): when the traveled day is a Pangea day
-    (`core.continents.ninth_is_pangea_*`) the seat shows PANGEA in place
-    of ZEALANDIA — same graceful-absent gate, its own alt plate.
+    `active_alt` is the DOUBLE NINTH's alt-face switch (owner Double-
+    Ninth verdicts, 2026-07-29 — was `pangea`, continents-only, before
+    the law generalized): when True, `ninth_table_for` resolves WHICH
+    alt table (if any) `theme`'s own `NINTH_MECHANISMS` entry names —
+    continents' Pangea, sw_dyad's Exegol — same graceful-absent gate,
+    its own alt plate. cp_corpo's "term_weekly" mechanism never reaches
+    an alt table (see `ninth_table_for`); its rotation rides `on_date`
+    alone, like every other seat roster.
 
     `on_date` opts the resolved plate into THE UNIVERSAL ROTATION
     CONVENTION (weekday ALT ROTATION round 2026-07-20/21 — bible_dark's
-    Ninth Circle is the first Ninth to ship `alt/` siblings); None
-    (every caller before this round) keeps the plain canonical file."""
-    entry = None
-    if pangea:
-        entry = constants.WEEKDAY_THEME_NINTH_EASTER_EGG.get(theme)
+    Ninth Circle is the first Ninth to ship `alt/` siblings, cp_corpo's
+    weekly mandate the first to ride a WEEKLY cadence instead of daily);
+    None (every caller before this round) keeps the plain canonical
+    file."""
+    table = ninth_table_for(theme, active_alt)
+    entry = table.get(theme) if table is not None else None
     if entry is None:
         entry = constants.WEEKDAY_THEME_NINTHS.get(theme)
     if entry is None:
@@ -1419,6 +1452,30 @@ def theme_ninth(
     if on_date is not None:
         asset = defaults.rotating_art_file(asset, on_date) or asset
     return name, asset
+
+
+def ninth_alt_active(ctx: RenderContext) -> bool:
+    """Whether `ctx.skin.weekday_theme`'s Ninth shows its ALT face right
+    now — THE MECHANISM DISPATCH the paint pass reads (owner Double-
+    Ninth verdicts, 2026-07-29), replacing the old `weekday_theme ==
+    "continents"` gate the two `theme_ninth` call sites below used to
+    repeat (Rule #5 — one dispatch, not a copy per call site):
+
+    - "easter_egg" reads `core.continents`'s sky law from the day's OWN
+      pre-built anchors and the live eclipse flag (never recomputed).
+    - "daynight" reads the SAME `TickState.is_daylight` `center_face`
+      already reads — night is the alt face.
+    - every other mechanism (or none) answers False; `theme_ninth` then
+      falls back to the canonical plate, rotated by `on_date` alone."""
+    mechanism = constants.NINTH_MECHANISMS.get(ctx.skin.weekday_theme)
+    if mechanism == "easter_egg":
+        return continents.ninth_is_pangea_from_events(
+            ctx.day.local_date, ctx.day.season_events, ctx.day.moon_events,
+            ctx.tick.eclipse_event is not None,
+        )
+    if mechanism == "daynight":
+        return not ctx.tick.is_daylight
+    return False
 
 
 def ninth_window_anchor(day: DayContext, tick: TickState) -> str | None:
@@ -2550,17 +2607,9 @@ class WeekdayLayer(Layer):
         # themes naming none keep both faces all Sunday.
         seat_taken, ninth_plate = None, None
         if servant and today == "sun" and not ctx.reveal_active:
-            pangea = (
-                ctx.skin.weekday_theme == "continents"
-                and continents.ninth_is_pangea_from_events(
-                    ctx.day.local_date,
-                    ctx.day.season_events,
-                    ctx.day.moon_events,
-                    ctx.tick.eclipse_event is not None,
-                )
-            )
             ninth_plate = theme_ninth(
-                ctx.skin.weekday_theme, pangea, on_date=ctx.day.local_date
+                ctx.skin.weekday_theme, ninth_alt_active(ctx),
+                on_date=ctx.day.local_date,
             )
             if ninth_plate is not None:
                 seat_taken = dual_seat_ninth(ctx.day, ctx.tick)
@@ -2888,21 +2937,13 @@ class CenterBodyLayer(Layer):
         # law to `sunday_dual_face` (Compass/Seasons keep their own
         # two-seat mechanic, untouched).
         if today == "sun" and not ghost_reveal and center_dual_face(self._skin):
-            # THE CONTINENTS Ninth easter egg (owner-sealed matrix
-            # 2026-07-21): Pangea replaces Zealandia while the sky is
-            # doing something, read from the day's OWN pre-built anchors
-            # and eclipse flag (never recomputed — core.continents).
-            pangea = (
-                ctx.skin.weekday_theme == "continents"
-                and continents.ninth_is_pangea_from_events(
-                    ctx.day.local_date,
-                    ctx.day.season_events,
-                    ctx.day.moon_events,
-                    ctx.tick.eclipse_event is not None,
-                )
-            )
+            # THE DOUBLE NINTH's alt face (owner Double-Ninth verdicts,
+            # 2026-07-29): `ninth_alt_active` dispatches by the theme's
+            # OWN `constants.NINTH_MECHANISMS` entry — continents' sky
+            # trigger, sw_dyad's daylight/night switch, or neither.
             ninth = theme_ninth(
-                ctx.skin.weekday_theme, pangea, on_date=ctx.day.local_date
+                ctx.skin.weekday_theme, ninth_alt_active(ctx),
+                on_date=ctx.day.local_date,
             )
             face = center_face(ctx.day, ctx.tick, ninth is not None)
             if face != "ruler":

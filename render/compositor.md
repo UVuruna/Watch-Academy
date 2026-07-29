@@ -339,10 +339,13 @@ tooltip` — the Rose card carries a computed 24-entry legend, see
   `constants.WEEKDAY_THEME_NINTHS`) speaks the single GOOD/Ruler
   article outside its solar windows and the matching pair — GOOD+NINTH
   near solar noon, EVIL+NINTH near solar midnight — inside them,
-  `render.layers.center_face` deciding which. For the **Continents**
-  theme (round R7a) `_center_pangea` feeds the day's Pangea flag
-  (`core.continents`) into `theme_ninth(theme, pangea=...)`, so the
-  hover card and the dial agree on Zealandia vs Pangea. The Ninth's OWN article
+  `render.layers.center_face` deciding which. THE DOUBLE NINTH's alt
+  face (owner Double-Ninth verdicts, 2026-07-29): `_center_ninth_alt`
+  dispatches by the theme's `constants.NINTH_MECHANISMS` entry — the
+  **Continents** day's Pangea flag (`core.continents`, "easter_egg") or
+  sw_dyad's `TickState.is_daylight` ("daynight") — into
+  `theme_ninth(theme, active_alt=...)`, so the hover card and the dial
+  always agree on which face shows. The Ninth's OWN article
   text comes from a NEW dependency, `self._encyclopedia`
   (`data.encyclopedia.EncyclopediaRepository`, `entry("ninths", name)`)
   — the Ninth's family lives in `encyclopedia.json`, not

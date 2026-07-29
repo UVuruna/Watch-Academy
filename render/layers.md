@@ -1140,14 +1140,22 @@ render hooks, both keyed off `ctx.skin.weekday_theme == "continents"`:
   instrument) at the sky's own phase (`ctx.tick.is_daylight`, the SAME
   sun-elevation law the Earth marker already uses, never recomputed).
   Graceful-absent: a missing face keeps the baked plate.
-- **The Ninth easter egg.** `theme_ninth`'s `pangea` flag reads
-  `constants.WEEKDAY_THEME_NINTH_EASTER_EGG` (Pangea) instead of
-  `WEEKDAY_THEME_NINTHS` (Zealandia) when the traveled day is a Pangea
-  day. `CenterBodyLayer` computes that flag from the day's OWN pre-built
-  anchors + eclipse via `core.continents.ninth_is_pangea_from_events`
-  (never recomputing astronomy) and passes it in; the compositor's
-  `_center_pangea` feeds the same law to the hover so card and dial
-  agree.
+- **THE DOUBLE NINTH's alt face** (owner Double-Ninth verdicts,
+  2026-07-29). `theme_ninth`'s `active_alt` flag, resolved by
+  `ninth_table_for(theme, active_alt)` — a MECHANISM DISPATCH over
+  `constants.NINTH_MECHANISMS` — picks which alt table (if any)
+  replaces `WEEKDAY_THEME_NINTHS`'s canonical entry: "easter_egg" reads
+  `constants.WEEKDAY_THEME_NINTH_EASTER_EGG` (continents' Pangea over
+  Zealandia), "daynight" reads `constants.WEEKDAY_THEME_NINTH_NIGHT`
+  (sw_dyad's Exegol over The Ghosts), "term_weekly" (cp_corpo) reaches
+  neither table — its whole Throne/Mirror/Ninth triple rotates through
+  `on_date` alone, at a WEEKLY cadence (`config.defaults.
+  _pick_weekly_mandate`). `ninth_alt_active(ctx)` computes the flag
+  itself: "easter_egg" from the day's OWN pre-built anchors + eclipse
+  via `core.continents.ninth_is_pangea_from_events` (never recomputing
+  astronomy), "daynight" from the SAME `ctx.tick.is_daylight`
+  `center_face` reads; the compositor's `_center_ninth_alt` mirrors it
+  for the hover so card and dial agree.
 
 ### SlotLayer (MINUTE)
 One instance per placement pass draws every SEATED slot from

@@ -1437,7 +1437,7 @@ class Compositor:
         # 2026-07-20/21): `self._day` is None before the first tick
         # (this method is unit-tested directly, `self._day` unset —
         # `test_seated_slot_wears_its_own_roster`) — the SAME graceful-
-        # absent guard `_center_pangea` already uses for the identical
+        # absent guard `_center_ninth_alt` already uses for the identical
         # hazard.
         on_date = self._day.local_date if self._day is not None else None
         # The weekday-set shortcut holds only while the ROSTER matches
@@ -1814,7 +1814,7 @@ class Compositor:
         for face in faces:
             if face == "ninth":
                 name, asset = theme_ninth(
-                    theme, self._center_pangea(), on_date=self._day.local_date
+                    theme, self._center_ninth_alt(), on_date=self._day.local_date
                 )
                 text = self._encyclopedia.entry("ninths", name)["base"]
                 # The Ninth stands OUTSIDE the circle — no weekday line.
@@ -1853,7 +1853,7 @@ class Compositor:
         overrule, CORRECTED 2026-07-2X) — calls the SAME pure resolver
         the paint pass calls (`render.layers.active_thirteenth`, fed
         the pre-computed `DayContext.thirteenth_candidates` fact set);
-        None before the first day build (mirrors `_center_pangea`'s own
+        None before the first day build (mirrors `_center_ninth_alt`'s own
         graceful guard)."""
         if self._day is None:
             return None
@@ -1913,29 +1913,44 @@ class Compositor:
         if today != "sun" or not sunday_dual_face(self._skin):
             return None
         if theme_ninth(
-            self._skin.weekday_theme, self._center_pangea(),
+            self._skin.weekday_theme, self._center_ninth_alt(),
             on_date=self._day.local_date,
         ) is None:
             return None
         return dual_seat_ninth(self._day, self._last_tick)
 
-    def _center_pangea(self) -> bool:
-        """The Continents theme's Ninth easter-egg flag for the hover
-        (owner-sealed matrix 2026-07-21) — the SAME `core.continents`
-        law the paint pass reads, fed from this compositor's own day and
-        last tick so the card and the dial never disagree."""
-        if self._skin.weekday_theme != "continents" or self._day is None:
+    def _center_ninth_alt(self) -> bool:
+        """THE DOUBLE NINTH's alt-face flag for the hover (owner
+        Double-Ninth verdicts, 2026-07-29 — was `_center_pangea`,
+        continents-only, before the law generalized): dispatches by the
+        theme's OWN `constants.NINTH_MECHANISMS` entry, fed from this
+        compositor's own day and last tick so the card and the dial
+        never disagree.
+
+        - "easter_egg" reads the SAME `core.continents` sky law the
+          paint pass reads.
+        - "daynight" reads the SAME `TickState.is_daylight` `center_face`
+          reads — night is the alt face.
+        - every other mechanism (or none) answers False."""
+        if self._day is None:
             return False
-        return continents.ninth_is_pangea_from_events(
-            self._day.local_date,
-            self._day.season_events,
-            self._day.moon_events,
-            (
-                self._last_tick.eclipse_event is not None
-                if self._last_tick is not None
-                else False
-            ),
-        )
+        mechanism = constants.NINTH_MECHANISMS.get(self._skin.weekday_theme)
+        if mechanism == "easter_egg":
+            return continents.ninth_is_pangea_from_events(
+                self._day.local_date,
+                self._day.season_events,
+                self._day.moon_events,
+                (
+                    self._last_tick.eclipse_event is not None
+                    if self._last_tick is not None
+                    else False
+                ),
+            )
+        if mechanism == "daynight":
+            return (
+                self._last_tick is not None and not self._last_tick.is_daylight
+            )
+        return False
 
     def _center_dual_tooltip(self, active: bool) -> str:
         """The CENTER seat's Sunday duality hover (owner INSTRUCTION #5,
@@ -1951,7 +1966,7 @@ class Compositor:
             return self._sun_face_tooltip("ruler", active=False)
         theme = self._skin.weekday_theme
         ninth = theme_ninth(
-            theme, self._center_pangea(), on_date=self._day.local_date
+            theme, self._center_ninth_alt(), on_date=self._day.local_date
         )
         if ninth is None:
             return self._dual_face_columns(theme, ("ruler", "servant"))
