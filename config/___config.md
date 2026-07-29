@@ -159,20 +159,55 @@ The Ghosts), the NEW "Films" picker group — the second and last group
 the checklist named, matching `taxonomy.WEEK_GROUPS["films"]` on disk —
 and a third merged card, `starwars`, with a Jedi | Sith | Dyad
 switcher. Two things are new here. First, a `WEEKDAY_SEAT_ROSTERS` seat
-that holds PLACES rather than people: the Dyad's Ninth turns between
-The Ghosts and Exegol, which the canon expressly permits (a Ninth need
-not be a person) and which the same table serves with no new mechanism
-— the alternative, reusing `core.continents`'s Zealandia/Pangea
-trigger, is recorded as a PROVISIONAL owner call in the staging ledger
-rather than half-wired beside it. Second, the same PERSON seated in two
-casts at different ages — Anakin in the Sith Mirror and the Jedi
-Mirror, Leia and Han in a cast each of their own — which is why the
-per-cast blurb and article sets are not an over-engineering: a shared
-franchise set would have had to describe one of the two ages wrongly on
-every hover. None of the three needed a `THEME_KEY_RENAMES` deletion.
-The wiring table of the
+that holds PLACES rather than people: the Dyad's Ninth turned between
+The Ghosts and Exegol by plain date rotation — SUPERSEDED, see THE
+DOUBLE NINTH LAW below. Second, the same PERSON seated in two casts at
+different ages — Anakin in the Sith Mirror and the Jedi Mirror, Leia
+and Han in a cast each of their own — which is why the per-cast blurb
+and article sets are not an over-engineering: a shared franchise set
+would have had to describe one of the two ages wrongly on every hover.
+None of the three needed a `THEME_KEY_RENAMES` deletion. The wiring
+table of the
 [Theme Staging Ledger](../research/theme_staging.md) is now EMPTY; its
 second table records the plates these three casts are still owed.
+
+**THE DOUBLE NINTH LAW** (standing law, owner decree 2026-07-29): a
+theme may mount a DOUBLE NINTH only with a DEFINED alternation
+mechanism, and every reader shows ONLY the currently active face, never
+both. `NINTH_MECHANISMS` (theme -> mechanism name) is the registry;
+`NINTH_MECHANISM_KINDS` the vocabulary a dispatch actually implements.
+Three sealed mechanisms today:
+
+- **`continents` -> `"easter_egg"`** — unchanged, `core.continents`'s
+  sky trigger, now WIDENED to every principal moon phase (see
+  [Continents](../core/continents.md)).
+- **`sw_dyad` -> `"daynight"`** — RESOLVED 2026-07-29, superseding
+  Session 33's provisional date rotation: the Ninth is a DAYLIGHT/NIGHT
+  switch (the owner's words: "the duality of that theme pulling the
+  actors to one of two sides"), day The Ghosts
+  (`WEEKDAY_THEME_NINTHS`), night Exegol (the NEW
+  `WEEKDAY_THEME_NINTH_NIGHT` table, same shape as the easter-egg one).
+  `WEEKDAY_SEAT_ROSTERS["sw_dyad"]["ninth"]` is GONE — the mechanism no
+  longer rides a seat roster at all.
+- **`cp_corpo` -> `"term_weekly"`** — RESOLVED 2026-07-29 (scope
+  extension the same session): THE WEEKLY MANDATE — the traveled date's
+  ISO calendar week PARITY, not the daily ordinal, decides which half
+  of the Throne/Mirror/Ninth triple rules (even week Arasaka/canonical,
+  odd week NUSA) — Rule #5's "one rotation mechanism" stays true: no new
+  alt table, `_pick_weekly_mandate` is a CADENCE swap inside the SAME
+  `rotating_art_file` chokepoint (`constants.NINTH_MECHANISMS.get(theme)
+  == "term_weekly"` is the only new branch). `cp_gangs`/`cp_street`
+  stay on the plain daily cadence untouched.
+
+`render.layers.theme_ninth`/`ninth_table_for`/`ninth_alt_active` and
+`render.compositor._center_ninth_alt` are the DIAL's dispatch;
+`app.encyclopedia.builders._live_ninth_face` and `_weekday_topic`'s
+`travel_date` thread are the ENCYCLOPEDIA's — see
+[Topic Builders](../app/encyclopedia/builders.md). Guarded by
+`tests/test_ninth_mechanisms.py`: no double ninth (found in ANY
+registry shape) may lack a `NINTH_MECHANISMS` entry, and no entry may
+name an unimplemented mechanism.
+
 **THE BLUE MOON LAW**
 (owner-sealed 2026-07-22, R12; extended by **THE AXLE LAW**, CANON §The
 Axle, owner-sealed 2026-07-29): `THIRTEENTHS` — key → (display name,

@@ -107,12 +107,13 @@ always their code keys. 184 texts in all (~93,600 characters): 3 × 61 —
 7 arm blurbs, the theme title, the week-duality page and the Ninth —
 plus the one card line the shared card reads.
 
-**THE DYAD'S THREE ROTATING SEATS are wired** through the same
-`defaults.WEEKDAY_SEAT_ROSTERS` the Cyberpunk half built one commit
-earlier: Tuesday (Finn / Phasma), Wednesday (Maz / DJ) and the Ninth
-(The Ghosts / Exegol) — the registry's first PLACE-vs-PLACE Ninth, which
-the canon expressly permits. See the PROVISIONAL note in the art-owed
-row below for the mechanism question this closes and how to reopen it.
+**THE DYAD'S THREE ROTATING SEATS are wired**: Tuesday (Finn / Phasma)
+and Wednesday (Maz / DJ) through `defaults.WEEKDAY_SEAT_ROSTERS`, the
+same mechanism the Cyberpunk half built one commit earlier. The Ninth
+(The Ghosts / Exegol) — the registry's first PLACE-vs-PLACE Ninth,
+which the canon expressly permits — is DIFFERENT: see the RESOLVED note
+in the art-owed row below, superseding the seat-roster wiring this
+paragraph used to describe for it.
 
 **The wiring table is empty.** The twelve casts CLAUDE.md's THEME
 COMPLETION LAW was written for are all registered, worded and seated;
@@ -152,21 +153,25 @@ plate lights up the day it lands with no code change.
 | `vices` centre | calendars | 0 | [Virtue Wheel Prompts](prompts/calendars/virtue_wheel_prompts.md) | 1: the PAINT axle `Cunning`. 12 vices wired earlier; NEW centre added 0.14.605. PromptPainter brief complete. |
 | `sw_jedi` | films | 22 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 3 seats: the Throne (Luke), the Mirror (Vader) and the Ninth (Yoda). Chewbacca has bronze but no `colored/` twin. |
 | `sw_sith` | films | 18 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 4 seats: Wednesday (Jabba) and the Throne (Palpatine) have `colored/` but no BRONZE master, so the three metal looks are dark on them; Saturday (Boba Fett) and the Mirror (Anakin) have nothing at all. |
-| `sw_dyad` | films | 3 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 11 of its 12 declared figures — everything except Monday (Rose): the Throne (Rey), the Mirror (Kylo), Thursday (Leia), Friday (Han), Saturday (Hux), and all six roster members of the three rotating seats (Finn/Phasma, Maz/DJ, Ghosts/Exegol). |
+| `sw_dyad` | films | 3 | [Star Wars Prompts](prompts/starwars/starwars_prompts.md) | 11 of its 12 declared figures — everything except Monday (Rose): the Throne (Rey), the Mirror (Kylo), Thursday (Leia), Friday (Han), Saturday (Hux), the two rotating seats (Finn/Phasma, Maz/DJ), and the Ninth's two faces (Ghosts, Exegol). |
 
-**PROVISIONAL — the Dyad's Ninth rotation mechanism (owner call still
-open).** The sheet's own "rotation convention" section names two ways to
-turn The Ghosts / Exegol and expressly leaves the choice to the owner at
-wiring time: (a) the plain date rotation every other rotating seat uses,
-or (b) a reuse of `core.continents`'s Zealandia/Pangea TRIGGER, where
-the rarer face surfaces only when the sky is doing something. **Session
-33 wired (a)** — `defaults.WEEKDAY_SEAT_ROSTERS["sw_dyad"]["ninth"]` —
-because Rule #5 says one rotation mechanism rather than two, and the
-sheet argues the PAIRING rather than the trigger. The rejected
-alternative is (b), and flipping to it is a small, fully named change,
-written out in that table's own comment. The regression
-`test_sw_dyad_ninth_rotates_through_the_seat_roster` in
-`tests/test_weekday_rotation.py` pins which of the two is live, so a
-flip has to be deliberate. This note stands until the owner rules.
+**RESOLVED — the Dyad's Ninth mechanism (owner verdict landed
+2026-07-29).** The sheet's own "rotation convention" section named two
+ways to turn The Ghosts / Exegol and left the choice open: (a) the plain
+date rotation every other rotating seat uses, or (b) a DAYLIGHT/NIGHT
+switch reading the same sky state the center seat's Ruler/Servant law
+already reads. **The owner ruled (b)** — his words: "the duality of that
+theme pulling the actors to one of two sides" — day The Ghosts, night
+Exegol. Session 33's provisional (a) is GONE:
+`defaults.WEEKDAY_SEAT_ROSTERS["sw_dyad"]["ninth"]` is deleted, and the
+new `constants.WEEKDAY_THEME_NINTH_NIGHT["sw_dyad"]` table carries
+Exegol's plate, dispatched by `constants.NINTH_MECHANISMS["sw_dyad"] ==
+"daynight"` — part of THE DOUBLE NINTH LAW (owner decree 2026-07-29,
+[Config (folder)](../config/___config.md)). The regression this table's
+old note pointed at is renamed:
+`test_sw_dyad_ninth_is_a_daylight_night_switch` in
+`tests/test_weekday_rotation.py` now pins mechanism (b); the guard
+`tests/test_ninth_mechanisms.py` fails the build if either mechanism
+table ever drifts.
 
 A row leaves THIS table when its plates land, not when its wiring does.

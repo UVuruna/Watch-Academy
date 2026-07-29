@@ -325,6 +325,22 @@ found — PRISM's Council thirty-six lines from its own primary wheel);
 and the table agrees with the pointer roster. `tests/` itself is exempt
 from clause 1 — a probe pixmap's fill is data, not a design decision.
 
+### `test_ninth_mechanisms.py`
+THE DOUBLE NINTH LAW (owner decree 2026-07-29): every double ninth found
+in ANY registry shape (`WEEKDAY_THEME_NINTH_EASTER_EGG`,
+`WEEKDAY_THEME_NINTH_NIGHT`, `WEEKDAY_SEAT_ROSTERS[*]["ninth"]`) has a
+`NINTH_MECHANISMS` entry naming a mechanism a real dispatch implements,
+and no orphan entry names a theme with no double ninth at all; pins the
+three sealed mechanisms by name (continents "easter_egg", sw_dyad
+"daynight", cp_corpo "term_weekly"); proves `render.layers.
+ninth_table_for` dispatches by mechanism (and that "term_weekly"
+deliberately reaches no alt table); and proves the Encyclopedia's
+active-only law on live offscreen `topics()` calls for both live-state
+mechanisms — sw_dyad's day/night Ghosts/Exegol switch and cp_corpo's
+ISO-week-parity WEEKLY MANDATE (Throne/Mirror/Ninth flipping together,
+names staying static while the plates turn) — reached through the
+merged `starwars`/`cyberpunk` variant cards.
+
 ### `test_purity.py`
 Asserts nothing under `core/` or `data/` mentions PySide6 — and that
 library code reads no wall clock (`datetime.now`/`.today`/`time.time`;

@@ -1014,6 +1014,22 @@ absent. Everything else in the original Session 28 entry stands.
   → 3:29 are one scene). Full table, the six axes and the CENTER-PAIR
   LAW in CANON §The Sins Dozen and §The Axle; sheet
   `research/prompts/calendars/sins_prompts.md`; mounted and tested.
+- ~~**sw_dyad's Ninth mechanism** (Ghosts/Exegol)~~ — **RESOLVED
+  2026-07-29: DAYLIGHT/NIGHT switch**, not the date rotation Session 33
+  provisionally wired. Day shows The Ghosts, night Exegol
+  (`constants.NINTH_MECHANISMS["sw_dyad"] == "daynight"`,
+  `constants.WEEKDAY_THEME_NINTH_NIGHT`); `WEEKDAY_SEAT_ROSTERS
+  ["sw_dyad"]["ninth"]` is deleted. Part of THE DOUBLE NINTH LAW, see
+  [Config (folder)](../config/___config.md) and
+  `tests/test_ninth_mechanisms.py`.
+- ~~**cp_corpo's Throne/Mirror/Ninth mechanism**~~ — **RESOLVED
+  2026-07-29: THE WEEKLY MANDATE.** The ISO calendar week's PARITY,
+  not the daily ordinal, decides the ruling triple — even week
+  Arasaka, odd week NUSA — for Throne, Mirror AND Ninth together
+  (`constants.NINTH_MECHANISMS["cp_corpo"] == "term_weekly"`,
+  `config.defaults._pick_weekly_mandate`). `cp_gangs`/`cp_street` stay
+  on the plain daily rotation. Pinned by
+  `tests/test_weekday_rotation.py` and `tests/test_ninth_mechanisms.py`.
 - **A 24-set for the Calendar** — no 24 (+3 center) roster is
   canon-sealed to ride it; the two-per-wedge law is implemented and
   tested, registering one is a single table row once sealed (Rose-24's
