@@ -207,6 +207,40 @@ def axis(name: str, size: int) -> QPixmap:
     return pixmap
 
 
+def pole(name: str, size: int) -> QPixmap:
+    """ONE END of an axis lit inside its own cube — the seat named, its
+    own line drawn faintly through the centre to the pole it answers.
+
+    The six face poles used to read the Character wheel's lancets, and
+    two of them (Composure, Vigor) never had one: their axis is the
+    depth the flat wheel drops. The owner sent that whole family to the
+    rotating 3D previewer (decree 2026-07-29), so until it lands the
+    page shows where the seat STANDS — which is the one thing a flat
+    figure can honestly say about a 3D position."""
+    entry = next(
+        (
+            (a, end)
+            for a in cube.AXES
+            for end in (a.cold, a.warm)
+            if end.luminous == name
+        ),
+        None,
+    )
+    if entry is None:
+        return QPixmap()
+    axis_entry, end = entry
+    other = axis_entry.warm if end is axis_entry.cold else axis_entry.cold
+    pixmap, painter = _canvas(size)
+    unit = size * defaults.CUBE_DIAGRAM_UNIT_RATIO
+    _draw_frame(painter, unit)
+    _draw_axis_line(painter, unit, end.coords, other.coords)
+    _draw_cells(painter, unit, lit=(end.coords, (0, 0, 0)))
+    _draw_end_label(painter, unit, end.coords, end.luminous)
+    _draw_end_label(painter, unit, (0, 0, 0), cube.THE_ONE.luminous)
+    painter.end()
+    return pixmap
+
+
 def whole_cube(size: int) -> QPixmap:
     """The Cube itself — twenty-seven cells in their own hues, the
     centre lit, no axis singled out."""
@@ -321,6 +355,7 @@ def banknote_axes(size: int) -> QPixmap:
 # which drawer answers which kind (Rule #5).
 _DRAWERS = {
     "axis": axis,
+    "pole": pole,
     "cube": lambda _key, size: whole_cube(size),
     "axes": lambda _key, size: thirteen_axes(size),
     "hexagram": lambda _key, size: hexagram_projection(size),

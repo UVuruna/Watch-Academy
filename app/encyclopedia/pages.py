@@ -149,8 +149,15 @@ _CUBE_ENTRIES = (
     ("The Sixty-Five Terms", None, ("terms", "")),
     ("The Three Sets", None, ("sets", "")),
     ("The Activation Axis", None, ("axis", "Activation")),
-    ("Composure", archetypes.CHARACTER_ART_DIR / "Composure.png"),
-    ("Vigor", archetypes.CHARACTER_ART_DIR / "Vigor.png"),
+    # THE ACTIVATION POLES ARE 3D, NOT PLATES (owner decree 2026-07-29:
+    # "ovo će biti animacija izrađena uz pomoć Gadgets/3D Previewer").
+    # The Character wheel is the Cube with this axis at zero, so these
+    # two ends have no lancet and never will — the whole Cube family
+    # goes to the rotating previewer. Until it lands they show the
+    # COMPUTED cube with their own seat lit, which is the one thing a
+    # flat figure can honestly say about a 3D position.
+    ("Composure", None, ("pole", "Composure")),
+    ("Vigor", None, ("pole", "Vigor")),
     ("The Moral Scope Axis", None, ("axis", "Moral Scope")),
     ("Integrity", archetypes.CHARACTER_ART_DIR / "Integrity.png"),
     ("Loyalty", archetypes.CHARACTER_ART_DIR / "Loyalty.png"),

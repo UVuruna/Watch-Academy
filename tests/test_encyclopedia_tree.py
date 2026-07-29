@@ -415,9 +415,9 @@ def test_the_exception_list_has_no_stale_entries(topics):
 
 
 def test_the_title_plate_resolver_names_one_file_per_block(topics):
-    """The three blocks of a merged theme name three DIFFERENT plates —
-    the merge must not make two title pages fight over one filename. The
-    blocks differ by REGISTER (primary / pantheon / wider, primary /
+    """The three blocks of a merged theme name three DIFFERENT TITLE
+    plates — the merge must not make two title pages fight over one
+    filename. The blocks differ by REGISTER (primary / pantheon / wider, primary /
     secondary / dark), which is exactly what a register is for, so the
     reserved `Title` stem repeats across folders and never inside one."""
     from config import defaults
@@ -426,13 +426,38 @@ def test_the_title_plate_resolver_names_one_file_per_block(topics):
     for key in ("greek", "greek_pantheon", "greek_wider",
                 "bible", "bible2", "bible_dark",
                 "religion", "religion_alt"):
-        for duality in (False, True):
-            path = defaults.theme_title_art(key, duality=duality)
-            assert path not in seen, (key, duality, seen.get(path))
-            seen[path] = (key, duality)
+        path = defaults.theme_title_art(key)
+        assert path not in seen, (key, seen.get(path))
+        seen[path] = key
     # And the seat is the one the prompt sheets already write against.
     greek = defaults.theme_title_art("greek")
     assert greek.name == "Title.png"
     assert greek.parent.name == "colored"
     assert greek.parent.parent.name == "primary"
-    assert defaults.theme_title_art("greek", duality=True).name == "Duality.png"
+
+
+def test_every_dual_page_shares_the_one_generic_plate(topics):
+    """OWNER DECREE 2026-07-29: the DUALITY page is generic — one plate
+    for every theme, because the two faces open the very next two pages
+    and a title plate that draws them again is a repeat. The opposite of
+    the TITLE plates above, deliberately: a title names its own theme, a
+    duality names the shape all of them share."""
+    from config import defaults
+
+    for key in ("greek", "greek_pantheon", "bible", "bible_dark",
+                "wolf", "cosmos", "religion_alt"):
+        assert defaults.theme_title_art(key, duality=True) == (
+            defaults.DUALITY_GENERIC_ART
+        ), key
+    assert defaults.DUALITY_GENERIC_ART.parent.name == "instrument"
+    # The escape hatch exists and is unused — a theme may still claim
+    # its own plate when its dual page shows a genuinely new third
+    # thing (owner's own carve-out).
+    assert defaults.THEME_OWN_DUALITY_PLATE == {}
+    defaults.THEME_OWN_DUALITY_PLATE["greek"] = True
+    try:
+        claimed = defaults.theme_title_art("greek", duality=True)
+    finally:
+        defaults.THEME_OWN_DUALITY_PLATE.clear()
+    assert claimed.name == "Duality.png"
+    assert claimed.parent.parent.parent.name == "greek"

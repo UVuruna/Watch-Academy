@@ -234,3 +234,71 @@ articles are owner-driven captures of the running app, dropped
 alongside for whatever crop/export step the Encyclopedia's image
 pipeline expects. `metals` and `ring_letters` need nothing new at all —
 both point at assets already sitting in the tree.
+
+---
+
+## THE TWO GENERIC PLATES (owner decree 2026-07-29)
+
+Two pages repeat across the whole book with the SAME meaning every
+time, and the owner sealed both as ONE shared image rather than one per
+theme:
+
+> *"Neka Generic što ćemo osmisliti da opisuje taj DUALITY tj TRINITY
+> koji predstavljamo. Neće svaka tema imati svoju — osim ako tu ne
+> predstavljamo nešto novo što ne opisuje nijedan od 3 predstavnika
+> nedelje."* … *"Isto kao i kod 13ti teme. Dakle 2 generic slike."*
+
+**Why this is the right seat for them.** Both plates belong to no
+theme, so they cannot live in a theme's register (the tree law's
+`<theme>/<register>/<look>/` has no room for "everyone's"). They are
+the instrument's own furniture, exactly like the section logo and the
+paint/light legend, and they land beside them at `assets/instrument/`
+top level — sourced files, `_gem`/`_gpt` suffix resolved by
+`config.paths.art_file` like every other sourced image.
+
+**The rule that shaped the DUALITY plate.** The earlier per-theme
+briefs drew the two faces themselves (Zeus enthroned against Hades
+enthroned). The owner struck that down for a reason worth writing
+down: *"njihova slika se sve pojavljuje odmah na sledeće dve strane,
+tako da forsiranje 1 te iste slike na svakoj strani nećemo da
+dozvolimo"* — the two faces open the very next two pages, so a title
+plate that shows them again spends the reader's attention on a repeat.
+**Neither plate carries a single figure.** What they carry is the
+SHAPE of the idea: a seat with two faces, and a count that will not
+close.
+
+**Neither carries lettering.** The theme-title sheet's wordmark
+exception is a per-theme thing; a plate that serves twenty themes can
+name none of them.
+
+**When a theme may claim its OWN Duality plate:** only when that page
+presents something *none of the three seat-holders already describes*
+— a genuinely new third thing, not a restatement of the pair. The
+resolver keeps an override table for exactly that case; it is EMPTY
+today.
+
+---
+
+**The Generic Duality — the seat with two faces** →
+`assets/instrument/duality.png`
+
+*One throne, split down the middle: day on one side, night on the
+other, and the ninth standing outside the ring entirely. Nobody is
+sitting in it — whoever does is on the next page.*
+
+```
+Ornate circular medallion, aged bronze and dark silver relief, photorealistic render, perfectly centered, isolated on white background. NO FIGURE OF ANY KIND — no person, no face, no hand, no animal: the seat is EMPTY, deliberately. Center: one single high-backed throne seen head-on, and the throne is split exactly down its vertical axis into two finishes that meet along one seam — the LEFT half struck in warm polished gold under a small sun disc, its side of the field open and lit; the RIGHT half struck in cold dark iron-silver under a small eclipsed disc, its side of the field closed and unlit. The seat, the arms and the base run through the seam UNBROKEN, so the plate reads as one chair and not as two half-chairs. Beyond the border ring, at the very bottom and clearly OUTSIDE the medallion's rim, stands a third much smaller stool, plain and turned away from the throne, in neither metal — the ninth, outside the circle. Border: a plain double bronze fillet, no ornament of any culture, broken only by twenty-four fine ticks evenly spaced around the ring — the dial's own hour count, the one family this plate belongs to. No text, no watermark, no letters or numerals anywhere.
+```
+
+---
+
+**The Generic Thirteenth — the count that does not close** →
+`assets/instrument/thirteenth.png`
+
+*Every set on this instrument is built on twelve. This is what happens
+when a thirteenth arrives: the same craft, the same metal, and no seat
+for it.*
+
+```
+Ornate circular medallion, aged bronze relief, photorealistic render, perfectly centered, isolated on white background. NO FIGURE OF ANY KIND — no person, no animal, no symbol of any culture. Center: a closed ring of TWELVE identical segments, cut and finished exactly alike, meeting edge to edge all the way round so the circle is complete and admits nothing more. At the very top, where the ring closes, a THIRTEENTH segment of the same size and the same bronze stands LIFTED clear of the ring — resting slightly above and outside the rim, not fitted into it, casting its own distinct shadow down across the twelve beneath it. The gap it should have occupied is not there: the twelve have already closed over it. Border: a plain double bronze fillet, unbroken and unornamented. No text, no watermark, no letters or numerals anywhere.
+```

@@ -2899,6 +2899,34 @@ def colored_variant_rel(rel: str) -> str:
 # the SAME seat under the reserved stem `Duality`.
 TITLE_PLATE_STEM = "Title"
 DUALITY_PLATE_STEM = "Duality"
+
+# THE TWO GENERIC PLATES (owner decree 2026-07-29). Two pages repeat
+# across the whole book with the SAME meaning every time, so they are
+# ONE shared image each, not one per theme:
+#
+#   * the week's DUALITY title page — "one seat, two faces, and a ninth
+#     outside the circle". The owner struck the per-theme version down
+#     for the reader's sake, not for cost: the two faces open the very
+#     next two pages ("njihova slika se sve pojavljuje odmah na sledeće
+#     dve strane"), so a title plate that draws them again spends
+#     attention on a repeat. The generic plate carries the SHAPE of the
+#     idea and no figure at all.
+#   * the THIRTEENTH of any twelve-based set (Sol, Modrenik, and
+#     whatever else earns a thirteenth) — "the count that does not
+#     close".
+#
+# Both belong to no theme, so they cannot live in a theme's register
+# (the tree law has no seat for "everyone's"); they are the
+# instrument's own furniture, beside the section logo and the
+# paint/light legend. Briefs: research/prompts/instrument/.
+DUALITY_GENERIC_ART = INSTRUMENT_ART_DIR / "duality.png"
+THIRTEENTH_GENERIC_ART = INSTRUMENT_ART_DIR / "thirteenth.png"
+# The ONE documented exception the owner allowed: a theme whose dual
+# page presents something none of its three seat-holders already
+# describes may claim its OWN plate. Key -> True. EMPTY today; the
+# per-theme briefs stay written in `titles/theme_title_prompts.md` so
+# claiming one is a one-line change plus a generation.
+THEME_OWN_DUALITY_PLATE: dict[str, bool] = {}
 # key -> (register, look) where either differs from primary/colored.
 TITLE_PLATE_SEATS = {
     "planets": ("primary", "photo"),
@@ -2921,6 +2949,11 @@ def theme_title_art(key: str, duality: bool = False) -> "Path":
         if base.endswith(suffix):
             base, register = base[: -len(suffix)], suffix[1:]
             break
+    # EVERY dual page shares ONE plate unless this theme earned its own
+    # (owner decree 2026-07-29) — the block's register does not matter,
+    # because the generic plate belongs to no register.
+    if duality and not THEME_OWN_DUALITY_PLATE.get(base):
+        return DUALITY_GENERIC_ART
     seat_register, look = TITLE_PLATE_SEATS.get(base, ("primary", "colored"))
     register = register or seat_register
     stem = DUALITY_PLATE_STEM if duality else TITLE_PLATE_STEM

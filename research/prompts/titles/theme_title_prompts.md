@@ -616,6 +616,26 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 # THE SESSION 27 WAVE — the DUALITY plates and the BLOCK titles
 
+> **THE DUALITY PLATES IN THIS WAVE ARE SUPERSEDED — DO NOT GENERATE
+> THEM (owner decree 2026-07-29).** All twenty per-theme `Duality.png`
+> briefs below (17 theme + 3 pantheon) are replaced by ONE shared
+> plate, `assets/instrument/duality.png`, written in
+> [The Instrument](../instrument/instrument_prompts.md) §The Two
+> Generic Plates. The owner's reason is about the READER, not about
+> cost: *"njihova slika se sve pojavljuje odmah na sledeće dve strane"*
+> — the two faces open the very next two pages, so a title plate that
+> draws them again spends attention on a repeat. The generic plate
+> carries the SHAPE of the idea instead, and no figure at all.
+>
+> **A theme may still claim its own Duality plate** — but only when
+> that page presents something none of its three seat-holders already
+> describes. The resolver keeps an override table for exactly that,
+> empty today. If a theme ever earns one, ITS brief below is the
+> starting point, which is why none of them is deleted.
+>
+> **The BLOCK TITLE briefs in this wave are UNAFFECTED** and still
+> wanted — those are per-theme by nature.
+
 **Owner Session 27, 2026-07-28/29.** The Encyclopedia rework made two
 things visible that the sheet above never covered.
 

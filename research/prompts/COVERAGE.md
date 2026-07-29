@@ -740,6 +740,34 @@ parser (`--dry-run`), 0 problems.
 one: written, computed, or already written somewhere the audit had not
 looked.
 
+### The owner's own cut of that list (decree 2026-07-29)
+
+Reading the 73 back to the owner produced four verdicts that removed
+**24 more files** without removing a single page:
+
+| Was | Now | The owner's reason |
+|---|---|---|
+| 20 per-theme `Duality.png` | **1** generic plate | *"njihova slika se sve pojavljuje odmah na sledeće dve strane"* — the two faces open the very next two pages; a title plate that draws them again is a repeat |
+| 2 thirteenth-month plates | **1** generic plate | *"isto generic za sve koji imaju 13, tj. sve teme gde je osnov 12"* |
+| 2 Activation-pole lancets | **0** | the whole Cube family goes to the rotating 3D previewer, not to dead plates |
+| 2 sacred plates | **0** | drawn by the program (agreed the same day) |
+
+Both generic plates are the INSTRUMENT's own furniture
+(`assets/instrument/duality.png`, `assets/instrument/thirteenth.png`) —
+they belong to no theme, and the tree law has no seat for "everyone's".
+Their briefs are in [The Instrument](instrument/instrument_prompts.md)
+§The Two Generic Plates. The per-theme briefs they replace are NOT
+deleted: each superseded section now carries a banner saying so, and a
+theme may still claim its own Duality plate when its dual page shows a
+genuinely new third thing (`defaults.THEME_OWN_DUALITY_PLATE`, empty
+today).
+
+**What the owner's generation queue actually holds now: 49 images** —
+9 block titles, 15 wider-court figures, 8 vertex lancets, 8 edge
+lancets, 5 Chinese elements, Lord's Day, Pangea, and the 2 new generic
+plates. Everything else on the old list of 73 is drawn by the program
+or waiting on the 3D previewer.
+
 ## Zero-Gap Declaration
 
 After this round: **every image the app can reference is either (a)

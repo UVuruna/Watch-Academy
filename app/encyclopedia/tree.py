@@ -368,7 +368,12 @@ def _build_topics(travel_date: date | None = None) -> dict:
             # window — core.blue_moon). Same graceful-absent contract
             # as the twelve above: the plate is a future prompt sheet.
             {
-                "images": (defaults.MONTHS_ART_DIR / f"{key}.png",),
+                # ONE GENERIC THIRTEENTH (owner decree 2026-07-29):
+                # every twelve-based set on this instrument says the
+                # same thing when a thirteenth arrives — the count does
+                # not close — and it says it once, in the instrument's
+                # own furniture rather than in each set's register.
+                "images": (defaults.THIRTEENTH_GENERIC_ART,),
                 "name": name,
                 "article": ("emblem", "months", key),
             }

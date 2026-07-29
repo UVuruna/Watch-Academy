@@ -250,6 +250,22 @@ ROUND stained-glass badge medallion, night-window register, photorealistic rende
 
 ## The two poles this wheel does NOT seat — the Activation axis
 
+> **NOT ART — THESE TWO BECOME 3D (owner decree 2026-07-29).**
+> Composure and Vigor are the two ends of the Cube's ACTIVATION axis,
+> and the owner assigned the whole Cube family to the rotating 3D
+> previewer rather than to dead plates: *"ovo će biti animacija
+> izrađena uz pomoć Gadgets/3D Previewer"* — the three primary axes,
+> the four vertex diagonals, the six edge diagonals and the Cube
+> itself. That is exactly the v1 deliverable already specified in
+> `Gadgets/3D Preview/PLAN.md` §The Four Owner Models, so nothing new
+> is being invented here.
+>
+> **Do not generate the two windows below.** Until the previewer
+> lands, both pages show the COMPUTED Cube figure with their own pole
+> lit — the same drawer the axis pages already use. The briefs stay as
+> the written record of what each pole means; the eight DIRECTION
+> lancets above are untouched and still wanted.
+
 The Character wheel is the Cube with the depth axis at zero, so the two
 ends of that axis — **Composure** and **Vigor** — have no arm here.
 They still have their own Encyclopedia articles

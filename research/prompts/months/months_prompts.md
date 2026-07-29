@@ -139,6 +139,17 @@ ROUND rose-window stained-glass medallion, night-window register, photorealistic
 
 ## The two THIRTEENTH months
 
+> **SUPERSEDED — DO NOT GENERATE (owner decree 2026-07-29).** Sol and
+> Modrenik take the ONE shared thirteenth plate,
+> `assets/instrument/thirteenth.png`, written in
+> [The Instrument](../instrument/instrument_prompts.md) §The Two
+> Generic Plates: *"isto generic za sve koji imaju 13, tj. sve teme gde
+> je osnov 12"*. Every twelve-based set on this instrument says the
+> same thing when a thirteenth arrives — the count does not close — and
+> it says it once. The two briefs below stay as the record of what the
+> pages mean, and as the starting point if a month ever earns a plate
+> of its own.
+
 The twelve above are the year as the Croatian calendar names it. Two
 more months exist in this book and neither belongs to that ring: each
 is a THIRTEENTH month, and each answers a different flaw in the
