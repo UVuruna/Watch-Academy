@@ -65,7 +65,9 @@ from render.layers import (
     center_face,
     chinese_mount_dimmed_index,
     dial_point,
+    dual_seat_ninth,
     earth_region,
+    ninth_window_anchor,
     palette_for,
     servant_holds_the_seat,
     servant_seat_angle,
@@ -622,22 +624,18 @@ class Compositor:
             raise RuntimeError("Compositor.paint() before the first day context")
         self._last_tick = tick
         reveal = self.reveal_active()
-        # The Calendar's lit wedge (the shichen under the hour hand)
-        # changes INTRADAY, so it keys the cached segments too — the
-        # wedges live below the ring (BackgroundLayer, cached), and this
-        # keeps them relighting ~12 times a day instead of once (owner
-        # spec).
-        calendar_lit = self._calendar_lit(tick)
         # The archetype hour-space (owner 2026-07-16) turns with the
-        # hour hand the same way — but the archetype figures paint LIVE
-        # now (ROADMAP 15f), so the lit index no longer keys any cache.
+        # hour hand — but the archetype figures paint LIVE (ROADMAP
+        # 15f), so the lit index keys no cache.
         archetype_lit = self._archetype_lit(tick)
-        # The cached segments depend ONLY on size/DPI, the day and the
-        # Calendar's lit wedge — NEITHER hover NOR reveal (those live in
-        # the hover-variable layers painted live below). This is the
-        # whole point of the 15f split: a hover enter/leave rebuilds
-        # NOTHING (the count of "Composite rebuild" stays flat).
-        key = (round(size * dpr), self._day.cache_key, calendar_lit)
+        # The cached segments depend ONLY on size/DPI and the day —
+        # NEITHER hover NOR reveal (those live in the hover-variable
+        # layers painted live below). This is the whole point of the 15f
+        # split: a hover enter/leave rebuilds NOTHING (the count of
+        # "Composite rebuild" stays flat). The Calendar's lit wedge used
+        # to be the ONE intraday term in this key; deleting it (owner
+        # 2026-07-29) makes the composite purely DAILY again.
+        key = (round(size * dpr), self._day.cache_key)
         if self._composite_key != key:
             self._composites = [None] * len(self._cached_groups)
             self._composite_key = key
@@ -651,8 +649,7 @@ class Compositor:
             skin=self._skin, day=self._day, tick=tick,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=self._hovered,
-            reveal_active=reveal, calendar_lit=calendar_lit,
-            archetype_lit=archetype_lit,
+            reveal_active=reveal, archetype_lit=archetype_lit,
         )
         for kind, payload in self._steps:
             if kind == "cache":
@@ -661,7 +658,6 @@ class Compositor:
                     with profiling.measure("Composite rebuild"):
                         pixmap = self._render_group(
                             self._cached_groups[payload], size, dpr,
-                            calendar_lit,
                         )
                     self._composites[payload] = pixmap
                 painter.drawPixmap(QPointF(-overhang, -overhang), pixmap)
@@ -752,8 +748,15 @@ class Compositor:
                     int(element[len("archetype:"):])
                 )
             if element == "sun_servant":
-                # The SERVANT face at 24h (owner 2026-07-13): its own
-                # name, its own plate, its own text.
+                # The SERVANT face at his seat (owner 2026-07-13): its
+                # own name, its own plate, its own text — except in the
+                # solar NOON window (owner seal 2026-07-29), when the
+                # NINTH borrows this seat and the card speaks the pair
+                # actually standing (GOOD + NINTH), like the center law.
+                if self._dual_seat_taken() == "servant":
+                    return self._dual_face_columns(
+                        self._skin.weekday_theme, ("ruler", "ninth")
+                    )
                 return self._sun_face_tooltip(
                     "servant", active=today == "sun"
                 )
@@ -762,9 +765,15 @@ class Compositor:
                 # leads with the date, ghosts show their article alone.
                 body = element[len("body:"):]
                 if body == "sun" and sunday_dual_face(self._skin):
-                    # The north face on the Compass/Seasons speaks the
-                    # RULER face alone (owner 2026-07-13) — the 24h
-                    # face has its own hover.
+                    # The Ruler's seat speaks the RULER face alone
+                    # (owner 2026-07-13) — the Servant's seat has its
+                    # own hover — except in the solar MIDNIGHT window
+                    # (owner seal 2026-07-29), when the NINTH borrows
+                    # this seat and the card speaks the standing pair.
+                    if self._dual_seat_taken() == "ruler":
+                        return self._dual_face_columns(
+                            self._skin.weekday_theme, ("servant", "ninth")
+                        )
                     return self._sun_face_tooltip(
                         "ruler", active=today == "sun"
                     )
@@ -1871,6 +1880,24 @@ class Compositor:
         )
         return _article_html(asset, title, text, tr=self._tr)
 
+    def _dual_seat_taken(self) -> str | None:
+        """Which TWO-BADGE seat the Ninth borrows RIGHT NOW ("ruler" /
+        "servant" / None — owner seal 2026-07-29): mirrors
+        `WeekdayLayer`'s own gate exactly (Sunday, `sunday_dual_face`,
+        a Ninth that resolves, `dual_seat_ninth`'s solar windows) so
+        the hover card and the dial can never disagree."""
+        if self._day is None or self._last_tick is None:
+            return None
+        today = constants.WEEKDAY_BODIES[self._day.weekday_index]
+        if today != "sun" or not sunday_dual_face(self._skin):
+            return None
+        if theme_ninth(
+            self._skin.weekday_theme, self._center_pangea(),
+            on_date=self._day.local_date,
+        ) is None:
+            return None
+        return dual_seat_ninth(self._day, self._last_tick)
+
     def _center_pangea(self) -> bool:
         """The Continents theme's Ninth easter-egg flag for the hover
         (owner-sealed matrix 2026-07-21) — the SAME `core.continents`
@@ -1890,15 +1917,15 @@ class Compositor:
         )
 
     def _center_dual_tooltip(self, active: bool) -> str:
-        """The CENTER seat's Sunday duality hover (owner INSTRUCTION #5
-        + solar amendment, round R3b items 3/4): a ghost read on a
-        non-Sunday day stays the single GOOD/Ruler article (unchanged
-        from before this round); on the real Sunday, a theme with only
-        TWO faces ALWAYS speaks BOTH side by side (owner: "HOVER su
-        uvek OBA jedan pored drugog"), a theme with a NINTH speaks GOOD
-        alone outside its solar windows and the matching TWO-COLUMN
-        pair inside them (GOOD+NINTH near solar noon, EVIL+NINTH near
-        solar midnight) — `center_face` decides which."""
+        """The CENTER seat's Sunday duality hover (owner INSTRUCTION #5,
+        re-shaped by the 2026-07-29 seal): a ghost read on a non-Sunday
+        day stays the single GOOD/Ruler article; on the real Sunday, a
+        theme with only TWO faces ALWAYS speaks BOTH side by side
+        (owner: "HOVER su uvek OBA jedan pored drugog"), a theme with a
+        NINTH speaks the showing face alone outside the solar windows
+        (GOOD in daylight, EVIL at night — `center_face`) and the
+        matching TWO-COLUMN pair inside them (GOOD+NINTH near solar
+        noon, EVIL+NINTH near solar midnight — `ninth_window_anchor`)."""
         if not active:
             return self._sun_face_tooltip("ruler", active=False)
         theme = self._skin.weekday_theme
@@ -1908,11 +1935,14 @@ class Compositor:
         if ninth is None:
             return self._dual_face_columns(theme, ("ruler", "servant"))
         face = center_face(self._day, self._last_tick, has_ninth=True)
-        if face == "servant":
-            return self._dual_face_columns(theme, ("servant", "ninth"))
         if face == "ninth":
-            return self._dual_face_columns(theme, ("ruler", "ninth"))
-        return self._sun_face_tooltip("ruler", active=True)
+            beside = (
+                "ruler"
+                if ninth_window_anchor(self._day, self._last_tick) == "noon"
+                else "servant"
+            )
+            return self._dual_face_columns(theme, (beside, "ninth"))
+        return self._sun_face_tooltip(face, active=True)
 
     def _arm_tooltip(self, point: QPointF, radius: float, rotation: float) -> str | None:
         """Hover over a star arm (owner spec): hexa arms name their TWO
@@ -3175,19 +3205,6 @@ class Compositor:
         painter.end()
         return image
 
-    def _calendar_lit(self, tick: TickState) -> int | None:
-        """The Calendar wedge index that lights (owner 2026-07-16), or
-        None off the Calendar pointer. Shared by the composite key and
-        the wedge render (Rule #5)."""
-        if self._skin.pointer != "calendar":
-            return None
-        from render.layers import calendar_lit_index
-
-        return calendar_lit_index(
-            self._skin, self._skin.calendar_lighting,
-            tick.hour_angle, self._day,
-        )
-
     def _archetype_lit(self, tick: TickState) -> int | None:
         """The archetype figure whose HOUR-SPACE holds the hour hand
         (owner 2026-07-16), or None off the mode. Shared by the
@@ -3202,7 +3219,6 @@ class Compositor:
 
     def _render_group(
         self, layers: list[Layer], size: float, dpr: float,
-        calendar_lit: int | None = None,
     ) -> QPixmap:
         """Rasterize ONE contiguous run of hover-invariant STATIC/DAILY
         layers into a padded pixmap (owner 2026-07-17, ROADMAP 15f).
@@ -3224,8 +3240,7 @@ class Compositor:
             skin=self._skin, day=self._day, tick=None,
             radius=size / 2, cache=self._cache, dpr=dpr,
             rotation=self._rotation(), hovered=None,
-            reveal_active=False, calendar_lit=calendar_lit,
-            archetype_lit=None,
+            reveal_active=False, archetype_lit=None,
         )
         for layer in layers:
             painter.save()   # isolate pen/brush/opacity/rotation leaks

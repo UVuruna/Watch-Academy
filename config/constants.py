@@ -363,20 +363,27 @@ POINTER_DIAL_COUNTS = {
 }
 CALENDAR_WEDGES = 12
 CALENDAR_WEDGE_DEG = 360.0 / CALENDAR_WEDGES        # 30° per 2-hour wedge
-# The two lighting modes (owner 2026-07-16, both user-selectable):
-# "hour" — the wedge under the HOUR HAND lights (the Chinese
-# double-hour, shichen); "year" — the current MONTH's wedge (Almanac)
-# or the current SIGN's wedge (Zodiac).
-CALENDAR_LIGHTING_MODES = ("hour", "year")
-# The CALENDAR-POINTER 12-SET MOUNT (owner DESIGN ZODIAC law, R9a round
-# 2026-07-21): "off" — no marks; "zodiac" — the astrology sign register
-# (the SAME colored badges the wedge hover already shows); "months" —
-# the Slavic months (defaults.SLAVIC_MONTHS, graceful-absent art);
-# "chinese" — the twelve MONTHLY animals (owner R12, CHINESE_MONTH_
-# BRANCH_ANIMALS), NOT the Chinese YEAR zodiac already read elsewhere.
-# ONE mount at a time, independent of `palette_style`/`calendar_lighting`
-# — a mount rides its OWN fixed wheel geometry regardless of which wheel
-# paints the background wedges (render.layers.calendar_mount_wheel).
+# THE LIT WEDGE IS GONE (owner decree 2026-07-29, Pointers REWORK phase
+# 2): "Osvetljavanje part koji prolazi sat ili zemlja iskljuciti —
+# obrisati tu funkcionalnost". The Calendar no longer lights the wedge
+# under the hour hand or under today's month/sign; it follows the SAME
+# visibility law as every other pointer (the day/night law plus its own
+# DAYLIGHT_SWITCH_POINTERS entry). `CALENDAR_LIGHTING_MODES`,
+# `Settings.calendar_lighting`, `render.layers.calendar_lit_index` and
+# `defaults.CALENDAR_WEDGE_LIT_DELTA` died with it — an old settings
+# file that still carries the stale `calendar_lighting` key simply
+# loads without it (the loader reads keys it knows, never rejects
+# extras — pinned by tests/test_calendar.py).
+#
+# THE CALENDAR MOUNT (owner DESIGN ZODIAC law, R9a round 2026-07-21;
+# GENERALIZED 2026-07-29): the set of figures that rides the Calendar's
+# twelve wedges. The offer is no longer a hand-kept quartet — every
+# roster whose membership is 12/13 (one per wedge) or 24/27 (two per
+# wedge) may mount, and `CALENDAR_MOUNTS` below is the ONE registry
+# both the picker and the renderer read (Rule #5). ONE mount at a time,
+# independent of `palette_style` — a mount rides its OWN fixed wheel
+# geometry regardless of which wheel paints the background wedges
+# (render.layers.calendar_mount_wheel).
 CALENDAR_MOUNT_MODES = ("off", "zodiac", "months", "chinese")
 
 # Display names chosen by the owner (FINAL.txt #8): the internal keys
@@ -1228,18 +1235,17 @@ WEEKDAY_THEME_NINTH_EASTER_EGG = {
     "continents": ("Pangea", "../earth/pangea.png"),
 }
 
-# DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
-# amendment, round R3b item 3): hours either side of the day's SOLAR
-# anchors (never wall-clock noon/midnight — `core.angles.hours_between`
-# reads the actual `DayContext.sun.noon`) during which the CENTER seat
-# of a hexa/trio/center_only weekday unit swaps its Sunday face. A
-# theme with a Ninth shows it near solar NOON (owner: "Izmedju 11 i
-# 13h"); EVIL (the Servant) shows near solar MIDNIGHT, narrower when a
-# Ninth also claims noon ("Izmedju 23 i 1h") than when it is the ONLY
-# alternate face a 2-face theme has ("izmedju 22h i 2h").
-CENTER_NOON_WINDOW_HOURS = 1.0
-CENTER_MIDNIGHT_WINDOW_HOURS = 1.0
-CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH = 2.0
+# THE DUAL/NINTH TIME WINDOW (owner seal 2026-07-29, superseding
+# INSTRUCTION #5's hour widths): half an hour either side of the day's
+# SOLAR anchors (never wall-clock — `core.angles.hours_between` reads
+# the actual `DayContext.sun.noon`), i.e. solar 11:30-12:30 and
+# 23:30-00:30. In BOTH windows the NINTH shows; outside them the
+# CENTER seat follows the sky itself — DAYLIGHT the Ruler, NIGHT the
+# Servant (`render.layers.center_face`) — and a two-badge Sunday swaps
+# ONE seat per window (`render.layers.dual_seat_ninth`: near noon the
+# Ninth replaces the SERVANT beside the Ruler, near midnight the RULER
+# beside the Servant). Themes with no Ninth ignore the windows.
+CENTER_WINDOW_HOURS = 0.5
 
 # Chinese zodiac (sexagenary cycle): the animal repeats every 12 years,
 # the element every 10 (two years per element). Year N maps via
@@ -1532,12 +1538,6 @@ POINTER_WEEKDAY_SLOTS = {
     ),
 }
 
-# The Calendar lighting modes (owner 2026-07-16, both user-selectable):
-# "hour" — the wedge under the HOUR HAND lights (the Chinese
-# double-hour, shichen — the animal speaks); "year" — the current
-# MONTH's wedge lights on the Almanac, the current SIGN's on the
-# Zodiac.
-CALENDAR_LIGHTING_MODES = ("hour", "year")
 # The SOUTH SLOT home angle and the Aurora DUAL layout (owner spec
 # 2026-07-12): with BOTH the weekday body and the slot on, they flank
 # the bottom ±45° — the weekday at 3h on the left, the slot at 21h on
@@ -1582,3 +1582,31 @@ AURORA_DUAL_SLOT_ANGLE = 135.0       # 21h — bottom right
 # are the two readers (Rule #5) — they swap which of the Ruler's/
 # Servant's figures rides which arm, never their names or articles.
 DUALITY_RULER_ON_COLD_POLE = frozenset({"religion"})
+
+# THE DUAL SUNDAY WHEEL MAP (owner seal 2026-07-29, closing the Session
+# 23 miss — the per-WHEEL split was the whole point of the Duality-Axes
+# decree and the Compass's third wheel never received it). Sunday's
+# duality displays one of THREE ways, and the way is a property of the
+# WHEEL, not only the pointer:
+#   CENTER (one image; daylight Ruler / night Servant / Ninth in the
+#     solar windows) — the Trinity and the Prism (all wheels), PLUS the
+#     wheels below: the Quaternity's Seasons wheel turns its arms onto
+#     the diagonals, leaving no 12h/24h seat to stand on.
+#   VERTICAL 12h/24h (Ruler top in the light, Servant bottom in the
+#     dark) — the Quaternity and the Compass, primary + secondary.
+#   HORIZONTAL 06h/18h (Servant on blue left, Ruler on red right) — the
+#     Rose (both wheels) PLUS the wheels below: the Compass's Character
+#     wheel wears the very ROSE_PALETTE hues, so its Sunday rides the
+#     same blue<->red axis and its bodies take the Rose's own hue seats
+#     (`render.layers` reads POINTER_WEEKDAY_SLOTS["rose"] for it).
+CENTER_DUALITY_WHEELS = frozenset({("cross", "tertiary")})
+HORIZONTAL_DUALITY_WHEELS = frozenset({("octa", "tertiary")})
+
+# THE GEOGRAPHIC VERTICAL FLIP (owner seal 2026-07-29, theme poll 23/23):
+# themes whose VERTICAL duality seats the SERVANT on top — continents,
+# because the Arctic IS the north and a globe reads north-up: Arctic
+# (Servant) 12h, Antarctica (Ruler) 24h. The horizontal axis stays
+# standard (18h red Antarctica, 06h blue Arctic). Same reader pair as
+# DUALITY_RULER_ON_COLD_POLE; every OTHER theme was polled and sealed
+# STANDARD the same day (Ruler top+red, Servant bottom+blue).
+DUALITY_SERVANT_ON_TOP = frozenset({"continents"})

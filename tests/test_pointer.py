@@ -607,16 +607,15 @@ def test_center_dual_face_is_the_complement_of_sunday_dual_face(app):
 
 
 def test_center_face_solar_windows_golden(app):
-    """DUAL/NINTH CENTER TIME WINDOWS (owner INSTRUCTION #5 + solar
-    amendment, round R3b item 3) — golden-tested against a REAL solar
-    noon: Belgrade, 2026-07-19 (a Sunday), solar noon 12:44:28 CEST
-    (`python -m core --city Belgrade --at 2026-07-19T12:00:00`; the
-    owner's own rough note, "2026-07-20 solar noon 12:41", named a
-    Monday and was off by a few minutes — this pins the GROUND-TRUTHED
-    value instead). A theme WITH a Ninth: noon +/-1h -> "ninth",
-    midnight +/-1h -> "servant", elsewhere -> "ruler". A theme with
-    only two faces: midnight +/-2h -> "servant" (owner: "22h i 2h"),
-    else "ruler" — solar noon is never special for it."""
+    """THE DUAL/NINTH LAW (owner seal 2026-07-29, superseding
+    INSTRUCTION #5's shape) — golden-tested against a REAL solar noon:
+    Belgrade, 2026-07-19 (a Sunday), solar noon 12:44:28 CEST
+    (`python -m core --city Belgrade --at 2026-07-19T12:00:00`).
+    The sky decides the face — DAYLIGHT "ruler", NIGHT "servant" — and
+    a theme WITH a Ninth shows "ninth" in BOTH solar +/-30min windows
+    (11:30-12:30 and 23:30-00:30 solar). A theme with only two faces
+    ignores the windows entirely. Ticks are BUILT per moment (never
+    hour-angle-patched), because the law reads `tick.is_daylight`."""
     from render import layers as render_layers
 
     city = defaults.DEFAULT_CITY
@@ -631,26 +630,24 @@ def test_center_face_solar_windows_golden(app):
         MoonPhaseRepository().moon_window(now.year),
     )
     assert day.sun.noon.strftime("%H:%M:%S") == "12:44:28"
-    tick = build_tick_state(now, day)
 
     def at(hh: int, mm: int, ss: int = 0):
         moment = datetime(2026, 7, 19, hh, mm, ss, tzinfo=tz)
-        return dataclasses.replace(
-            tick, hour_angle=render_layers.angles.time_to_dial_angle(moment)
-        )
+        return build_tick_state(moment, day)
 
     golden_with_ninth = {
         (12, 44, 28): "ninth",     # solar noon exactly
-        (11, 44, 28): "ninth",     # -1h, boundary
-        (11, 43, 28): "ruler",     # -1h-1min, just outside
-        (13, 44, 28): "ninth",     # +1h, boundary
-        (13, 45, 28): "ruler",     # +1h+1min
-        (0, 44, 28): "servant",    # solar midnight exactly
-        (1, 44, 28): "servant",    # +1h, boundary
-        (1, 45, 28): "ruler",      # +1h+1min
-        (23, 44, 28): "servant",   # -1h, boundary
-        (23, 43, 28): "ruler",     # -1h-1min
-        (18, 0, 0): "ruler",       # broad afternoon
+        (12, 14, 28): "ninth",     # -30min, boundary
+        (12, 13, 28): "ruler",     # -31min, just outside (daylight)
+        (13, 14, 28): "ninth",     # +30min, boundary
+        (13, 15, 28): "ruler",     # +31min (daylight)
+        (0, 44, 28): "ninth",      # solar midnight exactly — the NINTH
+        (0, 14, 28): "ninth",      # -30min, boundary
+        (1, 14, 28): "ninth",      # +30min, boundary
+        (1, 15, 28): "servant",    # +31min — plain night
+        (23, 0, 0): "servant",     # night, outside every window
+        (18, 0, 0): "ruler",       # broad afternoon (daylight)
+        (21, 30, 0): "servant",    # after sunset (20:14) — night
     }
     for (hh, mm, ss), expected in golden_with_ninth.items():
         assert render_layers.center_face(day, at(hh, mm, ss), True) == (
@@ -659,13 +656,29 @@ def test_center_face_solar_windows_golden(app):
 
     golden_no_ninth = {
         (12, 44, 28): "ruler",     # solar noon is NOT special without a Ninth
-        (2, 44, 28): "servant",    # +2h, boundary
-        (2, 45, 28): "ruler",
-        (22, 44, 28): "servant",   # -2h, boundary
-        (22, 43, 28): "ruler",
+        (0, 44, 28): "servant",    # ...nor solar midnight — plain night
+        (22, 0, 0): "servant",     # night
+        (10, 0, 0): "ruler",       # day
     }
     for (hh, mm, ss), expected in golden_no_ninth.items():
         assert render_layers.center_face(day, at(hh, mm, ss), False) == (
+            expected
+        ), (hh, mm, ss)
+
+    # THE TWO-BADGE WINDOWS (`dual_seat_ninth`, same seal): near solar
+    # noon the Ninth borrows the SERVANT's seat, near solar midnight
+    # the RULER's, None outside.
+    golden_seats = {
+        (12, 44, 28): "servant",
+        (12, 14, 28): "servant",
+        (12, 13, 28): None,
+        (0, 44, 28): "ruler",
+        (1, 14, 28): "ruler",
+        (1, 15, 28): None,
+        (18, 0, 0): None,
+    }
+    for (hh, mm, ss), expected in golden_seats.items():
+        assert render_layers.dual_seat_ninth(day, at(hh, mm, ss)) == (
             expected
         ), (hh, mm, ss)
 

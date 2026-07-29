@@ -64,11 +64,6 @@ class RenderContext:
                                      # Omega double-click raises every
                                      # non-active weekday body to full
                                      # opacity for REVEAL_WEEK_DURATION_S
-    calendar_lit: int | None = None  # Calendar pointer: the wedge index
-                                     # (0..11 from the top) that LIGHTS —
-                                     # the compositor computes it from the
-                                     # live tick (the shichen changes intraday,
-                                     # so it also keys the DAILY composite)
     archetype_lit: int | None = None  # Archetype mode (owner 2026-07-16):
                                      # the figure whose HOUR-SPACE holds the
                                      # hour hand draws FULL, the rest ghost —
@@ -328,37 +323,82 @@ def rose_star_set(offset: float) -> str:
     return constants.ROSE_STAR_SETS[offset]
 
 
+def _wheel(skin: SkinDefinition) -> str:
+    """The skin's EFFECTIVE wheel slot — the stored palette_style
+    normalized to what this pointer actually serves (Rule #5: the same
+    `defaults.effective_palette_style` every other wheel reader uses)."""
+    return defaults.effective_palette_style(skin.pointer, skin.palette_style)
+
+
+def horizontal_duality(skin: SkinDefinition) -> bool:
+    """Whether this skin's Sunday duality rides the HORIZONTAL blue<->red
+    axis — Servant on blue 06h left, Ruler on red 18h right (owner seal
+    2026-07-29): the Rose on BOTH its wheels, plus the wheels
+    `constants.HORIZONTAL_DUALITY_WHEELS` names (the Compass's Character
+    wheel, which wears the same ROSE_PALETTE hues)."""
+    return (
+        skin.pointer == "rose"
+        or (skin.pointer, _wheel(skin)) in constants.HORIZONTAL_DUALITY_WHEELS
+    )
+
+
+def center_duality(skin: SkinDefinition) -> bool:
+    """Whether this skin's Sunday duality lives in ONE CENTER image —
+    the Trinity and the Prism on every wheel, plus the wheels
+    `constants.CENTER_DUALITY_WHEELS` names (the Quaternity's Seasons
+    wheel: its arms turn onto the diagonals, so no 12h/24h seat exists
+    to hold a second face — owner seal 2026-07-29)."""
+    return (
+        skin.pointer in ("hexa", "trio")
+        or (skin.pointer, _wheel(skin)) in constants.CENTER_DUALITY_WHEELS
+    )
+
+
+def _base_weekday_slots(skin: SkinDefinition) -> tuple:
+    """The raw weekday table this skin reads BEFORE offsets and flips:
+    the pointer's own — except the horizontal-duality wheels of other
+    pointers (the Compass's Character wheel), which take the ROSE's
+    hue-seated table wholesale, because their arms wear the Rose's own
+    hues and the seat is the HUE (owner seal 2026-07-29)."""
+    if (skin.pointer, _wheel(skin)) in constants.HORIZONTAL_DUALITY_WHEELS:
+        return constants.POINTER_WEEKDAY_SLOTS["rose"]
+    return constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+
+
 def _duality_ruler_default_angle(skin: SkinDefinition) -> float:
     """The Ruler's (the "sun" occupant's) UNFLIPPED seat — wherever the
-    pointer's own weekday table seats him, before any Duality-Axes
-    override (`_duality_flipped`) swaps it with the Servant's."""
+    skin's own weekday table seats him, before any flip
+    (`_duality_flipped`) swaps it with the Servant's."""
     return next(
         angle
-        for angle, occupants in constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+        for angle, occupants in _base_weekday_slots(skin)
         if "sun" in occupants
     )
 
 
 def _duality_servant_default_angle(skin: SkinDefinition) -> float:
-    """The Servant's UNFLIPPED seat (`constants.SERVANT_SEAT_ANGLE`),
-    before any Duality-Axes override."""
-    return constants.SERVANT_SEAT_ANGLE.get(
-        skin.pointer, constants.SOUTH_SLOT_ANGLE
-    )
+    """The Servant's UNFLIPPED seat, before any flip: the blue 06h/270°
+    arm on every horizontal-duality wheel (`constants.SERVANT_SEAT_
+    ANGLE`), the 24h bottom everywhere else."""
+    if horizontal_duality(skin):
+        return constants.SERVANT_SEAT_ANGLE["rose"]
+    return constants.SOUTH_SLOT_ANGLE
 
 
 def _duality_flipped(skin: SkinDefinition) -> bool:
-    """Whether this theme's Sunday duality reverses the Rose's default
-    Ruler-red/Servant-blue seating (`constants.DUALITY_RULER_ON_COLD_
-    POLE`, CUBE.md §The Thirteen Axes — the Duality-Axes config): the
-    Sacred Axis's proof case, Christianity pulling to the cold blue
-    pole instead of the blind default's warm red. Only the ROSE's
-    horizontal axis is ever per-theme — the Compass/Seasons' vertical
-    Ruler-at-top default is unconditional (owner decree 2026-07-28)."""
-    return (
-        skin.pointer == "rose"
-        and skin.weekday_theme in constants.DUALITY_RULER_ON_COLD_POLE
-    )
+    """Whether this theme swaps the Ruler's and the Servant's seats on
+    this skin (the two faces swap ARMS, never names or articles):
+    on a HORIZONTAL wheel, the Sacred-Axis themes (`constants.DUALITY_
+    RULER_ON_COLD_POLE` — Christianity pulls to the cold blue pole,
+    Satanism to the warm red); on a VERTICAL wheel, the geographic
+    themes (`constants.DUALITY_SERVANT_ON_TOP` — the Arctic IS the
+    north, owner seal 2026-07-29). A CENTER duality has no seats to
+    swap."""
+    if center_duality(skin):
+        return False
+    if horizontal_duality(skin):
+        return skin.weekday_theme in constants.DUALITY_RULER_ON_COLD_POLE
+    return skin.weekday_theme in constants.DUALITY_SERVANT_ON_TOP
 
 
 def ruler_seat_angle(skin: SkinDefinition) -> float:
@@ -374,14 +414,15 @@ def ruler_seat_angle(skin: SkinDefinition) -> float:
 
 def servant_seat_angle(skin: SkinDefinition) -> float:
     """The angle the SERVANT face of Sunday occupies (Rule #5 — the ONE
-    reader of `constants.SERVANT_SEAT_ANGLE`). 24h on the Compass and
-    the Seasons, where the dual Sunday has always sat; the ROSE seats
-    him on the BLUE 06h arm and gives 18h's red to the Ruler, because
-    blue is the servant's hue and red the master's (CUBE.md §The
-    Rose) — UNLESS the Duality-Axes config flips this theme
-    (`_duality_flipped`), in which case the Servant takes the Ruler's
-    default seat instead (the Sacred Axis proof case: Christianity
-    pulls to blue, Satanism to red)."""
+    reader of `constants.SERVANT_SEAT_ANGLE`). The 24h bottom on the
+    vertical wheels (Quaternity/Compass primary+secondary); the BLUE
+    06h arm on every horizontal wheel (the Rose and the Compass's
+    Character wheel), because blue is the servant's hue and red the
+    master's (CUBE.md §The Rose) — UNLESS the theme flips
+    (`_duality_flipped`: the Sacred Axis pulls Christianity to blue and
+    Satanism to red on the horizontal; the geographic flip sends the
+    Arctic up top on the vertical), in which case the Servant takes the
+    Ruler's default seat instead."""
     if _duality_flipped(skin):
         return _duality_ruler_default_angle(skin)
     return _duality_servant_default_angle(skin)
@@ -412,27 +453,45 @@ def cube_look_active(skin: SkinDefinition) -> bool:
 
 
 def weekday_slots(skin: SkinDefinition) -> tuple:
-    """The pointer's weekday slots with the Genesis offset applied —
-    the slots ride the DRAWN arms (pure geometry: each occupant pair
-    stays glued to its arm as the trio's tertiary wheel swings it 180°; no
-    re-pairing doctrine is invented here). Every consumer of
+    """The skin's weekday slots as DRAWN — every consumer of
     `constants.POINTER_WEEKDAY_SLOTS` reads through this (Rule #5).
-    The Duality-Axes config (`_duality_flipped`) additionally moves the
-    "sun" occupant onto `ruler_seat_angle` — the Servant's own seat is
-    never IN this table (drawn separately), so only the Ruler's entry
-    ever needs relocating."""
-    slots = constants.POINTER_WEEKDAY_SLOTS[skin.pointer]
+    Three transforms, in order: the wheel's own arm offset (slots ride
+    the DRAWN arms — pure geometry: each occupant pair stays glued to
+    its arm as the Genesis/Seasons wheels swing it; no re-pairing
+    doctrine is invented here); the CENTER-duality wheels lift the Sun
+    OUT (he stands in the center there — owner seal 2026-07-29); and a
+    flipped theme (`_duality_flipped`) relocates the Sun alone onto the
+    Servant's default seat — the Servant's own seat is never IN this
+    table (drawn separately), and on a shared slot only the SUN moves:
+    his slot-mates keep their arm (the cross's Jupiter stays put when
+    continents sends the Ruler down to 24h)."""
+    slots = _base_weekday_slots(skin)
     offset = arm_offset_deg(skin)
     if offset != 0.0:
         slots = tuple(
             ((angle + offset) % 360.0, occupants) for angle, occupants in slots
         )
-    if _duality_flipped(skin):
-        ruler_angle = (_duality_servant_default_angle(skin) + offset) % 360.0
-        slots = tuple(
-            (ruler_angle, occupants) if "sun" in occupants else (angle, occupants)
-            for angle, occupants in slots
+    if center_duality(skin):
+        return tuple(
+            (angle, occupants) for angle, occupants in (
+                (angle, tuple(o for o in occupants if o != "sun"))
+                for angle, occupants in slots
+            )
+            if occupants
         )
+    if _duality_flipped(skin):
+        target = (_duality_servant_default_angle(skin) + offset) % 360.0
+        moved, merged = [], False
+        for angle, occupants in slots:
+            occupants = tuple(o for o in occupants if o != "sun")
+            if not occupants:
+                continue
+            if angle == target:
+                occupants, merged = occupants + ("sun",), True
+            moved.append((angle, occupants))
+        if not merged:
+            moved.append((target, ("sun",)))
+        slots = tuple(moved)
     return slots
 
 
@@ -453,28 +512,6 @@ def calendar_wedge_bounds(wheel: str) -> list[tuple[float, float]]:
     step = constants.CALENDAR_WEDGE_DEG
     offset = 0.0 if wheel == "zodiac" else -step / 2.0
     return [(k * step + offset, k * step + offset + step) for k in range(12)]
-
-
-def calendar_lit_index(
-    skin: SkinDefinition, lighting: str, hour_angle: float, day: DayContext
-) -> int:
-    """Which wedge (0..11 from the top) LIGHTS (owner 2026-07-16). "hour"
-    — the wedge containing the HOUR HAND (the Chinese double-hour): on
-    the Zodiac its own boundary geometry (floor), on the Almanac the
-    axis-centered geometry (round). "year" — the current SIGN's wedge on
-    the Zodiac (Cancer = 0, aligned with the year wheel), the current
-    MONTH's wedge on the Almanac."""
-    step = constants.CALENDAR_WEDGE_DEG
-    wheel = calendar_wheel(skin)
-    if lighting == "hour":
-        if wheel == "zodiac":
-            return int(hour_angle // step) % 12
-        return int((hour_angle + step / 2.0) // step) % 12
-    if wheel == "zodiac":
-        names = [name for name, _ in constants.ZODIAC_SIGNS]
-        return names.index(day.zodiac_name)
-    from core.year_wheel import almanac_month_index
-    return almanac_month_index(day.local_date.month)
 
 
 def calendar_day_arrow(angle_deg: float, radius: float) -> QPolygonF:
@@ -1179,10 +1216,13 @@ def sunday_dual_face(skin: SkinDefinition) -> bool:
     blue 06h arm on the Rose. The Trinity and the Prism keep one image
     ("two persons in one body") and speak the second face in the hover.
     Needs the CLASSIC unit up and the theme's dual art on disk
-    (documented: no art, no second face)."""
+    (documented: no art, no second face). The CENTER-duality wheels of
+    these pointers (the Quaternity's Seasons wheel) resolve through
+    `center_dual_face` instead (owner seal 2026-07-29)."""
     spec = skin.weekday_set
     return (
         skin.pointer in ("octa", "cross", "rose")
+        and not center_duality(skin)
         and weekday_classic_slot(skin) is not None
         and spec.display_mode != "center_only"
         and spec.dual_asset is not None
@@ -1226,7 +1266,7 @@ def center_dual_face(skin: SkinDefinition) -> bool:
         return False
     if spec.display_mode == "center_only":
         return True
-    return skin.pointer in ("hexa", "trio")
+    return center_duality(skin)
 
 
 def center_seat_body_key(skin: SkinDefinition, today: str) -> str | None:
@@ -1243,7 +1283,7 @@ def center_seat_body_key(skin: SkinDefinition, today: str) -> str | None:
         return None
     if skin.weekday_set.display_mode == "center_only":
         return today
-    if skin.pointer in ("hexa", "trio"):
+    if center_duality(skin):
         return "sun"
     return None
 
@@ -1343,29 +1383,54 @@ def theme_ninth(
     return name, asset
 
 
+def ninth_window_anchor(day: DayContext, tick: TickState) -> str | None:
+    """Which SOLAR anchor's ±`constants.CENTER_WINDOW_HOURS` window the
+    hour hand stands in right now — "noon", "midnight", or None outside
+    both. SOLAR, not wall-clock: `day.sun.noon` is the SAME anchor the
+    hexagram's own rotation reads (`star_rotation_deg`) — reused via
+    `angles.hours_between`, never a parallel clock (Rule #5/#6)."""
+    noon_angle = angles.time_to_dial_angle(day.sun.noon)
+    if (
+        abs(angles.hours_between(tick.hour_angle, noon_angle))
+        <= constants.CENTER_WINDOW_HOURS
+    ):
+        return "noon"
+    midnight_angle = (noon_angle + 180.0) % 360.0
+    if (
+        abs(angles.hours_between(tick.hour_angle, midnight_angle))
+        <= constants.CENTER_WINDOW_HOURS
+    ):
+        return "midnight"
+    return None
+
+
 def center_face(day: DayContext, tick: TickState, has_ninth: bool) -> str:
     """Which face the CENTER seat's Sunday duality shows RIGHT NOW
-    (owner INSTRUCTION #5 + solar amendment, round R3b item 3):
-    "ruler" (GOOD) normally, "servant" (EVIL) near SOLAR MIDNIGHT,
-    "ninth" near SOLAR NOON for a theme that names one — the midnight
-    window widens when there is no Ninth to also claim noon (owner:
-    "za one koje nemaju 9tog... izmedju 22h i 2h"). SOLAR, not
-    wall-clock: `day.sun.noon` is the SAME anchor the hexagram's own
-    rotation reads (`star_rotation_deg`) — reused via `angles.
-    hours_between`, never a parallel clock (Rule #5/#6)."""
-    noon_angle = angles.time_to_dial_angle(day.sun.noon)
-    midnight_angle = (noon_angle + 180.0) % 360.0
-    from_noon = abs(angles.hours_between(tick.hour_angle, noon_angle))
-    from_midnight = abs(angles.hours_between(tick.hour_angle, midnight_angle))
-    if has_ninth:
-        if from_noon <= constants.CENTER_NOON_WINDOW_HOURS:
-            return "ninth"
-        if from_midnight <= constants.CENTER_MIDNIGHT_WINDOW_HOURS:
-            return "servant"
-        return "ruler"
-    if from_midnight <= constants.CENTER_MIDNIGHT_WINDOW_HOURS_NO_NINTH:
+    (owner seal 2026-07-29, superseding INSTRUCTION #5's shape): the sky
+    itself decides — DAYLIGHT the "ruler" (GOOD), NIGHT the "servant"
+    (EVIL) — and a theme that names a Ninth shows "ninth" in BOTH solar
+    windows (11:30-12:30 and 23:30-00:30 solar, `ninth_window_anchor`).
+    Themes with no Ninth ignore the windows: day Ruler, night Servant,
+    nothing else."""
+    if has_ninth and ninth_window_anchor(day, tick) is not None:
+        return "ninth"
+    return "ruler" if tick.is_daylight else "servant"
+
+
+def dual_seat_ninth(day: DayContext, tick: TickState) -> str | None:
+    """Which SEAT the Ninth's badge takes over RIGHT NOW on a TWO-BADGE
+    Sunday (owner seal 2026-07-29 — the rule the center windows always
+    had, extended to the 12h/24h and 06h/18h displays): near solar NOON
+    he replaces the "servant" (and stands beside the Ruler), near solar
+    MIDNIGHT the "ruler" (and stands beside the Servant); None outside
+    the windows. Callers gate on Sunday, `sunday_dual_face` and a theme
+    that actually names a Ninth."""
+    anchor = ninth_window_anchor(day, tick)
+    if anchor == "noon":
         return "servant"
-    return "ruler"
+    if anchor == "midnight":
+        return "ruler"
+    return None
 
 
 def pie_path(radius: float, start_deg: float, end_deg: float) -> QPainterPath:
@@ -1846,25 +1911,20 @@ class BackgroundLayer(Layer):
         # CALENDAR (owner 2026-07-16, CANON §The Dozen): TWELVE 2-hour
         # wedges — the Aura carries the wedge colors, no star arms (like
         # Aurora). Calendar-FIXED: the wedges never ride the solar
-        # rotation (owner spec). The wedge that LIGHTS (the shichen, or
-        # the current month/sign) raises its opacity by the delta; the
-        # lit index rides the RenderContext (the compositor computes it
-        # from the live tick and keys the composite on it).
+        # rotation (owner spec). EVERY wedge paints at the SAME resting
+        # opacity — the lit-wedge feature (the shichen under the hour
+        # hand, the month/sign under the Earth) is DELETED (owner decree
+        # 2026-07-29): the Calendar follows the same visibility law as
+        # every other pointer, nothing more.
         if ctx.skin.pointer == "calendar":
             palette = aura_palette_for(ctx.skin)
             wheel = calendar_wheel(ctx.skin)
             cal_radius = ctx.radius * (
                 ctx.skin.background.aura_radius_fraction
             )
-            base = defaults.CALENDAR_WEDGE_ALPHA
             for index, (start, end) in enumerate(calendar_wedge_bounds(wheel)):
-                alpha = base + (
-                    defaults.CALENDAR_WEDGE_LIT_DELTA
-                    if index == ctx.calendar_lit
-                    else 0.0
-                )
                 painter.save()
-                painter.setOpacity(min(1.0, alpha))
+                painter.setOpacity(defaults.CALENDAR_WEDGE_ALPHA)
                 painter.setBrush(QColor(palette[index]))
                 draw_pie(painter, cal_radius, start, end)
                 painter.restore()
@@ -2257,7 +2317,7 @@ def weekday_label_set_px(ctx: RenderContext) -> int:
         if servant and slot_angle == servant_seat_angle(ctx.skin):
             continue
         bodies.add(visible_occupant(occupants, today))
-    if ctx.skin.pointer in ("hexa", "trio"):
+    if center_duality(ctx.skin):
         bodies.add("sun")     # the ghost/opaque center Sun joins the set
     texts = {weekday_label_text(ctx, body) for body in bodies}
     return min(name_label_px(text, target_width) for text in texts)
@@ -2377,14 +2437,15 @@ class WeekdayLayer(Layer):
         base_label_px = weekday_label_set_px(ctx) if names_on else None
 
         if (
-            ctx.skin.pointer in ("hexa", "trio")
+            center_duality(ctx.skin)
             and today != "sun"
             and not ctx.reveal_active
             and self._gate(ctx, "body:sun")
         ):
-            # The hexa and trio layouts center the Sun; on Sundays — or
-            # during the reveal window (owner 2026-07-16) — the CENTER
-            # pass draws it opaque ABOVE the hands instead.
+            # The center-duality wheels (hexa/trio, and the Quaternity's
+            # Seasons wheel — owner seal 2026-07-29) center the Sun; on
+            # Sundays — or during the reveal window (owner 2026-07-16) —
+            # the CENTER pass draws it opaque ABOVE the hands instead.
             hf = hover_factor(ctx, "body:sun")
             center_size = weekday_body_size(ctx.skin, ctx.radius) * hf
             draw_weekday_body(
@@ -2395,6 +2456,28 @@ class WeekdayLayer(Layer):
         orbit = ctx.radius * weekday_body_orbit(ctx.skin)
         slot_size = weekday_body_size(ctx.skin, ctx.radius)
         servant = servant_holds_the_seat(ctx.skin, today)
+        # THE TWO-BADGE NINTH WINDOWS (owner seal 2026-07-29 — the law
+        # the center seat always had, extended to the two-seat Sundays):
+        # near solar noon the Ninth borrows the SERVANT's seat (and
+        # stands beside the Ruler), near solar midnight the RULER's
+        # (beside the Servant). Existence-gated like every Ninth plate;
+        # themes naming none keep both faces all Sunday.
+        seat_taken, ninth_plate = None, None
+        if servant and today == "sun" and not ctx.reveal_active:
+            pangea = (
+                ctx.skin.weekday_theme == "continents"
+                and continents.ninth_is_pangea_from_events(
+                    ctx.day.local_date,
+                    ctx.day.season_events,
+                    ctx.day.moon_events,
+                    ctx.tick.eclipse_event is not None,
+                )
+            )
+            ninth_plate = theme_ninth(
+                ctx.skin.weekday_theme, pangea, on_date=ctx.day.local_date
+            )
+            if ninth_plate is not None:
+                seat_taken = dual_seat_ninth(ctx.day, ctx.tick)
         for slot_angle, occupants in weekday_slots(ctx.skin):
             if servant and slot_angle == servant_seat_angle(ctx.skin):
                 continue     # the Servant won that seat today
@@ -2403,6 +2486,14 @@ class WeekdayLayer(Layer):
                 continue
             theta = slot_angle + ctx.rotation
             hf = hover_factor(ctx, f"body:{body}")
+            if seat_taken == "ruler" and body == "sun":
+                # The midnight window: the Ninth's plate on the Ruler's
+                # seat — image only, the label belongs to the faces.
+                draw_pixmap_centered(
+                    painter, ctx, ninth_plate[1], dial_point(theta, orbit),
+                    slot_size * hf, metal=spec.metal,
+                )
+                continue
             draw_weekday_body(
                 painter, ctx, body, dial_point(theta, orbit),
                 slot_size * hf,
@@ -2432,6 +2523,11 @@ class WeekdayLayer(Layer):
                 defaults.rotating_art_file(servant_asset, ctx.day.local_date)
                 or servant_asset
             )
+            if seat_taken == "servant":
+                # The noon window: the Ninth's plate on the Servant's
+                # seat (owner seal 2026-07-29) — `theme_ninth` already
+                # resolved rotation and the Pangea easter egg above.
+                servant_asset = ninth_plate[1]
             painter.save()
             painter.setOpacity(
                 1.0 if today == "sun" or ctx.reveal_active else spec.ghost_opacity
@@ -2668,10 +2764,10 @@ class CenterBodyLayer(Layer):
         ghost_reveal = (
             ctx.reveal_active
             and spec.display_mode != "center_only"
-            and ctx.skin.pointer in ("hexa", "trio")
+            and center_duality(ctx.skin)
         )
         if spec.display_mode != "center_only" and not (
-            ctx.skin.pointer in ("hexa", "trio") and today == "sun"
+            center_duality(ctx.skin) and today == "sun"
         ) and not ghost_reveal:
             return
         # ONE body size (owner 2026-07-18, his screenshots): the hexa/
